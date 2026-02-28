@@ -157,6 +157,8 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
     final maxY = history.reduce((a, b) => a > b ? a : b);
     // 添加小边距防止线条被裁剪
     final padding = (maxY - minY) * 0.1 + 0.5;
+    final subtitleColor =
+        AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -166,16 +168,14 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
             Icon(
               Icons.show_chart,
               size: ScreenUtil().setWidth(28),
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name),
+              color: subtitleColor,
             ),
             SizedBox(width: ScreenUtil().setWidth(6)),
             Text(
               S.of(context).g_key_gas_price_trend,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(22),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemSubtitleTextColor.name),
+                color: subtitleColor,
               ),
             ),
             const Spacer(),

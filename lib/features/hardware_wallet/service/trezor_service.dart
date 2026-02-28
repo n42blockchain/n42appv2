@@ -84,26 +84,10 @@ class TrezorService {
     required String derivationPath,
     required Map<String, dynamic> txData,
   }) async {
-    try {
-      final result = await _channel.invokeMethod<Map<dynamic, dynamic>>(
-        'trezor_signEthTx',
-        {
-          'derivationPath': derivationPath,
-          'txData': txData,
-        },
-      );
-      if (result == null) {
-        return HardwareWalletSignResponse.error('No signature returned');
-      }
-      final map = Map<String, dynamic>.from(result);
-      return HardwareWalletSignResponse.success(
-        signature: map['signature'] as String? ?? '',
-        txHash: map['txHash'] as String?,
-      );
-    } on PlatformException catch (e) {
-      final err = _mapPlatformException(e);
-      return HardwareWalletSignResponse.error(err.userFriendlyMessage);
-    }
+    return _invokeSign('trezor_signEthTx', {
+      'derivationPath': derivationPath,
+      'txData': txData,
+    });
   }
 
   /// Sign a Bitcoin transaction (PSBT).
@@ -113,26 +97,11 @@ class TrezorService {
     required String derivationPath,
     required String psbtHex,
   }) async {
-    try {
-      final result = await _channel.invokeMethod<Map<dynamic, dynamic>>(
-        'trezor_signBtcTx',
-        {
-          'derivationPath': derivationPath,
-          'psbtHex': psbtHex,
-        },
-      );
-      if (result == null) {
-        return HardwareWalletSignResponse.error('No signature returned');
-      }
-      final map = Map<String, dynamic>.from(result);
-      return HardwareWalletSignResponse.success(
-        signature: map['signedPsbtHex'] as String? ?? '',
-        txHash: map['txHash'] as String?,
-      );
-    } on PlatformException catch (e) {
-      final err = _mapPlatformException(e);
-      return HardwareWalletSignResponse.error(err.userFriendlyMessage);
-    }
+    return _invokeSign(
+      'trezor_signBtcTx',
+      {'derivationPath': derivationPath, 'psbtHex': psbtHex},
+      signatureKey: 'signedPsbtHex',
+    );
   }
 
   /// Sign a Solana transaction.
@@ -142,25 +111,10 @@ class TrezorService {
     required String derivationPath,
     required String txBase64,
   }) async {
-    try {
-      final result = await _channel.invokeMethod<Map<dynamic, dynamic>>(
-        'trezor_signSolTx',
-        {
-          'derivationPath': derivationPath,
-          'txBase64': txBase64,
-        },
-      );
-      if (result == null) {
-        return HardwareWalletSignResponse.error('No signature returned');
-      }
-      final map = Map<String, dynamic>.from(result);
-      return HardwareWalletSignResponse.success(
-        signature: map['signature'] as String? ?? '',
-      );
-    } on PlatformException catch (e) {
-      final err = _mapPlatformException(e);
-      return HardwareWalletSignResponse.error(err.userFriendlyMessage);
-    }
+    return _invokeSign('trezor_signSolTx', {
+      'derivationPath': derivationPath,
+      'txBase64': txBase64,
+    });
   }
 
   /// Sign an EIP-712 typed data payload.
@@ -168,25 +122,10 @@ class TrezorService {
     required String derivationPath,
     required String typedDataJson,
   }) async {
-    try {
-      final result = await _channel.invokeMethod<Map<dynamic, dynamic>>(
-        'trezor_signTypedData',
-        {
-          'derivationPath': derivationPath,
-          'typedDataJson': typedDataJson,
-        },
-      );
-      if (result == null) {
-        return HardwareWalletSignResponse.error('No signature returned');
-      }
-      final map = Map<String, dynamic>.from(result);
-      return HardwareWalletSignResponse.success(
-        signature: map['signature'] as String? ?? '',
-      );
-    } on PlatformException catch (e) {
-      final err = _mapPlatformException(e);
-      return HardwareWalletSignResponse.error(err.userFriendlyMessage);
-    }
+    return _invokeSign('trezor_signTypedData', {
+      'derivationPath': derivationPath,
+      'typedDataJson': typedDataJson,
+    });
   }
 
   /// Sign a personal_sign message.
@@ -194,27 +133,12 @@ class TrezorService {
     required String derivationPath,
     required Uint8List messageBytes,
   }) async {
-    try {
-      final result = await _channel.invokeMethod<Map<dynamic, dynamic>>(
-        'trezor_signMessage',
-        {
-          'derivationPath': derivationPath,
-          'messageHex': messageBytes
-              .map((b) => b.toRadixString(16).padLeft(2, '0'))
-              .join(),
-        },
-      );
-      if (result == null) {
-        return HardwareWalletSignResponse.error('No signature returned');
-      }
-      final map = Map<String, dynamic>.from(result);
-      return HardwareWalletSignResponse.success(
-        signature: map['signature'] as String? ?? '',
-      );
-    } on PlatformException catch (e) {
-      final err = _mapPlatformException(e);
-      return HardwareWalletSignResponse.error(err.userFriendlyMessage);
-    }
+    return _invokeSign('trezor_signMessage', {
+      'derivationPath': derivationPath,
+      'messageHex': messageBytes
+          .map((b) => b.toRadixString(16).padLeft(2, '0'))
+          .join(),
+    });
   }
 
   /// Sign a generic chain transaction (ATOM, DOT, TRX, etc.)
@@ -223,27 +147,11 @@ class TrezorService {
     required String derivationPath,
     required Map<String, dynamic> txData,
   }) async {
-    try {
-      final result = await _channel.invokeMethod<Map<dynamic, dynamic>>(
-        'trezor_signChainTx',
-        {
-          'coinType': coinType.toUpperCase(),
-          'derivationPath': derivationPath,
-          'txData': txData,
-        },
-      );
-      if (result == null) {
-        return HardwareWalletSignResponse.error('No signature returned');
-      }
-      final map = Map<String, dynamic>.from(result);
-      return HardwareWalletSignResponse.success(
-        signature: map['signature'] as String? ?? '',
-        txHash: map['txHash'] as String?,
-      );
-    } on PlatformException catch (e) {
-      final err = _mapPlatformException(e);
-      return HardwareWalletSignResponse.error(err.userFriendlyMessage);
-    }
+    return _invokeSign('trezor_signChainTx', {
+      'coinType': coinType.toUpperCase(),
+      'derivationPath': derivationPath,
+      'txData': txData,
+    });
   }
 
   /// Check if a Trezor device is currently connected via USB
@@ -256,6 +164,29 @@ class TrezorService {
   }
 
   // ==================== Private helpers ====================
+
+  /// Common sign invocation: calls [method] with [args], extracts signature
+  /// from [signatureKey] (default `'signature'`) and optional `txHash`.
+  Future<HardwareWalletSignResponse> _invokeSign(
+    String method,
+    Map<String, dynamic> args, {
+    String signatureKey = 'signature',
+  }) async {
+    try {
+      final result = await _channel.invokeMethod<Map<dynamic, dynamic>>(method, args);
+      if (result == null) {
+        return HardwareWalletSignResponse.error('No signature returned');
+      }
+      final map = Map<String, dynamic>.from(result);
+      return HardwareWalletSignResponse.success(
+        signature: map[signatureKey] as String? ?? '',
+        txHash: map['txHash'] as String?,
+      );
+    } on PlatformException catch (e) {
+      final err = _mapPlatformException(e);
+      return HardwareWalletSignResponse.error(err.userFriendlyMessage);
+    }
+  }
 
   HardwareWalletDevice _parseDeviceInfo(Map<String, dynamic> result) {
     final typeStr = result['type'] as String? ?? 'trezorModelT';

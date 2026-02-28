@@ -88,11 +88,9 @@ class _NonEvmGasSettingsPageState extends State<NonEvmGasSettingsPage> {
   void _validateCustomRate(String value) {
     final rate = int.tryParse(value);
     setState(() {
-      if (value.isEmpty || rate == null || rate <= 0) {
-        _customRateError = S.current.g_key_t_43; // "Enter a whole number greater than 0."
-      } else {
-        _customRateError = '';
-      }
+      _customRateError = (rate == null || rate <= 0)
+          ? S.current.g_key_t_43 // "Enter a whole number greater than 0."
+          : '';
     });
   }
 

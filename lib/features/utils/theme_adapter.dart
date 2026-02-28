@@ -1,208 +1,131 @@
 import 'package:flutter/material.dart';
-class ThemeAdapter{
-  static ThemeData themeDataLight=ThemeData.light().copyWith(
-      scaffoldBackgroundColor:AppThemeUtils.lightMap[AppThemeKeys.backGroundColor.name],
+
+class ThemeAdapter {
+  static const _accent = Color(0xFF448BDF);
+  static const _lightText = Color(0xff222222);
+  static const _darkText = Color(0xffffffff);
+
+  static ThemeData themeDataLight = ThemeData.light().copyWith(
+    scaffoldBackgroundColor:
+        AppThemeUtils.lightMap[AppThemeKeys.backGroundColor.name],
     primaryColor: Color(0xffF9f9f9),
     //头部导航样式
     appBarTheme: AppBarTheme(
-      centerTitle:true,
-      elevation: 0,//去掉阴影
-      titleTextStyle: TextStyle(
-        color: Color(0xff222222),
-      ),
-      actionsIconTheme: IconThemeData(
-        color: Color(0xff222222),
-      ),
-      toolbarTextStyle: TextStyle(
-        color: Color(0xff222222),
-      ),
-      iconTheme: IconThemeData(
-        color: Color(0xff222222),
-      ),
+      centerTitle: true,
+      elevation: 0,
+      titleTextStyle: TextStyle(color: _lightText),
+      actionsIconTheme: IconThemeData(color: _lightText),
+      toolbarTextStyle: TextStyle(color: _lightText),
+      iconTheme: IconThemeData(color: _lightText),
     ),
     //底部导航样式
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      selectedIconTheme: IconThemeData(color: Color(0xFF448BDF)),
-      unselectedIconTheme: IconThemeData(color: Color(0xffffffff)),
-      selectedItemColor: Color(0xFF448BDF),
-      unselectedItemColor: Color(0xff222222),
+      selectedIconTheme: IconThemeData(color: _accent),
+      unselectedIconTheme: IconThemeData(color: _darkText),
+      selectedItemColor: _accent,
+      unselectedItemColor: _lightText,
     ),
-    iconTheme: IconThemeData(color: Color(0xff222222)),
-
+    iconTheme: IconThemeData(color: _lightText),
 
     ///输入框style
     inputDecorationTheme: const InputDecorationTheme(
-      hintStyle: TextStyle(
-        color: Color(0xFFBAC2CC),//文本框，提示文本颜色
-        fontSize: 16,
-      ),
+      hintStyle: TextStyle(color: Color(0xFFBAC2CC), fontSize: 16),
       focusedBorder: UnderlineInputBorder(
-        borderSide: BorderSide(
-          color: Color(0xFF448BDF),
-          //width: 1,
-          style: BorderStyle.solid,
-        ),
+        borderSide: BorderSide(color: _accent),
       ),
-      /*labelStyle: TextStyle(
-        color: Color(0xff888888),//文本框，提示文本颜色
-      ),*/
-
       border: UnderlineInputBorder(
-        borderSide: BorderSide(
-          color: Color(0xffc6c6c6),
-          //width: 1,
-          style: BorderStyle.solid,
-        ),
+        borderSide: BorderSide(color: Color(0xffc6c6c6)),
       ),
       errorBorder: UnderlineInputBorder(
-        borderSide: BorderSide(
-          color: Color(0xffd9445a),
-          //width: 1,
-          style: BorderStyle.solid,
-        ),
+        borderSide: BorderSide(color: Color(0xffd9445a)),
       ),
     ),
-    /*textButtonTheme: TextButtonThemeData(
-      style: ButtonStyle(
-        backgroundColor: ButtonStyleButton.allOrNull<Color>(Colors.cyanAccent),
-      ),
-    ),*/
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: Color.fromRGBO(255, 255, 255, 0.5),
     ),
-    buttonTheme: ButtonThemeData(
-        buttonColor: Color(0xFF448BDF)
-    ),
+    buttonTheme: ButtonThemeData(buttonColor: _accent),
     //进度条样式
     progressIndicatorTheme: ProgressIndicatorThemeData(
-      color: Color(0xFF448BDF),
-      linearTrackColor:Colors.white24,
+      color: _accent,
+      linearTrackColor: Colors.white24,
       refreshBackgroundColor: Colors.white24,
     ),
     //分割线样式
-    dividerTheme:DividerThemeData(
-        color: Color(0xffD9D9D9),
-        space: 0,
-        thickness: 1,
-        indent: 10,
-        endIndent: 10
+    dividerTheme: DividerThemeData(
+      color: Color(0xffD9D9D9),
+      space: 0,
+      thickness: 1,
+      indent: 10,
+      endIndent: 10,
     ),
-    textSelectionTheme: TextSelectionThemeData(
-      cursorColor: Color(0xFF448BDF),
-    ),
+    textSelectionTheme: TextSelectionThemeData(cursorColor: _accent),
   );
 
-  static ThemeData themeDataDark=ThemeData.dark().copyWith(
-    scaffoldBackgroundColor:AppThemeUtils.darkMap[AppThemeKeys.backGroundColor.name],
+  static ThemeData themeDataDark = ThemeData.dark().copyWith(
+    scaffoldBackgroundColor:
+        AppThemeUtils.darkMap[AppThemeKeys.backGroundColor.name],
     cardTheme: CardThemeData(
       shadowColor: Color(0xff444444),
       color: Color(0xff2b2b2b),
     ),
     //头部导航样式
     appBarTheme: AppBarTheme(
-      centerTitle:true,
-      elevation: 0,//去掉阴影
-      titleTextStyle: TextStyle(
-        color: Color(0xffffffff),
-      ),
-      toolbarTextStyle: TextStyle(
-        color: Color(0xffffffff),
-      ),
-      actionsIconTheme: IconThemeData(
-        color: Color(0xffffffff),
-      ),
-      iconTheme: IconThemeData(
-        color: Color(0xffffffff),
-      ),
+      centerTitle: true,
+      elevation: 0,
+      titleTextStyle: TextStyle(color: _darkText),
+      toolbarTextStyle: TextStyle(color: _darkText),
+      actionsIconTheme: IconThemeData(color: _darkText),
+      iconTheme: IconThemeData(color: _darkText),
     ),
     //底部导航样式
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      selectedIconTheme: IconThemeData(color: Color(0xFF448BDF)),
-      unselectedIconTheme: IconThemeData(color: Color(0xffffffff)),
-      selectedItemColor: Color(0xFF448BDF),
+      selectedIconTheme: IconThemeData(color: _accent),
+      unselectedIconTheme: IconThemeData(color: _darkText),
+      selectedItemColor: _accent,
       unselectedItemColor: Color(0xff888888),
     ),
-    iconTheme: IconThemeData(color: Color(0xffffffff)),
-
-    //cardColor: Color(0xff888888),
-
+    iconTheme: IconThemeData(color: _darkText),
     inputDecorationTheme: InputDecorationTheme(
-      hintStyle: TextStyle(
-        color: Color(0xFFBEBEBE),//文本框，提示文本颜色
-        fontSize: 16,
-      ),
+      hintStyle: TextStyle(color: Color(0xFFBEBEBE), fontSize: 16),
       focusedBorder: UnderlineInputBorder(
-        borderSide: BorderSide(
-          color: Color(0xFF448BDF),
-          //width: 1,
-          style: BorderStyle.solid,
-        ),
+        borderSide: BorderSide(color: _accent),
       ),
-      /*labelStyle: TextStyle(
-        color: Color(0xff888888),//文本框，提示文本颜色
-      ),*/
-
       border: UnderlineInputBorder(
-        borderSide: BorderSide(
-          color: Color(0xff545454),
-          //width: 1,
-          style: BorderStyle.solid,
-        ),
+        borderSide: BorderSide(color: Color(0xff545454)),
       ),
       errorBorder: UnderlineInputBorder(
-        borderSide: BorderSide(
-          color: Color(0xffd9445a),
-          //width: 1,
-          style: BorderStyle.solid,
-        ),
+        borderSide: BorderSide(color: Color(0xffd9445a)),
       ),
     ),
-    /*textButtonTheme: TextButtonThemeData(
-      style: ButtonStyle(
-        backgroundColor: ButtonStyleButton.allOrNull<Color>(Colors.cyanAccent),
-      ),
-    ),*/
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: Color.fromRGBO(255, 255, 255, 0.5),
     ),
-    buttonTheme: ButtonThemeData(
-        buttonColor: Color(0xFF448BDF)
-    ),
-    //进度条样
+    buttonTheme: ButtonThemeData(buttonColor: _accent),
+    //进度条样式
     progressIndicatorTheme: ProgressIndicatorThemeData(
-      color: Color(0xFF448BDF),
-      linearTrackColor:Colors.white24,
+      color: _accent,
+      linearTrackColor: Colors.white24,
       refreshBackgroundColor: Colors.white24,
     ),
     //分割线样式
-    dividerTheme:DividerThemeData(
-        color: Color(0xff303239),
-        space: 0,
-        thickness: 1,
-        indent: 10,
-        endIndent: 10
+    dividerTheme: DividerThemeData(
+      color: Color(0xff303239),
+      space: 0,
+      thickness: 1,
+      indent: 10,
+      endIndent: 10,
     ),
-    textSelectionTheme: TextSelectionThemeData(
-      cursorColor: Color(0xFF448BDF),
-    ),
+    textSelectionTheme: TextSelectionThemeData(cursorColor: _accent),
   );
 }
-class AppThemeUtils{
-  ///根据key返回颜色
-  static Color getColorByKey(BuildContext? context,String key){
-    if(context == null) return  Colors.red;
-    //判断当前主题是什么主题
-    Color? color;
-    if(Theme.of(context).brightness == Brightness.dark){
-      color =  darkMap[key];
-    }else{
-      color = lightMap[key];
-    }
-    //如果没有颜色 返回黑色
-    // assert(color != null);
-    color = color?? const Color(0xff000000);
-    return color;
 
+class AppThemeUtils {
+  ///根据key返回颜色
+  static Color getColorByKey(BuildContext? context, String key) {
+    if (context == null) return Colors.red;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    //如果没有颜色 返回黑色
+    return (isDark ? darkMap : lightMap)[key] ?? const Color(0xff000000);
   }
 
   /// 亮色颜色定义
@@ -234,21 +157,24 @@ class AppThemeUtils{
     AppThemeKeys.itemBgColor8.name: const Color(0xFFEBEBEB),
     AppThemeKeys.itemTextColor.name: const Color(0xFF222222),
     AppThemeKeys.itemSubtitleTextColor.name: const Color(0xFF8F8F8F),
-    AppThemeKeys.itemBorderColor.name:const Color(0xFFD9D9D9),
-    AppThemeKeys.itemLineColor.name:const Color(0xFFE4E4E4),
-    AppThemeKeys.errorBgColor.name:const Color(0xFFFFF3EC),
-    AppThemeKeys.errorBgColor2.name:const Color(0xFFF03450).withAlpha((0.2 * 255).round()),
-    AppThemeKeys.errorTextColor.name:const Color(0xFFF03450),
-    AppThemeKeys.rightTextColor.name:const Color(0xff44A677),
-    AppThemeKeys.textColorOrange.name:const Color(0xFFFF6F16),
-    AppThemeKeys.dividerColor.name:const Color(0xffD9D9D9),
+    AppThemeKeys.itemBorderColor.name: const Color(0xFFD9D9D9),
+    AppThemeKeys.itemLineColor.name: const Color(0xFFE4E4E4),
+    AppThemeKeys.errorBgColor.name: const Color(0xFFFFF3EC),
+    AppThemeKeys.errorBgColor2.name:
+        const Color(0xFFF03450).withAlpha(51),
+    AppThemeKeys.errorTextColor.name: const Color(0xFFF03450),
+    AppThemeKeys.rightTextColor.name: const Color(0xff44A677),
+    AppThemeKeys.textColorOrange.name: const Color(0xFFFF6F16),
+    AppThemeKeys.dividerColor.name: const Color(0xffD9D9D9),
     AppThemeKeys.mainButtonBgColor.name: const Color(0xFF1976F9),
     AppThemeKeys.mainButtonBgColor3.name: const Color(0xFFD1E4FE),
     AppThemeKeys.mainButtonTextColor.name: const Color(0xFFFFFFFF),
-    AppThemeKeys.mainButtonTextColor3.name: Color(0xFF1976F9),
-    AppThemeKeys.transparentBgColor.name:const Color.fromRGBO(0, 0, 0, 0.2),
-    AppThemeKeys.alertBgColor.name: Color(0xFF000000).withAlpha((0.8 * 255).round()),
-    AppThemeKeys.textColorGrey.name:const Color(0xFFCDCBCB),
+    AppThemeKeys.mainButtonTextColor3.name: const Color(0xFF1976F9),
+    AppThemeKeys.transparentBgColor.name:
+        const Color.fromRGBO(0, 0, 0, 0.2),
+    AppThemeKeys.alertBgColor.name:
+        const Color(0xFF000000).withAlpha(204),
+    AppThemeKeys.textColorGrey.name: const Color(0xFFCDCBCB),
     AppThemeKeys.mainGreyColor.name: Colors.grey,
     AppThemeKeys.ff444444.name: const Color(0xFF444444),
     AppThemeKeys.textFieldHintColor.name: const Color(0xFFBAC2CC),
@@ -286,21 +212,23 @@ class AppThemeUtils{
     AppThemeKeys.itemBgColor8.name: const Color(0xFFEBEBEB),
     AppThemeKeys.itemTextColor.name: const Color(0xFFFFFFFF),
     AppThemeKeys.itemSubtitleTextColor.name: const Color(0xFF8F8F8F),
-    AppThemeKeys.itemBorderColor.name:const Color(0xFF303239),
+    AppThemeKeys.itemBorderColor.name: const Color(0xFF303239),
     AppThemeKeys.itemLineColor.name: const Color(0x50E4E4E4),
-    AppThemeKeys.errorBgColor.name:const Color(0xFFFFF3EC),
-    AppThemeKeys.errorBgColor2.name:const Color(0xFFF03450).withAlpha((0.2 * 255).round()),
-    AppThemeKeys.errorTextColor.name:const Color(0xFFF03450),
-    AppThemeKeys.rightTextColor.name:const Color(0xff44A677),
-    AppThemeKeys.textColorOrange.name:const Color(0xFFFF6F16),
-    AppThemeKeys.dividerColor.name:const Color(0xff303239),
+    AppThemeKeys.errorBgColor.name: const Color(0xFFFFF3EC),
+    AppThemeKeys.errorBgColor2.name:
+        const Color(0xFFF03450).withAlpha(51),
+    AppThemeKeys.errorTextColor.name: const Color(0xFFF03450),
+    AppThemeKeys.rightTextColor.name: const Color(0xff44A677),
+    AppThemeKeys.textColorOrange.name: const Color(0xFFFF6F16),
+    AppThemeKeys.dividerColor.name: const Color(0xff303239),
     AppThemeKeys.mainButtonBgColor.name: const Color(0xFF1976F9),
     AppThemeKeys.mainButtonBgColor3.name: const Color(0xFF2A3D5C),
     AppThemeKeys.mainButtonTextColor.name: const Color(0xFFFFFFFF),
     AppThemeKeys.mainButtonTextColor3.name: const Color(0xFF6B9ADB),
-    AppThemeKeys.transparentBgColor.name:const Color.fromRGBO(0, 0, 0, 0.2),
-    AppThemeKeys.alertBgColor.name:const Color(0xFFffffff),
-    AppThemeKeys.textColorGrey.name:const Color(0xFFCDCBCB),
+    AppThemeKeys.transparentBgColor.name:
+        const Color.fromRGBO(0, 0, 0, 0.2),
+    AppThemeKeys.alertBgColor.name: const Color(0xFFffffff),
+    AppThemeKeys.textColorGrey.name: const Color(0xFFCDCBCB),
     AppThemeKeys.mainGreyColor.name: Colors.grey,
     AppThemeKeys.ff444444.name: Colors.white70,
     AppThemeKeys.textFieldHintColor.name: const Color(0xFFBEBEBE),
@@ -308,52 +236,50 @@ class AppThemeUtils{
     AppThemeKeys.iconTextDisableColor.name: const Color(0xff373739),
     AppThemeKeys.timeBorderColor.name: const Color(0xff373739),
   };
-
 }
-enum AppThemeKeys{
-  backGroundColor,//背景色
-  backGroundColor2,//背景色2
+
+enum AppThemeKeys {
+  backGroundColor, //背景色
+  backGroundColor2, //背景色2
   backGroundColor3,
-  //borderSide,//阴影颜色
-  //mainBoxColor,//widget背景色
-  linearGradient1,//线性渐变色1
-  linearGradient2,//线性渐变色2
-  mainBlueColor,//蓝色
-  mainTextColor,//主要文本颜色
+  linearGradient1, //线性渐变色1
+  linearGradient2, //线性渐变色2
+  mainBlueColor, //蓝色
+  mainTextColor, //主要文本颜色
   mainTextColor3,
   mainTextColor4,
-  mainTextColor5,//主要文本颜色，与mainTextColor颜色相反
+  mainTextColor5, //主要文本颜色，与mainTextColor颜色相反
   mainTextColor6,
   mainTextColor7,
   mainTextColor8,
   mainTextColor10,
   mainWhiteColor,
   mainBlockColor,
-  refreshBGColor,//下拉刷新widget 背景颜色
-  refreshValueColor,//下拉刷新进度 颜色
+  refreshBGColor, //下拉刷新widget 背景颜色
+  refreshValueColor, //下拉刷新进度 颜色
   ff888888,
-  itemBgColor,//列表项背景
-  itemBgColor2,//列表项背景，文本输入框
+  itemBgColor, //列表项背景
+  itemBgColor2, //列表项背景，文本输入框
   itemBgColor4,
   itemBgColor5,
   itemBgColor6,
   itemBgColor8,
-  itemTextColor,//列表项文本主颜色
-  itemSubtitleTextColor,//列表项文本副标题颜色
-  itemBorderColor,//列表项边框颜色
+  itemTextColor, //列表项文本主颜色
+  itemSubtitleTextColor, //列表项文本副标题颜色
+  itemBorderColor, //列表项边框颜色
   itemLineColor,
-  errorBgColor,//错误文本背景色
+  errorBgColor, //错误文本背景色
   errorBgColor2,
-  errorTextColor,//错误文本颜色
-  rightTextColor,//正确文本颜色
-  textColorOrange,//橙色
-  dividerColor,//隔断线颜色
-  mainButtonBgColor,//按钮背景颜色
+  errorTextColor, //错误文本颜色
+  rightTextColor, //正确文本颜色
+  textColorOrange, //橙色
+  dividerColor, //隔断线颜色
+  mainButtonBgColor, //按钮背景颜色
   mainButtonBgColor3,
-  mainButtonTextColor,//按钮字体颜色
+  mainButtonTextColor, //按钮字体颜色
   mainButtonTextColor3,
-  transparentBgColor,//半透明背景色
-  alertBgColor,//弹出层背景色
+  transparentBgColor, //半透明背景色
+  alertBgColor, //弹出层背景色
   textColorGrey,
   mainGreyColor,
   ff444444,

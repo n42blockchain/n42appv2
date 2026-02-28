@@ -6,7 +6,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:n42_chat/n42_chat.dart';
 import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
-import 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart';
 import 'package:n42_wallet/features/wallet/services/ens_service.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 
@@ -37,23 +36,16 @@ class N42WalletBridge implements IWalletBridge {
     final provider = _provider;
     if (provider == null) return null;
 
-    // 优先获取 ETH 地址作为默认收款地址
-    final ethAddress = provider.getAddress('ETH');
-    if (ethAddress != null && ethAddress.toString().isNotEmpty) {
-      return ethAddress.toString();
-    }
-
-    // 如果没有 ETH 地址，尝试获取 N 链地址
-    final nAddress = provider.getAddress('N');
-    if (nAddress != null && nAddress.toString().isNotEmpty) {
-      return nAddress.toString();
+    // 优先获取 ETH 地址作为默认收款地址，其次 N 链地址
+    for (final chain in ['ETH', 'N']) {
+      final addr = provider.getAddress(chain)?.toString();
+      if (addr != null && addr.isNotEmpty) return addr;
     }
 
     // 尝试从 coinModels 获取第一个有效地址
     for (final coinModel in provider.coinModels) {
-      if (coinModel.address != null && coinModel.address.toString().isNotEmpty) {
-        return coinModel.address.toString();
-      }
+      final addr = coinModel.address?.toString();
+      if (addr != null && addr.isNotEmpty) return addr;
     }
 
     return null;
@@ -161,15 +153,9 @@ class N42WalletBridge implements IWalletBridge {
 
   @override
   bool isValidAddress(String address) {
-    // ETH address: 0x + 40 hex chars
-    if (_ethAddressRegExp.hasMatch(address)) {
-      return true;
-    }
-    // N chain address
-    if (address.startsWith('N') && address.length >= 30 && address.length <= 50) {
-      return true;
-    }
-    return false;
+    // ETH address: 0x + 40 hex chars, or N chain address (30-50 chars)
+    return _ethAddressRegExp.hasMatch(address) ||
+        (address.startsWith('N') && address.length >= 30 && address.length <= 50);
   }
 
   @override
@@ -221,11 +207,7 @@ class N42WalletBridge implements IWalletBridge {
       return await _ensService.resolveAddresses(addresses);
     } catch (e) {
       debugPrint('N42WalletBridge: Failed to batch lookup ENS: $e');
-      final results = <String, String?>{};
-      for (final addr in addresses) {
-        results[addr] = null;
-      }
-      return results;
+      return {for (final addr in addresses) addr: null};
     }
   }
 
@@ -241,25 +223,8 @@ class N42WalletBridge implements IWalletBridge {
     required int chainId,
     String? ownerAddress,
   }) async {
-    try {
-      final address = ownerAddress ?? walletAddress;
-      if (address == null) return BigInt.zero;
-
-      final result = await _tokenViewApi.getBalanceEth(
-        'ETH',
-        address,
-        contractAddress,
-      );
-
-      if (!result.error && result.data != null) {
-        final balanceStr = result.data.toString();
-        return BigInt.tryParse(balanceStr) ?? BigInt.zero;
-      }
-      return BigInt.zero;
-    } catch (e) {
-      debugPrint('N42WalletBridge: Failed to get ERC-20 balance: $e');
-      return BigInt.zero;
-    }
+    final raw = await _queryTokenBalance(contractAddress, ownerAddress, 'ERC-20');
+    return BigInt.tryParse(raw) ?? BigInt.zero;
   }
 
   @override
@@ -268,26 +233,9 @@ class N42WalletBridge implements IWalletBridge {
     required int chainId,
     String? ownerAddress,
   }) async {
-    try {
-      final address = ownerAddress ?? walletAddress;
-      if (address == null) return 0;
-
-      // Use ERC-20 balance query as proxy - NFT balance returns count
-      final result = await _tokenViewApi.getBalanceEth(
-        'ETH',
-        address,
-        contractAddress,
-      );
-
-      if (!result.error && result.data != null) {
-        final balanceStr = result.data.toString();
-        return int.tryParse(balanceStr) ?? 0;
-      }
-      return 0;
-    } catch (e) {
-      debugPrint('N42WalletBridge: Failed to get ERC-721 balance: $e');
-      return 0;
-    }
+    // Use ERC-20 balance query as proxy - NFT balance returns count
+    final raw = await _queryTokenBalance(contractAddress, ownerAddress, 'ERC-721');
+    return int.tryParse(raw) ?? 0;
   }
 
   @override
@@ -297,25 +245,29 @@ class N42WalletBridge implements IWalletBridge {
     required int chainId,
     String? ownerAddress,
   }) async {
+    // ERC-1155 balanceOf(address, tokenId) - query via token API
+    final raw = await _queryTokenBalance(contractAddress, ownerAddress, 'ERC-1155');
+    return BigInt.tryParse(raw) ?? BigInt.zero;
+  }
+
+  /// Query token balance via TokenViewApi; returns raw balance string or '0'.
+  Future<String> _queryTokenBalance(
+    String contractAddress,
+    String? ownerAddress,
+    String tokenStandard,
+  ) async {
     try {
       final address = ownerAddress ?? walletAddress;
-      if (address == null) return BigInt.zero;
+      if (address == null) return '0';
 
-      // ERC-1155 balanceOf(address, tokenId) - query via token API
-      final result = await _tokenViewApi.getBalanceEth(
-        'ETH',
-        address,
-        contractAddress,
-      );
-
+      final result = await _tokenViewApi.getBalanceEth('ETH', address, contractAddress);
       if (!result.error && result.data != null) {
-        final balanceStr = result.data.toString();
-        return BigInt.tryParse(balanceStr) ?? BigInt.zero;
+        return result.data.toString();
       }
-      return BigInt.zero;
+      return '0';
     } catch (e) {
-      debugPrint('N42WalletBridge: Failed to get ERC-1155 balance: $e');
-      return BigInt.zero;
+      debugPrint('N42WalletBridge: Failed to get $tokenStandard balance: $e');
+      return '0';
     }
   }
 }

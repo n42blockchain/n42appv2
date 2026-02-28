@@ -60,14 +60,8 @@ class ThemeAdapter {
       backgroundColor: accent,
     ),
 
-    buttonTheme: ButtonThemeData(buttonColor: accent),
-
-    // Progress Indicator Theme
-    progressIndicatorTheme: ProgressIndicatorThemeData(
-      color: accent,
-      linearTrackColor: Colors.white24,
-      refreshBackgroundColor: Colors.white24,
-    ),
+    buttonTheme: _buttonTheme(accent),
+    progressIndicatorTheme: _progressTheme(accent),
 
     // Divider Theme
     dividerTheme: const DividerThemeData(
@@ -78,9 +72,7 @@ class ThemeAdapter {
       endIndent: 10,
     ),
 
-    textSelectionTheme: TextSelectionThemeData(
-      cursorColor: accent,
-    ),
+    textSelectionTheme: _textSelectionTheme(accent),
   );
 
   /// Build dark ThemeData with the given [accent] color.
@@ -132,14 +124,8 @@ class ThemeAdapter {
       backgroundColor: accent.withValues(alpha: 0.5),
     ),
 
-    buttonTheme: ButtonThemeData(buttonColor: accent),
-
-    // Progress Indicator Theme
-    progressIndicatorTheme: ProgressIndicatorThemeData(
-      color: accent,
-      linearTrackColor: Colors.white24,
-      refreshBackgroundColor: Colors.white24,
-    ),
+    buttonTheme: _buttonTheme(accent),
+    progressIndicatorTheme: _progressTheme(accent),
 
     // Divider Theme
     dividerTheme: const DividerThemeData(
@@ -150,10 +136,23 @@ class ThemeAdapter {
       endIndent: 10,
     ),
 
-    textSelectionTheme: TextSelectionThemeData(
-      cursorColor: accent,
-    ),
+    textSelectionTheme: _textSelectionTheme(accent),
   );
+
+  // ── Shared theme components ─────────────────────────────────────────────
+
+  static ButtonThemeData _buttonTheme(Color accent) =>
+      ButtonThemeData(buttonColor: accent);
+
+  static ProgressIndicatorThemeData _progressTheme(Color accent) =>
+      ProgressIndicatorThemeData(
+        color: accent,
+        linearTrackColor: Colors.white24,
+        refreshBackgroundColor: Colors.white24,
+      );
+
+  static TextSelectionThemeData _textSelectionTheme(Color accent) =>
+      TextSelectionThemeData(cursorColor: accent);
 
   // ── Backward-compat statics (used in tests / legacy call sites) ──────────
   static ThemeData get themeDataLight => buildLight(defaultAccent);
@@ -338,4 +337,3 @@ enum AppThemeKeys {
   iconTextDisableColor,
   timeBorderColor,
 }
-

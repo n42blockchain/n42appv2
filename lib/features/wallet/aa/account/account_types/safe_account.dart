@@ -68,7 +68,7 @@ class SafeAccountHelper {
 
       // Step 2: initCode = creationCode ++ uint256(uint160(singleton))
       //         This matches: abi.encodePacked(type(SafeProxy).creationCode, uint256(uint160(_singleton)))
-      final singletonPadded = _addressAsUint256(singletonAddress);
+      final singletonPadded = _addressToBytes32(singletonAddress);
       final initCode = Uint8List(creationCode.length + 32);
       initCode.setAll(0, creationCode);
       initCode.setAll(creationCode.length, singletonPadded);
@@ -84,7 +84,7 @@ class SafeAccountHelper {
       final create2Salt = keccak256(saltPreimage);
 
       // Step 5: CREATE2 address = keccak256(0xff ++ factory ++ salt ++ initCodeHash)[12:]
-      final factoryBytes = hexToBytes(factoryAddress.replaceFirst('0x', '').padLeft(40, '0'));
+      final factoryBytes = _parseAddressBytes(factoryAddress);
       final data = Uint8List(1 + 20 + 32 + 32);
       data[0] = 0xff;
       data.setAll(1, factoryBytes);
@@ -106,13 +106,17 @@ class SafeAccountHelper {
     required String owner,
     required BigInt saltNonce,
   }) {
-    final factoryBytes = hexToBytes(factoryAddress.replaceFirst('0x', '').padLeft(40, '0'));
+    final factoryBytes = _parseAddressBytes(factoryAddress);
     final calldata = _buildCreateProxyWithNonce(owner: owner, saltNonce: saltNonce);
     final result = Uint8List(20 + calldata.length);
     result.setAll(0, factoryBytes);
     result.setAll(20, calldata);
     return result;
   }
+
+  /// Parse a hex address string (with or without 0x prefix) into 20 raw bytes.
+  Uint8List _parseAddressBytes(String addr) =>
+      hexToBytes(addr.replaceFirst('0x', '').padLeft(40, '0'));
 
   // ── Private: ABI helpers ────────────────────────────────────────────────────
 
@@ -229,14 +233,8 @@ class SafeAccountHelper {
 
   Uint8List _addressToBytes32(String addr) {
     final out = Uint8List(32);
-    final addrBytes = hexToBytes(addr.replaceFirst('0x', '').padLeft(40, '0'));
-    out.setAll(12, addrBytes);
+    out.setAll(12, _parseAddressBytes(addr));
     return out;
-  }
-
-  /// Encode an address as uint256 (right-aligned in 32 bytes) for initCode concat.
-  Uint8List _addressAsUint256(String addr) {
-    return _addressToBytes32(addr); // same layout: 12 zero bytes + 20 address bytes
   }
 
   Uint8List _uint256ToBytes32(BigInt v) {
@@ -284,9 +282,9 @@ class SafeAccountHelper {
         }),
       );
       if (response.statusCode != 200) return null;
-      final json = jsonDecode(response.body) as Map<String, dynamic>;
-      if (json.containsKey('error')) return null;
-      final result = json['result'];
+      final responseBody = jsonDecode(response.body) as Map<String, dynamic>;
+      if (responseBody.containsKey('error')) return null;
+      final result = responseBody['result'];
       return result is String ? result : null;
     } catch (_) {
       return null;

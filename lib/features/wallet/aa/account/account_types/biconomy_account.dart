@@ -72,31 +72,13 @@ class BiconomyAccountHelper {
   }) async {
     try {
       final initData = buildInitData(owner: owner);
-      final saltBytes = _uint256ToBytes32(salt);
 
       // computeAccountAddress(bytes calldata initData, bytes32 salt)
-      // selector = keccak256("computeAccountAddress(bytes,bytes32)")[:4]
-      final selectorFull = keccak256(
-        Uint8List.fromList(utf8.encode('computeAccountAddress(bytes,bytes32)')),
+      final calldata = _encodeSelectorBytesBytes32(
+        'computeAccountAddress(bytes,bytes32)',
+        initData,
+        salt,
       );
-      final selector = bytesToHex(selectorFull.sublist(0, 4));
-
-      // ABI encode: (bytes initData, bytes32 salt)
-      //   head: offset to initData (32) + salt (32) = 64 bytes
-      //   tail: length + initData + padding
-      final offsetToInitData = _uint256ToBytes32(BigInt.from(64));
-      final initDataLength = _uint256ToBytes32(BigInt.from(initData.length));
-      final padding = (32 - initData.length % 32) % 32;
-      final initDataPadded = Uint8List(initData.length + padding);
-      initDataPadded.setAll(0, initData);
-
-      final calldata = Uint8List(4 + 32 + 32 + 32 + initDataPadded.length);
-      var pos = 0;
-      calldata.setAll(pos, hexToBytes(selector)); pos += 4;
-      calldata.setAll(pos, offsetToInitData); pos += 32;
-      calldata.setAll(pos, saltBytes); pos += 32;
-      calldata.setAll(pos, initDataLength); pos += 32;
-      calldata.setAll(pos, initDataPadded);
 
       final result = await _ethCall(
         rpcUrl: rpcUrl,
@@ -191,9 +173,8 @@ class BiconomyAccountHelper {
     //   [96:128] struct.initData.length = 32 (abi.encode(address) = 32 bytes)
     //   [128:160] struct.initData[0..31] = ownerAddr right-padded
 
-    final ownerEncoded = _addressToBytes32(owner);
     // initData for K1Validator = abi.encode(ownerAddress) = 32 bytes
-    final validatorInitData = ownerEncoded; // abi.encode(address) is 32 bytes
+    final ownerEncoded = _addressToBytes32(owner);
 
     // struct BootstrapConfig in memory:
     //   offset to struct from outer param head = 32
@@ -201,10 +182,9 @@ class BiconomyAccountHelper {
     //     module (address,static) at offset 0  within struct = 32 bytes
     //     offset to initData within struct      = 64 (pointing past the two 32-byte head slots)
     //     initData.length = 32
-    //     initData data   = validatorInitData (32 bytes)
+    //     initData data   = ownerEncoded (32 bytes)
     final structModule = _addressToBytes32(k1ValidatorAddress);
     const structInitDataRelOffset = 64; // 2 * 32 bytes past struct start
-    final structInitDataLength = _uint256ToBytes32(BigInt.from(32)); // abi.encode(address) = 32
 
     final calldata = Uint8List(4 + 5 * 32);
     var pos = 0;
@@ -212,42 +192,47 @@ class BiconomyAccountHelper {
     calldata.setAll(pos, _uint256ToBytes32(BigInt.from(32))); pos += 32; // offset to struct
     calldata.setAll(pos, structModule); pos += 32;            // struct.module
     calldata.setAll(pos, _uint256ToBytes32(BigInt.from(structInitDataRelOffset))); pos += 32; // relative offset
-    calldata.setAll(pos, structInitDataLength); pos += 32;   // initData.length
-    calldata.setAll(pos, validatorInitData);                  // initData bytes
+    calldata.setAll(pos, _uint256ToBytes32(BigInt.from(32))); pos += 32; // initData.length
+    calldata.setAll(pos, ownerEncoded);                       // initData bytes
 
     return calldata;
   }
 
   /// Build factory.createAccount(bytes initData, bytes32 salt) calldata.
-  /// selector = keccak256("createAccount(bytes,bytes32)")[:4]
   Uint8List _buildCreateAccountCalldata({
     required String owner,
     required BigInt salt,
   }) {
-    final selectorFull = keccak256(
-      Uint8List.fromList(utf8.encode('createAccount(bytes,bytes32)')),
-    );
-    final selector = selectorFull.sublist(0, 4);
-
     final initData = buildInitData(owner: owner);
-    final saltBytes = _uint256ToBytes32(salt);
+    return _encodeSelectorBytesBytes32('createAccount(bytes,bytes32)', initData, salt);
+  }
 
-    // (bytes initData, bytes32 salt)
-    //   head: offset to initData = 64, salt = static 32
-    final initDataOffset = _uint256ToBytes32(BigInt.from(64));
-    final initDataLength = _uint256ToBytes32(BigInt.from(initData.length));
-    final padding = (32 - initData.length % 32) % 32;
-    final initDataPadded = Uint8List(initData.length + padding);
-    initDataPadded.setAll(0, initData);
+  // ── Private: calldata encoding ─────────────────────────────────────────────
 
-    final calldata = Uint8List(4 + 32 + 32 + 32 + initDataPadded.length);
+  /// Encode `selector(bytes,bytes32)` calldata.
+  ///
+  /// Layout: selector(4) + offset(32) + bytes32Value(32) + bytesLength(32) + bytesPadded
+  Uint8List _encodeSelectorBytesBytes32(
+    String signature,
+    Uint8List bytesArg,
+    BigInt bytes32Value,
+  ) {
+    final selectorFull = keccak256(Uint8List.fromList(utf8.encode(signature)));
+    final selector = selectorFull.sublist(0, 4);
+    final saltBytes = _uint256ToBytes32(bytes32Value);
+    final offset = _uint256ToBytes32(BigInt.from(64));
+    final length = _uint256ToBytes32(BigInt.from(bytesArg.length));
+    final padding = (32 - bytesArg.length % 32) % 32;
+    final padded = Uint8List(bytesArg.length + padding);
+    padded.setAll(0, bytesArg);
+
+    final calldata = Uint8List(4 + 32 + 32 + 32 + padded.length);
     var pos = 0;
     calldata.setAll(pos, selector); pos += 4;
-    calldata.setAll(pos, initDataOffset); pos += 32;
+    calldata.setAll(pos, offset); pos += 32;
     calldata.setAll(pos, saltBytes); pos += 32;
-    calldata.setAll(pos, initDataLength); pos += 32;
-    calldata.setAll(pos, initDataPadded);
-
+    calldata.setAll(pos, length); pos += 32;
+    calldata.setAll(pos, padded);
     return calldata;
   }
 

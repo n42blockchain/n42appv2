@@ -43,7 +43,8 @@ class HomePage extends ConsumerStatefulWidget {
   ConsumerState<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver {
+class _HomePageState extends ConsumerState<HomePage>
+    with WidgetsBindingObserver {
   final GlobalKey _tabTwo = GlobalKey();
   final GlobalKey _tabThree = GlobalKey();
   final GlobalKey _tabFour = GlobalKey();
@@ -53,6 +54,10 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
   bool? showTermsOfService;
   StreamSubscription? _deviceLoginSubscription;
   bool _isDeviceLoginDialogShowing = false;
+
+  /// 是否启用了任意一种锁屏方式。
+  bool _hasAnyLock(ScreenLockState lockState) =>
+      lockState.isLocked || lockState.faceEnabled || lockState.gestureEnabled;
 
   /// Build pages list (不包含 Chat，Chat 作为独立页面跳转)
   List<Widget> _buildPages() {
@@ -114,10 +119,8 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
     if (AppGlobals.userInfo == null) return;
 
     final lockState = ref.read(screenLockProvider);
-    final hasLock =
-        lockState.isLocked || lockState.faceEnabled || lockState.gestureEnabled;
 
-    if (hasLock) {
+    if (_hasAnyLock(lockState)) {
       // 检查跨进程持久化的后台时间戳，判断是否真正超时
       // 场景：OS 将应用在后台杀死后冷重启，此时 didChangeAppLifecycleState
       // 不会再触发，但我们在 hidden/paused 时已经持久化了 pausedAt。
@@ -236,7 +239,7 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
                 child: buildBottomNavBar(context),
               ),
             ],
-            if(showTermsOfService==false)
+            if (showTermsOfService == false)
               Positioned.fill(
                 child: TermsOfServiceWidget(
                   '${AppConfig.apiUrl['walletamazeBrowser']}/static/terms_of_use.html',
@@ -273,11 +276,7 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
   /// 记录进入后台时间戳（内存 + 持久化双写）。
   void _recordPausedTimestamp() {
     final lockState = ref.read(screenLockProvider);
-    if (!lockState.isLocked &&
-        !lockState.faceEnabled &&
-        !lockState.gestureEnabled) {
-      return;
-    }
+    if (!_hasAnyLock(lockState)) return;
     final ts = DateTime.now().millisecondsSinceEpoch ~/ 1000;
     pausedTime = ts;
     // 持久化：应对 OS 在后台杀死进程后冷重启的场景
@@ -295,9 +294,7 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
       case AppLifecycleState.resumed:
         MiningBackground().backgroundEnd();
 
-        if (!lockState.isLocked &&
-            !lockState.faceEnabled &&
-            !lockState.gestureEnabled) {
+        if (!_hasAnyLock(lockState)) {
           // 无锁屏配置 → 清理可能遗留的时间戳并退出
           pausedTime = 0;
           await SPUtil().clearPausedAt();

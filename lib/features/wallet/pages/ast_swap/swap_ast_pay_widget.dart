@@ -50,16 +50,17 @@ class SwapAstPayWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final Color balanceColor = hasValidInput
-        ? AppThemeUtils.getColorByKey(context, AppThemeKeys.itemTextColor.name)
-        : AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name);
+    final colorKey = hasValidInput
+        ? AppThemeKeys.itemTextColor.name
+        : AppThemeKeys.errorTextColor.name;
+    final Color balanceColor = AppThemeUtils.getColorByKey(context, colorKey);
 
     return Container(
-      margin: EdgeInsets.only(
-        top: ScreenUtil().setWidth(30),
-        left: ScreenUtil().setWidth(30),
-        right: ScreenUtil().setWidth(30),
-        bottom: ScreenUtil().setWidth(20),
+      margin: EdgeInsets.fromLTRB(
+        ScreenUtil().setWidth(30),
+        ScreenUtil().setWidth(30),
+        ScreenUtil().setWidth(30),
+        ScreenUtil().setWidth(20),
       ),
       padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
       decoration: BoxDecoration(
@@ -229,7 +230,6 @@ class SwapAstPayWidget extends ConsumerWidget {
     ).toString();
 
     return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Text(
           "${S.of(context).g_key_29}:$balanceText",
@@ -255,7 +255,6 @@ class SwapAstPayWidget extends ConsumerWidget {
     required String coinName,
   }) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Text(
           label,

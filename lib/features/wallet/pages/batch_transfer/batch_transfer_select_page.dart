@@ -26,39 +26,40 @@ class BatchTransferSelectPage extends ConsumerWidget {
       appBar: AppBarWidget(
         text: S.of(context).g_key_batch_title,
       ),
-      body: Builder(builder: (context) {
-          // 过滤出支持批量转账的代币（EVM 链）
-          final supportedCoins = waProvider.coinList.where((coin) {
-            final chainSymbol = coin.coin['symbol'] ?? '';
-            // 只支持 EVM 兼容链
-            return _isEvmChain(chainSymbol);
-          }).toList();
+      body: _buildBody(context, waProvider),
+    );
+  }
 
-          if (supportedCoins.isEmpty) {
-            return _buildEmptyState(context);
-          }
+  Widget _buildBody(BuildContext context, dynamic waProvider) {
+    // 过滤出支持批量转账的代币（EVM 链）
+    final supportedCoins = waProvider.coinList.where((coin) {
+      final chainSymbol = coin.coin['symbol'] ?? '';
+      return _isEvmChain(chainSymbol);
+    }).toList();
 
-          return ListView(
-            padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
-            children: [
-              // 说明卡片
-              _buildInfoCard(context),
-              SizedBox(height: ScreenUtil().setWidth(24)),
-              // 代币列表
-              Text(
-                S.of(context).g_key_batch_select_token,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(28),
-                  fontWeight: FontWeight.bold,
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
-                ),
-              ),
-              SizedBox(height: ScreenUtil().setWidth(16)),
-              ...supportedCoins.map((coin) => _buildCoinItem(context, coin)),
-            ],
-          );
-        }),
+    if (supportedCoins.isEmpty) {
+      return _buildEmptyState(context);
+    }
+
+    return ListView(
+      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      children: [
+        // 说明卡片
+        _buildInfoCard(context),
+        SizedBox(height: ScreenUtil().setWidth(24)),
+        // 代币列表
+        Text(
+          S.of(context).g_key_batch_select_token,
+          style: TextStyle(
+            fontSize: ScreenUtil().setSp(28),
+            fontWeight: FontWeight.bold,
+            color: AppThemeUtils.getColorByKey(
+                context, AppThemeKeys.mainTextColor.name),
+          ),
+        ),
+        SizedBox(height: ScreenUtil().setWidth(16)),
+        ...supportedCoins.map((coin) => _buildCoinItem(context, coin)),
+      ],
     );
   }
 
@@ -70,6 +71,8 @@ class BatchTransferSelectPage extends ConsumerWidget {
   }
 
   Widget _buildEmptyState(BuildContext context) {
+    final subtitleText = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.itemSubtitleTextColor.name);
     return Center(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(32)),
@@ -79,16 +82,14 @@ class BatchTransferSelectPage extends ConsumerWidget {
             Icon(
               Icons.send_rounded,
               size: ScreenUtil().setWidth(80),
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name),
+              color: subtitleText,
             ),
             SizedBox(height: ScreenUtil().setWidth(16)),
             Text(
               S.of(context).g_key_batch_no_supported,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(28),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemSubtitleTextColor.name),
+                color: subtitleText,
               ),
               textAlign: TextAlign.center,
             ),
@@ -97,8 +98,7 @@ class BatchTransferSelectPage extends ConsumerWidget {
               S.of(context).g_key_batch_evm_only,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(24),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemSubtitleTextColor.name),
+                color: subtitleText,
               ),
               textAlign: TextAlign.center,
             ),
@@ -163,8 +163,12 @@ class BatchTransferSelectPage extends ConsumerWidget {
   Widget _buildCoinItem(BuildContext context, CoinModel coin) {
     final chainSymbol = (coin.coin['symbol'] ?? '') as String;
     final name = (coin.coin['name'] ?? chainSymbol) as String;
-    final balance = coin.balance;
     final decimals = (coin.coin['decimals'] ?? 18) as int;
+    final chainColor = _getChainColor(chainSymbol);
+    final mainText = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.mainTextColor.name);
+    final subtitleText = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.itemSubtitleTextColor.name);
 
     return GestureDetector(
       onTap: () => _navigateToBatchTransfer(context, coin),
@@ -183,7 +187,7 @@ class BatchTransferSelectPage extends ConsumerWidget {
               width: ScreenUtil().setWidth(48),
               height: ScreenUtil().setWidth(48),
               decoration: BoxDecoration(
-                color: _getChainColor(chainSymbol).withAlpha(30),
+                color: chainColor.withAlpha(30),
                 borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24)),
               ),
               child: Center(
@@ -192,7 +196,7 @@ class BatchTransferSelectPage extends ConsumerWidget {
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(24),
                     fontWeight: FontWeight.bold,
-                    color: _getChainColor(chainSymbol),
+                    color: chainColor,
                   ),
                 ),
               ),
@@ -208,8 +212,7 @@ class BatchTransferSelectPage extends ConsumerWidget {
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(28),
                       fontWeight: FontWeight.w600,
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainTextColor.name),
+                      color: mainText,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -218,8 +221,7 @@ class BatchTransferSelectPage extends ConsumerWidget {
                     chainSymbol,
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(22),
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.itemSubtitleTextColor.name),
+                      color: subtitleText,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -232,30 +234,24 @@ class BatchTransferSelectPage extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  _formatBalance(balance, decimals),
+                  _formatBalance(coin.balance, decimals),
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(26),
                     fontWeight: FontWeight.w500,
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainTextColor.name),
+                    color: mainText,
                   ),
                 ),
                 Text(
                   chainSymbol,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(22),
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.itemSubtitleTextColor.name),
+                    color: subtitleText,
                   ),
                 ),
               ],
             ),
             SizedBox(width: ScreenUtil().setWidth(8)),
-            Icon(
-              Icons.chevron_right,
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name),
-            ),
+            Icon(Icons.chevron_right, color: subtitleText),
           ],
         ),
       ),
@@ -277,27 +273,31 @@ class BatchTransferSelectPage extends ConsumerWidget {
 
   void _navigateToBatchTransfer(BuildContext context, CoinModel coin) {
     final chainSymbol = (coin.coin['symbol'] ?? '') as String;
-    final rpcUrl = _getRpcUrl(chainSymbol);
-    final chainId = _getChainId(chainSymbol);
+    final baseInfo = _getBaseInfo(chainSymbol);
     final address = coin.address?.toString() ?? '';
     final decimals = (coin.coin['decimals'] ?? 18) as int;
-    final balance = coin.balance;
 
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (_) => BatchTransferPage(
           chainSymbol: chainSymbol,
-          rpcUrl: rpcUrl,
-          chainId: chainId,
+          rpcUrl: baseInfo['service'] as String? ?? '',
+          chainId: baseInfo['chainId'] as int? ?? 1,
           fromAddress: address,
           tokenSymbol: chainSymbol,
           decimals: decimals,
-          balance: balance,
+          balance: coin.balance,
           batchTransferProvider: BatchTransferProvider(),
         ),
       ),
     );
+  }
+
+  /// 从 chainUrlMap 获取链基础配置（rpcUrl、chainId 等）
+  Map<String, dynamic> _getBaseInfo(String chainSymbol) {
+    final config = chainUrlMap[chainSymbol];
+    return (config?['baseInfo'] as Map<String, dynamic>?) ?? {};
   }
 
   Color _getChainColor(String chainSymbol) {
@@ -313,21 +313,5 @@ class BatchTransferSelectPage extends ConsumerWidget {
       'CELO': Color(0xFF35D07F),
     };
     return chainColors[chainSymbol.toUpperCase()] ?? const Color(0xFF607D8B);
-  }
-
-  String _getRpcUrl(String chainSymbol) {
-    final config = chainUrlMap[chainSymbol];
-    if (config != null && config['baseInfo'] != null) {
-      return config['baseInfo']['service'] ?? '';
-    }
-    return '';
-  }
-
-  int _getChainId(String chainSymbol) {
-    final config = chainUrlMap[chainSymbol];
-    if (config != null && config['baseInfo'] != null) {
-      return config['baseInfo']['chainId'] ?? 1;
-    }
-    return 1;
   }
 }

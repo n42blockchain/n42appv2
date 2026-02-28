@@ -1,5 +1,4 @@
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
-import 'package:n42_wallet/features/models/message_model.dart';
 import 'package:n42_wallet/features/wallet/api/dex_swap_api.dart';
 import 'package:n42_wallet/features/wallet/models/dex/dex_token_model.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
@@ -43,12 +42,19 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
     super.dispose();
   }
 
+  /// 从 API 响应中解析 token 列表
+  List<DexTokenModel> _parseTokens(dynamic data) {
+    return ((data as List?) ?? [])
+        .map((e) => DexTokenModel.fromJson(e as Map<String, dynamic>))
+        .toList();
+  }
+
   Future<void> _loadTokens() async {
     setState(() {
       _loading = true;
       _error = '';
     });
-    final MessageModel res = await _api.getTokens(widget.chain);
+    final res = await _api.getTokens(widget.chain);
     if (!mounted) return;
     if (res.error) {
       setState(() {
@@ -56,9 +62,7 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
         _error = res.data?.toString() ?? 'Load failed';
       });
     } else {
-      final list = ((res.data as List?) ?? [])
-          .map((e) => DexTokenModel.fromJson(e as Map<String, dynamic>))
-          .toList();
+      final list = _parseTokens(res.data);
       setState(() {
         _loading = false;
         _all = list;
@@ -84,33 +88,30 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
   }
 
   void _onSearch() {
-    final q = _searchCtrl.text.trim().toLowerCase();
+    final raw = _searchCtrl.text.trim();
+    final q = raw.toLowerCase();
 
-    // 重置地址搜索状态
+    // 本地过滤
+    final local = q.isEmpty
+        ? _all
+        : _all
+            .where((t) =>
+                t.symbol.toLowerCase().contains(q) ||
+                t.name.toLowerCase().contains(q) ||
+                t.address.toLowerCase().contains(q))
+            .toList();
+
+    // 重置地址搜索状态 + 更新本地过滤结果
     setState(() {
       _remoteResults = [];
       _remoteError = '';
       _remoteSearching = false;
+      _filtered = local;
     });
 
-    if (q.isEmpty) {
-      setState(() => _filtered = _all);
-      return;
-    }
-
-    // 本地过滤
-    final local = _all
-        .where((t) =>
-            t.symbol.toLowerCase().contains(q) ||
-            t.name.toLowerCase().contains(q) ||
-            t.address.toLowerCase().contains(q))
-        .toList();
-
-    setState(() => _filtered = local);
-
     // 当本地无结果且输入看起来是合约地址时，向后端查询
-    if (local.isEmpty && _isAddressLike(_searchCtrl.text.trim())) {
-      _searchByAddress(_searchCtrl.text.trim());
+    if (local.isEmpty && _isAddressLike(raw)) {
+      _searchByAddress(raw);
     }
   }
 
@@ -119,8 +120,7 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
     if (!mounted) return;
     setState(() => _remoteSearching = true);
 
-    final MessageModel res =
-        await _api.getTokens(widget.chain, q: address);
+    final res = await _api.getTokens(widget.chain, q: address);
 
     if (!mounted) return;
     if (res.error) {
@@ -131,11 +131,7 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
       return;
     }
 
-    final rawList = res.data as List? ?? [];
-    final results = rawList
-        .map((e) => DexTokenModel.fromJson(e as Map<String, dynamic>))
-        .toList();
-
+    final results = _parseTokens(res.data);
     setState(() {
       _remoteSearching = false;
       _remoteResults = results;
@@ -267,10 +263,15 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
   }
 
   Widget _buildList(List<DexTokenModel> tokens) {
+    final mainText = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.mainTextColor.name);
+    final subtitleText = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.itemSubtitleTextColor.name);
+
     return ListView.separated(
       padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
       itemCount: tokens.length,
-      separatorBuilder: (context, i) => Divider(
+      separatorBuilder: (_, _) => Divider(
         height: ScreenUtil().setWidth(1),
         color: AppThemeUtils.getColorByKey(
             context, AppThemeKeys.dividerColor.name),
@@ -300,8 +301,7 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
                       Text(
                         token.symbol,
                         style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.mainTextColor.name),
+                          color: mainText,
                           fontSize: ScreenUtil().setSp(28),
                           fontWeight: FontWeight.w600,
                         ),
@@ -309,9 +309,7 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
                       Text(
                         token.name,
                         style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.itemSubtitleTextColor.name),
+                          color: subtitleText,
                           fontSize: ScreenUtil().setSp(22),
                         ),
                         maxLines: 1,
@@ -324,8 +322,7 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
                 Text(
                   _shortenAddress(token.address),
                   style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.itemSubtitleTextColor.name),
+                    color: subtitleText,
                     fontSize: ScreenUtil().setSp(20),
                   ),
                 ),
