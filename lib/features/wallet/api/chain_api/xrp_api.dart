@@ -59,7 +59,7 @@ class XrpApi {
                 : BigInt.zero,
             'sequence': accountData?['Sequence'] ?? 0,
             'account': accountData != null,
-            'ownerCount': accountData?['OwnerCount'] ?? 0, //持有的对象
+            'ownerCount': accountData?['OwnerCount'] ?? 0,
           };
       }
       // error_code 19 = account not found，余额为 0
@@ -80,7 +80,7 @@ class XrpApi {
 
   Future<MessageModel> getGasPriceXrp(bool isTest) async {
     return _rpcCall('fee', [{}], isTest,
-        (r) => BigInt.parse(r['drops']['minimum_level'])); //minimum_level\median_fee
+        (r) => BigInt.parse(r['drops']['minimum_level']));
   }
 
   Future<MessageModel> getTxInfoXrp(String txHash, bool isTest) async {
@@ -88,49 +88,27 @@ class XrpApi {
         (r) => r['meta']['TransactionResult']);
   }
 
-  //获取服务器信息
+  /// 获取服务器信息（reserve / fee / load factor）
   Future<MessageModel> getServerStateXrp({bool isTest = false}) async {
     return _rpcCall('server_state', [{'ledger_index': 'current'}], isTest, (r) {
       final ledger = r['state']['validated_ledger'] as Map<String, dynamic>;
       return {
-        'reserve_base': ledger['reserve_base'], //激活账户必须持有的最小值
-        //每添加一个对象（如 trust line、挂单、payment channel）需加锁
+        'reserve_base': ledger['reserve_base'],
         'reserve_inc': ledger['reserve_inc'],
-        'base_fee': ledger['base_fee'], //理论最低手续费单位（网络空闲时）
-        'load_base': r['state']['load_base'], //固定值，表示最小负载因子基准，一般为 256（不能变）
-        //当前节点对费用的整体乘数因子，用来估算"标准"费用。
-        // 计算：实际费用 = base_fee × (load_factor / load_base)
+        'base_fee': ledger['base_fee'],
+        'load_base': r['state']['load_base'],
         'load_factor': r['state']['load_factor'],
       };
     });
   }
 
-  //获取当前账本信息
+  /// 获取当前账本信息
   Future<MessageModel> getLedgerXrp({bool isTest = false}) async {
     return _rpcCall('ledger', [{'ledger_index': 'current'}], isTest,
         (r) => r['ledger_current_index']);
   }
 
-  //获取全部交易记录
-  /*
-  * {
-  "result": {
-    "transactions": [
-      {
-        "tx": {
-          "TransactionType": "Payment",
-          "Account": "rUserAddress",
-          "Destination": "rAnotherAddress",
-          "Amount": "1000000",
-          "Fee": "12"
-        }
-      }
-    ]
-  }
-}*/
-  /*TransactionType: 交易类型（Payment = 发送 XRP, TrustSet = 信任设置, AMMDeposit = AMM 交易）
-Amount: 交易金额（单位 drops，1 XRP = 1,000,000 drops）
-Fee: 交易费用（10-12 drops）*/
+  /// 获取账户交易记录
   Future<MessageModel> getTxsXrp(
     String address, {
     int ledgerIndexMin = -1,
@@ -139,13 +117,13 @@ Fee: 交易费用（10-12 drops）*/
   }) async {
     return _rpcCall(
       'account_tx',
-      [{'account': 'rUserAddress', 'ledger_index_min': ledgerIndexMin, 'ledger_index_max': -1, 'limit': limit}],
+      [{'account': address, 'ledger_index_min': ledgerIndexMin, 'ledger_index_max': -1, 'limit': limit}],
       isTest,
       (r) => r['transactions'],
     );
   }
 
-  //广播
+  /// 广播已签名交易
   Future<MessageModel> sendTxXrp(String signHash, bool isTest) async {
     try {
       final data = await _rpc('submit', [{'tx_blob': signHash}], isTest);
@@ -162,94 +140,28 @@ Fee: 交易费用（10-12 drops）*/
     }
   }
 
-  //获取hook合约信息
-  /*{
-  "result": {
-    "account_objects": [
-      {
-        "LedgerEntryType": "Hook",
-        "HookNamespace": "0xABCDEF",
-        "HookOn": "0000000000000000",
-        "HookParameters": [
-          {
-            "HookParameter": {
-              "HookParamKey": "0x74657374",
-              "HookParamValue": "0x123456"
-            }
-          }
-        ],
-        "Flags": 1
-      }
-    ]
-  }
-}*/
-  /*
-  * HookNamespace: 合约的命名空间
-HookParameters: 传递给合约的参数
-Flags: 合约的状态标志*/
+  /// 获取 Hook 合约信息
   Future<MessageModel> getHookInfo(String address, {bool isTest = false}) async {
     return _rpcCall('account_objects', [{'account': address, 'type': 'hook'}], isTest,
         (r) => BigInt.parse(r['account_objects']));
   }
 
-  //获取AMM合约信息
-  /*{
-  "result": {
-    "amm": {
-      "Account": "rAMMPoolAddress",
-      "Amount": "100000000",
-      "Amount2": {
-        "currency": "USDT",
-        "issuer": "rIssuerAddress",
-        "value": "5000"
-      },
-      "TradingFee": 30
-    }
-  }
-}*/
-  /*Account: AMM 池的账户地址
-Amount: XRP 储备
-Amount2: USDT 储备
-TradingFee: 交易费用（单位 basis points，即 30 = 0.3%）*/
+  /// 获取 AMM 池信息
   Future<MessageModel> getAMMInfo(
     Map<String, dynamic> ammInfo, {
     bool isTest = false,
   }) async {
-    /*Map<String,dynamic> ammInfo={
-      "asset":{
-        "currency":"XRP",
-      },
-      "asset2": { "currency": "USDT", "issuer": "rIssuerAddress" }
-    };*/
     return _rpcCall('amm_info', [ammInfo], isTest,
         (r) => BigInt.parse(r['amm']));
   }
 
-  //获取 Trustline 代币（IOU）合约信息
-  /*{
-  "result": {
-    "lines": [
-      {
-        "currency": "USDT",
-        "account": "rIssuerAddress",
-        "balance": "500",
-        "limit": "1000",
-        "limit_peer": "0",
-        "quality_in": 0,
-        "quality_out": 0
-      }
-    ]
-  }
-}*/
-  /*currency: 代币符号
-account: 代币发行者
-balance: 账户持有的 USDT 数量
-limit: 账户信任额度（最多持有 1000 USDT）*/
+  /// 获取 Trustline 代币（IOU）信息
   Future<MessageModel> getTrustline(String address, {bool isTest = false}) async {
     return _rpcCall('account_lines', [{address}], isTest,
         (r) => BigInt.parse(r['lines']));
   }
 
+  /// 获取账户交易历史
   Future<MessageModel> getTxHistory(
     String address, {
     int limit = 10,

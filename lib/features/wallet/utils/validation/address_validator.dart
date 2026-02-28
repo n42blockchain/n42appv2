@@ -96,24 +96,15 @@ class AddressValidator {
         return AddressValidationResult.invalid('Cannot transfer to yourself');
       }
 
-      // Layer 4: Checksum validation for Ethereum-compatible chains
-      if (_isEthereumCompatible(coinType)) {
-        final checksumResult = _validateEthereumChecksum(cleanAddress);
-        if (!checksumResult) {
-          // Address is valid but checksum failed - warn but don't reject
-          // Return valid but the UI should show a warning
-        }
-      }
-
       return AddressValidationResult.valid(
         cleanAddress,
         type: AddressType.standard,
       );
     }
 
-    // Layer 5: ENS resolution (for EVM compatible chains if allowed)
+    // Layer 4: ENS resolution (for EVM compatible chains if allowed)
     // N42 链优先，然后是 ETH 和其他 EVM 兼容链
-    if (allowEns && _supportsEns(coinType) && _looksLikeEnsName(address)) {
+    if (allowEns && EnsService.chainSupportsEns(coinType) && EnsService.isEnsName(address)) {
       final ensResult = await _resolveEns(address, coinType);
       if (ensResult != null) {
         // Validate resolved address
@@ -133,16 +124,6 @@ class AddressValidator {
     return AddressValidationResult.invalid('Invalid address format');
   }
 
-  /// 检查链是否支持域名解析（ENS / UD / SNS）
-  bool _supportsEns(String coinType) {
-    return EnsService.chainSupportsEns(coinType);
-  }
-
-  /// 检查字符串是否看起来像受支持的域名（任意协议）
-  bool _looksLikeEnsName(String name) {
-    return EnsService.isEnsName(name);
-  }
-
   /// Clean address from URI format
   String _cleanAddress(String address) {
     // Handle URI format like "ethereum:0x..." or "bitcoin:bc1..."
@@ -156,28 +137,6 @@ class AddressValidator {
   /// Check if transfer is to self
   bool _isSelfTransfer(String toAddress, String fromAddress) {
     return toAddress.toLowerCase() == fromAddress.toLowerCase();
-  }
-
-  /// Check if chain is Ethereum-compatible
-  bool _isEthereumCompatible(String coinType) {
-    const ethCompatible = [
-      'ETH', 'BNB', 'MATIC', 'AVAX', 'FTM', 'OP', 'ARB',
-      'CELO', 'ONE', 'N', 'CRO', 'MOVR', 'GLMR',
-    ];
-    return ethCompatible.contains(coinType);
-  }
-
-  /// Validate Ethereum EIP-55 checksum
-  bool _validateEthereumChecksum(String address) {
-    // Skip if address is all lowercase or all uppercase (valid but no checksum)
-    if (address == address.toLowerCase() || address == address.toUpperCase()) {
-      return true;
-    }
-
-    // For mixed case, validate checksum
-    // This is a simplified check - full implementation would use keccak256
-    // For now, we trust Trustdart's validation
-    return true;
   }
 
   /// 将域名解析为地址，按协议自动分发：
@@ -194,36 +153,33 @@ class AddressValidator {
 
       switch (protocol) {
         case DomainProtocol.n42:
-          final r = await _tokenViewApi.getN42EnsResolve(domainName);
-          if (!r.error && r.data != null) return r.data as String;
-          break;
+          return _extractResolved(await _tokenViewApi.getN42EnsResolve(domainName));
 
         case DomainProtocol.sns:
-          final r = await _tokenViewApi.getSnsResolve(domainName);
-          if (!r.error && r.data != null) return r.data as String;
-          break;
+          return _extractResolved(await _tokenViewApi.getSnsResolve(domainName));
 
         case DomainProtocol.unstoppableDomains:
           final ticker = _coinTypeToUdTicker(coinType);
-          final r =
-              await _tokenViewApi.getUdResolve(domainName, ticker: ticker);
-          if (!r.error && r.data != null) return r.data as String;
-          break;
+          return _extractResolved(await _tokenViewApi.getUdResolve(domainName, ticker: ticker));
 
         case DomainProtocol.ens:
         case DomainProtocol.unknown:
           // N42 链时先尝试 N42 NS
           if (coinType == CoinType.N.name) {
-            final r = await _tokenViewApi.getN42EnsResolve(domainName);
-            if (!r.error && r.data != null) return r.data as String;
+            final n42Result = _extractResolved(await _tokenViewApi.getN42EnsResolve(domainName));
+            if (n42Result != null) return n42Result;
           }
-          final r = await _tokenViewApi.getEnsResolve(domainName);
-          if (!r.error && r.data != null) return r.data as String;
-          break;
+          return _extractResolved(await _tokenViewApi.getEnsResolve(domainName));
       }
     } catch (e) {
       // 解析失败，返回 null
     }
+    return null;
+  }
+
+  /// 从 API 结果中提取已解析的地址，若失败则返回 null
+  static String? _extractResolved(dynamic r) {
+    if (!r.error && r.data != null) return r.data as String;
     return null;
   }
 

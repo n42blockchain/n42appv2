@@ -16,11 +16,12 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
 
   bool get _hasContent => _textController.text.trim().isNotEmpty;
 
-  void _showSnack(String message) {
+  void _showSnack(String message, {Color? color}) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
         behavior: SnackBarBehavior.floating,
+        backgroundColor: color,
       ),
     );
   }
@@ -55,13 +56,7 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
 
     // Max 200 recipients check
     if (rows.length > 200) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(S.of(context).g_key_batch_max_recipients(200)),
-          backgroundColor: Colors.orange,
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+      _showSnack(S.of(context).g_key_batch_max_recipients(200), color: Colors.orange);
       return;
     }
 
@@ -103,11 +98,10 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
     }
 
     if (errors.isEmpty) {
-      // 全部有效，直接返回
       Navigator.pop(context, rawContent);
-    } else {
-      _showValidationDialog(validCount, errors, rawContent);
+      return;
     }
+    _showValidationDialog(validCount, errors, rawContent);
   }
 
   bool _looksLikeDataRow(String line) {
@@ -115,19 +109,15 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
     return parts.length >= 2 && parts[0].trim().startsWith('0x');
   }
 
+  static final _evmAddressRegex = RegExp(r'^0x[a-fA-F0-9]{40}$');
+
   bool _isValidEvmAddress(String address) {
-    return address.length == 42 &&
-        RegExp(r'^0x[a-fA-F0-9]{40}$').hasMatch(address);
+    return address.length == 42 && _evmAddressRegex.hasMatch(address);
   }
 
   bool _isValidAmount(String amount) {
-    try {
-      final value =
-          double.parse(amount.replaceAll(',', '').replaceAll(' ', ''));
-      return value > 0;
-    } catch (_) {
-      return false;
-    }
+    final value = double.tryParse(amount.replaceAll(',', '').replaceAll(' ', ''));
+    return value != null && value > 0;
   }
 
   void _clearInput() => _textController.clear();
@@ -141,13 +131,7 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
         '0x9876543210987654321098765432109876543210,0.5,';
 
     Clipboard.setData(const ClipboardData(text: template));
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('${S.of(context).g_key_119} — Template'),
-        duration: const Duration(seconds: 2),
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
+    _showSnack('${S.of(context).g_key_119} — Template');
   }
 
   Future<void> _pasteFromClipboard() async {
@@ -156,13 +140,7 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
     if (data?.text != null && data!.text!.isNotEmpty) {
       _textController.text = data.text!;
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Clipboard is empty'),
-          duration: Duration(seconds: 1),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+      _showSnack('Clipboard is empty');
     }
   }
 
@@ -185,13 +163,7 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
       }
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Failed to read file: $e'),
-          backgroundColor: Colors.red,
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+      _showSnack('Failed to read file: $e', color: Colors.red);
     }
   }
 

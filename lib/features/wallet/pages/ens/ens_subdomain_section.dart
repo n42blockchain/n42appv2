@@ -47,6 +47,9 @@ class EnsSubdomainSection extends StatelessWidget {
   }
 
   Widget _buildTitleRow(BuildContext context) {
+    final subtitleColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+    final mainTextColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -55,10 +58,7 @@ class EnsSubdomainSection extends StatelessWidget {
           style: TextStyle(
             fontSize: ScreenUtil().setSp(28),
             fontWeight: FontWeight.w600,
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainTextColor.name,
-            ),
+            color: mainTextColor,
           ),
         ),
         Row(
@@ -67,10 +67,7 @@ class EnsSubdomainSection extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.refresh, size: 20),
               onPressed: isLoading ? null : onRefresh,
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ),
+              color: subtitleColor,
             ),
             IconButton(
               icon: const Icon(Icons.add_circle_outline, size: 22),
@@ -84,35 +81,32 @@ class EnsSubdomainSection extends StatelessWidget {
   }
 
   Widget _buildBody(BuildContext context) {
+    final scr = ScreenUtil();
+
     if (isLoading) {
       return Padding(
-        padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(24)),
+        padding: EdgeInsets.symmetric(vertical: scr.setWidth(24)),
         child: const Center(child: CircularProgressIndicator()),
       );
     }
     if (subdomains.isEmpty) {
+      final subtitleColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
       return Padding(
-        padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
+        padding: EdgeInsets.symmetric(vertical: scr.setWidth(20)),
         child: Center(
           child: Column(
             children: [
               Icon(
                 Icons.subdirectory_arrow_right,
-                size: ScreenUtil().setWidth(48),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemSubtitleTextColor.name,
-                ).withAlpha(100),
+                size: scr.setWidth(48),
+                color: subtitleColor.withAlpha(100),
               ),
-              SizedBox(height: ScreenUtil().setWidth(8)),
+              SizedBox(height: scr.setWidth(8)),
               Text(
                 S.of(context).g_key_ens_subdomain_empty,
                 style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.itemSubtitleTextColor.name,
-                  ),
+                  fontSize: scr.setSp(24),
+                  color: subtitleColor,
                 ),
               ),
             ],
@@ -172,24 +166,29 @@ class _SubdomainItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scr = ScreenUtil();
+    final subtitleColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+    final mainTextColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+    final iconSize = scr.setWidth(40);
+
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(12)),
+      padding: EdgeInsets.symmetric(vertical: scr.setWidth(12)),
       child: Row(
         children: [
           Container(
-            width: ScreenUtil().setWidth(40),
-            height: ScreenUtil().setWidth(40),
+            width: iconSize,
+            height: iconSize,
             decoration: BoxDecoration(
               color: domainChain.color.withAlpha(20),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+              borderRadius: BorderRadius.circular(scr.setWidth(20)),
             ),
             child: Icon(
               Icons.subdirectory_arrow_right,
-              size: ScreenUtil().setWidth(20),
+              size: scr.setWidth(20),
               color: domainChain.color,
             ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(12)),
+          SizedBox(width: scr.setWidth(12)),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -197,23 +196,17 @@ class _SubdomainItem extends StatelessWidget {
                 Text(
                   sub.fullName,
                   style: TextStyle(
-                    fontSize: ScreenUtil().setSp(26),
+                    fontSize: scr.setSp(26),
                     fontWeight: FontWeight.w500,
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.mainTextColor.name,
-                    ),
+                    color: mainTextColor,
                   ),
                 ),
                 if (sub.owner.isNotEmpty)
                   Text(
                     '${sub.owner.substring(0, 6)}...${sub.owner.substring(sub.owner.length - 4)}',
                     style: TextStyle(
-                      fontSize: ScreenUtil().setSp(22),
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.itemSubtitleTextColor.name,
-                      ),
+                      fontSize: scr.setSp(22),
+                      color: subtitleColor,
                       fontFamily: 'monospace',
                     ),
                   ),
@@ -223,10 +216,7 @@ class _SubdomainItem extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.copy_outlined, size: 18),
             onPressed: () => onCopy(sub),
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.itemSubtitleTextColor.name,
-            ),
+            color: subtitleColor,
           ),
           IconButton(
             icon: const Icon(Icons.delete_outline, size: 18),

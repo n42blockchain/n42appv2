@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:n42_wallet/features/browser/pages/browser_page.dart';
 import 'package:n42_wallet/features/wallet/utils/browser/browser_txhash.dart';
 import 'package:n42_wallet/features/component/enums/load.dart';
-import 'package:n42_wallet/features/models/message_model.dart';
 import 'package:n42_wallet/features/sqlite/app_database.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
@@ -53,32 +52,22 @@ class TransactionDetailEth extends StatefulWidget {
 }
 
 class _TransactionDetailEthState extends State<TransactionDetailEth> {
-  EthAPI? _ethAPI;
-  EthAPI get ethAPI{
-    _ethAPI ??= EthAPI();
-    return _ethAPI!;
-  }
-  AppDatabase? _db;
-  AppDatabase get db{
-    _db ??= AppDatabase();
-    return _db!;
-  }
-  TextEditingController searchEditingController=TextEditingController();
-  Load load=Load.finish;
-  String errorMessage="";
-  TransationRecordModel trm=TransationRecordModel();
-  TokenViewApi? _tokenViewApi;
-  TokenViewApi get tokenViewApi{
-    _tokenViewApi ??= TokenViewApi();
-    return _tokenViewApi!;
-  }
+  late final EthAPI ethAPI = EthAPI();
+  late final AppDatabase db = AppDatabase();
+  late final TokenViewApi tokenViewApi = TokenViewApi();
+
+  TextEditingController searchEditingController = TextEditingController();
+  Load load = Load.finish;
+  String errorMessage = "";
+  TransationRecordModel trm = TransationRecordModel();
   late String _txHash;
   Timer? _pollingTimer;
   late String _explorerUrl;
+
   @override
   void initState() {
     _txHash = widget.txHash;
-    searchEditingController.text=_txHash;
+    searchEditingController.text = _txHash;
     _explorerUrl = getBrowserTxHash(
       widget.coinModel.coin['coinType'],
       _txHash,
@@ -87,129 +76,123 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
     init();
     super.initState();
   }
+
   @override
   void dispose() {
     _pollingTimer?.cancel();
     super.dispose();
   }
-  Future<void> init()async{
-    errorMessage="";
-    if(_txHash==""){
-      _txHash=searchEditingController.text;
+
+  Future<void> init() async {
+    errorMessage = "";
+    if (_txHash == "") {
+      _txHash = searchEditingController.text;
     }
-    if(_txHash==""){
-      owner=false;
+    if (_txHash == "") {
+      owner = false;
       return;
     }
     if (mounted) {
       setState(() {
-        load=Load.loading;
+        load = Load.loading;
       });
     }
-    List<TransationRecordModel> trModelList=await db.selectTransationRecordTxHash(_txHash,widget.coinModel.address);
-    if(trModelList.isNotEmpty){
-      trm=trModelList[0];
+    final trModelList = await db.selectTransationRecordTxHash(_txHash, widget.coinModel.address);
+    if (trModelList.isNotEmpty) {
+      trm = trModelList[0];
     }
-    bool r=await getTransactionByHash();
+    final success = await getTransactionByHash();
     if (!mounted) return;
-    if(r){
+    if (success) {
       await getTransactionReceipt();
       if (!mounted) return;
-      setState(() {
-        load=Load.finish;
-      });
-    }else{
-      setState(() {
-        load=Load.error;
-      });
+      setState(() { load = Load.finish; });
+    } else {
+      setState(() { load = Load.error; });
     }
   }
-  Map<String,dynamic>? transactionInfo;
-  Map<String,dynamic>? transactionInfoReceipt;
-  String resultStr="Pending";
-  String value='';
-  String gasPrice='';
-  String gasLimit='';
-  String nonce="";
-  bool owner=true;//是否时自己的交易信息
-  Future<bool> getTransactionByHash()async{
-    MessageModel rData=await ethAPI.getTransactionByHash(
-        _txHash,
-        coinType: widget.coinModel.coin['coinType'],);
-    if(rData.error==false){
-      if(rData.data==null){
-        errorMessage="Not found";
-        owner=false;
-        return false;
-      }
-      transactionInfo=rData.data;
-      trm.gas=hexToInt(transactionInfo!['gas']??"0x0").toInt();
-      trm.gasPriceValue=hexToInt(transactionInfo!['gasPrice']??"0x0");
-      //trm.price=hexToInt(transactionInfo!['value']??"0x0");
-      resultStr="Pending";
-      gasPrice='${toGWei(trm.gasPriceValue.toString())} GWei';
-      gasLimit='${trm.gas}';
-      nonce='${hexToInt(transactionInfo!['nonce']??"0x0").toInt()}';
 
-      if(trm.contract ==""){
-        try{
-          trm.message=utf8.decode(hexToBytes(transactionInfo!['input']));
-        }
-        catch(e){
-          trm.message="";
-        }
-        trm.to1=transactionInfo!['to'];
-        trm.price=hexToInt(transactionInfo!['value']??"0x0");
-        value='${toEther(trm.price.toString(), widget.coinModel.coin['decimals'])} ${widget.coinModel.coin['unit']}';
-      }else{
-        try{
-          trm.message="";
-          String input=transactionInfo!['input'];
-          String to=input.substring(10,74).substring(24);
-          trm.to1="0x$to";
-          //String match=input.substring(0,10);
-          String valueStr=input.substring(74,138);
-          trm.price=hexToInt(valueStr);
-          value='${toEther(trm.price.toString(), widget.coinModel.coin['decimals'])} ${widget.coinModel.coin['unit']}';
-        } catch (_) {
-          // 错误安全忽略
-        }
-      }
-      if(trm.from1.toLowerCase() != (transactionInfo?['from']??"").toString().toLowerCase()){
-        owner=false;
-      }else{
-        owner=true;
-      }
-      return true;
-    }else{
-      errorMessage=rData.data.toString();
-      owner=false;
+  Map<String, dynamic>? transactionInfo;
+  Map<String, dynamic>? transactionInfoReceipt;
+  String resultStr = "Pending";
+  String value = '';
+  String gasPrice = '';
+  String gasLimit = '';
+  String nonce = "";
+  bool owner = true; // 是否是自己的交易信息
+
+  Future<bool> getTransactionByHash() async {
+    final rData = await ethAPI.getTransactionByHash(
+      _txHash,
+      coinType: widget.coinModel.coin['coinType'],
+    );
+    if (rData.error != false) {
+      errorMessage = rData.data.toString();
+      owner = false;
       return false;
     }
-  }
-  Future<void> getTransactionReceipt()async{
-    MessageModel rData=await ethAPI.getTransactionReceipt(
-        _txHash,
-        coinType: widget.coinModel.coin['coinType'],);
-    if(rData.error==false){
-      transactionInfoReceipt=rData.data;
-      if(transactionInfoReceipt !=null){
-        // receipt 非 null 表示交易已上链确认，停止轮询
-        if(_isReceiptSuccess(transactionInfoReceipt!['status'])){
-          resultStr="Success";
-        }else{
-          // 0x0 = 链上 revert（执行失败），非 Pending
-          resultStr="Failed";
-        }
-        return;
-      }
-      // receipt 为 null 表示交易仍在 mempool，继续轮询
-      errorMessage="";
-      _startPolling();
-    }else{
-      errorMessage=rData.data.toString();
+    if (rData.data == null) {
+      errorMessage = "Not found";
+      owner = false;
+      return false;
     }
+    transactionInfo = rData.data;
+    trm.gas = hexToInt(transactionInfo!['gas'] ?? "0x0").toInt();
+    trm.gasPriceValue = hexToInt(transactionInfo!['gasPrice'] ?? "0x0");
+    resultStr = "Pending";
+    gasPrice = '${toGWei(trm.gasPriceValue.toString())} GWei';
+    gasLimit = '${trm.gas}';
+    nonce = '${hexToInt(transactionInfo!['nonce'] ?? "0x0").toInt()}';
+
+    final decimals = widget.coinModel.coin['decimals'];
+    final unit = widget.coinModel.coin['unit'];
+
+    if (trm.contract == "") {
+      try {
+        trm.message = utf8.decode(hexToBytes(transactionInfo!['input']));
+      } catch (_) {
+        trm.message = "";
+      }
+      trm.to1 = transactionInfo!['to'];
+      trm.price = hexToInt(transactionInfo!['value'] ?? "0x0");
+      value = '${toEther(trm.price.toString(), decimals)} $unit';
+    } else {
+      try {
+        trm.message = "";
+        final input = transactionInfo!['input'] as String;
+        trm.to1 = "0x${input.substring(34, 74)}";
+        trm.price = hexToInt(input.substring(74, 138));
+        value = '${toEther(trm.price.toString(), decimals)} $unit';
+      } catch (_) {
+        // 合约 input 解析失败时安全忽略
+      }
+    }
+    owner = trm.from1.toLowerCase() == (transactionInfo?['from'] ?? "").toString().toLowerCase();
+    return true;
   }
+
+  Future<void> getTransactionReceipt() async {
+    final rData = await ethAPI.getTransactionReceipt(
+      _txHash,
+      coinType: widget.coinModel.coin['coinType'],
+    );
+    if (rData.error != false) {
+      errorMessage = rData.data.toString();
+      return;
+    }
+    transactionInfoReceipt = rData.data;
+    if (transactionInfoReceipt != null) {
+      // receipt 非 null 表示交易已上链确认，停止轮询
+      resultStr = _isReceiptSuccess(transactionInfoReceipt!['status'])
+          ? "Success"
+          : "Failed"; // 0x0 = 链上 revert
+      return;
+    }
+    // receipt 为 null 表示交易仍在 mempool，继续轮询
+    errorMessage = "";
+    _startPolling();
+  }
+
   void _startPolling() {
     _pollingTimer?.cancel();
     _pollingTimer = Timer(const Duration(seconds: 3), () async {
@@ -217,28 +200,34 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
       if (mounted) setState(() {});
     });
   }
-  //关闭键盘
-  void closeKeyboard(){
+
+  void closeKeyboard() {
     FocusScope.of(context).requestFocus(FocusNode());
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
         text: S.of(context).s_key_3,
-        actions: _explorerUrl.isNotEmpty ? [
-          IconButton(
-            icon: const Icon(Icons.open_in_browser_outlined),
-            tooltip: S.of(context).g_key_196,
-            onPressed: () => Navigator.push(context,
-              MaterialPageRoute(builder: (_) => BrowserPage(_explorerUrl))),
-          ),
-        ] : null,
+        actions: _explorerUrl.isNotEmpty
+            ? [
+                IconButton(
+                  icon: const Icon(Icons.open_in_browser_outlined),
+                  tooltip: S.of(context).g_key_196,
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => BrowserPage(_explorerUrl)),
+                  ),
+                ),
+              ]
+            : null,
       ),
       body: bodyWidget(),
     );
   }
-  Widget bodyWidget(){
+
+  Widget bodyWidget() {
     return SafeArea(
       child: Stack(
         children: [
@@ -247,9 +236,9 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
               children: [
                 buildSearchWidget(),
                 Expanded(
-                  flex: 1,
-                  child: load==Load.error?buildErrorWidget():
-                  buildTxDataWidget(),
+                  child: load == Load.error
+                      ? buildErrorWidget()
+                      : buildTxDataWidget(),
                 ),
               ],
             ),

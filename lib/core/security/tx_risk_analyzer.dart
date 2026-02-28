@@ -68,10 +68,8 @@ class TxRiskAnalyzer {
     String? ethValue,
     String? toAddress,
   }) {
-    final hasData = calldata != null &&
-        calldata.isNotEmpty &&
-        calldata != '0x' &&
-        calldata != '0X';
+    final data = calldata?.toLowerCase() ?? '';
+    final hasData = data.isNotEmpty && data != '0x';
 
     if (!hasData) {
       final fields = <TxRiskField>[];
@@ -88,9 +86,7 @@ class TxRiskAnalyzer {
       );
     }
 
-    final clean = calldata.startsWith('0x') || calldata.startsWith('0X')
-        ? calldata.substring(2)
-        : calldata;
+    final clean = data.startsWith('0x') ? data.substring(2) : data;
 
     if (clean.length < 8) {
       return const TxRiskAnalysis(
@@ -100,7 +96,7 @@ class TxRiskAnalyzer {
       );
     }
 
-    final selector = '0x${clean.substring(0, 8).toLowerCase()}';
+    final selector = '0x${clean.substring(0, 8)}';
     final params = clean.substring(8); // ABI-encoded params without selector
 
     return _dispatch(selector, params);
@@ -112,17 +108,16 @@ class TxRiskAnalyzer {
   static TxRiskAnalysis? analyzeTypedData(String? jsonStr) {
     if (jsonStr == null || jsonStr.isEmpty) return null;
 
-    Map<String, dynamic>? data;
+    final Object? decoded;
     try {
-      final decoded = jsonDecode(jsonStr);
-      if (decoded is! Map<String, dynamic>) return null;
-      data = decoded;
+      decoded = jsonDecode(jsonStr);
     } catch (_) {
       return null;
     }
+    if (decoded is! Map<String, dynamic>) return null;
 
-    final primaryType = data['primaryType'] as String?;
-    final message = data['message'] as Map<String, dynamic>?;
+    final primaryType = decoded['primaryType'] as String?;
+    final message = decoded['message'] as Map<String, dynamic>?;
 
     if (primaryType == null) return null;
 

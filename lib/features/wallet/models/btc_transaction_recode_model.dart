@@ -46,22 +46,14 @@ class BtcTransactionRecodeModel {
   }
 
   List<String> get inputsAddressList {
-    if (inputsAddress == null) {
-      inputsAddress = [];
-      for (final im in inputModelsList) {
-        inputsAddress!.addAll(im.address);
-      }
-    }
+    inputsAddress ??=
+        inputModelsList.expand((im) => im.address).toList();
     return inputsAddress!;
   }
 
   List<String> get outputsAddressList {
-    if (outputsAddress == null) {
-      outputsAddress = [];
-      for (final om in outputModelsList) {
-        outputsAddress!.addAll(om.address);
-      }
-    }
+    outputsAddress ??=
+        outputModelsList.expand((om) => om.address).toList();
     return outputsAddress!;
   }
 
@@ -118,13 +110,12 @@ class BtcTransactionRecodeModel {
   }
 
   String getTxTimeStr() {
-    if (txTimeStr == null) {
-      final tt = txTime.length == 13 ? int.parse(txTime) : int.parse(txTime) * 1000;
-      txTimeStr = dformat.formatDate(
-        DateTime.fromMillisecondsSinceEpoch(tt),
-        [dformat.yyyy, '/', dformat.mm, '/', dformat.dd, ' ', dformat.am, ' ', dformat.hh, ':', dformat.nn],
-      );
-    }
+    txTimeStr ??= dformat.formatDate(
+      DateTime.fromMillisecondsSinceEpoch(
+        txTime.length == 13 ? int.parse(txTime) : int.parse(txTime) * 1000,
+      ),
+      [dformat.yyyy, '/', dformat.mm, '/', dformat.dd, ' ', dformat.am, ' ', dformat.hh, ':', dformat.nn],
+    );
     return txTimeStr!;
   }
 
@@ -133,12 +124,10 @@ class BtcTransactionRecodeModel {
   BtcTransactionRecodeModel.fromMap(Map<String, dynamic> map) {
     final inputs = jsonDecode(map["input"]) as List<dynamic>;
     final outputs = jsonDecode(map["output"]) as List<dynamic>;
-    for (final s in inputs) {
-      inputModelsList.add(InputModel.fromMap(jsonDecode(s as String)));
-    }
-    for (final s in outputs) {
-      outputModelsList.add(OutputModel.fromMap(jsonDecode(s as String)));
-    }
+    inputModelsList.addAll(
+        inputs.map((s) => InputModel.fromMap(jsonDecode(s as String))));
+    outputModelsList.addAll(
+        outputs.map((s) => OutputModel.fromMap(jsonDecode(s as String))));
     trId = map['trId'];
     address = map['address'];
     to1 = map['to1'];

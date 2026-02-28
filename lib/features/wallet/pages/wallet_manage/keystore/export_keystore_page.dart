@@ -92,6 +92,9 @@ class _ExportKeystorePageState extends State<ExportKeystorePage> {
   @override
   Widget build(BuildContext context) {
     final s = S.of(context);
+    final pad30 = ScreenUtil().setWidth(30);
+    final bottomBarHeight = ScreenUtil().setWidth(148);
+
     return Scaffold(
       appBar: AppBarWidget(text: s.g_key_ex_keystore),
       body: SafeArea(
@@ -99,44 +102,15 @@ class _ExportKeystorePageState extends State<ExportKeystorePage> {
           children: [
             Positioned.fill(
               child: SingleChildScrollView(
-                padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                padding: EdgeInsets.all(pad30),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    buildItem(context, s.g_key_ex_keystore_5,
-                        s.g_key_ex_keystore_6),
-                    buildItem(context, s.g_key_ex_keystore_7,
-                        s.g_key_ex_keystore_8),
-                    buildItem(context, s.g_key_ex_keystore_9,
-                        s.g_key_ex_keystore_10),
+                    _buildItem(s.g_key_ex_keystore_5, s.g_key_ex_keystore_6),
+                    _buildItem(s.g_key_ex_keystore_7, s.g_key_ex_keystore_8),
+                    _buildItem(s.g_key_ex_keystore_9, s.g_key_ex_keystore_10),
                     SizedBox(height: ScreenUtil().setWidth(40)),
-
-                    // ── Keystore JSON 展示框 ─────────────────────────────
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                            ScreenUtil().setWidth(16)),
-                        color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.itemBgColor.name),
-                      ),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(30),
-                        vertical: ScreenUtil().setWidth(24),
-                      ),
-                      margin: EdgeInsets.symmetric(
-                          vertical: ScreenUtil().setWidth(24)),
-                      child: Text(
-                        widget.keystoreJson,
-                        style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.itemTextColor.name),
-                          fontSize: ScreenUtil().setSp(28),
-                        ),
-                        textAlign: TextAlign.start,
-                      ),
-                    ),
-
-                    // ── 已复制时显示倒计时提示 ────────────────────────────
+                    _buildKeystoreBox(),
                     if (_isCopied) ...[
                       SizedBox(height: ScreenUtil().setWidth(8)),
                       _ClipboardCountdownHint(
@@ -145,8 +119,7 @@ class _ExportKeystorePageState extends State<ExportKeystorePage> {
                             context, AppThemeKeys.ff888888.name),
                       ),
                     ],
-
-                    SizedBox(height: ScreenUtil().setWidth(148)),
+                    SizedBox(height: bottomBarHeight),
                   ],
                 ),
               ),
@@ -162,23 +135,21 @@ class _ExportKeystorePageState extends State<ExportKeystorePage> {
                 children: [
                   Divider(height: ScreenUtil().setWidth(1)),
                   Container(
-                    height: ScreenUtil().setWidth(148),
+                    height: bottomBarHeight,
                     width: double.infinity,
-                    padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                    padding: EdgeInsets.all(pad30),
                     color: AppThemeUtils.getColorByKey(
                         context, AppThemeKeys.backGroundColor.name),
                     child: _isCopied
-                        // 已复制：显示"清除剪贴板（n s）"，点击立即手动清除
                         ? buttonStyle2(
                             context,
                             _clearClipboard,
                             '${s.g_key_ex_keystore_12} (${_countdown}s)',
                           )
-                        // 未复制：显示"复制"
                         : buttonStyle2(
                             context,
                             _copyToClipboard,
-                            s.g_key_119, // "Copy"
+                            s.g_key_119,
                           ),
                   ),
                 ],
@@ -190,7 +161,34 @@ class _ExportKeystorePageState extends State<ExportKeystorePage> {
     );
   }
 
-  Widget buildItem(BuildContext context, String title, String action) {
+  Widget _buildKeystoreBox() {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        color: AppThemeUtils.getColorByKey(
+            context, AppThemeKeys.itemBgColor.name),
+      ),
+      padding: EdgeInsets.symmetric(
+        horizontal: ScreenUtil().setWidth(30),
+        vertical: ScreenUtil().setWidth(24),
+      ),
+      margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(24)),
+      child: Text(
+        widget.keystoreJson,
+        style: TextStyle(
+          color: AppThemeUtils.getColorByKey(
+              context, AppThemeKeys.itemTextColor.name),
+          fontSize: ScreenUtil().setSp(28),
+        ),
+        textAlign: TextAlign.start,
+      ),
+    );
+  }
+
+  Widget _buildItem(String title, String action) {
+    final mainTextColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.mainTextColor.name);
+
     return Padding(
       padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
       child: Column(
@@ -199,8 +197,7 @@ class _ExportKeystorePageState extends State<ExportKeystorePage> {
           Text(
             title,
             style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
+              color: mainTextColor,
               fontSize: ScreenUtil().setSp(32),
               fontWeight: FontWeight.bold,
             ),
@@ -209,8 +206,7 @@ class _ExportKeystorePageState extends State<ExportKeystorePage> {
           Text(
             action,
             style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
+              color: mainTextColor,
               fontSize: ScreenUtil().setSp(28),
             ),
           ),

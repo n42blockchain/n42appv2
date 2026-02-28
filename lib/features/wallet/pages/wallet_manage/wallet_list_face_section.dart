@@ -6,123 +6,109 @@ mixin _WalletListFaceMixin on ConsumerState<WalletList> {
   bool fbwCheck = true; // 验证钱包地址是否成功，默认成功
   String fbwCheckAddress = ""; // 验证钱包地址后，返回的地址
 
+  _WalletListState get _state => this as _WalletListState;
+
   void checkFaceBindingWallet() {
     fbwIndex = -1;
     fbwCheck = true;
     fbwCheckAddress = "";
-    fbwIndex = (this as _WalletListState).walletList.indexWhere((e) {
-      return e.faceBinding == true;
-    });
+    fbwIndex = _state.walletList.indexWhere((e) => e.faceBinding == true);
   }
 
-  Future<void> checkFaceBindAddress(String addr) async {
-    final state = this as _WalletListState;
-    state.fbwCheck = false;
-    state.fbwIndex = -1;
-    final walletList = state.walletList;
-    for (int i = 0; i < walletList.length; i++) {
-      WalletInfo info = walletList[i];
-      Map coinInfo = info.coinInfo?[CoinType.N.name];
-      int pathIndex = coinInfo['pathIndex'] ?? 0;
-      final path =
-          getPathWithIndex(coinInfo["baseInfo"]["path"]["legacy"], pathIndex);
-      Map addressMap = await Trustdart().generateAddress(
-        coinInfo["baseInfo"]['coinType'],
-        path,
-        'legacy',
-        mnemonic: info.mnemonic ?? "",
-        pk: info.privateKey ?? "",
-      );
-      if (!mounted) return;
-      if (addr.toUpperCase() ==
-          addressMap['legacy'].toString().toUpperCase()) {
-        state.fbwCheck = true;
-        state.fbwIndex = i;
-        ref.read(wapBridgeProvider).setWalletFaceBinding(state.fbwIndex);
-        break;
-      }
-    }
-    state.fbwCheckAddress = addr;
-    setState(() {});
-  }
-
-  Future<void> verify() async {
-    final state = this as _WalletListState;
-    if (state.load == Load.loading) return;
-    String? rData = await Navigator.push(
-        context, MaterialPageRoute(builder: (context) => FaceMatch(2)));
-    if (!mounted) return;
-    if (rData != null) {
-      checkFaceBindAddress(rData);
-    } else {
-      ToastUtils.show(S.of(context).g_face_match_key34);
-    }
-  }
-
-  Future<void> unbind() async {
-    final state = this as _WalletListState;
-    if (state.load == Load.loading) return;
-
-    String? rData = await Navigator.push(
-        context, MaterialPageRoute(builder: (context) => FaceMatch(2)));
-    if (!mounted) return;
-    if (rData == null) {
-      ToastUtils.show(S.of(context).g_face_match_key34);
-      return;
-    }
-    setState(() {
-      state.load = Load.loading;
-    });
-    WalletInfo info = state.walletList[state.fbwIndex];
-    Map coinInfo = info.coinInfo?[CoinType.N.name];
-    int pathIndex = coinInfo['pathIndex'] ?? 0;
+  /// 根据钱包信息生成 legacy 地址
+  Future<String> _generateLegacyAddress(WalletInfo info) async {
+    final Map coinInfo = info.coinInfo?[CoinType.N.name];
+    final pathIndex = coinInfo['pathIndex'] ?? 0;
     final path =
         getPathWithIndex(coinInfo["baseInfo"]["path"]["legacy"], pathIndex);
-    Map addressMap = await Trustdart().generateAddress(
+    final addressMap = await Trustdart().generateAddress(
       coinInfo["baseInfo"]['coinType'],
       path,
       'legacy',
       mnemonic: info.mnemonic ?? "",
       pk: info.privateKey ?? "",
     );
-    MessageModel rmm =
-        await FaceApi().deleteBinding(addressMap['legacy'].toString());
+    return addressMap['legacy'].toString();
+  }
+
+  /// 人脸匹配导航，返回 null 表示匹配失败或未返回
+  Future<String?> _matchFace() async {
+    if (_state.load == Load.loading) return null;
+    final rData = await Navigator.push<String>(
+        context, MaterialPageRoute(builder: (context) => FaceMatch(2)));
+    if (!mounted) return null;
+    if (rData == null) {
+      ToastUtils.show(S.of(context).g_face_match_key34);
+    }
+    return rData;
+  }
+
+  Future<void> checkFaceBindAddress(String addr) async {
+    _state.fbwCheck = false;
+    _state.fbwIndex = -1;
+    final walletList = _state.walletList;
+    for (int i = 0; i < walletList.length; i++) {
+      final legacyAddr = await _generateLegacyAddress(walletList[i]);
+      if (!mounted) return;
+      if (addr.toUpperCase() == legacyAddr.toUpperCase()) {
+        _state.fbwCheck = true;
+        _state.fbwIndex = i;
+        ref.read(wapBridgeProvider).setWalletFaceBinding(_state.fbwIndex);
+        break;
+      }
+    }
+    _state.fbwCheckAddress = addr;
+    setState(() {});
+  }
+
+  Future<void> verify() async {
+    final rData = await _matchFace();
+    if (rData == null) return;
+    checkFaceBindAddress(rData);
+  }
+
+  Future<void> unbind() async {
+    final rData = await _matchFace();
+    if (rData == null) return;
+
+    setState(() {
+      _state.load = Load.loading;
+    });
+    final legacyAddr =
+        await _generateLegacyAddress(_state.walletList[_state.fbwIndex]);
+    final rmm = await FaceApi().deleteBinding(legacyAddr);
     if (!mounted) return;
     if (rmm.error) {
       ToastUtils.show(S.of(context).g_face_match_key35);
     } else {
       ref.read(wapBridgeProvider).setWalletFaceBinding(
-            state.fbwIndex,
+            _state.fbwIndex,
             faceBinding: false,
           );
-      state.fbwIndex = -1;
+      _state.fbwIndex = -1;
     }
     setState(() {
-      state.load = Load.finish;
+      _state.load = Load.finish;
     });
   }
 
   Future<void> bind() async {
-    final state = this as _WalletListState;
-    if (state.load == Load.loading) return;
-    MessageModel? rData = await Navigator.push(
+    if (_state.load == Load.loading) return;
+    final rData = await Navigator.push<MessageModel>(
         context, MaterialPageRoute(builder: (context) => FaceUserNotice()));
     if (!mounted) return;
-    if (rData != null) {
-      if (rData.error == false) {
-        await state.initData();
-      }
+    if (rData != null && !rData.error) {
+      await _state.initData();
     }
   }
 
   // ── 人脸绑定区块 UI ──────────────────────────────────────────────────────
 
   Widget _buildFaceBind() {
-    final state = this as _WalletListState;
     final List<Widget> cList = [];
 
-    if (state.fbwIndex == -1) {
-      if (state.fbwCheck) {
+    if (_state.fbwIndex == -1) {
+      if (_state.fbwCheck) {
         // 未绑定且验证通过 → 显示绑定 + 验证按钮
         final Widget c4 = Row(
           children: [
@@ -156,7 +142,7 @@ mixin _WalletListFaceMixin on ConsumerState<WalletList> {
                 margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20)),
               ),
               faceBindText(
-                state.fbwCheckAddress,
+                _state.fbwCheckAddress,
                 margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20)),
               ),
             ],
@@ -170,7 +156,7 @@ mixin _WalletListFaceMixin on ConsumerState<WalletList> {
                 S.of(context).g_token_m_key_9,
                 () async {
                   await Navigator.pushNamed(context, '/ImportOne');
-                  await state.initData();
+                  await _state.initData();
                 },
               ),
             ),
@@ -193,7 +179,7 @@ mixin _WalletListFaceMixin on ConsumerState<WalletList> {
       }
     } else {
       // 已绑定 → 显示绑定的钱包名 + 重绑 + 解绑按钮
-      WalletInfo info = state.walletList[state.fbwIndex];
+      WalletInfo info = _state.walletList[_state.fbwIndex];
       final Widget c5 = Row(
         children: [
           Image.asset(

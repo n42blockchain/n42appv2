@@ -43,6 +43,31 @@ class TokenViewApi {
 
   // ── 公共列表查询 ───────────────────────────────────────────────────────────
 
+  /// 统一的 GET 请求模板：发起请求、校验状态码、提取数据
+  Future<MessageModel> _request(
+    String path, {
+    int successCode = 200,
+    dynamic Function(Map<String, dynamic> response)? extractData,
+  }) async {
+    try {
+      final a = await BaseApi.requestEmptyH.get(
+        '$url$path',
+        params: {},
+        header: header,
+      );
+      final mm = MessageModel.error();
+      if (a['code'] == successCode) {
+        mm.error = false;
+        mm.data = extractData != null ? extractData(a) : a['data'];
+      } else {
+        mm.data = errorMessage(a['code']);
+      }
+      return mm;
+    } catch (e) {
+      return MessageModel.error()..data = e.toString();
+    }
+  }
+
   /// 获取币列表（主链 + 代币）
   ///
   /// [chains] — 按主链全名过滤，如 "Solana,Bitcoin"
@@ -50,74 +75,35 @@ class TokenViewApi {
   Future<MessageModel> getChainListAll({
     String chains = '',
     String coins = '',
-  }) async {
-    try {
-      final parts = <String>[];
-      if (chains.isNotEmpty) parts.add('chains=$chains');
-      if (coins.isNotEmpty) parts.add('coins=$coins');
-      final query = parts.isEmpty ? '' : '?${parts.join('&')}';
-      final a = await BaseApi.requestEmptyH.get(
-        '${url}v2/chains/coins/v2$query',
-        params: {},
-        header: header,
-      );
-      final mm = MessageModel.error();
-      if (a['code'] == 200) {
-        mm.error = false;
-        mm.data = a['data'];
-      } else {
-        mm.data = errorMessage(a['code']);
-      }
-      return mm;
-    } catch (e) {
-      return MessageModel.error()..data = e.toString();
-    }
+  }) {
+    final parts = <String>[];
+    if (chains.isNotEmpty) parts.add('chains=$chains');
+    if (coins.isNotEmpty) parts.add('coins=$coins');
+    final query = parts.isEmpty ? '' : '?${parts.join('&')}';
+    return _request('v2/chains/coins/v2$query');
   }
 
   /// 获取某主链的所有代币列表
-  Future<MessageModel> getTokenListFullname(String fullname) async {
-    try {
-      final a = await BaseApi.requestEmptyH.get(
-        '${url}v1/chains/coins?chains=$fullname',
-        params: {},
-        header: header,
-      );
-      final mm = MessageModel.error();
-      if (a['code'] == 200) {
+  Future<MessageModel> getTokenListFullname(String fullname) {
+    return _request(
+      'v1/chains/coins?chains=$fullname',
+      extractData: (a) {
         final List<dynamic> rData = a['data'];
-        mm.error = false;
-        mm.data = rData.isEmpty ? [] : rData[0]['coins'];
-      } else {
-        mm.data = errorMessage(a['code']);
-      }
-      return mm;
-    } catch (e) {
-      return MessageModel.error()..data = e.toString();
-    }
+        return rData.isEmpty ? [] : rData[0]['coins'];
+      },
+    );
   }
 
   /// 获取某笔交易的确认数
   Future<MessageModel> getTxConfirmation(
     String coinType,
     String txHash,
-  ) async {
-    try {
-      final a = await BaseApi.requestEmptyH.get(
-        '${url}v1/vipapi/tx/confirmation?coin=${coinType.toLowerCase()}&tx_hash=$txHash',
-        params: {},
-        header: header,
-      );
-      final mm = MessageModel.error();
-      if (a['code'] == 1) {
-        mm.error = false;
-        mm.data = a['data']['confirmation'];
-      } else {
-        mm.data = errorMessage(a['code']);
-      }
-      return mm;
-    } catch (e) {
-      return MessageModel.error()..data = e.toString();
-    }
+  ) {
+    return _request(
+      'v1/vipapi/tx/confirmation?coin=${coinType.toLowerCase()}&tx_hash=$txHash',
+      successCode: 1,
+      extractData: (a) => a['data']['confirmation'],
+    );
   }
 
   // ── 多链 dispatch ──────────────────────────────────────────────────────────
