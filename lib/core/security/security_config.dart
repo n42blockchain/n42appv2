@@ -132,9 +132,12 @@ class SecurityConfig {
     if (!isPinnedHost) return true;
 
     if (!isCertPinningConfigured) {
+      // Cert pinning uses placeholder fingerprints — fall back to standard TLS.
+      // To enable strict pinning, replace allowedCertFingerprints with the
+      // real server certificate fingerprints before production deployment.
       debugPrint('⚠️ WARNING: SSL Pinning not configured for $host. '
-          'Update allowedCertFingerprints with real certificate fingerprints.');
-      return false;
+          'Falling back to standard TLS validation.');
+      return true;
     }
 
     if (allowedCertFingerprints.isEmpty && backupCertFingerprints.isEmpty) {

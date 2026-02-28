@@ -4,7 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/foundation.dart';
-import 'package:n42_wallet/core/network/base_api.dart';
+import 'package:n42_wallet/core/network/external_http.dart';
 
 // ─── Model ─────────────────────────────────────────────────────────────────
 
@@ -89,11 +89,8 @@ class CryptoNewsService {
       return _cached!;
     }
     try {
-      final raw = await BaseApi.requestEmptyH.get<dynamic>(
-        _url,
-        params: {},
-        header: <String, dynamic>{},
-      ).timeout(const Duration(seconds: 8), onTimeout: () => null);
+      final raw = await ExternalHttp.get(_url)
+          .timeout(const Duration(seconds: 8), onTimeout: () => null);
       if (raw == null || raw is! Map) return [];
       final data = raw['Data'];
       if (data is! List) return [];

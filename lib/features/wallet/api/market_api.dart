@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/config/api_keys_config.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/network/base_api.dart';
+import 'package:n42_wallet/core/network/external_http.dart';
 import 'package:n42_wallet/features/wallet/models/ohlc_point.dart';
 
 class MarketApi {
@@ -78,10 +79,9 @@ class MarketApi {
       final encodedId = Uri.encodeComponent(geckoId);
       debugPrint('MarketApi.getOhlcvData: $encodedId days=$days');
 
-      final raw = await BaseApi.requestEmptyH.get<dynamic>(
+      final raw = await ExternalHttp.get(
         '$_geckoBase/coins/$encodedId/ohlc?vs_currency=usd&days=$days',
-        params: {},
-        header: _geckoHeader,
+        headers: _geckoHeader,
       ).timeout(const Duration(seconds: 15), onTimeout: () => null);
 
       if (raw == null || raw is! List) return [];
@@ -116,10 +116,9 @@ class MarketApi {
       final encodedId = Uri.encodeComponent(geckoId);
       debugPrint('MarketApi.getMarketChart: $encodedId days=$days');
 
-      final raw = await BaseApi.requestEmptyH.get<dynamic>(
+      final raw = await ExternalHttp.get(
         '$_geckoBase/coins/$encodedId/market_chart?vs_currency=usd&days=$days',
-        params: {},
-        header: _geckoHeader,
+        headers: _geckoHeader,
       ).timeout(const Duration(seconds: 15), onTimeout: () => null);
 
       if (raw == null || raw is! Map) return empty;
@@ -146,10 +145,9 @@ class MarketApi {
     try {
       debugPrint('MarketApi.getTrendingCoins');
 
-      final raw = await BaseApi.requestEmptyH.get<dynamic>(
+      final raw = await ExternalHttp.get(
         '$_geckoBase/search/trending',
-        params: {},
-        header: _geckoHeader,
+        headers: _geckoHeader,
       ).timeout(const Duration(seconds: 8), onTimeout: () => null);
 
       if (raw == null || raw is! Map) return [];
@@ -181,10 +179,9 @@ class MarketApi {
     try {
       debugPrint('MarketApi.searchCoins: $query');
 
-      final raw = await BaseApi.requestEmptyH.get<dynamic>(
+      final raw = await ExternalHttp.get(
         '$_geckoBase/search?q=${Uri.encodeQueryComponent(query.trim())}',
-        params: {},
-        header: _geckoHeader,
+        headers: _geckoHeader,
       ).timeout(const Duration(seconds: 8), onTimeout: () => null);
 
       if (raw == null || raw is! Map) return [];
