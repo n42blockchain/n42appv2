@@ -7,11 +7,8 @@ part of 'wallet_chain_send_sol.dart';
 mixin _SolSendLogicMixin on ConsumerState<WalletChainSendSol> {
   CoinModel? chainModel;
 
-  Regular? _logicRegular;
-  Regular get _regular => _logicRegular ??= Regular();
-
-  DataUtils? _logicDataUtils;
-  DataUtils get dataUtils => _logicDataUtils ??= DataUtils();
+  late final Regular _regular = Regular();
+  late final DataUtils dataUtils = DataUtils();
 
   final TextEditingController toTextEditingController = TextEditingController();
   final TextEditingController valueTextEditingController =

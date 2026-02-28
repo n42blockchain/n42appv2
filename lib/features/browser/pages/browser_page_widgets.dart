@@ -2,49 +2,50 @@ part of 'browser_page.dart';
 
 /// UI widget builders for BrowserPage.
 extension _BrowserPageWidgets on _BrowserPageState {
+  Color _mainTextColor() => AppThemeUtils.getColorByKey(
+        context,
+        AppThemeKeys.mainTextColor.name,
+      );
+
   Widget _buildBrowserContent() {
     final bValue = ref.watch(browserNotifierProvider);
-    return Builder(builder: (context) {
-      return Column(
-        children: [
-          _buildAddressBar(bValue),
-          Expanded(flex: 1, child: _buildWebViewArea(bValue)),
-          _buildProgressIndicator(bValue),
-          if (!bValue.showWList) _buildMainToolbar(bValue),
-          if (bValue.showWList) _buildTabListToolbar(bValue),
-        ],
-      );
-    });
+    return Column(
+      children: [
+        _buildAddressBar(bValue),
+        Expanded(child: _buildWebViewArea(bValue)),
+        _buildProgressIndicator(bValue),
+        if (!bValue.showWList) _buildMainToolbar(bValue),
+        if (bValue.showWList) _buildTabListToolbar(bValue),
+      ],
+    );
   }
 
   Widget _buildAddressBar(BrowserProvider bValue) {
+    final sw = ScreenUtil().setWidth;
+
     return Container(
       alignment: Alignment.center,
-      height: ScreenUtil().setWidth(100.0),
-      padding: EdgeInsets.only(
-          top: ScreenUtil().setWidth(10.0),
-          right: ScreenUtil().setWidth(20.0)),
+      height: sw(100.0),
+      padding: EdgeInsets.only(top: sw(10.0), right: sw(20.0)),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
-            flex: 1,
             child: textFieldStyle2(
               context,
               controller: bValue.titleEditingController,
               focusNode: bValue.titleFocusNode,
-              height: ScreenUtil().setWidth(80.0),
+              height: sw(80.0),
               style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
-                fontSize: ScreenUtil().setWidth(26.0),
+                color: _mainTextColor(),
+                fontSize: sw(26.0),
                 fontWeight: bValue.titleFocusNode?.hasFocus ?? false
                     ? FontWeight.bold
                     : FontWeight.normal,
               ),
               leftWidget: _buildSecurityIcon(bValue),
               maxLines: 1,
-              boxShadow: BoxShadow(
+              boxShadow: const BoxShadow(
                 color: Color(0x00101828),
                 offset: Offset.zero,
                 blurRadius: 0,
@@ -56,7 +57,7 @@ extension _BrowserPageWidgets on _BrowserPageState {
               },
             ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(10.0)),
+          SizedBox(width: sw(10.0)),
           _buildAddTabButton(bValue),
           _buildTabCountButton(bValue),
         ],
@@ -65,77 +66,75 @@ extension _BrowserPageWidgets on _BrowserPageState {
   }
 
   Widget _buildSecurityIcon(BrowserProvider bValue) {
+    final sw = ScreenUtil().setWidth;
+    final idx = bValue.wListIndex;
+    final DAppSecurityInfo? securityInfo;
+    if (idx >= 0 && idx < bValue.wInfoList.length) {
+      final url = bValue.wInfoList[idx]['openUrl'] as String? ?? '';
+      securityInfo = (url.startsWith('http://') || url.startsWith('https://'))
+          ? DAppSecurityService.check(url)
+          : null;
+    } else {
+      securityInfo = null;
+    }
+
     return Container(
-      width: ScreenUtil().setWidth(30.0),
-      height: ScreenUtil().setWidth(30.0),
-      margin: EdgeInsets.only(right: ScreenUtil().setWidth(15.0)),
-      child: DAppSecurityIcon(
-        info: (() {
-          final idx = bValue.wListIndex;
-          if (idx < 0 || idx >= bValue.wInfoList.length) return null;
-          final url = bValue.wInfoList[idx]['openUrl'] as String? ?? '';
-          if (url.startsWith('http://') || url.startsWith('https://')) {
-            return DAppSecurityService.check(url);
-          }
-          return null;
-        })(),
-        size: 24,
-      ),
+      width: sw(30.0),
+      height: sw(30.0),
+      margin: EdgeInsets.only(right: sw(15.0)),
+      child: DAppSecurityIcon(info: securityInfo, size: 24),
     );
   }
 
   Widget _buildAddTabButton(BrowserProvider bValue) {
+    final sw = ScreenUtil().setWidth;
+
     return InkWell(
       onTap: () { bValue.wListAdd(); },
       child: Container(
-        height: ScreenUtil().setWidth(60.0),
-        width: ScreenUtil().setWidth(60.0),
-        padding: EdgeInsets.all(ScreenUtil().setWidth(10.0)),
+        height: sw(60.0),
+        width: sw(60.0),
+        padding: EdgeInsets.all(sw(10.0)),
         child: Image.asset(
           "assets/browser/add.png",
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainTextColor.name),
-          width: ScreenUtil().setWidth(40.0),
-          height: ScreenUtil().setWidth(40.0),
+          color: _mainTextColor(),
+          width: sw(40.0),
+          height: sw(40.0),
         ),
       ),
     );
   }
 
   Widget _buildTabCountButton(BrowserProvider bValue) {
+    final sw = ScreenUtil().setWidth;
+    final sp = ScreenUtil().setSp;
+
     return InkWell(
       onTap: () { bValue.setShowWList(true); },
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(10.0)),
-        height: ScreenUtil().setWidth(40),
-        width: ScreenUtil().setWidth(40),
+        margin: EdgeInsets.symmetric(horizontal: sw(10.0)),
+        height: sw(40),
+        width: sw(40),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12.0)),
-          border: Border.all(
-            width: ScreenUtil().setWidth(2.0),
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainTextColor.name),
-          ),
+          borderRadius: BorderRadius.circular(sw(12.0)),
+          border: Border.all(width: sw(2.0), color: _mainTextColor()),
         ),
         child: Text(
           "${bValue.wList.length}",
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(20.0),
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainTextColor.name),
-          ),
+          style: TextStyle(fontSize: sp(20.0), color: _mainTextColor()),
         ),
       ),
     );
   }
 
   Widget _buildProgressIndicator(BrowserProvider bValue) {
-    if (bValue.showWList || bValue.wListIndex == -1) return SizedBox.shrink();
-    final isLoading = bValue.wInfoList[bValue.wListIndex]['load'] ?? false;
-    if (!isLoading) return SizedBox.shrink();
+    if (bValue.showWList || bValue.wListIndex == -1) return const SizedBox.shrink();
+    final info = bValue.wInfoList[bValue.wListIndex];
+    final isLoading = info['load'] ?? false;
+    if (!isLoading) return const SizedBox.shrink();
     return LinearProgressIndicator(
-      value: bValue.wInfoList[bValue.wListIndex]['progress'] ?? 0,
+      value: info['progress'] ?? 0,
       backgroundColor: AppThemeUtils.getColorByKey(
           context, AppThemeKeys.mainButtonBgColor3.name),
       color: AppThemeUtils.getColorByKey(
@@ -144,12 +143,8 @@ extension _BrowserPageWidgets on _BrowserPageState {
   }
 
   Widget _buildWebViewArea(BrowserProvider bValue) {
-    if (bValue.showWList) {
-      return _buildTabGridView(bValue);
-    }
-    if (bValue.wListIndex == -1) {
-      return EmptyView();
-    }
+    if (bValue.showWList) return _buildTabGridView(bValue);
+    if (bValue.wListIndex == -1) return EmptyView();
     return bValue.wList[bValue.wListIndex];
   }
 
@@ -226,65 +221,40 @@ extension _BrowserPageWidgets on _BrowserPageState {
   }
 
   Widget _buildTabListToolbar(BrowserProvider bValue) {
+    final sw = ScreenUtil().setWidth;
+    final sp = ScreenUtil().setSp;
+
     return Container(
       alignment: Alignment.center,
-      height: ScreenUtil().setWidth(100.0),
+      height: sw(100.0),
       child: Row(
         children: [
-          Expanded(
-            child: InkWell(
-              onTap: () async { bValue.cleanWList(); },
-              child: Container(
-                alignment: Alignment.centerLeft,
-                height: ScreenUtil().setWidth(80.0),
-                margin: EdgeInsets.only(left: ScreenUtil().setSp(30.0)),
-                child: Text(
-                  S.of(context).g_browser_key16,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(26.0),
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainTextColor.name),
-                  ),
-                ),
-              ),
+          _tabToolbarItem(
+            alignment: Alignment.centerLeft,
+            margin: EdgeInsets.only(left: sp(30.0)),
+            onTap: () async { bValue.cleanWList(); },
+            child: Text(
+              S.of(context).g_browser_key16,
+              style: TextStyle(fontSize: sp(26.0), color: _mainTextColor()),
             ),
           ),
-          Expanded(
-            child: InkWell(
-              onTap: () async { bValue.wListAdd(); },
-              child: Container(
-                alignment: Alignment.center,
-                height: ScreenUtil().setWidth(80.0),
-                width: ScreenUtil().setWidth(60.0),
-                padding: EdgeInsets.symmetric(
-                    horizontal: ScreenUtil().setWidth(10.0),
-                    vertical: ScreenUtil().setWidth(20.0)),
-                child: Image.asset(
-                  "assets/browser/add.png",
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
-                  width: ScreenUtil().setWidth(40.0),
-                  height: ScreenUtil().setWidth(40.0),
-                ),
-              ),
+          _tabToolbarItem(
+            alignment: Alignment.center,
+            onTap: () async { bValue.wListAdd(); },
+            child: Image.asset(
+              "assets/browser/add.png",
+              color: _mainTextColor(),
+              width: sw(40.0),
+              height: sw(40.0),
             ),
           ),
-          Expanded(
-            child: InkWell(
-              onTap: () async { bValue.setShowWList(false); },
-              child: Container(
-                alignment: Alignment.centerRight,
-                height: ScreenUtil().setWidth(80.0),
-                margin: EdgeInsets.only(right: ScreenUtil().setSp(30.0)),
-                child: Text(
-                  S.of(context).g_browser_key17,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(26.0),
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainTextColor.name),
-                  ),
-                ),
-              ),
+          _tabToolbarItem(
+            alignment: Alignment.centerRight,
+            margin: EdgeInsets.only(right: sp(30.0)),
+            onTap: () async { bValue.setShowWList(false); },
+            child: Text(
+              S.of(context).g_browser_key17,
+              style: TextStyle(fontSize: sp(26.0), color: _mainTextColor()),
             ),
           ),
         ],
@@ -292,63 +262,92 @@ extension _BrowserPageWidgets on _BrowserPageState {
     );
   }
 
-  /// Toolbar button with an asset image from `assets/browser/`.
-  Widget _toolbarAssetButton(String assetName,
-      {VoidCallback? onTap, String? colorKey}) {
-    final color = AppThemeUtils.getColorByKey(
-        context, colorKey ?? AppThemeKeys.mainTextColor.name);
+  /// A single item in the tab list toolbar.
+  Widget _tabToolbarItem({
+    required AlignmentGeometry alignment,
+    required VoidCallback onTap,
+    required Widget child,
+    EdgeInsetsGeometry? margin,
+  }) {
+    final sw = ScreenUtil().setWidth;
+
     return Expanded(
       child: InkWell(
         onTap: onTap,
         child: Container(
-          alignment: Alignment.center,
-          height: ScreenUtil().setWidth(80.0),
-          width: ScreenUtil().setWidth(60.0),
+          alignment: alignment,
+          height: sw(80.0),
+          margin: margin,
           padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(10.0),
-              vertical: ScreenUtil().setWidth(20.0)),
-          child: Image.asset(
-            "assets/browser/$assetName.png",
-            color: color,
-            width: ScreenUtil().setWidth(40.0),
-            height: ScreenUtil().setWidth(40.0),
+            horizontal: sw(10.0),
+            vertical: sw(20.0),
           ),
+          child: child,
         ),
+      ),
+    );
+  }
+
+  /// Toolbar button with an asset image from `assets/browser/`.
+  Widget _toolbarAssetButton(String assetName,
+      {VoidCallback? onTap, String? colorKey}) {
+    final sw = ScreenUtil().setWidth;
+    final color = AppThemeUtils.getColorByKey(
+        context, colorKey ?? AppThemeKeys.mainTextColor.name);
+
+    return _toolbarButton(
+      onTap: onTap,
+      child: Image.asset(
+        "assets/browser/$assetName.png",
+        color: color,
+        width: sw(40.0),
+        height: sw(40.0),
       ),
     );
   }
 
   /// Toolbar button with a Material icon.
   Widget _toolbarIconButton(IconData icon, {VoidCallback? onTap}) {
+    final sw = ScreenUtil().setWidth;
+
+    return _toolbarButton(
+      onTap: onTap,
+      child: Icon(icon, color: _mainTextColor(), size: sw(40.0)),
+    );
+  }
+
+  /// Shared toolbar button layout used by both asset and icon variants.
+  Widget _toolbarButton({VoidCallback? onTap, required Widget child}) {
+    final sw = ScreenUtil().setWidth;
+
     return Expanded(
       child: InkWell(
         onTap: onTap,
         child: Container(
           alignment: Alignment.center,
-          height: ScreenUtil().setWidth(80.0),
-          width: ScreenUtil().setWidth(60.0),
+          height: sw(80.0),
+          width: sw(60.0),
           padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(10.0),
-              vertical: ScreenUtil().setWidth(20.0)),
-          child: Icon(
-            icon,
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainTextColor.name),
-            size: ScreenUtil().setWidth(40.0),
+            horizontal: sw(10.0),
+            vertical: sw(20.0),
           ),
+          child: child,
         ),
       ),
     );
   }
 
   void _showAlertWidgetConnectDapp(String uri) {
+    final sp = ScreenUtil().setSp;
+    final sw = ScreenUtil().setWidth;
+
     sheetBottom(
       context,
       S.of(context).g_browser_key14,
       Column(
         children: [
           Container(
-            padding: EdgeInsets.only(top: ScreenUtil().setWidth(30)),
+            padding: EdgeInsets.only(top: sw(30)),
             alignment: Alignment.centerLeft,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -356,9 +355,8 @@ extension _BrowserPageWidgets on _BrowserPageState {
                 Text(
                   "Uri",
                   style: TextStyle(
-                    fontSize: ScreenUtil().setSp(28),
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainTextColor.name),
+                    fontSize: sp(28),
+                    color: _mainTextColor(),
                   ),
                 ),
                 IconButton(
@@ -376,19 +374,18 @@ extension _BrowserPageWidgets on _BrowserPageState {
             ),
           ),
           Container(
-            padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(30)),
+            padding: EdgeInsets.only(bottom: sw(30)),
             alignment: Alignment.centerLeft,
             child: Text(
               uri,
               style: TextStyle(
-                fontSize: ScreenUtil().setSp(28),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
+                fontSize: sp(28),
+                color: _mainTextColor(),
               ),
             ),
           ),
           SizedBox(
-            height: ScreenUtil().setWidth(88),
+            height: sw(88),
             child: Row(
               children: [
                 Expanded(
@@ -396,7 +393,7 @@ extension _BrowserPageWidgets on _BrowserPageState {
                     Navigator.pop(context);
                   }, S.of(context).g_key_79),
                 ),
-                SizedBox(width: ScreenUtil().setWidth(30)),
+                SizedBox(width: sw(30)),
                 Expanded(
                   child: buttonStyle2(context, () async {
                     Navigator.pop(context);

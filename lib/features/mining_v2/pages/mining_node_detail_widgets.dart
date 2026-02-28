@@ -6,6 +6,12 @@ part of 'mining_node_detail_page.dart';
 mixin _MiningNodeDetailWidgets
     on ConsumerState<MiningNodeDetailPage> {
 
+  // ── Theme helper ──────────────────────────────────────────────────────
+
+  Color _themeColor(BuildContext context, AppThemeKeys key) {
+    return AppThemeUtils.getColorByKey(context, key.name);
+  }
+
   // ── Two-column info cards ───────────────────────────────────────────────
 
   Widget _buildTwoColumnCards(
@@ -59,16 +65,14 @@ mixin _MiningNodeDetailWidgets
               Icon(
                 icon,
                 size: ScreenUtil().setWidth(28),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
+                color: _themeColor(context, AppThemeKeys.mainBlueColor),
               ),
               SizedBox(width: ScreenUtil().setWidth(8)),
               Expanded(
                 child: Text(
                   label,
                   style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.itemSubtitleTextColor.name),
+                    color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
                     fontSize: ScreenUtil().setSp(22),
                   ),
                   maxLines: 1,
@@ -82,8 +86,7 @@ mixin _MiningNodeDetailWidgets
             value,
             style: TextStyle(
               color: valueColor ??
-                  AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
+                  _themeColor(context, AppThemeKeys.mainTextColor),
               fontSize: ScreenUtil().setSp(28),
               fontWeight: FontWeight.w700,
             ),
@@ -140,38 +143,22 @@ mixin _MiningNodeDetailWidgets
     required String value,
     Color? valueColor,
   }) {
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(20),
-        vertical: ScreenUtil().setWidth(18),
-      ),
-      child: Row(
-        children: [
-          Text(
-            label,
-            style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name),
-              fontSize: ScreenUtil().setSp(24),
-            ),
+    return _buildListTileWidget(
+      context,
+      label: label,
+      trailing: Flexible(
+        child: Text(
+          value,
+          style: TextStyle(
+            color: valueColor ??
+                _themeColor(context, AppThemeKeys.mainTextColor),
+            fontSize: ScreenUtil().setSp(24),
+            fontWeight: FontWeight.w500,
           ),
-          const Spacer(),
-          Flexible(
-            child: Text(
-              value,
-              style: TextStyle(
-                color: valueColor ??
-                    AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainTextColor.name),
-                fontSize: ScreenUtil().setSp(24),
-                fontWeight: FontWeight.w500,
-              ),
-              textAlign: TextAlign.end,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-        ],
+          textAlign: TextAlign.end,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
       ),
     );
   }
@@ -191,8 +178,7 @@ mixin _MiningNodeDetailWidgets
           Text(
             label,
             style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name),
+              color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
               fontSize: ScreenUtil().setSp(24),
             ),
           ),
@@ -217,8 +203,7 @@ mixin _MiningNodeDetailWidgets
           height: ScreenUtil().setWidth(20),
           child: CircularProgressIndicator(
             strokeWidth: 2,
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainBlueColor.name),
+            color: _themeColor(context, AppThemeKeys.mainBlueColor),
           ),
         );
       case WebSocketState.disconnected:
@@ -254,8 +239,7 @@ mixin _MiningNodeDetailWidgets
       height: 1,
       indent: ScreenUtil().setWidth(20),
       endIndent: ScreenUtil().setWidth(20),
-      color: AppThemeUtils.getColorByKey(
-          context, AppThemeKeys.dividerColor.name),
+      color: _themeColor(context, AppThemeKeys.dividerColor),
     );
   }
 
@@ -265,57 +249,54 @@ mixin _MiningNodeDetailWidgets
       BuildContext context, MiningV2Provider mpValue) {
     // Redemption button: show when activated and not yet requested
     if (mpValue.showRedemption == true && mpValue.redeem == false) {
+      final isLoading = mpValue.exitDepositLoad == Load.loading;
       return SizedBox(
         height: ScreenUtil().setWidth(88),
         child: buttonStyle6(
           context,
           () {
-            if (mpValue.exitDepositLoad == Load.finish) {
-              _showUnlockDialog(context, mpValue);
-            }
+            if (!isLoading) _showUnlockDialog(context, mpValue);
           },
           S.of(context).g_mining_key_77,
-          AppThemeUtils.getColorByKey(
+          _themeColor(
             context,
-            mpValue.exitDepositLoad == Load.loading
-                ? AppThemeKeys.mainButtonBgColor3.name
-                : AppThemeKeys.mainButtonBgColor.name,
+            isLoading
+                ? AppThemeKeys.mainButtonBgColor3
+                : AppThemeKeys.mainButtonBgColor,
           ),
-          AppThemeUtils.getColorByKey(
+          _themeColor(
             context,
-            mpValue.exitDepositLoad == Load.loading
-                ? AppThemeKeys.mainButtonTextColor3.name
-                : AppThemeKeys.mainButtonTextColor.name,
+            isLoading
+                ? AppThemeKeys.mainButtonTextColor3
+                : AppThemeKeys.mainButtonTextColor,
           ),
-          mpValue.exitDepositLoad == Load.loading,
+          isLoading,
         ),
       );
     }
+
     // Activation pending hint
     if (mpValue.depositsEnable == true && mpValue.showRedemption == false) {
-      return Text(
-        S.of(context).g_mining_key_88,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(28),
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.textColorOrange.name),
-        ),
-        textAlign: TextAlign.center,
-      );
+      return _hintText(context, S.of(context).g_mining_key_88);
     }
+
     // Redemption in progress hint
     if (mpValue.redeem == true && mpValue.showRedemption2 == true) {
-      return Text(
-        S.of(context).g_mining_key_115,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(28),
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.textColorOrange.name),
-        ),
-        textAlign: TextAlign.center,
-      );
+      return _hintText(context, S.of(context).g_mining_key_115);
     }
+
     return const SizedBox.shrink();
+  }
+
+  Widget _hintText(BuildContext context, String text) {
+    return Text(
+      text,
+      style: TextStyle(
+        fontSize: ScreenUtil().setSp(28),
+        color: _themeColor(context, AppThemeKeys.textColorOrange),
+      ),
+      textAlign: TextAlign.center,
+    );
   }
 
   void _showUnlockDialog(BuildContext context, MiningV2Provider mpValue) {
@@ -327,8 +308,7 @@ mixin _MiningNodeDetailWidgets
           content: Text(
             S.current.g_mining_key20,
             style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
+              color: _themeColor(context, AppThemeKeys.mainTextColor),
             ),
           ),
           actions: [
@@ -361,8 +341,7 @@ mixin _MiningNodeDetailWidgets
 
   BoxDecoration _cardDecoration(BuildContext context, bool isDark) {
     return BoxDecoration(
-      color: AppThemeUtils.getColorByKey(
-          context, AppThemeKeys.itemBgColor.name),
+      color: _themeColor(context, AppThemeKeys.itemBgColor),
       borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
       border: Border.all(
         color: isDark

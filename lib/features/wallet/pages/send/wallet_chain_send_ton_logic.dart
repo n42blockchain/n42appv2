@@ -7,11 +7,8 @@ part of 'wallet_chain_send_ton.dart';
 mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
   CoinModel? chainModel;
 
-  Regular? _logicRegular;
-  Regular get regular => _logicRegular ??= Regular();
-
-  DataUtils? _logicDataUtils;
-  DataUtils get dataUtils => _logicDataUtils ??= DataUtils();
+  late final Regular regular = Regular();
+  late final DataUtils dataUtils = DataUtils();
 
   final TextEditingController toTextEditingController = TextEditingController();
   final TextEditingController valueTextEditingController =
@@ -37,14 +34,29 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
   Load load = Load.loading;
   Load gasLimitLoad = Load.finish;
 
+  // ── Coin property helpers ─────────────────────────────────────────────
+
+  Map<String, dynamic> get _coin => widget.coinModel.coin;
+  String get _coinType => _coin['coinType'] as String;
+  bool get _isContract => _coin['isContract'] as bool;
+  int get _decimals => _coin['decimals'] as int;
+  String get _blockchainType => _coin['blockchainType'] as String;
+
+  String get _contract => (widget.coinModel.isTest
+      ? _coin['contract_test']
+      : _coin['contract']) as String? ?? '';
+
+  static const _noLatestCoinTypes = {
+    'OKT', 'MTR', 'METIS', 'VIC', 'BOBA', 'OP', 'GO',
+  };
+
+  // ── Initialization ────────────────────────────────────────────────────
+
   Future<void> initData() async {
-    // 判断是否是代币
-    if (widget.coinModel.coin['isContract']) {
+    if (_isContract) {
       final WalletActionProvider wap = ref.read(wapBridgeProvider);
       final int cIndex = wap.coinModels.indexWhere((element) {
-        if (element.coin['coinType'] != widget.coinModel.coin['coinType']) {
-          return false;
-        }
+        if (element.coin['coinType'] != _coinType) return false;
         if (widget.coinModel.privateKey != null) {
           return element.privateKey == widget.coinModel.privateKey;
         }
@@ -55,10 +67,7 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
       if (!mounted) return;
       setState(() {});
     }
-    gas = BigInt.from(getCoinGas(
-      widget.coinModel.coin['coinType'],
-      contract: widget.coinModel.coin['isContract'],
-    ));
+    gas = BigInt.from(getCoinGas(_coinType, contract: _isContract));
     await getBalance();
     await getGasPrice();
   }
@@ -93,11 +102,11 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
     setState(() {
       gasLimitLoad = Load.loading;
     });
-    if (widget.coinModel.coin['blockchainType'] !=
-            BlockchainType.Ethereum.name &&
-        widget.coinModel.coin['blockchainType'] != BlockchainType.Tron.name) {
-      return;
-    }
+
+    final isEthereum = _blockchainType == BlockchainType.Ethereum.name;
+    final isTron = _blockchainType == BlockchainType.Tron.name;
+    if (!isEthereum && !isTron) return;
+
     try {
       String? toAddr;
       if (checkAddress) {
@@ -111,64 +120,44 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
       final String price = valueTextEditingController.text;
       if (price == "") return;
 
-      bool addLatest = true;
-      if (widget.coinModel.coin['coinType'] == CoinType.OKT.name ||
-          widget.coinModel.coin['coinType'] == CoinType.MTR.name ||
-          widget.coinModel.coin['coinType'] == CoinType.METIS.name ||
-          widget.coinModel.coin['coinType'] == CoinType.VIC.name ||
-          widget.coinModel.coin['coinType'] == CoinType.BOBA.name ||
-          widget.coinModel.coin['coinType'] == CoinType.OP.name ||
-          widget.coinModel.coin['coinType'] == CoinType.GO.name) {
-        addLatest = false;
-      }
-
-      final BigInt gaslimit = BigInt.from(getCoinGas(
-        widget.coinModel.coin['coinType'],
-        contract: widget.coinModel.coin['isContract'],
-      ));
+      final BigInt gaslimit = BigInt.from(getCoinGas(_coinType, contract: _isContract));
+      final BigInt weiValue = ethToWeiString(price, _decimals);
       final MessageModel ethMessage;
 
-      if (widget.coinModel.coin['blockchainType'] == BlockchainType.Tron.name) {
+      if (isTron) {
         final TrxApi trxApi = TrxApi();
         ethMessage = await trxApi.getGasEstimateTrx(
           widget.coinModel.address,
           toAddr,
           gasPrice,
-          ethToWeiString(price, widget.coinModel.coin['decimals']),
+          weiValue,
           gaslimit,
-          contract: widget.coinModel.isTest
-              ? widget.coinModel.coin['contract_test']
-              : widget.coinModel.coin['contract'],
+          contract: _contract,
           isTest: widget.coinModel.isTest,
         );
       } else {
-        final String rpc = widget.coinModel.isTest
-            ? widget.coinModel.coin['service_test']
-            : widget.coinModel.coin['service'];
+        final String rpc = (widget.coinModel.isTest
+            ? _coin['service_test']
+            : _coin['service']) as String;
         final EthAPI ethAPI = EthAPI.init(null, rpc, null);
         ethMessage = await ethAPI.getGasLimit(
           widget.coinModel.address,
           toAddr,
           gasPrice,
-          ethToWeiString(price, widget.coinModel.coin['decimals']),
+          weiValue,
           gaslimit,
-          contract: widget.coinModel.isTest
-              ? widget.coinModel.coin['contract_test']
-              : widget.coinModel.coin['contract'],
+          contract: _contract,
           isTest: widget.coinModel.isTest,
-          addLatest: addLatest,
+          addLatest: !_noLatestCoinTypes.contains(_coinType),
         );
       }
 
       if (ethMessage.error == false) {
         gas = ethMessage.data;
-        if (widget.coinModel.coin['coinType'] == CoinType.BOBA.name ||
-            widget.coinModel.coin['coinType'] == CoinType.OP.name) {
+        if (_coinType == CoinType.BOBA.name || _coinType == CoinType.OP.name) {
           gas = BigInt.from(gas.toInt() * 1.5);
         }
-        if (widget.coinModel.coin['blockchainType'] ==
-                BlockchainType.Ethereum.name &&
-            widget.coinModel.coin['isContract'] == false) {
+        if (isEthereum && !_isContract) {
           final String note = noteTextEditingController.text.trim();
           if (note != "") {
             final String noteHex = bytesToHex(note.codeUnits);
@@ -197,7 +186,7 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
     if (value == "") {
       value = valueTextEditingController.text;
     }
-    final int minValue = widget.coinModel.coin['decimals'] == 0 ? 1 : 0;
+    final int minValue = _decimals == 0 ? 1 : 0;
 
     if (value.isEmpty) {
       amountErrorMessage = S.of(context).g_key_46(minValue);
@@ -206,7 +195,7 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
     }
 
     bool checkValue1 = false;
-    if (widget.coinModel.coin['decimals'] == 0) {
+    if (_decimals == 0) {
       checkValue1 = regular.regularNums(value);
       if (checkValue1 == false) {
         amountErrorMessage = S.of(context).g_key_134;
@@ -246,7 +235,7 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
       addr = addrList[1];
     }
     final bool check =
-        await Trustdart().validateAddress(widget.coinModel.coin['coinType'], addr);
+        await Trustdart().validateAddress(_coinType, addr);
     if (!check ||
         addr.toUpperCase() ==
             widget.coinModel.address.toString().toUpperCase()) {
@@ -283,7 +272,7 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
     }
 
     BigInt uBalance = widget.coinModel.balance;
-    if (widget.coinModel.coin['isContract']) {
+    if (_isContract) {
       uBalance = chainModel?.balance ?? BigInt.zero;
     }
     if (totalGasPrice > uBalance || widget.coinModel.balance == BigInt.zero) {
@@ -296,7 +285,7 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
     if (!mounted) return;
     transferValue = ethToWeiString(
       valueTextEditingController.text,
-      widget.coinModel.coin['decimals'],
+      _decimals,
     );
 
     final TransationRecordModel trModel = TransationRecordModel();
@@ -304,12 +293,10 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
     trModel.from1 = widget.coinModel.address.toString();
     trModel.to1 = toAddr;
     trModel.addrType = widget.coinModel.addrType;
-    trModel.coin = widget.coinModel.coin;
-    trModel.coinMiniName = widget.coinModel.coin['coinType'];
+    trModel.coin = _coin;
+    trModel.coinMiniName = _coinType;
     trModel.walletIndex = ref.read(wapBridgeProvider).walletIndex;
-    trModel.contract = widget.coinModel.isTest
-        ? widget.coinModel.coin['contract_test']
-        : widget.coinModel.coin['contract'];
+    trModel.contract = _contract;
     trModel.isTest = widget.coinModel.isTest ? 1 : 0;
     trModel.gasPrice = totalGasPrice;
     trModel.gas = gas.toInt();
@@ -317,7 +304,7 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
     trModel.price = transferValue;
 
     final String feeUnit = chainModel == null
-        ? widget.coinModel.coin['unit'].toString().toUpperCase()
+        ? _coin['unit'].toString().toUpperCase()
         : chainModel!.coin['unit'].toString().toUpperCase();
 
     final bool check = await Navigator.push(
@@ -354,7 +341,7 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
         if (!mounted) return;
         ref.read(tripBridgeProvider).addUndoneTr(trModel, 1);
         await RecentAddressService.save(
-          widget.coinModel.coin['coinType'] ?? '',
+          _coinType,
           toTextEditingController.text.trim(),
         );
         ToastUtils.show(S.current.g_key_nft_41);
@@ -372,7 +359,7 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
 
   Future<void> maxTag() async {
     if (gasLimitLoad == Load.loading) return;
-    if (widget.coinModel.coin['isContract']) {
+    if (_isContract) {
       valueTextEditingController.text = widget.coinModel.balanceStringAll();
       transferValue = widget.coinModel.balance;
       estimateGasEthLocal();
@@ -380,7 +367,7 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
       transferValue = widget.coinModel.balance - totalGasPrice;
       valueTextEditingController.text = toEther(
         transferValue.toString(),
-        widget.coinModel.coin['decimals'],
+        _decimals,
       ).toString();
     }
     amountErrorMessage = "";
