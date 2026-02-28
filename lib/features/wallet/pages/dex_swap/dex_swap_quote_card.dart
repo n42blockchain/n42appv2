@@ -8,6 +8,8 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 /// a countdown until the quote expires, optional high-impact warning, and an
 /// ERC-20 approval notice with unlimited/exact toggle.
 class DexQuoteCard extends StatelessWidget {
+  static const _colorRed = Color(0xFFF44336);
+  static const _colorOrange = Color(0xFFFF9800);
   const DexQuoteCard({
     super.key,
     required this.quote,
@@ -38,8 +40,8 @@ class DexQuoteCard extends StatelessWidget {
 
   Color _impactColor(BuildContext context) {
     final num = quote.priceImpactNum;
-    if (num >= 3.0) return const Color(0xFFF44336);
-    if (num >= 1.0) return const Color(0xFFFF9800);
+    if (num >= 3.0) return _colorRed;
+    if (num >= 1.0) return _colorOrange;
     return AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
   }
 
@@ -71,8 +73,8 @@ class DexQuoteCard extends StatelessWidget {
             quote.priceImpact,
             valueColor: impactColor,
           ),
-          _row(context, s.g_key_dex_gas_estimate, quote.gasEstimate),
-          _row(context, s.g_key_dex_min_received,
+          _rowWidget(context, s.g_key_dex_gas_estimate, quote.gasEstimate),
+          _rowWidget(context, s.g_key_dex_min_received,
               '${quote.minAmountOut} ${quote.tokenOutSymbol}'),
           if (quote.priceImpactNum >= 3.0) ...[
             SizedBox(height: ScreenUtil().setWidth(8)),
@@ -94,7 +96,7 @@ class DexQuoteCard extends StatelessWidget {
       s.g_key_dex_quote_expires(secsLeft.toString()),
       style: TextStyle(
         color: secsLeft <= 10
-            ? const Color(0xFFF44336)
+            ? _colorRed
             : AppThemeUtils.getColorByKey(
                 context, AppThemeKeys.ff888888.name),
         fontSize: ScreenUtil().setSp(22),
@@ -109,20 +111,20 @@ class DexQuoteCard extends StatelessWidget {
         vertical: ScreenUtil().setWidth(8),
       ),
       decoration: BoxDecoration(
-        color: const Color(0xFFF44336).withAlpha(20),
+        color: _colorRed.withAlpha(20),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
       ),
       child: Row(
         children: [
           Icon(Icons.warning_amber_rounded,
-              color: const Color(0xFFF44336),
+              color: _colorRed,
               size: ScreenUtil().setWidth(28)),
           SizedBox(width: ScreenUtil().setWidth(8)),
           Expanded(
             child: Text(
               s.g_key_dex_price_impact_high(quote.priceImpact),
               style: TextStyle(
-                color: const Color(0xFFF44336),
+                color: _colorRed,
                 fontSize: ScreenUtil().setSp(22),
               ),
             ),
@@ -139,7 +141,7 @@ class DexQuoteCard extends StatelessWidget {
         vertical: ScreenUtil().setWidth(10),
       ),
       decoration: BoxDecoration(
-        color: const Color(0xFFFF9800).withAlpha(20),
+        color: _colorOrange.withAlpha(20),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
       ),
       child: Column(
@@ -148,14 +150,14 @@ class DexQuoteCard extends StatelessWidget {
           Row(
             children: [
               Icon(Icons.lock_outline,
-                  color: const Color(0xFFFF9800),
+                  color: _colorOrange,
                   size: ScreenUtil().setWidth(28)),
               SizedBox(width: ScreenUtil().setWidth(8)),
               Expanded(
                 child: Text(
                   s.g_key_dex_approve_required(tokenInSymbol),
                   style: TextStyle(
-                    color: const Color(0xFFFF9800),
+                    color: _colorOrange,
                     fontSize: ScreenUtil().setSp(22),
                   ),
                 ),
@@ -185,7 +187,7 @@ class DexQuoteCard extends StatelessWidget {
             Text(
               s.g_key_dex_approve_unlimited_info,
               style: TextStyle(
-                color: const Color(0xFFFF9800).withValues(alpha: 0.75),
+                color: _colorOrange.withValues(alpha: 0.75),
                 fontSize: ScreenUtil().setSp(20),
               ),
             ),
@@ -212,11 +214,11 @@ class DexQuoteCard extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           color: selected
-              ? const Color(0xFFFF9800).withValues(alpha: 0.2)
+              ? _colorOrange.withValues(alpha: 0.2)
               : Colors.transparent,
           border: Border.all(
             color: selected
-                ? const Color(0xFFFF9800)
+                ? _colorOrange
                 : mainText.withValues(alpha: 0.25),
             width: 1.0,
           ),
@@ -225,7 +227,7 @@ class DexQuoteCard extends StatelessWidget {
         child: Text(
           label,
           style: TextStyle(
-            color: selected ? const Color(0xFFFF9800) : mainText,
+            color: selected ? _colorOrange : mainText,
             fontSize: ScreenUtil().setSp(22),
             fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
           ),
@@ -276,7 +278,4 @@ class DexQuoteCard extends StatelessWidget {
     );
   }
 
-  Widget _row(BuildContext context, String label, String value,
-          {Color? valueColor}) =>
-      _rowWidget(context, label, value, valueColor: valueColor);
 }

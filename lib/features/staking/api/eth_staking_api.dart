@@ -19,10 +19,38 @@ class EthStakingApi {
   // Lido API 端点
   static const String _lidoStatsApi = 'https://eth-api.lido.fi';
 
-  final Map<String, String> _headers = {
+  // 零地址推荐人（64 字符零填充）
+  static const String _zeroReferral = '0000000000000000000000000000000000000000000000000000000000000000';
+
+  static const Map<String, String> _headers = {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
   };
+
+  /// 获取 ETH RPC 地址，为空时返回 null
+  String? _getRpc() {
+    final rpc = chainUrlMap['ETH']?['baseInfo']?['service'] ?? '';
+    return rpc.isEmpty ? null : rpc;
+  }
+
+  /// 通用 eth_call 调用
+  Future<Map<dynamic, dynamic>> _ethCall(String rpc, String data) async {
+    final params = {
+      'jsonrpc': '2.0',
+      'method': 'eth_call',
+      'params': [
+        {'to': _lidoContractAddress, 'data': data},
+        'latest',
+      ],
+      'id': 1,
+    };
+    return await BaseApi.requestEmptyH.post(
+      rpc,
+      params: params,
+      data: params,
+      header: _headers,
+    );
+  }
 
   /// 获取当前 Lido APY
   Future<MessageModel> getLidoApy() async {
@@ -33,20 +61,14 @@ class EthStakingApi {
         header: _headers,
       );
 
-      final mm = MessageModel();
+      // APY 是百分比形式，无数据时使用默认值
+      final apy = (response is Map && response['data'] != null)
+          ? (response['data']['smaApr'] ?? 4.0).toDouble()
+          : 4.0;
 
-      if (response is Map && response['data'] != null) {
-        // APY 是百分比形式
-        final apy = (response['data']['smaApr'] ?? 4.0).toDouble();
-        mm.data = apy;
-        mm.error = false;
-      } else {
-        // 使用默认 APY
-        mm.data = 4.0;
-        mm.error = false;
-      }
-
-      return mm;
+      return MessageModel()
+        ..error = false
+        ..data = apy;
     } catch (e) {
       // 返回默认 APY
       return MessageModel()
@@ -59,49 +81,26 @@ class EthStakingApi {
   Future<MessageModel> getStEthBalance(String address) async {
     try {
       // 调用 stETH 合约的 balanceOf 方法
-      final rpc = chainUrlMap['ETH']?['baseInfo']?['service'] ?? '';
-      if (rpc.isEmpty) {
+      final rpc = _getRpc();
+      if (rpc == null) {
         return MessageModel.error()..data = 'RPC not configured';
       }
 
       // ERC20 balanceOf 函数签名
-      final balanceOfSelector = '0x70a08231';
+      const balanceOfSelector = '0x70a08231';
       final paddedAddress = address.toLowerCase().replaceFirst('0x', '').padLeft(64, '0');
-      final data = '$balanceOfSelector$paddedAddress';
 
-      final params = {
-        'jsonrpc': '2.0',
-        'method': 'eth_call',
-        'params': [
-          {
-            'to': _lidoContractAddress,
-            'data': data,
-          },
-          'latest'
-        ],
-        'id': 1,
-      };
-
-      final response = await BaseApi.requestEmptyH.post(
-        rpc,
-        params: params,
-        data: params,
-        header: _headers,
-      );
-
-      final mm = MessageModel();
+      final response = await _ethCall(rpc, '$balanceOfSelector$paddedAddress');
 
       if (response['result'] != null) {
-        final balanceHex = response['result'].toString();
-        final balance = _hexToBigInt(balanceHex);
-        mm.data = balance;
-        mm.error = false;
-      } else {
-        mm.error = true;
-        mm.data = response['error']?['message'] ?? 'Failed to get balance';
+        return MessageModel()
+          ..error = false
+          ..data = _hexToBigInt(response['result'].toString());
       }
 
-      return mm;
+      return MessageModel()
+        ..error = true
+        ..data = response['error']?['message'] ?? 'Failed to get balance';
     } catch (e) {
       return MessageModel.error()..data = e.toString();
     }
@@ -112,9 +111,7 @@ class EthStakingApi {
     try {
       // 获取 stETH 余额
       final balanceResult = await getStEthBalance(address);
-      if (balanceResult.error) {
-        return balanceResult;
-      }
+      if (balanceResult.error) return balanceResult;
 
       final stEthBalance = balanceResult.data as BigInt;
 
@@ -153,12 +150,14 @@ class EthStakingApi {
     try {
       // submit(address _referral) 函数签名
       // 我们使用零地址作为推荐人
-      final submitSelector = '0xa1903eab';
-      final referral = '0x0000000000000000000000000000000000000000'.replaceFirst('0x', '').padLeft(64, '0');
-      final data = '$submitSelector$referral';
+      const submitSelector = '0xa1903eab';
+      final data = '$submitSelector$_zeroReferral';
 
       // 获取 gas 估算
-      final rpc = chainUrlMap['ETH']?['baseInfo']?['service'] ?? '';
+      final rpc = _getRpc();
+      if (rpc == null) {
+        return MessageModel.error()..data = 'RPC not configured';
+      }
 
       final gasParams = {
         'jsonrpc': '2.0',
@@ -211,47 +210,26 @@ class EthStakingApi {
     try {
       // 调用 getPooledEthByShares 方法
       // 传入 1e18 (1 stETH) 获取对应的 ETH 数量
-      final rpc = chainUrlMap['ETH']?['baseInfo']?['service'] ?? '';
-
-      final selector = '0x7a28fb88'; // getPooledEthByShares
-      final oneStEth = BigInt.from(10).pow(18).toRadixString(16).padLeft(64, '0');
-      final data = '$selector$oneStEth';
-
-      final params = {
-        'jsonrpc': '2.0',
-        'method': 'eth_call',
-        'params': [
-          {
-            'to': _lidoContractAddress,
-            'data': data,
-          },
-          'latest'
-        ],
-        'id': 1,
-      };
-
-      final response = await BaseApi.requestEmptyH.post(
-        rpc,
-        params: params,
-        data: params,
-        header: _headers,
-      );
-
-      final mm = MessageModel();
-
-      if (response['result'] != null) {
-        final ethAmount = _hexToBigInt(response['result'].toString());
-        // 转换为浮点数比率
-        final rate = ethAmount.toDouble() / 1e18;
-        mm.data = rate;
-        mm.error = false;
-      } else {
-        // 默认 1:1
-        mm.data = 1.0;
-        mm.error = false;
+      final rpc = _getRpc();
+      if (rpc == null) {
+        return MessageModel()
+          ..error = false
+          ..data = 1.0;
       }
 
-      return mm;
+      const selector = '0x7a28fb88'; // getPooledEthByShares
+      final oneStEth = BigInt.from(10).pow(18).toRadixString(16).padLeft(64, '0');
+
+      final response = await _ethCall(rpc, '$selector$oneStEth');
+
+      // 转换为浮点数比率，无数据时默认 1:1
+      final rate = (response['result'] != null)
+          ? _hexToBigInt(response['result'].toString()).toDouble() / 1e18
+          : 1.0;
+
+      return MessageModel()
+        ..error = false
+        ..data = rate;
     } catch (e) {
       return MessageModel()
         ..error = false
@@ -268,31 +246,28 @@ class EthStakingApi {
         header: _headers,
       );
 
-      final mm = MessageModel();
-
       if (response is Map) {
-        mm.data = {
-          'totalStaked': response['data']?['totalPooledEther'] ?? '0',
-          'totalStakers': response['data']?['uniqueHolders'] ?? 0,
-          'apr': response['data']?['apr'] ?? 4.0,
-        };
-        mm.error = false;
-      } else {
-        mm.error = true;
-        mm.data = 'Failed to get stats';
+        return MessageModel()
+          ..error = false
+          ..data = {
+            'totalStaked': response['data']?['totalPooledEther'] ?? '0',
+            'totalStakers': response['data']?['uniqueHolders'] ?? 0,
+            'apr': response['data']?['apr'] ?? 4.0,
+          };
       }
 
-      return mm;
+      return MessageModel()
+        ..error = true
+        ..data = 'Failed to get stats';
     } catch (e) {
       return MessageModel.error()..data = e.toString();
     }
   }
 
   BigInt _hexToBigInt(String hexStr) {
-    String cleaned = hexStr;
-    if (cleaned.startsWith('0x') || cleaned.startsWith('0X')) {
-      cleaned = cleaned.substring(2);
-    }
+    final cleaned = hexStr.startsWith('0x') || hexStr.startsWith('0X')
+        ? hexStr.substring(2)
+        : hexStr;
     if (cleaned.isEmpty) return BigInt.zero;
     return BigInt.parse(cleaned, radix: 16);
   }

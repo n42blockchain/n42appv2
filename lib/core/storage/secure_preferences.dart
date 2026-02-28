@@ -96,15 +96,7 @@ class SecurePreferences {
     String uuid,
     Map<String, dynamic> value,
   ) async {
-    Map<String, dynamic> allData = {};
-    final existing = await _secureStorage.read(key: key);
-    if (existing != null && existing.isNotEmpty) {
-      try {
-        allData = jsonDecode(existing) as Map<String, dynamic>;
-      } catch (_) {
-        // JSON 解析失败时使用默认值，安全忽略
-      }
-    }
+    final allData = await _readSecureJson(key) ?? {};
     allData[uuid] = value;
     await _secureStorage.write(key: key, value: jsonEncode(allData));
   }

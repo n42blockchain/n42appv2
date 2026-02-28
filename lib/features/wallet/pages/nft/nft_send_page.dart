@@ -223,10 +223,11 @@ class _NftSendPageState extends State<NftSendPage> {
   }
 
   Widget _buildNftInfo(BuildContext context, Color textColor, Color subtitleColor) {
+    final blueColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withAlpha(15),
+        color: blueColor.withAlpha(15),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
       ),
       child: Row(
@@ -240,9 +241,9 @@ class _NftSendPageState extends State<NftSendPage> {
                     width: ScreenUtil().setWidth(80),
                     height: ScreenUtil().setWidth(80),
                     fit: BoxFit.cover,
-                    errorBuilder: (context, error, stack) => _imgPlaceholder(),
+                    errorBuilder: (context, error, stack) => _imgPlaceholder(blueColor),
                   )
-                : _imgPlaceholder(),
+                : _imgPlaceholder(blueColor),
           ),
           SizedBox(width: ScreenUtil().setWidth(16)),
           // 名称 + Token ID
@@ -276,17 +277,15 @@ class _NftSendPageState extends State<NftSendPage> {
     );
   }
 
-  Widget _imgPlaceholder() {
-    return Builder(
-      builder: (context) => Container(
-        width: ScreenUtil().setWidth(80),
-        height: ScreenUtil().setWidth(80),
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withAlpha(30),
-        child: Icon(
-          Icons.image_outlined,
-          size: ScreenUtil().setWidth(40),
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-        ),
+  Widget _imgPlaceholder(Color blueColor) {
+    return Container(
+      width: ScreenUtil().setWidth(80),
+      height: ScreenUtil().setWidth(80),
+      color: blueColor.withAlpha(30),
+      child: Icon(
+        Icons.image_outlined,
+        size: ScreenUtil().setWidth(40),
+        color: blueColor,
       ),
     );
   }

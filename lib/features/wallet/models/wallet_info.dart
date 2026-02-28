@@ -155,27 +155,24 @@ class WalletInfo {
   ///   }
   /// }
   /// ```
-  SecureString? getMnemonicSecure() {
-    if (mnemonic == null || mnemonic!.isEmpty) return null;
-    return SecureString(mnemonic!);
-  }
+  SecureString? getMnemonicSecure() => _wrapSecure(mnemonic);
 
   /// Get private key as secure wrapper
   ///
   /// SECURITY: Remember to call dispose() on the returned SecureString
   /// after use to zero out memory
-  SecureString? getPrivateKeySecure() {
-    if (privateKey == null || privateKey!.isEmpty) return null;
-    return SecureString(privateKey!);
-  }
+  SecureString? getPrivateKeySecure() => _wrapSecure(privateKey);
 
   /// Get password as secure wrapper
   ///
   /// SECURITY: Remember to call dispose() on the returned SecureString
   /// after use to zero out memory
-  SecureString? getPasswordSecure() {
-    if (password == null || password!.isEmpty) return null;
-    return SecureString(password!);
+  SecureString? getPasswordSecure() => _wrapSecure(password);
+
+  /// Wrap a nullable string as a SecureString, returning null if empty
+  static SecureString? _wrapSecure(String? value) {
+    if (value == null || value.isEmpty) return null;
+    return SecureString(value);
   }
 
   /// Check if wallet has mnemonic without exposing it
@@ -189,24 +186,18 @@ class WalletInfo {
   /// SECURITY: Call this when wallet info is no longer needed
   /// to prevent sensitive data from remaining in memory
   void clearSensitiveData() {
-    if (mnemonic != null) {
-      // Overwrite with zeros before nullifying
-      final bytes = Uint8List.fromList(mnemonic!.codeUnits);
-      SecureMemory.zeroOut(bytes);
-      mnemonic = null;
-    }
+    // Overwrite with zeros before nullifying
+    mnemonic = _zeroOutAndNull(mnemonic);
+    privateKey = _zeroOutAndNull(privateKey);
+    password = _zeroOutAndNull(password);
+  }
 
-    if (privateKey != null) {
-      final bytes = Uint8List.fromList(privateKey!.codeUnits);
-      SecureMemory.zeroOut(bytes);
-      privateKey = null;
+  /// Zero out string bytes via SecureMemory, return null for reassignment
+  static String? _zeroOutAndNull(String? value) {
+    if (value != null) {
+      SecureMemory.zeroOut(Uint8List.fromList(value.codeUnits));
     }
-
-    if (password != null) {
-      final bytes = Uint8List.fromList(password!.codeUnits);
-      SecureMemory.zeroOut(bytes);
-      password = null;
-    }
+    return null;
   }
 
   @override

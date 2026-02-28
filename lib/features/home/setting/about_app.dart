@@ -115,96 +115,33 @@ class _AboutAppState extends State<AboutApp> {
   Widget _buildSocialSection() {
     final blueColor = AppThemeUtils.getColorByKey(
         context, AppThemeKeys.mainBlueColor.name);
+    final s = S.of(context);
+
+    final socialLinks = [
+      ("twitter", s.g_key_m_11, "https://x.com/N42Blockchain"),
+      ("telegram", s.g_key_m_16, "https://t.me/N42Blockchain"),
+      ("discord", s.g_key_m_17, "https://discord.gg/yjDsEnDTdt"),
+      ("youtube", s.g_key_m_18, "https://www.youtube.com/@N42Blockchain"),
+      ("reddit", s.g_key_m_14, "https://www.reddit.com/r/N42Blockchain"),
+      ("ins", s.g_key_m_19, "https://www.instagram.com/n42blockchain"),
+      ("tiktok", "TikTok", "https://www.tiktok.com/@n42blockchain"),
+      ("snapchat", "snapchat", "https://www.snapchat.com/t/JMpRe83U"),
+      ("linkedin", "linkedin", "https://www.linkedin.com/company/n42blockchain/about/"),
+      ("whatsapp", "whatsapp", "https://whatsapp.com/channel/0029Var1z8S8KMqr4FVk1K0e"),
+      ("medium", "medium", "https://medium.com/p/publications/create"),
+      ("line", "line", "https://line.me/ti/p/d-KryNwume"),
+      ("bsky", "bsky", "https://bsky.app/profile/n42blockchain.bsky.social"),
+    ];
 
     return _buildNavContainer(
       children: [
-        NavSettingItem(
-          path: "assets/home/about/twitter.png",
-          action: S.of(context).g_key_m_11,
-          callback: () => _openBrowser("https://x.com/N42Blockchain"),
-          imgColor: blueColor,
-        ),
-        NavSettingItem(
-          path: "assets/home/about/telegram.png",
-          action: S.of(context).g_key_m_16,
-          callback: () => _openBrowser("https://t.me/N42Blockchain"),
-          imgColor: blueColor,
-        ),
-        NavSettingItem(
-          path: "assets/home/about/discord.png",
-          action: S.of(context).g_key_m_17,
-          callback: () => _openBrowser("https://discord.gg/yjDsEnDTdt"),
-          imgColor: blueColor,
-        ),
-        NavSettingItem(
-          path: "assets/home/about/youtube.png",
-          action: S.of(context).g_key_m_18,
-          callback: () =>
-              _openBrowser("https://www.youtube.com/@N42Blockchain"),
-          imgColor: blueColor,
-        ),
-        NavSettingItem(
-          path: "assets/home/about/reddit.png",
-          action: S.of(context).g_key_m_14,
-          callback: () =>
-              _openBrowser("https://www.reddit.com/r/N42Blockchain"),
-          imgColor: blueColor,
-        ),
-        NavSettingItem(
-          path: "assets/home/about/ins.png",
-          action: S.of(context).g_key_m_19,
-          callback: () =>
-              _openBrowser("https://www.instagram.com/n42blockchain"),
-          imgColor: blueColor,
-        ),
-        NavSettingItem(
-          path: "assets/home/about/tiktok.png",
-          action: "TikTok",
-          callback: () =>
-              _openBrowser("https://www.tiktok.com/@n42blockchain"),
-          imgColor: blueColor,
-        ),
-        NavSettingItem(
-          path: "assets/home/about/snapchat.png",
-          action: "snapchat",
-          callback: () =>
-              _openBrowser("https://www.snapchat.com/t/JMpRe83U"),
-          imgColor: blueColor,
-        ),
-        NavSettingItem(
-          path: "assets/home/about/linkedin.png",
-          action: "linkedin",
-          callback: () => _openBrowser(
-              "https://www.linkedin.com/company/n42blockchain/about/"),
-          imgColor: blueColor,
-        ),
-        NavSettingItem(
-          path: "assets/home/about/whatsapp.png",
-          action: "whatsapp",
-          callback: () => _openBrowser(
-              "https://whatsapp.com/channel/0029Var1z8S8KMqr4FVk1K0e"),
-          imgColor: blueColor,
-        ),
-        NavSettingItem(
-          path: "assets/home/about/medium.png",
-          action: "medium",
-          callback: () =>
-              _openBrowser("https://medium.com/p/publications/create"),
-          imgColor: blueColor,
-        ),
-        NavSettingItem(
-          path: "assets/home/about/line.png",
-          action: "line",
-          callback: () => _openBrowser("https://line.me/ti/p/d-KryNwume"),
-          imgColor: blueColor,
-        ),
-        NavSettingItem(
-          path: "assets/home/about/bsky.png",
-          action: "bsky",
-          callback: () => _openBrowser(
-              "https://bsky.app/profile/n42blockchain.bsky.social"),
-          imgColor: blueColor,
-        ),
+        for (final (icon, label, url) in socialLinks)
+          NavSettingItem(
+            path: "assets/home/about/$icon.png",
+            action: label,
+            callback: () => _openBrowser(url),
+            imgColor: blueColor,
+          ),
       ],
     );
   }
@@ -278,16 +215,12 @@ class _AboutAppState extends State<AboutApp> {
           ),
         );
       },
-      child: Row(
-        children: [
-          Text(
-            "${S.of(context).g_key_v_k3}(v${versionInfo!.versionName})",
-            style: TextStyle(
-              color: Colors.blueAccent,
-              fontSize: ScreenUtil().setSp(26),
-            ),
-          ),
-        ],
+      child: Text(
+        "${S.of(context).g_key_v_k3}(v${versionInfo!.versionName})",
+        style: TextStyle(
+          color: Colors.blueAccent,
+          fontSize: ScreenUtil().setSp(26),
+        ),
       ),
     );
   }

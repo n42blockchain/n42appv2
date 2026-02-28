@@ -36,10 +36,7 @@ class _EditWalletPasswordState extends ConsumerState<EditWalletPassword> {
   bool showPwd2=true;
   bool showPwd=true;//显示密码
   Load load=Load.finish;
-  @override
-  void initState() {
-    super.initState();
-  }
+
   @override
   void dispose() {
     _uPasswordController.dispose();
@@ -50,11 +47,65 @@ class _EditWalletPasswordState extends ConsumerState<EditWalletPassword> {
     _lPasswordFocusNode.dispose();
     super.dispose();
   }
+  /// 构建统一的密码输入字段
+  Widget _buildPasswordField({
+    required TextEditingController controller,
+    required FocusNode focusNode,
+    required String hintText,
+    required bool obscure,
+    required String errorMessage,
+    required VoidCallback onToggleObscure,
+    required VoidCallback onEditingComplete,
+    TextInputType keyboardType = TextInputType.visiblePassword,
+    EdgeInsets? margin,
+  }) {
+    return Container(
+      constraints: BoxConstraints(
+        minHeight: ScreenUtil().setWidth(108.0),
+      ),
+      margin: margin ?? EdgeInsets.only(top: ScreenUtil().setWidth(10), bottom: ScreenUtil().setWidth(20)),
+      width: double.infinity,
+      child: textFieldStyle3(
+        context,
+        onEditingComplete: onEditingComplete,
+        height: ScreenUtil().setWidth(108.0),
+        controller: controller,
+        focusNode: focusNode,
+        hintText: hintText,
+        keyboardType: keyboardType,
+        textInputAction: TextInputAction.done,
+        hintStyle: TextStyle(
+          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.hintTextColor.name),
+          fontSize: ScreenUtil().setSp(30.0),
+        ),
+        obscure: obscure,
+        errorMessage: errorMessage,
+        rightWidget1: Container(
+          width: ScreenUtil().setWidth(50.0),
+          height: ScreenUtil().setWidth(50.0),
+          alignment: Alignment.center,
+          child: Image.asset(
+            'assets/login/${obscure ? "icon_denglu_yincang" : "icon_denglu_xianshi"}.png',
+            width: ScreenUtil().setWidth(34.0),
+            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+          ),
+        ),
+        rightOnTap1: onToggleObscure,
+      ),
+    );
+  }
+
+  /// 显示验证错误并 toast 提示
+  void _showValidationError(String Function() setError) {
+    final msg = setError();
+    ToastUtils.show(msg);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
-        text:S.of(context).g_key_206,
+        text: S.of(context).g_key_206,
       ),
       body: SafeArea(
         child: Stack(
@@ -63,7 +114,6 @@ class _EditWalletPasswordState extends ConsumerState<EditWalletPassword> {
               child: SingleChildScrollView(
                 padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     LoginTitle(
@@ -71,143 +121,46 @@ class _EditWalletPasswordState extends ConsumerState<EditWalletPassword> {
                       color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor10.name),
                       must: true,
                     ),
-                    Container(
-                      constraints: BoxConstraints(
-                        minHeight: ScreenUtil().setWidth(108.0),
-                      ),
-                      margin: EdgeInsets.only(top: ScreenUtil().setWidth(10),bottom: ScreenUtil().setWidth(20)),
-                      width: double.infinity,
-                      child: textFieldStyle3(
-                          context,
-                          onEditingComplete:(){
-                            FocusScope.of(context).requestFocus(_uPasswordFocusNode);
-                          },
-                          height: ScreenUtil().setWidth(108.0),
-                          controller:_lPasswordController,
-                          focusNode: _lPasswordFocusNode,
-                          hintText:S.of(context).rest_Choose_password,
-                          keyboardType: TextInputType.text,
-                          textInputAction: TextInputAction.done,
-                          //bgColor: Colors.transparent,
-                          //padding: EdgeInsets.all(0),
-                          hintStyle: TextStyle(
-                            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.hintTextColor.name),
-                            fontSize: ScreenUtil().setSp(30.0),
-                          ),
-                          obscure: showPwd,
-                          errorMessage: lPasswordErrorMessage,
-                          rightWidget1: Container(
-                            width: ScreenUtil().setWidth(50.0),
-                            height: ScreenUtil().setWidth(50.0),
-                            alignment: Alignment.center,
-                            child: Image.asset(
-                              'assets/login/${showPwd?"icon_denglu_yincang":"icon_denglu_xianshi"}.png',
-                              width: ScreenUtil().setWidth(34.0),
-                              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                            ),
-                          ),
-                          rightOnTap1: (){
-                            setState(() {
-                              showPwd=!showPwd;
-                            });
-                          }
-                      ),
+                    _buildPasswordField(
+                      controller: _lPasswordController,
+                      focusNode: _lPasswordFocusNode,
+                      hintText: S.of(context).rest_Choose_password,
+                      keyboardType: TextInputType.text,
+                      obscure: showPwd,
+                      errorMessage: lPasswordErrorMessage,
+                      onToggleObscure: () => setState(() => showPwd = !showPwd),
+                      onEditingComplete: () => FocusScope.of(context).requestFocus(_uPasswordFocusNode),
                     ),
                     LoginTitle(
                       title: S.of(context).login_password,
                       color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor10.name),
                       must: true,
                     ),
-                    Container(
-                      constraints: BoxConstraints(
-                        minHeight: ScreenUtil().setWidth(108.0),
-                      ),
-                      margin: EdgeInsets.only(top: ScreenUtil().setWidth(10),bottom: ScreenUtil().setWidth(20)),
-                      width: double.infinity,
-                      child: textFieldStyle3(
-                          context,
-                          onEditingComplete:(){
-                            FocusScope.of(context).requestFocus(_uPasswordConfirmFocusNode);
-                          },
-                          height: ScreenUtil().setWidth(108.0),
-                          controller:_uPasswordController,
-                          focusNode: _uPasswordFocusNode,
-                          hintText:S.of(context).rest_Choose_password,
-                          keyboardType: TextInputType.visiblePassword,
-                          textInputAction: TextInputAction.done,
-                          errorMessage: uPasswordErrorMessage,
-                          //bgColor: Colors.transparent,
-                          //padding: EdgeInsets.all(0),
-                          hintStyle: TextStyle(
-                            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.hintTextColor.name),
-                            fontSize: ScreenUtil().setSp(30.0),
-                          ),
-                          obscure: showPwd1,
-                          rightWidget1: Container(
-                            width: ScreenUtil().setWidth(50.0),
-                            height: ScreenUtil().setWidth(50.0),
-                            alignment: Alignment.center,
-                            child: Image.asset(
-                              'assets/login/${showPwd1?"icon_denglu_yincang":"icon_denglu_xianshi"}.png',
-                              width: ScreenUtil().setWidth(34.0),
-                              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                            ),
-                          ),
-                          rightOnTap1: (){
-                            setState(() {
-                              showPwd1=!showPwd1;
-                            });
-                          }
-                      ),
+                    _buildPasswordField(
+                      controller: _uPasswordController,
+                      focusNode: _uPasswordFocusNode,
+                      hintText: S.of(context).rest_Choose_password,
+                      obscure: showPwd1,
+                      errorMessage: uPasswordErrorMessage,
+                      onToggleObscure: () => setState(() => showPwd1 = !showPwd1),
+                      onEditingComplete: () => FocusScope.of(context).requestFocus(_uPasswordConfirmFocusNode),
                     ),
                     LoginTitle(
                       title: S.of(context).rest_Confirm_password,
                       color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor10.name),
                       must: true,
                     ),
-                    Container(
-                      constraints: BoxConstraints(
-                        minHeight: ScreenUtil().setWidth(108.0),
-                      ),
-                      margin: EdgeInsets.only(top: ScreenUtil().setWidth(10),),
-                      width: double.infinity,
-                      child: textFieldStyle3(
-                          context,
-                          onEditingComplete:(){
-                            FocusScope.of(context).requestFocus(FocusNode());
-                          },
-                          height: ScreenUtil().setWidth(108.0),
-                          controller:_uPasswordConfirmController,
-                          focusNode: _uPasswordConfirmFocusNode,
-                          hintText:S.of(context).repeatPassword,
-                          keyboardType: TextInputType.visiblePassword,
-                          textInputAction: TextInputAction.done,
-                          errorMessage: uPasswordConfirmErrorMessage,
-                          //bgColor: Colors.transparent,
-                          //padding: EdgeInsets.all(0),
-                          hintStyle: TextStyle(
-                            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.hintTextColor.name),
-                            fontSize: ScreenUtil().setSp(30.0),
-                          ),
-                          obscure: showPwd2,
-                          rightWidget1: Container(
-                            width: ScreenUtil().setWidth(50.0),
-                            height: ScreenUtil().setWidth(50.0),
-                            alignment: Alignment.center,
-                            child: Image.asset(
-                              'assets/login/${showPwd2?"icon_denglu_yincang":"icon_denglu_xianshi"}.png',
-                              width: ScreenUtil().setWidth(34.0),
-                              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                            ),
-                          ),
-                          rightOnTap1: (){
-                            setState(() {
-                              showPwd2=!showPwd2;
-                            });
-                          }
-                      ),
+                    _buildPasswordField(
+                      controller: _uPasswordConfirmController,
+                      focusNode: _uPasswordConfirmFocusNode,
+                      hintText: S.of(context).repeatPassword,
+                      obscure: showPwd2,
+                      errorMessage: uPasswordConfirmErrorMessage,
+                      onToggleObscure: () => setState(() => showPwd2 = !showPwd2),
+                      onEditingComplete: () => FocusScope.of(context).requestFocus(FocusNode()),
+                      margin: EdgeInsets.only(top: ScreenUtil().setWidth(10)),
                     ),
-                    SizedBox(height: ScreenUtil().setWidth(148.0),),
+                    SizedBox(height: ScreenUtil().setWidth(148.0)),
                   ],
                 ),
               ),
@@ -218,84 +171,63 @@ class _EditWalletPasswordState extends ConsumerState<EditWalletPassword> {
               right: 0,
               child: Column(
                 children: [
-                  Divider(
-                    height: 1,
-                    indent: 0,
-                    endIndent: 0,
-                  ),
+                  Divider(height: 1),
                   Container(
                     height: ScreenUtil().setWidth(148.0),
                     padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
                     width: double.infinity,
                     child: buttonStyle6(context,
-                          ()async{
+                      () async {
                         // 数据的校验
                         final password = _uPasswordController.text.trim();
                         final rPassword = _uPasswordConfirmController.text.trim();
                         final lPassword = _lPasswordController.text.trim();
                         if (password.isEmpty) {
-                          uPasswordErrorMessage=S.of(context).g_key_21;
-                          ToastUtils.show(uPasswordErrorMessage);
+                          _showValidationError(() => uPasswordErrorMessage = S.of(context).g_key_21);
                           return;
                         }
-                        //if (password.length < AppConfig.walletPasswordLength) {
                         if (!Regular().isPassword(password)) {
-                          uPasswordErrorMessage=S.of(context).rest_Choose_password;//S.of(context).g_key_wallet_m7(AppConfig.walletPasswordLength);
-                          ToastUtils.show(uPasswordErrorMessage);
+                          _showValidationError(() => uPasswordErrorMessage = S.of(context).rest_Choose_password);
                           return;
                         }
-                        setState(() {
-                          uPasswordErrorMessage="";
-                        });
+                        setState(() => uPasswordErrorMessage = "");
                         if (rPassword.isEmpty) {
-                          uPasswordConfirmErrorMessage=S.of(context).g_key_21;
-                          ToastUtils.show(uPasswordConfirmErrorMessage);
+                          _showValidationError(() => uPasswordConfirmErrorMessage = S.of(context).g_key_21);
                           return;
                         }
                         if (password != rPassword) {
-                          uPasswordConfirmErrorMessage=S.of(context).g_key_25;
-                          ToastUtils.show(uPasswordConfirmErrorMessage);
+                          _showValidationError(() => uPasswordConfirmErrorMessage = S.of(context).g_key_25);
                           return;
                         }
-                        setState(() {
-                          uPasswordConfirmErrorMessage="";
-                        });
-                        if(lPassword.isEmpty){
-                          lPasswordErrorMessage=S.of(context).g_key_21;
-                          ToastUtils.show(lPasswordErrorMessage);
+                        setState(() => uPasswordConfirmErrorMessage = "");
+                        if (lPassword.isEmpty) {
+                          _showValidationError(() => lPasswordErrorMessage = S.of(context).g_key_21);
                           return;
                         }
-                        if(widget.walletInfo.password != lPassword.trim()){
-                          lPasswordErrorMessage=S.of(context).g_key_146;
-                          ToastUtils.show(lPasswordErrorMessage);
+                        if (widget.walletInfo.password != lPassword) {
+                          _showValidationError(() => lPasswordErrorMessage = S.of(context).g_key_146);
                           return;
                         }
-                        setState(() {
-                          lPasswordErrorMessage="";
-                        });
+                        setState(() => lPasswordErrorMessage = "");
                         try {
-                          setState(() {
-                            load=Load.loading;
-                          });
-                          widget.walletInfo.password=password;
+                          setState(() => load = Load.loading);
+                          widget.walletInfo.password = password;
                           final wap = ref.read(wapBridgeProvider);
                           final successMessage = S.of(context).g_key_185;
-                          await wap.saveWalletInfo(widget.walletInfo,widget.walletIndex);
+                          await wap.saveWalletInfo(widget.walletInfo, widget.walletIndex);
                           if (!context.mounted) return;
                           ToastUtils.show(successMessage);
-                          Navigator.pop(context,widget.walletInfo);
+                          Navigator.pop(context, widget.walletInfo);
                         } catch (err) {
                           ToastUtils.show(err.toString());
                         } finally {
-                          setState(() {
-                            load=Load.finish;
-                          });
+                          setState(() => load = Load.finish);
                         }
                       },
                       S.of(context).g_key_115,
                       AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
                       AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
-                      load==Load.loading,
+                      load == Load.loading,
                     ),
                   ),
                 ],

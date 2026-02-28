@@ -8,41 +8,30 @@ mixin _TransferBtcMixin on _TransferBaseMixin {
   Future<MessageModel> transferBtc(String coinType, String fromAddress, String toAddress,
       double value, String path,{bool maxValue=true,String isTest="main"}) async {
     MessageModel checkLastModel=await checkLastTxBtc(coinType, fromAddress);
-    if(checkLastModel.error){
-      return checkLastModel;
-    }
+    if(checkLastModel.error) return checkLastModel;
+
     BigInt valuePrice=ethToWeiString(value.toString(), 8);
+    final bool isTestNet = isTest != "main";
+
     //获取平均gasfee
     int averageValue = 0;
     if (coinType.toUpperCase() == CoinType.BTC.name) {
-      MessageModel gasFeeMM = await tokenViewApi.getGasFeeBtc(isTest: isTest=="main"?false:true);
-      if (gasFeeMM.error) {
-        return gasFeeMM;
-      } else {
-        averageValue = gasFeeMM.data;
-      }
+      MessageModel gasFeeMM = await tokenViewApi.getGasFeeBtc(isTest: isTestNet);
+      if (gasFeeMM.error) return gasFeeMM;
+      averageValue = gasFeeMM.data;
     } else {
       averageValue = getCoinGas(coinType.toUpperCase());
     }
 
     //获取余额
-    BigInt balance = BigInt.zero;
-    MessageModel mmb =
-    await getBalanceBtc(coinType.toUpperCase(), fromAddress,isTest: isTest=="main"?false:true);
-    if (mmb.error) {
-      return mmb;
-    } else {
-      balance = mmb.data;
-    }
+    MessageModel mmb = await getBalanceBtc(coinType.toUpperCase(), fromAddress, isTest: isTestNet);
+    if (mmb.error) return mmb;
+    BigInt balance = mmb.data;
+
     if(balance==BigInt.zero){
-      MessageModel mmr =MessageModel.error();
-      mmr.data=S.current.g_key_wallet_m5(coinType);
-      return mmr;
+      return MessageModel.error()..data=S.current.g_key_wallet_m5(coinType);
     }
-    bool allValue=false;
-    if(balance==valuePrice && maxValue){
-      allValue=true;
-    }
+    bool allValue = balance==valuePrice && maxValue;
     List<Map<String, dynamic>> utxos = [];
     String utxoAddress=fromAddress;
     if(coinType.toUpperCase()==CoinType.BCH.name){
@@ -52,27 +41,21 @@ mixin _TransferBtcMixin on _TransferBaseMixin {
       utxoAddress=globalWapAdapter.getAddress(coinType,addrType: "legacy");
     }
     MessageModel mmutxo = await getUTXO(coinType.toUpperCase(), value, utxoAddress,
-        utxos, 0, averageValue, 1000, 1,allValue,isTest: isTest=="main"?false:true);
-    if (mmutxo.error) {
-      return mmutxo;
-    } else {
-      utxos = mmutxo.data['utxo'];
-    }
+        utxos, 0, averageValue, 1000, 1, allValue, isTest: isTestNet);
+    if (mmutxo.error) return mmutxo;
+    utxos = mmutxo.data['utxo'];
+
     int byteSize= await getSignByteSize(coinType,path,utxos,valuePrice,averageValue,fromAddress,toAddress,max: allValue,);
-    //(utxos.length * 148 + 78) * averageValue;
     int byteSizeFees=byteSize*averageValue;
     if(allValue){
-      //int byteSizeFees = (utxos.length * 148 + 44) * averageValue;
       value=value-toEther(byteSizeFees.toString(),8).toDouble();
     }else{
       if(BigInt.from(byteSizeFees)+valuePrice > balance){
-        MessageModel mmr =MessageModel.error();
-        mmr.data=S.current.g_key_wallet_m5(coinType);
-        return mmr;
+        return MessageModel.error()..data=S.current.g_key_wallet_m5(coinType);
       }
     }
-    MessageModel rmm=await transferBtcSend(coinType, fromAddress, toAddress,  valuePrice.toInt(),path, averageValue, byteSizeFees,utxos,max: allValue,isTest:isTest);
-    if(rmm.error==false){
+    MessageModel rmm=await transferBtcSend(coinType, fromAddress, toAddress, valuePrice.toInt(),path, averageValue, byteSizeFees,utxos,max: allValue,isTest:isTest);
+    if(!rmm.error){
       rmm.data={
         "txHash":rmm.data,
         "value":value,
@@ -102,7 +85,9 @@ mixin _TransferBtcMixin on _TransferBaseMixin {
       "max":max,
     };
     String signStr;
-    if(privateKey ==null || privateKey==""){
+    if(privateKey?.isNotEmpty ?? false){
+      signStr = await trustdart.signTransaction(coinType.toUpperCase(), path, btcTxMap, pk:privateKey!,);
+    }else{
       if (!AppGlobals.appContext.mounted) {
         return MessageModel.error()..data = 'Context is no longer valid';
       }
@@ -112,13 +97,9 @@ mixin _TransferBtcMixin on _TransferBaseMixin {
         btcTxMap,
         mnemonic: globalWapAdapter.walletInfo.mnemonic??"",
       );
-    }else{
-      signStr = await trustdart.signTransaction(coinType.toUpperCase(), path, btcTxMap,  pk:privateKey,);
     }
-    if (signStr == "") {
-      MessageModel rmm = MessageModel.error();
-      rmm.data = S.current.g_key_wallet_m6;
-      return rmm;
+    if (signStr.isEmpty) {
+      return MessageModel.error()..data = S.current.g_key_wallet_m6;
     }
     // Validate signature before broadcast
     final validationError = validateSignature(signStr, coinType.toUpperCase());
@@ -144,31 +125,20 @@ mixin _TransferBtcMixin on _TransferBaseMixin {
     MessageModel mm = await tokenViewApi.getUTXOBtc(
         coinType.toUpperCase(), address,
         pageSize: pageSize, pageNum: pageNum,isTest:isTest);
-    if (mm.error) {
-      return mm;
-    } else {
-      bool lastPage = false;
-      List<dynamic> unspents = mm.data;
-      if (unspents.length < (pageSize * pageNum)) {
-        //是最后一页
-        lastPage = true;
-      }
-      MessageModel mmutxoC =
-      await calculateGasFee(value, unspents, utxos, input2Price, gasFee,isTest: isTest);
-      if (mmutxoC.error) {
-        if (lastPage) {
-          if(allValue==false){
-            mmutxoC.data = S.current.g_key_wallet_m5(coinType);
-          }
-          return mmutxoC;
-        } else {
-          return await getUTXO(coinType, value, address, mmutxoC.data['utxo'],
-              mmutxoC.data['inputPrice'], gasFee, pageSize, pageNum + 1,allValue,isTest: isTest);
-        }
-      } else {
-        return mmutxoC;
-      }
+    if (mm.error) return mm;
+
+    List<dynamic> unspents = mm.data;
+    bool lastPage = unspents.length < (pageSize * pageNum);
+    MessageModel mmutxoC =
+        await calculateGasFee(value, unspents, utxos, input2Price, gasFee,isTest: isTest);
+    if (!mmutxoC.error) return mmutxoC;
+
+    if (lastPage) {
+      if(!allValue) mmutxoC.data = S.current.g_key_wallet_m5(coinType);
+      return mmutxoC;
     }
+    return await getUTXO(coinType, value, address, mmutxoC.data['utxo'],
+        mmutxoC.data['inputPrice'], gasFee, pageSize, pageNum + 1, allValue, isTest: isTest);
   }
 
   Future<MessageModel> calculateGasFee(double value, List<dynamic> unspents,
@@ -244,11 +214,7 @@ mixin _TransferBtcMixin on _TransferBaseMixin {
       path,
       privateKey: privateKey,
     );
-    if(signByteSize == ""){
-      return 0;
-    }else{
-      return int.parse(signByteSize);
-    }
+    return signByteSize.isEmpty ? 0 : int.parse(signByteSize);
   }
 
   Future<MessageModel> getBalanceBtc(String coinType, String fromAddress,{bool isTest=false}) async {
@@ -264,32 +230,29 @@ mixin _TransferBtcMixin on _TransferBaseMixin {
   //根据最后一笔交易，判断此次交易是否可以进行交易，当确认数小于6时，交易不能进行
   Future<MessageModel> checkLastTxBtc(String coinType, String fromAddress)async{
     MessageModel txModel=await getTxListBtc(coinType, fromAddress,pageNum: 1,pageSize: 1);
-    if(txModel.error){
-      return txModel;
-    }else{
-      if(txModel.data.length >= 1){
-        Map<String,dynamic> btcData=txModel.data[0];
-        if(btcData['txCount']==0){
-          txModel.data=true;
-        }else{
-          if(btcData['txs'].length >=1){
-            if(double.parse(btcData['txs'][0]['confirmations'].toString())>=6){
-              txModel.data=true;
-            }else{
-              txModel.error=true;
-              txModel.data=S.current.g_key_wallet_m19(coinType);
-            }
-          }else{
-            txModel.error=true;
-            txModel.data="error";
-          }
-        }
-      }else{
-        txModel.error=false;
-        txModel.data=true;
-      }
+    if(txModel.error) return txModel;
+
+    if((txModel.data as List).isEmpty){
+      txModel.error=false;
+      txModel.data=true;
       return txModel;
     }
+
+    Map<String,dynamic> btcData=txModel.data[0];
+    if(btcData['txCount']==0){
+      txModel.data=true;
+    }else if((btcData['txs'] as List).isNotEmpty){
+      if(double.parse(btcData['txs'][0]['confirmations'].toString())>=6){
+        txModel.data=true;
+      }else{
+        txModel.error=true;
+        txModel.data=S.current.g_key_wallet_m19(coinType);
+      }
+    }else{
+      txModel.error=true;
+      txModel.data="error";
+    }
+    return txModel;
   }
   //获取交易记录列表
   //btc 比特币类

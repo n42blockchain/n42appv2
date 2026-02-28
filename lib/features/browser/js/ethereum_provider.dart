@@ -81,10 +81,6 @@ class EthereumProviderJs {
         case "eth_coinbase":
           return Promise.resolve(_accounts.length > 0 ? _accounts[0] : null);
         case "wallet_requestPermissions":
-          return Promise.resolve([{
-            parentCapability: "eth_accounts",
-            caveats: [{type: "restrictReturnedAccounts", value: _accounts.slice()}]
-          }]);
         case "wallet_getPermissions":
           return Promise.resolve([{
             parentCapability: "eth_accounts",
@@ -129,20 +125,19 @@ class EthereumProviderJs {
       if (typeof methodOrPayload === "string") {
         var m = methodOrPayload;
         // Synchronous return for known local values (legacy pattern)
-        if (m === "eth_accounts") {
-          return { id: 0, jsonrpc: "2.0", result: _accounts.slice() };
+        switch(m) {
+          case "eth_accounts":
+            return { id: 0, jsonrpc: "2.0", result: _accounts.slice() };
+          case "eth_coinbase":
+            return { id: 0, jsonrpc: "2.0", result: _accounts.length > 0 ? _accounts[0] : null };
+          case "net_version":
+            return { id: 0, jsonrpc: "2.0", result: String(parseInt(_chainId, 16)) };
+          case "eth_chainId":
+            return { id: 0, jsonrpc: "2.0", result: _chainId };
+          default:
+            // Otherwise, return a promise
+            return ethereum.request({ method: m, params: paramsOrCallback || [] });
         }
-        if (m === "eth_coinbase") {
-          return { id: 0, jsonrpc: "2.0", result: _accounts.length > 0 ? _accounts[0] : null };
-        }
-        if (m === "net_version") {
-          return { id: 0, jsonrpc: "2.0", result: String(parseInt(_chainId, 16)) };
-        }
-        if (m === "eth_chainId") {
-          return { id: 0, jsonrpc: "2.0", result: _chainId };
-        }
-        // Otherwise, return a promise
-        return ethereum.request({ method: m, params: paramsOrCallback || [] });
       }
       // JSON-RPC payload object
       var payload = methodOrPayload;

@@ -167,8 +167,8 @@ class UserOpHasher {
     offset += 32;
 
     // EIP-7702 auth hash (v0.8 only)
-    if (hasEip7702 && eip7702AuthHash != null) {
-      packed.setAll(offset, eip7702AuthHash);
+    if (hasEip7702) {
+      packed.setAll(offset, eip7702AuthHash!);
     }
 
     return packed;
@@ -186,7 +186,7 @@ class UserOpHasher {
   static Uint8List _bigIntToBytes32(BigInt value) {
     final bytes = Uint8List(32);
     final valueBytes = intToBytes(value);
-    if (valueBytes.isNotEmpty && valueBytes.length <= 32) {
+    if (valueBytes.isNotEmpty) {
       bytes.setAll(32 - valueBytes.length, valueBytes);
     }
     return bytes;

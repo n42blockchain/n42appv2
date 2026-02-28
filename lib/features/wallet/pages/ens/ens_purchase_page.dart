@@ -106,9 +106,7 @@ class _EnsPurchasePageState extends State<EnsPurchasePage> {
         return;
       }
 
-      setState(() {
-        _remainingSeconds--;
-      });
+      setState(() => _remainingSeconds--);
 
       if (_remainingSeconds <= 0) {
         timer.cancel();
@@ -120,9 +118,7 @@ class _EnsPurchasePageState extends State<EnsPurchasePage> {
   Future<void> _executeRegister() async {
     if (_commitResult == null) return;
 
-    setState(() {
-      _currentStep = 3;
-    });
+    setState(() => _currentStep = 3);
 
     // 步骤 3: 执行注册
     final registerParams = RegisterParams(
@@ -152,9 +148,7 @@ class _EnsPurchasePageState extends State<EnsPurchasePage> {
 
     _registerResult = registerResult.data;
 
-    setState(() {
-      _currentStep = 4;
-    });
+    setState(() => _currentStep = 4);
   }
 
   void _retryRegistration() {
@@ -240,16 +234,14 @@ class _EnsPurchasePageState extends State<EnsPurchasePage> {
   }
 
   Widget _buildDomainCard() {
+    final blueColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+    final subtitleColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [
-            AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
-                .withAlpha(30),
-            AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
-                .withAlpha(10),
-          ],
+          colors: [blueColor.withAlpha(30), blueColor.withAlpha(10)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -262,10 +254,7 @@ class _EnsPurchasePageState extends State<EnsPurchasePage> {
             style: TextStyle(
               fontSize: ScreenUtil().setSp(40),
               fontWeight: FontWeight.bold,
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainTextColor.name,
-              ),
+              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
             ),
           ),
           SizedBox(height: ScreenUtil().setWidth(8)),
@@ -275,20 +264,14 @@ class _EnsPurchasePageState extends State<EnsPurchasePage> {
               Icon(
                 Icons.access_time,
                 size: ScreenUtil().setWidth(20),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemSubtitleTextColor.name,
-                ),
+                color: subtitleColor,
               ),
               SizedBox(width: ScreenUtil().setWidth(6)),
               Text(
                 '${widget.years} ${widget.years == 1 ? S.of(context).g_key_ens_year : S.of(context).g_key_ens_years}',
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(26),
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.itemSubtitleTextColor.name,
-                  ),
+                  color: subtitleColor,
                 ),
               ),
             ],

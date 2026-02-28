@@ -20,11 +20,7 @@ class CreateTwo extends StatefulWidget {
 }
 
 class _CreateTwoState extends State<CreateTwo> with _CreateTwoWidgetsMixin {
-  Trustdart? trustdart;
-  Trustdart get _trustdart {
-    trustdart ??= Trustdart();
-    return trustdart!;
-  }
+  late final Trustdart _trustdart = Trustdart();
 
   @override
   bool showMnemonic = false;
@@ -61,20 +57,17 @@ class _CreateTwoState extends State<CreateTwo> with _CreateTwoWidgetsMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Container(
-          alignment: Alignment.center,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildProgressDot(active: true),
-              SizedBox(width: ScreenUtil().setWidth(20.0)),
-              _buildProgressDot(active: true),
-              SizedBox(width: ScreenUtil().setWidth(20.0)),
-              _buildProgressDot(active: false),
-              SizedBox(width: ScreenUtil().setWidth(20.0)),
-              _buildProgressDot(active: false),
-            ],
-          ),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _buildProgressDot(active: true),
+            SizedBox(width: ScreenUtil().setWidth(20.0)),
+            _buildProgressDot(active: true),
+            SizedBox(width: ScreenUtil().setWidth(20.0)),
+            _buildProgressDot(active: false),
+            SizedBox(width: ScreenUtil().setWidth(20.0)),
+            _buildProgressDot(active: false),
+          ],
         ),
         actions: [
           SizedBox(width: ScreenUtil().setWidth(130.0)),
@@ -131,11 +124,8 @@ class _CreateTwoState extends State<CreateTwo> with _CreateTwoWidgetsMixin {
   }
 
   Widget _buildTitle() {
-    return Container(
-      margin: EdgeInsets.only(
-        top: ScreenUtil().setWidth(30),
-        bottom: ScreenUtil().setWidth(30),
-      ),
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(30)),
       child: Text(
         S.of(context).g_key_wallet_c39,
         style: TextStyle(
@@ -149,10 +139,8 @@ class _CreateTwoState extends State<CreateTwo> with _CreateTwoWidgetsMixin {
   }
 
   Widget _buildSubtitle() {
-    return Container(
-      margin: EdgeInsets.only(
-        bottom: ScreenUtil().setWidth(60),
-      ),
+    return Padding(
+      padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(60)),
       child: Text(
         S.of(context).g_key_wallet_c40,
         style: TextStyle(
@@ -166,17 +154,13 @@ class _CreateTwoState extends State<CreateTwo> with _CreateTwoWidgetsMixin {
   }
 
   Widget _buildWordCountSelector() {
-    return Container(
-      alignment: Alignment.center,
-      width: double.infinity,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          _buildWordCountButton(12),
-          SizedBox(width: ScreenUtil().setWidth(40.0)),
-          _buildWordCountButton(24),
-        ],
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _buildWordCountButton(12),
+        SizedBox(width: ScreenUtil().setWidth(40.0)),
+        _buildWordCountButton(24),
+      ],
     );
   }
 

@@ -32,6 +32,7 @@ class SmartAccountCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final typeColor = _getAccountTypeColor(account.type);
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -39,15 +40,15 @@ class SmartAccountCard extends StatelessWidget {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              _getAccountTypeColor(account.type).withAlpha(30),
-              _getAccountTypeColor(account.type).withAlpha(10),
+              typeColor.withAlpha(30),
+              typeColor.withAlpha(10),
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
           border: Border.all(
-            color: _getAccountTypeColor(account.type).withAlpha(40),
+            color: typeColor.withAlpha(40),
           ),
         ),
         child: Column(
@@ -106,18 +107,19 @@ class SmartAccountCard extends StatelessWidget {
   }
 
   Widget _buildAccountTypeIcon(BuildContext context) {
+    final color = _getAccountTypeColor(account.type);
     return Container(
       width: ScreenUtil().setWidth(48),
       height: ScreenUtil().setWidth(48),
       decoration: BoxDecoration(
-        color: _getAccountTypeColor(account.type).withAlpha(30),
+        color: color.withAlpha(30),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
       ),
       child: Center(
         child: Icon(
           _getAccountTypeIcon(account.type),
           size: ScreenUtil().setWidth(28),
-          color: _getAccountTypeColor(account.type),
+          color: color,
         ),
       ),
     );

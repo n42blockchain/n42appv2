@@ -76,10 +76,8 @@ mixin _CreateTwoWidgetsMixin on State<CreateTwo> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
-              width: ScreenUtil().setWidth(80.0),
-              height: ScreenUtil().setWidth(80.0),
-              margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(30.0)),
+            Padding(
+              padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(30.0)),
               child: Icon(
                 Icons.visibility_off_outlined,
                 color: AppThemeUtils.getColorByKey(
@@ -187,7 +185,7 @@ mixin _CreateTwoWidgetsMixin on State<CreateTwo> {
     );
     final flag = await tipsDialog3(context, child);
     if (!mounted) return;
-    if (flag != null && flag) {
+    if (flag == true) {
       widget.wInfo.mnemonic = mnemonicWords;
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => CreateFinish(wInfo: widget.wInfo)));
