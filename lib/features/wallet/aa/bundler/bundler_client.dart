@@ -137,49 +137,40 @@ class BundlerClient {
 
   /// Get a UserOperation by its hash
   Future<UserOperation?> getUserOperationByHash(String userOpHash) async {
-    try {
-      final result = await _rpcCall(
-        'eth_getUserOperationByHash',
-        [userOpHash],
-      );
-
-      if (result == null) return null;
-
+    return _safeRpcQuery('eth_getUserOperationByHash', [userOpHash], (result) {
       if (result is Map<String, dynamic>) {
         final userOp = result['userOperation'];
         if (userOp is Map<String, dynamic>) {
           return UserOperation.fromJson(userOp);
         }
       }
-
       return null;
-    } catch (e) {
-      assert(() {
-        debugPrint('getUserOperationByHash error: $e');
-        return true;
-      }());
-      return null;
-    }
+    });
   }
 
   /// Get the receipt for a UserOperation
   Future<UserOperationReceipt?> getUserOperationReceipt(String userOpHash) async {
-    try {
-      final result = await _rpcCall(
-        'eth_getUserOperationReceipt',
-        [userOpHash],
-      );
-
-      if (result == null) return null;
-
+    return _safeRpcQuery('eth_getUserOperationReceipt', [userOpHash], (result) {
       if (result is Map<String, dynamic>) {
         return UserOperationReceipt.fromJson(result);
       }
-
       return null;
+    });
+  }
+
+  /// Shared helper for nullable RPC queries with error suppression
+  Future<T?> _safeRpcQuery<T>(
+    String method,
+    List<dynamic> params,
+    T? Function(dynamic result) parse,
+  ) async {
+    try {
+      final result = await _rpcCall(method, params);
+      if (result == null) return null;
+      return parse(result);
     } catch (e) {
       assert(() {
-        debugPrint('getUserOperationReceipt error: $e');
+        debugPrint('$method error: $e');
         return true;
       }());
       return null;
@@ -322,13 +313,13 @@ class GasEstimateResult {
       verificationGasLimit: _parseBigInt(json['verificationGasLimit']),
       callGasLimit: _parseBigInt(json['callGasLimit']),
       preVerificationGas: _parseBigInt(json['preVerificationGas']),
-      paymasterVerificationGasLimit: json['paymasterVerificationGasLimit'] != null
-          ? _parseBigInt(json['paymasterVerificationGasLimit'])
-          : null,
-      paymasterPostOpGasLimit: json['paymasterPostOpGasLimit'] != null
-          ? _parseBigInt(json['paymasterPostOpGasLimit'])
-          : null,
+      paymasterVerificationGasLimit: _parseOptionalBigInt(json['paymasterVerificationGasLimit']),
+      paymasterPostOpGasLimit: _parseOptionalBigInt(json['paymasterPostOpGasLimit']),
     );
+  }
+
+  static BigInt? _parseOptionalBigInt(dynamic value) {
+    return value != null ? _parseBigInt(value) : null;
   }
 
   static BigInt _parseBigInt(dynamic value) {
@@ -346,16 +337,17 @@ class GasEstimateResult {
   GasEstimateResult withBuffer(double multiplier) {
     final mult = BigInt.from((multiplier * 100).round());
     final div = BigInt.from(100);
+    BigInt applyBuffer(BigInt v) => v * mult ~/ div;
 
     return GasEstimateResult(
-      verificationGasLimit: verificationGasLimit * mult ~/ div,
-      callGasLimit: callGasLimit * mult ~/ div,
-      preVerificationGas: preVerificationGas * mult ~/ div,
+      verificationGasLimit: applyBuffer(verificationGasLimit),
+      callGasLimit: applyBuffer(callGasLimit),
+      preVerificationGas: applyBuffer(preVerificationGas),
       paymasterVerificationGasLimit: paymasterVerificationGasLimit != null
-          ? paymasterVerificationGasLimit! * mult ~/ div
+          ? applyBuffer(paymasterVerificationGasLimit!)
           : null,
       paymasterPostOpGasLimit: paymasterPostOpGasLimit != null
-          ? paymasterPostOpGasLimit! * mult ~/ div
+          ? applyBuffer(paymasterPostOpGasLimit!)
           : null,
     );
   }
@@ -404,8 +396,6 @@ class BundlerClientBuilder {
   Duration? _timeout;
   bool _useBackup = false;
   EntryPointVersion? _version;
-
-  BundlerClientBuilder();
 
   BundlerClientBuilder forChain(String chainSymbol) {
     _chainSymbol = chainSymbol;

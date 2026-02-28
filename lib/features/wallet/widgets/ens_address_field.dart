@@ -119,10 +119,7 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
     // 检查是否是 ENS 名称
     if (EnsService.isEnsName(text)) {
       _updateStatus(EnsResolveStatus.resolving, null);
-
-      _debounceTimer = Timer(_debounceDelay, () {
-        _resolveEns(text);
-      });
+      _debounceTimer = Timer(_debounceDelay, () => _resolveEns(text));
     } else {
       _updateStatus(EnsResolveStatus.idle, null);
       // 验证普通地址
@@ -257,35 +254,11 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
 
         // 外部错误信息（父组件传入）
         if (widget.errorText != null && widget.errorText!.isNotEmpty)
-          Padding(
-            padding: EdgeInsets.only(
-              top: ScreenUtil().setWidth(8),
-              left: ScreenUtil().setWidth(4),
-            ),
-            child: Text(
-              widget.errorText!,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
-                color: Colors.red,
-              ),
-            ),
-          ),
+          _buildHintText(widget.errorText!, Colors.red),
 
         // ENS 解析失败信息
         if (_status == EnsResolveStatus.failed && _resolveResult?.error != null)
-          Padding(
-            padding: EdgeInsets.only(
-              top: ScreenUtil().setWidth(8),
-              left: ScreenUtil().setWidth(4),
-            ),
-            child: Text(
-              _resolveResult!.error!,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
-                color: Colors.orange,
-              ),
-            ),
-          ),
+          _buildHintText(_resolveResult!.error!, Colors.orange),
       ],
     );
   }
@@ -303,46 +276,56 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
     }
   }
 
-  Widget _buildStatusIndicator(Color blueColor, Color subtitleColor) {
-    final rightPadding = EdgeInsets.only(right: ScreenUtil().setWidth(12));
+  Widget _buildHintText(String text, Color color) {
+    return Padding(
+      padding: EdgeInsets.only(
+        top: ScreenUtil().setWidth(8),
+        left: ScreenUtil().setWidth(4),
+      ),
+      child: Text(
+        text,
+        style: TextStyle(
+          fontSize: ScreenUtil().setSp(22),
+          color: color,
+        ),
+      ),
+    );
+  }
 
+  Widget _buildStatusIndicator(Color blueColor, Color subtitleColor) {
+    if (_status == EnsResolveStatus.idle) return const SizedBox.shrink();
+
+    final Widget indicator;
     switch (_status) {
       case EnsResolveStatus.resolving:
-        return Padding(
-          padding: rightPadding,
-          child: SizedBox(
-            width: ScreenUtil().setWidth(24),
-            height: ScreenUtil().setWidth(24),
-            child: CircularProgressIndicator(
-              strokeWidth: 2,
-              valueColor: AlwaysStoppedAnimation<Color>(blueColor),
-            ),
+        indicator = SizedBox(
+          width: ScreenUtil().setWidth(24),
+          height: ScreenUtil().setWidth(24),
+          child: CircularProgressIndicator(
+            strokeWidth: 2,
+            valueColor: AlwaysStoppedAnimation<Color>(blueColor),
           ),
         );
-
       case EnsResolveStatus.resolved:
-        return Padding(
-          padding: rightPadding,
-          child: Icon(
-            Icons.check_circle,
-            color: const Color(0xFF4CAF50),
-            size: ScreenUtil().setWidth(28),
-          ),
+        indicator = Icon(
+          Icons.check_circle,
+          color: const Color(0xFF4CAF50),
+          size: ScreenUtil().setWidth(28),
         );
-
       case EnsResolveStatus.failed:
-        return Padding(
-          padding: rightPadding,
-          child: Icon(
-            Icons.warning_amber_rounded,
-            color: Colors.orange,
-            size: ScreenUtil().setWidth(28),
-          ),
+        indicator = Icon(
+          Icons.warning_amber_rounded,
+          color: Colors.orange,
+          size: ScreenUtil().setWidth(28),
         );
-
       case EnsResolveStatus.idle:
-        return const SizedBox.shrink();
+        indicator = const SizedBox.shrink(); // unreachable
     }
+
+    return Padding(
+      padding: EdgeInsets.only(right: ScreenUtil().setWidth(12)),
+      child: indicator,
+    );
   }
 
   /// 解析成功卡片：显示头像（若有）、ENS名称→缩短地址、来源链徽章。

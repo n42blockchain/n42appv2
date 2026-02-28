@@ -8,6 +8,7 @@ import 'dart:typed_data';
 import 'package:blockchain_utils/cbor/cbor.dart';
 import 'package:blockchain_utils/utils/binary/utils.dart';
 import 'package:blockchain_utils/uuid/uuid.dart';
+import 'package:flutter/foundation.dart' show listEquals;
 
 /// BC-UR (Uniform Resource) codec implementation
 ///
@@ -111,13 +112,7 @@ class UrCodec {
 
   /// Encode bytes to bytewords string (space-separated full words)
   static String bytewordsEncode(Uint8List data) {
-    final buf = StringBuffer();
-    for (var i = 0; i < data.length; i++) {
-      if (i > 0) buf.write(' ');
-      final word = _wordList[data[i]];
-      buf.write(word);
-    }
-    return buf.toString();
+    return data.map((byte) => _wordList[byte]).join(' ');
   }
 
   /// Decode bytewords string to bytes
@@ -185,19 +180,11 @@ class UrCodec {
     final receivedCrc = Uint8List.sublistView(payload, payload.length - 4);
     final expectedCrc = crc32Bytes(data);
 
-    if (!_bytesEqual(receivedCrc, expectedCrc)) {
+    if (!listEquals(receivedCrc, expectedCrc)) {
       throw UrCodecException('CRC-32 mismatch: data may be corrupted');
     }
 
     return (type: type, data: data);
-  }
-
-  static bool _bytesEqual(Uint8List a, Uint8List b) {
-    if (a.length != b.length) return false;
-    for (var i = 0; i < a.length; i++) {
-      if (a[i] != b[i]) return false;
-    }
-    return true;
   }
 }
 

@@ -101,10 +101,8 @@ class AccountDeployer {
   /// Check if a UserOperation needs init code (first transaction)
   bool needsInitCode(SmartAccount account) {
     // EIP-7702 accounts never need init code
-    if (account.type == SmartAccountType.simple7702Account) {
-      return false;
-    }
-    return account.state == SmartAccountState.notDeployed;
+    return account.type != SmartAccountType.simple7702Account &&
+        account.state == SmartAccountState.notDeployed;
   }
 
   /// Check if account type requires deployment
@@ -276,26 +274,19 @@ class AccountDeployer {
     required BigInt maxFeePerGas,
     SmartAccountType accountType = SmartAccountType.simpleAccount,
   }) {
-    BigInt gasUnits;
-
-    if (accountType == SmartAccountType.simple7702Account) {
-      // EIP-7702 doesn't require deployment, only authorization
-      gasUnits = BigInt.from(
-        Simple7702GasConstants.authorizationGas +
-        AAConstants.defaultPreVerificationGas,
-      );
-    } else {
-      // Traditional smart account deployment
-      gasUnits = BigInt.from(AAConstants.accountDeploymentGas) +
-          BigInt.from(AAConstants.defaultPreVerificationGas);
-    }
-
-    final totalCost = gasUnits * maxFeePerGas;
+    // EIP-7702 doesn't require deployment, only authorization
+    final gasUnits = accountType == SmartAccountType.simple7702Account
+        ? BigInt.from(
+            Simple7702GasConstants.authorizationGas +
+            AAConstants.defaultPreVerificationGas,
+          )
+        : BigInt.from(AAConstants.accountDeploymentGas) +
+            BigInt.from(AAConstants.defaultPreVerificationGas);
 
     return DeploymentCostEstimate(
       gasUnits: gasUnits,
       maxFeePerGas: maxFeePerGas,
-      totalCost: totalCost,
+      totalCost: gasUnits * maxFeePerGas,
       accountType: accountType,
     );
   }
@@ -360,8 +351,7 @@ class DeploymentCostEstimate {
 
   /// Format cost for display
   String formatCost({int decimals = 6}) {
-    final ethValue = costInEth;
-    return ethValue.toStringAsFixed(decimals);
+    return costInEth.toStringAsFixed(decimals);
   }
 
   /// Check if this is an EIP-7702 estimate

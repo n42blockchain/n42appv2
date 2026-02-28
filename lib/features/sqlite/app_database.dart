@@ -48,8 +48,8 @@ class AppDatabase {
     return whereClause;
   }
   Future<Database> getDatabaseInstance() async {
-    var directory = await getDatabasesPath();
-    String path = join(directory, "astranet.db");
+    final directory = await getDatabasesPath();
+    final path = join(directory, "astranet.db");
     return await openDatabase(
       path,
       version: 7, //v7: portfolio_trades for cost-basis P&L tracking
@@ -428,24 +428,21 @@ class AppDatabase {
   //添加搜索历史
   Future<int?> insertBrowserSearchHistory(Map<String, dynamic> map) async {
     final db = await database;
-    var response = await db.query(
+    final existing = await _queryList(
       "browserSearchHistory",
+      BrowserSearchHistoryModel.fromJson,
       where: 'search=?',
       whereArgs: [map['search']],
       orderBy: "searchCount desc",
     );
-    List<BrowserSearchHistoryModel> list =
-    response.map((c) => BrowserSearchHistoryModel.fromJson(c)).toList();
-    if (list.isEmpty) {
-      var raw = await db.insert("browserSearchHistory", map,
+    if (existing.isEmpty) {
+      return db.insert("browserSearchHistory", map,
           conflictAlgorithm: ConflictAlgorithm.rollback);
-      return raw;
-    } else {
-      BrowserSearchHistoryModel bshm = list[0];
-      bshm.searchCount = (bshm.searchCount ?? 0) + 1;
-      await db.update('browserSearchHistory', bshm.getMap(),
-          where: 'id=?', whereArgs: [bshm.id]);
     }
+    final bshm = existing[0];
+    bshm.searchCount = (bshm.searchCount ?? 0) + 1;
+    await db.update('browserSearchHistory', bshm.getMap(),
+        where: 'id=?', whereArgs: [bshm.id]);
     return null;
   }
 

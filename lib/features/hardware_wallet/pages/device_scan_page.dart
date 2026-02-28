@@ -22,7 +22,6 @@ class DeviceScanPage extends StatefulWidget {
 class _DeviceScanPageState extends State<DeviceScanPage>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
-  late Animation<double> _rotationAnimation;
 
   @override
   void initState() {
@@ -30,9 +29,6 @@ class _DeviceScanPageState extends State<DeviceScanPage>
     _animationController = AnimationController(
       duration: const Duration(seconds: 2),
       vsync: this,
-    );
-    _rotationAnimation = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(parent: _animationController, curve: Curves.linear),
     );
 
     // 开始扫描
@@ -124,7 +120,7 @@ class _DeviceScanPageState extends State<DeviceScanPage>
                   return AnimatedBuilder(
                     animation: _animationController,
                     builder: (context, child) {
-                      final value = (_rotationAnimation.value + index * 0.33) % 1.0;
+                      final value = (_animationController.value + index * 0.33) % 1.0;
                       return Container(
                         width: ScreenUtil().setWidth(200 + value * 100),
                         height: ScreenUtil().setWidth(200 + value * 100),
@@ -353,36 +349,33 @@ class _DeviceScanPageState extends State<DeviceScanPage>
   }
 
   Widget _buildBottomActions(BuildContext context, HardwareWalletProvider provider) {
-    return Container(
+    return Padding(
       padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-      child: Row(
-        children: [
-          Expanded(
-            child: ElevatedButton(
-              onPressed: provider.isScanning ? _stopScan : _startScan,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: provider.isScanning
-                    ? Colors.orange
-                    : AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainBlueColor.name,
-                      ),
-                padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(18)),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-                ),
-              ),
-              child: Text(
-                provider.isScanning ? 'Stop Scanning' : 'Scan Again',
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(30),
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                ),
-              ),
+      child: SizedBox(
+        width: double.infinity,
+        child: ElevatedButton(
+          onPressed: provider.isScanning ? _stopScan : _startScan,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: provider.isScanning
+                ? Colors.orange
+                : AppThemeUtils.getColorByKey(
+                    context,
+                    AppThemeKeys.mainBlueColor.name,
+                  ),
+            padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(18)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
             ),
           ),
-        ],
+          child: Text(
+            provider.isScanning ? 'Stop Scanning' : 'Scan Again',
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(30),
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
+            ),
+          ),
+        ),
       ),
     );
   }

@@ -135,25 +135,9 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
       if (!mounted) return;
 
       if (rtrm.isEmpty) {
-        final trm = TransationRecordModel();
-        trm.coinId = coinModel.isTest
-            ? coinModel.coin['chainId_test']
-            : coinModel.coin['chainId'];
-        trm.coin = coinModel.coin;
-        trm.address = coinModel.address ?? '';
-        trm.from1 = (cri.from ?? '').toLowerCase();
-        trm.to1 = (cri.to ?? '').toLowerCase();
-        trm.price = BigInt.parse(cri.value ?? '0');
-        trm.contract = (coinModel.coin['contract'] ?? '').toLowerCase();
-        trm.walletIndex = ref.read(wapBridgeProvider).walletIndex;
+        final hash = cri.hash ?? '';
+        final trm = _buildTxRecord(coinModel, cri, hash);
         trm.nonce = cri.nonce;
-        trm.txHash = cri.hash ?? '';
-        trm.gasPrice = BigInt.parse(cri.gasPrice ?? '0');
-        trm.gas = int.parse(cri.gas ?? '0');
-        trm.txTime = cri.timeStamp ?? '0';
-        trm.state = int.parse(cri.txreceiptStatus ?? '0');
-        trm.coinMiniName = coinModel.coin['coinType'];
-        trm.isTest = coinModel.isTest ? 1 : 0;
 
         if (trm.contract == '') {
           String input = cri.input ?? '0x';
@@ -171,10 +155,7 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
         await db.insertTransationRecord(trm);
         isEdit = true;
       } else {
-        final trm = rtrm[0];
-        if (trm.txTime != cri.timeStamp) {
-          trm.txTime = cri.timeStamp ?? '0';
-          await db.updateTransationRecord(trm);
+        if (await _updateTxTimeIfChanged(rtrm[0], cri.timeStamp ?? '0')) {
           isEdit = true;
         }
       }
@@ -199,32 +180,13 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
       if (!mounted) return;
 
       if (rtrm.isEmpty) {
-        final trm = TransationRecordModel();
-        trm.coinId = coinModel.isTest
-            ? coinModel.coin['chainId_test']
-            : coinModel.coin['chainId'];
-        trm.coin = coinModel.coin;
-        trm.address = coinModel.address ?? '';
-        trm.from1 = (cri.from ?? '').toLowerCase();
-        trm.to1 = (cri.to ?? '').toLowerCase();
-        trm.price = BigInt.parse(cri.value ?? '0');
-        trm.contract = (coinModel.coin['contract'] ?? '').toLowerCase();
-        trm.walletIndex = ref.read(wapBridgeProvider).walletIndex;
+        final hash = cri.hash ?? '';
+        final trm = _buildTxRecord(coinModel, cri, hash);
         trm.nonce = cri.nonce;
-        trm.txHash = cri.hash ?? '';
-        trm.gasPrice = BigInt.parse(cri.gasPrice ?? '0');
-        trm.gas = int.parse(cri.gas ?? '0');
-        trm.txTime = cri.timeStamp ?? '0';
-        trm.state = int.parse(cri.txreceiptStatus ?? '0');
-        trm.coinMiniName = coinModel.coin['coinType'];
-        trm.isTest = coinModel.isTest ? 1 : 0;
         await db.insertTransationRecord(trm);
         isEdit = true;
       } else {
-        final trm = rtrm[0];
-        if (trm.txTime != cri.timeStamp) {
-          trm.txTime = cri.timeStamp ?? '0';
-          await db.updateTransationRecord(trm);
+        if (await _updateTxTimeIfChanged(rtrm[0], cri.timeStamp ?? '0')) {
           isEdit = true;
         }
       }
@@ -377,11 +339,8 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
         await db.insertTransationRecord(trm);
         isEdit = true;
       } else {
-        final trm = rtrm[0];
         final newTime = (cri.blockTime ?? 0).toString();
-        if (trm.txTime != newTime) {
-          trm.txTime = newTime;
-          await db.updateTransationRecord(trm);
+        if (await _updateTxTimeIfChanged(rtrm[0], newTime)) {
           isEdit = true;
         }
       }
@@ -405,32 +364,11 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
       if (!mounted) return;
 
       if (rtrm.isEmpty) {
-        final trm = TransationRecordModel();
-        trm.coinId = (coinModel.isTest
-                ? coinModel.coin['chainId_test']
-                : coinModel.coin['chainId']) ??
-            0;
-        trm.coin = coinModel.coin;
-        trm.address = coinModel.address ?? '';
-        trm.from1 = (cri.from ?? '').toLowerCase();
-        trm.to1 = (cri.to ?? '').toLowerCase();
-        trm.price = BigInt.tryParse(cri.value ?? '0') ?? BigInt.zero;
-        trm.contract = (coinModel.coin['contract'] ?? '').toLowerCase();
-        trm.walletIndex = ref.read(wapBridgeProvider).walletIndex;
-        trm.txHash = hash;
-        trm.gasPrice = BigInt.tryParse(cri.gasPrice ?? '0') ?? BigInt.zero;
-        trm.gas = int.tryParse(cri.gas ?? '0') ?? 0;
-        trm.txTime = cri.timeStamp ?? '0';
-        trm.state = int.tryParse(cri.txreceiptStatus ?? '0') ?? 0;
-        trm.coinMiniName = coinModel.coin['coinType'];
-        trm.isTest = coinModel.isTest ? 1 : 0;
+        final trm = _buildTxRecord(coinModel, cri, hash);
         await db.insertTransationRecord(trm);
         isEdit = true;
       } else {
-        final trm = rtrm[0];
-        if (trm.txTime != (cri.timeStamp ?? '0')) {
-          trm.txTime = cri.timeStamp ?? '0';
-          await db.updateTransationRecord(trm);
+        if (await _updateTxTimeIfChanged(rtrm[0], cri.timeStamp ?? '0')) {
           isEdit = true;
         }
       }
@@ -468,6 +406,48 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
       return false;
     });
     setState(() {});
+  }
+
+  // ── 辅助方法 ─────────────────────────────────────────────────────────────
+
+  /// 构建通用的 TransationRecordModel（ETH / TRX / Generic 共用字段填充）
+  TransationRecordModel _buildTxRecord(
+    dynamic coinModel,
+    CommonResponseItemModel cri,
+    String hash,
+  ) {
+    final trm = TransationRecordModel();
+    trm.coinId = coinModel.isTest
+        ? coinModel.coin['chainId_test']
+        : coinModel.coin['chainId'];
+    trm.coin = coinModel.coin;
+    trm.address = coinModel.address ?? '';
+    trm.from1 = (cri.from ?? '').toLowerCase();
+    trm.to1 = (cri.to ?? '').toLowerCase();
+    trm.price = BigInt.tryParse(cri.value ?? '0') ?? BigInt.zero;
+    trm.contract = (coinModel.coin['contract'] ?? '').toLowerCase();
+    trm.walletIndex = ref.read(wapBridgeProvider).walletIndex;
+    trm.txHash = hash;
+    trm.gasPrice = BigInt.tryParse(cri.gasPrice ?? '0') ?? BigInt.zero;
+    trm.gas = int.tryParse(cri.gas ?? '0') ?? 0;
+    trm.txTime = cri.timeStamp ?? '0';
+    trm.state = int.tryParse(cri.txreceiptStatus ?? '0') ?? 0;
+    trm.coinMiniName = coinModel.coin['coinType'];
+    trm.isTest = coinModel.isTest ? 1 : 0;
+    return trm;
+  }
+
+  /// 更新已有交易记录的时间戳（如果不同）
+  Future<bool> _updateTxTimeIfChanged(
+    TransationRecordModel trm,
+    String newTime,
+  ) async {
+    if (trm.txTime != newTime) {
+      trm.txTime = newTime;
+      await db.updateTransationRecord(trm);
+      return true;
+    }
+    return false;
   }
 
   /// Subclasses must provide access to the current CoinModel.

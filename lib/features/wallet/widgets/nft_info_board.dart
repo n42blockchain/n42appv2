@@ -58,10 +58,7 @@ class NftInfoBoard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30.0),
-        vertical: ScreenUtil().setWidth(30.0),
-      ),
+      margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -281,40 +278,37 @@ class NftInfoBoard extends StatelessWidget {
   }
 
   Widget _buildFloorPriceRow(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(top: ScreenUtil().setWidth(8)),
-      child: Container(
-        padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(12),
-          vertical: ScreenUtil().setWidth(8),
-        ),
-        decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainBlueColor.name)
-              .withAlpha(15),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.trending_down_rounded,
-              size: ScreenUtil().setWidth(22),
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainBlueColor.name),
+    final blueColor = AppThemeUtils.getColorByKey(
+      context, AppThemeKeys.mainBlueColor.name,
+    );
+    return Container(
+      margin: EdgeInsets.only(top: ScreenUtil().setWidth(8)),
+      padding: EdgeInsets.symmetric(
+        horizontal: ScreenUtil().setWidth(12),
+        vertical: ScreenUtil().setWidth(8),
+      ),
+      decoration: BoxDecoration(
+        color: blueColor.withAlpha(15),
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.trending_down_rounded,
+            size: ScreenUtil().setWidth(22),
+            color: blueColor,
+          ),
+          SizedBox(width: ScreenUtil().setWidth(6)),
+          Text(
+            '${S.of(context).g_key_nft_floor_price}: $floorPriceDisplay',
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(24),
+              fontWeight: FontWeight.w600,
+              color: blueColor,
             ),
-            SizedBox(width: ScreenUtil().setWidth(6)),
-            Text(
-              '${S.of(context).g_key_nft_floor_price}: $floorPriceDisplay',
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(24),
-                fontWeight: FontWeight.w600,
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -349,48 +343,31 @@ class NftInfoBoard extends StatelessWidget {
   }
 
   Widget _buildActionButtons(BuildContext context) {
+    final blueColor = AppThemeUtils.getColorByKey(
+      context, AppThemeKeys.mainBlueColor.name,
+    );
+    final actions = [
+      (S.of(context).g_key_48, Icons.send, sendTap),       // Send
+      (S.of(context).g_key_33, Icons.qr_code, receiveTap), // Receive
+      (S.of(context).g_key_196, Icons.open_in_browser, browserTap), // Browser
+    ];
+
     return Column(
       children: [
         // 主要操作按钮（发送、接收、浏览器）
         Row(
           children: [
-            Expanded(
-              child: _buildActionButton(
-                context,
-                S.of(context).g_key_48, // Send
-                Icons.send,
-                AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
-                sendTap,
+            for (var i = 0; i < actions.length; i++) ...[
+              if (i > 0) SizedBox(width: ScreenUtil().setWidth(12)),
+              Expanded(
+                child: _buildActionButton(
+                  context, actions[i].$1, actions[i].$2, blueColor, actions[i].$3,
+                ),
               ),
-            ),
-            SizedBox(width: ScreenUtil().setWidth(12)),
-            Expanded(
-              child: _buildActionButton(
-                context,
-                S.of(context).g_key_33, // Receive
-                Icons.qr_code,
-                AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
-                receiveTap,
-              ),
-            ),
-            SizedBox(width: ScreenUtil().setWidth(12)),
-            Expanded(
-              child: _buildActionButton(
-                context,
-                S.of(context).g_key_196, // Browser
-                Icons.open_in_browser,
-                AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
-                browserTap,
-              ),
-            ),
+            ],
           ],
         ),
-
         SizedBox(height: ScreenUtil().setWidth(16)),
-
         // 销毁按钮（独立一行，红色警告风格）
         if (burnTap != null)
           SizedBox(

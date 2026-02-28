@@ -11,11 +11,10 @@ class Trustdart {
   // 生成助记词：128=12词 160=15词 192=18词 228=21词 256=24词
   Future<String> generateMnemonic({String passphrase = '', int length = 128}) async {
     try {
-      final String mnemonic = await _channel.invokeMethod(
+      return await _channel.invokeMethod(
         'generateMnemonic',
         <String, dynamic>{'passphrase': passphrase, 'length': length},
       );
-      return mnemonic;
     } catch (e) {
       debugPrint('Trustdart.generateMnemonic: $e');
       return '';
@@ -24,11 +23,10 @@ class Trustdart {
 
   Future<bool> checkMnemonic(String mnemonic, {String passphrase = ''}) async {
     try {
-      final bool importStatus = await _channel.invokeMethod(
+      return await _channel.invokeMethod(
         'checkMnemonic',
         <String, String>{'mnemonic': mnemonic, 'passphrase': passphrase},
       );
-      return importStatus;
     } catch (e) {
       debugPrint('Trustdart.checkMnemonic: $e');
       return false;
@@ -47,7 +45,7 @@ class Trustdart {
     bool isTest = false,
   }) async {
     try {
-      final Map address = await _channel.invokeMethod(
+      return await _channel.invokeMethod(
         'generateAddress',
         <String, String>{
           'coin': coin,
@@ -60,7 +58,6 @@ class Trustdart {
           'isTest': '$isTest',
         },
       );
-      return address;
     } catch (e) {
       debugPrint('Trustdart.generateAddress: $e');
       return {'legacy': ''};
@@ -70,11 +67,10 @@ class Trustdart {
   /// validates address belonging to a particular crypto
   Future<bool> validateAddress(String coin, String address) async {
     try {
-      final bool isAddressValid = await _channel.invokeMethod(
+      return await _channel.invokeMethod(
         'validateAddress',
         <String, String>{'coin': coin, 'address': address},
       );
-      return isAddressValid;
     } catch (e) {
       debugPrint('Trustdart.validateAddress: $e');
       return false;
@@ -90,7 +86,7 @@ class Trustdart {
     String pk = '',
   }) async {
     try {
-      final String publicKey = await _channel.invokeMethod(
+      return await _channel.invokeMethod(
         'getPublicKey',
         <String, String>{
           'coin': coin,
@@ -100,7 +96,6 @@ class Trustdart {
           'pk': pk,
         },
       );
-      return publicKey;
     } catch (e) {
       debugPrint('Trustdart.getPublicKey: $e');
       return '';
@@ -115,7 +110,7 @@ class Trustdart {
     String passphrase = '',
   }) async {
     try {
-      final String privateKey = await _channel.invokeMethod(
+      return await _channel.invokeMethod(
         'getPrivateKey',
         <String, String>{
           'coin': coin,
@@ -124,7 +119,6 @@ class Trustdart {
           'passphrase': passphrase,
         },
       );
-      return privateKey;
     } catch (e) {
       debugPrint('Trustdart.getPrivateKey: $e');
       return '';
@@ -139,7 +133,7 @@ class Trustdart {
     String passphrase = '',
   }) async {
     try {
-      final String keyPair = await _channel.invokeMethod(
+      return await _channel.invokeMethod(
         'getPrivateKeyAndPublicKey',
         <String, String>{
           'coin': coin,
@@ -149,7 +143,6 @@ class Trustdart {
           'passphrase': passphrase,
         },
       );
-      return keyPair;
     } catch (e) {
       debugPrint('Trustdart.getPrivateKeyAndPublicKeyPair: $e');
       return '';
@@ -207,7 +200,7 @@ class Trustdart {
     String passphrase = '',
   }) async {
     try {
-      final String txHash = await _channel.invokeMethod(
+      final String raw = await _channel.invokeMethod(
         'signTransaction_byteArray',
         <String, dynamic>{
           'coin': coin,
@@ -218,7 +211,7 @@ class Trustdart {
           'pk': pk,
         },
       );
-      return json.decode(txHash);
+      return json.decode(raw);
     } catch (e) {
       debugPrint('Trustdart.signTransactionByteArray: $e');
       return {'result': false, 'signHash': ''};
@@ -234,7 +227,7 @@ class Trustdart {
     String passphrase = '',
   }) async {
     try {
-      final String txHash = await _channel.invokeMethod(
+      return await _channel.invokeMethod(
         'signMessage',
         <String, dynamic>{
           'coin': coin,
@@ -245,7 +238,6 @@ class Trustdart {
           'pk': pk,
         },
       );
-      return txHash;
     } catch (e) {
       debugPrint('Trustdart.signMessage: $e');
       return '';
@@ -291,7 +283,7 @@ class Trustdart {
     String pk = '',
   }) async {
     try {
-      final String keyStoreJson = await _channel.invokeMethod(
+      return await _channel.invokeMethod(
         'getKeyStore',
         <String, dynamic>{
           'coin': coin,
@@ -302,7 +294,6 @@ class Trustdart {
           'pk': pk,
         },
       );
-      return keyStoreJson;
     } catch (e) {
       debugPrint('Trustdart.getKeyStore: $e');
       return '';
@@ -316,7 +307,7 @@ class Trustdart {
     String passphrase,
   ) async {
     try {
-      final Map keyStoreJson = await _channel.invokeMethod(
+      return await _channel.invokeMethod(
         'getWalletInfoWithKeyStore',
         <String, dynamic>{
           'keyStore': keyStore,
@@ -324,7 +315,6 @@ class Trustdart {
           'passphrase': passphrase,
         },
       );
-      return keyStoreJson;
     } catch (e) {
       debugPrint('Trustdart.getWalletInfoWithKeyStore: $e');
       return {'address': '', 'privateKey': ''};
@@ -334,11 +324,10 @@ class Trustdart {
   // 返回 Solana token account
   Future<String> getPubKeySOL(String address, String mintAddress) async {
     try {
-      final String pubKey = await _channel.invokeMethod(
+      return await _channel.invokeMethod(
         'getPubKeySOL',
         <String, dynamic>{'address': address, 'mintAddress': mintAddress},
       );
-      return pubKey;
     } catch (e) {
       debugPrint('Trustdart.getPubKeySOL: $e');
       return '';
@@ -361,24 +350,16 @@ class Trustdart {
     }
   }
 
-  Future<MessageModel> liveActivityUpdate(int value) async {
-    try {
-      final String rData = await _channel.invokeMethod(
-        'LiveActivityUpdate',
-        <String, dynamic>{'value': value},
-      );
-      final MessageModel rmm = MessageModel();
-      if (rData != 'true') rmm.data = rData;
-      return rmm;
-    } catch (e) {
-      return MessageModel.error()..data = e.toString();
-    }
-  }
+  Future<MessageModel> liveActivityUpdate(int value) =>
+      _invokeLiveActivity('LiveActivityUpdate', value);
 
-  Future<MessageModel> liveActivityEnd(int value) async {
+  Future<MessageModel> liveActivityEnd(int value) =>
+      _invokeLiveActivity('LiveActivityEnd', value);
+
+  Future<MessageModel> _invokeLiveActivity(String method, int value) async {
     try {
       final String rData = await _channel.invokeMethod(
-        'LiveActivityEnd',
+        method,
         <String, dynamic>{'value': value},
       );
       final MessageModel rmm = MessageModel();
@@ -392,11 +373,10 @@ class Trustdart {
   // 获取权限（暂时只支持 iOS）
   Future<String> getPermissions(String pType) async {
     try {
-      final String rData = await _channel.invokeMethod(
+      return await _channel.invokeMethod(
         'Permissions',
         <String, dynamic>{'pName': pType},
       );
-      return rData;
     } catch (e) {
       debugPrint('Trustdart.getPermissions: $e');
       return '';
@@ -406,8 +386,8 @@ class Trustdart {
   // evm
   Future<Map<String, dynamic>?> evmEmit(Map<String, dynamic> params) async {
     try {
-      final String rData = await _channel.invokeMethod('EvmEmit', params);
-      return jsonDecode(rData);
+      final String raw = await _channel.invokeMethod('EvmEmit', params);
+      return jsonDecode(raw);
     } catch (e) {
       debugPrint('Trustdart.evmEmit: $e');
       return null;
@@ -415,52 +395,27 @@ class Trustdart {
   }
 
   // mining
-  Future<String?> miningGenerateBls12381Keypair() async {
-    try {
-      final String rData = await _channel.invokeMethod('MiningGenerateBls12381Keypair');
-      return rData;
-    } catch (e) {
-      debugPrint('Trustdart.miningGenerateBls12381Keypair: $e');
-      return null;
-    }
-  }
+  Future<String?> miningGenerateBls12381Keypair() =>
+      _invokeMining('MiningGenerateBls12381Keypair');
 
-  Future<String?> miningCreateDepositUnsignedTx(Map<String, dynamic> params) async {
-    try {
-      final String rData = await _channel.invokeMethod('MiningCreateDepositUnsignedTx', params);
-      return rData;
-    } catch (e) {
-      debugPrint('Trustdart.miningCreateDepositUnsignedTx: $e');
-      return null;
-    }
-  }
+  Future<String?> miningCreateDepositUnsignedTx(Map<String, dynamic> params) =>
+      _invokeMining('MiningCreateDepositUnsignedTx', params);
 
-  Future<String?> miningRunClient(Map<String, dynamic> params) async {
-    try {
-      final String rData = await _channel.invokeMethod('MiningRunClient', params);
-      return rData;
-    } catch (e) {
-      debugPrint('Trustdart.miningRunClient: $e');
-      return null;
-    }
-  }
+  Future<String?> miningRunClient(Map<String, dynamic> params) =>
+      _invokeMining('MiningRunClient', params);
 
-  Future<String?> miningCreateGetExitFeeUnsignedTx() async {
-    try {
-      final String rData = await _channel.invokeMethod('MiningCreateGetExitFeeUnsignedTx');
-      return rData;
-    } catch (e) {
-      debugPrint('Trustdart.miningCreateGetExitFeeUnsignedTx: $e');
-      return null;
-    }
-  }
+  Future<String?> miningCreateGetExitFeeUnsignedTx() =>
+      _invokeMining('MiningCreateGetExitFeeUnsignedTx');
 
-  Future<String?> miningCreateExitUnsignedTx(Map<String, dynamic> params) async {
+  Future<String?> miningCreateExitUnsignedTx(Map<String, dynamic> params) =>
+      _invokeMining('MiningCreateExitUnsignedTx', params);
+
+  /// 内部辅助：统一的 mining invokeMethod 调用模板（返回 String?）
+  Future<String?> _invokeMining(String method, [Map<String, dynamic>? params]) async {
     try {
-      final String rData = await _channel.invokeMethod('MiningCreateExitUnsignedTx', params);
-      return rData;
+      return await _channel.invokeMethod(method, params);
     } catch (e) {
-      debugPrint('Trustdart.miningCreateExitUnsignedTx: $e');
+      debugPrint('Trustdart.$method: $e');
       return null;
     }
   }

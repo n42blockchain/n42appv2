@@ -8,8 +8,6 @@ import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
-import 'package:n42_wallet/features/wallet/models/btc_transaction_recode_model.dart';
-import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
 import 'package:n42_wallet/features/wallet/pages/send/unified_send_page.dart';
 import 'package:n42_wallet/features/wallet/pages/transactions/transaction_detail_eth.dart';
 import 'package:n42_wallet/features/wallet/pages/transactions/transaction_history_list.dart';
@@ -18,7 +16,6 @@ import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_one.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_chain_info_actions.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_chain_info_sync.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_receive_qr.dart';
-import 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart';
 import 'package:n42_wallet/features/wallet/utils/browser/browser_address.dart';
 import 'package:n42_wallet/features/wallet/utils/browser/browser_token_address.dart';
 import 'package:n42_wallet/features/wallet/widgets/wallet_chain_info_board.dart';
@@ -108,9 +105,7 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
   @override
   Future<bool> ensureWalletBackedUp() async {
     final walletInfo = _walletProvider.walletInfo;
-    if (walletInfo.password != null && walletInfo.password!.isNotEmpty) {
-      return true;
-    }
+    if ((walletInfo.password ?? '').isNotEmpty) return true;
     final flag = await tipsDialog7(context);
     if (!mounted) return false;
     if (flag == true) {
@@ -348,11 +343,7 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
                         );
                       },
                     ),
-                    Divider(
-                      height: ScreenUtil().setWidth(1),
-                      endIndent: 0,
-                      indent: 0,
-                    ),
+                    Divider(height: ScreenUtil().setWidth(1)),
                     _buildTransactionHeader(),
                     _buildTransactionsWidget(),
                   ],
@@ -386,24 +377,14 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
               BlockchainType.Ethereum.name)
             InkWell(
               onTap: () async {
-                bool? r;
-                if (widget.coinModel.coin['coinType'] == CoinType.N.name) {
-                  r = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          TransactionRetry(widget.coinModel, ''),
-                    ),
-                  );
-                } else {
-                  r = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          TransactionDetailEth(widget.coinModel, ''),
-                    ),
-                  );
-                }
+                final isN42 = widget.coinModel.coin['coinType'] == CoinType.N.name;
+                final page = isN42
+                    ? TransactionRetry(widget.coinModel, '')
+                    : TransactionDetailEth(widget.coinModel, '');
+                final r = await Navigator.push<bool>(
+                  context,
+                  MaterialPageRoute(builder: (context) => page),
+                );
                 if (r == true) getTransactionData(Load.refresh);
               },
               child: Container(
@@ -461,24 +442,14 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
           );
         }
 
-        if (widget.coinModel.coin['blockchainType'] ==
-            BlockchainType.Bitcoin.name) {
-          final BtcTransactionRecodeModel trm = transactionList[index];
-          return WalletChainInfoTransactionsItem(
-            coinModel: widget.coinModel,
-            type: 0,
-            transactionModel: trm,
-            onBack: () => getTransactionData(Load.refresh),
-          );
-        } else {
-          final TransationRecordModel trm = transactionList[index];
-          return WalletChainInfoTransactionsItem(
-            coinModel: widget.coinModel,
-            type: 1,
-            transactionModel: trm,
-            onBack: () => getTransactionData(Load.refresh),
-          );
-        }
+        final isBtc = widget.coinModel.coin['blockchainType'] ==
+            BlockchainType.Bitcoin.name;
+        return WalletChainInfoTransactionsItem(
+          coinModel: widget.coinModel,
+          type: isBtc ? 0 : 1,
+          transactionModel: transactionList[index],
+          onBack: () => getTransactionData(Load.refresh),
+        );
       },
     );
   }

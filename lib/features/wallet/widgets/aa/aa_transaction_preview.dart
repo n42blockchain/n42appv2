@@ -33,10 +33,11 @@ class AATransactionPreviewData {
     this.batchOperations,
   });
 
+  static final BigInt _weiPerEth = BigInt.from(10).pow(18);
+
   String get formattedGasCost {
     if (estimatedGas == null || maxFeePerGas == null) return '~';
-    final cost = estimatedGas! * maxFeePerGas!;
-    final ethValue = cost / BigInt.from(10).pow(18);
+    final ethValue = (estimatedGas! * maxFeePerGas!) / _weiPerEth;
     return '${ethValue.toStringAsFixed(6)} ETH';
   }
 }
@@ -117,16 +118,14 @@ class AATransactionPreview extends StatelessWidget {
   }
 
   Widget _buildAmountSection(BuildContext context) {
+    final blueColor = AppThemeUtils.getColorByKey(
+      context, AppThemeKeys.mainBlueColor.name,
+    );
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [
-            AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
-                .withAlpha(20),
-            AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
-                .withAlpha(5),
-          ],
+          colors: [blueColor.withAlpha(20), blueColor.withAlpha(5)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -139,8 +138,7 @@ class AATransactionPreview extends StatelessWidget {
             style: TextStyle(
               fontSize: ScreenUtil().setSp(24),
               color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
+                context, AppThemeKeys.itemSubtitleTextColor.name,
               ),
             ),
           ),
@@ -155,8 +153,7 @@ class AATransactionPreview extends StatelessWidget {
                   fontSize: ScreenUtil().setSp(48),
                   fontWeight: FontWeight.bold,
                   color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainTextColor.name,
+                    context, AppThemeKeys.mainTextColor.name,
                   ),
                 ),
               ),
@@ -168,10 +165,7 @@ class AATransactionPreview extends StatelessWidget {
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(28),
                     fontWeight: FontWeight.w600,
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.mainBlueColor.name,
-                    ),
+                    color: blueColor,
                   ),
                 ),
               ),
@@ -270,19 +264,20 @@ class AATransactionPreview extends StatelessWidget {
   }
 
   Widget _buildGasSection(BuildContext context) {
+    final sponsored = data.isGasSponsored;
+    final subtitleColor = AppThemeUtils.getColorByKey(
+      context, AppThemeKeys.itemSubtitleTextColor.name,
+    );
+    final bgFallback = AppThemeUtils.getColorByKey(
+      context, AppThemeKeys.backGroundColor.name,
+    ).withAlpha(100);
+
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
       decoration: BoxDecoration(
-        color: data.isGasSponsored
-            ? Colors.green.withAlpha(20)
-            : AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.backGroundColor.name,
-              ).withAlpha(100),
+        color: sponsored ? Colors.green.withAlpha(20) : bgFallback,
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-        border: data.isGasSponsored
-            ? Border.all(color: Colors.green.withAlpha(40))
-            : null,
+        border: sponsored ? Border.all(color: Colors.green.withAlpha(40)) : null,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -292,27 +287,19 @@ class AATransactionPreview extends StatelessWidget {
               Icon(
                 Icons.local_gas_station,
                 size: ScreenUtil().setWidth(22),
-                color: data.isGasSponsored
-                    ? Colors.green
-                    : AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.itemSubtitleTextColor.name,
-                      ),
+                color: sponsored ? Colors.green : subtitleColor,
               ),
               SizedBox(width: ScreenUtil().setWidth(8)),
               Text(
                 S.of(context).g_key_t_17,
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(24),
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.itemSubtitleTextColor.name,
-                  ),
+                  color: subtitleColor,
                 ),
               ),
             ],
           ),
-          if (data.isGasSponsored)
+          if (sponsored)
             Row(
               children: [
                 Text(
@@ -320,10 +307,7 @@ class AATransactionPreview extends StatelessWidget {
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(24),
                     decoration: TextDecoration.lineThrough,
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.itemSubtitleTextColor.name,
-                    ),
+                    color: subtitleColor,
                   ),
                 ),
                 SizedBox(width: ScreenUtil().setWidth(8)),
@@ -344,8 +328,7 @@ class AATransactionPreview extends StatelessWidget {
                 fontSize: ScreenUtil().setSp(26),
                 fontWeight: FontWeight.w600,
                 color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainTextColor.name,
+                  context, AppThemeKeys.mainTextColor.name,
                 ),
               ),
             ),
@@ -355,12 +338,16 @@ class AATransactionPreview extends StatelessWidget {
   }
 
   Widget _buildBatchOperationsSection(BuildContext context) {
+    final blueColor = AppThemeUtils.getColorByKey(
+      context, AppThemeKeys.mainBlueColor.name,
+    );
+    final ops = data.batchOperations!;
+
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
       decoration: BoxDecoration(
         color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.backGroundColor.name,
+          context, AppThemeKeys.backGroundColor.name,
         ).withAlpha(100),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
       ),
@@ -368,19 +355,18 @@ class AATransactionPreview extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '${S.of(context).g_key_aa_batch_operations} (${data.batchOperations!.length})',
+            '${S.of(context).g_key_aa_batch_operations} (${ops.length})',
             style: TextStyle(
               fontSize: ScreenUtil().setSp(24),
               fontWeight: FontWeight.w600,
               color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainTextColor.name,
+                context, AppThemeKeys.mainTextColor.name,
               ),
             ),
           ),
           SizedBox(height: ScreenUtil().setWidth(8)),
-          ...data.batchOperations!.asMap().entries.map((entry) {
-            return Padding(
+          for (final (i, op) in ops.indexed)
+            Padding(
               padding: EdgeInsets.only(top: ScreenUtil().setWidth(6)),
               child: Row(
                 children: [
@@ -388,22 +374,16 @@ class AATransactionPreview extends StatelessWidget {
                     width: ScreenUtil().setWidth(24),
                     height: ScreenUtil().setWidth(24),
                     decoration: BoxDecoration(
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainBlueColor.name,
-                      ).withAlpha(20),
+                      color: blueColor.withAlpha(20),
                       borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
                     ),
                     child: Center(
                       child: Text(
-                        '${entry.key + 1}',
+                        '${i + 1}',
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(18),
                           fontWeight: FontWeight.bold,
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.mainBlueColor.name,
-                          ),
+                          color: blueColor,
                         ),
                       ),
                     ),
@@ -411,12 +391,11 @@ class AATransactionPreview extends StatelessWidget {
                   SizedBox(width: ScreenUtil().setWidth(10)),
                   Expanded(
                     child: Text(
-                      entry.value,
+                      op,
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(22),
                         color: AppThemeUtils.getColorByKey(
-                          context,
-                          AppThemeKeys.itemSubtitleTextColor.name,
+                          context, AppThemeKeys.itemSubtitleTextColor.name,
                         ),
                       ),
                       overflow: TextOverflow.ellipsis,
@@ -424,8 +403,7 @@ class AATransactionPreview extends StatelessWidget {
                   ),
                 ],
               ),
-            );
-          }),
+            ),
         ],
       ),
     );

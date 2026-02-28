@@ -72,16 +72,17 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
     }
   }
 
+  /// Check if two paymaster options match (same type and, for erc20, same token).
+  static bool _optionsMatch(PaymasterOption a, PaymasterOption b) {
+    if (a.type != b.type) return false;
+    return a.type != PaymasterType.erc20 || a.tokenSymbol == b.tokenSymbol;
+  }
+
   /// Find the matching option after a reload (preserves user selection).
   PaymasterOption? _findMatchingOption(
       List<PaymasterOption> options, PaymasterOption current) {
     for (final o in options) {
-      if (o.type != current.type) continue;
-      if (o.type == PaymasterType.erc20) {
-        if (o.tokenSymbol == current.tokenSymbol) return o;
-      } else {
-        return o;
-      }
+      if (_optionsMatch(o, current)) return o;
     }
     return null;
   }
@@ -200,7 +201,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
               ),
               const Spacer(),
               // Supported chain chips
-              _buildChainChips(supportedChains),
+              _buildChainChips(supportedChains, blueColor),
             ],
           ),
         ],
@@ -208,9 +209,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
     );
   }
 
-  Widget _buildChainChips(List<String> chains) {
-    final blueColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainBlueColor.name);
+  Widget _buildChainChips(List<String> chains, Color blueColor) {
     final currentSymbol = _resolvedSymbol.toUpperCase();
 
     return Row(
@@ -320,11 +319,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
   }
 
   bool _isOptionSelected(PaymasterOption option) {
-    if (option.type != _selectedOption.type) return false;
-    if (option.type == PaymasterType.erc20) {
-      return option.tokenSymbol == _selectedOption.tokenSymbol;
-    }
-    return true;
+    return _optionsMatch(option, _selectedOption);
   }
 
   // ── Confirm button ────────────────────────────────────────────────────────

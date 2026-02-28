@@ -21,21 +21,26 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
 
   // ── Section builders ───────────────────────────────────────────────────────
 
+  /// Shared section title style used by label, chain, and type selectors.
+  Widget _buildSectionTitle(String title) {
+    return Text(
+      title,
+      style: TextStyle(
+        fontSize: ScreenUtil().setSp(26),
+        fontWeight: FontWeight.w600,
+        color: AppThemeUtils.getColorByKey(
+          context,
+          AppThemeKeys.mainTextColor.name,
+        ),
+      ),
+    );
+  }
+
   Widget _buildLabelInput() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          S.of(context).g_key_aa_account_name,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(26),
-            fontWeight: FontWeight.w600,
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainTextColor.name,
-            ),
-          ),
-        ),
+        _buildSectionTitle(S.of(context).g_key_aa_account_name),
         SizedBox(height: ScreenUtil().setWidth(12)),
         TextField(
           controller: labelController,
@@ -62,18 +67,8 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          // Bug 2 fix: was g_key_17 (wrong key), now g_key_aa_select_chain
-          S.of(context).g_key_aa_select_chain,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(26),
-            fontWeight: FontWeight.w600,
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainTextColor.name,
-            ),
-          ),
-        ),
+        // Bug 2 fix: was g_key_17 (wrong key), now g_key_aa_select_chain
+        _buildSectionTitle(S.of(context).g_key_aa_select_chain),
         SizedBox(height: ScreenUtil().setWidth(12)),
         Wrap(
           spacing: ScreenUtil().setWidth(12),
@@ -145,17 +140,7 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          S.of(context).g_key_aa_account_type,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(26),
-            fontWeight: FontWeight.w600,
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainTextColor.name,
-            ),
-          ),
-        ),
+        _buildSectionTitle(S.of(context).g_key_aa_account_type),
         SizedBox(height: ScreenUtil().setWidth(12)),
         ...types.map((type) => _buildTypeOption(type)),
       ],
@@ -168,6 +153,7 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
     final isAvailable = type == SmartAccountType.simpleAccount ||
         type == SmartAccountType.safe ||
         type == SmartAccountType.biconomy;
+    final typeColor = _getTypeColor(type);
 
     return GestureDetector(
       onTap: isAvailable
@@ -179,7 +165,7 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
         padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
         decoration: BoxDecoration(
           color: isSelected
-              ? _getTypeColor(type).withAlpha(15)
+              ? typeColor.withAlpha(15)
               : AppThemeUtils.getColorByKey(
                   context,
                   AppThemeKeys.itemBgColor.name,
@@ -187,7 +173,7 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
           border: Border.all(
             color: isSelected
-                ? _getTypeColor(type)
+                ? typeColor
                 : AppThemeUtils.getColorByKey(
                     context,
                     AppThemeKeys.itemSubtitleTextColor.name,
@@ -203,14 +189,14 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
                 width: ScreenUtil().setWidth(44),
                 height: ScreenUtil().setWidth(44),
                 decoration: BoxDecoration(
-                  color: _getTypeColor(type).withAlpha(25),
+                  color: typeColor.withAlpha(25),
                   borderRadius:
                       BorderRadius.circular(ScreenUtil().setWidth(12)),
                 ),
                 child: Icon(
                   _getTypeIcon(type),
                   size: ScreenUtil().setWidth(24),
-                  color: _getTypeColor(type),
+                  color: typeColor,
                 ),
               ),
               SizedBox(width: ScreenUtil().setWidth(14)),
@@ -272,7 +258,7 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
                 Icon(
                   Icons.check_circle,
                   size: ScreenUtil().setWidth(28),
-                  color: _getTypeColor(type),
+                  color: typeColor,
                 ),
             ],
           ),
@@ -416,7 +402,7 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
       );
     }
 
-    return const SizedBox();
+    return const SizedBox.shrink();
   }
 
   Widget _buildInfoSection() {

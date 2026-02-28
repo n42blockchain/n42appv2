@@ -54,10 +54,9 @@ class RewardsPage extends StatelessWidget {
     }
 
     // 分组奖励
-    final affordableRewards =
-        rewards.where((r) => r.canRedeem && r.pointsCost <= availablePoints).toList();
-    final otherRewards =
-        rewards.where((r) => !affordableRewards.contains(r)).toList();
+    bool isAffordable(Reward r) => r.canRedeem && r.pointsCost <= availablePoints;
+    final affordableRewards = rewards.where(isAffordable).toList();
+    final otherRewards = rewards.where((r) => !isAffordable(r)).toList();
 
     return ListView(
       padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
@@ -257,32 +256,7 @@ class RewardsPage extends StatelessWidget {
                 // 过期时间
                 if (reward.expiresAt != null) ...[
                   SizedBox(height: ScreenUtil().setWidth(8)),
-                  Builder(builder: (_) {
-                    final expiringSoon = _isExpiringSoon(reward.expiresAt!);
-                    final expiryColor = expiringSoon
-                        ? Colors.orange
-                        : AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.itemSubtitleTextColor.name,
-                          );
-                    return Row(
-                      children: [
-                        Icon(
-                          Icons.access_time,
-                          size: ScreenUtil().setWidth(20),
-                          color: expiryColor,
-                        ),
-                        SizedBox(width: ScreenUtil().setWidth(4)),
-                        Text(
-                          'Expires ${_getExpiryText(reward.expiresAt!)}',
-                          style: TextStyle(
-                            fontSize: ScreenUtil().setSp(22),
-                            color: expiryColor,
-                          ),
-                        ),
-                      ],
-                    );
-                  }),
+                  _buildExpiryRow(context, reward.expiresAt!),
                 ],
 
                 // 兑换按钮
@@ -407,23 +381,40 @@ class RewardsPage extends StatelessWidget {
     return 'Redeem';
   }
 
-  String _getExpiryText(DateTime expiresAt) {
-    final now = DateTime.now();
-    final diff = expiresAt.difference(now);
-
+  Widget _buildExpiryRow(BuildContext context, DateTime expiresAt) {
+    final diff = expiresAt.difference(DateTime.now());
+    final expiringSoon = diff.inDays <= 3;
+    final expiryColor = expiringSoon
+        ? Colors.orange
+        : AppThemeUtils.getColorByKey(
+            context,
+            AppThemeKeys.itemSubtitleTextColor.name,
+          );
+    String expiryText;
     if (diff.isNegative) {
-      return 'Expired';
+      expiryText = 'Expired';
     } else if (diff.inHours < 24) {
-      return 'in ${diff.inHours}h';
+      expiryText = 'in ${diff.inHours}h';
     } else {
-      return 'in ${diff.inDays}d';
+      expiryText = 'in ${diff.inDays}d';
     }
-  }
-
-  bool _isExpiringSoon(DateTime expiresAt) {
-    final now = DateTime.now();
-    final diff = expiresAt.difference(now);
-    return diff.inDays <= 3;
+    return Row(
+      children: [
+        Icon(
+          Icons.access_time,
+          size: ScreenUtil().setWidth(20),
+          color: expiryColor,
+        ),
+        SizedBox(width: ScreenUtil().setWidth(4)),
+        Text(
+          'Expires $expiryText',
+          style: TextStyle(
+            fontSize: ScreenUtil().setSp(22),
+            color: expiryColor,
+          ),
+        ),
+      ],
+    );
   }
 
   void _handleRedeem(BuildContext context, Reward reward) async {

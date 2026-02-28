@@ -106,6 +106,9 @@ class EnsSearchResultView extends StatelessWidget {
   Widget _buildSuggestions(BuildContext context) {
     // Web3 / N42 ecosystem oriented suggestions as search starters
     final suggestions = ['n42user', 'web3', 'builder', 'trader', 'hodler', 'degen'];
+    final blueColor = AppThemeUtils.getColorByKey(
+      context, AppThemeKeys.mainBlueColor.name,
+    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,8 +119,7 @@ class EnsSearchResultView extends StatelessWidget {
             fontSize: ScreenUtil().setSp(26),
             fontWeight: FontWeight.w600,
             color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainTextColor.name,
+              context, AppThemeKeys.mainTextColor.name,
             ),
           ),
         ),
@@ -135,25 +137,16 @@ class EnsSearchResultView extends StatelessWidget {
                 ),
                 decoration: BoxDecoration(
                   color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.itemBgColor.name,
+                    context, AppThemeKeys.itemBgColor.name,
                   ),
                   borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
-                  border: Border.all(
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.mainBlueColor.name,
-                    ).withAlpha(30),
-                  ),
+                  border: Border.all(color: blueColor.withAlpha(30)),
                 ),
                 child: Text(
                   '$name.eth',
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(24),
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.mainBlueColor.name,
-                    ),
+                    color: blueColor,
                   ),
                 ),
               ),
@@ -288,21 +281,20 @@ class EnsSearchResultView extends StatelessWidget {
   }
 
   Widget _buildAvailabilityCard(BuildContext context, {required bool isAvailable}) {
+    final statusColor = isAvailable ? Colors.green : Colors.red;
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
       decoration: BoxDecoration(
-        color: isAvailable ? Colors.green.withAlpha(20) : Colors.red.withAlpha(20),
+        color: statusColor.withAlpha(20),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-        border: Border.all(
-          color: isAvailable ? Colors.green.withAlpha(50) : Colors.red.withAlpha(50),
-        ),
+        border: Border.all(color: statusColor.withAlpha(50)),
       ),
       child: Row(
         children: [
           Icon(
             isAvailable ? Icons.check_circle : Icons.cancel,
             size: ScreenUtil().setWidth(48),
-            color: isAvailable ? Colors.green : Colors.red,
+            color: statusColor,
           ),
           SizedBox(width: ScreenUtil().setWidth(16)),
           Expanded(
@@ -315,8 +307,7 @@ class EnsSearchResultView extends StatelessWidget {
                     fontSize: ScreenUtil().setSp(32),
                     fontWeight: FontWeight.bold,
                     color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.mainTextColor.name,
+                      context, AppThemeKeys.mainTextColor.name,
                     ),
                   ),
                 ),
@@ -327,7 +318,7 @@ class EnsSearchResultView extends StatelessWidget {
                       : S.of(context).g_key_ens_unavailable,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(26),
-                    color: isAvailable ? Colors.green : Colors.red,
+                    color: statusColor,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -398,6 +389,20 @@ class EnsSearchResultView extends StatelessWidget {
   }
 
   Widget _buildYearsSelector(BuildContext context) {
+    final blueColor = AppThemeUtils.getColorByKey(
+      context, AppThemeKeys.mainBlueColor.name,
+    );
+    final itemBgColor = AppThemeUtils.getColorByKey(
+      context, AppThemeKeys.itemBgColor.name,
+    );
+    final subtitleColor = AppThemeUtils.getColorByKey(
+      context, AppThemeKeys.itemSubtitleTextColor.name,
+    );
+    final mainTextColor = AppThemeUtils.getColorByKey(
+      context, AppThemeKeys.mainTextColor.name,
+    );
+    final yearOptions = [1, 2, 3, 5];
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -406,69 +411,66 @@ class EnsSearchResultView extends StatelessWidget {
           style: TextStyle(
             fontSize: ScreenUtil().setSp(26),
             fontWeight: FontWeight.w600,
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainTextColor.name,
-            ),
+            color: mainTextColor,
           ),
         ),
         SizedBox(height: ScreenUtil().setWidth(12)),
         Row(
-          children: [1, 2, 3, 5].map((years) {
-            final isSelected = selectedYears == years;
-            return Expanded(
-              child: GestureDetector(
-                onTap: () => onYearsChanged(years),
-                child: Container(
-                  margin: EdgeInsets.only(
-                    right: years != 5 ? ScreenUtil().setWidth(12) : 0,
-                  ),
-                  padding: EdgeInsets.symmetric(
-                    vertical: ScreenUtil().setWidth(14),
-                  ),
-                  decoration: BoxDecoration(
-                    color: isSelected
-                        ? AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.mainBlueColor.name,
-                          )
-                        : AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.itemBgColor.name,
-                          ),
-                    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-                    border: Border.all(
-                      color: isSelected
-                          ? AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.mainBlueColor.name,
-                            )
-                          : AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.itemSubtitleTextColor.name,
-                            ).withAlpha(50),
-                    ),
-                  ),
-                  child: Text(
-                    '$years ${years == 1 ? S.of(context).g_key_ens_year : S.of(context).g_key_ens_years}',
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(24),
-                      fontWeight: FontWeight.w600,
-                      color: isSelected
-                          ? Colors.white
-                          : AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.mainTextColor.name,
-                            ),
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
+          children: [
+            for (var i = 0; i < yearOptions.length; i++) ...[
+              Expanded(
+                child: _buildYearChip(
+                  context,
+                  years: yearOptions[i],
+                  isSelected: selectedYears == yearOptions[i],
+                  isLast: i == yearOptions.length - 1,
+                  blueColor: blueColor,
+                  itemBgColor: itemBgColor,
+                  subtitleColor: subtitleColor,
+                  mainTextColor: mainTextColor,
                 ),
               ),
-            );
-          }).toList(),
+            ],
+          ],
         ),
       ],
+    );
+  }
+
+  Widget _buildYearChip(
+    BuildContext context, {
+    required int years,
+    required bool isSelected,
+    required bool isLast,
+    required Color blueColor,
+    required Color itemBgColor,
+    required Color subtitleColor,
+    required Color mainTextColor,
+  }) {
+    return GestureDetector(
+      onTap: () => onYearsChanged(years),
+      child: Container(
+        margin: EdgeInsets.only(
+          right: isLast ? 0 : ScreenUtil().setWidth(12),
+        ),
+        padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(14)),
+        decoration: BoxDecoration(
+          color: isSelected ? blueColor : itemBgColor,
+          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+          border: Border.all(
+            color: isSelected ? blueColor : subtitleColor.withAlpha(50),
+          ),
+        ),
+        child: Text(
+          '$years ${years == 1 ? S.of(context).g_key_ens_year : S.of(context).g_key_ens_years}',
+          style: TextStyle(
+            fontSize: ScreenUtil().setSp(24),
+            fontWeight: FontWeight.w600,
+            color: isSelected ? Colors.white : mainTextColor,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ),
     );
   }
 

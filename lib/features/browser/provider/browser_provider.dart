@@ -353,22 +353,11 @@ class BrowserProvider extends ChangeNotifier {
     return true;
   }
   String checkHttp(String url) {
-    String returnUrl="";
-    bool isHttp=isURL(url,);
-    if(isHttp){
-      int httpIndex=url.indexOf("https://",0);
-      if(httpIndex!=0 ){
-        httpIndex=url.indexOf("http://",0);
-      }
-      if(httpIndex!=0){
-        returnUrl='https://$url';
-      }else{
-        returnUrl=url;
-      }
-    }else{
-      returnUrl="https://www.google.com/search?q=${Uri.encodeQueryComponent(url)}";
+    if (!isURL(url)) {
+      return "https://www.google.com/search?q=${Uri.encodeQueryComponent(url)}";
     }
-    return returnUrl;
+    final hasScheme = url.startsWith("https://") || url.startsWith("http://");
+    return hasScheme ? url : 'https://$url';
   }
   //删除收藏url
   Future<void> deleteBrowserCollectionUrl()async{
