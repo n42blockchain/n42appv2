@@ -127,17 +127,13 @@ class SwapAstCheckWidget extends StatelessWidget {
             child: SizedBox(
               height: ScreenUtil().setWidth(60),
               width: ScreenUtil().setWidth(60),
-              child: readStatement
-                  ? Icon(
-                      Icons.check_box_outlined,
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainBlueColor.name),
-                    )
-                  : Icon(
-                      Icons.check_box_outline_blank,
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.dividerColor.name),
-                    ),
+              child: Icon(
+                readStatement ? Icons.check_box_outlined : Icons.check_box_outline_blank,
+                color: AppThemeUtils.getColorByKey(
+                  context,
+                  readStatement ? AppThemeKeys.mainBlueColor.name : AppThemeKeys.dividerColor.name,
+                ),
+              ),
             ),
           ),
           SizedBox(
@@ -196,11 +192,10 @@ class SwapAstPreviewButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color backgroundColor = load == Load.loading
-        ? AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainButtonBgColor3.name)
-        : AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainButtonBgColor.name);
+    final isLoading = load == Load.loading;
+    final bgColorKey = isLoading
+        ? AppThemeKeys.mainButtonBgColor3.name
+        : AppThemeKeys.mainButtonBgColor.name;
 
     return Positioned(
       left: 0,
@@ -216,10 +211,10 @@ class SwapAstPreviewButton extends StatelessWidget {
                 context,
                 onPreview,
                 S.of(context).g_swap_key_5,
-                backgroundColor,
+                AppThemeUtils.getColorByKey(context, bgColorKey),
                 AppThemeUtils.getColorByKey(
                     context, AppThemeKeys.mainButtonTextColor.name),
-                load == Load.loading,
+                isLoading,
               ),
       ),
     );

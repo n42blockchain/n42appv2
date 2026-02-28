@@ -25,10 +25,6 @@ mixin _TransactionHistoryLogicMixin on State<TransactionHistoryList> {
         widget.coinModel.coin['blockchainType'] == BlockchainType.Bitcoin.name;
   }
 
-  // -------------------------------------------------------------------------
-  // Data loading
-  // -------------------------------------------------------------------------
-
   Future<void> loadAll() async {
     if (!mounted) return;
     setState(() => isLoading = true);
@@ -69,10 +65,6 @@ mixin _TransactionHistoryLogicMixin on State<TransactionHistoryList> {
       if (mounted) setState(() => isLoading = false);
     }
   }
-
-  // -------------------------------------------------------------------------
-  // Filter logic
-  // -------------------------------------------------------------------------
 
   List<dynamic> _applyFilter(List<dynamic> records) {
     if (!filter.isActive) return records;
@@ -130,10 +122,6 @@ mixin _TransactionHistoryLogicMixin on State<TransactionHistoryList> {
     return ts < 1000000000000 ? ts * 1000 : ts;
   }
 
-  // -------------------------------------------------------------------------
-  // CSV export
-  // -------------------------------------------------------------------------
-
   Future<void> exportCsv() async {
     setState(() => isExporting = true);
     try {
@@ -152,33 +140,27 @@ mixin _TransactionHistoryLogicMixin on State<TransactionHistoryList> {
         final bool isSent;
         final String fromAddr;
         final String toAddr;
-        final double amount;
-        final String token;
-        final int state;
-        final String txHash;
 
         if (tx is BtcTransactionRecodeModel) {
           isSent = tx.inputsAddressList
               .any((a) => a.toUpperCase() == addr.toUpperCase());
           fromAddr = addr;
           toAddr = tx.to1;
-          amount = tx.priceDouble();
-          token =
-              (tx.coin['unit'] as String? ?? tx.coinMiniName).toUpperCase();
-          state = tx.state;
-          txHash = tx.txHash;
         } else if (tx is TransationRecordModel) {
           isSent = tx.from1.toLowerCase() == addr.toLowerCase();
           fromAddr = tx.from1;
           toAddr = tx.to1;
-          amount = tx.priceDouble();
-          token =
-              (tx.coin['unit'] as String? ?? tx.coinMiniName).toUpperCase();
-          state = tx.state;
-          txHash = tx.txHash;
         } else {
           continue;
         }
+
+        final amount = (tx as dynamic).priceDouble() as double;
+        final coin = (tx as dynamic).coin as Map<String, dynamic>;
+        final token =
+            (coin['unit'] as String? ?? (tx as dynamic).coinMiniName as String)
+                .toUpperCase();
+        final int state = (tx as dynamic).state as int;
+        final String txHash = (tx as dynamic).txHash as String;
 
         final direction = isSent ? 'Send' : 'Receive';
         final status = _statusStr(state);
@@ -216,16 +198,10 @@ mixin _TransactionHistoryLogicMixin on State<TransactionHistoryList> {
     return s;
   }
 
-  String _statusStr(int state) {
-    switch (state) {
-      case 0:
-        return 'Pending';
-      case 1:
-        return 'Success';
-      case 2:
-        return 'Failed';
-      default:
-        return 'Unknown';
-    }
-  }
+  String _statusStr(int state) => switch (state) {
+        0 => 'Pending',
+        1 => 'Success',
+        2 => 'Failed',
+        _ => 'Unknown',
+      };
 }

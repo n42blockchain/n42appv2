@@ -10,7 +10,7 @@ import 'package:n42_wallet/generated/l10n.dart';
 class BackupOne extends StatefulWidget {
   final WalletInfo walletInfo;
   final int walletIndex;
-  const BackupOne(this.walletInfo,this.walletIndex,{super.key});
+  const BackupOne(this.walletInfo, this.walletIndex, {super.key});
 
   @override
   State<BackupOne> createState() => _BackupOneState();
@@ -75,7 +75,7 @@ class _BackupOneState extends State<BackupOne> {
                       topMargin: ScreenUtil().setWidth(40),
                     ),
                     _buildWarningRow(context, S.of(context).g_key_wallet_c42),
-                    SizedBox(height: ScreenUtil().setWidth(148.0),),
+                    SizedBox(height: ScreenUtil().setWidth(148.0)),
                   ],
                 ),
               ),
@@ -86,30 +86,35 @@ class _BackupOneState extends State<BackupOne> {
               right: 0,
               child: Column(
                 children: [
-                  Divider(height: 1),
+                  const Divider(height: 1),
                   Container(
                     padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
                     color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
                     height: ScreenUtil().setWidth(148),
                     child: buttonStyle6(
                       context,
-                          (){
-                        if(showMnemonic){
-                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>BackupTwo(widget.walletInfo,widget.walletIndex)));
+                      () {
+                        if (showMnemonic) {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => BackupTwo(widget.walletInfo, widget.walletIndex),
+                            ),
+                          );
                         }
                       },
                       S.of(context).g_key_wallet_c43,
                       AppThemeUtils.getColorByKey(
                         context,
-                        showMnemonic?
-                        AppThemeKeys.mainButtonBgColor.name:
-                        AppThemeKeys.mainButtonBgColor3.name,
+                        showMnemonic
+                            ? AppThemeKeys.mainButtonBgColor.name
+                            : AppThemeKeys.mainButtonBgColor3.name,
                       ),
                       AppThemeUtils.getColorByKey(
-                          context,
-                          showMnemonic?
-                          AppThemeKeys.mainButtonTextColor.name:
-                          AppThemeKeys.mainButtonTextColor3.name
+                        context,
+                        showMnemonic
+                            ? AppThemeKeys.mainButtonTextColor.name
+                            : AppThemeKeys.mainButtonTextColor3.name,
                       ),
                       false,
                     ),

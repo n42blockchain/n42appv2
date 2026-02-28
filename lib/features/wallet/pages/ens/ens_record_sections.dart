@@ -8,10 +8,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 
-// ─────────────────────────────────────────────────────────────────────────────
-// 解析地址 Section
-// ─────────────────────────────────────────────────────────────────────────────
-
 /// 解析地址编辑区块
 class EnsAddressSection extends StatelessWidget {
   final TextEditingController controller;
@@ -69,10 +65,6 @@ class EnsAddressSection extends StatelessWidget {
     );
   }
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// 文本记录 Section
-// ─────────────────────────────────────────────────────────────────────────────
 
 /// 文本记录编辑区块
 class EnsTextRecordsSection extends StatelessWidget {
@@ -136,52 +128,28 @@ class _RecordField extends StatelessWidget {
     );
   }
 
-  static String _labelFor(String key) {
-    switch (key) {
-      case 'email':
-        return 'Email';
-      case 'url':
-        return 'Website';
-      case 'com.twitter':
-        return 'Twitter / X';
-      case 'com.github':
-        return 'GitHub';
-      case 'com.discord':
-        return 'Discord';
-      case 'org.telegram':
-        return 'Telegram';
-      case 'description':
-        return 'Description';
-      default:
-        return key;
-    }
-  }
+  static String _labelFor(String key) => switch (key) {
+        'email' => 'Email',
+        'url' => 'Website',
+        'com.twitter' => 'Twitter / X',
+        'com.github' => 'GitHub',
+        'com.discord' => 'Discord',
+        'org.telegram' => 'Telegram',
+        'description' => 'Description',
+        _ => key,
+      };
 
-  static IconData _iconFor(String key) {
-    switch (key) {
-      case 'email':
-        return Icons.email_outlined;
-      case 'url':
-        return Icons.link;
-      case 'com.twitter':
-        return Icons.alternate_email;
-      case 'com.github':
-        return Icons.code;
-      case 'com.discord':
-        return Icons.chat_bubble_outline;
-      case 'org.telegram':
-        return Icons.send_outlined;
-      case 'description':
-        return Icons.description_outlined;
-      default:
-        return Icons.text_fields;
-    }
-  }
+  static IconData _iconFor(String key) => switch (key) {
+        'email' => Icons.email_outlined,
+        'url' => Icons.link,
+        'com.twitter' => Icons.alternate_email,
+        'com.github' => Icons.code,
+        'com.discord' => Icons.chat_bubble_outline,
+        'org.telegram' => Icons.send_outlined,
+        'description' => Icons.description_outlined,
+        _ => Icons.text_fields,
+      };
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// 共享内部 widgets
-// ─────────────────────────────────────────────────────────────────────────────
 
 class _SectionCard extends StatelessWidget {
   final Widget child;

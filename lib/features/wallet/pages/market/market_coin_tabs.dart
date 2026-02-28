@@ -5,8 +5,6 @@
 
 part of 'market_page.dart';
 
-// ─── Trending Tab ────────────────────────────────────────────────────────────
-
 class _TrendingTab extends StatelessWidget {
   final List<Map<String, dynamic>> coins;
   final bool loading;
@@ -62,8 +60,6 @@ class _TrendingTab extends StatelessWidget {
     );
   }
 }
-
-// ─── Search Tab ──────────────────────────────────────────────────────────────
 
 class _SearchTab extends StatelessWidget {
   final TextEditingController controller;
@@ -170,8 +166,6 @@ class _SearchTab extends StatelessWidget {
     );
   }
 }
-
-// ─── Watchlist Tab ───────────────────────────────────────────────────────────
 
 class _WatchlistTab extends StatelessWidget {
   final List<Map<String, dynamic>> coins;
