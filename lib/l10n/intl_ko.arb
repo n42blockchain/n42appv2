@@ -1698,7 +1698,7 @@
     }
   },
   "g_setting_mining_version": "채굴 인터페이스",
-  "g_setting_mining_v2_label": "클라우드 채굴 (V2)",
+  "g_setting_mining_v2_label": "채굴 (V2)",
   "g_setting_mining_v1_label": "클래식 채굴 (V1)",
   "g_mining_node_key1": "풀 노드 상세",
   "g_mining_node_key2": "노드 ID",

@@ -3535,7 +3535,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Классический майнинг (V1)",
     ),
     "g_setting_mining_v2_label": MessageLookupByLibrary.simpleMessage(
-      "Облачный майнинг (V2)",
+      "Майнинг (V2)",
     ),
     "g_setting_mining_version": MessageLookupByLibrary.simpleMessage(
       "Интерфейс майнинга",

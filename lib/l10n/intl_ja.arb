@@ -1655,7 +1655,7 @@
     }
   },
   "g_setting_mining_version": "マイニング画面",
-  "g_setting_mining_v2_label": "クラウドマイニング (V2)",
+  "g_setting_mining_v2_label": "マイニング (V2)",
   "g_setting_mining_v1_label": "クラシックマイニング (V1)",
   "g_mining_node_key1": "フルノード詳細",
   "g_mining_node_key2": "ノード ID",

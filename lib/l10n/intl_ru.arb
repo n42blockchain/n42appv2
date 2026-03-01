@@ -1655,7 +1655,7 @@
     }
   },
   "g_setting_mining_version": "Интерфейс майнинга",
-  "g_setting_mining_v2_label": "Облачный майнинг (V2)",
+  "g_setting_mining_v2_label": "Майнинг (V2)",
   "g_setting_mining_v1_label": "Классический майнинг (V1)",
   "g_mining_node_key1": "Детали Полного Узла",
   "g_mining_node_key2": "ID узла",

@@ -3433,7 +3433,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Khai thác cổ điển (V1)",
     ),
     "g_setting_mining_v2_label": MessageLookupByLibrary.simpleMessage(
-      "Khai thác đám mây (V2)",
+      "Khai thác (V2)",
     ),
     "g_setting_mining_version": MessageLookupByLibrary.simpleMessage(
       "Giao diện khai thác",

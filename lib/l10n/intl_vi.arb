@@ -1655,7 +1655,7 @@
     }
   },
   "g_setting_mining_version": "Giao diện khai thác",
-  "g_setting_mining_v2_label": "Khai thác đám mây (V2)",
+  "g_setting_mining_v2_label": "Khai thác (V2)",
   "g_setting_mining_v1_label": "Khai thác cổ điển (V1)",
   "g_mining_node_key1": "Chi tiết Nút đầy đủ",
   "g_mining_node_key2": "ID Nút",

@@ -14834,10 +14834,10 @@ class S {
     );
   }
 
-  /// `Cloud Mining (V2)`
+  /// `Mining (V2)`
   String get g_setting_mining_v2_label {
     return Intl.message(
-      'Cloud Mining (V2)',
+      'Mining (V2)',
       name: 'g_setting_mining_v2_label',
       desc: '',
       args: [],

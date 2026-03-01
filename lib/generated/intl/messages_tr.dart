@@ -3447,7 +3447,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Klasik Madencilik (V1)",
     ),
     "g_setting_mining_v2_label": MessageLookupByLibrary.simpleMessage(
-      "Bulut Madenciliği (V2)",
+      "Madencilik (V2)",
     ),
     "g_setting_mining_version": MessageLookupByLibrary.simpleMessage(
       "Madencilik Arayüzü",

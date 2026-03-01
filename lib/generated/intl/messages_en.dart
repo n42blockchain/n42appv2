@@ -3639,7 +3639,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Classic Mining (V1)",
     ),
     "g_setting_mining_v2_label": MessageLookupByLibrary.simpleMessage(
-      "Cloud Mining (V2)",
+      "Mining (V2)",
     ),
     "g_setting_mining_version": MessageLookupByLibrary.simpleMessage(
       "Mining Interface",

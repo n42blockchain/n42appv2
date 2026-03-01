@@ -1655,7 +1655,7 @@
     }
   },
   "g_setting_mining_version": "Madencilik Arayüzü",
-  "g_setting_mining_v2_label": "Bulut Madenciliği (V2)",
+  "g_setting_mining_v2_label": "Madencilik (V2)",
   "g_setting_mining_v1_label": "Klasik Madencilik (V1)",
   "g_mining_node_key1": "Tam Düğüm Detayı",
   "g_mining_node_key2": "Düğüm ID",

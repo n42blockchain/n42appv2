@@ -41,44 +41,36 @@ class _AppHomeTopBarState extends ConsumerState<AppHomeTopBar> {
 
     return Container(
       color: Colors.transparent,
-      padding: EdgeInsets.symmetric(horizontal: isWide ? 16.0 : ScreenUtil().setWidth(30.0)),
+      padding: EdgeInsets.symmetric(horizontal: isWide ? 16.0 : 8.0),
       height: isWide ? 56.0 : ScreenUtil().setWidth(110.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          _buildLeftWidget(userInfo?.image, messageNotReadCount),
           Expanded(
-            child: _buildLeftWidget(userInfo?.image, messageNotReadCount),
-          ),
-          if(widget.titleChild ==null)
-            Center(
-              child: widget.isText
+            child: Center(
+              child: widget.titleChild ?? (widget.isText
                   ? Text(
-                widget.title ?? '',
-                style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
-                  fontSize: ScreenUtil().setSp(32.0),
-                ),
-              )
+                      widget.title ?? '',
+                      style: TextStyle(
+                        color: AppThemeUtils.getColorByKey(
+                            context, AppThemeKeys.mainTextColor.name),
+                        fontSize: ScreenUtil().setSp(32.0),
+                      ),
+                    )
                   : Image.asset(
-                'assets/images/ast_nft.png',
-                width: ScreenUtil().setWidth(64.0) ,// 375 * MediaQuery.of(context).size.width,
-                height: ScreenUtil().setWidth(64.0) ,// 375 * MediaQuery.of(context).size.width,
-                fit: BoxFit.cover,
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
-              ),
+                      'assets/images/ast_nft.png',
+                      width: ScreenUtil().setWidth(64.0),
+                      height: ScreenUtil().setWidth(64.0),
+                      fit: BoxFit.cover,
+                      color: AppThemeUtils.getColorByKey(
+                          context, AppThemeKeys.mainTextColor.name),
+                    )),
             ),
-          if(widget.titleChild !=null)
-            Center(
-              child: widget.titleChild,
-            ),
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: widget.actions ?? [],
-            ),
-          )
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: widget.actions ?? [],
+          ),
         ],
       ),
     );
@@ -113,7 +105,7 @@ class _AppHomeTopBarState extends ConsumerState<AppHomeTopBar> {
         child: Container(
           width: ScreenUtil().setWidth(80.0),
           height: ScreenUtil().setWidth(80.0),
-          alignment: Alignment.center,
+          alignment: Alignment.centerLeft,
           child: Image.asset(
             widget.onLeftImageUri ?? "",
             width: ScreenUtil().setWidth(44),

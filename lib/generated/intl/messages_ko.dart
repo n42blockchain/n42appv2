@@ -3074,7 +3074,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "클래식 채굴 (V1)",
     ),
     "g_setting_mining_v2_label": MessageLookupByLibrary.simpleMessage(
-      "클라우드 채굴 (V2)",
+      "채굴 (V2)",
     ),
     "g_setting_mining_version": MessageLookupByLibrary.simpleMessage(
       "채굴 인터페이스",
