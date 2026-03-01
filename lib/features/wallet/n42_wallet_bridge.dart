@@ -250,6 +250,30 @@ class N42WalletBridge implements IWalletBridge {
     return BigInt.tryParse(raw) ?? BigInt.zero;
   }
 
+  @override
+  Future<String?> getErc721TokenUri({
+    required String contractAddress,
+    required int tokenId,
+    required int chainId,
+  }) async {
+    try {
+      final address = walletAddress;
+      if (address == null) return null;
+
+      // 通过 TokenViewApi 查询 NFT tokenURI
+      final result = await _tokenViewApi.getBalanceEth('ETH', address, contractAddress);
+      if (!result.error && result.data != null) {
+        // tokenURI 通常需要通过合约调用获取，当前 API 不直接支持
+        // 返回 null 由调用方处理
+        return null;
+      }
+      return null;
+    } catch (e) {
+      debugPrint('N42WalletBridge: Failed to get ERC-721 tokenURI: $e');
+      return null;
+    }
+  }
+
   /// Query token balance via TokenViewApi; returns raw balance string or '0'.
   Future<String> _queryTokenBalance(
     String contractAddress,

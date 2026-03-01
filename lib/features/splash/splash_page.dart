@@ -256,43 +256,21 @@ class _SplashTagline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isAllCaps =
-        variant.mainText == variant.mainText.toUpperCase() &&
-        variant.mainText.contains(RegExp(r'[A-Z]'));
+    // 统一样式：比标题小、使用浅青色区分
+    final taglineStyle = TextStyle(
+      fontSize: ScreenUtil().setSp(26),
+      fontWeight: FontWeight.w500,
+      color: const Color(0xFF80DEEA),
+      letterSpacing: 0.5,
+    );
 
     // ── 标签行：topLabel + mainText + midLabel 拼成一段富文本 ──
-    // 空间足够时自然排在一行；太长则自动换行
     final labelSpans = <InlineSpan>[
-      if (variant.topLabel != null) ...[
-        TextSpan(
-          text: '${variant.topLabel} ',
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(22),
-            fontWeight: FontWeight.w500,
-            color: Colors.white.withValues(alpha: 0.75),
-            letterSpacing: 0.3,
-          ),
-        ),
-      ],
-      TextSpan(
-        text: variant.mainText,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(36),
-          fontWeight: FontWeight.w800,
-          color: Colors.white,
-          letterSpacing: isAllCaps ? 2.0 : 0.5,
-        ),
-      ),
+      if (variant.topLabel != null)
+        TextSpan(text: '${variant.topLabel} ', style: taglineStyle),
+      TextSpan(text: variant.mainText, style: taglineStyle),
       if (variant.midLabel != null)
-        TextSpan(
-          text: ' ${variant.midLabel}',
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(22),
-            fontWeight: FontWeight.w500,
-            color: Colors.white.withValues(alpha: 0.75),
-            letterSpacing: 0.3,
-          ),
-        ),
+        TextSpan(text: ' ${variant.midLabel}', style: taglineStyle),
     ];
 
     return Column(
