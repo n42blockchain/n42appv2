@@ -44,4 +44,27 @@ class ExternalHttp {
       return null;
     }
   }
+
+  /// POST [url] with [data] body and return the parsed response body,
+  /// or null on any error.
+  static Future<dynamic> post(
+    String url, {
+    dynamic data,
+    Map<String, String>? headers,
+  }) async {
+    try {
+      final resp = await _dio.post<dynamic>(
+        url,
+        data: data,
+        options: headers != null ? Options(headers: headers) : null,
+      );
+      return resp.data;
+    } on DioException catch (e) {
+      debugPrint('ExternalHttp.post error [$url]: ${e.message}');
+      return null;
+    } catch (e) {
+      debugPrint('ExternalHttp.post unexpected error [$url]: $e');
+      return null;
+    }
+  }
 }
