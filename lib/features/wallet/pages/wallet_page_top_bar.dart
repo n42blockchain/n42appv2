@@ -49,6 +49,7 @@ class WalletTopBar extends ConsumerWidget {
         ),
         _WalletConnectButton(onTap: onWalletConnectTap),
         _FacePortraitButton(),
+
       ],
     );
   }

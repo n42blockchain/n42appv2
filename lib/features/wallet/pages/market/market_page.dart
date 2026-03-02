@@ -11,6 +11,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/market/crypto_news_service.dart';
 import 'package:n42_wallet/core/market/fear_greed_service.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
+import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
+import 'package:n42_wallet/features/widgets/app_home_top_bar.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/api/market_api.dart';
 import 'package:n42_wallet/features/wallet/pages/market/market_coin_info.dart';
@@ -414,20 +416,36 @@ class _MarketPageState extends ConsumerState<MarketPage>
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
-      decoration: BoxDecoration(
-        color: itemBgColor,
-        boxShadow: [
-          BoxShadow(
-            color: isDark ? Colors.black.withAlpha(40) : Colors.black.withAlpha(8),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Padding(
+          AppHomeTopBar(
+            titleChild: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Markets',
+                  style: TextStyle(
+                    fontSize: 32.sp,
+                    //fontWeight: FontWeight.bold,
+                    color: textColor,
+                    letterSpacing: -0.5,
+                  ),
+                ),
+                if (_fearGreed != null)
+                  Padding(
+                    padding: EdgeInsets.only(top: 4.h),
+                    child: _FearGreedBadge(data: _fearGreed!),
+                  ),
+              ],
+            ),
+            onLeftImageClick: () {
+              Scaffold.of(context).openDrawer();
+            },
+            onLeftImageUri: "assets/img/menu.png",
+          ),
+          /*Padding(
             padding: EdgeInsets.fromLTRB(20.w, 16.h, 16.w, 0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -435,6 +453,7 @@ class _MarketPageState extends ConsumerState<MarketPage>
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+
                     Text(
                       'Markets',
                       style: TextStyle(
@@ -454,7 +473,7 @@ class _MarketPageState extends ConsumerState<MarketPage>
               ],
             ),
           ),
-          SizedBox(height: 8.h),
+          SizedBox(height: 8.h),*/
           TabBar(
             controller: _tabController,
             labelColor: accentColor,

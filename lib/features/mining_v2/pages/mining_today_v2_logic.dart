@@ -13,11 +13,11 @@ mixin _MiningTodayV2LogicMixin on ConsumerState<MiningTodayV2> {
 
   Future<void> initDataWallet(EventPublicType pt) async {
     MiningV2Provider mp = ref.read(miningBridgeProvider);
-    if (pt == EventPublicType.selectWallet) {
+    /*if (pt == EventPublicType.selectWallet) {
       // BUGFIX: Skip initialization only if depositsEnable has already been set
       // Previously was `!= null` which incorrectly skipped when already initialized
       if (mp.depositsEnable == null) return;
-    }
+    }*/
     mp.resetData();
     await mp.checkAddressMiningStatus();
     await initData();

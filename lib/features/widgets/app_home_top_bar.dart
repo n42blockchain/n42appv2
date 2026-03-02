@@ -43,33 +43,39 @@ class _AppHomeTopBarState extends ConsumerState<AppHomeTopBar> {
       color: Colors.transparent,
       padding: EdgeInsets.symmetric(horizontal: isWide ? 16.0 : 8.0),
       height: isWide ? 56.0 : ScreenUtil().setWidth(110.0),
-      child: Row(
+      child: Stack(
+        alignment: Alignment.center,
         children: [
-          _buildLeftWidget(userInfo?.image, messageNotReadCount),
-          Expanded(
-            child: Center(
-              child: widget.titleChild ?? (widget.isText
-                  ? Text(
-                      widget.title ?? '',
-                      style: TextStyle(
-                        color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.mainTextColor.name),
-                        fontSize: ScreenUtil().setSp(32.0),
-                      ),
-                    )
-                  : Image.asset(
-                      'assets/images/ast_nft.png',
-                      width: ScreenUtil().setWidth(64.0),
-                      height: ScreenUtil().setWidth(64.0),
-                      fit: BoxFit.cover,
+          // 标题绝对居中于整个顶部栏
+          Center(
+            child: widget.titleChild ?? (widget.isText
+                ? Text(
+                    widget.title ?? '',
+                    style: TextStyle(
                       color: AppThemeUtils.getColorByKey(
                           context, AppThemeKeys.mainTextColor.name),
-                    )),
-            ),
+                      fontSize: ScreenUtil().setSp(32.0),
+                    ),
+                  )
+                : Image.asset(
+                    'assets/images/ast_nft.png',
+                    width: ScreenUtil().setWidth(64.0),
+                    height: ScreenUtil().setWidth(64.0),
+                    fit: BoxFit.cover,
+                    color: AppThemeUtils.getColorByKey(
+                        context, AppThemeKeys.mainTextColor.name),
+                  )),
           ),
+          // 左右两侧按钮叠加在标题上方
           Row(
-            mainAxisSize: MainAxisSize.min,
-            children: widget.actions ?? [],
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _buildLeftWidget(userInfo?.image, messageNotReadCount),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: widget.actions ?? [],
+              ),
+            ],
           ),
         ],
       ),
