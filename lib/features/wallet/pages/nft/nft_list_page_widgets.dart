@@ -1,6 +1,5 @@
 part of 'nft_list_page.dart';
 
-/// Widget builder methods for [_NftListPageState].
 extension _NftListPageWidgets on _NftListPageState {
   Widget buildSearchBar(BuildContext context) {
     final su = ScreenUtil();

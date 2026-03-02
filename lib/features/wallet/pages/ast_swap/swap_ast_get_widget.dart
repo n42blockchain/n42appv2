@@ -29,41 +29,40 @@ class SwapAstGetWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final su = ScreenUtil();
+    final textColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.itemTextColor.name);
+
     return Container(
       margin: EdgeInsets.only(
-        top: ScreenUtil().setWidth(20),
-        bottom: ScreenUtil().setWidth(30),
-        left: ScreenUtil().setWidth(30),
-        right: ScreenUtil().setWidth(30),
+        top: su.setWidth(20),
+        bottom: su.setWidth(30),
+        left: su.setWidth(30),
+        right: su.setWidth(30),
       ),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+      padding: EdgeInsets.all(su.setWidth(30)),
       decoration: BoxDecoration(
         color: AppThemeUtils.getColorByKey(
             context, AppThemeKeys.itemBgColor5.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+        borderRadius: BorderRadius.circular(su.setWidth(8)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             S.of(context).g_swap_key_4,
-            style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemTextColor.name),
-              fontSize: ScreenUtil().setSp(30),
-            ),
+            style: TextStyle(color: textColor, fontSize: su.setSp(30)),
           ),
           SizedBox(
-            height: ScreenUtil().setWidth(100),
+            height: su.setWidth(100),
             width: double.infinity,
             child: Row(
               children: [
                 Expanded(
                   child: TextField(
                     style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.itemTextColor.name),
-                      fontSize: ScreenUtil().setWidth(50.0),
+                      color: textColor,
+                      fontSize: su.setWidth(50.0),
                     ),
                     controller: getController,
                     focusNode: getNode,
@@ -73,7 +72,7 @@ class SwapAstGetWidget extends StatelessWidget {
                     decoration: InputDecoration(
                       hintText: S.of(context).g_key_44,
                       hintStyle: TextStyle(
-                        fontSize: ScreenUtil().setWidth(50.0),
+                        fontSize: su.setWidth(50.0),
                         color: AppThemeUtils.getColorByKey(
                             context, AppThemeKeys.textFieldHintColor.name),
                       ),
@@ -81,8 +80,8 @@ class SwapAstGetWidget extends StatelessWidget {
                       errorBorder: InputBorder.none,
                       focusedBorder: InputBorder.none,
                       isCollapsed: true,
-                      contentPadding: EdgeInsets.symmetric(
-                          vertical: ScreenUtil().setWidth(10.0)),
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: su.setWidth(10.0)),
                     ),
                     maxLines: 1,
                     onChanged: onGetChanged,
@@ -92,66 +91,68 @@ class SwapAstGetWidget extends StatelessWidget {
                     },
                   ),
                 ),
-                Container(
-                  width: ScreenUtil().setWidth(200),
-                  margin: EdgeInsets.only(left: ScreenUtil().setWidth(20)),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: ScreenUtil().setWidth(52),
-                        height: ScreenUtil().setWidth(52),
-                        child: Image.asset('assets/img/ast.png'),
-                      ),
-                      Expanded(
-                        child: Text(
-                          CoinType.N.name,
-                          style: TextStyle(
-                            color: AppThemeUtils.getColorByKey(
-                                context, AppThemeKeys.itemTextColor.name),
-                            fontSize: ScreenUtil().setSp(30),
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      SizedBox(
-                        width: ScreenUtil().setWidth(40),
-                        child: Icon(
-                          Icons.arrow_forward_ios,
-                          color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.itemBorderColor.name),
-                          size: ScreenUtil().setWidth(40),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                _buildTokenBadge(context, su, textColor),
               ],
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text(
-                "${S.of(context).g_key_29}:${getCoinModel?.balanceDoubleAll()}",
-                style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemTextColor.name),
-                  fontSize: ScreenUtil().setSp(26),
-                ),
-              ),
-              if (getLoad == Load.loading)
-                SizedBox(
-                  width: ScreenUtil().setWidth(26),
-                  height: ScreenUtil().setWidth(26),
-                  child: const CircularProgressIndicator(),
-                ),
-            ],
+          _buildBalanceRow(context, su, textColor),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTokenBadge(
+      BuildContext context, ScreenUtil su, Color textColor) {
+    final iconSize = su.setWidth(52);
+    return Container(
+      width: su.setWidth(200),
+      margin: EdgeInsets.only(left: su.setWidth(20)),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(
+            width: iconSize,
+            height: iconSize,
+            child: Image.asset('assets/img/ast.png'),
+          ),
+          Expanded(
+            child: Text(
+              CoinType.N.name,
+              style: TextStyle(color: textColor, fontSize: su.setSp(30)),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+            ),
+          ),
+          SizedBox(
+            width: su.setWidth(40),
+            child: Icon(
+              Icons.arrow_forward_ios,
+              color: AppThemeUtils.getColorByKey(
+                  context, AppThemeKeys.itemBorderColor.name),
+              size: su.setWidth(40),
+            ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildBalanceRow(
+      BuildContext context, ScreenUtil su, Color textColor) {
+    return Row(
+      children: [
+        Text(
+          "${S.of(context).g_key_29}:${getCoinModel?.balanceDoubleAll()}",
+          style: TextStyle(color: textColor, fontSize: su.setSp(26)),
+        ),
+        if (getLoad == Load.loading)
+          SizedBox(
+            width: su.setWidth(26),
+            height: su.setWidth(26),
+            child: const CircularProgressIndicator(),
+          ),
+      ],
     );
   }
 }

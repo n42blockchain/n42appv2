@@ -55,6 +55,7 @@ import 'package:n42_wallet/core/security/phishing_detector.dart';
 import 'package:n42_wallet/core/security/secure_storage.dart';
 import 'package:n42_wallet/core/security/wallet_data_migration.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:n42_wallet/features/wallet/n42_api_hub_bridge.dart';
 import 'package:n42_wallet/features/wallet/n42_wallet_bridge.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/core/network/request_url.dart';
@@ -233,6 +234,7 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
         pushGatewayUrl: 'https://m.si46.world/_matrix/push/v1/notify',
         pushAppId: pushAppId,
         walletBridge: N42WalletBridge(),
+        apiHubBridge: N42ApiHubBridge(),
         aiApiKey: ApiKeysConfig.aiApiKey,
         aiBaseUrl: ApiKeysConfig.aiBaseUrl,
         aiModel: ApiKeysConfig.aiModel,

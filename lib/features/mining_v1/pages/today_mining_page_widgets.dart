@@ -5,11 +5,10 @@ part of 'today_mining_page.dart';
 /// Depends on [_LogicMixin] for all shared state and business methods.
 /// Contains status cards, time displays, data boards, and tier widgets.
 mixin _WidgetsMixin on _LogicMixin {
-  miningStatusWidget(MiningProvider mpValue) {
+  Widget miningStatusWidget(MiningProvider mpValue) {
+    final isActive = mpValue.miningType != null && mpValue.miningStatus == true;
     return Container(
-      margin: EdgeInsets.only(
-        top: ScreenUtil().setWidth(18),
-      ),
+      margin: EdgeInsets.only(top: ScreenUtil().setWidth(18)),
       child: Row(
         children: [
           Expanded(
@@ -26,14 +25,12 @@ mixin _WidgetsMixin on _LogicMixin {
                 borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
               ),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Row(
                     children: [
                       Expanded(
                         child: Text(
-                          // "Mining Status",
                           S.of(context).g_mining_key_5,
                           maxLines: 2,
                           style: TextStyle(
@@ -49,8 +46,7 @@ mixin _WidgetsMixin on _LogicMixin {
                         margin: EdgeInsets.only(left: ScreenUtil().setWidth(10)),
                         padding: EdgeInsets.all(ScreenUtil().setWidth(8)),
                         decoration: BoxDecoration(
-                          color: mpValue.miningType != null &&
-                                  mpValue.miningStatus == true
+                          color: isActive
                               ? const Color.fromRGBO(50, 215, 75, 0.2)
                               : const Color.fromRGBO(235, 88, 81, 0.2),
                           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
@@ -59,8 +55,7 @@ mixin _WidgetsMixin on _LogicMixin {
                           height: ScreenUtil().setWidth(16),
                           width: ScreenUtil().setWidth(16),
                           decoration: BoxDecoration(
-                            color: mpValue.miningType != null &&
-                                    mpValue.miningStatus == true
+                            color: isActive
                                 ? const Color(0xff32D74B)
                                 : const Color(0xffEB5851),
                             borderRadius:
@@ -70,15 +65,12 @@ mixin _WidgetsMixin on _LogicMixin {
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: ScreenUtil().setWidth(30),
-                  ),
+                  SizedBox(height: ScreenUtil().setWidth(30)),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        mpValue.miningType != null &&
-                                mpValue.miningStatus == true
+                        isActive
                             ? S.current.g_key_193
                             : S.current.g_mining_key_47,
                         style: TextStyle(
@@ -89,48 +81,35 @@ mixin _WidgetsMixin on _LogicMixin {
                       ),
                       GestureDetector(
                         onTap: () async {
-                          if (miningStartLoad == Load.loading) {
-                            return;
-                          }
-                          if (mpValue.miningType == null) {
-                            //未开启挖矿
-                            return;
-                          }
-                          setState(() {
-                            miningStartLoad = Load.loading;
-                          });
-                          if (mpValue.miningStatus == true) {
-                            //停止
+                          if (miningStartLoad == Load.loading) return;
+                          if (mpValue.miningType == null) return;
+                          setState(() => miningStartLoad = Load.loading);
+                          if (isActive) {
                             SPUtil().setMiningOpen(false);
-                            globalMiningV1
-                                .setMiningStatus(false);
+                            globalMiningV1.setMiningStatus(false);
                             await MiningUtils.stopMining();
                           } else {
-                            //开启
                             SPUtil().setMiningOpen(true);
                             globalMiningV1.setMiningStatus(true);
                             await MiningUtils.startMining();
                           }
-                          setState(() {
-                            miningStartLoad = Load.finish;
-                          });
+                          setState(() => miningStartLoad = Load.finish);
                         },
-                        child: Container(
+                        child: SizedBox(
                           height: ScreenUtil().setWidth(40),
                           width: ScreenUtil().setWidth(40),
                           child: miningStartLoad == Load.finish
                               ? Image.asset(
-                                  "assets/mining/${mpValue.miningType != null && mpValue.miningStatus == true ? 'stop' : 'play'}.png",
+                                  "assets/mining/${isActive ? 'stop' : 'play'}.png",
                                   color: AppThemeUtils.getColorByKey(
                                       context,
-                                      mpValue.miningType != null &&
-                                              mpValue.miningStatus == true
+                                      isActive
                                           ? AppThemeKeys.mainBlueColor.name
                                           : AppThemeKeys.iconTextDisableColor.name),
                                   height: ScreenUtil().setWidth(40),
                                   width: ScreenUtil().setWidth(40),
                                 )
-                              : CircularProgressIndicator(),
+                              : const CircularProgressIndicator(),
                         ),
                       ),
                     ],
@@ -139,9 +118,7 @@ mixin _WidgetsMixin on _LogicMixin {
               ),
             ),
           ),
-          SizedBox(
-            width: ScreenUtil().setWidth(22),
-          ),
+          SizedBox(width: ScreenUtil().setWidth(22)),
           Expanded(
             child: Container(
               width: double.infinity,
@@ -160,30 +137,22 @@ mixin _WidgetsMixin on _LogicMixin {
                 children: [
                   Text(
                     S.of(context).g_mining_key38,
-                    // "Your Tier",
                     style: TextStyle(
                       color: AppThemeUtils.getColorByKey(
                           context, AppThemeKeys.itemSubtitleTextColor.name),
                       fontSize: ScreenUtil().setSp(24),
                     ),
                   ),
-                  SizedBox(
-                    height: ScreenUtil().setWidth(30),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        mpValue.miningType == null
-                            ? "0 ${CoinType.N.name}"
-                            : '$currDepositsOfValue ${CoinType.N.name}',
-                        style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.itemTextColor.name),
-                          fontSize: ScreenUtil().setSp(32),
-                        ),
-                      ),
-                    ],
+                  SizedBox(height: ScreenUtil().setWidth(30)),
+                  Text(
+                    mpValue.miningType == null
+                        ? "0 ${CoinType.N.name}"
+                        : '$currDepositsOfValue ${CoinType.N.name}',
+                    style: TextStyle(
+                      color: AppThemeUtils.getColorByKey(
+                          context, AppThemeKeys.itemTextColor.name),
+                      fontSize: ScreenUtil().setSp(32),
+                    ),
                   ),
                 ],
               ),
@@ -194,7 +163,7 @@ mixin _WidgetsMixin on _LogicMixin {
     );
   }
 
-  dayMiningTimeWidget(MiningProvider mpValue) {
+  Widget dayMiningTimeWidget(MiningProvider mpValue) {
     return Container(
       padding: EdgeInsets.symmetric(
         vertical: ScreenUtil().setWidth(18),
@@ -218,7 +187,6 @@ mixin _WidgetsMixin on _LogicMixin {
                 horizontal: ScreenUtil().setWidth(16),
               ),
               child: Text(
-                // 'Current Mining Time',
                 S.of(context).g_mining_key_8,
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(26),
@@ -236,89 +204,53 @@ mixin _WidgetsMixin on _LogicMixin {
     );
   }
 
-  showTimeWidget(String hh, String mm, String ss) {
+  Widget showTimeWidget(String hh, String mm, String ss) {
+    final blueColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.mainBlueColor.name);
+    final borderColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.timeBorderColor.name);
+    final textStyle = TextStyle(
+        color: blueColor, fontSize: ScreenUtil().setSp(26));
+
+    Widget timeBox(String value) {
+      return Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: borderColor)),
+        padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
+        child: Text(value, style: textStyle),
+      );
+    }
+
+    Widget separator() {
+      return Padding(
+        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(12)),
+        child: Text(":", style: textStyle),
+      );
+    }
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.timeBorderColor.name))),
-          padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
-          child: Text(
-            hh,
-            style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
-                fontSize: ScreenUtil().setSp(26)),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(12)),
-          child: Text(
-            ":",
-            style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
-                fontSize: ScreenUtil().setSp(26)),
-          ),
-        ),
-        Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.timeBorderColor.name))),
-          padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
-          child: Text(
-            mm,
-            style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
-                fontSize: ScreenUtil().setSp(26)),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(12)),
-          child: Text(
-            ":",
-            style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
-                fontSize: ScreenUtil().setSp(26)),
-          ),
-        ),
-        Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.timeBorderColor.name))),
-          padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
-          child: Text(
-            ss,
-            style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
-                fontSize: ScreenUtil().setSp(26)),
-          ),
-        ),
+        timeBox(hh), separator(),
+        timeBox(mm), separator(),
+        timeBox(ss),
       ],
     );
   }
 
-  miningDataBroad(String titleText, String value,
+  Widget miningDataBroad(String titleText, String value,
       {bool showTips = false, String? imagePath, String? tipsText}) {
     return Expanded(
       child: Container(
         decoration: BoxDecoration(
-            color:
-                AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16))),
-        padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(30), ScreenUtil().setWidth(30),
-            ScreenUtil().setWidth(0), ScreenUtil().setWidth(0)),
+          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        ),
+        padding: EdgeInsets.fromLTRB(
+          ScreenUtil().setWidth(30), ScreenUtil().setWidth(30),
+          ScreenUtil().setWidth(0), ScreenUtil().setWidth(0),
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,

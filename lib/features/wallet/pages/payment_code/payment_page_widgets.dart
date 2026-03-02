@@ -4,18 +4,16 @@ part of 'payment_page.dart';
 ///
 /// Contains: usdtCoin, mainCoin, walletWidget.
 extension _PaymentPageWidgets on _PaymentPageState {
-  String _formatValue(double value) {
+  String _formatNumber(double value, [String? fallback]) {
     if (value >= 1000000000) return regular.getMoneyAbbreviation(value);
     if (value > 0 && value < 0.0000000009) return regular.getMoneyAbbreviationDecimal(value);
-    return oCcy.format(value);
+    return fallback ?? oCcy.format(value);
   }
 
-  String _formatTokenBalance(CoinModel coin) {
-    final balance = coin.balanceDoubleAll();
-    if (balance > 1000000000) return regular.getMoneyAbbreviation(balance);
-    if (balance > 0 && balance < 0.0000000009) return regular.getMoneyAbbreviationDecimal(balance);
-    return coin.balanceString();
-  }
+  String _formatValue(double value) => _formatNumber(value);
+
+  String _formatTokenBalance(CoinModel coin) =>
+      _formatNumber(coin.balanceDoubleAll(), coin.balanceString());
 
   Widget _coinImage(CoinModel coinInfo) {
     final icon = coinInfo.coin['icon'] ?? '';
@@ -51,7 +49,7 @@ extension _PaymentPageWidgets on _PaymentPageState {
             onTap: () {
               if(!isSelected){
                 setState(() { coinModelIndex = index; });
-                initCoinMainModel();
+                _initCoinMainModel();
               }
             },
             child: Container(
@@ -68,7 +66,6 @@ extension _PaymentPageWidgets on _PaymentPageState {
                     : null,
               ),
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
                     width: su.setWidth(52.0),

@@ -11,13 +11,8 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
   List<dynamic> rewardsList = [];
   String? astAddress;
 
-  //totalValue = rewardsReceived + accumulatedRewards
   double totalValue = 0;
-
-  //已经发放奖励
   double rewardsReceived = 0;
-
-  //未发放奖励
   double accumulatedRewards = 0;
 
   double astPrice = 0;
@@ -31,7 +26,6 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
 
   bool isLoading7DayData = false;
 
-  //显示默认柱状图
   bool isShowDefaultBar = true;
   dynamic eventBusFn;
 
@@ -58,50 +52,34 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
     }
   }
 
-  //七天挖矿数据
   Future<void> miningBarchartData() async {
     try {
-      setState(() {
-        isLoading7DayData = true;
-      });
+      setState(() => isLoading7DayData = true);
       epochList = await MiningApi.generateRewardsArray();
-      debugPrint("epoch list:$epochList");
       if (epochList.isNotEmpty) {
         final list = await MiningApi.getMiningBarChartData(astAddress ?? '',
-            currEpochNum: epochList[epochList.length - 1]);
-        if (list != null) {
-          final items = list["items"];
-          if (items != null && items is List) {
-            barValues = [];
-            for (var element in epochList) {
-              final item = items.firstWhere(
-                      (value) => value["epoch"] == element,
-                  orElse: () => -1);
-              if (item != -1) {
-                barValues.add((item["verify_count"] as int).toDouble());
-              } else {
-                barValues.add(0);
-              }
-            }
-          }
+            currEpochNum: epochList.last);
+        final items = list?["items"];
+        if (items != null && items is List) {
+          barValues = epochList.map((epoch) {
+            final item = items.firstWhere(
+                (v) => v["epoch"] == epoch,
+                orElse: () => -1);
+            return item != -1 ? (item["verify_count"] as int).toDouble() : 0.0;
+          }).toList();
         }
       }
     } catch (err) {
       barValues = [];
-      debugPrint("miningBarchartData fun err:${err.toString()}");
+      debugPrint("miningBarchartData err: $err");
     } finally {
-      //生成图标点击事件展示数据
       generateBarTipData();
-      isShowDefaultBar = false;
-       debugPrint("barValues:$barValues");
-      if (barValues.isEmpty || barValues.length != 7) {
+      isShowDefaultBar = barValues.isEmpty || barValues.length != 7;
+      if (isShowDefaultBar) {
         barValues = [0, 0, 0, 0, 0, 0, 0];
-        isShowDefaultBar = true;
       }
       isLoading7DayData = false;
-      if (mounted) {
-        setState(() {});
-      }
+      if (mounted) setState(() {});
     }
   }
 
@@ -116,7 +94,6 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
     return "$hoursStr:$minutesStr:$secondsStr";
   }
 
-  //生成图标点击事件展示数据
   void generateBarTipData() {
     if (barValues.length != 7) return;
 
@@ -162,57 +139,25 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
     }
   }
 
-  ///根据任务个数计算奖励值
   double computeRewardsValueByTaskNum(int taskNum, int astStackNum) {
-    double rewardValue = 0;
-    //如果是FUJI NFT质押的
-    if (globalMiningV1.miningType == MiningType.FUJI_NFT) {
-      if (astStackNum == 2000) {
-        rewardValue =
-        taskNum >= 50 ? 0.333333333333333 : 0.0066666666666 * taskNum;
-      } else if (astStackNum == 800) {
-        rewardValue = taskNum >= 50 ? 0.1 : 0.002 * taskNum;
-      } else {
-        rewardValue = taskNum >= 50 ? 0.025 : 0.0005 * taskNum;
-      }
-      return rewardValue;
-    }
-
-    // 50 100 500
-    if (astStackNum == 50) {
-      if (taskNum >= 500) {
-        rewardValue = 0.0125;
-      } else {
-        rewardValue = taskNum * 0.000025;
-      }
-    } else if (astStackNum == 100) {
-      if (taskNum >= 100) {
-        rewardValue = 0.0333333333333334;
-      } else {
-        rewardValue = taskNum * 0.000333333333333334;
-      }
-    } else {
-      //500 ast
-      if (taskNum >= 100) {
-        rewardValue = 0.2083333333333334;
-      } else {
-        rewardValue = taskNum * 0.002083333333333334;
-      }
-    }
-    return rewardValue;
+    final (int cap, double rate) = switch ((globalMiningV1.miningType, astStackNum)) {
+      (MiningType.FUJI_NFT, 2000) => (50, 0.0066666666666),
+      (MiningType.FUJI_NFT, 800)  => (50, 0.002),
+      (MiningType.FUJI_NFT, _)    => (50, 0.0005),
+      (_, 50)                      => (500, 0.000025),
+      (_, 100)                     => (100, 0.000333333333333334),
+      _                            => (100, 0.002083333333333334),
+    };
+    return taskNum >= cap ? cap * rate : taskNum * rate;
   }
 
   int getMaxRewardIndex() {
-    if (epochList.isEmpty) return -1;
-    double maxVerifyCount = 0;
-    int maxVerifyCountIndex = -1;
-    for (int i = 0; i < barValues.length; i++) {
-      if (barValues[i] > maxVerifyCount) {
-        maxVerifyCount = barValues[i];
-        maxVerifyCountIndex = i;
-      }
+    if (epochList.isEmpty || barValues.isEmpty) return -1;
+    int maxIndex = 0;
+    for (int i = 1; i < barValues.length; i++) {
+      if (barValues[i] > barValues[maxIndex]) maxIndex = i;
     }
-    return maxVerifyCountIndex;
+    return barValues[maxIndex] > 0 ? maxIndex : -1;
   }
 
   List<String> getPast7DaysDate() {
@@ -231,7 +176,6 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
     return dates;
   }
 
-  //获取锁仓时间
   Future<void> getLockTime(String address) async {
     try {
       final lockTime = await MiningApi.lockTime(address);
@@ -247,33 +191,22 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
     }
   }
 
-  ///根据解锁时间推算质押时间
   String getYearAgoTime(String lockTime) {
     try {
-      DateFormat format = DateFormat("dd/MM/yyyy HH:mm");
-      DateTime currentDateTime = format.parse(lockTime);
-
-      // 1 FUJI NFT 质押90天
-      // 2 AST/miningNFT 质押都是一年365
-      int desDays = 365;
-      if (globalMiningV1.miningType == MiningType.FUJI_NFT) {
-        desDays = 90;
-      }
-
-      DateTime? oneYearAgo = currentDateTime.subtract(Duration(days: desDays));
-      String formattedOneYearAgo =
-          "${oneYearAgo.day.toString().padLeft(2, '0')}/"
-          "${oneYearAgo.month.toString().padLeft(2, '0')}/"
-          "${oneYearAgo.year} ${oneYearAgo.hour.toString().padLeft(2, '0')}:"
-          "${oneYearAgo.minute.toString().padLeft(2, '0')}";
-      return formattedOneYearAgo;
+      final format = DateFormat("dd/MM/yyyy HH:mm");
+      final currentDateTime = format.parse(lockTime);
+      final desDays = globalMiningV1.miningType == MiningType.FUJI_NFT ? 90 : 365;
+      final stakeDate = currentDateTime.subtract(Duration(days: desDays));
+      return "${stakeDate.day.toString().padLeft(2, '0')}/"
+          "${stakeDate.month.toString().padLeft(2, '0')}/"
+          "${stakeDate.year} ${stakeDate.hour.toString().padLeft(2, '0')}:"
+          "${stakeDate.minute.toString().padLeft(2, '0')}";
     } catch (err) {
-      debugPrint("err: ${err.toString()}");
+      debugPrint("getYearAgoTime err: $err");
       return '';
     }
   }
 
-  //已经发放奖励
   Future<void> getTotalValue(String address) async {
     try {
       final totalData = await MiningApi.getTotalMiningValue(address);
@@ -286,7 +219,6 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
     }
   }
 
-  //未发放金额
   Future<void> getAccountRewardUnpaid(String address) async {
     try {
       final totalData = await MiningApi.getAccountRewardUnpaid(address);

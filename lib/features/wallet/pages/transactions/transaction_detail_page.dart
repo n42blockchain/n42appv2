@@ -19,11 +19,11 @@ class TransactionDetailPage extends StatefulWidget {
   final String? gasUsed;
   final String? blockNumber;
   final String? coinType;
-
-  //交易的金额
   final String? value;
   final bool? isTest;
-  const TransactionDetailPage({this.time,
+
+  const TransactionDetailPage({
+    this.time,
     this.from,
     this.to,
     this.txHash,
@@ -34,86 +34,82 @@ class TransactionDetailPage extends StatefulWidget {
     this.gasUsed,
     this.value,
     this.isTest,
-    super.key});
+    super.key,
+  });
 
   @override
   State<TransactionDetailPage> createState() => _TransactionDetailPageState();
 }
 
 class _TransactionDetailPageState extends State<TransactionDetailPage> {
+  TextStyle _labelStyle() => TextStyle(
+        color: AppThemeUtils.getColorByKey(
+            context, AppThemeKeys.itemSubtitleTextColor.name),
+        fontSize: ScreenUtil().setSp(30),
+      );
+
+  EdgeInsets get _itemPadding => EdgeInsets.symmetric(
+        vertical: ScreenUtil().setWidth(16),
+        horizontal: ScreenUtil().setWidth(24),
+      );
+
+  Widget _divider() => Divider(
+        height: ScreenUtil().setWidth(1),
+        endIndent: 0,
+        indent: 0,
+      );
+
   @override
   Widget build(BuildContext context) {
     final explorerUrl = (widget.coinType != null && widget.txHash != null)
-        ? getBrowserTxHash(widget.coinType!, widget.txHash!, isTest: widget.isTest)
+        ? getBrowserTxHash(widget.coinType!, widget.txHash!,
+            isTest: widget.isTest)
         : '';
+    final s = S.of(context);
     return Scaffold(
       appBar: AppBarWidget(
-        text: S.of(context).g_key_tran_4,
-        actions: explorerUrl.isNotEmpty ? [
-          IconButton(
-            icon: const Icon(Icons.open_in_browser_outlined),
-            tooltip: S.of(context).g_key_196,
-            onPressed: () => Navigator.push(context,
-              MaterialPageRoute(builder: (_) => BrowserPage(explorerUrl))),
-          ),
-        ] : null,
+        text: s.g_key_tran_4,
+        actions: explorerUrl.isNotEmpty
+            ? [
+                IconButton(
+                  icon: const Icon(Icons.open_in_browser_outlined),
+                  tooltip: s.g_key_196,
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => BrowserPage(explorerUrl)),
+                  ),
+                ),
+              ]
+            : null,
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildItem(S.of(context).g_key_wallet_k25, widget.time),
-            _buildItem(S.of(context).g_key_wallet_k54, widget.blockNumber),
-            _buildAddressItem(
-              S.of(context).g_key_75,
-              widget.from,
-            ),
-            _buildAddressItem(
-              S.of(context).g_key_38,
-              widget.to,
-            ),
-            _buildItem(S.of(context).g_key_wallet_k55, widget.value),
-            _buildItem(S.of(context).g_key_t_7, widget.gas),
-            _buildItem(S.of(context).g_key_t_15, widget.gasPrice),
-            _buildItem(S.of(context).g_key_t_6, widget.gasUsed),
-            _buildItem(
-              S.of(context).g_key_wallet_k37,
-              widget.txHash,
-              copy: true,
-            ),
-            /*_buildItem(
-              "blockHash",
-              widget.blockHash,
-              copy: true,
-            ),
-            _buildItem("status", widget.status),*/
+            _buildItem(s.g_key_wallet_k25, widget.time),
+            _buildItem(s.g_key_wallet_k54, widget.blockNumber),
+            _buildAddressItem(s.g_key_75, widget.from),
+            _buildAddressItem(s.g_key_38, widget.to),
+            _buildItem(s.g_key_wallet_k55, widget.value),
+            _buildItem(s.g_key_t_7, widget.gas),
+            _buildItem(s.g_key_t_15, widget.gasPrice),
+            _buildItem(s.g_key_t_6, widget.gasUsed),
+            _buildItem(s.g_key_wallet_k37, widget.txHash, copy: true),
           ],
         ),
       ),
     );
   }
-  /// 构建地址显示项（支持 ENS）
+
   Widget _buildAddressItem(String? title, String? address) {
-    if (address == null || address.isEmpty) {
-      return const SizedBox.shrink();
-    }
+    if (address == null || address.isEmpty) return const SizedBox.shrink();
     return Padding(
-      padding: EdgeInsets.symmetric(
-        vertical: ScreenUtil().setWidth(16),
-        horizontal: ScreenUtil().setWidth(24),
-      ),
+      padding: _itemPadding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title ?? "",
-            style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name),
-              fontSize: ScreenUtil().setSp(30),
-            ),
-          ),
+          Text(title ?? "", style: _labelStyle()),
           SizedBox(height: ScreenUtil().setWidth(12)),
           EnsAddressDisplay(
             address: address,
@@ -124,39 +120,21 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
             fontSize: ScreenUtil().setSp(28),
           ),
           SizedBox(height: ScreenUtil().setWidth(24)),
-          Divider(
-            height: ScreenUtil().setWidth(1),
-            endIndent: 0,
-            indent: 0,
-          ),
+          _divider(),
         ],
       ),
     );
   }
 
   Widget _buildItem(String? title, String? content, {bool copy = false}) {
-    if (content == null || content.isEmpty) {
-      return const SizedBox(
-        width: 0,
-        height: 0,
-      );
-    }
+    if (content == null || content.isEmpty) return const SizedBox.shrink();
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16), horizontal: ScreenUtil().setWidth(24)),
+      padding: _itemPadding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title ?? "",
-            style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name),
-              fontSize: ScreenUtil().setSp(30),
-            ),
-          ),
-          SizedBox(
-            height: ScreenUtil().setWidth(12),
-          ),
+          Text(title ?? "", style: _labelStyle()),
+          SizedBox(height: ScreenUtil().setWidth(12)),
           Row(
             children: [
               Expanded(
@@ -165,9 +143,10 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainTextColor.name),
-                      fontSize: ScreenUtil().setSp(28)),
+                    color: AppThemeUtils.getColorByKey(
+                        context, AppThemeKeys.mainTextColor.name),
+                    fontSize: ScreenUtil().setSp(28),
+                  ),
                 ),
               ),
               if (copy)
@@ -189,14 +168,8 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                 ),
             ],
           ),
-          SizedBox(
-            height: ScreenUtil().setWidth(24),
-          ),
-          Divider(
-            height: ScreenUtil().setWidth(1),
-            endIndent: 0,
-            indent: 0,
-          ),
+          SizedBox(height: ScreenUtil().setWidth(24)),
+          _divider(),
         ],
       ),
     );

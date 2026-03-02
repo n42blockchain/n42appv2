@@ -6,13 +6,9 @@ part of 'mining_node_detail_page.dart';
 mixin _MiningNodeDetailWidgets
     on ConsumerState<MiningNodeDetailPage> {
 
-  // ── Theme helper ──────────────────────────────────────────────────────
-
   Color _themeColor(BuildContext context, AppThemeKeys key) {
     return AppThemeUtils.getColorByKey(context, key.name);
   }
-
-  // ── Two-column info cards ───────────────────────────────────────────────
 
   Widget _buildTwoColumnCards(
     BuildContext context,
@@ -97,8 +93,6 @@ mixin _MiningNodeDetailWidgets
       ),
     );
   }
-
-  // ── Info list ──────────────────────────────────────────────────────────
 
   Widget _buildInfoList(
     BuildContext context,
@@ -189,28 +183,22 @@ mixin _MiningNodeDetailWidgets
     );
   }
 
-  Widget _buildWsStatus(BuildContext context, WebSocketState state) {
-    switch (state) {
-      case WebSocketState.connected:
-        return _wsDot(context, const Color(0xff32D74B),
-            S.of(context).g_mining_node_key3);
-      case WebSocketState.reconnecting:
-        return _wsDot(context, const Color(0xFFFF9500),
-            S.of(context).g_mining_node_key5);
-      case WebSocketState.connecting:
-        return SizedBox(
-          width: ScreenUtil().setWidth(20),
-          height: ScreenUtil().setWidth(20),
-          child: CircularProgressIndicator(
-            strokeWidth: 2,
-            color: _themeColor(context, AppThemeKeys.mainBlueColor),
-          ),
-        );
-      case WebSocketState.disconnected:
-        return _wsDot(context, const Color(0xffEB5851),
-            S.of(context).g_mining_node_key4);
-    }
-  }
+  Widget _buildWsStatus(BuildContext context, WebSocketState state) => switch (state) {
+    WebSocketState.connected => _wsDot(
+        context, const Color(0xff32D74B), S.of(context).g_mining_node_key3),
+    WebSocketState.reconnecting => _wsDot(
+        context, const Color(0xFFFF9500), S.of(context).g_mining_node_key5),
+    WebSocketState.connecting => SizedBox(
+        width: ScreenUtil().setWidth(20),
+        height: ScreenUtil().setWidth(20),
+        child: CircularProgressIndicator(
+          strokeWidth: 2,
+          color: _themeColor(context, AppThemeKeys.mainBlueColor),
+        ),
+      ),
+    WebSocketState.disconnected => _wsDot(
+        context, const Color(0xffEB5851), S.of(context).g_mining_node_key4),
+  };
 
   Widget _wsDot(BuildContext context, Color color, String label) {
     return Row(
@@ -242,8 +230,6 @@ mixin _MiningNodeDetailWidgets
       color: _themeColor(context, AppThemeKeys.dividerColor),
     );
   }
-
-  // ── Redemption section ─────────────────────────────────────────────────
 
   Widget _buildRedemptionSection(
       BuildContext context, MiningV2Provider mpValue) {
@@ -337,8 +323,6 @@ mixin _MiningNodeDetailWidgets
     );
   }
 
-  // ── Helpers ────────────────────────────────────────────────────────────
-
   BoxDecoration _cardDecoration(BuildContext context, bool isDark) {
     return BoxDecoration(
       color: _themeColor(context, AppThemeKeys.itemBgColor),
@@ -361,29 +345,17 @@ mixin _MiningNodeDetailWidgets
     );
   }
 
-  Color _statusColor(NodeStatus status) {
-    switch (status) {
-      case NodeStatus.online:
-        return const Color(0xff32D74B);
-      case NodeStatus.offline:
-      case NodeStatus.error:
-        return const Color(0xffEB5851);
-      case NodeStatus.syncing:
-        return const Color(0xFFFF9500);
-    }
-  }
+  Color _statusColor(NodeStatus status) => switch (status) {
+    NodeStatus.online  => const Color(0xff32D74B),
+    NodeStatus.offline || NodeStatus.error => const Color(0xffEB5851),
+    NodeStatus.syncing => const Color(0xFFFF9500),
+  };
 
-  String _statusLabel(BuildContext context, NodeStatus status) {
-    switch (status) {
-      case NodeStatus.online:
-        return S.of(context).g_key_193;
-      case NodeStatus.offline:
-      case NodeStatus.error:
-        return S.of(context).g_mining_key_47;
-      case NodeStatus.syncing:
-        return S.of(context).g_mining_key_102;
-    }
-  }
+  String _statusLabel(BuildContext context, NodeStatus status) => switch (status) {
+    NodeStatus.online  => S.of(context).g_key_193,
+    NodeStatus.offline || NodeStatus.error => S.of(context).g_mining_key_47,
+    NodeStatus.syncing => S.of(context).g_mining_key_102,
+  };
 
   Color _uptimeColor(double pct) {
     if (pct >= 90) return const Color(0xff32D74B);

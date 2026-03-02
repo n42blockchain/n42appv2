@@ -1655,7 +1655,7 @@
     }
   },
   "g_setting_mining_version": "Mining-Interface",
-  "g_setting_mining_v2_label": "Cloud-Mining (V2)",
+  "g_setting_mining_v2_label": "Mining (V2)",
   "g_setting_mining_v1_label": "Klassisches Mining (V1)",
   "g_mining_node_key1": "Full Node Detail",
   "g_mining_node_key2": "Node ID",

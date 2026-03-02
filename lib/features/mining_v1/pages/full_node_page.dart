@@ -29,7 +29,6 @@ import 'package:n42_wallet/features/widgets/dialog_widget/tips_dialog_7.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-// import removed: use web3dart/web3dart.dart instead
 import 'package:web3dart/web3dart.dart';
 
 part 'full_node_page_widgets.dart';
@@ -55,7 +54,6 @@ class _FullNodePageState extends State<FullNodePage>
   double? astBalance;
   String? astAddress;
 
-  //nft50num (拥有多少个50面额的NFT)
   BigInt nft50num = BigInt.zero;
   BigInt nft100num = BigInt.zero;
   BigInt nft500num = BigInt.zero;
@@ -92,17 +90,13 @@ class _FullNodePageState extends State<FullNodePage>
                         children: [
                           AstLevel(astNum: widget.astNum),
                           SizedBox(height: ScreenUtil().setWidth(90)),
-                          Row(
-                            children: [
-                              Text(
-                                S.current.g_mining_key_38,
-                                style: TextStyle(
-                                    color: AppThemeUtils.getColorByKey(
-                                        context,
-                                        AppThemeKeys.mainTextColor.name),
-                                    fontSize: ScreenUtil().setSp(30)),
-                              ),
-                            ],
+                          Text(
+                            S.current.g_mining_key_38,
+                            style: TextStyle(
+                                color: AppThemeUtils.getColorByKey(
+                                    context,
+                                    AppThemeKeys.mainTextColor.name),
+                                fontSize: ScreenUtil().setSp(30)),
                           ),
                           SizedBox(height: ScreenUtil().setWidth(30)),
                           _buildPayMethod(
@@ -130,17 +124,13 @@ class _FullNodePageState extends State<FullNodePage>
                                 fontSize: ScreenUtil().setSp(26)),
                           ),
                           SizedBox(height: ScreenUtil().setWidth(90)),
-                          Row(
-                            children: [
-                              Text(
-                                S.current.g_mining_key_39,
-                                style: TextStyle(
-                                    color: AppThemeUtils.getColorByKey(
-                                        context,
-                                        AppThemeKeys.mainTextColor.name),
-                                    fontSize: ScreenUtil().setSp(30)),
-                              ),
-                            ],
+                          Text(
+                            S.current.g_mining_key_39,
+                            style: TextStyle(
+                                color: AppThemeUtils.getColorByKey(
+                                    context,
+                                    AppThemeKeys.mainTextColor.name),
+                                fontSize: ScreenUtil().setSp(30)),
                           ),
                           SizedBox(height: ScreenUtil().setWidth(24)),
                           _buildPayMethods(),
@@ -196,14 +186,11 @@ class _FullNodePageState extends State<FullNodePage>
   }
 
   String _resolveAppBarTitle(BuildContext context) {
-    final String levelLabel;
-    if (widget.astNum == 50) {
-      levelLabel = S.of(context).g_mining_key_62;
-    } else if (widget.astNum == 100) {
-      levelLabel = S.of(context).g_mining_key_61;
-    } else {
-      levelLabel = S.of(context).g_mining_key_63;
-    }
+    final levelLabel = switch (widget.astNum) {
+      50  => S.of(context).g_mining_key_62,
+      100 => S.of(context).g_mining_key_61,
+      _   => S.of(context).g_mining_key_63,
+    };
     return '${S.current.g_mining_key_37}:$levelLabel';
   }
 }

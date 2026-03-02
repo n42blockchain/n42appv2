@@ -3534,7 +3534,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Klasyczne górnictwo (V1)",
     ),
     "g_setting_mining_v2_label": MessageLookupByLibrary.simpleMessage(
-      "Górnictwo w chmurze (V2)",
+      "Górnictwo (V2)",
     ),
     "g_setting_mining_version": MessageLookupByLibrary.simpleMessage(
       "Interfejs Górniczy",

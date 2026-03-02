@@ -1,10 +1,6 @@
 part of 'swap_ast_home.dart';
 
 extension _SwapAstHomeGasAndTx on _SwapAstHomeState {
-  // ---------------------------------------------------------------------------
-  // Gas estimation
-  // ---------------------------------------------------------------------------
-
   Future<bool> getGasPrice() async {
     if (payCoinModel == null) {
       errorMessage = "Error";
@@ -98,10 +94,6 @@ extension _SwapAstHomeGasAndTx on _SwapAstHomeState {
     }
   }
 
-  // ---------------------------------------------------------------------------
-  // Order / transaction
-  // ---------------------------------------------------------------------------
-
   Future<bool> newOrder() async {
     if (load != Load.finish) return false;
     rebuild(() => load = Load.loading);
@@ -142,12 +134,8 @@ extension _SwapAstHomeGasAndTx on _SwapAstHomeState {
       AppGlobals.userInfo?.uuid ?? "",
       orderId ?? 0,
     );
-    if (rOrderData.error) {
-      errorMessage = rOrderData.data as String;
-    } else {
-      errorMessage = "";
-      orderId = null;
-    }
+    errorMessage = rOrderData.error ? rOrderData.data as String : "";
+    if (!rOrderData.error) orderId = null;
     rebuild(() => load = Load.finish);
   }
 

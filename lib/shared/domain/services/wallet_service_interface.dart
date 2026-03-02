@@ -72,31 +72,3 @@ abstract class IWalletService {
   Future<void> refreshWallets();
 }
 
-/// Chat Crypto Service Interface
-///
-/// Handles encryption/decryption operations for the Chat feature.
-/// Isolates sensitive key operations from direct access.
-abstract class IChatCryptoService {
-  /// Get public key for encrypting messages to this wallet
-  Future<String?> getPublicKeyForChat();
-
-  /// Get private key for decrypting messages (only from main wallet)
-  Future<String?> getPrivateKeyForChat();
-
-  /// Encrypt a message using the recipient's public key
-  Future<String?> encryptMessage(String recipientPubKey, String message);
-
-  /// Decrypt a message using wallet's private key
-  Future<String?> decryptMessage(String encryptedMessage);
-
-  /// Get all public key and private key pairs from wallets
-  ///
-  /// Returns a map where key is public key and value is private key.
-  /// Used for multi-wallet message decryption.
-  Future<Map<String, String>> getPublicKeyAndPrivateKeyPairs();
-
-  /// Decrypt message with auto key selection
-  ///
-  /// Automatically finds the correct private key based on the public key.
-  Future<String?> decryptMessageWithKeyPair(String pubKey, String encryptedMessage);
-}

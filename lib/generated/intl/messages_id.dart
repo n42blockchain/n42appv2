@@ -3493,7 +3493,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Penambangan Klasik (V1)",
     ),
     "g_setting_mining_v2_label": MessageLookupByLibrary.simpleMessage(
-      "Penambangan Cloud (V2)",
+      "Penambangan (V2)",
     ),
     "g_setting_mining_version": MessageLookupByLibrary.simpleMessage(
       "Antarmuka Pertambangan",

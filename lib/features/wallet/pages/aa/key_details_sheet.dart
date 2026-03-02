@@ -106,18 +106,16 @@ class KeyDetailsSheet extends StatelessWidget {
     );
   }
 
-  String _permLabel(BuildContext context, SessionKeyPermission p) {
-    switch (p) {
-      case SessionKeyPermission.transfer:
-        return S.of(context).g_key_aa_session_preset_transfer;
-      case SessionKeyPermission.approve:
-        return S.of(context).g_key_aa_approve;
-      case SessionKeyPermission.contractCall:
-        return S.of(context).g_key_aa_session_preset_contract;
-      case SessionKeyPermission.full:
-        return S.of(context).g_key_aa_session_preset_full;
-    }
-  }
+  String _permLabel(BuildContext context, SessionKeyPermission p) =>
+      switch (p) {
+        SessionKeyPermission.transfer =>
+          S.of(context).g_key_aa_session_preset_transfer,
+        SessionKeyPermission.approve => S.of(context).g_key_aa_approve,
+        SessionKeyPermission.contractCall =>
+          S.of(context).g_key_aa_session_preset_contract,
+        SessionKeyPermission.full =>
+          S.of(context).g_key_aa_session_preset_full,
+      };
 
   static String _date(DateTime d) =>
       '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';

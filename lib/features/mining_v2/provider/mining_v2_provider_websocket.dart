@@ -1,23 +1,16 @@
 part of 'mining_v2_provider.dart';
 
-// ============================================================================
-// WebSocket Connection Management
-//
-// Handles native WebSocket lifecycle: connect, disconnect, reconnect with
-// exponential back-off, and message routing.
-// ============================================================================
-
+/// WebSocket connection management mixin.
+///
+/// Handles native WebSocket lifecycle: connect, disconnect, reconnect with
+/// exponential back-off, and message routing.
 mixin _MiningWebSocketMixin on _MiningStateMixin {
-  // ==================== Init ====================
-
   /// Lazily initialise the native WebSocket bridge.
   void initWebSocket() {
     wsBridge ??= NativeWebSocketBridge();
   }
 
-  // ==================== Connect ====================
-
-  /// 连接 / 切换 WebSocket（首连 + 切钱包共用）
+  /// Connect or switch WebSocket (used for both initial connect and wallet switch).
   @override
   Future<void> connectWebSocket({
     required String wsUrl,
@@ -74,9 +67,7 @@ mixin _MiningWebSocketMixin on _MiningStateMixin {
     }
   }
 
-  // ==================== Disconnect ====================
-
-  /// 用户主动断开（退出挖矿 / 登出）
+  /// User-initiated disconnect (exit mining / logout).
   @override
   Future<void> disconnectWebSocket() async {
     // Cancel any pending reconnect
@@ -103,8 +94,6 @@ mixin _MiningWebSocketMixin on _MiningStateMixin {
     miningStatus = false;
     notifyListeners();
   }
-
-  // ==================== Reconnect ====================
 
   /// Handle connection lost - attempt reconnection.
   void _handleConnectionLost() {
@@ -143,8 +132,6 @@ mixin _MiningWebSocketMixin on _MiningStateMixin {
     });
   }
 
-  // ==================== Message Handling ====================
-
   @override
   void handleWebSocketMessage(String message) {
     debugPrint('Received WS: $message');
@@ -156,16 +143,10 @@ mixin _MiningWebSocketMixin on _MiningStateMixin {
         miningStatus = true;
         wsReconnectAttempts = 0;
         notifyListeners();
-        getBeaconValidator(); // immediately refresh beacon status on connect/reconnect
-        break;
-
-      case 'onFailure':
-      case 'onClosed':
+        getBeaconValidator();
+      case 'onFailure' || 'onClosed':
         _handleConnectionLost();
-        break;
-
       default:
-        // Normal business message handling
         break;
     }
   }

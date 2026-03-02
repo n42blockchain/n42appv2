@@ -66,7 +66,7 @@ class _WalletChainSendXrpState extends ConsumerState<WalletChainSendXrp>
   }
 
   Widget errorMessageWidget() {
-    if (errorMessage == "") return const SizedBox.shrink();
+    if (errorMessage.isEmpty) return const SizedBox.shrink();
     return Container(
       margin: EdgeInsets.only(
         top: ScreenUtil().setWidth(20.0),
@@ -117,30 +117,26 @@ class _WalletChainSendXrpState extends ConsumerState<WalletChainSendXrp>
   }
 
   Widget sendButtonWidget() {
-    final String title = S.of(context).g_key_48;
-    final bool isLoading = load == Load.loading;
+    final isLoading = load == Load.loading;
+    final sw = ScreenUtil().setWidth;
     return Positioned(
       left: 0,
       right: 0,
       bottom: 0,
       child: Column(
         children: [
-          Divider(
-            height: ScreenUtil().setWidth(1),
-            indent: 0,
-            endIndent: 0,
-          ),
+          Divider(height: sw(1), indent: 0, endIndent: 0),
           Container(
-            padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
-            height: ScreenUtil().setWidth(148.0),
+            padding: EdgeInsets.all(sw(30.0)),
+            height: sw(148.0),
             color: AppThemeUtils.getColorByKey(
                 context, AppThemeKeys.backGroundColor.name),
             child: buttonStyle6(
               context,
-              () async {
-                sendTransaction();
-              },
-              isLoading ? '${S.of(context).g_key_106}...' : title,
+              sendTransaction,
+              isLoading
+                  ? '${S.of(context).g_key_106}...'
+                  : S.of(context).g_key_48,
               AppThemeUtils.getColorByKey(
                 context,
                 isLoading
@@ -164,19 +160,18 @@ class _WalletChainSendXrpState extends ConsumerState<WalletChainSendXrp>
         text: "${S.of(context).g_key_37} ${widget.coinModel.coin['miniName']}",
         actions: [
           InkWell(
-            onTap: () {
-              Navigator.push(
+            onTap: () async {
+              final value = await Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => AddressBookList(
+                  builder: (_) => AddressBookList(
                     coinName: widget.coinModel.coin['coinType'],
                   ),
                 ),
-              ).then((value) async {
-                if (value != null) {
-                  toTextEditingController.text = value;
-                }
-              });
+              );
+              if (value != null) {
+                toTextEditingController.text = value;
+              }
             },
             child: Container(
               width: ScreenUtil().setWidth(40.0),

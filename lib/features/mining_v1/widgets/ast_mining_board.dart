@@ -43,16 +43,11 @@ class ASTMiningBoard extends StatelessWidget {
     );
   }
 
-  String _getLevelText(BuildContext context) {
-    switch (astNum) {
-      case 50:
-        return S.of(context).g_mining_key_62;
-      case 100:
-        return S.of(context).g_mining_key_61;
-      default:
-        return S.of(context).g_mining_key_63;
-    }
-  }
+  String _getLevelText(BuildContext context) => switch (astNum) {
+    50 => S.of(context).g_mining_key_62,
+    100 => S.of(context).g_mining_key_61,
+    _ => S.of(context).g_mining_key_63,
+  };
 
   String _getTimes() => astNum == 50 ? "70" : "15";
 
@@ -111,7 +106,6 @@ class ASTMiningBoard extends StatelessWidget {
                     height: ScreenUtil().setWidth(40),
                   ),
                   Row(
-                    //mainAxisSize: MainAxisSize.min,
                     children: [
                       Container(
                         decoration: BoxDecoration(
@@ -159,81 +153,50 @@ class ASTMiningBoard extends StatelessWidget {
   }
 
   Widget _buildItems(BuildContext context) {
-    String maxReward;
-    String dailyLimit;
-    String rewardDistribution;
+    final (maxReward, dailyLimit, rewardDistribution) = switch (astNum) {
+      50 => ("4.5", S.of(context).g_mining_key_69, S.of(context).g_mining_key_71("0.5", "20,000")),
+      100 => ("12", S.of(context).g_mining_key_70, S.of(context).g_mining_key_71("0.5", "1,500")),
+      _ => ("75", S.of(context).g_mining_key_70, S.of(context).g_mining_key_71("0.625", "300")),
+    };
 
-    switch (astNum) {
-      case 50:
-        maxReward = "4.5";
-        dailyLimit = S.of(context).g_mining_key_69;
-        rewardDistribution = S.of(context).g_mining_key_71("0.5", "20,000");
-        break;
-      case 100:
-        maxReward = "12";
-        dailyLimit = S.of(context).g_mining_key_70;
-        rewardDistribution = S.of(context).g_mining_key_71("0.5", "1,500");
-        break;
-      default:
-        maxReward = "75";
-        dailyLimit = S.of(context).g_mining_key_70;
-        rewardDistribution = S.of(context).g_mining_key_71("0.625", "300");
-    }
+    final divider = Divider(
+      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemLineColor.name),
+      indent: 1,
+      endIndent: 1,
+    );
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         _buildItem(context, "assets/mining/medal-star.png",
-            // "Max Reward Annually",
-            S.current.g_mining_key_33,
-            "$maxReward ${CoinType.N.name}"),
-        Divider(
-          color:
-          AppThemeUtils.getColorByKey(context, AppThemeKeys.itemLineColor.name),
-          indent: 1,
-          endIndent: 1,
-        ),
-        _buildItem(
-            context, "assets/mining/flash.png",
-            // "Speed",
-            S.current.g_mining_key_36,
-            S.of(context).g_mining_key_72),
-        Divider(
-          color:
-          AppThemeUtils.getColorByKey(context, AppThemeKeys.itemLineColor.name),
-          indent: 1,
-          endIndent: 1,
-        ),
-        _buildItem(
-            context, "assets/mining/star.png",
-            // "Daily Limit",
-            S.current.g_mining_key_35,
-            dailyLimit),
-        Divider(
-          color:
-          AppThemeUtils.getColorByKey(context, AppThemeKeys.itemLineColor.name),
-          indent: 1,
-          endIndent: 1,
-        ),
+            S.current.g_mining_key_33, "$maxReward ${CoinType.N.name}"),
+        divider,
+        _buildItem(context, "assets/mining/flash.png",
+            S.current.g_mining_key_36, S.of(context).g_mining_key_72),
+        divider,
+        _buildItem(context, "assets/mining/star.png",
+            S.current.g_mining_key_35, dailyLimit),
+        divider,
         _buildItem(context, "assets/mining/grid-lock.png",
-            // "Reward Distribution",
-            S.current.g_mining_key_34,
-            rewardDistribution),
-        //every 20,000 blocks mined
+            S.current.g_mining_key_34, rewardDistribution),
       ],
     );
   }
 
   Widget _buildItem(
       BuildContext context, String iconPath, String action, String desc) {
+    final textStyle = TextStyle(
+      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+      fontSize: ScreenUtil().setSp(24),
+    );
+
     return Padding(
       padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(28)),
       child: Row(
         children: [
           Container(
             decoration: BoxDecoration(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainBlueColor.name),
+              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
               borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
             ),
             width: ScreenUtil().setWidth(44),
@@ -247,33 +210,14 @@ class ASTMiningBoard extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
-            width: ScreenUtil().setWidth(12),
-          ),
-          Expanded(
-            child: Text(
-              action,
-              style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
-                  fontSize: ScreenUtil().setSp(24)),
-            ),
-          ),
-          Expanded(
-            child: Text(
-              desc,
-              style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
-                  fontSize: ScreenUtil().setSp(24)),
-              maxLines: 2,
-            ),
-          ),
+          SizedBox(width: ScreenUtil().setWidth(12)),
+          Expanded(child: Text(action, style: textStyle)),
+          Expanded(child: Text(desc, style: textStyle, maxLines: 2)),
           Image.asset(
             "assets/mining/duihao.png",
             width: ScreenUtil().setWidth(20),
             fit: BoxFit.cover,
-          )
+          ),
         ],
       ),
     );

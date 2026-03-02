@@ -60,53 +60,42 @@ class _WalletChainSendAlgoState extends ConsumerState<WalletChainSendAlgo>
   }
 
   Widget coinTypeWidget() {
-    final List<Widget> cChildren = [];
-    if (widget.coinModel.coin['coinType'] == CoinType.ALGO.name) {
-      if (algoTokenAdd) {
-        cChildren.addAll([
-          RecentAddressBar(
-            coinType: widget.coinModel.coin['coinType'] ?? '',
-            onSelected: (addr) {
-              toTextEditingController.text = addr;
-              toAddressCheck(addr);
-            },
-          ),
+    final isAlgoCoin = widget.coinModel.coin['coinType'] == CoinType.ALGO.name;
+    return Column(
+      children: [
+        if (isAlgoCoin && !algoTokenAdd)
+          algoAddToken()
+        else ...[
+          if (isAlgoCoin)
+            RecentAddressBar(
+              coinType: widget.coinModel.coin['coinType'] ?? '',
+              onSelected: (addr) {
+                toTextEditingController.text = addr;
+                toAddressCheck(addr);
+              },
+            ),
           toWidget(),
           amountWidget(),
-        ]);
-      } else {
-        cChildren.add(algoAddToken());
-      }
-    } else {
-      cChildren.addAll([
-        toWidget(),
-        amountWidget(),
-      ]);
-    }
-    cChildren.addAll([
-      minerFeeWidget(),
-      errorMessageWidget(),
-      const SizedBox(height: 100),
-    ]);
-    return Column(children: cChildren);
+        ],
+        minerFeeWidget(),
+        errorMessageWidget(),
+        const SizedBox(height: 100),
+      ],
+    );
   }
 
   Widget errorMessageWidget() {
-    if (errorMessage == "") return const SizedBox.shrink();
+    if (errorMessage.isEmpty) return const SizedBox.shrink();
     return Container(
       margin: EdgeInsets.only(
         top: ScreenUtil().setWidth(20.0),
         left: ScreenUtil().setWidth(30),
         right: ScreenUtil().setWidth(30),
       ),
-      padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30.0),
-        vertical: ScreenUtil().setWidth(30.0),
-      ),
+      padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
       width: double.infinity,
       decoration: BoxDecoration(
-        borderRadius:
-            BorderRadius.all(Radius.circular(ScreenUtil().setWidth(8.0))),
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8.0)),
         color: AppThemeUtils.getColorByKey(
             context, AppThemeKeys.errorBgColor2.name),
       ),
@@ -122,11 +111,8 @@ class _WalletChainSendAlgoState extends ConsumerState<WalletChainSendAlgo>
   }
 
   Widget sendButtonWidget() {
-    final String title = algoTokenAdd
-        ? S.of(context).g_key_48
-        : S.of(context).g_key_159;
-    final bool isLoading = load == Load.loading;
-
+    final title = algoTokenAdd ? S.of(context).g_key_48 : S.of(context).g_key_159;
+    final isLoading = load == Load.loading;
     return Positioned(
       left: 0,
       right: 0,
@@ -141,13 +127,7 @@ class _WalletChainSendAlgoState extends ConsumerState<WalletChainSendAlgo>
                 context, AppThemeKeys.backGroundColor.name),
             child: buttonStyle6(
               context,
-              () async {
-                if (!algoTokenAdd) {
-                  sendTransactionAlgoTokenEdit(true);
-                } else {
-                  sendTransaction();
-                }
-              },
+              () => algoTokenAdd ? sendTransaction() : sendTransactionAlgoTokenEdit(true),
               isLoading ? '${S.of(context).g_key_106}...' : title,
               AppThemeUtils.getColorByKey(
                 context,

@@ -3647,7 +3647,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Minage classique (V1)",
     ),
     "g_setting_mining_v2_label": MessageLookupByLibrary.simpleMessage(
-      "Minage cloud (V2)",
+      "Minage (V2)",
     ),
     "g_setting_mining_version": MessageLookupByLibrary.simpleMessage(
       "Interface de Minage",

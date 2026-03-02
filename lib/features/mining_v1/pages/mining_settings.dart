@@ -144,116 +144,81 @@ class _MiningSettingsState extends State<MiningSettings> {
     ));
   }
 
-  Widget _buildNodeSelector() {
+  Widget _buildDropdownRow({
+    required Widget label,
+    required String value,
+    required VoidCallback onTap,
+  }) {
     final textColor = _mainTextColor();
     return wrapItem(Padding(
-      padding:
-          EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
       child: Row(
         children: [
-          Text(
-            S.of(context).g_mining_key83,
-            style: TextStyle(
-                fontSize: ScreenUtil().setSp(32), color: textColor),
-          ),
-          const Spacer(),
+          Expanded(child: label),
+          SizedBox(width: ScreenUtil().setWidth(60)),
           GestureDetector(
-            onTap: () => sheetBottom(context, "", _buildNodeList(context)),
+            onTap: onTap,
             child: Row(
               mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
+              children: [
                 Text(
-                  currentNode?["name"] ?? '',
+                  value,
                   style: TextStyle(
                       color: textColor, fontSize: ScreenUtil().setSp(32)),
                 ),
-                const Icon(Icons.arrow_drop_down_sharp)
+                const Icon(Icons.arrow_drop_down_sharp),
               ],
             ),
           ),
         ],
       ),
     ));
+  }
+
+  Widget _buildNodeSelector() {
+    return _buildDropdownRow(
+      label: Text(
+        S.of(context).g_mining_key83,
+        style: TextStyle(
+            fontSize: ScreenUtil().setSp(32), color: _mainTextColor()),
+      ),
+      value: currentNode?["name"] ?? '',
+      onTap: () => sheetBottom(context, "", _buildNodeList(context)),
+    );
   }
 
   Widget _buildBgmSelector() {
-    final textColor = _mainTextColor();
-    return wrapItem(Padding(
-      padding:
-          EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 1,
-            child: Text(
-              S.of(context).g_mining_key34,
-              style: TextStyle(
-                  fontSize: ScreenUtil().setSp(32), color: textColor),
-            ),
-          ),
-          SizedBox(width: ScreenUtil().setWidth(60)),
-          GestureDetector(
-            onTap: _showMusicSheet,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Text(
-                  bgmMusicOptions[backgroundMiningMusic],
-                  style: TextStyle(
-                      color: textColor, fontSize: ScreenUtil().setSp(32)),
-                ),
-                const Icon(Icons.arrow_drop_down_sharp)
-              ],
-            ),
-          ),
-        ],
+    return _buildDropdownRow(
+      label: Text(
+        S.of(context).g_mining_key34,
+        style: TextStyle(
+            fontSize: ScreenUtil().setSp(32), color: _mainTextColor()),
       ),
-    ));
+      value: bgmMusicOptions[backgroundMiningMusic],
+      onTap: _showMusicSheet,
+    );
   }
 
   Widget _buildNetworkSelector() {
-    final textColor = _mainTextColor();
-    return wrapItem(Padding(
-      padding:
-          EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
-      child: Row(
+    return _buildDropdownRow(
+      label: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            flex: 1,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  S.of(context).g_mining_key84,
-                  style: TextStyle(
-                      fontSize: ScreenUtil().setSp(32), color: textColor),
-                ),
-                Text(
-                  S.of(context).g_mining_key85,
-                  style: TextStyle(
-                      fontSize: ScreenUtil().setSp(28), color: _greyColor()),
-                ),
-              ],
-            ),
+          Text(
+            S.of(context).g_mining_key84,
+            style: TextStyle(
+                fontSize: ScreenUtil().setSp(32), color: _mainTextColor()),
           ),
-          SizedBox(width: ScreenUtil().setWidth(60)),
-          GestureDetector(
-            onTap: _showNetworkSheet,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Text(
-                  networkOptions[AppConfig.isMainChainMining ? 0 : 1],
-                  style: TextStyle(
-                      color: textColor, fontSize: ScreenUtil().setSp(32)),
-                ),
-                const Icon(Icons.arrow_drop_down_sharp)
-              ],
-            ),
+          Text(
+            S.of(context).g_mining_key85,
+            style: TextStyle(
+                fontSize: ScreenUtil().setSp(28), color: _greyColor()),
           ),
         ],
       ),
-    ));
+      value: networkOptions[AppConfig.isMainChainMining ? 0 : 1],
+      onTap: _showNetworkSheet,
+    );
   }
 
   Widget _buildNodeList(BuildContext context) {

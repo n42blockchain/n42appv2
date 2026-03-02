@@ -22,12 +22,12 @@ class _DexSwapHistoryState extends State<DexSwapHistory> {
 
   String _statusText(BuildContext context, int status) {
     final s = S.of(context);
-    switch (status) {
-      case 1: return s.g_key_dex_status_pending;
-      case 2: return s.g_key_dex_status_confirmed;
-      case 3: return s.g_key_dex_status_failed;
-      default: return s.g_key_dex_status_quoted;
-    }
+    return switch (status) {
+      1 => s.g_key_dex_status_pending,
+      2 => s.g_key_dex_status_confirmed,
+      3 => s.g_key_dex_status_failed,
+      _ => s.g_key_dex_status_quoted,
+    };
   }
 
   @override
@@ -68,18 +68,14 @@ class _DexSwapHistoryState extends State<DexSwapHistory> {
               ],
             );
 
-            Color statusColor;
-            switch (item.status) {
-              case 2:
-                statusColor = AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.rightTextColor.name);
-              case 3:
-                statusColor = AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.errorTextColor.name);
-              default:
-                statusColor = AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.textColorOrange.name);
-            }
+            final statusColor = AppThemeUtils.getColorByKey(
+              context,
+              switch (item.status) {
+                2 => AppThemeKeys.rightTextColor.name,
+                3 => AppThemeKeys.errorTextColor.name,
+                _ => AppThemeKeys.textColorOrange.name,
+              },
+            );
 
             return Container(
               height: ScreenUtil().setWidth(100),
@@ -99,7 +95,7 @@ class _DexSwapHistoryState extends State<DexSwapHistory> {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      const Expanded(child: SizedBox()),
+                      const Spacer(),
                       Text(
                         '+${item.amountOut} ${item.tokenOutSymbol}',
                         style: TextStyle(
@@ -140,7 +136,7 @@ class _DexSwapHistoryState extends State<DexSwapHistory> {
                           ),
                         ),
                       ),
-                      const Expanded(child: SizedBox()),
+                      const Spacer(),
                       Text(
                         _statusText(context, item.status),
                         style: TextStyle(

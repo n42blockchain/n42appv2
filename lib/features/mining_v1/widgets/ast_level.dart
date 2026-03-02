@@ -25,17 +25,13 @@ class AstLevel extends StatelessWidget {
   }
 
   Widget _buildBoard(BuildContext context) {
-    final String bigImage = "assets/mining/ast_$astNum.png";
-    String levelText;
-    switch (astNum) {
-      case 50:
-        levelText = S.of(context).g_mining_key_62;
-      case 100:
-        levelText = S.of(context).g_mining_key_61;
-      default:
-        levelText = S.of(context).g_mining_key_63;
-    }
-    final String times = astNum == 50 ? "70" : "15";
+    final bigImage = "assets/mining/ast_$astNum.png";
+    final levelText = switch (astNum) {
+      50  => S.of(context).g_mining_key_62,
+      100 => S.of(context).g_mining_key_61,
+      _   => S.of(context).g_mining_key_63,
+    };
+    final times = astNum == 50 ? "70" : "15";
     return Column(
       children: [
         Row(
@@ -43,14 +39,10 @@ class AstLevel extends StatelessWidget {
             Image.asset(
               bigImage,
               width: ScreenUtil().setWidth(216),
-              // height: 108 / 375 * MediaQuery.of(context).size.width,
               fit: BoxFit.cover,
             ),
-            SizedBox(
-              width: ScreenUtil().setWidth(34),
-            ),
+            SizedBox(width: ScreenUtil().setWidth(34)),
             Expanded(
-              flex: 1,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -61,9 +53,7 @@ class AstLevel extends StatelessWidget {
                             context, AppThemeKeys.mainTextColor.name),
                         fontSize: ScreenUtil().setSp(32)),
                   ),
-                  SizedBox(
-                    height: ScreenUtil().setWidth(40),
-                  ),
+                  SizedBox(height: ScreenUtil().setWidth(40)),
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -72,7 +62,7 @@ class AstLevel extends StatelessWidget {
                         style: TextStyle(
                             color: AppThemeUtils.getColorByKey(
                                 context, AppThemeKeys.mainTextColor.name),
-                            fontSize:ScreenUtil().setSp(104),
+                            fontSize: ScreenUtil().setSp(104),
                             fontWeight: FontWeight.bold),
                       ),
                       Text(
@@ -81,13 +71,11 @@ class AstLevel extends StatelessWidget {
                             color: AppThemeUtils.getColorByKey(
                                 context, AppThemeKeys.mainTextColor.name),
                             fontWeight: FontWeight.bold,
-                            fontSize:ScreenUtil().setSp(32)),
+                            fontSize: ScreenUtil().setSp(32)),
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: ScreenUtil().setWidth(40),
-                  ),
+                  SizedBox(height: ScreenUtil().setWidth(40)),
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -102,13 +90,9 @@ class AstLevel extends StatelessWidget {
                           width: ScreenUtil().setWidth(20),
                         ),
                       ),
-                      SizedBox(
-                        width: ScreenUtil().setWidth(12),
-                      ),
+                      SizedBox(width: ScreenUtil().setWidth(12)),
                       Expanded(
-                        flex: 1,
                         child: Text(
-                          // "Unlock Period: 12 months",
                           S.current.g_mining_key_32,
                           style: TextStyle(
                               color: AppThemeUtils.getColorByKey(
@@ -123,9 +107,7 @@ class AstLevel extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(
-          height: ScreenUtil().setWidth(72),
-        ),
+        SizedBox(height: ScreenUtil().setWidth(72)),
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [

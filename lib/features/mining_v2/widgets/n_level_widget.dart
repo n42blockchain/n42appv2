@@ -34,7 +34,6 @@ class NLevelWidget extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // 顶部渐变条
           Container(
             height: ScreenUtil().setWidth(6),
             decoration: BoxDecoration(
@@ -68,7 +67,6 @@ class NLevelWidget extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        // 左侧图片区域
         Container(
           width: ScreenUtil().setWidth(160),
           height: ScreenUtil().setWidth(160),
@@ -90,13 +88,11 @@ class NLevelWidget extends StatelessWidget {
           ),
         ),
         SizedBox(width: ScreenUtil().setWidth(24)),
-        // 右侧内容
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // 数量显示
               Row(
                 crossAxisAlignment: CrossAxisAlignment.baseline,
                 textBaseline: TextBaseline.alphabetic,
@@ -125,7 +121,6 @@ class NLevelWidget extends StatelessWidget {
                 ],
               ),
               SizedBox(height: ScreenUtil().setWidth(20)),
-              // 解锁信息
               Container(
                 padding: EdgeInsets.symmetric(
                   horizontal: ScreenUtil().setWidth(14),

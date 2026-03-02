@@ -16,7 +16,6 @@ import 'package:n42_wallet/shared/domain/services/wallet_service_interface.dart'
 import 'package:n42_wallet/shared/domain/services/mining_service_interface.dart';
 import 'package:n42_wallet/features/wallet/data/services/wallet_service_impl.dart';
 import 'package:n42_wallet/features/mining/data/services/mining_service_impl.dart';
-import 'package:n42_wallet/features/chat/data/services/chat_crypto_service_impl.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 
 /// Dependency Injection Container
@@ -83,12 +82,6 @@ Future<void> configureDependencies(
     final miningService = MiningServiceImpl();
     getIt.registerSingleton<MiningServiceImpl>(miningService);
     ServiceLocatorSetup.registerMiningService(miningService);
-  }
-
-  if (!getIt.isRegistered<ChatCryptoServiceImpl>()) {
-    final chatCryptoService = ChatCryptoServiceImpl(container);
-    getIt.registerSingleton<ChatCryptoServiceImpl>(chatCryptoService);
-    ServiceLocatorSetup.registerChatCryptoService(chatCryptoService);
   }
 
   // Platform and security

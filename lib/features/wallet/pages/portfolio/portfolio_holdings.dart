@@ -8,8 +8,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/wallet/pages/portfolio/portfolio_models.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart' show ImageNetWork;
 
-// ─── Holdings row ─────────────────────────────────────────────────────────────
-
 class HoldingRow extends StatelessWidget {
   final CoinRecord record;
   final int rank;
@@ -43,7 +41,6 @@ class HoldingRow extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 10.h),
       child: Row(
         children: [
-          // Rank dot with slice color
           Container(
             width: 32.w,
             height: 32.w,
@@ -62,7 +59,6 @@ class HoldingRow extends StatelessWidget {
             ),
           ),
           SizedBox(width: 8.w),
-          // Icon
           ClipRRect(
             borderRadius: BorderRadius.circular(14.r),
             child: record.icon.isNotEmpty
@@ -78,7 +74,6 @@ class HoldingRow extends StatelessWidget {
                   ),
           ),
           SizedBox(width: 8.w),
-          // Name & allocation bar
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,7 +111,6 @@ class HoldingRow extends StatelessWidget {
             ),
           ),
           SizedBox(width: 12.w),
-          // Value & 24h
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [

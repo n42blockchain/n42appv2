@@ -37,8 +37,6 @@ class _AAAccountDetailPageState extends ConsumerState<AAAccountDetailPage>
     with _AAAccountDetailWidgetsMixin {
   bool _isDeploying = false;
 
-  // ─── Business Logic ───────────────────────────────────────────────────
-
   @override
   void copyAddress() {
     Clipboard.setData(ClipboardData(text: widget.account.address));
@@ -112,15 +110,13 @@ class _AAAccountDetailPageState extends ConsumerState<AAAccountDetailPage>
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => AASendPage(
+        builder: (_) => AASendPage(
           account: widget.account,
           walletAddress: widget.walletAddress,
         ),
       ),
     );
   }
-
-  // ─── Build ────────────────────────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {
@@ -133,11 +129,8 @@ class _AAAccountDetailPageState extends ConsumerState<AAAccountDetailPage>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // 账户卡片
             buildAccountCard(),
             SizedBox(height: ScreenUtil().setWidth(24)),
-
-            // 快捷操作
             buildQuickActions(
               onSend: widget.account.state.canExecute ? _navigateToSend : null,
               onReceive: _showReceiveDialog,
@@ -145,12 +138,8 @@ class _AAAccountDetailPageState extends ConsumerState<AAAccountDetailPage>
               isDeploying: _isDeploying,
             ),
             SizedBox(height: ScreenUtil().setWidth(24)),
-
-            // 账户详情
             buildDetailsSection(),
             SizedBox(height: ScreenUtil().setWidth(24)),
-
-            // 交易历史
             buildTransactionHistory(),
           ],
         ),

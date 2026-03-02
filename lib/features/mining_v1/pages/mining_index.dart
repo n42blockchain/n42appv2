@@ -180,7 +180,6 @@ class _MiningIndexState extends State<MiningIndex> with SingleTickerProviderStat
       ),
     );
   }
-  /// 显示钱包列表
   void showChangeAddress() {
     final walletValue = globalWapAdapter;
     final miningValue = globalMiningV1;

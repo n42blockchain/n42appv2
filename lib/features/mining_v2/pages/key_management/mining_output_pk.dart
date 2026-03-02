@@ -35,12 +35,10 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
   Map<String,dynamic>? encrypteData;
   Map<String,dynamic>? _localValue;
 
-  // 模拟加密函数：你可以替换成真实加密逻辑
   Future<String> encryptData(String password) async {
     _localValue ??= widget.value ?? await MiningApi.init().generateBls12381Keypair();
     if (!mounted) return "";
 
-    // Use IWalletService instead of WalletActionProvider
     final walletService = ServiceLocatorSetup.walletService;
     if (walletService == null) return "";
 
@@ -56,46 +54,37 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
     return await encryptSecret(data: encrypteData!, password: password);
   }
 
-  void _onConfirm() async{
+  Future<void> _onConfirm() async {
     final pwd = _pwdController.text;
     final confirm = _confirmController.text;
 
     if (pwd.length != 8) {
-      setState(() {
-        pwdErrorMessage=S.of(context).g_mining_key_98(8);
-      });
+      setState(() => pwdErrorMessage = S.of(context).g_mining_key_98(8));
       return;
     }
-
     if (pwd != confirm) {
-      setState(() {
-        confirmErrorMessage=S.of(context).g_key_passwords_not_match;
-      });
+      setState(() => confirmErrorMessage = S.of(context).g_key_passwords_not_match);
       return;
     }
-    pwdErrorMessage="";
-    confirmErrorMessage="";
 
-    // 显示加载状态
     setState(() {
+      pwdErrorMessage = "";
+      confirmErrorMessage = "";
       load = Load.loading;
     });
 
     try {
       _encryptedData = await encryptData(pwd);
-      // 执行加密
       if (mounted) {
         setState(() {
           load = Load.finish;
-          _showEncryptResult = true; // 切换状态
+          _showEncryptResult = true;
         });
       }
     } catch (e) {
       if (mounted) {
-        setState(() {
-          load = Load.finish;
-        });
-        ToastUtils.show('加密失败: $e');
+        setState(() => load = Load.finish);
+        ToastUtils.show('Encryption failed: $e');
       }
     }
   }
@@ -142,9 +131,8 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
         if (didPop) return;
-        // 返回时传递 copyEncrypte 的值
         if (mounted) {
-          Navigator.of(context).pop(copyEncrypte==false?null:encrypteData);
+          Navigator.of(context).pop(copyEncrypte ? encrypteData : null);
         }
       },
       child: Scaffold(
@@ -232,7 +220,7 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
       ),
 
       bottomNavigationBar: SafeArea(
-        child:  Container(
+        child: Container(
           margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
           width: double.infinity,
           height: ScreenUtil().setWidth(88),
@@ -240,9 +228,15 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
             context,
             _showEncryptResult ? _copyEncryptedData : _onConfirm,
             _showEncryptResult ? S.of(context).g_mining_key_101 : S.of(context).g_key_78,
-            AppThemeUtils.getColorByKey(context, load==Load.loading?AppThemeKeys.mainButtonBgColor3.name:AppThemeKeys.mainButtonBgColor.name),
-            AppThemeUtils.getColorByKey(context,load==Load.loading?AppThemeKeys.mainButtonTextColor3.name:AppThemeKeys.mainButtonTextColor.name),
-            load==Load.loading,
+            AppThemeUtils.getColorByKey(
+              context,
+              (load == Load.loading ? AppThemeKeys.mainButtonBgColor3 : AppThemeKeys.mainButtonBgColor).name,
+            ),
+            AppThemeUtils.getColorByKey(
+              context,
+              (load == Load.loading ? AppThemeKeys.mainButtonTextColor3 : AppThemeKeys.mainButtonTextColor).name,
+            ),
+            load == Load.loading,
           ),
         ),
       ),

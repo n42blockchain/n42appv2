@@ -1655,7 +1655,7 @@
     }
   },
   "g_setting_mining_version": "Interface de Mineração",
-  "g_setting_mining_v2_label": "Mineração em nuvem (V2)",
+  "g_setting_mining_v2_label": "Mineração (V2)",
   "g_setting_mining_v1_label": "Mineração Clássica (V1)",
   "g_mining_node_key1": "Detalhes do Nó Completo",
   "g_mining_node_key2": "ID do Nó",

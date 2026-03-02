@@ -69,10 +69,8 @@ class _TodayMiningPageState extends State<TodayMiningPage>
             initData();
           },
           childWidget: SingleChildScrollView(
-            padding: EdgeInsets.only(
-              left: ScreenUtil().setWidth(30),
-              right: ScreenUtil().setWidth(30),
-              //bottom: ScreenUtil().setWidth(30),
+            padding: EdgeInsets.symmetric(
+              horizontal: ScreenUtil().setWidth(30),
             ),
             child: ListenableBuilder(
               listenable: globalMiningV1,
@@ -80,71 +78,48 @@ class _TodayMiningPageState extends State<TodayMiningPage>
                 final mpValue = globalMiningV1;
                 return Column(
                   children: [
-                    //没有质押展示 选择plans
                     if (mpValue.miningType == null)
                       Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          SizedBox(
-                            height: ScreenUtil().setWidth(18),
-                          ),
-                          SelectPlan(
-                            onTap: null,
-                          ),
-                          SizedBox(
-                            height: ScreenUtil().setWidth(10),
-                          ),
+                          SizedBox(height: ScreenUtil().setWidth(18)),
+                          SelectPlan(onTap: null),
+                          SizedBox(height: ScreenUtil().setWidth(10)),
                         ],
                       ),
                     miningStatusWidget(mpValue),
 
-                    SizedBox(
-                      height: ScreenUtil().setWidth(20),
-                    ),
+                    SizedBox(height: ScreenUtil().setWidth(20)),
                     dayMiningTimeWidget(mpValue),
-                    SizedBox(
-                      height: ScreenUtil().setWidth(20),
-                    ),
+                    SizedBox(height: ScreenUtil().setWidth(20)),
                     backgroundMiningWidget(mpValue),
                     Row(
                       children: [
                         miningDataBroad(S.of(context).g_mining_key_10,
                             "${lastCycleMiningTimes[0]}:${lastCycleMiningTimes[1]}:${lastCycleMiningTimes[2]}",
                             imagePath: "assets/mining/broad_bg_3.png"),
-                        SizedBox(
-                          width: ScreenUtil().setWidth(20),
-                        ),
+                        SizedBox(width: ScreenUtil().setWidth(20)),
                         miningDataBroad(
-                          // "Last Rewards",
                             S.of(context).g_mining_key_11,
                             "${dataUtils.formatNum(lastCycleRewardsValue, 4)} ${CoinType.N.name}",
                             imagePath: "assets/mining/broad_bg_4.png",
-                            tipsText:
-                            // "Reward accumulates daily and is only sent to your AST wallet when it reaches ~0.5 AST.",
-                            S.of(context).g_mining_key_12,
+                            tipsText: S.of(context).g_mining_key_12,
                             showTips: true),
                       ],
                     ),
-                    SizedBox(
-                      height: ScreenUtil().setWidth(20),
-                    ),
+                    SizedBox(height: ScreenUtil().setWidth(20)),
                     Row(
                       children: [
                         miningDataBroad(
-                          // "Total Rewards:",
                           S.of(context).g_mining_key_13,
                           '${dataUtils.doubleFixed(totalValue, 2)} ${CoinType.N.name}',
                           imagePath: "assets/mining/broad_bg_1.png",
                         ),
-                        SizedBox(
-                          width: ScreenUtil().setWidth(20),
-                        ),
+                        SizedBox(width: ScreenUtil().setWidth(20)),
                         miningDataBroad(S.of(context).g_mining_key_14,
                             "\$${NumberFormat("#,##0.0#", "en_US").format((astPrice * totalValue))}",
                             imagePath: "assets/mining/broad_bg_2.png",
-                            tipsText:
-                            // "Calculated based on market price of AST * the total AST rewards.",
-                            S.of(context).g_mining_key_15,
+                            tipsText: S.of(context).g_mining_key_15,
                             showTips: true),
                       ],
                     ),

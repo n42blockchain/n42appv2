@@ -74,28 +74,17 @@ class _NftListPageState extends State<NftListPage> {
   }
 
   List<NftModel> get _filtered {
-    // 过滤掉 balance <= 0 的 NFT（API 数据异常 or 已全部转出的 ERC-1155）
     var list = _nfts.where((n) => n.balance > 0).toList();
 
-    // 类型过滤
-    switch (_filter) {
-      case _NftFilter.video:
-        list = list.where((n) => n.hasVideo).toList();
-        break;
-      case _NftFilter.erc721:
-        list = list.where((n) => n.nftType == 'ERC721').toList();
-        break;
-      case _NftFilter.erc1155:
-        list = list.where((n) => n.isErc1155).toList();
-        break;
-      case _NftFilter.ordinals:
-        list = list.where((n) => n.isOrdinal).toList();
-        break;
-      case _NftFilter.all:
-        break;
-    }
+    final typeTest = switch (_filter) {
+      _NftFilter.all => null,
+      _NftFilter.video => (NftModel n) => n.hasVideo,
+      _NftFilter.erc721 => (NftModel n) => n.nftType == 'ERC721',
+      _NftFilter.erc1155 => (NftModel n) => n.isErc1155,
+      _NftFilter.ordinals => (NftModel n) => n.isOrdinal,
+    };
+    if (typeTest != null) list = list.where(typeTest).toList();
 
-    // 搜索过滤
     if (_query.isNotEmpty) {
       list = list.where((n) {
         return n.name.toLowerCase().contains(_query) ||
@@ -106,7 +95,6 @@ class _NftListPageState extends State<NftListPage> {
     return list;
   }
 
-  // 当前链是否有 Ordinals（BTC 链）
   bool get _hasOrdinals {
     final coinType = widget.coinModel.coin['coinType'] as String? ?? '';
     return coinType.toUpperCase() == 'BTC';

@@ -59,10 +59,6 @@ class WalletChainSendBtc extends ConsumerStatefulWidget {
 
 class _WalletChainSendBtcState extends ConsumerState<WalletChainSendBtc>
     with _BtcSendLogicMixin, _BtcSendTxMixin, _BtcSendWidgetsMixin {
-  // All state fields are declared in _BtcSendLogicMixin.
-  // All widget methods are declared in _BtcSendWidgetsMixin.
-
-  // NumberFormat instance used for display formatting.
   final oCcy = NumberFormat('#,##0.00########', 'en_US');
 
   @override

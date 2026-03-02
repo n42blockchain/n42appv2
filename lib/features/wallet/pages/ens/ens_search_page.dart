@@ -45,7 +45,6 @@ class _EnsSearchPageState extends State<EnsSearchPage> {
   @override
   void initState() {
     super.initState();
-    // 自动聚焦搜索框
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _searchFocusNode.requestFocus();
     });
@@ -90,10 +89,7 @@ class _EnsSearchPageState extends State<EnsSearchPage> {
         _availabilityResult = result;
       });
 
-      // 如果可用，加载价格
-      if (result.isAvailable) {
-        _loadPrice(query);
-      }
+      if (result.isAvailable) _loadPrice(query);
     }
   }
 

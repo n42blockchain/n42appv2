@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/config/api_keys_config.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/network/base_api.dart';
+import 'package:n42_wallet/core/network/external_http.dart';
 import 'package:n42_wallet/features/wallet/models/ohlc_point.dart';
 
 class MarketApi {
@@ -78,11 +79,10 @@ class MarketApi {
       final encodedId = Uri.encodeComponent(geckoId);
       debugPrint('MarketApi.getOhlcvData: $encodedId days=$days');
 
-      final raw = await BaseApi.requestEmptyH.get<dynamic>(
+      final raw = await ExternalHttp.get(
         '$_geckoBase/coins/$encodedId/ohlc?vs_currency=usd&days=$days',
-        params: {},
-        header: _geckoHeader,
-      );
+        headers: _geckoHeader,
+      ).timeout(const Duration(seconds: 15), onTimeout: () => null);
 
       if (raw == null || raw is! List) return [];
 
@@ -116,11 +116,10 @@ class MarketApi {
       final encodedId = Uri.encodeComponent(geckoId);
       debugPrint('MarketApi.getMarketChart: $encodedId days=$days');
 
-      final raw = await BaseApi.requestEmptyH.get<dynamic>(
+      final raw = await ExternalHttp.get(
         '$_geckoBase/coins/$encodedId/market_chart?vs_currency=usd&days=$days',
-        params: {},
-        header: _geckoHeader,
-      );
+        headers: _geckoHeader,
+      ).timeout(const Duration(seconds: 15), onTimeout: () => null);
 
       if (raw == null || raw is! Map) return empty;
 
@@ -138,15 +137,18 @@ class MarketApi {
   ///
   /// 返回 trending coins 的 item 列表，每项包含 id, name, symbol, thumb, large,
   /// market_cap_rank, data 等字段。网络异常或解析失败返回空列表。
+  ///
+  /// 使用 8 秒 Dart 级超时：在可访问地区（如加拿大）CoinGecko 通常 ~1s 返回；
+  /// 在封锁地区 8s 后返回空列表，由调用方切换至 N42 后端 fallback，
+  /// 避免占用 Dio 的 60s + RetryInterceptor 的 3x 重试（总计 4 分钟）。
   Future<List<Map<String, dynamic>>> getTrendingCoins() async {
     try {
       debugPrint('MarketApi.getTrendingCoins');
 
-      final raw = await BaseApi.requestEmptyH.get<dynamic>(
+      final raw = await ExternalHttp.get(
         '$_geckoBase/search/trending',
-        params: {},
-        header: _geckoHeader,
-      );
+        headers: _geckoHeader,
+      ).timeout(const Duration(seconds: 8), onTimeout: () => null);
 
       if (raw == null || raw is! Map) return [];
       final coins = raw['coins'];
@@ -177,11 +179,10 @@ class MarketApi {
     try {
       debugPrint('MarketApi.searchCoins: $query');
 
-      final raw = await BaseApi.requestEmptyH.get<dynamic>(
+      final raw = await ExternalHttp.get(
         '$_geckoBase/search?q=${Uri.encodeQueryComponent(query.trim())}',
-        params: {},
-        header: _geckoHeader,
-      );
+        headers: _geckoHeader,
+      ).timeout(const Duration(seconds: 8), onTimeout: () => null);
 
       if (raw == null || raw is! Map) return [];
       final coins = raw['coins'];
@@ -193,6 +194,38 @@ class MarketApi {
           .toList();
     } catch (e, st) {
       debugPrint('MarketApi.searchCoins error: $e\n$st');
+      return [];
+    }
+  }
+
+  /// 硬编码热门币列表，当 CoinGecko trending 不可用时作为 fallback。
+  static const String _fallbackTrendingSymbols =
+      'btc,eth,sol,bnb,xrp,ada,avax,doge,dot,link';
+
+  /// 从 N42 后端获取 fallback trending 数据。
+  ///
+  /// 返回格式与 watchlist 一致（`coin`, `name`, `price`, `price_change_per_24h`,
+  /// `image`, `coin_gecko_id`, `market_cap_rank`），调用方可直接以
+  /// [_CoinSource.watchlist] 方式渲染。
+  Future<List<Map<String, dynamic>>> getFallbackTrendingCoins() async {
+    try {
+      debugPrint('MarketApi.getFallbackTrendingCoins');
+
+      final resp = await getWalletCoinsInfo(_fallbackTrendingSymbols);
+      if (resp['error'] != false) return [];
+
+      final rawData = resp['data'];
+      final coins = (rawData is List)
+          ? rawData
+          : (rawData is Map ? rawData['data'] : null);
+      if (coins is! List) return [];
+
+      return coins
+          .whereType<Map<dynamic, dynamic>>()
+          .map((c) => Map<String, dynamic>.from(c))
+          .toList();
+    } catch (e, st) {
+      debugPrint('MarketApi.getFallbackTrendingCoins error: $e\n$st');
       return [];
     }
   }

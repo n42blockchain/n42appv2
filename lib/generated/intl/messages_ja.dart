@@ -2975,7 +2975,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "クラシックマイニング (V1)",
     ),
     "g_setting_mining_v2_label": MessageLookupByLibrary.simpleMessage(
-      "クラウドマイニング (V2)",
+      "マイニング (V2)",
     ),
     "g_setting_mining_version": MessageLookupByLibrary.simpleMessage("マイニング画面"),
     "g_share_v2_key_5": MessageLookupByLibrary.simpleMessage("共有"),

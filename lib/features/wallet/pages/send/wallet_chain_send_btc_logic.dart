@@ -1,12 +1,7 @@
 part of 'wallet_chain_send_btc.dart';
 
 /// Business logic mixin for [_WalletChainSendBtcState].
-///
-/// Declares all shared state fields and contains initialization, fee loading,
-/// fee model building, and input validation methods.
 mixin _BtcSendLogicMixin on ConsumerState<WalletChainSendBtc> {
-  // -- Lazy-initialized service objects --
-
   TransferApi? _logicTransferApi;
   TransferApi get transferApi => _logicTransferApi ??= TransferApi();
 
@@ -19,8 +14,6 @@ mixin _BtcSendLogicMixin on ConsumerState<WalletChainSendBtc> {
   TokenViewApi? _logicTokenViewApi;
   TokenViewApi get tokenViewApi => _logicTokenViewApi ??= TokenViewApi();
 
-  // -- Controllers & focus nodes --
-
   final TextEditingController toTextEditingController = TextEditingController();
   final TextEditingController valueTextEditingController =
       TextEditingController();
@@ -30,14 +23,10 @@ mixin _BtcSendLogicMixin on ConsumerState<WalletChainSendBtc> {
   final FocusNode valueNode = FocusNode();
   final FocusNode byteFeeNode = FocusNode();
 
-  // -- Validation error messages --
-
   String toErrorMessage = '';
   String amountErrorMessage = '';
   String bytefeeErrorMessage = '';
   String errorMessage = '';
-
-  // -- State --
 
   Load utxoLoad = Load.finish;
   Load load = Load.loading;
@@ -68,8 +57,6 @@ mixin _BtcSendLogicMixin on ConsumerState<WalletChainSendBtc> {
     'signByteSize': 0,
     'maxValue': 0,
   };
-
-  // -- Initialization --
 
   Future<void> initData() async {
     await checkLastTx();
@@ -173,12 +160,8 @@ mixin _BtcSendLogicMixin on ConsumerState<WalletChainSendBtc> {
     }
   }
 
-  // -- Abstract methods provided by _BtcSendTxMixin --
-
   Future<void> calculateGasFee();
   Future<void> maxTag();
-
-  // -- Input validation --
 
   Future<void> toAddressCheck(String addr) async {
     if (widget.coinModel.isTest) return;

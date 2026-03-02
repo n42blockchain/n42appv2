@@ -12,7 +12,7 @@ class SwapAstSummary extends StatefulWidget {
   final String receive;
   final String balance;
   final String date;
-  final String payCoin;  // Bug 3: 新增动态 payCoin 参数，替代硬编码 USDT
+  final String payCoin;
   const SwapAstSummary(this.send, this.receive, this.balance, this.date,
       {required this.payCoin, super.key});
 
@@ -21,186 +21,115 @@ class SwapAstSummary extends StatefulWidget {
 }
 
 class _SwapAstSummaryState extends State<SwapAstSummary> {
+  Color _color(AppThemeKeys key) =>
+      AppThemeUtils.getColorByKey(context, key.name);
+
+  Widget _summaryRow(String label, String value, {bool bottomPadding = true}) {
+    return Padding(
+      padding: bottomPadding
+          ? EdgeInsets.only(bottom: ScreenUtil().setHeight(60))
+          : EdgeInsets.zero,
+      child: Row(
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              color: _color(AppThemeKeys.itemSubtitleTextColor),
+              fontSize: ScreenUtil().setSp(30),
+            ),
+          ),
+          Expanded(
+            child: Text(
+              value,
+              style: TextStyle(
+                color: _color(AppThemeKeys.itemTextColor),
+                fontSize: ScreenUtil().setSp(30),
+              ),
+              textAlign: TextAlign.right,
+              maxLines: 2,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final s = S.of(context);
+    final sw = ScreenUtil().setWidth;
+    final noteStyle = TextStyle(
+      color: _color(AppThemeKeys.mainTextColor3),
+      fontSize: ScreenUtil().setSp(26),
+    );
+
     return Scaffold(
-      appBar: AppBarWidget(
-        text: S.of(context).g_swap_key_28,
-      ),
+      appBar: AppBarWidget(text: s.g_swap_key_28),
       body: Container(
-        padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(30), ScreenUtil().setWidth(30), ScreenUtil().setWidth(30), 0),
+        padding: EdgeInsets.fromLTRB(sw(30), sw(30), sw(30), 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              padding: EdgeInsets.symmetric(horizontal:ScreenUtil().setWidth(30), vertical: ScreenUtil().setHeight(26)),
+              padding: EdgeInsets.symmetric(
+                horizontal: sw(30),
+                vertical: ScreenUtil().setHeight(26),
+              ),
               decoration: BoxDecoration(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+                color: _color(AppThemeKeys.itemBgColor),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Column(
                 children: [
-                  Padding(
-                    padding: EdgeInsets.only(bottom: ScreenUtil().setHeight(60)),
-                    child: Row(
-                      children: [
-                        Text(
-                          S.of(context).g_key_48,
-                          style: TextStyle(
-                            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-                            fontSize: ScreenUtil().setSp(30),
-                          ),
-                        ),
-                        Expanded(
-                          child: Text(
-                            "${widget.send} ${widget.payCoin}",
-                            style: TextStyle(
-                              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemTextColor.name),
-                              fontSize: ScreenUtil().setSp(30),
-                            ),
-                            textAlign: TextAlign.right,
-                            maxLines: 2,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(bottom: ScreenUtil().setHeight(60)),
-                    child: Row(
-                      children: [
-                        Text(
-                          S.of(context).g_key_33,
-                          style: TextStyle(
-                            color:AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-                            fontSize: ScreenUtil().setSp(30),
-                          ),
-                        ),
-                        Expanded(
-                          child: Text(
-                            "${widget.receive} ${CoinType.N.name}",
-                            style: TextStyle(
-                              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemTextColor.name),
-                              fontSize: ScreenUtil().setSp(30),
-                            ),
-                            textAlign: TextAlign.right,
-                            maxLines: 2,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(bottom: ScreenUtil().setHeight(60)),
-                    child: Row(
-                      children: [
-                        Text(
-                          S.of(context).g_swap_key_29,
-                          style: TextStyle(
-                            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-                            fontSize: ScreenUtil().setSp(30),
-                          ),
-                        ),
-                        Expanded(
-                          child: Text(
-                            "${widget.balance} ${CoinType.N.name}",
-                            style: TextStyle(
-                              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemTextColor.name),
-                              fontSize: ScreenUtil().setSp(30),
-                            ),
-                            textAlign: TextAlign.right,
-                            maxLines: 2,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        S.of(context).g_swap_key_30,
-                        style: TextStyle(
-                          color:AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-                          fontSize: ScreenUtil().setSp(30),
-                        ),
-                      ),
-                      Expanded(
-                        child: Row(
-                          textDirection: TextDirection.rtl,
-                          children: [
-                            Text(
-                              widget.date,
-                              style: TextStyle(
-                                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemTextColor.name),
-                                fontSize: ScreenUtil().setSp(30),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                  _summaryRow(s.g_key_48, '${widget.send} ${widget.payCoin}'),
+                  _summaryRow(
+                      s.g_key_33, '${widget.receive} ${CoinType.N.name}'),
+                  _summaryRow(
+                      s.g_swap_key_29, '${widget.balance} ${CoinType.N.name}'),
+                  _summaryRow(s.g_swap_key_30, widget.date,
+                      bottomPadding: false),
                 ],
               ),
             ),
-            SizedBox(
-              height: ScreenUtil().setHeight(102),
-            ),
-            Text(
-              S.of(context).g_swap_key_31(CoinType.N.name),
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor3.name),
-                fontSize: ScreenUtil().setSp(26),
-              ),
-            ),
-            SizedBox(
-              height: ScreenUtil().setHeight(20),
-            ),
-            Text(
-              S.of(context).g_swap_key_32,
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor3.name),
-                fontSize: ScreenUtil().setSp(26),
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: SizedBox(),
-            ),
+            SizedBox(height: ScreenUtil().setHeight(102)),
+            Text(s.g_swap_key_31(CoinType.N.name), style: noteStyle),
+            SizedBox(height: ScreenUtil().setHeight(20)),
+            Text(s.g_swap_key_32, style: noteStyle),
+            const Spacer(),
             Container(
-              height: ScreenUtil().setWidth(88),
-              margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(36)),
+              height: sw(88),
+              margin: EdgeInsets.only(bottom: sw(36)),
               child: Row(
                 children: [
                   Expanded(
                     child: buttonStyle5(
                       context,
-                          ()async{
-                        Navigator.pop(context);
-                      },
-                      S.of(context).g_key_79,
-                      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainWhiteColor.name),
-                      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor3.name),
+                      () => Navigator.pop(context),
+                      s.g_key_79,
+                      _color(AppThemeKeys.mainWhiteColor),
+                      _color(AppThemeKeys.mainButtonTextColor3),
                     ),
                   ),
-                  SizedBox(
-                    width: ScreenUtil().setWidth(30),
-                  ),
+                  SizedBox(width: sw(30)),
                   Expanded(
                     child: buttonStyle2(
                       context,
-                          ()async{
-                        bool r=await Navigator.push(context, MaterialPageRoute(builder: (context)=>WalletSecurityVerification()));
+                      () async {
+                        final r = await Navigator.push<bool>(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => WalletSecurityVerification(),
+                          ),
+                        );
                         if (!context.mounted) return;
-                        if(r){
-                          Navigator.pop(context,true);
-                        }
-                      }, S.of(context).g_key_78,),
+                        if (r == true) Navigator.pop(context, true);
+                      },
+                      s.g_key_78,
+                    ),
                   ),
                 ],
               ),
             ),
-
           ],
         ),
       ),

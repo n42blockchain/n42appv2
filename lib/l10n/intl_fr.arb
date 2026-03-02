@@ -1655,7 +1655,7 @@
     }
   },
   "g_setting_mining_version": "Interface de Minage",
-  "g_setting_mining_v2_label": "Minage cloud (V2)",
+  "g_setting_mining_v2_label": "Minage (V2)",
   "g_setting_mining_v1_label": "Minage classique (V1)",
   "g_mining_node_key1": "Détail Nœud Complet",
   "g_mining_node_key2": "ID du Nœud",

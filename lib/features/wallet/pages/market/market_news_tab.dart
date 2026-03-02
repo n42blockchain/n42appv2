@@ -5,8 +5,6 @@
 
 part of 'market_page.dart';
 
-// ─── News Tab ─────────────────────────────────────────────────────────────────
-
 class _NewsTab extends StatelessWidget {
   final List<NewsArticle> articles;
   final bool loading;
@@ -38,8 +36,6 @@ class _NewsTab extends StatelessWidget {
   }
 }
 
-// ─── News Card ────────────────────────────────────────────────────────────────
-
 class _NewsCard extends StatelessWidget {
   final NewsArticle article;
   const _NewsCard({required this.article});
@@ -69,7 +65,6 @@ class _NewsCard extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Thumbnail
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8.r),
                   child: article.imageUrl != null
@@ -88,7 +83,6 @@ class _NewsCard extends StatelessWidget {
                         ),
                 ),
                 SizedBox(width: 12.w),
-                // Text content
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

@@ -20,153 +20,130 @@ class SwapAstTransactions extends StatefulWidget {
 }
 
 class _SwapAstTransactionsState extends State<SwapAstTransactions> {
-  SwapAstApi? _swapAstApi;
-  SwapAstApi get swapAstApi{
-    _swapAstApi ??= SwapAstApi();
-    return _swapAstApi!;
+  late final SwapAstApi _swapAstApi = SwapAstApi();
+
+  static const _dateFormat = [
+    dformat.yyyy, '/', dformat.mm, '/', dformat.dd,
+    ' ', dformat.am, ' ', dformat.hh, ':', dformat.nn,
+  ];
+
+  ({IconData icon, String label, Color color}) _orderStateInfo(
+    BuildContext context,
+    SwapAstOrderModel order,
+  ) {
+    final s = S.of(context);
+    return switch (order.orderState) {
+      1 => (
+        icon: Icons.error,
+        label: s.g_swap_key_22,
+        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
+      ),
+      2 => (
+        icon: Icons.error,
+        label: s.g_key_79,
+        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
+      ),
+      0 => (
+        icon: Icons.info_rounded,
+        label: (order.payTx?.contains("0x") ?? false) ? s.g_swap_key_24 : s.g_swap_key_23,
+        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.textColorOrange.name),
+      ),
+      5 => (
+        icon: Icons.check_circle,
+        label: s.g_swap_key_18,
+        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.rightTextColor.name),
+      ),
+      _ => (
+        icon: Icons.info_rounded,
+        label: s.g_swap_key_25,
+        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.textColorOrange.name),
+      ),
+    };
   }
 
   @override
   Widget build(BuildContext context) {
+    final mainTextColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+    final subtitleColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
     return Scaffold(
-      appBar: AppBarWidget(
-        text: S.of(context).g_key_tran_1,
-      ),
+      appBar: AppBarWidget(text: S.of(context).g_key_tran_1),
       body: Padding(
         padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
         child: BaseList(
-          buildItem: (BuildContext context, List<dynamic> results, int index) {
-            SwapAstOrderModel orderModel=results[index];
-            String stateStr="";
-            Color stateColor;
-            IconData iconData;
-            if(orderModel.orderState==1){
-              iconData=Icons.error;
-              stateStr=S.of(context).g_swap_key_22;
-              stateColor=AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name);
-            }else if(orderModel.orderState==2){
-              iconData=Icons.error;
-              stateStr=S.of(context).g_key_79;
-              stateColor=AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name);
-            }else if(orderModel.orderState==0){
-              int index=orderModel.payTx?.indexOf("0x")??-1;
-              if(index==-1){
-                stateStr=S.of(context).g_swap_key_23;
-              }else{
-                stateStr=S.of(context).g_swap_key_24;
-              }
-              iconData=Icons.info_rounded;
-              stateColor=AppThemeUtils.getColorByKey(context, AppThemeKeys.textColorOrange.name);
-            }else if(orderModel.orderState==5){
-              iconData=Icons.check_circle;
-              stateStr=S.of(context).g_swap_key_18;
-              stateColor=AppThemeUtils.getColorByKey(context, AppThemeKeys.rightTextColor.name);
-            }else {
-              iconData=Icons.info_rounded;
-              stateStr=S.of(context).g_swap_key_25;
-              stateColor=AppThemeUtils.getColorByKey(context, AppThemeKeys.textColorOrange.name);
-            }
-            String createStr=dformat.formatDate(
-                DateTime.fromMillisecondsSinceEpoch(orderModel.created??0), [
-              dformat.yyyy,
-              '/',
-              dformat.mm,
-              '/',
-              dformat.dd,
-              ' ',
-              dformat.am,
-              ' ',
-              dformat.hh,
-              ':',
-              dformat.nn
-            ]);
-            return InkWell(
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>SwapAstTransactionDetail(orderModel)));
-                },
-                child: Container(
-                  height: ScreenUtil().setWidth(80),
-                  width: double.infinity,
-                  margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(40)),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            "${orderModel.payCoin ?? 'USDT'}/${CoinType.N.name}",
-                            style: TextStyle(
-                              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                              fontSize: ScreenUtil().setSp(28),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Text(
-                              "+${orderModel.orderNum}",
-                              style: TextStyle(
-                                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                                fontSize: ScreenUtil().setSp(28),
-                              ),
-                              textAlign: TextAlign.right,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            createStr,
-                            style: TextStyle(
-                              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-                              fontSize: ScreenUtil().setSp(24),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Container(
-                                  height: ScreenUtil().setWidth(30),
-                                  width: ScreenUtil().setWidth(30),
-                                  margin: EdgeInsets.only(right: ScreenUtil().setWidth(4)),
-                                  child: Icon(
-                                    iconData,
-                                    color: stateColor,
-                                    size: ScreenUtil().setWidth(30),
-                                    fill: 0,
-                                  ),
-                                ),
-                                Text(
-                                  stateStr,
-                                  style: TextStyle(
-                                    color: stateColor,
-                                    fontSize: ScreenUtil().setSp(24),
-                                  ),
-                                  textAlign: TextAlign.right,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                )
-            );
-          },
-          getData: (int page, int pageSize) async {
-            MessageModel rData=await swapAstApi.getNftOrAstOrderList(2, AppGlobals.userInfo?.uuid??"",page: page,pageSize: pageSize);
-            if(rData.error==false){
-              return (rData.data as List).map((e) => SwapAstOrderModel.fromJson(e)).toList();
-            }
-            return Future.value([]);
-
-          },
           firstRefresh: true,
           pageIndex: 1,
           pageSize: 15,
+          getData: (int page, int pageSize) async {
+            final rData = await _swapAstApi.getNftOrAstOrderList(
+              2, AppGlobals.userInfo?.uuid ?? '',
+              page: page, pageSize: pageSize,
+            );
+            if (rData.error) return [];
+            return (rData.data as List)
+                .map((e) => SwapAstOrderModel.fromJson(e))
+                .toList();
+          },
+          buildItem: (BuildContext context, List<dynamic> results, int index) {
+            final order = results[index] as SwapAstOrderModel;
+            final state = _orderStateInfo(context, order);
+            final timeStr = dformat.formatDate(
+              DateTime.fromMillisecondsSinceEpoch(order.created ?? 0),
+              _dateFormat,
+            );
+            final textStyle = TextStyle(
+              color: mainTextColor,
+              fontSize: ScreenUtil().setSp(28),
+            );
+            return InkWell(
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => SwapAstTransactionDetail(order)),
+              ),
+              child: Container(
+                height: ScreenUtil().setWidth(80),
+                width: double.infinity,
+                margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(40)),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Text("${order.payCoin ?? 'USDT'}/${CoinType.N.name}", style: textStyle),
+                        Expanded(
+                          child: Text(
+                            "+${order.orderNum}",
+                            style: textStyle,
+                            textAlign: TextAlign.right,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          timeStr,
+                          style: TextStyle(color: subtitleColor, fontSize: ScreenUtil().setSp(24)),
+                        ),
+                        Expanded(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Icon(state.icon, color: state.color, size: ScreenUtil().setWidth(30), fill: 0),
+                              SizedBox(width: ScreenUtil().setWidth(4)),
+                              Text(
+                                state.label,
+                                style: TextStyle(color: state.color, fontSize: ScreenUtil().setSp(24)),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
         ),
       ),
     );

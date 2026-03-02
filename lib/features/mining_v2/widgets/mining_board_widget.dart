@@ -8,8 +8,6 @@ import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dar
 
 class MiningBoardWidget extends StatelessWidget {
   final int nNum;
-
-  /// 单次验证收益
   final int cReward;
 
   const MiningBoardWidget({
@@ -18,12 +16,9 @@ class MiningBoardWidget extends StatelessWidget {
     required this.cReward,
   });
 
-  bool _isDark(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
-
   @override
   Widget build(BuildContext context) {
-    final isDark = _isDark(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
       decoration: BoxDecoration(
@@ -40,7 +35,6 @@ class MiningBoardWidget extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // 顶部标题区域
           Container(
             width: double.infinity,
             padding: EdgeInsets.symmetric(
@@ -71,7 +65,6 @@ class MiningBoardWidget extends StatelessWidget {
               ),
             ),
           ),
-          // 主内容区域
           Padding(
             padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
             child: Column(
@@ -88,13 +81,10 @@ class MiningBoardWidget extends StatelessWidget {
   }
 
   Widget _buildBoard(BuildContext context) {
-    const String bigImage = "assets/mining/ast_50.png";
-    final isDark = _isDark(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        // 左侧图片 - 添加渐变背景
         Container(
           width: ScreenUtil().setWidth(180),
           height: ScreenUtil().setWidth(180),
@@ -111,18 +101,16 @@ class MiningBoardWidget extends StatelessWidget {
           ),
           padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
           child: Image.asset(
-            bigImage,
+            "assets/mining/ast_50.png",
             fit: BoxFit.contain,
           ),
         ),
         SizedBox(width: ScreenUtil().setWidth(30)),
-        // 右侧内容
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // 数量显示
               Row(
                 crossAxisAlignment: CrossAxisAlignment.baseline,
                 textBaseline: TextBaseline.alphabetic,
@@ -148,7 +136,6 @@ class MiningBoardWidget extends StatelessWidget {
                 ],
               ),
               SizedBox(height: ScreenUtil().setWidth(24)),
-              // 解锁信息
               Container(
                 padding: EdgeInsets.symmetric(
                   horizontal: ScreenUtil().setWidth(16),
@@ -212,14 +199,12 @@ class MiningBoardWidget extends StatelessWidget {
   }
 
   Widget _buildItems(BuildContext context) {
-    final String rewardPerVerification =
-        "${toEther('$cReward', 9)} ${CoinType.N.name}";
-    
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final rewardPerVerification = "${toEther('$cReward', 9)} ${CoinType.N.name}";
+
     return Container(
       decoration: BoxDecoration(
-        color: _isDark(context)
-            ? Colors.white.withValues(alpha:0.03)
-            : Colors.grey.withValues(alpha:0.03),
+        color: (isDark ? Colors.white : Colors.grey).withValues(alpha:0.03),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
       ),
       child: Column(
@@ -230,23 +215,23 @@ class MiningBoardWidget extends StatelessWidget {
             "assets/mining/medal-star.png",
             S.current.g_mining_key_33,
             rewardPerVerification,
-            const Color(0xFF5C6BC0), // 紫蓝色
+            const Color(0xFF5C6BC0),
           ),
           _buildDivider(context),
           _buildItem(
-            context, 
+            context,
             "assets/mining/flash.png",
             S.current.g_mining_key_36,
             S.of(context).g_mining_key_72,
-            const Color(0xFF26A69A), // 青色
+            const Color(0xFF26A69A),
           ),
           _buildDivider(context),
           _buildItem(
-            context, 
+            context,
             "assets/mining/grid-lock.png",
             S.current.g_mining_key_34,
             S.current.g_mining_key_74,
-            const Color(0xFFFF7043), // 橙色
+            const Color(0xFFFF7043),
           ),
         ],
       ),
@@ -271,7 +256,6 @@ class MiningBoardWidget extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // 图标
           Container(
             width: ScreenUtil().setWidth(48),
             height: ScreenUtil().setWidth(48),
@@ -290,7 +274,6 @@ class MiningBoardWidget extends StatelessWidget {
             ),
           ),
           SizedBox(width: ScreenUtil().setWidth(16)),
-          // 标题
           Expanded(
             flex: 2,
             child: Text(
@@ -301,7 +284,6 @@ class MiningBoardWidget extends StatelessWidget {
               ),
             ),
           ),
-          // 值
           Expanded(
             flex: 3,
             child: Row(

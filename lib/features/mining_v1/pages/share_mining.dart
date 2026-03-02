@@ -10,7 +10,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ShareMining extends StatefulWidget {
-  // 0 创建群组 1 加入群组 2Ast质押 3NFT质押
   final int fromType;
   final int? astValue;
   final String? groupName;
@@ -59,10 +58,8 @@ class _ShareMiningState extends State<ShareMining> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        return false;
-      },
+    return PopScope(
+      canPop: false,
       child: Scaffold(
         body: Container(
           decoration: const BoxDecoration(
@@ -74,9 +71,7 @@ class _ShareMiningState extends State<ShareMining> {
             padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
             child: Column(
               children: [
-                SizedBox(
-                  height: ScreenUtil().setWidth(60) + MediaQuery.of(context).padding.top,
-                ),
+                SizedBox(height: ScreenUtil().setWidth(60) + MediaQuery.of(context).padding.top),
                 Image.asset(
                   "assets/mining/medal_star.png",
                   width: ScreenUtil().setWidth(170),
@@ -84,9 +79,7 @@ class _ShareMiningState extends State<ShareMining> {
                   color: AppThemeUtils.getColorByKey(
                       context, AppThemeKeys.mainTextColor.name),
                 ),
-                SizedBox(
-                  height: ScreenUtil().setWidth(100),
-                ),
+                SizedBox(height: ScreenUtil().setWidth(100)),
                 Text(
                   "Congratulations!",
                   style: TextStyle(
@@ -94,9 +87,7 @@ class _ShareMiningState extends State<ShareMining> {
                           context, AppThemeKeys.mainTextColor.name),
                       fontSize: ScreenUtil().setSp(30)),
                 ),
-                SizedBox(
-                  height: ScreenUtil().setWidth(40),
-                ),
+                SizedBox(height: ScreenUtil().setWidth(40)),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(44)),
                   child: Text(
@@ -126,9 +117,7 @@ class _ShareMiningState extends State<ShareMining> {
                               color: AppThemeUtils.getColorByKey(
                                   context, AppThemeKeys.mainBlueColor.name),
                             ),
-                            SizedBox(
-                              height: ScreenUtil().setWidth(24),
-                            ),
+                            SizedBox(height: ScreenUtil().setWidth(24)),
                             Text(
                               S.of(context).g_mining_key61,
                               style: TextStyle(

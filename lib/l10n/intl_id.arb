@@ -1655,7 +1655,7 @@
     }
   },
   "g_setting_mining_version": "Antarmuka Pertambangan",
-  "g_setting_mining_v2_label": "Penambangan Cloud (V2)",
+  "g_setting_mining_v2_label": "Penambangan (V2)",
   "g_setting_mining_v1_label": "Penambangan Klasik (V1)",
   "g_mining_node_key1": "Detail Node Penuh",
   "g_mining_node_key2": "ID Node",

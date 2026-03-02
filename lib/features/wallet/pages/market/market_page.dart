@@ -40,6 +40,7 @@ class _MarketPageState extends ConsumerState<MarketPage>
   // Trending
   List<Map<String, dynamic>> _trending = [];
   bool _trendingLoading = false;
+  bool _trendingIsFallback = false; // true when using N42 backend fallback
 
   // Search
   final _searchCtrl = TextEditingController();
@@ -185,10 +186,22 @@ class _MarketPageState extends ConsumerState<MarketPage>
   Future<void> _loadTrending() async {
     if (_trendingLoading) return;
     setState(() => _trendingLoading = true);
-    final result = await MarketApi().getTrendingCoins();
+
+    final api = MarketApi();
+    var result = await api.getTrendingCoins();
+    var isFallback = false;
+
+    // CoinGecko 不可用（被墙 / 无 key / 限频）→ 走 N42 后端 fallback
+    if (result.isEmpty) {
+      debugPrint('MarketApi: CoinGecko trending empty, trying N42 fallback');
+      result = await api.getFallbackTrendingCoins();
+      isFallback = result.isNotEmpty;
+    }
+
     if (mounted) {
       setState(() {
         _trending = result;
+        _trendingIsFallback = isFallback;
         _trendingLoading = false;
       });
     }
@@ -319,17 +332,31 @@ class _MarketPageState extends ConsumerState<MarketPage>
                 _TrendingTab(
                   coins: _trending,
                   loading: _trendingLoading,
+                  isFallback: _trendingIsFallback,
                   watchlistSymbols: _watchlistSymbols,
                   priceAlerts: _priceAlerts,
-                  onTap: (c) => _navigateToDetail(c, _CoinSource.trending),
-                  onToggleWatchlist: _toggleWatchlist,
-                  onSetAlert: (ctx, c) => _openAlertSheet(
-                    ctx,
-                    c['id']?.toString() ?? '',
-                    (c['symbol'] ?? '').toString().toLowerCase(),
-                    c['name']?.toString() ?? '',
-                    _parseTrendingPrice(c),
+                  onTap: (c) => _navigateToDetail(
+                    c,
+                    _trendingIsFallback
+                        ? _CoinSource.watchlist
+                        : _CoinSource.trending,
                   ),
+                  onToggleWatchlist: _toggleWatchlist,
+                  onSetAlert: (ctx, c) => _trendingIsFallback
+                      ? _openAlertSheet(
+                          ctx,
+                          c['coin_gecko_id']?.toString() ?? '',
+                          (c['coin'] ?? '').toString().toLowerCase(),
+                          c['name']?.toString() ?? '',
+                          _parsePrice(c['price']),
+                        )
+                      : _openAlertSheet(
+                          ctx,
+                          c['id']?.toString() ?? '',
+                          (c['symbol'] ?? '').toString().toLowerCase(),
+                          c['name']?.toString() ?? '',
+                          _parseTrendingPrice(c),
+                        ),
                   onRefresh: _loadTrending,
                 ),
                 _SearchTab(

@@ -31,7 +31,7 @@ class SelectWallet extends ConsumerStatefulWidget {
 
 class _SelectWalletState extends ConsumerState<SelectWallet> {
   List<WalletInfo> walletList = [];
-  Load _load = Load.loading; // 初始显示加载中
+  Load _load = Load.loading;
 
   @override
   void initState() {
@@ -66,9 +66,7 @@ class _SelectWalletState extends ConsumerState<SelectWallet> {
   }
 
   Widget _buildContent() {
-    if (_load == Load.loading) {
-      return const SizedBox.shrink(); // LoadingPage 已覆盖
-    }
+    if (_load == Load.loading) return const SizedBox.shrink();
     if (walletList.isEmpty) {
       return const EmptyView();
     }

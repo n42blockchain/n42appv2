@@ -7,7 +7,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ShareMining extends StatefulWidget {
-  // 0 创建群组 1 加入群组 2Ast质押 3NFT质押
   final int fromType;
   final int? astValue;
   final String? groupName;
@@ -55,17 +54,11 @@ class _ShareMiningState extends State<ShareMining> with SingleTickerProviderStat
     if (widget.fromType == 0 || widget.fromType == 1) {
       return S.of(context).g_mining_key60;
     }
-    String topS;
-    switch (widget.astValue) {
-      case 50:
-        topS = S.of(context).g_mining_key_67;
-        break;
-      case 100:
-        topS = S.of(context).g_mining_key_66;
-        break;
-      default:
-        topS = S.of(context).g_mining_key_68;
-    }
+    final topS = switch (widget.astValue) {
+      50 => S.of(context).g_mining_key_67,
+      100 => S.of(context).g_mining_key_66,
+      _ => S.of(context).g_mining_key_68,
+    };
     return S.of(context).g_mining_key63(topS);
   }
 
@@ -109,7 +102,6 @@ class _ShareMiningState extends State<ShareMining> with SingleTickerProviderStat
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           SizedBox(height: ScreenUtil().setWidth(40)),
-                          // 勋章图标 - 带动画
                           AnimatedBuilder(
                             animation: _animationController,
                             builder: (context, child) {
@@ -153,7 +145,6 @@ class _ShareMiningState extends State<ShareMining> with SingleTickerProviderStat
                             },
                           ),
                           SizedBox(height: ScreenUtil().setWidth(50)),
-                          // 标题
                           FadeTransition(
                             opacity: _fadeAnimation,
                             child: Text(
@@ -167,7 +158,6 @@ class _ShareMiningState extends State<ShareMining> with SingleTickerProviderStat
                             ),
                           ),
                           SizedBox(height: ScreenUtil().setWidth(30)),
-                          // 描述文字
                           FadeTransition(
                             opacity: _fadeAnimation,
                             child: Container(
@@ -193,7 +183,6 @@ class _ShareMiningState extends State<ShareMining> with SingleTickerProviderStat
                             ),
                           ),
                           SizedBox(height: ScreenUtil().setWidth(60)),
-                          // 分享按钮
                           FadeTransition(
                             opacity: _fadeAnimation,
                             child: GestureDetector(
@@ -245,14 +234,12 @@ class _ShareMiningState extends State<ShareMining> with SingleTickerProviderStat
                     ),
                   ),
                 ),
-                // 底部分割线
                 Container(
                   height: 1,
                   color: isDark
                       ? Colors.white.withValues(alpha:0.08)
                       : Colors.black.withValues(alpha:0.06),
                 ),
-                // 底部按钮
                 Padding(
                   padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
                   child: SizedBox(

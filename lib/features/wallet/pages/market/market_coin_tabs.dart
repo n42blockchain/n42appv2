@@ -8,6 +8,8 @@ part of 'market_page.dart';
 class _TrendingTab extends StatelessWidget {
   final List<Map<String, dynamic>> coins;
   final bool loading;
+  /// When true, [coins] come from N42 backend (watchlist-format fields).
+  final bool isFallback;
   final List<String> watchlistSymbols;
   final Map<String, CoinPriceAlertConfig> priceAlerts;
   final ValueChanged<Map<String, dynamic>> onTap;
@@ -18,6 +20,7 @@ class _TrendingTab extends StatelessWidget {
   const _TrendingTab({
     required this.coins,
     required this.loading,
+    this.isFallback = false,
     required this.watchlistSymbols,
     required this.priceAlerts,
     required this.onTap,
@@ -36,18 +39,25 @@ class _TrendingTab extends StatelessWidget {
         onRefresh: onRefresh,
       );
     }
+
+    // When using N42 fallback data, fields match _CoinSource.watchlist format.
+    final source = isFallback ? _CoinSource.watchlist : _CoinSource.trending;
+
     return RefreshIndicator(
       onRefresh: onRefresh,
       child: ListView.builder(
         itemCount: coins.length,
         itemBuilder: (_, i) {
           final coin = coins[i];
-          final symbol =
-              (coin['symbol'] ?? '').toString().toLowerCase();
-          final coinId = coin['id']?.toString() ?? '';
+          final symbol = isFallback
+              ? (coin['coin'] ?? '').toString().toLowerCase()
+              : (coin['symbol'] ?? '').toString().toLowerCase();
+          final coinId = isFallback
+              ? (coin['coin_gecko_id']?.toString() ?? '')
+              : (coin['id']?.toString() ?? '');
           return _CoinTile(
             coin: coin,
-            source: _CoinSource.trending,
+            source: source,
             inWatchlist: watchlistSymbols.contains(symbol),
             alertActive: priceAlerts.containsKey(coinId) &&
                 (priceAlerts[coinId]?.enabled ?? false),

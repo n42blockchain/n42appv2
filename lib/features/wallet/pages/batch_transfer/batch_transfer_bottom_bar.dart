@@ -69,7 +69,6 @@ class BatchBottomBar extends StatelessWidget {
               SizedBox(height: ScreenUtil().setWidth(16)),
             ],
 
-            // 错误信息
             if (provider.errorMessage != null) ...[
               Container(
                 width: double.infinity,
@@ -86,7 +85,6 @@ class BatchBottomBar extends StatelessWidget {
               SizedBox(height: ScreenUtil().setWidth(12)),
             ],
 
-            // 操作按钮
             Row(
               children: [
                 if (provider.items.isNotEmpty) ...[
@@ -152,25 +150,21 @@ class BatchButtonContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    switch (provider.state) {
-      case BatchTransferState.estimatingGas:
-        return _loadingRow(S.of(context).g_key_batch_estimating_gas);
-      case BatchTransferState.signing:
-        return _loadingRow(S.of(context).g_key_batch_signing);
-      case BatchTransferState.broadcasting:
-        return _loadingRow(S.of(context).g_key_batch_broadcasting);
-      case BatchTransferState.success:
-        return Row(
+    final s = S.of(context);
+    return switch (provider.state) {
+      BatchTransferState.estimatingGas => _loadingRow(s.g_key_batch_estimating_gas),
+      BatchTransferState.signing => _loadingRow(s.g_key_batch_signing),
+      BatchTransferState.broadcasting => _loadingRow(s.g_key_batch_broadcasting),
+      BatchTransferState.success => Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(Icons.check_circle, size: ScreenUtil().setWidth(24)),
             SizedBox(width: ScreenUtil().setWidth(8)),
-            Text(S.of(context).g_key_batch_done),
+            Text(s.g_key_batch_done),
           ],
-        );
-      default:
-        return Text(S.of(context).g_key_batch_continue);
-    }
+        ),
+      _ => Text(s.g_key_batch_continue),
+    };
   }
 
   Widget _loadingRow(String label) {

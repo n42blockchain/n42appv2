@@ -4,8 +4,6 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 
 import 'market_coin_info_helpers.dart';
 
-// ─── reusable card shell ───────────────────────────────────────────────────
-
 /// A themed rounded card with optional [title] rendered above [child].
 Widget coinInfoCard(
   BuildContext context, {
@@ -45,8 +43,6 @@ Widget coinInfoCard(
   );
 }
 
-// ─── typography primitives ─────────────────────────────────────────────────
-
 Widget coinInfoSectionTitle(BuildContext context, String title) => Text(
       title,
       style: TextStyle(
@@ -57,7 +53,11 @@ Widget coinInfoSectionTitle(BuildContext context, String title) => Text(
       ),
     );
 
-// ─── stat row variants ─────────────────────────────────────────────────────
+TextStyle _labelStyle(BuildContext context) => TextStyle(
+      color: AppThemeUtils.getColorByKey(
+          context, AppThemeKeys.mainTextColor.name),
+      fontSize: ScreenUtil().setSp(28),
+    );
 
 /// A label-value row with accent-colored value text.
 Widget coinInfoStatRow(BuildContext context, String label, String value) {
@@ -66,14 +66,7 @@ Widget coinInfoStatRow(BuildContext context, String label, String value) {
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          label,
-          style: TextStyle(
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainTextColor.name),
-            fontSize: ScreenUtil().setSp(28),
-          ),
-        ),
+        Text(label, style: _labelStyle(context)),
         Expanded(
           child: Text(
             value,
@@ -99,14 +92,7 @@ Widget coinInfoStatRowColored(
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          label,
-          style: TextStyle(
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainTextColor.name),
-            fontSize: ScreenUtil().setSp(28),
-          ),
-        ),
+        Text(label, style: _labelStyle(context)),
         Text(
           fmtPct(pct),
           style: TextStyle(
@@ -119,8 +105,6 @@ Widget coinInfoStatRowColored(
     ),
   );
 }
-
-// ─── P&L stat cell ─────────────────────────────────────────────────────────
 
 /// A vertically stacked label/value cell used inside the P&L card.
 Widget pnlStat(

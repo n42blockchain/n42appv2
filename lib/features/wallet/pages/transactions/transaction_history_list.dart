@@ -19,10 +19,6 @@ import 'package:share_plus/share_plus.dart';
 part 'transaction_history_list_logic.dart';
 part 'transaction_history_list_widgets.dart';
 
-// ---------------------------------------------------------------------------
-// Internal filter model
-// ---------------------------------------------------------------------------
-
 class _TxFilter {
   final String? direction; // null=all, 'out'=sent, 'in'=received
   final int? status; // null=all, 0=pending, 1=success, 2=failed
@@ -61,12 +57,7 @@ class _TxFilter {
   _TxFilter clear() => const _TxFilter();
 }
 
-// Sentinel object for copyWith optional params
 const Object _sentinel = Object();
-
-// ---------------------------------------------------------------------------
-// Page widget
-// ---------------------------------------------------------------------------
 
 class TransactionHistoryList extends StatefulWidget {
   final CoinModel coinModel;
@@ -94,7 +85,6 @@ class _TransactionHistoryListState extends State<TransactionHistoryList>
       appBar: AppBarWidget(
         text: S.of(context).g_coin_key_1,
         actions: [
-          // Filter button with active-count badge
           Stack(
             alignment: Alignment.center,
             children: [
@@ -110,7 +100,6 @@ class _TransactionHistoryListState extends State<TransactionHistoryList>
                 ),
             ],
           ),
-          // Export button (only when there are records)
           if (allRecords.isNotEmpty)
             isExporting
                 ? SizedBox(
@@ -163,10 +152,6 @@ class _TransactionHistoryListState extends State<TransactionHistoryList>
     );
   }
 }
-
-// ---------------------------------------------------------------------------
-// Badge widget for filter active count
-// ---------------------------------------------------------------------------
 
 class _FilterBadge extends StatelessWidget {
   final int count;

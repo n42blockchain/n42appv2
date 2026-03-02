@@ -46,12 +46,21 @@ class _AAAccountCreatePageState extends State<AAAccountCreatePage>
     super.dispose();
   }
 
-  // ── Address computation ────────────────────────────────────────────────────
+  void _showSnackBar(String message, Color color) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message), backgroundColor: color),
+    );
+  }
 
-  /// Computes the counterfactual address via [SmartAccountFactory.computeAddressForType].
-  ///
-  /// Uses eth_call to the appropriate factory's view function so the result is
-  /// exact (no local approximation).
+  void _finishCalculation({String? address, String? error}) {
+    if (!mounted) return;
+    setState(() {
+      isCalculating = false;
+      previewAddress = address;
+      addressError = error;
+    });
+  }
+
   Future<void> _calculatePreviewAddress() async {
     if (!mounted) return;
     setState(() {
@@ -63,12 +72,7 @@ class _AAAccountCreatePageState extends State<AAAccountCreatePage>
     try {
       final config = AAConfig.getChainConfig(selectedChain);
       if (config == null) {
-        if (mounted) {
-          setState(() {
-            isCalculating = false;
-            addressError = S.of(context).g_key_aa_address_error;
-          });
-        }
+        _finishCalculation(error: S.of(context).g_key_aa_address_error);
         return;
       }
 
@@ -83,23 +87,12 @@ class _AAAccountCreatePageState extends State<AAAccountCreatePage>
         salt: BigInt.zero,
       );
 
-      if (mounted) {
-        setState(() {
-          isCalculating = false;
-          if (address != null) {
-            previewAddress = address;
-          } else {
-            addressError = S.of(context).g_key_aa_address_error;
-          }
-        });
-      }
+      _finishCalculation(
+        address: address,
+        error: address == null ? S.of(context).g_key_aa_address_error : null,
+      );
     } catch (_) {
-      if (mounted) {
-        setState(() {
-          isCalculating = false;
-          addressError = S.of(context).g_key_aa_address_error;
-        });
-      }
+      _finishCalculation(error: S.of(context).g_key_aa_address_error);
     }
   }
 
@@ -112,8 +105,6 @@ class _AAAccountCreatePageState extends State<AAAccountCreatePage>
     setState(() => selectedType = type);
     _calculatePreviewAddress();
   }
-
-  // ── Account creation ───────────────────────────────────────────────────────
 
   Future<void> _createAccount() async {
     if (previewAddress == null) return;
@@ -139,30 +130,15 @@ class _AAAccountCreatePageState extends State<AAAccountCreatePage>
       );
 
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(S.of(context).g_key_aa_account_created),
-            backgroundColor: Colors.green,
-          ),
-        );
-        // Pop with the SmartAccount so the caller can persist it
+        _showSnackBar(S.of(context).g_key_aa_account_created, Colors.green);
         Navigator.pop(context, account);
       }
     } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(e.toString()),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
+      if (mounted) _showSnackBar(e.toString(), Colors.red);
     } finally {
       if (mounted) setState(() => isCreating = false);
     }
   }
-
-  // ── Build ──────────────────────────────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {
@@ -175,27 +151,16 @@ class _AAAccountCreatePageState extends State<AAAccountCreatePage>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // 账户名称
             _buildLabelInput(),
             SizedBox(height: ScreenUtil().setWidth(24)),
-
-            // 链选择  (Bug 2 fix: g_key_17 → g_key_aa_select_chain)
             _buildChainSelector(),
             SizedBox(height: ScreenUtil().setWidth(24)),
-
-            // 账户类型选择
             _buildTypeSelector(),
             SizedBox(height: ScreenUtil().setWidth(24)),
-
-            // 预览地址
             _buildPreviewSection(),
             SizedBox(height: ScreenUtil().setWidth(24)),
-
-            // 说明信息
             _buildInfoSection(),
             SizedBox(height: ScreenUtil().setWidth(32)),
-
-            // 创建按钮
             _buildCreateButton(),
           ],
         ),

@@ -30,7 +30,7 @@ class _DexSwapConfirmState extends State<DexSwapConfirm> {
         child: Column(
           children: [
             _summaryCard(),
-            const Expanded(child: SizedBox()),
+            const Spacer(),
             _actionRow(),
             SizedBox(height: ScreenUtil().setWidth(36)),
           ],
@@ -65,7 +65,6 @@ class _DexSwapConfirmState extends State<DexSwapConfirm> {
     );
   }
 
-  /// Standard label/value row.
   Widget _row(String label, String value) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(14)),
@@ -79,7 +78,7 @@ class _DexSwapConfirmState extends State<DexSwapConfirm> {
               fontSize: ScreenUtil().setSp(28),
             ),
           ),
-          const Expanded(child: SizedBox()),
+          const Spacer(),
           Text(
             value,
             style: TextStyle(
@@ -93,20 +92,13 @@ class _DexSwapConfirmState extends State<DexSwapConfirm> {
     );
   }
 
-  /// Price-impact row with color coding:
-  /// ≥ 3 % → red, ≥ 1 % → orange, otherwise normal text color.
   Widget _priceImpactRow(DexQuoteModel q) {
     final impact = q.priceImpactNum;
-    final Color valueColor;
-    if (impact >= 3.0) {
-      valueColor = Colors.red;
-    } else if (impact >= 1.0) {
-      valueColor = Colors.orange;
-    } else {
-      valueColor = AppThemeUtils.getColorByKey(
-          context, AppThemeKeys.mainTextColor.name);
-    }
-
+    final valueColor = switch (impact) {
+      >= 3.0 => Colors.red,
+      >= 1.0 => Colors.orange,
+      _ => AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+    };
     return Padding(
       padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(14)),
       child: Row(
@@ -119,7 +111,7 @@ class _DexSwapConfirmState extends State<DexSwapConfirm> {
               fontSize: ScreenUtil().setSp(28),
             ),
           ),
-          const Expanded(child: SizedBox()),
+          const Spacer(),
           Text(
             q.priceImpact,
             style: TextStyle(
