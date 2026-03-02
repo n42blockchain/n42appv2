@@ -16,7 +16,7 @@ class Trustdart {
         <String, dynamic>{'passphrase': passphrase, 'length': length},
       );
     } catch (e) {
-      debugPrint('Trustdart.generateMnemonic: $e');
+      if (kDebugMode) debugPrint('Trustdart.generateMnemonic: $e');
       return '';
     }
   }
@@ -28,7 +28,7 @@ class Trustdart {
         <String, String>{'mnemonic': mnemonic, 'passphrase': passphrase},
       );
     } catch (e) {
-      debugPrint('Trustdart.checkMnemonic: $e');
+      if (kDebugMode) debugPrint('Trustdart.checkMnemonic: $e');
       return false;
     }
   }
@@ -59,7 +59,7 @@ class Trustdart {
         },
       );
     } catch (e) {
-      debugPrint('Trustdart.generateAddress: $e');
+      if (kDebugMode) debugPrint('Trustdart.generateAddress: $e');
       return {'legacy': ''};
     }
   }
@@ -72,7 +72,7 @@ class Trustdart {
         <String, String>{'coin': coin, 'address': address},
       );
     } catch (e) {
-      debugPrint('Trustdart.validateAddress: $e');
+      if (kDebugMode) debugPrint('Trustdart.validateAddress: $e');
       return false;
     }
   }
@@ -97,7 +97,7 @@ class Trustdart {
         },
       );
     } catch (e) {
-      debugPrint('Trustdart.getPublicKey: $e');
+      if (kDebugMode) debugPrint('Trustdart.getPublicKey: $e');
       return '';
     }
   }
@@ -120,7 +120,7 @@ class Trustdart {
         },
       );
     } catch (e) {
-      debugPrint('Trustdart.getPrivateKey: $e');
+      if (kDebugMode) debugPrint('Trustdart.getPrivateKey: $e');
       return '';
     }
   }
@@ -144,7 +144,7 @@ class Trustdart {
         },
       );
     } catch (e) {
-      debugPrint('Trustdart.getPrivateKeyAndPublicKeyPair: $e');
+      if (kDebugMode) debugPrint('Trustdart.getPrivateKeyAndPublicKeyPair: $e');
       return '';
     }
   }
@@ -213,7 +213,7 @@ class Trustdart {
       );
       return json.decode(raw);
     } catch (e) {
-      debugPrint('Trustdart.signTransactionByteArray: $e');
+      if (kDebugMode) debugPrint('Trustdart.signTransactionByteArray: $e');
       return {'result': false, 'signHash': ''};
     }
   }
@@ -239,7 +239,7 @@ class Trustdart {
         },
       );
     } catch (e) {
-      debugPrint('Trustdart.signMessage: $e');
+      if (kDebugMode) debugPrint('Trustdart.signMessage: $e');
       return '';
     }
   }
@@ -268,7 +268,7 @@ class Trustdart {
       );
       return txHash;
     } catch (e) {
-      debugPrint('Trustdart.$method: $e');
+      if (kDebugMode) debugPrint('Trustdart.$method: $e');
       return '';
     }
   }
@@ -295,7 +295,7 @@ class Trustdart {
         },
       );
     } catch (e) {
-      debugPrint('Trustdart.getKeyStore: $e');
+      if (kDebugMode) debugPrint('Trustdart.getKeyStore: $e');
       return '';
     }
   }
@@ -316,7 +316,7 @@ class Trustdart {
         },
       );
     } catch (e) {
-      debugPrint('Trustdart.getWalletInfoWithKeyStore: $e');
+      if (kDebugMode) debugPrint('Trustdart.getWalletInfoWithKeyStore: $e');
       return {'address': '', 'privateKey': ''};
     }
   }
@@ -329,7 +329,7 @@ class Trustdart {
         <String, dynamic>{'address': address, 'mintAddress': mintAddress},
       );
     } catch (e) {
-      debugPrint('Trustdart.getPubKeySOL: $e');
+      if (kDebugMode) debugPrint('Trustdart.getPubKeySOL: $e');
       return '';
     }
   }
@@ -378,7 +378,7 @@ class Trustdart {
         <String, dynamic>{'pName': pType},
       );
     } catch (e) {
-      debugPrint('Trustdart.getPermissions: $e');
+      if (kDebugMode) debugPrint('Trustdart.getPermissions: $e');
       return '';
     }
   }
@@ -389,7 +389,7 @@ class Trustdart {
       final String raw = await _channel.invokeMethod('EvmEmit', params);
       return jsonDecode(raw);
     } catch (e) {
-      debugPrint('Trustdart.evmEmit: $e');
+      if (kDebugMode) debugPrint('Trustdart.evmEmit: $e');
       return null;
     }
   }
@@ -415,7 +415,7 @@ class Trustdart {
     try {
       return await _channel.invokeMethod(method, params);
     } catch (e) {
-      debugPrint('Trustdart.$method: $e');
+      if (kDebugMode) debugPrint('Trustdart.$method: $e');
       return null;
     }
   }

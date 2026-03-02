@@ -66,7 +66,7 @@ class AppConfig {
     // Market API
     'marketHost': {
       'main': 'https://api.n42.ai/market/v1',
-      'test': 'http://5.78.28.90:9398/v1', // TODO(production): Replace with domain name
+      'test': 'https://5.78.28.90:9398/v1', // TODO(production): Replace with domain name
     },
 
     // NFT API
@@ -138,13 +138,20 @@ class AppConfig {
     'coinGeckoApi': 'https://api.coingecko.com/api/v3',
   };
 
-  // ============ Mining WebSocket ============
+  // ============ Mining Network ============
 
   /// Mining node WebSocket URL
   /// Override via --dart-define=MINING_WS_URL=wss://yournode:port/
   static const String miningWebSocketUrl = String.fromEnvironment(
     'MINING_WS_URL',
     defaultValue: 'ws://5.161.252.59:8546/',
+  );
+
+  /// Mining node RPC URL
+  /// Override via --dart-define=MINING_RPC_URL=https://yournode:port
+  static const String miningRpcUrl = String.fromEnvironment(
+    'MINING_RPC_URL',
+    defaultValue: 'http://5.161.252.59:8545',
   );
 
   // ============ Helper Methods ============
@@ -191,6 +198,12 @@ class AppConfig {
     if (miningWebSocketUrl.startsWith('ws://')) {
       warnings.add('miningWebSocketUrl uses unencrypted ws:// ($miningWebSocketUrl)'
           ' — override via --dart-define=MINING_WS_URL=wss://...');
+    }
+
+    // 检查 Mining RPC
+    if (miningRpcUrl.startsWith('http://')) {
+      warnings.add('miningRpcUrl uses unencrypted http:// ($miningRpcUrl)'
+          ' — override via --dart-define=MINING_RPC_URL=https://...');
     }
 
     if (warnings.isNotEmpty) {

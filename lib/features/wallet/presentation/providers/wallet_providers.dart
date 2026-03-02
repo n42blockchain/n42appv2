@@ -417,10 +417,7 @@ class CoinListNotifier extends AsyncNotifier<List<CoinBalanceData>> {
     state = await AsyncValue.guard(() => build());
   }
 
-  Future<void> refreshCoin(String symbol) async {
-    // Refresh specific coin balance
-    // TODO: Implement
-  }
+  Future<void> refreshCoin(String symbol) async => refresh();
 }
 
 /// Mining Wallet Index Provider

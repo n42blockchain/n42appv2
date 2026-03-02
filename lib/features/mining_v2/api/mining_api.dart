@@ -1,6 +1,7 @@
 ﻿import 'dart:convert';
 
 import 'package:n42_wallet/core/app/app_globals.dart';
+import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/network/base_api.dart';
 import 'package:n42_wallet/features/mining_v2/models/mining_withdrawals_daily.dart';
 import 'package:n42_wallet/features/models/message_model.dart';
@@ -11,15 +12,7 @@ class MiningApi{
     mining=Trustdart();
   }
   late Trustdart mining;
-  static const String _wsUrl = String.fromEnvironment(
-    'MINING_WS_URL',
-    defaultValue: 'ws://5.161.252.59:8546/',
-  );
-  final String wsUrl = _wsUrl;
-  static const String _rpcUrl = String.fromEnvironment(
-    'MINING_RPC_URL',
-    defaultValue: 'http://5.161.252.59:8545',
-  );
+  String get wsUrl => AppConfig.miningWebSocketUrl;
   static const String _explorerApiBase = String.fromEnvironment(
     'MINING_EXPLORER_URL',
     defaultValue: 'https://testnet2.n42.world',
@@ -128,7 +121,7 @@ class MiningApi{
       MessageModel mm=MessageModel();
       Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":params,"id":AppGlobals.nextId};
 
-      final data=await BaseApi.requestEmptyH.post(_rpcUrl, params: {},data: postData);
+      final data=await BaseApi.requestEmptyH.post(AppConfig.miningRpcUrl, params: {},data: postData);
       if(data.containsKey('error')){
         mm.error=true;
         mm.data=data['error'];

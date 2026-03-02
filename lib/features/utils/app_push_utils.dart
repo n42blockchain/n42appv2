@@ -20,6 +20,7 @@ import 'package:n42_wallet/features/wallet/utils/browser/browser_txhash.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:n42_chat/n42_chat.dart' show FirebasePushService, N42Chat;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_new_badger/flutter_new_badger.dart';
@@ -110,30 +111,30 @@ class AppPushUtils {
       sound: true,
     );
     //android上不需要考虑权限的问题
-    debugPrint('User granted permission: ${settings.authorizationStatus}');
+    if (kDebugMode) debugPrint('User granted permission: ${settings.authorizationStatus}');
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
     } else if (settings.authorizationStatus ==
         AuthorizationStatus.provisional) {
-      debugPrint('User granted provisional permission');
+      if (kDebugMode) debugPrint('User granted provisional permission');
     } else {
       // 用户拒绝或者未接受许可
       // 在基于 Apple 的平台上，一旦用户处理了权限请求（授权或拒绝），就无法重新请求权限。用户必须改为通过设备设置 UI 更新权限：
       // 如果用户完全拒绝权限，他们必须完全启用应用权限。
       // 如果用户接受请求的权限（无声音），他们必须己专门启用声音选项。
-      debugPrint('User declined or has not accepted permission');
+      if (kDebugMode) debugPrint('User declined or has not accepted permission');
       //首次安装应用 同意之后 也会执行这里的逻辑
     }
 
     ///前台消息
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-      debugPrint('在前台收到消息！');
+      if (kDebugMode) debugPrint('在前台收到消息！');
 
       try {
         // Matrix chat 推送（含 room_id 或 type 为 m.call.*）由 n42_chat 插件处理
         final dataType = message.data['type'] as String?;
         final roomId = message.data['room_id'] as String?;
         if (roomId != null || (dataType != null && dataType.startsWith('m.call.'))) {
-          debugPrint('Chat/Matrix notification - handled by n42_chat plugin');
+          if (kDebugMode) debugPrint('Chat/Matrix notification - handled by n42_chat plugin');
           return;
         }
 
@@ -176,7 +177,7 @@ class AppPushUtils {
           }
         }
       } catch (err) {
-        debugPrint("解析失败：${err.toString()}");
+        if (kDebugMode) debugPrint("解析失败：${err.toString()}");
       }
     });
 
@@ -185,7 +186,7 @@ class AppPushUtils {
 
     ///点击后台消息打开App
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      debugPrint('从后台打开应用，自动清除通知');
+      if (kDebugMode) debugPrint('从后台打开应用，自动清除通知');
 
       /// 打开对应的页面
       _PushNavigation.handleMessage(message.data);
@@ -194,18 +195,18 @@ class AppPushUtils {
     ///应用从终止状态打开
     var m = await FirebaseMessaging.instance.getInitialMessage();
     if (m != null) {
-      debugPrint('应用从终止状态打开:${m.notification?.title}');
+      if (kDebugMode) debugPrint('应用从终止状态打开:${m.notification?.title}');
       //这种情况待测试
       _PushNavigation.handleMessage(m.data);
     }
 
     //token更新监听
     FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {
-      debugPrint("firebase messaging token updated: $newToken");
+      if (kDebugMode) debugPrint("firebase messaging token updated: $newToken");
       bindUserPushToken(newToken);
       // 同步新 Token 到 Matrix Pusher（确保 FCM token 刷新后 Matrix 推送仍然工作）
       N42Chat.registerPushNotifications().catchError((Object e) {
-        debugPrint('[PUSH_TOKEN_SYNC] Failed to re-register Matrix pusher on token refresh: $e');
+        if (kDebugMode) debugPrint('[PUSH_TOKEN_SYNC] Failed to re-register Matrix pusher on token refresh: $e');
       });
     });
   }
@@ -214,38 +215,38 @@ class AppPushUtils {
   static Future<void> bindUserPushToken(dynamic newToken) async {
     try {
       // 绑定token
-      debugPrint('new token : $newToken');
+      if (kDebugMode) debugPrint('new token : $newToken');
       if (newToken != null && AppGlobals.userInfo != null) {
         UserInfoApi loginApi=UserInfoApi();
         final deviceId = await DeviceInfoUtil().getOrCreateDeviceId();
         final data = await loginApi.bindPushUserToken(newToken, deviceId: deviceId);
         if (data != null && data["code"] == 200) {
           //success
-          debugPrint("更新推送用户Token成功");
+          if (kDebugMode) debugPrint("更新推送用户Token成功");
         } else {
-          debugPrint("更新推送用户Token失败");
+          if (kDebugMode) debugPrint("更新推送用户Token失败");
         }
       }
     } catch (err) {
-      debugPrint("bindUserPushToken err: ${err.toString()}");
+      if (kDebugMode) debugPrint("bindUserPushToken err: ${err.toString()}");
     }
   }
 
   ///前台通知点击
   static void _onSelectNotification(String? payload) {
     try {
-      debugPrint('前台通知点击: $payload');
+      if (kDebugMode) debugPrint('前台通知点击: $payload');
 
       /// 打开对应的页面
       if (payload != null) {
         //逻辑处理
         final map = json.decode(payload);
-        debugPrint("map : $map");
+        if (kDebugMode) debugPrint("map : $map");
         //建议参数中携带type，区分不同的通知类型，
         _PushNavigation.handleMessage(map);
       }
     } catch (err) {
-      debugPrint("点击前台通知消息err ：${err.toString()}");
+      if (kDebugMode) debugPrint("点击前台通知消息err ：${err.toString()}");
     }
   }
 
@@ -257,7 +258,7 @@ class AppPushUtils {
       final notifyDeviceId = data['device_id'] as String? ?? '';
       // 如果是自己设备的通知，静默忽略
       if (notifyDeviceId.isNotEmpty && notifyDeviceId == currentDeviceId) {
-        debugPrint('Device login notification from self, ignoring');
+        if (kDebugMode) debugPrint('Device login notification from self, ignoring');
         return;
       }
       final info = DeviceLoginInfo.fromJson(data);
@@ -266,7 +267,7 @@ class AppPushUtils {
         param: info,
       ));
     } catch (e) {
-      debugPrint('Handle device login notification error: $e');
+      if (kDebugMode) debugPrint('Handle device login notification error: $e');
     }
   }
 
@@ -286,7 +287,7 @@ class AppPushUtils {
     final dataType = message.data['type'] as String?;
     final roomId = message.data['room_id'] as String?;
     if (roomId != null || (dataType != null && dataType.startsWith('m.call.'))) {
-      debugPrint('Background: Matrix/Chat message - delegating to FirebasePushService');
+      if (kDebugMode) debugPrint('Background: Matrix/Chat message - delegating to FirebasePushService');
       await FirebasePushService.handleBackgroundMessage(message);
       return;
     }
@@ -314,7 +315,7 @@ class AppPushUtils {
     }
 
     _updateBadgeCount();
-    debugPrint('Background: app message ${message.messageId}');
+    if (kDebugMode) debugPrint('Background: app message ${message.messageId}');
   }
 
   //更新未读消息数

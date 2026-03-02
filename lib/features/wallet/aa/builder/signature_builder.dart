@@ -130,14 +130,26 @@ class SignatureBuilder {
       throw SignatureError('Invalid signature length');
     }
 
-    // Note: This is a placeholder. In production, use a proper
-    // ECDSA recovery implementation (e.g., from pointycastle or web3dart)
-    // The actual implementation depends on the crypto library available.
+    final r = bytesToUnsignedInt(Uint8List.fromList(signature.sublist(0, 32)));
+    final s = bytesToUnsignedInt(Uint8List.fromList(signature.sublist(32, 64)));
+    int v = signature[64];
+    if (v < 27) v += 27;
 
-    // For now, we'll throw an unimplemented error
-    throw UnimplementedError(
-      'Signature recovery requires ECDSA library integration',
-    );
+    final msgSig = MsgSignature(r, s, v);
+    final pubKeyBytes = ecRecover(hash, msgSig);
+
+    // ecRecover may return fewer than 64 bytes if leading zeros are stripped.
+    // publicKeyToAddress asserts length == 64, so pad if needed.
+    final Uint8List padded;
+    if (pubKeyBytes.length < 64) {
+      padded = Uint8List(64);
+      padded.setAll(64 - pubKeyBytes.length, pubKeyBytes);
+    } else {
+      padded = pubKeyBytes;
+    }
+
+    final addressBytes = publicKeyToAddress(padded);
+    return '0x${bytesToHex(addressBytes)}';
   }
 
   /// Create a dummy signature for gas estimation

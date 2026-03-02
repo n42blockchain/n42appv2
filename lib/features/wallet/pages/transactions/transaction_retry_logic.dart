@@ -124,7 +124,9 @@ mixin _TransactionRetryLogicMixin on ConsumerState<TransactionRetry> {
         final input = transactionInfo!['input'];
         trm.to1 = '0x${input.substring(10, 74).substring(24)}';
         trm.price = hexToInt(input.substring(74, 138));
-      } catch (_) {}
+      } catch (_) {
+        // intentional parse fallback: input may not contain valid transfer data
+      }
     }
     value = '${toEther(trm.price.toString(), coin['decimals'])} $valueUnit';
     owner = trm.from1.toLowerCase() ==

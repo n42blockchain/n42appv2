@@ -102,7 +102,7 @@ mixin _LogicMixin on State<TodayMiningPage> {
         astPrice = Decimal.parse(nInfo[0]['price'].toString()).toDouble();
       }
     } catch (err) {
-      debugPrint("getAstPrice err: $err");
+      if (kDebugMode) debugPrint("getAstPrice err: $err");
     }
   }
 
@@ -118,7 +118,7 @@ mixin _LogicMixin on State<TodayMiningPage> {
       }
       if (mounted) setState(() {});
     } catch (err) {
-      debugPrint("get24hour err: $err");
+      if (kDebugMode) debugPrint("get24hour err: $err");
     }
   }
 
@@ -137,7 +137,7 @@ mixin _LogicMixin on State<TodayMiningPage> {
       }
       if (mounted) setState(() {});
     } catch (err) {
-      debugPrint("getCurrentMiningTime err: $err");
+      if (kDebugMode) debugPrint("getCurrentMiningTime err: $err");
     }
   }
 
@@ -172,7 +172,7 @@ mixin _LogicMixin on State<TodayMiningPage> {
       lastCycleMiningTimes =
           nums != 0 ? formatElapsedTime(nums) : ["00", "00", "00"];
     } catch (err) {
-      debugPrint("getLastCycleMiningTime err: $err");
+      if (kDebugMode) debugPrint("getLastCycleMiningTime err: $err");
     }
   }
 
@@ -194,7 +194,7 @@ mixin _LogicMixin on State<TodayMiningPage> {
       }
       return Decimal.zero;
     } catch (err) {
-      debugPrint("getTotalValue err: $err");
+      if (kDebugMode) debugPrint("getTotalValue err: $err");
       return Decimal.zero;
     }
   }
@@ -207,7 +207,7 @@ mixin _LogicMixin on State<TodayMiningPage> {
       }
       return Decimal.zero;
     } catch (err) {
-      debugPrint("getAccountRewardUnpaid err: $err");
+      if (kDebugMode) debugPrint("getAccountRewardUnpaid err: $err");
       return Decimal.zero;
     }
   }
@@ -221,7 +221,7 @@ mixin _LogicMixin on State<TodayMiningPage> {
           format: "dd/MM/yyyy");
       if (mounted) setState(() {});
     } catch (err) {
-      debugPrint("getLockTime err: $err");
+      if (kDebugMode) debugPrint("getLockTime err: $err");
     }
   }
 
@@ -231,7 +231,9 @@ mixin _LogicMixin on State<TodayMiningPage> {
       final bool isRunning = data?["data"] != "stopped";
       globalMiningV1.setMiningStatus(isRunning);
       if (!isRunning) MiningUtils.startMining();
-    } catch (_) {}
+    } catch (e) {
+      if (kDebugMode) debugPrint('[TodayMiningPage] getMiningStatus failed: $e');
+    }
   }
 
   Future<void> computerMaxY(String astAddress, {int? value}) async {
@@ -251,7 +253,7 @@ mixin _LogicMixin on State<TodayMiningPage> {
       globalMiningV1.setDepositsNum(currDepositsOfValue);
       if (mounted) setState(() {});
     } catch (err) {
-      debugPrint("computerMaxY err: $err");
+      if (kDebugMode) debugPrint("computerMaxY err: $err");
     }
   }
 
@@ -270,7 +272,7 @@ mixin _LogicMixin on State<TodayMiningPage> {
       }
     } catch (err) {
       taskList = [];
-      debugPrint("getMiningTaskList err: $err");
+      if (kDebugMode) debugPrint("getMiningTaskList err: $err");
     } finally {
       isLoadingTaskList = false;
       if (mounted) setState(() {});
@@ -290,7 +292,7 @@ mixin _LogicMixin on State<TodayMiningPage> {
         }
       }
     } catch (err) {
-      debugPrint("getCurrentMiningTimeByBlockApi err: $err");
+      if (kDebugMode) debugPrint("getCurrentMiningTimeByBlockApi err: $err");
       getCurrentMiningTime(astAddress);
       getLastCycleMiningTime(astAddress);
     }

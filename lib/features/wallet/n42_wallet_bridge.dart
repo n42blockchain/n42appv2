@@ -20,7 +20,7 @@ class N42WalletBridge implements IWalletBridge {
     try {
       _walletProvider = globalWapAdapter;
     } catch (e) {
-      debugPrint('N42WalletBridge: Failed to get WalletActionProvider: $e');
+      if (kDebugMode) debugPrint('N42WalletBridge: Failed to get WalletActionProvider: $e');
     }
     return _walletProvider;
   }
@@ -106,7 +106,7 @@ class N42WalletBridge implements IWalletBridge {
   }) async {
     // 转账功能需要导航到转账页面，这里暂时返回取消
     // TODO: 实现实际转账逻辑
-    debugPrint('N42WalletBridge: Transfer requested - to: $toAddress, amount: $amount $token');
+    if (kDebugMode) debugPrint('N42WalletBridge: Transfer requested - to: $toAddress, amount: $amount $token');
     return TransferResult.cancelled();
   }
 
@@ -146,7 +146,7 @@ class N42WalletBridge implements IWalletBridge {
   @override
   Future<void> showReceiveQRCode() async {
     // TODO: 导航到收款二维码页面
-    debugPrint('N42WalletBridge: Show receive QR code requested');
+    if (kDebugMode) debugPrint('N42WalletBridge: Show receive QR code requested');
   }
 
   static final _ethAddressRegExp = RegExp(r'^0x[0-9a-fA-F]{40}$');
@@ -176,7 +176,7 @@ class N42WalletBridge implements IWalletBridge {
       final result = await _ensService.resolveName(ensName);
       return result.success ? result.address : null;
     } catch (e) {
-      debugPrint('N42WalletBridge: Failed to resolve ENS name: $e');
+      if (kDebugMode) debugPrint('N42WalletBridge: Failed to resolve ENS name: $e');
       return null;
     }
   }
@@ -186,7 +186,7 @@ class N42WalletBridge implements IWalletBridge {
     try {
       return await _ensService.resolveAddress(address);
     } catch (e) {
-      debugPrint('N42WalletBridge: Failed to lookup ENS name: $e');
+      if (kDebugMode) debugPrint('N42WalletBridge: Failed to lookup ENS name: $e');
       return null;
     }
   }
@@ -196,7 +196,7 @@ class N42WalletBridge implements IWalletBridge {
     try {
       return await _ensService.getAvatar(ensName);
     } catch (e) {
-      debugPrint('N42WalletBridge: Failed to get ENS avatar: $e');
+      if (kDebugMode) debugPrint('N42WalletBridge: Failed to get ENS avatar: $e');
       return null;
     }
   }
@@ -206,7 +206,7 @@ class N42WalletBridge implements IWalletBridge {
     try {
       return await _ensService.resolveAddresses(addresses);
     } catch (e) {
-      debugPrint('N42WalletBridge: Failed to batch lookup ENS: $e');
+      if (kDebugMode) debugPrint('N42WalletBridge: Failed to batch lookup ENS: $e');
       return {for (final addr in addresses) addr: null};
     }
   }
@@ -269,7 +269,7 @@ class N42WalletBridge implements IWalletBridge {
       }
       return null;
     } catch (e) {
-      debugPrint('N42WalletBridge: Failed to get ERC-721 tokenURI: $e');
+      if (kDebugMode) debugPrint('N42WalletBridge: Failed to get ERC-721 tokenURI: $e');
       return null;
     }
   }
@@ -290,7 +290,7 @@ class N42WalletBridge implements IWalletBridge {
       }
       return '0';
     } catch (e) {
-      debugPrint('N42WalletBridge: Failed to get $tokenStandard balance: $e');
+      if (kDebugMode) debugPrint('N42WalletBridge: Failed to get $tokenStandard balance: $e');
       return '0';
     }
   }

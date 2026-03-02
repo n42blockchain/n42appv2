@@ -56,7 +56,7 @@ class LedgerService {
       final result = await _channel.invokeMethod<bool>('isBluetoothAvailable');
       return result ?? false;
     } on PlatformException catch (e) {
-      debugPrint('Failed to check Bluetooth: ${e.message}');
+      if (kDebugMode) debugPrint('Failed to check Bluetooth: ${e.message}');
       return false;
     }
   }
@@ -67,7 +67,7 @@ class LedgerService {
       final result = await _channel.invokeMethod<bool>('requestBluetoothPermissions');
       return result ?? false;
     } on PlatformException catch (e) {
-      debugPrint('Failed to request permissions: ${e.message}');
+      if (kDebugMode) debugPrint('Failed to request permissions: ${e.message}');
       return false;
     }
   }
@@ -96,7 +96,7 @@ class LedgerService {
           }
         },
         onError: (error) {
-          debugPrint('Scan error: $error');
+          if (kDebugMode) debugPrint('Scan error: $error');
         },
         onDone: () {
           if (_connectionState == HardwareWalletConnectionState.scanning) {
@@ -111,7 +111,7 @@ class LedgerService {
         }
       });
     } on PlatformException catch (e) {
-      debugPrint('Failed to start scan: ${e.message}');
+      if (kDebugMode) debugPrint('Failed to start scan: ${e.message}');
       _updateConnectionState(HardwareWalletConnectionState.error);
       throw HardwareWalletError(
         code: HardwareWalletError.bluetoothDisabled,
@@ -130,7 +130,7 @@ class LedgerService {
         _updateConnectionState(HardwareWalletConnectionState.disconnected);
       }
     } on PlatformException catch (e) {
-      debugPrint('Failed to stop scan: ${e.message}');
+      if (kDebugMode) debugPrint('Failed to stop scan: ${e.message}');
     }
   }
 
@@ -175,7 +175,7 @@ class LedgerService {
           message: e.message ?? 'Connection failed',
           details: e.details?.toString(),
         );
-        debugPrint('Connect attempt $attempt/$_maxConnectRetries failed: ${e.message}');
+        if (kDebugMode) debugPrint('Connect attempt $attempt/$_maxConnectRetries failed: ${e.message}');
       } on HardwareWalletError catch (e) {
         lastError = e;
       }
@@ -197,7 +197,7 @@ class LedgerService {
       _connectedDevice = null;
       _updateConnectionState(HardwareWalletConnectionState.disconnected);
     } on PlatformException catch (e) {
-      debugPrint('Failed to disconnect: ${e.message}');
+      if (kDebugMode) debugPrint('Failed to disconnect: ${e.message}');
     }
   }
 
@@ -213,7 +213,7 @@ class LedgerService {
       }
       return null;
     } catch (e) {
-      debugPrint('Failed to get current app: $e');
+      if (kDebugMode) debugPrint('Failed to get current app: $e');
       return null;
     }
   }
@@ -404,7 +404,7 @@ class LedgerService {
       try {
         await getCurrentApp();
       } catch (e) {
-        debugPrint('Keepalive failed: $e');
+        if (kDebugMode) debugPrint('Keepalive failed: $e');
         _onConnectionLost();
       }
     });
@@ -419,7 +419,7 @@ class LedgerService {
     _stopKeepalive();
     _connectedDevice = _connectedDevice?.copyWith(isConnected: false);
     _updateConnectionState(HardwareWalletConnectionState.error);
-    debugPrint('LedgerService: connection lost');
+    if (kDebugMode) debugPrint('LedgerService: connection lost');
   }
 
   HardwareWalletType _determineDeviceType(String name) {

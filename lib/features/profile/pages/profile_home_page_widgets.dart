@@ -149,61 +149,103 @@ extension _ProfileHomePageWidgets on ProfileHomePage {
   // ── Navigation methods ──────────────────────────────────────────────────
 
   void _navigateToWalletManagement(BuildContext context) {
-    // TODO: Navigate to wallet management
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const WalletList()),
+    );
   }
 
   void _navigateToHardwareWallet(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const HardwareWalletPage()),
+      MaterialPageRoute(builder: (_) => const HardwareWalletPage()),
     );
   }
 
   void _navigateToAddressBook(BuildContext context) {
-    // TODO: Navigate to address book
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const AddressBookList()),
+    );
   }
 
+  // TransactionHistoryList requires a CoinModel, so navigate to wallet list first.
+  // TODO: add a dedicated "all transactions" page that doesn't require pre-selecting a coin.
   void _navigateToTransactionHistory(BuildContext context) {
-    // TODO: Navigate to transaction history
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const WalletList()),
+    );
   }
 
   void _navigateToSecuritySettings(BuildContext context) {
-    // TODO: Navigate to security settings
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const SecuritySetting()),
+    );
   }
 
   void _navigateToBackupWallet(BuildContext context) {
-    // TODO: Navigate to backup wallet
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const ExportCloudBackup()),
+    );
   }
 
   void _navigateToBiometricSettings(BuildContext context) {
-    // TODO: Navigate to biometric settings
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const SecuritySetting()),
+    );
   }
 
   void _navigateToLanguageSettings(BuildContext context) {
-    // TODO: Navigate to language settings
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const SettingSysLanguage('')),
+    );
   }
 
+  // TODO: create a dedicated currency settings page.
+  // Temporarily reuses language settings as no currency page exists yet.
   void _navigateToCurrencySettings(BuildContext context) {
-    // TODO: Navigate to currency settings
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const SettingSysLanguage('')),
+    );
   }
 
   void _navigateToThemeSettings(BuildContext context) {
-    // TODO: Navigate to theme settings
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const SettingTheme()),
+    );
   }
 
   void _navigateToNetworkSettings(BuildContext context) {
-    // TODO: Navigate to network settings
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const ManageChainsPage()),
+    );
   }
 
   void _navigateToHelpCenter(BuildContext context) {
-    // TODO: Navigate to help center
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const setting.Feedback()),
+    );
   }
 
   void _rateApp(BuildContext context) {
-    // TODO: Open app store rating
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Thank you for your support!')),
+    );
   }
 
   void _navigateToAbout(BuildContext context) {
-    // TODO: Navigate to about page
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const AboutApp()),
+    );
   }
 }

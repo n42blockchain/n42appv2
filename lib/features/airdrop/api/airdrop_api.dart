@@ -3,6 +3,7 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
+import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/features/airdrop/models/airdrop_model.dart';
 import 'package:n42_wallet/core/network/base_api.dart';
 import 'package:n42_wallet/features/models/message_model.dart';
@@ -163,13 +164,17 @@ class AirdropApi {
           ..data = airdrops;
       }
     } catch (_) {
-      // fall through to mock data
+      // fall through
     }
 
-    // 返回模拟热门空投
+    if (kDebugMode) {
+      return MessageModel()
+        ..error = false
+        ..data = _getTrendingMockAirdrops();
+    }
     return MessageModel()
-      ..error = false
-      ..data = _getTrendingMockAirdrops();
+      ..error = true
+      ..data = 'Trending data unavailable';
   }
 
   /// 标记空投为已领取

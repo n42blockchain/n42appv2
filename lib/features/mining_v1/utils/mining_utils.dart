@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/mining_v1/provider/mining_provider.dart';
@@ -62,6 +63,7 @@ class MiningUtils{
       }
       await MiningPluginUtils.start();
     } catch (err) {
+      if (kDebugMode) debugPrint('[MiningUtils] startMining failed: $err');
     }
   }
 
@@ -73,6 +75,7 @@ class MiningUtils{
         await MiningPluginUtils.stop();
       }
     }catch(err){
+      if (kDebugMode) debugPrint('[MiningUtils] stopMining failed: $err');
     }
   }
 

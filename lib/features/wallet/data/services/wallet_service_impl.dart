@@ -14,6 +14,8 @@ import 'package:n42_wallet/features/wallet/presentation/providers/wallet_provide
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
+import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
+import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart' show chainUrlMap;
 
 /// Implementation of IWalletService using Riverpod
 ///
@@ -184,17 +186,31 @@ class WalletServiceImpl implements IWalletService {
 
   @override
   Future<WalletBalanceInfo?> getBalance(String address, String coinType) async {
-    // TODO: Implement actual balance fetching from blockchain or API
-    // For now, return a placeholder implementation
     try {
       final wallet = getWalletByAddress(address);
       if (wallet == null) return null;
-      
-      // Placeholder: In real implementation, this should fetch from blockchain
+
+      // Derive blockchain type from coinType via chain config, since wallet.chainType is 'multi'
+      final chainConfig = chainUrlMap[coinType];
+      final chainType = chainConfig?['baseInfo']?['blockchainType'] as String? ?? 'Ethereum';
+      final result = await TokenViewApi().getBalance(chainType, coinType, address);
+      if (result == null || result.error) {
+        return WalletBalanceInfo(
+          address: address,
+          coinType: coinType,
+          balance: 0.0,
+          lastUpdated: DateTime.now(),
+        );
+      }
+
+      final balanceValue = result.data is num
+          ? (result.data as num).toDouble()
+          : double.tryParse(result.data?.toString() ?? '0') ?? 0.0;
+
       return WalletBalanceInfo(
         address: address,
         coinType: coinType,
-        balance: 0.0,
+        balance: balanceValue,
         lastUpdated: DateTime.now(),
       );
     } catch (e) {

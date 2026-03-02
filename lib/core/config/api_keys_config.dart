@@ -136,12 +136,9 @@ class ApiKeysConfig {
   static const String _defaultTonApiKeyMainnet = '';
   static const String _defaultTonApiKeyTestnet = '';
   static const String _defaultDotApiKey = '';
-  // IMPORTANT(test-only): This key is kept for local development/testing ONLY.
-  // It MUST be overridden before any production/release build:
-  //   flutter build apk --dart-define=AI_API_KEY=<real_key>
-  // Shipping with this default exposes the Groq quota to anyone who decompiles the binary.
-  // ignore: avoid_hardcoded_credentials
-  static const String _defaultAiApiKey = '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';
+  // AI API key must be provided via --dart-define=AI_API_KEY=<key>
+  // Never commit a real key here.
+  static const String _defaultAiApiKey = '';
 
   // ==================== Validation ====================
 
@@ -180,7 +177,7 @@ class ApiKeysConfig {
     if (dotApiKey.isEmpty) {
       warnings.add('DOT_API_KEY not configured');
     }
-    if (aiApiKey == _defaultAiApiKey) {
+    if (aiApiKey.isEmpty) {
       warnings.add('AI_API_KEY not configured');
     }
 

@@ -16443,6 +16443,96 @@ class S {
       args: [],
     );
   }
+
+  /// `High 24H`
+  String get g_market_high_24h {
+    return Intl.message(
+      'High 24H',
+      name: 'g_market_high_24h',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Low 24H`
+  String get g_market_low_24h {
+    return Intl.message(
+      'Low 24H',
+      name: 'g_market_low_24h',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `FDV`
+  String get g_market_fdv {
+    return Intl.message('FDV', name: 'g_market_fdv', desc: '', args: []);
+  }
+
+  /// `Rank`
+  String get g_market_rank {
+    return Intl.message('Rank', name: 'g_market_rank', desc: '', args: []);
+  }
+
+  /// `ATH`
+  String get g_market_ath {
+    return Intl.message('ATH', name: 'g_market_ath', desc: '', args: []);
+  }
+
+  /// `ATL`
+  String get g_market_atl {
+    return Intl.message('ATL', name: 'g_market_atl', desc: '', args: []);
+  }
+
+  /// `Liquidity Score`
+  String get g_market_liquidity_score {
+    return Intl.message(
+      'Liquidity Score',
+      name: 'g_market_liquidity_score',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `7D Change`
+  String get g_market_7d_change {
+    return Intl.message(
+      '7D Change',
+      name: 'g_market_7d_change',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `30D Change`
+  String get g_market_30d_change {
+    return Intl.message(
+      '30D Change',
+      name: 'g_market_30d_change',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Market Depth`
+  String get g_market_depth {
+    return Intl.message(
+      'Market Depth',
+      name: 'g_market_depth',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No chart data`
+  String get g_market_no_chart {
+    return Intl.message(
+      'No chart data',
+      name: 'g_market_no_chart',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

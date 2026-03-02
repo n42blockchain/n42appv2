@@ -3,6 +3,7 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
+import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/network/base_api.dart';
 import 'package:n42_wallet/features/loyalty/models/loyalty_model.dart';
 import 'package:n42_wallet/features/models/message_model.dart';
@@ -28,14 +29,19 @@ class LoyaltyApi {
           ..data = LoyaltyAccount.fromJson(response['data']);
       }
 
-      // 返回模拟数据
-      return MessageModel()
-        ..error = false
-        ..data = _getMockAccount(walletAddress);
+      if (kDebugMode) {
+        return MessageModel()
+          ..error = false
+          ..data = _getMockAccount(walletAddress);
+      }
+      return MessageModel()..error = true..data = 'Service unavailable';
     } catch (e) {
-      return MessageModel()
-        ..error = false
-        ..data = _getMockAccount(walletAddress);
+      if (kDebugMode) {
+        return MessageModel()
+          ..error = false
+          ..data = _getMockAccount(walletAddress);
+      }
+      return MessageModel()..error = true..data = 'Service unavailable';
     }
   }
 
@@ -56,13 +62,19 @@ class LoyaltyApi {
           ..data = tasks;
       }
 
-      return MessageModel()
-        ..error = false
-        ..data = _getMockTasks();
+      if (kDebugMode) {
+        return MessageModel()
+          ..error = false
+          ..data = _getMockTasks();
+      }
+      return MessageModel()..error = true..data = 'Service unavailable';
     } catch (e) {
-      return MessageModel()
-        ..error = false
-        ..data = _getMockTasks();
+      if (kDebugMode) {
+        return MessageModel()
+          ..error = false
+          ..data = _getMockTasks();
+      }
+      return MessageModel()..error = true..data = 'Service unavailable';
     }
   }
 
@@ -91,14 +103,7 @@ class LoyaltyApi {
       return MessageModel.error()
         ..data = 'Task completion failed: server error (code ${response['code']})';
     } catch (e) {
-      // API 不可达时返回 mock 降级，保证开发环境可用
-      return MessageModel()
-        ..error = false
-        ..data = {
-          'task_id': taskId,
-          'points_earned': 0,
-          'completed_at': DateTime.now().toIso8601String(),
-        };
+      return MessageModel.error()..data = e.toString();
     }
   }
 
@@ -120,14 +125,7 @@ class LoyaltyApi {
       return MessageModel.error()
         ..data = 'Check-in failed: server error (code ${response['code']})';
     } catch (e) {
-      // API 不可达时返回 mock 降级，保证开发环境可用
-      return MessageModel()
-        ..error = false
-        ..data = {
-          'points_earned': 10,
-          'streak': 1,
-          'message': 'Check-in successful',
-        };
+      return MessageModel.error()..data = e.toString();
     }
   }
 
@@ -156,13 +154,19 @@ class LoyaltyApi {
           ..data = history;
       }
 
-      return MessageModel()
-        ..error = false
-        ..data = _getMockHistory();
+      if (kDebugMode) {
+        return MessageModel()
+          ..error = false
+          ..data = _getMockHistory();
+      }
+      return MessageModel()..error = true..data = 'Service unavailable';
     } catch (e) {
-      return MessageModel()
-        ..error = false
-        ..data = _getMockHistory();
+      if (kDebugMode) {
+        return MessageModel()
+          ..error = false
+          ..data = _getMockHistory();
+      }
+      return MessageModel()..error = true..data = 'Service unavailable';
     }
   }
 }

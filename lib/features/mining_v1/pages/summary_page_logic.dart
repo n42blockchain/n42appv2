@@ -71,7 +71,7 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
       }
     } catch (err) {
       barValues = [];
-      debugPrint("miningBarchartData err: $err");
+      if (kDebugMode) debugPrint("miningBarchartData err: $err");
     } finally {
       generateBarTipData();
       isShowDefaultBar = barValues.isEmpty || barValues.length != 7;
@@ -182,12 +182,12 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
       isCanUnlock = DateTime.now().millisecondsSinceEpoch ~/ 1000 >
           int.parse("${lockTime[0]}");
       lockTimeStr = dataUtils.getTimeByTimeStamp("${lockTime[0]}");
-      debugPrint("锁仓时间:$lockTimeStr");
+      if (kDebugMode) debugPrint("锁仓时间:$lockTimeStr");
       if (mounted) {
         setState(() {});
       }
     } catch (err) {
-      debugPrint("err : ${err.toString()}");
+      if (kDebugMode) debugPrint("err : ${err.toString()}");
     }
   }
 
@@ -202,7 +202,7 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
           "${stakeDate.year} ${stakeDate.hour.toString().padLeft(2, '0')}:"
           "${stakeDate.minute.toString().padLeft(2, '0')}";
     } catch (err) {
-      debugPrint("getYearAgoTime err: $err");
+      if (kDebugMode) debugPrint("getYearAgoTime err: $err");
       return '';
     }
   }
@@ -215,7 +215,7 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
             toEther("${BigInt.tryParse(totalData["result"]["total"])}", 18).toDouble();
       }
     } catch (err) {
-      debugPrint("err:${err.toString()}");
+      if (kDebugMode) debugPrint("err:${err.toString()}");
     }
   }
 
@@ -227,7 +227,7 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
             toEther("${BigInt.tryParse(totalData["result"])}", 18).toDouble();
       }
     } catch (err) {
-      debugPrint("err:${err.toString()}");
+      if (kDebugMode) debugPrint("err:${err.toString()}");
     }
   }
 
@@ -236,7 +236,7 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
     globalWapAdapter.getCoinPriceWithUnit(CoinType.N.name);
     if (data != null) {
       astPrice = data["coinPrice"];
-      debugPrint("astPrice:$astPrice");
+      if (kDebugMode) debugPrint("astPrice:$astPrice");
     }
   }
 
@@ -246,7 +246,7 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
       rewardsList = data?["result"]?["data"] as List<dynamic>? ?? [];
     } catch (err) {
       rewardsList = [];
-      debugPrint("err:${err.toString()}");
+      if (kDebugMode) debugPrint("err:${err.toString()}");
     } finally {
       if (mounted) setState(() {});
     }
@@ -291,7 +291,7 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
                     if (AppConfig.isMainChainMining == false) {
                       miningValueKey = '${miningValueKey}test';
                     }
-                    debugPrint("unlock data：$data");
+                    if (kDebugMode) debugPrint("unlock data：$data");
                     if (data != null) {
                       mp.setMiningType(null);
                       mp.setMiningStatus(false);
@@ -314,7 +314,7 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
                       });
                     }
                   } catch (err) {
-                    debugPrint("err:${err.toString()}");
+                    if (kDebugMode) debugPrint("err:${err.toString()}");
                   } finally {
                     if (mounted) {
                       Navigator.of(dialogContext).pop();

@@ -309,16 +309,16 @@ Widget buildMarketStatsCard(
         coinInfoStatRow(context, S.of(context).g_key_m_5,
             '${regular.getMoneyAbbreviation(circSup)} $symbol'),
         if (high24h > 0)
-          coinInfoStatRow(context, 'High 24H', // TODO: i18n
+          coinInfoStatRow(context, S.of(context).g_market_high_24h,
               '\$${regular.formartNum(high24h, 6, isCrop: true)}'),
         if (low24h > 0)
-          coinInfoStatRow(context, 'Low 24H', // TODO: i18n
+          coinInfoStatRow(context, S.of(context).g_market_low_24h,
               '\$${regular.formartNum(low24h, 6, isCrop: true)}'),
         if (fdv > 0)
-          coinInfoStatRow(context, 'FDV', // TODO: i18n
+          coinInfoStatRow(context, S.of(context).g_market_fdv,
               '\$${regular.getMoneyAbbreviation(fdv)}'),
         if (rank > 0)
-          coinInfoStatRow(context, 'Rank', '#$rank'), // TODO: i18n
+          coinInfoStatRow(context, S.of(context).g_market_rank, '#$rank'),
       ]),
     ),
   );
@@ -335,27 +335,28 @@ Widget buildDepthDataCard(
   required double pct30d,
   required Regular regular,
 }) {
+  final s = S.of(context);
   final rows = <Widget>[
     if (ath > 0)
-      coinInfoStatRow(context, 'ATH', // TODO: i18n
+      coinInfoStatRow(context, s.g_market_ath,
           '\$${regular.formartNum(ath, 6, isCrop: true)}'),
     if (atl > 0)
-      coinInfoStatRow(context, 'ATL', // TODO: i18n
+      coinInfoStatRow(context, s.g_market_atl,
           '\$${regular.formartNum(atl, 6, isCrop: true)}'),
     if (liquidityScore > 0)
-      coinInfoStatRow(context, 'Liquidity Score', // TODO: i18n
+      coinInfoStatRow(context, s.g_market_liquidity_score,
           liquidityScore.toStringAsFixed(1)),
     if (pct7d != 0)
-      coinInfoStatRowColored(context, '7D Change', pct7d), // TODO: i18n
+      coinInfoStatRowColored(context, s.g_market_7d_change, pct7d),
     if (pct30d != 0)
-      coinInfoStatRowColored(context, '30D Change', pct30d), // TODO: i18n
+      coinInfoStatRowColored(context, s.g_market_30d_change, pct30d),
   ];
 
   if (rows.isEmpty) return const SizedBox.shrink();
 
   return coinInfoCard(
     context,
-    title: 'Market Depth', // TODO: i18n
+    title: s.g_market_depth,
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: withDividers(context, rows),

@@ -47,11 +47,11 @@ class MarketApi {
           .join(',');
 
       if (cleanedCoins.isEmpty) {
-        debugPrint('MarketApi: No valid coins to query');
+        if (kDebugMode) debugPrint('MarketApi: No valid coins to query');
         return {'error': true, 'data': 'No coins specified'};
       }
 
-      debugPrint('MarketApi.getWalletCoinsInfo: $cleanedCoins');
+      if (kDebugMode) debugPrint('MarketApi.getWalletCoinsInfo: $cleanedCoins');
 
       final data = await BaseApi.requestEmptyH.get<dynamic>(
         '$_url/r/targetCoinMarketsList?coin=$cleanedCoins',
@@ -62,7 +62,7 @@ class MarketApi {
       if (data == null) return {'error': true, 'data': 'Null response'};
       return {'error': false, 'data': data};
     } catch (e, st) {
-      debugPrint('MarketApi.getWalletCoinsInfo error: $e\n$st');
+      if (kDebugMode) debugPrint('MarketApi.getWalletCoinsInfo error: $e\n$st');
       return {'error': true, 'data': e.toString()};
     }
   }
@@ -77,7 +77,7 @@ class MarketApi {
     if (geckoId.isEmpty) return [];
     try {
       final encodedId = Uri.encodeComponent(geckoId);
-      debugPrint('MarketApi.getOhlcvData: $encodedId days=$days');
+      if (kDebugMode) debugPrint('MarketApi.getOhlcvData: $encodedId days=$days');
 
       final raw = await ExternalHttp.get(
         '$_geckoBase/coins/$encodedId/ohlc?vs_currency=usd&days=$days',
@@ -98,7 +98,7 @@ class MarketApi {
           .where((p) => p.isValid)
           .toList();
     } catch (e, st) {
-      debugPrint('MarketApi.getOhlcvData error: $e\n$st');
+      if (kDebugMode) debugPrint('MarketApi.getOhlcvData error: $e\n$st');
       return [];
     }
   }
@@ -114,7 +114,7 @@ class MarketApi {
     if (geckoId.isEmpty) return empty;
     try {
       final encodedId = Uri.encodeComponent(geckoId);
-      debugPrint('MarketApi.getMarketChart: $encodedId days=$days');
+      if (kDebugMode) debugPrint('MarketApi.getMarketChart: $encodedId days=$days');
 
       final raw = await ExternalHttp.get(
         '$_geckoBase/coins/$encodedId/market_chart?vs_currency=usd&days=$days',
@@ -128,7 +128,7 @@ class MarketApi {
         'volumes': _extractDoubleValues(raw['total_volumes']),
       };
     } catch (e, st) {
-      debugPrint('MarketApi.getMarketChart error: $e\n$st');
+      if (kDebugMode) debugPrint('MarketApi.getMarketChart error: $e\n$st');
       return empty;
     }
   }
@@ -143,7 +143,7 @@ class MarketApi {
   /// 避免占用 Dio 的 60s + RetryInterceptor 的 3x 重试（总计 4 分钟）。
   Future<List<Map<String, dynamic>>> getTrendingCoins() async {
     try {
-      debugPrint('MarketApi.getTrendingCoins');
+      if (kDebugMode) debugPrint('MarketApi.getTrendingCoins');
 
       final raw = await ExternalHttp.get(
         '$_geckoBase/search/trending',
@@ -164,7 +164,7 @@ class MarketApi {
           .whereType<Map<String, dynamic>>()
           .toList();
     } catch (e, st) {
-      debugPrint('MarketApi.getTrendingCoins error: $e\n$st');
+      if (kDebugMode) debugPrint('MarketApi.getTrendingCoins error: $e\n$st');
       return [];
     }
   }
@@ -177,7 +177,7 @@ class MarketApi {
   Future<List<Map<String, dynamic>>> searchCoins(String query) async {
     if (query.trim().isEmpty) return [];
     try {
-      debugPrint('MarketApi.searchCoins: $query');
+      if (kDebugMode) debugPrint('MarketApi.searchCoins: $query');
 
       final raw = await ExternalHttp.get(
         '$_geckoBase/search?q=${Uri.encodeQueryComponent(query.trim())}',
@@ -193,7 +193,7 @@ class MarketApi {
           .map((c) => Map<String, dynamic>.from(c))
           .toList();
     } catch (e, st) {
-      debugPrint('MarketApi.searchCoins error: $e\n$st');
+      if (kDebugMode) debugPrint('MarketApi.searchCoins error: $e\n$st');
       return [];
     }
   }
@@ -209,7 +209,7 @@ class MarketApi {
   /// [_CoinSource.watchlist] 方式渲染。
   Future<List<Map<String, dynamic>>> getFallbackTrendingCoins() async {
     try {
-      debugPrint('MarketApi.getFallbackTrendingCoins');
+      if (kDebugMode) debugPrint('MarketApi.getFallbackTrendingCoins');
 
       final resp = await getWalletCoinsInfo(_fallbackTrendingSymbols);
       if (resp['error'] != false) return [];
@@ -225,7 +225,7 @@ class MarketApi {
           .map((c) => Map<String, dynamic>.from(c))
           .toList();
     } catch (e, st) {
-      debugPrint('MarketApi.getFallbackTrendingCoins error: $e\n$st');
+      if (kDebugMode) debugPrint('MarketApi.getFallbackTrendingCoins error: $e\n$st');
       return [];
     }
   }
@@ -244,7 +244,7 @@ class MarketApi {
       if (d == null) return {'error': true, 'data': '未找到该币'};
       return {'error': false, 'data': d};
     } catch (e, st) {
-      debugPrint('MarketApi.getWalletCoinsBaseInfo error: $e\n$st');
+      if (kDebugMode) debugPrint('MarketApi.getWalletCoinsBaseInfo error: $e\n$st');
       return {'error': true, 'data': e.toString()};
     }
   }

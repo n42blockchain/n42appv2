@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/widgets/candlestick_chart.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 
 import 'market_coin_info_helpers.dart';
@@ -98,7 +99,7 @@ List<double> _fallbackPrices(Map<String, dynamic> coin) {
 
 Widget _noChartData(BuildContext context) => Center(
       child: Text(
-        'No chart data', // TODO: i18n
+        S.of(context).g_market_no_chart,
         style: TextStyle(
           color: AppThemeUtils.getColorByKey(
               context, AppThemeKeys.itemSubtitleTextColor.name),

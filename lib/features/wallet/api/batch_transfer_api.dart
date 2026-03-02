@@ -5,6 +5,7 @@
 
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:n42_wallet/core/network/base_api.dart';
 import 'package:n42_wallet/features/models/message_model.dart';
@@ -339,7 +340,9 @@ class BatchTransferApi {
         );
         final result = jsonDecode(resp.body)['result'];
         if (result != null) return Map<String, dynamic>.from(result);
-      } catch (_) {}
+      } catch (e) {
+        debugPrint('[BatchTransferApi] getTransactionReceipt failed: $e');
+      }
     }
     return null;
   }

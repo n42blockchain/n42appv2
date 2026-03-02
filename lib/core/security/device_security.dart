@@ -180,7 +180,9 @@ class DeviceSecurityService {
       // ro.build.characteristics via a MethodChannel.  Without adding a
       // platform channel here, we conservatively return false and rely on
       // root detection to catch most emulator-based attacks.
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('[DeviceSecurity] isEmulator check failed: $e');
+    }
     return false;
   }
 

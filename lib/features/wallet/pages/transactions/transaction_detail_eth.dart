@@ -151,7 +151,9 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
         trm.to1 = "0x${input.substring(34, 74)}";
         trm.price = hexToInt(input.substring(74, 138));
         value = '${toEther(trm.price.toString(), decimals)} $unit';
-      } catch (_) {}
+      } catch (_) {
+        // intentional parse fallback: input may not contain valid transfer data
+      }
     }
     owner = trm.from1.toLowerCase() == (transactionInfo?['from'] ?? "").toString().toLowerCase();
     return true;

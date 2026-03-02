@@ -1967,5 +1967,17 @@
   "g_dapp_security_caution": "Caution",
   "g_dapp_security_blocked": "Blocked",
   "g_dapp_security_title": "DApp Security",
-  "g_mining_inactivity_warning": "Validator inactivity score is high. Check your node status to avoid penalties."
+  "g_mining_inactivity_warning": "Validator inactivity score is high. Check your node status to avoid penalties.",
+
+  "g_market_high_24h": "High 24H",
+  "g_market_low_24h": "Low 24H",
+  "g_market_fdv": "FDV",
+  "g_market_rank": "Rank",
+  "g_market_ath": "ATH",
+  "g_market_atl": "ATL",
+  "g_market_liquidity_score": "Liquidity Score",
+  "g_market_7d_change": "7D Change",
+  "g_market_30d_change": "30D Change",
+  "g_market_depth": "Market Depth",
+  "g_market_no_chart": "No chart data"
 }

@@ -377,7 +377,14 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
       if (code != 0) {
         Navigator.of(context).pop(true);
       }
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('[AddAddressPage] save failed: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Save failed. Please try again.')),
+        );
+      }
+    }
   }
   void faceMatchTypeWidget() {
     final su = ScreenUtil();

@@ -12,7 +12,6 @@ class ShowImage extends StatelessWidget{
   const ShowImage(this.title, this.img, {this.watermark="AstraWallet",this.type="network",super.key});
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     Widget extendedImage=Container();
     if(type == "network"){
       extendedImage=ExtendedImage.network(

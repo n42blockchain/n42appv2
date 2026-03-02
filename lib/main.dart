@@ -195,7 +195,7 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
       final prefs = await SharedPreferences.getInstance();
       await PhishingDetector.instance.initialize(prefs);
     } catch (e) {
-      debugPrint('[Security] PhishingDetector init failed: $e');
+      if (kDebugMode) debugPrint('[Security] PhishingDetector init failed: $e');
     }
   }
 
@@ -208,10 +208,10 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
       );
       if (await migration.needsMigration()) {
         final count = await migration.migrate();
-        debugPrint('[Security] Wallet data migration completed: $count wallets migrated');
+        if (kDebugMode) debugPrint('[Security] Wallet data migration completed: $count wallets migrated');
       }
     } catch (e) {
-      debugPrint('[Security] Wallet data migration failed: $e');
+      if (kDebugMode) debugPrint('[Security] Wallet data migration failed: $e');
     }
   }
 
@@ -243,7 +243,7 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
       N42Chat.setNavigatorKey(AppGlobals.navigatorKey);
 
       N42Chat.setNotificationTapHandler((roomId, eventId) {
-        debugPrint('N42Chat notification tapped: roomId=$roomId');
+        if (kDebugMode) debugPrint('N42Chat notification tapped: roomId=$roomId');
         if (roomId != null && AppGlobals.navigatorKey.currentContext != null) {
           Navigator.of(AppGlobals.navigatorKey.currentContext!).push(
             MaterialPageRoute(builder: (_) => N42Chat.chatWidget()),
@@ -264,19 +264,19 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
         final currentAppLocale = globalProviderContainer.read(localeProvider);
         if (currentAppLocale.languageCode != locale.languageCode) {
           globalProviderContainer.read(localeProvider.notifier).setLocale(locale.languageCode);
-          debugPrint('Main app locale synced from N42Chat: $locale');
+          if (kDebugMode) debugPrint('Main app locale synced from N42Chat: $locale');
         }
       });
 
       // 监听未读消息数
       _unreadCountSubscription = N42Chat.unreadCountStream.listen((count) {
         globalProviderContainer.read(unreadCountProvider.notifier).setCount(count);
-        debugPrint('N42Chat unread count updated: $count');
+        if (kDebugMode) debugPrint('N42Chat unread count updated: $count');
       });
 
-      debugPrint('N42Chat initialized successfully with theme: $currentTheme');
+      if (kDebugMode) debugPrint('N42Chat initialized successfully with theme: $currentTheme');
     } catch (e) {
-      debugPrint('N42Chat initialization failed: $e');
+      if (kDebugMode) debugPrint('N42Chat initialization failed: $e');
     }
   }
   Future<void> initData() async {
@@ -287,7 +287,7 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
       if (!mounted) return;
       await ref.read(appInitProvider.future);
     } catch (err) {
-      debugPrint("FCM推送初始化失败");
+      if (kDebugMode) debugPrint("FCM推送初始化失败");
     }
   }
   Future<void> _initDeepLinks() async {
@@ -300,7 +300,7 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
       _deepLinkService = service;
       _deepLinkHandler = handler;
     } catch (e) {
-      debugPrint('Deep link initialization failed: $e');
+      if (kDebugMode) debugPrint('Deep link initialization failed: $e');
     }
   }
 
@@ -326,7 +326,7 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
       case DeepLinkType.user:
         final userId = data.params['userId'] ?? '';
         if (userId.isNotEmpty && AppGlobals.userInfo != null) {
-          debugPrint('Deep link: Navigate to user $userId');
+          if (kDebugMode) debugPrint('Deep link: Navigate to user $userId');
           // User profile navigation via N42Chat
           N42Chat.openConversation(userId, context: navContext);
         }
@@ -347,15 +347,15 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
         break;
 
       case DeepLinkType.groupMining:
-        debugPrint('Deep link: Group mining - ${data.params}');
+        if (kDebugMode) debugPrint('Deep link: Group mining - ${data.params}');
         break;
 
       case DeepLinkType.fullNode:
-        debugPrint('Deep link: Full node - ${data.params}');
+        if (kDebugMode) debugPrint('Deep link: Full node - ${data.params}');
         break;
 
       default:
-        debugPrint('Deep link: Unhandled type ${data.type}');
+        if (kDebugMode) debugPrint('Deep link: Unhandled type ${data.type}');
     }
   }
   @override

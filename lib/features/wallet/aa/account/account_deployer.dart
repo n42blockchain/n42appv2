@@ -101,12 +101,9 @@ class AccountDeployer {
       case SmartAccountType.kernel:
       case SmartAccountType.biconomy:
       case SmartAccountType.custom:
-        // These account types require specific factory implementations.
-        // See: https://docs.safe.global/advanced/erc-4337/4337-safe
-        // See: https://docs.zerodev.app/sdk/core-api/create-account
-        throw UnimplementedError(
-          'Init code for ${type.name} is not yet implemented. '
-          'Currently only SimpleAccount and Simple7702Account are supported.',
+        throw AAConfigurationError(
+          'Init code for ${type.name} is not yet supported. '
+          'Only SimpleAccount and Simple7702Account are available.',
         );
     }
   }

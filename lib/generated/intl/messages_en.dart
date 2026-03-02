@@ -3311,14 +3311,27 @@ class MessageLookup extends MessageLookupByLibrary {
       "Add biometric verification?",
     ),
     "g_lock_key9": MessageLookupByLibrary.simpleMessage("Reset password"),
+    "g_market_30d_change": MessageLookupByLibrary.simpleMessage("30D Change"),
+    "g_market_7d_change": MessageLookupByLibrary.simpleMessage("7D Change"),
+    "g_market_ath": MessageLookupByLibrary.simpleMessage("ATH"),
+    "g_market_atl": MessageLookupByLibrary.simpleMessage("ATL"),
+    "g_market_depth": MessageLookupByLibrary.simpleMessage("Market Depth"),
     "g_market_empty_watchlist": MessageLookupByLibrary.simpleMessage(
       "No watchlist yet",
     ),
     "g_market_empty_watchlist_hint": MessageLookupByLibrary.simpleMessage(
       "Tap ★ on any coin to add",
     ),
+    "g_market_fdv": MessageLookupByLibrary.simpleMessage("FDV"),
+    "g_market_high_24h": MessageLookupByLibrary.simpleMessage("High 24H"),
+    "g_market_liquidity_score": MessageLookupByLibrary.simpleMessage(
+      "Liquidity Score",
+    ),
+    "g_market_low_24h": MessageLookupByLibrary.simpleMessage("Low 24H"),
     "g_market_news": MessageLookupByLibrary.simpleMessage("News"),
+    "g_market_no_chart": MessageLookupByLibrary.simpleMessage("No chart data"),
     "g_market_no_results": MessageLookupByLibrary.simpleMessage("No results"),
+    "g_market_rank": MessageLookupByLibrary.simpleMessage("Rank"),
     "g_market_search": MessageLookupByLibrary.simpleMessage("Search"),
     "g_market_search_hint": MessageLookupByLibrary.simpleMessage(
       "Search coins...",

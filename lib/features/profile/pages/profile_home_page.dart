@@ -7,6 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/hardware_wallet/pages/hardware_wallet_page.dart';
+import 'package:n42_wallet/features/wallet/pages/wallet_manage/wallet_list.dart';
+import 'package:n42_wallet/features/wallet/pages/address_book/address_book_list.dart';
+import 'package:n42_wallet/features/home/setting/security/security_setting.dart';
+import 'package:n42_wallet/features/wallet/pages/wallet_backup/export_cloud_backup.dart';
+import 'package:n42_wallet/features/home/setting/setting_sys_language.dart';
+import 'package:n42_wallet/features/home/setting/setting_theme.dart';
+import 'package:n42_wallet/features/wallet/pages/manage_chains_page.dart';
+import 'package:n42_wallet/features/home/setting/feedback.dart' as setting;
+import 'package:n42_wallet/features/home/setting/about_app.dart';
 
 part 'profile_home_page_widgets.dart';
 

@@ -18,6 +18,7 @@ import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dar
 import 'package:n42_wallet/features/widgets/chart_histogram.dart';
 import 'package:n42_wallet/features/widgets/detail_refresh_widget.dart';
 import 'package:n42_wallet/features/widgets/empty.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';

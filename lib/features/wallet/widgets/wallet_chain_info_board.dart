@@ -35,7 +35,6 @@ class WalletChainInfoBoard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Container(
       margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0),vertical: ScreenUtil().setWidth(30.0),),
       //padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0),horizontal: ScreenUtil().setWidth(30.0),),
