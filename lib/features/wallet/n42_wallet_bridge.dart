@@ -212,6 +212,24 @@ class N42WalletBridge implements IWalletBridge {
   }
 
   // ============================================
+  // 消息签名（治理投票等）
+  // ============================================
+
+  @override
+  Future<String?> signMessage(String message) async {
+    // TODO: 接入 WalletConnect 或本地钱包的 personal_sign
+    if (kDebugMode) debugPrint('N42WalletBridge: signMessage requested');
+    return null;
+  }
+
+  @override
+  Future<String?> signTypedData(String typedDataJson) async {
+    // TODO: 接入 WalletConnect 或本地钱包的 eth_signTypedData_v4
+    if (kDebugMode) debugPrint('N42WalletBridge: signTypedData requested');
+    return null;
+  }
+
+  // ============================================
   // 代币门控
   // ============================================
 
