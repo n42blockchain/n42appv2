@@ -26,7 +26,7 @@ class MiningSettings extends StatefulWidget {
 
 class _MiningSettingsState extends State<MiningSettings> {
   ///是否开启挖矿
-  bool isSwitched = false;
+  bool isSwitched = true;
 
   ///挖矿节点列表
   List<Map> nodeList = [];

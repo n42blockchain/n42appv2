@@ -4,7 +4,7 @@ import 'package:n42_wallet/features/component/enums/coin_type.dart';
 Map<String,dynamic> walletChainConfigsPart1={
   CoinType.N.name:<String,dynamic>{
     "showList":true,//主链币是否显示在主页列表中
-    "isTest":true,//是否时正式链
+    "isTest":false,//是否时正式链
     "supportTest":true,
     "addrType":"legacy",//地址类型
     "pathIndex":0,//path具体的账号节点

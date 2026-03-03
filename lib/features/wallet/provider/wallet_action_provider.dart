@@ -361,7 +361,7 @@ class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAcc
         address,
         contract: contract,
         isTest: coinModel.isTest ,
-      rpc: coinModel.coin['coinType']==CoinType.N.name?coinModel.coin['service_test']:null,
+      //rpc: coinModel.coin['coinType']==CoinType.N.name?coinModel.coin['service_test']:null,
     ) ?? MessageModel.error();
     _applyMarketPrice(coinModel);
 

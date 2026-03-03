@@ -4,7 +4,7 @@ import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/component/enums/load.dart';
 import 'package:n42_wallet/features/mining_v1/api/mining_api.dart';
 import 'package:n42_wallet/features/mining_v1/models/mining_type.dart';
-import 'package:n42_wallet/features/mining_v1/pages/mining_background.dart';
+import 'package:n42_wallet/features/mining_v2/pages/mining_background.dart';
 import 'package:n42_wallet/features/mining_v1/pages/mining_task_list.dart';
 import 'package:n42_wallet/features/mining_v1/pages/task_detail_page.dart';
 import 'package:n42_wallet/features/mining_v1/provider/mining_provider.dart';

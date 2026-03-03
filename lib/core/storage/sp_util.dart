@@ -321,7 +321,7 @@ class SPUtil {
   /// 获取 V1 挖矿是否开启
   Future<bool> getOpenMining() async {
     await initPrefs();
-    return prefs?.getBool(SPkey.miningV1OpenMining.name) ?? false;
+    return prefs?.getBool(SPkey.miningV1OpenMining.name) ?? true;
   }
 
   /// 设置 V1 挖矿开关（与 setMiningOpen 等价）

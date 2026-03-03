@@ -144,14 +144,14 @@ class AppConfig {
   /// Override via --dart-define=MINING_WS_URL=wss://yournode:port/
   static const String miningWebSocketUrl = String.fromEnvironment(
     'MINING_WS_URL',
-    defaultValue: 'wss://ws.n42.world',
+    defaultValue: 'wss://testws2.n42.world',
   );
 
   /// Mining node RPC URL
   /// Override via --dart-define=MINING_RPC_URL=https://yournode:port
   static const String miningRpcUrl = String.fromEnvironment(
     'MINING_RPC_URL',
-    defaultValue: 'https://rpc.n42.world',
+    defaultValue: 'https://testrpc2.n42.world',
   );
 
   // ============ Helper Methods ============

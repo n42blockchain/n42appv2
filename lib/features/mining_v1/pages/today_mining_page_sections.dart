@@ -48,7 +48,7 @@ mixin _SectionsMixin on _WidgetsMixin {
             context,
             () {
               if (mpValue.depositsEnable == true) {
-                MiningBackground().background_start();
+                MiningBackground().backgroundStart();
               }
             },
             S.of(context).g_key_wallet_c4,

@@ -7,12 +7,12 @@ import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/core/utils/responsive_utils.dart';
 import 'package:n42_wallet/data/models/device_login_info.dart';
 import 'package:n42_wallet/features/login/pages/change_password_page.dart';
+import 'package:n42_wallet/features/mining_v1/pages/mining_home_page.dart';
 import 'package:n42_wallet/features/widgets/dialog_widget/device_login_dialog.dart';
 import 'package:n42_wallet/features/home/home_draw_page.dart';
 import 'package:n42_wallet/features/home/unlock.dart';
 import 'package:n42_wallet/features/mining_v2/pages/mining_background.dart';
 import 'package:n42_wallet/features/mining_v2/pages/mining_today_v2.dart';
-import 'package:n42_wallet/features/mining_v1/pages/mining_index.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_page.dart';
@@ -64,7 +64,7 @@ class _HomePageState extends ConsumerState<HomePage>
     final useV2 = ref.watch(miningUseV2Provider);
     return [
       const WalletPage(),
-      useV2 ? const MiningTodayV2() : const MiningIndex(),
+      useV2 ? const MiningTodayV2() : const MiningHomePage(),
       const EarnPage(),
       const MarketPage(),
     ];
