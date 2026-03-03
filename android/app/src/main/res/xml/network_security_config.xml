@@ -18,9 +18,5 @@
         <domain includeSubdomains="true">10.0.2.2</domain>
     </domain-config>
 
-    <!-- 测试节点例外：允许明文 WS/HTTP（临时，待节点配置 TLS 后移除） -->
-    <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="false">5.161.252.59</domain>
-        <domain includeSubdomains="false">54.175.247.94</domain>
-    </domain-config>
+    <!-- 测试节点已升级为 TLS，无需明文例外 -->
 </network-security-config>

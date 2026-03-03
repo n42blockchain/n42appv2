@@ -25,8 +25,8 @@ final Map<String, dynamic> chainUrlConfigsPart1 = <String, dynamic>{
       "path": {
         "legacy":"m/44'/60'/0'/0/0",
       },
-      "service": "http://18.170.108.78:20012",
-      "service_test": "http://54.243.83.152:20012",
+      "service": "https://rpc.n42.world",
+      "service_test": "https://testrpc.n42.world",
       "chainId": 94,//100100100,
       "chainId_test": 1142,//100100100,
       "contract": "",
@@ -34,17 +34,17 @@ final Map<String, dynamic> chainUrlConfigsPart1 = <String, dynamic>{
       "canEdit": false,
       "rules": "ERC20",
     },
-    //"mainnetWS":"ws://174.129.114.74:8546",
-    //"mainnetRPC":"http://174.129.114.74:8545",//"http://192.168.0.190:20012",//
+    //"mainnetWS":"wss://ws.n42.world",
+    //"mainnetRPC":"https://rpc.n42.world",
     "mainnetChainID":94,//100100100,
-    //"testnetWS":"ws://174.129.114.74:8546",
-    //"testnetRPC":"http://174.129.114.74:8545",//"http://192.168.0.190:20012",//
+    //"testnetWS":"wss://testws.n42.world",
+    //"testnetRPC":"https://testrpc.n42.world",
     "testnetChainID":1142,
     "testnetIndex":0,//当前选择的测试网络 索引值
     "testnets":[
       {
-        "testnetWS":"ws://54.175.247.94:20012",
-        "testnetRPC":"http://54.243.83.152:20012",
+        "testnetWS":"wss://testws.n42.world",
+        "testnetRPC":"https://testrpc.n42.world",
         "testnetChainID":1142,//100100100,//
         "testnetContract":<String,dynamic>{
         }

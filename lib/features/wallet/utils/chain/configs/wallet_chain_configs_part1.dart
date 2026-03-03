@@ -27,7 +27,7 @@ Map<String,dynamic> walletChainConfigsPart1={
         "legacy":"m/44'/60'/0'/0/0",
       },
       "service": "https://rpc.n42.world",
-      "service_test": const String.fromEnvironment('N42_TESTNET_RPC', defaultValue: 'http://5.161.252.59:8545'),
+      "service_test": const String.fromEnvironment('N42_TESTNET_RPC', defaultValue: 'https://testrpc.n42.world'),
       "chainId": 94,
       "chainId_test": 1142,
       "contract": "",
@@ -40,8 +40,8 @@ Map<String,dynamic> walletChainConfigsPart1={
     "testnetIndex":0,
     "testnets":[
       {
-        "testnetWS":"ws://54.175.247.94:20012",
-        "testnetRPC":"http://5.161.252.59:8545",
+        "testnetWS":"wss://testws.n42.world",
+        "testnetRPC":"https://testrpc.n42.world",
         "testnetChainID":1142,
         "testnetContract":<String,dynamic>{
         }
@@ -181,7 +181,7 @@ Map<String,dynamic> walletChainConfigsPart1={
             "path": {
               "legacy":"m/44'/60'/0'/0/0",
             },
-            "service": const String.fromEnvironment('ETH_RPC_URL', defaultValue: 'http://18.170.108.78:20012'),
+            "service": const String.fromEnvironment('ETH_RPC_URL', defaultValue: 'https://rpc.n42.world'),
             "service_test": "https://eth-sepolia.public.blastapi.io",
             "chainId": 1,
             "chainId_test": 11155111,
