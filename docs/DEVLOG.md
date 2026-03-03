@@ -5,6 +5,149 @@
 
 ---
 
+## [2026-03-02] Mining V2 崩溃修复 — SDK 方法迁移
+
+### 背景
+
+V2 挖矿启动后闪退，崩溃日志：
+```
+FATAL EXCEPTION: Thread-28
+java.lang.NoSuchMethodError: No static method genBlockVerifyResult(String, String)
+  in class Lcom/mobileSdk/Api;
+    at ai.n42.www.MyWebSocketListener.onMessage$lambda$0(MyWebSocketListener.kt:65)
+```
+
+### 根因
+
+项目中存在两个 AAR 文件，API surface 不一致：
+
+| 文件 | 用途 | 大小 | `genBlockVerifyResult` |
+|------|------|------|----------------------|
+| `android/app/libs/mobile-sdk-android.aar` | compile-time（`compileOnly`） | 8.5 MB | ✅ 有 |
+| `plugins/flutter_mining/android/libs/mobile-sdk-release.aar` | runtime（`implementation`） | 9.1 MB | ❌ 无 |
+
+新 SDK（runtime AAR）移除了 `genBlockVerifyResult()`，新增 `runClient(wsUrl, privateKey)` 替代整个 WebSocket + 区块验证流程。旧代码编译时引用 compile-time AAR 通过，运行时加载 runtime AAR 找不到方法。
+
+### V2 挖矿两条路径
+
+| 路径 | 入口 | 流程 | 状态 |
+|------|------|------|------|
+| `connectWebSocket` | `checkAddressMiningStatus()` | Dart → MethodChannel → Kotlin `WebSocketService` → `MyWebSocketListener` → `Api.genBlockVerifyResult()` | ❌ 崩溃 |
+| `runClient` | `runMining()` | Dart → `MiningApi.runClient()` → MethodChannel → Kotlin `Api.runClient(wsUrl, privateKey)` | ✅ 正常 |
+
+新 SDK 的 `Api.runClient()` 内部自行管理 WebSocket 连接、订阅验证请求、区块验证和结果提交，不再需要 Dart/Kotlin 端手动管理 WebSocket 生命周期。
+
+### 改动文件
+
+| 文件 | 改动 |
+|------|------|
+| `TrustdartPlugin.kt` | 保存 `runClient` 的 `CompletableFuture` 引用（`@Volatile runClientFuture`），两处 `MiningRunClient` handler 均更新；新增 `MiningStopClient` method 用于暂停挖矿 |
+| `trustdart.dart` | 新增 `miningStopClient()` 方法 |
+| `mining_api.dart` | 新增 `stopClient()` 方法 |
+| `mining_v2_provider_actions.dart` | `checkAddressMiningStatus()` 中 `connectWebSocket()` → `runMining()` |
+| `mining_v2_provider_websocket.dart` | `disconnectWebSocket()` 增加 `mining.stopClient()` 调用，确保暂停按钮能停止 `runClient` |
+
+### 新 SDK API（5 个方法）
+
+```
+Api.generateBls12381Keypair() → String
+Api.createDepositUnsignedTx(String, String, String, String) → String
+Api.createGetExitFeeUnsignedTx() → String
+Api.createExitUnsignedTx(String, String) → String
+Api.runClient(String wsUrl, String privateKey) → CompletableFuture<Void>
+```
+
+### 技术备注
+
+- `CompletableFuture.cancel(true)` 用于暂停。`cancel` 标记 future 为已取消，但不一定中断底层线程；SDK 内部若检查 `Thread.interrupted()` 可实现优雅停止
+- Kotlin 端两处 `MiningRunClient` handler（`handleCoreCall` 和 `handleCoreCall2`）均已同步更新，保持一致
+- `MyWebSocketListener.kt` 和 `WebSocketService.kt` 保留但不再被 V2 主流程调用（V1 仍可能使用）
+
+---
+
+## [2026-03-02] 启动屏 Tagline 改版 — 13 语言单语展示
+
+### 背景
+
+启动屏 "N42 Wallet" 下方的标语存在两个问题：
+1. 英文变体同时携带中文副标题（如 "OWNS" + "耕 者 有 其 田"），违反"每次只显示一种语言"的设计意图
+2. 字号过小（`setSp(26)`），与标题 `setSp(48)` 差距太大
+
+### 改动文件
+
+| 文件 | 改动 |
+|------|------|
+| `splash_variants.dart` | 移除 `subText`/`subTextSpaced` 字段；英文变体去掉中文副标题；新增越南语（第 13 种语言）；调整权重算法适配 33 条 Pool2 |
+| `splash_page.dart` | Tagline 字号 `setSp(26)` → `setSp(44)`；fontWeight `w500` → `w600`；移除 subText 渲染逻辑；添加水平 padding 防溢出 |
+
+### 13 种语言
+
+英 / 中 / 日 / 韩 / 西 / 法 / 德 / 葡 / 俄 / 阿 / 泰 / 印地 / 越
+
+### 概率分配
+
+| 池 | 条目 | 权重 | 总权重单元 | 概率 |
+|----|------|------|-----------|------|
+| Pool1（中 + 英） | 6 条 | ×11 | 66 | 50% |
+| Pool2（其他 11 语言） | 33 条 | ×2 | 66 | 50% |
+
+### 3 句主题
+
+| 代号 | 英文 | 中文 |
+|------|------|------|
+| A | Who Creates OWNS | 耕者有其田 |
+| B | Private Sovereignty Matters | 自己的事，最好自己说了算 |
+| C | Blockchain Won't Forget | 上链得永生 |
+
+每种语言翻译这 3 句，共 39 条变体（6 中英 + 33 其他）。
+
+---
+
+## [2026-03-02] 生产就绪性审计修复 — 14 项问题 + 82 个测试
+
+### 背景
+
+基于 2026-03-02 生产就绪性审计报告，对 n42appv2 发现的 3 个 P0、7 个 P1、4 个 P2 问题进行全量修复。
+
+### 修复清单
+
+**P0 安全：**
+- 移除硬编码 Groq API Key（`api_keys_config.dart`）
+- Mining URL 统一管理、HTTP → HTTPS（`app_config.dart`、`mining_api.dart`、`mining_web3.dart`）
+
+**P0 功能：**
+- Profile 页面 13 个导航方法全部接线（`profile_home_page_widgets.dart`）
+
+**P1 Mock/Stub 降级：**
+- Loyalty API release 模式不再 fallback 到 mock 数据
+- Airdrop trending 添加 `kDebugMode` 守卫
+- `wallet_service_impl.getBalance()` 改为真实余额查询（`chainUrlMap` 解析 blockchainType 替代固定 'multi'）
+- `refreshCoin()` 委托给 `refresh()`
+
+**P1 AA 模块：**
+- `signature_builder.dart` 签名恢复用 `web3dart` 实现（修复 `bytesToInt` → `bytesToUnsignedInt` 的符号 bug）
+- `account_deployer.dart` 未支持类型从 `throw UnimplementedError` 改为 `throw AAConfigurationError`
+
+**P2：**
+- 8 处空 `catch {}` 块添加 debugPrint 日志或注释
+- Top 10 高密度文件 debugPrint 添加 `kDebugMode` 守卫
+- 11 个 market i18n 硬编码替换为 ARB key
+
+### 测试
+
+6 个新测试文件，82 个测试用例，全部通过：
+
+| 文件 | 测试数 |
+|------|--------|
+| `test/features/aa/signature_builder_test.dart` | 24 |
+| `test/features/aa/account_deployer_test.dart` | 12 |
+| `test/core/config/app_config_test.dart` | 14 |
+| `test/l10n/market_i18n_test.dart` | 11 |
+| `test/features/loyalty/loyalty_api_test.dart` | 8 |
+| `test/features/wallet/wallet_service_balance_test.dart` | 13 |
+
+---
+
 ## [2026-02-21] AA Account Abstraction — Safe/Biconomy 支持 + 5 Bug 修复
 
 ### Commits

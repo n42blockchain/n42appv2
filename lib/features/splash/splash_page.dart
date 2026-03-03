@@ -245,8 +245,7 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
 }
 
 // ---------------------------------------------------------------------------
-// 随机启动文字组件
-// 布局参考设计稿：小标签 + 大主字 + 小标签 + 副标题（带字间距）
+// 随机启动文字组件（单语言，不混排）
 // ---------------------------------------------------------------------------
 
 class _SplashTagline extends StatelessWidget {
@@ -256,15 +255,13 @@ class _SplashTagline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 统一样式：比标题小、使用浅青色区分
     final taglineStyle = TextStyle(
-      fontSize: ScreenUtil().setSp(26),
-      fontWeight: FontWeight.w500,
+      fontSize: ScreenUtil().setSp(44),
+      fontWeight: FontWeight.w600,
       color: const Color(0xFF80DEEA),
-      letterSpacing: 0.5,
+      letterSpacing: 1.0,
     );
 
-    // ── 标签行：topLabel + mainText + midLabel 拼成一段富文本 ──
     final labelSpans = <InlineSpan>[
       if (variant.topLabel != null)
         TextSpan(text: '${variant.topLabel} ', style: taglineStyle),
@@ -273,32 +270,13 @@ class _SplashTagline extends StatelessWidget {
         TextSpan(text: ' ${variant.midLabel}', style: taglineStyle),
     ];
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        // 标签行（尽量一行显示，放不下自动换行）
-        Text.rich(
-          TextSpan(children: labelSpans),
-          textAlign: TextAlign.center,
-          softWrap: true,
-        ),
-
-        // 副标题（中/日/韩等表意文字加大字间距）
-        if (variant.subText != null) ...[
-          SizedBox(height: ScreenUtil().setWidth(10)),
-          Text(
-            variant.subText!,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(20),
-              fontWeight: FontWeight.w600,
-              color: Colors.white.withValues(alpha: 0.85),
-              letterSpacing: variant.subTextSpaced ? 4.0 : 0.5,
-              height: 1.4,
-            ),
-          ),
-        ],
-      ],
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(40)),
+      child: Text.rich(
+        TextSpan(children: labelSpans),
+        textAlign: TextAlign.center,
+        softWrap: true,
+      ),
     );
   }
 }
