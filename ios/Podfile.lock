@@ -51,8 +51,8 @@ PODS:
     - SDWebImage
     - SwiftyGif
   - FaceCoreBasic (7.2.1622)
-  - FaceSDK (7.2.3696):
-    - RegulaCommon (= 9.2.1962)
+  - FaceSDK (7.2.3526):
+    - RegulaCommon (= 9.1.1844)
   - FBAEMKit (18.0.2):
     - FBSDKCoreKit_Basics (= 18.0.2)
   - FBSDKCoreKit (18.0.2):
@@ -152,8 +152,8 @@ PODS:
     - Flutter
   - flutter_contacts (0.0.1):
     - Flutter
-  - flutter_face_api (7.2.716):
-    - FaceSDK (= 7.2.3696)
+  - flutter_face_api (7.2.626):
+    - FaceSDK (= 7.2.3526)
     - Flutter
   - flutter_face_core_basic (7.2.235):
     - FaceCoreBasic (= 7.2.1622)
@@ -302,7 +302,7 @@ PODS:
   - libwebp/sharpyuv (1.5.0)
   - libwebp/webp (1.5.0):
     - libwebp/sharpyuv
-  - livekit_client (2.6.4):
+  - livekit_client (2.6.2):
     - Flutter
     - flutter_webrtc
     - WebRTC-SDK (= 137.7151.04)
@@ -329,6 +329,7 @@ PODS:
   - mobile_scanner (7.0.0):
     - Flutter
     - FlutterMacOS
+  - MTBBarcodeScanner (5.0.11)
   - nanopb (3.30910.0):
     - nanopb/decode (= 3.30910.0)
     - nanopb/encode (= 3.30910.0)
@@ -347,14 +348,15 @@ PODS:
     - PromisesObjC (= 2.4.0)
   - qr_code_scanner_plus (0.2.6):
     - Flutter
+    - MTBBarcodeScanner
   - record_ios (1.2.0):
     - Flutter
-  - RegulaCommon (9.2.1962)
+  - RegulaCommon (9.1.1844)
   - saver_gallery (0.0.1):
     - Flutter
-  - SDWebImage (5.21.5):
-    - SDWebImage/Core (= 5.21.5)
-  - SDWebImage/Core (5.21.5)
+  - SDWebImage (5.21.7):
+    - SDWebImage/Core (= 5.21.7)
+  - SDWebImage/Core (5.21.7)
   - share_plus (0.0.1):
     - Flutter
   - shared_preferences_foundation (0.0.1):
@@ -527,6 +529,7 @@ SPEC REPOS:
     - MLKitCommon
     - MLKitFaceDetection
     - MLKitVision
+    - MTBBarcodeScanner
     - nanopb
     - PromisesObjC
     - PromisesSwift
@@ -657,14 +660,14 @@ SPEC CHECKSUMS:
   app_links: a754cbec3c255bd4bbb4d236ecc06f28cd9a7ce8
   AppAuth: 1c1a8afa7e12f2ec3a294d9882dfa5ab7d3cb063
   AppCheckCore: cc8fd0a3a230ddd401f326489c99990b013f0c4f
-  audioplayers_darwin: 835ced6edd4c9fc8ebb0a7cc9e294a91d99917d5
+  audioplayers_darwin: 4f9ca89d92d3d21cec7ec580e78ca888e5fb68bd
   connectivity_plus: cb623214f4e1f6ef8fe7403d580fdad517d2f7dd
   CryptoSwift: e64e11850ede528a02a0f3e768cec8e9d92ecb90
   device_info_plus: 21fcca2080fbcd348be798aa36c3e5ed849eefbe
   DKImagePickerController: 946cec48c7873164274ecc4624d19e3da4c1ef3c
   DKPhotoGallery: b3834fecb755ee09a593d7c9e389d8b5d6deed60
   FaceCoreBasic: 8dd4be50401c8ca6021ca9fb8cc005aefe3f020d
-  FaceSDK: 2077e3d2d6d91ad70a0e6b97d58979f65a3a8adb
+  FaceSDK: 392c32ca3613396533816ac14900431ffdb3b65f
   FBAEMKit: 56a4f5a9607957b547b6458b17a98c5bb2736367
   FBSDKCoreKit: 54f1240567e16862ab71c53c33dc347db5c524c5
   FBSDKCoreKit_Basics: eb530cd6a79030dbb11df460aafb2767bcad9028
@@ -687,7 +690,7 @@ SPEC CHECKSUMS:
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   flutter_callkit_incoming: cb8138af67cda6dd981f7101a5d709003af21502
   flutter_contacts: 5383945387e7ca37cf963d4be57c21f2fc15ca9f
-  flutter_face_api: c8832834492c7e0e7e0f50a998b0bd9fe907b1e3
+  flutter_face_api: 54553daca9a5924bb8f9788b1192e58bdf88a584
   flutter_face_core_basic: e86f4c426917ac6c7b8dd8f114d366495cd315d1
   flutter_facebook_auth: fa3b69b1df0831d2178fe87a05ee2d7d0156db70
   flutter_local_notifications: a5a732f069baa862e728d839dd2ebb904737effb
@@ -717,13 +720,14 @@ SPEC CHECKSUMS:
   image_picker_ios: e0ece4aa2a75771a7de3fa735d26d90817041326
   integration_test: 4a889634ef21a45d28d50d622cf412dc6d9f586e
   libwebp: 02b23773aedb6ff1fd38cec7a77b81414c6842a8
-  livekit_client: 05903af3b321aa2703c661edcac1abfb4fc7e80c
+  livekit_client: e266d6c90ba57a121aa126df808ac032b12e26f3
   local_auth_darwin: c3ee6cce0a8d56be34c8ccb66ba31f7f180aaebb
   MLImage: 0de5c6c2bf9e93b80ef752e2797f0836f03b58c0
   MLKitCommon: 47d47b50a031d00db62f1b0efe5a1d8b09a3b2e6
   MLKitFaceDetection: 32549f1e70e6e7731261bf9cea2b74095e2531cb
   MLKitVision: 39a5a812db83c4a0794445088e567f3631c11961
   mobile_scanner: 9157936403f5a0644ca3779a38ff8404c5434a93
+  MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
   open_filex: 432f3cd11432da3e39f47fcc0df2b1603854eff1
   package_info_plus: af8e2ca6888548050f16fa2f1938db7b5a5df499
@@ -731,11 +735,11 @@ SPEC CHECKSUMS:
   permission_handler_apple: 4ed2196e43d0651e8ff7ca3483a069d469701f2d
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   PromisesSwift: 9d77319bbe72ebf6d872900551f7eeba9bce2851
-  qr_code_scanner_plus: 1fb59fd4576edb53ec7560c3746f454dee54300c
+  qr_code_scanner_plus: 7e087021bc69873140e0754750eb87d867bed755
   record_ios: 412daca2350b228e698fffcd08f1f94ceb1e3844
-  RegulaCommon: cbd5190ddd58bddf29dd40a3bd606a1d20cdf091
+  RegulaCommon: 714094c23bdade6ac5ed81b16cb6e299f5aafb2d
   saver_gallery: af2d0c762dafda254e0ad025ef0dabd6506cd490
-  SDWebImage: e9c98383c7572d713c1a0d7dd2783b10599b9838
+  SDWebImage: e9fc87c1aab89a8ab1bbd74eba378c6f53be8abf
   share_plus: 50da8cb520a8f0f65671c6c6a99b3617ed10a58a
   shared_preferences_foundation: 7036424c3d8ec98dfe75ff1667cb0cd531ec82bb
   sign_in_with_apple: c5dcc141574c8c54d5ac99dd2163c0c72ad22418

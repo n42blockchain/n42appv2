@@ -74,6 +74,8 @@
 	<string>N42 Wallet needs permission to save QR codes and images to your photo library.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>N42 Wallet needs location access to share your location with contacts in chat.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>N42 Wallet needs continuous location access to share live location with contacts in chat conversations.</string>
 	<key>NSSupportsLiveActivities</key>
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
