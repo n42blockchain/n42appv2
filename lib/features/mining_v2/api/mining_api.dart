@@ -54,6 +54,13 @@ class MiningApi{
       return null;
     }
   }
+  Future<String?> stopClient()async{
+    try{
+      return await mining.miningStopClient();
+    }catch(e){
+      return null;
+    }
+  }
   Future<String?> miningCreateGetExitFeeUnsignedTx()async{
     try{
       return await mining.miningCreateGetExitFeeUnsignedTx();

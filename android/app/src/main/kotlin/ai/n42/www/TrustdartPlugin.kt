@@ -53,11 +53,16 @@ import wallet.core.jni.proto.Theta
 import wallet.core.jni.proto.Cardano
 import wallet.core.jni.proto.MultiversX
 import java.math.BigInteger
+import java.util.concurrent.CompletableFuture
 import evmsdk.Evmsdk
 import com.mobileSdk.Api
 import io.flutter.plugin.common.EventChannel
 
 class TrustdartPlugin: FlutterPlugin, MethodCallHandler {
+
+    /// Active runClient future — saved so we can cancel on MiningStopClient.
+    @Volatile
+    private var runClientFuture: CompletableFuture<Void>? = null
 
     init {
         System.loadLibrary("TrustWalletCore")
@@ -558,17 +563,31 @@ class TrustdartPlugin: FlutterPlugin, MethodCallHandler {
                 val validatorPrivateKey = args["validatorPrivateKey"] as String
 
                 try {
-                    Api.runClient(wsUrl, validatorPrivateKey)
+                    runClientFuture?.cancel(true)
+                    val future = Api.runClient(wsUrl, validatorPrivateKey)
+                    runClientFuture = future
+                    future
                         .thenRun {
-                            channel.invokeMethod("onClientDone", null) // 通知 Flutter
+                            runClientFuture = null
+                            channel.invokeMethod("onClientDone", null)
                         }
                         .exceptionally { ex ->
+                            runClientFuture = null
                             channel.invokeMethod("onClientError", ex.message)
                             null
                         }
                     result.success("Client started")
                 } catch (e: Exception) {
                     result.error("ClientError", e.message, null)
+                }
+            }
+            "MiningStopClient" -> {
+                try {
+                    runClientFuture?.cancel(true)
+                    runClientFuture = null
+                    result.success("Client stopped")
+                } catch (e: Exception) {
+                    result.error("StopClientError", e.message, null)
                 }
             }
 
@@ -1113,17 +1132,31 @@ class TrustdartPlugin: FlutterPlugin, MethodCallHandler {
                 val validatorPrivateKey = args["validatorPrivateKey"] as String
 
                 try {
-                    Api.runClient(wsUrl, validatorPrivateKey)
+                    runClientFuture?.cancel(true)
+                    val future = Api.runClient(wsUrl, validatorPrivateKey)
+                    runClientFuture = future
+                    future
                         .thenRun {
-                            channel.invokeMethod("onClientDone", null) // 通知 Flutter
+                            runClientFuture = null
+                            channel.invokeMethod("onClientDone", null)
                         }
                         .exceptionally { ex ->
+                            runClientFuture = null
                             channel.invokeMethod("onClientError", ex.message)
                             null
                         }
                     result.success("Client started")
                 } catch (e: Exception) {
                     result.error("ClientError", e.message, null)
+                }
+            }
+            "MiningStopClient" -> {
+                try {
+                    runClientFuture?.cancel(true)
+                    runClientFuture = null
+                    result.success("Client stopped")
+                } catch (e: Exception) {
+                    result.error("StopClientError", e.message, null)
                 }
             }
             "connectWebSocket" -> {

@@ -75,11 +75,7 @@ mixin _MiningActionsMixin on _MiningStateMixin {
 
       await getMiningData();
       if (depositsEnable == true) {
-        connectWebSocket(
-          wsUrl: AppConfig.miningWebSocketUrl,
-          validatorPrivateKey: miningKeypart?['privateKey'] ?? "",
-          validatorPubkey: miningKeypart?['publicKey'] ?? "",
-        );
+        await runMining();
       }
       loadMiningData();
 

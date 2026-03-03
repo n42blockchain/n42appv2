@@ -404,6 +404,9 @@ class Trustdart {
   Future<String?> miningRunClient(Map<String, dynamic> params) =>
       _invokeMining('MiningRunClient', params);
 
+  Future<String?> miningStopClient() =>
+      _invokeMining('MiningStopClient');
+
   Future<String?> miningCreateGetExitFeeUnsignedTx() =>
       _invokeMining('MiningCreateGetExitFeeUnsignedTx');
 

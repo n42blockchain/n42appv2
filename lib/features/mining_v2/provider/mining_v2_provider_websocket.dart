@@ -80,6 +80,14 @@ mixin _MiningWebSocketMixin on _MiningStateMixin {
     lastValidatorPubkey = null;
     lastValidatorPrivateKey = null;
 
+    // Stop the SDK runClient (new SDK approach)
+    try {
+      await mining.stopClient();
+    } catch (e) {
+      debugPrint('MiningStopClient error: $e');
+    }
+
+    // Also stop legacy WebSocket bridge if active
     try {
       await wsBridge?.disconnect();
     } catch (e) {
