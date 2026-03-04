@@ -1,5 +1,4 @@
 import 'package:n42_wallet/core/app/app_globals.dart';
-import 'package:n42_wallet/core/config/api_keys_config.dart';
 import 'package:n42_wallet/core/utils/message_model_bridge.dart';
 import 'package:n42_wallet/core/utils/result.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
@@ -17,7 +16,7 @@ class DotApi {
         url,
         params: {},
         data: {'address': address},
-        header: {'x-api-key': ApiKeysConfig.dotApiKey},
+        header: {},
       );
       if (data['code'] != 0) {
         mm.error = true;

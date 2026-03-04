@@ -102,7 +102,7 @@ extension TransactionApiEthDotAptTon on TransactionApi {
       }
       final url = '${hostUrl}api/v2/scan/transfers';
       final h = Map<String, String>.from(header)
-        ..['x-api-key'] = ApiKeysConfig.dotApiKey;
+        ..['x-api-key'] = ''; // API key injected by server proxy
       final data = await BaseApi.requestEmptyH.post(
         url,
         params: {},
