@@ -29,6 +29,7 @@ class _NewsTab extends StatelessWidget {
     return RefreshIndicator(
       onRefresh: onRefresh,
       child: ListView.builder(
+        padding: EdgeInsets.only(bottom: 116.w),
         itemCount: articles.length,
         itemBuilder: (_, i) => _NewsCard(article: articles[i]),
       ),

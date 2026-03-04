@@ -46,6 +46,7 @@ class _TrendingTab extends StatelessWidget {
     return RefreshIndicator(
       onRefresh: onRefresh,
       child: ListView.builder(
+        padding: EdgeInsets.only(bottom: 116.w),
         itemCount: coins.length,
         itemBuilder: (_, i) {
           final coin = coins[i];
@@ -156,6 +157,7 @@ class _SearchTab extends StatelessWidget {
       );
     }
     return ListView.builder(
+      padding: EdgeInsets.only(bottom: 116.w),
       itemCount: results.length,
       itemBuilder: (_, i) {
         final coin = results[i];
@@ -210,6 +212,7 @@ class _WatchlistTab extends StatelessWidget {
     return RefreshIndicator(
       onRefresh: onRefresh,
       child: ListView.builder(
+        padding: EdgeInsets.only(bottom: 116.w),
         itemCount: coins.length,
         itemBuilder: (_, i) {
           final coin = coins[i];
