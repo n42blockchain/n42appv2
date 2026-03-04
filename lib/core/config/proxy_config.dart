@@ -55,4 +55,10 @@ class ProxyConfig {
   // ==================== Speech ====================
   static String get speechGoogle => '$baseUrl/v1/speech/google';
   static String get speechAzure => '$baseUrl/v1/speech/azure';
+
+  // ==================== TokenView Enhanced ====================
+  static String get tokenviewGasNextBlock => '$baseUrl/v1/tokenview/gas/nextblock';
+  static String get tokenviewPendingStat => '$baseUrl/v1/tokenview/pendingstat';
+  static String get tokenviewPendingTx => '$baseUrl/v1/tokenview/pending/tx';
+  static String get tokenviewContractCreator => '$baseUrl/v1/tokenview/contract/creator';
 }

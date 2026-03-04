@@ -19,6 +19,7 @@ import 'package:n42_wallet/features/wallet/pages/wallet_receive_qr.dart';
 import 'package:n42_wallet/features/wallet/utils/browser/browser_address.dart';
 import 'package:n42_wallet/features/wallet/utils/browser/browser_token_address.dart';
 import 'package:n42_wallet/features/wallet/widgets/wallet_chain_info_board.dart';
+import 'package:n42_wallet/features/wallet/widgets/wallet_coin_market_preview.dart';
 import 'package:n42_wallet/features/wallet/widgets/wallet_chain_info_transactions_item.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/features/widgets/dialog_widget/tips_dialog_7.dart';
@@ -343,6 +344,12 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
                   );
                 },
               ),
+              if ((marketInfo?['coin_gecko_id'] ?? '').toString().isNotEmpty)
+                WalletCoinMarketPreview(
+                  geckoId: marketInfo!['coin_gecko_id'].toString(),
+                  priceChange24h: (marketInfo!['price_change_per_24h'] as num?)?.toDouble() ?? 0,
+                  marketInfo: marketInfo!,
+                ),
               Divider(height: su.setWidth(1)),
               _buildTransactionHeader(),
               _buildTransactionsWidget(),

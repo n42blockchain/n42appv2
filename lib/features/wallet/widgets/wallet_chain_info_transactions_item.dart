@@ -1,4 +1,6 @@
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
+import 'package:n42_wallet/core/security/address_label_service.dart';
+import 'package:n42_wallet/features/wallet/api/tokenview_enhanced_api.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/pages/transactions/transaction_detail_eth.dart';
@@ -46,8 +48,12 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
     return _isBtcType ? "assets/img/remind.png" : "assets/img/error.png";
   }
 
+  bool get _isMempoolTx => transactionModel is MempoolTxItem;
+
   @override
   Widget build(BuildContext context) {
+    if (_isMempoolTx) return _buildMempoolTxCard(context);
+
     final isOut = _isOutgoing();
 
     return InkWell(
@@ -163,6 +169,7 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
                   fontSize: ScreenUtil().setSp(26.0),
                 ),
               ),
+              _buildAddressLabel(context, _counterpartyAddress(isOut)),
             ],
           ),
         ),
@@ -306,4 +313,154 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
         2 => S.current.g_key_t_3,
         _ => "",
       };
+
+  Widget _buildAddressLabel(BuildContext context, String address) {
+    final label = AddressLabelService.getLabel(address);
+    if (label == null) return const SizedBox.shrink();
+
+    final Color tagColor;
+    switch (label.riskLevel) {
+      case 'danger':
+        tagColor = const Color(0xFFF44336);
+      case 'caution':
+        tagColor = const Color(0xFFFF9800);
+      default:
+        tagColor = const Color(0xFF4CAF50);
+    }
+
+    return Padding(
+      padding: EdgeInsets.only(top: ScreenUtil().setWidth(4)),
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: ScreenUtil().setWidth(8),
+          vertical: ScreenUtil().setWidth(2),
+        ),
+        decoration: BoxDecoration(
+          color: tagColor.withAlpha(20),
+          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
+        ),
+        child: Text(
+          label.name,
+          style: TextStyle(
+            fontSize: ScreenUtil().setSp(20),
+            color: tagColor,
+            fontWeight: FontWeight.w500,
+          ),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMempoolTxCard(BuildContext context) {
+    final tx = transactionModel as MempoolTxItem;
+    final su = ScreenUtil();
+    final myAddr = coinModel?.address?.toString().toLowerCase() ?? '';
+    final isOut = tx.from.toLowerCase() == myAddr;
+    final counterparty = isOut ? tx.to : tx.from;
+
+    return Card(
+      margin: EdgeInsets.only(bottom: su.setWidth(30.0)),
+      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+      elevation: 0,
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          vertical: su.setWidth(30.0),
+          horizontal: su.setWidth(30.0),
+        ),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.orange.withAlpha(60), width: 1),
+          borderRadius: BorderRadius.circular(su.setWidth(12)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Mempool badge instead of time
+            Row(
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: su.setWidth(12),
+                    vertical: su.setWidth(4),
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.orange.withAlpha(30),
+                    borderRadius: BorderRadius.circular(su.setWidth(8)),
+                  ),
+                  child: Text(
+                    'Mempool',
+                    style: TextStyle(
+                      fontSize: su.setSp(22),
+                      fontWeight: FontWeight.w600,
+                      color: Colors.orange,
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                Text(
+                  'Pending (Mempool)',
+                  style: TextStyle(
+                    fontSize: su.setSp(22),
+                    color: Colors.orange,
+                  ),
+                ),
+              ],
+            ),
+            const Divider(height: 10.0),
+            // Direction + address
+            Row(
+              children: [
+                Container(
+                  width: su.setWidth(80.0),
+                  height: su.setWidth(80.0),
+                  decoration: BoxDecoration(
+                    color: AppThemeUtils.getColorByKey(
+                        context, AppThemeKeys.mainButtonBgColor3.name),
+                    borderRadius: BorderRadius.circular(su.setWidth(80.0)),
+                  ),
+                  margin: EdgeInsets.only(right: su.setWidth(20.0)),
+                  child: Icon(
+                    isOut ? Icons.arrow_upward : Icons.arrow_downward,
+                    color: AppThemeUtils.getColorByKey(
+                        context, AppThemeKeys.itemTextColor.name),
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        isOut ? S.of(context).g_key_t_4 : S.of(context).g_key_t_5,
+                        style: TextStyle(
+                          color: AppThemeUtils.getColorByKey(
+                            context,
+                            isOut
+                                ? AppThemeKeys.errorTextColor.name
+                                : AppThemeKeys.rightTextColor.name,
+                          ),
+                          fontSize: su.setSp(30.0),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        counterparty.length > 16
+                            ? '${counterparty.substring(0, 8)}...${counterparty.substring(counterparty.length - 8)}'
+                            : counterparty,
+                        style: TextStyle(
+                          color: AppThemeUtils.getColorByKey(
+                              context, AppThemeKeys.itemTextColor.name),
+                          fontSize: su.setSp(26.0),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

@@ -5,6 +5,7 @@ import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/component/enums/load.dart';
 import 'package:n42_wallet/features/models/message_model.dart';
 import 'package:n42_wallet/features/sqlite/app_database.dart';
+import 'package:n42_wallet/features/wallet/api/tokenview_enhanced_api.dart';
 import 'package:n42_wallet/features/wallet/api/transaction_api.dart';
 import 'package:n42_wallet/features/wallet/models/btc_transaction_recode_model.dart';
 import 'package:n42_wallet/features/wallet/models/transaction/btc_tran_detail.dart';
@@ -107,6 +108,47 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
         case 'TheOpenNetwork':
           await getTransactionDataNetworkGeneric(mm.data);
       }
+    }
+
+    // Fetch mempool pending transactions for supported chains
+    await _fetchMempoolTxs(coinModel);
+  }
+
+  /// Mempool 支持的链 → TokenView chain 参数映射
+  static const _mempoolChainMap = {
+    'ETH': 'eth', 'BNB': 'bnb', 'BASE': 'base',
+    'TRX': 'trx', 'BTC': 'btc', 'SOL': 'sol',
+  };
+
+  Future<void> _fetchMempoolTxs(dynamic coinModel) async {
+    final coinType = coinModel.coin['coinType']?.toString() ?? '';
+    final tvChain = _mempoolChainMap[coinType.toUpperCase()];
+    if (tvChain == null) return;
+
+    final addr = coinModel.address?.toString() ?? '';
+    if (addr.isEmpty) return;
+
+    try {
+      final mempoolTxs = await const TokenViewEnhancedApi().getPendingTxs(tvChain, addr);
+      if (mempoolTxs.isEmpty || !mounted) return;
+
+      final existingHashes = <String>{
+        for (final tx in transactionList)
+          if (tx is TransationRecordModel) tx.txHash ?? ''
+          else if (tx is BtcTransactionRecodeModel) tx.txHash ?? '',
+      };
+
+      final newMempoolTxs = mempoolTxs
+          .where((tx) => tx.txHash.isNotEmpty && !existingHashes.contains(tx.txHash))
+          .toList();
+
+      if (newMempoolTxs.isNotEmpty) {
+        setState(() {
+          transactionList.insertAll(0, newMempoolTxs);
+        });
+      }
+    } catch (_) {
+      // Mempool fetch is best-effort, silently ignore errors
     }
   }
 

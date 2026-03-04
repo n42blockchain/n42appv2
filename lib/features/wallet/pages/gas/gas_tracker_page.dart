@@ -12,6 +12,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:n42_wallet/core/config/rpc_config.dart';
+import 'package:n42_wallet/features/wallet/api/tokenview_enhanced_api.dart';
 import 'package:n42_wallet/features/wallet/services/gas_alert_service.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -40,9 +41,17 @@ class _GasTrackerPageState extends State<GasTrackerPage> {
   /// 内存中的历史价格（Gwei），每个网络最多保留 60 个采样点（≈15 分钟）
   final Map<String, List<double>> _history = {};
 
+  /// TokenView Gas 预测（下一区块）
+  final Map<String, GasNextBlockPrediction> _gasPredictions = {};
+
+  /// TokenView Mempool 拥塞统计
+  final Map<String, MempoolCongestion> _mempoolData = {};
+
   Map<String, GasAlertConfig> _alertConfigs = {};
   bool _isLoading = true;
   Timer? _refreshTimer;
+
+  static const _tokenViewApi = TokenViewEnhancedApi();
 
   static const List<NetworkConfig> _networks = [
     NetworkConfig(symbol: 'ETH', name: 'Ethereum', icon: '⟠', color: Color(0xFF627EEA)),
@@ -76,11 +85,38 @@ class _GasTrackerPageState extends State<GasTrackerPage> {
   }
 
   Future<void> _fetchAllGasData() async {
-    await Future.wait(_networks.map(_fetchGasForNetwork));
+    await Future.wait([
+      ..._networks.map(_fetchGasForNetwork),
+      _fetchTokenViewData('eth'),
+      _fetchTokenViewData('bnb'),
+    ]);
     if (mounted) setState(() => _isLoading = false);
     // 每次刷新后检查提醒阈值
     _checkAlerts();
   }
+
+  Future<void> _fetchTokenViewData(String chain) async {
+    try {
+      final results = await Future.wait([
+        _tokenViewApi.getGasNextBlock(chain),
+        _tokenViewApi.getPendingStat(chain),
+      ]);
+      if (!mounted) return;
+      setState(() {
+        final symbol = _chainToSymbol(chain);
+        if (results[0] != null) _gasPredictions[symbol] = results[0] as GasNextBlockPrediction;
+        if (results[1] != null) _mempoolData[symbol] = results[1] as MempoolCongestion;
+      });
+    } catch (e) {
+      debugPrint('Failed to fetch TokenView data for $chain: $e');
+    }
+  }
+
+  static String _chainToSymbol(String chain) => switch (chain) {
+    'eth' => 'ETH',
+    'bnb' => 'BNB',
+    _ => chain.toUpperCase(),
+  };
 
   Future<void> _fetchGasForNetwork(NetworkConfig network) async {
     try {
@@ -267,6 +303,10 @@ class _GasTrackerPageState extends State<GasTrackerPage> {
       children: [
         buildHeader(),
         SizedBox(height: spacing),
+        if (_gasPredictions.isNotEmpty) ...[
+          buildGasPredictionCard(),
+          SizedBox(height: spacing),
+        ],
         ..._networks.map(buildNetworkCard),
         SizedBox(height: ScreenUtil().setWidth(16)),
         buildFooter(),

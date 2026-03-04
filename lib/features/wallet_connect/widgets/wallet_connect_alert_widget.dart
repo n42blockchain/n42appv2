@@ -1,8 +1,10 @@
 // Copyright 2021-2026 N42 Inc. All rights reserved.
 
+import 'package:n42_wallet/core/security/address_label_service.dart';
 import 'package:n42_wallet/core/security/tx_risk_analyzer.dart';
 import 'package:n42_wallet/core/security/tx_simulation_result.dart';
 import 'package:n42_wallet/core/security/tx_simulation_service.dart';
+import 'package:n42_wallet/features/wallet/api/tokenview_enhanced_api.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_provider.dart';
 import 'package:n42_wallet/features/wallet_connect/widgets/tx_risk_banner_widget.dart';
@@ -35,17 +37,49 @@ class WalletConnectAlertWidget extends ConsumerStatefulWidget {
 class _WalletConnectAlertWidgetState
     extends ConsumerState<WalletConnectAlertWidget> {
   TxSimulationResult _simResult = TxSimulationResult.simulating();
+  ContractCreatorInfo? _contractCreatorInfo;
+  AddressLabel? _toAddressLabel;
 
   @override
   void initState() {
     super.initState();
     if (widget.actionDataMap['signType'] == 'transaction') {
       _runSimulation();
+      _fetchContractCreatorInfo();
     } else {
-      // Message signing — no simulation needed
       _simResult = TxSimulationResult.unavailable();
     }
+    _checkAddressLabels();
   }
+
+  Future<void> _fetchContractCreatorInfo() async {
+    final toAddr = widget.actionDataMap['to'] as String? ?? '';
+    final coinType = widget.actionDataMap['coinType'] as String? ?? '';
+    if (toAddr.isEmpty || coinType.isEmpty) return;
+
+    final chain = _coinTypeToChain(coinType);
+    if (chain == null) return;
+
+    final info = await const TokenViewEnhancedApi().getContractCreator(chain, toAddr);
+    if (mounted && info != null && (info.creatorAddress?.isNotEmpty ?? false)) {
+      setState(() => _contractCreatorInfo = info);
+    }
+  }
+
+  void _checkAddressLabels() {
+    final toAddr = widget.actionDataMap['to'] as String? ?? '';
+    if (toAddr.isNotEmpty) {
+      _toAddressLabel = AddressLabelService.getLabel(toAddr);
+    }
+  }
+
+  static String? _coinTypeToChain(String coinType) => switch (coinType.toUpperCase()) {
+    'ETH' || 'N' => 'eth',
+    'BNB' => 'bnb',
+    'BASE' => 'base',
+    'TRX' => 'trx',
+    _ => null,
+  };
 
   Future<void> _runSimulation() async {
     final coinType = widget.actionDataMap['coinType'] as String? ?? '';
@@ -123,6 +157,9 @@ class _WalletConnectAlertWidgetState
                   _buildTransactionRows(context)
                 else
                   _buildMessageRows(context),
+
+                // Address label + contract creator info
+                _buildSecurityInsights(context),
 
                 // Simulation card — only for transactions
                 if (isTransaction) TxSimulationCard(result: _simResult),
@@ -339,6 +376,155 @@ class _WalletConnectAlertWidgetState
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  // ── Security insights ─────────────────────────────────────────────────────
+
+  Widget _buildSecurityInsights(BuildContext context) {
+    final su = ScreenUtil();
+    final items = <Widget>[];
+
+    // Address label badge
+    if (_toAddressLabel != null) {
+      final Color tagColor;
+      final IconData tagIcon;
+      switch (_toAddressLabel!.riskLevel) {
+        case 'danger':
+          tagColor = const Color(0xFFF44336);
+          tagIcon = Icons.dangerous_outlined;
+        case 'caution':
+          tagColor = const Color(0xFFFF9800);
+          tagIcon = Icons.warning_amber_outlined;
+        default:
+          tagColor = const Color(0xFF4CAF50);
+          tagIcon = Icons.verified_outlined;
+      }
+      items.add(
+        Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: su.setWidth(20),
+            vertical: su.setWidth(10),
+          ),
+          decoration: BoxDecoration(
+            color: tagColor.withAlpha(15),
+            borderRadius: BorderRadius.circular(su.setWidth(12)),
+            border: Border.all(color: tagColor.withAlpha(40)),
+          ),
+          child: Row(
+            children: [
+              Icon(tagIcon, size: su.setWidth(32), color: tagColor),
+              SizedBox(width: su.setWidth(8)),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _toAddressLabel!.name,
+                      style: TextStyle(
+                        fontSize: su.setSp(24),
+                        fontWeight: FontWeight.w600,
+                        color: tagColor,
+                      ),
+                    ),
+                    Text(
+                      _toAddressLabel!.category.toUpperCase(),
+                      style: TextStyle(fontSize: su.setSp(20), color: tagColor.withAlpha(180)),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    // Contract creator info
+    if (_contractCreatorInfo != null) {
+      final isNew = _contractCreatorInfo!.isNewContract;
+      final ageDays = _contractCreatorInfo!.contractAgeDays;
+      final creatorAddr = _contractCreatorInfo!.creatorAddress ?? '';
+
+      items.add(
+        Container(
+          margin: EdgeInsets.only(top: su.setWidth(8)),
+          padding: EdgeInsets.symmetric(
+            horizontal: su.setWidth(20),
+            vertical: su.setWidth(10),
+          ),
+          decoration: BoxDecoration(
+            color: (isNew ? Colors.orange : Colors.blue).withAlpha(15),
+            borderRadius: BorderRadius.circular(su.setWidth(12)),
+            border: Border.all(color: (isNew ? Colors.orange : Colors.blue).withAlpha(40)),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    Icons.code,
+                    size: su.setWidth(28),
+                    color: isNew ? Colors.orange : Colors.blue,
+                  ),
+                  SizedBox(width: su.setWidth(8)),
+                  Text(
+                    'Contract Info',
+                    style: TextStyle(
+                      fontSize: su.setSp(24),
+                      fontWeight: FontWeight.w600,
+                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: su.setWidth(6)),
+              if (creatorAddr.isNotEmpty)
+                Text(
+                  'Creator: ${creatorAddr.length > 16 ? '${creatorAddr.substring(0, 8)}...${creatorAddr.substring(creatorAddr.length - 8)}' : creatorAddr}',
+                  style: TextStyle(
+                    fontSize: su.setSp(22),
+                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                  ),
+                ),
+              if (ageDays != null)
+                Text(
+                  'Age: ${ageDays >= 365 ? '${(ageDays / 365).toStringAsFixed(1)} years' : ageDays >= 30 ? '${(ageDays / 30).toStringAsFixed(0)} months' : '$ageDays days'}',
+                  style: TextStyle(
+                    fontSize: su.setSp(22),
+                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                  ),
+                ),
+              if (isNew)
+                Padding(
+                  padding: EdgeInsets.only(top: su.setWidth(6)),
+                  child: Text(
+                    '⚠ New contract (< 7 days), proceed with caution',
+                    style: TextStyle(
+                      fontSize: su.setSp(22),
+                      fontWeight: FontWeight.w600,
+                      color: Colors.orange,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    if (items.isEmpty) return const SizedBox.shrink();
+
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: su.setWidth(30),
+        vertical: su.setWidth(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: items,
       ),
     );
   }
