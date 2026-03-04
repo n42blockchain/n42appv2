@@ -3,6 +3,8 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
+import '../../../../core/config/proxy_config.dart';
+
 /// EntryPoint version enum
 enum EntryPointVersion {
   /// ERC-4337 v0.7 - original packed UserOperation format
@@ -123,28 +125,29 @@ class AAConfig {
     'MATIC': 137,
   };
 
-  /// Paymaster RPC URLs (Pimlico — same endpoint as bundler, supports ERC-7677)
+  /// Paymaster RPC URLs — routed through server proxy (API key injected server-side)
   ///
   /// Pimlico's paymaster service is accessed via the same RPC endpoint using
   /// `pm_getPaymasterStubData` and `pm_getPaymasterData` methods.
-  static const Map<String, String> paymasterUrls = {
-    'ETH':   'https://api.pimlico.io/v2/1/rpc',
-    'BASE':  'https://api.pimlico.io/v2/8453/rpc',
-    'ARB':   'https://api.pimlico.io/v2/42161/rpc',
-    'OP':    'https://api.pimlico.io/v2/10/rpc',
-    'MATIC': 'https://api.pimlico.io/v2/137/rpc',
+  static final Map<String, String> paymasterUrls = {
+    'ETH':   ProxyConfig.bundler('1'),
+    'BASE':  ProxyConfig.bundler('8453'),
+    'ARB':   ProxyConfig.bundler('42161'),
+    'OP':    ProxyConfig.bundler('10'),
+    'MATIC': ProxyConfig.bundler('137'),
   };
 
-  /// Bundler URL configuration (Pimlico as primary)
-  static const Map<String, String> bundlerUrls = {
-    'ETH': 'https://api.pimlico.io/v2/1/rpc',
-    'BASE': 'https://api.pimlico.io/v2/8453/rpc',
-    'ARB': 'https://api.pimlico.io/v2/42161/rpc',
-    'OP': 'https://api.pimlico.io/v2/10/rpc',
-    'MATIC': 'https://api.pimlico.io/v2/137/rpc',
+  /// Bundler URL configuration — routed through server proxy
+  static final Map<String, String> bundlerUrls = {
+    'ETH':   ProxyConfig.bundler('1'),
+    'BASE':  ProxyConfig.bundler('8453'),
+    'ARB':   ProxyConfig.bundler('42161'),
+    'OP':    ProxyConfig.bundler('10'),
+    'MATIC': ProxyConfig.bundler('137'),
   };
 
-  /// Backup Bundler URLs (StackUp as fallback)
+  /// Backup Bundler URLs (StackUp as fallback — also through proxy)
+  @Deprecated('Bundler requests now go through server proxy with automatic failover')
   static const Map<String, String> backupBundlerUrls = {
     'ETH': 'https://api.stackup.sh/v1/node/ethereum-mainnet',
     'BASE': 'https://api.stackup.sh/v1/node/base-mainnet',
@@ -153,25 +156,25 @@ class AAConfig {
     'MATIC': 'https://api.stackup.sh/v1/node/polygon-mainnet',
   };
 
-  /// Testnet configurations (v0.8)
+  /// Testnet configurations (v0.8) — through server proxy
   static Map<String, AAChainConfig> get testnetConfigs => {
     'SEPOLIA': AAChainConfig(
       chainId: 11155111,
-      bundlerUrl: 'https://api.pimlico.io/v2/11155111/rpc',
+      bundlerUrl: ProxyConfig.bundler('11155111'),
       entryPoint: getEntryPoint(),
       simpleAccountFactory: getSimpleAccountFactory(),
       version: defaultVersion,
     ),
     'BASE_SEPOLIA': AAChainConfig(
       chainId: 84532,
-      bundlerUrl: 'https://api.pimlico.io/v2/84532/rpc',
+      bundlerUrl: ProxyConfig.bundler('84532'),
       entryPoint: getEntryPoint(),
       simpleAccountFactory: getSimpleAccountFactory(),
       version: defaultVersion,
     ),
     'ARB_SEPOLIA': AAChainConfig(
       chainId: 421614,
-      bundlerUrl: 'https://api.pimlico.io/v2/421614/rpc',
+      bundlerUrl: ProxyConfig.bundler('421614'),
       entryPoint: getEntryPoint(),
       simpleAccountFactory: getSimpleAccountFactory(),
       version: defaultVersion,
@@ -242,25 +245,9 @@ class AAConfig {
     return chainErc20Tokens[chainSymbol.toUpperCase()] ?? const [];
   }
 
-  /// Bundler API key from build-time environment variable
-  ///
-  /// Set via: flutter build --dart-define=BUNDLER_API_KEY=your_key
-  /// Or in IDE run configuration as environment variable
-  static const String _bundlerApiKey = String.fromEnvironment(
-    'BUNDLER_API_KEY',
-    defaultValue: '',
-  );
-
-  /// Get Bundler API key for authenticated bundler requests
-  ///
-  /// Returns the API key if configured, null otherwise.
-  /// For production deployments, set BUNDLER_API_KEY environment variable:
-  /// ```
-  /// flutter build --dart-define=BUNDLER_API_KEY=pk_xxx
-  /// ```
-  static String? getBundlerApiKey() {
-    return _bundlerApiKey.isNotEmpty ? _bundlerApiKey : null;
-  }
+  /// Bundler API key — migrated to server proxy.
+  @Deprecated('API key migrated to server proxy. Use ProxyConfig.bundler() instead.')
+  static String? getBundlerApiKey() => null;
 }
 
 /// ERC-20 token descriptor used in per-chain paymaster token lists
