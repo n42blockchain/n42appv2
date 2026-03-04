@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:n42_wallet/core/config/api_keys_config.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
+import 'package:n42_wallet/core/config/proxy_config.dart';
 import 'package:n42_wallet/core/network/base_api.dart';
 import 'package:n42_wallet/core/network/external_http.dart';
 import 'package:n42_wallet/features/wallet/models/ohlc_point.dart';
@@ -13,23 +13,9 @@ class MarketApi {
       : _url = AppConfig.getApiUrlOnline('marketHost'),
         _header = const {'content-type': 'application/json'};
 
-  // 有 API key 时使用 Pro endpoint（更高限额），否则用免费 endpoint。
-  static String get _geckoBase {
-    final key = ApiKeysConfig.coinGeckoApiKey;
-    if (key.isNotEmpty) return 'https://pro-api.coingecko.com/api/v3';
-    return (AppConfig.apiUrl['coinGeckoApi'] as String?) ??
-        'https://api.coingecko.com/api/v3';
-  }
-
-  /// CoinGecko 请求头：有 key 时加上认证头。
-  Map<String, String> get _geckoHeader {
-    final key = ApiKeysConfig.coinGeckoApiKey;
-    if (key.isEmpty) return {'content-type': 'application/json'};
-    return {
-      'content-type': 'application/json',
-      'x-cg-demo-api-key': key,
-    };
-  }
+  /// CoinGecko 请求头 — API key 已迁移到服务端代理。
+  Map<String, String> get _geckoHeader =>
+      const {'content-type': 'application/json'};
 
   // ---------------------------------------------------------------------------
   // Public API
@@ -80,7 +66,7 @@ class MarketApi {
       if (kDebugMode) debugPrint('MarketApi.getOhlcvData: $encodedId days=$days');
 
       final raw = await ExternalHttp.get(
-        '$_geckoBase/coins/$encodedId/ohlc?vs_currency=usd&days=$days',
+        '${ProxyConfig.marketOhlcv}?coin_id=$encodedId&vs_currency=usd&days=$days',
         headers: _geckoHeader,
       ).timeout(const Duration(seconds: 15), onTimeout: () => null);
 
@@ -117,7 +103,7 @@ class MarketApi {
       if (kDebugMode) debugPrint('MarketApi.getMarketChart: $encodedId days=$days');
 
       final raw = await ExternalHttp.get(
-        '$_geckoBase/coins/$encodedId/market_chart?vs_currency=usd&days=$days',
+        '${ProxyConfig.marketChart}?coin_id=$encodedId&vs_currency=usd&days=$days',
         headers: _geckoHeader,
       ).timeout(const Duration(seconds: 15), onTimeout: () => null);
 
@@ -146,7 +132,7 @@ class MarketApi {
       if (kDebugMode) debugPrint('MarketApi.getTrendingCoins');
 
       final raw = await ExternalHttp.get(
-        '$_geckoBase/search/trending',
+        ProxyConfig.marketTrending,
         headers: _geckoHeader,
       ).timeout(const Duration(seconds: 8), onTimeout: () => null);
 
@@ -180,7 +166,7 @@ class MarketApi {
       if (kDebugMode) debugPrint('MarketApi.searchCoins: $query');
 
       final raw = await ExternalHttp.get(
-        '$_geckoBase/search?q=${Uri.encodeQueryComponent(query.trim())}',
+        '${ProxyConfig.marketSearch}?q=${Uri.encodeQueryComponent(query.trim())}',
         headers: _geckoHeader,
       ).timeout(const Duration(seconds: 8), onTimeout: () => null);
 

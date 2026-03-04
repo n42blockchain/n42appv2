@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:n42_wallet/core/config/api_keys_config.dart';
+import 'package:n42_wallet/core/config/proxy_config.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/eth_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/sol_api.dart';
 
@@ -12,8 +12,7 @@ import 'discovered_token.dart';
 
 class _Explorer {
   final String baseUrl;
-  final String apiKey;
-  const _Explorer(this.baseUrl, this.apiKey);
+  const _Explorer(this.baseUrl);
 }
 
 // ─── Token-discovery service ─────────────────────────────────────────────────
@@ -23,36 +22,15 @@ class _Explorer {
 ///
 /// All errors are swallowed per-chain; a failed chain simply returns nothing.
 class TokenDiscoveryService {
-  // Etherscan-compatible explorer APIs indexed by internal coin type.
-  static const Map<String, _Explorer> _evmExplorers = {
-    'ETH': _Explorer(
-      'https://api.etherscan.io/api',
-      ApiKeysConfig.etherscan,
-    ),
-    'BSC': _Explorer(
-      'https://api.bscscan.com/api',
-      ApiKeysConfig.bscscan,
-    ),
-    'MATIC': _Explorer(
-      'https://api.polygonscan.com/api',
-      '', // free tier works without key
-    ),
-    'ARBITRUM': _Explorer(
-      'https://api.arbiscan.io/api',
-      '', // separate key not configured; free tier OK
-    ),
-    'OPTIMISM': _Explorer(
-      'https://api-optimistic.etherscan.io/api',
-      ApiKeysConfig.etherscan,
-    ),
-    'BASE': _Explorer(
-      'https://api.basescan.org/api',
-      ApiKeysConfig.basescan,
-    ),
-    'AVAXC': _Explorer(
-      'https://api.snowtrace.io/api',
-      '',
-    ),
+  // Explorer APIs indexed by internal coin type — now via proxy (no API key).
+  static final Map<String, _Explorer> _evmExplorers = {
+    'ETH': _Explorer(ProxyConfig.explorerTxlist('eth')),
+    'BSC': _Explorer(ProxyConfig.explorerTxlist('bnb')),
+    'MATIC': const _Explorer('https://api.polygonscan.com/api'),
+    'ARBITRUM': const _Explorer('https://api.arbiscan.io/api'),
+    'OPTIMISM': _Explorer(ProxyConfig.explorerTxlist('eth')),
+    'BASE': _Explorer(ProxyConfig.explorerTxlist('base')),
+    'AVAXC': const _Explorer('https://api.snowtrace.io/api'),
   };
 
   /// Solana Token program — owns all SPL token accounts.
@@ -142,9 +120,6 @@ class TokenDiscoveryService {
       'offset': '50', // last 50 transfers is plenty
       'page': '1',
     };
-    if (explorer.apiKey.isNotEmpty) {
-      params['apikey'] = explorer.apiKey;
-    }
 
     final response = await _dio.get<Map<String, dynamic>>(
       explorer.baseUrl,

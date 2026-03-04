@@ -4,18 +4,15 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/foundation.dart';
-import 'package:n42_wallet/core/config/api_keys_config.dart';
+import 'package:n42_wallet/core/config/proxy_config.dart';
 import 'package:n42_wallet/core/network/base_api.dart';
 import 'package:n42_wallet/features/wallet/models/nft_model.dart';
 
 /// SimpleHash NFT API 封装
 ///
-/// 文档: https://docs.simplehash.com/reference/nfts-by-owners
-///
-/// 使用前需配置 API Key:
-///   flutter run --dart-define=SIMPLE_HASH_API_KEY=xxx
+/// API Key 已迁移到服务端代理，客户端不再持有。
 class SimpleHashNftApi {
-  static const String _base = 'https://api.simplehash.com/api/v0';
+  static String get _base => '${ProxyConfig.baseUrl}/v1/nft';
 
   /// coinType（内部枚举值）→ SimpleHash chain slug 映射
   static const Map<String, String> chainMap = {
@@ -30,11 +27,7 @@ class SimpleHashNftApi {
     'BTC': 'bitcoin', // Bitcoin Ordinals
   };
 
-  Map<String, dynamic> get _authHeader {
-    final key = ApiKeysConfig.simpleHashApiKey;
-    if (key.isEmpty) return {};
-    return {'X-API-KEY': key};
-  }
+  Map<String, dynamic> get _authHeader => const {};
 
   /// 获取某地址在指定链上持有的所有 NFT（最多 200 条）
   ///
@@ -47,10 +40,7 @@ class SimpleHashNftApi {
       return [];
     }
 
-    if (ApiKeysConfig.simpleHashApiKey.isEmpty) {
-      debugPrint('SimpleHashNftApi: SIMPLE_HASH_API_KEY not configured');
-      return [];
-    }
+    // API key is now injected server-side via proxy.
 
     final results = <NftModel>[];
     String? cursor;
@@ -97,7 +87,7 @@ class SimpleHashNftApi {
 
   /// 获取单个 NFT 详情（用于刷新）
   Future<NftModel?> fetchNftById(String nftId) async {
-    if (ApiKeysConfig.simpleHashApiKey.isEmpty) return null;
+    // API key is now injected server-side via proxy.
     try {
       final raw = await BaseApi.requestEmptyH.get<dynamic>(
         '$_base/nfts/${Uri.encodeComponent(nftId)}',
