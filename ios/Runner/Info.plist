@@ -56,28 +56,39 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSContactsUsageDescription</key>
-	<string>N42 Wallet needs access to your contacts to help you find and connect with friends.</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoadsInWebContent</key>
+		<true/>
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
+	</dict>
 	<key>NSAppleMusicUsageDescription</key>
 	<string>N42 Wallet needs access to Apple Music to play audio content in chat messages.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>N42 Wallet needs camera access to scan QR codes for wallet addresses and WalletConnect, and to capture photos for your profile picture.</string>
+	<key>NSContactsUsageDescription</key>
+	<string>N42 Wallet needs access to your contacts to help you find and connect with friends.</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>N42 Wallet uses Face ID and Touch ID to securely authenticate and protect your wallet access.</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>N42 Wallet needs microphone access to record voice messages in chat and for voice/video calls.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>N42 Wallet needs photo library access to select images for your profile picture and to share files in chat.</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>N42 Wallet needs permission to save QR codes and images to your photo library.</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>N42 Wallet needs location access to share your location with contacts in chat.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>N42 Wallet needs continuous location access to share live location with contacts in chat conversations.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>N42 Wallet needs location access to share your location with contacts in chat.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>N42 Wallet needs microphone access to record voice messages in chat and for voice/video calls.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>N42 Wallet needs permission to save QR codes and images to your photo library.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>N42 Wallet needs photo library access to select images for your profile picture and to share files in chat.</string>
 	<key>NSSupportsLiveActivities</key>
 	<true/>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>N42 Wallet uses analytics to improve app performance and your experience. No personal wallet data is shared.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>
@@ -97,21 +108,10 @@
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>NSUserTrackingUsageDescription</key>
-	<string>N42 Wallet uses analytics to improve app performance and your experience. No personal wallet data is shared.</string>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsArbitraryLoadsInWebContent</key>
-		<true/>
-		<key>NSAllowsLocalNetworking</key>
-		<true/>
-	</dict>
-	<key>ITSAppUsesNonExemptEncryption</key>
-	<false/>
 </dict>
 </plist>
