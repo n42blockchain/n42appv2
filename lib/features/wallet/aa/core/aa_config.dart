@@ -216,7 +216,7 @@ class AAConfig {
     return AAChainConfig(
       chainId: chainIds[symbol]!,
       bundlerUrl: bundlerUrls[symbol]!,
-      backupBundlerUrl: backupBundlerUrls[symbol],
+      // Backup handled server-side by proxy; no client-side fallback needed.
       paymasterUrl: paymasterUrls[symbol],
       entryPoint: getEntryPoint(version: v),
       simpleAccountFactory: getSimpleAccountFactory(version: v),

@@ -101,13 +101,11 @@ extension TransactionApiEthDotAptTon on TransactionApi {
         return mm;
       }
       final url = '${hostUrl}api/v2/scan/transfers';
-      final h = Map<String, String>.from(header)
-        ..['x-api-key'] = ''; // API key injected by server proxy
       final data = await BaseApi.requestEmptyH.post(
         url,
         params: {},
         data: {'address': address, 'row': 25, 'page': 0},
-        header: h,
+        header: header,
       );
       if (data != null && data['code'] == 0) {
         final transfers = data['data']['transfers'] as List? ?? [];

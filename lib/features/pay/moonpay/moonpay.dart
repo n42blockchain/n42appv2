@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:n42_wallet/features/component/enums/load.dart';
@@ -91,7 +92,8 @@ class _MoonpayState extends State<Moonpay> {
   }
 
   void _handleJSMessage(JavaScriptMessage message) {
-    _handleJSMessageAsync(message);
+    // Fire-and-forget: JS callback is synchronous, errors handled inside async method.
+    unawaited(_handleJSMessageAsync(message));
   }
 
   Future<void> _handleJSMessageAsync(JavaScriptMessage message) async {

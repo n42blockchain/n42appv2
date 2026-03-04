@@ -1,7 +1,6 @@
-import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/config/proxy_config.dart';
-import 'package:n42_wallet/core/network/base_http.dart';
 
 /// Moonpay URL 签名服务
 ///
@@ -22,7 +21,11 @@ class MoonpayService {
 /// 返回 HMAC-SHA256 签名的 Base64 编码字符串
 Future<String> createUrl(String url, String mode) async {
   try {
-    final response = await BaseHttp().dio.post<Map<String, dynamic>>(
+    final dio = Dio(BaseOptions(
+      connectTimeout: const Duration(seconds: 10),
+      receiveTimeout: const Duration(seconds: 10),
+    ));
+    final response = await dio.post<Map<String, dynamic>>(
       ProxyConfig.moonpaySign,
       data: {'url': url, 'mode': mode},
     );
