@@ -50,6 +50,7 @@ import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_chat/n42_chat.dart';
 import 'package:n42_chat/l10n/app_localizations.dart' as chat_l10n;
 import 'package:n42_wallet/core/config/api_keys_config.dart';
+import 'package:n42_wallet/core/config/proxy_config.dart';
 import 'package:n42_wallet/core/config/rpc_config.dart';
 import 'package:n42_wallet/core/security/phishing_detector.dart';
 import 'package:n42_wallet/core/security/secure_storage.dart';
@@ -235,9 +236,9 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
         pushAppId: pushAppId,
         walletBridge: N42WalletBridge(),
         apiHubBridge: N42ApiHubBridge(),
-        aiApiKey: ApiKeysConfig.aiApiKey,
-        aiBaseUrl: ApiKeysConfig.aiBaseUrl,
-        aiModel: ApiKeysConfig.aiModel,
+        aiApiKey: '', // API key now injected by server proxy
+        aiBaseUrl: ProxyConfig.aiChat,
+        aiModel: '', // Model configured server-side
       ));
 
       N42Chat.setNavigatorKey(AppGlobals.navigatorKey);
