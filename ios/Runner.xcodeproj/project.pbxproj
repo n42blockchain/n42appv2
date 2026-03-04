@@ -26,6 +26,9 @@
 		690ACF662F1628CC00F9B66D /* MobileSdk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69240F832EE6C4CD00C6CEE7 /* MobileSdk.swift */; };
 		69D7DAC12F15E36E004CA1FA /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D7DAC02F15E36E004CA1FA /* WebSocketManager.swift */; };
 		69D7DAC32F15EC6F004CA1FA /* TrustdartPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D7DAC22F15EC6F004CA1FA /* TrustdartPlugin.swift */; };
+		69D7DAD12F27A00100000001 /* WalletCorePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D7DAD02F27A00100000001 /* WalletCorePlugin.swift */; };
+		69D7DAD32F27A00100000002 /* WalletCorePlugin+KeyManagement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D7DAD22F27A00100000002 /* WalletCorePlugin+KeyManagement.swift */; };
+		69D7DAD52F27A00100000003 /* WalletCorePlugin+Signing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D7DAD42F27A00100000003 /* WalletCorePlugin+Signing.swift */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		80DF6CA187EF2D544C26CFCA /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56C53ED41BD5DB7271872A76 /* Pods_Runner.framework */; };
 		91638B74777D7C9D4B2A0D49 /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F04F9C4638963A4198071CD6 /* Pods_RunnerTests.framework */; };
@@ -96,6 +99,9 @@
 		69D5E1C22EFA6F7800CAF028 /* libmobile_sdk.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmobile_sdk.a; path = "../../../Downloads/n42 doc/mobile-sdk-ios/MobileSdk.xcframework/ios-x86_64-simulator/libmobile_sdk.a"; sourceTree = "<group>"; };
 		69D7DAC02F15E36E004CA1FA /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
 		69D7DAC22F15EC6F004CA1FA /* TrustdartPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrustdartPlugin.swift; sourceTree = "<group>"; };
+		69D7DAD02F27A00100000001 /* WalletCorePlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletCorePlugin.swift; sourceTree = "<group>"; };
+		69D7DAD22F27A00100000002 /* WalletCorePlugin+KeyManagement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WalletCorePlugin+KeyManagement.swift"; sourceTree = "<group>"; };
+		69D7DAD42F27A00100000003 /* WalletCorePlugin+Signing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WalletCorePlugin+Signing.swift"; sourceTree = "<group>"; };
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
 		74858FAE1ED2DC5600515810 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		764E347C82549ABBCDA7A27F /* Pods-RunnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -248,6 +254,9 @@
 			isa = PBXGroup;
 			children = (
 				69D7DAC22F15EC6F004CA1FA /* TrustdartPlugin.swift */,
+				69D7DAD02F27A00100000001 /* WalletCorePlugin.swift */,
+				69D7DAD22F27A00100000002 /* WalletCorePlugin+KeyManagement.swift */,
+				69D7DAD42F27A00100000003 /* WalletCorePlugin+Signing.swift */,
 				69D7DAC02F15E36E004CA1FA /* WebSocketManager.swift */,
 				52A9AA832C33A48D00A68381 /* Runner.entitlements */,
 				52D8711D2C202EF100A5ACA8 /* GoogleService-Info.plist */,
@@ -557,6 +566,9 @@
 			files = (
 				690ACF662F1628CC00F9B66D /* MobileSdk.swift in Sources */,
 				69D7DAC32F15EC6F004CA1FA /* TrustdartPlugin.swift in Sources */,
+				69D7DAD12F27A00100000001 /* WalletCorePlugin.swift in Sources */,
+				69D7DAD32F27A00100000002 /* WalletCorePlugin+KeyManagement.swift in Sources */,
+				69D7DAD52F27A00100000003 /* WalletCorePlugin+Signing.swift in Sources */,
 				526F3A0E2C10466E00FF9273 /* avPlay.swift in Sources */,
 				69D7DAC12F15E36E004CA1FA /* WebSocketManager.swift in Sources */,
 				526F3A0C2C10463F00FF9273 /* permissionsUtil.swift in Sources */,
