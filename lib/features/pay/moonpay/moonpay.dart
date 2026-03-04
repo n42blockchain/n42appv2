@@ -91,6 +91,10 @@ class _MoonpayState extends State<Moonpay> {
   }
 
   void _handleJSMessage(JavaScriptMessage message) {
+    _handleJSMessageAsync(message);
+  }
+
+  Future<void> _handleJSMessageAsync(JavaScriptMessage message) async {
     try {
       List<dynamic> rdatas = jsonDecode(message.message);
       if (rdatas.isNotEmpty && rdatas[0] != null) {
@@ -99,7 +103,8 @@ class _MoonpayState extends State<Moonpay> {
             final signUrl = rdatas[0]['url'];
             final signMode = rdatas[0]['mode'];
             if (signUrl is String && signMode is String) {
-              String signature = createUrl(signUrl, signMode);
+              String signature = await createUrl(signUrl, signMode);
+              if (!mounted) return;
               webViewController.runJavaScript(
                   'receiveSignature("${JsEscapeUtils.escapeJs(signature)}");');
             }
