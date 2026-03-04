@@ -35,14 +35,11 @@ class RpcConfig {
 
   // ==================== EVM 链 RPC ====================
 
-  /// Infura API Key (从环境变量读取)
-  static const String infuraApiKey = String.fromEnvironment(
-    'INFURA_API_KEY',
-    defaultValue: 'YOUR_INFURA_API_KEY',
+  /// Ethereum Mainnet RPC (via proxy)
+  static const String ethMainnetRpc = String.fromEnvironment(
+    'ETH_MAINNET_RPC',
+    defaultValue: 'https://api.n42.ai/proxy/v1/rpc/eth',
   );
-
-  /// Ethereum Mainnet RPC
-  static String get ethMainnetRpc => 'https://mainnet.infura.io/v3/$infuraApiKey';
 
   /// Ethereum Sepolia Testnet RPC
   static const String ethSepoliaRpc = 'https://eth-sepolia.public.blastapi.io';

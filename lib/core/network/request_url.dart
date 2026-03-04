@@ -1,4 +1,4 @@
-import 'package:n42_wallet/core/config/api_keys_config.dart';
+import 'package:n42_wallet/core/config/proxy_config.dart';
 import 'package:n42_wallet/core/config/rpc_config.dart';
 
 part 'request_url_testnet.dart';
@@ -14,8 +14,8 @@ class RequestUrl {
     _initialized = true;
 
     // 更新 testnet URLs
-    _requestUrlTest1['ETH']!['rpc'] = ApiKeysConfig.getInfuraUrl(network: 'sepolia');
-    _requestUrlTest1['S']!['api'] = ApiKeysConfig.getSonicscanApiUrl(isTestnet: true);
+    _requestUrlTest1['ETH']!['rpc'] = RpcConfig.ethSepoliaRpc;
+    _requestUrlTest1['S']!['api'] = '${ProxyConfig.explorerSonic}?';
 
     final btcTestnetRpc = RpcConfig.btcTestnetRpc;
     for (final coin in _btcLikeCoins) {
@@ -24,12 +24,12 @@ class RequestUrl {
       }
     }
 
-    // 更新 mainnet URLs
-    _requestUrlMain1['BNB']!['api'] = ApiKeysConfig.getBscscanApiUrl();
-    _requestUrlMain1['ETH']!['api'] = ApiKeysConfig.getEtherscanApiUrl();
-    _requestUrlMain1['ETH']!['rpc'] = ApiKeysConfig.getInfuraUrl(network: 'mainnet');
-    _requestUrlMain1['BASE']!['api'] = ApiKeysConfig.getBasescanApiUrl();
-    _requestUrlMain1['S']!['api'] = ApiKeysConfig.getSonicscanApiUrl();
+    // 更新 mainnet URLs — Explorer API 通过代理
+    _requestUrlMain1['BNB']!['api'] = '${ProxyConfig.explorerTxlist('bnb')}?';
+    _requestUrlMain1['ETH']!['api'] = '${ProxyConfig.explorerTxlist('eth')}?';
+    _requestUrlMain1['ETH']!['rpc'] = ProxyConfig.ethRpc;
+    _requestUrlMain1['BASE']!['api'] = '${ProxyConfig.explorerTxlist('base')}?';
+    _requestUrlMain1['S']!['api'] = '${ProxyConfig.explorerSonic}?';
 
     final btcMainnetRpc = RpcConfig.btcMainnetRpc;
     for (final coin in _btcLikeCoins) {
