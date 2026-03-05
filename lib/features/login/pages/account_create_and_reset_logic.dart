@@ -30,11 +30,7 @@ mixin _AccountCreateAndResetLogic
   Load sendLoad = Load.finish;
   late HandType _currentType;
 
-  UserInfoApi? _userInfoApi;
-  UserInfoApi get userInfoApi {
-    _userInfoApi ??= UserInfoApi();
-    return _userInfoApi!;
-  }
+  late final UserInfoApi userInfoApi = UserInfoApi();
 
   @override
   void initState() {

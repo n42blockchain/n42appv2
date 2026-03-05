@@ -18,12 +18,12 @@ class BrowserCollection extends StatefulWidget {
 }
 
 class BrowserCollectionState extends State<BrowserCollection> {
-  TextEditingController titleEditingController = TextEditingController();
-  FocusNode titleNode = FocusNode();
-  TextEditingController urlEditingController = TextEditingController();
-  FocusNode urlNode = FocusNode();
-  TextEditingController descEditingController = TextEditingController();
-  FocusNode descNode = FocusNode();
+  final TextEditingController titleEditingController = TextEditingController();
+  final FocusNode titleNode = FocusNode();
+  final TextEditingController urlEditingController = TextEditingController();
+  final FocusNode urlNode = FocusNode();
+  final TextEditingController descEditingController = TextEditingController();
+  final FocusNode descNode = FocusNode();
 
   String titleErrorMessage = "";
   String urlErrorMessage = "";
@@ -31,30 +31,24 @@ class BrowserCollectionState extends State<BrowserCollection> {
 
   @override
   void initState() {
+    super.initState();
     titleEditingController.text = widget.title;
     urlEditingController.text = widget.url;
-    super.initState();
   }
 
-  //保存 当前 url
   Future<void> _saveUrl() async {
-    String title = titleEditingController.text;
+    final title = titleEditingController.text;
     if (title == "") {
-      setState(() {
-        titleErrorMessage = S.of(context).g_browser_key4;
-      });
+      setState(() => titleErrorMessage = S.of(context).g_browser_key4);
       return;
     }
-    String url = urlEditingController.text;
+    final url = urlEditingController.text;
     if (url == "") {
-      setState(() {
-        urlErrorMessage = S.of(context).g_browser_key4;
-      });
+      setState(() => urlErrorMessage = S.of(context).g_browser_key4);
       return;
     }
-    String desc = descEditingController.text;
+    final desc = descEditingController.text;
     BrowserApi().insertBrowserCollection(title, url, desc: desc);
-    setState(() {});
     ToastUtils.show(S.of(context).g_key_185);
     Navigator.pop(context);
   }

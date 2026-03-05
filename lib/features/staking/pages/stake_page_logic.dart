@@ -37,18 +37,14 @@ mixin _StakeLogicMixin on State<StakePage> {
     return widget.protocol.chainType != StakingChainType.ethereum;
   }
 
-  int _getDecimals() {
-    switch (widget.protocol.chainType) {
-      case StakingChainType.ethereum:
-        return 18;
-      case StakingChainType.solana:
-        return 9;
-      case StakingChainType.cosmos:
-        return 6;
-      case StakingChainType.polkadot:
-        return 10;
-    }
-  }
+  static const _chainTypeDecimals = <StakingChainType, int>{
+    StakingChainType.ethereum: 18,
+    StakingChainType.solana: 9,
+    StakingChainType.cosmos: 6,
+    StakingChainType.polkadot: 10,
+  };
+
+  int _getDecimals() => _chainTypeDecimals[widget.protocol.chainType] ?? 18;
 
   // ── Data loading ────────────────────────────────────────────────────────
 

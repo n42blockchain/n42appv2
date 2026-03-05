@@ -417,11 +417,11 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
     );
   }
 
-  Color _getRankColor(int rank) => switch (rank) {
-    1 => Color(0xFFFFD700), // Gold
-    2 => Color(0xFFC0C0C0), // Silver
-    3 => Color(0xFFCD7F32), // Bronze
-    _ => Colors.grey,
+  static const _rankColors = {
+    1: Color(0xFFFFD700), // Gold
+    2: Color(0xFFC0C0C0), // Silver
+    3: Color(0xFFCD7F32), // Bronze
   };
 
+  Color _getRankColor(int rank) => _rankColors[rank] ?? Colors.grey;
 }

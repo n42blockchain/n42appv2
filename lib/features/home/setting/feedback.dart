@@ -1,21 +1,26 @@
+// Copyright 2021-2026 N42 Inc. All rights reserved.
+// Use of this source code is governed by a dual license:
+// Apache License 2.0 and MIT License.
+// See LICENSE file in the project root for full license information.
+
 import 'dart:io';
 
-import 'package:n42_wallet/features/component/enums/coin_type.dart';
-import 'package:n42_wallet/generated/l10n.dart';
+import 'package:dio/dio.dart';
+import 'package:file_picker/file_picker.dart' as f_picker;
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
+import 'package:n42_wallet/core/di/service_locator_setup.dart';
+import 'package:n42_wallet/core/network/ipfs_api.dart';
+import 'package:n42_wallet/core/utils/toast_utils.dart';
+import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/component/enums/load.dart';
 import 'package:n42_wallet/features/home/models/appendix_model.dart';
-import 'package:n42_wallet/core/network/ipfs_api.dart';
 import 'package:n42_wallet/features/login/api/user_info_api.dart';
 import 'package:n42_wallet/features/utils/regular.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
-import 'package:n42_wallet/core/utils/toast_utils.dart';
-import 'package:n42_wallet/core/di/service_locator_setup.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart' as f_picker;
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:video_compress/video_compress.dart';
 
 class Feedback extends StatefulWidget {
@@ -27,7 +32,7 @@ class Feedback extends StatefulWidget {
 
 class _FeedbackState extends State<Feedback> {
   late final Regular regular = Regular();
-  TextEditingController inputEditingController = TextEditingController();
+  late final TextEditingController inputEditingController = TextEditingController();
   Load load = Load.finish;
   List<AppendixModel> appendixs = [];
 
@@ -37,22 +42,20 @@ class _FeedbackState extends State<Feedback> {
     super.dispose();
   }
 
-  /// 选择文件，type: 0=图片，1=视频
   Future<void> getFile(int type) async {
-    f_picker.FilePickerResult? result = await f_picker.FilePicker.platform.pickFiles(
+    final result = await f_picker.FilePicker.platform.pickFiles(
       allowMultiple: true,
       type: type == 0 ? f_picker.FileType.image : f_picker.FileType.video,
     );
     if (result == null) return;
-    int fjCount = result.files.length;
-    if (fjCount > 5) fjCount = 5 - appendixs.length;
+    final fjCount = result.files.length.clamp(0, 5 - appendixs.length);
 
     for (int i = 0; i < fjCount; i++) {
-      f_picker.PlatformFile pf = result.files[i];
-      AppendixModel am = AppendixModel();
-      am.name = pf.name;
-      am.path = pf.path.toString();
-      am.upTotal = pf.size;
+      final pf = result.files[i];
+      final am = AppendixModel()
+        ..name = pf.name
+        ..path = pf.path.toString()
+        ..upTotal = pf.size;
       if (type == 1) {
         await createVideoImageMini(am);
       }
@@ -73,15 +76,14 @@ class _FeedbackState extends State<Feedback> {
 
   Future<void> uploadFile(AppendixModel am) async {
     try {
-      File file = File(am.path);
       am.cancelToken = CancelToken();
       setState(() {
         am.state = 1;
         am.upCount = 0;
         am.upTotal = 0;
       });
-      Map<String, dynamic> rData = await IpfsApi().uploadIPFSImage(
-        file.path,
+      final rData = await IpfsApi().uploadIPFSImage(
+        am.path,
         "fkImage.png",
         (int count, int total) {
           am.upCount = count;
@@ -98,10 +100,8 @@ class _FeedbackState extends State<Feedback> {
           am.state = 2;
         }
       });
-    } catch (e) {
-      setState(() {
-        am.state = 3;
-      });
+    } catch (_) {
+      setState(() => am.state = 3);
     }
   }
 
@@ -112,21 +112,20 @@ class _FeedbackState extends State<Feedback> {
   }
 
   Future<void> submit() async {
-    FocusScope.of(context).requestFocus(FocusNode());
-    String content = inputEditingController.text;
-    if (content == "") {
+    FocusScope.of(context).unfocus();
+    final content = inputEditingController.text;
+    if (content.isEmpty) {
       ToastUtils.show(S.of(context).g_key_feedback_1);
       return;
     }
-    final fjUpload = appendixs.every((am) => am.state == 2);
-    if (!fjUpload) {
+    if (!appendixs.every((am) => am.state == 2)) {
       ToastUtils.show(S.of(context).g_key_feedback_2);
       return;
     }
     final fjStr = appendixs.map((am) => am.url).join(';');
-    setState(() { load = Load.loading; });
+    setState(() => load = Load.loading);
     final walletService = ServiceLocatorSetup.walletService;
-    String address = "";
+    var address = "";
     if (walletService != null) {
       final mainWallet = walletService.getMainWallet();
       if (mainWallet != null) {
@@ -134,7 +133,7 @@ class _FeedbackState extends State<Feedback> {
       }
     }
     final mm = await UserInfoApi().submitFeedback(address, content, fjStr);
-    setState(() { load = Load.finish; });
+    setState(() => load = Load.finish);
     if (!mounted) return;
     if (!mm.error && mm.data['code'] == 200) {
       ToastUtils.show(S.of(context).g_key_feedback_4);
@@ -175,9 +174,7 @@ class _FeedbackState extends State<Feedback> {
           ],
         ),
         body: GestureDetector(
-          onTap: () {
-            FocusScope.of(context).requestFocus(FocusNode());
-          },
+          onTap: () => FocusScope.of(context).unfocus(),
           child: SingleChildScrollView(
             padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
             child: Column(
@@ -411,7 +408,7 @@ class _FeedbackState extends State<Feedback> {
   }
 
   void selectFileDialog() {
-    FocusScope.of(context).requestFocus(FocusNode());
+    FocusScope.of(context).unfocus();
     final textColor = _color(AppThemeKeys.mainTextColor);
     final optionStyle = TextStyle(
       color: textColor,

@@ -397,12 +397,12 @@ class RewardsPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('Are you sure you want to redeem:'),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               reward.name,
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               'This will cost ${reward.pointsCost} points.',
               style: TextStyle(color: Colors.grey.shade600),

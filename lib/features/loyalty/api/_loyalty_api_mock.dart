@@ -16,7 +16,7 @@ extension LoyaltyApiMock on LoyaltyApi {
       tier: LoyaltyTier.silver,
       tierProgress: 65,
       nextTierPoints: 2000,
-      createdAt: DateTime.now().subtract(Duration(days: 30)),
+      createdAt: DateTime.now().subtract(const Duration(days: 30)),
       updatedAt: DateTime.now(),
     );
   }
@@ -95,7 +95,7 @@ extension LoyaltyApiMock on LoyaltyApi {
         points: 20,
         maxCompletions: 1,
         completedCount: 1,
-        lastCompletedAt: now.subtract(Duration(days: 5)),
+        lastCompletedAt: now.subtract(const Duration(days: 5)),
       ),
       LoyaltyTask(
         id: 'bridge-special',
@@ -106,7 +106,7 @@ extension LoyaltyApiMock on LoyaltyApi {
         points: 150,
         maxCompletions: 3,
         completedCount: 0,
-        expiresAt: now.add(Duration(days: 7)),
+        expiresAt: now.add(const Duration(days: 7)),
       ),
       LoyaltyTask(
         id: 'weekly-trader',
@@ -117,7 +117,7 @@ extension LoyaltyApiMock on LoyaltyApi {
         points: 80,
         maxCompletions: 4,
         completedCount: 1,
-        expiresAt: now.add(Duration(days: 5)),
+        expiresAt: now.add(const Duration(days: 5)),
         requirements: {'min_count': 5, 'period': 'week'},
       ),
       LoyaltyTask(
@@ -165,7 +165,7 @@ extension LoyaltyApiMock on LoyaltyApi {
         points: 10,
         description: 'Daily check-in',
         taskId: 'daily-checkin',
-        createdAt: now.subtract(Duration(hours: 2)),
+        createdAt: now.subtract(const Duration(hours: 2)),
       ),
       PointsHistory(
         id: '2',
@@ -174,14 +174,14 @@ extension LoyaltyApiMock on LoyaltyApi {
         description: 'Completed transaction',
         taskId: 'first-tx',
         txHash: '0x123...abc',
-        createdAt: now.subtract(Duration(days: 1)),
+        createdAt: now.subtract(const Duration(days: 1)),
       ),
       PointsHistory(
         id: '3',
         action: PointsAction.spend,
         points: -200,
         description: 'Redeemed: Gas Fee Discount',
-        createdAt: now.subtract(Duration(days: 2)),
+        createdAt: now.subtract(const Duration(days: 2)),
       ),
       PointsHistory(
         id: '4',
@@ -189,7 +189,7 @@ extension LoyaltyApiMock on LoyaltyApi {
         points: 100,
         description: 'Referral bonus',
         taskId: 'invite-friend',
-        createdAt: now.subtract(Duration(days: 3)),
+        createdAt: now.subtract(const Duration(days: 3)),
       ),
       PointsHistory(
         id: '5',
@@ -197,7 +197,7 @@ extension LoyaltyApiMock on LoyaltyApi {
         points: 20,
         description: 'Joined Discord',
         taskId: 'join-discord',
-        createdAt: now.subtract(Duration(days: 5)),
+        createdAt: now.subtract(const Duration(days: 5)),
       ),
     ];
   }
@@ -250,7 +250,7 @@ extension LoyaltyApiMock on LoyaltyApi {
         description: 'Enter the monthly iPhone giveaway',
         type: RewardType.raffle,
         pointsCost: 100,
-        expiresAt: DateTime.now().add(Duration(days: 30)),
+        expiresAt: DateTime.now().add(const Duration(days: 30)),
         isAvailable: true,
       ),
       Reward(

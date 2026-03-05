@@ -3,14 +3,19 @@ part of 'home_draw_page.dart';
 // ── Drawer widget components ─────────────────────────────────────────────────
 
 extension on _HomeDrawPageState {
+  void _openChat() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => N42Chat.chatWidget()),
+    );
+  }
+
   Widget buildUserAccount(dynamic currentUser) {
-    // 优先使用 Chat 插件的用户信息（从流中更新）
     final chatUser = _chatUser ?? N42Chat.currentUser;
     final userInfo = AppGlobals.userInfo;
     final isChatLoggedIn = N42Chat.isLoggedIn;
     final isWalletLoggedIn = currentUser != null || userInfo != null;
 
-    // 显示名称和头像优先使用 chat 用户
     final displayName = chatUser?.displayName ?? currentUser?.name ?? userInfo?.name;
     final displayAvatar = chatUser?.avatarUrl ?? currentUser?.image ?? userInfo?.image ?? '';
     final displayEmail = chatUser?.userId ?? currentUser?.email ?? userInfo?.email ?? '';
@@ -39,14 +44,8 @@ extension on _HomeDrawPageState {
         children: [
           Row(
             children: [
-              // 头像 - 点击进入 chat
               GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => N42Chat.chatWidget()),
-                  );
-                },
+                onTap: _openChat,
                 child: Container(
                   width: ScreenUtil().setWidth(72),
                   height: ScreenUtil().setWidth(72),
@@ -68,15 +67,9 @@ extension on _HomeDrawPageState {
                 ),
               ),
               SizedBox(width: ScreenUtil().setWidth(16)),
-              // 用户信息
               Expanded(
                 child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => N42Chat.chatWidget()),
-                    );
-                  },
+                  onTap: _openChat,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -110,14 +103,8 @@ extension on _HomeDrawPageState {
             ],
           ),
           SizedBox(height: ScreenUtil().setWidth(16)),
-          // 邀请朋友按钮 - 跳转到 chat
           GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => N42Chat.chatWidget()),
-              );
-            },
+            onTap: _openChat,
             child: Container(
               padding: EdgeInsets.symmetric(
                 horizontal: ScreenUtil().setWidth(20),

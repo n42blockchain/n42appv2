@@ -6,9 +6,7 @@ part of 'security_setting.dart';
 extension on _SecuritySettingState {
   Widget buildRowItemNew(String title, bool open, Function callback) {
     return InkWell(
-      onTap: () {
-        callback();
-      },
+      onTap: () => callback(),
       child: Container(
         height: ScreenUtil().setWidth(88.0),
         padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
@@ -26,7 +24,6 @@ extension on _SecuritySettingState {
               child: Image.asset("assets/home/setting/scurity/${open ? "open" : "closs"}.png"),
             ),
             Expanded(
-              flex: 1,
               child: Text(
                 title,
                 style: TextStyle(
@@ -167,7 +164,6 @@ extension on _SecuritySettingState {
       child: Row(
         children: [
           Expanded(
-            flex: 1,
             child: Text(
               S.of(context).g_lock_key7,
               style: TextStyle(
@@ -201,7 +197,6 @@ extension on _SecuritySettingState {
       child: Row(
         children: [
           Expanded(
-            flex: 1,
             child: Text(
               title,
               style: TextStyle(
@@ -214,9 +209,7 @@ extension on _SecuritySettingState {
             activeTrackColor:
                 AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
             value: value,
-            onChanged: (bool value) {
-              valueChange(value);
-            },
+            onChanged: (v) => valueChange(v),
           ),
         ],
       ),
@@ -225,16 +218,13 @@ extension on _SecuritySettingState {
 
   Widget buildLockTime(ScreenLockState screenLockState) {
     return InkWell(
-      onTap: () {
-        showLockTimeSheet(screenLockState);
-      },
+      onTap: () => showLockTimeSheet(screenLockState),
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
         height: ScreenUtil().setWidth(88.0),
         child: Row(
           children: [
             Expanded(
-              flex: 1,
               child: Text(
                 S.of(context).g_lock_key4,
                 style: TextStyle(
@@ -326,18 +316,15 @@ extension on _SecuritySettingState {
     );
   }
 
-  Widget buildResetPassword(Function onTap) {
+  Widget buildResetPassword(VoidCallback onTap) {
     return InkWell(
-      onTap: () {
-        onTap();
-      },
+      onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
         height: ScreenUtil().setWidth(88.0),
         child: Row(
           children: [
             Expanded(
-              flex: 1,
               child: Text(
                 S.of(context).g_lock_key9,
                 style: TextStyle(

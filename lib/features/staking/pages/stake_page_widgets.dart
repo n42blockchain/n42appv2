@@ -148,7 +148,7 @@ mixin _StakeViewsMixin on _StakeLogicMixin {
     return Container(
       width: ScreenUtil().setWidth(56),
       height: ScreenUtil().setWidth(56),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.white24,
         shape: BoxShape.circle,
       ),

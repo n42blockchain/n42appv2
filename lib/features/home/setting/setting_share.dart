@@ -1,18 +1,24 @@
+// Copyright 2021-2026 N42 Inc. All rights reserved.
+// Use of this source code is governed by a dual license:
+// Apache License 2.0 and MIT License.
+// See LICENSE file in the project root for full license information.
+
 import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
-import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/core/config/app_config.dart';
+import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/home/widgets/share_list.dart';
 import 'package:n42_wallet/features/login/api/user_info_api.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
-import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/widgets/button_widget.dart';
 import 'package:n42_wallet/features/widgets/prompt_widget.dart';
 import 'package:n42_wallet/features/widgets/sheet_bottom.dart';
+import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -31,14 +37,12 @@ class _SettingShareState extends State<SettingShare> {
   int inviteeTotal = 0;
   int miningTotal = 0;
   double rewardTotal = 0;
-  UserInfoApi? _loginApi;
-
-  UserInfoApi get loginApi {
-    _loginApi ??= UserInfoApi();
-    return _loginApi!;
-  }
+  late final UserInfoApi loginApi = UserInfoApi();
 
   String? get _uuid => AppGlobals.userInfo?.uuid;
+
+  Color _color(AppThemeKeys key) =>
+      AppThemeUtils.getColorByKey(context, key.name);
 
   @override
   void initState() {
@@ -160,8 +164,7 @@ class _SettingShareState extends State<SettingShare> {
                         S.of(context).g_share_v3_key_2,
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(44.0),
-                          color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.mainTextColor.name),
+                          color: _color(AppThemeKeys.mainTextColor),
                         ),
                       ),
                     ),
@@ -178,8 +181,7 @@ class _SettingShareState extends State<SettingShare> {
               height: ScreenUtil().setWidth(100.0),
               child: IconButton(
                 icon: const Icon(Icons.arrow_back_ios),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
+                color: _color(AppThemeKeys.mainTextColor),
                 onPressed: () => Navigator.pop(context),
               ),
             ),
@@ -220,8 +222,7 @@ class _SettingShareState extends State<SettingShare> {
       ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16.0)),
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemBgColor.name),
+        color: _color(AppThemeKeys.itemBgColor),
       ),
       child: Row(
         children: [
@@ -247,8 +248,7 @@ class _SettingShareState extends State<SettingShare> {
             style: TextStyle(
               fontSize: ScreenUtil().setSp(36.0),
               fontWeight: FontWeight.bold,
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
+              color: _color(AppThemeKeys.mainTextColor),
             ),
           ),
           SizedBox(height: ScreenUtil().setWidth(4.0)),
@@ -257,8 +257,7 @@ class _SettingShareState extends State<SettingShare> {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(20.0),
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name),
+              color: _color(AppThemeKeys.itemSubtitleTextColor),
             ),
           ),
         ],
@@ -273,8 +272,7 @@ class _SettingShareState extends State<SettingShare> {
       padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16.0)),
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemBgColor.name),
+        color: _color(AppThemeKeys.itemBgColor),
       ),
       child: Row(
         children: [
@@ -292,8 +290,7 @@ class _SettingShareState extends State<SettingShare> {
               textAlign: TextAlign.end,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(26.0),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemTextColor.name),
+                color: _color(AppThemeKeys.itemTextColor),
               ),
             ),
           ),
@@ -302,8 +299,7 @@ class _SettingShareState extends State<SettingShare> {
             onTap: () => _copyToClipboard(value),
             child: Icon(
               Icons.copy,
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainBlueColor.name),
+              color: _color(AppThemeKeys.mainBlueColor),
               size: ScreenUtil().setWidth(32.0),
             ),
           ),
@@ -316,8 +312,7 @@ class _SettingShareState extends State<SettingShare> {
     return RepaintBoundary(
       key: previewContainer,
       child: Container(
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.backGroundColor.name),
+        color: _color(AppThemeKeys.backGroundColor),
         child: Column(
           children: [
             SizedBox(height: ScreenUtil().setWidth(30)),
@@ -333,8 +328,7 @@ class _SettingShareState extends State<SettingShare> {
                 Text(
                   AppConfig.apiUrl['walletamazeBrowser'],
                   style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainTextColor.name),
+                    color: _color(AppThemeKeys.mainTextColor),
                     fontSize: ScreenUtil().setSp(40.0),
                   ),
                 ),
@@ -351,8 +345,7 @@ class _SettingShareState extends State<SettingShare> {
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(30.0),
                   fontWeight: FontWeight.bold,
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
+                  color: _color(AppThemeKeys.mainTextColor),
                 ),
               ),
             ),
@@ -371,13 +364,11 @@ class _SettingShareState extends State<SettingShare> {
                 height: 240,
                 decoration: BoxDecoration(
                   border: Border.all(
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.itemLineColor.name),
+                    color: _color(AppThemeKeys.itemLineColor),
                   ),
                   borderRadius:
                       BorderRadius.circular(ScreenUtil().setWidth(40.0)),
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainWhiteColor.name),
+                  color: _color(AppThemeKeys.mainWhiteColor),
                 ),
                 clipBehavior: Clip.hardEdge,
                 child: QrImageView(

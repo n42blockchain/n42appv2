@@ -33,31 +33,26 @@ typedef ConnectDAPP = void Function(String url, bool connect);
 typedef PhishingWarning = void Function(String url, VoidCallback proceed);
 
 class BrowserProvider extends ChangeNotifier {
-  BrowserProvider(){
+  BrowserProvider() {
     getBrowserSetting();
   }
-  BrowserApi? _browserApi;
-  BrowserApi get browserApi{
-    _browserApi ??= BrowserApi();
-    return _browserApi!;
-  }
-  Map<String,dynamic> browser={
-    "connectDApp":false,
-  };
-  Future<void> getBrowserSetting()async{
-    Map<String,dynamic>? b=await SPUtil().getBrowserSetting();
-    if(b !=null){
-      browser=b;
-    }
+
+  late final BrowserApi browserApi = BrowserApi();
+  Map<String, dynamic> browser = {"connectDApp": false};
+
+  Future<void> getBrowserSetting() async {
+    final b = await SPUtil().getBrowserSetting();
+    if (b != null) browser = b;
   }
 
-  List<Widget> wList=[];
-  List<WebViewController> wvcList=[];
-  List<Map<String,dynamic>> wInfoList=[];
-  int wListIndex=-1;
-  bool showWList=false;
-  void setShowWList(bool value){
-    showWList=value;
+  List<Widget> wList = [];
+  List<WebViewController> wvcList = [];
+  List<Map<String, dynamic>> wInfoList = [];
+  int wListIndex = -1;
+  bool showWList = false;
+
+  void setShowWList(bool value) {
+    showWList = value;
     notifyListeners();
   }
   TextEditingController? titleEditingController;
@@ -95,23 +90,22 @@ class BrowserProvider extends ChangeNotifier {
     }
   }
 
-  bool canBack=false;
-  bool canForward=false;
-  bool collect=false;
+  bool canBack = false;
+  bool canForward = false;
+  bool collect = false;
+
   void browserInit() {
-    titleEditingController=TextEditingController();
-    titleFocusNode=FocusNode();
-    titleFocusNode?.addListener(() {
-      notifyListeners();
-    });
+    titleEditingController = TextEditingController();
+    titleFocusNode = FocusNode();
+    titleFocusNode?.addListener(notifyListeners);
   }
   void browserDispose() {
     titleEditingController?.dispose();
     titleFocusNode?.dispose();
   }
   void addUrl(String url) {
-    String rUrl=checkHttp(url);
-    wListAdd(url:rUrl);
+    final rUrl = checkHttp(url);
+    wListAdd(url: rUrl);
   }
 
   /// Look up the current index of [controller] in the tab list.
@@ -120,11 +114,11 @@ class BrowserProvider extends ChangeNotifier {
     return wvcList.indexOf(controller);
   }
 
-  void wListAdd({String url=""}) {
-    if(url==""){
-      url=AppConfig.apiUrl['walletamazeBrowser']!;
+  void wListAdd({String url = ""}) {
+    if (url == "") {
+      url = AppConfig.apiUrl['walletamazeBrowser']!;
     }
-    titleEditingController?.text=url;
+    titleEditingController?.text = url;
     late WebViewController webViewController;
     late final PlatformWebViewControllerCreationParams params;
     if (WebViewPlatform.instance is WebKitWebViewPlatform) {
@@ -241,44 +235,39 @@ class BrowserProvider extends ChangeNotifier {
       // Enable wide viewport for better page rendering
       androidController.setUseWideViewPort(true);
     }
-    Widget wv=WebViewWidget(controller: webViewController);
+    final wv = WebViewWidget(controller: webViewController);
     wList.add(wv);
     wvcList.add(webViewController);
-    wInfoList.add({
-      "openUrl":url,
-    });
-    showWList=false;
-    wListIndex=wList.length-1;
+    wInfoList.add({"openUrl": url});
+    showWList = false;
+    wListIndex = wList.length - 1;
     notifyListeners();
   }
-  void loadRequest({String url=""}) {
-    if(url==""){
-      url=titleEditingController?.text??"";
-    }
-    if(url=="")return;
-    url=checkHttp(url);
+  void loadRequest({String url = ""}) {
+    if (url == "") url = titleEditingController?.text ?? "";
+    if (url == "") return;
+    url = checkHttp(url);
     _currentController.loadRequest(Uri.parse(url));
-    wInfoList[wListIndex]['openUrl']=url;
+    wInfoList[wListIndex]['openUrl'] = url;
   }
-  //显示webView
+
   void wListShow(int index) {
-    wListIndex=index;
-    showWList=false;
-    titleEditingController?.text=_currentUrl;
+    wListIndex = index;
+    showWList = false;
+    titleEditingController?.text = _currentUrl;
     // Notify immediately so the UI switches tab right away
     notifyListeners();
     // Then async-update navigation and bookmark state
     checkCanGo();
     getCollectionUrl(_currentUrl);
   }
-  //删除一个 webView
   void wListDelete(int index) {
     // Clear WebViewController navigation delegate before removal
     wvcList[index].setNavigationDelegate(NavigationDelegate());
     wList.removeAt(index);
     wvcList.removeAt(index);
     wInfoList.removeAt(index);
-    if(wList.isEmpty){
+    if (wList.isEmpty) {
       wListAdd();
       return;
     }
@@ -301,17 +290,17 @@ class BrowserProvider extends ChangeNotifier {
     collect = list.isNotEmpty;
     notifyListeners();
   }
-  Future<void> getTitle()async{
+  Future<void> getTitle() async {
     final t = await _currentController.getTitle();
-    if(t !=null){
-      wInfoList[wListIndex]['title']=t;
+    if (t != null) {
+      wInfoList[wListIndex]['title'] = t;
       notifyListeners();
     }
   }
-  //检查是否可以 上一页，或者下一页
-  Future<void> checkCanGo()async{
-    canBack=await _currentController.canGoBack();
-    canForward=await _currentController.canGoForward();
+
+  Future<void> checkCanGo() async {
+    canBack = await _currentController.canGoBack();
+    canForward = await _currentController.canGoForward();
     notifyListeners();
   }
   /// Try to handle a WalletConnect URI; returns true if handled.
@@ -361,18 +350,19 @@ class BrowserProvider extends ChangeNotifier {
     final hasScheme = url.startsWith("https://") || url.startsWith("http://");
     return hasScheme ? url : 'https://$url';
   }
-  //删除收藏url
-  Future<void> deleteBrowserCollectionUrl()async{
+  Future<void> deleteBrowserCollectionUrl() async {
     final url = _currentUrl;
     await browserApi.deleteBrowserCollectionUrl(url);
     getCollectionUrl(url);
   }
-  //添加收藏
   Future<void> addBrowserCollection(BuildContext context) async {
-    String? currentUrl=await _currentController.currentUrl();
-    String? title=await _currentController.getTitle();
+    final currentUrl = await _currentController.currentUrl();
+    final title = await _currentController.getTitle();
     if (!context.mounted) return;
-    await Navigator.push(context, MaterialPageRoute(builder: (context)=>BrowserCollection(title ?? "",currentUrl ?? "",)));
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => BrowserCollection(title ?? "", currentUrl ?? "")),
+    );
     getCollectionUrl(_currentUrl);
   }
   /// Handle incoming DApp JSON-RPC messages from the JavaScript channel.
@@ -451,14 +441,13 @@ class BrowserProvider extends ChangeNotifier {
     for (final wvc in wvcList) {
       wvc.setNavigationDelegate(NavigationDelegate());
     }
-    showWList=false;
-    wList=[];
-    wvcList=[];
-    wInfoList=[];
+    showWList = false;
+    wList = [];
+    wvcList = [];
+    wInfoList = [];
     _dappHandler?.dispose();
-    _dappHandler=null;
-    // Create a fresh default tab instead of leaving empty
-    wListIndex=-1;
+    _dappHandler = null;
+    wListIndex = -1;
     wListAdd();
   }
 }

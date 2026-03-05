@@ -17,7 +17,7 @@ extension LoyaltyApiExtras on LoyaltyApi {
 
       if (response['data'] != null) {
         final rewards = (response['data'] as List)
-            .map((e) => Reward.fromJson(e))
+            .map((e) => Reward.fromJson(e as Map<String, dynamic>))
             .toList();
         return MessageModel()
           ..error = false
@@ -95,7 +95,7 @@ extension LoyaltyApiExtras on LoyaltyApi {
 
       if (response['data'] != null) {
         final referrals = (response['data'] as List)
-            .map((e) => ReferralRecord.fromJson(e))
+            .map((e) => ReferralRecord.fromJson(e as Map<String, dynamic>))
             .toList();
         return MessageModel()
           ..error = false
@@ -122,7 +122,7 @@ extension LoyaltyApiExtras on LoyaltyApi {
 
       if (response['data'] != null) {
         final rules = (response['data'] as List)
-            .map((e) => PointsRule.fromJson(e))
+            .map((e) => PointsRule.fromJson(e as Map<String, dynamic>))
             .toList();
         return MessageModel()
           ..error = false

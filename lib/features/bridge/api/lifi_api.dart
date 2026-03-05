@@ -23,7 +23,7 @@ class LiFiApi {
     return _instance!;
   }
 
-  final Map<String, String> _headers = {
+  static const Map<String, String> _headers = {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
   };
@@ -40,7 +40,7 @@ class LiFiApi {
       final mm = MessageModel();
       if (response is Map && response['chains'] != null) {
         mm.data = (response['chains'] as List<dynamic>)
-            .map((c) => BridgeChain.fromJson(c))
+            .map((c) => BridgeChain.fromJson(c as Map<String, dynamic>))
             .toList();
       } else {
         mm.error = true;

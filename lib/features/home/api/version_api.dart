@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:n42_wallet/core/config/app_config.dart';
-import 'package:n42_wallet/features/home/models/version_info_model.dart';
 import 'package:n42_wallet/core/network/base_api.dart';
+import 'package:n42_wallet/features/home/models/version_info_model.dart';
 
 class VersionApi {
   final String url;

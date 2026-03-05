@@ -21,39 +21,30 @@ enum LoyaltyLoadState {
 class LoyaltyProvider extends ChangeNotifier {
   final LoyaltyApi _api = LoyaltyApi();
 
-  // 加载状态
   LoyaltyLoadState _loadState = LoyaltyLoadState.initial;
   LoyaltyLoadState get loadState => _loadState;
 
-  // 错误信息
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
-  // 钱包地址
   String? _walletAddress;
   String? get walletAddress => _walletAddress;
 
-  // 用户账户
   LoyaltyAccount _account = LoyaltyAccount.empty();
   LoyaltyAccount get account => _account;
 
-  // 任务列表
   List<LoyaltyTask> _tasks = [];
   List<LoyaltyTask> get tasks => _tasks;
 
-  // 积分历史
   List<PointsHistory> _history = [];
   List<PointsHistory> get history => _history;
 
-  // 可兑换奖励
   List<Reward> _rewards = [];
   List<Reward> get rewards => _rewards;
 
-  // 积分规则
   List<PointsRule> _rules = [];
   List<PointsRule> get rules => _rules;
 
-  // 邀请信息
   String? _referralCode;
   String? get referralCode => _referralCode;
 
@@ -63,7 +54,6 @@ class LoyaltyProvider extends ChangeNotifier {
   List<ReferralRecord> _referrals = [];
   List<ReferralRecord> get referrals => _referrals;
 
-  // 今日是否已签到
   bool _hasCheckedInToday = false;
   bool get hasCheckedInToday => _hasCheckedInToday;
 
@@ -267,46 +257,24 @@ class LoyaltyProvider extends ChangeNotifier {
     return false;
   }
 
-  // ============ 便捷获取方法 ============
+  List<LoyaltyTask> get availableTasks =>
+      _tasks.where((t) => t.canComplete).toList();
 
-  /// 可完成的任务
-  List<LoyaltyTask> get availableTasks {
-    return _tasks.where((t) => t.canComplete).toList();
-  }
+  String getTaskTypeIcon(TaskType type) => switch (type) {
+        TaskType.dailyCheckIn => '📅',
+        TaskType.transaction => '💸',
+        TaskType.referral => '👥',
+        TaskType.staking => '🔒',
+        TaskType.dappUsage => '📱',
+        TaskType.social => '🐦',
+        TaskType.special => '⭐',
+      };
 
-  /// 获取任务类型的图标
-  String getTaskTypeIcon(TaskType type) {
-    switch (type) {
-      case TaskType.dailyCheckIn:
-        return '📅';
-      case TaskType.transaction:
-        return '💸';
-      case TaskType.referral:
-        return '👥';
-      case TaskType.staking:
-        return '🔒';
-      case TaskType.dappUsage:
-        return '📱';
-      case TaskType.social:
-        return '🐦';
-      case TaskType.special:
-        return '⭐';
-    }
-  }
-
-  /// 计算等级颜色
-  int getTierColorValue() {
-    switch (_account.tier) {
-      case LoyaltyTier.bronze:
-        return 0xFFCD7F32;
-      case LoyaltyTier.silver:
-        return 0xFFC0C0C0;
-      case LoyaltyTier.gold:
-        return 0xFFFFD700;
-      case LoyaltyTier.platinum:
-        return 0xFFE5E4E2;
-      case LoyaltyTier.diamond:
-        return 0xFFB9F2FF;
-    }
-  }
+  int getTierColorValue() => switch (_account.tier) {
+        LoyaltyTier.bronze => 0xFFCD7F32,
+        LoyaltyTier.silver => 0xFFC0C0C0,
+        LoyaltyTier.gold => 0xFFFFD700,
+        LoyaltyTier.platinum => 0xFFE5E4E2,
+        LoyaltyTier.diamond => 0xFFB9F2FF,
+      };
 }

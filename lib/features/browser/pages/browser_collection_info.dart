@@ -17,28 +17,24 @@ class BrowserCollectionInfo extends StatefulWidget {
 }
 
 class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
-  BrowserApi? _browserApi;
-  BrowserApi get browserApi{
-    _browserApi ??= BrowserApi();
-    return _browserApi!;
-  }
-  TextEditingController titleEditingController=TextEditingController();
-  FocusNode titleNode=FocusNode();
-  TextEditingController urlEditingController=TextEditingController();
-  FocusNode urlNode=FocusNode();
-  TextEditingController descEditingController=TextEditingController();
-  FocusNode descNode=FocusNode();
+  late final BrowserApi browserApi = BrowserApi();
+  final TextEditingController titleEditingController = TextEditingController();
+  final FocusNode titleNode = FocusNode();
+  final TextEditingController urlEditingController = TextEditingController();
+  final FocusNode urlNode = FocusNode();
+  final TextEditingController descEditingController = TextEditingController();
+  final FocusNode descNode = FocusNode();
 
-  String titleErrorMessage="";
-  String urlErrorMessage="";
-  String descErrorMessage="";
+  String titleErrorMessage = "";
+  String urlErrorMessage = "";
+  String descErrorMessage = "";
 
   @override
   void initState() {
-    titleEditingController.text=widget.collectionModel.name ?? "";
-    urlEditingController.text=widget.collectionModel.url ?? "";
-    descEditingController.text=widget.collectionModel.desc ?? "";
     super.initState();
+    titleEditingController.text = widget.collectionModel.name ?? "";
+    urlEditingController.text = widget.collectionModel.url ?? "";
+    descEditingController.text = widget.collectionModel.desc ?? "";
   }
   @override
   void dispose() {
@@ -51,33 +47,27 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
     super.dispose();
   }
 
-  Future<void> deleteCollection()async{
+  Future<void> deleteCollection() async {
     browserApi.deleteBrowserCollection(widget.collectionModel.id!);
-    setState(() {});
     ToastUtils.show(S.of(context).g_key_address_5);
-    Navigator.pop(context,"delete");
+    Navigator.pop(context, "delete");
   }
-  //保存 当前 url
-  Future<void> _saveUrl()async{
-    widget.collectionModel.name=titleEditingController.text;
-    if(widget.collectionModel.name==""){
-      setState(() {
-        titleErrorMessage=S.of(context).g_browser_key4;
-      });
+
+  Future<void> _saveUrl() async {
+    widget.collectionModel.name = titleEditingController.text;
+    if (widget.collectionModel.name == "") {
+      setState(() => titleErrorMessage = S.of(context).g_browser_key4);
       return;
     }
-    widget.collectionModel.url=urlEditingController.text;
-    if(widget.collectionModel.url==""){
-      setState(() {
-        urlErrorMessage=S.of(context).g_browser_key4;
-      });
+    widget.collectionModel.url = urlEditingController.text;
+    if (widget.collectionModel.url == "") {
+      setState(() => urlErrorMessage = S.of(context).g_browser_key4);
       return;
     }
-    widget.collectionModel.desc=descEditingController.text;
+    widget.collectionModel.desc = descEditingController.text;
     browserApi.updateBrowsercollection(widget.collectionModel);
-    setState(() {});
     ToastUtils.show(S.of(context).g_key_185);
-    Navigator.pop(context,"save");
+    Navigator.pop(context, "save");
   }
   @override
   Widget build(BuildContext context) {

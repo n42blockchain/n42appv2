@@ -61,18 +61,11 @@ mixin AirdropDetailLogicMixin on State<AirdropDetailPage> {
     return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
   }
 
-  IconData getSocialIcon(String platform) {
-    switch (platform.toLowerCase()) {
-      case 'twitter':
-        return Icons.alternate_email;
-      case 'discord':
-        return Icons.discord;
-      case 'telegram':
-        return Icons.telegram;
-      case 'github':
-        return Icons.code;
-      default:
-        return Icons.link;
-    }
-  }
+  IconData getSocialIcon(String platform) => switch (platform.toLowerCase()) {
+        'twitter' => Icons.alternate_email,
+        'discord' => Icons.discord,
+        'telegram' => Icons.telegram,
+        'github' => Icons.code,
+        _ => Icons.link,
+      };
 }

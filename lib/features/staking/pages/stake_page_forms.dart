@@ -95,7 +95,7 @@ mixin _StakeFormsMixin on _StakeLogicMixin {
           Expanded(
             child: TextField(
               controller: _amountController,
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
               ],
@@ -219,7 +219,7 @@ mixin _StakeFormsMixin on _StakeLogicMixin {
           ),
           if (widget.protocol.isLiquid) ...[
             SizedBox(height: su.setWidth(12)),
-            Divider(),
+            const Divider(),
             SizedBox(height: su.setWidth(12)),
             _buildEstimateRow(
               context,
@@ -292,7 +292,7 @@ mixin _StakeFormsMixin on _StakeLogicMixin {
             ? SizedBox(
                 width: su.setWidth(32),
                 height: su.setWidth(32),
-                child: CircularProgressIndicator(
+                child: const CircularProgressIndicator(
                   strokeWidth: 2,
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                 ),

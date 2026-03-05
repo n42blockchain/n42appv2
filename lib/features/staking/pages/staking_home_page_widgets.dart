@@ -191,7 +191,7 @@ mixin StakingHomePageWidgetsMixin on State<StakingHomePage>,
             ? SizedBox(
                 width: ScreenUtil().setWidth(20),
                 height: ScreenUtil().setWidth(20),
-                child: CircularProgressIndicator(
+                child: const CircularProgressIndicator(
                   strokeWidth: 2,
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
                 ),
@@ -236,7 +236,7 @@ mixin StakingHomePageWidgetsMixin on State<StakingHomePage>,
       listenable: provider,
       builder: (context, _) {
         if (provider.state == StakingState.loading) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         }
 
         if (provider.positions.isEmpty) {
@@ -337,7 +337,7 @@ mixin StakingHomePageWidgetsMixin on State<StakingHomePage>,
               : S.of(context).g_key_stake_active,
           color: isUnbonding ? Colors.orange : Colors.green,
         ),
-        Spacer(),
+        const Spacer(),
         Text(
           '${(liveApys[position.protocol.id] ?? position.protocol.apy).toStringAsFixed(1)}% ${S.of(context).g_key_stake_apy}',
           style: TextStyle(

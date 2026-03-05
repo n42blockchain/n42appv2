@@ -15,26 +15,26 @@ class BrowserSetting extends StatefulWidget {
 }
 
 class _BrowserSettingState extends State<BrowserSetting> {
-  Map<String,dynamic> browser={
-    "connectDApp":false,
-  };
-  Future<void> getBrowserSetting()async{
-    Map<String,dynamic>? b=await SPUtil().getBrowserSetting();
-    if(b !=null){
-      browser=b;
+  Map<String, dynamic> browser = {"connectDApp": false};
+
+  Future<void> getBrowserSetting() async {
+    final b = await SPUtil().getBrowserSetting();
+    if (b != null) {
+      browser = b;
       setState(() {});
     }
   }
-  void setBrowserConnectDApp(bool value){
-    browser['connectDApp']=value;
+
+  void setBrowserConnectDApp(bool value) {
+    browser['connectDApp'] = value;
     SPUtil().setBrowserSetting(browser);
-    setState(() {
-    });
+    setState(() {});
   }
+
   @override
   void initState() {
-    getBrowserSetting();
     super.initState();
+    getBrowserSetting();
   }
   @override
   Widget build(BuildContext context) {
@@ -79,13 +79,9 @@ class _BrowserSettingState extends State<BrowserSetting> {
                 endIndent: 0,
                 color: AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name),
               ),
-              if(widget.webViewController !=null)
+              if (widget.webViewController != null)
                 InkWell(
-                  onTap: (){
-                    if(widget.webViewController !=null){
-                      widget.webViewController!.clearLocalStorage();
-                    }
-                  },
+                  onTap: () => widget.webViewController!.clearLocalStorage(),
                   child: SizedBox(
                     height: ScreenUtil().setWidth(100),
                     width: double.infinity,

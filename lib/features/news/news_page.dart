@@ -27,7 +27,7 @@ class _NewsPageState extends State<NewsPage> {
           AppHomeTopBar(
             title: S.of(context).g_home_key2,
             onLeftImageClick: () {
-              Scaffold.of(this.context).openDrawer();
+              Scaffold.of(context).openDrawer();
             },
             onLeftImageUri: "assets/img/menu.png",
           ),

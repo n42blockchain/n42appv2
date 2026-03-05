@@ -1,21 +1,22 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42_chat/n42_chat.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
+import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_wallet/features/browser/pages/browser_page.dart';
 import 'package:n42_wallet/features/home/setting/about_app.dart';
 import 'package:n42_wallet/features/home/setting/setting_home_page.dart';
 import 'package:n42_wallet/features/notification/pages/message_list.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/pages/address_book/address_book_list.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_manage/wallet_list.dart';
 import 'package:n42_wallet/features/widgets/dialog_widget/tips_dialog_2.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
-import 'dart:async';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/core/config/app_config.dart';
-import 'package:n42_chat/n42_chat.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 
 part 'home_draw_page_widgets.dart';
 
@@ -38,11 +39,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
   void initState() {
     super.initState();
     _chatUserSubscription = N42Chat.userStream.listen((user) {
-      if (mounted) {
-        setState(() {
-          _chatUser = user;
-        });
-      }
+      if (mounted) setState(() => _chatUser = user);
     });
     _chatUser = N42Chat.currentUser;
   }
@@ -114,7 +111,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
                     _menuItem(
                       "assets/home/profile.png",
                       S.of(context).g_home_key1,
-                      onTap: () async {
+                      onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(builder: (_) => N42Chat.profileWidget()),
                         );
@@ -123,14 +120,14 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
                     _menuItem(
                       "assets/home/manage_wallet.png",
                       S.of(context).s_key_1,
-                      onTap: () async {
+                      onTap: () {
                         Navigator.push(context, MaterialPageRoute(builder: (_) => const WalletList()));
                       },
                     ),
                     _menuItem(
                       "assets/home/address_book.png",
                       S.of(context).g_key_108,
-                      onTap: () async {
+                      onTap: () {
                         Navigator.push(context, MaterialPageRoute(builder: (_) => AddressBookList()));
                       },
                     ),
@@ -141,7 +138,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
                     _menuItem(
                       "assets/home/security.png",
                       S.of(context).s_key_11,
-                      onTap: () async {
+                      onTap: () {
                         if (AppGlobals.userInfo == null && !N42Chat.isLoggedIn) {
                           Navigator.push(
                             context,

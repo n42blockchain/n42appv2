@@ -14,22 +14,11 @@ mixin _SectionsMixin on _WidgetsMixin {
 
   @override
   Widget _buildReferralItem(BuildContext context, ReferralRecord r) {
-    Color statusColor;
-    String statusText;
-    switch (r.status) {
-      case ReferralStatus.confirmed:
-        statusColor = Colors.green;
-        statusText = 'Confirmed';
-        break;
-      case ReferralStatus.pending:
-        statusColor = Colors.orange;
-        statusText = 'Pending';
-        break;
-      case ReferralStatus.invalid:
-        statusColor = Colors.red;
-        statusText = 'Invalid';
-        break;
-    }
+    final (Color statusColor, String statusText) = switch (r.status) {
+      ReferralStatus.confirmed => (Colors.green, 'Confirmed'),
+      ReferralStatus.pending => (Colors.orange, 'Pending'),
+      ReferralStatus.invalid => (Colors.red, 'Invalid'),
+    };
 
     final addr = r.referredAddress;
     final shortAddr = addr.length > 10

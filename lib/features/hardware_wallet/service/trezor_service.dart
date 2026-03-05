@@ -188,17 +188,13 @@ class TrezorService {
     }
   }
 
+  static const _trezorOneTypes = {'trezor_one', 'trezorone', '1'};
+
   HardwareWalletDevice _parseDeviceInfo(Map<String, dynamic> result) {
     final typeStr = result['type'] as String? ?? 'trezorModelT';
-    HardwareWalletType type;
-    switch (typeStr.toLowerCase()) {
-      case 'trezor_one':
-      case 'trezorone':
-      case '1':
-        type = HardwareWalletType.trezorOne;
-      default:
-        type = HardwareWalletType.trezorModelT;
-    }
+    final type = _trezorOneTypes.contains(typeStr.toLowerCase())
+        ? HardwareWalletType.trezorOne
+        : HardwareWalletType.trezorModelT;
 
     return HardwareWalletDevice(
       id: result['id'] as String? ?? 'trezor_usb',

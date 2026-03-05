@@ -8,9 +8,8 @@ class ThemeAdapter {
   static ThemeData themeDataLight = ThemeData.light().copyWith(
     scaffoldBackgroundColor:
         AppThemeUtils.lightMap[AppThemeKeys.backGroundColor.name],
-    primaryColor: Color(0xffF9f9f9),
-    //头部导航样式
-    appBarTheme: AppBarTheme(
+    primaryColor: const Color(0xffF9f9f9),
+    appBarTheme: const AppBarTheme(
       centerTitle: true,
       elevation: 0,
       titleTextStyle: TextStyle(color: _lightText),
@@ -18,16 +17,13 @@ class ThemeAdapter {
       toolbarTextStyle: TextStyle(color: _lightText),
       iconTheme: IconThemeData(color: _lightText),
     ),
-    //底部导航样式
-    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       selectedIconTheme: IconThemeData(color: _accent),
       unselectedIconTheme: IconThemeData(color: _darkText),
       selectedItemColor: _accent,
       unselectedItemColor: _lightText,
     ),
-    iconTheme: IconThemeData(color: _lightText),
-
-    ///输入框style
+    iconTheme: const IconThemeData(color: _lightText),
     inputDecorationTheme: const InputDecorationTheme(
       hintStyle: TextStyle(color: Color(0xFFBAC2CC), fontSize: 16),
       focusedBorder: UnderlineInputBorder(
@@ -40,36 +36,33 @@ class ThemeAdapter {
         borderSide: BorderSide(color: Color(0xffd9445a)),
       ),
     ),
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(
       backgroundColor: Color.fromRGBO(255, 255, 255, 0.5),
     ),
-    buttonTheme: ButtonThemeData(buttonColor: _accent),
-    //进度条样式
-    progressIndicatorTheme: ProgressIndicatorThemeData(
+    buttonTheme: const ButtonThemeData(buttonColor: _accent),
+    progressIndicatorTheme: const ProgressIndicatorThemeData(
       color: _accent,
       linearTrackColor: Colors.white24,
       refreshBackgroundColor: Colors.white24,
     ),
-    //分割线样式
-    dividerTheme: DividerThemeData(
+    dividerTheme: const DividerThemeData(
       color: Color(0xffD9D9D9),
       space: 0,
       thickness: 1,
       indent: 10,
       endIndent: 10,
     ),
-    textSelectionTheme: TextSelectionThemeData(cursorColor: _accent),
+    textSelectionTheme: const TextSelectionThemeData(cursorColor: _accent),
   );
 
   static ThemeData themeDataDark = ThemeData.dark().copyWith(
     scaffoldBackgroundColor:
         AppThemeUtils.darkMap[AppThemeKeys.backGroundColor.name],
-    cardTheme: CardThemeData(
+    cardTheme: const CardThemeData(
       shadowColor: Color(0xff444444),
       color: Color(0xff2b2b2b),
     ),
-    //头部导航样式
-    appBarTheme: AppBarTheme(
+    appBarTheme: const AppBarTheme(
       centerTitle: true,
       elevation: 0,
       titleTextStyle: TextStyle(color: _darkText),
@@ -77,15 +70,14 @@ class ThemeAdapter {
       actionsIconTheme: IconThemeData(color: _darkText),
       iconTheme: IconThemeData(color: _darkText),
     ),
-    //底部导航样式
-    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       selectedIconTheme: IconThemeData(color: _accent),
       unselectedIconTheme: IconThemeData(color: _darkText),
       selectedItemColor: _accent,
       unselectedItemColor: Color(0xff888888),
     ),
-    iconTheme: IconThemeData(color: _darkText),
-    inputDecorationTheme: InputDecorationTheme(
+    iconTheme: const IconThemeData(color: _darkText),
+    inputDecorationTheme: const InputDecorationTheme(
       hintStyle: TextStyle(color: Color(0xFFBEBEBE), fontSize: 16),
       focusedBorder: UnderlineInputBorder(
         borderSide: BorderSide(color: _accent),
@@ -97,34 +89,30 @@ class ThemeAdapter {
         borderSide: BorderSide(color: Color(0xffd9445a)),
       ),
     ),
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(
       backgroundColor: Color.fromRGBO(255, 255, 255, 0.5),
     ),
-    buttonTheme: ButtonThemeData(buttonColor: _accent),
-    //进度条样式
-    progressIndicatorTheme: ProgressIndicatorThemeData(
+    buttonTheme: const ButtonThemeData(buttonColor: _accent),
+    progressIndicatorTheme: const ProgressIndicatorThemeData(
       color: _accent,
       linearTrackColor: Colors.white24,
       refreshBackgroundColor: Colors.white24,
     ),
-    //分割线样式
-    dividerTheme: DividerThemeData(
+    dividerTheme: const DividerThemeData(
       color: Color(0xff303239),
       space: 0,
       thickness: 1,
       indent: 10,
       endIndent: 10,
     ),
-    textSelectionTheme: TextSelectionThemeData(cursorColor: _accent),
+    textSelectionTheme: const TextSelectionThemeData(cursorColor: _accent),
   );
 }
 
 class AppThemeUtils {
-  ///根据key返回颜色
   static Color getColorByKey(BuildContext? context, String key) {
     if (context == null) return Colors.red;
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    //如果没有颜色 返回黑色
     return (isDark ? darkMap : lightMap)[key] ?? const Color(0xff000000);
   }
 

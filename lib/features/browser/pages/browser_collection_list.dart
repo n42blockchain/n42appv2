@@ -19,11 +19,7 @@ class BrowserCollectionList extends StatefulWidget {
 }
 
 class _BrowserCollectionListState extends State<BrowserCollectionList> {
-  BrowserApi? _browserApi;
-  BrowserApi get browserApi {
-    _browserApi ??= BrowserApi();
-    return _browserApi!;
-  }
+  late final BrowserApi browserApi = BrowserApi();
 
   List<BrowserCollectionModel> collectionList = [];
   int pageSize = 20;
@@ -37,7 +33,6 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
     refreshCollectionList();
   }
 
-  //刷新
   Future<void> refreshCollectionList() async {
     if (loading == Load.loading) return;
     loading = Load.loading;
@@ -49,7 +44,6 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
     setState(() {});
   }
 
-  //加载更多
   Future<void> moreCollectionList() async {
     loading = Load.loading;
     pageNum++;
@@ -129,7 +123,7 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
                         margin: EdgeInsets.only(right: ScreenUtil().setWidth(10.0)),
                         height: ScreenUtil().setWidth(40.0),
                         width: ScreenUtil().setWidth(40.0),
-                        child: CircularProgressIndicator(),
+                        child: const CircularProgressIndicator(),
                       ),
                       Text(S.of(context).g_key_106, style: _subtitleStyle(context)),
                     ],

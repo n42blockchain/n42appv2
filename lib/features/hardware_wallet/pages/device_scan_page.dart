@@ -312,7 +312,7 @@ class _DeviceScanPageState extends State<DeviceScanPage>
               SizedBox(
                 width: su.setWidth(32),
                 height: su.setWidth(32),
-                child: CircularProgressIndicator(strokeWidth: 2),
+                child: const CircularProgressIndicator(strokeWidth: 2),
               )
             else
               Icon(

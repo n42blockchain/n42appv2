@@ -86,7 +86,7 @@ class AirdropApi {
 
       if (response['data'] != null) {
         final airdrops = (response['data'] as List)
-            .map((e) => AirdropModel.fromJson(e))
+            .map((e) => AirdropModel.fromJson(e as Map<String, dynamic>))
             .toList();
         return MessageModel()
           ..error = false
@@ -157,7 +157,7 @@ class AirdropApi {
 
       if (response['data'] != null) {
         final airdrops = (response['data'] as List)
-            .map((e) => AirdropModel.fromJson(e))
+            .map((e) => AirdropModel.fromJson(e as Map<String, dynamic>))
             .toList();
         return MessageModel()
           ..error = false
@@ -246,7 +246,7 @@ class AirdropApi {
         tokenSymbol: 'ZRO',
         estimatedValueUsd: 850.0,
         amount: '500 ZRO',
-        claimDeadline: now.add(Duration(days: 14)),
+        claimDeadline: now.add(const Duration(days: 14)),
         requirements: [
           AirdropRequirement(
             id: '1',
@@ -269,7 +269,7 @@ class AirdropApi {
           'discord': 'https://discord.gg/layerzero',
         },
         tags: ['DeFi', 'Bridge', 'L0'],
-        createdAt: now.subtract(Duration(days: 7)),
+        createdAt: now.subtract(const Duration(days: 7)),
         updatedAt: now,
       ),
       AirdropModel(
@@ -287,7 +287,7 @@ class AirdropApi {
         tokenSymbol: 'EIGEN',
         estimatedValueUsd: 1200.0,
         amount: '300 EIGEN',
-        claimDeadline: now.add(Duration(days: 30)),
+        claimDeadline: now.add(const Duration(days: 30)),
         requirements: [
           AirdropRequirement(
             id: '1',
@@ -300,7 +300,7 @@ class AirdropApi {
         userClaimableAmount: null,
         claimUrl: 'https://claims.eigenfoundation.org',
         tags: ['Restaking', 'Ethereum', 'DeFi'],
-        createdAt: now.subtract(Duration(days: 14)),
+        createdAt: now.subtract(const Duration(days: 14)),
         updatedAt: now,
       ),
       AirdropModel(
@@ -317,7 +317,7 @@ class AirdropApi {
         priority: AirdropPriority.medium,
         tokenSymbol: 'SCR',
         estimatedValueUsd: 500.0,
-        startDate: now.add(Duration(days: 7)),
+        startDate: now.add(const Duration(days: 7)),
         requirements: [
           AirdropRequirement(
             id: '1',
@@ -333,7 +333,7 @@ class AirdropApi {
           ),
         ],
         tags: ['L2', 'zkEVM', 'Ethereum'],
-        createdAt: now.subtract(Duration(days: 3)),
+        createdAt: now.subtract(const Duration(days: 3)),
         updatedAt: now,
       ),
       AirdropModel(
@@ -350,7 +350,7 @@ class AirdropApi {
         priority: AirdropPriority.high,
         tokenSymbol: 'ZK',
         estimatedValueUsd: 750.0,
-        startDate: now.add(Duration(days: 21)),
+        startDate: now.add(const Duration(days: 21)),
         requirements: [
           AirdropRequirement(
             id: '1',
@@ -360,7 +360,7 @@ class AirdropApi {
           ),
         ],
         tags: ['L2', 'zkRollup', 'DeFi'],
-        createdAt: now.subtract(Duration(days: 1)),
+        createdAt: now.subtract(const Duration(days: 1)),
         updatedAt: now,
       ),
       AirdropModel(
@@ -376,7 +376,7 @@ class AirdropApi {
         status: AirdropStatus.active,
         priority: AirdropPriority.low,
         estimatedValueUsd: 50.0,
-        claimDeadline: now.add(Duration(days: 60)),
+        claimDeadline: now.add(const Duration(days: 60)),
         requirements: [
           AirdropRequirement(
             id: '1',
@@ -388,7 +388,7 @@ class AirdropApi {
         isEligible: null,
         claimUrl: 'https://odyssey.arbitrum.io/claim',
         tags: ['NFT', 'L2', 'Community'],
-        createdAt: now.subtract(Duration(days: 30)),
+        createdAt: now.subtract(const Duration(days: 30)),
         updatedAt: now,
       ),
       AirdropModel(
@@ -405,10 +405,10 @@ class AirdropApi {
         priority: AirdropPriority.medium,
         tokenSymbol: 'STRK',
         estimatedValueUsd: 400.0,
-        endDate: now.subtract(Duration(days: 7)),
+        endDate: now.subtract(const Duration(days: 7)),
         tags: ['L2', 'Cairo', 'DeFi'],
-        createdAt: now.subtract(Duration(days: 60)),
-        updatedAt: now.subtract(Duration(days: 7)),
+        createdAt: now.subtract(const Duration(days: 60)),
+        updatedAt: now.subtract(const Duration(days: 7)),
       ),
     ];
   }

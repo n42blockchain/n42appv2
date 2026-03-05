@@ -97,8 +97,8 @@ class _UnlockState extends ConsumerState<Unlock> {
       return;
     }
 
-    final FaceRecognitionPublic frp = FaceRecognitionPublic();
-    final bool canAuth = await frp.checkBiometrics();
+    final frp = FaceRecognitionPublic();
+    final canAuth = await frp.checkBiometrics();
     if (!mounted) return;
 
     if (!canAuth) {
@@ -112,7 +112,7 @@ class _UnlockState extends ConsumerState<Unlock> {
 
     setState(() => _biometricAvailable = true);
 
-    final BiometricAuthResult result = await frp.authenticateWithBiometrics();
+    final result = await frp.authenticateWithBiometrics();
     if (!mounted) return;
 
     if (result == BiometricAuthResult.success) {
@@ -121,45 +121,16 @@ class _UnlockState extends ConsumerState<Unlock> {
       return;
     }
 
-    // For all non-success results, advance to next auth layer
-    if (result == BiometricAuthResult.userCancelled) {
-      setState(() {
-        _biometricFailed = true;
-        faceShow = true;
-      });
-    } else if (result == BiometricAuthResult.notEnrolled) {
-      ToastUtils.show(S.of(context).g_biometric_not_enrolled);
-      setState(() {
-        _biometricAvailable = false;
-        faceShow = true;
-      });
-    } else if (result == BiometricAuthResult.lockedOut) {
-      ToastUtils.show(S.of(context).g_biometric_locked_out);
-      setState(() {
-        _biometricFailed = true;
-        faceShow = true;
-      });
-    } else if (result == BiometricAuthResult.notAvailable) {
-      ToastUtils.show(S.of(context).g_lock_key7);
-      setState(() {
-        _biometricAvailable = false;
-        faceShow = true;
-      });
-    } else {
-      ToastUtils.show(S.of(context).g_unlock_key7);
-      setState(() {
-        _biometricFailed = true;
-        faceShow = true;
-      });
-    }
+    _handleBiometricFailure(result);
+    setState(() => faceShow = true);
   }
 
   /// Retry biometric auth without resetting to the loading state.
   Future<void> _retryBiometric() async {
     setState(() => _biometricFailed = false);
 
-    final FaceRecognitionPublic frp = FaceRecognitionPublic();
-    final BiometricAuthResult result = await frp.authenticateWithBiometrics();
+    final frp = FaceRecognitionPublic();
+    final result = await frp.authenticateWithBiometrics();
     if (!mounted) return;
 
     if (result == BiometricAuthResult.success) {
@@ -168,20 +139,25 @@ class _UnlockState extends ConsumerState<Unlock> {
       return;
     }
 
-    if (result == BiometricAuthResult.userCancelled) {
-      setState(() => _biometricFailed = true);
-    } else if (result == BiometricAuthResult.notEnrolled) {
-      ToastUtils.show(S.of(context).g_biometric_not_enrolled);
-      setState(() => _biometricAvailable = false);
-    } else if (result == BiometricAuthResult.lockedOut) {
-      ToastUtils.show(S.of(context).g_biometric_locked_out);
-      setState(() => _biometricFailed = true);
-    } else if (result == BiometricAuthResult.notAvailable) {
-      ToastUtils.show(S.of(context).g_lock_key7);
-      setState(() => _biometricAvailable = false);
-    } else {
-      ToastUtils.show(S.of(context).g_unlock_key7);
-      setState(() => _biometricFailed = true);
+    _handleBiometricFailure(result);
+  }
+
+  void _handleBiometricFailure(BiometricAuthResult result) {
+    switch (result) {
+      case BiometricAuthResult.userCancelled:
+        setState(() => _biometricFailed = true);
+      case BiometricAuthResult.notEnrolled:
+        ToastUtils.show(S.of(context).g_biometric_not_enrolled);
+        setState(() => _biometricAvailable = false);
+      case BiometricAuthResult.lockedOut:
+        ToastUtils.show(S.of(context).g_biometric_locked_out);
+        setState(() => _biometricFailed = true);
+      case BiometricAuthResult.notAvailable:
+        ToastUtils.show(S.of(context).g_lock_key7);
+        setState(() => _biometricAvailable = false);
+      default:
+        ToastUtils.show(S.of(context).g_unlock_key7);
+        setState(() => _biometricFailed = true);
     }
   }
 
@@ -218,7 +194,7 @@ class _UnlockState extends ConsumerState<Unlock> {
   }
 
   bool checkPwd() {
-    String pwdStr = inputPassword;
+    final pwdStr = inputPassword;
     final lockState = ref.read(screenLockProvider);
 
     if (!lockState.verifyPassword(pwdStr)) {
@@ -248,11 +224,9 @@ class _UnlockState extends ConsumerState<Unlock> {
 
     passwordTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (passwordUnlock > 1) {
-        setState(() {
-          passwordUnlock--;
-        });
+        setState(() => passwordUnlock--);
       } else {
-        passwordTimer!.cancel();
+        timer.cancel();
         initData();
         setState(() {});
       }

@@ -319,7 +319,9 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
         return Icons.usb;
       case HardwareWalletType.keystoneModel:
         return Icons.qr_code_scanner;
-      default:
+      case HardwareWalletType.ledgerNanoX:
+      case HardwareWalletType.ledgerNanoSPlus:
+      case HardwareWalletType.ledgerStax:
         return Icons.bluetooth_connected;
     }
   }

@@ -339,28 +339,13 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
 
   Widget _buildStatusBadge(
       BuildContext context, BridgeTransactionStatus status) {
-    Color color;
-    String text;
-    IconData icon;
-
-    switch (status) {
-      case BridgeTransactionStatus.pending:
-        color = Colors.orange;
-        text = S.of(context).g_key_bridge_status_pending;
-        icon = Icons.hourglass_empty;
-      case BridgeTransactionStatus.inProgress:
-        color = Colors.blue;
-        text = S.of(context).g_key_bridge_status_in_progress;
-        icon = Icons.sync;
-      case BridgeTransactionStatus.completed:
-        color = Colors.green;
-        text = S.of(context).g_key_bridge_status_completed;
-        icon = Icons.check_circle;
-      case BridgeTransactionStatus.failed:
-        color = Colors.red;
-        text = S.of(context).g_key_bridge_status_failed;
-        icon = Icons.error;
-    }
+    final s = S.of(context);
+    final (Color color, String text, IconData icon) = switch (status) {
+      BridgeTransactionStatus.pending => (Colors.orange, s.g_key_bridge_status_pending, Icons.hourglass_empty),
+      BridgeTransactionStatus.inProgress => (Colors.blue, s.g_key_bridge_status_in_progress, Icons.sync),
+      BridgeTransactionStatus.completed => (Colors.green, s.g_key_bridge_status_completed, Icons.check_circle),
+      BridgeTransactionStatus.failed => (Colors.red, s.g_key_bridge_status_failed, Icons.error),
+    };
 
     return Container(
       padding: EdgeInsets.symmetric(
@@ -374,11 +359,11 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // 进行中时旋转 icon
-          status == BridgeTransactionStatus.inProgress
-              ? _SpinningIcon(icon: icon, color: color,
-                  size: ScreenUtil().setWidth(24))
-              : Icon(icon, color: color, size: ScreenUtil().setWidth(24)),
+          if (status == BridgeTransactionStatus.inProgress)
+            _SpinningIcon(icon: icon, color: color,
+                size: ScreenUtil().setWidth(24))
+          else
+            Icon(icon, color: color, size: ScreenUtil().setWidth(24)),
           SizedBox(width: ScreenUtil().setWidth(6)),
           Text(
             text,

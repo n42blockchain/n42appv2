@@ -29,7 +29,7 @@ class BluetoothDeviceInfo {
   final int rssi;
   final bool isConnectable;
 
-  BluetoothDeviceInfo({
+  const BluetoothDeviceInfo({
     required this.id,
     required this.name,
     required this.rssi,
@@ -82,7 +82,7 @@ class HardwareWalletDevice {
   final DateTime? lastConnectedAt;
   final List<HardwareWalletAccount> accounts;
 
-  HardwareWalletDevice({
+  const HardwareWalletDevice({
     required this.id,
     required this.name,
     required this.type,
@@ -184,7 +184,7 @@ class HardwareWalletAccount {
   final String? name;
   final int index;
 
-  HardwareWalletAccount({
+  const HardwareWalletAccount({
     required this.address,
     required this.coinType,
     required this.derivationPath,
@@ -230,7 +230,7 @@ class HardwareWalletSignRequest {
   final String? message;
   final HardwareWalletSignType signType;
 
-  HardwareWalletSignRequest({
+  const HardwareWalletSignRequest({
     required this.coinType,
     required this.derivationPath,
     required this.transactionData,
@@ -259,7 +259,7 @@ class HardwareWalletSignResponse {
   /// 需要 Keystone QR 签名时，此字段包含待签名的原始 RLP 交易字节
   final List<int>? rawTxForQr;
 
-  HardwareWalletSignResponse({
+  const HardwareWalletSignResponse({
     required this.success,
     this.signature,
     this.txHash,
@@ -293,7 +293,7 @@ class LedgerAppInfo {
   final String version;
   final bool isOpen;
 
-  LedgerAppInfo({
+  const LedgerAppInfo({
     required this.name,
     required this.version,
     this.isOpen = false,
@@ -338,7 +338,7 @@ class HardwareWalletError {
   final String message;
   final String? details;
 
-  HardwareWalletError({
+  const HardwareWalletError({
     required this.code,
     required this.message,
     this.details,

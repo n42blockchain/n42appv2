@@ -55,7 +55,7 @@ class LoyaltyApi {
 
       if (response['data'] != null) {
         final tasks = (response['data'] as List)
-            .map((e) => LoyaltyTask.fromJson(e))
+            .map((e) => LoyaltyTask.fromJson(e as Map<String, dynamic>))
             .toList();
         return MessageModel()
           ..error = false
@@ -147,7 +147,7 @@ class LoyaltyApi {
 
       if (response['data'] != null) {
         final history = (response['data'] as List)
-            .map((e) => PointsHistory.fromJson(e))
+            .map((e) => PointsHistory.fromJson(e as Map<String, dynamic>))
             .toList();
         return MessageModel()
           ..error = false

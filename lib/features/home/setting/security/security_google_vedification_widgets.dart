@@ -23,7 +23,7 @@ extension _SecurityGoogleVedificationWidgets
         ),
         child: buttonStyle2(
           context,
-          () async { await _handleSubmit(); },
+          _handleSubmit,
           S.of(context).g_key_154,
         ),
       ),
@@ -32,21 +32,17 @@ extension _SecurityGoogleVedificationWidgets
 
   /// Error message row used by multiple sections.
   Widget _buildErrorMessage(String message) {
-    return Visibility(
-      visible: message != "",
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Text(
-            message,
-            style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.errorTextColor.name),
-              fontSize: ScreenUtil().setSp(26.0),
-            ),
-            textAlign: TextAlign.end,
-          ),
-        ],
+    if (message.isEmpty) return const SizedBox.shrink();
+    return Align(
+      alignment: Alignment.centerRight,
+      child: Text(
+        message,
+        style: TextStyle(
+          color: AppThemeUtils.getColorByKey(
+              context, AppThemeKeys.errorTextColor.name),
+          fontSize: ScreenUtil().setSp(26.0),
+        ),
+        textAlign: TextAlign.end,
       ),
     );
   }
@@ -92,7 +88,6 @@ extension _SecurityGoogleVedificationWidgets
           child: Row(
             children: [
               Expanded(
-                flex: 1,
                 child: TextField(
                   style: TextStyle(
                     color: AppThemeUtils.getColorByKey(
@@ -119,7 +114,7 @@ extension _SecurityGoogleVedificationWidgets
                     focusedBorder: InputBorder.none,
                   ),
                   maxLines: 1,
-                  onEditingComplete: () { closeKeyboard(); },
+                  onEditingComplete: closeKeyboard,
                 ),
               ),
               _buildPasteButton(),
@@ -135,11 +130,10 @@ extension _SecurityGoogleVedificationWidgets
   Widget _buildPasteButton() {
     return InkWell(
       onTap: () async {
-        ClipboardData? cd = await Clipboard.getData(Clipboard.kTextPlain);
-        if (cd != null) {
-          if (cd.text != null && cd.text != "null") {
-            pasteGoogleCode(cd.text!);
-          }
+        final cd = await Clipboard.getData(Clipboard.kTextPlain);
+        final text = cd?.text;
+        if (text != null && text != "null") {
+          pasteGoogleCode(text);
         }
       },
       child: Container(
@@ -165,7 +159,7 @@ extension _SecurityGoogleVedificationWidgets
 
   //邮箱验证
   Widget buildEmailSection() {
-    if (!securityMap['email']) return SizedBox();
+    if (!securityMap['email']) return const SizedBox.shrink();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -187,7 +181,6 @@ extension _SecurityGoogleVedificationWidgets
           child: Row(
             children: [
               Expanded(
-                flex: 1,
                 child: TextField(
                   style: TextStyle(
                     color: AppThemeUtils.getColorByKey(
@@ -213,7 +206,7 @@ extension _SecurityGoogleVedificationWidgets
                         vertical: ScreenUtil().setWidth(18.0)),
                   ),
                   maxLines: 1,
-                  onEditingComplete: () { closeKeyboard(); },
+                  onEditingComplete: closeKeyboard,
                 ),
               ),
               _buildEmailVerificationButton(),
@@ -228,31 +221,31 @@ extension _SecurityGoogleVedificationWidgets
 
   //发送邮箱验证码按钮
   Widget _buildEmailVerificationButton() {
-    Widget leftWidget = SizedBox();
+    final buttonTextColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.mainButtonTextColor.name);
+    Widget leftWidget;
     if (emailLoad == Load.loading) {
       leftWidget = SizedBox(
         height: ScreenUtil().setWidth(30.0),
         width: ScreenUtil().setWidth(30.0),
-        child: CircularProgressIndicator(
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainButtonTextColor.name),
-        ),
+        child: CircularProgressIndicator(color: buttonTextColor),
       );
     } else if (emailSendWait) {
-      leftWidget = Container(
+      leftWidget = Padding(
         padding: EdgeInsets.only(right: ScreenUtil().setWidth(6.0)),
         child: Text(
           '($emailSendWaitNum)',
           style: TextStyle(
             fontSize: ScreenUtil().setSp(30.0),
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainButtonTextColor.name),
+            color: buttonTextColor,
           ),
         ),
       );
+    } else {
+      leftWidget = const SizedBox.shrink();
     }
     return InkWell(
-      onTap: () { getEmailVerification(); },
+      onTap: getEmailVerification,
       child: Container(
         padding: EdgeInsets.symmetric(
             vertical: ScreenUtil().setWidth(10.0),
@@ -303,7 +296,6 @@ extension _SecurityGoogleVedificationWidgets
           child: Row(
             children: [
               Expanded(
-                flex: 1,
                 child: TextField(
                   style: TextStyle(
                     color: AppThemeUtils.getColorByKey(
@@ -328,7 +320,7 @@ extension _SecurityGoogleVedificationWidgets
                     isCollapsed: true,
                   ),
                   maxLines: 1,
-                  onEditingComplete: () { closeKeyboard(); },
+                  onEditingComplete: closeKeyboard,
                 ),
               ),
               InkWell(

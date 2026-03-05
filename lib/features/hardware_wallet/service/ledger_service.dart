@@ -422,7 +422,7 @@ class LedgerService {
     if (kDebugMode) debugPrint('LedgerService: connection lost');
   }
 
-  HardwareWalletType _determineDeviceType(String name) {
+  static HardwareWalletType _determineDeviceType(String name) {
     final n = name.toLowerCase();
     if (n.contains('nano x')) return HardwareWalletType.ledgerNanoX;
     if (n.contains('nano s plus') || n.contains('nano s+')) return HardwareWalletType.ledgerNanoSPlus;

@@ -1,141 +1,85 @@
 import 'package:intl/intl.dart';
 import 'package:decimal/decimal.dart';
-class Regular{
-  //是否是十六进制字符串
-  bool regularHex(String str){
-    bool r=RegExp(r'^(0x)?[0-9a-fA-F]+$').hasMatch(str);
-    return r;
-  }
-  //判断base58
-  bool regularBase58(String str){
-    bool r=RegExp(r'^[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]+$').hasMatch(str);
-    return r;
-  }
-  //验证是否是浮点数
-  bool regularDouble(String str){
-    bool r=RegExp(r'^\d+(\.)?[0-9]').hasMatch(str);
-    return r;
-  }
-  //验证数字
-  bool regularNums(String str){
-    return RegExp(r"^[0-9]+$").hasMatch(str);
-  }
-  //返回钱的缩写
-  String getMoneyAbbreviation(dynamic money){
-    final oCcy = NumberFormat("#,##0.00", "en_US");
 
-    //double r=0;
-    String rStr="";
-    if(money>=1000000000000){
-      String r=formartNum(money/1000000000000, 2,isCrop: true);
-      //NumUtil.getNumByValueDouble(money/1000000000000, 3)!.toString();
-      rStr=r;//.substring(0,r.length-1);
-      return "${rStr}T";
+class Regular {
+  bool regularHex(String str) =>
+      RegExp(r'^(0x)?[0-9a-fA-F]+$').hasMatch(str);
+
+  bool regularBase58(String str) =>
+      RegExp(r'^[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]+$')
+          .hasMatch(str);
+
+  bool regularDouble(String str) =>
+      RegExp(r'^\d+(\.)?[0-9]').hasMatch(str);
+
+  bool regularNums(String str) =>
+      RegExp(r"^[0-9]+$").hasMatch(str);
+
+  String getMoneyAbbreviation(dynamic money) {
+    if (money >= 1000000000000) {
+      return '${formartNum(money / 1000000000000, 2, isCrop: true)}T';
     }
-    if(money>=1000000000){
-      String r=formartNum(money/1000000000, 2,isCrop: true);
-      //NumUtil.getNumByValueDouble(money/1000000000, 3)!.toString();
-      rStr=r;//.substring(0,r.length-1);
-      return "${rStr}B";
+    if (money >= 1000000000) {
+      return '${formartNum(money / 1000000000, 2, isCrop: true)}B';
     }
-    return oCcy.format(money);
+    return NumberFormat("#,##0.00", "en_US").format(money);
   }
-  //返回小数缩写
-  String getMoneyAbbreviationDecimal(dynamic money,{int l=8}){
-    String moneyStr=Decimal.parse(money.toString()).toString();
-    List<String> ms=moneyStr.split("");
-    String rStr="0.0{";
-    for(int i=l+3;i<ms.length;i++){
-      if(ms[i]=="0"){
+
+  String getMoneyAbbreviationDecimal(dynamic money, {int l = 8}) {
+    final moneyStr = Decimal.parse(money.toString()).toString();
+    final ms = moneyStr.split("");
+    String rStr = "0.0{";
+    for (int i = l + 3; i < ms.length; i++) {
+      if (ms[i] == "0") {
         l++;
-      }else{
-        rStr+="$l}${moneyStr.substring(i)}";
+      } else {
+        rStr += "$l}${moneyStr.substring(i)}";
         break;
       }
     }
     return rStr;
   }
 
-  /// target  要转换的数字
-  /// postion 要保留的位数
-  /// isCrop  true 直接裁剪 false 四舍五入
-  /// isFill0 小数位不足是否补0,true 补0 false 不补0
-  String formartNum(num target, int postion, {bool isCrop = false,isFill0=true}) {
-    String t = target.toString();
-    // 如果要保留的长度小于等于0 直接返回当前字符串
-    if (postion < 0) {
-      return t;
-    }
+  String formartNum(num target, int postion,
+      {bool isCrop = false, bool isFill0 = true}) {
+    final t = target.toString();
+    if (postion < 0) return t;
+
     if (t.contains(".")) {
-      String t1 = t.split(".").last;
-      if (t1.length >= postion) {
+      final decimalPart = t.split(".").last;
+      if (decimalPart.length >= postion) {
         if (isCrop) {
-          // 直接裁剪
-          return t.substring(0, t.length - (t1.length - postion));
-        } else {
-          // 四舍五入
-          return target.toStringAsFixed(postion);
+          return t.substring(0, t.length - (decimalPart.length - postion));
         }
-      } else {
-        // 不够位数的补相应个数的0
-        String t2 = "";
-        if(isFill0){
-          for (int i = 0; i < postion - t1.length; i++) {
-            t2 += "0";
-          }
-        }
-        return t + t2;
+        return target.toStringAsFixed(postion);
       }
-    } else {
-      String t3="";
-      if(isFill0){
-        // 不含小数的部分补点和相应的0
-        t3 =  postion>0?".":"";
-
-        for (int i = 0; i < postion; i++) {
-          t3 += "0";
-        }
-
-      }
-      return t + t3;
+      if (!isFill0) return t;
+      return t + "0" * (postion - decimalPart.length);
     }
+
+    if (!isFill0) return t;
+    return postion > 0 ? '$t.${"0" * postion}' : t;
   }
-  double formartNumDouble(num target,int postion,{bool isCrop = false,isFill0=true}){
-    return double.parse(formartNum(target,postion,isCrop:isCrop,isFill0:isFill0));
+
+  double formartNumDouble(num target, int postion,
+      {bool isCrop = false, bool isFill0 = true}) {
+    return double.parse(
+        formartNum(target, postion, isCrop: isCrop, isFill0: isFill0));
   }
-  //十六进制字符串转int
+
   int? hexToInt(String hex) {
-    int? val;
-    if(hex.toUpperCase().contains("0X")){
-      String desString = hex.substring(2);
-      val = int.tryParse("0x$desString");
-    }else {
-      val = int.tryParse("0x$hex");
-    }
-    return val;
+    final normalized =
+        hex.toUpperCase().contains("0X") ? '0x${hex.substring(2)}' : '0x$hex';
+    return int.tryParse(normalized);
   }
 
-  ///是否是一个密码
-  bool isPassword(String pwd) {
-    RegExp rule = RegExp(r'^[A-Za-z\d$@$!%*#?&]{8,18}$');//RegExp(r'^[0-9A-Za-z]{6,18}$');
-    return rule.hasMatch(pwd);
-  }
-  ///是否是6位验证码
-  bool isCaptcha(String captcha) {
-    RegExp rule = RegExp(r'^\w{6}$');
-    return rule.hasMatch(captcha);
-  }
+  bool isPassword(String pwd) =>
+      RegExp(r'^[A-Za-z\d$@$!%*#?&]{8,18}$').hasMatch(pwd);
 
-  ///是否是8位验证码
-  bool isCaptcha2(String captcha) {
-    RegExp rule = RegExp(r'^\w{8}$');
-    return rule.hasMatch(captcha);
-  }
+  bool isCaptcha(String captcha) => RegExp(r'^\w{6}$').hasMatch(captcha);
 
-  ///是否是邮箱
-  bool isEmail(String email) {
-    RegExp  rule = RegExp(r"^\w+([-+.]\w+)*@\w+([-.]\w+)*.\w+([-.]\w+)*$");
-    return rule.hasMatch(email);
-  }
+  bool isCaptcha2(String captcha) => RegExp(r'^\w{8}$').hasMatch(captcha);
 
+  bool isEmail(String email) =>
+      RegExp(r"^\w+([-+.]\w+)*@\w+([-.]\w+)*.\w+([-.]\w+)*$").hasMatch(email);
 }

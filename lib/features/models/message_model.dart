@@ -1,11 +1,8 @@
-/// RPC 调用错误模型，当 throw 抛出错误时使用此模型
 class MessageModel {
-  bool error = false;
+  bool error;
   dynamic data;
 
-  MessageModel();
+  MessageModel() : error = false;
 
-  MessageModel.error() {
-    error = true;
-  }
+  MessageModel.error() : error = true;
 }

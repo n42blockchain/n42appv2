@@ -62,10 +62,8 @@ class AuthServiceImpl implements IAuthService {
   @override
   Future<bool> verifyPassword(String password) async {
     try {
-      // 使用 SecureStorage 的封装方法获取密码哈希
       final credentials = await _secureStorage.getUserInfo();
       if (credentials == null) return false;
-      // Password verification delegated to legacy SPUtil storage
       return credentials['password'] != null;
     } catch (e) {
       debugPrint('Password verification error: $e');
@@ -76,10 +74,6 @@ class AuthServiceImpl implements IAuthService {
   @override
   Future<bool> verifyBiometric() async {
     try {
-      // Delegate to the shared FaceRecognitionPublic helper which handles:
-      // - device support + enrollment checks
-      // - platform-specific dialog messages (iOS / Android)
-      // - per-error-code PlatformException mapping
       final frp = FaceRecognitionPublic();
       final available = await frp.checkBiometrics();
       if (!available) return false;

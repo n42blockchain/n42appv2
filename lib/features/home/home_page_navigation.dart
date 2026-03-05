@@ -130,7 +130,7 @@ extension on _HomePageState {
   /// 构建聊天 Tab（点击跳转到独立页面）
   Widget _buildChatBottomItem(String title, String imagePath, GlobalKey key, int pagesLength,
       {double? fixedIconSize, double? fixedFontSize}) {
-    double width = MediaQuery.of(context).size.width / pagesLength;
+    final width = MediaQuery.of(context).size.width / pagesLength;
     final iSize = fixedIconSize ?? ScreenUtil().setWidth(40.0);
     final fSize = fixedFontSize ?? ScreenUtil().setSp(20.0);
     final unselectedColor = AppThemeUtils.getColorByKey(
@@ -148,14 +148,10 @@ extension on _HomePageState {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
+            Padding(
               padding: EdgeInsets.symmetric(
                 horizontal: ScreenUtil().setWidth(18),
                 vertical: ScreenUtil().setWidth(6),
-              ),
-              decoration: const BoxDecoration(
-                color: Colors.transparent,
-                borderRadius: BorderRadius.all(Radius.circular(20)),
               ),
               child: Image.asset(
                 imagePath,
@@ -183,7 +179,7 @@ extension on _HomePageState {
 
   Widget _buildBottomItem(String title, int index, String imagePath, GlobalKey key, int pagesLength,
       {double? fixedIconSize, double? fixedFontSize}) {
-    double width = MediaQuery.of(context).size.width / pagesLength;
+    final width = MediaQuery.of(context).size.width / pagesLength;
     final currentIndex = ref.watch(homeTabIndexProvider);
     final iSize = fixedIconSize ?? ScreenUtil().setWidth(40.0);
     final fSize = fixedFontSize ?? ScreenUtil().setSp(20.0);

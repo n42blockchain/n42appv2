@@ -204,7 +204,7 @@ mixin AirdropHomeLogicMixin on State<AirdropHomePage> {
           SizedBox(height: ScreenUtil().setWidth(16)),
           ElevatedButton(
             onPressed: p.refresh,
-            child: Text('Retry'),
+            child: const Text('Retry'),
           ),
         ],
       ),

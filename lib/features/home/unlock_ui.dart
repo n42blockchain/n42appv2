@@ -8,7 +8,7 @@ extension on _UnlockState {
     final lockState = ref.watch(screenLockProvider);
 
     String textspanStr = S.of(context).g_unlock_key2;
-    List<Widget> columns = [];
+    final columns = <Widget>[];
 
     if (lockState.faceEnabled && faceShow == false) {
       columns.add(const Expanded(flex: 1, child: SizedBox()));
@@ -61,9 +61,7 @@ extension on _UnlockState {
                   } else {
                     gestureErrorCount++;
                     if (gestureErrorCount >= 3) {
-                      setState(() {
-                        gestureShow = true;
-                      });
+                      setState(() => gestureShow = true);
                     }
                   }
                 },
@@ -105,7 +103,7 @@ extension on _UnlockState {
 
     columns.add(_buildBottomRichText(textspanStr));
 
-    Widget stack = Stack(
+    final stack = Stack(
       children: [
         Positioned(
           top: ScreenUtil().setWidth(120.0),
@@ -134,6 +132,7 @@ extension on _UnlockState {
   }
 
   List<Widget> _buildPasswordUI(ScreenLockState lockState) {
+    final remaining = 3 - passwordErrorCount;
     return [
       Container(
         margin: EdgeInsets.only(top: ScreenUtil().setWidth(60.0)),
@@ -159,9 +158,9 @@ extension on _UnlockState {
           height: ScreenUtil().setWidth(120.0),
           alignment: Alignment.center,
           child: Text(
-            3 - passwordErrorCount == 1
-                ? S.of(context).g_unlock_key8(3 - passwordErrorCount)
-                : S.of(context).g_unlock_key6(3 - passwordErrorCount),
+            remaining == 1
+                ? S.of(context).g_unlock_key8(remaining)
+                : S.of(context).g_unlock_key6(remaining),
             style: TextStyle(
               color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
               fontSize: ScreenUtil().setSp(32.0),
@@ -177,8 +176,8 @@ extension on _UnlockState {
           scrollDirection: Axis.horizontal,
           itemCount: 6,
           itemBuilder: (context, int index) {
-            double width = (MediaQuery.of(context).size.width - ScreenUtil().setWidth(180.0)) / 6;
-            bool isInput = inputPassword.length >= index + 1;
+            final width = (MediaQuery.of(context).size.width - ScreenUtil().setWidth(180.0)) / 6;
+            final isInput = inputPassword.length >= index + 1;
             return Container(
               width: width,
               height: ScreenUtil().setWidth(36.0),
@@ -197,8 +196,7 @@ extension on _UnlockState {
         ),
       ),
       Expanded(
-        flex: 1,
-        child: Container(
+        child: Padding(
           padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(120.0)),
           child: GridView.count(
             crossAxisCount: 3,
@@ -225,10 +223,9 @@ extension on _UnlockState {
               }
               return InkWell(
                 onTap: () {
-                  if (index == 10) {
-                    // empty button — no action
-                  } else if (index == 11) {
-                    if (inputPassword == "") return;
+                  if (index == 10) return;
+                  if (index == 11) {
+                    if (inputPassword.isEmpty) return;
                     inputPassword = inputPassword.substring(0, inputPassword.length - 1);
                   } else {
                     inputPassword = '$inputPassword$title';

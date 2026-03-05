@@ -5,15 +5,5 @@
 //
 // Author: Jiang Yiwei
 
-// Settings Feature Module
-//
-// Handles application settings:
-// - Theme settings
-// - Language settings
-// - Security settings
-// - Account settings
-
-// Presentation
 export 'presentation/pages/setting_theme_page.dart';
 export 'presentation/pages/setting_language_page.dart';
-

@@ -162,7 +162,7 @@ mixin AirdropHomeWidgetsMixin on State<AirdropHomePage>, AirdropHomeLogicMixin {
             return Center(
               child: Padding(
                 padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
-                child: CircularProgressIndicator(),
+                child: const CircularProgressIndicator(),
               ),
             );
           }
@@ -204,7 +204,7 @@ mixin AirdropHomeWidgetsMixin on State<AirdropHomePage>, AirdropHomeLogicMixin {
                         color: Colors.grey.withValues(alpha: 30 / 255),
                         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
                       ),
-                      child: Icon(Icons.token, color: Colors.grey),
+                      child: const Icon(Icons.token, color: Colors.grey),
                     ),
                   ),
                 ),
@@ -260,7 +260,7 @@ mixin AirdropHomeWidgetsMixin on State<AirdropHomePage>, AirdropHomeLogicMixin {
                 buildChainTag(airdrop.chainSymbol),
                 SizedBox(width: ScreenUtil().setWidth(8)),
                 buildTypeTag(airdrop.type),
-                Spacer(),
+                const Spacer(),
                 if (airdrop.estimatedValueUsd != null)
                   Text(
                     '~\$${airdrop.estimatedValueUsd!.toStringAsFixed(0)}',

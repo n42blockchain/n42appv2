@@ -291,7 +291,7 @@ class _HWLoadMoreButton extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: su.setWidth(16)),
       child: isLoading
-          ? Center(child: CircularProgressIndicator(strokeWidth: 2))
+          ? const Center(child: CircularProgressIndicator(strokeWidth: 2))
           : TextButton(
               onPressed: onLoadMore,
               child: Text(

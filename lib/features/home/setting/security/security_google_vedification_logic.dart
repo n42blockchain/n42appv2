@@ -23,7 +23,6 @@ mixin _SecurityGoogleVedificationLogic
 
   String walletName = "";
 
-  //账号安全
   Map<String, dynamic> securityMap = {
     "email": false,
     "google": false,
@@ -43,7 +42,6 @@ mixin _SecurityGoogleVedificationLogic
     _loadSecuritySettings();
   }
 
-  // 加载钱包名 - 使用 IWalletService 替代 WalletActionProvider
   Future<void> _loadWalletName() async {
     final walletService = ServiceLocatorSetup.walletService;
     if (walletService == null) {
@@ -56,7 +54,6 @@ mixin _SecurityGoogleVedificationLogic
     setState(() {});
   }
 
-  //加载安全设置
   Future<void> _loadSecuritySettings() async {
     Map<String, dynamic>? s = await SPUtil().getSecurity();
     if (s != null) {
@@ -72,7 +69,6 @@ mixin _SecurityGoogleVedificationLogic
     }
   }
 
-  //获取邮箱验证码
   Future<void> getEmailVerification() async {
     if (emailLoad == Load.loading) return;
     if (emailSendWait) return;
@@ -93,13 +89,10 @@ mixin _SecurityGoogleVedificationLogic
     });
   }
 
-  //开启emailsendwait倒计时
   void _startEmailCountdown() {
-    Timer(Duration(seconds: 1), () {
-      setState(() {
-        emailSendWaitNum--;
-      });
-      debugPrint('$emailSendWaitNum');
+    Timer(const Duration(seconds: 1), () {
+      if (!mounted) return;
+      setState(() => emailSendWaitNum--);
       if (emailSendWaitNum <= 0) {
         emailSendWaitNum = 60;
         emailSendWait = false;
@@ -109,31 +102,28 @@ mixin _SecurityGoogleVedificationLogic
     });
   }
 
-  // 验证密码 - 使用 SPUtil 直接读取钱包信息验证密码
   Future<bool> checkPwd() async {
-    String pwdStr = pwdTextEditingController.text;
-    if (pwdStr == "") {
+    final pwdStr = pwdTextEditingController.text;
+    if (pwdStr.isEmpty) {
       setState(() {
         pwdErrorMessage = S.of(context).g_key_t_33;
       });
       return false;
     }
 
-    // 从 SPUtil 获取钱包列表进行密码验证
-    Map<String, dynamic>? walletAll = await SPUtil().getWalletInfo();
+    final walletAll = await SPUtil().getWalletInfo();
     WalletInfo? walletInfo;
 
     if (walletAll != null) {
-      String userUUID = AppGlobals.userInfo?.uuid ?? "";
-      Map<String, dynamic>? walletUser = walletAll[userUUID];
+      final userUUID = AppGlobals.userInfo?.uuid ?? "";
+      final walletUser = walletAll[userUUID] as Map<String, dynamic>?;
       if (walletUser != null) {
-        List<dynamic> walletInfos = walletUser["wallet"] ?? [];
-        List<WalletInfo> walletList = walletInfos
+        final walletInfos = walletUser["wallet"] as List<dynamic>? ?? [];
+        final walletList = walletInfos
             .map((e) => WalletInfo.fromJson(e as Map<String, dynamic>))
             .toList();
 
-        // 查找主钱包
-        int mainIndex = walletList.indexWhere((e) => e.mainWallet == true);
+        final mainIndex = walletList.indexWhere((e) => e.mainWallet == true);
         if (mainIndex != -1) {
           walletInfo = walletList[mainIndex];
         } else if (walletList.isNotEmpty) {
@@ -142,7 +132,7 @@ mixin _SecurityGoogleVedificationLogic
       }
     }
 
-    String oldPwdStr = walletInfo?.password ?? "";
+    final oldPwdStr = walletInfo?.password ?? "";
     if (oldPwdStr != pwdStr) {
       setState(() {
         pwdErrorMessage = S.of(context).g_key_t_34;
@@ -155,10 +145,9 @@ mixin _SecurityGoogleVedificationLogic
     return true;
   }
 
-  //验证邮箱验证码
   Future<bool> checkEmailVerification() async {
-    String codeStr = emailTextEditingController.text;
-    if (codeStr == "") {
+    final codeStr = emailTextEditingController.text;
+    if (codeStr.isEmpty) {
       setState(() {
         emailErrorMessage = S.of(context).rest_Please_enter;
       });
@@ -184,10 +173,9 @@ mixin _SecurityGoogleVedificationLogic
     }
   }
 
-  //谷歌验证
   Future<bool> checkGoogleVerification() async {
-    String codeStr = googleTextEditingController.text.trim();
-    if (codeStr == "") {
+    final codeStr = googleTextEditingController.text.trim();
+    if (codeStr.isEmpty) {
       setState(() {
         googleErrorMessage = S.of(context).rest_Please_enter;
       });
@@ -217,19 +205,17 @@ mixin _SecurityGoogleVedificationLogic
     }
   }
 
-  //保存设置
   Future<void> _saveSecurity() async {
-    SPUtil sPUtils = SPUtil();
-    Map<String, dynamic>? s = await sPUtils.getSecurity();
+    final spUtils = SPUtil();
+    Map<String, dynamic>? s = await spUtils.getSecurity();
     s ??= {};
     s[AppGlobals.userInfo?.uuid ?? ""] = securityMap;
-    await sPUtils.setSecurity(s);
+    await spUtils.setSecurity(s);
     setState(() {});
   }
 
-  //关闭键盘
   void closeKeyboard() {
-    FocusScope.of(context).requestFocus(FocusNode());
+    FocusScope.of(context).unfocus();
   }
 
   /// Handle submit button press - validate all fields and save.

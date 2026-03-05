@@ -53,21 +53,21 @@ class _AirdropHomePageState extends State<AirdropHomePage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Airdrop Tracker'),
+        title: const Text('Airdrop Tracker'),
         actions: [
           IconButton(
-            icon: Icon(Icons.filter_list),
+            icon: const Icon(Icons.filter_list),
             onPressed: showFilterSheet,
           ),
           IconButton(
-            icon: Icon(Icons.notifications_outlined),
+            icon: const Icon(Icons.notifications_outlined),
             onPressed: showNotificationSettings,
           ),
         ],
         bottom: TabBar(
           controller: tabController,
           isScrollable: true,
-          tabs: [
+          tabs: const [
             Tab(text: 'All'),
             Tab(text: 'Claimable'),
             Tab(text: 'Upcoming'),
@@ -80,7 +80,7 @@ class _AirdropHomePageState extends State<AirdropHomePage>
         builder: (context, _) {
           if (provider.loadState == AirdropLoadState.loading &&
               provider.airdrops.isEmpty) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
 
           if (provider.loadState == AirdropLoadState.error) {

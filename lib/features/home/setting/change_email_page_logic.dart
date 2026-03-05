@@ -13,16 +13,11 @@ import 'package:n42_wallet/features/home/setting/change_email_page.dart';
 import 'package:n42_wallet/features/login/api/user_info_api.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 
-/// Logic mixin for [ChangeEmailPage].
-///
-/// Contains all state fields, validation helpers, and API interaction methods.
 mixin ChangeEmailPageLogicMixin on State<ChangeEmailPage> {
-  // ── Step ────────────────────────────────────────────────────────────────────
   int step = 0;
-  bool chatAvailable = false; // Chat 已初始化且已登录
-  bool chatSyncEnabled = true; // 用户是否开启 Chat 同步
+  bool chatAvailable = false;
+  bool chatSyncEnabled = true;
 
-  // ── Controllers ─────────────────────────────────────────────────────────────
   final emailCtrl = TextEditingController();
   final passwordCtrl = TextEditingController();
   final n42CodeCtrl = TextEditingController();
@@ -33,26 +28,20 @@ mixin ChangeEmailPageLogicMixin on State<ChangeEmailPage> {
   final chatCodeFocus = FocusNode();
   bool obscurePassword = true;
 
-  // ── Loading ──────────────────────────────────────────────────────────────────
   bool sendingN42Code = false;
   bool confirmingN42 = false;
   bool requestingChatCode = false;
   bool confirmingChat = false;
 
-  // ── State flags ──────────────────────────────────────────────────────────────
   bool chatCodeSent = false;
 
-  // ── Errors ───────────────────────────────────────────────────────────────────
   String? emailError;
   String? passwordError;
   String? n42CodeError;
-  String? chatSyncError; // Chat 同步过程中的错误（请求码 / 确认均用此字段）
+  String? chatSyncError;
 
-  // ── Countdown ────────────────────────────────────────────────────────────────
   int countdown = 0;
   Timer? countdownTimer;
-
-  // ─── Lifecycle helpers ─────────────────────────────────────────────────────
 
   void initLogic() {
     chatAvailable = N42Chat.isInitialized && N42Chat.isLoggedIn;

@@ -63,18 +63,15 @@ class _MessageListState extends ConsumerState<MessageList> {
           if (dateFmt.format(DateTime.now()) == map["showDate"]) {
             map["showDate"] = S.of(context).g_chat_key_61;
           }
-          String showData2="";
-          if(index !=0){
-            showData2=results[index-1]['showDate'];
-          }
+          final showData2 = index != 0 ? results[index - 1]['showDate'] as String : "";
           Map<String, dynamic> txContent = {};
           try {
             txContent = json.decode(map['content']);
           } catch (e) {
             debugPrint("json err:${e.toString()}");
           }
-          String coin = txContent['coin'] ?? "";
-          String msgType = map['msg_type'] ?? "";
+          final coin = txContent['coin'] as String? ?? "";
+          final msgType = map['msg_type'] as String? ?? "";
           switch (msgType) {
             case "tokens_received":
             case "tokens_sent":
@@ -184,7 +181,7 @@ class _MessageListState extends ConsumerState<MessageList> {
             page: page,
             pageSize: pageSize,
           );
-          if (marketData.error == false && marketData.data != null) {
+          if (!marketData.error && marketData.data != null) {
             return (marketData.data['list'] as List);
           }
           return [];

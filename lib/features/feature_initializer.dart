@@ -62,14 +62,12 @@ class FeatureInitializer {
       throw StateError('Feature $featureId not registered');
     }
 
-    // Ensure dependencies are initialized first
     for (final depId in feature.dependencies) {
       if (!_initializedFeatures.contains(depId)) {
         await _initializeFeature(depId);
       }
     }
 
-    // Initialize the feature
     try {
       await feature.initialize();
       _initializedFeatures.add(featureId);
@@ -117,7 +115,6 @@ class FeatureInitializer {
 
   /// Dispose all features
   Future<void> disposeAll() async {
-    // Dispose in reverse order of initialization
     final features = _initializedFeatures.toList().reversed;
 
     for (final featureId in features) {

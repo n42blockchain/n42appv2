@@ -23,41 +23,24 @@ mixin TasksLogicMixin on State<TasksPage> {
     }
   }
 
-  Color _getTaskColor(TaskType type) {
-    switch (type) {
-      case TaskType.dailyCheckIn:
-        return Colors.amber;
-      case TaskType.transaction:
-        return Colors.blue;
-      case TaskType.referral:
-        return Colors.green;
-      case TaskType.staking:
-        return Colors.purple;
-      case TaskType.dappUsage:
-        return Colors.orange;
-      case TaskType.social:
-        return Colors.pink;
-      case TaskType.special:
-        return Colors.red;
-    }
-  }
+  Color _getTaskColor(TaskType type) => switch (type) {
+        TaskType.dailyCheckIn => Colors.amber,
+        TaskType.transaction => Colors.blue,
+        TaskType.referral => Colors.green,
+        TaskType.staking => Colors.purple,
+        TaskType.dappUsage => Colors.orange,
+        TaskType.social => Colors.pink,
+        TaskType.special => Colors.red,
+      };
 
-  String _getButtonText(LoyaltyTask task) {
-    switch (task.type) {
-      case TaskType.dailyCheckIn:
-        return 'Check In';
-      case TaskType.social:
-        return task.actionUrl != null ? 'Go →' : 'Follow';
-      case TaskType.referral:
-        return 'Invite Friends';
-      case TaskType.dappUsage:
-        return task.actionUrl != null ? 'Open →' : 'Complete';
-      case TaskType.staking:
-        return task.actionUrl != null ? 'Go Stake →' : 'Complete';
-      default:
-        return 'Complete';
-    }
-  }
+  String _getButtonText(LoyaltyTask task) => switch (task.type) {
+        TaskType.dailyCheckIn => 'Check In',
+        TaskType.social => task.actionUrl != null ? 'Go →' : 'Follow',
+        TaskType.referral => 'Invite Friends',
+        TaskType.dappUsage => task.actionUrl != null ? 'Open →' : 'Complete',
+        TaskType.staking => task.actionUrl != null ? 'Go Stake →' : 'Complete',
+        _ => 'Complete',
+      };
 
   String _getExpiryText(DateTime expiresAt) {
     final diff = expiresAt.difference(DateTime.now());
