@@ -185,8 +185,13 @@ class MarketApi {
   }
 
   /// 硬编码热门币列表，当 CoinGecko trending 不可用时作为 fallback。
+  /// 覆盖 Top 50 主流币种（按市值排序），确保 proxy 不可用时仍有丰富展示。
   static const String _fallbackTrendingSymbols =
-      'btc,eth,sol,bnb,xrp,ada,avax,doge,dot,link';
+      'btc,eth,sol,bnb,xrp,ada,avax,doge,dot,link,'
+      'trx,matic,shib,ltc,atom,uni,xlm,near,apt,icp,'
+      'fil,arb,op,sui,sei,inj,vet,algo,ftm,hbar,'
+      'mana,sand,gala,aave,mkr,ldo,snx,crv,rune,egld,'
+      'grt,ape,imx,mina,flow,kas,ton,stx,ondo,pepe';
 
   /// 从 N42 后端获取 fallback trending 数据。
   ///
