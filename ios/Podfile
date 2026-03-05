@@ -61,6 +61,8 @@ post_install do |installer|
       config.build_settings['SWIFT_SUPPRESS_WARNINGS'] = 'YES'
       # 只排除 i386 架构，保留 arm64 用于 Apple Silicon 模拟器
       config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'i386'
+      # 使用 classic 链接器避免 clang linker segfault
+      config.build_settings['OTHER_LDFLAGS'] = '$(inherited) -ld_classic'
 
       # Fix fluwx WXApi.h not found issue for simulator builds
       if target.name == 'fluwx'
