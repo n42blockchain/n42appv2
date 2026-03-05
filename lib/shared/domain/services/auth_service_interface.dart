@@ -7,30 +7,14 @@
 
 import 'package:n42_wallet/shared/domain/entities/wallet_info.dart';
 
-/// Auth Service Interface
-///
-/// Shared interface for authentication operations that can be used across features.
-/// This prevents circular dependencies while allowing access to auth state.
+/// Shared interface for authentication across features.
 abstract class IAuthService {
-  /// Check if user is logged in
   bool isLoggedIn();
-
-  /// Get current user info
   SharedUserInfo? getCurrentUser();
-
-  /// Get current auth token
   Future<String?> getAuthToken();
-
-  /// Verify user password
   Future<bool> verifyPassword(String password);
-
-  /// Verify biometric authentication
   Future<bool> verifyBiometric();
-
-  /// Stream of auth state changes
   Stream<bool> get authStateStream;
-
-  /// Logout current user
   Future<void> logout();
 }
 

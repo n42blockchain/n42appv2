@@ -7,45 +7,36 @@
 
 import 'package:n42_wallet/shared/domain/entities/wallet_info.dart';
 
-/// Cross-Feature Event Types
+/// Base class for all cross-feature events.
 ///
-/// Events that need to be communicated across feature boundaries.
-/// Features emit and listen for these events through the EventBus
+/// Events communicated across feature boundaries via EventBus
 /// without direct dependencies.
-
-// ============ Base Event ============
-
-/// Base class for all cross-feature events
 abstract class CrossFeatureEvent {
   final DateTime timestamp;
   
   CrossFeatureEvent() : timestamp = DateTime.now();
 }
 
-// ============ Wallet Events ============
+// — Wallet Events —
 
-/// Emitted when a wallet is selected/changed
 class WalletSelectedEvent extends CrossFeatureEvent {
   final SharedWalletInfo wallet;
   
   WalletSelectedEvent(this.wallet);
 }
 
-/// Emitted when a wallet is created
 class WalletCreatedEvent extends CrossFeatureEvent {
   final SharedWalletInfo wallet;
   
   WalletCreatedEvent(this.wallet);
 }
 
-/// Emitted when a wallet is deleted
 class WalletDeletedEvent extends CrossFeatureEvent {
   final String walletAddress;
   
   WalletDeletedEvent(this.walletAddress);
 }
 
-/// Emitted when wallet balance is updated
 class WalletBalanceUpdatedEvent extends CrossFeatureEvent {
   final String walletAddress;
   final String coinSymbol;
@@ -58,7 +49,6 @@ class WalletBalanceUpdatedEvent extends CrossFeatureEvent {
   });
 }
 
-/// Emitted when a transaction is completed
 class TransactionCompletedEvent extends CrossFeatureEvent {
   final String walletAddress;
   final String txHash;
@@ -75,11 +65,11 @@ class TransactionCompletedEvent extends CrossFeatureEvent {
   });
 }
 
-// ============ Mining Events ============
+// — Mining Events —
 
-/// Emitted when mining status changes
+/// [status] is one of: 'started', 'stopped', 'paused'.
 class MiningStatusChangedEvent extends CrossFeatureEvent {
-  final String status; // 'started', 'stopped', 'paused'
+  final String status;
   final String? walletAddress;
   
   MiningStatusChangedEvent({
@@ -88,7 +78,6 @@ class MiningStatusChangedEvent extends CrossFeatureEvent {
   });
 }
 
-/// Emitted when mining reward is received
 class MiningRewardReceivedEvent extends CrossFeatureEvent {
   final String reward;
   final String walletAddress;
@@ -99,7 +88,6 @@ class MiningRewardReceivedEvent extends CrossFeatureEvent {
   });
 }
 
-/// Emitted when mining plan is changed
 class MiningPlanChangedEvent extends CrossFeatureEvent {
   final String planId;
   final String planName;
@@ -110,16 +98,14 @@ class MiningPlanChangedEvent extends CrossFeatureEvent {
   });
 }
 
-// ============ Chat Events ============
+// — Chat Events —
 
-/// Emitted when unread message count changes
 class UnreadMessageCountChangedEvent extends CrossFeatureEvent {
   final int count;
   
   UnreadMessageCountChangedEvent(this.count);
 }
 
-/// Emitted when new message is received
 class NewMessageReceivedEvent extends CrossFeatureEvent {
   final String conversationId;
   final String messageId;
@@ -132,9 +118,8 @@ class NewMessageReceivedEvent extends CrossFeatureEvent {
   });
 }
 
-// ============ Auth Events ============
+// — Auth Events —
 
-/// Emitted when user logs in
 class UserLoggedInEvent extends CrossFeatureEvent {
   final String userUuid;
   final String? email;
@@ -145,20 +130,15 @@ class UserLoggedInEvent extends CrossFeatureEvent {
   });
 }
 
-/// Emitted when user logs out
 class UserLoggedOutEvent extends CrossFeatureEvent {}
 
-// ============ App Lifecycle Events ============
+// — App Lifecycle Events —
 
-/// Emitted when app goes to background
 class AppBackgroundedEvent extends CrossFeatureEvent {}
 
-/// Emitted when app comes to foreground
 class AppForegroundedEvent extends CrossFeatureEvent {}
 
-/// Emitted when screen is locked
 class ScreenLockedEvent extends CrossFeatureEvent {}
 
-/// Emitted when screen is unlocked
 class ScreenUnlockedEvent extends CrossFeatureEvent {}
 
