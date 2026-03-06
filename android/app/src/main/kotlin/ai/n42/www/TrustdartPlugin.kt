@@ -576,6 +576,17 @@ class TrustdartPlugin: FlutterPlugin, MethodCallHandler {
                             channel.invokeMethod("onClientError", ex.message)
                             null
                         }
+                    // 启动前台服务显示持续通知（挖矿运行中）
+                    val serviceIntent = Intent(context, WebSocketService::class.java).apply {
+                        putExtra("wsUrl", wsUrl)
+                        putExtra("validatorPubkey", "")
+                        putExtra("validatorPrivateKey", validatorPrivateKey)
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        context.startForegroundService(serviceIntent)
+                    } else {
+                        context.startService(serviceIntent)
+                    }
                     result.success("Client started")
                 } catch (e: Exception) {
                     result.error("ClientError", e.message, null)
@@ -585,6 +596,8 @@ class TrustdartPlugin: FlutterPlugin, MethodCallHandler {
                 try {
                     runClientFuture?.cancel(true)
                     runClientFuture = null
+                    // 停止前台服务通知
+                    context.stopService(Intent(context, WebSocketService::class.java))
                     result.success("Client stopped")
                 } catch (e: Exception) {
                     result.error("StopClientError", e.message, null)

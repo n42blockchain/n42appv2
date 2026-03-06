@@ -4,6 +4,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
 import android.content.Intent
+import android.content.pm.ServiceInfo
 import android.os.Build
 import android.os.Handler
 import android.os.IBinder
@@ -61,7 +62,15 @@ class WebSocketService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        startForeground(NOTIFICATION_ID, createNotification())
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            startForeground(
+                NOTIFICATION_ID,
+                createNotification(),
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
+            )
+        } else {
+            startForeground(NOTIFICATION_ID, createNotification())
+        }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -70,6 +79,11 @@ class WebSocketService : Service() {
         val newPrivKey = intent?.getStringExtra("validatorPrivateKey")
 
         if (newUrl == null || newPubkey == null || newPrivKey == null) {
+            return START_NOT_STICKY
+        }
+
+        // pubkey 为空时仅用于显示前台通知（MiningRunClient 场景），不启动 WebSocket
+        if (newPubkey.isEmpty()) {
             return START_NOT_STICKY
         }
 
@@ -148,9 +162,15 @@ class WebSocketService : Service() {
             manager.createNotificationChannel(channel)
         }
 
+        val pubkey = validatorPubkey
+        val contentText = if (pubkey.isNullOrEmpty())
+            "Mining node is running"
+        else
+            "Listening for verification requests"
+
         return NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle("N42 Node Running")
-            .setContentText("Listening for verification requests")
+            .setContentText(contentText)
             .setSmallIcon(android.R.drawable.stat_sys_upload)
             .setOngoing(true)
             .build()
