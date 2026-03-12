@@ -7,7 +7,6 @@ import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/core/token_discovery/discovered_token.dart';
 import 'package:n42_wallet/core/token_discovery/token_discovery_service.dart';
-import 'package:n42_wallet/core/utils/responsive_utils.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/component/enums/load.dart';
@@ -275,8 +274,7 @@ class _WalletPageState extends ConsumerState<WalletPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: ResponsiveContainer(
-          child: Builder(builder: (context) {
+        child: Builder(builder: (context) {
             final waValue = ref.watch(wapBridgeProvider);
 
             if (waValue.walletIndex == -1 || waValue.buildwallet) {
@@ -468,7 +466,6 @@ class _WalletPageState extends ConsumerState<WalletPage> {
               ],
             );
           }),
-        ),
       ),
     );
   }

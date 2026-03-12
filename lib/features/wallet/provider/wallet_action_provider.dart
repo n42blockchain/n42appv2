@@ -9,6 +9,7 @@ import 'package:n42_wallet/features/wallet/presentation/providers/transaction_pr
 import 'package:n42_wallet/features/models/message_model.dart';
 import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
+import 'package:n42_wallet/core/security/secure_storage.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/shared/di/service_locator.dart';
 import 'package:n42_wallet/core/network/external_http.dart';

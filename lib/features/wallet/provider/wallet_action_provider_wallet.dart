@@ -22,10 +22,12 @@ extension WalletActionProviderWallet on WalletActionProvider {
       final walletUser = walletAll[userUUID];
       if (walletUser != null) {
         _loadWalletList(walletUser);
+        await _restoreMnemonics();
       } else {
         final walletDefault = walletAll["AstranetWallet"];
         if (walletDefault != null) {
           _loadWalletList(walletDefault);
+          await _restoreMnemonics();
           walletAll[userUUID] = walletDefault;
           walletAll.remove("AstranetWallet");
           await SPUtil().setWalletInfo(walletAll);
@@ -38,17 +40,29 @@ extension WalletActionProviderWallet on WalletActionProvider {
     refresh();
   }
 
+  /// 从 SecureStorage 恢复被 WalletDataMigration 清除的 mnemonic
+  Future<void> _restoreMnemonics() async {
+    final secureStorage = SecureStorage();
+    for (int i = 0; i < _walletInfoLsit.length; i++) {
+      final wallet = _walletInfoLsit[i];
+      if (wallet.hasMnemonic) continue;
+      final walletId = wallet.timestamp ?? '${userUUID}_$i';
+      final mnemonic = await secureStorage.getMnemonic(walletId);
+      if (mnemonic != null && mnemonic.isNotEmpty) {
+        wallet.mnemonic = mnemonic;
+        if (kDebugMode) debugPrint('WalletActionProvider: Restored mnemonic for wallet $walletId');
+      }
+    }
+  }
+
   Future<void> initWallet({bool shouldInitCoinInfo=false})async{
     if(buildwallet==true)return;
     buildwallet=true;
-    try {
-      await getWalletInfo();
-      await _syncNewChains();
-      await buildCoinModel();
-    } finally {
-      buildwallet=false;
-      refresh();
-    }
+    await getWalletInfo();
+    await _syncNewChains();
+    await buildCoinModel();
+    buildwallet=false;
+    refresh();
     if(shouldInitCoinInfo){
       eventBus.fire(EventPublic(EventPublicType.selectWallet,
           intValue: walletIndex,stringValue: "wallet"));
@@ -119,6 +133,11 @@ extension WalletActionProviderWallet on WalletActionProvider {
         walletMiningIndex=walletIndex;
       }
       await saveWalletInfo(newWalletInfo,walletIndex,isNewWallet: true);
+      // 同步将 mnemonic/privateKey 写入 SecureStorage，防止迁移清除 JSON 后丢失
+      if (info.hasMnemonic) {
+        final walletId = info.timestamp ?? '${userUUID}_$walletIndex';
+        await SecureStorage().saveMnemonic(walletId: walletId, mnemonic: info.mnemonic!);
+      }
       initWallet(shouldInitCoinInfo: true);
       refresh();
     }catch(e){

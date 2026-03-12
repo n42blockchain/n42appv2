@@ -54,6 +54,7 @@ import 'package:n42_wallet/core/config/rpc_config.dart';
 import 'package:n42_wallet/core/security/phishing_detector.dart';
 import 'package:n42_wallet/core/security/secure_storage.dart';
 import 'package:n42_wallet/core/security/wallet_data_migration.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:n42_wallet/features/wallet/n42_api_hub_bridge.dart';
 import 'package:n42_wallet/features/wallet/n42_wallet_bridge.dart';
@@ -88,6 +89,10 @@ void main() async {
       DeviceOrientation.portraitDown,
     ]);
   }
+
+  // 首次安装检测：NSUserDefaults 卸载时会被清除，Keychain 不会
+  // 利用这个差异，在重新安装后清除残留的 Keychain 数据
+  await _clearKeychainOnFreshInstall();
 
   // Initialize Firebase
   await Firebase.initializeApp();
@@ -148,6 +153,34 @@ void main() async {
     ),
   );
 }
+
+/// 首次安装后清除残留 Keychain 数据
+///
+/// iOS Keychain 默认跨 App 重装保留。通过 SharedPreferences（NSUserDefaults）
+/// 的标志位判断是否为全新安装：NSUserDefaults 在卸载时会被清除，Keychain 不会。
+Future<void> _clearKeychainOnFreshInstall() async {
+  if (!Platform.isIOS) return;
+  try {
+    const flagKey = 'n42_keychain_initialized';
+    final prefs = await SharedPreferences.getInstance();
+    final initialized = prefs.getBool(flagKey) ?? false;
+    if (!initialized) {
+      // 全新安装：清除所有残留 Keychain 数据
+      const storage = FlutterSecureStorage(
+        iOptions: IOSOptions(
+          accessibility: KeychainAccessibility.first_unlock_this_device,
+          accountName: 'n42wallet_prefs',
+        ),
+      );
+      await storage.deleteAll();
+      if (kDebugMode) debugPrint('[main] Fresh install detected, Keychain cleared');
+      await prefs.setBool(flagKey, true);
+    }
+  } catch (e) {
+    if (kDebugMode) debugPrint('[main] _clearKeychainOnFreshInstall error: $e');
+  }
+}
+
 /// Main Application Widget
 ///
 /// Uses Riverpod for state management.
