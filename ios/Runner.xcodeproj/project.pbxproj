@@ -444,9 +444,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -520,9 +524,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -666,7 +674,7 @@
 				DEVELOPMENT_TEAM = CFRXH38L48;
 				ENABLE_BITCODE = NO;
 				FLUTTER_BUILD_NAME = 1.0.16;
-				FLUTTER_BUILD_NUMBER = 47;
+				FLUTTER_BUILD_NUMBER = 48;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/DKImagePickerController\"",
@@ -1235,7 +1243,7 @@
 				DEVELOPMENT_TEAM = CFRXH38L48;
 				ENABLE_BITCODE = NO;
 				FLUTTER_BUILD_NAME = 1.0.16;
-				FLUTTER_BUILD_NUMBER = 47;
+				FLUTTER_BUILD_NUMBER = 48;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/DKImagePickerController\"",
@@ -1516,7 +1524,7 @@
 				DEVELOPMENT_TEAM = CFRXH38L48;
 				ENABLE_BITCODE = NO;
 				FLUTTER_BUILD_NAME = 1.0.16;
-				FLUTTER_BUILD_NUMBER = 47;
+				FLUTTER_BUILD_NUMBER = 48;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/DKImagePickerController\"",
