@@ -2160,7 +2160,7 @@ import WalletCore
             coinType=CoinType.zilliqa
             break
         default:
-            coinType = nil
+            coinType = CoinType.ethereum
         }
         return coinType
     }

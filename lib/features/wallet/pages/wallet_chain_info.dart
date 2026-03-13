@@ -233,7 +233,7 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
       _chainName = coin['name'];
       _chainSymbol = coin['miniName'];
       browserUrl = getBrowserAddress(
-        coin['coinType'], cm.address,
+        coin['coinType'], cm.address??"",
         isTest: cm.isTest,
       );
     }

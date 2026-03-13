@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/pay/moonpay/moonpay.dart';
@@ -120,17 +122,18 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
       label: l10n.g_key_196,
       onTap: () => pushAndClose(BrowserPage(browserUrl)),
     );
-    addItem(
-      icon: Image.asset('assets/wallet/w_buy.png', color: _blue),
-      label: l10n.g_key_211,
-      onTap: () => pushAndClose(Moonpay(coinModel: coinModel)),
-    );
-    addItem(
-      icon: Image.asset('assets/wallet/w_sell.png', color: _blue),
-      label: l10n.g_key_212,
-      onTap: () => pushAndClose(Moonpay(coinModel: coinModel, type: 1)),
-    );
-
+    if(Platform.isAndroid){
+      addItem(
+        icon: Image.asset('assets/wallet/w_buy.png', color: _blue),
+        label: l10n.g_key_211,
+        onTap: () => pushAndClose(Moonpay(coinModel: coinModel)),
+      );
+      addItem(
+        icon: Image.asset('assets/wallet/w_sell.png', color: _blue),
+        label: l10n.g_key_212,
+        onTap: () => pushAndClose(Moonpay(coinModel: coinModel, type: 1)),
+      );
+    }
     // Batch Transfer — EVM chains only
     if (coinModel.coin['blockchainType'] == BlockchainType.Ethereum.name) {
       childs.add(_divider());
