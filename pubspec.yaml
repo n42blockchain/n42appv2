@@ -2,7 +2,7 @@ name: n42_wallet
 description: "N42 Wallet - Enterprise cryptocurrency wallet application"
 publish_to: 'none'
 
-version: 2.3.536+33
+version: 2.3.536+34
 
 environment:
   sdk: ^3.9.2
@@ -142,8 +142,7 @@ dependencies:
 
   # === N42 Chat Module ===
   n42_chat:
-    git: https://github.com/n42blockchain/n42_chat
-    #path: /Users/jieliu/Documents/n42/n42_chat
+    path: ../n42_chat
 
 dependency_overrides:
   flutter_secure_storage: ^10.0.0

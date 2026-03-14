@@ -9,7 +9,14 @@ extension _PushNavigation on AppPushUtils {
   static void handleMessage(Map<String, dynamic> data) {
     final ctx = AppGlobals.navigatorKey.currentContext;
     if (ctx == null) {
-      debugPrint('[AppPushUtils] _handleMessage: navigator context unavailable, skipping');
+      debugPrint(
+        '[AppPushUtils] _handleMessage: navigator context unavailable, skipping',
+      );
+      return;
+    }
+    final type = data['type'];
+    if (_isLegacyChatNotificationType(type)) {
+      _navigateToChatHome(ctx, type);
       return;
     }
     // 未登录 统一去登录
@@ -23,11 +30,7 @@ extension _PushNavigation on AppPushUtils {
       return;
     }
 
-    switch (data['type']) {
-      case 'chat':
-        // Chat notifications are handled by n42_chat plugin
-        debugPrint("Chat notification tapped - handled by n42_chat plugin");
-
+    switch (type) {
       case 'payment_received':
         // 「确认收款」通知 — 跳转到支付历史页
         Navigator.push(
@@ -47,43 +50,59 @@ extension _PushNavigation on AppPushUtils {
       case 'Tell Friends #2_normal':
         Navigator.push(ctx, MaterialPageRoute(builder: (_) => SettingShare()));
 
-      case 'ChatHome #1_normal':
-      case 'ChatHome #2_normal':
-        //跳转聊天主页
-        Navigator.of(ctx).popUntil((route) => route.isFirst);
-        globalProviderContainer.read(mainTabSelectIndexProvider.notifier).state = 2;
-
       case 'News_normal':
       case 'Login_normal':
       case 'Homepage_normal':
       case 'WalletHome #1_normal':
       case 'WalletHome #2_normal':
         Navigator.of(ctx).popUntil((route) => route.isFirst);
-        globalProviderContainer.read(mainTabSelectIndexProvider.notifier).state = 0;
+        globalProviderContainer
+                .read(mainTabSelectIndexProvider.notifier)
+                .state =
+            0;
 
       case 'AboutSettings_normal':
         Navigator.push(ctx, MaterialPageRoute(builder: (_) => AboutApp()));
 
       case 'SettingsProfile_normal':
         if (AppGlobals.userInfo != null) {
-          Navigator.push(ctx, MaterialPageRoute(builder: (_) => PersonalSetting()));
+          Navigator.push(
+            ctx,
+            MaterialPageRoute(builder: (_) => PersonalSetting()),
+          );
         }
 
       default:
-        final typeValue = data['type'];
-        if (typeValue == 110 || typeValue == 100 || typeValue == 101) {
-          // Chat notifications are handled by n42_chat plugin
-          // flutter_local_notifications 20.0.0 使用命名参数
-          flutterLocalNotificationsPlugin.cancel(id: typeValue);
-          debugPrint("Chat notification tapped - handled by n42_chat plugin");
-        } else {
-          debugPrint("未知消息类型，无法处理");
-        }
+        debugPrint("未知消息类型，无法处理");
     }
   }
 
+  static bool _isLegacyChatNotificationType(Object? type) {
+    return type == 'chat' ||
+        type == 'ChatHome #1_normal' ||
+        type == 'ChatHome #2_normal' ||
+        type == 100 ||
+        type == 101 ||
+        type == 110;
+  }
+
+  static void _navigateToChatHome(BuildContext ctx, Object? type) {
+    if (type is int) {
+      // 清理老 chat 体系遗留的本地通知 ID，避免重复点击。
+      flutterLocalNotificationsPlugin.cancel(id: type);
+    }
+    debugPrint('Legacy chat notification tapped - routing to n42_chat');
+    Navigator.push(
+      ctx,
+      MaterialPageRoute(builder: (_) => N42Chat.chatWidget()),
+    );
+  }
+
   /// 解析交易数据并跳转到浏览器查看交易详情
-  static void _navigateToTxBrowser(BuildContext ctx, Map<String, dynamic> data) {
+  static void _navigateToTxBrowser(
+    BuildContext ctx,
+    Map<String, dynamic> data,
+  ) {
     Map<String, dynamic> txContent = {};
     try {
       txContent = json.decode(data['data']);
@@ -96,13 +115,18 @@ extension _PushNavigation on AppPushUtils {
       isTest = isTestStr == "test";
     }
     String bUri = getBrowserTxHash(
-        txContent['coin'], txContent['hash'] ?? "",
-        isTest: isTest);
+      txContent['coin'],
+      txContent['hash'] ?? "",
+      isTest: isTest,
+    );
     Navigator.push(ctx, MaterialPageRoute(builder: (_) => BrowserPage(bUri)));
   }
 
   /// 解析价格变动数据并跳转到消息详情页
-  static void _navigateToPriceChanged(BuildContext ctx, Map<String, dynamic> data) {
+  static void _navigateToPriceChanged(
+    BuildContext ctx,
+    Map<String, dynamic> data,
+  ) {
     Map<String, dynamic> txContent = {};
     try {
       txContent = json.decode(data['data']);
@@ -119,6 +143,9 @@ extension _PushNavigation on AppPushUtils {
       "content": content,
       "created": dateFormat.format(DateTime.now()),
     };
-    Navigator.push(ctx, MaterialPageRoute(builder: (_) => MessageInfo(infoMap)));
+    Navigator.push(
+      ctx,
+      MaterialPageRoute(builder: (_) => MessageInfo(infoMap)),
+    );
   }
 }

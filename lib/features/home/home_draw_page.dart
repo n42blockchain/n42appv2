@@ -30,7 +30,8 @@ class HomeDrawPage extends ConsumerStatefulWidget {
   ConsumerState<HomeDrawPage> createState() => _HomeDrawPageState();
 }
 
-class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepAliveClientMixin {
+class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
+    with AutomaticKeepAliveClientMixin {
   /// Chat 用户信息（从流中更新）
   dynamic _chatUser;
   StreamSubscription? _chatUserSubscription;
@@ -62,7 +63,10 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
         bottomRight: Radius.circular(ScreenUtil().setWidth(24)),
       ),
       child: Container(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
+        color: AppThemeUtils.getColorByKey(
+          context,
+          AppThemeKeys.backGroundColor.name,
+        ),
         child: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,8 +85,13 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
                       width: ScreenUtil().setWidth(44),
                       height: ScreenUtil().setWidth(44),
                       decoration: BoxDecoration(
-                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-                        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(22)),
+                        color: AppThemeUtils.getColorByKey(
+                          context,
+                          AppThemeKeys.itemBgColor.name,
+                        ),
+                        borderRadius: BorderRadius.circular(
+                          ScreenUtil().setWidth(22),
+                        ),
                       ),
                       child: IconButton(
                         padding: EdgeInsets.zero,
@@ -92,7 +101,10 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
                         icon: Icon(
                           Icons.close_rounded,
                           size: ScreenUtil().setWidth(24),
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                          color: AppThemeUtils.getColorByKey(
+                            context,
+                            AppThemeKeys.itemSubtitleTextColor.name,
+                          ),
                         ),
                       ),
                     ),
@@ -113,7 +125,9 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
                       S.of(context).g_home_key1,
                       onTap: () {
                         Navigator.of(context).push(
-                          MaterialPageRoute(builder: (_) => N42Chat.profileWidget()),
+                          MaterialPageRoute(
+                            builder: (_) => N42Chat.profileWidget(),
+                          ),
                         );
                       },
                     ),
@@ -121,14 +135,20 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
                       "assets/home/manage_wallet.png",
                       S.of(context).s_key_1,
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (_) => const WalletList()));
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const WalletList()),
+                        );
                       },
                     ),
                     _menuItem(
                       "assets/home/address_book.png",
                       S.of(context).g_key_108,
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (_) => AddressBookList()));
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => AddressBookList()),
+                        );
                       },
                     ),
 
@@ -139,10 +159,12 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
                       "assets/home/security.png",
                       S.of(context).s_key_11,
                       onTap: () {
-                        if (AppGlobals.userInfo == null && !N42Chat.isLoggedIn) {
+                        if (AppGlobals.userInfo == null) {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (_) => N42Chat.chatWidget()),
+                            MaterialPageRoute(
+                              builder: (_) => N42Chat.chatWidget(),
+                            ),
                           );
                         } else {
                           Navigator.pushNamed(context, '/securitySetting');
@@ -155,7 +177,9 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const SettingHomePage()),
+                          MaterialPageRoute(
+                            builder: (context) => const SettingHomePage(),
+                          ),
                         );
                       },
                     ),
@@ -167,16 +191,26 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
                       "assets/home/tabbar/news.png",
                       S.of(context).g_browser_key11,
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) {
-                          return BrowserPage(AppConfig.apiUrl['walletamazeBrowser']);
-                        }));
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return BrowserPage(
+                                AppConfig.apiUrl['walletamazeBrowser'],
+                              );
+                            },
+                          ),
+                        );
                       },
                     ),
                     _menuItem(
                       "assets/home/about_app.png",
                       S.of(context).s_key_10,
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (_) => const AboutApp()));
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const AboutApp()),
+                        );
                       },
                     ),
 
@@ -185,7 +219,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
                     buildLoginLogoutButton(currentUser),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),
@@ -193,8 +227,12 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
     );
   }
 
-  Widget _menuItem(String iconPath, String actionName,
-      {Widget? rightWidget, GestureTapCallback? onTap}) {
+  Widget _menuItem(
+    String iconPath,
+    String actionName, {
+    Widget? rightWidget,
+    GestureTapCallback? onTap,
+  }) {
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -218,8 +256,13 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
                 width: ScreenUtil().setWidth(44),
                 height: ScreenUtil().setWidth(44),
                 decoration: BoxDecoration(
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha:0.1),
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+                  color: AppThemeUtils.getColorByKey(
+                    context,
+                    AppThemeKeys.mainBlueColor.name,
+                  ).withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(
+                    ScreenUtil().setWidth(12),
+                  ),
                 ),
                 alignment: Alignment.center,
                 child: Image.asset(
@@ -227,7 +270,10 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
                   width: ScreenUtil().setWidth(24),
                   height: ScreenUtil().setWidth(24),
                   fit: BoxFit.contain,
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                  color: AppThemeUtils.getColorByKey(
+                    context,
+                    AppThemeKeys.mainBlueColor.name,
+                  ),
                 ),
               ),
               SizedBox(width: ScreenUtil().setWidth(16)),
@@ -235,7 +281,10 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
                 child: Text(
                   actionName,
                   style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                    color: AppThemeUtils.getColorByKey(
+                      context,
+                      AppThemeKeys.mainTextColor.name,
+                    ),
                     fontSize: ScreenUtil().setSp(28),
                     fontWeight: FontWeight.w500,
                   ),
@@ -247,7 +296,10 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
                 Icon(
                   Icons.chevron_right_rounded,
                   size: ScreenUtil().setWidth(24),
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                  color: AppThemeUtils.getColorByKey(
+                    context,
+                    AppThemeKeys.itemSubtitleTextColor.name,
+                  ),
                 ),
             ],
           ),
@@ -267,7 +319,10 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
       child: Text(
         title.toUpperCase(),
         style: TextStyle(
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+          color: AppThemeUtils.getColorByKey(
+            context,
+            AppThemeKeys.itemSubtitleTextColor.name,
+          ),
           fontSize: ScreenUtil().setSp(20),
           fontWeight: FontWeight.w600,
           letterSpacing: 1.2,

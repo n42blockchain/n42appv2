@@ -1,8 +1,6 @@
 import 'dart:async';
 
 import 'package:n42_wallet/core/app/app_globals.dart';
-import 'package:n42_wallet/core/providers/core_providers.dart';
-import 'package:n42_wallet/shared/domain/entities/wallet_info.dart';
 import 'package:n42_wallet/features/component/enums/load.dart';
 import 'package:n42_wallet/features/login/api/handtype.dart';
 import 'package:n42_wallet/features/login/api/user_info_api.dart';
@@ -30,10 +28,15 @@ part 'account_create_and_reset_widgets.dart';
 class AccountCreateAndReset extends ConsumerStatefulWidget {
   final HandType type;
   final int pushType; // 0 push, 1 content
-  const AccountCreateAndReset({required this.type, this.pushType = 0, super.key});
+  const AccountCreateAndReset({
+    required this.type,
+    this.pushType = 0,
+    super.key,
+  });
 
   @override
-  ConsumerState<AccountCreateAndReset> createState() => _AccountCreateAndResetState();
+  ConsumerState<AccountCreateAndReset> createState() =>
+      _AccountCreateAndResetState();
 }
 
 class _AccountCreateAndResetState extends ConsumerState<AccountCreateAndReset>
@@ -54,7 +57,9 @@ class _AccountCreateAndResetState extends ConsumerState<AccountCreateAndReset>
             children: [
               Positioned.fill(
                 child: SingleChildScrollView(
-                  padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: ScreenUtil().setWidth(30.0),
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

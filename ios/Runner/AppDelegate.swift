@@ -4,6 +4,37 @@ import UIKit
 
 @main
 @objc class AppDelegate: FlutterAppDelegate {
+  private func normalizeConfigValue(_ value: Any?) -> String? {
+    guard let stringValue = value as? String else { return nil }
+    let trimmed = stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+    if trimmed.isEmpty || trimmed == "null" { return nil }
+    if trimmed.hasPrefix("$(") && trimmed.hasSuffix(")") { return nil }
+    return trimmed
+  }
+
+  private func googleServiceValue(_ key: String) -> String? {
+    guard
+      let path = Bundle.main.path(forResource: "GoogleService-Info", ofType: "plist"),
+      let data = NSDictionary(contentsOfFile: path)
+    else {
+      return nil
+    }
+    return normalizeConfigValue(data[key])
+  }
+
+  private func socialAuthConfig() -> [String: Any?] {
+    let info = Bundle.main.infoDictionary ?? [:]
+    return [
+      "googleClientId": normalizeConfigValue(info["N42ChatGoogleClientID"]) ?? googleServiceValue("CLIENT_ID"),
+      "googleServerClientId": normalizeConfigValue(info["N42ChatGoogleServerClientID"]),
+      "twitterApiKey": normalizeConfigValue(info["N42ChatTwitterApiKey"]),
+      "twitterApiSecret": normalizeConfigValue(info["N42ChatTwitterApiSecret"]),
+      "twitterRedirectUri": normalizeConfigValue(info["N42ChatTwitterRedirectUri"]) ?? "n42://auth/twitter",
+      "weChatAppId": normalizeConfigValue(info["N42ChatWeChatAppID"]),
+      "weChatUniversalLink": normalizeConfigValue(info["N42ChatWeChatUniversalLink"]),
+    ]
+  }
+
   override func application(
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
@@ -25,6 +56,24 @@ import UIKit
       WalletCorePlugin.register(
         with: self.registrar(forPlugin: "WalletCorePlugin")!
       )
+
+      if let controller = window?.rootViewController as? FlutterViewController {
+        let channel = FlutterMethodChannel(
+          name: "ai.n42.www/app_config",
+          binaryMessenger: controller.binaryMessenger
+        )
+        channel.setMethodCallHandler { [weak self] call, result in
+          guard let self else {
+            result(FlutterError(code: "unavailable", message: "AppDelegate released", details: nil))
+            return
+          }
+          if call.method == "getSocialAuthConfig" {
+            result(self.socialAuthConfig())
+          } else {
+            result(FlutterMethodNotImplemented)
+          }
+        }
+      }
 
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }

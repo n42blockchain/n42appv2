@@ -26,6 +26,9 @@ enum DeepLinkType {
   /// 打开群组
   group,
 
+  /// Chat SSO/OIDC 登录回调
+  chatSso,
+
   /// 未知类型
   unknown,
 }
@@ -155,6 +158,16 @@ class DeepLinkService {
   /// - n42://user/{userId} - 打开用户主页
   /// - n42://group/{groupId} - 打开群组
   DeepLinkData _parseN42Uri(Uri uri) {
+    if (uri.host == 'auth' &&
+        uri.pathSegments.isNotEmpty &&
+        uri.pathSegments.first == 'sso') {
+      return DeepLinkData(
+        type: DeepLinkType.chatSso,
+        uri: uri,
+        params: uri.queryParameters,
+      );
+    }
+
     const actionConfig = {
       'chat': (type: DeepLinkType.chat, key: 'roomId'),
       'user': (type: DeepLinkType.user, key: 'userId'),

@@ -7,10 +7,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:n42_wallet/data/models/user_info.dart';
+import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/core/security/secure_storage.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
+import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/features/wallet_connect/presentation/providers/wallet_connect_providers.dart';
+import 'package:n42_wallet/main.dart' show globalProviderContainer;
+import 'package:n42_wallet/shared/domain/entities/wallet_info.dart';
 
 /// Application Globals
 ///
@@ -75,6 +79,10 @@ class AppGlobals {
     if (info.token != null && info.token!.isNotEmpty) {
       await SecureStorage().saveToken(info.token!);
     }
+    globalProviderContainer
+        .read(currentUserProvider.notifier)
+        .setUser(SharedUserInfo.fromLegacyUserInfo(info));
+    globalProviderContainer.invalidate(walletListProvider);
     globalWapAdapter.initWallet(shouldInitCoinInfo: true);
     globalWcpInstance.cleanDataLogout();
   }
@@ -87,6 +95,10 @@ class AppGlobals {
       await SPUtil().saveUserInfo(null);
       await SecureStorage().clearUserData();
       userInfo = null;
+      globalProviderContainer.read(currentUserProvider.notifier).clearUser();
+      globalProviderContainer.invalidate(walletListProvider);
+      globalWapAdapter.initWallet();
+      globalWcpInstance.cleanDataLogout();
     } catch (err) {
       debugPrint('Logout error: $err');
     }
@@ -108,4 +120,3 @@ class AppGlobals {
 // Legacy alias for backwards compatibility
 // ignore: camel_case_types
 typedef Application = AppGlobals;
-

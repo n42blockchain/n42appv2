@@ -17,6 +17,7 @@ mixin ChangeEmailPageLogicMixin on State<ChangeEmailPage> {
   int step = 0;
   bool chatAvailable = false;
   bool chatSyncEnabled = true;
+  StreamSubscription? chatUserSubscription;
 
   final emailCtrl = TextEditingController();
   final passwordCtrl = TextEditingController();
@@ -44,12 +45,16 @@ mixin ChangeEmailPageLogicMixin on State<ChangeEmailPage> {
   Timer? countdownTimer;
 
   void initLogic() {
-    chatAvailable = N42Chat.isInitialized && N42Chat.isLoggedIn;
-    chatSyncEnabled = chatAvailable;
+    _syncChatAvailability();
+    chatUserSubscription = N42Chat.userStream.listen((_) {
+      if (!mounted) return;
+      _syncChatAvailability(fromStream: true);
+    });
   }
 
   void disposeLogic() {
     countdownTimer?.cancel();
+    chatUserSubscription?.cancel();
     emailCtrl.dispose();
     passwordCtrl.dispose();
     n42CodeCtrl.dispose();
@@ -58,6 +63,31 @@ mixin ChangeEmailPageLogicMixin on State<ChangeEmailPage> {
     passwordFocus.dispose();
     n42CodeFocus.dispose();
     chatCodeFocus.dispose();
+  }
+
+  void _syncChatAvailability({bool fromStream = false}) {
+    final nextChatAvailable = N42Chat.isInitialized && N42Chat.isLoggedIn;
+    if (nextChatAvailable == chatAvailable && !fromStream) {
+      return;
+    }
+
+    if (!mounted) {
+      chatAvailable = nextChatAvailable;
+      chatSyncEnabled = nextChatAvailable;
+      return;
+    }
+
+    setState(() {
+      final becameAvailable = nextChatAvailable && !chatAvailable;
+      chatAvailable = nextChatAvailable;
+      if (!nextChatAvailable) {
+        chatSyncEnabled = false;
+        passwordError = null;
+        chatSyncError = null;
+      } else if (becameAvailable && step == 0) {
+        chatSyncEnabled = true;
+      }
+    });
   }
 
   // ─── Helpers ──────────────────────────────────────────────────────────────────
