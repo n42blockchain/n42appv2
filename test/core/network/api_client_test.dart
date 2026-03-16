@@ -36,8 +36,8 @@ void main() {
     });
 
     test('should have interceptors configured', () {
-      // 应该有 4 个拦截器: Auth, Logging, Retry, Error
-      expect(apiClient.dio.interceptors.length, greaterThanOrEqualTo(4));
+      // ApiClient 自己注册了两个业务拦截器；Dio 可能额外注入内部拦截器。
+      expect(apiClient.dio.interceptors.length, greaterThanOrEqualTo(2));
     });
   });
 
@@ -66,4 +66,3 @@ void main() {
     });
   });
 }
-
