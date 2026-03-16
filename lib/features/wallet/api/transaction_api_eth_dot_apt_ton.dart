@@ -1,5 +1,27 @@
 part of 'transaction_api.dart';
 
+String? _proxyExplorerChain(String key) {
+  switch (key.toUpperCase()) {
+    case 'ETH':
+      return 'eth';
+    case 'BNB':
+      return 'bnb';
+    case 'BASE':
+      return 'base';
+    default:
+      return null;
+  }
+}
+
+List<dynamic>? _extractExplorerItems(dynamic data) {
+  if (data is List<dynamic>) return data;
+  if (data is! Map) return null;
+  if (data['result'] is List<dynamic>) return data['result'] as List<dynamic>;
+  if (data['data'] is List<dynamic>) return data['data'] as List<dynamic>;
+  if (data['items'] is List<dynamic>) return data['items'] as List<dynamic>;
+  return null;
+}
+
 extension TransactionApiEthDotAptTon on TransactionApi {
   // ---------------------------------------------------------------------------
   // ETH-compatible — Etherscan-style API
@@ -23,19 +45,31 @@ extension TransactionApiEthDotAptTon on TransactionApi {
         mm.data = null;
         return mm;
       }
-      final endblockStr = endBlock != null ? '&endblock=$endBlock' : '';
-      final requestUrl =
-          '${hostUrl}module=account&action=txlist&address=$address'
-          '&startblock=$fromBlock&page=$page&offset=$offset&sort=desc$endblockStr';
-      final data = await BaseApi.requestEmptyH
-          .get(requestUrl, params: {}, header: header);
-      if (data != null && data['status'] == '1') {
-        mm.data = (data['result'] as List)
+      final proxyChain = !isTest ? _proxyExplorerChain(miniName) : null;
+      final requestUrl = proxyChain == null
+          ? '${hostUrl}module=account&action=txlist&address=$address'
+              '&startblock=$fromBlock&page=$page&offset=$offset&sort=desc'
+              '${endBlock != null ? '&endblock=$endBlock' : ''}'
+          : ProxyConfig.explorerTxlist(proxyChain);
+      final data = await BaseApi.requestEmptyH.get(
+        requestUrl,
+        params: proxyChain == null
+            ? {}
+            : {
+                'address': address,
+                'page': '$page',
+                'size': '$offset',
+              },
+        header: header,
+      );
+      final items = _extractExplorerItems(data);
+      if (items != null) {
+        mm.data = items
             .map((e) => CommonResponseItemModel.fromJson(e))
             .toList();
       } else {
         mm.error = true;
-        mm.data = data?['message'];
+        mm.data = data is Map ? data['message'] ?? data['error'] : null;
       }
     } catch (e) {
       mm.error = true;
@@ -62,19 +96,32 @@ extension TransactionApiEthDotAptTon on TransactionApi {
         mm.data = null;
         return mm;
       }
-      final requestUrl =
-          '${hostUrl}module=account&action=tokentx&address=$address'
-          '&contractaddress=$contractAddress&startblock=$fromBlock'
-          '&endblock=$endBlock&page=$page&offset=$offset&sort=desc';
-      final data = await BaseApi.requestEmptyH
-          .get(requestUrl, params: {}, header: header);
-      if (data != null && data['status'] == '1') {
-        mm.data = (data['result'] as List)
+      final proxyChain = !isTest ? _proxyExplorerChain(name) : null;
+      final requestUrl = proxyChain == null
+          ? '${hostUrl}module=account&action=tokentx&address=$address'
+              '&contractaddress=$contractAddress&startblock=$fromBlock'
+              '&endblock=$endBlock&page=$page&offset=$offset&sort=desc'
+          : ProxyConfig.explorerTokentx(proxyChain);
+      final data = await BaseApi.requestEmptyH.get(
+        requestUrl,
+        params: proxyChain == null
+            ? {}
+            : {
+                'address': address,
+                'contractAddress': contractAddress,
+                'page': '$page',
+                'size': '$offset',
+              },
+        header: header,
+      );
+      final items = _extractExplorerItems(data);
+      if (items != null) {
+        mm.data = items
             .map((e) => CommonResponseItemModel.fromJson(e))
             .toList();
       } else {
         mm.error = true;
-        mm.data = data?['message'];
+        mm.data = data is Map ? data['message'] ?? data['error'] : null;
       }
     } catch (e) {
       mm.error = true;

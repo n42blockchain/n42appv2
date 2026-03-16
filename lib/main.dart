@@ -348,9 +348,10 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
           ssoRedirectUrl: 'n42://auth/sso',
           walletBridge: N42WalletBridge(),
           apiHubBridge: N42ApiHubBridge(),
-          aiApiKey: '', // API key now injected by server proxy
+          aiApiKey: ProxyConfig.authToken.isEmpty ? null : ProxyConfig.authToken,
           aiBaseUrl: ProxyConfig.aiChat,
           aiModel: '', // Model configured server-side
+          aiUseProxyEndpoint: true,
         ),
       );
       await _flushPendingChatDeepLink();

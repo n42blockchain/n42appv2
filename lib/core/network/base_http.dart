@@ -12,6 +12,7 @@ import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
+import 'package:n42_wallet/core/config/proxy_config.dart';
 import 'package:n42_wallet/core/network/circuit_breaker_interceptor.dart';
 import 'package:n42_wallet/core/network/retry_interceptor.dart';
 import 'package:n42_wallet/core/security/security_config.dart';
@@ -141,10 +142,11 @@ class BaseHttp {
         method: method,
         contentType: header?['content-type'] as String? ?? _contentTypeString,
         extra: enableRetry ? {RetryOptions.kRetryEnabled: true} : null,
-        headers: {
-          if (header != null) ...header,
+        headers: ProxyConfig.mergeAuthHeaders(path, {
+          if (header != null)
+            ...header.map((key, value) => MapEntry(key, value.toString())),
           if (userInfo != null) ...userInfo,
-        },
+        }),
       );
 
       final response = await _dio.request<dynamic>(

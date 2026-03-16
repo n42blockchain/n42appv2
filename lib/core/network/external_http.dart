@@ -5,6 +5,7 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:n42_wallet/core/config/proxy_config.dart';
 
 /// Lightweight HTTP client for third-party external APIs
 /// (CoinGecko, alternative.me, CryptoCompare, etc.).
@@ -33,7 +34,7 @@ class ExternalHttp {
     try {
       final resp = await _dio.get<dynamic>(
         url,
-        options: headers != null ? Options(headers: headers) : null,
+        options: Options(headers: ProxyConfig.mergeAuthHeaders(url, headers)),
       );
       return resp.data;
     } on DioException catch (e) {
@@ -56,7 +57,7 @@ class ExternalHttp {
       final resp = await _dio.post<dynamic>(
         url,
         data: data,
-        options: headers != null ? Options(headers: headers) : null,
+        options: Options(headers: ProxyConfig.mergeAuthHeaders(url, headers)),
       );
       return resp.data;
     } on DioException catch (e) {

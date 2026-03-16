@@ -4,6 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/foundation.dart';
+import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 
 /// RPC 端点配置
 ///
@@ -35,10 +36,10 @@ class RpcConfig {
 
   // ==================== EVM 链 RPC ====================
 
-  /// Ethereum Mainnet RPC (via proxy)
+  /// Ethereum Mainnet RPC
   static const String ethMainnetRpc = String.fromEnvironment(
-    'ETH_MAINNET_RPC',
-    defaultValue: 'https://api.n42.ai/proxy/v1/rpc/eth',
+    'ETH_RPC_URL',
+    defaultValue: 'https://rpc.n42.world',
   );
 
   /// Ethereum Sepolia Testnet RPC
@@ -116,5 +117,17 @@ class RpcConfig {
 
 /// 初始化 RPC 配置
 void initRpcConfig() {
+  _syncWalletChainRpcOverrides();
   RpcConfig.validateSecurityInDebug();
+}
+
+void _syncWalletChainRpcOverrides() {
+  final eth = chainUrlMap['ETH'];
+  if (eth is! Map<String, dynamic>) return;
+
+  final baseInfo = eth['baseInfo'];
+  if (baseInfo is! Map<String, dynamic>) return;
+
+  baseInfo['service'] = RpcConfig.ethMainnetRpc;
+  baseInfo['service_test'] = RpcConfig.ethSepoliaRpc;
 }

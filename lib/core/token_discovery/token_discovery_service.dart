@@ -24,12 +24,12 @@ class _Explorer {
 class TokenDiscoveryService {
   // Explorer APIs indexed by internal coin type — now via proxy (no API key).
   static final Map<String, _Explorer> _evmExplorers = {
-    'ETH': _Explorer(ProxyConfig.explorerTxlist('eth')),
-    'BSC': _Explorer(ProxyConfig.explorerTxlist('bnb')),
+    'ETH': _Explorer(ProxyConfig.explorerTokentx('eth')),
+    'BSC': _Explorer(ProxyConfig.explorerTokentx('bnb')),
     'MATIC': const _Explorer('https://api.polygonscan.com/api'),
     'ARBITRUM': const _Explorer('https://api.arbiscan.io/api'),
-    'OPTIMISM': _Explorer(ProxyConfig.explorerTxlist('eth')),
-    'BASE': _Explorer(ProxyConfig.explorerTxlist('base')),
+    'OPTIMISM': const _Explorer('https://api-optimistic.etherscan.io/api'),
+    'BASE': _Explorer(ProxyConfig.explorerTokentx('base')),
     'AVAXC': const _Explorer('https://api.snowtrace.io/api'),
   };
 
@@ -113,17 +113,25 @@ class TokenDiscoveryService {
 
     // 1. Fetch ERC-20 transfer history from Etherscan-compatible explorer.
     final params = <String, dynamic>{
-      'module': 'account',
-      'action': 'tokentx',
       'address': address,
-      'sort': 'desc',
-      'offset': '50', // last 50 transfers is plenty
+      if (!explorer.baseUrl.startsWith(ProxyConfig.baseUrl)) ...{
+        'module': 'account',
+        'action': 'tokentx',
+        'sort': 'desc',
+        'offset': '50', // last 50 transfers is plenty
+      },
       'page': '1',
+      if (explorer.baseUrl.startsWith(ProxyConfig.baseUrl)) 'size': '50',
     };
 
     final response = await _dio.get<Map<String, dynamic>>(
       explorer.baseUrl,
       queryParameters: params,
+      options: Options(
+        headers: ProxyConfig.mergeAuthHeaders(explorer.baseUrl, const {
+          'Accept': 'application/json',
+        }),
+      ),
     );
     final body = response.data;
     if (body == null || body['status'] != '1') {

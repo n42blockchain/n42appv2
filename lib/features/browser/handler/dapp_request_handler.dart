@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:http/http.dart';
+import 'package:n42_wallet/core/config/proxy_config.dart';
 import 'package:n42_wallet/core/di/service_locator_setup.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
@@ -268,7 +269,9 @@ class DAppRequestHandler {
     try {
       final response = await client.post(
         Uri.parse(_rpcUrl),
-        headers: {'Content-Type': 'application/json'},
+        headers: ProxyConfig.mergeAuthHeaders(_rpcUrl, {
+          'Content-Type': 'application/json',
+        }),
         body: json.encode({
           'jsonrpc': '2.0',
           'id': 1,

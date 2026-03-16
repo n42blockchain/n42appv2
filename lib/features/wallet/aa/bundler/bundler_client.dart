@@ -7,6 +7,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:n42_wallet/core/config/proxy_config.dart';
 
 import '../core/aa_config.dart';
 import '../core/aa_constants.dart';
@@ -240,10 +241,10 @@ class BundlerClient {
       final response = await _httpClient
           .post(
             Uri.parse(_bundlerUrl),
-            headers: {
+            headers: ProxyConfig.mergeAuthHeaders(_bundlerUrl, {
               'Content-Type': 'application/json',
               if (_apiKey != null) 'Authorization': 'Bearer $_apiKey',
-            },
+            }),
             body: body,
           )
           .timeout(_timeout);

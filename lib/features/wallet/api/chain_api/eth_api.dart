@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:n42_wallet/core/app/app_globals.dart';
+import 'package:n42_wallet/core/config/proxy_config.dart';
 import 'package:n42_wallet/core/utils/message_model_bridge.dart';
 import 'package:n42_wallet/core/utils/result.dart';
 import 'package:n42_wallet/core/network/base_api.dart';
@@ -268,12 +269,37 @@ class EthAPI {
   }) async {
     try {
       final hasContract = contractAddress.isNotEmpty;
-      final action = hasContract ? 'tokentx' : 'txlist';
-      final params = <String, dynamic>{
-        'address': address, 'action': action, 'module': 'account', 'page': page, 'offset': offset,
-        if (hasContract) 'contractaddress': contractAddress,
-      };
-      final apiUrl = coinType == null ? (api ?? '') : RequestUrl().getUrl2(coinType, 'api', isTest: isTest);
+      final normalizedCoin = _coin(coinType)?.toUpperCase();
+      final proxyChain = !isTest
+          ? switch (normalizedCoin) {
+              'ETH' => 'eth',
+              'BNB' => 'bnb',
+              'BASE' => 'base',
+              _ => null,
+            }
+          : null;
+      final params = proxyChain == null
+          ? <String, dynamic>{
+              'address': address,
+              'action': hasContract ? 'tokentx' : 'txlist',
+              'module': 'account',
+              'page': page,
+              'offset': offset,
+              if (hasContract) 'contractaddress': contractAddress,
+            }
+          : <String, dynamic>{
+              'address': address,
+              'page': '$page',
+              'size': '$offset',
+              if (hasContract) 'contractAddress': contractAddress,
+            };
+      final apiUrl = proxyChain == null
+          ? (coinType == null
+              ? (api ?? '')
+              : RequestUrl().getUrl2(coinType, 'api', isTest: isTest))
+          : (hasContract
+              ? ProxyConfig.explorerTokentx(proxyChain)
+              : ProxyConfig.explorerTxlist(proxyChain));
       final data = await BaseApi.requestEmptyH.get(apiUrl, params: params);
       if (data.containsKey('error')) {
         return MessageModel()..error = true..data = data['error'];

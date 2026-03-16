@@ -29,6 +29,19 @@ class SimpleHashNftApi {
 
   Map<String, dynamic> get _authHeader => const {};
 
+  ({String chain, String contractAddress, String tokenId})? _parseNftId(
+    String nftId,
+  ) {
+    final parts = nftId.split('.');
+    if (parts.length < 3) return null;
+
+    return (
+      chain: parts.first,
+      contractAddress: parts[1],
+      tokenId: parts.sublist(2).join('.'),
+    );
+  }
+
   /// 获取某地址在指定链上持有的所有 NFT（最多 200 条）
   ///
   /// [address]  钱包地址
@@ -56,7 +69,7 @@ class SimpleHashNftApi {
         }..removeWhere((_, v) => v == null);
 
         final raw = await BaseApi.requestEmptyH.get<dynamic>(
-          '$_base/nfts/owners_v2',
+          '$_base/by_owner',
           params: params,
           header: _authHeader,
         );
@@ -89,9 +102,16 @@ class SimpleHashNftApi {
   Future<NftModel?> fetchNftById(String nftId) async {
     // API key is now injected server-side via proxy.
     try {
+      final parsed = _parseNftId(nftId);
+      if (parsed == null) return null;
+
       final raw = await BaseApi.requestEmptyH.get<dynamic>(
-        '$_base/nfts/${Uri.encodeComponent(nftId)}',
-        params: {},
+        '$_base/by_id',
+        params: {
+          'chain': parsed.chain,
+          'contract_address': parsed.contractAddress,
+          'token_id': parsed.tokenId,
+        },
         header: _authHeader,
       );
       if (raw == null || raw is! Map<String, dynamic>) return null;

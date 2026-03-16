@@ -27,7 +27,7 @@ class RequestUrl {
     // 更新 mainnet URLs — Explorer API 通过代理
     _requestUrlMain1['BNB']!['api'] = '${ProxyConfig.explorerTxlist('bnb')}?';
     _requestUrlMain1['ETH']!['api'] = '${ProxyConfig.explorerTxlist('eth')}?';
-    _requestUrlMain1['ETH']!['rpc'] = ProxyConfig.ethRpc;
+    _requestUrlMain1['ETH']!['rpc'] = RpcConfig.ethMainnetRpc;
     _requestUrlMain1['BASE']!['api'] = '${ProxyConfig.explorerTxlist('base')}?';
     _requestUrlMain1['S']!['api'] = '${ProxyConfig.explorerSonic}?';
 

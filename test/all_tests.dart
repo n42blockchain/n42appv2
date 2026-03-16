@@ -25,6 +25,10 @@ import 'core/security/security_config_test.dart' as security_config_test;
 // Core Platform Tests
 import 'core/platform/deep_link_service_test.dart' as deep_link_service_test;
 
+// Core Config Tests
+import 'core/config/proxy_config_test.dart' as proxy_config_test;
+import 'core/config/rpc_config_test.dart' as rpc_config_test;
+
 // Core Routing Tests
 import 'core/routing/deep_link_handler_test.dart' as deep_link_handler_test;
 
@@ -101,6 +105,10 @@ void main() {
   // Core Platform Tests
   deep_link_service_test.main();
 
+  // Core Config Tests
+  proxy_config_test.main();
+  rpc_config_test.main();
+
   // Core Routing Tests
   deep_link_handler_test.main();
 
@@ -149,4 +157,3 @@ void main() {
   airdrop_model_test.main();
   loyalty_model_test.main();
 }
-

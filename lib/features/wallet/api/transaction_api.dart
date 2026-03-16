@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 // api_keys_config removed — API keys migrated to server proxy.
+import 'package:n42_wallet/core/config/proxy_config.dart';
 import 'package:n42_wallet/core/network/base_api.dart';
 import 'package:n42_wallet/core/network/request_url.dart';
 import 'package:n42_wallet/features/models/message_model.dart';

@@ -27,6 +27,9 @@ Future<String> createUrl(String url, String mode) async {
     ));
     final response = await dio.post<Map<String, dynamic>>(
       ProxyConfig.moonpaySign,
+      options: Options(
+        headers: ProxyConfig.mergeAuthHeaders(ProxyConfig.moonpaySign),
+      ),
       data: {'url': url, 'mode': mode},
     );
 
