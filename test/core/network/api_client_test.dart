@@ -65,4 +65,33 @@ void main() {
       expect(apiClient.patch, isNotNull);
     });
   });
+
+  group('Retry policy', () {
+    test('should retry idempotent methods only', () {
+      expect(
+        ApiClient.shouldRetryRequest(
+          RequestOptions(path: '/health', method: 'GET'),
+        ),
+        isTrue,
+      );
+      expect(
+        ApiClient.shouldRetryRequest(
+          RequestOptions(path: '/user', method: 'HEAD'),
+        ),
+        isTrue,
+      );
+      expect(
+        ApiClient.shouldRetryRequest(
+          RequestOptions(path: '/login', method: 'POST'),
+        ),
+        isFalse,
+      );
+      expect(
+        ApiClient.shouldRetryRequest(
+          RequestOptions(path: '/wallet', method: 'PATCH'),
+        ),
+        isFalse,
+      );
+    });
+  });
 }

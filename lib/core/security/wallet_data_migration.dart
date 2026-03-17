@@ -41,11 +41,11 @@ class WalletDataMigration {
   /// 返回迁移的钱包数量
   Future<int> migrate() async {
     if (!await needsMigration()) {
-      debugPrint('[WalletDataMigration] Migration already completed');
+      _debugLog('[WalletDataMigration] Migration already completed');
       return 0;
     }
 
-    debugPrint('[WalletDataMigration] Starting migration...');
+    _debugLog('[WalletDataMigration] Starting migration...');
 
     try {
       int migratedCount = 0;
@@ -56,18 +56,24 @@ class WalletDataMigration {
         return 0;
       }
 
+      final sanitizedWalletAll = Map<String, dynamic>.from(walletAll);
+
       // 遍历所有用户的钱包
-      for (final userEntry in walletAll.entries) {
+      for (final userEntry in sanitizedWalletAll.entries.toList()) {
         final userUuid = userEntry.key;
         final userData = userEntry.value;
 
         if (userData is! Map<String, dynamic>) continue;
 
-        final wallets = userData['wallet'] as List<dynamic>?;
-        if (wallets == null) continue;
+        final mutableUserData = Map<String, dynamic>.from(userData);
+        sanitizedWalletAll[userUuid] = mutableUserData;
+
+        final rawWallets = mutableUserData['wallet'];
+        if (rawWallets is! List) continue;
+        final wallets = List<dynamic>.from(rawWallets);
 
         for (int i = 0; i < wallets.length; i++) {
-          final wallet = wallets[i] as Map<String, dynamic>?;
+          final wallet = _asWalletMap(wallets[i]);
           if (wallet == null) continue;
 
           final walletId = _getWalletId(wallet, userUuid, i);
@@ -75,20 +81,23 @@ class WalletDataMigration {
         }
 
         // 更新 SharedPreferences 中的数据，移除敏感信息
-        userData['wallet'] = wallets
-            .map((w) => _sanitizeWalletData(w as Map<String, dynamic>))
-            .toList();
+        mutableUserData['wallet'] = List<dynamic>.from(
+          wallets.map(_sanitizeWalletEntry),
+        );
       }
 
       // 保存清理后的数据
-      await _spUtil.setWalletInfo(walletAll);
+      await _spUtil.setWalletInfo(sanitizedWalletAll);
 
       await _markMigrationCompleted();
-      debugPrint('[WalletDataMigration] Migration completed: $migratedCount wallets migrated');
+      _debugLog(
+        '[WalletDataMigration] Migration completed: '
+        '$migratedCount wallets migrated',
+      );
 
       return migratedCount;
     } catch (e) {
-      debugPrint('[WalletDataMigration] Migration failed: $e');
+      _debugLog('[WalletDataMigration] Migration failed: $e');
       rethrow;
     }
   }
@@ -96,7 +105,8 @@ class WalletDataMigration {
   /// 获取钱包唯一标识
   String _getWalletId(Map<String, dynamic> wallet, String userUuid, int index) {
     // 优先使用 timestamp，否则使用 userUuid + index
-    return (wallet['timestamp'] as String?) ?? '${userUuid}_$index';
+    final timestamp = wallet['timestamp']?.toString().trim() ?? '';
+    return timestamp.isNotEmpty ? timestamp : '${userUuid}_$index';
   }
 
   /// 迁移单个钱包的敏感数据
@@ -108,7 +118,10 @@ class WalletDataMigration {
     if (mnemonic != null && mnemonic.isNotEmpty) {
       await _secureStorage.saveMnemonic(walletId: walletId, mnemonic: mnemonic);
       migratedFields++;
-      debugPrint('[WalletDataMigration] Migrated mnemonic for wallet: $walletId');
+      _debugLog(
+        '[WalletDataMigration] Migrated mnemonic for wallet: '
+        '${_maskWalletId(walletId)}',
+      );
     }
 
     // 迁移私钥
@@ -116,7 +129,10 @@ class WalletDataMigration {
     if (privateKey != null && privateKey.isNotEmpty) {
       await _secureStorage.savePrivateKey(address: walletId, privateKey: privateKey);
       migratedFields++;
-      debugPrint('[WalletDataMigration] Migrated privateKey for wallet: $walletId');
+      _debugLog(
+        '[WalletDataMigration] Migrated privateKey for wallet: '
+        '${_maskWalletId(walletId)}',
+      );
     }
 
     // 迁移密码 (使用单独的前缀)
@@ -124,7 +140,10 @@ class WalletDataMigration {
     if (password != null && password.isNotEmpty) {
       await _saveWalletPassword(walletId, password);
       migratedFields++;
-      debugPrint('[WalletDataMigration] Migrated password for wallet: $walletId');
+      _debugLog(
+        '[WalletDataMigration] Migrated password for wallet: '
+        '${_maskWalletId(walletId)}',
+      );
     }
 
     return migratedFields > 0 ? 1 : 0;
@@ -138,6 +157,26 @@ class WalletDataMigration {
       if (sanitized.containsKey(field)) sanitized[field] = null;
     }
     return sanitized;
+  }
+
+  Object? _sanitizeWalletEntry(Object? wallet) {
+    if (wallet is Map<String, dynamic>) {
+      return _sanitizeWalletData(wallet);
+    }
+    if (wallet is Map) {
+      return _sanitizeWalletData(Map<String, dynamic>.from(wallet));
+    }
+    return wallet;
+  }
+
+  Map<String, dynamic>? _asWalletMap(Object? wallet) {
+    if (wallet is Map<String, dynamic>) {
+      return wallet;
+    }
+    if (wallet is Map) {
+      return Map<String, dynamic>.from(wallet);
+    }
+    return null;
   }
 
   /// 保存钱包密码到 SecureStorage
@@ -167,6 +206,18 @@ class WalletDataMigration {
   Future<void> resetMigration() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_migrationCompletedKey);
+  }
+
+  static String _maskWalletId(String walletId) {
+    if (walletId.length <= 8) return '***';
+    return '${walletId.substring(0, 4)}***${walletId.substring(walletId.length - 4)}';
+  }
+
+  static void _debugLog(String message) {
+    assert(() {
+      debugPrint(message);
+      return true;
+    }());
   }
 }
 

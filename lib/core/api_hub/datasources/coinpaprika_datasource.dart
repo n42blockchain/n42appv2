@@ -59,9 +59,7 @@ class CoinPaprikaDatasource {
   ///
   /// Uses per-coin `/tickers/{id}` endpoint (max 5 sequential requests
   /// to limit latency) instead of pulling the entire /tickers list.
-  static Future<Map<String, CoinPrice>> getPrices(
-    List<String> symbols,
-  ) async {
+  static Future<Map<String, CoinPrice>> getPrices(List<String> symbols) async {
     final now = DateTime.now();
     final cachedAt = _cachedAt;
     if (cachedAt != null && now.difference(cachedAt) < _cacheTtl) {
@@ -83,8 +81,9 @@ class CoinPaprikaDatasource {
       if (id == null) continue;
 
       try {
-        final raw = await ExternalHttp.get('$_base/tickers/$id')
-            .timeout(const Duration(seconds: 8), onTimeout: () => null);
+        final raw = await ExternalHttp.get(
+          '$_base/tickers/$id',
+        ).timeout(const Duration(seconds: 8), onTimeout: () => null);
         if (raw == null || raw is! Map) continue;
 
         final quotes = raw['quotes'] as Map?;
@@ -107,10 +106,15 @@ class CoinPaprikaDatasource {
         _cache[sym] = cp;
         fetched++;
       } catch (e) {
-        debugPrint('CoinPaprikaDatasource.getPrices($s) error: $e');
+        _debugLog('CoinPaprikaDatasource.getPrices($s) error: $e');
       }
     }
     if (result.isNotEmpty) _cachedAt = DateTime.now();
     return result;
+  }
+
+  static void _debugLog(String message) {
+    if (!kDebugMode) return;
+    debugPrint(message);
   }
 }

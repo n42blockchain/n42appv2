@@ -26,8 +26,17 @@ void main() {
   group('SOLTransactionItem positional constructor', () {
     test('sets all fields correctly', () {
       final item = SOLTransactionItem(
-        'doc-id', 'src', 'dst', 5000000, 1700100000,
-        200000000, '5KtP', 'success', 5000, 9, 1,
+        'doc-id',
+        'src',
+        'dst',
+        5000000,
+        1700100000,
+        200000000,
+        '5KtP',
+        'success',
+        5000,
+        9,
+        1,
       );
       expect(item.src, 'src');
       expect(item.dst, 'dst');
@@ -91,6 +100,26 @@ void main() {
       final item = SOLTransactionItem.fromJson({'status': 'fail'});
       expect(item.status, 'fail');
     });
+
+    test('maps explorer payload fields into Solana transaction model', () {
+      final item = SOLTransactionItem.fromExplorerJson({
+        'txid': 'sol-hash',
+        'from': 'SenderSolAddress111',
+        'to': 'ReceiverSolAddress222',
+        'value': '0.25',
+        'time': 1700100000,
+        'status': 'success',
+        'fee': '0.000005',
+      });
+
+      expect(item.txHash, 'sol-hash');
+      expect(item.src, 'SenderSolAddress111');
+      expect(item.dst, 'ReceiverSolAddress222');
+      expect(item.lamport, 250000000);
+      expect(item.blockTime, 1700100000);
+      expect(item.status, 'Success');
+      expect(item.fee, 5000);
+    });
   });
 
   // ─────────────────────────────────────────────────
@@ -101,10 +130,22 @@ void main() {
     test('includes all expected keys', () {
       final item = SOLTransactionItem.fromJson(_kFullJson);
       final json = item.toJson();
-      expect(json.keys, containsAll([
-        '_id', 'src', 'dst', 'lamport', 'blockTime',
-        'slot', 'txHash', 'status', 'fee', 'decimals', 'txNumberSolTransfer',
-      ]));
+      expect(
+        json.keys,
+        containsAll([
+          '_id',
+          'src',
+          'dst',
+          'lamport',
+          'blockTime',
+          'slot',
+          'txHash',
+          'status',
+          'fee',
+          'decimals',
+          'txNumberSolTransfer',
+        ]),
+      );
     });
 
     test('values match model fields', () {

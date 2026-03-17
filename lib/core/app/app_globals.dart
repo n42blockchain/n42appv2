@@ -76,9 +76,19 @@ class AppGlobals {
   /// Also syncs the auth token to SecureStorage so both storage paths stay consistent.
   static Future<void> login(UserInfo info) async {
     userInfo = info;
+    final secureStorage = SecureStorage();
+    final syncTasks = <Future<void>>[];
     if (info.token != null && info.token!.isNotEmpty) {
-      await SecureStorage().saveToken(info.token!);
+      syncTasks.add(secureStorage.saveToken(info.token!));
     }
+    if (info.uuid != null && info.uuid!.isNotEmpty) {
+      syncTasks.add(secureStorage.saveUuid(info.uuid!));
+    }
+    if (info.email != null && info.email!.isNotEmpty) {
+      syncTasks.add(secureStorage.saveEmail(info.email!));
+    }
+    syncTasks.add(secureStorage.saveUserInfo(info.toJson()));
+    await Future.wait(syncTasks);
     globalProviderContainer
         .read(currentUserProvider.notifier)
         .setUser(SharedUserInfo.fromLegacyUserInfo(info));
@@ -100,7 +110,10 @@ class AppGlobals {
       globalWapAdapter.initWallet();
       globalWcpInstance.cleanDataLogout();
     } catch (err) {
-      debugPrint('Logout error: $err');
+      assert(() {
+        debugPrint('Logout error: $err');
+        return true;
+      }());
     }
   }
 

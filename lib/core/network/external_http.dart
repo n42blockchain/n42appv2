@@ -38,10 +38,10 @@ class ExternalHttp {
       );
       return resp.data;
     } on DioException catch (e) {
-      debugPrint('ExternalHttp.get error [$url]: ${e.message}');
+      _debugLog('ExternalHttp.get error [${sanitizeUrlForLogging(url)}]: ${e.message}');
       return null;
     } catch (e) {
-      debugPrint('ExternalHttp.get unexpected error [$url]: $e');
+      _debugLog('ExternalHttp.get unexpected error [${sanitizeUrlForLogging(url)}]: $e');
       return null;
     }
   }
@@ -61,11 +61,26 @@ class ExternalHttp {
       );
       return resp.data;
     } on DioException catch (e) {
-      debugPrint('ExternalHttp.post error [$url]: ${e.message}');
+      _debugLog('ExternalHttp.post error [${sanitizeUrlForLogging(url)}]: ${e.message}');
       return null;
     } catch (e) {
-      debugPrint('ExternalHttp.post unexpected error [$url]: $e');
+      _debugLog('ExternalHttp.post unexpected error [${sanitizeUrlForLogging(url)}]: $e');
       return null;
     }
+  }
+
+  static String sanitizeUrlForLogging(String url) {
+    final uri = Uri.tryParse(url);
+    if (uri == null || uri.queryParameters.isEmpty) return url;
+    return uri.replace(
+      queryParameters: uri.queryParameters.map(
+        (key, _) => MapEntry(key, '[redacted]'),
+      ),
+    ).toString();
+  }
+
+  static void _debugLog(String message) {
+    if (!kDebugMode) return;
+    debugPrint(message);
   }
 }

@@ -55,9 +55,7 @@ class CoinCapDatasource {
   static const _cacheTtl = Duration(minutes: 2);
 
   /// Fetch prices for the given uppercase [symbols].
-  static Future<Map<String, CoinPrice>> getPrices(
-    List<String> symbols,
-  ) async {
+  static Future<Map<String, CoinPrice>> getPrices(List<String> symbols) async {
     final now = DateTime.now();
     final cachedAt = _cachedAt;
     if (cachedAt != null && now.difference(cachedAt) < _cacheTtl) {
@@ -79,8 +77,9 @@ class CoinCapDatasource {
       if (ids.isEmpty) return {};
 
       final url = '$_base/assets?ids=${ids.join(',')}';
-      final raw = await ExternalHttp.get(url)
-          .timeout(const Duration(seconds: 8), onTimeout: () => null);
+      final raw = await ExternalHttp.get(
+        url,
+      ).timeout(const Duration(seconds: 8), onTimeout: () => null);
       if (raw == null || raw is! Map) return {};
 
       final data = raw['data'];
@@ -98,10 +97,10 @@ class CoinCapDatasource {
         final cp = CoinPrice(
           symbol: symbol,
           priceUsd: price,
-          change24h:
-              double.tryParse(item['changePercent24Hr']?.toString() ?? ''),
-          volume24h:
-              double.tryParse(item['volumeUsd24Hr']?.toString() ?? ''),
+          change24h: double.tryParse(
+            item['changePercent24Hr']?.toString() ?? '',
+          ),
+          volume24h: double.tryParse(item['volumeUsd24Hr']?.toString() ?? ''),
           marketCap: double.tryParse(item['marketCapUsd']?.toString() ?? ''),
           source: _source,
           fetchedAt: fetchedAt,
@@ -112,8 +111,13 @@ class CoinCapDatasource {
       _cachedAt = DateTime.now();
       return result;
     } catch (e) {
-      debugPrint('CoinCapDatasource.getPrices error: $e');
+      _debugLog('CoinCapDatasource.getPrices error: $e');
       return {};
     }
+  }
+
+  static void _debugLog(String message) {
+    if (!kDebugMode) return;
+    debugPrint(message);
   }
 }

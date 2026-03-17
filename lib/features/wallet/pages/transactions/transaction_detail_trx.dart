@@ -60,6 +60,7 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
     _pollingTimer?.cancel();
     super.dispose();
   }
+
   Map<String, dynamic>? transactionInfo;
   String resultStr = "Pending";
   String value = '';
@@ -75,7 +76,9 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
     if (mounted) setState(() => load = Load.loading);
 
     final trModelList = await db.selectTransationRecordTxHash(
-        _txHash, widget.coinModel.address);
+      _txHash,
+      widget.coinModel.address,
+    );
     if (trModelList.isNotEmpty) trm = trModelList[0];
 
     final ok = await getTransactionByHash();
@@ -84,7 +87,10 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
   }
 
   Future<bool> getTransactionByHash() async {
-    final rData = await transactionApi.trxTransactionInfoHash(_txHash);
+    final rData = await transactionApi.trxTransactionInfoHash(
+      _txHash,
+      isTest: widget.coinModel.isTest,
+    );
     if (rData.error) {
       errorMessage = rData.data.toString();
       owner = false;
@@ -112,7 +118,8 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
     final decimals = widget.coinModel.coin['decimals'];
     value = '${toEther(trm.price.toString(), decimals)} $unit';
     gasPrice = '${toEther(trm.gasPrice.toString(), decimals)} $unit';
-    owner = trm.from1.toLowerCase() ==
+    owner =
+        trm.from1.toLowerCase() ==
         (transactionInfo?['from'] ?? "").toString().toLowerCase();
     return true;
   }
@@ -133,31 +140,37 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
   void closeKeyboard() {
     FocusScope.of(context).requestFocus(FocusNode());
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
         text: S.of(context).s_key_3,
-        actions: _explorerUrl.isNotEmpty ? [
-          IconButton(
-            icon: const Icon(Icons.open_in_browser_outlined),
-            tooltip: S.of(context).g_key_196,
-            onPressed: () => Navigator.push(context,
-              MaterialPageRoute(builder: (_) => BrowserPage(_explorerUrl))),
-          ),
-        ] : null,
+        actions: _explorerUrl.isNotEmpty
+            ? [
+                IconButton(
+                  icon: const Icon(Icons.open_in_browser_outlined),
+                  tooltip: S.of(context).g_key_196,
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => BrowserPage(_explorerUrl),
+                    ),
+                  ),
+                ),
+              ]
+            : null,
       ),
       body: bodyWidget(),
     );
   }
+
   Widget bodyWidget() {
     return SafeArea(
       child: Column(
         children: [
           searchWidget(),
-          Expanded(
-            child: load == Load.error ? errorWidget() : txDataWidget(),
-          ),
+          Expanded(child: load == Load.error ? errorWidget() : txDataWidget()),
         ],
       ),
     );
@@ -176,7 +189,9 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
             child: Icon(
               Icons.refresh,
               color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainBlueColor.name),
+                context,
+                AppThemeKeys.mainBlueColor.name,
+              ),
             ),
           ),
         ),
@@ -184,11 +199,9 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
       ],
     );
   }
-  Widget _divider() => Divider(
-        height: ScreenUtil().setWidth(1),
-        indent: 0,
-        endIndent: 0,
-      );
+
+  Widget _divider() =>
+      Divider(height: ScreenUtil().setWidth(1), indent: 0, endIndent: 0);
 
   Widget txDataWidget() {
     if (transactionInfo == null) {
@@ -218,6 +231,7 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
       ),
     );
   }
+
   void _searchAndReload() {
     closeKeyboard();
     init();
@@ -229,7 +243,9 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
       padding: EdgeInsets.only(left: ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
         color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemBgColor.name),
+          context,
+          AppThemeKeys.itemBgColor.name,
+        ),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8.0)),
       ),
       height: ScreenUtil().setWidth(72.0),
@@ -239,7 +255,9 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
             child: TextField(
               style: TextStyle(
                 color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
+                  context,
+                  AppThemeKeys.mainTextColor.name,
+                ),
                 fontSize: ScreenUtil().setSp(26.0),
               ),
               controller: searchEditingController,
@@ -247,7 +265,8 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
               keyboardType: TextInputType.text,
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.symmetric(
-                    vertical: ScreenUtil().setWidth(10.0)),
+                  vertical: ScreenUtil().setWidth(10.0),
+                ),
                 hintText: S.of(context).search,
                 border: InputBorder.none,
                 errorBorder: InputBorder.none,
@@ -266,7 +285,9 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
               child: Icon(
                 Icons.search,
                 color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
+                  context,
+                  AppThemeKeys.mainBlueColor.name,
+                ),
                 size: ScreenUtil().setWidth(30.0),
               ),
             ),
@@ -275,6 +296,7 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
       ),
     );
   }
+
   Widget errorMessageWidget() {
     if (errorMessage.isEmpty) return const SizedBox.shrink();
     return Container(
@@ -289,22 +311,29 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20.0)),
         color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.errorBgColor2.name),
+          context,
+          AppThemeKeys.errorBgColor2.name,
+        ),
       ),
       child: Text(
         errorMessage,
         style: TextStyle(
           fontSize: ScreenUtil().setSp(28.0),
           color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.errorTextColor.name),
+            context,
+            AppThemeKeys.errorTextColor.name,
+          ),
         ),
         textAlign: TextAlign.center,
       ),
     );
   }
+
   Widget itemWidget(String title, String value, {bool copy = false}) {
     final blueColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainBlueColor.name);
+      context,
+      AppThemeKeys.mainBlueColor.name,
+    );
     return Container(
       margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
       padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10)),
@@ -316,7 +345,9 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
             title,
             style: TextStyle(
               color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
+                context,
+                AppThemeKeys.mainTextColor.name,
+              ),
               fontSize: ScreenUtil().setSp(28),
             ),
           ),
@@ -326,7 +357,10 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
               Expanded(
                 child: Text(
                   value,
-                  style: TextStyle(color: blueColor, fontSize: ScreenUtil().setSp(28)),
+                  style: TextStyle(
+                    color: blueColor,
+                    fontSize: ScreenUtil().setSp(28),
+                  ),
                 ),
               ),
               if (copy)
@@ -365,7 +399,10 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
           Text(
             title,
             style: TextStyle(
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+              color: AppThemeUtils.getColorByKey(
+                context,
+                AppThemeKeys.mainTextColor.name,
+              ),
               fontSize: ScreenUtil().setSp(28),
             ),
           ),

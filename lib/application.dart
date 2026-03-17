@@ -39,11 +39,13 @@ class Application {
       userInfo = null;
       globalProviderContainer.read(currentUserProvider.notifier).clearUser();
       globalProviderContainer.invalidate(walletListProvider);
-      if (!AppContext.mounted) return;
       globalWapAdapter.initWallet();
       globalWcpInstance.cleanDataLogout();
     } catch (err) {
-      debugPrint('Logout error: $err');
+      assert(() {
+        debugPrint('Logout error: $err');
+        return true;
+      }());
     }
   }
 }

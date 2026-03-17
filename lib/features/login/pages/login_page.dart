@@ -212,8 +212,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                   ),
                                   recognizer: TapGestureRecognizer()
                                     ..onTap = () async {
-                                      final rData = await Navigator.push<bool>(
-                                        context,
+                                      final navigator = Navigator.of(context);
+                                      final rData = await navigator.push<bool>(
                                         MaterialPageRoute(
                                           builder: (_) => AccountCreateAndReset(
                                             type: HandType.createAccount,
@@ -222,7 +222,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                         ),
                                       );
                                       if (!mounted) return;
-                                      if (rData == true) Navigator.pop(context);
+                                      if (rData == true) navigator.pop();
                                     },
                                 ),
                               ],
@@ -307,8 +307,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           ),
           recognizer: TapGestureRecognizer()
             ..onTap = () async {
-              final rData = await Navigator.push<bool>(
-                context,
+              final navigator = Navigator.of(context);
+              final rData = await navigator.push<bool>(
                 MaterialPageRoute(
                   builder: (_) => AccountCreateAndReset(
                     type: HandType.restPassword,
@@ -317,7 +317,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 ),
               );
               if (!mounted) return;
-              if (rData == true) Navigator.pop(context);
+              if (rData == true) navigator.pop();
             },
         ),
       ),
@@ -389,7 +389,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     } catch (err) {
       ToastUtils.show(err.toString());
     } finally {
-      setState(() => load = Load.finish);
+      if (mounted) {
+        setState(() => load = Load.finish);
+      }
     }
   }
 }

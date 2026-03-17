@@ -52,6 +52,8 @@ class SocialAuthResult {
   factory SocialAuthResult.cancelled() {
     return SocialAuthResult(success: false, cancelled: true);
   }
+
+  bool get hasUsableIdToken => idToken != null && idToken!.isNotEmpty;
 }
 
 /// Social authentication service
@@ -79,8 +81,12 @@ class SocialAuthService {
   /// - accessToken requires separate authorization request
   Future<SocialAuthResult> signInWithGoogle() async {
     try {
-      // Sign out first to ensure fresh login
-      await _googleSignIn.signOut();
+      // Best-effort sign-out first to ensure account chooser visibility.
+      try {
+        await _googleSignIn.signOut();
+      } catch (e) {
+        _debugLog('Google pre-login signOut failed: $e');
+      }
 
       // Authenticate with Google (google_sign_in 7.x)
       final GoogleSignInAccount account = await _googleSignIn.authenticate(
@@ -98,7 +104,7 @@ class SocialAuthService {
         );
         accessToken = authorization?.accessToken;
       } catch (e) {
-        debugPrint('Failed to get access token: $e');
+        _debugLog('Failed to get access token: $e');
         // Continue without access token - idToken is usually sufficient
       }
 
@@ -116,10 +122,10 @@ class SocialAuthService {
       if (e.code == GoogleSignInExceptionCode.canceled) {
         return SocialAuthResult.cancelled();
       }
-      debugPrint('Google Sign-In error: $e');
+      _debugLog('Google Sign-In error: $e');
       return SocialAuthResult.failure(e.toString());
     } catch (e) {
-      debugPrint('Google Sign-In error: $e');
+      _debugLog('Google Sign-In error: $e');
       return SocialAuthResult.failure(e.toString());
     }
   }
@@ -175,10 +181,10 @@ class SocialAuthService {
       if (e.code == AuthorizationErrorCode.canceled) {
         return SocialAuthResult.cancelled();
       }
-      debugPrint('Apple Sign-In authorization error: $e');
+      _debugLog('Apple Sign-In authorization error: $e');
       return SocialAuthResult.failure(e.message);
     } catch (e) {
-      debugPrint('Apple Sign-In error: $e');
+      _debugLog('Apple Sign-In error: $e');
       return SocialAuthResult.failure(e.toString());
     }
   }
@@ -208,8 +214,12 @@ class SocialAuthService {
     try {
       await _googleSignIn.signOut();
     } catch (e) {
-      debugPrint('Google Sign-Out error: $e');
+      _debugLog('Google Sign-Out error: $e');
     }
   }
 
+  void _debugLog(String message) {
+    if (!kDebugMode) return;
+    debugPrint(message);
+  }
 }

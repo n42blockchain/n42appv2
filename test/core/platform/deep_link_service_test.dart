@@ -36,12 +36,8 @@ void main() {
     });
 
     test('should detect WalletConnect URI embedded in n42 scheme', () async {
-      final uri = Uri.parse(
-        'n42://wc?uri=wc%3Aabc%402%3Frelay-protocol%3Dirn%26symKey%3Ddef',
-      );
-      // The full toString contains relay-protocol and symKey
-      // But they are percent-encoded in the query, so the toString check might not match
-      // Let's test with a URI that explicitly contains these strings
+      // Percent-encoded WC URI in query is not guaranteed to match the
+      // heuristic, so use an explicit relay/symKey container URL.
       final wcUri = Uri.parse(
         'n42app://connect?relay-protocol=irn&symKey=abc123',
       );
@@ -282,6 +278,40 @@ void main() {
       final str = data.toString();
       expect(str, contains('chat'));
       expect(str, contains('room1'));
+    });
+
+    test('toString should redact sensitive sso parameters', () {
+      final data = DeepLinkData(
+        type: DeepLinkType.chatSso,
+        uri: Uri.parse(
+          'n42://auth/sso?loginToken=secret-token&homeserver=https://m.si46.world',
+        ),
+        params: {
+          'loginToken': 'secret-token',
+          'homeserver': 'https://m.si46.world',
+        },
+      );
+
+      final str = data.toString();
+      expect(str, isNot(contains('secret-token')));
+      expect(str, contains('[redacted]'));
+      expect(str, contains('m.si46.world'));
+    });
+
+    test('toString should redact walletconnect symKey in nested wcUri', () {
+      final data = DeepLinkData(
+        type: DeepLinkType.walletConnect,
+        uri: Uri.parse(
+          'wc:abc123@2?relay-protocol=irn&symKey=super-secret-key',
+        ),
+        params: {
+          'wcUri': 'wc:abc123@2?relay-protocol=irn&symKey=super-secret-key',
+        },
+      );
+
+      final str = data.toString();
+      expect(str, isNot(contains('super-secret-key')));
+      expect(str, contains('redacted'));
     });
   });
 

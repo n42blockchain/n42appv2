@@ -127,6 +127,7 @@ class BaseHttp {
     bool defaultReturn = true,
     Map<String, String>? userInfo,
     bool enableRetry = false,
+    Duration? timeout,
   }) async {
     // RESTful path parameter substitution
     if (params.isNotEmpty) {
@@ -142,6 +143,9 @@ class BaseHttp {
         method: method,
         contentType: header?['content-type'] as String? ?? _contentTypeString,
         extra: enableRetry ? {RetryOptions.kRetryEnabled: true} : null,
+        connectTimeout: timeout,
+        sendTimeout: timeout,
+        receiveTimeout: timeout,
         headers: ProxyConfig.mergeAuthHeaders(path, {
           if (header != null)
             ...header.map((key, value) => MapEntry(key, value.toString())),
@@ -268,6 +272,7 @@ class BaseHttp {
     bool defaultReturn = true,
     bool addUserInfo = false,
     Map<String, dynamic>? header,
+    Duration? timeout,
   }) {
     return _request(
       path,
@@ -276,6 +281,7 @@ class BaseHttp {
       defaultReturn: defaultReturn,
       userInfo: addUserInfo ? getUserToken() : null,
       header: header,
+      timeout: timeout,
     );
   }
 
@@ -291,6 +297,7 @@ class BaseHttp {
     bool defaultReturn = true,
     bool addUserInfo = false,
     bool enableRetry = false,
+    Duration? timeout,
   }) {
     return _request(
       path,
@@ -304,6 +311,7 @@ class BaseHttp {
       userInfo: addUserInfo ? getUserToken() : null,
       header: header,
       enableRetry: enableRetry,
+      timeout: timeout,
     );
   }
 
@@ -315,6 +323,7 @@ class BaseHttp {
     bool defaultReturn = true,
     bool addUserInfo = false,
     Map<String, dynamic>? header,
+    Duration? timeout,
   }) {
     return _request(
       path,
@@ -324,6 +333,7 @@ class BaseHttp {
       defaultReturn: defaultReturn,
       userInfo: addUserInfo ? getUserToken() : null,
       header: header,
+      timeout: timeout,
     );
   }
 
@@ -335,6 +345,7 @@ class BaseHttp {
     bool defaultReturn = true,
     bool addUserInfo = false,
     Map<String, dynamic>? header,
+    Duration? timeout,
   }) {
     return _request(
       path,
@@ -344,6 +355,7 @@ class BaseHttp {
       defaultReturn: defaultReturn,
       userInfo: addUserInfo ? getUserToken() : null,
       header: header,
+      timeout: timeout,
     );
   }
 

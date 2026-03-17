@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/config/proxy_config.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/eth_api.dart';
+import 'package:n42_wallet/features/wallet/models/transaction/explorer_response_utils.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/sol_api.dart';
 
 import 'discovered_token.dart';
@@ -134,20 +135,26 @@ class TokenDiscoveryService {
       ),
     );
     final body = response.data;
-    if (body == null || body['status'] != '1') {
-      // status '0' with message "No transactions found" is a normal case.
+    if (body == null) {
       return [];
     }
 
-    final txList = body['result'] as List<dynamic>? ?? [];
+    final txList = extractExplorerItems(body);
+    if (txList.isEmpty) {
+      return [];
+    }
 
     // 2. Deduplicate unique contracts (preserve first occurrence).
     final seen = <String>{};
     final candidates = <_EvmCandidate>[];
 
-    for (final tx in txList) {
-      if (tx is! Map) continue;
-      final contract = (tx['contractAddress'] as String?)?.toLowerCase() ?? '';
+    for (final normalized in txList) {
+      final contract = (explorerString(
+                normalized,
+                const ['contractAddress', 'tokenAddr', 'token'],
+              ) ??
+              '')
+          .toLowerCase();
       if (contract.isEmpty ||
           !seen.add(contract) ||
           knownContracts.contains(contract) ||
@@ -156,10 +163,21 @@ class TokenDiscoveryService {
       }
 
       candidates.add(_EvmCandidate(
-        contract: tx['contractAddress'] as String,
-        symbol: tx['tokenSymbol'] as String? ?? '',
-        name: tx['tokenName'] as String? ?? '',
-        decimals: int.tryParse(tx['tokenDecimal'] as String? ?? '0') ?? 0,
+        contract: explorerString(
+              normalized,
+              const ['contractAddress', 'tokenAddr', 'token'],
+            ) ??
+            '',
+        symbol: explorerString(normalized, const ['tokenSymbol']) ?? '',
+        name: explorerString(normalized, const ['tokenName']) ?? '',
+        decimals: int.tryParse(
+              explorerString(
+                    normalized,
+                    const ['tokenDecimal', 'tokenDecimals', 'decimals'],
+                  ) ??
+                  '0',
+            ) ??
+            0,
       ));
       if (candidates.length >= 30) break; // safety cap
     }

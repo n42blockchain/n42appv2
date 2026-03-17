@@ -20,9 +20,7 @@ class CryptoComparePriceDatasource {
   static const _cacheTtl = Duration(minutes: 2);
 
   /// Fetch prices for the given uppercase [symbols].
-  static Future<Map<String, CoinPrice>> getPrices(
-    List<String> symbols,
-  ) async {
+  static Future<Map<String, CoinPrice>> getPrices(List<String> symbols) async {
     final now = DateTime.now();
     final cachedAt = _cachedAt;
     if (cachedAt != null && now.difference(cachedAt) < _cacheTtl) {
@@ -38,8 +36,9 @@ class CryptoComparePriceDatasource {
       final fsyms = symbols.map((s) => s.toUpperCase()).join(',');
       final url =
           '$_base/pricemultifull?fsyms=$fsyms&tsyms=USD&extraParams=n42wallet';
-      final raw = await ExternalHttp.get(url)
-          .timeout(const Duration(seconds: 8), onTimeout: () => null);
+      final raw = await ExternalHttp.get(
+        url,
+      ).timeout(const Duration(seconds: 8), onTimeout: () => null);
       if (raw == null || raw is! Map) return {};
 
       final rawData = raw['RAW'] as Map?;
@@ -71,8 +70,13 @@ class CryptoComparePriceDatasource {
       _cachedAt = DateTime.now();
       return result;
     } catch (e) {
-      debugPrint('CryptoComparePriceDatasource.getPrices error: $e');
+      _debugLog('CryptoComparePriceDatasource.getPrices error: $e');
       return {};
     }
+  }
+
+  static void _debugLog(String message) {
+    if (!kDebugMode) return;
+    debugPrint(message);
   }
 }

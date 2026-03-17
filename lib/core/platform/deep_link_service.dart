@@ -35,6 +35,18 @@ enum DeepLinkType {
 
 /// Deep Link 数据
 class DeepLinkData {
+  static const Set<String> _sensitiveParams = {
+    'loginToken',
+    'login_token',
+    'token',
+    'access_token',
+    'symKey',
+    'wcUri',
+    'password',
+    'privateKey',
+    'mnemonic',
+  };
+
   /// 链接类型
   final DeepLinkType type;
 
@@ -50,8 +62,37 @@ class DeepLinkData {
     required this.params,
   });
 
+  Uri get sanitizedUri => redactUri(uri);
+
+  Map<String, String> get sanitizedParams => params.map(
+        (key, value) => MapEntry(key, _redactParamValue(key, value)),
+      );
+
+  static Uri redactUri(Uri uri) {
+    if (uri.queryParameters.isEmpty) return uri;
+    return uri.replace(
+      queryParameters: uri.queryParameters.map(
+        (key, value) => MapEntry(key, _redactParamValue(key, value)),
+      ),
+    );
+  }
+
+  static String _redactParamValue(String key, String value) {
+    if (_sensitiveParams.contains(key)) {
+      if (key == 'wcUri') {
+        final nestedUri = Uri.tryParse(value);
+        if (nestedUri != null) {
+          return redactUri(nestedUri).toString();
+        }
+      }
+      return '[redacted]';
+    }
+    return value;
+  }
+
   @override
-  String toString() => 'DeepLinkData(type: $type, uri: $uri, params: $params)';
+  String toString() =>
+      'DeepLinkData(type: $type, uri: $sanitizedUri, params: $sanitizedParams)';
 }
 
 /// Deep Link 服务
@@ -88,9 +129,9 @@ class DeepLinkService {
   }
 
   void _handleUri(Uri uri) {
-    // 仅在 debug 模式打印完整 URI，避免 release 模式泄露 symKey 等敏感参数
+    // Deep link 诊断日志只在 debug 下输出，且默认脱敏 query 参数。
     assert(() {
-      debugPrint('Received deep link: $uri');
+      debugPrint('Received deep link: ${DeepLinkData.redactUri(uri)}');
       return true;
     }());
 

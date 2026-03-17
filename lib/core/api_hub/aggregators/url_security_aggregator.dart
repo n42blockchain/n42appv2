@@ -21,15 +21,29 @@ class UrlSecurityAggregator {
   /// When [useRemote] is true (default), also queries URLhaus for
   /// malware URLs not covered by the phishing blocklist.
   /// Set [useRemote] to false for fast synchronous-only checks.
-  static Future<UrlThreat> checkUrl(
+  static Future<UrlThreat> checkUrl(String url, {bool useRemote = true}) async {
+    return checkUrlWithLookups(
+      url,
+      useRemote: useRemote,
+      phishingLookup: PhishingDetector.instance.checkUrl,
+      remoteUrlLookup: UrlhausDatasource.checkUrl,
+      remoteHostLookup: UrlhausDatasource.checkHost,
+    );
+  }
+
+  @visibleForTesting
+  static Future<UrlThreat> checkUrlWithLookups(
     String url, {
     bool useRemote = true,
+    required PhishingCheckResult Function(String url) phishingLookup,
+    required Future<UrlThreat> Function(String url) remoteUrlLookup,
+    required Future<UrlThreat> Function(String host) remoteHostLookup,
   }) async {
     if (url.isEmpty) return UrlThreat.safe(url);
 
     try {
       // Layer 1: Local phishing blocklist (synchronous)
-      final phishingResult = PhishingDetector.instance.checkUrl(url);
+      final phishingResult = phishingLookup(url);
       if (phishingResult == PhishingCheckResult.phishing) {
         return UrlThreat(
           url: url,
@@ -41,13 +55,19 @@ class UrlSecurityAggregator {
 
       // Layer 2: URLhaus remote check (async, optional)
       if (useRemote) {
-        final urlhausResult = await UrlhausDatasource.checkUrl(url);
+        final urlhausResult = await remoteUrlLookup(url);
         if (urlhausResult.isMalicious) return urlhausResult;
+
+        final host = Uri.tryParse(url)?.host;
+        if (host != null && host.isNotEmpty) {
+          final urlhausHostResult = await remoteHostLookup(host);
+          if (urlhausHostResult.isMalicious) return urlhausHostResult;
+        }
       }
 
       return UrlThreat.safe(url);
     } catch (e) {
-      debugPrint('UrlSecurityAggregator.checkUrl error: $e');
+      _debugLog('UrlSecurityAggregator.checkUrl error: $e');
       return UrlThreat.safe(url);
     }
   }
@@ -56,5 +76,10 @@ class UrlSecurityAggregator {
   static bool isPhishing(String url) {
     return PhishingDetector.instance.checkUrl(url) ==
         PhishingCheckResult.phishing;
+  }
+
+  static void _debugLog(String message) {
+    if (!kDebugMode) return;
+    debugPrint(message);
   }
 }

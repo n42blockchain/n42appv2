@@ -45,7 +45,10 @@ class AuthServiceImpl implements IAuthService {
         _authStateController.add(true);
       }
     } catch (e) {
-      debugPrint('Auth init error: $e');
+      assert(() {
+        debugPrint('Auth init error: $e');
+        return true;
+      }());
       _authStateController.add(false);
     }
   }
@@ -62,11 +65,17 @@ class AuthServiceImpl implements IAuthService {
   @override
   Future<bool> verifyPassword(String password) async {
     try {
+      if (password.isEmpty) return false;
       final credentials = await _secureStorage.getUserInfo();
       if (credentials == null) return false;
-      return credentials['password'] != null;
+      final storedPassword = credentials['password'] as String?;
+      if (storedPassword == null || storedPassword.isEmpty) return false;
+      return storedPassword == password;
     } catch (e) {
-      debugPrint('Password verification error: $e');
+      assert(() {
+        debugPrint('Password verification error: $e');
+        return true;
+      }());
       return false;
     }
   }
@@ -80,7 +89,10 @@ class AuthServiceImpl implements IAuthService {
       final result = await frp.authenticateWithBiometrics();
       return result == BiometricAuthResult.success;
     } catch (e) {
-      debugPrint('Biometric auth error: $e');
+      assert(() {
+        debugPrint('Biometric auth error: $e');
+        return true;
+      }());
       return false;
     }
   }
@@ -93,7 +105,7 @@ class AuthServiceImpl implements IAuthService {
     _currentUser = null;
     _authToken = null;
     await _spUtil.saveUserInfo(null);
-    await _secureStorage.deleteToken();
+    await _secureStorage.clearUserData();
     _authStateController.add(false);
   }
 
@@ -140,4 +152,3 @@ final isLoggedInProvider = Provider<bool>((ref) {
   final authService = ref.watch(authServiceProvider);
   return authService.isLoggedIn();
 });
-

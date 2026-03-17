@@ -12,6 +12,7 @@ import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/platform/chat_social_auth_config.dart';
 import 'package:n42_wallet/core/platform/deep_link_service.dart';
 import 'package:n42_wallet/core/platform/social_auth_native_config.dart';
+import 'package:n42_wallet/core/routing/chat_sso_utils.dart';
 import 'package:n42_wallet/core/routing/deep_link_handler.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/di/injection.dart';
@@ -348,10 +349,26 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
           ssoRedirectUrl: 'n42://auth/sso',
           walletBridge: N42WalletBridge(),
           apiHubBridge: N42ApiHubBridge(),
-          aiApiKey: ProxyConfig.authToken.isEmpty ? null : ProxyConfig.authToken,
+          proxyAuthToken: ProxyConfig.authToken.isEmpty
+              ? null
+              : ProxyConfig.authToken,
+          giphyBaseUrl: ProxyConfig.giphyBase,
+          giphyUseProxyEndpoint: true,
+          aiApiKey: ProxyConfig.authToken.isEmpty
+              ? null
+              : ProxyConfig.authToken,
           aiBaseUrl: ProxyConfig.aiChat,
           aiModel: '', // Model configured server-side
           aiUseProxyEndpoint: true,
+          speechGoogleBaseUrl: ProxyConfig.speechGoogle,
+          speechAzureBaseUrl: ProxyConfig.speechAzure,
+          speechUseProxyEndpoint: true,
+          marketBaseUrl: ProxyConfig.marketBase,
+          marketUseProxyEndpoint: true,
+          debankBaseUrl: ProxyConfig.debankBase,
+          debankUseProxyEndpoint: true,
+          alchemyBaseUrl: ProxyConfig.alchemyChain('eth-mainnet'),
+          alchemyUseProxyEndpoint: true,
         ),
       );
       await _flushPendingChatDeepLink();
@@ -438,16 +455,23 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
         '';
     if (loginToken.isEmpty) {
       if (kDebugMode) {
-        debugPrint('Deep link: SSO callback missing login token: ${data.uri}');
+        debugPrint(
+          'Deep link: SSO callback missing login token: ${data.sanitizedUri}',
+        );
       }
       return;
     }
 
-    final homeserver =
-        data.params['homeserver'] ?? N42Chat.config?.defaultHomeserver ?? '';
-    if (homeserver.isEmpty) {
+    final homeserver = normalizeChatSsoHomeserver(
+      data.params['homeserver'],
+      fallbackHomeserver: N42Chat.config?.defaultHomeserver,
+    );
+    if (homeserver == null || homeserver.isEmpty) {
       if (kDebugMode) {
-        debugPrint('Deep link: SSO callback missing homeserver: ${data.uri}');
+        debugPrint(
+          'Deep link: SSO callback missing or invalid homeserver: '
+          '${data.sanitizedUri}',
+        );
       }
       return;
     }

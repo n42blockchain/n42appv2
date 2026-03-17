@@ -32,30 +32,45 @@ class NewsAggregator {
         MessariDatasource.fetchNews(),
       ]);
 
-      // Merge all articles
-      final allArticles = <NewsArticle>[];
-      for (final list in results) {
-        allArticles.addAll(list);
+      final merged = mergeArticles(
+        results,
+        fallback: _cache ?? const [],
+      );
+      if (merged.isNotEmpty) {
+        _cache = merged;
+        _cachedAt = DateTime.now();
       }
+      return merged.take(limit).toList();
+    } catch (e) {
+      _debugLog('NewsAggregator.fetchLatest error: $e');
+      return (_cache ?? const []).take(limit).toList();
+    }
+  }
 
-      // Deduplicate by URL
-      final seen = <String>{};
-      final deduplicated = <NewsArticle>[];
-      for (final article in allArticles) {
-        if (article.url.isNotEmpty && seen.add(article.url)) {
-          deduplicated.add(article);
+  @visibleForTesting
+  static List<NewsArticle> mergeArticles(
+    List<List<NewsArticle>> results, {
+    List<NewsArticle> fallback = const [],
+  }) {
+    final newestByUrl = <String, NewsArticle>{};
+    for (final list in results) {
+      for (final article in list) {
+        if (article.url.isEmpty) continue;
+        final existing = newestByUrl[article.url];
+        if (existing == null ||
+            article.publishedAt.isAfter(existing.publishedAt)) {
+          newestByUrl[article.url] = article;
         }
       }
-
-      // Sort by publish time (newest first)
-      deduplicated.sort((a, b) => b.publishedAt.compareTo(a.publishedAt));
-
-      _cache = deduplicated;
-      _cachedAt = DateTime.now();
-      return deduplicated.take(limit).toList();
-    } catch (e) {
-      debugPrint('NewsAggregator.fetchLatest error: $e');
-      return [];
     }
+
+    final deduplicated = newestByUrl.values.toList();
+    deduplicated.sort((a, b) => b.publishedAt.compareTo(a.publishedAt));
+    return deduplicated.isNotEmpty ? deduplicated : fallback;
+  }
+
+  static void _debugLog(String message) {
+    if (!kDebugMode) return;
+    debugPrint(message);
   }
 }

@@ -5,6 +5,7 @@ import 'package:n42_wallet/core/network/base_api.dart';
 import 'package:n42_wallet/core/network/request_url.dart';
 import 'package:n42_wallet/features/models/message_model.dart';
 import 'package:n42_wallet/features/sqlite/app_database.dart';
+import 'package:n42_wallet/features/wallet/models/transaction/explorer_response_utils.dart';
 // ignore: unused_import
 import 'package:n42_wallet/features/wallet/models/btc_transaction_recode_model.dart';
 import 'package:n42_wallet/features/wallet/models/transaction/btc_response.dart';

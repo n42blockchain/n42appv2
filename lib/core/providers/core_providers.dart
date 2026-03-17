@@ -137,10 +137,18 @@ final appInitProvider = FutureProvider<void>((ref) async {
     if (userInfoJson != null) {
       final userInfo = UserInfo.fromJson(userInfoJson);
       AppGlobals.userInfo = userInfo;
-      // Sync token to SecureStorage on startup load
+      // Keep SecureStorage in sync with the canonical cached user info.
+      final syncTasks = <Future<void>>[secureStorage.saveUserInfo(userInfo.toJson())];
       if (userInfo.token != null && userInfo.token!.isNotEmpty) {
-        await secureStorage.saveToken(userInfo.token!);
+        syncTasks.add(secureStorage.saveToken(userInfo.token!));
       }
+      if (userInfo.uuid != null && userInfo.uuid!.isNotEmpty) {
+        syncTasks.add(secureStorage.saveUuid(userInfo.uuid!));
+      }
+      if (userInfo.email != null && userInfo.email!.isNotEmpty) {
+        syncTasks.add(secureStorage.saveEmail(userInfo.email!));
+      }
+      await Future.wait(syncTasks);
       final sharedInfo = SharedUserInfo(
         uuid: userInfo.uuid ?? '',
         email: userInfo.email ?? '',
@@ -161,10 +169,19 @@ final appInitProvider = FutureProvider<void>((ref) async {
       ).timeout(const Duration(seconds: 8), onTimeout: () => null);
       if (freshUser != null) {
         AppGlobals.userInfo = freshUser;
-        // Sync fresh token to SecureStorage
+        final freshSyncTasks = <Future<void>>[
+          secureStorage.saveUserInfo(freshUser.toJson()),
+        ];
         if (freshUser.token != null && freshUser.token!.isNotEmpty) {
-          await secureStorage.saveToken(freshUser.token!);
+          freshSyncTasks.add(secureStorage.saveToken(freshUser.token!));
         }
+        if (freshUser.uuid != null && freshUser.uuid!.isNotEmpty) {
+          freshSyncTasks.add(secureStorage.saveUuid(freshUser.uuid!));
+        }
+        if (freshUser.email != null && freshUser.email!.isNotEmpty) {
+          freshSyncTasks.add(secureStorage.saveEmail(freshUser.email!));
+        }
+        await Future.wait(freshSyncTasks);
         final freshShared = SharedUserInfo(
           uuid: freshUser.uuid ?? '',
           email: freshUser.email ?? '',

@@ -135,40 +135,55 @@ class MessariDatasource {
     try {
       final raw = await ExternalHttp.get('$_base/v1/news')
           .timeout(const Duration(seconds: 8), onTimeout: () => null);
-      if (raw == null || raw is! Map) return [];
-
-      final data = raw['data'];
-      if (data is! List) return [];
-
-      final articles = <NewsArticle>[];
-      for (final item in data) {
-        if (item is! Map) continue;
-        final title = item['title']?.toString() ?? '';
-        final url = item['url']?.toString() ?? '';
-        if (title.isEmpty || url.isEmpty) continue;
-
-        final publishedAt = DateTime.tryParse(
-              item['published_at']?.toString() ?? '',
-            ) ??
-            DateTime.now();
-
-        articles.add(NewsArticle(
-          id: item['id']?.toString() ?? '',
-          title: title,
-          url: url,
-          imageUrl: null,
-          sourceName: item['author']?['name']?.toString() ?? 'Messari',
-          publishedAt: publishedAt,
-          body: item['content']?.toString(),
-        ));
+      final articles = parseNewsResponse(raw, fallback: _newsCache ?? const []);
+      if (articles.isNotEmpty) {
+        _newsCache = articles;
+        _newsCachedAt = DateTime.now();
       }
-
-      _newsCache = articles;
-      _newsCachedAt = DateTime.now();
       return articles;
     } catch (e) {
-      debugPrint('MessariDatasource.fetchNews error: $e');
-      return [];
+      _debugLog('MessariDatasource.fetchNews error: $e');
+      return _newsCache ?? [];
     }
+  }
+
+  @visibleForTesting
+  static List<NewsArticle> parseNewsResponse(
+    dynamic raw, {
+    List<NewsArticle> fallback = const [],
+  }) {
+    if (raw == null || raw is! Map) return fallback;
+
+    final data = raw['data'];
+    if (data is! List) return fallback;
+
+    final articles = <NewsArticle>[];
+    for (final item in data) {
+      if (item is! Map) continue;
+      final title = item['title']?.toString() ?? '';
+      final url = item['url']?.toString() ?? '';
+      if (title.isEmpty || url.isEmpty) continue;
+
+      final publishedAt = DateTime.tryParse(
+            item['published_at']?.toString() ?? '',
+          ) ??
+          DateTime.now();
+
+      articles.add(NewsArticle(
+        id: item['id']?.toString() ?? '',
+        title: title,
+        url: url,
+        imageUrl: null,
+        sourceName: item['author']?['name']?.toString() ?? 'Messari',
+        publishedAt: publishedAt,
+        body: item['content']?.toString(),
+      ));
+    }
+    return articles.isNotEmpty ? articles : fallback;
+  }
+
+  static void _debugLog(String message) {
+    if (!kDebugMode) return;
+    debugPrint(message);
   }
 }

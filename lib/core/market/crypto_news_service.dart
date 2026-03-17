@@ -91,22 +91,37 @@ class CryptoNewsService {
     try {
       final raw = await ExternalHttp.get(_url)
           .timeout(const Duration(seconds: 8), onTimeout: () => null);
-      if (raw == null || raw is! Map) return [];
-      final data = raw['Data'];
-      if (data is! List) return [];
-
-      final articles = data
-          .whereType<Map<dynamic, dynamic>>()
-          .map((m) => NewsArticle.fromCryptoCompare(Map<String, dynamic>.from(m)))
-          .where((a) => a.title.isNotEmpty && a.url.isNotEmpty)
-          .toList();
-
-      _cached = articles;
-      _cachedAt = DateTime.now();
+      final articles = parseLatestResponse(raw, fallback: _cached ?? const []);
+      if (articles.isNotEmpty) {
+        _cached = articles;
+        _cachedAt = DateTime.now();
+      }
       return articles;
     } catch (e) {
-      debugPrint('CryptoNewsService.fetchLatest error: $e');
-      return [];
+      _debugLog('CryptoNewsService.fetchLatest error: $e');
+      return _cached ?? [];
     }
+  }
+
+  @visibleForTesting
+  static List<NewsArticle> parseLatestResponse(
+    dynamic raw, {
+    List<NewsArticle> fallback = const [],
+  }) {
+    if (raw == null || raw is! Map) return fallback;
+    final data = raw['Data'];
+    if (data is! List) return fallback;
+
+    final articles = data
+        .whereType<Map<dynamic, dynamic>>()
+        .map((m) => NewsArticle.fromCryptoCompare(Map<String, dynamic>.from(m)))
+        .where((a) => a.title.isNotEmpty && a.url.isNotEmpty)
+        .toList();
+    return articles.isNotEmpty ? articles : fallback;
+  }
+
+  static void _debugLog(String message) {
+    if (!kDebugMode) return;
+    debugPrint(message);
   }
 }

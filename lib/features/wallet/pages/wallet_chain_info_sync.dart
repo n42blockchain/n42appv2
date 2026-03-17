@@ -8,8 +8,10 @@ import 'package:n42_wallet/features/sqlite/app_database.dart';
 import 'package:n42_wallet/features/wallet/api/tokenview_enhanced_api.dart';
 import 'package:n42_wallet/features/wallet/api/transaction_api.dart';
 import 'package:n42_wallet/features/wallet/models/btc_transaction_recode_model.dart';
+import 'package:n42_wallet/features/wallet/models/transaction/btc_sync_utils.dart';
 import 'package:n42_wallet/features/wallet/models/transaction/btc_tran_detail.dart';
 import 'package:n42_wallet/features/wallet/models/transaction/common_response_item_model.dart';
+import 'package:n42_wallet/features/wallet/models/transaction/explorer_response_utils.dart';
 import 'package:n42_wallet/features/wallet/models/transaction/sol_transaction_item.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
@@ -49,8 +51,9 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
       final coinKey = coinModel.coin['coinType'];
       final contract = coinModel.coin['contract'];
 
-      final isBtc = coinModel.coin['blockchainType'] == BlockchainType.Bitcoin.name;
-      final List<dynamic>? txList = isBtc
+      final isBtc =
+          coinModel.coin['blockchainType'] == BlockchainType.Bitcoin.name;
+      final List<dynamic> txList = isBtc
           ? await db.selectBtcTransationRecord(
               AppGlobals.userInfo?.uuid ?? '',
               addr,
@@ -69,7 +72,7 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
               isTest: coinModel.isTest ? 1 : 0,
             );
 
-      final results = txList ?? [];
+      final results = txList;
       if (loadType == Load.refresh) transactionList.clear();
       transactionList.addAll(results);
       if (results.length < pageSize) lastPage = true;
@@ -89,8 +92,12 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
     final api = TransactionApi();
     final MessageModel mm = contract == ''
         ? await api.getTransactionList(coinKey, addr, isTest: coinModel.isTest)
-        : await api.getContractTransactionList(coinKey, addr, contract,
-            isTest: coinModel.isTest);
+        : await api.getContractTransactionList(
+            coinKey,
+            addr,
+            contract,
+            isTest: coinModel.isTest,
+          );
 
     if (mm.error == false) {
       final blockchainType = coinModel.coin['blockchainType'];
@@ -116,8 +123,12 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
 
   /// Mempool 支持的链 → TokenView chain 参数映射
   static const _mempoolChainMap = {
-    'ETH': 'eth', 'BNB': 'bnb', 'BASE': 'base',
-    'TRX': 'trx', 'BTC': 'btc', 'SOL': 'sol',
+    'ETH': 'eth',
+    'BNB': 'bnb',
+    'BASE': 'base',
+    'TRX': 'trx',
+    'BTC': 'btc',
+    'SOL': 'sol',
   };
 
   Future<void> _fetchMempoolTxs(dynamic coinModel) async {
@@ -129,17 +140,24 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
     if (addr.isEmpty) return;
 
     try {
-      final mempoolTxs = await const TokenViewEnhancedApi().getPendingTxs(tvChain, addr);
+      final mempoolTxs = await const TokenViewEnhancedApi().getPendingTxs(
+        tvChain,
+        addr,
+      );
       if (mempoolTxs.isEmpty || !mounted) return;
 
       final existingHashes = <String>{
         for (final tx in transactionList)
-          if (tx is TransationRecordModel) tx.txHash ?? ''
-          else if (tx is BtcTransactionRecodeModel) tx.txHash ?? '',
+          if (tx is TransationRecordModel)
+            tx.txHash
+          else if (tx is BtcTransactionRecodeModel)
+            tx.txHash,
       };
 
       final newMempoolTxs = mempoolTxs
-          .where((tx) => tx.txHash.isNotEmpty && !existingHashes.contains(tx.txHash))
+          .where(
+            (tx) => tx.txHash.isNotEmpty && !existingHashes.contains(tx.txHash),
+          )
           .toList();
 
       if (newMempoolTxs.isNotEmpty) {
@@ -153,12 +171,14 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
   }
 
   Future<void> getTransactionDataNetworkEth(
-      List<CommonResponseItemModel>? cril) async {
+    List<CommonResponseItemModel>? cril,
+  ) async {
     await _syncCommonTxRecords(cril, isEth: true);
   }
 
   Future<void> getTransactionDataNetworkTrx(
-      List<CommonResponseItemModel>? cril) async {
+    List<CommonResponseItemModel>? cril,
+  ) async {
     await _syncCommonTxRecords(cril, isEth: false);
   }
 
@@ -181,7 +201,9 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
       }
 
       final rtrm = await db.selectTransationRecordTxHash(
-          cri.hash ?? '0x', coinModel.address);
+        cri.hash ?? '0x',
+        coinModel.address,
+      );
       if (!mounted) return;
 
       if (rtrm.isEmpty) {
@@ -191,23 +213,15 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
 
         // ETH: decode input data as message for native transfers
         if (isEth && trm.contract == '') {
-          String input = cri.input ?? '0x';
-          if (input == '0x') {
-            input = '';
-          } else {
-            try {
-              input = utf8.decode(hexToBytes(input));
-            } catch (_) {
-              input = '';
-            }
-          }
-          trm.message = input;
+          trm.message = _decodeEthMessageInput(cri.input);
         }
 
         await db.insertTransationRecord(trm);
         isEdit = true;
       } else {
-        if (await _updateTxTimeIfChanged(rtrm[0], cri.timeStamp ?? '0')) {
+        final existing = rtrm[0];
+        if (_syncExistingTxRecord(existing, coinModel, cri, isEth: isEth)) {
+          await db.updateTransationRecord(existing);
           isEdit = true;
         }
       }
@@ -215,8 +229,7 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
     if (isEdit) getTransactionData(Load.refresh);
   }
 
-  Future<void> getTransactionDataNetworkBtc(
-      List<BtcTranDetail>? cril) async {
+  Future<void> getTransactionDataNetworkBtc(List<BtcTranDetail>? cril) async {
     if (cril == null) return;
     final coinModel = getCoinModel();
     bool isEdit = false;
@@ -225,54 +238,23 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
       final cri = cril[i];
       final rtrm = await db.selectBtcTransationRecordTxHash(cri.hash);
       if (!mounted) return;
-      final cDate = _parseBtcTimestamp(cri.confirmed);
 
       if (rtrm.isEmpty) {
         final trm = BtcTransactionRecodeModel();
         trm.addrType = coinModel.addrType;
         trm.coin = coinModel.coin;
         trm.address = coinModel.address ?? '';
-        trm.price = cri.total;
-        trm.gasPrice = cri.fees;
         trm.to1 = '';
         trm.walletIndex = ref.read(wapBridgeProvider).walletIndex;
         trm.txHash = cri.hash;
-        trm.txTime = cDate;
-        trm.state = cri.confirmations >= 6 ? 1 : 0;
         trm.coinMiniName = coinModel.coin['coinType'];
         trm.isTest = coinModel.isTest ? 1 : 0;
-
-        bool isIn = false;
-        trm.inputModels = _buildBtcInputModels(cri.inputs);
-        if (trm.inputModels != null) {
-          final addrUpper = trm.address.toUpperCase();
-          isIn = trm.inputModels!.every(
-            (im) => im.address.every((a) => a.toUpperCase() != addrUpper),
-          );
-        }
-        trm.outputModels = _buildBtcOutputModels(cri.outputs);
-        if (trm.outputModels != null) {
-          final addrUpper = trm.address.toUpperCase();
-          int outputPrice = 0;
-          for (final om in trm.outputModels!) {
-            final hasAddr = om.address.any((a) => a.toUpperCase() == addrUpper);
-            if (isIn ? hasAddr : !hasAddr) outputPrice += om.price;
-          }
-          trm.price = outputPrice;
-        }
+        syncBtcRecordFromDetail(trm, cri);
         await db.insertBtcTransactionRecord(trm);
         isEdit = true;
       } else {
         final trm = rtrm[0];
-        if (trm.inputsAddressList.isEmpty) {
-          trm.inputModels = _buildBtcInputModels(cri.inputs);
-          trm.outputModels = _buildBtcOutputModels(cri.outputs);
-          trm.txTime = cDate;
-          await db.updateBtcTransactionRecord(trm);
-          isEdit = true;
-        }
-        if (trm.txTime != cDate) {
-          trm.txTime = cDate;
+        if (syncBtcRecordFromDetail(trm, cri)) {
           await db.updateBtcTransactionRecord(trm);
           isEdit = true;
         }
@@ -281,36 +263,9 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
     if (isEdit) getTransactionData(Load.refresh);
   }
 
-  String _parseBtcTimestamp(String? confirmed) {
-    return (DateTime.parse(confirmed ?? '').millisecondsSinceEpoch ~/ 1000)
-        .toString();
-  }
-
-  List<InputModel>? _buildBtcInputModels(List<dynamic>? inputs) {
-    if (inputs == null) return null;
-    return [
-      for (final input in inputs)
-        InputModel()
-          ..vout = input.outputValue
-          ..txid = input.prevHash
-          ..script = input.script ?? ''
-          ..address = input.addresses,
-    ];
-  }
-
-  List<OutputModel>? _buildBtcOutputModels(List<dynamic>? outputs) {
-    if (outputs == null) return null;
-    return [
-      for (final output in outputs)
-        OutputModel()
-          ..price = output.value
-          ..script = output.script ?? ''
-          ..address = output.addresses ?? [],
-    ];
-  }
-
   Future<void> getTransactionDataNetworkSol(
-      List<SOLTransactionItem>? cril) async {
+    List<SOLTransactionItem>? cril,
+  ) async {
     if (cril == null) return;
     final coinModel = getCoinModel();
     bool isEdit = false;
@@ -319,13 +274,16 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
       final cri = cril[i];
       final hash = cri.txHash ?? '';
       if (hash.isEmpty) continue;
-      final rtrm =
-          await db.selectTransationRecordTxHash(hash, coinModel.address);
+      final rtrm = await db.selectTransationRecordTxHash(
+        hash,
+        coinModel.address,
+      );
       if (!mounted) return;
 
       if (rtrm.isEmpty) {
         final trm = TransationRecordModel();
-        trm.coinId = (coinModel.isTest
+        trm.coinId =
+            (coinModel.isTest
                 ? coinModel.coin['chainId_test']
                 : coinModel.coin['chainId']) ??
             0;
@@ -356,7 +314,8 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
   }
 
   Future<void> getTransactionDataNetworkGeneric(
-      List<CommonResponseItemModel>? cril) async {
+    List<CommonResponseItemModel>? cril,
+  ) async {
     if (cril == null) return;
     final coinModel = getCoinModel();
     bool isEdit = false;
@@ -365,8 +324,10 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
       final cri = cril[i];
       final hash = cri.hash ?? '';
       if (hash.isEmpty) continue;
-      final rtrm =
-          await db.selectTransationRecordTxHash(hash, coinModel.address);
+      final rtrm = await db.selectTransationRecordTxHash(
+        hash,
+        coinModel.address,
+      );
       if (!mounted) return;
 
       if (rtrm.isEmpty) {
@@ -383,10 +344,13 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
   }
 
   Future<void> getTxInfoNetwork(
-      TransationRecordModel transationRecordModel) async {
+    TransationRecordModel transationRecordModel,
+  ) async {
     final rtrm =
-        await ref.read(tripBridgeProvider).checkUndoneTrReturn(transationRecordModel) ??
-            transationRecordModel;
+        await ref
+            .read(tripBridgeProvider)
+            .checkUndoneTrReturn(transationRecordModel) ??
+        transationRecordModel;
     transactionList.firstWhere((element) {
       final trm = element as TransationRecordModel;
       if (trm.txHash == rtrm.txHash) {
@@ -399,10 +363,13 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
   }
 
   Future<void> getTxInfoNetworkBtc(
-      BtcTransactionRecodeModel transationRecordModel) async {
+    BtcTransactionRecodeModel transationRecordModel,
+  ) async {
     final rtrm =
-        await ref.read(tripBridgeProvider).checkUndoneTrBtcReturn(transationRecordModel) ??
-            transationRecordModel;
+        await ref
+            .read(tripBridgeProvider)
+            .checkUndoneTrBtcReturn(transationRecordModel) ??
+        transationRecordModel;
     transactionList.firstWhere((element) {
       final trm = element as TransationRecordModel;
       if (trm.txHash == rtrm.txHash) {
@@ -427,14 +394,17 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
     trm.address = coinModel.address ?? '';
     trm.from1 = (cri.from ?? '').toLowerCase();
     trm.to1 = (cri.to ?? '').toLowerCase();
-    trm.price = BigInt.tryParse(cri.value ?? '0') ?? BigInt.zero;
+    trm.price = parseExplorerAmount(
+      cri.value,
+      coinModel.coin['decimals'] as int? ?? 18,
+    );
     trm.contract = (coinModel.coin['contract'] ?? '').toLowerCase();
     trm.walletIndex = ref.read(wapBridgeProvider).walletIndex;
     trm.txHash = hash;
     trm.gasPrice = BigInt.tryParse(cri.gasPrice ?? '0') ?? BigInt.zero;
     trm.gas = int.tryParse(cri.gas ?? '0') ?? 0;
     trm.txTime = cri.timeStamp ?? '0';
-    trm.state = int.tryParse(cri.txreceiptStatus ?? '0') ?? 0;
+    trm.state = cri.normalizedState;
     trm.coinMiniName = coinModel.coin['coinType'];
     trm.isTest = coinModel.isTest ? 1 : 0;
     return trm;
@@ -450,6 +420,87 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
       return true;
     }
     return false;
+  }
+
+  bool _syncExistingTxRecord(
+    TransationRecordModel trm,
+    dynamic coinModel,
+    CommonResponseItemModel cri, {
+    required bool isEth,
+  }) {
+    var changed = false;
+
+    final from = (cri.from ?? '').toLowerCase();
+    if (trm.from1 != from) {
+      trm.from1 = from;
+      changed = true;
+    }
+
+    final to = (cri.to ?? '').toLowerCase();
+    if (trm.to1 != to) {
+      trm.to1 = to;
+      changed = true;
+    }
+
+    final price = parseExplorerAmount(
+      cri.value,
+      coinModel.coin['decimals'] as int? ?? 18,
+    );
+    if (trm.price != price) {
+      trm.price = price;
+      changed = true;
+    }
+
+    final gasPrice = BigInt.tryParse(cri.gasPrice ?? '0') ?? BigInt.zero;
+    if (trm.gasPrice != gasPrice) {
+      trm.gasPrice = gasPrice;
+      changed = true;
+    }
+
+    final gas = int.tryParse(cri.gas ?? '0') ?? 0;
+    if (trm.gas != gas) {
+      trm.gas = gas;
+      changed = true;
+    }
+
+    final state = cri.normalizedState;
+    if (trm.state != state) {
+      trm.state = state;
+      changed = true;
+    }
+
+    final time = cri.timeStamp ?? '0';
+    if (trm.txTime != time) {
+      trm.txTime = time;
+      changed = true;
+    }
+
+    if (trm.nonce != cri.nonce) {
+      trm.nonce = cri.nonce;
+      changed = true;
+    }
+
+    if (isEth && trm.contract.isEmpty) {
+      final message = _decodeEthMessageInput(cri.input);
+      if (trm.message != message) {
+        trm.message = message;
+        changed = true;
+      }
+    }
+
+    return changed;
+  }
+
+  String _decodeEthMessageInput(String? rawInput) {
+    String input = rawInput ?? '0x';
+    if (input == '0x') {
+      return '';
+    }
+    try {
+      return utf8.decode(hexToBytes(input));
+    } catch (_) {
+      return '';
+    }
   }
 
   dynamic getCoinModel();

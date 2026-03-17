@@ -91,6 +91,57 @@ void main() {
       final model = CommonResponseItemModel.fromJson({'txreceipt_status': '1'});
       expect(model.txreceiptStatus, '1');
     });
+
+    test('maps TokenView native transaction fields into common fields', () {
+      final model = CommonResponseItemModel.fromJson({
+        'block_no': 22929695,
+        'time': 1725239842,
+        'txid': '0xabc',
+        'from': '0xfrom',
+        'to': '0xto',
+        'value': '0.1',
+        'gasLimit': 21000,
+        'gasPrice': '1156960484',
+        'gasused': 21000,
+        'confirmations': 14,
+      });
+
+      expect(model.blockNumber, '22929695');
+      expect(model.timeStamp, '1725239842');
+      expect(model.hash, '0xabc');
+      expect(model.value, '0.1');
+      expect(model.gas, '21000');
+      expect(model.gasPrice, '1156960484');
+      expect(model.gasUsed, '21000');
+      expect(model.confirmations, '14');
+      expect(model.normalizedState, 1);
+    });
+
+    test('maps TokenView token transfer fields into contract metadata', () {
+      final model = CommonResponseItemModel.fromJson({
+        'txid': '0xdef',
+        'tokenAddr': '0xtoken',
+        'value': '12345',
+        'confirmations': 9,
+      });
+
+      expect(model.hash, '0xdef');
+      expect(model.contractAddress, '0xtoken');
+      expect(model.value, '12345');
+      expect(model.normalizedState, 1);
+    });
+
+    test('maps failed receipt status to failed transaction state', () {
+      final model = CommonResponseItemModel.fromJson({'txreceipt_status': '0'});
+
+      expect(model.normalizedState, 2);
+    });
+
+    test('maps explicit isError flag to failed transaction state', () {
+      final model = CommonResponseItemModel.fromJson({'isError': '1'});
+
+      expect(model.normalizedState, 2);
+    });
   });
 
   // ─────────────────────────────────────────────────
@@ -101,12 +152,29 @@ void main() {
     test('includes all expected keys', () {
       final model = CommonResponseItemModel.fromJson(_kFullJson);
       final json = model.toJson();
-      expect(json.keys, containsAll([
-        'blockNumber', 'timeStamp', 'hash', 'nonce', 'blockHash',
-        'transactionIndex', 'from', 'to', 'value', 'gas', 'gasPrice',
-        'isError', 'txreceipt_status', 'input', 'contractAddress',
-        'cumulativeGasUsed', 'gasUsed', 'confirmations',
-      ]));
+      expect(
+        json.keys,
+        containsAll([
+          'blockNumber',
+          'timeStamp',
+          'hash',
+          'nonce',
+          'blockHash',
+          'transactionIndex',
+          'from',
+          'to',
+          'value',
+          'gas',
+          'gasPrice',
+          'isError',
+          'txreceipt_status',
+          'input',
+          'contractAddress',
+          'cumulativeGasUsed',
+          'gasUsed',
+          'confirmations',
+        ]),
+      );
     });
 
     test('txreceiptStatus maps back to txreceipt_status key in toJson', () {

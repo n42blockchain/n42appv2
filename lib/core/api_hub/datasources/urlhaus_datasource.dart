@@ -14,6 +14,7 @@ import '../models/url_threat.dart';
 class UrlhausDatasource {
   static const String _base = 'https://urlhaus-api.abuse.ch/v1';
   static const String _source = 'URLhaus';
+  static const Set<String> _definitiveSafeStatuses = {'no_results'};
 
   // In-memory cache: URL → result
   static final Map<String, UrlThreat> _cache = {};
@@ -37,38 +38,13 @@ class UrlhausDatasource {
         headers: {'content-type': 'application/x-www-form-urlencoded'},
       ).timeout(const Duration(seconds: 8), onTimeout: () => null);
 
-      if (raw == null || raw is! Map) return UrlThreat.safe(url);
-
-      final queryStatus = raw['query_status']?.toString();
-
-      // "no_results" means URL not in database → safe
-      if (queryStatus != 'ok') {
-        final result = UrlThreat.safe(url);
-        _addToCache(url, result);
-        return result;
+      final parsed = parseUrlResponse(url, raw);
+      if (parsed.shouldCache) {
+        _addToCache(url, parsed.threat);
       }
-
-      // URL found in URLhaus database → malicious
-      final tags = <String>[];
-      final rawTags = raw['tags'];
-      if (rawTags is List) {
-        for (final t in rawTags) {
-          if (t is String && t.isNotEmpty) tags.add(t);
-        }
-      }
-
-      final threat = raw['threat']?.toString();
-      final result = UrlThreat(
-        url: url,
-        isMalicious: true,
-        threatType: threat ?? 'malware',
-        source: _source,
-        tags: tags,
-      );
-      _addToCache(url, result);
-      return result;
+      return parsed.threat;
     } catch (e) {
-      debugPrint('UrlhausDatasource.checkUrl error: $e');
+      _debugLog('UrlhausDatasource.checkUrl error: $e');
       // Fail-open: return safe on error
       return UrlThreat.safe(url);
     }
@@ -76,48 +52,101 @@ class UrlhausDatasource {
 
   /// Check a host/domain against URLhaus.
   static Future<UrlThreat> checkHost(String host) async {
-    if (host.isEmpty) return UrlThreat.safe(host);
+    final normalizedHost = host.trim().toLowerCase();
+    if (normalizedHost.isEmpty) return UrlThreat.safe(host);
 
-    final cached = _cache['host:$host'];
+    final cacheKey = 'host:$normalizedHost';
+    final cached = _cache[cacheKey];
     if (cached != null) return cached;
 
     try {
       final raw = await ExternalHttp.post(
         '$_base/host/',
-        data: 'host=${Uri.encodeComponent(host)}',
+        data: 'host=${Uri.encodeComponent(normalizedHost)}',
         headers: {'content-type': 'application/x-www-form-urlencoded'},
       ).timeout(const Duration(seconds: 8), onTimeout: () => null);
 
-      if (raw == null || raw is! Map) return UrlThreat.safe(host);
-
-      final queryStatus = raw['query_status']?.toString();
-      if (queryStatus != 'ok') {
-        final result = UrlThreat.safe(host);
-        _addToCache('host:$host', result);
-        return result;
+      final parsed = parseHostResponse(normalizedHost, raw);
+      if (parsed.shouldCache) {
+        _addToCache(cacheKey, parsed.threat);
       }
+      return parsed.threat;
+    } catch (e) {
+      _debugLog('UrlhausDatasource.checkHost error: $e');
+      return UrlThreat.safe(normalizedHost);
+    }
+  }
 
-      // Host has entries in URLhaus
-      final urlCount = (raw['url_count'] as num?)?.toInt() ?? 0;
-      if (urlCount == 0) {
-        final result = UrlThreat.safe(host);
-        _addToCache('host:$host', result);
-        return result;
+  @visibleForTesting
+  static ({UrlThreat threat, bool shouldCache}) parseUrlResponse(
+    String url,
+    dynamic raw,
+  ) {
+    if (raw == null || raw is! Map) {
+      return (threat: UrlThreat.safe(url), shouldCache: false);
+    }
+
+    final queryStatus = raw['query_status']?.toString();
+    if (queryStatus != 'ok') {
+      return (
+        threat: UrlThreat.safe(url),
+        shouldCache: _definitiveSafeStatuses.contains(queryStatus),
+      );
+    }
+
+    final tags = <String>[];
+    final rawTags = raw['tags'];
+    if (rawTags is List) {
+      for (final t in rawTags) {
+        if (t is String && t.isNotEmpty) tags.add(t);
       }
+    }
 
-      final result = UrlThreat(
+    final threat = raw['threat']?.toString();
+    return (
+      threat: UrlThreat(
+        url: url,
+        isMalicious: true,
+        threatType: threat ?? 'malware',
+        source: _source,
+        tags: tags,
+      ),
+      shouldCache: true,
+    );
+  }
+
+  @visibleForTesting
+  static ({UrlThreat threat, bool shouldCache}) parseHostResponse(
+    String host,
+    dynamic raw,
+  ) {
+    if (raw == null || raw is! Map) {
+      return (threat: UrlThreat.safe(host), shouldCache: false);
+    }
+
+    final queryStatus = raw['query_status']?.toString();
+    if (queryStatus != 'ok') {
+      return (
+        threat: UrlThreat.safe(host),
+        shouldCache: _definitiveSafeStatuses.contains(queryStatus),
+      );
+    }
+
+    final urlCount = (raw['url_count'] as num?)?.toInt() ?? 0;
+    if (urlCount <= 0) {
+      return (threat: UrlThreat.safe(host), shouldCache: true);
+    }
+
+    return (
+      threat: UrlThreat(
         url: host,
         isMalicious: true,
         threatType: 'malware_host',
         source: _source,
         tags: ['urls_count:$urlCount'],
-      );
-      _addToCache('host:$host', result);
-      return result;
-    } catch (e) {
-      debugPrint('UrlhausDatasource.checkHost error: $e');
-      return UrlThreat.safe(host);
-    }
+      ),
+      shouldCache: true,
+    );
   }
 
   static void _addToCache(String key, UrlThreat result) {
@@ -129,5 +158,10 @@ class UrlhausDatasource {
       }
     }
     _cache[key] = result;
+  }
+
+  static void _debugLog(String message) {
+    if (!kDebugMode) return;
+    debugPrint(message);
   }
 }

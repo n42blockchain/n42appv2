@@ -13,15 +13,6 @@ String? _proxyExplorerChain(String key) {
   }
 }
 
-List<dynamic>? _extractExplorerItems(dynamic data) {
-  if (data is List<dynamic>) return data;
-  if (data is! Map) return null;
-  if (data['result'] is List<dynamic>) return data['result'] as List<dynamic>;
-  if (data['data'] is List<dynamic>) return data['data'] as List<dynamic>;
-  if (data['items'] is List<dynamic>) return data['items'] as List<dynamic>;
-  return null;
-}
-
 extension TransactionApiEthDotAptTon on TransactionApi {
   // ---------------------------------------------------------------------------
   // ETH-compatible — Etherscan-style API
@@ -62,8 +53,8 @@ extension TransactionApiEthDotAptTon on TransactionApi {
               },
         header: header,
       );
-      final items = _extractExplorerItems(data);
-      if (items != null) {
+      final items = extractExplorerItems(data);
+      if (items.isNotEmpty || hasExplorerItemContainer(data)) {
         mm.data = items
             .map((e) => CommonResponseItemModel.fromJson(e))
             .toList();
@@ -114,8 +105,8 @@ extension TransactionApiEthDotAptTon on TransactionApi {
               },
         header: header,
       );
-      final items = _extractExplorerItems(data);
-      if (items != null) {
+      final items = extractExplorerItems(data);
+      if (items.isNotEmpty || hasExplorerItemContainer(data)) {
         mm.data = items
             .map((e) => CommonResponseItemModel.fromJson(e))
             .toList();

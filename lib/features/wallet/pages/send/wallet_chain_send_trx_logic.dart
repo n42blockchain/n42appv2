@@ -58,10 +58,12 @@ mixin _TrxSendLogicMixin on ConsumerState<WalletChainSendTrx> {
       if (!mounted) return;
       setState(() {});
     }
-    gas = BigInt.from(getCoinGas(
-      widget.coinModel.coin['coinType'],
-      contract: widget.coinModel.coin['isContract'],
-    ));
+    gas = BigInt.from(
+      getCoinGas(
+        widget.coinModel.coin['coinType'],
+        contract: widget.coinModel.coin['isContract'],
+      ),
+    );
     await getBalance();
     await getGasPrice();
   }
@@ -82,7 +84,10 @@ mixin _TrxSendLogicMixin on ConsumerState<WalletChainSendTrx> {
   Future<void> getGasPrice() async {
     load = Load.loading;
     setState(() {});
-    final mm = await TrxApi().getGasPriceTrx(isTest: widget.coinModel.isTest);
+    var mm = await tokenViewApi.getGasPriceTrx(isTest: widget.coinModel.isTest);
+    if (mm.error) {
+      mm = await TrxApi().getGasPriceTrx(isTest: widget.coinModel.isTest);
+    }
     if (!mounted) return;
     if (!mm.error) {
       gasPrice = mm.data;
@@ -113,10 +118,12 @@ mixin _TrxSendLogicMixin on ConsumerState<WalletChainSendTrx> {
       final price = valueTextEditingController.text;
       if (price == "") return;
 
-      final gaslimit = BigInt.from(getCoinGas(
-        widget.coinModel.coin['coinType'],
-        contract: widget.coinModel.coin['isContract'],
-      ));
+      final gaslimit = BigInt.from(
+        getCoinGas(
+          widget.coinModel.coin['coinType'],
+          contract: widget.coinModel.coin['isContract'],
+        ),
+      );
       final ethMessage = await TrxApi().getGasEstimateTrx(
         widget.coinModel.address,
         toAddr,
@@ -205,8 +212,10 @@ mixin _TrxSendLogicMixin on ConsumerState<WalletChainSendTrx> {
     if (parts.length == 2) {
       addr = parts[1];
     }
-    final isValid = await Trustdart()
-        .validateAddress(widget.coinModel.coin['coinType'], addr);
+    final isValid = await Trustdart().validateAddress(
+      widget.coinModel.coin['coinType'],
+      addr,
+    );
     if (!isValid ||
         addr.toUpperCase() ==
             widget.coinModel.address.toString().toUpperCase()) {
@@ -231,8 +240,9 @@ mixin _TrxSendLogicMixin on ConsumerState<WalletChainSendTrx> {
 
     setState(() => load = Load.loading);
 
-    final String? toAddr =
-        await toAddressCheck(toTextEditingController.text.trim());
+    final String? toAddr = await toAddressCheck(
+      toTextEditingController.text.trim(),
+    );
     if (toAddr == null) {
       setState(() => load = Load.finish);
       return;
@@ -268,8 +278,9 @@ mixin _TrxSendLogicMixin on ConsumerState<WalletChainSendTrx> {
       ..gasPriceValue = gasPrice
       ..price = transferValue;
 
-    final feeUnit =
-        (chainModel ?? widget.coinModel).coin['unit'].toString().toUpperCase();
+    final feeUnit = (chainModel ?? widget.coinModel).coin['unit']
+        .toString()
+        .toUpperCase();
     final bool check = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -344,8 +355,10 @@ mixin _TrxSendLogicMixin on ConsumerState<WalletChainSendTrx> {
       if (rOK != null && rOK) {
         transferValue = widget.coinModel.balance - totalGasPrice;
         valueTextEditingController.text = _regular.formartNum(
-          toEther(transferValue.toString(), widget.coinModel.coin['decimals'])
-              .toDouble(),
+          toEther(
+            transferValue.toString(),
+            widget.coinModel.coin['decimals'],
+          ).toDouble(),
           14,
           isCrop: true,
           isFill0: false,

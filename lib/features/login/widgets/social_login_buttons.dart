@@ -235,6 +235,12 @@ class _SocialLoginButtonsState extends ConsumerState<SocialLoginButtons> {
         ToastUtils.show(errorMsg);
         return;
       }
+      if (!result.hasUsableIdToken) {
+        final errorMsg = '$provider sign-in returned no identity token';
+        widget.onError?.call(errorMsg);
+        ToastUtils.show(errorMsg);
+        return;
+      }
 
       await _loginWithSocialToken(
         provider: provider,

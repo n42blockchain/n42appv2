@@ -8,6 +8,7 @@ import 'package:n42_wallet/core/utils/result.dart';
 import 'package:n42_wallet/core/network/base_api.dart';
 import 'package:n42_wallet/core/network/request_url.dart';
 import 'package:n42_wallet/features/models/message_model.dart';
+import 'package:n42_wallet/features/wallet/models/transaction/explorer_response_utils.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/chain_eip1559.dart';
 import 'package:web3dart/web3dart.dart';
 
@@ -304,7 +305,13 @@ class EthAPI {
       if (data.containsKey('error')) {
         return MessageModel()..error = true..data = data['error'];
       }
-      return MessageModel()..data = data['result'];
+      final items = extractExplorerItems(data);
+      if (items.isEmpty && !hasExplorerItemContainer(data)) {
+        return MessageModel()
+          ..error = true
+          ..data = data['message'] ?? data['msg'] ?? data['error'];
+      }
+      return MessageModel()..data = items;
     } catch (e) {
       return MessageModel.error()..data = e.toString();
     }
