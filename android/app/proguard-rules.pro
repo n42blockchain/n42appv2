@@ -106,6 +106,32 @@
 # 保持 MethodChannel 相关类
 -keep class io.flutter.plugin.common.** { *; }
 
+# ==================== JNA (Java Native Access) ====================
+# yttrium WalletConnect SDK 通过 JNA 调用 Rust FFI，必须保留所有字段和方法
+-keep class com.sun.jna.** { *; }
+-keepclassmembers class com.sun.jna.** { *; }
+-dontwarn com.sun.jna.**
+
+# ==================== UniFFI / yttrium WalletConnect Pay ====================
+-keep class uniffi.** { *; }
+-keepclassmembers class uniffi.** { *; }
+-dontwarn uniffi.**
+
+# ==================== QR Code Scanner (qr_code_scanner_plus / ZXing) ====================
+-keep class com.journeyapps.barcodescanner.** { *; }
+-keep class com.google.zxing.** { *; }
+-dontwarn com.journeyapps.barcodescanner.**
+-dontwarn com.google.zxing.**
+
+# ==================== Mobile Scanner (mobile_scanner / CameraX + ML Kit) ====================
+-keep class dev.steenbakker.mobile_scanner.** { *; }
+-keep class androidx.camera.** { *; }
+-dontwarn androidx.camera.**
+-keep class com.google.mlkit.** { *; }
+-dontwarn com.google.mlkit.**
+-keep class com.google.android.gms.vision.** { *; }
+-dontwarn com.google.android.gms.vision.**
+
 # ==================== Google Play Core ====================
 # 抑制 Play Core 分发功能的警告
 -dontwarn com.google.android.play.core.splitcompat.SplitCompatApplication

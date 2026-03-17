@@ -23,7 +23,7 @@ extension _CoinItemWidgets on _WalletSearchCoinState {
     final Widget image = coinInfo.coin['miniName'] == ""
         ? Image.asset('assets/images/list_default.png')
         : ImageNetWork(
-            imageUrl: coinInfo.coin['icon'],
+            imageUrl: coinInfo.coin['icon']??"",
             placeholder: "assets/img/list_default.png",
           );
 

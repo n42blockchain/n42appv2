@@ -43,10 +43,10 @@ class WalletTopBar extends ConsumerWidget {
       onLeftImageClick: onMenuTap,
       onLeftImageUri: "assets/img/menu.png",
       actions: [
-        _QrCodeMenu(
+        /*_QrCodeMenu(
           onScanTap: onScanTap,
           onReceiveTap: onReceiveTap,
-        ),
+        ),*/
         _WalletConnectButton(onTap: onWalletConnectTap),
         _FacePortraitButton(),
 

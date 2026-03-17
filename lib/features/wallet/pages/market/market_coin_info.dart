@@ -13,9 +13,9 @@ import 'package:n42_wallet/features/wallet/presentation/providers/wallet_provide
 import 'package:n42_wallet/features/wallet/services/coin_price_alert_service.dart';
 import 'package:n42_wallet/features/wallet/services/portfolio_trade_service.dart';
 import 'package:n42_wallet/features/widgets/candlestick_chart.dart';
-import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
-
+////暂时屏蔽Earn功能
+//import 'package:n42_wallet/generated/l10n.dart';
+//import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'market_coin_info_chart.dart';
 import 'market_coin_info_helpers.dart';
 import 'market_coin_info_links.dart';
@@ -360,7 +360,8 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
           ],
         ),
       ),
-      floatingActionButton: _coinId.isNotEmpty
+      ////暂时屏蔽Earn功能
+      /*floatingActionButton: _coinId.isNotEmpty
           ? FloatingActionButton.small(
               onPressed: _openTradeSheet,
               tooltip: S.of(context).g_pnl_add_trade,
@@ -368,7 +369,7 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
                   context, AppThemeKeys.mainBlueColor.name),
               child: const Icon(Icons.add, color: Colors.white),
             )
-          : null,
+          : null,*/
     );
   }
 }
