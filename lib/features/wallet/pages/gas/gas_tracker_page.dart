@@ -12,6 +12,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:n42_wallet/core/config/rpc_config.dart';
+import 'package:n42_wallet/features/wallet/pages/gas/gas_alert_sheet_utils.dart';
 import 'package:n42_wallet/features/wallet/api/tokenview_enhanced_api.dart';
 import 'package:n42_wallet/features/wallet/services/gas_alert_service.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
@@ -54,12 +55,42 @@ class _GasTrackerPageState extends State<GasTrackerPage> {
   static const _tokenViewApi = TokenViewEnhancedApi();
 
   static const List<NetworkConfig> _networks = [
-    NetworkConfig(symbol: 'ETH', name: 'Ethereum', icon: '⟠', color: Color(0xFF627EEA)),
-    NetworkConfig(symbol: 'BNB', name: 'BNB Chain', icon: '◈', color: Color(0xFFF3BA2F)),
-    NetworkConfig(symbol: 'MATIC', name: 'Polygon', icon: '⬡', color: Color(0xFF8247E5)),
-    NetworkConfig(symbol: 'ARB', name: 'Arbitrum', icon: '◇', color: Color(0xFF28A0F0)),
-    NetworkConfig(symbol: 'OP', name: 'Optimism', icon: '◎', color: Color(0xFFFF0420)),
-    NetworkConfig(symbol: 'AVAX', name: 'Avalanche', icon: '▲', color: Color(0xFFE84142)),
+    NetworkConfig(
+      symbol: 'ETH',
+      name: 'Ethereum',
+      icon: '⟠',
+      color: Color(0xFF627EEA),
+    ),
+    NetworkConfig(
+      symbol: 'BNB',
+      name: 'BNB Chain',
+      icon: '◈',
+      color: Color(0xFFF3BA2F),
+    ),
+    NetworkConfig(
+      symbol: 'MATIC',
+      name: 'Polygon',
+      icon: '⬡',
+      color: Color(0xFF8247E5),
+    ),
+    NetworkConfig(
+      symbol: 'ARB',
+      name: 'Arbitrum',
+      icon: '◇',
+      color: Color(0xFF28A0F0),
+    ),
+    NetworkConfig(
+      symbol: 'OP',
+      name: 'Optimism',
+      icon: '◎',
+      color: Color(0xFFFF0420),
+    ),
+    NetworkConfig(
+      symbol: 'AVAX',
+      name: 'Avalanche',
+      icon: '▲',
+      color: Color(0xFFE84142),
+    ),
   ];
 
   @override
@@ -104,8 +135,12 @@ class _GasTrackerPageState extends State<GasTrackerPage> {
       if (!mounted) return;
       setState(() {
         final symbol = _chainToSymbol(chain);
-        if (results[0] != null) _gasPredictions[symbol] = results[0] as GasNextBlockPrediction;
-        if (results[1] != null) _mempoolData[symbol] = results[1] as MempoolCongestion;
+        if (results[0] != null) {
+          _gasPredictions[symbol] = results[0] as GasNextBlockPrediction;
+        }
+        if (results[1] != null) {
+          _mempoolData[symbol] = results[1] as MempoolCongestion;
+        }
       });
     } catch (e) {
       debugPrint('Failed to fetch TokenView data for $chain: $e');
@@ -125,7 +160,13 @@ class _GasTrackerPageState extends State<GasTrackerPage> {
 
       final client = http.Client();
       try {
-        final gasPriceHex = await _rpcCall(client, rpcUrl, 'eth_gasPrice', [], 1);
+        final gasPriceHex = await _rpcCall(
+          client,
+          rpcUrl,
+          'eth_gasPrice',
+          [],
+          1,
+        );
         if (gasPriceHex == null) return;
 
         final gasPrice = BigInt.parse(gasPriceHex.substring(2), radix: 16);
@@ -138,7 +179,9 @@ class _GasTrackerPageState extends State<GasTrackerPage> {
             _gasData[network.symbol] = NetworkGasData(
               gasPrice: gasPriceGwei,
               baseFee: eip1559.$1 != null ? eip1559.$1!.toDouble() / 1e9 : null,
-              priorityFee: eip1559.$2 != null ? eip1559.$2!.toDouble() / 1e9 : null,
+              priorityFee: eip1559.$2 != null
+                  ? eip1559.$2!.toDouble() / 1e9
+                  : null,
               lastUpdated: DateTime.now(),
             );
             final hist = _history.putIfAbsent(network.symbol, () => []);
@@ -156,13 +199,22 @@ class _GasTrackerPageState extends State<GasTrackerPage> {
 
   /// Makes a JSON-RPC call and returns the 'result' string, or null on failure.
   Future<String?> _rpcCall(
-    http.Client client, String url, String method, List<dynamic> params, int id,
+    http.Client client,
+    String url,
+    String method,
+    List<dynamic> params,
+    int id,
   ) async {
     final response = await client
         .post(
           Uri.parse(url),
           headers: {'Content-Type': 'application/json'},
-          body: jsonEncode({'jsonrpc': '2.0', 'method': method, 'params': params, 'id': id}),
+          body: jsonEncode({
+            'jsonrpc': '2.0',
+            'method': method,
+            'params': params,
+            'id': id,
+          }),
         )
         .timeout(const Duration(seconds: 10));
     if (response.statusCode != 200) return null;
@@ -170,7 +222,10 @@ class _GasTrackerPageState extends State<GasTrackerPage> {
   }
 
   /// Fetches EIP-1559 base fee and priority fee; returns (null, null) if unsupported.
-  Future<(BigInt?, BigInt?)> _fetchEip1559(http.Client client, String rpcUrl) async {
+  Future<(BigInt?, BigInt?)> _fetchEip1559(
+    http.Client client,
+    String rpcUrl,
+  ) async {
     try {
       final response = await client
           .post(
@@ -179,7 +234,11 @@ class _GasTrackerPageState extends State<GasTrackerPage> {
             body: jsonEncode({
               'jsonrpc': '2.0',
               'method': 'eth_feeHistory',
-              'params': [1, 'latest', [25, 50, 75]],
+              'params': [
+                1,
+                'latest',
+                [25, 50, 75],
+              ],
               'id': 2,
             }),
           )
@@ -193,7 +252,10 @@ class _GasTrackerPageState extends State<GasTrackerPage> {
       BigInt? baseFee;
       final baseFeeList = result['baseFeePerGas'] as List?;
       if (baseFeeList != null && baseFeeList.isNotEmpty) {
-        baseFee = BigInt.parse((baseFeeList.last as String).substring(2), radix: 16);
+        baseFee = BigInt.parse(
+          (baseFeeList.last as String).substring(2),
+          radix: 16,
+        );
       }
 
       BigInt? priorityFee;
@@ -201,7 +263,10 @@ class _GasTrackerPageState extends State<GasTrackerPage> {
       if (rewardList != null && rewardList.isNotEmpty) {
         final rewards = rewardList.first as List;
         if (rewards.length > 1) {
-          priorityFee = BigInt.parse((rewards[1] as String).substring(2), radix: 16);
+          priorityFee = BigInt.parse(
+            (rewards[1] as String).substring(2),
+            radix: 16,
+          );
         }
       }
 
@@ -221,13 +286,13 @@ class _GasTrackerPageState extends State<GasTrackerPage> {
   }
 
   String _getRpcUrl(String symbol) => switch (symbol) {
-    'ETH'  => RpcConfig.ethMainnetRpc,
-    'BNB'  => RpcConfig.bscMainnetRpc,
+    'ETH' => RpcConfig.ethMainnetRpc,
+    'BNB' => RpcConfig.bscMainnetRpc,
     'MATIC' => RpcConfig.polygonMainnetRpc,
-    'ARB'  => RpcConfig.arbitrumMainnetRpc,
-    'OP'   => RpcConfig.optimismMainnetRpc,
+    'ARB' => RpcConfig.arbitrumMainnetRpc,
+    'OP' => RpcConfig.optimismMainnetRpc,
     'AVAX' => RpcConfig.avalancheMainnetRpc,
-    _      => '',
+    _ => '',
   };
 
   // ── 提醒配置底部弹窗 ─────────────────────────────────────
@@ -281,7 +346,10 @@ class _GasTrackerPageState extends State<GasTrackerPage> {
           IconButton(
             icon: Icon(
               Icons.notifications_outlined,
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+              color: AppThemeUtils.getColorByKey(
+                context,
+                AppThemeKeys.mainTextColor.name,
+              ),
               size: ScreenUtil().setWidth(44),
             ),
             tooltip: S.of(context).g_key_gas_alert,
@@ -291,7 +359,9 @@ class _GasTrackerPageState extends State<GasTrackerPage> {
       ),
       body: RefreshIndicator(
         onRefresh: _fetchAllGasData,
-        child: _isLoading ? const Center(child: CircularProgressIndicator()) : _buildContent(),
+        child: _isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : _buildContent(),
       ),
     );
   }

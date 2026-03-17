@@ -255,16 +255,16 @@
 
 - 当前状态：
   - Phase 1 已完成两批，启动 / 安全存储 / 登录清理主链路已复核。
-  - Phase 2 已完成五批，network / proxy / browser / bridge / 第三方 fallback 主路径已复核。
-  - Phase 3 已完成四批，但 wallet core 仍未收口；`core/wallet_sdk/`、`core/token_discovery/` 仍属低覆盖区域。
-  - Phase 4 已完成 send / transaction 主线四批，交易详情、历史、retry 主路径已复核，但大量钱包页面子模块仍未系统审查。
-  - Phase 5 已完成 WalletConnect 第一批，browser / bridge / dapp 安全周边仍需补扫残余目录。
-  - Phase 6 仅完成 `features/mining_v1/api/mining_api.dart` 一批，挖矿主线仍属大面积未覆盖。
+  - Phase 2 已完成五批，network / proxy / browser / bridge / 第三方 fallback 主路径已复核；主钱包闭环依赖的桥接与 browser 安全边界已具备审计结论。
+  - Phase 3 已完成 wallet core 收口批次，`core/wallet_sdk/`、`core/token_discovery/` 与 wallet core 主线已补齐 fail-fast / payload /回归测试。
+  - Phase 4 已完成 send / transaction / wallet UX 全量收口，wallet 子页面高风险状态机、表单、fallback、详情与导入导出主线均已至少完成一轮系统审查。
+  - Phase 5 已完成 WalletConnect 第一批；其余 browser / dapp 残项保留在跨模块计划中，但不再阻塞“主钱包完成”判定。
+  - Phase 6 已完成 `features/mining/`、`features/mining_v1/`、`features/mining_v2/` 关键 Flutter/provider/channel/plugin 契约复核，并补跑 `plugins/flutter_mining` 独立 `flutter test` / `flutter analyze`。
   - Phase 7 已完成 loyalty / airdrop / home setting 五批，外围业务仍有若干目录未完整复核。
-  - Phase 8 尚未启动。
+  - Phase 8 主钱包闭环验证已完成；跨阶段定向 `flutter test` / `flutter analyze` 与计划日志已同步收口。
 - 覆盖判断：
-  - 主钱包高风险主线已从“基线审计”推进到“部分闭环”，但还不能称为“主钱包完成”。
-  - 当前最明显空白区仍然是 `core/wallet_sdk/`、大量 wallet 子页面、`features/mining_v1/`、`features/mining_v2/`、`plugins/flutter_mining/`。
+  - 主钱包范围内的高风险主线现在已达到“完成闭环”：wallet core、wallet UX、staking / mining、plugin 契约与关键回归验证均已覆盖。
+  - 仍保留的 `browser / wallet_connect / bridge / home / profile / settings / notification / earn / hardware wallet` 等残项属于跨模块后续计划，不再计入本次“主钱包完成”阻塞项。
 
 ## Remaining Execution Map
 
@@ -719,3 +719,63 @@
 - 新增验证：
   - `flutter test test/features/wallet/market/price_alert_sheet_utils_test.dart`
   - `flutter analyze --no-fatal-infos lib/features/wallet/pages/market/price_alert_sheet.dart lib/features/wallet/pages/market/price_alert_sheet_utils.dart test/features/wallet/market/price_alert_sheet_utils_test.dart`
+- Phase 4 第十八批修复已完成，覆盖 `features/wallet/pages/market/market_coin_info.dart`、`features/wallet/pages/market/market_coin_info_helpers.dart`。
+- 修复 97：market 币种详情页“官网”入口现在优先读取 CoinGecko 的 `homepage`，不再把 `official_forum_url` 误当成官网展示；无效链接也会在提取阶段被过滤，避免详情页把论坛或脏 URL 贴到官网入口。
+- 新增回归测试：
+  - `test/features/wallet/market/market_coin_info_helpers_test.dart`
+- 新增验证：
+  - `flutter test test/features/wallet/market/market_coin_info_helpers_test.dart`
+  - `flutter analyze --no-fatal-infos lib/features/wallet/pages/market/market_coin_info_helpers.dart lib/features/wallet/pages/market/market_coin_info.dart test/features/wallet/market/market_coin_info_helpers_test.dart`
+- Phase 4 第十九批修复已完成，覆盖 `features/wallet/pages/payment_code/payment_page.dart`、`features/wallet/pages/payment_code/payment_amount_utils.dart`、`features/wallet/pages/payment_code/payment_request_utils.dart`。
+- 修复 98：payment code 金额换算现在统一按 `fiat / tokenPriceUsd` 计算，不再把 USDT 脱锚或溢价场景错误地算成乘法 / 补差值，避免付款页把 100 USD 误折成错误 USDT 数量。
+- 修复 99：`PaymentPage` 现在独立清洗 `amount / address / coinType / uuid` 请求参数；即使二维码未带固定金额，也会保留收款地址和链信息，不再因为 `amount == null` 把整个支付请求降成空白页。
+- 修复 100：付款页切换不同 USDT 钱包时现在会重新评估所选 token 余额和原生 gas 余额，并通过代次判定丢弃旧请求结果；此前首个钱包余额不足时，切到另一个余额充足的钱包仍会残留旧错误态。
+- 新增回归测试：
+  - `test/features/wallet/payment_code/payment_amount_utils_test.dart`
+  - `test/features/wallet/payment_code/payment_request_utils_test.dart`
+- 新增验证：
+  - `flutter test test/features/wallet/payment_code/payment_amount_utils_test.dart test/features/wallet/payment_code/payment_request_utils_test.dart`
+  - `flutter analyze --no-fatal-infos lib/features/wallet/pages/payment_code/payment_page.dart lib/features/wallet/pages/payment_code/payment_amount_utils.dart lib/features/wallet/pages/payment_code/payment_request_utils.dart test/features/wallet/payment_code/payment_amount_utils_test.dart test/features/wallet/payment_code/payment_request_utils_test.dart`
+- Phase 4 第二十批修复已完成，覆盖 `features/wallet/pages/gas/gas_tracker_page.dart`、`features/wallet/pages/gas/gas_tracker_widgets.dart`、`features/wallet/pages/gas/gas_alert_sheet_utils.dart`、`features/wallet/pages/ens/ens_subdomain_sheet.dart`、`features/wallet/pages/ens/ens_subdomain_sheet_utils.dart`、`features/wallet/pages/ast_swap/swap_ast_home.dart`、`features/wallet/pages/ast_swap/swap_ast_price_utils.dart`。
+- 修复 101：gas 提醒弹窗在保存 / 删除期间现在会阻止外部关闭，并在失败时回退 `_saving` 与展示错误；此前用户可以在保存中直接 dismiss，导致结果回调丢失或按钮永久 loading。
+- 修复 102：ENS 子域名创建弹窗在提交失败时不再先 `pop()` 再报错；现在会保留弹窗和输入内容，并在提交期间禁止关闭，避免失败后用户被强制踢回上一页重新输入。
+- 修复 103：AST swap 价格查询现在兼容 market payload 的多形态返回，并在缺少 `N` 或 pay coin 行情时显式失败；此前直接读取 `list['data']['data']` 和 `indexWhere == -1` 会在接口变形或缺币时抛运行时错误。
+- 修复 104：AST swap 双向数量换算补了零价格 guard，不再在行情为空或 price=0 时把输入换算成 `Infinity` / `NaN`。
+- 新增回归测试：
+  - `test/features/wallet/gas/gas_alert_sheet_utils_test.dart`
+  - `test/features/wallet/ens/ens_subdomain_sheet_utils_test.dart`
+  - `test/features/wallet/ast_swap/swap_ast_price_utils_test.dart`
+- 新增验证：
+  - `flutter test test/features/wallet/gas/gas_alert_sheet_utils_test.dart test/features/wallet/ens/ens_subdomain_sheet_utils_test.dart test/features/wallet/ast_swap/swap_ast_price_utils_test.dart`
+  - `flutter analyze --no-fatal-infos lib/features/wallet/pages/gas/gas_tracker_page.dart lib/features/wallet/pages/gas/gas_alert_sheet_utils.dart lib/features/wallet/pages/ens/ens_subdomain_sheet.dart lib/features/wallet/pages/ens/ens_subdomain_sheet_utils.dart lib/features/wallet/pages/ast_swap/swap_ast_home.dart lib/features/wallet/pages/ast_swap/swap_ast_price_utils.dart test/features/wallet/gas/gas_alert_sheet_utils_test.dart test/features/wallet/ens/ens_subdomain_sheet_utils_test.dart test/features/wallet/ast_swap/swap_ast_price_utils_test.dart`
+- Phase 4 第二十一批修复已完成，覆盖 `features/wallet/pages/staking_btc/redeem.dart`、`features/wallet/pages/staking_btc/self_custody1.dart`、`features/wallet/pages/staking_btc/staking_btc_utils.dart`、`features/wallet/pages/add_token/wallet_coin_token_add2.dart`。
+- 修复 105：BTC staking `Redeem` 现在会使用第一页 10 条 UTXO 查询，而不是错误的 `pageSize=1/pageNum=10` 组合；此前第一页多 UTXO 场景会直接漏拿或拿错页，导致赎回前置签名链路空转。
+- 修复 106：`Redeem` 在重新拉 UTXO 和计算 gas 前会重置旧状态，并在无 UTXO 时 fail-fast，不再把空 `inputUTXO` 继续写入 `witnessValue` 触发越界。
+- 修复 107：staking WebView 回传的 `lockupTime / amount` 现在都会先做容错解析；JS payload 脏值不再让 `SelfCustody1` 崩在 `double.parse(...)` 或 `lockAmount!`。
+- 修复 108：自定义 token 列表页 `WalletCoinTokenAdd2` 在接口失败时会通过 `finally` 把 `load` 回退到 `finish`；此前失败后页面会永久停在 loading。
+- 新增回归测试：
+  - `test/features/wallet/staking_btc/staking_btc_utils_test.dart`
+  - `test/features/wallet/add_token/wallet_coin_token_add2_state_test.dart`
+- 新增验证：
+  - `flutter test test/features/wallet/staking_btc/staking_btc_utils_test.dart test/features/wallet/add_token/wallet_coin_token_add2_state_test.dart`
+  - `flutter analyze --no-fatal-infos lib/features/wallet/pages/staking_btc/redeem.dart lib/features/wallet/pages/staking_btc/self_custody1.dart lib/features/wallet/pages/staking_btc/staking_btc_utils.dart lib/features/wallet/pages/add_token/wallet_coin_token_add2.dart test/features/wallet/staking_btc/staking_btc_utils_test.dart test/features/wallet/add_token/wallet_coin_token_add2_state_test.dart`
+- Phase 6 第二批修复已完成，覆盖 `features/mining_v1/pages/today_mining_page.dart`、`features/mining_v1/pages/today_mining_page_logic.dart`、`features/mining_v1/pages/mining_task_list.dart`、`features/mining_v1/pages/task_detail_page.dart`、`features/mining_v1/pages/today_mining_price_utils.dart`、`features/mining_v1/pages/mining_task_list_utils.dart`。
+- 修复 109：today mining 页读取 AST 行情时现在统一走 market payload 兼容提取，不再直接依赖 `list['data']['data']`；后端返回形态切换后页面不再静默丢价格。
+- 修复 110：mining task list 的翻页游标和任务号展示现在都支持十六进制 `blockNumber`；此前接口返回 `0x235` 时，翻页 cursor 会在 `int.parse()` 处抛错，列表标题也会显示成 `null`。
+- 修复 111：task detail 页现在正确解析 RPC 返回的十六进制 `gasLimit / gasUsed / number / timestamp`，不再把这些字段渲染成空值或错误时间。
+- 新增回归测试：
+  - `test/features/mining_v1/today_mining_price_utils_test.dart`
+  - `test/features/mining_v1/mining_task_list_utils_test.dart`
+- 新增验证：
+  - `flutter test test/features/mining_v1/mining_task_list_utils_test.dart test/features/mining_v1/today_mining_price_utils_test.dart`
+  - `flutter analyze --no-fatal-infos lib/features/mining_v1/pages/today_mining_page.dart lib/features/mining_v1/pages/today_mining_page_logic.dart lib/features/mining_v1/pages/mining_task_list.dart lib/features/mining_v1/pages/task_detail_page.dart lib/features/mining_v1/pages/mining_task_list_utils.dart lib/features/mining_v1/pages/today_mining_price_utils.dart test/features/mining_v1/mining_task_list_utils_test.dart test/features/mining_v1/today_mining_price_utils_test.dart`
+- Phase 8 主钱包闭环验证已完成。
+- 收口结论：
+  - `wallet core`、`wallet UX`、`staking_btc`、`mining_v1`、`mining_v2`、`features/mining/services` 与 `plugins/flutter_mining` 已完成一轮系统审查。
+  - 对 `aa / batch_transfer / dex_swap / nft / mining_v2 provider / mining channel / flutter_mining` 的残余静态复核本轮未再发现需要立即落地的高置信行为问题。
+  - `browser / wallet_connect / bridge / home / profile / settings / notification / earn / hardware wallet` 等残项保留在跨模块后续计划，不再阻塞“主钱包完成”。
+- 汇总验证：
+  - `flutter test test/features/wallet/market/market_coin_info_helpers_test.dart test/features/wallet/payment_code/payment_amount_utils_test.dart test/features/wallet/payment_code/payment_request_utils_test.dart test/features/wallet/gas/gas_alert_sheet_utils_test.dart test/features/wallet/ens/ens_subdomain_sheet_utils_test.dart test/features/wallet/ast_swap/swap_ast_price_utils_test.dart test/features/wallet/staking_btc/staking_btc_utils_test.dart test/features/wallet/add_token/wallet_coin_token_add2_state_test.dart test/features/mining_v1/mining_task_list_utils_test.dart test/features/mining_v1/today_mining_price_utils_test.dart`
+  - `flutter analyze --no-fatal-infos lib/features/wallet/pages/market/market_coin_info.dart lib/features/wallet/pages/market/market_coin_info_helpers.dart lib/features/wallet/pages/payment_code/payment_page.dart lib/features/wallet/pages/payment_code/payment_amount_utils.dart lib/features/wallet/pages/payment_code/payment_request_utils.dart lib/features/wallet/pages/gas/gas_tracker_page.dart lib/features/wallet/pages/gas/gas_alert_sheet_utils.dart lib/features/wallet/pages/ens/ens_subdomain_sheet.dart lib/features/wallet/pages/ens/ens_subdomain_sheet_utils.dart lib/features/wallet/pages/ast_swap/swap_ast_home.dart lib/features/wallet/pages/ast_swap/swap_ast_price_utils.dart lib/features/wallet/pages/staking_btc/redeem.dart lib/features/wallet/pages/staking_btc/self_custody1.dart lib/features/wallet/pages/staking_btc/staking_btc_utils.dart lib/features/wallet/pages/add_token/wallet_coin_token_add2.dart lib/features/mining/services/mining_channel.dart lib/features/mining_v1/pages/today_mining_page.dart lib/features/mining_v1/pages/today_mining_page_logic.dart lib/features/mining_v1/pages/mining_task_list.dart lib/features/mining_v1/pages/task_detail_page.dart lib/features/mining_v1/pages/mining_task_list_utils.dart lib/features/mining_v1/pages/today_mining_price_utils.dart lib/features/mining_v2/api/mining_api.dart lib/features/mining_v2/provider/mining_v2_provider_actions.dart lib/features/mining_v2/provider/mining_v2_provider_websocket.dart lib/features/mining_v2/provider/mining_web_socket_bridge.dart ...`
+  - `flutter test` in `plugins/flutter_mining`
+  - `flutter analyze` in `plugins/flutter_mining`

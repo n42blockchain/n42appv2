@@ -1,5 +1,6 @@
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/mining_v1/api/mining_api.dart';
+import 'package:n42_wallet/features/mining_v1/pages/mining_task_list_utils.dart';
 import 'package:n42_wallet/features/mining_v1/widgets/nav_show_data_item.dart';
 import 'package:n42_wallet/features/utils/data_utils.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
@@ -15,7 +16,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class TaskDetailPage extends StatefulWidget {
   final String astValue;
   final String blockNumber;
-  const TaskDetailPage({required this.blockNumber, required this.astValue,super.key});
+  const TaskDetailPage({
+    required this.blockNumber,
+    required this.astValue,
+    super.key,
+  });
 
   @override
   State<TaskDetailPage> createState() => _TaskDetailPageState();
@@ -32,7 +37,7 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
     initData();
   }
 
-  initData() async {
+  Future<void> initData() async {
     try {
       setState(() {
         isLoading = true;
@@ -54,105 +59,136 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
         actions: [
           Row(
             children: [
-              RoundRefreshIcon(
-                refreshData: () => initData(),
-              ),
-              SizedBox(width: ScreenUtil().setWidth(24),)
+              RoundRefreshIcon(refreshData: () => initData()),
+              SizedBox(width: ScreenUtil().setWidth(24)),
             ],
-          )
+          ),
         ],
       ),
       body: isLoading
           ? const Loading()
           : Container(
-        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(36)),
-        child: Column(
-          children: [
-            SizedBox(
-              height: ScreenUtil().setWidth(50),
-            ),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  widget.astValue,
-                  style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainTextColor.name),
-                      fontSize: ScreenUtil().setSp(36)),
-                ),
-                SizedBox(
-                  width: ScreenUtil().setWidth(12),
-                ),
-                Text(
-                  CoinType.N.name,
-                  style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainTextColor.name),
-                      fontSize: ScreenUtil().setSp(28)),
-                ),
-              ],
-            ),
+              padding: EdgeInsets.symmetric(
+                horizontal: ScreenUtil().setWidth(36),
+              ),
+              child: Column(
+                children: [
+                  SizedBox(height: ScreenUtil().setWidth(50)),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        widget.astValue,
+                        style: TextStyle(
+                          color: AppThemeUtils.getColorByKey(
+                            context,
+                            AppThemeKeys.mainTextColor.name,
+                          ),
+                          fontSize: ScreenUtil().setSp(36),
+                        ),
+                      ),
+                      SizedBox(width: ScreenUtil().setWidth(12)),
+                      Text(
+                        CoinType.N.name,
+                        style: TextStyle(
+                          color: AppThemeUtils.getColorByKey(
+                            context,
+                            AppThemeKeys.mainTextColor.name,
+                          ),
+                          fontSize: ScreenUtil().setSp(28),
+                        ),
+                      ),
+                    ],
+                  ),
 
-            SizedBox(
-              height: ScreenUtil().setWidth(40),
-            ),
-            Divider(
-              height: 1,
-              endIndent: 1,
-              indent: 1,
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemLineColor.name),
-            ),
-            //展示数据
-            NavShowDataItem("gasLimit",
-                "${BigInt.tryParse("${taskDetailResponse?["gasLimit"] ?? ''}")}"),
-            NavShowDataItem("gasUsed",
-                "${BigInt.tryParse("${taskDetailResponse?["gasUsed"] ?? ''}")}"),
-
-            Row(
-              children: [
-                Expanded(
-                  child: NavShowDataItem(
-                      "hash",
-                      dataUtils.addressFarmat(
-                          taskDetailResponse?["hash"] ?? '')),
-                ),
-                InkWell(
-                  onTap: () {
-                    Clipboard.setData(ClipboardData(
-                        text: "${taskDetailResponse?["hash"]}"));
-                    //toast 已经复制
-                    ToastUtils.show(S.of(context).copy);
-                  },
-                  child: Container(
-                    margin: EdgeInsets.only(left: ScreenUtil().setWidth(20)),
-                    width: ScreenUtil().setWidth(50),
-                    height: ScreenUtil().setWidth(50),
-                    child: Icon(
-                      Icons.copy,
-                      size: ScreenUtil().setWidth(36),
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainBlueColor.name),
+                  SizedBox(height: ScreenUtil().setWidth(40)),
+                  Divider(
+                    height: 1,
+                    endIndent: 1,
+                    indent: 1,
+                    color: AppThemeUtils.getColorByKey(
+                      context,
+                      AppThemeKeys.itemLineColor.name,
                     ),
                   ),
-                ),
-              ],
-            ),
+                  //展示数据
+                  NavShowDataItem(
+                    "gasLimit",
+                    parseMiningNumericValue(
+                          taskDetailResponse?["gasLimit"],
+                        )?.toString() ??
+                        '',
+                  ),
+                  NavShowDataItem(
+                    "gasUsed",
+                    parseMiningNumericValue(
+                          taskDetailResponse?["gasUsed"],
+                        )?.toString() ??
+                        '',
+                  ),
 
-            NavShowDataItem(
-                "miner",
-                dataUtils.addressFarmat(
-                    taskDetailResponse?["miner"])),
-            NavShowDataItem("block number",
-                "${BigInt.tryParse(taskDetailResponse?["number"] ?? '')}"),
-            NavShowDataItem(
-                "timestamp",
-                dataUtils.getTimeByTimeStamp(
-                    "${BigInt.tryParse(taskDetailResponse?["timestamp"] ?? '')}")),
-          ],
-        ),
-      ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: NavShowDataItem(
+                          "hash",
+                          dataUtils.addressFarmat(
+                            taskDetailResponse?["hash"] ?? '',
+                          ),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Clipboard.setData(
+                            ClipboardData(
+                              text: "${taskDetailResponse?["hash"]}",
+                            ),
+                          );
+                          //toast 已经复制
+                          ToastUtils.show(S.of(context).copy);
+                        },
+                        child: Container(
+                          margin: EdgeInsets.only(
+                            left: ScreenUtil().setWidth(20),
+                          ),
+                          width: ScreenUtil().setWidth(50),
+                          height: ScreenUtil().setWidth(50),
+                          child: Icon(
+                            Icons.copy,
+                            size: ScreenUtil().setWidth(36),
+                            color: AppThemeUtils.getColorByKey(
+                              context,
+                              AppThemeKeys.mainBlueColor.name,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  NavShowDataItem(
+                    "miner",
+                    dataUtils.addressFarmat(taskDetailResponse?["miner"]),
+                  ),
+                  NavShowDataItem(
+                    "block number",
+                    parseMiningNumericValue(
+                          taskDetailResponse?["number"],
+                        )?.toString() ??
+                        '',
+                  ),
+                  NavShowDataItem(
+                    "timestamp",
+                    dataUtils.getTimeByTimeStamp(
+                      parseMiningNumericValue(
+                            taskDetailResponse?["timestamp"],
+                          )?.toString() ??
+                          '',
+                    ),
+                  ),
+                ],
+              ),
+            ),
     );
   }
 }

@@ -203,23 +203,8 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
     final links = _coinInfo?['links'];
     if (links is! Map) return;
 
-    final forumUrls = links['official_forum_url'];
-    if (forumUrls is List) {
-      _website =
-          forumUrls
-              .map((u) => validateHttpUrl(u?.toString()))
-              .whereType<String>()
-              .firstOrNull ??
-          '';
-    }
-
-    final rawBrowsers = links['blockchain_site'];
-    if (rawBrowsers is List) {
-      _browsers = rawBrowsers
-          .map((b) => validateHttpUrl(b?.toString()))
-          .whereType<String>()
-          .toList();
-    }
+    _website = extractPrimaryWebsite(links);
+    _browsers = extractValidatedHttpUrls(links['blockchain_site']);
 
     _reddit = validateHttpUrl(links['subreddit_url']?.toString());
 

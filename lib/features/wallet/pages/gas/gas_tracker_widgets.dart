@@ -22,21 +22,33 @@ class _AlertsOverviewSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name);
-    final mainText = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final subtitleText =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+    final bgColor = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.backGroundColor.name,
+    );
+    final mainText = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.mainTextColor.name,
+    );
+    final subtitleText = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.itemSubtitleTextColor.name,
+    );
 
     return Container(
       decoration: BoxDecoration(
         color: bgColor,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(ScreenUtil().setWidth(24))),
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(ScreenUtil().setWidth(24)),
+        ),
       ),
       padding: EdgeInsets.only(
         left: ScreenUtil().setWidth(30),
         right: ScreenUtil().setWidth(30),
         top: ScreenUtil().setWidth(24),
-        bottom: ScreenUtil().setWidth(40) + MediaQuery.of(context).viewInsets.bottom,
+        bottom:
+            ScreenUtil().setWidth(40) +
+            MediaQuery.of(context).viewInsets.bottom,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -53,26 +65,44 @@ class _AlertsOverviewSheet extends StatelessWidget {
             ),
           ),
           SizedBox(height: ScreenUtil().setWidth(16)),
-          ...networks.map((n) => _buildNetworkTile(context, n, mainText, subtitleText)),
+          ...networks.map(
+            (n) => _buildNetworkTile(context, n, mainText, subtitleText),
+          ),
         ],
       ),
     );
   }
 
   Widget _buildNetworkTile(
-      BuildContext context, NetworkConfig n, Color mainText, Color subtitleText) {
+    BuildContext context,
+    NetworkConfig n,
+    Color mainText,
+    Color subtitleText,
+  ) {
     final config = alertConfigs[n.symbol];
     final hasAlert = config != null && config.enabled;
     return ListTile(
       contentPadding: EdgeInsets.zero,
       leading: _NetworkIcon(network: n, size: 40, iconSize: 22),
-      title: Text(n.name, style: TextStyle(fontSize: ScreenUtil().setSp(28), color: mainText)),
+      title: Text(
+        n.name,
+        style: TextStyle(fontSize: ScreenUtil().setSp(28), color: mainText),
+      ),
       subtitle: hasAlert
           ? Text(
               '${config.alertBelow ? S.of(context).g_key_gas_alert_below : S.of(context).g_key_gas_alert_above} ${config.threshold.toStringAsFixed(0)} Gwei',
-              style: TextStyle(fontSize: ScreenUtil().setSp(22), color: n.color),
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(22),
+                color: n.color,
+              ),
             )
-          : Text('—', style: TextStyle(fontSize: ScreenUtil().setSp(22), color: subtitleText)),
+          : Text(
+              '—',
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(22),
+                color: subtitleText,
+              ),
+            ),
       trailing: Icon(
         hasAlert ? Icons.notifications_active : Icons.notifications_none,
         color: hasAlert ? n.color : subtitleText,
@@ -118,7 +148,9 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
     _alertBelow = existing?.alertBelow ?? true;
     _enabled = existing?.enabled ?? true;
     _thresholdCtrl = TextEditingController(
-      text: existing?.threshold != null ? existing!.threshold.toStringAsFixed(0) : '',
+      text: existing?.threshold != null
+          ? existing!.threshold.toStringAsFixed(0)
+          : '',
     );
   }
 
@@ -131,70 +163,124 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
   void _validate(String v) {
     final d = double.tryParse(v);
     setState(() {
-      _error = (v.isEmpty || d == null || d <= 0) ? S.of(context).g_key_t_43 : '';
+      _error = (v.isEmpty || d == null || d <= 0)
+          ? S.of(context).g_key_t_43
+          : '';
     });
   }
 
+  void _showError(String msg) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(msg), duration: const Duration(seconds: 2)),
+    );
+  }
+
   Future<void> _save() async {
+    if (_saving) return;
     _validate(_thresholdCtrl.text);
-    if (_error.isNotEmpty) return;
+    final threshold = double.tryParse(_thresholdCtrl.text);
+    if (_error.isNotEmpty || threshold == null || threshold <= 0) return;
     setState(() => _saving = true);
     final config = GasAlertConfig(
       symbol: widget.network.symbol,
-      threshold: double.parse(_thresholdCtrl.text),
+      threshold: threshold,
       alertBelow: _alertBelow,
       enabled: _enabled,
       lastNotifiedMs: widget.existing?.lastNotifiedMs,
     );
-    await widget.onSaved(config);
-    if (mounted) Navigator.pop(context);
+    try {
+      await widget.onSaved(config);
+      if (!mounted) return;
+      Navigator.pop(context, true);
+    } catch (err) {
+      if (mounted) {
+        setState(() => _saving = false);
+      }
+      _showError(err.toString());
+    }
   }
 
   Future<void> _remove() async {
+    if (_saving) return;
     setState(() => _saving = true);
-    await widget.onRemoved();
-    if (mounted) Navigator.pop(context);
+    try {
+      await widget.onRemoved();
+      if (!mounted) return;
+      Navigator.pop(context, true);
+    } catch (err) {
+      if (mounted) {
+        setState(() => _saving = false);
+      }
+      _showError(err.toString());
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name);
-    final itemBg = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name);
-    final mainText = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final subtitleText =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
-    final blueColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+    final bgColor = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.backGroundColor.name,
+    );
+    final itemBg = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.itemBgColor.name,
+    );
+    final mainText = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.mainTextColor.name,
+    );
+    final subtitleText = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.itemSubtitleTextColor.name,
+    );
+    final blueColor = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.mainBlueColor.name,
+    );
 
-    return Container(
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(ScreenUtil().setWidth(24))),
-      ),
-      padding: EdgeInsets.only(
-        left: ScreenUtil().setWidth(30),
-        right: ScreenUtil().setWidth(30),
-        top: ScreenUtil().setWidth(24),
-        bottom: ScreenUtil().setWidth(40) + MediaQuery.of(context).viewInsets.bottom,
-      ),
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _SheetDragHandle(subtitleText: subtitleText),
-            SizedBox(height: ScreenUtil().setWidth(20)),
-            _buildTitleRow(context, mainText),
-            SizedBox(height: ScreenUtil().setWidth(24)),
-            _buildEnabledToggle(context, itemBg, mainText, blueColor),
-            SizedBox(height: ScreenUtil().setWidth(16)),
-            _buildThresholdSection(context, itemBg, subtitleText, mainText, bgColor),
-            SizedBox(height: ScreenUtil().setWidth(24)),
-            _buildSaveButton(context, blueColor),
-            if (widget.existing != null) ...[
-              SizedBox(height: ScreenUtil().setWidth(12)),
-              _buildRemoveButton(context),
+    return PopScope(
+      canPop: canDismissGasAlertSheet(_saving),
+      child: Container(
+        decoration: BoxDecoration(
+          color: bgColor,
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(ScreenUtil().setWidth(24)),
+          ),
+        ),
+        padding: EdgeInsets.only(
+          left: ScreenUtil().setWidth(30),
+          right: ScreenUtil().setWidth(30),
+          top: ScreenUtil().setWidth(24),
+          bottom:
+              ScreenUtil().setWidth(40) +
+              MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _SheetDragHandle(subtitleText: subtitleText),
+              SizedBox(height: ScreenUtil().setWidth(20)),
+              _buildTitleRow(context, mainText),
+              SizedBox(height: ScreenUtil().setWidth(24)),
+              _buildEnabledToggle(context, itemBg, mainText, blueColor),
+              SizedBox(height: ScreenUtil().setWidth(16)),
+              _buildThresholdSection(
+                context,
+                itemBg,
+                subtitleText,
+                mainText,
+                bgColor,
+              ),
+              SizedBox(height: ScreenUtil().setWidth(24)),
+              _buildSaveButton(context, blueColor),
+              if (widget.existing != null) ...[
+                SizedBox(height: ScreenUtil().setWidth(12)),
+                _buildRemoveButton(context),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );
@@ -220,7 +306,11 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
   }
 
   Widget _buildEnabledToggle(
-      BuildContext context, Color itemBg, Color mainText, Color blueColor) {
+    BuildContext context,
+    Color itemBg,
+    Color mainText,
+    Color blueColor,
+  ) {
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: ScreenUtil().setWidth(20),
@@ -233,11 +323,13 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(S.of(context).g_key_gas_alert,
-              style: TextStyle(fontSize: ScreenUtil().setSp(28), color: mainText)),
+          Text(
+            S.of(context).g_key_gas_alert,
+            style: TextStyle(fontSize: ScreenUtil().setSp(28), color: mainText),
+          ),
           Switch(
             value: _enabled,
-            onChanged: (v) => setState(() => _enabled = v),
+            onChanged: _saving ? null : (v) => setState(() => _enabled = v),
             activeThumbColor: blueColor,
           ),
         ],
@@ -246,7 +338,12 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
   }
 
   Widget _buildThresholdSection(
-      BuildContext context, Color itemBg, Color subtitleText, Color mainText, Color bgColor) {
+    BuildContext context,
+    Color itemBg,
+    Color subtitleText,
+    Color mainText,
+    Color bgColor,
+  ) {
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
       decoration: BoxDecoration(
@@ -256,8 +353,13 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(S.of(context).g_key_gas_alert_threshold,
-              style: TextStyle(fontSize: ScreenUtil().setSp(24), color: subtitleText)),
+          Text(
+            S.of(context).g_key_gas_alert_threshold,
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(24),
+              color: subtitleText,
+            ),
+          ),
           SizedBox(height: ScreenUtil().setWidth(12)),
           Row(
             children: [
@@ -267,7 +369,10 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
                   icon: Icons.arrow_downward,
                   selected: _alertBelow,
                   color: Colors.green,
-                  onTap: () => setState(() => _alertBelow = true),
+                  onTap: () {
+                    if (_saving) return;
+                    setState(() => _alertBelow = true);
+                  },
                 ),
               ),
               SizedBox(width: ScreenUtil().setWidth(12)),
@@ -277,7 +382,10 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
                   icon: Icons.arrow_upward,
                   selected: !_alertBelow,
                   color: Colors.red,
-                  onTap: () => setState(() => _alertBelow = false),
+                  onTap: () {
+                    if (_saving) return;
+                    setState(() => _alertBelow = false);
+                  },
                 ),
               ),
             ],
@@ -291,7 +399,9 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(22),
                 color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.errorTextColor.name),
+                  context,
+                  AppThemeKeys.errorTextColor.name,
+                ),
               ),
             ),
           ],
@@ -301,7 +411,11 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
   }
 
   Widget _buildThresholdInput(
-      BuildContext context, Color subtitleText, Color mainText, Color bgColor) {
+    BuildContext context,
+    Color subtitleText,
+    Color mainText,
+    Color bgColor,
+  ) {
     final borderColor = _error.isNotEmpty
         ? AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name)
         : AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name);
@@ -320,15 +434,24 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
         children: [
           Expanded(
             child: TextField(
+              enabled: !_saving,
               controller: _thresholdCtrl,
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
               ],
-              style: TextStyle(fontSize: ScreenUtil().setSp(28), color: mainText),
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(28),
+                color: mainText,
+              ),
               decoration: InputDecoration(
                 hintText: '0',
-                hintStyle: TextStyle(fontSize: ScreenUtil().setSp(28), color: subtitleText),
+                hintStyle: TextStyle(
+                  fontSize: ScreenUtil().setSp(28),
+                  color: subtitleText,
+                ),
                 border: InputBorder.none,
                 isDense: true,
                 contentPadding: EdgeInsets.zero,
@@ -336,8 +459,13 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
               onChanged: _validate,
             ),
           ),
-          Text('Gwei',
-              style: TextStyle(fontSize: ScreenUtil().setSp(24), color: subtitleText)),
+          Text(
+            'Gwei',
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(24),
+              color: subtitleText,
+            ),
+          ),
         ],
       ),
     );
@@ -361,11 +489,17 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
             ? SizedBox(
                 width: ScreenUtil().setWidth(36),
                 height: ScreenUtil().setWidth(36),
-                child: const CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                child: const CircularProgressIndicator(
+                  color: Colors.white,
+                  strokeWidth: 2,
+                ),
               )
             : Text(
                 S.of(context).g_key_gas_alert_save,
-                style: TextStyle(fontSize: ScreenUtil().setSp(30), fontWeight: FontWeight.w600),
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(30),
+                  fontWeight: FontWeight.w600,
+                ),
               ),
       ),
     );
@@ -411,8 +545,10 @@ class _DirectionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final idleColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+    final idleColor = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.itemSubtitleTextColor.name,
+    );
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
@@ -423,7 +559,10 @@ class _DirectionButton extends StatelessWidget {
           border: Border.all(
             color: selected
                 ? color
-                : AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name),
+                : AppThemeUtils.getColorByKey(
+                    context,
+                    AppThemeKeys.dividerColor.name,
+                  ),
             width: selected ? 1.5 : 1,
           ),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
@@ -431,7 +570,11 @@ class _DirectionButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: ScreenUtil().setWidth(28), color: selected ? color : idleColor),
+            Icon(
+              icon,
+              size: ScreenUtil().setWidth(28),
+              color: selected ? color : idleColor,
+            ),
             SizedBox(width: ScreenUtil().setWidth(6)),
             Flexible(
               child: Text(
@@ -478,7 +621,11 @@ class _NetworkIcon extends StatelessWidget {
   final NetworkConfig network;
   final double size;
   final double iconSize;
-  const _NetworkIcon({required this.network, required this.size, required this.iconSize});
+  const _NetworkIcon({
+    required this.network,
+    required this.size,
+    required this.iconSize,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -490,7 +637,10 @@ class _NetworkIcon extends StatelessWidget {
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(size * 0.25)),
       ),
       child: Center(
-        child: Text(network.icon, style: TextStyle(fontSize: ScreenUtil().setSp(iconSize))),
+        child: Text(
+          network.icon,
+          style: TextStyle(fontSize: ScreenUtil().setSp(iconSize)),
+        ),
       ),
     );
   }

@@ -7,6 +7,7 @@ import 'package:n42_wallet/features/mining_v1/models/mining_type.dart';
 import 'package:n42_wallet/features/mining_v2/pages/mining_background.dart';
 import 'package:n42_wallet/features/mining_v1/pages/mining_task_list.dart';
 import 'package:n42_wallet/features/mining_v1/pages/task_detail_page.dart';
+import 'package:n42_wallet/features/mining_v1/pages/today_mining_price_utils.dart';
 import 'package:n42_wallet/features/mining_v1/provider/mining_provider.dart';
 import 'package:n42_wallet/features/mining_v1/provider/mining_v1_providers.dart';
 import 'package:n42_wallet/features/mining_v1/utils/mining_plugin_utils.dart';
@@ -96,16 +97,19 @@ class _TodayMiningPageState extends State<TodayMiningPage>
                     backgroundMiningWidget(mpValue),
                     Row(
                       children: [
-                        miningDataBroad(S.of(context).g_mining_key_10,
-                            "${lastCycleMiningTimes[0]}:${lastCycleMiningTimes[1]}:${lastCycleMiningTimes[2]}",
-                            imagePath: "assets/mining/broad_bg_3.png"),
+                        miningDataBroad(
+                          S.of(context).g_mining_key_10,
+                          "${lastCycleMiningTimes[0]}:${lastCycleMiningTimes[1]}:${lastCycleMiningTimes[2]}",
+                          imagePath: "assets/mining/broad_bg_3.png",
+                        ),
                         SizedBox(width: ScreenUtil().setWidth(20)),
                         miningDataBroad(
-                            S.of(context).g_mining_key_11,
-                            "${dataUtils.formatNum(lastCycleRewardsValue, 4)} ${CoinType.N.name}",
-                            imagePath: "assets/mining/broad_bg_4.png",
-                            tipsText: S.of(context).g_mining_key_12,
-                            showTips: true),
+                          S.of(context).g_mining_key_11,
+                          "${dataUtils.formatNum(lastCycleRewardsValue, 4)} ${CoinType.N.name}",
+                          imagePath: "assets/mining/broad_bg_4.png",
+                          tipsText: S.of(context).g_mining_key_12,
+                          showTips: true,
+                        ),
                       ],
                     ),
                     SizedBox(height: ScreenUtil().setWidth(20)),
@@ -117,11 +121,13 @@ class _TodayMiningPageState extends State<TodayMiningPage>
                           imagePath: "assets/mining/broad_bg_1.png",
                         ),
                         SizedBox(width: ScreenUtil().setWidth(20)),
-                        miningDataBroad(S.of(context).g_mining_key_14,
-                            "\$${NumberFormat("#,##0.0#", "en_US").format((astPrice * totalValue))}",
-                            imagePath: "assets/mining/broad_bg_2.png",
-                            tipsText: S.of(context).g_mining_key_15,
-                            showTips: true),
+                        miningDataBroad(
+                          S.of(context).g_mining_key_14,
+                          "\$${NumberFormat("#,##0.0#", "en_US").format((astPrice * totalValue))}",
+                          imagePath: "assets/mining/broad_bg_2.png",
+                          tipsText: S.of(context).g_mining_key_15,
+                          showTips: true,
+                        ),
                       ],
                     ),
                     miningActivityWidget(mpValue),

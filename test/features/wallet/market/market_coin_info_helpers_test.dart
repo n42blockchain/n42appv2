@@ -26,4 +26,24 @@ void main() {
       expect(merged['price'], 3200.0);
     },
   );
+
+  test('extractPrimaryWebsite prefers homepage over forum-style urls', () {
+    final website = extractPrimaryWebsite({
+      'homepage': ['https://ethereum.org', ''],
+      'official_forum_url': ['https://forum.example.com'],
+    });
+
+    expect(website, 'https://ethereum.org');
+  });
+
+  test('extractValidatedHttpUrls filters invalid and empty urls', () {
+    final urls = extractValidatedHttpUrls([
+      '',
+      'ftp://example.com',
+      'https://valid.example',
+      'http://also-valid.example',
+    ]);
+
+    expect(urls, ['https://valid.example', 'http://also-valid.example']);
+  });
 }

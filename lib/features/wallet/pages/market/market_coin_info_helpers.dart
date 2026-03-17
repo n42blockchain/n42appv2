@@ -82,6 +82,18 @@ String? validateHttpUrl(String? raw) {
 bool isSafeUsername(String? u) =>
     u != null && u.isNotEmpty && RegExp(r'^[\w\-\.]+$').hasMatch(u);
 
+List<String> extractValidatedHttpUrls(dynamic raw) {
+  if (raw is! List) return const [];
+  return raw
+      .map((value) => validateHttpUrl(value?.toString()))
+      .whereType<String>()
+      .toList();
+}
+
+String extractPrimaryWebsite(Map links) {
+  return extractValidatedHttpUrls(links['homepage']).firstOrNull ?? '';
+}
+
 // ─── layout helpers ────────────────────────────────────────────────────────
 
 /// Inserts a themed divider between every adjacent pair of items.

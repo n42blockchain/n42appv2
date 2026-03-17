@@ -6,7 +6,8 @@ part of 'payment_page.dart';
 extension _PaymentPageWidgets on _PaymentPageState {
   String _formatNumber(double value, [String? fallback]) {
     if (value >= 1000000000) return regular.getMoneyAbbreviation(value);
-    if (value > 0 && value < 0.0000000009) return regular.getMoneyAbbreviationDecimal(value);
+    if (value > 0 && value < 0.0000000009)
+      return regular.getMoneyAbbreviationDecimal(value);
     return fallback ?? oCcy.format(value);
   }
 
@@ -18,7 +19,10 @@ extension _PaymentPageWidgets on _PaymentPageState {
   Widget _coinImage(CoinModel coinInfo) {
     final icon = coinInfo.coin['icon'] ?? '';
     if (icon.isEmpty) return Image.asset("assets/img/list_default.png");
-    return ImageNetWork(imageUrl: icon, placeholder: "assets/img/list_default.png");
+    return ImageNetWork(
+      imageUrl: icon,
+      placeholder: "assets/img/list_default.png",
+    );
   }
 
   Widget? _mainCoinImage(CoinModel coinInfo) {
@@ -47,9 +51,8 @@ extension _PaymentPageWidgets on _PaymentPageState {
 
           return InkWell(
             onTap: () {
-              if(!isSelected){
-                setState(() { coinModelIndex = index; });
-                _initCoinMainModel();
+              if (!isSelected) {
+                _selectCoinModel(index);
               }
             },
             child: Container(
@@ -156,7 +159,7 @@ extension _PaymentPageWidgets on _PaymentPageState {
   Color _themeColor(AppThemeKeys key) =>
       AppThemeUtils.getColorByKey(context, key.name);
 
-  Widget mainCoin(){
+  Widget mainCoin() {
     final su = ScreenUtil();
     return Container(
       alignment: Alignment.centerRight,
@@ -171,7 +174,7 @@ extension _PaymentPageWidgets on _PaymentPageState {
     );
   }
 
-  Widget walletWidget(){
+  Widget walletWidget() {
     final su = ScreenUtil();
     return Container(
       height: su.setWidth(100),
@@ -194,7 +197,7 @@ extension _PaymentPageWidgets on _PaymentPageState {
           ),
           Expanded(
             child: Text(
-              ref.read(wapBridgeProvider).walletInfo.walletName??"",
+              ref.read(wapBridgeProvider).walletInfo.walletName ?? "",
               style: TextStyle(
                 color: _themeColor(AppThemeKeys.itemTextColor),
                 fontSize: su.setSp(30),

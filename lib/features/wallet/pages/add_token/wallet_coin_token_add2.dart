@@ -67,7 +67,8 @@ class _WalletCoinTokenAdd2State extends ConsumerState<WalletCoinTokenAdd2> {
     try {
       final wap = ref.read(wapBridgeProvider);
       final baseToken =
-          json.decode(json.encode(widget.coinModel.coin)) as Map<String, dynamic>;
+          json.decode(json.encode(widget.coinModel.coin))
+              as Map<String, dynamic>;
       baseToken
         ..['isContract'] = true
         ..['contract'] = coinMap['contract'].toString()
@@ -127,28 +128,35 @@ class _WalletCoinTokenAdd2State extends ConsumerState<WalletCoinTokenAdd2> {
 
   Future<void> getTokenList() async {
     setState(() => load = Load.loading);
-    final tokenViewApi = TokenViewApi();
-    String fullname = widget.coinModel.coin['name'];
-    if (fullname == 'AmazeToken') fullname = 'Amaze Chain';
+    try {
+      final tokenViewApi = TokenViewApi();
+      String fullname = widget.coinModel.coin['name'];
+      if (fullname == 'AmazeToken') fullname = 'Amaze Chain';
 
-    final coinsData = await tokenViewApi.getTokenListFullname(fullname);
-    if (coinsData.error) {
-      ToastUtils.show(coinsData.data);
-      return;
-    }
+      final coinsData = await tokenViewApi.getTokenListFullname(fullname);
+      if (coinsData.error) {
+        ToastUtils.show(coinsData.data);
+        return;
+      }
 
-    coinlist = [];
-    for (final Map<String, dynamic> r in coinsData.data) {
-      if (r['contract'] == '') continue;
-      r['isAdd'] = checkSymbol(r['contract'].toString().toUpperCase());
-      r['edit'] = false;
-      if (r['isAdd'] as bool) {
-        coinlist.insert(0, r);
-      } else {
-        coinlist.add(r);
+      coinlist = [];
+      for (final Map<String, dynamic> r in coinsData.data) {
+        if (r['contract'] == '') continue;
+        r['isAdd'] = checkSymbol(r['contract'].toString().toUpperCase());
+        r['edit'] = false;
+        if (r['isAdd'] as bool) {
+          coinlist.insert(0, r);
+        } else {
+          coinlist.add(r);
+        }
+      }
+    } catch (e) {
+      ToastUtils.show(e.toString());
+    } finally {
+      if (mounted) {
+        setState(() => load = Load.finish);
       }
     }
-    setState(() => load = Load.finish);
   }
 
   void closeKeyboard() {
@@ -218,10 +226,7 @@ class _WalletCoinTokenAdd2State extends ConsumerState<WalletCoinTokenAdd2> {
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: _sw(20.0)),
       margin: EdgeInsets.symmetric(vertical: _sw(20.0)),
-      constraints: BoxConstraints(
-        minHeight: _sw(100.0),
-        maxHeight: _sw(100.0),
-      ),
+      constraints: BoxConstraints(minHeight: _sw(100.0), maxHeight: _sw(100.0)),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(_sw(20.0)),
         color: _themeColor(AppThemeKeys.itemBgColor),
@@ -284,7 +289,8 @@ class _WalletCoinTokenAdd2State extends ConsumerState<WalletCoinTokenAdd2> {
     return ListView.separated(
       itemCount: items.length,
       itemBuilder: (_, index) => _buildCoinItem(items[index]),
-      separatorBuilder: (context, index) => Divider(height: _sw(1.0), indent: 0, endIndent: 0),
+      separatorBuilder: (context, index) =>
+          Divider(height: _sw(1.0), indent: 0, endIndent: 0),
     );
   }
 
@@ -315,7 +321,10 @@ class _WalletCoinTokenAdd2State extends ConsumerState<WalletCoinTokenAdd2> {
 
     final imgWidget = rowValue['fullname'] == 'N42'
         ? Image.asset('assets/img/ast.png')
-        : ImageNetWork(imageUrl: icon, placeholder: 'assets/img/list_default.png');
+        : ImageNetWork(
+            imageUrl: icon,
+            placeholder: 'assets/img/list_default.png',
+          );
 
     final bool isEditing = rowValue['edit'] == true;
     final bool isAdded = rowValue['isAdd'] == true;
@@ -365,7 +374,10 @@ class _WalletCoinTokenAdd2State extends ConsumerState<WalletCoinTokenAdd2> {
   }
 
   Widget _buildActionButton(
-      Map<String, dynamic> rowValue, bool isEditing, bool isAdded) {
+    Map<String, dynamic> rowValue,
+    bool isEditing,
+    bool isAdded,
+  ) {
     if (isEditing) {
       return Container(
         padding: EdgeInsets.all(_sw(19.0)),
