@@ -19,7 +19,9 @@ enum LoyaltyLoadState {
 
 /// 积分系统 Provider
 class LoyaltyProvider extends ChangeNotifier {
-  final LoyaltyApi _api = LoyaltyApi();
+  LoyaltyProvider({LoyaltyApi? api}) : _api = api ?? LoyaltyApi();
+
+  final LoyaltyApi _api;
 
   LoyaltyLoadState _loadState = LoyaltyLoadState.initial;
   LoyaltyLoadState get loadState => _loadState;
@@ -57,6 +59,18 @@ class LoyaltyProvider extends ChangeNotifier {
   bool _hasCheckedInToday = false;
   bool get hasCheckedInToday => _hasCheckedInToday;
 
+  bool get hasContent =>
+      _tasks.isNotEmpty ||
+      _history.isNotEmpty ||
+      _rewards.isNotEmpty ||
+      _rules.isNotEmpty ||
+      _referrals.isNotEmpty ||
+      _referralCode != null ||
+      _referralLink != null ||
+      _account.totalPoints > 0 ||
+      _account.availablePoints > 0 ||
+      _account.usedPoints > 0;
+
   /// 初始化
   Future<void> initialize(String walletAddress) async {
     _walletAddress = walletAddress;
@@ -72,7 +86,7 @@ class LoyaltyProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      await Future.wait([
+      final results = await Future.wait<bool>([
         _loadAccount(),
         _loadTasks(),
         _loadHistory(),
@@ -80,7 +94,12 @@ class LoyaltyProvider extends ChangeNotifier {
         _loadReferralInfo(),
       ]);
 
-      _loadState = LoyaltyLoadState.loaded;
+      if (results.any((loaded) => loaded) || hasContent) {
+        _loadState = LoyaltyLoadState.loaded;
+      } else {
+        _loadState = LoyaltyLoadState.error;
+        _errorMessage = 'Failed to load loyalty data';
+      }
     } catch (e) {
       _loadState = LoyaltyLoadState.error;
       _errorMessage = e.toString();
@@ -90,20 +109,24 @@ class LoyaltyProvider extends ChangeNotifier {
   }
 
   /// 加载账户信息
-  Future<void> _loadAccount() async {
+  Future<bool> _loadAccount() async {
     final result = await _api.getAccount(_walletAddress!);
     if (!result.error && result.data != null) {
       _account = result.data as LoyaltyAccount;
+      return true;
     }
+    return false;
   }
 
   /// 加载任务列表
-  Future<void> _loadTasks() async {
+  Future<bool> _loadTasks() async {
     final result = await _api.getTasks(_walletAddress!);
     if (!result.error && result.data != null) {
       _tasks = result.data as List<LoyaltyTask>;
       _updateCheckInStatus();
+      return true;
     }
+    return false;
   }
 
   /// 更新签到状态
@@ -120,39 +143,49 @@ class LoyaltyProvider extends ChangeNotifier {
   }
 
   /// 加载积分历史
-  Future<void> _loadHistory() async {
+  Future<bool> _loadHistory() async {
     final result = await _api.getPointsHistory(walletAddress: _walletAddress!);
     if (!result.error && result.data != null) {
       _history = result.data as List<PointsHistory>;
+      return true;
     }
+    return false;
   }
 
   /// 加载可兑换奖励
-  Future<void> _loadRewards() async {
-    final result = await _api.getRewards();
+  Future<bool> _loadRewards() async {
+    final result = await _api.fetchRewards();
     if (!result.error && result.data != null) {
       _rewards = result.data as List<Reward>;
+      return true;
     }
+    return false;
   }
 
   /// 加载邀请信息
-  Future<void> _loadReferralInfo() async {
-    final codeResult = await _api.getReferralCode(_walletAddress!);
+  Future<bool> _loadReferralInfo() async {
+    var loaded = false;
+
+    final codeResult = await _api.fetchReferralCode(_walletAddress!);
     if (!codeResult.error && codeResult.data != null) {
       final data = codeResult.data as Map<String, dynamic>;
       _referralCode = data['code'];
       _referralLink = data['link'];
+      loaded = true;
     }
 
-    final referralsResult = await _api.getReferrals(_walletAddress!);
+    final referralsResult = await _api.fetchReferrals(_walletAddress!);
     if (!referralsResult.error && referralsResult.data != null) {
       _referrals = referralsResult.data as List<ReferralRecord>;
+      loaded = true;
     }
+
+    return loaded;
   }
 
   /// 加载积分规则
   Future<void> loadRules() async {
-    final result = await _api.getPointsRules();
+    final result = await _api.fetchPointsRules();
     if (!result.error && result.data != null) {
       _rules = result.data as List<PointsRule>;
       notifyListeners();

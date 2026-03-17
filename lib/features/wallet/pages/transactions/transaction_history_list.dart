@@ -11,6 +11,7 @@ import 'package:n42_wallet/features/sqlite/app_database.dart';
 import 'package:n42_wallet/features/wallet/models/btc_transaction_recode_model.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
+import 'package:n42_wallet/features/wallet/pages/transactions/transaction_record_helpers.dart';
 import 'package:n42_wallet/features/wallet/widgets/wallet_chain_info_transactions_item.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:path_provider/path_provider.dart';
@@ -25,12 +26,7 @@ class _TxFilter {
   final DateTime? dateFrom;
   final DateTime? dateTo;
 
-  const _TxFilter({
-    this.direction,
-    this.status,
-    this.dateFrom,
-    this.dateTo,
-  });
+  const _TxFilter({this.direction, this.status, this.dateFrom, this.dateTo});
 
   bool get isActive =>
       direction != null || status != null || dateFrom != null || dateTo != null;
@@ -45,11 +41,9 @@ class _TxFilter {
     Object? dateTo = _sentinel,
   }) {
     return _TxFilter(
-      direction:
-          direction == _sentinel ? this.direction : direction as String?,
+      direction: direction == _sentinel ? this.direction : direction as String?,
       status: status == _sentinel ? this.status : status as int?,
-      dateFrom:
-          dateFrom == _sentinel ? this.dateFrom : dateFrom as DateTime?,
+      dateFrom: dateFrom == _sentinel ? this.dateFrom : dateFrom as DateTime?,
       dateTo: dateTo == _sentinel ? this.dateTo : dateTo as DateTime?,
     );
   }
@@ -65,8 +59,7 @@ class TransactionHistoryList extends StatefulWidget {
   const TransactionHistoryList(this.coinModel, {super.key});
 
   @override
-  State<TransactionHistoryList> createState() =>
-      _TransactionHistoryListState();
+  State<TransactionHistoryList> createState() => _TransactionHistoryListState();
 }
 
 class _TransactionHistoryListState extends State<TransactionHistoryList>
@@ -115,9 +108,7 @@ class _TransactionHistoryListState extends State<TransactionHistoryList>
                   ),
         ],
       ),
-      body: SafeArea(
-        child: _buildBody(items),
-      ),
+      body: SafeArea(child: _buildBody(items)),
     );
   }
 
@@ -137,8 +128,7 @@ class _TransactionHistoryListState extends State<TransactionHistoryList>
     return ListView.separated(
       padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
       itemCount: items.length,
-      separatorBuilder: (_, _) =>
-          SizedBox(height: ScreenUtil().setWidth(30)),
+      separatorBuilder: (_, _) => SizedBox(height: ScreenUtil().setWidth(30)),
       itemBuilder: (ctx, i) {
         final tx = items[i];
         final isBtcTx = tx is BtcTransactionRecodeModel;

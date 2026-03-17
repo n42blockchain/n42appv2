@@ -1,5 +1,12 @@
 part of 'security_google_vedification.dart';
 
+({int nextCount, bool keepWaiting}) advanceSecurityEmailCountdown(int current) {
+  if (current <= 1) {
+    return (nextCount: 60, keepWaiting: false);
+  }
+  return (nextCount: current - 1, keepWaiting: true);
+}
+
 /// Business logic mixin for SecurityGoogleVedification page.
 ///
 /// Contains controllers, state variables, verification methods,
@@ -20,6 +27,7 @@ mixin _SecurityGoogleVedificationLogic
   Load load = Load.finish;
   Load emailLoad = Load.finish;
   Load googleLoad = Load.finish;
+  Timer? _emailCountdownTimer;
 
   String walletName = "";
 
@@ -90,14 +98,22 @@ mixin _SecurityGoogleVedificationLogic
   }
 
   void _startEmailCountdown() {
-    Timer(const Duration(seconds: 1), () {
-      if (!mounted) return;
-      setState(() => emailSendWaitNum--);
-      if (emailSendWaitNum <= 0) {
-        emailSendWaitNum = 60;
-        emailSendWait = false;
-      } else {
-        _startEmailCountdown();
+    _emailCountdownTimer?.cancel();
+    _emailCountdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
+
+      final nextState = advanceSecurityEmailCountdown(emailSendWaitNum);
+      setState(() {
+        emailSendWaitNum = nextState.nextCount;
+        emailSendWait = nextState.keepWaiting;
+      });
+
+      if (!nextState.keepWaiting) {
+        timer.cancel();
+        _emailCountdownTimer = null;
       }
     });
   }
@@ -248,11 +264,11 @@ mixin _SecurityGoogleVedificationLogic
     }
 
     securityMap['google'] = true;
-    _saveSecurity();
+    await _saveSecurity();
+    if (!mounted) return;
     setState(() {
       load = Load.finish;
     });
-    if (!context.mounted) return;
     Navigator.popUntil(context, ModalRoute.withName('/securitySetting'));
   }
 
@@ -263,5 +279,14 @@ mixin _SecurityGoogleVedificationLogic
   void pasteGoogleCode(String text) {
     googleTextEditingController.text = text;
     setState(() {});
+  }
+
+  @override
+  void dispose() {
+    _emailCountdownTimer?.cancel();
+    pwdTextEditingController.dispose();
+    emailTextEditingController.dispose();
+    googleTextEditingController.dispose();
+    super.dispose();
   }
 }

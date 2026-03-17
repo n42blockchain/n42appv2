@@ -7,11 +7,43 @@ import 'package:n42_wallet/core/network/base_api.dart';
 import 'package:n42_wallet/features/models/message_model.dart';
 import 'package:n42_wallet/features/bridge/models/bridge_models.dart';
 
+abstract interface class BridgeApiClient {
+  Future<MessageModel> getChains();
+  Future<MessageModel> getTokens({int? chainId});
+  Future<MessageModel> getQuote(BridgeQuoteRequest request);
+  Future<MessageModel> getRoutes(BridgeQuoteRequest request);
+  Future<MessageModel> getStepTransaction({required Map<String, dynamic> step});
+  Future<MessageModel> getStatus({
+    required String txHash,
+    required int fromChainId,
+    required int toChainId,
+    required String bridge,
+  });
+  Future<MessageModel> getTools();
+  Future<MessageModel> getTokenBalance({
+    required String walletAddress,
+    required int chainId,
+    required String tokenAddress,
+  });
+  Future<MessageModel> getTokenApproval({
+    required int chainId,
+    required String tokenAddress,
+    required String walletAddress,
+    required String spenderAddress,
+  });
+  Future<MessageModel> getApprovalTransaction({
+    required int chainId,
+    required String tokenAddress,
+    required String spenderAddress,
+    String? amount,
+  });
+}
+
 /// LI.FI 跨链桥 API
 ///
 /// LI.FI 是一个跨链桥聚合器，支持 15+ 桥接协议
 /// API 文档: https://docs.li.fi/
-class LiFiApi {
+class LiFiApi implements BridgeApiClient {
   static const String _baseUrl = 'https://li.quest/v1';
 
   static LiFiApi? _instance;
@@ -29,6 +61,7 @@ class LiFiApi {
   };
 
   /// 获取支持的链列表
+  @override
   Future<MessageModel> getChains() async {
     try {
       final response = await BaseApi.requestEmptyH.get(
@@ -53,6 +86,7 @@ class LiFiApi {
   }
 
   /// 获取指定链上的代币列表
+  @override
   Future<MessageModel> getTokens({int? chainId}) async {
     try {
       final url = chainId != null
@@ -90,9 +124,12 @@ class LiFiApi {
   /// 获取跨链路由报价
   ///
   /// 返回可用的跨链路由列表，按推荐程度排序
+  @override
   Future<MessageModel> getQuote(BridgeQuoteRequest request) async {
     try {
-      final queryString = request.toQueryParams().entries
+      final queryString = request
+          .toQueryParams()
+          .entries
           .map((e) => '${e.key}=${Uri.encodeComponent(e.value)}')
           .join('&');
 
@@ -125,6 +162,7 @@ class LiFiApi {
   /// 获取所有可用路由
   ///
   /// 返回所有可用的跨链路由，包括不同的桥接协议
+  @override
   Future<MessageModel> getRoutes(BridgeQuoteRequest request) async {
     try {
       final body = {
@@ -151,7 +189,9 @@ class LiFiApi {
       final mm = MessageModel();
       if (response is Map) {
         if (response['routes'] != null) {
-          mm.data = BridgeQuoteResponse.fromJson(response as Map<String, dynamic>);
+          mm.data = BridgeQuoteResponse.fromJson(
+            response as Map<String, dynamic>,
+          );
         } else {
           mm.error = true;
           mm.data = response['message'] ?? 'No routes available';
@@ -169,6 +209,7 @@ class LiFiApi {
   /// 获取交易数据
   ///
   /// 根据选择的路由生成交易数据，用于签名和广播
+  @override
   Future<MessageModel> getStepTransaction({
     required Map<String, dynamic> step,
   }) async {
@@ -183,7 +224,9 @@ class LiFiApi {
       final mm = MessageModel();
       if (response is Map) {
         if (response['transactionRequest'] != null) {
-          mm.data = BridgeTransactionResponse.fromJson(response as Map<String, dynamic>);
+          mm.data = BridgeTransactionResponse.fromJson(
+            response as Map<String, dynamic>,
+          );
         } else {
           mm.error = true;
           mm.data = response['message'] ?? 'Failed to get transaction';
@@ -201,6 +244,7 @@ class LiFiApi {
   /// 查询交易状态
   ///
   /// 根据交易哈希查询跨链交易的状态
+  @override
   Future<MessageModel> getStatus({
     required String txHash,
     required int fromChainId,
@@ -208,14 +252,15 @@ class LiFiApi {
     required String bridge,
   }) async {
     try {
-      final queryString = {
-        'txHash': txHash,
-        'fromChain': fromChainId.toString(),
-        'toChain': toChainId.toString(),
-        'bridge': bridge,
-      }.entries
-          .map((e) => '${e.key}=${Uri.encodeComponent(e.value)}')
-          .join('&');
+      final queryString =
+          {
+                'txHash': txHash,
+                'fromChain': fromChainId.toString(),
+                'toChain': toChainId.toString(),
+                'bridge': bridge,
+              }.entries
+              .map((e) => '${e.key}=${Uri.encodeComponent(e.value)}')
+              .join('&');
 
       final response = await BaseApi.requestEmptyH.get(
         '$_baseUrl/status?$queryString',
@@ -225,7 +270,9 @@ class LiFiApi {
 
       final mm = MessageModel();
       if (response is Map) {
-        mm.data = BridgeStatusResponse.fromJson(response as Map<String, dynamic>);
+        mm.data = BridgeStatusResponse.fromJson(
+          response as Map<String, dynamic>,
+        );
       } else {
         mm.error = true;
         mm.data = 'Invalid response';
@@ -237,6 +284,7 @@ class LiFiApi {
   }
 
   /// 获取可用的桥接工具列表
+  @override
   Future<MessageModel> getTools() async {
     try {
       final response = await BaseApi.requestEmptyH.get(
@@ -259,6 +307,7 @@ class LiFiApi {
   }
 
   /// 获取代币余额
+  @override
   Future<MessageModel> getTokenBalance({
     required String walletAddress,
     required int chainId,
@@ -285,6 +334,7 @@ class LiFiApi {
   }
 
   /// 检查并获取代币授权状态
+  @override
   Future<MessageModel> getTokenApproval({
     required int chainId,
     required String tokenAddress,
@@ -312,6 +362,7 @@ class LiFiApi {
   }
 
   /// 获取代币授权交易数据
+  @override
   Future<MessageModel> getApprovalTransaction({
     required int chainId,
     required String tokenAddress,
@@ -319,7 +370,8 @@ class LiFiApi {
     String? amount,
   }) async {
     try {
-      final baseUrl = '$_baseUrl/approval/transaction?chainId=$chainId&tokenAddress=$tokenAddress&spenderAddress=$spenderAddress';
+      final baseUrl =
+          '$_baseUrl/approval/transaction?chainId=$chainId&tokenAddress=$tokenAddress&spenderAddress=$spenderAddress';
       final url = amount != null ? '$baseUrl&amount=$amount' : baseUrl;
 
       final response = await BaseApi.requestEmptyH.get(

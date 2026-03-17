@@ -76,17 +76,27 @@ class WalletConnectProvider
     switch (state) {
       case WalletConnectState.loading:
         await connectInit();
-        await pair(params as String);
+        if (walletConnectState == WalletConnectState.error ||
+            signClient == null) {
+          return;
+        }
+        final paired = await pair(params as String);
+        if (!paired || walletConnectState == WalletConnectState.error) {
+          return;
+        }
       case WalletConnectState.connectOK:
         final args = actionData as wallet_connect.SessionProposalEvent;
         try {
-          signClient!.approveSession(id: args.id, namespaces: namespace!).then((value) async {
-            dAppTopic = value.topic;
-            viewStateDeal(WalletConnectState.connect);
-          }).catchError((error) {
-            ToastUtils.show(error.toString());
-            viewStateDeal(WalletConnectState.disconnect);
-          });
+          signClient!
+              .approveSession(id: args.id, namespaces: namespace!)
+              .then((value) async {
+                dAppTopic = value.topic;
+                viewStateDeal(WalletConnectState.connect);
+              })
+              .catchError((error) {
+                ToastUtils.show(error.toString());
+                viewStateDeal(WalletConnectState.disconnect);
+              });
         } catch (e) {
           ToastUtils.show("Connection error: ${e.toString()}");
           viewStateDeal(WalletConnectState.disconnect);
@@ -130,7 +140,10 @@ class WalletConnectProvider
         topic: eventData.topic,
         response: wallet_connect.JsonRpcResponse(
           id: eventData.id,
-          error: wallet_connect.JsonRpcError(code: 4001, message: "User rejected."),
+          error: wallet_connect.JsonRpcError(
+            code: 4001,
+            message: "User rejected.",
+          ),
         ),
       );
     } catch (e) {

@@ -44,19 +44,20 @@ mixin _ZilSendLogicMixin on ConsumerState<WalletChainSendZil> {
     final coin = widget.coinModel.coin;
     if (coin['isContract']) {
       final wap = ref.read(wapBridgeProvider);
-      final cIndex = wap.coinModels.indexWhere((e) =>
-          e.coin['coinType'] == coin['coinType'] &&
-          (widget.coinModel.privateKey == null ||
-              e.privateKey == widget.coinModel.privateKey));
+      final cIndex = wap.coinModels.indexWhere(
+        (e) =>
+            e.coin['coinType'] == coin['coinType'] &&
+            (widget.coinModel.privateKey == null ||
+                e.privateKey == widget.coinModel.privateKey),
+      );
       chainModel = wap.coinModels[cIndex];
       await chainModel?.getBalance();
       if (!mounted) return;
       setState(() {});
     }
-    gas = BigInt.from(getCoinGas(
-      coin['coinType'],
-      contract: coin['isContract'],
-    ));
+    gas = BigInt.from(
+      getCoinGas(coin['coinType'], contract: coin['isContract']),
+    );
     await getBalance();
     await getGasPrice();
   }
@@ -148,12 +149,14 @@ mixin _ZilSendLogicMixin on ConsumerState<WalletChainSendZil> {
     final parts = addr.split(':');
     if (parts.length == 2) addr = parts[1];
 
-    final isValid = await Trustdart()
-        .validateAddress(widget.coinModel.coin['coinType'], addr);
+    final isValid = await Trustdart().validateAddress(
+      widget.coinModel.coin['coinType'],
+      addr,
+    );
     if (!mounted) return null;
 
-    final isSelfSend = addr.toUpperCase() ==
-        widget.coinModel.address.toString().toUpperCase();
+    final isSelfSend =
+        addr.toUpperCase() == widget.coinModel.address.toString().toUpperCase();
     if (!isValid || isSelfSend) {
       toErrorMessage = S.current.g_key_t_50;
       setState(() {});
@@ -210,13 +213,12 @@ mixin _ZilSendLogicMixin on ConsumerState<WalletChainSendZil> {
       ..gasPriceValue = gasPrice
       ..price = transferValue;
 
-    final feeUnit =
-        (chainModel ?? widget.coinModel).coin['unit'].toString().toUpperCase();
+    final feeUnit = (chainModel ?? widget.coinModel).coin['unit']
+        .toString()
+        .toUpperCase();
     final confirmed = await Navigator.push<bool>(
       context,
-      MaterialPageRoute(
-        builder: (_) => WalletBaseSend(trModel, null, feeUnit),
-      ),
+      MaterialPageRoute(builder: (_) => WalletBaseSend(trModel, null, feeUnit)),
     );
     if (!mounted) return;
     if (confirmed == true) {
@@ -279,7 +281,10 @@ mixin _ZilSendLogicMixin on ConsumerState<WalletChainSendZil> {
       valueTextEditingController.text = widget.coinModel.balanceStringAll();
       transferValue = widget.coinModel.balance;
     } else {
-      transferValue = widget.coinModel.balance - totalGasPrice;
+      transferValue = maxTransferableAmount(
+        balance: widget.coinModel.balance,
+        fee: totalGasPrice,
+      );
       valueTextEditingController.text = toEther(
         transferValue.toString(),
         widget.coinModel.coin['decimals'],

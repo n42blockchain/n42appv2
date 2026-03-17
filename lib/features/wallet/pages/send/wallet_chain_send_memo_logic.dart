@@ -49,10 +49,12 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
       }
     }
 
-    gas = BigInt.from(getCoinGas(
-      widget.coinModel.coin['coinType'] as String? ?? '',
-      contract: widget.coinModel.coin['isContract'] == true,
-    ));
+    gas = BigInt.from(
+      getCoinGas(
+        widget.coinModel.coin['coinType'] as String? ?? '',
+        contract: widget.coinModel.coin['isContract'] == true,
+      ),
+    );
     // 非 EVM 链 gas 固定为 gas 单位（无需 gasPrice rpc 查询）
     totalGasPrice = gas;
 
@@ -81,8 +83,10 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
       return;
     }
 
-    final BigInt valueBi =
-        ethToWeiString(value, widget.coinModel.coin['decimals'] as int);
+    final BigInt valueBi = ethToWeiString(
+      value,
+      widget.coinModel.coin['decimals'] as int,
+    );
     if (widget.coinModel.coin['isContract'] != true &&
         valueBi + totalGasPrice > widget.coinModel.balance) {
       amountError = S.of(context).g_key_47;
@@ -117,8 +121,8 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
     final bool ok = await Trustdart().validateAddress(coinType, addr);
     if (!mounted) return null;
 
-    final bool isSelfSend = addr.toUpperCase() ==
-        widget.coinModel.address.toString().toUpperCase();
+    final bool isSelfSend =
+        addr.toUpperCase() == widget.coinModel.address.toString().toUpperCase();
     if (!ok || isSelfSend) {
       _setToError(S.current.g_key_t_50);
       return null;
@@ -181,7 +185,8 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
         ? (chainModel!.coin['unit'] as String? ?? '').toUpperCase()
         : (widget.coinModel.coin['unit'] as String? ?? '').toUpperCase();
 
-    final bool confirmed = await Navigator.push<bool>(
+    final bool confirmed =
+        await Navigator.push<bool>(
           context,
           MaterialPageRoute(
             builder: (_) => WalletBaseSend(trModel, null, unitLabel),
@@ -245,8 +250,10 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
       valueCtrl.text = widget.coinModel.balanceStringAll();
       transferValue = widget.coinModel.balance;
     } else {
-      transferValue = widget.coinModel.balance - totalGasPrice;
-      if (transferValue < BigInt.zero) transferValue = BigInt.zero;
+      transferValue = maxTransferableAmount(
+        balance: widget.coinModel.balance,
+        fee: totalGasPrice,
+      );
       valueCtrl.text = toEther(
         transferValue.toString(),
         widget.coinModel.coin['decimals'] as int,
@@ -260,11 +267,14 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
     FocusScope.of(context).requestFocus(FocusNode());
   }
 
-  void scanQR() => performScanQR(context,
-      controller: toCtrl, onAddress: toAddressCheck);
+  void scanQR() =>
+      performScanQR(context, controller: toCtrl, onAddress: toAddressCheck);
 
-  void pasteAddress() => performPasteAddress(context,
-      controller: toCtrl, onAddress: toAddressCheck);
+  void pasteAddress() => performPasteAddress(
+    context,
+    controller: toCtrl,
+    onAddress: toAddressCheck,
+  );
 
   void showAddressPicker() {
     showAddressPickerSheet(

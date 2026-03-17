@@ -14,7 +14,6 @@ import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_base_send.dart';
 import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
-import 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/utils/transaction/coin_gas.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
@@ -98,17 +97,22 @@ class _WalletChainSendDotState extends ConsumerState<WalletChainSendDot>
       ),
       width: double.infinity,
       decoration: BoxDecoration(
-        borderRadius:
-            BorderRadius.all(Radius.circular(ScreenUtil().setWidth(16.0))),
+        borderRadius: BorderRadius.all(
+          Radius.circular(ScreenUtil().setWidth(16.0)),
+        ),
         color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.errorBgColor2.name),
+          context,
+          AppThemeKeys.errorBgColor2.name,
+        ),
       ),
       child: Text(
         errorMessage,
         style: TextStyle(
           fontSize: ScreenUtil().setSp(28.0),
           color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.errorTextColor.name),
+            context,
+            AppThemeKeys.errorTextColor.name,
+          ),
         ),
       ),
     );
@@ -128,7 +132,9 @@ class _WalletChainSendDotState extends ConsumerState<WalletChainSendDot>
             padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
             height: ScreenUtil().setWidth(148.0),
             color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.backGroundColor.name),
+              context,
+              AppThemeKeys.backGroundColor.name,
+            ),
             child: buttonStyle6(
               context,
               sendTransaction,
@@ -140,7 +146,9 @@ class _WalletChainSendDotState extends ConsumerState<WalletChainSendDot>
                     : AppThemeKeys.mainButtonBgColor.name,
               ),
               AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainButtonTextColor.name),
+                context,
+                AppThemeKeys.mainButtonTextColor.name,
+              ),
               isLoading,
             ),
           ),
@@ -161,9 +169,7 @@ class _WalletChainSendDotState extends ConsumerState<WalletChainSendDot>
           child: Stack(
             children: [
               Positioned.fill(
-                child: SingleChildScrollView(
-                  child: coinTypeWidget(),
-                ),
+                child: SingleChildScrollView(child: coinTypeWidget()),
               ),
               sendButtonWidget(),
             ],

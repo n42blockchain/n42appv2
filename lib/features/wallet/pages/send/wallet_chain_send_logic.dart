@@ -17,6 +17,7 @@ import 'package:n42_wallet/features/wallet/api/transfer_api.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/gas_estimate_model.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
+import 'package:n42_wallet/features/wallet/pages/send/send_utils.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/transaction_providers.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/features/wallet/services/recent_address_service.dart';
@@ -87,10 +88,12 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
       await chainModel?.getBalance();
       setState(() {});
     }
-    gas = BigInt.from(getCoinGas(
-      coinModel.coin['coinType'],
-      contract: coinModel.coin['isContract'],
-    ));
+    gas = BigInt.from(
+      getCoinGas(
+        coinModel.coin['coinType'],
+        contract: coinModel.coin['isContract'],
+      ),
+    );
     await getBalance();
     await getGasPrice();
     if (getEthLayer2(coinModel.coin['coinType'])) {
@@ -125,7 +128,8 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
     if (isEthereum) {
       await _fetchAdvancedGasEstimate();
     }
-    final mm = await tokenViewApi.getGasPrice(
+    final mm =
+        await tokenViewApi.getGasPrice(
           blockchainType,
           coinType,
           isTest: coinModel.isTest,
@@ -166,10 +170,13 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
 
   Future<void> getGasPriceLayer2() async {
     setState(() => load = Load.loading);
-    final rpc = chainUrlMap[CoinType.ETH.name]?['baseInfo']
-            ?[coinModel.isTest ? 'service_test' : 'service'] ??
+    final rpc =
+        chainUrlMap[CoinType.ETH.name]?['baseInfo']?[coinModel.isTest
+            ? 'service_test'
+            : 'service'] ??
         '';
-    final mm = await tokenViewApi.getGasPrice(
+    final mm =
+        await tokenViewApi.getGasPrice(
           coinModel.coin['blockchainType'],
           CoinType.ETH.name,
           isTest: false,
@@ -211,10 +218,9 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
       if (price.isEmpty) return;
 
       final coinType = coinModel.coin['coinType'] as String;
-      final gaslimit = BigInt.from(getCoinGas(
-        coinType,
-        contract: coinModel.coin['isContract'],
-      ));
+      final gaslimit = BigInt.from(
+        getCoinGas(coinType, contract: coinModel.coin['isContract']),
+      );
 
       final ethMessage = await _callGasEstimateApi(
         coinModel: coinModel,
@@ -265,7 +271,9 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
     }
     final isValidNum = regular.regularNums(value);
     final isValidDec = regular.regularDouble(value);
-    final isValidFormat = decimals == 0 ? isValidNum : (isValidNum || isValidDec);
+    final isValidFormat = decimals == 0
+        ? isValidNum
+        : (isValidNum || isValidDec);
     if (!isValidFormat) {
       _setAmountError(S.of(context).g_key_134);
       return;
@@ -278,7 +286,8 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
       _setAmountError(S.of(context).g_key_134);
       return;
     }
-    if (decimalValue < Decimal.fromInt(minValue) || decimalValue == Decimal.zero) {
+    if (decimalValue < Decimal.fromInt(minValue) ||
+        decimalValue == Decimal.zero) {
       _setAmountError(S.of(context).g_key_46(minValue));
       return;
     }
@@ -322,20 +331,29 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
       valueTextEditingController.text = coinModel.balanceStringAll();
       final rOK = await estimateGasEthLocal();
       if (rOK == true) {
-        transferValue = coinModel.balance - totalGasPrice;
+        transferValue = maxTransferableAmount(
+          balance: coinModel.balance,
+          fee: totalGasPrice,
+        );
         valueTextEditingController.text = regular.formartNum(
-          toEther(transferValue.toString(), coinModel.coin['decimals'])
-              .toDouble(),
+          toEther(
+            transferValue.toString(),
+            coinModel.coin['decimals'],
+          ).toDouble(),
           14,
           isCrop: true,
           isFill0: false,
         );
       }
     } else {
-      transferValue = coinModel.balance - totalGasPrice;
-      valueTextEditingController.text =
-          toEther(transferValue.toString(), coinModel.coin['decimals'])
-              .toString();
+      transferValue = maxTransferableAmount(
+        balance: coinModel.balance,
+        fee: totalGasPrice,
+      );
+      valueTextEditingController.text = toEther(
+        transferValue.toString(),
+        coinModel.coin['decimals'],
+      ).toString();
     }
     amountErrorMessage = '';
     setState(() {});
@@ -374,7 +392,8 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
     final check = await Navigator.push<bool>(
       context,
       MaterialPageRoute(
-          builder: (_) => buildWalletBaseSend(trModel, chainUnit)),
+        builder: (_) => buildWalletBaseSend(trModel, chainUnit),
+      ),
     );
     if (!mounted) return;
     if (check == true) {
@@ -450,8 +469,7 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
     if (!isEthContract) return true;
     final chainBalance = chainModel?.balance ?? BigInt.zero;
     if (chainBalance == BigInt.zero || totalGasPrice > chainBalance) {
-      ToastUtils.show(
-          S.current.g_key_t_29(chainModel?.coin['coinType'] ?? ''));
+      ToastUtils.show(S.current.g_key_t_29(chainModel?.coin['coinType'] ?? ''));
       return false;
     }
     return true;
@@ -477,8 +495,13 @@ Future<MessageModel> _callGasEstimateApi({
 
   if (blockchainType == BlockchainType.Tron.name) {
     return TrxApi().getGasEstimateTrx(
-      coinModel.address, toAddr, gasPrice, weiValue, gaslimit,
-      contract: contract, isTest: coinModel.isTest,
+      coinModel.address,
+      toAddr,
+      gasPrice,
+      weiValue,
+      gaslimit,
+      contract: contract,
+      isTest: coinModel.isTest,
     );
   }
 
@@ -486,8 +509,13 @@ Future<MessageModel> _callGasEstimateApi({
       ? coinModel.coin['service_test']
       : coinModel.coin['service'];
   return EthAPI.init(null, rpc, null).getGasLimit(
-    coinModel.address, toAddr, gasPrice, weiValue, gaslimit,
-    contract: contract, isTest: coinModel.isTest,
+    coinModel.address,
+    toAddr,
+    gasPrice,
+    weiValue,
+    gaslimit,
+    contract: contract,
+    isTest: coinModel.isTest,
     addLatest: !noLatestChains.contains(coinType),
   );
 }

@@ -11,6 +11,21 @@ import 'package:n42_wallet/features/models/message_model.dart';
 part '_loyalty_api_extras.dart';
 part '_loyalty_api_mock.dart';
 
+MessageModel buildLoyaltyFallbackResult<T>({
+  required bool isDebug,
+  required T Function() debugData,
+  String unavailableMessage = 'Service unavailable',
+}) {
+  if (isDebug) {
+    return MessageModel()
+      ..error = false
+      ..data = debugData();
+  }
+  return MessageModel()
+    ..error = true
+    ..data = unavailableMessage;
+}
+
 /// 积分系统 API
 class LoyaltyApi {
   static const String _apiBase = 'https://api.n42.ai/loyalty/v1';
@@ -34,14 +49,18 @@ class LoyaltyApi {
           ..error = false
           ..data = _getMockAccount(walletAddress);
       }
-      return MessageModel()..error = true..data = 'Service unavailable';
+      return MessageModel()
+        ..error = true
+        ..data = 'Service unavailable';
     } catch (e) {
       if (kDebugMode) {
         return MessageModel()
           ..error = false
           ..data = _getMockAccount(walletAddress);
       }
-      return MessageModel()..error = true..data = 'Service unavailable';
+      return MessageModel()
+        ..error = true
+        ..data = 'Service unavailable';
     }
   }
 
@@ -67,14 +86,18 @@ class LoyaltyApi {
           ..error = false
           ..data = _getMockTasks();
       }
-      return MessageModel()..error = true..data = 'Service unavailable';
+      return MessageModel()
+        ..error = true
+        ..data = 'Service unavailable';
     } catch (e) {
       if (kDebugMode) {
         return MessageModel()
           ..error = false
           ..data = _getMockTasks();
       }
-      return MessageModel()..error = true..data = 'Service unavailable';
+      return MessageModel()
+        ..error = true
+        ..data = 'Service unavailable';
     }
   }
 
@@ -88,10 +111,7 @@ class LoyaltyApi {
       final response = await BaseApi.requestEmptyH.post(
         '$_apiBase/tasks/$taskId/complete',
         params: {'wallet': walletAddress},
-        data: {
-          'wallet': walletAddress,
-          'proof': proof,
-        },
+        data: {'wallet': walletAddress, 'proof': proof},
       );
 
       if (response['code'] == 200 && response['data'] != null) {
@@ -101,7 +121,8 @@ class LoyaltyApi {
       }
 
       return MessageModel.error()
-        ..data = 'Task completion failed: server error (code ${response['code']})';
+        ..data =
+            'Task completion failed: server error (code ${response['code']})';
     } catch (e) {
       return MessageModel.error()..data = e.toString();
     }
@@ -138,11 +159,7 @@ class LoyaltyApi {
     try {
       final response = await BaseApi.requestEmptyH.get(
         '$_apiBase/history',
-        params: {
-          'wallet': walletAddress,
-          'page': page,
-          'page_size': pageSize,
-        },
+        params: {'wallet': walletAddress, 'page': page, 'page_size': pageSize},
       );
 
       if (response['data'] != null) {
@@ -159,14 +176,30 @@ class LoyaltyApi {
           ..error = false
           ..data = _getMockHistory();
       }
-      return MessageModel()..error = true..data = 'Service unavailable';
+      return MessageModel()
+        ..error = true
+        ..data = 'Service unavailable';
     } catch (e) {
       if (kDebugMode) {
         return MessageModel()
           ..error = false
           ..data = _getMockHistory();
       }
-      return MessageModel()..error = true..data = 'Service unavailable';
+      return MessageModel()
+        ..error = true
+        ..data = 'Service unavailable';
     }
   }
+
+  Future<MessageModel> fetchRewards() =>
+      LoyaltyApiExtras(this).getRewards();
+
+  Future<MessageModel> fetchReferralCode(String walletAddress) =>
+      LoyaltyApiExtras(this).getReferralCode(walletAddress);
+
+  Future<MessageModel> fetchReferrals(String walletAddress) =>
+      LoyaltyApiExtras(this).getReferrals(walletAddress);
+
+  Future<MessageModel> fetchPointsRules() =>
+      LoyaltyApiExtras(this).getPointsRules();
 }

@@ -46,21 +46,34 @@ abstract class TransactionRepository {
 
 /// Send Transaction Use Case
 @injectable
-class SendTransaction implements UseCase<TransactionEntity, SendTransactionParams> {
+class SendTransaction
+    implements UseCase<TransactionEntity, SendTransactionParams> {
   final TransactionRepository _repository;
 
   SendTransaction(this._repository);
 
   @override
-  Future<Either<Failure, TransactionEntity>> call(SendTransactionParams params) async {
+  Future<Either<Failure, TransactionEntity>> call(
+    SendTransactionParams params,
+  ) async {
+    if (params.fromAddress.isEmpty) {
+      return const Left(
+        ValidationFailure(message: 'Sender address is required'),
+      );
+    }
+
     // Validate address
     if (params.toAddress.isEmpty) {
-      return const Left(ValidationFailure(message: 'Recipient address is required'));
+      return const Left(
+        ValidationFailure(message: 'Recipient address is required'),
+      );
     }
 
     // Validate amount
     if (params.amount <= BigInt.zero) {
-      return const Left(ValidationFailure(message: 'Amount must be greater than zero'));
+      return const Left(
+        ValidationFailure(message: 'Amount must be greater than zero'),
+      );
     }
 
     // Send transaction
@@ -101,15 +114,15 @@ class SendTransactionParams extends Equatable {
 
   @override
   List<Object?> get props => [
-        fromAddress,
-        toAddress,
-        amount,
-        chainType,
-        contractAddress,
-        data,
-        gasLimit,
-        gasPrice,
-      ];
+    fromAddress,
+    toAddress,
+    amount,
+    chainType,
+    contractAddress,
+    data,
+    gasLimit,
+    gasPrice,
+  ];
 }
 
 /// Estimate Gas Use Case
@@ -152,12 +165,11 @@ class EstimateGasParams extends Equatable {
 
   @override
   List<Object?> get props => [
-        fromAddress,
-        toAddress,
-        amount,
-        chainType,
-        contractAddress,
-        data,
-      ];
+    fromAddress,
+    toAddress,
+    amount,
+    chainType,
+    contractAddress,
+    data,
+  ];
 }
-

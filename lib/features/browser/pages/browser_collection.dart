@@ -1,4 +1,4 @@
-﻿import 'package:n42_wallet/features/browser/pages/browser_collection_list.dart';
+import 'package:n42_wallet/features/browser/pages/browser_collection_list.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/widgets/button_widget.dart';
@@ -48,7 +48,8 @@ class BrowserCollectionState extends State<BrowserCollection> {
       return;
     }
     final desc = descEditingController.text;
-    BrowserApi().insertBrowserCollection(title, url, desc: desc);
+    await BrowserApi().insertBrowserCollection(title, url, desc: desc);
+    if (!mounted) return;
     ToastUtils.show(S.of(context).g_key_185);
     Navigator.pop(context);
   }
@@ -73,7 +74,9 @@ class BrowserCollectionState extends State<BrowserCollection> {
           S.of(context).g_browser_key5,
           style: TextStyle(
             color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainTextColor.name),
+              context,
+              AppThemeKeys.mainTextColor.name,
+            ),
             fontSize: ScreenUtil().setSp(36.0),
           ),
         ),
@@ -81,9 +84,11 @@ class BrowserCollectionState extends State<BrowserCollection> {
           InkWell(
             onTap: () async {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => BrowserCollectionList(type: 1)));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => BrowserCollectionList(type: 1),
+                ),
+              );
             },
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 15.0),
@@ -94,7 +99,9 @@ class BrowserCollectionState extends State<BrowserCollection> {
                 child: Icon(
                   Icons.list_alt,
                   color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainButtonBgColor.name),
+                    context,
+                    AppThemeKeys.mainButtonBgColor.name,
+                  ),
                 ),
               ),
             ),
@@ -112,19 +119,12 @@ class BrowserCollectionState extends State<BrowserCollection> {
                     titleWidget(),
                     urlWidget(),
                     descWidget(),
-                    SizedBox(
-                      height: ScreenUtil().setWidth(120.0),
-                    )
+                    SizedBox(height: ScreenUtil().setWidth(120.0)),
                   ],
                 ),
               ),
             ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: saveWidget(),
-            )
+            Positioned(bottom: 0, left: 0, right: 0, child: saveWidget()),
           ],
         ),
       ),
@@ -156,7 +156,9 @@ class BrowserCollectionState extends State<BrowserCollection> {
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(28.0),
                 color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemSubtitleTextColor.name),
+                  context,
+                  AppThemeKeys.itemSubtitleTextColor.name,
+                ),
               ),
             ),
           ),
@@ -166,14 +168,19 @@ class BrowserCollectionState extends State<BrowserCollection> {
             margin: EdgeInsets.only(top: ScreenUtil().setWidth(20.0)),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(
-                  Radius.circular(ScreenUtil().setWidth(20.0))),
+                Radius.circular(ScreenUtil().setWidth(20.0)),
+              ),
               color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemBgColor.name),
+                context,
+                AppThemeKeys.itemBgColor.name,
+              ),
             ),
             child: TextField(
               style: TextStyle(
                 color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
+                  context,
+                  AppThemeKeys.mainTextColor.name,
+                ),
               ),
               controller: controller,
               focusNode: focusNode,
@@ -196,7 +203,9 @@ class BrowserCollectionState extends State<BrowserCollection> {
               errorMessage,
               style: TextStyle(
                 color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.errorTextColor.name),
+                  context,
+                  AppThemeKeys.errorTextColor.name,
+                ),
                 fontSize: ScreenUtil().setSp(24.0),
               ),
             ),
@@ -237,7 +246,10 @@ class BrowserCollectionState extends State<BrowserCollection> {
     return Container(
       height: ScreenUtil().setWidth(148.0),
       width: double.infinity,
-      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
+      color: AppThemeUtils.getColorByKey(
+        context,
+        AppThemeKeys.backGroundColor.name,
+      ),
       padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
       child: buttonStyle2(context, _saveUrl, S.of(context).g_key_115),
     );

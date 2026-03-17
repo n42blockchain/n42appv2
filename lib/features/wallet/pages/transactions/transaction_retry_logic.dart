@@ -48,31 +48,36 @@ mixin _TransactionRetryLogicMixin on ConsumerState<TransactionRetry> {
   }
 
   Future<void> init() async {
-    if (_txHash.isEmpty) _txHash = searchEditingController.text;
+    timer?.cancel();
+    transactionInfo = null;
+    transactionInfoReceipt = null;
+    resultStr = 'Pending';
+    errorMessage = '';
+    _txHash = searchEditingController.text.trim();
+    _explorerUrl = _txHash.isEmpty
+        ? ''
+        : getBrowserTxHash(
+            widget.coinModel.coin['coinType'],
+            _txHash,
+            isTest: widget.coinModel.isTest,
+          );
     if (_txHash.isEmpty) {
       owner = false;
       return;
     }
     _setLoadState(Load.loading);
     final trModelList = await db.selectTransationRecordTxHash(
-        _txHash, widget.coinModel.address);
+      _txHash,
+      widget.coinModel.address,
+    );
     if (!mounted) return;
     if (trModelList.isNotEmpty) {
       trm = trModelList[0];
     } else {
-      final cm = widget.coinModel;
-      trm = TransationRecordModel()
-        ..address = cm.address.toString()
-        ..from1 = cm.address.toString()
-        ..addrType = cm.addrType
-        ..coin = cm.coin
-        ..coinMiniName = cm.coin['coinType']
-        ..walletIndex = ref.read(wapBridgeProvider).walletIndex
-        ..contract = cm.isTest ? cm.coin['contract_test'] : cm.coin['contract']
-        ..isTest = cm.isTest ? 1 : 0
-        ..gasPrice = BigInt.zero
-        ..gasPriceValue = BigInt.zero
-        ..coinId = cm.isTest ? cm.coin['chainId_test'] : cm.coin['chainId'];
+      trm = buildFallbackTransactionRecord(
+        widget.coinModel,
+        walletIndex: ref.read(wapBridgeProvider).walletIndex,
+      );
     }
     final r = await getTransactionByHash();
     if (r) {
@@ -99,6 +104,7 @@ mixin _TransactionRetryLogicMixin on ConsumerState<TransactionRetry> {
       return false;
     }
     transactionInfo = rData.data;
+    errorMessage = '';
     trm.gas = hexToInt(transactionInfo!['gas'] ?? '0x0').toInt();
     trm.gasPriceValue = hexToInt(transactionInfo!['gasPrice'] ?? '0x0');
     _originalGasPriceValue = trm.gasPriceValue;
@@ -129,7 +135,8 @@ mixin _TransactionRetryLogicMixin on ConsumerState<TransactionRetry> {
       }
     }
     value = '${toEther(trm.price.toString(), coin['decimals'])} $valueUnit';
-    owner = trm.from1.toLowerCase() ==
+    owner =
+        trm.from1.toLowerCase() ==
         (transactionInfo?['from'] ?? '').toString().toLowerCase();
     return true;
   }
@@ -155,27 +162,39 @@ mixin _TransactionRetryLogicMixin on ConsumerState<TransactionRetry> {
   }
 
   void timerInit() {
+    timer?.cancel();
     timer = Timer(const Duration(seconds: 3), () {
       getTransactionReceipt();
     });
   }
 
-  Future<void> send(String toAddress, BigInt transferValue,
-      {bool isCancel = false}) async {
-    if (load == Load.loading || errorMessage.isNotEmpty || !mounted) return;
+  Future<void> send(
+    String toAddress,
+    BigInt transferValue, {
+    bool isCancel = false,
+  }) async {
+    if (!canRetryTransactionSubmission(
+      load: load,
+      isMounted: mounted,
+      transactionInfo: transactionInfo,
+    )) {
+      return;
+    }
     _setLoadState(Load.loading);
     try {
-      final bool isEip1559 = transactionInfo!['gasPrice'] == '0x0' ||
+      final bool isEip1559 =
+          transactionInfo!['gasPrice'] == '0x0' ||
           _originalGasPriceValue == BigInt.zero;
       final String? customRpc = widget.coinModel.coin['custom'] == true
           ? (widget.coinModel.isTest
-              ? widget.coinModel.coin['service_test']
-              : widget.coinModel.coin['service'])
+                ? widget.coinModel.coin['service_test']
+                : widget.coinModel.coin['service'])
           : null;
 
       BigInt newGasPriceValue;
       if (isEip1559) {
-        final mm = await tokenViewApi.getGasPrice(
+        final mm =
+            await tokenViewApi.getGasPrice(
               BlockchainType.Ethereum.name,
               trm.coinMiniName,
               rpc: customRpc,
@@ -187,19 +206,27 @@ mixin _TransactionRetryLogicMixin on ConsumerState<TransactionRetry> {
           ToastUtils.show(mm.data);
           return;
         }
-        newGasPriceValue = (mm.data as BigInt) * BigInt.from(3) ~/ BigInt.from(2);
+        newGasPriceValue =
+            (mm.data as BigInt) * BigInt.from(3) ~/ BigInt.from(2);
       } else {
-        newGasPriceValue = _originalGasPriceValue * BigInt.from(3) ~/ BigInt.from(2);
+        newGasPriceValue =
+            _originalGasPriceValue * BigInt.from(3) ~/ BigInt.from(2);
       }
 
       if (isCancel) {
         final cancelTrm = _buildCancelTrm(newGasPriceValue);
         final check = await Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => WalletBaseSend(cancelTrm, null, cancelTrm.coin['unit'])),
+          MaterialPageRoute(
+            builder: (_) =>
+                WalletBaseSend(cancelTrm, null, cancelTrm.coin['unit']),
+          ),
         );
         if (!mounted) return;
-        if (!check) { _setLoadState(Load.finish); return; }
+        if (!check) {
+          _setLoadState(Load.finish);
+          return;
+        }
         final mm = await TransferApi().transferWallet(
           trModel: cancelTrm,
           privateKey: widget.coinModel.privateKey,
@@ -215,13 +242,19 @@ mixin _TransactionRetryLogicMixin on ConsumerState<TransactionRetry> {
           ..nonce = transactionInfo!['nonce']
           ..gas = hexToInt(transactionInfo!['gas']).toInt();
 
-        final gaslimit = BigInt.from(getCoinGas(
-          widget.coinModel.coin['coinType'],
-          contract: widget.coinModel.coin['isContract'],
-        ));
+        final gaslimit = BigInt.from(
+          getCoinGas(
+            widget.coinModel.coin['coinType'],
+            contract: widget.coinModel.coin['isContract'],
+          ),
+        );
         final cm = widget.coinModel;
         final gasEst = await tokenViewApi.getGasEstimateEthV2(
-          cm.address, trm.to1, trm.gasPriceValue, trm.price, gaslimit,
+          cm.address,
+          trm.to1,
+          trm.gasPriceValue,
+          trm.price,
+          gaslimit,
           cm.coin['coinType'],
           contract: cm.isTest ? cm.coin['contract_test'] : cm.coin['contract'],
           isTest: cm.isTest,
@@ -237,10 +270,15 @@ mixin _TransactionRetryLogicMixin on ConsumerState<TransactionRetry> {
 
         final check = await Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => WalletBaseSend(trm, null, trm.coin['unit'])),
+          MaterialPageRoute(
+            builder: (_) => WalletBaseSend(trm, null, trm.coin['unit']),
+          ),
         );
         if (!mounted) return;
-        if (!check) { _setLoadState(Load.finish); return; }
+        if (!check) {
+          _setLoadState(Load.finish);
+          return;
+        }
         final mm = await TransferApi().transferWallet(
           trModel: trm,
           privateKey: cm.privateKey,
@@ -277,7 +315,9 @@ mixin _TransactionRetryLogicMixin on ConsumerState<TransactionRetry> {
   }
 
   Future<void> _handleTransferResult(
-      MessageModel mm, TransationRecordModel model) async {
+    MessageModel mm,
+    TransationRecordModel model,
+  ) async {
     if (mm.error) {
       _setLoadState(Load.finish);
       ToastUtils.show(mm.data);

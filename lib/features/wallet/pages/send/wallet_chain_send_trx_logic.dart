@@ -353,7 +353,10 @@ mixin _TrxSendLogicMixin on ConsumerState<WalletChainSendTrx> {
       final bool? rOK = await estimateGasEthLocal();
       if (!mounted) return;
       if (rOK != null && rOK) {
-        transferValue = widget.coinModel.balance - totalGasPrice;
+        transferValue = maxTransferableAmount(
+          balance: widget.coinModel.balance,
+          fee: totalGasPrice,
+        );
         valueTextEditingController.text = _regular.formartNum(
           toEther(
             transferValue.toString(),

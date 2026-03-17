@@ -11,7 +11,7 @@ import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BrowserCollectionList extends StatefulWidget {
-  final int type;//0点击列表项，立刻返回上一页，并带回地址；1点击列表项，跳转收藏详情页
+  final int type; //0点击列表项，立刻返回上一页，并带回地址；1点击列表项，跳转收藏详情页
   const BrowserCollectionList({this.type = 0, super.key});
 
   @override
@@ -53,7 +53,8 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
   }
 
   Future<void> getCollectionList() async {
-    List<BrowserCollectionModel> cList = await browserApi.selectBrowserCollection(pageNum: pageNum, pageSize: pageSize);
+    List<BrowserCollectionModel> cList = await browserApi
+        .selectBrowserCollection(pageNum: pageNum, pageSize: pageSize);
     if (cList.length < pageSize) {
       lastPage = true;
     }
@@ -62,8 +63,9 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
 
   Future<void> deleteCollection(int index) async {
     BrowserCollectionModel bcm = collectionList[index];
-    browserApi.deleteBrowserCollection(bcm.id!);
+    await browserApi.deleteBrowserCollection(bcm.id!);
     collectionList.remove(bcm);
+    if (!mounted) return;
     setState(() {});
     ToastUtils.show(S.of(context).g_key_address_5);
   }
@@ -84,7 +86,10 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
 
   TextStyle _subtitleStyle(BuildContext context) {
     return TextStyle(
-      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+      color: AppThemeUtils.getColorByKey(
+        context,
+        AppThemeKeys.itemSubtitleTextColor.name,
+      ),
       fontSize: ScreenUtil().setSp(26.0),
     );
   }
@@ -92,13 +97,17 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(
-        text: S.of(context).g_browser_key3,
-      ),
+      appBar: AppBarWidget(text: S.of(context).g_browser_key3),
       body: RefreshIndicator(
         onRefresh: refreshCollectionList,
-        backgroundColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
+        backgroundColor: AppThemeUtils.getColorByKey(
+          context,
+          AppThemeKeys.mainButtonBgColor.name,
+        ),
+        color: AppThemeUtils.getColorByKey(
+          context,
+          AppThemeKeys.mainButtonTextColor.name,
+        ),
         displacement: ScreenUtil().setWidth(72.0),
         child: collectionList.isEmpty ? noDataWidget() : listWidget(),
       ),
@@ -120,12 +129,17 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        margin: EdgeInsets.only(right: ScreenUtil().setWidth(10.0)),
+                        margin: EdgeInsets.only(
+                          right: ScreenUtil().setWidth(10.0),
+                        ),
                         height: ScreenUtil().setWidth(40.0),
                         width: ScreenUtil().setWidth(40.0),
                         child: const CircularProgressIndicator(),
                       ),
-                      Text(S.of(context).g_key_106, style: _subtitleStyle(context)),
+                      Text(
+                        S.of(context).g_key_106,
+                        style: _subtitleStyle(context),
+                      ),
                     ],
                   ),
           );
@@ -141,10 +155,18 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
           },
           child: Container(
             margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0)),
-            padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0), horizontal: ScreenUtil().setWidth(30.0)),
+            padding: EdgeInsets.symmetric(
+              vertical: ScreenUtil().setWidth(20.0),
+              horizontal: ScreenUtil().setWidth(30.0),
+            ),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(20.0))),
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+              borderRadius: BorderRadius.all(
+                Radius.circular(ScreenUtil().setWidth(20.0)),
+              ),
+              color: AppThemeUtils.getColorByKey(
+                context,
+                AppThemeKeys.itemBgColor.name,
+              ),
             ),
             child: Row(
               children: [
@@ -155,11 +177,16 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(6.0)),
+                        padding: EdgeInsets.symmetric(
+                          vertical: ScreenUtil().setWidth(6.0),
+                        ),
                         child: Text(
                           bcm.name ?? "",
                           style: TextStyle(
-                            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                            color: AppThemeUtils.getColorByKey(
+                              context,
+                              AppThemeKeys.mainTextColor.name,
+                            ),
                             fontSize: ScreenUtil().setSp(28.0),
                           ),
                           maxLines: 1,
@@ -167,7 +194,9 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
                         ),
                       ),
                       Container(
-                        padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(6.0)),
+                        padding: EdgeInsets.symmetric(
+                          vertical: ScreenUtil().setWidth(6.0),
+                        ),
                         child: Text(
                           bcm.url ?? "",
                           style: _subtitleStyle(context),
@@ -178,7 +207,9 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
                       Visibility(
                         visible: (bcm.desc ?? "").isNotEmpty,
                         child: Container(
-                          padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(6.0)),
+                          padding: EdgeInsets.symmetric(
+                            vertical: ScreenUtil().setWidth(6.0),
+                          ),
                           child: Text(
                             bcm.desc ?? "",
                             style: _subtitleStyle(context),
@@ -200,7 +231,10 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
                         width: ScreenUtil().setWidth(40.0),
                         child: Icon(
                           Icons.delete,
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
+                          color: AppThemeUtils.getColorByKey(
+                            context,
+                            AppThemeKeys.mainButtonBgColor.name,
+                          ),
                         ),
                       ),
                     ),
@@ -212,7 +246,10 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
                         width: ScreenUtil().setWidth(40.0),
                         child: Icon(
                           Icons.edit_note,
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
+                          color: AppThemeUtils.getColorByKey(
+                            context,
+                            AppThemeKeys.mainButtonBgColor.name,
+                          ),
                         ),
                       ),
                     ),

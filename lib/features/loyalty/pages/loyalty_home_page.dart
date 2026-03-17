@@ -23,10 +23,12 @@ part 'loyalty_home_page_sections.dart';
 /// 积分系统首页
 class LoyaltyHomePage extends StatefulWidget {
   final String walletAddress;
+  final LoyaltyProvider? provider;
 
   const LoyaltyHomePage({
     super.key,
     required this.walletAddress,
+    this.provider,
   });
 
   @override
@@ -39,21 +41,28 @@ class _LoyaltyHomePageState extends State<LoyaltyHomePage>
   late final TabController _tabController;
   @override
   late final LoyaltyProvider _provider;
+  late final bool _ownsProvider;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
-    _provider = LoyaltyProvider();
+    _ownsProvider = widget.provider == null;
+    _provider = widget.provider ?? LoyaltyProvider();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _provider.initialize(widget.walletAddress);
+      if (_provider.walletAddress != widget.walletAddress ||
+          _provider.loadState == LoyaltyLoadState.initial) {
+        _provider.initialize(widget.walletAddress);
+      }
     });
   }
 
   @override
   void dispose() {
     _tabController.dispose();
-    _provider.dispose();
+    if (_ownsProvider) {
+      _provider.dispose();
+    }
     super.dispose();
   }
 
@@ -68,8 +77,12 @@ class _LoyaltyHomePageState extends State<LoyaltyHomePage>
         builder: (context, _) {
           final provider = _provider;
           if (provider.loadState == LoyaltyLoadState.loading &&
-              provider.account.totalPoints == 0) {
+              !provider.hasContent) {
             return const Center(child: CircularProgressIndicator());
+          }
+
+          if (provider.loadState == LoyaltyLoadState.error && !provider.hasContent) {
+            return _buildErrorView(context, provider);
           }
 
           return NestedScrollView(

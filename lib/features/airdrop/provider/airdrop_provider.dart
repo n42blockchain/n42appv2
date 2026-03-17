@@ -17,7 +17,9 @@ enum AirdropLoadState {
 
 /// 空投追踪 Provider
 class AirdropProvider extends ChangeNotifier {
-  final AirdropApi _api = AirdropApi();
+  AirdropProvider({AirdropApi? api}) : _api = api ?? AirdropApi();
+
+  final AirdropApi _api;
 
   AirdropLoadState _loadState = AirdropLoadState.initial;
   AirdropLoadState get loadState => _loadState;
@@ -67,13 +69,19 @@ class AirdropProvider extends ChangeNotifier {
 
     try {
       // 并行加载数据
-      await Future.wait([
+      final results = await Future.wait<bool>([
         _loadAirdrops(refresh: true),
         _loadStats(),
         _loadTrending(),
       ]);
 
-      _loadState = AirdropLoadState.loaded;
+      final airdropsLoaded = results.first;
+      if (!airdropsLoaded && _airdrops.isEmpty) {
+        _loadState = AirdropLoadState.error;
+        _errorMessage = 'Failed to load airdrops';
+      } else {
+        _loadState = AirdropLoadState.loaded;
+      }
     } catch (e) {
       _loadState = AirdropLoadState.error;
       _errorMessage = e.toString();
@@ -86,7 +94,7 @@ class AirdropProvider extends ChangeNotifier {
   }
 
   /// 加载空投列表
-  Future<void> _loadAirdrops({bool refresh = false}) async {
+  Future<bool> _loadAirdrops({bool refresh = false}) async {
     try {
       final result = await _api.getAirdrops(
         walletAddress: _walletAddress,
@@ -105,6 +113,7 @@ class AirdropProvider extends ChangeNotifier {
 
         _hasMore = newAirdrops.length >= 20;
         _currentPage++;
+        return true;
       } else if (result.error) {
         // 网络失败：保留上次成功数据，标记错误横幅
         _isNetworkError = true;
@@ -113,6 +122,7 @@ class AirdropProvider extends ChangeNotifier {
       _isNetworkError = true;
       debugPrint('Failed to load airdrops: $e');
     }
+    return false;
   }
 
   /// 加载更多
@@ -124,21 +134,25 @@ class AirdropProvider extends ChangeNotifier {
   }
 
   /// 加载统计数据
-  Future<void> _loadStats() async {
-    if (_walletAddress == null) return;
+  Future<bool> _loadStats() async {
+    if (_walletAddress == null) return false;
 
     final result = await _api.getAirdropStats(_walletAddress!);
     if (!result.error && result.data != null) {
       _stats = result.data as AirdropStats;
+      return true;
     }
+    return false;
   }
 
   /// 加载热门空投
-  Future<void> _loadTrending() async {
+  Future<bool> _loadTrending() async {
     final result = await _api.getTrendingAirdrops();
     if (!result.error && result.data != null) {
       _trendingAirdrops = result.data as List<AirdropModel>;
+      return true;
     }
+    return false;
   }
 
   /// 应用筛选条件

@@ -320,3 +320,148 @@
 - 新增验证：
   - `flutter test test/features/pay/moonpay_signature_test.dart test/core/api_hub/url_security_resilience_test.dart test/core/api_hub/defillama_datasource_test.dart test/core/api_hub/market_data_aggregator_test.dart test/core/market/news_resilience_test.dart`
   - `flutter analyze lib/features/pay/moonpay/moonpay.dart test/features/pay/moonpay_signature_test.dart lib/core/api_hub/aggregators/url_security_aggregator.dart lib/core/api_hub/datasources/urlhaus_datasource.dart lib/core/api_hub/datasources/defillama_datasource.dart lib/core/api_hub/datasources/coincap_datasource.dart lib/core/api_hub/datasources/coinlore_datasource.dart lib/core/api_hub/datasources/coinpaprika_datasource.dart lib/core/api_hub/datasources/cryptocompare_price_datasource.dart test/core/api_hub/url_security_resilience_test.dart test/core/api_hub/defillama_datasource_test.dart`
+- Phase 2 第四批修复已完成，覆盖 `features/bridge/api/lifi_api.dart`、`features/bridge/provider/bridge_provider.dart`、`features/bridge/provider/_bridge_execution.dart`。
+- 修复 22：`BridgeProvider` 现在支持注入式 `BridgeApiClient`，桥接 provider 不再被硬编码 `LiFiApi` 卡死，后续可以直接做真实 provider 行为测试。
+- 修复 23：ERC-20 approval 早退路径现在都会显式进 `error`，不再把 provider 卡在 `approving`，也不会在 approval 查询失败后继续错误地发送主交易。
+- 修复 24：approval 缺少 spender、approval status 获取失败、approval transaction 获取失败、用户取消 approval 签名这些路径都会 fail-fast，并带明确错误消息。
+- 修复 25：approval 轮询现在会返回确认结果；超时未到账时不会再直接继续桥接主交易。
+- 新增回归测试：
+  - `test/features/bridge/bridge_provider_approval_test.dart`
+- 新增验证：
+  - `flutter test test/features/bridge/bridge_provider_approval_test.dart test/features/bridge/bridge_provider_polling_test.dart test/features/bridge/bridge_provider_test.dart`
+  - `flutter analyze lib/features/bridge/api/lifi_api.dart lib/features/bridge/provider/bridge_provider.dart lib/features/bridge/provider/_bridge_execution.dart test/features/bridge/bridge_provider_approval_test.dart test/features/bridge/bridge_provider_polling_test.dart test/features/bridge/bridge_provider_test.dart`
+- Phase 2 第五批修复已完成，覆盖 `features/browser/api/browser_api.dart`、`features/browser/data/repositories/browser_repository_impl.dart`、`features/browser/pages/browser_collection*.dart`。
+- 修复 26：`BrowserApi` 的历史/收藏写操作现在会真正 `await` SQLite 持久化；此前上层仓库和页面会提前返回成功，数据库异常会被静默吞掉。
+- 修复 27：`BrowserRepositoryImpl.addHistory()` 现在会等待底层 insert 完成，浏览记录写失败不再被误报为成功。
+- 修复 28：浏览器收藏页的新增、编辑、删除现在都会在数据库操作完成后再 toast / pop，不再出现“UI 显示成功但数据没写进去”的假成功。
+- 新增回归测试：
+  - `test/features/browser/browser_repository_impl_test.dart`
+- 新增验证：
+  - `flutter test test/features/browser/browser_repository_impl_test.dart test/features/browser/browser_entity_test.dart test/features/browser/browser_models_test.dart test/core/browser/browser_models_test.dart test/core/wallet/browser_collection_model_test.dart`
+  - `flutter analyze lib/features/browser/api/browser_api.dart lib/features/browser/data/repositories/browser_repository_impl.dart lib/features/browser/pages/browser_collection.dart lib/features/browser/pages/browser_collection_info.dart lib/features/browser/pages/browser_collection_list.dart test/features/browser/browser_repository_impl_test.dart`
+- Phase 3 已开始，第一批修复落在 `features/wallet/data/services/wallet_service_impl.dart`。
+- 修复 29：`walletServiceProvider` 不再默认新建隔离的 `ProviderContainer`；现在会优先复用已经注册到 shared service locator 的 `IWalletService`，避免不同入口读到分叉的钱包状态。
+- 修复 30：只有在独立测试 / 未初始化环境下，`walletServiceProvider` 才会退回到临时本地 `WalletServiceImpl`，并在 provider dispose 时正确回收。
+- 新增回归测试：
+  - `test/features/wallet/wallet_service_provider_test.dart`
+- 新增验证：
+  - `flutter test test/features/wallet/wallet_service_provider_test.dart test/features/wallet/wallet_service_balance_test.dart`
+  - `flutter analyze lib/features/wallet/data/services/wallet_service_impl.dart test/features/wallet/wallet_service_provider_test.dart test/features/wallet/wallet_service_balance_test.dart`
+- Phase 3 第二批修复已完成，覆盖 `features/wallet/domain/usecases/get_balance.dart`。
+- 修复 31：`GetBalance` 不再依赖旧的根域 `WalletRepository` / `WalletAsset`；现在改为使用 wallet feature 自己的 repository/entity，避免多链资产在用例层丢失 `chainType`。
+- 修复 32：当 `GetBalanceParams.chainType` 为空时，返回结果会保留每个资产原始的 `chainType`；只有显式指定链过滤时才会统一覆盖为请求链，避免跨链资产列表被错误标成 `ethereum`。
+- 新增回归测试：
+  - `test/features/wallet/domain/usecases/get_balance_chain_type_test.dart`
+- 新增验证：
+  - `flutter test test/features/wallet/wallet_service_provider_test.dart test/features/wallet/wallet_service_balance_test.dart test/features/wallet/domain/usecases/get_balance_chain_type_test.dart`
+  - `flutter analyze lib/features/wallet/data/services/wallet_service_impl.dart lib/features/wallet/domain/usecases/get_balance.dart test/features/wallet/wallet_service_provider_test.dart test/features/wallet/domain/usecases/get_balance_chain_type_test.dart`
+- Phase 3 第三批修复已完成，覆盖 `features/wallet/domain/usecases/create_wallet.dart`、`features/wallet/wallet.dart`。
+- 修复 33：`CreateWallet` 不再依赖旧的根域 `WalletRepository` / `Wallet` 模型；现在直接使用 wallet feature 自己的 repository/entity，避免创建钱包链路继续在两套仓库协议之间来回映射。
+- 修复 34：wallet feature barrel `features/wallet/wallet.dart` 现在导出 feature 自己的 `ChainType`，不再把旧根域枚举暴露给外部，避免调用方拿到与 repository / usecase 不一致的链类型定义。
+- 新增回归测试：
+  - `test/features/wallet/domain/usecases/create_wallet_usecase_test.dart`
+  - `test/features/wallet/wallet_barrel_export_test.dart`
+- 新增验证：
+  - `flutter test test/features/wallet/domain/usecases/create_wallet_test.dart test/features/wallet/domain/usecases/create_wallet_usecase_test.dart test/features/wallet/wallet_barrel_export_test.dart`
+  - `flutter analyze lib/features/wallet/domain/usecases/create_wallet.dart lib/features/wallet/wallet.dart test/features/wallet/domain/usecases/create_wallet_usecase_test.dart test/features/wallet/wallet_barrel_export_test.dart`
+- Phase 3 第四批修复已完成，覆盖 `features/wallet/domain/usecases/send_transaction.dart`。
+- 修复 35：`SendTransaction` 现在会在 usecase 层 fail-fast 校验 `fromAddress`；此前空发送地址会直接下沉到仓库 / 链适配层，导致错误来源滞后且难以定位。
+- 修复 36：补齐 `SendTransaction` / `EstimateGas` 的真实用例测试，验证参数透传与 sender 早退校验，替代之前只校验常量值的弱测试。
+- 新增回归测试：
+  - `test/features/wallet/domain/usecases/send_transaction_usecase_test.dart`
+- 新增验证：
+  - `flutter test test/features/wallet/domain/usecases/send_transaction_test.dart test/features/wallet/domain/usecases/send_transaction_usecase_test.dart`
+  - `flutter analyze lib/features/wallet/domain/usecases/send_transaction.dart test/features/wallet/domain/usecases/send_transaction_usecase_test.dart`
+- Phase 4 第一批修复已完成，覆盖 `features/wallet/pages/send/send_utils.dart` 与多条链发送页 `maxTag()` 逻辑。
+- 修复 37：发送页“Max”金额计算现在统一走 `maxTransferableAmount()`，余额不足以覆盖 gas / reserve 时会回填 `0` 而不是负数，避免输入框出现非法负值。
+- 修复 38：`APT` 发送页之前在 `balance <= fee` 时会保留旧金额；现在会显式回填 `0`，不再让用户在 gas 变化后继续看到过期可发送金额。
+- 新增回归测试：
+  - `test/features/wallet/pages/send/send_utils_test.dart`
+- 新增验证：
+  - `flutter test test/features/wallet/pages/send/send_utils_test.dart`
+  - `flutter analyze lib/features/wallet/pages/send/send_utils.dart lib/features/wallet/pages/send/wallet_chain_send_logic.dart lib/features/wallet/pages/send/wallet_chain_send_sol.dart lib/features/wallet/pages/send/wallet_chain_send_sui.dart lib/features/wallet/pages/send/wallet_chain_send_fil.dart lib/features/wallet/pages/send/wallet_chain_send_dot.dart lib/features/wallet/pages/send/wallet_chain_send_apt.dart lib/features/wallet/pages/send/wallet_chain_send_algo.dart lib/features/wallet/pages/send/wallet_chain_send_ton.dart lib/features/wallet/pages/send/wallet_chain_send_memo.dart lib/features/wallet/pages/send/wallet_chain_send_zil.dart lib/features/wallet/pages/send/wallet_chain_send_trx.dart lib/features/wallet/pages/send/wallet_chain_send_xrp.dart test/features/wallet/pages/send/send_utils_test.dart`
+- Phase 4 第二批修复已完成，覆盖 `features/wallet/pages/transactions/transaction_retry.dart`、`features/wallet/pages/transactions/transaction_retry_logic.dart`。
+- 修复 39：`TransactionRetry.send()` 不再被 `errorMessage` 文案状态锁死；现在只要页面仍挂载、当前不在 loading、并且交易详情已加载，就允许继续做 cancel / speed-up。
+- 修复 40：交易重试页的 receipt 轮询在重建 timer 前会先取消旧 timer，避免反复触发 `timerInit()` 时叠加轮询实例。
+- 新增回归测试：
+  - `test/features/wallet/transaction_retry_guard_test.dart`
+- 新增验证：
+  - `flutter test test/features/wallet/transaction_retry_test.dart test/features/wallet/transaction_retry_guard_test.dart`
+  - `flutter analyze lib/features/wallet/pages/transactions/transaction_retry.dart test/features/wallet/transaction_retry_guard_test.dart`
+- Phase 4 第三批修复已完成，覆盖 `features/wallet/pages/transactions/transaction_detail_eth.dart`、`features/wallet/pages/transactions/transaction_detail_trx.dart`。
+- 修复 41：`ETH` 交易详情页在 receipt 轮询遇到临时请求错误时，现在会继续轮询，而不是直接把 pending 交易卡在半失败状态。
+- 修复 42：`TRX` 交易详情页在已有上一轮交易详情的情况下，遇到临时查询错误会继续轮询；成功后也会清理旧错误文案，避免页面长期显示过期错误。
+- 新增回归测试：
+  - `test/features/wallet/transaction_detail_polling_test.dart`
+- 新增验证：
+  - `flutter test test/features/wallet/transaction_detail_polling_test.dart`
+  - `flutter analyze lib/features/wallet/pages/transactions/transaction_detail_eth.dart lib/features/wallet/pages/transactions/transaction_detail_trx.dart test/features/wallet/transaction_detail_polling_test.dart`
+- Phase 4 第四批修复已完成，覆盖 `features/wallet/pages/transactions/transaction_record_helpers.dart`、`features/wallet/pages/transactions/transaction_history_list*.dart`、`features/wallet/pages/transactions/transaction_detail_*.dart`、`features/wallet/pages/transactions/transaction_retry*.dart`。
+- 修复 43：交易历史列表查询 token 记录时现在会按网络选择 `contract_test` / `contract`；此前测试网 token 历史会错误拿主网合约过滤，导致记录丢失。
+- 修复 44：`ETH` / `TRX` 交易详情页在本地数据库没有该 hash 记录时，现在会回退到当前 `coinModel` 构建交易上下文，避免 token 详情把合约交易误当原生转账、金额显示为 `0` 或 owner 误判。
+- 修复 45：`TRX` 交易详情页现在会从远端详情补齐 `to1` / `price` / TRC20 contract 信息；直接按 hash 查询的页面不再继续显示空金额或旧收款地址。
+- 修复 46：交易详情页和重试页的搜索框现在每次都会同步输入框里的最新 hash、重建 explorer 链接并重置旧轮询状态；此前 `_txHash` 只会在首次为空时读取，后续手动搜索实际上不会生效。
+- 修复 47：`ETH` receipt 在后续轮询成功后会清空之前的临时错误文案，不再出现“交易已成功但页面仍展示旧错误”的残留状态。
+- 新增回归测试：
+  - `test/features/wallet/pages/transactions/transaction_record_helpers_test.dart`
+- 新增验证：
+  - `flutter test test/features/wallet/pages/transactions/transaction_record_helpers_test.dart test/features/wallet/transaction_detail_polling_test.dart test/features/wallet/transaction_retry_guard_test.dart`
+  - `flutter analyze lib/features/wallet/pages/transactions/transaction_record_helpers.dart lib/features/wallet/pages/transactions/transaction_history_list.dart lib/features/wallet/pages/transactions/transaction_detail_eth.dart lib/features/wallet/pages/transactions/transaction_detail_trx.dart lib/features/wallet/pages/transactions/transaction_retry.dart test/features/wallet/pages/transactions/transaction_record_helpers_test.dart test/features/wallet/transaction_detail_polling_test.dart test/features/wallet/transaction_retry_guard_test.dart`
+- Phase 5 第一批修复已完成，覆盖 `features/wallet_connect/wallet_connect_uri.dart`、`features/wallet_connect/provider/wallet_connect_connection.dart`、`features/wallet_connect/provider/wallet_connect_provider.dart`、`features/wallet_connect/pages/wallet_connect_widgets_mixin.dart`、`features/wallet_connect/pages/wc_session_list_page.dart`、`features/browser/provider/browser_provider.dart`、`features/wallet/pages/wallet_page.dart`。
+- 修复 48：WalletConnect URI 校验现在统一走 `parseWalletConnectUri()` / `isWalletConnectUriString()`；扫描页、会话列表、钱包入口和浏览器拦截不再只靠字符串 `contains()` 误判任意 URL。
+- 修复 49：`WalletConnectConnection.pair()` 遇到非法或非 `wc:` URI 时现在会 fail-fast 进入错误态，不再静默 no-op。
+- 修复 50：`WalletConnectProvider.viewStateDeal(WalletConnectState.loading)` 不再在 `connectInit()` / `pair()` 已经切到 `error` 后把状态覆盖回 `loading`，避免初始化失败和非法二维码被错误地伪装成持续加载。
+- 新增回归测试：
+  - `test/features/wallet_connect/wallet_connect_uri_test.dart`
+- 新增验证：
+  - `flutter test test/features/wallet_connect/wallet_connect_uri_test.dart test/features/wallet_connect/wc_provider_test.dart`
+  - `flutter analyze lib/features/wallet_connect/wallet_connect_uri.dart lib/features/wallet_connect/provider/wallet_connect_connection.dart lib/features/wallet_connect/provider/wallet_connect_provider.dart lib/features/wallet_connect/pages/wallet_connect_widgets_mixin.dart lib/features/wallet_connect/pages/wc_session_list_page.dart lib/features/browser/provider/browser_provider.dart lib/features/wallet/pages/wallet_page.dart test/features/wallet_connect/wallet_connect_uri_test.dart test/features/wallet_connect/wc_provider_test.dart`
+- Phase 6 第一批修复已完成，覆盖 `features/mining_v1/api/mining_api.dart`。
+- 修复 51：`MiningApi.setMiningNode()` 现在会按当前挖矿网络选择 `miningContract` / `miningContract_test`；此前测试网切换 RPC 节点后仍会继续绑定主网合约，导致后续链上读取/写入跑错网络。
+- 新增回归测试：
+  - `test/features/mining_v1/mining_api_contract_test.dart`
+- 新增验证：
+  - `flutter test test/features/mining_v1/mining_api_contract_test.dart`
+  - `flutter analyze lib/features/mining_v1/api/mining_api.dart test/features/mining_v1/mining_api_contract_test.dart`
+- Phase 7 第一批修复已完成，覆盖 `features/loyalty/api/loyalty_api.dart`、`features/loyalty/api/_loyalty_api_extras.dart`、`features/airdrop/api/airdrop_api.dart`。
+- 修复 52：`LoyaltyApi` 的 rewards/referrals/rules/referralCode fallback 现在仅在 `kDebugMode` 下返回 mock 数据；release 构建里不再把“服务不可用”伪装成空成功结果或假邀请码。
+- 修复 53：`LoyaltyApi.getReferralCode()` 在非 debug 且接口失败时现在会返回明确错误消息，而不是继续回退到固定测试邀请码，避免生产环境展示无效推荐码。
+- 修复 54：`AirdropApi.markAsClaimed()` / `subscribeAirdropAlert()` 现在会校验接口返回 payload 是否真实成功；空响应或缺失 `data` 不再被当作写入成功。
+- 新增回归测试：
+  - `test/features/loyalty/loyalty_api_fallback_test.dart`
+  - `test/features/airdrop/airdrop_api_response_guard_test.dart`
+- 新增验证：
+  - `flutter test test/features/loyalty/loyalty_api_fallback_test.dart test/features/airdrop/airdrop_api_response_guard_test.dart test/features/loyalty/loyalty_api_test.dart`
+  - `flutter analyze lib/features/loyalty/api/loyalty_api.dart lib/features/loyalty/api/_loyalty_api_extras.dart lib/features/airdrop/api/airdrop_api.dart test/features/loyalty/loyalty_api_fallback_test.dart test/features/airdrop/airdrop_api_response_guard_test.dart`
+- Phase 7 第二批修复已完成，覆盖 `features/airdrop/provider/airdrop_provider.dart`、`features/loyalty/api/loyalty_api.dart`、`features/loyalty/provider/loyalty_provider.dart`、`features/loyalty/pages/loyalty_home_page*.dart`。
+- 修复 55：`AirdropProvider.refresh()` 现在会根据主列表加载结果决定首屏状态；首次进入时如果空投列表请求失败且没有缓存数据，会正确进入 `error`，不再把“网络失败”渲染成正常空状态。
+- 修复 56：`LoyaltyProvider.refresh()` 现在会聚合各接口的真实成功结果；当 account/tasks/history/rewards/referral 全部失败时会切到 `error` 并保留错误消息，避免积分首页被伪装成正常但全空。
+- 修复 57：`LoyaltyHomePage` 现在会消费 provider 的 `error` 状态并展示重试页；同时把 rewards/referral/rules 的加载入口统一收口到 `LoyaltyApi` 实例包装方法，修复 extension 方法难以替身、测试无法覆盖的问题。
+- 新增回归测试：
+  - `test/features/airdrop/airdrop_provider_state_test.dart`
+  - `test/features/loyalty/loyalty_provider_state_test.dart`
+- 新增验证：
+  - `flutter test test/features/airdrop/airdrop_api_response_guard_test.dart test/features/airdrop/airdrop_provider_state_test.dart test/features/airdrop/airdrop_eligibility_test.dart test/features/loyalty/loyalty_api_fallback_test.dart test/features/loyalty/loyalty_api_test.dart test/features/loyalty/loyalty_provider_state_test.dart`
+  - `flutter analyze lib/features/airdrop/api/airdrop_api.dart lib/features/airdrop/provider/airdrop_provider.dart lib/features/loyalty/api/loyalty_api.dart lib/features/loyalty/provider/loyalty_provider.dart lib/features/loyalty/pages/loyalty_home_page.dart lib/features/loyalty/pages/loyalty_home_page_widgets.dart test/features/airdrop/airdrop_api_response_guard_test.dart test/features/airdrop/airdrop_provider_state_test.dart test/features/loyalty/loyalty_api_fallback_test.dart test/features/loyalty/loyalty_api_test.dart test/features/loyalty/loyalty_provider_state_test.dart`
+- Phase 7 第三批修复已完成，覆盖 `features/home/setting/setting_share.dart`。
+- 修复 58：邀请分享页的四个统计请求现在分别做异常吞吐与脏值解析；单个接口网络失败、返回空对象或把数字字段写成非法字符串时，不再让整页 `Future.wait` 失败并打断统计渲染。
+- 新增回归测试：
+  - `test/features/home/setting/setting_share_stats_test.dart`
+- 新增验证：
+  - `flutter test test/features/home/setting/setting_share_stats_test.dart`
+  - `flutter analyze lib/features/home/setting/setting_share.dart test/features/home/setting/setting_share_stats_test.dart`
+- Phase 7 第四批修复已完成，覆盖 `features/home/setting/change_email_page_logic.dart`。
+- 修复 59：修改邮箱流程在 N42 验证成功切到 Chat 同步前，现在会显式清空旧验证码倒计时；此前会 `cancel` timer 但保留非零 `countdown`，一旦 Chat 验证码首次请求失败，`resendChatCode()` 会被永久判定为“仍在倒计时中”，导致用户无法重试。
+- 新增回归测试：
+  - `test/features/home/change_email_countdown_test.dart`
+- 新增验证：
+  - `flutter test test/features/home/change_email_countdown_test.dart test/features/home/setting/setting_share_stats_test.dart`
+  - `flutter analyze lib/features/home/setting/change_email_page_logic.dart lib/features/home/setting/setting_share.dart test/features/home/change_email_countdown_test.dart test/features/home/setting/setting_share_stats_test.dart`
+- Phase 7 第五批修复已完成，覆盖 `features/home/setting/security/security_google_vedification_logic.dart`。
+- 修复 60：Google 验证页的邮箱验证码倒计时现在收口为单个可取消的 `Timer.periodic`，页面销毁时会显式释放 timer 与 controller；此前页面没有 `dispose`，重复进入/退出后会残留输入控制器和倒计时状态。
+- 修复 61：Google 验证成功后本地安全设置现在会 `await _saveSecurity()` 再退出页面，避免本地安全开关写入与页面导航竞争。
+- 新增回归测试：
+  - `test/features/home/security_google_countdown_test.dart`
+- 新增验证：
+  - `flutter test test/features/home/change_email_countdown_test.dart test/features/home/setting/setting_share_stats_test.dart test/features/home/security_google_countdown_test.dart`
+  - `flutter analyze lib/features/home/setting/change_email_page_logic.dart lib/features/home/setting/setting_share.dart lib/features/home/setting/security/security_google_vedification_logic.dart test/features/home/change_email_countdown_test.dart test/features/home/setting/setting_share_stats_test.dart test/features/home/security_google_countdown_test.dart`

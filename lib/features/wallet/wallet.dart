@@ -14,14 +14,11 @@
 // - Token management
 
 // Domain Layer
-export 'domain/entities/wallet_entity.dart' hide ChainType;
+export 'domain/entities/wallet_entity.dart';
 export 'domain/repositories/wallet_repository.dart';
-export 'domain/usecases/create_wallet.dart' hide ChainType;
-export 'domain/usecases/get_balance.dart' hide ChainType;
+export 'domain/usecases/create_wallet.dart';
+export 'domain/usecases/get_balance.dart';
 export 'domain/usecases/send_transaction.dart';
-
-// Export ChainType from a single source
-export 'package:n42_wallet/domain/entities/wallet.dart' show ChainType;
 
 // Data Layer
 export 'data/repositories/wallet_repository_impl.dart';

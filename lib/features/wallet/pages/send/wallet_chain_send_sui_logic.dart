@@ -39,7 +39,7 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
   Load gasLimitLoad = Load.finish;
 
   Future<void> initData() async {
-      if (widget.coinModel.coin['isContract']) {
+    if (widget.coinModel.coin['isContract']) {
       final WalletActionProvider wap = ref.read(wapBridgeProvider);
       final int cIndex = wap.coinModels.indexWhere((element) {
         if (element.coin['coinType'] != widget.coinModel.coin['coinType']) {
@@ -55,10 +55,12 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
       if (!mounted) return;
       setState(() {});
     }
-    gas = BigInt.from(getCoinGas(
-      widget.coinModel.coin['coinType'],
-      contract: widget.coinModel.coin['isContract'],
-    ));
+    gas = BigInt.from(
+      getCoinGas(
+        widget.coinModel.coin['coinType'],
+        contract: widget.coinModel.coin['isContract'],
+      ),
+    );
     await getBalance();
     await getGasPrice();
     await getOwnerObjects();
@@ -80,7 +82,8 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
     setState(() => load = Load.loading);
     final coin = widget.coinModel.coin;
     final rpc = coin['custom'] == true ? coin['service'] as String? : null;
-    final mm = await tokenViewApi.getGasPrice(
+    final mm =
+        await tokenViewApi.getGasPrice(
           coin['blockchainType'],
           coin['coinType'],
           isTest: widget.coinModel.isTest,
@@ -100,8 +103,9 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
 
   /// 获取持有的所有可用 SUI 资产 (Coin objects)
   Future<void> getOwnerObjects() async {
-    final List<dynamic> v = await SuiApi(isTest: widget.coinModel.isTest)
-        .getOwnedObjects(widget.coinModel.address);
+    final List<dynamic> v = await SuiApi(
+      isTest: widget.coinModel.isTest,
+    ).getOwnedObjects(widget.coinModel.address);
     if (!mounted) return;
     utxos = [
       for (final Map utxo in v)
@@ -154,8 +158,9 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
         pk: widget.coinModel.privateKey ?? "",
       );
       if (!mounted) return false;
-      final MessageModel suiMessage =
-          await suiApi.dryRunTransactionBlock(signStr);
+      final MessageModel suiMessage = await suiApi.dryRunTransactionBlock(
+        signStr,
+      );
       if (!mounted) return false;
 
       if (!suiMessage.error) {
@@ -186,18 +191,31 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
       setState(() {});
     }
 
-    if (value.isEmpty) { setError(S.of(context).g_key_46(minValue)); return; }
+    if (value.isEmpty) {
+      setError(S.of(context).g_key_46(minValue));
+      return;
+    }
 
     final isInt = regular.regularNums(value);
     final isDouble = regular.regularDouble(value);
-    if (coin['decimals'] == 0 && !isInt) { setError(S.of(context).g_key_134); return; }
-    if (!isDouble && !isInt) { setError(S.of(context).g_key_134); return; }
+    if (coin['decimals'] == 0 && !isInt) {
+      setError(S.of(context).g_key_134);
+      return;
+    }
+    if (!isDouble && !isInt) {
+      setError(S.of(context).g_key_134);
+      return;
+    }
 
     final dValue = double.parse(value);
-    if (dValue <= 0 || dValue < minValue) { setError(S.of(context).g_key_46(minValue)); return; }
+    if (dValue <= 0 || dValue < minValue) {
+      setError(S.of(context).g_key_46(minValue));
+      return;
+    }
 
     final valueBi = ethToWeiString(value, coin['decimals']);
-    if (!coin['isContract'] && valueBi + totalGasPrice > widget.coinModel.balance) {
+    if (!coin['isContract'] &&
+        valueBi + totalGasPrice > widget.coinModel.balance) {
       setError(S.of(context).g_key_47);
       return;
     }
@@ -217,10 +235,14 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
     final List<String> addrList = addr.split(":");
     if (addrList.length == 2) addr = addrList[1];
 
-    final bool valid =
-        await Trustdart().validateAddress(widget.coinModel.coin['coinType'], addr);
+    final bool valid = await Trustdart().validateAddress(
+      widget.coinModel.coin['coinType'],
+      addr,
+    );
 
-    if (!valid || addr.toUpperCase() == widget.coinModel.address.toString().toUpperCase()) {
+    if (!valid ||
+        addr.toUpperCase() ==
+            widget.coinModel.address.toString().toUpperCase()) {
       toErrorMessage = S.current.g_key_t_50;
       setState(() {});
       return null;
@@ -245,19 +267,32 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
 
     setState(() => load = Load.loading);
 
-    final String? toAddr =
-        await toAddressCheck(toTextEditingController.text.trim());
-    if (toAddr == null) { _resetLoad(); return; }
+    final String? toAddr = await toAddressCheck(
+      toTextEditingController.text.trim(),
+    );
+    if (toAddr == null) {
+      _resetLoad();
+      return;
+    }
 
     await estimateGasEthLocal(checkAddress: false);
     if (!mounted) return;
-    if (errorMessage != "") { _resetLoad(); return; }
+    if (errorMessage != "") {
+      _resetLoad();
+      return;
+    }
 
     final BigInt uBalance = widget.coinModel.coin['isContract']
         ? (chainModel?.balance ?? BigInt.zero)
         : widget.coinModel.balance;
-    if (totalGasPrice > uBalance) { _resetLoad(); return; }
-    if (widget.coinModel.balance == BigInt.zero) { _resetLoad(); return; }
+    if (totalGasPrice > uBalance) {
+      _resetLoad();
+      return;
+    }
+    if (widget.coinModel.balance == BigInt.zero) {
+      _resetLoad();
+      return;
+    }
     if (!mounted) return;
     final TransationRecordModel trModel = TransationRecordModel();
     trModel.address = widget.coinModel.address.toString();
@@ -332,13 +367,13 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
   }
 
   bool signTxCheck() {
-    if (widget.coinModel.coin['blockchainType'] != BlockchainType.Ethereum.name) return true;
+    if (widget.coinModel.coin['blockchainType'] != BlockchainType.Ethereum.name)
+      return true;
     if (!widget.coinModel.coin['isContract']) return true;
 
     final BigInt chainBalance = chainModel?.balance ?? BigInt.zero;
     if (chainBalance == BigInt.zero || totalGasPrice > chainBalance) {
-      ToastUtils.show(
-          S.current.g_key_t_29(chainModel?.coin['coinType'] ?? ""));
+      ToastUtils.show(S.current.g_key_t_29(chainModel?.coin['coinType'] ?? ""));
       return false;
     }
     return true;
@@ -364,7 +399,10 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
       transferValue = widget.coinModel.balance;
       estimateGasEthLocal();
     } else {
-      transferValue = widget.coinModel.balance - totalGasPrice;
+      transferValue = maxTransferableAmount(
+        balance: widget.coinModel.balance,
+        fee: totalGasPrice,
+      );
       valueTextEditingController.text = toEther(
         transferValue.toString(),
         widget.coinModel.coin['decimals'],

@@ -1,4 +1,4 @@
-﻿import 'package:n42_wallet/features/browser/api/browser_api.dart';
+import 'package:n42_wallet/features/browser/api/browser_api.dart';
 import 'package:n42_wallet/features/browser/models/browser_collection_model.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
@@ -10,7 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BrowserCollectionInfo extends StatefulWidget {
   final BrowserCollectionModel collectionModel;
-  const BrowserCollectionInfo(this.collectionModel,{super.key});
+  const BrowserCollectionInfo(this.collectionModel, {super.key});
 
   @override
   State<BrowserCollectionInfo> createState() => _BrowserCollectionInfoState();
@@ -36,6 +36,7 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
     urlEditingController.text = widget.collectionModel.url ?? "";
     descEditingController.text = widget.collectionModel.desc ?? "";
   }
+
   @override
   void dispose() {
     titleEditingController.dispose();
@@ -48,7 +49,8 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
   }
 
   Future<void> deleteCollection() async {
-    browserApi.deleteBrowserCollection(widget.collectionModel.id!);
+    await browserApi.deleteBrowserCollection(widget.collectionModel.id!);
+    if (!mounted) return;
     ToastUtils.show(S.of(context).g_key_address_5);
     Navigator.pop(context, "delete");
   }
@@ -65,10 +67,12 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
       return;
     }
     widget.collectionModel.desc = descEditingController.text;
-    browserApi.updateBrowsercollection(widget.collectionModel);
+    await browserApi.updateBrowsercollection(widget.collectionModel);
+    if (!mounted) return;
     ToastUtils.show(S.of(context).g_key_185);
     Navigator.pop(context, "save");
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,11 +82,16 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
           InkWell(
             onTap: deleteCollection,
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+              padding: EdgeInsets.symmetric(
+                horizontal: ScreenUtil().setWidth(30.0),
+              ),
               height: ScreenUtil().setWidth(40.0),
               child: Icon(
                 Icons.delete,
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                color: AppThemeUtils.getColorByKey(
+                  context,
+                  AppThemeKeys.mainBlueColor.name,
+                ),
               ),
             ),
           ),
@@ -99,22 +108,18 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
                     titleWidget(),
                     urlWidget(),
                     descWidget(),
-                    SizedBox(height: ScreenUtil().setWidth(120.0),)
+                    SizedBox(height: ScreenUtil().setWidth(120.0)),
                   ],
                 ),
               ),
             ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: saveWidget(),
-            )
+            Positioned(bottom: 0, left: 0, right: 0, child: saveWidget()),
           ],
         ),
       ),
     );
   }
+
   /// Shared form field builder to eliminate repetition across title/url/desc.
   Widget _buildFormField({
     required String label,
@@ -139,7 +144,10 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
               label,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(28.0),
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                color: AppThemeUtils.getColorByKey(
+                  context,
+                  AppThemeKeys.itemSubtitleTextColor.name,
+                ),
               ),
             ),
           ),
@@ -148,12 +156,20 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
             padding: EdgeInsets.only(left: ScreenUtil().setWidth(32.0)),
             margin: EdgeInsets.only(top: ScreenUtil().setWidth(20.0)),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(20.0))),
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+              borderRadius: BorderRadius.all(
+                Radius.circular(ScreenUtil().setWidth(20.0)),
+              ),
+              color: AppThemeUtils.getColorByKey(
+                context,
+                AppThemeKeys.itemBgColor.name,
+              ),
             ),
             child: TextField(
               style: TextStyle(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                color: AppThemeUtils.getColorByKey(
+                  context,
+                  AppThemeKeys.mainTextColor.name,
+                ),
               ),
               controller: controller,
               focusNode: focusNode,
@@ -175,7 +191,10 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
             Text(
               errorMessage,
               style: TextStyle(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
+                color: AppThemeUtils.getColorByKey(
+                  context,
+                  AppThemeKeys.errorTextColor.name,
+                ),
                 fontSize: ScreenUtil().setSp(24.0),
               ),
             ),
@@ -211,12 +230,15 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
     errorMessage: descErrorMessage,
     maxLines: 5,
   );
-  Widget saveWidget(){
+  Widget saveWidget() {
     return Container(
       height: ScreenUtil().setWidth(148.0),
       width: double.infinity,
-      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-      padding: EdgeInsets.all( ScreenUtil().setWidth(30.0)),
+      color: AppThemeUtils.getColorByKey(
+        context,
+        AppThemeKeys.backGroundColor.name,
+      ),
+      padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
       child: buttonStyle2(context, _saveUrl, S.of(context).g_key_115),
     );
   }

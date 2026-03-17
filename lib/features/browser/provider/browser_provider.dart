@@ -1,4 +1,4 @@
-﻿import 'dart:async';
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
@@ -13,6 +13,7 @@ import 'package:n42_wallet/features/browser/pages/browser_collection.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
+import 'package:n42_wallet/features/wallet_connect/wallet_connect_uri.dart';
 import 'package:flutter/material.dart';
 import 'package:validators/validators.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -55,6 +56,7 @@ class BrowserProvider extends ChangeNotifier {
     showWList = value;
     notifyListeners();
   }
+
   TextEditingController? titleEditingController;
   FocusNode? titleFocusNode;
   ConnectDAPP? connectDAPPCallBack;
@@ -80,8 +82,11 @@ class BrowserProvider extends ChangeNotifier {
   void initDAppHandler() {
     try {
       final cms = globalWapAdapter.coinModels;
-      final ethCoins = cms.where((cm) =>
-          cm.coin['blockchainType'] == BlockchainType.Ethereum.name).toList();
+      final ethCoins = cms
+          .where(
+            (cm) => cm.coin['blockchainType'] == BlockchainType.Ethereum.name,
+          )
+          .toList();
       if (ethCoins.isNotEmpty) {
         _dappHandler = DAppRequestHandler(ethCoinModels: ethCoins);
       }
@@ -99,10 +104,12 @@ class BrowserProvider extends ChangeNotifier {
     titleFocusNode = FocusNode();
     titleFocusNode?.addListener(notifyListeners);
   }
+
   void browserDispose() {
     titleEditingController?.dispose();
     titleFocusNode?.dispose();
   }
+
   void addUrl(String url) {
     final rUrl = checkHttp(url);
     wListAdd(url: rUrl);
@@ -133,8 +140,7 @@ class BrowserProvider extends ChangeNotifier {
       params = const PlatformWebViewControllerCreationParams();
     }
 
-    webViewController =
-        WebViewController.fromPlatformCreationParams(params);
+    webViewController = WebViewController.fromPlatformCreationParams(params);
 
     // Capture the controller reference for use in navigation callbacks.
     // All callbacks look up their tab index dynamically via _indexOfController
@@ -149,22 +155,22 @@ class BrowserProvider extends ChangeNotifier {
           onProgress: (int progress) {
             final idx = _indexOfController(wvc);
             if (idx < 0) return;
-            wInfoList[idx]['progress']=progress*0.01;
+            wInfoList[idx]['progress'] = progress * 0.01;
             notifyListeners();
           },
           onPageStarted: (String url) {
             final idx = _indexOfController(wvc);
             if (idx < 0) return;
             debugPrint('Page started loading: $url');
-            wInfoList[idx]['load']=true;
+            wInfoList[idx]['load'] = true;
             _injectProviderScript(wvc);
             notifyListeners();
           },
           onPageFinished: (String url) async {
             final idx = _indexOfController(wvc);
             if (idx < 0) return;
-            wInfoList[idx]['load']=false;
-            wInfoList[idx]['progress']=0;
+            wInfoList[idx]['load'] = false;
+            wInfoList[idx]['progress'] = 0;
             _injectProviderScript(wvc);
             // Fetch title for this tab
             final t = await wvc.getTitle();
@@ -186,8 +192,8 @@ class BrowserProvider extends ChangeNotifier {
           onWebResourceError: (WebResourceError error) {
             final idx = _indexOfController(wvc);
             if (idx < 0) return;
-            wInfoList[idx]['load']=false;
-            wInfoList[idx]['progress']=0;
+            wInfoList[idx]['load'] = false;
+            wInfoList[idx]['progress'] = 0;
             notifyListeners();
           },
           onNavigationRequest: (NavigationRequest request) {
@@ -198,10 +204,10 @@ class BrowserProvider extends ChangeNotifier {
           onUrlChange: (UrlChange change) {
             final idx = _indexOfController(wvc);
             if (idx < 0) return;
-            wInfoList[idx]['openUrl']=change.url??"";
+            wInfoList[idx]['openUrl'] = change.url ?? "";
             // Only update URL bar if this is the active tab
             if (idx == wListIndex) {
-              titleEditingController?.text=wInfoList[idx]['openUrl'];
+              titleEditingController?.text = wInfoList[idx]['openUrl'];
             }
             notifyListeners();
           },
@@ -224,7 +230,8 @@ class BrowserProvider extends ChangeNotifier {
 
     // #docregion platform_features
     if (webViewController.platform is AndroidWebViewController) {
-      final androidController = webViewController.platform as AndroidWebViewController;
+      final androidController =
+          webViewController.platform as AndroidWebViewController;
       if (kDebugMode) {
         AndroidWebViewController.enableDebugging(true);
       }
@@ -243,6 +250,7 @@ class BrowserProvider extends ChangeNotifier {
     wListIndex = wList.length - 1;
     notifyListeners();
   }
+
   void loadRequest({String url = ""}) {
     if (url == "") url = titleEditingController?.text ?? "";
     if (url == "") return;
@@ -261,6 +269,7 @@ class BrowserProvider extends ChangeNotifier {
     checkCanGo();
     getCollectionUrl(_currentUrl);
   }
+
   void wListDelete(int index) {
     // Clear WebViewController navigation delegate before removal
     wvcList[index].setNavigationDelegate(NavigationDelegate());
@@ -284,12 +293,14 @@ class BrowserProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
+
   /// Check whether the given URL is in the bookmarks collection.
   Future<void> getCollectionUrl(String url) async {
     final list = await browserApi.selectBrowserCollectionUrl(url);
     collect = list.isNotEmpty;
     notifyListeners();
   }
+
   Future<void> getTitle() async {
     final t = await _currentController.getTitle();
     if (t != null) {
@@ -303,9 +314,10 @@ class BrowserProvider extends ChangeNotifier {
     canForward = await _currentController.canGoForward();
     notifyListeners();
   }
+
   /// Try to handle a WalletConnect URI; returns true if handled.
   bool _tryHandleWalletConnect(String wcUri) {
-    if (!wcUri.contains('relay-protocol') || !wcUri.contains('symKey')) {
+    if (!isWalletConnectUriString(wcUri)) {
       return false;
     }
     if (connectDAPPCallBack == null) return false;
@@ -343,6 +355,7 @@ class BrowserProvider extends ChangeNotifier {
 
     return true;
   }
+
   String checkHttp(String url) {
     if (!isURL(url)) {
       return "https://www.google.com/search?q=${Uri.encodeQueryComponent(url)}";
@@ -350,27 +363,34 @@ class BrowserProvider extends ChangeNotifier {
     final hasScheme = url.startsWith("https://") || url.startsWith("http://");
     return hasScheme ? url : 'https://$url';
   }
+
   Future<void> deleteBrowserCollectionUrl() async {
     final url = _currentUrl;
     await browserApi.deleteBrowserCollectionUrl(url);
     getCollectionUrl(url);
   }
+
   Future<void> addBrowserCollection(BuildContext context) async {
     final currentUrl = await _currentController.currentUrl();
     final title = await _currentController.getTitle();
     if (!context.mounted) return;
     await Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => BrowserCollection(title ?? "", currentUrl ?? "")),
+      MaterialPageRoute(
+        builder: (_) => BrowserCollection(title ?? "", currentUrl ?? ""),
+      ),
     );
     getCollectionUrl(_currentUrl);
   }
+
   /// Handle incoming DApp JSON-RPC messages from the JavaScript channel.
   ///
   /// The [controller] reference is captured at channel creation time,
   /// so it always points to the correct WebView regardless of tab switching.
   Future<void> _handleDAppMessage(
-      JavaScriptMessage message, WebViewController controller) async {
+    JavaScriptMessage message,
+    WebViewController controller,
+  ) async {
     if (_dappHandler == null) return;
     try {
       final data = json.decode(message.message) as Map<String, dynamic>;
@@ -396,25 +416,31 @@ class BrowserProvider extends ChangeNotifier {
           final newChainHex = JsEscapeUtils.escapeJs(_dappHandler!.chainIdHex);
           final newAddr = JsEscapeUtils.escapeJs(_dappHandler!.address);
           controller.runJavaScript(
-              'window.ethereum._n42SetChain("$newChainHex");'
-              'window.ethereum._n42SetAccounts(["$newAddr"]);');
+            'window.ethereum._n42SetChain("$newChainHex");'
+            'window.ethereum._n42SetAccounts(["$newAddr"]);',
+          );
         }
 
         // Serialize result safely — handles null, strings, numbers, lists, maps
         final resultStr = JsEscapeUtils.escapeJs(json.encode(result));
         controller.runJavaScript(
-            'window.ethereum._n42Cb($id, "$resultStr", null);');
+          'window.ethereum._n42Cb($id, "$resultStr", null);',
+        );
       } catch (e) {
         // Build a proper EIP-1193 error object {code, message}
         final Map<String, dynamic> errObj;
         if (e is Map) {
-          errObj = {'code': e['code'] ?? -32603, 'message': e['message'] ?? e.toString()};
+          errObj = {
+            'code': e['code'] ?? -32603,
+            'message': e['message'] ?? e.toString(),
+          };
         } else {
           errObj = {'code': -32603, 'message': e.toString()};
         }
         final errorStr = JsEscapeUtils.escapeJs(json.encode(errObj));
         controller.runJavaScript(
-            'window.ethereum._n42Cb($id, null, "$errorStr");');
+          'window.ethereum._n42Cb($id, null, "$errorStr");',
+        );
       }
     } catch (e) {
       debugPrint('[Browser] DApp message parse error: $e');

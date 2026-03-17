@@ -11,12 +11,8 @@ import 'package:injectable/injectable.dart';
 
 import '../../../../core/error/failures.dart';
 import '../../../../core/usecase/usecase.dart';
-import '../../../../domain/repositories/wallet_repository.dart';
-import '../../../../domain/entities/wallet.dart' show ChainType;
-import '../entities/wallet_entity.dart' hide ChainType;
-
-// Re-export ChainType for convenience
-export '../../../../domain/entities/wallet.dart' show ChainType;
+import '../entities/wallet_entity.dart';
+import '../repositories/wallet_repository.dart';
 
 /// Create Wallet Use Case
 ///
@@ -32,16 +28,22 @@ class CreateWallet implements UseCase<WalletEntity, CreateWalletParams> {
   Future<Either<Failure, WalletEntity>> call(CreateWalletParams params) async {
     // Validate wallet name
     if (params.name.isEmpty) {
-      return const Left(ValidationFailure(message: 'Wallet name cannot be empty'));
+      return const Left(
+        ValidationFailure(message: 'Wallet name cannot be empty'),
+      );
     }
 
     if (params.name.length > 12) {
-      return const Left(ValidationFailure(message: 'Wallet name cannot exceed 12 characters'));
+      return const Left(
+        ValidationFailure(message: 'Wallet name cannot exceed 12 characters'),
+      );
     }
 
     // Validate password
     if (params.password.length < 8) {
-      return const Left(ValidationFailure(message: 'Password must be at least 8 characters'));
+      return const Left(
+        ValidationFailure(message: 'Password must be at least 8 characters'),
+      );
     }
 
     // Create wallet through repository
@@ -51,16 +53,7 @@ class CreateWallet implements UseCase<WalletEntity, CreateWalletParams> {
       chainType: params.chainType,
     );
 
-    return result.map((wallet) => WalletEntity(
-      id: wallet.id,
-      name: wallet.name,
-      address: wallet.address,
-      chainType: wallet.chainType.name,
-      createdAt: wallet.createdAt,
-      isHD: wallet.isHD,
-      derivationPath: wallet.derivationPath,
-      index: wallet.index,
-    ));
+    return result;
   }
 }
 
@@ -84,4 +77,3 @@ class CreateWalletParams extends Equatable {
   @override
   List<Object?> get props => [name, password, chainType];
 }
-

@@ -6,16 +6,19 @@ import 'package:n42_wallet/features/sqlite/app_database.dart';
 class BrowserApi {
   late final AppDatabase db = AppDatabase();
 
-  void insertBrowserHistory(String url, {String? title}) {
+  Future<int> insertBrowserHistory(String url, {String? title}) async {
     final bhm = BrowserHistoryModel(url, titleStr: title);
-    db.insertBrowserHistory(bhm.getMapDb());
+    return await db.insertBrowserHistory(bhm.getMapDb());
   }
 
   Future<List<BrowserHistoryModel>> selectBrowserHistoryLike(String url) async {
     return db.selectBrowserHistoryLike(url);
   }
 
-  Future<List<BrowserHistoryModel>> selectBrowserHistory({int pageSize = 20, int pageNum = 1}) async {
+  Future<List<BrowserHistoryModel>> selectBrowserHistory({
+    int pageSize = 20,
+    int pageNum = 1,
+  }) async {
     return db.selectBrowserHistory(pageSize: pageSize, pageNum: pageNum);
   }
 
@@ -27,32 +30,45 @@ class BrowserApi {
     return db.clearBrowserHistory();
   }
 
-  Future<void> insertBrowserCollection(String name, String url, {String desc = "", String? favicon}) async {
+  Future<void> insertBrowserCollection(
+    String name,
+    String url, {
+    String desc = "",
+    String? favicon,
+  }) async {
     final bcm = BrowserCollectionModel(url, name, desc, faviconStr: favicon);
-    db.insertBrowserCollection(bcm.getMapDb());
+    await db.insertBrowserCollection(bcm.getMapDb());
   }
 
   Future<void> updateBrowsercollection(BrowserCollectionModel bcm) async {
-    db.updateBrowserCollection(bcm.getMapDb(), bcm.id!);
+    await db.updateBrowserCollection(bcm.getMapDb(), bcm.id!);
   }
 
-  Future<List<BrowserCollectionModel>> selectBrowserCollection({int pageSize = 10, int pageNum = 1}) async {
+  Future<List<BrowserCollectionModel>> selectBrowserCollection({
+    int pageSize = 10,
+    int pageNum = 1,
+  }) async {
     return db.selectBrowserCollection(pageSize: pageSize, pageNum: pageNum);
   }
 
-  Future<List<BrowserCollectionModel>> selectBrowserCollectionUrl(String url) async {
+  Future<List<BrowserCollectionModel>> selectBrowserCollectionUrl(
+    String url,
+  ) async {
     return db.selectBrowserCollectionUrl(url);
   }
 
   Future<void> deleteBrowserCollection(int id) async {
-    db.deleteBrowserCollection(id);
+    await db.deleteBrowserCollection(id);
   }
 
   Future<int> deleteBrowserCollectionUrl(String url) async {
     return db.deleteBrowserCollectionUrl(url);
   }
 
-  Future<List<BrowserSearchHistoryModel>> selectBrowserSearchHistory({int pageSize = 10, int pageNum = 1}) async {
+  Future<List<BrowserSearchHistoryModel>> selectBrowserSearchHistory({
+    int pageSize = 10,
+    int pageNum = 1,
+  }) async {
     return db.selectBrowserSearchHistory(pageSize: pageSize, pageNum: pageNum);
   }
 

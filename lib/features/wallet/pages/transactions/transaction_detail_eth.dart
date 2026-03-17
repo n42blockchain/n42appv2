@@ -11,6 +11,7 @@ import 'package:n42_wallet/features/wallet/api/chain_api/eth_api.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
+import 'package:n42_wallet/features/wallet/pages/transactions/transaction_record_helpers.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/features/widgets/empty.dart';
@@ -36,10 +37,17 @@ bool _isReceiptSuccess(dynamic status) {
   return n != null && n == 1;
 }
 
+bool shouldContinueEthReceiptPolling({
+  required bool requestError,
+  required Map<String, dynamic>? receipt,
+}) {
+  return requestError || receipt == null;
+}
+
 class TransactionDetailEth extends StatefulWidget {
   final String txHash;
   final CoinModel coinModel;
-  const TransactionDetailEth(this.coinModel,this.txHash,{super.key});
+  const TransactionDetailEth(this.coinModel, this.txHash, {super.key});
 
   @override
   State<TransactionDetailEth> createState() => _TransactionDetailEthState();
@@ -78,16 +86,32 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
   }
 
   Future<void> init() async {
+    _pollingTimer?.cancel();
+    transactionInfo = null;
+    transactionInfoReceipt = null;
+    resultStr = "Pending";
     errorMessage = "";
-    if (_txHash.isEmpty) _txHash = searchEditingController.text;
+    _txHash = searchEditingController.text.trim();
+    _explorerUrl = _txHash.isEmpty
+        ? ''
+        : getBrowserTxHash(
+            widget.coinModel.coin['coinType'],
+            _txHash,
+            isTest: widget.coinModel.isTest,
+          );
     if (_txHash.isEmpty) {
       owner = false;
       return;
     }
     if (mounted) setState(() => load = Load.loading);
-    final trModelList = await db.selectTransationRecordTxHash(_txHash, widget.coinModel.address);
+    final trModelList = await db.selectTransationRecordTxHash(
+      _txHash,
+      widget.coinModel.address,
+    );
     if (trModelList.isNotEmpty) {
       trm = trModelList[0];
+    } else {
+      trm = buildFallbackTransactionRecord(widget.coinModel);
     }
     final success = await getTransactionByHash();
     if (!mounted) return;
@@ -125,6 +149,7 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
       return false;
     }
     transactionInfo = rData.data;
+    errorMessage = "";
     trm.gas = hexToInt(transactionInfo!['gas'] ?? "0x0").toInt();
     trm.gasPriceValue = hexToInt(transactionInfo!['gasPrice'] ?? "0x0");
     resultStr = "Pending";
@@ -155,7 +180,9 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
         // intentional parse fallback: input may not contain valid transfer data
       }
     }
-    owner = trm.from1.toLowerCase() == (transactionInfo?['from'] ?? "").toString().toLowerCase();
+    owner =
+        trm.from1.toLowerCase() ==
+        (transactionInfo?['from'] ?? "").toString().toLowerCase();
     return true;
   }
 
@@ -164,18 +191,20 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
       _txHash,
       coinType: widget.coinModel.coin['coinType'],
     );
-    if (rData.error != false) {
-      errorMessage = rData.data.toString();
-      return;
-    }
-    transactionInfoReceipt = rData.data;
-    if (transactionInfoReceipt != null) {
+    final requestError = rData.error != false;
+    final receipt = rData.data as Map<String, dynamic>?;
+    transactionInfoReceipt = receipt;
+    if (!shouldContinueEthReceiptPolling(
+      requestError: requestError,
+      receipt: receipt,
+    )) {
+      errorMessage = "";
       resultStr = _isReceiptSuccess(transactionInfoReceipt!['status'])
           ? "Success"
           : "Failed";
       return;
     }
-    errorMessage = "";
+    errorMessage = requestError ? rData.data.toString() : "";
     _startPolling();
   }
 
@@ -203,7 +232,9 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
                   tooltip: S.of(context).g_key_196,
                   onPressed: () => Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => BrowserPage(_explorerUrl)),
+                    MaterialPageRoute(
+                      builder: (_) => BrowserPage(_explorerUrl),
+                    ),
                   ),
                 ),
               ]

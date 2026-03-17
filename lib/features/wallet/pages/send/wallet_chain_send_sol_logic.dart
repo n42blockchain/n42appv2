@@ -68,8 +68,9 @@ mixin _SolSendLogicMixin on ConsumerState<WalletChainSendSol> {
   }
 
   Future<bool> simulateTransaction() async {
-    final MessageModel bhmm = await SolApi()
-        .getLatestBlockhash(isTest: widget.coinModel.isTest);
+    final MessageModel bhmm = await SolApi().getLatestBlockhash(
+      isTest: widget.coinModel.isTest,
+    );
     if (!mounted) return false;
     if (bhmm.error) {
       errorMessage = bhmm.data;
@@ -90,8 +91,10 @@ mixin _SolSendLogicMixin on ConsumerState<WalletChainSendSol> {
       final contractAddress = widget.coinModel.isTest
           ? _coin['contract_test']
           : _coin['contract'];
-      final recipientTokenAddress =
-          await Trustdart().getPubKeySOL(toAddr, contractAddress);
+      final recipientTokenAddress = await Trustdart().getPubKeySOL(
+        toAddr,
+        contractAddress,
+      );
       if (!mounted) return false;
       if (recipientTokenAddress.isEmpty) {
         errorMessage = "Error";
@@ -120,7 +123,9 @@ mixin _SolSendLogicMixin on ConsumerState<WalletChainSendSol> {
     );
     final walletInfo = ref.read(wapBridgeProvider).walletInfo;
     final signStr = await Trustdart().signTransaction(
-      _coinType, path, txData,
+      _coinType,
+      path,
+      txData,
       mnemonic: walletInfo.mnemonic ?? "",
       pk: walletInfo.privateKey ?? "",
     );
@@ -131,8 +136,10 @@ mixin _SolSendLogicMixin on ConsumerState<WalletChainSendSol> {
       setState(() => load = Load.finish);
       return false;
     }
-    final ffmmm = await SolApi()
-        .simulateTransaction(signStr, isTest: widget.coinModel.isTest);
+    final ffmmm = await SolApi().simulateTransaction(
+      signStr,
+      isTest: widget.coinModel.isTest,
+    );
     return !ffmmm.error;
   }
 
@@ -188,7 +195,9 @@ mixin _SolSendLogicMixin on ConsumerState<WalletChainSendSol> {
     if (parts.length == 2) addr = parts[1];
 
     final valid = await Trustdart().validateAddress(_coinType, addr);
-    if (!valid || addr.toUpperCase() == widget.coinModel.address.toString().toUpperCase()) {
+    if (!valid ||
+        addr.toUpperCase() ==
+            widget.coinModel.address.toString().toUpperCase()) {
       toErrorMessage = S.current.g_key_t_50;
       setState(() {});
       return null;
@@ -210,8 +219,9 @@ mixin _SolSendLogicMixin on ConsumerState<WalletChainSendSol> {
 
     setState(() => load = Load.loading);
 
-    final String? toAddr =
-        await toAddressCheck(toTextEditingController.text.trim());
+    final String? toAddr = await toAddressCheck(
+      toTextEditingController.text.trim(),
+    );
     if (toAddr == null) {
       setState(() => load = Load.finish);
       return;
@@ -250,8 +260,7 @@ mixin _SolSendLogicMixin on ConsumerState<WalletChainSendSol> {
       ..gasPriceValue = gasPrice
       ..price = transferValue;
 
-    final feeUnit = (chainModel ?? widget.coinModel)
-        .coin['unit']
+    final feeUnit = (chainModel ?? widget.coinModel).coin['unit']
         .toString()
         .toUpperCase();
     final check = await Navigator.push(
@@ -282,7 +291,9 @@ mixin _SolSendLogicMixin on ConsumerState<WalletChainSendSol> {
         if (!mounted) return;
         ref.read(tripBridgeProvider).addUndoneTr(trModel, 1);
         await RecentAddressService.save(
-            _coinType, toTextEditingController.text.trim());
+          _coinType,
+          toTextEditingController.text.trim(),
+        );
         ToastUtils.show(S.current.g_key_nft_41);
         Navigator.pop(context);
       }
@@ -296,16 +307,16 @@ mixin _SolSendLogicMixin on ConsumerState<WalletChainSendSol> {
   }
 
   void scanQR() => performScanQR(
-        context,
-        controller: toTextEditingController,
-        onAddress: toAddressCheck,
-      );
+    context,
+    controller: toTextEditingController,
+    onAddress: toAddressCheck,
+  );
 
   void pasteAddress() => performPasteAddress(
-        context,
-        controller: toTextEditingController,
-        onAddress: toAddressCheck,
-      );
+    context,
+    controller: toTextEditingController,
+    onAddress: toAddressCheck,
+  );
 
   Future<void> maxTag() async {
     if (_isContract) {
@@ -313,9 +324,14 @@ mixin _SolSendLogicMixin on ConsumerState<WalletChainSendSol> {
       transferValue = widget.coinModel.balance;
       simulateTransaction();
     } else {
-      transferValue = widget.coinModel.balance - totalGasPrice;
-      valueTextEditingController.text =
-          toEther(transferValue.toString(), _decimals).toString();
+      transferValue = maxTransferableAmount(
+        balance: widget.coinModel.balance,
+        fee: totalGasPrice,
+      );
+      valueTextEditingController.text = toEther(
+        transferValue.toString(),
+        _decimals,
+      ).toString();
     }
     amountErrorMessage = "";
     setState(() {});

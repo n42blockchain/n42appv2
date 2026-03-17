@@ -22,6 +22,28 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 
+Future<Map<String, dynamic>?> safeShareStatsRequest(
+  Future<dynamic> Function() action,
+) async {
+  try {
+    final result = await action();
+    if (result is Map<String, dynamic>) {
+      return result;
+    }
+    return null;
+  } catch (_) {
+    return null;
+  }
+}
+
+int parseShareStatCount(dynamic value) {
+  return int.tryParse('${value ?? ''}') ?? 0;
+}
+
+double parseShareStatReward(dynamic value) {
+  return double.tryParse('${value ?? ''}') ?? 0;
+}
+
 class SettingShare extends StatefulWidget {
   const SettingShare({super.key});
 
@@ -54,7 +76,7 @@ class _SettingShareState extends State<SettingShare> {
 
   Future<void> _loadAllStats() async {
     if (_uuid == null) return;
-    await Future.wait([
+    await Future.wait<void>([
       _loadInviteeDownloadCount(),
       _loadInviteeCount(),
       _loadMiningCount(),
@@ -64,27 +86,35 @@ class _SettingShareState extends State<SettingShare> {
   }
 
   Future<void> _loadMiningReward() async {
-    final data = await loginApi.getInviteeMiningInfo(_uuid!);
+    final data = await safeShareStatsRequest(
+      () => loginApi.getInviteeMiningInfo(_uuid!),
+    );
     if (data == null) return;
-    rewardTotal = double.parse((data['total_reward'] ?? "0.0").toString());
+    rewardTotal = parseShareStatReward(data['total_reward']);
   }
 
   Future<void> _loadMiningCount() async {
-    final data = await loginApi.getInviteeMiningCount(_uuid!);
+    final data = await safeShareStatsRequest(
+      () => loginApi.getInviteeMiningCount(_uuid!),
+    );
     if (data == null) return;
-    miningTotal = int.parse((data['total'] ?? 0).toString());
+    miningTotal = parseShareStatCount(data['total']);
   }
 
   Future<void> _loadInviteeDownloadCount() async {
-    final data = await loginApi.getInviteeDownloadList(_uuid!);
+    final data = await safeShareStatsRequest(
+      () => loginApi.getInviteeDownloadList(_uuid!),
+    );
     if (data == null) return;
-    inviteeTotalDown = int.parse(data['total'].toString());
+    inviteeTotalDown = parseShareStatCount(data['total']);
   }
 
   Future<void> _loadInviteeCount() async {
-    final data = await loginApi.getInviteeList(_uuid!);
+    final data = await safeShareStatsRequest(
+      () => loginApi.getInviteeList(_uuid!),
+    );
     if (data == null) return;
-    inviteeTotal = int.parse(data['total'].toString());
+    inviteeTotal = parseShareStatCount(data['total']);
   }
 
   /// 截图并分享（内存直接分享）

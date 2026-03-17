@@ -2,6 +2,7 @@ import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_provider.dart';
+import 'package:n42_wallet/features/wallet_connect/wallet_connect_uri.dart';
 import 'package:n42_wallet/features/widgets/button_widget.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +38,10 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
               final cm = connectV2.coinModels[index];
               final iconWidget = cm.coin['coinType'] == CoinType.N.name
                   ? Image.asset("assets/img/ast.png")
-                  : ImageNetWork(imageUrl: cm.coin['icon'], placeholder: "assets/img/list_default.png");
+                  : ImageNetWork(
+                      imageUrl: cm.coin['icon'],
+                      placeholder: "assets/img/list_default.png",
+                    );
               return SizedBox(
                 height: su.setWidth(120),
                 width: double.infinity,
@@ -52,7 +56,10 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
                     Expanded(
                       child: Text(
                         cm.coin['name'],
-                        style: TextStyle(fontSize: su.setSp(30), color: mainText),
+                        style: TextStyle(
+                          fontSize: su.setSp(30),
+                          color: mainText,
+                        ),
                         textAlign: TextAlign.end,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
@@ -131,7 +138,10 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
                 SizedBox(
                   height: ScreenUtil().setWidth(160),
                   width: ScreenUtil().setWidth(160),
-                  child: Image.asset("assets/wallet/icon_net.png", color: subtitleColor),
+                  child: Image.asset(
+                    "assets/wallet/icon_net.png",
+                    color: subtitleColor,
+                  ),
                 ),
                 SizedBox(height: ScreenUtil().setWidth(24)),
                 Text(
@@ -160,8 +170,11 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
                 child: actionButton(S.of(context).g_key_4, () async {
                   final scanStr = await scan();
                   if (!mounted) return;
-                  if (scanStr.contains('relay-protocol') && scanStr.contains('symKey')) {
-                    connectV2.viewStateDeal(WalletConnectState.loading, params: scanStr);
+                  if (isWalletConnectUriString(scanStr)) {
+                    connectV2.viewStateDeal(
+                      WalletConnectState.loading,
+                      params: scanStr,
+                    );
                   } else {
                     ToastUtils.show(S.of(context).g_key_203);
                   }

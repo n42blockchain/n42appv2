@@ -13,6 +13,21 @@ import 'package:n42_wallet/features/home/setting/change_email_page.dart';
 import 'package:n42_wallet/features/login/api/user_info_api.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 
+void clearChangeEmailCountdownState({
+  required VoidCallback cancelTimer,
+  required ValueChanged<int> setCountdown,
+}) {
+  cancelTimer();
+  setCountdown(0);
+}
+
+bool canResendChangeEmailCode({
+  required int countdown,
+  required bool loading,
+}) {
+  return countdown <= 0 && !loading;
+}
+
 mixin ChangeEmailPageLogicMixin on State<ChangeEmailPage> {
   int step = 0;
   bool chatAvailable = false;
@@ -158,7 +173,12 @@ mixin ChangeEmailPageLogicMixin on State<ChangeEmailPage> {
   }
 
   Future<void> resendN42Code() async {
-    if (countdown > 0 || sendingN42Code) return;
+    if (!canResendChangeEmailCode(
+      countdown: countdown,
+      loading: sendingN42Code,
+    )) {
+      return;
+    }
     setState(() => sendingN42Code = true);
     try {
       final data = await UserInfoApi()
@@ -197,7 +217,13 @@ mixin ChangeEmailPageLogicMixin on State<ChangeEmailPage> {
       if (!mounted) return;
       if (result.error == false) {
         AppGlobals.userInfo?.email = emailCtrl.text.trim();
-        countdownTimer?.cancel();
+        clearChangeEmailCountdownState(
+          cancelTimer: () {
+            countdownTimer?.cancel();
+            countdownTimer = null;
+          },
+          setCountdown: (value) => countdown = value,
+        );
 
         if (chatSyncEnabled && chatAvailable) {
           // 进入 Step 2：自动请求 Chat 验证码
@@ -240,6 +266,13 @@ mixin ChangeEmailPageLogicMixin on State<ChangeEmailPage> {
       startCountdown();
     } catch (e) {
       if (mounted) {
+        clearChangeEmailCountdownState(
+          cancelTimer: () {
+            countdownTimer?.cancel();
+            countdownTimer = null;
+          },
+          setCountdown: (value) => countdown = value,
+        );
         setState(() {
           chatSyncError = e.toString();
           requestingChatCode = false;
@@ -249,7 +282,12 @@ mixin ChangeEmailPageLogicMixin on State<ChangeEmailPage> {
   }
 
   Future<void> resendChatCode() async {
-    if (countdown > 0 || requestingChatCode) return;
+    if (!canResendChangeEmailCode(
+      countdown: countdown,
+      loading: requestingChatCode,
+    )) {
+      return;
+    }
     await requestChatCode();
   }
 

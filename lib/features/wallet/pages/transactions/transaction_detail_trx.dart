@@ -10,6 +10,7 @@ import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/features/wallet/api/transaction_api.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
+import 'package:n42_wallet/features/wallet/pages/transactions/transaction_record_helpers.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/features/widgets/empty.dart';
@@ -27,6 +28,17 @@ class TransactionDetailTrx extends StatefulWidget {
 
   @override
   State<TransactionDetailTrx> createState() => _TransactionDetailTrxState();
+}
+
+bool shouldContinueTrxDetailPolling({
+  required bool requestError,
+  required Map<String, dynamic>? latestTransactionInfo,
+  required Map<String, dynamic>? previousTransactionInfo,
+}) {
+  if (requestError || latestTransactionInfo == null) {
+    return previousTransactionInfo != null;
+  }
+  return latestTransactionInfo['confirmed'] != true;
 }
 
 class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
@@ -68,7 +80,18 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
   bool owner = true;
 
   Future<void> init() async {
-    if (_txHash.isEmpty) _txHash = searchEditingController.text;
+    _stopPolling();
+    transactionInfo = null;
+    resultStr = "Pending";
+    errorMessage = "";
+    _txHash = searchEditingController.text.trim();
+    _explorerUrl = _txHash.isEmpty
+        ? ''
+        : getBrowserTxHash(
+            widget.coinModel.coin['coinType'],
+            _txHash,
+            isTest: widget.coinModel.isTest,
+          );
     if (_txHash.isEmpty) {
       owner = false;
       return;
@@ -79,7 +102,11 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
       _txHash,
       widget.coinModel.address,
     );
-    if (trModelList.isNotEmpty) trm = trModelList[0];
+    if (trModelList.isNotEmpty) {
+      trm = trModelList[0];
+    } else {
+      trm = buildFallbackTransactionRecord(widget.coinModel);
+    }
 
     final ok = await getTransactionByHash();
     if (!mounted) return;
@@ -87,31 +114,57 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
   }
 
   Future<bool> getTransactionByHash() async {
+    final previousTransactionInfo = transactionInfo;
     final rData = await transactionApi.trxTransactionInfoHash(
       _txHash,
       isTest: widget.coinModel.isTest,
     );
     if (rData.error) {
       errorMessage = rData.data.toString();
+      if (shouldContinueTrxDetailPolling(
+        requestError: true,
+        latestTransactionInfo: null,
+        previousTransactionInfo: previousTransactionInfo,
+      )) {
+        _startPolling();
+        return true;
+      }
       owner = false;
       return false;
     }
     if (rData.data == null) {
       errorMessage = "Not found";
+      if (shouldContinueTrxDetailPolling(
+        requestError: false,
+        latestTransactionInfo: null,
+        previousTransactionInfo: previousTransactionInfo,
+      )) {
+        _startPolling();
+        return true;
+      }
       owner = false;
       return false;
     }
 
     transactionInfo = rData.data;
+    errorMessage = "";
+    populateTrxTransactionRecordFromInfo(
+      record: trm,
+      transactionInfo: transactionInfo!,
+    );
     trm.gas = transactionInfo?['cost']?['net_fee_cost'] ?? 0;
     trm.gasPriceValue = BigInt.from(transactionInfo?['cost']?['fee'] ?? 0);
 
     final confirmed = transactionInfo?['confirmed'] == true;
     resultStr = confirmed ? "Success" : "Pending";
-    if (confirmed) {
-      _stopPolling();
-    } else {
+    if (shouldContinueTrxDetailPolling(
+      requestError: false,
+      latestTransactionInfo: transactionInfo,
+      previousTransactionInfo: previousTransactionInfo,
+    )) {
       _startPolling();
+    } else {
+      _stopPolling();
     }
 
     final unit = widget.coinModel.coin['unit'];
@@ -120,7 +173,9 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
     gasPrice = '${toEther(trm.gasPrice.toString(), decimals)} $unit';
     owner =
         trm.from1.toLowerCase() ==
-        (transactionInfo?['from'] ?? "").toString().toLowerCase();
+        (transactionInfo?['ownerAddress'] ?? transactionInfo?['from'] ?? "")
+            .toString()
+            .toLowerCase();
     return true;
   }
 

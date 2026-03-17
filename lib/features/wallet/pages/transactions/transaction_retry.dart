@@ -15,6 +15,7 @@ import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/features/wallet/api/transfer_api.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
+import 'package:n42_wallet/features/wallet/pages/transactions/transaction_record_helpers.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_base_send.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/utils/transaction/coin_gas.dart';
@@ -49,6 +50,14 @@ bool _isReceiptSuccess(dynamic status) {
   final hex = s.startsWith('0x') ? s.substring(2) : s;
   final n = int.tryParse(hex, radix: 16);
   return n != null && n == 1;
+}
+
+bool canRetryTransactionSubmission({
+  required Load load,
+  required bool isMounted,
+  required Map<String, dynamic>? transactionInfo,
+}) {
+  return isMounted && load != Load.loading && transactionInfo != null;
 }
 
 class TransactionRetry extends ConsumerStatefulWidget {
@@ -95,9 +104,11 @@ class _TransactionRetryState extends ConsumerState<TransactionRetry>
                   icon: const Icon(Icons.open_in_browser_outlined),
                   tooltip: S.of(context).g_key_196,
                   onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => BrowserPage(_explorerUrl))),
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => BrowserPage(_explorerUrl),
+                    ),
+                  ),
                 ),
               ]
             : null,

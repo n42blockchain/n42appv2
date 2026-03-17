@@ -31,7 +31,10 @@ mixin _TransactionHistoryLogicMixin on State<TransactionHistoryList> {
 
     try {
       final coinKey = widget.coinModel.coin['coinType'] as String;
-      final contract = widget.coinModel.coin['contract'] as String? ?? '';
+      final contract = resolveCoinContractForNetwork(
+        coin: widget.coinModel.coin,
+        isTest: widget.coinModel.isTest,
+      );
 
       List<dynamic> list;
       if (isBtcChain) {
@@ -74,8 +77,9 @@ mixin _TransactionHistoryLogicMixin on State<TransactionHistoryList> {
       if (filter.direction != null) {
         final bool isSent;
         if (tx is BtcTransactionRecodeModel) {
-          isSent = tx.inputsAddressList
-              .any((a) => a.toUpperCase() == addr.toUpperCase());
+          isSent = tx.inputsAddressList.any(
+            (a) => a.toUpperCase() == addr.toUpperCase(),
+          );
         } else if (tx is TransationRecordModel) {
           isSent = tx.from1.toLowerCase() == addr.toLowerCase();
         } else {
@@ -142,8 +146,9 @@ mixin _TransactionHistoryLogicMixin on State<TransactionHistoryList> {
         final String toAddr;
 
         if (tx is BtcTransactionRecodeModel) {
-          isSent = tx.inputsAddressList
-              .any((a) => a.toUpperCase() == addr.toUpperCase());
+          isSent = tx.inputsAddressList.any(
+            (a) => a.toUpperCase() == addr.toUpperCase(),
+          );
           fromAddr = addr;
           toAddr = tx.to1;
         } else if (tx is TransationRecordModel) {
@@ -199,9 +204,9 @@ mixin _TransactionHistoryLogicMixin on State<TransactionHistoryList> {
   }
 
   String _statusStr(int state) => switch (state) {
-        0 => 'Pending',
-        1 => 'Success',
-        2 => 'Failed',
-        _ => 'Unknown',
-      };
+    0 => 'Pending',
+    1 => 'Success',
+    2 => 'Failed',
+    _ => 'Unknown',
+  };
 }

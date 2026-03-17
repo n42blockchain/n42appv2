@@ -37,12 +37,19 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
   int get _decimals => _coin['decimals'] as int;
   String get _blockchainType => _coin['blockchainType'] as String;
 
-  String get _contract => (widget.coinModel.isTest
-      ? _coin['contract_test']
-      : _coin['contract']) as String? ?? '';
+  String get _contract =>
+      (widget.coinModel.isTest ? _coin['contract_test'] : _coin['contract'])
+          as String? ??
+      '';
 
   static const _noLatestCoinTypes = {
-    'OKT', 'MTR', 'METIS', 'VIC', 'BOBA', 'OP', 'GO',
+    'OKT',
+    'MTR',
+    'METIS',
+    'VIC',
+    'BOBA',
+    'OP',
+    'GO',
   };
 
   Future<void> initData() async {
@@ -103,7 +110,9 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
       final String price = valueTextEditingController.text;
       if (price == "") return;
 
-      final BigInt gaslimit = BigInt.from(getCoinGas(_coinType, contract: _isContract));
+      final BigInt gaslimit = BigInt.from(
+        getCoinGas(_coinType, contract: _isContract),
+      );
       final BigInt weiValue = ethToWeiString(price, _decimals);
       final MessageModel ethMessage;
 
@@ -119,9 +128,9 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
           isTest: widget.coinModel.isTest,
         );
       } else {
-        final String rpc = (widget.coinModel.isTest
-            ? _coin['service_test']
-            : _coin['service']) as String;
+        final String rpc =
+            (widget.coinModel.isTest ? _coin['service_test'] : _coin['service'])
+                as String;
         final EthAPI ethAPI = EthAPI.init(null, rpc, null);
         ethMessage = await ethAPI.getGasLimit(
           widget.coinModel.address,
@@ -202,7 +211,9 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
     if (parts.length == 2) addr = parts[1];
 
     final valid = await Trustdart().validateAddress(_coinType, addr);
-    if (!valid || addr.toUpperCase() == widget.coinModel.address.toString().toUpperCase()) {
+    if (!valid ||
+        addr.toUpperCase() ==
+            widget.coinModel.address.toString().toUpperCase()) {
       toErrorMessage = S.current.g_key_t_50;
       setState(() {});
       return null;
@@ -224,8 +235,9 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
 
     setState(() => load = Load.loading);
 
-    final String? toAddr =
-        await toAddressCheck(toTextEditingController.text.trim());
+    final String? toAddr = await toAddressCheck(
+      toTextEditingController.text.trim(),
+    );
     if (toAddr == null) {
       setState(() => load = Load.finish);
       return;
@@ -316,7 +328,10 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
       transferValue = widget.coinModel.balance;
       estimateGasEthLocal();
     } else {
-      transferValue = widget.coinModel.balance - totalGasPrice;
+      transferValue = maxTransferableAmount(
+        balance: widget.coinModel.balance,
+        fee: totalGasPrice,
+      );
       valueTextEditingController.text = toEther(
         transferValue.toString(),
         _decimals,
@@ -331,16 +346,16 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
   }
 
   void scanQR() => performScanQR(
-        context,
-        controller: toTextEditingController,
-        onAddress: toAddressCheck,
-      );
+    context,
+    controller: toTextEditingController,
+    onAddress: toAddressCheck,
+  );
 
   void pasteAddress() => performPasteAddress(
-        context,
-        controller: toTextEditingController,
-        onAddress: toAddressCheck,
-      );
+    context,
+    controller: toTextEditingController,
+    onAddress: toAddressCheck,
+  );
 
   void searchToAddressWidget() {
     showAddressPickerSheet(
