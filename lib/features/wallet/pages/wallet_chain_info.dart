@@ -13,6 +13,7 @@ import 'package:n42_wallet/features/wallet/pages/transactions/transaction_detail
 import 'package:n42_wallet/features/wallet/pages/transactions/transaction_history_list.dart';
 import 'package:n42_wallet/features/wallet/pages/transactions/transaction_retry.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_one.dart';
+import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_flow_utils.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_chain_info_actions.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_chain_info_sync.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_receive_qr.dart';
@@ -102,6 +103,10 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
   Future<bool> ensureWalletBackedUp() async {
     final walletInfo = _walletProvider.walletInfo;
     if ((walletInfo.password ?? '').isNotEmpty) return true;
+    if (!walletHasBackupableMnemonic(walletInfo)) {
+      ToastUtils.show(walletBackupPhraseUnavailableMessage);
+      return false;
+    }
     final flag = await tipsDialog7(context);
     if (!mounted) return false;
     if (flag == true) {
@@ -124,7 +129,9 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
     if (!await _guardBackup(closeSheet)) return;
     await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => UnifiedSendPage(widget.coinModel)),
+      MaterialPageRoute(
+        builder: (context) => UnifiedSendPage(widget.coinModel),
+      ),
     );
     await getTransactionData(Load.refresh);
     if (!mounted) return;
@@ -184,8 +191,7 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
     _initData();
     _scrollController.addListener(_onScroll);
     _eventBusFn = eventBus.on().listen((event) async {
-      if (event is EventPublic &&
-          event.type == EventPublicType.transferOk) {
+      if (event is EventPublic && event.type == EventPublicType.transferOk) {
         getTransactionData(Load.refresh);
         getTransactionDataNetwork(Load.refresh);
         await widget.coinModel.getBalance();
@@ -227,14 +233,17 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
       _tokenName = coin['name'];
       _tokenSymbol = coin['miniName'];
       browserUrl = getBrowserTokenAddress(
-        coin['coinType'], cm.address, coin['contract'],
+        coin['coinType'],
+        cm.address,
+        coin['contract'],
         isTest: cm.isTest,
       );
     } else {
       _chainName = coin['name'];
       _chainSymbol = coin['miniName'];
       browserUrl = getBrowserAddress(
-        coin['coinType'], cm.address,
+        coin['coinType'],
+        cm.address,
         isTest: cm.isTest,
       );
     }
@@ -248,8 +257,7 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
 
   // ── Theme helpers ────────────────────────────────────────────────────────
 
-  Color _themeColor(String key) =>
-      AppThemeUtils.getColorByKey(context, key);
+  Color _themeColor(String key) => AppThemeUtils.getColorByKey(context, key);
 
   // ── Build ─────────────────────────────────────────────────────────────────
 
@@ -279,10 +287,7 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
             if (_tokenSymbol != null)
               Text(
                 '$_tokenSymbol($_tokenName)',
-                style: TextStyle(
-                  color: textColor,
-                  fontSize: su.setSp(24.0),
-                ),
+                style: TextStyle(color: textColor, fontSize: su.setSp(24.0)),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -347,7 +352,10 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
               if ((marketInfo?['coin_gecko_id'] ?? '').toString().isNotEmpty)
                 WalletCoinMarketPreview(
                   geckoId: marketInfo!['coin_gecko_id'].toString(),
-                  priceChange24h: (marketInfo!['price_change_per_24h'] as num?)?.toDouble() ?? 0,
+                  priceChange24h:
+                      (marketInfo!['price_change_per_24h'] as num?)
+                          ?.toDouble() ??
+                      0,
                   marketInfo: marketInfo!,
                 ),
               Divider(height: su.setWidth(1)),

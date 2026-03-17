@@ -3,6 +3,7 @@ import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/config/proxy_config.dart';
 import 'package:n42_wallet/core/network/base_api.dart';
 import 'package:n42_wallet/core/network/external_http.dart';
+import 'package:n42_wallet/features/wallet/api/market_api_payload_utils.dart';
 import 'package:n42_wallet/features/wallet/models/ohlc_point.dart';
 
 class MarketApi {
@@ -10,12 +11,13 @@ class MarketApi {
   final Map<String, String> _header;
 
   MarketApi()
-      : _url = AppConfig.getApiUrlOnline('marketHost'),
-        _header = const {'content-type': 'application/json'};
+    : _url = AppConfig.getApiUrlOnline('marketHost'),
+      _header = const {'content-type': 'application/json'};
 
   /// CoinGecko 请求头 — API key 已迁移到服务端代理。
-  Map<String, String> get _geckoHeader =>
-      const {'content-type': 'application/json'};
+  Map<String, String> get _geckoHeader => const {
+    'content-type': 'application/json',
+  };
 
   // ---------------------------------------------------------------------------
   // Public API
@@ -63,7 +65,8 @@ class MarketApi {
     if (geckoId.isEmpty) return [];
     try {
       final encodedId = Uri.encodeComponent(geckoId);
-      if (kDebugMode) debugPrint('MarketApi.getOhlcvData: $encodedId days=$days');
+      if (kDebugMode)
+        debugPrint('MarketApi.getOhlcvData: $encodedId days=$days');
 
       final raw = await ExternalHttp.get(
         '${ProxyConfig.marketOhlcv}?coin_id=$encodedId&vs_currency=usd&days=$days',
@@ -75,12 +78,14 @@ class MarketApi {
       return raw
           .whereType<List>()
           .where((item) => item.length >= 5)
-          .map((item) => OhlcPoint(
-                open: _toDouble(item[1]),
-                high: _toDouble(item[2]),
-                low: _toDouble(item[3]),
-                close: _toDouble(item[4]),
-              ))
+          .map(
+            (item) => OhlcPoint(
+              open: _toDouble(item[1]),
+              high: _toDouble(item[2]),
+              low: _toDouble(item[3]),
+              close: _toDouble(item[4]),
+            ),
+          )
           .where((p) => p.isValid)
           .toList();
     } catch (e, st) {
@@ -100,7 +105,8 @@ class MarketApi {
     if (geckoId.isEmpty) return empty;
     try {
       final encodedId = Uri.encodeComponent(geckoId);
-      if (kDebugMode) debugPrint('MarketApi.getMarketChart: $encodedId days=$days');
+      if (kDebugMode)
+        debugPrint('MarketApi.getMarketChart: $encodedId days=$days');
 
       final raw = await ExternalHttp.get(
         '${ProxyConfig.marketChart}?coin_id=$encodedId&vs_currency=usd&days=$days',
@@ -205,18 +211,10 @@ class MarketApi {
       final resp = await getWalletCoinsInfo(_fallbackTrendingSymbols);
       if (resp['error'] != false) return [];
 
-      final rawData = resp['data'];
-      final coins = (rawData is List)
-          ? rawData
-          : (rawData is Map ? rawData['data'] : null);
-      if (coins is! List) return [];
-
-      return coins
-          .whereType<Map<dynamic, dynamic>>()
-          .map((c) => Map<String, dynamic>.from(c))
-          .toList();
+      return extractMarketCoinItems(resp['data']);
     } catch (e, st) {
-      if (kDebugMode) debugPrint('MarketApi.getFallbackTrendingCoins error: $e\n$st');
+      if (kDebugMode)
+        debugPrint('MarketApi.getFallbackTrendingCoins error: $e\n$st');
       return [];
     }
   }
@@ -235,7 +233,8 @@ class MarketApi {
       if (d == null) return {'error': true, 'data': '未找到该币'};
       return {'error': false, 'data': d};
     } catch (e, st) {
-      if (kDebugMode) debugPrint('MarketApi.getWalletCoinsBaseInfo error: $e\n$st');
+      if (kDebugMode)
+        debugPrint('MarketApi.getWalletCoinsBaseInfo error: $e\n$st');
       return {'error': true, 'data': e.toString()};
     }
   }

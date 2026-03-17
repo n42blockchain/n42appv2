@@ -234,12 +234,7 @@ class _CoinTile extends StatelessWidget {
   }
 
   String _formatPrice(double price) {
-    if (price >= 1000) return price.toStringAsFixed(2);
-    if (price >= 1) return price.toStringAsFixed(4);
-    return price
-        .toStringAsPrecision(4)
-        .replaceAll(RegExp(r'0+$'), '')
-        .replaceAll(RegExp(r'\.$'), '');
+    return formatMarketPriceDisplay(price);
   }
 }
 

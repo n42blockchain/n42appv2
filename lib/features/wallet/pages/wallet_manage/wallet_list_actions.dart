@@ -3,28 +3,25 @@ part of 'wallet_list.dart';
 /// 钱包操作方法（切换、管理、删除），混入 [_WalletListState]。
 mixin _WalletListActionsMixin on ConsumerState<WalletList> {
   Future<void> jumpWalletInfoPage(WalletInfo info, int index) async {
-    await Navigator.of(context).push(MaterialPageRoute(
-        builder: (_) => WalletManage(
-              walletInfo: info,
-              walletIndex: index,
-            )));
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => WalletManage(walletInfo: info, walletIndex: index),
+      ),
+    );
     await (this as _WalletListState).initData();
   }
 
   /// 直接切换（Tap 非当前钱包）
-  void _switchWallet(int index) {
-    final mm = ref.read(wapBridgeProvider).setMainWallet(index);
-    if (mm.error) {
-      ToastUtils.show(mm.data);
-    } else {
-      setState(() {});
-      ToastUtils.show(S.of(context).g_key_15);
-    }
+  Future<void> _switchWallet(int index) async {
+    await ref.read(wapBridgeProvider).setWalletIndex(index);
+    if (!mounted) return;
+    setState(() {});
+    ToastUtils.show(S.of(context).g_key_15);
   }
 
   /// 打开管理页（需密码验证）
   Future<void> _onManage(WalletInfo info, int index) async {
-    if (info.password == '') {
+    if (!walletHasUserPassword(info)) {
       await jumpWalletInfoPage(info, index);
       return;
     }
@@ -49,7 +46,9 @@ mixin _WalletListActionsMixin on ConsumerState<WalletList> {
           S.of(ctx).g_face_3,
           style: TextStyle(
             color: AppThemeUtils.getColorByKey(
-                ctx, AppThemeKeys.mainTextColor.name),
+              ctx,
+              AppThemeKeys.mainTextColor.name,
+            ),
             fontSize: ScreenUtil().setSp(32),
           ),
         ),
@@ -57,7 +56,9 @@ mixin _WalletListActionsMixin on ConsumerState<WalletList> {
           S.of(ctx).g_key_192,
           style: TextStyle(
             color: AppThemeUtils.getColorByKey(
-                ctx, AppThemeKeys.mainTextColor.name),
+              ctx,
+              AppThemeKeys.mainTextColor.name,
+            ),
             fontSize: ScreenUtil().setSp(28),
           ),
         ),
@@ -67,8 +68,11 @@ mixin _WalletListActionsMixin on ConsumerState<WalletList> {
             child: Text(
               S.of(ctx).g_key_79,
               style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      ctx, AppThemeKeys.mainBlueColor.name)),
+                color: AppThemeUtils.getColorByKey(
+                  ctx,
+                  AppThemeKeys.mainBlueColor.name,
+                ),
+              ),
             ),
           ),
           TextButton(
@@ -76,16 +80,18 @@ mixin _WalletListActionsMixin on ConsumerState<WalletList> {
             child: Text(
               S.of(ctx).g_key_78,
               style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      ctx, AppThemeKeys.mainBlueColor.name)),
+                color: AppThemeUtils.getColorByKey(
+                  ctx,
+                  AppThemeKeys.mainBlueColor.name,
+                ),
+              ),
             ),
           ),
         ],
       ),
     );
     if (!mounted || confirmed != true) return;
-    final rmm =
-        await ref.read(wapBridgeProvider).deleteWalletInfo(info: info);
+    final rmm = await ref.read(wapBridgeProvider).deleteWalletInfo(info: info);
     if (!mounted) return;
     if (rmm != null) {
       ToastUtils.show(rmm.data);

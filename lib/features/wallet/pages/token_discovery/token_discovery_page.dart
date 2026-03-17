@@ -72,7 +72,10 @@ class _TokenDiscoveryPageState extends ConsumerState<TokenDiscoveryPage> {
   }
 
   Future<void> _ignoreToken(DiscoveredToken token) async {
-    await SPUtil().addIgnoredTokenContract(token.contractAddress);
+    final contract = token.coinType == 'SOL'
+        ? token.contractAddress.trim()
+        : token.contractAddress.toLowerCase();
+    await SPUtil().addIgnoredTokenContract(contract);
     setState(() => _tokens.remove(token));
   }
 
@@ -143,7 +146,10 @@ class _TokenDiscoveryPageState extends ConsumerState<TokenDiscoveryPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.only(top: su.setWidth(20), bottom: su.setWidth(10)),
+          padding: EdgeInsets.only(
+            top: su.setWidth(20),
+            bottom: su.setWidth(10),
+          ),
           child: Text(
             chainType,
             style: TextStyle(
@@ -192,8 +198,11 @@ class _TokenDiscoveryPageState extends ConsumerState<TokenDiscoveryPage> {
                 borderRadius: BorderRadius.circular(su.setWidth(8)),
               ),
               child: token.isSelected
-                  ? Icon(Icons.check_rounded,
-                      color: Colors.white, size: su.setWidth(24))
+                  ? Icon(
+                      Icons.check_rounded,
+                      color: Colors.white,
+                      size: su.setWidth(24),
+                    )
                   : null,
             ),
           ),
@@ -202,57 +211,73 @@ class _TokenDiscoveryPageState extends ConsumerState<TokenDiscoveryPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(token.displaySymbol,
-                    style: TextStyle(
-                        fontSize: su.setSp(30),
-                        fontWeight: FontWeight.w600,
-                        color: _color(AppThemeKeys.mainTextColor))),
+                Text(
+                  token.displaySymbol,
+                  style: TextStyle(
+                    fontSize: su.setSp(30),
+                    fontWeight: FontWeight.w600,
+                    color: _color(AppThemeKeys.mainTextColor),
+                  ),
+                ),
                 SizedBox(height: su.setWidth(4)),
-                Text(token.displayName,
-                    style: TextStyle(
-                        fontSize: su.setSp(24),
-                        color: _color(AppThemeKeys.itemSubtitleTextColor)),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis),
+                Text(
+                  token.displayName,
+                  style: TextStyle(
+                    fontSize: su.setSp(24),
+                    color: _color(AppThemeKeys.itemSubtitleTextColor),
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ],
             ),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(token.humanBalance,
-                  style: TextStyle(
-                      fontSize: su.setSp(28),
-                      fontWeight: FontWeight.w500,
-                      color: _color(AppThemeKeys.mainTextColor))),
+              Text(
+                token.humanBalance,
+                style: TextStyle(
+                  fontSize: su.setSp(28),
+                  fontWeight: FontWeight.w500,
+                  color: _color(AppThemeKeys.mainTextColor),
+                ),
+              ),
               SizedBox(height: su.setWidth(8)),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   GestureDetector(
                     onTap: () => _ignoreToken(token),
-                    child: Text(s.g_key_token_discovery_ignore,
-                        style: TextStyle(
-                            fontSize: su.setSp(22),
-                            color: _color(AppThemeKeys.itemSubtitleTextColor),
-                            decoration: TextDecoration.underline)),
+                    child: Text(
+                      s.g_key_token_discovery_ignore,
+                      style: TextStyle(
+                        fontSize: su.setSp(22),
+                        color: _color(AppThemeKeys.itemSubtitleTextColor),
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
                   ),
                   SizedBox(width: su.setWidth(16)),
                   GestureDetector(
                     onTap: () => _addToken(token),
                     child: Container(
                       padding: EdgeInsets.symmetric(
-                          horizontal: su.setWidth(20),
-                          vertical: su.setWidth(8)),
+                        horizontal: su.setWidth(20),
+                        vertical: su.setWidth(8),
+                      ),
                       decoration: BoxDecoration(
                         color: accent,
                         borderRadius: BorderRadius.circular(su.setWidth(8)),
                       ),
-                      child: Text(s.g_key_token_discovery_add,
-                          style: TextStyle(
-                              fontSize: su.setSp(22),
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500)),
+                      child: Text(
+                        s.g_key_token_discovery_add,
+                        style: TextStyle(
+                          fontSize: su.setSp(22),
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                     ),
                   ),
                 ],
@@ -272,7 +297,10 @@ class _TokenDiscoveryPageState extends ConsumerState<TokenDiscoveryPage> {
 
     return Container(
       padding: EdgeInsets.fromLTRB(
-        su.setWidth(30), su.setWidth(16), su.setWidth(30), su.setWidth(36),
+        su.setWidth(30),
+        su.setWidth(16),
+        su.setWidth(30),
+        su.setWidth(36),
       ),
       decoration: BoxDecoration(
         color: _color(AppThemeKeys.backGroundColor),

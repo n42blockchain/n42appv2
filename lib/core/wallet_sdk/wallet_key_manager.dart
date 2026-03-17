@@ -17,6 +17,36 @@ class WalletKeyManager {
 
   WalletKeyManager(this._trustdart);
 
+  String _normalizedNonEmptyString(Object? value) {
+    if (value is! String) {
+      return '';
+    }
+    final normalized = value.trim();
+    return normalized.isEmpty ? '' : normalized;
+  }
+
+  String _extractPrimaryAddress(Object? rawAddress) {
+    if (rawAddress is String) {
+      return _normalizedNonEmptyString(rawAddress);
+    }
+
+    if (rawAddress is Map) {
+      final legacy = _normalizedNonEmptyString(rawAddress['legacy']);
+      if (legacy.isNotEmpty) {
+        return legacy;
+      }
+
+      for (final value in rawAddress.values) {
+        final candidate = _normalizedNonEmptyString(value);
+        if (candidate.isNotEmpty) {
+          return candidate;
+        }
+      }
+    }
+
+    return '';
+  }
+
   // ---------------------------------------------------------------------------
   // Mnemonic
   // ---------------------------------------------------------------------------
@@ -55,10 +85,7 @@ class WalletKeyManager {
     String passphrase = '',
   }) async {
     try {
-      return await _trustdart.checkMnemonic(
-        mnemonic,
-        passphrase: passphrase,
-      );
+      return await _trustdart.checkMnemonic(mnemonic, passphrase: passphrase);
     } on PlatformException catch (e) {
       if (kDebugMode) debugPrint('WalletKeyManager.validateMnemonic: $e');
       return false;
@@ -153,13 +180,21 @@ class WalletKeyManager {
           code: 'KEY_PAIR_DERIVATION_FAILED',
         );
       }
+
       // Raw format: "privateKeyHex:publicKeyHex"
       final parts = raw.split(':');
       if (parts.length >= 2) {
-        return KeyPair(privateKey: parts[0], publicKey: parts[1]);
+        final privatePart = parts[0].trim();
+        final publicPart = parts[1].trim();
+        if (privatePart.isNotEmpty && publicPart.isNotEmpty) {
+          return KeyPair(privateKey: privatePart, publicKey: publicPart);
+        }
       }
-      // Fallback: treat entire string as private key
-      return KeyPair(privateKey: raw, publicKey: '');
+
+      throw WalletException(
+        message: 'Malformed key pair response for $coin',
+        code: 'KEY_PAIR_DERIVATION_FAILED',
+      );
     } on PlatformException catch (e) {
       throw WalletException(
         message: 'Key pair derivation failed: ${e.message}',
@@ -220,16 +255,7 @@ class WalletKeyManager {
         passphrase,
       );
       // Native returns address as either String or Map (iOS returns addressMap)
-      final rawAddress = map['address'];
-      String address;
-      if (rawAddress is String) {
-        address = rawAddress;
-      } else if (rawAddress is Map) {
-        address = (rawAddress['legacy'] as String?) ??
-            (rawAddress.values.whereType<String>().firstOrNull ?? '');
-      } else {
-        address = '';
-      }
+      final address = _extractPrimaryAddress(map['address']);
       final pk = (map['privateKey'] as String?) ?? '';
       if (address.isEmpty) {
         throw WalletException(

@@ -10,6 +10,7 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/component/enums/load.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/utils/wallet_backup_crypto.dart';
+import 'package:n42_wallet/features/wallet/utils/wallet_backup_payload.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/features/widgets/button_widget.dart';
 import 'package:n42_wallet/features/widgets/comm_input.dart';
@@ -28,7 +29,7 @@ import 'package:share_plus/share_plus.dart';
 ///
 /// 安全保证：
 ///   AES-256-CBC + PBKDF2-SHA256（60 万次）+ HMAC-SHA256 完整性校验。
-///   密码不存储，仅用于密钥衍生。
+///   备份文件中包含钱包恢复所需敏感字段，且仅受备份密码保护。
 class ExportCloudBackup extends ConsumerStatefulWidget {
   const ExportCloudBackup({super.key});
 
@@ -44,8 +45,7 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
   Load _load = Load.finish;
   String _error = '';
 
-  List<WalletInfo> get _wallets =>
-      ref.read(wapBridgeProvider).walletInfoList;
+  List<WalletInfo> get _wallets => ref.read(wapBridgeProvider).walletInfoList;
 
   @override
   void initState() {
@@ -85,15 +85,17 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
 
     try {
       final wallets = _wallets;
-      final selected = _selectedIndexes.map((i) => wallets[i]).toList();
+      final selected = _selectedIndexes
+          .where((i) => i >= 0 && i < wallets.length)
+          .map((i) => wallets[i])
+          .toList();
 
-      // 仅导出恢复所需的最小字段（不含 password、coinSort 等运行时状态）
-      final payload = selected.map((w) => {
-            'walletName': w.walletName,
-            'mnemonic': w.mnemonic,
-            'privateKey': w.privateKey,
-            'timestamp': w.timestamp,
-          }).toList();
+      if (selected.isEmpty) {
+        setState(() => _error = 'No valid wallets selected for backup');
+        return;
+      }
+
+      final payload = selected.map(walletInfoToBackupPayload).toList();
 
       final encrypted = await WalletBackupCrypto.encrypt(payload, password);
 
@@ -138,12 +140,7 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
         child: Stack(
           children: [
             Positioned.fill(child: _buildBody(wallets)),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: _buildBottomBar(),
-            ),
+            Positioned(bottom: 0, left: 0, right: 0, child: _buildBottomBar()),
           ],
         ),
       ),
@@ -189,15 +186,18 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
               padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
               decoration: BoxDecoration(
                 color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.errorBgColor.name),
-                borderRadius:
-                    BorderRadius.circular(ScreenUtil().setWidth(8)),
+                  context,
+                  AppThemeKeys.errorBgColor.name,
+                ),
+                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
               ),
               child: Text(
                 _error,
                 style: TextStyle(
                   color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.errorTextColor.name),
+                    context,
+                    AppThemeKeys.errorTextColor.name,
+                  ),
                   fontSize: ScreenUtil().setSp(26),
                 ),
               ),
@@ -212,32 +212,36 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
   }
 
   Widget _buildWarningBanner() => Container(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
-        decoration: BoxDecoration(
-          color: const Color(0xFFFFF3CD),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-          border: Border.all(color: const Color(0xFFFFD700), width: 1),
+    padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+    decoration: BoxDecoration(
+      color: const Color(0xFFFFF3CD),
+      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+      border: Border.all(color: const Color(0xFFFFD700), width: 1),
+    ),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Icon(
+          Icons.warning_amber_rounded,
+          color: Color(0xFFD4A017),
+          size: 20,
         ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Icon(Icons.warning_amber_rounded,
-                color: Color(0xFFD4A017), size: 20),
-            SizedBox(width: ScreenUtil().setWidth(12)),
-            Expanded(
-              child: Text(
-                'This backup contains your private keys / mnemonics. '
-                'Keep the backup file and password safe. '
-                'Never share them with anyone.',
-                style: TextStyle(
-                  color: const Color(0xFF856404),
-                  fontSize: ScreenUtil().setSp(24),
-                ),
-              ),
+        SizedBox(width: ScreenUtil().setWidth(12)),
+        Expanded(
+          child: Text(
+            'This backup contains your private keys / mnemonics. '
+            'wallet passwords and wallet settings. '
+            'Keep the backup file and password safe. '
+            'Never share them with anyone.',
+            style: TextStyle(
+              color: const Color(0xFF856404),
+              fontSize: ScreenUtil().setSp(24),
             ),
-          ],
+          ),
         ),
-      );
+      ],
+    ),
+  );
 
   void _toggleSelection(int index) {
     setState(() {
@@ -264,15 +268,18 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
             height: ScreenUtil().setWidth(48),
             decoration: BoxDecoration(
               color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainBlueColor.name)
-                  .withValues(alpha: 0.1),
+                context,
+                AppThemeKeys.mainBlueColor.name,
+              ).withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: Icon(
               wallet.hasMnemonic ? Icons.vpn_key : Icons.key,
               size: ScreenUtil().setWidth(24),
               color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainBlueColor.name),
+                context,
+                AppThemeKeys.mainBlueColor.name,
+              ),
             ),
           ),
           SizedBox(width: ScreenUtil().setWidth(16)),
@@ -284,7 +291,9 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
                   wallet.walletName ?? 'Wallet ${index + 1}',
                   style: TextStyle(
                     color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainTextColor.name),
+                      context,
+                      AppThemeKeys.mainTextColor.name,
+                    ),
                     fontSize: ScreenUtil().setSp(30),
                     fontWeight: FontWeight.w600,
                   ),
@@ -293,7 +302,9 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
                   wallet.hasMnemonic ? 'Mnemonic wallet' : 'Private key wallet',
                   style: TextStyle(
                     color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.itemSubtitleTextColor.name),
+                      context,
+                      AppThemeKeys.itemSubtitleTextColor.name,
+                    ),
                     fontSize: ScreenUtil().setSp(24),
                   ),
                 ),
@@ -303,7 +314,9 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
           Checkbox(
             value: isSelected,
             activeColor: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainBlueColor.name),
+              context,
+              AppThemeKeys.mainBlueColor.name,
+            ),
             onChanged: (_) => _toggleSelection(index),
           ),
         ],
@@ -315,60 +328,66 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
   Widget _buildPasswordField({
     required TextEditingController controller,
     required String hintText,
-  }) =>
-      containerStyle1(
-        context,
-        height: ScreenUtil().setWidth(120),
-        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
-        margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
-        child: CommInput(
-          type: InputFieldType.password,
-          hintText: hintText,
-          controller: controller,
-          maxLines: 1,
-          style: TextStyle(
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.ff888888.name),
-            fontSize: ScreenUtil().setSp(26),
-          ),
-        ),
-      );
+  }) => containerStyle1(
+    context,
+    height: ScreenUtil().setWidth(120),
+    padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
+    margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
+    child: CommInput(
+      type: InputFieldType.password,
+      hintText: hintText,
+      controller: controller,
+      maxLines: 1,
+      style: TextStyle(
+        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.ff888888.name),
+        fontSize: ScreenUtil().setSp(26),
+      ),
+    ),
+  );
 
   Widget _label(String text) => Text(
-        text,
-        style: TextStyle(
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainTextColor.name),
-          fontWeight: FontWeight.bold,
-          fontSize: ScreenUtil().setSp(32),
-        ),
-      );
+    text,
+    style: TextStyle(
+      color: AppThemeUtils.getColorByKey(
+        context,
+        AppThemeKeys.mainTextColor.name,
+      ),
+      fontWeight: FontWeight.bold,
+      fontSize: ScreenUtil().setSp(32),
+    ),
+  );
 
   Widget _buildBottomBar() => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Divider(height: ScreenUtil().setWidth(1)),
-          Container(
-            padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-            height: ScreenUtil().setWidth(148),
-            width: double.infinity,
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.backGroundColor.name),
-            child: buttonStyle6(
-              context,
-              () { if (_load != Load.loading) _export(); },
-              'Create & Save Backup',
-              AppThemeUtils.getColorByKey(
-                context,
-                _load == Load.loading
-                    ? AppThemeKeys.mainButtonBgColor3.name
-                    : AppThemeKeys.mainButtonBgColor.name,
-              ),
-              AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainButtonTextColor.name),
-              _load == Load.loading,
-            ),
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Divider(height: ScreenUtil().setWidth(1)),
+      Container(
+        padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+        height: ScreenUtil().setWidth(148),
+        width: double.infinity,
+        color: AppThemeUtils.getColorByKey(
+          context,
+          AppThemeKeys.backGroundColor.name,
+        ),
+        child: buttonStyle6(
+          context,
+          () {
+            if (_load != Load.loading) _export();
+          },
+          'Create & Save Backup',
+          AppThemeUtils.getColorByKey(
+            context,
+            _load == Load.loading
+                ? AppThemeKeys.mainButtonBgColor3.name
+                : AppThemeKeys.mainButtonBgColor.name,
           ),
-        ],
-      );
+          AppThemeUtils.getColorByKey(
+            context,
+            AppThemeKeys.mainButtonTextColor.name,
+          ),
+          _load == Load.loading,
+        ),
+      ),
+    ],
+  );
 }

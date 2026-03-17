@@ -5,11 +5,13 @@ import 'package:n42_wallet/features/wallet/pages/add_token/wallet_chain_add.dart
 import 'package:n42_wallet/features/wallet/pages/add_token/wallet_coin_add_all.dart';
 import 'package:n42_wallet/features/wallet/pages/ast_swap/swap_ast_home.dart';
 import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_swap_home.dart';
+import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_flow_utils.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_one.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_manage/wallet_list.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/features/wallet/widgets/create_wallet_button.dart';
 import 'package:n42_wallet/features/wallet/widgets/wallet_search_coin.dart';
+import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/widgets/sheet_bottom.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
@@ -33,7 +35,9 @@ void showAddressSheet(
         Divider(
           height: ScreenUtil().setWidth(1),
           color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.dividerColor.name),
+            context,
+            AppThemeKeys.dividerColor.name,
+          ),
         ),
         _WalletAddressList(walletValue: walletValue, ref: ref),
         CreateWalletButton(),
@@ -57,7 +61,9 @@ class _AddressSheetHeader extends StatelessWidget {
             S.of(context).g_key_13,
             style: TextStyle(
               color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
+                context,
+                AppThemeKeys.mainTextColor.name,
+              ),
               fontSize: ScreenUtil().setSp(36.0),
               fontWeight: FontWeight.bold,
             ),
@@ -73,7 +79,9 @@ class _AddressSheetHeader extends StatelessWidget {
             child: Icon(
               Icons.settings,
               color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainBlueColor.name),
+                context,
+                AppThemeKeys.mainBlueColor.name,
+              ),
             ),
           ),
         ],
@@ -83,10 +91,7 @@ class _AddressSheetHeader extends StatelessWidget {
 }
 
 class _WalletAddressList extends StatelessWidget {
-  const _WalletAddressList({
-    required this.walletValue,
-    required this.ref,
-  });
+  const _WalletAddressList({required this.walletValue, required this.ref});
 
   final WalletActionProvider walletValue;
   final WidgetRef ref;
@@ -128,8 +133,7 @@ class _WalletAddressList extends StatelessWidget {
                 children: [
                   if (wInfo.watchOnly)
                     Padding(
-                      padding:
-                          EdgeInsets.only(right: ScreenUtil().setWidth(8)),
+                      padding: EdgeInsets.only(right: ScreenUtil().setWidth(8)),
                       child: Icon(
                         Icons.visibility_outlined,
                         color: walletColor,
@@ -164,7 +168,9 @@ class _WalletAddressList extends StatelessWidget {
                     Icon(
                       Icons.lock,
                       color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainGreyColor.name),
+                        context,
+                        AppThemeKeys.mainGreyColor.name,
+                      ),
                     ),
                 ],
               ),
@@ -180,19 +186,12 @@ class _WalletAddressList extends StatelessWidget {
 
 /// [type]: 0=发送，1=接收
 void showSearchCoinSheet(BuildContext context, int type) {
-  sheetBottom(
-    context,
-    S.of(context).g_token_m_key_12,
-    WalletSearchCoin(type),
-  );
+  sheetBottom(context, S.of(context).g_token_m_key_12, WalletSearchCoin(type));
 }
 
 // ── 添加代币/链弹窗 ───────────────────────────────────────────────────────────
 
-Future<void> showAddTokenSheet(
-  BuildContext context,
-  WidgetRef ref,
-) async {
+Future<void> showAddTokenSheet(BuildContext context, WidgetRef ref) async {
   final wi = ref.read(wapBridgeProvider).walletInfo;
 
   if (wi.privateKey != null) {
@@ -200,9 +199,7 @@ Future<void> showAddTokenSheet(
     final cType = wi.coinInfo?.keys.toList()[0];
     final result = await Navigator.push<bool>(
       context,
-      MaterialPageRoute(
-        builder: (_) => WalletCoinAddAll("", coinType: cType),
-      ),
+      MaterialPageRoute(builder: (_) => WalletCoinAddAll("", coinType: cType)),
     );
     if (result == true) {
       ref.read(wapBridgeProvider).initWallet(shouldInitCoinInfo: true);
@@ -211,11 +208,7 @@ Future<void> showAddTokenSheet(
   }
 
   // 多链钱包：展示"添加代币 / 添加链"菜单
-  sheetBottom(
-    context,
-    "",
-    _AddTokenMenu(ref: ref),
-  );
+  sheetBottom(context, "", _AddTokenMenu(ref: ref));
 }
 
 class _AddTokenMenu extends StatelessWidget {
@@ -238,8 +231,7 @@ class _AddTokenMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final wi = ref.read(wapBridgeProvider).walletInfo;
-    final cType =
-        wi.privateKey != null ? wi.coinInfo?.keys.toList()[0] : null;
+    final cType = wi.privateKey != null ? wi.coinInfo?.keys.toList()[0] : null;
 
     return Container(
       alignment: Alignment.center,
@@ -264,10 +256,7 @@ class _AddTokenMenu extends StatelessWidget {
 }
 
 class _AddTokenMenuItem extends StatelessWidget {
-  const _AddTokenMenuItem({
-    required this.label,
-    required this.onTap,
-  });
+  const _AddTokenMenuItem({required this.label, required this.onTap});
 
   final String label;
   final VoidCallback onTap;
@@ -284,7 +273,9 @@ class _AddTokenMenuItem extends StatelessWidget {
           label,
           style: TextStyle(
             color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainBlueColor.name),
+              context,
+              AppThemeKeys.mainBlueColor.name,
+            ),
             fontSize: ScreenUtil().setSp(32),
           ),
         ),
@@ -346,7 +337,9 @@ class BackupReminderBanner extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemBgColor.name),
+          context,
+          AppThemeKeys.itemBgColor.name,
+        ),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16.0)),
       ),
       child: Column(
@@ -360,31 +353,45 @@ class BackupReminderBanner extends StatelessWidget {
               S.of(context).g_key_wallet_c35,
               style: TextStyle(
                 color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.errorTextColor.name),
+                  context,
+                  AppThemeKeys.errorTextColor.name,
+                ),
                 fontSize: ScreenUtil().setSp(28),
               ),
             ),
           ),
           InkWell(
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                settings: const RouteSettings(name: 'BackupOne'),
-                builder: (_) =>
-                    BackupOne(waValue.walletInfo, waValue.walletIndex),
-              ),
-            ),
+            onTap: () {
+              if (!walletHasBackupableMnemonic(waValue.walletInfo)) {
+                ToastUtils.show(walletBackupPhraseUnavailableMessage);
+                return;
+              }
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  settings: const RouteSettings(name: 'BackupOne'),
+                  builder: (_) =>
+                      BackupOne(waValue.walletInfo, waValue.walletIndex),
+                ),
+              );
+            },
             child: Padding(
-              padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
+              padding: EdgeInsets.symmetric(
+                vertical: ScreenUtil().setWidth(20),
+              ),
               child: Text(
                 S.of(context).g_key_wallet_c36,
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(30),
                   color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainBlueColor.name),
+                    context,
+                    AppThemeKeys.mainBlueColor.name,
+                  ),
                   decoration: TextDecoration.underline,
                   decorationColor: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainBlueColor.name),
+                    context,
+                    AppThemeKeys.mainBlueColor.name,
+                  ),
                 ),
               ),
             ),
@@ -404,18 +411,23 @@ class AddTokenFloatingIcon extends StatelessWidget {
       width: ScreenUtil().setWidth(50.0),
       height: ScreenUtil().setWidth(50.0),
       decoration: BoxDecoration(
-        borderRadius:
-            BorderRadius.all(Radius.circular(ScreenUtil().setWidth(50.0))),
+        borderRadius: BorderRadius.all(
+          Radius.circular(ScreenUtil().setWidth(50.0)),
+        ),
         border: Border.all(
           color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainBlueColor.name),
+            context,
+            AppThemeKeys.mainBlueColor.name,
+          ),
         ),
       ),
       alignment: Alignment.center,
       child: Icon(
         Icons.add,
         color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainBlueColor.name),
+          context,
+          AppThemeKeys.mainBlueColor.name,
+        ),
         size: ScreenUtil().setWidth(38.0),
       ),
     );

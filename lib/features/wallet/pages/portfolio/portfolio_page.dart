@@ -10,6 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/wallet/pages/portfolio/portfolio_holdings.dart';
 import 'package:n42_wallet/features/wallet/pages/portfolio/portfolio_models.dart';
 import 'package:n42_wallet/features/wallet/pages/portfolio/portfolio_movers.dart';
+import 'package:n42_wallet/features/wallet/pages/portfolio/portfolio_record_utils.dart';
 import 'package:n42_wallet/features/wallet/pages/portfolio/portfolio_widgets.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
@@ -28,50 +29,45 @@ class PortfolioPage extends ConsumerStatefulWidget {
 class _PortfolioPageState extends ConsumerState<PortfolioPage> {
   int _touchedIndex = -1;
 
-  // ─── Data helpers ────────────────────────────────────────────────────────
-
-  /// Extract a portable data record from any item in coinList.
-  CoinRecord? _record(dynamic item) {
-    if (item is! CoinModel) return null;
-    if (item.value <= 0) return null;
-    final symbol =
-        (item.coin['miniName'] ?? item.coin['coinType'] ?? '').toString();
-    if (symbol.isEmpty) return null;
-    return CoinRecord(
-      symbol: symbol,
-      name: (item.coin['name'] ?? symbol).toString(),
-      icon: (item.coin['icon'] ?? '').toString(),
-      value: item.value,
-      percentage: item.percentage,
-    );
-  }
-
   // ─── Build ────────────────────────────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {
     final waValue = ref.watch(wapBridgeProvider);
-    final bgColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name);
-    final itemBg =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name);
-    final textColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final accentColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+    final bgColor = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.backGroundColor.name,
+    );
+    final itemBg = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.itemBgColor.name,
+    );
+    final textColor = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.mainTextColor.name,
+    );
+    final accentColor = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.mainBlueColor.name,
+    );
 
-    final records = waValue.coinList
-        .map(_record)
-        .whereType<CoinRecord>()
-        .toList()
-      ..sort((a, b) => b.value.compareTo(a.value));
+    final records = sortPortfolioRecordsByValue(
+      waValue.coinList
+          .whereType<CoinModel>()
+          .map(portfolioRecordFromCoinModel)
+          .whereType<CoinRecord>(),
+    );
+    final valuedRecords = records.where((record) => record.value > 0).toList();
 
-    final totalValue = records.fold(0.0, (s, r) => s + r.value);
-    final total24hPnl =
-        records.fold(0.0, (s, r) => s + calcPnl(r.value, r.percentage));
+    final totalValue = valuedRecords.fold(0.0, (s, r) => s + r.value);
+    final total24hPnl = valuedRecords.fold(
+      0.0,
+      (s, r) => s + calcPnl(r.value, r.percentage),
+    );
     final previousTotal = totalValue - total24hPnl;
-    final total24hPct =
-        previousTotal > 0 ? total24hPnl / previousTotal * 100 : 0.0;
+    final total24hPct = previousTotal > 0
+        ? total24hPnl / previousTotal * 100
+        : 0.0;
 
     return Scaffold(
       backgroundColor: bgColor,
@@ -79,13 +75,20 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
         backgroundColor: itemBg,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_rounded, color: textColor, size: 20.sp),
+          icon: Icon(
+            Icons.arrow_back_ios_rounded,
+            color: textColor,
+            size: 20.sp,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           S.of(context).g_portfolio_title,
           style: TextStyle(
-              color: textColor, fontSize: 18.sp, fontWeight: FontWeight.bold),
+            color: textColor,
+            fontSize: 18.sp,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         centerTitle: false,
       ),
@@ -97,16 +100,39 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _buildSummaryCards(
-                      context, totalValue, total24hPnl, total24hPct,
-                      itemBg, textColor, accentColor),
+                    context,
+                    totalValue,
+                    total24hPnl,
+                    total24hPct,
+                    itemBg,
+                    textColor,
+                    accentColor,
+                  ),
                   SizedBox(height: 16.h),
-                  _buildPieSection(context, records, totalValue, itemBg,
-                      textColor, accentColor),
+                  _buildPieSection(
+                    context,
+                    valuedRecords,
+                    totalValue,
+                    itemBg,
+                    textColor,
+                    accentColor,
+                  ),
                   SizedBox(height: 16.h),
-                  _buildMoversSection(context, records, itemBg, textColor),
+                  _buildMoversSection(
+                    context,
+                    valuedRecords,
+                    itemBg,
+                    textColor,
+                  ),
                   SizedBox(height: 16.h),
-                  _buildHoldingsList(context, records, totalValue, itemBg,
-                      textColor, accentColor),
+                  _buildHoldingsList(
+                    context,
+                    records,
+                    totalValue,
+                    itemBg,
+                    textColor,
+                    accentColor,
+                  ),
                   SizedBox(height: 32.h),
                 ],
               ),
@@ -119,8 +145,11 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.donut_large_outlined,
-              size: 64.sp, color: textColor.withAlpha(80)),
+          Icon(
+            Icons.donut_large_outlined,
+            size: 64.sp,
+            color: textColor.withAlpha(80),
+          ),
           SizedBox(height: 12.h),
           Text(
             S.of(context).g_portfolio_no_assets,
@@ -161,8 +190,9 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
             label: S.of(context).g_portfolio_24h,
             value: fmtPnl(pnl24h),
             subValue: '${pnlPct >= 0 ? '+' : ''}${pnlPct.toStringAsFixed(2)}%',
-            valueColor:
-                pnl24h >= 0 ? const Color(0xFF22C55E) : const Color(0xFFEF4444),
+            valueColor: pnl24h >= 0
+                ? const Color(0xFF22C55E)
+                : const Color(0xFFEF4444),
             itemBg: itemBg,
             textColor: textColor,
             icon: pnl24h >= 0
@@ -184,6 +214,26 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
     Color textColor,
     Color accentColor,
   ) {
+    if (records.isEmpty) {
+      return _sectionContainer(
+        itemBg,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _sectionTitle(S.of(context).g_portfolio_allocation, textColor),
+            SizedBox(height: 16.h),
+            Text(
+              S.of(context).g_portfolio_no_assets,
+              style: TextStyle(
+                fontSize: 13.sp,
+                color: textColor.withAlpha(160),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     const maxSlices = 8;
     final sliceRecords = records.take(maxSlices).toList();
     final othersValue = records.length > maxSlices
@@ -198,10 +248,11 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
         radius: isTouched ? 70.r : 56.r,
         title: isTouched ? '${pct.toStringAsFixed(1)}%' : '',
         titleStyle: TextStyle(
-            fontSize: 12.sp,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-            shadows: const [Shadow(blurRadius: 4, color: Colors.black26)]),
+          fontSize: 12.sp,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+          shadows: const [Shadow(blurRadius: 4, color: Colors.black26)],
+        ),
         titlePositionPercentageOffset: 0.6,
       );
     }
@@ -227,7 +278,8 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
       highlighted = sliceRecords[_touchedIndex];
     }
 
-    return _sectionContainer(itemBg,
+    return _sectionContainer(
+      itemBg,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -249,19 +301,23 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
                           centerSpaceRadius: 52.r,
                           sectionsSpace: 2,
                           pieTouchData: PieTouchData(
-                            touchCallback: (FlTouchEvent event,
-                                PieTouchResponse? response) {
-                              setState(() {
-                                if (!event.isInterestedForInteractions ||
-                                    response == null ||
-                                    response.touchedSection == null) {
-                                  _touchedIndex = -1;
-                                } else {
-                                  _touchedIndex = response
-                                      .touchedSection!.touchedSectionIndex;
-                                }
-                              });
-                            },
+                            touchCallback:
+                                (
+                                  FlTouchEvent event,
+                                  PieTouchResponse? response,
+                                ) {
+                                  setState(() {
+                                    if (!event.isInterestedForInteractions ||
+                                        response == null ||
+                                        response.touchedSection == null) {
+                                      _touchedIndex = -1;
+                                    } else {
+                                      _touchedIndex = response
+                                          .touchedSection!
+                                          .touchedSectionIndex;
+                                    }
+                                  });
+                                },
                           ),
                         ),
                       ),
@@ -285,8 +341,9 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
                     children: [
                       for (var i = 0; i < sliceRecords.length; i++)
                         LegendItem(
-                          color: portfolioSliceColors[
-                              i % portfolioSliceColors.length],
+                          color:
+                              portfolioSliceColors[i %
+                                  portfolioSliceColors.length],
                           symbol: sliceRecords[i].symbol.toUpperCase(),
                           pct: totalValue > 0
                               ? sliceRecords[i].value / totalValue * 100
@@ -329,14 +386,14 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
           Text(
             highlighted.symbol.toUpperCase(),
             style: TextStyle(
-                fontSize: 13.sp,
-                fontWeight: FontWeight.bold,
-                color: textColor),
+              fontSize: 13.sp,
+              fontWeight: FontWeight.bold,
+              color: textColor,
+            ),
           ),
           Text(
             fmtUsd(highlighted.value),
-            style: TextStyle(
-                fontSize: 11.sp, color: textColor.withAlpha(178)),
+            style: TextStyle(fontSize: 11.sp, color: textColor.withAlpha(178)),
           ),
         ],
       );
@@ -346,15 +403,15 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
       children: [
         Text(
           S.of(context).g_portfolio_pie_total,
-          style: TextStyle(
-              fontSize: 12.sp, color: textColor.withAlpha(153)),
+          style: TextStyle(fontSize: 12.sp, color: textColor.withAlpha(153)),
         ),
         Text(
           fmtUsd(totalValue),
           style: TextStyle(
-              fontSize: 13.sp,
-              fontWeight: FontWeight.bold,
-              color: textColor),
+            fontSize: 13.sp,
+            fontWeight: FontWeight.bold,
+            color: textColor,
+          ),
         ),
       ],
     );
@@ -379,7 +436,10 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
     return Text(
       title,
       style: TextStyle(
-          fontSize: 15.sp, fontWeight: FontWeight.bold, color: textColor),
+        fontSize: 15.sp,
+        fontWeight: FontWeight.bold,
+        color: textColor,
+      ),
     );
   }
 
@@ -413,7 +473,8 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
 
     if (gainers.isEmpty && losers.isEmpty) return const SizedBox();
 
-    return _sectionContainer(itemBg,
+    return _sectionContainer(
+      itemBg,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -452,7 +513,8 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
     Color textColor,
     Color accentColor,
   ) {
-    return _sectionContainer(itemBg,
+    return _sectionContainer(
+      itemBg,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -467,8 +529,11 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
               fmtUsd: fmtUsd,
               accentColor: accentColor,
               textColor: textColor,
-              sliceColor: portfolioSliceColors[
-                  i.clamp(0, portfolioSliceColors.length - 1)],
+              sliceColor:
+                  portfolioSliceColors[i.clamp(
+                    0,
+                    portfolioSliceColors.length - 1,
+                  )],
             ),
             if (i < records.length - 1)
               Divider(

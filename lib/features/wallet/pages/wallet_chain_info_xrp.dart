@@ -11,6 +11,7 @@ import 'package:n42_wallet/features/wallet/api/chain_api/xrp_api.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/pages/transactions/transaction_history_list.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_one.dart';
+import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_flow_utils.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_chain_info_sync.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_chain_info_xrp_actions.dart';
 import 'package:n42_wallet/features/wallet/utils/browser/browser_address.dart';
@@ -34,8 +35,7 @@ class WalletChainInfoXRP extends ConsumerStatefulWidget {
   const WalletChainInfoXRP(this.coinModel, {super.key});
 
   @override
-  ConsumerState<WalletChainInfoXRP> createState() =>
-      _WalletChainInfoXRPState();
+  ConsumerState<WalletChainInfoXRP> createState() => _WalletChainInfoXRPState();
 }
 
 class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
@@ -96,6 +96,10 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
   @override
   Future<bool> ensureWalletBackedUp() async {
     if (_walletProvider.walletInfo.password != '') return true;
+    if (!walletHasBackupableMnemonic(_walletProvider.walletInfo)) {
+      ToastUtils.show(walletBackupPhraseUnavailableMessage);
+      return false;
+    }
     final flag = await tipsDialog7(context);
     if (!mounted) return false;
     if (flag == true) {
@@ -104,7 +108,9 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
         MaterialPageRoute(
           settings: const RouteSettings(name: 'BackupOne'),
           builder: (context) => BackupOne(
-              _walletProvider.walletInfo, _walletProvider.walletIndex),
+            _walletProvider.walletInfo,
+            _walletProvider.walletIndex,
+          ),
         ),
       );
     }
@@ -126,19 +132,15 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
   }
 
   @override
-  Future<void> handleSend({bool closeSheet = false}) => _guardedAction(
-        () async {
-          await navigateToXrpSend();
-          await getTransactionData(Load.refresh);
-        },
-        closeSheet: closeSheet,
-      );
+  Future<void> handleSend({bool closeSheet = false}) =>
+      _guardedAction(() async {
+        await navigateToXrpSend();
+        await getTransactionData(Load.refresh);
+      }, closeSheet: closeSheet);
 
   @override
-  Future<void> handleReceive({bool closeSheet = false}) => _guardedAction(
-        () => navigateToReceive(),
-        closeSheet: closeSheet,
-      );
+  Future<void> handleReceive({bool closeSheet = false}) =>
+      _guardedAction(() => navigateToReceive(), closeSheet: closeSheet);
 
   @override
   Future<void> changeNet(bool isTest, Load loadType) async {
@@ -164,8 +166,7 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
     _initData();
     _scrollController.addListener(_onScroll);
     _eventBusFn = eventBus.on().listen((event) async {
-      if (event is EventPublic &&
-          event.type == EventPublicType.transferOk) {
+      if (event is EventPublic && event.type == EventPublicType.transferOk) {
         _refreshTransactions(Load.refresh);
         await widget.coinModel.getBalance();
         setState(() {});
@@ -228,8 +229,9 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
   }
 
   Future<void> _getServiceState() async {
-    final MessageModel mm = await XrpApi()
-        .getServerStateXrp(isTest: widget.coinModel.isTest);
+    final MessageModel mm = await XrpApi().getServerStateXrp(
+      isTest: widget.coinModel.isTest,
+    );
     if (!mounted) return;
     if (mm.error == false) {
       widget.coinModel.other?.setServiceState(mm.data);
@@ -306,10 +308,8 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
                       coinType: widget.coinModel.coin['coinType'],
                       balanceStr:
                           '${widget.coinModel.balanceStringAll()} ${widget.coinModel.coin['unit'].toString().toUpperCase()}',
-                      balanceDollarStr:
-                          '\$${widget.coinModel.valueString()}',
-                      marketValueStr:
-                          '\$${widget.coinModel.coinPriceString()}',
+                      balanceDollarStr: '\$${widget.coinModel.valueString()}',
+                      marketValueStr: '\$${widget.coinModel.coinPriceString()}',
                       lockAmountStr:
                           '${toEther((widget.coinModel.other?.getLockAmount ?? 0).toString(), widget.coinModel.coin['decimals'])} ${CoinType.XRP.name}',
                       xmlLockInfoTap: showXMLLockAmountWidget,
@@ -319,7 +319,8 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => BrowserPage(browserUrl)),
+                            builder: (context) => BrowserPage(browserUrl),
+                          ),
                         );
                       },
                       tokenAddTap: null,
@@ -360,16 +361,13 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
 
   Widget _transactionsWidget() {
     if (transactionList.isEmpty) {
-      return const IntrinsicHeight(
-        child: Center(child: EmptyView()),
-      );
+      return const IntrinsicHeight(child: Center(child: EmptyView()));
     }
 
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      padding:
-          EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
       itemCount: transactionList.length + 1,
       itemBuilder: (context, int index) {
         if (index == transactionList.length) {
@@ -378,8 +376,9 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>
-                        TransactionHistoryList(widget.coinModel)),
+                  builder: (context) =>
+                      TransactionHistoryList(widget.coinModel),
+                ),
               );
             },
             child: Container(
@@ -397,7 +396,8 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
           );
         }
 
-        final isBtc = widget.coinModel.coin['blockchainType'] ==
+        final isBtc =
+            widget.coinModel.coin['blockchainType'] ==
             BlockchainType.Bitcoin.name;
         return WalletChainInfoTransactionsItem(
           coinModel: widget.coinModel,

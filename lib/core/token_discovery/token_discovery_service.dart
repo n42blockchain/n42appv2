@@ -54,8 +54,8 @@ class TokenDiscoveryService {
   /// Scan multiple chains for unknown tokens.
   ///
   /// [addressByChain] maps internal coinType → wallet address.
-  /// [knownContracts]  contract addresses already in the wallet (lower-cased).
-  /// [ignoredContracts] contracts the user previously dismissed (lower-cased).
+  /// [knownContracts]  contract addresses already in the wallet.
+  /// [ignoredContracts] contracts the user previously dismissed.
   ///
   /// Returns a deduplicated list of [DiscoveredToken] with non-zero balances,
   /// sorted by chain then symbol.
@@ -74,7 +74,11 @@ class TokenDiscoveryService {
       try {
         List<DiscoveredToken> chainResult;
         if (coinType == 'SOL') {
-          chainResult = await _scanSolana(address, knownContracts, ignoredContracts);
+          chainResult = await _scanSolana(
+            address,
+            knownContracts,
+            ignoredContracts,
+          );
         } else if (_evmExplorers.containsKey(coinType)) {
           chainResult = await _scanEvm(
             coinType: coinType,
@@ -149,36 +153,46 @@ class TokenDiscoveryService {
     final candidates = <_EvmCandidate>[];
 
     for (final normalized in txList) {
-      final contract = (explorerString(
-                normalized,
-                const ['contractAddress', 'tokenAddr', 'token'],
-              ) ??
-              '')
-          .toLowerCase();
+      final contract =
+          (explorerString(normalized, const [
+                    'contractAddress',
+                    'tokenAddr',
+                    'token',
+                  ]) ??
+                  '')
+              .trim();
       if (contract.isEmpty ||
-          !seen.add(contract) ||
-          knownContracts.contains(contract) ||
-          ignoredContracts.contains(contract)) {
+          !seen.add(contract.toLowerCase()) ||
+          matchesTrackedContract(
+            coinType: coinType,
+            contract: contract,
+            trackedContracts: knownContracts,
+          ) ||
+          matchesTrackedContract(
+            coinType: coinType,
+            contract: contract,
+            trackedContracts: ignoredContracts,
+          )) {
         continue;
       }
 
-      candidates.add(_EvmCandidate(
-        contract: explorerString(
-              normalized,
-              const ['contractAddress', 'tokenAddr', 'token'],
-            ) ??
-            '',
-        symbol: explorerString(normalized, const ['tokenSymbol']) ?? '',
-        name: explorerString(normalized, const ['tokenName']) ?? '',
-        decimals: int.tryParse(
-              explorerString(
-                    normalized,
-                    const ['tokenDecimal', 'tokenDecimals', 'decimals'],
-                  ) ??
-                  '0',
-            ) ??
-            0,
-      ));
+      candidates.add(
+        _EvmCandidate(
+          contract: contract,
+          symbol: explorerString(normalized, const ['tokenSymbol']) ?? '',
+          name: explorerString(normalized, const ['tokenName']) ?? '',
+          decimals:
+              int.tryParse(
+                explorerString(normalized, const [
+                      'tokenDecimal',
+                      'tokenDecimals',
+                      'decimals',
+                    ]) ??
+                    '0',
+              ) ??
+              0,
+        ),
+      );
       if (candidates.length >= 30) break; // safety cap
     }
 
@@ -189,7 +203,11 @@ class TokenDiscoveryService {
     for (var i = 0; i < candidates.length; i += 5) {
       final batch = candidates.sublist(i, min(i + 5, candidates.length));
       final futures = batch.map(
-        (c) => _verifyEvmBalance(coinType: coinType, address: address, candidate: c),
+        (c) => _verifyEvmBalance(
+          coinType: coinType,
+          address: address,
+          candidate: c,
+        ),
       );
       final batchResults = await Future.wait(futures, eagerError: false);
       results.addAll(batchResults.nonNulls);
@@ -206,7 +224,9 @@ class TokenDiscoveryService {
   }) async {
     try {
       // balanceOf(address) selector: 0x70a08231
-      final stripped = address.replaceFirst(RegExp(r'^0x', caseSensitive: false), '').toLowerCase();
+      final stripped = address
+          .replaceFirst(RegExp(r'^0x', caseSensitive: false), '')
+          .toLowerCase();
       final calldata = '0x70a08231${stripped.padLeft(64, '0')}';
 
       final result = await EthAPI()
@@ -225,7 +245,8 @@ class TokenDiscoveryService {
       final hex = result.valueOrNull?.toString() ?? '';
       if (!hex.startsWith('0x') || hex.length <= 2) return null;
 
-      final balance = BigInt.tryParse(hex.substring(2), radix: 16) ?? BigInt.zero;
+      final balance =
+          BigInt.tryParse(hex.substring(2), radix: 16) ?? BigInt.zero;
       if (balance == BigInt.zero) return null;
 
       return DiscoveredToken(
@@ -252,15 +273,11 @@ class TokenDiscoveryService {
     Set<String> ignoredContracts,
   ) async {
     final result = await SolApi()
-        .baseRPCSol(
-          'getTokenAccountsByOwner',
-          [
-            address,
-            {'programId': _solTokenProgram},
-            {'encoding': 'jsonParsed'},
-          ],
-          isTest: false,
-        )
+        .baseRPCSol('getTokenAccountsByOwner', [
+          address,
+          {'programId': _solTokenProgram},
+          {'encoding': 'jsonParsed'},
+        ], isTest: false)
         .timeout(const Duration(seconds: 12));
 
     if (!result.isSuccess || result.valueOrNull == null) return [];
@@ -288,8 +305,20 @@ class TokenDiscoveryService {
 
       final mint = info['mint'] as String? ?? '';
       if (mint.isEmpty) return null;
-      if (knownContracts.contains(mint)) return null;
-      if (ignoredContracts.contains(mint)) return null;
+      if (matchesTrackedContract(
+        coinType: 'SOL',
+        contract: mint,
+        trackedContracts: knownContracts,
+      )) {
+        return null;
+      }
+      if (matchesTrackedContract(
+        coinType: 'SOL',
+        contract: mint,
+        trackedContracts: ignoredContracts,
+      )) {
+        return null;
+      }
 
       final tokenAmount = info['tokenAmount'] as Map<String, dynamic>? ?? {};
       final amountStr = tokenAmount['amount'] as String? ?? '0';
@@ -311,6 +340,32 @@ class TokenDiscoveryService {
     } catch (_) {
       return null;
     }
+  }
+
+  @visibleForTesting
+  static bool matchesTrackedContract({
+    required String coinType,
+    required String contract,
+    required Set<String> trackedContracts,
+  }) {
+    final trimmedContract = contract.trim();
+    if (trimmedContract.isEmpty) {
+      return false;
+    }
+
+    if (coinType == 'SOL') {
+      final legacyLowercase = trimmedContract.toLowerCase();
+      return trackedContracts.contains(trimmedContract) ||
+          trackedContracts.contains(legacyLowercase);
+    }
+
+    final normalizedContract = trimmedContract.toLowerCase();
+    for (final tracked in trackedContracts) {
+      if (tracked.trim().toLowerCase() == normalizedContract) {
+        return true;
+      }
+    }
+    return false;
   }
 }
 

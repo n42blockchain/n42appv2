@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/component/enums/load.dart';
 import 'package:n42_wallet/features/utils/regular.dart';
@@ -8,6 +6,7 @@ import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_manage/keystore/export_keystore_desc.dart';
+import 'package:n42_wallet/features/wallet/pages/wallet_manage/keystore/keystore_export_utils.dart';
 import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
@@ -23,7 +22,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/features/wallet/widgets/ens_address_display.dart';
-import 'package:web3dart/web3dart.dart';
 
 part 'one_coin_wallet_manage_widgets.dart';
 
@@ -31,13 +29,20 @@ class OneCoinWalletManage extends ConsumerStatefulWidget {
   final WalletInfo walletInfo;
   final CoinModel model;
   final int walletIndex;
-  const OneCoinWalletManage({required this.walletInfo, required this.model,required this.walletIndex,super.key});
+  const OneCoinWalletManage({
+    required this.walletInfo,
+    required this.model,
+    required this.walletIndex,
+    super.key,
+  });
 
   @override
-  ConsumerState<OneCoinWalletManage> createState() => _OneCoinWalletManageState();
+  ConsumerState<OneCoinWalletManage> createState() =>
+      _OneCoinWalletManageState();
 }
 
-class _OneCoinWalletManageState extends ConsumerState<OneCoinWalletManage> with _OneCoinWalletManageWidgetsMixin {
+class _OneCoinWalletManageState extends ConsumerState<OneCoinWalletManage>
+    with _OneCoinWalletManageWidgetsMixin {
   @override
   String? mnemonic;
   @override
@@ -96,10 +101,14 @@ class _OneCoinWalletManageState extends ConsumerState<OneCoinWalletManage> with 
     _coinInfo['pathList'] = pathList;
     _coinInfo['pathIndex'] = pathIndex;
     _coinInfo['addrType'] = addrType;
-    await ref.read(wapBridgeProvider).saveWalletInfo(widget.walletInfo, widget.walletIndex);
+    await ref
+        .read(wapBridgeProvider)
+        .saveWalletInfo(widget.walletInfo, widget.walletIndex);
     if (!mounted) return;
     if (ref.read(wapBridgeProvider).walletIndex == widget.walletIndex) {
-      ref.read(wapBridgeProvider).reBuildCoin(widget.walletInfo, widget.model.coin['coinType']);
+      ref
+          .read(wapBridgeProvider)
+          .reBuildCoin(widget.walletInfo, widget.model.coin['coinType']);
     }
     Navigator.pop(context, true);
   }
@@ -109,20 +118,28 @@ class _OneCoinWalletManageState extends ConsumerState<OneCoinWalletManage> with 
     setState(() => load = Load.loading);
     await Future.delayed(const Duration(milliseconds: 300));
     if (!mounted) return;
-    password ??= widget.walletInfo.password ?? "";
-    final keystoreJson = await Trustdart().getKeyStore(
-      widget.model.coin['coinType']!,
-      getPathWithIndex(coinPath!, _coinInfo['pathIndex'] ?? 0),
-      _coinInfo['addrType'],
-      password,
-      mnemonic: mnemonic ?? "",
-      pk: pk ?? "",
-    );
-    if (!mounted) return;
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => ExportKeystoreDesc(keystoreJson: keystoreJson)),
-    );
+    try {
+      password ??= widget.walletInfo.password ?? "";
+      final keystoreJson = await Trustdart().getKeyStore(
+        widget.model.coin['coinType']!,
+        getPathWithIndex(coinPath!, _coinInfo['pathIndex'] ?? 0),
+        _coinInfo['addrType'],
+        password,
+        mnemonic: mnemonic ?? "",
+        pk: pk ?? "",
+      );
+      if (!mounted) return;
+      final normalized = normalizeExportableKeystore(keystoreJson);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => ExportKeystoreDesc(keystoreJson: normalized),
+        ),
+      );
+    } catch (_) {
+      if (!mounted) return;
+      ToastUtils.show(S.of(context).g_key_keystore_21);
+    }
   }
 
   @override
@@ -133,7 +150,9 @@ class _OneCoinWalletManageState extends ConsumerState<OneCoinWalletManage> with 
       final isSelected = widget.model.addrType == key;
       final textColor = AppThemeUtils.getColorByKey(
         context,
-        isSelected ? AppThemeKeys.mainButtonBgColor.name : AppThemeKeys.mainTextColor.name,
+        isSelected
+            ? AppThemeKeys.mainButtonBgColor.name
+            : AppThemeKeys.mainTextColor.name,
       );
       return InkWell(
         onTap: () async {
@@ -153,19 +172,21 @@ class _OneCoinWalletManageState extends ConsumerState<OneCoinWalletManage> with 
           alignment: Alignment.center,
           child: Text(
             key,
-            style: TextStyle(color: textColor, fontSize: ScreenUtil().setSp(32.0)),
+            style: TextStyle(
+              color: textColor,
+              fontSize: ScreenUtil().setSp(32.0),
+            ),
           ),
         ),
       );
     }).toList();
     sheetBottom(context, "", Column(children: children));
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(
-        text: S.of(context).g_key_110,
-      ),
+      appBar: AppBarWidget(text: S.of(context).g_key_110),
       body: SafeArea(
         child: Stack(
           children: [
@@ -174,8 +195,7 @@ class _OneCoinWalletManageState extends ConsumerState<OneCoinWalletManage> with 
                 child: Column(
                   children: [
                     _buildWalletInfo(),
-                    if(widget.walletInfo.privateKey ==null)
-                    _buildExport(),
+                    if (widget.walletInfo.privateKey == null) _buildExport(),
                   ],
                 ),
               ),
@@ -195,8 +215,15 @@ class _OneCoinWalletManageState extends ConsumerState<OneCoinWalletManage> with 
                     height: ScreenUtil().setWidth(148),
                     width: double.infinity,
                     padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-                    child: buttonStyle2(context, saveCoin, S.of(context).g_key_115),
+                    color: AppThemeUtils.getColorByKey(
+                      context,
+                      AppThemeKeys.backGroundColor.name,
+                    ),
+                    child: buttonStyle2(
+                      context,
+                      saveCoin,
+                      S.of(context).g_key_115,
+                    ),
                   ),
                 ],
               ),

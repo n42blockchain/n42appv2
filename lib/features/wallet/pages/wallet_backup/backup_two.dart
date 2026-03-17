@@ -3,6 +3,7 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/models/mess_mnemonic_words_item.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
+import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_flow_utils.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_three.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/features/widgets/button_widget.dart';
@@ -36,7 +37,7 @@ class _BackupTwoState extends State<BackupTwo> {
   @override
   void initState() {
     super.initState();
-    mnemonicWordsList = widget.walletInfo.mnemonic!.split(" ");
+    mnemonicWordsList = parseBackupMnemonicWords(widget.walletInfo.mnemonic);
     final list = dataUtils.shuffle(mnemonicWordsList);
     messMnemonicWordsList = [
       for (int i = 0; i < list.length; i++)
@@ -45,6 +46,10 @@ class _BackupTwoState extends State<BackupTwo> {
   }
 
   void _onConfirmTap() {
+    if (mnemonicWordsList.isEmpty) {
+      ToastUtils.show(walletBackupPhraseUnavailableMessage);
+      return;
+    }
     if (isCanClick) {
       Navigator.pushReplacement(
         context,
@@ -60,9 +65,8 @@ class _BackupTwoState extends State<BackupTwo> {
 
   void _removeUserWord(int index) {
     final item = userHandList[index];
-    messMnemonicWordsList
-        .firstWhere((e) => e.index == item.index)
-        .isSelected = false;
+    messMnemonicWordsList.firstWhere((e) => e.index == item.index).isSelected =
+        false;
     userHandList.removeAt(index);
     setState(() {});
   }
@@ -100,7 +104,9 @@ class _BackupTwoState extends State<BackupTwo> {
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(50.0),
                           color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.mainTextColor.name),
+                            context,
+                            AppThemeKeys.mainTextColor.name,
+                          ),
                         ),
                       ),
                     ),
@@ -122,7 +128,9 @@ class _BackupTwoState extends State<BackupTwo> {
                   Container(
                     padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
                     color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.backGroundColor.name),
+                      context,
+                      AppThemeKeys.backGroundColor.name,
+                    ),
                     height: ScreenUtil().setWidth(148),
                     child: buttonStyle6(
                       context,
@@ -135,7 +143,9 @@ class _BackupTwoState extends State<BackupTwo> {
                             : AppThemeKeys.mainButtonBgColor3.name,
                       ),
                       AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainButtonTextColor.name),
+                        context,
+                        AppThemeKeys.mainButtonTextColor.name,
+                      ),
                       false,
                     ),
                   ),
@@ -167,7 +177,9 @@ class _BackupTwoState extends State<BackupTwo> {
     return Container(
       decoration: BoxDecoration(
         color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemBgColor8.name),
+          context,
+          AppThemeKeys.itemBgColor8.name,
+        ),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8.0)),
       ),
     );
@@ -182,7 +194,9 @@ class _BackupTwoState extends State<BackupTwo> {
         Container(
           decoration: BoxDecoration(
             color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainButtonBgColor.name),
+              context,
+              AppThemeKeys.mainButtonBgColor.name,
+            ),
             borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8.0)),
           ),
           child: Center(
@@ -191,7 +205,9 @@ class _BackupTwoState extends State<BackupTwo> {
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainButtonTextColor.name),
+                  context,
+                  AppThemeKeys.mainButtonTextColor.name,
+                ),
                 fontSize: ScreenUtil().setSp(28.0),
               ),
             ),
@@ -203,15 +219,18 @@ class _BackupTwoState extends State<BackupTwo> {
             right: 0,
             child: Transform.translate(
               offset: Offset(
-                  ScreenUtil().setWidth(10.0), -ScreenUtil().setWidth(10.0)),
+                ScreenUtil().setWidth(10.0),
+                -ScreenUtil().setWidth(10.0),
+              ),
               child: GestureDetector(
                 onTap: () => _removeUserWord(index),
                 child: Container(
                   width: ScreenUtil().setWidth(36.0),
                   height: ScreenUtil().setWidth(36.0),
                   decoration: BoxDecoration(
-                    borderRadius:
-                        BorderRadius.circular(ScreenUtil().setWidth(18.0)),
+                    borderRadius: BorderRadius.circular(
+                      ScreenUtil().setWidth(18.0),
+                    ),
                     color: Colors.white,
                   ),
                   child: Icon(
@@ -245,11 +264,12 @@ class _BackupTwoState extends State<BackupTwo> {
                 color: item.isSelected
                     ? Colors.blueAccent
                     : AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainGreyColor.name),
+                        context,
+                        AppThemeKeys.mainGreyColor.name,
+                      ),
                 width: 1,
               ),
-              borderRadius:
-                  BorderRadius.circular(ScreenUtil().setWidth(8.0)),
+              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8.0)),
             ),
             child: Center(
               child: Text(
@@ -259,7 +279,9 @@ class _BackupTwoState extends State<BackupTwo> {
                   color: item.isSelected
                       ? Colors.blueAccent
                       : AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.ff444444.name),
+                          context,
+                          AppThemeKeys.ff444444.name,
+                        ),
                   fontSize: ScreenUtil().setSp(28.0),
                 ),
               ),

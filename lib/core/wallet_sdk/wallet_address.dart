@@ -10,6 +10,11 @@ class WalletAddress {
 
   WalletAddress(this._trustdart);
 
+  String _firstNonEmptyAddress(Map<String, String> addresses) {
+    return addresses['legacy'] ??
+        (addresses.isNotEmpty ? addresses.values.first : '');
+  }
+
   /// Generate a [WalletAccount] for the specified coin.
   ///
   /// Derives the address from [mnemonic] (HD wallet) or [privateKey] (import).
@@ -46,13 +51,21 @@ class WalletAddress {
       final addresses = <String, String>{};
       for (final entry in result.entries) {
         if (entry.value is String) {
-          addresses[entry.key.toString()] = entry.value as String;
+          final value = (entry.value as String).trim();
+          if (value.isNotEmpty) {
+            addresses[entry.key.toString()] = value;
+          }
         }
       }
 
-      // Primary address: prefer 'legacy', fall back to first available
-      final primaryAddress = addresses['legacy'] ??
-          (addresses.isNotEmpty ? addresses.values.first : '');
+      // Primary address: prefer 'legacy', fall back to first available.
+      final primaryAddress = _firstNonEmptyAddress(addresses);
+      if (primaryAddress.isEmpty) {
+        throw WalletException(
+          message: 'Failed to generate address for $coin',
+          code: 'ADDRESS_GENERATION_FAILED',
+        );
+      }
 
       return WalletAccount(
         coin: coin,
@@ -90,10 +103,7 @@ class WalletAddress {
     required String mintAddress,
   }) async {
     try {
-      final result = await _trustdart.getPubKeySOL(
-        walletAddress,
-        mintAddress,
-      );
+      final result = await _trustdart.getPubKeySOL(walletAddress, mintAddress);
       if (result.isEmpty) {
         throw WalletException(
           message: 'Failed to derive Solana token account',

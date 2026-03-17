@@ -251,6 +251,124 @@
 - 性能或启动路径改动：
   - 核对 `benchmark_results/`
 
+## Current Coverage Snapshot (2026-03-17)
+
+- 当前状态：
+  - Phase 1 已完成两批，启动 / 安全存储 / 登录清理主链路已复核。
+  - Phase 2 已完成五批，network / proxy / browser / bridge / 第三方 fallback 主路径已复核。
+  - Phase 3 已完成四批，但 wallet core 仍未收口；`core/wallet_sdk/`、`core/token_discovery/` 仍属低覆盖区域。
+  - Phase 4 已完成 send / transaction 主线四批，交易详情、历史、retry 主路径已复核，但大量钱包页面子模块仍未系统审查。
+  - Phase 5 已完成 WalletConnect 第一批，browser / bridge / dapp 安全周边仍需补扫残余目录。
+  - Phase 6 仅完成 `features/mining_v1/api/mining_api.dart` 一批，挖矿主线仍属大面积未覆盖。
+  - Phase 7 已完成 loyalty / airdrop / home setting 五批，外围业务仍有若干目录未完整复核。
+  - Phase 8 尚未启动。
+- 覆盖判断：
+  - 主钱包高风险主线已从“基线审计”推进到“部分闭环”，但还不能称为“主钱包完成”。
+  - 当前最明显空白区仍然是 `core/wallet_sdk/`、大量 wallet 子页面、`features/mining_v1/`、`features/mining_v2/`、`plugins/flutter_mining/`。
+
+## Remaining Execution Map
+
+### P0: Wallet Core Residual
+
+- `lib/core/wallet_sdk/`
+  - `wallet_key_manager.dart`
+  - `wallet_signer.dart`
+  - `wallet_address.dart`
+  - `models/*.dart`
+- `lib/core/token_discovery/`
+- `lib/features/wallet/api/chain_api/` 中尚未单独复核的链适配器
+- `lib/features/wallet/api/token*/`
+- `lib/features/wallet/utils/chain/`
+- `lib/features/wallet/utils/transaction/`
+- 退出标准：
+  - 签名、导入导出、地址生成、token 发现、链切换与精度换算至少完成一次系统审查。
+  - 对原生 / token / 测试网 / fallback 关键边界补足定向回归测试。
+
+### P0: Wallet UX Residual
+
+- `lib/features/wallet/pages/aa/`
+- `lib/features/wallet/pages/add_token/`
+- `lib/features/wallet/pages/address_book/`
+- `lib/features/wallet/pages/ast_swap/`
+- `lib/features/wallet/pages/batch_transfer/`
+- `lib/features/wallet/pages/create_wallet/`
+- `lib/features/wallet/pages/dex_swap/`
+- `lib/features/wallet/pages/ens/`
+- `lib/features/wallet/pages/face_matching/`
+- `lib/features/wallet/pages/gas/`
+- `lib/features/wallet/pages/market/`
+- `lib/features/wallet/pages/nft/`
+- `lib/features/wallet/pages/payment_code/`
+- `lib/features/wallet/pages/portfolio/`
+- `lib/features/wallet/pages/staking_btc/`
+- `lib/features/wallet/pages/token_discovery/`
+- `lib/features/wallet/pages/wallet_backup/`
+- `lib/features/wallet/pages/wallet_manage/`
+- `lib/features/wallet/provider/` 中尚未随 send / transaction 复核覆盖到的 provider
+- 退出标准：
+  - 每个子目录至少完成一轮“状态机 / 表单 / fallback / 错误态”检查。
+  - 发现真实行为问题时，必须连同页面级或 provider 级回归一起落地。
+
+### P1: DApp / Browser / WalletConnect Residual
+
+- `lib/features/browser/` 中未随收藏写路径复核到的 provider / page / widget
+- `lib/features/wallet_connect/` 中未随 URI 校验复核到的会话恢复、事件分发、签名请求展示
+- `lib/features/bridge/` 中 `_bridge_persistence.dart`、history / UI 页面
+- `lib/core/security/dapp_security_service.dart`
+- `lib/core/security/tx_simulation_service.dart`
+- 退出标准：
+  - 非法 URI、会话恢复失败、签名拒绝、链不匹配、桥接持久化错误路径均有明确结论。
+
+### P1: Mining Completion
+
+- `lib/features/mining/`
+- `lib/features/mining_v1/` 除 `api/mining_api.dart` 外的页面、provider、model、service
+- `lib/features/mining_v2/`
+- `plugins/flutter_mining/lib/`
+- `plugins/flutter_mining/android/`
+- `plugins/flutter_mining/ios/`
+- 退出标准：
+  - Flutter/provider 层与 plugin/native 层的参数契约、状态同步、网络切换、后台行为至少完成一次贯通审查。
+  - plugin 侧 `flutter test` / `flutter analyze` 必须单独跑通一次。
+
+### P2: Peripheral Residual
+
+- `lib/features/home/` 中除 setting 已覆盖路径外的剩余页面
+- `lib/features/profile/`
+- `lib/features/settings/`
+- `lib/features/notification/`
+- `lib/features/earn/`
+- `lib/features/news/`
+- `lib/features/staking/`
+- `lib/features/hardware_wallet/`
+- 退出标准：
+  - 对用户可直接触达的列表页、详情页、绑定页完成错误态与首屏状态复核。
+
+### Phase 8: Closure
+
+- 汇总 `test/` 里的新增回归入口并去重。
+- 对已修复主路径做一次跨阶段定向验证。
+- 更新 `docs/`、`audit_results/` 和跨仓状态表。
+- 输出“已完成 / 未完成 / 剩余风险 / 建议后续批次”。
+
+## Remaining Batch Plan
+
+1. 批次 A：`core/wallet_sdk/` + 对应 `test/core/` 回归。
+2. 批次 B：`core/token_discovery/`、wallet chain adapter / token adapter 残余边界。
+3. 批次 C：wallet 页面残余高风险目录，优先 `address_book`、`wallet_backup`、`wallet_manage`、`add_token`、`portfolio`、`market`。
+4. 批次 D：wallet 页面扩展目录，覆盖 `nft`、`gas`、`ens`、`aa`、`dex_swap`、`ast_swap`、`batch_transfer`、`staking_btc`。
+5. 批次 E：browser / wallet_connect / bridge 残余目录。
+6. 批次 F：`features/mining_v1/`、`features/mining_v2/`、`plugins/flutter_mining/`。
+7. 批次 G：home / profile / settings / notification / news / earn / hardware wallet 残余目录。
+8. 批次 H：全计划收口验证、风险清单和状态文档更新。
+
+## Main Wallet Completion Criteria
+
+- `features/wallet/` 主线目录、`core/wallet_sdk/`、`core/token_discovery/`、`features/mining*`、`plugins/flutter_mining/` 都至少完成一轮系统审查。
+- 所有本轮修复都已补充对应定向测试或明确记录“为何无法测试”。
+- 各阶段执行日志、剩余风险和跨仓覆盖状态保持一致。
+- 至少完成一次跨阶段定向 `flutter analyze` 与 `flutter test` 汇总验证。
+
 ## Execution Log
 
 ### 2026-03-16
@@ -465,3 +583,139 @@
 - 新增验证：
   - `flutter test test/features/home/change_email_countdown_test.dart test/features/home/setting/setting_share_stats_test.dart test/features/home/security_google_countdown_test.dart`
   - `flutter analyze lib/features/home/setting/change_email_page_logic.dart lib/features/home/setting/setting_share.dart lib/features/home/setting/security/security_google_vedification_logic.dart test/features/home/change_email_countdown_test.dart test/features/home/setting/setting_share_stats_test.dart test/features/home/security_google_countdown_test.dart`
+- Phase 3 第五批修复已完成，覆盖 `core/wallet_sdk/wallet_address.dart`、`core/wallet_sdk/wallet_key_manager.dart`、`core/wallet_sdk/wallet_signer.dart`。
+- 修复 62：`WalletAddress.generateAddress()` 现在会过滤空地址变体，并在 native 只返回空字符串时显式抛错；此前 `Trustdart` 吞错回传 `{'legacy': ''}` 时会被包装成“成功但 address 为空”的假成功结果。
+- 修复 63：`WalletKeyManager.importFromKeystore()` 现在会在 `legacy` 为空时回退到首个非空地址变体，避免 iOS addressMap 只有 `segwit`/其他地址有效时被误判为 keystore 导入失败；`getKeyPair()` 也不再接受缺失公钥的畸形原生返回。
+- 修复 64：`WalletSigner` 现在会对空 rawTx、无效 byte-array 签名结果、空 max value 统一 fail-fast 抛出 `TransactionException`，不再把 native 吞错后的空结果继续向上伪装成正常签名响应。
+- 新增回归测试：
+  - `test/core/wallet_sdk/wallet_address_test.dart`
+  - `test/core/wallet_sdk/wallet_key_manager_test.dart`
+  - `test/core/wallet_sdk/wallet_signer_test.dart`
+- 新增验证：
+  - `flutter test test/core/wallet_sdk/wallet_address_test.dart test/core/wallet_sdk/wallet_key_manager_test.dart test/core/wallet_sdk/wallet_signer_test.dart`
+  - `flutter analyze --no-fatal-infos lib/core/wallet_sdk/wallet_address.dart lib/core/wallet_sdk/wallet_key_manager.dart lib/core/wallet_sdk/wallet_signer.dart test/core/wallet_sdk/wallet_address_test.dart test/core/wallet_sdk/wallet_key_manager_test.dart test/core/wallet_sdk/wallet_signer_test.dart`
+- Phase 3 第六批修复已完成，覆盖 `core/token_discovery/token_discovery_service.dart`、`core/storage/sp_util.dart`、`features/wallet/pages/token_discovery/token_discovery_page.dart`、`features/wallet/pages/wallet_page.dart`。
+- 修复 65：token discovery 不再把所有 tracked contract 都无脑 lower-case；EVM 合约继续大小写不敏感匹配，Solana mint 改为优先按原值匹配，并兼容旧版 lower-case 存量数据，避免已添加或已忽略的 SPL token 被重复重新发现。
+- 修复 66：钱包首页构建 `knownContracts` 时不再提前破坏原始合约大小写；忽略 token 时也会按链类型选择正确的存储格式，防止 Solana 忽略列表失真。
+- 修复 67：`SPUtil` 的 ignored token contract 存储现在会保留原始值并清理空白脏数据，避免存储层继续扩大大小写敏感链的地址损坏。
+- 新增回归测试：
+  - `test/core/token_discovery/token_discovery_service_test.dart`
+  - `test/core/storage/sp_util_test.dart`
+- 新增验证：
+  - `flutter test test/core/token_discovery/token_discovery_service_test.dart test/core/storage/sp_util_test.dart`
+  - `flutter analyze --no-fatal-infos lib/core/token_discovery/token_discovery_service.dart lib/core/storage/sp_util.dart lib/features/wallet/pages/token_discovery/token_discovery_page.dart lib/features/wallet/pages/wallet_page.dart test/core/token_discovery/token_discovery_service_test.dart test/core/storage/sp_util_test.dart`
+- Phase 4 第五批修复已完成，覆盖 `features/wallet/pages/wallet_manage/keystore/import_keystore.dart`、`features/wallet/pages/wallet_manage/keystore/import_privatekey.dart`、`features/wallet/pages/wallet_manage/keystore/keystore_flow_utils.dart`。
+- 修复 68：私钥导入页现在会按当前选中的链类型做地址生成和校验，不再无论用户选哪条链都拿 `CoinType.N` 去验私钥；同时补上了真实 `loading` 状态，避免重复提交导入。
+- 修复 69：keystore 导入现在兼容 native 返回 `address` 为字符串或地址 map 两种结构，并在地址 / 私钥为空时统一 fail-fast；此前部分平台会在 `walletInfo['address'][walletInfo['addressType']]` 处直接崩溃，或者把空导入结果继续向下走。
+- 修复 70：导入链路公共 helper 统一了“选中链 coinType 解析”“导入地址提取”“私钥字符串清洗”三类边界，减少 wallet-manage 两个入口继续分叉出不同错误行为。
+- 新增回归测试：
+  - `test/features/wallet/wallet_manage/keystore_flow_utils_test.dart`
+- 新增验证：
+  - `flutter test test/features/wallet/wallet_manage/keystore_flow_utils_test.dart`
+  - `flutter analyze --no-fatal-infos lib/features/wallet/pages/wallet_manage/keystore/keystore_flow_utils.dart lib/features/wallet/pages/wallet_manage/keystore/import_keystore.dart lib/features/wallet/pages/wallet_manage/keystore/import_privatekey.dart test/features/wallet/wallet_manage/keystore_flow_utils_test.dart`
+- Phase 4 第六批修复已完成，覆盖 `features/wallet/pages/wallet_backup/export_cloud_backup.dart`、`features/wallet/pages/create_wallet/import/import_cloud_backup.dart`、`features/wallet/utils/wallet_backup_payload.dart`、`features/wallet/pages/wallet_manage/keystore/one_coin_wallet_manage*.dart`、`features/wallet/pages/wallet_manage/keystore/keystore_export_utils.dart`。
+- 修复 71：cloud backup 导出/导入现在共享同一份 payload 契约，不再只导出 `walletName/mnemonic/privateKey/timestamp` 这类残缺字段；钱包密码、链配置、观察钱包标记、主钱包状态、AA 信息和用户排序元数据都会一并进入加密备份，恢复后不会再变成残缺钱包。
+- 修复 72：`ImportCloudBackup` 不再把备份里的 `walletName` 当成链 key 传给 `addImportWalletInfo()`；现在会先还原完整 `WalletInfo` 再按钱包维度导入，并对重复钱包、旧版最小备份和无法恢复的残缺 payload 做显式 skip，避免“备份文件看起来导入成功但实际一个钱包都没恢复”。
+- 修复 73：keystore / private key 导出现在会对空 keystore、空私钥和无效 base64 结果 fail-fast，不再打开空白导出页或把空字符串复制到剪贴板伪装成功。
+- 新增回归测试：
+  - `test/features/wallet/wallet_backup_payload_test.dart`
+  - `test/features/wallet/wallet_manage/keystore_export_utils_test.dart`
+- 新增验证：
+  - `flutter test test/features/wallet/wallet_backup_payload_test.dart test/features/wallet/wallet_manage/keystore_export_utils_test.dart test/features/wallet/wallet_manage/keystore_flow_utils_test.dart`
+  - `flutter analyze --no-fatal-infos lib/features/wallet/utils/wallet_backup_payload.dart lib/features/wallet/pages/wallet_manage/keystore/keystore_export_utils.dart lib/features/wallet/pages/wallet_backup/export_cloud_backup.dart lib/features/wallet/pages/create_wallet/import/import_cloud_backup.dart lib/features/wallet/pages/wallet_manage/keystore/one_coin_wallet_manage.dart lib/features/wallet/pages/wallet_manage/keystore/one_coin_wallet_manage_widgets.dart test/features/wallet/wallet_backup_payload_test.dart test/features/wallet/wallet_manage/keystore_export_utils_test.dart test/features/wallet/wallet_manage/keystore_flow_utils_test.dart`
+- Phase 4 第七批修复已完成，覆盖 `features/wallet/pages/address_book/add_address_page.dart`、`features/wallet/pages/address_book/edit_address_page.dart`、`features/wallet/pages/address_book/address_book_input_utils.dart`。
+- 修复 74：address book 新增页初始化默认链时现在会同时同步 `coinName / coinFullName / coinType / coinIcon / blockchainType`，不再只改部分字段，避免首次进入后显示链和真实校验链不一致。
+- 修复 75：编辑地址页把 `coinName` 与真实校验用 `coinType` 正式拆开；此前切链后把显示名写回 `coinName`，后续地址校验会拿 “Ethereum” 这类展示名而不是链类型去验证，导致合法地址被误判失败。
+- 修复 76：地址簿输入统一加入 URI / 二维码归一化；扫描或粘贴 `ethereum:0x...?...`、`tron:...`、`ton://transfer/...` 一类带 scheme/query 的地址时，现在会先提取纯地址再校验，不再要求用户手工清洗。
+- 新增回归测试：
+  - `test/features/wallet/address_book_input_utils_test.dart`
+- 新增验证：
+  - `flutter test test/features/wallet/address_book_input_utils_test.dart`
+  - `flutter analyze --no-fatal-infos lib/features/wallet/pages/address_book/address_book_input_utils.dart lib/features/wallet/pages/address_book/add_address_page.dart lib/features/wallet/pages/address_book/edit_address_page.dart test/features/wallet/address_book_input_utils_test.dart`
+- Phase 4 第八批修复已完成，覆盖 `features/wallet/pages/wallet_backup/backup_flow_utils.dart`、`features/wallet/pages/wallet_backup/backup_one.dart`、`features/wallet/pages/wallet_backup/backup_two.dart`、`features/wallet/pages/wallet_manage/wallet_manage.dart`、`features/wallet/provider/wallet_delete_utils.dart`、`features/wallet/provider/wallet_action_provider_wallet.dart`、`features/wallet/pages/market/market_page.dart`、`features/wallet/pages/market/market_search_utils.dart`、`features/wallet/pages/wallet_sheets.dart`、`features/wallet/pages/wallet_chain_info*.dart`、`features/wallet/pages/wallet_page.dart`。
+- 修复 77：助记词备份流现在会先清洗 recovery phrase 空白并校验是否真的存在；没有助记词的钱包不再进入 `BackupOne -> BackupTwo` 后在 `mnemonic!` 处崩溃，备份入口会直接阻断并提示该钱包没有可备份的 recovery phrase。
+- 修复 78：`WalletManage` 现在允许删除非当前的单链导入钱包，不再把“是否包含 N 链”错误耦合到删除按钮；删除逻辑也改成仅在钱包确实具备完整 N 链配置时才执行挖矿/验证者校验，避免单链 keystore / private-key 钱包因为缺少 `CoinType.N` 配置而无法删除。
+- 修复 79：钱包管理页构建 coin list 时现在会跳过坏链配置并在页面已销毁时停止 `setState`；此前只要某一条链配置损坏或用户快速返回，`WalletManage` 就可能在异步构建中抛异常或触发销毁后更新状态。
+- 修复 80：market 搜索现在带请求代次判定；快速输入、删除、重新输入时，旧请求返回结果不再覆盖最新 query，避免搜索页出现“框里是 bitcoin，列表却退回 bit/eth 旧结果”的乱序状态。
+- 新增回归测试：
+  - `test/features/wallet/wallet_backup/backup_flow_utils_test.dart`
+  - `test/features/wallet/provider/wallet_delete_utils_test.dart`
+  - `test/features/wallet/market/market_search_utils_test.dart`
+- 新增验证：
+  - `flutter test test/features/wallet/wallet_backup/backup_flow_utils_test.dart test/features/wallet/provider/wallet_delete_utils_test.dart test/features/wallet/market/market_search_utils_test.dart`
+  - `flutter analyze --no-fatal-infos lib/features/wallet/pages/wallet_backup/backup_flow_utils.dart lib/features/wallet/pages/wallet_backup/backup_one.dart lib/features/wallet/pages/wallet_backup/backup_two.dart lib/features/wallet/pages/market/market_search_utils.dart lib/features/wallet/pages/market/market_page.dart lib/features/wallet/pages/wallet_page.dart lib/features/wallet/pages/wallet_chain_info.dart lib/features/wallet/pages/wallet_chain_info_xrp.dart lib/features/wallet/pages/wallet_sheets.dart lib/features/wallet/pages/wallet_manage/wallet_manage.dart lib/features/wallet/provider/wallet_action_provider.dart lib/features/wallet/provider/wallet_action_provider_wallet.dart lib/features/wallet/provider/wallet_delete_utils.dart test/features/wallet/wallet_backup/backup_flow_utils_test.dart test/features/wallet/provider/wallet_delete_utils_test.dart test/features/wallet/market/market_search_utils_test.dart`
+- Phase 4 第九批修复已完成，覆盖 `features/wallet/pages/wallet_manage/add_watch_wallet_page.dart`、`features/wallet/pages/wallet_manage/watch_wallet_utils.dart`。
+- 修复 81：观察钱包地址校验现在收口为严格十六进制 EVM 地址规则，不再只看 `0x` 前缀和长度；`0xzz...`、截断地址等脏输入会在提交前被拦下。
+- 修复 82：新增观察钱包前现在会按地址做去重匹配；同一个 watch-only 地址不再被重复导入成多份钱包记录，避免余额页和钱包列表出现重复观察钱包。
+- 新增回归测试：
+  - `test/features/wallet/wallet_manage/watch_wallet_utils_test.dart`
+- 新增验证：
+  - `flutter test test/features/wallet/wallet_manage/watch_wallet_utils_test.dart`
+  - `flutter analyze --no-fatal-infos lib/features/wallet/pages/wallet_manage/add_watch_wallet_page.dart lib/features/wallet/pages/wallet_manage/watch_wallet_utils.dart test/features/wallet/wallet_manage/watch_wallet_utils_test.dart`
+- Phase 4 第十批修复已完成，覆盖 `features/wallet/api/market_api_payload_utils.dart`、`features/wallet/api/market_api.dart`、`features/wallet/models/coin_model.dart`、`features/wallet/models/coin_model_build_utils.dart`、`features/wallet/provider/watch_only_wallet_utils.dart`、`features/wallet/provider/wallet_action_provider_wallet.dart`、`features/wallet/provider/wallet_action_provider_market.dart`、`features/wallet/pages/market/market_page.dart`、`features/wallet/pages/market/market_coin_info.dart`、`features/wallet/pages/wallet_manage/wallet_list_actions.dart`。
+- 修复 83：market 数据解析现在统一兼容 `List`、`{data: [...]}`、单对象三种返回形态；钱包价格刷新、watchlist、price alert 轮询和 fallback trending 不再因为后端 payload 形态切换而静默丢数据或在 provider 内部抛运行时类型错误。
+- 修复 84：`CoinModel.buildWallet()` 现在会把派生路径和 `addrType` 正确分开传给 `Trustdart.generateAddress()`；此前第三个参数错误地传成了派生路径字符串，导致地址派生类型与调用契约错位。
+- 修复 85：watch-only 钱包现在只保留 `BlockchainType.Ethereum` 的链配置，并会在钱包初始化时自动清理旧数据里的非 EVM 链；不再把同一个 EVM 地址硬套到 BTC / SOL / TON 等非兼容链上。
+- 修复 86：钱包列表页点选非当前钱包现在只切换当前钱包索引，不会再误调用 `setMainWallet()` 把“主钱包”标记一起改掉。
+- 新增回归测试：
+  - `test/features/wallet/api/market_api_payload_utils_test.dart`
+  - `test/features/wallet/models/coin_model_build_utils_test.dart`
+  - `test/features/wallet/provider/watch_only_wallet_utils_test.dart`
+- 新增验证：
+  - `flutter test test/features/wallet/api/market_api_payload_utils_test.dart test/features/wallet/models/coin_model_build_utils_test.dart test/features/wallet/provider/watch_only_wallet_utils_test.dart test/features/wallet/wallet_manage/watch_wallet_utils_test.dart`
+  - `flutter analyze --no-fatal-infos lib/features/wallet/api/market_api.dart lib/features/wallet/api/market_api_payload_utils.dart lib/features/wallet/models/coin_model.dart lib/features/wallet/models/coin_model_build_utils.dart lib/features/wallet/pages/market/market_coin_info.dart lib/features/wallet/pages/market/market_page.dart lib/features/wallet/pages/wallet_manage/wallet_list_actions.dart lib/features/wallet/provider/wallet_action_provider.dart lib/features/wallet/provider/wallet_action_provider_market.dart lib/features/wallet/provider/wallet_action_provider_wallet.dart lib/features/wallet/provider/watch_only_wallet_utils.dart test/features/wallet/api/market_api_payload_utils_test.dart test/features/wallet/models/coin_model_build_utils_test.dart test/features/wallet/provider/watch_only_wallet_utils_test.dart test/features/wallet/wallet_manage/watch_wallet_utils_test.dart`
+- Phase 4 第十一批修复已完成，覆盖 `features/wallet/pages/wallet_manage/wallet_manage_flags_utils.dart`、`features/wallet/pages/wallet_manage/wallet_manage.dart`、`features/wallet/pages/wallet_manage/wallet_list.dart`、`features/wallet/pages/wallet_manage/wallet_list_actions.dart`、`features/wallet/pages/market/market_coin_info_helpers.dart`、`features/wallet/pages/market/market_coin_info.dart`。
+- 修复 87：watch-only 钱包的密码哨兵值 `'0'` 现在不会再被管理页当成真实用户密码；观察钱包进入管理页时不再被错误要求输入密码，也不会再显示“修改密码”或“备份助记词”这类不适用入口。
+- 修复 88：market 详情页刷新价格时现在会保留已有 `coin_gecko_id` / `name` / `image` 等稳定字段，并按 symbol 大小写不敏感匹配；后端只回局部价格字段时，不会再把详情页状态覆盖成残缺 coin snapshot，导致提醒/交易记录入口突然消失。
+- 新增回归测试：
+  - `test/features/wallet/wallet_manage/wallet_manage_flags_utils_test.dart`
+  - `test/features/wallet/market/market_coin_info_helpers_test.dart`
+- 新增验证：
+  - `flutter test test/features/wallet/wallet_manage/wallet_manage_flags_utils_test.dart test/features/wallet/market/market_coin_info_helpers_test.dart test/features/wallet/api/market_api_payload_utils_test.dart test/features/wallet/provider/watch_only_wallet_utils_test.dart`
+  - `flutter analyze --no-fatal-infos lib/features/wallet/pages/wallet_manage/wallet_manage.dart lib/features/wallet/pages/wallet_manage/wallet_list.dart lib/features/wallet/pages/wallet_manage/wallet_list_actions.dart lib/features/wallet/pages/wallet_manage/wallet_manage_flags_utils.dart lib/features/wallet/pages/market/market_coin_info.dart lib/features/wallet/pages/market/market_coin_info_helpers.dart test/features/wallet/wallet_manage/wallet_manage_flags_utils_test.dart test/features/wallet/market/market_coin_info_helpers_test.dart`
+- Phase 4 第十二批修复已完成，覆盖 `features/wallet/pages/face_matching/face_wallet_utils.dart`、`features/wallet/pages/face_matching/select_wallet.dart`、`features/wallet/pages/wallet_manage/wallet_list_face_section.dart`、`features/wallet/pages/portfolio/portfolio_record_utils.dart`、`features/wallet/pages/portfolio/portfolio_page.dart`。
+- 修复 89：人脸绑定钱包列表与钱包管理页的人脸校验现在只接受真正支持 N 链 legacy 地址派生的钱包；watch-only、缺少 N 链配置或缺少 legacy path 的钱包不会再进入绑定/解绑流程，也不会再在生成 legacy 地址时因为空链配置直接崩溃。
+- 修复 90：portfolio 现在会保留“有余额但暂无行情价格”的持仓项；资产总览 / 饼图 / movers 只统计有估值的资产，但 holdings 列表仍展示这类真实持仓，避免用户余额存在时首屏被错误渲染成空资产状态。
+- 新增回归测试：
+  - `test/features/wallet/face_matching/face_wallet_utils_test.dart`
+  - `test/features/wallet/portfolio/portfolio_record_utils_test.dart`
+- 新增验证：
+  - `flutter test test/features/wallet/face_matching/face_wallet_utils_test.dart test/features/wallet/portfolio/portfolio_record_utils_test.dart`
+  - `flutter analyze --no-fatal-infos lib/features/wallet/pages/face_matching/face_wallet_utils.dart lib/features/wallet/pages/face_matching/select_wallet.dart lib/features/wallet/pages/wallet_manage/wallet_list.dart lib/features/wallet/pages/wallet_manage/wallet_list_face_section.dart lib/features/wallet/pages/portfolio/portfolio_page.dart lib/features/wallet/pages/portfolio/portfolio_record_utils.dart test/features/wallet/face_matching/face_wallet_utils_test.dart test/features/wallet/portfolio/portfolio_record_utils_test.dart`
+- Phase 4 第十三批修复已完成，覆盖 `core/storage/sp_util.dart`、`features/wallet/pages/market/market_page.dart`。
+- 修复 91：market 自选列表现在在读写两端都会统一做 `trim + lowercase + 去重 + 去空串`；旧版本残留的 `ETH` / ` eth ` / 空串 / 重复 symbol 不会再把星标状态、自选列表刷新和价格请求参数打乱。
+- 新增回归测试：
+  - `test/core/storage/sp_util_test.dart`
+- 新增验证：
+  - `flutter test test/core/storage/sp_util_test.dart`
+  - `flutter analyze --no-fatal-infos lib/core/storage/sp_util.dart lib/features/wallet/pages/market/market_page.dart test/core/storage/sp_util_test.dart`
+- Phase 4 第十四批修复已完成，覆盖 `features/wallet/pages/wallet_manage/edit_wallet.dart`、`features/wallet/pages/wallet_manage/edit_wallet_utils.dart`。
+- 修复 92：编辑钱包名称时不再允许把名字保存成空串；用户清空输入后会优先保留当前有效名称，若历史数据本身也为空则回退到 `Account{index}`，避免钱包列表和管理页再次退化成 `-` / 空名状态。
+- 新增回归测试：
+  - `test/features/wallet/wallet_manage/edit_wallet_utils_test.dart`
+- 新增验证：
+  - `flutter test test/features/wallet/wallet_manage/edit_wallet_utils_test.dart`
+  - `flutter analyze --no-fatal-infos lib/features/wallet/pages/wallet_manage/edit_wallet.dart lib/features/wallet/pages/wallet_manage/edit_wallet_utils.dart test/features/wallet/wallet_manage/edit_wallet_utils_test.dart`
+- Phase 4 第十五批修复已完成，覆盖 `features/wallet/pages/market/market_price_format_utils.dart`、`features/wallet/pages/market/market_coin_info_helpers.dart`、`features/wallet/pages/market/price_alert_sheet.dart`、`features/wallet/pages/market/market_page.dart`。
+- 修复 93：market 行情页、币种详情和价格提醒弹窗现在统一使用非科学计数法的小数价格 formatter；超小价格不再显示成 `1.234e-8` 这类工程计数，而会按用户可读的小数形式展示，提醒输入框也会按 8 位小数上限安全预填。
+- 新增回归测试：
+  - `test/features/wallet/market/market_price_format_utils_test.dart`
+- 新增验证：
+  - `flutter test test/features/wallet/market/market_price_format_utils_test.dart`
+  - `flutter analyze --no-fatal-infos lib/features/wallet/pages/market/market_price_format_utils.dart lib/features/wallet/pages/market/market_coin_info_helpers.dart lib/features/wallet/pages/market/price_alert_sheet.dart lib/features/wallet/pages/market/market_page.dart test/features/wallet/market/market_price_format_utils_test.dart`
+- Phase 4 第十六批修复已完成，覆盖 `features/wallet/pages/market/trade_entry_sheet.dart`、`features/wallet/pages/market/trade_entry_sheet_utils.dart`、`features/wallet/pages/wallet_manage/edit_wallet_password.dart`、`features/wallet/pages/wallet_manage/edit_wallet_password_utils.dart`。
+- 修复 94：portfolio trade 录入弹窗现在在保存期间禁止关闭，且 tiny price 预填会保留到 8 位小数，不再把 `0.00000001234` 这类价格直接预填成 `0.000000` 导致用户保存失败或误录入。
+- 修复 95：钱包密码修改页在提交期间禁止返回，并移除了提交成功 `pop()` 后继续 `setState` 的风险路径，避免提交刚完成就触发 `setState() called after dispose()`。
+- 新增回归测试：
+  - `test/features/wallet/market/trade_entry_sheet_utils_test.dart`
+  - `test/features/wallet/wallet_manage/edit_wallet_password_utils_test.dart`
+- 新增验证：
+  - `flutter test test/features/wallet/market/trade_entry_sheet_utils_test.dart test/features/wallet/wallet_manage/edit_wallet_password_utils_test.dart`
+  - `flutter analyze --no-fatal-infos lib/features/wallet/pages/market/trade_entry_sheet.dart lib/features/wallet/pages/market/trade_entry_sheet_utils.dart lib/features/wallet/pages/wallet_manage/edit_wallet_password.dart lib/features/wallet/pages/wallet_manage/edit_wallet_password_utils.dart test/features/wallet/market/trade_entry_sheet_utils_test.dart test/features/wallet/wallet_manage/edit_wallet_password_utils_test.dart`
+- Phase 4 第十七批修复已完成，覆盖 `features/wallet/pages/market/price_alert_sheet.dart`、`features/wallet/pages/market/price_alert_sheet_utils.dart`。
+- 修复 96：价格提醒弹窗在保存或删除期间现在同样禁止被外部关闭；如果本地持久化失败，会把 `_saving` 正常回退并保留弹窗可操作，不再出现后台已写入但 UI 结果返回 `null` 或按钮永久 loading 的状态。
+- 新增回归测试：
+  - `test/features/wallet/market/price_alert_sheet_utils_test.dart`
+- 新增验证：
+  - `flutter test test/features/wallet/market/price_alert_sheet_utils_test.dart`
+  - `flutter analyze --no-fatal-infos lib/features/wallet/pages/market/price_alert_sheet.dart lib/features/wallet/pages/market/price_alert_sheet_utils.dart test/features/wallet/market/price_alert_sheet_utils_test.dart`

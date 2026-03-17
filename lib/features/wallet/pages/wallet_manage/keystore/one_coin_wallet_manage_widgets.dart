@@ -23,19 +23,19 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
       AppThemeUtils.getColorByKey(context, key.name);
 
   BoxDecoration get _sectionDecoration => BoxDecoration(
-        color: _color(AppThemeKeys.itemBgColor),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16.0)),
-      );
+    color: _color(AppThemeKeys.itemBgColor),
+    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16.0)),
+  );
 
   EdgeInsets get _sectionPadding => EdgeInsets.symmetric(
-        vertical: ScreenUtil().setWidth(30.0),
-        horizontal: ScreenUtil().setWidth(30.0),
-      );
+    vertical: ScreenUtil().setWidth(30.0),
+    horizontal: ScreenUtil().setWidth(30.0),
+  );
 
   EdgeInsets get _sectionMargin => EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30.0),
-        vertical: ScreenUtil().setWidth(20.0),
-      );
+    horizontal: ScreenUtil().setWidth(30.0),
+    vertical: ScreenUtil().setWidth(20.0),
+  );
 
   bool get _hasMnemonic => widget.walletInfo.privateKey == null;
 
@@ -185,9 +185,7 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
       height: ScreenUtil().setWidth(101.0 * visibleCount),
       child: ListView.separated(
         itemCount: pathList.length,
-        separatorBuilder: (_, _) => Divider(
-          height: ScreenUtil().setWidth(1.0),
-        ),
+        separatorBuilder: (_, _) => Divider(height: ScreenUtil().setWidth(1.0)),
         itemBuilder: (context, int index) {
           final pIndex = pathList[index] as int;
           final path = getPathWithIndex(
@@ -415,7 +413,9 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
               bottom: su.setWidth(30.0),
             ),
             child: _buildPasswordField(
-                controller2, S.of(context).repeatPassword),
+              controller2,
+              S.of(context).repeatPassword,
+            ),
           ),
           Divider(height: su.setWidth(1)),
           SizedBox(
@@ -451,9 +451,7 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
       height: su.setWidth(80.0),
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: su.setWidth(30)),
-      decoration: BoxDecoration(
-        color: _color(AppThemeKeys.itemBgColor),
-      ),
+      decoration: BoxDecoration(color: _color(AppThemeKeys.itemBgColor)),
       child: CommInput(
         type: InputFieldType.password,
         hintText: hint,
@@ -471,10 +469,7 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
           alignment: Alignment.center,
           child: Text(
             text,
-            style: TextStyle(
-              color: color,
-              fontSize: ScreenUtil().setSp(30),
-            ),
+            style: TextStyle(color: color, fontSize: ScreenUtil().setSp(30)),
           ),
         ),
       ),
@@ -526,8 +521,14 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
       coinPath ?? "",
     );
     if (!mounted) return;
-    final pkHex = bytesToHex(base64Decode(pk));
-    Clipboard.setData(ClipboardData(text: pkHex));
-    ToastUtils.show(S.of(context).copy);
+    try {
+      final pkHex = decodeExportablePrivateKey(pk);
+      await Clipboard.setData(ClipboardData(text: pkHex));
+      if (!mounted) return;
+      ToastUtils.show(S.of(context).copy);
+    } catch (_) {
+      if (!mounted) return;
+      ToastUtils.show(S.of(context).g_key_210);
+    }
   }
 }

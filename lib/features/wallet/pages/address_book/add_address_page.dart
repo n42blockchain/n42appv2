@@ -6,6 +6,7 @@ import 'package:n42_wallet/features/wallet/api/address_book_api.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/features/wallet/models/address_book_model.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/pages/address_book/address_book_input_utils.dart';
 import 'package:n42_wallet/features/wallet/pages/address_book/choose_coins_page.dart';
 import 'package:n42_wallet/features/wallet/pages/face_matching/face_match.dart';
 import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
@@ -60,10 +61,15 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
       if (!mounted) return;
       final list = ref.read(wapBridgeProvider).coinModels;
       if (list.isEmpty || !mounted) return;
+      final selection = addressBookSelectionFromCoinMap(
+        Map<String, dynamic>.from(list[0].coin),
+      );
       setState(() {
-        coinName = list[0].coin["coinType"];
-        coinIcon = list[0].coin["icon"];
-        blockchainType = list[0].coin["blockchainType"];
+        coinName = selection.coinName;
+        coinFullName = selection.coinFullName;
+        coinType = selection.coinType;
+        coinIcon = selection.coinIcon;
+        blockchainType = selection.blockchainType;
       });
     });
   }
@@ -85,8 +91,7 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
     if (addr.isEmpty) {
       errorMessage = S.current.g_key_41;
     } else {
-      final parts = addr.split(":");
-      if (parts.length == 2) addr = parts[1];
+      addr = normalizeAddressBookInput(addr);
 
       if (await Trustdart().validateAddress(coinType, addr)) {
         errorMessage = "";
@@ -117,7 +122,9 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
           GestureDetector(
             onTap: handlerData,
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+              padding: EdgeInsets.symmetric(
+                horizontal: ScreenUtil().setWidth(30.0),
+              ),
               color: Colors.transparent,
               child: Center(
                 child: Text(
@@ -129,7 +136,7 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
       body: buildContentList(context),
@@ -138,14 +145,15 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
 
   Widget buildContentList(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30), vertical: ScreenUtil().setWidth(30.0)),
+      margin: EdgeInsets.symmetric(
+        horizontal: ScreenUtil().setWidth(30),
+        vertical: ScreenUtil().setWidth(30.0),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildSelectItem(),
-          const SizedBox(
-            height: 18,
-          ),
+          const SizedBox(height: 18),
           Text(
             S.of(context).address_Information,
             style: TextStyle(
@@ -153,10 +161,8 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
               fontSize: ScreenUtil().setSp(28.0),
             ),
           ),
-          const SizedBox(
-            height: 10,
-          ),
-          _buildAddressView(context)
+          const SizedBox(height: 10),
+          _buildAddressView(context),
         ],
       ),
     );
@@ -170,36 +176,37 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
           MaterialPageRoute(builder: (_) => const ChooseCoinsPage()),
         );
         if (!mounted || data == null) return;
+        final selection = addressBookSelectionFromCoinMap(
+          Map<String, dynamic>.from(data.coin),
+        );
         setState(() {
-          coinType = data.coin["coinType"];
-          coinName = data.coin["miniName"];
-          coinFullName = data.coin['name'];
-          coinIcon = data.coin["icon"] ?? "";
-          blockchainType = data.coin["blockchainType"];
+          coinType = selection.coinType;
+          coinName = selection.coinName;
+          coinFullName = selection.coinFullName;
+          coinIcon = selection.coinIcon;
+          blockchainType = selection.blockchainType;
         });
       },
       child: containerStyle1(
         context,
-        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20.0),),
+        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20.0)),
         height: ScreenUtil().setWidth(88.0),
         child: Row(
           children: [
             (coinType == CoinType.N.name)
                 ? Image.asset(
-              'assets/img/ast.png',
-              width: ScreenUtil().setWidth(50.0),
-              height: ScreenUtil().setWidth(50.0),
-              fit: BoxFit.cover,
-            )
-                : ImageNetWork(imageUrl:
-              coinIcon,
-              width: ScreenUtil().setWidth(50.0),
-              height: ScreenUtil().setWidth(50.0),
-              placeholder: "assets/img/list_default.png",
-            ),
-            SizedBox(
-              width: ScreenUtil().setWidth(24.0),
-            ),
+                    'assets/img/ast.png',
+                    width: ScreenUtil().setWidth(50.0),
+                    height: ScreenUtil().setWidth(50.0),
+                    fit: BoxFit.cover,
+                  )
+                : ImageNetWork(
+                    imageUrl: coinIcon,
+                    width: ScreenUtil().setWidth(50.0),
+                    height: ScreenUtil().setWidth(50.0),
+                    placeholder: "assets/img/list_default.png",
+                  ),
+            SizedBox(width: ScreenUtil().setWidth(24.0)),
             Text(
               '$coinFullName ($coinName)',
               style: TextStyle(
@@ -222,8 +229,7 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
   Widget _buildAddressView(BuildContext context) {
     return containerStyle1(
       context,
-      padding: EdgeInsets.symmetric(
-          vertical: ScreenUtil().setWidth(20.0)),
+      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0)),
       child: Column(
         children: [
           scanItem(),
@@ -238,7 +244,7 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
             endIndent: ScreenUtil().setWidth(20.0),
             indent: ScreenUtil().setWidth(20.0),
           ),
-          desc()
+          desc(),
         ],
       ),
     );
@@ -259,23 +265,29 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
       focusNode: addressFocusNode,
       hintText: S.of(context).please_input_address,
       errorMessage: errorMessage,
-      onEditingComplete: (){
+      onEditingComplete: () {
         FocusScope.of(context).requestFocus(nameFocusNode);
       },
       boxShadow: _noShadow,
       bgColor: _themeColor(AppThemeKeys.itemBgColor),
-      messageMargin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
-      rightWidget3: blockchainType == BlockchainType.Ethereum.name ? Container(
-        width: ScreenUtil().setWidth(60.0),
-        height: ScreenUtil().setWidth(60.0),
-        padding: EdgeInsets.all(ScreenUtil().setWidth(5.0)),
-        child: Icon(
-          Icons.face_outlined,
-          size: ScreenUtil().setWidth(50.0),
-          color: _themeColor(AppThemeKeys.mainBlueColor),
-        ),
-      ) : null,
-      rightOnTap3: blockchainType == BlockchainType.Ethereum.name ? faceMatchTypeWidget : null,
+      messageMargin: EdgeInsets.symmetric(
+        horizontal: ScreenUtil().setWidth(30.0),
+      ),
+      rightWidget3: blockchainType == BlockchainType.Ethereum.name
+          ? Container(
+              width: ScreenUtil().setWidth(60.0),
+              height: ScreenUtil().setWidth(60.0),
+              padding: EdgeInsets.all(ScreenUtil().setWidth(5.0)),
+              child: Icon(
+                Icons.face_outlined,
+                size: ScreenUtil().setWidth(50.0),
+                color: _themeColor(AppThemeKeys.mainBlueColor),
+              ),
+            )
+          : null,
+      rightOnTap3: blockchainType == BlockchainType.Ethereum.name
+          ? faceMatchTypeWidget
+          : null,
       rightWidget1: Container(
         width: ScreenUtil().setWidth(60.0),
         height: ScreenUtil().setWidth(60.0),
@@ -293,15 +305,17 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
           MaterialPageRoute(builder: (_) => ScanPage()),
         );
         if (!mounted || data == null) return;
-        setState(() => addressController.text = data);
+        setState(
+          () => addressController.text = normalizeAddressBookInput(data),
+        );
       },
       rightWidget2: Container(
         padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20.0)),
         height: ScreenUtil().setWidth(60.0),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-            color: _themeColor(AppThemeKeys.mainBlueColor),
-            borderRadius: BorderRadius.all(Radius.circular(60.0))
+          color: _themeColor(AppThemeKeys.mainBlueColor),
+          borderRadius: BorderRadius.all(Radius.circular(60.0)),
         ),
         child: Text(
           S.of(context).g_key_166,
@@ -315,7 +329,7 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
         final data = await Clipboard.getData(Clipboard.kTextPlain);
         final text = data?.text;
         if (text != null && text != "null") {
-          addressController.text = text;
+          addressController.text = normalizeAddressBookInput(text);
         }
       },
     );
@@ -329,7 +343,8 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
       hintText: S.of(context).g_key_nft_2,
       boxShadow: _noShadow,
       bgColor: _themeColor(AppThemeKeys.itemBgColor),
-      onEditingComplete: () => FocusScope.of(context).requestFocus(descFocusNode),
+      onEditingComplete: () =>
+          FocusScope.of(context).requestFocus(descFocusNode),
     );
   }
 
@@ -341,7 +356,8 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
       hintText: S.of(context).descO,
       boxShadow: _noShadow,
       bgColor: _themeColor(AppThemeKeys.itemBgColor),
-      onEditingComplete: () => FocusScope.of(context).requestFocus(addressFocusNode),
+      onEditingComplete: () =>
+          FocusScope.of(context).requestFocus(addressFocusNode),
     );
   }
 
@@ -386,6 +402,7 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
       }
     }
   }
+
   void faceMatchTypeWidget() {
     final su = ScreenUtil();
     final textColor = _themeColor(AppThemeKeys.mainTextColor);

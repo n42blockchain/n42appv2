@@ -1,11 +1,11 @@
 // Copyright 2021-2026 N42 Inc. All rights reserved.
 
-import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/component/enums/load.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/pages/face_matching/face_binding.dart';
+import 'package:n42_wallet/features/wallet/pages/face_matching/face_wallet_utils.dart';
 import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
@@ -40,7 +40,11 @@ class _SelectWalletState extends ConsumerState<SelectWallet> {
   }
 
   Future<void> _initData() async {
-    final list = ref.read(wapBridgeProvider).walletInfoLsit;
+    final list = ref
+        .read(wapBridgeProvider)
+        .walletInfoLsit
+        .where(walletSupportsFaceBinding)
+        .toList();
     if (!mounted) return;
     setState(() {
       walletList = list;
@@ -51,9 +55,7 @@ class _SelectWalletState extends ConsumerState<SelectWallet> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(
-        text: S.of(context).g_face_match_key31,
-      ),
+      appBar: AppBarWidget(text: S.of(context).g_face_match_key31),
       body: SafeArea(
         child: Stack(
           children: [
@@ -97,7 +99,9 @@ class _SelectWalletState extends ConsumerState<SelectWallet> {
                   info.walletName ?? '-',
                   style: TextStyle(
                     color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainTextColor.name),
+                      context,
+                      AppThemeKeys.mainTextColor.name,
+                    ),
                     fontSize: ScreenUtil().setSp(40.0),
                     fontWeight: FontWeight.bold,
                   ),
@@ -106,7 +110,9 @@ class _SelectWalletState extends ConsumerState<SelectWallet> {
                 Icon(
                   Icons.chevron_right,
                   color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
+                    context,
+                    AppThemeKeys.mainTextColor.name,
+                  ),
                 ),
               ],
             ),
@@ -117,17 +123,18 @@ class _SelectWalletState extends ConsumerState<SelectWallet> {
   }
 
   Future<void> _onWalletTap(WalletInfo info, int index) async {
-    final Map? coinInfo = info.coinInfo?[CoinType.N.name];
+    final coinInfo = faceBindingChainConfig(info);
     if (coinInfo == null) {
       if (!mounted) return;
-      ToastUtils.show(
-          S.of(context).g_face_match_key32(info.walletName ?? ''));
+      ToastUtils.show(S.of(context).g_face_match_key32(info.walletName ?? ''));
       return;
     }
 
     final int pathIndex = coinInfo['pathIndex'] ?? 0;
     final path = getPathWithIndex(
-        coinInfo['baseInfo']['path']['legacy'], pathIndex);
+      coinInfo['baseInfo']['path']['legacy'],
+      pathIndex,
+    );
 
     final Map addressMap = await Trustdart().generateAddress(
       coinInfo['baseInfo']['coinType'],

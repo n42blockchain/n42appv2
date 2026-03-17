@@ -7,13 +7,18 @@ import 'package:n42_wallet/features/widgets/comm_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
+import 'package:n42_wallet/features/wallet/pages/wallet_manage/edit_wallet_utils.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EditWallet extends ConsumerStatefulWidget {
   final WalletInfo walletInfo;
   final int walletIndex;
-  const EditWallet({required this.walletInfo,required this.walletIndex,super.key});
+  const EditWallet({
+    required this.walletInfo,
+    required this.walletIndex,
+    super.key,
+  });
 
   @override
   ConsumerState<EditWallet> createState() => _EditWalletState();
@@ -59,13 +64,15 @@ class _EditWalletState extends ConsumerState<EditWallet> {
       ),
       body: SafeArea(
         child: GestureDetector(
-          onTap: () =>  FocusScope.of(context).unfocus(),
+          onTap: () => FocusScope.of(context).unfocus(),
           child: Column(
             children: [
               Container(
                 margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
                 color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemBgColor.name),
+                  context,
+                  AppThemeKeys.itemBgColor.name,
+                ),
                 child: CommInput(
                   type: InputFieldType.account,
                   controller: _controller,
@@ -83,8 +90,12 @@ class _EditWalletState extends ConsumerState<EditWallet> {
                 height: ScreenUtil().setWidth(148),
                 width: double.infinity,
                 padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-                child: buttonStyle2(context, ()async{
-                  widget.walletInfo.walletName = _controller.text.trim();
+                child: buttonStyle2(context, () async {
+                  widget.walletInfo.walletName = resolveEditedWalletName(
+                    input: _controller.text,
+                    existingName: widget.walletInfo.walletName ?? '',
+                    walletIndex: widget.walletIndex,
+                  );
                   //保存钱包
                   // Map<String,dynamic>? walletAll=await SPUtils.getWallsetInfo();
                   // if(walletAll==null){
@@ -92,14 +103,16 @@ class _EditWalletState extends ConsumerState<EditWallet> {
                   // }else{
                   //   walletAll[AppGlobals.userInfo!.uuid]=[widget.walletInfo.toJson()];
                   // }
-                  await ref.read(wapBridgeProvider).saveWalletInfo(widget.walletInfo,widget.walletIndex);
+                  await ref
+                      .read(wapBridgeProvider)
+                      .saveWalletInfo(widget.walletInfo, widget.walletIndex);
                   //await SPUtils.setWalletInfo({AppGlobals.userInfo!.uuid:[widget.walletInfo.toJson()]});
 
                   ///更新一下provider中的数据
                   //Provider.of<WalletActionProvider>(context,listen: false).updateWalletInfo(widget.walletInfo);
                   if (!context.mounted) return;
                   Navigator.of(context).pop(widget.walletInfo);
-                }, S.of(context).g_key_115,),
+                }, S.of(context).g_key_115),
               ),
             ],
           ),

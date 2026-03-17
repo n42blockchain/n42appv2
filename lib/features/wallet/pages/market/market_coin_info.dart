@@ -6,6 +6,7 @@ import 'package:n42_wallet/features/browser/pages/browser_page.dart';
 import 'package:n42_wallet/features/component/enums/load.dart';
 import 'package:n42_wallet/features/utils/regular.dart';
 import 'package:n42_wallet/features/wallet/api/market_api.dart';
+import 'package:n42_wallet/features/wallet/api/market_api_payload_utils.dart';
 import 'package:n42_wallet/features/wallet/models/portfolio_trade.dart';
 import 'package:n42_wallet/features/wallet/pages/market/price_alert_sheet.dart';
 import 'package:n42_wallet/features/wallet/pages/market/trade_entry_sheet.dart';
@@ -128,15 +129,14 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
     final result = await MarketApi().getWalletCoinsInfo(coinSymbol);
     if (result['error'] != false) return;
 
-    final rawData = result['data'];
-    final coins   = (rawData is Map ? rawData['data'] : null);
-    if (coins is! List) return;
+    final coins = extractMarketCoinItems(result['data']);
+    if (coins.isEmpty) return;
 
     for (final c in coins) {
-      if (c is! Map || c['coin'] != coinSymbol) continue;
+      if (!marketCoinMatchesSymbol(c, coinSymbol)) continue;
       if (!mounted) return;
       setState(() {
-        _coin = Map<String, dynamic>.from(c);
+        _coin = mergeMarketCoinSnapshot(_coin, c);
         _priceChange24h = toDouble(_coin['price_change_per_24h']);
       });
       break;
@@ -172,7 +172,7 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
     final generation = ++_chartGeneration;
     if (mounted) setState(() => _chartLoading = true);
 
-    final api  = MarketApi();
+    final api = MarketApi();
     final days = periodDays[_periodIndex];
 
     final results = await Future.wait([
@@ -183,8 +183,8 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
     if (!mounted || generation != _chartGeneration) return;
 
     setState(() {
-      _ohlcvData    = results[0] as List<OhlcPoint>;
-      _volumeData   = (results[1] as Map<String, dynamic>)['volumes'] ?? [];
+      _ohlcvData = results[0] as List<OhlcPoint>;
+      _volumeData = (results[1] as Map<String, dynamic>)['volumes'] ?? [];
       _chartLoading = false;
     });
   }
@@ -193,8 +193,8 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
     if (_periodIndex == index) return;
     setState(() {
       _periodIndex = index;
-      _ohlcvData   = [];
-      _volumeData  = [];
+      _ohlcvData = [];
+      _volumeData = [];
     });
     _fetchChartData();
   }
@@ -205,7 +205,8 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
 
     final forumUrls = links['official_forum_url'];
     if (forumUrls is List) {
-      _website = forumUrls
+      _website =
+          forumUrls
               .map((u) => validateHttpUrl(u?.toString()))
               .whereType<String>()
               .firstOrNull ??
@@ -230,14 +231,14 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
   }
 
   void _cacheMarketMetrics() {
-    _high24h        = _marketDouble('high_24h');
-    _low24h         = _marketDouble('low_24h');
-    _fdv            = _marketDouble('fully_diluted_valuation');
-    _rank           = toDouble(_marketData?['market_cap_rank']).toInt();
-    _ath            = _marketDouble('ath');
-    _atl            = _marketDouble('atl');
-    _pct7d          = toDouble(_marketData?['price_change_percentage_7d']);
-    _pct30d         = toDouble(_marketData?['price_change_percentage_30d']);
+    _high24h = _marketDouble('high_24h');
+    _low24h = _marketDouble('low_24h');
+    _fdv = _marketDouble('fully_diluted_valuation');
+    _rank = toDouble(_marketData?['market_cap_rank']).toInt();
+    _ath = _marketDouble('ath');
+    _atl = _marketDouble('atl');
+    _pct7d = toDouble(_marketData?['price_change_percentage_7d']);
+    _pct30d = toDouble(_marketData?['price_change_percentage_30d']);
     _liquidityScore = toDouble(_coinInfo?['liquidity_score']);
 
     final md = _marketData;
@@ -365,7 +366,9 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
               onPressed: _openTradeSheet,
               tooltip: S.of(context).g_pnl_add_trade,
               backgroundColor: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainBlueColor.name),
+                context,
+                AppThemeKeys.mainBlueColor.name,
+              ),
               child: const Icon(Icons.add, color: Colors.white),
             )
           : null,

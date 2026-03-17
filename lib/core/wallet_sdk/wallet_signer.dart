@@ -19,6 +19,21 @@ class WalletSigner {
 
   WalletSigner(this._trustdart);
 
+  SigningResult _requireRawTransaction({
+    required String rawTx,
+    required String coin,
+    required String operation,
+  }) {
+    if (rawTx.isEmpty) {
+      throw TransactionException(
+        message: '$operation returned empty result for $coin',
+        code: 'SIGNING_FAILED',
+      );
+    }
+
+    return SigningResult(rawTx: rawTx);
+  }
+
   // ---------------------------------------------------------------------------
   // Transaction signing
   // ---------------------------------------------------------------------------
@@ -41,7 +56,11 @@ class WalletSigner {
         pk: privateKey,
         passphrase: passphrase,
       );
-      return SigningResult(rawTx: rawTx);
+      return _requireRawTransaction(
+        rawTx: rawTx,
+        coin: coin,
+        operation: 'Transaction signing',
+      );
     } on PlatformException catch (e) {
       throw TransactionException(
         message: 'Transaction signing failed for $coin: ${e.message}',
@@ -69,7 +88,11 @@ class WalletSigner {
         pk: privateKey,
         passphrase: passphrase,
       );
-      return SigningResult(rawTx: rawTx);
+      return _requireRawTransaction(
+        rawTx: rawTx,
+        coin: coin,
+        operation: 'Transaction signing (gas)',
+      );
     } on PlatformException catch (e) {
       throw TransactionException(
         message: 'Transaction signing (gas) failed for $coin: ${e.message}',
@@ -96,7 +119,11 @@ class WalletSigner {
         pk: privateKey,
         passphrase: passphrase,
       );
-      return SigningResult(rawTx: rawTx);
+      return _requireRawTransaction(
+        rawTx: rawTx,
+        coin: 'BTC',
+        operation: 'BTC P2WSH signing',
+      );
     } on PlatformException catch (e) {
       throw TransactionException(
         message: 'BTC P2WSH signing failed: ${e.message}',
@@ -124,7 +151,14 @@ class WalletSigner {
         pk: privateKey,
         passphrase: passphrase,
       );
-      return ByteArraySigningResult.fromMap(map);
+      final result = ByteArraySigningResult.fromMap(map);
+      if (!result.success || result.signHash.isEmpty) {
+        throw TransactionException(
+          message: 'ByteArray signing returned invalid result for $coin',
+          code: 'SIGNING_FAILED',
+        );
+      }
+      return result;
     } on PlatformException catch (e) {
       throw TransactionException(
         message: 'ByteArray signing failed for $coin: ${e.message}',
@@ -144,7 +178,7 @@ class WalletSigner {
     String passphrase = '',
   }) async {
     try {
-      return await _trustdart.signTransactionMaxValue(
+      final maxValue = await _trustdart.signTransactionMaxValue(
         coin,
         path,
         txData,
@@ -152,6 +186,13 @@ class WalletSigner {
         pk: privateKey,
         passphrase: passphrase,
       );
+      if (maxValue.isEmpty) {
+        throw TransactionException(
+          message: 'Max value calculation returned empty result for $coin',
+          code: 'MAX_VALUE_FAILED',
+        );
+      }
+      return maxValue;
     } on PlatformException catch (e) {
       throw TransactionException(
         message: 'Max value calculation failed for $coin: ${e.message}',
@@ -204,9 +245,7 @@ class WalletSigner {
   // ---------------------------------------------------------------------------
 
   /// Execute an EVM-specific operation via the native channel.
-  Future<Map<String, dynamic>?> evmEmit(
-    Map<String, dynamic> params,
-  ) async {
+  Future<Map<String, dynamic>?> evmEmit(Map<String, dynamic> params) async {
     try {
       return await _trustdart.evmEmit(params);
     } on PlatformException catch (e) {

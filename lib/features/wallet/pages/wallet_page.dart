@@ -17,6 +17,7 @@ import 'package:n42_wallet/features/wallet/pages/aa/aa_home_page.dart';
 import 'package:n42_wallet/features/wallet/pages/ens/ens_home_page.dart';
 import 'package:n42_wallet/features/wallet/pages/payment_code/payment_page.dart';
 import 'package:n42_wallet/features/wallet/pages/payment_code/set_amount.dart';
+import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_flow_utils.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_one.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_coin_item.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_coin_list_header.dart';
@@ -118,7 +119,7 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                 (chainData['mainnets'] as Map<dynamic, dynamic>? ?? {}).values,
           )
           .whereType<Map>()
-          .map((t) => (t['contract'] as String?)?.toLowerCase() ?? '')
+          .map((t) => (t['contract'] as String?)?.trim() ?? '')
           .where((c) => c.isNotEmpty)
           .toSet();
 
@@ -258,6 +259,10 @@ class _WalletPageState extends ConsumerState<WalletPage> {
   }
 
   Future<void> _promptBackup(WalletActionProvider waValue) async {
+    if (!walletHasBackupableMnemonic(waValue.walletInfo)) {
+      ToastUtils.show(walletBackupPhraseUnavailableMessage);
+      return;
+    }
     final flag = await tipsDialog7(context);
     if (!mounted || flag != true) return;
     Navigator.push(
