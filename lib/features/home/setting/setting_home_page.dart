@@ -1,7 +1,8 @@
-﻿import 'package:n42_wallet/features/browser/pages/browser_setting.dart';
+import 'package:n42_wallet/features/browser/pages/browser_setting.dart';
 import 'package:n42_wallet/features/home/setting/setting_sys_language.dart';
 import 'package:n42_wallet/features/home/setting/setting_theme.dart';
 import 'package:n42_wallet/features/home/widgets/nav_setting_item.dart';
+import 'package:n42_wallet/core/constants/language_constants.dart';
 import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
@@ -11,7 +12,7 @@ import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// Setting Home Page - Migrated to Riverpod
-/// 
+///
 /// This page demonstrates Riverpod integration:
 /// - Uses ConsumerWidget for automatic state updates
 /// - Watches localeProvider for current language
@@ -24,7 +25,7 @@ class SettingHomePage extends ConsumerWidget {
     // Watch locale from Riverpod - automatically updates when language changes
     final locale = ref.watch(localeProvider);
     final localeCode = _getLocaleCode(locale);
-    
+
     return Scaffold(
       appBar: AppBarWidget(text: S.of(context).g_key_94),
       body: SingleChildScrollView(
@@ -32,34 +33,34 @@ class SettingHomePage extends ConsumerWidget {
           horizontal: ScreenUtil().setWidth(30.0),
           vertical: ScreenUtil().setWidth(30.0),
         ),
-        child: Column(
-          children: [
-            _buildNavEnter(context, ref, localeCode),
-          ],
-        ),
+        child: Column(children: [_buildNavEnter(context, ref, localeCode)]),
       ),
     );
   }
 
   /// Convert Locale to language code string
   String _getLocaleCode(Locale locale) {
-    if (locale.countryCode != null && locale.countryCode!.isNotEmpty) {
-      return '${locale.languageCode}_${locale.countryCode}';
-    }
-    return locale.languageCode;
+    return languageCodeFromLocale(locale);
   }
 
-  Widget _buildNavEnter(BuildContext context, WidgetRef ref, String appSysLang) {
+  Widget _buildNavEnter(
+    BuildContext context,
+    WidgetRef ref,
+    String appSysLang,
+  ) {
     return Column(
       children: [
         Container(
           alignment: Alignment.centerLeft,
-          margin: EdgeInsets.symmetric(
-              vertical: ScreenUtil().setWidth(10.0)),
+          margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10.0)),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(
-                Radius.circular(ScreenUtil().setWidth(16.0))),
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+              Radius.circular(ScreenUtil().setWidth(16.0)),
+            ),
+            color: AppThemeUtils.getColorByKey(
+              context,
+              AppThemeKeys.itemBgColor.name,
+            ),
           ),
           child: Column(
             children: [
@@ -69,10 +70,11 @@ class SettingHomePage extends ConsumerWidget {
                 imgColor: Colors.blueAccent,
                 callback: () async {
                   final returnStr = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              SettingSysLanguage(appSysLang)));
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SettingSysLanguage(appSysLang),
+                    ),
+                  );
                   if (returnStr != null && returnStr is String) {
                     // Update locale via Riverpod - UI will automatically update
                     ref.read(localeProvider.notifier).setLocale(returnStr);
@@ -84,12 +86,15 @@ class SettingHomePage extends ConsumerWidget {
         ),
         Container(
           alignment: Alignment.centerLeft,
-          margin: EdgeInsets.symmetric(
-              vertical: ScreenUtil().setWidth(10.0)),
+          margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10.0)),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(
-                Radius.circular(ScreenUtil().setWidth(16.0))),
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+              Radius.circular(ScreenUtil().setWidth(16.0)),
+            ),
+            color: AppThemeUtils.getColorByKey(
+              context,
+              AppThemeKeys.itemBgColor.name,
+            ),
           ),
           child: Column(
             children: [
@@ -98,10 +103,13 @@ class SettingHomePage extends ConsumerWidget {
                 action: S.of(context).s_key_5,
                 imgColor: Colors.blueAccent,
                 callback: () {
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) {
-                    return const SettingTheme();
-                  }));
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return const SettingTheme();
+                      },
+                    ),
+                  );
                 },
               ),
             ],
@@ -109,12 +117,15 @@ class SettingHomePage extends ConsumerWidget {
         ),
         Container(
           alignment: Alignment.centerLeft,
-          margin: EdgeInsets.symmetric(
-              vertical: ScreenUtil().setWidth(10.0)),
+          margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10.0)),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(
-                Radius.circular(ScreenUtil().setWidth(16.0))),
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+              Radius.circular(ScreenUtil().setWidth(16.0)),
+            ),
+            color: AppThemeUtils.getColorByKey(
+              context,
+              AppThemeKeys.itemBgColor.name,
+            ),
           ),
           child: Column(
             children: [
@@ -123,10 +134,13 @@ class SettingHomePage extends ConsumerWidget {
                 action: S.of(context).g_browser_key11,
                 imgColor: Colors.blueAccent,
                 callback: () {
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) {
-                    return BrowserSetting();
-                  }));
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return BrowserSetting();
+                      },
+                    ),
+                  );
                 },
               ),
             ],
@@ -134,12 +148,15 @@ class SettingHomePage extends ConsumerWidget {
         ),
         Container(
           alignment: Alignment.centerLeft,
-          margin: EdgeInsets.symmetric(
-              vertical: ScreenUtil().setWidth(10.0)),
+          margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10.0)),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(
-                Radius.circular(ScreenUtil().setWidth(16.0))),
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+              Radius.circular(ScreenUtil().setWidth(16.0)),
+            ),
+            color: AppThemeUtils.getColorByKey(
+              context,
+              AppThemeKeys.itemBgColor.name,
+            ),
           ),
           child: _buildMiningVersionToggle(context, ref),
         ),
@@ -171,7 +188,10 @@ class SettingHomePage extends ConsumerWidget {
                   S.of(context).g_setting_mining_version,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(30.0),
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                    color: AppThemeUtils.getColorByKey(
+                      context,
+                      AppThemeKeys.mainTextColor.name,
+                    ),
                   ),
                 ),
                 Text(
@@ -180,7 +200,10 @@ class SettingHomePage extends ConsumerWidget {
                       : S.of(context).g_setting_mining_v1_label,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(24.0),
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                    color: AppThemeUtils.getColorByKey(
+                      context,
+                      AppThemeKeys.itemSubtitleTextColor.name,
+                    ),
                   ),
                 ),
               ],
@@ -188,8 +211,12 @@ class SettingHomePage extends ConsumerWidget {
           ),
           Switch(
             value: useV2,
-            onChanged: (v) => ref.read(miningUseV2Provider.notifier).setUseV2(v),
-            activeColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+            onChanged: (v) =>
+                ref.read(miningUseV2Provider.notifier).setUseV2(v),
+            activeThumbColor: AppThemeUtils.getColorByKey(
+              context,
+              AppThemeKeys.mainBlueColor.name,
+            ),
           ),
         ],
       ),

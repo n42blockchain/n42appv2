@@ -51,6 +51,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/core/constants/language_constants.dart';
 import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_chat/n42_chat.dart';
 import 'package:n42_chat/l10n/app_localizations.dart' as chat_l10n;
@@ -98,8 +99,6 @@ void main() async {
 
   // Initialize Firebase
   await Firebase.initializeApp();
-  await notification.init();
-
   // Create Riverpod ProviderContainer
   globalProviderContainer = ProviderContainer();
 
@@ -196,13 +195,25 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
   /// 延迟初始化重量级服务，在首帧渲染后执行
   void _initDeferredServices() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      // 本地通知初始化（后台执行，不阻塞首帧）
+      unawaited(_initLocalNotifications());
       // 钱包数据迁移（后台执行，不阻塞 UI）
-      _migrateWalletData();
+      unawaited(_migrateWalletData());
       // N42Chat 初始化（后台执行，不阻塞 UI）
-      _initN42Chat();
+      unawaited(_initN42Chat());
       // 钓鱼检测初始化（后台执行，不阻塞 UI）
-      _initPhishingDetector();
+      unawaited(_initPhishingDetector());
     });
+  }
+
+  Future<void> _initLocalNotifications() async {
+    try {
+      await notification.init();
+    } catch (e) {
+      if (kDebugMode) {
+        debugPrint('Local notification initialization failed: $e');
+      }
+    }
   }
 
   /// 初始化钓鱼网址检测服务（后台执行，不阻塞 UI）
@@ -386,10 +397,11 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
       // 监听 n42_chat 语言变化，同步更新主应用
       N42Chat.addLocaleListener((locale) {
         final currentAppLocale = globalProviderContainer.read(localeProvider);
-        if (currentAppLocale.languageCode != locale.languageCode) {
+        if (languageCodeFromLocale(currentAppLocale) !=
+            languageCodeFromLocale(locale)) {
           globalProviderContainer
               .read(localeProvider.notifier)
-              .setLocale(locale.languageCode);
+              .setLocale(languageCodeFromLocale(locale));
           if (kDebugMode) {
             debugPrint('Main app locale synced from N42Chat: $locale');
           }
@@ -667,12 +679,15 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
   }
 
   Future<void> initData() async {
+    unawaited(_initPushServices());
+    unawaited(ref.read(appInitProvider.future));
+  }
+
+  Future<void> _initPushServices() async {
     try {
       /// FCM推送设置
       /// ios 通过fcm集成的apns推送 同样需要开启vpn
       await AppPushUtils.init();
-      if (!mounted) return;
-      await ref.read(appInitProvider.future);
     } catch (err) {
       if (kDebugMode) debugPrint("FCM推送初始化失败");
     }

@@ -21,8 +21,8 @@ class SettingSysLanguage extends ConsumerWidget {
         itemCount: kSupportedLanguages.length,
         itemBuilder: (context, index) {
           final lang = kSupportedLanguages[index];
-          final isSelected = appSysLang == lang.code ||
-              (lang.code.split('_').first == appSysLang);
+          final currentCode = normalizeLanguageCode(appSysLang);
+          final isSelected = isLanguageSelected(currentCode, lang.code);
           return _LanguageItem(
             lang: lang,
             isSelected: isSelected,
@@ -62,7 +62,16 @@ class _LanguageItem extends StatelessWidget {
           children: [
             Row(
               children: [
-                Image.asset(lang.icon, width: ScreenUtil().setWidth(56), fit: BoxFit.cover),
+                Image.asset(
+                  lang.icon,
+                  width: ScreenUtil().setWidth(56),
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, _, _) => Icon(
+                    Icons.language,
+                    size: ScreenUtil().setWidth(48),
+                    color: Colors.grey,
+                  ),
+                ),
                 SizedBox(width: ScreenUtil().setWidth(30)),
                 Expanded(
                   child: Column(
@@ -71,7 +80,10 @@ class _LanguageItem extends StatelessWidget {
                       Text(
                         lang.name,
                         style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                          color: AppThemeUtils.getColorByKey(
+                            context,
+                            AppThemeKeys.mainTextColor.name,
+                          ),
                           fontSize: ScreenUtil().setSp(32),
                         ),
                       ),
@@ -79,7 +91,10 @@ class _LanguageItem extends StatelessWidget {
                       Text(
                         lang.englishName,
                         style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.ff888888.name),
+                          color: AppThemeUtils.getColorByKey(
+                            context,
+                            AppThemeKeys.ff888888.name,
+                          ),
                           fontSize: ScreenUtil().setSp(32),
                         ),
                       ),
@@ -87,13 +102,23 @@ class _LanguageItem extends StatelessWidget {
                   ),
                 ),
                 if (isSelected)
-                  Icon(Icons.check, size: ScreenUtil().setWidth(48), color: const Color(0xFF448BDF))
+                  Icon(
+                    Icons.check,
+                    size: ScreenUtil().setWidth(48),
+                    color: const Color(0xFF448BDF),
+                  )
                 else
                   SizedBox(width: ScreenUtil().setWidth(48)),
               ],
             ),
             SizedBox(height: ScreenUtil().setWidth(26)),
-            Divider(height: 1, color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemLineColor.name)),
+            Divider(
+              height: 1,
+              color: AppThemeUtils.getColorByKey(
+                context,
+                AppThemeKeys.itemLineColor.name,
+              ),
+            ),
           ],
         ),
       ),

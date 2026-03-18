@@ -25,19 +25,31 @@ void main() {
       test('referral text should use N token, not AST', () {
         // g_share_v3_key_3
         final referralText = s.g_share_v3_key_3;
-        expect(referralText.contains('AST'), false, 
-            reason: 'Referral text should not contain AST');
-        expect(referralText.contains('N Tokens'), true,
-            reason: 'Referral text should contain N Tokens');
+        expect(
+          referralText.contains('AST'),
+          false,
+          reason: 'Referral text should not contain AST',
+        );
+        expect(
+          referralText.contains('N Tokens'),
+          true,
+          reason: 'Referral text should contain N Tokens',
+        );
       });
 
       test('verification reward text should use N token, not AST', () {
         // g_share_v3_key_5
         final rewardText = s.g_share_v3_key_5;
-        expect(rewardText.contains('AST'), false,
-            reason: 'Reward text should not contain AST');
-        expect(rewardText.contains(' N '), true,
-            reason: 'Reward text should contain N');
+        expect(
+          rewardText.contains('AST'),
+          false,
+          reason: 'Reward text should not contain AST',
+        );
+        expect(
+          rewardText.contains(' N '),
+          true,
+          reason: 'Reward text should contain N',
+        );
       });
     });
 
@@ -85,12 +97,18 @@ void main() {
           s.g_key_wallet_k33, // Result
           s.g_key_wallet_k47, // Add
         ];
-        
+
         for (final text in walletTexts) {
-          expect(text.contains('AST'), false,
-              reason: 'Wallet text "$text" should not contain AST');
-          expect(text.contains('AMT'), false,
-              reason: 'Wallet text "$text" should not contain AMT');
+          expect(
+            text.contains('AST'),
+            false,
+            reason: 'Wallet text "$text" should not contain AST',
+          );
+          expect(
+            text.contains('AMT'),
+            false,
+            reason: 'Wallet text "$text" should not contain AMT',
+          );
         }
       });
     });
@@ -126,7 +144,7 @@ void main() {
           ),
         ),
       );
-      
+
       await tester.pumpAndSettle();
       expect(find.text('Theme'), findsOneWidget);
     });
@@ -156,7 +174,7 @@ void main() {
           ),
         ),
       );
-      
+
       await tester.pumpAndSettle();
       expect(find.text('Light'), findsOneWidget);
       expect(find.text('Dark'), findsOneWidget);
@@ -171,10 +189,27 @@ void main() {
       );
     });
 
+    test('should support Traditional Chinese', () {
+      expect(
+        S.delegate.supportedLocales.any(
+          (l) => l.languageCode == 'zh' && l.countryCode == 'TW',
+        ),
+        true,
+      );
+    });
+
+    test('should support Portuguese (Brazil)', () {
+      expect(
+        S.delegate.supportedLocales.any(
+          (l) => l.languageCode == 'pt' && l.countryCode == 'BR',
+        ),
+        true,
+      );
+    });
+
     test('should have valid delegate', () {
       expect(S.delegate, isNotNull);
       expect(S.delegate.supportedLocales, isNotEmpty);
     });
   });
 }
-
