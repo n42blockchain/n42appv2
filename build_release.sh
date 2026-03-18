@@ -35,10 +35,64 @@ fi
 DATE=$(date +%Y%m%d)
 mkdir -p "$BIN_DIR"
 
+# ── 1.5. 读取 .env（如存在）────────────────────────────────────────────
+if [[ -f .env ]]; then
+  set -a
+  # shellcheck disable=SC1091
+  source .env
+  set +a
+fi
+
 # ── 2. 公共 --dart-define 参数 ──────────────────────────────────────────
 DART_DEFINES=""
-[[ -n "${COINGECKO_API_KEY:-}" ]] && DART_DEFINES+=" --dart-define=COINGECKO_API_KEY=$COINGECKO_API_KEY"
-[[ -n "${AI_API_KEY:-}" ]]        && DART_DEFINES+=" --dart-define=AI_API_KEY=$AI_API_KEY"
+for key in \
+  INFURA_API_KEY \
+  INFURA_SEPOLIA_KEY \
+  ETHERSCAN_API_KEY \
+  BSCSCAN_API_KEY \
+  BASESCAN_API_KEY \
+  SONICSCAN_API_KEY \
+  SOLSCAN_API_TOKEN \
+  TRON_PRO_API_KEY \
+  TOKENVIEW_API_KEY \
+  TON_API_KEY_MAINNET \
+  TON_API_KEY_TESTNET \
+  DOT_API_KEY \
+  COINGECKO_API_KEY \
+  SIMPLE_HASH_API_KEY \
+  MOONPAY_SECRET_KEY \
+  MOONPAY_SECRET_KEY_TEST \
+  AI_API_KEY \
+  AI_BASE_URL \
+  AI_MODEL \
+  GOOGLE_TRANSLATE_API_KEY \
+  GOOGLE_SPEECH_API_KEY \
+  AZURE_SPEECH_API_KEY \
+  AZURE_SPEECH_REGION \
+  GIPHY_API_KEY \
+  DEBANK_API_KEY \
+  ALCHEMY_API_KEY \
+  N42_CHAT_GOOGLE_CLIENT_ID \
+  N42_CHAT_GOOGLE_SERVER_CLIENT_ID \
+  N42_CHAT_TWITTER_API_KEY \
+  N42_CHAT_TWITTER_API_SECRET \
+  N42_CHAT_TWITTER_REDIRECT_URI \
+  N42_CHAT_WECHAT_APP_ID \
+  N42_CHAT_WECHAT_UNIVERSAL_LINK \
+  PROXY_BASE_URL \
+  PROXY_AUTH_TOKEN \
+  MINING_WS_URL \
+  MINING_RPC_URL \
+  MINING_EXPLORER_URL \
+  N42_TESTNET_RPC \
+  ETH_RPC_URL \
+  BTC_TESTNET_RPC \
+  BTC_MAINNET_RPC \
+  IPFS_USERNAME \
+  IPFS_PASSWORD; do
+  value="${!key:-}"
+  [[ -n "$value" ]] && DART_DEFINES+=" --dart-define=${key}=${value}"
+done
 
 # ── 3. 构建 APK ────────────────────────────────────────────────────────
 build_apk() {

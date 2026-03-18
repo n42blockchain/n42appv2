@@ -272,6 +272,31 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
       const envChatWeChatUniversalLink = String.fromEnvironment(
         'N42_CHAT_WECHAT_UNIVERSAL_LINK',
       );
+      const envGoogleTranslateApiKey = String.fromEnvironment(
+        'GOOGLE_TRANSLATE_API_KEY',
+      );
+      const envGoogleSpeechApiKey = String.fromEnvironment(
+        'GOOGLE_SPEECH_API_KEY',
+      );
+      const envAzureSpeechApiKey = String.fromEnvironment(
+        'AZURE_SPEECH_API_KEY',
+      );
+      const envAzureSpeechRegion = String.fromEnvironment(
+        'AZURE_SPEECH_REGION',
+        defaultValue: 'eastus',
+      );
+      const envGiphyApiKey = String.fromEnvironment('GIPHY_API_KEY');
+      const envAiApiKey = String.fromEnvironment('AI_API_KEY');
+      const envAiBaseUrl = String.fromEnvironment(
+        'AI_BASE_URL',
+        defaultValue: 'https://api.groq.com/openai',
+      );
+      const envAiModel = String.fromEnvironment(
+        'AI_MODEL',
+        defaultValue: 'llama-3.3-70b-versatile',
+      );
+      const envDebankApiKey = String.fromEnvironment('DEBANK_API_KEY');
+      const envAlchemyApiKey = String.fromEnvironment('ALCHEMY_API_KEY');
       final nativeSocialAuthConfig = await SocialAuthNativeConfig.load();
       final chatSocialAuthConfig = ChatSocialAuthConfig.resolve(
         nativeConfig: nativeSocialAuthConfig,
@@ -283,6 +308,23 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
         envWeChatAppId: envChatWeChatAppId,
         envWeChatUniversalLink: envChatWeChatUniversalLink,
       );
+      String? normalizedEnv(String value) {
+        final trimmed = value.trim();
+        if (trimmed.isEmpty) return null;
+        return trimmed;
+      }
+
+      final proxyAuthToken = normalizedEnv(ProxyConfig.authToken);
+      final directGoogleTranslateApiKey = normalizedEnv(
+        envGoogleTranslateApiKey,
+      );
+      final directGoogleSpeechApiKey = normalizedEnv(envGoogleSpeechApiKey);
+      final directAzureSpeechApiKey = normalizedEnv(envAzureSpeechApiKey);
+      final directGiphyApiKey = normalizedEnv(envGiphyApiKey);
+      final directAiApiKey = normalizedEnv(envAiApiKey);
+      final directDebankApiKey = normalizedEnv(envDebankApiKey);
+      final directAlchemyApiKey = normalizedEnv(envAlchemyApiKey);
+
       if (kDebugMode) {
         for (final line in chatSocialAuthConfig.diagnostics(
           isAndroid: Platform.isAndroid,
@@ -360,26 +402,29 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
           ssoRedirectUrl: 'n42://auth/sso',
           walletBridge: N42WalletBridge(),
           apiHubBridge: N42ApiHubBridge(),
-          proxyAuthToken: ProxyConfig.authToken.isEmpty
-              ? null
-              : ProxyConfig.authToken,
-          giphyBaseUrl: ProxyConfig.giphyBase,
-          giphyUseProxyEndpoint: true,
-          aiApiKey: ProxyConfig.authToken.isEmpty
-              ? null
-              : ProxyConfig.authToken,
-          aiBaseUrl: ProxyConfig.aiChat,
-          aiModel: '', // Model configured server-side
-          aiUseProxyEndpoint: true,
-          speechGoogleBaseUrl: ProxyConfig.speechGoogle,
-          speechAzureBaseUrl: ProxyConfig.speechAzure,
-          speechUseProxyEndpoint: true,
-          marketBaseUrl: ProxyConfig.marketBase,
-          marketUseProxyEndpoint: true,
-          debankBaseUrl: ProxyConfig.debankBase,
-          debankUseProxyEndpoint: true,
-          alchemyBaseUrl: ProxyConfig.alchemyChain('eth-mainnet'),
-          alchemyUseProxyEndpoint: true,
+          proxyAuthToken: proxyAuthToken,
+          giphyApiKey: directGiphyApiKey,
+          giphyBaseUrl: 'https://api.giphy.com/v1/gifs',
+          giphyUseProxyEndpoint: false,
+          googleTranslateApiKey: directGoogleTranslateApiKey,
+          aiApiKey: directAiApiKey,
+          aiBaseUrl: envAiBaseUrl,
+          aiModel: envAiModel,
+          aiUseProxyEndpoint: false,
+          googleSpeechApiKey: directGoogleSpeechApiKey,
+          azureSpeechApiKey: directAzureSpeechApiKey,
+          azureSpeechRegion: envAzureSpeechRegion,
+          speechGoogleBaseUrl: null,
+          speechAzureBaseUrl: null,
+          speechUseProxyEndpoint: false,
+          marketBaseUrl: 'https://api.coingecko.com/api/v3',
+          marketUseProxyEndpoint: false,
+          debankApiKey: directDebankApiKey,
+          debankBaseUrl: 'https://open-api.debank.com/v1',
+          debankUseProxyEndpoint: false,
+          alchemyApiKey: directAlchemyApiKey,
+          alchemyBaseUrl: 'https://eth-mainnet.g.alchemy.com/v2',
+          alchemyUseProxyEndpoint: false,
         ),
       );
       await _flushPendingChatDeepLink();
