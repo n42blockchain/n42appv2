@@ -19,18 +19,24 @@ extension _CoinItemWidgets on _WalletSearchCoinState {
         ? _regular.getMoneyAbbreviation(balance)
         : _oCcy.format(balance);
     final sp30 = su.setSp(30.0);
+    final coinSymbol = (coinInfo.coin['miniName'] ?? coinInfo.coin['coinType'] ?? '')
+        .toString()
+        .trim();
+    final iconUrl = coinInfo.coin['icon']?.toString().trim() ?? '';
+    final isContract = coinInfo.coin['isContract'] == true;
+    final mainCoinIconUrl = coinInfo.mainCoinIcon?.trim() ?? '';
 
-    final Widget image = coinInfo.coin['miniName'] == ""
-        ? Image.asset('assets/images/list_default.png')
+    final Widget image = coinSymbol.isEmpty || iconUrl.isEmpty
+        ? Image.asset('assets/img/list_default.png')
         : ImageNetWork(
-            imageUrl: coinInfo.coin['icon'],
-            placeholder: "assets/img/list_default.png",
+            imageUrl: iconUrl,
+            placeholder: 'assets/img/list_default.png',
           );
 
-    final Widget? mainImage = coinInfo.coin['isContract']
+    final Widget? mainImage = isContract && mainCoinIconUrl.isNotEmpty
         ? ImageNetWork(
-            imageUrl: coinInfo.mainCoinIcon ?? "",
-            placeholder: "assets/img/list_default.png",
+            imageUrl: mainCoinIconUrl,
+            placeholder: 'assets/img/list_default.png',
           )
         : null;
 
@@ -104,12 +110,14 @@ extension _CoinItemWidgets on _WalletSearchCoinState {
                     children: [
                       Expanded(
                         child: Text(
-                          coinInfo.coin['miniName'],
+                          coinSymbol.isEmpty ? '--' : coinSymbol,
                           style: TextStyle(
                             fontSize: sp30,
                             color: mainColor,
                             fontWeight: FontWeight.bold,
                           ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
                         ),
                       ),
                       Text(

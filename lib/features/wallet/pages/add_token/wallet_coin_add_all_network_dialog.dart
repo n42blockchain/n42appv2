@@ -15,7 +15,7 @@ extension _WalletCoinAddAllNetworkDialog on _WalletCoinAddAllState {
             constraints: BoxConstraints(maxHeight: ScreenUtil().setWidth(600.0)),
             child: ListView.separated(
               itemCount: itemCount,
-              separatorBuilder: (_, __) => Divider(
+              separatorBuilder: (context, index) => Divider(
                 height: 0.1,
                 indent: 0,
                 endIndent: 0,
@@ -71,20 +71,25 @@ extension _WalletCoinAddAllNetworkDialog on _WalletCoinAddAllState {
 
     if (coinInfo == null) return const SizedBox.shrink();
 
-    final isN42 = coinInfo['baseInfo']['miniName'] == CoinType.N.name;
-    final symbolStr = isN42 ? CoinType.N.name : coinInfo['baseInfo']['miniName'] as String;
-    final nameStr = isN42 ? "N42" : coinInfo['baseInfo']['name'] as String;
+    final baseInfo = (coinInfo['baseInfo'] as Map?)?.cast<String, dynamic>() ?? const {};
+    final coinSymbol =
+        (baseInfo['miniName'] ?? baseInfo['coinType'] ?? '').toString().trim();
+    final coinName = (baseInfo['name'] ?? coinSymbol).toString().trim();
+    final iconUrl = baseInfo['icon']?.toString().trim() ?? '';
+    final isN42 = coinSymbol == CoinType.N.name;
+    final symbolStr = isN42 ? CoinType.N.name : (coinSymbol.isEmpty ? '--' : coinSymbol);
+    final nameStr = isN42 ? "N42" : coinName;
     final image = isN42
-        ? Image.asset('assets/images/ast.png')
+        ? Image.asset('assets/img/ast.png')
         : ImageNetWork(
-            imageUrl: coinInfo['baseInfo']['icon'],
+            imageUrl: iconUrl,
             placeholder: "assets/img/list_default.png",
           );
 
     return _networkRowWrapper(
       onTap: () {
         final adjustedIndex = importType == 0 ? index - 1 : index;
-        setNetworkIndex(adjustedIndex, coinInfo!['baseInfo']['name']);
+        setNetworkIndex(adjustedIndex, coinName);
         Navigator.pop(context);
       },
       child: Row(

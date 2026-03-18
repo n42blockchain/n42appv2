@@ -11,6 +11,14 @@ import 'package:n42_wallet/features/wallet/services/ens_resolution_models.dart';
 
 export 'package:n42_wallet/features/wallet/services/ens_resolution_models.dart';
 
+Map<String, dynamic>? _ensServiceMapValue(dynamic value) {
+  if (value is Map<String, dynamic>) return value;
+  if (value is Map) {
+    return value.map((key, entry) => MapEntry(key.toString(), entry));
+  }
+  return null;
+}
+
 /// 统一域名解析服务
 ///
 /// 支持 4 种协议（解析优先级从高到低）：
@@ -201,16 +209,16 @@ class EnsService {
     try {
       final result = await _tokenViewApi.getEnsTextRecords(domainName);
       if (!result.error && result.data != null) {
-        final data = result.data as Map<String, dynamic>;
+        final data = _ensServiceMapValue(result.data) ?? <String, dynamic>{};
         return EnsTextRecords(
-          email: data['email'] as String?,
-          url: data['url'] as String?,
-          avatar: data['avatar'] as String?,
-          description: data['description'] as String?,
-          twitter: data['com.twitter'] as String?,
-          github: data['com.github'] as String?,
-          discord: data['com.discord'] as String?,
-          telegram: data['org.telegram'] as String?,
+          email: data['email']?.toString(),
+          url: data['url']?.toString(),
+          avatar: data['avatar']?.toString(),
+          description: data['description']?.toString(),
+          twitter: data['com.twitter']?.toString(),
+          github: data['com.github']?.toString(),
+          discord: data['com.discord']?.toString(),
+          telegram: data['org.telegram']?.toString(),
         );
       }
     } catch (e) {
@@ -266,9 +274,11 @@ class EnsService {
   }) async {
     try {
       final result = await apiCall();
-      if (!result.error && result.data != null) {
+      final data = result.data;
+      final address = data == null ? '' : data.toString();
+      if (!result.error && address.isNotEmpty) {
         return EnsResolutionResult.success(
-          address: result.data as String,
+          address: address,
           ensName: domain,
           sourceChain: sourceChain,
           protocol: protocol,
@@ -287,7 +297,7 @@ class EnsService {
   ) async {
     try {
       final result = await apiCall();
-      if (!result.error && result.data != null) return result.data as String;
+      if (!result.error && result.data != null) return result.data.toString();
     } catch (e) {
       debugPrint('[DomainService] $debugLabel failed: $e');
     }

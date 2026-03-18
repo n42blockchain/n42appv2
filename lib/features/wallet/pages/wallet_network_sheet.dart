@@ -180,10 +180,15 @@ class _NetworkCoinItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scr = ScreenUtil();
-    final image = coinInfo.coin['miniName'] == CoinType.N.name
+    final coinSymbol = (coinInfo.coin['miniName'] ?? coinInfo.coin['coinType'] ?? '')
+        .toString()
+        .trim();
+    final coinName = (coinInfo.coin['name'] ?? coinSymbol).toString().trim();
+    final iconUrl = coinInfo.coin['icon']?.toString().trim() ?? '';
+    final image = coinSymbol == CoinType.N.name || iconUrl.isEmpty
         ? Image.asset('assets/img/ast.png')
         : ImageNetWork(
-            imageUrl: coinInfo.coin['icon'],
+            imageUrl: iconUrl,
             placeholder: "assets/img/list_default.png",
           );
 
@@ -209,21 +214,25 @@ class _NetworkCoinItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    coinInfo.coin['miniName'],
+                    coinSymbol.isEmpty ? '--' : coinSymbol,
                     style: TextStyle(
                       fontSize: scr.setSp(30.0),
                       color: AppThemeUtils.getColorByKey(
                           context, AppThemeKeys.mainTextColor.name),
                       fontWeight: FontWeight.bold,
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    coinInfo.coin['name'],
+                    coinName,
                     style: TextStyle(
                       fontSize: scr.setSp(30.0),
                       color: AppThemeUtils.getColorByKey(
                           context, AppThemeKeys.itemSubtitleTextColor.name),
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),

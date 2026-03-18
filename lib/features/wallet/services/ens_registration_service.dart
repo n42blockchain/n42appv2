@@ -16,6 +16,40 @@ import 'package:web3dart/web3dart.dart';
 export 'package:n42_wallet/features/wallet/services/ens_management_service.dart';
 export 'package:n42_wallet/features/wallet/services/ens_models.dart';
 
+Map<String, dynamic>? _ensMapValue(dynamic value) {
+  if (value is Map<String, dynamic>) return value;
+  if (value is Map) {
+    return value.map(
+      (key, entry) => MapEntry(key.toString(), entry),
+    );
+  }
+  return null;
+}
+
+List<dynamic> _ensListValue(dynamic value) {
+  if (value is List) return value;
+  return const [];
+}
+
+String _ensStringValue(dynamic value, {String fallback = ''}) {
+  if (value == null) return fallback;
+  return value.toString();
+}
+
+int _ensIntValue(dynamic value, {int fallback = 0}) {
+  if (value is int) return value;
+  if (value is num) return value.toInt();
+  return int.tryParse(value?.toString() ?? '') ?? fallback;
+}
+
+DateTime? _ensDateTimeValue(dynamic value) {
+  if (value == null) return null;
+  if (value is DateTime) return value;
+  if (value is int) return DateTime.fromMillisecondsSinceEpoch(value);
+  if (value is num) return DateTime.fromMillisecondsSinceEpoch(value.toInt());
+  return DateTime.tryParse(value.toString());
+}
+
 /// ENS 注册服务
 ///
 /// 提供 ENS 域名的完整生命周期管理：
@@ -51,18 +85,17 @@ class EnsRegistrationService {
         params: {'domain': normalizedName},
         header: _headers,
       );
+      final data = _ensMapValue(response['data']);
 
       if (response['code'] == 200) {
-        final data = response['data'];
-        if (data['available'] == true) {
+        if (data?['available'] == true) {
           return EnsAvailabilityResult.available(normalizedName);
         } else {
           return EnsAvailabilityResult.unavailable(
             normalizedName,
-            expiresAt: data['expiresAt'] != null
-                ? DateTime.parse(data['expiresAt'] as String)
-                : null,
-            ownerAddress: data['owner'] as String?,
+            expiresAt: _ensDateTimeValue(data?['expiresAt']),
+            ownerAddress:
+                data?['owner'] == null ? null : _ensStringValue(data?['owner']),
           );
         }
       } else {
@@ -92,7 +125,9 @@ class EnsRegistrationService {
 
       if (response['code'] == 200) {
         mm.error = false;
-        mm.data = EnsPrice.fromJson(response['data'] as Map<String, dynamic>);
+        mm.data = EnsPrice.fromJson(
+          _ensMapValue(response['data']) ?? <String, dynamic>{},
+        );
       } else {
         mm.error = true;
       }
@@ -118,10 +153,15 @@ class EnsRegistrationService {
       );
 
       if (response['code'] == 200) {
-        final dataList = response['data'] as List<dynamic>?;
+        final dataList = _ensListValue(response['data']);
         mm.error = false;
-        mm.data = (dataList ?? [])
-            .map((e) => OwnedEns.fromJson(e as Map<String, dynamic>))
+        mm.data = dataList
+            .whereType<Map>()
+            .map(
+              (e) => OwnedEns.fromJson(
+                e.map((key, value) => MapEntry(key.toString(), value)),
+              ),
+            )
             .toList();
       } else {
         mm.error = true;
@@ -192,13 +232,15 @@ class EnsRegistrationService {
       );
 
       if (response['code'] == 200) {
+        final data = _ensMapValue(response['data']) ?? <String, dynamic>{};
         final result = CommitResult(
           commitmentHash: commitment,
           secret: secretValue,
-          txHash: response['data']['txHash'] as String?,
+          txHash:
+              data['txHash'] == null ? null : _ensStringValue(data['txHash']),
           commitTime: DateTime.now(),
-          minWaitTime: response['data']['minWaitTime'] as int? ?? 60,
-          maxWaitTime: response['data']['maxWaitTime'] as int? ?? 86400,
+          minWaitTime: _ensIntValue(data['minWaitTime'], fallback: 60),
+          maxWaitTime: _ensIntValue(data['maxWaitTime'], fallback: 86400),
         );
         _pendingCommitments[normalizedName] = result;
         mm.error = false;
@@ -255,16 +297,16 @@ class EnsRegistrationService {
       );
 
       if (response['code'] == 200) {
-        final data = response['data'];
+        final data = _ensMapValue(response['data']) ?? <String, dynamic>{};
         _pendingCommitments.remove(params.name);
         mm.error = false;
         mm.data = RegisterResult.success(
-          txHash: data['txHash'] as String,
+          txHash: _ensStringValue(data['txHash']),
           name: '${params.name}.eth',
-          expiresAt: DateTime.parse(data['expiresAt'] as String),
+          expiresAt: _ensDateTimeValue(data['expiresAt']) ?? DateTime.now(),
         );
       } else {
-        final errCode = response['code'] as int? ?? 0;
+        final errCode = _ensIntValue(response['code']);
         final errMsg = response['msg']?.toString() ?? 'Registration failed';
         // 仅信任服务端明确的错误码 4001 判断承诺过期
         // 避免依赖 errMsg 字符串匹配——服务端可在任何消息中注入 "expired" 关键词

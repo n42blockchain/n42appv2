@@ -10,6 +10,24 @@ const String _kLegacyTronProApiKey = String.fromEnvironment(
 );
 const Duration _kProxyExplorerTimeout = Duration(seconds: 4);
 
+List<dynamic> _txListValue(dynamic value) {
+  if (value is List) return value;
+  return const [];
+}
+
+Map<String, dynamic>? _txMapValue(dynamic value) {
+  if (value is Map<String, dynamic>) return value;
+  if (value is Map) {
+    return value.map((key, entry) => MapEntry(key.toString(), entry));
+  }
+  return null;
+}
+
+String _txStringValue(dynamic value, {String fallback = ''}) {
+  if (value == null) return fallback;
+  return value.toString();
+}
+
 int explorerStartFromPage(int? page, int? pageSize) {
   final normalizedPage = page == null || page < 1 ? 1 : page;
   final normalizedPageSize = pageSize == null || pageSize < 1 ? 20 : pageSize;
@@ -263,11 +281,18 @@ extension TransactionApiBtcSolTrx on TransactionApi {
         header: h,
       );
       if (data != null) {
-        final res = data['data'] as List;
-        mm.data = res.map((e) => SOLTransactionItem.fromJson(e)).toList();
+        final res = _txListValue(data['data']);
+        mm.data = res
+            .whereType<Map>()
+            .map(
+              (e) => SOLTransactionItem.fromJson(
+                e.map((key, value) => MapEntry(key.toString(), value)),
+              ),
+            )
+            .toList();
       } else {
         mm.error = true;
-        mm.data = data['message'];
+        mm.data = 'Error';
       }
     } catch (e) {
       mm.error = true;
@@ -363,9 +388,15 @@ extension TransactionApiBtcSolTrx on TransactionApi {
         header: h,
       );
       if (data != null) {
-        final res = data['data'] as List;
+        final res = _txListValue(data['data']);
         final mapped = res
-            .map((e) => _parseTrxItem(e, includeToAddress: includeToAddress))
+            .whereType<Map>()
+            .map(
+              (e) => _parseTrxItem(
+                e.map((key, value) => MapEntry(key.toString(), value)),
+                includeToAddress: includeToAddress,
+              ),
+            )
             .where((item) {
               if (contractAddress.isEmpty) return true;
               return (item.contractAddress ?? '').toLowerCase() ==
@@ -390,19 +421,20 @@ extension TransactionApiBtcSolTrx on TransactionApi {
   }) {
     final item = CommonResponseItemModel.fromJson(e)
       ..blockHash = e['block'].toString()
-      ..hash = e['hash'] as String
+      ..hash = _txStringValue(e['hash'])
       ..timeStamp = e['timestamp'].toString()
-      ..from = e['ownerAddress'] as String;
+      ..from = _txStringValue(e['ownerAddress']);
     if (includeToAddress) {
-      item.to = e['toAddress'] as String;
-      item.value = e['amount'] as String;
+      item.to = _txStringValue(e['toAddress']);
+      item.value = _txStringValue(e['amount']);
     }
-    final triggerInfo = e['trigger_info'] as Map<String, dynamic>?;
+    final triggerInfo = _txMapValue(e['trigger_info']);
     if (triggerInfo != null) {
-      item.contractAddress = triggerInfo['contract_address'] as String? ?? '';
+      item.contractAddress = _txStringValue(triggerInfo['contract_address']);
       if (item.contractAddress != '') {
-        item.to = triggerInfo['parameter']['_to'] as String? ?? '';
-        item.value = triggerInfo['parameter']['_value'] as String? ?? '';
+        final parameters = _txMapValue(triggerInfo['parameter']);
+        item.to = _txStringValue(parameters?['_to']);
+        item.value = _txStringValue(parameters?['_value']);
       }
     }
     return item;

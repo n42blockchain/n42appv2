@@ -17,7 +17,6 @@ import 'package:n42_wallet/features/wallet/pages/send/wallet_chain_send_sui.dart
 import 'package:n42_wallet/features/wallet/pages/send/wallet_chain_send_ton.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_chain_send_xrp.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_receive_qr.dart';
-import 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart';
 import 'package:n42_wallet/features/widgets/empty.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
 import 'package:flutter/material.dart';
@@ -128,8 +127,15 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
       // 单次遍历同时完成过滤 + 缓存 toLowerCase 结果，避免 sort 阶段重复转换
       final matched = <({CoinModel coin, String sym, String name})>[];
       for (final cm in waValue.coinList) {
-        final sym = cm.coin['miniName'].toString().toLowerCase();
-        final name = cm.coin['name'].toString().toLowerCase();
+        final sym = (cm.coin['miniName'] ?? cm.coin['coinType'] ?? '')
+            .toString()
+            .trim()
+            .toLowerCase();
+        final name = (cm.coin['name'] ?? cm.coin['coinType'] ?? '')
+            .toString()
+            .trim()
+            .toLowerCase();
+        if (sym.isEmpty && name.isEmpty) continue;
         if (sym.contains(input) || name.contains(input)) {
           matched.add((coin: cm, sym: sym, name: name));
         }
@@ -175,7 +181,7 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
 
   Future<void> _navigateForCoin(CoinModel coinInfo) async {
     if (widget.type == 0) {
-      final bt = coinInfo.coin['blockchainType'];
+      final bt = coinInfo.coin['blockchainType']?.toString() ?? '';
       await Navigator.push(context, MaterialPageRoute(builder: (context) {
         if (bt == BlockchainType.Bitcoin.name) return WalletChainSendBtc(coinInfo);
         if (bt == BlockchainType.Solana.name) return WalletChainSendSol(coinInfo);
@@ -189,10 +195,17 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
         return WalletChainSend(coinInfo);
       }));
     } else {
-      if (coinInfo.coin['isContract']) {
+      if (coinInfo.coin['isContract'] == true) {
         final idx = ref.read(wapBridgeProvider).coinModels.indexWhere(
           (e) => e.coin['coinType'] == coinInfo.coin['coinType'],
         );
+        if (idx < 0) {
+          await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => WalletReceiveQr(coinInfo)),
+          );
+          return;
+        }
         final chainCoin = ref.read(wapBridgeProvider).coinModels[idx];
         await Navigator.push(
           context,

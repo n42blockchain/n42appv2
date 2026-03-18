@@ -71,32 +71,53 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
   Future<String?> toAddressCheck(String addr);
   void closeKeyboard();
 
+  String get _coinType => coinModel.coin['coinType']?.toString() ?? '';
+  String get _blockchainType => coinModel.coin['blockchainType']?.toString() ?? '';
+  bool get _isContract => coinModel.coin['isContract'] == true;
+  int get _decimals => (coinModel.coin['decimals'] as num?)?.toInt() ?? 18;
+
+  bool _ensureChainConfig() {
+    if (_coinType.isNotEmpty && _blockchainType.isNotEmpty) return true;
+    errorMessage = 'Invalid coin configuration';
+    ToastUtils.show(errorMessage);
+    return false;
+  }
+
   // Init
 
   Future<void> initData() async {
-    if (coinModel.coin['isContract'] as bool? ?? false) {
+    if (!_ensureChainConfig()) {
+      if (mounted) setState(() => load = Load.finish);
+      return;
+    }
+    if (_isContract) {
       final wap = ref.read(wapBridgeProvider);
-      final coinType = coinModel.coin['coinType'];
       final idx = wap.coinModels.indexWhere((e) {
-        if (e.coin['coinType'] != coinType) return false;
+        if (e.coin['coinType'] != _coinType) return false;
         if (coinModel.privateKey != null) {
           return e.privateKey == coinModel.privateKey;
         }
         return true;
       });
+      if (idx < 0) {
+        errorMessage = 'Missing parent chain for $_coinType';
+        ToastUtils.show(errorMessage);
+        if (mounted) setState(() => load = Load.finish);
+        return;
+      }
       chainModel = wap.coinModels[idx];
       await chainModel?.getBalance();
       setState(() {});
     }
     gas = BigInt.from(
       getCoinGas(
-        coinModel.coin['coinType'],
-        contract: coinModel.coin['isContract'],
+        _coinType,
+        contract: _isContract,
       ),
     );
     await getBalance();
     await getGasPrice();
-    if (getEthLayer2(coinModel.coin['coinType'])) {
+    if (getEthLayer2(_coinType)) {
       gasEth = BigInt.from(getCoinGas(CoinType.ETH.name));
       await getGasPriceLayer2();
     }
@@ -121,24 +142,26 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
 
   Future<void> getGasPrice() async {
     setState(() => load = Load.loading);
-    final blockchainType = coinModel.coin['blockchainType'] as String;
-    final coinType = coinModel.coin['coinType'] as String;
-    final isEthereum = blockchainType == BlockchainType.Ethereum.name;
+    if (!_ensureChainConfig()) {
+      if (mounted) setState(() => load = Load.finish);
+      return;
+    }
+    final isEthereum = _blockchainType == BlockchainType.Ethereum.name;
 
     if (isEthereum) {
       await _fetchAdvancedGasEstimate();
     }
     final mm =
         await tokenViewApi.getGasPrice(
-          blockchainType,
-          coinType,
+          _blockchainType,
+          _coinType,
           isTest: coinModel.isTest,
           rpc: _resolveRpc(),
         ) ??
         MessageModel.error();
     if (mm.error == false) {
       gasPrice = mm.data;
-      if (get1559WithChainSymbol(coinType) && isEthereum) {
+      if (get1559WithChainSymbol(_coinType) && isEthereum) {
         gasPrice = gasPrice * BigInt.from(2);
       }
     } else {
@@ -157,10 +180,11 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
   }
 
   Future<void> _fetchAdvancedGasEstimate() async {
+    if (_coinType.isEmpty) return;
     final result = await GasTrackerApi().getGasEstimate(
-      coinType: coinModel.coin['coinType'],
+      coinType: _coinType,
       isTest: coinModel.isTest,
-      isContract: coinModel.coin['isContract'] ?? false,
+      isContract: _isContract,
     );
     if (!result.error && result.data is GasEstimateModel) {
       gasEstimate = result.data as GasEstimateModel;
@@ -177,7 +201,7 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
         '';
     final mm =
         await tokenViewApi.getGasPrice(
-          coinModel.coin['blockchainType'],
+          _blockchainType,
           CoinType.ETH.name,
           isTest: false,
           rpc: rpc,
@@ -199,9 +223,8 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
     closeKeyboard();
     if (gasLimitLoad == Load.loading) return;
     setState(() => gasLimitLoad = Load.loading);
-    final blockchainType = coinModel.coin['blockchainType'] as String;
-    if (blockchainType != BlockchainType.Ethereum.name &&
-        blockchainType != BlockchainType.Tron.name) {
+    if (_blockchainType != BlockchainType.Ethereum.name &&
+        _blockchainType != BlockchainType.Tron.name) {
       return;
     }
     try {
@@ -217,9 +240,8 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
       final price = valueTextEditingController.text;
       if (price.isEmpty) return;
 
-      final coinType = coinModel.coin['coinType'] as String;
       final gaslimit = BigInt.from(
-        getCoinGas(coinType, contract: coinModel.coin['isContract']),
+        getCoinGas(_coinType, contract: _isContract),
       );
 
       final ethMessage = await _callGasEstimateApi(
@@ -232,11 +254,10 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
 
       if (ethMessage.error == false) {
         gas = ethMessage.data;
-        if (coinType == CoinType.BOBA.name || coinType == CoinType.OP.name) {
+        if (_coinType == CoinType.BOBA.name || _coinType == CoinType.OP.name) {
           gas = BigInt.from(gas.toInt() * 1.5);
         }
-        if (blockchainType == BlockchainType.Ethereum.name &&
-            coinModel.coin['isContract'] == false) {
+        if (_blockchainType == BlockchainType.Ethereum.name && !_isContract) {
           final note = noteTextEditingController.text.trim();
           if (note.isNotEmpty) {
             final noteHex = bytesToHex(note.codeUnits);
@@ -261,7 +282,7 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
   /// 使用 Decimal 精确校验金额，避免浮点精度问题。
   void amountCheck({String value = ''}) {
     if (value.isEmpty) value = valueTextEditingController.text;
-    final int decimals = coinModel.coin['decimals'] ?? 18;
+    final int decimals = _decimals;
     final int minValue = decimals == 0 ? 1 : 0;
 
     // 格式校验
@@ -294,14 +315,13 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
 
     // 余额校验
     final BigInt valueBi = ethToWeiString(value, decimals);
-    final blockchainType = coinModel.coin['blockchainType'] as String;
-    if (blockchainType == BlockchainType.Ripple.name) {
+    if (_blockchainType == BlockchainType.Ripple.name) {
       final reserveAmount = ethToWeiString('10', decimals);
       if (valueBi + totalGasPrice > coinModel.balance - reserveAmount) {
         _setAmountError(S.of(context).g_key_47);
         return;
       }
-    } else if (coinModel.coin['isContract'] == false) {
+    } else if (!_isContract) {
       if (valueBi + totalGasPrice > coinModel.balance) {
         _setAmountError(S.of(context).g_key_47);
         return;
@@ -321,13 +341,12 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
 
   Future<void> maxTag() async {
     if (gasLimitLoad == Load.loading) return;
-    if (coinModel.coin['isContract']) {
+    if (_isContract) {
       valueTextEditingController.text = coinModel.balanceStringAll();
       transferValue = coinModel.balance;
       estimateGasEthLocal();
-    } else if (coinModel.coin['blockchainType'] ==
-            BlockchainType.Ethereum.name ||
-        coinModel.coin['blockchainType'] == BlockchainType.Tron.name) {
+    } else if (_blockchainType == BlockchainType.Ethereum.name ||
+        _blockchainType == BlockchainType.Tron.name) {
       valueTextEditingController.text = coinModel.balanceStringAll();
       final rOK = await estimateGasEthLocal();
       if (rOK == true) {
@@ -338,7 +357,7 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
         valueTextEditingController.text = regular.formartNum(
           toEther(
             transferValue.toString(),
-            coinModel.coin['decimals'],
+            _decimals,
           ).toDouble(),
           14,
           isCrop: true,
@@ -352,7 +371,7 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
       );
       valueTextEditingController.text = toEther(
         transferValue.toString(),
-        coinModel.coin['decimals'],
+        _decimals,
       ).toString();
     }
     amountErrorMessage = '';
@@ -377,7 +396,7 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
     await estimateGasEthLocal(checkAddress: false);
     if (errorMessage != '') return setState(() => load = Load.finish);
 
-    final uBalance = coinModel.coin['isContract']
+    final uBalance = _isContract
         ? (chainModel?.balance ?? BigInt.zero)
         : coinModel.balance;
     if (totalGasPrice > uBalance || coinModel.balance == BigInt.zero) {
@@ -410,7 +429,7 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
       ..to1 = toAddr
       ..addrType = coinModel.addrType
       ..coin = coinModel.coin
-      ..coinMiniName = coinModel.coin['coinType']
+      ..coinMiniName = _coinType
       ..walletIndex = ref.read(wapBridgeProvider).walletIndex
       ..contract = coinModel.isTest
           ? coinModel.coin['contract_test']
@@ -420,7 +439,7 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
       ..gas = gas.toInt()
       ..gasPriceValue = gasPrice
       ..price = transferValue;
-    if (coinModel.coin['blockchainType'] == BlockchainType.Ethereum.name) {
+    if (_blockchainType == BlockchainType.Ethereum.name) {
       trModel.message = noteTextEditingController.text.trim();
     }
     return trModel;
@@ -446,7 +465,7 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
         if (!mounted) return;
         ref.read(tripBridgeProvider).addUndoneTr(trModel, 1);
         await RecentAddressService.save(
-          coinModel.coin['coinType'] ?? '',
+          _coinType,
           toTextEditingController.text.trim(),
         );
         if (!mounted) return;
@@ -464,8 +483,7 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
 
   bool signTxCheck() {
     final isEthContract =
-        coinModel.coin['blockchainType'] == BlockchainType.Ethereum.name &&
-        (coinModel.coin['isContract'] as bool? ?? false);
+        _blockchainType == BlockchainType.Ethereum.name && _isContract;
     if (!isEthContract) return true;
     final chainBalance = chainModel?.balance ?? BigInt.zero;
     if (chainBalance == BigInt.zero || totalGasPrice > chainBalance) {
@@ -484,14 +502,18 @@ Future<MessageModel> _callGasEstimateApi({
   required BigInt gasPrice,
   required BigInt gaslimit,
 }) async {
-  final coinType = coinModel.coin['coinType'] as String;
+  final coinType = coinModel.coin['coinType']?.toString() ?? '';
   const noLatestChains = {'OKT', 'MTR', 'METIS', 'VIC', 'BOBA', 'OP', 'GO'};
 
-  final weiValue = ethToWeiString(price, coinModel.coin['decimals']);
+  final decimals = (coinModel.coin['decimals'] as num?)?.toInt() ?? 18;
+  final weiValue = ethToWeiString(price, decimals);
   final contract = coinModel.isTest
       ? coinModel.coin['contract_test']
       : coinModel.coin['contract'];
-  final blockchainType = coinModel.coin['blockchainType'] as String;
+  final blockchainType = coinModel.coin['blockchainType']?.toString() ?? '';
+  if (coinType.isEmpty || blockchainType.isEmpty) {
+    return MessageModel.error()..data = 'Invalid coin configuration';
+  }
 
   if (blockchainType == BlockchainType.Tron.name) {
     return TrxApi().getGasEstimateTrx(

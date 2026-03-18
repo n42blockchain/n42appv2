@@ -123,8 +123,10 @@ extension WalletActionProviderSort on WalletActionProvider {
     final nameSort = sort['name'] ?? -1;
     if (nameSort == 0 || nameSort == 1) {
       coinList.sort((a, b) {
-        final aName = a.coin['miniName'] as String;
-        final bName = b.coin['miniName'] as String;
+        final aName =
+            (a.coin['miniName'] ?? a.coin['coinType'] ?? '').toString();
+        final bName =
+            (b.coin['miniName'] ?? b.coin['coinType'] ?? '').toString();
         return nameSort == 0 ? aName.compareTo(bName) : bName.compareTo(aName);
       });
     }

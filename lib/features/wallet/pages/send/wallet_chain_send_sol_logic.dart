@@ -28,11 +28,17 @@ mixin _SolSendLogicMixin on ConsumerState<WalletChainSendSol> {
   Load load = Load.loading;
 
   Map<String, dynamic> get _coin => widget.coinModel.coin;
-  String get _coinType => _coin['coinType'] as String;
-  bool get _isContract => _coin['isContract'] as bool;
-  int get _decimals => _coin['decimals'] as int;
+  String get _coinType => _coin['coinType']?.toString() ?? '';
+  bool get _isContract => _coin['isContract'] == true;
+  int get _decimals => (_coin['decimals'] as num?)?.toInt() ?? 18;
 
   Future<void> initData() async {
+    if (_coinType.isEmpty) {
+      errorMessage = 'Invalid coin configuration';
+      ToastUtils.show(errorMessage);
+      if (mounted) setState(() => load = Load.finish);
+      return;
+    }
     if (_isContract) {
       final wap = ref.read(wapBridgeProvider);
       final cIndex = wap.coinModels.indexWhere((e) {
@@ -42,6 +48,12 @@ mixin _SolSendLogicMixin on ConsumerState<WalletChainSendSol> {
         }
         return true;
       });
+      if (cIndex < 0) {
+        errorMessage = 'Missing parent chain for $_coinType';
+        ToastUtils.show(errorMessage);
+        if (mounted) setState(() => load = Load.finish);
+        return;
+      }
       chainModel = wap.coinModels[cIndex];
       await chainModel?.getBalance();
       if (!mounted) return;
@@ -294,6 +306,7 @@ mixin _SolSendLogicMixin on ConsumerState<WalletChainSendSol> {
           _coinType,
           toTextEditingController.text.trim(),
         );
+        if (!mounted) return;
         ToastUtils.show(S.current.g_key_nft_41);
         Navigator.pop(context);
       }

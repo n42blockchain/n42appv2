@@ -5,6 +5,14 @@ part of 'wallet_coin_add_all.dart';
 /// Contains: coin/token CRUD operations, search, address validation,
 /// contract lookup, import, and navigation helpers.
 extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
+  Map<String, dynamic>? _currentTokenBaseInfo() {
+    final cKeys = chainsToken.keys.toList();
+    if (cKeys.isEmpty) return null;
+    if (networkIndexToken < 0 || networkIndexToken >= cKeys.length) return null;
+    final chain = chainsToken[cKeys[networkIndexToken]];
+    return (chain['baseInfo'] as Map?)?.cast<String, dynamic>();
+  }
+
   void setNetworkIndex(int value, String name) {
     if (importType == 0) {
       if (value == networkIndex) return;
@@ -63,8 +71,13 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
       }
       if (!mounted) return;
       chain = chains![symbolStr];
+      if (chain == null) {
+        ToastUtils.show('Missing parent chain configuration');
+        setState(() => coinMap['edit'] = false);
+        return;
+      }
       final wap = ref.read(wapBridgeProvider);
-      final baseToken = _cloneBaseInfo(chain!);
+      final baseToken = _cloneBaseInfo(chain);
       baseToken['contract'] = coinMap['contract'].toString();
       baseToken['icon'] = coinMap['icon'];
       baseToken['name'] = coinMap['fullname'];
@@ -158,8 +171,12 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
       tokenErrorMessage = S.of(context).g_key_41;
       return false;
     }
-    final cKeys = chainsToken.keys.toList();
-    final coinType = chainsToken[cKeys[networkIndexToken]]["baseInfo"]['coinType'];
+    final baseInfo = _currentTokenBaseInfo();
+    final coinType = baseInfo?['coinType']?.toString() ?? '';
+    if (coinType.isEmpty) {
+      tokenErrorMessage = 'Invalid chain configuration';
+      return false;
+    }
     final check = await Trustdart().validateAddress(coinType, addr);
     tokenErrorMessage = check ? "" : S.current.g_key_t_50;
     return check;
@@ -192,10 +209,15 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
   /// 查询合约信息：先从本地 coinlist 匹配，再尝试链上 eth_call。
   Future<void> _lookupContractInfo(String address) async {
     if (!mounted) return;
-    final cKeys = chainsToken.keys.toList();
-    if (cKeys.isEmpty) return;
-    final baseInfo = chainsToken[cKeys[networkIndexToken]]['baseInfo'];
-    final coinType = baseInfo['coinType'] as String;
+    final baseInfo = _currentTokenBaseInfo();
+    final coinType = baseInfo?['coinType']?.toString() ?? '';
+    if (baseInfo == null || coinType.isEmpty) {
+      setState(() {
+        _contractState = 'error';
+        _contractHint = '';
+      });
+      return;
+    }
 
     // 1. 地址格式校验
     if (!await Trustdart().validateAddress(coinType, address)) {
@@ -215,7 +237,7 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
     }
 
     // 3. 链上查询（仅支持 EVM 链）
-    if (baseInfo['blockchainType'] == 'Ethereum') {
+    if (baseInfo['blockchainType']?.toString() == 'Ethereum') {
       final rpcUrl = baseInfo['service']?.toString() ?? '';
       if (rpcUrl.isNotEmpty) {
         final info = await EthAPI.getErc20TokenInfo(address, rpcUrl);
@@ -261,8 +283,22 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
     if (!await checkTokenInput()) return;
     setState(() => load = Load.loading);
     final tokenAddress = tokenEditingController.text;
-    final chain = chainsToken[chainsToken.keys.toList()[networkIndexToken]];
-    final symbolStr = chain['baseInfo']['miniName'].toString().toUpperCase();
+    final cKeys = chainsToken.keys.toList();
+    if (networkIndexToken < 0 || networkIndexToken >= cKeys.length) {
+      ToastUtils.show('Invalid chain configuration');
+      setState(() => load = Load.finish);
+      return;
+    }
+    final chain =
+        (chainsToken[cKeys[networkIndexToken]] as Map?)?.cast<String, dynamic>();
+    final baseInfo = (chain?['baseInfo'] as Map?)?.cast<String, dynamic>();
+    final symbolStr =
+        (baseInfo?['miniName'] ?? baseInfo?['coinType'] ?? '').toString().toUpperCase();
+    if (chain == null || baseInfo == null || symbolStr.isEmpty) {
+      ToastUtils.show('Invalid chain configuration');
+      setState(() => load = Load.finish);
+      return;
+    }
 
     // 检查 coinlist 中是否已存在
     final cIndex = coinlist.indexWhere((e) =>
@@ -365,7 +401,8 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
 
   /// 深拷贝 chain baseInfo 并设置 token 公共默认值。
   Map<String, dynamic> _cloneBaseInfo(Map<String, dynamic> chain) {
-    final baseToken = json.decode(json.encode(chain['baseInfo'])) as Map<String, dynamic>;
+    final baseInfo = (chain['baseInfo'] as Map?)?.cast<String, dynamic>() ?? const {};
+    final baseToken = json.decode(json.encode(baseInfo)) as Map<String, dynamic>;
     baseToken['isContract'] = true;
     baseToken['contract_test'] = "";
     baseToken['balance'] = "0";

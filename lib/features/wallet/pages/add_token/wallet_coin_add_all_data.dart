@@ -5,13 +5,29 @@ part of 'wallet_coin_add_all.dart';
 /// Contains: setChainsToken, setChainsTokenWithNetwork, checkSymbol,
 /// dealChain, coinDeal, getChainList, _extractPopularTokens.
 extension _WalletCoinAddAllData on _WalletCoinAddAllState {
+  String _mapString(Map<String, dynamic> map, String key, {String fallback = ''}) {
+    final value = map[key];
+    if (value == null) return fallback;
+    final text = value.toString().trim();
+    return text.isEmpty ? fallback : text;
+  }
+
+  int _mapInt(Map<String, dynamic> map, String key, {int fallback = 0}) {
+    final value = map[key];
+    if (value is int) return value;
+    if (value is num) return value.toInt();
+    if (value is String) return int.tryParse(value) ?? fallback;
+    return fallback;
+  }
+
   void setChainsToken() {
     chainsToken = {};
     if (chains != null) {
       for (final entry in chains!.entries) {
-        final baseInfo = entry.value['baseInfo'];
-        final blockchainType = baseInfo["blockchainType"];
-        final coinType = baseInfo["coinType"];
+        final baseInfo =
+            (entry.value['baseInfo'] as Map?)?.cast<String, dynamic>() ?? const {};
+        final blockchainType = _mapString(baseInfo, 'blockchainType');
+        final coinType = _mapString(baseInfo, 'coinType');
         if (blockchainType != BlockchainType.Bitcoin.name &&
             blockchainType != BlockchainType.Algorand.name &&
             coinType != CoinType.N.name) {
@@ -25,18 +41,28 @@ extension _WalletCoinAddAllData on _WalletCoinAddAllState {
   void setChainsTokenWithNetwork() {
     final cKeys = chainsToken.keys.toList();
     if (cKeys.isEmpty) return;
+    if (networkIndexToken < 0 || networkIndexToken >= cKeys.length) {
+      networkIndexToken = 0;
+    }
 
-    networkNameToken =
-        chainsToken[cKeys[networkIndexToken]]["baseInfo"]['name'];
-    final chainMap = chainsToken[cKeys[networkIndexToken]];
-    final mainnets = chainMap['isTest']
-        ? chainMap['testnets'][0]['testnetContract']
-        : chainMap['mainnets'];
+    final currentChain =
+        (chainsToken[cKeys[networkIndexToken]] as Map?)?.cast<String, dynamic>() ?? const {};
+    final baseInfo =
+        (currentChain['baseInfo'] as Map?)?.cast<String, dynamic>() ?? const {};
+    networkNameToken = _mapString(baseInfo, 'name');
+    final isTest = currentChain['isTest'] == true;
+    final testnets = currentChain['testnets'];
+    final mainnets = isTest &&
+            testnets is List &&
+            testnets.isNotEmpty &&
+            testnets.first is Map
+        ? (testnets.first as Map)['testnetContract']
+        : currentChain['mainnets'];
 
     coinlistToken = [];
     if (mainnets is Map<String, dynamic> && mainnets.isNotEmpty) {
       for (final mainnet in mainnets.values) {
-        if (mainnet['customer'] == true) {
+        if (mainnet is Map<String, dynamic> && mainnet['customer'] == true) {
           mainnet["edit"] = false;
           coinlistToken.add(mainnet);
         }
@@ -48,36 +74,52 @@ extension _WalletCoinAddAllData on _WalletCoinAddAllState {
     final chain = chains![symbol.toUpperCase()];
     if (chain == null) return false;
     if (contract == "") return chain['showList'] == true;
-    return chain['mainnets'][contract] != null;
+    final mainnets = chain['mainnets'];
+    return mainnets is Map && mainnets[contract] != null;
   }
 
   Map<String, dynamic>? dealChain(
     Map<String, dynamic> chainMap,
   ) {
-    final symbol = chainMap['coin_name'].toString();
-    final unit = chainMap['unit'].toString();
+    final symbol = _mapString(chainMap, 'coin_name');
+    if (symbol.isEmpty) return null;
+    final unit = _mapString(chainMap, 'unit');
     final ctIndex = CoinType.values.indexWhere(
         (e) => e.name.toLowerCase() == symbol.toLowerCase());
     if (ctIndex == -1) return null;
     final ct = CoinType.values[ctIndex];
     final coinType = ct.name;
-    final bct = BlockchainType.values.firstWhere((e) =>
-        e.name.toLowerCase() ==
-        chainMap['class_name'].toString().toLowerCase());
+    final className = _mapString(chainMap, 'class_name');
+    final bctIndex = BlockchainType.values.indexWhere(
+      (e) => e.name.toLowerCase() == className.toLowerCase(),
+    );
+    if (bctIndex == -1) return null;
+    final bct = BlockchainType.values[bctIndex];
     final blockchainType = bct.name;
     final path = <String, dynamic>{};
 
-    final List<dynamic>? derivation = json.decode(chainMap['derivation']);
-    if (derivation == null) return null;
+    final derivationRaw = chainMap['derivation'];
+    if (derivationRaw == null) return null;
+    final List<dynamic> derivation;
+    try {
+      final decoded = json.decode(derivationRaw.toString());
+      if (decoded is! List<dynamic>) return null;
+      derivation = decoded;
+    } catch (_) {
+      return null;
+    }
     String addrType = "legacy";
 
     for (final p in derivation) {
+      if (p is! Map) continue;
+      final pMap = p.cast<String, dynamic>();
+      final pPath = _mapString(pMap, 'path');
+      if (pPath.isEmpty) continue;
       if (bct == BlockchainType.Ethereum || bct == BlockchainType.Tron) {
-        path[addrType] = p['path'];
+        path[addrType] = pPath;
       } else if (bct == BlockchainType.Solana) {
-        if (p['name'] == null) path[addrType] = p['path'];
+        if (pMap['name'] == null) path[addrType] = pPath;
       } else if (bct == BlockchainType.Bitcoin) {
-        final pPath = p['path'] as String;
         if (ct.name == "BCH") {
           path["segwit"] = pPath;
         } else if (pPath.contains("44")) {
@@ -87,11 +129,12 @@ extension _WalletCoinAddAllData on _WalletCoinAddAllState {
         }
       }
     }
-    final testNetUrl = chainMap['test_net_url'] as String;
-    final mainNetUrl = chainMap['main_net_url'] as String;
-    final mainChainId = chainMap['main_chain_id'] as int;
-    final testChainId = chainMap['test_chain_id'] as int;
-    final rules = chainMap['rules'] as String;
+    if (path.isEmpty) return null;
+    final testNetUrl = _mapString(chainMap, 'test_net_url');
+    final mainNetUrl = _mapString(chainMap, 'main_net_url');
+    final mainChainId = _mapInt(chainMap, 'main_chain_id');
+    final testChainId = _mapInt(chainMap, 'test_chain_id');
+    final rules = _mapString(chainMap, 'rules');
     bool supportTest = true;
     if (bct == BlockchainType.Bitcoin) {
       supportTest = false;
@@ -99,9 +142,9 @@ extension _WalletCoinAddAllData on _WalletCoinAddAllState {
     } else if (testNetUrl == "") {
       supportTest = false;
     }
-    final fullname = chainMap['fullname'] as String;
+    final fullname = _mapString(chainMap, 'fullname', fallback: symbol);
     final icon = switch (fullname) {
-      'LoveCoin' => chainMap['icon'] as String,
+      'LoveCoin' => _mapString(chainMap, 'icon'),
       'Base' => "${AppConfig.apiUrl['walletamazeBrowser']}/static/${chainMap['coin_name']}.png",
       _ => "https://api-wallet.walletamaze.com/market/v1/r/coinImage/$fullname.png",
     };
@@ -115,10 +158,10 @@ extension _WalletCoinAddAllData on _WalletCoinAddAllState {
         "blockchainType": blockchainType,
         "coinType": coinType,
         "icon": icon,
-        "name": chainMap['fullname'],
+        "name": fullname,
         "miniName": coinType,
         "unit": unit == "" ? symbol : unit,
-        "decimals": chainMap['decimals'],
+        "decimals": _mapInt(chainMap, 'decimals', fallback: 18),
         "balance": "0",
         "balance_test": "0",
         "coinPrice": 0.0,
@@ -161,6 +204,7 @@ extension _WalletCoinAddAllData on _WalletCoinAddAllState {
     } else {
       if (!mounted) return;
       coinlist = [];
+      netChains = {};
       final returnData = coinsData.data as List<dynamic>;
       final chains = ref.read(wapBridgeProvider).walletMap;
       coinDeal(returnData, chains);
@@ -190,7 +234,9 @@ extension _WalletCoinAddAllData on _WalletCoinAddAllState {
 
   void coinDeal(List<dynamic> returnData, Map<String, dynamic> chains,
       {String rules = "", String chainName = "", String symbol = ""}) {
-    for (Map<String, dynamic> r in returnData) {
+    for (final item in returnData) {
+      if (item is! Map) continue;
+      final r = item.cast<String, dynamic>();
       if (chainName == "") {
         if (widget.coinType != null &&
             widget.coinType != r['coin_name'].toString().toUpperCase()) {
@@ -214,9 +260,11 @@ extension _WalletCoinAddAllData on _WalletCoinAddAllState {
 
       if (isAdd) {
         final chainMap = chains[checkStr.toUpperCase()];
+        final baseInfo =
+            (chainMap?['baseInfo'] as Map?)?.cast<String, dynamic>() ?? const {};
         r['canEdit'] = chainMap == null
             ? false
-            : (chainName != "" || chainMap['baseInfo']['canEdit'] == true);
+            : (chainName != "" || baseInfo['canEdit'] == true);
         coinlist.insert(0, r);
       } else {
         r['canEdit'] = true;

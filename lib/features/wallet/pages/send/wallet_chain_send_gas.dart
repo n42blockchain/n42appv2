@@ -31,15 +31,15 @@ class StandardMinerFeeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final blockchainType = coinModel.coin['blockchainType'] as String;
-    final coinType = coinModel.coin['coinType'] as String;
-    final isContract = coinModel.coin['isContract'] as bool? ?? false;
+    final blockchainType = coinModel.coin['blockchainType']?.toString() ?? '';
+    final coinType = coinModel.coin['coinType']?.toString() ?? '';
+    final isContract = coinModel.coin['isContract'] == true;
     final isEthereum = blockchainType == BlockchainType.Ethereum.name;
     final isTron = blockchainType == BlockchainType.Tron.name;
 
     final decimals = isContract
         ? (chainModel?.coin['decimals'] ?? 0)
-        : coinModel.coin['decimals'] as int;
+        : (coinModel.coin['decimals'] as num?)?.toInt() ?? 18;
 
     var totalGasPriceColor =
         AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);

@@ -201,15 +201,16 @@ extension _WalletCoinAddAllSearchUI on _WalletCoinAddAllState {
 
   Widget coinItem(Map<String, dynamic> rowValue) {
     final su = ScreenUtil();
-    final String fullname = rowValue['fullname'];
-    final String symbol = rowValue['coin_name'].toString();
+    final String fullname =
+        (rowValue['fullname'] ?? rowValue['coin_name'] ?? '--').toString();
+    final String symbol = (rowValue['coin_name'] ?? '').toString();
     final Color mainText = AppThemeUtils.getColorByKey(
         context, AppThemeKeys.mainTextColor.name);
     final Color buttonBg = AppThemeUtils.getColorByKey(
         context, AppThemeKeys.mainButtonBgColor.name);
 
     final String icon = switch (fullname) {
-      'LoveCoin' => rowValue['icon'] as String,
+      'LoveCoin' => rowValue['icon']?.toString() ?? '',
       'Base' =>
         "${AppConfig.apiUrl['walletamazeBrowser']}/static/${rowValue['coin_name']}.png",
       _ =>

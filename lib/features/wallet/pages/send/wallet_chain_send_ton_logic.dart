@@ -32,10 +32,10 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
   Load gasLimitLoad = Load.finish;
 
   Map<String, dynamic> get _coin => widget.coinModel.coin;
-  String get _coinType => _coin['coinType'] as String;
-  bool get _isContract => _coin['isContract'] as bool;
-  int get _decimals => _coin['decimals'] as int;
-  String get _blockchainType => _coin['blockchainType'] as String;
+  String get _coinType => _coin['coinType']?.toString() ?? '';
+  bool get _isContract => _coin['isContract'] == true;
+  int get _decimals => (_coin['decimals'] as num?)?.toInt() ?? 18;
+  String get _blockchainType => _coin['blockchainType']?.toString() ?? '';
 
   String get _contract =>
       (widget.coinModel.isTest ? _coin['contract_test'] : _coin['contract'])
@@ -53,6 +53,12 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
   };
 
   Future<void> initData() async {
+    if (_coinType.isEmpty || _blockchainType.isEmpty) {
+      errorMessage = 'Invalid coin configuration';
+      ToastUtils.show(errorMessage);
+      if (mounted) setState(() => load = Load.finish);
+      return;
+    }
     if (_isContract) {
       final WalletActionProvider wap = ref.read(wapBridgeProvider);
       final int cIndex = wap.coinModels.indexWhere((element) {
@@ -62,6 +68,12 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
         }
         return true;
       });
+      if (cIndex < 0) {
+        errorMessage = 'Missing parent chain for $_coinType';
+        ToastUtils.show(errorMessage);
+        if (mounted) setState(() => load = Load.finish);
+        return;
+      }
       chainModel = wap.coinModels[cIndex];
       await chainModel?.getBalance();
       if (!mounted) return;

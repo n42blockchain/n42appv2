@@ -9,6 +9,29 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+int _ensReminderIntValue(dynamic value, {int fallback = 0}) {
+  if (value is int) return value;
+  if (value is num) return value.toInt();
+  return int.tryParse(value?.toString() ?? '') ?? fallback;
+}
+
+bool _ensReminderBoolValue(dynamic value, {bool fallback = false}) {
+  if (value is bool) return value;
+  final normalized = value?.toString().toLowerCase();
+  if (normalized == 'true' || normalized == '1') return true;
+  if (normalized == 'false' || normalized == '0') return false;
+  return fallback;
+}
+
+List<int> _ensReminderIntList(dynamic value, List<int> fallback) {
+  if (value is! List) return fallback;
+  final list = value
+      .map((entry) => _ensReminderIntValue(entry, fallback: -999999))
+      .where((entry) => entry != -999999)
+      .toList();
+  return list.isEmpty ? fallback : list;
+}
+
 /// 单个 ENS 域名的到期提醒配置
 class EnsExpiryReminderConfig {
   /// 域名（含后缀，如 alice.eth / alice.n42）
@@ -51,15 +74,11 @@ class EnsExpiryReminderConfig {
 
   factory EnsExpiryReminderConfig.fromJson(Map<String, dynamic> json) {
     return EnsExpiryReminderConfig(
-      domainName: json['domainName'] as String,
-      expiresAtMs: json['expiresAtMs'] as int,
-      enabled: json['enabled'] as bool? ?? true,
-      notifyDays:
-          (json['notifyDays'] as List<dynamic>?)?.map((e) => e as int).toList() ??
-              [30, 7, 1],
-      notifiedDays:
-          (json['notifiedDays'] as List<dynamic>?)?.map((e) => e as int).toList() ??
-              [],
+      domainName: json['domainName']?.toString() ?? '',
+      expiresAtMs: _ensReminderIntValue(json['expiresAtMs']),
+      enabled: _ensReminderBoolValue(json['enabled'], fallback: true),
+      notifyDays: _ensReminderIntList(json['notifyDays'], [30, 7, 1]),
+      notifiedDays: _ensReminderIntList(json['notifiedDays'], const []),
     );
   }
 
@@ -102,10 +121,21 @@ class EnsExpiryReminderService {
       final prefs = await SharedPreferences.getInstance();
       final raw = prefs.getString(_prefKey);
       if (raw == null || raw.isEmpty) return {};
-      final map = jsonDecode(raw) as Map<String, dynamic>;
+      final decoded = jsonDecode(raw);
+      if (decoded is! Map) return {};
+      final map = decoded.map(
+        (key, value) => MapEntry(key.toString(), value),
+      );
       return map.map(
         (k, v) =>
-            MapEntry(k, EnsExpiryReminderConfig.fromJson(v as Map<String, dynamic>)),
+            MapEntry(
+              k,
+              EnsExpiryReminderConfig.fromJson(
+                v is Map
+                    ? v.map((key, value) => MapEntry(key.toString(), value))
+                    : const <String, dynamic>{},
+              ),
+            ),
       );
     } catch (e) {
       debugPrint('[EnsExpiryReminderService] loadAll error: $e');
