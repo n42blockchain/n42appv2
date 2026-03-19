@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:app_links/app_links.dart';
 import 'package:flutter/foundation.dart';
+import 'package:n42_wallet/features/wallet_connect/wallet_connect_uri.dart';
 
 /// Deep Link 类型
 enum DeepLinkType {
@@ -64,9 +65,8 @@ class DeepLinkData {
 
   Uri get sanitizedUri => redactUri(uri);
 
-  Map<String, String> get sanitizedParams => params.map(
-        (key, value) => MapEntry(key, _redactParamValue(key, value)),
-      );
+  Map<String, String> get sanitizedParams =>
+      params.map((key, value) => MapEntry(key, _redactParamValue(key, value)));
 
   static Uri redactUri(Uri uri) {
     if (uri.queryParameters.isEmpty) return uri;
@@ -141,11 +141,12 @@ class DeepLinkService {
   }
 
   DeepLinkData _parseUri(Uri uri) {
-    if (_isWalletConnectUri(uri)) {
+    final normalizedWcUri = normalizeWalletConnectUriString(uri.toString());
+    if (normalizedWcUri != null) {
       return DeepLinkData(
         type: DeepLinkType.walletConnect,
         uri: uri,
-        params: {'wcUri': uri.toString()},
+        params: {'wcUri': normalizedWcUri},
       );
     }
     if (uri.scheme == 'n42' || uri.scheme == 'n42app') {
@@ -155,14 +156,6 @@ class DeepLinkService {
       return _parseAstraAppUri(uri);
     }
     return _unknownLink(uri, uri.queryParameters);
-  }
-
-  /// WalletConnect v2 URI 格式: wc:{topic}@2?relay-protocol=irn&symKey=...
-  /// 也支持通过其他 scheme 传入的 WC URI（query 中包含 relay-protocol + symKey）
-  bool _isWalletConnectUri(Uri uri) {
-    if (uri.scheme == 'wc') return true;
-    final s = uri.toString();
-    return s.contains('relay-protocol') && s.contains('symKey');
   }
 
   DeepLinkData _parseAstraAppUri(Uri uri) {

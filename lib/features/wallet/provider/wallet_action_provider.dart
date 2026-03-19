@@ -37,6 +37,16 @@ part 'wallet_action_provider_token.dart';
 part 'wallet_action_provider_sort.dart';
 part 'wallet_action_provider_market.dart';
 
+String? resolveBalanceRpcOverride(CoinModel coinModel) {
+  final coinType = coinModel.coin['coinType']?.toString().toUpperCase();
+  if (coinType != CoinType.N.name || !coinModel.isTest) {
+    return null;
+  }
+
+  final rpc = coinModel.coin['service_test']?.toString().trim() ?? '';
+  return rpc.isEmpty ? null : rpc;
+}
+
 class WalletActionProvider extends ChangeNotifier
     implements ICoinModelWalletAccess {
   /// 公开的刷新方法，用于通知监听者数据已更新
@@ -408,7 +418,7 @@ class WalletActionProvider extends ChangeNotifier
           address,
           contract: contract,
           isTest: coinModel.isTest,
-          //rpc: coinModel.coin['coinType']==CoinType.N.name?coinModel.coin['service_test']:null,
+          rpc: resolveBalanceRpcOverride(coinModel),
         ) ??
         MessageModel.error();
     _applyMarketPrice(coinModel);

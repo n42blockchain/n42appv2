@@ -37,6 +37,13 @@ class FaceBinding extends ConsumerStatefulWidget {
 class _FaceBindingState extends ConsumerState<FaceBinding>
     with WidgetsBindingObserver {
   final _faceSdk = FaceSDK.instance;
+  final _livenessConfig = LivenessConfig(
+    cameraSwitchEnabled: false,
+    torchButtonEnabled: false,
+    cameraPositionAndroid: CameraPosition.FRONT.value,
+    cameraPositionIOS: CameraPosition.FRONT,
+    screenOrientation: const [ScreenOrientation.PORTRAIT],
+  );
   Load load = Load.finish;
   bool cameraOK = false;
   var img1 = Image.asset('assets/face/portrait.png');
@@ -53,7 +60,8 @@ class _FaceBindingState extends ConsumerState<FaceBinding>
     if (!result.$1) {
       if (mounted) {
         setState(() {
-          errorMessage = result.$2?.message ?? S.of(context).g_face_sdk_init_failed;
+          errorMessage =
+              result.$2?.message ?? S.of(context).g_face_sdk_init_failed;
         });
       }
     }
@@ -107,9 +115,8 @@ class _FaceBindingState extends ConsumerState<FaceBinding>
       cameraOK = rData == 'notDetermined' || rData == 'authorized';
     } else {
       final status = await Permission.camera.status;
-      cameraOK = !(status.isPermanentlyDenied ||
-          status.isLimited ||
-          status.isDenied);
+      cameraOK =
+          !(status.isPermanentlyDenied || status.isLimited || status.isDenied);
     }
     if (!mounted) return;
     setState(() {});
@@ -180,7 +187,7 @@ class _FaceBindingState extends ConsumerState<FaceBinding>
   Future<void> _useCamera() async {
     if (_isUsingCamera) return;
     _isUsingCamera = true;
-    final response = await _faceSdk.startLiveness();
+    final response = await _faceSdk.startLiveness(config: _livenessConfig);
     _isUsingCamera = false;
 
     final image = response.image;
@@ -228,8 +235,12 @@ class _FaceBindingState extends ConsumerState<FaceBinding>
 
   /// 绑定流程（type=1）：将人脸图像与钱包地址关联
   Future<void> _bindingFlow(Uint8List img) async {
-    final addr = widget.address ??
-        ref.read(wapBridgeProvider).getCoinModelWithCoinType(CoinType.N.name)?.address;
+    final addr =
+        widget.address ??
+        ref
+            .read(wapBridgeProvider)
+            .getCoinModelWithCoinType(CoinType.N.name)
+            ?.address;
     if (addr == null) {
       if (!mounted) return;
       ToastUtils.show(S.of(context).g_face_match_key5);
@@ -298,7 +309,9 @@ class _FaceBindingState extends ConsumerState<FaceBinding>
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+                  borderRadius: BorderRadius.circular(
+                    ScreenUtil().setWidth(20),
+                  ),
                   child: Image(
                     height: ScreenUtil().setWidth(300),
                     width: ScreenUtil().setWidth(300),
@@ -313,16 +326,21 @@ class _FaceBindingState extends ConsumerState<FaceBinding>
                     ),
                     padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
                     decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.circular(ScreenUtil().setWidth(16)),
+                      borderRadius: BorderRadius.circular(
+                        ScreenUtil().setWidth(16),
+                      ),
                       color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.errorBgColor.name),
+                        context,
+                        AppThemeKeys.errorBgColor.name,
+                      ),
                     ),
                     child: Text(
                       errorMessage,
                       style: TextStyle(
                         color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.errorTextColor.name),
+                          context,
+                          AppThemeKeys.errorTextColor.name,
+                        ),
                         fontSize: ScreenUtil().setSp(28),
                       ),
                       textAlign: TextAlign.center,
@@ -330,7 +348,8 @@ class _FaceBindingState extends ConsumerState<FaceBinding>
                   ),
                   Container(
                     margin: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(30)),
+                      horizontal: ScreenUtil().setWidth(30),
+                    ),
                     height: ScreenUtil().setWidth(88),
                     width: double.infinity,
                     child: buttonStyle2(
@@ -357,22 +376,23 @@ class _FaceBindingState extends ConsumerState<FaceBinding>
   /// 未授权相机：提示用户去系统设置开启
   Widget _cameraPermissionWidget() {
     return Scaffold(
-      appBar: AppBarWidget(
-        text: S.of(context).g_face_match_key6,
-      ),
+      appBar: AppBarWidget(text: S.of(context).g_face_match_key6),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
               padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(40)),
+                horizontal: ScreenUtil().setWidth(40),
+              ),
               child: Text(
                 S.of(context).g_key_195,
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(30),
                   color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
+                    context,
+                    AppThemeKeys.mainTextColor.name,
+                  ),
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -390,7 +410,9 @@ class _FaceBindingState extends ConsumerState<FaceBinding>
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(32),
                   color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainBlueColor.name),
+                    context,
+                    AppThemeKeys.mainBlueColor.name,
+                  ),
                 ),
               ),
             ),

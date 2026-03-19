@@ -5,6 +5,8 @@ part of 'transaction_retry.dart';
 /// Handles transaction lookup, receipt polling, speed-up / cancel
 /// submission, and database persistence.
 mixin _TransactionRetryLogicMixin on ConsumerState<TransactionRetry> {
+  static const _invalidTransactionHashMessage = 'Invalid transaction hash';
+
   EthAPI? _ethAPI;
   EthAPI get ethAPI {
     _ethAPI ??= EthAPI();
@@ -53,7 +55,17 @@ mixin _TransactionRetryLogicMixin on ConsumerState<TransactionRetry> {
     transactionInfoReceipt = null;
     resultStr = 'Pending';
     errorMessage = '';
-    _txHash = searchEditingController.text.trim();
+    final normalizedTxHash = normalizeEvmTransactionHashInput(
+      searchEditingController.text,
+    );
+    _txHash = normalizedTxHash ?? '';
+    if (normalizedTxHash != null &&
+        searchEditingController.text != normalizedTxHash) {
+      searchEditingController.value = TextEditingValue(
+        text: normalizedTxHash,
+        selection: TextSelection.collapsed(offset: normalizedTxHash.length),
+      );
+    }
     _explorerUrl = _txHash.isEmpty
         ? ''
         : getBrowserTxHash(
@@ -61,8 +73,14 @@ mixin _TransactionRetryLogicMixin on ConsumerState<TransactionRetry> {
             _txHash,
             isTest: widget.coinModel.isTest,
           );
-    if (_txHash.isEmpty) {
+    if (searchEditingController.text.trim().isEmpty) {
       owner = false;
+      return;
+    }
+    if (normalizedTxHash == null) {
+      owner = false;
+      errorMessage = _invalidTransactionHashMessage;
+      _setLoadState(Load.error);
       return;
     }
     _setLoadState(Load.loading);
@@ -89,9 +107,11 @@ mixin _TransactionRetryLogicMixin on ConsumerState<TransactionRetry> {
   }
 
   Future<bool> getTransactionByHash() async {
-    final rData = await ethAPI.getTransactionByHash(
-      _txHash,
+    final rData = await fetchEvmTransactionByHash(
+      ethAPI,
+      txHash: _txHash,
       coinType: widget.coinModel.coin['coinType'],
+      isTest: widget.coinModel.isTest,
     );
     if (rData.error) {
       errorMessage = rData.data.toString();
@@ -142,9 +162,11 @@ mixin _TransactionRetryLogicMixin on ConsumerState<TransactionRetry> {
   }
 
   Future<void> getTransactionReceipt() async {
-    final rData = await ethAPI.getTransactionReceipt(
-      _txHash,
+    final rData = await fetchEvmTransactionReceipt(
+      ethAPI,
+      txHash: _txHash,
       coinType: widget.coinModel.coin['coinType'],
+      isTest: widget.coinModel.isTest,
     );
     if (!rData.error) {
       transactionInfoReceipt = rData.data;
@@ -193,13 +215,12 @@ mixin _TransactionRetryLogicMixin on ConsumerState<TransactionRetry> {
 
       BigInt newGasPriceValue;
       if (isEip1559) {
-        final mm =
-            await tokenViewApi.getGasPrice(
-              BlockchainType.Ethereum.name,
-              trm.coinMiniName,
-              rpc: customRpc,
-            ) ??
-            MessageModel.error();
+        final mm = await fetchEvmGasPrice(
+          tokenViewApi,
+          coinType: trm.coinMiniName,
+          isTest: widget.coinModel.isTest,
+          rpc: customRpc,
+        );
         if (!mounted) return;
         if (mm.error) {
           _setLoadState(Load.finish);

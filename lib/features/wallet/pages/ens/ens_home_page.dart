@@ -9,13 +9,15 @@ import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/pages/ens/ens_search_page.dart';
 import 'package:n42_wallet/features/wallet/pages/ens/ens_management_page.dart';
+import 'package:n42_wallet/features/wallet/pages/ens/ens_owned_name_filter.dart';
 import 'package:n42_wallet/features/wallet/services/ens_expiry_reminder_service.dart';
 import 'package:n42_wallet/features/wallet/services/ens_registration_service.dart';
 import 'package:n42_wallet/features/wallet/widgets/ens/ens_owned_list_item.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 
 // 引入链配置
-export 'package:n42_wallet/features/wallet/pages/ens/ens_management_page.dart' show EnsChainConfig;
+export 'package:n42_wallet/features/wallet/pages/ens/ens_management_page.dart'
+    show EnsChainConfig;
 
 part 'ens_home_page_logic.dart';
 part 'ens_home_page_widgets.dart';
@@ -30,10 +32,7 @@ class EnsHomePage extends StatefulWidget {
   /// 当前钱包地址
   final String walletAddress;
 
-  const EnsHomePage({
-    super.key,
-    required this.walletAddress,
-  });
+  const EnsHomePage({super.key, required this.walletAddress});
 
   @override
   State<EnsHomePage> createState() => _EnsHomePageState();
@@ -52,13 +51,8 @@ class _EnsHomePageState extends State<EnsHomePage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(
-        text: S.of(context).g_key_ens_title,
-      ),
-      body: RefreshIndicator(
-        onRefresh: loadOwnedNames,
-        child: _buildContent(),
-      ),
+      appBar: AppBarWidget(text: S.of(context).g_key_ens_title),
+      body: RefreshIndicator(onRefresh: loadOwnedNames, child: _buildContent()),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: navigateToSearch,
         backgroundColor: AppThemeUtils.getColorByKey(

@@ -317,11 +317,12 @@ class BrowserProvider extends ChangeNotifier {
 
   /// Try to handle a WalletConnect URI; returns true if handled.
   bool _tryHandleWalletConnect(String wcUri) {
-    if (!isWalletConnectUriString(wcUri)) {
+    final normalizedWcUri = normalizeWalletConnectUriString(wcUri);
+    if (normalizedWcUri == null) {
       return false;
     }
     if (connectDAPPCallBack == null) return false;
-    connectDAPPCallBack!(wcUri, browser['connectDApp']);
+    connectDAPPCallBack!(normalizedWcUri, browser['connectDApp']);
     return true;
   }
 

@@ -11,7 +11,6 @@ import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/pages/send/unified_send_page.dart';
 import 'package:n42_wallet/features/wallet/pages/transactions/transaction_detail_eth.dart';
 import 'package:n42_wallet/features/wallet/pages/transactions/transaction_history_list.dart';
-import 'package:n42_wallet/features/wallet/pages/transactions/transaction_retry.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_one.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_flow_utils.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_chain_info_actions.dart';
@@ -127,6 +126,7 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
   @override
   Future<void> handleSend({bool closeSheet = false}) async {
     if (!await _guardBackup(closeSheet)) return;
+    if (!mounted) return;
     await Navigator.push(
       context,
       MaterialPageRoute(
@@ -141,6 +141,7 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
   @override
   Future<void> handleReceive({bool closeSheet = false}) async {
     if (!await _guardBackup(closeSheet)) return;
+    if (!mounted) return;
     await Navigator.push(
       context,
       MaterialPageRoute(
@@ -391,9 +392,7 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
           if (isEth)
             InkWell(
               onTap: () async {
-                final Widget page = cm.coin['coinType'] == CoinType.N.name
-                    ? TransactionRetry(cm, '')
-                    : TransactionDetailEth(cm, '');
+                final Widget page = TransactionDetailEth(cm, '');
                 final r = await Navigator.push<bool>(
                   context,
                   MaterialPageRoute(builder: (_) => page),

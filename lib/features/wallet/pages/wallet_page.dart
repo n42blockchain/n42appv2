@@ -189,8 +189,9 @@ class _WalletPageState extends ConsumerState<WalletPage> {
     final scanStr = await _scan();
     if (!mounted || scanStr.isEmpty) return;
 
-    if (isWalletConnectUriString(scanStr)) {
-      await _pushAndRefreshWc(WalletConnectPage(scanStr), wcp);
+    final normalizedWcUri = normalizeWalletConnectUriString(scanStr);
+    if (normalizedWcUri != null) {
+      await _pushAndRefreshWc(WalletConnectPage(normalizedWcUri), wcp);
       return;
     }
 

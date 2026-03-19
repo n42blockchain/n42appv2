@@ -11,6 +11,8 @@ import 'package:n42_wallet/features/wallet/api/chain_api/eth_api.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
+import 'package:n42_wallet/features/wallet/pages/transactions/evm_transaction_hash_input.dart';
+import 'package:n42_wallet/features/wallet/pages/transactions/evm_transaction_requests.dart';
 import 'package:n42_wallet/features/wallet/pages/transactions/transaction_record_helpers.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
@@ -54,6 +56,8 @@ class TransactionDetailEth extends StatefulWidget {
 }
 
 class _TransactionDetailEthState extends State<TransactionDetailEth> {
+  static const _invalidTransactionHashMessage = 'Invalid transaction hash';
+
   late final EthAPI ethAPI = EthAPI();
   late final AppDatabase db = AppDatabase();
   late final TokenViewApi tokenViewApi = TokenViewApi();
@@ -91,7 +95,17 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
     transactionInfoReceipt = null;
     resultStr = "Pending";
     errorMessage = "";
-    _txHash = searchEditingController.text.trim();
+    final normalizedTxHash = normalizeEvmTransactionHashInput(
+      searchEditingController.text,
+    );
+    _txHash = normalizedTxHash ?? '';
+    if (normalizedTxHash != null &&
+        searchEditingController.text != normalizedTxHash) {
+      searchEditingController.value = TextEditingValue(
+        text: normalizedTxHash,
+        selection: TextSelection.collapsed(offset: normalizedTxHash.length),
+      );
+    }
     _explorerUrl = _txHash.isEmpty
         ? ''
         : getBrowserTxHash(
@@ -99,8 +113,18 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
             _txHash,
             isTest: widget.coinModel.isTest,
           );
-    if (_txHash.isEmpty) {
+    if (searchEditingController.text.trim().isEmpty) {
       owner = false;
+      return;
+    }
+    if (normalizedTxHash == null) {
+      owner = false;
+      if (mounted) {
+        setState(() {
+          errorMessage = _invalidTransactionHashMessage;
+          load = Load.error;
+        });
+      }
       return;
     }
     if (mounted) setState(() => load = Load.loading);
@@ -134,9 +158,11 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
   bool owner = true; // 是否是自己的交易信息
 
   Future<bool> getTransactionByHash() async {
-    final rData = await ethAPI.getTransactionByHash(
-      _txHash,
+    final rData = await fetchEvmTransactionByHash(
+      ethAPI,
+      txHash: _txHash,
       coinType: widget.coinModel.coin['coinType'],
+      isTest: widget.coinModel.isTest,
     );
     if (rData.error != false) {
       errorMessage = rData.data.toString();
@@ -187,9 +213,11 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
   }
 
   Future<void> getTransactionReceipt() async {
-    final rData = await ethAPI.getTransactionReceipt(
-      _txHash,
+    final rData = await fetchEvmTransactionReceipt(
+      ethAPI,
+      txHash: _txHash,
       coinType: widget.coinModel.coin['coinType'],
+      isTest: widget.coinModel.isTest,
     );
     final requestError = rData.error != false;
     final receipt = rData.data as Map<String, dynamic>?;
