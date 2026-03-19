@@ -13,8 +13,8 @@ mixin _EnsHomeLogicMixin on State<EnsHomePage> {
   bool isLoading = true;
   String? errorMessage;
 
-  // 当前选择的链，默认 N42
-  EnsChainConfig selectedChain = EnsChainConfig.supportedChains.first;
+  // 当前选择的链，默认 Ethereum
+  EnsChainConfig selectedChain = EnsChainConfig.defaultChain;
 
   Future<void> loadOwnedNames() async {
     setState(() {

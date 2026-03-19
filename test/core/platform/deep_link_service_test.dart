@@ -68,6 +68,18 @@ void main() {
       );
     });
 
+    test('should ignore malformed WalletConnect universal links', () async {
+      final wcUri = Uri.parse(
+        'https://walletconnect.com/wc?uri=wc%3Aabc123%402',
+      );
+
+      service.handleUri(wcUri);
+      await Future.delayed(Duration.zero);
+
+      expect(receivedData.length, 1);
+      expect(receivedData.first.type, DeepLinkType.unknown);
+    });
+
     // ========== n42:// scheme ==========
 
     group('n42:// scheme parsing', () {
@@ -333,6 +345,20 @@ void main() {
       final str = data.toString();
       expect(str, isNot(contains('super-secret-key')));
       expect(str, contains('redacted'));
+    });
+
+    test('sanitizedUri should redact walletconnect symKey in nested uri', () {
+      final data = DeepLinkData(
+        type: DeepLinkType.walletConnect,
+        uri: Uri.parse(
+          'https://walletconnect.com/wc?uri=wc%3Aabc123%402%3Frelay-protocol%3Dirn%26symKey%3Dsuper-secret-key',
+        ),
+        params: const {},
+      );
+
+      final sanitized = data.sanitizedUri.toString();
+      expect(sanitized, isNot(contains('super-secret-key')));
+      expect(sanitized, contains('redacted'));
     });
   });
 

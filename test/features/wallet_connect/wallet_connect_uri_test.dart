@@ -45,6 +45,14 @@ void main() {
       expect(uri.queryParameters['symKey'], 'abc123');
     });
 
+    test('rejects malformed universal links missing wc parameters', () {
+      final uri = parseWalletConnectUri(
+        'https://walletconnect.com/wc?uri=wc%3Atopic%402',
+      );
+
+      expect(uri, isNull);
+    });
+
     test('extracts wc uri from wcUri query parameter', () {
       final uri = parseWalletConnectUri(
         'n42app://connect?wcUri=wc%3Atopic%402%3Frelay-protocol%3Dirn%26symKey%3Dabc123',

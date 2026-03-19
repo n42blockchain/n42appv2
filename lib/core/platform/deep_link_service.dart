@@ -78,13 +78,17 @@ class DeepLinkData {
   }
 
   static String _redactParamValue(String key, String value) {
-    if (_sensitiveParams.contains(key)) {
-      if (key == 'wcUri') {
-        final nestedUri = Uri.tryParse(value);
+    if (key == 'wcUri' || key == 'uri') {
+      final normalizedWcUri = normalizeWalletConnectUriString(value);
+      if (normalizedWcUri != null) {
+        final nestedUri = Uri.tryParse(normalizedWcUri);
         if (nestedUri != null) {
           return redactUri(nestedUri).toString();
         }
+        return '[redacted]';
       }
+    }
+    if (_sensitiveParams.contains(key)) {
       return '[redacted]';
     }
     return value;
@@ -141,12 +145,12 @@ class DeepLinkService {
   }
 
   DeepLinkData _parseUri(Uri uri) {
-    final normalizedWcUri = normalizeWalletConnectUriString(uri.toString());
-    if (normalizedWcUri != null) {
+    final parsedWcUri = parseWalletConnectUri(uri.toString());
+    if (parsedWcUri != null) {
       return DeepLinkData(
         type: DeepLinkType.walletConnect,
         uri: uri,
-        params: {'wcUri': normalizedWcUri},
+        params: {'wcUri': parsedWcUri.toString()},
       );
     }
     if (uri.scheme == 'n42' || uri.scheme == 'n42app') {

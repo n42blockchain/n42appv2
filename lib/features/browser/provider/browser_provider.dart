@@ -327,6 +327,10 @@ class BrowserProvider extends ChangeNotifier {
   }
 
   bool checkUrl(String url) {
+    if (_tryHandleWalletConnect(url)) {
+      return false;
+    }
+
     final uri = Uri.parse(url);
     // 拦截危险 URL 协议：javascript: 可用于 XSS；data: / blob: 可绕过 CSP；file: 可读本地文件
     const blockedSchemes = {'javascript', 'data', 'blob', 'file'};
