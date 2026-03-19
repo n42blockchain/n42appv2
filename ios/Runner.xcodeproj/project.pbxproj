@@ -319,6 +319,7 @@
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
 				B6C2B36985033CBD4964FC51 /* [CP] Embed Pods Frameworks */,
 				884D19DC5AA2CCB07E010457 /* [CP] Copy Pods Resources */,
+				N42STRIP001202600000001 /* Strip Simulator Slices */,
 			);
 			buildRules = (
 			);
@@ -537,6 +538,21 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		N42STRIP001202600000001 /* Strip Simulator Slices */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Strip Simulator Slices";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Strip x86_64 simulator slices from all embedded frameworks (iOS device builds only)\nif [ \"$PLATFORM_NAME\" != \"iphoneos\" ]; then\n  echo \"Skipping strip: not an iphoneos build\"\n  exit 0\nfi\nfind \"${TARGET_BUILD_DIR}/${WRAPPER_NAME}/Frameworks\" -name \"*.framework\" -type d 2>/dev/null | while read -r fw; do\n  bin=\"${fw}/$(basename \"${fw}\" .framework)\"\n  if [ -f \"$bin\" ] && lipo -info \"$bin\" 2>/dev/null | grep -q 'x86_64'; then\n    lipo \"$bin\" -remove x86_64 -output \"$bin\"\n    echo \"stripped x86_64 from $bin\"\n  fi\ndone\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -670,11 +686,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
-				CURRENT_PROJECT_VERSION = 50;
+				CURRENT_PROJECT_VERSION = 51;
 				DEVELOPMENT_TEAM = CFRXH38L48;
 				ENABLE_BITCODE = NO;
 				FLUTTER_BUILD_NAME = 1.0.16;
-				FLUTTER_BUILD_NUMBER = 50;
+				FLUTTER_BUILD_NUMBER = 51;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/DKImagePickerController\"",
@@ -1239,11 +1255,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
-				CURRENT_PROJECT_VERSION = 50;
+				CURRENT_PROJECT_VERSION = 51;
 				DEVELOPMENT_TEAM = CFRXH38L48;
 				ENABLE_BITCODE = NO;
 				FLUTTER_BUILD_NAME = 1.0.16;
-				FLUTTER_BUILD_NUMBER = 50;
+				FLUTTER_BUILD_NUMBER = 51;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/DKImagePickerController\"",
@@ -1520,11 +1536,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
-				CURRENT_PROJECT_VERSION = 50;
+				CURRENT_PROJECT_VERSION = 51;
 				DEVELOPMENT_TEAM = CFRXH38L48;
 				ENABLE_BITCODE = NO;
 				FLUTTER_BUILD_NAME = 1.0.16;
-				FLUTTER_BUILD_NUMBER = 50;
+				FLUTTER_BUILD_NUMBER = 51;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/DKImagePickerController\"",

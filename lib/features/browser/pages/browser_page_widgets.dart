@@ -206,9 +206,10 @@ extension _BrowserPageWidgets on _BrowserPageState {
           _toolbarAssetButton("note",
               onTap: () =>
                   _navigateAndLoad(bValue, BrowserCollectionList())),
-          _toolbarIconButton(Icons.explore,
-              onTap: () =>
-                  _navigateAndLoad(bValue, const DAppDirectoryPage())),
+          if (Platform.isAndroid)
+            _toolbarIconButton(Icons.explore,
+                onTap: () =>
+                    _navigateAndLoad(bValue, const DAppDirectoryPage())),
           _toolbarAssetButton("setting", onTap: () async {
             final wv = bValue.wvcList[bValue.wListIndex];
             await Navigator.push(context,

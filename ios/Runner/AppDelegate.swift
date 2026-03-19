@@ -683,13 +683,143 @@ import WalletCore
           })
           flutterResult("Client started")
           break
+      case "getTonWalletStateInit":
+          guard let args = call.arguments as? [String: String],
+                let mnemonic = args["mnemonic"], !mnemonic.isEmpty,
+                let path = args["path"], !path.isEmpty else {
+              result(nil)
+              break
+          }
+          guard let wallet = HDWallet(mnemonic: mnemonic, passphrase: "") else {
+              result(nil)
+              break
+          }
+          let pk = wallet.getKey(coin: CoinType.ton, derivationPath: path)
+          let dummyDest = "EQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N"
+          let transfer = TheOpenNetworkTransfer.with {
+              $0.dest = dummyDest
+              $0.amount = Data(count: 8) // 0 nanoton as 8-byte big-endian uint64
+              $0.mode = UInt32(TheOpenNetworkSendMode.payFeesSeparately.rawValue |
+                               TheOpenNetworkSendMode.ignoreActionPhaseErrors.rawValue)
+              $0.bounceable = false
+          }
+          let input = TheOpenNetworkSigningInput.with {
+              $0.messages = [transfer]
+              $0.privateKey = pk.data
+              $0.sequenceNumber = 0
+              $0.expireAt = 1893456000
+              $0.walletVersion = TheOpenNetworkWalletVersion.walletV4R2
+          }
+          let output: TheOpenNetworkSigningOutput = AnySigner.sign(input: input, coin: CoinType.ton)
+          if let bocData = Data(base64Encoded: output.encoded),
+             let stateInitBoc = self.extractStateInitFromBoc(bocData) {
+              result(stateInitBoc.base64EncodedString())
+          } else {
+              result(nil)
+          }
+          break
       default:
           result(FlutterMethodNotImplemented)
       }
       }
-      
+
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
+
+    func extractStateInitFromBoc(_ boc: Data) -> Data? {
+        let bytes = [UInt8](boc)
+        guard bytes.count >= 10 else { return nil }
+        guard bytes[0] == 0xB5 && bytes[1] == 0xEE &&
+              bytes[2] == 0x9C && bytes[3] == 0x72 else { return nil }
+
+        var pos = 4
+
+        // Read flagsByte
+        let flagsByte = Int(bytes[pos]); pos += 1
+        let hasIdx = (flagsByte >> 7) & 1 == 1
+        let refSize = flagsByte & 0x07
+        let offBytes = Int(bytes[pos]); pos += 1
+
+        // Read cellCount (refSize bytes, big-endian)
+        var cellCount = 0
+        for _ in 0..<refSize { cellCount = (cellCount << 8) | Int(bytes[pos]); pos += 1 }
+        // Skip root_count (refSize bytes) and absent_count (refSize bytes)
+        pos += refSize * 2
+        // Skip tot_cells_size (offBytes wide) and root_index (refSize wide)
+        pos += offBytes + refSize
+
+        if hasIdx { pos += cellCount * offBytes }
+
+        var cellD1 = [Int](repeating: 0, count: cellCount)
+        var cellD2 = [Int](repeating: 0, count: cellCount)
+        var cellData = [[UInt8]](repeating: [], count: cellCount)
+        var cellRefs = [[Int]](repeating: [], count: cellCount)
+
+        for i in 0..<cellCount {
+            let d1 = Int(bytes[pos]); pos += 1
+            let d2 = Int(bytes[pos]); pos += 1
+            let refsCount = d1 & 0x07
+            let dataLen = (d2 >> 1) + (d2 & 1)
+            cellD1[i] = d1; cellD2[i] = d2
+            cellData[i] = Array(bytes[pos..<pos+dataLen]); pos += dataLen
+            var refs = [Int]()
+            for _ in 0..<refsCount {
+                var r = 0
+                for _ in 0..<refSize { r = (r << 8) | Int(bytes[pos]); pos += 1 }
+                refs.append(r)
+            }
+            cellRefs[i] = refs
+        }
+
+        // Find stateInit cell: d1=0x02, d2=0x01, data=[0x34]
+        var stateInitIdx = -1
+        for i in 0..<cellCount {
+            if cellD1[i] == 0x02 && cellD2[i] == 0x01 &&
+               cellData[i].count == 1 && cellData[i][0] == 0x34 {
+                stateInitIdx = i; break
+            }
+        }
+        guard stateInitIdx >= 0 else { return nil }
+
+        var orderedIndices = [Int]()
+        var visited = Set<Int>()
+        var queue = [stateInitIdx]
+        visited.insert(stateInitIdx)
+        while !queue.isEmpty {
+            let idx = queue.removeFirst()
+            orderedIndices.append(idx)
+            for ref in cellRefs[idx] {
+                if !visited.contains(ref) { visited.insert(ref); queue.append(ref) }
+            }
+        }
+
+        var oldToNew = [Int: Int]()
+        for (newIdx, oldIdx) in orderedIndices.enumerated() { oldToNew[oldIdx] = newIdx }
+
+        var totSize = 0
+        for oldIdx in orderedIndices {
+            totSize += 2 + cellData[oldIdx].count + (cellD1[oldIdx] & 0x07)
+        }
+
+        var out = [UInt8]()
+        out += [0xB5, 0xEE, 0x9C, 0x72]
+        out += [0x01, 0x02] // flags size=1, off_bytes=2
+        out.append(UInt8(orderedIndices.count))
+        out += [0x01, 0x00] // root_count=1, absent=0
+        out.append(UInt8((totSize >> 8) & 0xFF))
+        out.append(UInt8(totSize & 0xFF))
+        out.append(0x00) // root_index=0
+
+        for oldIdx in orderedIndices {
+            out.append(UInt8(cellD1[oldIdx]))
+            out.append(UInt8(cellD2[oldIdx]))
+            out += cellData[oldIdx]
+            for ref in cellRefs[oldIdx] { out.append(UInt8(oldToNew[ref]!)) }
+        }
+
+        return Data(out)
+    }
+
     public func getKeyStore(wallet: HDWallet, path: String,coin: String,passphrase:String,addressType:String)->String{
         var coinType: CoinType? = getCoinTypeWithCoinString(coin: coin)
         if coinType == nil{
@@ -828,6 +958,9 @@ import WalletCore
         case "Filecoin":
             publicKey = privateKey.getPublicKeySecp256k1(compressed: true).data.base64EncodedString()
             break
+        case "Ton":
+            publicKey = privateKey.getPublicKeyEd25519().data.base64EncodedString()
+            break
         default:
             publicKey = nil
         }
@@ -903,6 +1036,9 @@ import WalletCore
         case "Ton":
             txHash = signTonTransaction(wallet: wallet, path: path, txData: txData, privateKey: pk)
             break
+        case "Near":
+            txHash = signNearTransaction(wallet: wallet, path: path, txData: txData, privateKey: pk)
+            break
         case "Zilliqa":
             txHash = signZilTransaction(wallet: wallet, path: path, txData: txData, privateKey: pk)
             break
@@ -926,12 +1062,29 @@ import WalletCore
     func signMessage(wallet: HDWallet?, coin: String, path: String, txData: String,pk: PrivateKey?) -> String? {
         let chainType:String = self.getChainTypeWithCoinString(coin: coin)
         let coinType:CoinType? = self.getCoinTypeWithCoinString(coin: coin)
-        var txHash: String?
         var privateKey : PrivateKey
         if pk == nil{
             privateKey=wallet!.getKey(coin:  coinType!, derivationPath: path)
         }else {
             privateKey=pk!
+        }
+        // Solana WalletConnect: message is base64-encoded, return base64 signature
+        if coinType == .solana {
+            guard let messageData = Data(base64Encoded: txData),
+                  let sig = privateKey.sign(digest: messageData, curve: .ed25519) else { return nil }
+            return sig.base64EncodedString()
+        }
+        // Aptos/TON/NEAR WalletConnect: plain text message, sign UTF-8 bytes, return hex
+        if coinType == .aptos || coinType == .ton || coinType == .near {
+            let messageData = txData.data(using: .utf8) ?? Data()
+            guard let sig = privateKey.sign(digest: messageData, curve: .ed25519) else { return nil }
+            return sig.hexString
+        }
+        // Sui WalletConnect: base64-encoded message bytes, return base64 signature
+        if coinType == .sui {
+            guard let messageData = Data(base64Encoded: txData),
+                  let sig = privateKey.sign(digest: messageData, curve: .ed25519) else { return nil }
+            return sig.base64EncodedString()
         }
         if let curve = coinType?.curve {
             if let digestData = handHexData(from: txData) {
@@ -940,7 +1093,7 @@ import WalletCore
                 }
             }
         }
-              
+
         return nil
     }
     private func objToJson(from object:Any) -> String? {
@@ -1269,6 +1422,25 @@ import WalletCore
         return output.encoded.hexString
       }
 
+    /// Decode a Solana compact-u16 from `data` at `offset`.
+    /// Returns (value, bytesConsumed).
+    private func decodeCompactU16(_ data: Data, offset: Int) -> (Int, Int) {
+        var value = 0
+        var bytesRead = 0
+        var shift = 0
+        var idx = offset
+        while idx < data.count {
+            let byte = Int(data[idx])
+            bytesRead += 1
+            idx += 1
+            value |= (byte & 0x7F) << shift
+            if byte & 0x80 == 0 { break }
+            shift += 7
+            if shift >= 16 { break }
+        }
+        return (value, bytesRead)
+    }
+
     func signSolanaTransaction(wallet: HDWallet?, path: String, txData:  [String: Any],pk: PrivateKey?) -> String? {
         var privateKey : PrivateKey
         if pk == nil{
@@ -1279,6 +1451,29 @@ import WalletCore
         let type = txData["type"] as! String
         let encodeType = txData["encodeType"] as! String
         var txHash: String?
+
+        // WalletConnect raw transaction signing
+        if type == "WC_SOL" {
+            guard let rawTxBase64 = txData["transaction"] as? String,
+                  let rawTxData = Data(base64Encoded: rawTxBase64) else { return nil }
+            // Solana tx layout: [compact-u16 numSigs][signatures: N×64 bytes][message]
+            let (numSigs, headerBytes) = decodeCompactU16(rawTxData, offset: 0)
+            let messageOffset = headerBytes + numSigs * 64
+            guard messageOffset < rawTxData.count else { return nil }
+            let message = rawTxData.subdata(in: messageOffset..<rawTxData.count)
+            // Sign message with ed25519
+            guard let signature = privateKey.sign(digest: message, curve: .ed25519) else { return nil }
+            // Reconstruct signed transaction
+            var signedTx = Data(rawTxData.prefix(headerBytes))          // compact-u16 header
+            signedTx.append(signature.prefix(64))                        // first signature (64 bytes)
+            let remainingSigBytes = numSigs * 64 - min(64, signature.count)
+            if remainingSigBytes > 0 {
+                signedTx.append(Data(count: remainingSigBytes))          // zero-fill remaining sig slots
+            }
+            signedTx.append(message)
+            return signedTx.base64EncodedString()
+        }
+
         if type == "token" {
             let transferTransaction = txData["tokenTransferTransaction"] as! [String:String]
             let amount : String = transferTransaction["amount"] as! String
@@ -1777,7 +1972,20 @@ import WalletCore
         }else{
             pk = privateKey!
         }
-        
+
+        let type = txData["type"] as? String ?? ""
+        if type == "WC_APT" {
+            // WalletConnect: DApp sends pre-built BCS-encoded raw transaction (base64)
+            // anyEncoded is a string field expecting hex representation of raw tx bytes
+            let rawTxBase64 = txData["encodedTransaction"] as? String ?? ""
+            guard let rawBytes = Data(base64Encoded: rawTxBase64) else { return nil }
+            var input = AptosSigningInput()
+            input.anyEncoded = rawBytes.hexString
+            input.privateKey = pk.data
+            let output: AptosSigningOutput = AnySigner.sign(input: input, coin: .aptos)
+            return output.encoded.base64EncodedString()
+        }
+
         let gasUnitPrice : UInt64 = txData["gasUnitPrice"] as! UInt64
         let maxGasAmount : UInt64 = txData["maxGasAmount"] as! UInt64
         let expirationTimestampSecs : UInt64 = txData["expirationTimestampSecs"] as! UInt64
@@ -1836,7 +2044,23 @@ import WalletCore
         }else{
             pk = privateKey!
         }
-        
+
+        let type = txData["type"] as? String ?? ""
+        if type == "WC_SUI" {
+            // WalletConnect: DApp sends base64-encoded BCS transaction block (SignDirect)
+            // unsignedTxMsg is a string field; pass the base64 string directly
+            let rawTxBase64 = txData["transaction"] as? String ?? ""
+            let signDirect = SuiSignDirect.with {
+                $0.unsignedTxMsg = rawTxBase64
+            }
+            let input = SuiSigningInput.with {
+                $0.signDirectMessage = signDirect
+                $0.privateKey = pk.data
+            }
+            let output: AptosSigningOutput = AnySigner.sign(input: input, coin: .sui)
+            return output.encoded.base64EncodedString()
+        }
+
         let referenceGasPrice : UInt64 = txData["referenceGasPrice"] as! UInt64
         let gasBudget : UInt64 = txData["gasBudget"] as! UInt64
         let toAddress : String = txData["toAddress"] as! String
@@ -1940,6 +2164,54 @@ import WalletCore
         }
         
       }
+    func signNearTransaction(wallet: HDWallet?, path: String, txData: [String: Any], privateKey: PrivateKey?) -> String? {
+        var pk: PrivateKey
+        if privateKey == nil {
+            pk = wallet!.getKey(coin: .near, derivationPath: path)
+        } else {
+            pk = privateKey!
+        }
+
+        let type = txData["type"] as? String ?? ""
+        if type == "WC_NEAR" {
+            // WalletConnect: DApp sends base64-encoded borsh-encoded Transaction
+            let rawTxBase64 = txData["transaction"] as? String ?? ""
+            guard let rawTxData = Data(base64Encoded: rawTxBase64) else { return nil }
+            // NEAR signing: SHA-256 of raw borsh tx bytes
+            let hash = Hash.sha256(data: rawTxData)
+            guard let signature = pk.sign(digest: hash, curve: .ed25519) else { return nil }
+            // NEAR SignedTransaction borsh = raw_tx_bytes + [0x00 key_type] + signature (64 bytes)
+            var signedTx = rawTxData
+            signedTx.append(0x00)
+            signedTx.append(contentsOf: signature)
+            return signedTx.base64EncodedString()
+        }
+
+        // Structured fields (direct transfer)
+        let signerId: String = txData["signerId"] as! String
+        let receiverId: String = txData["receiverId"] as! String
+        let nonce: UInt64 = UInt64(txData["nonce"] as! String) ?? 0
+        let blockHash: String = txData["blockHash"] as! String
+        let amount: String = txData["amount"] as! String
+
+        let transfer = NEARTransfer.with {
+            $0.deposit = Data(hexString: amount) ?? Data()
+        }
+        let action = NEARAction.with {
+            $0.transfer = transfer
+        }
+        let input = NEARSigningInput.with {
+            $0.signerID = signerId
+            $0.receiverID = receiverId
+            $0.nonce = nonce
+            $0.blockHash = Data(hexString: blockHash) ?? Data()
+            $0.actions = [action]
+            $0.privateKey = pk.data
+        }
+        let output: NEARSigningOutput = AnySigner.sign(input: input, coin: .near)
+        return output.signedTransaction.base64EncodedString()
+    }
+
     func signZilTransaction(wallet: HDWallet?, path: String, txData:  [String: Any],privateKey: PrivateKey?) -> String? {
 
         var pk: PrivateKey
@@ -2159,6 +2431,9 @@ import WalletCore
         case "ZIL":
             coinType=CoinType.zilliqa
             break
+        case "NEAR":
+            coinType=CoinType.near
+            break
         default:
             coinType = CoinType.ethereum
         }
@@ -2344,6 +2619,8 @@ import WalletCore
             break
         case "ZIL":
             chainType="Zilliqa"
+        case "NEAR":
+            chainType="Near"
         default:
             chainType = "Ethereum"
         }

@@ -273,6 +273,49 @@ class Trustdart {
     }
   }
 
+  /// Signs a TonConnect ton_proof challenge with the TON Ed25519 private key.
+  /// Returns a JSON string with timestamp, domain, payload, and signature,
+  /// or null on failure.
+  Future<String?> signTonProof({
+    required String mnemonic,
+    required String path,
+    required String domain,
+    required int timestamp,
+    required String payload,
+    required String address,
+  }) async {
+    try {
+      return await _channel.invokeMethod(
+        'signTonProof',
+        <String, dynamic>{
+          'mnemonic': mnemonic,
+          'path': path,
+          'domain': domain,
+          'timestamp': timestamp,
+          'payload': payload,
+          'address': address,
+        },
+      );
+    } catch (e) {
+      if (kDebugMode) debugPrint('Trustdart.signTonProof: $e');
+      return null;
+    }
+  }
+
+  /// Returns the base64-encoded TON v4R2 wallet StateInit BOC for the given
+  /// mnemonic and derivation path.  Used for TonConnect 2.0 sessionProperties.
+  Future<String?> getTonWalletStateInit(String mnemonic, String path) async {
+    try {
+      return await _channel.invokeMethod(
+        'getTonWalletStateInit',
+        <String, String>{'mnemonic': mnemonic, 'path': path},
+      );
+    } catch (e) {
+      if (kDebugMode) debugPrint('Trustdart.getTonWalletStateInit: $e');
+      return null;
+    }
+  }
+
   // 返回 keystore
   Future<String> getKeyStore(
     String coin,

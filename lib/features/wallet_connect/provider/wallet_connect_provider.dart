@@ -80,10 +80,17 @@ class WalletConnectProvider
       case WalletConnectState.connectOK:
         final args = actionData as wallet_connect.SessionProposalEvent;
         try {
-          signClient!.approveSession(id: args.id, namespaces: namespace!).then((value) async {
+          debugPrint('[WC] approveSession namespace: $namespace');
+          signClient!.approveSession(
+            id: args.id,
+            namespaces: namespace!,
+            sessionProperties: args.params.sessionProperties,
+          ).then((value) async {
+            debugPrint('[WC] approveSession OK topic=${value.topic}');
             dAppTopic = value.topic;
             viewStateDeal(WalletConnectState.connect);
           }).catchError((error) {
+            debugPrint('[WC] approveSession error: $error');
             ToastUtils.show(error.toString());
             viewStateDeal(WalletConnectState.disconnect);
           });

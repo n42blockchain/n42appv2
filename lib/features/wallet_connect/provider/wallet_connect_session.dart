@@ -35,6 +35,33 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
     "tron_signMessage",
   ];
 
+  /// Solana methods registered for WalletConnect session handling.
+  static const _solanaMethods = [
+    "solana_signTransaction",
+    "solana_signMessage",
+    "solana_signAndSendTransaction",
+  ];
+
+  /// Aptos methods registered for WalletConnect session handling.
+  static const _aptosMethods = [
+    "aptos_signTransaction",
+    "aptos_signMessage",
+    "aptos_signAndSubmitTransaction",
+  ];
+
+  /// Sui methods registered for WalletConnect session handling.
+  static const _suiMethods = [
+    "sui_signTransaction",
+    "sui_signAndExecuteTransaction",
+    "sui_signMessage",
+  ];
+
+  /// NEAR methods registered for WalletConnect session handling.
+  static const _nearMethods = [
+    "near_signTransaction",
+    "near_signAndSendTransaction",
+  ];
+
   /// Standard events exposed to DApps via WalletConnect namespaces.
   static const _namespaceEvents = ['chainChanged', 'accountsChanged'];
 
@@ -116,6 +143,10 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
   /// Subscribe to relay-level connect/disconnect/error events.
   void _subscribeRelayEvents() {
     try {
+      // Log ALL raw incoming relay messages for debugging
+      signClient!.core.relayClient.onRelayClientMessage.subscribe((args) {
+        debugPrint('[WC] relayMessage topic=${args.topic} message=${args.message}');
+      });
       signClient!.core.relayClient.onRelayClientDisconnect.subscribe((_) {
         debugPrint('[WalletConnect] Relay disconnected');
         if (dAppTopic != null) scheduleReconnect();
@@ -144,6 +175,12 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
       actionData = args;
       metadata = args.params.proposer.metadata;
 
+      // Debug: log what the DApp is requesting
+      debugPrint('[WC] requiredNamespaces: ${args.params.requiredNamespaces}');
+      debugPrint('[WC] optionalNamespaces: ${args.params.optionalNamespaces}');
+      debugPrint('[WC] sessionProperties: ${args.params.sessionProperties}');
+      debugPrint('[WC] proposer metadata: ${args.params.proposer.metadata}');
+
       final resolvedModels = _resolveChains(
         args.params.optionalNamespaces,
         args.params.requiredNamespaces,
@@ -151,32 +188,84 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
       coinModels = resolvedModels;
       coinModelsIndex = coinModels.length - 1;
 
+      final opt = args.params.optionalNamespaces;
+      final req = args.params.requiredNamespaces;
+
       final accounts = <String>[];
       final accountsTron = <String>[];
-      _registerChainHandlers(accounts, accountsTron);
+      final accountsSolana = <String>[];
+      final accountsAptos = <String>[];
+      final accountsSui = <String>[];
+      final accountsNear = <String>[];
+      _registerChainHandlers(
+        accounts, accountsTron, accountsSolana,
+        accountsAptos, accountsSui, accountsNear,
+      );
 
-      namespace = {
-        "eip155": wallet_connect.Namespace(
+      namespace = {};
+      // Only include eip155 if DApp requested EVM chains (non-empty accounts)
+      if (accounts.isNotEmpty) {
+        namespace!['eip155'] = wallet_connect.Namespace(
           accounts: accounts,
           methods: _ethMethods,
           events: _namespaceEvents,
-        ),
-      };
+        );
+      }
       if (accountsTron.isNotEmpty) {
+        final chains = _nsChainIds('tron', opt, req);
         namespace!['tron'] = wallet_connect.Namespace(
+          chains: chains.isNotEmpty ? chains.toList() : null,
           accounts: accountsTron,
-          methods: _tronMethods,
-          events: _namespaceEvents,
+          methods: _nsMethods('tron', opt, req, _tronMethods),
+          events: _nsEvents('tron', opt, req),
+        );
+      }
+      if (accountsSolana.isNotEmpty) {
+        final chains = _nsChainIds('solana', opt, req);
+        namespace!['solana'] = wallet_connect.Namespace(
+          chains: chains.isNotEmpty ? chains.toList() : null,
+          accounts: accountsSolana,
+          methods: _nsMethods('solana', opt, req, _solanaMethods),
+          events: _nsEvents('solana', opt, req),
+        );
+      }
+      if (accountsAptos.isNotEmpty) {
+        final chains = _nsChainIds('aptos', opt, req);
+        namespace!['aptos'] = wallet_connect.Namespace(
+          chains: chains.isNotEmpty ? chains.toList() : null,
+          accounts: accountsAptos,
+          methods: _nsMethods('aptos', opt, req, _aptosMethods),
+          events: _nsEvents('aptos', opt, req),
+        );
+      }
+      if (accountsSui.isNotEmpty) {
+        final chains = _nsChainIds('sui', opt, req);
+        namespace!['sui'] = wallet_connect.Namespace(
+          chains: chains.isNotEmpty ? chains.toList() : null,
+          accounts: accountsSui,
+          methods: _nsMethods('sui', opt, req, _suiMethods),
+          events: _nsEvents('sui', opt, req),
+        );
+      }
+      if (accountsNear.isNotEmpty) {
+        final chains = _nsChainIds('near', opt, req);
+        namespace!['near'] = wallet_connect.Namespace(
+          chains: chains.isNotEmpty ? chains.toList() : null,
+          accounts: accountsNear,
+          methods: _nsMethods('near', opt, req, _nearMethods),
+          events: _nsEvents('near', opt, req),
         );
       }
       viewStateDeal(WalletConnectState.selectChain);
     });
 
     signClient!.onSessionRequest.subscribe((wallet_connect.SessionRequestEvent? args) async {
+      debugPrint('[WC] onSessionRequest: method=${args?.method} chainId=${args?.chainId} params=${args?.params}');
       if (args != null) setActionDataMap(args);
     });
 
     signClient!.onSessionDelete.subscribe((args) async {
+      debugPrint('[WC] onSessionDelete: topic=${args.topic} dAppTopic=$dAppTopic');
       if (disconnectingByUser) return;
       if (dAppTopic != null && dAppTopic == args.topic) {
         final s = wcL10n();
@@ -265,6 +354,15 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
         );
         viewStateDeal(WalletConnectState.messageSignOK);
 
+      case "solana_signMessage":
+        final params = eventData.params! as Map;
+        actionDataMap = _buildMessageData(
+          networkName,
+          params["pubkey"] as String? ?? '',
+          params["message"] as String? ?? '',
+        );
+        viewStateDeal(WalletConnectState.messageSignOK);
+
       // ── Transaction methods ─────────────────────────────────────────────
       case "eth_signTransaction":
       case "eth_sendTransaction":
@@ -283,6 +381,94 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
 
       case "tron_signTransaction":
         _parseTronTransaction(eventData, networkName);
+
+      case "solana_signTransaction":
+      case "solana_signAndSendTransaction":
+        final params = eventData.params! as Map;
+        actionDataMap = {
+          "network": networkName,
+          "coinType": CoinType.SOL.name,
+          "from": params["feePayer"] as String? ?? '',
+          "to": '',
+          "data": params["transaction"] as String? ?? '',
+          "value": "0",
+          "gas": "0",
+          "signType": "transaction",
+        };
+        viewStateDeal(WalletConnectState.transactionOK);
+
+      // ── Aptos ────────────────────────────────────────────────────────────
+      case "aptos_signMessage":
+        final params = eventData.params! as Map;
+        actionDataMap = _buildMessageData(
+          networkName,
+          params["address"] as String? ?? '',
+          params["message"] as String? ?? (params["fullMessage"] as String? ?? ''),
+        );
+        viewStateDeal(WalletConnectState.messageSignOK);
+
+      case "aptos_signTransaction":
+      case "aptos_signAndSubmitTransaction":
+        final params = eventData.params! as Map;
+        actionDataMap = {
+          "network": networkName,
+          "coinType": CoinType.APT.name,
+          "from": '',
+          "to": '',
+          "data": params["encodedTransaction"] as String? ??
+              (params["transaction"] as String? ?? ''),
+          "value": "0",
+          "gas": "0",
+          "signType": "transaction",
+        };
+        viewStateDeal(WalletConnectState.transactionOK);
+
+      // ── Sui ──────────────────────────────────────────────────────────────
+      case "sui_signMessage":
+        final params = eventData.params! as Map;
+        actionDataMap = _buildMessageData(
+          networkName,
+          params["account"] as String? ?? '',
+          params["message"] as String? ?? '',
+        );
+        viewStateDeal(WalletConnectState.messageSignOK);
+
+      case "sui_signTransaction":
+      case "sui_signAndExecuteTransaction":
+        final params = eventData.params! as Map;
+        actionDataMap = {
+          "network": networkName,
+          "coinType": CoinType.SUI.name,
+          "from": '',
+          "to": '',
+          "data": params["transactionBlock"] as String? ??
+              (params["transaction"] as String? ?? ''),
+          "value": "0",
+          "gas": "0",
+          "signType": "transaction",
+        };
+        viewStateDeal(WalletConnectState.transactionOK);
+
+      // ── NEAR ─────────────────────────────────────────────────────────────
+      case "near_signTransaction":
+      case "near_signAndSendTransaction":
+        final params = eventData.params! as Map;
+        // DApp sends either a single transaction or a list
+        final txList = params["transactions"];
+        final txData = txList is List
+            ? (txList.isNotEmpty ? txList[0].toString() : '')
+            : (params["transaction"] as String? ?? '');
+        actionDataMap = {
+          "network": networkName,
+          "coinType": CoinType.NEAR.name,
+          "from": '',
+          "to": '',
+          "data": txData,
+          "value": "0",
+          "gas": "0",
+          "signType": "transaction",
+        };
+        viewStateDeal(WalletConnectState.transactionOK);
 
       default:
         debugPrint('[WalletConnect] Unsupported method: ${eventData.method}');
@@ -370,6 +556,20 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
     Map<String, wallet_connect.RequiredNamespace> required,
   ) {
     final result = <CoinModel>[];
+    // Track added models by address to prevent duplicates when a DApp sends
+    // multiple chain IDs that map to the same coin model (e.g. ton:mainnet + ton:-239)
+    final seen = <String>{};
+
+    void addIfNew(CoinModel cm, {bool prepend = false}) {
+      final key = '${cm.coin['blockchainType']}:${cm.address}';
+      if (seen.add(key)) {
+        if (prepend) {
+          result.insert(0, cm);
+        } else {
+          result.add(cm);
+        }
+      }
+    }
 
     // Collect optional chains
     for (final chain in optional.keys) {
@@ -377,7 +577,7 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
       if (chains == null) continue;
       for (final chainId in chains) {
         final cm = coinModelFind(chainId);
-        if (cm != null) result.add(cm);
+        if (cm != null) addIfNew(cm);
       }
     }
 
@@ -394,7 +594,7 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
       for (final chainId in chains) {
         if (alreadyCovered.contains(chainId)) continue;
         final cm = coinModelFind(chainId);
-        if (cm != null) result.insert(0, cm);
+        if (cm != null) addIfNew(cm, prepend: true);
       }
     }
 
@@ -402,7 +602,18 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
   }
 
   /// Register request handlers and build account lists for all resolved chains.
-  void _registerChainHandlers(List<String> accounts, List<String> accountsTron) {
+  void _registerChainHandlers(
+    List<String> accounts,
+    List<String> accountsTron,
+    List<String> accountsSolana,
+    List<String> accountsAptos,
+    List<String> accountsSui,
+    List<String> accountsNear,
+  ) {
+    bool solanaRegistered = false;
+    bool aptosRegistered = false;
+    bool suiRegistered = false;
+    bool nearRegistered = false;
     for (int i = coinModels.length - 1; i >= 0; i--) {
       final cm = coinModels[i];
       final blockchainType = cm.coin['blockchainType'];
@@ -423,8 +634,87 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
           signClient!.registerRequestHandler(chainId: tronChainId, method: method);
         }
         signClient!.registerAccount(chainId: tronChainId, accountAddress: addr);
+      } else if (blockchainType == BlockchainType.Solana.name && !solanaRegistered) {
+        const solanaChainId = "solana:4sGjMW1sUnHzSxGspuhpqLDx6wiyjNtZ";
+        final addr = cm.address.toString();
+        accountsSolana.add("$solanaChainId:$addr");
+        for (final method in _solanaMethods) {
+          signClient!.registerRequestHandler(chainId: solanaChainId, method: method);
+        }
+        signClient!.registerAccount(chainId: solanaChainId, accountAddress: addr);
+        solanaRegistered = true;
+      } else if (blockchainType == BlockchainType.Aptos.name && !aptosRegistered) {
+        const aptosChainId = "aptos:1";
+        final addr = cm.address.toString();
+        accountsAptos.add("$aptosChainId:$addr");
+        for (final method in _aptosMethods) {
+          signClient!.registerRequestHandler(chainId: aptosChainId, method: method);
+        }
+        signClient!.registerAccount(chainId: aptosChainId, accountAddress: addr);
+        aptosRegistered = true;
+      } else if (blockchainType == BlockchainType.Sui.name && !suiRegistered) {
+        const suiChainId = "sui:mainnet";
+        final addr = cm.address.toString();
+        accountsSui.add("$suiChainId:$addr");
+        for (final method in _suiMethods) {
+          signClient!.registerRequestHandler(chainId: suiChainId, method: method);
+        }
+        signClient!.registerAccount(chainId: suiChainId, accountAddress: addr);
+        suiRegistered = true;
+      } else if (blockchainType == BlockchainType.Near.name && !nearRegistered) {
+        const nearChainId = "near:mainnet";
+        final addr = cm.address.toString();
+        accountsNear.add("$nearChainId:$addr");
+        for (final method in _nearMethods) {
+          signClient!.registerRequestHandler(chainId: nearChainId, method: method);
+        }
+        signClient!.registerAccount(chainId: nearChainId, accountAddress: addr);
+        nearRegistered = true;
       }
     }
+  }
+
+  // ── Namespace proposal helpers ────────────────────────────────────────────
+
+  /// Collect chain IDs from both optional and required namespaces for [nsKey].
+  static Set<String> _nsChainIds(
+    String nsKey,
+    Map<String, wallet_connect.RequiredNamespace> opt,
+    Map<String, wallet_connect.RequiredNamespace> req,
+  ) {
+    final ids = <String>{};
+    for (final ns in [opt, req]) {
+      final n = ns[nsKey];
+      if (n?.chains != null) ids.addAll(n!.chains!);
+    }
+    return ids;
+  }
+
+  /// Collect methods from both optional and required namespaces for [nsKey].
+  /// Falls back to [fallback] if the DApp specified nothing.
+  static List<String> _nsMethods(
+    String nsKey,
+    Map<String, wallet_connect.RequiredNamespace> opt,
+    Map<String, wallet_connect.RequiredNamespace> req,
+    List<String> fallback,
+  ) {
+    final methods = <String>{};
+    for (final ns in [opt, req]) {
+      methods.addAll(ns[nsKey]?.methods ?? []);
+    }
+    return methods.isEmpty ? fallback : methods.toList();
+  }
+
+  /// Collect events from both optional and required namespaces for [nsKey].
+  /// Returns empty list when DApp requests no events (avoids EVM-specific
+  /// events like chainChanged/accountsChanged being sent to non-EVM DApps).
+  static List<String> _nsEvents(
+    String nsKey,
+    Map<String, wallet_connect.RequiredNamespace> opt,
+    Map<String, wallet_connect.RequiredNamespace> req,
+  ) {
+    final events = <String>{...?(opt[nsKey]?.events), ...?(req[nsKey]?.events)};
+    return events.isEmpty ? const [] : events.toList();
   }
 
   // ── Abstract methods ──────────────────────────────────────────────────────

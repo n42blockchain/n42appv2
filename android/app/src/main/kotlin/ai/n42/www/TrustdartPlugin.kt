@@ -16,10 +16,12 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import org.json.JSONObject
 import wallet.core.java.AnySigner
 import wallet.core.jni.Account
+import wallet.core.jni.TONWallet
 import wallet.core.jni.BitcoinAddress
 import wallet.core.jni.BitcoinScript
 import wallet.core.jni.BitcoinSigHashType
 import wallet.core.jni.CoinType
+import wallet.core.jni.Curve
 import wallet.core.jni.DataVector
 import wallet.core.jni.Derivation
 import wallet.core.jni.HDWallet
@@ -52,7 +54,11 @@ import wallet.core.jni.proto.Zilliqa
 import wallet.core.jni.proto.Theta
 import wallet.core.jni.proto.Cardano
 import wallet.core.jni.proto.MultiversX
+import java.io.ByteArrayOutputStream
 import java.math.BigInteger
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
+import java.security.MessageDigest
 import java.util.concurrent.CompletableFuture
 import evmsdk.Evmsdk
 import com.mobileSdk.Api
@@ -604,8 +610,200 @@ class TrustdartPlugin: FlutterPlugin, MethodCallHandler {
                 }
             }
 
+            "getTonWalletStateInit" -> {
+                val mnemonic: String? = call.argument("mnemonic")
+                val path: String? = call.argument("path")
+                if (mnemonic.isNullOrEmpty() || path.isNullOrEmpty()) {
+                    result.success(null)
+                } else {
+                    try {
+                        val wallet = HDWallet(mnemonic, "")
+                        val privateKey = wallet.getKey(CoinType.TON, path)
+                        val pubKey = privateKey.publicKeyEd25519
+                        // Use TrustWallet Core native method to build v4R2 stateInit directly
+                        // Returns base64-encoded BOC (standard TON format with correct cell ordering)
+                        val stateInitBase64 = TONWallet.buildV4R2StateInit(pubKey, 0, 698983191)
+                        val derivedAddr = CoinType.TON.deriveAddress(privateKey)
+                        if (stateInitBase64.isNullOrEmpty()) {
+                            result.success(null)
+                        } else {
+                            result.success("ADDR:$derivedAddr|$stateInitBase64")
+                        }
+                    } catch (e: Exception) {
+                        result.success(null)
+                    }
+                }
+            }
+
+            "signTonProof" -> {
+                val mnemonic: String? = call.argument("mnemonic")
+                val path: String? = call.argument("path")
+                val domain: String? = call.argument("domain")
+                val timestamp: Long = (call.argument<Any>("timestamp") as? Number)?.toLong()
+                    ?: (System.currentTimeMillis() / 1000L)
+                val payload: String? = call.argument("payload")
+                val tonAddress: String? = call.argument("address")
+                if (mnemonic.isNullOrEmpty() || path.isNullOrEmpty()) {
+                    result.success(null)
+                } else {
+                    try {
+                        val wallet = HDWallet(mnemonic, "")
+                        val privateKey = wallet.getKey(CoinType.TON, path)
+                        val address = if (!tonAddress.isNullOrEmpty()) tonAddress
+                                      else CoinType.TON.deriveAddress(privateKey)
+                        val addrDecoded = decodeTonAddress(address)
+                        val workchain = addrDecoded?.first ?: 0
+                        val addrHash = addrDecoded?.second ?: ByteArray(32)
+                        val domainStr = domain ?: ""
+                        val payloadStr = payload ?: ""
+                        val domainBytes = domainStr.toByteArray(Charsets.UTF_8)
+                        val payloadBytes = payloadStr.toByteArray(Charsets.UTF_8)
+                        // Build message per TonConnect ton_proof spec
+                        val baos = ByteArrayOutputStream()
+                        baos.write("ton-proof-item-v2/".toByteArray(Charsets.UTF_8))
+                        baos.write(ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(workchain).array())
+                        baos.write(addrHash)
+                        baos.write(ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(domainBytes.size).array())
+                        baos.write(domainBytes)
+                        baos.write(ByteBuffer.allocate(8).order(ByteOrder.LITTLE_ENDIAN).putLong(timestamp).array())
+                        baos.write(payloadBytes)
+                        val message = baos.toByteArray()
+                        val md = MessageDigest.getInstance("SHA-256")
+                        val messageHash = md.digest(message)
+                        val appContextHash = md.digest("ton-connect".toByteArray(Charsets.UTF_8))
+                        // bufToSign = 0xffff ++ sha256("ton-connect") ++ sha256(message)
+                        val bufToSign = ByteArray(66)
+                        bufToSign[0] = 0xff.toByte()
+                        bufToSign[1] = 0xff.toByte()
+                        System.arraycopy(appContextHash, 0, bufToSign, 2, 32)
+                        System.arraycopy(messageHash, 0, bufToSign, 34, 32)
+                        val signature = privateKey.sign(bufToSign, Curve.ED25519)
+                        val signatureBase64 = aBase64.encodeToString(signature, aBase64.NO_WRAP)
+                        val proofResult = JSONObject().apply {
+                            put("timestamp", timestamp)
+                            put("domain", JSONObject().apply {
+                                put("lengthBytes", domainBytes.size)
+                                put("value", domainStr)
+                            })
+                            put("payload", payloadStr)
+                            put("signature", signatureBase64)
+                        }
+                        result.success(proofResult.toString())
+                    } catch (e: Exception) {
+                        result.success(null)
+                    }
+                }
+            }
+
             else -> result.notImplemented()
         }
+    }
+
+    private fun decodeTonAddress(address: String): Pair<Int, ByteArray>? {
+        return try {
+            val standardB64 = address.replace('-', '+').replace('_', '/')
+            val decoded = aBase64.decode(standardB64, aBase64.DEFAULT)
+            if (decoded.size != 36) return null
+            val workchain = decoded[1].toInt().let { if (it > 127) it - 256 else it }
+            val hash = decoded.copyOfRange(2, 34)
+            Pair(workchain, hash)
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    private fun extractStateInitFromBoc(boc: ByteArray): ByteArray? {
+        if (boc.size < 10) return null
+        if (boc[0] != 0xB5.toByte() || boc[1] != 0xEE.toByte() ||
+            boc[2] != 0x9C.toByte() || boc[3] != 0x72.toByte()) return null
+
+        var pos = 4
+        fun byte(): Int = boc[pos++].toInt() and 0xFF
+        fun uint(n: Int): Int { var r = 0; repeat(n) { r = (r shl 8) or byte() }; return r }
+
+        val flagsByte = byte()
+        val hasIdx = (flagsByte shr 7) and 1 == 1
+        val refSize = flagsByte and 0x07
+        val offBytes = byte()
+
+        val cellCount = uint(refSize)
+        uint(refSize) // root_count
+        uint(refSize) // absent_count
+        uint(offBytes) // tot_cells_size
+        uint(refSize) // root_index
+
+        if (hasIdx) pos += cellCount * offBytes
+
+        val cellD1 = IntArray(cellCount)
+        val cellD2 = IntArray(cellCount)
+        val cellData = Array(cellCount) { ByteArray(0) }
+        val cellRefs = Array(cellCount) { IntArray(0) }
+
+        for (i in 0 until cellCount) {
+            val d1 = byte()
+            val d2 = byte()
+            val refsCount = d1 and 0x07
+            val dataLen = (d2 ushr 1) + (d2 and 1)
+            cellD1[i] = d1
+            cellD2[i] = d2
+            cellData[i] = boc.copyOfRange(pos, pos + dataLen); pos += dataLen
+            cellRefs[i] = IntArray(refsCount) { uint(refSize) }
+        }
+
+        // Find stateInit cell: d1=0x02 (2 refs), d2=0x01 (5 bits), data=[0x34]
+        var stateInitIdx = -1
+        for (i in 0 until cellCount) {
+            if (cellD1[i] == 0x02 && cellD2[i] == 0x01 &&
+                cellData[i].size == 1 && cellData[i][0] == 0x34.toByte()) {
+                stateInitIdx = i
+                break
+            }
+        }
+        if (stateInitIdx < 0) return null
+
+        // BFS collect all cells in the stateInit subtree
+        val orderedIndices = mutableListOf<Int>()
+        val visited = mutableSetOf<Int>()
+        val queue = ArrayDeque<Int>()
+        queue.add(stateInitIdx)
+        visited.add(stateInitIdx)
+        while (queue.isNotEmpty()) {
+            val idx = queue.removeFirst()
+            orderedIndices.add(idx)
+            for (ref in cellRefs[idx]) {
+                if (visited.add(ref)) queue.add(ref)
+            }
+        }
+
+        val oldToNew = HashMap<Int, Int>()
+        for ((newIdx, oldIdx) in orderedIndices.withIndex()) oldToNew[oldIdx] = newIdx
+
+        // Total cell data size with refSize=1
+        var totSize = 0
+        for (oldIdx in orderedIndices) {
+            val refsCount = cellD1[oldIdx] and 0x07
+            totSize += 2 + cellData[oldIdx].size + refsCount
+        }
+
+        val out = java.io.ByteArrayOutputStream()
+        out.write(byteArrayOf(0xB5.toByte(), 0xEE.toByte(), 0x9C.toByte(), 0x72.toByte()))
+        out.write(0x01) // flags: size=1
+        out.write(0x02) // off_bytes=2
+        out.write(orderedIndices.size) // cell_count
+        out.write(0x01) // root_count
+        out.write(0x00) // absent_count
+        out.write((totSize shr 8) and 0xFF)
+        out.write(totSize and 0xFF)
+        out.write(0x00) // root_index=0
+
+        for (oldIdx in orderedIndices) {
+            out.write(cellD1[oldIdx])
+            out.write(cellD2[oldIdx])
+            out.write(cellData[oldIdx])
+            for (ref in cellRefs[oldIdx]) out.write(oldToNew[ref]!!)
+        }
+
+        return out.toByteArray()
     }
 
     fun handleCoreCall2(call: MethodCall, result: MethodChannel.Result) {
@@ -1370,6 +1568,9 @@ class TrustdartPlugin: FlutterPlugin, MethodCallHandler {
             "MultiversX" ->{
                 privateKey.publicKeyEd25519
             }
+            "Ton" ->{
+                privateKey.publicKeyEd25519
+            }
             else -> null
         }
         return if(publicKey==null){
@@ -1494,6 +1695,24 @@ class TrustdartPlugin: FlutterPlugin, MethodCallHandler {
 
             val ba : ByteArray=privateKey.sign(txData.toByteArray(),coinType.curve())
             return Numeric.toHexString(ba)
+        }
+        if(coinType==CoinType.SOLANA){
+            // WalletConnect sends message as base64; sign raw bytes and return base64 signature
+            val messageBytes: ByteArray = aBase64.decode(txData, aBase64.DEFAULT)
+            val sig: ByteArray = privateKey.sign(messageBytes, coinType.curve())
+            return aBase64.encodeToString(sig, aBase64.NO_WRAP)
+        }
+        if(coinType==CoinType.APTOS || coinType==CoinType.TON || coinType==CoinType.NEAR){
+            // WalletConnect sends plain text messages; sign UTF-8 bytes and return hex signature
+            val sig: ByteArray = privateKey.sign(txData.toByteArray(Charsets.UTF_8), coinType.curve())
+                ?: return null
+            return Numeric.toHexString(sig)
+        }
+        if(coinType==CoinType.SUI){
+            // WalletConnect sends base64-encoded message bytes
+            val messageBytes: ByteArray = aBase64.decode(txData, aBase64.DEFAULT)
+            val sig: ByteArray = privateKey.sign(messageBytes, coinType.curve()) ?: return null
+            return aBase64.encodeToString(sig, aBase64.NO_WRAP)
         }
         val ba : ByteArray=privateKey.sign(Numeric.hexStringToByteArray(txData),coinType.curve())
         return Numeric.toHexString(ba)
@@ -1987,10 +2206,50 @@ class TrustdartPlugin: FlutterPlugin, MethodCallHandler {
         val result = AnySigner.sign(input.build(),coinType,Ethereum.SigningOutput.parser())
         return Numeric.toHexString(result.encoded.toByteArray())
     }
+    /**
+     * Decode a Solana compact-u16 value from [data] starting at [offset].
+     * Returns Pair(value, bytesConsumed).
+     */
+    private fun decodeCompactU16(data: ByteArray, offset: Int): Pair<Int, Int> {
+        var value = 0
+        var bytesRead = 0
+        var shift = 0
+        while (offset + bytesRead < data.size) {
+            val byte = data[offset + bytesRead].toInt() and 0xFF
+            bytesRead++
+            value = value or ((byte and 0x7F) shl shift)
+            if (byte and 0x80 == 0) break
+            shift += 7
+            if (shift >= 16) break
+        }
+        return Pair(value, bytesRead)
+    }
+
     private fun signSolanaTransaction(wallet: HDWallet?, path: String, txData: Map<String, Any>,pk: PrivateKey?): String? {
         val privateKey= pk ?: wallet!!.getKey(CoinType.SOLANA, path)
         val type : String = txData["type"] as String
         val encodeType : String = txData["encodeType"] as String
+
+        // WalletConnect raw transaction signing
+        if (type == "WC_SOL") {
+            val rawTxBase64: String = txData["transaction"] as String
+            val rawTxBytes: ByteArray = aBase64.decode(rawTxBase64, aBase64.DEFAULT)
+            // Solana tx layout: [compact-u16 numSigs][signatures: N×64 bytes][message]
+            val (numSigs, headerBytes) = decodeCompactU16(rawTxBytes, 0)
+            val messageOffset = headerBytes + numSigs * 64
+            if (messageOffset >= rawTxBytes.size) return null
+            val message = rawTxBytes.copyOfRange(messageOffset, rawTxBytes.size)
+            // Sign the message with ed25519
+            val signature: ByteArray = privateKey.sign(message, CoinType.SOLANA.curve()) ?: return null
+            // Reconstruct signed transaction
+            val signedTx = ByteArray(rawTxBytes.size)
+            System.arraycopy(rawTxBytes, 0, signedTx, 0, headerBytes)             // compact-u16 header
+            System.arraycopy(signature, 0, signedTx, headerBytes, minOf(64, signature.size)) // first sig
+            // Remaining signature slots (if any) are already zeroed
+            System.arraycopy(message, 0, signedTx, headerBytes + numSigs * 64, message.size)
+            return aBase64.encodeToString(signedTx, aBase64.NO_WRAP)
+        }
+
         //创建代币的地址
         if( type == "createTokenAccount"){
             val createTokenAccount: Map<String, String> = txData["createTokenAccount"] as Map<String, String>
@@ -2389,6 +2648,20 @@ class TrustdartPlugin: FlutterPlugin, MethodCallHandler {
     private fun signAptosTransaction(wallet: HDWallet?, path: String, txData: Map<String, Any>,pk:PrivateKey?): String{
         val privateKey= pk ?: wallet!!.getKey(CoinType.APTOS, path)
 
+        val type = txData["type"] as? String ?: ""
+        if (type == "WC_APT") {
+            // WalletConnect: DApp sends pre-built BCS-encoded raw transaction (base64)
+            // anyEncoded field expects hex string of the raw transaction bytes
+            val rawTxBase64 = txData["encodedTransaction"] as? String ?: return ""
+            val rawBytes = aBase64.decode(rawTxBase64, aBase64.DEFAULT)
+            val input = Aptos.SigningInput.newBuilder()
+                .setAnyEncoded(Numeric.toHexString(rawBytes))
+                .setPrivateKey(ByteString.copyFrom(privateKey.data()))
+                .build()
+            val output = AnySigner.sign(input, CoinType.APTOS, Aptos.SigningOutput.parser())
+            return aBase64.encodeToString(output.encoded.toByteArray(), aBase64.NO_WRAP)
+        }
+
         val gasUnitPrice : Long = txData["gasUnitPrice"] as Long
         val maxGasAmount : Long = txData["maxGasAmount"] as Long
         val expirationTimestampSecs : Long = txData["expirationTimestampSecs"] as Long
@@ -2439,6 +2712,22 @@ class TrustdartPlugin: FlutterPlugin, MethodCallHandler {
     }
     private fun signSuiTransaction(wallet: HDWallet?, path: String, txData: Map<String, Any>,pk:PrivateKey?): String{
         val privateKey= pk ?: wallet!!.getKey(CoinType.SUI, path)
+
+        val type = txData["type"] as? String ?: ""
+        if (type == "WC_SUI") {
+            // WalletConnect: DApp sends base64-encoded BCS transaction block (SignDirect)
+            // unsignedTxMsg is a string field (base64 or raw tx string)
+            val rawTxBase64 = txData["transaction"] as? String ?: return ""
+            val signDirect = Sui.SignDirect.newBuilder()
+                .setUnsignedTxMsg(rawTxBase64)
+                .build()
+            val input = Sui.SigningInput.newBuilder()
+                .setSignDirectMessage(signDirect)
+                .setPrivateKey(ByteString.copyFrom(privateKey.data()))
+                .build()
+            val output = AnySigner.sign(input, CoinType.SUI, Aptos.SigningOutput.parser())
+            return aBase64.encodeToString(output.encoded.toByteArray(), aBase64.NO_WRAP)
+        }
 
         val referenceGasPrice : Long = txData["referenceGasPrice"] as Long
         val gasBudget : Long = txData["gasBudget"] as Long
@@ -2599,6 +2888,20 @@ class TrustdartPlugin: FlutterPlugin, MethodCallHandler {
 
     private fun signNearTransaction(wallet: HDWallet?, path: String, txData: Map<String, Any>, pk: PrivateKey?): String? {
         val privateKey = pk ?: wallet!!.getKey(CoinType.NEAR, path)
+
+        val type = txData["type"] as? String ?: ""
+        if (type == "WC_NEAR") {
+            // WalletConnect: DApp sends base64-encoded borsh-encoded Transaction
+            val rawTxBase64 = txData["transaction"] as? String ?: return null
+            val rawTxBytes = aBase64.decode(rawTxBase64, aBase64.DEFAULT)
+            // NEAR signing: SHA-256 of raw borsh tx bytes
+            val hash = java.security.MessageDigest.getInstance("SHA-256").digest(rawTxBytes)
+            // Sign the hash with ed25519
+            val signature = privateKey.sign(hash, Curve.ED25519) ?: return null
+            // NEAR SignedTransaction borsh = raw_tx_bytes + [0x00 key_type] + signature (64 bytes)
+            val signedTx = rawTxBytes + byteArrayOf(0x00.toByte()) + signature
+            return aBase64.encodeToString(signedTx, aBase64.NO_WRAP)
+        }
 
         val signerId: String = txData["signerId"] as String
         val receiverId: String = txData["receiverId"] as String
