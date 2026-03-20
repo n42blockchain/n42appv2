@@ -68,7 +68,12 @@ class BrowserProvider extends ChangeNotifier {
   }
 
   /// Shortcut: WebViewController of the currently active tab
-  WebViewController get _currentController => wvcList[wListIndex];
+  WebViewController get _currentController {
+    if (wListIndex < 0 || wListIndex >= wvcList.length) {
+      throw StateError('Invalid browser tab index: $wListIndex (tabs: ${wvcList.length})');
+    }
+    return wvcList[wListIndex];
+  }
 
   /// Set by [BrowserPage] to display a phishing warning dialog.
   /// Cleared in [BrowserPage.dispose] to prevent stale context usage.

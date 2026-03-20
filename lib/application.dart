@@ -9,6 +9,8 @@ import 'package:n42_wallet/features/wallet_connect/presentation/providers/wallet
 import 'package:n42_wallet/main.dart' show globalProviderContainer;
 import 'package:n42_wallet/shared/domain/entities/wallet_info.dart';
 
+import 'package:n42_wallet/core/security/secure_storage.dart';
+
 /// Legacy Application class - 已部分迁移到 Riverpod
 ///
 /// 保留此类以兼容旧代码，新代码应使用 AppGlobals 和 Riverpod
@@ -35,7 +37,10 @@ class Application {
   /// 用户退出
   static Future<void> logout() async {
     try {
-      await SPUtil().saveUserInfo(null);
+      await Future.wait([
+        SPUtil().saveUserInfo(null),
+        SecureStorage().clearUserData(),
+      ]);
       userInfo = null;
       globalProviderContainer.read(currentUserProvider.notifier).clearUser();
       globalProviderContainer.invalidate(walletListProvider);

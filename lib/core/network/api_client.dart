@@ -73,8 +73,10 @@ class ApiClient {
               error.type == DioExceptionType.receiveTimeout ||
               error.type == DioExceptionType.sendTimeout;
 
-          if (isTimeout && shouldRetryRequest(error.requestOptions)) {
+          if (isTimeout && shouldRetryRequest(error.requestOptions) &&
+              error.requestOptions.extra['_retried'] != true) {
             try {
+              error.requestOptions.extra['_retried'] = true;
               final response = await _dio.fetch(error.requestOptions);
               handler.resolve(response);
               return;

@@ -88,8 +88,11 @@ class SecurePreferences {
     'miningData',
   ];
 
-  /// 初始化
-  Future<void> init() async {
+  /// 初始化（使用缓存 Future 防止并发竞态）
+  Future<void>? _initFuture;
+  Future<void> init() => _initFuture ??= _doInit();
+
+  Future<void> _doInit() async {
     _prefs ??= await SharedPreferences.getInstance();
     await _migrateFromSharedPreferences();
   }

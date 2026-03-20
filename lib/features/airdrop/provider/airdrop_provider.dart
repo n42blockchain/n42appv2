@@ -261,21 +261,26 @@ class AirdropProvider extends ChangeNotifier {
   }
 
   /// 标记为已领取
+  final Set<String> _claimingAirdrops = {};
   Future<bool> markAsClaimed(String airdropId, String txHash) async {
-    if (_walletAddress == null) return false;
+    if (_walletAddress == null || _claimingAirdrops.contains(airdropId)) return false;
+    _claimingAirdrops.add(airdropId);
+    try {
+      final result = await _api.markAsClaimed(
+        airdropId: airdropId,
+        walletAddress: _walletAddress!,
+        txHash: txHash,
+      );
 
-    final result = await _api.markAsClaimed(
-      airdropId: airdropId,
-      walletAddress: _walletAddress!,
-      txHash: txHash,
-    );
+      if (!result.error) {
+        await refresh();
+        return true;
+      }
 
-    if (!result.error) {
-      await refresh();
-      return true;
+      return false;
+    } finally {
+      _claimingAirdrops.remove(airdropId);
     }
-
-    return false;
   }
 
   // ============ 便捷获取方法 ============

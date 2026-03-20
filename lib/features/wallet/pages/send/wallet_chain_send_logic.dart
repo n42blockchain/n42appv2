@@ -214,7 +214,7 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
       ToastUtils.show(errorMessage);
     }
     totalGasPrice =
-        totalGasPrice + BigInt.from((100 * gasPriceEth.toInt() * 2100) / 16);
+        totalGasPrice + (BigInt.from(100) * gasPriceEth * BigInt.from(2100)) ~/ BigInt.from(16);
     load = Load.finish;
     setState(() {});
   }
@@ -255,7 +255,7 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
       if (ethMessage.error == false) {
         gas = ethMessage.data;
         if (_coinType == CoinType.BOBA.name || _coinType == CoinType.OP.name) {
-          gas = BigInt.from(gas.toInt() * 1.5);
+          gas = gas * BigInt.from(3) ~/ BigInt.from(2);
         }
         if (_blockchainType == BlockchainType.Ethereum.name && !_isContract) {
           final note = noteTextEditingController.text.trim();

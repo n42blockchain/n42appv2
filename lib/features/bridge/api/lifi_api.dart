@@ -343,7 +343,10 @@ class LiFiApi implements BridgeApiClient {
   }) async {
     try {
       final response = await BaseApi.requestEmptyH.get(
-        '$_baseUrl/approval?chainId=$chainId&tokenAddress=$tokenAddress&walletAddress=$walletAddress&spenderAddress=$spenderAddress',
+        '$_baseUrl/approval?chainId=$chainId'
+        '&tokenAddress=${Uri.encodeComponent(tokenAddress)}'
+        '&walletAddress=${Uri.encodeComponent(walletAddress)}'
+        '&spenderAddress=${Uri.encodeComponent(spenderAddress)}',
         params: {},
         header: _headers,
       );
@@ -371,7 +374,9 @@ class LiFiApi implements BridgeApiClient {
   }) async {
     try {
       final baseUrl =
-          '$_baseUrl/approval/transaction?chainId=$chainId&tokenAddress=$tokenAddress&spenderAddress=$spenderAddress';
+          '$_baseUrl/approval/transaction?chainId=$chainId'
+          '&tokenAddress=${Uri.encodeComponent(tokenAddress)}'
+          '&spenderAddress=${Uri.encodeComponent(spenderAddress)}';
       final url = amount != null ? '$baseUrl&amount=$amount' : baseUrl;
 
       final response = await BaseApi.requestEmptyH.get(

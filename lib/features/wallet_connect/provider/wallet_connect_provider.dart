@@ -80,11 +80,19 @@ class WalletConnectProvider
             signClient == null) {
           return;
         }
-        final paired = await pair(params as String);
+        if (params is! String || params.isEmpty) {
+          viewStateDeal(WalletConnectState.error, params: 'Missing WalletConnect URI');
+          return;
+        }
+        final paired = await pair(params);
         if (!paired || walletConnectState == WalletConnectState.error) {
           return;
         }
       case WalletConnectState.connectOK:
+        if (actionData is! wallet_connect.SessionProposalEvent) {
+          viewStateDeal(WalletConnectState.error, params: 'Invalid session proposal data');
+          return;
+        }
         final args = actionData as wallet_connect.SessionProposalEvent;
         try {
           signClient!
@@ -107,7 +115,7 @@ class WalletConnectProvider
       case WalletConnectState.messageSignOK:
         if (!pageOpen) showAlertWidget();
       case WalletConnectState.error:
-        errorMessage = params as String;
+        errorMessage = (params as String?) ?? 'Unknown error';
       case WalletConnectState.selectChain:
       case WalletConnectState.connect:
       case WalletConnectState.reconnect:
@@ -135,6 +143,11 @@ class WalletConnectProvider
   Future<void> cancelTap(WalletConnectState state) async {
     viewStateDeal(state);
     try {
+      if (actionData is! wallet_connect.SessionRequestEvent) {
+        debugPrint('[WalletConnect] cancelTap: actionData is not SessionRequestEvent');
+        viewStateDeal(WalletConnectState.connect);
+        return;
+      }
       final eventData = actionData as wallet_connect.SessionRequestEvent;
       await signClient!.respondSessionRequest(
         topic: eventData.topic,

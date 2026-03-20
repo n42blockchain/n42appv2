@@ -212,25 +212,30 @@ class LoyaltyProvider extends ChangeNotifier {
   }
 
   /// 每日签到
+  bool _checkingIn = false;
   Future<Map<String, dynamic>?> checkIn() async {
-    if (_walletAddress == null || _hasCheckedInToday) return null;
+    if (_walletAddress == null || _hasCheckedInToday || _checkingIn) return null;
+    _checkingIn = true;
+    try {
+      final result = await _api.dailyCheckIn(_walletAddress!);
+      if (!result.error && result.data != null) {
+        final data = result.data as Map<String, dynamic>;
+        final pointsEarned = data['points_earned'] as int? ?? 0;
 
-    final result = await _api.dailyCheckIn(_walletAddress!);
-    if (!result.error && result.data != null) {
-      final data = result.data as Map<String, dynamic>;
-      final pointsEarned = data['points_earned'] as int? ?? 0;
+        _account = _copyAccountWith(
+          totalDelta: pointsEarned,
+          availableDelta: pointsEarned,
+        );
+        _hasCheckedInToday = true;
+        notifyListeners();
 
-      _account = _copyAccountWith(
-        totalDelta: pointsEarned,
-        availableDelta: pointsEarned,
-      );
-      _hasCheckedInToday = true;
-      notifyListeners();
+        return data;
+      }
 
-      return data;
+      return null;
+    } finally {
+      _checkingIn = false;
     }
-
-    return null;
   }
 
   /// 完成任务
@@ -253,8 +258,9 @@ class LoyaltyProvider extends ChangeNotifier {
   }
 
   /// 兑换奖励
+  final Set<String> _redeemingRewards = {};
   Future<bool> redeemReward(String rewardId) async {
-    if (_walletAddress == null) return false;
+    if (_walletAddress == null || _redeemingRewards.contains(rewardId)) return false;
 
     final reward = _rewards.firstWhere(
       (r) => r.id == rewardId,
@@ -272,22 +278,27 @@ class LoyaltyProvider extends ChangeNotifier {
       return false;
     }
 
-    final result = await _api.redeemReward(
-      walletAddress: _walletAddress!,
-      rewardId: rewardId,
-    );
-
-    if (!result.error) {
-      _account = _copyAccountWith(
-        availableDelta: -reward.pointsCost,
-        usedDelta: reward.pointsCost,
+    _redeemingRewards.add(rewardId);
+    try {
+      final result = await _api.redeemReward(
+        walletAddress: _walletAddress!,
+        rewardId: rewardId,
       );
-      notifyListeners();
-      unawaited(refresh()); // 异步同步后端，防止重进页面积分复原
-      return true;
-    }
 
-    return false;
+      if (!result.error) {
+        _account = _copyAccountWith(
+          availableDelta: -reward.pointsCost,
+          usedDelta: reward.pointsCost,
+        );
+        notifyListeners();
+        unawaited(refresh()); // 异步同步后端，防止重进页面积分复原
+        return true;
+      }
+
+      return false;
+    } finally {
+      _redeemingRewards.remove(rewardId);
+    }
   }
 
   List<LoyaltyTask> get availableTasks =>
