@@ -14,7 +14,7 @@ import '../models/url_threat.dart';
 /// 1. [PhishingDetector] — synchronous local blocklist (MetaMask + seeds)
 /// 2. [UrlhausDatasource] — async remote malware URL check (optional)
 ///
-/// Fail-open: returns safe on any error.
+/// Fail-closed: returns unknown (treated as suspicious) on any error.
 class UrlSecurityAggregator {
   /// Check whether [url] is malicious.
   ///
@@ -68,7 +68,14 @@ class UrlSecurityAggregator {
       return UrlThreat.safe(url);
     } catch (e) {
       _debugLog('UrlSecurityAggregator.checkUrl error: $e');
-      return UrlThreat.safe(url);
+      // Fail-closed: treat check failures as suspicious
+      return UrlThreat(
+        url: url,
+        isMalicious: true,
+        threatType: 'check_failed',
+        source: 'UrlSecurityAggregator',
+        tags: ['error:${e.runtimeType}'],
+      );
     }
   }
 

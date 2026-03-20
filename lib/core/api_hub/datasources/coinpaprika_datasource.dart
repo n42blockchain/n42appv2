@@ -83,7 +83,7 @@ class CoinPaprikaDatasource {
       try {
         final raw = await ExternalHttp.get(
           '$_base/tickers/$id',
-        ).timeout(const Duration(seconds: 8), onTimeout: () => null);
+        ).timeout(const Duration(seconds: 8));
         if (raw == null || raw is! Map) continue;
 
         final quotes = raw['quotes'] as Map?;

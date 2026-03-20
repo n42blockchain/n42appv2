@@ -44,6 +44,13 @@ mixin BridgeExecutionMixin on ChangeNotifier {
     if (_selectedRoute == null) {
       return MessageModel.error()..data = 'No route selected';
     }
+    if (_selectedRoute!.steps.isEmpty) {
+      return MessageModel.error()..data = 'Route has no steps';
+    }
+    if (_fromChain == null || _toChain == null ||
+        _fromToken == null || _toToken == null) {
+      return MessageModel.error()..data = 'Incomplete bridge configuration';
+    }
 
     _setState(BridgeState.executing);
     _clearError();

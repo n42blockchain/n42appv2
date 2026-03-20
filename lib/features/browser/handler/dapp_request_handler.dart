@@ -93,7 +93,8 @@ class DAppRequestHandler {
         return _handlePersonalSign(params);
 
       case 'eth_sign':
-        return _handleEthSign(params);
+        // eth_sign is dangerous (signs arbitrary data) — reject by default
+        throw Exception('eth_sign is disabled for security reasons. Use personal_sign instead.');
 
       case 'eth_signTypedData':
       case 'eth_signTypedData_v3':
@@ -125,8 +126,8 @@ class DAppRequestHandler {
         return _forwardToRpc(method, params);
 
       default:
-        // Try forwarding unknown methods to RPC
-        return _forwardToRpc(method, params);
+        // Reject unknown methods instead of blindly forwarding
+        throw {'code': -32601, 'message': 'Method not supported: $method'};
     }
   }
 
@@ -134,8 +135,12 @@ class DAppRequestHandler {
 
   String? _handleSwitchChain(List<dynamic> params) {
     if (params.isEmpty) throw 'Missing params';
-    final chainIdHex = params[0]['chainId'] as String;
-    final targetChainId = int.parse(chainIdHex.replaceFirst('0x', ''), radix: 16);
+    final chainParam = params[0];
+    if (chainParam is! Map) throw {'code': -32602, 'message': 'Invalid chain params'};
+    final chainIdRaw = chainParam['chainId'];
+    if (chainIdRaw is! String) throw {'code': -32602, 'message': 'Invalid chainId'};
+    final targetChainId = int.tryParse(chainIdRaw.replaceFirst('0x', ''), radix: 16);
+    if (targetChainId == null) throw {'code': -32602, 'message': 'Invalid chainId format'};
 
     for (int i = 0; i < ethCoinModels.length; i++) {
       final cm = ethCoinModels[i];
@@ -155,6 +160,11 @@ class DAppRequestHandler {
   Future<String> _handlePersonalSign(List<dynamic> params) async {
     if (params.length < 2) throw 'Invalid params';
     final rawData = params[0] as String;
+    // Verify the requested address matches our wallet
+    final requestedAddress = (params[1] as String).toLowerCase();
+    if (requestedAddress != address.toLowerCase()) {
+      throw {'code': -32602, 'message': 'Address mismatch'};
+    }
     final origin = 'DApp';
 
     // Ask user for approval
@@ -174,23 +184,8 @@ class DAppRequestHandler {
     return bytesToHex(signedData, include0x: true);
   }
 
-  Future<String> _handleEthSign(List<dynamic> params) async {
-    if (params.length < 2) throw 'Invalid params';
-    final rawData = params[1] as String;
-
-    final approved = await _requestApproval(
-      origin: 'DApp',
-      method: 'eth_sign',
-      details: {'message': rawData},
-    );
-    if (!approved) throw {'code': 4001, 'message': 'User rejected'};
-
-    final privateKey = await _getPrivateKey();
-    final stripped = web3.strip0x(rawData);
-    final encodedMessage = web3.hexToBytes(stripped);
-    final signedData = privateKey.signPersonalMessageToUint8List(encodedMessage);
-    return bytesToHex(signedData, include0x: true);
-  }
+  // eth_sign intentionally removed — dangerous method that signs arbitrary data.
+  // DApps should use personal_sign or eth_signTypedData instead.
 
   Future<String> _handleSignTypedData(String method, List<dynamic> params) async {
     if (params.length < 2) throw 'Invalid params';

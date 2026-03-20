@@ -130,13 +130,18 @@ class BaseHttp {
     Duration? timeout,
   }) async {
     // RESTful path parameter substitution
+    final consumedKeys = <String>{};
     if (params.isNotEmpty) {
       params.forEach((key, value) {
         if (path.contains(':$key')) {
-          path = path.replaceAll(':$key', value.toString());
+          path = path.replaceAll(':$key', Uri.encodeComponent(value.toString()));
+          consumedKeys.add(key);
         }
       });
     }
+    // Remove consumed path params so they don't leak as query parameters
+    final queryParams = Map<String, dynamic>.from(params)
+      ..removeWhere((key, _) => consumedKeys.contains(key));
 
     try {
       final options = Options(
@@ -146,7 +151,9 @@ class BaseHttp {
         connectTimeout: timeout,
         sendTimeout: timeout,
         receiveTimeout: timeout,
-        headers: ProxyConfig.mergeAuthHeaders(path, {
+        headers: ProxyConfig.mergeAuthHeaders(
+          '${_options.baseUrl}$path',
+          {
           if (header != null)
             ...header.map((key, value) => MapEntry(key, value.toString())),
           if (userInfo != null) ...userInfo,
@@ -156,7 +163,7 @@ class BaseHttp {
       final response = await _dio.request<dynamic>(
         path,
         data: data,
-        queryParameters: params,
+        queryParameters: queryParams,
         options: options,
         onSendProgress: sendProgress,
         onReceiveProgress: receiveProgress,
@@ -367,10 +374,15 @@ class BaseHttp {
   Map<String, String>? getUserToken() {
     final user = AppGlobals.userInfo;
     if (user == null) return null;
+    final uuid = user.uuid;
+    final token = user.token;
+    if (uuid == null || uuid.isEmpty || token == null || token.isEmpty) {
+      return null;
+    }
     return {
       'Source': 'app',
-      'Uuid': user.uuid ?? '',
-      'Token': user.token ?? '',
+      'Uuid': uuid,
+      'Token': token,
     };
   }
 }

@@ -33,7 +33,7 @@ class DefiLlamaDatasource {
     try {
       final raw = await ExternalHttp.get(
         '$_base/protocols',
-      ).timeout(const Duration(seconds: 8), onTimeout: () => null);
+      ).timeout(const Duration(seconds: 8));
       final protocols = parseProtocolsResponse(raw, fallback: _protocolsCache);
       if (protocols.isNotEmpty) {
         _protocolsCache = protocols;
@@ -64,7 +64,7 @@ class DefiLlamaDatasource {
     try {
       final raw = await ExternalHttp.get(
         '$_yieldsBase/pools',
-      ).timeout(const Duration(seconds: 8), onTimeout: () => null);
+      ).timeout(const Duration(seconds: 8));
       final yields = parseYieldsResponse(raw, fallback: _yieldsCache);
       if (yields.isNotEmpty) {
         _yieldsCache = yields;

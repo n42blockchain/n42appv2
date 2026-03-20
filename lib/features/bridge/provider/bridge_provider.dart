@@ -139,6 +139,10 @@ class BridgeProvider extends ChangeNotifier
     }
 
     _chains = result.data as List<BridgeChain>;
+    if (_chains.isEmpty) {
+      _setError('No supported chains available');
+      return;
+    }
 
     // 默认选择 Ethereum 和 Arbitrum
     __fromChain = _chains.firstWhere(
@@ -369,7 +373,13 @@ class BridgeProvider extends ChangeNotifier
   /// 将可读金额转换为最小单位
   @override
   String _parseAmount(String amount, int decimals) {
+    if (amount.isEmpty) return '0';
     try {
+      // Validate input contains only digits and at most one decimal point
+      if (!RegExp(r'^\d+\.?\d*$').hasMatch(amount)) {
+        _setError('Invalid amount format');
+        return '0';
+      }
       final parts = amount.split('.');
       final wholePart = parts[0];
       final decimalPart = parts.length > 1 ? parts[1] : '';

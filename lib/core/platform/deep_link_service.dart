@@ -145,6 +145,13 @@ class DeepLinkService {
   }
 
   DeepLinkData _parseUri(Uri uri) {
+    // Scheme whitelist: only process known safe schemes
+    const allowedSchemes = {'n42', 'n42app', 'astraapp', 'https', 'http', 'wc', ''};
+    if (!allowedSchemes.contains(uri.scheme.toLowerCase())) {
+      debugPrint('Rejected deep link with unknown scheme: ${uri.scheme}');
+      return _unknownLink(uri, uri.queryParameters);
+    }
+
     final parsedWcUri = parseWalletConnectUri(uri.toString());
     if (parsedWcUri != null) {
       return DeepLinkData(

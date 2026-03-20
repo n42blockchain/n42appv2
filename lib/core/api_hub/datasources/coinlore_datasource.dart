@@ -75,7 +75,7 @@ class CoinLoreDatasource {
       final url = '$_base/ticker/?id=${ids.join(',')}';
       final raw = await ExternalHttp.get(
         url,
-      ).timeout(const Duration(seconds: 8), onTimeout: () => null);
+      ).timeout(const Duration(seconds: 8));
       if (raw == null || raw is! List) return {};
 
       final result = <String, CoinPrice>{};

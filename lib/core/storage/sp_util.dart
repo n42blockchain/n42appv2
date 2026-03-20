@@ -158,23 +158,27 @@ class SPUtil {
 
   // 锁屏设置（安全存储）
   Future<void> setLockScreen(Map<String, dynamic> value) async {
-    final uuid = AppGlobals.userInfo?.uuid ?? "";
+    final uuid = AppGlobals.userInfo?.uuid;
+    if (uuid == null || uuid.isEmpty) return;
     await _securePrefs.setLockScreen(uuid, value);
   }
 
   Future<Map<String, dynamic>?> getLockScreen() async {
-    final uuid = AppGlobals.userInfo?.uuid ?? "";
+    final uuid = AppGlobals.userInfo?.uuid;
+    if (uuid == null || uuid.isEmpty) return null;
     return await _securePrefs.getLockScreen(uuid);
   }
 
   // 挖矿数据（安全存储）
   Future<void> setMiningData(Map<String, dynamic> value) async {
-    final uuid = AppGlobals.userInfo?.uuid ?? "";
+    final uuid = AppGlobals.userInfo?.uuid;
+    if (uuid == null || uuid.isEmpty) return;
     await _securePrefs.setMiningData(uuid, value);
   }
 
   Future<Map<String, dynamic>?> getMiningData() async {
-    final uuid = AppGlobals.userInfo?.uuid ?? "";
+    final uuid = AppGlobals.userInfo?.uuid;
+    if (uuid == null || uuid.isEmpty) return null;
     return await _securePrefs.getMiningData(uuid);
   }
 

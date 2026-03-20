@@ -33,12 +33,19 @@ class CryptoComparePriceDatasource {
     }
 
     try {
-      final fsyms = symbols.map((s) => s.toUpperCase()).join(',');
+      // Validate symbols to prevent URL parameter injection
+      final validSymbol = RegExp(r'^[A-Z0-9]+$');
+      final safeSymbols = symbols
+          .map((s) => s.toUpperCase())
+          .where((s) => validSymbol.hasMatch(s))
+          .toList();
+      if (safeSymbols.isEmpty) return {};
+      final fsyms = safeSymbols.join(',');
       final url =
           '$_base/pricemultifull?fsyms=$fsyms&tsyms=USD&extraParams=n42wallet';
       final raw = await ExternalHttp.get(
         url,
-      ).timeout(const Duration(seconds: 8), onTimeout: () => null);
+      ).timeout(const Duration(seconds: 8));
       if (raw == null || raw is! Map) return {};
 
       final rawData = raw['RAW'] as Map?;

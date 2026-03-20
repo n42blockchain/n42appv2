@@ -79,7 +79,7 @@ class CoinCapDatasource {
       final url = '$_base/assets?ids=${ids.join(',')}';
       final raw = await ExternalHttp.get(
         url,
-      ).timeout(const Duration(seconds: 8), onTimeout: () => null);
+      ).timeout(const Duration(seconds: 8));
       if (raw == null || raw is! Map) return {};
 
       final data = raw['data'];

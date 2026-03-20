@@ -104,9 +104,14 @@ class WalletDataMigration {
 
   /// 获取钱包唯一标识
   String _getWalletId(Map<String, dynamic> wallet, String userUuid, int index) {
-    // 优先使用 timestamp，否则使用 userUuid + index
+    // 优先使用钱包地址（最稳定的唯一标识）
+    final address = wallet['address']?.toString().trim() ?? '';
+    if (address.isNotEmpty) return '${userUuid}_$address';
+    // 其次使用 timestamp
     final timestamp = wallet['timestamp']?.toString().trim() ?? '';
-    return timestamp.isNotEmpty ? timestamp : '${userUuid}_$index';
+    if (timestamp.isNotEmpty) return '${userUuid}_$timestamp';
+    // 最后 fallback 到 index（不稳定，但避免空 ID）
+    return '${userUuid}_$index';
   }
 
   /// 迁移单个钱包的敏感数据
@@ -152,9 +157,9 @@ class WalletDataMigration {
   /// 清理钱包数据，移除敏感信息
   Map<String, dynamic> _sanitizeWalletData(Map<String, dynamic> wallet) {
     final sanitized = Map<String, dynamic>.from(wallet);
-    // 移除敏感字段，用 null 替代以保持向后兼容
+    // 完全移除敏感字段 key，而非设为 null（避免暴露数据结构）
     for (final field in ['mnemonic', 'privateKey', 'password']) {
-      if (sanitized.containsKey(field)) sanitized[field] = null;
+      sanitized.remove(field);
     }
     return sanitized;
   }

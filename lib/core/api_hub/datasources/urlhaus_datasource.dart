@@ -36,7 +36,7 @@ class UrlhausDatasource {
         '$_base/url/',
         data: 'url=${Uri.encodeComponent(url)}',
         headers: {'content-type': 'application/x-www-form-urlencoded'},
-      ).timeout(const Duration(seconds: 8), onTimeout: () => null);
+      ).timeout(const Duration(seconds: 8));
 
       final parsed = parseUrlResponse(url, raw);
       if (parsed.shouldCache) {
@@ -45,8 +45,14 @@ class UrlhausDatasource {
       return parsed.threat;
     } catch (e) {
       _debugLog('UrlhausDatasource.checkUrl error: $e');
-      // Fail-open: return safe on error
-      return UrlThreat.safe(url);
+      // Fail-closed: treat network/parse errors as suspicious
+      return UrlThreat(
+        url: url,
+        isMalicious: true,
+        threatType: 'check_failed',
+        source: _source,
+        tags: ['error:${e.runtimeType}'],
+      );
     }
   }
 
@@ -64,7 +70,7 @@ class UrlhausDatasource {
         '$_base/host/',
         data: 'host=${Uri.encodeComponent(normalizedHost)}',
         headers: {'content-type': 'application/x-www-form-urlencoded'},
-      ).timeout(const Duration(seconds: 8), onTimeout: () => null);
+      ).timeout(const Duration(seconds: 8));
 
       final parsed = parseHostResponse(normalizedHost, raw);
       if (parsed.shouldCache) {
@@ -73,7 +79,14 @@ class UrlhausDatasource {
       return parsed.threat;
     } catch (e) {
       _debugLog('UrlhausDatasource.checkHost error: $e');
-      return UrlThreat.safe(normalizedHost);
+      // Fail-closed: treat network/parse errors as suspicious
+      return UrlThreat(
+        url: normalizedHost,
+        isMalicious: true,
+        threatType: 'check_failed',
+        source: _source,
+        tags: ['error:${e.runtimeType}'],
+      );
     }
   }
 

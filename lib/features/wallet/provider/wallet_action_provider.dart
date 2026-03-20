@@ -82,12 +82,20 @@ class WalletActionProvider extends ChangeNotifier
   List<WalletInfo> get walletInfoList => _walletInfoLsit;
   @override
   WalletInfo get walletInfo {
+    if (walletIndex < 0 || walletIndex >= _walletInfoLsit.length) {
+      throw StateError(
+        'Invalid walletIndex ($walletIndex) for list of ${_walletInfoLsit.length} wallets. '
+        'Ensure wallet is initialized before accessing walletInfo.',
+      );
+    }
     return _walletInfoLsit[walletIndex];
   }
 
   //获取用户设置的钱包名字
   String get walletName {
-    if (_walletInfoLsit.isEmpty) return "";
+    if (_walletInfoLsit.isEmpty || walletIndex < 0 || walletIndex >= _walletInfoLsit.length) {
+      return "";
+    }
     return walletInfo.walletName ?? "";
   }
 

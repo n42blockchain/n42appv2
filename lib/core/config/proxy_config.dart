@@ -92,10 +92,13 @@ class ProxyConfig {
       '$_normalizedBaseUrl/v1/tokenview/contract/creator';
 
   static bool isProxyUrl(String url) {
-    final normalizedUrl = url.endsWith('/')
-        ? url.substring(0, url.length - 1)
-        : url;
-    return normalizedUrl.startsWith(_normalizedBaseUrl);
+    final uri = Uri.tryParse(url);
+    final baseUri = Uri.tryParse(_normalizedBaseUrl);
+    if (uri == null || baseUri == null) return false;
+    // Exact host match to prevent token leakage to lookalike domains
+    return uri.host == baseUri.host &&
+        uri.scheme == baseUri.scheme &&
+        uri.path.startsWith(baseUri.path);
   }
 
   static Map<String, String> mergeAuthHeaders(

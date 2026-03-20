@@ -64,6 +64,7 @@ mixin WalletConnectConnection on ChangeNotifier {
 
   Future<void> _tryReconnect() async {
     reconnectAttempts++;
+    if (signClient == null) return;
     try {
       await signClient!.core.relayClient.connect();
       reconnectAttempts = 0;

@@ -83,7 +83,7 @@ class MessariDatasource {
       try {
         final url = '$_base/v1/assets/$slug/metrics/market-data';
         final raw = await ExternalHttp.get(url)
-            .timeout(const Duration(seconds: 8), onTimeout: () => null);
+            .timeout(const Duration(seconds: 8));
         if (raw == null || raw is! Map) continue;
 
         final data = raw['data'] as Map?;
@@ -134,7 +134,7 @@ class MessariDatasource {
 
     try {
       final raw = await ExternalHttp.get('$_base/v1/news')
-          .timeout(const Duration(seconds: 8), onTimeout: () => null);
+          .timeout(const Duration(seconds: 8));
       final articles = parseNewsResponse(raw, fallback: _newsCache ?? const []);
       if (articles.isNotEmpty) {
         _newsCache = articles;
