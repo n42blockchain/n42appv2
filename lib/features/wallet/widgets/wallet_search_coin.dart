@@ -31,7 +31,8 @@ part 'wallet_search_coin_item.dart';
 
 class WalletSearchCoin extends ConsumerStatefulWidget {
   final int type; // 0 转账，1 收币
-  const WalletSearchCoin(this.type, {super.key});
+  final String? toAddress;
+  const WalletSearchCoin(this.type, {this.toAddress, super.key});
 
   @override
   ConsumerState<WalletSearchCoin> createState() => _WalletSearchCoinState();
@@ -176,17 +177,18 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
   Future<void> _navigateForCoin(CoinModel coinInfo) async {
     if (widget.type == 0) {
       final bt = coinInfo.coin['blockchainType'];
+      final toAddr = widget.toAddress;
       await Navigator.push(context, MaterialPageRoute(builder: (context) {
-        if (bt == BlockchainType.Bitcoin.name) return WalletChainSendBtc(coinInfo);
-        if (bt == BlockchainType.Solana.name) return WalletChainSendSol(coinInfo);
-        if (bt == BlockchainType.Algorand.name) return WalletChainSendAlgo(coinInfo);
-        if (bt == BlockchainType.Ripple.name) return WalletChainSendXrp(coinInfo);
-        if (bt == BlockchainType.Filecoin.name) return WalletChainSendFil(coinInfo);
-        if (bt == BlockchainType.Polkadot.name) return WalletChainSendDot(coinInfo);
-        if (bt == BlockchainType.Sui.name) return WalletChainSendSui(coinInfo);
-        if (bt == BlockchainType.TheOpenNetwork.name) return WalletChainSendTon(coinInfo);
-        if (bt == BlockchainType.Aptos.name) return WalletChainSendApt(coinInfo);
-        return WalletChainSend(coinInfo);
+        if (bt == BlockchainType.Bitcoin.name) return WalletChainSendBtc(coinInfo, toAddress: toAddr);
+        if (bt == BlockchainType.Solana.name) return WalletChainSendSol(coinInfo, initialToAddress: toAddr);
+        if (bt == BlockchainType.Algorand.name) return WalletChainSendAlgo(coinInfo, initialToAddress: toAddr);
+        if (bt == BlockchainType.Ripple.name) return WalletChainSendXrp(coinInfo, initialToAddress: toAddr);
+        if (bt == BlockchainType.Filecoin.name) return WalletChainSendFil(coinInfo, initialToAddress: toAddr);
+        if (bt == BlockchainType.Polkadot.name) return WalletChainSendDot(coinInfo, initialToAddress: toAddr);
+        if (bt == BlockchainType.Sui.name) return WalletChainSendSui(coinInfo, initialToAddress: toAddr);
+        if (bt == BlockchainType.TheOpenNetwork.name) return WalletChainSendTon(coinInfo, initialToAddress: toAddr);
+        if (bt == BlockchainType.Aptos.name) return WalletChainSendApt(coinInfo, initialToAddress: toAddr);
+        return WalletChainSend(coinInfo, initialToAddress: toAddr);
       }));
     } else {
       if (coinInfo.coin['isContract']) {

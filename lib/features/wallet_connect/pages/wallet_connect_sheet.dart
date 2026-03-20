@@ -1,0 +1,88 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42_wallet/features/component/enums/load.dart';
+import 'package:n42_wallet/features/component/pages/scan_page.dart';
+import 'package:n42_wallet/features/wallet_connect/pages/wallet_connect_widgets_mixin.dart';
+import 'package:n42_wallet/features/wallet_connect/presentation/providers/wallet_connect_providers.dart';
+import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_state.dart';
+import 'package:n42_wallet/features/widgets/loading_page.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+
+/// WalletConnect connection sheet displayed as a modal bottom sheet.
+///
+/// Mirrors [WalletConnectPage] but without the full-screen Scaffold,
+/// so it doesn't cover the browser while the user reviews the connection.
+class WalletConnectSheet extends ConsumerStatefulWidget {
+  final String uri;
+  const WalletConnectSheet(this.uri, {super.key});
+
+  /// Show the sheet and return true if the user approved the connection.
+  static Future<bool> show(BuildContext context, String uri) async {
+    final result = await showModalBottomSheet<bool>(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (_) => WalletConnectSheet(uri),
+    );
+    return result ?? false;
+  }
+
+  @override
+  ConsumerState<WalletConnectSheet> createState() => _WalletConnectSheetState();
+}
+
+class _WalletConnectSheetState extends ConsumerState<WalletConnectSheet>
+    with WalletConnectWidgetsMixin {
+  @override
+  void initState() {
+    super.initState();
+    if (widget.uri.isNotEmpty) {
+      ref.read(wcpBridgeProvider).pageOpen = true;
+      ref.read(wcpBridgeProvider)
+          .viewStateDeal(WalletConnectState.loading, params: widget.uri);
+    }
+  }
+
+  @override
+  void dispose() {
+    ref.read(wcpBridgeProvider).pageOpen = false;
+    super.dispose();
+  }
+
+  @override
+  Future<String> scan() async {
+    final result = await Navigator.push<String>(
+      context,
+      MaterialPageRoute(builder: (_) => ScanPage()),
+    );
+    return result ?? "";
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final connectV2 = ref.watch(wcpBridgeProvider);
+    final bgColor =
+        AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name);
+
+    return Container(
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(ScreenUtil().setWidth(24)),
+        ),
+      ),
+      // 80% of screen height to show browser behind
+      height: MediaQuery.of(context).size.height * 0.8,
+      child: SafeArea(
+        child: Stack(
+          children: [
+            Positioned.fill(child: buildDAppConnectWidget(connectV2)),
+            if (connectV2.load == Load.loading)
+              Positioned.fill(child: LoadingPage()),
+          ],
+        ),
+      ),
+    );
+  }
+}

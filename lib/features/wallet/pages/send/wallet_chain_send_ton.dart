@@ -36,7 +36,8 @@ part 'wallet_chain_send_ton_widgets.dart';
 
 class WalletChainSendTon extends ConsumerStatefulWidget {
   final CoinModel coinModel;
-  const WalletChainSendTon(this.coinModel, {super.key});
+  final String? initialToAddress;
+  const WalletChainSendTon(this.coinModel, {this.initialToAddress, super.key});
 
   @override
   ConsumerState<WalletChainSendTon> createState() =>
@@ -49,6 +50,9 @@ class _WalletChainSendTonState extends ConsumerState<WalletChainSendTon>
   void initState() {
     super.initState();
     valueTextEditingController.text = "0";
+    if (widget.initialToAddress?.isNotEmpty == true) {
+      toTextEditingController.text = widget.initialToAddress!;
+    }
     initData();
   }
 

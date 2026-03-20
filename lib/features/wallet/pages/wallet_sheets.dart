@@ -179,11 +179,11 @@ class _WalletAddressList extends StatelessWidget {
 // ── 选择币列表弹窗 ────────────────────────────────────────────────────────────
 
 /// [type]: 0=发送，1=接收
-void showSearchCoinSheet(BuildContext context, int type) {
+void showSearchCoinSheet(BuildContext context, int type, {String? toAddress}) {
   sheetBottom(
     context,
     S.of(context).g_token_m_key_12,
-    WalletSearchCoin(type),
+    WalletSearchCoin(type, toAddress: toAddress),
   );
 }
 

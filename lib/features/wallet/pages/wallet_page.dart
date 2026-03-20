@@ -162,6 +162,68 @@ class _WalletPageState extends ConsumerState<WalletPage> {
     }
   }
 
+  // ── Scan for transfer ─────────────────────────────────────────────────────
+
+  /// Parse a QR string into (address, blockchainType).
+  (String, String?) _parseQrForTransfer(String qr) {
+    const prefixes = {
+      'ethereum:': 'Ethereum',
+      'bitcoin:': 'Bitcoin',
+      'solana:': 'Solana',
+      'tron:': 'Tron',
+      'xrpl:': 'Ripple',
+      'cosmos:': 'Cosmos',
+      'near:': 'Near',
+      'ton:transfer/': 'TheOpenNetwork',
+    };
+    for (final entry in prefixes.entries) {
+      if (qr.startsWith(entry.key)) {
+        var addr = qr.substring(entry.key.length);
+        final q = addr.indexOf('?');
+        if (q != -1) addr = addr.substring(0, q);
+        return (addr.trim(), entry.value);
+      }
+    }
+    // No prefix: treat the whole string (before '?') as an address
+    return (qr.split('?').first.trim(), null);
+  }
+
+  Future<void> _scanForTransfer() async {
+    final waValue = ref.read(wapBridgeProvider);
+    if (!await _guardAction(waValue)) return;
+
+    final scanStr = await _scan();
+    ToastUtils.show(scanStr);
+    if (!mounted || scanStr.isEmpty) return;
+
+    // WalletConnect URIs are not for transfer
+    if (scanStr.contains('relay-protocol') && scanStr.contains('symKey')) {
+      final wcp = ref.read(wcpBridgeProvider);
+      await wcp.connectInit();
+      if (mounted) await _pushAndRefreshWc(WalletConnectPage(scanStr), wcp);
+      return;
+    }
+
+    final (address, _) = _parseQrForTransfer(scanStr);
+    if (address.isEmpty) {
+      ToastUtils.show(S.of(context).g_key_41);
+      return;
+    }
+
+    // Check if scanned address is the user's own address
+    final myAddresses = waValue.coinModels
+        .map((cm) => cm.address?.toString().toLowerCase())
+        .whereType<String>()
+        .toSet();
+    if (myAddresses.contains(address.toLowerCase())) {
+      ToastUtils.show('不能转账到自己的地址');
+      return;
+    }
+
+    if (!mounted) return;
+    showSearchCoinSheet(context, 0, toAddress: address);
+  }
+
   // ── WalletConnect ─────────────────────────────────────────────────────────
 
   Future<void> _walletConnect() async {
@@ -303,7 +365,7 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                         onMenuTap: () =>
                             Scaffold.of(this.context).openDrawer(),
                         onWalletConnectTap: _walletConnect,
-                        onScanTap: _walletConnect,
+                        onScanTap: _scanForTransfer,
                         onReceiveTap: () => showSearchCoinSheet(context, 1),
                       ),
                       Expanded(

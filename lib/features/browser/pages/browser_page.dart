@@ -10,7 +10,9 @@ import 'package:n42_wallet/features/browser/widgets/dapp_signing_sheet.dart';
 import 'package:n42_wallet/features/browser/presentation/providers/browser_providers.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
-import 'package:n42_wallet/features/wallet_connect/pages/wallet_connect_page.dart';
+import 'package:n42_wallet/features/wallet_connect/pages/wallet_connect_sheet.dart';
+import 'package:n42_wallet/features/wallet_connect/presentation/providers/wallet_connect_providers.dart';
+import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_provider.dart';
 import 'package:n42_wallet/features/widgets/button_widget.dart';
 import 'package:n42_wallet/features/widgets/empty.dart';
 import 'package:n42_wallet/features/widgets/prompt_widget.dart';
@@ -66,8 +68,7 @@ class _BrowserPageState extends ConsumerState<BrowserPage> {
     final bp = _browserProvider!;
     bp.connectDAPPCallBack = (String url, bool connect) {
       if (connect) {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => WalletConnectPage(url)));
+        WalletConnectSheet.show(context, url);
       } else {
         _showAlertWidgetConnectDapp(url);
       }
@@ -139,6 +140,18 @@ class _BrowserPageState extends ConsumerState<BrowserPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Detect when a DApp proactively sends a session proposal (e.g. from cached
+    // WalletConnect data). The provider transitions disconnect → selectChain
+    // without going through checkUrl, so we must listen and show the sheet here.
+    ref.listen<WalletConnectProvider>(wcpBridgeProvider, (prev, next) {
+      if (prev?.walletConnectState == WalletConnectState.disconnect &&
+          next.walletConnectState == WalletConnectState.selectChain) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) WalletConnectSheet.show(context, "");
+        });
+      }
+    });
+
     return Scaffold(
       body: SafeArea(
         child: GestureDetector(
