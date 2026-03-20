@@ -114,11 +114,12 @@ extension _PushNavigation on AppPushUtils {
     if (isTestStr != null) {
       isTest = isTestStr == "test";
     }
-    String bUri = getBrowserTxHash(
+    final String bUri = getSafeBrowserTxHashUrl(
       txContent['coin'],
-      txContent['hash'] ?? "",
+      txContent['hash'],
       isTest: isTest,
     );
+    if (bUri.isEmpty) return;
     Navigator.push(ctx, MaterialPageRoute(builder: (_) => BrowserPage(bUri)));
   }
 

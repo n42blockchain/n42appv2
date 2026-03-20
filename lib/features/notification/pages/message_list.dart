@@ -55,7 +55,8 @@ class _MessageListState extends ConsumerState<MessageList> {
           Map<String, dynamic> map = results[index];
           String title = map['subject'];
           int created = (map['created'] ?? 0) as int;
-          final createdDt = DateTime.fromMicrosecondsSinceEpoch(created * 1000);
+          // 服务端返回秒级时间戳，转为微秒
+          final createdDt = DateTime.fromMillisecondsSinceEpoch(created * 1000);
           final createTime = DateFormat("dd-MM-yyyy HH:mm").format(createdDt);
           final dateFmt = DateFormat("dd-MM-yyyy");
           map["showDate"] = dateFmt.format(createdDt);
@@ -278,11 +279,12 @@ class _MessageListState extends ConsumerState<MessageList> {
   void _navigateToTxBrowser(Map<String, dynamic> txContent) {
     final String? isTestStr = txContent['network'];
     final bool? isTest = isTestStr != null ? isTestStr == "test" : null;
-    final String bUri = getBrowserTxHash(
+    final String bUri = getSafeBrowserTxHashUrl(
       txContent['coin'],
-      txContent['hash'] ?? "",
+      txContent['hash'],
       isTest: isTest,
     );
+    if (bUri.isEmpty) return;
     Navigator.push(
       context,
       MaterialPageRoute(builder: (_) => BrowserPage(bUri)),

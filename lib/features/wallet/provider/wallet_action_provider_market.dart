@@ -40,8 +40,8 @@ extension WalletActionProviderMarket on WalletActionProvider {
             final rawPrice = coinData['usd'];
             final rawChange = coinData['usd_24h_change'];
 
-            final price = _parseDouble(rawPrice, 1.0);
-            final change = _parseDouble(rawChange, 0.0);
+            final price = parseMarketDouble(rawPrice, 1.0);
+            final change = parseMarketDouble(rawChange, 0.0);
 
             // 验证价格在合理范围内
             if (price >= WalletActionProvider._stablecoinMinPrice &&
@@ -58,7 +58,7 @@ extension WalletActionProviderMarket on WalletActionProvider {
             // 利用 USDT 的 CNY 报价推导 USD→CNY 汇率
             // USDT_cny / USDT_usd ≈ 汇率（USDT 近似锚定 $1）
             if (symbol == 'usdt') {
-              final cnyPrice = _parseDouble(coinData['cny'], 0.0);
+              final cnyPrice = parseMarketDouble(coinData['cny'], 0.0);
               if (cnyPrice > 5.0 && cnyPrice < 12.0 && price > 0) {
                 _usdToCnyRate = cnyPrice / price;
                 if (kDebugMode)
@@ -84,17 +84,6 @@ extension WalletActionProviderMarket on WalletActionProvider {
       }
       // 失败时保留之前的缓存和汇率，不重置
     }
-  }
-
-  /// 安全的 double 解析
-  double _parseDouble(dynamic value, double defaultValue) {
-    if (value == null) return defaultValue;
-    if (value is double) return value;
-    if (value is int) return value.toDouble();
-    if (value is String) {
-      return double.tryParse(value) ?? defaultValue;
-    }
-    return defaultValue;
   }
 
   ///获取钱包 币的基本数据，成功后初始化主页币列表
@@ -187,8 +176,8 @@ extension WalletActionProviderMarket on WalletActionProvider {
         if (element['image'] != null) {
           cm.coin["icon"] = element['image'];
         }
-        cm.coinPrice = element['price'] * 1.0;
-        cm.percentage = element['price_change_per_24h'] * 1.0;
+        cm.coinPrice = parseMarketDouble(element['price'], 0.0);
+        cm.percentage = parseMarketDouble(element['price_change_per_24h'], 0.0);
         _syncCoinPriceFields(cm);
         break;
       }
@@ -218,10 +207,11 @@ extension WalletActionProviderMarket on WalletActionProvider {
 
     for (final element in _coinMarketInfo) {
       if (element['coin'].toString().toLowerCase() != keyStr) continue;
-      final price = Decimal.parse(element['price'].toString()).toDouble();
-      final percentage = Decimal.parse(
-        element['price_change_per_24h'].toString(),
-      ).toDouble();
+      final price = parseMarketDouble(element['price'], 0.0);
+      final percentage = parseMarketDouble(
+        element['price_change_per_24h'],
+        0.0,
+      );
       if (kDebugMode)
         debugPrint(
           'WalletActionProvider: getCoinPriceWithUnit($unit) -> price=\$$price, change=$percentage%',

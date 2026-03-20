@@ -24,7 +24,6 @@ import 'package:n42_wallet/features/wallet/provider/wallet_delete_utils.dart';
 import 'package:n42_wallet/features/wallet/provider/watch_only_wallet_utils.dart';
 import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
-import 'package:decimal/decimal.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';

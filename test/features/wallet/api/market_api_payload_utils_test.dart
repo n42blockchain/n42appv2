@@ -40,4 +40,19 @@ void main() {
       expect(extractMarketCoinItems({'message': 'ok'}), isEmpty);
     });
   });
+
+  group('parseMarketDouble', () {
+    test('parses num and string values safely', () {
+      expect(parseMarketDouble(12), 12.0);
+      expect(parseMarketDouble(12.5), 12.5);
+      expect(parseMarketDouble('12.5'), 12.5);
+      expect(parseMarketDouble(' 7.25 '), 7.25);
+    });
+
+    test('falls back for null and invalid values', () {
+      expect(parseMarketDouble(null, 1.0), 1.0);
+      expect(parseMarketDouble('abc', 2.5), 2.5);
+      expect(parseMarketDouble(const {'price': 1}, 3.0), 3.0);
+    });
+  });
 }

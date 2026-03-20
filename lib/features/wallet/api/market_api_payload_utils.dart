@@ -19,6 +19,12 @@ List<Map<String, dynamic>> extractMarketCoinItems(dynamic rawData) {
   return const <Map<String, dynamic>>[];
 }
 
+double parseMarketDouble(dynamic value, [double fallback = 0.0]) {
+  if (value is num) return value.toDouble();
+  if (value is String) return double.tryParse(value.trim()) ?? fallback;
+  return fallback;
+}
+
 bool _looksLikeMarketCoin(Map<dynamic, dynamic> item) {
   return item.containsKey('coin') ||
       item.containsKey('coin_gecko_id') ||
