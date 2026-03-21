@@ -95,6 +95,7 @@ class FearGreedService {
 
   static FearGreedData? _cached;
   static DateTime? _cachedAt;
+  static Future<FearGreedData?>? _inflight;
 
   static Future<FearGreedData?> fetch() async {
     final cachedAt = _cachedAt;
@@ -103,9 +104,14 @@ class FearGreedService {
         DateTime.now().difference(cachedAt) < const Duration(hours: 1)) {
       return _cached;
     }
+    // Deduplicate concurrent requests
+    return _inflight ??= _doFetch().whenComplete(() => _inflight = null);
+  }
+
+  static Future<FearGreedData?> _doFetch() async {
     try {
       final raw = await ExternalHttp.get(_url)
-          .timeout(const Duration(seconds: 8), onTimeout: () => null);
+          .timeout(const Duration(seconds: 8));
       final result = parseResponse(raw, fallback: _cached);
       if (result != null) {
         _cached = result;

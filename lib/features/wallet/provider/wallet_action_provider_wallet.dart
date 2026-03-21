@@ -167,6 +167,10 @@ extension WalletActionProviderWallet on WalletActionProvider {
     if (info == null) {
       //不传 默认移除第一个
       _walletInfoLsit.removeAt(0);
+      // Clamp walletIndex after removal
+      if (walletIndex >= _walletInfoLsit.length) {
+        walletIndex = _walletInfoLsit.length - 1;
+      }
       return null;
     } else {
       final rIndex = _walletInfoLsit.indexWhere((e) => e == info);

@@ -35,6 +35,8 @@ class _ImportKeystoreState extends ConsumerState<ImportKeystore> {
 
   @override
   void dispose() {
+    _keystoreController.clear();
+    _passwordController.clear();
     _keystoreController.dispose();
     _passwordController.dispose();
     super.dispose();

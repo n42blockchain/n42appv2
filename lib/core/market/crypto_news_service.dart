@@ -80,6 +80,7 @@ class CryptoNewsService {
 
   static List<NewsArticle>? _cached;
   static DateTime? _cachedAt;
+  static Future<List<NewsArticle>>? _inflight;
 
   static Future<List<NewsArticle>> fetchLatest() async {
     final cachedAt = _cachedAt;
@@ -88,9 +89,14 @@ class CryptoNewsService {
         DateTime.now().difference(cachedAt) < const Duration(minutes: 15)) {
       return _cached!;
     }
+    // Deduplicate concurrent requests
+    return _inflight ??= _doFetch().whenComplete(() => _inflight = null);
+  }
+
+  static Future<List<NewsArticle>> _doFetch() async {
     try {
       final raw = await ExternalHttp.get(_url)
-          .timeout(const Duration(seconds: 8), onTimeout: () => null);
+          .timeout(const Duration(seconds: 8));
       final articles = parseLatestResponse(raw, fallback: _cached ?? const []);
       if (articles.isNotEmpty) {
         _cached = articles;

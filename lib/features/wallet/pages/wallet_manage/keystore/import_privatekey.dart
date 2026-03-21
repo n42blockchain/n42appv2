@@ -156,6 +156,7 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
 
   @override
   void dispose() {
+    _keystoreController.clear();
     _keystoreController.dispose();
     super.dispose();
   }

@@ -105,8 +105,8 @@ class _MoonpayState extends State<Moonpay> {
     final coin = widget.coinModel;
     if (coin == null) return base;
 
-    final currencyParam = "defaultCurrencyCode=${coin.coin['miniName']}";
-    final walletParam = isBuy ? "&walletAddress=${coin.address}" : "";
+    final currencyParam = "defaultCurrencyCode=${Uri.encodeComponent(coin.coin['miniName']?.toString() ?? '')}";
+    final walletParam = isBuy ? "&walletAddress=${Uri.encodeComponent(coin.address?.toString() ?? '')}" : "";
     return "$base?$currencyParam$walletParam";
   }
 

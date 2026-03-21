@@ -52,6 +52,12 @@ class _AccountLogoutPageState extends State<AccountLogoutPage> {
     });
   }
 
+  @override
+  void dispose() {
+    _uCodeController.dispose();
+    super.dispose();
+  }
+
   //检查交易所是否还有余额
   Future<void> checkExchangeBalance() async {
     try {
@@ -67,16 +73,18 @@ class _AccountLogoutPageState extends State<AccountLogoutPage> {
         await getCoinInfo(balanceData);
       }
     } finally {
-      setState(() {
-        loading = false;
-      });
+      if (mounted) {
+        setState(() {
+          loading = false;
+        });
+      }
     }
   }
 
   Future<void> getCoinInfo(List<ExchangeAccountModel> eams) async {
     String searchStr = "";
     for (ExchangeAccountModel eam in eams) {
-      searchStr += "${eam.coin!.toLowerCase()},";
+      searchStr += "${(eam.coin ?? '').toLowerCase()},";
     }
     if (searchStr == "") {
       return;
@@ -229,16 +237,20 @@ class _AccountLogoutPageState extends State<AccountLogoutPage> {
                 } catch (err) {
                   debugPrint("err: ${err.toString()}");
                 } finally {
+                  if (mounted) {
+                    setState(() {
+                      load = Load.finish;
+                    });
+                  }
+                }
+              } else {
+                //注销失败
+                ToastUtils.show(data?['err']?.toString() ?? S.current.g_key_5);
+                if (mounted) {
                   setState(() {
                     load = Load.finish;
                   });
                 }
-              } else {
-                //注销失败
-                ToastUtils.show("${data['err']}");
-                setState(() {
-                  load = Load.finish;
-                });
               }
             }
           }, S.of(context).g_key_154),

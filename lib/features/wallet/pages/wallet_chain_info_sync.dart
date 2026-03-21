@@ -358,7 +358,7 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
         return true;
       }
       return false;
-    });
+    }, orElse: () => rtrm);
     setState(() {});
   }
 
@@ -377,7 +377,7 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
         return true;
       }
       return false;
-    });
+    }, orElse: () => rtrm);
     setState(() {});
   }
 

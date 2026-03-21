@@ -23,7 +23,7 @@ mixin _LogicMixin on State<TodayMiningPage> {
   Timer? _timer;
   double astPrice = 0;
   Load miningStartLoad = Load.finish;
-  dynamic eventBusFn;
+  StreamSubscription? eventBusFn;
 
   void initEventBus() {
     eventBusFn = eventBus.on().listen((event) {
@@ -51,7 +51,7 @@ mixin _LogicMixin on State<TodayMiningPage> {
 
   void disposeLogic() {
     _timer?.cancel();
-    eventBusFn.cancel();
+    eventBusFn?.cancel();
   }
 
   Future<void> initData({bool forcedRefresh = false}) async {
