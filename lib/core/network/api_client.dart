@@ -22,7 +22,12 @@ class ApiClient {
   Dio get dio => _dio;
 
   /// 日志中需要过滤的敏感请求头
-  static const _sensitiveHeaders = ['Authorization', 'authorization', 'Cookie', 'cookie'];
+  static const _sensitiveHeaders = [
+    'Authorization', 'authorization',
+    'Cookie', 'cookie',
+    'Token', 'token',
+    'Uuid',
+  ];
   static const _retryableMethods = {'GET', 'HEAD', 'OPTIONS'};
 
   ApiClient(this._secureStorage)

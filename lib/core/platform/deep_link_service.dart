@@ -242,11 +242,24 @@ class DeepLinkService {
     final config = actionConfig[action];
     if (config == null) return _unknownLink(uri, uri.queryParameters);
 
+    // Sanitize the ID to prevent path traversal or injection attacks.
+    // IDs should be alphanumeric identifiers, not contain path separators.
+    final sanitizedId = _sanitizeId(id);
+
     return DeepLinkData(
       type: config.type,
       uri: uri,
-      params: {config.key: id, ...uri.queryParameters},
+      params: {config.key: sanitizedId, ...uri.queryParameters},
     );
+  }
+
+  /// Sanitize an ID parameter from a deep link to prevent injection attacks.
+  /// Strips path separators and control characters; keeps alphanumeric,
+  /// hyphens, underscores, dots, colons, and @ (for Matrix-style IDs).
+  static final RegExp _unsafeIdChars = RegExp(r'[^a-zA-Z0-9._\-:@!]');
+
+  static String _sanitizeId(String id) {
+    return id.replaceAll(_unsafeIdChars, '');
   }
 
   DeepLinkData _unknownLink(Uri uri, Map<String, String> params) =>

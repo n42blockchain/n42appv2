@@ -115,6 +115,9 @@ class DAppSecurityService {
   // ── 5-minute in-memory cache keyed by lowercase host ─────────────────────
   static final Map<String, _CacheEntry> _cache = {};
 
+  /// Maximum number of cached entries to prevent unbounded memory growth.
+  static const int _maxCacheSize = 200;
+
   /// Returns the security info for [url].
   /// Safe to call synchronously — no I/O after first [PhishingDetector.initialize].
   static DAppSecurityInfo check(String url) {
@@ -128,6 +131,18 @@ class DAppSecurityService {
     // Cache hit?
     final cached = _cache[host];
     if (cached != null && !cached.isExpired) return cached.info;
+
+    // Evict expired entries and enforce size limit
+    if (_cache.length >= _maxCacheSize) {
+      _cache.removeWhere((_, entry) => entry.isExpired);
+      // If still over limit after evicting expired, remove oldest entries
+      if (_cache.length >= _maxCacheSize) {
+        final keysToRemove = _cache.keys.take(_cache.length - _maxCacheSize + 1).toList();
+        for (final key in keysToRemove) {
+          _cache.remove(key);
+        }
+      }
+    }
 
     DAppSecurityInfo result;
 

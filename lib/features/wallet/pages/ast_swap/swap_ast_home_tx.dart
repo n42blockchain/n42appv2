@@ -94,6 +94,12 @@ extension _SwapAstHomeGasAndTx on _SwapAstHomeState {
 
   Future<bool> newOrder() async {
     if (load != Load.finish) return false;
+    // Validate order amount before parsing
+    final double? orderAmount = double.tryParse(getTextEditingController.text.trim());
+    if (orderAmount == null || orderAmount <= 0 || orderAmount.isNaN || orderAmount.isInfinite) {
+      errorMessage = "Invalid order amount";
+      return false;
+    }
     rebuild(() => load = Load.loading);
 
     final MessageModel rOrderData = await _swapAstApi.postNftOrAstAddOrder(
@@ -101,7 +107,7 @@ extension _SwapAstHomeGasAndTx on _SwapAstHomeState {
       AppGlobals.userInfo?.uuid ?? "",
       youPay!.id ?? 0,
       2,
-      double.parse(getTextEditingController.text),
+      orderAmount,
     );
 
     if (rOrderData.error) {
@@ -174,10 +180,22 @@ extension _SwapAstHomeGasAndTx on _SwapAstHomeState {
       errorMessage = "Invalid chain configuration";
       return null;
     }
+    // Validate pay amount before parsing
+    final payText = payTextEditingController.text.trim();
+    final double? payAmount = double.tryParse(payText);
+    if (payAmount == null || payAmount <= 0 || payAmount.isNaN || payAmount.isInfinite) {
+      errorMessage = "Invalid payment amount";
+      return null;
+    }
+    final String payAddr = youPay?.payAddr ?? "";
+    if (payAddr.isEmpty) {
+      errorMessage = "Invalid recipient address";
+      return null;
+    }
     final MessageModel rData = await transferApi.transfer(
       _payCoinType,
-      youPay?.payAddr ?? "",
-      double.parse(payTextEditingController.text),
+      payAddr,
+      payAmount,
       fromAddress: payCoinModel!.address,
       contractAddress: youPay?.payCoinContract ?? "",
       isTest: false,

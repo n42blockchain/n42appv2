@@ -6,6 +6,8 @@
 // Author: Jiang Yiwei
 
 import 'dart:async';
+import 'dart:convert';
+import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:injectable/injectable.dart';
@@ -70,7 +72,16 @@ class AuthServiceImpl implements IAuthService {
       if (credentials == null) return false;
       final storedPassword = credentials['password'] as String?;
       if (storedPassword == null || storedPassword.isEmpty) return false;
-      return storedPassword == password;
+      // Use constant-time comparison to prevent timing side-channel attacks.
+      // Hash both values so the comparison time is independent of content.
+      final storedHash = sha256.convert(utf8.encode(storedPassword)).bytes;
+      final inputHash = sha256.convert(utf8.encode(password)).bytes;
+      if (storedHash.length != inputHash.length) return false;
+      var result = 0;
+      for (var i = 0; i < storedHash.length; i++) {
+        result |= storedHash[i] ^ inputHash[i];
+      }
+      return result == 0;
     } catch (e) {
       assert(() {
         debugPrint('Password verification error: $e');

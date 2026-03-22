@@ -81,10 +81,13 @@ mixin _TransferCosmosFamilyMixin on _TransferBaseMixin {
       valuePrice = ethToWeiString(value.toString(), decimals);
       //如果是全部转账
       if (valuePrice == chainBalance && maxValue) {
+        if (totalGasPrice >= valuePrice) {
+          return _insufficientBalanceError(CoinType.ATOM.name);
+        }
         valuePrice = valuePrice - totalGasPrice;
         value = toEther(valuePrice.toString(), decimals).toDouble();
       }
-      if (totalGasPrice + valuePrice > chainBalance) {
+      if (valuePrice <= BigInt.zero || totalGasPrice + valuePrice > chainBalance) {
         return _insufficientBalanceError(CoinType.ATOM.name);
       }
     }
@@ -186,11 +189,14 @@ mixin _TransferCosmosFamilyMixin on _TransferBaseMixin {
     if (contractAddress.isEmpty) {
       valuePrice = ethToWeiString(value.toString(), decimals);
       if (valuePrice == chainBalance && maxValue) {
+        if (totalGasPrice >= valuePrice) {
+          return _insufficientBalanceError(coinType);
+        }
         valuePrice = valuePrice - totalGasPrice;
         value = toEther(valuePrice.toString(), decimals).toDouble();
       }
-      if (totalGasPrice + valuePrice > chainBalance) {
-        return _insufficientBalanceError(CoinType.ATOM.name);
+      if (valuePrice <= BigInt.zero || totalGasPrice + valuePrice > chainBalance) {
+        return _insufficientBalanceError(coinType);
       }
     }
     MessageModel mmtx = await transferAtomSend(fromAddress, toAddress, valuePrice, path, totalGasPrice, contractAddress: contractAddress);
@@ -276,10 +282,13 @@ mixin _TransferCosmosFamilyMixin on _TransferBaseMixin {
       valuePrice = ethToWeiString(value.toString(), decimals);
       //如果是全部转账
       if (valuePrice == chainBalance && maxValue) {
+        if (totalGasPrice >= valuePrice) {
+          return _insufficientBalanceError(CoinType.ATOM.name);
+        }
         valuePrice = valuePrice - totalGasPrice;
         value = toEther(valuePrice.toString(), decimals).toDouble();
       }
-      if (totalGasPrice + valuePrice > chainBalance) {
+      if (valuePrice <= BigInt.zero || totalGasPrice + valuePrice > chainBalance) {
         return _insufficientBalanceError(CoinType.ATOM.name);
       }
     } else {

@@ -111,11 +111,10 @@ BigInt ethToWeiString(String eth,int decimals) {
     BigInt n = bDiff * BigInt.from(10).pow(diff);
     return a.getInWei + n;
   }else{
-    // Safe access to decimalMap, dynamically calculate if not found
-    String? decStr = decimalMap[decimals.toString()];
-    decStr ??= '${BigInt.from(10).pow(decimals)}.0';
-    double dec= double.parse(decStr);
-    Decimal rValue=Decimal.parse(eth)*Decimal.parse(dec.toString());
+    // Use Decimal for the multiplier to avoid double precision loss
+    // (double cannot represent 10^24 exactly, causing amount errors)
+    final Decimal multiplier = Decimal.parse(BigInt.from(10).pow(decimals).toString());
+    Decimal rValue=Decimal.parse(eth)*multiplier;
     return rValue.toBigInt();
   }
 }

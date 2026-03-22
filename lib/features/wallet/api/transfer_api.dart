@@ -88,6 +88,16 @@ class TransferApi
     bool maxValue = true,
     String? message,
   }) async {
+    // ── Input validation ─────────────────────────────────────
+    // Reject zero, negative, infinite, or NaN amounts
+    if (value <= 0 || value.isNaN || value.isInfinite) {
+      return MessageModel.error()..data = 'Invalid transfer amount';
+    }
+    // Reject empty or whitespace-only recipient address
+    if (toAddress.trim().isEmpty) {
+      return MessageModel.error()..data = 'Recipient address is empty';
+    }
+    // ─────────────────────────────────────────────────────────
     final WalletActionProvider wap = globalWapAdapter;
     chainSymbol = symbolDealWith(chainSymbol);
     final Map<String, dynamic>? txChainMap =
@@ -123,6 +133,11 @@ class TransferApi
           ..data = S.current.g_key_wallet_m3(txChainMap['baseInfo']['coinType']);
       }
       fromAddress = fAddress;
+    }
+
+    // Prevent self-send (same address after case-insensitive comparison)
+    if (fromAddress.toLowerCase() == toAddress.toLowerCase()) {
+      return MessageModel.error()..data = 'Cannot send to your own address';
     }
 
     final String blockchain = txChainMap['baseInfo']['blockchainType'];

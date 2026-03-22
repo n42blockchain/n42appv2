@@ -41,10 +41,13 @@ mixin _TransferOthersMixin on _TransferBaseMixin {
     double adjustedValue = value;
 
     if (valuePrice == chainBalance && maxValue) {
+      if (totalGasPrice >= valuePrice) {
+        return MessageModel.error()..data = S.current.g_key_wallet_m5(coinSymbol);
+      }
       valuePrice = valuePrice - totalGasPrice;
       adjustedValue = toEther(valuePrice.toString(), decimals).toDouble();
     }
-    if (totalGasPrice + valuePrice > chainBalance) {
+    if (valuePrice <= BigInt.zero || totalGasPrice + valuePrice > chainBalance) {
       return MessageModel.error()..data = S.current.g_key_wallet_m5(coinSymbol);
     }
 
@@ -110,7 +113,9 @@ mixin _TransferOthersMixin on _TransferBaseMixin {
     txData['round']=mminfo.data['last-round'];
 
     Map<dynamic,dynamic> rValue;
-    if(privateKey !=null){
+    if(privateKey != null){
+      rValue = await trustdart.signTransactionByteArray(CoinType.ALGO.name, path, txData, pk:privateKey,);
+    }else{
       final ctxError = _checkContextMounted();
       if (ctxError != null) return ctxError;
       rValue = await trustdart.signTransactionByteArray(
@@ -119,8 +124,6 @@ mixin _TransferOthersMixin on _TransferBaseMixin {
         txData,
         mnemonic: globalWapAdapter.walletInfo.mnemonic??"",
       );
-    }else{
-      rValue = await trustdart.signTransactionByteArray(CoinType.ALGO.name, path, txData,  pk:privateKey!,);
     }
     if(rValue['result']!=true) return _signFailureError();
     final Uint8List signStr=hexToBytes(rValue['signHash']);

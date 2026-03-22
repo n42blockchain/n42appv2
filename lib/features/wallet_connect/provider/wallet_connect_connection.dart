@@ -129,7 +129,10 @@ mixin WalletConnectConnection on ChangeNotifier {
         return;
       }
       signClient = await wallet_connect.ReownWalletKit.createInstance(
-        projectId: "18a60a7cb862aad161fecd764ecc736a",
+        projectId: const String.fromEnvironment(
+          'WC_PROJECT_ID',
+          defaultValue: '18a60a7cb862aad161fecd764ecc736a',
+        ),
         metadata: wallet_connect.PairingMetadata(
           name: AppConfig.apiUrl['walletName'],
           description: AppConfig.apiUrl['walletName'],

@@ -56,10 +56,13 @@ mixin _TransferEvmMixin on _TransferBaseMixin {
     BigInt totalGasPrice = gasPrice * BigInt.from(gas);
     BigInt valuePrice = ethToWeiString(value.toString(), 18);
     if(valuePrice==chainBalance){
+      if (totalGasPrice >= valuePrice) {
+        return MessageModel.error()..data = S.current.g_key_wallet_m5(coinType);
+      }
       valuePrice=valuePrice-totalGasPrice;
       value=toEther(valuePrice.toString(),18).toDouble();
     }
-    if (totalGasPrice + valuePrice > chainBalance) {
+    if (valuePrice <= BigInt.zero || totalGasPrice + valuePrice > chainBalance) {
       return MessageModel.error()..data = S.current.g_key_wallet_m5(coinType);
     }
     //获取nonce值
@@ -165,10 +168,13 @@ mixin _TransferEvmMixin on _TransferBaseMixin {
     if (contractAddress == "") {
       valuePrice = ethToWeiString(value.toString(), decimals);
       if(valuePrice==chainBalance && maxValue==true){
+        if (totalGasPrice >= valuePrice) {
+          return MessageModel.error()..data = S.current.g_key_wallet_m5(displayCoinType);
+        }
         valuePrice=valuePrice-totalGasPrice;
         value=toEther(valuePrice.toString(),decimals).toDouble();
       }
-      if(value<0 || totalGasPrice + valuePrice > chainBalance){
+      if(value<0 || valuePrice <= BigInt.zero || totalGasPrice + valuePrice > chainBalance){
         return MessageModel.error()..data = S.current.g_key_wallet_m5(displayCoinType);
       }
     } else {
@@ -237,7 +243,10 @@ mixin _TransferEvmMixin on _TransferBaseMixin {
     String amountHex=dataUtils.bigIntToHex(valuePrice,
         need0x: false);
     String chainIdHex = dataUtils.bigIntToHex(BigInt.from(chainId), need0x: false);
-    String gasLimitHex = dataUtils.bigIntToHex(BigInt.from(gas*4), need0x: false);
+    // Apply a 20% safety buffer to the estimated gas limit (was 4x, which
+    // unnecessarily locked user funds during tx execution)
+    final int gasWithBuffer = (gas * 1.2).ceil();
+    String gasLimitHex = dataUtils.bigIntToHex(BigInt.from(gasWithBuffer), need0x: false);
     String messageHex = message == null
         ? ""
         : Platform.isAndroid ? message : bytesToHex(message.codeUnits);

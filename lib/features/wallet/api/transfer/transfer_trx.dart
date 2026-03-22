@@ -75,10 +75,13 @@ mixin _TransferTrxMixin on _TransferBaseMixin {
       valuePrice = ethToWeiString(value.toString(), decimals);
       //如果是全部转账
       if (valuePrice == chainBalance && maxValue) {
+        if (totalGasPrice >= valuePrice) {
+          return MessageModel.error()..data = S.current.g_key_wallet_m5("TRX");
+        }
         valuePrice = valuePrice - totalGasPrice;
         value = toEther(valuePrice.toString(), decimals).toDouble();
       }
-      if (totalGasPrice + valuePrice > chainBalance) {
+      if (valuePrice <= BigInt.zero || totalGasPrice + valuePrice > chainBalance) {
         MessageModel mme = MessageModel.error();
         mme.data = S.current.g_key_wallet_m5("TRX");
         return mme;
@@ -148,14 +151,15 @@ mixin _TransferTrxMixin on _TransferBaseMixin {
       "parentHash": blockInfo['parentHash'],
       "version": blockInfo['version'],
       "number": blockInfo['number'],
-      "feeLimit": totalGasPrice.toInt(),
+      "feeLimit": totalGasPrice.toString(),
     };
     if (contractAddress != "") {
       txData['cmd'] = "TRC20";
       txData['contractAddress'] = contractAddress;
       txData['amount'] = dataUtils.bigIntToHex(valuePrice, need0x: false);
     } else {
-      txData['amount'] = valuePrice.toInt();
+      // Use toString() instead of toInt() to prevent overflow for large amounts
+      txData['amount'] = valuePrice.toString();
       txData['cmd'] = CoinType.TRX.name;
     }
 

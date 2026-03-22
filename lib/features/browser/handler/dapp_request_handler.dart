@@ -27,6 +27,10 @@ class DAppRequestHandler {
 
   web3.Web3Client? _web3client;
 
+  /// The origin URL of the DApp currently being browsed.
+  /// Set by BrowserPage so signing dialogs show the actual requesting site.
+  String dappOrigin = 'DApp';
+
   DAppRequestHandler({
     required this.ethCoinModels,
     int initialChainIndex = 0,
@@ -165,11 +169,9 @@ class DAppRequestHandler {
     if (requestedAddress != address.toLowerCase()) {
       throw {'code': -32602, 'message': 'Address mismatch'};
     }
-    final origin = 'DApp';
-
-    // Ask user for approval
+    // Ask user for approval — show the actual DApp origin
     final approved = await _requestApproval(
-      origin: origin,
+      origin: dappOrigin,
       method: 'personal_sign',
       details: {'message': rawData},
     );
@@ -192,7 +194,7 @@ class DAppRequestHandler {
     final jsonData = params[1] as String;
 
     final approved = await _requestApproval(
-      origin: 'DApp',
+      origin: dappOrigin,
       method: method,
       details: {'data': jsonData},
     );
@@ -219,8 +221,14 @@ class DAppRequestHandler {
     if (params.isEmpty) throw 'Invalid params';
     final txMap = params[0] as Map<String, dynamic>;
 
+    // Validate the from address matches our wallet to prevent spoofing
+    final txFrom = (txMap['from'] as String?)?.toLowerCase();
+    if (txFrom != null && txFrom.isNotEmpty && txFrom != address.toLowerCase()) {
+      throw {'code': -32602, 'message': 'From address does not match wallet'};
+    }
+
     final approved = await _requestApproval(
-      origin: 'DApp',
+      origin: dappOrigin,
       method: 'eth_sendTransaction',
       details: txMap,
     );
@@ -242,8 +250,14 @@ class DAppRequestHandler {
     if (params.isEmpty) throw 'Invalid params';
     final txMap = params[0] as Map<String, dynamic>;
 
+    // Validate the from address matches our wallet to prevent spoofing
+    final txFrom = (txMap['from'] as String?)?.toLowerCase();
+    if (txFrom != null && txFrom.isNotEmpty && txFrom != address.toLowerCase()) {
+      throw {'code': -32602, 'message': 'From address does not match wallet'};
+    }
+
     final approved = await _requestApproval(
-      origin: 'DApp',
+      origin: dappOrigin,
       method: 'eth_signTransaction',
       details: txMap,
     );
