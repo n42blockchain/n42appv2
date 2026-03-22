@@ -39,6 +39,12 @@ class _ChooseCoinsPageState extends ConsumerState<ChooseCoinsPage> {
   }
 
   @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final scr = ScreenUtil();
     return Scaffold(

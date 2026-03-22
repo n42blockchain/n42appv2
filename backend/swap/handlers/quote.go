@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"math/big"
 	"net/http"
 
@@ -91,6 +90,6 @@ func estimateGas(chain, source string) string {
 		if source == "1inch" {
 			return "~0.004 ETH"
 		}
-		return fmt.Sprintf("~0.003 ETH")
+		return "~0.003 ETH"
 	}
 }

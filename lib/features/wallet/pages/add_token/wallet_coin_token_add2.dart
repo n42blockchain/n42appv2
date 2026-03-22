@@ -160,7 +160,7 @@ class _WalletCoinTokenAdd2State extends ConsumerState<WalletCoinTokenAdd2> {
   }
 
   void closeKeyboard() {
-    FocusScope.of(context).requestFocus(FocusNode());
+    FocusScope.of(context).unfocus();
   }
 
   Future<bool> _pageBack() {

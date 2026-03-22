@@ -120,12 +120,14 @@ class KeyDetailsSheet extends StatelessWidget {
   static String _date(DateTime d) =>
       '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
 
+  static final _trailingZeros = RegExp(r'0+$');
+
   static String _formatBigInt(BigInt value, int decimals) {
     if (value == BigInt.zero) return '0';
     final pow = BigInt.from(10).pow(decimals);
     final whole = value ~/ pow;
     final frac = (value % pow).toString().padLeft(decimals, '0');
-    final trimmed = frac.replaceAll(RegExp(r'0+$'), '');
+    final trimmed = frac.replaceAll(_trailingZeros, '');
     return trimmed.isEmpty ? whole.toString() : '$whole.$trimmed';
   }
 }

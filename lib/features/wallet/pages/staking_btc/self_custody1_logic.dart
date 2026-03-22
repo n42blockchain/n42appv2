@@ -40,10 +40,13 @@ mixin _SelfCustody1LogicMixin on ConsumerState<SelfCustody1> {
   }
 
   Future<void> createWallet() async {
-    privateKey = ECPrivate.fromWif(
-      "cVbQm3SVhN3sHD2mhbucpyz99mH6WNRcAKhzur3SP5hX4Ca53m15",
-      netVersion: BitcoinNetwork.mainnet.wifNetVer,
+    final wap = ref.read(wapBridgeProvider);
+    final pk = await Trustdart().getPrivateKey(
+      wap.walletInfo.mnemonic ?? "",
+      CoinType.BTC.name,
+      "m/84'/4'/0'/0/0",
     );
+    privateKey = ECPrivate.fromHex(bytesToHex(base64.decode(pk)));
     final pub = privateKey!.getPublic();
     address = pub.toSegwitAddress().toAddress(BitcoinNetwork.mainnet);
     final rdata = await getUTXO(address ?? "");
@@ -110,45 +113,7 @@ mixin _SelfCustody1LogicMixin on ConsumerState<SelfCustody1> {
   }
 
   Future<void> sendTrx1(Script scriptP2wsh) async {
-    final sendAmount = ethToWeiString('0.001', 8).toInt();
-    final fee = 1000;
-    int totalInputAmount = 0;
-
-    final List<TxInput> selectedUTXOs = [];
-    final List<BigInt> txAmount = [];
-    final List<Script> txInputScript = [];
-    for (final utxo in unspents) {
-      final utxoTx = await getUTXOTxid(utxo['txid']);
-      if (!utxoTx.error) {
-        final scriptpk =
-            utxoTx.data['vout']?[utxo['vout']]?['scriptpubkey'] ?? "";
-        if (scriptpk != "") {
-          txInputScript.add(P2wpkhAddress.fromAddress(
-            address: utxoTx.data['vout']?[utxo['vout']]
-                    ?['scriptpubkey_address'] ??
-                "",
-            network: BitcoinNetwork.testnet,
-          ).toScriptPubKey());
-          totalInputAmount += utxo['value'] as int;
-          selectedUTXOs
-              .add(TxInput(txId: utxo['txid'], txIndex: utxo['vout']));
-          txAmount.add(BigInt.from(utxo['value']));
-        }
-      }
-      if (totalInputAmount >= (sendAmount + fee)) break;
-    }
-
-    final changeAmount = totalInputAmount - sendAmount - fee;
-    final scriptPubKey = P2wpkhAddress.fromAddress(
-      address: 'tb1queqpeqalteucdndy4llnmz8l39ugtklypvw6v8',
-      network: BitcoinNetwork.testnet,
-    ).toScriptPubKey();
-    final scriptPubkey1 = p2wshAddress!.toScriptPubKey();
-
-    final txOutputs = [
-      TxOutput(amount: BigInt.from(sendAmount), scriptPubKey: scriptPubkey1),
-      TxOutput(amount: BigInt.from(changeAmount), scriptPubKey: scriptPubKey),
-    ];
+    if (privateKey == null || p2wshAddress == null || address == null) return;
 
     final txHash =
         CreateBtcTX2().createSegwitV2(privateKey!, p2wshAddress!);
@@ -156,6 +121,7 @@ mixin _SelfCustody1LogicMixin on ConsumerState<SelfCustody1> {
   }
 
   Future<void> sendTrx2(Script scriptP2wsh) async {
+    if (privateKey == null || p2wshAddress == null || address == null) return;
     final sendAmount = ethToWeiString('0.0001', 8).toInt();
     final fee = 1000;
     int totalInputAmount = 0;
@@ -166,12 +132,13 @@ mixin _SelfCustody1LogicMixin on ConsumerState<SelfCustody1> {
     for (final utxo in unspents) {
       selectedUTXOs
           .add(TxInput(txId: utxo['txid'], txIndex: utxo['vout']));
+      totalInputAmount += (utxo['value'] as int?) ?? 0;
       if (totalInputAmount >= (sendAmount + fee)) break;
     }
 
     final changeAmount = totalInputAmount - sendAmount - fee;
     final scriptPubKey = P2wpkhAddress.fromAddress(
-      address: address ?? "",
+      address: address!,
       network: BitcoinNetwork.testnet,
     ).toScriptPubKey();
     final scriptPubkey1 = p2wshAddress!.toScriptPubKey();
@@ -187,9 +154,11 @@ mixin _SelfCustody1LogicMixin on ConsumerState<SelfCustody1> {
   }
 
   Future<void> sendTrx() async {
+    if (privateKey == null || address == null) return;
+    final wifKey = privateKey!.toWif(netVersion: BitcoinNetwork.testnet.wifNetVer);
     final hex = await CreateBTCTXV1().createV2(
-      'cVbQm3SVhN3sHD2mhbucpyz99mH6WNRcAKhzur3SP5hX4Ca53m15',
-      'tb1queqpeqalteucdndy4llnmz8l39ugtklypvw6v8',
+      wifKey,
+      address!,
       0.001,
       unspents,
       address!,
@@ -214,8 +183,9 @@ mixin _SelfCustody1LogicMixin on ConsumerState<SelfCustody1> {
       if (!mm.error) {
         return MessageModel()..data = mm.data;
       }
-    } catch (_) {
-      setState(() {});
+    } catch (e) {
+      debugPrint('getUTXO2 error: $e');
+      if (mounted) setState(() {});
     }
     return null;
   }

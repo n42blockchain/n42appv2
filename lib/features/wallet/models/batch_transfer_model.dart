@@ -61,8 +61,10 @@ class BatchTransferItem {
     );
   }
 
+  static final RegExp _ethAddressRegExp = RegExp(r'^0x[a-fA-F0-9]{40}$');
+
   static bool _isValidEthAddress(String address) {
-    return RegExp(r'^0x[a-fA-F0-9]{40}$').hasMatch(address);
+    return _ethAddressRegExp.hasMatch(address);
   }
 
   static BigInt _parseAmount(String amountStr, int decimals) {

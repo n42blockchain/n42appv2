@@ -36,6 +36,8 @@ class GasSettingsPage extends StatefulWidget {
 }
 
 class _GasSettingsPageState extends State<GasSettingsPage> {
+  static final _numericFilter = FilteringTextInputFormatter.allow(RegExp(r'[\d.]'));
+
   late GasEstimateModel _gasEstimate;
   late GasSpeed _selectedSpeed;
   bool _isCustomMode = false;
@@ -318,9 +320,7 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
         TextField(
           controller: controller,
           keyboardType: TextInputType.numberWithOptions(decimal: true),
-          inputFormatters: [
-            FilteringTextInputFormatter.allow(RegExp(r'[\d.]')),
-          ],
+          inputFormatters: [_numericFilter],
           decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(
               horizontal: su.setWidth(20),

@@ -28,7 +28,6 @@ class TransactionRecordItemProvider with ChangeNotifier {
   List<BtcTransactionRecodeModel> _trUndoneList = [];
   List<BtcTransactionRecodeModel> get trUndoneList => _trUndoneList;
 
-  int timerCount = 0;
   Timer? _timer;
   Timer? _timerBtc;
 

@@ -18,8 +18,6 @@ class ChooseImportCoin extends StatefulWidget {
 
 class _ChooseImportCoinState extends State<ChooseImportCoin> {
   var selectIndex = -1;
-  var isSearch = false;
-  var cleanable = true;
   List<String> keyList = [];
   Map<String,dynamic> mMap={};
   @override

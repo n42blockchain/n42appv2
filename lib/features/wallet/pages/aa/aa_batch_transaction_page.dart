@@ -57,8 +57,6 @@ class _AABatchTransactionPageState extends State<AABatchTransactionPage> {
   BigInt? _estimatedMaxFeePerGas;
   String? _estimateError;
 
-  String? _sendError;
-
   late final String _chainSymbol;
   late final AATransferHandler _handler;
   late final BatchTemplateProvider _templateProvider;
@@ -220,10 +218,7 @@ class _AABatchTransactionPageState extends State<AABatchTransactionPage> {
     final calls = _validateAndBuildCalls(onError: _showErrorSnackBar);
     if (calls == null) return;
 
-    setState(() {
-      _isSending = true;
-      _sendError = null;
-    });
+    setState(() => _isSending = true);
 
     try {
       final result = await _handler.transfer(_buildTransferParams(calls));
@@ -238,18 +233,13 @@ class _AABatchTransactionPageState extends State<AABatchTransactionPage> {
         );
         Navigator.pop(context, true);
       } else {
-        setState(() {
-          _isSending = false;
-          _sendError = result.data?.toString() ?? S.of(context).g_key_aa_batch_failed;
-        });
-        _showErrorSnackBar(_sendError!);
+        final errorMsg = result.data?.toString() ?? S.of(context).g_key_aa_batch_failed;
+        setState(() => _isSending = false);
+        _showErrorSnackBar(errorMsg);
       }
     } catch (e) {
       if (!mounted) return;
-      setState(() {
-        _isSending = false;
-        _sendError = e.toString();
-      });
+      setState(() => _isSending = false);
       _showErrorSnackBar(e.toString());
     }
   }
@@ -276,7 +266,6 @@ class _AABatchTransactionPageState extends State<AABatchTransactionPage> {
       _estimatedTotalGas = null;
       _estimatedMaxFeePerGas = null;
       _estimateError = null;
-      _sendError = null;
     });
   }
 
@@ -295,7 +284,6 @@ class _AABatchTransactionPageState extends State<AABatchTransactionPage> {
               ..clear()
               ..addAll(template.operations);
             _estimateError = null;
-            _sendError = null;
           });
           _estimateGas();
         },

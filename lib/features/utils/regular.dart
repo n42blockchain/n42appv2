@@ -2,18 +2,24 @@ import 'package:intl/intl.dart';
 import 'package:decimal/decimal.dart';
 
 class Regular {
-  bool regularHex(String str) =>
-      RegExp(r'^(0x)?[0-9a-fA-F]+$').hasMatch(str);
+  static final RegExp _hexRegExp = RegExp(r'^(0x)?[0-9a-fA-F]+$');
+  static final RegExp _base58RegExp =
+      RegExp(r'^[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]+$');
+  static final RegExp _doubleRegExp = RegExp(r'^\d+(\.)?[0-9]');
+  static final RegExp _numsRegExp = RegExp(r"^[0-9]+$");
+  static final RegExp _passwordRegExp = RegExp(r'^[A-Za-z\d$@$!%*#?&]{8,18}$');
+  static final RegExp _captchaRegExp = RegExp(r'^\w{6}$');
+  static final RegExp _captcha2RegExp = RegExp(r'^\w{8}$');
+  static final RegExp _emailRegExp =
+      RegExp(r"^\w+([-+.]\w+)*@\w+([-.]\w+)*.\w+([-.]\w+)*$");
 
-  bool regularBase58(String str) =>
-      RegExp(r'^[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]+$')
-          .hasMatch(str);
+  bool regularHex(String str) => _hexRegExp.hasMatch(str);
 
-  bool regularDouble(String str) =>
-      RegExp(r'^\d+(\.)?[0-9]').hasMatch(str);
+  bool regularBase58(String str) => _base58RegExp.hasMatch(str);
 
-  bool regularNums(String str) =>
-      RegExp(r"^[0-9]+$").hasMatch(str);
+  bool regularDouble(String str) => _doubleRegExp.hasMatch(str);
+
+  bool regularNums(String str) => _numsRegExp.hasMatch(str);
 
   String getMoneyAbbreviation(dynamic money) {
     if (money >= 1000000000000) {
@@ -73,13 +79,11 @@ class Regular {
     return int.tryParse(normalized);
   }
 
-  bool isPassword(String pwd) =>
-      RegExp(r'^[A-Za-z\d$@$!%*#?&]{8,18}$').hasMatch(pwd);
+  bool isPassword(String pwd) => _passwordRegExp.hasMatch(pwd);
 
-  bool isCaptcha(String captcha) => RegExp(r'^\w{6}$').hasMatch(captcha);
+  bool isCaptcha(String captcha) => _captchaRegExp.hasMatch(captcha);
 
-  bool isCaptcha2(String captcha) => RegExp(r'^\w{8}$').hasMatch(captcha);
+  bool isCaptcha2(String captcha) => _captcha2RegExp.hasMatch(captcha);
 
-  bool isEmail(String email) =>
-      RegExp(r"^\w+([-+.]\w+)*@\w+([-.]\w+)*.\w+([-.]\w+)*$").hasMatch(email);
+  bool isEmail(String email) => _emailRegExp.hasMatch(email);
 }

@@ -47,6 +47,8 @@ const Map<String, Color> _kChainColors = {
   'ETC':   Color(0xFF328432),
 };
 
+final _amountInputRegex = RegExp(r'^\d*\.?\d*');
+
 // ─── QR 数据 URI 构建（BIP-21 / EIP-681 / Solana Pay 等）──────────────────────
 String _buildQrData({
   required String address,

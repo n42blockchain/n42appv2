@@ -311,7 +311,7 @@ class _MiningImportState extends ConsumerState<MiningImport> {
       textInputAction: TextInputAction.done,
       onChanged: (value) => _validatePassword(value),
       onEditingComplete: () {
-        FocusScope.of(context).requestFocus(FocusNode());
+        FocusScope.of(context).unfocus();
       },
       height: ScreenUtil().setWidth(88),
       errorMessage: _passwordErrorMessage,

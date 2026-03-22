@@ -34,33 +34,16 @@ class _EditWalletState extends ConsumerState<EditWallet> {
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
         text: S.of(context).g_key_wallet_edit,
-        /*actions: [
-          TextButton(
-              onPressed: () async {
-                widget.walletInfo.walletName = _controller.text.trim();
-                //保存钱包
-                // Map<String,dynamic>? walletAll=await SPUtils.getWallsetInfo();
-                // if(walletAll==null){
-                //   await SPUtils.setWalletInfo({AppGlobals.userInfo!.uuid:[widget.walletInfo.toJson()]});
-                // }else{
-                //   walletAll[AppGlobals.userInfo!.uuid]=[widget.walletInfo.toJson()];
-                // }
-                await Provider.of<WalletActionProvider>(context,listen: false).saveWalletInfo(widget.walletInfo,widget.walletIndex);
-                //await SPUtils.setWalletInfo({AppGlobals.userInfo!.uuid:[widget.walletInfo.toJson()]});
-
-                ///更新一下provider中的数据
-                //Provider.of<WalletActionProvider>(context,listen: false).updateWalletInfo(widget.walletInfo);
-                Navigator.of(context).pop();
-              },
-              child:  Text(
-                S.of(context).g_key_115,
-                style: TextStyle(fontSize: ScreenUtil().setSp(36),color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)),
-              ))
-        ],*/
       ),
       body: SafeArea(
         child: GestureDetector(
@@ -96,20 +79,9 @@ class _EditWalletState extends ConsumerState<EditWallet> {
                     existingName: widget.walletInfo.walletName ?? '',
                     walletIndex: widget.walletIndex,
                   );
-                  //保存钱包
-                  // Map<String,dynamic>? walletAll=await SPUtils.getWallsetInfo();
-                  // if(walletAll==null){
-                  //   await SPUtils.setWalletInfo({AppGlobals.userInfo!.uuid:[widget.walletInfo.toJson()]});
-                  // }else{
-                  //   walletAll[AppGlobals.userInfo!.uuid]=[widget.walletInfo.toJson()];
-                  // }
                   await ref
                       .read(wapBridgeProvider)
                       .saveWalletInfo(widget.walletInfo, widget.walletIndex);
-                  //await SPUtils.setWalletInfo({AppGlobals.userInfo!.uuid:[widget.walletInfo.toJson()]});
-
-                  ///更新一下provider中的数据
-                  //Provider.of<WalletActionProvider>(context,listen: false).updateWalletInfo(widget.walletInfo);
                   if (!context.mounted) return;
                   Navigator.of(context).pop(widget.walletInfo);
                 }, S.of(context).g_key_115),

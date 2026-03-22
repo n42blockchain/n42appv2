@@ -393,9 +393,11 @@ class DAppRequestHandler {
     );
   }
 
+  static final RegExp _hexRegExp = RegExp(r'^[0-9a-fA-F]+$');
+
   static bool _isValidHex(String s) {
     if (s.isEmpty) return false;
-    return RegExp(r'^[0-9a-fA-F]+$').hasMatch(s);
+    return _hexRegExp.hasMatch(s);
   }
 
   void dispose() {

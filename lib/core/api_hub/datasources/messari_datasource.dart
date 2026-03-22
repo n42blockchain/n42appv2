@@ -110,7 +110,7 @@ class MessariDatasource {
         _priceCache[symbol] = cp;
         fetched++;
       } catch (e) {
-        debugPrint('MessariDatasource.getPrices($s) error: $e');
+        _debugLog('MessariDatasource.getPrices($s) error: $e');
       }
     }
     if (result.isNotEmpty) _priceCachedAt = DateTime.now();

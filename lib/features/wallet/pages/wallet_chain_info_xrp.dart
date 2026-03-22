@@ -396,12 +396,9 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
           );
         }
 
-        final isBtc =
-            widget.coinModel.coin['blockchainType'] ==
-            BlockchainType.Bitcoin.name;
         return WalletChainInfoTransactionsItem(
           coinModel: widget.coinModel,
-          type: isBtc ? 0 : 1,
+          type: 1,
           transactionModel: transactionList[index],
           onBack: () => getTransactionData(Load.refresh),
         );

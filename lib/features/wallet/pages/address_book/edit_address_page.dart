@@ -393,8 +393,8 @@ class _EditAddressPageState extends State<EditAddressPage> {
         eventBus.fire(EventPublic(EventPublicType.refreshData));
         Navigator.of(context).pop(true);
       }
-    } catch (_) {
-      // safe to ignore
+    } catch (e) {
+      debugPrint('[EditAddressPage] update failed: $e');
     }
   }
 

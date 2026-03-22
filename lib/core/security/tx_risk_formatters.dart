@@ -5,6 +5,9 @@ final BigInt txRiskMaxUint256 = BigInt.parse(
   '115792089237316195423570985008687907853269984665640564039457584007913129639935',
 );
 
+final RegExp _leadingZeros = RegExp(r'^0+');
+final RegExp _trailingZeros = RegExp(r'0+$');
+
 /// Decode a 32-byte ABI-padded address (64 hex chars) to "0x..." form.
 String txRiskDecodeAddress(String padded) {
   if (padded.length < 40) return '0x${padded.padLeft(40, '0')}';
@@ -14,7 +17,7 @@ String txRiskDecodeAddress(String padded) {
 /// Returns true if the 64-char hex uint256 equals MaxUint256.
 bool txRiskIsMaxUint256(String hex64) {
   try {
-    final clean = hex64.replaceAll(RegExp(r'^0+'), '').toLowerCase();
+    final clean = hex64.replaceAll(_leadingZeros, '').toLowerCase();
     if (clean.isEmpty) return false;
     final bi = BigInt.parse(clean, radix: 16);
     return bi == txRiskMaxUint256;
@@ -37,7 +40,7 @@ bool txRiskIsUnlimitedPermitValue(dynamic value) {
 String txRiskFormatAmount(String hex64) {
   if (txRiskIsMaxUint256(hex64)) return 'Unlimited ∞';
   try {
-    final clean = hex64.replaceAll(RegExp(r'^0+'), '');
+    final clean = hex64.replaceAll(_leadingZeros, '');
     if (clean.isEmpty) return '0';
     final bi = BigInt.parse(clean, radix: 16);
     if (bi == BigInt.zero) return '0';
@@ -66,7 +69,7 @@ String txRiskFormatHexWei(String hexValue) {
     if (remainder == BigInt.zero) return '$whole ETH';
     // Pad remainder to 18 digits, then take first 6 for display
     final fracStr = remainder.toString().padLeft(18, '0').substring(0, 6);
-    final trimmed = fracStr.replaceAll(RegExp(r'0+$'), '');
+    final trimmed = fracStr.replaceAll(_trailingZeros, '');
     return '$whole.${trimmed.isEmpty ? '0' : trimmed} ETH';
   } catch (_) {
     return hexValue;

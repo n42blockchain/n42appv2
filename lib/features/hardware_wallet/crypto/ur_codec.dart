@@ -73,6 +73,9 @@ class UrCodec {
     for (var i = 0; i < _wordList.length; i++) _wordList[i]: i,
   };
 
+  static final RegExp _whitespaceRegex = RegExp(r'\s+');
+  static final RegExp _multipartRegex = RegExp(r'^\d+-of-\d+/(.+)$');
+
   // ==================== CRC-32 ====================
 
   /// CRC-32 lookup table (ISO 3309 / ITU-T V.42 polynomial 0xEDB88320)
@@ -115,7 +118,7 @@ class UrCodec {
   ///
   /// Throws [UrCodecException] if any word is not in the word list.
   static Uint8List bytewordsDecode(String encoded) {
-    final words = encoded.toLowerCase().trim().split(RegExp(r'\s+'));
+    final words = encoded.toLowerCase().trim().split(_whitespaceRegex);
     final result = Uint8List(words.length);
     for (var i = 0; i < words.length; i++) {
       final idx = _wordToIndex[words[i]];
@@ -164,7 +167,7 @@ class UrCodec {
     final bodyStr = withoutPrefix.substring(slashIdx + 1);
 
     // Multi-part UR: skip  (e.g. "1-of-3/body" — not supported yet)
-    final multipartMatch = RegExp(r'^\d+-of-\d+/(.+)$').firstMatch(bodyStr);
+    final multipartMatch = _multipartRegex.firstMatch(bodyStr);
     final encodedBody = multipartMatch != null ? multipartMatch.group(1)! : bodyStr;
 
     final payload = bytewordsDecode(encodedBody);

@@ -68,7 +68,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           : null,
       resizeToAvoidBottomInset: false,
       body: GestureDetector(
-        onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+        onTap: () => FocusScope.of(context).unfocus(),
         child: SafeArea(
           child: Stack(
             children: [
@@ -144,7 +144,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         textFieldStyle3(
                           context,
                           onEditingComplete: () {
-                            FocusScope.of(context).requestFocus(FocusNode());
+                            FocusScope.of(context).unfocus();
                           },
                           controller: _uPasswordController,
                           focusNode: _uPasswordFocusNode,

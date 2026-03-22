@@ -12,6 +12,8 @@ String? normalizeChatSsoHomeserver(
   return _normalizeHomeserver(fallback);
 }
 
+final RegExp _trailingSlashes = RegExp(r'/+$');
+
 String? _normalizeHomeserver(String value) {
   final parsed = Uri.tryParse(value);
   if (parsed == null || !parsed.hasScheme || parsed.host.isEmpty) {
@@ -23,7 +25,7 @@ String? _normalizeHomeserver(String value) {
     return null;
   }
 
-  final normalizedPath = parsed.path.replaceAll(RegExp(r'/+$'), '');
+  final normalizedPath = parsed.path.replaceAll(_trailingSlashes, '');
   return parsed
       .replace(
         scheme: scheme,

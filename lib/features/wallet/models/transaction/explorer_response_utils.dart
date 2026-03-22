@@ -19,13 +19,16 @@ String? explorerString(
   return null;
 }
 
+final RegExp _integerRegExp = RegExp(r'^\d+$');
+final RegExp _decimalRegExp = RegExp(r'^\d+(\.\d+)?$');
+
 BigInt parseExplorerAmount(String? rawValue, int decimals) {
   final value = rawValue?.trim() ?? '';
   if (value.isEmpty) return BigInt.zero;
-  if (RegExp(r'^\d+$').hasMatch(value)) {
+  if (_integerRegExp.hasMatch(value)) {
     return BigInt.parse(value);
   }
-  if (RegExp(r'^\d+(\.\d+)?$').hasMatch(value)) {
+  if (_decimalRegExp.hasMatch(value)) {
     return ethToWeiString(value, decimals);
   }
   return BigInt.tryParse(value) ?? BigInt.zero;

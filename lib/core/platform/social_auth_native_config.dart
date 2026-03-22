@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 class SocialAuthNativeConfig {
@@ -27,7 +28,11 @@ class SocialAuthNativeConfig {
         'getSocialAuthConfig',
       );
       return SocialAuthNativeConfig.fromMap(map ?? const <String, dynamic>{});
-    } catch (_) {
+    } catch (e) {
+      assert(() {
+        debugPrint('SocialAuthNativeConfig.load: $e');
+        return true;
+      }());
       return const SocialAuthNativeConfig();
     }
   }

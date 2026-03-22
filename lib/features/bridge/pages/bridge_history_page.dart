@@ -28,6 +28,7 @@ class BridgeHistoryPage extends StatefulWidget {
 }
 
 class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
+  static final DateFormat _dateFormat = DateFormat('yyyy-MM-dd HH:mm');
   bool _refreshing = false;
 
   Future<void> _onRefresh() async {
@@ -106,7 +107,6 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
     BuildContext context,
     BridgeTransaction tx,
   ) {
-    final dateFormat = DateFormat('yyyy-MM-dd HH:mm');
     final subtitleColor = AppThemeUtils.getColorByKey(
         context, AppThemeKeys.itemSubtitleTextColor.name);
     final blueColor = AppThemeUtils.getColorByKey(
@@ -133,7 +133,7 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
             children: [
               _buildStatusBadge(context, tx.status),
               Text(
-                dateFormat.format(tx.createdAt),
+                _dateFormat.format(tx.createdAt),
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(24),
                   color: subtitleColor,

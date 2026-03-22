@@ -154,7 +154,7 @@ extension _AccountCreateAndResetWidgets on _AccountCreateAndResetState {
         textFieldStyle3(
           context,
           onEditingComplete: () {
-            FocusScope.of(context).requestFocus(FocusNode());
+            FocusScope.of(context).unfocus();
           },
           controller: _inviteCodeController,
           focusNode: _inviteCodeFocusNode,
@@ -184,7 +184,7 @@ extension _AccountCreateAndResetWidgets on _AccountCreateAndResetState {
         textFieldStyle3(
           context,
           onEditingComplete: () {
-            FocusScope.of(context).requestFocus(FocusNode());
+            FocusScope.of(context).unfocus();
           },
           focusNode: _uCodeFocusNode,
           controller: _uCodeController,

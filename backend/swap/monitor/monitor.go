@@ -44,6 +44,14 @@ func (m *Monitor) Watch(orderID, chain, txHash string) {
 			return
 		}
 
+		client, err := ethclient.Dial(rpcURL)
+		if err != nil {
+			log.Printf("[monitor] dial %s error: %v", rpcURL, err)
+			_ = m.db.UpdateStatus(orderID, models.StatusFailed)
+			return
+		}
+		defer client.Close()
+
 		ticker := time.NewTicker(5 * time.Second)
 		deadline := time.Now().Add(30 * time.Minute)
 		defer ticker.Stop()
@@ -58,9 +66,9 @@ func (m *Monitor) Watch(orderID, chain, txHash string) {
 					_ = m.db.UpdateStatus(orderID, models.StatusFailed)
 					return
 				}
-				confirmed, err := m.checkConfirmed(rpcURL, txHash)
-				if err != nil {
-					log.Printf("[monitor] check %s error: %v", txHash, err)
+				confirmed, checkErr := m.checkConfirmed(client, txHash)
+				if checkErr != nil {
+					log.Printf("[monitor] check %s error: %v", txHash, checkErr)
 					continue
 				}
 				if confirmed {
@@ -74,15 +82,9 @@ func (m *Monitor) Watch(orderID, chain, txHash string) {
 }
 
 // checkConfirmed 查询 EVM 交易是否已上链（receipt status == 1）
-func (m *Monitor) checkConfirmed(rpcURL, txHash string) (bool, error) {
+func (m *Monitor) checkConfirmed(client *ethclient.Client, txHash string) (bool, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-
-	client, err := ethclient.DialContext(ctx, rpcURL)
-	if err != nil {
-		return false, err
-	}
-	defer client.Close()
 
 	receipt, err := client.TransactionReceipt(ctx, common.HexToHash(txHash))
 	if err != nil {

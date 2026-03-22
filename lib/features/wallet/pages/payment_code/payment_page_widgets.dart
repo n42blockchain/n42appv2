@@ -156,9 +156,6 @@ extension _PaymentPageWidgets on _PaymentPageState {
     );
   }
 
-  Color _themeColor(AppThemeKeys key) =>
-      AppThemeUtils.getColorByKey(context, key.name);
-
   Widget mainCoin() {
     final su = ScreenUtil();
     return Container(

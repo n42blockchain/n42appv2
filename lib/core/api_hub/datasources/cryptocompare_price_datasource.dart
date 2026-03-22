@@ -15,6 +15,8 @@ class CryptoComparePriceDatasource {
   static const String _base = 'https://min-api.cryptocompare.com/data';
   static const String _source = 'CryptoCompare';
 
+  static final RegExp _validSymbolPattern = RegExp(r'^[A-Z0-9]+$');
+
   static final Map<String, CoinPrice> _cache = {};
   static DateTime? _cachedAt;
   static const _cacheTtl = Duration(minutes: 2);
@@ -34,7 +36,7 @@ class CryptoComparePriceDatasource {
 
     try {
       // Validate symbols to prevent URL parameter injection
-      final validSymbol = RegExp(r'^[A-Z0-9]+$');
+      final validSymbol = _validSymbolPattern;
       final safeSymbols = symbols
           .map((s) => s.toUpperCase())
           .where((s) => validSymbol.hasMatch(s))

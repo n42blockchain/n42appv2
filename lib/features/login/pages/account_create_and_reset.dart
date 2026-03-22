@@ -52,7 +52,7 @@ class _AccountCreateAndResetState extends ConsumerState<AccountCreateAndReset>
       ),
       body: SafeArea(
         child: GestureDetector(
-          onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+          onTap: () => FocusScope.of(context).unfocus(),
           child: Stack(
             children: [
               Positioned.fill(

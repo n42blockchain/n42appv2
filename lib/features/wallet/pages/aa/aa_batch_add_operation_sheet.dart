@@ -30,6 +30,7 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
   String? _amountError;
 
   static const _ethLikeTokens = ['ETH', 'BNB', 'MATIC', 'AVAX', 'ARB'];
+  static final _addrRegex = RegExp(r'^0x[0-9a-fA-F]{40}$');
 
   @override
   void dispose() {
@@ -48,8 +49,7 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
 
     bool valid = true;
 
-    final addrRegex = RegExp(r'^0x[0-9a-fA-F]{40}$');
-    if (!addrRegex.hasMatch(_toController.text.trim())) {
+    if (!_addrRegex.hasMatch(_toController.text.trim())) {
       setState(() => _toError = 'Invalid address (0x...)');
       valid = false;
     }

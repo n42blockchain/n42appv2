@@ -387,7 +387,7 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
   }
 
   void closeKeyboard() {
-    FocusScope.of(context).requestFocus(FocusNode());
+    FocusScope.of(context).unfocus();
   }
 
   Future<bool> _pageBack() {

@@ -166,17 +166,23 @@ class WalletAsset extends Equatable {
     this.priceUsd,
   });
 
+  double get _balanceAsDouble {
+    final divisor = BigInt.from(10).pow(decimals);
+    final wholePart = balance ~/ divisor;
+    final remainder = balance.remainder(divisor);
+    return wholePart.toDouble() +
+        remainder.toDouble() / divisor.toDouble();
+  }
+
   /// 获取格式化的余额
   String get formattedBalance {
-    final value = balance / BigInt.from(10).pow(decimals);
-    return value.toStringAsFixed(decimals > 6 ? 6 : decimals);
+    return _balanceAsDouble.toStringAsFixed(decimals > 6 ? 6 : decimals);
   }
 
   /// 获取美元价值
   double? get valueUsd {
     if (priceUsd == null) return null;
-    final value = balance / BigInt.from(10).pow(decimals);
-    return value.toDouble() * priceUsd!;
+    return _balanceAsDouble * priceUsd!;
   }
 
   @override

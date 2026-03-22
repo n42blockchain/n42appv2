@@ -186,6 +186,14 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
     bool useStyle3 = true,
   }) {
     final h = ScreenUtil().setWidth(useStyle3 ? 120.0 : 88.0);
+    void onComplete() {
+      if (nextFocus != null) {
+        FocusScope.of(context).requestFocus(nextFocus);
+      } else {
+        FocusScope.of(context).unfocus();
+      }
+    }
+
     final field = useStyle3
         ? textFieldStyle3(
             context,
@@ -196,8 +204,7 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
             maxLengths: maxLengths ?? 30,
             height: h,
             errorMessage: errorMsg,
-            onEditingComplete: () =>
-                FocusScope.of(context).requestFocus(nextFocus ?? FocusNode()),
+            onEditingComplete: onComplete,
             onChanged: (_) {},
           )
         : textFieldStyle2(
@@ -208,8 +215,7 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
             maxLines: 1,
             height: h,
             errorMessage: errorMsg,
-            onEditingComplete: () =>
-                FocusScope.of(context).requestFocus(nextFocus ?? FocusNode()),
+            onEditingComplete: onComplete,
             onChanged: (_) {},
           );
 

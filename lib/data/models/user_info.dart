@@ -20,7 +20,7 @@ class UserInfo {
   String? image;
   String? name;
   String? desc;
-  String? artJson;
+  String? _artJson;
   bool? bindGoogleAuthState;
   bool? createWallet;
   String? walletAddr;
@@ -31,6 +31,14 @@ class UserInfo {
   bool followAction = false;
   bool? _isArtist;
 
+  String? get artJson => _artJson;
+  set artJson(String? value) {
+    if (_artJson != value) {
+      _artJson = value;
+      _isArtist = null;
+    }
+  }
+
   UserInfo({
     this.email,
     this.token,
@@ -39,14 +47,14 @@ class UserInfo {
     this.image,
     this.name,
     this.desc,
-    this.artJson,
+    String? artJson,
     this.idxEmailHash,
     this.source,
     this.bindGoogleAuthState,
     this.createWallet,
     this.inviteCode,
     this.walletAddr,
-  });
+  }) : _artJson = artJson;
 
   /// Create from JSON map
   factory UserInfo.fromJson(Map<String, dynamic> json) {

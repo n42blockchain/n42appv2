@@ -33,6 +33,8 @@ class MessageList extends ConsumerStatefulWidget {
 }
 
 class _MessageListState extends ConsumerState<MessageList> {
+  static final DateFormat _dateTimeFmt = DateFormat("dd-MM-yyyy HH:mm");
+  static final DateFormat _dateFmt = DateFormat("dd-MM-yyyy");
   late final UserInfoApi userInfoApi = UserInfoApi();
 
   @override
@@ -57,10 +59,9 @@ class _MessageListState extends ConsumerState<MessageList> {
           int created = (map['created'] ?? 0) as int;
           // 服务端返回秒级时间戳，转为微秒
           final createdDt = DateTime.fromMillisecondsSinceEpoch(created * 1000);
-          final createTime = DateFormat("dd-MM-yyyy HH:mm").format(createdDt);
-          final dateFmt = DateFormat("dd-MM-yyyy");
-          map["showDate"] = dateFmt.format(createdDt);
-          if (dateFmt.format(DateTime.now()) == map["showDate"]) {
+          final createTime = _dateTimeFmt.format(createdDt);
+          map["showDate"] = _dateFmt.format(createdDt);
+          if (_dateFmt.format(DateTime.now()) == map["showDate"]) {
             map["showDate"] = S.of(context).g_chat_key_61;
           }
           final showData2 = index != 0

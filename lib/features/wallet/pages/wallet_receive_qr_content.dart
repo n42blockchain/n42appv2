@@ -268,7 +268,7 @@ extension _WalletReceiveQrContent on _WalletReceiveQrState {
       keyboardType:
           const TextInputType.numberWithOptions(decimal: true),
       inputFormatters: [
-        FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
+        FilteringTextInputFormatter.allow(_amountInputRegex),
       ],
       style: TextStyle(color: mainText, fontSize: fontSize),
       decoration: InputDecoration(

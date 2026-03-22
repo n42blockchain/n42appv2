@@ -16,6 +16,8 @@ class _Explorer {
   const _Explorer(this.baseUrl);
 }
 
+final RegExp _hex0xPrefix = RegExp(r'^0x', caseSensitive: false);
+
 // ─── Token-discovery service ─────────────────────────────────────────────────
 
 /// Scans EVM and Solana chains for tokens received by the wallet that are not
@@ -225,7 +227,7 @@ class TokenDiscoveryService {
     try {
       // balanceOf(address) selector: 0x70a08231
       final stripped = address
-          .replaceFirst(RegExp(r'^0x', caseSensitive: false), '')
+          .replaceFirst(_hex0xPrefix, '')
           .toLowerCase();
       final calldata = '0x70a08231${stripped.padLeft(64, '0')}';
 

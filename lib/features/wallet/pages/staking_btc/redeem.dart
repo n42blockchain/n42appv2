@@ -8,10 +8,8 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
-import 'package:n42_wallet/core/network/request_url.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/btc_api.dart';
-import 'package:n42_wallet/features/wallet/api/redeem_token.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/features/wallet/api/transfer_api.dart';
 import 'package:n42_wallet/features/wallet/models/btc_transaction_recode_model.dart';
@@ -23,10 +21,8 @@ import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dar
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
-import 'package:reown_walletkit/reown_walletkit.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
-import 'package:http/http.dart';
 import 'package:bitcoin_base/bitcoin_base.dart';
 import 'package:n42_wallet/core/utils/js_escape_utils.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -136,36 +132,6 @@ class _RedeemState extends ConsumerState<Redeem> {
     inputUTXO[0]['witnessValue'] = witnessScriptValue;
     inputUTXO[0]['lockTime'] = lockTime;
     return signP2WSH();
-  }
-
-  Future<void> redeemEth(String p2wshAddress) async {
-    final serviceUrl = RequestUrl().getUrl2(
-      CoinType.ETH.name,
-      'rpc',
-      isTest: _coin.isTest,
-    );
-    String privateKey;
-    if (_coin.privateKey == null || _coin.privateKey == '') {
-      final pk = await Trustdart().getPrivateKey(
-        _walletInfo.mnemonic ?? '',
-        CoinType.ETH.name,
-        "m/44'/60'/0'/0/0",
-      );
-      privateKey = bytesToHex(base64Decode(pk));
-    } else {
-      privateKey = bytesToHex(base64Decode(_coin.privateKey ?? ''));
-    }
-    final credentials = EthPrivateKey.fromHex(privateKey);
-    if (kDebugMode) debugPrint(credentials.address.eip55With0x);
-    final rt = RedeemToken.init(
-      address: EthereumAddress.fromHex(
-        '0x6c30A50430cC615C4659DF2dBe3E42036583bE7E',
-      ),
-      client: Web3Client(serviceUrl, Client()),
-      chainId: 11155111,
-    );
-    final rData = await rt.reedem(p2wshAddress, credentials: credentials);
-    if (kDebugMode) debugPrint(rData);
   }
 
   Future<String> createP2WSH(
@@ -370,30 +336,6 @@ class _RedeemState extends ConsumerState<Redeem> {
     }
     inputUTXO = utxos;
     if (mounted) setState(() {});
-  }
-
-  Future<void> initEthToken(String p2wshAddr) async {
-    final client = Web3Client(
-      'https://eth-sepolia.public.blastapi.io',
-      Client(),
-    );
-    final token = RedeemToken.init(
-      address: EthereumAddress.fromHex(
-        '0x6c30A50430cC615C4659DF2dBe3E42036583bE7E',
-      ),
-      client: client,
-    );
-    String privateKey = _walletInfo.privateKey ?? '';
-    if (privateKey.isEmpty) {
-      privateKey = await Trustdart().getPrivateKey(
-        _walletInfo.mnemonic ?? '',
-        CoinType.ETH.name,
-        "m/44'/60'/0'/0/0",
-      );
-    }
-    final epk = EthPrivateKey(base64Decode(privateKey));
-    final rData = await token.getDepositAmount(p2wshAddr, credentials: epk);
-    if (kDebugMode) debugPrint(rData);
   }
 
   @override

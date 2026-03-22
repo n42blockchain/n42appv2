@@ -68,7 +68,10 @@ class CurrentUserNotifier extends StateNotifier<SharedUserInfo?> {
         state = SharedUserInfo.fromJson(userJson);
       }
     } catch (e) {
-      // Ignore loading errors
+      assert(() {
+        debugPrint('CurrentUserNotifier._loadFromStorage error: $e');
+        return true;
+      }());
     }
   }
 

@@ -24,7 +24,6 @@ import 'package:n42_wallet/features/wallet/models/btc_transaction_recode_model.d
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
-import 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/chain_eip1559.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/utils/transaction/coin_gas.dart';

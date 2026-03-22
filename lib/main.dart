@@ -626,12 +626,7 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
       return;
     }
 
-    final shouldWaitForChatSession =
-        data.type == DeepLinkType.chat ||
-        data.type == DeepLinkType.user ||
-        data.type == DeepLinkType.group ||
-        data.type == DeepLinkType.friendCard;
-    if (shouldWaitForChatSession && !N42Chat.isLoggedIn) {
+    if (_isChatDeepLink(data.type) && !N42Chat.isLoggedIn) {
       _pendingChatDeepLink = data;
       await _openChatEntry(navContext);
       return;
@@ -733,8 +728,8 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
       /// FCM推送设置
       /// ios 通过fcm集成的apns推送 同样需要开启vpn
       await AppPushUtils.init();
-    } catch (err) {
-      if (kDebugMode) debugPrint("FCM推送初始化失败");
+    } catch (e) {
+      if (kDebugMode) debugPrint('FCM推送初始化失败: $e');
     }
   }
 
@@ -887,7 +882,7 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
   }
 
   //路由
-  Map<String, WidgetBuilder> routes = {
+  final Map<String, WidgetBuilder> routes = {
     "/HomePage": (context) => HomePage(),
     "/CreateOne": (context) => CreateOne(),
     "/ImportOne": (context) => ImportOne(),

@@ -171,8 +171,8 @@ class AddressValidator {
           }
           return _extractResolved(await _tokenViewApi.getEnsResolve(domainName));
       }
-    } catch (e) {
-      // 解析失败，返回 null
+    } catch (_) {
+      return null;
     }
     return null;
   }

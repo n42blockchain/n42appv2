@@ -37,6 +37,7 @@ enum BridgeState {
 /// 管理跨链桥的状态和业务逻辑
 class BridgeProvider extends ChangeNotifier
     with BridgePersistenceMixin, BridgeExecutionMixin {
+  static final _amountRegex = RegExp(r'^\d+\.?\d*$');
   BridgeProvider({BridgeApiClient? lifiApi}) : _lifiApi = lifiApi ?? LiFiApi();
 
   @override
@@ -376,7 +377,7 @@ class BridgeProvider extends ChangeNotifier
     if (amount.isEmpty) return '0';
     try {
       // Validate input contains only digits and at most one decimal point
-      if (!RegExp(r'^\d+\.?\d*$').hasMatch(amount)) {
+      if (!_amountRegex.hasMatch(amount)) {
         _setError('Invalid amount format');
         return '0';
       }
