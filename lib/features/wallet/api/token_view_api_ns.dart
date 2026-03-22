@@ -18,7 +18,7 @@ extension TokenViewApiNameService on TokenViewApi {
         mm.data = a['data'];
       } else {
         mm.error = true;
-        mm.data = errorMessage(a['msg']);
+        mm.data = a['msg']?.toString() ?? errorMessage(a['code']);
       }
       return mm;
     } catch (e) {
@@ -39,7 +39,7 @@ extension TokenViewApiNameService on TokenViewApi {
         mm.data = a['data'];
       } else {
         mm.error = true;
-        mm.data = errorMessage(a['msg']);
+        mm.data = a['msg']?.toString() ?? errorMessage(a['code']);
       }
       return mm;
     } catch (e) {
@@ -60,7 +60,7 @@ extension TokenViewApiNameService on TokenViewApi {
         mm.data = a['data'];
       } else {
         mm.error = true;
-        mm.data = errorMessage(a['msg']);
+        mm.data = a['msg']?.toString() ?? errorMessage(a['code']);
       }
       return mm;
     } catch (e) {
@@ -81,7 +81,7 @@ extension TokenViewApiNameService on TokenViewApi {
         mm.data = a['data'];
       } else {
         mm.error = true;
-        mm.data = errorMessage(a['msg']);
+        mm.data = a['msg']?.toString() ?? errorMessage(a['code']);
       }
       return mm;
     } catch (e) {
@@ -102,7 +102,7 @@ extension TokenViewApiNameService on TokenViewApi {
         mm.data = a['data'];
       } else {
         mm.error = true;
-        mm.data = errorMessage(a['msg']);
+        mm.data = a['msg']?.toString() ?? errorMessage(a['code']);
       }
       return mm;
     } catch (e) {
@@ -123,7 +123,7 @@ extension TokenViewApiNameService on TokenViewApi {
         mm.data = a['data'];
       } else {
         mm.error = true;
-        mm.data = errorMessage(a['msg']);
+        mm.data = a['msg']?.toString() ?? errorMessage(a['code']);
       }
       return mm;
     } catch (e) {
@@ -150,7 +150,7 @@ extension TokenViewApiNameService on TokenViewApi {
         mm.data = a['data'];
       } else {
         mm.error = true;
-        mm.data = errorMessage(a['msg']);
+        mm.data = a['msg']?.toString() ?? errorMessage(a['code']);
       }
       return mm;
     } catch (e) {
@@ -178,7 +178,7 @@ extension TokenViewApiNameService on TokenViewApi {
         mm.data = a['data'];
       } else {
         mm.error = true;
-        mm.data = errorMessage(a['msg']);
+        mm.data = a['msg']?.toString() ?? errorMessage(a['code']);
       }
       return mm;
     } catch (e) {
@@ -201,7 +201,7 @@ extension TokenViewApiNameService on TokenViewApi {
         mm.data = a['data'];
       } else {
         mm.error = true;
-        mm.data = errorMessage(a['msg']);
+        mm.data = a['msg']?.toString() ?? errorMessage(a['code']);
       }
       return mm;
     } catch (e) {
@@ -222,7 +222,7 @@ extension TokenViewApiNameService on TokenViewApi {
         mm.data = a['data'];
       } else {
         mm.error = true;
-        mm.data = errorMessage(a['msg']);
+        mm.data = a['msg']?.toString() ?? errorMessage(a['code']);
       }
       return mm;
     } catch (e) {

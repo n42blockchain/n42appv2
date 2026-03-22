@@ -103,7 +103,7 @@ class FilApi {
       final url = '${RequestUrl().getUrl2("FIL", "api", isTest: isTest)}message/$mId';
       final data = await BaseApi.requestEmptyH.get(url, params: {});
       final mm = MessageModel();
-      if (data['receipt']['exitCode'] ?? -1 != 0) {
+      if ((data['receipt']['exitCode'] ?? -1) != 0) {
         mm.error = true;
         mm.data = '';
       } else {

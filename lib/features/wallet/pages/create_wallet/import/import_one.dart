@@ -209,7 +209,7 @@ class _ImportOneState extends ConsumerState<ImportOne>
                         maxLines: 8,
                         onChanged: checkInput,
                         onEditingComplete: () =>
-                            FocusScope.of(context).requestFocus(FocusNode()),
+                            FocusScope.of(context).unfocus(),
                       ),
                     ),
                     Container(

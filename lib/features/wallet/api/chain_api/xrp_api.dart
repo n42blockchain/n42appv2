@@ -143,7 +143,7 @@ class XrpApi {
   /// 获取 Hook 合约信息
   Future<MessageModel> getHookInfo(String address, {bool isTest = false}) async {
     return _rpcCall('account_objects', [{'account': address, 'type': 'hook'}], isTest,
-        (r) => BigInt.parse(r['account_objects']));
+        (r) => r['account_objects']);
   }
 
   /// 获取 AMM 池信息
@@ -152,13 +152,13 @@ class XrpApi {
     bool isTest = false,
   }) async {
     return _rpcCall('amm_info', [ammInfo], isTest,
-        (r) => BigInt.parse(r['amm']));
+        (r) => r['amm']);
   }
 
   /// 获取 Trustline 代币（IOU）信息
   Future<MessageModel> getTrustline(String address, {bool isTest = false}) async {
-    return _rpcCall('account_lines', [{address}], isTest,
-        (r) => BigInt.parse(r['lines']));
+    return _rpcCall('account_lines', [{'account': address}], isTest,
+        (r) => r['lines']);
   }
 
   /// 获取账户交易历史

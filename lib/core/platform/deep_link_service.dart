@@ -123,12 +123,14 @@ class DeepLinkService {
       final initialUri = await _appLinks.getInitialLink();
       if (initialUri != null) _handleUri(initialUri);
     } catch (e) {
-      debugPrint('Failed to get initial link: $e');
+      if (kDebugMode) debugPrint('Failed to get initial link: $e');
     }
 
     _subscription = _appLinks.uriLinkStream.listen(
       _handleUri,
-      onError: (e) => debugPrint('Deep link stream error: $e'),
+      onError: (e) {
+        if (kDebugMode) debugPrint('Deep link stream error: $e');
+      },
     );
   }
 

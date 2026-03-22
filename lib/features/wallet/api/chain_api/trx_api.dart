@@ -62,7 +62,7 @@ class TrxApi {
       {
         'from': '0x$address',
         'to': '0x$contract',
-        'data': '0x70a082310000000000000000000000$addr',
+        'data': '0x70a08231000000000000000000000000$addr',
       },
       'latest',
     ], isTest: isTest);

@@ -29,11 +29,14 @@ mixin _AASendLogicMixin on State<AASendPage> {
       )
       .key;
 
+  static final _addrRegex = RegExp(r'^0x[0-9a-fA-F]{40}$');
+
   Uint8List _buildCallData() {
     final toAddress = toController.text.trim();
-    final amountWei = BigInt.from(
-      ((double.tryParse(amountController.text.trim()) ?? 0.0) * 1e18).toInt(),
-    );
+    final parsed = double.tryParse(amountController.text.trim()) ?? 0.0;
+    final wholePart = BigInt.from(parsed.truncate());
+    final fracPart = BigInt.from(((parsed - parsed.truncate()) * 1e18).round());
+    final amountWei = wholePart * BigInt.from(10).pow(18) + fracPart;
     return CalldataBuilder.buildExecute(
       target: toAddress.isEmpty
           ? '0x0000000000000000000000000000000000000000'
@@ -98,6 +101,17 @@ mixin _AASendLogicMixin on State<AASendPage> {
   }
 
   void showTransactionPreview() {
+    final toAddress = toController.text.trim();
+    if (!_addrRegex.hasMatch(toAddress)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(S.of(context).g_key_t_50)),
+      );
+      return;
+    }
+    final amount = double.tryParse(amountController.text.trim()) ?? 0.0;
+    if (amount <= 0) {
+      return;
+    }
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,

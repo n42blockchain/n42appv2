@@ -86,8 +86,17 @@ class ScreenLockState {
     );
   }
 
-  /// Verify numeric/text password
-  bool verifyPassword(String password) => lockPassword == password;
+  /// Verify numeric/text password (constant-time comparison)
+  bool verifyPassword(String password) {
+    final a = lockPassword;
+    final b = password;
+    if (a.length != b.length) return false;
+    int result = 0;
+    for (int i = 0; i < a.length; i++) {
+      result |= a.codeUnitAt(i) ^ b.codeUnitAt(i);
+    }
+    return result == 0;
+  }
 
   /// Verify gesture pattern
   bool verifyGesture(List<int> gesture) {

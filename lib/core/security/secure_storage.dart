@@ -266,7 +266,7 @@ class SecureStorage {
     try {
       return jsonDecode(value) as T;
     } catch (e) {
-      debugPrint('Failed to decode $label: $e');
+      if (kDebugMode) debugPrint('Failed to decode $label: $e');
       return null;
     }
   }

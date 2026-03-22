@@ -234,7 +234,7 @@ class SendAmountWidget extends StatelessWidget {
                   errorMessage: amountErrorMessage,
                   messageMargin: EdgeInsets.symmetric(
                       horizontal: su.setWidth(30.0)),
-                  rightWidget1: _MaxButton(context: context),
+                  rightWidget1: const _MaxButton(),
                   rightOnTap1: onMaxTap,
                 ),
                 Divider(
@@ -271,12 +271,10 @@ class _BalanceLabel extends StatelessWidget {
 }
 
 class _MaxButton extends StatelessWidget {
-  const _MaxButton({required this.context});
-
-  final BuildContext context;
+  const _MaxButton();
 
   @override
-  Widget build(BuildContext _) {
+  Widget build(BuildContext context) {
     final su = ScreenUtil();
     return Container(
       margin: EdgeInsets.only(left: su.setWidth(10.0)),

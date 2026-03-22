@@ -240,7 +240,7 @@ class DAppPermissionsTracker {
       _mem = map;
       await _save(map);
     } catch (e) {
-      debugPrint('DAppPermissionsTracker.record error: $e');
+      if (kDebugMode) debugPrint('DAppPermissionsTracker.record error: $e');
     }
   }
 
@@ -274,7 +274,7 @@ class DAppPermissionsTracker {
       final decoded = jsonDecode(raw) as Map<String, dynamic>;
       return decoded.map((k, v) => MapEntry(k, (v as List).cast<String>()));
     } catch (e) {
-      debugPrint('DAppPermissionsTracker._load error: $e');
+      if (kDebugMode) debugPrint('DAppPermissionsTracker._load error: $e');
       return {};
     }
   }
@@ -283,7 +283,7 @@ class DAppPermissionsTracker {
     try {
       await (await _prefs()).setString(_spKey, jsonEncode(map));
     } catch (e) {
-      debugPrint('DAppPermissionsTracker._save error: $e');
+      if (kDebugMode) debugPrint('DAppPermissionsTracker._save error: $e');
     }
   }
 }

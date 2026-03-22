@@ -82,7 +82,7 @@ extension TransactionApiBtcSolTrx on TransactionApi {
         mm.data = list;
       } else {
         mm.error = true;
-        mm.data = data['message'];
+        mm.data = 'No data returned';
       }
     } catch (e) {
       mm.error = true;

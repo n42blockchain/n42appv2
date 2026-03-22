@@ -258,7 +258,7 @@ class EvmTransferHandler extends BaseTransferHandler {
     final gasPrice2Hex = dataUtils.bigIntToHex(gasPrice2, need0x: false);
     final amountHex = dataUtils.bigIntToHex(valuePrice, need0x: false);
     final chainIdHex = dataUtils.bigIntToHex(BigInt.from(chainId), need0x: false);
-    final gasLimitHex = dataUtils.bigIntToHex(BigInt.from(gas * 4), need0x: false);
+    final gasLimitHex = dataUtils.bigIntToHex(BigInt.from((gas * 1.2).ceil()), need0x: false);
 
     String messageHex = '';
     if (message != null) {
