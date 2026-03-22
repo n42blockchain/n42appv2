@@ -350,8 +350,7 @@ class _RedeemState extends ConsumerState<Redeem> {
         "m/44'/60'/0'/0/0",
       );
     }
-    final epk = EthPrivateKey(base64Decode(privateKey));
-    final rData = await token.getDepositAmount(p2wshAddr, credentials: epk);
+    final rData = await token.getDepositAmount(p2wshAddr);
     if (kDebugMode) debugPrint(rData);
   }
 

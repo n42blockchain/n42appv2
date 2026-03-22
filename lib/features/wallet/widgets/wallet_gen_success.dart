@@ -4,57 +4,42 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:flutter/material.dart';
 
 Widget successView(String title) {
-  return Container(
-    padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12),
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(12.0),
-      // color: Colors.white,
-      color: AppThemeUtils.getColorByKey(AppGlobals.navigatorKey.currentContext, AppThemeKeys.itemBgColor.name),
-    ),
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        const Icon(
-          Icons.check_circle_outline,
-          color: Color(0xFF448BDF),
-          size: 36,
-        ),
-        Text(
-          title,
-          style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  AppGlobals.navigatorKey.currentContext,
-                  AppThemeKeys.mainTextColor.name),
-              fontSize: 15),
-        ),
-      ],
-    ),
+  return _statusView(
+    title: title,
+    icon: Icons.check_circle_outline,
+    iconColor: const Color(0xFF448BDF),
   );
 }
 
-/// 创建钱包失败
 Widget createWalletErrView(String title) {
+  return _statusView(
+    title: title,
+    icon: Icons.cancel_outlined,
+    iconColor: Colors.redAccent,
+  );
+}
+
+Widget _statusView({
+  required String title,
+  required IconData icon,
+  required Color iconColor,
+}) {
+  final context = AppGlobals.navigatorKey.currentContext;
   return Container(
     padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12),
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(12.0),
-      // color: Colors.white,
-      color: AppThemeUtils.getColorByKey(AppGlobals.navigatorKey.currentContext, AppThemeKeys.itemBgColor.name),
+      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
     ),
     child: Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Icon(
-          Icons.cancel_outlined,
-          color: Colors.redAccent,
-          size: 36,
-        ),
+        Icon(icon, color: iconColor, size: 36),
         Text(
           title,
           style: TextStyle(
               color: AppThemeUtils.getColorByKey(
-                  AppGlobals.navigatorKey.currentContext,
-                  AppThemeKeys.mainTextColor.name),
+                  context, AppThemeKeys.mainTextColor.name),
               fontSize: 15),
         ),
       ],

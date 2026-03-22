@@ -1,4 +1,4 @@
-﻿import 'package:n42_wallet/core/app/app_globals.dart';
+import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 
@@ -8,7 +8,6 @@ class Notification {
   /// main 初始化
   Future<void> init() async {
     const AndroidInitializationSettings android =  AndroidInitializationSettings("@mipmap/ic_launcher");
-    // var ios = const IOSInitializationSettings();
     DarwinInitializationSettings ios = const DarwinInitializationSettings(
       requestAlertPermission: true,
       requestBadgePermission: true,
@@ -28,9 +27,25 @@ class Notification {
             case NotificationResponseType.selectedNotificationAction:
               break;
           }
-
         }
+    );
+  }
 
+  /// 构建 Android 通知详情
+  AndroidNotificationDetails _buildAndroidDetails({
+    bool playSound = true,
+    Importance importance = Importance.max,
+    bool autoCancel = false,
+    bool ongoing = false,
+  }) {
+    return AndroidNotificationDetails(
+        'nftWallet_channelId',
+        S.of(AppGlobals.navigatorKey.currentContext!).importantNotice,
+        importance: importance,
+        priority: Priority.high,
+        autoCancel: autoCancel,
+        ongoing: ongoing,
+        playSound: playSound,
     );
   }
 
@@ -44,36 +59,8 @@ class Notification {
   /// notificationId指定时，不在根据时间生成
   void send(String title, String body, {int? notificationId, String? params,bool playSound = true}) async{
     try {
-      // 构建描述
-      /**
-       * 通知渠道 大部分厂家通知渠道归类通知类别
-       * channelId 这个是一个标识  Android8.0+每个通知都要加这个channelId标识重要程度 是否弹窗 是否通知 是否发出声音
-       * channelName 这个可以自己随意命名定义 安装后 到当前应用详情通知功能看到这个名字 创建多少个渠道就有多少条，
-       *              用于手机查看每个通知渠道 这是用于用户可以单独设置每个通知渠道的显示程度
-       * TIP: 同一种重要程度渠道可以创建多个，channelID 和channelName设置不同就行 这里我只写了官方重要级别到几种
-       * */
-      var androidDetails = AndroidNotificationDetails(
-          'nftWallet_channelId', //id可以随意一点
-          ///这个会显示在手机设置 通知管理 app 通知设置列表中 不要瞎写
-          // '重要通知',
-          S.of(AppGlobals.navigatorKey.currentContext!).importantNotice,
+      var androidDetails = _buildAndroidDetails(playSound: playSound);
 
-          ///通知的级别
-          importance: Importance.max,
-          priority: Priority.high,
-
-          // icon: ''//可以单独设置每次发送通知的图标
-
-          //显示进度条 3个参数必须同时设置
-          // progress: 19,
-          // maxProgress: 100,
-          // showProgress: true
-
-          //是否播放声音
-          playSound: playSound
-      );
-
-      // ios的通知
       const String darwinNotificationCategoryPlain = 'plainCategory';
       DarwinNotificationDetails iosNotificationDetails =
       DarwinNotificationDetails(
@@ -83,11 +70,8 @@ class Notification {
           presentBadge: true
       );
 
-
       var details = NotificationDetails(android: androidDetails, iOS: iosNotificationDetails);
 
-      // 显示通知, 第一个参数是id,id如果一致则会覆盖之前的通知
-      // String? payload, 点击时可以拿到的参数
       // flutter_local_notifications 20.0.0 使用命名参数
       await np.show(
           id: notificationId ?? DateTime.now().millisecondsSinceEpoch >> 10,
@@ -101,31 +85,14 @@ class Notification {
   }
 
   void sendAndroid(String title ,String body ,{int? notificationId, String? params,bool playSound = true}){
-    var androidDetails = AndroidNotificationDetails(
-        'nftWallet_channelId', //id可以随意一点
-        ///这个会显示在手机设置 通知管理 app 通知设置列表中 不要瞎写
-        // '重要通知',
-        S.of(AppGlobals.navigatorKey.currentContext!).importantNotice,
-
-        ///通知的级别
-        importance: Importance.high,
-        priority: Priority.high,
-        autoCancel: true,
-        ongoing: true,
-        // icon: ''//可以单独设置每次发送通知的图标
-
-        //显示进度条 3个参数必须同时设置
-        // progress: 19,
-        // maxProgress: 100,
-        // showProgress: true
-
-        //是否播放声音
-        playSound: playSound
+    var androidDetails = _buildAndroidDetails(
+      playSound: playSound,
+      importance: Importance.high,
+      autoCancel: true,
+      ongoing: true,
     );
-    var details = NotificationDetails(android: androidDetails,);
+    var details = NotificationDetails(android: androidDetails);
 
-    // 显示通知, 第一个参数是id,id如果一致则会覆盖之前的通知
-    // String? payload, 点击时可以拿到的参数
     // flutter_local_notifications 20.0.0 使用命名参数
     np.show(
         id: notificationId ?? DateTime.now().millisecondsSinceEpoch >> 10,

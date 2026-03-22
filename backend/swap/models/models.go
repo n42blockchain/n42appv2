@@ -89,11 +89,11 @@ const (
 
 type APIResp struct {
 	Code int         `json:"code"`
-	Data interface{} `json:"data,omitempty"`
+	Data any `json:"data,omitempty"`
 	Err  string      `json:"err,omitempty"`
 }
 
-func OK(data interface{}) APIResp {
+func OK(data any) APIResp {
 	return APIResp{Code: 200, Data: data}
 }
 

@@ -49,100 +49,53 @@ class SettingHomePage extends ConsumerWidget {
     return locale.languageCode;
   }
 
+  Widget _settingCard(BuildContext context, {required Widget child}) {
+    return Container(
+      alignment: Alignment.centerLeft,
+      margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10.0)),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(16.0))),
+        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+      ),
+      child: child,
+    );
+  }
+
   Widget _buildNavEnter(BuildContext context, WidgetRef ref, String appSysLang) {
     return Column(
       children: [
-        Container(
-          alignment: Alignment.centerLeft,
-          margin: EdgeInsets.symmetric(
-              vertical: ScreenUtil().setWidth(10.0)),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(
-                Radius.circular(ScreenUtil().setWidth(16.0))),
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-          ),
-          child: Column(
-            children: [
-              NavSettingItem(
-                path: "assets/home/setting/language.png",
-                action: S.of(context).s_key_4,
-                imgColor: Colors.blueAccent,
-                callback: () async {
-                  final returnStr = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              SettingSysLanguage(appSysLang)));
-                  if (returnStr != null && returnStr is String) {
-                    // Update locale via Riverpod - UI will automatically update
-                    ref.read(localeProvider.notifier).setLocale(returnStr);
-                  }
-                },
-              ),
-            ],
-          ),
-        ),
-        Container(
-          alignment: Alignment.centerLeft,
-          margin: EdgeInsets.symmetric(
-              vertical: ScreenUtil().setWidth(10.0)),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(
-                Radius.circular(ScreenUtil().setWidth(16.0))),
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-          ),
-          child: Column(
-            children: [
-              NavSettingItem(
-                path: "assets/home/setting/nav_img_7.png",
-                action: S.of(context).s_key_5,
-                imgColor: Colors.blueAccent,
-                callback: () {
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) {
-                    return const SettingTheme();
-                  }));
-                },
-              ),
-            ],
-          ),
-        ),
-        Container(
-          alignment: Alignment.centerLeft,
-          margin: EdgeInsets.symmetric(
-              vertical: ScreenUtil().setWidth(10.0)),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(
-                Radius.circular(ScreenUtil().setWidth(16.0))),
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-          ),
-          child: Column(
-            children: [
-              NavSettingItem(
-                path: "assets/home/setting/nav_img_2.png",
-                action: S.of(context).g_browser_key11,
-                imgColor: Colors.blueAccent,
-                callback: () {
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) {
-                    return BrowserSetting();
-                  }));
-                },
-              ),
-            ],
-          ),
-        ),
-        Container(
-          alignment: Alignment.centerLeft,
-          margin: EdgeInsets.symmetric(
-              vertical: ScreenUtil().setWidth(10.0)),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(
-                Radius.circular(ScreenUtil().setWidth(16.0))),
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-          ),
-          child: _buildMiningVersionToggle(context, ref),
-        ),
+        _settingCard(context, child: NavSettingItem(
+          path: "assets/home/setting/language.png",
+          action: S.of(context).s_key_4,
+          imgColor: Colors.blueAccent,
+          callback: () async {
+            final returnStr = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        SettingSysLanguage(appSysLang)));
+            if (returnStr != null && returnStr is String) {
+              ref.read(localeProvider.notifier).setLocale(returnStr);
+            }
+          },
+        )),
+        _settingCard(context, child: NavSettingItem(
+          path: "assets/home/setting/nav_img_7.png",
+          action: S.of(context).s_key_5,
+          imgColor: Colors.blueAccent,
+          callback: () {
+            Navigator.of(context).push(MaterialPageRoute(builder: (_) => const SettingTheme()));
+          },
+        )),
+        _settingCard(context, child: NavSettingItem(
+          path: "assets/home/setting/nav_img_2.png",
+          action: S.of(context).g_browser_key11,
+          imgColor: Colors.blueAccent,
+          callback: () {
+            Navigator.of(context).push(MaterialPageRoute(builder: (_) => BrowserSetting()));
+          },
+        )),
+        _settingCard(context, child: _buildMiningVersionToggle(context, ref)),
       ],
     );
   }

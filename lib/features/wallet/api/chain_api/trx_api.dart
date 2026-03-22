@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:n42_wallet/core/app/app_globals.dart';
+import 'package:n42_wallet/core/config/api_keys_config.dart';
 import 'package:n42_wallet/core/utils/message_model_bridge.dart';
 import 'package:n42_wallet/core/utils/result.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
@@ -17,7 +18,7 @@ class TrxApi {
 
   TrxApi() {
     url = '';
-    header = {'content-type': 'application/json', 'TRON-PRO-API-KEY': 'c0093859-4ae0-47b5-8650-6b14fec2d771'};
+    header = {'content-type': 'application/json', 'TRON-PRO-API-KEY': ApiKeysConfig.tronApiKey};
   }
 
   /// Helper: call baseRPCEth and convert hex result to BigInt

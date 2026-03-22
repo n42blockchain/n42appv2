@@ -160,17 +160,11 @@ func (u *UniswapAdapter) callQuoterV2(
 		SqrtPriceLimitX96: big.NewInt(0),
 	}
 
-	callData, err := parsedABI.Pack("quoteExactInputSingle", params)
-	if err != nil {
-		return nil, fmt.Errorf("pack: %w", err)
-	}
-
 	contract := bind.NewBoundContract(
 		quoterAddr, parsedABI, client, client, client)
-	var results []interface{}
+	var results []any
 	if err = contract.Call(&bind.CallOpts{Context: ctx}, &results,
 		"quoteExactInputSingle", params); err != nil {
-		_ = callData
 		return nil, fmt.Errorf("call: %w", err)
 	}
 	if len(results) == 0 {

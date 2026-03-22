@@ -286,21 +286,18 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
         ],
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: RefreshIndicator(
-                onRefresh: () async {
-                  _refreshTransactions(Load.refresh);
-                  await widget.coinModel.getBalance();
-                },
-                backgroundColor: _tc(AppThemeKeys.mainButtonBgColor.name),
-                color: _tc(AppThemeKeys.mainWhiteColor.name),
-                displacement: ScreenUtil().setWidth(72.0),
-                child: ListView(
-                  controller: _scrollController,
-                  padding: EdgeInsets.zero,
-                  children: [
+        child: RefreshIndicator(
+          onRefresh: () async {
+            _refreshTransactions(Load.refresh);
+            await widget.coinModel.getBalance();
+          },
+          backgroundColor: _tc(AppThemeKeys.mainButtonBgColor.name),
+          color: _tc(AppThemeKeys.mainWhiteColor.name),
+          displacement: ScreenUtil().setWidth(72.0),
+          child: ListView(
+            controller: _scrollController,
+            padding: EdgeInsets.zero,
+            children: [
                     WalletChainInfoBoard(
                       address: widget.coinModel.address,
                       coinType: widget.coinModel.coin['coinType'],
@@ -322,9 +319,6 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
                               builder: (context) => BrowserPage(browserUrl)),
                         );
                       },
-                      tokenAddTap: null,
-                      swapAddTap: null,
-                      sellAddTap: null,
                     ),
                     Divider(
                       height: ScreenUtil().setWidth(1),
@@ -348,11 +342,8 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
                       ),
                     ),
                     _transactionsWidget(),
-                  ],
-                ),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -3,21 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class NavImportWallet extends StatefulWidget {
-  final dynamic onTap;
+class NavImportWallet extends StatelessWidget {
+  final void Function(int)? onTap;
   const NavImportWallet({this.onTap,super.key});
 
-  @override
-  State<NavImportWallet> createState() => _NavImportWalletState();
-}
-
-class _NavImportWalletState extends State<NavImportWallet> {
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        //导入方式
         Text(
           S.of(context).g_key_ex_keystore_16,
           style: TextStyle(
@@ -31,7 +25,7 @@ class _NavImportWalletState extends State<NavImportWallet> {
         ),
         InkWell(
           onTap: (){
-            widget.onTap(1);
+            onTap?.call(1);
           },
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20.0), vertical: ScreenUtil().setWidth(30.0)),
@@ -68,8 +62,6 @@ class _NavImportWalletState extends State<NavImportWallet> {
                       SizedBox(
                         height: ScreenUtil().setWidth(12),
                       ),
-
-                      /// "加密的私钥json",
                       Text(
                         S.of(context).w_key_8,
                         style: TextStyle(
@@ -86,7 +78,7 @@ class _NavImportWalletState extends State<NavImportWallet> {
         ),
         InkWell(
           onTap: (){
-            widget.onTap(0);
+            onTap?.call(0);
           },
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20.0), vertical: ScreenUtil().setWidth(30.0)),
@@ -123,8 +115,6 @@ class _NavImportWalletState extends State<NavImportWallet> {
                       const SizedBox(
                         height: 6,
                       ),
-
-                      /// "加密的私钥json",
                       Text(
                         S.of(context).g_key_ex_keystore_15,
                         style: TextStyle(

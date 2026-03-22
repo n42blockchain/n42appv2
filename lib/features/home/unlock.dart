@@ -115,43 +115,7 @@ class _UnlockState extends ConsumerState<Unlock> {
     final BiometricAuthResult result = await frp.authenticateWithBiometrics();
     if (!mounted) return;
 
-    if (result == BiometricAuthResult.success) {
-      check = true;
-      back();
-      return;
-    }
-
-    // For all non-success results, advance to next auth layer
-    if (result == BiometricAuthResult.userCancelled) {
-      setState(() {
-        _biometricFailed = true;
-        faceShow = true;
-      });
-    } else if (result == BiometricAuthResult.notEnrolled) {
-      ToastUtils.show(S.of(context).g_biometric_not_enrolled);
-      setState(() {
-        _biometricAvailable = false;
-        faceShow = true;
-      });
-    } else if (result == BiometricAuthResult.lockedOut) {
-      ToastUtils.show(S.of(context).g_biometric_locked_out);
-      setState(() {
-        _biometricFailed = true;
-        faceShow = true;
-      });
-    } else if (result == BiometricAuthResult.notAvailable) {
-      ToastUtils.show(S.of(context).g_lock_key7);
-      setState(() {
-        _biometricAvailable = false;
-        faceShow = true;
-      });
-    } else {
-      ToastUtils.show(S.of(context).g_unlock_key7);
-      setState(() {
-        _biometricFailed = true;
-        faceShow = true;
-      });
-    }
+    _handleBiometricResult(result);
   }
 
   /// Retry biometric auth without resetting to the loading state.
@@ -162,26 +126,47 @@ class _UnlockState extends ConsumerState<Unlock> {
     final BiometricAuthResult result = await frp.authenticateWithBiometrics();
     if (!mounted) return;
 
+    _handleBiometricResult(result);
+  }
+
+  /// Handle biometric auth result (shared by initFace and _retryBiometric).
+  void _handleBiometricResult(BiometricAuthResult result) {
     if (result == BiometricAuthResult.success) {
       check = true;
       back();
       return;
     }
 
-    if (result == BiometricAuthResult.userCancelled) {
-      setState(() => _biometricFailed = true);
-    } else if (result == BiometricAuthResult.notEnrolled) {
-      ToastUtils.show(S.of(context).g_biometric_not_enrolled);
-      setState(() => _biometricAvailable = false);
-    } else if (result == BiometricAuthResult.lockedOut) {
-      ToastUtils.show(S.of(context).g_biometric_locked_out);
-      setState(() => _biometricFailed = true);
-    } else if (result == BiometricAuthResult.notAvailable) {
-      ToastUtils.show(S.of(context).g_lock_key7);
-      setState(() => _biometricAvailable = false);
-    } else {
-      ToastUtils.show(S.of(context).g_unlock_key7);
-      setState(() => _biometricFailed = true);
+    switch (result) {
+      case BiometricAuthResult.userCancelled:
+        setState(() {
+          _biometricFailed = true;
+          faceShow = true;
+        });
+      case BiometricAuthResult.notEnrolled:
+        ToastUtils.show(S.of(context).g_biometric_not_enrolled);
+        setState(() {
+          _biometricAvailable = false;
+          faceShow = true;
+        });
+      case BiometricAuthResult.lockedOut:
+        ToastUtils.show(S.of(context).g_biometric_locked_out);
+        setState(() {
+          _biometricFailed = true;
+          faceShow = true;
+        });
+      case BiometricAuthResult.notAvailable:
+        ToastUtils.show(S.of(context).g_lock_key7);
+        setState(() {
+          _biometricAvailable = false;
+          faceShow = true;
+        });
+      default:
+        ToastUtils.show(S.of(context).g_unlock_key7);
+        setState(() {
+          _biometricFailed = true;
+          faceShow = true;
+        });
     }
   }
 

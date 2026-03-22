@@ -11,8 +11,6 @@ extension TransactionApiBtcSolTrx on TransactionApi {
     String address, {
     int? page = 1,
     int? offset = 10,
-    int? fromBlock = 0,
-    int? endBlock = 99999999999,
     bool isTest = false,
   }) async {
     final mm = MessageModel();
@@ -61,8 +59,6 @@ extension TransactionApiBtcSolTrx on TransactionApi {
 
   Future<MessageModel> solTransactionList(
     String address, {
-    int? fromBlock = 0,
-    int? endBlock = 99999999999,
     int? page = 1,
     int? offset = 10,
   }) async {
@@ -72,8 +68,7 @@ extension TransactionApiBtcSolTrx on TransactionApi {
       final requestUrl =
           '${hostUrl}account/solTransfers?account=$address&limit=$offset&offset=$page';
       final h = Map<String, String>.from(header)
-        ..['token'] =
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVhdGVkQXQiOjE3MjI4NDg0NTUxODAsImVtYWlsIjoiamlhbmd5aXdlaUBzdGFybGluay13b3JsZC5jbiIsImFjdGlvbiI6InRva2VuLWFwaSIsImFwaVZlcnNpb24iOiJ2MSIsImlhdCI6MTcyMjg0ODQ1NX0.nN1kusKNvwXb_SUnpFrhsHoYfUuArbiLqC4HHk5UnNI';
+        ..['token'] = ApiKeysConfig.solscanToken;
       final data =
           await BaseApi.requestEmptyH.get(requestUrl, params: {}, header: h);
       if (data != null) {
@@ -97,40 +92,24 @@ extension TransactionApiBtcSolTrx on TransactionApi {
 
   Future<MessageModel> trxTransactionList(
     String address, {
-    int? fromBlock = 0,
-    int? endBlock = 99999999999,
     int? page = 1,
     int? offset = 999999,
   }) async {
-    final mm = MessageModel();
-    try {
-      final hostUrl = getHostByCoinMiniName('TRX');
-      final requestUrl =
-          '${hostUrl}transaction?address=$address&limit=$offset&start=$page&sort=-timestamp&count=true';
-      final h = Map<String, String>.from(header)
-        ..['TRON-PRO-API-KEY'] = '1908ecd1-99f1-4480-9353-c5a643b907b4';
-      final data =
-          await BaseApi.requestEmptyH.get(requestUrl, params: {}, header: h);
-      if (data != null) {
-        final res = data['data'] as List;
-        mm.data =
-            res.map((e) => _parseTrxItem(e, includeToAddress: true)).toList();
-      } else {
-        mm.error = true;
-        mm.data = 'Error';
-      }
-    } catch (e) {
-      mm.error = true;
-      mm.data = e.toString();
-    }
-    return mm;
+    return _fetchTrxTransactions(address, includeToAddress: true, page: page, offset: offset);
   }
 
   Future<MessageModel> trxContractTransactionList(
     String address,
     String contractAddress, {
-    int? fromBlock = 0,
-    int? endBlock = 99999999999,
+    int? page = 1,
+    int? offset = 999999,
+  }) async {
+    return _fetchTrxTransactions(address, includeToAddress: false, page: page, offset: offset);
+  }
+
+  Future<MessageModel> _fetchTrxTransactions(
+    String address, {
+    required bool includeToAddress,
     int? page = 1,
     int? offset = 999999,
   }) async {
@@ -140,13 +119,13 @@ extension TransactionApiBtcSolTrx on TransactionApi {
       final requestUrl =
           '${hostUrl}transaction?address=$address&limit=$offset&start=$page&sort=-timestamp&count=true';
       final h = Map<String, String>.from(header)
-        ..['TRON-PRO-API-KEY'] = '1908ecd1-99f1-4480-9353-c5a643b907b4';
+        ..['TRON-PRO-API-KEY'] = ApiKeysConfig.tronApiKey;
       final data =
           await BaseApi.requestEmptyH.get(requestUrl, params: {}, header: h);
       if (data != null) {
         final res = data['data'] as List;
         mm.data =
-            res.map((e) => _parseTrxItem(e, includeToAddress: false)).toList();
+            res.map((e) => _parseTrxItem(e, includeToAddress: includeToAddress)).toList();
       } else {
         mm.error = true;
         mm.data = 'Error';
@@ -165,7 +144,7 @@ extension TransactionApiBtcSolTrx on TransactionApi {
       final hostUrl = getHostByCoinMiniName('TRX');
       final requestUrl = '${hostUrl}transaction-info?hash=$hash';
       final h = Map<String, String>.from(header)
-        ..['TRON-PRO-API-KEY'] = '1908ecd1-99f1-4480-9353-c5a643b907b4';
+        ..['TRON-PRO-API-KEY'] = ApiKeysConfig.tronApiKey;
       final data =
           await BaseApi.requestEmptyH.get(requestUrl, params: {}, header: h);
       if (data != null) {

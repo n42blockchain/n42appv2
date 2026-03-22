@@ -19,7 +19,6 @@ class Application {
   static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   static RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
   static UserInfo? userInfo;
-  static int currentId = 0;
 
   /// 用户登录
   static Future<void> login(UserInfo info) async {

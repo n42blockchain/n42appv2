@@ -16,8 +16,6 @@ import 'package:n42_wallet/features/mining_v2/pages/mining_today_v2.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_page.dart';
-//暂时屏蔽Earn功能
-//import 'package:n42_wallet/features/earn/pages/earn_page.dart';
 import 'package:n42_wallet/features/wallet/pages/market/market_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -48,8 +46,6 @@ class _HomePageState extends ConsumerState<HomePage>
     with WidgetsBindingObserver {
   final GlobalKey _tabTwo = GlobalKey();
   final GlobalKey _tabThree = GlobalKey();
-  //暂时屏蔽Earn功能
-  final GlobalKey _tabFour = GlobalKey();
   final GlobalKey _tabFive = GlobalKey();
   final GlobalKey _tabSix = GlobalKey();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -67,8 +63,6 @@ class _HomePageState extends ConsumerState<HomePage>
     return [
       const WalletPage(),
       useV2 ? const MiningTodayV2() : const MiningHomePage(),
-      //暂时屏蔽Earn功能
-      //const EarnPage(),
       const MarketPage(),
     ];
   }

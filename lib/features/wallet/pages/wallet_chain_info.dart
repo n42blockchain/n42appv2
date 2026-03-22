@@ -329,9 +329,6 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
                 marketValueStr: '\$${cm.coinPriceString()}',
                 lockAmountStr: null,
                 xmlLockInfoTap: null,
-                tokenAddTap: null,
-                swapAddTap: null,
-                sellAddTap: null,
                 sendTap: handleSend,
                 receiveTap: handleReceive,
                 browserTap: () {

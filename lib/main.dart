@@ -15,7 +15,6 @@ import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/di/injection.dart';
 import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
-import 'package:n42_wallet/features/component/enums/load.dart';
 import 'package:n42_wallet/features/home/home_page.dart';
 import 'package:n42_wallet/features/home/setting/security/security_setting.dart';
 import 'package:n42_wallet/features/splash/splash_page.dart';
@@ -401,9 +400,7 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
   }
   bool _splashComplete = false;
 
-  Widget _widgetPage(Load loadState) {
-    // Splash 完成后直接进入首页，不再依赖 loadState
-    // （getUserInfo 刷新是后台操作，不应阻塞首页渲染）
+  Widget _widgetPage() {
     if (_splashComplete) {
       return HomePage();
     }
@@ -449,7 +446,6 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
         final locale = ref.watch(localeProvider);
         final themeMode = ref.watch(themeModeProvider);
         final accentColor = ref.watch(accentColorProvider);
-        final loadState = ref.watch(appLoadStateProvider);
         return GestureDetector(
           onTap: () {
             //全局
@@ -470,13 +466,12 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
             theme: ThemeAdapter.buildLight(accentColor),
             darkTheme: ThemeAdapter.buildDark(accentColor),
             title: 'N42Wallet',
-            home: _widgetPage(loadState),
+            home: _widgetPage(),
             routes: routes,
             navigatorObservers: <NavigatorObserver>[AppGlobals.routeObserver],
           ),
         );
       },
-      //child: const HomePage(title: 'First Method'),
     );
   }
   //路由
@@ -488,6 +483,5 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
     "/ImportCloudBackup":(context)=>ImportCloudBackup(),
     "/LoginPage":(context)=>LoginPage(),
     "/securitySetting": (context) => SecuritySetting(),
-  //"/BackupOne":(context,)=>BackupOne(),
 };
 }

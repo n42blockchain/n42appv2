@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 import 'package:flustars_flutter3/flustars_flutter3.dart';
 
 class DataUtils{
@@ -35,22 +34,10 @@ class DataUtils{
       return str;
     }
   }
-  /// 打乱数组
+  /// 打乱数组（返回新数组，不修改原数组）
   List shuffle(List arr) {
-    List newArr = [];
-    // newArr.shuffle(); 目前dart提供的有shuffle方法
-    newArr.addAll(arr);
-    for (var i = 1; i < newArr.length; i++) {
-      var j = getRandomInt(0, i);
-      var t = newArr[i];
-      newArr[i] = newArr[j];
-      newArr[j] = t;
-    }
+    final newArr = List.of(arr)..shuffle();
     return newArr;
-  }
-  int getRandomInt(int min, int max) {
-    final random = Random();
-    return random.nextInt((max - min).floor()) + min;
   }
   /// 比较2个集合是否完全一样
   bool sameList(List first, List second) {

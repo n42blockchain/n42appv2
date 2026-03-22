@@ -112,17 +112,10 @@ class AppPushUtils {
     );
     //android上不需要考虑权限的问题
     if (kDebugMode) debugPrint('User granted permission: ${settings.authorizationStatus}');
-    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-    } else if (settings.authorizationStatus ==
-        AuthorizationStatus.provisional) {
+    if (settings.authorizationStatus == AuthorizationStatus.provisional) {
       if (kDebugMode) debugPrint('User granted provisional permission');
-    } else {
-      // 用户拒绝或者未接受许可
-      // 在基于 Apple 的平台上，一旦用户处理了权限请求（授权或拒绝），就无法重新请求权限。用户必须改为通过设备设置 UI 更新权限：
-      // 如果用户完全拒绝权限，他们必须完全启用应用权限。
-      // 如果用户接受请求的权限（无声音），他们必须己专门启用声音选项。
+    } else if (settings.authorizationStatus != AuthorizationStatus.authorized) {
       if (kDebugMode) debugPrint('User declined or has not accepted permission');
-      //首次安装应用 同意之后 也会执行这里的逻辑
     }
 
     ///前台消息
@@ -329,49 +322,6 @@ class AppPushUtils {
   static void removeBadgeCount() {
     FlutterNewBadger.removeBadge();
     cleanNotification();
-  }
-
-  //显示本地通知 test
-  static Future<void> showLocalNotifications() async {
-
-    var androidDetails = AndroidNotificationDetails(
-        'nftWallet_channelId', //id可以随意一点
-        ///这个会显示在手机设置 通知管理 app 通知设置列表中 不要瞎写
-        // '重要通知',
-        "channelName",
-
-        ///通知的级别
-        importance: Importance.max,
-        priority: Priority.high,
-
-        // icon: ''//可以单独设置每次发送通知的图标
-
-        //显示进度条 3个参数必须同时设置
-        // progress: 19,
-        // maxProgress: 100,
-        // showProgress: true
-
-        //是否播放声音
-        playSound: true
-    );
-
-    // ios的通知
-    const String darwinNotificationCategoryPlain = 'plainCategory';
-    DarwinNotificationDetails iosNotificationDetails =
-    DarwinNotificationDetails(
-        categoryIdentifier: darwinNotificationCategoryPlain,
-        presentSound: true,
-        presentAlert: true,
-        presentBadge: true
-    );
-    var notificationDetails = NotificationDetails(android: androidDetails,iOS: iosNotificationDetails);
-    // flutter_local_notifications 20.0.0 使用命名参数
-    flutterLocalNotificationsPlugin.show(
-      id: 100,
-      title: "测试推送",
-      body: "你收到了一条消息",
-      notificationDetails: notificationDetails,
-    );
   }
 
 }

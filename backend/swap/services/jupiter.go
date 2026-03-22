@@ -79,7 +79,7 @@ type jupQuoteResp struct {
 	OtherAmountThreshold string   `json:"otherAmountThreshold"`
 	SwapMode           string      `json:"swapMode"`
 	SlippageBps        int         `json:"slippageBps"`
-	RoutePlan          interface{} `json:"routePlan"`
+	RoutePlan          any `json:"routePlan"`
 }
 
 func (j *JupiterAdapter) fetchQuote(
@@ -116,7 +116,7 @@ func (j *JupiterAdapter) fetchSwap(
 	quoteResp *jupQuoteResp,
 	userPublicKey string,
 ) (string, error) {
-	body := map[string]interface{}{
+	body := map[string]any{
 		"quoteResponse":            quoteResp,
 		"userPublicKey":            userPublicKey,
 		"wrapAndUnwrapSol":         true,

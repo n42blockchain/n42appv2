@@ -76,6 +76,22 @@ class ApiKeysConfig {
     defaultValue: _defaultTonApiKeyTestnet,
   );
 
+  // ==================== TRON ====================
+
+  /// TRON Pro API Key
+  static const String tronApiKey = String.fromEnvironment(
+    'TRON_API_KEY',
+    defaultValue: _defaultTronApiKey,
+  );
+
+  // ==================== Solscan ====================
+
+  /// Solscan API Token
+  static const String solscanToken = String.fromEnvironment(
+    'SOLSCAN_TOKEN',
+    defaultValue: _defaultSolscanToken,
+  );
+
   // ==================== Polkadot / Substrate ====================
 
   /// DOT (Polkadot) Subscan x-api-key
@@ -135,6 +151,8 @@ class ApiKeysConfig {
   static const String _defaultSonicscanKey = 'YOUR_SONICSCAN_API_KEY';
   static const String _defaultTonApiKeyMainnet = '';
   static const String _defaultTonApiKeyTestnet = '';
+  static const String _defaultTronApiKey = '';
+  static const String _defaultSolscanToken = '';
   static const String _defaultDotApiKey = '';
   // AI API key must be provided via --dart-define=AI_API_KEY=<key>
   // Never commit a real key here.
