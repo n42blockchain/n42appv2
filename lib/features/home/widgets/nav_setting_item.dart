@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class NavSettingItem extends StatefulWidget {
+class NavSettingItem extends StatelessWidget {
   final String path;
   final String action;
   final VoidCallback callback;
@@ -13,25 +13,20 @@ class NavSettingItem extends StatefulWidget {
     super.key});
 
   @override
-  State<NavSettingItem> createState() => _NavSettingItemState();
-}
-
-class _NavSettingItemState extends State<NavSettingItem> {
-  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: widget.callback,
+      onTap: callback,
       child: Container(
         padding: EdgeInsets.all(ScreenUtil().setSp(30.0)),
         color: Colors.transparent,
         child: Row(
           children: [
             Image.asset(
-              widget.path,
+              path,
               width: ScreenUtil().setWidth(60.0),
               height: ScreenUtil().setWidth(60.0),
               fit: BoxFit.contain,
-              color: widget.imgColor ,
+              color: imgColor ,
             ),
             Expanded(
               flex: 1,
@@ -40,7 +35,7 @@ class _NavSettingItemState extends State<NavSettingItem> {
                   horizontal: ScreenUtil().setWidth(20.0),
                 ),
                 child: Text(
-                  widget.action,
+                  action,
                   style: TextStyle(
                     color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
                     fontSize: ScreenUtil().setSp(30.0),

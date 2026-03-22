@@ -80,7 +80,9 @@ mixin _StakeLogicMixin on State<StakePage> {
         final key = cm.isTest ? 'balance_test' : 'balance';
         balance = BigInt.tryParse(cm.coin[key] ?? '0') ?? BigInt.zero;
       }
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('[StakeLogic] _loadBalance error: $e');
+    }
     setState(() => _balance = balance);
   }
 

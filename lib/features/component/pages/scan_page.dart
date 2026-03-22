@@ -43,24 +43,10 @@ class _ScanPageState extends State<ScanPage> {
   Future<void> initPlatformState() async {
     if(Platform.isIOS){
       String rData=await Trustdart().getPermissions("Camera");
-      if(rData !=""){
-        if(rData=="notDetermined" || rData=="authorized"){
-          cameraOK=true;
-        }else{
-          cameraOK=false;
-        }
-      }
+      cameraOK = rData == "notDetermined" || rData == "authorized";
     }else{
       var status =await Permission.camera.status;
-      if(status.isPermanentlyDenied){
-        cameraOK=false;
-      }
-      else if(status.isLimited){
-        cameraOK=false;
-      }
-      else{
-        cameraOK=true;
-      }
+      cameraOK = !status.isPermanentlyDenied && !status.isLimited;
     }
     setState(() {});
   }
@@ -76,7 +62,7 @@ class _ScanPageState extends State<ScanPage> {
               flash=await controller?.getFlashStatus()??false;
               setState(() {});
             },
-            icon: Icon(flash==true?Icons.flash_on:Icons.flash_off,color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),),
+            icon: Icon(flash?Icons.flash_on:Icons.flash_off,color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),),
           ),
         ],
       ),
@@ -134,7 +120,7 @@ class _ScanPageState extends State<ScanPage> {
       this.controller = controller;
     });
     controller.scannedDataStream.listen((scanData) {
-        if(back==false){
+        if(!back){
           pop(scanData.code??"");
         }
     });

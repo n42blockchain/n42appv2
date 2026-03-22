@@ -51,10 +51,4 @@ class UrlSecurityAggregator {
       return UrlThreat.safe(url);
     }
   }
-
-  /// Quick synchronous-only check (no network calls).
-  static bool isPhishing(String url) {
-    return PhishingDetector.instance.checkUrl(url) ==
-        PhishingCheckResult.phishing;
-  }
 }

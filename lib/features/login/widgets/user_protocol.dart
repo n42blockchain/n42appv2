@@ -96,45 +96,6 @@ class _UserProtocolState extends State<UserProtocol> {
                           }
                         },
                     ),
-                    /*TextSpan(
-                      text: ",",
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(24.0),
-                        color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.mainTextColor.name),
-                        // decoration: TextDecoration.underline,
-                      ),
-                    ),
-                    TextSpan(
-                      text: S.of(context).g_key_user_p3,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(24.0),
-                        color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.mainBlueColor.name),
-                        decoration: TextDecoration.underline,
-                      ),
-                      // 设置点击事件
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          Navigator.push(context,
-                            MaterialPageRoute(
-                              builder: (_) => BrowserPage(
-                                "${AppConfig.apiUrl['walletamazeBrowser']!}/app-privacy-policy/",
-                                //S.of(context).g_key_user_p3
-                              ),
-                            ),
-                          );
-                        },
-                    ),
-                    TextSpan(
-                      text: ".",
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(24.0),
-                        color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.mainTextColor.name),
-                        // decoration: TextDecoration.underline,
-                      ),
-                    ),*/
                   ]
               ),
               maxLines: 4,

@@ -90,13 +90,8 @@ class ScreenLockState {
   bool verifyPassword(String password) => lockPassword == password;
 
   /// Verify gesture pattern
-  bool verifyGesture(List<int> gesture) {
-    if (gesturePassword.length != gesture.length) return false;
-    for (int i = 0; i < gesture.length; i++) {
-      if (gesturePassword[i] != gesture[i]) return false;
-    }
-    return true;
-  }
+  bool verifyGesture(List<int> gesture) =>
+      listEquals(gesturePassword, gesture);
 }
 
 class ScreenLockNotifier extends StateNotifier<ScreenLockState> {

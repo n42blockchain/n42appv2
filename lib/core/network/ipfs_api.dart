@@ -9,7 +9,7 @@ class IpfsApi {
   Future<Map<String, dynamic>> uploadIPFSImage(
     dynamic file,
     String filename,
-    dynamic sendProgress, {
+    void Function(int, int)? sendProgress, {
     int type = 0,
     CancelToken? cancelToken,
   }) async {

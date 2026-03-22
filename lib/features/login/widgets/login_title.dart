@@ -11,7 +11,7 @@ class LoginTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if(must==true){
+    if(must){
       return Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

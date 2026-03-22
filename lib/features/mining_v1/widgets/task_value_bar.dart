@@ -4,7 +4,7 @@ import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TaskValueBar extends StatelessWidget {
-  const TaskValueBar({Key? key}) : super(key: key);
+  const TaskValueBar({super.key});
 
   @override
   Widget build(BuildContext context) {

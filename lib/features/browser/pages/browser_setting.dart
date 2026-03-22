@@ -82,9 +82,7 @@ class _BrowserSettingState extends State<BrowserSetting> {
               if(widget.webViewController !=null)
                 InkWell(
                   onTap: (){
-                    if(widget.webViewController !=null){
-                      widget.webViewController!.clearLocalStorage();
-                    }
+                    widget.webViewController!.clearLocalStorage();
                   },
                   child: SizedBox(
                     height: ScreenUtil().setWidth(100),

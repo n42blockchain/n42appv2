@@ -85,6 +85,12 @@ class PerformanceConfig {
 
   // ─── 帧率分析 ─────────────────────────────────────────────
 
+  /// 记录一帧的时序数据
+  static void addFrameRecord(FrameTimingRecord record) {
+    if (!isEnabled) return;
+    _frameRecords.add(record);
+  }
+
   /// 平均帧时间（毫秒），无帧数据时返回 0
   static double get averageFrameTime {
     if (_frameRecords.isEmpty) return 0;

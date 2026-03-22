@@ -92,18 +92,6 @@ class MarketDataAggregator {
     return result;
   }
 
-  /// Convenience: get a single coin price.
-  static Future<CoinPrice?> getPrice(String symbol) async {
-    final result = await getPrices([symbol]);
-    return result[symbol.toUpperCase()];
-  }
-
-  /// Get price as a simple double (USD), or null if unavailable.
-  static Future<double?> getPriceUsd(String symbol) async {
-    final cp = await getPrice(symbol);
-    return cp?.priceUsd;
-  }
-
   /// Get prices as a simple symbol→USD map (convenience for bridge).
   static Future<Map<String, double>> getPriceMap(
     List<String> symbols,
@@ -112,11 +100,5 @@ class MarketDataAggregator {
     return {
       for (final entry in result.entries) entry.key: entry.value.priceUsd,
     };
-  }
-
-  /// Clear all caches (useful for testing or manual refresh).
-  static void clearCache() {
-    _cache.clear();
-    _cachedAt = null;
   }
 }

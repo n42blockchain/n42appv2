@@ -58,11 +58,6 @@ class BaseHttp {
   // Initialization
   // ---------------------------------------------------------------------------
 
-  /// Reset Dio connection with optional test mode
-  void reSetDio(bool isTest) {
-    _initDio();
-  }
-
   void _initDio() {
     _options = _buildBaseOptions();
     _dio = Dio(_options)..interceptors.add(CircuitBreakerInterceptor());
@@ -96,16 +91,11 @@ class BaseHttp {
   // Content-Type helpers
   // ---------------------------------------------------------------------------
 
-  String get _contentTypeString {
-    switch (headerType) {
-      case 0:
-        return 'application/json';
-      case 1:
-        return 'multipart/form-data';
-      default:
-        return 'application/x-www-form-urlencoded';
-    }
-  }
+  String get _contentTypeString => switch (headerType) {
+        0 => 'application/json',
+        1 => 'multipart/form-data',
+        _ => 'application/x-www-form-urlencoded',
+      };
 
   static const String _contentTypeKey = 'content-type';
 
@@ -196,64 +186,48 @@ class BaseHttp {
 
   /// Handle Dio exceptions
   String _handleDioError(DioException error) {
-    switch (error.type) {
-      case DioExceptionType.connectionTimeout:
-      case DioExceptionType.receiveTimeout:
-      case DioExceptionType.sendTimeout:
-      case DioExceptionType.connectionError:
-        return S.current.g_key_error_4;
-      case DioExceptionType.badCertificate:
-        return S.current.g_key_error_27;
-      case DioExceptionType.badResponse:
-        final response = error.response;
-        if (response == null) return S.current.g_key_error_28;
-        final data = response.data;
-        if (data is Map && data.containsKey('error')) {
-          final errorData = data['error'];
-          if (errorData is Map && errorData.containsKey('message')) {
-            return errorData['message'].toString();
-          }
-          if (errorData is String) return errorData;
-        }
-        return _handleHttpError(response.statusCode);
-      case DioExceptionType.cancel:
-        return S.current.g_key_error_8;
-      case DioExceptionType.unknown:
-        return S.current.g_key_error_10;
+    return switch (error.type) {
+      DioExceptionType.connectionTimeout ||
+      DioExceptionType.receiveTimeout ||
+      DioExceptionType.sendTimeout ||
+      DioExceptionType.connectionError =>
+        S.current.g_key_error_4,
+      DioExceptionType.badCertificate => S.current.g_key_error_27,
+      DioExceptionType.badResponse => _handleBadResponse(error.response),
+      DioExceptionType.cancel => S.current.g_key_error_8,
+      DioExceptionType.unknown => S.current.g_key_error_10,
+    };
+  }
+
+  String _handleBadResponse(Response<dynamic>? response) {
+    if (response == null) return S.current.g_key_error_28;
+    final data = response.data;
+    if (data is Map && data.containsKey('error')) {
+      final errorData = data['error'];
+      if (errorData is Map && errorData.containsKey('message')) {
+        return errorData['message'].toString();
+      }
+      if (errorData is String) return errorData;
     }
+    return _handleHttpError(response.statusCode);
   }
 
   /// Handle HTTP error codes
-  String _handleHttpError(int? errorCode) {
-    switch (errorCode) {
-      case 400:
-        return S.current.g_key_error_11;
-      case 401:
-        return S.current.g_key_error_12;
-      case 403:
-        return S.current.g_key_error_13;
-      case 404:
-        return S.current.g_key_error_14;
-      case 408:
-        return S.current.g_key_error_15;
-      case 429:
-        return S.current.g_key_error_23;
-      case 500:
-        return S.current.g_key_error_16;
-      case 501:
-        return S.current.g_key_error_17;
-      case 502:
-        return S.current.g_key_error_18;
-      case 503:
-        return S.current.g_key_error_19;
-      case 504:
-        return S.current.g_key_error_20;
-      case 505:
-        return S.current.g_key_error_21;
-      default:
-        return '${S.current.g_key_error_22}$errorCode';
-    }
-  }
+  String _handleHttpError(int? errorCode) => switch (errorCode) {
+        400 => S.current.g_key_error_11,
+        401 => S.current.g_key_error_12,
+        403 => S.current.g_key_error_13,
+        404 => S.current.g_key_error_14,
+        408 => S.current.g_key_error_15,
+        429 => S.current.g_key_error_23,
+        500 => S.current.g_key_error_16,
+        501 => S.current.g_key_error_17,
+        502 => S.current.g_key_error_18,
+        503 => S.current.g_key_error_19,
+        504 => S.current.g_key_error_20,
+        505 => S.current.g_key_error_21,
+        _ => '${S.current.g_key_error_22}$errorCode',
+      };
 
   // ---------------------------------------------------------------------------
   // Public HTTP methods

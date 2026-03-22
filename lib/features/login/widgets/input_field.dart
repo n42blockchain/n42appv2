@@ -1,6 +1,4 @@
-﻿import 'dart:io';
-
-import 'package:n42_wallet/features/login/api/handtype.dart';
+﻿import 'package:n42_wallet/features/login/api/handtype.dart';
 import 'package:n42_wallet/features/login/widgets/captcha_button.dart';
 import 'package:n42_wallet/features/login/widgets/view_pwd_icon.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
@@ -25,7 +23,7 @@ class InputField extends StatefulWidget {
   final HandType? codeType;
 
   //键盘事件
-  final dynamic onEditingComplete;
+  final VoidCallback? onEditingComplete;
   const InputField({required this.type,
     required this.controller,
     required this.hintText,
@@ -69,7 +67,6 @@ class _InputFieldState extends State<InputField> {
     });
   }
 
-  //清楚按钮图标
   Widget cleanIcon() => GestureDetector(
     child: const Icon(
       Icons.cancel_outlined,
@@ -77,14 +74,6 @@ class _InputFieldState extends State<InputField> {
     ),
     onTap: () => widget.controller.text = '',
   );
-
-  // 安卓手机下文字不居中
-  EdgeInsets padding() {
-    final left = widget.type == InputFieldType.email ? -5.0 : 0.0;
-    return Platform.isIOS
-        ? EdgeInsets.only(left: left)
-        : EdgeInsets.fromLTRB(left, -2, 0, 0);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -126,11 +115,7 @@ class _InputFieldState extends State<InputField> {
               inputFormatters: widget.type == InputFieldType.captcha
                   ? [LengthLimitingTextInputFormatter(widget.inputLength)]
                   : null,
-              onEditingComplete: () {
-                if(widget.onEditingComplete !=null){
-                  widget.onEditingComplete();
-                }
-              },
+              onEditingComplete: widget.onEditingComplete,
             ),
           ),
 

@@ -142,14 +142,6 @@ class ApiKeysConfig {
 
   // ==================== Validation ====================
 
-  /// 检查 API keys 是否已配置
-  static bool get isConfigured {
-    return infuraMainnet != _defaultInfuraKey &&
-        etherscan != _defaultEtherscanKey &&
-        tonApiKeyMainnet.isNotEmpty &&
-        dotApiKey.isNotEmpty;
-  }
-
   /// 在 Debug 模式下验证 API keys 配置
   static void validateInDebug() {
     if (!kDebugMode) return;

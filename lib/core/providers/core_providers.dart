@@ -65,7 +65,7 @@ class CurrentUserNotifier extends StateNotifier<SharedUserInfo?> {
         state = SharedUserInfo.fromJson(userJson);
       }
     } catch (e) {
-      // Ignore loading errors
+      debugPrint('CurrentUserNotifier._loadFromStorage error: $e');
     }
   }
 
@@ -129,6 +129,23 @@ final appInitializedProvider = StateProvider<bool>((ref) => false);
 ///
 /// Not autoDispose: this is a one-shot initialization provider.
 /// Its completed state is intentionally kept alive for the lifetime of the app.
+SharedUserInfo _toSharedUserInfo(UserInfo u) => SharedUserInfo(
+      uuid: u.uuid ?? '',
+      email: u.email ?? '',
+      name: u.name,
+      avatarUrl: u.image,
+      token: u.token,
+      image: u.image,
+      desc: u.desc,
+    );
+
+Future<void> _syncTokenToSecureStorage(
+    SecureStorage secureStorage, UserInfo userInfo) async {
+  if (userInfo.token != null && userInfo.token!.isNotEmpty) {
+    await secureStorage.saveToken(userInfo.token!);
+  }
+}
+
 final appInitProvider = FutureProvider<void>((ref) async {
   final spUtil = ref.read(spUtilProvider);
   final secureStorage = SecureStorage();
@@ -137,20 +154,8 @@ final appInitProvider = FutureProvider<void>((ref) async {
     if (userInfoJson != null) {
       final userInfo = UserInfo.fromJson(userInfoJson);
       AppGlobals.userInfo = userInfo;
-      // Sync token to SecureStorage on startup load
-      if (userInfo.token != null && userInfo.token!.isNotEmpty) {
-        await secureStorage.saveToken(userInfo.token!);
-      }
-      final sharedInfo = SharedUserInfo(
-        uuid: userInfo.uuid ?? '',
-        email: userInfo.email ?? '',
-        name: userInfo.name,
-        avatarUrl: userInfo.image,
-        token: userInfo.token,
-        image: userInfo.image,
-        desc: userInfo.desc,
-      );
-      ref.read(currentUserProvider.notifier).setUser(sharedInfo);
+      await _syncTokenToSecureStorage(secureStorage, userInfo);
+      ref.read(currentUserProvider.notifier).setUser(_toSharedUserInfo(userInfo));
 
       // Fetch fresh user info from server (with timeout to prevent startup hang)
       final loginApi = UserInfoApi();
@@ -161,20 +166,8 @@ final appInitProvider = FutureProvider<void>((ref) async {
       ).timeout(const Duration(seconds: 8), onTimeout: () => null);
       if (freshUser != null) {
         AppGlobals.userInfo = freshUser;
-        // Sync fresh token to SecureStorage
-        if (freshUser.token != null && freshUser.token!.isNotEmpty) {
-          await secureStorage.saveToken(freshUser.token!);
-        }
-        final freshShared = SharedUserInfo(
-          uuid: freshUser.uuid ?? '',
-          email: freshUser.email ?? '',
-          name: freshUser.name,
-          avatarUrl: freshUser.image,
-          token: freshUser.token,
-          image: freshUser.image,
-          desc: freshUser.desc,
-        );
-        ref.read(currentUserProvider.notifier).setUser(freshShared);
+        await _syncTokenToSecureStorage(secureStorage, freshUser);
+        ref.read(currentUserProvider.notifier).setUser(_toSharedUserInfo(freshUser));
         await spUtil.saveUserInfo(freshUser);
       }
     }
@@ -182,10 +175,6 @@ final appInitProvider = FutureProvider<void>((ref) async {
     debugPrint('appInitProvider._getUserInfo error: $e');
   }
 
-  // Load lock screen data
-  // (ScreenLockNotifier loads from storage in its constructor)
-  // Just ensure the provider is read so it initializes
   ref.read(screenLockProvider);
-
   ref.read(appLoadStateProvider.notifier).state = Load.finish;
 });
