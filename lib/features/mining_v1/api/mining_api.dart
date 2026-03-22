@@ -88,8 +88,10 @@ class MiningApi {
   static Future<EthPrivateKey> _getCredentials() async {
     await createToken();
     final privateKey = await getPrivateKey();
-    assert(privateKey != null);
-    return EthPrivateKey.fromHex(privateKey!);
+    if (privateKey == null) {
+      throw StateError('Failed to derive private key for mining');
+    }
+    return EthPrivateKey.fromHex(privateKey);
   }
 
   static Future deposit(String pubKey, String msg, BigInt value) async {

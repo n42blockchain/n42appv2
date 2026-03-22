@@ -107,6 +107,8 @@ class WalletEntity extends Equatable {
 ///
 /// Represents a token or coin asset in a wallet.
 class AssetEntity extends Equatable {
+  static final RegExp _trailingZeros = RegExp(r'0+$');
+
   /// Asset symbol (e.g., 'ETH', 'BTC')
   final String symbol;
 
@@ -158,7 +160,7 @@ class AssetEntity extends Equatable {
     final trimmed = fraction
         .toString()
         .padLeft(decimals, '0')
-        .replaceAll(RegExp(r'0+$'), '');
+        .replaceAll(_trailingZeros, '');
     return trimmed.isEmpty ? whole.toString() : '$whole.$trimmed';
   }
 

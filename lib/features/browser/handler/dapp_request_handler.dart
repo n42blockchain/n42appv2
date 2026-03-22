@@ -191,6 +191,10 @@ class DAppRequestHandler {
 
   Future<String> _handleSignTypedData(String method, List<dynamic> params) async {
     if (params.length < 2) throw 'Invalid params';
+    final requestedAddress = (params[0] as String).toLowerCase();
+    if (requestedAddress != address.toLowerCase()) {
+      throw {'code': -32602, 'message': 'Address mismatch'};
+    }
     final jsonData = params[1] as String;
 
     final approved = await _requestApproval(

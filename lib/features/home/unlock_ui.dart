@@ -279,7 +279,7 @@ extension on _UnlockState {
               color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
               fontSize: ScreenUtil().setSp(30.0),
             ),
-            recognizer: TapGestureRecognizer()
+            recognizer: _loginTapRecognizer
               ..onTap = () async {
                 String tokenId = AppGlobals.userInfo?.token ?? "";
                 await Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));

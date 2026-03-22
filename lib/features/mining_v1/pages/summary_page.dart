@@ -52,8 +52,8 @@ class _SummaryPageState extends State<SummaryPage>
 
   @override
   void dispose() {
-    super.dispose();
     eventBusFn.cancel();
+    super.dispose();
   }
 
   @override

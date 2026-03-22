@@ -13,6 +13,8 @@ part of 'security_google_vedification.dart';
 /// security settings load/save, and timer management.
 mixin _SecurityGoogleVedificationLogic
     on State<SecurityGoogleVedification> {
+  static final RegExp _totpCodeRegExp = RegExp(r'^\d{6}$');
+
   final TextEditingController pwdTextEditingController = TextEditingController();
   final TextEditingController emailTextEditingController = TextEditingController();
   final TextEditingController googleTextEditingController = TextEditingController();
@@ -197,7 +199,7 @@ mixin _SecurityGoogleVedificationLogic
       });
       return false;
     }
-    if (codeStr.length != 6 || !RegExp(r'^\d{6}$').hasMatch(codeStr)) {
+    if (codeStr.length != 6 || !_totpCodeRegExp.hasMatch(codeStr)) {
       setState(() {
         googleErrorMessage = S.of(context).g_2fa_invalid_format;
       });

@@ -27,7 +27,7 @@ class MiningCacheUtils{
   /// 获取国家code
   /// CN(中国)
   static String? getCountryCode() {
-    final List<Locale> systemLocales = WidgetsBinding.instance.window.locales;
+    final List<Locale> systemLocales = WidgetsBinding.instance.platformDispatcher.locales;
     String? isoCountryCode = systemLocales.first.countryCode;
     debugPrint("isoCountryCode: $isoCountryCode");
     return isoCountryCode;

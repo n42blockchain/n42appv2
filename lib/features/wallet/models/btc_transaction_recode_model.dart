@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:decimal/decimal.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/features/utils/data_utils.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
@@ -106,7 +107,7 @@ class BtcTransactionRecodeModel {
 
   // 赋值 gas
   void setGasDouble(double g) {
-    gas = BigInt.from(g * 100000000).toInt();
+    gas = (Decimal.parse(g.toString()) * Decimal.parse('100000000')).toBigInt().toInt();
   }
 
   String getTxTimeStr() {

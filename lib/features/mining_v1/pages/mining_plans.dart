@@ -20,6 +20,12 @@ class _MiningPlansState extends State<MiningPlans> {
   int currentPage = 0;
   final List<int> depositsList = [50, 100, 500];
 
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   String _titleForPage(int page) => switch (page) {
     0 => S.of(context).g_mining_key_62,
     1 => S.of(context).g_mining_key_61,

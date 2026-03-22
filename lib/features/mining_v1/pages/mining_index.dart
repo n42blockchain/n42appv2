@@ -47,6 +47,12 @@ class _MiningIndexState extends State<MiningIndex> with SingleTickerProviderStat
   }
 
   @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(

@@ -44,7 +44,7 @@ func TestCommit_MissingTxHash(t *testing.T) {
 
 func TestCommit_Success(t *testing.T) {
 	store := &fakeStore{
-		order: &db.Order{OrderID: "ord_abc", Chain: "ETH", TxHash: "0xhash"},
+		order: &db.Order{OrderID: "ord_abc", UserUUID: "user-1", Chain: "ETH", TxHash: "0xhash"},
 	}
 	r := newCommitRouter(store)
 
@@ -52,6 +52,19 @@ func TestCommit_Success(t *testing.T) {
 	w := doPost(r, "/v1/dex/commit", body)
 	if w.Code != http.StatusOK {
 		t.Errorf("status = %d; body: %s", w.Code, w.Body.String())
+	}
+}
+
+func TestCommit_WrongUser(t *testing.T) {
+	store := &fakeStore{
+		order: &db.Order{OrderID: "ord_abc", UserUUID: "user-1", Chain: "ETH"},
+	}
+	r := newCommitRouter(store)
+
+	body := `{"uuid":"attacker","order_id":"ord_abc","tx_hash":"0x123456"}`
+	w := doPost(r, "/v1/dex/commit", body)
+	if w.Code != http.StatusForbidden {
+		t.Errorf("status = %d, want 403; body: %s", w.Code, w.Body.String())
 	}
 }
 

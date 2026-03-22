@@ -178,9 +178,10 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
     setState(() => _avatarUrl = url);
   }
 
+  static final RegExp _evmAddressRegExp = RegExp(r'^0x[0-9a-fA-F]{40}$');
+
   void _validateAddress(String address) {
-    // 简单的地址格式检查（0x + 40 hex）
-    final isValid = RegExp(r'^0x[0-9a-fA-F]{40}$').hasMatch(address);
+    final isValid = _evmAddressRegExp.hasMatch(address);
     widget.onAddressValidated?.call(isValid ? address : null, false);
   }
 

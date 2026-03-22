@@ -32,6 +32,8 @@ class _UnlockState extends ConsumerState<Unlock> {
   bool check = false;
   bool obscure = true;
 
+  final TapGestureRecognizer _loginTapRecognizer = TapGestureRecognizer();
+
   bool faceShow = false;
   bool gestureShow = false;
   bool passwordShow = false;
@@ -186,6 +188,7 @@ class _UnlockState extends ConsumerState<Unlock> {
   void dispose() {
     passwordTimer?.cancel();
     passwordTimer = null;
+    _loginTapRecognizer.dispose();
     super.dispose();
   }
 

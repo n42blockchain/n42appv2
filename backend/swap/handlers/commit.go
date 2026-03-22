@@ -27,8 +27,19 @@ func (h *CommitHandler) Commit(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, models.Fail("invalid request: "+err.Error()))
 		return
 	}
-	if req.OrderID == "" || req.TxHash == "" {
-		c.JSON(http.StatusBadRequest, models.Fail("order_id and tx_hash required"))
+	if req.OrderID == "" || req.TxHash == "" || req.UUID == "" {
+		c.JSON(http.StatusBadRequest, models.Fail("uuid, order_id and tx_hash required"))
+		return
+	}
+
+	// 查询订单，验证所有者
+	order, err := h.db.GetOrder(req.OrderID)
+	if err != nil || order == nil {
+		c.JSON(http.StatusNotFound, models.Fail("order not found"))
+		return
+	}
+	if order.UserUUID != req.UUID {
+		c.JSON(http.StatusForbidden, models.Fail("order does not belong to this user"))
 		return
 	}
 
@@ -38,11 +49,8 @@ func (h *CommitHandler) Commit(c *gin.Context) {
 		return
 	}
 
-	// 查询订单以获取 chain，用于 monitor 轮询
-	order, err := h.db.GetOrder(req.OrderID)
-	if err == nil && order != nil {
-		h.monitor.Watch(req.OrderID, order.Chain, req.TxHash)
-	}
+	// 启动 monitor 轮询
+	h.monitor.Watch(req.OrderID, order.Chain, req.TxHash)
 
 	c.JSON(http.StatusOK, models.OK(true))
 }
