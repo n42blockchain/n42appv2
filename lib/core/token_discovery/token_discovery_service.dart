@@ -66,6 +66,9 @@ class TokenDiscoveryService {
     required Set<String> knownContracts,
     required Set<String> ignoredContracts,
   }) async {
+    // Pre-normalize contract sets to avoid repeated trim+lowercase in inner loops.
+    final normalizedKnown = _normalizeContractSet(knownContracts);
+    final normalizedIgnored = _normalizeContractSet(ignoredContracts);
     final results = <DiscoveredToken>[];
 
     for (final entry in addressByChain.entries) {
@@ -78,22 +81,22 @@ class TokenDiscoveryService {
         if (coinType == 'SOL') {
           chainResult = await _scanSolana(
             address,
-            knownContracts,
-            ignoredContracts,
+            normalizedKnown,
+            normalizedIgnored,
           );
         } else if (_evmExplorers.containsKey(coinType)) {
           chainResult = await _scanEvm(
             coinType: coinType,
             address: address,
-            knownContracts: knownContracts,
-            ignoredContracts: ignoredContracts,
+            knownContracts: normalizedKnown,
+            ignoredContracts: normalizedIgnored,
           );
         } else {
           continue; // non-EVM, non-SOL: skip
         }
         results.addAll(chainResult);
       } catch (e) {
-        debugPrint('[TokenDiscovery] $coinType scan error: $e');
+        if (kDebugMode) debugPrint('[TokenDiscovery] $coinType scan error: $e');
       }
     }
 
@@ -362,12 +365,20 @@ class TokenDiscoveryService {
     }
 
     final normalizedContract = trimmedContract.toLowerCase();
-    for (final tracked in trackedContracts) {
-      if (tracked.trim().toLowerCase() == normalizedContract) {
-        return true;
-      }
+    return trackedContracts.contains(normalizedContract);
+  }
+
+  /// Pre-normalize a set of contract addresses for efficient O(1) lookups.
+  /// Adds both the trimmed original and the lowercased form (for SOL compat).
+  static Set<String> _normalizeContractSet(Set<String> contracts) {
+    final normalized = <String>{};
+    for (final c in contracts) {
+      final trimmed = c.trim();
+      if (trimmed.isEmpty) continue;
+      normalized.add(trimmed); // original case (for SOL)
+      normalized.add(trimmed.toLowerCase()); // lowercased (for EVM)
     }
-    return false;
+    return normalized;
   }
 }
 

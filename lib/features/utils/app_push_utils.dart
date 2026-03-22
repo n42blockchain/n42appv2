@@ -476,9 +476,16 @@ class AppPushUtils {
         'Flushing pending chat notification: roomId=$roomId, eventId=$eventId',
       );
     }
-    await N42Chat.openConversation(roomId);
-    recordHandledChatNotificationTap(roomId: roomId, eventId: eventId);
-    _clearPendingChatNotification();
+    try {
+      await N42Chat.openConversation(roomId);
+      recordHandledChatNotificationTap(roomId: roomId, eventId: eventId);
+    } catch (e) {
+      if (kDebugMode) {
+        debugPrint('flushPendingChatNotification openConversation error: $e');
+      }
+    } finally {
+      _clearPendingChatNotification();
+    }
   }
 
   static bool _wasChatNotificationHandledRecently({

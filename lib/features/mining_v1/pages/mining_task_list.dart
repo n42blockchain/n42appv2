@@ -121,7 +121,7 @@ class _MiningTaskListState extends State<MiningTaskList> {
                       }
                     }
                   } catch (err) {
-                    // err
+                    debugPrint('[MiningTaskList] getData error: $err');
                   }
                   return [];
                 },

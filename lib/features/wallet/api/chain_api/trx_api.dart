@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/config/proxy_config.dart';
 import 'package:n42_wallet/core/utils/message_model_bridge.dart';
@@ -123,8 +123,9 @@ class TrxApi {
       if (proxyData['block_header'] != null) {
         return MessageModel()..data = proxyData['block_header'];
       }
-    } catch (_) {
+    } catch (e) {
       // Fall back to direct TronGrid when proxy is unavailable.
+      debugPrint('[TrxApi] getBlockNowTrx proxy error: $e');
     }
 
     try {
@@ -172,11 +173,13 @@ class TrxApi {
         header: ProxyConfig.mergeAuthHeaders(proxyUrl, header),
         timeout: _kProxyWriteTimeout,
       );
-      if (proxyData['result'] != false) {
-        return MessageModel()..data = proxyData['txid'];
+      final txid = proxyData['txid']?.toString() ?? '';
+      if (proxyData['result'] != false && txid.isNotEmpty) {
+        return MessageModel()..data = txid;
       }
-    } catch (_) {
+    } catch (e) {
       // Fall back to direct TronGrid when proxy is unavailable.
+      debugPrint('[TrxApi] createTransaction proxy error: $e');
     }
 
     try {
@@ -207,7 +210,12 @@ class TrxApi {
       'wallet/broadcasttransaction',
       isTest: isTest,
     );
-    final requestBody = jsonDecode(signStr);
+    final dynamic requestBody;
+    try {
+      requestBody = jsonDecode(signStr);
+    } catch (e) {
+      return MessageModel.error()..data = 'Invalid transaction data: $e';
+    }
 
     try {
       final proxyData = await BaseApi.requestEmptyH.post(
@@ -217,11 +225,13 @@ class TrxApi {
         header: ProxyConfig.mergeAuthHeaders(proxyUrl, header),
         timeout: _kProxyWriteTimeout,
       );
-      if (proxyData['result'] != false) {
-        return MessageModel()..data = proxyData['txid'];
+      final txid = proxyData['txid']?.toString() ?? '';
+      if (proxyData['result'] != false && txid.isNotEmpty) {
+        return MessageModel()..data = txid;
       }
-    } catch (_) {
+    } catch (e) {
       // Fall back to direct TronGrid when proxy is unavailable.
+      debugPrint('[TrxApi] sendTxTrx proxy error: $e');
     }
 
     try {
@@ -273,8 +283,9 @@ class TrxApi {
       if (!data.containsKey('error')) {
         return Result.success(data['result']);
       }
-    } catch (_) {
+    } catch (e) {
       // Fall back to direct TronGrid when proxy is unavailable.
+      debugPrint('[TrxApi] baseRPCEth proxy error: $e');
     }
 
     try {

@@ -15,7 +15,8 @@ Uri? parseWalletConnectUri(String value) {
   return uri;
 }
 
-String? normalizeWalletConnectUriString(String value) {
+String? normalizeWalletConnectUriString(String value, {int _depth = 0}) {
+  if (_depth > 3) return null; // prevent infinite recursion on malicious URIs
   final trimmed = value.trim();
   if (trimmed.isEmpty) return null;
 
@@ -26,7 +27,7 @@ String? normalizeWalletConnectUriString(String value) {
   }
 
   for (final candidate in candidates.whereType<String>()) {
-    final normalized = _normalizeWalletConnectCandidate(candidate);
+    final normalized = _normalizeWalletConnectCandidate(candidate, _depth);
     if (normalized != null) {
       return normalized;
     }
@@ -38,7 +39,7 @@ bool isWalletConnectUriString(String value) {
   return parseWalletConnectUri(value) != null;
 }
 
-String? _normalizeWalletConnectCandidate(String value) {
+String? _normalizeWalletConnectCandidate(String value, int depth) {
   final trimmed = value.trim();
   if (trimmed.startsWith('wc:')) {
     return trimmed;
@@ -50,7 +51,7 @@ String? _normalizeWalletConnectCandidate(String value) {
   for (final key in _walletConnectParamKeys) {
     final nested = uri.queryParameters[key];
     if (nested != null && nested.trim().isNotEmpty) {
-      return normalizeWalletConnectUriString(nested);
+      return normalizeWalletConnectUriString(nested, _depth: depth + 1);
     }
   }
 
@@ -69,7 +70,7 @@ String? _normalizeWalletConnectCandidate(String value) {
       for (final key in _walletConnectParamKeys) {
         final nested = params[key];
         if (nested != null && nested.trim().isNotEmpty) {
-          return normalizeWalletConnectUriString(nested);
+          return normalizeWalletConnectUriString(nested, _depth: depth + 1);
         }
       }
     } catch (_) {

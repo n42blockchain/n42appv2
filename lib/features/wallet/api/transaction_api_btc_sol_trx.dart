@@ -191,12 +191,13 @@ extension TransactionApiBtcSolTrx on TransactionApi {
         header: ProxyConfig.mergeAuthHeaders(proxyUrl, header),
         timeout: _kProxyExplorerTimeout,
       );
-      if (proxyData != null) {
+      if (proxyData is Map && proxyData.isNotEmpty) {
         mm.data = proxyData;
         return mm;
       }
-    } catch (_) {
+    } catch (e) {
       // Fall back to legacy direct request when proxy is unavailable.
+      debugPrint('[TransactionApi] trxTransactionInfoHash proxy error: $e');
     }
 
     try {

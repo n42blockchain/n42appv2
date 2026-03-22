@@ -22,6 +22,7 @@ Future<void> purgeCancelledChatSessionCompat() async {
 
   try {
     await N42Chat.purgeLocalData();
+    await clearPendingCancelledChatDataPurgeCompat();
   } catch (e) {
     debugPrint(
       'purgeCancelledChatSessionCompat secure storage cleanup failed: $e',

@@ -57,7 +57,7 @@ class _MessageListState extends ConsumerState<MessageList> {
           Map<String, dynamic> map = results[index];
           String title = map['subject'];
           int created = (map['created'] ?? 0) as int;
-          // 服务端返回秒级时间戳，转为微秒
+          // 服务端返回秒级时间戳，转为毫秒
           final createdDt = DateTime.fromMillisecondsSinceEpoch(created * 1000);
           final createTime = _dateTimeFmt.format(createdDt);
           map["showDate"] = _dateFmt.format(createdDt);

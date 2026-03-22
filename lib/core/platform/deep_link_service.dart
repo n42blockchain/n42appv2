@@ -148,7 +148,10 @@ class DeepLinkService {
     // Scheme whitelist: only process known safe schemes
     const allowedSchemes = {'n42', 'n42app', 'astraapp', 'https', 'http', 'wc', ''};
     if (!allowedSchemes.contains(uri.scheme.toLowerCase())) {
-      debugPrint('Rejected deep link with unknown scheme: ${uri.scheme}');
+      assert(() {
+        debugPrint('Rejected deep link with unknown scheme: ${uri.scheme}');
+        return true;
+      }());
       return _unknownLink(uri, uri.queryParameters);
     }
 

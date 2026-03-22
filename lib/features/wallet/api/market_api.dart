@@ -65,8 +65,9 @@ class MarketApi {
     if (geckoId.isEmpty) return [];
     try {
       final encodedId = Uri.encodeComponent(geckoId);
-      if (kDebugMode)
+      if (kDebugMode) {
         debugPrint('MarketApi.getOhlcvData: $encodedId days=$days');
+      }
 
       final raw = await ExternalHttp.get(
         '${ProxyConfig.marketOhlcv}?coin_id=$encodedId&vs_currency=usd&days=$days',
@@ -105,8 +106,9 @@ class MarketApi {
     if (geckoId.isEmpty) return empty;
     try {
       final encodedId = Uri.encodeComponent(geckoId);
-      if (kDebugMode)
+      if (kDebugMode) {
         debugPrint('MarketApi.getMarketChart: $encodedId days=$days');
+      }
 
       final raw = await ExternalHttp.get(
         '${ProxyConfig.marketChart}?coin_id=$encodedId&vs_currency=usd&days=$days',
@@ -213,8 +215,9 @@ class MarketApi {
 
       return extractMarketCoinItems(resp['data']);
     } catch (e, st) {
-      if (kDebugMode)
+      if (kDebugMode) {
         debugPrint('MarketApi.getFallbackTrendingCoins error: $e\n$st');
+      }
       return [];
     }
   }
@@ -233,8 +236,9 @@ class MarketApi {
       if (d == null) return {'error': true, 'data': '未找到该币'};
       return {'error': false, 'data': d};
     } catch (e, st) {
-      if (kDebugMode)
+      if (kDebugMode) {
         debugPrint('MarketApi.getWalletCoinsBaseInfo error: $e\n$st');
+      }
       return {'error': true, 'data': e.toString()};
     }
   }

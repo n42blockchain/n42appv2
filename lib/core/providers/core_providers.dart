@@ -163,7 +163,7 @@ final appInitProvider = FutureProvider<void>((ref) async {
       }
     }
   } catch (e) {
-    debugPrint('appInitProvider._getUserInfo error: $e');
+    if (kDebugMode) debugPrint('appInitProvider._getUserInfo error: $e');
   }
 
   // Load lock screen data
@@ -241,6 +241,6 @@ Future<void> _refreshUserInfoInBackground({
       spUtil: spUtil,
     );
   } catch (e) {
-    debugPrint('appInitProvider._refreshUserInfoInBackground error: $e');
+    if (kDebugMode) debugPrint('appInitProvider._refreshUserInfoInBackground error: $e');
   }
 }
