@@ -3,6 +3,8 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
+// ignore_for_file: unused_element
+
 part of 'stake_page.dart';
 
 /// Unstake-specific section widgets: liquid swap view, unbonding warning,

@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_protected_member
+
 part of 'nft_list_page.dart';
 
 extension _NftListPageWidgets on _NftListPageState {

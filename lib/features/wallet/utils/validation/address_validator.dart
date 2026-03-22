@@ -174,7 +174,6 @@ class AddressValidator {
     } catch (_) {
       return null;
     }
-    return null;
   }
 
   /// 从 API 结果中提取已解析的地址，若失败则返回 null

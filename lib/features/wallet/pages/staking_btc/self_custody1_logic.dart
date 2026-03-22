@@ -155,7 +155,7 @@ mixin _SelfCustody1LogicMixin on ConsumerState<SelfCustody1> {
 
   Future<void> sendTrx() async {
     if (privateKey == null || address == null) return;
-    final wifKey = privateKey!.toWif(netVersion: BitcoinNetwork.testnet.wifNetVer);
+    final wifKey = privateKey!.toWif(network: BitcoinNetwork.testnet);
     final hex = await CreateBTCTXV1().createV2(
       wifKey,
       address!,

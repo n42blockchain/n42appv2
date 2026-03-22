@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_protected_member
+
 part of 'wallet_coin_add_all.dart';
 
 /// Chain/token data processing methods for [_WalletCoinAddAllState].
