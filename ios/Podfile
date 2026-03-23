@@ -86,6 +86,9 @@ post_install do |installer|
   runner_project.targets.each do |target|
     if target.name == 'Runner'
       target.build_configurations.each do |config|
+        # MLImage.framework (Google MLKit) has no arm64 simulator slice — use Rosetta (x86_64)
+        config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
+
         # Exclude MobileSdk.xcframework linking on simulator
         # The Swift code uses #if targetEnvironment(simulator) to provide mock implementations
         xcconfig_path = config.base_configuration_reference&.real_path
@@ -100,6 +103,41 @@ post_install do |installer|
           end
         end
       end
+
+      # Fix: add Run Script phase to create missing Info.plist for embedded frameworks (e.g., objective_c.framework)
+      existing_fix = target.build_phases.find { |p|
+        p.is_a?(Xcodeproj::Project::Object::PBXShellScriptBuildPhase) &&
+        p.name == '[Fix] Missing framework Info.plist'
+      }
+      unless existing_fix
+        phase = runner_project.new(Xcodeproj::Project::Object::PBXShellScriptBuildPhase)
+        phase.name = '[Fix] Missing framework Info.plist'
+        phase.shell_script = <<~'SCRIPT'
+          find "$BUILT_PRODUCTS_DIR/$FRAMEWORKS_FOLDER_PATH" -name "*.framework" | while read fw; do
+            plist="$fw/Info.plist"
+            if [ ! -f "$plist" ]; then
+              name=$(basename "$fw" .framework)
+              /usr/libexec/PlistBuddy -c "Add :CFBundleIdentifier string org.grpc.$name" \
+                -c "Add :CFBundleInfoDictionaryVersion string 6.0" \
+                -c "Add :CFBundlePackageType string FMWK" \
+                -c "Add :CFBundleShortVersionString string 1.0" \
+                -c "Add :CFBundleVersion string 1" \
+                "$plist" 2>/dev/null || true
+            fi
+          done
+        SCRIPT
+        # Insert after "Embed Frameworks" phase
+        embed_idx = target.build_phases.index { |p|
+          p.is_a?(Xcodeproj::Project::Object::PBXCopyFilesBuildPhase) ||
+          (p.respond_to?(:name) && p.name.to_s.include?('Embed'))
+        }
+        if embed_idx
+          target.build_phases.insert(embed_idx + 1, phase)
+        else
+          target.build_phases << phase
+        end
+      end
     end
   end
+  runner_project.save
 end
