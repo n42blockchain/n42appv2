@@ -18,7 +18,6 @@ import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/di/injection.dart';
 import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
-import 'package:n42_wallet/features/component/enums/load.dart';
 import 'package:n42_wallet/features/home/home_page.dart';
 import 'package:n42_wallet/features/home/setting/security/security_setting.dart';
 import 'package:n42_wallet/features/splash/splash_page.dart';
@@ -61,6 +60,7 @@ import 'package:n42_wallet/core/config/rpc_config.dart';
 import 'package:n42_wallet/core/security/phishing_detector.dart';
 import 'package:n42_wallet/core/security/secure_storage.dart';
 import 'package:n42_wallet/core/security/wallet_data_migration.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:n42_wallet/features/wallet/n42_api_hub_bridge.dart';
 import 'package:n42_wallet/features/wallet/n42_wallet_bridge.dart';
@@ -96,6 +96,10 @@ void main() async {
       DeviceOrientation.portraitDown,
     ]);
   }
+
+  // 首次安装检测：NSUserDefaults 卸载时会被清除，Keychain 不会
+  // 利用这个差异，在重新安装后清除残留的 Keychain 数据
+  await _clearKeychainOnFreshInstall();
 
   // Initialize Firebase
   await Firebase.initializeApp();
@@ -154,6 +158,34 @@ void main() async {
     ),
   );
 }
+
+/// 首次安装后清除残留 Keychain 数据
+///
+/// iOS Keychain 默认跨 App 重装保留。通过 SharedPreferences（NSUserDefaults）
+/// 的标志位判断是否为全新安装：NSUserDefaults 在卸载时会被清除，Keychain 不会。
+Future<void> _clearKeychainOnFreshInstall() async {
+  if (!Platform.isIOS) return;
+  try {
+    const flagKey = 'n42_keychain_initialized';
+    final prefs = await SharedPreferences.getInstance();
+    final initialized = prefs.getBool(flagKey) ?? false;
+    if (!initialized) {
+      // 全新安装：清除所有残留 Keychain 数据
+      const storage = FlutterSecureStorage(
+        iOptions: IOSOptions(
+          accessibility: KeychainAccessibility.first_unlock_this_device,
+          accountName: 'n42wallet_prefs',
+        ),
+      );
+      await storage.deleteAll();
+      if (kDebugMode) debugPrint('[main] Fresh install detected, Keychain cleared');
+      await prefs.setBool(flagKey, true);
+    }
+  } catch (e) {
+    if (kDebugMode) debugPrint('[main] _clearKeychainOnFreshInstall error: $e');
+  }
+}
+
 
 /// Main Application Widget
 ///
@@ -801,9 +833,7 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
 
   bool _splashComplete = false;
 
-  Widget _widgetPage(Load loadState) {
-    // Splash 完成后直接进入首页，不再依赖 loadState
-    // （getUserInfo 刷新是后台操作，不应阻塞首页渲染）
+  Widget _widgetPage() {
     if (_splashComplete) {
       return HomePage();
     }
@@ -850,7 +880,6 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
         final locale = ref.watch(localeProvider);
         final themeMode = ref.watch(themeModeProvider);
         final accentColor = ref.watch(accentColorProvider);
-        final loadState = ref.watch(appLoadStateProvider);
         return GestureDetector(
           onTap: () {
             //全局
@@ -871,13 +900,12 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
             theme: ThemeAdapter.buildLight(accentColor),
             darkTheme: ThemeAdapter.buildDark(accentColor),
             title: 'N42Wallet',
-            home: _widgetPage(loadState),
+            home: _widgetPage(),
             routes: routes,
             navigatorObservers: <NavigatorObserver>[AppGlobals.routeObserver],
           ),
         );
       },
-      //child: const HomePage(title: 'First Method'),
     );
   }
 
@@ -890,6 +918,5 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
     "/ImportCloudBackup": (context) => ImportCloudBackup(),
     "/LoginPage": (context) => LoginPage(),
     "/securitySetting": (context) => SecuritySetting(),
-    //"/BackupOne":(context,)=>BackupOne(),
   };
 }

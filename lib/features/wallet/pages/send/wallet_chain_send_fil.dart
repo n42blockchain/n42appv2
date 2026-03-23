@@ -35,7 +35,8 @@ part 'wallet_chain_send_fil_widgets.dart';
 
 class WalletChainSendFil extends ConsumerStatefulWidget {
   final CoinModel coinModel;
-  const WalletChainSendFil(this.coinModel, {super.key});
+  final String? initialToAddress;
+  const WalletChainSendFil(this.coinModel, {this.initialToAddress, super.key});
 
   @override
   ConsumerState<WalletChainSendFil> createState() => _WalletChainSendFilState();
@@ -47,6 +48,9 @@ class _WalletChainSendFilState extends ConsumerState<WalletChainSendFil>
   void initState() {
     super.initState();
     valueTextEditingController.text = "0";
+    if (widget.initialToAddress?.isNotEmpty == true) {
+      toTextEditingController.text = widget.initialToAddress!;
+    }
     initData();
   }
 

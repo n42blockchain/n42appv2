@@ -33,37 +33,23 @@ class MiningCacheUtils{
     return isoCountryCode;
   }
 
+  /// 从节点配置获取指定 key 的值（ipAddress / socket）
+  static Future<String> _getNodeValue(String key) async {
+    Map? nodeMap = await SPUtil().getCurrNodeAddress();
+    String? address = nodeMap?[key];
+    if (address != null && address.isNotEmpty) return address;
+    final isMain = await MiningUtils.isMainChainMining();
+    final List<Map> list = miningNodeMap[isMain ? "main" : "test"] as List<Map>;
+    return list[0][key];
+  }
+
   /// 获取当前节点IP
   static Future<String> getCurrentMiningNodeIp() async {
-    Map? nodeMap = await SPUtil().getCurrNodeAddress();
-    String? address = nodeMap?['ipAddress'];
-    debugPrint("current mining node address ip: $address");
-    if (address != null && address.isNotEmpty) return address;
-    late String astServiceUrl;
-    if (await MiningUtils.isMainChainMining()) {
-      List<Map> list = miningNodeMap["main"] as List<Map>;
-      astServiceUrl = list[0]["ipAddress"];
-    } else {
-      List<Map> list = miningNodeMap["test"] as List<Map>;
-      astServiceUrl = list[0]["ipAddress"];
-    }
-    return astServiceUrl;
+    final ip = await _getNodeValue('ipAddress');
+    debugPrint("current mining node address ip: $ip");
+    return ip;
   }
-
 
   /// 获取当前socket地址
-  static Future<String> getCurrentSocketUrl() async {
-    Map? nodeMap = await SPUtil().getCurrNodeAddress();
-    String? address = nodeMap?['socket'];
-    if (address != null && address.isNotEmpty) return address;
-    late String astServiceUrl;
-    if (await MiningUtils.isMainChainMining()) {
-      List<Map> list = miningNodeMap["main"] as List<Map>;
-      astServiceUrl = list[0]["socket"];
-    } else {
-      List<Map> list = miningNodeMap["test"] as List<Map>;
-      astServiceUrl = list[0]["socket"];
-    }
-    return astServiceUrl;
-  }
+  static Future<String> getCurrentSocketUrl() => _getNodeValue('socket');
 }

@@ -1,14 +1,11 @@
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/features/component/enums/load.dart';
-import 'package:n42_wallet/features/home/models/exchange_account_model.dart';
 import 'package:n42_wallet/features/login/api/handtype.dart';
 import 'package:n42_wallet/features/login/api/user_info_api.dart';
 import 'package:n42_wallet/features/login/widgets/input_field.dart';
 import 'package:n42_wallet/features/utils/regular.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
-import 'package:n42_wallet/features/wallet/api/exchange_api.dart';
-import 'package:n42_wallet/features/wallet/api/market_api.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/features/widgets/button_widget.dart';
 import 'package:n42_wallet/features/widgets/dialog_widget/tips_dialog_2.dart';
@@ -37,11 +34,7 @@ class _AccountLogoutPageState extends State<AccountLogoutPage> {
   bool canClick = false;
   String emailCode = '';
 
-  double totalBalance = 0.0;
-
   bool loading = false;
-
-  List<ExchangeAccountModel> balanceData = [];
 
   @override
   void initState() {
@@ -58,62 +51,6 @@ class _AccountLogoutPageState extends State<AccountLogoutPage> {
     super.dispose();
   }
 
-  //检查交易所是否还有余额
-  Future<void> checkExchangeBalance() async {
-    try {
-      setState(() {
-        loading = true;
-      });
-      ExchangeApi exchangeApi = ExchangeApi();
-      final data = await exchangeApi.exchangeBalance('', "binance");
-      if (data != null && data["code"] == 200) {
-        balanceData = (data["data"] as List)
-            .map((e) => ExchangeAccountModel.fromJson(e))
-            .toList();
-        await getCoinInfo(balanceData);
-      }
-    } finally {
-      if (mounted) {
-        setState(() {
-          loading = false;
-        });
-      }
-    }
-  }
-
-  Future<void> getCoinInfo(List<ExchangeAccountModel> eams) async {
-    String searchStr = "";
-    for (ExchangeAccountModel eam in eams) {
-      searchStr += "${(eam.coin ?? '').toLowerCase()},";
-    }
-    if (searchStr == "") {
-      return;
-    }
-    var list = await MarketApi().getWalletCoinsInfo(searchStr);
-    if (list['error']) {
-      totalBalance = 0.0;
-      ToastUtils.show(S.current.g_key_5);
-    } else {
-      List<dynamic> coinMarketInfo = list['data']['data'];
-      double total = 0.0;
-      for (ExchangeAccountModel eam in eams) {
-        double coinPrice = getCoinPriceWithUnit(eam.coin!, coinMarketInfo);
-        total +=
-            coinPrice * (double.parse(eam.over!) + double.parse(eam.lock!));
-      }
-      totalBalance = total;
-    }
-  }
-
-  double getCoinPriceWithUnit(String unit, List<dynamic> coinMarketInfo) {
-    String keyStr = unit.toLowerCase();
-    for (var element in coinMarketInfo) {
-      if (element['coin'] == keyStr) {
-        return element['price'] * 1.0;
-      }
-    }
-    return 0.0;
-  }
 
   void checkStatus() {
     if ( //googleCode.isNotEmpty &&

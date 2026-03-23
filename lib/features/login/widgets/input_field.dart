@@ -18,7 +18,7 @@ class InputField extends StatefulWidget {
 
   final String hintText;
   final HandType? codeType;
-  final dynamic onEditingComplete;
+  final VoidCallback? onEditingComplete;
   const InputField({
     required this.type,
     required this.controller,
@@ -99,9 +99,7 @@ class _InputFieldState extends State<InputField> {
               inputFormatters: widget.type == InputFieldType.captcha
                   ? [LengthLimitingTextInputFormatter(widget.inputLength)]
                   : null,
-              onEditingComplete: widget.onEditingComplete != null
-                  ? () => widget.onEditingComplete()
-                  : null,
+              onEditingComplete: widget.onEditingComplete,
             ),
           ),
           _buildRightView(context)

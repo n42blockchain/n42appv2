@@ -1,0 +1,4 @@
+dependency_overrides:
+  webview_flutter_wkwebview:
+    path: packages/webview_flutter_wkwebview
+  flutter_secure_storage: ^10.0.0

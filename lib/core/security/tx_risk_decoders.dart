@@ -3,9 +3,6 @@
 import 'package:n42_wallet/core/security/tx_risk_formatters.dart';
 import 'package:n42_wallet/core/security/tx_risk_models.dart';
 
-// ERC-20 selectors (used for function name resolution)
-const String selIncAllowance = '0xb0431182';
-
 TxRiskAnalysis decodeErc20Transfer(String params) {
   final fields = <TxRiskField>[];
   if (params.length >= 128) {
@@ -50,7 +47,7 @@ TxRiskAnalysis decodeApprove(String params, String selector) {
   return TxRiskAnalysis(
     level: level,
     functionName:
-        selector == selIncAllowance ? 'Increase Allowance' : 'ERC-20 Approve',
+        selector == '0xb0431182' ? 'Increase Allowance' : 'ERC-20 Approve',
     fields: fields,
     warnings: warnings,
   );

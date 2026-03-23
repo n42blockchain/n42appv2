@@ -32,28 +32,13 @@ class EmptyView extends StatefulWidget {
 }
 
 class _EmptyViewState extends State<EmptyView> {
-  bool? isCanRefresh;
-
-  @override
-  void initState() {
-    super.initState();
-    isCanRefresh = widget.canRefresh;
-    // //如果时网络类型的 可以刷新
-    // if(widget.type == EmptyType.netError){
-    //   isCanRefresh = true;
-    // }
-
-  }
-
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Padding(
-        padding: const EdgeInsets.only(top: 0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (isCanRefresh == true) //是否需要刷新
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          if (widget.canRefresh)
               IconButton(
                   onPressed: widget.onPressed,
                   icon:  Icon(Icons.wifi_protected_setup_outlined,

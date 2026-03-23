@@ -38,7 +38,8 @@ part 'wallet_chain_send_xrp_widgets.dart';
 
 class WalletChainSendXrp extends ConsumerStatefulWidget {
   final CoinModel coinModel;
-  const WalletChainSendXrp(this.coinModel, {super.key});
+  final String? initialToAddress;
+  const WalletChainSendXrp(this.coinModel, {this.initialToAddress, super.key});
 
   @override
   ConsumerState<WalletChainSendXrp> createState() =>
@@ -51,6 +52,9 @@ class _WalletChainSendXrpState extends ConsumerState<WalletChainSendXrp>
   void initState() {
     super.initState();
     valueTextEditingController.text = "0";
+    if (widget.initialToAddress?.isNotEmpty == true) {
+      toTextEditingController.text = widget.initialToAddress!;
+    }
     initData();
   }
 

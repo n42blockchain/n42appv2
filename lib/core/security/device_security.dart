@@ -9,13 +9,6 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 
-/// 安全违规响应动作
-enum SecurityViolationAction {
-  warnAndContinue,
-  restrictFeatures,
-  blockApp,
-}
-
 /// 设备安全状态快照
 class DeviceSecurityStatus {
   final bool isRootedOrJailbroken;
@@ -38,33 +31,6 @@ class DeviceSecurityStatus {
         'isDebuggerAttached: $isDebuggerAttached, '
         'isSecure: $isSecure)';
   }
-}
-
-/// 安全策略配置
-class SecurityPolicyConfig {
-  final SecurityViolationAction onRootDetected;
-  final SecurityViolationAction onEmulatorDetected;
-  final SecurityViolationAction onDebuggerDetected;
-
-  const SecurityPolicyConfig({
-    required this.onRootDetected,
-    required this.onEmulatorDetected,
-    required this.onDebuggerDetected,
-  });
-
-  /// 生产环境策略：Root/越狱限制功能，模拟器/调试器阻断应用
-  static const SecurityPolicyConfig production = SecurityPolicyConfig(
-    onRootDetected: SecurityViolationAction.restrictFeatures,
-    onEmulatorDetected: SecurityViolationAction.blockApp,
-    onDebuggerDetected: SecurityViolationAction.blockApp,
-  );
-
-  /// 开发环境策略：所有违规仅警告，不影响调试流程
-  static const SecurityPolicyConfig development = SecurityPolicyConfig(
-    onRootDetected: SecurityViolationAction.warnAndContinue,
-    onEmulatorDetected: SecurityViolationAction.warnAndContinue,
-    onDebuggerDetected: SecurityViolationAction.warnAndContinue,
-  );
 }
 
 /// 设备安全检测服务

@@ -26,16 +26,28 @@ class Notification {
     );
   }
 
+  /// 构建 Android 通知详情
+  AndroidNotificationDetails _buildAndroidDetails({
+    bool playSound = true,
+    Importance importance = Importance.max,
+    bool autoCancel = false,
+    bool ongoing = false,
+  }) {
+    return AndroidNotificationDetails(
+      'nftWallet_channelId',
+      S.of(AppGlobals.navigatorKey.currentContext!).importantNotice,
+      importance: importance,
+      priority: Priority.high,
+      autoCancel: autoCancel,
+      ongoing: ongoing,
+      playSound: playSound,
+    );
+  }
+
   void send(String title, String body,
       {int? notificationId, String? params, bool playSound = true}) async {
     try {
-      final androidDetails = AndroidNotificationDetails(
-        'nftWallet_channelId',
-        S.of(AppGlobals.navigatorKey.currentContext!).importantNotice,
-        importance: Importance.max,
-        priority: Priority.high,
-        playSound: playSound,
-      );
+      final androidDetails = _buildAndroidDetails(playSound: playSound);
 
       const String darwinNotificationCategoryPlain = 'plainCategory';
       final iosNotificationDetails = DarwinNotificationDetails(
@@ -65,14 +77,11 @@ class Notification {
 
   void sendAndroid(String title, String body,
       {int? notificationId, String? params, bool playSound = true}) {
-    final androidDetails = AndroidNotificationDetails(
-      'nftWallet_channelId',
-      S.of(AppGlobals.navigatorKey.currentContext!).importantNotice,
+    final androidDetails = _buildAndroidDetails(
+      playSound: playSound,
       importance: Importance.high,
-      priority: Priority.high,
       autoCancel: true,
       ongoing: true,
-      playSound: playSound,
     );
     final details = NotificationDetails(android: androidDetails);
 

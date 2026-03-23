@@ -14,7 +14,6 @@ class ResponsiveUtils {
 
   static const double mobileBreakpoint = 600;
   static const double tabletBreakpoint = 900;
-  static const double desktopBreakpoint = 1200;
   /// 内容区域推荐最大宽度（iPad 竖屏约 810pt，限制内容区让布局更紧凑）
   static const double contentMaxWidth = 600;
 

@@ -34,7 +34,8 @@ part 'wallet_chain_send_algo_widgets.dart';
 
 class WalletChainSendAlgo extends ConsumerStatefulWidget {
   final CoinModel coinModel;
-  const WalletChainSendAlgo(this.coinModel, {super.key});
+  final String? initialToAddress;
+  const WalletChainSendAlgo(this.coinModel, {this.initialToAddress, super.key});
 
   @override
   ConsumerState<WalletChainSendAlgo> createState() =>
@@ -47,6 +48,9 @@ class _WalletChainSendAlgoState extends ConsumerState<WalletChainSendAlgo>
   void initState() {
     super.initState();
     valueTextEditingController.text = "0";
+    if (widget.initialToAddress?.isNotEmpty == true) {
+      toTextEditingController.text = widget.initialToAddress!;
+    }
     initData();
   }
 

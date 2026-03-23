@@ -13,8 +13,6 @@ import (
 	"github.com/n42/n42appv2/backend/swap/monitor"
 )
 
-var _ = (*db.DB)(nil) // ensure db import is used for Order type
-
 // ─── Commit 测试 ──────────────────────────────────────────────────────────────
 
 func newCommitRouter(store handlers.DEXStore) *gin.Engine {

@@ -6,7 +6,7 @@ import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SelectPlan extends StatelessWidget {
-  final dynamic onTap;
+  final VoidCallback? onTap;
 
   const SelectPlan({required this.onTap, super.key});
 

@@ -96,23 +96,6 @@ class RpcConfig {
       debugPrint('   Consider upgrading to HTTPS or using VPN/proxy');
     }
   }
-
-  /// 检查 URL 是否安全
-  static bool isSecureUrl(String url) {
-    return url.startsWith('https://') || url.startsWith('wss://');
-  }
-
-  /// 获取安全的 URL（如果可能）
-  /// 如果没有 HTTPS 替代方案，返回原 URL 并打印警告
-  static String getSecureUrl(String url, {String? fallbackHttps}) {
-    if (isSecureUrl(url)) return url;
-    if (fallbackHttps != null) return fallbackHttps;
-
-    if (kDebugMode) {
-      debugPrint('⚠️ [RpcConfig] Using insecure URL: $url');
-    }
-    return url;
-  }
 }
 
 /// 初始化 RPC 配置

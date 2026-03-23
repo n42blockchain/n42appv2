@@ -4,7 +4,7 @@ import 'package:n42_wallet/features/widgets/image_network.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class ItemWallet extends StatefulWidget {
+class ItemWallet extends StatelessWidget {
   final String iconPath;
   final String fullName;
   final String coinType;
@@ -16,13 +16,8 @@ class ItemWallet extends StatefulWidget {
     this.fullName="",
     this.onTap,super.key});
 
-  @override
-  State<ItemWallet> createState() => _ItemWalletState();
-}
-
-class _ItemWalletState extends State<ItemWallet> {
   Widget _buildImage() {
-    if (widget.coinType == CoinType.N.name) {
+    if (coinType == CoinType.N.name) {
       return Image.asset(
         'assets/img/ast.png',
         width: ScreenUtil().setWidth(52.0),
@@ -31,7 +26,7 @@ class _ItemWalletState extends State<ItemWallet> {
       );
     }
     return ImageNetWork(imageUrl:
-      widget.iconPath,
+      iconPath,
       width: ScreenUtil().setWidth(52.0),
       height: ScreenUtil().setWidth(52.0),
       placeholder: "assets/img/list_default.png",
@@ -41,7 +36,7 @@ class _ItemWalletState extends State<ItemWallet> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: widget.onTap,
+      onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
             color:
@@ -70,7 +65,7 @@ class _ItemWalletState extends State<ItemWallet> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        widget.coinType,
+                        coinType,
                         style: TextStyle(
                           color: AppThemeUtils.getColorByKey(
                               context, AppThemeKeys.itemSubtitleTextColor.name),
@@ -81,7 +76,7 @@ class _ItemWalletState extends State<ItemWallet> {
                         width: ScreenUtil().setWidth(6.0),
                       ),
                       Text(
-                        widget.coinAddress,
+                        coinAddress,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(

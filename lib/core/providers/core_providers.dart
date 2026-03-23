@@ -166,11 +166,7 @@ final appInitProvider = FutureProvider<void>((ref) async {
     if (kDebugMode) debugPrint('appInitProvider._getUserInfo error: $e');
   }
 
-  // Load lock screen data
-  // (ScreenLockNotifier loads from storage in its constructor)
-  // Just ensure the provider is read so it initializes
   ref.read(screenLockProvider);
-
   ref.read(appLoadStateProvider.notifier).state = Load.finish;
 });
 

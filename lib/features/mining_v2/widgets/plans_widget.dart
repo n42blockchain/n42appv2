@@ -15,14 +15,10 @@ class PlansWidget extends StatelessWidget {
     String title1 = S.of(context).g_mining_key_6;
     String buttonTitle = S.of(context).g_mining_key_7;
     return GestureDetector(
-      onTap: () {
-        if(onTap!=null){
-          onTap!();
-        }else{
-          Navigator.push(context,MaterialPageRoute(
-            builder: (_) => const MiningPlansV2(),
-          ));
-        }
+      onTap: onTap ?? () {
+        Navigator.push(context,MaterialPageRoute(
+          builder: (_) => const MiningPlansV2(),
+        ));
       },
       child: Container(
         height: ScreenUtil().setWidth(290),

@@ -232,9 +232,78 @@ mixin WalletConnectConnection on ChangeNotifier {
     }
   }
 
-  Future<bool> web3clientInitFromChainId(String eip155) async {
-    final chainId = eip155.split(':')[1];
+  Future<bool> web3clientInitFromChainId(String chainStr) async {
+    final namespace = chainStr.split(':')[0];
+
+    // Solana: no web3client needed, just locate the coin model
+    if (namespace == 'solana') {
+      final idx = coinModels.indexWhere(
+        (cm) => cm.coin['blockchainType'] == BlockchainType.Solana.name,
+      );
+      if (idx == -1) {
+        viewStateDeal(WalletConnectState.error, params: 'Solana chain not configured');
+        return false;
+      }
+      if (coinModelsIndex != idx) setCoinModelsIndex(idx);
+      return true;
+    }
+
+    // Tron: no web3client needed, just locate the coin model
+    if (namespace == 'tron') {
+      final idx = coinModels.indexWhere(
+        (cm) => cm.coin['blockchainType'] == BlockchainType.Tron.name,
+      );
+      if (idx == -1) {
+        viewStateDeal(WalletConnectState.error, params: 'Tron chain not configured');
+        return false;
+      }
+      if (coinModelsIndex != idx) setCoinModelsIndex(idx);
+      return true;
+    }
+
+    // Aptos: no web3client needed
+    if (namespace == 'aptos') {
+      final idx = coinModels.indexWhere(
+        (cm) => cm.coin['blockchainType'] == BlockchainType.Aptos.name,
+      );
+      if (idx == -1) {
+        viewStateDeal(WalletConnectState.error, params: 'Aptos chain not configured');
+        return false;
+      }
+      if (coinModelsIndex != idx) setCoinModelsIndex(idx);
+      return true;
+    }
+
+    // Sui: no web3client needed
+    if (namespace == 'sui') {
+      final idx = coinModels.indexWhere(
+        (cm) => cm.coin['blockchainType'] == BlockchainType.Sui.name,
+      );
+      if (idx == -1) {
+        viewStateDeal(WalletConnectState.error, params: 'Sui chain not configured');
+        return false;
+      }
+      if (coinModelsIndex != idx) setCoinModelsIndex(idx);
+      return true;
+    }
+
+    // NEAR: no web3client needed
+    if (namespace == 'near') {
+      final idx = coinModels.indexWhere(
+        (cm) => cm.coin['blockchainType'] == BlockchainType.Near.name,
+      );
+      if (idx == -1) {
+        viewStateDeal(WalletConnectState.error, params: 'NEAR chain not configured');
+        return false;
+      }
+      if (coinModelsIndex != idx) setCoinModelsIndex(idx);
+      return true;
+    }
+
+    // EIP-155 (Ethereum): use web3client
+    final chainId = chainStr.split(':')[1];
     final chainIndex = coinModels.indexWhere((cm) {
+      if (cm.coin['blockchainType'] != BlockchainType.Ethereum.name) return false;
       final id = (cm.isTest ? cm.coin['chainId_test'] : cm.coin['chainId'])
           .toString();
       return id == chainId;
@@ -252,14 +321,24 @@ mixin WalletConnectConnection on ChangeNotifier {
     try {
       coinModels = globalWapAdapter.coinModels
           .where(
-            (cm) => cm.coin['blockchainType'] == BlockchainType.Ethereum.name,
+            (cm) =>
+                cm.coin['blockchainType'] == BlockchainType.Ethereum.name ||
+                cm.coin['blockchainType'] == BlockchainType.Tron.name ||
+                cm.coin['blockchainType'] == BlockchainType.Solana.name ||
+                cm.coin['blockchainType'] == BlockchainType.Aptos.name ||
+                cm.coin['blockchainType'] == BlockchainType.Sui.name ||
+                cm.coin['blockchainType'] == BlockchainType.Near.name,
           )
           .toList();
 
       if (coinModels.isEmpty) return;
 
       if (chainId == -1) {
-        setCoinModelsIndex(0);
+        // 默认选中第一个 Ethereum 链
+        final ethIndex = coinModels.indexWhere(
+          (cm) => cm.coin['blockchainType'] == BlockchainType.Ethereum.name,
+        );
+        setCoinModelsIndex(ethIndex >= 0 ? ethIndex : 0);
         return;
       }
       // 按指定 chainId 查找匹配项
@@ -288,9 +367,37 @@ mixin WalletConnectConnection on ChangeNotifier {
       if (blockchainType == BlockchainType.Tron.name) {
         return 'tron:0x2b6653dc' == chainId;
       }
+      if (blockchainType == BlockchainType.Solana.name) {
+        return chainId == _solanaMainnetChainId || chainId == _solanaDevnetChainId;
+      }
+      if (blockchainType == BlockchainType.Aptos.name) {
+        return chainId == _aptosMainnetChainId || chainId == _aptosTestnetChainId;
+      }
+      if (blockchainType == BlockchainType.Sui.name) {
+        return chainId == _suiMainnetChainId || chainId == _suiTestnetChainId;
+      }
+      if (blockchainType == BlockchainType.Near.name) {
+        return chainId == _nearMainnetChainId || chainId == _nearTestnetChainId;
+      }
       return false;
     }).firstOrNull;
   }
+
+  /// Solana WalletConnect chain IDs
+  static const String _solanaMainnetChainId = 'solana:4sGjMW1sUnHzSxGspuhpqLDx6wiyjNtZ';
+  static const String _solanaDevnetChainId  = 'solana:8E9rvCKLFQia2Y35HXjjpWzj8weVo44K';
+
+  /// Aptos WalletConnect chain IDs
+  static const String _aptosMainnetChainId = 'aptos:1';
+  static const String _aptosTestnetChainId = 'aptos:2';
+
+  /// Sui WalletConnect chain IDs
+  static const String _suiMainnetChainId = 'sui:mainnet';
+  static const String _suiTestnetChainId = 'sui:testnet';
+
+  /// NEAR WalletConnect chain IDs
+  static const String _nearMainnetChainId = 'near:mainnet';
+  static const String _nearTestnetChainId = 'near:testnet';
 
   /// Fetch TRON wallet credentials from IWalletService.
   Future<({String mnemonic, String privateKey})> getTronCredentials() async {
@@ -298,6 +405,42 @@ mixin WalletConnectConnection on ChangeNotifier {
     final currentIndex = walletService?.miningWalletIndex ?? 0;
     final mnemonic =
         await walletService?.getMnemonicForWallet(currentIndex) ?? "";
+    final pk = await walletService?.getPrivateKeyForWallet(currentIndex) ?? "";
+    return (mnemonic: mnemonic, privateKey: pk);
+  }
+
+  /// Fetch Solana wallet credentials from IWalletService.
+  Future<({String mnemonic, String privateKey})> getSolanaCredentials() async {
+    final walletService = ServiceLocatorSetup.walletService;
+    final currentIndex = walletService?.miningWalletIndex ?? 0;
+    final mnemonic = await walletService?.getMnemonicForWallet(currentIndex) ?? "";
+    final pk = await walletService?.getPrivateKeyForWallet(currentIndex) ?? "";
+    return (mnemonic: mnemonic, privateKey: pk);
+  }
+
+  /// Fetch Aptos wallet credentials from IWalletService.
+  Future<({String mnemonic, String privateKey})> getAptosCredentials() async {
+    final walletService = ServiceLocatorSetup.walletService;
+    final currentIndex = walletService?.miningWalletIndex ?? 0;
+    final mnemonic = await walletService?.getMnemonicForWallet(currentIndex) ?? "";
+    final pk = await walletService?.getPrivateKeyForWallet(currentIndex) ?? "";
+    return (mnemonic: mnemonic, privateKey: pk);
+  }
+
+  /// Fetch Sui wallet credentials from IWalletService.
+  Future<({String mnemonic, String privateKey})> getSuiCredentials() async {
+    final walletService = ServiceLocatorSetup.walletService;
+    final currentIndex = walletService?.miningWalletIndex ?? 0;
+    final mnemonic = await walletService?.getMnemonicForWallet(currentIndex) ?? "";
+    final pk = await walletService?.getPrivateKeyForWallet(currentIndex) ?? "";
+    return (mnemonic: mnemonic, privateKey: pk);
+  }
+
+  /// Fetch NEAR wallet credentials from IWalletService.
+  Future<({String mnemonic, String privateKey})> getNearCredentials() async {
+    final walletService = ServiceLocatorSetup.walletService;
+    final currentIndex = walletService?.miningWalletIndex ?? 0;
+    final mnemonic = await walletService?.getMnemonicForWallet(currentIndex) ?? "";
     final pk = await walletService?.getPrivateKeyForWallet(currentIndex) ?? "";
     return (mnemonic: mnemonic, privateKey: pk);
   }

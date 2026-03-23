@@ -63,8 +63,7 @@ class SecurityGoogleBackupKeyState extends State<SecurityGoogleBackupKey>{
       googleAuthStr=mm.data;
     }
     load=Load.finish;
-    setState(() {
-    });
+    setState(() {});
   }
 
   @override

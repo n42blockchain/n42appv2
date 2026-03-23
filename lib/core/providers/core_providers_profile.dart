@@ -49,16 +49,7 @@ class UserProfileService {
     if (mm.error == false) {
       await _ref.read(spUtilProvider).saveUserInfo(uInfo);
       AppGlobals.userInfo = uInfo;
-      final sharedInfo = SharedUserInfo(
-        uuid: uInfo.uuid ?? '',
-        email: uInfo.email ?? '',
-        name: uInfo.name,
-        avatarUrl: uInfo.image,
-        token: uInfo.token,
-        image: uInfo.image,
-        desc: uInfo.desc,
-      );
-      _ref.read(currentUserProvider.notifier).setUser(sharedInfo);
+      _ref.read(currentUserProvider.notifier).setUser(_toSharedUserInfo(uInfo));
     }
     return mm;
   }

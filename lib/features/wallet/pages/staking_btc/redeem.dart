@@ -339,6 +339,7 @@ class _RedeemState extends ConsumerState<Redeem> {
     if (mounted) setState(() {});
   }
 
+
   @override
   Widget build(BuildContext context) {
     final s = S.of(context);

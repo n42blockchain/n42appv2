@@ -4,38 +4,26 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:flutter/material.dart';
 
 Widget successView(String title) {
-  final ctx = AppGlobals.navigatorKey.currentContext;
-  return Container(
-    padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12),
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(12.0),
-      color: ctx != null
-          ? AppThemeUtils.getColorByKey(ctx, AppThemeKeys.itemBgColor.name)
-          : const Color(0xFFFFFFFF),
-    ),
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        const Icon(
-          Icons.check_circle_outline,
-          color: Color(0xFF448BDF),
-          size: 36,
-        ),
-        Text(
-          title,
-          style: TextStyle(
-              color: ctx != null
-                  ? AppThemeUtils.getColorByKey(ctx, AppThemeKeys.mainTextColor.name)
-                  : const Color(0xFF000000),
-              fontSize: 15),
-        ),
-      ],
-    ),
+  return _statusView(
+    title: title,
+    icon: Icons.check_circle_outline,
+    iconColor: const Color(0xFF448BDF),
   );
 }
 
-/// 创建钱包失败
 Widget createWalletErrView(String title) {
+  return _statusView(
+    title: title,
+    icon: Icons.cancel_outlined,
+    iconColor: Colors.redAccent,
+  );
+}
+
+Widget _statusView({
+  required String title,
+  required IconData icon,
+  required Color iconColor,
+}) {
   final ctx = AppGlobals.navigatorKey.currentContext;
   return Container(
     padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12),
@@ -48,11 +36,7 @@ Widget createWalletErrView(String title) {
     child: Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Icon(
-          Icons.cancel_outlined,
-          color: Colors.redAccent,
-          size: 36,
-        ),
+        Icon(icon, color: iconColor, size: 36),
         Text(
           title,
           style: TextStyle(

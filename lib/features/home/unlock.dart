@@ -117,14 +117,7 @@ class _UnlockState extends ConsumerState<Unlock> {
     final result = await frp.authenticateWithBiometrics();
     if (!mounted) return;
 
-    if (result == BiometricAuthResult.success) {
-      check = true;
-      back();
-      return;
-    }
-
-    _handleBiometricFailure(result);
-    setState(() => faceShow = true);
+    _handleBiometricResult(result);
   }
 
   /// Retry biometric auth without resetting to the loading state.
@@ -135,31 +128,47 @@ class _UnlockState extends ConsumerState<Unlock> {
     final result = await frp.authenticateWithBiometrics();
     if (!mounted) return;
 
+    _handleBiometricResult(result);
+  }
+
+  /// Handle biometric auth result (shared by initFace and _retryBiometric).
+  void _handleBiometricResult(BiometricAuthResult result) {
     if (result == BiometricAuthResult.success) {
       check = true;
       back();
       return;
     }
 
-    _handleBiometricFailure(result);
-  }
-
-  void _handleBiometricFailure(BiometricAuthResult result) {
     switch (result) {
       case BiometricAuthResult.userCancelled:
-        setState(() => _biometricFailed = true);
+        setState(() {
+          _biometricFailed = true;
+          faceShow = true;
+        });
       case BiometricAuthResult.notEnrolled:
         ToastUtils.show(S.of(context).g_biometric_not_enrolled);
-        setState(() => _biometricAvailable = false);
+        setState(() {
+          _biometricAvailable = false;
+          faceShow = true;
+        });
       case BiometricAuthResult.lockedOut:
         ToastUtils.show(S.of(context).g_biometric_locked_out);
-        setState(() => _biometricFailed = true);
+        setState(() {
+          _biometricFailed = true;
+          faceShow = true;
+        });
       case BiometricAuthResult.notAvailable:
         ToastUtils.show(S.of(context).g_lock_key7);
-        setState(() => _biometricAvailable = false);
+        setState(() {
+          _biometricAvailable = false;
+          faceShow = true;
+        });
       default:
         ToastUtils.show(S.of(context).g_unlock_key7);
-        setState(() => _biometricFailed = true);
+        setState(() {
+          _biometricFailed = true;
+          faceShow = true;
+        });
     }
   }
 

@@ -106,9 +106,7 @@
 	<string>N42 Wallet needs photo library access to select images for your profile picture and to share files in chat.</string>
 	<key>NSSupportsLiveActivities</key>
 	<true/>
-	<key>NSUserTrackingUsageDescription</key>
-	<string>N42 Wallet uses analytics to improve app performance and your experience. No personal wallet data is shared.</string>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
+<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>
 	<array>

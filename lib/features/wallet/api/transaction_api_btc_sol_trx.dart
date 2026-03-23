@@ -45,8 +45,6 @@ extension TransactionApiBtcSolTrx on TransactionApi {
     String address, {
     int? page = 1,
     int? offset = 10,
-    int? fromBlock = 0,
-    int? endBlock = 99999999999,
     bool isTest = false,
   }) async {
     final mm = MessageModel();
@@ -98,8 +96,6 @@ extension TransactionApiBtcSolTrx on TransactionApi {
 
   Future<MessageModel> solTransactionList(
     String address, {
-    int? fromBlock = 0,
-    int? endBlock = 99999999999,
     int? page = 1,
     int? offset = 10,
   }) async {
@@ -124,8 +120,6 @@ extension TransactionApiBtcSolTrx on TransactionApi {
 
   Future<MessageModel> trxTransactionList(
     String address, {
-    int? fromBlock = 0,
-    int? endBlock = 99999999999,
     int? page = 1,
     int? offset = 20,
   }) async {
@@ -151,10 +145,8 @@ extension TransactionApiBtcSolTrx on TransactionApi {
   Future<MessageModel> trxContractTransactionList(
     String address,
     String contractAddress, {
-    int? fromBlock = 0,
-    int? endBlock = 99999999999,
     int? page = 1,
-    int? offset = 20,
+    int? offset = 999999,
   }) async {
     final proxyResult = await _trxContractTransactionListViaProxy(
       address,

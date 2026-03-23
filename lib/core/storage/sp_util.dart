@@ -115,9 +115,7 @@ class SPUtil {
 
   Future<Map<String, dynamic>?> getBrowserSetting() async {
     await initPrefs();
-    final r = prefs?.getString(SPkey.browserSetting.name);
-    if (r == null) return null;
-    return json.decode(r);
+    return _decodeJsonMap(prefs?.getString(SPkey.browserSetting.name));
   }
 
   // ==================== 敏感数据（使用 SecurePreferences） ====================
@@ -128,8 +126,8 @@ class SPUtil {
   }
 
   /// 获取钱包列表（安全存储）
-  Future<Map<String, dynamic>?> getWalletInfo() async {
-    return await _securePrefs.getWalletInfo();
+  Future<Map<String, dynamic>?> getWalletInfo() {
+    return _securePrefs.getWalletInfo();
   }
 
   // 钱包安全验证配置（安全存储）
@@ -137,8 +135,8 @@ class SPUtil {
     await _securePrefs.setSecurity(value);
   }
 
-  Future<Map<String, dynamic>?> getSecurity() async {
-    return await _securePrefs.getSecurity();
+  Future<Map<String, dynamic>?> getSecurity() {
+    return _securePrefs.getSecurity();
   }
 
   // 保存用户信息（安全存储）
@@ -152,8 +150,8 @@ class SPUtil {
   }
 
   // 获取缓存的用户信息（安全存储）
-  Future<Map<String, dynamic>?> getUserInfo() async {
-    return await _securePrefs.getUserInfo();
+  Future<Map<String, dynamic>?> getUserInfo() {
+    return _securePrefs.getUserInfo();
   }
 
   // 锁屏设置（安全存储）
@@ -346,14 +344,11 @@ class SPUtil {
     return prefs?.getBool(SPkey.miningV1OpenMining.name) ?? true;
   }
 
-  /// 设置 V1 挖矿开关（与 setMiningOpen 等价）
-  Future<void> setOpenMining(bool value) async {
+  /// 设置 V1 挖矿开关
+  Future<void> setMiningOpen(bool value) async {
     await initPrefs();
     await prefs?.setBool(SPkey.miningV1OpenMining.name, value);
   }
-
-  /// 设置 V1 挖矿开关（别名）
-  Future<void> setMiningOpen(bool value) async => setOpenMining(value);
 
   /// 获取是否使用主链挖矿
   Future<bool?> getIsMainChainMining() async {

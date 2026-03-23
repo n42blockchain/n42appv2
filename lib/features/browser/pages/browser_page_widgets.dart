@@ -206,16 +206,32 @@ extension _BrowserPageWidgets on _BrowserPageState {
           _toolbarAssetButton("note",
               onTap: () =>
                   _navigateAndLoad(bValue, BrowserCollectionList())),
-          _toolbarIconButton(Icons.explore,
-              onTap: () =>
-                  _navigateAndLoad(bValue, const DAppDirectoryPage())),
+          if (Platform.isAndroid)
+            _toolbarIconButton(Icons.explore,
+                onTap: () =>
+                    _navigateAndLoad(bValue, const DAppDirectoryPage())),
           _toolbarAssetButton("setting", onTap: () async {
             final wv = bValue.wvcList[bValue.wListIndex];
             await Navigator.push(context,
                 MaterialPageRoute(builder: (_) => BrowserSetting(webViewController: wv)));
             bValue.getBrowserSetting();
           }),
+          if (ref.watch(wcpBridgeProvider).walletConnectState == WalletConnectState.connect)
+            _buildWalletConnectButton(),
         ],
+      ),
+    );
+  }
+
+  Widget _buildWalletConnectButton() {
+    final sw = ScreenUtil().setWidth;
+    return _toolbarButton(
+      onTap: () => WalletConnectSheet.show(context, ""),
+      child: Image.asset(
+        "assets/wallet/WalletConnect.png",
+        width: sw(40.0),
+        height: sw(40.0),
+        color: _mainTextColor(),
       ),
     );
   }
@@ -397,6 +413,7 @@ extension _BrowserPageWidgets on _BrowserPageState {
                 Expanded(
                   child: buttonStyle2(context, () async {
                     Navigator.pop(context);
+                    WalletConnectSheet.show(context, uri);
                   }, S.of(context).g_key_78),
                 ),
               ],

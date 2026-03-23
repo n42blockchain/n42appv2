@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/component/enums/load.dart';
 import 'package:n42_wallet/features/mining_v1/api/mining_api.dart';

@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Phishing URL Detection Service
@@ -24,9 +25,10 @@ class PhishingDetector {
 
   static final PhishingDetector instance = PhishingDetector._();
 
-  // SharedPreferences keys managed internally
-  static const String _spCacheKey = 'phishing_blocklist_v1';
+  // SharedPreferences key — only stores the last-fetch timestamp (int, trivially small)
   static const String _spCacheTimeKey = 'phishing_blocklist_time_v1';
+  // File name for the blocklist cache (stored in app support dir, not NSUserDefaults)
+  static const String _cacheFileName = 'phishing_blocklist_v1.json';
   static const Duration _cacheTtl = Duration(hours: 6);
 
   /// MetaMask community-maintained phishing blocklist.
@@ -104,9 +106,23 @@ class PhishingDetector {
     if (_initialized) return;
     _prefs = prefs;
     _initialized = true;
+    // Remove the old large SharedPreferences key (stored pre-fix) to free
+    // NSUserDefaults space. The list is now cached in a file instead.
+    await _migrateOldSpCache(prefs);
     await _loadFromCache();
     // Fire-and-forget — do NOT await so we don't block startup
     unawaited(_refreshInBackground());
+  }
+
+  /// One-time migration: remove the legacy large SharedPreferences key that
+  /// previously stored the full phishing blocklist JSON (~4 MB) in
+  /// NSUserDefaults, which exceeds the iOS 4 MB per-plist limit.
+  static Future<void> _migrateOldSpCache(SharedPreferences prefs) async {
+    const legacyKey = 'phishing_blocklist_v1';
+    if (prefs.containsKey(legacyKey)) {
+      await prefs.remove(legacyKey);
+      debugPrint('[PhishingDetector] Removed legacy NSUserDefaults cache key');
+    }
   }
 
   /// Synchronously check whether [rawUrl] is a phishing site.
@@ -172,14 +188,21 @@ class PhishingDetector {
     return false;
   }
 
-  Future<void> _loadFromCache() async {
-    final prefs = _prefs;
-    if (prefs == null) return;
-
-    final cachedJson = prefs.getString(_spCacheKey);
-    if (cachedJson == null) return;
-
+  Future<File?> _cacheFile() async {
     try {
+      final dir = await getApplicationSupportDirectory();
+      return File('${dir.path}/$_cacheFileName');
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Future<void> _loadFromCache() async {
+    try {
+      final file = await _cacheFile();
+      if (file == null || !file.existsSync()) return;
+
+      final cachedJson = await file.readAsString();
       final map = jsonDecode(cachedJson) as Map<String, dynamic>;
       final blacklist = (map['blacklist'] is List)
           ? (map['blacklist'] as List<dynamic>).whereType<String>().toList()
@@ -250,11 +273,13 @@ class PhishingDetector {
       _blocklist.addAll(blacklist);
       _whitelist.addAll(whitelist);
 
-      // Persist only blacklist + whitelist (skip fuzzylist for now)
-      await prefs.setString(
-        _spCacheKey,
-        jsonEncode({'blacklist': blacklist, 'whitelist': whitelist}),
-      );
+      // Persist to file (avoids NSUserDefaults 4 MB limit on iOS)
+      final file = await _cacheFile();
+      if (file != null) {
+        await file.writeAsString(
+          jsonEncode({'blacklist': blacklist, 'whitelist': whitelist}),
+        );
+      }
       await prefs.setInt(_spCacheTimeKey, DateTime.now().millisecondsSinceEpoch);
 
       assert(() {

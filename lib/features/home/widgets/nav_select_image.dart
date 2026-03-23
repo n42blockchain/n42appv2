@@ -9,7 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 
 class NavSelectImage extends StatelessWidget {
-  final dynamic returnImage;//选择好图片后，返回，返回类型未uint8List
+  final ValueChanged<Uint8List?>? returnImage;
   const NavSelectImage({this.returnImage,super.key});
 
   @override

@@ -31,8 +31,9 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 
 class WalletChainSend extends ConsumerStatefulWidget {
   final CoinModel coinModel;
+  final String? initialToAddress;
 
-  const WalletChainSend(this.coinModel, {super.key});
+  const WalletChainSend(this.coinModel, {this.initialToAddress, super.key});
 
   @override
   ConsumerState<WalletChainSend> createState() => _WalletChainSendState();
@@ -81,6 +82,9 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
     super.initState();
     valueTextEditingController.text = '0';
     toTextEditingController.addListener(_onAddressInputChanged);
+    if (widget.initialToAddress?.isNotEmpty == true) {
+      toTextEditingController.text = widget.initialToAddress!;
+    }
     initData();
   }
 

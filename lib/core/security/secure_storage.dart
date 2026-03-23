@@ -58,30 +58,6 @@ class SecureStorage {
     }
   }
 
-  /// 安全擦除字符串 (尽可能)
-  ///
-  /// 注意: Dart 字符串是不可变的，此方法创建副本并返回
-  /// 调用者应该立即将原变量设置为 null
-  ///
-  /// 示例用法:
-  /// ```dart
-  /// var mnemonic = await getMnemonic('id');
-  /// // 使用 mnemonic...
-  /// SecureStorage.secureWipeString(mnemonic);
-  /// mnemonic = null; // 移除引用
-  /// ```
-  static void secureWipeString(String? data) {
-    // Dart 字符串是不可变的，无法真正擦除
-    // 此方法主要用于代码意图的文档化
-    // 真正的安全措施在于:
-    // 1. 尽快将变量设置为 null
-    // 2. 使用 Uint8List 代替 String 存储敏感数据
-    // 3. 依赖 Dart GC 和操作系统内存保护
-    if (kDebugMode && data != null) {
-      debugPrint('⚠️ [SecureStorage] Reminder: Set sensitive variable to null after use');
-    }
-  }
-
   /// 敏感数据包装器
   ///
   /// 使用后调用 dispose() 清除数据
