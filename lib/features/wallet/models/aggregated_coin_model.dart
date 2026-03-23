@@ -4,9 +4,11 @@
 // See LICENSE file in the project root for full license information.
 
 import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:n42_wallet/features/wallet/models/aggregated_token.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:wallet/wallet.dart' show EthereumAddress;
 import 'package:web3dart/web3dart.dart';
 
 /// 链上余额信息

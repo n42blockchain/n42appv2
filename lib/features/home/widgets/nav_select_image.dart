@@ -29,7 +29,7 @@ class NavSelectImage extends StatelessWidget {
               Uint8List imageData=file.readAsBytesSync();
               Uint8List? rImageData=await Navigator.push(context, MaterialPageRoute(builder: (context)=>ImageCropPage(imageData)));
               if(!context.mounted) return;
-              if(returnImage!=null)returnImage(rImageData);
+              returnImage?.call(rImageData);
             }
           },
           child: Container(
@@ -63,7 +63,7 @@ class NavSelectImage extends StatelessWidget {
               Uint8List imageData=file.readAsBytesSync();
               Uint8List? rImageData=await Navigator.push(context, MaterialPageRoute(builder: (context)=>ImageCropPage(imageData)));
               if(!context.mounted) return;
-              if(returnImage!=null)returnImage(rImageData);
+              returnImage?.call(rImageData);
             }
           },
           child: Container(

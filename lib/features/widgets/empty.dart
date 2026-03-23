@@ -65,7 +65,6 @@ class _EmptyViewState extends State<EmptyView> {
             ),
           ],
         ),
-      ),
-    );
+      );
   }
 }
