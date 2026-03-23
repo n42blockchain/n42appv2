@@ -180,7 +180,7 @@ extension on _SecuritySettingState {
             child: Text(
               S.of(context).g_face_5,
               style: TextStyle(
-                fontSize: ScreenUtil().setSp(30),
+                fontSize: ScreenUtil().setSp(28),
                 color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
               ),
             ),
@@ -201,7 +201,7 @@ extension on _SecuritySettingState {
               title,
               style: TextStyle(
                 color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                fontSize: ScreenUtil().setSp(30.0),
+                fontSize: ScreenUtil().setSp(28),
               ),
             ),
           ),
@@ -229,7 +229,7 @@ extension on _SecuritySettingState {
                 S.of(context).g_lock_key4,
                 style: TextStyle(
                   color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                  fontSize: ScreenUtil().setSp(30.0),
+                  fontSize: ScreenUtil().setSp(28),
                 ),
               ),
             ),
@@ -237,7 +237,7 @@ extension on _SecuritySettingState {
               _formatLockTime(screenLockState.lockTimeSeconds),
               style: TextStyle(
                 color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                fontSize: ScreenUtil().setSp(30.0),
+                fontSize: ScreenUtil().setSp(28),
               ),
             ),
             Icon(
@@ -329,7 +329,7 @@ extension on _SecuritySettingState {
                 S.of(context).g_lock_key9,
                 style: TextStyle(
                   color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                  fontSize: ScreenUtil().setSp(30.0),
+                  fontSize: ScreenUtil().setSp(28),
                 ),
               ),
             ),

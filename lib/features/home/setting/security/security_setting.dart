@@ -96,7 +96,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                   S.of(context).google_verification_message5,
                   style: TextStyle(
                     color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                    fontSize: ScreenUtil().setSp(30.0),
+                    fontSize: ScreenUtil().setSp(28),
                   ),
                 ),
               ),
@@ -106,7 +106,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                   S.of(context).google_verification_message6,
                   style: TextStyle(
                     color: AppThemeUtils.getColorByKey(context, AppThemeKeys.ff888888.name),
-                    fontSize: ScreenUtil().setSp(30.0),
+                    fontSize: ScreenUtil().setSp(28),
                   ),
                 ),
               ),
@@ -177,7 +177,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                               child: Text(
                                 S.of(context).g_face_5,
                                 style: TextStyle(
-                                  fontSize: ScreenUtil().setSp(30),
+                                  fontSize: ScreenUtil().setSp(28),
                                   color: AppThemeUtils.getColorByKey(
                                       context, AppThemeKeys.mainBlueColor.name),
                                 ),
@@ -203,7 +203,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                           style: TextStyle(
                             color: AppThemeUtils.getColorByKey(
                                 context, AppThemeKeys.mainTextColor.name),
-                            fontSize: ScreenUtil().setSp(30.0),
+                            fontSize: ScreenUtil().setSp(28),
                           ),
                         ),
                       ),

@@ -193,7 +193,7 @@ class _SettingShareState extends State<SettingShare> {
                       child: Text(
                         S.of(context).g_share_v3_key_2,
                         style: TextStyle(
-                          fontSize: ScreenUtil().setSp(44.0),
+                          fontSize: ScreenUtil().setSp(32),
                           color: _color(AppThemeKeys.mainTextColor),
                         ),
                       ),
@@ -276,7 +276,7 @@ class _SettingShareState extends State<SettingShare> {
           Text(
             value,
             style: TextStyle(
-              fontSize: ScreenUtil().setSp(36.0),
+              fontSize: ScreenUtil().setSp(30),
               fontWeight: FontWeight.bold,
               color: _color(AppThemeKeys.mainTextColor),
             ),
@@ -359,7 +359,7 @@ class _SettingShareState extends State<SettingShare> {
                   AppConfig.apiUrl['walletamazeBrowser'],
                   style: TextStyle(
                     color: _color(AppThemeKeys.mainTextColor),
-                    fontSize: ScreenUtil().setSp(40.0),
+                    fontSize: ScreenUtil().setSp(30),
                   ),
                 ),
               ],

@@ -17,35 +17,37 @@ class NavSettingItem extends StatelessWidget {
     return GestureDetector(
       onTap: callback,
       child: Container(
-        padding: EdgeInsets.all(ScreenUtil().setSp(30.0)),
+        padding: EdgeInsets.symmetric(
+          horizontal: ScreenUtil().setWidth(28),
+          vertical: ScreenUtil().setWidth(26),
+        ),
         color: Colors.transparent,
         child: Row(
           children: [
             Image.asset(
               path,
-              width: ScreenUtil().setWidth(60.0),
-              height: ScreenUtil().setWidth(60.0),
+              width: ScreenUtil().setWidth(44),
+              height: ScreenUtil().setWidth(44),
               fit: BoxFit.contain,
-              color: imgColor ,
+              color: imgColor,
             ),
             Expanded(
-              flex: 1,
-              child: Container(
+              child: Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(20.0),
+                  horizontal: ScreenUtil().setWidth(20),
                 ),
                 child: Text(
                   action,
                   style: TextStyle(
                     color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                    fontSize: ScreenUtil().setSp(30.0),
+                    fontSize: ScreenUtil().setSp(28),
                   ),
                 ),
               ),
             ),
             Icon(
               Icons.arrow_forward_ios_sharp,
-              size: ScreenUtil().setWidth(30.0),
+              size: ScreenUtil().setWidth(24),
               color: AppThemeUtils.getColorByKey(context, AppThemeKeys.ff888888.name),
             ),
           ],

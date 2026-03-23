@@ -198,7 +198,7 @@ class SecurityEditState extends State<SecurityEdit>{
                           widget.type=="google"?S.of(context).google_verification:S.of(context).email_verification,
                           style: TextStyle(
                             color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                            fontSize: ScreenUtil().setWidth(30.0),
+                            fontSize: ScreenUtil().setSp(28),
                           ),
                         ),
                       ),

@@ -204,7 +204,7 @@ class _ThemeItem extends StatelessWidget {
             SizedBox(width: ScreenUtil().setWidth(30)),
             Text(
               option.labelBuilder(context),
-              style: TextStyle(color: option.textColor, fontSize: ScreenUtil().setSp(32)),
+              style: TextStyle(color: option.textColor, fontSize: ScreenUtil().setSp(28)),
             ),
             const Spacer(),
             if (isSelected)

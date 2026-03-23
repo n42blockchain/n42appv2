@@ -167,7 +167,7 @@ class _FeedbackState extends State<Feedback> {
                   S.of(context).g_key_154,
                   style: TextStyle(
                     color: _color(AppThemeKeys.mainButtonBgColor),
-                    fontSize: ScreenUtil().setWidth(30.0),
+                    fontSize: ScreenUtil().setSp(28),
                   ),
                 ),
               ),
@@ -412,7 +412,7 @@ class _FeedbackState extends State<Feedback> {
     final textColor = _color(AppThemeKeys.mainTextColor);
     final optionStyle = TextStyle(
       color: textColor,
-      fontSize: ScreenUtil().setWidth(32.0),
+      fontSize: ScreenUtil().setSp(28),
       height: 1.5,
     );
 

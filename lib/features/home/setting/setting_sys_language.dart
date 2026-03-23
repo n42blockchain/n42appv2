@@ -115,17 +115,17 @@ class _LanguageItem extends StatelessWidget {
                     lang.name,
                     style: TextStyle(
                       color: mainTextColor,
-                      fontSize: ScreenUtil().setSp(30),
+                      fontSize: ScreenUtil().setSp(28),
                       fontWeight:
                           isSelected ? FontWeight.w600 : FontWeight.normal,
                     ),
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(6)),
+                  SizedBox(height: ScreenUtil().setWidth(4)),
                   Text(
                     lang.englishName,
                     style: TextStyle(
                       color: subTextColor,
-                      fontSize: ScreenUtil().setSp(24),
+                      fontSize: ScreenUtil().setSp(22),
                     ),
                   ),
                 ],

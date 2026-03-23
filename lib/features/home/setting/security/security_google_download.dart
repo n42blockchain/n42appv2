@@ -92,7 +92,7 @@ class SecurityGoogleDownload extends StatelessWidget {
                         style: TextStyle(
                           color: AppThemeUtils.getColorByKey(
                               context, AppThemeKeys.mainTextColor.name),
-                          fontSize: ScreenUtil().setWidth(30.0),
+                          fontSize: ScreenUtil().setSp(28),
                         ),
                       ),
                     ),

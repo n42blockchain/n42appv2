@@ -159,16 +159,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
                       "assets/home/security.png",
                       S.of(context).s_key_11,
                       onTap: () {
-                        if (AppGlobals.userInfo == null) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => N42Chat.chatWidget(),
-                            ),
-                          );
-                        } else {
-                          Navigator.pushNamed(context, '/securitySetting');
-                        }
+                        Navigator.pushNamed(context, '/securitySetting');
                       },
                     ),
                     _menuItem(

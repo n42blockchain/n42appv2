@@ -92,7 +92,7 @@ extension _SecurityGoogleVedificationWidgets
                   style: TextStyle(
                     color: AppThemeUtils.getColorByKey(
                         context, AppThemeKeys.mainTextColor.name),
-                    fontSize: ScreenUtil().setWidth(30.0),
+                    fontSize: ScreenUtil().setSp(28),
                   ),
                   controller: googleTextEditingController,
                   textInputAction: TextInputAction.done,
@@ -105,7 +105,7 @@ extension _SecurityGoogleVedificationWidgets
                         vertical: ScreenUtil().setWidth(18.0)),
                     hintText: S.of(context).rest_Please_enter,
                     hintStyle: TextStyle(
-                      fontSize: ScreenUtil().setWidth(30.0),
+                      fontSize: ScreenUtil().setSp(28),
                       color: AppThemeUtils.getColorByKey(
                           context, AppThemeKeys.itemSubtitleTextColor.name),
                     ),
@@ -185,7 +185,7 @@ extension _SecurityGoogleVedificationWidgets
                   style: TextStyle(
                     color: AppThemeUtils.getColorByKey(
                         context, AppThemeKeys.mainTextColor.name),
-                    fontSize: ScreenUtil().setWidth(30.0),
+                    fontSize: ScreenUtil().setSp(28),
                   ),
                   controller: emailTextEditingController,
                   textInputAction: TextInputAction.done,
@@ -194,7 +194,7 @@ extension _SecurityGoogleVedificationWidgets
                   decoration: InputDecoration(
                     hintText: S.of(context).rest_Please_enter,
                     hintStyle: TextStyle(
-                      fontSize: ScreenUtil().setWidth(30.0),
+                      fontSize: ScreenUtil().setSp(28),
                       color: AppThemeUtils.getColorByKey(
                           context, AppThemeKeys.itemSubtitleTextColor.name),
                     ),
@@ -300,7 +300,7 @@ extension _SecurityGoogleVedificationWidgets
                   style: TextStyle(
                     color: AppThemeUtils.getColorByKey(
                         context, AppThemeKeys.mainTextColor.name),
-                    fontSize: ScreenUtil().setWidth(30.0),
+                    fontSize: ScreenUtil().setSp(28),
                   ),
                   obscureText: obscure,
                   controller: pwdTextEditingController,
@@ -308,7 +308,7 @@ extension _SecurityGoogleVedificationWidgets
                   decoration: InputDecoration(
                     hintText: S.of(context).g_key_t_35,
                     hintStyle: TextStyle(
-                      fontSize: ScreenUtil().setWidth(30.0),
+                      fontSize: ScreenUtil().setSp(28),
                       color: AppThemeUtils.getColorByKey(
                           context, AppThemeKeys.itemSubtitleTextColor.name),
                     ),

@@ -231,7 +231,7 @@ class _WalletSecurityVerificationState
   }
 
   Future<void> pushSetting() async {
-    await Navigator.pushNamed(context, 'securitySetting');
+    await Navigator.pushNamed(context, '/securitySetting');
     initSecurity();
   }
 
