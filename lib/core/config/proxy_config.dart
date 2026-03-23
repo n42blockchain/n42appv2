@@ -16,7 +16,7 @@ class ProxyConfig {
   /// 用于访问受保护的 N42 proxy 路由，不是第三方服务自身的 API key。
   static const String authToken = String.fromEnvironment(
     'PROXY_AUTH_TOKEN',
-    defaultValue: '',
+    defaultValue: 'dd0f3335acaf177bd5bc75b4661b53b87af81216fd198d1503bf5649401e5387',
   );
 
   static String get _normalizedBaseUrl => baseUrl.endsWith('/')
@@ -42,6 +42,8 @@ class ProxyConfig {
   static String explorerTokentx(String chain) =>
       '$_normalizedBaseUrl/v1/explorer/$chain/tokentx';
   static String get explorerSonic => '$_normalizedBaseUrl/v1/explorer/sonic';
+  /// Not yet deployed on proxy (returns 404). Callers must use direct Subscan API.
+  @Deprecated('Proxy endpoint /v1/subscan/* is not deployed yet (404). Use direct Subscan API.')
   static String subscan(String chain) => '$_normalizedBaseUrl/v1/subscan/$chain';
 
   // ==================== Market ====================
@@ -58,27 +60,43 @@ class ProxyConfig {
       '$_normalizedBaseUrl/v1/bundler/$chainId';
 
   // ==================== AI ====================
+  /// Not yet deployed on proxy (returns 404). Callers must use direct API.
+  @Deprecated('Proxy endpoint /v1/ai/chat is not deployed yet (404). Use direct API key.')
   static String get aiChat => '$_normalizedBaseUrl/v1/ai/chat';
 
   // ==================== Translate ====================
+  /// Not yet deployed on proxy (returns 404). Callers must use direct API.
+  @Deprecated('Proxy endpoint /v1/translate is not deployed yet (404). Use direct API key.')
   static String get translate => '$_normalizedBaseUrl/v1/translate';
 
   // ==================== Giphy ====================
+  /// Not yet deployed on proxy (returns 404). Callers must use direct API.
+  @Deprecated('Proxy endpoint /v1/giphy/* is not deployed yet (404). Use direct API key.')
   static String get giphyBase => '$_normalizedBaseUrl/v1/giphy';
+  @Deprecated('Proxy endpoint /v1/giphy/* is not deployed yet (404). Use direct API key.')
   static String get giphySearch => '$_normalizedBaseUrl/v1/giphy/search';
+  @Deprecated('Proxy endpoint /v1/giphy/* is not deployed yet (404). Use direct API key.')
   static String get giphyTrending => '$_normalizedBaseUrl/v1/giphy/trending';
 
   // ==================== DeBank ====================
+  /// Not yet deployed on proxy (returns 404). Callers must use direct API.
+  @Deprecated('Proxy endpoint /v1/debank/* is not deployed yet (404). Use direct API key.')
   static String get debankBase => '$_normalizedBaseUrl/v1/debank';
+  @Deprecated('Proxy endpoint /v1/debank/* is not deployed yet (404). Use direct API key.')
   static String get debankBalance =>
       '$_normalizedBaseUrl/v1/debank/total_balance';
+  @Deprecated('Proxy endpoint /v1/debank/* is not deployed yet (404). Use direct API key.')
   static String get debankTokenList =>
       '$_normalizedBaseUrl/v1/debank/token_list';
+  @Deprecated('Proxy endpoint /v1/debank/* is not deployed yet (404). Use direct API key.')
   static String get debankUsedChainList =>
       '$_normalizedBaseUrl/v1/debank/used_chain_list';
 
   // ==================== Speech ====================
+  /// Not yet deployed on proxy (returns 404). Callers must use direct API.
+  @Deprecated('Proxy endpoint /v1/speech/* is not deployed yet (404). Use direct API key.')
   static String get speechGoogle => '$_normalizedBaseUrl/v1/speech/google';
+  @Deprecated('Proxy endpoint /v1/speech/* is not deployed yet (404). Use direct API key.')
   static String get speechAzure => '$_normalizedBaseUrl/v1/speech/azure';
 
   // ==================== TokenView Enhanced ====================
