@@ -95,6 +95,7 @@ class FearGreedService {
 
   static FearGreedData? _cached;
   static DateTime? _cachedAt;
+  static Future<FearGreedData?>? _inflight;
 
   static Future<FearGreedData?> fetch() async {
     final cachedAt = _cachedAt;
@@ -103,21 +104,38 @@ class FearGreedService {
         DateTime.now().difference(cachedAt) < const Duration(hours: 1)) {
       return _cached;
     }
+    // Deduplicate concurrent requests
+    return _inflight ??= _doFetch().whenComplete(() => _inflight = null);
+  }
+
+  static Future<FearGreedData?> _doFetch() async {
     try {
       final raw = await ExternalHttp.get(_url)
-          .timeout(const Duration(seconds: 8), onTimeout: () => null);
-      if (raw == null || raw is! Map) return null;
-      final data = raw['data'];
-      if (data is! List || data.isEmpty) return null;
-      final entry = data.first;
-      if (entry is! Map) return null;
-      final result = FearGreedData.fromJson(Map<String, dynamic>.from(entry));
-      _cached = result;
-      _cachedAt = DateTime.now();
+          .timeout(const Duration(seconds: 8));
+      final result = parseResponse(raw, fallback: _cached);
+      if (result != null) {
+        _cached = result;
+        _cachedAt = DateTime.now();
+      }
       return result;
     } catch (e) {
-      debugPrint('FearGreedService.fetch error: $e');
-      return null;
+      _debugLog('FearGreedService.fetch error: $e');
+      return _cached;
     }
+  }
+
+  @visibleForTesting
+  static FearGreedData? parseResponse(dynamic raw, {FearGreedData? fallback}) {
+    if (raw == null || raw is! Map) return fallback;
+    final data = raw['data'];
+    if (data is! List || data.isEmpty) return fallback;
+    final entry = data.first;
+    if (entry is! Map) return fallback;
+    return FearGreedData.fromJson(Map<String, dynamic>.from(entry));
+  }
+
+  static void _debugLog(String message) {
+    if (!kDebugMode) return;
+    debugPrint(message);
   }
 }

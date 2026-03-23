@@ -1,6 +1,5 @@
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
-import 'package:n42_wallet/features/models/message_model.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/api/swap_ast_api.dart';
 import 'package:n42_wallet/features/wallet/models/ast_swap/swap_ast_order_model.dart';
@@ -79,8 +78,15 @@ class _SwapAstTransactionsState extends State<SwapAstTransactions> {
               page: page, pageSize: pageSize,
             );
             if (rData.error) return [];
-            return (rData.data as List)
-                .map((e) => SwapAstOrderModel.fromJson(e))
+            final data = rData.data;
+            if (data is! List) return [];
+            return data
+                .whereType<Map>()
+                .map(
+                  (e) => SwapAstOrderModel.fromJson(
+                    e.map((key, value) => MapEntry(key.toString(), value)),
+                  ),
+                )
                 .toList();
           },
           buildItem: (BuildContext context, List<dynamic> results, int index) {

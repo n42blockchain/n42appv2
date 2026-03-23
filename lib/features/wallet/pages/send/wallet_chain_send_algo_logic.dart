@@ -51,10 +51,12 @@ mixin _AlgoSendLogicMixin on ConsumerState<WalletChainSendAlgo> {
       await chainModel?.getBalance();
       setState(() {});
     }
-    gas = BigInt.from(getCoinGas(
-      widget.coinModel.coin['coinType'],
-      contract: widget.coinModel.coin['isContract'],
-    ));
+    gas = BigInt.from(
+      getCoinGas(
+        widget.coinModel.coin['coinType'],
+        contract: widget.coinModel.coin['isContract'],
+      ),
+    );
     showMaxButton = true;
     await getBalance();
     await getGasPrice();
@@ -62,7 +64,9 @@ mixin _AlgoSendLogicMixin on ConsumerState<WalletChainSendAlgo> {
   }
 
   Future<void> getBalance() async {
-    setState(() { load = Load.loading; });
+    setState(() {
+      load = Load.loading;
+    });
     final bool isOk = await widget.coinModel.getBalance(getToken: false);
     if (!isOk) {
       load = Load.finish;
@@ -73,8 +77,11 @@ mixin _AlgoSendLogicMixin on ConsumerState<WalletChainSendAlgo> {
   }
 
   Future<void> getGasPrice() async {
-    setState(() { load = Load.loading; });
-    final MessageModel mm = await tokenViewApi.getGasPrice(
+    setState(() {
+      load = Load.loading;
+    });
+    final MessageModel mm =
+        await tokenViewApi.getGasPrice(
           widget.coinModel.coin['blockchainType'],
           widget.coinModel.coin['coinType'],
           isTest: widget.coinModel.isTest,
@@ -115,8 +122,10 @@ mixin _AlgoSendLogicMixin on ConsumerState<WalletChainSendAlgo> {
       setState(() {});
       return;
     }
-    final BigInt valueBi =
-        ethToWeiString(value, widget.coinModel.coin['decimals']);
+    final BigInt valueBi = ethToWeiString(
+      value,
+      widget.coinModel.coin['decimals'],
+    );
     if (!widget.coinModel.coin['isContract']) {
       if (valueBi + totalGasPrice > widget.coinModel.balance) {
         amountErrorMessage = S.of(context).g_key_47;
@@ -139,8 +148,10 @@ mixin _AlgoSendLogicMixin on ConsumerState<WalletChainSendAlgo> {
     if (addrList.length == 2) {
       addr = addrList[1];
     }
-    final bool valid = await Trustdart()
-        .validateAddress(widget.coinModel.coin['coinType'], addr);
+    final bool valid = await Trustdart().validateAddress(
+      widget.coinModel.coin['coinType'],
+      addr,
+    );
     if (!valid ||
         addr.toUpperCase() ==
             widget.coinModel.address.toString().toUpperCase()) {
@@ -179,13 +190,14 @@ mixin _AlgoSendLogicMixin on ConsumerState<WalletChainSendAlgo> {
       return;
     }
     if (amountErrorMessage != "") return;
-    setState(() { load = Load.loading; });
+    setState(() {
+      load = Load.loading;
+    });
     closeKeyboard();
     amountCheck();
     if (amountErrorMessage != "") return;
 
-    final String? toAddr =
-        await toAddressCheck(toTextEditingController.text);
+    final String? toAddr = await toAddressCheck(toTextEditingController.text);
     if (!mounted) return;
     if (toAddr == null) {
       _finishLoading();
@@ -234,7 +246,9 @@ mixin _AlgoSendLogicMixin on ConsumerState<WalletChainSendAlgo> {
       return;
     }
     if (amountErrorMessage != "") return;
-    setState(() { load = Load.loading; });
+    setState(() {
+      load = Load.loading;
+    });
     closeKeyboard();
     if (errorMessage != "") {
       _finishLoading();
@@ -246,8 +260,9 @@ mixin _AlgoSendLogicMixin on ConsumerState<WalletChainSendAlgo> {
       return;
     }
 
-    final TransationRecordModel trModel =
-        _buildTransactionRecord(widget.coinModel.address.toString());
+    final TransationRecordModel trModel = _buildTransactionRecord(
+      widget.coinModel.address.toString(),
+    );
     trModel.price = BigInt.zero;
     trModel.other = AlgoTrModel(add ? "Add" : "Delete");
 
@@ -342,7 +357,10 @@ mixin _AlgoSendLogicMixin on ConsumerState<WalletChainSendAlgo> {
       valueTextEditingController.text = widget.coinModel.balanceStringAll();
       transferValue = widget.coinModel.balance;
     } else {
-      transferValue = widget.coinModel.balance - totalGasPrice;
+      transferValue = maxTransferableAmount(
+        balance: widget.coinModel.balance,
+        fee: totalGasPrice,
+      );
       valueTextEditingController.text = toEther(
         transferValue.toString(),
         widget.coinModel.coin['decimals'],

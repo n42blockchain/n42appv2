@@ -49,7 +49,7 @@ class _ImportOneState extends ConsumerState<ImportOne>
       }
       setState(() {});
     } catch (e) {
-      debugPrint('import_one: checkMnemonic failed: $e');
+      assert(() { debugPrint('import_one: checkMnemonic failed: $e'); return true; }());
     }
   }
 
@@ -62,6 +62,10 @@ class _ImportOneState extends ConsumerState<ImportOne>
 
   @override
   void dispose() {
+    // Clear mnemonic data from memory before disposing
+    inputEditingController.clear();
+    inputEditingController.dispose();
+    inputMW = "";
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -205,7 +209,7 @@ class _ImportOneState extends ConsumerState<ImportOne>
                         maxLines: 8,
                         onChanged: checkInput,
                         onEditingComplete: () =>
-                            FocusScope.of(context).requestFocus(FocusNode()),
+                            FocusScope.of(context).unfocus(),
                       ),
                     ),
                     Container(

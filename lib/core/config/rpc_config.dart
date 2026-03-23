@@ -4,6 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/foundation.dart';
+import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 
 /// RPC 端点配置
 ///
@@ -35,14 +36,11 @@ class RpcConfig {
 
   // ==================== EVM 链 RPC ====================
 
-  /// Infura API Key (从环境变量读取)
-  static const String infuraApiKey = String.fromEnvironment(
-    'INFURA_API_KEY',
-    defaultValue: 'YOUR_INFURA_API_KEY',
-  );
-
   /// Ethereum Mainnet RPC
-  static String get ethMainnetRpc => 'https://mainnet.infura.io/v3/$infuraApiKey';
+  static const String ethMainnetRpc = String.fromEnvironment(
+    'ETH_RPC_URL',
+    defaultValue: 'https://rpc.n42.world',
+  );
 
   /// Ethereum Sepolia Testnet RPC
   static const String ethSepoliaRpc = 'https://eth-sepolia.public.blastapi.io';
@@ -98,26 +96,21 @@ class RpcConfig {
       debugPrint('   Consider upgrading to HTTPS or using VPN/proxy');
     }
   }
-
-  /// 检查 URL 是否安全
-  static bool isSecureUrl(String url) {
-    return url.startsWith('https://') || url.startsWith('wss://');
-  }
-
-  /// 获取安全的 URL（如果可能）
-  /// 如果没有 HTTPS 替代方案，返回原 URL 并打印警告
-  static String getSecureUrl(String url, {String? fallbackHttps}) {
-    if (isSecureUrl(url)) return url;
-    if (fallbackHttps != null) return fallbackHttps;
-
-    if (kDebugMode) {
-      debugPrint('⚠️ [RpcConfig] Using insecure URL: $url');
-    }
-    return url;
-  }
 }
 
 /// 初始化 RPC 配置
 void initRpcConfig() {
+  _syncWalletChainRpcOverrides();
   RpcConfig.validateSecurityInDebug();
+}
+
+void _syncWalletChainRpcOverrides() {
+  final eth = chainUrlMap['ETH'];
+  if (eth is! Map<String, dynamic>) return;
+
+  final baseInfo = eth['baseInfo'];
+  if (baseInfo is! Map<String, dynamic>) return;
+
+  baseInfo['service'] = RpcConfig.ethMainnetRpc;
+  baseInfo['service_test'] = RpcConfig.ethSepoliaRpc;
 }

@@ -26,7 +26,7 @@ class StakingProtocol {
   final String? liquidTokenSymbol;  // 流动性质押代币符号 (如 stETH)
   final String? contractAddress;
 
-  StakingProtocol({
+  const StakingProtocol({
     required this.id,
     required this.name,
     required this.description,
@@ -92,7 +92,7 @@ class Validator {
   final bool isActive;
   final double uptime;  // 正常运行时间 (0-100)
 
-  Validator({
+  const Validator({
     required this.address,
     required this.name,
     required this.description,
@@ -148,7 +148,7 @@ class StakingPosition {
   final DateTime? unbondingAt;
   final StakingPositionStatus status;
 
-  StakingPosition({
+  const StakingPosition({
     required this.id,
     required this.protocol,
     this.validator,
@@ -229,7 +229,7 @@ class StakingTransactionResponse {
   final String? error;
   final Map<String, dynamic>? txData;
 
-  StakingTransactionResponse({
+  const StakingTransactionResponse({
     required this.success,
     this.txHash,
     this.error,
@@ -262,7 +262,7 @@ class StakingStats {
   final double averageApy;
   final int activePositions;
 
-  StakingStats({
+  const StakingStats({
     required this.totalStaked,
     required this.totalRewards,
     required this.averageApy,
@@ -290,7 +290,7 @@ String shortenStakingAddress(String address, {int prefixLen = 8, int suffixLen =
 
 /// 预定义的 Staking 协议
 class StakingProtocols {
-  static final ethLido = StakingProtocol(
+  static const ethLido = StakingProtocol(
     id: 'eth_lido',
     name: 'Lido',
     description: 'Liquid staking for Ethereum. Stake ETH and receive stETH.',
@@ -305,7 +305,7 @@ class StakingProtocols {
     contractAddress: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84',
   );
 
-  static final solNative = StakingProtocol(
+  static const solNative = StakingProtocol(
     id: 'sol_native',
     name: 'Solana Staking',
     description: 'Native Solana staking with validators.',
@@ -317,7 +317,7 @@ class StakingProtocols {
     unbondingPeriodDays: 2,
   );
 
-  static final atomNative = StakingProtocol(
+  static const atomNative = StakingProtocol(
     id: 'atom_native',
     name: 'Cosmos Staking',
     description: 'Native ATOM staking with Cosmos Hub validators.',
@@ -329,7 +329,7 @@ class StakingProtocols {
     unbondingPeriodDays: 21,
   );
 
-  static final dotNative = StakingProtocol(
+  static const dotNative = StakingProtocol(
     id: 'dot_native',
     name: 'Polkadot Staking',
     description: 'Native DOT staking with Polkadot validators.',
@@ -341,7 +341,7 @@ class StakingProtocols {
     unbondingPeriodDays: 28,
   );
 
-  static List<StakingProtocol> get all => [
+  static const List<StakingProtocol> all = [
     ethLido,
     solNative,
     atomNative,

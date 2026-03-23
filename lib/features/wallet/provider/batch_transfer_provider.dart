@@ -307,6 +307,8 @@ class BatchTransferProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  static final RegExp _trailingZeros = RegExp(r'0+$');
+
   /// 格式化金额显示
   String formatAmount(BigInt amount) {
     final divisor = BigInt.from(10).pow(_decimals);
@@ -316,7 +318,7 @@ class BatchTransferProvider extends ChangeNotifier {
     if (fractionalPart == BigInt.zero) return wholePart.toString();
 
     final fractionalStr = fractionalPart.toString().padLeft(_decimals, '0');
-    final trimmed = fractionalStr.replaceAll(RegExp(r'0+$'), '');
+    final trimmed = fractionalStr.replaceAll(_trailingZeros, '');
     return '$wholePart.$trimmed';
   }
 

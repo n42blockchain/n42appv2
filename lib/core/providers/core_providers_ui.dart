@@ -12,7 +12,9 @@ part of 'core_providers.dart';
 // ============================================
 
 /// Theme Mode Provider
-final themeModeProvider = StateNotifierProvider<ThemeModeNotifier, ThemeMode>((ref) {
+final themeModeProvider = StateNotifierProvider<ThemeModeNotifier, ThemeMode>((
+  ref,
+) {
   return ThemeModeNotifier(ref.watch(spUtilProvider));
 });
 
@@ -47,7 +49,9 @@ class ThemeModeNotifier extends StateNotifier<ThemeMode> {
 
 /// Accent color provider — persisted via SharedPreferences.
 /// Default is [ThemeAdapter.defaultAccent] (N42 brand blue).
-final accentColorProvider = StateNotifierProvider<AccentColorNotifier, Color>((ref) {
+final accentColorProvider = StateNotifierProvider<AccentColorNotifier, Color>((
+  ref,
+) {
   return AccentColorNotifier(ref.watch(spUtilProvider));
 });
 
@@ -103,8 +107,9 @@ class LocaleNotifier extends StateNotifier<Locale> {
   }
 
   void setLocale(String code) {
-    state = _codeToLocale(code);
-    _spUtil.setSysLang(code);
+    final normalizedCode = normalizeLanguageCode(code);
+    state = _codeToLocale(normalizedCode);
+    _spUtil.setSysLang(normalizedCode);
     _syncToN42Chat(state);
   }
 
@@ -113,15 +118,12 @@ class LocaleNotifier extends StateNotifier<Locale> {
   }
 
   Locale _codeToLocale(String code) {
-    if (code == 'zh_TW') return const Locale('zh', 'TW');
-    if (code == 'zh_CN') return const Locale('zh', 'CN');
-    if (code == 'es_ES') return const Locale('es', 'ES');
-    return Locale(code);
+    return localeFromLanguageCode(code);
   }
 
   /// Get locale info for display
   Map<String, String> getLocaleInfo(Locale locale) {
-    final lang = getLanguageByCode(locale.languageCode);
+    final lang = getLanguageByCode(languageCodeFromLocale(locale));
     return {"icon": lang.icon, "title": lang.name};
   }
 }

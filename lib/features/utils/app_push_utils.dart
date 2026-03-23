@@ -34,12 +34,20 @@ late AndroidNotificationChannel channel;
 late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
 class AppPushUtils {
+  static const Duration _chatTapDedupWindow = Duration(seconds: 8);
+  static String? _pendingChatRoomId;
+  static String? _pendingChatEventId;
+  static String? _lastHandledChatRoomId;
+  static String? _lastHandledChatEventId;
+  static DateTime? _lastHandledChatTapAt;
+
   /// 返回设备的令牌Token
   /// Returns the default FCM token for this device.
   static Future<String?> getToken() async {
     String? token = await FirebaseMessaging.instance.getToken();
     return token;
   }
+
   static Future<String?> getAPNsToken() async {
     String? token = await FirebaseMessaging.instance.getAPNSToken();
     return token;
@@ -65,53 +73,53 @@ class AppPushUtils {
     /// default FCM channel to enable heads up notifications.
     await flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin>()
+          AndroidFlutterLocalNotificationsPlugin
+        >()
         ?.createNotificationChannel(channel);
 
     /// Update the iOS foreground notification presentation options to allow
     /// heads up notifications.
     await FirebaseMessaging.instance
         .setForegroundNotificationPresentationOptions(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
+          alert: true,
+          badge: true,
+          sound: true,
+        );
 
     // Pixel 6手机上小 图标显示白色小方块
     // 解决方案参考： https://blog.csdn.net/SImple_a/article/details/103594842
     // 判断手机 设置不同的图片  version 》 android 8.0 透明
     // 国内手机厂商修改了系统 不存在这个问题 考虑到应用发布到国外，这里需要处理
     var android =
-    // const AndroidInitializationSettings('@mipmap/ic_launcher');
-    const AndroidInitializationSettings('push_small_icon');
+        // const AndroidInitializationSettings('@mipmap/ic_launcher');
+        const AndroidInitializationSettings('push_small_icon');
     // var ios = const IOSInitializationSettings();
-    var ios =  const DarwinInitializationSettings(
-      requestAlertPermission: true,
-    );
+    var ios = const DarwinInitializationSettings(requestAlertPermission: true);
 
     // flutter_local_notifications 20.0.0 使用命名参数
     FlutterLocalNotificationsPlugin().initialize(
-        settings: InitializationSettings(android: android, iOS: ios),
-        onDidReceiveNotificationResponse: (NotificationResponse details) {
-          String? payload = details.payload;
-          _onSelectNotification(payload);
-        }
+      settings: InitializationSettings(android: android, iOS: ios),
+      onDidReceiveNotificationResponse: (NotificationResponse details) {
+        String? payload = details.payload;
+        _onSelectNotification(payload);
+      },
     );
-
 
     ///ios , mac, web需要请求权限
-    NotificationSettings settings =
-    await FirebaseMessaging.instance.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true,
-    );
+    NotificationSettings settings = await FirebaseMessaging.instance
+        .requestPermission(
+          alert: true,
+          announcement: false,
+          badge: true,
+          carPlay: false,
+          criticalAlert: false,
+          provisional: false,
+          sound: true,
+        );
     //android上不需要考虑权限的问题
-    if (kDebugMode) debugPrint('User granted permission: ${settings.authorizationStatus}');
+    if (kDebugMode) {
+      debugPrint('User granted permission: ${settings.authorizationStatus}');
+    }
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
     } else if (settings.authorizationStatus ==
         AuthorizationStatus.provisional) {
@@ -121,7 +129,9 @@ class AppPushUtils {
       // 在基于 Apple 的平台上，一旦用户处理了权限请求（授权或拒绝），就无法重新请求权限。用户必须改为通过设备设置 UI 更新权限：
       // 如果用户完全拒绝权限，他们必须完全启用应用权限。
       // 如果用户接受请求的权限（无声音），他们必须己专门启用声音选项。
-      if (kDebugMode) debugPrint('User declined or has not accepted permission');
+      if (kDebugMode) {
+        debugPrint('User declined or has not accepted permission');
+      }
       //首次安装应用 同意之后 也会执行这里的逻辑
     }
 
@@ -133,8 +143,11 @@ class AppPushUtils {
         // Matrix chat 推送（含 room_id 或 type 为 m.call.*）由 n42_chat 插件处理
         final dataType = message.data['type'] as String?;
         final roomId = message.data['room_id'] as String?;
-        if (roomId != null || (dataType != null && dataType.startsWith('m.call.'))) {
-          if (kDebugMode) debugPrint('Chat/Matrix notification - handled by n42_chat plugin');
+        if (roomId != null ||
+            (dataType != null && dataType.startsWith('m.call.'))) {
+          if (kDebugMode) {
+            debugPrint('Chat/Matrix notification - handled by n42_chat plugin');
+          }
           return;
         }
 
@@ -163,16 +176,19 @@ class AppPushUtils {
             if (notification != null && notification.android != null) {
               // flutter_local_notifications 20.0.0 使用命名参数
               FlutterLocalNotificationsPlugin().show(
-                  id: notification.hashCode,
-                  title: notification.title,
-                  body: notification.body,
-                  notificationDetails: NotificationDetails(
-                    android: AndroidNotificationDetails(
-                        channel.id, channel.name,
-                        channelDescription: channel.description,
-                        color: Colors.black),
+                id: notification.hashCode,
+                title: notification.title,
+                body: notification.body,
+                notificationDetails: NotificationDetails(
+                  android: AndroidNotificationDetails(
+                    channel.id,
+                    channel.name,
+                    channelDescription: channel.description,
+                    color: Colors.black,
                   ),
-                  payload: jsonStr);
+                ),
+                payload: jsonStr,
+              );
             }
           }
         }
@@ -188,6 +204,30 @@ class AppPushUtils {
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       if (kDebugMode) debugPrint('从后台打开应用，自动清除通知');
 
+      final dataType = message.data['type'] as String?;
+      final roomId = message.data['room_id'] as String?;
+      final isCallEvent = dataType != null && dataType.startsWith('m.call.');
+      if (isCallEvent) {
+        if (kDebugMode) {
+          debugPrint(
+            'Call notification tap - letting CallKit/sync handle the call flow',
+          );
+        }
+        return;
+      }
+      if (roomId != null) {
+        if (kDebugMode) {
+          debugPrint('Chat/Matrix notification tap - delegating to n42_chat');
+        }
+        if (!N42Chat.isInitialized) {
+          _queuePendingChatNotification(
+            roomId: roomId,
+            eventId: message.data['event_id'] as String?,
+          );
+        }
+        return;
+      }
+
       /// 打开对应的页面
       _PushNavigation.handleMessage(message.data);
     });
@@ -196,7 +236,29 @@ class AppPushUtils {
     var m = await FirebaseMessaging.instance.getInitialMessage();
     if (m != null) {
       if (kDebugMode) debugPrint('应用从终止状态打开:${m.notification?.title}');
-      //这种情况待测试
+      final dataType = m.data['type'] as String?;
+      final roomId = m.data['room_id'] as String?;
+      final isCallEvent = dataType != null && dataType.startsWith('m.call.');
+      if (isCallEvent) {
+        if (kDebugMode) {
+          debugPrint(
+            'Cold-start call notification - letting CallKit/sync handle the call flow',
+          );
+        }
+        return;
+      }
+      if (roomId != null) {
+        if (kDebugMode) {
+          debugPrint('Cold-start chat notification - delegating to n42_chat');
+        }
+        if (roomId.isNotEmpty) {
+          _queuePendingChatNotification(
+            roomId: roomId,
+            eventId: m.data['event_id'] as String?,
+          );
+        }
+        return;
+      }
       _PushNavigation.handleMessage(m.data);
     }
 
@@ -204,10 +266,8 @@ class AppPushUtils {
     FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {
       if (kDebugMode) debugPrint("firebase messaging token updated: $newToken");
       bindUserPushToken(newToken);
-      // 同步新 Token 到 Matrix Pusher（确保 FCM token 刷新后 Matrix 推送仍然工作）
-      N42Chat.registerPushNotifications().catchError((Object e) {
-        if (kDebugMode) debugPrint('[PUSH_TOKEN_SYNC] Failed to re-register Matrix pusher on token refresh: $e');
-      });
+      // Matrix Pusher 的 token 轮换由 n42_chat 插件内部的
+      // FirebaseMessaging.onTokenRefresh 监听统一处理，宿主侧不重复注册。
     });
   }
 
@@ -217,9 +277,12 @@ class AppPushUtils {
       // 绑定token
       if (kDebugMode) debugPrint('new token : $newToken');
       if (newToken != null && AppGlobals.userInfo != null) {
-        UserInfoApi loginApi=UserInfoApi();
+        UserInfoApi loginApi = UserInfoApi();
         final deviceId = await DeviceInfoUtil().getOrCreateDeviceId();
-        final data = await loginApi.bindPushUserToken(newToken, deviceId: deviceId);
+        final data = await loginApi.bindPushUserToken(
+          newToken,
+          deviceId: deviceId,
+        );
         if (data != null && data["code"] == 200) {
           //success
           if (kDebugMode) debugPrint("更新推送用户Token成功");
@@ -252,20 +315,23 @@ class AppPushUtils {
 
   /// 处理新设备登录推送通知
   /// 校验非自身设备后触发 EventBus 弹窗
-  static Future<void> _handleDeviceLoginNotification(Map<String, dynamic> data) async {
+  static Future<void> _handleDeviceLoginNotification(
+    Map<String, dynamic> data,
+  ) async {
     try {
       final currentDeviceId = await DeviceInfoUtil().getOrCreateDeviceId();
       final notifyDeviceId = data['device_id'] as String? ?? '';
       // 如果是自己设备的通知，静默忽略
       if (notifyDeviceId.isNotEmpty && notifyDeviceId == currentDeviceId) {
-        if (kDebugMode) debugPrint('Device login notification from self, ignoring');
+        if (kDebugMode) {
+          debugPrint('Device login notification from self, ignoring');
+        }
         return;
       }
       final info = DeviceLoginInfo.fromJson(data);
-      eventBus.fire(EventPublic(
-        EventPublicType.deviceLoginDetected,
-        param: info,
-      ));
+      eventBus.fire(
+        EventPublic(EventPublicType.deviceLoginDetected, param: info),
+      );
     } catch (e) {
       if (kDebugMode) debugPrint('Handle device login notification error: $e');
     }
@@ -278,7 +344,8 @@ class AppPushUtils {
 
   @pragma('vm:entry-point')
   static Future<void> _firebaseMessagingBackgroundHandler(
-      RemoteMessage message) async {
+    RemoteMessage message,
+  ) async {
     // 后台 isolate 需要确保 Firebase 已初始化
     await Firebase.initializeApp();
 
@@ -286,8 +353,13 @@ class AppPushUtils {
     // 包括后台来电 CallKit 触发、消息本地通知等
     final dataType = message.data['type'] as String?;
     final roomId = message.data['room_id'] as String?;
-    if (roomId != null || (dataType != null && dataType.startsWith('m.call.'))) {
-      if (kDebugMode) debugPrint('Background: Matrix/Chat message - delegating to FirebasePushService');
+    if (roomId != null ||
+        (dataType != null && dataType.startsWith('m.call.'))) {
+      if (kDebugMode) {
+        debugPrint(
+          'Background: Matrix/Chat message - delegating to FirebasePushService',
+        );
+      }
       await FirebasePushService.handleBackgroundMessage(message);
       return;
     }
@@ -304,7 +376,8 @@ class AppPushUtils {
         body: 'Your account was logged in on $deviceName',
         notificationDetails: NotificationDetails(
           android: AndroidNotificationDetails(
-            channel.id, channel.name,
+            channel.id,
+            channel.name,
             channelDescription: channel.description,
             color: Colors.black,
           ),
@@ -331,40 +404,169 @@ class AppPushUtils {
     cleanNotification();
   }
 
+  // 只清理角标，不影响已投递的通知列表。
+  static void clearBadgeOnly() {
+    FlutterNewBadger.removeBadge();
+  }
+
+  static void recordHandledChatNotificationTap({
+    String? roomId,
+    String? eventId,
+  }) {
+    if (roomId == null || roomId.isEmpty) {
+      return;
+    }
+
+    _lastHandledChatRoomId = roomId;
+    _lastHandledChatEventId = eventId;
+    _lastHandledChatTapAt = DateTime.now();
+
+    if (_matchesChatTap(
+      roomId: roomId,
+      eventId: eventId,
+      otherRoomId: _pendingChatRoomId,
+      otherEventId: _pendingChatEventId,
+    )) {
+      _clearPendingChatNotification();
+    }
+  }
+
+  static void _queuePendingChatNotification({
+    required String roomId,
+    String? eventId,
+  }) {
+    if (_wasChatNotificationHandledRecently(roomId: roomId, eventId: eventId)) {
+      return;
+    }
+    _pendingChatRoomId = roomId;
+    _pendingChatEventId = eventId;
+  }
+
+  static Future<void> flushPendingChatNotification() async {
+    final roomId = _pendingChatRoomId;
+    if (roomId == null || !N42Chat.isInitialized) {
+      return;
+    }
+    final eventId = _pendingChatEventId;
+
+    if (_wasChatNotificationHandledRecently(roomId: roomId, eventId: eventId)) {
+      _clearPendingChatNotification();
+      return;
+    }
+
+    if (!N42Chat.isLoggedIn) {
+      for (var i = 0; i < 20; i++) {
+        await Future<void>.delayed(const Duration(milliseconds: 500));
+        if (N42Chat.isLoggedIn) {
+          break;
+        }
+      }
+      if (!N42Chat.isLoggedIn) {
+        return;
+      }
+    }
+
+    if (_wasChatNotificationHandledRecently(roomId: roomId, eventId: eventId)) {
+      _clearPendingChatNotification();
+      return;
+    }
+
+    if (kDebugMode) {
+      debugPrint(
+        'Flushing pending chat notification: roomId=$roomId, eventId=$eventId',
+      );
+    }
+    try {
+      await N42Chat.openConversation(roomId);
+      recordHandledChatNotificationTap(roomId: roomId, eventId: eventId);
+    } catch (e) {
+      if (kDebugMode) {
+        debugPrint('flushPendingChatNotification openConversation error: $e');
+      }
+    } finally {
+      _clearPendingChatNotification();
+    }
+  }
+
+  static bool _wasChatNotificationHandledRecently({
+    required String roomId,
+    String? eventId,
+  }) {
+    final handledAt = _lastHandledChatTapAt;
+    if (handledAt == null ||
+        _lastHandledChatRoomId == null ||
+        DateTime.now().difference(handledAt) > _chatTapDedupWindow) {
+      return false;
+    }
+
+    return _matchesChatTap(
+      roomId: roomId,
+      eventId: eventId,
+      otherRoomId: _lastHandledChatRoomId,
+      otherEventId: _lastHandledChatEventId,
+    );
+  }
+
+  static bool _matchesChatTap({
+    required String roomId,
+    String? eventId,
+    required String? otherRoomId,
+    String? otherEventId,
+  }) {
+    if (otherRoomId == null || roomId != otherRoomId) {
+      return false;
+    }
+
+    final normalizedEventId = eventId?.trim() ?? '';
+    final normalizedOtherEventId = otherEventId?.trim() ?? '';
+    if (normalizedEventId.isEmpty || normalizedOtherEventId.isEmpty) {
+      return true;
+    }
+
+    return normalizedEventId == normalizedOtherEventId;
+  }
+
+  static void _clearPendingChatNotification() {
+    _pendingChatRoomId = null;
+    _pendingChatEventId = null;
+  }
+
   //显示本地通知 test
   static Future<void> showLocalNotifications() async {
-
     var androidDetails = AndroidNotificationDetails(
-        'nftWallet_channelId', //id可以随意一点
-        ///这个会显示在手机设置 通知管理 app 通知设置列表中 不要瞎写
-        // '重要通知',
-        "channelName",
+      'nftWallet_channelId', //id可以随意一点
+      ///这个会显示在手机设置 通知管理 app 通知设置列表中 不要瞎写
+      // '重要通知',
+      "channelName",
 
-        ///通知的级别
-        importance: Importance.max,
-        priority: Priority.high,
+      ///通知的级别
+      importance: Importance.max,
+      priority: Priority.high,
 
-        // icon: ''//可以单独设置每次发送通知的图标
+      // icon: ''//可以单独设置每次发送通知的图标
 
-        //显示进度条 3个参数必须同时设置
-        // progress: 19,
-        // maxProgress: 100,
-        // showProgress: true
+      //显示进度条 3个参数必须同时设置
+      // progress: 19,
+      // maxProgress: 100,
+      // showProgress: true
 
-        //是否播放声音
-        playSound: true
+      //是否播放声音
+      playSound: true,
     );
 
     // ios的通知
     const String darwinNotificationCategoryPlain = 'plainCategory';
     DarwinNotificationDetails iosNotificationDetails =
-    DarwinNotificationDetails(
-        categoryIdentifier: darwinNotificationCategoryPlain,
-        presentSound: true,
-        presentAlert: true,
-        presentBadge: true
+        DarwinNotificationDetails(
+          categoryIdentifier: darwinNotificationCategoryPlain,
+          presentSound: true,
+          presentAlert: true,
+          presentBadge: true,
+        );
+    var notificationDetails = NotificationDetails(
+      android: androidDetails,
+      iOS: iosNotificationDetails,
     );
-    var notificationDetails = NotificationDetails(android: androidDetails,iOS: iosNotificationDetails);
     // flutter_local_notifications 20.0.0 使用命名参数
     flutterLocalNotificationsPlugin.show(
       id: 100,
@@ -373,5 +575,4 @@ class AppPushUtils {
       notificationDetails: notificationDetails,
     );
   }
-
 }

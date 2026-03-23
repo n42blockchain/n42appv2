@@ -1,5 +1,39 @@
 part of 'transaction_api.dart';
 
+const String _kLegacySolscanApiToken = String.fromEnvironment(
+  'SOLSCAN_API_TOKEN',
+  defaultValue: '',
+);
+const String _kLegacyTronProApiKey = String.fromEnvironment(
+  'TRON_PRO_API_KEY',
+  defaultValue: '',
+);
+const Duration _kProxyExplorerTimeout = Duration(seconds: 4);
+
+List<dynamic> _txListValue(dynamic value) {
+  if (value is List) return value;
+  return const [];
+}
+
+Map<String, dynamic>? _txMapValue(dynamic value) {
+  if (value is Map<String, dynamic>) return value;
+  if (value is Map) {
+    return value.map((key, entry) => MapEntry(key.toString(), entry));
+  }
+  return null;
+}
+
+String _txStringValue(dynamic value, {String fallback = ''}) {
+  if (value == null) return fallback;
+  return value.toString();
+}
+
+int explorerStartFromPage(int? page, int? pageSize) {
+  final normalizedPage = page == null || page < 1 ? 1 : page;
+  final normalizedPageSize = pageSize == null || pageSize < 1 ? 20 : pageSize;
+  return (normalizedPage - 1) * normalizedPageSize;
+}
+
 extension TransactionApiBtcSolTrx on TransactionApi {
   // ---------------------------------------------------------------------------
   // BTC — Blockchair API
@@ -11,8 +45,6 @@ extension TransactionApiBtcSolTrx on TransactionApi {
     String address, {
     int? page = 1,
     int? offset = 10,
-    int? fromBlock = 0,
-    int? endBlock = 99999999999,
     bool isTest = false,
   }) async {
     final mm = MessageModel();
@@ -23,21 +55,24 @@ extension TransactionApiBtcSolTrx on TransactionApi {
         return mm;
       }
       final url = '${hostUrl}addrs/$address';
-      final data =
-          await BaseApi.requestEmptyH.get(url, params: {}, header: header);
+      final data = await BaseApi.requestEmptyH.get(
+        url,
+        params: {},
+        header: header,
+      );
       if (data != null) {
         final res = BtcResponse.fromJson(data);
         final list = <BtcTranDetail>[];
         for (final element in res.txrefs) {
-          final records = await db
-              .selectBtcTransationRecordTxHash(element.txHash);
+          final records = await db.selectBtcTransationRecordTxHash(
+            element.txHash,
+          );
           if (records.isNotEmpty &&
               (records.first.outputModels?.isNotEmpty ?? false)) {
             continue;
           }
           final innerUrl = '${hostUrl}txs/${element.txHash}';
-          final inData =
-              await BaseApi.requestEmptyH.get(innerUrl, params: {});
+          final inData = await BaseApi.requestEmptyH.get(innerUrl, params: {});
           if (inData != null) {
             list.add(BtcTranDetail.fromJson(inData));
           }
@@ -45,7 +80,7 @@ extension TransactionApiBtcSolTrx on TransactionApi {
         mm.data = list;
       } else {
         mm.error = true;
-        mm.data = data['message'];
+        mm.data = 'No data returned';
       }
     } catch (e) {
       mm.error = true;
@@ -61,33 +96,21 @@ extension TransactionApiBtcSolTrx on TransactionApi {
 
   Future<MessageModel> solTransactionList(
     String address, {
-    int? fromBlock = 0,
-    int? endBlock = 99999999999,
     int? page = 1,
     int? offset = 10,
   }) async {
-    final mm = MessageModel();
-    try {
-      final hostUrl = getHostByCoinMiniName('SOL');
-      final requestUrl =
-          '${hostUrl}account/solTransfers?account=$address&limit=$offset&offset=$page';
-      final h = Map<String, String>.from(header)
-        ..['token'] =
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVhdGVkQXQiOjE3MjI4NDg0NTUxODAsImVtYWlsIjoiamlhbmd5aXdlaUBzdGFybGluay13b3JsZC5jbiIsImFjdGlvbiI6InRva2VuLWFwaSIsImFwaVZlcnNpb24iOiJ2MSIsImlhdCI6MTcyMjg0ODQ1NX0.nN1kusKNvwXb_SUnpFrhsHoYfUuArbiLqC4HHk5UnNI';
-      final data =
-          await BaseApi.requestEmptyH.get(requestUrl, params: {}, header: h);
-      if (data != null) {
-        final res = data['data'] as List;
-        mm.data = res.map((e) => SOLTransactionItem.fromJson(e)).toList();
-      } else {
-        mm.error = true;
-        mm.data = data['message'];
-      }
-    } catch (e) {
-      mm.error = true;
-      mm.data = e.toString();
+    final proxyResult = await _solTransactionListViaProxy(
+      address,
+      page: page,
+      offset: offset,
+    );
+    if (!proxyResult.error) {
+      return proxyResult;
     }
-    return mm;
+    debugPrint(
+      '[TransactionApi] SOL proxy txlist fallback: ${proxyResult.data}',
+    );
+    return _solTransactionListViaSolscan(address, page: page, offset: offset);
   }
 
   // ---------------------------------------------------------------------------
@@ -97,77 +120,90 @@ extension TransactionApiBtcSolTrx on TransactionApi {
 
   Future<MessageModel> trxTransactionList(
     String address, {
-    int? fromBlock = 0,
-    int? endBlock = 99999999999,
     int? page = 1,
-    int? offset = 999999,
+    int? offset = 20,
   }) async {
-    final mm = MessageModel();
-    try {
-      final hostUrl = getHostByCoinMiniName('TRX');
-      final requestUrl =
-          '${hostUrl}transaction?address=$address&limit=$offset&start=$page&sort=-timestamp&count=true';
-      final h = Map<String, String>.from(header)
-        ..['TRON-PRO-API-KEY'] = '1908ecd1-99f1-4480-9353-c5a643b907b4';
-      final data =
-          await BaseApi.requestEmptyH.get(requestUrl, params: {}, header: h);
-      if (data != null) {
-        final res = data['data'] as List;
-        mm.data =
-            res.map((e) => _parseTrxItem(e, includeToAddress: true)).toList();
-      } else {
-        mm.error = true;
-        mm.data = 'Error';
-      }
-    } catch (e) {
-      mm.error = true;
-      mm.data = e.toString();
+    final proxyResult = await _trxTransactionListViaProxy(
+      address,
+      page: page,
+      offset: offset,
+    );
+    if (!proxyResult.error) {
+      return proxyResult;
     }
-    return mm;
+    debugPrint(
+      '[TransactionApi] TRX proxy txlist fallback: ${proxyResult.data}',
+    );
+    return _trxTransactionListViaLegacy(
+      address,
+      page: page,
+      offset: offset,
+      includeToAddress: true,
+    );
   }
 
   Future<MessageModel> trxContractTransactionList(
     String address,
     String contractAddress, {
-    int? fromBlock = 0,
-    int? endBlock = 99999999999,
     int? page = 1,
     int? offset = 999999,
   }) async {
-    final mm = MessageModel();
-    try {
-      final hostUrl = getHostByCoinMiniName('TRX');
-      final requestUrl =
-          '${hostUrl}transaction?address=$address&limit=$offset&start=$page&sort=-timestamp&count=true';
-      final h = Map<String, String>.from(header)
-        ..['TRON-PRO-API-KEY'] = '1908ecd1-99f1-4480-9353-c5a643b907b4';
-      final data =
-          await BaseApi.requestEmptyH.get(requestUrl, params: {}, header: h);
-      if (data != null) {
-        final res = data['data'] as List;
-        mm.data =
-            res.map((e) => _parseTrxItem(e, includeToAddress: false)).toList();
-      } else {
-        mm.error = true;
-        mm.data = 'Error';
-      }
-    } catch (e) {
-      mm.error = true;
-      mm.data = e.toString();
+    final proxyResult = await _trxContractTransactionListViaProxy(
+      address,
+      contractAddress,
+      page: page,
+      offset: offset,
+    );
+    if (!proxyResult.error) {
+      return proxyResult;
     }
-    return mm;
+    debugPrint(
+      '[TransactionApi] TRX proxy tokentx fallback: ${proxyResult.data}',
+    );
+    return _trxTransactionListViaLegacy(
+      address,
+      page: page,
+      offset: offset,
+      includeToAddress: false,
+      contractAddress: contractAddress,
+    );
   }
 
   /// TRX 根据交易 hash 获取交易信息
-  Future<MessageModel> trxTransactionInfoHash(String hash) async {
+  Future<MessageModel> trxTransactionInfoHash(
+    String hash, {
+    bool isTest = false,
+  }) async {
     final mm = MessageModel();
+    final proxyUrl = ProxyConfig.trxPath('transaction-info', isTest: isTest);
+    try {
+      final proxyData = await BaseApi.requestEmptyH.get(
+        proxyUrl,
+        params: {'hash': hash},
+        header: ProxyConfig.mergeAuthHeaders(proxyUrl, header),
+        timeout: _kProxyExplorerTimeout,
+      );
+      if (proxyData is Map && proxyData.isNotEmpty) {
+        mm.data = proxyData;
+        return mm;
+      }
+    } catch (e) {
+      // Fall back to legacy direct request when proxy is unavailable.
+      debugPrint('[TransactionApi] trxTransactionInfoHash proxy error: $e');
+    }
+
     try {
       final hostUrl = getHostByCoinMiniName('TRX');
       final requestUrl = '${hostUrl}transaction-info?hash=$hash';
-      final h = Map<String, String>.from(header)
-        ..['TRON-PRO-API-KEY'] = '1908ecd1-99f1-4480-9353-c5a643b907b4';
-      final data =
-          await BaseApi.requestEmptyH.get(requestUrl, params: {}, header: h);
+      final h = Map<String, String>.from(header);
+      if (_kLegacyTronProApiKey.isNotEmpty) {
+        h['TRON-PRO-API-KEY'] = _kLegacyTronProApiKey;
+      }
+      final data = await BaseApi.requestEmptyH.get(
+        requestUrl,
+        params: {},
+        header: h,
+      );
       if (data != null) {
         mm.data = data;
       } else {
@@ -181,31 +217,217 @@ extension TransactionApiBtcSolTrx on TransactionApi {
     return mm;
   }
 
-  // ---------------------------------------------------------------------------
-  // Private helpers
-  // ---------------------------------------------------------------------------
+  Future<MessageModel> _solTransactionListViaProxy(
+    String address, {
+    int? page,
+    int? offset,
+  }) async {
+    final mm = MessageModel();
+    try {
+      final data = await BaseApi.requestEmptyH.get(
+        ProxyConfig.explorerTxlist('sol'),
+        params: {'address': address, 'page': '$page', 'size': '$offset'},
+        header: header,
+        timeout: _kProxyExplorerTimeout,
+      );
+      final items = extractExplorerItems(data);
+      if (items.isEmpty && hasExplorerItemContainer(data)) {
+        mm.data = <SOLTransactionItem>[];
+        return mm;
+      }
 
-  /// 解析 TRX 交易条目，[includeToAddress] 控制是否从顶层字段填充 to/value
+      final mapped = items
+          .map(SOLTransactionItem.fromExplorerJson)
+          .where((item) => (item.txHash ?? '').isNotEmpty)
+          .toList();
+      if (mapped.isNotEmpty) {
+        mm.data = mapped;
+      } else {
+        mm.error = true;
+        mm.data = data is Map ? data['message'] ?? data['error'] : null;
+      }
+    } catch (e) {
+      mm.error = true;
+      mm.data = e.toString();
+    }
+    return mm;
+  }
+
+  Future<MessageModel> _solTransactionListViaSolscan(
+    String address, {
+    int? page,
+    int? offset,
+  }) async {
+    final mm = MessageModel();
+    try {
+      final hostUrl = getHostByCoinMiniName('SOL');
+      final start = explorerStartFromPage(page, offset);
+      final requestUrl =
+          '${hostUrl}account/solTransfers?account=$address&limit=$offset&offset=$start';
+      final h = Map<String, String>.from(header);
+      if (_kLegacySolscanApiToken.isNotEmpty) {
+        h['token'] = _kLegacySolscanApiToken;
+      }
+      final data = await BaseApi.requestEmptyH.get(
+        requestUrl,
+        params: {},
+        header: h,
+      );
+      if (data != null) {
+        final res = _txListValue(data['data']);
+        mm.data = res
+            .whereType<Map>()
+            .map(
+              (e) => SOLTransactionItem.fromJson(
+                e.map((key, value) => MapEntry(key.toString(), value)),
+              ),
+            )
+            .toList();
+      } else {
+        mm.error = true;
+        mm.data = 'Error';
+      }
+    } catch (e) {
+      mm.error = true;
+      mm.data = e.toString();
+    }
+    return mm;
+  }
+
+  Future<MessageModel> _trxTransactionListViaProxy(
+    String address, {
+    int? page,
+    int? offset,
+  }) async {
+    final mm = MessageModel();
+    try {
+      final data = await BaseApi.requestEmptyH.get(
+        ProxyConfig.explorerTxlist('trx'),
+        params: {'address': address, 'page': '$page', 'size': '$offset'},
+        header: header,
+        timeout: _kProxyExplorerTimeout,
+      );
+      final items = extractExplorerItems(data);
+      if (items.isNotEmpty || hasExplorerItemContainer(data)) {
+        mm.data = items
+            .map((e) => CommonResponseItemModel.fromJson(e))
+            .toList();
+      } else {
+        mm.error = true;
+        mm.data = data is Map ? data['message'] ?? data['error'] : null;
+      }
+    } catch (e) {
+      mm.error = true;
+      mm.data = e.toString();
+    }
+    return mm;
+  }
+
+  Future<MessageModel> _trxContractTransactionListViaProxy(
+    String address,
+    String contractAddress, {
+    int? page,
+    int? offset,
+  }) async {
+    final mm = MessageModel();
+    try {
+      final data = await BaseApi.requestEmptyH.get(
+        ProxyConfig.explorerTokentx('trx'),
+        params: {
+          'address': address,
+          'contractAddress': contractAddress,
+          'page': '$page',
+          'size': '$offset',
+        },
+        header: header,
+        timeout: _kProxyExplorerTimeout,
+      );
+      final items = extractExplorerItems(data);
+      if (items.isNotEmpty || hasExplorerItemContainer(data)) {
+        mm.data = items
+            .map((e) => CommonResponseItemModel.fromJson(e))
+            .toList();
+      } else {
+        mm.error = true;
+        mm.data = data is Map ? data['message'] ?? data['error'] : null;
+      }
+    } catch (e) {
+      mm.error = true;
+      mm.data = e.toString();
+    }
+    return mm;
+  }
+
+  Future<MessageModel> _trxTransactionListViaLegacy(
+    String address, {
+    int? page,
+    int? offset,
+    required bool includeToAddress,
+    String contractAddress = '',
+  }) async {
+    final mm = MessageModel();
+    try {
+      final hostUrl = getHostByCoinMiniName('TRX');
+      final start = explorerStartFromPage(page, offset);
+      final requestUrl =
+          '${hostUrl}transaction?address=$address&limit=$offset&start=$start&sort=-timestamp&count=true';
+      final h = Map<String, String>.from(header);
+      if (_kLegacyTronProApiKey.isNotEmpty) {
+        h['TRON-PRO-API-KEY'] = _kLegacyTronProApiKey;
+      }
+      final data = await BaseApi.requestEmptyH.get(
+        requestUrl,
+        params: {},
+        header: h,
+      );
+      if (data != null) {
+        final res = _txListValue(data['data']);
+        final mapped = res
+            .whereType<Map>()
+            .map(
+              (e) => _parseTrxItem(
+                e.map((key, value) => MapEntry(key.toString(), value)),
+                includeToAddress: includeToAddress,
+              ),
+            )
+            .where((item) {
+              if (contractAddress.isEmpty) return true;
+              return (item.contractAddress ?? '').toLowerCase() ==
+                  contractAddress.toLowerCase();
+            })
+            .toList();
+        mm.data = mapped;
+      } else {
+        mm.error = true;
+        mm.data = 'Error';
+      }
+    } catch (e) {
+      mm.error = true;
+      mm.data = e.toString();
+    }
+    return mm;
+  }
+
   CommonResponseItemModel _parseTrxItem(
     Map<String, dynamic> e, {
     required bool includeToAddress,
   }) {
     final item = CommonResponseItemModel.fromJson(e)
       ..blockHash = e['block'].toString()
-      ..hash = e['hash'] as String
+      ..hash = _txStringValue(e['hash'])
       ..timeStamp = e['timestamp'].toString()
-      ..from = e['ownerAddress'] as String;
+      ..from = _txStringValue(e['ownerAddress']);
     if (includeToAddress) {
-      item.to = e['toAddress'] as String;
-      item.value = e['amount'] as String;
+      item.to = _txStringValue(e['toAddress']);
+      item.value = _txStringValue(e['amount']);
     }
-    final triggerInfo = e['trigger_info'] as Map<String, dynamic>?;
+    final triggerInfo = _txMapValue(e['trigger_info']);
     if (triggerInfo != null) {
-      item.contractAddress =
-          triggerInfo['contract_address'] as String? ?? '';
+      item.contractAddress = _txStringValue(triggerInfo['contract_address']);
       if (item.contractAddress != '') {
-        item.to = triggerInfo['parameter']['_to'] as String? ?? '';
-        item.value = triggerInfo['parameter']['_value'] as String? ?? '';
+        final parameters = _txMapValue(triggerInfo['parameter']);
+        item.to = _txStringValue(parameters?['_to']);
+        item.value = _txStringValue(parameters?['_value']);
       }
     }
     return item;

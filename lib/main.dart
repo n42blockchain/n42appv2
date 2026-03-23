@@ -9,13 +9,15 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:n42_wallet/core/config/app_config.dart';
+import 'package:n42_wallet/core/platform/chat_social_auth_config.dart';
 import 'package:n42_wallet/core/platform/deep_link_service.dart';
+import 'package:n42_wallet/core/platform/social_auth_native_config.dart';
+import 'package:n42_wallet/core/routing/chat_sso_utils.dart';
 import 'package:n42_wallet/core/routing/deep_link_handler.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/di/injection.dart';
 import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
-import 'package:n42_wallet/features/component/enums/load.dart';
 import 'package:n42_wallet/features/home/home_page.dart';
 import 'package:n42_wallet/features/home/setting/security/security_setting.dart';
 import 'package:n42_wallet/features/splash/splash_page.dart';
@@ -28,8 +30,10 @@ import 'package:n42_wallet/features/mining/domain/repositories/mining_repository
 import 'package:n42_wallet/features/mining/presentation/providers/mining_providers.dart';
 import 'package:n42_wallet/features/mining_v2/provider/mining_v2_provider.dart';
 import 'package:n42_wallet/features/mining_v1/provider/mining_v1_providers.dart';
-import 'package:n42_wallet/features/mining_v1/provider/mining_provider.dart' show MiningProvider;
+import 'package:n42_wallet/features/mining_v1/provider/mining_provider.dart'
+    show MiningProvider;
 import 'package:n42_wallet/features/utils/app_push_utils.dart';
+import 'package:n42_wallet/features/utils/chat_logout_compat.dart';
 import 'package:n42_wallet/features/utils/notfication_utils.dart';
 import 'package:n42_wallet/features/wallet/pages/create_wallet/create/create_one.dart';
 import 'package:n42_wallet/features/wallet/pages/create_wallet/import/import_one.dart';
@@ -46,10 +50,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/core/constants/language_constants.dart';
 import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_chat/n42_chat.dart';
 import 'package:n42_chat/l10n/app_localizations.dart' as chat_l10n;
 import 'package:n42_wallet/core/config/api_keys_config.dart';
+import 'package:n42_wallet/core/config/proxy_config.dart';
 import 'package:n42_wallet/core/config/rpc_config.dart';
 import 'package:n42_wallet/core/security/phishing_detector.dart';
 import 'package:n42_wallet/core/security/secure_storage.dart';
@@ -73,7 +79,8 @@ void main() async {
   if (Platform.isIOS) {
     // 通过 shortestSide 判断是否为 iPad
     final firstView = WidgetsBinding.instance.platformDispatcher.views.first;
-    final shortestSide = firstView.physicalSize.shortestSide / firstView.devicePixelRatio;
+    final shortestSide =
+        firstView.physicalSize.shortestSide / firstView.devicePixelRatio;
     if (shortestSide < 600) {
       // iPhone：锁定竖屏
       await SystemChrome.setPreferredOrientations([
@@ -96,8 +103,6 @@ void main() async {
 
   // Initialize Firebase
   await Firebase.initializeApp();
-  await notification.init();
-
   // Create Riverpod ProviderContainer
   globalProviderContainer = ProviderContainer();
 
@@ -141,7 +146,7 @@ void main() async {
   };
   // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
   PlatformDispatcher.instance.onError = (error, stack) {
-    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: false);
     return true;
   };
 
@@ -181,6 +186,7 @@ Future<void> _clearKeychainOnFreshInstall() async {
   }
 }
 
+
 /// Main Application Widget
 ///
 /// Uses Riverpod for state management.
@@ -194,7 +200,12 @@ class N42AppV2 extends ConsumerStatefulWidget {
 class _N42AppV2State extends ConsumerState<N42AppV2> {
   DeepLinkService? _deepLinkService;
   DeepLinkHandler? _deepLinkHandler;
+  StreamSubscription? _chatAuthSubscription;
+  StreamSubscription? _chatUserSubscription;
   StreamSubscription<int>? _unreadCountSubscription;
+  DeepLinkData? _pendingChatDeepLink;
+  DeepLinkData? _pendingChatSsoDeepLink;
+  AuthStatus? _lastChatAuthStatus;
   @override
   void initState() {
     super.initState();
@@ -202,9 +213,12 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
     // ignore: deprecated_member_use_from_same_package
     AppGlobals.appContext = context;
     _initDeepLinks();
+
     ///是否打开FirebaseCrashlytics日志收集
     ///release + online 开启
-    FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(AppConfig.isOnline);
+    FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(
+      AppConfig.isOnline,
+    );
     initData();
     // 延迟初始化：钱包数据迁移 + N42Chat，不阻塞首帧渲染
     _initDeferredServices();
@@ -213,13 +227,25 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
   /// 延迟初始化重量级服务，在首帧渲染后执行
   void _initDeferredServices() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      // 本地通知初始化（后台执行，不阻塞首帧）
+      unawaited(_initLocalNotifications());
       // 钱包数据迁移（后台执行，不阻塞 UI）
-      _migrateWalletData();
+      unawaited(_migrateWalletData());
       // N42Chat 初始化（后台执行，不阻塞 UI）
-      _initN42Chat();
+      unawaited(_initN42Chat());
       // 钓鱼检测初始化（后台执行，不阻塞 UI）
-      _initPhishingDetector();
+      unawaited(_initPhishingDetector());
     });
+  }
+
+  Future<void> _initLocalNotifications() async {
+    try {
+      await notification.init();
+    } catch (e) {
+      if (kDebugMode) {
+        debugPrint('Local notification initialization failed: $e');
+      }
+    }
   }
 
   /// 初始化钓鱼网址检测服务（后台执行，不阻塞 UI）
@@ -241,7 +267,11 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
       );
       if (await migration.needsMigration()) {
         final count = await migration.migrate();
-        if (kDebugMode) debugPrint('[Security] Wallet data migration completed: $count wallets migrated');
+        if (kDebugMode) {
+          debugPrint(
+            '[Security] Wallet data migration completed: $count wallets migrated',
+          );
+        }
       }
     } catch (e) {
       if (kDebugMode) debugPrint('[Security] Wallet data migration failed: $e');
@@ -251,6 +281,92 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
   /// 后台初始化 N42Chat 模块
   Future<void> _initN42Chat() async {
     try {
+      await purgePendingCancelledChatDataCompat();
+
+      const envChatGoogleClientId = String.fromEnvironment(
+        'N42_CHAT_GOOGLE_CLIENT_ID',
+      );
+      const envChatGoogleServerClientId = String.fromEnvironment(
+        'N42_CHAT_GOOGLE_SERVER_CLIENT_ID',
+      );
+      const envChatTwitterApiKey = String.fromEnvironment(
+        'N42_CHAT_TWITTER_API_KEY',
+      );
+      const envChatTwitterApiSecret = String.fromEnvironment(
+        'N42_CHAT_TWITTER_API_SECRET',
+      );
+      const envChatTwitterRedirectUri = String.fromEnvironment(
+        'N42_CHAT_TWITTER_REDIRECT_URI',
+      );
+      const envChatWeChatAppId = String.fromEnvironment(
+        'N42_CHAT_WECHAT_APP_ID',
+      );
+      const envChatWeChatUniversalLink = String.fromEnvironment(
+        'N42_CHAT_WECHAT_UNIVERSAL_LINK',
+      );
+      const envGoogleTranslateApiKey = String.fromEnvironment(
+        'GOOGLE_TRANSLATE_API_KEY',
+      );
+      const envGoogleSpeechApiKey = String.fromEnvironment(
+        'GOOGLE_SPEECH_API_KEY',
+      );
+      const envAzureSpeechApiKey = String.fromEnvironment(
+        'AZURE_SPEECH_API_KEY',
+      );
+      const envAzureSpeechRegion = String.fromEnvironment(
+        'AZURE_SPEECH_REGION',
+        defaultValue: 'eastus',
+      );
+      const envGiphyApiKey = String.fromEnvironment('GIPHY_API_KEY');
+      const envAiApiKey = String.fromEnvironment('AI_API_KEY');
+      const envAiBaseUrl = String.fromEnvironment(
+        'AI_BASE_URL',
+        defaultValue: 'https://api.groq.com/openai',
+      );
+      const envAiModel = String.fromEnvironment(
+        'AI_MODEL',
+        defaultValue: 'llama-3.3-70b-versatile',
+      );
+      const envDebankApiKey = String.fromEnvironment('DEBANK_API_KEY');
+      const envAlchemyApiKey = String.fromEnvironment('ALCHEMY_API_KEY');
+      final nativeSocialAuthConfig = await SocialAuthNativeConfig.load();
+      final chatSocialAuthConfig = ChatSocialAuthConfig.resolve(
+        nativeConfig: nativeSocialAuthConfig,
+        envGoogleClientId: envChatGoogleClientId,
+        envGoogleServerClientId: envChatGoogleServerClientId,
+        envTwitterApiKey: envChatTwitterApiKey,
+        envTwitterApiSecret: envChatTwitterApiSecret,
+        envTwitterRedirectUri: envChatTwitterRedirectUri,
+        envWeChatAppId: envChatWeChatAppId,
+        envWeChatUniversalLink: envChatWeChatUniversalLink,
+      );
+      String? normalizedEnv(String value) {
+        final trimmed = value.trim();
+        if (trimmed.isEmpty) return null;
+        return trimmed;
+      }
+
+      final proxyAuthToken = normalizedEnv(ProxyConfig.authToken);
+      final directGoogleTranslateApiKey = normalizedEnv(
+        envGoogleTranslateApiKey,
+      );
+      final directGoogleSpeechApiKey = normalizedEnv(envGoogleSpeechApiKey);
+      final directAzureSpeechApiKey = normalizedEnv(envAzureSpeechApiKey);
+      final directGiphyApiKey = normalizedEnv(envGiphyApiKey);
+      final directAiApiKey = normalizedEnv(envAiApiKey);
+      final directDebankApiKey = normalizedEnv(envDebankApiKey);
+      final directAlchemyApiKey = normalizedEnv(envAlchemyApiKey);
+
+      if (kDebugMode) {
+        for (final line in chatSocialAuthConfig.diagnostics(
+          isAndroid: Platform.isAndroid,
+          isIOS: Platform.isIOS,
+          isMacOS: Platform.isMacOS,
+        )) {
+          debugPrint(line);
+        }
+      }
+
       final String pushAppId;
       if (Platform.isAndroid) {
         pushAppId = 'ai.n42.www.android';
@@ -260,29 +376,92 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
         pushAppId = 'ai.n42.www.web';
       }
 
-      await N42Chat.initialize(N42ChatConfig(
-        defaultHomeserver: 'https://matrix.n42.network',
-        enableEncryption: true,
-        enablePushNotifications: true,
-        pushGatewayUrl: 'https://m.si46.world/_matrix/push/v1/notify',
-        pushAppId: pushAppId,
-        walletBridge: N42WalletBridge(),
-        apiHubBridge: N42ApiHubBridge(),
-        aiApiKey: ApiKeysConfig.aiApiKey,
-        aiBaseUrl: ApiKeysConfig.aiBaseUrl,
-        aiModel: ApiKeysConfig.aiModel,
-      ));
-
+      // Push service may consume an initial notification during initialize(),
+      // so navigator wiring must be ready before chat bootstraps.
       N42Chat.setNavigatorKey(AppGlobals.navigatorKey);
-
       N42Chat.setNotificationTapHandler((roomId, eventId) {
-        if (kDebugMode) debugPrint('N42Chat notification tapped: roomId=$roomId');
-        if (roomId != null && AppGlobals.navigatorKey.currentContext != null) {
-          Navigator.of(AppGlobals.navigatorKey.currentContext!).push(
-            MaterialPageRoute(builder: (_) => N42Chat.chatWidget()),
+        AppPushUtils.recordHandledChatNotificationTap(
+          roomId: roomId,
+          eventId: eventId,
+        );
+        if (kDebugMode) {
+          debugPrint(
+            'N42Chat notification tapped: roomId=$roomId, eventId=$eventId',
           );
         }
       });
+
+      await N42Chat.initialize(
+        N42ChatConfig(
+          defaultHomeserver: 'https://m.si46.world',
+          enableEncryption: true,
+          enablePushNotifications: true,
+          pushGatewayUrl: 'https://m.si46.world/_matrix/push/v1/notify',
+          pushAppId: pushAppId,
+          enableGoogleLogin: chatSocialAuthConfig
+              .supportsGoogleForCurrentPlatform(
+                isAndroid: Platform.isAndroid,
+                isIOS: Platform.isIOS,
+                isMacOS: Platform.isMacOS,
+              ),
+          enableAppleLogin: Platform.isIOS || Platform.isMacOS,
+          enableFacebookLogin: Platform.isAndroid,
+          enableTwitterLogin: chatSocialAuthConfig.twitterConfigured,
+          enableWeChatLogin: chatSocialAuthConfig.weChatConfigured,
+          enableSsoLogin: true,
+          googleClientId: chatSocialAuthConfig.googleClientId.isEmpty
+              ? null
+              : chatSocialAuthConfig.googleClientId,
+          googleServerClientId:
+              chatSocialAuthConfig.googleServerClientId.isEmpty
+              ? null
+              : chatSocialAuthConfig.googleServerClientId,
+          twitterApiKey: chatSocialAuthConfig.twitterApiKey.isEmpty
+              ? null
+              : chatSocialAuthConfig.twitterApiKey,
+          twitterApiSecret: chatSocialAuthConfig.twitterApiSecret.isEmpty
+              ? null
+              : chatSocialAuthConfig.twitterApiSecret,
+          twitterRedirectUri: chatSocialAuthConfig.twitterConfigured
+              ? chatSocialAuthConfig.twitterRedirectUri
+              : null,
+          weChatAppId: chatSocialAuthConfig.weChatAppId.isEmpty
+              ? null
+              : chatSocialAuthConfig.weChatAppId,
+          weChatUniversalLink: chatSocialAuthConfig.weChatUniversalLink.isEmpty
+              ? null
+              : chatSocialAuthConfig.weChatUniversalLink,
+          ssoRedirectUrl: 'n42://auth/sso',
+          walletBridge: N42WalletBridge(),
+          apiHubBridge: N42ApiHubBridge(),
+          proxyAuthToken: proxyAuthToken,
+          giphyApiKey: directGiphyApiKey,
+          giphyBaseUrl: 'https://api.giphy.com/v1/gifs',
+          giphyUseProxyEndpoint: false,
+          googleTranslateApiKey: directGoogleTranslateApiKey,
+          aiApiKey: directAiApiKey,
+          aiBaseUrl: envAiBaseUrl,
+          aiModel: envAiModel,
+          aiUseProxyEndpoint: false,
+          googleSpeechApiKey: directGoogleSpeechApiKey,
+          azureSpeechApiKey: directAzureSpeechApiKey,
+          azureSpeechRegion: envAzureSpeechRegion,
+          speechGoogleBaseUrl: null,
+          speechAzureBaseUrl: null,
+          speechUseProxyEndpoint: false,
+          marketBaseUrl: 'https://api.coingecko.com/api/v3',
+          marketUseProxyEndpoint: false,
+          debankApiKey: directDebankApiKey,
+          debankBaseUrl: 'https://open-api.debank.com/v1',
+          debankUseProxyEndpoint: false,
+          alchemyApiKey: directAlchemyApiKey,
+          alchemyBaseUrl: 'https://eth-mainnet.g.alchemy.com/v2',
+          alchemyUseProxyEndpoint: false,
+        ),
+      );
+      await _flushPendingChatDeepLink();
+      await _flushPendingChatSsoDeepLink();
+      await AppPushUtils.flushPendingChatNotification();
 
       // 同步当前主题到 n42_chat
       final currentTheme = globalProviderContainer.read(themeModeProvider);
@@ -295,34 +474,297 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
       // 监听 n42_chat 语言变化，同步更新主应用
       N42Chat.addLocaleListener((locale) {
         final currentAppLocale = globalProviderContainer.read(localeProvider);
-        if (currentAppLocale.languageCode != locale.languageCode) {
-          globalProviderContainer.read(localeProvider.notifier).setLocale(locale.languageCode);
-          if (kDebugMode) debugPrint('Main app locale synced from N42Chat: $locale');
+        if (languageCodeFromLocale(currentAppLocale) !=
+            languageCodeFromLocale(locale)) {
+          globalProviderContainer
+              .read(localeProvider.notifier)
+              .setLocale(languageCodeFromLocale(locale));
+          if (kDebugMode) {
+            debugPrint('Main app locale synced from N42Chat: $locale');
+          }
         }
       });
 
       // 监听未读消息数
       _unreadCountSubscription = N42Chat.unreadCountStream.listen((count) {
-        globalProviderContainer.read(unreadCountProvider.notifier).setCount(count);
+        globalProviderContainer
+            .read(unreadCountProvider.notifier)
+            .setCount(count);
         if (kDebugMode) debugPrint('N42Chat unread count updated: $count');
       });
+      _chatUserSubscription?.cancel();
+      _chatUserSubscription = N42Chat.userStream.listen((_) {
+        unawaited(_flushPendingChatDeepLink());
+        unawaited(_flushPendingChatSsoDeepLink());
+        unawaited(AppPushUtils.flushPendingChatNotification());
+      });
+      _lastChatAuthStatus = N42Chat.authStatus;
+      _syncHostWithChatAuthStatus(_lastChatAuthStatus);
+      _chatAuthSubscription?.cancel();
+      _chatAuthSubscription = N42Chat.authStatusStream.listen((status) {
+        final previousStatus = _lastChatAuthStatus;
+        _lastChatAuthStatus = status;
+        _syncHostWithChatAuthStatus(status, previousStatus: previousStatus);
+      });
 
-      if (kDebugMode) debugPrint('N42Chat initialized successfully with theme: $currentTheme');
+      if (kDebugMode) {
+        debugPrint(
+          'N42Chat initialized successfully with theme: $currentTheme',
+        );
+      }
     } catch (e) {
       if (kDebugMode) debugPrint('N42Chat initialization failed: $e');
     }
   }
+
+  bool get _isChatSessionReady => N42Chat.isInitialized && N42Chat.isLoggedIn;
+
+  bool _isChatDeepLink(DeepLinkType type) {
+    return type == DeepLinkType.chat ||
+        type == DeepLinkType.user ||
+        type == DeepLinkType.group ||
+        type == DeepLinkType.friendCard;
+  }
+
+  Future<void> _routeChatSsoDeepLink(DeepLinkData data) async {
+    if (!N42Chat.isInitialized) {
+      _pendingChatSsoDeepLink = data;
+      if (kDebugMode) {
+        debugPrint(
+          'Queued chat SSO deep link until N42Chat initializes: $data',
+        );
+      }
+      return;
+    }
+
+    final loginToken =
+        data.params['loginToken'] ??
+        data.params['login_token'] ??
+        data.params['token'] ??
+        '';
+    if (loginToken.isEmpty) {
+      if (kDebugMode) {
+        debugPrint(
+          'Deep link: SSO callback missing login token: ${data.sanitizedUri}',
+        );
+      }
+      return;
+    }
+
+    final homeserver = normalizeChatSsoHomeserver(
+      data.params['homeserver'],
+      fallbackHomeserver: N42Chat.config?.defaultHomeserver,
+    );
+    if (homeserver == null || homeserver.isEmpty) {
+      if (kDebugMode) {
+        debugPrint(
+          'Deep link: SSO callback missing or invalid homeserver: '
+          '${data.sanitizedUri}',
+        );
+      }
+      return;
+    }
+
+    try {
+      await N42Chat.loginWithLoginToken(
+        homeserver: homeserver,
+        loginToken: loginToken,
+      );
+    } catch (e) {
+      if (kDebugMode) {
+        debugPrint('Deep link: failed to complete chat SSO login: $e');
+      }
+    }
+  }
+
+  Future<void> _openChatEntry(BuildContext navContext) async {
+    if (!mounted) return;
+    await Navigator.of(
+      navContext,
+    ).push(MaterialPageRoute(builder: (_) => N42Chat.chatWidget()));
+  }
+
+  Future<void> _openChatConversation(
+    BuildContext navContext,
+    String roomId,
+  ) async {
+    if (!_isChatSessionReady) {
+      await _openChatEntry(navContext);
+      return;
+    }
+
+    try {
+      await N42Chat.openConversation(roomId, context: navContext);
+    } catch (e) {
+      if (kDebugMode) {
+        debugPrint('Deep link: failed to open conversation $roomId: $e');
+      }
+      if (!mounted || !navContext.mounted) return;
+      await _openChatEntry(navContext);
+    }
+  }
+
+  Future<void> _openDirectMessage(
+    BuildContext navContext,
+    String userId,
+  ) async {
+    if (!_isChatSessionReady) {
+      await _openChatEntry(navContext);
+      return;
+    }
+
+    try {
+      final roomId = await N42Chat.createDirectMessage(userId);
+      if (!mounted || !navContext.mounted) return;
+      await N42Chat.openConversation(roomId, context: navContext);
+    } catch (e) {
+      if (kDebugMode) {
+        debugPrint('Deep link: failed to open direct message for $userId: $e');
+      }
+      if (!mounted || !navContext.mounted) return;
+      await _openChatEntry(navContext);
+    }
+  }
+
+  Future<void> _openChatUserProfile(
+    BuildContext navContext,
+    String userId,
+  ) async {
+    if (!_isChatSessionReady) {
+      await _openChatEntry(navContext);
+      return;
+    }
+
+    try {
+      await N42Chat.openUserProfile(userId, context: navContext);
+    } catch (e) {
+      if (kDebugMode) {
+        debugPrint('Deep link: failed to open user profile for $userId: $e');
+      }
+      if (!mounted || !navContext.mounted) return;
+      await _openChatEntry(navContext);
+    }
+  }
+
+  Future<void> _routeChatDeepLink(
+    DeepLinkData data, {
+    required BuildContext navContext,
+  }) async {
+    if (!N42Chat.isInitialized) {
+      _pendingChatDeepLink = data;
+      if (kDebugMode) {
+        debugPrint('Queued chat deep link until N42Chat initializes: $data');
+      }
+      return;
+    }
+
+    if (_isChatDeepLink(data.type) && !N42Chat.isLoggedIn) {
+      _pendingChatDeepLink = data;
+      await _openChatEntry(navContext);
+      return;
+    }
+
+    switch (data.type) {
+      case DeepLinkType.chat:
+        final roomId = data.params['roomId'] ?? '';
+        if (roomId.isNotEmpty) {
+          await _openChatConversation(navContext, roomId);
+        }
+        return;
+      case DeepLinkType.user:
+        final userId = data.params['userId'] ?? '';
+        if (userId.isNotEmpty) {
+          await _openDirectMessage(navContext, userId);
+        }
+        return;
+      case DeepLinkType.group:
+        final groupId = data.params['groupId'] ?? '';
+        if (groupId.isNotEmpty) {
+          await _openChatConversation(navContext, groupId);
+        }
+        return;
+      case DeepLinkType.friendCard:
+        final userId = data.params['userId'] ?? '';
+        if (userId.isNotEmpty) {
+          await _openChatUserProfile(navContext, userId);
+        } else {
+          await _openChatEntry(navContext);
+        }
+        return;
+      case DeepLinkType.chatSso:
+        return;
+      case DeepLinkType.walletConnect:
+      case DeepLinkType.groupMining:
+      case DeepLinkType.fullNode:
+      case DeepLinkType.unknown:
+        return;
+    }
+  }
+
+  Future<void> _flushPendingChatDeepLink() async {
+    final pending = _pendingChatDeepLink;
+    if (pending == null || !_isChatDeepLink(pending.type) || !mounted) {
+      return;
+    }
+
+    final navContext = AppGlobals.navigatorKey.currentContext;
+    if (navContext == null) {
+      return;
+    }
+
+    _pendingChatDeepLink = null;
+    await _routeChatDeepLink(pending, navContext: navContext);
+  }
+
+  Future<void> _flushPendingChatSsoDeepLink() async {
+    final pending = _pendingChatSsoDeepLink;
+    if (pending == null || pending.type != DeepLinkType.chatSso) {
+      return;
+    }
+
+    _pendingChatSsoDeepLink = null;
+    await _routeChatSsoDeepLink(pending);
+  }
+
+  void _syncHostWithChatAuthStatus(
+    AuthStatus? status, {
+    AuthStatus? previousStatus,
+  }) {
+    if (status == null) {
+      return;
+    }
+
+    if (status == AuthStatus.authenticated &&
+        previousStatus != AuthStatus.authenticated) {
+      unawaited(clearPendingCancelledChatDataPurgeCompat());
+      N42Chat.notifyUserChanged();
+      return;
+    }
+
+    if ((status == AuthStatus.unauthenticated ||
+            status == AuthStatus.initial) &&
+        previousStatus != status) {
+      N42Chat.notifyUserChanged();
+      globalProviderContainer.read(unreadCountProvider.notifier).reset();
+      AppPushUtils.clearBadgeOnly();
+    }
+  }
+
   Future<void> initData() async {
+    unawaited(_initPushServices());
+    unawaited(ref.read(appInitProvider.future));
+  }
+
+  Future<void> _initPushServices() async {
     try {
       /// FCM推送设置
       /// ios 通过fcm集成的apns推送 同样需要开启vpn
       await AppPushUtils.init();
-      if (!mounted) return;
-      await ref.read(appInitProvider.future);
-    } catch (err) {
-      if (kDebugMode) debugPrint("FCM推送初始化失败");
+    } catch (e) {
+      if (kDebugMode) debugPrint('FCM推送初始化失败: $e');
     }
   }
+
   Future<void> _initDeepLinks() async {
     try {
       final service = getIt<DeepLinkService>();
@@ -337,46 +779,27 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
     }
   }
 
-  void _handleDeepLinkNavigation(DeepLinkData data) {
+  Future<void> _handleDeepLinkNavigation(DeepLinkData data) async {
     if (!mounted) return;
     final navContext = AppGlobals.navigatorKey.currentContext;
     if (navContext == null) return;
 
+    if (_isChatDeepLink(data.type)) {
+      await _routeChatDeepLink(data, navContext: navContext);
+      return;
+    }
+
+    if (data.type == DeepLinkType.chatSso) {
+      await _routeChatSsoDeepLink(data);
+      return;
+    }
+
     switch (data.type) {
       case DeepLinkType.walletConnect:
         final wcUri = data.params['wcUri'] ?? data.uri.toString();
-        eventBus.fire(EventPublic(EventPublicType.walletConnect,
-            stringValue: wcUri));
-        break;
-
-      case DeepLinkType.chat:
-        final roomId = data.params['roomId'] ?? '';
-        if (roomId.isNotEmpty && AppGlobals.userInfo != null) {
-          N42Chat.openConversation(roomId, context: navContext);
-        }
-        break;
-
-      case DeepLinkType.user:
-        final userId = data.params['userId'] ?? '';
-        if (userId.isNotEmpty && AppGlobals.userInfo != null) {
-          if (kDebugMode) debugPrint('Deep link: Navigate to user $userId');
-          // User profile navigation via N42Chat
-          N42Chat.openConversation(userId, context: navContext);
-        }
-        break;
-
-      case DeepLinkType.group:
-        final groupId = data.params['groupId'] ?? '';
-        if (groupId.isNotEmpty && AppGlobals.userInfo != null) {
-          N42Chat.openConversation(groupId, context: navContext);
-        }
-        break;
-
-      case DeepLinkType.friendCard:
-        if (AppGlobals.userInfo != null) {
-          Navigator.of(navContext).push(
-              MaterialPageRoute(builder: (_) => N42Chat.chatWidget()));
-        }
+        eventBus.fire(
+          EventPublic(EventPublicType.walletConnect, stringValue: wcUri),
+        );
         break;
 
       case DeepLinkType.groupMining:
@@ -387,23 +810,30 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
         if (kDebugMode) debugPrint('Deep link: Full node - ${data.params}');
         break;
 
+      case DeepLinkType.chat:
+      case DeepLinkType.user:
+      case DeepLinkType.group:
+      case DeepLinkType.friendCard:
+      case DeepLinkType.chatSso:
       default:
         if (kDebugMode) debugPrint('Deep link: Unhandled type ${data.type}');
     }
   }
+
   @override
   void dispose() {
+    _chatAuthSubscription?.cancel();
+    _chatUserSubscription?.cancel();
     _unreadCountSubscription?.cancel();
     _deepLinkHandler?.dispose();
     // ignore: discarded_futures
     _deepLinkService?.dispose();
     super.dispose();
   }
+
   bool _splashComplete = false;
 
-  Widget _widgetPage(Load loadState) {
-    // Splash 完成后直接进入首页，不再依赖 loadState
-    // （getUserInfo 刷新是后台操作，不应阻塞首页渲染）
+  Widget _widgetPage() {
     if (_splashComplete) {
       return HomePage();
     }
@@ -422,6 +852,7 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
       },
     );
   }
+
   /// 根据屏幕宽度计算 ScreenUtil 的 designSize。
   /// 手机（< 600pt）使用标准 750x1334。
   /// iPad/平板（>= 600pt）使用更大的 designSize，
@@ -445,11 +876,10 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
       minTextAdapt: true,
       splitScreenMode: true,
       // Use builder only if you need to use library outside ScreenUtilInit context
-      builder: (_ , child) {
+      builder: (_, child) {
         final locale = ref.watch(localeProvider);
         final themeMode = ref.watch(themeModeProvider);
         final accentColor = ref.watch(accentColorProvider);
-        final loadState = ref.watch(appLoadStateProvider);
         return GestureDetector(
           onTap: () {
             //全局
@@ -470,24 +900,23 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
             theme: ThemeAdapter.buildLight(accentColor),
             darkTheme: ThemeAdapter.buildDark(accentColor),
             title: 'N42Wallet',
-            home: _widgetPage(loadState),
+            home: _widgetPage(),
             routes: routes,
             navigatorObservers: <NavigatorObserver>[AppGlobals.routeObserver],
           ),
         );
       },
-      //child: const HomePage(title: 'First Method'),
     );
   }
+
   //路由
-  Map<String,WidgetBuilder> routes={
-    "/HomePage":(context)=>HomePage(),
-    "/CreateOne":(context)=>CreateOne(),
-    "/ImportOne":(context)=>ImportOne(),
-    "/ImportPrivatekey":(context)=>ImportPrivatekey(),
-    "/ImportCloudBackup":(context)=>ImportCloudBackup(),
-    "/LoginPage":(context)=>LoginPage(),
+  final Map<String, WidgetBuilder> routes = {
+    "/HomePage": (context) => HomePage(),
+    "/CreateOne": (context) => CreateOne(),
+    "/ImportOne": (context) => ImportOne(),
+    "/ImportPrivatekey": (context) => ImportPrivatekey(),
+    "/ImportCloudBackup": (context) => ImportCloudBackup(),
+    "/LoginPage": (context) => LoginPage(),
     "/securitySetting": (context) => SecuritySetting(),
-  //"/BackupOne":(context,)=>BackupOne(),
-};
+  };
 }

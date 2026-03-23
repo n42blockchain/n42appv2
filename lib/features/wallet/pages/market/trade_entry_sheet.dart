@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/features/wallet/pages/market/trade_entry_sheet_utils.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/models/portfolio_trade.dart';
 import 'package:n42_wallet/features/wallet/services/portfolio_trade_service.dart';
@@ -73,11 +74,7 @@ class _TradeEntrySheetState extends State<_TradeEntrySheet> {
   @override
   void initState() {
     super.initState();
-    if (widget.currentPrice > 0) {
-      _priceCtrl.text = widget.currentPrice.toStringAsFixed(
-        widget.currentPrice >= 1 ? 2 : 6,
-      );
-    }
+    _priceCtrl.text = initialTradeEntryPrice(widget.currentPrice);
     _loadTrades();
   }
 
@@ -89,30 +86,38 @@ class _TradeEntrySheetState extends State<_TradeEntrySheet> {
   }
 
   Future<void> _loadTrades() async {
-    final list =
-        await PortfolioTradeService.getTradesForCoin(widget.coinId);
+    final list = await PortfolioTradeService.getTradesForCoin(widget.coinId);
     if (mounted) setState(() => _trades = list);
   }
 
   Future<void> _save() async {
     if (!(_formKey.currentState?.validate() ?? false)) return;
+    if (_loading) return;
     final qty = double.tryParse(_qtyCtrl.text.trim()) ?? 0;
     final price = double.tryParse(_priceCtrl.text.trim()) ?? 0;
     if (qty <= 0 || price <= 0) return;
 
     setState(() => _loading = true);
-    await PortfolioTradeService.insertTrade(PortfolioTrade(
-      coinId: widget.coinId,
-      symbol: widget.symbol.toLowerCase(),
-      name: widget.name,
-      quantity: qty,
-      buyPriceUsd: price,
-      buyTimeMs: DateTime.now().millisecondsSinceEpoch,
-    ));
-    _qtyCtrl.clear();
-    _changed = true;
-    await _loadTrades();
-    setState(() => _loading = false);
+    try {
+      await PortfolioTradeService.insertTrade(
+        PortfolioTrade(
+          coinId: widget.coinId,
+          symbol: widget.symbol.toLowerCase(),
+          name: widget.name,
+          quantity: qty,
+          buyPriceUsd: price,
+          buyTimeMs: DateTime.now().millisecondsSinceEpoch,
+        ),
+      );
+      if (!mounted) return;
+      _qtyCtrl.clear();
+      _changed = true;
+      await _loadTrades();
+    } finally {
+      if (mounted) {
+        setState(() => _loading = false);
+      }
+    }
   }
 
   Future<void> _deleteTrade(PortfolioTrade trade) async {
@@ -125,15 +130,22 @@ class _TradeEntrySheetState extends State<_TradeEntrySheet> {
   @override
   Widget build(BuildContext context) {
     final bgColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemBgColor.name);
+      context,
+      AppThemeKeys.itemBgColor.name,
+    );
     final textColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainTextColor.name);
+      context,
+      AppThemeKeys.mainTextColor.name,
+    );
     final subColor = textColor.withAlpha(153);
     final accentColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainBlueColor.name);
+      context,
+      AppThemeKeys.mainBlueColor.name,
+    );
     final s = S.of(context);
 
     return PopScope(
+      canPop: canDismissTradeEntrySheet(_loading),
       child: Container(
         decoration: BoxDecoration(
           color: bgColor,
@@ -175,10 +187,10 @@ class _TradeEntrySheetState extends State<_TradeEntrySheet> {
                       ),
                     ),
                     IconButton(
-                      onPressed: () =>
-                          Navigator.pop(context, _changed),
-                      icon:
-                          Icon(Icons.close, color: subColor, size: 28.sp),
+                      onPressed: _loading
+                          ? null
+                          : () => Navigator.pop(context, _changed),
+                      icon: Icon(Icons.close, color: subColor, size: 28.sp),
                     ),
                   ],
                 ),
@@ -238,8 +250,10 @@ class _TradeEntrySheetState extends State<_TradeEntrySheet> {
                                   color: Colors.white,
                                 ),
                               )
-                            : Text(s.g_pnl_save,
-                                style: TextStyle(fontSize: 24.sp)),
+                            : Text(
+                                s.g_pnl_save,
+                                style: TextStyle(fontSize: 24.sp),
+                              ),
                       ),
                     ],
                   ),
@@ -250,9 +264,10 @@ class _TradeEntrySheetState extends State<_TradeEntrySheet> {
               if (_trades.isNotEmpty) ...[
                 SizedBox(height: 16.h),
                 Divider(
-                    height: 1,
-                    thickness: 0.5,
-                    color: subColor.withAlpha(40)),
+                  height: 1,
+                  thickness: 0.5,
+                  color: subColor.withAlpha(40),
+                ),
                 ConstrainedBox(
                   constraints: BoxConstraints(maxHeight: 220.h),
                   child: ListView.builder(
@@ -260,25 +275,29 @@ class _TradeEntrySheetState extends State<_TradeEntrySheet> {
                     itemCount: _trades.length,
                     itemBuilder: (_, i) {
                       final t = _trades[i];
-                      final dateStr = DateFormat('yyyy-MM-dd').format(t.buyTime);
+                      final dateStr = DateFormat(
+                        'yyyy-MM-dd',
+                      ).format(t.buyTime);
                       return ListTile(
                         dense: true,
                         contentPadding: EdgeInsets.symmetric(
-                            horizontal: 20.w, vertical: 0),
+                          horizontal: 20.w,
+                          vertical: 0,
+                        ),
                         title: Text(
                           '${t.quantity} × \$${_fmt(t.buyPriceUsd)}',
-                          style: TextStyle(
-                              fontSize: 26.sp, color: textColor),
+                          style: TextStyle(fontSize: 26.sp, color: textColor),
                         ),
                         subtitle: Text(
                           dateStr,
-                          style: TextStyle(
-                              fontSize: 20.sp, color: subColor),
+                          style: TextStyle(fontSize: 20.sp, color: subColor),
                         ),
                         trailing: IconButton(
-                          icon: Icon(Icons.delete_outline,
-                              color: const Color(0xFFEF4444),
-                              size: 24.sp),
+                          icon: Icon(
+                            Icons.delete_outline,
+                            color: const Color(0xFFEF4444),
+                            size: 24.sp,
+                          ),
                           onPressed: () => _deleteTrade(t),
                         ),
                       );
@@ -296,10 +315,10 @@ class _TradeEntrySheetState extends State<_TradeEntrySheet> {
   }
 
   String _fmt(double v) => v.toStringAsFixed(switch (v) {
-        >= 1000 => 2,
-        >= 1 => 4,
-        _ => 6,
-      });
+    >= 1000 => 2,
+    >= 1 => 4,
+    _ => 6,
+  });
 }
 
 // ─── Reusable numeric text field ─────────────────────────────────────────
@@ -327,11 +346,8 @@ class _NumField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
-      keyboardType:
-          const TextInputType.numberWithOptions(decimal: true),
-      inputFormatters: [
-        FilteringTextInputFormatter.allow(RegExp(r'[\d\.]')),
-      ],
+      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+      inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[\d\.]'))],
       style: TextStyle(color: textColor, fontSize: 26.sp),
       validator: validator,
       decoration: InputDecoration(
@@ -341,8 +357,7 @@ class _NumField extends StatelessWidget {
         hintStyle: TextStyle(color: subColor.withAlpha(100), fontSize: 24.sp),
         filled: true,
         fillColor: subColor.withAlpha(20),
-        contentPadding:
-            EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
+        contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.r),
           borderSide: BorderSide.none,

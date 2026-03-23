@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gesture_password_widget/gesture_password_widget.dart';
 
 class GesturePassword extends StatelessWidget{
-  final Function completeEvent;
+  final ValueChanged<String> completeEvent;
   final double identifySize;
   final List<int>? answer;
   const GesturePassword(this.completeEvent,this.identifySize,{this.answer,super.key});

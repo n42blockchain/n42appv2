@@ -188,8 +188,8 @@ Widget textFieldStyle2(
           ],
         ),
       ),
-      if (_buildMessageWidget(context, message: message, errorMessage: errorMessage, messageMargin: messageMargin) != null)
-        _buildMessageWidget(context, message: message, errorMessage: errorMessage, messageMargin: messageMargin)!,
+      if (_buildMessageWidget(context, message: message, errorMessage: errorMessage, messageMargin: messageMargin) case final msgWidget?)
+        msgWidget,
     ],
   );
 }

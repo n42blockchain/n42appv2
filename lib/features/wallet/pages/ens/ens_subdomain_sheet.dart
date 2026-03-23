@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/features/wallet/pages/ens/ens_chain_config.dart';
+import 'package:n42_wallet/features/wallet/pages/ens/ens_subdomain_sheet_utils.dart';
 import 'package:n42_wallet/features/wallet/services/ens_registration_service.dart';
 
 /// 创建子域名的 BottomSheet
@@ -87,11 +88,14 @@ class _EnsCreateSubdomainSheetState extends State<EnsCreateSubdomainSheet> {
   bool _isValidAddress(String addr) => _hexAddrRegex.hasMatch(addr.trim());
 
   Future<void> _onCreate() async {
+    if (_creating) return;
     final label = _labelController.text.trim();
     final owner = _ownerController.text.trim();
 
     if (!widget.ensService.isValidSubdomainLabel(label)) {
-      setState(() => _labelError = S.of(context).g_key_ens_subdomain_invalid_label);
+      setState(
+        () => _labelError = S.of(context).g_key_ens_subdomain_invalid_label,
+      );
       return;
     }
     if (owner.isNotEmpty && !_isValidAddress(owner)) {
@@ -118,43 +122,50 @@ class _EnsCreateSubdomainSheetState extends State<EnsCreateSubdomainSheet> {
 
     if (!mounted) return;
 
-    nav.pop();
     final messenger = ScaffoldMessenger.of(context);
     if (result.error) {
-      messenger.showSnackBar(SnackBar(
-        content: Text(result.data?.toString() ?? errorFallback),
-        backgroundColor: Colors.red,
-      ));
+      setState(() => _creating = false);
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text(result.data?.toString() ?? errorFallback),
+          backgroundColor: Colors.red,
+        ),
+      );
     } else {
-      messenger.showSnackBar(SnackBar(
-        content: Text(successMsg),
-        backgroundColor: Colors.green,
-      ));
+      nav.pop();
+      messenger.showSnackBar(
+        SnackBar(content: Text(successMsg), backgroundColor: Colors.green),
+      );
       widget.onCreated();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-      child: SingleChildScrollView(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _buildHeader(context),
-            SizedBox(height: ScreenUtil().setWidth(8)),
-            _buildPreview(context),
-            SizedBox(height: ScreenUtil().setWidth(8)),
-            _buildLabelField(context),
-            SizedBox(height: ScreenUtil().setWidth(16)),
-            _buildOwnerField(context),
-            SizedBox(height: ScreenUtil().setWidth(24)),
-            _buildCreateButton(context),
-            SizedBox(height: ScreenUtil().setWidth(8)),
-          ],
+    return PopScope(
+      canPop: canDismissEnsSubdomainSheet(_creating),
+      child: Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _buildHeader(context),
+              SizedBox(height: ScreenUtil().setWidth(8)),
+              _buildPreview(context),
+              SizedBox(height: ScreenUtil().setWidth(8)),
+              _buildLabelField(context),
+              SizedBox(height: ScreenUtil().setWidth(16)),
+              _buildOwnerField(context),
+              SizedBox(height: ScreenUtil().setWidth(24)),
+              _buildCreateButton(context),
+              SizedBox(height: ScreenUtil().setWidth(8)),
+            ],
+          ),
         ),
       ),
     );
@@ -172,7 +183,7 @@ class _EnsCreateSubdomainSheetState extends State<EnsCreateSubdomainSheet> {
           ),
         ),
         IconButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: _creating ? null : () => Navigator.pop(context),
           icon: const Icon(Icons.close),
         ),
       ],
@@ -185,7 +196,10 @@ class _EnsCreateSubdomainSheetState extends State<EnsCreateSubdomainSheet> {
     final su = ScreenUtil();
     return Container(
       margin: EdgeInsets.only(bottom: su.setWidth(12)),
-      padding: EdgeInsets.symmetric(horizontal: su.setWidth(16), vertical: su.setWidth(10)),
+      padding: EdgeInsets.symmetric(
+        horizontal: su.setWidth(16),
+        vertical: su.setWidth(10),
+      ),
       decoration: BoxDecoration(
         color: widget.domainChain.color.withAlpha(20),
         borderRadius: BorderRadius.circular(su.setWidth(10)),

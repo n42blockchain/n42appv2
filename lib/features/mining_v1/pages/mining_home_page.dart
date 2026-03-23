@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/features/mining_v1/api/mining_api.dart';
 import 'package:n42_wallet/features/mining_v1/pages/mining_index.dart';
@@ -19,12 +21,12 @@ class MiningHomePage extends StatefulWidget {
 }
 
 class _MiningHomePageState extends State<MiningHomePage> with AutomaticKeepAliveClientMixin{
+  StreamSubscription? _eventBusSub;
 
   @override
   void initState() {
     super.initState();
-    //每次创建完钱包 发送一个监听
-    eventBus.on().listen((event) {
+    _eventBusSub = eventBus.on().listen((event) {
       if (event is EventPublic && event.type == EventPublicType.selectWallet) {
         if(event.stringValue=="mainwallet"){
           return;
@@ -38,6 +40,12 @@ class _MiningHomePageState extends State<MiningHomePage> with AutomaticKeepAlive
         initData(event.intValue??0);
       }
     });
+  }
+
+  @override
+  void dispose() {
+    _eventBusSub?.cancel();
+    super.dispose();
   }
   initData(int walletIndex)async{
     AppConfig.isMainChainMining= await SPUtil().getIsMainChainMining()??true;

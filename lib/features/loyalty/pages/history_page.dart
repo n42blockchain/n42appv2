@@ -232,18 +232,12 @@ class HistoryPage extends StatelessWidget {
     );
   }
 
-  IconData _getActionIcon(PointsAction action) {
-    switch (action) {
-      case PointsAction.earn:
-        return Icons.add_circle_outline;
-      case PointsAction.spend:
-        return Icons.remove_circle_outline;
-      case PointsAction.expire:
-        return Icons.timer_off_outlined;
-      case PointsAction.adjust:
-        return Icons.tune;
-    }
-  }
+  IconData _getActionIcon(PointsAction action) => switch (action) {
+        PointsAction.earn => Icons.add_circle_outline,
+        PointsAction.spend => Icons.remove_circle_outline,
+        PointsAction.expire => Icons.timer_off_outlined,
+        PointsAction.adjust => Icons.tune,
+      };
 
   String _shortenHash(String hash) {
     if (hash.length <= 10) return hash;

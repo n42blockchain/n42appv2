@@ -7,6 +7,75 @@
 // 包含 ENS 域名生命周期管理所需的全部数据类型：
 // 价格、可用性、已拥有域名、子域名、注册/续费结果等。
 
+String _ensJsonString(
+  Map<String, dynamic> json,
+  String key, {
+  String fallback = '',
+}) {
+  final value = json[key];
+  if (value == null) return fallback;
+  return value.toString();
+}
+
+int _ensJsonInt(
+  Map<String, dynamic> json,
+  String key, {
+  int fallback = 0,
+}) {
+  final value = json[key];
+  if (value is int) return value;
+  if (value is num) return value.toInt();
+  return int.tryParse(value?.toString() ?? '') ?? fallback;
+}
+
+double _ensJsonDouble(
+  Map<String, dynamic> json,
+  String key, {
+  double fallback = 0,
+}) {
+  final value = json[key];
+  if (value is double) return value;
+  if (value is num) return value.toDouble();
+  return double.tryParse(value?.toString() ?? '') ?? fallback;
+}
+
+bool _ensJsonBool(
+  Map<String, dynamic> json,
+  String key, {
+  bool fallback = false,
+}) {
+  final value = json[key];
+  if (value is bool) return value;
+  final normalized = value?.toString().toLowerCase();
+  if (normalized == 'true' || normalized == '1') return true;
+  if (normalized == 'false' || normalized == '0') return false;
+  return fallback;
+}
+
+DateTime? _ensJsonDateTime(Map<String, dynamic> json, String key) {
+  final value = json[key];
+  if (value == null) return null;
+  if (value is DateTime) return value;
+  if (value is int) {
+    return DateTime.fromMillisecondsSinceEpoch(value);
+  }
+  if (value is num) {
+    return DateTime.fromMillisecondsSinceEpoch(value.toInt());
+  }
+  return DateTime.tryParse(value.toString());
+}
+
+Map<String, String>? _ensJsonStringMap(Map<String, dynamic> json, String key) {
+  final value = json[key];
+  if (value is! Map) return null;
+  final result = <String, String>{};
+  for (final entry in value.entries) {
+    if (entry.key == null || entry.value == null) continue;
+    result[entry.key.toString()] = entry.value.toString();
+  }
+  return result.isEmpty ? null : result;
+}
+
 /// ENS 价格信息
 class EnsPrice {
   /// 基础价格 (ETH)
@@ -42,15 +111,13 @@ class EnsPrice {
 
   factory EnsPrice.fromJson(Map<String, dynamic> json) {
     return EnsPrice(
-      basePrice: (json['basePrice'] as num?)?.toDouble() ?? 0,
-      annualPrice: (json['annualPrice'] as num?)?.toDouble() ?? 0,
-      totalPrice: (json['totalPrice'] as num?)?.toDouble() ?? 0,
-      years: json['years'] as int? ?? 1,
-      nameLength: json['nameLength'] as int? ?? 0,
-      updatedAt: json['updatedAt'] != null
-          ? DateTime.parse(json['updatedAt'] as String)
-          : DateTime.now(),
-      usdPrice: (json['usdPrice'] as num?)?.toDouble(),
+      basePrice: _ensJsonDouble(json, 'basePrice'),
+      annualPrice: _ensJsonDouble(json, 'annualPrice'),
+      totalPrice: _ensJsonDouble(json, 'totalPrice'),
+      years: _ensJsonInt(json, 'years', fallback: 1),
+      nameLength: _ensJsonInt(json, 'nameLength'),
+      updatedAt: _ensJsonDateTime(json, 'updatedAt') ?? DateTime.now(),
+      usdPrice: json['usdPrice'] == null ? null : _ensJsonDouble(json, 'usdPrice'),
     );
   }
 
@@ -121,13 +188,13 @@ class EnsAvailabilityResult {
 
   factory EnsAvailabilityResult.fromJson(Map<String, dynamic> json) {
     return EnsAvailabilityResult(
-      name: json['name'] as String,
-      isAvailable: json['isAvailable'] as bool? ?? false,
-      expiresAt: json['expiresAt'] != null
-          ? DateTime.parse(json['expiresAt'] as String)
-          : null,
-      ownerAddress: json['ownerAddress'] as String?,
-      error: json['error'] as String?,
+      name: _ensJsonString(json, 'name'),
+      isAvailable: _ensJsonBool(json, 'isAvailable'),
+      expiresAt: _ensJsonDateTime(json, 'expiresAt'),
+      ownerAddress: json['ownerAddress'] == null
+          ? null
+          : _ensJsonString(json, 'ownerAddress'),
+      error: json['error'] == null ? null : _ensJsonString(json, 'error'),
     );
   }
 }
@@ -171,18 +238,16 @@ class OwnedEns {
 
   factory OwnedEns.fromJson(Map<String, dynamic> json) {
     return OwnedEns(
-      name: json['name'] as String,
-      ownerAddress: json['ownerAddress'] as String,
-      resolvedAddress: json['resolvedAddress'] as String?,
-      expiresAt: DateTime.parse(json['expiresAt'] as String),
-      registeredAt: json['registeredAt'] != null
-          ? DateTime.parse(json['registeredAt'] as String)
-          : null,
-      avatar: json['avatar'] as String?,
-      isPrimary: json['isPrimary'] as bool? ?? false,
-      textRecords: json['textRecords'] != null
-          ? Map<String, String>.from(json['textRecords'] as Map)
-          : null,
+      name: _ensJsonString(json, 'name'),
+      ownerAddress: _ensJsonString(json, 'ownerAddress'),
+      resolvedAddress: json['resolvedAddress'] == null
+          ? null
+          : _ensJsonString(json, 'resolvedAddress'),
+      expiresAt: _ensJsonDateTime(json, 'expiresAt') ?? DateTime.now(),
+      registeredAt: _ensJsonDateTime(json, 'registeredAt'),
+      avatar: json['avatar'] == null ? null : _ensJsonString(json, 'avatar'),
+      isPrimary: _ensJsonBool(json, 'isPrimary'),
+      textRecords: _ensJsonStringMap(json, 'textRecords'),
     );
   }
 
@@ -240,10 +305,10 @@ class SubdomainInfo {
 
   factory SubdomainInfo.fromJson(Map<String, dynamic> json) {
     return SubdomainInfo(
-      label: json['label'] as String,
-      fullName: json['fullName'] as String,
-      owner: json['owner'] as String,
-      resolver: json['resolver'] as String?,
+      label: _ensJsonString(json, 'label'),
+      fullName: _ensJsonString(json, 'fullName'),
+      owner: _ensJsonString(json, 'owner'),
+      resolver: json['resolver'] == null ? null : _ensJsonString(json, 'resolver'),
     );
   }
 
@@ -290,12 +355,12 @@ class CommitResult {
 
   factory CommitResult.fromJson(Map<String, dynamic> json) {
     return CommitResult(
-      commitmentHash: json['commitmentHash'] as String,
-      secret: json['secret'] as String,
-      txHash: json['txHash'] as String?,
-      commitTime: DateTime.parse(json['commitTime'] as String),
-      minWaitTime: json['minWaitTime'] as int? ?? 60,
-      maxWaitTime: json['maxWaitTime'] as int? ?? 86400,
+      commitmentHash: _ensJsonString(json, 'commitmentHash'),
+      secret: _ensJsonString(json, 'secret'),
+      txHash: json['txHash'] == null ? null : _ensJsonString(json, 'txHash'),
+      commitTime: _ensJsonDateTime(json, 'commitTime') ?? DateTime.now(),
+      minWaitTime: _ensJsonInt(json, 'minWaitTime', fallback: 60),
+      maxWaitTime: _ensJsonInt(json, 'maxWaitTime', fallback: 86400),
     );
   }
 
@@ -419,13 +484,11 @@ class RegisterResult {
 
   factory RegisterResult.fromJson(Map<String, dynamic> json) {
     return RegisterResult(
-      success: json['success'] as bool? ?? false,
-      txHash: json['txHash'] as String?,
-      name: json['name'] as String,
-      expiresAt: json['expiresAt'] != null
-          ? DateTime.parse(json['expiresAt'] as String)
-          : null,
-      error: json['error'] as String?,
+      success: _ensJsonBool(json, 'success'),
+      txHash: json['txHash'] == null ? null : _ensJsonString(json, 'txHash'),
+      name: _ensJsonString(json, 'name'),
+      expiresAt: _ensJsonDateTime(json, 'expiresAt'),
+      error: json['error'] == null ? null : _ensJsonString(json, 'error'),
     );
   }
 }

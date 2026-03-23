@@ -1,6 +1,4 @@
-﻿import 'package:n42_wallet/core/app/app_globals.dart';
-import 'package:n42_wallet/core/providers/core_providers.dart';
-import 'package:n42_wallet/shared/domain/entities/wallet_info.dart';
+import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/features/component/enums/load.dart';
 import 'package:n42_wallet/features/login/api/handtype.dart';
 import 'package:n42_wallet/features/login/api/user_info_api.dart';
@@ -25,7 +23,7 @@ import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// Login Page - Migrated to Riverpod
-/// 
+///
 /// Handles user authentication
 class LoginPage extends ConsumerStatefulWidget {
   final int type; // 0 push, 1 content
@@ -70,14 +68,17 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           : null,
       resizeToAvoidBottomInset: false,
       body: GestureDetector(
-        onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+        onTap: () => FocusScope.of(context).unfocus(),
         child: SafeArea(
-          child:Stack(
+          child: Stack(
             children: [
               Positioned.fill(
                 child: SingleChildScrollView(
                   child: Container(
-                    padding:  EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0),vertical: ScreenUtil().setWidth(60.0)),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: ScreenUtil().setWidth(30.0),
+                      vertical: ScreenUtil().setWidth(60.0),
+                    ),
                     color: Colors.transparent,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,123 +86,146 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         Container(
                           width: double.infinity,
                           alignment: Alignment.center,
-                          margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(50.0)),
+                          margin: EdgeInsets.only(
+                            bottom: ScreenUtil().setWidth(50.0),
+                          ),
                           child: Text(
                             S.of(context).g_key_login,
                             style: TextStyle(
                               fontSize: ScreenUtil().setSp(48.0),
-                              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                              color: AppThemeUtils.getColorByKey(
+                                context,
+                                AppThemeKeys.mainTextColor.name,
+                              ),
                               fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
                         LoginTitle(
                           title: S.of(context).login_email,
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor10.name),
+                          color: AppThemeUtils.getColorByKey(
+                            context,
+                            AppThemeKeys.mainTextColor10.name,
+                          ),
                           must: true,
                         ),
-                        SizedBox(
-                          height: ScreenUtil().setWidth(10),
-                        ),
+                        SizedBox(height: ScreenUtil().setWidth(10)),
                         textFieldStyle3(
                           context,
-                          onEditingComplete:(){
-                            FocusScope.of(context).requestFocus(_uPasswordFocusNode);
+                          onEditingComplete: () {
+                            FocusScope.of(
+                              context,
+                            ).requestFocus(_uPasswordFocusNode);
                           },
-                          controller:_unameController,
+                          controller: _unameController,
                           focusNode: _unameFocusNode,
-                          hintText:S.of(context).login_email,
+                          hintText: S.of(context).login_email,
                           keyboardType: TextInputType.emailAddress,
                           textInputAction: TextInputAction.done,
                           errorMessage: unameErrorMessage,
                           hintStyle: TextStyle(
-                            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.hintTextColor.name),
+                            color: AppThemeUtils.getColorByKey(
+                              context,
+                              AppThemeKeys.hintTextColor.name,
+                            ),
                             fontSize: ScreenUtil().setSp(30.0),
                           ),
                         ),
-                        SizedBox(
-                          height: ScreenUtil().setHeight(20),
-                        ),
+                        SizedBox(height: ScreenUtil().setHeight(20)),
                         LoginTitle(
                           title: S.of(context).login_password,
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor10.name),
+                          color: AppThemeUtils.getColorByKey(
+                            context,
+                            AppThemeKeys.mainTextColor10.name,
+                          ),
                           must: true,
                         ),
-                        SizedBox(
-                          height: ScreenUtil().setWidth(10),
-                        ),
+                        SizedBox(height: ScreenUtil().setWidth(10)),
                         textFieldStyle3(
-                            context,
-                            onEditingComplete:(){
-                              FocusScope.of(context).requestFocus(FocusNode());
-                            },
-                            controller:_uPasswordController,
-                            focusNode: _uPasswordFocusNode,
-                            hintText:S.of(context).login_password,
-                            keyboardType: TextInputType.text,
-                            textInputAction: TextInputAction.done,
-                            hintStyle: TextStyle(
-                              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.hintTextColor.name),
-                              fontSize: ScreenUtil().setSp(30.0),
+                          context,
+                          onEditingComplete: () {
+                            FocusScope.of(context).unfocus();
+                          },
+                          controller: _uPasswordController,
+                          focusNode: _uPasswordFocusNode,
+                          hintText: S.of(context).login_password,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.done,
+                          hintStyle: TextStyle(
+                            color: AppThemeUtils.getColorByKey(
+                              context,
+                              AppThemeKeys.hintTextColor.name,
                             ),
-                            obscure: showPwd,
-                            rightWidget1: Container(
-                              width: ScreenUtil().setWidth(50.0),
-                              height: ScreenUtil().setWidth(50.0),
-                              alignment: Alignment.center,
-                              child: Image.asset(
-                                'assets/login/${showPwd?"icon_denglu_yincang":"icon_denglu_xianshi"}.png',
-                                width: ScreenUtil().setWidth(34.0),
-                                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                            fontSize: ScreenUtil().setSp(30.0),
+                          ),
+                          obscure: showPwd,
+                          rightWidget1: Container(
+                            width: ScreenUtil().setWidth(50.0),
+                            height: ScreenUtil().setWidth(50.0),
+                            alignment: Alignment.center,
+                            child: Image.asset(
+                              'assets/login/${showPwd ? "icon_denglu_yincang" : "icon_denglu_xianshi"}.png',
+                              width: ScreenUtil().setWidth(34.0),
+                              color: AppThemeUtils.getColorByKey(
+                                context,
+                                AppThemeKeys.mainBlueColor.name,
                               ),
                             ),
-                            rightOnTap1: (){
-                              setState(() {
-                                showPwd=!showPwd;
-                              });
-                            }
+                          ),
+                          rightOnTap1: () {
+                            setState(() {
+                              showPwd = !showPwd;
+                            });
+                          },
                         ),
-                        SizedBox(
-                          height: ScreenUtil().setWidth(44),
-                        ),
+                        SizedBox(height: ScreenUtil().setWidth(44)),
                         _buildText(context),
                         Container(
-                          margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0),vertical: ScreenUtil().setWidth(60.0)),
+                          margin: EdgeInsets.symmetric(
+                            horizontal: ScreenUtil().setWidth(30.0),
+                            vertical: ScreenUtil().setWidth(60.0),
+                          ),
                           alignment: Alignment.center,
                           child: RichText(
                             text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: S.of(context).login_message_1,
-                                    style: TextStyle(
-                                      fontSize: ScreenUtil().setSp(32.0),
-                                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                                      fontWeight: FontWeight.w500,
+                              children: [
+                                TextSpan(
+                                  text: S.of(context).login_message_1,
+                                  style: TextStyle(
+                                    fontSize: ScreenUtil().setSp(32.0),
+                                    color: AppThemeUtils.getColorByKey(
+                                      context,
+                                      AppThemeKeys.mainTextColor.name,
                                     ),
+                                    fontWeight: FontWeight.w500,
                                   ),
-                                  TextSpan(
-                                      text: S.of(context).Create_account,
-                                      style: TextStyle(
-                                        fontSize: ScreenUtil().setSp(32.0),
-                                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () async {
-                                          final rData = await Navigator.push<bool>(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (_) => AccountCreateAndReset(
-                                                type: HandType.createAccount,
-                                                pushType: widget.type,
-                                              ),
-                                            ),
-                                          );
-                                          if (!mounted) return;
-                                          if (rData == true) Navigator.pop(context);
-                                        }
+                                ),
+                                TextSpan(
+                                  text: S.of(context).Create_account,
+                                  style: TextStyle(
+                                    fontSize: ScreenUtil().setSp(32.0),
+                                    color: AppThemeUtils.getColorByKey(
+                                      context,
+                                      AppThemeKeys.mainBlueColor.name,
+                                    ),
+                                    fontWeight: FontWeight.w400,
                                   ),
-                                ]
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () async {
+                                      final navigator = Navigator.of(context);
+                                      final rData = await navigator.push<bool>(
+                                        MaterialPageRoute(
+                                          builder: (_) => AccountCreateAndReset(
+                                            type: HandType.createAccount,
+                                            pushType: widget.type,
+                                          ),
+                                        ),
+                                      );
+                                      if (!mounted) return;
+                                      if (rData == true) navigator.pop();
+                                    },
+                                ),
+                              ],
                             ),
                           ),
                         ),
@@ -234,8 +258,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     const Divider(height: 1),
                     Container(
                       height: ScreenUtil().setWidth(148),
-                      padding: EdgeInsets.all(ScreenUtil().setWidth(30.0),),
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
+                      padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+                      color: AppThemeUtils.getColorByKey(
+                        context,
+                        AppThemeKeys.backGroundColor.name,
+                      ),
                       child: buttonStyle6(
                         context,
                         _onLoginTap,
@@ -246,7 +273,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                               ? AppThemeKeys.mainButtonBgColor3.name
                               : AppThemeKeys.mainButtonBgColor.name,
                         ),
-                        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
+                        AppThemeUtils.getColorByKey(
+                          context,
+                          AppThemeKeys.mainButtonTextColor.name,
+                        ),
                         load == Load.loading,
                       ),
                     ),
@@ -261,7 +291,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   }
 
   Widget _buildText(BuildContext context) {
-    final textColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+    final textColor = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.mainBlueColor.name,
+    );
     return Align(
       alignment: Alignment.centerRight,
       child: RichText(
@@ -274,8 +307,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           ),
           recognizer: TapGestureRecognizer()
             ..onTap = () async {
-              final rData = await Navigator.push<bool>(
-                context,
+              final navigator = Navigator.of(context);
+              final rData = await navigator.push<bool>(
                 MaterialPageRoute(
                   builder: (_) => AccountCreateAndReset(
                     type: HandType.restPassword,
@@ -284,7 +317,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 ),
               );
               if (!mounted) return;
-              if (rData == true) Navigator.pop(context);
+              if (rData == true) navigator.pop();
             },
         ),
       ),
@@ -343,10 +376,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         final userInfo = UserInfo.fromJson(data['data']);
         await SPUtil().saveUserInfo(userInfo);
         if (!mounted) return;
-        // 使用 Riverpod 设置用户信息
-        ref.read(currentUserProvider.notifier).setUser(
-          SharedUserInfo.fromLegacyUserInfo(userInfo),
-        );
         await AppGlobals.login(userInfo);
         if (!mounted) return;
         if (widget.type == 0) Navigator.pop(context);
@@ -360,7 +389,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     } catch (err) {
       ToastUtils.show(err.toString());
     } finally {
-      setState(() => load = Load.finish);
+      if (mounted) {
+        setState(() => load = Load.finish);
+      }
     }
   }
 }

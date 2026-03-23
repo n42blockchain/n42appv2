@@ -142,7 +142,6 @@ class FeatureEntryCard extends StatelessWidget {
                 bgColor: Colors.white24, fgColor: Colors.white),
             SizedBox(width: ScreenUtil().setWidth(20)),
 
-            // 内容
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -157,9 +156,9 @@ class FeatureEntryCard extends StatelessWidget {
                           color: Colors.white,
                         ),
                       ),
-                      if (_buildStatusBadge() != null) ...[
+                      if (_buildStatusBadge() case final badge?) ...[
                         SizedBox(width: ScreenUtil().setWidth(8)),
-                        _buildStatusBadge()!,
+                        badge,
                       ],
                     ],
                   ),
@@ -177,13 +176,11 @@ class FeatureEntryCard extends StatelessWidget {
               ),
             ),
 
-            // 尾部
-            trailing ??
-                Icon(
-                  Icons.arrow_forward_ios,
-                  color: Colors.white70,
-                  size: ScreenUtil().setWidth(24),
-                ),
+            trailing ?? Icon(
+              Icons.arrow_forward_ios,
+              color: Colors.white70,
+              size: ScreenUtil().setWidth(24),
+            ),
           ],
         ),
       ),
@@ -209,10 +206,7 @@ class FeatureEntryCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // 图标
                 _buildIconBox(context, size: 48, iconSize: 28, radius: 12),
-
-                // 标签
                 if (tag != null)
                   Container(
                     padding: EdgeInsets.symmetric(
@@ -233,13 +227,11 @@ class FeatureEntryCard extends StatelessWidget {
                     ),
                   ),
 
-                if (_buildStatusBadge() != null) _buildStatusBadge()!,
+                if (_buildStatusBadge() case final badge?) badge,
               ],
             ),
 
             SizedBox(height: ScreenUtil().setWidth(16)),
-
-            // 标题
             Text(
               title,
               style: TextStyle(
@@ -394,7 +386,7 @@ class FeatureEntryGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     return GridView.builder(
       shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: crossAxisCount,
         mainAxisSpacing: ScreenUtil().setWidth(spacing),

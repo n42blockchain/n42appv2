@@ -38,7 +38,7 @@ class BrowserRepositoryImpl implements BrowserRepository {
     String? favicon,
   }) async {
     try {
-      _api.insertBrowserHistory(url, title: title);
+      await _api.insertBrowserHistory(url, title: title);
       return const Right(null);
     } catch (e) {
       return Left(CacheFailure(message: e.toString()));
@@ -67,7 +67,8 @@ class BrowserRepositoryImpl implements BrowserRepository {
 
   @override
   Future<Either<Failure, List<BrowserHistoryEntity>>> searchHistory(
-      String query) async {
+    String query,
+  ) async {
     try {
       final models = await _api.selectBrowserHistoryLike(query);
       return Right(models.map(_historyFromModel).toList());
@@ -176,13 +177,15 @@ class BrowserRepositoryImpl implements BrowserRepository {
 
   @override
   Future<Either<Failure, void>> updateSettings(
-      BrowserSettingsEntity settings) async {
+    BrowserSettingsEntity settings,
+  ) async {
     return const Right(null);
   }
 
   @override
   Future<Either<Failure, List<String>>> getSearchSuggestions(
-      String query) async {
+    String query,
+  ) async {
     try {
       final models = await _api.selectBrowserHistoryLike(query);
       return Right(models.map((m) => m.url ?? '').toList());
@@ -199,9 +202,7 @@ class BrowserRepositoryImpl implements BrowserRepository {
       url: m.url ?? '',
       title: m.title ?? m.url ?? '',
       visitedAt: m.time != null
-          ? DateTime.fromMillisecondsSinceEpoch(
-              int.tryParse(m.time!) ?? 0,
-            )
+          ? DateTime.fromMillisecondsSinceEpoch(int.tryParse(m.time!) ?? 0)
           : DateTime.now(),
     );
   }

@@ -444,11 +444,13 @@ String sessionKeyFormatRemainingTime(Duration d) {
 
 /// Formats a [BigInt] wei amount with [decimals] precision into a
 /// human-readable string (e.g. "1.5", "100").
+final _trailingZeros = RegExp(r'0+$');
+
 String sessionKeyFormatBigInt(BigInt value, int decimals) {
   if (value == BigInt.zero) return '0';
   final pow = BigInt.from(10).pow(decimals);
   final whole = value ~/ pow;
   final frac = (value % pow).toString().padLeft(decimals, '0');
-  final trimmed = frac.replaceAll(RegExp(r'0+$'), '');
+  final trimmed = frac.replaceAll(_trailingZeros, '');
   return trimmed.isEmpty ? whole.toString() : '$whole.$trimmed';
 }

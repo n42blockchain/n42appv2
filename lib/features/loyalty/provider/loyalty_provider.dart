@@ -19,41 +19,34 @@ enum LoyaltyLoadState {
 
 /// 积分系统 Provider
 class LoyaltyProvider extends ChangeNotifier {
-  final LoyaltyApi _api = LoyaltyApi();
+  LoyaltyProvider({LoyaltyApi? api}) : _api = api ?? LoyaltyApi();
 
-  // 加载状态
+  final LoyaltyApi _api;
+
   LoyaltyLoadState _loadState = LoyaltyLoadState.initial;
   LoyaltyLoadState get loadState => _loadState;
 
-  // 错误信息
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
-  // 钱包地址
   String? _walletAddress;
   String? get walletAddress => _walletAddress;
 
-  // 用户账户
   LoyaltyAccount _account = LoyaltyAccount.empty();
   LoyaltyAccount get account => _account;
 
-  // 任务列表
   List<LoyaltyTask> _tasks = [];
   List<LoyaltyTask> get tasks => _tasks;
 
-  // 积分历史
   List<PointsHistory> _history = [];
   List<PointsHistory> get history => _history;
 
-  // 可兑换奖励
   List<Reward> _rewards = [];
   List<Reward> get rewards => _rewards;
 
-  // 积分规则
   List<PointsRule> _rules = [];
   List<PointsRule> get rules => _rules;
 
-  // 邀请信息
   String? _referralCode;
   String? get referralCode => _referralCode;
 
@@ -63,9 +56,20 @@ class LoyaltyProvider extends ChangeNotifier {
   List<ReferralRecord> _referrals = [];
   List<ReferralRecord> get referrals => _referrals;
 
-  // 今日是否已签到
   bool _hasCheckedInToday = false;
   bool get hasCheckedInToday => _hasCheckedInToday;
+
+  bool get hasContent =>
+      _tasks.isNotEmpty ||
+      _history.isNotEmpty ||
+      _rewards.isNotEmpty ||
+      _rules.isNotEmpty ||
+      _referrals.isNotEmpty ||
+      _referralCode != null ||
+      _referralLink != null ||
+      _account.totalPoints > 0 ||
+      _account.availablePoints > 0 ||
+      _account.usedPoints > 0;
 
   /// 初始化
   Future<void> initialize(String walletAddress) async {
@@ -82,7 +86,7 @@ class LoyaltyProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      await Future.wait([
+      final results = await Future.wait<bool>([
         _loadAccount(),
         _loadTasks(),
         _loadHistory(),
@@ -90,7 +94,12 @@ class LoyaltyProvider extends ChangeNotifier {
         _loadReferralInfo(),
       ]);
 
-      _loadState = LoyaltyLoadState.loaded;
+      if (results.any((loaded) => loaded) || hasContent) {
+        _loadState = LoyaltyLoadState.loaded;
+      } else {
+        _loadState = LoyaltyLoadState.error;
+        _errorMessage = 'Failed to load loyalty data';
+      }
     } catch (e) {
       _loadState = LoyaltyLoadState.error;
       _errorMessage = e.toString();
@@ -100,20 +109,24 @@ class LoyaltyProvider extends ChangeNotifier {
   }
 
   /// 加载账户信息
-  Future<void> _loadAccount() async {
+  Future<bool> _loadAccount() async {
     final result = await _api.getAccount(_walletAddress!);
     if (!result.error && result.data != null) {
       _account = result.data as LoyaltyAccount;
+      return true;
     }
+    return false;
   }
 
   /// 加载任务列表
-  Future<void> _loadTasks() async {
+  Future<bool> _loadTasks() async {
     final result = await _api.getTasks(_walletAddress!);
     if (!result.error && result.data != null) {
       _tasks = result.data as List<LoyaltyTask>;
       _updateCheckInStatus();
+      return true;
     }
+    return false;
   }
 
   /// 更新签到状态
@@ -130,39 +143,49 @@ class LoyaltyProvider extends ChangeNotifier {
   }
 
   /// 加载积分历史
-  Future<void> _loadHistory() async {
+  Future<bool> _loadHistory() async {
     final result = await _api.getPointsHistory(walletAddress: _walletAddress!);
     if (!result.error && result.data != null) {
       _history = result.data as List<PointsHistory>;
+      return true;
     }
+    return false;
   }
 
   /// 加载可兑换奖励
-  Future<void> _loadRewards() async {
-    final result = await _api.getRewards();
+  Future<bool> _loadRewards() async {
+    final result = await _api.fetchRewards();
     if (!result.error && result.data != null) {
       _rewards = result.data as List<Reward>;
+      return true;
     }
+    return false;
   }
 
   /// 加载邀请信息
-  Future<void> _loadReferralInfo() async {
-    final codeResult = await _api.getReferralCode(_walletAddress!);
+  Future<bool> _loadReferralInfo() async {
+    var loaded = false;
+
+    final codeResult = await _api.fetchReferralCode(_walletAddress!);
     if (!codeResult.error && codeResult.data != null) {
       final data = codeResult.data as Map<String, dynamic>;
       _referralCode = data['code'];
       _referralLink = data['link'];
+      loaded = true;
     }
 
-    final referralsResult = await _api.getReferrals(_walletAddress!);
+    final referralsResult = await _api.fetchReferrals(_walletAddress!);
     if (!referralsResult.error && referralsResult.data != null) {
       _referrals = referralsResult.data as List<ReferralRecord>;
+      loaded = true;
     }
+
+    return loaded;
   }
 
   /// 加载积分规则
   Future<void> loadRules() async {
-    final result = await _api.getPointsRules();
+    final result = await _api.fetchPointsRules();
     if (!result.error && result.data != null) {
       _rules = result.data as List<PointsRule>;
       notifyListeners();
@@ -189,25 +212,30 @@ class LoyaltyProvider extends ChangeNotifier {
   }
 
   /// 每日签到
+  bool _checkingIn = false;
   Future<Map<String, dynamic>?> checkIn() async {
-    if (_walletAddress == null || _hasCheckedInToday) return null;
+    if (_walletAddress == null || _hasCheckedInToday || _checkingIn) return null;
+    _checkingIn = true;
+    try {
+      final result = await _api.dailyCheckIn(_walletAddress!);
+      if (!result.error && result.data != null) {
+        final data = result.data as Map<String, dynamic>;
+        final pointsEarned = data['points_earned'] as int? ?? 0;
 
-    final result = await _api.dailyCheckIn(_walletAddress!);
-    if (!result.error && result.data != null) {
-      final data = result.data as Map<String, dynamic>;
-      final pointsEarned = data['points_earned'] as int? ?? 0;
+        _account = _copyAccountWith(
+          totalDelta: pointsEarned,
+          availableDelta: pointsEarned,
+        );
+        _hasCheckedInToday = true;
+        notifyListeners();
 
-      _account = _copyAccountWith(
-        totalDelta: pointsEarned,
-        availableDelta: pointsEarned,
-      );
-      _hasCheckedInToday = true;
-      notifyListeners();
+        return data;
+      }
 
-      return data;
+      return null;
+    } finally {
+      _checkingIn = false;
     }
-
-    return null;
   }
 
   /// 完成任务
@@ -230,8 +258,9 @@ class LoyaltyProvider extends ChangeNotifier {
   }
 
   /// 兑换奖励
+  final Set<String> _redeemingRewards = {};
   Future<bool> redeemReward(String rewardId) async {
-    if (_walletAddress == null) return false;
+    if (_walletAddress == null || _redeemingRewards.contains(rewardId)) return false;
 
     final reward = _rewards.firstWhere(
       (r) => r.id == rewardId,
@@ -249,64 +278,47 @@ class LoyaltyProvider extends ChangeNotifier {
       return false;
     }
 
-    final result = await _api.redeemReward(
-      walletAddress: _walletAddress!,
-      rewardId: rewardId,
-    );
-
-    if (!result.error) {
-      _account = _copyAccountWith(
-        availableDelta: -reward.pointsCost,
-        usedDelta: reward.pointsCost,
+    _redeemingRewards.add(rewardId);
+    try {
+      final result = await _api.redeemReward(
+        walletAddress: _walletAddress!,
+        rewardId: rewardId,
       );
-      notifyListeners();
-      unawaited(refresh()); // 异步同步后端，防止重进页面积分复原
-      return true;
-    }
 
-    return false;
-  }
+      if (!result.error) {
+        _account = _copyAccountWith(
+          availableDelta: -reward.pointsCost,
+          usedDelta: reward.pointsCost,
+        );
+        notifyListeners();
+        unawaited(refresh()); // 异步同步后端，防止重进页面积分复原
+        return true;
+      }
 
-  // ============ 便捷获取方法 ============
-
-  /// 可完成的任务
-  List<LoyaltyTask> get availableTasks {
-    return _tasks.where((t) => t.canComplete).toList();
-  }
-
-  /// 获取任务类型的图标
-  String getTaskTypeIcon(TaskType type) {
-    switch (type) {
-      case TaskType.dailyCheckIn:
-        return '📅';
-      case TaskType.transaction:
-        return '💸';
-      case TaskType.referral:
-        return '👥';
-      case TaskType.staking:
-        return '🔒';
-      case TaskType.dappUsage:
-        return '📱';
-      case TaskType.social:
-        return '🐦';
-      case TaskType.special:
-        return '⭐';
+      return false;
+    } finally {
+      _redeemingRewards.remove(rewardId);
     }
   }
 
-  /// 计算等级颜色
-  int getTierColorValue() {
-    switch (_account.tier) {
-      case LoyaltyTier.bronze:
-        return 0xFFCD7F32;
-      case LoyaltyTier.silver:
-        return 0xFFC0C0C0;
-      case LoyaltyTier.gold:
-        return 0xFFFFD700;
-      case LoyaltyTier.platinum:
-        return 0xFFE5E4E2;
-      case LoyaltyTier.diamond:
-        return 0xFFB9F2FF;
-    }
-  }
+  List<LoyaltyTask> get availableTasks =>
+      _tasks.where((t) => t.canComplete).toList();
+
+  String getTaskTypeIcon(TaskType type) => switch (type) {
+        TaskType.dailyCheckIn => '📅',
+        TaskType.transaction => '💸',
+        TaskType.referral => '👥',
+        TaskType.staking => '🔒',
+        TaskType.dappUsage => '📱',
+        TaskType.social => '🐦',
+        TaskType.special => '⭐',
+      };
+
+  int getTierColorValue() => switch (_account.tier) {
+        LoyaltyTier.bronze => 0xFFCD7F32,
+        LoyaltyTier.silver => 0xFFC0C0C0,
+        LoyaltyTier.gold => 0xFFFFD700,
+        LoyaltyTier.platinum => 0xFFE5E4E2,
+        LoyaltyTier.diamond => 0xFFB9F2FF,
+      };
 }

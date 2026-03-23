@@ -52,10 +52,13 @@ mixin _TransferSolMixin on _TransferBaseMixin {
       valuePrice = ethToWeiString(value.toString(), decimals);
       //如果是全部转账
       if(valuePrice==chainBalance && maxValue){
+        if (totalGasPrice >= valuePrice) {
+          return MessageModel.error()..data = S.current.g_key_wallet_m5("SOL");
+        }
         valuePrice=valuePrice-totalGasPrice;
         value=toEther(valuePrice.toString(),decimals).toDouble();
       }
-      if (totalGasPrice + valuePrice > chainBalance) {
+      if (valuePrice <= BigInt.zero || totalGasPrice + valuePrice > chainBalance) {
         MessageModel mme = MessageModel.error();
         mme.data = S.current.g_key_wallet_m5("SOL");
         return mme;

@@ -23,7 +23,7 @@ mixin _LogicMixin on State<TodayMiningPage> {
   Timer? _timer;
   double astPrice = 0;
   Load miningStartLoad = Load.finish;
-  dynamic eventBusFn;
+  StreamSubscription? eventBusFn;
 
   void initEventBus() {
     eventBusFn = eventBus.on().listen((event) {
@@ -51,7 +51,7 @@ mixin _LogicMixin on State<TodayMiningPage> {
 
   void disposeLogic() {
     _timer?.cancel();
-    eventBusFn.cancel();
+    eventBusFn?.cancel();
   }
 
   Future<void> initData({bool forcedRefresh = false}) async {
@@ -97,10 +97,8 @@ mixin _LogicMixin on State<TodayMiningPage> {
       }
       final list = await MarketApi().getWalletCoinsInfo('n');
       if (list['error']) return;
-      final List<dynamic> nInfo = list['data']['data'];
-      if (nInfo.isNotEmpty) {
-        astPrice = Decimal.parse(nInfo[0]['price'].toString()).toDouble();
-      }
+      final price = extractAstPriceFromMarketPayload(list['data']);
+      if (price > 0) astPrice = price;
     } catch (err) {
       if (kDebugMode) debugPrint("getAstPrice err: $err");
     }
@@ -169,8 +167,9 @@ mixin _LogicMixin on State<TodayMiningPage> {
       }
 
       final int nums = (value * BigInt.from(8)).toInt();
-      lastCycleMiningTimes =
-          nums != 0 ? formatElapsedTime(nums) : ["00", "00", "00"];
+      lastCycleMiningTimes = nums != 0
+          ? formatElapsedTime(nums)
+          : ["00", "00", "00"];
     } catch (err) {
       if (kDebugMode) debugPrint("getLastCycleMiningTime err: $err");
     }
@@ -178,12 +177,11 @@ mixin _LogicMixin on State<TodayMiningPage> {
 
   void computeRewardsValueByTaskNum(int value) {
     final (int cap, double rate) = switch (currDepositsOfValue) {
-      50  => (500, 0.000025),
+      50 => (500, 0.000025),
       100 => (100, 0.000333333333333334),
-      _   => (100, 0.002083333333333334),
+      _ => (100, 0.002083333333333334),
     };
-    lastCycleRewardsValue =
-        value >= cap ? cap * rate : value * rate;
+    lastCycleRewardsValue = value >= cap ? cap * rate : value * rate;
   }
 
   Future<Decimal> getTotalValue(String address) async {
@@ -215,10 +213,13 @@ mixin _LogicMixin on State<TodayMiningPage> {
   Future<void> getLockTime(String address) async {
     try {
       final lockTime = await MiningApi.lockTime(address);
-      isCanUnlock = DateTime.now().millisecondsSinceEpoch ~/ 1000 >
+      isCanUnlock =
+          DateTime.now().millisecondsSinceEpoch ~/ 1000 >
           int.parse("${lockTime[0]}");
-      lockTimeStr = dataUtils.getTimeByTimeStamp("${lockTime[0]}",
-          format: "dd/MM/yyyy");
+      lockTimeStr = dataUtils.getTimeByTimeStamp(
+        "${lockTime[0]}",
+        format: "dd/MM/yyyy",
+      );
       if (mounted) setState(() {});
     } catch (err) {
       if (kDebugMode) debugPrint("getLockTime err: $err");
@@ -232,7 +233,9 @@ mixin _LogicMixin on State<TodayMiningPage> {
       globalMiningV1.setMiningStatus(isRunning);
       if (!isRunning) MiningUtils.startMining();
     } catch (e) {
-      if (kDebugMode) debugPrint('[TodayMiningPage] getMiningStatus failed: $e');
+      if (kDebugMode) {
+        debugPrint('[TodayMiningPage] getMiningStatus failed: $e');
+      }
     }
   }
 
@@ -243,7 +246,10 @@ mixin _LogicMixin on State<TodayMiningPage> {
       } else {
         final depositsOfResponse = await MiningApi.depositsOf(astAddress);
         if (depositsOfResponse != null && depositsOfResponse is List) {
-          currDepositsOfValue = toEther("${depositsOfResponse[0]}", 18).toDouble().toInt();
+          currDepositsOfValue = toEther(
+            "${depositsOfResponse[0]}",
+            18,
+          ).toDouble().toInt();
           final key = AppConfig.isMainChainMining ? "n" : "ntest";
           setMiningValue(key, currDepositsOfValue);
         } else {
@@ -260,8 +266,11 @@ mixin _LogicMixin on State<TodayMiningPage> {
   Future<void> getMiningTaskList(String astAddress) async {
     try {
       setState(() => isLoadingTaskList = true);
-      final data = await MiningApi.getMiningTaskList(astAddress, null,
-          pageSize: pageSize);
+      final data = await MiningApi.getMiningTaskList(
+        astAddress,
+        null,
+        pageSize: pageSize,
+      );
       if (data != null) {
         taskList = data["result"]["minedBlocks"] ?? [];
         if (taskList.isNotEmpty && taskList.length >= pageSize) {
@@ -300,8 +309,9 @@ mixin _LogicMixin on State<TodayMiningPage> {
 
   void _handleCurrentMiningTime(List items, int currentEpochNum) {
     final item = items.firstWhere(
-        (e) => e["epoch"] == currentEpochNum,
-        orElse: () => -1);
+      (e) => e["epoch"] == currentEpochNum,
+      orElse: () => -1,
+    );
     if (item == -1) {
       getCurrentMiningTime(astAddress);
       return;
@@ -315,8 +325,9 @@ mixin _LogicMixin on State<TodayMiningPage> {
 
   void _handleYesterdayMiningTime(List items, int lastEpochNum) {
     final item = items.firstWhere(
-        (e) => e["epoch"] == lastEpochNum,
-        orElse: () => -1);
+      (e) => e["epoch"] == lastEpochNum,
+      orElse: () => -1,
+    );
     if (item == -1) {
       getLastCycleMiningTime(astAddress);
       return;

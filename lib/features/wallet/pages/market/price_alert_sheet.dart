@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/features/wallet/pages/market/market_price_format_utils.dart';
+import 'package:n42_wallet/features/wallet/pages/market/price_alert_sheet_utils.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/services/coin_price_alert_service.dart';
 
@@ -75,17 +77,18 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
     setState(() {
       _existing = config;
       if (config != null) {
-        _priceCtrl.text = _fmtForInput(config.targetPrice);
+        _priceCtrl.text = formatMarketPriceInput(config.targetPrice);
         _alertAbove = config.alertAbove;
         _enabled = config.enabled;
       } else if (widget.currentPrice > 0) {
-        _priceCtrl.text = _fmtForInput(widget.currentPrice);
+        _priceCtrl.text = formatMarketPriceInput(widget.currentPrice);
       }
       _loading = false;
     });
   }
 
   Future<void> _save() async {
+    if (_saving) return;
     final text = _priceCtrl.text.trim();
     final price = double.tryParse(text);
     if (price == null || price <= 0) {
@@ -103,16 +106,31 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
       enabled: _enabled,
       lastNotifiedMs: _existing?.lastNotifiedMs,
     );
-    await CoinPriceAlertService.save(config);
-    if (!mounted) return;
-    Navigator.pop(context, true); // signal: reload needed
+    try {
+      await CoinPriceAlertService.save(config);
+      if (!mounted) return;
+      Navigator.pop(context, true); // signal: reload needed
+    } catch (err) {
+      if (mounted) {
+        setState(() => _saving = false);
+      }
+      _showError(err.toString());
+    }
   }
 
   Future<void> _delete() async {
+    if (_saving) return;
     setState(() => _saving = true);
-    await CoinPriceAlertService.remove(widget.coinId);
-    if (!mounted) return;
-    Navigator.pop(context, true);
+    try {
+      await CoinPriceAlertService.remove(widget.coinId);
+      if (!mounted) return;
+      Navigator.pop(context, true);
+    } catch (err) {
+      if (mounted) {
+        setState(() => _saving = false);
+      }
+      _showError(err.toString());
+    }
   }
 
   void _showError(String msg) {
@@ -125,198 +143,226 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final bgColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name);
-    final textColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+    final bgColor = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.itemBgColor.name,
+    );
+    final textColor = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.mainTextColor.name,
+    );
     final subColor = textColor.withAlpha(153);
-    final accentColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
-    final dividerColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name);
+    final accentColor = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.mainBlueColor.name,
+    );
+    final dividerColor = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.dividerColor.name,
+    );
     final bottomPad = MediaQuery.of(context).viewInsets.bottom;
 
-    return Container(
-      margin: EdgeInsets.only(
-          top: MediaQuery.of(context).size.height * 0.35),
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
-      ),
-      padding: EdgeInsets.fromLTRB(24.w, 16.h, 24.w, 24.h + bottomPad),
-      child: _loading
-          ? SizedBox(
-              height: 160.h,
-              child: const Center(child: CircularProgressIndicator()),
-            )
-          : Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Container(
-                    width: 40.w,
-                    height: 4.h,
-                    decoration: BoxDecoration(
-                      color: dividerColor,
-                      borderRadius: BorderRadius.circular(2.r),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 16.h),
-                Row(
-                  children: [
-                    Icon(Icons.notifications_outlined,
-                        color: accentColor, size: 22.sp),
-                    SizedBox(width: 8.w),
-                    Text(
-                      S.of(context).g_alert_title(widget.symbol.toUpperCase()),
-                      style: TextStyle(
-                        fontSize: 17.sp,
-                        fontWeight: FontWeight.bold,
-                        color: textColor,
+    return PopScope(
+      canPop: canDismissPriceAlertSheet(_saving),
+      child: Container(
+        margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.35),
+        decoration: BoxDecoration(
+          color: bgColor,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+        ),
+        padding: EdgeInsets.fromLTRB(24.w, 16.h, 24.w, 24.h + bottomPad),
+        child: _loading
+            ? SizedBox(
+                height: 160.h,
+                child: const Center(child: CircularProgressIndicator()),
+              )
+            : Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Container(
+                      width: 40.w,
+                      height: 4.h,
+                      decoration: BoxDecoration(
+                        color: dividerColor,
+                        borderRadius: BorderRadius.circular(2.r),
                       ),
                     ),
-                    const Spacer(),
-                    if (_existing != null)
-                      TextButton(
-                        onPressed: _saving ? null : _delete,
-                        child: Text(
-                          S.of(context).g_alert_remove,
-                          style: TextStyle(
-                              color: const Color(0xFFEF4444), fontSize: 13.sp),
+                  ),
+                  SizedBox(height: 16.h),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.notifications_outlined,
+                        color: accentColor,
+                        size: 22.sp,
+                      ),
+                      SizedBox(width: 8.w),
+                      Text(
+                        S
+                            .of(context)
+                            .g_alert_title(widget.symbol.toUpperCase()),
+                        style: TextStyle(
+                          fontSize: 17.sp,
+                          fontWeight: FontWeight.bold,
+                          color: textColor,
                         ),
                       ),
-                  ],
-                ),
-
-                if (widget.currentPrice > 0) ...[
-                  SizedBox(height: 4.h),
-                  Text(
-                    S.of(context).g_alert_current_price(_fmtPrice(widget.currentPrice)),
-                    style: TextStyle(fontSize: 12.sp, color: subColor),
+                      const Spacer(),
+                      if (_existing != null)
+                        TextButton(
+                          onPressed: _saving ? null : _delete,
+                          child: Text(
+                            S.of(context).g_alert_remove,
+                            style: TextStyle(
+                              color: const Color(0xFFEF4444),
+                              fontSize: 13.sp,
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
-                ],
-                SizedBox(height: 20.h),
 
-                Text(
-                  S.of(context).g_alert_direction,
-                  style: TextStyle(fontSize: 13.sp, color: subColor),
-                ),
-                SizedBox(height: 8.h),
-                Row(
-                  children: [
-                    _DirectionChip(
-                      label: S.of(context).g_alert_above,
-                      selected: _alertAbove,
-                      onTap: () => setState(() => _alertAbove = true),
-                      accentColor: accentColor,
-                      textColor: textColor,
-                      dividerColor: dividerColor,
-                    ),
-                    SizedBox(width: 10.w),
-                    _DirectionChip(
-                      label: S.of(context).g_alert_below,
-                      selected: !_alertAbove,
-                      onTap: () => setState(() => _alertAbove = false),
-                      accentColor: accentColor,
-                      textColor: textColor,
-                      dividerColor: dividerColor,
+                  if (widget.currentPrice > 0) ...[
+                    SizedBox(height: 4.h),
+                    Text(
+                      S
+                          .of(context)
+                          .g_alert_current_price(
+                            formatMarketPriceDisplay(widget.currentPrice),
+                          ),
+                      style: TextStyle(fontSize: 12.sp, color: subColor),
                     ),
                   ],
-                ),
-                SizedBox(height: 20.h),
+                  SizedBox(height: 20.h),
 
-                Text(
-                  S.of(context).g_alert_target_price,
-                  style: TextStyle(fontSize: 13.sp, color: subColor),
-                ),
-                SizedBox(height: 8.h),
-                TextField(
-                  controller: _priceCtrl,
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(
-                        RegExp(r'^\d*\.?\d{0,8}')),
-                  ],
-                  style: TextStyle(
+                  Text(
+                    S.of(context).g_alert_direction,
+                    style: TextStyle(fontSize: 13.sp, color: subColor),
+                  ),
+                  SizedBox(height: 8.h),
+                  Row(
+                    children: [
+                      _DirectionChip(
+                        label: S.of(context).g_alert_above,
+                        selected: _alertAbove,
+                        onTap: () => setState(() => _alertAbove = true),
+                        accentColor: accentColor,
+                        textColor: textColor,
+                        dividerColor: dividerColor,
+                      ),
+                      SizedBox(width: 10.w),
+                      _DirectionChip(
+                        label: S.of(context).g_alert_below,
+                        selected: !_alertAbove,
+                        onTap: () => setState(() => _alertAbove = false),
+                        accentColor: accentColor,
+                        textColor: textColor,
+                        dividerColor: dividerColor,
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20.h),
+
+                  Text(
+                    S.of(context).g_alert_target_price,
+                    style: TextStyle(fontSize: 13.sp, color: subColor),
+                  ),
+                  SizedBox(height: 8.h),
+                  TextField(
+                    controller: _priceCtrl,
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(
+                        RegExp(r'^\d*\.?\d{0,8}'),
+                      ),
+                    ],
+                    style: TextStyle(
                       fontSize: 18.sp,
                       fontWeight: FontWeight.w600,
-                      color: textColor),
-                  decoration: InputDecoration(
-                    prefixText: '\$ ',
-                    prefixStyle:
-                        TextStyle(fontSize: 18.sp, color: subColor),
-                    hintText: '0.00',
-                    hintStyle:
-                        TextStyle(fontSize: 18.sp, color: subColor),
-                    filled: true,
-                    fillColor: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.itemBgColor2.name),
-                    contentPadding: EdgeInsets.symmetric(
-                        horizontal: 14.w, vertical: 14.h),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.r),
-                      borderSide: BorderSide.none,
+                      color: textColor,
                     ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.r),
-                      borderSide:
-                          BorderSide(color: accentColor, width: 1.5),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 20.h),
-
-                Row(
-                  children: [
-                    Text(
-                      S.of(context).g_alert_enable,
-                      style: TextStyle(fontSize: 14.sp, color: textColor),
-                    ),
-                    const Spacer(),
-                    Switch(
-                      value: _enabled,
-                      onChanged: (v) => setState(() => _enabled = v),
-                      activeTrackColor: accentColor,
-                      activeThumbColor: Colors.white,
-                    ),
-                  ],
-                ),
-                SizedBox(height: 24.h),
-
-                SizedBox(
-                  width: double.infinity,
-                  height: 50.h,
-                  child: ElevatedButton(
-                    onPressed: _saving ? null : _save,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: accentColor,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.r),
+                    decoration: InputDecoration(
+                      prefixText: '\$ ',
+                      prefixStyle: TextStyle(fontSize: 18.sp, color: subColor),
+                      hintText: '0.00',
+                      hintStyle: TextStyle(fontSize: 18.sp, color: subColor),
+                      filled: true,
+                      fillColor: AppThemeUtils.getColorByKey(
+                        context,
+                        AppThemeKeys.itemBgColor2.name,
+                      ),
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 14.w,
+                        vertical: 14.h,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.r),
+                        borderSide: BorderSide.none,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.r),
+                        borderSide: BorderSide(color: accentColor, width: 1.5),
                       ),
                     ),
-                    child: _saving
-                        ? SizedBox(
-                            width: 20.w,
-                            height: 20.h,
-                            child: const CircularProgressIndicator(
-                              color: Colors.white,
-                              strokeWidth: 2,
-                            ),
-                          )
-                        : Text(
-                            _existing != null ? S.of(context).g_alert_update : S.of(context).g_alert_set,
-                            style: TextStyle(
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.w600),
-                          ),
                   ),
-                ),
-              ],
-            ),
+                  SizedBox(height: 20.h),
+
+                  Row(
+                    children: [
+                      Text(
+                        S.of(context).g_alert_enable,
+                        style: TextStyle(fontSize: 14.sp, color: textColor),
+                      ),
+                      const Spacer(),
+                      Switch(
+                        value: _enabled,
+                        onChanged: (v) => setState(() => _enabled = v),
+                        activeTrackColor: accentColor,
+                        activeThumbColor: Colors.white,
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 24.h),
+
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50.h,
+                    child: ElevatedButton(
+                      onPressed: _saving ? null : _save,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: accentColor,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.r),
+                        ),
+                      ),
+                      child: _saving
+                          ? SizedBox(
+                              width: 20.w,
+                              height: 20.h,
+                              child: const CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2,
+                              ),
+                            )
+                          : Text(
+                              _existing != null
+                                  ? S.of(context).g_alert_update
+                                  : S.of(context).g_alert_set,
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                    ),
+                  ),
+                ],
+              ),
+      ),
     );
   }
 }
@@ -346,7 +392,9 @@ class _DirectionChip extends StatelessWidget {
         duration: const Duration(milliseconds: 150),
         padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 9.h),
         decoration: BoxDecoration(
-          color: selected ? accentColor.withAlpha(26) : dividerColor.withAlpha(80),
+          color: selected
+              ? accentColor.withAlpha(26)
+              : dividerColor.withAlpha(80),
           border: Border.all(
             color: selected ? accentColor : dividerColor,
             width: selected ? 1.5 : 1,
@@ -364,21 +412,4 @@ class _DirectionChip extends StatelessWidget {
       ),
     );
   }
-}
-
-/// Remove trailing zeros and a dangling decimal point.
-String _trimTrailingZeros(String s) {
-  return s.replaceAll(RegExp(r'0+$'), '').replaceAll(RegExp(r'\.$'), '');
-}
-
-String _fmtPrice(double price) {
-  if (price >= 1000) return price.toStringAsFixed(2);
-  if (price >= 1) return price.toStringAsFixed(4);
-  return _trimTrailingZeros(price.toStringAsPrecision(4));
-}
-
-String _fmtForInput(double price) {
-  if (price >= 1000) return price.toStringAsFixed(2);
-  if (price >= 1) return price.toStringAsFixed(4);
-  return _trimTrailingZeros(price.toStringAsFixed(8));
 }

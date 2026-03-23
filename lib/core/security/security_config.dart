@@ -88,25 +88,6 @@ class SecurityConfig {
     'email', 'phone', 'ssn', 'credit_card', 'cvv',
   ];
 
-  /// 检查是否为 Release 模式
-  static bool get isRelease => kReleaseMode;
-
-  /// 检查是否为 Debug 模式
-  static bool get isDebug => kDebugMode;
-
-  /// 检查是否为 Profile 模式
-  static bool get isProfile => kProfileMode;
-
-  /// 检查是否应启用日志
-  ///
-  /// 仅在 Debug 模式下启用
-  static bool get shouldEnableLogging => kDebugMode;
-
-  /// 检查是否应启用 SSL Pinning
-  ///
-  /// 仅在 Release 模式下强制启用
-  static bool get shouldEnableSslPinning => kReleaseMode;
-
   /// Check if certificate pinning is properly configured
   ///
   /// Returns false if still using placeholder values

@@ -9,29 +9,26 @@ import 'package:flutter/material.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-/// 点击事件，返回true继续后续操作，返回false不再倒计时
 typedef OnTap = String? Function();
+
 class CaptchaButton extends StatefulWidget {
   final OnTap onTap;
   final HandType? codeType;
 
-  const CaptchaButton({required this.onTap, this.codeType,super.key});
+  const CaptchaButton({required this.onTap, this.codeType, super.key});
 
   @override
   State<CaptchaButton> createState() => _CaptchaButtonState();
 }
 
-class _CaptchaButtonState extends State<CaptchaButton> with WidgetsBindingObserver{
+class _CaptchaButtonState extends State<CaptchaButton> with WidgetsBindingObserver {
   Timer? _timer;
   int _countdown = 61;
   String? mobile;
   DateTime? last;
-  UserInfoApi? _loginApi;
-  UserInfoApi get loginApi{
-    _loginApi ??= UserInfoApi();
-    return _loginApi!;
-  }
-  Load load=Load.finish;
+  late final UserInfoApi loginApi = UserInfoApi();
+  Load load = Load.finish;
+
   @override
   void initState() {
     super.initState();
@@ -69,35 +66,19 @@ class _CaptchaButtonState extends State<CaptchaButton> with WidgetsBindingObserv
   void _onTaped() {
     mobile = widget.onTap();
     if (mobile == null) return;
-    if (canClick) {
-      canClick = false;
-      if(widget.codeType == HandType.unRegister){
-        /// 注销账号 单独接口
-        _unRegisterAccount();
-      }else{
-        ///如果接口发送验证码成功 开始倒计时
-        //发送验证码type 必传 register 注册验 | resetPwd 重置密码
-        _sendEmailCode(mobile!,
-            widget.codeType == HandType.restPassword ? "resetPwd" : "register");
-      }
-
+    if (!canClick) return;
+    canClick = false;
+    if (widget.codeType == HandType.unRegister) {
+      _doSendCode(() => loginApi.sendUnRegisterEmailCode());
+    } else {
+      final type = widget.codeType == HandType.restPassword ? "resetPwd" : "register";
+      _doSendCode(() => loginApi.sendEmailCode(mobile!, type));
     }
-  }
-
-
-  void _unRegisterAccount() async{
-    await _doSendCode(() => loginApi.sendUnRegisterEmailCode());
-  }
-
-  void _sendEmailCode(String email, String type) async {
-    await _doSendCode(() => loginApi.sendEmailCode(email, type));
   }
 
   Future<void> _doSendCode(Future Function() apiCall) async {
     try {
-      setState(() {
-        load=Load.loading;
-      });
+      setState(() => load = Load.loading);
       final data = await apiCall();
       if (data["code"] == 200) {
         setState(() => _countdown -= 1);
@@ -110,9 +91,7 @@ class _CaptchaButtonState extends State<CaptchaButton> with WidgetsBindingObserv
       }
     } finally {
       canClick = true;
-      setState(() {
-        load=Load.finish;
-      });
+      setState(() => load = Load.finish);
     }
   }
 
@@ -128,23 +107,24 @@ class _CaptchaButtonState extends State<CaptchaButton> with WidgetsBindingObserv
     });
   }
 
+  BoxDecoration get _buttonDecoration => BoxDecoration(
+        border: Border.all(
+          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+        ),
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+      );
+
   @override
   Widget build(BuildContext context) {
-    if(load==Load.loading){
+    if (load == Load.loading) {
       return Container(
         padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(28), vertical: ScreenUtil().setWidth(12)),
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainBlueColor.name),
-          ),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-        ),
+        decoration: _buttonDecoration,
         alignment: Alignment.center,
         child: SizedBox(
           width: ScreenUtil().setWidth(40.0),
           height: ScreenUtil().setWidth(40.0),
-          child: CircularProgressIndicator(),
+          child: const CircularProgressIndicator(),
         ),
       );
     }
@@ -152,13 +132,7 @@ class _CaptchaButtonState extends State<CaptchaButton> with WidgetsBindingObserv
       onTap: _countdown == 61 ? _onTaped : null,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(28), vertical: ScreenUtil().setWidth(12)),
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainBlueColor.name),
-          ),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-        ),
+        decoration: _buttonDecoration,
         child: Text(
           _countdown == 61
               ? S.of(context).rest_Verification_code

@@ -5,7 +5,6 @@
 //
 // Author: Jiang Yiwei
 
-/// Mining Status
 enum MiningStatus {
   idle,
   mining,
@@ -14,7 +13,6 @@ enum MiningStatus {
   error,
 }
 
-/// Mining Info
 class SharedMiningInfo {
   final MiningStatus status;
   final String? currentReward;
@@ -33,27 +31,13 @@ class SharedMiningInfo {
   bool get isActive => status == MiningStatus.mining;
 }
 
-/// Mining Service Interface
-///
-/// This interface allows other features (like Wallet) to access mining
-/// status without direct dependency on the Mining feature.
+/// Allows other features to access mining status without direct dependency.
 abstract class IMiningService {
-  /// Get current mining status
   MiningStatus get status;
-
-  /// Check if mining is active
   bool get isMining;
-
-  /// Get current mining wallet address
   String? get miningWalletAddress;
-
-  /// Get mining info
   SharedMiningInfo get miningInfo;
-
-  /// Stream of mining status changes
   Stream<MiningStatus> get statusStream;
-
-  /// Notify mining feature of wallet change
   void onWalletChanged(String? newAddress);
 }
 

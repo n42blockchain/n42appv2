@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:http/http.dart';
+import 'package:n42_wallet/core/config/proxy_config.dart';
 import 'package:n42_wallet/core/di/service_locator_setup.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
@@ -25,6 +26,10 @@ class DAppRequestHandler {
   final Trustdart _trustdart = Trustdart();
 
   web3.Web3Client? _web3client;
+
+  /// The origin URL of the DApp currently being browsed.
+  /// Set by BrowserPage so signing dialogs show the actual requesting site.
+  String dappOrigin = 'DApp';
 
   DAppRequestHandler({
     required this.ethCoinModels,
@@ -92,7 +97,8 @@ class DAppRequestHandler {
         return _handlePersonalSign(params);
 
       case 'eth_sign':
-        return _handleEthSign(params);
+        // eth_sign is dangerous (signs arbitrary data) — reject by default
+        throw Exception('eth_sign is disabled for security reasons. Use personal_sign instead.');
 
       case 'eth_signTypedData':
       case 'eth_signTypedData_v3':
@@ -124,8 +130,8 @@ class DAppRequestHandler {
         return _forwardToRpc(method, params);
 
       default:
-        // Try forwarding unknown methods to RPC
-        return _forwardToRpc(method, params);
+        // Reject unknown methods instead of blindly forwarding
+        throw {'code': -32601, 'message': 'Method not supported: $method'};
     }
   }
 
@@ -133,8 +139,12 @@ class DAppRequestHandler {
 
   String? _handleSwitchChain(List<dynamic> params) {
     if (params.isEmpty) throw 'Missing params';
-    final chainIdHex = params[0]['chainId'] as String;
-    final targetChainId = int.parse(chainIdHex.replaceFirst('0x', ''), radix: 16);
+    final chainParam = params[0];
+    if (chainParam is! Map) throw {'code': -32602, 'message': 'Invalid chain params'};
+    final chainIdRaw = chainParam['chainId'];
+    if (chainIdRaw is! String) throw {'code': -32602, 'message': 'Invalid chainId'};
+    final targetChainId = int.tryParse(chainIdRaw.replaceFirst('0x', ''), radix: 16);
+    if (targetChainId == null) throw {'code': -32602, 'message': 'Invalid chainId format'};
 
     for (int i = 0; i < ethCoinModels.length; i++) {
       final cm = ethCoinModels[i];
@@ -154,11 +164,14 @@ class DAppRequestHandler {
   Future<String> _handlePersonalSign(List<dynamic> params) async {
     if (params.length < 2) throw 'Invalid params';
     final rawData = params[0] as String;
-    final origin = 'DApp';
-
-    // Ask user for approval
+    // Verify the requested address matches our wallet
+    final requestedAddress = (params[1] as String).toLowerCase();
+    if (requestedAddress != address.toLowerCase()) {
+      throw {'code': -32602, 'message': 'Address mismatch'};
+    }
+    // Ask user for approval — show the actual DApp origin
     final approved = await _requestApproval(
-      origin: origin,
+      origin: dappOrigin,
       method: 'personal_sign',
       details: {'message': rawData},
     );
@@ -173,30 +186,19 @@ class DAppRequestHandler {
     return bytesToHex(signedData, include0x: true);
   }
 
-  Future<String> _handleEthSign(List<dynamic> params) async {
-    if (params.length < 2) throw 'Invalid params';
-    final rawData = params[1] as String;
-
-    final approved = await _requestApproval(
-      origin: 'DApp',
-      method: 'eth_sign',
-      details: {'message': rawData},
-    );
-    if (!approved) throw {'code': 4001, 'message': 'User rejected'};
-
-    final privateKey = await _getPrivateKey();
-    final stripped = web3.strip0x(rawData);
-    final encodedMessage = web3.hexToBytes(stripped);
-    final signedData = privateKey.signPersonalMessageToUint8List(encodedMessage);
-    return bytesToHex(signedData, include0x: true);
-  }
+  // eth_sign intentionally removed — dangerous method that signs arbitrary data.
+  // DApps should use personal_sign or eth_signTypedData instead.
 
   Future<String> _handleSignTypedData(String method, List<dynamic> params) async {
     if (params.length < 2) throw 'Invalid params';
+    final requestedAddress = (params[0] as String).toLowerCase();
+    if (requestedAddress != address.toLowerCase()) {
+      throw {'code': -32602, 'message': 'Address mismatch'};
+    }
     final jsonData = params[1] as String;
 
     final approved = await _requestApproval(
-      origin: 'DApp',
+      origin: dappOrigin,
       method: method,
       details: {'data': jsonData},
     );
@@ -223,8 +225,14 @@ class DAppRequestHandler {
     if (params.isEmpty) throw 'Invalid params';
     final txMap = params[0] as Map<String, dynamic>;
 
+    // Validate the from address matches our wallet to prevent spoofing
+    final txFrom = (txMap['from'] as String?)?.toLowerCase();
+    if (txFrom != null && txFrom.isNotEmpty && txFrom != address.toLowerCase()) {
+      throw {'code': -32602, 'message': 'From address does not match wallet'};
+    }
+
     final approved = await _requestApproval(
-      origin: 'DApp',
+      origin: dappOrigin,
       method: 'eth_sendTransaction',
       details: txMap,
     );
@@ -246,8 +254,14 @@ class DAppRequestHandler {
     if (params.isEmpty) throw 'Invalid params';
     final txMap = params[0] as Map<String, dynamic>;
 
+    // Validate the from address matches our wallet to prevent spoofing
+    final txFrom = (txMap['from'] as String?)?.toLowerCase();
+    if (txFrom != null && txFrom.isNotEmpty && txFrom != address.toLowerCase()) {
+      throw {'code': -32602, 'message': 'From address does not match wallet'};
+    }
+
     final approved = await _requestApproval(
-      origin: 'DApp',
+      origin: dappOrigin,
       method: 'eth_signTransaction',
       details: txMap,
     );
@@ -268,7 +282,9 @@ class DAppRequestHandler {
     try {
       final response = await client.post(
         Uri.parse(_rpcUrl),
-        headers: {'Content-Type': 'application/json'},
+        headers: ProxyConfig.mergeAuthHeaders(_rpcUrl, {
+          'Content-Type': 'application/json',
+        }),
         body: json.encode({
           'jsonrpc': '2.0',
           'id': 1,
@@ -395,9 +411,11 @@ class DAppRequestHandler {
     );
   }
 
+  static final RegExp _hexRegExp = RegExp(r'^[0-9a-fA-F]+$');
+
   static bool _isValidHex(String s) {
     if (s.isEmpty) return false;
-    return RegExp(r'^[0-9a-fA-F]+$').hasMatch(s);
+    return _hexRegExp.hasMatch(s);
   }
 
   void dispose() {

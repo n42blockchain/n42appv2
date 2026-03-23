@@ -2,8 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:n42_wallet/core/storage/sp_util.dart';
-import 'package:n42_wallet/features/models/message_model.dart';
 
 class Trustdart {
   final MethodChannel _channel = const MethodChannel('trustdart');
@@ -377,42 +375,6 @@ class Trustdart {
     }
   }
 
-  // 启动 iOS LiveActivity
-  Future<MessageModel> liveActivityStart() async {
-    try {
-      final int type = await SPUtil().getBackgroundMiningMusic() ?? 0;
-      final String rData = await _channel.invokeMethod(
-        'LiveActivityStart',
-        <String, dynamic>{'type': type},
-      );
-      final MessageModel rmm = MessageModel();
-      if (rData != 'true') rmm.data = rData;
-      return rmm;
-    } catch (e) {
-      return MessageModel.error()..data = e.toString();
-    }
-  }
-
-  Future<MessageModel> liveActivityUpdate(int value) =>
-      _invokeLiveActivity('LiveActivityUpdate', value);
-
-  Future<MessageModel> liveActivityEnd(int value) =>
-      _invokeLiveActivity('LiveActivityEnd', value);
-
-  Future<MessageModel> _invokeLiveActivity(String method, int value) async {
-    try {
-      final String rData = await _channel.invokeMethod(
-        method,
-        <String, dynamic>{'value': value},
-      );
-      final MessageModel rmm = MessageModel();
-      if (rData != 'true') rmm.data = rData;
-      return rmm;
-    } catch (e) {
-      return MessageModel.error()..data = e.toString();
-    }
-  }
-
   // 获取权限（暂时只支持 iOS）
   Future<String> getPermissions(String pType) async {
     try {
@@ -433,35 +395,6 @@ class Trustdart {
       return jsonDecode(raw);
     } catch (e) {
       if (kDebugMode) debugPrint('Trustdart.evmEmit: $e');
-      return null;
-    }
-  }
-
-  // mining
-  Future<String?> miningGenerateBls12381Keypair() =>
-      _invokeMining('MiningGenerateBls12381Keypair');
-
-  Future<String?> miningCreateDepositUnsignedTx(Map<String, dynamic> params) =>
-      _invokeMining('MiningCreateDepositUnsignedTx', params);
-
-  Future<String?> miningRunClient(Map<String, dynamic> params) =>
-      _invokeMining('MiningRunClient', params);
-
-  Future<String?> miningStopClient() =>
-      _invokeMining('MiningStopClient');
-
-  Future<String?> miningCreateGetExitFeeUnsignedTx() =>
-      _invokeMining('MiningCreateGetExitFeeUnsignedTx');
-
-  Future<String?> miningCreateExitUnsignedTx(Map<String, dynamic> params) =>
-      _invokeMining('MiningCreateExitUnsignedTx', params);
-
-  /// 内部辅助：统一的 mining invokeMethod 调用模板（返回 String?）
-  Future<String?> _invokeMining(String method, [Map<String, dynamic>? params]) async {
-    try {
-      return await _channel.invokeMethod(method, params);
-    } catch (e) {
-      if (kDebugMode) debugPrint('Trustdart.$method: $e');
       return null;
     }
   }

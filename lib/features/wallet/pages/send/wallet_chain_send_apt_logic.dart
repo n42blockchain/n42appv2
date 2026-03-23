@@ -35,7 +35,8 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
     if (widget.coinModel.coin['isContract'] == true) {
       final wap = ref.read(wapBridgeProvider);
       final cIndex = wap.coinModels.indexWhere((element) {
-        if (element.coin['coinType'] != widget.coinModel.coin['coinType']) return false;
+        if (element.coin['coinType'] != widget.coinModel.coin['coinType'])
+          return false;
         if (widget.coinModel.privateKey != null) {
           return element.privateKey == widget.coinModel.privateKey;
         }
@@ -48,8 +49,12 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
         setState(() {});
       }
     }
-    gas = BigInt.from(getCoinGas(widget.coinModel.coin['coinType'],
-        contract: widget.coinModel.coin['isContract']));
+    gas = BigInt.from(
+      getCoinGas(
+        widget.coinModel.coin['coinType'],
+        contract: widget.coinModel.coin['isContract'],
+      ),
+    );
     await getBalance();
     await getGasPrice();
   }
@@ -121,8 +126,10 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
       setState(() {});
       return null;
     }
-    final valid = await Trustdart()
-        .validateAddress(widget.coinModel.coin['coinType'], addr);
+    final valid = await Trustdart().validateAddress(
+      widget.coinModel.coin['coinType'],
+      addr,
+    );
     if (!mounted) return null;
 
     final isSelfAddress =
@@ -152,8 +159,9 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
 
     setState(() => load = Load.loading);
 
-    final String? toAddr =
-        await toAddressCheck(toTextEditingController.text.trim());
+    final String? toAddr = await toAddressCheck(
+      toTextEditingController.text.trim(),
+    );
     if (toAddr == null) {
       _finishLoading();
       return;
@@ -252,13 +260,14 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
       valueTextEditingController.text = widget.coinModel.balanceStringAll();
       transferValue = widget.coinModel.balance;
     } else {
-      final BigInt maxValue = widget.coinModel.balance - totalGasPrice;
-      if (maxValue > BigInt.zero) {
-        transferValue = maxValue;
-        valueTextEditingController.text =
-            toEther(transferValue.toString(), widget.coinModel.coin['decimals'])
-                .toString();
-      }
+      transferValue = maxTransferableAmount(
+        balance: widget.coinModel.balance,
+        fee: totalGasPrice,
+      );
+      valueTextEditingController.text = toEther(
+        transferValue.toString(),
+        widget.coinModel.coin['decimals'],
+      ).toString();
     }
     amountErrorMessage = '';
     setState(() {});

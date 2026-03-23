@@ -37,9 +37,13 @@ class MockFlutterMiningPlatform
   Future<String?> createDepositUnsignedTx(Map<String,String> params) {
     throw UnimplementedError();
   }
+
+  @override
   Future<String?> createGetExitFeeUnsignedTx() {
     throw UnimplementedError();
   }
+
+  @override
   Future<String?> generateBls12381Keypair() {
     throw UnimplementedError();
   }

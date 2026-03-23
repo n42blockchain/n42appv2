@@ -194,11 +194,13 @@ class SignatureValidator {
     return SignatureValidationResult.valid();
   }
 
+  static final RegExp _hexPattern = RegExp(r'^[0-9a-fA-F]+$');
+
   /// Check if string is valid hex
   static bool _isValidHex(String value) {
     final hex = value.startsWith('0x') ? value.substring(2) : value;
     if (hex.isEmpty) return false;
-    return RegExp(r'^[0-9a-fA-F]+$').hasMatch(hex);
+    return _hexPattern.hasMatch(hex);
   }
 
   /// Validate signature has correct length for v, r, s components
@@ -211,6 +213,9 @@ class SignatureValidator {
 
 /// Extension for easy validation in transfer flows
 extension SignedTransactionValidation on String {
+  static final RegExp _hexRe = RegExp(r'^[0-9a-fA-F]+$');
+  static final RegExp _base64Re = RegExp(r'^[A-Za-z0-9+/=]+$');
+
   /// Validate this string as a signed transaction
   SignatureValidationResult validateAsSignedTx(String coinType, {String? expectedAddress}) {
     return SignatureValidator.validateSignedTransaction(
@@ -224,10 +229,10 @@ extension SignedTransactionValidation on String {
   bool get looksLikeSignedTx {
     if (isEmpty || length < 20) return false;
     // Check for common formats
-    if (startsWith('0x') || startsWith('{') || RegExp(r'^[0-9a-fA-F]+$').hasMatch(this)) {
+    if (startsWith('0x') || startsWith('{') || _hexRe.hasMatch(this)) {
       return true;
     }
     // Could be base64/base58 for some chains
-    return RegExp(r'^[A-Za-z0-9+/=]+$').hasMatch(this);
+    return _base64Re.hasMatch(this);
   }
 }

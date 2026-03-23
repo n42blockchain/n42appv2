@@ -1,4 +1,3 @@
-import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'configs/chain_url_configs_part1.dart';
 import 'configs/chain_url_configs_part2.dart';
 import 'configs/chain_url_configs_part3.dart';

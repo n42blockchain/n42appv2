@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"math/big"
 	"net/http"
+	"net/url"
 	"time"
 
 	"github.com/n42/n42appv2/backend/swap/models"
@@ -39,10 +40,12 @@ func (j *JupiterAdapter) Quote(
 	}
 
 	// Step 1: GET /quote
-	quoteURL := fmt.Sprintf(
-		"%s/quote?inputMint=%s&outputMint=%s&amount=%s&slippageBps=%d",
-		jupBase, req.TokenIn, req.TokenOut, req.AmountIn, req.SlippageBps,
-	)
+	params := url.Values{}
+	params.Set("inputMint", req.TokenIn)
+	params.Set("outputMint", req.TokenOut)
+	params.Set("amount", req.AmountIn)
+	params.Set("slippageBps", fmt.Sprintf("%d", req.SlippageBps))
+	quoteURL := fmt.Sprintf("%s/quote?%s", jupBase, params.Encode())
 	quoteResp, err := j.fetchQuote(ctx, quoteURL)
 	if err != nil {
 		return nil, err
@@ -79,7 +82,7 @@ type jupQuoteResp struct {
 	OtherAmountThreshold string   `json:"otherAmountThreshold"`
 	SwapMode           string      `json:"swapMode"`
 	SlippageBps        int         `json:"slippageBps"`
-	RoutePlan          interface{} `json:"routePlan"`
+	RoutePlan          any         `json:"routePlan"`
 }
 
 func (j *JupiterAdapter) fetchQuote(
@@ -116,7 +119,7 @@ func (j *JupiterAdapter) fetchSwap(
 	quoteResp *jupQuoteResp,
 	userPublicKey string,
 ) (string, error) {
-	body := map[string]interface{}{
+	body := map[string]any{
 		"quoteResponse":            quoteResp,
 		"userPublicKey":            userPublicKey,
 		"wrapAndUnwrapSol":         true,

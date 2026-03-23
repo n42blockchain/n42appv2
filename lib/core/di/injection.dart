@@ -17,6 +17,7 @@ import 'package:n42_wallet/shared/domain/services/mining_service_interface.dart'
 import 'package:n42_wallet/features/wallet/data/services/wallet_service_impl.dart';
 import 'package:n42_wallet/features/mining/data/services/mining_service_impl.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
+import 'package:n42_wallet/core/wallet_sdk/wallet_sdk.dart';
 
 /// Dependency Injection Container
 final GetIt getIt = GetIt.instance;
@@ -84,6 +85,9 @@ Future<void> configureDependencies(
     ServiceLocatorSetup.registerMiningService(miningService);
   }
 
+  // Wallet SDK
+  _registerIfAbsent<WalletSdk>(() => WalletSdk());
+
   // Platform and security
   _registerIfAbsent<TokenViewApi>(() => TokenViewApi());
   _registerIfAbsent<DeepLinkService>(() => DeepLinkService());
@@ -106,6 +110,9 @@ DeepLinkService get deepLinkService => getIt<DeepLinkService>();
 /// Convenience accessors - Feature Services
 WalletServiceImpl get walletServiceImpl => getIt<WalletServiceImpl>();
 MiningServiceImpl get miningServiceImpl => getIt<MiningServiceImpl>();
+
+/// Convenience accessors - Wallet SDK
+WalletSdk get walletSdk => getIt<WalletSdk>();
 
 /// Convenience accessors - Wallet APIs
 TokenViewApi get tokenViewApi => getIt<TokenViewApi>();

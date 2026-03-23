@@ -176,7 +176,11 @@ class DrawLineChart extends CustomPainter{
 
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate){
-    return true;
+  bool shouldRepaint(covariant DrawLineChart oldDelegate){
+    return oldDelegate.values != values ||
+        oldDelegate.isUp != isUp ||
+        oldDelegate.maxValue != maxValue ||
+        oldDelegate.minValue != minValue ||
+        oldDelegate.theme.brightness != theme.brightness;
   }
 }

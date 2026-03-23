@@ -3,14 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BoardItem extends StatelessWidget {
-  final String imagePath;
   final String action;
   final GestureTapCallback? onTap;
   final Color? color;
 
   const BoardItem(
       {super.key,
-        required this.imagePath,
         required this.action,
         this.onTap,
         this.color});

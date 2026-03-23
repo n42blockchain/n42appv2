@@ -7,7 +7,7 @@ part of 'bridge_provider.dart';
 
 /// 跨链桥交易执行逻辑
 mixin BridgeExecutionMixin on ChangeNotifier {
-  LiFiApi get _lifiApi;
+  BridgeApiClient get _lifiApi;
   BridgeChain? get _fromChain;
   BridgeChain? get _toChain;
   BridgeToken? get _fromToken;
@@ -44,6 +44,13 @@ mixin BridgeExecutionMixin on ChangeNotifier {
     if (_selectedRoute == null) {
       return MessageModel.error()..data = 'No route selected';
     }
+    if (_selectedRoute!.steps.isEmpty) {
+      return MessageModel.error()..data = 'Route has no steps';
+    }
+    if (_fromChain == null || _toChain == null ||
+        _fromToken == null || _toToken == null) {
+      return MessageModel.error()..data = 'Incomplete bridge configuration';
+    }
 
     _setState(BridgeState.executing);
     _clearError();
@@ -68,7 +75,8 @@ mixin BridgeExecutionMixin on ChangeNotifier {
       final txResult = await _lifiApi.getStepTransaction(step: stepJson);
       if (txResult.error) {
         return _errorResult(
-            txResult.data?.toString() ?? 'Failed to get transaction');
+          txResult.data?.toString() ?? 'Failed to get transaction',
+        );
       }
 
       final txResponse = txResult.data as BridgeTransactionResponse;
@@ -78,9 +86,14 @@ mixin BridgeExecutionMixin on ChangeNotifier {
 
       // ERC-20 授权检查：原生代币无需授权
       if (!_fromToken!.isNative) {
-        await _handleTokenApproval(fromAddress, txResponse, signAndSend);
-        if (_errorMessage != null && state == BridgeState.error) {
-          return MessageModel.error()..data = _errorMessage;
+        final approved = await _handleTokenApproval(
+          fromAddress,
+          txResponse,
+          signAndSend,
+        );
+        if (!approved) {
+          return MessageModel.error()
+            ..data = _errorMessage ?? 'Approval failed';
         }
         _setState(BridgeState.executing);
       }
@@ -120,21 +133,27 @@ mixin BridgeExecutionMixin on ChangeNotifier {
   }
 
   /// ERC-20 授权流程
-  Future<void> _handleTokenApproval(
+  Future<bool> _handleTokenApproval(
     String fromAddress,
     BridgeTransactionResponse txResponse,
     Future<String?> Function(Map<String, dynamic> txData) signAndSend,
   ) async {
     _setState(BridgeState.approving);
 
-    final fromAmountBig = BigInt.tryParse(
-          _parseAmount(_fromAmount, _fromToken!.decimals),
-        ) ??
+    final fromAmountBig =
+        BigInt.tryParse(_parseAmount(_fromAmount, _fromToken!.decimals)) ??
         BigInt.zero;
     // LiFi 合约地址即为 spender（来自 transactionRequest.to）
     final spenderAddress = txResponse.txData!['to']?.toString() ?? '';
 
-    if (spenderAddress.isEmpty || fromAmountBig <= BigInt.zero) return;
+    if (spenderAddress.isEmpty) {
+      _setError('Missing approval spender');
+      return false;
+    }
+    if (fromAmountBig <= BigInt.zero) {
+      _setError('Invalid approval amount');
+      return false;
+    }
 
     final approvalResult = await _lifiApi.getTokenApproval(
       chainId: _fromChain!.chainId,
@@ -143,11 +162,18 @@ mixin BridgeExecutionMixin on ChangeNotifier {
       spenderAddress: spenderAddress,
     );
 
-    if (approvalResult.error || approvalResult.data == null) return;
+    if (approvalResult.error || approvalResult.data == null) {
+      _setError(
+        approvalResult.data?.toString() ?? 'Failed to get approval status',
+      );
+      return false;
+    }
 
-    final allowance = _parseAllowance(approvalResult.data as Map<String, dynamic>);
+    final allowance = _parseAllowance(
+      approvalResult.data as Map<String, dynamic>,
+    );
 
-    if (allowance >= fromAmountBig) return;
+    if (allowance >= fromAmountBig) return true;
 
     // 授权额度不足，先发送 approve 交易
     final approveTxResult = await _lifiApi.getApprovalTransaction(
@@ -157,22 +183,37 @@ mixin BridgeExecutionMixin on ChangeNotifier {
       amount: fromAmountBig.toString(),
     );
 
-    if (approveTxResult.error || approveTxResult.data == null) return;
+    if (approveTxResult.error || approveTxResult.data == null) {
+      _setError(
+        approveTxResult.data?.toString() ??
+            'Failed to get approval transaction',
+      );
+      return false;
+    }
 
     final approveTxData = approveTxResult.data as Map<String, dynamic>;
     final approveTxHash = await signAndSend(approveTxData);
 
     if (approveTxHash == null) {
       _setError('Approval transaction cancelled');
-      return;
+      return false;
     }
 
     // 等待授权到账（轮询 allowance，最多 60s）
-    await _waitForApproval(fromAddress, spenderAddress, fromAmountBig);
+    final approved = await _waitForApproval(
+      fromAddress,
+      spenderAddress,
+      fromAmountBig,
+    );
+    if (!approved) {
+      _setError('Approval not confirmed in time');
+      return false;
+    }
+    return true;
   }
 
   /// 轮询等待 ERC-20 授权到账
-  Future<void> _waitForApproval(
+  Future<bool> _waitForApproval(
     String fromAddress,
     String spenderAddress,
     BigInt requiredAmount,
@@ -186,10 +227,13 @@ mixin BridgeExecutionMixin on ChangeNotifier {
         spenderAddress: spenderAddress,
       );
       if (!updated.error && updated.data != null) {
-        final newAllowance = _parseAllowance(updated.data as Map<String, dynamic>);
-        if (newAllowance >= requiredAmount) break;
+        final newAllowance = _parseAllowance(
+          updated.data as Map<String, dynamic>,
+        );
+        if (newAllowance >= requiredAmount) return true;
       }
     }
+    return false;
   }
 
   /// 解析 allowance 值（支持 0x 前缀和十进制字符串）
@@ -217,8 +261,9 @@ mixin BridgeExecutionMixin on ChangeNotifier {
     if (result.error) return;
 
     final statusResp = result.data as BridgeStatusResponse;
-    final index =
-        _transactions.indexWhere((t) => t.txHash == transaction.txHash);
+    final index = _transactions.indexWhere(
+      (t) => t.txHash == transaction.txHash,
+    );
     if (index < 0) return;
 
     final oldStatus = _transactions[index].status;

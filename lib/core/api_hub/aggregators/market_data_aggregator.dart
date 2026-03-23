@@ -73,35 +73,37 @@ class MarketDataAggregator {
     if (remaining.isEmpty) return result;
 
     // Fallback chain: only query missing symbols
+    var gotFreshData = false;
     for (final source in _sources) {
       if (remaining.isEmpty) break;
 
       try {
         final data = await source(remaining);
+        if (data.isNotEmpty) {
+          gotFreshData = true;
+        }
         for (final entry in data.entries) {
           result[entry.key] = entry.value;
           _cache[entry.key] = entry.value;
         }
         remaining = remaining.where((s) => !data.containsKey(s)).toList();
       } catch (e) {
-        debugPrint('MarketDataAggregator: source failed: $e');
+        _debugLog('MarketDataAggregator: source failed: $e');
       }
     }
 
-    if (result.isNotEmpty) _cachedAt = DateTime.now();
+    if (remaining.isNotEmpty) {
+      addStaleFallback(
+        result: result,
+        missingSymbols: remaining,
+        cache: _cache,
+      );
+    }
+
+    if (gotFreshData && result.isNotEmpty) {
+      _cachedAt = DateTime.now();
+    }
     return result;
-  }
-
-  /// Convenience: get a single coin price.
-  static Future<CoinPrice?> getPrice(String symbol) async {
-    final result = await getPrices([symbol]);
-    return result[symbol.toUpperCase()];
-  }
-
-  /// Get price as a simple double (USD), or null if unavailable.
-  static Future<double?> getPriceUsd(String symbol) async {
-    final cp = await getPrice(symbol);
-    return cp?.priceUsd;
   }
 
   /// Get prices as a simple symbol→USD map (convenience for bridge).
@@ -118,5 +120,26 @@ class MarketDataAggregator {
   static void clearCache() {
     _cache.clear();
     _cachedAt = null;
+  }
+
+  @visibleForTesting
+  static void addStaleFallback({
+    required Map<String, CoinPrice> result,
+    required Iterable<String> missingSymbols,
+    required Map<String, CoinPrice> cache,
+  }) {
+    for (final symbol in missingSymbols) {
+      final normalized = symbol.toUpperCase();
+      if (result.containsKey(normalized)) continue;
+      final stale = cache[normalized];
+      if (stale != null) {
+        result[normalized] = stale;
+      }
+    }
+  }
+
+  static void _debugLog(String message) {
+    if (!kDebugMode) return;
+    debugPrint(message);
   }
 }

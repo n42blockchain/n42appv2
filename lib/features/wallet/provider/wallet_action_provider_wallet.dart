@@ -2,7 +2,6 @@ part of 'wallet_action_provider.dart';
 
 /// Wallet CRUD operations: create, import, delete, save, find, backup, key management.
 extension WalletActionProviderWallet on WalletActionProvider {
-
   /// 从 JSON 列表解析钱包，填充 _walletInfoLsit 并设置 index。
   void _loadWalletList(Map<String, dynamic> source) {
     walletIndex = source['index'];
@@ -55,17 +54,25 @@ extension WalletActionProviderWallet on WalletActionProvider {
     }
   }
 
-  Future<void> initWallet({bool shouldInitCoinInfo=false})async{
-    if(buildwallet==true)return;
-    buildwallet=true;
-    await getWalletInfo();
-    await _syncNewChains();
-    await buildCoinModel();
-    buildwallet=false;
-    refresh();
-    if(shouldInitCoinInfo){
-      eventBus.fire(EventPublic(EventPublicType.selectWallet,
-          intValue: walletIndex,stringValue: "wallet"));
+  Future<void> initWallet({bool shouldInitCoinInfo = false}) async {
+    if (buildwallet == true) return;
+    buildwallet = true;
+    try {
+      await getWalletInfo();
+      await _syncNewChains();
+      await buildCoinModel();
+    } finally {
+      buildwallet = false;
+      refresh();
+    }
+    if (shouldInitCoinInfo) {
+      eventBus.fire(
+        EventPublic(
+          EventPublicType.selectWallet,
+          intValue: walletIndex,
+          stringValue: "wallet",
+        ),
+      );
       initCoinInfo();
     }
     await refreshWalletListNotifier();
@@ -81,6 +88,13 @@ extension WalletActionProviderWallet on WalletActionProvider {
     // 遍历所有钱包
     for (int walletIdx = 0; walletIdx < _walletInfoLsit.length; walletIdx++) {
       final wallet = _walletInfoLsit[walletIdx];
+
+      if (normalizeWatchOnlyWallet(wallet, supportedChains: chainUrlMap)) {
+        hasNewChains = true;
+      }
+      if (wallet.watchOnly) {
+        continue;
+      }
       if (wallet.coinInfo == null) continue;
 
       // 检查 chainUrlMap 中的每条链
@@ -92,7 +106,10 @@ extension WalletActionProviderWallet on WalletActionProvider {
             // 完全深拷贝链配置
             wallet.coinInfo![chainKey] = _deepCopyChainConfig(chainConfig);
             hasNewChains = true;
-            if (kDebugMode) debugPrint('WalletActionProvider: Added new chain $chainKey to wallet ${wallet.walletName}');
+            if (kDebugMode)
+              debugPrint(
+                'WalletActionProvider: Added new chain $chainKey to wallet ${wallet.walletName}',
+              );
           }
         }
       }
@@ -103,36 +120,37 @@ extension WalletActionProviderWallet on WalletActionProvider {
       for (int i = 0; i < _walletInfoLsit.length; i++) {
         await saveWalletInfo(_walletInfoLsit[i], i);
       }
-      if (kDebugMode) debugPrint('WalletActionProvider: Synced new chains to all wallets');
+      if (kDebugMode)
+        debugPrint('WalletActionProvider: Synced new chains to all wallets');
     }
   }
 
   //创建钱包
-  Future<void> createWallet()async{
-    WalletInfo wInfo=WalletInfo(
+  Future<void> createWallet() async {
+    WalletInfo wInfo = WalletInfo(
       walletName: "",
       password: "",
       walletUuid: userUUID,
     );
-    wInfo.mnemonic= await Trustdart().generateMnemonic();
-    wInfo.walletName="Account${walletInfoLsit.length+1}";
+    wInfo.mnemonic = await Trustdart().generateMnemonic();
+    wInfo.walletName = "Account${walletInfoLsit.length + 1}";
     wInfo.coinInfo = chainUrlMap;
-    wInfo.mainWallet=true;
+    wInfo.mainWallet = true;
     wInfo.timestamp = "${DateTime.now().millisecondsSinceEpoch}";
     await addWalletInfo(wInfo);
   }
 
   ///添加钱包
   Future<void> addWalletInfo(WalletInfo info) async {
-    try{
+    try {
       // 克隆一份数据，不污染数据源（存储时不保存助记词）
       final newWalletInfo = WalletInfo.fromJson(info.toJson());
       _walletInfoLsit.add(info);
-      walletIndex=_walletInfoLsit.length-1;
-      if(walletMiningIndex ==-1){
-        walletMiningIndex=walletIndex;
+      walletIndex = _walletInfoLsit.length - 1;
+      if (walletMiningIndex == -1) {
+        walletMiningIndex = walletIndex;
       }
-      await saveWalletInfo(newWalletInfo,walletIndex,isNewWallet: true);
+      await saveWalletInfo(newWalletInfo, walletIndex, isNewWallet: true);
       // 同步将 mnemonic/privateKey 写入 SecureStorage，防止迁移清除 JSON 后丢失
       if (info.hasMnemonic) {
         final walletId = info.timestamp ?? '${userUUID}_$walletIndex';
@@ -140,7 +158,7 @@ extension WalletActionProviderWallet on WalletActionProvider {
       }
       initWallet(shouldInitCoinInfo: true);
       refresh();
-    }catch(e){
+    } catch (e) {
       ToastUtils.show(e.toString());
     }
   }
@@ -149,7 +167,9 @@ extension WalletActionProviderWallet on WalletActionProvider {
   /// [name] 钱包显示名称；[address] 要追踪的 EVM 地址（0x...）
   Future<void> addWatchOnlyWallet(String name, String address) async {
     final wInfo = WalletInfo(
-      walletName: name.trim().isEmpty ? 'Watch ${_walletInfoLsit.length + 1}' : name.trim(),
+      walletName: name.trim().isEmpty
+          ? 'Watch ${_walletInfoLsit.length + 1}'
+          : name.trim(),
       password: '0', // 非空，避免触发备份提示
       walletUuid: userUUID,
     );
@@ -157,47 +177,55 @@ extension WalletActionProviderWallet on WalletActionProvider {
     wInfo.watchAddress = address.trim();
     wInfo.mnemonic = '';
     wInfo.privateKey = '';
-    wInfo.coinInfo = chainUrlMap;
+    wInfo.coinInfo = buildWatchOnlyCoinInfo(chainUrlMap);
     wInfo.mainWallet = false;
     wInfo.timestamp = '${DateTime.now().millisecondsSinceEpoch}';
     await addWalletInfo(wInfo);
   }
 
   ///删除一个钱包
-  Future<MessageModel?> deleteWalletInfo({WalletInfo? info}) async{
+  Future<MessageModel?> deleteWalletInfo({WalletInfo? info}) async {
     if (_walletInfoLsit.isEmpty) return null;
     if (info == null) {
       //不传 默认移除第一个
       _walletInfoLsit.removeAt(0);
+      // Clamp walletIndex after removal
+      if (walletIndex >= _walletInfoLsit.length) {
+        walletIndex = _walletInfoLsit.length - 1;
+      }
       return null;
     } else {
       final rIndex = _walletInfoLsit.indexWhere((e) => e == info);
-      // 观察钱包：无私钥/助记词，直接删除，跳过挖矿地址检查
-      if (!_walletInfoLsit[rIndex].watchOnly) {
-        Map<String,dynamic> cInfo=_walletInfoLsit[rIndex].coinInfo?[CoinType.N.name];
-        Map<String, dynamic> pathMap = cInfo['baseInfo']['path'];
-        var rmAddress=await Trustdart().generateAddress(
-            CoinType.N.name,
-            getPathWithIndex(pathMap[cInfo['addrType']], cInfo['pathIndex']),
-            cInfo['addrType'],
-            mnemonic: _walletInfoLsit[rIndex].mnemonic??"",
-            pk: _walletInfoLsit[rIndex].privateKey??""
+      if (rIndex == -1) return null;
+
+      final wallet = _walletInfoLsit[rIndex];
+      final miningChainConfig = walletDeletionMiningChainConfig(wallet);
+      if (miningChainConfig != null) {
+        final pathMap = Map<String, dynamic>.from(
+          miningChainConfig['baseInfo']['path'] as Map,
         );
-        String miningAddress=rmAddress[cInfo['addrType']];
-        var miningData=globalMiningInstance.miningData?[miningAddress];
-        if(miningData !=null){
-          if(miningData['isMining']==true){
-            MessageModel rmm=MessageModel.error();
-            rmm.data="The validator's wallet cannot be deleted!";//"验证者钱包，无法删除！";
-            return rmm;
-          }
+        final addrType = miningChainConfig['addrType'].toString();
+        var rmAddress = await Trustdart().generateAddress(
+          CoinType.N.name,
+          getPathWithIndex(pathMap[addrType], miningChainConfig['pathIndex']),
+          addrType,
+          mnemonic: wallet.mnemonic ?? "",
+          pk: wallet.privateKey ?? "",
+        );
+        String miningAddress = rmAddress[addrType];
+        var miningData = globalMiningInstance.miningData?[miningAddress];
+        if (miningData != null && miningData['isMining'] == true) {
+          MessageModel rmm = MessageModel.error();
+          rmm.data =
+              "The validator's wallet cannot be deleted!"; //"验证者钱包，无法删除！";
+          return rmm;
         }
       }
-      if(rIndex<walletIndex){
+      if (rIndex < walletIndex) {
         walletIndex--;
         _walletInfoLsit.remove(info);
         //setWalletIndex(walletIndex);
-      }else{
+      } else {
         _walletInfoLsit.remove(info);
       }
       saveWalletInfoAll();
@@ -207,197 +235,244 @@ extension WalletActionProviderWallet on WalletActionProvider {
 
   //isFirst 用户第一次创建钱包 缓存中还未有数据
   Future<int> checkWalletMnemonic(WalletInfo info) async {
-    try{
+    try {
       final valid = await Trustdart().checkMnemonic(info.mnemonic!);
       return valid ? 0 : -1;
-    }catch(e){
+    } catch (e) {
       return -1;
     }
   }
 
-  WalletInfo? findWallet({String pk="",String mnemonic=""}){
-    final index = walletInfoLsit.indexWhere((e) =>
-      pk.isNotEmpty ? e.privateKey == pk : e.mnemonic == mnemonic,
+  WalletInfo? findWallet({String pk = "", String mnemonic = ""}) {
+    final index = walletInfoLsit.indexWhere(
+      (e) => pk.isNotEmpty ? e.privateKey == pk : e.mnemonic == mnemonic,
     );
     return index == -1 ? null : walletInfoLsit[index];
   }
 
   //返回公钥、私钥对
-  Future<void> getPublicKeyAndPrivateKeyPairN()async{
-    _publicKeyAndPrivateKeyPair={};
-    Trustdart trustdart=Trustdart();
-    for(WalletInfo wInfo in walletInfoLsit){
-      if(wInfo.mainWallet==false){
+  Future<void> getPublicKeyAndPrivateKeyPairN() async {
+    _publicKeyAndPrivateKeyPair = {};
+    Trustdart trustdart = Trustdart();
+    for (WalletInfo wInfo in walletInfoLsit) {
+      if (wInfo.mainWallet == false) {
         continue;
       }
       // 检查 coinInfo 和 N 链配置是否存在
       if (wInfo.coinInfo == null || wInfo.coinInfo![CoinType.N.name] == null) {
-        if (kDebugMode) debugPrint('WalletActionProvider: Skipping wallet ${wInfo.walletName} - coinInfo or N chain config is null');
+        if (kDebugMode)
+          debugPrint(
+            'WalletActionProvider: Skipping wallet ${wInfo.walletName} - coinInfo or N chain config is null',
+          );
         continue;
       }
       final nChainConfig = wInfo.coinInfo![CoinType.N.name];
-      if (nChainConfig['baseInfo'] == null || nChainConfig['baseInfo']['path'] == null) {
-        if (kDebugMode) debugPrint('WalletActionProvider: Skipping wallet ${wInfo.walletName} - N chain baseInfo or path is null');
+      if (nChainConfig['baseInfo'] == null ||
+          nChainConfig['baseInfo']['path'] == null) {
+        if (kDebugMode)
+          debugPrint(
+            'WalletActionProvider: Skipping wallet ${wInfo.walletName} - N chain baseInfo or path is null',
+          );
         continue;
       }
       // EDGE-M03: 验证路径配置完整性，防止 addrType 不存在时产生难以追踪的空指针
       final pathMap = nChainConfig['baseInfo']?['path'];
       final addrType = nChainConfig['addrType'] as String?;
       if (pathMap == null || addrType == null || pathMap[addrType] == null) {
-        if (kDebugMode) debugPrint('WalletActionProvider: Invalid path config for ${wInfo.walletName}, addrType=$addrType');
+        if (kDebugMode)
+          debugPrint(
+            'WalletActionProvider: Invalid path config for ${wInfo.walletName}, addrType=$addrType',
+          );
         continue;
       }
       try {
-        String path=getPathWithIndex(pathMap[addrType], nChainConfig['pathIndex']);
-        String privateKeyStr=await trustdart.getPrivateKeyAndPublicKeyPair(
+        String path = getPathWithIndex(
+          pathMap[addrType],
+          nChainConfig['pathIndex'],
+        );
+        String privateKeyStr = await trustdart.getPrivateKeyAndPublicKeyPair(
           CoinType.N.name,
           path,
-          mnemonic: wInfo.mnemonic??"",
-          pk: wInfo.privateKey??"",
+          mnemonic: wInfo.mnemonic ?? "",
+          pk: wInfo.privateKey ?? "",
         );
         if (privateKeyStr.isEmpty) {
-          if (kDebugMode) debugPrint('WalletActionProvider: Empty key pair response for ${wInfo.walletName}');
+          if (kDebugMode)
+            debugPrint(
+              'WalletActionProvider: Empty key pair response for ${wInfo.walletName}',
+            );
           continue;
         }
-        Map<dynamic,dynamic> pkPair=json.decode(privateKeyStr);
+        Map<dynamic, dynamic> pkPair = json.decode(privateKeyStr);
         final pubKey = bytesToHex(base64Decode(pkPair['publicKey'].toString()));
-        final privateKey = bytesToHex(base64Decode(pkPair['privateKey'].toString()));
+        final privateKey = bytesToHex(
+          base64Decode(pkPair['privateKey'].toString()),
+        );
         _publicKeyAndPrivateKeyPair![pubKey] = privateKey;
       } catch (e) {
-        if (kDebugMode) debugPrint('WalletActionProvider: Failed to load key pair for ${wInfo.walletName}: $e');
+        if (kDebugMode)
+          debugPrint(
+            'WalletActionProvider: Failed to load key pair for ${wInfo.walletName}: $e',
+          );
       }
     }
   }
 
-  String? getPrivateKeyWithPublicKey(String publicKey){
+  String? getPrivateKeyWithPublicKey(String publicKey) {
     return _publicKeyAndPrivateKeyPair?[publicKey];
   }
 
   //设置主钱包
-  MessageModel setMainWallet(int wIndex){
+  MessageModel setMainWallet(int wIndex) {
     final index = walletInfoLsit.indexWhere((e) => e.mainWallet == true);
-    if(index==-1){
+    if (index == -1) {
       final rmm = MessageModel.error();
-      rmm.data="Main wallet not found!";
+      rmm.data = "Main wallet not found!";
       return rmm;
     }
-    walletInfoLsit[index].mainWallet=false;
-    walletInfoLsit[wIndex].mainWallet=true;
+    walletInfoLsit[index].mainWallet = false;
+    walletInfoLsit[wIndex].mainWallet = true;
     saveWalletInfoAll();
-    eventBus.fire(EventPublic(EventPublicType.selectWallet,
-        intValue: -1,stringValue: "mainwallet"));
+    eventBus.fire(
+      EventPublic(
+        EventPublicType.selectWallet,
+        intValue: -1,
+        stringValue: "mainwallet",
+      ),
+    );
     return MessageModel();
   }
 
   //保存钱包修改到SPUtil
   //isNewWallet，是否是添加新钱包
-  Future<void> saveWalletInfo(WalletInfo newWalletInfo,int wIndex,{bool isNewWallet=false}) async{
-    try{
+  Future<void> saveWalletInfo(
+    WalletInfo newWalletInfo,
+    int wIndex, {
+    bool isNewWallet = false,
+  }) async {
+    try {
       final sPUtils = SPUtil();
       Map<String, dynamic>? walletAll = await sPUtils.getWalletInfo();
       if (walletAll == null) {
         await sPUtils.setWalletInfo({
           userUUID: {
-            "index":0,
-            "miningIndex":0,
-            "wallet":[newWalletInfo.toJson()],
-          }
+            "index": 0,
+            "miningIndex": 0,
+            "wallet": [newWalletInfo.toJson()],
+          },
         });
       } else {
         final userWallets = walletAll[userUUID];
-        if(userWallets==null){
+        if (userWallets == null) {
           walletAll[userUUID] = {
-            "index":0,
-            "miningIndex":0,
-            "wallet":[newWalletInfo.toJson()],
+            "index": 0,
+            "miningIndex": 0,
+            "wallet": [newWalletInfo.toJson()],
           };
-        }else{
-          if(isNewWallet){
+        } else {
+          if (isNewWallet) {
             (userWallets['wallet'] as List).add(newWalletInfo.toJson());
-          }else{
-            userWallets['wallet'][wIndex]=newWalletInfo.toJson();
+          } else {
+            userWallets['wallet'][wIndex] = newWalletInfo.toJson();
           }
-          userWallets['index']=wIndex;
-          userWallets['miningIndex']=walletMiningIndex;
-          walletAll[userUUID]=userWallets;
+          userWallets['index'] = wIndex;
+          userWallets['miningIndex'] = walletMiningIndex;
+          walletAll[userUUID] = userWallets;
         }
         await sPUtils.setWalletInfo(walletAll);
       }
       await refreshWalletListNotifier();
-    }catch(e){
+    } catch (e) {
       if (kDebugMode) debugPrint("saveWalletInfo error: $e");
     }
   }
 
   //保存钱包数据
-  Future<void> saveWalletInfoAll()async{
-    SPUtil sPUtils=SPUtil();
+  Future<void> saveWalletInfoAll() async {
+    SPUtil sPUtils = SPUtil();
     Map<String, dynamic>? walletAll = await sPUtils.getWalletInfo();
     if (walletAll != null) {
-      walletAll[userUUID]['wallet']=walletInfoLsit.map((e) => e.toJson()).toList();
-      walletAll[userUUID]['index']=walletIndex;
-      walletAll[userUUID]['miningIndex']=walletMiningIndex;
+      walletAll[userUUID]['wallet'] = walletInfoLsit
+          .map((e) => e.toJson())
+          .toList();
+      walletAll[userUUID]['index'] = walletIndex;
+      walletAll[userUUID]['miningIndex'] = walletMiningIndex;
       await sPUtils.setWalletInfo(walletAll);
       await refreshWalletListNotifier();
     }
   }
 
   //刷新缓存
-  Future<void> refreshWalletListNotifier()async{
+  Future<void> refreshWalletListNotifier() async {
     // 刷新 WalletListNotifier 以同步数据
     try {
       final walletService = ServiceLocatorSetup.walletService;
       if (walletService != null) {
         await walletService.refreshWallets();
-        if (kDebugMode) debugPrint("saveWalletInfo: WalletListNotifier refreshed successfully");
+        if (kDebugMode)
+          debugPrint(
+            "saveWalletInfo: WalletListNotifier refreshed successfully",
+          );
       } else {
-        if (kDebugMode) debugPrint("saveWalletInfo: WalletService not available, skipping refresh");
+        if (kDebugMode)
+          debugPrint(
+            "saveWalletInfo: WalletService not available, skipping refresh",
+          );
       }
     } catch (refreshError) {
-      if (kDebugMode) debugPrint("saveWalletInfo: Error refreshing WalletListNotifier: $refreshError");
+      if (kDebugMode)
+        debugPrint(
+          "saveWalletInfo: Error refreshing WalletListNotifier: $refreshError",
+        );
       // 不抛出异常，因为保存已经成功
     }
   }
 
   //修改面部数据绑定钱包
-  void setWalletFaceBinding(int? setIndex,{bool faceBinding=true}){
-    if(faceBinding){
-      int cancelIndex=walletInfoLsit.indexWhere((e)=>e.faceBinding==true);
-      if(cancelIndex !=-1){
-        WalletInfo wi=walletInfoLsit[cancelIndex];
-        wi.faceBinding=false;
+  void setWalletFaceBinding(int? setIndex, {bool faceBinding = true}) {
+    if (faceBinding) {
+      int cancelIndex = walletInfoLsit.indexWhere((e) => e.faceBinding == true);
+      if (cancelIndex != -1) {
+        WalletInfo wi = walletInfoLsit[cancelIndex];
+        wi.faceBinding = false;
       }
     }
     setIndex ??= walletIndex;
-    WalletInfo wiSet=walletInfoLsit[setIndex];
-    wiSet.faceBinding=faceBinding;
+    WalletInfo wiSet = walletInfoLsit[setIndex];
+    wiSet.faceBinding = faceBinding;
     saveWalletInfoAll();
   }
 
   //添加一个导入钱包
   Future<bool> addImportWalletInfo(WalletInfo info) async {
-    try{
+    try {
       if (info.walletName == null || info.walletName!.isEmpty) {
-        if (kDebugMode) debugPrint('WalletActionProvider: Cannot add import wallet - walletName is null or empty');
+        if (kDebugMode)
+          debugPrint(
+            'WalletActionProvider: Cannot add import wallet - walletName is null or empty',
+          );
         return false;
       }
       final walletNameUpper = info.walletName!.toUpperCase();
       final chainMapWallet = walletMap[walletNameUpper];
       if (chainMapWallet == null) {
-        if (kDebugMode) debugPrint('WalletActionProvider: Cannot add import wallet - chain config not found for $walletNameUpper');
+        if (kDebugMode)
+          debugPrint(
+            'WalletActionProvider: Cannot add import wallet - chain config not found for $walletNameUpper',
+          );
         return false;
       }
-      final chainMap = Map<String,dynamic>.from(chainMapWallet);
-      chainMap['baseInfo']['isTest']=false;
-      chainMap['baseInfo']['mainnets']={};
-      chainMap['baseInfo']['balance']="0";
-      chainMap['baseInfo']['balance_test']="0";
-      chainMap['baseInfo']['canEdit']=false;
-      info.coinInfo= {walletNameUpper: chainMap};
-      await saveWalletInfo(info, walletInfoLsit.length,isNewWallet: true);
+      final chainMap = Map<String, dynamic>.from(chainMapWallet);
+      chainMap['baseInfo']['isTest'] = false;
+      chainMap['baseInfo']['mainnets'] = {};
+      chainMap['baseInfo']['balance'] = "0";
+      chainMap['baseInfo']['balance_test'] = "0";
+      chainMap['baseInfo']['canEdit'] = false;
+      info.coinInfo = {walletNameUpper: chainMap};
+      await saveWalletInfo(info, walletInfoLsit.length, isNewWallet: true);
       initWallet();
       return true;
-    }catch(e){
+    } catch (e) {
       return false;
     }
   }

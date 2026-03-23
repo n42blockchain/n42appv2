@@ -1,5 +1,5 @@
 import 'package:n42_wallet/core/app/app_globals.dart';
-import 'package:n42_wallet/core/config/api_keys_config.dart';
+import 'package:n42_wallet/core/config/proxy_config.dart';
 import 'package:n42_wallet/core/utils/message_model_bridge.dart';
 import 'package:n42_wallet/core/utils/result.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
@@ -9,14 +9,11 @@ import 'package:n42_wallet/features/models/message_model.dart';
 
 class TonApi{
   String url="";
-  String apiKey="";
   TonApi({bool isTest=false}){
-    url=RequestUrl().getUrl2(CoinType.TON.name, "rpc",isTest: isTest);
-    if(isTest){
-      apiKey=ApiKeysConfig.tonApiKeyTestnet;
-    }else{
-      apiKey=ApiKeysConfig.tonApiKeyMainnet;
-    }
+    // TON RPC now goes through server proxy — API key injected server-side.
+    url = isTest
+        ? RequestUrl().getUrl2(CoinType.TON.name, "rpc", isTest: true)
+        : '${ProxyConfig.tonRpc}/';
   }
   Future<MessageModel> getBalanceTon(String address)async{
     final result=await baseRPCTon(
@@ -96,7 +93,7 @@ class TonApi{
         url+path,
         params: {},
         data: value,
-        header: {'x-api-key':apiKey,'Content-Type':'application/json'},
+        header: {'Content-Type':'application/json'},
         enableRetry: enableRetry,
       );
       if(data['ok']==false){

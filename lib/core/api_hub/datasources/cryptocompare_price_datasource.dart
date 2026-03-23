@@ -15,14 +15,14 @@ class CryptoComparePriceDatasource {
   static const String _base = 'https://min-api.cryptocompare.com/data';
   static const String _source = 'CryptoCompare';
 
+  static final RegExp _validSymbolPattern = RegExp(r'^[A-Z0-9]+$');
+
   static final Map<String, CoinPrice> _cache = {};
   static DateTime? _cachedAt;
   static const _cacheTtl = Duration(minutes: 2);
 
   /// Fetch prices for the given uppercase [symbols].
-  static Future<Map<String, CoinPrice>> getPrices(
-    List<String> symbols,
-  ) async {
+  static Future<Map<String, CoinPrice>> getPrices(List<String> symbols) async {
     final now = DateTime.now();
     final cachedAt = _cachedAt;
     if (cachedAt != null && now.difference(cachedAt) < _cacheTtl) {
@@ -35,11 +35,19 @@ class CryptoComparePriceDatasource {
     }
 
     try {
-      final fsyms = symbols.map((s) => s.toUpperCase()).join(',');
+      // Validate symbols to prevent URL parameter injection
+      final validSymbol = _validSymbolPattern;
+      final safeSymbols = symbols
+          .map((s) => s.toUpperCase())
+          .where((s) => validSymbol.hasMatch(s))
+          .toList();
+      if (safeSymbols.isEmpty) return {};
+      final fsyms = safeSymbols.join(',');
       final url =
           '$_base/pricemultifull?fsyms=$fsyms&tsyms=USD&extraParams=n42wallet';
-      final raw = await ExternalHttp.get(url)
-          .timeout(const Duration(seconds: 8), onTimeout: () => null);
+      final raw = await ExternalHttp.get(
+        url,
+      ).timeout(const Duration(seconds: 8));
       if (raw == null || raw is! Map) return {};
 
       final rawData = raw['RAW'] as Map?;
@@ -71,8 +79,13 @@ class CryptoComparePriceDatasource {
       _cachedAt = DateTime.now();
       return result;
     } catch (e) {
-      debugPrint('CryptoComparePriceDatasource.getPrices error: $e');
+      _debugLog('CryptoComparePriceDatasource.getPrices error: $e');
       return {};
     }
+  }
+
+  static void _debugLog(String message) {
+    if (!kDebugMode) return;
+    debugPrint(message);
   }
 }

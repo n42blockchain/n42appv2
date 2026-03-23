@@ -5,6 +5,7 @@
 //
 // Author: Jiang Yiwei
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
@@ -380,14 +381,15 @@ class CoinListNotifier extends AsyncNotifier<List<CoinBalanceData>> {
     final coinInfo = wallet.coinInfo;
     if (coinInfo == null) return [];
 
-    // Build O(1) lookup map from legacy coin models (O-1 optimisation + A-4 guard)
     Map<String, dynamic> modelMap = {};
     try {
       modelMap = {
         for (final c in globalWapAdapter.coinModels)
           (c.coin['coinType'] as String? ?? ''): c,
       };
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('[CoinListNotifier] build modelMap error: $e');
+    }
 
     return coinInfo.entries
         .where((e) {
@@ -416,8 +418,6 @@ class CoinListNotifier extends AsyncNotifier<List<CoinBalanceData>> {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() => build());
   }
-
-  Future<void> refreshCoin(String symbol) async => refresh();
 }
 
 /// Mining Wallet Index Provider

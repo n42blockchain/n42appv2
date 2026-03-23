@@ -39,6 +39,12 @@ class _ChooseCoinsPageState extends ConsumerState<ChooseCoinsPage> {
   }
 
   @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final scr = ScreenUtil();
     return Scaffold(
@@ -182,8 +188,15 @@ class _ChooseCoinsPageState extends ConsumerState<ChooseCoinsPage> {
 
   void _searchData(String text) {
     if (text.isEmpty) return;
+    final keyword = text.toLowerCase();
     final results = allList
-        .where((e) => (e.coin['name'] as String).contains(text))
+        .where((e) {
+          final name = (e.coin['name'] ?? '').toString().toLowerCase();
+          final symbol = (e.coin['miniName'] ?? e.coin['coinType'] ?? '')
+              .toString()
+              .toLowerCase();
+          return name.contains(keyword) || symbol.contains(keyword);
+        })
         .toList();
     if (results.isNotEmpty) {
       setState(() {

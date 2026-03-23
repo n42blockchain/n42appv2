@@ -59,8 +59,8 @@ class DexQuoteModel {
     return double.tryParse(clean) ?? 0.0;
   }
 
-  /// Compute minAmountOut = amountOut × (10000 − slippageBps) / 10000.
-  /// Uses pure string arithmetic to avoid floating-point drift.
+  static final RegExp _trailingZeros = RegExp(r'0+$');
+
   static String _calcMinOut(String amountOut, int slippageBps) {
     try {
       // Split into integer and fractional parts
@@ -83,7 +83,7 @@ class DexQuoteModel {
       final resultFrac = (result % scale).toString().padLeft(fracLen, '0');
 
       if (fracLen == 0) return resultInt.toString();
-      return '$resultInt.${resultFrac.replaceAll(RegExp(r'0+$'), '')}';
+      return '$resultInt.${resultFrac.replaceAll(_trailingZeros, '')}';
     } catch (_) {
       return amountOut;
     }

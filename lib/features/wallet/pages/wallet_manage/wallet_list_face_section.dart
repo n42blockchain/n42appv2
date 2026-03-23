@@ -11,14 +11,19 @@ mixin _WalletListFaceMixin on ConsumerState<WalletList> {
     fbwIndex = -1;
     fbwCheck = true;
     fbwCheckAddress = "";
-    fbwIndex = _state.walletList.indexWhere((e) => e.faceBinding == true);
+    fbwIndex = _state.walletList.indexWhere(
+      (e) => e.faceBinding == true && walletSupportsFaceBinding(e),
+    );
   }
 
-  Future<String> _generateLegacyAddress(WalletInfo info) async {
-    final Map coinInfo = info.coinInfo?[CoinType.N.name];
+  Future<String?> _generateLegacyAddress(WalletInfo info) async {
+    final coinInfo = faceBindingChainConfig(info);
+    if (coinInfo == null) return null;
     final pathIndex = coinInfo['pathIndex'] ?? 0;
-    final path =
-        getPathWithIndex(coinInfo["baseInfo"]["path"]["legacy"], pathIndex);
+    final path = getPathWithIndex(
+      coinInfo["baseInfo"]["path"]["legacy"],
+      pathIndex,
+    );
     final addressMap = await Trustdart().generateAddress(
       coinInfo["baseInfo"]['coinType'],
       path,
@@ -26,13 +31,17 @@ mixin _WalletListFaceMixin on ConsumerState<WalletList> {
       mnemonic: info.mnemonic ?? "",
       pk: info.privateKey ?? "",
     );
-    return addressMap['legacy'].toString();
+    final address = addressMap['legacy']?.toString() ?? '';
+    if (address.isEmpty) return null;
+    return address;
   }
 
   Future<String?> _matchFace() async {
     if (_state.load == Load.loading) return null;
     final rData = await Navigator.push<String>(
-        context, MaterialPageRoute(builder: (context) => FaceMatch(2)));
+      context,
+      MaterialPageRoute(builder: (context) => FaceMatch(2)),
+    );
     if (!mounted) return null;
     if (rData == null) {
       ToastUtils.show(S.of(context).g_face_match_key34);
@@ -47,6 +56,7 @@ mixin _WalletListFaceMixin on ConsumerState<WalletList> {
     for (int i = 0; i < walletList.length; i++) {
       final legacyAddr = await _generateLegacyAddress(walletList[i]);
       if (!mounted) return;
+      if (legacyAddr == null) continue;
       if (addr.toUpperCase() == legacyAddr.toUpperCase()) {
         _state.fbwCheck = true;
         _state.fbwIndex = i;
@@ -61,7 +71,7 @@ mixin _WalletListFaceMixin on ConsumerState<WalletList> {
   Future<void> verify() async {
     final rData = await _matchFace();
     if (rData == null) return;
-    checkFaceBindAddress(rData);
+    await checkFaceBindAddress(rData);
   }
 
   Future<void> unbind() async {
@@ -71,17 +81,32 @@ mixin _WalletListFaceMixin on ConsumerState<WalletList> {
     setState(() {
       _state.load = Load.loading;
     });
-    final legacyAddr =
-        await _generateLegacyAddress(_state.walletList[_state.fbwIndex]);
+    final legacyAddr = await _generateLegacyAddress(
+      _state.walletList[_state.fbwIndex],
+    );
+    if (legacyAddr == null) {
+      if (!mounted) return;
+      ToastUtils.show(
+        S
+            .of(context)
+            .g_face_match_key32(
+              _state.walletList[_state.fbwIndex].walletName ?? '',
+            ),
+      );
+      setState(() {
+        _state.load = Load.finish;
+        _state.fbwIndex = -1;
+      });
+      return;
+    }
     final rmm = await FaceApi().deleteBinding(legacyAddr);
     if (!mounted) return;
     if (rmm.error) {
       ToastUtils.show(S.of(context).g_face_match_key35);
     } else {
-      ref.read(wapBridgeProvider).setWalletFaceBinding(
-            _state.fbwIndex,
-            faceBinding: false,
-          );
+      ref
+          .read(wapBridgeProvider)
+          .setWalletFaceBinding(_state.fbwIndex, faceBinding: false);
       _state.fbwIndex = -1;
     }
     setState(() {
@@ -92,7 +117,9 @@ mixin _WalletListFaceMixin on ConsumerState<WalletList> {
   Future<void> bind() async {
     if (_state.load == Load.loading) return;
     final rData = await Navigator.push<MessageModel>(
-        context, MaterialPageRoute(builder: (context) => FaceUserNotice()));
+      context,
+      MaterialPageRoute(builder: (context) => FaceUserNotice()),
+    );
     if (!mounted) return;
     if (rData != null && !rData.error) {
       await _state.initData();
@@ -101,8 +128,12 @@ mixin _WalletListFaceMixin on ConsumerState<WalletList> {
 
   // ── UI ────────────────────────────────────────────────────────────────────
 
-  Widget _faceButtonRow(String leftLabel, VoidCallback onLeft,
-      String rightLabel, VoidCallback onRight) {
+  Widget _faceButtonRow(
+    String leftLabel,
+    VoidCallback onLeft,
+    String rightLabel,
+    VoidCallback onRight,
+  ) {
     return Row(
       children: [
         Expanded(child: faceBindButton(leftLabel, onLeft)),
@@ -177,7 +208,9 @@ mixin _WalletListFaceMixin on ConsumerState<WalletList> {
                 info.walletName ?? "-",
                 style: TextStyle(
                   color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemTextColor.name),
+                    context,
+                    AppThemeKeys.itemTextColor.name,
+                  ),
                   fontSize: ScreenUtil().setSp(40.0),
                   fontWeight: FontWeight.bold,
                 ),
@@ -217,14 +250,16 @@ mixin _WalletListFaceMixin on ConsumerState<WalletList> {
   Widget faceBindText(String value, {EdgeInsetsGeometry? margin}) {
     return Container(
       alignment: Alignment.centerLeft,
-      margin: margin ??
-          EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0)),
+      margin:
+          margin ?? EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0)),
       child: Text(
         value,
         style: TextStyle(
           fontSize: ScreenUtil().setSp(28),
           color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemSubtitleTextColor.name),
+            context,
+            AppThemeKeys.itemSubtitleTextColor.name,
+          ),
         ),
       ),
     );

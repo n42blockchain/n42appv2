@@ -28,6 +28,8 @@ class ResetPasswordPage extends StatefulWidget {
 }
 
 class _ResetPasswordPageState extends State<ResetPasswordPage> {
+  static final RegExp _emailRegExp = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _codeController = TextEditingController();
@@ -122,7 +124,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
             if (value == null || value.isEmpty) {
               return S.of(context).g_key_email_required;
             }
-            if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+            if (!_emailRegExp.hasMatch(value)) {
               return S.of(context).g_key_email_invalid;
             }
             return null;
@@ -295,7 +297,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       return;
     }
 
-    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(_emailController.text)) {
+    if (!_emailRegExp.hasMatch(_emailController.text)) {
       ToastUtils.show(S.of(context).g_key_email_invalid);
       return;
     }

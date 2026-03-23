@@ -36,8 +36,8 @@ void main() {
     });
 
     test('should have interceptors configured', () {
-      // 应该有 4 个拦截器: Auth, Logging, Retry, Error
-      expect(apiClient.dio.interceptors.length, greaterThanOrEqualTo(4));
+      // ApiClient 自己注册了两个业务拦截器；Dio 可能额外注入内部拦截器。
+      expect(apiClient.dio.interceptors.length, greaterThanOrEqualTo(2));
     });
   });
 
@@ -65,5 +65,33 @@ void main() {
       expect(apiClient.patch, isNotNull);
     });
   });
-}
 
+  group('Retry policy', () {
+    test('should retry idempotent methods only', () {
+      expect(
+        ApiClient.shouldRetryRequest(
+          RequestOptions(path: '/health', method: 'GET'),
+        ),
+        isTrue,
+      );
+      expect(
+        ApiClient.shouldRetryRequest(
+          RequestOptions(path: '/user', method: 'HEAD'),
+        ),
+        isTrue,
+      );
+      expect(
+        ApiClient.shouldRetryRequest(
+          RequestOptions(path: '/login', method: 'POST'),
+        ),
+        isFalse,
+      );
+      expect(
+        ApiClient.shouldRetryRequest(
+          RequestOptions(path: '/wallet', method: 'PATCH'),
+        ),
+        isFalse,
+      );
+    });
+  });
+}

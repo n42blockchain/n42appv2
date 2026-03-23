@@ -4,12 +4,12 @@ part of 'account_create_and_reset.dart';
 ///
 /// Contains controllers, state variables, timer management,
 /// API calls, and form validation.
-mixin _AccountCreateAndResetLogic
-    on ConsumerState<AccountCreateAndReset> {
+mixin _AccountCreateAndResetLogic on ConsumerState<AccountCreateAndReset> {
   final TextEditingController _unameController = TextEditingController();
   final TextEditingController _inviteCodeController = TextEditingController();
   final TextEditingController _uPasswordController = TextEditingController();
-  final TextEditingController _uPasswordConfirmController = TextEditingController();
+  final TextEditingController _uPasswordConfirmController =
+      TextEditingController();
   final TextEditingController _uCodeController = TextEditingController();
   final FocusNode _unameFocusNode = FocusNode();
   final FocusNode _inviteCodeFocusNode = FocusNode();
@@ -30,11 +30,7 @@ mixin _AccountCreateAndResetLogic
   Load sendLoad = Load.finish;
   late HandType _currentType;
 
-  UserInfoApi? _userInfoApi;
-  UserInfoApi get userInfoApi {
-    _userInfoApi ??= UserInfoApi();
-    return _userInfoApi!;
-  }
+  late final UserInfoApi userInfoApi = UserInfoApi();
 
   @override
   void initState() {
@@ -78,7 +74,10 @@ mixin _AccountCreateAndResetLogic
     if (infoMap != null) {
       UserInfoApi loginApi = UserInfoApi();
       String? email = await loginApi.getInviterCode(
-          infoMap["mobileModel"], infoMap["mobileName"], infoMap["os"]);
+        infoMap["mobileModel"],
+        infoMap["mobileName"],
+        infoMap["os"],
+      );
       if (email != null) {
         _inviteCodeController.text = email;
         setState(() {});
@@ -123,17 +122,16 @@ mixin _AccountCreateAndResetLogic
 
   Future<bool> login(String email, String password) async {
     final data = await userInfoApi.login(
-        email, Md5Util().generateMd5(password));
+      email,
+      Md5Util().generateMd5(password),
+    );
     if (!mounted) return false;
     if (data != null) {
       if (data["code"] == 200) {
         UserInfo userInfo = UserInfo.fromJson(data['data']);
         await SPUtil().saveUserInfo(userInfo);
         if (!mounted) return false;
-        AppGlobals.login(userInfo);
-        ref.read(currentUserProvider.notifier).setUser(
-          SharedUserInfo.fromLegacyUserInfo(userInfo),
-        );
+        await AppGlobals.login(userInfo);
         return true;
       } else if (data["code"] == -403) {
         ToastUtils.showFtToast(title: S.of(context).code_403);
@@ -155,12 +153,16 @@ mixin _AccountCreateAndResetLogic
 
     // Validate email
     if (email.isEmpty) {
-      setState(() { unameErrorMessage = S.of(context).please_enter_email; });
+      setState(() {
+        unameErrorMessage = S.of(context).please_enter_email;
+      });
       ToastUtils.show(S.of(context).please_enter_email);
       return;
     }
     if (!regular.isEmail(email)) {
-      setState(() { unameErrorMessage = S.of(context).email_error; });
+      setState(() {
+        unameErrorMessage = S.of(context).email_error;
+      });
       ToastUtils.show(S.of(context).email_error);
       return;
     }
@@ -168,12 +170,16 @@ mixin _AccountCreateAndResetLogic
 
     // Validate password
     if (password.isEmpty) {
-      setState(() { uPasswordErrorMessage = S.of(context).please_enter_password; });
+      setState(() {
+        uPasswordErrorMessage = S.of(context).please_enter_password;
+      });
       ToastUtils.show(S.of(context).please_enter_password);
       return;
     }
     if (!regular.isPassword(password)) {
-      setState(() { uPasswordErrorMessage = S.of(context).rest_Choose_password; });
+      setState(() {
+        uPasswordErrorMessage = S.of(context).rest_Choose_password;
+      });
       ToastUtils.show(S.of(context).rest_Choose_password);
       return;
     }
@@ -181,12 +187,16 @@ mixin _AccountCreateAndResetLogic
 
     // Validate confirm password
     if (confirmPassword.isEmpty) {
-      setState(() { uPasswordConfirmErrorMessage = S.of(context).please_enter_password; });
+      setState(() {
+        uPasswordConfirmErrorMessage = S.of(context).please_enter_password;
+      });
       ToastUtils.show(S.of(context).please_enter_password);
       return;
     }
     if (password != confirmPassword) {
-      setState(() { uPasswordConfirmErrorMessage = S.of(context).password_diff; });
+      setState(() {
+        uPasswordConfirmErrorMessage = S.of(context).password_diff;
+      });
       ToastUtils.show(S.of(context).password_diff);
       return;
     }
@@ -195,19 +205,25 @@ mixin _AccountCreateAndResetLogic
     // Validate verification code
     final code = _uCodeController.value.text.trim();
     if (code.isEmpty) {
-      setState(() { uCodeErrorMessage = S.of(context).please_enter_code; });
+      setState(() {
+        uCodeErrorMessage = S.of(context).please_enter_code;
+      });
       ToastUtils.show(S.of(context).please_enter_code);
       return;
     }
     if (_currentType == HandType.createAccount) {
       if (!regular.isCaptcha(code)) {
-        setState(() { uCodeErrorMessage = S.of(context).code_err_tips; });
+        setState(() {
+          uCodeErrorMessage = S.of(context).code_err_tips;
+        });
         ToastUtils.show(S.of(context).code_err_tips);
         return;
       }
     } else {
       if (!regular.isCaptcha2(code)) {
-        setState(() { uCodeErrorMessage = S.of(context).code_err_tips; });
+        setState(() {
+          uCodeErrorMessage = S.of(context).code_err_tips;
+        });
         ToastUtils.show(S.of(context).code_err_tips);
         return;
       }
@@ -217,7 +233,9 @@ mixin _AccountCreateAndResetLogic
 
     final inviteCode = _inviteCodeController.text.trim();
     try {
-      setState(() { sendLoad = Load.loading; });
+      setState(() {
+        sendLoad = Load.loading;
+      });
       if (_currentType == HandType.createAccount) {
         await _submitCreateAccount(email, password, code, inviteCode);
       } else {
@@ -226,14 +244,24 @@ mixin _AccountCreateAndResetLogic
     } catch (err) {
       ToastUtils.show(err.toString());
     } finally {
-      setState(() { sendLoad = Load.finish; });
+      setState(() {
+        sendLoad = Load.finish;
+      });
     }
   }
 
   Future<void> _submitCreateAccount(
-      String email, String password, String code, String inviteCode) async {
+    String email,
+    String password,
+    String code,
+    String inviteCode,
+  ) async {
     final data = await userInfoApi.registerEmail(
-        email, Md5Util().generateMd5(password), code, inviteCode: inviteCode);
+      email,
+      Md5Util().generateMd5(password),
+      code,
+      inviteCode: inviteCode,
+    );
     if (!context.mounted) return;
     if (data["code"] == 200) {
       ToastUtils.show(S.of(context).login_message_10);
@@ -250,9 +278,15 @@ mixin _AccountCreateAndResetLogic
   }
 
   Future<void> _submitResetPassword(
-      String email, String password, String code) async {
+    String email,
+    String password,
+    String code,
+  ) async {
     final data = await userInfoApi.emailResetPwd(
-        email, Md5Util().generateMd5(password), code);
+      email,
+      Md5Util().generateMd5(password),
+      code,
+    );
     if (!context.mounted) return;
     if (data["code"] == 200) {
       ToastUtils.show(S.of(context).login_message_11);
@@ -269,15 +303,21 @@ mixin _AccountCreateAndResetLogic
   }
 
   void toggleShowPwd1() {
-    setState(() { showPwd1 = !showPwd1; });
+    setState(() {
+      showPwd1 = !showPwd1;
+    });
   }
 
   void toggleShowPwd2() {
-    setState(() { showPwd2 = !showPwd2; });
+    setState(() {
+      showPwd2 = !showPwd2;
+    });
   }
 
   void switchToResetPassword() {
-    setState(() { _currentType = HandType.restPassword; });
+    setState(() {
+      _currentType = HandType.restPassword;
+    });
   }
 
   /// Validate email and request verification code.
@@ -285,18 +325,24 @@ mixin _AccountCreateAndResetLogic
     if (_countdown != 61) return;
     final email = _unameController.value.text.trim();
     if (email.isEmpty) {
-      setState(() { unameErrorMessage = S.of(context).please_enter_email; });
+      setState(() {
+        unameErrorMessage = S.of(context).please_enter_email;
+      });
       ToastUtils.show(S.of(context).please_enter_email);
       return;
     }
     Regular regular = Regular();
     if (!regular.isEmail(email)) {
-      setState(() { unameErrorMessage = S.of(context).email_error; });
+      setState(() {
+        unameErrorMessage = S.of(context).email_error;
+      });
       ToastUtils.show(S.of(context).email_error);
       return;
     }
     unameErrorMessage = "";
     sendEmailCode(
-        email, _currentType == HandType.restPassword ? "resetPwd" : "register");
+      email,
+      _currentType == HandType.restPassword ? "resetPwd" : "register",
+    );
   }
 }

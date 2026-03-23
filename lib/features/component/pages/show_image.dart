@@ -1,86 +1,71 @@
-﻿//查看图片
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class ShowImage extends StatelessWidget{
+class ShowImage extends StatelessWidget {
   final String title;
   final dynamic img;
-  final String type;//图片来源类型 network,file,memory
+  final String type;
   final String watermark;
-  const ShowImage(this.title, this.img, {this.watermark="AstraWallet",this.type="network",super.key});
-  @override
-  Widget build(BuildContext context) {
-    Widget extendedImage=Container();
-    if(type == "network"){
-      extendedImage=ExtendedImage.network(
+  const ShowImage(this.title, this.img,
+      {this.watermark = "AstraWallet", this.type = "network", super.key});
+
+  GestureConfig _gestureConfig(ExtendedImageState state) {
+    return GestureConfig(
+      minScale: 0.9,
+      animationMinScale: 0.7,
+      maxScale: 3.0,
+      animationMaxScale: 3.5,
+      speed: 1.0,
+      inertialSpeed: 100.0,
+      initialScale: 1.0,
+      inPageView: false,
+      initialAlignment: InitialAlignment.center,
+    );
+  }
+
+  Widget _buildImage() {
+    if (type == "network") {
+      return ExtendedImage.network(
         img,
         fit: BoxFit.contain,
-        //enableLoadState: false,
         mode: ExtendedImageMode.gesture,
-        initGestureConfigHandler: (state) {
-          return GestureConfig(
-            minScale: 0.9,
-            animationMinScale: 0.7,
-            maxScale: 3.0,
-            animationMaxScale: 3.5,
-            speed: 1.0,
-            inertialSpeed: 100.0,
-            initialScale: 1.0,
-            inPageView: false,
-            initialAlignment: InitialAlignment.center,
-          );
-        },
+        initGestureConfigHandler: _gestureConfig,
       );
-    }else if(type == "file"){
-      extendedImage=ExtendedImage.file(
+    } else if (type == "file") {
+      return ExtendedImage.file(
         img,
         fit: BoxFit.contain,
-        //enableLoadState: false,
         mode: ExtendedImageMode.gesture,
-        initGestureConfigHandler: (state) {
-          return GestureConfig(
-            minScale: 0.9,
-            animationMinScale: 0.7,
-            maxScale: 3.0,
-            animationMaxScale: 3.5,
-            speed: 1.0,
-            inertialSpeed: 100.0,
-            initialScale: 1.0,
-            inPageView: false,
-            initialAlignment: InitialAlignment.center,
-          );
-        },
-      );
-    }else{
-      extendedImage=ExtendedImage.memory(
-        img,
-        fit: BoxFit.contain,
-        //enableLoadState: false,
-        mode: ExtendedImageMode.gesture,
-        initGestureConfigHandler: (state) {
-          return GestureConfig(
-            minScale: 0.9,
-            animationMinScale: 0.7,
-            maxScale: 3.0,
-            animationMaxScale: 3.5,
-            speed: 1.0,
-            inertialSpeed: 100.0,
-            initialScale: 1.0,
-            inPageView: false,
-            initialAlignment: InitialAlignment.center,
-          );
-        },
+        initGestureConfigHandler: _gestureConfig,
       );
     }
+    return ExtendedImage.memory(
+      img,
+      fit: BoxFit.contain,
+      mode: ExtendedImageMode.gesture,
+      initGestureConfigHandler: _gestureConfig,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final watermarkStyle = TextStyle(
+      color: Colors.white.withAlpha(153),
+      fontSize: ScreenUtil().setSp(40),
+    );
+    final watermarkHeight = ScreenUtil().setWidth(240);
+
     return Scaffold(
-      backgroundColor: Color(0xff000000),
+      backgroundColor: const Color(0xff000000),
       appBar: AppBar(
         centerTitle: false,
-        title: Text(title,
+        title: Text(
+          title,
           style: TextStyle(
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+            color: AppThemeUtils.getColorByKey(
+                context, AppThemeKeys.mainTextColor.name),
             fontSize: ScreenUtil().setSp(40),
           ),
         ),
@@ -88,57 +73,22 @@ class ShowImage extends StatelessWidget{
       body: Stack(
         children: [
           Positioned.fill(
-            child: Center(
-                child: extendedImage
-            ),
+            child: Center(child: _buildImage()),
           ),
           Positioned.fill(
             child: IgnorePointer(
               ignoring: true,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
+                children: List.generate(
+                  3,
+                  (_) => Container(
                     alignment: Alignment.center,
-                    height: ScreenUtil().setWidth(240),
-                    color: Colors.transparent, // 半透明
-                    child: Text
-                      (
-                      watermark,
-                      style: TextStyle(
-                        color: Colors.white.withAlpha((0.6 * 255).round()),
-                        fontSize: ScreenUtil().setSp(40),
-                      ),
-                    ),
+                    height: watermarkHeight,
+                    color: Colors.transparent,
+                    child: Text(watermark, style: watermarkStyle),
                   ),
-                  Container(
-                    alignment: Alignment.center,
-                    height: ScreenUtil().setWidth(240),
-                    color: Colors.transparent, // 半透明
-                    child: Text
-                      (
-                      watermark,
-                      style: TextStyle(
-                        color: Colors.white.withAlpha((0.6 * 255).round()),
-                        fontSize: ScreenUtil().setSp(40),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    alignment: Alignment.center,
-                    height: ScreenUtil().setWidth(240),
-                    color: Colors.transparent, // 半透明
-                    child: Text
-                      (
-                      watermark,
-                      style: TextStyle(
-                        color: Colors.white.withAlpha((0.6 * 255).round()),
-                        fontSize: ScreenUtil().setSp(40),
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
           ),

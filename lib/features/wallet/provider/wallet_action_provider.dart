@@ -14,17 +14,18 @@ import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/shared/di/service_locator.dart';
 import 'package:n42_wallet/core/network/external_http.dart';
 import 'package:n42_wallet/features/wallet/api/market_api.dart';
+import 'package:n42_wallet/features/wallet/api/market_api_payload_utils.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model_wallet_access.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/models/aggregated_token.dart';
 import 'package:n42_wallet/features/wallet/models/aggregated_coin_model.dart';
+import 'package:n42_wallet/features/wallet/provider/wallet_delete_utils.dart';
+import 'package:n42_wallet/features/wallet/provider/watch_only_wallet_utils.dart';
 import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
-import 'package:decimal/decimal.dart';
 import 'package:web3dart/web3dart.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -35,7 +36,18 @@ part 'wallet_action_provider_token.dart';
 part 'wallet_action_provider_sort.dart';
 part 'wallet_action_provider_market.dart';
 
-class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAccess{
+String? resolveBalanceRpcOverride(CoinModel coinModel) {
+  final coinType = coinModel.coin['coinType']?.toString().toUpperCase();
+  if (coinType != CoinType.N.name || !coinModel.isTest) {
+    return null;
+  }
+
+  final rpc = coinModel.coin['service_test']?.toString().trim() ?? '';
+  return rpc.isEmpty ? null : rpc;
+}
+
+class WalletActionProvider extends ChangeNotifier
+    implements ICoinModelWalletAccess {
   /// 公开的刷新方法，用于通知监听者数据已更新
   @override
   void refresh() {
@@ -43,21 +55,22 @@ class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAcc
   }
 
   //刷新coin 余额
-  Map<int,dynamic> coinRefreshMap={};
+  Map<int, dynamic> coinRefreshMap = {};
 
   // ── 置顶同步缓存（避免无变化时重复遍历）────────────────────────────────────
   /// 上次 _syncPinnedState 时的 fingerprint；格式：pinnedHash|coinListLength
   String _lastSyncFingerprint = '';
-  String defaultWalletUUID="AstranetWallet";
-  String get userUUID{
-    if(AppGlobals.userInfo==null) return defaultWalletUUID;
-    return AppGlobals.userInfo?.uuid??"";
+  String defaultWalletUUID = "AstranetWallet";
+  String get userUUID {
+    if (AppGlobals.userInfo == null) return defaultWalletUUID;
+    return AppGlobals.userInfo?.uuid ?? "";
   }
+
   late final TokenViewApi tokenViewApi = TokenViewApi();
   Load _load = Load.finish; //当前状态
   Load get load => _load;
   Load loadBalance = Load.finish;
-  bool buildwallet=false;
+  bool buildwallet = false;
   //数字格式化实例
   final NumberFormat _oCcy = NumberFormat("#,##0.00", "en_US");
 
@@ -67,43 +80,57 @@ class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAcc
   @override
   List<WalletInfo> get walletInfoList => _walletInfoLsit;
   @override
-  WalletInfo get walletInfo{
+  WalletInfo get walletInfo {
+    if (walletIndex < 0 || walletIndex >= _walletInfoLsit.length) {
+      throw StateError(
+        'Invalid walletIndex ($walletIndex) for list of ${_walletInfoLsit.length} wallets. '
+        'Ensure wallet is initialized before accessing walletInfo.',
+      );
+    }
     return _walletInfoLsit[walletIndex];
   }
+
   //获取用户设置的钱包名字
   String get walletName {
-    if (_walletInfoLsit.isEmpty) return "";
-    return walletInfo.walletName??"";
+    if (_walletInfoLsit.isEmpty || walletIndex < 0 || walletIndex >= _walletInfoLsit.length) {
+      return "";
+    }
+    return walletInfo.walletName ?? "";
   }
-  int walletIndex=-1;//钱包索引
-  Future<void> setWalletIndex(int index)async{
-    if(index==walletIndex)return;
+
+  int walletIndex = -1; //钱包索引
+  Future<void> setWalletIndex(int index) async {
+    if (index == walletIndex) return;
     removeConRefreshMap(walletIndex);
-    walletIndex=index;
+    walletIndex = index;
     await saveWalletInfo(walletInfoLsit[walletIndex], walletIndex);
 
     await initWallet(shouldInitCoinInfo: true);
     notifyListeners();
-
   }
-  int walletMiningIndex=-1;//钱包挖矿索引
-  Future<void> setWalletMiningIndex(int index)async{
-    if(index==walletMiningIndex)return;
-    walletMiningIndex=index;
+
+  int walletMiningIndex = -1; //钱包挖矿索引
+  Future<void> setWalletMiningIndex(int index) async {
+    if (index == walletMiningIndex) return;
+    walletMiningIndex = index;
     await saveWalletInfo(walletInfoLsit[walletIndex], walletIndex);
   }
-  Map<String,String>? _publicKeyAndPrivateKeyPair;//_walletInfoLsit所有钱包N的公钥私钥对
-  Future<Map<String,String>> publicKeyAndPrivateKeyPair() async{
-    if(_publicKeyAndPrivateKeyPair==null){
+
+  Map<String, String>? _publicKeyAndPrivateKeyPair; //_walletInfoLsit所有钱包N的公钥私钥对
+  Future<Map<String, String>> publicKeyAndPrivateKeyPair() async {
+    if (_publicKeyAndPrivateKeyPair == null) {
       await getPublicKeyAndPrivateKeyPairN();
     }
     return _publicKeyAndPrivateKeyPair!;
   }
+
   //当前钱包数据
-  Map<String,dynamic> get walletMap{
+  Map<String, dynamic> get walletMap {
     // 安全访问 coinInfo，如果为 null 返回空 Map
     if (walletInfo.coinInfo == null) {
-      debugPrint('WalletActionProvider: walletMap accessed but coinInfo is null');
+      debugPrint(
+        'WalletActionProvider: walletMap accessed but coinInfo is null',
+      );
       return {};
     }
     return walletInfo.coinInfo!;
@@ -125,18 +152,25 @@ class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAcc
       } else {
         if (coinModel.isTest) {
           final testnets = chainData['testnets'];
-          if (testnets != null && testnets.isNotEmpty && testnets[0]['testnetContract'] != null) {
-            walletMap[coinType]['testnets'][0]['testnetContract'][coinModel.coin['mKey']] = coinModel.coin;
+          if (testnets != null &&
+              testnets.isNotEmpty &&
+              testnets[0]['testnetContract'] != null) {
+            walletMap[coinType]['testnets'][0]['testnetContract'][coinModel
+                    .coin['mKey']] =
+                coinModel.coin;
           }
         } else {
           final mainnets = chainData['mainnets'];
           if (mainnets != null) {
-            walletMap[coinType]['mainnets'][coinModel.coin['mKey']] = coinModel.coin;
+            walletMap[coinType]['mainnets'][coinModel.coin['mKey']] =
+                coinModel.coin;
           }
         }
       }
     } catch (e) {
-      debugPrint('WalletActionProvider: Error updating walletMap for ${coinModel.coin['miniName']}: $e');
+      debugPrint(
+        'WalletActionProvider: Error updating walletMap for ${coinModel.coin['miniName']}: $e',
+      );
     }
   }
 
@@ -176,7 +210,7 @@ class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAcc
   List<CoinModel> _coinModels = [];
   List<CoinModel> get coinModels => _coinModels;
   //首页 显示的币列表（包含 CoinModel 和 AggregatedCoinModel）
-  List<dynamic> coinList=[];
+  List<dynamic> coinList = [];
   //钱包所有币种余额
   //可用余额，美刀
   double _balanceTotal = 0.0;
@@ -185,36 +219,43 @@ class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAcc
     _balanceTotal = price;
     notifyListeners();
   }
+
   //获取外国余额，美刀形式
   String getBalanceTotal() {
     return _oCcy.format(_balanceTotal);
   }
-//市场上 币的信息，价格、涨跌幅、名称、名称缩写、icon地址
+
+  //市场上 币的信息，价格、涨跌幅、名称、名称缩写、icon地址
   List<dynamic> _coinMarketInfo = [];
   //币的地址 集合
   final Map<String, dynamic> _addrsss = {};
   Map<String, dynamic> get address => _addrsss;
   //根据 key 获取 币的地址
-  dynamic getAddress(String coinKey,{String addrType='legacy'}) {
+  dynamic getAddress(String coinKey, {String addrType = 'legacy'}) {
     Map<Object?, Object?>? addrs = _addrsss[coinKey];
     return addrs?[addrType];
   }
-  Future<dynamic> getMainWalletAddressAsync(String coinKey,{String addrType='legacy'}) async{
-    int index=walletInfoLsit.indexWhere((e)=>e.mainWallet==true);
-    if(index==-1)return "";
-    if(walletInfoLsit[index].coinInfo == null) return "";
-    Map<String,dynamic>? nCoinInfo=walletInfoLsit[index].coinInfo![coinKey];
-    if(nCoinInfo ==null)return "";
+
+  Future<dynamic> getMainWalletAddressAsync(
+    String coinKey, {
+    String addrType = 'legacy',
+  }) async {
+    int index = walletInfoLsit.indexWhere((e) => e.mainWallet == true);
+    if (index == -1) return "";
+    if (walletInfoLsit[index].coinInfo == null) return "";
+    Map<String, dynamic>? nCoinInfo = walletInfoLsit[index].coinInfo![coinKey];
+    if (nCoinInfo == null) return "";
     Map<String, dynamic> pathMap = nCoinInfo['baseInfo']['path'];
-    Map<Object?, Object?> rm=await Trustdart().generateAddress(
+    Map<Object?, Object?> rm = await Trustdart().generateAddress(
       coinKey,
       getPathWithIndex(pathMap[addrType], nCoinInfo['pathIndex']),
       addrType,
-      mnemonic: walletInfoLsit[index].mnemonic??"",
-      pk:walletInfoLsit[index].privateKey??"",
+      mnemonic: walletInfoLsit[index].mnemonic ?? "",
+      pk: walletInfoLsit[index].privateKey ?? "",
     );
     return rm[addrType];
   }
+
   //输入的是小写的coinKey
   CoinModel? getAddressCoinKeyLowerCase(String coinKey, String contract) {
     CoinModel? returnCM;
@@ -231,12 +272,13 @@ class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAcc
       // 安全访问 walletMap
       final chainData = walletMap[coinKey.toUpperCase()];
       if (chainData != null && chainData['mainnets'] != null) {
-        Map<String,dynamic> mainnets = chainData['mainnets'];
+        Map<String, dynamic> mainnets = chainData['mainnets'];
         if (mainnets.isNotEmpty) {
           List<String> mKeys = mainnets.keys.toList();
           for (String key in mKeys) {
-            Map<String,dynamic> coin = mainnets[key];
-            if (contract.toLowerCase() == coin['contract'].toString().toLowerCase()) {
+            Map<String, dynamic> coin = mainnets[key];
+            if (contract.toLowerCase() ==
+                coin['contract'].toString().toLowerCase()) {
               returnCM = CoinModel.fromMap(mainnets[key]);
               break;
             }
@@ -246,18 +288,23 @@ class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAcc
     }
     return returnCM;
   }
+
   //添加币到 集合中
   @override
   void setAddress(String key, Map<String, dynamic> value) {
     _addrsss[key] = value;
   }
+
   //返回 coinType 的主链 coinmodel
-  CoinModel? getCoinModelWithCoinType(String coinType){
+  CoinModel? getCoinModelWithCoinType(String coinType) {
     final index = _coinModels.indexWhere((e) => e.coin['coinType'] == coinType);
     return index != -1 ? _coinModels[index] : null;
   }
-//返回对应symbol 的coinmodel 列表（每个 symbol 只取第一个匹配）
-  List<CoinModel> getCoinModelWithSymbols({String symbols="ETH,BNB,TRX,OKT"}){
+
+  //返回对应symbol 的coinmodel 列表（每个 symbol 只取第一个匹配）
+  List<CoinModel> getCoinModelWithSymbols({
+    String symbols = "ETH,BNB,TRX,OKT",
+  }) {
     final symbolList = symbols.split(",");
     return [
       for (final symbol in symbolList)
@@ -322,68 +369,91 @@ class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAcc
   };
 
   /// 稳定币列表
-  static const Set<String> _stablecoins = {'usdt', 'usdc', 'dai', 'busd', 'tusd', 'usdp', 'gusd', 'frax'};
+  static const Set<String> _stablecoins = {
+    'usdt',
+    'usdc',
+    'dai',
+    'busd',
+    'tusd',
+    'usdp',
+    'gusd',
+    'frax',
+  };
 
   //计算余额
   @override
-  void calculateBalanceWidthCoinModel(){
-    double tBalance=0.0;
-    for(int i=0;i<coinList.length;i++){
-      tBalance +=coinList[i].value;
+  void calculateBalanceWidthCoinModel() {
+    double tBalance = 0.0;
+    for (int i = 0; i < coinList.length; i++) {
+      tBalance += coinList[i].value;
     }
     setBalanceTotal(tBalance);
   }
+
   @override
-  Future<bool> getBalanceWithCoinModel(CoinModel coinModel)async{
+  Future<bool> getBalanceWithCoinModel(CoinModel coinModel) async {
     //获取coin 的地址
     // 如果地址为 null，说明该链的地址生成失败，跳过余额获取
     if (coinModel.address == null) {
-      debugPrint('WalletActionProvider: Skipping balance fetch for ${coinModel.coin['miniName']} - address is null');
+      debugPrint(
+        'WalletActionProvider: Skipping balance fetch for ${coinModel.coin['miniName']} - address is null',
+      );
       coinModel.loadError = true;
       return true; // 返回 true 表示有错误
     }
     String address = coinModel.address.toString();
-    if(coinModel.coin['coinType']==CoinType.BCH.name){
-      address=getAddress(coinModel.coin['coinType'],addrType: 'legacy');
+    if (coinModel.coin['coinType'] == CoinType.BCH.name) {
+      address = getAddress(coinModel.coin['coinType'], addrType: 'legacy');
     }
     //合约地址
-    String contract= "";
-    if(coinModel.coin['isContract']==true){
-      contract = coinModel.isTest ? coinModel.coin['contract_test'] : coinModel.coin['contract'];
+    String contract = "";
+    if (coinModel.coin['isContract'] == true) {
+      contract = coinModel.isTest
+          ? coinModel.coin['contract_test']
+          : coinModel.coin['contract'];
     }
-    if(coinModel.coin['isContract'] && coinModel.coin['coinType']==CoinType.ALGO.name){
+    if (coinModel.coin['isContract'] &&
+        coinModel.coin['coinType'] == CoinType.ALGO.name) {
       return await getBalanceTokenAlgoWithCoinModel(coinModel);
     }
 
     //获取 coin 的余额
-    MessageModel mm=await tokenViewApi.getBalance(
-        coinModel.coin['blockchainType'],
-        coinModel.coin['coinType'],
-        address,
-        contract: contract,
-        isTest: coinModel.isTest ,
-      //rpc: coinModel.coin['coinType']==CoinType.N.name?coinModel.coin['service_test']:null,
-    ) ?? MessageModel.error();
+    MessageModel mm =
+        await tokenViewApi.getBalance(
+          coinModel.coin['blockchainType'],
+          coinModel.coin['coinType'],
+          address,
+          contract: contract,
+          isTest: coinModel.isTest,
+          rpc: resolveBalanceRpcOverride(coinModel),
+        ) ??
+        MessageModel.error();
     _applyMarketPrice(coinModel);
 
-    if(mm.error){
+    if (mm.error) {
       // 网络请求失败，使用缓存的余额数据
-      debugPrint('WalletActionProvider: Balance fetch failed for ${coinModel.coin['miniName']}, using cached balance');
+      debugPrint(
+        'WalletActionProvider: Balance fetch failed for ${coinModel.coin['miniName']}, using cached balance',
+      );
       _safeUpdateWalletMap(coinModel);
       coinModel.getBalanceDefault();
       coinModel.loadError = false;
       return true;
     }
 
-    BigInt balance=BigInt.zero;
-    if(coinModel.coin['coinType']==CoinType.ALGO.name){
-      balance=mm.data['balance'];
-      coinModel.other=AlgoModel.fromMinBalance(mm.data['minBalance']);
-    }else if(coinModel.coin['coinType']==CoinType.XRP.name){
-      balance=mm.data['balance'];
-      coinModel.other=XrpModel(mm.data['sequence'],mm.data['account'],mm.data['ownerCount']);
-    }else{
-      balance=mm.data;
+    BigInt balance = BigInt.zero;
+    if (coinModel.coin['coinType'] == CoinType.ALGO.name) {
+      balance = mm.data['balance'];
+      coinModel.other = AlgoModel.fromMinBalance(mm.data['minBalance']);
+    } else if (coinModel.coin['coinType'] == CoinType.XRP.name) {
+      balance = mm.data['balance'];
+      coinModel.other = XrpModel(
+        mm.data['sequence'],
+        mm.data['account'],
+        mm.data['ownerCount'],
+      );
+    } else {
+      balance = mm.data;
     }
     final balanceKey = coinModel.isTest ? 'balance_test' : 'balance';
     coinModel.coin[balanceKey] = balance.toString();
@@ -397,7 +467,9 @@ class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAcc
     final coinInfo = getCoinPriceWithUnit(coinModel.coin['unit'].toString());
     if (coinInfo == null) return;
     coinModel.coin['percentage'] = coinInfo['percentage'];
-    coinModel.coin['coinPrice'] = coinModel.isTest ? 0.0 : coinInfo['coinPrice'];
+    coinModel.coin['coinPrice'] = coinModel.isTest
+        ? 0.0
+        : coinInfo['coinPrice'];
     coinModel.coin['icon'] = coinInfo['icon'];
   }
 }

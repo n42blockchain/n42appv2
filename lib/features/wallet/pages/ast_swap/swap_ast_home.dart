@@ -5,18 +5,19 @@ import 'package:n42_wallet/features/models/message_model.dart';
 import 'package:n42_wallet/features/utils/regular.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/api/market_api.dart';
+import 'package:n42_wallet/features/wallet/api/market_api_payload_utils.dart';
 import 'package:n42_wallet/features/wallet/api/swap_ast_api.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/features/wallet/api/transfer_api.dart';
 import 'package:n42_wallet/features/wallet/models/ast_swap/swap_ast_model.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/pages/ast_swap/swap_ast_price_utils.dart';
 import 'package:n42_wallet/features/wallet/pages/ast_swap/swap_ast_form_widgets.dart';
 import 'package:n42_wallet/features/wallet/pages/ast_swap/swap_ast_get_widget.dart';
 import 'package:n42_wallet/features/wallet/pages/ast_swap/swap_ast_miner_fee_widget.dart';
 import 'package:n42_wallet/features/wallet/pages/ast_swap/swap_ast_pay_widget.dart';
 import 'package:n42_wallet/features/wallet/pages/ast_swap/swap_ast_summary.dart';
 import 'package:n42_wallet/features/wallet/pages/ast_swap/swap_ast_transactions.dart';
-import 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/chain_eip1559.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/utils/transaction/coin_gas.dart';
@@ -33,6 +34,51 @@ import 'package:date_format/date_format.dart' as dformat;
 
 part 'swap_ast_home_build.dart';
 part 'swap_ast_home_tx.dart';
+
+Map<String, dynamic>? _swapMapValue(dynamic value) {
+  if (value is Map<String, dynamic>) return value;
+  if (value is Map) {
+    return value.map((key, entry) => MapEntry(key.toString(), entry));
+  }
+  return null;
+}
+
+List<dynamic> _swapListValue(dynamic value) {
+  if (value is List) return value;
+  return const [];
+}
+
+String _swapStringValue(dynamic value, {String fallback = ''}) {
+  if (value == null) return fallback;
+  return value.toString();
+}
+
+int _swapIntValue(dynamic value, {int fallback = 0}) {
+  if (value is int) return value;
+  if (value is num) return value.toInt();
+  return int.tryParse(value?.toString() ?? '') ?? fallback;
+}
+
+double _swapDoubleValue(dynamic value, {double fallback = 0}) {
+  if (value is double) return value;
+  if (value is num) return value.toDouble();
+  return double.tryParse(value?.toString() ?? '') ?? fallback;
+}
+
+BigInt _swapBigIntValue(dynamic value, {BigInt? fallback}) {
+  if (value is BigInt) return value;
+  if (value is int) return BigInt.from(value);
+  if (value is num) return BigInt.from(value.toInt());
+  return BigInt.tryParse(value?.toString() ?? '') ?? (fallback ?? BigInt.zero);
+}
+
+bool _swapBoolValue(dynamic value, {bool fallback = false}) {
+  if (value is bool) return value;
+  final normalized = value?.toString().toLowerCase();
+  if (normalized == 'true' || normalized == '1') return true;
+  if (normalized == 'false' || normalized == '0') return false;
+  return fallback;
+}
 
 class SwapAstHome extends ConsumerStatefulWidget {
   final double? getAstNum;
@@ -76,6 +122,19 @@ class _SwapAstHomeState extends ConsumerState<SwapAstHome> {
   late final SwapAstApi _swapAstApi = SwapAstApi();
   late final TokenViewApi _tokenViewApi = TokenViewApi();
 
+  Map<String, dynamic> get _payCoinData => payCoinModel?.coin ?? const {};
+
+  String get _payCoinType => _swapStringValue(_payCoinData['coinType']);
+
+  String get _payBlockchainType =>
+      _swapStringValue(_payCoinData['blockchainType']);
+
+  String? get _payServiceRpc {
+    final service = _payCoinData['service'];
+    final value = _swapStringValue(service);
+    return value.isEmpty ? null : value;
+  }
+
   // ---------------------------------------------------------------------------
   // Lifecycle
   // ---------------------------------------------------------------------------
@@ -111,11 +170,8 @@ class _SwapAstHomeState extends ConsumerState<SwapAstHome> {
   Future<void> _onChainSelected(SwapAstModel rModel) async {
     youPay = rModel;
     payCoinModel = getChainCoinModel((youPay?.payChain ?? "").toUpperCase());
-    if (payCoinModel != null) {
-      getUsdtMap(
-        payCoinModel!.coin['coinType'] as String,
-        youPay?.payCoinContract ?? "",
-      );
+    if (payCoinModel != null && _payCoinType.isNotEmpty) {
+      getUsdtMap(_payCoinType, youPay?.payCoinContract ?? "");
     }
     setState(() {});
     getBalanceChainPay();
@@ -143,10 +199,16 @@ class _SwapAstHomeState extends ConsumerState<SwapAstHome> {
 
   Future<void> getAstChainModel() async {
     final WalletActionProvider wa = ref.read(wapBridgeProvider);
-    final Map<String, dynamic> astModel =
-        wa.walletMap[CoinType.N.name] as Map<String, dynamic>;
-    final CoinModel cm =
-        CoinModel.fromMap(astModel['baseInfo'] as Map<String, dynamic>);
+    final Map<String, dynamic>? astModel =
+        _swapMapValue(wa.walletMap[CoinType.N.name]);
+    final Map<String, dynamic>? baseInfo = _swapMapValue(astModel?['baseInfo']);
+    if (astModel == null || baseInfo == null) {
+      errorMessage = S.of(context).g_key_132;
+      return;
+    }
+    final CoinModel cm = CoinModel.fromMap(
+      baseInfo,
+    );
     cm.showList = astModel['showList'];
     cm.isTest = false;
     cm.addrType = astModel['addrType'];
@@ -167,15 +229,20 @@ class _SwapAstHomeState extends ConsumerState<SwapAstHome> {
     if (rData.error) {
       setState(() {
         load = Load.error;
-        errorMessage = rData.data as String;
+        errorMessage = _swapStringValue(rData.data, fallback: 'Error');
       });
       return false;
     }
 
     swapAstList
       ..clear()
-      ..addAll((rData.data as List)
-          .map((e) => SwapAstModel.fromJson(e as Map<String, dynamic>)));
+      ..addAll(
+        _swapListValue(rData.data).whereType<Map>().map(
+          (e) => SwapAstModel.fromJson(
+            e.map((key, value) => MapEntry(key.toString(), value)),
+          ),
+        ),
+      );
 
     if (swapAstList.isEmpty) {
       if (!mounted) return false;
@@ -184,19 +251,17 @@ class _SwapAstHomeState extends ConsumerState<SwapAstHome> {
     }
 
     if (youPay != null) {
-      final int ypIndex =
-          swapAstList.indexWhere((e) => e.payChain == youPay!.payChain);
+      final int ypIndex = swapAstList.indexWhere(
+        (e) => e.payChain == youPay!.payChain,
+      );
       youPay = ypIndex != -1 ? swapAstList[ypIndex] : swapAstList[0];
     } else {
       youPay = swapAstList[0];
     }
 
-    payCoinModel =
-        getChainCoinModel((youPay?.payChain ?? "").toUpperCase());
-    if (payCoinModel != null) {
-      getUsdtMap(
-          payCoinModel!.coin['coinType'] as String,
-          youPay?.payCoinContract ?? "");
+    payCoinModel = getChainCoinModel((youPay?.payChain ?? "").toUpperCase());
+    if (payCoinModel != null && _payCoinType.isNotEmpty) {
+      getUsdtMap(_payCoinType, youPay?.payCoinContract ?? "");
     }
     errorMessage = "";
     setState(() {});
@@ -207,21 +272,22 @@ class _SwapAstHomeState extends ConsumerState<SwapAstHome> {
 
   CoinModel? getChainCoinModel(String symbol) {
     final String normalized = symbol == "BSC" ? CoinType.BNB.name : symbol;
-    final List<CoinModel> rList =
-        ref.read(wapBridgeProvider).getCoinModelWithSymbols(symbols: normalized);
+    final List<CoinModel> rList = ref
+        .read(wapBridgeProvider)
+        .getCoinModelWithSymbols(symbols: normalized);
     return rList.isNotEmpty ? rList.first : null;
   }
 
   void getUsdtMap(String chainSymbol, String contractAddress) {
     token = null;
     if (contractAddress.isNotEmpty) {
-      final Map<String, dynamic>? txChainMap = ref
-          .read(wapBridgeProvider)
-          .walletMap[chainSymbol.toUpperCase()] as Map<String, dynamic>?;
-      if (txChainMap != null &&
-          (txChainMap['mainnets'] as Map).isNotEmpty) {
-        token = txChainMap['mainnets'][contractAddress.toUpperCase()]
-            as Map<String, dynamic>?;
+      final Map<String, dynamic>? txChainMap =
+          _swapMapValue(
+            ref.read(wapBridgeProvider).walletMap[chainSymbol.toUpperCase()],
+          );
+      final Map<String, dynamic>? mainnets = _swapMapValue(txChainMap?['mainnets']);
+      if (mainnets != null && mainnets.isNotEmpty) {
+        token = _swapMapValue(mainnets[contractAddress.toUpperCase()]);
       }
     }
     setState(() {});
@@ -229,10 +295,14 @@ class _SwapAstHomeState extends ConsumerState<SwapAstHome> {
 
   Future<void> getBalanceChainPay() async {
     if (payCoinModel == null || payLoad == Load.loading) return;
+    if (_payBlockchainType.isEmpty || _payCoinType.isEmpty) {
+      setState(() => payLoad = Load.finish);
+      return;
+    }
     setState(() => payLoad = Load.loading);
     payCoinModel!.balance = await _fetchBalance(
-      payCoinModel!.coin['blockchainType'] as String,
-      payCoinModel!.coin['coinType'] as String,
+      _payBlockchainType,
+      _payCoinType,
       payCoinModel!.address.toString(),
     );
     setState(() => payLoad = Load.finish);
@@ -240,18 +310,27 @@ class _SwapAstHomeState extends ConsumerState<SwapAstHome> {
 
   Future<void> getBalancePay() async {
     if (youPay == null || payCoinModel == null) return;
+    if (_payBlockchainType.isEmpty || _payCoinType.isEmpty) {
+      youPay!.balance = 0;
+      return;
+    }
     setState(() => youPay!.load = Load.loading);
 
-    final MessageModel rData = await _tokenViewApi.getBalance(
-          payCoinModel!.coin['blockchainType'] as String,
-          (payCoinModel!.coin['coinType'] as String? ?? "").toUpperCase(),
+    final MessageModel rData =
+        await _tokenViewApi.getBalance(
+          _payBlockchainType,
+          _payCoinType.toUpperCase(),
           payCoinModel?.address ?? "",
-          contract: youPay?.payCoinContract ?? "") ??
+          contract: youPay?.payCoinContract ?? "",
+        ) ??
         MessageModel.error();
 
     youPay!.balance = rData.error
         ? 0
-        : toEther(rData.data.toString(), youPay?.payCoinDecimal ?? 6).toDouble();
+        : toEther(
+            rData.data.toString(),
+            youPay?.payCoinDecimal ?? 6,
+          ).toDouble();
     setState(() => youPay!.load = Load.finish);
   }
 
@@ -267,11 +346,14 @@ class _SwapAstHomeState extends ConsumerState<SwapAstHome> {
   }
 
   Future<BigInt> _fetchBalance(
-      String blockchainType, String coinType, String address) async {
+    String blockchainType,
+    String coinType,
+    String address,
+  ) async {
     final MessageModel rData =
         await _tokenViewApi.getBalance(blockchainType, coinType, address) ??
-            MessageModel.error();
-    return rData.error ? BigInt.zero : rData.data as BigInt;
+        MessageModel.error();
+    return rData.error ? BigInt.zero : _swapBigIntValue(rData.data);
   }
 
   // ---------------------------------------------------------------------------
@@ -280,32 +362,45 @@ class _SwapAstHomeState extends ConsumerState<SwapAstHome> {
 
   Future<bool> getCoinPrice() async {
     final String keys = 'n,${youPay!.payCoin?.toLowerCase() ?? ""}';
-    final Map<String, dynamic> list =
-        await MarketApi().getWalletCoinsInfo(keys);
+    final Map<String, dynamic> list = await MarketApi().getWalletCoinsInfo(
+      keys,
+    );
     if (!mounted) return false;
-    if (list['error'] as bool) {
+    if (_swapBoolValue(list['error'])) {
       errorMessage = S.of(context).g_swap_key_15;
       return false;
     }
-    coinMarketInfo = list['data']['data'] as List<dynamic>;
+    coinMarketInfo = extractMarketCoinItems(list['data']);
+    if (!setCoinModelPrice()) {
+      errorMessage = S.of(context).g_swap_key_15;
+      return false;
+    }
     errorMessage = "";
-    setCoinModelPrice();
     return true;
   }
 
-  void setCoinModelPrice() {
-    final int index =
-        coinMarketInfo.indexWhere((e) => (e as Map)['coin'] == "n");
-    final Map<String, dynamic> astCoinInfo =
-        coinMarketInfo[index] as Map<String, dynamic>;
-    getCoinModel!.coinPrice = (astCoinInfo['price'] as num).toDouble();
+  bool setCoinModelPrice() {
+    if (getCoinModel == null || youPay == null) return false;
 
-    final int indexPay = coinMarketInfo.indexWhere(
-        (e) => (e as Map)['coin'] == (youPay?.payCoin ?? "").toLowerCase());
-    final Map<String, dynamic> payCoinInfo =
-        coinMarketInfo[indexPay] as Map<String, dynamic>;
-    youPay!.price = (payCoinInfo['price'] as num).toDouble();
+    final Map<String, dynamic>? astCoinInfo = findSwapAstMarketCoin(
+      coinMarketInfo,
+      'n',
+    );
+    final Map<String, dynamic>? payCoinInfo = findSwapAstMarketCoin(
+      coinMarketInfo,
+      youPay?.payCoin ?? '',
+    );
+    final double astPrice = _swapDoubleValue(astCoinInfo?['price']);
+    final double payPrice = _swapDoubleValue(payCoinInfo?['price']);
+
+    if (astPrice <= 0 || payPrice <= 0) {
+      return false;
+    }
+
+    getCoinModel!.coinPrice = astPrice;
+    youPay!.price = payPrice;
     setState(() {});
+    return true;
   }
 
   // ---------------------------------------------------------------------------
@@ -316,15 +411,23 @@ class _SwapAstHomeState extends ConsumerState<SwapAstHome> {
       _regular.regularNums(value) || _regular.regularDouble(value);
 
   String _formatAmount(double value) => _regular
-      .formartNumDouble(dec.Decimal.parse(value.toString()).toDouble(), 8,
-          isCrop: true, isFill0: false)
+      .formartNumDouble(
+        dec.Decimal.parse(value.toString()).toDouble(),
+        8,
+        isCrop: true,
+        isFill0: false,
+      )
       .toString();
 
   void payInput({String? value}) {
     value ??= payTextEditingController.text;
     if (!_isValidNumericInput(value) || value == "0") return;
-    final double converted = dec.Decimal.parse(value).toDouble() *
-        ((youPay?.price ?? 0) / (getCoinModel?.coinPrice ?? 0));
+    final double converted = calculateSwapAstConvertedAmount(
+      value: value,
+      fromPrice: youPay?.price ?? 0,
+      toPrice: getCoinModel?.coinPrice ?? 0,
+    );
+    if (converted <= 0) return;
     getTextEditingController.text = _formatAmount(converted);
     setState(() {});
   }
@@ -332,8 +435,12 @@ class _SwapAstHomeState extends ConsumerState<SwapAstHome> {
   void getInput({String? value}) {
     value ??= getTextEditingController.text;
     if (!_isValidNumericInput(value) || value == "0") return;
-    final double ratio = (getCoinModel?.coinPrice ?? 0) / (youPay?.price ?? 0);
-    final double converted = double.parse(value) * ratio;
+    final double converted = calculateSwapAstConvertedAmount(
+      value: value,
+      fromPrice: getCoinModel?.coinPrice ?? 0,
+      toPrice: youPay?.price ?? 0,
+    );
+    if (converted <= 0) return;
     payTextEditingController.text = _formatAmount(converted);
     setState(() {});
   }

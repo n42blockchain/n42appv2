@@ -13,7 +13,7 @@ import 'package:n42_wallet/features/staking/models/staking_models.dart';
 class AtomStakingApi {
   static const String _cosmosRestApi = 'https://cosmos-rest.publicnode.com';
 
-  final Map<String, String> _headers = {
+  static const Map<String, String> _headers = {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
   };

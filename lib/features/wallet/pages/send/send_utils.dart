@@ -15,6 +15,19 @@ import 'package:n42_wallet/features/wallet/pages/face_matching/face_match.dart';
 import 'package:n42_wallet/features/wallet/services/recent_address_service.dart';
 import 'package:n42_wallet/features/widgets/sheet_bottom.dart';
 
+/// Computes the largest transferable on-chain amount after fees and reserve.
+///
+/// Returns zero instead of a negative value when the available balance cannot
+/// cover fees or reserve requirements.
+BigInt maxTransferableAmount({
+  required BigInt balance,
+  required BigInt fee,
+  BigInt? reserve,
+}) {
+  final spendable = balance - fee - (reserve ?? BigInt.zero);
+  return spendable > BigInt.zero ? spendable : BigInt.zero;
+}
+
 /// Small icon button for the address input field (scan / paste / address book).
 Widget buildSendIconBtn(BuildContext context, IconData icon) {
   return Container(
@@ -25,7 +38,9 @@ Widget buildSendIconBtn(BuildContext context, IconData icon) {
       icon,
       size: ScreenUtil().setWidth(38.0),
       color: AppThemeUtils.getColorByKey(
-          context, AppThemeKeys.mainBlueColor.name),
+        context,
+        AppThemeKeys.mainBlueColor.name,
+      ),
     ),
   );
 }
@@ -34,7 +49,10 @@ Widget buildSendIconBtn(BuildContext context, IconData icon) {
 ///
 /// Returns empty placeholder when price or amount is invalid.
 Widget buildUsdEquivalent(
-    BuildContext context, String amountText, double coinPrice) {
+  BuildContext context,
+  String amountText,
+  double coinPrice,
+) {
   final amount = double.tryParse(amountText) ?? 0.0;
   if (coinPrice <= 0 || amount <= 0) return const SizedBox.shrink();
   final usd = amount * coinPrice;
@@ -49,7 +67,9 @@ Widget buildUsdEquivalent(
       style: TextStyle(
         fontSize: ScreenUtil().setSp(24),
         color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemSubtitleTextColor.name),
+          context,
+          AppThemeKeys.itemSubtitleTextColor.name,
+        ),
       ),
     ),
   );
@@ -62,7 +82,9 @@ Future<void> performScanQR(
   required ValueChanged<String> onAddress,
 }) async {
   final String? scanValue = await Navigator.push<String>(
-      context, MaterialPageRoute(builder: (_) => ScanPage()));
+    context,
+    MaterialPageRoute(builder: (_) => ScanPage()),
+  );
   if (!context.mounted) return;
   if (scanValue != null) {
     controller.text = scanValue;
@@ -96,7 +118,9 @@ Future<void> showAddressPickerSheet(
 }) async {
   void defaultScanQR() async {
     final scanValue = await Navigator.push(
-        context, MaterialPageRoute(builder: (_) => ScanPage()));
+      context,
+      MaterialPageRoute(builder: (_) => ScanPage()),
+    );
     if (!context.mounted) return;
     if (scanValue != null) onAddressSelected(scanValue as String);
     if (context.mounted) Navigator.pop(context);
@@ -104,11 +128,18 @@ Future<void> showAddressPickerSheet(
 
   final scanAction = onScanQR ?? defaultScanQR;
   final blueColor = AppThemeUtils.getColorByKey(
-      context, AppThemeKeys.mainBlueColor.name);
-  final divider = Divider(height: ScreenUtil().setWidth(1), indent: 0, endIndent: 0);
+    context,
+    AppThemeKeys.mainBlueColor.name,
+  );
+  final divider = Divider(
+    height: ScreenUtil().setWidth(1),
+    indent: 0,
+    endIndent: 0,
+  );
   final iconSize = ScreenUtil().setWidth(48);
 
-  Widget buildSheetRow(BuildContext ctx, {
+  Widget buildSheetRow(
+    BuildContext ctx, {
     required Widget iconWidget,
     required String label,
     required VoidCallback onTap,
@@ -142,28 +173,43 @@ Future<void> showAddressPickerSheet(
   }
 
   final List<Widget> childs = [
-    buildSheetRow(context,
-      iconWidget: Image.asset('assets/wallet/addressBook.png',
-          color: blueColor, height: iconSize, width: iconSize),
+    buildSheetRow(
+      context,
+      iconWidget: Image.asset(
+        'assets/wallet/addressBook.png',
+        color: blueColor,
+        height: iconSize,
+        width: iconSize,
+      ),
       label: S.of(context).g_key_108,
       onTap: () async {
-        final value = await Navigator.push(context,
-          MaterialPageRoute(builder: (_) =>
-              AddressBookList(coinName: coinModel.coin['coinType'])));
+        final value = await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) =>
+                AddressBookList(coinName: coinModel.coin['coinType']),
+          ),
+        );
         if (!context.mounted) return;
         if (value != null) onAddressSelected(value as String);
         if (context.mounted) Navigator.pop(context);
       },
     ),
     divider,
-    buildSheetRow(context,
-      iconWidget: Image.asset('assets/wallet/scan.png',
-          color: blueColor, height: iconSize, width: iconSize),
+    buildSheetRow(
+      context,
+      iconWidget: Image.asset(
+        'assets/wallet/scan.png',
+        color: blueColor,
+        height: iconSize,
+        width: iconSize,
+      ),
       label: S.of(context).g_key_4,
       onTap: scanAction,
     ),
     divider,
-    buildSheetRow(context,
+    buildSheetRow(
+      context,
       iconWidget: Icon(Icons.paste_outlined, color: blueColor, size: iconSize),
       label: S.of(context).g_key_166,
       onTap: () async {
@@ -181,29 +227,42 @@ Future<void> showAddressPickerSheet(
   if (isEvm) {
     Future<void> faceMatchAction(int type) async {
       final address = await Navigator.push<String>(
-          context, MaterialPageRoute(builder: (_) => FaceMatch(type)));
+        context,
+        MaterialPageRoute(builder: (_) => FaceMatch(type)),
+      );
       if (!context.mounted) return;
       if (address != null) onAddressSelected(address);
       if (context.mounted) Navigator.pop(context);
     }
 
     childs.addAll([
-      buildSheetRow(context,
-        iconWidget: Icon(Icons.photo_album_outlined, color: blueColor, size: iconSize),
-        label: '${S.of(context).g_face_match_key1}(${S.of(context).photograph})',
+      buildSheetRow(
+        context,
+        iconWidget: Icon(
+          Icons.photo_album_outlined,
+          color: blueColor,
+          size: iconSize,
+        ),
+        label:
+            '${S.of(context).g_face_match_key1}(${S.of(context).photograph})',
         onTap: () => faceMatchAction(1),
       ),
       divider,
-      buildSheetRow(context,
+      buildSheetRow(
+        context,
         iconWidget: Icon(Icons.face_outlined, color: blueColor, size: iconSize),
-        label: '${S.of(context).g_face_match_key1}(${S.of(context).g_key_nft_16})',
+        label:
+            '${S.of(context).g_face_match_key1}(${S.of(context).g_key_nft_16})',
         onTap: () => faceMatchAction(2),
       ),
     ]);
   }
 
-  sheetBottom(context, S.of(context).g_face_match_key1,
-      Column(children: childs));
+  sheetBottom(
+    context,
+    S.of(context).g_face_match_key1,
+    Column(children: childs),
+  );
 }
 
 /// Recent address quick-select bar above the address input field.
@@ -233,8 +292,7 @@ class _RecentAddressBarState extends State<RecentAddressBar> {
   }
 
   Future<void> _load() async {
-    final list =
-        await RecentAddressService.load(widget.coinType, maxCount: 5);
+    final list = await RecentAddressService.load(widget.coinType, maxCount: 5);
     if (mounted) setState(() => _entries = list);
   }
 

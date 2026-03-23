@@ -1,0 +1,12 @@
+name: n42_jmt_verify
+description: N42 Jellyfish Merkle Tree proof verification for mobile clients.
+version: 0.1.0
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  hashlib: ^2.2.0
+
+dev_dependencies:
+  test: ^1.24.0

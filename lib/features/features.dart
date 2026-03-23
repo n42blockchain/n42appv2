@@ -5,10 +5,6 @@
 //
 // Author: Jiang Yiwei
 
-// Features Module
-//
-// Re-exports all feature modules for convenient importing.
-
 export 'wallet/wallet.dart';
 export 'mining/mining.dart';
 export 'browser/browser.dart';

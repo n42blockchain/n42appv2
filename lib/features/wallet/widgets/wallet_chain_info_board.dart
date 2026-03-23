@@ -15,9 +15,6 @@ class WalletChainInfoBoard extends StatelessWidget {
   final GestureTapCallback? sendTap;//交易点击
   final GestureTapCallback? receiveTap;//收款码点击
   final GestureTapCallback? browserTap;//浏览器点击
-  final GestureTapCallback? tokenAddTap;//添加代币按钮
-  final GestureTapCallback? swapAddTap;//添加兑换按钮
-  final GestureTapCallback? sellAddTap;//卖按钮
   const WalletChainInfoBoard({required this.address,
     this.coinType,
     required this.balanceStr,
@@ -27,9 +24,6 @@ class WalletChainInfoBoard extends StatelessWidget {
     required this.sendTap,
     required this.receiveTap,
     required this.browserTap,
-    required this.tokenAddTap,
-    required this.swapAddTap,
-    required this.sellAddTap,
     required this.xmlLockInfoTap,
     super.key});
 
@@ -37,7 +31,6 @@ class WalletChainInfoBoard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0),vertical: ScreenUtil().setWidth(30.0),),
-      //padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0),horizontal: ScreenUtil().setWidth(30.0),),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -116,73 +109,19 @@ class WalletChainInfoBoard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              //buttonWidget(context,'assets/wallet/w_send.png',S.of(context).g_key_48,sendTap),
               Expanded(child: buttonWidgetV2(context,S.of(context).g_key_48,sendTap)),
               SizedBox(width: ScreenUtil().setWidth(20),),
-              //buttonWidget(context,'assets/wallet/w_receive.png',S.of(context).g_key_33,receiveTap),
               Expanded(child: buttonWidgetV2(context,S.of(context).g_key_33,receiveTap)),
               SizedBox(width: ScreenUtil().setWidth(20),),
-              //buttonWidget(context,'assets/wallet/mainnet.png',S.of(context).g_key_196,browserTap),
               Expanded(child: buttonWidgetV2(context,S.of(context).g_key_196,browserTap)),
             ],
           ),
-          /*
-          SizedBox(height: ScreenUtil().setWidth(30),),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              buttonWidgetV2(context,S.of(context).g_key_211,swapAddTap),
-              SizedBox(width: ScreenUtil().setWidth(30),),
-              buttonWidgetV2(context,S.of(context).g_key_212,sellAddTap),
-              if(tokenAddTap !=null)
-                SizedBox(width: ScreenUtil().setWidth(30),),
-              if(tokenAddTap !=null)
-                buttonWidgetV2(context,S.of(context).g_token_m_key_11,tokenAddTap),
-              //buttonWidget(context,'assets/wallet/addToken.png',S.of(context).g_token_m_key_11,tokenAddTap),
-            ],
-          ),
-          */
         ],
       ),
     );
 
   }
-  /*
-  buttonWidget(context,String img,String lable,GestureTapCallback? tap){
-    return InkWell(
-      onTap: tap,
-      child: Container(
-        width: ScreenUtil().setWidth(150.0),
-        child: Column(
-          children: [
-            Container(
-              height: ScreenUtil().setWidth(64.0),
-              width: ScreenUtil().setWidth(64.0),
-              padding: EdgeInsets.all(6.0),
-              margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(16.0)),
-              decoration: BoxDecoration(
-                  color: Color(0xff4791FA).withOpacity(0.15),
-                  borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(10.0)))
-              ),
-              child: Image.asset(
-                img,
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-              ),
-            ),
-            Text(
-              lable,
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                fontSize: ScreenUtil().setSp(26.0),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-  */
+
   Widget buttonWidgetV2(BuildContext context,String lable,GestureTapCallback? tap){
     return InkWell(
       onTap: tap,

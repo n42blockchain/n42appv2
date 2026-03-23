@@ -9,14 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class SecurityGoogleDownload extends StatefulWidget {
+class SecurityGoogleDownload extends StatelessWidget {
   const SecurityGoogleDownload({super.key});
 
-  @override
-  SecurityGoogleDownloadState createState() => SecurityGoogleDownloadState();
-}
-
-class SecurityGoogleDownloadState extends State<SecurityGoogleDownload> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

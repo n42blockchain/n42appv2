@@ -7,6 +7,7 @@ import 'package:n42_wallet/features/wallet/api/address_book_api.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/features/wallet/models/address_book_model.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/pages/address_book/address_book_input_utils.dart';
 import 'package:n42_wallet/features/wallet/pages/address_book/choose_coins_page.dart';
 import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
@@ -20,7 +21,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EditAddressPage extends StatefulWidget {
   final AddressBookModel info;
-  const EditAddressPage({required this.info,super.key});
+  const EditAddressPage({required this.info, super.key});
 
   @override
   State<EditAddressPage> createState() => _EditAddressPageState();
@@ -37,6 +38,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
 
   late AddressBookModel info;
   String coinName = 'BTC';
+  String coinType = 'BTC';
   String coinIcon = '';
   bool editStatus = true;
   String errorMessage = "";
@@ -53,11 +55,13 @@ class _EditAddressPageState extends State<EditAddressPage> {
     super.initState();
     info = widget.info;
     coinName = info.coinName ?? "BTC";
+    coinType = info.coinName ?? "BTC";
     coinIcon = info.coinIcon ?? "";
     addressController.text = info.address ?? "";
     nameController.text = info.name ?? "";
     descController.text = info.desc ?? '';
   }
+
   @override
   void dispose() {
     addressController.dispose();
@@ -75,10 +79,9 @@ class _EditAddressPageState extends State<EditAddressPage> {
       return null;
     }
 
-    final parts = addr.split(":");
-    if (parts.length == 2) addr = parts[1];
+    addr = normalizeAddressBookInput(addr);
 
-    final valid = await Trustdart().validateAddress(coinName, addr);
+    final valid = await Trustdart().validateAddress(coinType, addr);
     if (valid) {
       setState(() => errorMessage = "");
       return addr;
@@ -95,6 +98,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
     setState(() => errorMessage = S.current.g_key_t_50);
     return null;
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,14 +107,18 @@ class _EditAddressPageState extends State<EditAddressPage> {
         actions: [
           GestureDetector(
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+              padding: EdgeInsets.symmetric(
+                horizontal: ScreenUtil().setWidth(30.0),
+              ),
               color: Colors.transparent,
               child: Center(
                 child: Text(
                   editStatus ? S.of(context).g_key_115 : S.of(context).Edit,
                   style: TextStyle(
                     color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainTextColor.name),
+                      context,
+                      AppThemeKeys.mainTextColor.name,
+                    ),
                     fontSize: ScreenUtil().setSp(32.0),
                   ),
                 ),
@@ -126,7 +134,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
                 });
               }
             },
-          )
+          ),
         ],
       ),
       body: buildContentList(context),
@@ -135,27 +143,31 @@ class _EditAddressPageState extends State<EditAddressPage> {
 
   Widget buildContentList(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(left: ScreenUtil().setWidth(30.0),right: ScreenUtil().setWidth(30.0), top: ScreenUtil().setWidth(30.0),bottom: ScreenUtil().setWidth(36.0)),
+      margin: EdgeInsets.only(
+        left: ScreenUtil().setWidth(30.0),
+        right: ScreenUtil().setWidth(30.0),
+        top: ScreenUtil().setWidth(30.0),
+        bottom: ScreenUtil().setWidth(36.0),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildSelectItem(),
-          SizedBox(
-            height: ScreenUtil().setWidth(36.0),
-          ),
+          SizedBox(height: ScreenUtil().setWidth(36.0)),
           Text(
             S.of(context).address_Information,
             style: TextStyle(
-                color:
-                AppThemeUtils.getColorByKey(context, AppThemeKeys.ff888888.name),
-                fontSize: ScreenUtil().setSp(28.0)),
+              color: AppThemeUtils.getColorByKey(
+                context,
+                AppThemeKeys.ff888888.name,
+              ),
+              fontSize: ScreenUtil().setSp(28.0),
+            ),
           ),
-          SizedBox(
-            height: ScreenUtil().setWidth(20.0),
-          ),
+          SizedBox(height: ScreenUtil().setWidth(20.0)),
           _buildAddressView(context),
           const Spacer(),
-          delete()
+          delete(),
         ],
       ),
     );
@@ -165,20 +177,26 @@ class _EditAddressPageState extends State<EditAddressPage> {
     return GestureDetector(
       onTap: editStatus
           ? () async {
-        final CoinModel? data = await Navigator.push(context,
-            MaterialPageRoute(builder: (_) => const ChooseCoinsPage()));
-        if (!mounted) return;
-        if (data != null) {
-          setState(() {
-            coinName = data.coin["name"];
-            coinIcon = data.coin["icon"];
-          });
-        }
-      }
+              final CoinModel? data = await Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const ChooseCoinsPage()),
+              );
+              if (!mounted) return;
+              if (data != null) {
+                final selection = addressBookSelectionFromCoinMap(
+                  Map<String, dynamic>.from(data.coin),
+                );
+                setState(() {
+                  coinName = selection.coinName;
+                  coinType = selection.coinType;
+                  coinIcon = selection.coinIcon;
+                });
+              }
+            }
           : null,
       child: containerStyle1(
         context,
-        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20.0),),
+        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20.0)),
         height: ScreenUtil().setWidth(88.0),
         child: Row(
           children: [
@@ -187,33 +205,37 @@ class _EditAddressPageState extends State<EditAddressPage> {
               height: ScreenUtil().setWidth(50.0),
               child: (coinName == CoinType.N.name)
                   ? Image.asset(
-                'assets/img/ast.png',
-                width: ScreenUtil().setWidth(50.0),
-                height: ScreenUtil().setWidth(50.0),
-                fit: BoxFit.cover,
-              )
-                  : ImageNetWork(imageUrl:
-                coinIcon,
-                width: ScreenUtil().setWidth(50.0),
-                height: ScreenUtil().setWidth(50.0),
-                placeholder: "assets/img/list_default.png",
-              ),
+                      'assets/img/ast.png',
+                      width: ScreenUtil().setWidth(50.0),
+                      height: ScreenUtil().setWidth(50.0),
+                      fit: BoxFit.cover,
+                    )
+                  : ImageNetWork(
+                      imageUrl: coinIcon,
+                      width: ScreenUtil().setWidth(50.0),
+                      height: ScreenUtil().setWidth(50.0),
+                      placeholder: "assets/img/list_default.png",
+                    ),
             ),
-            SizedBox(
-              width: ScreenUtil().setWidth(24.0),
-            ),
+            SizedBox(width: ScreenUtil().setWidth(24.0)),
             Text(
               coinName,
               style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
-                  fontSize: ScreenUtil().setSp(28.0)),
+                color: AppThemeUtils.getColorByKey(
+                  context,
+                  AppThemeKeys.mainTextColor.name,
+                ),
+                fontSize: ScreenUtil().setSp(28.0),
+              ),
             ),
             const Spacer(),
             Icon(
               Icons.arrow_forward_ios,
               size: ScreenUtil().setWidth(40.0),
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+              color: AppThemeUtils.getColorByKey(
+                context,
+                AppThemeKeys.itemSubtitleTextColor.name,
+              ),
             ),
           ],
         ),
@@ -224,8 +246,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
   Widget _buildAddressView(BuildContext context) {
     return containerStyle1(
       context,
-      padding: EdgeInsets.symmetric(
-          vertical: ScreenUtil().setWidth(20.0)),
+      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0)),
       child: Column(
         children: [
           scanItem(),
@@ -241,7 +262,6 @@ class _EditAddressPageState extends State<EditAddressPage> {
             endIndent: ScreenUtil().setWidth(20.0),
           ),
           desc(),
-
         ],
       ),
     );
@@ -253,39 +273,54 @@ class _EditAddressPageState extends State<EditAddressPage> {
       controller: addressController,
       focusNode: addressFocusNode,
       hintText: S.of(context).please_input_address,
-      errorMessage:errorMessage,
-      onEditingComplete: (){
+      errorMessage: errorMessage,
+      onEditingComplete: () {
         FocusScope.of(context).requestFocus(nameFocusNode);
       },
       boxShadow: _noShadow,
-      messageMargin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+      messageMargin: EdgeInsets.symmetric(
+        horizontal: ScreenUtil().setWidth(30.0),
+      ),
       rightWidget1: Image.asset(
         "assets/wallet/scan.png",
         color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainTextColor.name),
+          context,
+          AppThemeKeys.mainTextColor.name,
+        ),
         width: ScreenUtil().setWidth(50.0),
         height: ScreenUtil().setWidth(50.0),
       ),
       rightOnTap1: () async {
         final data = await Navigator.push(
-            context, MaterialPageRoute(builder: (_) => ScanPage()));
+          context,
+          MaterialPageRoute(builder: (_) => ScanPage()),
+        );
         if (!mounted) return;
-        if (data != null) setState(() => addressController.text = data);
+        if (data != null) {
+          setState(
+            () => addressController.text = normalizeAddressBookInput(data),
+          );
+        }
       },
       rightWidget2: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12,),
-        margin: EdgeInsets.only(left: 10,),
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        margin: EdgeInsets.only(left: 10),
         height: ScreenUtil().setWidth(60.0),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainBlueColor.name),
-            borderRadius: BorderRadius.all(Radius.circular(60.0))
+          color: AppThemeUtils.getColorByKey(
+            context,
+            AppThemeKeys.mainBlueColor.name,
+          ),
+          borderRadius: BorderRadius.all(Radius.circular(60.0)),
         ),
         child: Text(
           S.of(context).g_key_166,
           style: TextStyle(
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainWhiteColor.name),
+            color: AppThemeUtils.getColorByKey(
+              context,
+              AppThemeKeys.mainWhiteColor.name,
+            ),
             fontSize: ScreenUtil().setSp(26.0),
           ),
         ),
@@ -293,7 +328,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
       rightOnTap2: () async {
         final data = await Clipboard.getData(Clipboard.kTextPlain);
         if (data?.text != null && data!.text != "null") {
-          addressController.text = data.text!;
+          addressController.text = normalizeAddressBookInput(data.text!);
         }
       },
     );
@@ -306,7 +341,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
       focusNode: nameFocusNode,
       hintText: S.of(context).g_key_nft_2,
       boxShadow: _noShadow,
-      onEditingComplete: (){
+      onEditingComplete: () {
         FocusScope.of(context).requestFocus(descFocusNode);
       },
     );
@@ -319,7 +354,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
       focusNode: descFocusNode,
       hintText: S.of(context).descO,
       boxShadow: _noShadow,
-      onEditingComplete: (){
+      onEditingComplete: () {
         FocusScope.of(context).requestFocus(addressFocusNode);
       },
     );
@@ -331,9 +366,18 @@ class _EditAddressPageState extends State<EditAddressPage> {
     final address = await addressCheck(addressController.text.trim());
     if (!mounted || address == null) return;
 
-    if (coinName.isEmpty) { ToastUtils.show(S.of(context).g_key_address_3); return; }
-    if (address.isEmpty) { ToastUtils.show(S.of(context).g_key_address_2); return; }
-    if (name.isEmpty) { ToastUtils.show(S.of(context).g_key_address_1); return; }
+    if (coinName.isEmpty) {
+      ToastUtils.show(S.of(context).g_key_address_3);
+      return;
+    }
+    if (address.isEmpty) {
+      ToastUtils.show(S.of(context).g_key_address_2);
+      return;
+    }
+    if (name.isEmpty) {
+      ToastUtils.show(S.of(context).g_key_address_1);
+      return;
+    }
 
     info
       ..coinName = coinName
@@ -349,8 +393,8 @@ class _EditAddressPageState extends State<EditAddressPage> {
         eventBus.fire(EventPublic(EventPublicType.refreshData));
         Navigator.of(context).pop(true);
       }
-    } catch (_) {
-      // safe to ignore
+    } catch (e) {
+      debugPrint('[EditAddressPage] update failed: $e');
     }
   }
 
@@ -370,14 +414,18 @@ class _EditAddressPageState extends State<EditAddressPage> {
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.errorTextColor.name),
+            context,
+            AppThemeKeys.errorTextColor.name,
+          ),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16.0)),
         ),
         child: Text(
           S.of(context).g_key_113,
           style: TextStyle(
             color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainWhiteColor.name),
+              context,
+              AppThemeKeys.mainWhiteColor.name,
+            ),
             fontSize: ScreenUtil().setSp(32.0),
           ),
         ),

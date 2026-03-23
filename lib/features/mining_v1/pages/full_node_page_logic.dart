@@ -164,9 +164,10 @@ mixin _FullNodePageLogic on State<FullNodePage> {
     return chainData != null;
   }
 
-  Future<void> waitChainData(String txHash) async {
+  Future<void> waitChainData(String txHash, {int retries = 30}) async {
     try {
       await Future.delayed(const Duration(seconds: 2));
+      if (!mounted) return;
       final chainData = await MiningApi.getTransactionReceipt(txHash);
       if (chainData != null) {
         globalMiningV1.setDepositsEnable(true);
@@ -180,8 +181,8 @@ mixin _FullNodePageLogic on State<FullNodePage> {
             ),
           ),
         );
-      } else {
-        await waitChainData(txHash);
+      } else if (retries > 0) {
+        await waitChainData(txHash, retries: retries - 1);
       }
     } catch (err) {
       debugPrint("waitChainData err: ${err.toString()}");

@@ -212,12 +212,18 @@ class PhishingDetector {
           : <String>[];
       _blocklist.addAll(blacklist);
       _whitelist.addAll(whitelist);
-      debugPrint(
-        '[PhishingDetector] Cache loaded: ${blacklist.length} blocked, '
-        '${whitelist.length} whitelisted',
-      );
+      assert(() {
+        debugPrint(
+          '[PhishingDetector] Cache loaded: ${blacklist.length} blocked, '
+          '${whitelist.length} whitelisted',
+        );
+        return true;
+      }());
     } catch (e) {
-      debugPrint('[PhishingDetector] Cache parse error: $e');
+      assert(() {
+        debugPrint('[PhishingDetector] Cache parse error: $e');
+        return true;
+      }());
     }
   }
 
@@ -229,7 +235,10 @@ class PhishingDetector {
     final lastFetchMs = prefs.getInt(_spCacheTimeKey) ?? 0;
     final ageMs = DateTime.now().millisecondsSinceEpoch - lastFetchMs;
     if (lastFetchMs > 0 && ageMs < _cacheTtl.inMilliseconds) {
-      debugPrint('[PhishingDetector] Cache still fresh, skipping refresh');
+      assert(() {
+        debugPrint('[PhishingDetector] Cache still fresh, skipping refresh');
+        return true;
+      }());
       return;
     }
 
@@ -243,7 +252,10 @@ class PhishingDetector {
       if (response.statusCode != 200) {
         await response.drain<void>(); // consume body to free socket
         client.close();
-        debugPrint('[PhishingDetector] Remote returned ${response.statusCode}');
+        assert(() {
+          debugPrint('[PhishingDetector] Remote returned ${response.statusCode}');
+          return true;
+        }());
         return;
       }
 
@@ -270,13 +282,19 @@ class PhishingDetector {
       }
       await prefs.setInt(_spCacheTimeKey, DateTime.now().millisecondsSinceEpoch);
 
-      debugPrint(
-        '[PhishingDetector] Remote refresh done: '
-        '${blacklist.length} blocked, ${whitelist.length} whitelisted',
-      );
+      assert(() {
+        debugPrint(
+          '[PhishingDetector] Remote refresh done: '
+          '${blacklist.length} blocked, ${whitelist.length} whitelisted',
+        );
+        return true;
+      }());
     } catch (e) {
       // Non-fatal: seed list + cached list continue to protect the user
-      debugPrint('[PhishingDetector] Background refresh failed: $e');
+      assert(() {
+        debugPrint('[PhishingDetector] Background refresh failed: $e');
+        return true;
+      }());
     }
   }
 }

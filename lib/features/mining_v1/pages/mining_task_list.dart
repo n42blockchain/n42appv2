@@ -1,4 +1,5 @@
 import 'package:n42_wallet/features/mining_v1/api/mining_api.dart';
+import 'package:n42_wallet/features/mining_v1/pages/mining_task_list_utils.dart';
 import 'package:n42_wallet/features/mining_v1/pages/task_detail_page.dart';
 import 'package:n42_wallet/features/mining_v1/widgets/task_item.dart';
 import 'package:n42_wallet/features/mining_v1/widgets/task_value_bar.dart';
@@ -28,92 +29,109 @@ class _MiningTaskListState extends State<MiningTaskList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBarWidget(
-          text: S.of(context).g_mining_key31,
+      appBar: AppBarWidget(text: S.of(context).g_mining_key31),
+      body: Container(
+        margin: EdgeInsets.only(
+          left: ScreenUtil().setWidth(30),
+          right: ScreenUtil().setWidth(30),
+          bottom: ScreenUtil().setWidth(30),
+          top: ScreenUtil().setWidth(30),
         ),
-        body: Container(
-          margin: EdgeInsets.only(
-            left: ScreenUtil().setWidth(30),
-            right: ScreenUtil().setWidth(30),
-            bottom: ScreenUtil().setWidth(30),
-            top: ScreenUtil().setWidth(30),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(ScreenUtil().setWidth(16)),
+            topRight: Radius.circular(ScreenUtil().setWidth(16)),
           ),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(ScreenUtil().setWidth(16)),
-              topRight: Radius.circular(ScreenUtil().setWidth(16)),
-            ),
-            color:
-            AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+          color: AppThemeUtils.getColorByKey(
+            context,
+            AppThemeKeys.itemBgColor.name,
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const TaskValueBar(),
-              Expanded(
-                  child: BaseList(
-                    buildItem:
-                        (BuildContext context, List<dynamic> results, int index) {
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const TaskValueBar(),
+            Expanded(
+              child: BaseList(
+                buildItem:
+                    (BuildContext context, List<dynamic> results, int index) {
                       var item = results[index];
                       return GestureDetector(
                         onTap: () async {
-                          Navigator.of(context).push(MaterialPageRoute(
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
                               builder: (_) => TaskDetailPage(
                                 blockNumber: "${item["blockNumber"]}",
                                 astValue: dataUtils.formatNum(
-                                    toEther(
-                                        "${BigInt.tryParse(item["reward"])}",
-                                        18).toDouble(),
-                                    8),
-                              )));
+                                  toEther(
+                                    "${BigInt.tryParse(item["reward"])}",
+                                    18,
+                                  ).toDouble(),
+                                  8,
+                                ),
+                              ),
+                            ),
+                          );
                         },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
                           // //{blockNumber: 0x235, timestamp: 1671526039, reward: 0x1}
                           child: TaskItem(
-                            taskId: "${BigInt.tryParse(item["blockNumber"])}",
+                            taskId: formatMiningBlockNumber(
+                              item["blockNumber"],
+                            ),
                             astValue: dataUtils.formatNum(
-                                toEther("${BigInt.tryParse(item["reward"])}", 18).toDouble(),
-                                8),
+                              toEther(
+                                "${BigInt.tryParse(item["reward"])}",
+                                18,
+                              ).toDouble(),
+                              8,
+                            ),
                             time: dataUtils.getTimeByTimeStamp(
-                                "${item["timestamp"]}",
-                                format: "dd/MM HH:mm"),
+                              "${item["timestamp"]}",
+                              format: "dd/MM HH:mm",
+                            ),
                             status: "success",
                           ),
                         ),
                       );
                     },
-                    getData: (int page, int pageSize) async {
-                      try {
-                        if(page==1){
-                          fromBlockNum=null;
+                getData: (int page, int pageSize) async {
+                  try {
+                    if (page == 1) {
+                      fromBlockNum = null;
+                    }
+                    final data = await MiningApi.getMiningTaskList(
+                      widget.address,
+                      fromBlockNum,
+                      pageSize: pageSize,
+                    );
+                    debugPrint("task list data:$data");
+                    if (data != null) {
+                      //{blockNumber: 0x235, timestamp: 1671526039, reward: 0x1}
+                      final taskList = data["result"]["minedBlocks"] ?? [];
+                      if (taskList != null && taskList is List) {
+                        if (taskList.length > 1) {
+                          fromBlockNum = buildPreviousMiningBlockCursor(
+                            taskList[taskList.length - 1]["blockNumber"],
+                          );
+                          // debugPrint("fromBlockNum : $fromBlockNum");
                         }
-                        final data = await MiningApi.getMiningTaskList(
-                            widget.address, fromBlockNum,
-                            pageSize: pageSize);
-                        debugPrint("task list data:$data");
-                        if (data != null) {
-                          //{blockNumber: 0x235, timestamp: 1671526039, reward: 0x1}
-                          final taskList = data["result"]["minedBlocks"] ?? [];
-                          if(taskList != null && taskList is List ){
-                            if(taskList.length > 1){
-                              fromBlockNum =
-                              "0x${(int.parse((taskList[taskList.length - 1]["blockNumber"])) - 1).toRadixString(16)}";
-                              // debugPrint("fromBlockNum : $fromBlockNum");
-                            }
-                            return taskList;
-                          }
-                        }
-                      }catch (err){
-                        // err
+                        return taskList;
                       }
-                      return [];
-                    },
-                    firstRefresh: true,
-                    pageSize: 50,
-                  ))
-            ],
-          ),
-        ));
+                    }
+                  } catch (err) {
+                    debugPrint('[MiningTaskList] getData error: $err');
+                  }
+                  return [];
+                },
+                firstRefresh: true,
+                pageSize: 50,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

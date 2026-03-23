@@ -17,30 +17,18 @@ class RedeemToken extends GeneratedContract {
         );
 
   /// 质押 deposit
-  Future getDepositAmount(
-    String lockAddress, {
-    required Credentials credentials,
-    Transaction? transaction,
-  }) async {
+  Future getDepositAmount(String lockAddress) async {
     return await read(self.function('getDepositAmount'), [lockAddress], null);
   }
 
   /// 获取是否允许质押 depositAllowed
-  Future depositAllowed(
-    BigInt value, {
-    required Credentials credentials,
-    Transaction? transaction,
-  }) async {
+  Future depositAllowed(BigInt value) async {
     final astNum = ethToWeiString('$value', 18);
     return await read(self.function('depositAllowed'), [astNum], null);
   }
 
   /// depositsOf — 获取当前地址质押数量
-  Future depositsOf(
-    String address, {
-    required Credentials credentials,
-    Transaction? transaction,
-  }) async {
+  Future depositsOf(String address) async {
     return await read(
       self.function('depositsOf'),
       [EthereumAddress.fromHex(address)],
@@ -49,11 +37,7 @@ class RedeemToken extends GeneratedContract {
   }
 
   /// 获取质押之后锁仓时间
-  Future lockTime(
-    String address, {
-    required Credentials credentials,
-    Transaction? transaction,
-  }) async {
+  Future lockTime(String address) async {
     return await read(
       self.function('depositUnlockingTimestamp'),
       [EthereumAddress.fromHex(address)],
@@ -65,7 +49,6 @@ class RedeemToken extends GeneratedContract {
   Future reedem(
     String p2wshAddress, {
     required Credentials credentials,
-    Transaction? transaction,
   }) async {
     return await write(
       credentials,

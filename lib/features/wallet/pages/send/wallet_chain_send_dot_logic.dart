@@ -42,7 +42,8 @@ mixin _DotSendLogicMixin on ConsumerState<WalletChainSendDot> {
     if (widget.coinModel.coin['isContract']) {
       final wap = ref.read(wapBridgeProvider);
       final cIndex = wap.coinModels.indexWhere((element) {
-        if (element.coin['coinType'] != widget.coinModel.coin['coinType']) return false;
+        if (element.coin['coinType'] != widget.coinModel.coin['coinType'])
+          return false;
         if (widget.coinModel.privateKey != null) {
           return element.privateKey == widget.coinModel.privateKey;
         }
@@ -53,10 +54,12 @@ mixin _DotSendLogicMixin on ConsumerState<WalletChainSendDot> {
       if (!mounted) return;
       setState(() {});
     }
-    gas = BigInt.from(getCoinGas(
-      widget.coinModel.coin['coinType'],
-      contract: widget.coinModel.coin['isContract'],
-    ));
+    gas = BigInt.from(
+      getCoinGas(
+        widget.coinModel.coin['coinType'],
+        contract: widget.coinModel.coin['isContract'],
+      ),
+    );
     await getBalance();
   }
 
@@ -73,7 +76,10 @@ mixin _DotSendLogicMixin on ConsumerState<WalletChainSendDot> {
 
   Future<void> getGasPrice(String txHash) async {
     setState(() => load = Load.loading);
-    final rmm = await dotApi.getGasPrice(txHash, isTest: widget.coinModel.isTest);
+    final rmm = await dotApi.getGasPrice(
+      txHash,
+      isTest: widget.coinModel.isTest,
+    );
     if (!mounted) return;
     if (!rmm.error) {
       totalGasPrice = BigInt.parse(rmm.data['partialFee']);
@@ -111,8 +117,10 @@ mixin _DotSendLogicMixin on ConsumerState<WalletChainSendDot> {
       return;
     }
 
-    final BigInt valueBi =
-        ethToWeiString(value, widget.coinModel.coin['decimals']);
+    final BigInt valueBi = ethToWeiString(
+      value,
+      widget.coinModel.coin['decimals'],
+    );
     if (!widget.coinModel.coin['isContract'] &&
         valueBi + totalGasPrice > widget.coinModel.balance) {
       _setAmountError(S.of(context).g_key_47);
@@ -138,8 +146,10 @@ mixin _DotSendLogicMixin on ConsumerState<WalletChainSendDot> {
     final List<String> addrList = addr.split(":");
     if (addrList.length == 2) addr = addrList[1];
 
-    final bool valid = await Trustdart()
-        .validateAddress(widget.coinModel.coin['coinType'], addr);
+    final bool valid = await Trustdart().validateAddress(
+      widget.coinModel.coin['coinType'],
+      addr,
+    );
     if (!valid ||
         addr.toUpperCase() ==
             widget.coinModel.address.toString().toUpperCase()) {
@@ -163,8 +173,9 @@ mixin _DotSendLogicMixin on ConsumerState<WalletChainSendDot> {
     amountCheck();
     if (amountErrorMessage.isNotEmpty) return;
     setState(() => load = Load.loading);
-    final String? toAddr =
-        await toAddressCheck(toTextEditingController.text.trim());
+    final String? toAddr = await toAddressCheck(
+      toTextEditingController.text.trim(),
+    );
     if (!mounted) return;
     if (toAddr == null) {
       _finishLoading();
@@ -205,8 +216,9 @@ mixin _DotSendLogicMixin on ConsumerState<WalletChainSendDot> {
       return;
     }
 
-    final String feeUnit =
-        (chainModel ?? widget.coinModel).coin['unit'].toString().toUpperCase();
+    final String feeUnit = (chainModel ?? widget.coinModel).coin['unit']
+        .toString()
+        .toUpperCase();
     final bool check = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -282,9 +294,15 @@ mixin _DotSendLogicMixin on ConsumerState<WalletChainSendDot> {
       valueTextEditingController.text = widget.coinModel.balanceStringAll();
       transferValue = widget.coinModel.balance;
     } else {
-      transferValue = widget.coinModel.balance - totalGasPrice;
+      transferValue = maxTransferableAmount(
+        balance: widget.coinModel.balance,
+        fee: totalGasPrice,
+      );
       valueTextEditingController.text = _regular.formartNum(
-        toEther(transferValue.toString(), widget.coinModel.coin['decimals']).toDouble(),
+        toEther(
+          transferValue.toString(),
+          widget.coinModel.coin['decimals'],
+        ).toDouble(),
         14,
         isCrop: true,
         isFill0: false,
@@ -299,8 +317,10 @@ mixin _DotSendLogicMixin on ConsumerState<WalletChainSendDot> {
   }
 
   void faceMatchTypeWidget() {
-    final textColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+    final textColor = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.mainTextColor.name,
+    );
     final textStyle = TextStyle(
       fontSize: ScreenUtil().setWidth(32.0),
       color: textColor,

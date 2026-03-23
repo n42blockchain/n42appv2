@@ -182,7 +182,7 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
                 textInputAction:TextInputAction.done,
                 errorMessage: confirmErrorMessage,
                 onEditingComplete: (){
-                  FocusScope.of(context).requestFocus(FocusNode());
+                  FocusScope.of(context).unfocus();
                 },
                 obscure: obscure,
                 rightWidget1: _buildObscureToggle(),

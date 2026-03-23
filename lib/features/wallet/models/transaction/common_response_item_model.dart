@@ -1,3 +1,5 @@
+import 'package:n42_wallet/features/wallet/models/transaction/explorer_response_utils.dart';
+
 /// EVM-compatible transaction record from block explorer APIs
 /// (e.g. Etherscan-compatible endpoints).
 class CommonResponseItemModel {
@@ -22,26 +24,41 @@ class CommonResponseItemModel {
 
   CommonResponseItemModel();
 
+  int get normalizedState {
+    final status = _normalizedFlag(txreceiptStatus);
+    if (status == '1') return 1;
+    if (status == '0') return 2;
+
+    final error = _normalizedFlag(isError);
+    if (error == '1') return 2;
+    if (error == '0') return 1;
+
+    final confirmed = int.tryParse(confirmations ?? '');
+    if (confirmed != null && confirmed > 0) return 1;
+
+    return 0;
+  }
+
   factory CommonResponseItemModel.fromJson(Map<String, dynamic> map) {
     return CommonResponseItemModel()
-      ..blockNumber = map['blockNumber'] as String?
-      ..timeStamp = map['timeStamp'] as String?
-      ..hash = map['hash'] as String?
-      ..nonce = map['nonce'] as String?
-      ..blockHash = map['blockHash'] as String?
-      ..transactionIndex = map['transactionIndex'] as String?
-      ..from = map['from'] as String?
-      ..to = map['to'] as String?
-      ..value = map['value'] as String?
-      ..gas = map['gas'] as String?
-      ..gasPrice = map['gasPrice'] as String?
-      ..isError = map['isError'] as String?
-      ..txreceiptStatus = map['txreceipt_status'] as String?
-      ..input = map['input'] as String?
-      ..contractAddress = map['contractAddress'] as String?
-      ..cumulativeGasUsed = map['cumulativeGasUsed'] as String?
-      ..gasUsed = map['gasUsed'] as String?
-      ..confirmations = map['confirmations'] as String?;
+      ..blockNumber = explorerString(map, const ['blockNumber', 'block_no'])
+      ..timeStamp = explorerString(map, const ['timeStamp', 'time'])
+      ..hash = explorerString(map, const ['hash', 'txid'])
+      ..nonce = explorerString(map, const ['nonce'])
+      ..blockHash = explorerString(map, const ['blockHash'])
+      ..transactionIndex = explorerString(map, const ['transactionIndex', 'index'])
+      ..from = explorerString(map, const ['from'])
+      ..to = explorerString(map, const ['to'])
+      ..value = explorerString(map, const ['value', 'tokenValue'])
+      ..gas = explorerString(map, const ['gas', 'gasLimit', 'gaslimit'])
+      ..gasPrice = explorerString(map, const ['gasPrice', 'gas_price'])
+      ..isError = explorerString(map, const ['isError', 'error'])
+      ..txreceiptStatus = explorerString(map, const ['txreceipt_status', 'status'])
+      ..input = explorerString(map, const ['input'])
+      ..contractAddress = explorerString(map, const ['contractAddress', 'tokenAddr', 'token'])
+      ..cumulativeGasUsed = explorerString(map, const ['cumulativeGasUsed'])
+      ..gasUsed = explorerString(map, const ['gasUsed', 'gasused'])
+      ..confirmations = explorerString(map, const ['confirmations']);
   }
 
   Map<String, dynamic> toJson() => {
@@ -64,4 +81,25 @@ class CommonResponseItemModel {
         'gasUsed': gasUsed,
         'confirmations': confirmations,
       };
+
+  static String? _normalizedFlag(String? value) {
+    if (value == null) return null;
+    final normalized = value.trim().toLowerCase();
+    switch (normalized) {
+      case '1':
+      case '0x1':
+      case 'true':
+      case 'success':
+        return '1';
+      case '0':
+      case '0x0':
+      case 'false':
+      case 'failed':
+      case 'failure':
+      case 'error':
+        return '0';
+      default:
+        return null;
+    }
+  }
 }

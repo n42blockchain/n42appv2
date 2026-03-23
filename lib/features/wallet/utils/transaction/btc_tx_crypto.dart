@@ -99,10 +99,11 @@ class BtcTxCrypto {
     ]);
   }
 
-  /// BigInt 转最小字节列表（去除前导零）
+  /// BigInt 转最小字节列表（去除前导零，保留至少 1 字节）
   List<int> _bigIntToBytes(BigInt value) {
     final Uint8List bytes =
         Uint8List.fromList(hex.decode(value.toRadixString(16).padLeft(64, '0')));
-    return bytes.skipWhile((b) => b == 0).toList();
+    final result = bytes.skipWhile((b) => b == 0).toList();
+    return result.isEmpty ? [0] : result;
   }
 }

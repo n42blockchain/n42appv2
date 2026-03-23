@@ -312,7 +312,6 @@
 			buildPhases = (
 				B60443F1BA6839E08233EFFF /* [CP] Check Pods Manifest.lock */,
 				526F3A0A2C10438C00FF9273 /* Embed Foundation Extensions */,
-				1592C158C24B0B48D11C3BE8 /* [Fix] Missing framework Info.plist */,
 				9740EEB61CF901F6004384FC /* Run Script */,
 				97C146EA1CF9000F007C117D /* Sources */,
 				97C146EB1CF9000F007C117D /* Frameworks */,
@@ -422,24 +421,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		1592C158C24B0B48D11C3BE8 /* [Fix] Missing framework Info.plist */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "[Fix] Missing framework Info.plist";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "find \"$BUILT_PRODUCTS_DIR/$FRAMEWORKS_FOLDER_PATH\" -name \"*.framework\" | while read fw; do\n  plist=\"$fw/Info.plist\"\n  if [ ! -f \"$plist\" ]; then\n    name=$(basename \"$fw\" .framework)\n    /usr/libexec/PlistBuddy -c \"Add :CFBundleIdentifier string org.grpc.$name\" \\\n      -c \"Add :CFBundleInfoDictionaryVersion string 6.0\" \\\n      -c \"Add :CFBundlePackageType string FMWK\" \\\n      -c \"Add :CFBundleShortVersionString string 1.0\" \\\n      -c \"Add :CFBundleVersion string 1\" \\\n      \"$plist\" 2>/dev/null || true\n  fi\ndone\n";
-		};
 		3B06AD1E1E4923F5004D2608 /* Thin Binary */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
@@ -708,9 +689,8 @@
 				CURRENT_PROJECT_VERSION = 51;
 				DEVELOPMENT_TEAM = CFRXH38L48;
 				ENABLE_BITCODE = NO;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FLUTTER_BUILD_NAME = 1.0.16;
-				FLUTTER_BUILD_NUMBER = 52;
+				FLUTTER_BUILD_NUMBER = 51;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/DKImagePickerController\"",
@@ -1278,9 +1258,8 @@
 				CURRENT_PROJECT_VERSION = 51;
 				DEVELOPMENT_TEAM = CFRXH38L48;
 				ENABLE_BITCODE = NO;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FLUTTER_BUILD_NAME = 1.0.16;
-				FLUTTER_BUILD_NUMBER = 52;
+				FLUTTER_BUILD_NUMBER = 51;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/DKImagePickerController\"",
@@ -1560,9 +1539,8 @@
 				CURRENT_PROJECT_VERSION = 51;
 				DEVELOPMENT_TEAM = CFRXH38L48;
 				ENABLE_BITCODE = NO;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FLUTTER_BUILD_NAME = 1.0.16;
-				FLUTTER_BUILD_NUMBER = 52;
+				FLUTTER_BUILD_NUMBER = 51;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/DKImagePickerController\"",

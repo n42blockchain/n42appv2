@@ -1,5 +1,4 @@
-//主链币种类型
-enum CoinType{
+enum CoinType {
   BNB,
   ETH,
   N,
@@ -10,8 +9,8 @@ enum CoinType{
   XDAI,
   CELO,
   FTM,
-  SOL,//solana
-  TRX,//tron
+  SOL,
+  TRX,
   CLO,
   POA,
   METIS,
@@ -22,7 +21,6 @@ enum CoinType{
   WAN,
   CRO,
   KAVA,
-  //BCH_E,
   KCS,
   BOBA,
   EVMOS,
@@ -38,7 +36,6 @@ enum CoinType{
   BASE,
   S,
   BB,
-  //bitcoin比特币类型
   BTC,
   LTC,
   DOGE,
@@ -46,233 +43,199 @@ enum CoinType{
   VIA,
   DGB,
   MONA,
-  //FIRO,
   BCH,
   BTG,
   RVN,
-  //QTUM,
-  //XEC,
-  //Algorand
   ALGO,
-  //Tezos
   XTZ,
-  //Ripple
   XRP,
-  //Cosmos
   ATOM,
-  //Filecoin
   FIL,
-  //Polkadot
   DOT,
   ACA,
   KSM,
-  //Aptos
   APT,
-  //Sui
   SUI,
-  //TheOpenNetwork
   TON,
-  //Stellar
   XLM,
-  //VeChain
   VET,
-  //Harmony
   ONE,
-  //IoTeX
   IOTX,
-  //NEAR Protocol
   NEAR,
-  //Zilliqa
   ZIL,
-  //Theta
   THETA,
-  //Cardano
   ADA,
-  //MultiversX (Elrond)
   EGLD,
-  //Layer 2 chains
-  ZKSYNC,  //zkSync Era
-  LINEA,   //Linea
-  SCROLL,  //Scroll
-  MNT,     //Mantle
-  BLAST,   //Blast
-  //Additional L2/EVM chains
-  MANTA,   //Manta Pacific
-  MODE,    //Mode
-  ZORA,    //Zora
-  TAIKO,   //Taiko
-  ZIRCUIT, //Zircuit
-  ZKPOLYGON, //Polygon zkEVM
-  OPBNB,   //opBNB
-  FRAX,    //Fraxtal
-  KROMA,   //Kroma
-  LISK,    //Lisk
-  BOB,     //BOB
-  UNICHAIN,//Unichain
-  INK,     //Ink
-  METAL,   //Metal L2
-  ZKFAIR,  //zkFair
-  XLAYER,  //X Layer
-  //Exchange chains
-  GT,      //Gate Chain
-  //Gaming/NFT chains
-  RON,     //Ronin
-  IMX,     //Immutable zkEVM
-  APE,     //ApeChain
-  BONE,    //Shibarium
-  CHZ,     //Chiliz
-  DOGECHAIN,//Dogechain
-  WLD,     //World Chain
-  //Bitcoin L2
-  RBTC,    //Rootstock
-  MERLIN,  //Merlin Chain
-  BEVM,    //BEVM
-  CORE,    //Core DAO
-  BITLAYER,//Bitlayer
-  //Other EVM chains
-  CFX,     //Conflux eSpace
-  TLOS,    //Telos
-  ASTR,    //Astar
-  SDN,     //Shiden
-  BNC,     //Bifrost
-  FSN,     //Fusion
-  PALM,    //Palm
-  EWT,     //Energy Web
-  BRISE,   //Bitgert
-  REEF,    //Reef
-  BTT,     //BitTorrent Chain
-  FX,      //Function X
-  ISLM,    //Haqq Network
-  DYM,     //Dymension
-  PLUME,   //Plume
-  NEON,    //Neon EVM
-  SYS,     //Syscoin
-  ELA,     //Elastos
-  HEMI,    //Hemi
-  HSK,     //HashKey
-  CYBER,   //Cyber
-  GRAVITY, //Gravity
-  SWAN,    //Swan Chain
-  MINT,    //Mint
-  FUSE,    //Fuse
-  CANTO,   //Canto
-  ROSE,    //Oasis Emerald
-  PLS,     //PulseChain
-  FLR,     //Flare
-  SGB,     //Songbird
-  HBAR,    //Hedera
-  BERA,    //Berachain
-  SEI,     //Sei
-  GNOSIS,  //Gnosis Chain
-  NOVA,    //Arbitrum Nova
-  //Additional chains batch 7
-  ZKLINK,  //zkLink Nova
-  REDSTONE,//Redstone
-  ANCIENT8,//Ancient8
-  STRATO,  //StratoVM
-  SAAKURU, //Saakuru
-  DFI,     //DeFiChain
-  NUM,     //Numbers
-  MILKOMEDA,//Milkomeda C1
-  GOAT,    //GOAT Network
-  BOBAETH, //BOB (Build on Bitcoin)
-  EDU,     //Open Campus Codex
-  KATANA,  //Katana
-  TEMPO,   //Tempo
-  BOBBNB,  //Boba BNB
-  ZETA2,   //Zeta Chain
-  //Phase 1: High priority new chains
-  HYPE,    //Hyperliquid
-  MON,     //Monad
-  ABSTRACT,//Abstract
-  IP,      //Story Protocol
-  MEGAETH, //MegaETH
-  WORLD,   //Worldcoin (World Chain已有WLD)
-  SONEIUM, //Soneium (Sony L2)
-  CORN,    //Corn (BTC yield L2)
-  INK2,    //Ink (Kraken L2) - 补充
-  APECHAIN,//ApeChain mainnet
-  SHAPE,   //Shape (NFT L2)
-  SUPERPOSITION, //Superposition
-  POLYNOMIAL, //Polynomial
-  LENSNETWORK, //Lens Network
-  //Phase 2: Cosmos ecosystem
-  INJ,     //Injective
-  TIA,     //Celestia
-  DYDX,    //dYdX Chain
-  OSMO,    //Osmosis
-  AKT,     //Akash
-  NTRN,    //Neutron
-  SCRT,    //Secret Network
-  STRD,    //Stride
-  JUNO,    //Juno
-  KUJI,    //Kujira
-  XPRT,    //Persistence
-  RUNE,    //THORChain
-  KAVA2,   //Kava (Cosmos version)
-  CRE,     //Crescent
-  SOMM,    //Sommelier
-  MARS,    //Mars Protocol
-  CMDX,    //Comdex
-  //Phase 3: ZK/unique architecture chains
-  STRK,    //Starknet
-  //Phase 4: Other important chains
-  EOS,     //EOS
-  WAX,     //WAX (EOSIO-based)
-  WAVES,   //Waves
-  NEO,     //NEO
-  GAS,     //GAS (NEO gas token)
-  IOST,    //IOST
-  ONT,     //Ontology
-  ONG,     //Ontology Gas
-  ZEN,     //Horizen
-  DCR,     //Decred
-  XEM,     //NEM
-  XYM,     //Symbol
-  LSK,     //Lisk (non-EVM version)
-  ARK,     //Ark
-  QTUM2,   //Qtum
-  ICX,     //ICON
-  NANO,    //Nano
-  HIVE,    //Hive
-  STEEM    //Steem
+  ZKSYNC,
+  LINEA,
+  SCROLL,
+  MNT,
+  BLAST,
+  MANTA,
+  MODE,
+  ZORA,
+  TAIKO,
+  ZIRCUIT,
+  ZKPOLYGON,
+  OPBNB,
+  FRAX,
+  KROMA,
+  LISK,
+  BOB,
+  UNICHAIN,
+  INK,
+  METAL,
+  ZKFAIR,
+  XLAYER,
+  GT,
+  RON,
+  IMX,
+  APE,
+  BONE,
+  CHZ,
+  DOGECHAIN,
+  WLD,
+  RBTC,
+  MERLIN,
+  BEVM,
+  CORE,
+  BITLAYER,
+  CFX,
+  TLOS,
+  ASTR,
+  SDN,
+  BNC,
+  FSN,
+  PALM,
+  EWT,
+  BRISE,
+  REEF,
+  BTT,
+  FX,
+  ISLM,
+  DYM,
+  PLUME,
+  NEON,
+  SYS,
+  ELA,
+  HEMI,
+  HSK,
+  CYBER,
+  GRAVITY,
+  SWAN,
+  MINT,
+  FUSE,
+  CANTO,
+  ROSE,
+  PLS,
+  FLR,
+  SGB,
+  HBAR,
+  BERA,
+  SEI,
+  GNOSIS,
+  NOVA,
+  ZKLINK,
+  REDSTONE,
+  ANCIENT8,
+  STRATO,
+  SAAKURU,
+  DFI,
+  NUM,
+  MILKOMEDA,
+  GOAT,
+  BOBAETH,
+  EDU,
+  KATANA,
+  TEMPO,
+  BOBBNB,
+  ZETA2,
+  HYPE,
+  MON,
+  ABSTRACT,
+  IP,
+  MEGAETH,
+  WORLD,
+  SONEIUM,
+  CORN,
+  INK2,
+  APECHAIN,
+  SHAPE,
+  SUPERPOSITION,
+  POLYNOMIAL,
+  LENSNETWORK,
+  INJ,
+  TIA,
+  DYDX,
+  OSMO,
+  AKT,
+  NTRN,
+  SCRT,
+  STRD,
+  JUNO,
+  KUJI,
+  XPRT,
+  RUNE,
+  KAVA2,
+  CRE,
+  SOMM,
+  MARS,
+  CMDX,
+  STRK,
+  EOS,
+  WAX,
+  WAVES,
+  NEO,
+  GAS,
+  IOST,
+  ONT,
+  ONG,
+  ZEN,
+  DCR,
+  XEM,
+  XYM,
+  LSK,
+  ARK,
+  QTUM2,
+  ICX,
+  NANO,
+  HIVE,
+  STEEM,
 }
-//区块链类型
-enum BlockchainType{
-  Bitcoin,//比特币类型
-  Ethereum,//以太坊类型
+enum BlockchainType {
+  Bitcoin,
+  Ethereum,
   Solana,
   Tron,
   Algorand,
   Tezos,
-  Ripple,//若波
+  Ripple,
   Cosmos,
   Filecoin,
   Polkadot,
   Aptos,
   Sui,
   TheOpenNetwork,
-  Stellar,//恒星
-  VeChain,//唯链
-  Harmony,//和谐链
-  IoTeX,//物联网链
-  Near,//NEAR协议
-  Zilliqa,//Zilliqa
-  Theta,//Theta网络
-  Cardano,//卡尔达诺
-  MultiversX,//MultiversX (原Elrond)
-  Starknet,//Starknet (Cairo/STARK)
-  //Phase 4 blockchain types
-  EOSIO,//EOS/WAX
-  Waves,//Waves
-  Neo,//NEO/GAS
-  Ontology,//ONT/ONG
-  NEM,//XEM/XYM
-  Nano,//Nano (DAG)
-  Decred,//Decred
-  ICON,//ICON
-  IOST,//IOST
-  Ark,//Ark
-  Qtum,//Qtum
-  Hive//Hive/Steem
+  Stellar,
+  VeChain,
+  Harmony,
+  IoTeX,
+  Near,
+  Zilliqa,
+  Theta,
+  Cardano,
+  MultiversX,
+  Starknet,
+  EOSIO,
+  Waves,
+  Neo,
+  Ontology,
+  NEM,
+  Nano,
+  Decred,
+  ICON,
+  IOST,
+  Ark,
+  Qtum,
+  Hive,
 }

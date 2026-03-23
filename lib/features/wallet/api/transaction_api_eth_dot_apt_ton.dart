@@ -1,5 +1,18 @@
 part of 'transaction_api.dart';
 
+String? _proxyExplorerChain(String key) {
+  switch (key.toUpperCase()) {
+    case 'ETH':
+      return 'eth';
+    case 'BNB':
+      return 'bnb';
+    case 'BASE':
+      return 'base';
+    default:
+      return null;
+  }
+}
+
 extension TransactionApiEthDotAptTon on TransactionApi {
   // ---------------------------------------------------------------------------
   // ETH-compatible — Etherscan-style API
@@ -23,19 +36,31 @@ extension TransactionApiEthDotAptTon on TransactionApi {
         mm.data = null;
         return mm;
       }
-      final endblockStr = endBlock != null ? '&endblock=$endBlock' : '';
-      final requestUrl =
-          '${hostUrl}module=account&action=txlist&address=$address'
-          '&startblock=$fromBlock&page=$page&offset=$offset&sort=desc$endblockStr';
-      final data = await BaseApi.requestEmptyH
-          .get(requestUrl, params: {}, header: header);
-      if (data != null && data['status'] == '1') {
-        mm.data = (data['result'] as List)
+      final proxyChain = !isTest ? _proxyExplorerChain(miniName) : null;
+      final requestUrl = proxyChain == null
+          ? '${hostUrl}module=account&action=txlist&address=$address'
+              '&startblock=$fromBlock&page=$page&offset=$offset&sort=desc'
+              '${endBlock != null ? '&endblock=$endBlock' : ''}'
+          : ProxyConfig.explorerTxlist(proxyChain);
+      final data = await BaseApi.requestEmptyH.get(
+        requestUrl,
+        params: proxyChain == null
+            ? {}
+            : {
+                'address': address,
+                'page': '$page',
+                'size': '$offset',
+              },
+        header: header,
+      );
+      final items = extractExplorerItems(data);
+      if (items.isNotEmpty || hasExplorerItemContainer(data)) {
+        mm.data = items
             .map((e) => CommonResponseItemModel.fromJson(e))
             .toList();
       } else {
         mm.error = true;
-        mm.data = data?['message'];
+        mm.data = data is Map ? data['message'] ?? data['error'] : null;
       }
     } catch (e) {
       mm.error = true;
@@ -62,19 +87,32 @@ extension TransactionApiEthDotAptTon on TransactionApi {
         mm.data = null;
         return mm;
       }
-      final requestUrl =
-          '${hostUrl}module=account&action=tokentx&address=$address'
-          '&contractaddress=$contractAddress&startblock=$fromBlock'
-          '&endblock=$endBlock&page=$page&offset=$offset&sort=desc';
-      final data = await BaseApi.requestEmptyH
-          .get(requestUrl, params: {}, header: header);
-      if (data != null && data['status'] == '1') {
-        mm.data = (data['result'] as List)
+      final proxyChain = !isTest ? _proxyExplorerChain(name) : null;
+      final requestUrl = proxyChain == null
+          ? '${hostUrl}module=account&action=tokentx&address=$address'
+              '&contractaddress=$contractAddress&startblock=$fromBlock'
+              '&endblock=$endBlock&page=$page&offset=$offset&sort=desc'
+          : ProxyConfig.explorerTokentx(proxyChain);
+      final data = await BaseApi.requestEmptyH.get(
+        requestUrl,
+        params: proxyChain == null
+            ? {}
+            : {
+                'address': address,
+                'contractAddress': contractAddress,
+                'page': '$page',
+                'size': '$offset',
+              },
+        header: header,
+      );
+      final items = extractExplorerItems(data);
+      if (items.isNotEmpty || hasExplorerItemContainer(data)) {
+        mm.data = items
             .map((e) => CommonResponseItemModel.fromJson(e))
             .toList();
       } else {
         mm.error = true;
-        mm.data = data?['message'];
+        mm.data = data is Map ? data['message'] ?? data['error'] : null;
       }
     } catch (e) {
       mm.error = true;
@@ -101,13 +139,11 @@ extension TransactionApiEthDotAptTon on TransactionApi {
         return mm;
       }
       final url = '${hostUrl}api/v2/scan/transfers';
-      final h = Map<String, String>.from(header)
-        ..['x-api-key'] = ApiKeysConfig.dotApiKey;
       final data = await BaseApi.requestEmptyH.post(
         url,
         params: {},
         data: {'address': address, 'row': 25, 'page': 0},
-        header: h,
+        header: header,
       );
       if (data != null && data['code'] == 0) {
         final transfers = data['data']['transfers'] as List? ?? [];

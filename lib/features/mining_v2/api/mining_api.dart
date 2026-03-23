@@ -5,13 +5,13 @@ import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/network/base_api.dart';
 import 'package:n42_wallet/features/mining_v2/models/mining_withdrawals_daily.dart';
 import 'package:n42_wallet/features/models/message_model.dart';
-import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
+import 'package:n42_wallet/features/mining/services/mining_channel.dart';
 
 class MiningApi{
   MiningApi.init(){
-    mining=Trustdart();
+    mining=MiningChannel();
   }
-  late Trustdart mining;
+  late MiningChannel mining;
   String get wsUrl => AppConfig.miningWebSocketUrl;
   static const String _explorerApiBase = String.fromEnvironment(
     'MINING_EXPLORER_URL',
@@ -20,7 +20,7 @@ class MiningApi{
   static const String _depositContractAddress='0x0dcAE65dDB5df8f1817D35286beAC32b8994962B';
   Future<Map<String,String>?> generateBls12381Keypair()async{
     try{
-      String? res=await mining.miningGenerateBls12381Keypair();
+      String? res=await mining.generateBls12381Keypair();
       if(res !=null){
         List<dynamic> dynamicArray= json.decode(res);
         return {
@@ -35,7 +35,7 @@ class MiningApi{
   }
   Future<String?> createDepositUnsignedTx(String validatorPrivateKey,String withdrawalAddress,String depositValueWeiInHex)async{
     try{
-      return await mining.miningCreateDepositUnsignedTx({
+      return await mining.createDepositUnsignedTx({
         "depositContractAddress": _depositContractAddress,
         "validatorPrivateKey": validatorPrivateKey,
         "withdrawalAddress": withdrawalAddress,
@@ -47,7 +47,7 @@ class MiningApi{
   }
   Future<String?> runClient(String validatorPrivateKey)async{
     try{
-      return await mining.miningRunClient({
+      return await mining.runClient({
         "wsUrl": wsUrl, "validatorPrivateKey": validatorPrivateKey
       });
     }catch(e){
@@ -56,21 +56,21 @@ class MiningApi{
   }
   Future<String?> stopClient()async{
     try{
-      return await mining.miningStopClient();
+      return await mining.stopClient();
     }catch(e){
       return null;
     }
   }
   Future<String?> miningCreateGetExitFeeUnsignedTx()async{
     try{
-      return await mining.miningCreateGetExitFeeUnsignedTx();
+      return await mining.createGetExitFeeUnsignedTx();
     }catch(e){
       return null;
     }
   }
   Future<String?> miningCreateExitUnsignedTx(String feeWeiInHex,String validatorPublicKey)async{
     try{
-      return await mining.miningCreateExitUnsignedTx({
+      return await mining.createExitUnsignedTx({
         "feeWeiInHex": feeWeiInHex,
         "validatorPublicKey": validatorPublicKey,
       });

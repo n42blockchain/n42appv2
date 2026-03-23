@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl/intl.dart';
+import 'package:n42_wallet/features/wallet/pages/market/market_price_format_utils.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 
 // ─── period selector constants ─────────────────────────────────────────────
 // Both arrays must stay in sync (enforced by assert in initState).
 const periodLabels = ['1D', '7D', '1M', '3M', '1Y'];
-const periodDays   = [1, 7, 30, 90, 365];
+const periodDays = [1, 7, 30, 90, 365];
 
 // Record type for social link list items.
 typedef LinkItem = ({String icon, String label, String url});
@@ -23,11 +23,7 @@ double toDouble(dynamic v, [double fallback = 0.0]) {
 /// Formats a price with automatic decimal precision:
 /// ≥$1000 → 2dp, ≥$1 → 4dp, <$1 → 4 significant figures, trailing zeros removed.
 String fmtPrice(double price) {
-  if (price <= 0) return '0.00';
-  if (price >= 1000) return NumberFormat('#,##0.00', 'en_US').format(price);
-  if (price >= 1) return NumberFormat('#,##0.0000', 'en_US').format(price);
-  final s = price.toStringAsPrecision(4);
-  return double.tryParse(s)?.toString() ?? s;
+  return formatMarketPriceDisplay(price);
 }
 
 /// Formats a percentage with a leading sign.
@@ -44,11 +40,31 @@ String fmtQty(double v) {
 
 /// Returns the theme color for a positive/negative percentage value.
 Color pctColor(double v, BuildContext ctx) => AppThemeUtils.getColorByKey(
-      ctx,
-      v >= 0
-          ? AppThemeKeys.rightTextColor.name
-          : AppThemeKeys.errorTextColor.name,
-    );
+  ctx,
+  v >= 0 ? AppThemeKeys.rightTextColor.name : AppThemeKeys.errorTextColor.name,
+);
+
+bool marketCoinMatchesSymbol(Map<String, dynamic> coin, String expectedSymbol) {
+  return (coin['coin']?.toString().trim().toLowerCase() ?? '') ==
+      expectedSymbol.trim().toLowerCase();
+}
+
+Map<String, dynamic> mergeMarketCoinSnapshot(
+  Map<String, dynamic> existing,
+  Map<String, dynamic> incoming,
+) {
+  return {
+    ...existing,
+    ...incoming,
+    if (!incoming.containsKey('coin_gecko_id') &&
+        existing['coin_gecko_id'] != null)
+      'coin_gecko_id': existing['coin_gecko_id'],
+    if (!incoming.containsKey('image') && existing['image'] != null)
+      'image': existing['image'],
+    if (!incoming.containsKey('name') && existing['name'] != null)
+      'name': existing['name'],
+  };
+}
 
 // ─── URL / username validation ─────────────────────────────────────────────
 
@@ -66,6 +82,18 @@ String? validateHttpUrl(String? raw) {
 bool isSafeUsername(String? u) =>
     u != null && u.isNotEmpty && RegExp(r'^[\w\-\.]+$').hasMatch(u);
 
+List<String> extractValidatedHttpUrls(dynamic raw) {
+  if (raw is! List) return const [];
+  return raw
+      .map((value) => validateHttpUrl(value?.toString()))
+      .whereType<String>()
+      .toList();
+}
+
+String extractPrimaryWebsite(Map links) {
+  return extractValidatedHttpUrls(links['homepage']).firstOrNull ?? '';
+}
+
 // ─── layout helpers ────────────────────────────────────────────────────────
 
 /// Inserts a themed divider between every adjacent pair of items.
@@ -79,9 +107,10 @@ List<Widget> withDividers(BuildContext context, List<Widget> items) {
 }
 
 Widget coinInfoDivider(BuildContext context) => Divider(
-      height: ScreenUtil().setWidth(1),
-      thickness: 0.5,
-      color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemSubtitleTextColor.name)
-          .withValues(alpha: 0.15),
-    );
+  height: ScreenUtil().setWidth(1),
+  thickness: 0.5,
+  color: AppThemeUtils.getColorByKey(
+    context,
+    AppThemeKeys.itemSubtitleTextColor.name,
+  ).withValues(alpha: 0.15),
+);

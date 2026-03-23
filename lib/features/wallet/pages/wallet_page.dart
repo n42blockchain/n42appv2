@@ -16,6 +16,7 @@ import 'package:n42_wallet/features/wallet/pages/aa/aa_home_page.dart';
 import 'package:n42_wallet/features/wallet/pages/ens/ens_home_page.dart';
 import 'package:n42_wallet/features/wallet/pages/payment_code/payment_page.dart';
 import 'package:n42_wallet/features/wallet/pages/payment_code/set_amount.dart';
+import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_flow_utils.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_one.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_coin_item.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_coin_list_header.dart';
@@ -23,7 +24,6 @@ import 'package:n42_wallet/features/wallet/pages/wallet_coin_list_section.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_page_top_bar.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_sheets.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
-import 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart';
 import 'package:n42_wallet/features/wallet/services/ens_service.dart';
 import 'package:n42_wallet/features/wallet/widgets/feature_entry_cards.dart';
 import 'package:n42_wallet/features/wallet/widgets/wallet_board.dart';
@@ -31,9 +31,11 @@ import 'package:n42_wallet/features/wallet_connect/pages/wallet_connect_page.dar
 import 'package:n42_wallet/features/wallet_connect/pages/wc_session_list_page.dart';
 import 'package:n42_wallet/features/wallet_connect/presentation/providers/wallet_connect_providers.dart';
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_provider.dart';
+import 'package:n42_wallet/features/wallet_connect/wallet_connect_uri.dart';
 import 'package:n42_wallet/features/widgets/dialog_widget/tips_dialog_7.dart';
 import 'package:n42_wallet/features/widgets/loading.dart';
 import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/core/utils/responsive_utils.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 
 class WalletPage extends ConsumerStatefulWidget {
@@ -69,8 +71,7 @@ class _WalletPageState extends ConsumerState<WalletPage> {
   void initState() {
     super.initState();
     ref.read(wapBridgeProvider).initWallet(shouldInitCoinInfo: true);
-    _scrollController = ScrollController()
-      ..addListener(_onScroll);
+    _scrollController = ScrollController()..addListener(_onScroll);
     SPUtil().getSmallAssetsThreshold().then((v) {
       if (mounted) setState(() => _smallAssetsThreshold = v);
     });
@@ -113,10 +114,12 @@ class _WalletPageState extends ConsumerState<WalletPage> {
 
     try {
       final knownContracts = wap.walletMap.values
-          .expand((chainData) =>
-              (chainData['mainnets'] as Map<dynamic, dynamic>? ?? {}).values)
+          .expand(
+            (chainData) =>
+                (chainData['mainnets'] as Map<dynamic, dynamic>? ?? {}).values,
+          )
           .whereType<Map>()
-          .map((t) => (t['contract'] as String?)?.toLowerCase() ?? '')
+          .map((t) => (t['contract'] as String?)?.trim() ?? '')
           .where((c) => c.isNotEmpty)
           .toSet();
 
@@ -152,76 +155,13 @@ class _WalletPageState extends ConsumerState<WalletPage> {
     if (ethAddress.isEmpty || ethAddress == _lastCheckedAddress) return;
     _lastCheckedAddress = ethAddress;
     try {
-      final ensName =
-          await EnsService().resolveAddress(ethAddress);
+      final ensName = await EnsService().resolveAddress(ethAddress);
       if (mounted && ensName != null && ensName.isNotEmpty) {
         setState(() => _ensName = ensName);
       }
     } catch (e) {
       debugPrint('ENS reverse resolve error: $e');
     }
-  }
-
-  // ── Scan for transfer ─────────────────────────────────────────────────────
-
-  /// Parse a QR string into (address, blockchainType).
-  (String, String?) _parseQrForTransfer(String qr) {
-    const prefixes = {
-      'ethereum:': 'Ethereum',
-      'bitcoin:': 'Bitcoin',
-      'solana:': 'Solana',
-      'tron:': 'Tron',
-      'xrpl:': 'Ripple',
-      'cosmos:': 'Cosmos',
-      'near:': 'Near',
-      'ton:transfer/': 'TheOpenNetwork',
-    };
-    for (final entry in prefixes.entries) {
-      if (qr.startsWith(entry.key)) {
-        var addr = qr.substring(entry.key.length);
-        final q = addr.indexOf('?');
-        if (q != -1) addr = addr.substring(0, q);
-        return (addr.trim(), entry.value);
-      }
-    }
-    // No prefix: treat the whole string (before '?') as an address
-    return (qr.split('?').first.trim(), null);
-  }
-
-  Future<void> _scanForTransfer() async {
-    final waValue = ref.read(wapBridgeProvider);
-    if (!await _guardAction(waValue)) return;
-
-    final scanStr = await _scan();
-    ToastUtils.show(scanStr);
-    if (!mounted || scanStr.isEmpty) return;
-
-    // WalletConnect URIs are not for transfer
-    if (scanStr.contains('relay-protocol') && scanStr.contains('symKey')) {
-      final wcp = ref.read(wcpBridgeProvider);
-      await wcp.connectInit();
-      if (mounted) await _pushAndRefreshWc(WalletConnectPage(scanStr), wcp);
-      return;
-    }
-
-    final (address, _) = _parseQrForTransfer(scanStr);
-    if (address.isEmpty) {
-      ToastUtils.show(S.of(context).g_key_41);
-      return;
-    }
-
-    // Check if scanned address is the user's own address
-    final myAddresses = waValue.coinModels
-        .map((cm) => cm.address?.toString().toLowerCase())
-        .whereType<String>()
-        .toSet();
-    if (myAddresses.contains(address.toLowerCase())) {
-      ToastUtils.show('不能转账到自己的地址');
-      return;
-    }
-
-    if (!mounted) return;
-    showSearchCoinSheet(context, 0, toAddress: address);
   }
 
   // ── WalletConnect ─────────────────────────────────────────────────────────
@@ -236,7 +176,8 @@ class _WalletPageState extends ConsumerState<WalletPage> {
     }
 
     final state = wcp.walletConnectState;
-    final shouldScan = state == WalletConnectState.disconnect ||
+    final shouldScan =
+        state == WalletConnectState.disconnect ||
         state == WalletConnectState.loading ||
         state == WalletConnectState.connectOK;
 
@@ -248,8 +189,9 @@ class _WalletPageState extends ConsumerState<WalletPage> {
     final scanStr = await _scan();
     if (!mounted || scanStr.isEmpty) return;
 
-    if (scanStr.contains('relay-protocol') && scanStr.contains('symKey')) {
-      await _pushAndRefreshWc(WalletConnectPage(scanStr), wcp);
+    final normalizedWcUri = normalizeWalletConnectUriString(scanStr);
+    if (normalizedWcUri != null) {
+      await _pushAndRefreshWc(WalletConnectPage(normalizedWcUri), wcp);
       return;
     }
 
@@ -271,10 +213,7 @@ class _WalletPageState extends ConsumerState<WalletPage> {
   }
 
   Future<void> _pushAndRefreshWc(Widget page, dynamic wcp) async {
-    await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => page),
-    );
+    await Navigator.push(context, MaterialPageRoute(builder: (_) => page));
     if (!mounted) return;
     wcp.refresh();
   }
@@ -291,8 +230,10 @@ class _WalletPageState extends ConsumerState<WalletPage> {
 
   /// Returns true if the action can proceed. Blocks watchOnly wallets
   /// (unless [blockWatchOnly] is false) and prompts backup for unprotected wallets.
-  Future<bool> _guardAction(WalletActionProvider waValue,
-      {bool blockWatchOnly = true}) async {
+  Future<bool> _guardAction(
+    WalletActionProvider waValue, {
+    bool blockWatchOnly = true,
+  }) async {
     if (blockWatchOnly && waValue.walletInfo.watchOnly) {
       ToastUtils.show(S.of(context).g_key_watch_only_cant_send);
       return false;
@@ -319,6 +260,10 @@ class _WalletPageState extends ConsumerState<WalletPage> {
   }
 
   Future<void> _promptBackup(WalletActionProvider waValue) async {
+    if (!walletHasBackupableMnemonic(waValue.walletInfo)) {
+      ToastUtils.show(walletBackupPhraseUnavailableMessage);
+      return;
+    }
     final flag = await tipsDialog7(context);
     if (!mounted || flag != true) return;
     Navigator.push(
@@ -336,200 +281,216 @@ class _WalletPageState extends ConsumerState<WalletPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Builder(builder: (context) {
-            final waValue = ref.watch(wapBridgeProvider);
+        child: ResponsiveContainer(
+          child: Builder(
+            builder: (context) {
+              final waValue = ref.watch(wapBridgeProvider);
 
-            if (waValue.walletIndex == -1 || waValue.buildwallet) {
-              return Loading();
-            }
+              if (waValue.walletIndex == -1 || waValue.buildwallet) {
+                return Loading();
+              }
 
-            if (!_discoveryScanned) {
-              WidgetsBinding.instance.addPostFrameCallback(
-                (_) => _runTokenDiscovery(waValue),
-              );
-            }
+              if (!_discoveryScanned) {
+                WidgetsBinding.instance.addPostFrameCallback(
+                  (_) => _runTokenDiscovery(waValue),
+                );
+              }
 
-            return Stack(
-              children: [
-                Positioned.fill(
-                  child: Column(
-                    children: [
-                      WalletTopBar(
-                        walletName: waValue.walletName,
-                        isWatchOnly: waValue.walletInfo.watchOnly,
-                        onTitleTap: () => showAddressSheet(
-                          context,
-                          ref,
-                          ref.read(wapBridgeProvider),
+              return Stack(
+                children: [
+                  Positioned.fill(
+                    child: Column(
+                      children: [
+                        WalletTopBar(
+                          walletName: waValue.walletName,
+                          isWatchOnly: waValue.walletInfo.watchOnly,
+                          onTitleTap: () => showAddressSheet(
+                            context,
+                            ref,
+                            ref.read(wapBridgeProvider),
+                          ),
+                          onMenuTap: () =>
+                              Scaffold.of(this.context).openDrawer(),
+                          onWalletConnectTap: _walletConnect,
+                          onScanTap: _walletConnect,
+                          onReceiveTap: () => showSearchCoinSheet(context, 1),
                         ),
-                        onMenuTap: () =>
-                            Scaffold.of(this.context).openDrawer(),
-                        onWalletConnectTap: _walletConnect,
-                        onScanTap: _scanForTransfer,
-                        onReceiveTap: () => showSearchCoinSheet(context, 1),
-                      ),
-                      Expanded(
-                        child: RefreshIndicator(
-                          onRefresh: () async {
-                            if (waValue.load == Load.refresh ||
-                                waValue.load == Load.loading) {
-                              return;
-                            }
-                            await waValue.refreshWalletCoinInfo();
-                          },
-                          backgroundColor: AppThemeUtils.getColorByKey(
+                        Expanded(
+                          child: RefreshIndicator(
+                            onRefresh: () async {
+                              if (waValue.load == Load.refresh ||
+                                  waValue.load == Load.loading) {
+                                return;
+                              }
+                              await waValue.refreshWalletCoinInfo();
+                            },
+                            backgroundColor: AppThemeUtils.getColorByKey(
                               context,
-                              AppThemeKeys.mainButtonBgColor.name),
-                          color: AppThemeUtils.getColorByKey(context,
-                              AppThemeKeys.mainButtonTextColor.name),
-                          displacement: 72,
-                          child: CustomScrollView(
-                            controller: _scrollController,
-                            physics: const AlwaysScrollableScrollPhysics(),
-                            shrinkWrap: false,
-                            primary: false,
-                            slivers: [
-                              SliverToBoxAdapter(
-                                child: WalletBoard(
-                                  accountPrice: waValue.balanceTotal,
-                                  usdToCnyRate: waValue.usdToCnyRate,
-                                  priceLastUpdated: waValue.priceLastUpdated,
-                                  walletName: waValue.walletName,
-                                  sendTap: () => _onSendTap(waValue),
-                                  receiveTap: () => _onReceiveTap(waValue),
-                                  swapTap: () => _onSwapTap(waValue),
-                                  paymentCodeTap: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (_) => SetAmount()),
-                                  ),
-                                  buyTap: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (_) => Moonpay(type: 0)),
-                                  ),
-                                  sellTap: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (_) => Moonpay(type: 1)),
+                              AppThemeKeys.mainButtonBgColor.name,
+                            ),
+                            color: AppThemeUtils.getColorByKey(
+                              context,
+                              AppThemeKeys.mainButtonTextColor.name,
+                            ),
+                            displacement: 72,
+                            child: CustomScrollView(
+                              controller: _scrollController,
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              shrinkWrap: false,
+                              primary: false,
+                              slivers: [
+                                SliverToBoxAdapter(
+                                  child: WalletBoard(
+                                    accountPrice: waValue.balanceTotal,
+                                    usdToCnyRate: waValue.usdToCnyRate,
+                                    priceLastUpdated: waValue.priceLastUpdated,
+                                    walletName: waValue.walletName,
+                                    sendTap: () => _onSendTap(waValue),
+                                    receiveTap: () => _onReceiveTap(waValue),
+                                    swapTap: () => _onSwapTap(waValue),
+                                    paymentCodeTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => SetAmount(),
+                                      ),
+                                    ),
+                                    buyTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => Moonpay(type: 0),
+                                      ),
+                                    ),
+                                    sellTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => Moonpay(type: 1),
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                              SliverToBoxAdapter(
-                                child: Builder(builder: (context) {
-                                  final ethAddress =
-                                      waValue.getAddress(CoinType.ETH.name) ??
+                                SliverToBoxAdapter(
+                                  child: Builder(
+                                    builder: (context) {
+                                      final ethAddress =
+                                          waValue.getAddress(
+                                            CoinType.ETH.name,
+                                          ) ??
                                           '';
-                                  if (ethAddress.isNotEmpty) {
-                                    _loadEnsInfo(ethAddress);
-                                  }
-                                  final hasAA =
-                                      waValue.walletInfo.hasAAAccounts;
-                                  final primaryAccount = waValue.walletInfo
-                                      .getPrimarySmartAccount(1);
-                                  final isDeployed =
-                                      primaryAccount?.isDeployed ?? false;
+                                      if (ethAddress.isNotEmpty) {
+                                        _loadEnsInfo(ethAddress);
+                                      }
+                                      final hasAA =
+                                          waValue.walletInfo.hasAAAccounts;
+                                      final primaryAccount = waValue.walletInfo
+                                          .getPrimarySmartAccount(1);
+                                      final isDeployed =
+                                          primaryAccount?.isDeployed ?? false;
 
-                                  return FeatureEntryHorizontal(
-                                    ensName: _ensName,
-                                    hasSmartAccount: hasAA,
-                                    isSmartAccountDeployed: isDeployed,
-                                    onEnsTap: () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => EnsHomePage(
-                                            walletAddress: ethAddress),
-                                      ),
-                                    ),
-                                    onSmartAccountTap: () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => AAHomePage(
-                                          walletAddress: ethAddress,
-                                          accountInfo: waValue
-                                              .walletInfo.aaAccountInfo,
+                                      return FeatureEntryHorizontal(
+                                        ensName: _ensName,
+                                        hasSmartAccount: hasAA,
+                                        isSmartAccountDeployed: isDeployed,
+                                        onEnsTap: () => Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) => EnsHomePage(
+                                              walletAddress: ethAddress,
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                    ),
-                                  );
-                                }),
-                              ),
-                              WalletCoinListHeader(
-                                waValue: waValue,
-                                smallAssetsThreshold: _smallAssetsThreshold,
-                                onAddToken: () =>
-                                    showAddTokenSheet(context, ref),
-                                onChangeNetwork: () =>
-                                    showNetworkSheet(context, waValue),
-                                onThresholdChanged: (next) {
-                                  setState(
-                                      () => _smallAssetsThreshold = next);
-                                  SPUtil().setSmallAssetsThreshold(next);
-                                },
-                              ),
-                              WalletCoinListSliver(
-                                waValue: waValue,
-                                smallAssetsThreshold: _smallAssetsThreshold,
-                                discoveredTokens: _discoveredTokens,
-                                onDiscoveryDismiss: () => setState(
-                                    () => _discoveredTokens = []),
-                                onDiscoveryAdded: () => setState(
-                                    () => _discoveredTokens = []),
-                                onShowAllTap: () {
-                                  setState(
-                                      () => _smallAssetsThreshold = 0.0);
-                                  SPUtil().setSmallAssetsThreshold(0.0);
-                                },
-                                coinItemBuilder: (coin, key, group) =>
-                                    WalletCoinItem(
-                                  coinInfo: coin,
-                                  itemKey: key,
-                                  group: group,
+                                        onSmartAccountTap: () => Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) => AAHomePage(
+                                              walletAddress: ethAddress,
+                                              accountInfo: waValue
+                                                  .walletInfo
+                                                  .aaAccountInfo,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
                                 ),
-                              ),
-                              SliverToBoxAdapter(
-                                child:
-                                    SizedBox(height: ScreenUtil().setWidth(300.0)),
-                              ),
-                            ],
+                                WalletCoinListHeader(
+                                  waValue: waValue,
+                                  smallAssetsThreshold: _smallAssetsThreshold,
+                                  onAddToken: () =>
+                                      showAddTokenSheet(context, ref),
+                                  onChangeNetwork: () =>
+                                      showNetworkSheet(context, waValue),
+                                  onThresholdChanged: (next) {
+                                    setState(
+                                      () => _smallAssetsThreshold = next,
+                                    );
+                                    SPUtil().setSmallAssetsThreshold(next);
+                                  },
+                                ),
+                                WalletCoinListSliver(
+                                  waValue: waValue,
+                                  smallAssetsThreshold: _smallAssetsThreshold,
+                                  discoveredTokens: _discoveredTokens,
+                                  onDiscoveryDismiss: () =>
+                                      setState(() => _discoveredTokens = []),
+                                  onDiscoveryAdded: () =>
+                                      setState(() => _discoveredTokens = []),
+                                  onShowAllTap: () {
+                                    setState(() => _smallAssetsThreshold = 0.0);
+                                    SPUtil().setSmallAssetsThreshold(0.0);
+                                  },
+                                  coinItemBuilder: (coin, key, group) =>
+                                      WalletCoinItem(
+                                        coinInfo: coin,
+                                        itemKey: key,
+                                        group: group,
+                                      ),
+                                ),
+                                SliverToBoxAdapter(
+                                  child: SizedBox(
+                                    height: ScreenUtil().setWidth(300.0),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                // 悬浮添加代币按钮（滚动到底部时显示）
-                Positioned(
-                  bottom: ScreenUtil().setWidth(180.0),
-                  left: 0,
-                  right: 0,
-                  height: ScreenUtil().setWidth(70.0),
-                  child: Visibility(
-                    visible: _showAddTokenButton,
-                    child: Container(
-                      alignment: Alignment.center,
-                      child: GestureDetector(
-                        onTap: () => showAddTokenSheet(context, ref),
-                        child: const AddTokenFloatingIcon(),
+                  // 悬浮添加代币按钮（滚动到底部时显示）
+                  Positioned(
+                    bottom: ScreenUtil().setWidth(180.0),
+                    left: 0,
+                    right: 0,
+                    height: ScreenUtil().setWidth(70.0),
+                    child: Visibility(
+                      visible: _showAddTokenButton,
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: GestureDetector(
+                          onTap: () => showAddTokenSheet(context, ref),
+                          child: const AddTokenFloatingIcon(),
+                        ),
                       ),
                     ),
                   ),
-                ),
-                // 未备份提示条
-                Positioned(
-                  bottom: ScreenUtil().setWidth(120.0),
-                  left: ScreenUtil().setWidth(30.0),
-                  right: ScreenUtil().setWidth(30.0),
-                  child: Visibility(
-                    visible: waValue.walletInfo.password == "",
-                    child: BackupReminderBanner(waValue: waValue),
+                  // 未备份提示条
+                  Positioned(
+                    bottom: ScreenUtil().setWidth(120.0),
+                    left: ScreenUtil().setWidth(30.0),
+                    right: ScreenUtil().setWidth(30.0),
+                    child: Visibility(
+                      visible: waValue.walletInfo.password == "",
+                      child: BackupReminderBanner(waValue: waValue),
+                    ),
                   ),
-                ),
-              ],
-            );
-          }),
+                ],
+              );
+            },
+          ),
+        ),
       ),
     );
   }
 }
-

@@ -8,37 +8,27 @@ part of 'hardware_wallet_provider.dart';
 // ============ 链工具（顶层函数，供两个 mixin 共用） ============
 
 /// 返回 coinType 对应的 BIP-44 基础路径（不含最后的 index）
-String _derivationBasePath(String coin) {
-  switch (coin) {
-    case 'ETH':
-    case 'BNB':
-    case 'MATIC':
-    case 'AVAX':
-    case 'FTM':
-    case 'OP':
-    case 'ARB':
-    case 'BASE':
-      return "m/44'/60'/0'/0/";
-    case 'BTC':
-      return "m/84'/0'/0'/0/";
-    case 'LTC':
-      return "m/84'/2'/0'/0/";
-    case 'DOGE':
-      return "m/44'/3'/0'/0/";
-    case 'BCH':
-      return "m/44'/145'/0'/0/";
-    case 'SOL':
-      return "m/44'/501'/0'/0'/";
-    case 'ATOM':
-      return "m/44'/118'/0'/0/";
-    case 'DOT':
-      return "m/44'/354'/0'/0/";
-    case 'TRX':
-      return "m/44'/195'/0'/0/";
-    default:
-      return "m/44'/60'/0'/0/";
-  }
-}
+const _derivationPaths = <String, String>{
+  'ETH':  "m/44'/60'/0'/0/",
+  'BNB':  "m/44'/60'/0'/0/",
+  'MATIC':"m/44'/60'/0'/0/",
+  'AVAX': "m/44'/60'/0'/0/",
+  'FTM':  "m/44'/60'/0'/0/",
+  'OP':   "m/44'/60'/0'/0/",
+  'ARB':  "m/44'/60'/0'/0/",
+  'BASE': "m/44'/60'/0'/0/",
+  'BTC':  "m/84'/0'/0'/0/",
+  'LTC':  "m/84'/2'/0'/0/",
+  'DOGE': "m/44'/3'/0'/0/",
+  'BCH':  "m/44'/145'/0'/0/",
+  'SOL':  "m/44'/501'/0'/0'/",
+  'ATOM': "m/44'/118'/0'/0/",
+  'DOT':  "m/44'/354'/0'/0/",
+  'TRX':  "m/44'/195'/0'/0/",
+};
+
+String _derivationBasePath(String coin) =>
+    _derivationPaths[coin] ?? "m/44'/60'/0'/0/";
 
 /// EVM 兼容链（使用 Ledger Ethereum app）
 bool _isEvmChain(String coin) {

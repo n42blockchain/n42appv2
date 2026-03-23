@@ -16,10 +16,8 @@ part '_bridge_execution.dart';
 part '_bridge_persistence.dart';
 
 /// 状态变化回调：tx 已更新到终态 (completed / failed)
-typedef BridgeStatusChangeCallback = void Function(
-  BridgeTransaction tx,
-  BridgeTransactionStatus newStatus,
-);
+typedef BridgeStatusChangeCallback =
+    void Function(BridgeTransaction tx, BridgeTransactionStatus newStatus);
 
 /// 跨链桥状态
 enum BridgeState {
@@ -39,8 +37,11 @@ enum BridgeState {
 /// 管理跨链桥的状态和业务逻辑
 class BridgeProvider extends ChangeNotifier
     with BridgePersistenceMixin, BridgeExecutionMixin {
+  static final _amountRegex = RegExp(r'^\d+\.?\d*$');
+  BridgeProvider({BridgeApiClient? lifiApi}) : _lifiApi = lifiApi ?? LiFiApi();
+
   @override
-  final LiFiApi _lifiApi = LiFiApi();
+  final BridgeApiClient _lifiApi;
 
   /// 状态变化通知回调：仅在 completed / failed 时触发。
   /// 由 UI 层设置，dispose 时应置 null 防止野回调。
@@ -64,7 +65,8 @@ class BridgeProvider extends ChangeNotifier
 
   // 代币列表（按链 ID 分组）
   final Map<int, List<BridgeToken>> _tokensByChain = {};
-  List<BridgeToken> getTokensForChain(int chainId) => _tokensByChain[chainId] ?? [];
+  List<BridgeToken> getTokensForChain(int chainId) =>
+      _tokensByChain[chainId] ?? [];
 
   // 选择的源链和目标链
   BridgeChain? __fromChain;
@@ -138,6 +140,10 @@ class BridgeProvider extends ChangeNotifier
     }
 
     _chains = result.data as List<BridgeChain>;
+    if (_chains.isEmpty) {
+      _setError('No supported chains available');
+      return;
+    }
 
     // 默认选择 Ethereum 和 Arbitrum
     __fromChain = _chains.firstWhere(
@@ -174,7 +180,9 @@ class BridgeProvider extends ChangeNotifier
 
     if (!result.error) {
       final tokens = result.data as List<BridgeToken>;
-      _tokensByChain[chainId] = tokens.where((t) => t.chainId == chainId).toList();
+      _tokensByChain[chainId] = tokens
+          .where((t) => t.chainId == chainId)
+          .toList();
 
       // 默认选择原生代币
       if (__fromChain?.chainId == chainId && __fromToken == null) {
@@ -366,13 +374,21 @@ class BridgeProvider extends ChangeNotifier
   /// 将可读金额转换为最小单位
   @override
   String _parseAmount(String amount, int decimals) {
+    if (amount.isEmpty) return '0';
     try {
+      // Validate input contains only digits and at most one decimal point
+      if (!_amountRegex.hasMatch(amount)) {
+        _setError('Invalid amount format');
+        return '0';
+      }
       final parts = amount.split('.');
       final wholePart = parts[0];
       final decimalPart = parts.length > 1 ? parts[1] : '';
 
       // 补齐或截断小数位
-      final paddedDecimal = decimalPart.padRight(decimals, '0').substring(0, decimals);
+      final paddedDecimal = decimalPart
+          .padRight(decimals, '0')
+          .substring(0, decimals);
       final combined = wholePart + paddedDecimal;
 
       // 移除前导零

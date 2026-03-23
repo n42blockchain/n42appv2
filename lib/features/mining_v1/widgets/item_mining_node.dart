@@ -2,7 +2,7 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class ItemMiningNode extends StatefulWidget {
+class ItemMiningNode extends StatelessWidget {
   final String icon;
   final String countryName;
   final String nodeAddress;
@@ -18,18 +18,7 @@ class ItemMiningNode extends StatefulWidget {
     super.key});
 
   @override
-  State<ItemMiningNode> createState() => _ItemMiningNodeState();
-}
-
-class _ItemMiningNodeState extends State<ItemMiningNode> {
-  @override
   Widget build(BuildContext context) {
-    return _buildItem(context, widget.icon, widget.countryName,
-        widget.nodeAddress, widget.socketUrl,widget.onTap);
-  }
-
-  Widget _buildItem(context, icon, countryName, ip,socketUrl, GestureTapCallback? onTap) {
-    //final innerIcon = "${AppConfig.userInfoHost}$icon";
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -61,7 +50,7 @@ class _ItemMiningNodeState extends State<ItemMiningNode> {
                   height: ScreenUtil().setWidth(12),
                 ),
                 Text(
-                  ip,
+                  nodeAddress,
                   style: TextStyle(
                     color: AppThemeUtils.getColorByKey(
                         context, AppThemeKeys.mainGreyColor.name),
@@ -81,7 +70,7 @@ class _ItemMiningNodeState extends State<ItemMiningNode> {
                 ),
               ],
             ),
-            widget.isSelected
+            isSelected
                 ? Icon(
               Icons.check,
               size: ScreenUtil().setWidth(48),

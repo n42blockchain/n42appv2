@@ -3,6 +3,8 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
+// ignore_for_file: unused_element
+
 part of 'stake_page.dart';
 
 /// View mixin: top-level page structure (protocol card, tab bar, tab entries).
@@ -148,7 +150,7 @@ mixin _StakeViewsMixin on _StakeLogicMixin {
     return Container(
       width: ScreenUtil().setWidth(56),
       height: ScreenUtil().setWidth(56),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.white24,
         shape: BoxShape.circle,
       ),

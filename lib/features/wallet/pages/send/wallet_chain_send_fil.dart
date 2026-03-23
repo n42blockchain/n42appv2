@@ -16,7 +16,6 @@ import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
 import 'package:n42_wallet/features/wallet/pages/address_book/address_book_list.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_base_send.dart';
 import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
-import 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/utils/transaction/coin_gas.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
@@ -111,7 +110,9 @@ class _WalletChainSendFilState extends ConsumerState<WalletChainSendFil>
               child: Image.asset(
                 'assets/wallet/addressBook.png',
                 color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
+                  context,
+                  AppThemeKeys.mainBlueColor.name,
+                ),
               ),
             ),
           ),
@@ -123,9 +124,7 @@ class _WalletChainSendFilState extends ConsumerState<WalletChainSendFil>
           child: Stack(
             children: [
               Positioned.fill(
-                child: SingleChildScrollView(
-                  child: coinTypeWidget(),
-                ),
+                child: SingleChildScrollView(child: coinTypeWidget()),
               ),
               sendButtonWidget(),
             ],

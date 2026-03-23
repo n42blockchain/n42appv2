@@ -38,9 +38,11 @@ class SolApi {
       );
       final mm = resultToMessageModel(result);
       if (mm.error == false) {
-        final List<Map<String, dynamic>> valueMap = mm.data['value'];
+        final List<dynamic> valueMap = mm.data['value'] as List<dynamic>? ?? [];
         if (valueMap.isNotEmpty) {
-          mm.data = BigInt.from(valueMap[0]['account']['data']['parsed']['info']['tokenAmount']['amount']);
+          mm.data = BigInt.parse(valueMap[0]['account']['data']['parsed']['info']['tokenAmount']['amount'].toString());
+        } else {
+          mm.data = BigInt.zero;
         }
       }
       return mm;

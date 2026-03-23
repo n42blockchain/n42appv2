@@ -6,16 +6,17 @@ extension _SwapAstHomeGasAndTx on _SwapAstHomeState {
       errorMessage = "Error";
       return false;
     }
-    gas = BigInt.from(
-        getCoinGas(payCoinModel!.coin['coinType'] as String, contract: true));
+    if (_payCoinType.isEmpty || _payBlockchainType.isEmpty) {
+      errorMessage = "Invalid chain configuration";
+      return false;
+    }
+    gas = BigInt.from(getCoinGas(_payCoinType, contract: true));
 
     final MessageModel mm = await _tokenViewApi.getGasPrice(
-          payCoinModel!.coin['blockchainType'] as String,
-          payCoinModel!.coin['coinType'] as String,
+          _payBlockchainType,
+          _payCoinType,
           isTest: false,
-          rpc: payCoinModel!.custom
-              ? payCoinModel!.coin['service'] as String?
-              : null,
+          rpc: payCoinModel!.custom ? _payServiceRpc : null,
         ) ??
         MessageModel.error();
 
@@ -23,8 +24,8 @@ extension _SwapAstHomeGasAndTx on _SwapAstHomeState {
       errorMessage = mm.data.toString();
       return false;
     }
-    gasPrice = mm.data as BigInt;
-    if (get1559WithChainSymbol(payCoinModel!.coin['coinType'] as String)) {
+    gasPrice = _swapBigIntValue(mm.data);
+    if (get1559WithChainSymbol(_payCoinType)) {
       gasPrice = gasPrice * BigInt.from(2);
     }
     totalGasPrice = gasPrice * gas;
@@ -35,13 +36,11 @@ extension _SwapAstHomeGasAndTx on _SwapAstHomeState {
     if (payCoinModel == null) return true;
     if (payCoinModel!.balance == BigInt.zero) {
       if (!mounted) return false;
-      errorMessage =
-          S.of(context).g_key_t_29(payCoinModel!.coin['coinType'] as String);
+      errorMessage = S.of(context).g_key_t_29(_payCoinType);
       rebuild();
       return false;
     }
-    final String blockchainType =
-        payCoinModel!.coin['blockchainType'] as String;
+    final String blockchainType = _payBlockchainType;
     if (blockchainType != BlockchainType.Ethereum.name &&
         blockchainType != BlockchainType.Tron.name) {
       return true;
@@ -64,23 +63,22 @@ extension _SwapAstHomeGasAndTx on _SwapAstHomeState {
         ethToWeiString(
             payTextEditingController.text, youPay!.payCoinDecimal!),
         gas,
-        payCoinModel!.coin['coinType'] as String,
+        _payCoinType,
         contract: youPay!.payCoinContract!,
         isTest: false,
       );
       if (!mounted) return false;
 
       if (ethMessage.error) {
-        errorMessage = ethMessage.data as String;
+        errorMessage = _swapStringValue(ethMessage.data, fallback: 'Error');
         rebuild(() => load = Load.finish);
         return false;
       }
 
-      gas = ethMessage.data as BigInt;
+      gas = _swapBigIntValue(ethMessage.data, fallback: gas);
       totalGasPrice = gasPrice * gas;
       if (payCoinModel!.balance < totalGasPrice) {
-        errorMessage =
-            S.of(context).g_key_t_29(payCoinModel!.coin['coinType'] as String);
+        errorMessage = S.of(context).g_key_t_29(_payCoinType);
         rebuild(() => load = Load.finish);
         return false;
       }
@@ -96,6 +94,12 @@ extension _SwapAstHomeGasAndTx on _SwapAstHomeState {
 
   Future<bool> newOrder() async {
     if (load != Load.finish) return false;
+    // Validate order amount before parsing
+    final double? orderAmount = double.tryParse(getTextEditingController.text.trim());
+    if (orderAmount == null || orderAmount <= 0 || orderAmount.isNaN || orderAmount.isInfinite) {
+      errorMessage = "Invalid order amount";
+      return false;
+    }
     rebuild(() => load = Load.loading);
 
     final MessageModel rOrderData = await _swapAstApi.postNftOrAstAddOrder(
@@ -103,21 +107,20 @@ extension _SwapAstHomeGasAndTx on _SwapAstHomeState {
       AppGlobals.userInfo?.uuid ?? "",
       youPay!.id ?? 0,
       2,
-      double.parse(getTextEditingController.text),
+      orderAmount,
     );
 
     if (rOrderData.error) {
-      errorMessage = rOrderData.data as String;
+      errorMessage = _swapStringValue(rOrderData.data, fallback: 'Error');
       rebuild(() => load = Load.finish);
       return false;
     }
 
     errorMessage = "";
-    orderId = (rOrderData.data as Map<String, dynamic>)['id'] as int;
-    final double amount =
-        ((rOrderData.data as Map)['amount'] as num).toDouble();
-    final double price =
-        ((rOrderData.data as Map)['price'] as num).toDouble();
+    final orderData = _swapMapValue(rOrderData.data) ?? <String, dynamic>{};
+    orderId = _swapIntValue(orderData['id']);
+    final double amount = _swapDoubleValue(orderData['amount']);
+    final double price = _swapDoubleValue(orderData['price']);
     getCoinModel!.coinPrice = price;
     payTextEditingController.text = amount.toString();
     payInput();
@@ -134,7 +137,9 @@ extension _SwapAstHomeGasAndTx on _SwapAstHomeState {
       AppGlobals.userInfo?.uuid ?? "",
       orderId ?? 0,
     );
-    errorMessage = rOrderData.error ? rOrderData.data as String : "";
+    errorMessage = rOrderData.error
+        ? _swapStringValue(rOrderData.data, fallback: 'Error')
+        : "";
     if (!rOrderData.error) orderId = null;
     rebuild(() => load = Load.finish);
   }
@@ -162,7 +167,7 @@ extension _SwapAstHomeGasAndTx on _SwapAstHomeState {
     final MessageModel rData = await _swapAstApi.postNftOrAstCommitPay(
         AppGlobals.userInfo?.uuid ?? "", oid, txHash);
     if (rData.error) {
-      errorMessage = rData.data as String;
+      errorMessage = _swapStringValue(rData.data, fallback: 'Error');
       return false;
     }
     errorMessage = "";
@@ -171,19 +176,37 @@ extension _SwapAstHomeGasAndTx on _SwapAstHomeState {
 
   Future<String?> web3Transaction() async {
     final TransferApi transferApi = TransferApi();
+    if (_payCoinType.isEmpty) {
+      errorMessage = "Invalid chain configuration";
+      return null;
+    }
+    // Validate pay amount before parsing
+    final payText = payTextEditingController.text.trim();
+    final double? payAmount = double.tryParse(payText);
+    if (payAmount == null || payAmount <= 0 || payAmount.isNaN || payAmount.isInfinite) {
+      errorMessage = "Invalid payment amount";
+      return null;
+    }
+    final String payAddr = youPay?.payAddr ?? "";
+    if (payAddr.isEmpty) {
+      errorMessage = "Invalid recipient address";
+      return null;
+    }
     final MessageModel rData = await transferApi.transfer(
-      payCoinModel!.coin['coinType'] as String,
-      youPay?.payAddr ?? "",
-      double.parse(payTextEditingController.text),
+      _payCoinType,
+      payAddr,
+      payAmount,
       fromAddress: payCoinModel!.address,
       contractAddress: youPay?.payCoinContract ?? "",
       isTest: false,
     );
     if (rData.error) {
-      errorMessage = rData.data as String;
+      errorMessage = _swapStringValue(rData.data, fallback: 'Error');
       return null;
     }
     errorMessage = "";
-    return (rData.data as Map<String, dynamic>)['txHash'] as String?;
+    final data = _swapMapValue(rData.data);
+    final txHash = data?['txHash']?.toString();
+    return txHash != null && txHash.isNotEmpty ? txHash : null;
   }
 }

@@ -39,10 +39,16 @@ class DeepLinkHandler {
   };
 
   void _handleDeepLink(DeepLinkData data) {
-    debugPrint('DeepLinkHandler: Handling deep link: $data');
+    assert(() {
+      debugPrint('DeepLinkHandler: Handling deep link: $data');
+      return true;
+    }());
 
     if (data.type == DeepLinkType.unknown) {
-      debugPrint('DeepLinkHandler: Unhandled deep link type: ${data.type}');
+      assert(() {
+        debugPrint('DeepLinkHandler: Unhandled deep link type: ${data.type}');
+        return true;
+      }());
       return;
     }
 
@@ -51,13 +57,19 @@ class DeepLinkHandler {
     if (requiredKey != null) {
       final value = data.params[requiredKey] ?? '';
       if (value.isEmpty) return;
-      debugPrint('DeepLinkHandler: Navigating to ${data.type.name} $value');
+      assert(() {
+        debugPrint('DeepLinkHandler: Navigating to ${data.type.name} $value');
+        return true;
+      }());
     }
 
     try {
       onNavigate?.call(data);
     } catch (e) {
-      debugPrint('DeepLinkHandler: Navigation callback error: $e');
+      assert(() {
+        debugPrint('DeepLinkHandler: Navigation callback error: $e');
+        return true;
+      }());
     }
   }
 

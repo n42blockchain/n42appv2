@@ -2,6 +2,9 @@ part of 'token_view_api.dart';
 
 // ── Tron (TRX) ─────────────────────────────────────────────────────────────
 
+const Duration _kTrxServiceReadTimeout = Duration(seconds: 4);
+const Duration _kTrxServiceWriteTimeout = Duration(seconds: 6);
+
 extension TokenViewApiTrx on TokenViewApi {
   /// 获取 TRX gasPrice
   Future<MessageModel> getGasPriceTrx({bool isTest = false}) async {
@@ -12,6 +15,7 @@ extension TokenViewApiTrx on TokenViewApi {
         params: params,
         data: params,
         header: header,
+        timeout: _kTrxServiceReadTimeout,
       );
       final mm = MessageModel.error();
       if (a['code'] == 200) {
@@ -36,15 +40,13 @@ extension TokenViewApiTrx on TokenViewApi {
     bool isTest = false,
   }) async {
     try {
-      final params = {
-        'tx_hash': txHash,
-        'net_mode': isTest ? 'test' : 'main',
-      };
+      final params = {'tx_hash': txHash, 'net_mode': isTest ? 'test' : 'main'};
       final a = await BaseApi.requestEmptyH.post(
         '${url}v1/trx/transaction/receipt',
         params: params,
         data: params,
         header: header,
+        timeout: _kTrxServiceReadTimeout,
       );
       final mm = MessageModel.error();
       if (a['code'] == 200) {
@@ -68,6 +70,7 @@ extension TokenViewApiTrx on TokenViewApi {
         params: params,
         data: params,
         header: header,
+        timeout: _kTrxServiceReadTimeout,
       );
       final mm = MessageModel.error();
       if (a['code'] == 200) {
@@ -102,6 +105,7 @@ extension TokenViewApiTrx on TokenViewApi {
         params: params,
         data: params,
         header: header,
+        timeout: _kTrxServiceWriteTimeout,
       );
       final mm = MessageModel.error();
       if (a['code'] == 200) {
@@ -127,6 +131,7 @@ extension TokenViewApiTrx on TokenViewApi {
         params: sign,
         data: sign,
         header: header,
+        timeout: _kTrxServiceWriteTimeout,
       );
       final mm = MessageModel.error();
       if (a['code'] == 200) {

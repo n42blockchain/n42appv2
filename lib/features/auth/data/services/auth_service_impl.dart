@@ -6,6 +6,8 @@
 // Author: Jiang Yiwei
 
 import 'dart:async';
+import 'dart:convert';
+import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:injectable/injectable.dart';
@@ -45,7 +47,10 @@ class AuthServiceImpl implements IAuthService {
         _authStateController.add(true);
       }
     } catch (e) {
-      debugPrint('Auth init error: $e');
+      assert(() {
+        debugPrint('Auth init error: $e');
+        return true;
+      }());
       _authStateController.add(false);
     }
   }
@@ -62,13 +67,26 @@ class AuthServiceImpl implements IAuthService {
   @override
   Future<bool> verifyPassword(String password) async {
     try {
-      // 使用 SecureStorage 的封装方法获取密码哈希
+      if (password.isEmpty) return false;
       final credentials = await _secureStorage.getUserInfo();
       if (credentials == null) return false;
-      // Password verification delegated to legacy SPUtil storage
-      return credentials['password'] != null;
+      final storedPassword = credentials['password'] as String?;
+      if (storedPassword == null || storedPassword.isEmpty) return false;
+      // Use constant-time comparison to prevent timing side-channel attacks.
+      // Hash both values so the comparison time is independent of content.
+      final storedHash = sha256.convert(utf8.encode(storedPassword)).bytes;
+      final inputHash = sha256.convert(utf8.encode(password)).bytes;
+      if (storedHash.length != inputHash.length) return false;
+      var result = 0;
+      for (var i = 0; i < storedHash.length; i++) {
+        result |= storedHash[i] ^ inputHash[i];
+      }
+      return result == 0;
     } catch (e) {
-      debugPrint('Password verification error: $e');
+      assert(() {
+        debugPrint('Password verification error: $e');
+        return true;
+      }());
       return false;
     }
   }
@@ -76,17 +94,16 @@ class AuthServiceImpl implements IAuthService {
   @override
   Future<bool> verifyBiometric() async {
     try {
-      // Delegate to the shared FaceRecognitionPublic helper which handles:
-      // - device support + enrollment checks
-      // - platform-specific dialog messages (iOS / Android)
-      // - per-error-code PlatformException mapping
       final frp = FaceRecognitionPublic();
       final available = await frp.checkBiometrics();
       if (!available) return false;
       final result = await frp.authenticateWithBiometrics();
       return result == BiometricAuthResult.success;
     } catch (e) {
-      debugPrint('Biometric auth error: $e');
+      assert(() {
+        debugPrint('Biometric auth error: $e');
+        return true;
+      }());
       return false;
     }
   }
@@ -99,7 +116,7 @@ class AuthServiceImpl implements IAuthService {
     _currentUser = null;
     _authToken = null;
     await _spUtil.saveUserInfo(null);
-    await _secureStorage.deleteToken();
+    await _secureStorage.clearUserData();
     _authStateController.add(false);
   }
 
@@ -146,4 +163,3 @@ final isLoggedInProvider = Provider<bool>((ref) {
   final authService = ref.watch(authServiceProvider);
   return authService.isLoggedIn();
 });
-

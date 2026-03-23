@@ -34,7 +34,7 @@ func New(database StatusUpdater, rpcURLs map[string]string) *Monitor {
 // 最大等待：30 分钟，超时后将订单标记为 failed
 func (m *Monitor) Watch(orderID, chain, txHash string) {
 	if m.db == nil {
-		return // 无 DB 时（测试场景）静默跳过
+		return
 	}
 	go func() {
 		rpcURL, ok := m.rpcURLs[chain]
@@ -44,23 +44,32 @@ func (m *Monitor) Watch(orderID, chain, txHash string) {
 			return
 		}
 
+		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Minute)
+		defer cancel()
+
+		client, err := ethclient.DialContext(ctx, rpcURL)
+		if err != nil {
+			log.Printf("[monitor] dial %s error: %v", rpcURL, err)
+			_ = m.db.UpdateStatus(orderID, models.StatusFailed)
+			return
+		}
+		defer client.Close()
+
 		ticker := time.NewTicker(5 * time.Second)
-		deadline := time.Now().Add(30 * time.Minute)
 		defer ticker.Stop()
 
 		log.Printf("[monitor] watching %s on %s (order=%s)", txHash, chain, orderID)
 
 		for {
 			select {
-			case t := <-ticker.C:
-				if t.After(deadline) {
-					log.Printf("[monitor] timeout order %s", orderID)
-					_ = m.db.UpdateStatus(orderID, models.StatusFailed)
-					return
-				}
-				confirmed, err := m.checkConfirmed(rpcURL, txHash)
-				if err != nil {
-					log.Printf("[monitor] check %s error: %v", txHash, err)
+			case <-ctx.Done():
+				log.Printf("[monitor] timeout order %s", orderID)
+				_ = m.db.UpdateStatus(orderID, models.StatusFailed)
+				return
+			case <-ticker.C:
+				confirmed, checkErr := m.checkConfirmed(ctx, client, txHash)
+				if checkErr != nil {
+					log.Printf("[monitor] check %s error: %v", txHash, checkErr)
 					continue
 				}
 				if confirmed {
@@ -74,20 +83,16 @@ func (m *Monitor) Watch(orderID, chain, txHash string) {
 }
 
 // checkConfirmed 查询 EVM 交易是否已上链（receipt status == 1）
-func (m *Monitor) checkConfirmed(rpcURL, txHash string) (bool, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+func (m *Monitor) checkConfirmed(parent context.Context, client *ethclient.Client, txHash string) (bool, error) {
+	ctx, cancel := context.WithTimeout(parent, 5*time.Second)
 	defer cancel()
-
-	client, err := ethclient.DialContext(ctx, rpcURL)
-	if err != nil {
-		return false, err
-	}
-	defer client.Close()
 
 	receipt, err := client.TransactionReceipt(ctx, common.HexToHash(txHash))
 	if err != nil {
-		// 交易未入链时返回 not found 错误，正常继续等待
-		return false, nil
+		if err.Error() == "not found" || err.Error() == "transaction indexing is in progress" {
+			return false, nil
+		}
+		return false, err
 	}
 	return receipt.Status == 1, nil
 }

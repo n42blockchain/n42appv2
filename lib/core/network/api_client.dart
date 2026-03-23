@@ -22,7 +22,13 @@ class ApiClient {
   Dio get dio => _dio;
 
   /// 日志中需要过滤的敏感请求头
-  static const _sensitiveHeaders = ['Authorization', 'authorization', 'Cookie', 'cookie'];
+  static const _sensitiveHeaders = [
+    'Authorization', 'authorization',
+    'Cookie', 'cookie',
+    'Token', 'token',
+    'Uuid',
+  ];
+  static const _retryableMethods = {'GET', 'HEAD', 'OPTIONS'};
 
   ApiClient(this._secureStorage)
       : _dio = Dio(
@@ -72,8 +78,10 @@ class ApiClient {
               error.type == DioExceptionType.receiveTimeout ||
               error.type == DioExceptionType.sendTimeout;
 
-          if (isTimeout) {
+          if (isTimeout && shouldRetryRequest(error.requestOptions) &&
+              error.requestOptions.extra['_retried'] != true) {
             try {
+              error.requestOptions.extra['_retried'] = true;
               final response = await _dio.fetch(error.requestOptions);
               handler.resolve(response);
               return;
@@ -135,5 +143,9 @@ class ApiClient {
     Options? options,
   }) {
     return _dio.patch<T>(path, data: data, queryParameters: queryParameters, options: options);
+  }
+
+  static bool shouldRetryRequest(RequestOptions options) {
+    return _retryableMethods.contains(options.method.toUpperCase());
   }
 }

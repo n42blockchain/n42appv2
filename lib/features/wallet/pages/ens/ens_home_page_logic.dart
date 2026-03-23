@@ -9,10 +9,11 @@ mixin _EnsHomeLogicMixin on State<EnsHomePage> {
       EnsRegistrationServiceProvider.instance;
 
   List<OwnedEns> ownedNames = [];
+  List<OwnedEns> allOwnedNames = [];
   bool isLoading = true;
   String? errorMessage;
 
-  // 当前选择的链，默认 N42
+  // 当前选择的链，默认 Ethereum
   EnsChainConfig selectedChain = EnsChainConfig.defaultChain;
 
   Future<void> loadOwnedNames() async {
@@ -27,11 +28,33 @@ mixin _EnsHomeLogicMixin on State<EnsHomePage> {
       setState(() {
         isLoading = false;
         if (!result.error && result.data != null) {
-          ownedNames = result.data!;
+          allOwnedNames = List<OwnedEns>.from(result.data! as List<OwnedEns>);
+          ownedNames = filterOwnedEnsByChain(allOwnedNames, selectedChain);
         } else {
-          errorMessage = S.of(context).g_key_5;
+          ownedNames = filterOwnedEnsByChain(allOwnedNames, selectedChain);
+          errorMessage = _shouldShowOwnedNamesError
+              ? S.of(context).g_key_5
+              : null;
         }
       });
+    }
+  }
+
+  bool get _shouldShowOwnedNamesError =>
+      selectedChain.id == EnsChainConfig.defaultChain.id &&
+      allOwnedNames.isEmpty;
+
+  void selectChain(EnsChainConfig chain) {
+    if (selectedChain.id == chain.id) return;
+
+    setState(() {
+      selectedChain = chain;
+      errorMessage = null;
+      ownedNames = filterOwnedEnsByChain(allOwnedNames, selectedChain);
+    });
+
+    if (allOwnedNames.isEmpty) {
+      loadOwnedNames();
     }
   }
 
@@ -39,9 +62,8 @@ mixin _EnsHomeLogicMixin on State<EnsHomePage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => EnsSearchPage(
-          walletAddress: widget.walletAddress,
-        ),
+        builder: (context) =>
+            EnsSearchPage(walletAddress: widget.walletAddress),
       ),
     ).then((_) => loadOwnedNames());
   }

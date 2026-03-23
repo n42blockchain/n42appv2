@@ -34,6 +34,7 @@ class _SelectMiningPlansState extends State<SelectMiningPlans> {
 
   @override
   void dispose() {
+    _controller.dispose();
     eventBusFn.cancel();
     super.dispose();
   }

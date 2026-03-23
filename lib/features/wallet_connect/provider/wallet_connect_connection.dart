@@ -11,6 +11,7 @@ import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
+import 'package:n42_wallet/features/wallet_connect/wallet_connect_uri.dart';
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_state.dart';
 import 'package:reown_walletkit/reown_walletkit.dart' as wallet_connect;
 import 'package:web3dart/web3dart.dart' as web3;
@@ -46,7 +47,9 @@ mixin WalletConnectConnection on ChangeNotifier {
     if (signClient == null || reconnectAttempts >= _maxReconnectAttempts) {
       if (reconnectAttempts >= _maxReconnectAttempts && dAppTopic != null) {
         final s = wcL10n();
-        ToastUtils.show(s?.g_wc_connection_lost ?? 'Connection lost. Please reconnect.');
+        ToastUtils.show(
+          s?.g_wc_connection_lost ?? 'Connection lost. Please reconnect.',
+        );
         viewStateDeal(WalletConnectState.disconnect);
       }
       return;
@@ -54,11 +57,14 @@ mixin WalletConnectConnection on ChangeNotifier {
     // Exponential back-off: 2s, 4s, 8s, 16s, 30s
     final seconds = (reconnectAttempts < 4) ? (2 << reconnectAttempts) : 30;
     reconnectTimer = Timer(Duration(seconds: seconds), _tryReconnect);
-    debugPrint('[WalletConnect] Reconnect attempt ${reconnectAttempts + 1} in ${seconds}s');
+    debugPrint(
+      '[WalletConnect] Reconnect attempt ${reconnectAttempts + 1} in ${seconds}s',
+    );
   }
 
   Future<void> _tryReconnect() async {
     reconnectAttempts++;
+    if (signClient == null) return;
     try {
       await signClient!.core.relayClient.connect();
       reconnectAttempts = 0;
@@ -82,12 +88,15 @@ mixin WalletConnectConnection on ChangeNotifier {
   void onAppResumed() {
     if (signClient == null || dAppTopic == null) return;
     try {
-      signClient!.core.relayClient.connect().then((_) {
-        pingSession();
-      }).catchError((e) {
-        debugPrint('[WalletConnect] Resume relay reconnect error: $e');
-        scheduleReconnect();
-      });
+      signClient!.core.relayClient
+          .connect()
+          .then((_) {
+            pingSession();
+          })
+          .catchError((e) {
+            debugPrint('[WalletConnect] Resume relay reconnect error: $e');
+            scheduleReconnect();
+          });
     } catch (e) {
       debugPrint('[WalletConnect] Resume relay reconnect: $e');
     }
@@ -99,9 +108,9 @@ mixin WalletConnectConnection on ChangeNotifier {
     final topic = dAppTopic;
     if (topic == null || signClient == null) return;
     try {
-      await signClient!.reOwnSign.ping(topic: topic).timeout(
-        const Duration(seconds: 10),
-      );
+      await signClient!.reOwnSign
+          .ping(topic: topic)
+          .timeout(const Duration(seconds: 10));
       debugPrint('[WalletConnect] Session ping OK');
     } catch (e) {
       debugPrint('[WalletConnect] Session ping failed: $e');
@@ -120,7 +129,10 @@ mixin WalletConnectConnection on ChangeNotifier {
         return;
       }
       signClient = await wallet_connect.ReownWalletKit.createInstance(
-        projectId: "18a60a7cb862aad161fecd764ecc736a",
+        projectId: const String.fromEnvironment(
+          'WC_PROJECT_ID',
+          defaultValue: '18a60a7cb862aad161fecd764ecc736a',
+        ),
         metadata: wallet_connect.PairingMetadata(
           name: AppConfig.apiUrl['walletName'],
           description: AppConfig.apiUrl['walletName'],
@@ -135,15 +147,22 @@ mixin WalletConnectConnection on ChangeNotifier {
     }
   }
 
-  Future<void> pair(String relayUrl) async {
+  Future<bool> pair(String relayUrl) async {
     try {
-      final uri = Uri.tryParse(relayUrl);
-      if (uri != null) {
-        await signClient!.pair(uri: uri);
+      final uri = parseWalletConnectUri(relayUrl);
+      if (uri == null) {
+        await viewStateDeal(
+          WalletConnectState.error,
+          params: 'Invalid WalletConnect URI',
+        );
+        return false;
       }
+      await signClient!.pair(uri: uri);
       notifyListeners();
+      return true;
     } catch (e) {
-      viewStateDeal(WalletConnectState.error, params: e.toString());
+      await viewStateDeal(WalletConnectState.error, params: e.toString());
+      return false;
     }
   }
 
@@ -157,7 +176,10 @@ mixin WalletConnectConnection on ChangeNotifier {
 
       final walletService = ServiceLocatorSetup.walletService;
       if (walletService == null) {
-        viewStateDeal(WalletConnectState.error, params: "Wallet service not available");
+        viewStateDeal(
+          WalletConnectState.error,
+          params: "Wallet service not available",
+        );
         return false;
       }
 
@@ -178,7 +200,10 @@ mixin WalletConnectConnection on ChangeNotifier {
       }
 
       if (pKey == null) {
-        viewStateDeal(WalletConnectState.error, params: "Could not get private key");
+        viewStateDeal(
+          WalletConnectState.error,
+          params: "Could not get private key",
+        );
         return false;
       }
 
@@ -186,11 +211,17 @@ mixin WalletConnectConnection on ChangeNotifier {
       try {
         decodedKey = base64Decode(pKey);
       } on FormatException catch (e) {
-        viewStateDeal(WalletConnectState.error, params: 'Invalid private key encoding: ${e.message}');
+        viewStateDeal(
+          WalletConnectState.error,
+          params: 'Invalid private key encoding: ${e.message}',
+        );
         return false;
       }
       if (decodedKey.length != 32) {
-        viewStateDeal(WalletConnectState.error, params: 'Invalid private key length: expected 32 bytes');
+        viewStateDeal(
+          WalletConnectState.error,
+          params: 'Invalid private key length: expected 32 bytes',
+        );
         return false;
       }
       privateKey = web3.EthPrivateKey(decodedKey);
@@ -273,7 +304,8 @@ mixin WalletConnectConnection on ChangeNotifier {
     final chainId = chainStr.split(':')[1];
     final chainIndex = coinModels.indexWhere((cm) {
       if (cm.coin['blockchainType'] != BlockchainType.Ethereum.name) return false;
-      final id = (cm.isTest ? cm.coin['chainId_test'] : cm.coin['chainId']).toString();
+      final id = (cm.isTest ? cm.coin['chainId_test'] : cm.coin['chainId'])
+          .toString();
       return id == chainId;
     });
     if (chainIndex == -1) {
@@ -288,13 +320,15 @@ mixin WalletConnectConnection on ChangeNotifier {
   void coinModelInit({int chainId = -1}) {
     try {
       coinModels = globalWapAdapter.coinModels
-          .where((cm) =>
-              cm.coin['blockchainType'] == BlockchainType.Ethereum.name ||
-              cm.coin['blockchainType'] == BlockchainType.Tron.name ||
-              cm.coin['blockchainType'] == BlockchainType.Solana.name ||
-              cm.coin['blockchainType'] == BlockchainType.Aptos.name ||
-              cm.coin['blockchainType'] == BlockchainType.Sui.name ||
-              cm.coin['blockchainType'] == BlockchainType.Near.name)
+          .where(
+            (cm) =>
+                cm.coin['blockchainType'] == BlockchainType.Ethereum.name ||
+                cm.coin['blockchainType'] == BlockchainType.Tron.name ||
+                cm.coin['blockchainType'] == BlockchainType.Solana.name ||
+                cm.coin['blockchainType'] == BlockchainType.Aptos.name ||
+                cm.coin['blockchainType'] == BlockchainType.Sui.name ||
+                cm.coin['blockchainType'] == BlockchainType.Near.name,
+          )
           .toList();
 
       if (coinModels.isEmpty) return;
@@ -309,7 +343,9 @@ mixin WalletConnectConnection on ChangeNotifier {
       }
       // 按指定 chainId 查找匹配项
       final matchIndex = coinModels.indexWhere((cm) {
-        final cmChainId = cm.isTest ? cm.coin['chainId_test'] : cm.coin['chainId'];
+        final cmChainId = cm.isTest
+            ? cm.coin['chainId_test']
+            : cm.coin['chainId'];
         return cmChainId == chainId;
       });
       if (matchIndex != -1) setCoinModelsIndex(matchIndex);
@@ -323,7 +359,9 @@ mixin WalletConnectConnection on ChangeNotifier {
     return coinModels.where((element) {
       final blockchainType = element.coin['blockchainType'];
       if (blockchainType == BlockchainType.Ethereum.name) {
-        final id = element.isTest ? element.coin['chainId_test'] : element.coin['chainId'];
+        final id = element.isTest
+            ? element.coin['chainId_test']
+            : element.coin['chainId'];
         return 'eip155:$id' == chainId;
       }
       if (blockchainType == BlockchainType.Tron.name) {
@@ -365,7 +403,8 @@ mixin WalletConnectConnection on ChangeNotifier {
   Future<({String mnemonic, String privateKey})> getTronCredentials() async {
     final walletService = ServiceLocatorSetup.walletService;
     final currentIndex = walletService?.miningWalletIndex ?? 0;
-    final mnemonic = await walletService?.getMnemonicForWallet(currentIndex) ?? "";
+    final mnemonic =
+        await walletService?.getMnemonicForWallet(currentIndex) ?? "";
     final pk = await walletService?.getPrivateKeyForWallet(currentIndex) ?? "";
     return (mnemonic: mnemonic, privateKey: pk);
   }

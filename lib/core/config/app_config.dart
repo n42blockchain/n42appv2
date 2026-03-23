@@ -29,11 +29,8 @@ class AppConfig {
   // ============ IPFS Credentials ============
   // Loaded from environment variables at build time:
   //   --dart-define=IPFS_USERNAME=xxx --dart-define=IPFS_PASSWORD=xxx
-  static const String _ipfsUsername = String.fromEnvironment('IPFS_USERNAME');
-  static const String _ipfsPassword = String.fromEnvironment('IPFS_PASSWORD');
-
-  static String get ipfsUsername => _ipfsUsername;
-  static String get ipfsPassword => _ipfsPassword;
+  static const String ipfsUsername = String.fromEnvironment('IPFS_USERNAME');
+  static const String ipfsPassword = String.fromEnvironment('IPFS_PASSWORD');
 
   // ============ Environment Flags ============
   
@@ -47,13 +44,10 @@ class AppConfig {
   static bool isMainChainMining = true;
 
   /// Production environment flag
-  /// 
+  ///
   /// TODO: Replace with environment variable or build flavor
   /// Example: static final bool isOnline = const String.fromEnvironment('ENV') == 'production';
   static const bool isOnline = true;
-
-  /// Test host selector (0 = test, other = main)
-  static const int testHost = 0;
 
   // ============ API Endpoints ============
   
@@ -164,21 +158,6 @@ class AppConfig {
     }
     return endpoint?.toString() ?? '';
   }
-
-  /// Get API URL based on test host setting
-  static String getApiUrlTestHost(String key) {
-    final endpoint = apiUrl[key];
-    if (endpoint is Map) {
-      return testHost == 0 ? endpoint['test'] : endpoint['main'];
-    }
-    return endpoint?.toString() ?? '';
-  }
-
-
-  // ============ Debug Helpers ============
-
-  /// Check if running in debug mode
-  static bool get isDebug => kDebugMode;
 
   /// Get current environment name
   static String get environmentName => isOnline ? 'Production' : 'Development';

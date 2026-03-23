@@ -1,20 +1,20 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/di/service_locator_setup.dart';
+import 'package:n42_wallet/core/storage/sp_util.dart';
+import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/component/enums/load.dart';
 import 'package:n42_wallet/features/login/api/user_info_api.dart';
 import 'package:n42_wallet/features/models/message_model.dart';
-import 'package:n42_wallet/core/storage/sp_util.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
-import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/features/widgets/button_widget.dart';
-import 'package:flutter/material.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 
 part 'security_google_vedification_logic.dart';
 part 'security_google_vedification_widgets.dart';
@@ -42,7 +42,6 @@ class SecurityGoogleVedificationState
             child: SingleChildScrollView(
               padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   buildGoogleSection(),

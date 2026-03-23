@@ -4,8 +4,6 @@
 // and data cleanup. These tests exercise pure-logic paths that do not
 // require a real ReownWalletKit connection.
 
-import 'dart:async';
-
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_provider.dart';
@@ -17,19 +15,22 @@ void main() {
   // ---------------------------------------------------------------------------
   group('WalletConnectState enum', () {
     test('has all expected variants', () {
-      expect(WalletConnectState.values, containsAll([
-        WalletConnectState.loading,
-        WalletConnectState.selectChain,
-        WalletConnectState.connectOK,
-        WalletConnectState.connect,
-        WalletConnectState.disconnect,
-        WalletConnectState.reconnect,
-        WalletConnectState.transactionOK,
-        WalletConnectState.transaction,
-        WalletConnectState.messageSignOK,
-        WalletConnectState.messageSign,
-        WalletConnectState.error,
-      ]));
+      expect(
+        WalletConnectState.values,
+        containsAll([
+          WalletConnectState.loading,
+          WalletConnectState.selectChain,
+          WalletConnectState.connectOK,
+          WalletConnectState.connect,
+          WalletConnectState.disconnect,
+          WalletConnectState.reconnect,
+          WalletConnectState.transactionOK,
+          WalletConnectState.transaction,
+          WalletConnectState.messageSignOK,
+          WalletConnectState.messageSign,
+          WalletConnectState.error,
+        ]),
+      );
     });
 
     test('has exactly 11 variants', () {
@@ -225,10 +226,7 @@ void main() {
       await provider.viewStateDeal(WalletConnectState.connect);
       expect(provider.walletConnectState, WalletConnectState.connect);
 
-      await provider.viewStateDeal(
-        WalletConnectState.error,
-        params: 'Timeout',
-      );
+      await provider.viewStateDeal(WalletConnectState.error, params: 'Timeout');
       expect(provider.walletConnectState, WalletConnectState.error);
       expect(provider.errorMessage, 'Timeout');
 
@@ -256,10 +254,12 @@ void main() {
       // Replicate the formula from _scheduleReconnect
       List<int> expected = [2, 4, 8, 16, 30];
       for (int attempt = 0; attempt < 5; attempt++) {
-        final seconds =
-            (attempt < 4) ? (2 << attempt) : 30;
-        expect(seconds, expected[attempt],
-            reason: 'attempt $attempt should be ${expected[attempt]}s');
+        final seconds = (attempt < 4) ? (2 << attempt) : 30;
+        expect(
+          seconds,
+          expected[attempt],
+          reason: 'attempt $attempt should be ${expected[attempt]}s',
+        );
       }
     });
 
@@ -323,13 +323,16 @@ void main() {
       provider.dispose();
     });
 
-    test('didChangeAppLifecycleState with resumed does not crash when signClient is null', () {
-      // signClient == null → _onAppResumed returns immediately
-      expect(
-        () => provider.didChangeAppLifecycleState(AppLifecycleState.resumed),
-        returnsNormally,
-      );
-    });
+    test(
+      'didChangeAppLifecycleState with resumed does not crash when signClient is null',
+      () {
+        // signClient == null → _onAppResumed returns immediately
+        expect(
+          () => provider.didChangeAppLifecycleState(AppLifecycleState.resumed),
+          returnsNormally,
+        );
+      },
+    );
 
     test('didChangeAppLifecycleState with paused is a no-op', () {
       expect(
@@ -358,19 +361,25 @@ void main() {
       provider.dispose();
     });
 
-    test('transactionOK when pageOpen=false tries showAlertWidget (graceful null context)', () async {
-      // AppGlobals.navigatorKey.currentContext is null in tests → showAlertWidget
-      // should not crash due to null-check we added
-      provider.pageOpen = false;
-      await provider.viewStateDeal(WalletConnectState.transactionOK);
-      expect(provider.walletConnectState, WalletConnectState.transactionOK);
-    });
+    test(
+      'transactionOK when pageOpen=false tries showAlertWidget (graceful null context)',
+      () async {
+        // AppGlobals.navigatorKey.currentContext is null in tests → showAlertWidget
+        // should not crash due to null-check we added
+        provider.pageOpen = false;
+        await provider.viewStateDeal(WalletConnectState.transactionOK);
+        expect(provider.walletConnectState, WalletConnectState.transactionOK);
+      },
+    );
 
-    test('messageSignOK when pageOpen=false tries showAlertWidget (graceful null context)', () async {
-      provider.pageOpen = false;
-      await provider.viewStateDeal(WalletConnectState.messageSignOK);
-      expect(provider.walletConnectState, WalletConnectState.messageSignOK);
-    });
+    test(
+      'messageSignOK when pageOpen=false tries showAlertWidget (graceful null context)',
+      () async {
+        provider.pageOpen = false;
+        await provider.viewStateDeal(WalletConnectState.messageSignOK);
+        expect(provider.walletConnectState, WalletConnectState.messageSignOK);
+      },
+    );
 
     test('transactionOK when pageOpen=true skips showAlertWidget', () async {
       provider.pageOpen = true;

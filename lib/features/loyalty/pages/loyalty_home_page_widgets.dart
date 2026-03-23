@@ -18,6 +18,43 @@ mixin _WidgetsMixin on _LogicMixin {
     return AppThemeUtils.getColorByKey(context, key.name);
   }
 
+  Widget _buildErrorView(BuildContext context, LoyaltyProvider provider) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.error_outline,
+            size: ScreenUtil().setWidth(80),
+            color: Colors.red,
+          ),
+          SizedBox(height: ScreenUtil().setWidth(16)),
+          Text(
+            'Failed to load loyalty data',
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(28),
+              color: _themeColor(context, AppThemeKeys.mainTextColor),
+            ),
+          ),
+          SizedBox(height: ScreenUtil().setWidth(8)),
+          Text(
+            provider.errorMessage ?? 'Please try again later',
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(22),
+              color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
+            ),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: ScreenUtil().setWidth(16)),
+          ElevatedButton(
+            onPressed: provider.refresh,
+            child: const Text('Retry'),
+          ),
+        ],
+      ),
+    );
+  }
+
   // ── Points card ─────────────────────────────────────────────────────────
 
   Widget _buildPointsCard(BuildContext context, LoyaltyProvider provider) {

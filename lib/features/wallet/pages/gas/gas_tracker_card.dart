@@ -137,6 +137,7 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
             SizedBox(height: ScreenUtil().setWidth(12)),
             buildSparkline(history, network),
           ],
+          buildMempoolIndicator(network.symbol),
         ],
       ),
     );
@@ -272,6 +273,136 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
       ),
     );
   }
+
+  // ── Gas Prediction Card ──────────────────────────────────
+
+  Widget buildGasPredictionCard() {
+    final su = ScreenUtil();
+    final textColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+
+    return Container(
+      padding: EdgeInsets.all(su.setWidth(20)),
+      decoration: BoxDecoration(
+        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        borderRadius: BorderRadius.circular(su.setWidth(16)),
+        border: Border.all(color: Colors.orange.withAlpha(50), width: 1),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.auto_graph, size: su.setWidth(36), color: Colors.orange),
+              SizedBox(width: su.setWidth(8)),
+              Text(
+                'Next Block Gas Prediction',
+                style: TextStyle(
+                  fontSize: su.setSp(28),
+                  fontWeight: FontWeight.w600,
+                  color: textColor,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: su.setWidth(12)),
+          ..._gasPredictions.entries.map((entry) {
+            final symbol = entry.key;
+            final pred = entry.value;
+            return Padding(
+              padding: EdgeInsets.only(bottom: su.setWidth(8)),
+              child: Row(
+                children: [
+                  Text(symbol, style: TextStyle(fontSize: su.setSp(24), fontWeight: FontWeight.w600, color: textColor)),
+                  SizedBox(width: su.setWidth(12)),
+                  if (pred.low != null) _predBadge('Slow', pred.low!, Colors.green, su),
+                  SizedBox(width: su.setWidth(8)),
+                  if (pred.medium != null) _predBadge('Avg', pred.medium!, Colors.orange, su),
+                  SizedBox(width: su.setWidth(8)),
+                  if (pred.high != null) _predBadge('Fast', pred.high!, Colors.red, su),
+                ],
+              ),
+            );
+          }),
+        ],
+      ),
+    );
+  }
+
+  Widget _predBadge(String label, double value, Color color, ScreenUtil su) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: su.setWidth(10), vertical: su.setWidth(4)),
+      decoration: BoxDecoration(
+        color: color.withAlpha(20),
+        borderRadius: BorderRadius.circular(su.setWidth(6)),
+      ),
+      child: Text(
+        '$label: ${value.toStringAsFixed(1)}',
+        style: TextStyle(fontSize: su.setSp(20), fontWeight: FontWeight.w600, color: color),
+      ),
+    );
+  }
+
+  // ── Mempool Indicator ──────────────────────────────────
+
+  Widget buildMempoolIndicator(String symbol) {
+    final data = _mempoolData[symbol];
+    if (data == null) return const SizedBox.shrink();
+
+    final su = ScreenUtil();
+    final subtitleColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+
+    return Padding(
+      padding: EdgeInsets.only(top: su.setWidth(8)),
+      child: Row(
+        children: [
+          Icon(Icons.pending_actions, size: su.setWidth(28), color: subtitleColor),
+          SizedBox(width: su.setWidth(6)),
+          Text(
+            'Mempool',
+            style: TextStyle(fontSize: su.setSp(22), color: subtitleColor),
+          ),
+          SizedBox(width: su.setWidth(8)),
+          if (data.pendingCount != null)
+            Text(
+              '${_formatCount(data.pendingCount!)} pending',
+              style: TextStyle(fontSize: su.setSp(22), color: data.congestionColor),
+            ),
+          const Spacer(),
+          Container(
+            width: su.setWidth(60),
+            height: su.setWidth(8),
+            decoration: BoxDecoration(
+              color: data.congestionColor.withAlpha(40),
+              borderRadius: BorderRadius.circular(su.setWidth(4)),
+            ),
+            child: FractionallySizedBox(
+              alignment: Alignment.centerLeft,
+              widthFactor: _congestionFraction(data.congestionLevel),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: data.congestionColor,
+                  borderRadius: BorderRadius.circular(su.setWidth(4)),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _formatCount(int count) {
+    if (count >= 1000000) return '${(count / 1000000).toStringAsFixed(1)}M';
+    if (count >= 1000) return '${(count / 1000).toStringAsFixed(1)}K';
+    return count.toString();
+  }
+
+  double _congestionFraction(String? level) => switch (level) {
+    'low' => 0.3,
+    'medium' => 0.6,
+    'high' => 1.0,
+    _ => 0.1,
+  };
 
   Widget buildFooter() {
     return Padding(

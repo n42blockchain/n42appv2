@@ -11,6 +11,45 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+abstract class SecureStore {
+  Future<String?> read({required String key});
+  Future<void> write({required String key, required String value});
+  Future<void> delete({required String key});
+  Future<void> deleteAll();
+}
+
+class FlutterSecureStore implements SecureStore {
+  FlutterSecureStore({
+    FlutterSecureStorage? storage,
+  }) : _storage =
+           storage ??
+           const FlutterSecureStorage(
+             aOptions: AndroidOptions(
+               sharedPreferencesName: 'n42_secure_prefs',
+               preferencesKeyPrefix: 'sp_',
+             ),
+             iOptions: IOSOptions(
+               accessibility: KeychainAccessibility.first_unlock_this_device,
+               accountName: 'n42wallet_prefs',
+             ),
+           );
+
+  final FlutterSecureStorage _storage;
+
+  @override
+  Future<String?> read({required String key}) => _storage.read(key: key);
+
+  @override
+  Future<void> write({required String key, required String value}) =>
+      _storage.write(key: key, value: value);
+
+  @override
+  Future<void> delete({required String key}) => _storage.delete(key: key);
+
+  @override
+  Future<void> deleteAll() => _storage.deleteAll();
+}
+
 /// 安全存储偏好设置
 ///
 /// 将敏感数据存储在 SecureStorage 中，非敏感数据存储在 SharedPreferences 中
@@ -18,25 +57,26 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SecurePreferences {
   static SecurePreferences? _instance;
   SharedPreferences? _prefs;
+  final SecureStore _secureStorage;
 
-  /// 安全存储实例
-  static const FlutterSecureStorage _secureStorage = FlutterSecureStorage(
-    aOptions: AndroidOptions(
-      sharedPreferencesName: 'n42_secure_prefs',
-      preferencesKeyPrefix: 'sp_',
-    ),
-    iOptions: IOSOptions(
-      accessibility: KeychainAccessibility.first_unlock_this_device,
-      accountName: 'n42wallet_prefs',
-    ),
-  );
-
-  SecurePreferences._();
+  SecurePreferences._({
+    SecureStore? secureStorage,
+  }) : _secureStorage = secureStorage ?? FlutterSecureStore();
 
   /// 获取单例实例
   static SecurePreferences get instance {
     _instance ??= SecurePreferences._();
     return _instance!;
+  }
+
+  @visibleForTesting
+  factory SecurePreferences.test({
+    required SharedPreferences prefs,
+    required SecureStore secureStorage,
+  }) {
+    final instance = SecurePreferences._(secureStorage: secureStorage);
+    instance._prefs = prefs;
+    return instance;
   }
 
   /// 敏感数据键名列表（将存储在 SecureStorage 中）
@@ -45,10 +85,14 @@ class SecurePreferences {
     'security',
     'lockScreen',
     'userInfo',
+    'miningData',
   ];
 
-  /// 初始化
-  Future<void> init() async {
+  /// 初始化（使用缓存 Future 防止并发竞态）
+  Future<void>? _initFuture;
+  Future<void> init() => _initFuture ??= _doInit();
+
+  Future<void> _doInit() async {
     _prefs ??= await SharedPreferences.getInstance();
     await _migrateFromSharedPreferences();
   }
@@ -60,12 +104,12 @@ class SecurePreferences {
         final value = _prefs?.getString(key);
         if (value != null && value.isNotEmpty) {
           final secureValue = await _secureStorage.read(key: key);
-          if (secureValue == null) {
+          if (secureValue == null || secureValue.isEmpty) {
             await _secureStorage.write(key: key, value: value);
-            await _prefs?.remove(key);
-            if (kDebugMode) {
-              debugPrint('[SecurePreferences] Migrated key: $key');
-            }
+          }
+          await _prefs?.remove(key);
+          if (kDebugMode) {
+            debugPrint('[SecurePreferences] Migrated key: $key');
           }
         }
       } catch (e) {
@@ -265,7 +309,6 @@ class SecurePreferences {
     for (final key in _sensitiveKeys) {
       await _secureStorage.delete(key: key);
     }
-    await _secureStorage.delete(key: 'miningData');
   }
 
   /// 清除所有数据

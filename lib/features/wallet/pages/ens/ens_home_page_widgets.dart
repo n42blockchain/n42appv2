@@ -24,11 +24,18 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
         children: [
           Row(
             children: [
-              Icon(Icons.link, size: ScreenUtil().setWidth(18), color: subtitleColor),
+              Icon(
+                Icons.link,
+                size: ScreenUtil().setWidth(18),
+                color: subtitleColor,
+              ),
               SizedBox(width: ScreenUtil().setWidth(6)),
               Text(
                 S.of(context).g_key_aa_chain,
-                style: TextStyle(fontSize: ScreenUtil().setSp(22), color: subtitleColor),
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(22),
+                  color: subtitleColor,
+                ),
               ),
               const Spacer(),
               Container(
@@ -61,10 +68,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
                   padding: EdgeInsets.only(right: ScreenUtil().setWidth(10)),
                   child: GestureDetector(
                     onTap: () {
-                      if (selectedChain.id != chain.id) {
-                        setState(() { selectedChain = chain; });
-                        loadOwnedNames();
-                      }
+                      selectChain(chain);
                     },
                     child: _buildChainChip(chain, isSelected),
                   ),
@@ -220,9 +224,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
             onTap: () {
               if (ownedNames.isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(S.of(context).g_key_ens_no_domains),
-                  ),
+                  SnackBar(content: Text(S.of(context).g_key_ens_no_domains)),
                 );
               } else {
                 // 导航到续费页面
@@ -249,10 +251,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
         decoration: BoxDecoration(
           color: _themeColor(AppThemeKeys.itemBgColor.name),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-          border: Border.all(
-            color: color.withAlpha(40),
-            width: 1,
-          ),
+          border: Border.all(color: color.withAlpha(40), width: 1),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -264,11 +263,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
                 color: color.withAlpha(25),
                 borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
               ),
-              child: Icon(
-                icon,
-                size: ScreenUtil().setWidth(24),
-                color: color,
-              ),
+              child: Icon(icon, size: ScreenUtil().setWidth(24), color: color),
             ),
             SizedBox(height: ScreenUtil().setWidth(12)),
             Text(
@@ -382,10 +377,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
       decoration: BoxDecoration(
         color: _themeColor(AppThemeKeys.itemBgColor.name),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-        border: Border.all(
-          color: blueColor.withAlpha(30),
-          width: 1,
-        ),
+        border: Border.all(color: blueColor.withAlpha(30), width: 1),
       ),
       child: Column(
         children: [

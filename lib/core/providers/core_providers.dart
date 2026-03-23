@@ -5,6 +5,8 @@
 //
 // Author: Jiang Yiwei
 
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -46,9 +48,10 @@ final mainTabSelectIndexProvider = StateProvider<int>((ref) => 0);
 // ============================================
 
 /// Current User Provider
-final currentUserProvider = StateNotifierProvider<CurrentUserNotifier, SharedUserInfo?>((ref) {
-  return CurrentUserNotifier(ref.watch(spUtilProvider));
-});
+final currentUserProvider =
+    StateNotifierProvider<CurrentUserNotifier, SharedUserInfo?>((ref) {
+      return CurrentUserNotifier(ref.watch(spUtilProvider));
+    });
 
 class CurrentUserNotifier extends StateNotifier<SharedUserInfo?> {
   final SPUtil _spUtil;
@@ -65,7 +68,10 @@ class CurrentUserNotifier extends StateNotifier<SharedUserInfo?> {
         state = SharedUserInfo.fromJson(userJson);
       }
     } catch (e) {
-      // Ignore loading errors
+      assert(() {
+        debugPrint('CurrentUserNotifier._loadFromStorage error: $e');
+        return true;
+      }());
     }
   }
 
@@ -90,7 +96,9 @@ final walletPasswordVerifiedProvider = StateProvider<bool>((ref) => false);
 // ============================================
 
 /// Unread Message Count Provider
-final unreadCountProvider = StateNotifierProvider<UnreadCountNotifier, int>((ref) {
+final unreadCountProvider = StateNotifierProvider<UnreadCountNotifier, int>((
+  ref,
+) {
   return UnreadCountNotifier();
 });
 
@@ -132,60 +140,103 @@ final appInitializedProvider = StateProvider<bool>((ref) => false);
 final appInitProvider = FutureProvider<void>((ref) async {
   final spUtil = ref.read(spUtilProvider);
   final secureStorage = SecureStorage();
+  final currentUserNotifier = ref.read(currentUserProvider.notifier);
   try {
     final userInfoJson = await spUtil.getUserInfo();
     if (userInfoJson != null) {
       final userInfo = UserInfo.fromJson(userInfoJson);
-      AppGlobals.userInfo = userInfo;
-      // Sync token to SecureStorage on startup load
-      if (userInfo.token != null && userInfo.token!.isNotEmpty) {
-        await secureStorage.saveToken(userInfo.token!);
-      }
-      final sharedInfo = SharedUserInfo(
-        uuid: userInfo.uuid ?? '',
-        email: userInfo.email ?? '',
-        name: userInfo.name,
-        avatarUrl: userInfo.image,
-        token: userInfo.token,
-        image: userInfo.image,
-        desc: userInfo.desc,
+      await _syncActiveUser(
+        userInfo,
+        secureStorage: secureStorage,
+        currentUserNotifier: currentUserNotifier,
       );
-      ref.read(currentUserProvider.notifier).setUser(sharedInfo);
-
-      // Fetch fresh user info from server (with timeout to prevent startup hang)
-      final loginApi = UserInfoApi();
-      final freshUser = await loginApi.getUserInfo(
-        userInfo.uuid ?? '',
-        userInfo.token ?? '',
-        userInfo.hashCode.toString(),
-      ).timeout(const Duration(seconds: 8), onTimeout: () => null);
-      if (freshUser != null) {
-        AppGlobals.userInfo = freshUser;
-        // Sync fresh token to SecureStorage
-        if (freshUser.token != null && freshUser.token!.isNotEmpty) {
-          await secureStorage.saveToken(freshUser.token!);
-        }
-        final freshShared = SharedUserInfo(
-          uuid: freshUser.uuid ?? '',
-          email: freshUser.email ?? '',
-          name: freshUser.name,
-          avatarUrl: freshUser.image,
-          token: freshUser.token,
-          image: freshUser.image,
-          desc: freshUser.desc,
+      if ((userInfo.uuid ?? '').isNotEmpty &&
+          (userInfo.token ?? '').isNotEmpty) {
+        unawaited(
+          _refreshUserInfoInBackground(
+            initialUser: userInfo,
+            spUtil: spUtil,
+            secureStorage: secureStorage,
+            currentUserNotifier: currentUserNotifier,
+          ),
         );
-        ref.read(currentUserProvider.notifier).setUser(freshShared);
-        await spUtil.saveUserInfo(freshUser);
       }
     }
   } catch (e) {
-    debugPrint('appInitProvider._getUserInfo error: $e');
+    if (kDebugMode) debugPrint('appInitProvider._getUserInfo error: $e');
   }
 
-  // Load lock screen data
-  // (ScreenLockNotifier loads from storage in its constructor)
-  // Just ensure the provider is read so it initializes
   ref.read(screenLockProvider);
-
   ref.read(appLoadStateProvider.notifier).state = Load.finish;
 });
+
+SharedUserInfo _toSharedUserInfo(UserInfo userInfo) {
+  return SharedUserInfo(
+    uuid: userInfo.uuid ?? '',
+    email: userInfo.email ?? '',
+    name: userInfo.name,
+    avatarUrl: userInfo.image,
+    token: userInfo.token,
+    image: userInfo.image,
+    desc: userInfo.desc,
+  );
+}
+
+Future<void> _syncActiveUser(
+  UserInfo userInfo, {
+  required SecureStorage secureStorage,
+  required CurrentUserNotifier currentUserNotifier,
+  SPUtil? spUtil,
+}) async {
+  AppGlobals.userInfo = userInfo;
+  currentUserNotifier.setUser(_toSharedUserInfo(userInfo));
+
+  final syncTasks = <Future<void>>[
+    secureStorage.saveUserInfo(userInfo.toJson()),
+  ];
+  if (userInfo.token != null && userInfo.token!.isNotEmpty) {
+    syncTasks.add(secureStorage.saveToken(userInfo.token!));
+  }
+  if (userInfo.uuid != null && userInfo.uuid!.isNotEmpty) {
+    syncTasks.add(secureStorage.saveUuid(userInfo.uuid!));
+  }
+  if (userInfo.email != null && userInfo.email!.isNotEmpty) {
+    syncTasks.add(secureStorage.saveEmail(userInfo.email!));
+  }
+  if (spUtil != null) {
+    syncTasks.add(spUtil.saveUserInfo(userInfo));
+  }
+  await Future.wait(syncTasks);
+}
+
+Future<void> _refreshUserInfoInBackground({
+  required UserInfo initialUser,
+  required SPUtil spUtil,
+  required SecureStorage secureStorage,
+  required CurrentUserNotifier currentUserNotifier,
+}) async {
+  try {
+    final loginApi = UserInfoApi();
+    final freshUser = await loginApi
+        .getUserInfo(
+          initialUser.uuid ?? '',
+          initialUser.token ?? '',
+          initialUser.hashCode.toString(),
+        )
+        .timeout(const Duration(seconds: 8), onTimeout: () => null);
+    if (freshUser == null) return;
+    final activeUser = AppGlobals.userInfo;
+    if (activeUser?.uuid != initialUser.uuid ||
+        activeUser?.token != initialUser.token) {
+      return;
+    }
+    await _syncActiveUser(
+      freshUser,
+      secureStorage: secureStorage,
+      currentUserNotifier: currentUserNotifier,
+      spUtil: spUtil,
+    );
+  } catch (e) {
+    if (kDebugMode) debugPrint('appInitProvider._refreshUserInfoInBackground error: $e');
+  }
+}

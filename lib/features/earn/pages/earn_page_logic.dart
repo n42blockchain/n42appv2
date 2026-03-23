@@ -17,6 +17,9 @@ import 'package:n42_wallet/features/earn/pages/earn_page.dart';
 
 /// 业务逻辑 mixin：状态加载、导航、工具方法
 mixin EarnPageLogicMixin on ConsumerState<EarnPage> {
+  static final _trailingZeros = RegExp(r'0+$');
+  static final _trailingDot = RegExp(r'\.$');
+
   void loadStakedData() {
     final wap = ref.read(wapBridgeProvider);
     String? ethAddr, solAddr, atomAddr;
@@ -204,8 +207,8 @@ mixin EarnPageLogicMixin on ConsumerState<EarnPage> {
     final amount = EarnState.tokenAmount(raw, chainType);
     final formatted = amount
         .toStringAsFixed(6)
-        .replaceAll(RegExp(r'0+$'), '')
-        .replaceAll(RegExp(r'\.$'), '');
+        .replaceAll(_trailingZeros, '')
+        .replaceAll(_trailingDot, '');
     return '$formatted $symbol';
   }
 

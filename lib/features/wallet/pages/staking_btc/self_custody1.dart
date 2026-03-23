@@ -13,6 +13,7 @@ import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/features/wallet/api/transfer_api.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_chain_send_btc.dart';
+import 'package:n42_wallet/features/wallet/pages/staking_btc/staking_btc_utils.dart';
 import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/utils/transaction/create_btc_tx_1.dart';
@@ -35,13 +36,14 @@ part 'self_custody1_logic.dart';
 
 class SelfCustody1 extends ConsumerStatefulWidget {
   final CoinModel coinModel;
-  const SelfCustody1(this.coinModel,{super.key});
+  const SelfCustody1(this.coinModel, {super.key});
 
   @override
   ConsumerState<SelfCustody1> createState() => _SelfCustody1State();
 }
 
-class _SelfCustody1State extends ConsumerState<SelfCustody1> with _SelfCustody1LogicMixin {
+class _SelfCustody1State extends ConsumerState<SelfCustody1>
+    with _SelfCustody1LogicMixin {
   late WebViewController _controller;
 
   bool _showBanner = true;
@@ -102,12 +104,13 @@ class _SelfCustody1State extends ConsumerState<SelfCustody1> with _SelfCustody1L
     _controller = WebViewController.fromPlatformCreationParams(params)
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(const Color(0xFF121212))
-      ..setNavigationDelegate(NavigationDelegate(
-        onNavigationRequest: (_) => NavigationDecision.navigate,
-      ))
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onNavigationRequest: (_) => NavigationDecision.navigate,
+        ),
+      )
       ..loadRequest(Uri.parse(AppConfig.getApiUrlOnline('btcStaking')))
-      ..addJavaScriptChannel("N42APP",
-          onMessageReceived: _onJsMessage);
+      ..addJavaScriptChannel("N42APP", onMessageReceived: _onJsMessage);
   }
 
   Future<void> _onJsMessage(JavaScriptMessage message) async {
@@ -120,7 +123,9 @@ class _SelfCustody1State extends ConsumerState<SelfCustody1> with _SelfCustody1L
       case 'is_p2wsh_address_valid':
         await _handleP2wshValidation(rdata);
       case 'request_mint_vbtc':
-        final result = JsEscapeUtils.escapeJs(rdata['result']?.toString() ?? '');
+        final result = JsEscapeUtils.escapeJs(
+          rdata['result']?.toString() ?? '',
+        );
         _controller.runJavaScript('alert("来自Flutter的消息，我收到了:$result");');
     }
   }
@@ -129,34 +134,52 @@ class _SelfCustody1State extends ConsumerState<SelfCustody1> with _SelfCustody1L
     final ecdsaKeyMap = jsonDecode(rdata['ecdsaKey']) as Map<String, dynamic>;
     final ecdsaKeyList = ecdsaKeyMap.values.map((e) => e as int).toList();
     final pKey = bytesToHex(ecdsaKeyList);
-    final nowTime = (DateTime.now().millisecondsSinceEpoch ~/ 1000) +
-        (double.parse(rdata['lockupTime']!) * 86400).toInt();
+    final lockupSeconds = parseStakingLockupSeconds(
+      rdata['lockupTime']?.toString(),
+    );
+    final stakeAmount = rdata['amount']?.toString();
+    if (lockupSeconds == null ||
+        stakeAmount == null ||
+        stakeAmount.trim().isEmpty) {
+      return;
+    }
+    final nowTime =
+        (DateTime.now().millisecondsSinceEpoch ~/ 1000) + lockupSeconds;
     lockTimeInt = nowTime;
     final p2wshAddr = await createP2WSH(nowTime, cPubKey: pKey);
-    lockAmount = rdata['amount'];
+    lockAmount = stakeAmount;
     _controller.runJavaScript(
-        'is_p2wsh_address_valid("${JsEscapeUtils.escapeJs(p2wshAddr ?? "")}");');
+      'is_p2wsh_address_valid("${JsEscapeUtils.escapeJs(p2wshAddr ?? "")}");',
+    );
   }
 
   Future<void> _handleP2wshValidation(Map<String, dynamic> rdata) async {
     if (rdata['result'] != true) return;
+    final currentP2wshAddress = p2wshAddress;
+    final currentLockAmount = lockAmount;
+    if (currentP2wshAddress == null ||
+        currentLockAmount == null ||
+        currentLockAmount.isEmpty) {
+      return;
+    }
 
-    final p2wshAddr = p2wshAddress!.toAddress(BitcoinNetwork.testnet);
+    final p2wshAddr = currentP2wshAddress.toAddress(BitcoinNetwork.testnet);
     final value = await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (_) => WalletChainSendBtc(
           widget.coinModel,
           toAddress: p2wshAddr,
-          toAmount: lockAmount!,
+          toAmount: currentLockAmount,
         ),
       ),
     );
     if (!mounted || value == null) return;
 
     final ethAddress = ref.read(wapBridgeProvider).getAddress(CoinType.N.name);
-    final lockAmountInt = ethToWeiString(lockAmount!, 8);
-    final alertStr = 'requestMintVbtc('
+    final lockAmountInt = ethToWeiString(currentLockAmount, 8);
+    final alertStr =
+        'requestMintVbtc('
         '"${JsEscapeUtils.escapeJs(p2wshAddr)}",'
         '"${JsEscapeUtils.escapeJs(ethAddress)}",'
         '$lockAmountInt,'
@@ -178,9 +201,7 @@ class _SelfCustody1State extends ConsumerState<SelfCustody1> with _SelfCustody1L
           if (_showBanner) _buildReminderBanner(context, s),
 
           // ── WebView 填充剩余空间 ──────────────────────────────
-          Expanded(
-            child: WebViewWidget(controller: _controller),
-          ),
+          Expanded(child: WebViewWidget(controller: _controller)),
         ],
       ),
     );
@@ -209,7 +230,9 @@ class _SelfCustody1State extends ConsumerState<SelfCustody1> with _SelfCustody1L
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(22),
                 color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
+                  context,
+                  AppThemeKeys.mainTextColor.name,
+                ),
                 height: 1.4,
               ),
             ),
@@ -220,7 +243,9 @@ class _SelfCustody1State extends ConsumerState<SelfCustody1> with _SelfCustody1L
               Icons.close,
               size: ScreenUtil().setWidth(28),
               color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name),
+                context,
+                AppThemeKeys.itemSubtitleTextColor.name,
+              ),
             ),
           ),
         ],

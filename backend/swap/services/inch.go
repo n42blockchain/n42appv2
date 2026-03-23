@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"math/big"
 	"net/http"
+	"net/url"
 	"time"
 
 	"github.com/n42/n42appv2/backend/swap/models"
@@ -53,16 +54,16 @@ func (a *InchAdapter) Quote(
 		return nil, fmt.Errorf("1inch: unsupported chain %s", req.Chain)
 	}
 
-	url := fmt.Sprintf(
-		"%s/%d/swap?src=%s&dst=%s&amount=%s&from=%s&slippage=%.2f&disableEstimate=true",
-		inchBase, chainID,
-		req.TokenIn, req.TokenOut,
-		req.AmountIn,
-		req.UserAddr,
-		float64(req.SlippageBps)/100.0,
-	)
+	params := url.Values{}
+	params.Set("src", req.TokenIn)
+	params.Set("dst", req.TokenOut)
+	params.Set("amount", req.AmountIn)
+	params.Set("from", req.UserAddr)
+	params.Set("slippage", fmt.Sprintf("%.2f", float64(req.SlippageBps)/100.0))
+	params.Set("disableEstimate", "true")
+	endpoint := fmt.Sprintf("%s/%d/swap?%s", inchBase, chainID, params.Encode())
 
-	httpReq, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
+	httpReq, err := http.NewRequestWithContext(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return nil, fmt.Errorf("1inch: new request: %w", err)
 	}

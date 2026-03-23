@@ -1,4 +1,5 @@
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
+import 'package:n42_wallet/features/wallet/pages/wallet_manage/watch_wallet_utils.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
@@ -27,20 +28,25 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
     super.dispose();
   }
 
-  bool _isValidEvmAddress(String addr) {
-    final trimmed = addr.trim();
-    return trimmed.startsWith('0x') && trimmed.length == 42;
-  }
-
   Future<void> _submit() async {
     final address = _addressCtrl.text.trim();
-    if (!_isValidEvmAddress(address)) {
+    if (!isValidWatchWalletAddress(address)) {
       ToastUtils.show(S.of(context).g_key_watch_address_hint);
       return;
     }
     setState(() => _loading = true);
     try {
       final wap = ref.read(wapBridgeProvider);
+      final existingWallet = findExistingWatchWallet(
+        wap.walletInfoLsit,
+        address,
+      );
+      if (existingWallet != null) {
+        ToastUtils.show(
+          S.of(context).g_key_214(existingWallet.walletName ?? ''),
+        );
+        return;
+      }
       final count = wap.walletInfoLsit.where((w) => w.watchOnly).length;
       final name = _nameCtrl.text.trim().isEmpty
           ? '${S.of(context).g_key_watch_wallet} ${count + 1}'
@@ -85,10 +91,16 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
           child: TextField(
             controller: controller,
             maxLines: maxLines,
-            style: TextStyle(fontSize: ScreenUtil().setSp(fontSize), color: textColor),
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(fontSize),
+              color: textColor,
+            ),
             decoration: InputDecoration(
               hintText: hint,
-              hintStyle: TextStyle(color: hintColor, fontSize: ScreenUtil().setSp(fontSize)),
+              hintStyle: TextStyle(
+                color: hintColor,
+                fontSize: ScreenUtil().setSp(fontSize),
+              ),
               border: InputBorder.none,
               contentPadding: EdgeInsets.symmetric(
                 horizontal: ScreenUtil().setWidth(24),
@@ -103,17 +115,32 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
 
   @override
   Widget build(BuildContext context) {
-    final mainText = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final subText = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
-    final blueColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
-    final itemBg = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name);
+    final mainText = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.mainTextColor.name,
+    );
+    final subText = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.itemSubtitleTextColor.name,
+    );
+    final blueColor = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.mainBlueColor.name,
+    );
+    final itemBg = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.itemBgColor.name,
+    );
     final s = S.of(context);
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
           s.g_key_watch_wallet,
-          style: TextStyle(fontSize: ScreenUtil().setSp(32), fontWeight: FontWeight.w600),
+          style: TextStyle(
+            fontSize: ScreenUtil().setSp(32),
+            fontWeight: FontWeight.w600,
+          ),
         ),
         centerTitle: true,
       ),
@@ -133,12 +160,19 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
               ),
               child: Row(
                 children: [
-                  Icon(Icons.visibility_outlined, color: blueColor, size: ScreenUtil().setWidth(40)),
+                  Icon(
+                    Icons.visibility_outlined,
+                    color: blueColor,
+                    size: ScreenUtil().setWidth(40),
+                  ),
                   SizedBox(width: ScreenUtil().setWidth(16)),
                   Expanded(
                     child: Text(
                       s.g_key_watch_wallet_desc,
-                      style: TextStyle(fontSize: ScreenUtil().setSp(24), color: subText),
+                      style: TextStyle(
+                        fontSize: ScreenUtil().setSp(24),
+                        color: subText,
+                      ),
                     ),
                   ),
                 ],
@@ -174,14 +208,19 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: blueColor,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+                    borderRadius: BorderRadius.circular(
+                      ScreenUtil().setWidth(20),
+                    ),
                   ),
                 ),
                 child: _loading
                     ? SizedBox(
                         width: ScreenUtil().setWidth(40),
                         height: ScreenUtil().setWidth(40),
-                        child: const CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                        child: const CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
                       )
                     : Text(
                         s.g_key_watch_wallet,

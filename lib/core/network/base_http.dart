@@ -12,6 +12,7 @@ import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
+import 'package:n42_wallet/core/config/proxy_config.dart';
 import 'package:n42_wallet/core/network/circuit_breaker_interceptor.dart';
 import 'package:n42_wallet/core/network/retry_interceptor.dart';
 import 'package:n42_wallet/core/security/security_config.dart';
@@ -58,11 +59,6 @@ class BaseHttp {
   // Initialization
   // ---------------------------------------------------------------------------
 
-  /// Reset Dio connection with optional test mode
-  void reSetDio(bool isTest) {
-    _initDio();
-  }
-
   void _initDio() {
     _options = _buildBaseOptions();
     _dio = Dio(_options)..interceptors.add(CircuitBreakerInterceptor());
@@ -96,16 +92,11 @@ class BaseHttp {
   // Content-Type helpers
   // ---------------------------------------------------------------------------
 
-  String get _contentTypeString {
-    switch (headerType) {
-      case 0:
-        return 'application/json';
-      case 1:
-        return 'multipart/form-data';
-      default:
-        return 'application/x-www-form-urlencoded';
-    }
-  }
+  String get _contentTypeString => switch (headerType) {
+        0 => 'application/json',
+        1 => 'multipart/form-data',
+        _ => 'application/x-www-form-urlencoded',
+      };
 
   static const String _contentTypeKey = 'content-type';
 
@@ -126,31 +117,43 @@ class BaseHttp {
     bool defaultReturn = true,
     Map<String, String>? userInfo,
     bool enableRetry = false,
+    Duration? timeout,
   }) async {
     // RESTful path parameter substitution
+    final consumedKeys = <String>{};
     if (params.isNotEmpty) {
       params.forEach((key, value) {
         if (path.contains(':$key')) {
-          path = path.replaceAll(':$key', value.toString());
+          path = path.replaceAll(':$key', Uri.encodeComponent(value.toString()));
+          consumedKeys.add(key);
         }
       });
     }
+    // Remove consumed path params so they don't leak as query parameters
+    final queryParams = Map<String, dynamic>.from(params)
+      ..removeWhere((key, _) => consumedKeys.contains(key));
 
     try {
       final options = Options(
         method: method,
         contentType: header?['content-type'] as String? ?? _contentTypeString,
         extra: enableRetry ? {RetryOptions.kRetryEnabled: true} : null,
-        headers: {
-          if (header != null) ...header,
+        connectTimeout: timeout,
+        sendTimeout: timeout,
+        receiveTimeout: timeout,
+        headers: ProxyConfig.mergeAuthHeaders(
+          '${_options.baseUrl}$path',
+          {
+          if (header != null)
+            ...header.map((key, value) => MapEntry(key, value.toString())),
           if (userInfo != null) ...userInfo,
-        },
+        }),
       );
 
       final response = await _dio.request<dynamic>(
         path,
         data: data,
-        queryParameters: params,
+        queryParameters: queryParams,
         options: options,
         onSendProgress: sendProgress,
         onReceiveProgress: receiveProgress,
@@ -196,64 +199,48 @@ class BaseHttp {
 
   /// Handle Dio exceptions
   String _handleDioError(DioException error) {
-    switch (error.type) {
-      case DioExceptionType.connectionTimeout:
-      case DioExceptionType.receiveTimeout:
-      case DioExceptionType.sendTimeout:
-      case DioExceptionType.connectionError:
-        return S.current.g_key_error_4;
-      case DioExceptionType.badCertificate:
-        return S.current.g_key_error_27;
-      case DioExceptionType.badResponse:
-        final response = error.response;
-        if (response == null) return S.current.g_key_error_28;
-        final data = response.data;
-        if (data is Map && data.containsKey('error')) {
-          final errorData = data['error'];
-          if (errorData is Map && errorData.containsKey('message')) {
-            return errorData['message'].toString();
-          }
-          if (errorData is String) return errorData;
-        }
-        return _handleHttpError(response.statusCode);
-      case DioExceptionType.cancel:
-        return S.current.g_key_error_8;
-      case DioExceptionType.unknown:
-        return S.current.g_key_error_10;
+    return switch (error.type) {
+      DioExceptionType.connectionTimeout ||
+      DioExceptionType.receiveTimeout ||
+      DioExceptionType.sendTimeout ||
+      DioExceptionType.connectionError =>
+        S.current.g_key_error_4,
+      DioExceptionType.badCertificate => S.current.g_key_error_27,
+      DioExceptionType.badResponse => _handleBadResponse(error.response),
+      DioExceptionType.cancel => S.current.g_key_error_8,
+      DioExceptionType.unknown => S.current.g_key_error_10,
+    };
+  }
+
+  String _handleBadResponse(Response<dynamic>? response) {
+    if (response == null) return S.current.g_key_error_28;
+    final data = response.data;
+    if (data is Map && data.containsKey('error')) {
+      final errorData = data['error'];
+      if (errorData is Map && errorData.containsKey('message')) {
+        return errorData['message'].toString();
+      }
+      if (errorData is String) return errorData;
     }
+    return _handleHttpError(response.statusCode);
   }
 
   /// Handle HTTP error codes
-  String _handleHttpError(int? errorCode) {
-    switch (errorCode) {
-      case 400:
-        return S.current.g_key_error_11;
-      case 401:
-        return S.current.g_key_error_12;
-      case 403:
-        return S.current.g_key_error_13;
-      case 404:
-        return S.current.g_key_error_14;
-      case 408:
-        return S.current.g_key_error_15;
-      case 429:
-        return S.current.g_key_error_23;
-      case 500:
-        return S.current.g_key_error_16;
-      case 501:
-        return S.current.g_key_error_17;
-      case 502:
-        return S.current.g_key_error_18;
-      case 503:
-        return S.current.g_key_error_19;
-      case 504:
-        return S.current.g_key_error_20;
-      case 505:
-        return S.current.g_key_error_21;
-      default:
-        return '${S.current.g_key_error_22}$errorCode';
-    }
-  }
+  String _handleHttpError(int? errorCode) => switch (errorCode) {
+        400 => S.current.g_key_error_11,
+        401 => S.current.g_key_error_12,
+        403 => S.current.g_key_error_13,
+        404 => S.current.g_key_error_14,
+        408 => S.current.g_key_error_15,
+        429 => S.current.g_key_error_23,
+        500 => S.current.g_key_error_16,
+        501 => S.current.g_key_error_17,
+        502 => S.current.g_key_error_18,
+        503 => S.current.g_key_error_19,
+        504 => S.current.g_key_error_20,
+        505 => S.current.g_key_error_21,
+        _ => '${S.current.g_key_error_22}$errorCode',
+      };
 
   // ---------------------------------------------------------------------------
   // Public HTTP methods
@@ -266,6 +253,7 @@ class BaseHttp {
     bool defaultReturn = true,
     bool addUserInfo = false,
     Map<String, dynamic>? header,
+    Duration? timeout,
   }) {
     return _request(
       path,
@@ -274,6 +262,7 @@ class BaseHttp {
       defaultReturn: defaultReturn,
       userInfo: addUserInfo ? getUserToken() : null,
       header: header,
+      timeout: timeout,
     );
   }
 
@@ -289,6 +278,7 @@ class BaseHttp {
     bool defaultReturn = true,
     bool addUserInfo = false,
     bool enableRetry = false,
+    Duration? timeout,
   }) {
     return _request(
       path,
@@ -302,6 +292,7 @@ class BaseHttp {
       userInfo: addUserInfo ? getUserToken() : null,
       header: header,
       enableRetry: enableRetry,
+      timeout: timeout,
     );
   }
 
@@ -313,6 +304,7 @@ class BaseHttp {
     bool defaultReturn = true,
     bool addUserInfo = false,
     Map<String, dynamic>? header,
+    Duration? timeout,
   }) {
     return _request(
       path,
@@ -322,6 +314,7 @@ class BaseHttp {
       defaultReturn: defaultReturn,
       userInfo: addUserInfo ? getUserToken() : null,
       header: header,
+      timeout: timeout,
     );
   }
 
@@ -333,6 +326,7 @@ class BaseHttp {
     bool defaultReturn = true,
     bool addUserInfo = false,
     Map<String, dynamic>? header,
+    Duration? timeout,
   }) {
     return _request(
       path,
@@ -342,6 +336,7 @@ class BaseHttp {
       defaultReturn: defaultReturn,
       userInfo: addUserInfo ? getUserToken() : null,
       header: header,
+      timeout: timeout,
     );
   }
 
@@ -353,10 +348,15 @@ class BaseHttp {
   Map<String, String>? getUserToken() {
     final user = AppGlobals.userInfo;
     if (user == null) return null;
+    final uuid = user.uuid;
+    final token = user.token;
+    if (uuid == null || uuid.isEmpty || token == null || token.isEmpty) {
+      return null;
+    }
     return {
       'Source': 'app',
-      'Uuid': user.uuid ?? '',
-      'Token': user.token ?? '',
+      'Uuid': uuid,
+      'Token': token,
     };
   }
 }

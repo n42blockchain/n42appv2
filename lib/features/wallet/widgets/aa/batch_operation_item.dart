@@ -68,11 +68,11 @@ class BatchOperation {
     );
   }
 
+  static final RegExp _evmAddressRegExp = RegExp(r'^0x[0-9a-fA-F]{40}$');
+
   /// 验证操作是否可以提交
   bool isValid() {
-    // 目标地址必须是合法的 EVM 地址（0x 前缀 + 40 hex chars）
-    final addrRegex = RegExp(r'^0x[0-9a-fA-F]{40}$');
-    if (!addrRegex.hasMatch(targetAddress)) return false;
+    if (!_evmAddressRegExp.hasMatch(targetAddress)) return false;
     // transfer/approve 需要金额 > 0
     if (type == BatchOperationType.transfer || type == BatchOperationType.approve) {
       if (amount == null || amount! <= BigInt.zero) return false;
@@ -86,10 +86,17 @@ class BatchOperation {
     return true;
   }
 
+  static final RegExp _trailingZeros = RegExp(r'\.?0+$');
+
   String get formattedAmount {
     if (amount == null || decimals == null) return '0';
-    final value = amount! / BigInt.from(10).pow(decimals!);
-    return value.toStringAsFixed(6).replaceAll(RegExp(r'\.?0+$'), '');
+    final divisor = BigInt.from(10).pow(decimals!);
+    final wholePart = amount! ~/ divisor;
+    final fracPart = (amount! % divisor).abs();
+    if (fracPart == BigInt.zero) return wholePart.toString();
+    final fracStr = fracPart.toString().padLeft(decimals!, '0');
+    final trimmed = '$wholePart.$fracStr'.replaceAll(_trailingZeros, '');
+    return trimmed.isEmpty ? '0' : trimmed;
   }
 }
 

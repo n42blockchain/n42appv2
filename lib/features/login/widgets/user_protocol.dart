@@ -10,7 +10,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class UserProtocol extends StatefulWidget {
   final ValueChanged<bool>? onChanged;
-  const UserProtocol({this.onChanged,super.key});
+  const UserProtocol({this.onChanged, super.key});
 
   @override
   State<UserProtocol> createState() => _UserProtocolState();
@@ -34,24 +34,20 @@ class _UserProtocolState extends State<UserProtocol> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
-      color:AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
+      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
       child: Row(
         children: [
           RoundCheckBox(
             isChecked: flag,
-            size: ScreenUtil().setWidth(60),  // Increased size for better accessibility
+            size: ScreenUtil().setWidth(60),
             onTap: (selected) {
-              setState(() {
-                flag = !flag;
-              });
-              if (widget.onChanged != null) {
-                widget.onChanged!(flag);
-              }
+              setState(() => flag = !flag);
+              widget.onChanged?.call(flag);
             },
             checkedWidget: Center(
               child: Icon(
                 Icons.check,
-                size: ScreenUtil().setWidth(40),  // Increased icon size
+                size: ScreenUtil().setWidth(40),
                 color: Colors.white,
               ),
             ),
@@ -85,7 +81,6 @@ class _UserProtocolState extends State<UserProtocol> {
                             context, AppThemeKeys.mainBlueColor.name),
                         decoration: TextDecoration.underline,
                       ),
-                      // 设置点击事件 - 在外部浏览器打开
                       recognizer: TapGestureRecognizer()
                         ..onTap = () async {
                           final url = Uri.parse(
@@ -96,45 +91,6 @@ class _UserProtocolState extends State<UserProtocol> {
                           }
                         },
                     ),
-                    /*TextSpan(
-                      text: ",",
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(24.0),
-                        color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.mainTextColor.name),
-                        // decoration: TextDecoration.underline,
-                      ),
-                    ),
-                    TextSpan(
-                      text: S.of(context).g_key_user_p3,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(24.0),
-                        color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.mainBlueColor.name),
-                        decoration: TextDecoration.underline,
-                      ),
-                      // 设置点击事件
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          Navigator.push(context,
-                            MaterialPageRoute(
-                              builder: (_) => BrowserPage(
-                                "${AppConfig.apiUrl['walletamazeBrowser']!}/app-privacy-policy/",
-                                //S.of(context).g_key_user_p3
-                              ),
-                            ),
-                          );
-                        },
-                    ),
-                    TextSpan(
-                      text: ".",
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(24.0),
-                        color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.mainTextColor.name),
-                        // decoration: TextDecoration.underline,
-                      ),
-                    ),*/
                   ]
               ),
               maxLines: 4,

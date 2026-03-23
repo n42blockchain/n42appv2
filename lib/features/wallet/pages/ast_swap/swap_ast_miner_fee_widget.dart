@@ -7,6 +7,17 @@ import 'package:decimal/decimal.dart' as dec;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+String _swapFeeString(dynamic value, {String fallback = ''}) {
+  if (value == null) return fallback;
+  return value.toString();
+}
+
+int _swapFeeInt(dynamic value, {int fallback = 0}) {
+  if (value is int) return value;
+  if (value is num) return value.toInt();
+  return int.tryParse(value?.toString() ?? '') ?? fallback;
+}
+
 /// 矿工费详情面板，显示链余额、Gas Price、Gas Limit 和预估总费用。
 class SwapAstMinerFeeWidget extends StatelessWidget {
   final CoinModel? payCoinModel;
@@ -26,7 +37,10 @@ class SwapAstMinerFeeWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     if (payCoinModel == null) return const SizedBox.shrink();
 
-    final String title = payCoinModel!.coin['coinType'] as String;
+    final String title = _swapFeeString(
+      payCoinModel!.coin['coinType'],
+      fallback: CoinType.N.name,
+    );
     final feeStrings = _buildFeeStrings(context, title);
 
     return Container(
@@ -75,13 +89,16 @@ class SwapAstMinerFeeWidget extends StatelessWidget {
 
   _FeeStrings _buildFeeStrings(BuildContext context, String title) {
     final String blockchainType =
-        payCoinModel!.coin['blockchainType'] as String;
-    final int decimals = payCoinModel!.coin['decimals'] as int;
+        _swapFeeString(payCoinModel!.coin['blockchainType']);
+    final int decimals = _swapFeeInt(payCoinModel!.coin['decimals'], fallback: 18);
     Color totalGasPriceColor =
         AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
 
     if (blockchainType == BlockchainType.Ethereum.name) {
-      final String unit = payCoinModel!.coin['unit'] as String;
+      final String unit = _swapFeeString(
+        payCoinModel!.coin['unit'],
+        fallback: title,
+      );
       if (totalGasPrice > payCoinModel!.balance) {
         totalGasPriceColor = AppThemeUtils.getColorByKey(
             context, AppThemeKeys.errorTextColor.name);

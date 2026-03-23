@@ -2,8 +2,9 @@ import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:n42_wallet/core/config/api_keys_config.dart';
+import 'package:n42_wallet/core/config/proxy_config.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/eth_api.dart';
+import 'package:n42_wallet/features/wallet/models/transaction/explorer_response_utils.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/sol_api.dart';
 
 import 'discovered_token.dart';
@@ -12,9 +13,10 @@ import 'discovered_token.dart';
 
 class _Explorer {
   final String baseUrl;
-  final String apiKey;
-  const _Explorer(this.baseUrl, this.apiKey);
+  const _Explorer(this.baseUrl);
 }
+
+final RegExp _hex0xPrefix = RegExp(r'^0x', caseSensitive: false);
 
 // ─── Token-discovery service ─────────────────────────────────────────────────
 
@@ -23,36 +25,15 @@ class _Explorer {
 ///
 /// All errors are swallowed per-chain; a failed chain simply returns nothing.
 class TokenDiscoveryService {
-  // Etherscan-compatible explorer APIs indexed by internal coin type.
-  static const Map<String, _Explorer> _evmExplorers = {
-    'ETH': _Explorer(
-      'https://api.etherscan.io/api',
-      ApiKeysConfig.etherscan,
-    ),
-    'BSC': _Explorer(
-      'https://api.bscscan.com/api',
-      ApiKeysConfig.bscscan,
-    ),
-    'MATIC': _Explorer(
-      'https://api.polygonscan.com/api',
-      '', // free tier works without key
-    ),
-    'ARBITRUM': _Explorer(
-      'https://api.arbiscan.io/api',
-      '', // separate key not configured; free tier OK
-    ),
-    'OPTIMISM': _Explorer(
-      'https://api-optimistic.etherscan.io/api',
-      ApiKeysConfig.etherscan,
-    ),
-    'BASE': _Explorer(
-      'https://api.basescan.org/api',
-      ApiKeysConfig.basescan,
-    ),
-    'AVAXC': _Explorer(
-      'https://api.snowtrace.io/api',
-      '',
-    ),
+  // Explorer APIs indexed by internal coin type — now via proxy (no API key).
+  static final Map<String, _Explorer> _evmExplorers = {
+    'ETH': _Explorer(ProxyConfig.explorerTokentx('eth')),
+    'BSC': _Explorer(ProxyConfig.explorerTokentx('bnb')),
+    'MATIC': const _Explorer('https://api.polygonscan.com/api'),
+    'ARBITRUM': const _Explorer('https://api.arbiscan.io/api'),
+    'OPTIMISM': const _Explorer('https://api-optimistic.etherscan.io/api'),
+    'BASE': _Explorer(ProxyConfig.explorerTokentx('base')),
+    'AVAXC': const _Explorer('https://api.snowtrace.io/api'),
   };
 
   /// Solana Token program — owns all SPL token accounts.
@@ -75,8 +56,8 @@ class TokenDiscoveryService {
   /// Scan multiple chains for unknown tokens.
   ///
   /// [addressByChain] maps internal coinType → wallet address.
-  /// [knownContracts]  contract addresses already in the wallet (lower-cased).
-  /// [ignoredContracts] contracts the user previously dismissed (lower-cased).
+  /// [knownContracts]  contract addresses already in the wallet.
+  /// [ignoredContracts] contracts the user previously dismissed.
   ///
   /// Returns a deduplicated list of [DiscoveredToken] with non-zero balances,
   /// sorted by chain then symbol.
@@ -85,6 +66,9 @@ class TokenDiscoveryService {
     required Set<String> knownContracts,
     required Set<String> ignoredContracts,
   }) async {
+    // Pre-normalize contract sets to avoid repeated trim+lowercase in inner loops.
+    final normalizedKnown = _normalizeContractSet(knownContracts);
+    final normalizedIgnored = _normalizeContractSet(ignoredContracts);
     final results = <DiscoveredToken>[];
 
     for (final entry in addressByChain.entries) {
@@ -95,20 +79,24 @@ class TokenDiscoveryService {
       try {
         List<DiscoveredToken> chainResult;
         if (coinType == 'SOL') {
-          chainResult = await _scanSolana(address, knownContracts, ignoredContracts);
+          chainResult = await _scanSolana(
+            address,
+            normalizedKnown,
+            normalizedIgnored,
+          );
         } else if (_evmExplorers.containsKey(coinType)) {
           chainResult = await _scanEvm(
             coinType: coinType,
             address: address,
-            knownContracts: knownContracts,
-            ignoredContracts: ignoredContracts,
+            knownContracts: normalizedKnown,
+            ignoredContracts: normalizedIgnored,
           );
         } else {
           continue; // non-EVM, non-SOL: skip
         }
         results.addAll(chainResult);
       } catch (e) {
-        debugPrint('[TokenDiscovery] $coinType scan error: $e');
+        if (kDebugMode) debugPrint('[TokenDiscovery] $coinType scan error: $e');
       }
     }
 
@@ -135,49 +123,81 @@ class TokenDiscoveryService {
 
     // 1. Fetch ERC-20 transfer history from Etherscan-compatible explorer.
     final params = <String, dynamic>{
-      'module': 'account',
-      'action': 'tokentx',
       'address': address,
-      'sort': 'desc',
-      'offset': '50', // last 50 transfers is plenty
+      if (!explorer.baseUrl.startsWith(ProxyConfig.baseUrl)) ...{
+        'module': 'account',
+        'action': 'tokentx',
+        'sort': 'desc',
+        'offset': '50', // last 50 transfers is plenty
+      },
       'page': '1',
+      if (explorer.baseUrl.startsWith(ProxyConfig.baseUrl)) 'size': '50',
     };
-    if (explorer.apiKey.isNotEmpty) {
-      params['apikey'] = explorer.apiKey;
-    }
 
     final response = await _dio.get<Map<String, dynamic>>(
       explorer.baseUrl,
       queryParameters: params,
+      options: Options(
+        headers: ProxyConfig.mergeAuthHeaders(explorer.baseUrl, const {
+          'Accept': 'application/json',
+        }),
+      ),
     );
     final body = response.data;
-    if (body == null || body['status'] != '1') {
-      // status '0' with message "No transactions found" is a normal case.
+    if (body == null) {
       return [];
     }
 
-    final txList = body['result'] as List<dynamic>? ?? [];
+    final txList = extractExplorerItems(body);
+    if (txList.isEmpty) {
+      return [];
+    }
 
     // 2. Deduplicate unique contracts (preserve first occurrence).
     final seen = <String>{};
     final candidates = <_EvmCandidate>[];
 
-    for (final tx in txList) {
-      if (tx is! Map) continue;
-      final contract = (tx['contractAddress'] as String?)?.toLowerCase() ?? '';
+    for (final normalized in txList) {
+      final contract =
+          (explorerString(normalized, const [
+                    'contractAddress',
+                    'tokenAddr',
+                    'token',
+                  ]) ??
+                  '')
+              .trim();
       if (contract.isEmpty ||
-          !seen.add(contract) ||
-          knownContracts.contains(contract) ||
-          ignoredContracts.contains(contract)) {
+          !seen.add(contract.toLowerCase()) ||
+          matchesTrackedContract(
+            coinType: coinType,
+            contract: contract,
+            trackedContracts: knownContracts,
+          ) ||
+          matchesTrackedContract(
+            coinType: coinType,
+            contract: contract,
+            trackedContracts: ignoredContracts,
+          )) {
         continue;
       }
 
-      candidates.add(_EvmCandidate(
-        contract: tx['contractAddress'] as String,
-        symbol: tx['tokenSymbol'] as String? ?? '',
-        name: tx['tokenName'] as String? ?? '',
-        decimals: int.tryParse(tx['tokenDecimal'] as String? ?? '0') ?? 0,
-      ));
+      candidates.add(
+        _EvmCandidate(
+          contract: contract,
+          symbol: explorerString(normalized, const ['tokenSymbol']) ?? '',
+          name: explorerString(normalized, const ['tokenName']) ?? '',
+          decimals:
+              int.tryParse(
+                explorerString(normalized, const [
+                      'tokenDecimal',
+                      'tokenDecimals',
+                      'decimals',
+                    ]) ??
+                    '0',
+              ) ??
+              0,
+        ),
+      );
       if (candidates.length >= 30) break; // safety cap
     }
 
@@ -188,7 +208,11 @@ class TokenDiscoveryService {
     for (var i = 0; i < candidates.length; i += 5) {
       final batch = candidates.sublist(i, min(i + 5, candidates.length));
       final futures = batch.map(
-        (c) => _verifyEvmBalance(coinType: coinType, address: address, candidate: c),
+        (c) => _verifyEvmBalance(
+          coinType: coinType,
+          address: address,
+          candidate: c,
+        ),
       );
       final batchResults = await Future.wait(futures, eagerError: false);
       results.addAll(batchResults.nonNulls);
@@ -205,7 +229,9 @@ class TokenDiscoveryService {
   }) async {
     try {
       // balanceOf(address) selector: 0x70a08231
-      final stripped = address.replaceFirst(RegExp(r'^0x', caseSensitive: false), '').toLowerCase();
+      final stripped = address
+          .replaceFirst(_hex0xPrefix, '')
+          .toLowerCase();
       final calldata = '0x70a08231${stripped.padLeft(64, '0')}';
 
       final result = await EthAPI()
@@ -224,7 +250,8 @@ class TokenDiscoveryService {
       final hex = result.valueOrNull?.toString() ?? '';
       if (!hex.startsWith('0x') || hex.length <= 2) return null;
 
-      final balance = BigInt.tryParse(hex.substring(2), radix: 16) ?? BigInt.zero;
+      final balance =
+          BigInt.tryParse(hex.substring(2), radix: 16) ?? BigInt.zero;
       if (balance == BigInt.zero) return null;
 
       return DiscoveredToken(
@@ -251,15 +278,11 @@ class TokenDiscoveryService {
     Set<String> ignoredContracts,
   ) async {
     final result = await SolApi()
-        .baseRPCSol(
-          'getTokenAccountsByOwner',
-          [
-            address,
-            {'programId': _solTokenProgram},
-            {'encoding': 'jsonParsed'},
-          ],
-          isTest: false,
-        )
+        .baseRPCSol('getTokenAccountsByOwner', [
+          address,
+          {'programId': _solTokenProgram},
+          {'encoding': 'jsonParsed'},
+        ], isTest: false)
         .timeout(const Duration(seconds: 12));
 
     if (!result.isSuccess || result.valueOrNull == null) return [];
@@ -287,8 +310,20 @@ class TokenDiscoveryService {
 
       final mint = info['mint'] as String? ?? '';
       if (mint.isEmpty) return null;
-      if (knownContracts.contains(mint)) return null;
-      if (ignoredContracts.contains(mint)) return null;
+      if (matchesTrackedContract(
+        coinType: 'SOL',
+        contract: mint,
+        trackedContracts: knownContracts,
+      )) {
+        return null;
+      }
+      if (matchesTrackedContract(
+        coinType: 'SOL',
+        contract: mint,
+        trackedContracts: ignoredContracts,
+      )) {
+        return null;
+      }
 
       final tokenAmount = info['tokenAmount'] as Map<String, dynamic>? ?? {};
       final amountStr = tokenAmount['amount'] as String? ?? '0';
@@ -310,6 +345,40 @@ class TokenDiscoveryService {
     } catch (_) {
       return null;
     }
+  }
+
+  @visibleForTesting
+  static bool matchesTrackedContract({
+    required String coinType,
+    required String contract,
+    required Set<String> trackedContracts,
+  }) {
+    final trimmedContract = contract.trim();
+    if (trimmedContract.isEmpty) {
+      return false;
+    }
+
+    if (coinType == 'SOL') {
+      final legacyLowercase = trimmedContract.toLowerCase();
+      return trackedContracts.contains(trimmedContract) ||
+          trackedContracts.contains(legacyLowercase);
+    }
+
+    final normalizedContract = trimmedContract.toLowerCase();
+    return trackedContracts.contains(normalizedContract);
+  }
+
+  /// Pre-normalize a set of contract addresses for efficient O(1) lookups.
+  /// Adds both the trimmed original and the lowercased form (for SOL compat).
+  static Set<String> _normalizeContractSet(Set<String> contracts) {
+    final normalized = <String>{};
+    for (final c in contracts) {
+      final trimmed = c.trim();
+      if (trimmed.isEmpty) continue;
+      normalized.add(trimmed); // original case (for SOL)
+      normalized.add(trimmed.toLowerCase()); // lowercased (for EVM)
+    }
+    return normalized;
   }
 }
 

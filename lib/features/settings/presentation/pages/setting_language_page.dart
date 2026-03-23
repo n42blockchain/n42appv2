@@ -34,7 +34,7 @@ class SettingLanguagePage extends ConsumerWidget {
         itemCount: kSupportedLanguages.length,
         itemBuilder: (context, index) {
           final language = kSupportedLanguages[index];
-          final isSelected = currentCode == language.code;
+          final isSelected = isLanguageSelected(currentCode, language.code);
 
           return _LanguageOptionItem(
             language: language,
@@ -50,10 +50,7 @@ class SettingLanguagePage extends ConsumerWidget {
   }
 
   String _localeToCode(Locale locale) {
-    if (locale.countryCode != null) {
-      return '${locale.languageCode}_${locale.countryCode}';
-    }
-    return locale.languageCode;
+    return languageCodeFromLocale(locale);
   }
 }
 
@@ -89,7 +86,7 @@ class _LanguageOptionItem extends StatelessWidget {
               : null,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha:0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, 2),
             ),
@@ -114,7 +111,7 @@ class _LanguageOptionItem extends StatelessWidget {
               ),
             ),
             SizedBox(width: ScreenUtil().setWidth(24)),
-            
+
             // Language name
             Expanded(
               child: Text(
@@ -126,7 +123,7 @@ class _LanguageOptionItem extends StatelessWidget {
                 ),
               ),
             ),
-            
+
             // Check mark
             if (isSelected)
               Icon(
@@ -140,4 +137,3 @@ class _LanguageOptionItem extends StatelessWidget {
     );
   }
 }
-

@@ -11,10 +11,7 @@ import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/shared/domain/entities/wallet_info.dart';
 import 'cross_feature_events.dart';
 
-/// Cross-Feature Event Manager
-///
-/// Provides a centralized way to emit and listen for cross-feature events.
-/// This enables loose coupling between features.
+/// Centralized event manager for cross-feature communication.
 class EventManager {
   static final EventManager _instance = EventManager._internal();
   factory EventManager() => _instance;
@@ -23,7 +20,6 @@ class EventManager {
   final EventBus _eventBus = EventBus();
   final List<StreamSubscription> _subscriptions = [];
 
-  /// Emit an event
   void emit<T extends CrossFeatureEvent>(T event) {
     if (kDebugMode) {
       debugPrint('[EventManager] Emitting: ${event.runtimeType}');
@@ -31,7 +27,6 @@ class EventManager {
     _eventBus.fire(event);
   }
 
-  /// Listen for events of a specific type
   StreamSubscription<T> on<T extends CrossFeatureEvent>(
     void Function(T event) handler,
   ) {
@@ -40,13 +35,11 @@ class EventManager {
     return subscription;
   }
 
-  /// Cancel a specific subscription
   void cancel(StreamSubscription subscription) {
     subscription.cancel();
     _subscriptions.remove(subscription);
   }
 
-  /// Cancel all subscriptions
   void cancelAll() {
     for (final sub in _subscriptions) {
       sub.cancel();
@@ -54,20 +47,17 @@ class EventManager {
     _subscriptions.clear();
   }
 
-  /// Destroy the event manager
   void destroy() {
     cancelAll();
     _eventBus.destroy();
   }
 
-  // ============ Convenience Methods ============
+  // — Convenience emitters —
 
-  /// Emit wallet selected event
   void emitWalletSelected(SharedWalletInfo wallet) {
     emit(WalletSelectedEvent(wallet));
   }
 
-  /// Emit wallet balance updated event
   void emitWalletBalanceUpdated({
     required String walletAddress,
     required String coinSymbol,
@@ -80,7 +70,6 @@ class EventManager {
     ));
   }
 
-  /// Emit transaction completed event
   void emitTransactionCompleted({
     required String walletAddress,
     required String txHash,
@@ -97,7 +86,6 @@ class EventManager {
     ));
   }
 
-  /// Emit mining status changed event
   void emitMiningStatusChanged({
     required String status,
     String? walletAddress,
@@ -108,7 +96,6 @@ class EventManager {
     ));
   }
 
-  /// Emit user logged in event
   void emitUserLoggedIn({
     required String userUuid,
     String? email,
@@ -119,30 +106,25 @@ class EventManager {
     ));
   }
 
-  /// Emit user logged out event
   void emitUserLoggedOut() {
     emit(UserLoggedOutEvent());
   }
 
-  /// Emit app backgrounded event
   void emitAppBackgrounded() {
     emit(AppBackgroundedEvent());
   }
 
-  /// Emit app foregrounded event
   void emitAppForegrounded() {
     emit(AppForegroundedEvent());
   }
 }
 
-/// Global event manager instance
 final eventManager = EventManager();
 
-/// Mixin for features that need to listen for events
+/// Mixin providing event subscription lifecycle management.
 mixin EventListenerMixin {
   final List<StreamSubscription> _eventSubscriptions = [];
 
-  /// Subscribe to an event type
   void subscribeToEvent<T extends CrossFeatureEvent>(
     void Function(T event) handler,
   ) {
@@ -150,7 +132,6 @@ mixin EventListenerMixin {
     _eventSubscriptions.add(sub);
   }
 
-  /// Unsubscribe from all events
   void unsubscribeFromAllEvents() {
     for (final sub in _eventSubscriptions) {
       sub.cancel();

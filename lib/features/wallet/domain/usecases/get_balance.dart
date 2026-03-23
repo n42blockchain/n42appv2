@@ -11,12 +11,9 @@ import 'package:injectable/injectable.dart';
 
 import '../../../../core/error/failures.dart';
 import '../../../../core/usecase/usecase.dart';
-import '../../../../domain/repositories/wallet_repository.dart';
-import '../../../../domain/entities/wallet.dart' show ChainType;
-import '../entities/wallet_entity.dart' hide ChainType;
+import '../entities/wallet_entity.dart';
+import '../repositories/wallet_repository.dart';
 
-// Re-export types for convenience
-export '../../../../domain/entities/wallet.dart' show ChainType;
 export '../entities/wallet_entity.dart' show AssetEntity;
 
 /// Get Balance Use Case
@@ -29,23 +26,31 @@ class GetBalance implements UseCase<List<AssetEntity>, GetBalanceParams> {
   GetBalance(this._repository);
 
   @override
-  Future<Either<Failure, List<AssetEntity>>> call(GetBalanceParams params) async {
+  Future<Either<Failure, List<AssetEntity>>> call(
+    GetBalanceParams params,
+  ) async {
     final result = await _repository.getAssets(
       address: params.address,
       chainType: params.chainType,
     );
 
-    return result.map((assets) => assets.map((asset) => AssetEntity(
-      symbol: asset.symbol,
-      name: asset.name,
-      balance: asset.balance,
-      decimals: asset.decimals,
-      chainType: params.chainType?.name ?? 'ethereum',
-      contractAddress: asset.contractAddress,
-      iconUrl: asset.iconUrl,
-      isNative: asset.isNative,
-      priceUsd: asset.priceUsd,
-    )).toList());
+    return result.map(
+      (assets) => assets
+          .map(
+            (asset) => AssetEntity(
+              symbol: asset.symbol,
+              name: asset.name,
+              balance: asset.balance,
+              decimals: asset.decimals,
+              chainType: params.chainType?.name ?? asset.chainType,
+              contractAddress: asset.contractAddress,
+              iconUrl: asset.iconUrl,
+              isNative: asset.isNative,
+              priceUsd: asset.priceUsd,
+            ),
+          )
+          .toList(),
+    );
   }
 }
 
@@ -57,12 +62,8 @@ class GetBalanceParams extends Equatable {
   /// Optional chain type filter
   final ChainType? chainType;
 
-  const GetBalanceParams({
-    required this.address,
-    this.chainType,
-  });
+  const GetBalanceParams({required this.address, this.chainType});
 
   @override
   List<Object?> get props => [address, chainType];
 }
-

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
@@ -9,17 +9,11 @@ import 'package:n42_wallet/features/wallet_connect/presentation/providers/wallet
 import 'package:n42_wallet/main.dart' show globalProviderContainer;
 import 'package:n42_wallet/shared/domain/entities/wallet_info.dart';
 
-/// Legacy Application class - 已部分迁移到 Riverpod
-///
-/// 保留此类以兼容旧代码，新代码应使用 AppGlobals 和 Riverpod
+import 'package:n42_wallet/core/security/secure_storage.dart';
+
 @Deprecated('Use AppGlobals and Riverpod providers instead')
 class Application {
-  // ignore: non_constant_identifier_names
-  static late BuildContext AppContext;
-  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-  static RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
   static UserInfo? userInfo;
-  static int currentId = 0;
 
   /// 用户登录
   static Future<void> login(UserInfo info) async {
@@ -35,15 +29,20 @@ class Application {
   /// 用户退出
   static Future<void> logout() async {
     try {
-      await SPUtil().saveUserInfo(null);
+      await Future.wait([
+        SPUtil().saveUserInfo(null),
+        SecureStorage().clearUserData(),
+      ]);
       userInfo = null;
       globalProviderContainer.read(currentUserProvider.notifier).clearUser();
       globalProviderContainer.invalidate(walletListProvider);
-      if (!AppContext.mounted) return;
       globalWapAdapter.initWallet();
       globalWcpInstance.cleanDataLogout();
     } catch (err) {
-      debugPrint('Logout error: $err');
+      assert(() {
+        debugPrint('Logout error: $err');
+        return true;
+      }());
     }
   }
 }

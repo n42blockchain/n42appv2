@@ -7,10 +7,7 @@
 
 import 'package:equatable/equatable.dart';
 
-/// Shared Wallet Info
-///
-/// A lightweight wallet representation that can be used across features.
-/// Contains only the essential information needed by other features.
+/// Lightweight wallet representation for cross-feature use.
 class SharedWalletInfo extends Equatable {
   final String address;
   final String name;
@@ -28,9 +25,7 @@ class SharedWalletInfo extends Equatable {
   List<Object?> get props => [address, name, chainType, avatarUrl];
 }
 
-/// Shared User Info
-///
-/// A lightweight user representation for cross-feature use.
+/// Lightweight user representation for cross-feature use.
 class SharedUserInfo extends Equatable {
   final String uuid;
   final String email;
@@ -52,53 +47,44 @@ class SharedUserInfo extends Equatable {
     this.isLoggedIn = true,
   });
 
-  factory SharedUserInfo.fromJson(Map<String, dynamic> json) {
-    return SharedUserInfo(
-      uuid: json['uuid'] ?? '',
-      email: json['email'] ?? '',
-      name: json['name'],
-      avatarUrl: json['image'] ?? json['avatarUrl'],
-      token: json['token'],
-      image: json['image'],
-      desc: json['desc'],
-      isLoggedIn: json['isLoggedIn'] ?? true,
-    );
-  }
+  factory SharedUserInfo.fromJson(Map<String, dynamic> json) => SharedUserInfo(
+        uuid: json['uuid'] as String? ?? '',
+        email: json['email'] as String? ?? '',
+        name: json['name'] as String?,
+        avatarUrl: json['image'] as String? ?? json['avatarUrl'] as String?,
+        token: json['token'] as String?,
+        image: json['image'] as String?,
+        desc: json['desc'] as String?,
+        isLoggedIn: json['isLoggedIn'] as bool? ?? true,
+      );
 
-  /// Create from legacy UserInfo model
-  factory SharedUserInfo.fromLegacyUserInfo(dynamic userInfo) {
-    return SharedUserInfo(
-      uuid: userInfo.uuid ?? '',
-      email: userInfo.email ?? '',
-      name: userInfo.name,
-      avatarUrl: userInfo.image,
-      token: userInfo.token,
-      image: userInfo.image,
-      desc: userInfo.desc,
-      isLoggedIn: true,
-    );
-  }
+  factory SharedUserInfo.fromLegacyUserInfo(dynamic userInfo) =>
+      SharedUserInfo(
+        uuid: userInfo.uuid ?? '',
+        email: userInfo.email ?? '',
+        name: userInfo.name,
+        avatarUrl: userInfo.image,
+        token: userInfo.token,
+        image: userInfo.image,
+        desc: userInfo.desc,
+      );
 
-  Map<String, dynamic> toJson() {
-    return {
-      'uuid': uuid,
-      'email': email,
-      'name': name,
-      'avatarUrl': avatarUrl,
-      'token': token,
-      'image': image,
-      'desc': desc,
-      'isLoggedIn': isLoggedIn,
-    };
-  }
+  Map<String, dynamic> toJson() => {
+        'uuid': uuid,
+        'email': email,
+        'name': name,
+        'avatarUrl': avatarUrl,
+        'token': token,
+        'image': image,
+        'desc': desc,
+        'isLoggedIn': isLoggedIn,
+      };
 
   @override
   List<Object?> get props => [uuid, email, name, avatarUrl, token, image, desc, isLoggedIn];
 }
 
-/// Wallet Balance Info
-///
-/// Represents wallet balance for a specific coin type.
+/// Wallet balance for a specific coin type.
 class WalletBalanceInfo extends Equatable {
   final String address;
   final String coinType;

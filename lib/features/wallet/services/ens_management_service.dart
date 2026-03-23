@@ -8,6 +8,32 @@ import 'package:n42_wallet/core/network/base_api.dart';
 import 'package:n42_wallet/features/models/message_model.dart';
 import 'package:n42_wallet/features/wallet/services/ens_registration_service.dart';
 
+Map<String, dynamic>? _ensManagementMapValue(dynamic value) {
+  if (value is Map<String, dynamic>) return value;
+  if (value is Map) {
+    return value.map((key, entry) => MapEntry(key.toString(), entry));
+  }
+  return null;
+}
+
+List<dynamic> _ensManagementListValue(dynamic value) {
+  if (value is List) return value;
+  return const [];
+}
+
+String _ensManagementStringValue(dynamic value, {String fallback = ''}) {
+  if (value == null) return fallback;
+  return value.toString();
+}
+
+DateTime? _ensManagementDateTimeValue(dynamic value) {
+  if (value == null) return null;
+  if (value is DateTime) return value;
+  if (value is int) return DateTime.fromMillisecondsSinceEpoch(value);
+  if (value is num) return DateTime.fromMillisecondsSinceEpoch(value.toInt());
+  return DateTime.tryParse(value.toString());
+}
+
 /// ENS 域名管理操作（续费、记录更新、转移、子域名）
 ///
 /// 作为 [EnsRegistrationService] 的 extension，共享网络配置，
@@ -34,8 +60,10 @@ extension EnsManagementService on EnsRegistrationService {
       );
 
       if (response['code'] == 200) {
+        final data =
+            _ensManagementMapValue(response['data']) ?? <String, dynamic>{};
         mm.error = false;
-        mm.data = response['data']?['txHash'];
+        mm.data = data['txHash']?.toString();
       } else {
         mm.error = true;
         mm.data = response['msg']?.toString() ?? fallbackError;
@@ -66,12 +94,14 @@ extension EnsManagementService on EnsRegistrationService {
 
       final mm = MessageModel();
       if (response['code'] == 200) {
-        final data = response['data'];
+        final data =
+            _ensManagementMapValue(response['data']) ?? <String, dynamic>{};
         mm.error = false;
         mm.data = RenewResult.success(
-          txHash: data['txHash'] as String,
+          txHash: _ensManagementStringValue(data['txHash']),
           name: normalizedName,
-          newExpiresAt: DateTime.parse(data['expiresAt'] as String),
+          newExpiresAt:
+              _ensManagementDateTimeValue(data['expiresAt']) ?? DateTime.now(),
         );
       } else {
         mm.error = true;
@@ -167,10 +197,15 @@ extension EnsManagementService on EnsRegistrationService {
       );
 
       if (response['code'] == 200) {
-        final dataList = response['data'] as List<dynamic>?;
+        final dataList = _ensManagementListValue(response['data']);
         mm.error = false;
-        mm.data = (dataList ?? [])
-            .map((e) => SubdomainInfo.fromJson(e as Map<String, dynamic>))
+        mm.data = dataList
+            .whereType<Map>()
+            .map(
+              (e) => SubdomainInfo.fromJson(
+                e.map((key, value) => MapEntry(key.toString(), value)),
+              ),
+            )
             .toList();
       } else {
         mm.error = true;

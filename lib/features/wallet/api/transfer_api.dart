@@ -24,7 +24,6 @@ import 'package:n42_wallet/features/wallet/models/btc_transaction_recode_model.d
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
-import 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/chain_eip1559.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/utils/transaction/coin_gas.dart';
@@ -89,6 +88,16 @@ class TransferApi
     bool maxValue = true,
     String? message,
   }) async {
+    // ── Input validation ─────────────────────────────────────
+    // Reject zero, negative, infinite, or NaN amounts
+    if (value <= 0 || value.isNaN || value.isInfinite) {
+      return MessageModel.error()..data = 'Invalid transfer amount';
+    }
+    // Reject empty or whitespace-only recipient address
+    if (toAddress.trim().isEmpty) {
+      return MessageModel.error()..data = 'Recipient address is empty';
+    }
+    // ─────────────────────────────────────────────────────────
     final WalletActionProvider wap = globalWapAdapter;
     chainSymbol = symbolDealWith(chainSymbol);
     final Map<String, dynamic>? txChainMap =
@@ -124,6 +133,11 @@ class TransferApi
           ..data = S.current.g_key_wallet_m3(txChainMap['baseInfo']['coinType']);
       }
       fromAddress = fAddress;
+    }
+
+    // Prevent self-send (same address after case-insensitive comparison)
+    if (fromAddress.toLowerCase() == toAddress.toLowerCase()) {
+      return MessageModel.error()..data = 'Cannot send to your own address';
     }
 
     final String blockchain = txChainMap['baseInfo']['blockchainType'];

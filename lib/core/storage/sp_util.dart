@@ -12,6 +12,17 @@ import 'package:n42_wallet/core/storage/secure_preferences.dart';
 import 'package:n42_wallet/data/models/user_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+List<String> normalizeMarketWatchlistSymbols(Iterable<dynamic> symbols) {
+  final normalized = <String>[];
+  final seen = <String>{};
+  for (final symbol in symbols) {
+    final value = symbol.toString().trim().toLowerCase();
+    if (value.isEmpty || !seen.add(value)) continue;
+    normalized.add(value);
+  }
+  return normalized;
+}
+
 /// Shared Preferences Utility
 ///
 /// Provides a centralized interface for local storage operations.
@@ -104,9 +115,7 @@ class SPUtil {
 
   Future<Map<String, dynamic>?> getBrowserSetting() async {
     await initPrefs();
-    final r = prefs?.getString(SPkey.browserSetting.name);
-    if (r == null) return null;
-    return json.decode(r);
+    return _decodeJsonMap(prefs?.getString(SPkey.browserSetting.name));
   }
 
   // ==================== 敏感数据（使用 SecurePreferences） ====================
@@ -117,8 +126,8 @@ class SPUtil {
   }
 
   /// 获取钱包列表（安全存储）
-  Future<Map<String, dynamic>?> getWalletInfo() async {
-    return await _securePrefs.getWalletInfo();
+  Future<Map<String, dynamic>?> getWalletInfo() {
+    return _securePrefs.getWalletInfo();
   }
 
   // 钱包安全验证配置（安全存储）
@@ -126,8 +135,8 @@ class SPUtil {
     await _securePrefs.setSecurity(value);
   }
 
-  Future<Map<String, dynamic>?> getSecurity() async {
-    return await _securePrefs.getSecurity();
+  Future<Map<String, dynamic>?> getSecurity() {
+    return _securePrefs.getSecurity();
   }
 
   // 保存用户信息（安全存储）
@@ -141,29 +150,33 @@ class SPUtil {
   }
 
   // 获取缓存的用户信息（安全存储）
-  Future<Map<String, dynamic>?> getUserInfo() async {
-    return await _securePrefs.getUserInfo();
+  Future<Map<String, dynamic>?> getUserInfo() {
+    return _securePrefs.getUserInfo();
   }
 
   // 锁屏设置（安全存储）
   Future<void> setLockScreen(Map<String, dynamic> value) async {
-    final uuid = AppGlobals.userInfo?.uuid ?? "";
+    final uuid = AppGlobals.userInfo?.uuid;
+    if (uuid == null || uuid.isEmpty) return;
     await _securePrefs.setLockScreen(uuid, value);
   }
 
   Future<Map<String, dynamic>?> getLockScreen() async {
-    final uuid = AppGlobals.userInfo?.uuid ?? "";
+    final uuid = AppGlobals.userInfo?.uuid;
+    if (uuid == null || uuid.isEmpty) return null;
     return await _securePrefs.getLockScreen(uuid);
   }
 
   // 挖矿数据（安全存储）
   Future<void> setMiningData(Map<String, dynamic> value) async {
-    final uuid = AppGlobals.userInfo?.uuid ?? "";
+    final uuid = AppGlobals.userInfo?.uuid;
+    if (uuid == null || uuid.isEmpty) return;
     await _securePrefs.setMiningData(uuid, value);
   }
 
   Future<Map<String, dynamic>?> getMiningData() async {
-    final uuid = AppGlobals.userInfo?.uuid ?? "";
+    final uuid = AppGlobals.userInfo?.uuid;
+    if (uuid == null || uuid.isEmpty) return null;
     return await _securePrefs.getMiningData(uuid);
   }
 
@@ -253,12 +266,17 @@ class SPUtil {
   // 行情自选列表（存储 coin symbol lowercase）
   Future<List<String>> getMarketWatchlist() async {
     await initPrefs();
-    return _decodeJsonList(prefs?.getString(SPkey.marketWatchlist.name));
+    return normalizeMarketWatchlistSymbols(
+      _decodeJsonList(prefs?.getString(SPkey.marketWatchlist.name)),
+    );
   }
 
   Future<void> saveMarketWatchlist(List<String> list) async {
     await initPrefs();
-    await prefs?.setString(SPkey.marketWatchlist.name, json.encode(list));
+    await prefs?.setString(
+      SPkey.marketWatchlist.name,
+      json.encode(normalizeMarketWatchlistSymbols(list)),
+    );
   }
 
   // 资产搜索历史（最近 10 条关键词，按时间倒序）
@@ -292,13 +310,16 @@ class SPUtil {
   /// 更新某地址挖矿状态中的某个子字段
   // ignore: non_constant_identifier_names
   Future<void> setMiningStatus_child(
-      String address, String key, dynamic value) async {
+    String address,
+    String key,
+    dynamic value,
+  ) async {
     await initPrefs();
     final existing = await getMiningStautus() ?? {};
-    final addrData =
-        Map<String, dynamic>.from(existing[address] as Map? ?? {});
-    final miningValue =
-        Map<String, dynamic>.from(addrData['miningValue'] as Map? ?? {});
+    final addrData = Map<String, dynamic>.from(existing[address] as Map? ?? {});
+    final miningValue = Map<String, dynamic>.from(
+      addrData['miningValue'] as Map? ?? {},
+    );
     miningValue[key] = value;
     addrData['miningValue'] = miningValue;
     existing[address] = addrData;
@@ -314,8 +335,7 @@ class SPUtil {
   /// 设置当前选中的 V1 挖矿节点
   Future<void> setCurrNodeAddress(Map<dynamic, dynamic> node) async {
     await initPrefs();
-    await prefs?.setString(
-        SPkey.miningV1NodeAddress.name, json.encode(node));
+    await prefs?.setString(SPkey.miningV1NodeAddress.name, json.encode(node));
   }
 
   /// 获取 V1 挖矿是否开启
@@ -324,14 +344,11 @@ class SPUtil {
     return prefs?.getBool(SPkey.miningV1OpenMining.name) ?? true;
   }
 
-  /// 设置 V1 挖矿开关（与 setMiningOpen 等价）
-  Future<void> setOpenMining(bool value) async {
+  /// 设置 V1 挖矿开关
+  Future<void> setMiningOpen(bool value) async {
     await initPrefs();
     await prefs?.setBool(SPkey.miningV1OpenMining.name, value);
   }
-
-  /// 设置 V1 挖矿开关（别名）
-  Future<void> setMiningOpen(bool value) async => setOpenMining(value);
 
   /// 获取是否使用主链挖矿
   Future<bool?> getIsMainChainMining() async {
@@ -375,21 +392,23 @@ class SPUtil {
   // ── Token auto-discovery: ignored contracts ──────────────────────────────
 
   /// Returns the set of contract addresses the user has dismissed in the
-  /// token discovery flow (stored in lower-case).
+  /// token discovery flow.
   Future<Set<String>> getIgnoredTokenContracts() async {
     await initPrefs();
     return _decodeJsonList(
       prefs?.getString(SPkey.ignoredTokenContracts.name),
-    ).toSet();
+    ).map((c) => c.trim()).where((c) => c.isNotEmpty).toSet();
   }
 
   /// Persists [contracts] to the ignored list (merges with existing).
   Future<void> addIgnoredTokenContracts(Iterable<String> contracts) async {
     await initPrefs();
     final existing = await getIgnoredTokenContracts();
-    existing.addAll(contracts.map((c) => c.toLowerCase()));
+    existing.addAll(contracts.map((c) => c.trim()).where((c) => c.isNotEmpty));
     await prefs?.setString(
-        SPkey.ignoredTokenContracts.name, json.encode(existing.toList()));
+      SPkey.ignoredTokenContracts.name,
+      json.encode(existing.toList()),
+    );
   }
 
   /// Convenience method to ignore a single contract address.
@@ -424,7 +443,7 @@ enum SPkey {
   miningUiVersion, // 挖矿 UI 版本：true = V2（默认），false = V1
   marketWatchlist, // 行情自选列表，JSON List<String> 存 coin symbol（lowercase）
   coinPriceAlerts, // 币价到价提醒配置，JSON Map<coinId, CoinPriceAlertConfig>
-  accentColor,     // 自定义主色调，存 ARGB int（0 表示默认蓝色）
+  accentColor, // 自定义主色调，存 ARGB int（0 表示默认蓝色）
   ignoredTokenContracts, // 代币自动发现：用户手动忽略的合约地址 JSON List<String>
   smallAssetsThreshold, // 小额资产过滤阈值（double: 0=关闭, 1/5/10/50 表示过滤低于该 USD 价值的代币）
 }

@@ -17,6 +17,7 @@ class SecurityEdit extends StatefulWidget{
   SecurityEditState createState()=>SecurityEditState();
 }
 class SecurityEditState extends State<SecurityEdit>{
+  static final RegExp _totpCodeRegExp = RegExp(r'^\d{6}$');
   Map<String,dynamic> securityMap={
     "email":false,
     "google":false,
@@ -121,7 +122,7 @@ class SecurityEditState extends State<SecurityEdit>{
               TextButton(
                 onPressed: () async {
                   final code = codeCtrl.text.trim();
-                  if (code.isEmpty || code.length != 6 || !RegExp(r'^\d{6}$').hasMatch(code)) {
+                  if (code.isEmpty || code.length != 6 || !_totpCodeRegExp.hasMatch(code)) {
                     setModalState(() => errorMsg = S.of(ctx).g_2fa_invalid_format);
                     return;
                   }

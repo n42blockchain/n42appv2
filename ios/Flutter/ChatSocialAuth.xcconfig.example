@@ -1,0 +1,15 @@
+// Copy this file to ChatSocialAuth.xcconfig and fill the real values.
+// Debug.xcconfig and Release.xcconfig already include it optionally.
+
+N42_CHAT_GOOGLE_CLIENT_ID =
+N42_CHAT_GOOGLE_SERVER_CLIENT_ID =
+
+N42_CHAT_TWITTER_API_KEY =
+N42_CHAT_TWITTER_API_SECRET =
+N42_CHAT_TWITTER_REDIRECT_URI = n42://auth/twitter
+
+N42_CHAT_WECHAT_APP_ID =
+N42_CHAT_WECHAT_UNIVERSAL_LINK =
+
+// Google iOS callback requires adding REVERSED_CLIENT_ID as a URL scheme
+// in Runner/Info.plist. Do not put it here only.

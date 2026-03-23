@@ -1,4 +1,4 @@
-﻿import 'dart:async';
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
@@ -13,6 +13,7 @@ import 'package:n42_wallet/features/browser/pages/browser_collection.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
+import 'package:n42_wallet/features/wallet_connect/wallet_connect_uri.dart';
 import 'package:flutter/material.dart';
 import 'package:validators/validators.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -33,33 +34,29 @@ typedef ConnectDAPP = void Function(String url, bool connect);
 typedef PhishingWarning = void Function(String url, VoidCallback proceed);
 
 class BrowserProvider extends ChangeNotifier {
-  BrowserProvider(){
+  BrowserProvider() {
     getBrowserSetting();
   }
-  BrowserApi? _browserApi;
-  BrowserApi get browserApi{
-    _browserApi ??= BrowserApi();
-    return _browserApi!;
-  }
-  Map<String,dynamic> browser={
-    "connectDApp":false,
-  };
-  Future<void> getBrowserSetting()async{
-    Map<String,dynamic>? b=await SPUtil().getBrowserSetting();
-    if(b !=null){
-      browser=b;
-    }
+
+  late final BrowserApi browserApi = BrowserApi();
+  Map<String, dynamic> browser = {"connectDApp": false};
+
+  Future<void> getBrowserSetting() async {
+    final b = await SPUtil().getBrowserSetting();
+    if (b != null) browser = b;
   }
 
-  List<Widget> wList=[];
-  List<WebViewController> wvcList=[];
-  List<Map<String,dynamic>> wInfoList=[];
-  int wListIndex=-1;
-  bool showWList=false;
-  void setShowWList(bool value){
-    showWList=value;
+  List<Widget> wList = [];
+  List<WebViewController> wvcList = [];
+  List<Map<String, dynamic>> wInfoList = [];
+  int wListIndex = -1;
+  bool showWList = false;
+
+  void setShowWList(bool value) {
+    showWList = value;
     notifyListeners();
   }
+
   TextEditingController? titleEditingController;
   FocusNode? titleFocusNode;
   ConnectDAPP? connectDAPPCallBack;
@@ -71,7 +68,12 @@ class BrowserProvider extends ChangeNotifier {
   }
 
   /// Shortcut: WebViewController of the currently active tab
-  WebViewController get _currentController => wvcList[wListIndex];
+  WebViewController get _currentController {
+    if (wListIndex < 0 || wListIndex >= wvcList.length) {
+      throw StateError('Invalid browser tab index: $wListIndex (tabs: ${wvcList.length})');
+    }
+    return wvcList[wListIndex];
+  }
 
   /// Set by [BrowserPage] to display a phishing warning dialog.
   /// Cleared in [BrowserPage.dispose] to prevent stale context usage.
@@ -85,8 +87,11 @@ class BrowserProvider extends ChangeNotifier {
   void initDAppHandler() {
     try {
       final cms = globalWapAdapter.coinModels;
-      final ethCoins = cms.where((cm) =>
-          cm.coin['blockchainType'] == BlockchainType.Ethereum.name).toList();
+      final ethCoins = cms
+          .where(
+            (cm) => cm.coin['blockchainType'] == BlockchainType.Ethereum.name,
+          )
+          .toList();
       if (ethCoins.isNotEmpty) {
         _dappHandler = DAppRequestHandler(ethCoinModels: ethCoins);
       }
@@ -95,23 +100,24 @@ class BrowserProvider extends ChangeNotifier {
     }
   }
 
-  bool canBack=false;
-  bool canForward=false;
-  bool collect=false;
+  bool canBack = false;
+  bool canForward = false;
+  bool collect = false;
+
   void browserInit() {
-    titleEditingController=TextEditingController();
-    titleFocusNode=FocusNode();
-    titleFocusNode?.addListener(() {
-      notifyListeners();
-    });
+    titleEditingController = TextEditingController();
+    titleFocusNode = FocusNode();
+    titleFocusNode?.addListener(notifyListeners);
   }
+
   void browserDispose() {
     titleEditingController?.dispose();
     titleFocusNode?.dispose();
   }
+
   void addUrl(String url) {
-    String rUrl=checkHttp(url);
-    wListAdd(url:rUrl);
+    final rUrl = checkHttp(url);
+    wListAdd(url: rUrl);
   }
 
   /// Look up the current index of [controller] in the tab list.
@@ -120,11 +126,11 @@ class BrowserProvider extends ChangeNotifier {
     return wvcList.indexOf(controller);
   }
 
-  void wListAdd({String url=""}) {
-    if(url==""){
-      url=AppConfig.apiUrl['walletamazeBrowser']!;
+  void wListAdd({String url = ""}) {
+    if (url == "") {
+      url = AppConfig.apiUrl['walletamazeBrowser']!;
     }
-    titleEditingController?.text=url;
+    titleEditingController?.text = url;
     late WebViewController webViewController;
     late final PlatformWebViewControllerCreationParams params;
     if (WebViewPlatform.instance is WebKitWebViewPlatform) {
@@ -139,8 +145,7 @@ class BrowserProvider extends ChangeNotifier {
       params = const PlatformWebViewControllerCreationParams();
     }
 
-    webViewController =
-        WebViewController.fromPlatformCreationParams(params);
+    webViewController = WebViewController.fromPlatformCreationParams(params);
 
     // Capture the controller reference for use in navigation callbacks.
     // All callbacks look up their tab index dynamically via _indexOfController
@@ -155,22 +160,22 @@ class BrowserProvider extends ChangeNotifier {
           onProgress: (int progress) {
             final idx = _indexOfController(wvc);
             if (idx < 0) return;
-            wInfoList[idx]['progress']=progress*0.01;
+            wInfoList[idx]['progress'] = progress * 0.01;
             notifyListeners();
           },
           onPageStarted: (String url) {
             final idx = _indexOfController(wvc);
             if (idx < 0) return;
             debugPrint('Page started loading: $url');
-            wInfoList[idx]['load']=true;
+            wInfoList[idx]['load'] = true;
             _injectProviderScript(wvc);
             notifyListeners();
           },
           onPageFinished: (String url) async {
             final idx = _indexOfController(wvc);
             if (idx < 0) return;
-            wInfoList[idx]['load']=false;
-            wInfoList[idx]['progress']=0;
+            wInfoList[idx]['load'] = false;
+            wInfoList[idx]['progress'] = 0;
             _injectProviderScript(wvc);
             // Fetch title for this tab
             final t = await wvc.getTitle();
@@ -192,8 +197,8 @@ class BrowserProvider extends ChangeNotifier {
           onWebResourceError: (WebResourceError error) {
             final idx = _indexOfController(wvc);
             if (idx < 0) return;
-            wInfoList[idx]['load']=false;
-            wInfoList[idx]['progress']=0;
+            wInfoList[idx]['load'] = false;
+            wInfoList[idx]['progress'] = 0;
             notifyListeners();
           },
           onNavigationRequest: (NavigationRequest request) {
@@ -204,10 +209,10 @@ class BrowserProvider extends ChangeNotifier {
           onUrlChange: (UrlChange change) {
             final idx = _indexOfController(wvc);
             if (idx < 0) return;
-            wInfoList[idx]['openUrl']=change.url??"";
+            wInfoList[idx]['openUrl'] = change.url ?? "";
             // Only update URL bar if this is the active tab
             if (idx == wListIndex) {
-              titleEditingController?.text=wInfoList[idx]['openUrl'];
+              titleEditingController?.text = wInfoList[idx]['openUrl'];
             }
             notifyListeners();
           },
@@ -230,7 +235,8 @@ class BrowserProvider extends ChangeNotifier {
 
     // #docregion platform_features
     if (webViewController.platform is AndroidWebViewController) {
-      final androidController = webViewController.platform as AndroidWebViewController;
+      final androidController =
+          webViewController.platform as AndroidWebViewController;
       if (kDebugMode) {
         AndroidWebViewController.enableDebugging(true);
       }
@@ -241,44 +247,41 @@ class BrowserProvider extends ChangeNotifier {
       // Enable wide viewport for better page rendering
       androidController.setUseWideViewPort(true);
     }
-    Widget wv=WebViewWidget(controller: webViewController);
+    final wv = WebViewWidget(controller: webViewController);
     wList.add(wv);
     wvcList.add(webViewController);
-    wInfoList.add({
-      "openUrl":url,
-    });
-    showWList=false;
-    wListIndex=wList.length-1;
+    wInfoList.add({"openUrl": url});
+    showWList = false;
+    wListIndex = wList.length - 1;
     notifyListeners();
   }
-  void loadRequest({String url=""}) {
-    if(url==""){
-      url=titleEditingController?.text??"";
-    }
-    if(url=="")return;
-    url=checkHttp(url);
+
+  void loadRequest({String url = ""}) {
+    if (url == "") url = titleEditingController?.text ?? "";
+    if (url == "") return;
+    url = checkHttp(url);
     _currentController.loadRequest(Uri.parse(url));
-    wInfoList[wListIndex]['openUrl']=url;
+    wInfoList[wListIndex]['openUrl'] = url;
   }
-  //显示webView
+
   void wListShow(int index) {
-    wListIndex=index;
-    showWList=false;
-    titleEditingController?.text=_currentUrl;
+    wListIndex = index;
+    showWList = false;
+    titleEditingController?.text = _currentUrl;
     // Notify immediately so the UI switches tab right away
     notifyListeners();
     // Then async-update navigation and bookmark state
     checkCanGo();
     getCollectionUrl(_currentUrl);
   }
-  //删除一个 webView
+
   void wListDelete(int index) {
     // Clear WebViewController navigation delegate before removal
     wvcList[index].setNavigationDelegate(NavigationDelegate());
     wList.removeAt(index);
     wvcList.removeAt(index);
     wInfoList.removeAt(index);
-    if(wList.isEmpty){
+    if (wList.isEmpty) {
       wListAdd();
       return;
     }
@@ -295,36 +298,44 @@ class BrowserProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
+
   /// Check whether the given URL is in the bookmarks collection.
   Future<void> getCollectionUrl(String url) async {
     final list = await browserApi.selectBrowserCollectionUrl(url);
     collect = list.isNotEmpty;
     notifyListeners();
   }
-  Future<void> getTitle()async{
+
+  Future<void> getTitle() async {
     final t = await _currentController.getTitle();
-    if(t !=null){
-      wInfoList[wListIndex]['title']=t;
+    if (t != null) {
+      wInfoList[wListIndex]['title'] = t;
       notifyListeners();
     }
   }
-  //检查是否可以 上一页，或者下一页
-  Future<void> checkCanGo()async{
-    canBack=await _currentController.canGoBack();
-    canForward=await _currentController.canGoForward();
+
+  Future<void> checkCanGo() async {
+    canBack = await _currentController.canGoBack();
+    canForward = await _currentController.canGoForward();
     notifyListeners();
   }
+
   /// Try to handle a WalletConnect URI; returns true if handled.
   bool _tryHandleWalletConnect(String wcUri) {
-    if (!wcUri.contains('relay-protocol') || !wcUri.contains('symKey')) {
+    final normalizedWcUri = normalizeWalletConnectUriString(wcUri);
+    if (normalizedWcUri == null) {
       return false;
     }
     if (connectDAPPCallBack == null) return false;
-    connectDAPPCallBack!(wcUri, browser['connectDApp']);
+    connectDAPPCallBack!(normalizedWcUri, browser['connectDApp']);
     return true;
   }
 
   bool checkUrl(String url) {
+    if (_tryHandleWalletConnect(url)) {
+      return false;
+    }
+
     final uri = Uri.parse(url);
     // 拦截危险 URL 协议：javascript: 可用于 XSS；data: / blob: 可绕过 CSP；file: 可读本地文件
     const blockedSchemes = {'javascript', 'data', 'blob', 'file'};
@@ -354,6 +365,7 @@ class BrowserProvider extends ChangeNotifier {
 
     return true;
   }
+
   String checkHttp(String url) {
     if (!isURL(url)) {
       return "https://www.google.com/search?q=${Uri.encodeQueryComponent(url)}";
@@ -361,26 +373,34 @@ class BrowserProvider extends ChangeNotifier {
     final hasScheme = url.startsWith("https://") || url.startsWith("http://");
     return hasScheme ? url : 'https://$url';
   }
-  //删除收藏url
-  Future<void> deleteBrowserCollectionUrl()async{
+
+  Future<void> deleteBrowserCollectionUrl() async {
     final url = _currentUrl;
     await browserApi.deleteBrowserCollectionUrl(url);
     getCollectionUrl(url);
   }
-  //添加收藏
+
   Future<void> addBrowserCollection(BuildContext context) async {
-    String? currentUrl=await _currentController.currentUrl();
-    String? title=await _currentController.getTitle();
+    final currentUrl = await _currentController.currentUrl();
+    final title = await _currentController.getTitle();
     if (!context.mounted) return;
-    await Navigator.push(context, MaterialPageRoute(builder: (context)=>BrowserCollection(title ?? "",currentUrl ?? "",)));
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => BrowserCollection(title ?? "", currentUrl ?? ""),
+      ),
+    );
     getCollectionUrl(_currentUrl);
   }
+
   /// Handle incoming DApp JSON-RPC messages from the JavaScript channel.
   ///
   /// The [controller] reference is captured at channel creation time,
   /// so it always points to the correct WebView regardless of tab switching.
   Future<void> _handleDAppMessage(
-      JavaScriptMessage message, WebViewController controller) async {
+    JavaScriptMessage message,
+    WebViewController controller,
+  ) async {
     if (_dappHandler == null) return;
     try {
       final data = json.decode(message.message) as Map<String, dynamic>;
@@ -406,25 +426,31 @@ class BrowserProvider extends ChangeNotifier {
           final newChainHex = JsEscapeUtils.escapeJs(_dappHandler!.chainIdHex);
           final newAddr = JsEscapeUtils.escapeJs(_dappHandler!.address);
           controller.runJavaScript(
-              'window.ethereum._n42SetChain("$newChainHex");'
-              'window.ethereum._n42SetAccounts(["$newAddr"]);');
+            'window.ethereum._n42SetChain("$newChainHex");'
+            'window.ethereum._n42SetAccounts(["$newAddr"]);',
+          );
         }
 
         // Serialize result safely — handles null, strings, numbers, lists, maps
         final resultStr = JsEscapeUtils.escapeJs(json.encode(result));
         controller.runJavaScript(
-            'window.ethereum._n42Cb($id, "$resultStr", null);');
+          'window.ethereum._n42Cb($id, "$resultStr", null);',
+        );
       } catch (e) {
         // Build a proper EIP-1193 error object {code, message}
         final Map<String, dynamic> errObj;
         if (e is Map) {
-          errObj = {'code': e['code'] ?? -32603, 'message': e['message'] ?? e.toString()};
+          errObj = {
+            'code': e['code'] ?? -32603,
+            'message': e['message'] ?? e.toString(),
+          };
         } else {
           errObj = {'code': -32603, 'message': e.toString()};
         }
         final errorStr = JsEscapeUtils.escapeJs(json.encode(errObj));
         controller.runJavaScript(
-            'window.ethereum._n42Cb($id, null, "$errorStr");');
+          'window.ethereum._n42Cb($id, null, "$errorStr");',
+        );
       }
     } catch (e) {
       debugPrint('[Browser] DApp message parse error: $e');
@@ -451,14 +477,13 @@ class BrowserProvider extends ChangeNotifier {
     for (final wvc in wvcList) {
       wvc.setNavigationDelegate(NavigationDelegate());
     }
-    showWList=false;
-    wList=[];
-    wvcList=[];
-    wInfoList=[];
+    showWList = false;
+    wList = [];
+    wvcList = [];
+    wInfoList = [];
     _dappHandler?.dispose();
-    _dappHandler=null;
-    // Create a fresh default tab instead of leaving empty
-    wListIndex=-1;
+    _dappHandler = null;
+    wListIndex = -1;
     wListAdd();
   }
 }

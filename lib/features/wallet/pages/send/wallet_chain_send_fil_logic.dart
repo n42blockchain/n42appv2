@@ -45,10 +45,12 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
       await chainModel?.getBalance();
       setState(() {});
     }
-    gas = BigInt.from(getCoinGas(
-      widget.coinModel.coin['coinType'],
-      contract: widget.coinModel.coin['isContract'],
-    ));
+    gas = BigInt.from(
+      getCoinGas(
+        widget.coinModel.coin['coinType'],
+        contract: widget.coinModel.coin['isContract'],
+      ),
+    );
     await getBalance();
   }
 
@@ -105,8 +107,10 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
     final List<String> parts = addr.split(":");
     if (parts.length == 2) addr = parts[1];
 
-    final bool valid =
-        await Trustdart().validateAddress(widget.coinModel.coin['coinType'], addr);
+    final bool valid = await Trustdart().validateAddress(
+      widget.coinModel.coin['coinType'],
+      addr,
+    );
     final bool isSelf =
         addr.toUpperCase() == widget.coinModel.address.toString().toUpperCase();
 
@@ -131,8 +135,7 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
 
     setState(() => load = Load.loading);
 
-    final String? toAddr =
-        await toAddressCheck(toTextEditingController.text);
+    final String? toAddr = await toAddressCheck(toTextEditingController.text);
     if (toAddr == null) return _resetLoad();
 
     await estimateGasEthLocal();
@@ -234,8 +237,7 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
     setState(() => gasLimitLoad = Load.loading);
     try {
       if (amountErrorMessage.isNotEmpty) return null;
-      final String? toAddr =
-          await toAddressCheck(toTextEditingController.text);
+      final String? toAddr = await toAddressCheck(toTextEditingController.text);
       if (toAddr == null || toErrorMessage.isNotEmpty) return null;
       final String price = valueTextEditingController.text;
       if (price.isEmpty) return null;
@@ -244,8 +246,10 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
         widget.coinModel.address,
         toAddr,
         BigInt.from(getCoinGas(widget.coinModel.coin['coinType'])),
-        value:
-            ethToWeiString(price, widget.coinModel.coin['decimals']).toString(),
+        value: ethToWeiString(
+          price,
+          widget.coinModel.coin['decimals'],
+        ).toString(),
         isTest: widget.coinModel.isTest,
       );
       if (!ethMessage.error) {
@@ -282,7 +286,10 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
     valueTextEditingController.text = widget.coinModel.balanceStringAll();
     final bool? rOK = await estimateGasEthLocal();
     if (rOK != null && rOK) {
-      transferValue = widget.coinModel.balance - totalGasPrice;
+      transferValue = maxTransferableAmount(
+        balance: widget.coinModel.balance,
+        fee: totalGasPrice,
+      );
       valueTextEditingController.text = toEther(
         transferValue.toString(),
         widget.coinModel.coin['decimals'],

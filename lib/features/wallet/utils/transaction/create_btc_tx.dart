@@ -261,7 +261,9 @@ class CreateBTCTX {
   }
 
   List<int> _bigIntToBytes(BigInt value) {
-    return hex.decode(value.toRadixString(16).padLeft(64, '0'));
+    final bytes = hex.decode(value.toRadixString(16).padLeft(64, '0'));
+    final result = bytes.skipWhile((b) => b == 0).toList();
+    return result.isEmpty ? [0] : result;
   }
 
   Future<MessageModel> getUTXOTxid(String txid) async {

@@ -165,12 +165,10 @@ class LedgerApduUtils {
 
   /// 将数据分块发送（Ledger BLE MTU 限制）
   static List<Uint8List> splitIntoChunks(Uint8List data, int chunkSize) {
-    final chunks = <Uint8List>[];
-    for (var i = 0; i < data.length; i += chunkSize) {
-      final end = (i + chunkSize < data.length) ? i + chunkSize : data.length;
-      chunks.add(data.sublist(i, end));
-    }
-    return chunks;
+    return [
+      for (var i = 0; i < data.length; i += chunkSize)
+        data.sublist(i, i + chunkSize < data.length ? i + chunkSize : data.length),
+    ];
   }
 
   /// 编码签名为十六进制字符串

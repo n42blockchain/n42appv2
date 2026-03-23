@@ -8,6 +8,11 @@ import 'package:n42_wallet/features/airdrop/models/airdrop_model.dart';
 import 'package:n42_wallet/core/network/base_api.dart';
 import 'package:n42_wallet/features/models/message_model.dart';
 
+bool hasSuccessfulApiPayload(Map<String, dynamic> response) {
+  final code = response['code'];
+  return response['data'] != null && (code == null || code == 200);
+}
+
 /// 空投追踪 API
 ///
 /// 整合多个数据源追踪空投信息
@@ -61,7 +66,9 @@ class AirdropApi {
 
       if (filter != null) {
         if (filter.statuses?.isNotEmpty ?? false) {
-          queryParams['statuses'] = filter.statuses!.map((e) => e.name).join(',');
+          queryParams['statuses'] = filter.statuses!
+              .map((e) => e.name)
+              .join(',');
         }
         if (filter.types?.isNotEmpty ?? false) {
           queryParams['types'] = filter.types!.map((e) => e.name).join(',');
@@ -86,7 +93,7 @@ class AirdropApi {
 
       if (response['data'] != null) {
         final airdrops = (response['data'] as List)
-            .map((e) => AirdropModel.fromJson(e))
+            .map((e) => AirdropModel.fromJson(e as Map<String, dynamic>))
             .toList();
         return MessageModel()
           ..error = false
@@ -157,7 +164,7 @@ class AirdropApi {
 
       if (response['data'] != null) {
         final airdrops = (response['data'] as List)
-            .map((e) => AirdropModel.fromJson(e))
+            .map((e) => AirdropModel.fromJson(e as Map<String, dynamic>))
             .toList();
         return MessageModel()
           ..error = false
@@ -187,15 +194,16 @@ class AirdropApi {
       final response = await BaseApi.requestEmptyH.post(
         '$_n42AirdropApi/airdrops/$airdropId/claim',
         params: {},
-        data: {
-          'wallet': walletAddress,
-          'tx_hash': txHash,
-        },
+        data: {'wallet': walletAddress, 'tx_hash': txHash},
       );
 
-      return MessageModel()
-        ..error = false
-        ..data = response['data'];
+      if (hasSuccessfulApiPayload(response)) {
+        return MessageModel()
+          ..error = false
+          ..data = response['data'];
+      }
+
+      return MessageModel.error()..data = 'Claim submission failed';
     } catch (e) {
       return MessageModel.error()..data = e.toString();
     }
@@ -218,9 +226,13 @@ class AirdropApi {
         },
       );
 
-      return MessageModel()
-        ..error = false
-        ..data = response['data'];
+      if (hasSuccessfulApiPayload(response)) {
+        return MessageModel()
+          ..error = false
+          ..data = response['data'];
+      }
+
+      return MessageModel.error()..data = 'Subscription update failed';
     } catch (e) {
       return MessageModel.error()..data = e.toString();
     }
@@ -234,9 +246,11 @@ class AirdropApi {
       AirdropModel(
         id: 'layerzero-1',
         name: 'LayerZero ZRO Token Airdrop',
-        description: 'LayerZero protocol token airdrop for early users who bridged assets across chains.',
+        description:
+            'LayerZero protocol token airdrop for early users who bridged assets across chains.',
         projectName: 'LayerZero',
-        projectLogo: 'https://assets.coingecko.com/coins/images/28206/small/ftxG9_TJ_400x400.jpeg',
+        projectLogo:
+            'https://assets.coingecko.com/coins/images/28206/small/ftxG9_TJ_400x400.jpeg',
         projectUrl: 'https://layerzero.network',
         chainSymbol: 'ETH',
         chainId: 1,
@@ -246,7 +260,7 @@ class AirdropApi {
         tokenSymbol: 'ZRO',
         estimatedValueUsd: 850.0,
         amount: '500 ZRO',
-        claimDeadline: now.add(Duration(days: 14)),
+        claimDeadline: now.add(const Duration(days: 14)),
         requirements: [
           AirdropRequirement(
             id: '1',
@@ -269,15 +283,17 @@ class AirdropApi {
           'discord': 'https://discord.gg/layerzero',
         },
         tags: ['DeFi', 'Bridge', 'L0'],
-        createdAt: now.subtract(Duration(days: 7)),
+        createdAt: now.subtract(const Duration(days: 7)),
         updatedAt: now,
       ),
       AirdropModel(
         id: 'eigenlayer-1',
         name: 'EigenLayer EIGEN Token',
-        description: 'EigenLayer restaking protocol token distribution for early stakers.',
+        description:
+            'EigenLayer restaking protocol token distribution for early stakers.',
         projectName: 'EigenLayer',
-        projectLogo: 'https://assets.coingecko.com/coins/images/37540/small/eigen.png',
+        projectLogo:
+            'https://assets.coingecko.com/coins/images/37540/small/eigen.png',
         projectUrl: 'https://eigenlayer.xyz',
         chainSymbol: 'ETH',
         chainId: 1,
@@ -287,7 +303,7 @@ class AirdropApi {
         tokenSymbol: 'EIGEN',
         estimatedValueUsd: 1200.0,
         amount: '300 EIGEN',
-        claimDeadline: now.add(Duration(days: 30)),
+        claimDeadline: now.add(const Duration(days: 30)),
         requirements: [
           AirdropRequirement(
             id: '1',
@@ -300,13 +316,14 @@ class AirdropApi {
         userClaimableAmount: null,
         claimUrl: 'https://claims.eigenfoundation.org',
         tags: ['Restaking', 'Ethereum', 'DeFi'],
-        createdAt: now.subtract(Duration(days: 14)),
+        createdAt: now.subtract(const Duration(days: 14)),
         updatedAt: now,
       ),
       AirdropModel(
         id: 'scroll-1',
         name: 'Scroll SCR Token Airdrop',
-        description: 'Scroll zkEVM Layer 2 token airdrop for bridge and DApp users.',
+        description:
+            'Scroll zkEVM Layer 2 token airdrop for bridge and DApp users.',
         projectName: 'Scroll',
         projectLogo: 'https://scroll.io/logo.png',
         projectUrl: 'https://scroll.io',
@@ -317,7 +334,7 @@ class AirdropApi {
         priority: AirdropPriority.medium,
         tokenSymbol: 'SCR',
         estimatedValueUsd: 500.0,
-        startDate: now.add(Duration(days: 7)),
+        startDate: now.add(const Duration(days: 7)),
         requirements: [
           AirdropRequirement(
             id: '1',
@@ -333,7 +350,7 @@ class AirdropApi {
           ),
         ],
         tags: ['L2', 'zkEVM', 'Ethereum'],
-        createdAt: now.subtract(Duration(days: 3)),
+        createdAt: now.subtract(const Duration(days: 3)),
         updatedAt: now,
       ),
       AirdropModel(
@@ -341,7 +358,8 @@ class AirdropApi {
         name: 'zkSync Era Season 2',
         description: 'Second season of ZK token distribution for active users.',
         projectName: 'zkSync',
-        projectLogo: 'https://assets.coingecko.com/coins/images/38024/small/zksync.jpeg',
+        projectLogo:
+            'https://assets.coingecko.com/coins/images/38024/small/zksync.jpeg',
         projectUrl: 'https://zksync.io',
         chainSymbol: 'ZKSYNC',
         chainId: 324,
@@ -350,7 +368,7 @@ class AirdropApi {
         priority: AirdropPriority.high,
         tokenSymbol: 'ZK',
         estimatedValueUsd: 750.0,
-        startDate: now.add(Duration(days: 21)),
+        startDate: now.add(const Duration(days: 21)),
         requirements: [
           AirdropRequirement(
             id: '1',
@@ -360,7 +378,7 @@ class AirdropApi {
           ),
         ],
         tags: ['L2', 'zkRollup', 'DeFi'],
-        createdAt: now.subtract(Duration(days: 1)),
+        createdAt: now.subtract(const Duration(days: 1)),
         updatedAt: now,
       ),
       AirdropModel(
@@ -368,7 +386,8 @@ class AirdropApi {
         name: 'Arbitrum Odyssey NFT',
         description: 'Commemorative NFT for Arbitrum Odyssey participants.',
         projectName: 'Arbitrum',
-        projectLogo: 'https://assets.coingecko.com/coins/images/16547/small/photo_2023-03-29_21.47.00.jpeg',
+        projectLogo:
+            'https://assets.coingecko.com/coins/images/16547/small/photo_2023-03-29_21.47.00.jpeg',
         projectUrl: 'https://arbitrum.io',
         chainSymbol: 'ARB',
         chainId: 42161,
@@ -376,7 +395,7 @@ class AirdropApi {
         status: AirdropStatus.active,
         priority: AirdropPriority.low,
         estimatedValueUsd: 50.0,
-        claimDeadline: now.add(Duration(days: 60)),
+        claimDeadline: now.add(const Duration(days: 60)),
         requirements: [
           AirdropRequirement(
             id: '1',
@@ -388,7 +407,7 @@ class AirdropApi {
         isEligible: null,
         claimUrl: 'https://odyssey.arbitrum.io/claim',
         tags: ['NFT', 'L2', 'Community'],
-        createdAt: now.subtract(Duration(days: 30)),
+        createdAt: now.subtract(const Duration(days: 30)),
         updatedAt: now,
       ),
       AirdropModel(
@@ -396,7 +415,8 @@ class AirdropApi {
         name: 'StarkNet STRK Round 2',
         description: 'Second round of STRK token distribution.',
         projectName: 'StarkNet',
-        projectLogo: 'https://assets.coingecko.com/coins/images/26433/small/starknet.png',
+        projectLogo:
+            'https://assets.coingecko.com/coins/images/26433/small/starknet.png',
         projectUrl: 'https://starknet.io',
         chainSymbol: 'STRK',
         chainId: 0,
@@ -405,10 +425,10 @@ class AirdropApi {
         priority: AirdropPriority.medium,
         tokenSymbol: 'STRK',
         estimatedValueUsd: 400.0,
-        endDate: now.subtract(Duration(days: 7)),
+        endDate: now.subtract(const Duration(days: 7)),
         tags: ['L2', 'Cairo', 'DeFi'],
-        createdAt: now.subtract(Duration(days: 60)),
-        updatedAt: now.subtract(Duration(days: 7)),
+        createdAt: now.subtract(const Duration(days: 60)),
+        updatedAt: now.subtract(const Duration(days: 7)),
       ),
     ];
   }
@@ -416,8 +436,15 @@ class AirdropApi {
   List<AirdropModel> _getTrendingMockAirdrops() {
     final all = _getMockAirdrops(null);
     return all
-        .where((a) => a.status == AirdropStatus.active || a.status == AirdropStatus.upcoming)
+        .where(
+          (a) =>
+              a.status == AirdropStatus.active ||
+              a.status == AirdropStatus.upcoming,
+        )
         .toList()
-      ..sort((a, b) => (b.estimatedValueUsd ?? 0).compareTo(a.estimatedValueUsd ?? 0));
+      ..sort(
+        (a, b) =>
+            (b.estimatedValueUsd ?? 0).compareTo(a.estimatedValueUsd ?? 0),
+      );
   }
 }

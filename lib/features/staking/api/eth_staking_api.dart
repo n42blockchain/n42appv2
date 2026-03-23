@@ -264,7 +264,7 @@ class EthStakingApi {
     }
   }
 
-  BigInt _hexToBigInt(String hexStr) {
+  static BigInt _hexToBigInt(String hexStr) {
     final cleaned = hexStr.startsWith('0x') || hexStr.startsWith('0X')
         ? hexStr.substring(2)
         : hexStr;

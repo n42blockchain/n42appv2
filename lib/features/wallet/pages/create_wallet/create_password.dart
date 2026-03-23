@@ -203,7 +203,7 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
                       child: textFieldStyle3(
                         context,
                         onEditingComplete: () {
-                          FocusScope.of(context).requestFocus(FocusNode());
+                          FocusScope.of(context).unfocus();
                         },
                         height: ScreenUtil().setWidth(108.0),
                         controller: _uPasswordConfirmController,

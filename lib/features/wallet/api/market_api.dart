@@ -1,8 +1,9 @@
 import 'package:flutter/foundation.dart';
-import 'package:n42_wallet/core/config/api_keys_config.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
+import 'package:n42_wallet/core/config/proxy_config.dart';
 import 'package:n42_wallet/core/network/base_api.dart';
 import 'package:n42_wallet/core/network/external_http.dart';
+import 'package:n42_wallet/features/wallet/api/market_api_payload_utils.dart';
 import 'package:n42_wallet/features/wallet/models/ohlc_point.dart';
 
 class MarketApi {
@@ -10,26 +11,13 @@ class MarketApi {
   final Map<String, String> _header;
 
   MarketApi()
-      : _url = AppConfig.getApiUrlOnline('marketHost'),
-        _header = const {'content-type': 'application/json'};
+    : _url = AppConfig.getApiUrlOnline('marketHost'),
+      _header = const {'content-type': 'application/json'};
 
-  // 有 API key 时使用 Pro endpoint（更高限额），否则用免费 endpoint。
-  static String get _geckoBase {
-    final key = ApiKeysConfig.coinGeckoApiKey;
-    if (key.isNotEmpty) return 'https://pro-api.coingecko.com/api/v3';
-    return (AppConfig.apiUrl['coinGeckoApi'] as String?) ??
-        'https://api.coingecko.com/api/v3';
-  }
-
-  /// CoinGecko 请求头：有 key 时加上认证头。
-  Map<String, String> get _geckoHeader {
-    final key = ApiKeysConfig.coinGeckoApiKey;
-    if (key.isEmpty) return {'content-type': 'application/json'};
-    return {
-      'content-type': 'application/json',
-      'x-cg-demo-api-key': key,
-    };
-  }
+  /// CoinGecko 请求头 — API key 已迁移到服务端代理。
+  Map<String, String> get _geckoHeader => const {
+    'content-type': 'application/json',
+  };
 
   // ---------------------------------------------------------------------------
   // Public API
@@ -77,10 +65,12 @@ class MarketApi {
     if (geckoId.isEmpty) return [];
     try {
       final encodedId = Uri.encodeComponent(geckoId);
-      if (kDebugMode) debugPrint('MarketApi.getOhlcvData: $encodedId days=$days');
+      if (kDebugMode) {
+        debugPrint('MarketApi.getOhlcvData: $encodedId days=$days');
+      }
 
       final raw = await ExternalHttp.get(
-        '$_geckoBase/coins/$encodedId/ohlc?vs_currency=usd&days=$days',
+        '${ProxyConfig.marketOhlcv}?coin_id=$encodedId&vs_currency=usd&days=$days',
         headers: _geckoHeader,
       ).timeout(const Duration(seconds: 15), onTimeout: () => null);
 
@@ -89,12 +79,14 @@ class MarketApi {
       return raw
           .whereType<List>()
           .where((item) => item.length >= 5)
-          .map((item) => OhlcPoint(
-                open: _toDouble(item[1]),
-                high: _toDouble(item[2]),
-                low: _toDouble(item[3]),
-                close: _toDouble(item[4]),
-              ))
+          .map(
+            (item) => OhlcPoint(
+              open: _toDouble(item[1]),
+              high: _toDouble(item[2]),
+              low: _toDouble(item[3]),
+              close: _toDouble(item[4]),
+            ),
+          )
           .where((p) => p.isValid)
           .toList();
     } catch (e, st) {
@@ -114,10 +106,12 @@ class MarketApi {
     if (geckoId.isEmpty) return empty;
     try {
       final encodedId = Uri.encodeComponent(geckoId);
-      if (kDebugMode) debugPrint('MarketApi.getMarketChart: $encodedId days=$days');
+      if (kDebugMode) {
+        debugPrint('MarketApi.getMarketChart: $encodedId days=$days');
+      }
 
       final raw = await ExternalHttp.get(
-        '$_geckoBase/coins/$encodedId/market_chart?vs_currency=usd&days=$days',
+        '${ProxyConfig.marketChart}?coin_id=$encodedId&vs_currency=usd&days=$days',
         headers: _geckoHeader,
       ).timeout(const Duration(seconds: 15), onTimeout: () => null);
 
@@ -146,7 +140,7 @@ class MarketApi {
       if (kDebugMode) debugPrint('MarketApi.getTrendingCoins');
 
       final raw = await ExternalHttp.get(
-        '$_geckoBase/search/trending',
+        ProxyConfig.marketTrending,
         headers: _geckoHeader,
       ).timeout(const Duration(seconds: 8), onTimeout: () => null);
 
@@ -180,7 +174,7 @@ class MarketApi {
       if (kDebugMode) debugPrint('MarketApi.searchCoins: $query');
 
       final raw = await ExternalHttp.get(
-        '$_geckoBase/search?q=${Uri.encodeQueryComponent(query.trim())}',
+        '${ProxyConfig.marketSearch}?q=${Uri.encodeQueryComponent(query.trim())}',
         headers: _geckoHeader,
       ).timeout(const Duration(seconds: 8), onTimeout: () => null);
 
@@ -199,8 +193,13 @@ class MarketApi {
   }
 
   /// 硬编码热门币列表，当 CoinGecko trending 不可用时作为 fallback。
+  /// 覆盖 Top 50 主流币种（按市值排序），确保 proxy 不可用时仍有丰富展示。
   static const String _fallbackTrendingSymbols =
-      'btc,eth,sol,bnb,xrp,ada,avax,doge,dot,link';
+      'btc,eth,sol,bnb,xrp,ada,avax,doge,dot,link,'
+      'trx,matic,shib,ltc,atom,uni,xlm,near,apt,icp,'
+      'fil,arb,op,sui,sei,inj,vet,algo,ftm,hbar,'
+      'mana,sand,gala,aave,mkr,ldo,snx,crv,rune,egld,'
+      'grt,ape,imx,mina,flow,kas,ton,stx,ondo,pepe';
 
   /// 从 N42 后端获取 fallback trending 数据。
   ///
@@ -214,18 +213,11 @@ class MarketApi {
       final resp = await getWalletCoinsInfo(_fallbackTrendingSymbols);
       if (resp['error'] != false) return [];
 
-      final rawData = resp['data'];
-      final coins = (rawData is List)
-          ? rawData
-          : (rawData is Map ? rawData['data'] : null);
-      if (coins is! List) return [];
-
-      return coins
-          .whereType<Map<dynamic, dynamic>>()
-          .map((c) => Map<String, dynamic>.from(c))
-          .toList();
+      return extractMarketCoinItems(resp['data']);
     } catch (e, st) {
-      if (kDebugMode) debugPrint('MarketApi.getFallbackTrendingCoins error: $e\n$st');
+      if (kDebugMode) {
+        debugPrint('MarketApi.getFallbackTrendingCoins error: $e\n$st');
+      }
       return [];
     }
   }
@@ -244,7 +236,9 @@ class MarketApi {
       if (d == null) return {'error': true, 'data': '未找到该币'};
       return {'error': false, 'data': d};
     } catch (e, st) {
-      if (kDebugMode) debugPrint('MarketApi.getWalletCoinsBaseInfo error: $e\n$st');
+      if (kDebugMode) {
+        debugPrint('MarketApi.getWalletCoinsBaseInfo error: $e\n$st');
+      }
       return {'error': true, 'data': e.toString()};
     }
   }

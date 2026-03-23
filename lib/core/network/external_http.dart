@@ -5,6 +5,7 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:n42_wallet/core/config/proxy_config.dart';
 
 /// Lightweight HTTP client for third-party external APIs
 /// (CoinGecko, alternative.me, CryptoCompare, etc.).
@@ -33,14 +34,14 @@ class ExternalHttp {
     try {
       final resp = await _dio.get<dynamic>(
         url,
-        options: headers != null ? Options(headers: headers) : null,
+        options: Options(headers: ProxyConfig.mergeAuthHeaders(url, headers)),
       );
       return resp.data;
     } on DioException catch (e) {
-      debugPrint('ExternalHttp.get error [$url]: ${e.message}');
+      _debugLog('ExternalHttp.get error [${sanitizeUrlForLogging(url)}]: ${e.message}');
       return null;
     } catch (e) {
-      debugPrint('ExternalHttp.get unexpected error [$url]: $e');
+      _debugLog('ExternalHttp.get unexpected error [${sanitizeUrlForLogging(url)}]: $e');
       return null;
     }
   }
@@ -56,15 +57,30 @@ class ExternalHttp {
       final resp = await _dio.post<dynamic>(
         url,
         data: data,
-        options: headers != null ? Options(headers: headers) : null,
+        options: Options(headers: ProxyConfig.mergeAuthHeaders(url, headers)),
       );
       return resp.data;
     } on DioException catch (e) {
-      debugPrint('ExternalHttp.post error [$url]: ${e.message}');
+      _debugLog('ExternalHttp.post error [${sanitizeUrlForLogging(url)}]: ${e.message}');
       return null;
     } catch (e) {
-      debugPrint('ExternalHttp.post unexpected error [$url]: $e');
+      _debugLog('ExternalHttp.post unexpected error [${sanitizeUrlForLogging(url)}]: $e');
       return null;
     }
+  }
+
+  static String sanitizeUrlForLogging(String url) {
+    final uri = Uri.tryParse(url);
+    if (uri == null || uri.queryParameters.isEmpty) return url;
+    return uri.replace(
+      queryParameters: uri.queryParameters.map(
+        (key, _) => MapEntry(key, '[redacted]'),
+      ),
+    ).toString();
+  }
+
+  static void _debugLog(String message) {
+    if (!kDebugMode) return;
+    debugPrint(message);
   }
 }

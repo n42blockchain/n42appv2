@@ -127,6 +127,12 @@ func (d *DB) GetOrder(orderID string) (*Order, error) {
 
 // ListOrders 查询用户历史记录（分页）
 func (d *DB) ListOrders(userUUID string, page, size int) ([]*Order, error) {
+	if page < 1 {
+		page = 1
+	}
+	if size < 1 || size > 100 {
+		size = 20
+	}
 	offset := (page - 1) * size
 	var orders []*Order
 	err := d.db.Select(&orders, `

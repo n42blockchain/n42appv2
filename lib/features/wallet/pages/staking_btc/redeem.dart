@@ -8,26 +8,24 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
-import 'package:n42_wallet/core/network/request_url.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/btc_api.dart';
-import 'package:n42_wallet/features/wallet/api/redeem_token.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/features/wallet/api/transfer_api.dart';
 import 'package:n42_wallet/features/wallet/models/btc_transaction_recode_model.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
+import 'package:n42_wallet/features/wallet/pages/staking_btc/staking_btc_utils.dart';
 import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
-import 'package:reown_walletkit/reown_walletkit.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
-import 'package:http/http.dart';
 import 'package:bitcoin_base/bitcoin_base.dart';
 import 'package:n42_wallet/core/utils/js_escape_utils.dart';
+import 'package:web3dart/web3dart.dart' show bytesToHex;
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
@@ -84,15 +82,19 @@ class _RedeemState extends ConsumerState<Redeem> {
     _controller = WebViewController.fromPlatformCreationParams(params)
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(const Color(0xFF121212))
-      ..setNavigationDelegate(NavigationDelegate(
-        onProgress: (progress) => debugPrint('WebView loading: $progress%'),
-        onPageStarted: (url) => debugPrint('Page started: $url'),
-        onNavigationRequest: (_) => NavigationDecision.navigate,
-      ))
-      ..loadRequest(Uri.parse(
-          '${AppConfig.getApiUrlOnline('btcStaking')}/redeem?walletAddress=${_coin.address}'))
-      ..addJavaScriptChannel("N42APP",
-          onMessageReceived: _onJsMessage);
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onProgress: (progress) => debugPrint('WebView loading: $progress%'),
+          onPageStarted: (url) => debugPrint('Page started: $url'),
+          onNavigationRequest: (_) => NavigationDecision.navigate,
+        ),
+      )
+      ..loadRequest(
+        Uri.parse(
+          '${AppConfig.getApiUrlOnline('btcStaking')}/redeem?walletAddress=${_coin.address}',
+        ),
+      )
+      ..addJavaScriptChannel("N42APP", onMessageReceived: _onJsMessage);
   }
 
   Future<void> _onJsMessage(JavaScriptMessage message) async {
@@ -104,49 +106,40 @@ class _RedeemState extends ConsumerState<Redeem> {
         final int lockTime = (rdata['lock_time'] as num).toInt();
         if (mounted) setState(() => _lockTimeUnix = lockTime);
         final signStr = await redeem(rdata['p2wsh_address'], lockTime);
-        final addr = JsEscapeUtils.escapeJs(rdata['p2wsh_address']?.toString() ?? '');
+        final addr = JsEscapeUtils.escapeJs(
+          rdata['p2wsh_address']?.toString() ?? '',
+        );
         final sig = JsEscapeUtils.escapeJs(signStr);
         _controller.runJavaScript('request_withdraw_vbtc("$addr","$sig");');
       case 'request_withdraw_vbtc':
-        final result = JsEscapeUtils.escapeJs(rdata['result']?.toString() ?? '');
+        final result = JsEscapeUtils.escapeJs(
+          rdata['result']?.toString() ?? '',
+        );
         _controller.runJavaScript('alert("来自Flutter的消息，我收到了:$result");');
     }
   }
 
   Future<String> redeem(String address, int lockTime) async {
+    inputUTXO = [];
+    input2Price = 0;
+    inputValueOK = false;
     await getGasFeeBtc();
     await getUTXO(address);
+    if (inputUTXO.isEmpty) {
+      ToastUtils.show('UTXO unavailable');
+      return '';
+    }
     final witnessScriptValue = await createP2WSH(lockTime);
     inputUTXO[0]['witnessValue'] = witnessScriptValue;
     inputUTXO[0]['lockTime'] = lockTime;
     return signP2WSH();
   }
 
-  Future<void> redeemEth(String p2wshAddress) async {
-    final serviceUrl = RequestUrl()
-        .getUrl2(CoinType.ETH.name, 'rpc', isTest: _coin.isTest);
-    String privateKey;
-    if (_coin.privateKey == null || _coin.privateKey == '') {
-      final pk = await Trustdart().getPrivateKey(
-          _walletInfo.mnemonic ?? '', CoinType.ETH.name, "m/44'/60'/0'/0/0");
-      privateKey = bytesToHex(base64Decode(pk));
-    } else {
-      privateKey = bytesToHex(base64Decode(_coin.privateKey ?? ''));
-    }
-    final credentials = EthPrivateKey.fromHex(privateKey);
-    if (kDebugMode) debugPrint(credentials.address.eip55With0x);
-    final rt = RedeemToken.init(
-      address: EthereumAddress.fromHex(
-          '0x6c30A50430cC615C4659DF2dBe3E42036583bE7E'),
-      client: Web3Client(serviceUrl, Client()),
-      chainId: 11155111,
-    );
-    final rData = await rt.reedem(p2wshAddress, credentials: credentials);
-    if (kDebugMode) debugPrint(rData);
-  }
-
-  Future<String> createP2WSH(int lockTime,
-      {String? uPubKey, String? cPubKey}) async {
+  Future<String> createP2WSH(
+    int lockTime, {
+    String? uPubKey,
+    String? cPubKey,
+  }) async {
     if (uPubKey == null) {
       final pubKey = await Trustdart().getPublicKey(
         CoinType.BTC.name,
@@ -158,22 +151,23 @@ class _RedeemState extends ConsumerState<Redeem> {
     }
     cPubKey ??=
         '02a075b5988699e95802fe94590908de9370588cacc750d6f538d76fe6e9b8d6ad';
-    final newScript = Script(script: [
-      lockTime,
-      'OP_CHECKLOCKTIMEVERIFY',
-      'OP_DROP',
-      2,
-      uPubKey,
-      cPubKey,
-      2,
-      'OP_CHECKMULTISIG',
-    ]);
+    final newScript = Script(
+      script: [
+        lockTime,
+        'OP_CHECKLOCKTIMEVERIFY',
+        'OP_DROP',
+        2,
+        uPubKey,
+        cPubKey,
+        2,
+        'OP_CHECKMULTISIG',
+      ],
+    );
     return newScript.toHex();
   }
 
   Future<void> getGasFeeBtc() async {
-    final gasFeeMM =
-        await tokenViewApi.getGasFeeBtc(isTest: _coin.isTest);
+    final gasFeeMM = await tokenViewApi.getGasFeeBtc(isTest: _coin.isTest);
     if (gasFeeMM.error) {
       debugPrint('getGasFeeBtc error: ${gasFeeMM.data}');
     } else {
@@ -202,7 +196,8 @@ class _RedeemState extends ConsumerState<Redeem> {
   }
 
   Future<BtcTransactionRecodeModel> transatroinBuilder1To1(
-      BtcTransactionRecodeModel btcTransactionRecodeModel) async {
+    BtcTransactionRecodeModel btcTransactionRecodeModel,
+  ) async {
     try {
       final btcTxMap = <String, dynamic>{
         'utxo': inputUTXO,
@@ -213,6 +208,7 @@ class _RedeemState extends ConsumerState<Redeem> {
         'change': 0,
       };
       btcTransactionRecodeModel.inputModels = [];
+      input2Price = 0;
       for (final unspent in inputUTXO) {
         input2Price += int.parse(unspent['value']);
         final im = InputModel(
@@ -253,8 +249,10 @@ class _RedeemState extends ConsumerState<Redeem> {
     }
   }
 
-  Future<int> getSignByteSize(List<Map<String, dynamic>> utxos,
-      {bool max = true}) async {
+  Future<int> getSignByteSize(
+    List<Map<String, dynamic>> utxos, {
+    bool max = true,
+  }) async {
     final btcTxMap = {
       'utxo': utxos,
       'toAddress': _coin.address,
@@ -267,8 +265,7 @@ class _RedeemState extends ConsumerState<Redeem> {
       _coin.coin['blockchainType'],
       _coin.coin['coinType'],
       btcTxMap,
-      getPathWithIndex(
-          _coin.coin['path'][_coin.addrType], _coin.pathIndex),
+      getPathWithIndex(_coin.coin['path'][_coin.addrType], _coin.pathIndex),
       privateKey: _coin.privateKey,
     );
     return signByteSize.isEmpty ? 0 : int.parse(signByteSize);
@@ -276,11 +273,14 @@ class _RedeemState extends ConsumerState<Redeem> {
 
   Future<void> getUTXO(String address) async {
     try {
+      inputUTXO = [];
+      input2Price = 0;
+      inputValueOK = false;
       final mm = await tokenViewApi.getUTXOBtc(
         _coin.coin['coinType'],
         address,
-        pageSize: 1,
-        pageNum: 10,
+        pageSize: kStakingRedeemUtxoPageSize,
+        pageNum: kStakingRedeemUtxoPageNum,
         isTest: _coin.isTest,
       );
       if (mm.error) {
@@ -296,6 +296,9 @@ class _RedeemState extends ConsumerState<Redeem> {
   }
 
   Future<void> calculateGasFee(List<dynamic> unspents) async {
+    input2Price = 0;
+    gasFees = 0;
+    inputValueOK = false;
     final List<Map<String, dynamic>> utxos = [];
     for (final Map<String, dynamic> unspent in unspents) {
       if (_coin.isTest) {
@@ -315,8 +318,10 @@ class _RedeemState extends ConsumerState<Redeem> {
           'script': unspent['hex'],
         });
       } else {
-        final BigInt amount =
-            ethToWeiString(double.parse(unspent['value']).toString(), 8);
+        final BigInt amount = ethToWeiString(
+          double.parse(unspent['value']).toString(),
+          8,
+        );
         input2Price += amount.toInt();
         utxos.add({
           'txid': unspent['txid'],
@@ -334,26 +339,6 @@ class _RedeemState extends ConsumerState<Redeem> {
     if (mounted) setState(() {});
   }
 
-  Future<void> initEthToken(String p2wshAddr) async {
-    final client =
-        Web3Client('https://eth-sepolia.public.blastapi.io', Client());
-    final token = RedeemToken.init(
-      address: EthereumAddress.fromHex(
-          '0x6c30A50430cC615C4659DF2dBe3E42036583bE7E'),
-      client: client,
-    );
-    String privateKey = _walletInfo.privateKey ?? '';
-    if (privateKey.isEmpty) {
-      privateKey = await Trustdart().getPrivateKey(
-        _walletInfo.mnemonic ?? '',
-        CoinType.ETH.name,
-        "m/44'/60'/0'/0/0",
-      );
-    }
-    final epk = EthPrivateKey(base64Decode(privateKey));
-    final rData = await token.getDepositAmount(p2wshAddr, credentials: epk);
-    if (kDebugMode) debugPrint(rData);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -369,7 +354,9 @@ class _RedeemState extends ConsumerState<Redeem> {
     );
   }
 
-  ({Color bg, Color icon, IconData iconData, String text}) _resolveBannerStatus(S s) {
+  ({Color bg, Color icon, IconData iconData, String text}) _resolveBannerStatus(
+    S s,
+  ) {
     final now = DateTime.now().millisecondsSinceEpoch ~/ 1000;
     if (_lockTimeUnix != null && _lockTimeUnix! <= now) {
       return (
@@ -388,7 +375,8 @@ class _RedeemState extends ConsumerState<Redeem> {
         bg: Colors.red.withAlpha(25),
         icon: Colors.red,
         iconData: Icons.lock_outline,
-        text: '${s.g_key_btc_redeem_still_locked}  ·  ${s.g_key_btc_redeem_locked_until} $dateStr',
+        text:
+            '${s.g_key_btc_redeem_still_locked}  ·  ${s.g_key_btc_redeem_locked_until} $dateStr',
       );
     }
     return (
@@ -417,7 +405,9 @@ class _RedeemState extends ConsumerState<Redeem> {
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(22),
                 color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
+                  context,
+                  AppThemeKeys.mainTextColor.name,
+                ),
                 height: 1.4,
               ),
             ),
@@ -428,7 +418,9 @@ class _RedeemState extends ConsumerState<Redeem> {
               Icons.close,
               size: sw(28),
               color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name),
+                context,
+                AppThemeKeys.itemSubtitleTextColor.name,
+              ),
             ),
           ),
         ],

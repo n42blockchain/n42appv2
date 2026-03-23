@@ -3,6 +3,8 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
+// ignore_for_file: unused_element
+
 part of 'stake_page.dart';
 
 /// Unstake-specific section widgets: liquid swap view, unbonding warning,
@@ -63,7 +65,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
                       ),
                     ),
                   ),
-                  TextSpan(text: ' — '),
+                  const TextSpan(text: ' — '),
                   TextSpan(text: S.of(context).g_key_stake_liquid_unstake_desc),
                 ],
               ),
@@ -76,7 +78,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
                   MaterialPageRoute(builder: (_) => const DexSwapHome()),
                 );
               },
-              icon: Icon(Icons.swap_horizontal_circle_outlined, color: Colors.white),
+              icon: const Icon(Icons.swap_horizontal_circle_outlined, color: Colors.white),
               label: Text(
                 S.of(context).g_key_stake_go_to_swap,
                 style: TextStyle(
@@ -256,7 +258,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
           Expanded(
             child: TextField(
               controller: _unstakeAmountController,
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
               ],
@@ -363,7 +365,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
             ? SizedBox(
                 width: ScreenUtil().setWidth(32),
                 height: ScreenUtil().setWidth(32),
-                child: CircularProgressIndicator(
+                child: const CircularProgressIndicator(
                   strokeWidth: 2,
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                 ),

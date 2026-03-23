@@ -20,7 +20,6 @@ import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
 import 'package:n42_wallet/features/wallet/pages/send/send_utils.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_base_send.dart';
 import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
-import 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart';
 import 'package:n42_wallet/features/wallet/services/recent_address_service.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/utils/transaction/coin_gas.dart';
@@ -40,8 +39,7 @@ class WalletChainSendTon extends ConsumerStatefulWidget {
   const WalletChainSendTon(this.coinModel, {this.initialToAddress, super.key});
 
   @override
-  ConsumerState<WalletChainSendTon> createState() =>
-      _WalletChainSendTonState();
+  ConsumerState<WalletChainSendTon> createState() => _WalletChainSendTonState();
 }
 
 class _WalletChainSendTonState extends ConsumerState<WalletChainSendTon>
@@ -97,16 +95,14 @@ class _WalletChainSendTonState extends ConsumerState<WalletChainSendTon>
       bottom: 0,
       child: Column(
         children: [
-          Divider(
-            height: ScreenUtil().setWidth(1),
-            indent: 0,
-            endIndent: 0,
-          ),
+          Divider(height: ScreenUtil().setWidth(1), indent: 0, endIndent: 0),
           Container(
             padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
             height: ScreenUtil().setWidth(148.0),
             color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.backGroundColor.name),
+              context,
+              AppThemeKeys.backGroundColor.name,
+            ),
             child: buttonStyle6(
               context,
               sendTransaction,
@@ -118,7 +114,9 @@ class _WalletChainSendTonState extends ConsumerState<WalletChainSendTon>
                     : AppThemeKeys.mainButtonBgColor.name,
               ),
               AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainButtonTextColor.name),
+                context,
+                AppThemeKeys.mainButtonTextColor.name,
+              ),
               isLoading,
             ),
           ),
@@ -139,9 +137,7 @@ class _WalletChainSendTonState extends ConsumerState<WalletChainSendTon>
           child: Stack(
             children: [
               Positioned.fill(
-                child: SingleChildScrollView(
-                  child: coinTypeWidget(),
-                ),
+                child: SingleChildScrollView(child: coinTypeWidget()),
               ),
               sendButtonWidget(),
             ],

@@ -9,13 +9,14 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:injectable/injectable.dart';
 import 'package:n42_wallet/shared/domain/entities/wallet_info.dart';
+import 'package:n42_wallet/shared/di/service_locator.dart';
 import 'package:n42_wallet/shared/domain/services/wallet_service_interface.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
-import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
-import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart' show chainUrlMap;
+import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart'
+    show chainUrlMap, getPathWithIndex;
 
 /// Implementation of IWalletService using Riverpod
 ///
@@ -31,13 +32,14 @@ class WalletServiceImpl implements IWalletService {
 
   WalletServiceImpl(this._container) {
     // Listen to wallet changes and broadcast
-    _walletListSubscription = _container.listen<AsyncValue<List<WalletInfoData>>>(
-      walletListProvider,
-      (_, next) {
-        final wallet = getCurrentWallet();
-        _walletStreamController.add(wallet);
-      },
-    );
+    _walletListSubscription = _container
+        .listen<AsyncValue<List<WalletInfoData>>>(walletListProvider, (
+          _,
+          next,
+        ) {
+          final wallet = getCurrentWallet();
+          _walletStreamController.add(wallet);
+        });
 
     _walletIndexSubscription = _container.listen<int>(
       selectedWalletIndexProvider,
@@ -77,7 +79,9 @@ class WalletServiceImpl implements IWalletService {
   SharedWalletInfo? getMainWallet() {
     final wallets = _getAllWalletsData();
     final mainWallet = wallets.where((w) => w.isMainWallet).firstOrNull;
-    if (mainWallet == null) return wallets.isNotEmpty ? _toSharedInfo(wallets.first) : null;
+    if (mainWallet == null) {
+      return wallets.isNotEmpty ? _toSharedInfo(wallets.first) : null;
+    }
     return _toSharedInfo(mainWallet);
   }
 
@@ -127,7 +131,9 @@ class WalletServiceImpl implements IWalletService {
   Future<String?> getChainAddress(String walletId, String chainType) async {
     // Find wallet by ID (using timestamp or address as ID)
     final wallets = _getAllWalletsData();
-    final wallet = wallets.where((w) => w.timestamp == walletId || w.address == walletId).firstOrNull;
+    final wallet = wallets
+        .where((w) => w.timestamp == walletId || w.address == walletId)
+        .firstOrNull;
     if (wallet == null) return null;
 
     final coinInfo = wallet.coinInfo?[chainType];
@@ -147,33 +153,33 @@ class WalletServiceImpl implements IWalletService {
   Future<String?> getPrivateKeyForWallet(int walletIndex) async {
     final wallets = _getAllWalletsData();
     if (walletIndex < 0 || walletIndex >= wallets.length) return null;
-    
+
     final wallet = wallets[walletIndex];
-    
+
     // Return stored private key if available
     if (wallet.privateKey != null && wallet.privateKey!.isNotEmpty) {
       return wallet.privateKey;
     }
-    
+
     // Generate from mnemonic if no private key stored
     if (wallet.mnemonic != null && wallet.mnemonic!.isNotEmpty) {
       final coinInfo = wallet.coinInfo?[CoinType.N.name];
       if (coinInfo == null) return null;
-      
+
       final pathMap = coinInfo['baseInfo']?['path'] as Map<String, dynamic>?;
       if (pathMap == null) return null;
-      
+
       final addrType = coinInfo['addrType'] ?? 'legacy';
       final pathIndex = coinInfo['pathIndex'] ?? 0;
       final path = getPathWithIndex(pathMap[addrType], pathIndex);
-      
+
       return await Trustdart().getPrivateKey(
         wallet.mnemonic!,
         CoinType.N.name,
         path,
       );
     }
-    
+
     return null;
   }
 
@@ -192,8 +198,13 @@ class WalletServiceImpl implements IWalletService {
 
       // Derive blockchain type from coinType via chain config, since wallet.chainType is 'multi'
       final chainConfig = chainUrlMap[coinType];
-      final chainType = chainConfig?['baseInfo']?['blockchainType'] as String? ?? 'Ethereum';
-      final result = await TokenViewApi().getBalance(chainType, coinType, address);
+      final chainType =
+          chainConfig?['baseInfo']?['blockchainType'] as String? ?? 'Ethereum';
+      final result = await TokenViewApi().getBalance(
+        chainType,
+        coinType,
+        address,
+      );
       if (result == null || result.error) {
         return WalletBalanceInfo(
           address: address,
@@ -242,6 +253,11 @@ class WalletServiceImpl implements IWalletService {
 
 /// Provider for IWalletService
 final walletServiceProvider = Provider<IWalletService>((ref) {
+  final registered = ServiceLocatorSetup.walletService;
+  if (registered != null) {
+    return registered;
+  }
+
   final container = ProviderContainer();
   final service = WalletServiceImpl(container);
   ref.onDispose(() {

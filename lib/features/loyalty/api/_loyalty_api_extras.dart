@@ -17,20 +17,21 @@ extension LoyaltyApiExtras on LoyaltyApi {
 
       if (response['data'] != null) {
         final rewards = (response['data'] as List)
-            .map((e) => Reward.fromJson(e))
+            .map((e) => Reward.fromJson(e as Map<String, dynamic>))
             .toList();
         return MessageModel()
           ..error = false
           ..data = rewards;
       }
-
-      return MessageModel()
-        ..error = false
-        ..data = _getMockRewards();
+      return buildLoyaltyFallbackResult(
+        isDebug: kDebugMode,
+        debugData: _getMockRewards,
+      );
     } catch (e) {
-      return MessageModel()
-        ..error = false
-        ..data = _getMockRewards();
+      return buildLoyaltyFallbackResult(
+        isDebug: kDebugMode,
+        debugData: _getMockRewards,
+      );
     }
   }
 
@@ -72,16 +73,23 @@ extension LoyaltyApiExtras on LoyaltyApi {
           ..data = response['data'];
       }
 
-      // 生成模拟邀请码
-      final code = 'N42-${walletAddress.substring(2, 8).toUpperCase()}';
-      return MessageModel()
-        ..error = false
-        ..data = {
-          'code': code,
-          'link': 'https://n42.ai/invite/$code',
-        };
+      return buildLoyaltyFallbackResult(
+        isDebug: kDebugMode,
+        unavailableMessage: 'Referral code unavailable',
+        debugData: () {
+          final code = 'N42-${walletAddress.substring(2, 8).toUpperCase()}';
+          return {'code': code, 'link': 'https://n42.ai/invite/$code'};
+        },
+      );
     } catch (e) {
-      return MessageModel.error()..data = e.toString();
+      return buildLoyaltyFallbackResult(
+        isDebug: kDebugMode,
+        unavailableMessage: 'Referral code unavailable',
+        debugData: () {
+          final code = 'N42-${walletAddress.substring(2, 8).toUpperCase()}';
+          return {'code': code, 'link': 'https://n42.ai/invite/$code'};
+        },
+      );
     }
   }
 
@@ -95,20 +103,23 @@ extension LoyaltyApiExtras on LoyaltyApi {
 
       if (response['data'] != null) {
         final referrals = (response['data'] as List)
-            .map((e) => ReferralRecord.fromJson(e))
+            .map((e) => ReferralRecord.fromJson(e as Map<String, dynamic>))
             .toList();
         return MessageModel()
           ..error = false
           ..data = referrals;
       }
-
-      return MessageModel()
-        ..error = false
-        ..data = <ReferralRecord>[];
+      return buildLoyaltyFallbackResult(
+        isDebug: kDebugMode,
+        unavailableMessage: 'Referral list unavailable',
+        debugData: () => <ReferralRecord>[],
+      );
     } catch (e) {
-      return MessageModel()
-        ..error = false
-        ..data = <ReferralRecord>[];
+      return buildLoyaltyFallbackResult(
+        isDebug: kDebugMode,
+        unavailableMessage: 'Referral list unavailable',
+        debugData: () => <ReferralRecord>[],
+      );
     }
   }
 
@@ -122,20 +133,21 @@ extension LoyaltyApiExtras on LoyaltyApi {
 
       if (response['data'] != null) {
         final rules = (response['data'] as List)
-            .map((e) => PointsRule.fromJson(e))
+            .map((e) => PointsRule.fromJson(e as Map<String, dynamic>))
             .toList();
         return MessageModel()
           ..error = false
           ..data = rules;
       }
-
-      return MessageModel()
-        ..error = false
-        ..data = _getMockRules();
+      return buildLoyaltyFallbackResult(
+        isDebug: kDebugMode,
+        debugData: _getMockRules,
+      );
     } catch (e) {
-      return MessageModel()
-        ..error = false
-        ..data = _getMockRules();
+      return buildLoyaltyFallbackResult(
+        isDebug: kDebugMode,
+        debugData: _getMockRules,
+      );
     }
   }
 }

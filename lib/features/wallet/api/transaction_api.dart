@@ -1,11 +1,11 @@
 import 'package:flutter/foundation.dart';
-import 'package:n42_wallet/core/config/api_keys_config.dart';
+// api_keys_config removed — API keys migrated to server proxy.
+import 'package:n42_wallet/core/config/proxy_config.dart';
 import 'package:n42_wallet/core/network/base_api.dart';
 import 'package:n42_wallet/core/network/request_url.dart';
 import 'package:n42_wallet/features/models/message_model.dart';
 import 'package:n42_wallet/features/sqlite/app_database.dart';
-// ignore: unused_import
-import 'package:n42_wallet/features/wallet/models/btc_transaction_recode_model.dart';
+import 'package:n42_wallet/features/wallet/models/transaction/explorer_response_utils.dart';
 import 'package:n42_wallet/features/wallet/models/transaction/btc_response.dart';
 import 'package:n42_wallet/features/wallet/models/transaction/btc_tran_detail.dart';
 import 'package:n42_wallet/features/wallet/models/transaction/common_response_item_model.dart';

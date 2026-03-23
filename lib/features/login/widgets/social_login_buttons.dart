@@ -8,12 +8,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
-import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/data/models/user_info.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
-import 'package:n42_wallet/shared/domain/entities/wallet_info.dart';
 import 'package:n42_wallet/features/login/api/user_info_api.dart';
 import 'package:n42_wallet/features/login/services/social_auth_service.dart';
 import 'package:n42_wallet/features/utils/device_info_util.dart';
@@ -77,7 +75,9 @@ class _SocialLoginButtonsState extends ConsumerState<SocialLoginButtons> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
+                padding: EdgeInsets.symmetric(
+                  horizontal: ScreenUtil().setWidth(20),
+                ),
                 child: Text(
                   S.of(context).g_key_or,
                   style: TextStyle(
@@ -235,6 +235,12 @@ class _SocialLoginButtonsState extends ConsumerState<SocialLoginButtons> {
         ToastUtils.show(errorMsg);
         return;
       }
+      if (!result.hasUsableIdToken) {
+        final errorMsg = '$provider sign-in returned no identity token';
+        widget.onError?.call(errorMsg);
+        ToastUtils.show(errorMsg);
+        return;
+      }
 
       await _loginWithSocialToken(
         provider: provider,
@@ -264,7 +270,11 @@ class _SocialLoginButtonsState extends ConsumerState<SocialLoginButtons> {
       dynamic data;
 
       if (provider == 'google') {
-        data = await api.loginWithGoogle(idToken, accessToken: accessToken, deviceInfo: deviceInfo);
+        data = await api.loginWithGoogle(
+          idToken,
+          accessToken: accessToken,
+          deviceInfo: deviceInfo,
+        );
       } else if (provider == 'apple') {
         data = await api.loginWithApple(
           idToken,
@@ -283,11 +293,6 @@ class _SocialLoginButtonsState extends ConsumerState<SocialLoginButtons> {
         await SPUtil().saveUserInfo(userInfo);
 
         if (!mounted) return;
-
-        // Update Riverpod state
-        ref.read(currentUserProvider.notifier).setUser(
-          SharedUserInfo.fromLegacyUserInfo(userInfo),
-        );
 
         await AppGlobals.login(userInfo);
 

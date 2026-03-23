@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/component/enums/load.dart';
 import 'package:n42_wallet/features/models/message_model.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
@@ -11,7 +10,9 @@ import 'package:n42_wallet/features/wallet/api/face_api.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/pages/face_matching/face_match.dart';
 import 'package:n42_wallet/features/wallet/pages/face_matching/face_user_notice.dart';
+import 'package:n42_wallet/features/wallet/pages/face_matching/face_wallet_utils.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_manage/wallet_manage.dart';
+import 'package:n42_wallet/features/wallet/pages/wallet_manage/wallet_manage_flags_utils.dart';
 import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/widgets/create_wallet_button.dart';
@@ -61,16 +62,22 @@ class _WalletListState extends ConsumerState<WalletList>
         actions: [
           IconButton(
             onPressed: () async {
-              sheetBottom(context, "", CreateWalletButton(
-                onTapBack: () {
-                  initData();
-                },
-              ));
+              sheetBottom(
+                context,
+                "",
+                CreateWalletButton(
+                  onTapBack: () {
+                    initData();
+                  },
+                ),
+              );
             },
             icon: Icon(
               Icons.add_circle_outline,
               color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainBlueColor.name),
+                context,
+                AppThemeKeys.mainBlueColor.name,
+              ),
             ),
           ),
         ],
@@ -85,29 +92,37 @@ class _WalletListState extends ConsumerState<WalletList>
                   children: [
                     Padding(
                       padding: EdgeInsets.only(
-                          top: ScreenUtil().setWidth(20.0),
-                          bottom: ScreenUtil().setWidth(10.0),
-                          left: ScreenUtil().setWidth(30.0)),
+                        top: ScreenUtil().setWidth(20.0),
+                        bottom: ScreenUtil().setWidth(10.0),
+                        left: ScreenUtil().setWidth(30.0),
+                      ),
                       child: Text(
                         S.of(context).g_face_match_key6,
                         style: TextStyle(
-                            color: AppThemeUtils.getColorByKey(
-                                context, AppThemeKeys.mainTextColor.name),
-                            fontSize: ScreenUtil().setSp(32.0)),
+                          color: AppThemeUtils.getColorByKey(
+                            context,
+                            AppThemeKeys.mainTextColor.name,
+                          ),
+                          fontSize: ScreenUtil().setSp(32.0),
+                        ),
                       ),
                     ),
                     _buildFaceBind(),
                     Padding(
                       padding: EdgeInsets.only(
-                          top: ScreenUtil().setWidth(20.0),
-                          bottom: ScreenUtil().setWidth(10.0),
-                          left: ScreenUtil().setWidth(30.0)),
+                        top: ScreenUtil().setWidth(20.0),
+                        bottom: ScreenUtil().setWidth(10.0),
+                        left: ScreenUtil().setWidth(30.0),
+                      ),
                       child: Text(
                         S.of(context).g_key_ex_keystore_13,
                         style: TextStyle(
-                            color: AppThemeUtils.getColorByKey(
-                                context, AppThemeKeys.mainTextColor.name),
-                            fontSize: ScreenUtil().setSp(32.0)),
+                          color: AppThemeUtils.getColorByKey(
+                            context,
+                            AppThemeKeys.mainTextColor.name,
+                          ),
+                          fontSize: ScreenUtil().setSp(32.0),
+                        ),
                       ),
                     ),
                     _buildList(),

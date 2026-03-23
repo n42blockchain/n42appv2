@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/features/component/enums/load.dart';
 import 'package:n42_wallet/features/pay/moonpay/create_url.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
@@ -8,6 +10,34 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/utils/js_escape_utils.dart';
+
+@visibleForTesting
+({String url, String mode})? parseMoonpaySignatureRequest(String rawMessage) {
+  final decoded = jsonDecode(rawMessage);
+  if (decoded is! List || decoded.isEmpty) return null;
+
+  final request = decoded.first;
+  if (request is! Map) return null;
+  if (request['type'] != 'get_moonpay_signature') return null;
+
+  final url = request['url'];
+  final mode = request['mode'];
+  if (url is! String || url.isEmpty || mode is! String || mode.isEmpty) {
+    return null;
+  }
+
+  return (url: url, mode: mode);
+}
+
+@visibleForTesting
+Future<String?> resolveMoonpaySignatureRequest(
+  String rawMessage, {
+  required Future<String> Function(String url, String mode) signUrl,
+}) async {
+  final request = parseMoonpaySignatureRequest(rawMessage);
+  if (request == null) return null;
+  return signUrl(request.url, request.mode);
+}
 
 class Moonpay extends StatefulWidget {
   final CoinModel? coinModel;
@@ -75,8 +105,8 @@ class _MoonpayState extends State<Moonpay> {
     final coin = widget.coinModel;
     if (coin == null) return base;
 
-    final currencyParam = "defaultCurrencyCode=${coin.coin['miniName']}";
-    final walletParam = isBuy ? "&walletAddress=${coin.address}" : "";
+    final currencyParam = "defaultCurrencyCode=${Uri.encodeComponent(coin.coin['miniName']?.toString() ?? '')}";
+    final walletParam = isBuy ? "&walletAddress=${Uri.encodeComponent(coin.address?.toString() ?? '')}" : "";
     return "$base?$currencyParam$walletParam";
   }
 
@@ -91,23 +121,22 @@ class _MoonpayState extends State<Moonpay> {
   }
 
   void _handleJSMessage(JavaScriptMessage message) {
+    // Fire-and-forget: JS callback is synchronous, errors handled inside async method.
+    unawaited(_handleJSMessageAsync(message));
+  }
+
+  Future<void> _handleJSMessageAsync(JavaScriptMessage message) async {
     try {
-      List<dynamic> rdatas = jsonDecode(message.message);
-      if (rdatas.isNotEmpty && rdatas[0] != null) {
-        if (rdatas[0]['type'] == "get_moonpay_signature") {
-          if (widget.coinModel != null) {
-            final signUrl = rdatas[0]['url'];
-            final signMode = rdatas[0]['mode'];
-            if (signUrl is String && signMode is String) {
-              String signature = createUrl(signUrl, signMode);
-              webViewController.runJavaScript(
-                  'receiveSignature("${JsEscapeUtils.escapeJs(signature)}");');
-            }
-          }
-        }
-      }
+      final signature = await resolveMoonpaySignatureRequest(
+        message.message,
+        signUrl: createUrl,
+      );
+      if (signature == null || !mounted) return;
+      webViewController.runJavaScript(
+        'receiveSignature("${JsEscapeUtils.escapeJs(signature)}");',
+      );
     } catch (e) {
-      debugPrint('Moonpay JS message handling error: $e');
+      _debugLog('Moonpay JS message handling error: $e');
     }
   }
 
@@ -125,9 +154,13 @@ class _MoonpayState extends State<Moonpay> {
                     LinearProgressIndicator(
                       value: pageLoadValue,
                       backgroundColor: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainButtonBgColor3.name),
+                        context,
+                        AppThemeKeys.mainButtonBgColor3.name,
+                      ),
                       color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainButtonBgColor.name),
+                        context,
+                        AppThemeKeys.mainButtonBgColor.name,
+                      ),
                     ),
                 ],
               ),
@@ -157,10 +190,11 @@ class _MoonpayState extends State<Moonpay> {
                         }
                       },
                       color: AppThemeUtils.getColorByKey(
-                          context,
-                          goBack
-                              ? AppThemeKeys.mainTextColor.name
-                              : AppThemeKeys.itemBorderColor.name),
+                        context,
+                        goBack
+                            ? AppThemeKeys.mainTextColor.name
+                            : AppThemeKeys.itemBorderColor.name,
+                      ),
                     ),
                   if (goForward)
                     _buildControlButton(
@@ -171,10 +205,11 @@ class _MoonpayState extends State<Moonpay> {
                         }
                       },
                       color: AppThemeUtils.getColorByKey(
-                          context,
-                          goForward
-                              ? AppThemeKeys.mainTextColor.name
-                              : AppThemeKeys.itemBorderColor.name),
+                        context,
+                        goForward
+                            ? AppThemeKeys.mainTextColor.name
+                            : AppThemeKeys.itemBorderColor.name,
+                      ),
                     ),
                 ],
               ),
@@ -203,9 +238,12 @@ class _MoonpayState extends State<Moonpay> {
           ),
           child: Image.asset(
             icon,
-            color: color ??
+            color:
+                color ??
                 AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
+                  context,
+                  AppThemeKeys.mainTextColor.name,
+                ),
             width: ScreenUtil().setWidth(40.0),
             height: ScreenUtil().setWidth(40.0),
           ),
@@ -213,4 +251,9 @@ class _MoonpayState extends State<Moonpay> {
       ),
     );
   }
+}
+
+void _debugLog(String message) {
+  if (!kDebugMode) return;
+  debugPrint(message);
 }

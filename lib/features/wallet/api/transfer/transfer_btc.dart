@@ -48,11 +48,18 @@ mixin _TransferBtcMixin on _TransferBaseMixin {
     int byteSize= await getSignByteSize(coinType,path,utxos,valuePrice,averageValue,fromAddress,toAddress,max: allValue,);
     int byteSizeFees=byteSize*averageValue;
     if(allValue){
-      value=value-toEther(byteSizeFees.toString(),8).toDouble();
+      double feeInBtc = toEther(byteSizeFees.toString(),8).toDouble();
+      if (feeInBtc >= value) {
+        return MessageModel.error()..data=S.current.g_key_wallet_m5(coinType);
+      }
+      value=value-feeInBtc;
     }else{
       if(BigInt.from(byteSizeFees)+valuePrice > balance){
         return MessageModel.error()..data=S.current.g_key_wallet_m5(coinType);
       }
+    }
+    if (value <= 0) {
+      return MessageModel.error()..data=S.current.g_key_wallet_m5(coinType);
     }
     MessageModel rmm=await transferBtcSend(coinType, fromAddress, toAddress, valuePrice.toInt(),path, averageValue, byteSizeFees,utxos,max: allValue,isTest:isTest);
     if(!rmm.error){

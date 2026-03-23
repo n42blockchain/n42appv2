@@ -31,6 +31,7 @@ class GoplusSecurityService {
 
   // 内存缓存（key = "chainId_contractAddress"）
   static final Map<String, _CacheEntry> _cache = {};
+  static const int _maxCacheSize = 200;
 
   static int? _chainId(String coinType) =>
       _chainIds[coinType.toUpperCase()];
@@ -78,6 +79,15 @@ class GoplusSecurityService {
       if (tokenData == null) return null;
 
       final result = GoplusSecurityResult.fromTokenJson(tokenData);
+      if (_cache.length >= _maxCacheSize) {
+        _cache.removeWhere((_, entry) => entry.isExpired);
+        if (_cache.length >= _maxCacheSize) {
+          final keysToRemove = _cache.keys.take(_cache.length ~/ 4).toList();
+          for (final k in keysToRemove) {
+            _cache.remove(k);
+          }
+        }
+      }
       _cache[cacheKey] = _CacheEntry(result);
       return result;
     } catch (e) {

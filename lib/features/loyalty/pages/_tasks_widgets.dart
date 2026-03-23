@@ -411,7 +411,7 @@ mixin TasksWidgetsMixin on State<TasksPage>, TasksLogicMixin {
               ? SizedBox(
                   width: ScreenUtil().setWidth(20),
                   height: ScreenUtil().setWidth(20),
-                  child: CircularProgressIndicator(
+                  child: const CircularProgressIndicator(
                     strokeWidth: 2,
                     color: Colors.white,
                   ),

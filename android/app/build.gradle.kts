@@ -16,6 +16,27 @@ if (keystorePropertiesFile.exists()) {
     }
 }
 
+val localConfigProperties = Properties()
+val localConfigPropertiesFile = rootProject.file("local.properties")
+if (localConfigPropertiesFile.exists()) {
+    localConfigPropertiesFile.reader(Charsets.UTF_8).use { reader ->
+        localConfigProperties.load(reader)
+    }
+}
+
+fun readConfigValue(name: String, defaultValue: String = ""): String {
+    val gradleValue = providers.gradleProperty(name).orNull
+    val localValue = localConfigProperties.getProperty(name)
+    val envValue = System.getenv(name)
+    return gradleValue ?: localValue ?: envValue ?: defaultValue
+}
+
+fun escapeResValue(value: String): String {
+    return value
+        .replace("\\", "\\\\")
+        .replace("\"", "\\\"")
+}
+
 android {
     namespace = "ai.n42.www"
     // Google Play 2026 要求: compileSdk 36, targetSdk 35 (Android 15)
@@ -52,6 +73,41 @@ android {
                 arguments += listOf("-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON")
             }
         }
+        resValue(
+            "string",
+            "n42_chat_google_client_id",
+            escapeResValue(readConfigValue("N42_CHAT_GOOGLE_CLIENT_ID"))
+        )
+        resValue(
+            "string",
+            "n42_chat_google_server_client_id",
+            escapeResValue(readConfigValue("N42_CHAT_GOOGLE_SERVER_CLIENT_ID"))
+        )
+        resValue(
+            "string",
+            "n42_chat_twitter_api_key",
+            escapeResValue(readConfigValue("N42_CHAT_TWITTER_API_KEY"))
+        )
+        resValue(
+            "string",
+            "n42_chat_twitter_api_secret",
+            escapeResValue(readConfigValue("N42_CHAT_TWITTER_API_SECRET"))
+        )
+        resValue(
+            "string",
+            "n42_chat_twitter_redirect_uri",
+            escapeResValue(readConfigValue("N42_CHAT_TWITTER_REDIRECT_URI", "n42://auth/twitter"))
+        )
+        resValue(
+            "string",
+            "n42_chat_wechat_app_id",
+            escapeResValue(readConfigValue("N42_CHAT_WECHAT_APP_ID"))
+        )
+        resValue(
+            "string",
+            "n42_chat_wechat_universal_link",
+            escapeResValue(readConfigValue("N42_CHAT_WECHAT_UNIVERSAL_LINK"))
+        )
     }
 
     signingConfigs {

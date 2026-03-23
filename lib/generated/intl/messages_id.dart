@@ -23,9 +23,9 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m0(deviceName, os) =>
       "Akun Anda baru saja masuk di ${deviceName} (${os}). Jika bukan Anda, kami sarankan untuk mengubah kata sandi Anda.";
 
-  static String m1(price) => "Current price: \$${price}";
+  static String m1(price) => "Harga saat ini: \$${price}";
 
-  static String m2(symbol) => "Price Alert · ${symbol}";
+  static String m2(symbol) => "Peringatan Harga · ${symbol}";
 
   static String m3(value) => "Saya adalah ${value}";
 
@@ -34,9 +34,9 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m5(value) =>
       "Apakah Anda yakin ingin menambahkan ${value} sebagai teman";
 
-  static String m6(email) => "Verification code sent to ${email}";
+  static String m6(email) => "Kode verifikasi dikirim ke ${email}";
 
-  static String m7(s) => "Resend in ${s}s";
+  static String m7(s) => "Kirim ulang dalam ${s}s";
 
   static String m8(value) =>
       "Anda telah terikat dan tidak dapat mengikat ulang saat ini. Alamat pengikatan: ${value}.";
@@ -73,148 +73,171 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m21(value) => "Alamat duplikat di baris ${value}";
 
-  static String m22(value) => "Alamat tidak valid di baris ${value}";
+  static String m22(value) =>
+      "Saldo tidak mencukupi: jumlah total akan melebihi ${value} yang tersedia";
 
-  static String m23(value) => "Jumlah tidak valid di baris ${value}";
+  static String m23(value) => "Alamat tidak valid di baris ${value}";
 
-  static String m24(value) => "Maksimal ${value} penerima";
+  static String m24(value) => "Jumlah tidak valid di baris ${value}";
 
-  static String m25(value) => "+${value} pts/day";
+  static String m25(value) => "Maksimal ${value} penerima";
 
-  static String m26(value) => "Earn up to ${value}% APY";
+  static String m26(token) => "Setujui ${token} untuk melanjutkan";
 
-  static String m27(value) => "Congratulations! You now own ${value}";
+  static String m27(impact) =>
+      "Dampak harga tinggi (${impact})! Lanjutkan dengan hati-hati.";
 
-  static String m28(value) => "Please wait ${value} seconds";
+  static String m28(secs) => "Penawaran berakhir dalam ${secs}s";
 
-  static String m29(value) => "Auto-refresh every ${value} seconds";
+  static String m29(value) => "+${value} poin/hari";
 
-  static String m30(address) => "Akun ${address} ditambahkan";
+  static String m30(value) => "Hasilkan hingga ${value}% APY";
 
-  static String m31(address, network) =>
+  static String m31(value) => "Selamat! Anda sekarang memiliki ${value}";
+
+  static String m32(value) => "Harap tunggu ${value} detik";
+
+  static String m33(value) => "Segarkan otomatis setiap ${value} detik";
+
+  static String m34(address) => "Akun ${address} ditambahkan";
+
+  static String m35(address, network) =>
       "Apakah Anda ingin melacak akun hardware wallet ini?\n\nAlamat: ${address}\nJaringan: ${network}";
 
-  static String m32(app) => "Current app: ${app}";
+  static String m36(app) => "Aplikasi saat ini: ${app}";
 
-  static String m33(days) => "${days} days ago";
+  static String m37(days) => "${days} hari yang lalu";
 
-  static String m34(value) => "Gagal mengimpor akun: ${value}";
+  static String m38(value) => "Gagal mengimpor akun: ${value}";
 
-  static String m35(date) => "Last connected: ${date}";
+  static String m39(date) => "Terakhir terhubung: ${date}";
 
-  static String m36(value) => "Mohon buka aplikasi ${value} di perangkat Anda";
+  static String m40(value) => "Mohon buka aplikasi ${value} di perangkat Anda";
 
-  static String m37(app) => "Pastikan aplikasi ${app} terbuka di Ledger Anda";
+  static String m41(app) => "Pastikan aplikasi ${app} terbuka di Ledger Anda";
 
-  static String m38(name) =>
-      "Are you sure you want to remove \"${name}\" from saved devices?";
+  static String m42(name) =>
+      "Apakah Anda yakin ingin menghapus \"${name}\" dari perangkat yang disimpan?";
 
-  static String m39(value) => "Earn ${value} points";
-
-  static String m40(value) => "Earn ${value} points for each friend who joins!";
-
-  static String m41(value) => "${value} poin untuk tingkat berikutnya";
-
-  static String m42(amount, token) => "≈ ${amount}${token}";
-
-  static String m43(amount) => "≈ ${amount} USDT";
+  static String m43(value) => "Dapatkan poin ${value}";
 
   static String m44(value) =>
+      "Dapatkan poin ${value} untuk setiap teman yang bergabung!";
+
+  static String m45(value) => "${value} poin untuk tingkat berikutnya";
+
+  static String m46(amount, token) => "≈ ${amount}${token}";
+
+  static String m47(amount) => "≈ ${amount} USDT";
+
+  static String m48(value) => "Perkiraan. gas: ~ unit ${value}";
+
+  static String m49(reason) => "Alasan: ${reason}";
+
+  static String m50(value) =>
       "Apakah Anda yakin ingin menghapus kontak ${value}?";
 
-  static String m45(value) => "${value}d unbond";
+  static String m51(value) => "${value}d terlepas";
 
-  static String m46(value) => "${value} hari tersisa";
+  static String m52(value) => "${value} hari tersisa";
 
-  static String m47(value) => "${value} days remaining";
+  static String m53(value) => "${value} hari tersisa";
 
-  static String m48(value) => "Anda tidak memiliki cukup \"${value}\"";
+  static String m54(value) =>
+      "Penghapusan staking membutuhkan waktu ${value} hari. Token Anda akan dikunci selama periode ini.";
 
-  static String m49(value) => "Gagal mendapatkan akun \"${value}\"";
+  static String m55(value) => "Anda tidak memiliki cukup \"${value}\"";
 
-  static String m50(value) => "Minimum ${value} XRP untuk transfer pertama";
+  static String m56(value) => "Gagal mendapatkan akun \"${value}\"";
 
-  static String m51(value) => "${value}d ago";
+  static String m57(value) => "Minimum ${value} XRP untuk transfer pertama";
 
-  static String m52(value) => "${value}h ago";
+  static String m58(value) => "${value}d yang lalu";
 
-  static String m53(value) => "${value}m ago";
+  static String m59(value) => "${value}h yang lalu";
 
-  static String m54(value) => "Verification code sent to ${value}";
+  static String m60(value) => "${value}m yang lalu";
 
-  static String m55(value) => "Jaringan ${value} belum ditambahkan.";
+  static String m61(count) => "Tambahkan (${count})";
 
-  static String m56(value) =>
-      "${value} memiliki transaksi yang belum selesai, silakan coba lagi nanti.";
+  static String m62(count) =>
+      "${Intl.plural(count, one: '1 token baru terdeteksi', other: '${count} token baru terdeteksi')} — ketuk untuk meninjau";
 
-  static String m57(value) => "Tidak ditemukan alamat untuk ${value}.";
+  static String m63(value) => "Kode verifikasi dikirim ke ${value}";
 
-  static String m58(value) => "Saldo ${value} tidak mencukupi.";
-
-  static String m59(value, value1) =>
-      "Setiap akun XRP harus mencadangkan ${value} XRP (${value1} drops) sebagai dasar, yang tidak dapat dibelanjakan.";
-
-  static String m60(value, value1) =>
-      "Untuk setiap objek yang dimiliki akun, ${value} XRP (${value1} drops) ditambahkan ke cadangan.";
-
-  static String m61(value, value1) =>
-      "Akun ini memiliki ${value} objek, yang berarti tambahan ${value1} XRP dicadangkan.";
-
-  static String m62(value) =>
-      "Kesalahan input kata sandi pola, Anda memiliki ${value} kesempatan";
-
-  static String m63(value) =>
-      "Kesalahan input kata sandi pola, Anda memiliki ${value} kesempatan";
-
-  static String m64(value) =>
-      "Anda telah berhasil menyiapkan ${value} dan akan memulai verifikasi dengan N42Wallet!";
+  static String m64(value) => "Jaringan ${value} belum ditambahkan.";
 
   static String m65(value) =>
-      "Bergabung dengan grup ${value} saya di @N42Wallet untuk menjadi penambang awal dari blockchain Layer 1, dan dapatkan kripto di ponsel Anda!";
+      "${value} memiliki transaksi yang belum selesai, silakan coba lagi nanti.";
 
-  static String m66(value, value1) =>
-      "Apakah Anda yakin ingin mengunci ${value} N hingga ${value1} untuk menjalankan node?";
+  static String m66(value) => "Tidak ditemukan alamat untuk ${value}.";
 
-  static String m67(value) => "Impor gagal:${value}";
+  static String m67(value) => "Saldo ${value} tidak mencukupi.";
 
-  static String m68(value) =>
-      "Dibutuhkan saldo staking minimal ${value} untuk mendapatkan hadiah.";
+  static String m68(value, value1) =>
+      "Setiap akun XRP harus mencadangkan ${value} XRP (${value1} drops) sebagai dasar, yang tidak dapat dibelanjakan.";
 
   static String m69(value, value1) =>
-      "${value} N setiap ${value1} blok ditambang";
+      "Untuk setiap objek yang dimiliki akun, ${value} XRP (${value1} drops) ditambahkan ke cadangan.";
 
-  static String m70(value) => "Harus ${value} karakter";
+  static String m70(value, value1) =>
+      "Akun ini memiliki ${value} objek, yang berarti tambahan ${value1} XRP dicadangkan.";
 
-  static String m71(value) => "Saldo ${value} Tidak Mencukupi.";
-
-  static String m72(value) => "${value} masuk...";
-
-  static String m73(value) =>
-      "${value} yang di-swap dalam aplikasi akan segera didistribusikan ke dompet Anda dan tidak dapat dijual melalui proses ini. Dapat digunakan untuk menjalankan node.";
-
-  static String m74(value) => "Maksimal ${value} karakter";
-
-  static String m75(value) => "Jaringan ${value} sudah didukung APP!";
-
-  static String m76(value) =>
-      "Jaringan ${value} sudah didukung APP, apakah Anda ingin menambahkannya?";
-
-  static String m77(value) => "Uji tautan alamat ${value} gagal!";
-
-  static String m78(value) => "Aplikasi akan terbuka dalam ${value} detik.";
-
-  static String m79(value) =>
+  static String m71(value) =>
       "Kesalahan input kata sandi pola, Anda memiliki ${value} kesempatan";
 
-  static String m80(value) =>
+  static String m72(value) =>
+      "Kesalahan input kata sandi pola, Anda memiliki ${value} kesempatan";
+
+  static String m73(value) =>
+      "Anda telah berhasil menyiapkan ${value} dan akan memulai verifikasi dengan N42Wallet!";
+
+  static String m74(value) =>
+      "Bergabung dengan grup ${value} saya di @N42Wallet untuk menjadi penambang awal dari blockchain Layer 1, dan dapatkan kripto di ponsel Anda!";
+
+  static String m75(value, value1) =>
+      "Apakah Anda yakin ingin mengunci ${value} N hingga ${value1} untuk menjalankan node?";
+
+  static String m76(value) => "Impor gagal:${value}";
+
+  static String m77(value) =>
+      "Dibutuhkan saldo staking minimal ${value} untuk mendapatkan hadiah.";
+
+  static String m78(value, value1) =>
+      "${value} N setiap ${value1} blok ditambang";
+
+  static String m79(value) => "Harus ${value} karakter";
+
+  static String m80(value) => "Saldo ${value} Tidak Mencukupi.";
+
+  static String m81(value) => "${value} masuk...";
+
+  static String m82(value) =>
+      "${value} yang di-swap dalam aplikasi akan segera didistribusikan ke dompet Anda dan tidak dapat dijual melalui proses ini. Dapat digunakan untuk menjalankan node.";
+
+  static String m83(value) => "Maksimal ${value} karakter";
+
+  static String m84(value) => "Jaringan ${value} sudah didukung APP!";
+
+  static String m85(value) =>
+      "Jaringan ${value} sudah didukung APP, apakah Anda ingin menambahkannya?";
+
+  static String m86(value) => "Uji tautan alamat ${value} gagal!";
+
+  static String m87(value) => "Aplikasi akan terbuka dalam ${value} detik.";
+
+  static String m88(value) =>
+      "Kesalahan input kata sandi pola, Anda memiliki ${value} kesempatan";
+
+  static String m89(value) =>
       "Kesalahan input kata sandi, Anda memiliki ${value} kesempatan";
 
-  static String m81(value) =>
+  static String m90(value) =>
       "Kesalahan input kata sandi, Anda memiliki ${value} kesempatan";
 
-  static String m82(value) => "Masukkan kata sandi ${value}";
+  static String m91(value) => "Masukkan kata sandi ${value}";
 
-  static String m83(value) => "0~${value} karakter";
+  static String m92(value) => "0~${value} karakter";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -222,7 +245,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "Create_your_account": MessageLookupByLibrary.simpleMessage(
       "Buat akun Anda",
     ),
-    "Edit": MessageLookupByLibrary.simpleMessage("Edit"),
+    "Edit": MessageLookupByLibrary.simpleMessage("Sunting"),
     "Verification": MessageLookupByLibrary.simpleMessage("Verifikasi"),
     "address_Information": MessageLookupByLibrary.simpleMessage(
       "Informasi Alamat",
@@ -266,7 +289,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "email_verification_message2": MessageLookupByLibrary.simpleMessage(
       "Tambahkan verifikasi Email?",
     ),
-    "file": MessageLookupByLibrary.simpleMessage("File"),
+    "file": MessageLookupByLibrary.simpleMessage("Mengajukan"),
     "g_2fa_backup_hint": MessageLookupByLibrary.simpleMessage(
       "Simpan kunci ini — Anda membutuhkannya jika kehilangan ponsel.",
     ),
@@ -289,23 +312,27 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_2fa_invalid_format": MessageLookupByLibrary.simpleMessage(
       "Masukkan kode 6 digit yang valid",
     ),
-    "g_alert_above": MessageLookupByLibrary.simpleMessage("Goes Above ↑"),
-    "g_alert_below": MessageLookupByLibrary.simpleMessage("Drops Below ↓"),
+    "g_alert_above": MessageLookupByLibrary.simpleMessage("Pergi ke Atas ↑"),
+    "g_alert_below": MessageLookupByLibrary.simpleMessage("Turun Di Bawah ↓"),
     "g_alert_current_price": m1,
     "g_alert_direction": MessageLookupByLibrary.simpleMessage(
-      "Alert me when price",
+      "Beritahu saya kapan harganya",
     ),
-    "g_alert_enable": MessageLookupByLibrary.simpleMessage("Enable this alert"),
+    "g_alert_enable": MessageLookupByLibrary.simpleMessage(
+      "Aktifkan peringatan ini",
+    ),
     "g_alert_invalid_price": MessageLookupByLibrary.simpleMessage(
-      "Please enter a valid price greater than 0",
+      "Silakan masukkan harga valid yang lebih besar dari 0",
     ),
-    "g_alert_remove": MessageLookupByLibrary.simpleMessage("Remove"),
-    "g_alert_set": MessageLookupByLibrary.simpleMessage("Set Alert"),
+    "g_alert_remove": MessageLookupByLibrary.simpleMessage("Hapus"),
+    "g_alert_set": MessageLookupByLibrary.simpleMessage("Setel Peringatan"),
     "g_alert_target_price": MessageLookupByLibrary.simpleMessage(
-      "Target price (USD)",
+      "Harga target (USD)",
     ),
     "g_alert_title": m2,
-    "g_alert_update": MessageLookupByLibrary.simpleMessage("Update Alert"),
+    "g_alert_update": MessageLookupByLibrary.simpleMessage(
+      "Perbarui Peringatan",
+    ),
     "g_app_share_key_1": MessageLookupByLibrary.simpleMessage(
       "Token hanya dapat dikirim dalam jaringan yang sama. Pengiriman dari jaringan lain dapat mengakibatkan kehilangan.",
     ),
@@ -327,7 +354,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_browser_key10": MessageLookupByLibrary.simpleMessage(
       "Masukkan deskripsi",
     ),
-    "g_browser_key11": MessageLookupByLibrary.simpleMessage("Browser"),
+    "g_browser_key11": MessageLookupByLibrary.simpleMessage("Peramban"),
     "g_browser_key12": MessageLookupByLibrary.simpleMessage(
       "Hapus Cache Browser",
     ),
@@ -354,13 +381,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_browser_key26": MessageLookupByLibrary.simpleMessage("DEX"),
     "g_browser_key27": MessageLookupByLibrary.simpleMessage("DeFi"),
     "g_browser_key28": MessageLookupByLibrary.simpleMessage("NFT"),
-    "g_browser_key29": MessageLookupByLibrary.simpleMessage("Bridge"),
+    "g_browser_key29": MessageLookupByLibrary.simpleMessage("Jembatan"),
     "g_browser_key3": MessageLookupByLibrary.simpleMessage("Bookmark"),
     "g_browser_key30": MessageLookupByLibrary.simpleMessage("Alat"),
     "g_browser_key4": MessageLookupByLibrary.simpleMessage(
       "Belum ada bookmark yang ditambahkan",
     ),
-    "g_browser_key5": MessageLookupByLibrary.simpleMessage("Bookmark"),
+    "g_browser_key5": MessageLookupByLibrary.simpleMessage("Penanda buku"),
     "g_browser_key6": MessageLookupByLibrary.simpleMessage("Nama"),
     "g_browser_key7": MessageLookupByLibrary.simpleMessage(
       "Silakan masukkan Nama",
@@ -483,104 +510,108 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_connect_key2": MessageLookupByLibrary.simpleMessage("Putuskan"),
     "g_connect_key3": MessageLookupByLibrary.simpleMessage("Tolak"),
-    "g_dapp_security_blocked": MessageLookupByLibrary.simpleMessage("Blocked"),
-    "g_dapp_security_caution": MessageLookupByLibrary.simpleMessage("Caution"),
-    "g_dapp_security_safe": MessageLookupByLibrary.simpleMessage("Safe"),
+    "g_dapp_security_blocked": MessageLookupByLibrary.simpleMessage("Diblokir"),
+    "g_dapp_security_caution": MessageLookupByLibrary.simpleMessage(
+      "Perhatian",
+    ),
+    "g_dapp_security_safe": MessageLookupByLibrary.simpleMessage("Aman"),
     "g_dapp_security_title": MessageLookupByLibrary.simpleMessage(
-      "DApp Security",
+      "Keamanan DApp",
     ),
     "g_dapp_security_verified": MessageLookupByLibrary.simpleMessage(
-      "Verified",
+      "Terverifikasi",
     ),
     "g_email_also_sync": MessageLookupByLibrary.simpleMessage(
-      "Also sync Chat account email",
+      "Sinkronkan juga email akun Obrolan",
     ),
     "g_email_back_to_email": MessageLookupByLibrary.simpleMessage(
-      "← Change email address",
+      "← Ubah alamat email",
     ),
     "g_email_both_success": MessageLookupByLibrary.simpleMessage(
-      "Both accounts updated successfully!",
+      "Kedua akun berhasil diperbarui!",
     ),
-    "g_email_change_title": MessageLookupByLibrary.simpleMessage(
-      "Change Email",
-    ),
+    "g_email_change_title": MessageLookupByLibrary.simpleMessage("Ubah Email"),
     "g_email_chat_code_hint": MessageLookupByLibrary.simpleMessage(
-      "Enter 6-digit Chat code",
+      "Masukkan 6 digit kode Obrolan",
     ),
     "g_email_chat_code_sent_to": MessageLookupByLibrary.simpleMessage(
-      "Chat code sent to",
+      "Kode obrolan dikirim ke",
     ),
     "g_email_chat_confirm": MessageLookupByLibrary.simpleMessage(
-      "Confirm Chat Sync",
+      "Konfirmasikan Sinkronisasi Obrolan",
     ),
     "g_email_chat_send_fail": MessageLookupByLibrary.simpleMessage(
-      "Failed to send Chat code",
+      "Gagal mengirim kode Obrolan",
     ),
     "g_email_chat_sending": MessageLookupByLibrary.simpleMessage(
-      "Sending Chat verification code...",
+      "Mengirim kode verifikasi Obrolan...",
     ),
     "g_email_chat_sync_title": MessageLookupByLibrary.simpleMessage(
-      "Sync Chat Account Email",
+      "Sinkronkan Email Akun Obrolan",
     ),
     "g_email_code_invalid": MessageLookupByLibrary.simpleMessage(
-      "Please enter the 6-digit code",
+      "Silakan masukkan kode 6 digit",
     ),
-    "g_email_code_resent": MessageLookupByLibrary.simpleMessage("Code resent"),
+    "g_email_code_resent": MessageLookupByLibrary.simpleMessage(
+      "Kode dikirim ulang",
+    ),
     "g_email_code_sent_to": m6,
     "g_email_code_wrong": MessageLookupByLibrary.simpleMessage(
-      "Incorrect code, please try again",
+      "Kode salah, silakan coba lagi",
     ),
     "g_email_confirm_change": MessageLookupByLibrary.simpleMessage(
-      "Confirm Change",
+      "Konfirmasikan Perubahan",
     ),
     "g_email_confirm_continue": MessageLookupByLibrary.simpleMessage(
-      "Confirm & Continue to Chat Sync",
+      "Konfirmasi & Lanjutkan ke Sinkronisasi Obrolan",
     ),
     "g_email_current_label": MessageLookupByLibrary.simpleMessage(
-      "Current email",
+      "Email saat ini",
     ),
     "g_email_enter_code": MessageLookupByLibrary.simpleMessage(
-      "Enter 6-digit code",
+      "Masukkan kode 6 digit",
     ),
     "g_email_error_empty": MessageLookupByLibrary.simpleMessage(
-      "Please enter a new email address",
+      "Silakan masukkan alamat email baru",
     ),
     "g_email_error_invalid": MessageLookupByLibrary.simpleMessage(
-      "Invalid email address",
+      "Alamat email tidak valid",
     ),
     "g_email_error_same": MessageLookupByLibrary.simpleMessage(
-      "New email must differ from current email",
+      "Email baru harus berbeda dengan email saat ini",
     ),
     "g_email_n42_only": MessageLookupByLibrary.simpleMessage(
-      "N42 email updated. Chat email can be updated in Chat > Settings.",
+      "Email N42 diperbarui. Email obrolan dapat diperbarui di Obrolan > Pengaturan.",
     ),
     "g_email_n42_updated": MessageLookupByLibrary.simpleMessage(
-      "N42 account email updated",
+      "Email akun N42 diperbarui",
     ),
     "g_email_new_hint": MessageLookupByLibrary.simpleMessage(
-      "Enter new email address",
+      "Masukkan alamat email baru",
     ),
     "g_email_new_label": MessageLookupByLibrary.simpleMessage(
-      "New email address",
+      "Alamat email baru",
     ),
-    "g_email_pwd_hint": MessageLookupByLibrary.simpleMessage("Enter password"),
+    "g_email_pwd_hint": MessageLookupByLibrary.simpleMessage(
+      "Masukkan kata sandi",
+    ),
     "g_email_pwd_label": MessageLookupByLibrary.simpleMessage(
-      "Current password (for Chat)",
+      "Kata sandi saat ini (untuk Obrolan)",
     ),
     "g_email_pwd_required": MessageLookupByLibrary.simpleMessage(
-      "Password required for Chat sync",
+      "Kata sandi diperlukan untuk sinkronisasi Obrolan",
     ),
-    "g_email_resend": MessageLookupByLibrary.simpleMessage("Resend code"),
+    "g_email_resend": MessageLookupByLibrary.simpleMessage("Kirim ulang kode"),
     "g_email_resend_countdown": m7,
     "g_email_send_code": MessageLookupByLibrary.simpleMessage(
-      "Send Verification Code",
+      "Kirim Kode Verifikasi",
     ),
-    "g_email_skip": MessageLookupByLibrary.simpleMessage("Skip"),
+    "g_email_skip": MessageLookupByLibrary.simpleMessage("Lewati"),
     "g_email_skip_full": MessageLookupByLibrary.simpleMessage(
-      "Skip – N42 email is already updated",
+      "Lewati – Email N42 sudah diperbarui",
     ),
     "g_email_success": MessageLookupByLibrary.simpleMessage(
-      "Email updated successfully",
+      "Email berhasil diperbarui",
     ),
     "g_face_1": MessageLookupByLibrary.simpleMessage(
       "Tips Pemindaian Biometrik",
@@ -591,7 +622,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_face_2": MessageLookupByLibrary.simpleMessage(
       "Pemindaian biometrik tidak berhasil",
     ),
-    "g_face_3": MessageLookupByLibrary.simpleMessage("Tips"),
+    "g_face_3": MessageLookupByLibrary.simpleMessage("Kiat"),
     "g_face_4": MessageLookupByLibrary.simpleMessage(
       "Pemindaian biometrik berhasil",
     ),
@@ -727,8 +758,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_14": MessageLookupByLibrary.simpleMessage("Dompet Utama"),
     "g_key_140": MessageLookupByLibrary.simpleMessage("Transaksi berhasil"),
     "g_key_146": MessageLookupByLibrary.simpleMessage("Kata sandi salah"),
-    "g_key_147": MessageLookupByLibrary.simpleMessage("Testnet"),
-    "g_key_148": MessageLookupByLibrary.simpleMessage("Mainnet"),
+    "g_key_147": MessageLookupByLibrary.simpleMessage("jaringan uji"),
+    "g_key_148": MessageLookupByLibrary.simpleMessage("Jaringan utama"),
     "g_key_149": MessageLookupByLibrary.simpleMessage("Bahasa sistem"),
     "g_key_15": MessageLookupByLibrary.simpleMessage(
       "Atur sebagai Dompet Utama",
@@ -788,7 +819,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_29": MessageLookupByLibrary.simpleMessage("Saldo"),
     "g_key_3": MessageLookupByLibrary.simpleMessage("Gagal menambahkan!"),
     "g_key_33": MessageLookupByLibrary.simpleMessage("Terima"),
-    "g_key_37": MessageLookupByLibrary.simpleMessage("Transfer"),
+    "g_key_37": MessageLookupByLibrary.simpleMessage("Pemindahan"),
     "g_key_38": MessageLookupByLibrary.simpleMessage("Ke"),
     "g_key_4": MessageLookupByLibrary.simpleMessage("Pindai kode QR"),
     "g_key_41": MessageLookupByLibrary.simpleMessage("Masukkan alamat dompet"),
@@ -810,26 +841,22 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_9": MessageLookupByLibrary.simpleMessage("Semua token"),
     "g_key_94": MessageLookupByLibrary.simpleMessage("Pengaturan"),
     "g_key_aa_account_created": MessageLookupByLibrary.simpleMessage(
-      "Account Created Successfully",
+      "Akun Berhasil Dibuat",
     ),
     "g_key_aa_account_details": MessageLookupByLibrary.simpleMessage(
-      "Account Details",
+      "Detail Akun",
     ),
-    "g_key_aa_account_name": MessageLookupByLibrary.simpleMessage(
-      "Account Name",
-    ),
+    "g_key_aa_account_name": MessageLookupByLibrary.simpleMessage("Nama Akun"),
     "g_key_aa_account_name_hint": MessageLookupByLibrary.simpleMessage(
-      "Enter account name",
+      "Masukkan nama akun",
     ),
-    "g_key_aa_account_type": MessageLookupByLibrary.simpleMessage(
-      "Account Type",
-    ),
-    "g_key_aa_active": MessageLookupByLibrary.simpleMessage("Active"),
+    "g_key_aa_account_type": MessageLookupByLibrary.simpleMessage("Jenis Akun"),
+    "g_key_aa_active": MessageLookupByLibrary.simpleMessage("Aktif"),
     "g_key_aa_add_first_operation": MessageLookupByLibrary.simpleMessage(
-      "Add your first operation",
+      "Tambahkan operasi pertama Anda",
     ),
     "g_key_aa_add_operation": MessageLookupByLibrary.simpleMessage(
-      "Add Operation",
+      "Tambahkan Operasi",
     ),
     "g_key_aa_address_calculating": MessageLookupByLibrary.simpleMessage(
       "Menghitung alamat...",
@@ -838,76 +865,76 @@ class MessageLookup extends MessageLookupByLibrary {
       "Gagal menghitung alamat. Silakan coba lagi.",
     ),
     "g_key_aa_address_preview": MessageLookupByLibrary.simpleMessage(
-      "This address is pre-computed and will be deployed when you make your first transaction.",
+      "Alamat ini telah dihitung sebelumnya dan akan digunakan saat Anda melakukan transaksi pertama.",
     ),
-    "g_key_aa_approve": MessageLookupByLibrary.simpleMessage("Approve"),
-    "g_key_aa_batch": MessageLookupByLibrary.simpleMessage("Batch"),
+    "g_key_aa_approve": MessageLookupByLibrary.simpleMessage("Menyetujui"),
+    "g_key_aa_batch": MessageLookupByLibrary.simpleMessage("kumpulan"),
     "g_key_aa_batch_atomic": MessageLookupByLibrary.simpleMessage(
-      "Atomic Execution",
+      "Eksekusi Atom",
     ),
     "g_key_aa_batch_desc": MessageLookupByLibrary.simpleMessage(
-      "Execute multiple operations at once",
+      "Jalankan beberapa operasi sekaligus",
     ),
     "g_key_aa_batch_description": MessageLookupByLibrary.simpleMessage(
-      "Send multiple transactions in a single operation",
+      "Kirim banyak transaksi dalam satu operasi",
     ),
     "g_key_aa_batch_failed": MessageLookupByLibrary.simpleMessage(
-      "Batch execution failed",
+      "Eksekusi batch gagal",
     ),
     "g_key_aa_batch_no_templates": MessageLookupByLibrary.simpleMessage(
-      "No saved templates",
+      "Tidak ada templat yang disimpan",
     ),
     "g_key_aa_batch_operations": MessageLookupByLibrary.simpleMessage(
-      "Batch Operations",
+      "Operasi Batch",
     ),
-    "g_key_aa_batch_save_gas": MessageLookupByLibrary.simpleMessage("Save Gas"),
+    "g_key_aa_batch_save_gas": MessageLookupByLibrary.simpleMessage(
+      "Hemat Gas",
+    ),
     "g_key_aa_batch_save_template": MessageLookupByLibrary.simpleMessage(
-      "Save as Template",
+      "Simpan sebagai Templat",
     ),
     "g_key_aa_batch_submitting": MessageLookupByLibrary.simpleMessage(
-      "Submitting...",
+      "Mengirimkan...",
     ),
     "g_key_aa_batch_success": MessageLookupByLibrary.simpleMessage(
-      "Batch submitted successfully",
+      "Batch berhasil dikirimkan",
     ),
     "g_key_aa_batch_template_load": MessageLookupByLibrary.simpleMessage(
-      "Load Template",
+      "Muat Templat",
     ),
     "g_key_aa_batch_template_name": MessageLookupByLibrary.simpleMessage(
-      "Template Name",
+      "Nama Templat",
     ),
     "g_key_aa_batch_template_name_hint": MessageLookupByLibrary.simpleMessage(
-      "Enter template name",
+      "Masukkan nama templat",
     ),
     "g_key_aa_batch_template_saved": MessageLookupByLibrary.simpleMessage(
-      "Template saved",
+      "Templat disimpan",
     ),
-    "g_key_aa_batch_templates": MessageLookupByLibrary.simpleMessage(
-      "Templates",
-    ),
+    "g_key_aa_batch_templates": MessageLookupByLibrary.simpleMessage("Templat"),
     "g_key_aa_batch_title": MessageLookupByLibrary.simpleMessage(
-      "Batch Transfer",
+      "Pemindahan Batch",
     ),
     "g_key_aa_batch_transaction": MessageLookupByLibrary.simpleMessage(
-      "Batch Transaction",
+      "Transaksi Batch",
     ),
     "g_key_aa_benefit_batch_desc": MessageLookupByLibrary.simpleMessage(
-      "Approve and swap in one transaction — no more two-step confirmations",
+      "Setujui dan tukar dalam satu transaksi — tidak ada lagi konfirmasi dua langkah",
     ),
     "g_key_aa_benefit_batch_title": MessageLookupByLibrary.simpleMessage(
-      "One-Click Batch Actions",
+      "Tindakan Batch Sekali Klik",
     ),
     "g_key_aa_benefit_gas_desc": MessageLookupByLibrary.simpleMessage(
-      "Sponsor transactions or pay fees with ERC-20 tokens instead of ETH",
+      "Sponsor transaksi atau bayar biaya dengan token ERC-20, bukan ETH",
     ),
     "g_key_aa_benefit_gas_title": MessageLookupByLibrary.simpleMessage(
-      "Pay Gas with Any Token",
+      "Bayar Gas dengan Token Apa Pun",
     ),
     "g_key_aa_benefit_recovery_desc": MessageLookupByLibrary.simpleMessage(
-      "Recover access via trusted contacts if you lose your private key",
+      "Pulihkan akses melalui kontak tepercaya jika Anda kehilangan kunci pribadi",
     ),
     "g_key_aa_benefit_recovery_title": MessageLookupByLibrary.simpleMessage(
-      "Social Recovery",
+      "Pemulihan Sosial",
     ),
     "g_key_aa_biconomy_account": MessageLookupByLibrary.simpleMessage(
       "Akun Biconomy",
@@ -915,115 +942,123 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_biconomy_desc": MessageLookupByLibrary.simpleMessage(
       "Akun pintar ERC-7579 modular dengan dukungan transaksi tanpa gas",
     ),
-    "g_key_aa_by": MessageLookupByLibrary.simpleMessage("by"),
-    "g_key_aa_chain": MessageLookupByLibrary.simpleMessage("Chain"),
-    "g_key_aa_chain_id": MessageLookupByLibrary.simpleMessage("Chain ID"),
-    "g_key_aa_change": MessageLookupByLibrary.simpleMessage("Change"),
+    "g_key_aa_by": MessageLookupByLibrary.simpleMessage("oleh"),
+    "g_key_aa_chain": MessageLookupByLibrary.simpleMessage("Rantai"),
+    "g_key_aa_chain_id": MessageLookupByLibrary.simpleMessage("ID Rantai"),
+    "g_key_aa_change": MessageLookupByLibrary.simpleMessage("Perubahan"),
     "g_key_aa_check_status": MessageLookupByLibrary.simpleMessage(
-      "Check Status",
+      "Periksa Status",
     ),
-    "g_key_aa_clear_all": MessageLookupByLibrary.simpleMessage("Clear All"),
-    "g_key_aa_coming_soon": MessageLookupByLibrary.simpleMessage("Coming Soon"),
-    "g_key_aa_continue": MessageLookupByLibrary.simpleMessage("Continue"),
-    "g_key_aa_contract": MessageLookupByLibrary.simpleMessage("Contract"),
+    "g_key_aa_clear_all": MessageLookupByLibrary.simpleMessage("Hapus Semua"),
+    "g_key_aa_coming_soon": MessageLookupByLibrary.simpleMessage(
+      "Segera Hadir",
+    ),
+    "g_key_aa_continue": MessageLookupByLibrary.simpleMessage("Lanjutkan"),
+    "g_key_aa_contract": MessageLookupByLibrary.simpleMessage("Kontrak"),
     "g_key_aa_counterfactual_address": MessageLookupByLibrary.simpleMessage(
-      "Counterfactual Address",
+      "Alamat Kontrafaktual",
     ),
     "g_key_aa_counterfactual_note": MessageLookupByLibrary.simpleMessage(
-      "This is a counterfactual address. It will be deployed on your first transaction.",
+      "Ini adalah alamat kontrafaktual. Ini akan diterapkan pada transaksi pertama Anda.",
     ),
     "g_key_aa_create_account": MessageLookupByLibrary.simpleMessage(
-      "Create Smart Account",
+      "Buat Akun Cerdas",
     ),
     "g_key_aa_create_first": MessageLookupByLibrary.simpleMessage(
-      "Create your first smart account",
+      "Buat akun pintar pertama Anda",
     ),
     "g_key_aa_create_first_account": MessageLookupByLibrary.simpleMessage(
-      "Create a smart account to get started",
+      "Buat akun cerdas untuk memulai",
     ),
     "g_key_aa_create_session": MessageLookupByLibrary.simpleMessage(
-      "Create Session Key",
+      "Buat Kunci Sesi",
     ),
     "g_key_aa_create_session_desc": MessageLookupByLibrary.simpleMessage(
-      "Session keys allow DApps to execute transactions on your behalf with limited permissions and time constraints.",
+      "Kunci sesi memungkinkan DApps mengeksekusi transaksi atas nama Anda dengan izin terbatas dan batasan waktu.",
     ),
     "g_key_aa_create_smart_account": MessageLookupByLibrary.simpleMessage(
-      "Create Smart Account",
+      "Buat Akun Cerdas",
     ),
-    "g_key_aa_created": MessageLookupByLibrary.simpleMessage("Created"),
-    "g_key_aa_custom": MessageLookupByLibrary.simpleMessage("Custom"),
-    "g_key_aa_deploy": MessageLookupByLibrary.simpleMessage("Deploy"),
+    "g_key_aa_created": MessageLookupByLibrary.simpleMessage("Dibuat"),
+    "g_key_aa_custom": MessageLookupByLibrary.simpleMessage("Adat"),
+    "g_key_aa_deploy": MessageLookupByLibrary.simpleMessage("Menyebarkan"),
     "g_key_aa_deploy_auto_note": MessageLookupByLibrary.simpleMessage(
-      "Account will be deployed automatically on your first transaction",
+      "Akun akan dikerahkan secara otomatis pada transaksi pertama Anda",
     ),
     "g_key_aa_deploy_failed": MessageLookupByLibrary.simpleMessage(
-      "Deploy Failed",
+      "Penerapan Gagal",
     ),
     "g_key_aa_deploy_failed_desc": MessageLookupByLibrary.simpleMessage(
-      "Deployment failed. Please try again.",
+      "Penerapan gagal. Silakan coba lagi.",
     ),
     "g_key_aa_deploy_started": MessageLookupByLibrary.simpleMessage(
-      "Deployment started",
+      "Penerapan dimulai",
     ),
-    "g_key_aa_deployed": MessageLookupByLibrary.simpleMessage("Deployed"),
+    "g_key_aa_deployed": MessageLookupByLibrary.simpleMessage("Dikerahkan"),
     "g_key_aa_deployed_desc": MessageLookupByLibrary.simpleMessage(
-      "Account is ready to use",
+      "Akun siap digunakan",
     ),
-    "g_key_aa_deploying": MessageLookupByLibrary.simpleMessage("Deploying..."),
+    "g_key_aa_deploying": MessageLookupByLibrary.simpleMessage(
+      "Menyebarkan...",
+    ),
     "g_key_aa_deploying_desc": MessageLookupByLibrary.simpleMessage(
-      "Deployment transaction is being processed",
+      "Transaksi penerapan sedang diproses",
     ),
     "g_key_aa_deployment_note": MessageLookupByLibrary.simpleMessage(
-      "Deployment will occur automatically with your first transaction.",
+      "Penerapan akan terjadi secara otomatis dengan transaksi pertama Anda.",
     ),
     "g_key_aa_description": MessageLookupByLibrary.simpleMessage(
-      "Experience the next generation of Ethereum accounts with enhanced features",
+      "Rasakan akun Ethereum generasi berikutnya dengan fitur yang ditingkatkan",
     ),
-    "g_key_aa_details": MessageLookupByLibrary.simpleMessage("Details"),
+    "g_key_aa_details": MessageLookupByLibrary.simpleMessage("Detail"),
     "g_key_aa_eip7702_account": MessageLookupByLibrary.simpleMessage(
-      "EIP-7702 Account",
+      "Akun EIP-7702",
     ),
     "g_key_aa_eip7702_badge": MessageLookupByLibrary.simpleMessage("EIP-7702"),
     "g_key_aa_eip7702_desc": MessageLookupByLibrary.simpleMessage(
-      "Hybrid EOA/Smart Account - No deployment needed",
+      "EOA Hibrid/Akun Cerdas - Tidak diperlukan penerapan",
     ),
-    "g_key_aa_error": MessageLookupByLibrary.simpleMessage("Error"),
+    "g_key_aa_error": MessageLookupByLibrary.simpleMessage("Kesalahan"),
     "g_key_aa_estimated_gas": MessageLookupByLibrary.simpleMessage(
-      "Estimated Gas",
+      "Perkiraan Gas",
     ),
     "g_key_aa_estimating": MessageLookupByLibrary.simpleMessage(
-      "Estimating...",
+      "Memperkirakan...",
     ),
     "g_key_aa_execute_batch": MessageLookupByLibrary.simpleMessage(
-      "Execute Batch",
+      "Jalankan Batch",
     ),
-    "g_key_aa_expired": MessageLookupByLibrary.simpleMessage("Expired"),
-    "g_key_aa_expires": MessageLookupByLibrary.simpleMessage("Expires"),
-    "g_key_aa_factory": MessageLookupByLibrary.simpleMessage("Factory"),
+    "g_key_aa_expired": MessageLookupByLibrary.simpleMessage("Kedaluwarsa"),
+    "g_key_aa_expires": MessageLookupByLibrary.simpleMessage("Kedaluwarsa"),
+    "g_key_aa_factory": MessageLookupByLibrary.simpleMessage("Pabrik"),
     "g_key_aa_feature_batch": MessageLookupByLibrary.simpleMessage(
-      "Batch multiple transactions",
+      "Batch beberapa transaksi",
     ),
     "g_key_aa_feature_gas": MessageLookupByLibrary.simpleMessage(
-      "Pay gas in any token",
+      "Bayar bahan bakar dengan token apa pun",
     ),
     "g_key_aa_feature_security": MessageLookupByLibrary.simpleMessage(
-      "Enhanced security",
+      "Keamanan yang ditingkatkan",
     ),
-    "g_key_aa_free": MessageLookupByLibrary.simpleMessage("FREE"),
-    "g_key_aa_full_access": MessageLookupByLibrary.simpleMessage("Full Access"),
+    "g_key_aa_free": MessageLookupByLibrary.simpleMessage("GRATIS"),
+    "g_key_aa_full_access": MessageLookupByLibrary.simpleMessage("Akses Penuh"),
     "g_key_aa_gas_estimate": MessageLookupByLibrary.simpleMessage(
-      "Gas Estimate",
+      "Perkiraan Bahan Bakar",
     ),
     "g_key_aa_gas_estimate_failed": MessageLookupByLibrary.simpleMessage(
-      "Gas estimate failed, using default",
+      "Perkiraan gas gagal, menggunakan default",
     ),
-    "g_key_aa_gas_payment": MessageLookupByLibrary.simpleMessage("Gas Payment"),
+    "g_key_aa_gas_payment": MessageLookupByLibrary.simpleMessage(
+      "Pembayaran Gas",
+    ),
     "g_key_aa_gas_payment_options": MessageLookupByLibrary.simpleMessage(
-      "Gas Payment Options",
+      "Opsi Pembayaran Gas",
     ),
-    "g_key_aa_gas_savings": MessageLookupByLibrary.simpleMessage("Gas Savings"),
+    "g_key_aa_gas_savings": MessageLookupByLibrary.simpleMessage(
+      "Penghematan Bahan Bakar",
+    ),
     "g_key_aa_gas_sponsored": MessageLookupByLibrary.simpleMessage(
-      "Gas Sponsored",
+      "Disponsori Gas",
     ),
     "g_key_aa_gas_warn_call_high": MessageLookupByLibrary.simpleMessage(
       "Gas Eksekusi Tinggi",
@@ -1051,66 +1086,66 @@ class MessageLookup extends MessageLookupByLibrary {
       "Gas Verifikasi Tinggi",
     ),
     "g_key_aa_gas_warn_verify_high_desc": m19,
-    "g_key_aa_gasless": MessageLookupByLibrary.simpleMessage("Gasless"),
+    "g_key_aa_gasless": MessageLookupByLibrary.simpleMessage("Tanpa gas"),
     "g_key_aa_gasless_transactions": MessageLookupByLibrary.simpleMessage(
-      "Gasless transactions & batch operations",
+      "Transaksi tanpa gas & operasi batch",
     ),
     "g_key_aa_home_title": MessageLookupByLibrary.simpleMessage(
-      "Account Abstraction",
+      "Abstraksi Akun",
     ),
-    "g_key_aa_just_now": MessageLookupByLibrary.simpleMessage("Just now"),
+    "g_key_aa_just_now": MessageLookupByLibrary.simpleMessage("Baru saja"),
     "g_key_aa_kernel_account": MessageLookupByLibrary.simpleMessage(
-      "Kernel Account",
+      "Akun Kernel",
     ),
     "g_key_aa_kernel_desc": MessageLookupByLibrary.simpleMessage(
-      "Modular account with plugin support from ZeroDev",
+      "Akun modular dengan dukungan plugin dari ZeroDev",
     ),
     "g_key_aa_label": MessageLookupByLibrary.simpleMessage("Label"),
     "g_key_aa_last_activity": MessageLookupByLibrary.simpleMessage(
-      "Last Activity",
+      "Aktivitas Terakhir",
     ),
     "g_key_aa_my_accounts": MessageLookupByLibrary.simpleMessage(
-      "My Smart Accounts",
+      "Akun Cerdas Saya",
     ),
-    "g_key_aa_never": MessageLookupByLibrary.simpleMessage("Never"),
+    "g_key_aa_never": MessageLookupByLibrary.simpleMessage("Tidak pernah"),
     "g_key_aa_no_accounts": MessageLookupByLibrary.simpleMessage(
-      "No smart accounts yet",
+      "Belum ada akun pintar",
     ),
     "g_key_aa_no_accounts_filter": MessageLookupByLibrary.simpleMessage(
-      "No accounts match your filter",
+      "Tidak ada akun yang cocok dengan filter Anda",
     ),
     "g_key_aa_no_operations": MessageLookupByLibrary.simpleMessage(
-      "No operations added",
+      "Tidak ada operasi yang ditambahkan",
     ),
     "g_key_aa_no_session_keys": MessageLookupByLibrary.simpleMessage(
-      "No session keys",
+      "Tidak ada kunci sesi",
     ),
     "g_key_aa_not_deployed": MessageLookupByLibrary.simpleMessage(
-      "Not Deployed",
+      "Tidak Dikerahkan",
     ),
     "g_key_aa_not_deployed_desc": MessageLookupByLibrary.simpleMessage(
-      "Account will be deployed on first transaction",
+      "Akun akan dikerahkan pada transaksi pertama",
     ),
     "g_key_aa_onboard_step1": MessageLookupByLibrary.simpleMessage(
-      "Create smart account (free, no ETH needed)",
+      "Buat akun pintar (gratis, tidak perlu ETH)",
     ),
     "g_key_aa_onboard_step2": MessageLookupByLibrary.simpleMessage(
-      "Fund it — receive any EVM token",
+      "Danai — terima token EVM apa pun",
     ),
     "g_key_aa_onboard_step3": MessageLookupByLibrary.simpleMessage(
-      "Transact gaslessly with Paymaster",
+      "Bertransaksi tanpa gas dengan Paymaster",
     ),
-    "g_key_aa_operations": MessageLookupByLibrary.simpleMessage("Operations"),
-    "g_key_aa_owner": MessageLookupByLibrary.simpleMessage("Owner"),
+    "g_key_aa_operations": MessageLookupByLibrary.simpleMessage("Operasi"),
+    "g_key_aa_owner": MessageLookupByLibrary.simpleMessage("Pemilik"),
     "g_key_aa_pay_gas_with_token": MessageLookupByLibrary.simpleMessage(
-      "Pay gas with token",
+      "Bayar bensin dengan token",
     ),
     "g_key_aa_pay_gas_yourself": MessageLookupByLibrary.simpleMessage(
-      "Pay gas with your ETH",
+      "Bayar bahan bakar dengan ETH Anda",
     ),
-    "g_key_aa_pay_with": MessageLookupByLibrary.simpleMessage("Pay with"),
+    "g_key_aa_pay_with": MessageLookupByLibrary.simpleMessage("Bayar dengan"),
     "g_key_aa_pay_with_eth": MessageLookupByLibrary.simpleMessage(
-      "Pay with ETH",
+      "Bayar dengan ETH",
     ),
     "g_key_aa_paymaster_balance": MessageLookupByLibrary.simpleMessage("Saldo"),
     "g_key_aa_paymaster_chains_supported": MessageLookupByLibrary.simpleMessage(
@@ -1123,7 +1158,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Cakupan Chain",
     ),
     "g_key_aa_paymaster_description": MessageLookupByLibrary.simpleMessage(
-      "Choose how you want to pay for transaction gas fees",
+      "Pilih bagaimana Anda ingin membayar biaya gas transaksi",
     ),
     "g_key_aa_paymaster_est_cost": MessageLookupByLibrary.simpleMessage(
       "Perkiraan biaya",
@@ -1142,56 +1177,58 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_aa_paymaster_sponsored_unavailable":
         MessageLookupByLibrary.simpleMessage("Sponsorship tidak tersedia"),
-    "g_key_aa_pending": MessageLookupByLibrary.simpleMessage("Pending"),
-    "g_key_aa_permission": MessageLookupByLibrary.simpleMessage("Permission"),
+    "g_key_aa_pending": MessageLookupByLibrary.simpleMessage("Tertunda"),
+    "g_key_aa_permission": MessageLookupByLibrary.simpleMessage("Izin"),
     "g_key_aa_preview_address": MessageLookupByLibrary.simpleMessage(
-      "Preview Address",
+      "Alamat Pratinjau",
     ),
-    "g_key_aa_ready": MessageLookupByLibrary.simpleMessage("Ready"),
+    "g_key_aa_ready": MessageLookupByLibrary.simpleMessage("Siap"),
     "g_key_aa_receive_address": MessageLookupByLibrary.simpleMessage(
-      "Receive Address",
+      "Terima Alamat",
     ),
-    "g_key_aa_recommended": MessageLookupByLibrary.simpleMessage("Recommended"),
-    "g_key_aa_retry": MessageLookupByLibrary.simpleMessage("Retry"),
-    "g_key_aa_revoke": MessageLookupByLibrary.simpleMessage("Revoke"),
+    "g_key_aa_recommended": MessageLookupByLibrary.simpleMessage(
+      "Direkomendasikan",
+    ),
+    "g_key_aa_retry": MessageLookupByLibrary.simpleMessage("Coba lagi"),
+    "g_key_aa_revoke": MessageLookupByLibrary.simpleMessage("Cabut"),
     "g_key_aa_revoke_confirm": MessageLookupByLibrary.simpleMessage(
-      "Are you sure you want to revoke this session key? The authorized DApp will no longer be able to execute transactions.",
+      "Apakah Anda yakin ingin mencabut kunci sesi ini? DApp resmi tidak lagi dapat melakukan transaksi.",
     ),
     "g_key_aa_revoke_session": MessageLookupByLibrary.simpleMessage(
-      "Revoke Session Key",
+      "Cabut Kunci Sesi",
     ),
     "g_key_aa_revoked": MessageLookupByLibrary.simpleMessage(
-      "Session key revoked",
+      "Kunci sesi dicabut",
     ),
-    "g_key_aa_revoked_status": MessageLookupByLibrary.simpleMessage("Revoked"),
+    "g_key_aa_revoked_status": MessageLookupByLibrary.simpleMessage("Dicabut"),
     "g_key_aa_revoking": MessageLookupByLibrary.simpleMessage(
-      "Revoking session key...",
+      "Mencabut kunci sesi...",
     ),
-    "g_key_aa_safe_account": MessageLookupByLibrary.simpleMessage(
-      "Safe Account",
-    ),
+    "g_key_aa_safe_account": MessageLookupByLibrary.simpleMessage("Akun Aman"),
     "g_key_aa_safe_desc": MessageLookupByLibrary.simpleMessage(
-      "Multi-signature account with advanced security features",
+      "Akun multi-tanda tangan dengan fitur keamanan tingkat lanjut",
     ),
     "g_key_aa_safe_guardians": MessageLookupByLibrary.simpleMessage("Penjaga"),
     "g_key_aa_safe_threshold": MessageLookupByLibrary.simpleMessage(
       "Ambang batas",
     ),
-    "g_key_aa_saved": MessageLookupByLibrary.simpleMessage("saved"),
+    "g_key_aa_saved": MessageLookupByLibrary.simpleMessage("disimpan"),
     "g_key_aa_select_chain": MessageLookupByLibrary.simpleMessage(
-      "Select Chain",
+      "Pilih Rantai",
     ),
     "g_key_aa_select_paymaster": MessageLookupByLibrary.simpleMessage(
-      "Select Paymaster",
+      "Pilih Pembayar",
     ),
     "g_key_aa_select_type": MessageLookupByLibrary.simpleMessage(
-      "Select Account Type",
+      "Pilih Jenis Akun",
     ),
-    "g_key_aa_selected": MessageLookupByLibrary.simpleMessage("Selected"),
+    "g_key_aa_selected": MessageLookupByLibrary.simpleMessage("Dipilih"),
     "g_key_aa_send_desc": MessageLookupByLibrary.simpleMessage(
-      "Send tokens using your smart account",
+      "Kirim token menggunakan akun pintar Anda",
     ),
-    "g_key_aa_send_title": MessageLookupByLibrary.simpleMessage("AA Transfer"),
+    "g_key_aa_send_title": MessageLookupByLibrary.simpleMessage(
+      "Pemindahan AA",
+    ),
     "g_key_aa_session_1d": MessageLookupByLibrary.simpleMessage("1 Hari"),
     "g_key_aa_session_1h": MessageLookupByLibrary.simpleMessage("1 Jam"),
     "g_key_aa_session_30d": MessageLookupByLibrary.simpleMessage("30 Hari"),
@@ -1227,7 +1264,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Label / Nama DApp",
     ),
     "g_key_aa_session_details": MessageLookupByLibrary.simpleMessage(
-      "Session Key Details",
+      "Detail Kunci Sesi",
     ),
     "g_key_aa_session_expiry": MessageLookupByLibrary.simpleMessage(
       "Berlaku Selama",
@@ -1235,11 +1272,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_session_full_warning": MessageLookupByLibrary.simpleMessage(
       "Risiko tinggi — hanya DApp terpercaya",
     ),
-    "g_key_aa_session_keys": MessageLookupByLibrary.simpleMessage(
-      "Session Keys",
-    ),
+    "g_key_aa_session_keys": MessageLookupByLibrary.simpleMessage("Kunci Sesi"),
     "g_key_aa_session_keys_desc": MessageLookupByLibrary.simpleMessage(
-      "Authorize DApps with temporary access to your smart account",
+      "Otorisasi DApps dengan akses sementara ke akun pintar Anda",
     ),
     "g_key_aa_session_preset_contract": MessageLookupByLibrary.simpleMessage(
       "Akses DApp",
@@ -1269,41 +1304,41 @@ class MessageLookup extends MessageLookupByLibrary {
       "Transfer token dalam batas yang ditentukan",
     ),
     "g_key_aa_simple_account": MessageLookupByLibrary.simpleMessage(
-      "Simple Account",
+      "Akun Sederhana",
     ),
     "g_key_aa_simple_desc": MessageLookupByLibrary.simpleMessage(
-      "Basic smart account with single owner - recommended for most users",
+      "Akun pintar dasar dengan pemilik tunggal - direkomendasikan untuk sebagian besar pengguna",
     ),
     "g_key_aa_smart_account": MessageLookupByLibrary.simpleMessage(
-      "Smart Account",
+      "Akun Cerdas",
     ),
     "g_key_aa_smart_accounts": MessageLookupByLibrary.simpleMessage(
-      "Smart Accounts",
+      "Akun Cerdas",
     ),
     "g_key_aa_smart_wallet": MessageLookupByLibrary.simpleMessage(
-      "Smart Wallet",
+      "Dompet Cerdas",
     ),
     "g_key_aa_spending_limit": MessageLookupByLibrary.simpleMessage(
-      "Spending Limit",
+      "Batas Pembelanjaan",
     ),
     "g_key_aa_sponsored": MessageLookupByLibrary.simpleMessage(
-      "Sponsored (Free)",
+      "Disponsori (Gratis)",
     ),
-    "g_key_aa_title": MessageLookupByLibrary.simpleMessage("Smart Account"),
-    "g_key_aa_total_gas": MessageLookupByLibrary.simpleMessage("Total Gas"),
-    "g_key_aa_total_value": MessageLookupByLibrary.simpleMessage("Total Value"),
-    "g_key_aa_transactions": MessageLookupByLibrary.simpleMessage(
-      "Transactions",
+    "g_key_aa_title": MessageLookupByLibrary.simpleMessage("Akun Cerdas"),
+    "g_key_aa_total_gas": MessageLookupByLibrary.simpleMessage("Jumlah Gas"),
+    "g_key_aa_total_value": MessageLookupByLibrary.simpleMessage("Nilai Total"),
+    "g_key_aa_transactions": MessageLookupByLibrary.simpleMessage("Transaksi"),
+    "g_key_aa_unavailable": MessageLookupByLibrary.simpleMessage(
+      "Tidak tersedia",
     ),
-    "g_key_aa_unavailable": MessageLookupByLibrary.simpleMessage("Unavailable"),
     "g_key_aa_version_v07": MessageLookupByLibrary.simpleMessage("v0.7"),
     "g_key_aa_version_v08": MessageLookupByLibrary.simpleMessage("v0.8"),
-    "g_key_aa_view_all": MessageLookupByLibrary.simpleMessage("View All"),
+    "g_key_aa_view_all": MessageLookupByLibrary.simpleMessage("Lihat Semua"),
     "g_key_account_linked": MessageLookupByLibrary.simpleMessage(
-      "Account linked successfully",
+      "Akun berhasil ditautkan",
     ),
     "g_key_account_unlinked": MessageLookupByLibrary.simpleMessage(
-      "Account unlinked successfully",
+      "Tautan akun berhasil dibatalkan",
     ),
     "g_key_address": MessageLookupByLibrary.simpleMessage("Alamat"),
     "g_key_address_1": MessageLookupByLibrary.simpleMessage(
@@ -1320,7 +1355,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_address_6": MessageLookupByLibrary.simpleMessage("Pilih Koin"),
     "g_key_address_7": MessageLookupByLibrary.simpleMessage("Cari koin"),
     "g_key_advanced_features": MessageLookupByLibrary.simpleMessage(
-      "Advanced Features",
+      "Fitur Lanjutan",
     ),
     "g_key_airdrop_active": MessageLookupByLibrary.simpleMessage("Aktif"),
     "g_key_airdrop_check_eligibility": MessageLookupByLibrary.simpleMessage(
@@ -1341,7 +1376,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_airdrop_expired": MessageLookupByLibrary.simpleMessage(
       "Kedaluwarsa",
     ),
-    "g_key_airdrop_filter": MessageLookupByLibrary.simpleMessage("Filter"),
+    "g_key_airdrop_filter": MessageLookupByLibrary.simpleMessage("Menyaring"),
     "g_key_airdrop_no_airdrops": MessageLookupByLibrary.simpleMessage(
       "Tidak ada airdrop tersedia",
     ),
@@ -1378,32 +1413,32 @@ class MessageLookup extends MessageLookupByLibrary {
       "Segera Hadir",
     ),
     "g_key_apple_sign_in_cancelled": MessageLookupByLibrary.simpleMessage(
-      "Apple sign-in cancelled",
+      "Proses masuk Apple dibatalkan",
     ),
-    "g_key_apply": MessageLookupByLibrary.simpleMessage("Apply"),
+    "g_key_apply": MessageLookupByLibrary.simpleMessage("Terapkan"),
     "g_key_batch_add_recipient": MessageLookupByLibrary.simpleMessage(
       "Tambah Penerima",
     ),
     "g_key_batch_broadcasting": MessageLookupByLibrary.simpleMessage(
-      "Broadcasting...",
+      "Penyiaran...",
     ),
     "g_key_batch_clear_all": MessageLookupByLibrary.simpleMessage(
       "Hapus Semua",
     ),
     "g_key_batch_confirm_title": MessageLookupByLibrary.simpleMessage(
-      "Confirm Batch Transfer",
+      "Konfirmasi Transfer Batch",
     ),
-    "g_key_batch_continue": MessageLookupByLibrary.simpleMessage("Continue"),
+    "g_key_batch_continue": MessageLookupByLibrary.simpleMessage("Lanjutkan"),
     "g_key_batch_csv_format": MessageLookupByLibrary.simpleMessage(
       "Format CSV: alamat,jumlah,label",
     ),
-    "g_key_batch_done": MessageLookupByLibrary.simpleMessage("Done"),
+    "g_key_batch_done": MessageLookupByLibrary.simpleMessage("Selesai"),
     "g_key_batch_duplicate_address": m21,
     "g_key_batch_estimating_gas": MessageLookupByLibrary.simpleMessage(
-      "Estimating Gas...",
+      "Memperkirakan Gas...",
     ),
     "g_key_batch_evm_only": MessageLookupByLibrary.simpleMessage(
-      "Batch transfer supports EVM chains only",
+      "Transfer batch hanya mendukung rantai EVM",
     ),
     "g_key_batch_execute": MessageLookupByLibrary.simpleMessage("Jalankan"),
     "g_key_batch_export_csv": MessageLookupByLibrary.simpleMessage(
@@ -1413,32 +1448,35 @@ class MessageLookup extends MessageLookupByLibrary {
       "Hemat Gas",
     ),
     "g_key_batch_help_title": MessageLookupByLibrary.simpleMessage(
-      "Batch Transfer Help",
+      "Bantuan Transfer Batch",
     ),
     "g_key_batch_import_csv": MessageLookupByLibrary.simpleMessage("Impor CSV"),
-    "g_key_batch_invalid_address": m22,
-    "g_key_batch_invalid_amount": m23,
-    "g_key_batch_max_recipients": m24,
+    "g_key_batch_insufficient_balance": m22,
+    "g_key_batch_invalid_address": m23,
+    "g_key_batch_invalid_amount": m24,
+    "g_key_batch_max_recipients": m25,
     "g_key_batch_memo_optional": MessageLookupByLibrary.simpleMessage(
-      "Memo is optional",
+      "Memo bersifat opsional",
     ),
     "g_key_batch_multicall_tip": MessageLookupByLibrary.simpleMessage(
-      "Use Multicall3 for lower gas fees",
+      "Gunakan Multicall3 untuk biaya bahan bakar yang lebih rendah",
     ),
     "g_key_batch_no_supported": MessageLookupByLibrary.simpleMessage(
-      "No supported tokens",
+      "Tidak ada token yang didukung",
     ),
     "g_key_batch_preview": MessageLookupByLibrary.simpleMessage("Pratinjau"),
     "g_key_batch_recipients": MessageLookupByLibrary.simpleMessage("Penerima"),
     "g_key_batch_select_token": MessageLookupByLibrary.simpleMessage(
-      "Select Token",
+      "Pilih Token",
     ),
     "g_key_batch_send_multiple": MessageLookupByLibrary.simpleMessage(
-      "Send tokens to multiple addresses in one transaction",
+      "Kirim token ke beberapa alamat dalam satu transaksi",
     ),
-    "g_key_batch_signing": MessageLookupByLibrary.simpleMessage("Signing..."),
+    "g_key_batch_signing": MessageLookupByLibrary.simpleMessage(
+      "Penandatanganan...",
+    ),
     "g_key_batch_swipe_remove": MessageLookupByLibrary.simpleMessage(
-      "Swipe left to remove a recipient",
+      "Gesek ke kiri untuk menghapus penerima",
     ),
     "g_key_batch_title": MessageLookupByLibrary.simpleMessage(
       "Transfer Massal",
@@ -1447,6 +1485,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Jumlah Total",
     ),
     "g_key_bridge_amount": MessageLookupByLibrary.simpleMessage("Jumlah"),
+    "g_key_bridge_chain_not_supported": MessageLookupByLibrary.simpleMessage(
+      "Rantai tidak didukung",
+    ),
     "g_key_bridge_cheapest": MessageLookupByLibrary.simpleMessage("Termurah"),
     "g_key_bridge_estimated_receive": MessageLookupByLibrary.simpleMessage(
       "Anda akan menerima (estimasi)",
@@ -1473,13 +1514,24 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_bridge_search_chain": MessageLookupByLibrary.simpleMessage(
       "Cari chain...",
     ),
+    "g_key_bridge_select": MessageLookupByLibrary.simpleMessage("Pilih"),
     "g_key_bridge_select_token": MessageLookupByLibrary.simpleMessage(
       "Pilih Token",
     ),
-    "g_key_bridge_slippage": MessageLookupByLibrary.simpleMessage("Slippage"),
-    "g_key_bridge_swap": MessageLookupByLibrary.simpleMessage("Bridge"),
+    "g_key_bridge_slippage": MessageLookupByLibrary.simpleMessage("Selipan"),
+    "g_key_bridge_status_completed": MessageLookupByLibrary.simpleMessage(
+      "Selesai",
+    ),
+    "g_key_bridge_status_failed": MessageLookupByLibrary.simpleMessage("Gagal"),
+    "g_key_bridge_status_in_progress": MessageLookupByLibrary.simpleMessage(
+      "Sedang Berlangsung",
+    ),
+    "g_key_bridge_status_pending": MessageLookupByLibrary.simpleMessage(
+      "Tertunda",
+    ),
+    "g_key_bridge_swap": MessageLookupByLibrary.simpleMessage("Jembatan"),
     "g_key_bridge_time": MessageLookupByLibrary.simpleMessage("Estimasi Waktu"),
-    "g_key_bridge_title": MessageLookupByLibrary.simpleMessage("Bridge"),
+    "g_key_bridge_title": MessageLookupByLibrary.simpleMessage("Jembatan"),
     "g_key_bridge_to_chain": MessageLookupByLibrary.simpleMessage("Ke Chain"),
     "g_key_bridge_tx_failed": MessageLookupByLibrary.simpleMessage(
       "Bridge Gagal",
@@ -1490,61 +1542,155 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_bridge_tx_success": MessageLookupByLibrary.simpleMessage(
       "Bridge Berhasil",
     ),
-    "g_key_burn_got_it": MessageLookupByLibrary.simpleMessage("Got it"),
+    "g_key_btc_redeem_locked_until": MessageLookupByLibrary.simpleMessage(
+      "Terkunci sampai",
+    ),
+    "g_key_btc_redeem_reminder": MessageLookupByLibrary.simpleMessage(
+      "Verifikasikan periode kunci telah berakhir sebelum mengirimkan penukaran Anda.",
+    ),
+    "g_key_btc_redeem_still_locked": MessageLookupByLibrary.simpleMessage(
+      "BTC masih terkunci",
+    ),
+    "g_key_btc_redeem_title": MessageLookupByLibrary.simpleMessage(
+      "Tukarkan vBTC",
+    ),
+    "g_key_btc_redeem_unlocked": MessageLookupByLibrary.simpleMessage(
+      "Tidak terkunci — siap untuk ditebus",
+    ),
+    "g_key_btc_stake_acknowledge": MessageLookupByLibrary.simpleMessage(
+      "Saya memahami risikonya dan ingin melanjutkan",
+    ),
+    "g_key_btc_stake_continue": MessageLookupByLibrary.simpleMessage(
+      "Lanjutkan untuk Mempertaruhkan",
+    ),
+    "g_key_btc_stake_how_it_works": MessageLookupByLibrary.simpleMessage(
+      "Cara Kerjanya",
+    ),
+    "g_key_btc_stake_reminder": MessageLookupByLibrary.simpleMessage(
+      "BTC akan dikunci hingga timelock berakhir. Selesaikan proses staking pada antarmuka di bawah ini.",
+    ),
+    "g_key_btc_stake_risk1": MessageLookupByLibrary.simpleMessage(
+      "BTC Anda akan dikunci selama periode staking penuh. Penarikan lebih awal tidak dimungkinkan.",
+    ),
+    "g_key_btc_stake_risk2": MessageLookupByLibrary.simpleMessage(
+      "Kunci ini diterapkan oleh Bitcoin OP_CHECKLOCKTIMEVERIFY (CLTV) dan tidak dapat dilewati.",
+    ),
+    "g_key_btc_stake_risk3": MessageLookupByLibrary.simpleMessage(
+      "Risiko kontrak pintar: meskipun telah diaudit, tidak ada protokol yang sepenuhnya bebas risiko.",
+    ),
+    "g_key_btc_stake_risk4": MessageLookupByLibrary.simpleMessage(
+      "Taruhan minimum: 0,001 BTC. Periode penguncian minimum: 0,125 hari (~3 jam).",
+    ),
+    "g_key_btc_stake_risk_warning": MessageLookupByLibrary.simpleMessage(
+      "Peringatan Resiko",
+    ),
+    "g_key_btc_stake_step1_desc": MessageLookupByLibrary.simpleMessage(
+      "BTC Anda dikunci dalam alamat multisig 2-dari-2 dengan kunci waktu (CLTV), diamankan dengan kunci Anda dan kunci tabung N42.",
+    ),
+    "g_key_btc_stake_step1_title": MessageLookupByLibrary.simpleMessage(
+      "Kunci BTC Anda",
+    ),
+    "g_key_btc_stake_step2_desc": MessageLookupByLibrary.simpleMessage(
+      "Setelah konfirmasi on-chain, vBTC dicetak ke dompet Anda dengan rasio 1:1.",
+    ),
+    "g_key_btc_stake_step2_title": MessageLookupByLibrary.simpleMessage(
+      "Mencetak vBTC",
+    ),
+    "g_key_btc_stake_step3_desc": MessageLookupByLibrary.simpleMessage(
+      "Tahan vBTC untuk mendapatkan hadiah staking. vBTC juga dapat digunakan dalam protokol DeFi.",
+    ),
+    "g_key_btc_stake_step3_title": MessageLookupByLibrary.simpleMessage(
+      "Dapatkan Hadiah",
+    ),
+    "g_key_btc_stake_step4_desc": MessageLookupByLibrary.simpleMessage(
+      "Ketika periode penguncian berakhir, bakar vBTC Anda untuk menerima kembali BTC asli Anda.",
+    ),
+    "g_key_btc_stake_step4_title": MessageLookupByLibrary.simpleMessage(
+      "Tukarkan Setelah Buka Kunci",
+    ),
+    "g_key_btc_stake_subtitle": MessageLookupByLibrary.simpleMessage(
+      "Kunci BTC untuk mencetak vBTC dan dapatkan hadiah",
+    ),
+    "g_key_btc_stake_title": MessageLookupByLibrary.simpleMessage(
+      "Taruhan Penitipan Mandiri BTC",
+    ),
+    "g_key_burn_got_it": MessageLookupByLibrary.simpleMessage("Mengerti"),
     "g_key_burn_nft_step1": MessageLookupByLibrary.simpleMessage(
-      "1. Select a token with NFT support",
+      "1. Pilih token dengan dukungan NFT",
     ),
     "g_key_burn_nft_step2": MessageLookupByLibrary.simpleMessage(
-      "2. Go to NFT tab",
+      "2. Buka tab NFT",
     ),
     "g_key_burn_nft_step3": MessageLookupByLibrary.simpleMessage(
-      "3. Select the NFT you want to burn",
+      "3. Pilih NFT yang ingin Anda bakar",
     ),
     "g_key_burn_nft_step4": MessageLookupByLibrary.simpleMessage(
-      "4. Tap \"Burn\" button",
+      "4. Ketuk tombol \"Bakar\".",
     ),
-    "g_key_burn_nft_steps": MessageLookupByLibrary.simpleMessage("Steps:"),
+    "g_key_burn_nft_steps": MessageLookupByLibrary.simpleMessage(
+      "Langkah-langkah:",
+    ),
     "g_key_burn_nft_tip": MessageLookupByLibrary.simpleMessage(
-      "To burn an NFT, please go to the NFT details page and tap the \"Burn\" button.",
+      "Untuk membakar NFT, silakan buka halaman detail NFT dan ketuk tombol \"Bakar\".",
     ),
-    "g_key_burn_nft_title": MessageLookupByLibrary.simpleMessage("Burn NFT"),
-    "g_key_change_email": MessageLookupByLibrary.simpleMessage("Change Email"),
+    "g_key_burn_nft_title": MessageLookupByLibrary.simpleMessage("Bakar NFT"),
+    "g_key_chain_transfer_not_supported": MessageLookupByLibrary.simpleMessage(
+      "Jaringan ini belum mendukung transfer, pantau terus",
+    ),
+    "g_key_change_email": MessageLookupByLibrary.simpleMessage("Ubah Email"),
     "g_key_change_password": MessageLookupByLibrary.simpleMessage(
-      "Change Password",
+      "Ubah Kata Sandi",
     ),
     "g_key_change_password_desc": MessageLookupByLibrary.simpleMessage(
-      "Enter your current password and set a new password",
+      "Masukkan kata sandi Anda saat ini dan atur kata sandi baru",
     ),
     "g_key_code_length": MessageLookupByLibrary.simpleMessage(
-      "Please enter 6-digit code",
+      "Silakan masukkan kode 6 digit",
     ),
     "g_key_code_required": MessageLookupByLibrary.simpleMessage(
-      "Verification code is required",
+      "Kode verifikasi diperlukan",
     ),
     "g_key_code_sent": MessageLookupByLibrary.simpleMessage(
-      "Verification code sent",
+      "Kode verifikasi terkirim",
+    ),
+    "g_key_coin_list_all_hidden": MessageLookupByLibrary.simpleMessage(
+      "Semua aset di bawah \$1",
+    ),
+    "g_key_coin_list_separator": MessageLookupByLibrary.simpleMessage(
+      "Aset lainnya",
+    ),
+    "g_key_coin_list_show_all": MessageLookupByLibrary.simpleMessage(
+      "Ketuk untuk menampilkan semua",
+    ),
+    "g_key_coin_search_recent": MessageLookupByLibrary.simpleMessage(
+      "Baru-baru ini",
     ),
     "g_key_confirm_new_password": MessageLookupByLibrary.simpleMessage(
-      "Confirm New Password",
+      "Konfirmasi Kata Sandi Baru",
     ),
     "g_key_continue_with_apple": MessageLookupByLibrary.simpleMessage(
-      "Continue with Apple",
+      "Lanjutkan dengan Apple",
     ),
     "g_key_continue_with_google": MessageLookupByLibrary.simpleMessage(
-      "Continue with Google",
+      "Lanjutkan dengan Google",
     ),
     "g_key_deadline_reminders": MessageLookupByLibrary.simpleMessage(
-      "Deadline reminders",
+      "Pengingat tenggat waktu",
+    ),
+    "g_key_dex_approval_success": MessageLookupByLibrary.simpleMessage(
+      "Disetujui! Ketuk Tukar untuk melanjutkan.",
     ),
     "g_key_dex_approve_exact": MessageLookupByLibrary.simpleMessage(
       "Jumlah Tepat",
     ),
+    "g_key_dex_approve_required": m26,
     "g_key_dex_approve_unlimited": MessageLookupByLibrary.simpleMessage(
       "Tak Terbatas",
     ),
     "g_key_dex_approve_unlimited_info": MessageLookupByLibrary.simpleMessage(
       "Persetujuan tak terbatas: router dapat membelanjakan token ini kapan saja. Praktik standar, namun berisiko jika kontrak disusupi.",
     ),
+    "g_key_dex_approving": MessageLookupByLibrary.simpleMessage("Menyetujui…"),
     "g_key_dex_best_route": MessageLookupByLibrary.simpleMessage(
       "Rute Terbaik",
     ),
@@ -1561,6 +1707,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_history_title": MessageLookupByLibrary.simpleMessage(
       "Riwayat DEX",
     ),
+    "g_key_dex_min_received": MessageLookupByLibrary.simpleMessage(
+      "Minimal. Diterima",
+    ),
     "g_key_dex_no_tokens": MessageLookupByLibrary.simpleMessage(
       "Tidak ada token",
     ),
@@ -1573,6 +1722,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_price_impact": MessageLookupByLibrary.simpleMessage(
       "Dampak Harga",
     ),
+    "g_key_dex_price_impact_high": m27,
+    "g_key_dex_quote_expires": m28,
     "g_key_dex_quote_failed": MessageLookupByLibrary.simpleMessage(
       "Kutipan gagal",
     ),
@@ -1586,6 +1737,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_select_token": MessageLookupByLibrary.simpleMessage("Pilih"),
     "g_key_dex_slippage": MessageLookupByLibrary.simpleMessage(
       "Toleransi Slippage",
+    ),
+    "g_key_dex_slippage_label": MessageLookupByLibrary.simpleMessage(
+      "Selipan Maks",
+    ),
+    "g_key_dex_sol_note": MessageLookupByLibrary.simpleMessage(
+      "Pertukaran Solana: tanda tangani transaksi di dompet Solana Anda.",
     ),
     "g_key_dex_sol_unsupported": MessageLookupByLibrary.simpleMessage(
       "Solana DEX swap belum didukung di aplikasi",
@@ -1613,19 +1770,19 @@ class MessageLookup extends MessageLookupByLibrary {
       "Mendukung ENS (.eth), Unstoppable Domains (.crypto/.wallet/…) dan Solana SNS (.sol)",
     ),
     "g_key_domain_sns_name": MessageLookupByLibrary.simpleMessage(
-      "Solana Name Service",
+      "Layanan Nama Solana",
     ),
     "g_key_domain_sns_not_found": MessageLookupByLibrary.simpleMessage(
       "Domain Solana tidak ditemukan",
     ),
     "g_key_domain_ud_name": MessageLookupByLibrary.simpleMessage(
-      "Unstoppable Domains",
+      "Domain yang Tidak Dapat Dihentikan",
     ),
     "g_key_domain_ud_not_found": MessageLookupByLibrary.simpleMessage(
       "Domain Unstoppable tidak ditemukan atau tidak ada alamat untuk rantai ini",
     ),
     "g_key_earn_active_products": MessageLookupByLibrary.simpleMessage(
-      "Active Products",
+      "Produk Aktif",
     ),
     "g_key_earn_batch": MessageLookupByLibrary.simpleMessage("Transfer Batch"),
     "g_key_earn_burn": MessageLookupByLibrary.simpleMessage("Bakar"),
@@ -1634,13 +1791,13 @@ class MessageLookup extends MessageLookupByLibrary {
       "Beli N dengan protokol AST",
     ),
     "g_key_earn_claim_free": MessageLookupByLibrary.simpleMessage(
-      "Claim free tokens",
+      "Klaim token gratis",
     ),
     "g_key_earn_cross_chain": MessageLookupByLibrary.simpleMessage(
-      "Cross-chain transfer",
+      "Transfer lintas rantai",
     ),
     "g_key_earn_daily_bonus": MessageLookupByLibrary.simpleMessage(
-      "Daily check-in bonus",
+      "Bonus check-in harian",
     ),
     "g_key_earn_dex_desc": MessageLookupByLibrary.simpleMessage(
       "Tukar token apa pun melalui Uniswap / 1inch",
@@ -1650,14 +1807,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_go_staking": MessageLookupByLibrary.simpleMessage(
       "Mulai Staking",
     ),
-    "g_key_earn_ledger": MessageLookupByLibrary.simpleMessage("Ledger"),
+    "g_key_earn_ledger": MessageLookupByLibrary.simpleMessage("buku besar"),
     "g_key_earn_loading_apy": MessageLookupByLibrary.simpleMessage(
       "Memuat APY...",
     ),
     "g_key_earn_mining": MessageLookupByLibrary.simpleMessage("Penambangan"),
-    "g_key_earn_more": MessageLookupByLibrary.simpleMessage("Earn More"),
+    "g_key_earn_more": MessageLookupByLibrary.simpleMessage(
+      "Hasilkan Lebih Banyak",
+    ),
     "g_key_earn_native_sol": MessageLookupByLibrary.simpleMessage(
-      "Native Solana staking",
+      "Taruhan asli Solana",
     ),
     "g_key_earn_no_positions": MessageLookupByLibrary.simpleMessage(
       "Tidak ada posisi aktif",
@@ -1669,190 +1828,196 @@ class MessageLookup extends MessageLookupByLibrary {
       "Dapatkan hadiah dengan berpartisipasi dalam penambangan node",
     ),
     "g_key_earn_points_daily": MessageLookupByLibrary.simpleMessage(
-      "Earn points daily",
+      "Hasilkan poin setiap hari",
     ),
-    "g_key_earn_pts_day": m25,
+    "g_key_earn_pts_day": m29,
     "g_key_earn_quick_tools": MessageLookupByLibrary.simpleMessage(
-      "Quick Tools",
+      "Alat Cepat",
     ),
     "g_key_earn_recommended": MessageLookupByLibrary.simpleMessage(
-      "Recommended",
+      "Direkomendasikan",
     ),
     "g_key_earn_select_swap": MessageLookupByLibrary.simpleMessage(
       "Pilih Jenis Tukar",
     ),
     "g_key_earn_stake_eth_lido": MessageLookupByLibrary.simpleMessage(
-      "Stake ETH with Lido",
+      "Taruhan ETH dengan Lido",
     ),
     "g_key_earn_swap": MessageLookupByLibrary.simpleMessage("Tukar"),
-    "g_key_earn_title": MessageLookupByLibrary.simpleMessage("Earn"),
+    "g_key_earn_title": MessageLookupByLibrary.simpleMessage("Hasilkan"),
     "g_key_earn_total_earnings": MessageLookupByLibrary.simpleMessage(
-      "Total Earnings",
+      "Jumlah Penghasilan",
     ),
-    "g_key_earn_up_to_apy": m26,
-    "g_key_earn_view_all": MessageLookupByLibrary.simpleMessage("View All"),
+    "g_key_earn_up_to_apy": m30,
+    "g_key_earn_view_all": MessageLookupByLibrary.simpleMessage("Lihat Semua"),
     "g_key_eligibility_alerts": MessageLookupByLibrary.simpleMessage(
-      "Eligibility alerts",
+      "Peringatan kelayakan",
     ),
     "g_key_eligible_only": MessageLookupByLibrary.simpleMessage(
-      "Eligible only",
+      "Hanya memenuhi syarat",
     ),
-    "g_key_email": MessageLookupByLibrary.simpleMessage("Email"),
+    "g_key_email": MessageLookupByLibrary.simpleMessage("Surel"),
     "g_key_email_invalid": MessageLookupByLibrary.simpleMessage(
-      "Please enter a valid email address",
+      "Silakan masukkan alamat email yang valid",
     ),
     "g_key_email_required": MessageLookupByLibrary.simpleMessage(
-      "Email is required",
+      "Email diperlukan",
     ),
     "g_key_ens_address_updated": MessageLookupByLibrary.simpleMessage(
-      "Resolved address updated",
+      "Alamat terselesaikan diperbarui",
     ),
-    "g_key_ens_advanced": MessageLookupByLibrary.simpleMessage("Advanced"),
-    "g_key_ens_annual_fee": MessageLookupByLibrary.simpleMessage("Annual Fee"),
-    "g_key_ens_available": MessageLookupByLibrary.simpleMessage("Available"),
-    "g_key_ens_base_price": MessageLookupByLibrary.simpleMessage("Base Price"),
+    "g_key_ens_advanced": MessageLookupByLibrary.simpleMessage("Lanjutan"),
+    "g_key_ens_annual_fee": MessageLookupByLibrary.simpleMessage(
+      "Biaya Tahunan",
+    ),
+    "g_key_ens_available": MessageLookupByLibrary.simpleMessage("Tersedia"),
+    "g_key_ens_base_price": MessageLookupByLibrary.simpleMessage("Harga Dasar"),
     "g_key_ens_checking": MessageLookupByLibrary.simpleMessage(
-      "Checking availability...",
+      "Memeriksa ketersediaan...",
     ),
-    "g_key_ens_commit": MessageLookupByLibrary.simpleMessage("Commit"),
+    "g_key_ens_commit": MessageLookupByLibrary.simpleMessage("Berkomitmen"),
     "g_key_ens_commit_failed": MessageLookupByLibrary.simpleMessage(
-      "Commit failed",
+      "Komit gagal",
     ),
     "g_key_ens_commit_tx": MessageLookupByLibrary.simpleMessage(
-      "Committing transaction...",
+      "Melakukan transaksi...",
     ),
     "g_key_ens_commitment_expired_msg": MessageLookupByLibrary.simpleMessage(
       "Komitmen pendaftaran telah kedaluwarsa. Silakan mulai ulang proses pendaftaran.",
     ),
     "g_key_ens_committing": MessageLookupByLibrary.simpleMessage(
-      "Committing...",
+      "Melakukan...",
     ),
     "g_key_ens_confirm_renew": MessageLookupByLibrary.simpleMessage(
-      "Confirm Renewal",
+      "Konfirmasi Perpanjangan",
     ),
     "g_key_ens_confirm_send": MessageLookupByLibrary.simpleMessage(
-      "Confirm & Send",
+      "Konfirmasi & Kirim",
     ),
     "g_key_ens_confirm_title": MessageLookupByLibrary.simpleMessage(
-      "Confirm ENS Resolution",
+      "Konfirmasikan Resolusi ENS",
     ),
     "g_key_ens_copy_address": MessageLookupByLibrary.simpleMessage(
       "Alamat disalin",
     ),
     "g_key_ens_current_expiry": MessageLookupByLibrary.simpleMessage(
-      "Current Expiry",
+      "Kedaluwarsa Saat Ini",
     ),
-    "g_key_ens_days_left": MessageLookupByLibrary.simpleMessage("days left"),
+    "g_key_ens_days_left": MessageLookupByLibrary.simpleMessage("hari tersisa"),
     "g_key_ens_description": MessageLookupByLibrary.simpleMessage(
-      "Register and manage your .eth domain names",
+      "Daftarkan dan kelola nama domain .eth Anda",
     ),
     "g_key_ens_detected": MessageLookupByLibrary.simpleMessage(
-      "ENS Name Detected",
+      "Nama ENS Terdeteksi",
     ),
     "g_key_ens_duration": MessageLookupByLibrary.simpleMessage(
-      "Registration Period",
+      "Periode Pendaftaran",
     ),
     "g_key_ens_edit_records": MessageLookupByLibrary.simpleMessage(
-      "Edit Records",
+      "Sunting Catatan",
     ),
-    "g_key_ens_expired": MessageLookupByLibrary.simpleMessage("Expired"),
-    "g_key_ens_expires": MessageLookupByLibrary.simpleMessage("Expires"),
+    "g_key_ens_expired": MessageLookupByLibrary.simpleMessage("Kedaluwarsa"),
+    "g_key_ens_expires": MessageLookupByLibrary.simpleMessage("Kedaluwarsa"),
     "g_key_ens_expiring_soon": MessageLookupByLibrary.simpleMessage(
-      "Expiring Soon",
+      "Segera Berakhir",
     ),
     "g_key_ens_extend_period": MessageLookupByLibrary.simpleMessage(
-      "Extend Registration Period",
+      "Perpanjang Masa Pendaftaran",
     ),
-    "g_key_ens_failed": MessageLookupByLibrary.simpleMessage("Failed"),
+    "g_key_ens_failed": MessageLookupByLibrary.simpleMessage("Gagal"),
     "g_key_ens_finalizing": MessageLookupByLibrary.simpleMessage(
-      "Finalizing registration",
+      "Menyelesaikan pendaftaran",
     ),
     "g_key_ens_get_started": MessageLookupByLibrary.simpleMessage(
-      "Get started with ENS",
+      "Mulailah dengan ENS",
     ),
     "g_key_ens_get_your_name": MessageLookupByLibrary.simpleMessage(
-      "Get your .eth name",
+      "Dapatkan nama .eth Anda",
     ),
-    "g_key_ens_home_title": MessageLookupByLibrary.simpleMessage("ENS Manager"),
+    "g_key_ens_home_title": MessageLookupByLibrary.simpleMessage("Manajer ENS"),
     "g_key_ens_invalid_address": MessageLookupByLibrary.simpleMessage(
-      "Invalid address (must be 0x + 40 hex chars)",
+      "Alamat tidak valid (harus 0x + 40 karakter hex)",
     ),
     "g_key_ens_invalid_name": MessageLookupByLibrary.simpleMessage(
-      "Invalid ENS name",
+      "Nama ENS tidak valid",
     ),
-    "g_key_ens_is_yours": MessageLookupByLibrary.simpleMessage("is now yours!"),
+    "g_key_ens_is_yours": MessageLookupByLibrary.simpleMessage(
+      "sekarang milikmu!",
+    ),
     "g_key_ens_keep_app_open": MessageLookupByLibrary.simpleMessage(
-      "Please keep the app open during registration",
+      "Harap tetap membuka aplikasi saat pendaftaran",
     ),
     "g_key_ens_manage_your_identity": MessageLookupByLibrary.simpleMessage(
-      "Manage your Web3 identity",
+      "Kelola identitas Web3 Anda",
     ),
     "g_key_ens_management_title": MessageLookupByLibrary.simpleMessage(
-      "Manage ENS",
+      "Kelola ENS",
     ),
     "g_key_ens_min_length": MessageLookupByLibrary.simpleMessage(
-      "Minimum 3 characters",
+      "Minimal 3 karakter",
     ),
-    "g_key_ens_my_domains": MessageLookupByLibrary.simpleMessage("My Domains"),
-    "g_key_ens_name": MessageLookupByLibrary.simpleMessage("ENS Name"),
-    "g_key_ens_new_expiry": MessageLookupByLibrary.simpleMessage("New Expiry"),
+    "g_key_ens_my_domains": MessageLookupByLibrary.simpleMessage("Domain Saya"),
+    "g_key_ens_name": MessageLookupByLibrary.simpleMessage("Nama ENS"),
+    "g_key_ens_new_expiry": MessageLookupByLibrary.simpleMessage(
+      "Kadaluwarsa Baru",
+    ),
     "g_key_ens_new_owner": MessageLookupByLibrary.simpleMessage(
-      "New Owner Address",
+      "Alamat Pemilik Baru",
     ),
     "g_key_ens_no_domains": MessageLookupByLibrary.simpleMessage(
-      "No domains yet",
+      "Belum ada domain",
     ),
     "g_key_ens_no_names": MessageLookupByLibrary.simpleMessage(
-      "You don\'t own any ENS names yet",
+      "Anda belum memiliki nama ENS",
     ),
     "g_key_ens_owned_names": MessageLookupByLibrary.simpleMessage(
-      "My ENS Names",
+      "Nama ENS saya",
     ),
-    "g_key_ens_owner": MessageLookupByLibrary.simpleMessage("Owner"),
+    "g_key_ens_owner": MessageLookupByLibrary.simpleMessage("Pemilik"),
     "g_key_ens_please_wait": MessageLookupByLibrary.simpleMessage(
-      "Please wait",
+      "Harap tunggu",
     ),
     "g_key_ens_premium_name": MessageLookupByLibrary.simpleMessage(
-      "Premium Name",
+      "Nama Premi",
     ),
     "g_key_ens_price_breakdown": MessageLookupByLibrary.simpleMessage(
-      "Price Breakdown",
+      "Rincian Harga",
     ),
     "g_key_ens_price_per_year": MessageLookupByLibrary.simpleMessage(
-      "per year",
+      "per tahun",
     ),
-    "g_key_ens_primary": MessageLookupByLibrary.simpleMessage("Primary"),
+    "g_key_ens_primary": MessageLookupByLibrary.simpleMessage("Utama"),
     "g_key_ens_primary_set": MessageLookupByLibrary.simpleMessage(
-      "Primary name set successfully",
+      "Nama utama berhasil ditetapkan",
     ),
     "g_key_ens_processing": MessageLookupByLibrary.simpleMessage(
-      "Processing...",
+      "Memproses...",
     ),
     "g_key_ens_purchase_title": MessageLookupByLibrary.simpleMessage(
-      "Register ENS",
+      "Daftarkan ENS",
     ),
-    "g_key_ens_records": MessageLookupByLibrary.simpleMessage("Records"),
-    "g_key_ens_register": MessageLookupByLibrary.simpleMessage("Register"),
+    "g_key_ens_records": MessageLookupByLibrary.simpleMessage("Catatan"),
+    "g_key_ens_register": MessageLookupByLibrary.simpleMessage("Daftar"),
     "g_key_ens_register_description": MessageLookupByLibrary.simpleMessage(
-      "Your decentralized identity on Ethereum",
+      "Identitas terdesentralisasi Anda di Ethereum",
     ),
     "g_key_ens_register_failed": MessageLookupByLibrary.simpleMessage(
-      "Registration failed",
+      "Pendaftaran gagal",
     ),
     "g_key_ens_register_now": MessageLookupByLibrary.simpleMessage(
-      "Register Now",
+      "Daftar Sekarang",
     ),
     "g_key_ens_register_tx": MessageLookupByLibrary.simpleMessage(
-      "Registering name...",
+      "Mendaftarkan nama...",
     ),
     "g_key_ens_registering": MessageLookupByLibrary.simpleMessage(
-      "Registering...",
+      "Mendaftar...",
     ),
     "g_key_ens_registration_info": MessageLookupByLibrary.simpleMessage(
-      "Registration Info",
+      "Info Pendaftaran",
     ),
     "g_key_ens_registration_period": MessageLookupByLibrary.simpleMessage(
-      "Registration Period",
+      "Periode Pendaftaran",
     ),
     "g_key_ens_reminder_disabled": MessageLookupByLibrary.simpleMessage(
       "Pengingat tidak aktif",
@@ -1866,156 +2031,158 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_reminder_hint": MessageLookupByLibrary.simpleMessage(
       "Beri tahu 30, 7 dan 1 hari sebelum kedaluwarsa",
     ),
-    "g_key_ens_renew": MessageLookupByLibrary.simpleMessage("Renew"),
+    "g_key_ens_renew": MessageLookupByLibrary.simpleMessage("Memperbarui"),
     "g_key_ens_renew_cost": MessageLookupByLibrary.simpleMessage(
-      "Renewal Cost",
+      "Biaya Perpanjangan",
     ),
     "g_key_ens_renew_desc": MessageLookupByLibrary.simpleMessage(
-      "Extend your domain registration",
+      "Perpanjang pendaftaran domain Anda",
     ),
     "g_key_ens_renew_success": MessageLookupByLibrary.simpleMessage(
-      "Renewal successful",
+      "Perpanjangan berhasil",
     ),
-    "g_key_ens_renew_title": MessageLookupByLibrary.simpleMessage("Renew ENS"),
+    "g_key_ens_renew_title": MessageLookupByLibrary.simpleMessage(
+      "Perbarui ENS",
+    ),
     "g_key_ens_resolution_failed": MessageLookupByLibrary.simpleMessage(
-      "ENS resolution failed",
+      "Resolusi ENS gagal",
     ),
     "g_key_ens_resolved_address": MessageLookupByLibrary.simpleMessage(
-      "Resolved Address",
+      "Alamat Terselesaikan",
     ),
     "g_key_ens_resolving": MessageLookupByLibrary.simpleMessage(
-      "Resolving ENS...",
+      "Menyelesaikan ENS...",
     ),
-    "g_key_ens_search": MessageLookupByLibrary.simpleMessage("Search"),
+    "g_key_ens_search": MessageLookupByLibrary.simpleMessage("Cari"),
     "g_key_ens_search_desc": MessageLookupByLibrary.simpleMessage(
-      "Find available .eth names",
+      "Temukan nama .eth yang tersedia",
     ),
     "g_key_ens_search_hint": MessageLookupByLibrary.simpleMessage(
-      "Search for a .eth name",
+      "Cari nama .eth",
     ),
     "g_key_ens_search_prompt": MessageLookupByLibrary.simpleMessage(
-      "Enter an ENS name to search",
+      "Masukkan nama ENS untuk mencari",
     ),
     "g_key_ens_search_register": MessageLookupByLibrary.simpleMessage(
-      "Search & Register",
+      "Cari & Daftar",
     ),
-    "g_key_ens_search_title": MessageLookupByLibrary.simpleMessage(
-      "Search ENS",
-    ),
+    "g_key_ens_search_title": MessageLookupByLibrary.simpleMessage("Cari ENS"),
     "g_key_ens_self_transfer": MessageLookupByLibrary.simpleMessage(
       "Tidak dapat mengirim ke alamat sendiri",
     ),
     "g_key_ens_service": MessageLookupByLibrary.simpleMessage(
-      "Ethereum Name Service",
+      "Layanan Nama Ethereum",
     ),
     "g_key_ens_set_primary": MessageLookupByLibrary.simpleMessage(
-      "Set as Primary",
+      "Tetapkan sebagai Utama",
     ),
     "g_key_ens_standard_name": MessageLookupByLibrary.simpleMessage(
-      "Standard Name",
+      "Nama Standar",
     ),
     "g_key_ens_start_registration": MessageLookupByLibrary.simpleMessage(
-      "Start Registration",
+      "Mulai Pendaftaran",
     ),
-    "g_key_ens_step_1": MessageLookupByLibrary.simpleMessage("Step 1"),
-    "g_key_ens_step_2": MessageLookupByLibrary.simpleMessage("Step 2"),
-    "g_key_ens_step_3": MessageLookupByLibrary.simpleMessage("Step 3"),
-    "g_key_ens_step_commit": MessageLookupByLibrary.simpleMessage("Commit"),
-    "g_key_ens_step_register": MessageLookupByLibrary.simpleMessage("Register"),
-    "g_key_ens_step_success": MessageLookupByLibrary.simpleMessage("Success"),
-    "g_key_ens_step_wait": MessageLookupByLibrary.simpleMessage("Wait"),
+    "g_key_ens_step_1": MessageLookupByLibrary.simpleMessage("Langkah 1"),
+    "g_key_ens_step_2": MessageLookupByLibrary.simpleMessage("Langkah 2"),
+    "g_key_ens_step_3": MessageLookupByLibrary.simpleMessage("Langkah 3"),
+    "g_key_ens_step_commit": MessageLookupByLibrary.simpleMessage(
+      "Berkomitmen",
+    ),
+    "g_key_ens_step_register": MessageLookupByLibrary.simpleMessage("Daftar"),
+    "g_key_ens_step_success": MessageLookupByLibrary.simpleMessage("Sukses"),
+    "g_key_ens_step_wait": MessageLookupByLibrary.simpleMessage("Tunggu"),
     "g_key_ens_subdomain_create": MessageLookupByLibrary.simpleMessage(
-      "Create Subdomain",
+      "Buat Subdomain",
     ),
     "g_key_ens_subdomain_created": MessageLookupByLibrary.simpleMessage(
-      "Subdomain created",
+      "Subdomain dibuat",
     ),
     "g_key_ens_subdomain_delete": MessageLookupByLibrary.simpleMessage(
-      "Delete Subdomain",
+      "Hapus Subdomain",
     ),
     "g_key_ens_subdomain_delete_confirm": MessageLookupByLibrary.simpleMessage(
-      "This subdomain will be permanently deleted.",
+      "Subdomain ini akan dihapus secara permanen.",
     ),
     "g_key_ens_subdomain_deleted": MessageLookupByLibrary.simpleMessage(
-      "Subdomain deleted",
+      "Subdomain dihapus",
     ),
     "g_key_ens_subdomain_empty": MessageLookupByLibrary.simpleMessage(
-      "No subdomains yet",
+      "Belum ada subdomain",
     ),
     "g_key_ens_subdomain_invalid_label": MessageLookupByLibrary.simpleMessage(
-      "Use letters, numbers and hyphens only",
+      "Gunakan huruf, angka, dan tanda hubung saja",
     ),
     "g_key_ens_subdomain_label": MessageLookupByLibrary.simpleMessage(
-      "Subdomain label",
+      "Label subdomain",
     ),
     "g_key_ens_subdomain_label_hint": MessageLookupByLibrary.simpleMessage(
-      "e.g. blog, mail, app",
+      "misalnya blog, email, aplikasi",
     ),
     "g_key_ens_subdomain_owner": MessageLookupByLibrary.simpleMessage(
-      "Owner address",
+      "Alamat pemilik",
     ),
     "g_key_ens_subdomain_owner_hint": MessageLookupByLibrary.simpleMessage(
-      "Leave empty to use current wallet",
+      "Biarkan kosong untuk menggunakan dompet saat ini",
     ),
-    "g_key_ens_subdomains": MessageLookupByLibrary.simpleMessage("Subdomains"),
-    "g_key_ens_success": MessageLookupByLibrary.simpleMessage("Success!"),
-    "g_key_ens_success_message": m27,
-    "g_key_ens_suggestions": MessageLookupByLibrary.simpleMessage(
-      "Suggestions",
-    ),
+    "g_key_ens_subdomains": MessageLookupByLibrary.simpleMessage("Subdomain"),
+    "g_key_ens_success": MessageLookupByLibrary.simpleMessage("Sukses!"),
+    "g_key_ens_success_message": m31,
+    "g_key_ens_suggestions": MessageLookupByLibrary.simpleMessage("Saran"),
     "g_key_ens_text_records": MessageLookupByLibrary.simpleMessage(
-      "Text Records",
+      "Catatan Teks",
     ),
-    "g_key_ens_title": MessageLookupByLibrary.simpleMessage("ENS Manager"),
-    "g_key_ens_total": MessageLookupByLibrary.simpleMessage("Total"),
-    "g_key_ens_total_cost": MessageLookupByLibrary.simpleMessage("Total Cost"),
-    "g_key_ens_transfer": MessageLookupByLibrary.simpleMessage("Transfer"),
+    "g_key_ens_title": MessageLookupByLibrary.simpleMessage("Manajer ENS"),
+    "g_key_ens_total": MessageLookupByLibrary.simpleMessage("Jumlah"),
+    "g_key_ens_total_cost": MessageLookupByLibrary.simpleMessage(
+      "Jumlah Biaya",
+    ),
+    "g_key_ens_transfer": MessageLookupByLibrary.simpleMessage("Pemindahan"),
     "g_key_ens_transfer_desc": MessageLookupByLibrary.simpleMessage(
-      "Transfer ownership to another address",
+      "Transfer kepemilikan ke alamat lain",
     ),
     "g_key_ens_transfer_success": MessageLookupByLibrary.simpleMessage(
-      "Transfer successful",
+      "Transfer berhasil",
     ),
     "g_key_ens_transfer_warning": MessageLookupByLibrary.simpleMessage(
-      "Transfer is irreversible. Make sure the new owner address is correct.",
+      "Pemindahan tidak dapat diubah. Pastikan alamat pemilik baru sudah benar.",
     ),
     "g_key_ens_try_another": MessageLookupByLibrary.simpleMessage(
-      "Try another name",
+      "Coba nama lain",
     ),
     "g_key_ens_two_step_process": MessageLookupByLibrary.simpleMessage(
-      "ENS registration is a two-step process",
+      "Pendaftaran ENS adalah proses dua langkah",
     ),
     "g_key_ens_unavailable": MessageLookupByLibrary.simpleMessage(
-      "Unavailable",
+      "Tidak tersedia",
     ),
-    "g_key_ens_wait": MessageLookupByLibrary.simpleMessage("Wait"),
+    "g_key_ens_wait": MessageLookupByLibrary.simpleMessage("Tunggu"),
     "g_key_ens_wait_explanation": MessageLookupByLibrary.simpleMessage(
-      "Waiting period prevents front-running attacks",
+      "Masa tunggu mencegah serangan yang berjalan di depan",
     ),
     "g_key_ens_wait_time_info": MessageLookupByLibrary.simpleMessage(
-      "A waiting period prevents front-running",
+      "Masa tunggu mencegah proses berjalan di depan",
     ),
-    "g_key_ens_wait_timer": m28,
-    "g_key_ens_waiting": MessageLookupByLibrary.simpleMessage("Waiting..."),
+    "g_key_ens_wait_timer": m32,
+    "g_key_ens_waiting": MessageLookupByLibrary.simpleMessage("Menunggu..."),
     "g_key_ens_warning": MessageLookupByLibrary.simpleMessage(
-      "Please verify the resolved address before proceeding. ENS names can be transferred or changed by their owner.",
+      "Harap verifikasi alamat yang diselesaikan sebelum melanjutkan. Nama ENS dapat dialihkan atau diubah oleh pemiliknya.",
     ),
-    "g_key_ens_year": MessageLookupByLibrary.simpleMessage("year"),
-    "g_key_ens_years": MessageLookupByLibrary.simpleMessage("years"),
+    "g_key_ens_year": MessageLookupByLibrary.simpleMessage("tahun"),
+    "g_key_ens_years": MessageLookupByLibrary.simpleMessage("tahun"),
     "g_key_ens_your_identity": MessageLookupByLibrary.simpleMessage(
-      "Your Identity",
+      "Identitas Anda",
     ),
     "g_key_enter_confirm_password": MessageLookupByLibrary.simpleMessage(
-      "Re-enter new password",
+      "Masukkan kembali kata sandi baru",
     ),
     "g_key_enter_email": MessageLookupByLibrary.simpleMessage(
-      "Enter your email address",
+      "Masukkan alamat email Anda",
     ),
     "g_key_enter_new_password": MessageLookupByLibrary.simpleMessage(
-      "Enter new password",
+      "Masukkan kata sandi baru",
     ),
     "g_key_enter_old_password": MessageLookupByLibrary.simpleMessage(
-      "Enter current password",
+      "Masukkan kata sandi saat ini",
     ),
     "g_key_error_1": MessageLookupByLibrary.simpleMessage(
       "Kesalahan parsing data respons!",
@@ -2169,23 +2336,23 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_feedback_7": MessageLookupByLibrary.simpleMessage("Gagal"),
     "g_key_feedback_8": MessageLookupByLibrary.simpleMessage("Klik coba"),
     "g_key_feedback_9": MessageLookupByLibrary.simpleMessage("Silakan masuk"),
-    "g_key_filter": MessageLookupByLibrary.simpleMessage("Filter"),
-    "g_key_filter_type": MessageLookupByLibrary.simpleMessage("Type"),
+    "g_key_filter": MessageLookupByLibrary.simpleMessage("Menyaring"),
+    "g_key_filter_type": MessageLookupByLibrary.simpleMessage("Ketik"),
     "g_key_forgot_password": MessageLookupByLibrary.simpleMessage(
-      "Forgot Password?",
+      "Lupa Kata Sandi?",
     ),
-    "g_key_gas_alert": MessageLookupByLibrary.simpleMessage("Gas Alert"),
+    "g_key_gas_alert": MessageLookupByLibrary.simpleMessage("Peringatan Gas"),
     "g_key_gas_alert_above": MessageLookupByLibrary.simpleMessage(
-      "Alert when above",
+      "Peringatan ketika di atas",
     ),
     "g_key_gas_alert_below": MessageLookupByLibrary.simpleMessage(
-      "Alert when below",
+      "Waspada ketika di bawah",
     ),
-    "g_key_gas_alert_save": MessageLookupByLibrary.simpleMessage("Save"),
+    "g_key_gas_alert_save": MessageLookupByLibrary.simpleMessage("Simpan"),
     "g_key_gas_alert_threshold": MessageLookupByLibrary.simpleMessage(
-      "Threshold (Gwei)",
+      "Ambang Batas (Gwei)",
     ),
-    "g_key_gas_auto_refresh": m29,
+    "g_key_gas_auto_refresh": m33,
     "g_key_gas_base_fee": MessageLookupByLibrary.simpleMessage("Biaya Dasar"),
     "g_key_gas_custom": MessageLookupByLibrary.simpleMessage("Kustom"),
     "g_key_gas_estimated_time": MessageLookupByLibrary.simpleMessage(
@@ -2193,7 +2360,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_gas_fast": MessageLookupByLibrary.simpleMessage("Cepat"),
     "g_key_gas_footer": MessageLookupByLibrary.simpleMessage(
-      "Gas prices fluctuate based on network demand. Lower gas = slower confirmation, higher gas = faster confirmation.",
+      "Harga gas berfluktuasi berdasarkan permintaan jaringan. Gas lebih rendah = konfirmasi lebih lambat, gas lebih tinggi = konfirmasi lebih cepat.",
     ),
     "g_key_gas_max_fee": MessageLookupByLibrary.simpleMessage("Biaya Maksimum"),
     "g_key_gas_network_busy": MessageLookupByLibrary.simpleMessage(
@@ -2205,21 +2372,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_gas_network_normal": MessageLookupByLibrary.simpleMessage(
       "Jaringan normal",
     ),
-    "g_key_gas_price_trend": MessageLookupByLibrary.simpleMessage(
-      "Price Trend",
-    ),
+    "g_key_gas_price_trend": MessageLookupByLibrary.simpleMessage("Tren Harga"),
     "g_key_gas_priority_fee": MessageLookupByLibrary.simpleMessage(
       "Biaya Prioritas",
     ),
     "g_key_gas_realtime_prices": MessageLookupByLibrary.simpleMessage(
-      "Real-time Gas Prices",
+      "Harga Gas Waktu Nyata",
     ),
     "g_key_gas_settings": MessageLookupByLibrary.simpleMessage(
       "Pengaturan Gas",
     ),
     "g_key_gas_slow": MessageLookupByLibrary.simpleMessage("Lambat"),
     "g_key_gas_standard": MessageLookupByLibrary.simpleMessage("Standar"),
-    "g_key_gas_tracker": MessageLookupByLibrary.simpleMessage("Gas Tracker"),
+    "g_key_gas_tracker": MessageLookupByLibrary.simpleMessage("Pelacak Gas"),
     "g_key_gesture_medium": MessageLookupByLibrary.simpleMessage("Sedang"),
     "g_key_gesture_strong": MessageLookupByLibrary.simpleMessage("Kuat"),
     "g_key_gesture_too_simple": MessageLookupByLibrary.simpleMessage(
@@ -2227,24 +2392,29 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_gesture_weak": MessageLookupByLibrary.simpleMessage("Lemah"),
     "g_key_google_sign_in_cancelled": MessageLookupByLibrary.simpleMessage(
-      "Google sign-in cancelled",
+      "Proses masuk dengan Google dibatalkan",
     ),
     "g_key_high_value_only": MessageLookupByLibrary.simpleMessage(
-      "High value only",
+      "Hanya bernilai tinggi",
     ),
-    "g_key_hw_account_added": m30,
+    "g_key_hw_account_added": m34,
+    "g_key_hw_account_already_imported": MessageLookupByLibrary.simpleMessage(
+      "Akun sudah diimpor",
+    ),
     "g_key_hw_accounts": MessageLookupByLibrary.simpleMessage("Akun"),
     "g_key_hw_add": MessageLookupByLibrary.simpleMessage("Tambah"),
     "g_key_hw_add_account": MessageLookupByLibrary.simpleMessage("Tambah Akun"),
-    "g_key_hw_add_account_content": m31,
+    "g_key_hw_add_account_content": m35,
     "g_key_hw_address_copied": MessageLookupByLibrary.simpleMessage(
       "Alamat disalin",
     ),
     "g_key_hw_ble_hint": MessageLookupByLibrary.simpleMessage(
-      "Make sure your device is unlocked and Bluetooth is enabled before connecting.",
+      "Pastikan perangkat Anda tidak terkunci dan Bluetooth diaktifkan sebelum menghubungkan.",
     ),
     "g_key_hw_cancel": MessageLookupByLibrary.simpleMessage("Batal"),
-    "g_key_hw_check_app": MessageLookupByLibrary.simpleMessage("Check App"),
+    "g_key_hw_check_app": MessageLookupByLibrary.simpleMessage(
+      "Periksa Aplikasi",
+    ),
     "g_key_hw_confirm_on_device": MessageLookupByLibrary.simpleMessage(
       "Konfirmasi di perangkat Anda",
     ),
@@ -2252,65 +2422,66 @@ class MessageLookup extends MessageLookupByLibrary {
       "Hubungkan Dompet Hardware",
     ),
     "g_key_hw_connect_new_device": MessageLookupByLibrary.simpleMessage(
-      "Connect New Device",
+      "Hubungkan Perangkat Baru",
     ),
     "g_key_hw_connect_new_keystone": MessageLookupByLibrary.simpleMessage(
-      "Air-gap with Keystone (QR)",
+      "Celah udara dengan Keystone (QR)",
     ),
     "g_key_hw_connect_new_ledger": MessageLookupByLibrary.simpleMessage(
-      "Connect Ledger (Bluetooth)",
+      "Hubungkan Buku Besar (Bluetooth)",
     ),
     "g_key_hw_connect_new_trezor": MessageLookupByLibrary.simpleMessage(
-      "Connect Trezor (USB)",
+      "Hubungkan Trezor (USB)",
     ),
-    "g_key_hw_connected": MessageLookupByLibrary.simpleMessage("Connected"),
+    "g_key_hw_connected": MessageLookupByLibrary.simpleMessage("Terhubung"),
     "g_key_hw_connecting": MessageLookupByLibrary.simpleMessage(
-      "Connecting...",
+      "Menghubungkan...",
     ),
-    "g_key_hw_current_app_label": m32,
-    "g_key_hw_days_ago": m33,
+    "g_key_hw_current_app_label": m36,
+    "g_key_hw_days_ago": m37,
     "g_key_hw_derivation_path": MessageLookupByLibrary.simpleMessage(
       "Jalur Derivasi",
     ),
-    "g_key_hw_disconnect": MessageLookupByLibrary.simpleMessage("Disconnect"),
+    "g_key_hw_disconnect": MessageLookupByLibrary.simpleMessage(
+      "Putuskan sambungan",
+    ),
     "g_key_hw_disconnected": MessageLookupByLibrary.simpleMessage("Terputus"),
     "g_key_hw_enable_bluetooth": MessageLookupByLibrary.simpleMessage(
       "Mohon aktifkan Bluetooth",
     ),
     "g_key_hw_firmware": MessageLookupByLibrary.simpleMessage("Versi Firmware"),
     "g_key_hw_go_back": MessageLookupByLibrary.simpleMessage("Kembali"),
-    "g_key_hw_import_failed": m34,
+    "g_key_hw_import_failed": m38,
     "g_key_hw_keystone_connect_title": MessageLookupByLibrary.simpleMessage(
-      "Connect Keystone",
+      "Hubungkan Batu Kunci",
     ),
     "g_key_hw_keystone_invalid_response": MessageLookupByLibrary.simpleMessage(
-      "Invalid response from Keystone device",
+      "Respons tidak valid dari perangkat Keystone",
     ),
     "g_key_hw_keystone_scan_error": MessageLookupByLibrary.simpleMessage(
-      "Failed to parse QR code. Please try again.",
+      "Gagal mengurai kode QR. Silakan coba lagi.",
     ),
     "g_key_hw_keystone_scan_request_hint": MessageLookupByLibrary.simpleMessage(
-      "Scan this QR code with your Keystone device to sign the transaction",
+      "Pindai kode QR ini dengan perangkat Keystone Anda untuk menandatangani transaksi",
     ),
-    "g_key_hw_keystone_scan_response_hint":
-        MessageLookupByLibrary.simpleMessage(
-          "Point your camera at the QR code displayed on your Keystone device",
-        ),
+    "g_key_hw_keystone_scan_response_hint": MessageLookupByLibrary.simpleMessage(
+      "Arahkan kamera Anda ke kode QR yang ditampilkan di perangkat Keystone Anda",
+    ),
     "g_key_hw_keystone_scan_response_title":
-        MessageLookupByLibrary.simpleMessage("Scan Keystone Signature"),
+        MessageLookupByLibrary.simpleMessage("Pindai Tanda Tangan Keystone"),
     "g_key_hw_keystone_scan_xpub_hint": MessageLookupByLibrary.simpleMessage(
-      "Scan the QR code from your Keystone device to import accounts",
+      "Pindai kode QR dari perangkat Keystone Anda untuk mengimpor akun",
     ),
     "g_key_hw_keystone_signature_received":
-        MessageLookupByLibrary.simpleMessage("Signature received successfully"),
+        MessageLookupByLibrary.simpleMessage("Tanda tangan berhasil diterima"),
     "g_key_hw_keystone_signing": MessageLookupByLibrary.simpleMessage(
-      "Waiting for Keystone signature...",
+      "Menunggu tanda tangan Keystone...",
     ),
     "g_key_hw_keystone_tap_to_scan": MessageLookupByLibrary.simpleMessage(
-      "Tap to scan Keystone response",
+      "Ketuk untuk memindai respons Keystone",
     ),
-    "g_key_hw_last_connected": m35,
-    "g_key_hw_ledger": MessageLookupByLibrary.simpleMessage("Ledger"),
+    "g_key_hw_last_connected": m39,
+    "g_key_hw_ledger": MessageLookupByLibrary.simpleMessage("buku besar"),
     "g_key_hw_load_more": MessageLookupByLibrary.simpleMessage(
       "Muat lebih banyak",
     ),
@@ -2324,7 +2495,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Tidak ada akun yang ditemukan",
     ),
     "g_key_hw_no_app_open": MessageLookupByLibrary.simpleMessage(
-      "No app is currently open",
+      "Tidak ada aplikasi yang terbuka saat ini",
     ),
     "g_key_hw_no_devices": MessageLookupByLibrary.simpleMessage(
       "Tidak ada perangkat ditemukan",
@@ -2333,20 +2504,20 @@ class MessageLookup extends MessageLookupByLibrary {
       "Perangkat tidak terhubung",
     ),
     "g_key_hw_not_connected_label": MessageLookupByLibrary.simpleMessage(
-      "Not Connected",
+      "Tidak Terhubung",
     ),
-    "g_key_hw_open_app": m36,
-    "g_key_hw_open_ledger_app_hint": m37,
+    "g_key_hw_open_app": m40,
+    "g_key_hw_open_ledger_app_hint": m41,
     "g_key_hw_rejected": MessageLookupByLibrary.simpleMessage(
       "Ditolak di perangkat",
     ),
-    "g_key_hw_remove": MessageLookupByLibrary.simpleMessage("Remove"),
+    "g_key_hw_remove": MessageLookupByLibrary.simpleMessage("Hapus"),
     "g_key_hw_remove_device": MessageLookupByLibrary.simpleMessage(
-      "Remove Device",
+      "Hapus Perangkat",
     ),
-    "g_key_hw_remove_device_confirm": m38,
+    "g_key_hw_remove_device_confirm": m42,
     "g_key_hw_saved_devices": MessageLookupByLibrary.simpleMessage(
-      "Saved Devices",
+      "Perangkat Tersimpan",
     ),
     "g_key_hw_scanning": MessageLookupByLibrary.simpleMessage(
       "Mencari perangkat...",
@@ -2364,56 +2535,58 @@ class MessageLookup extends MessageLookupByLibrary {
       "Kekuatan Sinyal",
     ),
     "g_key_hw_supported_devices": MessageLookupByLibrary.simpleMessage(
-      "Supported Devices",
+      "Perangkat yang Didukung",
     ),
     "g_key_hw_timeout": MessageLookupByLibrary.simpleMessage(
       "Waktu koneksi habis",
     ),
     "g_key_hw_title": MessageLookupByLibrary.simpleMessage("Dompet Hardware"),
-    "g_key_hw_today": MessageLookupByLibrary.simpleMessage("Today"),
+    "g_key_hw_today": MessageLookupByLibrary.simpleMessage("Hari ini"),
     "g_key_hw_trezor": MessageLookupByLibrary.simpleMessage("Trezor"),
     "g_key_hw_trezor_connect_failed": MessageLookupByLibrary.simpleMessage(
-      "Failed to connect to Trezor. Make sure USB is connected.",
+      "Gagal terhubung ke Trezor. Pastikan USB terhubung.",
     ),
     "g_key_hw_trezor_connect_title": MessageLookupByLibrary.simpleMessage(
-      "Connect Trezor",
+      "Hubungkan Trezor",
     ),
     "g_key_hw_trezor_connected": MessageLookupByLibrary.simpleMessage(
-      "Trezor connected successfully",
+      "Trezor berhasil terhubung",
     ),
     "g_key_hw_trezor_connecting": MessageLookupByLibrary.simpleMessage(
-      "Connecting to Trezor...",
+      "Menghubungkan ke Trezor...",
     ),
     "g_key_hw_trezor_passphrase_required": MessageLookupByLibrary.simpleMessage(
-      "Enter passphrase on your Trezor device",
+      "Masukkan frasa sandi pada perangkat Trezor Anda",
     ),
     "g_key_hw_trezor_pin_required": MessageLookupByLibrary.simpleMessage(
-      "Enter PIN on your Trezor device",
+      "Masukkan PIN pada perangkat Trezor Anda",
     ),
     "g_key_hw_trezor_usb_hint": MessageLookupByLibrary.simpleMessage(
-      "Connect your Trezor device via USB cable and unlock it",
+      "Hubungkan perangkat Trezor Anda melalui kabel USB dan buka kuncinya",
     ),
     "g_key_hw_view_accounts": MessageLookupByLibrary.simpleMessage(
-      "View Accounts",
+      "Lihat Akun",
     ),
     "g_key_hw_wallet_accounts": MessageLookupByLibrary.simpleMessage(
       "Akun Dompet",
     ),
-    "g_key_hw_yesterday": MessageLookupByLibrary.simpleMessage("Yesterday"),
+    "g_key_hw_yesterday": MessageLookupByLibrary.simpleMessage("Kemarin"),
     "g_key_keystore_19": MessageLookupByLibrary.simpleMessage(
       "Dompet mata uang saat ini sudah ada.",
     ),
     "g_key_keystore_21": MessageLookupByLibrary.simpleMessage(
       "Tidak dapat membaca Keystore",
     ),
-    "g_key_keystore_22": MessageLookupByLibrary.simpleMessage("Keystore"),
-    "g_key_link_account": MessageLookupByLibrary.simpleMessage("Link Account"),
+    "g_key_keystore_22": MessageLookupByLibrary.simpleMessage(
+      "Penyimpanan kunci",
+    ),
+    "g_key_link_account": MessageLookupByLibrary.simpleMessage("Tautkan Akun"),
     "g_key_linked_accounts": MessageLookupByLibrary.simpleMessage(
-      "Linked Accounts",
+      "Akun Tertaut",
     ),
     "g_key_login": MessageLookupByLibrary.simpleMessage("Masuk"),
     "g_key_login_success": MessageLookupByLibrary.simpleMessage(
-      "Login successful",
+      "Masuk berhasil",
     ),
     "g_key_logout": MessageLookupByLibrary.simpleMessage("Keluar"),
     "g_key_logout_sure": MessageLookupByLibrary.simpleMessage(
@@ -2423,48 +2596,52 @@ class MessageLookup extends MessageLookupByLibrary {
       "Poin Tersedia",
     ),
     "g_key_loyalty_checked_today": MessageLookupByLibrary.simpleMessage(
-      "Checked in today!",
+      "Check in hari ini!",
     ),
     "g_key_loyalty_checkin_btn": MessageLookupByLibrary.simpleMessage(
-      "Check In",
+      "Lapor Masuk",
     ),
-    "g_key_loyalty_checkin_done": MessageLookupByLibrary.simpleMessage("Done"),
+    "g_key_loyalty_checkin_done": MessageLookupByLibrary.simpleMessage(
+      "Selesai",
+    ),
     "g_key_loyalty_checkin_failed": MessageLookupByLibrary.simpleMessage(
-      "Check-in failed, please try again",
+      "Check-in gagal, silakan coba lagi",
     ),
     "g_key_loyalty_checkin_success": MessageLookupByLibrary.simpleMessage(
-      "Check-in successful!",
+      "Check-in berhasil!",
     ),
     "g_key_loyalty_claim_points": MessageLookupByLibrary.simpleMessage(
       "Klaim Poin",
     ),
     "g_key_loyalty_complete_failed": MessageLookupByLibrary.simpleMessage(
-      "Task failed, please try again",
+      "Tugas gagal, silakan coba lagi",
     ),
     "g_key_loyalty_complete_success": MessageLookupByLibrary.simpleMessage(
-      "Task completed!",
+      "Tugas selesai!",
     ),
-    "g_key_loyalty_copy": MessageLookupByLibrary.simpleMessage("Copy"),
+    "g_key_loyalty_copy": MessageLookupByLibrary.simpleMessage("Salin"),
     "g_key_loyalty_daily_checkin": MessageLookupByLibrary.simpleMessage(
       "Check-in Harian",
     ),
-    "g_key_loyalty_earn_points": m39,
+    "g_key_loyalty_earn_points": m43,
     "g_key_loyalty_earned": MessageLookupByLibrary.simpleMessage("Diperoleh"),
     "g_key_loyalty_history": MessageLookupByLibrary.simpleMessage(
       "Riwayat Poin",
     ),
-    "g_key_loyalty_invite": MessageLookupByLibrary.simpleMessage("Invite"),
-    "g_key_loyalty_invite_bonus": m40,
+    "g_key_loyalty_invite": MessageLookupByLibrary.simpleMessage("Undang"),
+    "g_key_loyalty_invite_bonus": m44,
     "g_key_loyalty_invite_friends": MessageLookupByLibrary.simpleMessage(
-      "Invite Friends",
+      "Undang Teman",
     ),
     "g_key_loyalty_invited_friends": MessageLookupByLibrary.simpleMessage(
       "Teman yang Diundang",
     ),
     "g_key_loyalty_max_level": MessageLookupByLibrary.simpleMessage(
-      "Max Level",
+      "Tingkat Maks",
     ),
-    "g_key_loyalty_next_prefix": MessageLookupByLibrary.simpleMessage("Next"),
+    "g_key_loyalty_next_prefix": MessageLookupByLibrary.simpleMessage(
+      "Selanjutnya",
+    ),
     "g_key_loyalty_next_tier": MessageLookupByLibrary.simpleMessage(
       "Tingkat Berikutnya",
     ),
@@ -2475,9 +2652,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Tidak ada tugas tersedia",
     ),
     "g_key_loyalty_points": MessageLookupByLibrary.simpleMessage("Poin"),
-    "g_key_loyalty_points_to_next": m41,
+    "g_key_loyalty_points_to_next": m45,
     "g_key_loyalty_redeem": MessageLookupByLibrary.simpleMessage("Tukarkan"),
-    "g_key_loyalty_referral": MessageLookupByLibrary.simpleMessage("Referral"),
+    "g_key_loyalty_referral": MessageLookupByLibrary.simpleMessage("Rujukan"),
     "g_key_loyalty_referral_bonus": MessageLookupByLibrary.simpleMessage(
       "Bonus Referral",
     ),
@@ -2488,7 +2665,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Link Referral",
     ),
     "g_key_loyalty_rewards": MessageLookupByLibrary.simpleMessage("Hadiah"),
-    "g_key_loyalty_share": MessageLookupByLibrary.simpleMessage("Share"),
+    "g_key_loyalty_share": MessageLookupByLibrary.simpleMessage("Bagikan"),
     "g_key_loyalty_spent": MessageLookupByLibrary.simpleMessage("Digunakan"),
     "g_key_loyalty_task_complete": MessageLookupByLibrary.simpleMessage(
       "Tugas Selesai",
@@ -2503,23 +2680,23 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_loyalty_tier_gold": MessageLookupByLibrary.simpleMessage("Emas"),
     "g_key_loyalty_tier_platinum": MessageLookupByLibrary.simpleMessage(
-      "Platinum",
+      "Platina",
     ),
     "g_key_loyalty_tier_silver": MessageLookupByLibrary.simpleMessage("Perak"),
     "g_key_loyalty_title": MessageLookupByLibrary.simpleMessage("Poin"),
     "g_key_loyalty_total_earned": MessageLookupByLibrary.simpleMessage(
-      "Total Earned",
+      "Jumlah Pendapatan",
     ),
     "g_key_loyalty_total_points": MessageLookupByLibrary.simpleMessage(
       "Total Poin",
     ),
-    "g_key_loyalty_used": MessageLookupByLibrary.simpleMessage("Used"),
+    "g_key_loyalty_used": MessageLookupByLibrary.simpleMessage("Digunakan"),
     "g_key_m_10": MessageLookupByLibrary.simpleMessage("Facebook"),
     "g_key_m_11": MessageLookupByLibrary.simpleMessage("Twitter"),
-    "g_key_m_14": MessageLookupByLibrary.simpleMessage("Reddit"),
-    "g_key_m_15": MessageLookupByLibrary.simpleMessage("Browser"),
-    "g_key_m_16": MessageLookupByLibrary.simpleMessage("Telegram"),
-    "g_key_m_17": MessageLookupByLibrary.simpleMessage("Discord"),
+    "g_key_m_14": MessageLookupByLibrary.simpleMessage("reddit"),
+    "g_key_m_15": MessageLookupByLibrary.simpleMessage("Peramban"),
+    "g_key_m_16": MessageLookupByLibrary.simpleMessage("telegram"),
+    "g_key_m_17": MessageLookupByLibrary.simpleMessage("Perselisihan"),
     "g_key_m_18": MessageLookupByLibrary.simpleMessage("Youtube"),
     "g_key_m_19": MessageLookupByLibrary.simpleMessage("Instagram"),
     "g_key_m_2": MessageLookupByLibrary.simpleMessage("Kapitalisasi Pasar"),
@@ -2531,22 +2708,26 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_m_8": MessageLookupByLibrary.simpleMessage("Tautan"),
     "g_key_m_9": MessageLookupByLibrary.simpleMessage("Situs web"),
     "g_key_manage_chains": MessageLookupByLibrary.simpleMessage(
-      "Manage Chains",
+      "Kelola Rantai",
     ),
-    "g_key_mining_available": MessageLookupByLibrary.simpleMessage("Available"),
+    "g_key_mining_available": MessageLookupByLibrary.simpleMessage("Tersedia"),
     "g_key_mining_requires_staking": MessageLookupByLibrary.simpleMessage(
-      "Requires staking",
+      "Membutuhkan taruhan",
     ),
     "g_key_mnemonic": MessageLookupByLibrary.simpleMessage(
       "Silakan masukkan frasa pemulihan",
     ),
-    "g_key_new_airdrops": MessageLookupByLibrary.simpleMessage("New airdrops"),
-    "g_key_new_password": MessageLookupByLibrary.simpleMessage("New Password"),
-    "g_key_new_password_same_as_old": MessageLookupByLibrary.simpleMessage(
-      "New password must be different from current password",
+    "g_key_new_airdrops": MessageLookupByLibrary.simpleMessage(
+      "Tetesan udara baru",
     ),
-    "g_key_next": MessageLookupByLibrary.simpleMessage("Next"),
-    "g_key_nft_141": MessageLookupByLibrary.simpleMessage("Total"),
+    "g_key_new_password": MessageLookupByLibrary.simpleMessage(
+      "Kata Sandi Baru",
+    ),
+    "g_key_new_password_same_as_old": MessageLookupByLibrary.simpleMessage(
+      "Kata sandi baru harus berbeda dengan kata sandi saat ini",
+    ),
+    "g_key_next": MessageLookupByLibrary.simpleMessage("Selanjutnya"),
+    "g_key_nft_141": MessageLookupByLibrary.simpleMessage("Jumlah"),
     "g_key_nft_16": MessageLookupByLibrary.simpleMessage("Kamera"),
     "g_key_nft_17": MessageLookupByLibrary.simpleMessage("Pilih foto"),
     "g_key_nft_18": MessageLookupByLibrary.simpleMessage("Konten"),
@@ -2555,103 +2736,101 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_nft_41": MessageLookupByLibrary.simpleMessage("Transaksi terkirim"),
     "g_key_nft_47": MessageLookupByLibrary.simpleMessage("Pilih video"),
     "g_key_nft_address_invalid": MessageLookupByLibrary.simpleMessage(
-      "Invalid wallet address",
+      "Alamat dompet tidak valid",
     ),
-    "g_key_nft_balance": MessageLookupByLibrary.simpleMessage("Balance"),
+    "g_key_nft_balance": MessageLookupByLibrary.simpleMessage("Keseimbangan"),
     "g_key_nft_burn_confirm": MessageLookupByLibrary.simpleMessage(
-      "This action is irreversible. The NFT will be sent to the burn address.",
+      "Tindakan ini tidak dapat diubah. NFT akan dikirim ke alamat pembakaran.",
     ),
     "g_key_nft_burn_evm_only": MessageLookupByLibrary.simpleMessage(
-      "Burn is only supported on EVM chains",
+      "Pembakaran hanya didukung pada rantai EVM",
     ),
     "g_key_nft_burn_sol_unsupported": MessageLookupByLibrary.simpleMessage(
-      "Solana NFT burn is coming soon",
+      "Pembakaran Solana NFT akan segera hadir",
     ),
-    "g_key_nft_burn_title": MessageLookupByLibrary.simpleMessage("Burn NFT"),
-    "g_key_nft_collection": MessageLookupByLibrary.simpleMessage("Collection"),
-    "g_key_nft_contract": MessageLookupByLibrary.simpleMessage("Contract"),
-    "g_key_nft_description": MessageLookupByLibrary.simpleMessage(
-      "Description",
-    ),
+    "g_key_nft_burn_title": MessageLookupByLibrary.simpleMessage("Bakar NFT"),
+    "g_key_nft_collection": MessageLookupByLibrary.simpleMessage("Koleksi"),
+    "g_key_nft_contract": MessageLookupByLibrary.simpleMessage("Kontrak"),
+    "g_key_nft_description": MessageLookupByLibrary.simpleMessage("Deskripsi"),
     "g_key_nft_error_retry": MessageLookupByLibrary.simpleMessage(
-      "Failed to load NFTs. Tap to retry.",
+      "Gagal memuat NFT. Ketuk untuk mencoba lagi.",
     ),
-    "g_key_nft_filter_all": MessageLookupByLibrary.simpleMessage("All"),
+    "g_key_nft_filter_all": MessageLookupByLibrary.simpleMessage("Semua"),
     "g_key_nft_filter_video": MessageLookupByLibrary.simpleMessage("Video"),
-    "g_key_nft_floor_price": MessageLookupByLibrary.simpleMessage("Floor"),
-    "g_key_nft_gallery": MessageLookupByLibrary.simpleMessage("NFT Gallery"),
-    "g_key_nft_inscription": MessageLookupByLibrary.simpleMessage(
-      "Inscription #",
+    "g_key_nft_floor_price": MessageLookupByLibrary.simpleMessage("Lantai"),
+    "g_key_nft_gallery": MessageLookupByLibrary.simpleMessage("Galeri NFT"),
+    "g_key_nft_inscription": MessageLookupByLibrary.simpleMessage("Prasasti #"),
+    "g_key_nft_no_items": MessageLookupByLibrary.simpleMessage(
+      "Tidak ada NFT yang ditemukan",
     ),
-    "g_key_nft_no_items": MessageLookupByLibrary.simpleMessage("No NFTs found"),
     "g_key_nft_no_url": MessageLookupByLibrary.simpleMessage(
-      "No explorer link available",
+      "Tidak ada tautan penjelajah yang tersedia",
     ),
     "g_key_nft_no_video_support": MessageLookupByLibrary.simpleMessage(
-      "Video playback not supported",
+      "Pemutaran video tidak didukung",
     ),
     "g_key_nft_open_browser": MessageLookupByLibrary.simpleMessage(
-      "View on Explorer",
+      "Lihat di Penjelajah",
     ),
-    "g_key_nft_ordinals": MessageLookupByLibrary.simpleMessage("Ordinals"),
+    "g_key_nft_ordinals": MessageLookupByLibrary.simpleMessage("Ordinal"),
     "g_key_nft_ordinals_unsupported": MessageLookupByLibrary.simpleMessage(
-      "Ordinals transfers are not yet supported",
+      "Transfer ordinal belum didukung",
     ),
-    "g_key_nft_quantity": MessageLookupByLibrary.simpleMessage("Quantity"),
+    "g_key_nft_quantity": MessageLookupByLibrary.simpleMessage("Kuantitas"),
     "g_key_nft_search_hint": MessageLookupByLibrary.simpleMessage(
-      "Search by name or collection",
+      "Cari berdasarkan nama atau koleksi",
     ),
-    "g_key_nft_send": MessageLookupByLibrary.simpleMessage("Send NFT"),
+    "g_key_nft_send": MessageLookupByLibrary.simpleMessage("Kirim NFT"),
     "g_key_nft_send_sol_unsupported": MessageLookupByLibrary.simpleMessage(
-      "Solana NFT transfers are coming soon",
+      "Transfer Solana NFT akan segera hadir",
     ),
-    "g_key_nft_token_id": MessageLookupByLibrary.simpleMessage("Token ID"),
-    "g_key_nft_type": MessageLookupByLibrary.simpleMessage("Type"),
+    "g_key_nft_token_id": MessageLookupByLibrary.simpleMessage("ID Token"),
+    "g_key_nft_type": MessageLookupByLibrary.simpleMessage("Ketik"),
     "g_key_no_linked_accounts": MessageLookupByLibrary.simpleMessage(
-      "No linked accounts",
+      "Tidak ada akun tertaut",
     ),
     "g_key_notification_settings": MessageLookupByLibrary.simpleMessage(
-      "Notification Settings",
+      "Pengaturan Pemberitahuan",
     ),
     "g_key_oidc_login": MessageLookupByLibrary.simpleMessage(
-      "Enterprise Login (SSO)",
+      "Login Perusahaan (SSO)",
     ),
     "g_key_oidc_not_configured": MessageLookupByLibrary.simpleMessage(
-      "Enterprise SSO not configured",
+      "SSO perusahaan tidak dikonfigurasi",
     ),
     "g_key_old_password": MessageLookupByLibrary.simpleMessage(
-      "Current Password",
+      "Kata Sandi Saat Ini",
     ),
-    "g_key_or": MessageLookupByLibrary.simpleMessage("or"),
+    "g_key_or": MessageLookupByLibrary.simpleMessage("atau"),
     "g_key_password_changed_success": MessageLookupByLibrary.simpleMessage(
-      "Password changed successfully",
+      "Kata sandi berhasil diubah",
     ),
     "g_key_password_min_length": MessageLookupByLibrary.simpleMessage(
-      "Password must be at least 6 characters",
+      "Kata sandi minimal harus 6 karakter",
     ),
     "g_key_password_req_different": MessageLookupByLibrary.simpleMessage(
-      "Different from current password",
+      "Berbeda dengan kata sandi saat ini",
     ),
     "g_key_password_req_length": MessageLookupByLibrary.simpleMessage(
-      "At least 6 characters",
+      "Setidaknya 6 karakter",
     ),
     "g_key_password_required": MessageLookupByLibrary.simpleMessage(
-      "Password is required",
+      "Kata sandi diperlukan",
     ),
     "g_key_password_requirements": MessageLookupByLibrary.simpleMessage(
-      "Password Requirements",
+      "Persyaratan Kata Sandi",
     ),
     "g_key_password_reset_success": MessageLookupByLibrary.simpleMessage(
-      "Password reset successfully",
+      "Reset kata sandi berhasil",
     ),
     "g_key_passwords_not_match": MessageLookupByLibrary.simpleMessage(
-      "Passwords do not match",
+      "Kata sandi tidak cocok",
     ),
     "g_key_payment_amount_invalid": MessageLookupByLibrary.simpleMessage(
       "Jumlah tidak valid",
     ),
-    "g_key_payment_approx_token": m42,
-    "g_key_payment_approx_usdt": m43,
+    "g_key_payment_approx_token": m46,
+    "g_key_payment_approx_usdt": m47,
     "g_key_payment_code_title": MessageLookupByLibrary.simpleMessage(
       "QR Pembayaran",
     ),
@@ -2693,53 +2872,73 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_personal_1": MessageLookupByLibrary.simpleMessage(
       "Pilih dari galeri ponsel",
     ),
-    "g_key_resend_code": MessageLookupByLibrary.simpleMessage("Resend Code"),
-    "g_key_reset": MessageLookupByLibrary.simpleMessage("Reset"),
+    "g_key_resend_code": MessageLookupByLibrary.simpleMessage(
+      "Kirim Ulang Kode",
+    ),
+    "g_key_reset": MessageLookupByLibrary.simpleMessage("Setel ulang"),
     "g_key_reset_password": MessageLookupByLibrary.simpleMessage(
-      "Reset Password",
+      "Atur Ulang Kata Sandi",
     ),
     "g_key_reset_password_email_desc": MessageLookupByLibrary.simpleMessage(
-      "Enter your email address to receive a verification code",
+      "Masukkan alamat email Anda untuk menerima kode verifikasi",
     ),
-    "g_key_saml_login": MessageLookupByLibrary.simpleMessage("SAML Login"),
+    "g_key_saml_login": MessageLookupByLibrary.simpleMessage("Masuk SAML"),
     "g_key_saml_not_configured": MessageLookupByLibrary.simpleMessage(
-      "SAML not configured",
+      "SAML tidak dikonfigurasi",
     ),
     "g_key_security_goplus_caution": MessageLookupByLibrary.simpleMessage(
-      "Use Caution",
+      "Gunakan Perhatian",
     ),
     "g_key_security_goplus_checking": MessageLookupByLibrary.simpleMessage(
-      "Checking contract security...",
+      "Memeriksa keamanan kontrak...",
     ),
     "g_key_security_goplus_danger": MessageLookupByLibrary.simpleMessage(
-      "High Risk Detected",
+      "Risiko Tinggi Terdeteksi",
     ),
     "g_key_security_goplus_powered_by": MessageLookupByLibrary.simpleMessage(
       "GoPlus",
     ),
     "g_key_security_goplus_safe": MessageLookupByLibrary.simpleMessage(
-      "Contract Verified Safe",
+      "Kontrak Terverifikasi Aman",
     ),
     "g_key_send_code": MessageLookupByLibrary.simpleMessage(
-      "Send Verification Code",
+      "Kirim Kode Verifikasi",
+    ),
+    "g_key_send_memo_hint": MessageLookupByLibrary.simpleMessage(
+      "Memo / Catatan",
+    ),
+    "g_key_send_memo_label": MessageLookupByLibrary.simpleMessage(
+      "Memo / Catatan (opsional)",
     ),
     "g_key_set_new_password_desc": MessageLookupByLibrary.simpleMessage(
-      "Set your new password",
+      "Tetapkan kata sandi baru Anda",
     ),
     "g_key_share_code": MessageLookupByLibrary.simpleMessage("Bagikan kode QR"),
     "g_key_share_link": MessageLookupByLibrary.simpleMessage("Bagikan tautan"),
     "g_key_share_method": MessageLookupByLibrary.simpleMessage(
       "Metode berbagi",
     ),
-    "g_key_sign_in_failed": MessageLookupByLibrary.simpleMessage(
-      "Sign in failed",
+    "g_key_sign_in_failed": MessageLookupByLibrary.simpleMessage("Gagal masuk"),
+    "g_key_sim_gas_estimate": m48,
+    "g_key_sim_reverted": MessageLookupByLibrary.simpleMessage(
+      "Kemungkinan besar transaksi akan gagal",
     ),
-    "g_key_social_login": MessageLookupByLibrary.simpleMessage("Social Login"),
+    "g_key_sim_reverted_reason": m49,
+    "g_key_sim_simulating": MessageLookupByLibrary.simpleMessage(
+      "Simulasi transaksi…",
+    ),
+    "g_key_sim_success": MessageLookupByLibrary.simpleMessage(
+      "Simulasi transaksi berhasil",
+    ),
+    "g_key_sim_unavailable": MessageLookupByLibrary.simpleMessage(
+      "Simulasi tidak tersedia untuk jaringan ini",
+    ),
+    "g_key_social_login": MessageLookupByLibrary.simpleMessage("Masuk Sosial"),
     "g_key_squad": MessageLookupByLibrary.simpleMessage("Obrolan"),
     "g_key_squad_k11": MessageLookupByLibrary.simpleMessage(
       "File terlalu besar untuk diunggah",
     ),
-    "g_key_squad_k15": m44,
+    "g_key_squad_k15": m50,
     "g_key_squad_k18": MessageLookupByLibrary.simpleMessage("Tambah Kontak"),
     "g_key_squad_k24": MessageLookupByLibrary.simpleMessage("Kontak"),
     "g_key_squad_k25": MessageLookupByLibrary.simpleMessage(
@@ -2747,32 +2946,64 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_stake_active": MessageLookupByLibrary.simpleMessage("Aktif"),
     "g_key_stake_active_positions": MessageLookupByLibrary.simpleMessage(
-      "Active Positions",
+      "Posisi Aktif",
+    ),
+    "g_key_stake_amount": MessageLookupByLibrary.simpleMessage("Jumlah"),
+    "g_key_stake_amount_unstake": MessageLookupByLibrary.simpleMessage(
+      "Jumlah untuk Dilepaskan",
     ),
     "g_key_stake_apy": MessageLookupByLibrary.simpleMessage("APY"),
-    "g_key_stake_avg_apy": MessageLookupByLibrary.simpleMessage("Avg APY"),
+    "g_key_stake_avg_apy": MessageLookupByLibrary.simpleMessage(
+      "Rata-rata APY",
+    ),
     "g_key_stake_claim": MessageLookupByLibrary.simpleMessage("Klaim Hadiah"),
     "g_key_stake_commission": MessageLookupByLibrary.simpleMessage("Komisi"),
-    "g_key_stake_d_unbond": m45,
-    "g_key_stake_days_left": m46,
-    "g_key_stake_days_remaining": m47,
+    "g_key_stake_d_unbond": m51,
+    "g_key_stake_days_left": m52,
+    "g_key_stake_days_remaining": m53,
     "g_key_stake_delegators": MessageLookupByLibrary.simpleMessage("Delegator"),
+    "g_key_stake_estimated_daily": MessageLookupByLibrary.simpleMessage(
+      "Perkiraan. Hadiah Harian",
+    ),
+    "g_key_stake_estimated_yearly": MessageLookupByLibrary.simpleMessage(
+      "Perkiraan. Hadiah Tahunan",
+    ),
+    "g_key_stake_go_to_swap": MessageLookupByLibrary.simpleMessage(
+      "Pergi ke Tukar",
+    ),
     "g_key_stake_liquid": MessageLookupByLibrary.simpleMessage(
       "Staking Likuid",
     ),
-    "g_key_stake_liquid_tag": MessageLookupByLibrary.simpleMessage("Liquid"),
+    "g_key_stake_liquid_staking_label": MessageLookupByLibrary.simpleMessage(
+      "Taruhan Cair",
+    ),
+    "g_key_stake_liquid_tag": MessageLookupByLibrary.simpleMessage("Cair"),
+    "g_key_stake_liquid_unstake_desc": MessageLookupByLibrary.simpleMessage(
+      "Token cair Anda dapat diperdagangkan di DEX secara langsung. Gunakan Swap untuk menukarkannya kembali ke aset asli.",
+    ),
     "g_key_stake_min_stake": MessageLookupByLibrary.simpleMessage(
       "Stake Minimum",
     ),
-    "g_key_stake_no_lock": MessageLookupByLibrary.simpleMessage("No lock"),
+    "g_key_stake_no_active_positions": MessageLookupByLibrary.simpleMessage(
+      "Tidak ada posisi aktif untuk dilepas taruhannya",
+    ),
+    "g_key_stake_no_lock": MessageLookupByLibrary.simpleMessage(
+      "Tidak ada kunci",
+    ),
     "g_key_stake_no_positions": MessageLookupByLibrary.simpleMessage(
       "Tidak ada posisi staking",
     ),
     "g_key_stake_no_positions_yet": MessageLookupByLibrary.simpleMessage(
-      "No staking positions yet",
+      "Belum ada posisi staking",
+    ),
+    "g_key_stake_no_validators": MessageLookupByLibrary.simpleMessage(
+      "Tidak ada validator yang ditemukan",
+    ),
+    "g_key_stake_no_wallet": MessageLookupByLibrary.simpleMessage(
+      "Alamat dompet tidak tersedia",
     ),
     "g_key_stake_overview": MessageLookupByLibrary.simpleMessage(
-      "Total Staking Overview",
+      "Ikhtisar Total Taruhan",
     ),
     "g_key_stake_pending_rewards": MessageLookupByLibrary.simpleMessage(
       "Hadiah Tertunda",
@@ -2781,20 +3012,37 @@ class MessageLookup extends MessageLookupByLibrary {
       "Posisi Saya",
     ),
     "g_key_stake_protocol": MessageLookupByLibrary.simpleMessage("Protokol"),
-    "g_key_stake_protocols": MessageLookupByLibrary.simpleMessage("Protocols"),
-    "g_key_stake_restake": MessageLookupByLibrary.simpleMessage("Restake"),
+    "g_key_stake_protocols": MessageLookupByLibrary.simpleMessage("Protokol"),
+    "g_key_stake_restake": MessageLookupByLibrary.simpleMessage(
+      "Ambil kembali",
+    ),
     "g_key_stake_rewards": MessageLookupByLibrary.simpleMessage("Hadiah"),
+    "g_key_stake_search_validator": MessageLookupByLibrary.simpleMessage(
+      "Validator pencarian...",
+    ),
+    "g_key_stake_select_a_validator": MessageLookupByLibrary.simpleMessage(
+      "Pilih validator",
+    ),
+    "g_key_stake_select_position": MessageLookupByLibrary.simpleMessage(
+      "Pilih posisi yang akan dilepas taruhannya",
+    ),
     "g_key_stake_select_validator": MessageLookupByLibrary.simpleMessage(
       "Pilih Validator",
     ),
-    "g_key_stake_stake": MessageLookupByLibrary.simpleMessage("Stake"),
-    "g_key_stake_staked": MessageLookupByLibrary.simpleMessage("Staked"),
-    "g_key_stake_start_staking": MessageLookupByLibrary.simpleMessage(
-      "Start Staking",
+    "g_key_stake_sort_by": MessageLookupByLibrary.simpleMessage(
+      "Urutkan berdasarkan",
     ),
-    "g_key_stake_title": MessageLookupByLibrary.simpleMessage("Staking"),
+    "g_key_stake_stake": MessageLookupByLibrary.simpleMessage("Taruhan"),
+    "g_key_stake_staked": MessageLookupByLibrary.simpleMessage("Dipertaruhkan"),
+    "g_key_stake_start_staking": MessageLookupByLibrary.simpleMessage(
+      "Mulai Mempertaruhkan",
+    ),
+    "g_key_stake_title": MessageLookupByLibrary.simpleMessage("Mempertaruhkan"),
     "g_key_stake_total_staked": MessageLookupByLibrary.simpleMessage(
       "Total Distake",
+    ),
+    "g_key_stake_tx_prepared": MessageLookupByLibrary.simpleMessage(
+      "Transaksi berhasil disiapkan",
     ),
     "g_key_stake_unbonding": MessageLookupByLibrary.simpleMessage(
       "Membuka Kunci",
@@ -2802,15 +3050,24 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_stake_unbonding_period": MessageLookupByLibrary.simpleMessage(
       "Periode Pembukaan",
     ),
-    "g_key_stake_unstake": MessageLookupByLibrary.simpleMessage("Unstake"),
+    "g_key_stake_unbonding_warning": m54,
+    "g_key_stake_unstake": MessageLookupByLibrary.simpleMessage(
+      "Lepaskan taruhannya",
+    ),
+    "g_key_stake_updating": MessageLookupByLibrary.simpleMessage(
+      "Memperbarui...",
+    ),
     "g_key_stake_uptime": MessageLookupByLibrary.simpleMessage("Waktu Aktif"),
     "g_key_stake_validator": MessageLookupByLibrary.simpleMessage("Validator"),
     "g_key_stake_validators": MessageLookupByLibrary.simpleMessage(
       "Daftar Validator",
     ),
-    "g_key_step_email": MessageLookupByLibrary.simpleMessage("Email"),
-    "g_key_step_password": MessageLookupByLibrary.simpleMessage("Password"),
-    "g_key_step_verify": MessageLookupByLibrary.simpleMessage("Verify"),
+    "g_key_stake_you_receive": MessageLookupByLibrary.simpleMessage(
+      "Anda akan menerima",
+    ),
+    "g_key_step_email": MessageLookupByLibrary.simpleMessage("Surel"),
+    "g_key_step_password": MessageLookupByLibrary.simpleMessage("Kata sandi"),
+    "g_key_step_verify": MessageLookupByLibrary.simpleMessage("Verifikasi"),
     "g_key_t_1": MessageLookupByLibrary.simpleMessage("Selesai"),
     "g_key_t_15": MessageLookupByLibrary.simpleMessage("Harga gas"),
     "g_key_t_16": MessageLookupByLibrary.simpleMessage("Biaya gas maksimal"),
@@ -2818,7 +3075,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Biaya maksimal per gas",
     ),
     "g_key_t_2": MessageLookupByLibrary.simpleMessage("Tertunda"),
-    "g_key_t_29": m48,
+    "g_key_t_29": m55,
     "g_key_t_3": MessageLookupByLibrary.simpleMessage("Gagal"),
     "g_key_t_30": MessageLookupByLibrary.simpleMessage("Biaya Penambang"),
     "g_key_t_31": MessageLookupByLibrary.simpleMessage("Lanjutkan"),
@@ -2843,7 +3100,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_t_44": MessageLookupByLibrary.simpleMessage(
       "Gagal mendapatkan data",
     ),
-    "g_key_t_45": m49,
+    "g_key_t_45": m56,
     "g_key_t_46": MessageLookupByLibrary.simpleMessage(
       "Periksa akun alamat penerima",
     ),
@@ -2854,16 +3111,39 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_t_51": MessageLookupByLibrary.simpleMessage(
       "Verifikasi akun berhasil",
     ),
-    "g_key_t_52": m50,
+    "g_key_t_52": m57,
     "g_key_t_54": MessageLookupByLibrary.simpleMessage(
       "Alamat penerima tidak memiliki akun, dan transfer pertama minimal 10XRP",
     ),
     "g_key_t_6": MessageLookupByLibrary.simpleMessage("Gas Terpakai"),
     "g_key_t_7": MessageLookupByLibrary.simpleMessage("Biaya Gas"),
-    "g_key_time_days_ago": m51,
-    "g_key_time_hours_ago": m52,
-    "g_key_time_just_now": MessageLookupByLibrary.simpleMessage("Just now"),
-    "g_key_time_minutes_ago": m53,
+    "g_key_time_days_ago": m58,
+    "g_key_time_hours_ago": m59,
+    "g_key_time_just_now": MessageLookupByLibrary.simpleMessage("Baru saja"),
+    "g_key_time_minutes_ago": m60,
+    "g_key_token_discovery_add": MessageLookupByLibrary.simpleMessage(
+      "Tambahkan",
+    ),
+    "g_key_token_discovery_add_selected": m61,
+    "g_key_token_discovery_added": MessageLookupByLibrary.simpleMessage(
+      "Token ditambahkan",
+    ),
+    "g_key_token_discovery_banner": m62,
+    "g_key_token_discovery_deselect_all": MessageLookupByLibrary.simpleMessage(
+      "Batalkan pilihan semua",
+    ),
+    "g_key_token_discovery_empty": MessageLookupByLibrary.simpleMessage(
+      "Tidak ada token baru yang ditemukan",
+    ),
+    "g_key_token_discovery_ignore": MessageLookupByLibrary.simpleMessage(
+      "Abaikan",
+    ),
+    "g_key_token_discovery_select_all": MessageLookupByLibrary.simpleMessage(
+      "Pilih semua",
+    ),
+    "g_key_token_discovery_title": MessageLookupByLibrary.simpleMessage(
+      "Token yang Ditemukan",
+    ),
     "g_key_tran_1": MessageLookupByLibrary.simpleMessage("Riwayat transaksi"),
     "g_key_tran_4": MessageLookupByLibrary.simpleMessage("Detail Transaksi"),
     "g_key_tran_6": MessageLookupByLibrary.simpleMessage(
@@ -2876,17 +3156,17 @@ class MessageLookup extends MessageLookupByLibrary {
       "Jumlah yang diterima",
     ),
     "g_key_tx_filter_date_from": MessageLookupByLibrary.simpleMessage(
-      "Start Date",
+      "Tanggal Mulai",
     ),
     "g_key_tx_filter_date_range": MessageLookupByLibrary.simpleMessage(
-      "Date Range",
+      "Rentang Tanggal",
     ),
-    "g_key_tx_filter_date_to": MessageLookupByLibrary.simpleMessage("End Date"),
-    "g_key_tx_filter_direction": MessageLookupByLibrary.simpleMessage(
-      "Direction",
+    "g_key_tx_filter_date_to": MessageLookupByLibrary.simpleMessage(
+      "Tanggal Berakhir",
     ),
+    "g_key_tx_filter_direction": MessageLookupByLibrary.simpleMessage("Arah"),
     "g_key_tx_no_results": MessageLookupByLibrary.simpleMessage(
-      "No transactions match your filter",
+      "Tidak ada transaksi yang cocok dengan filter Anda",
     ),
     "g_key_u_10": MessageLookupByLibrary.simpleMessage("Jenis NFT"),
     "g_key_u_11": MessageLookupByLibrary.simpleMessage("Pengikut"),
@@ -2908,7 +3188,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_u_8": MessageLookupByLibrary.simpleMessage("Nama"),
     "g_key_u_9": MessageLookupByLibrary.simpleMessage("Pendapatan"),
     "g_key_unlink_account": MessageLookupByLibrary.simpleMessage(
-      "Unlink Account",
+      "Putuskan Tautan Akun",
     ),
     "g_key_user_p1": MessageLookupByLibrary.simpleMessage(
       "Saya telah membaca dan menyetujui ",
@@ -2923,9 +3203,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_v_k3": MessageLookupByLibrary.simpleMessage("Versi baru ditemukan"),
     "g_key_v_k4": MessageLookupByLibrary.simpleMessage("Sudah versi terbaru"),
     "g_key_verification_code": MessageLookupByLibrary.simpleMessage(
-      "Verification Code",
+      "Kode Verifikasi",
     ),
-    "g_key_verification_code_sent": m54,
+    "g_key_verification_code_sent": m63,
     "g_key_wallet_c10": MessageLookupByLibrary.simpleMessage(
       "Lihat Frasa Pemulihan",
     ),
@@ -3048,10 +3328,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_wallet_k53": MessageLookupByLibrary.simpleMessage("Jalur"),
     "g_key_wallet_k54": MessageLookupByLibrary.simpleMessage("Blok"),
     "g_key_wallet_k55": MessageLookupByLibrary.simpleMessage("Nilai"),
-    "g_key_wallet_k56": MessageLookupByLibrary.simpleMessage("Nonce"),
+    "g_key_wallet_k56": MessageLookupByLibrary.simpleMessage(
+      "Tidak sekali pun",
+    ),
     "g_key_wallet_k57": MessageLookupByLibrary.simpleMessage("Percepat"),
     "g_key_wallet_k58": MessageLookupByLibrary.simpleMessage("Catatan"),
-    "g_key_wallet_m1": m55,
+    "g_key_wallet_m1": m64,
     "g_key_wallet_m11": MessageLookupByLibrary.simpleMessage(
       "Apakah Anda yakin ingin membatalkan akun Anda?",
     ),
@@ -3061,7 +3343,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_wallet_m17": MessageLookupByLibrary.simpleMessage(
       "Silakan masukkan kode verifikasi Google.",
     ),
-    "g_key_wallet_m19": m56,
+    "g_key_wallet_m19": m65,
     "g_key_wallet_m2": MessageLookupByLibrary.simpleMessage(
       "Token saat ini belum ditambahkan.",
     ),
@@ -3069,11 +3351,11 @@ class MessageLookup extends MessageLookupByLibrary {
       "Masukkan frasa pemulihan Anda dengan kata-kata dipisahkan spasi",
     ),
     "g_key_wallet_m22": MessageLookupByLibrary.simpleMessage("Impor Dompet"),
-    "g_key_wallet_m3": m57,
+    "g_key_wallet_m3": m66,
     "g_key_wallet_m4": MessageLookupByLibrary.simpleMessage(
       "Saldo token saat ini tidak mencukupi.",
     ),
-    "g_key_wallet_m5": m58,
+    "g_key_wallet_m5": m67,
     "g_key_wallet_m6": MessageLookupByLibrary.simpleMessage(
       "Kesalahan penandatanganan",
     ),
@@ -3085,27 +3367,29 @@ class MessageLookup extends MessageLookupByLibrary {
       "Kelola Dompet",
     ),
     "g_key_watch_address_hint": MessageLookupByLibrary.simpleMessage(
-      "Enter Ethereum address (0x...)",
+      "Masukkan alamat Ethereum (0x...)",
     ),
     "g_key_watch_only_banner": MessageLookupByLibrary.simpleMessage(
-      "Watch-only",
+      "Hanya untuk tontonan",
     ),
     "g_key_watch_only_cant_send": MessageLookupByLibrary.simpleMessage(
-      "Watch-only wallet cannot send or sign transactions",
+      "Dompet khusus jam tangan tidak dapat mengirim atau menandatangani transaksi",
     ),
-    "g_key_watch_wallet": MessageLookupByLibrary.simpleMessage("Watch Wallet"),
+    "g_key_watch_wallet": MessageLookupByLibrary.simpleMessage(
+      "Dompet Jam Tangan",
+    ),
     "g_key_watch_wallet_desc": MessageLookupByLibrary.simpleMessage(
-      "Track any EVM address without private key",
+      "Lacak alamat EVM apa pun tanpa kunci pribadi",
     ),
     "g_key_xml_0": MessageLookupByLibrary.simpleMessage("Dicadangkan"),
     "g_key_xml_1": MessageLookupByLibrary.simpleMessage("Cadangan Dasar"),
-    "g_key_xml_11": m59,
+    "g_key_xml_11": m68,
     "g_key_xml_2": MessageLookupByLibrary.simpleMessage("Cadangan Tambahan"),
-    "g_key_xml_22": m60,
+    "g_key_xml_22": m69,
     "g_key_xml_3": MessageLookupByLibrary.simpleMessage(
       "Jumlah Objek yang Dimiliki",
     ),
-    "g_key_xml_33": m61,
+    "g_key_xml_33": m70,
     "g_key_xml_4": MessageLookupByLibrary.simpleMessage(
       "Cara menghitung total jumlah yang dicadangkan",
     ),
@@ -3135,7 +3419,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_lock_key20": MessageLookupByLibrary.simpleMessage(
       "Gambar kata sandi pola",
     ),
-    "g_lock_key21": m62,
+    "g_lock_key21": m71,
     "g_lock_key22": MessageLookupByLibrary.simpleMessage(
       "Reset kata sandi pola",
     ),
@@ -3145,7 +3429,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_lock_key24": MessageLookupByLibrary.simpleMessage(
       "Tambahkan Kata Sandi Dompet?",
     ),
-    "g_lock_key25": m63,
+    "g_lock_key25": m72,
     "g_lock_key3": MessageLookupByLibrary.simpleMessage("Halaman layar kunci"),
     "g_lock_key4": MessageLookupByLibrary.simpleMessage("Kunci otomatis"),
     "g_lock_key5": MessageLookupByLibrary.simpleMessage("Berhasil"),
@@ -3157,40 +3441,61 @@ class MessageLookup extends MessageLookupByLibrary {
       "Tambahkan verifikasi biometrik?",
     ),
     "g_lock_key9": MessageLookupByLibrary.simpleMessage("Reset kata sandi"),
+    "g_market_30d_change": MessageLookupByLibrary.simpleMessage(
+      "Perubahan 30D",
+    ),
+    "g_market_7d_change": MessageLookupByLibrary.simpleMessage("Perubahan 7D"),
+    "g_market_ath": MessageLookupByLibrary.simpleMessage("ATH"),
+    "g_market_atl": MessageLookupByLibrary.simpleMessage("ATL"),
+    "g_market_depth": MessageLookupByLibrary.simpleMessage("Kedalaman Pasar"),
     "g_market_empty_watchlist": MessageLookupByLibrary.simpleMessage(
-      "No watchlist yet",
+      "Belum ada daftar pantauan",
     ),
     "g_market_empty_watchlist_hint": MessageLookupByLibrary.simpleMessage(
-      "Tap ★ on any coin to add",
+      "Ketuk ★ pada koin apa pun yang ingin ditambahkan",
     ),
-    "g_market_news": MessageLookupByLibrary.simpleMessage("News"),
-    "g_market_no_results": MessageLookupByLibrary.simpleMessage("No results"),
-    "g_market_search": MessageLookupByLibrary.simpleMessage("Search"),
+    "g_market_fdv": MessageLookupByLibrary.simpleMessage("FDV"),
+    "g_market_high_24h": MessageLookupByLibrary.simpleMessage("Tinggi 24 jam"),
+    "g_market_liquidity_score": MessageLookupByLibrary.simpleMessage(
+      "Skor Likuiditas",
+    ),
+    "g_market_low_24h": MessageLookupByLibrary.simpleMessage("Rendah 24 jam"),
+    "g_market_news": MessageLookupByLibrary.simpleMessage("Berita"),
+    "g_market_no_chart": MessageLookupByLibrary.simpleMessage(
+      "Tidak ada data grafik",
+    ),
+    "g_market_no_results": MessageLookupByLibrary.simpleMessage(
+      "Tidak ada hasil",
+    ),
+    "g_market_rank": MessageLookupByLibrary.simpleMessage("Pangkat"),
+    "g_market_search": MessageLookupByLibrary.simpleMessage("Cari"),
     "g_market_search_hint": MessageLookupByLibrary.simpleMessage(
-      "Search coins...",
+      "Cari koin...",
     ),
-    "g_market_trending": MessageLookupByLibrary.simpleMessage("Trending"),
-    "g_market_watchlist": MessageLookupByLibrary.simpleMessage("Watchlist"),
+    "g_market_trending": MessageLookupByLibrary.simpleMessage("Sedang tren"),
+    "g_market_watchlist": MessageLookupByLibrary.simpleMessage(
+      "Daftar pantauan",
+    ),
     "g_mining_inactivity_warning": MessageLookupByLibrary.simpleMessage(
       "Skor tidak aktif validator tinggi. Periksa status node Anda untuk menghindari penalti.",
     ),
-    "g_mining_key15": MessageLookupByLibrary.simpleMessage("Task detail"),
+    "g_mining_key15": MessageLookupByLibrary.simpleMessage("Detil tugas"),
     "g_mining_key20": MessageLookupByLibrary.simpleMessage("Buka kunci N?"),
     "g_mining_key31": MessageLookupByLibrary.simpleMessage(
       "Aktivitas Verifikasi Cloud",
     ),
     "g_mining_key33": MessageLookupByLibrary.simpleMessage(
-      "Verification Settings",
+      "Pengaturan Verifikasi",
     ),
     "g_mining_key34": MessageLookupByLibrary.simpleMessage(
-      "Background Verification Music",
+      "Musik Verifikasi Latar Belakang",
     ),
-    "g_mining_key35": MessageLookupByLibrary.simpleMessage("Default"),
-    "g_mining_key36": MessageLookupByLibrary.simpleMessage("Mute"),
+    "g_mining_key35": MessageLookupByLibrary.simpleMessage("Bawaan"),
+    "g_mining_key36": MessageLookupByLibrary.simpleMessage("Bisu"),
     "g_mining_key37": MessageLookupByLibrary.simpleMessage(
-      "When background verification is enabled, the music will play in the background. If the music stops, verification will also stop.",
+      "Saat verifikasi latar belakang diaktifkan, musik akan diputar di latar belakang. Jika musik berhenti, verifikasi juga akan berhenti.",
     ),
-    "g_mining_key38": MessageLookupByLibrary.simpleMessage("Your Tier"),
+    "g_mining_key38": MessageLookupByLibrary.simpleMessage("Tingkat Anda"),
     "g_mining_key46": MessageLookupByLibrary.simpleMessage(
       "Pengaturan memerlukan sedikit biaya gas.",
     ),
@@ -3199,18 +3504,18 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_mining_key61": MessageLookupByLibrary.simpleMessage("Bagikan ke teman"),
     "g_mining_key62": MessageLookupByLibrary.simpleMessage("Lanjutkan"),
-    "g_mining_key63": m64,
-    "g_mining_key7": MessageLookupByLibrary.simpleMessage("Unlock Date"),
-    "g_mining_key73": m65,
+    "g_mining_key63": m73,
+    "g_mining_key7": MessageLookupByLibrary.simpleMessage("Tanggal Buka Kunci"),
+    "g_mining_key73": m74,
     "g_mining_key74": MessageLookupByLibrary.simpleMessage(
       "Saya baru saja menyiapkan node di @N42Wallet dan memulai verifikasi di perangkat seluler! Ayo bergabung dengan saya. Masa depan terdesentralisasi ada di seluler!",
     ),
-    "g_mining_key76": m66,
+    "g_mining_key76": m75,
     "g_mining_key82": MessageLookupByLibrary.simpleMessage("Mineral"),
-    "g_mining_key83": MessageLookupByLibrary.simpleMessage("Node"),
-    "g_mining_key84": MessageLookupByLibrary.simpleMessage("Network"),
+    "g_mining_key83": MessageLookupByLibrary.simpleMessage("simpul"),
+    "g_mining_key84": MessageLookupByLibrary.simpleMessage("Jaringan"),
     "g_mining_key85": MessageLookupByLibrary.simpleMessage(
-      "Switch between testnet and mainnet for cloud mining.",
+      "Beralih antara testnet dan mainnet untuk penambangan awan.",
     ),
     "g_mining_key86": MessageLookupByLibrary.simpleMessage(
       "Penukaran tersedia setelah 768 detik.",
@@ -3218,7 +3523,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key87": MessageLookupByLibrary.simpleMessage(
       "Permintaan sebelum itu tidak akan diproses.",
     ),
-    "g_mining_key_1": MessageLookupByLibrary.simpleMessage("Home"),
+    "g_mining_key_1": MessageLookupByLibrary.simpleMessage("Rumah"),
     "g_mining_key_10": MessageLookupByLibrary.simpleMessage("Hadiah hari ini"),
     "g_mining_key_100": MessageLookupByLibrary.simpleMessage(
       "Silakan perlakukan data di bawah ini sebagai kunci penting. Kami sarankan untuk menyalin dan mencadangkannya ke lokasi tepercaya segera.",
@@ -3241,7 +3546,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_108": MessageLookupByLibrary.simpleMessage(
       "Format data terenkripsi tidak didukung!",
     ),
-    "g_mining_key_109": m67,
+    "g_mining_key_109": m76,
     "g_mining_key_11": MessageLookupByLibrary.simpleMessage("Hadiah Kemarin"),
     "g_mining_key_110": MessageLookupByLibrary.simpleMessage(
       "Data terenkripsi",
@@ -3255,28 +3560,28 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_115": MessageLookupByLibrary.simpleMessage(
       "Penukaran membutuhkan waktu, silakan tunggu sebentar!",
     ),
-    "g_mining_key_116": m68,
+    "g_mining_key_116": m77,
     "g_mining_key_12": MessageLookupByLibrary.simpleMessage(
       "Hadiah terakumulasi setiap hari dan hanya dikirim ke dompet N Anda ketika mencapai ~0,5 N.",
     ),
     "g_mining_key_13": MessageLookupByLibrary.simpleMessage("Total Hadiah"),
     "g_mining_key_14": MessageLookupByLibrary.simpleMessage("Nilai Ditambang"),
-    "g_mining_key_15": MessageLookupByLibrary.simpleMessage("Task detail"),
-    "g_mining_key_19": MessageLookupByLibrary.simpleMessage("Summary"),
-    "g_mining_key_2": MessageLookupByLibrary.simpleMessage("Activities"),
+    "g_mining_key_15": MessageLookupByLibrary.simpleMessage("Detil tugas"),
+    "g_mining_key_19": MessageLookupByLibrary.simpleMessage("Ringkasan"),
+    "g_mining_key_2": MessageLookupByLibrary.simpleMessage("Kegiatan"),
     "g_mining_key_20": MessageLookupByLibrary.simpleMessage(
-      "Total Value Mined",
+      "Nilai Total yang Ditambang",
     ),
-    "g_mining_key_21": MessageLookupByLibrary.simpleMessage(
-      "Verification Since",
-    ),
+    "g_mining_key_21": MessageLookupByLibrary.simpleMessage("Verifikasi Sejak"),
     "g_mining_key_22": MessageLookupByLibrary.simpleMessage(
-      "Reward Distribution",
+      "Distribusi Hadiah",
     ),
     "g_mining_key_23": MessageLookupByLibrary.simpleMessage(
       "Jumlah keuntungan",
     ),
-    "g_mining_key_24": MessageLookupByLibrary.simpleMessage("Verified Value"),
+    "g_mining_key_24": MessageLookupByLibrary.simpleMessage(
+      "Nilai Terverifikasi",
+    ),
     "g_mining_key_31": MessageLookupByLibrary.simpleMessage("Pilih Paket"),
     "g_mining_key_32": MessageLookupByLibrary.simpleMessage(
       "Periode Buka Kunci: Dapat dibuka kapan saja",
@@ -3304,43 +3609,47 @@ class MessageLookup extends MessageLookupByLibrary {
       "Anda tidak memiliki cukup N untuk transaksi ini",
     ),
     "g_mining_key_45": MessageLookupByLibrary.simpleMessage(
-      "Are you sure you want to skip?",
+      "Apakah Anda yakin ingin melewatkannya?",
     ),
     "g_mining_key_46": MessageLookupByLibrary.simpleMessage(
-      "You will not receive any verification rewards until you choose 1 of the plans.",
+      "Anda tidak akan menerima imbalan verifikasi apa pun sampai Anda memilih salah satu paket.",
     ),
     "g_mining_key_47": MessageLookupByLibrary.simpleMessage("Dinonaktifkan"),
-    "g_mining_key_48": MessageLookupByLibrary.simpleMessage("Reward"),
+    "g_mining_key_48": MessageLookupByLibrary.simpleMessage("Hadiah"),
     "g_mining_key_49": MessageLookupByLibrary.simpleMessage(
       "Lihat selengkapnya",
     ),
     "g_mining_key_5": MessageLookupByLibrary.simpleMessage("Status Verifikasi"),
-    "g_mining_key_50": MessageLookupByLibrary.simpleMessage("To unlock"),
-    "g_mining_key_52": MessageLookupByLibrary.simpleMessage("Skip"),
-    "g_mining_key_58": MessageLookupByLibrary.simpleMessage("Past 7 Days"),
-    "g_mining_key_59": MessageLookupByLibrary.simpleMessage(
-      "Accumulated Rewards",
+    "g_mining_key_50": MessageLookupByLibrary.simpleMessage(
+      "Untuk membuka kunci",
     ),
+    "g_mining_key_52": MessageLookupByLibrary.simpleMessage("Lewati"),
+    "g_mining_key_58": MessageLookupByLibrary.simpleMessage("7 Hari Terakhir"),
+    "g_mining_key_59": MessageLookupByLibrary.simpleMessage("Akumulasi Hadiah"),
     "g_mining_key_6": MessageLookupByLibrary.simpleMessage(
       "Kunci N untuk mulai mendapatkan hadiah verifikasi.",
     ),
-    "g_mining_key_60": MessageLookupByLibrary.simpleMessage("Rewards Received"),
-    "g_mining_key_61": MessageLookupByLibrary.simpleMessage("Advanced"),
+    "g_mining_key_60": MessageLookupByLibrary.simpleMessage(
+      "Hadiah yang Diterima",
+    ),
+    "g_mining_key_61": MessageLookupByLibrary.simpleMessage("Lanjutan"),
     "g_mining_key_62": MessageLookupByLibrary.simpleMessage("Pemula"),
     "g_mining_key_63": MessageLookupByLibrary.simpleMessage("Pro"),
-    "g_mining_key_64": MessageLookupByLibrary.simpleMessage("FULL NODE"),
-    "g_mining_key_65": MessageLookupByLibrary.simpleMessage("MINS/DAY"),
+    "g_mining_key_64": MessageLookupByLibrary.simpleMessage("NODE LENGKAP"),
+    "g_mining_key_65": MessageLookupByLibrary.simpleMessage("MENIT/HARI"),
     "g_mining_key_66": MessageLookupByLibrary.simpleMessage("Node Lanjutan"),
     "g_mining_key_67": MessageLookupByLibrary.simpleMessage("Node Pemula"),
     "g_mining_key_68": MessageLookupByLibrary.simpleMessage("Node Pro"),
     "g_mining_key_69": MessageLookupByLibrary.simpleMessage(
       "500 blok/hari~70 menit",
     ),
-    "g_mining_key_7": MessageLookupByLibrary.simpleMessage("Unlock Date"),
+    "g_mining_key_7": MessageLookupByLibrary.simpleMessage(
+      "Tanggal Buka Kunci",
+    ),
     "g_mining_key_70": MessageLookupByLibrary.simpleMessage(
       "100 blok/hari~15 menit",
     ),
-    "g_mining_key_71": m69,
+    "g_mining_key_71": m78,
     "g_mining_key_72": MessageLookupByLibrary.simpleMessage(
       "128 detik per pemeriksaan",
     ),
@@ -3360,7 +3669,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_mining_key_79": MessageLookupByLibrary.simpleMessage("Ekspor"),
     "g_mining_key_8": MessageLookupByLibrary.simpleMessage(
-      "Today\'s Verification Time",
+      "Waktu Verifikasi Hari Ini",
     ),
     "g_mining_key_80": MessageLookupByLibrary.simpleMessage(
       "Saldo tidak mencukupi untuk transfer.",
@@ -3407,7 +3716,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_97": MessageLookupByLibrary.simpleMessage(
       "Silakan masukkan kata sandi enkripsi",
     ),
-    "g_mining_key_98": m70,
+    "g_mining_key_98": m79,
     "g_mining_key_99": MessageLookupByLibrary.simpleMessage(
       "Silakan masukkan kembali kata sandi Anda untuk memastikan kebenaran",
     ),
@@ -3427,8 +3736,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_unlockable_anytime": MessageLookupByLibrary.simpleMessage(
       "Dapat dibuka kapan saja",
     ),
-    "g_news_empty": MessageLookupByLibrary.simpleMessage("No news available"),
-    "g_news_source": MessageLookupByLibrary.simpleMessage("Source"),
+    "g_news_empty": MessageLookupByLibrary.simpleMessage(
+      "Tidak ada berita yang tersedia",
+    ),
+    "g_news_source": MessageLookupByLibrary.simpleMessage("Sumber"),
     "g_notification_key_1": MessageLookupByLibrary.simpleMessage("Notifikasi"),
     "g_phishing_go_back": MessageLookupByLibrary.simpleMessage(
       "Kembali (Aman)",
@@ -3445,38 +3756,46 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_phishing_warning_url_label": MessageLookupByLibrary.simpleMessage(
       "URL Mencurigakan:",
     ),
-    "g_pnl_add_trade": MessageLookupByLibrary.simpleMessage("Add Trade"),
-    "g_pnl_avg_cost": MessageLookupByLibrary.simpleMessage("Avg Cost"),
+    "g_pnl_add_trade": MessageLookupByLibrary.simpleMessage(
+      "Tambahkan Perdagangan",
+    ),
+    "g_pnl_avg_cost": MessageLookupByLibrary.simpleMessage("Biaya Rata-rata"),
     "g_pnl_buy_price_usd": MessageLookupByLibrary.simpleMessage(
-      "Buy Price (USD)",
+      "Harga Beli (USD)",
     ),
-    "g_pnl_cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
-    "g_pnl_cost_basis": MessageLookupByLibrary.simpleMessage("Cost Basis"),
+    "g_pnl_cancel": MessageLookupByLibrary.simpleMessage("Batalkan"),
+    "g_pnl_cost_basis": MessageLookupByLibrary.simpleMessage("Dasar Biaya"),
     "g_pnl_no_trades": MessageLookupByLibrary.simpleMessage(
-      "No trades recorded",
+      "Tidak ada perdagangan yang tercatat",
     ),
-    "g_pnl_quantity": MessageLookupByLibrary.simpleMessage("Quantity"),
-    "g_pnl_save": MessageLookupByLibrary.simpleMessage("Save"),
-    "g_pnl_unrealized": MessageLookupByLibrary.simpleMessage("Unrealized P&L"),
-    "g_portfolio_24h": MessageLookupByLibrary.simpleMessage("24h Change"),
+    "g_pnl_quantity": MessageLookupByLibrary.simpleMessage("Kuantitas"),
+    "g_pnl_save": MessageLookupByLibrary.simpleMessage("Simpan"),
+    "g_pnl_unrealized": MessageLookupByLibrary.simpleMessage(
+      "Keuntungan dan Kerugian yang belum direalisasi",
+    ),
+    "g_portfolio_24h": MessageLookupByLibrary.simpleMessage("Perubahan 24 jam"),
     "g_portfolio_all_holdings": MessageLookupByLibrary.simpleMessage(
       "Semua Aset",
     ),
     "g_portfolio_allocation": MessageLookupByLibrary.simpleMessage(
-      "Asset Allocation",
+      "Alokasi Aset",
     ),
-    "g_portfolio_gainers": MessageLookupByLibrary.simpleMessage("Top Gainers"),
+    "g_portfolio_gainers": MessageLookupByLibrary.simpleMessage(
+      "Peraih Teratas",
+    ),
     "g_portfolio_losers": MessageLookupByLibrary.simpleMessage(
       "Penurunan Teratas",
     ),
-    "g_portfolio_movers": MessageLookupByLibrary.simpleMessage("24h Movers"),
-    "g_portfolio_no_assets": MessageLookupByLibrary.simpleMessage(
-      "No assets found",
+    "g_portfolio_movers": MessageLookupByLibrary.simpleMessage(
+      "Penggerak 24 jam",
     ),
-    "g_portfolio_others": MessageLookupByLibrary.simpleMessage("Others"),
-    "g_portfolio_pie_total": MessageLookupByLibrary.simpleMessage("Total"),
-    "g_portfolio_title": MessageLookupByLibrary.simpleMessage("Portfolio"),
-    "g_portfolio_total": MessageLookupByLibrary.simpleMessage("Total Value"),
+    "g_portfolio_no_assets": MessageLookupByLibrary.simpleMessage(
+      "Tidak ada aset yang ditemukan",
+    ),
+    "g_portfolio_others": MessageLookupByLibrary.simpleMessage("Lainnya"),
+    "g_portfolio_pie_total": MessageLookupByLibrary.simpleMessage("Jumlah"),
+    "g_portfolio_title": MessageLookupByLibrary.simpleMessage("Portofolio"),
+    "g_portfolio_total": MessageLookupByLibrary.simpleMessage("Nilai Total"),
     "g_referral_downloaded": MessageLookupByLibrary.simpleMessage("Diunduh"),
     "g_referral_invite_code": MessageLookupByLibrary.simpleMessage(
       "Kode undangan",
@@ -3499,7 +3818,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Antarmuka Pertambangan",
     ),
     "g_share_v2_key_5": MessageLookupByLibrary.simpleMessage("Bagikan"),
-    "g_share_v3_key_2": MessageLookupByLibrary.simpleMessage("Referral"),
+    "g_share_v3_key_2": MessageLookupByLibrary.simpleMessage("Rujukan"),
     "g_share_v3_key_3": MessageLookupByLibrary.simpleMessage(
       "Ajak teman dan dapatkan Token N!",
     ),
@@ -3512,7 +3831,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_share_v3_key_6": MessageLookupByLibrary.simpleMessage("Ajak melalui"),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("Tautan"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("kode"),
-    "g_swap_key_14": m71,
+    "g_swap_key_14": m80,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "Kesalahan mendapatkan harga koin.",
     ),
@@ -3526,7 +3845,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "Swap Anda akan segera didistribusikan. Harap bersabar.",
     ),
-    "g_swap_key_20": m72,
+    "g_swap_key_20": m81,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "Biaya untuk menjalankan node: Verifikasi Grup 1-49 N Node Dasar: 50 N Node Premium: 100 N Node Pro: 500 N.",
     ),
@@ -3542,22 +3861,20 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("Saldo Baru"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("Anda bayar"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("Tanggal"),
-    "g_swap_key_31": m73,
+    "g_swap_key_31": m82,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "Swap dapat dilihat di penjelajah blockchain terkait (Etherscan, BscScan, TRONSCAN dan milik kami).",
     ),
     "g_swap_key_33": MessageLookupByLibrary.simpleMessage("Swap ke N"),
-    "g_swap_key_35": MessageLookupByLibrary.simpleMessage("Swap"),
+    "g_swap_key_35": MessageLookupByLibrary.simpleMessage("Tukar"),
     "g_swap_key_4": MessageLookupByLibrary.simpleMessage("Anda dapat"),
     "g_swap_key_5": MessageLookupByLibrary.simpleMessage("Pratinjau Swap"),
     "g_swap_key_6": MessageLookupByLibrary.simpleMessage("Coba lagi"),
-    "g_theme_accent_color": MessageLookupByLibrary.simpleMessage(
-      "Accent Color",
-    ),
+    "g_theme_accent_color": MessageLookupByLibrary.simpleMessage("Warna Aksen"),
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
-      "Reset to default",
+      "Atur ulang ke default",
     ),
-    "g_token_m_key_1": m74,
+    "g_token_m_key_1": m83,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "Siapa pun dapat membuat token, termasuk membuat versi palsu dari token yang ada. Selalu teliti token sebelum mengimpornya.",
     ),
@@ -3577,9 +3894,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage(
       "Kesalahan Format!",
     ),
-    "g_token_m_key_22": m75,
-    "g_token_m_key_23": m76,
-    "g_token_m_key_24": m77,
+    "g_token_m_key_22": m84,
+    "g_token_m_key_23": m85,
+    "g_token_m_key_24": m86,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("Impor token"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("Semua jaringan"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage("Token Kustom"),
@@ -3590,20 +3907,20 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("Perhatian"),
     "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("Risiko Tinggi"),
     "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("Aman"),
-    "g_unlock_key10": m78,
+    "g_unlock_key10": m87,
     "g_unlock_key2": MessageLookupByLibrary.simpleMessage(
       "Sidik jari atau pengenalan wajah tidak diaktifkan?",
     ),
     "g_unlock_key3": MessageLookupByLibrary.simpleMessage(
       "Gambar kata sandi pola",
     ),
-    "g_unlock_key4": m79,
+    "g_unlock_key4": m88,
     "g_unlock_key5": MessageLookupByLibrary.simpleMessage(
       "Masukkan kata sandi",
     ),
-    "g_unlock_key6": m80,
+    "g_unlock_key6": m89,
     "g_unlock_key7": MessageLookupByLibrary.simpleMessage("Autentikasi gagal"),
-    "g_unlock_key8": m81,
+    "g_unlock_key8": m90,
     "g_unlock_key9": MessageLookupByLibrary.simpleMessage("Anda juga dapat "),
     "g_version_later": MessageLookupByLibrary.simpleMessage("Nanti"),
     "g_wc_connection_lost": MessageLookupByLibrary.simpleMessage(
@@ -3671,7 +3988,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "google_verification_message20": MessageLookupByLibrary.simpleMessage(
       "Masukkan kode verifikasi E-mail",
     ),
-    "google_verification_message21": m82,
+    "google_verification_message21": m91,
     "google_verification_message3": MessageLookupByLibrary.simpleMessage(
       "Gagal mendapatkan kunci google",
     ),
@@ -3694,7 +4011,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Pemberitahuan Penting",
     ),
     "login_button_text": MessageLookupByLibrary.simpleMessage("Masuk"),
-    "login_email": MessageLookupByLibrary.simpleMessage("Email"),
+    "login_email": MessageLookupByLibrary.simpleMessage("Surel"),
     "login_forgot_password": MessageLookupByLibrary.simpleMessage(
       "Lupa kata sandi?",
     ),
@@ -3729,7 +4046,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "login_password": MessageLookupByLibrary.simpleMessage("Kata Sandi"),
     "next": MessageLookupByLibrary.simpleMessage("Selanjutnya"),
-    "nicknameMessage": m83,
+    "nicknameMessage": m92,
     "password_diff": MessageLookupByLibrary.simpleMessage(
       "Kata sandi tidak cocok",
     ),

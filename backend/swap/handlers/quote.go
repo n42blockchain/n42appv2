@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"math/big"
 	"net/http"
 
@@ -65,13 +64,16 @@ func (h *QuoteHandler) Quote(c *gin.Context) {
 	resp.PriceImpact = "< 1%"
 
 	// 写入数据库（status=0 quoted）
-	_ = h.db.InsertOrder(
+	if err := h.db.InsertOrder(
 		orderID, req.UserAddr, req.Chain,
 		req.TokenIn, req.TokenOut,
 		resp.TokenInSymbol, resp.TokenOutSymbol,
 		req.AmountIn, resp.AmountOut,
 		resp.Source,
-	)
+	); err != nil {
+		c.JSON(http.StatusInternalServerError, models.Fail("save order failed"))
+		return
+	}
 
 	c.JSON(http.StatusOK, models.OK(resp))
 }
@@ -91,6 +93,6 @@ func estimateGas(chain, source string) string {
 		if source == "1inch" {
 			return "~0.004 ETH"
 		}
-		return fmt.Sprintf("~0.003 ETH")
+		return "~0.003 ETH"
 	}
 }

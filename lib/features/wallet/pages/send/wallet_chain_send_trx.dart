@@ -14,7 +14,6 @@ import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_base_send.dart';
 import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
-import 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/utils/transaction/coin_gas.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
@@ -41,8 +40,7 @@ class WalletChainSendTrx extends ConsumerStatefulWidget {
   const WalletChainSendTrx(this.coinModel, {super.key});
 
   @override
-  ConsumerState<WalletChainSendTrx> createState() =>
-      _WalletChainSendTrxState();
+  ConsumerState<WalletChainSendTrx> createState() => _WalletChainSendTrxState();
 }
 
 class _WalletChainSendTrxState extends ConsumerState<WalletChainSendTrx>
@@ -95,14 +93,18 @@ class _WalletChainSendTrxState extends ConsumerState<WalletChainSendTrx>
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(sw(16.0))),
         color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.errorBgColor2.name),
+          context,
+          AppThemeKeys.errorBgColor2.name,
+        ),
       ),
       child: Text(
         errorMessage,
         style: TextStyle(
           fontSize: ScreenUtil().setSp(28.0),
           color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.errorTextColor.name),
+            context,
+            AppThemeKeys.errorTextColor.name,
+          ),
         ),
       ),
     );
@@ -122,7 +124,9 @@ class _WalletChainSendTrxState extends ConsumerState<WalletChainSendTrx>
             padding: EdgeInsets.all(sw(30.0)),
             height: sw(148.0),
             color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.backGroundColor.name),
+              context,
+              AppThemeKeys.backGroundColor.name,
+            ),
             child: buttonStyle6(
               context,
               sendTransaction,
@@ -136,7 +140,9 @@ class _WalletChainSendTrxState extends ConsumerState<WalletChainSendTrx>
                     : AppThemeKeys.mainButtonBgColor.name,
               ),
               AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainButtonTextColor.name),
+                context,
+                AppThemeKeys.mainButtonTextColor.name,
+              ),
               isLoading,
             ),
           ),
@@ -181,7 +187,9 @@ class _WalletChainSendTrxState extends ConsumerState<WalletChainSendTrx>
           style: TextStyle(
             fontSize: ScreenUtil().setWidth(32.0),
             color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainTextColor.name),
+              context,
+              AppThemeKeys.mainTextColor.name,
+            ),
           ),
           textAlign: TextAlign.center,
         ),
@@ -193,8 +201,7 @@ class _WalletChainSendTrxState extends ConsumerState<WalletChainSendTrx>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
-        text:
-            "${S.of(context).g_key_37} ${widget.coinModel.coin['miniName']}",
+        text: "${S.of(context).g_key_37} ${widget.coinModel.coin['miniName']}",
       ),
       body: SafeArea(
         child: GestureDetector(
@@ -202,9 +209,7 @@ class _WalletChainSendTrxState extends ConsumerState<WalletChainSendTrx>
           child: Stack(
             children: [
               Positioned.fill(
-                child: SingleChildScrollView(
-                  child: coinTypeWidget(),
-                ),
+                child: SingleChildScrollView(child: coinTypeWidget()),
               ),
               sendButtonWidget(),
             ],

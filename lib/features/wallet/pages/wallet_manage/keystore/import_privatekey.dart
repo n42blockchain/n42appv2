@@ -8,6 +8,7 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/pages/create_wallet/create_password.dart';
+import 'package:n42_wallet/features/wallet/pages/wallet_manage/keystore/keystore_flow_utils.dart';
 import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/chain_url_registry.dart';
 import 'package:n42_wallet/features/wallet/widgets/choose_import_coin.dart';
@@ -38,6 +39,8 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
   Load load = Load.finish;
   String errorMessage = "";
   Map<String, dynamic> selectChain = allChainUrlMap[CoinType.N.name];
+
+  String get _selectedCoinType => resolveSelectedImportCoinType(selectChain);
 
   void _showError(String message) {
     errorMessage = message;
@@ -91,7 +94,7 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
   Future<bool> _verifyPrivateKeyCanGenerateAddress(String privateKey) async {
     try {
       final rm = await Trustdart().generateAddress(
-        CoinType.N.name,
+        _selectedCoinType,
         selectChain['baseInfo']['path'][selectChain['addrType']],
         selectChain['addrType'],
         mnemonic: "",
@@ -101,7 +104,7 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
       final address = rm['legacy'];
       if (address == null || address.toString().isEmpty) return false;
       return await Trustdart().validateAddress(
-        selectChain['baseInfo']['mKey'] ?? CoinType.N.name,
+        _selectedCoinType,
         address.toString(),
       );
     } catch (e) {
@@ -136,7 +139,9 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
     if (payload[0] != 0x80) return mm..error = true;
 
     final isCompressed = payload.length == 34 && payload.last == 0x01;
-    final privateKey = isCompressed ? payload.sublist(1, 33) : payload.sublist(1);
+    final privateKey = isCompressed
+        ? payload.sublist(1, 33)
+        : payload.sublist(1);
     mm.data = bytesToHex(privateKey);
     return mm;
   }
@@ -151,21 +156,23 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
 
   @override
   void dispose() {
+    _keystoreController.clear();
     _keystoreController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(
-        text: S.of(context).g_key_wallet_m22,
-      ),
+      appBar: AppBarWidget(text: S.of(context).g_key_wallet_m22),
       body: SafeArea(
         child: Stack(
           children: [
             Positioned.fill(
               child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+                padding: EdgeInsets.symmetric(
+                  horizontal: ScreenUtil().setWidth(30),
+                ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -176,15 +183,20 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                           child: Text(
                             S.of(context).g_key_209,
                             style: TextStyle(
-                                color: AppThemeUtils.getColorByKey(
-                                    context, AppThemeKeys.mainTextColor.name),
-                                fontWeight: FontWeight.bold,
-                                fontSize: ScreenUtil().setSp(32)),
+                              color: AppThemeUtils.getColorByKey(
+                                context,
+                                AppThemeKeys.mainTextColor.name,
+                              ),
+                              fontWeight: FontWeight.bold,
+                              fontSize: ScreenUtil().setSp(32),
+                            ),
                           ),
                         ),
                         InkWell(
                           onTap: () async {
-                            final data = await Clipboard.getData(Clipboard.kTextPlain);
+                            final data = await Clipboard.getData(
+                              Clipboard.kTextPlain,
+                            );
                             if (!mounted) return;
                             final text = data?.text;
                             if (text != null && text != "null") {
@@ -192,18 +204,27 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                             }
                           },
                           child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20.0)),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: ScreenUtil().setWidth(20.0),
+                            ),
                             height: ScreenUtil().setWidth(60.0),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                                color: AppThemeUtils.getColorByKey(
-                                    context, AppThemeKeys.mainBlueColor.name),
-                                borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(20.0)))
+                              color: AppThemeUtils.getColorByKey(
+                                context,
+                                AppThemeKeys.mainBlueColor.name,
+                              ),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(ScreenUtil().setWidth(20.0)),
+                              ),
                             ),
                             child: Text(
                               S.of(context).g_key_166,
                               style: TextStyle(
-                                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainWhiteColor.name),
+                                color: AppThemeUtils.getColorByKey(
+                                  context,
+                                  AppThemeKeys.mainWhiteColor.name,
+                                ),
                                 fontSize: ScreenUtil().setSp(26.0),
                               ),
                             ),
@@ -215,7 +236,9 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                       context,
                       height: ScreenUtil().setWidth(440),
                       padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
-                      margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
+                      margin: EdgeInsets.symmetric(
+                        vertical: ScreenUtil().setWidth(20),
+                      ),
                       child: CommInput(
                         type: InputFieldType.account,
                         hintText: S.of(context).g_key_209,
@@ -223,7 +246,9 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                         maxLines: 30,
                         style: TextStyle(
                           color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.ff888888.name),
+                            context,
+                            AppThemeKeys.ff888888.name,
+                          ),
                           fontSize: ScreenUtil().setSp(26),
                         ),
                       ),
@@ -231,22 +256,31 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                     Text(
                       S.of(context).g_key_17,
                       style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.mainTextColor.name),
-                          fontWeight: FontWeight.bold,
-                          fontSize: ScreenUtil().setSp(32)),
+                        color: AppThemeUtils.getColorByKey(
+                          context,
+                          AppThemeKeys.mainTextColor.name,
+                        ),
+                        fontWeight: FontWeight.bold,
+                        fontSize: ScreenUtil().setSp(32),
+                      ),
                     ),
                     containerStyle1(
                       context,
                       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
-                      margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
+                      margin: EdgeInsets.symmetric(
+                        vertical: ScreenUtil().setWidth(20),
+                      ),
                       child: Row(
                         children: [
                           Container(
                             width: ScreenUtil().setWidth(60),
                             height: ScreenUtil().setWidth(60),
-                            margin: EdgeInsets.only(right: ScreenUtil().setWidth(20)),
-                            child: ImageNetWork(imageUrl: selectChain['baseInfo']['icon']),
+                            margin: EdgeInsets.only(
+                              right: ScreenUtil().setWidth(20),
+                            ),
+                            child: ImageNetWork(
+                              imageUrl: selectChain['baseInfo']['icon'],
+                            ),
                           ),
                           Expanded(
                             child: Column(
@@ -256,14 +290,20 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                                   selectChain['baseInfo']['name'],
                                   style: TextStyle(
                                     fontSize: ScreenUtil().setSp(30),
-                                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemTextColor.name),
+                                    color: AppThemeUtils.getColorByKey(
+                                      context,
+                                      AppThemeKeys.itemTextColor.name,
+                                    ),
                                   ),
                                 ),
                                 Text(
                                   selectChain['baseInfo']['miniName'],
                                   style: TextStyle(
                                     fontSize: ScreenUtil().setSp(30),
-                                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemTextColor.name),
+                                    color: AppThemeUtils.getColorByKey(
+                                      context,
+                                      AppThemeKeys.itemTextColor.name,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -272,23 +312,32 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                           Container(
                             width: ScreenUtil().setWidth(30),
                             height: ScreenUtil().setWidth(30),
-                            margin: EdgeInsets.only(left: ScreenUtil().setWidth(20)),
+                            margin: EdgeInsets.only(
+                              left: ScreenUtil().setWidth(20),
+                            ),
                             child: Icon(
                               Icons.arrow_forward_ios,
-                              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                              color: AppThemeUtils.getColorByKey(
+                                context,
+                                AppThemeKeys.itemSubtitleTextColor.name,
+                              ),
                               size: ScreenUtil().setWidth(30),
                             ),
                           ),
                         ],
                       ),
                       onTap: () async {
-                        final rData = await Navigator.push<Map<String, dynamic>>(
-                          context,
-                          MaterialPageRoute(builder: (_) => ChooseImportCoin(selectChain: selectChain)),
-                        );
+                        final rData =
+                            await Navigator.push<Map<String, dynamic>>(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    ChooseImportCoin(selectChain: selectChain),
+                              ),
+                            );
                         if (!mounted || rData == null) return;
                         setState(() => selectChain = rData);
-                      }
+                      },
                     ),
                     if (errorMessage != "")
                       Container(
@@ -296,22 +345,31 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                         padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
                         margin: EdgeInsets.only(top: ScreenUtil().setWidth(30)),
                         decoration: BoxDecoration(
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorBgColor.name),
-                          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                          color: AppThemeUtils.getColorByKey(
+                            context,
+                            AppThemeKeys.errorBgColor.name,
+                          ),
+                          borderRadius: BorderRadius.circular(
+                            ScreenUtil().setWidth(8),
+                          ),
                         ),
                         child: Text(
                           errorMessage,
                           style: TextStyle(
-                              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
-                              fontSize: ScreenUtil().setSp(26)
+                            color: AppThemeUtils.getColorByKey(
+                              context,
+                              AppThemeKeys.errorTextColor.name,
+                            ),
+                            fontSize: ScreenUtil().setSp(26),
                           ),
                           textAlign: TextAlign.center,
                         ),
                       ),
-                    SizedBox(height: ScreenUtil().setWidth(148),)
+                    SizedBox(height: ScreenUtil().setWidth(148)),
                   ],
                 ),
-              ),),
+              ),
+            ),
             Positioned(
               bottom: 0,
               left: 0,
@@ -327,26 +385,34 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                     padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
                     height: ScreenUtil().setWidth(148),
                     width: double.infinity,
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
+                    color: AppThemeUtils.getColorByKey(
+                      context,
+                      AppThemeKeys.backGroundColor.name,
+                    ),
                     child: buttonStyle6(
-                        context,
-                            () async {
-                          if (load == Load.loading) return;
-                          FocusScope.of(context).requestFocus(FocusNode());
+                      context,
+                      () async {
+                        if (!mounted) return;
+                        if (load == Load.loading) return;
+                        final s = S.of(context);
+                        final navigator = Navigator.of(context);
+                        FocusScope.of(context).requestFocus(FocusNode());
+                        setState(() => load = Load.loading);
+                        try {
                           String keystoreJson = _keystoreController.text.trim();
                           if (keystoreJson.isEmpty) {
-                            _showError(S.of(context).g_key_210);
+                            _showError(s.g_key_210);
                             return;
                           }
                           final mm = await checkPraviteKey(keystoreJson);
                           if (!mounted) return;
                           if (mm.error) {
-                            _showError(S.of(context).g_key_210);
+                            _showError(s.g_key_210);
                             return;
                           }
                           keystoreJson = mm.data;
                           final rm = await Trustdart().generateAddress(
-                            CoinType.N.name,
+                            _selectedCoinType,
                             selectChain['baseInfo']['path'][selectChain['addrType']],
                             selectChain['addrType'],
                             mnemonic: "",
@@ -357,9 +423,13 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                           if (rm['legacy'] != "") {
                             final ksjByte = hexToBytes(keystoreJson);
                             final base64Str = base64Encode(ksjByte);
-                            final findWalletInfo = ref.read(wapBridgeProvider).findWallet(pk: base64Str);
+                            final findWalletInfo = ref
+                                .read(wapBridgeProvider)
+                                .findWallet(pk: base64Str);
                             if (findWalletInfo != null) {
-                              _showError(S.of(context).g_key_214(findWalletInfo.walletName ?? ""));
+                              _showError(
+                                s.g_key_214(findWalletInfo.walletName ?? ""),
+                              );
                               return;
                             }
                             final wInfo = WalletInfo(
@@ -368,33 +438,48 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                               walletUuid: ref.read(wapBridgeProvider).userUUID,
                               mnemonic: "",
                               privateKey: base64Str,
-                              coinInfo: {selectChain['baseInfo']['mKey']: selectChain},
+                              coinInfo: {
+                                selectChain['baseInfo']['mKey']: selectChain,
+                              },
                             );
                             errorMessage = "";
                             setState(() {});
-                            await Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (_) => CreatePassword(wInfo, createMetod: "PrivateKey")),
+                            await navigator.push(
+                              MaterialPageRoute(
+                                builder: (_) => CreatePassword(
+                                  wInfo,
+                                  createMetod: "PrivateKey",
+                                ),
+                              ),
                             );
                             if (!mounted) return;
-                            Navigator.of(context).pop(true);
+                            navigator.pop(true);
                           } else {
-                            _showError(S.of(context).g_key_210);
+                            _showError(s.g_key_210);
                           }
-                        },
-                        S.of(context).g_key_78,
-                        AppThemeUtils.getColorByKey(
-                          context,
-                          load == Load.loading
-                              ? AppThemeKeys.mainButtonBgColor3.name
-                              : AppThemeKeys.mainButtonBgColor.name,
-                        ),
-                        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
-                        load == Load.loading),
-                  )
+                        } finally {
+                          if (mounted) {
+                            setState(() => load = Load.finish);
+                          }
+                        }
+                      },
+                      S.of(context).g_key_78,
+                      AppThemeUtils.getColorByKey(
+                        context,
+                        load == Load.loading
+                            ? AppThemeKeys.mainButtonBgColor3.name
+                            : AppThemeKeys.mainButtonBgColor.name,
+                      ),
+                      AppThemeUtils.getColorByKey(
+                        context,
+                        AppThemeKeys.mainButtonTextColor.name,
+                      ),
+                      load == Load.loading,
+                    ),
+                  ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),

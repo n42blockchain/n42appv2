@@ -64,6 +64,7 @@ pubspec.lock
 **/ios/Flutter/Flutter.framework
 **/ios/Flutter/Flutter.podspec
 **/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/ChatSocialAuth.xcconfig
 **/ios/Flutter/ephemeral/
 **/ios/Flutter/app.flx
 **/ios/Flutter/app.zip
@@ -89,6 +90,8 @@ coverage/
 # Temp files
 tmpclaude-*
 nul
+__pycache__/
+*.pyc
 
 # Entitlements backup (created by release scripts)
 *.entitlements.backup

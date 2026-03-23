@@ -13,16 +13,27 @@ import 'package:n42_wallet/features/home/setting/change_email_page.dart';
 import 'package:n42_wallet/features/login/api/user_info_api.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 
-/// Logic mixin for [ChangeEmailPage].
-///
-/// Contains all state fields, validation helpers, and API interaction methods.
-mixin ChangeEmailPageLogicMixin on State<ChangeEmailPage> {
-  // ── Step ────────────────────────────────────────────────────────────────────
-  int step = 0;
-  bool chatAvailable = false; // Chat 已初始化且已登录
-  bool chatSyncEnabled = true; // 用户是否开启 Chat 同步
+void clearChangeEmailCountdownState({
+  required VoidCallback cancelTimer,
+  required ValueChanged<int> setCountdown,
+}) {
+  cancelTimer();
+  setCountdown(0);
+}
 
-  // ── Controllers ─────────────────────────────────────────────────────────────
+bool canResendChangeEmailCode({
+  required int countdown,
+  required bool loading,
+}) {
+  return countdown <= 0 && !loading;
+}
+
+mixin ChangeEmailPageLogicMixin on State<ChangeEmailPage> {
+  int step = 0;
+  bool chatAvailable = false;
+  bool chatSyncEnabled = true;
+  StreamSubscription? chatUserSubscription;
+
   final emailCtrl = TextEditingController();
   final passwordCtrl = TextEditingController();
   final n42CodeCtrl = TextEditingController();
@@ -33,34 +44,32 @@ mixin ChangeEmailPageLogicMixin on State<ChangeEmailPage> {
   final chatCodeFocus = FocusNode();
   bool obscurePassword = true;
 
-  // ── Loading ──────────────────────────────────────────────────────────────────
   bool sendingN42Code = false;
   bool confirmingN42 = false;
   bool requestingChatCode = false;
   bool confirmingChat = false;
 
-  // ── State flags ──────────────────────────────────────────────────────────────
   bool chatCodeSent = false;
 
-  // ── Errors ───────────────────────────────────────────────────────────────────
   String? emailError;
   String? passwordError;
   String? n42CodeError;
-  String? chatSyncError; // Chat 同步过程中的错误（请求码 / 确认均用此字段）
+  String? chatSyncError;
 
-  // ── Countdown ────────────────────────────────────────────────────────────────
   int countdown = 0;
   Timer? countdownTimer;
 
-  // ─── Lifecycle helpers ─────────────────────────────────────────────────────
-
   void initLogic() {
-    chatAvailable = N42Chat.isInitialized && N42Chat.isLoggedIn;
-    chatSyncEnabled = chatAvailable;
+    _syncChatAvailability();
+    chatUserSubscription = N42Chat.userStream.listen((_) {
+      if (!mounted) return;
+      _syncChatAvailability(fromStream: true);
+    });
   }
 
   void disposeLogic() {
     countdownTimer?.cancel();
+    chatUserSubscription?.cancel();
     emailCtrl.dispose();
     passwordCtrl.dispose();
     n42CodeCtrl.dispose();
@@ -69,6 +78,31 @@ mixin ChangeEmailPageLogicMixin on State<ChangeEmailPage> {
     passwordFocus.dispose();
     n42CodeFocus.dispose();
     chatCodeFocus.dispose();
+  }
+
+  void _syncChatAvailability({bool fromStream = false}) {
+    final nextChatAvailable = N42Chat.isInitialized && N42Chat.isLoggedIn;
+    if (nextChatAvailable == chatAvailable && !fromStream) {
+      return;
+    }
+
+    if (!mounted) {
+      chatAvailable = nextChatAvailable;
+      chatSyncEnabled = nextChatAvailable;
+      return;
+    }
+
+    setState(() {
+      final becameAvailable = nextChatAvailable && !chatAvailable;
+      chatAvailable = nextChatAvailable;
+      if (!nextChatAvailable) {
+        chatSyncEnabled = false;
+        passwordError = null;
+        chatSyncError = null;
+      } else if (becameAvailable && step == 0) {
+        chatSyncEnabled = true;
+      }
+    });
   }
 
   // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -139,7 +173,12 @@ mixin ChangeEmailPageLogicMixin on State<ChangeEmailPage> {
   }
 
   Future<void> resendN42Code() async {
-    if (countdown > 0 || sendingN42Code) return;
+    if (!canResendChangeEmailCode(
+      countdown: countdown,
+      loading: sendingN42Code,
+    )) {
+      return;
+    }
     setState(() => sendingN42Code = true);
     try {
       final data = await UserInfoApi()
@@ -178,7 +217,13 @@ mixin ChangeEmailPageLogicMixin on State<ChangeEmailPage> {
       if (!mounted) return;
       if (result.error == false) {
         AppGlobals.userInfo?.email = emailCtrl.text.trim();
-        countdownTimer?.cancel();
+        clearChangeEmailCountdownState(
+          cancelTimer: () {
+            countdownTimer?.cancel();
+            countdownTimer = null;
+          },
+          setCountdown: (value) => countdown = value,
+        );
 
         if (chatSyncEnabled && chatAvailable) {
           // 进入 Step 2：自动请求 Chat 验证码
@@ -221,6 +266,13 @@ mixin ChangeEmailPageLogicMixin on State<ChangeEmailPage> {
       startCountdown();
     } catch (e) {
       if (mounted) {
+        clearChangeEmailCountdownState(
+          cancelTimer: () {
+            countdownTimer?.cancel();
+            countdownTimer = null;
+          },
+          setCountdown: (value) => countdown = value,
+        );
         setState(() {
           chatSyncError = e.toString();
           requestingChatCode = false;
@@ -230,7 +282,12 @@ mixin ChangeEmailPageLogicMixin on State<ChangeEmailPage> {
   }
 
   Future<void> resendChatCode() async {
-    if (countdown > 0 || requestingChatCode) return;
+    if (!canResendChangeEmailCode(
+      countdown: countdown,
+      loading: requestingChatCode,
+    )) {
+      return;
+    }
     await requestChatCode();
   }
 

@@ -135,6 +135,21 @@ mixin WalletConnectSigning on ChangeNotifier, WalletConnectConnection, WalletCon
         );
         viewStateDeal(WalletConnectState.connect);
         return;
+      } else if (eventData.method == "eth_sign") {
+        // eth_sign signs arbitrary data and can be exploited to phish
+        // transaction signatures. Reject it — DApps should use personal_sign.
+        signClient!.respondSessionRequest(
+          topic: eventData.topic,
+          response: wallet_connect.JsonRpcResponse(
+            id: eventData.id,
+            error: wallet_connect.JsonRpcError(
+              code: 4200,
+              message: 'eth_sign is disabled for security reasons. Use personal_sign instead.',
+            ),
+          ),
+        );
+        viewStateDeal(WalletConnectState.connect);
+        return;
       } else {
         final requestParams = (eventData.params! as List).cast<String>();
         final dataToSign = web3.strip0x(requestParams[1]);
@@ -298,22 +313,24 @@ mixin WalletConnectSigning on ChangeNotifier, WalletConnectConnection, WalletCon
       to: wallet_types.EthereumAddress.fromHex(to ?? "0x"),
       value: wallet_types.EtherAmount.fromBigInt(
         wallet_types.EtherUnit.wei,
-        BigInt.tryParse(value ?? "0x") ?? BigInt.zero,
+        _parseHexOrDecBigInt(value ?? "0x0"),
       ),
+      // DApps send gas values as hex strings in wei per JSON-RPC spec.
+      // Must use EtherUnit.wei, NOT gwei, to avoid 10^9x overcharge.
       gasPrice: gasPrice != null
           ? wallet_types.EtherAmount.fromBigInt(
-              wallet_types.EtherUnit.gwei, BigInt.tryParse(gasPrice) ?? BigInt.zero)
+              wallet_types.EtherUnit.wei, _parseHexOrDecBigInt(gasPrice))
           : null,
       maxFeePerGas: maxFeePerGas != null
           ? wallet_types.EtherAmount.fromBigInt(
-              wallet_types.EtherUnit.gwei, BigInt.tryParse(maxFeePerGas) ?? BigInt.zero)
+              wallet_types.EtherUnit.wei, _parseHexOrDecBigInt(maxFeePerGas))
           : null,
       maxPriorityFeePerGas: maxPriorityFeePerGas != null
           ? wallet_types.EtherAmount.fromBigInt(
-              wallet_types.EtherUnit.gwei, BigInt.tryParse(maxPriorityFeePerGas) ?? BigInt.zero)
+              wallet_types.EtherUnit.wei, _parseHexOrDecBigInt(maxPriorityFeePerGas))
           : null,
-      maxGas: int.tryParse(gasLimit ?? ''),
-      nonce: int.tryParse(nonce ?? ''),
+      maxGas: gasLimit != null ? _parseHexOrDecInt(gasLimit) : null,
+      nonce: nonce != null ? _parseHexOrDecInt(nonce) : null,
       data: (data != null && data != '0x') ? web3.hexToBytes(data) : null,
     );
 
@@ -336,6 +353,25 @@ mixin WalletConnectSigning on ChangeNotifier, WalletConnectConnection, WalletCon
     );
     viewStateDeal(WalletConnectState.connect);
   }
+
+  /// Parse a hex (0x-prefixed) or decimal string to BigInt.
+  /// DApps send values as hex per JSON-RPC spec (e.g. "0xde0b6b3a7640000").
+  static BigInt _parseHexOrDecBigInt(String s) {
+    if (s.startsWith('0x') || s.startsWith('0X')) {
+      return BigInt.tryParse(s.substring(2), radix: 16) ?? BigInt.zero;
+    }
+    return BigInt.tryParse(s) ?? BigInt.zero;
+  }
+
+  /// Parse a hex (0x-prefixed) or decimal string to int.
+  static int? _parseHexOrDecInt(String s) {
+    if (s.startsWith('0x') || s.startsWith('0X')) {
+      return int.tryParse(s.substring(2), radix: 16);
+    }
+    return int.tryParse(s);
+  }
+
+  static final RegExp _hexRegExp = RegExp(r'^[0-9a-fA-F]+$');
 
   Future<void> _handleAptosTransaction(wallet_connect.SessionRequestEvent eventData) async {
     final requestParams = eventData.params! as Map;
@@ -495,7 +531,7 @@ mixin WalletConnectSigning on ChangeNotifier, WalletConnectConnection, WalletCon
   /// Empty string returns false to avoid creating a zero-length byte array.
   static bool _isValidHex(String s) {
     if (s.isEmpty) return false;
-    return RegExp(r'^[0-9a-fA-F]+$').hasMatch(s);
+    return _hexRegExp.hasMatch(s);
   }
 
   /// Sign typed data using EIP-712 standard.

@@ -22,28 +22,23 @@ void main() {
 
     // ========== WalletConnect URI ==========
 
-    test('should detect WalletConnect URI with relay-protocol and symKey', () async {
-      final uri = Uri.parse(
-        'wc:abc123@2?relay-protocol=irn&symKey=def456',
-      );
+    test(
+      'should detect WalletConnect URI with relay-protocol and symKey',
+      () async {
+        final uri = Uri.parse('wc:abc123@2?relay-protocol=irn&symKey=def456');
 
-      service.handleUri(uri);
-      await Future.delayed(Duration.zero);
+        service.handleUri(uri);
+        await Future.delayed(Duration.zero);
 
-      expect(receivedData.length, 1);
-      expect(receivedData.first.type, DeepLinkType.walletConnect);
-      expect(receivedData.first.params['wcUri'], uri.toString());
-    });
+        expect(receivedData.length, 1);
+        expect(receivedData.first.type, DeepLinkType.walletConnect);
+        expect(receivedData.first.params['wcUri'], uri.toString());
+      },
+    );
 
     test('should detect WalletConnect URI embedded in n42 scheme', () async {
-      final uri = Uri.parse(
-        'n42://wc?uri=wc%3Aabc%402%3Frelay-protocol%3Dirn%26symKey%3Ddef',
-      );
-      // The full toString contains relay-protocol and symKey
-      // But they are percent-encoded in the query, so the toString check might not match
-      // Let's test with a URI that explicitly contains these strings
       final wcUri = Uri.parse(
-        'n42app://connect?relay-protocol=irn&symKey=abc123',
+        'n42app://connect?wcUri=wc%3Aabc123%402%3Frelay-protocol%3Dirn%26symKey%3Dabc123',
       );
 
       service.handleUri(wcUri);
@@ -51,6 +46,38 @@ void main() {
 
       expect(receivedData.length, 1);
       expect(receivedData.first.type, DeepLinkType.walletConnect);
+      expect(
+        receivedData.first.params['wcUri'],
+        'wc:abc123@2?relay-protocol=irn&symKey=abc123',
+      );
+    });
+
+    test('should detect WalletConnect universal links', () async {
+      final wcUri = Uri.parse(
+        'https://walletconnect.com/wc?uri=wc%3Aabc123%402%3Frelay-protocol%3Dirn%26symKey%3Dabc123',
+      );
+
+      service.handleUri(wcUri);
+      await Future.delayed(Duration.zero);
+
+      expect(receivedData.length, 1);
+      expect(receivedData.first.type, DeepLinkType.walletConnect);
+      expect(
+        receivedData.first.params['wcUri'],
+        'wc:abc123@2?relay-protocol=irn&symKey=abc123',
+      );
+    });
+
+    test('should ignore malformed WalletConnect universal links', () async {
+      final wcUri = Uri.parse(
+        'https://walletconnect.com/wc?uri=wc%3Aabc123%402',
+      );
+
+      service.handleUri(wcUri);
+      await Future.delayed(Duration.zero);
+
+      expect(receivedData.length, 1);
+      expect(receivedData.first.type, DeepLinkType.unknown);
     });
 
     // ========== n42:// scheme ==========
@@ -152,7 +179,9 @@ void main() {
 
     group('astraapp:// scheme parsing', () {
       test('should parse group_mining type', () async {
-        final uri = Uri.parse('astraapp://astrawallet.com?type=group_mining&id=20');
+        final uri = Uri.parse(
+          'astraapp://astrawallet.com?type=group_mining&id=20',
+        );
 
         service.handleUri(uri);
         await Future.delayed(Duration.zero);
@@ -283,20 +312,71 @@ void main() {
       expect(str, contains('chat'));
       expect(str, contains('room1'));
     });
+
+    test('toString should redact sensitive sso parameters', () {
+      final data = DeepLinkData(
+        type: DeepLinkType.chatSso,
+        uri: Uri.parse(
+          'n42://auth/sso?loginToken=secret-token&homeserver=https://m.si46.world',
+        ),
+        params: {
+          'loginToken': 'secret-token',
+          'homeserver': 'https://m.si46.world',
+        },
+      );
+
+      final str = data.toString();
+      expect(str, isNot(contains('secret-token')));
+      expect(str, contains('[redacted]'));
+      expect(str, contains('m.si46.world'));
+    });
+
+    test('toString should redact walletconnect symKey in nested wcUri', () {
+      final data = DeepLinkData(
+        type: DeepLinkType.walletConnect,
+        uri: Uri.parse(
+          'wc:abc123@2?relay-protocol=irn&symKey=super-secret-key',
+        ),
+        params: {
+          'wcUri': 'wc:abc123@2?relay-protocol=irn&symKey=super-secret-key',
+        },
+      );
+
+      final str = data.toString();
+      expect(str, isNot(contains('super-secret-key')));
+      expect(str, contains('redacted'));
+    });
+
+    test('sanitizedUri should redact walletconnect symKey in nested uri', () {
+      final data = DeepLinkData(
+        type: DeepLinkType.walletConnect,
+        uri: Uri.parse(
+          'https://walletconnect.com/wc?uri=wc%3Aabc123%402%3Frelay-protocol%3Dirn%26symKey%3Dsuper-secret-key',
+        ),
+        params: const {},
+      );
+
+      final sanitized = data.sanitizedUri.toString();
+      expect(sanitized, isNot(contains('super-secret-key')));
+      expect(sanitized, contains('redacted'));
+    });
   });
 
   group('DeepLinkType enum', () {
     test('should have all expected values', () {
-      expect(DeepLinkType.values, containsAll([
-        DeepLinkType.walletConnect,
-        DeepLinkType.groupMining,
-        DeepLinkType.fullNode,
-        DeepLinkType.friendCard,
-        DeepLinkType.chat,
-        DeepLinkType.user,
-        DeepLinkType.group,
-        DeepLinkType.unknown,
-      ]));
+      expect(
+        DeepLinkType.values,
+        containsAll([
+          DeepLinkType.walletConnect,
+          DeepLinkType.groupMining,
+          DeepLinkType.fullNode,
+          DeepLinkType.friendCard,
+          DeepLinkType.chat,
+          DeepLinkType.user,
+          DeepLinkType.group,
+          DeepLinkType.unknown,
+        ]),
+      );
     });
   });
 }

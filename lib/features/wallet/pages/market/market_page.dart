@@ -11,16 +11,20 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/market/crypto_news_service.dart';
 import 'package:n42_wallet/core/market/fear_greed_service.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
-import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/features/widgets/app_home_top_bar.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/api/market_api.dart';
+import 'package:n42_wallet/features/wallet/api/market_api_payload_utils.dart';
 import 'package:n42_wallet/features/wallet/pages/market/market_coin_info.dart';
+import 'package:n42_wallet/features/wallet/pages/market/market_price_format_utils.dart';
 import 'package:n42_wallet/features/wallet/pages/market/price_alert_sheet.dart';
 import 'package:n42_wallet/features/wallet/services/coin_price_alert_service.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/features/widgets/image_network.dart' show ImageNetWork;
+import 'package:n42_wallet/features/widgets/image_network.dart'
+    show ImageNetWork;
 import 'package:url_launcher/url_launcher.dart';
+
+import 'market_search_utils.dart';
 
 part 'market_shared_widgets.dart';
 part 'market_coin_tabs.dart';
@@ -49,6 +53,8 @@ class _MarketPageState extends ConsumerState<MarketPage>
   List<Map<String, dynamic>> _searchResults = [];
   bool _searchLoading = false;
   Timer? _debounce;
+  int _searchGeneration = 0;
+  String _activeSearchQuery = '';
 
   // Watchlist
   List<String> _watchlistSymbols = [];
@@ -106,7 +112,12 @@ class _MarketPageState extends ConsumerState<MarketPage>
     if (_newsLoading) return;
     if (mounted) setState(() => _newsLoading = true);
     final list = await CryptoNewsService.fetchLatest();
-    if (mounted) setState(() { _news = list; _newsLoading = false; });
+    if (mounted) {
+      setState(() {
+        _news = list;
+        _newsLoading = false;
+      });
+    }
   }
 
   // ─── Price alert helpers ─────────────────────────────────────────────────
@@ -138,13 +149,11 @@ class _MarketPageState extends ConsumerState<MarketPage>
     final resp = await MarketApi().getWalletCoinsInfo(enabledSymbols.join(','));
     if (resp['error'] != false) return;
 
-    final rawData = resp['data'];
-    final coins = (rawData is Map ? rawData['data'] : null);
-    if (coins is! List) return;
+    final coins = extractMarketCoinItems(resp['data']);
+    if (coins.isEmpty) return;
 
     final prices = <String, double>{};
     for (final c in coins) {
-      if (c is! Map) continue;
       final sym = c['coin']?.toString().toLowerCase() ?? '';
       final price = _parsePrice(c['price']);
       if (sym.isNotEmpty && price > 0) prices[sym] = price;
@@ -181,7 +190,8 @@ class _MarketPageState extends ConsumerState<MarketPage>
             .toString()
             .replaceAll(r'$', '')
             .replaceAll(',', ''),
-      ) ?? 0.0;
+      ) ??
+      0.0;
 
   // ─── Data loaders ───────────────────────────────────────────────────────────
 
@@ -211,7 +221,10 @@ class _MarketPageState extends ConsumerState<MarketPage>
 
   void _onSearchChanged(String q) {
     _debounce?.cancel();
-    if (q.trim().isEmpty) {
+    final query = q.trim();
+    _activeSearchQuery = query;
+    final requestId = ++_searchGeneration;
+    if (query.isEmpty) {
       setState(() {
         _searchResults = [];
         _searchLoading = false;
@@ -219,10 +232,24 @@ class _MarketPageState extends ConsumerState<MarketPage>
       return;
     }
     _debounce = Timer(const Duration(milliseconds: 300), () async {
-      if (!mounted) return;
+      if (!mounted ||
+          !shouldApplyMarketSearchResponse(
+            requestId: requestId,
+            activeRequestId: _searchGeneration,
+            requestQuery: query,
+            activeQuery: _activeSearchQuery,
+          )) {
+        return;
+      }
       setState(() => _searchLoading = true);
-      final result = await MarketApi().searchCoins(q);
-      if (mounted) {
+      final result = await MarketApi().searchCoins(query);
+      if (mounted &&
+          shouldApplyMarketSearchResponse(
+            requestId: requestId,
+            activeRequestId: _searchGeneration,
+            requestQuery: query,
+            activeQuery: _activeSearchQuery,
+          )) {
         setState(() {
           _searchResults = result;
           _searchLoading = false;
@@ -242,27 +269,25 @@ class _MarketPageState extends ConsumerState<MarketPage>
 
     final resp = await MarketApi().getWalletCoinsInfo(symbols.join(','));
     if (!mounted) return;
-    final data = resp['data'];
-    final coins = (data is List) ? data : (data is Map ? [data] : <dynamic>[]);
+    final coins = extractMarketCoinItems(resp['data']);
     setState(() {
-      _watchlistCoins = coins
-          .whereType<Map<dynamic, dynamic>>()
-          .map((c) => Map<String, dynamic>.from(c))
-          .toList();
+      _watchlistCoins = coins;
       _watchlistLoading = false;
     });
   }
 
   Future<void> _toggleWatchlist(String symbol) async {
     final lower = symbol.toLowerCase();
+    if (lower.isEmpty) return;
     final updated = List<String>.from(_watchlistSymbols);
     if (updated.contains(lower)) {
       updated.remove(lower);
     } else {
       updated.add(lower);
     }
-    await SPUtil().saveMarketWatchlist(updated);
-    setState(() => _watchlistSymbols = updated);
+    final normalized = normalizeMarketWatchlistSymbols(updated);
+    await SPUtil().saveMarketWatchlist(normalized);
+    setState(() => _watchlistSymbols = normalized);
     await _loadWatchlist();
   }
 
@@ -277,32 +302,34 @@ class _MarketPageState extends ConsumerState<MarketPage>
   }
 
   Map<String, dynamic> _normalize(
-      Map<String, dynamic> coin, _CoinSource source) {
+    Map<String, dynamic> coin,
+    _CoinSource source,
+  ) {
     return switch (source) {
       _CoinSource.trending => {
-          'coin_gecko_id': coin['id'] ?? '',
-          'coin': (coin['symbol'] ?? '').toString().toLowerCase(),
-          'name': coin['name'] ?? '',
-          'image': coin['large'] ?? coin['thumb'] ?? '',
-          'price': _parseTrendingPrice(coin),
-          'price_change_per_24h': _parseTrendingPct(coin),
-        },
+        'coin_gecko_id': coin['id'] ?? '',
+        'coin': (coin['symbol'] ?? '').toString().toLowerCase(),
+        'name': coin['name'] ?? '',
+        'image': coin['large'] ?? coin['thumb'] ?? '',
+        'price': _parseTrendingPrice(coin),
+        'price_change_per_24h': _parseTrendingPct(coin),
+      },
       _CoinSource.search => {
-          'coin_gecko_id': coin['id'] ?? '',
-          'coin': (coin['symbol'] ?? '').toString().toLowerCase(),
-          'name': coin['name'] ?? '',
-          'image': coin['large'] ?? coin['thumb'] ?? '',
-          'price': 0.0,
-          'price_change_per_24h': 0.0,
-        },
+        'coin_gecko_id': coin['id'] ?? '',
+        'coin': (coin['symbol'] ?? '').toString().toLowerCase(),
+        'name': coin['name'] ?? '',
+        'image': coin['large'] ?? coin['thumb'] ?? '',
+        'price': 0.0,
+        'price_change_per_24h': 0.0,
+      },
       _CoinSource.watchlist => {
-          'coin_gecko_id': coin['coin_gecko_id'] ?? '',
-          'coin': coin['coin'] ?? '',
-          'name': coin['name'] ?? '',
-          'image': coin['image'] ?? '',
-          'price': _parsePrice(coin['price']),
-          'price_change_per_24h': _parsePrice(coin['price_change_per_24h']),
-        },
+        'coin_gecko_id': coin['coin_gecko_id'] ?? '',
+        'coin': coin['coin'] ?? '',
+        'name': coin['name'] ?? '',
+        'image': coin['image'] ?? '',
+        'price': _parsePrice(coin['price']),
+        'price_change_per_24h': _parsePrice(coin['price_change_per_24h']),
+      },
     };
   }
 
@@ -316,11 +343,17 @@ class _MarketPageState extends ConsumerState<MarketPage>
   @override
   Widget build(BuildContext context) {
     final bgColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.backGroundColor.name);
-    final textColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final accentColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+      context,
+      AppThemeKeys.backGroundColor.name,
+    );
+    final textColor = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.mainTextColor.name,
+    );
+    final accentColor = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.mainBlueColor.name,
+    );
 
     return Scaffold(
       backgroundColor: bgColor,
@@ -408,44 +441,44 @@ class _MarketPageState extends ConsumerState<MarketPage>
   }
 
   Widget _buildHeader(
-      BuildContext context, Color textColor, Color accentColor) {
-    final itemBgColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name);
-    final dividerColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name);
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          AppHomeTopBar(
-            titleChild: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Markets',
-                  style: TextStyle(
-                    fontSize: 32.sp,
-                    //fontWeight: FontWeight.bold,
-                    color: textColor,
-                    letterSpacing: -0.5,
-                  ),
+    BuildContext context,
+    Color textColor,
+    Color accentColor,
+  ) {
+    final dividerColor = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.dividerColor.name,
+    );
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        AppHomeTopBar(
+          titleChild: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Markets',
+                style: TextStyle(
+                  fontSize: 32.sp,
+                  //fontWeight: FontWeight.bold,
+                  color: textColor,
+                  letterSpacing: -0.5,
                 ),
-                if (_fearGreed != null)
-                  Padding(
-                    padding: EdgeInsets.only(top: 4.h),
-                    child: _FearGreedBadge(data: _fearGreed!),
-                  ),
-              ],
-            ),
-            onLeftImageClick: () {
-              Scaffold.of(context).openDrawer();
-            },
-            onLeftImageUri: "assets/img/menu.png",
+              ),
+              if (_fearGreed != null)
+                Padding(
+                  padding: EdgeInsets.only(top: 4.h),
+                  child: _FearGreedBadge(data: _fearGreed!),
+                ),
+            ],
           ),
-          /*Padding(
+          onLeftImageClick: () {
+            Scaffold.of(context).openDrawer();
+          },
+          onLeftImageUri: "assets/img/menu.png",
+        ),
+        /*Padding(
             padding: EdgeInsets.fromLTRB(20.w, 16.h, 16.w, 0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -474,34 +507,33 @@ class _MarketPageState extends ConsumerState<MarketPage>
             ),
           ),
           SizedBox(height: 8.h),*/
-          TabBar(
-            controller: _tabController,
-            labelColor: accentColor,
-            unselectedLabelColor: textColor.withAlpha(130),
-            indicatorColor: accentColor,
-            indicatorSize: TabBarIndicatorSize.label,
-            indicatorWeight: 2.5,
-            dividerColor: dividerColor,
-            isScrollable: true,
-            tabAlignment: TabAlignment.start,
-            labelStyle: TextStyle(
-              fontSize: 24.sp,
-              fontWeight: FontWeight.w700,
-              letterSpacing: 0.2,
-            ),
-            unselectedLabelStyle: TextStyle(
-              fontSize: 24.sp,
-              fontWeight: FontWeight.w400,
-            ),
-            tabs: [
-              Tab(text: S.of(context).g_market_trending),
-              Tab(text: S.of(context).g_market_search),
-              Tab(text: S.of(context).g_market_watchlist),
-              Tab(text: S.of(context).g_market_news),
-            ],
+        TabBar(
+          controller: _tabController,
+          labelColor: accentColor,
+          unselectedLabelColor: textColor.withAlpha(130),
+          indicatorColor: accentColor,
+          indicatorSize: TabBarIndicatorSize.label,
+          indicatorWeight: 2.5,
+          dividerColor: dividerColor,
+          isScrollable: true,
+          tabAlignment: TabAlignment.start,
+          labelStyle: TextStyle(
+            fontSize: 24.sp,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 0.2,
           ),
-        ],
-      ),
+          unselectedLabelStyle: TextStyle(
+            fontSize: 24.sp,
+            fontWeight: FontWeight.w400,
+          ),
+          tabs: [
+            Tab(text: S.of(context).g_market_trending),
+            Tab(text: S.of(context).g_market_search),
+            Tab(text: S.of(context).g_market_watchlist),
+            Tab(text: S.of(context).g_market_news),
+          ],
+        ),
+      ],
     );
   }
 }

@@ -11,6 +11,7 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/component/enums/load.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/utils/wallet_backup_crypto.dart';
+import 'package:n42_wallet/features/wallet/utils/wallet_backup_payload.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/features/widgets/button_widget.dart';
 import 'package:n42_wallet/features/widgets/comm_input.dart';
@@ -88,6 +89,24 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
 
   // ── 导入 ──────────────────────────────────────────────────
 
+  bool _walletAlreadyExists(dynamic wap, WalletInfo info) {
+    if (info.watchOnly) {
+      return wap.walletInfoLsit.any(
+        (wallet) =>
+            wallet.watchOnly &&
+            wallet.watchAddress.toLowerCase() ==
+                info.watchAddress.toLowerCase(),
+      );
+    }
+    if (info.privateKey != null && info.privateKey!.isNotEmpty) {
+      return wap.findWallet(pk: info.privateKey!) != null;
+    }
+    if (info.mnemonic != null && info.mnemonic!.isNotEmpty) {
+      return wap.findWallet(mnemonic: info.mnemonic!) != null;
+    }
+    return false;
+  }
+
   Future<void> _import() async {
     if (_backupContent == null) {
       ToastUtils.show('Please select a backup file first');
@@ -105,8 +124,10 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
     });
 
     try {
-      final wallets =
-          await WalletBackupCrypto.decrypt(_backupContent!, password);
+      final wallets = await WalletBackupCrypto.decrypt(
+        _backupContent!,
+        password,
+      );
       if (!mounted) return;
 
       if (wallets.isEmpty) {
@@ -118,21 +139,37 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
       int skipped = 0;
       final wap = ref.read(wapBridgeProvider);
       for (final w in wallets) {
-        final info = WalletInfo(
-          walletName: w['walletName'] as String?,
-          mnemonic: w['mnemonic'] as String?,
-          privateKey: w['privateKey'] as String?,
-          walletUuid: wap.userUUID,
-          timestamp: w['timestamp'] as String?,
-        );
-        final ok = await wap.addImportWalletInfo(info);
-        if (!mounted) return;
-        ok ? imported++ : skipped++;
+        try {
+          final info = walletInfoFromBackupPayload(
+            Map<String, dynamic>.from(w),
+            userUUID: wap.userUUID,
+          );
+          if (_walletAlreadyExists(wap, info)) {
+            skipped++;
+            continue;
+          }
+          await wap.addWalletInfo(info);
+          if (!mounted) return;
+          imported++;
+        } catch (e) {
+          skipped++;
+          debugPrint('ImportCloudBackup: skipping wallet payload: $e');
+        }
+      }
+
+      if (imported == 0) {
+        setState(() {
+          _error = skipped > 0
+              ? 'No wallets could be restored from this backup'
+              : 'No wallets found in the backup file';
+        });
+        return;
       }
 
       if (!mounted) return;
-      final msg = 'Imported $imported wallet(s)'
-          '${skipped > 0 ? ', $skipped already existed' : ''}';
+      final msg =
+          'Imported $imported wallet(s)'
+          '${skipped > 0 ? ', $skipped skipped' : ''}';
       ToastUtils.show(msg);
       Navigator.of(context).pop(true);
     } on WalletBackupException catch (e) {
@@ -157,12 +194,7 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
         child: Stack(
           children: [
             Positioned.fill(child: _buildBody()),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: _buildBottomBar(),
-            ),
+            Positioned(bottom: 0, left: 0, right: 0, child: _buildBottomBar()),
           ],
         ),
       ),
@@ -193,7 +225,9 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
           containerStyle1(
             context,
             padding: EdgeInsets.symmetric(
-                horizontal: su.setWidth(20), vertical: su.setWidth(20)),
+              horizontal: su.setWidth(20),
+              vertical: su.setWidth(20),
+            ),
             margin: EdgeInsets.only(bottom: su.setWidth(30)),
             child: Row(
               children: [
@@ -201,9 +235,11 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
                   child: Text(
                     _selectedFileName ?? 'No file selected',
                     style: TextStyle(
-                      color: _color(_selectedFileName != null
-                          ? AppThemeKeys.mainTextColor
-                          : AppThemeKeys.itemSubtitleTextColor),
+                      color: _color(
+                        _selectedFileName != null
+                            ? AppThemeKeys.mainTextColor
+                            : AppThemeKeys.itemSubtitleTextColor,
+                      ),
                       fontSize: su.setSp(28),
                     ),
                     overflow: TextOverflow.ellipsis,
@@ -255,9 +291,11 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(Icons.shield_outlined,
-                  size: su.setWidth(32),
-                  color: _color(AppThemeKeys.mainBlueColor)),
+              Icon(
+                Icons.shield_outlined,
+                size: su.setWidth(32),
+                color: _color(AppThemeKeys.mainBlueColor),
+              ),
               SizedBox(width: su.setWidth(12)),
               Expanded(
                 child: Text(
@@ -278,13 +316,13 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
   }
 
   Widget _label(String text) => Text(
-        text,
-        style: TextStyle(
-          color: _color(AppThemeKeys.mainTextColor),
-          fontWeight: FontWeight.bold,
-          fontSize: ScreenUtil().setSp(32),
-        ),
-      );
+    text,
+    style: TextStyle(
+      color: _color(AppThemeKeys.mainTextColor),
+      fontWeight: FontWeight.bold,
+      fontSize: ScreenUtil().setSp(32),
+    ),
+  );
 
   Widget _chip(String text, {required VoidCallback onTap}) {
     final su = ScreenUtil();
@@ -292,13 +330,17 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(
-            horizontal: su.setWidth(24), vertical: su.setWidth(12)),
+          horizontal: su.setWidth(24),
+          vertical: su.setWidth(12),
+        ),
         decoration: BoxDecoration(
           color: _color(AppThemeKeys.mainBlueColor),
           borderRadius: BorderRadius.circular(su.setWidth(20)),
         ),
-        child: Text(text,
-            style: TextStyle(color: Colors.white, fontSize: su.setSp(26))),
+        child: Text(
+          text,
+          style: TextStyle(color: Colors.white, fontSize: su.setSp(26)),
+        ),
       ),
     );
   }
@@ -317,11 +359,15 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
           color: _color(AppThemeKeys.backGroundColor),
           child: buttonStyle6(
             context,
-            () { if (!isLoading) _import(); },
+            () {
+              if (!isLoading) _import();
+            },
             'Import Wallets',
-            _color(isLoading
-                ? AppThemeKeys.mainButtonBgColor3
-                : AppThemeKeys.mainButtonBgColor),
+            _color(
+              isLoading
+                  ? AppThemeKeys.mainButtonBgColor3
+                  : AppThemeKeys.mainButtonBgColor,
+            ),
             _color(AppThemeKeys.mainButtonTextColor),
             isLoading,
           ),

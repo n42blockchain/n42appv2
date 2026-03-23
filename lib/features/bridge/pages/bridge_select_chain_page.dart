@@ -51,18 +51,14 @@ class _BridgeSelectChainPageState extends State<BridgeSelectChainPage> {
 
   void _filterChains(String query) {
     final available = _getAvailableChains();
-    if (query.isEmpty) {
-      setState(() {
-        _filteredChains = available;
-      });
-    } else {
-      setState(() {
-        _filteredChains = available.where((chain) {
-          return chain.name.toLowerCase().contains(query.toLowerCase()) ||
-              chain.nativeToken.toLowerCase().contains(query.toLowerCase());
-        }).toList();
-      });
-    }
+    final lowerQuery = query.toLowerCase();
+    setState(() {
+      _filteredChains = query.isEmpty
+          ? available
+          : available.where((chain) =>
+              chain.name.toLowerCase().contains(lowerQuery) ||
+              chain.nativeToken.toLowerCase().contains(lowerQuery)).toList();
+    });
   }
 
   @override
@@ -96,7 +92,7 @@ class _BridgeSelectChainPageState extends State<BridgeSelectChainPage> {
                   ),
                   suffixIcon: _searchController.text.isNotEmpty
                       ? IconButton(
-                          icon: Icon(Icons.clear),
+                          icon: const Icon(Icons.clear),
                           onPressed: () {
                             _searchController.clear();
                             _filterChains('');
@@ -136,7 +132,28 @@ class _BridgeSelectChainPageState extends State<BridgeSelectChainPage> {
     );
   }
 
+  Widget _buildChainInitial(BuildContext context, BridgeChain chain) {
+    return Container(
+      width: ScreenUtil().setWidth(48),
+      height: ScreenUtil().setWidth(48),
+      decoration: BoxDecoration(
+        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+        shape: BoxShape.circle,
+      ),
+      child: Center(
+        child: Text(
+          chain.name.substring(0, 1).toUpperCase(),
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildChainItem(BuildContext context, BridgeChain chain, bool isSelected) {
+    final blueColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
     return InkWell(
       onTap: () => Navigator.pop(context, chain),
       child: Container(
@@ -147,19 +164,15 @@ class _BridgeSelectChainPageState extends State<BridgeSelectChainPage> {
         padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
         decoration: BoxDecoration(
           color: isSelected
-              ? AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withAlpha(30)
+              ? blueColor.withAlpha(30)
               : AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
           border: isSelected
-              ? Border.all(
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                  width: 2,
-                )
+              ? Border.all(color: blueColor, width: 2)
               : null,
         ),
         child: Row(
           children: [
-            // 链图标
             ClipRRect(
               borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24)),
               child: chain.logoUri.isNotEmpty
@@ -167,46 +180,14 @@ class _BridgeSelectChainPageState extends State<BridgeSelectChainPage> {
                       chain.logoUri,
                       width: ScreenUtil().setWidth(48),
                       height: ScreenUtil().setWidth(48),
-                      errorBuilder: (ctx, err, stack) => Container(
-                        width: ScreenUtil().setWidth(48),
-                        height: ScreenUtil().setWidth(48),
-                        decoration: BoxDecoration(
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Center(
-                          child: Text(
-                            chain.name.substring(0, 1).toUpperCase(),
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
+                      errorBuilder: (ctx, err, stack) =>
+                          _buildChainInitial(context, chain),
                     )
-                  : Container(
-                      width: ScreenUtil().setWidth(48),
-                      height: ScreenUtil().setWidth(48),
-                      decoration: BoxDecoration(
-                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Center(
-                        child: Text(
-                          chain.name.substring(0, 1).toUpperCase(),
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
+                  : _buildChainInitial(context, chain),
             ),
 
             SizedBox(width: ScreenUtil().setWidth(20)),
 
-            // 链信息
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -235,7 +216,7 @@ class _BridgeSelectChainPageState extends State<BridgeSelectChainPage> {
             if (isSelected)
               Icon(
                 Icons.check_circle,
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                color: blueColor,
                 size: ScreenUtil().setWidth(40),
               ),
           ],

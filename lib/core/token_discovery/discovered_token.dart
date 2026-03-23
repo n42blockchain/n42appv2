@@ -1,5 +1,7 @@
 import 'dart:math';
 
+final RegExp _trailingZeros = RegExp(r'0+$');
+
 /// A token found on-chain but not yet in the user's wallet.
 class DiscoveredToken {
   final String coinType;        // internal chain key: ETH, BSC, SOL …
@@ -36,7 +38,7 @@ class DiscoveredToken {
     // Trim trailing zeros, keep at most 6 decimal places.
     final meaningful = fracStr
         .substring(0, min(6, fracStr.length))
-        .replaceAll(RegExp(r'0+$'), '');
+        .replaceAll(_trailingZeros, '');
     if (meaningful.isEmpty) return intPart.toString();
     return '$intPart.$meaningful';
   }
