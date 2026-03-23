@@ -142,7 +142,7 @@ dependencies:
 
   # === N42 Chat Module ===
   n42_chat:
-    path: D:/n42/n42_chat
+    git: https://github.com/n42blockchain/n42_chat
 
 dependency_overrides:
   flutter_secure_storage: ^10.0.0
