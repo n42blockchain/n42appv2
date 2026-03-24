@@ -27,6 +27,7 @@ import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
+import 'package:n42_wallet/core/utils/safe_change_notifier.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:web3dart/web3dart.dart';
 
@@ -46,16 +47,8 @@ String? resolveBalanceRpcOverride(CoinModel coinModel) {
 }
 
 class WalletActionProvider extends ChangeNotifier
+    with SafeChangeNotifierMixin
     implements ICoinModelWalletAccess {
-  bool _disposed = false;
-
-  bool get isDisposed => _disposed;
-
-  @override
-  void notifyListeners() {
-    if (_disposed) return;
-    super.notifyListeners();
-  }
 
   /// 公开的刷新方法，用于通知监听者数据已更新
   @override
@@ -231,12 +224,6 @@ class WalletActionProvider extends ChangeNotifier
     notifyListeners();
   }
 
-  @override
-  void dispose() {
-    _disposed = true;
-    super.dispose();
-  }
-
   //获取外国余额，美刀形式
   String getBalanceTotal() {
     return _oCcy.format(_balanceTotal);
@@ -325,10 +312,7 @@ class WalletActionProvider extends ChangeNotifier
     final symbolList = symbols.split(",");
     return [
       for (final symbol in symbolList)
-        ...switch (getCoinModelWithCoinType(symbol)) {
-          final cm? => [cm],
-          null => const <CoinModel>[],
-        },
+        if (getCoinModelWithCoinType(symbol) case final cm?) cm,
     ];
   }
 

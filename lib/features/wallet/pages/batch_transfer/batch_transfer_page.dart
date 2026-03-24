@@ -21,6 +21,7 @@ import 'package:n42_wallet/features/wallet/pages/batch_transfer/batch_transfer_l
 import 'package:n42_wallet/features/wallet/pages/batch_transfer/batch_transfer_widgets.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:n42_wallet/features/wallet/utils/feature_address_utils.dart';
 
 /// 批量转账页面
 class BatchTransferPage extends ConsumerStatefulWidget {
@@ -145,15 +146,13 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
     }
   }
 
-  static final _ethAddrRegex = RegExp(r'^0x[0-9a-fA-F]{40}$');
-
   void _addItem() {
     final address = _addressController.text.trim();
     final amountStr = _amountController.text.trim();
     final memo = _memoController.text.trim();
 
     if (address.isEmpty) return _showSnackBar('Please enter an address');
-    if (!_ethAddrRegex.hasMatch(address)) {
+    if (!FeatureAddressUtils.isValidEvmAddress(address)) {
       return _showSnackBar('Invalid address format');
     }
     if (amountStr.isEmpty) return _showSnackBar('Please enter an amount');

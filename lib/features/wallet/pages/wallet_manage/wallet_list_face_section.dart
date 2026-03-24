@@ -123,7 +123,6 @@ mixin _WalletListFaceMixin on ConsumerState<WalletList> {
     );
     if (!mounted) return;
     if (rData != null && !rData.error) {
-      if (!mounted) return;
       await _state.initData();
     }
   }

@@ -81,11 +81,12 @@ extension _BrowserPageTabs on _BrowserPageState {
   }
 
   Widget _buildTabPreview(BrowserProvider bValue, int index) {
-    final openUrl = bValue.wInfoList[index]['openUrl'] as String? ?? '';
-    final title = bValue.wInfoList[index]['title'] as String? ?? '';
+    final info = bValue.wInfoList[index];
+    final openUrl = info['openUrl'] as String? ?? '';
+    final title = info['title'] as String? ?? '';
     final host = Uri.tryParse(openUrl)?.host ?? '';
-    final progress = (bValue.wInfoList[index]['progress'] as num?)?.toDouble() ?? 0;
-    final isLoading = bValue.wInfoList[index]['load'] == true;
+    final progress = (info['progress'] as num?)?.toDouble() ?? 0;
+    final isLoading = info['load'] == true;
     final subtitleColor = AppThemeUtils.getColorByKey(
       context,
       AppThemeKeys.itemSubtitleTextColor.name,

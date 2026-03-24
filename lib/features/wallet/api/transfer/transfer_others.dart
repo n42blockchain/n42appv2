@@ -313,10 +313,7 @@ mixin _TransferOthersMixin on _TransferBaseMixin {
       "txType": "XRP",
       "issuer": "",
       "currency": "",
-      ...switch (destinationTag) {
-        final tag? => {"destinationTag": tag},
-        null => const <String, dynamic>{},
-      },
+      if (destinationTag != null) "destinationTag": destinationTag,
     };
     XrpApi xrpApi = XrpApi();
     if (sequence == 0) {

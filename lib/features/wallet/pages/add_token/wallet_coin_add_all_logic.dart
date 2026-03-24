@@ -44,7 +44,7 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
       updateView(() => chainMap['edit'] = true);
       Map<String, dynamic>? chainInfoMap =
           netChains[chainMap['coin_name'].toString().toUpperCase()];
-        chainInfoMap ??= dealChain(chainMap);
+      chainInfoMap ??= dealChain(chainMap);
       if (chainInfoMap == null) {
         ToastUtils.show(S.of(context).g_key_3);
         updateView(() => chainMap['edit'] = false);

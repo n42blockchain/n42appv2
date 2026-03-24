@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
+import 'package:n42_wallet/core/utils/safe_change_notifier.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/component/enums/load.dart';
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_connection.dart';
@@ -16,6 +17,7 @@ export 'wallet_connect_state.dart' show WalletConnectState;
 class WalletConnectProvider
     with
         ChangeNotifier,
+        SafeChangeNotifierMixin,
         WidgetsBindingObserver,
         WalletConnectConnection,
         WalletConnectSession,
@@ -24,16 +26,9 @@ class WalletConnectProvider
     WidgetsBinding.instance.addObserver(this);
   }
 
-  bool _disposed = false;
   bool pageOpen = false;
   Load load = Load.finish;
   String errorMessage = "";
-
-  @override
-  void notifyListeners() {
-    if (_disposed) return;
-    super.notifyListeners();
-  }
 
   /// Public refresh — notifies listeners without a state transition.
   void refresh() {
@@ -57,7 +52,6 @@ class WalletConnectProvider
 
   @override
   void dispose() {
-    _disposed = true;
     WidgetsBinding.instance.removeObserver(this);
     cancelReconnectTimer();
     web3client?.dispose();

@@ -46,11 +46,13 @@ class _AAHomePageState extends State<AAHomePage> {
   bool get _hasOwnerAddress =>
       FeatureAddressUtils.isValidEvmAddress(widget.walletAddress);
 
-  void _showUnsupportedSnack() {
-    if (!mounted) return;
+  bool _requireOwnerAddress() {
+    if (_hasOwnerAddress) return true;
+    if (!mounted) return false;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(S.of(context).g_key_bridge_chain_not_supported)),
     );
+    return false;
   }
 
   @override
@@ -72,23 +74,15 @@ class _AAHomePageState extends State<AAHomePage> {
       Navigator.push(context, MaterialPageRoute(builder: (_) => page));
 
   void navigateToCreateAccount() {
-    if (!_hasOwnerAddress) {
-      _showUnsupportedSnack();
-      return;
-    }
-    _pushPage(AAAccountCreatePage(ownerAddress: widget.walletAddress)).then((
-      _,
-    ) {
+    if (!_requireOwnerAddress()) return;
+    _pushPage(AAAccountCreatePage(ownerAddress: widget.walletAddress)).then((_) {
       if (!mounted) return;
       _loadAccounts();
     });
   }
 
   void navigateToAccountList() {
-    if (!_hasOwnerAddress) {
-      _showUnsupportedSnack();
-      return;
-    }
+    if (!_requireOwnerAddress()) return;
     _pushPage(
       AAAccountListPage(
         walletAddress: widget.walletAddress,
@@ -98,10 +92,7 @@ class _AAHomePageState extends State<AAHomePage> {
   }
 
   void navigateToAccountDetail(SmartAccount account) {
-    if (!_hasOwnerAddress) {
-      _showUnsupportedSnack();
-      return;
-    }
+    if (!_requireOwnerAddress()) return;
     _pushPage(
       AAAccountDetailPage(
         account: account,
@@ -111,20 +102,14 @@ class _AAHomePageState extends State<AAHomePage> {
   }
 
   void navigateToSend(SmartAccount account) {
-    if (!_hasOwnerAddress) {
-      _showUnsupportedSnack();
-      return;
-    }
+    if (!_requireOwnerAddress()) return;
     _pushPage(
       AASendPage(account: account, walletAddress: widget.walletAddress),
     );
   }
 
   void navigateToBatchTransaction(SmartAccount account) {
-    if (!_hasOwnerAddress) {
-      _showUnsupportedSnack();
-      return;
-    }
+    if (!_requireOwnerAddress()) return;
     _pushPage(
       AABatchTransactionPage(
         account: account,
@@ -134,10 +119,7 @@ class _AAHomePageState extends State<AAHomePage> {
   }
 
   void navigateToSessionKeys(SmartAccount account) {
-    if (!_hasOwnerAddress) {
-      _showUnsupportedSnack();
-      return;
-    }
+    if (!_requireOwnerAddress()) return;
     _pushPage(SessionKeyManagePage(account: account));
   }
 
@@ -161,9 +143,7 @@ class _AAHomePageState extends State<AAHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: _hasOwnerAddress
-            ? navigateToCreateAccount
-            : _showUnsupportedSnack,
+        onPressed: navigateToCreateAccount,
         backgroundColor: AppThemeUtils.getColorByKey(
           context,
           AppThemeKeys.mainBlueColor.name,

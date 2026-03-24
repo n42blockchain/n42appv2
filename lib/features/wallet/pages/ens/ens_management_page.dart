@@ -13,6 +13,7 @@ import 'package:n42_wallet/features/wallet/pages/ens/ens_management_widgets.dart
 import 'package:n42_wallet/features/wallet/pages/ens/ens_renew_page.dart';
 import 'package:n42_wallet/features/wallet/pages/ens/ens_subdomain_sheet.dart';
 import 'package:n42_wallet/features/wallet/services/ens_registration_service.dart';
+import 'package:n42_wallet/features/wallet/utils/feature_address_utils.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 
 export 'package:n42_wallet/features/wallet/pages/ens/ens_chain_config.dart';
@@ -58,7 +59,6 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
     'com.discord', 'org.telegram', 'description',
   ];
 
-  static final _hexAddrRegex = RegExp(r'^0x[0-9a-fA-F]{40}$');
 
   @override
   void initState() {
@@ -88,7 +88,7 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
     super.dispose();
   }
 
-  bool _isValidAddress(String addr) => _hexAddrRegex.hasMatch(addr.trim());
+  bool _isValidAddress(String addr) => FeatureAddressUtils.isValidEvmAddress(addr);
 
   void _copyToClipboard(String text) {
     Clipboard.setData(ClipboardData(text: text));

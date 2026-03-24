@@ -242,10 +242,7 @@ class FeatureEntryCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                ...switch (statusBadge) {
-                  final badge? => [badge],
-                  null => const <Widget>[],
-                },
+                if (statusBadge case final badge?) badge,
               ],
             ),
 

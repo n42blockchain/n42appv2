@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/features/wallet/utils/feature_address_utils.dart';
 import 'package:n42_wallet/features/wallet/widgets/aa/batch_operation_item.dart';
 
 class AddOperationSheet extends StatefulWidget {
@@ -30,8 +31,6 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
   String? _amountError;
 
   static const _ethLikeTokens = ['ETH', 'BNB', 'MATIC', 'AVAX', 'ARB'];
-  static final _addrRegex = RegExp(r'^0x[0-9a-fA-F]{40}$');
-
   @override
   void dispose() {
     _toController.dispose();
@@ -49,7 +48,7 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
 
     bool valid = true;
 
-    if (!_addrRegex.hasMatch(_toController.text.trim())) {
+    if (!FeatureAddressUtils.isValidEvmAddress(_toController.text.trim())) {
       setState(() => _toError = 'Invalid address (0x...)');
       valid = false;
     }
@@ -225,7 +224,7 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
   Widget _buildTokenSelector(BuildContext context) {
     const tokens = ['ETH', 'USDT', 'USDC', 'DAI', 'WBTC'];
     return DropdownButtonFormField<String>(
-      initialValue: _selectedToken,
+      value: _selectedToken,
       decoration: const InputDecoration(
         labelText: 'Token',
         border: OutlineInputBorder(),

@@ -158,7 +158,7 @@ extension _WalletCoinAddAllImportUI on _WalletCoinAddAllState {
             Expanded(
               child: SizedBox(
                 height: btnH,
-              child: buttonStyle5(
+                child: buttonStyle5(
                   context,
                   () => updateView(() => showImportWidget = false),
                   S.of(context).g_key_79,
