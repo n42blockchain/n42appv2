@@ -243,11 +243,13 @@ mixin _TrxSendLogicMixin on ConsumerState<WalletChainSendTrx> {
     final String? toAddr = await toAddressCheck(
       toTextEditingController.text.trim(),
     );
+    if (!mounted) return;
     if (toAddr == null) {
       setState(() => load = Load.finish);
       return;
     }
     await estimateGasEthLocal(checkAddress: false);
+    if (!mounted) return;
     if (errorMessage != "") {
       setState(() => load = Load.finish);
       return;

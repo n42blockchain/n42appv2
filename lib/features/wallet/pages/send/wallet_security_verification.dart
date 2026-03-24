@@ -89,8 +89,7 @@ class _WalletSecurityVerificationState
       securityMap['face'] = userMap['face'] ?? false;
     }
     if (!mounted) return;
-    showWalletPassword =
-        ref.read(wapBridgeProvider).walletInfo.password != '';
+    showWalletPassword = ref.read(wapBridgeProvider).walletInfo.password != '';
     setState(() {});
   }
 
@@ -149,7 +148,12 @@ class _WalletSecurityVerificationState
       return false;
     }
     final mm = await userInfoApi.checkEmailVerification(codeStr);
-    setState(() => emailErrorMessage = mm.error ? S.of(context).email_code_input_error : '');
+    if (!mounted) return false;
+    setState(
+      () => emailErrorMessage = mm.error
+          ? S.of(context).email_code_input_error
+          : '',
+    );
     return !mm.error;
   }
 
@@ -165,7 +169,12 @@ class _WalletSecurityVerificationState
       return false;
     }
     final mm = await userInfoApi.checkGoogle(codeStr);
-    setState(() => googleErrorMessage = mm.error ? S.of(context).email_code_input_error : '');
+    if (!mounted) return false;
+    setState(
+      () => googleErrorMessage = mm.error
+          ? S.of(context).email_code_input_error
+          : '',
+    );
     return !mm.error;
   }
 
@@ -183,12 +192,14 @@ class _WalletSecurityVerificationState
     }
     if (canCheck) {
       final available = await auth.getAvailableBiometrics();
-      canCheck = available.any(const {
-        BiometricType.face,
-        BiometricType.strong,
-        BiometricType.weak,
-        BiometricType.fingerprint,
-      }.contains);
+      canCheck = available.any(
+        const {
+          BiometricType.face,
+          BiometricType.strong,
+          BiometricType.weak,
+          BiometricType.fingerprint,
+        }.contains,
+      );
     }
     if (!canCheck) {
       setState(() => faceErrorMessage = S.of(context).g_lock_key7);
@@ -240,10 +251,8 @@ class _WalletSecurityVerificationState
     await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => EditWalletPassword(
-          ref.read(wapBridgeProvider).walletInfo,
-          wIndex,
-        ),
+        builder: (context) =>
+            EditWalletPassword(ref.read(wapBridgeProvider).walletInfo, wIndex),
       ),
     );
     initSecurity();
@@ -281,13 +290,22 @@ class _WalletSecurityVerificationState
 
     setState(() => load = Load.loading);
 
-    if (showWalletPassword && !checkPwd()) { _finishLoading(); return; }
+    if (showWalletPassword && !checkPwd()) {
+      _finishLoading();
+      return;
+    }
 
     if (securityMap['email'] == true) {
-      if (!await checkEmailVerification()) { if (mounted) _finishLoading(); return; }
+      if (!await checkEmailVerification()) {
+        if (mounted) _finishLoading();
+        return;
+      }
     }
     if (securityMap['google'] == true) {
-      if (!await checkGoogleVerification()) { if (mounted) _finishLoading(); return; }
+      if (!await checkGoogleVerification()) {
+        if (mounted) _finishLoading();
+        return;
+      }
     }
 
     if (!mounted) return;
@@ -324,11 +342,14 @@ class _WalletSecurityVerificationState
               onTap: pushSetting,
               child: Container(
                 padding: EdgeInsets.symmetric(
-                    horizontal: ScreenUtil().setWidth(30.0)),
+                  horizontal: ScreenUtil().setWidth(30.0),
+                ),
                 child: Image.asset(
                   'assets/img/Setting.png',
                   color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
+                    context,
+                    AppThemeKeys.mainTextColor.name,
+                  ),
                   width: ScreenUtil().setWidth(40.0),
                   height: ScreenUtil().setWidth(40.0),
                 ),
@@ -342,9 +363,7 @@ class _WalletSecurityVerificationState
               Positioned.fill(
                 child: SingleChildScrollView(
                   padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
-                  child: Column(
-                    children: _buildVerificationWidgets(),
-                  ),
+                  child: Column(children: _buildVerificationWidgets()),
                 ),
               ),
               Positioned(

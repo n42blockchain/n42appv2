@@ -43,6 +43,7 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
       });
       chainModel = wap.coinModels[cIndex];
       await chainModel?.getBalance();
+      if (!mounted) return;
       setState(() {});
     }
     gas = BigInt.from(
@@ -57,6 +58,7 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
   Future<void> getBalance() async {
     setState(() => load = Load.loading);
     final bool isOk = await widget.coinModel.getBalance(getToken: false);
+    if (!mounted) return;
     if (!isOk) {
       errorMessage = S.current.g_key_t_44;
       ToastUtils.show(S.current.g_key_t_44);
@@ -194,7 +196,10 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
     }
   }
 
-  void _resetLoad() => setState(() => load = Load.finish);
+  void _resetLoad() {
+    if (!mounted) return;
+    setState(() => load = Load.finish);
+  }
 
   Future<void> signTx(TransationRecordModel trModel) async {
     if (signTxCheck() == false) return;
@@ -226,7 +231,7 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
       ToastUtils.show(e.toString());
     } finally {
       load = Load.finish;
-      setState(() {});
+      if (mounted) setState(() {});
     }
   }
 
@@ -268,7 +273,9 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
       errorMessage = e.toString();
       return false;
     } finally {
-      setState(() => gasLimitLoad = Load.finish);
+      if (mounted) {
+        setState(() => gasLimitLoad = Load.finish);
+      }
     }
   }
 

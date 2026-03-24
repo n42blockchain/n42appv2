@@ -72,7 +72,8 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
   void closeKeyboard();
 
   String get _coinType => coinModel.coin['coinType']?.toString() ?? '';
-  String get _blockchainType => coinModel.coin['blockchainType']?.toString() ?? '';
+  String get _blockchainType =>
+      coinModel.coin['blockchainType']?.toString() ?? '';
   bool get _isContract => coinModel.coin['isContract'] == true;
   int get _decimals => (coinModel.coin['decimals'] as num?)?.toInt() ?? 18;
 
@@ -107,14 +108,10 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
       }
       chainModel = wap.coinModels[idx];
       await chainModel?.getBalance();
+      if (!mounted) return;
       setState(() {});
     }
-    gas = BigInt.from(
-      getCoinGas(
-        _coinType,
-        contract: _isContract,
-      ),
-    );
+    gas = BigInt.from(getCoinGas(_coinType, contract: _isContract));
     await getBalance();
     await getGasPrice();
     if (getEthLayer2(_coinType)) {
@@ -126,6 +123,7 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
   Future<void> getBalance() async {
     setState(() => load = Load.loading);
     final isOk = await coinModel.getBalance(getToken: false);
+    if (!mounted) return;
     if (isOk != false) return;
     errorMessage = S.current.g_key_t_44;
     ToastUtils.show(errorMessage);
@@ -214,7 +212,8 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
       ToastUtils.show(errorMessage);
     }
     totalGasPrice =
-        totalGasPrice + (BigInt.from(100) * gasPriceEth * BigInt.from(2100)) ~/ BigInt.from(16);
+        totalGasPrice +
+        (BigInt.from(100) * gasPriceEth * BigInt.from(2100)) ~/ BigInt.from(16);
     load = Load.finish;
     setState(() {});
   }
@@ -275,7 +274,9 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
       errorMessage = e.toString();
       return false;
     } finally {
-      setState(() => gasLimitLoad = Load.finish);
+      if (mounted) {
+        setState(() => gasLimitLoad = Load.finish);
+      }
     }
   }
 
@@ -355,10 +356,7 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
           fee: totalGasPrice,
         );
         valueTextEditingController.text = regular.formartNum(
-          toEther(
-            transferValue.toString(),
-            _decimals,
-          ).toDouble(),
+          toEther(transferValue.toString(), _decimals).toDouble(),
           14,
           isCrop: true,
           isFill0: false,
@@ -391,9 +389,11 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
     setState(() => load = Load.loading);
 
     final toAddr = await toAddressCheck(toTextEditingController.text.trim());
+    if (!mounted) return;
     if (toAddr == null) return setState(() => load = Load.finish);
 
     await estimateGasEthLocal(checkAddress: false);
+    if (!mounted) return;
     if (errorMessage != '') return setState(() => load = Load.finish);
 
     final uBalance = _isContract
@@ -449,7 +449,12 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
   Widget buildWalletBaseSend(TransationRecordModel trModel, String chainUnit);
 
   Future<void> signTx(TransationRecordModel trModel) async {
-    if (!signTxCheck()) return;
+    if (!signTxCheck()) {
+      if (mounted) {
+        setState(() => load = Load.finish);
+      }
+      return;
+    }
     try {
       final mm = await TransferApi().transferWallet(
         trModel: trModel,
@@ -477,7 +482,7 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
       ToastUtils.show(e.toString());
     } finally {
       load = Load.finish;
-      setState(() {});
+      if (mounted) setState(() {});
     }
   }
 

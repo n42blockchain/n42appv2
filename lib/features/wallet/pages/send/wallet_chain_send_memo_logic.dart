@@ -148,6 +148,7 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
     setState(() => load = Load.loading);
 
     final String? toAddr = await toAddressCheck(toCtrl.text);
+    if (!mounted) return;
     if (toAddr == null) {
       setState(() => load = Load.finish);
       return;
