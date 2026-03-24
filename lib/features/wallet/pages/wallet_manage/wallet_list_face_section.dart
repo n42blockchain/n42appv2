@@ -71,12 +71,14 @@ mixin _WalletListFaceMixin on ConsumerState<WalletList> {
 
   Future<void> verify() async {
     final rData = await _matchFace();
+    if (!mounted) return;
     if (rData == null) return;
     await checkFaceBindAddress(rData);
   }
 
   Future<void> unbind() async {
     final rData = await _matchFace();
+    if (!mounted) return;
     if (rData == null) return;
 
     setState(() {

@@ -250,6 +250,7 @@ mixin _SecurityGoogleVedificationLogic on State<SecurityGoogleVedification> {
     });
 
     bool rValue = await checkPwd();
+    if (!mounted) return;
     if (!rValue) {
       setState(() {
         load = Load.finish;
@@ -259,6 +260,7 @@ mixin _SecurityGoogleVedificationLogic on State<SecurityGoogleVedification> {
 
     if (securityMap['email']) {
       rValue = await checkEmailVerification();
+      if (!mounted) return;
       if (!rValue) {
         setState(() {
           load = Load.finish;
@@ -269,6 +271,7 @@ mixin _SecurityGoogleVedificationLogic on State<SecurityGoogleVedification> {
 
     if (securityMap['google'] == false) {
       rValue = await checkGoogleVerification();
+      if (!mounted) return;
       if (!rValue) {
         setState(() {
           load = Load.finish;

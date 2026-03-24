@@ -1,4 +1,4 @@
-﻿import 'dart:async';
+import 'dart:async';
 
 import 'package:n42_wallet/features/component/enums/load.dart';
 import 'package:n42_wallet/features/login/api/handtype.dart';
@@ -21,7 +21,8 @@ class CaptchaButton extends StatefulWidget {
   State<CaptchaButton> createState() => _CaptchaButtonState();
 }
 
-class _CaptchaButtonState extends State<CaptchaButton> with WidgetsBindingObserver {
+class _CaptchaButtonState extends State<CaptchaButton>
+    with WidgetsBindingObserver {
   Timer? _timer;
   int _countdown = 61;
   String? mobile;
@@ -71,7 +72,9 @@ class _CaptchaButtonState extends State<CaptchaButton> with WidgetsBindingObserv
     if (widget.codeType == HandType.unRegister) {
       _doSendCode(() => loginApi.sendUnRegisterEmailCode());
     } else {
-      final type = widget.codeType == HandType.restPassword ? "resetPwd" : "register";
+      final type = widget.codeType == HandType.restPassword
+          ? "resetPwd"
+          : "register";
       _doSendCode(() => loginApi.sendEmailCode(mobile!, type));
     }
   }
@@ -80,6 +83,7 @@ class _CaptchaButtonState extends State<CaptchaButton> with WidgetsBindingObserv
     try {
       setState(() => load = Load.loading);
       final data = await apiCall();
+      if (!mounted) return;
       if (data["code"] == 200) {
         setState(() => _countdown -= 1);
         _startTimer();
@@ -91,7 +95,9 @@ class _CaptchaButtonState extends State<CaptchaButton> with WidgetsBindingObserv
       }
     } finally {
       canClick = true;
-      setState(() => load = Load.finish);
+      if (mounted) {
+        setState(() => load = Load.finish);
+      }
     }
   }
 
@@ -108,17 +114,23 @@ class _CaptchaButtonState extends State<CaptchaButton> with WidgetsBindingObserv
   }
 
   BoxDecoration get _buttonDecoration => BoxDecoration(
-        border: Border.all(
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-        ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-      );
+    border: Border.all(
+      color: AppThemeUtils.getColorByKey(
+        context,
+        AppThemeKeys.mainBlueColor.name,
+      ),
+    ),
+    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+  );
 
   @override
   Widget build(BuildContext context) {
     if (load == Load.loading) {
       return Container(
-        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(28), vertical: ScreenUtil().setWidth(12)),
+        padding: EdgeInsets.symmetric(
+          horizontal: ScreenUtil().setWidth(28),
+          vertical: ScreenUtil().setWidth(12),
+        ),
         decoration: _buttonDecoration,
         alignment: Alignment.center,
         child: SizedBox(
@@ -131,7 +143,10 @@ class _CaptchaButtonState extends State<CaptchaButton> with WidgetsBindingObserv
     return GestureDetector(
       onTap: _countdown == 61 ? _onTaped : null,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(28), vertical: ScreenUtil().setWidth(12)),
+        padding: EdgeInsets.symmetric(
+          horizontal: ScreenUtil().setWidth(28),
+          vertical: ScreenUtil().setWidth(12),
+        ),
         decoration: _buttonDecoration,
         child: Text(
           _countdown == 61
@@ -140,7 +155,9 @@ class _CaptchaButtonState extends State<CaptchaButton> with WidgetsBindingObserv
           style: TextStyle(
             fontSize: ScreenUtil().setSp(28),
             color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainTextColor.name),
+              context,
+              AppThemeKeys.mainTextColor.name,
+            ),
           ),
         ),
       ),

@@ -1,4 +1,4 @@
-﻿import 'package:n42_wallet/core/config/app_config.dart';
+import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:flutter/gestures.dart';
@@ -27,6 +27,7 @@ class _UserProtocolState extends State<UserProtocol> {
 
   Future<void> init() async {
     flag = await SPUtil().getReadLoginClause();
+    if (!mounted) return;
     setState(() {});
   }
 
@@ -34,7 +35,10 @@ class _UserProtocolState extends State<UserProtocol> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
-      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
+      color: AppThemeUtils.getColorByKey(
+        context,
+        AppThemeKeys.backGroundColor.name,
+      ),
       child: Row(
         children: [
           RoundCheckBox(
@@ -52,46 +56,52 @@ class _UserProtocolState extends State<UserProtocol> {
               ),
             ),
             checkedColor: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainBlueColor.name),
-            animationDuration: const Duration(
-              milliseconds: 50,
+              context,
+              AppThemeKeys.mainBlueColor.name,
             ),
+            animationDuration: const Duration(milliseconds: 50),
           ),
-          SizedBox(
-            width: ScreenUtil().setWidth(20.0),
-          ),
+          SizedBox(width: ScreenUtil().setWidth(20.0)),
           Expanded(
             flex: 1,
             child: RichText(
               text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: S.of(context).g_key_user_p1,
-                      style: TextStyle(
-                        color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.mainTextColor.name),
-                        fontSize: ScreenUtil().setSp(24.0),
+                children: [
+                  TextSpan(
+                    text: S.of(context).g_key_user_p1,
+                    style: TextStyle(
+                      color: AppThemeUtils.getColorByKey(
+                        context,
+                        AppThemeKeys.mainTextColor.name,
                       ),
+                      fontSize: ScreenUtil().setSp(24.0),
                     ),
-                    TextSpan(
-                      text: "${S.of(context).g_key_user_p2},${S.of(context).g_key_user_p3}.",
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(24.0),
-                        color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.mainBlueColor.name),
-                        decoration: TextDecoration.underline,
+                  ),
+                  TextSpan(
+                    text:
+                        "${S.of(context).g_key_user_p2},${S.of(context).g_key_user_p3}.",
+                    style: TextStyle(
+                      fontSize: ScreenUtil().setSp(24.0),
+                      color: AppThemeUtils.getColorByKey(
+                        context,
+                        AppThemeKeys.mainBlueColor.name,
                       ),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () async {
-                          final url = Uri.parse(
-                            "${AppConfig.apiUrl['walletamazeBrowser']!}/static/terms_of_use.html",
+                      decoration: TextDecoration.underline,
+                    ),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () async {
+                        final url = Uri.parse(
+                          "${AppConfig.apiUrl['walletamazeBrowser']!}/static/terms_of_use.html",
+                        );
+                        if (await canLaunchUrl(url)) {
+                          await launchUrl(
+                            url,
+                            mode: LaunchMode.externalApplication,
                           );
-                          if (await canLaunchUrl(url)) {
-                            await launchUrl(url, mode: LaunchMode.externalApplication);
-                          }
-                        },
-                    ),
-                  ]
+                        }
+                      },
+                  ),
+                ],
               ),
               maxLines: 4,
             ),
