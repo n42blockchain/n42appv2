@@ -59,12 +59,12 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
   @override
   late final TokenViewApi tokenViewApi = TokenViewApi();
 
-  late final AddressValidator addressValidator =
-      AddressValidator(tokenViewApi: tokenViewApi);
+  late final AddressValidator addressValidator = AddressValidator(
+    tokenViewApi: tokenViewApi,
+  );
 
   @override
-  final TextEditingController toTextEditingController =
-      TextEditingController();
+  final TextEditingController toTextEditingController = TextEditingController();
   @override
   final TextEditingController valueTextEditingController =
       TextEditingController();
@@ -140,8 +140,10 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
         }
         ensConfirmed = true;
       }
-      debugPrint('ENS resolved: ${result.ensName} -> '
-          '${AddressValidator.getAddressPreview(result.resolvedAddress ?? "")}');
+      debugPrint(
+        'ENS resolved: ${result.ensName} -> '
+        '${AddressValidator.getAddressPreview(result.resolvedAddress ?? "")}',
+      );
     }
 
     toErrorMessage = '';
@@ -159,7 +161,8 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
     final result = await Navigator.push<GasEstimateModel>(
       context,
       MaterialPageRoute(
-          builder: (_) => GasSettingsPage(gasEstimate: gasEstimate!)),
+        builder: (_) => GasSettingsPage(gasEstimate: gasEstimate!),
+      ),
     );
     if (result != null && mounted) {
       setState(() {
@@ -172,12 +175,10 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
   }
 
   @override
-  Widget buildWalletBaseSend(
-          TransationRecordModel trModel, String chainUnit) =>
+  Widget buildWalletBaseSend(TransationRecordModel trModel, String chainUnit) =>
       WalletBaseSend(trModel, null, chainUnit);
 
   void scanQR() async {
-    final nav = Navigator.of(context);
     final scanValue = await Navigator.push<String>(
       context,
       MaterialPageRoute(builder: (_) => ScanPage()),
@@ -193,7 +194,6 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
       }
       toAddressCheck(scanValue);
     }
-    nav.pop();
   }
 
   void faceMatchTypeWidget() {
@@ -263,8 +263,7 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
-        text:
-            '${S.of(context).g_key_37} ${widget.coinModel.coin['miniName']}',
+        text: '${S.of(context).g_key_37} ${widget.coinModel.coin['miniName']}',
       ),
       body: SafeArea(
         child: GestureDetector(
@@ -272,9 +271,7 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
           child: Stack(
             children: [
               Positioned.fill(
-                child: SingleChildScrollView(
-                  child: _buildScrollContent(),
-                ),
+                child: SingleChildScrollView(child: _buildScrollContent()),
               ),
               _buildSendButton(),
             ],
@@ -322,8 +319,9 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
             nextFocusNode: toNode,
             noteErrorMessage: noteErrorMessage,
             onChanged: (v) {
-              noteErrorMessage =
-                  v.length > 100 ? S.of(context).nicknameMessage(100) : '';
+              noteErrorMessage = v.length > 100
+                  ? S.of(context).nicknameMessage(100)
+                  : '';
               setState(() {});
             },
           ),
@@ -373,9 +371,11 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
               isLoading
                   ? '${S.of(context).g_key_106}...'
                   : S.of(context).g_key_48,
-              _themeColor(isLoading
-                  ? AppThemeKeys.mainButtonBgColor3
-                  : AppThemeKeys.mainButtonBgColor),
+              _themeColor(
+                isLoading
+                    ? AppThemeKeys.mainButtonBgColor3
+                    : AppThemeKeys.mainButtonBgColor,
+              ),
               _themeColor(AppThemeKeys.mainButtonTextColor),
               isLoading,
             ),

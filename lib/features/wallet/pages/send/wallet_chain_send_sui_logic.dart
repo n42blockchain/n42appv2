@@ -367,7 +367,8 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
   }
 
   bool signTxCheck() {
-    if (widget.coinModel.coin['blockchainType'] != BlockchainType.Ethereum.name) {
+    if (widget.coinModel.coin['blockchainType'] !=
+        BlockchainType.Ethereum.name) {
       return true;
     }
     if (!widget.coinModel.coin['isContract']) return true;
@@ -390,7 +391,6 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
       toTextEditingController.text = scanValue;
       toAddressCheck(scanValue);
     }
-    Navigator.pop(context);
   }
 
   Future<void> maxTag() async {

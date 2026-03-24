@@ -339,7 +339,6 @@ mixin _TrxSendLogicMixin on ConsumerState<WalletChainSendTrx> {
       toTextEditingController.text = scanValue;
       toAddressCheck(scanValue);
     }
-    Navigator.pop(context);
   }
 
   Future<void> maxTag() async {
