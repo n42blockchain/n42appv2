@@ -203,7 +203,8 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
   void scanQR() async {
     String? scanValue = await Navigator.push(
         context, MaterialPageRoute(builder: (context) => ScanPage()));
-    if (scanValue != null) {
+    if (!mounted || scanValue == null) return;
+    if (scanValue.isNotEmpty) {
       tokenEditingController.text = scanValue;
       addressCheck(scanValue);
       updateView();

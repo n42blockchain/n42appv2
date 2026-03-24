@@ -8,6 +8,7 @@ mixin _WalletListActionsMixin on ConsumerState<WalletList> {
         builder: (_) => WalletManage(walletInfo: info, walletIndex: index),
       ),
     );
+    if (!mounted) return;
     await (this as _WalletListState).initData();
   }
 

@@ -153,6 +153,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                       builder: (context) => SecurityEdit('email'),
                     ),
                   );
+                  if (!mounted) return;
                   init();
                 },
               ),

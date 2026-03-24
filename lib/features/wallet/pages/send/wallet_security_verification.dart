@@ -243,6 +243,7 @@ class _WalletSecurityVerificationState
 
   Future<void> pushSetting() async {
     await Navigator.pushNamed(context, 'securitySetting');
+    if (!mounted) return;
     initSecurity();
   }
 
@@ -255,6 +256,7 @@ class _WalletSecurityVerificationState
             EditWalletPassword(ref.read(wapBridgeProvider).walletInfo, wIndex),
       ),
     );
+    if (!mounted) return;
     initSecurity();
   }
 

@@ -201,6 +201,7 @@ Future<void> showAddTokenSheet(BuildContext context, WidgetRef ref) async {
       context,
       MaterialPageRoute(builder: (_) => WalletCoinAddAll("", coinType: cType)),
     );
+    if (!context.mounted) return;
     if (result == true) {
       ref.read(wapBridgeProvider).initWallet(shouldInitCoinInfo: true);
     }
