@@ -18,9 +18,14 @@ mixin AirdropHomeWidgetsMixin on State<AirdropHomePage>, AirdropHomeLogicMixin {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-            AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
-                .withValues(alpha: 180 / 255),
+            AppThemeUtils.getColorByKey(
+              context,
+              AppThemeKeys.mainBlueColor.name,
+            ),
+            AppThemeUtils.getColorByKey(
+              context,
+              AppThemeKeys.mainBlueColor.name,
+            ).withValues(alpha: 180 / 255),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -60,7 +65,9 @@ mixin AirdropHomeWidgetsMixin on State<AirdropHomePage>, AirdropHomeLogicMixin {
                 ),
                 decoration: BoxDecoration(
                   color: Colors.white24,
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+                  borderRadius: BorderRadius.circular(
+                    ScreenUtil().setWidth(20),
+                  ),
                 ),
                 child: Text(
                   '${p.stats.eligibleAirdrops} Eligible',
@@ -157,6 +164,7 @@ mixin AirdropHomeWidgetsMixin on State<AirdropHomePage>, AirdropHomeLogicMixin {
           if (index == airdrops.length) {
             // 加载更多 - 在帧回调中触发以避免在 build 过程中修改状态
             WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (!mounted) return;
               p.loadMore();
             });
             return Center(
@@ -179,7 +187,10 @@ mixin AirdropHomeWidgetsMixin on State<AirdropHomePage>, AirdropHomeLogicMixin {
         margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
         padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+          color: AppThemeUtils.getColorByKey(
+            context,
+            AppThemeKeys.itemBgColor.name,
+          ),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
           border: airdrop.isExpiringSoon
               ? Border.all(color: Colors.orange, width: 1)
@@ -192,7 +203,9 @@ mixin AirdropHomeWidgetsMixin on State<AirdropHomePage>, AirdropHomeLogicMixin {
               children: [
                 // 项目 Logo
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
+                  borderRadius: BorderRadius.circular(
+                    ScreenUtil().setWidth(10),
+                  ),
                   child: Image.network(
                     airdrop.projectLogo,
                     width: ScreenUtil().setWidth(48),
@@ -202,7 +215,9 @@ mixin AirdropHomeWidgetsMixin on State<AirdropHomePage>, AirdropHomeLogicMixin {
                       height: ScreenUtil().setWidth(48),
                       decoration: BoxDecoration(
                         color: Colors.grey.withValues(alpha: 30 / 255),
-                        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
+                        borderRadius: BorderRadius.circular(
+                          ScreenUtil().setWidth(10),
+                        ),
                       ),
                       child: const Icon(Icons.token, color: Colors.grey),
                     ),
@@ -317,9 +332,13 @@ mixin AirdropHomeWidgetsMixin on State<AirdropHomePage>, AirdropHomeLogicMixin {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
                     foregroundColor: Colors.white,
-                    padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(12)),
+                    padding: EdgeInsets.symmetric(
+                      vertical: ScreenUtil().setWidth(12),
+                    ),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                      borderRadius: BorderRadius.circular(
+                        ScreenUtil().setWidth(8),
+                      ),
                     ),
                   ),
                   child: Text(

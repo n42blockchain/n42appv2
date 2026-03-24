@@ -42,6 +42,7 @@ class _MessageListState extends ConsumerState<MessageList> {
     super.initState();
     // Clear unread count when opening message list - using Riverpod
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
       ref.read(unreadCountProvider.notifier).reset();
     });
   }

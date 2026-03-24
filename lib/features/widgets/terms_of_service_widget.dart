@@ -65,8 +65,8 @@ class _TermsOfServiceWidgetState extends State<TermsOfServiceWidget> {
     }
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _webViewController.loadRequest(
-          Uri.parse(widget.url));
+      if (!mounted) return;
+      _webViewController.loadRequest(Uri.parse(widget.url));
     });
   }
 

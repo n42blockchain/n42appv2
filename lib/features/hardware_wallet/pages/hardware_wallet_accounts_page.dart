@@ -22,10 +22,12 @@ class HardwareWalletAccountsPage extends StatefulWidget {
   const HardwareWalletAccountsPage({super.key, required this.provider});
 
   @override
-  State<HardwareWalletAccountsPage> createState() => _HardwareWalletAccountsPageState();
+  State<HardwareWalletAccountsPage> createState() =>
+      _HardwareWalletAccountsPageState();
 }
 
-class _HardwareWalletAccountsPageState extends State<HardwareWalletAccountsPage> {
+class _HardwareWalletAccountsPageState
+    extends State<HardwareWalletAccountsPage> {
   String _selectedCoinType = 'ETH';
   bool _isLoading = false;
   bool _isLoadingMore = false;
@@ -33,29 +35,30 @@ class _HardwareWalletAccountsPageState extends State<HardwareWalletAccountsPage>
   /// 支持的链列表（symbol, name）
   static const List<Map<String, String>> _supportedCoins = [
     // EVM 链 — 共用 Ledger Ethereum app
-    {'symbol': 'ETH',  'name': 'Ethereum'},
-    {'symbol': 'BNB',  'name': 'BNB Chain'},
-    {'symbol': 'MATIC','name': 'Polygon'},
-    {'symbol': 'ARB',  'name': 'Arbitrum'},
-    {'symbol': 'OP',   'name': 'Optimism'},
+    {'symbol': 'ETH', 'name': 'Ethereum'},
+    {'symbol': 'BNB', 'name': 'BNB Chain'},
+    {'symbol': 'MATIC', 'name': 'Polygon'},
+    {'symbol': 'ARB', 'name': 'Arbitrum'},
+    {'symbol': 'OP', 'name': 'Optimism'},
     {'symbol': 'BASE', 'name': 'Base'},
     {'symbol': 'AVAX', 'name': 'Avalanche'},
     // UTXO 链
-    {'symbol': 'BTC',  'name': 'Bitcoin'},
-    {'symbol': 'LTC',  'name': 'Litecoin'},
+    {'symbol': 'BTC', 'name': 'Bitcoin'},
+    {'symbol': 'LTC', 'name': 'Litecoin'},
     {'symbol': 'DOGE', 'name': 'Dogecoin'},
-    {'symbol': 'BCH',  'name': 'Bitcoin Cash'},
+    {'symbol': 'BCH', 'name': 'Bitcoin Cash'},
     // 其他链
-    {'symbol': 'SOL',  'name': 'Solana'},
+    {'symbol': 'SOL', 'name': 'Solana'},
     {'symbol': 'ATOM', 'name': 'Cosmos'},
-    {'symbol': 'DOT',  'name': 'Polkadot'},
-    {'symbol': 'TRX',  'name': 'Tron'},
+    {'symbol': 'DOT', 'name': 'Polkadot'},
+    {'symbol': 'TRX', 'name': 'Tron'},
   ];
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
       _loadAccounts();
     });
   }
@@ -84,9 +87,7 @@ class _HardwareWalletAccountsPageState extends State<HardwareWalletAccountsPage>
   Widget build(BuildContext context) {
     final s = S.of(context);
     return Scaffold(
-      appBar: AppBarWidget(
-        text: s.g_key_hw_wallet_accounts,
-      ),
+      appBar: AppBarWidget(text: s.g_key_hw_wallet_accounts),
       body: SafeArea(
         child: ListenableBuilder(
           listenable: widget.provider,
@@ -128,15 +129,16 @@ class _HardwareWalletAccountsPageState extends State<HardwareWalletAccountsPage>
     );
   }
 
-  Widget _buildAccountsList(BuildContext context, HardwareWalletProvider provider) {
+  Widget _buildAccountsList(
+    BuildContext context,
+    HardwareWalletProvider provider,
+  ) {
     final accounts = provider.accounts;
 
     if (accounts.isEmpty) {
-      final appName = LedgerApps.getAppName(_selectedCoinType) ?? _selectedCoinType;
-      return _HWEmptyAccountsView(
-        appName: appName,
-        onRetry: _loadAccounts,
-      );
+      final appName =
+          LedgerApps.getAppName(_selectedCoinType) ?? _selectedCoinType;
+      return _HWEmptyAccountsView(appName: appName, onRetry: _loadAccounts);
     }
 
     return ListView.builder(
@@ -175,10 +177,12 @@ class _HardwareWalletAccountsPageState extends State<HardwareWalletAccountsPage>
       builder: (dialogContext) => AlertDialog(
         title: Text(S.of(context).g_key_hw_add_account),
         content: Text(
-          S.of(context).g_key_hw_add_account_content(
-            account.shortAddress,
-            account.coinType,
-          ),
+          S
+              .of(context)
+              .g_key_hw_add_account_content(
+                account.shortAddress,
+                account.coinType,
+              ),
         ),
         actions: [
           TextButton(
@@ -198,7 +202,9 @@ class _HardwareWalletAccountsPageState extends State<HardwareWalletAccountsPage>
   }
 
   Future<void> _importAccount(
-      BuildContext context, HardwareWalletAccount account) async {
+    BuildContext context,
+    HardwareWalletAccount account,
+  ) async {
     try {
       final success = await widget.provider.importAccount(account);
       if (!context.mounted) return;

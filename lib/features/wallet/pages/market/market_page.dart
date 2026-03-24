@@ -287,6 +287,7 @@ class _MarketPageState extends ConsumerState<MarketPage>
     }
     final normalized = normalizeMarketWatchlistSymbols(updated);
     await SPUtil().saveMarketWatchlist(normalized);
+    if (!mounted) return;
     setState(() => _watchlistSymbols = normalized);
     await _loadWatchlist();
   }
@@ -298,7 +299,10 @@ class _MarketPageState extends ConsumerState<MarketPage>
     Navigator.push(
       context,
       MaterialPageRoute(builder: (_) => MarketCoinInfo(normalized)),
-    ).then((_) => _loadAlerts()); // refresh bell states on return
+    ).then((_) {
+      if (!mounted) return;
+      _loadAlerts();
+    }); // refresh bell states on return
   }
 
   Map<String, dynamic> _normalize(
