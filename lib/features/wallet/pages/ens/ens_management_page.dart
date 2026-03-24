@@ -44,7 +44,8 @@ class EnsManagementPage extends StatefulWidget {
 }
 
 class _EnsManagementPageState extends State<EnsManagementPage> {
-  final EnsRegistrationService _ensService = EnsRegistrationServiceProvider.instance;
+  final EnsRegistrationService _ensService =
+      EnsRegistrationServiceProvider.instance;
 
   bool _isLoading = false;
   late EnsChainConfig _domainChain;
@@ -54,8 +55,13 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
   bool _subdomainsLoading = false;
 
   static const List<String> _commonRecordKeys = [
-    'email', 'url', 'com.twitter', 'com.github',
-    'com.discord', 'org.telegram', 'description',
+    'email',
+    'url',
+    'com.twitter',
+    'com.github',
+    'com.discord',
+    'org.telegram',
+    'description',
   ];
 
   static final _hexAddrRegex = RegExp(r'^0x[0-9a-fA-F]{40}$');
@@ -113,14 +119,24 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
     VoidCallback? onSuccess,
   }) async {
     setState(() => _isLoading = true);
-    final result = await action();
-    if (mounted) {
-      setState(() => _isLoading = false);
-      if (!result.error) {
-        _showSnack(successMessage, bg: Colors.green);
-        onSuccess?.call();
-      } else {
-        _showSnack(result.data?.toString() ?? S.of(context).g_key_error_3, bg: Colors.red);
+    try {
+      final result = await action();
+      if (mounted) {
+        setState(() => _isLoading = false);
+        if (!result.error) {
+          _showSnack(successMessage, bg: Colors.green);
+          onSuccess?.call();
+        } else {
+          _showSnack(
+            result.data?.toString() ?? S.of(context).g_key_error_3,
+            bg: Colors.red,
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => _isLoading = false);
+        _showSnack(e.toString(), bg: Colors.red);
       }
     }
   }
@@ -163,23 +179,33 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
 
   Future<void> _setPrimaryName() async {
     await _runWithLoading(
-      action: () => _ensService.setPrimaryName(widget.ownedEns.name, widget.walletAddress),
+      action: () => _ensService.setPrimaryName(
+        widget.ownedEns.name,
+        widget.walletAddress,
+      ),
       successMessage: S.of(context).g_key_ens_primary_set,
     );
   }
 
   Future<void> _loadSubdomains() async {
     setState(() => _subdomainsLoading = true);
-    final result = await _ensService.getSubdomains(widget.ownedEns.name);
-    if (mounted) {
-      setState(() {
-        _subdomainsLoading = false;
-        if (!result.error && result.data is List) {
-          _subdomains = (result.data as List<SubdomainInfo>)
-              .where((s) => !s.isDeleted)
-              .toList();
-        }
-      });
+    try {
+      final result = await _ensService.getSubdomains(widget.ownedEns.name);
+      if (mounted) {
+        setState(() {
+          _subdomainsLoading = false;
+          if (!result.error && result.data is List) {
+            _subdomains = (result.data as List<SubdomainInfo>)
+                .where((s) => !s.isDeleted)
+                .toList();
+          }
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => _subdomainsLoading = false);
+        _showSnack(e.toString(), bg: Colors.red);
+      }
     }
   }
 
@@ -221,7 +247,8 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
     if (confirm != true) return;
 
     await _runWithLoading(
-      action: () => _ensService.deleteSubdomain(widget.ownedEns.name, sub.label),
+      action: () =>
+          _ensService.deleteSubdomain(widget.ownedEns.name, sub.label),
       successMessage: successMessage,
       onSuccess: _loadSubdomains,
     );
@@ -319,7 +346,9 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
                   ownedEns: widget.ownedEns,
                   domainChain: _domainChain,
                   onRenew: _navigateToRenew,
-                  onSetPrimary: widget.ownedEns.isPrimary ? null : _setPrimaryName,
+                  onSetPrimary: widget.ownedEns.isPrimary
+                      ? null
+                      : _setPrimaryName,
                   onCopy: () => _copyToClipboard(widget.ownedEns.name),
                 ),
                 SizedBox(height: ScreenUtil().setWidth(24)),

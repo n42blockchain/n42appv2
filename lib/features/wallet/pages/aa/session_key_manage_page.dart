@@ -25,10 +25,7 @@ import 'session_key_sheets.dart';
 class SessionKeyManagePage extends StatefulWidget {
   final SmartAccount account;
 
-  const SessionKeyManagePage({
-    super.key,
-    required this.account,
-  });
+  const SessionKeyManagePage({super.key, required this.account});
 
   @override
   State<SessionKeyManagePage> createState() => _SessionKeyManagePageState();
@@ -38,10 +35,13 @@ class _SessionKeyManagePageState extends State<SessionKeyManagePage>
     with SingleTickerProviderStateMixin {
   static const _accentColor = Color(0xFF8B5CF6);
 
-  late final TabController _tabController =
-      TabController(length: 3, vsync: this);
-  late final SessionKeyRepository _repository =
-      SessionKeyRepository(AppDatabase());
+  late final TabController _tabController = TabController(
+    length: 3,
+    vsync: this,
+  );
+  late final SessionKeyRepository _repository = SessionKeyRepository(
+    AppDatabase(),
+  );
   bool _isLoading = true;
   List<SessionKeyData> _sessionKeys = [];
 
@@ -80,6 +80,7 @@ class _SessionKeyManagePageState extends State<SessionKeyManagePage>
         account: widget.account,
         repository: _repository,
         onCreated: (key) {
+          if (!mounted) return;
           setState(() => _sessionKeys.insert(0, key));
           _tabController.animateTo(0); // jump to Active tab
         },
@@ -88,25 +89,37 @@ class _SessionKeyManagePageState extends State<SessionKeyManagePage>
   }
 
   Future<void> _performRevoke(SessionKeyData key) async {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(S.of(context).g_key_aa_revoking),
-      duration: const Duration(seconds: 2),
-    ));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(S.of(context).g_key_aa_revoking),
+        duration: const Duration(seconds: 2),
+      ),
+    );
 
     final idx = _sessionKeys.indexWhere((k) => k.keyAddress == key.keyAddress);
     if (idx >= 0 && mounted) {
-      setState(() => _sessionKeys[idx] = key.copyWith(status: SessionKeyStatus.revoked));
+      setState(
+        () =>
+            _sessionKeys[idx] = key.copyWith(status: SessionKeyStatus.revoked),
+      );
     }
 
-    final ok = await _repository.revokeKey(key.keyAddress, widget.account.chainId);
+    final ok = await _repository.revokeKey(
+      key.keyAddress,
+      widget.account.chainId,
+    );
     if (!mounted) return;
 
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(ok
-          ? S.of(context).g_key_aa_revoked
-          : S.of(context).g_key_aa_session_create_failed),
-      backgroundColor: ok ? Colors.green : Colors.red,
-    ));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          ok
+              ? S.of(context).g_key_aa_revoked
+              : S.of(context).g_key_aa_session_create_failed,
+        ),
+        backgroundColor: ok ? Colors.green : Colors.red,
+      ),
+    );
   }
 
   @override
@@ -178,7 +191,11 @@ class _SessionKeyManagePageState extends State<SessionKeyManagePage>
                   color: _accentColor.withAlpha(25),
                   borderRadius: BorderRadius.circular(su.setWidth(14)),
                 ),
-                child: Icon(Icons.key, size: su.setWidth(28), color: _accentColor),
+                child: Icon(
+                  Icons.key,
+                  size: su.setWidth(28),
+                  color: _accentColor,
+                ),
               ),
               SizedBox(width: su.setWidth(14)),
               Expanded(
@@ -208,11 +225,23 @@ class _SessionKeyManagePageState extends State<SessionKeyManagePage>
           SizedBox(height: su.setWidth(16)),
           Row(
             children: [
-              _buildStatItem(activeKeys.length.toString(), s.g_key_aa_active, Colors.green),
+              _buildStatItem(
+                activeKeys.length.toString(),
+                s.g_key_aa_active,
+                Colors.green,
+              ),
               SizedBox(width: su.setWidth(16)),
-              _buildStatItem(expiredKeys.length.toString(), s.g_key_aa_expired, Colors.orange),
+              _buildStatItem(
+                expiredKeys.length.toString(),
+                s.g_key_aa_expired,
+                Colors.orange,
+              ),
               SizedBox(width: su.setWidth(16)),
-              _buildStatItem(revokedKeys.length.toString(), s.g_key_aa_revoked_status, Colors.red),
+              _buildStatItem(
+                revokedKeys.length.toString(),
+                s.g_key_aa_revoked_status,
+                Colors.red,
+              ),
             ],
           ),
         ],
@@ -335,10 +364,7 @@ class _SessionKeyManagePageState extends State<SessionKeyManagePage>
           SizedBox(height: su.setWidth(16)),
           Text(
             S.of(context).g_key_aa_no_session_keys,
-            style: TextStyle(
-              fontSize: su.setSp(28),
-              color: subtitleColor,
-            ),
+            style: TextStyle(fontSize: su.setSp(28), color: subtitleColor),
           ),
         ],
       ),

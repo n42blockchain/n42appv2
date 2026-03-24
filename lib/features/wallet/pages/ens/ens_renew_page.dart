@@ -52,16 +52,30 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
 
   Future<void> _loadPrice() async {
     setState(() => _isLoadingPrice = true);
+    try {
+      final result = await _ensService.getPrice(
+        widget.ownedEns.name,
+        _selectedYears,
+      );
 
-    final result = await _ensService.getPrice(widget.ownedEns.name, _selectedYears);
-
-    if (mounted) {
-      setState(() {
-        _isLoadingPrice = false;
-        if (!result.error) {
-          _priceInfo = result.data;
-        }
-      });
+      if (mounted) {
+        setState(() {
+          _isLoadingPrice = false;
+          if (!result.error) {
+            _priceInfo = result.data;
+          }
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => _isLoadingPrice = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Load ENS price failed: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 
@@ -75,27 +89,40 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
       _isRenewing = true;
       _renewResult = null;
     });
+    try {
+      final result = await _ensService.renew(
+        widget.ownedEns.name,
+        _selectedYears,
+      );
+      if (!mounted) return;
 
-    final result = await _ensService.renew(widget.ownedEns.name, _selectedYears);
-    if (!mounted) return;
+      setState(() {
+        _isRenewing = false;
+        _renewResult = result.data;
+      });
 
-    setState(() {
-      _isRenewing = false;
-      _renewResult = result.data;
-    });
-
-    final data = result.data;
-    if (result.error || data == null || !data.success) {
+      final data = result.data;
+      if (result.error || data == null || !data.success) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(data?.error ?? S.of(context).g_key_error_3),
+            backgroundColor: Colors.red,
+          ),
+        );
+      } else if (data.newExpiresAt != null) {
+        await EnsExpiryReminderService.setReminder(
+          widget.ownedEns.name,
+          data.newExpiresAt!,
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => _isRenewing = false);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(data?.error ?? S.of(context).g_key_error_3),
+          content: Text('ENS renew failed: $e'),
           backgroundColor: Colors.red,
         ),
-      );
-    } else if (data.newExpiresAt != null) {
-      await EnsExpiryReminderService.setReminder(
-        widget.ownedEns.name,
-        data.newExpiresAt!,
       );
     }
   }
@@ -103,9 +130,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(
-        text: S.of(context).g_key_ens_renew,
-      ),
+      appBar: AppBarWidget(text: S.of(context).g_key_ens_renew),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
         child: Column(
@@ -151,14 +176,17 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
 
   Widget _buildDomainCard() {
     final ens = widget.ownedEns;
-    final (statusColor, statusIcon, baseColor) = switch ((ens.isExpired, ens.isExpiringSoon)) {
+    final (statusColor, statusIcon, baseColor) = switch ((
+      ens.isExpired,
+      ens.isExpiringSoon,
+    )) {
       (true, _) => (Colors.red, Icons.error, Colors.red),
       (_, true) => (Colors.orange, Icons.warning, Colors.orange),
       _ => (
-          _color(AppThemeKeys.itemSubtitleTextColor),
-          Icons.access_time,
-          _color(AppThemeKeys.mainBlueColor),
-        ),
+        _color(AppThemeKeys.itemSubtitleTextColor),
+        Icons.access_time,
+        _color(AppThemeKeys.mainBlueColor),
+      ),
     };
 
     return Container(
@@ -185,7 +213,11 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(statusIcon, size: ScreenUtil().setWidth(20), color: statusColor),
+              Icon(
+                statusIcon,
+                size: ScreenUtil().setWidth(20),
+                color: statusColor,
+              ),
               SizedBox(width: ScreenUtil().setWidth(6)),
               Text(
                 ens.isExpired
@@ -230,14 +262,20 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
                     vertical: ScreenUtil().setWidth(16),
                   ),
                   decoration: BoxDecoration(
-                    color: _color(isSelected
-                        ? AppThemeKeys.mainBlueColor
-                        : AppThemeKeys.itemBgColor),
-                    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+                    color: _color(
+                      isSelected
+                          ? AppThemeKeys.mainBlueColor
+                          : AppThemeKeys.itemBgColor,
+                    ),
+                    borderRadius: BorderRadius.circular(
+                      ScreenUtil().setWidth(12),
+                    ),
                     border: Border.all(
                       color: isSelected
                           ? _color(AppThemeKeys.mainBlueColor)
-                          : _color(AppThemeKeys.itemSubtitleTextColor).withAlpha(50),
+                          : _color(
+                              AppThemeKeys.itemSubtitleTextColor,
+                            ).withAlpha(50),
                     ),
                   ),
                   child: Text(
@@ -294,7 +332,11 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
           ),
           Padding(
             padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(8)),
-            child: Icon(Icons.arrow_downward, size: ScreenUtil().setWidth(24), color: Colors.green),
+            child: Icon(
+              Icons.arrow_downward,
+              size: ScreenUtil().setWidth(24),
+              color: Colors.green,
+            ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

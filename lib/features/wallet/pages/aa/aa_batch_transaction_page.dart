@@ -104,19 +104,21 @@ class _AABatchTransactionPageState extends State<AABatchTransactionPage> {
           to: op.targetAddress,
           amount: amount,
         ),
-      BatchOperationType.transfer =>
-        ExecuteCall.ethTransfer(op.targetAddress, amount),
+      BatchOperationType.transfer => ExecuteCall.ethTransfer(
+        op.targetAddress,
+        amount,
+      ),
       BatchOperationType.approve => ExecuteCall.erc20Approve(
-          token: op.tokenAddress ?? op.targetAddress,
-          spender: op.targetAddress,
-          amount: amount,
-        ),
-      BatchOperationType.swap || BatchOperationType.custom =>
-        ExecuteCall.contractCall(
-          contract: op.targetAddress,
-          data: _parseCalldata(op.customData),
-          value: op.amount,
-        ),
+        token: op.tokenAddress ?? op.targetAddress,
+        spender: op.targetAddress,
+        amount: amount,
+      ),
+      BatchOperationType.swap ||
+      BatchOperationType.custom => ExecuteCall.contractCall(
+        contract: op.targetAddress,
+        data: _parseCalldata(op.customData),
+        value: op.amount,
+      ),
     };
   }
 
@@ -141,7 +143,9 @@ class _AABatchTransactionPageState extends State<AABatchTransactionPage> {
   // ── Shared helper ──────────────────────────────────────────────────────────
 
   /// 校验操作列表并构建 ExecuteCall，返回 null 表示失败（已通过 [onError] 报告）。
-  List<ExecuteCall>? _validateAndBuildCalls({required void Function(String) onError}) {
+  List<ExecuteCall>? _validateAndBuildCalls({
+    required void Function(String) onError,
+  }) {
     final validationError = _validateOperations();
     if (validationError != null) {
       onError(validationError);
@@ -191,7 +195,9 @@ class _AABatchTransactionPageState extends State<AABatchTransactionPage> {
     });
 
     try {
-      final estimation = await _handler.estimateGas(_buildTransferParams(calls));
+      final estimation = await _handler.estimateGas(
+        _buildTransferParams(calls),
+      );
       if (!mounted) return;
 
       final hasError = estimation.errorMessage?.isNotEmpty == true;
@@ -233,7 +239,8 @@ class _AABatchTransactionPageState extends State<AABatchTransactionPage> {
         );
         Navigator.pop(context, true);
       } else {
-        final errorMsg = result.data?.toString() ?? S.of(context).g_key_aa_batch_failed;
+        final errorMsg =
+            result.data?.toString() ?? S.of(context).g_key_aa_batch_failed;
         setState(() => _isSending = false);
         _showErrorSnackBar(errorMsg);
       }
@@ -246,10 +253,7 @@ class _AABatchTransactionPageState extends State<AABatchTransactionPage> {
 
   void _showErrorSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.red,
-      ),
+      SnackBar(content: Text(message), backgroundColor: Colors.red),
     );
   }
 
@@ -279,6 +283,7 @@ class _AABatchTransactionPageState extends State<AABatchTransactionPage> {
       builder: (context) => BatchTemplatesSheet(
         provider: _templateProvider,
         onLoad: (template) {
+          if (!mounted) return;
           setState(() {
             _operations
               ..clear()
@@ -293,46 +298,50 @@ class _AABatchTransactionPageState extends State<AABatchTransactionPage> {
 
   Future<void> _saveTemplate() async {
     final nameController = TextEditingController();
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(S.of(ctx).g_key_aa_batch_save_template),
-        content: TextField(
-          controller: nameController,
-          autofocus: true,
-          decoration: InputDecoration(
-            labelText: S.of(ctx).g_key_aa_batch_template_name,
-            hintText: S.of(ctx).g_key_aa_batch_template_name_hint,
-            border: const OutlineInputBorder(),
+    try {
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: Text(S.of(ctx).g_key_aa_batch_save_template),
+          content: TextField(
+            controller: nameController,
+            autofocus: true,
+            decoration: InputDecoration(
+              labelText: S.of(ctx).g_key_aa_batch_template_name,
+              hintText: S.of(ctx).g_key_aa_batch_template_name_hint,
+              border: const OutlineInputBorder(),
+            ),
           ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx, false),
+              child: Text(S.of(ctx).g_key_9),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(ctx, true),
+              child: Text(S.of(ctx).g_key_159),
+            ),
+          ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: Text(S.of(ctx).g_key_9),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, true),
-            child: Text(S.of(ctx).g_key_159),
-          ),
-        ],
-      ),
-    );
-
-    if (confirmed == true && nameController.text.trim().isNotEmpty) {
-      final saved = await _templateProvider.saveTemplate(
-        name: nameController.text.trim(),
-        chainSymbol: _chainSymbol,
-        operations: List.unmodifiable(_operations),
       );
-      if (mounted && saved != null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(S.of(context).g_key_aa_batch_template_saved),
-            backgroundColor: Colors.green,
-          ),
+
+      if (confirmed == true && nameController.text.trim().isNotEmpty) {
+        final saved = await _templateProvider.saveTemplate(
+          name: nameController.text.trim(),
+          chainSymbol: _chainSymbol,
+          operations: List.unmodifiable(_operations),
         );
+        if (mounted && saved != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(S.of(context).g_key_aa_batch_template_saved),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
       }
+    } finally {
+      nameController.dispose();
     }
   }
 
@@ -345,6 +354,7 @@ class _AABatchTransactionPageState extends State<AABatchTransactionPage> {
       builder: (context) => PaymasterSelectionSheet(
         selected: _selectedPaymaster,
         onSelect: (option) {
+          if (!mounted) return;
           setState(() => _selectedPaymaster = option);
           Navigator.pop(context);
         },
@@ -361,6 +371,7 @@ class _AABatchTransactionPageState extends State<AABatchTransactionPage> {
       backgroundColor: Colors.transparent,
       builder: (context) => AddOperationSheet(
         onAdd: (operation) {
+          if (!mounted) return;
           setState(() => _operations.add(operation));
           _estimateGas();
         },
@@ -371,7 +382,9 @@ class _AABatchTransactionPageState extends State<AABatchTransactionPage> {
   // ── Gas Cost Formatter ─────────────────────────────────────────────────────
 
   String _formatGasCost() {
-    if (_estimatedTotalGas == null || _estimatedMaxFeePerGas == null) return '-';
+    if (_estimatedTotalGas == null || _estimatedMaxFeePerGas == null) {
+      return '-';
+    }
     final cost = _estimatedTotalGas! * _estimatedMaxFeePerGas!;
     // cost in wei → ETH
     final ethValueStr = (cost / BigInt.from(10).pow(18)).toStringAsFixed(6);

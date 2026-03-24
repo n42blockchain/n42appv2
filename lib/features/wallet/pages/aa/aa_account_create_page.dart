@@ -23,10 +23,7 @@ class AAAccountCreatePage extends StatefulWidget {
   /// 所有者地址 (EOA)
   final String ownerAddress;
 
-  const AAAccountCreatePage({
-    super.key,
-    required this.ownerAddress,
-  });
+  const AAAccountCreatePage({super.key, required this.ownerAddress});
 
   @override
   State<AAAccountCreatePage> createState() => _AAAccountCreatePageState();
@@ -34,6 +31,8 @@ class AAAccountCreatePage extends StatefulWidget {
 
 class _AAAccountCreatePageState extends State<AAAccountCreatePage>
     with _AAAccountCreateHelpersMixin, _AAAccountCreateFormMixin {
+  int _previewRequestId = 0;
+
   @override
   void initState() {
     super.initState();
@@ -47,9 +46,9 @@ class _AAAccountCreatePageState extends State<AAAccountCreatePage>
   }
 
   void _showSnackBar(String message, Color color) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message), backgroundColor: color),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message), backgroundColor: color));
   }
 
   void _finishCalculation({String? address, String? error}) {
@@ -62,6 +61,7 @@ class _AAAccountCreatePageState extends State<AAAccountCreatePage>
   }
 
   Future<void> _calculatePreviewAddress() async {
+    final requestId = ++_previewRequestId;
     if (!mounted) return;
     setState(() {
       isCalculating = true;
@@ -87,12 +87,14 @@ class _AAAccountCreatePageState extends State<AAAccountCreatePage>
         selectedType,
         salt: BigInt.zero,
       );
+      if (!mounted || requestId != _previewRequestId) return;
 
       _finishCalculation(
         address: address,
         error: address == null ? addressErrorMessage : null,
       );
     } catch (_) {
+      if (!mounted || requestId != _previewRequestId) return;
       _finishCalculation(error: addressErrorMessage);
     }
   }
@@ -144,9 +146,7 @@ class _AAAccountCreatePageState extends State<AAAccountCreatePage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(
-        text: S.of(context).g_key_aa_create_account,
-      ),
+      appBar: AppBarWidget(text: S.of(context).g_key_aa_create_account),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
         child: Column(

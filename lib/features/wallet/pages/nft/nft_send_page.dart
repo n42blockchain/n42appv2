@@ -89,7 +89,9 @@ class _NftSendPageState extends State<NftSendPage> {
       if (mm.error == true) {
         ToastUtils.showWarning(mm.data?.toString() ?? 'Send failed');
       } else {
-        ToastUtils.showSuccess(S.of(context).g_key_nft_41); // Transaction submitted
+        ToastUtils.showSuccess(
+          S.of(context).g_key_nft_41,
+        ); // Transaction submitted
         Navigator.pop(context);
       }
     } catch (e) {
@@ -101,9 +103,18 @@ class _NftSendPageState extends State<NftSendPage> {
 
   @override
   Widget build(BuildContext context) {
-    final blueColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
-    final textColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final subtitleColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+    final blueColor = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.mainBlueColor.name,
+    );
+    final textColor = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.mainTextColor.name,
+    );
+    final subtitleColor = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.itemSubtitleTextColor.name,
+    );
 
     return Scaffold(
       appBar: AppBarWidget(text: S.of(context).g_key_nft_send),
@@ -135,21 +146,30 @@ class _NftSendPageState extends State<NftSendPage> {
                   controller: _addressCtrl,
                   decoration: InputDecoration(
                     hintText: S.of(context).g_key_41,
-                    hintStyle: TextStyle(color: subtitleColor, fontSize: ScreenUtil().setSp(26)),
+                    hintStyle: TextStyle(
+                      color: subtitleColor,
+                      fontSize: ScreenUtil().setSp(26),
+                    ),
                     suffixIcon: IconButton(
                       icon: Icon(Icons.paste, color: blueColor),
                       onPressed: () async {
                         final data = await Clipboard.getData('text/plain');
+                        if (!mounted) return;
                         if (data?.text != null) {
                           _addressCtrl.text = data!.text!;
                         }
                       },
                     ),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                      borderRadius: BorderRadius.circular(
+                        ScreenUtil().setWidth(8),
+                      ),
                     ),
                   ),
-                  style: TextStyle(fontSize: ScreenUtil().setSp(26), color: textColor),
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(26),
+                    color: textColor,
+                  ),
                   validator: (v) {
                     if (v == null || v.trim().isEmpty) {
                       return S.of(context).g_key_41;
@@ -163,7 +183,10 @@ class _NftSendPageState extends State<NftSendPage> {
                   SizedBox(height: ScreenUtil().setWidth(24)),
                   Text(
                     S.of(context).g_key_nft_quantity,
-                    style: TextStyle(fontSize: ScreenUtil().setSp(28), color: subtitleColor),
+                    style: TextStyle(
+                      fontSize: ScreenUtil().setSp(28),
+                      color: subtitleColor,
+                    ),
                   ),
                   SizedBox(height: ScreenUtil().setWidth(10)),
                   TextFormField(
@@ -172,12 +195,20 @@ class _NftSendPageState extends State<NftSendPage> {
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     decoration: InputDecoration(
                       hintText: '1 ~ ${nft.balance}',
-                      hintStyle: TextStyle(color: subtitleColor, fontSize: ScreenUtil().setSp(26)),
+                      hintStyle: TextStyle(
+                        color: subtitleColor,
+                        fontSize: ScreenUtil().setSp(26),
+                      ),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                        borderRadius: BorderRadius.circular(
+                          ScreenUtil().setWidth(8),
+                        ),
                       ),
                     ),
-                    style: TextStyle(fontSize: ScreenUtil().setSp(26), color: textColor),
+                    style: TextStyle(
+                      fontSize: ScreenUtil().setSp(26),
+                      color: textColor,
+                    ),
                     validator: (v) {
                       final n = int.tryParse(v ?? '');
                       if (n == null || n <= 0) return S.of(context).g_key_t_43;
@@ -198,7 +229,9 @@ class _NftSendPageState extends State<NftSendPage> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: blueColor,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+                        borderRadius: BorderRadius.circular(
+                          ScreenUtil().setWidth(12),
+                        ),
                       ),
                     ),
                     child: _sending
@@ -222,8 +255,15 @@ class _NftSendPageState extends State<NftSendPage> {
     );
   }
 
-  Widget _buildNftInfo(BuildContext context, Color textColor, Color subtitleColor) {
-    final blueColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+  Widget _buildNftInfo(
+    BuildContext context,
+    Color textColor,
+    Color subtitleColor,
+  ) {
+    final blueColor = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.mainBlueColor.name,
+    );
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
@@ -241,7 +281,8 @@ class _NftSendPageState extends State<NftSendPage> {
                     width: ScreenUtil().setWidth(80),
                     height: ScreenUtil().setWidth(80),
                     fit: BoxFit.cover,
-                    errorBuilder: (context, error, stack) => _imgPlaceholder(blueColor),
+                    errorBuilder: (context, error, stack) =>
+                        _imgPlaceholder(blueColor),
                   )
                 : _imgPlaceholder(blueColor),
           ),

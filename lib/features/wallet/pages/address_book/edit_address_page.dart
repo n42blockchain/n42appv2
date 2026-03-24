@@ -327,6 +327,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
       ),
       rightOnTap2: () async {
         final data = await Clipboard.getData(Clipboard.kTextPlain);
+        if (!mounted) return;
         if (data?.text != null && data!.text != "null") {
           addressController.text = normalizeAddressBookInput(data.text!);
         }

@@ -114,29 +114,37 @@ class _EnsCreateSubdomainSheetState extends State<EnsCreateSubdomainSheet> {
     final errorFallback = S.of(context).g_key_error_3;
     final successMsg = S.of(context).g_key_ens_subdomain_created;
 
-    final result = await widget.ensService.createSubdomain(
-      widget.parentName,
-      label,
-      owner.isNotEmpty ? owner : widget.walletAddress,
-    );
+    try {
+      final result = await widget.ensService.createSubdomain(
+        widget.parentName,
+        label,
+        owner.isNotEmpty ? owner : widget.walletAddress,
+      );
 
-    if (!mounted) return;
+      if (!mounted) return;
 
-    final messenger = ScaffoldMessenger.of(context);
-    if (result.error) {
+      final messenger = ScaffoldMessenger.of(context);
+      if (result.error) {
+        setState(() => _creating = false);
+        messenger.showSnackBar(
+          SnackBar(
+            content: Text(result.data?.toString() ?? errorFallback),
+            backgroundColor: Colors.red,
+          ),
+        );
+      } else {
+        nav.pop();
+        messenger.showSnackBar(
+          SnackBar(content: Text(successMsg), backgroundColor: Colors.green),
+        );
+        widget.onCreated();
+      }
+    } catch (e) {
+      if (!mounted) return;
       setState(() => _creating = false);
-      messenger.showSnackBar(
-        SnackBar(
-          content: Text(result.data?.toString() ?? errorFallback),
-          backgroundColor: Colors.red,
-        ),
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString()), backgroundColor: Colors.red),
       );
-    } else {
-      nav.pop();
-      messenger.showSnackBar(
-        SnackBar(content: Text(successMsg), backgroundColor: Colors.green),
-      );
-      widget.onCreated();
     }
   }
 

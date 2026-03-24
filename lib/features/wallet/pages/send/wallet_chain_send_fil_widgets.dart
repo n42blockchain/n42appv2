@@ -20,7 +20,8 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
         decoration: BoxDecoration(
           color: _tc(AppThemeKeys.mainBlueColor.name),
           borderRadius: BorderRadius.all(
-              Radius.circular(ScreenUtil().setWidth(60.0))),
+            Radius.circular(ScreenUtil().setWidth(60.0)),
+          ),
         ),
         alignment: Alignment.center,
         child: Text(
@@ -60,7 +61,10 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
         children: [
           Text(
             S.of(context).g_key_38,
-            style: TextStyle(color: mainText, fontSize: ScreenUtil().setSp(28.0)),
+            style: TextStyle(
+              color: mainText,
+              fontSize: ScreenUtil().setSp(28.0),
+            ),
           ),
           Container(
             alignment: Alignment.center,
@@ -71,7 +75,8 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
             margin: EdgeInsets.only(top: ScreenUtil().setWidth(20.0)),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(
-                  Radius.circular(ScreenUtil().setWidth(8.0))),
+                Radius.circular(ScreenUtil().setWidth(8.0)),
+              ),
               color: itemBg,
             ),
             height: ScreenUtil().setWidth(88.0),
@@ -95,7 +100,8 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
                       focusedBorder: InputBorder.none,
                       isCollapsed: true,
                       contentPadding: EdgeInsets.symmetric(
-                          vertical: ScreenUtil().setWidth(10.0)),
+                        vertical: ScreenUtil().setWidth(10.0),
+                      ),
                     ),
                     maxLines: 1,
                     onEditingComplete: () {
@@ -120,6 +126,7 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
                   label: S.of(context).g_key_166,
                   onTap: () async {
                     final cd = await Clipboard.getData(Clipboard.kTextPlain);
+                    if (!mounted) return;
                     if (cd?.text != null && cd!.text != "null") {
                       toTextEditingController.text = cd.text ?? "";
                       setState(() {});
@@ -149,7 +156,10 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
             children: [
               Text(
                 S.of(context).g_key_44,
-                style: TextStyle(color: mainText, fontSize: ScreenUtil().setSp(28.0)),
+                style: TextStyle(
+                  color: mainText,
+                  fontSize: ScreenUtil().setSp(28.0),
+                ),
               ),
               SizedBox(width: ScreenUtil().setWidth(20.0)),
               Expanded(child: amountBalanceWidget()),
@@ -164,7 +174,8 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
             margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0)),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(
-                  Radius.circular(ScreenUtil().setWidth(8.0))),
+                Radius.circular(ScreenUtil().setWidth(8.0)),
+              ),
               color: itemBg,
             ),
             child: Column(
@@ -175,12 +186,16 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
                   children: [
                     Expanded(
                       child: TextField(
-                        style: TextStyle(color: mainText, fontSize: amountFontSize),
+                        style: TextStyle(
+                          color: mainText,
+                          fontSize: amountFontSize,
+                        ),
                         controller: valueTextEditingController,
                         focusNode: valueNode,
                         textInputAction: TextInputAction.next,
-                        keyboardType:
-                            const TextInputType.numberWithOptions(decimal: true),
+                        keyboardType: const TextInputType.numberWithOptions(
+                          decimal: true,
+                        ),
                         decoration: InputDecoration(
                           hintText: S.of(context).g_key_44,
                           hintStyle: TextStyle(
@@ -270,7 +285,8 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
       width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(
-            Radius.circular(ScreenUtil().setWidth(8.0))),
+          Radius.circular(ScreenUtil().setWidth(8.0)),
+        ),
         color: _tc(AppThemeKeys.errorBgColor2.name),
       ),
       child: Text(
@@ -299,10 +315,14 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
             child: buttonStyle6(
               context,
               sendTransaction,
-              isLoading ? '${S.of(context).g_key_106}...' : S.of(context).g_key_48,
-              _tc(isLoading
-                  ? AppThemeKeys.mainButtonBgColor3.name
-                  : AppThemeKeys.mainButtonBgColor.name),
+              isLoading
+                  ? '${S.of(context).g_key_106}...'
+                  : S.of(context).g_key_48,
+              _tc(
+                isLoading
+                    ? AppThemeKeys.mainButtonBgColor3.name
+                    : AppThemeKeys.mainButtonBgColor.name,
+              ),
               _tc(AppThemeKeys.mainButtonTextColor.name),
               isLoading,
             ),

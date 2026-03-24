@@ -60,9 +60,11 @@ class _MarketPageState extends ConsumerState<MarketPage>
   List<String> _watchlistSymbols = [];
   List<Map<String, dynamic>> _watchlistCoins = [];
   bool _watchlistLoading = false;
+  int _watchlistGeneration = 0;
 
   // Price alerts (coinId → config)
   Map<String, CoinPriceAlertConfig> _priceAlerts = {};
+  int _alertsGeneration = 0;
 
   // Price alert polling timer
   Timer? _alertCheckTimer;
@@ -104,27 +106,47 @@ class _MarketPageState extends ConsumerState<MarketPage>
   // ─── Fear & Greed + News loaders ────────────────────────────────────────
 
   Future<void> _loadFearGreed() async {
-    final data = await FearGreedService.fetch();
-    if (mounted && data != null) setState(() => _fearGreed = data);
+    try {
+      final data = await FearGreedService.fetch();
+      if (mounted && data != null) {
+        setState(() => _fearGreed = data);
+      }
+    } catch (e) {
+      debugPrint('MarketPage: failed to load fear & greed: $e');
+    }
   }
 
   Future<void> _loadNews() async {
     if (_newsLoading) return;
     if (mounted) setState(() => _newsLoading = true);
-    final list = await CryptoNewsService.fetchLatest();
-    if (mounted) {
-      setState(() {
-        _news = list;
-        _newsLoading = false;
-      });
+    try {
+      final list = await CryptoNewsService.fetchLatest();
+      if (mounted) {
+        setState(() {
+          _news = list;
+          _newsLoading = false;
+        });
+      }
+    } catch (e) {
+      debugPrint('MarketPage: failed to load news: $e');
+      if (mounted) {
+        setState(() => _newsLoading = false);
+      }
     }
   }
 
   // ─── Price alert helpers ─────────────────────────────────────────────────
 
   Future<void> _loadAlerts() async {
-    final alerts = await CoinPriceAlertService.loadAll();
-    if (mounted) setState(() => _priceAlerts = alerts);
+    final requestId = ++_alertsGeneration;
+    try {
+      final alerts = await CoinPriceAlertService.loadAll();
+      if (mounted && requestId == _alertsGeneration) {
+        setState(() => _priceAlerts = alerts);
+      }
+    } catch (e) {
+      debugPrint('MarketPage: failed to load alerts: $e');
+    }
   }
 
   void _startAlertPolling() {
@@ -137,29 +159,35 @@ class _MarketPageState extends ConsumerState<MarketPage>
   }
 
   Future<void> _checkPriceAlerts() async {
-    final configs = await CoinPriceAlertService.loadAll();
-    if (configs.isEmpty) return;
+    try {
+      final configs = await CoinPriceAlertService.loadAll();
+      if (configs.isEmpty) return;
 
-    final enabledSymbols = configs.values
-        .where((c) => c.enabled)
-        .map((c) => c.symbol.toLowerCase())
-        .toSet();
-    if (enabledSymbols.isEmpty) return;
+      final enabledSymbols = configs.values
+          .where((c) => c.enabled)
+          .map((c) => c.symbol.toLowerCase())
+          .toSet();
+      if (enabledSymbols.isEmpty) return;
 
-    final resp = await MarketApi().getWalletCoinsInfo(enabledSymbols.join(','));
-    if (resp['error'] != false) return;
+      final resp = await MarketApi().getWalletCoinsInfo(
+        enabledSymbols.join(','),
+      );
+      if (resp['error'] != false) return;
 
-    final coins = extractMarketCoinItems(resp['data']);
-    if (coins.isEmpty) return;
+      final coins = extractMarketCoinItems(resp['data']);
+      if (coins.isEmpty) return;
 
-    final prices = <String, double>{};
-    for (final c in coins) {
-      final sym = c['coin']?.toString().toLowerCase() ?? '';
-      final price = _parsePrice(c['price']);
-      if (sym.isNotEmpty && price > 0) prices[sym] = price;
+      final prices = <String, double>{};
+      for (final c in coins) {
+        final sym = c['coin']?.toString().toLowerCase() ?? '';
+        final price = _parsePrice(c['price']);
+        if (sym.isNotEmpty && price > 0) prices[sym] = price;
+      }
+
+      await CoinPriceAlertService.checkAndNotify(prices);
+    } catch (e) {
+      debugPrint('MarketPage: failed to check price alerts: $e');
     }
-
-    await CoinPriceAlertService.checkAndNotify(prices);
   }
 
   Future<void> _openAlertSheet(
@@ -198,24 +226,29 @@ class _MarketPageState extends ConsumerState<MarketPage>
   Future<void> _loadTrending() async {
     if (_trendingLoading) return;
     setState(() => _trendingLoading = true);
+    try {
+      final api = MarketApi();
+      var result = await api.getTrendingCoins();
+      var isFallback = false;
 
-    final api = MarketApi();
-    var result = await api.getTrendingCoins();
-    var isFallback = false;
+      if (result.isEmpty) {
+        debugPrint('MarketApi: CoinGecko trending empty, trying N42 fallback');
+        result = await api.getFallbackTrendingCoins();
+        isFallback = result.isNotEmpty;
+      }
 
-    // CoinGecko 不可用（被墙 / 无 key / 限频）→ 走 N42 后端 fallback
-    if (result.isEmpty) {
-      debugPrint('MarketApi: CoinGecko trending empty, trying N42 fallback');
-      result = await api.getFallbackTrendingCoins();
-      isFallback = result.isNotEmpty;
-    }
-
-    if (mounted) {
-      setState(() {
-        _trending = result;
-        _trendingIsFallback = isFallback;
-        _trendingLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _trending = result;
+          _trendingIsFallback = isFallback;
+          _trendingLoading = false;
+        });
+      }
+    } catch (e) {
+      debugPrint('MarketPage: failed to load trending: $e');
+      if (mounted) {
+        setState(() => _trendingLoading = false);
+      }
     }
   }
 
@@ -259,8 +292,9 @@ class _MarketPageState extends ConsumerState<MarketPage>
   }
 
   Future<void> _loadWatchlist() async {
+    final requestId = ++_watchlistGeneration;
     final symbols = await SPUtil().getMarketWatchlist();
-    if (!mounted) return;
+    if (!mounted || requestId != _watchlistGeneration) return;
     setState(() {
       _watchlistSymbols = symbols;
       _watchlistLoading = symbols.isNotEmpty;
@@ -268,7 +302,7 @@ class _MarketPageState extends ConsumerState<MarketPage>
     if (symbols.isEmpty) return;
 
     final resp = await MarketApi().getWalletCoinsInfo(symbols.join(','));
-    if (!mounted) return;
+    if (!mounted || requestId != _watchlistGeneration) return;
     final coins = extractMarketCoinItems(resp['data']);
     setState(() {
       _watchlistCoins = coins;

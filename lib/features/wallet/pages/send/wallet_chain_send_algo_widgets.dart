@@ -21,7 +21,8 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
         decoration: BoxDecoration(
           color: _tc(AppThemeKeys.mainBlueColor.name),
           borderRadius: BorderRadius.all(
-              Radius.circular(ScreenUtil().setWidth(60.0))),
+            Radius.circular(ScreenUtil().setWidth(60.0)),
+          ),
         ),
         alignment: Alignment.center,
         child: Text(
@@ -49,6 +50,7 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
       ),
     );
   }
+
   Widget algoAddToken() {
     final String contract = widget.coinModel.isTest
         ? widget.coinModel.coin['contract_test']
@@ -92,7 +94,10 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
         children: [
           Text(
             S.of(context).g_key_38,
-            style: TextStyle(color: mainText, fontSize: ScreenUtil().setSp(28.0)),
+            style: TextStyle(
+              color: mainText,
+              fontSize: ScreenUtil().setSp(28.0),
+            ),
           ),
           Container(
             alignment: Alignment.center,
@@ -103,7 +108,8 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
             margin: EdgeInsets.only(top: ScreenUtil().setWidth(20.0)),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(
-                  Radius.circular(ScreenUtil().setWidth(8.0))),
+                Radius.circular(ScreenUtil().setWidth(8.0)),
+              ),
               color: itemBg,
             ),
             height: ScreenUtil().setWidth(88.0),
@@ -127,7 +133,8 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
                       focusedBorder: InputBorder.none,
                       isCollapsed: true,
                       contentPadding: EdgeInsets.symmetric(
-                          vertical: ScreenUtil().setWidth(10.0)),
+                        vertical: ScreenUtil().setWidth(10.0),
+                      ),
                     ),
                     maxLines: 1,
                     onEditingComplete: () {
@@ -152,6 +159,7 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
                   label: S.of(context).g_key_166,
                   onTap: () async {
                     final cd = await Clipboard.getData(Clipboard.kTextPlain);
+                    if (!mounted) return;
                     if (cd?.text != null && cd!.text != "null") {
                       toTextEditingController.text = cd.text ?? "";
                       setState(() {});
@@ -181,7 +189,10 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
             children: [
               Text(
                 S.of(context).g_key_44,
-                style: TextStyle(color: mainText, fontSize: ScreenUtil().setSp(28.0)),
+                style: TextStyle(
+                  color: mainText,
+                  fontSize: ScreenUtil().setSp(28.0),
+                ),
               ),
               SizedBox(width: ScreenUtil().setWidth(20.0)),
               Expanded(child: amountBalanceWidget()),
@@ -196,7 +207,8 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
             margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0)),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(
-                  Radius.circular(ScreenUtil().setWidth(8.0))),
+                Radius.circular(ScreenUtil().setWidth(8.0)),
+              ),
               color: itemBg,
             ),
             child: Column(
@@ -207,12 +219,16 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
                   children: [
                     Expanded(
                       child: TextField(
-                        style: TextStyle(color: mainText, fontSize: amountFontSize),
+                        style: TextStyle(
+                          color: mainText,
+                          fontSize: amountFontSize,
+                        ),
                         controller: valueTextEditingController,
                         focusNode: valueNode,
                         textInputAction: TextInputAction.next,
                         keyboardType: const TextInputType.numberWithOptions(
-                            decimal: true),
+                          decimal: true,
+                        ),
                         decoration: InputDecoration(
                           hintText: S.of(context).g_key_44,
                           hintStyle: TextStyle(
@@ -269,7 +285,7 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
   Widget amountBalanceWidget() {
     final String unit = widget.coinModel.coin['unit'];
     final double minBalance = toEther(
-      widget.coinModel.other?.minBalance??BigInt.zero.toString(),
+      widget.coinModel.other?.minBalance ?? BigInt.zero.toString(),
       widget.coinModel.coin['decimals'] ?? 0,
     ).toDouble();
     final double availableBalance =
@@ -383,5 +399,4 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
       ),
     );
   }
-
 }

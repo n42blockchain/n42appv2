@@ -6,8 +6,7 @@ part of 'wallet_coin_add_all.dart';
 /// _buildContractStateWidget.
 extension _WalletCoinAddAllImportFormUI on _WalletCoinAddAllState {
   // ── 主题色快捷取色 ──────────────────────────────────────────
-  Color _formColor(String key) =>
-      AppThemeUtils.getColorByKey(context, key);
+  Color _formColor(String key) => AppThemeUtils.getColorByKey(context, key);
 
   // ── 通用组件 ────────────────────────────────────────────────
 
@@ -41,8 +40,7 @@ extension _WalletCoinAddAllImportFormUI on _WalletCoinAddAllState {
           ),
           margin: EdgeInsets.only(top: su.setWidth(20.0)),
           decoration: BoxDecoration(
-            borderRadius:
-                BorderRadius.all(Radius.circular(su.setWidth(8.0))),
+            borderRadius: BorderRadius.all(Radius.circular(su.setWidth(8.0))),
             color: _formColor(AppThemeKeys.itemBgColor.name),
           ),
           height: su.setWidth(88.0),
@@ -65,8 +63,9 @@ extension _WalletCoinAddAllImportFormUI on _WalletCoinAddAllState {
                     errorBorder: InputBorder.none,
                     focusedBorder: InputBorder.none,
                     isCollapsed: true,
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: su.setWidth(10.0)),
+                    contentPadding: EdgeInsets.symmetric(
+                      vertical: su.setWidth(10.0),
+                    ),
                   ),
                   maxLines: 1,
                   onChanged: onChanged,
@@ -133,6 +132,7 @@ extension _WalletCoinAddAllImportFormUI on _WalletCoinAddAllState {
               InkWell(
                 onTap: () async {
                   final cd = await Clipboard.getData(Clipboard.kTextPlain);
+                  if (!mounted) return;
                   final text = cd?.text;
                   if (text != null && text != "null") {
                     tokenEditingController.text = text;
@@ -143,8 +143,7 @@ extension _WalletCoinAddAllImportFormUI on _WalletCoinAddAllState {
                 child: Container(
                   margin: EdgeInsets.only(left: su.setWidth(10.0)),
                   height: su.setWidth(60.0),
-                  padding:
-                      EdgeInsets.symmetric(horizontal: su.setWidth(20.0)),
+                  padding: EdgeInsets.symmetric(horizontal: su.setWidth(20.0)),
                   decoration: BoxDecoration(
                     color: blueColor,
                     borderRadius: BorderRadius.all(
@@ -179,7 +178,8 @@ extension _WalletCoinAddAllImportFormUI on _WalletCoinAddAllState {
     final double fontSize = su.setSp(24);
 
     final content = switch (_contractState) {
-      'loading' => Row(children: [
+      'loading' => Row(
+        children: [
           SizedBox(
             width: su.setWidth(24),
             height: su.setWidth(24),
@@ -196,26 +196,35 @@ extension _WalletCoinAddAllImportFormUI on _WalletCoinAddAllState {
               color: _formColor(AppThemeKeys.itemSubtitleTextColor.name),
             ),
           ),
-        ]),
-      'found' => Row(children: [
+        ],
+      ),
+      'found' => Row(
+        children: [
           Icon(Icons.check_circle_outline, color: Colors.green, size: iconSize),
           SizedBox(width: gap),
-          Expanded(child: Text(
-            'Token found: $_contractHint',
-            style: TextStyle(fontSize: fontSize, color: Colors.green),
-          )),
-        ]),
+          Expanded(
+            child: Text(
+              'Token found: $_contractHint',
+              style: TextStyle(fontSize: fontSize, color: Colors.green),
+            ),
+          ),
+        ],
+      ),
       'notFound' => () {
-          final orange = _formColor(AppThemeKeys.textColorOrange.name);
-          return Row(children: [
+        final orange = _formColor(AppThemeKeys.textColorOrange.name);
+        return Row(
+          children: [
             Icon(Icons.info_outline, color: orange, size: iconSize),
             SizedBox(width: gap),
-            Expanded(child: Text(
-              'Token not found in list — fill symbol & decimals manually',
-              style: TextStyle(fontSize: fontSize, color: orange),
-            )),
-          ]);
-        }(),
+            Expanded(
+              child: Text(
+                'Token not found in list — fill symbol & decimals manually',
+                style: TextStyle(fontSize: fontSize, color: orange),
+              ),
+            ),
+          ],
+        );
+      }(),
       _ => const SizedBox.shrink(),
     };
 

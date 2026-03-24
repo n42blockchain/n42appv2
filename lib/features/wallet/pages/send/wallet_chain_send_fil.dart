@@ -94,6 +94,7 @@ class _WalletChainSendFilState extends ConsumerState<WalletChainSendFil>
                   ),
                 ),
               );
+              if (!mounted) return;
               if (value != null) toTextEditingController.text = value;
             },
             child: Container(

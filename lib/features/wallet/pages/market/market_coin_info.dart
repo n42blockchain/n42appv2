@@ -88,16 +88,24 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
 
   Future<void> _loadAlertConfig() async {
     if (_coinId.isEmpty) return;
-    final all = await CoinPriceAlertService.loadAll();
-    if (!mounted) return;
-    setState(() => _alertConfig = all[_coinId]);
+    try {
+      final all = await CoinPriceAlertService.loadAll();
+      if (!mounted) return;
+      setState(() => _alertConfig = all[_coinId]);
+    } catch (e) {
+      debugPrint('MarketCoinInfo: failed to load alert config: $e');
+    }
   }
 
   Future<void> _loadTrades() async {
     if (_coinId.isEmpty) return;
-    final list = await PortfolioTradeService.getTradesForCoin(_coinId);
-    if (!mounted) return;
-    setState(() => _trades = list);
+    try {
+      final list = await PortfolioTradeService.getTradesForCoin(_coinId);
+      if (!mounted) return;
+      setState(() => _trades = list);
+    } catch (e) {
+      debugPrint('MarketCoinInfo: failed to load trades: $e');
+    }
   }
 
   Future<void> _openTradeSheet() async {
@@ -125,21 +133,24 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
   Future<void> _fetchCoinPrice() async {
     final coinSymbol = _coinSymbol;
     if (coinSymbol.isEmpty) return;
+    try {
+      final result = await MarketApi().getWalletCoinsInfo(coinSymbol);
+      if (result['error'] != false) return;
 
-    final result = await MarketApi().getWalletCoinsInfo(coinSymbol);
-    if (result['error'] != false) return;
+      final coins = extractMarketCoinItems(result['data']);
+      if (coins.isEmpty) return;
 
-    final coins = extractMarketCoinItems(result['data']);
-    if (coins.isEmpty) return;
-
-    for (final c in coins) {
-      if (!marketCoinMatchesSymbol(c, coinSymbol)) continue;
-      if (!mounted) return;
-      setState(() {
-        _coin = mergeMarketCoinSnapshot(_coin, c);
-        _priceChange24h = toDouble(_coin['price_change_per_24h']);
-      });
-      break;
+      for (final c in coins) {
+        if (!marketCoinMatchesSymbol(c, coinSymbol)) continue;
+        if (!mounted) return;
+        setState(() {
+          _coin = mergeMarketCoinSnapshot(_coin, c);
+          _priceChange24h = toDouble(_coin['price_change_per_24h']);
+        });
+        break;
+      }
+    } catch (e) {
+      debugPrint('MarketCoinInfo: failed to fetch coin price: $e');
     }
   }
 
@@ -149,20 +160,26 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
       if (mounted) setState(() => _infoLoad = Load.error);
       return;
     }
+    try {
+      final info = await ref.read(wapBridgeProvider).getCoinsBaseInfo(geckoId);
+      if (!mounted) return;
 
-    final info = await ref.read(wapBridgeProvider).getCoinsBaseInfo(geckoId);
-    if (!mounted) return;
+      if (info == null) {
+        setState(() => _infoLoad = Load.error);
+        return;
+      }
 
-    if (info == null) {
-      setState(() => _infoLoad = Load.error);
-      return;
+      _coinInfo = info;
+      _parseSocialLinks();
+      _cacheMarketMetrics();
+      setState(() => _infoLoad = Load.finish);
+      _fetchChartData();
+    } catch (e) {
+      debugPrint('MarketCoinInfo: failed to fetch base info: $e');
+      if (mounted) {
+        setState(() => _infoLoad = Load.error);
+      }
     }
-
-    _coinInfo = info;
-    _parseSocialLinks();
-    _cacheMarketMetrics();
-    setState(() => _infoLoad = Load.finish);
-    _fetchChartData();
   }
 
   Future<void> _fetchChartData() async {
@@ -171,22 +188,27 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
 
     final generation = ++_chartGeneration;
     if (mounted) setState(() => _chartLoading = true);
+    try {
+      final api = MarketApi();
+      final days = periodDays[_periodIndex];
 
-    final api = MarketApi();
-    final days = periodDays[_periodIndex];
+      final results = await Future.wait([
+        api.getOhlcvData(geckoId, days: days),
+        api.getMarketChart(geckoId, days: days),
+      ]);
 
-    final results = await Future.wait([
-      api.getOhlcvData(geckoId, days: days),
-      api.getMarketChart(geckoId, days: days),
-    ]);
+      if (!mounted || generation != _chartGeneration) return;
 
-    if (!mounted || generation != _chartGeneration) return;
-
-    setState(() {
-      _ohlcvData = results[0] as List<OhlcPoint>;
-      _volumeData = (results[1] as Map<String, dynamic>)['volumes'] ?? [];
-      _chartLoading = false;
-    });
+      setState(() {
+        _ohlcvData = results[0] as List<OhlcPoint>;
+        _volumeData = (results[1] as Map<String, dynamic>)['volumes'] ?? [];
+        _chartLoading = false;
+      });
+    } catch (e) {
+      debugPrint('MarketCoinInfo: failed to fetch chart data: $e');
+      if (!mounted || generation != _chartGeneration) return;
+      setState(() => _chartLoading = false);
+    }
   }
 
   void _onPeriodChanged(int index) {

@@ -327,6 +327,7 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
       ),
       rightOnTap2: () async {
         final data = await Clipboard.getData(Clipboard.kTextPlain);
+        if (!mounted) return;
         final text = data?.text;
         if (text != null && text != "null") {
           addressController.text = normalizeAddressBookInput(text);
