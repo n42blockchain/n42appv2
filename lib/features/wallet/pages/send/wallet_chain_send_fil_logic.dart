@@ -115,6 +115,7 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
     );
     final bool isSelf =
         addr.toUpperCase() == widget.coinModel.address.toString().toUpperCase();
+    if (!mounted) return null;
 
     if (!valid || isSelf) {
       toErrorMessage = S.current.g_key_t_50;

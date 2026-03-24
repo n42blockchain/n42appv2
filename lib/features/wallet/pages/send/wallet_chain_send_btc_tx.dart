@@ -108,6 +108,7 @@ mixin _BtcSendTxMixin on _BtcSendLogicMixin {
       }
     }
     inputUTXO = utxos;
+    if (!mounted) return;
     setState(() {});
     if (!inputValueOK) getUTXO();
   }
@@ -188,6 +189,7 @@ mixin _BtcSendTxMixin on _BtcSendLogicMixin {
     ];
     inputUTXO = utxos;
     final byteSize = await getSignByteSize(utxos, max: true);
+    if (!mounted) return;
     final int gasFee = gasFeeLevel['gasFeeRate'];
     gasFeeLevel['gasFees'] = byteSize * gasFee;
     price = widget.coinModel.balance.toInt() - (byteSize * gasFee);

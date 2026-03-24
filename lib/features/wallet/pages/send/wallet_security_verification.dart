@@ -229,6 +229,7 @@ class _WalletSecurityVerificationState
         authMessages: [authMessage],
       );
     } on PlatformException catch (e) {
+      if (!mounted) return;
       setState(() {
         faceCheck = 2;
         faceErrorMessage = e.toString();

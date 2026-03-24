@@ -69,6 +69,7 @@ mixin _AlgoSendLogicMixin on ConsumerState<WalletChainSendAlgo> {
       load = Load.loading;
     });
     final bool isOk = await widget.coinModel.getBalance(getToken: false);
+    if (!mounted) return;
     if (!isOk) {
       load = Load.finish;
       errorMessage = S.current.g_key_t_44;
@@ -153,6 +154,7 @@ mixin _AlgoSendLogicMixin on ConsumerState<WalletChainSendAlgo> {
       widget.coinModel.coin['coinType'],
       addr,
     );
+    if (!mounted) return null;
     if (!valid ||
         addr.toUpperCase() ==
             widget.coinModel.address.toString().toUpperCase()) {

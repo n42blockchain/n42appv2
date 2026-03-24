@@ -216,6 +216,7 @@ mixin _TrxSendLogicMixin on ConsumerState<WalletChainSendTrx> {
       widget.coinModel.coin['coinType'],
       addr,
     );
+    if (!mounted) return null;
     if (!isValid ||
         addr.toUpperCase() ==
             widget.coinModel.address.toString().toUpperCase()) {

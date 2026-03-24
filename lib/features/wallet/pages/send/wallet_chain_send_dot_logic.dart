@@ -151,6 +151,7 @@ mixin _DotSendLogicMixin on ConsumerState<WalletChainSendDot> {
       widget.coinModel.coin['coinType'],
       addr,
     );
+    if (!mounted) return null;
     if (!valid ||
         addr.toUpperCase() ==
             widget.coinModel.address.toString().toUpperCase()) {

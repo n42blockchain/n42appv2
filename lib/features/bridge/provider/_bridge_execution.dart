@@ -18,6 +18,8 @@ mixin BridgeExecutionMixin on ChangeNotifier {
   List<BridgeTransaction> get _transactions;
   Set<String> get _pendingTxHashes;
   BridgeStatusChangeCallback? get onStatusChanged;
+  bool get _isDisposedFlag;
+  void _notifySafely();
 
   void _setState(BridgeState state);
   void _setError(String message);
@@ -252,12 +254,14 @@ mixin BridgeExecutionMixin on ChangeNotifier {
 
   /// 检查单笔交易状态，更新记录并在终态时触发回调+持久化
   Future<void> checkTransactionStatus(BridgeTransaction transaction) async {
+    if (_isDisposedFlag) return;
     final result = await _lifiApi.getStatus(
       txHash: transaction.txHash,
       fromChainId: transaction.fromChainId,
       toChainId: transaction.toChainId,
       bridge: transaction.bridgeTool ?? '',
     );
+    if (_isDisposedFlag) return;
     if (result.error) return;
 
     final statusResp = result.data as BridgeStatusResponse;
@@ -294,7 +298,7 @@ mixin BridgeExecutionMixin on ChangeNotifier {
       }
     }
 
-    notifyListeners();
+    _notifySafely();
   }
 
   /// 主动刷新所有 pending/inProgress 交易状态（供下拉刷新使用）

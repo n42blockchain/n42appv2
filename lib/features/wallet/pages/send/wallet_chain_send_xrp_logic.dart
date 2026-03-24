@@ -179,6 +179,7 @@ mixin _XrpSendLogicMixin on ConsumerState<WalletChainSendXrp> {
       widget.coinModel.coin['coinType'],
       addr,
     );
+    if (!mounted) return null;
     if (!valid ||
         addr.toUpperCase() ==
             widget.coinModel.address.toString().toUpperCase()) {

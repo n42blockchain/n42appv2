@@ -239,6 +239,7 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
       widget.coinModel.coin['coinType'],
       addr,
     );
+    if (!mounted) return null;
 
     if (!valid ||
         addr.toUpperCase() ==

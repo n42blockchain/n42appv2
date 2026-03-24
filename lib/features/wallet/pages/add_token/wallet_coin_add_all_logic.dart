@@ -51,6 +51,7 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
         chainInfoMap['showList'] = showList;
         addSymbol = '$addSymbol,${chainMap['coin_name'].toString().toLowerCase()}';
         await wap.addWalletChain(chainInfoMap);
+        if (!mounted) return;
         chains = wap.walletMap;
         updateView(() {
           chainMap['isAdd'] = true;
@@ -243,12 +244,14 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
 
     // 1. 地址格式校验
     if (!await Trustdart().validateAddress(coinType, address)) {
+      if (!mounted) return;
       updateView(() {
         _contractState = 'error';
         _contractHint = '';
       });
       return;
     }
+    if (!mounted) return;
     updateView(() {
       _contractState = 'loading';
       _contractHint = '';
@@ -312,6 +315,7 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
 
   Future<void> importButton() async {
     if (!await checkTokenInput()) return;
+    if (!mounted) return;
     updateView(() => load = Load.loading);
     final tokenAddress = tokenEditingController.text;
     final cKeys = chainsToken.keys.toList();
@@ -341,6 +345,7 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
         ToastUtils.show("Already exists");
       } else {
         await addCoinToken(coinlist[cIndex]);
+        if (!mounted) return;
         ToastUtils.show("Successfully added");
       }
       updateView(() => load = Load.finish);

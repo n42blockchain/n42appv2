@@ -225,6 +225,7 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
     if (parts.length == 2) addr = parts[1];
 
     final valid = await Trustdart().validateAddress(_coinType, addr);
+    if (!mounted) return null;
     if (!valid ||
         addr.toUpperCase() ==
             widget.coinModel.address.toString().toUpperCase()) {
