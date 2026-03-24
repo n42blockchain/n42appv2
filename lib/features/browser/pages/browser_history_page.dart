@@ -32,44 +32,54 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
   }
 
   Future<void> refreshHistoryList() async {
-    if (loading == Load.loading) return;
-    loading = Load.loading;
-    pageNum = 1;
-    lastPage = false;
-    historyList.clear();
-    await getHistoryList();
-    if (!mounted) return;
-    loading = Load.finish;
-    setState(() {});
+    await _loadHistoryPage(pageToLoad: 1, replace: true);
   }
 
   Future<void> moreHistoryList() async {
-    loading = Load.loading;
-    pageNum++;
-    await getHistoryList();
-    if (!mounted) return;
-    loading = Load.finish;
-    setState(() {});
+    await _loadHistoryPage(pageToLoad: pageNum + 1, replace: false);
   }
 
-  Future<void> getHistoryList() async {
-    final list = await browserApi.selectBrowserHistory(
-      pageNum: pageNum,
-      pageSize: pageSize,
-    );
-    if (list.length < pageSize) {
-      lastPage = true;
+  Future<void> _loadHistoryPage({
+    required int pageToLoad,
+    required bool replace,
+  }) async {
+    if (loading == Load.loading || (!replace && lastPage)) return;
+    loading = Load.loading;
+    try {
+      final list = await browserApi.selectBrowserHistory(
+        pageNum: pageToLoad,
+        pageSize: pageSize,
+      );
+      if (!mounted) return;
+      if (replace) {
+        historyList.clear();
+        lastPage = false;
+      }
+      pageNum = pageToLoad;
+      lastPage = list.length < pageSize;
+      historyList.addAll(list);
+    } catch (e) {
+      debugPrint('load browser history failed: $e');
+    } finally {
+      if (mounted) {
+        loading = Load.finish;
+        setState(() {});
+      }
     }
-    historyList.addAll(list);
   }
 
   Future<void> deleteHistory(int index) async {
+    if (index < 0 || index >= historyList.length) return;
     final bhm = historyList[index];
     if (bhm.id != null) {
       await browserApi.deleteBrowserHistoryById(bhm.id!);
     }
     if (!mounted) return;
-    historyList.removeAt(index);
+    if (bhm.id != null) {
+      historyList.removeWhere((element) => element.id == bhm.id);
+    } else if (index >= 0 && index < historyList.length) {
+      historyList.removeAt(index);
+    }
     setState(() {});
   }
 
@@ -92,6 +102,7 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
         ],
       ),
     );
+    if (!mounted) return;
     if (confirmed != true) return;
 
     await browserApi.clearBrowserHistory();
@@ -302,15 +313,17 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
         style: TextStyle(color: subtitleColor, fontSize: su.setSp(26.0)),
       );
     } else {
+      final isLoadingMore = loading == Load.loading && historyList.isNotEmpty;
       child = Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
-            margin: EdgeInsets.only(right: su.setWidth(10.0)),
-            height: su.setWidth(40.0),
-            width: su.setWidth(40.0),
-            child: const CircularProgressIndicator(),
-          ),
+          if (isLoadingMore)
+            Container(
+              margin: EdgeInsets.only(right: su.setWidth(10.0)),
+              height: su.setWidth(40.0),
+              width: su.setWidth(40.0),
+              child: const CircularProgressIndicator(),
+            ),
           Text(
             s.g_key_106,
             style: TextStyle(color: subtitleColor, fontSize: su.setSp(26.0)),

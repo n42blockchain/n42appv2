@@ -66,6 +66,7 @@ class _BrowserPageState extends ConsumerState<BrowserPage> {
     _browserProvider ??= ref.read(browserNotifierProvider);
     final bp = _browserProvider!;
     bp.connectDAPPCallBack = (String url, bool connect) {
+      if (!mounted) return;
       if (connect) {
         Navigator.push(
           context,
@@ -76,6 +77,7 @@ class _BrowserPageState extends ConsumerState<BrowserPage> {
       }
     };
     bp.phishingCallBack = (String url, VoidCallback proceed) {
+      if (!mounted) return;
       _showPhishingWarning(url, proceed);
     };
 

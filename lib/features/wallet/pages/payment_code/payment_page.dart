@@ -80,14 +80,21 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
   }
 
   Future<void> _initData() async {
-    _initUserInfo();
-    await _initCoinInfo();
-    await _initCoinModel();
+    try {
+      await Future.wait<void>([_initUserInfo(), _initCoinInfo()]);
+      if (!mounted) return;
+      await _initCoinModel();
+    } catch (e) {
+      if (!mounted) return;
+      errorMessage = e.toString();
+      setState(() => load = Load.finish);
+    }
   }
 
   Future<void> _initUserInfo() async {
     if (uuid.isEmpty) return;
     final mm = await _userInfoApi.getUserInfoWithUUID(uuid);
+    if (!mounted) return;
     if (!mm.error && mm.data != null) {
       try {
         userInfo = UserInfo.fromJson(Map<String, dynamic>.from(mm.data as Map));
@@ -95,10 +102,11 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
         debugPrint('initUserInfo parse error: $e');
       }
     }
-    if (mounted) setState(() {});
+    setState(() {});
   }
 
   Future<void> _initCoinInfo() async {
+    if (!mounted) return;
     usdtInfo = ref.read(wapBridgeProvider).getCoinPriceWithUnit("usdt");
     final list = await MarketApi().getWalletCoinsInfo("usdt");
     if (!mounted) return;
@@ -131,6 +139,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
   }
 
   Future<void> _initCoinModel() async {
+    if (!mounted) return;
     final wap = ref.read(wapBridgeProvider);
     coinModels.clear();
     for (final cm in wap.coinList) {
@@ -156,10 +165,17 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
       coinMain = null;
       errorMessage = '';
     });
-    await _initCoinMainModel(generation: generation);
+    try {
+      await _initCoinMainModel(generation: generation);
+    } catch (e) {
+      if (!mounted || generation != _coinSelectionGeneration) return;
+      errorMessage = e.toString();
+      setState(() {});
+    }
   }
 
   Future<void> _initCoinMainModel({required int generation}) async {
+    if (!mounted) return;
     final wap = ref.read(wapBridgeProvider);
     final selectedCoin = coinModels[coinModelIndex];
     final cIndex = wap.coinModels.indexWhere((element) {
@@ -383,7 +399,8 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                             builder: (_) => WalletSecurityVerification(),
                           ),
                         );
-                        if (r == true) web3Transaction();
+                        if (!mounted || r != true) return;
+                        web3Transaction();
                       },
                       _buttonLabel,
                       _themeColor(

@@ -43,7 +43,10 @@ class BrowserProvider extends ChangeNotifier {
 
   Future<void> getBrowserSetting() async {
     final b = await SPUtil().getBrowserSetting();
-    if (b != null) browser = b;
+    if (b != null) {
+      browser = b;
+      notifyListeners();
+    }
   }
 
   List<WebViewController> wvcList = [];
@@ -69,7 +72,9 @@ class BrowserProvider extends ChangeNotifier {
   /// Shortcut: WebViewController of the currently active tab
   WebViewController get _currentController {
     if (wListIndex < 0 || wListIndex >= wvcList.length) {
-      throw StateError('Invalid browser tab index: $wListIndex (tabs: ${wvcList.length})');
+      throw StateError(
+        'Invalid browser tab index: $wListIndex (tabs: ${wvcList.length})',
+      );
     }
     return wvcList[wListIndex];
   }
@@ -102,6 +107,9 @@ class BrowserProvider extends ChangeNotifier {
   bool canBack = false;
   bool canForward = false;
   bool collect = false;
+  int _collectionRequestId = 0;
+  int _navigationStateRequestId = 0;
+  int _titleRequestId = 0;
 
   void browserInit() {
     titleEditingController = TextEditingController();
@@ -297,22 +305,43 @@ class BrowserProvider extends ChangeNotifier {
 
   /// Check whether the given URL is in the bookmarks collection.
   Future<void> getCollectionUrl(String url) async {
+    final requestId = ++_collectionRequestId;
     final list = await browserApi.selectBrowserCollectionUrl(url);
+    if (requestId != _collectionRequestId) return;
+    if (url != _currentUrl) return;
     collect = list.isNotEmpty;
     notifyListeners();
   }
 
   Future<void> getTitle() async {
-    final t = await _currentController.getTitle();
+    final index = wListIndex;
+    if (index < 0 || index >= wvcList.length || index >= wInfoList.length) {
+      return;
+    }
+    final controller = wvcList[index];
+    final requestId = ++_titleRequestId;
+    final t = await controller.getTitle();
+    if (requestId != _titleRequestId) return;
+    if (index != wListIndex || index >= wInfoList.length) return;
+    if (!identical(controller, wvcList[index])) return;
     if (t != null) {
-      wInfoList[wListIndex]['title'] = t;
+      wInfoList[index]['title'] = t;
       notifyListeners();
     }
   }
 
   Future<void> checkCanGo() async {
-    canBack = await _currentController.canGoBack();
-    canForward = await _currentController.canGoForward();
+    final index = wListIndex;
+    if (index < 0 || index >= wvcList.length) return;
+    final controller = wvcList[index];
+    final requestId = ++_navigationStateRequestId;
+    final canGoBack = await controller.canGoBack();
+    final canGoForward = await controller.canGoForward();
+    if (requestId != _navigationStateRequestId) return;
+    if (index != wListIndex || index >= wvcList.length) return;
+    if (!identical(controller, wvcList[index])) return;
+    canBack = canGoBack;
+    canForward = canGoForward;
     notifyListeners();
   }
 
@@ -386,6 +415,7 @@ class BrowserProvider extends ChangeNotifier {
         builder: (_) => BrowserCollection(title ?? "", currentUrl ?? ""),
       ),
     );
+    if (!context.mounted) return;
     getCollectionUrl(_currentUrl);
   }
 

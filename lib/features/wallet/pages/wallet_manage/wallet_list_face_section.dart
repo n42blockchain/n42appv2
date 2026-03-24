@@ -80,6 +80,9 @@ mixin _WalletListFaceMixin on ConsumerState<WalletList> {
     final rData = await _matchFace();
     if (!mounted) return;
     if (rData == null) return;
+    if (_state.fbwIndex < 0 || _state.fbwIndex >= _state.walletList.length) {
+      return;
+    }
 
     setState(() {
       _state.load = Load.loading;
