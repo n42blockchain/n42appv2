@@ -25,7 +25,16 @@ class SecuritySetting extends ConsumerStatefulWidget {
 }
 
 class _SecuritySettingState extends ConsumerState<SecuritySetting> {
-  List<String> lockTimeList = ["10", "30", "60", "120", "180", "240", "300", "600"];
+  List<String> lockTimeList = [
+    "10",
+    "30",
+    "60",
+    "120",
+    "180",
+    "240",
+    "300",
+    "600",
+  ];
 
   /// 将秒数格式化为人类可读形式：< 60 显示秒，>= 60 显示分钟
   String _formatLockTime(int seconds) {
@@ -50,8 +59,10 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
 
   Future<void> init() async {
     Map<String, dynamic>? s = await SPUtil().getSecurity();
+    if (!mounted) return;
     if (s != null) {
-      Map<String, dynamic>? userSecurityMap = s[AppGlobals.userInfo?.uuid ?? ""];
+      Map<String, dynamic>? userSecurityMap =
+          s[AppGlobals.userInfo?.uuid ?? ""];
       if (userSecurityMap != null) {
         setState(() {
           securityMap['email'] = userSecurityMap['email'];
@@ -66,6 +77,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
   Future<void> initFace() async {
     FaceRecognitionPublic frp = FaceRecognitionPublic();
     checkBiometrics = await frp.checkBiometrics();
+    if (!mounted) return;
     setState(() {});
   }
 
@@ -75,15 +87,14 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
     s ??= {};
     s[AppGlobals.userInfo?.uuid ?? ""] = securityMap;
     await sPUtils.setSecurity(s);
+    if (!mounted) return;
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(
-        text: S.of(context).s_key_11,
-      ),
+      appBar: AppBarWidget(text: S.of(context).s_key_11),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
@@ -91,11 +102,16 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0)),
+                padding: EdgeInsets.symmetric(
+                  vertical: ScreenUtil().setWidth(20.0),
+                ),
                 child: Text(
                   S.of(context).google_verification_message5,
                   style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                    color: AppThemeUtils.getColorByKey(
+                      context,
+                      AppThemeKeys.mainTextColor.name,
+                    ),
                     fontSize: ScreenUtil().setSp(30.0),
                   ),
                 ),
@@ -105,7 +121,10 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                 child: Text(
                   S.of(context).google_verification_message6,
                   style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.ff888888.name),
+                    color: AppThemeUtils.getColorByKey(
+                      context,
+                      AppThemeKeys.ff888888.name,
+                    ),
                     fontSize: ScreenUtil().setSp(30.0),
                   ),
                 ),
@@ -118,7 +137,9 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                   () async {
                     await Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => const ChangePasswordPage()),
+                      MaterialPageRoute(
+                        builder: (_) => const ChangePasswordPage(),
+                      ),
                     );
                   },
                 ),
@@ -127,15 +148,24 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                 securityMap['email'],
                 () async {
                   await Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => SecurityEdit('email')));
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SecurityEdit('email'),
+                    ),
+                  );
                   init();
                 },
               ),
               Container(
                 margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20.0)),
                 decoration: BoxDecoration(
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16.0)),
+                  color: AppThemeUtils.getColorByKey(
+                    context,
+                    AppThemeKeys.itemBgColor.name,
+                  ),
+                  borderRadius: BorderRadius.circular(
+                    ScreenUtil().setWidth(16.0),
+                  ),
                 ),
                 child: Column(
                   children: [
@@ -165,7 +195,9 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                                 style: TextStyle(
                                   fontSize: ScreenUtil().setSp(28),
                                   color: AppThemeUtils.getColorByKey(
-                                      context, AppThemeKeys.errorTextColor.name),
+                                    context,
+                                    AppThemeKeys.errorTextColor.name,
+                                  ),
                                 ),
                               ),
                             ),
@@ -179,7 +211,9 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                                 style: TextStyle(
                                   fontSize: ScreenUtil().setSp(30),
                                   color: AppThemeUtils.getColorByKey(
-                                      context, AppThemeKeys.mainBlueColor.name),
+                                    context,
+                                    AppThemeKeys.mainBlueColor.name,
+                                  ),
                                 ),
                               ),
                             ),
@@ -196,13 +230,17 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                     children: [
                       Container(
                         height: ScreenUtil().setWidth(60.0),
-                        margin: EdgeInsets.only(top: ScreenUtil().setWidth(40.0)),
+                        margin: EdgeInsets.only(
+                          top: ScreenUtil().setWidth(40.0),
+                        ),
                         alignment: Alignment.centerLeft,
                         child: Text(
                           S.of(context).g_lock_key15,
                           style: TextStyle(
                             color: AppThemeUtils.getColorByKey(
-                                context, AppThemeKeys.mainTextColor.name),
+                              context,
+                              AppThemeKeys.mainTextColor.name,
+                            ),
                             fontSize: ScreenUtil().setSp(30.0),
                           ),
                         ),

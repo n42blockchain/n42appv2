@@ -38,6 +38,7 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
     lastPage = false;
     historyList.clear();
     await getHistoryList();
+    if (!mounted) return;
     loading = Load.finish;
     setState(() {});
   }
@@ -46,13 +47,16 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
     loading = Load.loading;
     pageNum++;
     await getHistoryList();
+    if (!mounted) return;
     loading = Load.finish;
     setState(() {});
   }
 
   Future<void> getHistoryList() async {
     final list = await browserApi.selectBrowserHistory(
-        pageNum: pageNum, pageSize: pageSize);
+      pageNum: pageNum,
+      pageSize: pageSize,
+    );
     if (list.length < pageSize) {
       lastPage = true;
     }
@@ -64,6 +68,7 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
     if (bhm.id != null) {
       await browserApi.deleteBrowserHistoryById(bhm.id!);
     }
+    if (!mounted) return;
     historyList.removeAt(index);
     setState(() {});
   }
@@ -90,9 +95,9 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
     if (confirmed != true) return;
 
     await browserApi.clearBrowserHistory();
+    if (!mounted) return;
     historyList.clear();
     setState(() {});
-    if (!mounted) return;
     ToastUtils.show(s.g_browser_key21);
   }
 
@@ -127,7 +132,10 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
   @override
   Widget build(BuildContext context) {
     final s = S.of(context);
-    final mainText = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+    final mainText = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.mainTextColor.name,
+    );
 
     return Scaffold(
       appBar: AppBarWidget(
@@ -143,9 +151,13 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
       body: RefreshIndicator(
         onRefresh: refreshHistoryList,
         backgroundColor: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainButtonBgColor.name),
+          context,
+          AppThemeKeys.mainButtonBgColor.name,
+        ),
         color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainButtonTextColor.name),
+          context,
+          AppThemeKeys.mainButtonTextColor.name,
+        ),
         displacement: ScreenUtil().setWidth(72.0),
         child: historyList.isEmpty ? _noDataWidget() : _listWidget(),
       ),
@@ -155,9 +167,18 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
   Widget _listWidget() {
     final s = S.of(context);
     final su = ScreenUtil();
-    final mainText = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final subtitleColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
-    final itemBg = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name);
+    final mainText = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.mainTextColor.name,
+    );
+    final subtitleColor = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.itemSubtitleTextColor.name,
+    );
+    final itemBg = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.itemBgColor.name,
+    );
 
     return NotificationListener<ScrollNotification>(
       onNotification: (notification) {
@@ -179,7 +200,8 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
           }
 
           final item = historyList[index];
-          final showHeader = index == 0 ||
+          final showHeader =
+              index == 0 ||
               _dateLabel(item) != _dateLabel(historyList[index - 1]);
 
           return Column(
@@ -277,10 +299,7 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
     if (lastPage) {
       child = Text(
         s.g_key_105,
-        style: TextStyle(
-          color: subtitleColor,
-          fontSize: su.setSp(26.0),
-        ),
+        style: TextStyle(color: subtitleColor, fontSize: su.setSp(26.0)),
       );
     } else {
       child = Row(
@@ -294,10 +313,7 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
           ),
           Text(
             s.g_key_106,
-            style: TextStyle(
-              color: subtitleColor,
-              fontSize: su.setSp(26.0),
-            ),
+            style: TextStyle(color: subtitleColor, fontSize: su.setSp(26.0)),
           ),
         ],
       );
