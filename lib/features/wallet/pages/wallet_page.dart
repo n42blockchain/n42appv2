@@ -26,6 +26,7 @@ import 'package:n42_wallet/features/wallet/pages/wallet_page_top_bar.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_sheets.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/features/wallet/services/ens_service.dart';
+import 'package:n42_wallet/features/wallet/utils/feature_address_utils.dart';
 import 'package:n42_wallet/features/wallet/widgets/feature_entry_cards.dart';
 import 'package:n42_wallet/features/wallet/widgets/wallet_board.dart';
 import 'package:n42_wallet/features/wallet_connect/pages/wallet_connect_page.dart';
@@ -75,7 +76,10 @@ class _WalletPageState extends ConsumerState<WalletPage> {
     SPUtil().getSmallAssetsThreshold().then((v) {
       if (mounted) setState(() => _smallAssetsThreshold = v);
     });
-    WidgetsBinding.instance.addPostFrameCallback((_) => _startPriceTimer());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _startPriceTimer();
+    });
   }
 
   @override
@@ -152,16 +156,33 @@ class _WalletPageState extends ConsumerState<WalletPage> {
   // ── ENS ───────────────────────────────────────────────────────────────────
 
   Future<void> _loadEnsInfo(String ethAddress) async {
-    if (ethAddress.isEmpty || ethAddress == _lastCheckedAddress) return;
-    _lastCheckedAddress = ethAddress;
-    try {
-      final ensName = await EnsService().resolveAddress(ethAddress);
-      if (mounted && ensName != null && ensName.isNotEmpty) {
-        setState(() => _ensName = ensName);
+    final normalizedAddress = FeatureAddressUtils.normalize(ethAddress);
+    if (!FeatureAddressUtils.isValidEvmAddress(normalizedAddress)) {
+      _lastCheckedAddress = normalizedAddress;
+      if (_ensName != null && mounted) {
+        setState(() => _ensName = null);
       }
+      return;
+    }
+    if (normalizedAddress == _lastCheckedAddress) return;
+    _lastCheckedAddress = normalizedAddress;
+    if (_ensName != null && mounted) {
+      setState(() => _ensName = null);
+    }
+    try {
+      final ensName = await EnsService().resolveAddress(normalizedAddress);
+      if (!mounted || _lastCheckedAddress != normalizedAddress) return;
+      setState(() => _ensName = ensName?.isNotEmpty == true ? ensName : null);
     } catch (e) {
       debugPrint('ENS reverse resolve error: $e');
+      if (mounted && _lastCheckedAddress == normalizedAddress) {
+        setState(() => _ensName = null);
+      }
     }
+  }
+
+  void _showEvmFeatureUnavailableToast() {
+    ToastUtils.showWarning(S.of(context).g_key_bridge_chain_not_supported);
   }
 
   // ── WalletConnect ─────────────────────────────────────────────────────────
@@ -291,9 +312,10 @@ class _WalletPageState extends ConsumerState<WalletPage> {
               }
 
               if (!_discoveryScanned) {
-                WidgetsBinding.instance.addPostFrameCallback(
-                  (_) => _runTokenDiscovery(waValue),
-                );
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (!mounted) return;
+                  _runTokenDiscovery(waValue);
+                });
               }
 
               return Stack(
@@ -376,8 +398,19 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                                             CoinType.ETH.name,
                                           ) ??
                                           '';
-                                      if (ethAddress.isNotEmpty) {
+                                      final canOpenEvmFeatures =
+                                          FeatureAddressUtils.isValidEvmAddress(
+                                            ethAddress,
+                                          );
+                                      if (canOpenEvmFeatures) {
                                         _loadEnsInfo(ethAddress);
+                                      } else if (_ensName != null) {
+                                        WidgetsBinding.instance
+                                            .addPostFrameCallback((_) {
+                                              if (mounted) {
+                                                setState(() => _ensName = null);
+                                              }
+                                            });
                                       }
                                       final hasAA =
                                           waValue.walletInfo.hasAAAccounts;
@@ -390,25 +423,39 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                                         ensName: _ensName,
                                         hasSmartAccount: hasAA,
                                         isSmartAccountDeployed: isDeployed,
-                                        onEnsTap: () => Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (_) => EnsHomePage(
-                                              walletAddress: ethAddress,
+                                        ensEnabled: canOpenEvmFeatures,
+                                        smartAccountEnabled: canOpenEvmFeatures,
+                                        onEnsTap: () {
+                                          if (!canOpenEvmFeatures) {
+                                            _showEvmFeatureUnavailableToast();
+                                            return;
+                                          }
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (_) => EnsHomePage(
+                                                walletAddress: ethAddress,
+                                              ),
                                             ),
-                                          ),
-                                        ),
-                                        onSmartAccountTap: () => Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (_) => AAHomePage(
-                                              walletAddress: ethAddress,
-                                              accountInfo: waValue
-                                                  .walletInfo
-                                                  .aaAccountInfo,
+                                          );
+                                        },
+                                        onSmartAccountTap: () {
+                                          if (!canOpenEvmFeatures) {
+                                            _showEvmFeatureUnavailableToast();
+                                            return;
+                                          }
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (_) => AAHomePage(
+                                                walletAddress: ethAddress,
+                                                accountInfo: waValue
+                                                    .walletInfo
+                                                    .aaAccountInfo,
+                                              ),
                                             ),
-                                          ),
-                                        ),
+                                          );
+                                        },
                                       );
                                     },
                                   ),

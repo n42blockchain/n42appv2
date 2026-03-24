@@ -68,11 +68,12 @@ class _AAAccountCreatePageState extends State<AAAccountCreatePage>
       previewAddress = null;
       addressError = null;
     });
+    final addressErrorMessage = S.of(context).g_key_aa_address_error;
 
     try {
       final config = AAConfig.getChainConfig(selectedChain);
       if (config == null) {
-        _finishCalculation(error: S.of(context).g_key_aa_address_error);
+        _finishCalculation(error: addressErrorMessage);
         return;
       }
 
@@ -89,10 +90,10 @@ class _AAAccountCreatePageState extends State<AAAccountCreatePage>
 
       _finishCalculation(
         address: address,
-        error: address == null ? S.of(context).g_key_aa_address_error : null,
+        error: address == null ? addressErrorMessage : null,
       );
     } catch (_) {
-      _finishCalculation(error: S.of(context).g_key_aa_address_error);
+      _finishCalculation(error: addressErrorMessage);
     }
   }
 

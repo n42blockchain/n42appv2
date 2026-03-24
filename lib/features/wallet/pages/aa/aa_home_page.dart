@@ -14,6 +14,7 @@ import 'package:n42_wallet/features/wallet/pages/aa/aa_account_list_page.dart';
 import 'package:n42_wallet/features/wallet/pages/aa/aa_send_page.dart';
 import 'package:n42_wallet/features/wallet/pages/aa/aa_batch_transaction_page.dart';
 import 'package:n42_wallet/features/wallet/pages/aa/session_key_manage_page.dart';
+import 'package:n42_wallet/features/wallet/utils/feature_address_utils.dart';
 import 'package:n42_wallet/features/wallet/widgets/aa/smart_account_card.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 
@@ -33,11 +34,7 @@ class AAHomePage extends StatefulWidget {
   /// AA 账户信息
   final AAAccountInfo? accountInfo;
 
-  const AAHomePage({
-    super.key,
-    required this.walletAddress,
-    this.accountInfo,
-  });
+  const AAHomePage({super.key, required this.walletAddress, this.accountInfo});
 
   @override
   State<AAHomePage> createState() => _AAHomePageState();
@@ -46,6 +43,16 @@ class AAHomePage extends StatefulWidget {
 class _AAHomePageState extends State<AAHomePage> {
   List<SmartAccount> accounts = [];
 
+  bool get _hasOwnerAddress =>
+      FeatureAddressUtils.isValidEvmAddress(widget.walletAddress);
+
+  void _showUnsupportedSnack() {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(S.of(context).g_key_bridge_chain_not_supported)),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -53,6 +60,7 @@ class _AAHomePageState extends State<AAHomePage> {
   }
 
   void _loadAccounts() {
+    if (!mounted) return;
     accounts = [
       if (widget.accountInfo != null)
         for (final list in widget.accountInfo!.smartAccounts.values) ...list,
@@ -64,48 +72,79 @@ class _AAHomePageState extends State<AAHomePage> {
       Navigator.push(context, MaterialPageRoute(builder: (_) => page));
 
   void navigateToCreateAccount() {
-    _pushPage(AAAccountCreatePage(ownerAddress: widget.walletAddress))
-        .then((_) => _loadAccounts());
+    if (!_hasOwnerAddress) {
+      _showUnsupportedSnack();
+      return;
+    }
+    _pushPage(AAAccountCreatePage(ownerAddress: widget.walletAddress)).then((
+      _,
+    ) {
+      if (!mounted) return;
+      _loadAccounts();
+    });
   }
 
   void navigateToAccountList() {
-    _pushPage(AAAccountListPage(
-      walletAddress: widget.walletAddress,
-      accountInfo: widget.accountInfo,
-    ));
+    if (!_hasOwnerAddress) {
+      _showUnsupportedSnack();
+      return;
+    }
+    _pushPage(
+      AAAccountListPage(
+        walletAddress: widget.walletAddress,
+        accountInfo: widget.accountInfo,
+      ),
+    );
   }
 
   void navigateToAccountDetail(SmartAccount account) {
-    _pushPage(AAAccountDetailPage(
-      account: account,
-      walletAddress: widget.walletAddress,
-    ));
+    if (!_hasOwnerAddress) {
+      _showUnsupportedSnack();
+      return;
+    }
+    _pushPage(
+      AAAccountDetailPage(
+        account: account,
+        walletAddress: widget.walletAddress,
+      ),
+    );
   }
 
   void navigateToSend(SmartAccount account) {
-    _pushPage(AASendPage(
-      account: account,
-      walletAddress: widget.walletAddress,
-    ));
+    if (!_hasOwnerAddress) {
+      _showUnsupportedSnack();
+      return;
+    }
+    _pushPage(
+      AASendPage(account: account, walletAddress: widget.walletAddress),
+    );
   }
 
   void navigateToBatchTransaction(SmartAccount account) {
-    _pushPage(AABatchTransactionPage(
-      account: account,
-      walletAddress: widget.walletAddress,
-    ));
+    if (!_hasOwnerAddress) {
+      _showUnsupportedSnack();
+      return;
+    }
+    _pushPage(
+      AABatchTransactionPage(
+        account: account,
+        walletAddress: widget.walletAddress,
+      ),
+    );
   }
 
   void navigateToSessionKeys(SmartAccount account) {
+    if (!_hasOwnerAddress) {
+      _showUnsupportedSnack();
+      return;
+    }
     _pushPage(SessionKeyManagePage(account: account));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(
-        text: S.of(context).g_key_aa_title,
-      ),
+      appBar: AppBarWidget(text: S.of(context).g_key_aa_title),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
         child: Column(
@@ -122,7 +161,9 @@ class _AAHomePageState extends State<AAHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: navigateToCreateAccount,
+        onPressed: _hasOwnerAddress
+            ? navigateToCreateAccount
+            : _showUnsupportedSnack,
         backgroundColor: AppThemeUtils.getColorByKey(
           context,
           AppThemeKeys.mainBlueColor.name,

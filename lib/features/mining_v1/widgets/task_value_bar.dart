@@ -4,7 +4,7 @@ import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TaskValueBar extends StatelessWidget {
-  const TaskValueBar({Key? key}) : super(key: key);
+  const TaskValueBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,19 +12,19 @@ class TaskValueBar extends StatelessWidget {
       height: ScreenUtil().setWidth(72),
       width: double.infinity,
       decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.bottomLeft,
-            end: Alignment.topRight,
-            colors: [
-              Color.fromRGBO(135, 161, 255, 1),
-              Color.fromRGBO(60, 133, 255, 1),
-              Color.fromRGBO(25, 118, 249, 1),
-            ],
-          ),
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(ScreenUtil().setWidth(30)),
-            topRight: Radius.circular(ScreenUtil().setWidth(30)),
-          )
+        gradient: LinearGradient(
+          begin: Alignment.bottomLeft,
+          end: Alignment.topRight,
+          colors: [
+            Color.fromRGBO(135, 161, 255, 1),
+            Color.fromRGBO(60, 133, 255, 1),
+            Color.fromRGBO(25, 118, 249, 1),
+          ],
+        ),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(ScreenUtil().setWidth(30)),
+          topRight: Radius.circular(ScreenUtil().setWidth(30)),
+        ),
       ),
       child: Row(
         // mainAxisAlignment:MainAxisAlignment.spaceBetween,
@@ -36,7 +36,10 @@ class TaskValueBar extends StatelessWidget {
               child: Text(
                 S.current.g_key_wallet_k54,
                 style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainWhiteColor.name),
+                  color: AppThemeUtils.getColorByKey(
+                    context,
+                    AppThemeKeys.mainWhiteColor.name,
+                  ),
                   fontSize: ScreenUtil().setSp(30),
                 ),
                 textAlign: TextAlign.left,
@@ -49,7 +52,10 @@ class TaskValueBar extends StatelessWidget {
               // "Reward",
               S.of(context).g_mining_key_48,
               style: TextStyle(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainWhiteColor.name),
+                color: AppThemeUtils.getColorByKey(
+                  context,
+                  AppThemeKeys.mainWhiteColor.name,
+                ),
                 fontSize: ScreenUtil().setSp(30),
               ),
               textAlign: TextAlign.center,
@@ -63,7 +69,10 @@ class TaskValueBar extends StatelessWidget {
                 // "Time",
                 S.of(context).g_key_wallet_k25,
                 style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainWhiteColor.name),
+                  color: AppThemeUtils.getColorByKey(
+                    context,
+                    AppThemeKeys.mainWhiteColor.name,
+                  ),
                   fontSize: ScreenUtil().setSp(30),
                 ),
                 textAlign: TextAlign.right,

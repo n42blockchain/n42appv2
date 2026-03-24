@@ -9,8 +9,30 @@ part of 'stake_page.dart';
 /// position selector, unstake amount input, quick unstake buttons, and
 /// the unstake action button.
 mixin _StakeSectionsMixin on _StakeLogicMixin {
-  // Forward: implemented by _StakeViewsMixin
-  Widget _buildNoWalletHint(BuildContext context);
+  Widget _buildNoWalletHint(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      decoration: BoxDecoration(
+        color: AppThemeUtils.getColorByKey(
+          context,
+          AppThemeKeys.itemBgColor.name,
+        ),
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+      ),
+      child: Center(
+        child: Text(
+          S.of(context).g_key_stake_no_wallet,
+          style: TextStyle(
+            fontSize: ScreenUtil().setSp(26),
+            color: AppThemeUtils.getColorByKey(
+              context,
+              AppThemeKeys.itemSubtitleTextColor.name,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
   // ── Liquid unstake view ─────────────────────────────────────────────────
 

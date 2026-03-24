@@ -47,19 +47,21 @@ class _MiningHomePageState extends State<MiningHomePage> with AutomaticKeepAlive
     _eventBusSub?.cancel();
     super.dispose();
   }
-  initData(int walletIndex)async{
-    AppConfig.isMainChainMining= await SPUtil().getIsMainChainMining()??true;
+  Future<void> initData(int walletIndex) async {
+    AppConfig.isMainChainMining =
+        await SPUtil().getIsMainChainMining() ?? true;
     await MiningUtils.stopMining();
     MiningApi.cleanToken();
-    MiningProvider mp=globalMiningV1;
+    MiningProvider mp = globalMiningV1;
     mp.resetData();
 
     await mp.checkAddressMiningStatus(wIndex: walletIndex);
-    ///挖矿逻辑初始化
+    /// 挖矿逻辑初始化
     await MiningUtils.initEvmSdk();
     MiningUtils.startMining();
     eventBus.fire(EventPublic(EventPublicType.refreshMiningData));
   }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -73,7 +75,8 @@ class _MiningHomePageState extends State<MiningHomePage> with AutomaticKeepAlive
       listenable: globalMiningV1,
       builder: (context, _) {
         final miningModel = globalMiningV1;
-        if (miningModel.depositsEnable == null && !miningModel.isLoadingMiningDeposits)
+        if (miningModel.depositsEnable == null &&
+            !miningModel.isLoadingMiningDeposits) {
           return Center(
             child: Padding(
               padding: EdgeInsets.all(ScreenUtil().setWidth(40)),
@@ -85,6 +88,7 @@ class _MiningHomePageState extends State<MiningHomePage> with AutomaticKeepAlive
               ),
             ),
           );
+        }
         if (miningModel.depositsEnable != null) {
           return const MiningIndex();
         }

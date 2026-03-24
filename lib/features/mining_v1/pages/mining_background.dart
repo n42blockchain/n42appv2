@@ -3,7 +3,7 @@ import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/features/utils/notfication_utils.dart';
 
 class MiningBackground {
-  background_start() {
+  void backgroundStart() {
     // LiveActivity not available in n42appv2 - skipped
     if (Platform.isAndroid) {
       notification.sendAndroid(
@@ -14,7 +14,7 @@ class MiningBackground {
     }
   }
 
-  background_end() {
+  void backgroundEnd() {
     // LiveActivity not available in n42appv2 - skipped
     if (Platform.isAndroid) {
       notification.cancelNotification(10086);

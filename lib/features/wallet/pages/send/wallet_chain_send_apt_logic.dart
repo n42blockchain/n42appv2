@@ -35,8 +35,9 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
     if (widget.coinModel.coin['isContract'] == true) {
       final wap = ref.read(wapBridgeProvider);
       final cIndex = wap.coinModels.indexWhere((element) {
-        if (element.coin['coinType'] != widget.coinModel.coin['coinType'])
+        if (element.coin['coinType'] != widget.coinModel.coin['coinType']) {
           return false;
+        }
         if (widget.coinModel.privateKey != null) {
           return element.privateKey == widget.coinModel.privateKey;
         }
@@ -201,6 +202,7 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
           ? widget.coinModel.coin['chainId_test']
           : widget.coinModel.coin['chainId'];
 
+    if (!mounted) return;
     final bool check = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -243,6 +245,7 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
           widget.coinModel.coin['coinType'] ?? '',
           toTextEditingController.text.trim(),
         );
+        if (!mounted) return;
         ToastUtils.show(S.current.g_key_nft_41);
         Navigator.pop(context);
       }

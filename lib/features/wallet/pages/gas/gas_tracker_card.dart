@@ -279,7 +279,6 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
   Widget buildGasPredictionCard() {
     final su = ScreenUtil();
     final textColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final subtitleColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
 
     return Container(
       padding: EdgeInsets.all(su.setWidth(20)),

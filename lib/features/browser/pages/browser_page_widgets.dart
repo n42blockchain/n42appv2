@@ -121,7 +121,7 @@ extension _BrowserPageWidgets on _BrowserPageState {
           border: Border.all(width: sw(2.0), color: _mainTextColor()),
         ),
         child: Text(
-          "${bValue.wList.length}",
+          "${bValue.wvcList.length}",
           style: TextStyle(fontSize: sp(20.0), color: _mainTextColor()),
         ),
       ),
@@ -145,7 +145,11 @@ extension _BrowserPageWidgets on _BrowserPageState {
   Widget _buildWebViewArea(BrowserProvider bValue) {
     if (bValue.showWList) return _buildTabGridView(bValue);
     if (bValue.wListIndex == -1) return EmptyView();
-    return bValue.wList[bValue.wListIndex];
+    final controller = bValue.wvcList[bValue.wListIndex];
+    return KeyedSubtree(
+      key: ValueKey('browser_webview_${controller.hashCode}'),
+      child: WebViewWidget(controller: controller),
+    );
   }
 
   Widget _buildMainToolbar(BrowserProvider bValue) {

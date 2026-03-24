@@ -113,7 +113,7 @@ extension _WalletCoinAddAllImportFormUI on _WalletCoinAddAllState {
             onEditingComplete: () {
               FocusScope.of(context).requestFocus(symbolFocusNode);
               addressCheck(tokenEditingController.text);
-              setState(() {});
+              updateView();
             },
             trailing: [
               // 扫码按钮
@@ -137,7 +137,7 @@ extension _WalletCoinAddAllImportFormUI on _WalletCoinAddAllState {
                   if (text != null && text != "null") {
                     tokenEditingController.text = text;
                     addressCheck(text);
-                    setState(() {});
+                    updateView();
                   }
                 },
                 child: Container(

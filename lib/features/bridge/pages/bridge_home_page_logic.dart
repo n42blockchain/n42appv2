@@ -117,6 +117,7 @@ mixin BridgeHomeLogicMixin on ConsumerState<BridgeHomePage> {
     BridgeProvider provider,
   ) async {
     try {
+      final strings = S.of(context);
       final walletProvider = ref.read(wapBridgeProvider);
       final walletInfo = walletProvider.walletInfo;
       final mnemonic = walletInfo.mnemonic ?? '';
@@ -151,14 +152,16 @@ mixin BridgeHomeLogicMixin on ConsumerState<BridgeHomePage> {
         mnemonic: mnemonic,
         pk: privateKey,
       );
+      if (!context.mounted) return null;
 
       if (signedTx.isEmpty) {
-        _showSnack(context, S.of(context).g_key_175);
+        _showSnack(context, strings.g_key_175);
         return null;
       }
 
       return signedTx;
     } catch (e) {
+      if (!context.mounted) return null;
       _showSnack(context, e.toString());
       return null;
     }

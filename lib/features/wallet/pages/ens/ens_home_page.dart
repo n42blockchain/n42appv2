@@ -12,6 +12,7 @@ import 'package:n42_wallet/features/wallet/pages/ens/ens_management_page.dart';
 import 'package:n42_wallet/features/wallet/pages/ens/ens_owned_name_filter.dart';
 import 'package:n42_wallet/features/wallet/services/ens_expiry_reminder_service.dart';
 import 'package:n42_wallet/features/wallet/services/ens_registration_service.dart';
+import 'package:n42_wallet/features/wallet/utils/feature_address_utils.dart';
 import 'package:n42_wallet/features/wallet/widgets/ens/ens_owned_list_item.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 
@@ -54,7 +55,7 @@ class _EnsHomePageState extends State<EnsHomePage>
       appBar: AppBarWidget(text: S.of(context).g_key_ens_title),
       body: RefreshIndicator(onRefresh: loadOwnedNames, child: _buildContent()),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: navigateToSearch,
+        onPressed: _hasWalletAddress ? navigateToSearch : _showUnsupportedSnack,
         backgroundColor: AppThemeUtils.getColorByKey(
           context,
           AppThemeKeys.mainBlueColor.name,

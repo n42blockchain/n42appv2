@@ -62,6 +62,7 @@ mixin _FullNodePageLogic on State<FullNodePage> {
     if (_self.astBalance == null || _self.astBalance! < 50) {
       await checkAstBalance();
     }
+    if (!mounted) return;
     if (_self.astBalance == null || _self.astBalance! < 50) return;
     if (_self.astBalance! < widget.astNum) return;
 
@@ -82,6 +83,7 @@ mixin _FullNodePageLogic on State<FullNodePage> {
     final WalletInfo walletInfo = wap.walletInfoLsit[mp.walletIndex];
     if (walletInfo.password == "") {
       final flag = await tipsDialog7(context);
+      if (!mounted) return;
       if (flag != null && flag) {
         await Navigator.push(
           context,
@@ -149,9 +151,11 @@ mixin _FullNodePageLogic on State<FullNodePage> {
             ToastUtils.show("insufficient funds for transfer");
           }
         } finally {
-          setState(() {
-            _self.load = Load.finish;
-          });
+          if (mounted) {
+            setState(() {
+              _self.load = Load.finish;
+            });
+          }
         }
       }
     } catch (err) {
@@ -169,6 +173,7 @@ mixin _FullNodePageLogic on State<FullNodePage> {
       await Future.delayed(const Duration(seconds: 2));
       if (!mounted) return;
       final chainData = await MiningApi.getTransactionReceipt(txHash);
+      if (!mounted) return;
       if (chainData != null) {
         globalMiningV1.setDepositsEnable(true);
         MiningPluginUtils.start();

@@ -195,6 +195,7 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
   }
 
   Future<void> _deleteSubdomain(SubdomainInfo sub) async {
+    final successMessage = S.of(context).g_key_ens_subdomain_deleted;
     final confirm = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -221,7 +222,7 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
 
     await _runWithLoading(
       action: () => _ensService.deleteSubdomain(widget.ownedEns.name, sub.label),
-      successMessage: S.of(context).g_key_ens_subdomain_deleted,
+      successMessage: successMessage,
       onSuccess: _loadSubdomains,
     );
   }

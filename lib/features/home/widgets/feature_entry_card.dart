@@ -11,10 +11,13 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 enum FeatureCardStyle {
   /// 大卡片（横向铺满）
   large,
+
   /// 中等卡片（一行2个）
   medium,
+
   /// 小卡片（一行3-4个）
   small,
+
   /// 图标样式（仅图标+文字）
   icon,
 }
@@ -74,10 +77,12 @@ class FeatureEntryCard extends StatelessWidget {
 
   /// Resolve icon color, falling back to theme primary blue.
   Color _resolvedIconColor(BuildContext context) =>
-      iconColor ?? AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+      iconColor ??
+      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
 
   /// Rounded-square icon container reused across medium / small / icon styles.
-  Widget _buildIconBox(BuildContext context, {
+  Widget _buildIconBox(
+    BuildContext context, {
     required double size,
     required double iconSize,
     required double radius,
@@ -111,7 +116,8 @@ class FeatureEntryCard extends StatelessWidget {
 
   /// 大卡片样式 - 适合主要功能展示
   Widget _buildLargeCard(BuildContext context) {
-    final bgColor = backgroundColor ??
+    final bgColor =
+        backgroundColor ??
         AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
 
     return GestureDetector(
@@ -137,9 +143,14 @@ class FeatureEntryCard extends StatelessWidget {
         child: Row(
           children: [
             // 图标
-            _buildIconBox(context,
-                size: 64, iconSize: 36, radius: 16,
-                bgColor: Colors.white24, fgColor: Colors.white),
+            _buildIconBox(
+              context,
+              size: 64,
+              iconSize: 36,
+              radius: 16,
+              bgColor: Colors.white24,
+              fgColor: Colors.white,
+            ),
             SizedBox(width: ScreenUtil().setWidth(20)),
 
             Expanded(
@@ -176,11 +187,12 @@ class FeatureEntryCard extends StatelessWidget {
               ),
             ),
 
-            trailing ?? Icon(
-              Icons.arrow_forward_ios,
-              color: Colors.white70,
-              size: ScreenUtil().setWidth(24),
-            ),
+            trailing ??
+                Icon(
+                  Icons.arrow_forward_ios,
+                  color: Colors.white70,
+                  size: ScreenUtil().setWidth(24),
+                ),
           ],
         ),
       ),
@@ -189,8 +201,10 @@ class FeatureEntryCard extends StatelessWidget {
 
   /// 中等卡片样式 - 适合一行2个的布局
   Widget _buildMediumCard(BuildContext context) {
-    final bgColor = backgroundColor ??
+    final bgColor =
+        backgroundColor ??
         AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name);
+    final statusBadge = _buildStatusBadge();
 
     return GestureDetector(
       onTap: onTap,
@@ -215,7 +229,9 @@ class FeatureEntryCard extends StatelessWidget {
                     ),
                     decoration: BoxDecoration(
                       color: (tagColor ?? Colors.green).withAlpha(30),
-                      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                      borderRadius: BorderRadius.circular(
+                        ScreenUtil().setWidth(8),
+                      ),
                     ),
                     child: Text(
                       tag!,
@@ -226,8 +242,10 @@ class FeatureEntryCard extends StatelessWidget {
                       ),
                     ),
                   ),
-
-                if (_buildStatusBadge() case final badge?) badge,
+                ...switch (statusBadge) {
+                  final badge? => [badge],
+                  null => const <Widget>[],
+                },
               ],
             ),
 
@@ -237,7 +255,10 @@ class FeatureEntryCard extends StatelessWidget {
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(28),
                 fontWeight: FontWeight.w600,
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                color: AppThemeUtils.getColorByKey(
+                  context,
+                  AppThemeKeys.mainTextColor.name,
+                ),
               ),
             ),
 
@@ -272,7 +293,10 @@ class FeatureEntryCard extends StatelessWidget {
           horizontal: ScreenUtil().setWidth(12),
         ),
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+          color: AppThemeUtils.getColorByKey(
+            context,
+            AppThemeKeys.itemBgColor.name,
+          ),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
         ),
         child: Column(
@@ -293,7 +317,9 @@ class FeatureEntryCard extends StatelessWidget {
                       ),
                       decoration: BoxDecoration(
                         color: Colors.red,
-                        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                        borderRadius: BorderRadius.circular(
+                          ScreenUtil().setWidth(8),
+                        ),
                       ),
                       child: Text(
                         badge!,
@@ -313,7 +339,10 @@ class FeatureEntryCard extends StatelessWidget {
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(24),
                 fontWeight: FontWeight.w500,
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                color: AppThemeUtils.getColorByKey(
+                  context,
+                  AppThemeKeys.mainTextColor.name,
+                ),
               ),
               textAlign: TextAlign.center,
               maxLines: 1,
@@ -338,7 +367,10 @@ class FeatureEntryCard extends StatelessWidget {
             title,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(22),
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+              color: AppThemeUtils.getColorByKey(
+                context,
+                AppThemeKeys.mainTextColor.name,
+              ),
             ),
             textAlign: TextAlign.center,
           ),

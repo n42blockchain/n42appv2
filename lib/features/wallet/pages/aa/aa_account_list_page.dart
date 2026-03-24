@@ -34,7 +34,9 @@ class _AAAccountListPageState extends State<AAAccountListPage> {
 
   List<SmartAccount> get _allAccounts {
     if (widget.accountInfo == null) return [];
-    return widget.accountInfo!.smartAccounts.values.expand((list) => list).toList();
+    return widget.accountInfo!.smartAccounts.values
+        .expand((list) => list)
+        .toList();
   }
 
   List<SmartAccount> get _filteredAccounts {
@@ -69,11 +71,13 @@ class _AAAccountListPageState extends State<AAAccountListPage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => AAAccountCreatePage(
-          ownerAddress: widget.walletAddress,
-        ),
+        builder: (context) =>
+            AAAccountCreatePage(ownerAddress: widget.walletAddress),
       ),
-    ).then((_) => setState(() {}));
+    ).then((_) {
+      if (!mounted) return;
+      setState(() {});
+    });
   }
 
   void _navigateToDetail(SmartAccount account) {
@@ -91,9 +95,7 @@ class _AAAccountListPageState extends State<AAAccountListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(
-        text: S.of(context).g_key_aa_my_accounts,
-      ),
+      appBar: AppBarWidget(text: S.of(context).g_key_aa_my_accounts),
       body: Column(
         children: [
           _buildFilters(),
@@ -119,7 +121,10 @@ class _AAAccountListPageState extends State<AAAccountListPage> {
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: AppThemeUtils.getColorByKey(
+          context,
+          AppThemeKeys.itemBgColor.name,
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withAlpha(10),
@@ -171,7 +176,10 @@ class _AAAccountListPageState extends State<AAAccountListPage> {
   }
 
   Widget _buildChainChip(String chain, String label) {
-    final blue = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+    final blue = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.mainBlueColor.name,
+    );
     return _buildFilterChip(
       label: label,
       isSelected: _filterChain == chain,
@@ -183,7 +191,10 @@ class _AAAccountListPageState extends State<AAAccountListPage> {
   }
 
   Color _statusColor(SmartAccountState? status) => switch (status) {
-    null => AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+    null => AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.mainBlueColor.name,
+    ),
     SmartAccountState.deployed => Colors.green,
     SmartAccountState.notDeployed => Colors.grey,
     SmartAccountState.deploying => Colors.orange,
@@ -210,8 +221,14 @@ class _AAAccountListPageState extends State<AAAccountListPage> {
     required Color selectedTextColor,
     required VoidCallback onTap,
   }) {
-    final subtitleColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
-    final mainTextColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+    final subtitleColor = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.itemSubtitleTextColor.name,
+    );
+    final mainTextColor = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.mainTextColor.name,
+    );
 
     return GestureDetector(
       onTap: onTap,

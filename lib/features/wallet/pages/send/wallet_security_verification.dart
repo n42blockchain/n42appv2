@@ -284,13 +284,13 @@ class _WalletSecurityVerificationState
     if (showWalletPassword && !checkPwd()) { _finishLoading(); return; }
 
     if (securityMap['email'] == true) {
-      if (!await checkEmailVerification()) { if (context.mounted) _finishLoading(); return; }
+      if (!await checkEmailVerification()) { if (mounted) _finishLoading(); return; }
     }
     if (securityMap['google'] == true) {
-      if (!await checkGoogleVerification()) { if (context.mounted) _finishLoading(); return; }
+      if (!await checkGoogleVerification()) { if (mounted) _finishLoading(); return; }
     }
 
-    if (!context.mounted) return;
+    if (!mounted) return;
     _finishLoading();
     Navigator.pop(context, true);
   }

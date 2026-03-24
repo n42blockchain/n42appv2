@@ -107,6 +107,8 @@ class FeatureEntryHorizontal extends StatelessWidget {
   final String? ensName;
   final bool hasSmartAccount;
   final bool isSmartAccountDeployed;
+  final bool ensEnabled;
+  final bool smartAccountEnabled;
   final VoidCallback onEnsTap;
   final VoidCallback onSmartAccountTap;
 
@@ -115,6 +117,8 @@ class FeatureEntryHorizontal extends StatelessWidget {
     this.ensName,
     this.hasSmartAccount = false,
     this.isSmartAccountDeployed = false,
+    this.ensEnabled = true,
+    this.smartAccountEnabled = true,
     required this.onEnsTap,
     required this.onSmartAccountTap,
   });
@@ -138,6 +142,7 @@ class FeatureEntryHorizontal extends StatelessWidget {
                 : S.of(context).g_key_ens_register_now,
             gradientColors: const [Color(0xFF5B8DEF), Color(0xFF8B5CF6)],
             onTap: onEnsTap,
+            enabled: ensEnabled,
             showBadge: ensName != null,
           ),
           SizedBox(width: ScreenUtil().setWidth(20)),
@@ -153,6 +158,7 @@ class FeatureEntryHorizontal extends StatelessWidget {
                 : S.of(context).g_key_aa_gasless,
             gradientColors: const [Color(0xFFFF6B6B), Color(0xFFFFE66D)],
             onTap: onSmartAccountTap,
+            enabled: smartAccountEnabled,
             showBadge: hasSmartAccount,
             badgeColor: isSmartAccountDeployed ? const Color(0xFF4CAF50) : const Color(0xFFFF9800),
           ),
@@ -168,6 +174,7 @@ class FeatureEntryHorizontal extends StatelessWidget {
     required String subtitle,
     required List<Color> gradientColors,
     required VoidCallback onTap,
+    bool enabled = true,
     bool showBadge = false,
     Color badgeColor = const Color(0xFF4CAF50),
   }) {
@@ -195,77 +202,80 @@ class FeatureEntryHorizontal extends StatelessWidget {
             ),
           ],
         ),
-        child: Row(
-          children: [
-            Stack(
-              children: [
-                Container(
-                  width: ScreenUtil().setWidth(64),
-                  height: ScreenUtil().setWidth(64),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: gradientColors,
-                    ),
-                    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(32)),
-                  ),
-                  child: Icon(
-                    icon,
-                    color: Colors.white,
-                    size: ScreenUtil().setWidth(32),
-                  ),
-                ),
-                if (showBadge)
-                  Positioned(
-                    right: 0,
-                    bottom: 0,
-                    child: Container(
-                      width: ScreenUtil().setWidth(20),
-                      height: ScreenUtil().setWidth(20),
-                      decoration: BoxDecoration(
-                        color: badgeColor,
-                        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
-                        border: Border.all(color: Colors.white, width: 2),
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-            SizedBox(width: ScreenUtil().setWidth(16)),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
+        child: Opacity(
+          opacity: enabled ? 1 : 0.55,
+          child: Row(
+            children: [
+              Stack(
                 children: [
-                  FittedBox(
-                    fit: BoxFit.scaleDown,
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      title,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(24),
-                        fontWeight: FontWeight.w600,
-                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                  Container(
+                    width: ScreenUtil().setWidth(64),
+                    height: ScreenUtil().setWidth(64),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: gradientColors,
                       ),
+                      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(32)),
+                    ),
+                    child: Icon(
+                      icon,
+                      color: Colors.white,
+                      size: ScreenUtil().setWidth(32),
                     ),
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(4)),
-                  FittedBox(
-                    fit: BoxFit.scaleDown,
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      subtitle,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(20),
-                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                  if (showBadge)
+                    Positioned(
+                      right: 0,
+                      bottom: 0,
+                      child: Container(
+                        width: ScreenUtil().setWidth(20),
+                        height: ScreenUtil().setWidth(20),
+                        decoration: BoxDecoration(
+                          color: badgeColor,
+                          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
+                          border: Border.all(color: Colors.white, width: 2),
+                        ),
                       ),
                     ),
-                  ),
                 ],
               ),
-            ),
-          ],
+              SizedBox(width: ScreenUtil().setWidth(16)),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        title,
+                        style: TextStyle(
+                          fontSize: ScreenUtil().setSp(24),
+                          fontWeight: FontWeight.w600,
+                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: ScreenUtil().setWidth(4)),
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        subtitle,
+                        style: TextStyle(
+                          fontSize: ScreenUtil().setSp(20),
+                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

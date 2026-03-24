@@ -185,6 +185,7 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
         ? (chainModel!.coin['unit'] as String? ?? '').toUpperCase()
         : (widget.coinModel.coin['unit'] as String? ?? '').toUpperCase();
 
+    if (!mounted) return;
     final bool confirmed =
         await Navigator.push<bool>(
           context,
@@ -223,6 +224,7 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
           widget.coinModel.coin['coinType'] as String? ?? '',
           toCtrl.text.trim(),
         );
+        if (!mounted) return;
         ToastUtils.show(S.current.g_key_nft_41);
         Navigator.pop(context);
       }

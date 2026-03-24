@@ -24,7 +24,7 @@ extension _NftListPageWidgets on _NftListPageState {
                   iconSize: su.setWidth(24),
                   onPressed: () {
                     _searchController.clear();
-                    setState(() => _query = '');
+                    _updateView(() => _query = '');
                   },
                 )
               : null,
@@ -70,7 +70,7 @@ extension _NftListPageWidgets on _NftListPageState {
           final (type, label) = filters[i];
           final selected = _filter == type;
           return GestureDetector(
-            onTap: () => setState(() => _filter = type),
+            onTap: () => _updateView(() => _filter = type),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 150),
               padding: EdgeInsets.symmetric(
@@ -114,7 +114,9 @@ extension _NftListPageWidgets on _NftListPageState {
                 color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)),
             SizedBox(height: su.setWidth(16)),
             Text(
-              S.of(context).g_key_nft_error_retry,
+              _loadErrorMessage?.isNotEmpty == true
+                  ? _loadErrorMessage!
+                  : S.of(context).g_key_nft_error_retry,
               style: TextStyle(fontSize: su.setSp(28), color: subtitleColor),
               textAlign: TextAlign.center,
             ),
@@ -296,8 +298,8 @@ extension _NftListPageWidgets on _NftListPageState {
         fit: BoxFit.cover,
         width: double.infinity,
         height: double.infinity,
-        placeholder: (_, __) => _buildPlaceholder(nft),
-        errorWidget: (_, __, ___) => _buildPlaceholder(nft),
+        placeholder: (context, url) => _buildPlaceholder(nft),
+        errorWidget: (context, url, error) => _buildPlaceholder(nft),
       );
     }
     return _buildPlaceholder(nft);

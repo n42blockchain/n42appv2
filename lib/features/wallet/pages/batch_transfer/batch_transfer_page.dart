@@ -60,6 +60,7 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
       widget.batchTransferProvider.initialize(
         chainSymbol: widget.chainSymbol,
         rpcUrl: widget.rpcUrl,
@@ -152,7 +153,9 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
     final memo = _memoController.text.trim();
 
     if (address.isEmpty) return _showSnackBar('Please enter an address');
-    if (!_ethAddrRegex.hasMatch(address)) return _showSnackBar('Invalid address format');
+    if (!_ethAddrRegex.hasMatch(address)) {
+      return _showSnackBar('Invalid address format');
+    }
     if (amountStr.isEmpty) return _showSnackBar('Please enter an amount');
 
     final amount = _parseAmount(amountStr);
@@ -166,7 +169,8 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
     }
 
     widget.batchTransferProvider.addItem(
-      address, amount,
+      address,
+      amount,
       memo: memo.isEmpty ? null : memo,
     );
 
@@ -176,9 +180,9 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
   }
 
   void _showSnackBar(String message, {Color? bg}) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message), backgroundColor: bg),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message), backgroundColor: bg));
   }
 
   BigInt _parseAmount(String amountStr) {
@@ -266,7 +270,10 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
 
       final pathMap = coinInfo['baseInfo']['path'] as Map<String, dynamic>;
       final pathIndex = coinInfo['pathIndex'] ?? 0;
-      final path = getPathWithIndex(pathMap['legacy'] ?? "m/44'/60'/0'/0/0", pathIndex);
+      final path = getPathWithIndex(
+        pathMap['legacy'] ?? "m/44'/60'/0'/0/0",
+        pathIndex,
+      );
 
       final trustdart = Trustdart();
       final signedTx = await trustdart.signTransaction(
@@ -305,7 +312,10 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
     await showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+      backgroundColor: AppThemeUtils.getColorByKey(
+        context,
+        AppThemeKeys.itemBgColor.name,
+      ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(ScreenUtil().setWidth(24)),
@@ -319,7 +329,10 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
     );
   }
 
-  Future<void> _exportReport(BatchTransferProvider provider, BuildContext sheetCtx) async {
+  Future<void> _exportReport(
+    BatchTransferProvider provider,
+    BuildContext sheetCtx,
+  ) async {
     final subject = S.of(sheetCtx).g_key_batch_export_csv;
     try {
       final csvContent = provider.generateReportCsv();
@@ -352,10 +365,7 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
   }
 
   void _showHelp() {
-    showDialog(
-      context: context,
-      builder: (ctx) => const BatchHelpDialog(),
-    );
+    showDialog(context: context, builder: (ctx) => const BatchHelpDialog());
   }
 
   String _formatGasFee(BigInt fee) {

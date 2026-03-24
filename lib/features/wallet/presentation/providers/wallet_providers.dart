@@ -9,7 +9,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
-import 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart';
 export 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart';
 import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
 
@@ -71,11 +70,14 @@ class WalletInfoData {
       isMainWallet: json['mainWallet'] as bool? ?? false,
       createdAt: json['timestamp'] != null
           ? DateTime.fromMillisecondsSinceEpoch(
-              int.tryParse(json['timestamp'].toString()) ?? 0)
+              int.tryParse(json['timestamp'].toString()) ?? 0,
+            )
           : DateTime.now(),
       timestamp: json['timestamp'] as String?,
       coinInfo: coinInfo,
-      coinSort: (json['coinSort'] as Map<String, dynamic>?) ?? {"assets": 0, "name": -1},
+      coinSort:
+          (json['coinSort'] as Map<String, dynamic>?) ??
+          {"assets": 0, "name": -1},
       networkIndex: json['networkIndex'] as int? ?? -1,
       faceBinding: json['faceBinding'] as bool?,
     );
@@ -84,7 +86,8 @@ class WalletInfoData {
   static String _extractAddress(dynamic coinData) {
     if (coinData is Map) {
       // Try to get address from baseInfo or direct
-      if (coinData['baseInfo'] != null && coinData['baseInfo']['address'] != null) {
+      if (coinData['baseInfo'] != null &&
+          coinData['baseInfo']['address'] != null) {
         return coinData['baseInfo']['address'].toString();
       }
     }
@@ -172,8 +175,8 @@ final spUtilProvider = Provider<SPUtil>((ref) => SPUtil());
 /// Wallet List Provider (Async)
 final walletListProvider =
     AsyncNotifierProvider<WalletListNotifier, List<WalletInfoData>>(() {
-  return WalletListNotifier();
-});
+      return WalletListNotifier();
+    });
 
 class WalletListNotifier extends AsyncNotifier<List<WalletInfoData>> {
   @override
@@ -192,10 +195,10 @@ class WalletListNotifier extends AsyncNotifier<List<WalletInfoData>> {
 
     // Get user UUID for wallet lookup
     final userUUID = AppGlobals.userInfo?.uuid ?? 'AstranetWallet';
-    
+
     // Get user's wallet data
     Map<String, dynamic>? walletUser = walletAll[userUUID];
-    
+
     // Fallback to default wallet if user wallet not found
     walletUser ??= walletAll['AstranetWallet'];
 
@@ -249,14 +252,14 @@ class WalletListNotifier extends AsyncNotifier<List<WalletInfoData>> {
   Future<void> _saveWallets(List<WalletInfoData> wallets) async {
     final spUtil = ref.read(spUtilProvider);
     final userUUID = AppGlobals.userInfo?.uuid ?? 'AstranetWallet';
-    
+
     // Get current storage
     final walletAll = await spUtil.getWalletInfo() ?? {};
-    
+
     // Get current index
     final currentIndex = ref.read(selectedWalletIndexProvider);
     final miningIndex = ref.read(miningWalletIndexProvider);
-    
+
     // Update wallet data
     walletAll[userUUID] = {
       'index': currentIndex,
@@ -287,7 +290,8 @@ abstract class _WalletIndexNotifier extends StateNotifier<int> {
   Future<void> _loadFromStorage() async {
     final walletUser = await _getUserWalletMap();
     if (walletUser != null) {
-      state = walletUser[storageKey] ??
+      state =
+          walletUser[storageKey] ??
           (fallbackKey != null ? walletUser[fallbackKey] : null) ??
           0;
     }
@@ -322,8 +326,8 @@ abstract class _WalletIndexNotifier extends StateNotifier<int> {
 /// Selected Wallet Index Provider
 final selectedWalletIndexProvider =
     StateNotifierProvider<SelectedWalletIndexNotifier, int>((ref) {
-  return SelectedWalletIndexNotifier(ref);
-});
+      return SelectedWalletIndexNotifier(ref);
+    });
 
 class SelectedWalletIndexNotifier extends _WalletIndexNotifier {
   SelectedWalletIndexNotifier(super.ref);
@@ -333,7 +337,10 @@ class SelectedWalletIndexNotifier extends _WalletIndexNotifier {
 }
 
 /// Derive a wallet by index from the wallet list.
-WalletInfoData? _walletAtIndex(AsyncValue<List<WalletInfoData>> wallets, int index) {
+WalletInfoData? _walletAtIndex(
+  AsyncValue<List<WalletInfoData>> wallets,
+  int index,
+) {
   return wallets.whenOrNull(
     data: (list) => (index >= 0 && index < list.length) ? list[index] : null,
   );
@@ -366,9 +373,11 @@ final walletBalanceProvider = FutureProvider.autoDispose<double>((ref) async {
 
 /// Coin List Provider (Async)
 final coinListProvider =
-    AsyncNotifierProvider.autoDispose<CoinListNotifier, List<CoinBalanceData>>(() {
-  return CoinListNotifier();
-});
+    AsyncNotifierProvider.autoDispose<CoinListNotifier, List<CoinBalanceData>>(
+      () {
+        return CoinListNotifier();
+      },
+    );
 
 class CoinListNotifier extends AsyncNotifier<List<CoinBalanceData>> {
   @override
@@ -396,7 +405,9 @@ class CoinListNotifier extends AsyncNotifier<List<CoinBalanceData>> {
         })
         .map((e) {
           final coinKey = e.key;
-          final baseInfo = (e.value as Map<String, dynamic>)['baseInfo'] as Map<String, dynamic>;
+          final baseInfo =
+              (e.value as Map<String, dynamic>)['baseInfo']
+                  as Map<String, dynamic>;
           final legacyCoin = modelMap[coinKey];
           return CoinBalanceData(
             symbol: coinKey,
@@ -423,8 +434,8 @@ class CoinListNotifier extends AsyncNotifier<List<CoinBalanceData>> {
 /// Mining Wallet Index Provider
 final miningWalletIndexProvider =
     StateNotifierProvider<MiningWalletIndexNotifier, int>((ref) {
-  return MiningWalletIndexNotifier(ref);
-});
+      return MiningWalletIndexNotifier(ref);
+    });
 
 class MiningWalletIndexNotifier extends _WalletIndexNotifier {
   MiningWalletIndexNotifier(super.ref);

@@ -46,7 +46,6 @@ class BrowserProvider extends ChangeNotifier {
     if (b != null) browser = b;
   }
 
-  List<Widget> wList = [];
   List<WebViewController> wvcList = [];
   List<Map<String, dynamic>> wInfoList = [];
   int wListIndex = -1;
@@ -247,12 +246,10 @@ class BrowserProvider extends ChangeNotifier {
       // Enable wide viewport for better page rendering
       androidController.setUseWideViewPort(true);
     }
-    final wv = WebViewWidget(controller: webViewController);
-    wList.add(wv);
     wvcList.add(webViewController);
     wInfoList.add({"openUrl": url});
     showWList = false;
-    wListIndex = wList.length - 1;
+    wListIndex = wvcList.length - 1;
     notifyListeners();
   }
 
@@ -278,17 +275,16 @@ class BrowserProvider extends ChangeNotifier {
   void wListDelete(int index) {
     // Clear WebViewController navigation delegate before removal
     wvcList[index].setNavigationDelegate(NavigationDelegate());
-    wList.removeAt(index);
     wvcList.removeAt(index);
     wInfoList.removeAt(index);
-    if (wList.isEmpty) {
+    if (wvcList.isEmpty) {
       wListAdd();
       return;
     }
     if (index < wListIndex) {
       wListIndex--;
-    } else if (index == wListIndex && wListIndex >= wList.length) {
-      wListIndex = wList.length - 1;
+    } else if (index == wListIndex && wListIndex >= wvcList.length) {
+      wListIndex = wvcList.length - 1;
     }
     // Sync URL bar and navigation state with the new current tab
     if (wListIndex >= 0 && wListIndex < wInfoList.length) {
@@ -478,7 +474,6 @@ class BrowserProvider extends ChangeNotifier {
       wvc.setNavigationDelegate(NavigationDelegate());
     }
     showWList = false;
-    wList = [];
     wvcList = [];
     wInfoList = [];
     _dappHandler?.dispose();

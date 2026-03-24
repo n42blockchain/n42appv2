@@ -154,6 +154,7 @@ extension _AAHomePageWidgets on _AAHomePageState {
 
   Widget buildFeatureCards() {
     final sw = ScreenUtil().setWidth;
+    final canUseAa = _hasOwnerAddress;
 
     return Row(
       children: [
@@ -163,9 +164,12 @@ extension _AAHomePageWidgets on _AAHomePageState {
             title: S.of(context).g_key_48,
             subtitle: S.of(context).g_key_aa_send_desc,
             color: _kBlue,
-            onTap: accounts.isNotEmpty
+            onTap: canUseAa && accounts.isNotEmpty
                 ? () => navigateToSend(accounts.first)
                 : null,
+            disabledHint: canUseAa
+                ? S.of(context).g_key_aa_create_first
+                : S.of(context).g_key_bridge_chain_not_supported,
           ),
         ),
         SizedBox(width: sw(12)),
@@ -175,9 +179,12 @@ extension _AAHomePageWidgets on _AAHomePageState {
             title: S.of(context).g_key_aa_batch,
             subtitle: S.of(context).g_key_aa_batch_desc,
             color: _kOrange,
-            onTap: accounts.isNotEmpty
+            onTap: canUseAa && accounts.isNotEmpty
                 ? () => navigateToBatchTransaction(accounts.first)
                 : null,
+            disabledHint: canUseAa
+                ? S.of(context).g_key_aa_create_first
+                : S.of(context).g_key_bridge_chain_not_supported,
           ),
         ),
       ],
@@ -187,6 +194,7 @@ extension _AAHomePageWidgets on _AAHomePageState {
   Widget buildAdvancedFeatures() {
     final sw = ScreenUtil().setWidth;
     final sp = ScreenUtil().setSp;
+    final canUseAa = _hasOwnerAddress;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -205,9 +213,12 @@ extension _AAHomePageWidgets on _AAHomePageState {
           title: S.of(context).g_key_aa_session_keys,
           subtitle: S.of(context).g_key_aa_session_keys_desc,
           color: _kSecondaryAccent,
-          onTap: accounts.isNotEmpty
+          onTap: canUseAa && accounts.isNotEmpty
               ? () => navigateToSessionKeys(accounts.first)
               : null,
+          disabledHint: canUseAa
+              ? S.of(context).g_key_aa_create_first
+              : S.of(context).g_key_bridge_chain_not_supported,
         ),
       ],
     );
@@ -219,6 +230,7 @@ extension _AAHomePageWidgets on _AAHomePageState {
     required String subtitle,
     required Color color,
     VoidCallback? onTap,
+    String? disabledHint,
   }) {
     final isDisabled = onTap == null;
     final sw = ScreenUtil().setWidth;
@@ -229,7 +241,9 @@ extension _AAHomePageWidgets on _AAHomePageState {
           ? () {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(S.of(context).g_key_aa_create_first),
+                  content: Text(
+                    disabledHint ?? S.of(context).g_key_aa_create_first,
+                  ),
                 ),
               );
             }
@@ -301,11 +315,46 @@ extension _AAHomePageWidgets on _AAHomePageState {
           ],
         ),
         SizedBox(height: sw(16)),
-        if (accounts.isEmpty)
+        if (!_hasOwnerAddress)
+          buildUnsupportedState()
+        else if (accounts.isEmpty)
           buildEmptyState()
         else
           buildAccountsList(),
       ],
+    );
+  }
+
+  Widget buildUnsupportedState() {
+    final sw = ScreenUtil().setWidth;
+    final sp = ScreenUtil().setSp;
+    return Container(
+      padding: EdgeInsets.all(sw(24)),
+      decoration: BoxDecoration(
+        color: _itemBgColor(),
+        borderRadius: BorderRadius.circular(sw(16)),
+        border: Border.all(color: _kOrange.withAlpha(40)),
+      ),
+      child: Row(
+        children: [
+          _iconBox(
+            sw(44),
+            sw(12),
+            _kOrange,
+            Icon(Icons.info_outline, size: sw(24), color: _kOrange),
+          ),
+          SizedBox(width: sw(12)),
+          Expanded(
+            child: Text(
+              S.of(context).g_key_bridge_chain_not_supported,
+              style: TextStyle(
+                fontSize: sp(24),
+                color: _subtitleTextColor(),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

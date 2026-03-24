@@ -367,8 +367,9 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
   }
 
   bool signTxCheck() {
-    if (widget.coinModel.coin['blockchainType'] != BlockchainType.Ethereum.name)
+    if (widget.coinModel.coin['blockchainType'] != BlockchainType.Ethereum.name) {
       return true;
+    }
     if (!widget.coinModel.coin['isContract']) return true;
 
     final BigInt chainBalance = chainModel?.balance ?? BigInt.zero;

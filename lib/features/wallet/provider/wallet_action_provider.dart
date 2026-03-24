@@ -24,12 +24,10 @@ import 'package:n42_wallet/features/wallet/provider/wallet_delete_utils.dart';
 import 'package:n42_wallet/features/wallet/provider/watch_only_wallet_utils.dart';
 import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
-import 'package:web3dart/web3dart.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:n42_wallet/generated/l10n.dart';
+import 'package:web3dart/web3dart.dart';
 
 part 'wallet_action_provider_wallet.dart';
 part 'wallet_action_provider_token.dart';
@@ -92,7 +90,9 @@ class WalletActionProvider extends ChangeNotifier
 
   //获取用户设置的钱包名字
   String get walletName {
-    if (_walletInfoLsit.isEmpty || walletIndex < 0 || walletIndex >= _walletInfoLsit.length) {
+    if (_walletInfoLsit.isEmpty ||
+        walletIndex < 0 ||
+        walletIndex >= _walletInfoLsit.length) {
       return "";
     }
     return walletInfo.walletName ?? "";
@@ -308,7 +308,10 @@ class WalletActionProvider extends ChangeNotifier
     final symbolList = symbols.split(",");
     return [
       for (final symbol in symbolList)
-        if (getCoinModelWithCoinType(symbol) case final cm?) cm,
+        ...switch (getCoinModelWithCoinType(symbol)) {
+          final cm? => [cm],
+          null => const <CoinModel>[],
+        },
     ];
   }
 

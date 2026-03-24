@@ -6,8 +6,9 @@ part of 'payment_page.dart';
 extension _PaymentPageWidgets on _PaymentPageState {
   String _formatNumber(double value, [String? fallback]) {
     if (value >= 1000000000) return regular.getMoneyAbbreviation(value);
-    if (value > 0 && value < 0.0000000009)
+    if (value > 0 && value < 0.0000000009) {
       return regular.getMoneyAbbreviationDecimal(value);
+    }
     return fallback ?? oCcy.format(value);
   }
 

@@ -31,7 +31,6 @@ class _ScanPageState extends State<ScanPage> {
 
   @override
   void dispose() {
-    controller?.dispose();
     super.dispose();
   }
 
@@ -53,6 +52,7 @@ class _ScanPageState extends State<ScanPage> {
       final status = await Permission.camera.status;
       cameraOK = !status.isPermanentlyDenied && !status.isLimited;
     }
+    if (!mounted) return;
     setState(() {});
   }
 

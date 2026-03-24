@@ -23,7 +23,8 @@ class AddressValidationResult {
     this.ensName,
   });
 
-  factory AddressValidationResult.valid(String address, {
+  factory AddressValidationResult.valid(
+    String address, {
     AddressType type = AddressType.standard,
     bool isEns = false,
     String? ensName,
@@ -38,20 +39,12 @@ class AddressValidationResult {
   }
 
   factory AddressValidationResult.invalid(String error) {
-    return AddressValidationResult(
-      isValid: false,
-      errorMessage: error,
-    );
+    return AddressValidationResult(isValid: false, errorMessage: error);
   }
 }
 
 /// Address type enumeration
-enum AddressType {
-  standard,
-  contract,
-  ens,
-  multisig,
-}
+enum AddressType { standard, contract, ens, multisig }
 
 /// Enhanced address validator with multiple validation layers
 ///
@@ -65,7 +58,7 @@ class AddressValidator {
   final TokenViewApi _tokenViewApi;
 
   AddressValidator({TokenViewApi? tokenViewApi})
-      : _tokenViewApi = tokenViewApi ?? TokenViewApi();
+    : _tokenViewApi = tokenViewApi ?? TokenViewApi();
 
   /// Validate and resolve address with multiple layers of validation
   ///
@@ -88,7 +81,10 @@ class AddressValidator {
     String cleanAddress = _cleanAddress(address);
 
     // Layer 2: Format validation using Trustdart
-    bool isValidFormat = await Trustdart().validateAddress(coinType, cleanAddress);
+    bool isValidFormat = await Trustdart().validateAddress(
+      coinType,
+      cleanAddress,
+    );
 
     if (isValidFormat) {
       // Layer 3: Self-transfer prevention
@@ -104,7 +100,9 @@ class AddressValidator {
 
     // Layer 4: ENS resolution (for EVM compatible chains if allowed)
     // N42 链优先，然后是 ETH 和其他 EVM 兼容链
-    if (allowEns && EnsService.chainSupportsEns(coinType) && EnsService.isEnsName(address)) {
+    if (allowEns &&
+        EnsService.chainSupportsEns(coinType) &&
+        EnsService.isEnsName(address)) {
       final ensResult = await _resolveEns(address, coinType);
       if (ensResult != null) {
         // Validate resolved address
@@ -153,28 +151,37 @@ class AddressValidator {
 
       switch (protocol) {
         case DomainProtocol.n42:
-          return _extractResolved(await _tokenViewApi.getN42EnsResolve(domainName));
+          return _extractResolved(
+            await _tokenViewApi.getN42EnsResolve(domainName),
+          );
 
         case DomainProtocol.sns:
-          return _extractResolved(await _tokenViewApi.getSnsResolve(domainName));
+          return _extractResolved(
+            await _tokenViewApi.getSnsResolve(domainName),
+          );
 
         case DomainProtocol.unstoppableDomains:
           final ticker = _coinTypeToUdTicker(coinType);
-          return _extractResolved(await _tokenViewApi.getUdResolve(domainName, ticker: ticker));
+          return _extractResolved(
+            await _tokenViewApi.getUdResolve(domainName, ticker: ticker),
+          );
 
         case DomainProtocol.ens:
         case DomainProtocol.unknown:
           // N42 链时先尝试 N42 NS
           if (coinType == CoinType.N.name) {
-            final n42Result = _extractResolved(await _tokenViewApi.getN42EnsResolve(domainName));
+            final n42Result = _extractResolved(
+              await _tokenViewApi.getN42EnsResolve(domainName),
+            );
             if (n42Result != null) return n42Result;
           }
-          return _extractResolved(await _tokenViewApi.getEnsResolve(domainName));
+          return _extractResolved(
+            await _tokenViewApi.getEnsResolve(domainName),
+          );
       }
     } catch (_) {
       return null;
     }
-    return null;
   }
 
   /// 从 API 结果中提取已解析的地址，若失败则返回 null
@@ -186,9 +193,18 @@ class AddressValidator {
   /// 将 coinType 映射到 UD ticker（UD 多链记录中使用）
   static String? _coinTypeToUdTicker(String coinType) {
     const map = {
-      'ETH': 'ETH', 'N': 'ETH', 'BNB': 'BNB', 'MATIC': 'MATIC',
-      'AVAX': 'AVAX', 'FTM': 'FTM', 'OP': 'ETH', 'ARB': 'ETH',
-      'SOL': 'SOL', 'BTC': 'BTC', 'TRX': 'TRX', 'XRP': 'XRP',
+      'ETH': 'ETH',
+      'N': 'ETH',
+      'BNB': 'BNB',
+      'MATIC': 'MATIC',
+      'AVAX': 'AVAX',
+      'FTM': 'FTM',
+      'OP': 'ETH',
+      'ARB': 'ETH',
+      'SOL': 'SOL',
+      'BTC': 'BTC',
+      'TRX': 'TRX',
+      'XRP': 'XRP',
     };
     return map[coinType.toUpperCase()];
   }
@@ -196,7 +212,11 @@ class AddressValidator {
   /// Generate address preview for UI display
   ///
   /// Returns format like "0x1234...5678"
-  static String getAddressPreview(String address, {int prefixLength = 6, int suffixLength = 4}) {
+  static String getAddressPreview(
+    String address, {
+    int prefixLength = 6,
+    int suffixLength = 4,
+  }) {
     if (address.length <= prefixLength + suffixLength + 3) {
       return address;
     }

@@ -16,8 +16,9 @@ Uri? parseWalletConnectUri(String value) {
 }
 
 String? normalizeWalletConnectUriString(String value, {int depthLevel = 0}) {
-  if (depthLevel > 3)
+  if (depthLevel > 3) {
     return null; // prevent infinite recursion on malicious URIs
+  }
   final trimmed = value.trim();
   if (trimmed.isEmpty) return null;
 
