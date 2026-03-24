@@ -80,6 +80,7 @@ mixin _AccountCreateAndResetLogic on ConsumerState<AccountCreateAndReset> {
       );
       if (email != null) {
         _inviteCodeController.text = email;
+        if (!mounted) return;
         setState(() {});
       }
     }
@@ -244,9 +245,11 @@ mixin _AccountCreateAndResetLogic on ConsumerState<AccountCreateAndReset> {
     } catch (err) {
       ToastUtils.show(err.toString());
     } finally {
-      setState(() {
-        sendLoad = Load.finish;
-      });
+      if (mounted) {
+        setState(() {
+          sendLoad = Load.finish;
+        });
+      }
     }
   }
 

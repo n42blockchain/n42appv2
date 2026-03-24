@@ -226,6 +226,10 @@ class _UnlockState extends ConsumerState<Unlock> {
     }
 
     passwordTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
       if (passwordUnlock > 1) {
         setState(() => passwordUnlock--);
       } else {

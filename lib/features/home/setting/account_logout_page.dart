@@ -223,6 +223,7 @@ class _AccountLogoutPageState extends State<AccountLogoutPage> {
               cancelText: S.of(this.context).g_key_79,
               sureText: S.of(this.context).g_key_wallet_m13,
             );
+            if (!mounted) return;
             if (res != null && res) {
               setState(() {
                 load = Load.loading;

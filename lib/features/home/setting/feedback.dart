@@ -63,6 +63,7 @@ class _FeedbackState extends State<Feedback> {
       appendixs.add(am);
       uploadFile(am);
     }
+    if (!mounted) return;
     setState(() {});
   }
 
@@ -72,12 +73,14 @@ class _FeedbackState extends State<Feedback> {
       quality: 25,
       position: -1,
     );
+    if (!mounted) return;
     setState(() {});
   }
 
   Future<void> uploadFile(AppendixModel am) async {
     try {
       am.cancelToken = CancelToken();
+      if (!mounted) return;
       setState(() {
         am.state = 1;
         am.upCount = 0;
@@ -89,8 +92,10 @@ class _FeedbackState extends State<Feedback> {
       ) {
         am.upCount = count;
         am.upTotal = total;
+        if (!mounted) return;
         setState(() {});
       }, cancelToken: am.cancelToken);
+      if (!mounted) return;
       setState(() {
         if (rData["error"]) {
           am.state = 3;
@@ -100,6 +105,7 @@ class _FeedbackState extends State<Feedback> {
         }
       });
     } catch (_) {
+      if (!mounted) return;
       setState(() => am.state = 3);
     }
   }

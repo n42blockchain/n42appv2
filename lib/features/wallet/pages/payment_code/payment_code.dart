@@ -144,7 +144,8 @@ class _PaymentCodeState extends State<PaymentCode> {
                   builder: (_) => SetAmount(type: 1, amount: amount),
                 ),
               );
-              if (rAmount != null) setState(() => amount = rAmount);
+              if (!mounted || rAmount == null) return;
+              setState(() => amount = rAmount);
             },
             child: Text(
               S.of(context).g_key_payment_set_amount_title,

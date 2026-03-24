@@ -204,6 +204,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                             TextButton(
                               onPressed: () async {
                                 await openAppSettings();
+                                if (!mounted) return;
                                 initFace();
                               },
                               child: Text(

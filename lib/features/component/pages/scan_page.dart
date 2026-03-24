@@ -106,6 +106,7 @@ class _ScanPageState extends State<ScanPage> {
           TextButton(
             onPressed: () async {
               await openAppSettings();
+              if (!mounted) return;
               _initCameraPermission();
             },
             child: Text(

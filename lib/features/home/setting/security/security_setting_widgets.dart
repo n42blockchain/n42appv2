@@ -175,6 +175,7 @@ extension on _SecuritySettingState {
           TextButton(
             onPressed: () async {
               await openAppSettings();
+              if (!mounted) return;
               initFace();
             },
             child: Text(

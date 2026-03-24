@@ -58,16 +58,19 @@ mixin _SecurityGoogleVedificationLogic on State<SecurityGoogleVedification> {
     final walletService = ServiceLocatorSetup.walletService;
     if (walletService == null) {
       walletName = '${S.current.g_key_6} ';
+      if (!mounted) return;
       setState(() {});
       return;
     }
     final mainWallet = walletService.getMainWallet();
     walletName = '${S.current.g_key_6} ${mainWallet?.name ?? ""}';
+    if (!mounted) return;
     setState(() {});
   }
 
   Future<void> _loadSecuritySettings() async {
     Map<String, dynamic>? s = await SPUtil().getSecurity();
+    if (!mounted) return;
     if (s != null) {
       Map<String, dynamic>? userSecurityMap =
           s[AppGlobals.userInfo?.uuid ?? ""];
