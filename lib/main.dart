@@ -896,6 +896,15 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
             ],
             navigatorKey: AppGlobals.navigatorKey,
             supportedLocales: S.delegate.supportedLocales,
+            localeResolutionCallback: (locale, supported) {
+              if (locale?.languageCode == 'zh') {
+                return const Locale('zh', 'TW');
+              }
+              for (final s in supported) {
+                if (s.languageCode == locale?.languageCode) return s;
+              }
+              return const Locale('en');
+            },
             themeMode: themeMode,
             theme: ThemeAdapter.buildLight(accentColor),
             darkTheme: ThemeAdapter.buildDark(accentColor),
