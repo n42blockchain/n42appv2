@@ -190,8 +190,10 @@ class _WalletSecurityVerificationState
     } on PlatformException catch (_) {
       canCheck = false;
     }
+    if (!mounted) return;
     if (canCheck) {
       final available = await auth.getAvailableBiometrics();
+      if (!mounted) return;
       canCheck = available.any(
         const {
           BiometricType.face,
@@ -201,6 +203,7 @@ class _WalletSecurityVerificationState
         }.contains,
       );
     }
+    if (!mounted) return;
     if (!canCheck) {
       setState(() => faceErrorMessage = S.of(context).g_lock_key7);
       return;
@@ -236,6 +239,7 @@ class _WalletSecurityVerificationState
       });
       return;
     }
+    if (!mounted) return;
     setState(() {
       faceCheck = authenticated ? 1 : 2;
       faceErrorMessage = authenticated ? '' : S.of(context).g_lock_key6;

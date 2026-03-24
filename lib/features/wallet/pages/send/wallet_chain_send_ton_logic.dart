@@ -107,9 +107,8 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
 
     final isEthereum = _blockchainType == BlockchainType.Ethereum.name;
     final isTron = _blockchainType == BlockchainType.Tron.name;
-    if (!isEthereum && !isTron) return;
-
     try {
+      if (!isEthereum && !isTron) return;
       String? toAddr;
       if (checkAddress) {
         if (amountErrorMessage != "") return;

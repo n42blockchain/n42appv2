@@ -9,6 +9,7 @@ part of 'bridge_provider.dart';
 mixin BridgePersistenceMixin on ChangeNotifier {
   List<BridgeTransaction> get _transactions;
   Set<String> get _pendingTxHashes;
+  bool get _isDisposedFlag;
 
   Future<void> checkTransactionStatus(BridgeTransaction transaction);
 
@@ -23,11 +24,17 @@ mixin BridgePersistenceMixin on ChangeNotifier {
   /// 每隔 [_pollInterval] 检查所有 pending/inProgress 交易。
   /// 超过 [_pollTimeout] 或所有交易达到终态后自动停止。
   void _startStatusPolling() {
+    if (_isDisposedFlag) return;
     _pollTimer?.cancel();
 
     final startTime = DateTime.now();
 
     _pollTimer = Timer.periodic(_pollInterval, (timer) async {
+      if (_isDisposedFlag) {
+        timer.cancel();
+        _pollTimer = null;
+        return;
+      }
       // 超时停止
       if (DateTime.now().difference(startTime) >= _pollTimeout) {
         timer.cancel();
@@ -68,9 +75,7 @@ mixin BridgePersistenceMixin on ChangeNotifier {
   Future<void> _savePersisted() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final json = jsonEncode(
-        _transactions.map((t) => t.toJson()).toList(),
-      );
+      final json = jsonEncode(_transactions.map((t) => t.toJson()).toList());
       await prefs.setString(_kPersistKey, json);
     } catch (_) {
       // 持久化失败不影响主流程
@@ -81,6 +86,7 @@ mixin BridgePersistenceMixin on ChangeNotifier {
   Future<void> _loadPersisted() async {
     try {
       final prefs = await SharedPreferences.getInstance();
+      if (_isDisposedFlag) return;
       final raw = prefs.getString(_kPersistKey);
       if (raw == null) return;
 
@@ -96,7 +102,7 @@ mixin BridgePersistenceMixin on ChangeNotifier {
           _pendingTxHashes.add(tx.txHash);
         }
       }
-      if (_pendingTxHashes.isNotEmpty) {
+      if (_pendingTxHashes.isNotEmpty && !_isDisposedFlag) {
         _startStatusPolling();
       }
     } catch (_) {

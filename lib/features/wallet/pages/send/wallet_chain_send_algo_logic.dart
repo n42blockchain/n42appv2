@@ -92,6 +92,7 @@ mixin _AlgoSendLogicMixin on ConsumerState<WalletChainSendAlgo> {
               : null,
         ) ??
         MessageModel.error();
+    if (!mounted) return;
     if (!mm.error) {
       gasPrice = BigInt.from(mm.data['min-fee']);
     } else {

@@ -49,8 +49,10 @@ mixin BridgeExecutionMixin on ChangeNotifier {
     if (_selectedRoute!.steps.isEmpty) {
       return MessageModel.error()..data = 'Route has no steps';
     }
-    if (_fromChain == null || _toChain == null ||
-        _fromToken == null || _toToken == null) {
+    if (_fromChain == null ||
+        _toChain == null ||
+        _fromToken == null ||
+        _toToken == null) {
       return MessageModel.error()..data = 'Incomplete bridge configuration';
     }
 
@@ -75,6 +77,9 @@ mixin BridgeExecutionMixin on ChangeNotifier {
       };
 
       final txResult = await _lifiApi.getStepTransaction(step: stepJson);
+      if (_isDisposedFlag) {
+        return MessageModel.error()..data = 'Bridge request cancelled';
+      }
       if (txResult.error) {
         return _errorResult(
           txResult.data?.toString() ?? 'Failed to get transaction',
@@ -97,10 +102,16 @@ mixin BridgeExecutionMixin on ChangeNotifier {
           return MessageModel.error()
             ..data = _errorMessage ?? 'Approval failed';
         }
+        if (_isDisposedFlag) {
+          return MessageModel.error()..data = 'Bridge request cancelled';
+        }
         _setState(BridgeState.executing);
       }
 
       final txHash = await signAndSend(txResponse.txData!);
+      if (_isDisposedFlag) {
+        return MessageModel.error()..data = 'Bridge request cancelled';
+      }
       if (txHash == null) {
         return _errorResult('Transaction cancelled or failed');
       }
@@ -163,6 +174,7 @@ mixin BridgeExecutionMixin on ChangeNotifier {
       walletAddress: fromAddress,
       spenderAddress: spenderAddress,
     );
+    if (_isDisposedFlag) return false;
 
     if (approvalResult.error || approvalResult.data == null) {
       _setError(
@@ -195,6 +207,7 @@ mixin BridgeExecutionMixin on ChangeNotifier {
 
     final approveTxData = approveTxResult.data as Map<String, dynamic>;
     final approveTxHash = await signAndSend(approveTxData);
+    if (_isDisposedFlag) return false;
 
     if (approveTxHash == null) {
       _setError('Approval transaction cancelled');
@@ -221,13 +234,16 @@ mixin BridgeExecutionMixin on ChangeNotifier {
     BigInt requiredAmount,
   ) async {
     for (var i = 0; i < 20; i++) {
+      if (_isDisposedFlag) return false;
       await Future.delayed(const Duration(seconds: 3));
+      if (_isDisposedFlag) return false;
       final updated = await _lifiApi.getTokenApproval(
         chainId: _fromChain!.chainId,
         tokenAddress: _fromToken!.address,
         walletAddress: fromAddress,
         spenderAddress: spenderAddress,
       );
+      if (_isDisposedFlag) return false;
       if (!updated.error && updated.data != null) {
         final newAllowance = _parseAllowance(
           updated.data as Map<String, dynamic>,

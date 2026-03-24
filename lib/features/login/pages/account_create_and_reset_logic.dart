@@ -60,10 +60,11 @@ mixin _AccountCreateAndResetLogic on ConsumerState<AccountCreateAndReset> {
   /// Load previously saved user email into the email field.
   Future<void> _loadSavedEmail() async {
     final data = await SPUtil().getUserInfo();
+    if (!mounted) return;
     if (data != null) {
       UserInfo info = UserInfo.fromJson(data);
       _unameController.text = info.email ?? "";
-      if (mounted) setState(() {});
+      setState(() {});
     }
   }
 
@@ -71,6 +72,7 @@ mixin _AccountCreateAndResetLogic on ConsumerState<AccountCreateAndReset> {
   Future<void> _loadInviterEmail() async {
     DeviceInfoUtil deviceInfoUtil = DeviceInfoUtil();
     Map<String, dynamic>? infoMap = await deviceInfoUtil.getDeviceInfo();
+    if (!mounted) return;
     if (infoMap != null) {
       UserInfoApi loginApi = UserInfoApi();
       String? email = await loginApi.getInviterCode(
@@ -78,9 +80,9 @@ mixin _AccountCreateAndResetLogic on ConsumerState<AccountCreateAndReset> {
         infoMap["mobileName"],
         infoMap["os"],
       );
+      if (!mounted) return;
       if (email != null) {
         _inviteCodeController.text = email;
-        if (!mounted) return;
         setState(() {});
       }
     }
@@ -88,6 +90,10 @@ mixin _AccountCreateAndResetLogic on ConsumerState<AccountCreateAndReset> {
 
   void _startTimer() {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
       if (_countdown > 1) {
         _countdown--;
       } else {
@@ -115,9 +121,11 @@ mixin _AccountCreateAndResetLogic on ConsumerState<AccountCreateAndReset> {
         ToastUtils.show(S.of(context).login_message_9);
       }
     } finally {
-      setState(() {
-        codeLoad = Load.finish;
-      });
+      if (mounted) {
+        setState(() {
+          codeLoad = Load.finish;
+        });
+      }
     }
   }
 

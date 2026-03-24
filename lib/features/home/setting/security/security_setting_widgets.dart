@@ -12,7 +12,10 @@ extension on _SecuritySettingState {
         padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
         margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(30.0)),
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+          color: AppThemeUtils.getColorByKey(
+            context,
+            AppThemeKeys.itemBgColor.name,
+          ),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16.0)),
         ),
         child: Row(
@@ -21,13 +24,18 @@ extension on _SecuritySettingState {
               width: ScreenUtil().setWidth(40.0),
               height: ScreenUtil().setWidth(40.0),
               margin: EdgeInsets.only(right: ScreenUtil().setWidth(10.0)),
-              child: Image.asset("assets/home/setting/scurity/${open ? "open" : "closs"}.png"),
+              child: Image.asset(
+                "assets/home/setting/scurity/${open ? "open" : "closs"}.png",
+              ),
             ),
             Expanded(
               child: Text(
                 title,
                 style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                  color: AppThemeUtils.getColorByKey(
+                    context,
+                    AppThemeKeys.mainTextColor.name,
+                  ),
                   fontSize: ScreenUtil().setSp(26.0),
                 ),
               ),
@@ -35,7 +43,10 @@ extension on _SecuritySettingState {
             Icon(
               Icons.arrow_forward_ios_sharp,
               size: ScreenUtil().setWidth(40.0),
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+              color: AppThemeUtils.getColorByKey(
+                context,
+                AppThemeKeys.itemSubtitleTextColor.name,
+              ),
             ),
           ],
         ),
@@ -47,35 +58,44 @@ extension on _SecuritySettingState {
     return Container(
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20.0)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(8.0))),
+        color: AppThemeUtils.getColorByKey(
+          context,
+          AppThemeKeys.itemBgColor.name,
+        ),
+        borderRadius: BorderRadius.all(
+          Radius.circular(ScreenUtil().setWidth(8.0)),
+        ),
       ),
-      constraints: BoxConstraints(
-        minHeight: ScreenUtil().setWidth(88.0),
-      ),
+      constraints: BoxConstraints(minHeight: ScreenUtil().setWidth(88.0)),
       child: Column(
         children: [
-          buildOpenWidget(
-            S.of(context).g_lock_key3,
-            screenLockState.isLocked,
-            (bool value) async {
-              if (!screenLockState.isLocked) {
-                bool? r = await Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => LockScreenResetPassword(0)));
-                if (r == true) {
-                  ref.read(screenLockProvider.notifier).setLockEnabled(value);
-                }
-              } else {
+          buildOpenWidget(S.of(context).g_lock_key3, screenLockState.isLocked, (
+            bool value,
+          ) async {
+            if (!screenLockState.isLocked) {
+              bool? r = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => LockScreenResetPassword(0),
+                ),
+              );
+              if (!mounted) return;
+              if (r == true) {
                 ref.read(screenLockProvider.notifier).setLockEnabled(value);
               }
-            },
-          ),
-          if (screenLockState.isLocked)
-            buildLockTime(screenLockState),
+            } else {
+              ref.read(screenLockProvider.notifier).setLockEnabled(value);
+            }
+          }),
+          if (screenLockState.isLocked) buildLockTime(screenLockState),
           if (screenLockState.isLocked)
             buildResetPassword(() {
               Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => LockScreenResetPassword(1)));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => LockScreenResetPassword(1),
+                ),
+              );
             }),
         ],
       ),
@@ -86,12 +106,15 @@ extension on _SecuritySettingState {
     return Container(
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20.0)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(8.0))),
+        color: AppThemeUtils.getColorByKey(
+          context,
+          AppThemeKeys.itemBgColor.name,
+        ),
+        borderRadius: BorderRadius.all(
+          Radius.circular(ScreenUtil().setWidth(8.0)),
+        ),
       ),
-      constraints: BoxConstraints(
-        minHeight: ScreenUtil().setWidth(88.0),
-      ),
+      constraints: BoxConstraints(minHeight: ScreenUtil().setWidth(88.0)),
       child: Column(
         children: [
           buildOpenWidget(
@@ -100,11 +123,18 @@ extension on _SecuritySettingState {
             (bool value) async {
               if (!screenLockState.gestureEnabled) {
                 String? r = await Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => GesturePasswordSetting(0)));
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => GesturePasswordSetting(0),
+                  ),
+                );
+                if (!mounted) return;
                 if (r != null) {
                   ref.read(screenLockProvider.notifier).setGestureEnabled(true);
                   final passwordList = r.split(',').map(int.parse).toList();
-                  ref.read(screenLockProvider.notifier).setGesturePassword(passwordList);
+                  ref
+                      .read(screenLockProvider.notifier)
+                      .setGesturePassword(passwordList);
                 }
               } else {
                 ref.read(screenLockProvider.notifier).setGestureEnabled(value);
@@ -114,13 +144,20 @@ extension on _SecuritySettingState {
           if (screenLockState.gestureEnabled)
             buildResetPassword(() async {
               String? r = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => GesturePasswordSetting(1,
-                          oldPassword: screenLockState.gesturePassword.join(','))));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => GesturePasswordSetting(
+                    1,
+                    oldPassword: screenLockState.gesturePassword.join(','),
+                  ),
+                ),
+              );
+              if (!mounted) return;
               if (r != null) {
                 final passwordList = r.split(',').map(int.parse).toList();
-                ref.read(screenLockProvider.notifier).setGesturePassword(passwordList);
+                ref
+                    .read(screenLockProvider.notifier)
+                    .setGesturePassword(passwordList);
               }
             }),
         ],
@@ -132,8 +169,13 @@ extension on _SecuritySettingState {
     return Container(
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20.0)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(8.0))),
+        color: AppThemeUtils.getColorByKey(
+          context,
+          AppThemeKeys.itemBgColor.name,
+        ),
+        borderRadius: BorderRadius.all(
+          Radius.circular(ScreenUtil().setWidth(8.0)),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -148,8 +190,7 @@ extension on _SecuritySettingState {
               setState(() {});
             },
           ),
-          if (checkBiometrics == false)
-            _buildBiometricUnavailableHint(),
+          if (checkBiometrics == false) _buildBiometricUnavailableHint(),
         ],
       ),
     );
@@ -168,7 +209,10 @@ extension on _SecuritySettingState {
               S.of(context).g_lock_key7,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(28),
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
+                color: AppThemeUtils.getColorByKey(
+                  context,
+                  AppThemeKeys.errorTextColor.name,
+                ),
               ),
             ),
           ),
@@ -182,7 +226,10 @@ extension on _SecuritySettingState {
               S.of(context).g_face_5,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(30),
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                color: AppThemeUtils.getColorByKey(
+                  context,
+                  AppThemeKeys.mainBlueColor.name,
+                ),
               ),
             ),
           ),
@@ -201,14 +248,19 @@ extension on _SecuritySettingState {
             child: Text(
               title,
               style: TextStyle(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                color: AppThemeUtils.getColorByKey(
+                  context,
+                  AppThemeKeys.mainTextColor.name,
+                ),
                 fontSize: ScreenUtil().setSp(30.0),
               ),
             ),
           ),
           Switch(
-            activeTrackColor:
-                AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
+            activeTrackColor: AppThemeUtils.getColorByKey(
+              context,
+              AppThemeKeys.mainButtonBgColor.name,
+            ),
             value: value,
             onChanged: (v) => valueChange(v),
           ),
@@ -229,7 +281,10 @@ extension on _SecuritySettingState {
               child: Text(
                 S.of(context).g_lock_key4,
                 style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                  color: AppThemeUtils.getColorByKey(
+                    context,
+                    AppThemeKeys.mainTextColor.name,
+                  ),
                   fontSize: ScreenUtil().setSp(30.0),
                 ),
               ),
@@ -237,13 +292,19 @@ extension on _SecuritySettingState {
             Text(
               _formatLockTime(screenLockState.lockTimeSeconds),
               style: TextStyle(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                color: AppThemeUtils.getColorByKey(
+                  context,
+                  AppThemeKeys.mainTextColor.name,
+                ),
                 fontSize: ScreenUtil().setSp(30.0),
               ),
             ),
             Icon(
               Icons.arrow_drop_down_sharp,
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+              color: AppThemeUtils.getColorByKey(
+                context,
+                AppThemeKeys.itemSubtitleTextColor.name,
+              ),
               size: ScreenUtil().setWidth(40.0),
             ),
           ],
@@ -263,17 +324,24 @@ extension on _SecuritySettingState {
           itemCount: lockTimeList.length,
           itemBuilder: (context, int index) {
             String title = lockTimeList[index];
-            Color titleColor =
-                AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+            Color titleColor = AppThemeUtils.getColorByKey(
+              context,
+              AppThemeKeys.itemSubtitleTextColor.name,
+            );
             bool isSame = false;
             if (title == screenLockState.lockTimeSeconds.toString()) {
-              titleColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+              titleColor = AppThemeUtils.getColorByKey(
+                context,
+                AppThemeKeys.mainTextColor.name,
+              );
               isSame = true;
             }
             return InkWell(
               onTap: () {
                 if (title != screenLockState.lockTimeSeconds.toString()) {
-                  ref.read(screenLockProvider.notifier).setLockTime(int.parse(title));
+                  ref
+                      .read(screenLockProvider.notifier)
+                      .setLockTime(int.parse(title));
                 }
                 Navigator.pop(context);
               },
@@ -295,7 +363,10 @@ extension on _SecuritySettingState {
                         width: ScreenUtil().setWidth(40.0),
                         child: Icon(
                           Icons.check,
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                          color: AppThemeUtils.getColorByKey(
+                            context,
+                            AppThemeKeys.mainBlueColor.name,
+                          ),
                         ),
                       )
                     else
@@ -329,14 +400,20 @@ extension on _SecuritySettingState {
               child: Text(
                 S.of(context).g_lock_key9,
                 style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                  color: AppThemeUtils.getColorByKey(
+                    context,
+                    AppThemeKeys.mainTextColor.name,
+                  ),
                   fontSize: ScreenUtil().setSp(30.0),
                 ),
               ),
             ),
             Icon(
               Icons.arrow_forward_ios,
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+              color: AppThemeUtils.getColorByKey(
+                context,
+                AppThemeKeys.mainTextColor.name,
+              ),
               size: ScreenUtil().setWidth(30.0),
             ),
           ],
