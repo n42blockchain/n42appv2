@@ -69,11 +69,9 @@ class _HomePageState extends ConsumerState<HomePage>
 
   /// 跳转到聊天页面（使用 N42Chat 插件）
   void _navigateToChat() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => N42Chat.chatWidget(),
-      ),
-    );
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (_) => N42Chat.chatWidget()));
   }
 
   @override
@@ -112,6 +110,7 @@ class _HomePageState extends ConsumerState<HomePage>
 
   Future<void> initData() async {
     showTermsOfService = await SPUtil().getShowTermsOfService();
+    if (!mounted) return;
     setState(() {});
     if (AppGlobals.userInfo == null) return;
 
@@ -140,7 +139,9 @@ class _HomePageState extends ConsumerState<HomePage>
         Timer(const Duration(milliseconds: 500), () async {
           if (!mounted) return;
           final rData = await Navigator.push(
-              context, MaterialPageRoute(builder: (_) => const Unlock()));
+            context,
+            MaterialPageRoute(builder: (_) => const Unlock()),
+          );
           if (rData == true && mounted) {
             AppGlobals.login(AppGlobals.userInfo!);
           }
@@ -216,19 +217,13 @@ class _HomePageState extends ConsumerState<HomePage>
                 children: [
                   buildNavigationRail(safeIndex),
                   Expanded(
-                    child: IndexedStack(
-                      index: safeIndex,
-                      children: pages,
-                    ),
+                    child: IndexedStack(index: safeIndex, children: pages),
                   ),
                 ],
               )
             else ...[
               // 手机 / iPad 竖屏：保持原有底部导航
-              IndexedStack(
-                index: safeIndex,
-                children: pages,
-              ),
+              IndexedStack(index: safeIndex, children: pages),
               Positioned(
                 bottom: 0,
                 left: 0,
@@ -318,7 +313,9 @@ class _HomePageState extends ConsumerState<HomePage>
             AppGlobals.userInfo != null &&
             mounted) {
           await Navigator.push(
-              context, MaterialPageRoute(builder: (_) => const Unlock()));
+            context,
+            MaterialPageRoute(builder: (_) => const Unlock()),
+          );
         }
         break;
 

@@ -32,6 +32,7 @@ class _AboutAppState extends State<AboutApp> {
 
   Future<void> _initData() async {
     final packageInfo = await PackageInfo.fromPlatform();
+    if (!mounted) return;
     setState(() {
       appVersion = '${packageInfo.version} (${packageInfo.buildNumber})';
     });
@@ -63,13 +64,12 @@ class _AboutAppState extends State<AboutApp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(
-        text: S.of(context).s_key_10,
-      ),
+      appBar: AppBarWidget(text: S.of(context).s_key_10),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding:
-              EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+          padding: EdgeInsets.symmetric(
+            horizontal: ScreenUtil().setWidth(30.0),
+          ),
           child: Column(
             children: [
               _buildVersion(),
@@ -90,10 +90,13 @@ class _AboutAppState extends State<AboutApp> {
       alignment: Alignment.centerLeft,
       margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10.0)),
       decoration: BoxDecoration(
-        borderRadius:
-            BorderRadius.all(Radius.circular(ScreenUtil().setWidth(16.0))),
-        color:
-            AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        borderRadius: BorderRadius.all(
+          Radius.circular(ScreenUtil().setWidth(16.0)),
+        ),
+        color: AppThemeUtils.getColorByKey(
+          context,
+          AppThemeKeys.itemBgColor.name,
+        ),
       ),
       child: Column(children: children),
     );
@@ -105,8 +108,7 @@ class _AboutAppState extends State<AboutApp> {
         NavSettingItem(
           path: "assets/home/about/w.png",
           action: S.of(context).g_key_m_9,
-          callback: () =>
-              _openBrowser(AppConfig.apiUrl['walletamazeBrowser']!),
+          callback: () => _openBrowser(AppConfig.apiUrl['walletamazeBrowser']!),
         ),
       ],
     );
@@ -114,7 +116,9 @@ class _AboutAppState extends State<AboutApp> {
 
   Widget _buildSocialSection() {
     final blueColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainBlueColor.name);
+      context,
+      AppThemeKeys.mainBlueColor.name,
+    );
     final s = S.of(context);
 
     final socialLinks = [
@@ -126,8 +130,16 @@ class _AboutAppState extends State<AboutApp> {
       ("ins", s.g_key_m_19, "https://www.instagram.com/n42blockchain"),
       ("tiktok", "TikTok", "https://www.tiktok.com/@n42blockchain"),
       ("snapchat", "snapchat", "https://www.snapchat.com/t/JMpRe83U"),
-      ("linkedin", "linkedin", "https://www.linkedin.com/company/n42blockchain/about/"),
-      ("whatsapp", "whatsapp", "https://whatsapp.com/channel/0029Var1z8S8KMqr4FVk1K0e"),
+      (
+        "linkedin",
+        "linkedin",
+        "https://www.linkedin.com/company/n42blockchain/about/",
+      ),
+      (
+        "whatsapp",
+        "whatsapp",
+        "https://whatsapp.com/channel/0029Var1z8S8KMqr4FVk1K0e",
+      ),
       ("medium", "medium", "https://medium.com/p/publications/create"),
       ("line", "line", "https://line.me/ti/p/d-KryNwume"),
       ("bsky", "bsky", "https://bsky.app/profile/n42blockchain.bsky.social"),
@@ -168,7 +180,9 @@ class _AboutAppState extends State<AboutApp> {
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(32.0),
                   color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
+                    context,
+                    AppThemeKeys.mainTextColor.name,
+                  ),
                 ),
               ),
               SizedBox(height: ScreenUtil().setWidth(6.0)),
@@ -177,7 +191,9 @@ class _AboutAppState extends State<AboutApp> {
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(28.0),
                   color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.ff888888.name),
+                    context,
+                    AppThemeKeys.ff888888.name,
+                  ),
                 ),
               ),
               SizedBox(height: ScreenUtil().setWidth(6.0)),
@@ -195,7 +211,9 @@ class _AboutAppState extends State<AboutApp> {
         S.of(context).g_key_v_k4,
         style: TextStyle(
           color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.ff888888.name),
+            context,
+            AppThemeKeys.ff888888.name,
+          ),
           fontSize: ScreenUtil().setSp(26),
         ),
       );

@@ -32,7 +32,8 @@ class Feedback extends StatefulWidget {
 
 class _FeedbackState extends State<Feedback> {
   late final Regular regular = Regular();
-  late final TextEditingController inputEditingController = TextEditingController();
+  late final TextEditingController inputEditingController =
+      TextEditingController();
   Load load = Load.finish;
   List<AppendixModel> appendixs = [];
 
@@ -82,16 +83,14 @@ class _FeedbackState extends State<Feedback> {
         am.upCount = 0;
         am.upTotal = 0;
       });
-      final rData = await IpfsApi().uploadIPFSImage(
-        am.path,
-        "fkImage.png",
-        (int count, int total) {
-          am.upCount = count;
-          am.upTotal = total;
-          setState(() {});
-        },
-        cancelToken: am.cancelToken,
-      );
+      final rData = await IpfsApi().uploadIPFSImage(am.path, "fkImage.png", (
+        int count,
+        int total,
+      ) {
+        am.upCount = count;
+        am.upTotal = total;
+        setState(() {});
+      }, cancelToken: am.cancelToken);
       setState(() {
         if (rData["error"]) {
           am.state = 3;
@@ -129,12 +128,17 @@ class _FeedbackState extends State<Feedback> {
     if (walletService != null) {
       final mainWallet = walletService.getMainWallet();
       if (mainWallet != null) {
-        address = await walletService.getChainAddress(mainWallet.address, CoinType.N.name) ?? "";
+        address =
+            await walletService.getChainAddress(
+              mainWallet.address,
+              CoinType.N.name,
+            ) ??
+            "";
       }
     }
     final mm = await UserInfoApi().submitFeedback(address, content, fjStr);
-    setState(() => load = Load.finish);
     if (!mounted) return;
+    setState(() => load = Load.finish);
     if (!mm.error && mm.data['code'] == 200) {
       ToastUtils.show(S.of(context).g_key_feedback_4);
       Navigator.pop(context);
@@ -179,10 +183,7 @@ class _FeedbackState extends State<Feedback> {
             padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildFeedbackInput(),
-                _buildAttachmentList(),
-              ],
+              children: [_buildFeedbackInput(), _buildAttachmentList()],
             ),
           ),
         ),
@@ -282,7 +283,9 @@ class _FeedbackState extends State<Feedback> {
               color: _color(AppThemeKeys.backGroundColor),
               borderRadius: _borderRadius,
             ),
-            constraints: BoxConstraints(maxHeight: ScreenUtil().setWidth(600.0)),
+            constraints: BoxConstraints(
+              maxHeight: ScreenUtil().setWidth(600.0),
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -298,11 +301,13 @@ class _FeedbackState extends State<Feedback> {
                   child: GridView.builder(
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: appendixs.length,
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      childAspectRatio: 1,
-                    ),
-                    itemBuilder: (_, index) => _buildAttachmentItem(appendixs[index]),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          childAspectRatio: 1,
+                        ),
+                    itemBuilder: (_, index) =>
+                        _buildAttachmentItem(appendixs[index]),
                   ),
                 ),
               ],
@@ -316,7 +321,10 @@ class _FeedbackState extends State<Feedback> {
   /// Builds an inset overlay Positioned matching the attachment thumbnail bounds.
   Positioned _insetOverlay(double inset, {required Widget child}) {
     return Positioned(
-      top: inset, bottom: inset, left: inset, right: inset,
+      top: inset,
+      bottom: inset,
+      left: inset,
+      right: inset,
       child: child,
     );
   }
@@ -326,80 +334,112 @@ class _FeedbackState extends State<Feedback> {
         ? Image.file(File(am.path), fit: BoxFit.cover)
         : Image.memory(am.imgMini!, fit: BoxFit.cover);
     final inset = ScreenUtil().setWidth(10.0);
-    final borderRadius = BorderRadius.all(Radius.circular(ScreenUtil().setWidth(20.0)));
+    final borderRadius = BorderRadius.all(
+      Radius.circular(ScreenUtil().setWidth(20.0)),
+    );
     final smallFont = ScreenUtil().setWidth(26.0);
     final accentColor = _color(AppThemeKeys.mainButtonBgColor);
 
     return Stack(
       children: [
-        _insetOverlay(inset, child: Container(
-          clipBehavior: Clip.hardEdge,
-          decoration: BoxDecoration(
-            color: _color(AppThemeKeys.itemBgColor),
-            borderRadius: borderRadius,
-          ),
-          child: imgWidget,
-        )),
-        if (am.state == 1)
-          _insetOverlay(inset, child: Container(
+        _insetOverlay(
+          inset,
+          child: Container(
+            clipBehavior: Clip.hardEdge,
             decoration: BoxDecoration(
-              color: _color(AppThemeKeys.transparentBgColor),
+              color: _color(AppThemeKeys.itemBgColor),
               borderRadius: borderRadius,
             ),
-            alignment: Alignment.center,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20.0)),
-                  child: LinearProgressIndicator(
-                    backgroundColor: _color(AppThemeKeys.mainGreyColor),
-                    valueColor: AlwaysStoppedAnimation<Color>(accentColor),
-                    value: am.upCount == 0 ? 0 : am.upCount / am.upTotal,
-                  ),
-                ),
-                SizedBox(height: ScreenUtil().setWidth(10.0)),
-                Text(
-                  '${am.upCount == 0 ? 0 : regular.formartNum((am.upCount / am.upTotal) * 100, 0)}%',
-                  style: TextStyle(fontSize: smallFont, color: accentColor),
-                ),
-              ],
-            ),
-          )),
-        if (am.state == 3)
-          _insetOverlay(inset, child: InkWell(
-            onTap: () { uploadFile(am); },
+            child: imgWidget,
+          ),
+        ),
+        if (am.state == 1)
+          _insetOverlay(
+            inset,
             child: Container(
               decoration: BoxDecoration(
-                color: _color(AppThemeKeys.errorBgColor2),
+                color: _color(AppThemeKeys.transparentBgColor),
                 borderRadius: borderRadius,
               ),
               alignment: Alignment.center,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(S.of(context).g_key_feedback_7,
-                    style: TextStyle(fontSize: smallFont, color: _color(AppThemeKeys.errorTextColor))),
+                  Container(
+                    margin: EdgeInsets.symmetric(
+                      horizontal: ScreenUtil().setWidth(20.0),
+                    ),
+                    child: LinearProgressIndicator(
+                      backgroundColor: _color(AppThemeKeys.mainGreyColor),
+                      valueColor: AlwaysStoppedAnimation<Color>(accentColor),
+                      value: am.upCount == 0 ? 0 : am.upCount / am.upTotal,
+                    ),
+                  ),
                   SizedBox(height: ScreenUtil().setWidth(10.0)),
-                  Text(S.of(context).g_key_feedback_8,
-                    style: TextStyle(fontSize: smallFont, color: _color(AppThemeKeys.errorTextColor))),
+                  Text(
+                    '${am.upCount == 0 ? 0 : regular.formartNum((am.upCount / am.upTotal) * 100, 0)}%',
+                    style: TextStyle(fontSize: smallFont, color: accentColor),
+                  ),
                 ],
               ),
             ),
-          )),
+          ),
+        if (am.state == 3)
+          _insetOverlay(
+            inset,
+            child: InkWell(
+              onTap: () {
+                uploadFile(am);
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  color: _color(AppThemeKeys.errorBgColor2),
+                  borderRadius: borderRadius,
+                ),
+                alignment: Alignment.center,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      S.of(context).g_key_feedback_7,
+                      style: TextStyle(
+                        fontSize: smallFont,
+                        color: _color(AppThemeKeys.errorTextColor),
+                      ),
+                    ),
+                    SizedBox(height: ScreenUtil().setWidth(10.0)),
+                    Text(
+                      S.of(context).g_key_feedback_8,
+                      style: TextStyle(
+                        fontSize: smallFont,
+                        color: _color(AppThemeKeys.errorTextColor),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
         Positioned(
-          top: 0, right: 0,
+          top: 0,
+          right: 0,
           height: ScreenUtil().setWidth(60.0),
           width: ScreenUtil().setWidth(60.0),
           child: InkWell(
-            onTap: () { deleteFile(am); },
+            onTap: () {
+              deleteFile(am);
+            },
             child: Container(
               decoration: BoxDecoration(
                 color: _color(AppThemeKeys.transparentBgColor),
-                borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(30.0))),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(ScreenUtil().setWidth(30.0)),
+                ),
               ),
-              child: Icon(Icons.close_outlined,
-                  color: _color(AppThemeKeys.mainWhiteColor)),
+              child: Icon(
+                Icons.close_outlined,
+                color: _color(AppThemeKeys.mainWhiteColor),
+              ),
             ),
           ),
         ),
@@ -420,15 +460,24 @@ class _FeedbackState extends State<Feedback> {
       context: context,
       builder: (ctx) {
         return SimpleDialog(
-          title: Text(S.of(ctx).g_key_nft_18, style: TextStyle(color: textColor)),
+          title: Text(
+            S.of(ctx).g_key_nft_18,
+            style: TextStyle(color: textColor),
+          ),
           children: [
             SimpleDialogOption(
               child: Text(S.of(ctx).g_key_nft_17, style: optionStyle),
-              onPressed: () { getFile(0); Navigator.of(ctx).pop(); },
+              onPressed: () {
+                getFile(0);
+                Navigator.of(ctx).pop();
+              },
             ),
             SimpleDialogOption(
               child: Text(S.of(ctx).g_key_nft_47, style: optionStyle),
-              onPressed: () { getFile(1); Navigator.of(ctx).pop(); },
+              onPressed: () {
+                getFile(1);
+                Navigator.of(ctx).pop();
+              },
             ),
           ],
         );

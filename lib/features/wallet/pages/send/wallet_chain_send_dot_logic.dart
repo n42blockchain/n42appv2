@@ -286,7 +286,6 @@ mixin _DotSendLogicMixin on ConsumerState<WalletChainSendDot> {
       toTextEditingController.text = scanValue;
       toAddressCheck(scanValue);
     }
-    Navigator.pop(context);
   }
 
   Future<void> maxTag() async {

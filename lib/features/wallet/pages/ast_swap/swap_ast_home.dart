@@ -199,22 +199,22 @@ class _SwapAstHomeState extends ConsumerState<SwapAstHome> {
 
   Future<void> getAstChainModel() async {
     final WalletActionProvider wa = ref.read(wapBridgeProvider);
-    final Map<String, dynamic>? astModel =
-        _swapMapValue(wa.walletMap[CoinType.N.name]);
+    final Map<String, dynamic>? astModel = _swapMapValue(
+      wa.walletMap[CoinType.N.name],
+    );
     final Map<String, dynamic>? baseInfo = _swapMapValue(astModel?['baseInfo']);
     if (astModel == null || baseInfo == null) {
       errorMessage = S.of(context).g_key_132;
       return;
     }
-    final CoinModel cm = CoinModel.fromMap(
-      baseInfo,
-    );
+    final CoinModel cm = CoinModel.fromMap(baseInfo);
     cm.showList = astModel['showList'];
     cm.isTest = false;
     cm.addrType = astModel['addrType'];
     cm.pathIndex = astModel['pathIndex'] ?? 0;
     getCoinModel = cm;
     await getCoinModel!.buildWallet();
+    if (!mounted) return;
     getCoinModel!.getBalanceDefault();
     setState(() {});
     getBalanceGet();
@@ -226,6 +226,7 @@ class _SwapAstHomeState extends ConsumerState<SwapAstHome> {
 
   Future<bool> getAstList() async {
     final MessageModel rData = await _swapAstApi.getNftOrAstList(2);
+    if (!mounted) return false;
     if (rData.error) {
       setState(() {
         load = Load.error;
@@ -281,11 +282,12 @@ class _SwapAstHomeState extends ConsumerState<SwapAstHome> {
   void getUsdtMap(String chainSymbol, String contractAddress) {
     token = null;
     if (contractAddress.isNotEmpty) {
-      final Map<String, dynamic>? txChainMap =
-          _swapMapValue(
-            ref.read(wapBridgeProvider).walletMap[chainSymbol.toUpperCase()],
-          );
-      final Map<String, dynamic>? mainnets = _swapMapValue(txChainMap?['mainnets']);
+      final Map<String, dynamic>? txChainMap = _swapMapValue(
+        ref.read(wapBridgeProvider).walletMap[chainSymbol.toUpperCase()],
+      );
+      final Map<String, dynamic>? mainnets = _swapMapValue(
+        txChainMap?['mainnets'],
+      );
       if (mainnets != null && mainnets.isNotEmpty) {
         token = _swapMapValue(mainnets[contractAddress.toUpperCase()]);
       }

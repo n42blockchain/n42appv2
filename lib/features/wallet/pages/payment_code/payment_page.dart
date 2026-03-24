@@ -101,6 +101,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
   Future<void> _initCoinInfo() async {
     usdtInfo = ref.read(wapBridgeProvider).getCoinPriceWithUnit("usdt");
     final list = await MarketApi().getWalletCoinsInfo("usdt");
+    if (!mounted) return;
     if (list['error']) {
       errorMessage = S.current.g_key_5;
       setState(() => load = Load.finish);
@@ -144,6 +145,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
     } else {
       errorMessage = S.current.g_key_payment_usdt_not_found;
     }
+    if (!mounted) return;
     setState(() => load = Load.finish);
   }
 

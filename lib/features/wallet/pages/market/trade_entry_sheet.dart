@@ -86,8 +86,12 @@ class _TradeEntrySheetState extends State<_TradeEntrySheet> {
   }
 
   Future<void> _loadTrades() async {
-    final list = await PortfolioTradeService.getTradesForCoin(widget.coinId);
-    if (mounted) setState(() => _trades = list);
+    try {
+      final list = await PortfolioTradeService.getTradesForCoin(widget.coinId);
+      if (mounted) setState(() => _trades = list);
+    } catch (e) {
+      debugPrint('TradeEntrySheet: failed to load trades: $e');
+    }
   }
 
   Future<void> _save() async {
@@ -113,6 +117,12 @@ class _TradeEntrySheetState extends State<_TradeEntrySheet> {
       _qtyCtrl.clear();
       _changed = true;
       await _loadTrades();
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Save trade failed: $e')));
+      }
     } finally {
       if (mounted) {
         setState(() => _loading = false);
@@ -122,9 +132,17 @@ class _TradeEntrySheetState extends State<_TradeEntrySheet> {
 
   Future<void> _deleteTrade(PortfolioTrade trade) async {
     if (trade.id == null) return;
-    await PortfolioTradeService.deleteTrade(trade.id!);
-    _changed = true;
-    await _loadTrades();
+    try {
+      await PortfolioTradeService.deleteTrade(trade.id!);
+      _changed = true;
+      await _loadTrades();
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Delete trade failed: $e')));
+      }
+    }
   }
 
   @override

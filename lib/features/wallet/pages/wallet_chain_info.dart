@@ -177,6 +177,7 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
       widget.coinModel.address = null;
       await widget.coinModel.buildWallet();
       await widget.coinModel.getBalance();
+      if (!mounted) return;
       setState(() {});
       _initData();
     } catch (e) {
@@ -196,6 +197,7 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
         getTransactionData(Load.refresh);
         getTransactionDataNetwork(Load.refresh);
         await widget.coinModel.getBalance();
+        if (!mounted) return;
         setState(() {});
       }
     });
@@ -318,6 +320,7 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
             await getTransactionData(Load.refresh);
             await getTransactionDataNetwork(Load.refresh);
             await cm.getBalance();
+            if (!mounted) return;
             setState(() {});
           },
           backgroundColor: _themeColor(AppThemeKeys.mainButtonBgColor.name),

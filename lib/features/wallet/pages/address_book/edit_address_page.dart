@@ -82,6 +82,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
     addr = normalizeAddressBookInput(addr);
 
     final valid = await Trustdart().validateAddress(coinType, addr);
+    if (!mounted) return null;
     if (valid) {
       setState(() => errorMessage = "");
       return addr;
@@ -89,6 +90,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
 
     if (coinName == CoinType.ETH.name) {
       final rmm = await TokenViewApi().getEnsResolve(addr);
+      if (!mounted) return null;
       if (!rmm.error) {
         setState(() => errorMessage = "");
         return rmm.data;
@@ -327,6 +329,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
       ),
       rightOnTap2: () async {
         final data = await Clipboard.getData(Clipboard.kTextPlain);
+        if (!mounted) return;
         if (data?.text != null && data!.text != "null") {
           addressController.text = normalizeAddressBookInput(data.text!);
         }

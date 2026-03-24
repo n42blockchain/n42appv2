@@ -84,32 +84,54 @@ class _EnsSearchPageState extends State<EnsSearchPage> {
       _availabilityResult = null;
       _priceInfo = null;
     });
+    try {
+      final result = await _ensService.checkAvailability(query);
 
-    final result = await _ensService.checkAvailability(query);
+      if (mounted && _searchQuery == query) {
+        setState(() {
+          _isSearching = false;
+          _availabilityResult = result;
+        });
 
-    if (mounted && _searchQuery == query) {
-      setState(() {
-        _isSearching = false;
-        _availabilityResult = result;
-      });
-
-      if (result.isAvailable) _loadPrice(query);
+        if (result.isAvailable) _loadPrice(query);
+      }
+    } catch (e) {
+      if (mounted && _searchQuery == query) {
+        setState(() => _isSearching = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('ENS search failed: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 
   Future<void> _loadPrice(String name) async {
     final loadVersion = ++_priceLoadVersion;
     setState(() => _isLoadingPrice = true);
+    try {
+      final result = await _ensService.getPrice(name, _selectedYears);
 
-    final result = await _ensService.getPrice(name, _selectedYears);
-
-    if (mounted && _searchQuery == name && loadVersion == _priceLoadVersion) {
-      setState(() {
-        _isLoadingPrice = false;
-        if (!result.error) {
-          _priceInfo = result.data;
-        }
-      });
+      if (mounted && _searchQuery == name && loadVersion == _priceLoadVersion) {
+        setState(() {
+          _isLoadingPrice = false;
+          if (!result.error) {
+            _priceInfo = result.data;
+          }
+        });
+      }
+    } catch (e) {
+      if (mounted && _searchQuery == name && loadVersion == _priceLoadVersion) {
+        setState(() => _isLoadingPrice = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Load ENS price failed: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 

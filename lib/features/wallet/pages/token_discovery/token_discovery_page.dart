@@ -76,6 +76,7 @@ class _TokenDiscoveryPageState extends ConsumerState<TokenDiscoveryPage> {
         ? token.contractAddress.trim()
         : token.contractAddress.toLowerCase();
     await SPUtil().addIgnoredTokenContract(contract);
+    if (!mounted) return;
     setState(() => _tokens.remove(token));
   }
 

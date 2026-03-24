@@ -69,6 +69,7 @@ mixin _BtcSendLogicMixin on ConsumerState<WalletChainSendBtc> {
       widget.coinModel.coin['coinType'],
       widget.coinModel.address,
     );
+    if (!mounted) return;
     if (checkLastModel.error) {
       errorMessage = checkLastModel.data;
     }
@@ -83,6 +84,7 @@ mixin _BtcSendLogicMixin on ConsumerState<WalletChainSendBtc> {
       final gasFeeMM = await tokenViewApi.getGasFeeBtc(
         isTest: widget.coinModel.isTest,
       );
+      if (!mounted) return;
       if (gasFeeMM.error) {
         gasFeeLevel['error'] = true;
         errorMessage = S.current.g_key_t_44;
@@ -105,8 +107,9 @@ mixin _BtcSendLogicMixin on ConsumerState<WalletChainSendBtc> {
   void _buildBtcFeeModel() {
     final avgRate = gasFeeLevel['averageValue'] as int;
     final coinType = widget.coinModel.coin['coinType']?.toString() ?? 'BTC';
-    final unit =
-        (widget.coinModel.coin['unit'] ?? coinType).toString().toUpperCase();
+    final unit = (widget.coinModel.coin['unit'] ?? coinType)
+        .toString()
+        .toUpperCase();
     const estBytes = 250;
     _btcFeeModel = NonEvmFeeModel.forBtcLike(
       averageRateSatPerByte: avgRate,
@@ -126,7 +129,8 @@ mixin _BtcSendLogicMixin on ConsumerState<WalletChainSendBtc> {
     );
     if (result == null || !mounted) return;
     _btcFeeModel = result.feeModel;
-    final rate = result.effectiveFeeRate ??
+    final rate =
+        result.effectiveFeeRate ??
         _btcFeeModel!.currentOption.feeRate ??
         (gasFeeLevel['averageValue'] as int);
     gasFeeLevel['gasFeeRate'] = rate;
@@ -144,6 +148,7 @@ mixin _BtcSendLogicMixin on ConsumerState<WalletChainSendBtc> {
   Future<void> getBalance() async {
     try {
       final isOk = await widget.coinModel.getBalance();
+      if (!mounted) return;
       if (isOk == false) {
         load = Load.finish;
         errorMessage = S.current.g_key_t_44;
@@ -156,7 +161,7 @@ mixin _BtcSendLogicMixin on ConsumerState<WalletChainSendBtc> {
       ToastUtils.show(errorMessage);
     } finally {
       load = Load.finish;
-      setState(() {});
+      if (mounted) setState(() {});
     }
   }
 
@@ -170,10 +175,14 @@ mixin _BtcSendLogicMixin on ConsumerState<WalletChainSendBtc> {
       setState(() {});
       return;
     }
-    final valid = await Trustdart()
-        .validateAddress(widget.coinModel.coin['coinType'], addr);
+    final valid = await Trustdart().validateAddress(
+      widget.coinModel.coin['coinType'],
+      addr,
+    );
+    if (!mounted) return;
 
-    final isSelfAddress = addr.toUpperCase() == widget.coinModel.address.toUpperCase();
+    final isSelfAddress =
+        addr.toUpperCase() == widget.coinModel.address.toUpperCase();
     toErrorMessage = (valid && !isSelfAddress) ? '' : S.current.g_key_t_50;
     setState(() {});
   }
@@ -201,9 +210,11 @@ mixin _BtcSendLogicMixin on ConsumerState<WalletChainSendBtc> {
       _setAmountError(S.of(context).g_key_46(0));
       return;
     }
-    final transactionTotal = dec.Decimal.parse(value) +
+    final transactionTotal =
+        dec.Decimal.parse(value) +
         dec.Decimal.parse(
-            toEther(gasFeeLevel['gasFees'].toString(), 8).toString());
+          toEther(gasFeeLevel['gasFees'].toString(), 8).toString(),
+        );
     if (transactionTotal.toDouble() > widget.coinModel.balanceDoubleAll()) {
       _setAmountError(S.of(context).g_key_47);
       return;

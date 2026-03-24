@@ -101,14 +101,13 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
   ];
 
   String _expiryI18n(Duration d) => switch (d.inHours) {
-        1 => S.of(context).g_key_aa_session_1h,
-        24 => S.of(context).g_key_aa_session_1d,
-        168 => S.of(context).g_key_aa_session_7d,
-        _ => S.of(context).g_key_aa_session_30d,
-      };
+    1 => S.of(context).g_key_aa_session_1h,
+    24 => S.of(context).g_key_aa_session_1d,
+    168 => S.of(context).g_key_aa_session_7d,
+    _ => S.of(context).g_key_aa_session_30d,
+  };
 
-  Color _themeColor(String key) =>
-      AppThemeUtils.getColorByKey(context, key);
+  Color _themeColor(String key) => AppThemeUtils.getColorByKey(context, key);
 
   @override
   Widget build(BuildContext context) {
@@ -147,15 +146,15 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
     final info = _presetInfo(_preset);
     final trimmed = _labelCtrl.text.trim();
     final dappStr = trimmed.isNotEmpty ? trimmed : '?';
-    final spendingLine = (_preset == SessionKeyPermission.transfer &&
+    final spendingLine =
+        (_preset == SessionKeyPermission.transfer &&
             !_noLimit &&
             _amountCtrl.text.isNotEmpty)
         ? '${_amountCtrl.text} $_amountToken'
         : null;
 
     return [
-      _buildSectionHeader(
-          '1. ${S.of(context).g_key_aa_session_select_preset}'),
+      _buildSectionHeader('1. ${S.of(context).g_key_aa_session_select_preset}'),
       SizedBox(height: ScreenUtil().setWidth(12)),
       SessionKeyPresetCards(
         selected: _preset,
@@ -175,7 +174,8 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
       if (_preset == SessionKeyPermission.transfer) ...[
         SizedBox(height: ScreenUtil().setWidth(24)),
         _buildSectionHeader(
-            '4. ${S.of(context).g_key_aa_session_amount_limit}'),
+          '4. ${S.of(context).g_key_aa_session_amount_limit}',
+        ),
         SizedBox(height: ScreenUtil().setWidth(12)),
         SessionKeyAmountLimit(
           amountCtrl: _amountCtrl,
@@ -330,11 +330,11 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
               backgroundColor: _themeColor(AppThemeKeys.mainBlueColor.name),
               foregroundColor: Colors.white,
               disabledBackgroundColor: Colors.grey.withAlpha(50),
-              padding:
-                  EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
+              padding: EdgeInsets.symmetric(
+                vertical: ScreenUtil().setWidth(16),
+              ),
               shape: RoundedRectangleBorder(
-                borderRadius:
-                    BorderRadius.circular(ScreenUtil().setWidth(14)),
+                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
               ),
             ),
             child: _isSaving
@@ -361,6 +361,8 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
 
   Future<void> _submit() async {
     setState(() => _isSaving = true);
+    final navigator = Navigator.of(context);
+    final messenger = ScaffoldMessenger.of(context);
 
     final trimmedLabel = _labelCtrl.text.trim();
     final info = _presetInfo(_preset);
@@ -394,24 +396,27 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
 
     if (mounted) {
       setState(() => _isSaving = false);
-      Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(
+      if (ok) {
+        widget.onCreated(key);
+      }
+      navigator.pop();
+      messenger.showSnackBar(
         SnackBar(
-          content: Text(ok
-              ? S.of(context).g_key_aa_session_create_success
-              : S.of(context).g_key_aa_session_create_failed),
+          content: Text(
+            ok
+                ? S.of(context).g_key_aa_session_create_success
+                : S.of(context).g_key_aa_session_create_failed,
+          ),
           backgroundColor: ok ? Colors.green : Colors.red,
         ),
       );
-      if (ok) widget.onCreated(key);
     }
   }
 
   static String _generateKeyAddress() {
     final rng = Random.secure();
     final bytes = List.generate(20, (_) => rng.nextInt(256));
-    final hex =
-        bytes.map((b) => b.toRadixString(16).padLeft(2, '0')).join();
+    final hex = bytes.map((b) => b.toRadixString(16).padLeft(2, '0')).join();
     return '0x$hex';
   }
 }

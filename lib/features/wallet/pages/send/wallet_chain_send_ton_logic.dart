@@ -179,7 +179,9 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
       errorMessage = e.toString();
       return false;
     } finally {
-      setState(() => gasLimitLoad = Load.finish);
+      if (mounted) {
+        setState(() => gasLimitLoad = Load.finish);
+      }
     }
   }
 
@@ -250,6 +252,7 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
     final String? toAddr = await toAddressCheck(
       toTextEditingController.text.trim(),
     );
+    if (!mounted) return;
     if (toAddr == null) {
       setState(() => load = Load.finish);
       return;

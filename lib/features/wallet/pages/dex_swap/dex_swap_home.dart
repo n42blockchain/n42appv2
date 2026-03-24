@@ -56,6 +56,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
   // ── ERC-20 approval state ─────────────────────────────────────────────────
   bool _needsApproval = false;
   Load _approveLoad = Load.finish;
+
   /// When true, approves exact amountIn instead of MaxUint256.
   bool _exactApprove = false;
 
@@ -128,7 +129,10 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
   /// Try to fetch a quote if both tokens are selected and the amount is valid.
   void _tryFetchQuote() {
     final amount = _amountCtrl.text.trim();
-    if (amount.isNotEmpty && amount != '0' && _tokenIn != null && _tokenOut != null) {
+    if (amount.isNotEmpty &&
+        amount != '0' &&
+        _tokenIn != null &&
+        _tokenOut != null) {
       _fetchQuote(amount);
     }
   }
@@ -176,7 +180,10 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
     }
     setState(() => _chartLoading = true);
     try {
-      final data = await MarketApi().getMarketChart(geckoId, days: _chartPeriodDays);
+      final data = await MarketApi().getMarketChart(
+        geckoId,
+        days: _chartPeriodDays,
+      );
       if (mounted) setState(() => _chartPrices = data['prices'] ?? []);
     } catch (_) {
       if (mounted) setState(() => _chartPrices = []);
@@ -209,7 +216,8 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
     if (res.error) {
       setState(() {
         _quoteLoad = Load.finish;
-        _errorMsg = res.data?.toString() ?? S.of(context).g_key_dex_quote_failed;
+        _errorMsg =
+            res.data?.toString() ?? S.of(context).g_key_dex_quote_failed;
       });
       return;
     }
@@ -251,7 +259,10 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
   // ── ERC-20 approval check ─────────────────────────────────────────────────
 
   /// Returns true if the token-in is an ERC-20 that needs approval.
-  Future<bool> _checkApprovalNeeded(BigInt amountIn, DexQuoteModel quote) async {
+  Future<bool> _checkApprovalNeeded(
+    BigInt amountIn,
+    DexQuoteModel quote,
+  ) async {
     final tokenAddr = _tokenIn?.address ?? '';
     final coinType = dexCoinTypeForChain(_chain);
     // Skip approval for: native tokens, Solana, or missing context
@@ -278,7 +289,10 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
     final DexQuoteModel? q = _quote;
     if (q == null || _approveLoad == Load.loading) return;
 
-    setState(() { _approveLoad = Load.loading; _errorMsg = ''; });
+    setState(() {
+      _approveLoad = Load.loading;
+      _errorMsg = '';
+    });
 
     BigInt? exactAmount;
     if (_exactApprove && _tokenIn != null) {
@@ -293,7 +307,10 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
       fromAddress: _userAddr,
       contractAddress: '',
       isTest: false,
-      message: DexSwapApi.buildApproveCalldata(q.routerAddr, amount: exactAmount),
+      message: DexSwapApi.buildApproveCalldata(
+        q.routerAddr,
+        amount: exactAmount,
+      ),
     );
     if (!mounted) return;
 
@@ -305,7 +322,11 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
       return;
     }
 
-    setState(() { _approveLoad = Load.finish; _needsApproval = false; _errorMsg = ''; });
+    setState(() {
+      _approveLoad = Load.finish;
+      _needsApproval = false;
+      _errorMsg = '';
+    });
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(S.of(context).g_key_dex_approval_success),
@@ -320,7 +341,10 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
     final DexQuoteModel? q = _quote;
     if (q == null || _swapLoad == Load.loading) return;
 
-    setState(() { _swapLoad = Load.loading; _errorMsg = ''; });
+    setState(() {
+      _swapLoad = Load.loading;
+      _errorMsg = '';
+    });
 
     final MessageModel txRes = await _transferApi.transfer(
       _tokenIn?.chain ?? _chain,
@@ -364,9 +388,13 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
 
   Future<void> _selectTokenIn() async {
     final result = await _pushTokenSelect();
+    if (!mounted) return;
     if (result != null) {
       _clearQuote();
-      setState(() { _tokenIn = result; _chartPrices = []; });
+      setState(() {
+        _tokenIn = result;
+        _chartPrices = [];
+      });
       _onAmountChanged();
       if (_showChart) _fetchPriceChart();
     }
@@ -374,6 +402,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
 
   Future<void> _selectTokenOut() async {
     final result = await _pushTokenSelect();
+    if (!mounted) return;
     if (result != null) {
       _clearQuote();
       setState(() => _tokenOut = result);
@@ -385,7 +414,10 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
     if (_tokenIn == null && _tokenOut == null) return;
     _clearQuote();
     final tmp = _tokenIn;
-    setState(() { _tokenIn = _tokenOut; _tokenOut = tmp; });
+    setState(() {
+      _tokenIn = _tokenOut;
+      _tokenOut = tmp;
+    });
     _onAmountChanged();
   }
 

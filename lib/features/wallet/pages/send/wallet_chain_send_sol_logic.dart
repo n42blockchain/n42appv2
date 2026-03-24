@@ -234,6 +234,7 @@ mixin _SolSendLogicMixin on ConsumerState<WalletChainSendSol> {
     final String? toAddr = await toAddressCheck(
       toTextEditingController.text.trim(),
     );
+    if (!mounted) return;
     if (toAddr == null) {
       setState(() => load = Load.finish);
       return;

@@ -11,13 +11,15 @@ part of 'security_google_vedification.dart';
 ///
 /// Contains controllers, state variables, verification methods,
 /// security settings load/save, and timer management.
-mixin _SecurityGoogleVedificationLogic
-    on State<SecurityGoogleVedification> {
+mixin _SecurityGoogleVedificationLogic on State<SecurityGoogleVedification> {
   static final RegExp _totpCodeRegExp = RegExp(r'^\d{6}$');
 
-  final TextEditingController pwdTextEditingController = TextEditingController();
-  final TextEditingController emailTextEditingController = TextEditingController();
-  final TextEditingController googleTextEditingController = TextEditingController();
+  final TextEditingController pwdTextEditingController =
+      TextEditingController();
+  final TextEditingController emailTextEditingController =
+      TextEditingController();
+  final TextEditingController googleTextEditingController =
+      TextEditingController();
 
   bool obscure = true;
   String pwdErrorMessage = "";
@@ -178,6 +180,7 @@ mixin _SecurityGoogleVedificationLogic
       return false;
     }
     MessageModel mm = await userInfoAPI.checkEmailVerification(codeStr);
+    if (!mounted) return false;
     if (mm.error) {
       setState(() {
         emailErrorMessage = S.of(context).email_code_input_error;
@@ -206,6 +209,7 @@ mixin _SecurityGoogleVedificationLogic
       return false;
     }
     MessageModel mm = await userInfoAPI.checkGoogle(codeStr);
+    if (!mounted) return false;
     if (mm.error) {
       setState(() {
         googleErrorMessage = S.of(context).email_code_input_error;
@@ -215,6 +219,7 @@ mixin _SecurityGoogleVedificationLogic
       if (AppGlobals.userInfo!.bindGoogleAuthState == false) {
         AppGlobals.userInfo!.bindGoogleAuthState = true;
         await SPUtil().saveUserInfo(AppGlobals.userInfo!);
+        if (!mounted) return false;
       }
       setState(() {
         googleErrorMessage = "";
@@ -229,6 +234,7 @@ mixin _SecurityGoogleVedificationLogic
     s ??= {};
     s[AppGlobals.userInfo?.uuid ?? ""] = securityMap;
     await spUtils.setSecurity(s);
+    if (!mounted) return;
     setState(() {});
   }
 
@@ -244,23 +250,32 @@ mixin _SecurityGoogleVedificationLogic
     });
 
     bool rValue = await checkPwd();
+    if (!mounted) return;
     if (!rValue) {
-      setState(() { load = Load.finish; });
+      setState(() {
+        load = Load.finish;
+      });
       return;
     }
 
     if (securityMap['email']) {
       rValue = await checkEmailVerification();
+      if (!mounted) return;
       if (!rValue) {
-        setState(() { load = Load.finish; });
+        setState(() {
+          load = Load.finish;
+        });
         return;
       }
     }
 
     if (securityMap['google'] == false) {
       rValue = await checkGoogleVerification();
+      if (!mounted) return;
       if (!rValue) {
-        setState(() { load = Load.finish; });
+        setState(() {
+          load = Load.finish;
+        });
         return;
       }
     }
@@ -275,7 +290,9 @@ mixin _SecurityGoogleVedificationLogic
   }
 
   void toggleObscure() {
-    setState(() { obscure = !obscure; });
+    setState(() {
+      obscure = !obscure;
+    });
   }
 
   void pasteGoogleCode(String text) {

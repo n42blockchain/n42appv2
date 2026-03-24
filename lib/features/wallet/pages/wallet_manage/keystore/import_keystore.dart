@@ -53,6 +53,7 @@ class _ImportKeystoreState extends ConsumerState<ImportKeystore> {
 
   Future<void> _pasteFromClipboard() async {
     final data = await Clipboard.getData(Clipboard.kTextPlain);
+    if (!mounted) return;
     final text = data?.text;
     if (text != null && text != "null") {
       _keystoreController.text = text;

@@ -18,7 +18,9 @@ class _SectionLabel extends StatelessWidget {
       text,
       style: TextStyle(
         color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemSubtitleTextColor.name),
+          context,
+          AppThemeKeys.itemSubtitleTextColor.name,
+        ),
         fontSize: ScreenUtil().setSp(28.0),
       ),
     );
@@ -39,7 +41,9 @@ class _ErrorMessage extends StatelessWidget {
         message,
         style: TextStyle(
           color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.errorTextColor.name),
+            context,
+            AppThemeKeys.errorTextColor.name,
+          ),
           fontSize: ScreenUtil().setSp(26.0),
         ),
         textAlign: TextAlign.end,
@@ -65,16 +69,21 @@ class _PillButton extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainButtonBgColor.name),
-          borderRadius:
-              BorderRadius.all(Radius.circular(ScreenUtil().setWidth(30.0))),
+            context,
+            AppThemeKeys.mainButtonBgColor.name,
+          ),
+          borderRadius: BorderRadius.all(
+            Radius.circular(ScreenUtil().setWidth(30.0)),
+          ),
         ),
         child: Text(
           label,
           style: TextStyle(
             fontSize: ScreenUtil().setSp(24.0),
             color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainButtonTextColor.name),
+              context,
+              AppThemeKeys.mainButtonTextColor.name,
+            ),
           ),
         ),
       ),
@@ -85,8 +94,7 @@ class _PillButton extends StatelessWidget {
 /// 统一输入框背景装饰
 BoxDecoration _inputBoxDecoration(BuildContext context) {
   return BoxDecoration(
-    borderRadius:
-        BorderRadius.all(Radius.circular(ScreenUtil().setWidth(8.0))),
+    borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(8.0))),
     color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
   );
 }
@@ -112,7 +120,9 @@ class _SetupPromptRow extends StatelessWidget {
             message,
             style: TextStyle(
               color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainButtonBgColor.name),
+                context,
+                AppThemeKeys.mainButtonBgColor.name,
+              ),
               fontSize: ScreenUtil().setSp(26.0),
             ),
             maxLines: 2,
@@ -134,16 +144,19 @@ extension _SecurityVerificationBuild on _WalletSecurityVerificationState {
   List<Widget> _buildVerificationWidgets() {
     final List<Widget> widgets = [];
 
-    widgets.add(_WalletPasswordSection(
-      showPasswordInput: showWalletPassword,
-      pwdController: pwdTextEditingController,
-      obscure: obscure,
-      pwdErrorMessage: pwdErrorMessage,
-      onToggleObscure: () => setState(() => obscure = !obscure),
-      onSetupPassword:
-          AppGlobals.userInfo == null ? showLoginDialog : pushEditWallet,
-      onEditingComplete: closeKeyboard,
-    ));
+    widgets.add(
+      _WalletPasswordSection(
+        showPasswordInput: showWalletPassword,
+        pwdController: pwdTextEditingController,
+        obscure: obscure,
+        pwdErrorMessage: pwdErrorMessage,
+        onToggleObscure: () => setState(() => obscure = !obscure),
+        onSetupPassword: AppGlobals.userInfo == null
+            ? showLoginDialog
+            : pushEditWallet,
+        onEditingComplete: closeKeyboard,
+      ),
+    );
 
     _insertOrAppend(
       widgets,
@@ -201,6 +214,7 @@ extension _SecurityVerificationBuild on _WalletSecurityVerificationState {
 
   Future<void> _pasteGoogleCode() async {
     final ClipboardData? cd = await Clipboard.getData(Clipboard.kTextPlain);
+    if (!mounted) return;
     if (cd?.text != null && cd!.text != 'null') {
       googleTextEditingController.text = cd.text!.trim();
       setState(() {});
@@ -212,8 +226,7 @@ extension _SecurityVerificationBuild on _WalletSecurityVerificationState {
     final h88 = su.setWidth(88.0);
     final pad30 = su.setWidth(30.0);
 
-    Color themeColor(String key) =>
-        AppThemeUtils.getColorByKey(context, key);
+    Color themeColor(String key) => AppThemeUtils.getColorByKey(context, key);
 
     return Column(
       children: [
@@ -235,11 +248,16 @@ extension _SecurityVerificationBuild on _WalletSecurityVerificationState {
                       Navigator.pop(context, false);
                     },
                     S.of(context).g_key_79,
-                    themeColor((load == Load.finish
-                        ? AppThemeKeys.mainButtonTextColor
-                        : AppThemeKeys.mainButtonBgColor3).name),
+                    themeColor(
+                      (load == Load.finish
+                              ? AppThemeKeys.mainButtonTextColor
+                              : AppThemeKeys.mainButtonBgColor3)
+                          .name,
+                    ),
                     themeColor(AppThemeKeys.mainButtonBgColor.name),
-                    borderColor: themeColor(AppThemeKeys.mainButtonBgColor.name),
+                    borderColor: themeColor(
+                      AppThemeKeys.mainButtonBgColor.name,
+                    ),
                   ),
                 ),
               ),
@@ -251,9 +269,12 @@ extension _SecurityVerificationBuild on _WalletSecurityVerificationState {
                     context,
                     _onConfirm,
                     S.of(context).g_key_78,
-                    themeColor(((load == Load.finish && anyEnabled)
-                        ? AppThemeKeys.mainButtonBgColor
-                        : AppThemeKeys.mainButtonBgColor3).name),
+                    themeColor(
+                      ((load == Load.finish && anyEnabled)
+                              ? AppThemeKeys.mainButtonBgColor
+                              : AppThemeKeys.mainButtonBgColor3)
+                          .name,
+                    ),
                     themeColor(AppThemeKeys.mainButtonTextColor.name),
                     load == Load.loading,
                   ),

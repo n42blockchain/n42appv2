@@ -40,6 +40,7 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
     lastPage = false;
     collectionList.clear();
     await getCollectionList();
+    if (!mounted) return;
     loading = Load.finish;
     setState(() {});
   }
@@ -48,6 +49,7 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
     loading = Load.loading;
     pageNum++;
     await getCollectionList();
+    if (!mounted) return;
     loading = Load.finish;
     setState(() {});
   }
@@ -76,6 +78,7 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
       context,
       MaterialPageRoute(builder: (context) => BrowserCollectionInfo(bcm)),
     );
+    if (!mounted) return;
     if (edit != null) {
       if (edit == "delete") {
         collectionList.removeAt(index);

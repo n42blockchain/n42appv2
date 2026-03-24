@@ -54,8 +54,10 @@ mixin _BtcSendTxMixin on _BtcSendLogicMixin {
         'script': unspent['hex'],
       };
     }
-    final BigInt amount =
-        ethToWeiString(double.parse(unspent['value']).toString(), 8);
+    final BigInt amount = ethToWeiString(
+      double.parse(unspent['value']).toString(),
+      8,
+    );
     return {
       'txid': unspent['txid'],
       'vout': unspent['output_no'],
@@ -98,7 +100,8 @@ mixin _BtcSendTxMixin on _BtcSendLogicMixin {
       if (price < input2Price) {
         final byteSize = await getSignByteSize(utxos);
         if (byteSize != 0) {
-          gasFeeLevel['gasFees'] = byteSize * (gasFeeLevel['gasFeeRate'] as int);
+          gasFeeLevel['gasFees'] =
+              byteSize * (gasFeeLevel['gasFeeRate'] as int);
           inputValueOK = true;
           break;
         }
@@ -230,7 +233,6 @@ mixin _BtcSendTxMixin on _BtcSendLogicMixin {
       toTextEditingController.text = scanValue;
       toAddressCheck(scanValue);
     }
-    Navigator.pop(context);
   }
 
   void closeKeyboard() {

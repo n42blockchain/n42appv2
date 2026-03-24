@@ -77,9 +77,11 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
       transactionList.addAll(results);
       if (results.length < pageSize) lastPage = true;
     } finally {
-      setState(() {
-        load = Load.finish;
-      });
+      if (mounted) {
+        setState(() {
+          load = Load.finish;
+        });
+      }
     }
   }
 
@@ -351,6 +353,7 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
             .read(tripBridgeProvider)
             .checkUndoneTrReturn(transationRecordModel) ??
         transationRecordModel;
+    if (!mounted) return;
     transactionList.firstWhere((element) {
       final trm = element as TransationRecordModel;
       if (trm.txHash == rtrm.txHash) {
@@ -370,6 +373,7 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
             .read(tripBridgeProvider)
             .checkUndoneTrBtcReturn(transationRecordModel) ??
         transationRecordModel;
+    if (!mounted) return;
     transactionList.firstWhere((element) {
       final trm = element as TransationRecordModel;
       if (trm.txHash == rtrm.txHash) {

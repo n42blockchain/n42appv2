@@ -46,7 +46,8 @@ class EnsPurchasePage extends StatefulWidget {
 }
 
 class _EnsPurchasePageState extends State<EnsPurchasePage> {
-  final EnsRegistrationService _ensService = EnsRegistrationServiceProvider.instance;
+  final EnsRegistrationService _ensService =
+      EnsRegistrationServiceProvider.instance;
 
   // 注册步骤: 0=初始, 1=提交承诺中, 2=等待中, 3=注册中, 4=完成, -1=失败
   int _currentStep = 0;
@@ -72,34 +73,42 @@ class _EnsPurchasePageState extends State<EnsPurchasePage> {
       _errorMessage = null;
     });
 
-    // 步骤 1: 提交承诺
-    final commitResult = await _ensService.commit(
-      widget.name,
-      widget.walletAddress,
-    );
+    try {
+      final commitResult = await _ensService.commit(
+        widget.name,
+        widget.walletAddress,
+      );
 
-    if (!mounted) return;
+      if (!mounted) return;
 
-    if (commitResult.error || commitResult.data == null) {
+      if (commitResult.error || commitResult.data == null) {
+        setState(() {
+          _currentStep = -1;
+          _errorMessage = S.of(context).g_key_ens_commit_failed;
+        });
+        return;
+      }
+
+      _commitResult = commitResult.data;
+
+      setState(() {
+        _currentStep = 2;
+        _remainingSeconds = _commitResult!.minWaitTime;
+      });
+
+      _startWaitTimer();
+    } catch (e) {
+      if (!mounted) return;
       setState(() {
         _currentStep = -1;
         _errorMessage = S.of(context).g_key_ens_commit_failed;
       });
-      return;
+      debugPrint('EnsPurchasePage: commit failed: $e');
     }
-
-    _commitResult = commitResult.data;
-
-    // 步骤 2: 等待
-    setState(() {
-      _currentStep = 2;
-      _remainingSeconds = _commitResult!.minWaitTime;
-    });
-
-    _startWaitTimer();
   }
 
   void _startWaitTimer() {
+    _waitTimer?.cancel();
     _waitTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (!mounted) {
         timer.cancel();
@@ -129,33 +138,48 @@ class _EnsPurchasePageState extends State<EnsPurchasePage> {
       setReverseRecord: true,
     );
 
-    final registerResult = await _ensService.register(registerParams);
+    try {
+      final registerResult = await _ensService.register(registerParams);
 
-    if (!mounted) return;
+      if (!mounted) return;
 
-    if (registerResult.error || registerResult.data == null || !registerResult.data!.success) {
-      final isExpired = registerResult.data?.error ==
-          EnsRegisterErrorType.commitmentExpired.name;
+      if (registerResult.error ||
+          registerResult.data == null ||
+          !registerResult.data!.success) {
+        final isExpired =
+            registerResult.data?.error ==
+            EnsRegisterErrorType.commitmentExpired.name;
+        setState(() {
+          _currentStep = -1;
+          _commitmentExpiredOnRegister = isExpired;
+          _errorMessage = isExpired
+              ? S.of(context).g_key_ens_commitment_expired_msg
+              : (registerResult.data?.error ??
+                    S.of(context).g_key_ens_register_failed);
+        });
+        return;
+      }
+
+      _registerResult = registerResult.data;
+      setState(() => _currentStep = 4);
+    } catch (e) {
+      if (!mounted) return;
       setState(() {
         _currentStep = -1;
-        _commitmentExpiredOnRegister = isExpired;
-        _errorMessage = isExpired
-            ? S.of(context).g_key_ens_commitment_expired_msg
-            : (registerResult.data?.error ?? S.of(context).g_key_ens_register_failed);
+        _commitmentExpiredOnRegister = false;
+        _errorMessage = S.of(context).g_key_ens_register_failed;
       });
-      return;
+      debugPrint('EnsPurchasePage: register failed: $e');
     }
-
-    _registerResult = registerResult.data;
-
-    setState(() => _currentStep = 4);
   }
 
   void _retryRegistration() {
     _waitTimer?.cancel();
 
     final bool needsFullRestart =
-        _commitResult == null || _commitResult!.isExpired || _commitmentExpiredOnRegister;
+        _commitResult == null ||
+        _commitResult!.isExpired ||
+        _commitmentExpiredOnRegister;
 
     if (needsFullRestart) {
       if (_commitmentExpiredOnRegister || _commitResult?.isExpired == true) {
@@ -190,9 +214,7 @@ class _EnsPurchasePageState extends State<EnsPurchasePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(
-        text: S.of(context).g_key_ens_purchase_title,
-      ),
+      appBar: AppBarWidget(text: S.of(context).g_key_ens_purchase_title),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
         child: Column(
@@ -238,8 +260,14 @@ class _EnsPurchasePageState extends State<EnsPurchasePage> {
   Widget _buildDomainCard() {
     final s = S.of(context);
     final su = ScreenUtil();
-    final blueColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
-    final subtitleColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+    final blueColor = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.mainBlueColor.name,
+    );
+    final subtitleColor = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.itemSubtitleTextColor.name,
+    );
     final yearLabel = widget.years == 1 ? s.g_key_ens_year : s.g_key_ens_years;
 
     return Container(
@@ -259,14 +287,21 @@ class _EnsPurchasePageState extends State<EnsPurchasePage> {
             style: TextStyle(
               fontSize: su.setSp(40),
               fontWeight: FontWeight.bold,
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+              color: AppThemeUtils.getColorByKey(
+                context,
+                AppThemeKeys.mainTextColor.name,
+              ),
             ),
           ),
           SizedBox(height: su.setWidth(8)),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.access_time, size: su.setWidth(20), color: subtitleColor),
+              Icon(
+                Icons.access_time,
+                size: su.setWidth(20),
+                color: subtitleColor,
+              ),
               SizedBox(width: su.setWidth(6)),
               Text(
                 '${widget.years} $yearLabel',

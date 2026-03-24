@@ -49,6 +49,7 @@ mixin _AlgoSendLogicMixin on ConsumerState<WalletChainSendAlgo> {
       });
       chainModel = wap.coinModels[cIndex];
       await chainModel?.getBalance();
+      if (!mounted) return;
       setState(() {});
     }
     gas = BigInt.from(

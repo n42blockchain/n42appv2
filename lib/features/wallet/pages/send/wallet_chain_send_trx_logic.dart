@@ -243,11 +243,13 @@ mixin _TrxSendLogicMixin on ConsumerState<WalletChainSendTrx> {
     final String? toAddr = await toAddressCheck(
       toTextEditingController.text.trim(),
     );
+    if (!mounted) return;
     if (toAddr == null) {
       setState(() => load = Load.finish);
       return;
     }
     await estimateGasEthLocal(checkAddress: false);
+    if (!mounted) return;
     if (errorMessage != "") {
       setState(() => load = Load.finish);
       return;
@@ -339,7 +341,6 @@ mixin _TrxSendLogicMixin on ConsumerState<WalletChainSendTrx> {
       toTextEditingController.text = scanValue;
       toAddressCheck(scanValue);
     }
-    Navigator.pop(context);
   }
 
   Future<void> maxTag() async {

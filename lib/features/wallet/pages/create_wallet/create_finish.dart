@@ -84,7 +84,9 @@ class _CreateFinishState extends ConsumerState<CreateFinish>
       ToastUtils.show(err.toString());
       debugPrint("create wallet err: $err");
     } finally {
-      setState(() => load = Load.finish);
+      if (mounted) {
+        setState(() => load = Load.finish);
+      }
     }
   }
 
@@ -110,7 +112,9 @@ class _CreateFinishState extends ConsumerState<CreateFinish>
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.backGroundColor.name),
+            context,
+            AppThemeKeys.backGroundColor.name,
+          ),
           actions: [SizedBox(width: ScreenUtil().setWidth(130.0))],
           leadingWidth: ScreenUtil().setWidth(130.0),
           leading: const SizedBox(),

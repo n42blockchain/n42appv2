@@ -42,8 +42,7 @@ class WalletChainSendXrp extends ConsumerStatefulWidget {
   const WalletChainSendXrp(this.coinModel, {this.initialToAddress, super.key});
 
   @override
-  ConsumerState<WalletChainSendXrp> createState() =>
-      _WalletChainSendXrpState();
+  ConsumerState<WalletChainSendXrp> createState() => _WalletChainSendXrpState();
 }
 
 class _WalletChainSendXrpState extends ConsumerState<WalletChainSendXrp>
@@ -84,16 +83,21 @@ class _WalletChainSendXrpState extends ConsumerState<WalletChainSendXrp>
       width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(
-            Radius.circular(ScreenUtil().setWidth(20.0))),
+          Radius.circular(ScreenUtil().setWidth(20.0)),
+        ),
         color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.errorBgColor2.name),
+          context,
+          AppThemeKeys.errorBgColor2.name,
+        ),
       ),
       child: Text(
         errorMessage,
         style: TextStyle(
           fontSize: ScreenUtil().setSp(28.0),
           color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.errorTextColor.name),
+            context,
+            AppThemeKeys.errorTextColor.name,
+          ),
         ),
       ),
     );
@@ -134,7 +138,9 @@ class _WalletChainSendXrpState extends ConsumerState<WalletChainSendXrp>
             padding: EdgeInsets.all(sw(30.0)),
             height: sw(148.0),
             color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.backGroundColor.name),
+              context,
+              AppThemeKeys.backGroundColor.name,
+            ),
             child: buttonStyle6(
               context,
               sendTransaction,
@@ -148,7 +154,9 @@ class _WalletChainSendXrpState extends ConsumerState<WalletChainSendXrp>
                     : AppThemeKeys.mainButtonBgColor.name,
               ),
               AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainButtonTextColor.name),
+                context,
+                AppThemeKeys.mainButtonTextColor.name,
+              ),
               isLoading,
             ),
           ),
@@ -173,6 +181,7 @@ class _WalletChainSendXrpState extends ConsumerState<WalletChainSendXrp>
                   ),
                 ),
               );
+              if (!mounted) return;
               if (value != null) {
                 toTextEditingController.text = value;
               }
@@ -187,7 +196,9 @@ class _WalletChainSendXrpState extends ConsumerState<WalletChainSendXrp>
               child: Image.asset(
                 'assets/wallet/addressBook.png',
                 color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
+                  context,
+                  AppThemeKeys.mainBlueColor.name,
+                ),
               ),
             ),
           ),
@@ -199,9 +210,7 @@ class _WalletChainSendXrpState extends ConsumerState<WalletChainSendXrp>
           child: Stack(
             children: [
               Positioned.fill(
-                child: SingleChildScrollView(
-                  child: coinTypeWidget(),
-                ),
+                child: SingleChildScrollView(child: coinTypeWidget()),
               ),
               sendButtonWidget(),
             ],

@@ -58,20 +58,23 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
         withData: false,
       );
     } catch (e) {
+      if (!mounted) return;
       setState(() => _error = 'Cannot open file picker: $e');
       return;
     }
 
-    if (result == null || result.files.isEmpty) return;
+    if (!mounted || result == null || result.files.isEmpty) return;
 
     final path = result.files.first.path;
     if (path == null) {
+      if (!mounted) return;
       setState(() => _error = 'Cannot access the selected file');
       return;
     }
 
     try {
       final content = await File(path).readAsString();
+      if (!mounted) return;
       // 快速格式验证（不解密）
       final decoded = jsonDecode(content);
       if (decoded is! Map || decoded['app'] != 'N42Wallet') {
@@ -83,6 +86,7 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
         _backupContent = content;
       });
     } catch (e) {
+      if (!mounted) return;
       setState(() => _error = 'Cannot read file: $e');
     }
   }

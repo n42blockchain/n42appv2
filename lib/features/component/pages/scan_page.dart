@@ -46,7 +46,8 @@ class _ScanPageState extends State<ScanPage> {
   Future<void> _initCameraPermission() async {
     if (Platform.isIOS) {
       final rData = await Trustdart().getPermissions("Camera");
-      cameraOK = rData.isNotEmpty &&
+      cameraOK =
+          rData.isNotEmpty &&
           (rData == "notDetermined" || rData == "authorized");
     } else {
       final status = await Permission.camera.status;
@@ -65,13 +66,17 @@ class _ScanPageState extends State<ScanPage> {
           IconButton(
             onPressed: () async {
               await controller?.toggleFlash();
+              if (!mounted) return;
               flash = await controller?.getFlashStatus() ?? false;
+              if (!mounted) return;
               setState(() {});
             },
             icon: Icon(
               flash ? Icons.flash_on : Icons.flash_off,
               color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainBlueColor.name),
+                context,
+                AppThemeKeys.mainBlueColor.name,
+              ),
             ),
           ),
         ],
@@ -92,7 +97,9 @@ class _ScanPageState extends State<ScanPage> {
             style: TextStyle(
               fontSize: ScreenUtil().setSp(30.0),
               color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
+                context,
+                AppThemeKeys.mainTextColor.name,
+              ),
             ),
           ),
           SizedBox(height: ScreenUtil().setWidth(36.0)),
@@ -106,7 +113,9 @@ class _ScanPageState extends State<ScanPage> {
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(32.0),
                 color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
+                  context,
+                  AppThemeKeys.mainBlueColor.name,
+                ),
               ),
             ),
           ),
@@ -147,9 +156,9 @@ class _ScanPageState extends State<ScanPage> {
 
   void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
     if (!p) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('no Permission')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('no Permission')));
     }
   }
 }

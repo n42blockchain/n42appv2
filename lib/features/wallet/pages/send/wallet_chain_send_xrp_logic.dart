@@ -59,6 +59,7 @@ mixin _XrpSendLogicMixin on ConsumerState<WalletChainSendXrp> {
       });
       chainModel = wap.coinModels[cIndex];
       await chainModel?.getBalance();
+      if (!mounted) return;
       setState(() {});
     }
     gas = BigInt.from(
@@ -81,6 +82,7 @@ mixin _XrpSendLogicMixin on ConsumerState<WalletChainSendXrp> {
       load = Load.loading;
     });
     final bool isOk = await widget.coinModel.getBalance(getToken: false);
+    if (!mounted) return;
     if (!isOk) {
       load = Load.finish;
       errorMessage = S.current.g_key_t_44;
@@ -94,6 +96,7 @@ mixin _XrpSendLogicMixin on ConsumerState<WalletChainSendXrp> {
     final MessageModel mm = await XrpApi().getServerStateXrp(
       isTest: widget.coinModel.isTest,
     );
+    if (!mounted) return;
     if (!mm.error) {
       widget.coinModel.other?.setServiceState(mm.data);
     }
@@ -112,6 +115,7 @@ mixin _XrpSendLogicMixin on ConsumerState<WalletChainSendXrp> {
           isTest: widget.coinModel.isTest,
         ) ??
         MessageModel.error();
+    if (!mounted) return;
     if (!mm.error) {
       gasPrice = mm.data;
     } else {
@@ -183,6 +187,7 @@ mixin _XrpSendLogicMixin on ConsumerState<WalletChainSendXrp> {
       return null;
     }
     await checkAccountXRP(addr);
+    if (!mounted) return null;
     toErrorMessage = "";
     setState(() {});
     return addr;
@@ -198,6 +203,7 @@ mixin _XrpSendLogicMixin on ConsumerState<WalletChainSendXrp> {
       addr,
       widget.coinModel.isTest,
     );
+    if (!mounted) return;
     if (mm.error) {
       accountXrp['error'] = S.current.g_key_t_45(addr);
     } else {
@@ -218,7 +224,7 @@ mixin _XrpSendLogicMixin on ConsumerState<WalletChainSendXrp> {
   /// Resets load state and triggers a rebuild.
   void _finishLoading() {
     load = Load.finish;
-    setState(() {});
+    if (mounted) setState(() {});
   }
 
   Future<void> sendTransaction() async {
@@ -234,6 +240,7 @@ mixin _XrpSendLogicMixin on ConsumerState<WalletChainSendXrp> {
       load = Load.loading;
     });
     final String? toAddr = await toAddressCheck(toTextEditingController.text);
+    if (!mounted) return;
     if (toAddr == null) {
       _finishLoading();
       return;

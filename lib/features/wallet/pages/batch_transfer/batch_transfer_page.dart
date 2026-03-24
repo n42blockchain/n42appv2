@@ -141,6 +141,7 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
 
   Future<void> _pasteAddress() async {
     final data = await Clipboard.getData(Clipboard.kTextPlain);
+    if (!mounted) return;
     if (data?.text != null) {
       _addressController.text = data!.text!;
     }

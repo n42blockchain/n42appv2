@@ -35,6 +35,7 @@ class PaymasterSelectPage extends StatefulWidget {
 }
 
 class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
+  int _loadRequestId = 0;
   late PaymasterOption _selectedOption;
   _LoadState _loadState = _LoadState.loading;
   List<PaymasterOption> _availableOptions = [];
@@ -56,6 +57,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
       : _chainSymbolFromId(widget.chainId);
 
   Future<void> _loadPaymasterOptions() async {
+    final requestId = ++_loadRequestId;
     setState(() => _loadState = _LoadState.loading);
     try {
       final options = await PaymasterService.loadOptions(
@@ -63,17 +65,23 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
         chainSymbol: _resolvedSymbol,
         apiKey: AAConfig.getBundlerApiKey(),
       );
-      if (mounted) {
+      if (mounted && requestId == _loadRequestId) {
         setState(() {
           _availableOptions = options;
           _loadState = _LoadState.success;
-          _selectedOption = _findMatchingOption(options, _selectedOption)
-              ?? PaymasterOption.none;
+          _selectedOption =
+              _findMatchingOption(options, _selectedOption) ??
+              PaymasterOption.none;
         });
       }
     } catch (e) {
-      assert(() { debugPrint('[PaymasterSelectPage] loadOptions error: $e'); return true; }());
-      if (mounted) setState(() => _loadState = _LoadState.error);
+      assert(() {
+        debugPrint('[PaymasterSelectPage] loadOptions error: $e');
+        return true;
+      }());
+      if (mounted && requestId == _loadRequestId) {
+        setState(() => _loadState = _LoadState.error);
+      }
     }
   }
 
@@ -85,7 +93,9 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
 
   /// Find the matching option after a reload (preserves user selection).
   PaymasterOption? _findMatchingOption(
-      List<PaymasterOption> options, PaymasterOption current) {
+    List<PaymasterOption> options,
+    PaymasterOption current,
+  ) {
     return options.where((o) => _optionsMatch(o, current)).firstOrNull;
   }
 
@@ -119,7 +129,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
           Expanded(
             child: switch (_loadState) {
               _LoadState.loading => _buildLoading(),
-              _LoadState.error   => _buildError(),
+              _LoadState.error => _buildError(),
               _LoadState.success => _buildOptionsList(),
             },
           ),
@@ -152,8 +162,11 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
         children: [
           Row(
             children: [
-              Icon(Icons.local_gas_station,
-                  size: ScreenUtil().setWidth(28), color: blueColor),
+              Icon(
+                Icons.local_gas_station,
+                size: ScreenUtil().setWidth(28),
+                color: blueColor,
+              ),
               SizedBox(width: ScreenUtil().setWidth(12)),
               Text(
                 S.of(context).g_key_aa_gas_payment_options,
@@ -178,9 +191,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
           Row(
             children: [
               Icon(
-                isCurrentChainSupported
-                    ? Icons.check_circle
-                    : Icons.cancel,
+                isCurrentChainSupported ? Icons.check_circle : Icons.cancel,
                 size: ScreenUtil().setWidth(20),
                 color: isCurrentChainSupported ? Colors.green : Colors.red,
               ),
@@ -267,8 +278,11 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.error_outline,
-                size: ScreenUtil().setWidth(64), color: Colors.red),
+            Icon(
+              Icons.error_outline,
+              size: ScreenUtil().setWidth(64),
+              color: Colors.red,
+            ),
             SizedBox(height: ScreenUtil().setWidth(16)),
             Text(
               S.of(context).g_key_aa_paymaster_load_failed,
@@ -337,10 +351,12 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
                   backgroundColor: _themeColor(AppThemeKeys.mainBlueColor),
                   foregroundColor: Colors.white,
                   padding: EdgeInsets.symmetric(
-                      vertical: ScreenUtil().setWidth(16)),
+                    vertical: ScreenUtil().setWidth(16),
+                  ),
                   shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(ScreenUtil().setWidth(14)),
+                    borderRadius: BorderRadius.circular(
+                      ScreenUtil().setWidth(14),
+                    ),
                   ),
                 ),
                 child: Text(
@@ -369,8 +385,11 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
       ),
       child: Row(
         children: [
-          Icon(_getSelectedIcon(),
-              size: ScreenUtil().setWidth(28), color: color),
+          Icon(
+            _getSelectedIcon(),
+            size: ScreenUtil().setWidth(28),
+            color: color,
+          ),
           SizedBox(width: ScreenUtil().setWidth(12)),
           Expanded(
             child: Column(
@@ -439,14 +458,16 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
   String _getSelectedTitle() => switch (_selectedOption.type) {
     PaymasterType.none => S.of(context).g_key_aa_pay_with_eth,
     PaymasterType.sponsored => S.of(context).g_key_aa_sponsored,
-    PaymasterType.erc20 => '${S.of(context).g_key_aa_pay_with} ${_selectedOption.tokenSymbol ?? 'Token'}',
+    PaymasterType.erc20 =>
+      '${S.of(context).g_key_aa_pay_with} ${_selectedOption.tokenSymbol ?? 'Token'}',
   };
 
   static String _chainSymbolFromId(int chainId) =>
       AAConfig.chainIds.entries
           .where((e) => e.value == chainId)
           .map((e) => e.key)
-          .firstOrNull ?? '';
+          .firstOrNull ??
+      '';
 }
 
 enum _LoadState { loading, success, error }

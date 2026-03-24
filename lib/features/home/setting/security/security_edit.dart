@@ -10,18 +10,19 @@ import 'package:flutter/material.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class SecurityEdit extends StatefulWidget{
+class SecurityEdit extends StatefulWidget {
   final String type;
   const SecurityEdit(this.type, {super.key});
   @override
-  SecurityEditState createState()=>SecurityEditState();
+  SecurityEditState createState() => SecurityEditState();
 }
-class SecurityEditState extends State<SecurityEdit>{
+
+class SecurityEditState extends State<SecurityEdit> {
   static final RegExp _totpCodeRegExp = RegExp(r'^\d{6}$');
-  Map<String,dynamic> securityMap={
-    "email":false,
-    "google":false,
-    "face":false,
+  Map<String, dynamic> securityMap = {
+    "email": false,
+    "google": false,
+    "face": false,
   };
   bool _disableLoading = false;
 
@@ -31,27 +32,30 @@ class SecurityEditState extends State<SecurityEdit>{
     init();
   }
 
-  Future<void> init()async{
-    Map<String,dynamic>? s=await SPUtil().getSecurity();
-    if(s!=null){
-      Map<String,dynamic>? userSecurityMap=s[AppGlobals.userInfo?.uuid??""];
-      if(userSecurityMap!=null){
+  Future<void> init() async {
+    Map<String, dynamic>? s = await SPUtil().getSecurity();
+    if (!mounted) return;
+    if (s != null) {
+      Map<String, dynamic>? userSecurityMap =
+          s[AppGlobals.userInfo?.uuid ?? ""];
+      if (userSecurityMap != null) {
         setState(() {
-          securityMap['email']=userSecurityMap['email'];
-          securityMap['google']=userSecurityMap['google'];
-          securityMap['face']=userSecurityMap['face']??false;
+          securityMap['email'] = userSecurityMap['email'];
+          securityMap['google'] = userSecurityMap['google'];
+          securityMap['face'] = userSecurityMap['face'] ?? false;
         });
       }
     }
   }
 
   // 保存非 google 类型的设置
-  Future<void> saveSecurity()async{
-    SPUtil sPUtils=SPUtil();
-    Map<String,dynamic>? s=await sPUtils.getSecurity();
+  Future<void> saveSecurity() async {
+    SPUtil sPUtils = SPUtil();
+    Map<String, dynamic>? s = await sPUtils.getSecurity();
     s ??= {};
-    s[AppGlobals.userInfo?.uuid??""]=securityMap;
+    s[AppGlobals.userInfo?.uuid ?? ""] = securityMap;
     await sPUtils.setSecurity(s);
+    if (!mounted) return;
     setState(() {});
   }
 
@@ -64,80 +68,109 @@ class SecurityEditState extends State<SecurityEdit>{
       context: context,
       barrierDismissible: false,
       builder: (ctx) {
-        return StatefulBuilder(builder: (ctx, setModalState) {
-          return AlertDialog(
-            backgroundColor: AppThemeUtils.getColorByKey(ctx, AppThemeKeys.itemBgColor.name),
-            title: Text(
-              S.of(ctx).g_2fa_disable_confirm_title,
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(ctx, AppThemeKeys.mainTextColor.name),
-                fontSize: ScreenUtil().setSp(32.0),
+        return StatefulBuilder(
+          builder: (ctx, setModalState) {
+            return AlertDialog(
+              backgroundColor: AppThemeUtils.getColorByKey(
+                ctx,
+                AppThemeKeys.itemBgColor.name,
               ),
-            ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  S.of(ctx).g_2fa_disable_confirm_hint,
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(ctx, AppThemeKeys.itemSubtitleTextColor.name),
-                    fontSize: ScreenUtil().setSp(26.0),
+              title: Text(
+                S.of(ctx).g_2fa_disable_confirm_title,
+                style: TextStyle(
+                  color: AppThemeUtils.getColorByKey(
+                    ctx,
+                    AppThemeKeys.mainTextColor.name,
                   ),
+                  fontSize: ScreenUtil().setSp(32.0),
                 ),
-                SizedBox(height: ScreenUtil().setWidth(16.0)),
-                TextField(
-                  controller: codeCtrl,
-                  keyboardType: TextInputType.number,
-                  maxLength: 6,
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(ctx, AppThemeKeys.mainTextColor.name),
-                    fontSize: ScreenUtil().setSp(30.0),
-                  ),
-                  decoration: InputDecoration(
-                    hintText: S.of(ctx).google_verification_message19,
-                    hintStyle: TextStyle(
-                      color: AppThemeUtils.getColorByKey(ctx, AppThemeKeys.itemSubtitleTextColor.name),
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    S.of(ctx).g_2fa_disable_confirm_hint,
+                    style: TextStyle(
+                      color: AppThemeUtils.getColorByKey(
+                        ctx,
+                        AppThemeKeys.itemSubtitleTextColor.name,
+                      ),
                       fontSize: ScreenUtil().setSp(26.0),
                     ),
-                    counterText: '',
-                    errorText: errorMsg,
                   ),
-                  onChanged: (_) {
-                    if (errorMsg != null) setModalState(() => errorMsg = null);
+                  SizedBox(height: ScreenUtil().setWidth(16.0)),
+                  TextField(
+                    controller: codeCtrl,
+                    keyboardType: TextInputType.number,
+                    maxLength: 6,
+                    style: TextStyle(
+                      color: AppThemeUtils.getColorByKey(
+                        ctx,
+                        AppThemeKeys.mainTextColor.name,
+                      ),
+                      fontSize: ScreenUtil().setSp(30.0),
+                    ),
+                    decoration: InputDecoration(
+                      hintText: S.of(ctx).google_verification_message19,
+                      hintStyle: TextStyle(
+                        color: AppThemeUtils.getColorByKey(
+                          ctx,
+                          AppThemeKeys.itemSubtitleTextColor.name,
+                        ),
+                        fontSize: ScreenUtil().setSp(26.0),
+                      ),
+                      counterText: '',
+                      errorText: errorMsg,
+                    ),
+                    onChanged: (_) {
+                      if (errorMsg != null) {
+                        setModalState(() => errorMsg = null);
+                      }
+                    },
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(ctx, false),
+                  child: Text(
+                    S.of(ctx).g_key_79,
+                    style: TextStyle(
+                      color: AppThemeUtils.getColorByKey(
+                        ctx,
+                        AppThemeKeys.itemSubtitleTextColor.name,
+                      ),
+                    ),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () async {
+                    final code = codeCtrl.text.trim();
+                    if (code.isEmpty ||
+                        code.length != 6 ||
+                        !_totpCodeRegExp.hasMatch(code)) {
+                      setModalState(
+                        () => errorMsg = S.of(ctx).g_2fa_invalid_format,
+                      );
+                      return;
+                    }
+                    Navigator.pop(ctx, true);
                   },
+                  child: Text(
+                    S.of(ctx).g_key_78,
+                    style: TextStyle(
+                      color: AppThemeUtils.getColorByKey(
+                        ctx,
+                        AppThemeKeys.mainButtonBgColor.name,
+                      ),
+                    ),
+                  ),
                 ),
               ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(ctx, false),
-                child: Text(
-                  S.of(ctx).g_key_79,
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(ctx, AppThemeKeys.itemSubtitleTextColor.name),
-                  ),
-                ),
-              ),
-              TextButton(
-                onPressed: () async {
-                  final code = codeCtrl.text.trim();
-                  if (code.isEmpty || code.length != 6 || !_totpCodeRegExp.hasMatch(code)) {
-                    setModalState(() => errorMsg = S.of(ctx).g_2fa_invalid_format);
-                    return;
-                  }
-                  Navigator.pop(ctx, true);
-                },
-                child: Text(
-                  S.of(ctx).g_key_78,
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(ctx, AppThemeKeys.mainButtonBgColor.name),
-                  ),
-                ),
-              ),
-            ],
-          );
-        });
+            );
+          },
+        );
       },
     );
 
@@ -166,7 +199,9 @@ class SecurityEditState extends State<SecurityEdit>{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
-        text: widget.type=="google"?S.of(context).google_verification:S.of(context).email_verification,
+        text: widget.type == "google"
+            ? S.of(context).google_verification
+            : S.of(context).email_verification,
       ),
       body: Stack(
         children: [
@@ -179,9 +214,14 @@ class SecurityEditState extends State<SecurityEdit>{
                 Container(
                   height: ScreenUtil().setWidth(88.0),
                   width: double.infinity,
-                  padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20.0)),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: ScreenUtil().setWidth(20.0),
+                  ),
                   decoration: BoxDecoration(
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+                    color: AppThemeUtils.getColorByKey(
+                      context,
+                      AppThemeKeys.itemBgColor.name,
+                    ),
                     borderRadius: BorderRadius.all(Radius.circular(4.0)),
                   ),
                   child: Row(
@@ -189,13 +229,19 @@ class SecurityEditState extends State<SecurityEdit>{
                       Container(
                         height: ScreenUtil().setWidth(40.0),
                         width: ScreenUtil().setWidth(40.0),
-                        margin: EdgeInsets.only(right: ScreenUtil().setWidth(10.0)),
-                        child:Image.asset('assets/home/setting/scurity/item_${widget.type}.png',),
+                        margin: EdgeInsets.only(
+                          right: ScreenUtil().setWidth(10.0),
+                        ),
+                        child: Image.asset(
+                          'assets/home/setting/scurity/item_${widget.type}.png',
+                        ),
                       ),
                       Expanded(
                         flex: 1,
                         child: Text(
-                          widget.type=="google"?S.of(context).google_verification:S.of(context).email_verification,
+                          widget.type == "google"
+                              ? S.of(context).google_verification
+                              : S.of(context).email_verification,
                           style: TextStyle(
                             color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
                             fontSize: ScreenUtil().setSp(28),
@@ -208,26 +254,40 @@ class SecurityEditState extends State<SecurityEdit>{
                               height: ScreenUtil().setWidth(40.0),
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
-                                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
+                                color: AppThemeUtils.getColorByKey(
+                                  context,
+                                  AppThemeKeys.mainButtonBgColor.name,
+                                ),
                               ),
                             )
                           : Switch(
-                              activeTrackColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
+                              activeTrackColor: AppThemeUtils.getColorByKey(
+                                context,
+                                AppThemeKeys.mainButtonBgColor.name,
+                              ),
                               value: securityMap[widget.type],
-                              onChanged: _disableLoading ? null : (bool value){
-                                if(widget.type=="google"){
-                                  if(value==false){
-                                    // 关闭 2FA：需要先验证当前 TOTP 码，服务器解绑后再本地保存
-                                    _confirmDisableGoogle();
-                                  }else{
-                                    //跳转绑定流程
-                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>SecurityGoogleDownload()));
-                                  }
-                                }else{
-                                  securityMap[widget.type]=value;
-                                  saveSecurity();
-                                }
-                              },
+                              onChanged: _disableLoading
+                                  ? null
+                                  : (bool value) {
+                                      if (widget.type == "google") {
+                                        if (value == false) {
+                                          // 关闭 2FA：需要先验证当前 TOTP 码，服务器解绑后再本地保存
+                                          _confirmDisableGoogle();
+                                        } else {
+                                          //跳转绑定流程
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  SecurityGoogleDownload(),
+                                            ),
+                                          );
+                                        }
+                                      } else {
+                                        securityMap[widget.type] = value;
+                                        saveSecurity();
+                                      }
+                                    },
                             ),
                     ],
                   ),
@@ -235,10 +295,15 @@ class SecurityEditState extends State<SecurityEdit>{
                 Container(
                   padding: EdgeInsets.symmetric(vertical: 15.0),
                   child: Text(
-                    widget.type=="google"?S.of(context).google_verification_message7:S.of(context).email_verification_message1,
+                    widget.type == "google"
+                        ? S.of(context).google_verification_message7
+                        : S.of(context).email_verification_message1,
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(26.0),
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                      color: AppThemeUtils.getColorByKey(
+                        context,
+                        AppThemeKeys.itemSubtitleTextColor.name,
+                      ),
                     ),
                   ),
                 ),

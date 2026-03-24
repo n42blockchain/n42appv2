@@ -43,11 +43,14 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
         isLoading = true;
       });
       final data = await MiningApi.getTaskDetail(widget.blockNumber);
+      if (!mounted) return;
       taskDetailResponse = data["result"];
     } finally {
-      setState(() {
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
 
