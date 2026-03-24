@@ -11,10 +11,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SwapAstTransactionDetail extends StatefulWidget {
   final SwapAstOrderModel orderModel;
-  const SwapAstTransactionDetail(this.orderModel,{super.key});
+  const SwapAstTransactionDetail(this.orderModel, {super.key});
 
   @override
-  State<SwapAstTransactionDetail> createState() => _SwapAstTransactionDetailState();
+  State<SwapAstTransactionDetail> createState() =>
+      _SwapAstTransactionDetailState();
 }
 
 class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
@@ -29,16 +30,27 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
     super.initState();
     _orderModel = widget.orderModel;
     final int tsMs = (_orderModel.created ?? 0) * 1000;
-    createStr = dformat.formatDate(
-      DateTime.fromMillisecondsSinceEpoch(tsMs),
-      [dformat.yyyy, '/', dformat.mm, '/', dformat.dd, ' ', dformat.am, ' ', dformat.hh, ':', dformat.nn],
-    );
+    createStr = dformat.formatDate(DateTime.fromMillisecondsSinceEpoch(tsMs), [
+      dformat.yyyy,
+      '/',
+      dformat.mm,
+      '/',
+      dformat.dd,
+      ' ',
+      dformat.am,
+      ' ',
+      dformat.hh,
+      ':',
+      dformat.nn,
+    ]);
     _loadOrderDetail();
   }
 
   Future<void> _loadOrderDetail() async {
-    final MessageModel rData =
-        await SwapAstApi().getNftOrAstDetail(_orderModel.id ?? 0);
+    final MessageModel rData = await SwapAstApi().getNftOrAstDetail(
+      _orderModel.id ?? 0,
+    );
+    if (!mounted) return;
     if (!rData.error) {
       setState(() => _orderModel = SwapAstOrderModel.fromJson(rData.data));
     }
@@ -90,6 +102,7 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
       _ => processingWidget(),
     };
   }
+
   Widget processingWidget() {
     final su = ScreenUtil();
     final Color mainText = _themeColor(AppThemeKeys.mainTextColor);
@@ -112,28 +125,49 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
               children: [
                 Row(
                   children: [
-                    Text(pair, style: TextStyle(color: mainText, fontSize: su.setSp(28))),
+                    Text(
+                      pair,
+                      style: TextStyle(color: mainText, fontSize: su.setSp(28)),
+                    ),
                     Expanded(
-                      child: Text("+${_orderModel.orderNum}",
-                          style: TextStyle(color: mainText, fontSize: su.setSp(28)),
-                          textAlign: TextAlign.right),
+                      child: Text(
+                        "+${_orderModel.orderNum}",
+                        style: TextStyle(
+                          color: mainText,
+                          fontSize: su.setSp(28),
+                        ),
+                        textAlign: TextAlign.right,
+                      ),
                     ),
                   ],
                 ),
                 Row(
                   children: [
-                    Text(createStr, style: TextStyle(color: subtitle, fontSize: su.setSp(24))),
+                    Text(
+                      createStr,
+                      style: TextStyle(color: subtitle, fontSize: su.setSp(24)),
+                    ),
                     Expanded(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Padding(
                             padding: EdgeInsets.only(right: su.setWidth(4)),
-                            child: Icon(iconData, color: stateColor, size: su.setWidth(30), fill: 0),
+                            child: Icon(
+                              iconData,
+                              color: stateColor,
+                              size: su.setWidth(30),
+                              fill: 0,
+                            ),
                           ),
-                          Text(stateStr,
-                              style: TextStyle(color: stateColor, fontSize: su.setSp(24)),
-                              textAlign: TextAlign.right),
+                          Text(
+                            stateStr,
+                            style: TextStyle(
+                              color: stateColor,
+                              fontSize: su.setSp(24),
+                            ),
+                            textAlign: TextAlign.right,
+                          ),
                         ],
                       ),
                     ),
@@ -194,7 +228,9 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
   Widget _stepIconRaw(bool completed, ScreenUtil su, Color dividerColor) {
     return Icon(
       completed ? Icons.check_circle : Icons.radio_button_unchecked,
-      color: completed ? _themeColor(AppThemeKeys.rightTextColor) : dividerColor,
+      color: completed
+          ? _themeColor(AppThemeKeys.rightTextColor)
+          : dividerColor,
       size: su.setWidth(40),
     );
   }
@@ -209,14 +245,18 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
       ),
     );
   }
+
   Widget pRowWidget(String title) {
     return Expanded(
       child: Align(
         alignment: Alignment.centerLeft,
-        child: Text(title,
-            style: TextStyle(
-                color: _themeColor(AppThemeKeys.mainTextColor),
-                fontSize: ScreenUtil().setSp(28))),
+        child: Text(
+          title,
+          style: TextStyle(
+            color: _themeColor(AppThemeKeys.mainTextColor),
+            fontSize: ScreenUtil().setSp(28),
+          ),
+        ),
       ),
     );
   }
@@ -243,7 +283,10 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
                     children: [
                       TextSpan(
                         text: CoinType.N.name,
-                        style: TextStyle(fontSize: su.setSp(24), color: mainText),
+                        style: TextStyle(
+                          fontSize: su.setSp(24),
+                          color: mainText,
+                        ),
                       ),
                     ],
                   ),
@@ -256,20 +299,33 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
                   children: [
                     Padding(
                       padding: EdgeInsets.only(right: su.setWidth(10)),
-                      child: Icon(iconData, color: stateColor, size: su.setWidth(40)),
+                      child: Icon(
+                        iconData,
+                        color: stateColor,
+                        size: su.setWidth(40),
+                      ),
                     ),
-                    Text(stateStr,
-                        style: TextStyle(color: stateColor, fontSize: su.setSp(28))),
+                    Text(
+                      stateStr,
+                      style: TextStyle(
+                        color: stateColor,
+                        fontSize: su.setSp(28),
+                      ),
+                    ),
                   ],
                 ),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(
-                    vertical: su.setWidth(10), horizontal: su.setWidth(200)),
-                child: Text(s.g_key_tran_6,
-                    style: TextStyle(color: mainText, fontSize: su.setSp(24)),
-                    textAlign: TextAlign.center,
-                    maxLines: 2),
+                  vertical: su.setWidth(10),
+                  horizontal: su.setWidth(200),
+                ),
+                child: Text(
+                  s.g_key_tran_6,
+                  style: TextStyle(color: mainText, fontSize: su.setSp(24)),
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                ),
               ),
             ],
           ),
@@ -282,8 +338,14 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
           padding: EdgeInsets.symmetric(horizontal: su.setWidth(30)),
           child: Column(
             children: [
-              _rowWidget(s.g_key_tran_7, "${_orderModel.payNum} ${_orderModel.payCoin ?? 'USDT'}"),
-              _rowWidget(s.g_key_tran_8, "${_orderModel.orderNum} ${CoinType.N.name}"),
+              _rowWidget(
+                s.g_key_tran_7,
+                "${_orderModel.payNum} ${_orderModel.payCoin ?? 'USDT'}",
+              ),
+              _rowWidget(
+                s.g_key_tran_8,
+                "${_orderModel.orderNum} ${CoinType.N.name}",
+              ),
               _rowWidget(s.g_key_wallet_k25, createStr),
             ],
           ),
@@ -299,16 +361,22 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
       padding: EdgeInsets.symmetric(vertical: su.setWidth(10)),
       child: Row(
         children: [
-          Text(title,
-              style: TextStyle(
-                  color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
-                  fontSize: su.setSp(30))),
+          Text(
+            title,
+            style: TextStyle(
+              color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
+              fontSize: su.setSp(30),
+            ),
+          ),
           Expanded(
-            child: Text(value,
-                style: TextStyle(
-                    color: _themeColor(AppThemeKeys.mainTextColor),
-                    fontSize: su.setSp(30)),
-                textAlign: TextAlign.end),
+            child: Text(
+              value,
+              style: TextStyle(
+                color: _themeColor(AppThemeKeys.mainTextColor),
+                fontSize: su.setSp(30),
+              ),
+              textAlign: TextAlign.end,
+            ),
           ),
         ],
       ),

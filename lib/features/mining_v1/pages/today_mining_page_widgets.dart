@@ -21,7 +21,9 @@ mixin _WidgetsMixin on _LogicMixin {
               ),
               decoration: BoxDecoration(
                 color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemBgColor.name),
+                  context,
+                  AppThemeKeys.itemBgColor.name,
+                ),
                 borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
               ),
               child: Column(
@@ -35,7 +37,9 @@ mixin _WidgetsMixin on _LogicMixin {
                           maxLines: 2,
                           style: TextStyle(
                             color: AppThemeUtils.getColorByKey(
-                                context, AppThemeKeys.itemSubtitleTextColor.name),
+                              context,
+                              AppThemeKeys.itemSubtitleTextColor.name,
+                            ),
                             fontSize: ScreenUtil().setSp(24),
                           ),
                         ),
@@ -43,13 +47,17 @@ mixin _WidgetsMixin on _LogicMixin {
                       Container(
                         height: ScreenUtil().setWidth(32),
                         width: ScreenUtil().setWidth(32),
-                        margin: EdgeInsets.only(left: ScreenUtil().setWidth(10)),
+                        margin: EdgeInsets.only(
+                          left: ScreenUtil().setWidth(10),
+                        ),
                         padding: EdgeInsets.all(ScreenUtil().setWidth(8)),
                         decoration: BoxDecoration(
                           color: isActive
                               ? const Color.fromRGBO(50, 215, 75, 0.2)
                               : const Color.fromRGBO(235, 88, 81, 0.2),
-                          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+                          borderRadius: BorderRadius.circular(
+                            ScreenUtil().setWidth(16),
+                          ),
                         ),
                         child: Container(
                           height: ScreenUtil().setWidth(16),
@@ -58,8 +66,9 @@ mixin _WidgetsMixin on _LogicMixin {
                             color: isActive
                                 ? const Color(0xff32D74B)
                                 : const Color(0xffEB5851),
-                            borderRadius:
-                                BorderRadius.circular(ScreenUtil().setWidth(16)),
+                            borderRadius: BorderRadius.circular(
+                              ScreenUtil().setWidth(16),
+                            ),
                           ),
                         ),
                       ),
@@ -75,7 +84,9 @@ mixin _WidgetsMixin on _LogicMixin {
                             : S.current.g_mining_key_47,
                         style: TextStyle(
                           color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.itemTextColor.name),
+                            context,
+                            AppThemeKeys.itemTextColor.name,
+                          ),
                           fontSize: ScreenUtil().setSp(32),
                         ),
                       ),
@@ -93,6 +104,7 @@ mixin _WidgetsMixin on _LogicMixin {
                             globalMiningV1.setMiningStatus(true);
                             await MiningUtils.startMining();
                           }
+                          if (!mounted) return;
                           setState(() => miningStartLoad = Load.finish);
                         },
                         child: SizedBox(
@@ -102,10 +114,13 @@ mixin _WidgetsMixin on _LogicMixin {
                               ? Image.asset(
                                   "assets/mining/${isActive ? 'stop' : 'play'}.png",
                                   color: AppThemeUtils.getColorByKey(
-                                      context,
-                                      isActive
-                                          ? AppThemeKeys.mainBlueColor.name
-                                          : AppThemeKeys.iconTextDisableColor.name),
+                                    context,
+                                    isActive
+                                        ? AppThemeKeys.mainBlueColor.name
+                                        : AppThemeKeys
+                                              .iconTextDisableColor
+                                              .name,
+                                  ),
                                   height: ScreenUtil().setWidth(40),
                                   width: ScreenUtil().setWidth(40),
                                 )
@@ -128,7 +143,9 @@ mixin _WidgetsMixin on _LogicMixin {
               ),
               decoration: BoxDecoration(
                 color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemBgColor.name),
+                  context,
+                  AppThemeKeys.itemBgColor.name,
+                ),
                 borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
               ),
               child: Column(
@@ -139,7 +156,9 @@ mixin _WidgetsMixin on _LogicMixin {
                     S.of(context).g_mining_key38,
                     style: TextStyle(
                       color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.itemSubtitleTextColor.name),
+                        context,
+                        AppThemeKeys.itemSubtitleTextColor.name,
+                      ),
                       fontSize: ScreenUtil().setSp(24),
                     ),
                   ),
@@ -150,7 +169,9 @@ mixin _WidgetsMixin on _LogicMixin {
                         : '$currDepositsOfValue ${CoinType.N.name}',
                     style: TextStyle(
                       color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.itemTextColor.name),
+                        context,
+                        AppThemeKeys.itemTextColor.name,
+                      ),
                       fontSize: ScreenUtil().setSp(32),
                     ),
                   ),
@@ -170,7 +191,10 @@ mixin _WidgetsMixin on _LogicMixin {
         horizontal: ScreenUtil().setWidth(30),
       ),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: AppThemeUtils.getColorByKey(
+          context,
+          AppThemeKeys.itemBgColor.name,
+        ),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
       ),
       child: Row(
@@ -191,14 +215,19 @@ mixin _WidgetsMixin on _LogicMixin {
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(26),
                   color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemTextColor.name),
+                    context,
+                    AppThemeKeys.itemTextColor.name,
+                  ),
                   fontWeight: FontWeight.w600,
                 ),
               ),
             ),
           ),
-          showTimeWidget(currentMiningTimes[0], currentMiningTimes[1],
-              currentMiningTimes[2])
+          showTimeWidget(
+            currentMiningTimes[0],
+            currentMiningTimes[1],
+            currentMiningTimes[2],
+          ),
         ],
       ),
     );
@@ -206,17 +235,24 @@ mixin _WidgetsMixin on _LogicMixin {
 
   Widget showTimeWidget(String hh, String mm, String ss) {
     final blueColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainBlueColor.name);
+      context,
+      AppThemeKeys.mainBlueColor.name,
+    );
     final borderColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.timeBorderColor.name);
+      context,
+      AppThemeKeys.timeBorderColor.name,
+    );
     final textStyle = TextStyle(
-        color: blueColor, fontSize: ScreenUtil().setSp(26));
+      color: blueColor,
+      fontSize: ScreenUtil().setSp(26),
+    );
 
     Widget timeBox(String value) {
       return Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: borderColor)),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: borderColor),
+        ),
         padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
         child: Text(value, style: textStyle),
       );
@@ -232,24 +268,36 @@ mixin _WidgetsMixin on _LogicMixin {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        timeBox(hh), separator(),
-        timeBox(mm), separator(),
+        timeBox(hh),
+        separator(),
+        timeBox(mm),
+        separator(),
         timeBox(ss),
       ],
     );
   }
 
-  Widget miningDataBroad(String titleText, String value,
-      {bool showTips = false, String? imagePath, String? tipsText}) {
+  Widget miningDataBroad(
+    String titleText,
+    String value, {
+    bool showTips = false,
+    String? imagePath,
+    String? tipsText,
+  }) {
     return Expanded(
       child: Container(
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+          color: AppThemeUtils.getColorByKey(
+            context,
+            AppThemeKeys.itemBgColor.name,
+          ),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
         ),
         padding: EdgeInsets.fromLTRB(
-          ScreenUtil().setWidth(30), ScreenUtil().setWidth(30),
-          ScreenUtil().setWidth(0), ScreenUtil().setWidth(0),
+          ScreenUtil().setWidth(30),
+          ScreenUtil().setWidth(30),
+          ScreenUtil().setWidth(0),
+          ScreenUtil().setWidth(0),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -264,40 +312,57 @@ mixin _WidgetsMixin on _LogicMixin {
                       titleText,
                       maxLines: 2,
                       style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.ff888888.name),
-                          fontSize: ScreenUtil().setSp(22)),
+                        color: AppThemeUtils.getColorByKey(
+                          context,
+                          AppThemeKeys.ff888888.name,
+                        ),
+                        fontSize: ScreenUtil().setSp(22),
+                      ),
                     ),
                   ),
                   if (showTips)
                     CustomPopupMenuWrap(
-                        key: ValueKey(titleText),
-                        verticalMargin: ScreenUtil().setWidth(24),
-                        defView: Padding(
-                          padding: EdgeInsets.only(left: ScreenUtil().setWidth(12)),
-                          child: Image.asset(
-                            "assets/mining/tips_icon.png",
-                            width: ScreenUtil().setWidth(20),
-                            fit: BoxFit.cover,
+                      key: ValueKey(titleText),
+                      verticalMargin: ScreenUtil().setWidth(24),
+                      defView: Padding(
+                        padding: EdgeInsets.only(
+                          left: ScreenUtil().setWidth(12),
+                        ),
+                        child: Image.asset(
+                          "assets/mining/tips_icon.png",
+                          width: ScreenUtil().setWidth(20),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      menuItemView: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(
+                            ScreenUtil().setWidth(50),
+                          ),
+                          color: AppThemeUtils.getColorByKey(
+                            context,
+                            AppThemeKeys.itemBgColor.name,
                           ),
                         ),
-                        menuItemView: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(50)),
+                        margin: EdgeInsets.symmetric(
+                          horizontal: ScreenUtil().setWidth(100),
+                        ),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: ScreenUtil().setWidth(28),
+                          vertical: ScreenUtil().setWidth(30),
+                        ),
+                        child: Text(
+                          tipsText ?? '',
+                          style: TextStyle(
                             color: AppThemeUtils.getColorByKey(
-                                context, AppThemeKeys.itemBgColor.name),
+                              context,
+                              AppThemeKeys.mainTextColor.name,
+                            ),
+                            fontSize: ScreenUtil().setSp(24),
                           ),
-                          margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(100)),
-                          padding: EdgeInsets.symmetric(
-                              horizontal: ScreenUtil().setWidth(28), vertical: ScreenUtil().setWidth(30)),
-                          child: Text(
-                            tipsText ?? '',
-                            style: TextStyle(
-                                color: AppThemeUtils.getColorByKey(
-                                    context, AppThemeKeys.mainTextColor.name),
-                                fontSize: ScreenUtil().setSp(24)),
-                          ),
-                        ))
+                        ),
+                      ),
+                    ),
                 ],
               ),
             ),
@@ -307,16 +372,19 @@ mixin _WidgetsMixin on _LogicMixin {
                 Text(
                   value,
                   style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainTextColor.name),
-                      fontSize: ScreenUtil().setSp(30)),
+                    color: AppThemeUtils.getColorByKey(
+                      context,
+                      AppThemeKeys.mainTextColor.name,
+                    ),
+                    fontSize: ScreenUtil().setSp(30),
+                  ),
                 ),
                 Image.asset(
                   imagePath ?? '',
                   width: ScreenUtil().setWidth(90),
                   height: ScreenUtil().setWidth(90),
                   fit: BoxFit.cover,
-                )
+                ),
               ],
             ),
           ],
@@ -324,5 +392,4 @@ mixin _WidgetsMixin on _LogicMixin {
       ),
     );
   }
-
 }

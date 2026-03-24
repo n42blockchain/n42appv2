@@ -14,12 +14,18 @@ mixin _FullNodePageLogic on State<FullNodePage> {
       final WalletInfo walletInfo = wap.walletInfoLsit[mp.walletIndex];
       final astMap = walletInfo.coinInfo?[CoinType.N.name];
       int pathIndex = astMap['pathIndex'] ?? 0;
-      final path =
-          getPathWithIndex(astMap["baseInfo"]["path"]["legacy"], pathIndex);
+      final path = getPathWithIndex(
+        astMap["baseInfo"]["path"]["legacy"],
+        pathIndex,
+      );
       Trustdart trustdart = Trustdart();
-      var addressMap = await trustdart.generateAddress(CoinType.N.name, path,
-          'legacy',
-          mnemonic: walletInfo.mnemonic ?? "", pk: walletInfo.privateKey ?? "");
+      var addressMap = await trustdart.generateAddress(
+        CoinType.N.name,
+        path,
+        'legacy',
+        mnemonic: walletInfo.mnemonic ?? "",
+        pk: walletInfo.privateKey ?? "",
+      );
       final astAddress = addressMap['legacy'];
       final isMainChainMining = await MiningUtils.isMainChainMining();
       TokenViewApi tokenViewApi = TokenViewApi();
@@ -69,8 +75,10 @@ mixin _FullNodePageLogic on State<FullNodePage> {
     final int currTime = DateTime.now().millisecondsSinceEpoch;
     int yearTime = 365 * 24 * 60 * 60 * 1000;
     int totalTime = currTime + yearTime;
-    String lockTime = _self.dataUtils
-        .getTimeByTimeStamp("$totalTime", format: "dd/MM/yyyy");
+    String lockTime = _self.dataUtils.getTimeByTimeStamp(
+      "$totalTime",
+      format: "dd/MM/yyyy",
+    );
     showGroupConfirmDialog(context, widget.astNum, lockTime, () async {
       await handlerData();
     });
@@ -94,11 +102,11 @@ mixin _FullNodePageLogic on State<FullNodePage> {
         );
       }
     } else {
-      Navigator.of(context).push(MaterialPageRoute(
-        builder: (_) => SwapAstHome(
-          getAstNum: widget.astNum.toDouble(),
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => SwapAstHome(getAstNum: widget.astNum.toDouble()),
         ),
-      ));
+      );
     }
   }
 
@@ -110,20 +118,24 @@ mixin _FullNodePageLogic on State<FullNodePage> {
       final astMap = walletInfo.coinInfo?[CoinType.N.name];
       if (astMap != null) {
         int pathIndex = astMap['pathIndex'] ?? 0;
-        final path =
-            getPathWithIndex(astMap["baseInfo"]["path"]["legacy"], pathIndex);
+        final path = getPathWithIndex(
+          astMap["baseInfo"]["path"]["legacy"],
+          pathIndex,
+        );
         String? privateKey = walletInfo.privateKey;
         if (walletInfo.privateKey == null) {
-          privateKey = await Trustdart()
-              .getPrivateKey(walletInfo.mnemonic!, CoinType.N.name, path);
+          privateKey = await Trustdart().getPrivateKey(
+            walletInfo.mnemonic!,
+            CoinType.N.name,
+            path,
+          );
         }
         final pk = base64Decode(privateKey!);
 
         final BigInt an = ethToWeiString('${widget.astNum}', 18);
         final res = await MiningPluginUtils.blsSign(
           bytesToHex(pk, padToEvenLength: true),
-          _self.dataUtils
-              .bigIntToHex(an, need0x: false, padToEvenLength: true),
+          _self.dataUtils.bigIntToHex(an, need0x: false, padToEvenLength: true),
         );
 
         if (res == null || res["data"] == null) {
@@ -133,12 +145,16 @@ mixin _FullNodePageLogic on State<FullNodePage> {
         final blsMap = await MiningPluginUtils.getPubKey(
           bytesToHex(pk, padToEvenLength: true),
         );
+        if (!mounted) return;
         try {
           setState(() {
             _self.load = Load.loading;
           });
           final data = await MiningApi.deposit(
-              blsMap?["data"], res["data"], BigInt.from(widget.astNum));
+            blsMap?["data"],
+            res["data"],
+            BigInt.from(widget.astNum),
+          );
           if (data != null) {
             SPUtil().setMiningOpen(true);
 
