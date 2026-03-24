@@ -163,10 +163,12 @@ mixin AirdropHomeWidgetsMixin on State<AirdropHomePage>, AirdropHomeLogicMixin {
         itemBuilder: (context, index) {
           if (index == airdrops.length) {
             // 加载更多 - 在帧回调中触发以避免在 build 过程中修改状态
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (!mounted) return;
-              p.loadMore();
-            });
+            if (!p.isLoadingMore) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (!mounted) return;
+                p.loadMore();
+              });
+            }
             return Center(
               child: Padding(
                 padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
