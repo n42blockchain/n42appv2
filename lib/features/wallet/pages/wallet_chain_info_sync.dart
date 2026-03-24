@@ -77,9 +77,11 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
       transactionList.addAll(results);
       if (results.length < pageSize) lastPage = true;
     } finally {
-      setState(() {
-        load = Load.finish;
-      });
+      if (mounted) {
+        setState(() {
+          load = Load.finish;
+        });
+      }
     }
   }
 

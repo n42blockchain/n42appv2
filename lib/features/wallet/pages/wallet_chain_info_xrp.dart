@@ -153,6 +153,7 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
       widget.coinModel.address = null;
       await widget.coinModel.buildWallet();
       await widget.coinModel.getBalance();
+      if (!mounted) return;
       setState(() {});
       _initData();
     } catch (e) {
@@ -169,6 +170,7 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
       if (event is EventPublic && event.type == EventPublicType.transferOk) {
         _refreshTransactions(Load.refresh);
         await widget.coinModel.getBalance();
+        if (!mounted) return;
         setState(() {});
       }
     });

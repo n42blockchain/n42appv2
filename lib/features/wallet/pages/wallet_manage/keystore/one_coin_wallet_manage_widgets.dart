@@ -322,7 +322,9 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
         await _exportKeystoreWithExistingPassword();
       }
     } finally {
-      setState(() => load = Load.finish);
+      if (mounted) {
+        setState(() => load = Load.finish);
+      }
     }
   }
 
