@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/constants/language_constants.dart';
 import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/core/constants/app_colors.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 
@@ -30,7 +31,6 @@ class SettingSysLanguage extends ConsumerWidget {
             lang: lang,
             isSelected: isSelected,
             onTap: () {
-              ref.read(localeProvider.notifier).setLocale(lang.code);
               Navigator.pop(context, lang.code);
             },
           );
@@ -65,7 +65,7 @@ class _LanguageItem extends StatelessWidget {
       context,
       AppThemeKeys.ff888888.name,
     );
-    const accentColor = Color(0xFF448BDF);
+    const accentColor = AppColors.primaryBlue;
 
     return GestureDetector(
       onTap: onTap,
