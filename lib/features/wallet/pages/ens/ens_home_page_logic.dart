@@ -92,7 +92,10 @@ mixin _EnsHomeLogicMixin on State<EnsHomePage> {
         builder: (context) =>
             EnsSearchPage(walletAddress: widget.walletAddress),
       ),
-    ).then((_) => loadOwnedNames());
+    ).then((_) {
+      if (!mounted) return;
+      loadOwnedNames();
+    });
   }
 
   void navigateToManagement(OwnedEns ens) {
@@ -104,6 +107,9 @@ mixin _EnsHomeLogicMixin on State<EnsHomePage> {
           walletAddress: widget.walletAddress,
         ),
       ),
-    ).then((_) => loadOwnedNames());
+    ).then((_) {
+      if (!mounted) return;
+      loadOwnedNames();
+    });
   }
 }

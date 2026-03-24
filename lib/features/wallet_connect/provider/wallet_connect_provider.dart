@@ -24,9 +24,16 @@ class WalletConnectProvider
     WidgetsBinding.instance.addObserver(this);
   }
 
+  bool _disposed = false;
   bool pageOpen = false;
   Load load = Load.finish;
   String errorMessage = "";
+
+  @override
+  void notifyListeners() {
+    if (_disposed) return;
+    super.notifyListeners();
+  }
 
   /// Public refresh — notifies listeners without a state transition.
   void refresh() {
@@ -50,6 +57,7 @@ class WalletConnectProvider
 
   @override
   void dispose() {
+    _disposed = true;
     WidgetsBinding.instance.removeObserver(this);
     cancelReconnectTimer();
     web3client?.dispose();
@@ -81,7 +89,10 @@ class WalletConnectProvider
           return;
         }
         if (params is! String || params.isEmpty) {
-          viewStateDeal(WalletConnectState.error, params: 'Missing WalletConnect URI');
+          viewStateDeal(
+            WalletConnectState.error,
+            params: 'Missing WalletConnect URI',
+          );
           return;
         }
         final paired = await pair(params);
@@ -90,7 +101,10 @@ class WalletConnectProvider
         }
       case WalletConnectState.connectOK:
         if (actionData is! wallet_connect.SessionProposalEvent) {
-          viewStateDeal(WalletConnectState.error, params: 'Invalid session proposal data');
+          viewStateDeal(
+            WalletConnectState.error,
+            params: 'Invalid session proposal data',
+          );
           return;
         }
         final args = actionData as wallet_connect.SessionProposalEvent;
@@ -144,7 +158,9 @@ class WalletConnectProvider
     viewStateDeal(state);
     try {
       if (actionData is! wallet_connect.SessionRequestEvent) {
-        debugPrint('[WalletConnect] cancelTap: actionData is not SessionRequestEvent');
+        debugPrint(
+          '[WalletConnect] cancelTap: actionData is not SessionRequestEvent',
+        );
         viewStateDeal(WalletConnectState.connect);
         return;
       }

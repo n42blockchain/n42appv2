@@ -46,6 +46,16 @@ String? resolveBalanceRpcOverride(CoinModel coinModel) {
 
 class WalletActionProvider extends ChangeNotifier
     implements ICoinModelWalletAccess {
+  bool _disposed = false;
+
+  bool get isDisposed => _disposed;
+
+  @override
+  void notifyListeners() {
+    if (_disposed) return;
+    super.notifyListeners();
+  }
+
   /// 公开的刷新方法，用于通知监听者数据已更新
   @override
   void refresh() {
@@ -218,6 +228,12 @@ class WalletActionProvider extends ChangeNotifier
   void setBalanceTotal(double price) {
     _balanceTotal = price;
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _disposed = true;
+    super.dispose();
   }
 
   //获取外国余额，美刀形式
