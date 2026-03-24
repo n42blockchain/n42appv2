@@ -49,8 +49,12 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
     if (chainConfig != null) {
       rpcUrl = chainConfig['baseInfo']?[serviceKey] ?? '';
       chainId = isTest
-          ? (chainConfig['testnetChainID'] ?? chainConfig['baseInfo']?[chainIdKey] ?? 1)
-          : (chainConfig['mainnetChainID'] ?? chainConfig['baseInfo']?[chainIdKey] ?? 1);
+          ? (chainConfig['testnetChainID'] ??
+                chainConfig['baseInfo']?[chainIdKey] ??
+                1)
+          : (chainConfig['mainnetChainID'] ??
+                chainConfig['baseInfo']?[chainIdKey] ??
+                1);
     }
 
     if (coinModel.coin['custom'] == true) {
@@ -87,6 +91,7 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
   void showActionButtonListWidget() {
     final sw = ScreenUtil().setWidth;
     final l10n = S.of(context);
+    final navigator = Navigator.of(context);
     final List<Widget> childs = [];
 
     void addItem({
@@ -100,9 +105,9 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
 
     /// Push a page then close the sheet.
     void pushAndClose(Widget page) async {
-      await Navigator.push(context, MaterialPageRoute(builder: (_) => page));
-      if (!mounted) return;
-      Navigator.pop(context);
+      await navigator.push(MaterialPageRoute(builder: (_) => page));
+      if (!mounted || !navigator.mounted) return;
+      navigator.pop();
     }
 
     addItem(
@@ -134,51 +139,49 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
     // Batch Transfer — EVM chains only
     if (coinModel.coin['blockchainType'] == BlockchainType.Ethereum.name) {
       childs.add(_divider());
-      childs.add(_buildSheetItem(
-        icon: Icon(Icons.groups, color: _blue, size: sw(40.0)),
-        label: 'Batch Transfer',
-        onTap: () async {
-          await handleBatchTransfer();
-          if (!mounted) return;
-          Navigator.pop(context);
-        },
-        trailing: Container(
-          padding: EdgeInsets.symmetric(horizontal: sw(8), vertical: sw(2)),
-          decoration: BoxDecoration(
-            color: Colors.green,
-            borderRadius: BorderRadius.circular(sw(6)),
-          ),
-          child: Text(
-            'NEW',
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(18),
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
+      childs.add(
+        _buildSheetItem(
+          icon: Icon(Icons.groups, color: _blue, size: sw(40.0)),
+          label: 'Batch Transfer',
+          onTap: () async {
+            await handleBatchTransfer();
+            if (!mounted || !navigator.mounted) return;
+            navigator.pop();
+          },
+          trailing: Container(
+            padding: EdgeInsets.symmetric(horizontal: sw(8), vertical: sw(2)),
+            decoration: BoxDecoration(
+              color: Colors.green,
+              borderRadius: BorderRadius.circular(sw(6)),
+            ),
+            child: Text(
+              'NEW',
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(18),
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
           ),
         ),
-      ));
+      );
     }
 
     // NFT Gallery
     if (coinModel.coin['isContract'] != true &&
         SimpleHashNftApi.chainMap.containsKey(
-            (coinModel.coin['coinType'] as String? ?? '').toUpperCase())) {
+          (coinModel.coin['coinType'] as String? ?? '').toUpperCase(),
+        )) {
       addItem(
         icon: Icon(Icons.collections_outlined, color: _blue, size: sw(40.0)),
         label: l10n.g_key_nft_gallery,
-        onTap: () async {
-          Navigator.pop(context);
-          await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => NftListPage(coinModel)),
-          );
-        },
+        onTap: () => pushAndClose(NftListPage(coinModel)),
       );
     }
 
     // Add Token
-    final bool canAddToken = coinModel.privateKey == null ||
+    final bool canAddToken =
+        coinModel.privateKey == null ||
         coinModel.coin['blockchainType'] == BlockchainType.Bitcoin.name ||
         coinModel.coin['isContract'] == true;
     if (!canAddToken) {
@@ -186,23 +189,26 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
         icon: Image.asset('assets/wallet/addToken.png', color: _blue),
         label: l10n.g_token_m_key_11,
         onTap: () async {
-          final bool r = await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => WalletCoinTokenAdd2(coinModel)),
-          );
+          final bool r =
+              await navigator.push<bool>(
+                MaterialPageRoute(
+                  builder: (_) => WalletCoinTokenAdd2(coinModel),
+                ),
+              ) ??
+              false;
           if (!mounted) return;
           if (r) {
             ref.read(wapBridgeProvider).initWallet(shouldInitCoinInfo: true);
           }
-          Navigator.pop(context);
+          if (navigator.mounted) {
+            navigator.pop();
+          }
         },
       );
     }
 
     // Network switch
-    const supportedNetworkSwitch = {
-      'N', 'ETH', 'BTC', 'DOT', 'ZIL',
-    };
+    const supportedNetworkSwitch = {'N', 'ETH', 'BTC', 'DOT', 'ZIL'};
     if (supportedNetworkSwitch.contains(coinModel.coin['coinType'])) {
       childs.add(_divider());
       childs.add(_buildNetworkSwitchRow());
@@ -235,7 +241,12 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
           : AppThemeKeys.itemSubtitleTextColor.name,
     );
 
-    Widget netButton(String asset, String label, Color color, VoidCallback onTap) {
+    Widget netButton(
+      String asset,
+      String label,
+      Color color,
+      VoidCallback onTap,
+    ) {
       final sw = ScreenUtil().setWidth;
       return Expanded(
         child: InkWell(
@@ -253,7 +264,10 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
                 SizedBox(width: sw(20.0)),
                 Text(
                   label,
-                  style: TextStyle(color: color, fontSize: ScreenUtil().setSp(30.0)),
+                  style: TextStyle(
+                    color: color,
+                    fontSize: ScreenUtil().setSp(30.0),
+                  ),
                 ),
               ],
             ),
@@ -264,14 +278,24 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
 
     return Row(
       children: [
-        netButton('assets/wallet/mainnet.png', S.of(context).g_key_148, mainColor, () {
-          if (isTest) changeNet(false, Load.refresh);
-          Navigator.pop(context);
-        }),
-        netButton('assets/wallet/testnet.png', S.of(context).g_key_147, testColor, () {
-          if (!isTest) changeNet(true, Load.refresh);
-          Navigator.pop(context);
-        }),
+        netButton(
+          'assets/wallet/mainnet.png',
+          S.of(context).g_key_148,
+          mainColor,
+          () {
+            if (isTest) changeNet(false, Load.refresh);
+            Navigator.pop(context);
+          },
+        ),
+        netButton(
+          'assets/wallet/testnet.png',
+          S.of(context).g_key_147,
+          testColor,
+          () {
+            if (!isTest) changeNet(true, Load.refresh);
+            Navigator.pop(context);
+          },
+        ),
       ],
     );
   }
@@ -279,11 +303,8 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
   Color get _blue =>
       AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
 
-  Divider _divider() => Divider(
-        height: ScreenUtil().setWidth(1),
-        indent: 0,
-        endIndent: 0,
-      );
+  Divider _divider() =>
+      Divider(height: ScreenUtil().setWidth(1), indent: 0, endIndent: 0);
 
   Widget _buildSheetItem({
     required Widget icon,
@@ -303,12 +324,12 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
             SizedBox(width: sw(20.0)),
             Text(
               label,
-              style: TextStyle(color: _blue, fontSize: ScreenUtil().setSp(30.0)),
+              style: TextStyle(
+                color: _blue,
+                fontSize: ScreenUtil().setSp(30.0),
+              ),
             ),
-            if (trailing != null) ...[
-              SizedBox(width: sw(10.0)),
-              trailing,
-            ],
+            if (trailing != null) ...[SizedBox(width: sw(10.0)), trailing],
           ],
         ),
       ),
