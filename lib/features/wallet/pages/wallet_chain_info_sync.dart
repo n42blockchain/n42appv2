@@ -353,6 +353,7 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
             .read(tripBridgeProvider)
             .checkUndoneTrReturn(transationRecordModel) ??
         transationRecordModel;
+    if (!mounted) return;
     transactionList.firstWhere((element) {
       final trm = element as TransationRecordModel;
       if (trm.txHash == rtrm.txHash) {
@@ -372,6 +373,7 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
             .read(tripBridgeProvider)
             .checkUndoneTrBtcReturn(transationRecordModel) ??
         transationRecordModel;
+    if (!mounted) return;
     transactionList.firstWhere((element) {
       final trm = element as TransationRecordModel;
       if (trm.txHash == rtrm.txHash) {
