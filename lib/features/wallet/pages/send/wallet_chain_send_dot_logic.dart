@@ -42,8 +42,9 @@ mixin _DotSendLogicMixin on ConsumerState<WalletChainSendDot> {
     if (widget.coinModel.coin['isContract']) {
       final wap = ref.read(wapBridgeProvider);
       final cIndex = wap.coinModels.indexWhere((element) {
-        if (element.coin['coinType'] != widget.coinModel.coin['coinType'])
+        if (element.coin['coinType'] != widget.coinModel.coin['coinType']) {
           return false;
+        }
         if (widget.coinModel.privateKey != null) {
           return element.privateKey == widget.coinModel.privateKey;
         }

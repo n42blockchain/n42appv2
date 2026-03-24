@@ -8,26 +8,8 @@
 part of 'stake_page.dart';
 
 /// View mixin: top-level page structure (protocol card, tab bar, tab entries).
-///
-/// Forward-declares _build* methods implemented by [_StakeFormsMixin] and
-/// [_StakeSectionsMixin] so that Dart's mixin linearisation resolves them
-/// at the State class level.
-mixin _StakeViewsMixin on _StakeLogicMixin {
+mixin _StakeViewsMixin on _StakeLogicMixin, _StakeFormsMixin, _StakeSectionsMixin {
   TabController get _tabController;
-
-  // ── Forward declarations (implemented by forms / sections mixins) ───────
-
-  Widget _buildValidatorSelector(BuildContext context, StakingProvider provider);
-  Widget _buildAmountInput(BuildContext context);
-  Widget _buildQuickAmountButtons(BuildContext context);
-  Widget _buildStakeEstimate(BuildContext context, StakingProvider provider);
-  Widget _buildStakeButton(BuildContext context, StakingProvider provider);
-  Widget _buildLiquidUnstakeView(BuildContext context);
-  Widget _buildUnbondingWarning(BuildContext context);
-  Widget _buildPositionSelector(BuildContext context);
-  Widget _buildUnstakeAmountInput(BuildContext context);
-  Widget _buildQuickUnstakeButtons(BuildContext context);
-  Widget _buildUnstakeButton(BuildContext context, StakingProvider provider);
 
   // ── Protocol info card ──────────────────────────────────────────────────
 
@@ -337,23 +319,4 @@ mixin _StakeViewsMixin on _StakeLogicMixin {
     );
   }
 
-  Widget _buildNoWalletHint(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
-      decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-      ),
-      child: Center(
-        child: Text(
-          S.of(context).g_key_stake_no_wallet,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(26),
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.itemSubtitleTextColor.name),
-          ),
-        ),
-      ),
-    );
-  }
 }

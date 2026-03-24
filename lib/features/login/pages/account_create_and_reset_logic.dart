@@ -262,11 +262,11 @@ mixin _AccountCreateAndResetLogic on ConsumerState<AccountCreateAndReset> {
       code,
       inviteCode: inviteCode,
     );
-    if (!context.mounted) return;
+    if (!mounted) return;
     if (data["code"] == 200) {
       ToastUtils.show(S.of(context).login_message_10);
       bool rData = await login(email, password);
-      if (!context.mounted) return;
+      if (!mounted) return;
       if (rData && widget.pushType == 0) {
         Navigator.pop(context, true);
       } else {
@@ -287,11 +287,11 @@ mixin _AccountCreateAndResetLogic on ConsumerState<AccountCreateAndReset> {
       Md5Util().generateMd5(password),
       code,
     );
-    if (!context.mounted) return;
+    if (!mounted) return;
     if (data["code"] == 200) {
       ToastUtils.show(S.of(context).login_message_11);
       bool rData = await login(email, password);
-      if (!context.mounted) return;
+      if (!mounted) return;
       if (rData && widget.pushType == 0) {
         Navigator.pop(context, true);
       } else {

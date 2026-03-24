@@ -65,6 +65,7 @@ mixin _WalletListFaceMixin on ConsumerState<WalletList> {
       }
     }
     _state.fbwCheckAddress = addr;
+    if (!mounted) return;
     setState(() {});
   }
 
@@ -122,6 +123,7 @@ mixin _WalletListFaceMixin on ConsumerState<WalletList> {
     );
     if (!mounted) return;
     if (rData != null && !rData.error) {
+      if (!mounted) return;
       await _state.initData();
     }
   }
@@ -186,6 +188,7 @@ mixin _WalletListFaceMixin on ConsumerState<WalletList> {
             S.of(context).g_token_m_key_9,
             () async {
               await Navigator.pushNamed(context, '/ImportOne');
+              if (!mounted) return;
               await _state.initData();
             },
             S.of(context).g_face_match_key12,

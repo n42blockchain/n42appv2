@@ -27,6 +27,7 @@ class _SelectMiningPlansState extends State<SelectMiningPlans> {
     eventBusFn = eventBus.on().listen((event) {
       if (event is EventPublic &&
           event.type == EventPublicType.selectMiningplansPop) {
+        if (!mounted) return;
         Navigator.pop(context);
       }
     });

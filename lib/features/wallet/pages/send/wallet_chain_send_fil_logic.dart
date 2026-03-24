@@ -217,6 +217,7 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
           widget.coinModel.coin['coinType'] ?? '',
           toTextEditingController.text.trim(),
         );
+        if (!mounted) return;
         ToastUtils.show(S.current.g_key_nft_41);
         Navigator.pop(context);
       }

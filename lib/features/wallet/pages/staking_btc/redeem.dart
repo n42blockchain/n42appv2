@@ -21,6 +21,7 @@ import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dar
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
+import 'package:web3dart/web3dart.dart' show bytesToHex;
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 import 'package:bitcoin_base/bitcoin_base.dart';

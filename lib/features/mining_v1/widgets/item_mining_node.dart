@@ -9,28 +9,39 @@ class ItemMiningNode extends StatelessWidget {
   final String socketUrl;
   final GestureTapCallback? onTap;
   final bool isSelected;
-  const ItemMiningNode({required this.icon,
+  const ItemMiningNode({
+    required this.icon,
     required this.countryName,
     required this.nodeAddress,
     this.onTap,
     required this.isSelected,
     required this.socketUrl,
-    super.key});
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(24), vertical: ScreenUtil().setWidth(24)),
+        padding: EdgeInsets.symmetric(
+          horizontal: ScreenUtil().setWidth(24),
+          vertical: ScreenUtil().setWidth(24),
+        ),
         margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(12)),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-            color: Colors.transparent,
-            border: Border.fromBorderSide(BorderSide(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemLineColor.name),
-                width: 1))),
+          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+          color: Colors.transparent,
+          border: Border.fromBorderSide(
+            BorderSide(
+              color: AppThemeUtils.getColorByKey(
+                context,
+                AppThemeKeys.itemLineColor.name,
+              ),
+              width: 1,
+            ),
+          ),
+        ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -42,29 +53,31 @@ class ItemMiningNode extends StatelessWidget {
                   countryName,
                   style: TextStyle(
                     color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainTextColor.name),
+                      context,
+                      AppThemeKeys.mainTextColor.name,
+                    ),
                     fontSize: ScreenUtil().setSp(30),
                   ),
                 ),
-                SizedBox(
-                  height: ScreenUtil().setWidth(12),
-                ),
+                SizedBox(height: ScreenUtil().setWidth(12)),
                 Text(
                   nodeAddress,
                   style: TextStyle(
                     color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainGreyColor.name),
+                      context,
+                      AppThemeKeys.mainGreyColor.name,
+                    ),
                     fontSize: ScreenUtil().setSp(28),
                   ),
                 ),
-                SizedBox(
-                  height: ScreenUtil().setWidth(12),
-                ),
+                SizedBox(height: ScreenUtil().setWidth(12)),
                 Text(
                   socketUrl,
                   style: TextStyle(
                     color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainGreyColor.name),
+                      context,
+                      AppThemeKeys.mainGreyColor.name,
+                    ),
                     fontSize: ScreenUtil().setSp(28),
                   ),
                 ),
@@ -72,13 +85,14 @@ class ItemMiningNode extends StatelessWidget {
             ),
             isSelected
                 ? Icon(
-              Icons.check,
-              size: ScreenUtil().setWidth(48),
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-            )
-                : SizedBox(
-              width: ScreenUtil().setWidth(48),
-            ),
+                    Icons.check,
+                    size: ScreenUtil().setWidth(48),
+                    color: AppThemeUtils.getColorByKey(
+                      context,
+                      AppThemeKeys.mainBlueColor.name,
+                    ),
+                  )
+                : SizedBox(width: ScreenUtil().setWidth(48)),
           ],
         ),
       ),

@@ -137,7 +137,7 @@ extension _WalletCoinAddAllImportUI on _WalletCoinAddAllState {
       width: double.infinity,
       child: buttonStyle6(
         context,
-        () => setState(() => showImportWidget = true),
+        () => updateView(() => showImportWidget = true),
         S.of(context).g_key_159,
         _btnBgColor(),
         _btnTextColor(),
@@ -158,9 +158,9 @@ extension _WalletCoinAddAllImportUI on _WalletCoinAddAllState {
             Expanded(
               child: SizedBox(
                 height: btnH,
-                child: buttonStyle5(
+              child: buttonStyle5(
                   context,
-                  () => setState(() => showImportWidget = false),
+                  () => updateView(() => showImportWidget = false),
                   S.of(context).g_key_79,
                   _btnBgColor(),
                   _btnTextColor(),

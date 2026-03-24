@@ -45,6 +45,8 @@ class AirdropProvider extends ChangeNotifier {
   int _currentPage = 1;
   bool _hasMore = true;
   bool get hasMore => _hasMore;
+  bool _isLoadingMore = false;
+  bool get isLoadingMore => _isLoadingMore;
 
   final Map<String, bool> _eligibilityChecking = {};
   Map<String, bool> get eligibilityChecking => Map.unmodifiable(_eligibilityChecking);
@@ -65,6 +67,7 @@ class AirdropProvider extends ChangeNotifier {
     _isNetworkError = false;
     _currentPage = 1;
     _hasMore = true;
+    _isLoadingMore = false;
     notifyListeners();
 
     try {
@@ -127,10 +130,17 @@ class AirdropProvider extends ChangeNotifier {
 
   /// 加载更多
   Future<void> loadMore() async {
-    if (_loadState == AirdropLoadState.loading || !_hasMore) return;
+    if (_loadState == AirdropLoadState.loading || _isLoadingMore || !_hasMore) {
+      return;
+    }
 
-    await _loadAirdrops();
-    notifyListeners();
+    _isLoadingMore = true;
+    try {
+      await _loadAirdrops();
+    } finally {
+      _isLoadingMore = false;
+      notifyListeners();
+    }
   }
 
   /// 加载统计数据

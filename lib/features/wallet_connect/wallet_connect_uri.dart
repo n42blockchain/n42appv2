@@ -15,8 +15,10 @@ Uri? parseWalletConnectUri(String value) {
   return uri;
 }
 
-String? normalizeWalletConnectUriString(String value, {int depth = 0}) {
-  if (depth > 3) return null; // prevent infinite recursion on malicious URIs
+String? normalizeWalletConnectUriString(String value, {int depthLevel = 0}) {
+  if (depthLevel > 3) {
+    return null; // prevent infinite recursion on malicious URIs
+  }
   final trimmed = value.trim();
   if (trimmed.isEmpty) return null;
 
@@ -27,7 +29,7 @@ String? normalizeWalletConnectUriString(String value, {int depth = 0}) {
   }
 
   for (final candidate in candidates.whereType<String>()) {
-    final normalized = _normalizeWalletConnectCandidate(candidate, depth);
+    final normalized = _normalizeWalletConnectCandidate(candidate, depthLevel);
     if (normalized != null) {
       return normalized;
     }
@@ -39,7 +41,7 @@ bool isWalletConnectUriString(String value) {
   return parseWalletConnectUri(value) != null;
 }
 
-String? _normalizeWalletConnectCandidate(String value, int depth) {
+String? _normalizeWalletConnectCandidate(String value, int depthLevel) {
   final trimmed = value.trim();
   if (trimmed.startsWith('wc:')) {
     return trimmed;
@@ -51,7 +53,7 @@ String? _normalizeWalletConnectCandidate(String value, int depth) {
   for (final key in _walletConnectParamKeys) {
     final nested = uri.queryParameters[key];
     if (nested != null && nested.trim().isNotEmpty) {
-      return normalizeWalletConnectUriString(nested, depth: depth + 1);
+      return normalizeWalletConnectUriString(nested, depthLevel: depthLevel + 1);
     }
   }
 
@@ -70,7 +72,7 @@ String? _normalizeWalletConnectCandidate(String value, int depth) {
       for (final key in _walletConnectParamKeys) {
         final nested = params[key];
         if (nested != null && nested.trim().isNotEmpty) {
-          return normalizeWalletConnectUriString(nested, depth: depth + 1);
+          return normalizeWalletConnectUriString(nested, depthLevel: depthLevel + 1);
         }
       }
     } catch (_) {

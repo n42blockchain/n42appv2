@@ -203,6 +203,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
   }
 
   Widget buildQuickActions() {
+    final canManageEns = _hasWalletAddress;
     return Row(
       children: [
         Expanded(
@@ -211,7 +212,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
             title: S.of(context).g_key_ens_search,
             subtitle: S.of(context).g_key_ens_search_desc,
             color: const Color(0xFF5E97F6),
-            onTap: navigateToSearch,
+            onTap: canManageEns ? navigateToSearch : _showUnsupportedSnack,
           ),
         ),
         SizedBox(width: ScreenUtil().setWidth(16)),
@@ -222,6 +223,10 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
             subtitle: S.of(context).g_key_ens_renew_desc,
             color: const Color(0xFF66BB6A),
             onTap: () {
+              if (!canManageEns) {
+                _showUnsupportedSnack();
+                return;
+              }
               if (ownedNames.isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text(S.of(context).g_key_ens_no_domains)),
@@ -372,6 +377,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
   Widget _buildEmptyState() {
     final blueColor = _themeColor(AppThemeKeys.mainBlueColor.name);
     final subtitleColor = _themeColor(AppThemeKeys.itemSubtitleTextColor.name);
+    final canManageEns = _hasWalletAddress;
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(32)),
       decoration: BoxDecoration(
@@ -397,7 +403,9 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
           ),
           SizedBox(height: ScreenUtil().setWidth(8)),
           Text(
-            S.of(context).g_key_ens_get_started,
+            canManageEns
+                ? S.of(context).g_key_ens_get_started
+                : S.of(context).g_key_bridge_chain_not_supported,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(24),
               color: subtitleColor,
@@ -406,7 +414,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
           ),
           SizedBox(height: ScreenUtil().setWidth(20)),
           ElevatedButton.icon(
-            onPressed: navigateToSearch,
+            onPressed: canManageEns ? navigateToSearch : _showUnsupportedSnack,
             icon: const Icon(Icons.search, size: 20),
             label: Text(S.of(context).g_key_ens_search_register),
             style: ElevatedButton.styleFrom(

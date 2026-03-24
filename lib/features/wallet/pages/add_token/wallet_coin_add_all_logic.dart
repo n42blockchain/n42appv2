@@ -18,11 +18,17 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
   void setNetworkIndex(int value, String name) {
     if (importType == 0) {
       if (value == networkIndex) return;
-      setState(() { networkIndex = value; networkName = name; });
+      updateView(() {
+        networkIndex = value;
+        networkName = name;
+      });
       seachCoin();
     } else {
       if (value == networkIndexToken) return;
-      setState(() { networkIndexToken = value; networkNameToken = name; });
+      updateView(() {
+        networkIndexToken = value;
+        networkNameToken = name;
+      });
       setChainsTokenWithNetwork();
     }
   }
@@ -35,24 +41,27 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
   /// 添加主链币。[showList] 控制是否显示在列表中。
   Future<void> addCoin(Map<String, dynamic> chainMap, {bool showList = true}) async {
     try {
-      setState(() => chainMap['edit'] = true);
+      updateView(() => chainMap['edit'] = true);
       Map<String, dynamic>? chainInfoMap =
           netChains[chainMap['coin_name'].toString().toUpperCase()];
-      chainInfoMap ??= dealChain(chainMap);
+        chainInfoMap ??= dealChain(chainMap);
       if (chainInfoMap == null) {
         ToastUtils.show(S.of(context).g_key_3);
-        setState(() => chainMap['edit'] = false);
+        updateView(() => chainMap['edit'] = false);
       } else {
         final wap = ref.read(wapBridgeProvider);
         chainInfoMap['showList'] = showList;
         addSymbol = '$addSymbol,${chainMap['coin_name'].toString().toLowerCase()}';
         await wap.addWalletChain(chainInfoMap);
         chains = wap.walletMap;
-        setState(() { chainMap['isAdd'] = true; chainMap['edit'] = false; });
+        updateView(() {
+          chainMap['isAdd'] = true;
+          chainMap['edit'] = false;
+        });
       }
     } catch (e) {
       ToastUtils.show(e.toString());
-      setState(() => chainMap['edit'] = false);
+      updateView(() => chainMap['edit'] = false);
     } finally {
       isEdit = true;
     }
@@ -61,7 +70,7 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
   Future<void> addCoinToken(Map<String, dynamic> coinMap) async {
     try {
       if (coinMap['edit'] == true) return;
-      setState(() => coinMap['edit'] = true);
+      updateView(() => coinMap['edit'] = true);
       final symbolStr = coinMap['symbol'].toString().toUpperCase();
       Map<String, dynamic>? chain = chains![symbolStr];
       if (chain == null) {
@@ -75,7 +84,7 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
       chain = chains![symbolStr];
       if (chain == null) {
         ToastUtils.show('Missing parent chain configuration');
-        setState(() => coinMap['edit'] = false);
+        updateView(() => coinMap['edit'] = false);
         return;
       }
       final wap = ref.read(wapBridgeProvider);
@@ -90,10 +99,13 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
       baseToken['decimals'] = coinMap['decimals'];
       addSymbol = '$addSymbol,${coinMap['coin_name'].toString()}';
       wap.addWalletChainToken(baseToken);
-      setState(() { coinMap['isAdd'] = true; coinMap['edit'] = false; });
+      updateView(() {
+        coinMap['isAdd'] = true;
+        coinMap['edit'] = false;
+      });
     } catch (e) {
       ToastUtils.show(e.toString());
-      setState(() => coinMap['edit'] = false);
+      updateView(() => coinMap['edit'] = false);
     } finally {
       isEdit = true;
     }
@@ -102,7 +114,7 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
   Future<void> removeCoin(Map<String, dynamic> chainMap) async {
     try {
       if (chainMap['edit'] == true) return;
-      setState(() => chainMap['edit'] = true);
+      updateView(() => chainMap['edit'] = true);
       final wap = ref.read(wapBridgeProvider);
       final walletMapKeys = wap.walletMap.keys.toList();
       final removeKey = chainMap['coin_name'].toString().toUpperCase();
@@ -118,10 +130,10 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
       } else {
         ToastUtils.show(S.of(context).g_key_1);
       }
-      setState(() => chainMap['edit'] = false);
+      updateView(() => chainMap['edit'] = false);
     } catch (e) {
       ToastUtils.show(e.toString());
-      setState(() => chainMap['edit'] = false);
+      updateView(() => chainMap['edit'] = false);
     } finally {
       isEdit = true;
     }
@@ -130,19 +142,25 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
   Future<void> removeCoinToken(Map<String, dynamic> coinMap) async {
     try {
       if (coinMap['edit'] == true) return;
-      setState(() => coinMap['edit'] = true);
+      updateView(() => coinMap['edit'] = true);
       final symbolStr = coinMap['symbol'].toString();
       final wap = ref.read(wapBridgeProvider);
       if (wap.walletMap[symbolStr.toUpperCase()]['mainnets'].length == 0) {
-        setState(() { coinMap['isAdd'] = false; coinMap['edit'] = false; });
+        updateView(() {
+          coinMap['isAdd'] = false;
+          coinMap['edit'] = false;
+        });
         return;
       }
       addSymbol = addSymbol.replaceFirst(',${coinMap['coin_name']}', '');
       wap.removeWalletChainToken(coinMap);
-      setState(() { coinMap['isAdd'] = false; coinMap['edit'] = false; });
+      updateView(() {
+        coinMap['isAdd'] = false;
+        coinMap['edit'] = false;
+      });
     } catch (e) {
       ToastUtils.show(e.toString());
-      setState(() => coinMap['edit'] = false);
+      updateView(() => coinMap['edit'] = false);
     } finally {
       isEdit = true;
     }
@@ -165,7 +183,7 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
         ToastUtils.show(e.toString());
       }
     }
-    setState(() {});
+    updateView();
   }
 
   Future<bool> addressCheck(String addr) async {
@@ -190,7 +208,7 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
     if (scanValue != null) {
       tokenEditingController.text = scanValue;
       addressCheck(scanValue);
-      setState(() {});
+      updateView();
     }
   }
 
@@ -200,7 +218,10 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
   void _onContractAddressChanged(String value) {
     _contractDebounce?.cancel();
     if (value.trim().isEmpty) {
-      setState(() { _contractState = ''; _contractHint = ''; });
+      updateView(() {
+        _contractState = '';
+        _contractHint = '';
+      });
       return;
     }
     _contractDebounce = Timer(const Duration(milliseconds: 800), () {
@@ -214,7 +235,7 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
     final baseInfo = _currentTokenBaseInfo();
     final coinType = baseInfo?['coinType']?.toString() ?? '';
     if (baseInfo == null || coinType.isEmpty) {
-      setState(() {
+      updateView(() {
         _contractState = 'error';
         _contractHint = '';
       });
@@ -223,10 +244,16 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
 
     // 1. 地址格式校验
     if (!await Trustdart().validateAddress(coinType, address)) {
-      setState(() { _contractState = 'error'; _contractHint = ''; });
+      updateView(() {
+        _contractState = 'error';
+        _contractHint = '';
+      });
       return;
     }
-    setState(() { _contractState = 'loading'; _contractHint = ''; });
+    updateView(() {
+      _contractState = 'loading';
+      _contractHint = '';
+    });
 
     // 2. 从 coinlist 匹配（已知代币，无需链上查询）
     final knownIdx = coinlist.indexWhere((e) {
@@ -248,7 +275,7 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
           symbolEditingController.text = info.symbol;
           decimalEditingController.text = info.decimals.toString();
           final displayName = info.name.isNotEmpty ? info.name : info.symbol;
-          setState(() {
+          updateView(() {
             _contractState = 'found';
             _contractHint = '$displayName · ${info.decimals} decimals';
             symbolErrorMessage = '';
@@ -261,7 +288,10 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
 
     // 4. 未找到
     if (mounted) {
-      setState(() { _contractState = 'notFound'; _contractHint = ''; });
+      updateView(() {
+        _contractState = 'notFound';
+        _contractHint = '';
+      });
     }
   }
 
@@ -273,7 +303,7 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
     final name = found['fullname']?.toString() ?? sym;
     symbolEditingController.text = sym;
     decimalEditingController.text = dec;
-    setState(() {
+    updateView(() {
       _contractState = 'found';
       _contractHint = '$name · $dec decimals';
       symbolErrorMessage = '';
@@ -283,12 +313,12 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
 
   Future<void> importButton() async {
     if (!await checkTokenInput()) return;
-    setState(() => load = Load.loading);
+    updateView(() => load = Load.loading);
     final tokenAddress = tokenEditingController.text;
     final cKeys = chainsToken.keys.toList();
     if (networkIndexToken < 0 || networkIndexToken >= cKeys.length) {
       ToastUtils.show('Invalid chain configuration');
-      setState(() => load = Load.finish);
+      updateView(() => load = Load.finish);
       return;
     }
     final chain =
@@ -298,7 +328,7 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
         (baseInfo?['miniName'] ?? baseInfo?['coinType'] ?? '').toString().toUpperCase();
     if (chain == null || baseInfo == null || symbolStr.isEmpty) {
       ToastUtils.show('Invalid chain configuration');
-      setState(() => load = Load.finish);
+      updateView(() => load = Load.finish);
       return;
     }
 
@@ -314,7 +344,7 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
         await addCoinToken(coinlist[cIndex]);
         ToastUtils.show("Successfully added");
       }
-      setState(() => load = Load.finish);
+      updateView(() => load = Load.finish);
       return;
     }
 
@@ -324,7 +354,7 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
         : chain['mainnets'][tokenAddress.toUpperCase()];
     if (token != null) {
       ToastUtils.show("Already exists");
-      setState(() => load = Load.finish);
+      updateView(() => load = Load.finish);
       return;
     }
     if (!mounted) return;
@@ -343,13 +373,13 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
     wap.addWalletChainToken(baseToken);
     init();
     ToastUtils.show("Successfully added");
-    setState(() => load = Load.finish);
+    updateView(() => load = Load.finish);
   }
 
   Future<void> removeCustomerCoinToken(Map<String, dynamic> coinMap) async {
     try {
       if (coinMap['edit'] == true) return;
-      setState(() => coinMap['edit'] = true);
+      updateView(() => coinMap['edit'] = true);
       final symbolStr = coinMap['coinType'].toString().toUpperCase();
       final wap = ref.read(wapBridgeProvider);
       final chainData = wap.walletMap[symbolStr];
@@ -357,17 +387,17 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
           ? (chainData['testnets'][0]['testnetContract'].length > 0)
           : (chainData['mainnets'].length > 0);
       if (!hasTokens) {
-        setState(() => coinMap['edit'] = false);
+        updateView(() => coinMap['edit'] = false);
         return;
       }
       addSymbol = addSymbol.replaceFirst(',${coinMap['miniName']}', '');
       wap.removeWalletChainToken(coinMap,
           symbol: coinMap['coinType'], miniName: coinMap['miniName']);
-      setState(() => coinMap['edit'] = false);
+      updateView(() => coinMap['edit'] = false);
       init();
     } catch (e) {
       ToastUtils.show(e.toString());
-      setState(() => coinMap['edit'] = false);
+      updateView(() => coinMap['edit'] = false);
     } finally {
       isEdit = true;
     }

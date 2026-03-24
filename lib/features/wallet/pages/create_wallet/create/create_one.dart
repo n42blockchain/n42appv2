@@ -47,7 +47,7 @@ class _CreateOneState extends ConsumerState<CreateOne> {
       context,
       MaterialPageRoute(builder: (context) => CreateTwo(wInfo)),
     );
-    if (!context.mounted) return;
+    if (!mounted) return;
     Navigator.pop(context);
   }
 
@@ -56,7 +56,7 @@ class _CreateOneState extends ConsumerState<CreateOne> {
       context,
       MaterialPageRoute(builder: (context) => CreateFinish()),
     );
-    if (!context.mounted) return;
+    if (!mounted) return;
     Navigator.pop(context);
   }
 

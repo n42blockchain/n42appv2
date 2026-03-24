@@ -36,7 +36,11 @@ class LoyaltyHomePage extends StatefulWidget {
 }
 
 class _LoyaltyHomePageState extends State<LoyaltyHomePage>
-    with SingleTickerProviderStateMixin, _LogicMixin, _WidgetsMixin, _SectionsMixin {
+    with
+        SingleTickerProviderStateMixin,
+        _LogicMixin,
+        _WidgetsMixin,
+        _SectionsMixin {
   @override
   late final TabController _tabController;
   @override
@@ -50,6 +54,7 @@ class _LoyaltyHomePageState extends State<LoyaltyHomePage>
     _ownsProvider = widget.provider == null;
     _provider = widget.provider ?? LoyaltyProvider();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
       if (_provider.walletAddress != widget.walletAddress ||
           _provider.loadState == LoyaltyLoadState.initial) {
         _provider.initialize(widget.walletAddress);
@@ -69,9 +74,7 @@ class _LoyaltyHomePageState extends State<LoyaltyHomePage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(
-        text: S.of(context).g_key_loyalty_title,
-      ),
+      appBar: AppBarWidget(text: S.of(context).g_key_loyalty_title),
       body: ListenableBuilder(
         listenable: _provider,
         builder: (context, _) {
@@ -81,19 +84,16 @@ class _LoyaltyHomePageState extends State<LoyaltyHomePage>
             return const Center(child: CircularProgressIndicator());
           }
 
-          if (provider.loadState == LoyaltyLoadState.error && !provider.hasContent) {
+          if (provider.loadState == LoyaltyLoadState.error &&
+              !provider.hasContent) {
             return _buildErrorView(context, provider);
           }
 
           return NestedScrollView(
             headerSliverBuilder: (context, innerBoxIsScrolled) {
               return [
-                SliverToBoxAdapter(
-                  child: _buildPointsCard(context, provider),
-                ),
-                SliverToBoxAdapter(
-                  child: _buildCheckInCard(context, provider),
-                ),
+                SliverToBoxAdapter(child: _buildPointsCard(context, provider)),
+                SliverToBoxAdapter(child: _buildCheckInCard(context, provider)),
                 SliverToBoxAdapter(
                   child: _buildQuickActions(context, provider),
                 ),
@@ -155,7 +155,11 @@ class _SliverTabBarDelegate extends SliverPersistentHeaderDelegate {
   _SliverTabBarDelegate(this.tabBar, this.backgroundColor);
 
   @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
     return Container(color: backgroundColor, child: tabBar);
   }
 

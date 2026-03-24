@@ -16,9 +16,10 @@ class SelectPlan extends StatelessWidget {
     String buttonTitle = S.of(context).g_mining_key_7;
     return GestureDetector(
       onTap: () {
-        Navigator.push(context,MaterialPageRoute(
-          builder: (_) => const SelectMiningPlans(),
-        ));
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const SelectMiningPlans()),
+        );
       },
       child: Container(
         height: ScreenUtil().setWidth(246),
@@ -57,33 +58,39 @@ class SelectPlan extends StatelessWidget {
                       title1,
                       style: TextStyle(
                         color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.mainWhiteColor.name),
+                          context,
+                          AppThemeKeys.mainWhiteColor.name,
+                        ),
                         fontSize: ScreenUtil().setSp(30),
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                   Spacer(),
-                  Container(
-                    //margin: EdgeInsets.only(top: scr.setWidth(16)),
+                  SizedBox(
                     height: ScreenUtil().setWidth(56),
                     child: buttonStyle3(
-                      context, null,
+                      context,
+                      null,
                       buttonTitle,
                       AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainWhiteColor.name),
+                        context,
+                        AppThemeKeys.mainWhiteColor.name,
+                      ),
                       AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainButtonTextColor3.name),
+                        context,
+                        AppThemeKeys.mainButtonTextColor3.name,
+                      ),
                       fontSize: ScreenUtil().setSp(22),
                       borderRadius: ScreenUtil().setWidth(56),
                       height: ScreenUtil().setWidth(56),
-                      paddingV:ScreenUtil().setWidth(12.0),
+                      paddingV: ScreenUtil().setWidth(12.0),
                       paddingH: ScreenUtil().setWidth(32.0),
                     ),
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),

@@ -44,8 +44,10 @@ class _WalletManageState extends ConsumerState<WalletManage> {
   StreamSubscription? eventBusFn;
 
   void initEventBus() {
+    eventBusFn?.cancel();
     eventBusFn = eventBus.on().listen((event) {
       if (event is EventPublic && event.type == EventPublicType.backup) {
+        if (!mounted) return;
         setState(() {
           walletInfo = event.param as WalletInfo;
         });
@@ -229,7 +231,8 @@ class _WalletManageState extends ConsumerState<WalletManage> {
                                 ),
                               ),
                             );
-                            if (info != null) setState(() => walletInfo = info);
+                            if (!mounted || info == null) return;
+                            setState(() => walletInfo = info);
                           }),
                         if (walletCanBackupFromManage(walletInfo!))
                           _itemWidget(S.of(context).g_key_wallet_c38, () async {
@@ -317,10 +320,9 @@ class _WalletManageState extends ConsumerState<WalletManage> {
             ),
           ),
         );
-        if (res != null) {
-          walletInfo = res;
-          setState(() {});
-        }
+        if (!mounted || res == null) return;
+        walletInfo = res;
+        setState(() {});
       },
       child: Container(
         margin: _tileMargin,

@@ -22,7 +22,12 @@ mixin TrxTokenApiMixin on TokenApiBase {
     dynamic Function(dynamic data) extractor,
   ) async {
     try {
-      final a = await httpClient.post('${url}$endpoint', params: params, data: params, header: header);
+      final a = await httpClient.post(
+        '$url$endpoint',
+        params: params,
+        data: params,
+        header: header,
+      );
       final mm = MessageModel.error();
       if (a['code'] == 200) {
         mm.error = false;
@@ -40,7 +45,12 @@ mixin TrxTokenApiMixin on TokenApiBase {
   Future<MessageModel> getGasPriceTrx({bool isTest = false}) async {
     try {
       final params = <String, dynamic>{'net_mode': isTest ? 'test' : 'main'};
-      final a = await httpClient.post('${url}v1/trx/gas/price', params: params, data: params, header: header);
+      final a = await httpClient.post(
+        '${url}v1/trx/gas/price',
+        params: params,
+        data: params,
+        header: header,
+      );
       final mm = MessageModel.error();
       if (a['code'] == 200) {
         if (a['data']['error']['code'] != 0) {
@@ -59,24 +69,36 @@ mixin TrxTokenApiMixin on TokenApiBase {
   }
 
   /// Get transaction receipt for Tron
-  Future<MessageModel> getTransactionReceiptTrx(String txHash, {bool isTest = false}) async {
-    return _trxPost('v1/trx/transaction/receipt',
-        {'tx_hash': txHash, 'net_mode': isTest ? 'test' : 'main'}, (d) => d);
+  Future<MessageModel> getTransactionReceiptTrx(
+    String txHash, {
+    bool isTest = false,
+  }) async {
+    return _trxPost('v1/trx/transaction/receipt', {
+      'tx_hash': txHash,
+      'net_mode': isTest ? 'test' : 'main',
+    }, (d) => d);
   }
 
   /// Get latest block number for Tron
   Future<MessageModel> getLatestBlockNumberTrx({bool isTest = false}) async {
-    return _trxPost('v1/trx/latest/block',
-        {'net_mode': isTest ? 'test' : 'main'}, (d) => d);
+    return _trxPost('v1/trx/latest/block', {
+      'net_mode': isTest ? 'test' : 'main',
+    }, (d) => d);
   }
 
   /// Create Tron transaction
   Future<MessageModel> createTxTrx(
-    String sendAddress, String toAddress, int amount, dynamic netMode,
+    String sendAddress,
+    String toAddress,
+    int amount,
+    dynamic netMode,
   ) async {
     return _trxPost('v1/vipapi/onchainwallet/transaction', {
-      'coin': 'trx', 'owner_address': sendAddress, 'to_address': toAddress,
-      'visible': false, 'amount': amount,
+      'coin': 'trx',
+      'owner_address': sendAddress,
+      'to_address': toAddress,
+      'visible': false,
+      'amount': amount,
     }, (d) => d['raw_data_hex']);
   }
 

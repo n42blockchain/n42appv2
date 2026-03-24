@@ -131,6 +131,7 @@ mixin _BtcSendTxMixin on _BtcSendLogicMixin {
       widget.coinModel.coin['coinType'] ?? '',
       toTextEditingController.text.trim(),
     );
+    if (!mounted) return;
     ToastUtils.show(S.current.g_key_nft_41);
     Navigator.pop(context, toTextFieldEnabel ? null : trModel.txHash);
   }

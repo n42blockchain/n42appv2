@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/features/wallet/pages/ens/ens_purchase_page.dart';
 import 'package:n42_wallet/features/wallet/services/ens_registration_service.dart';
+import 'package:n42_wallet/features/wallet/utils/feature_address_utils.dart';
 import 'package:n42_wallet/features/wallet/widgets/ens/ens_search_bar.dart';
 import 'package:n42_wallet/features/wallet/widgets/ens/ens_search_result_view.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
@@ -20,17 +21,15 @@ class EnsSearchPage extends StatefulWidget {
   /// 当前钱包地址
   final String walletAddress;
 
-  const EnsSearchPage({
-    super.key,
-    required this.walletAddress,
-  });
+  const EnsSearchPage({super.key, required this.walletAddress});
 
   @override
   State<EnsSearchPage> createState() => _EnsSearchPageState();
 }
 
 class _EnsSearchPageState extends State<EnsSearchPage> {
-  final EnsRegistrationService _ensService = EnsRegistrationServiceProvider.instance;
+  final EnsRegistrationService _ensService =
+      EnsRegistrationServiceProvider.instance;
   final TextEditingController _searchController = TextEditingController();
   final FocusNode _searchFocusNode = FocusNode();
 
@@ -41,11 +40,16 @@ class _EnsSearchPageState extends State<EnsSearchPage> {
   bool _isSearching = false;
   bool _isLoadingPrice = false;
   int _selectedYears = 1;
+  int _priceLoadVersion = 0;
+
+  bool get _hasWalletAddress =>
+      FeatureAddressUtils.isValidEvmAddress(widget.walletAddress);
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
       _searchFocusNode.requestFocus();
     });
   }
@@ -94,11 +98,12 @@ class _EnsSearchPageState extends State<EnsSearchPage> {
   }
 
   Future<void> _loadPrice(String name) async {
+    final loadVersion = ++_priceLoadVersion;
     setState(() => _isLoadingPrice = true);
 
     final result = await _ensService.getPrice(name, _selectedYears);
 
-    if (mounted) {
+    if (mounted && _searchQuery == name && loadVersion == _priceLoadVersion) {
       setState(() {
         _isLoadingPrice = false;
         if (!result.error) {
@@ -111,7 +116,7 @@ class _EnsSearchPageState extends State<EnsSearchPage> {
   void _onYearsChanged(int years) {
     setState(() => _selectedYears = years);
     if (_availabilityResult?.isAvailable == true) {
-      _loadPrice(_searchQuery);
+      unawaited(_loadPrice(_searchQuery));
     }
   }
 
@@ -122,6 +127,12 @@ class _EnsSearchPageState extends State<EnsSearchPage> {
 
   void _navigateToPurchase() {
     if (_availabilityResult?.isAvailable != true || _priceInfo == null) return;
+    if (!_hasWalletAddress) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(S.of(context).g_key_bridge_chain_not_supported)),
+      );
+      return;
+    }
 
     Navigator.push(
       context,
@@ -143,9 +154,7 @@ class _EnsSearchPageState extends State<EnsSearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(
-        text: S.of(context).g_key_ens_search_title,
-      ),
+      appBar: AppBarWidget(text: S.of(context).g_key_ens_search_title),
       body: Column(
         children: [
           EnsSearchBar(
@@ -166,7 +175,9 @@ class _EnsSearchPageState extends State<EnsSearchPage> {
               onYearsChanged: _onYearsChanged,
               onSuggestionTap: _onSuggestionTap,
               onRetry: () => _performSearch(_searchQuery),
-              onRegisterTap: _priceInfo != null ? _navigateToPurchase : null,
+              onRegisterTap: _priceInfo != null && _hasWalletAddress
+                  ? _navigateToPurchase
+                  : null,
             ),
           ),
         ],

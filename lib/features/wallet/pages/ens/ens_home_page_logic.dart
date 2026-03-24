@@ -12,11 +12,34 @@ mixin _EnsHomeLogicMixin on State<EnsHomePage> {
   List<OwnedEns> allOwnedNames = [];
   bool isLoading = true;
   String? errorMessage;
+  int _loadVersion = 0;
 
   // 当前选择的链，默认 Ethereum
   EnsChainConfig selectedChain = EnsChainConfig.defaultChain;
 
+  bool get _hasWalletAddress =>
+      FeatureAddressUtils.isValidEvmAddress(widget.walletAddress);
+
+  void _showUnsupportedSnack() {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(S.of(context).g_key_bridge_chain_not_supported)),
+    );
+  }
+
   Future<void> loadOwnedNames() async {
+    if (!mounted) return;
+    final loadVersion = ++_loadVersion;
+    if (!_hasWalletAddress) {
+      setState(() {
+        isLoading = false;
+        errorMessage = null;
+        ownedNames = const [];
+        allOwnedNames = const [];
+      });
+      return;
+    }
+
     setState(() {
       isLoading = true;
       errorMessage = null;
@@ -24,7 +47,7 @@ mixin _EnsHomeLogicMixin on State<EnsHomePage> {
 
     final result = await ensService.getOwnedNames(widget.walletAddress);
 
-    if (mounted) {
+    if (mounted && loadVersion == _loadVersion) {
       setState(() {
         isLoading = false;
         if (!result.error && result.data != null) {
@@ -53,19 +76,26 @@ mixin _EnsHomeLogicMixin on State<EnsHomePage> {
       ownedNames = filterOwnedEnsByChain(allOwnedNames, selectedChain);
     });
 
-    if (allOwnedNames.isEmpty) {
+    if (_hasWalletAddress && allOwnedNames.isEmpty) {
       loadOwnedNames();
     }
   }
 
   void navigateToSearch() {
+    if (!_hasWalletAddress) {
+      _showUnsupportedSnack();
+      return;
+    }
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) =>
             EnsSearchPage(walletAddress: widget.walletAddress),
       ),
-    ).then((_) => loadOwnedNames());
+    ).then((_) {
+      if (!mounted) return;
+      loadOwnedNames();
+    });
   }
 
   void navigateToManagement(OwnedEns ens) {
@@ -77,6 +107,9 @@ mixin _EnsHomeLogicMixin on State<EnsHomePage> {
           walletAddress: widget.walletAddress,
         ),
       ),
-    ).then((_) => loadOwnedNames());
+    ).then((_) {
+      if (!mounted) return;
+      loadOwnedNames();
+    });
   }
 }

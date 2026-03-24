@@ -35,7 +35,10 @@ class _EarnPageState extends ConsumerState<EarnPage>
   void initState() {
     super.initState();
     // 初始化时加载多链质押仓位
-    WidgetsBinding.instance.addPostFrameCallback((_) => loadStakedData());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      loadStakedData();
+    });
   }
 
   @override
@@ -63,19 +66,13 @@ class _EarnPageState extends ConsumerState<EarnPage>
               ),
 
               // 总收益卡片
-              SliverToBoxAdapter(
-                child: buildEarningsCard(context, earnState),
-              ),
+              SliverToBoxAdapter(child: buildEarningsCard(context, earnState)),
 
               // 主要功能区
-              SliverToBoxAdapter(
-                child: buildMainFeatures(context, earnState),
-              ),
+              SliverToBoxAdapter(child: buildMainFeatures(context, earnState)),
 
               // 快捷工具区
-              SliverToBoxAdapter(
-                child: buildQuickTools(context),
-              ),
+              SliverToBoxAdapter(child: buildQuickTools(context)),
 
               // 已质押/活跃产品（始终显示，空时展示引导入口）
               SliverToBoxAdapter(

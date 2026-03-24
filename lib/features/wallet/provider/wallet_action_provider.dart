@@ -25,11 +25,10 @@ import 'package:n42_wallet/features/wallet/provider/wallet_delete_utils.dart';
 import 'package:n42_wallet/features/wallet/provider/watch_only_wallet_utils.dart';
 import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
-import 'package:web3dart/web3dart.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:n42_wallet/generated/l10n.dart';
+import 'package:web3dart/web3dart.dart';
 
 part 'wallet_action_provider_wallet.dart';
 part 'wallet_action_provider_token.dart';
@@ -48,6 +47,16 @@ String? resolveBalanceRpcOverride(CoinModel coinModel) {
 
 class WalletActionProvider extends ChangeNotifier
     implements ICoinModelWalletAccess {
+  bool _disposed = false;
+
+  bool get isDisposed => _disposed;
+
+  @override
+  void notifyListeners() {
+    if (_disposed) return;
+    super.notifyListeners();
+  }
+
   /// 公开的刷新方法，用于通知监听者数据已更新
   @override
   void refresh() {
@@ -92,7 +101,9 @@ class WalletActionProvider extends ChangeNotifier
 
   //获取用户设置的钱包名字
   String get walletName {
-    if (_walletInfoLsit.isEmpty || walletIndex < 0 || walletIndex >= _walletInfoLsit.length) {
+    if (_walletInfoLsit.isEmpty ||
+        walletIndex < 0 ||
+        walletIndex >= _walletInfoLsit.length) {
       return "";
     }
     return walletInfo.walletName ?? "";
@@ -220,6 +231,12 @@ class WalletActionProvider extends ChangeNotifier
     notifyListeners();
   }
 
+  @override
+  void dispose() {
+    _disposed = true;
+    super.dispose();
+  }
+
   //获取外国余额，美刀形式
   String getBalanceTotal() {
     return _oCcy.format(_balanceTotal);
@@ -308,7 +325,10 @@ class WalletActionProvider extends ChangeNotifier
     final symbolList = symbols.split(",");
     return [
       for (final symbol in symbolList)
-        if (getCoinModelWithCoinType(symbol) case final cm?) cm,
+        ...switch (getCoinModelWithCoinType(symbol)) {
+          final cm? => [cm],
+          null => const <CoinModel>[],
+        },
     ];
   }
 

@@ -32,7 +32,10 @@ class AirdropDetailPage extends StatefulWidget {
 }
 
 class _AirdropDetailPageState extends State<AirdropDetailPage>
-    with AirdropDetailLogicMixin, AirdropDetailActionsMixin, AirdropDetailWidgetsMixin {
+    with
+        AirdropDetailLogicMixin,
+        AirdropDetailActionsMixin,
+        AirdropDetailWidgetsMixin {
   @override
   void initState() {
     super.initState();
@@ -42,6 +45,7 @@ class _AirdropDetailPageState extends State<AirdropDetailPage>
         (airdrop.status == AirdropStatus.active ||
             airdrop.status == AirdropStatus.upcoming)) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
         widget.provider.checkEligibility(airdrop.id);
       });
     }
@@ -87,7 +91,9 @@ class _AirdropDetailPageState extends State<AirdropDetailPage>
                     ),
                     child: Center(
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+                        borderRadius: BorderRadius.circular(
+                          ScreenUtil().setWidth(20),
+                        ),
                         child: Image.network(
                           airdrop.projectLogo,
                           width: ScreenUtil().setWidth(80),
@@ -97,9 +103,15 @@ class _AirdropDetailPageState extends State<AirdropDetailPage>
                             height: ScreenUtil().setWidth(80),
                             decoration: BoxDecoration(
                               color: Colors.white24,
-                              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+                              borderRadius: BorderRadius.circular(
+                                ScreenUtil().setWidth(20),
+                              ),
                             ),
-                            child: const Icon(Icons.token, color: Colors.white, size: 40),
+                            child: const Icon(
+                              Icons.token,
+                              color: Colors.white,
+                              size: 40,
+                            ),
                           ),
                         ),
                       ),
@@ -125,7 +137,8 @@ class _AirdropDetailPageState extends State<AirdropDetailPage>
                       SizedBox(height: ScreenUtil().setWidth(20)),
                       buildRequirements(context, airdrop),
                       SizedBox(height: ScreenUtil().setWidth(20)),
-                      if (airdrop.socialLinks != null && airdrop.socialLinks!.isNotEmpty)
+                      if (airdrop.socialLinks != null &&
+                          airdrop.socialLinks!.isNotEmpty)
                         buildSocialLinks(context, airdrop),
                       SizedBox(height: ScreenUtil().setWidth(30)),
                       buildActionButtons(context, airdrop),

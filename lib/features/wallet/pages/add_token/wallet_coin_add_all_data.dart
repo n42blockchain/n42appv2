@@ -199,7 +199,7 @@ extension _WalletCoinAddAllData on _WalletCoinAddAllState {
   }
 
   Future<void> getChainList() async {
-    setState(() => load = Load.loading);
+    updateView(() => load = Load.loading);
     final coinsData = await TokenViewApi().getChainListAll();
     if (coinsData.error) {
       ToastUtils.show(coinsData.data);
@@ -213,7 +213,7 @@ extension _WalletCoinAddAllData on _WalletCoinAddAllState {
       // 从全量列表中提取热门代币（仅带合约地址的代币条目）
       _extractPopularTokens();
     }
-    setState(() => load = Load.finish);
+    updateView(() => load = Load.finish);
     if (inputEditingController.text != "") {
       seachCoin();
     }

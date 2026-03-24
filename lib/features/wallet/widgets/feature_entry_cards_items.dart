@@ -127,7 +127,8 @@ class EnsEntryCard extends StatelessWidget {
                       child: Image.network(
                         avatarUrl!,
                         fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => _buildEnsIcon(),
+                        errorBuilder: (context, error, stackTrace) =>
+                            _buildEnsIcon(),
                       ),
                     )
                   : _buildEnsIcon(),

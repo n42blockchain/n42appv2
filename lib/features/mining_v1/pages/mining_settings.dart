@@ -72,6 +72,7 @@ class _MiningSettingsState extends State<MiningSettings> {
 
   Future<void> networkChange(bool value) async {
     await SPUtil().setIsMainChainMining(value);
+    if (!mounted) return;
     eventBus.fire(EventPublic(EventPublicType.selectMiningWallet,
         intValue: globalMiningV1.walletIndex));
     initData();
@@ -317,6 +318,7 @@ class _MiningSettingsState extends State<MiningSettings> {
       setState(() => backgroundMiningMusic = index);
       await SPUtil().setBackgroundMiningMusic(backgroundMiningMusic);
     }
+    if (!mounted) return;
     Navigator.pop(context);
   }
 

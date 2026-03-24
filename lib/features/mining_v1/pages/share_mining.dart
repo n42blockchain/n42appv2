@@ -104,9 +104,11 @@ class _ShareMiningState extends State<ShareMining> {
                     child: Center(
                       child: GestureDetector(
                         onTap: () {
-                          Share.share(
-                            generateShareText(),
-                            subject: AppConfig.apiUrl['walletamazeBrowser'],
+                          SharePlus.instance.share(
+                            ShareParams(
+                              text: generateShareText(),
+                              subject: AppConfig.apiUrl['walletamazeBrowser'],
+                            ),
                           );
                         },
                         child: Column(

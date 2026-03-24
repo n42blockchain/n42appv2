@@ -33,15 +33,36 @@ void main() {
       expect(provider.airdrops, hasLength(1));
       expect(provider.isNetworkError, isTrue);
     });
+
+    test('deduplicates concurrent loadMore requests', () async {
+      final api = _FakeAirdropApi(pageSize: 20);
+      final provider = AirdropProvider(api: api);
+
+      await provider.initialize('0xabc');
+      expect(provider.hasMore, isTrue);
+      expect(provider.airdrops, hasLength(20));
+
+      await Future.wait([
+        provider.loadMore(),
+        provider.loadMore(),
+        provider.loadMore(),
+      ]);
+
+      expect(api.pageCalls[2], 1);
+      expect(provider.airdrops, hasLength(40));
+    });
   });
 }
 
 class _FakeAirdropApi extends AirdropApi {
   _FakeAirdropApi({
     this.failAirdrops = false,
+    this.pageSize = 1,
   });
 
   bool failAirdrops;
+  final int pageSize;
+  final Map<int, int> pageCalls = {};
 
   @override
   Future<MessageModel> getAirdrops({
@@ -50,12 +71,17 @@ class _FakeAirdropApi extends AirdropApi {
     int page = 1,
     int pageSize = 20,
   }) async {
+    pageCalls.update(page, (count) => count + 1, ifAbsent: () => 1);
     if (failAirdrops) {
       return MessageModel.error()..data = 'offline';
     }
+    await Future<void>.delayed(const Duration(milliseconds: 10));
     return MessageModel()
       ..error = false
-      ..data = [_buildAirdrop()];
+      ..data = List.generate(
+        this.pageSize,
+        (index) => _buildAirdrop(id: 'zro-$page-$index'),
+      );
   }
 
   @override
@@ -80,10 +106,10 @@ class _FakeAirdropApi extends AirdropApi {
   }
 }
 
-AirdropModel _buildAirdrop() {
+AirdropModel _buildAirdrop({String id = 'zro'}) {
   final now = DateTime(2026, 3, 16);
   return AirdropModel(
-    id: 'zro',
+    id: id,
     name: 'LayerZero',
     description: 'Bridge rewards',
     projectName: 'LayerZero',

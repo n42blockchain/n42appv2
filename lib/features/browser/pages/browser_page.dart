@@ -24,6 +24,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 part 'browser_page_tabs.dart';
 part 'browser_page_widgets.dart';
@@ -44,6 +45,7 @@ class _BrowserPageState extends ConsumerState<BrowserPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
       _browserProvider = ref.read(browserNotifierProvider);
       if (!_inited) {
         _inited = true;
@@ -94,7 +96,9 @@ class _BrowserPageState extends ConsumerState<BrowserPage> {
   }) async {
     final bp = _browserProvider;
     String displayOrigin = origin;
-    if (bp != null && bp.wListIndex >= 0 && bp.wListIndex < bp.wInfoList.length) {
+    if (bp != null &&
+        bp.wListIndex >= 0 &&
+        bp.wListIndex < bp.wInfoList.length) {
       final url = bp.wInfoList[bp.wListIndex]['openUrl'] as String? ?? '';
       displayOrigin = Uri.tryParse(url)?.host ?? origin;
     }
@@ -105,8 +109,13 @@ class _BrowserPageState extends ConsumerState<BrowserPage> {
       isScrollControlled: true,
       builder: (ctx) => Container(
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(ctx, AppThemeKeys.backGroundColor.name),
-          borderRadius: BorderRadius.vertical(top: Radius.circular(ScreenUtil().setWidth(16.0))),
+          color: AppThemeUtils.getColorByKey(
+            ctx,
+            AppThemeKeys.backGroundColor.name,
+          ),
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(ScreenUtil().setWidth(16.0)),
+          ),
         ),
         child: SafeArea(
           child: DAppSigningSheet(
@@ -123,6 +132,7 @@ class _BrowserPageState extends ConsumerState<BrowserPage> {
   /// Show a phishing warning dialog.
   void _showPhishingWarning(String url, VoidCallback proceed) {
     showPhishingWarningDialog(context, url).then((approved) {
+      if (!mounted) return;
       if (approved == true) {
         proceed();
       }
@@ -132,7 +142,10 @@ class _BrowserPageState extends ConsumerState<BrowserPage> {
   /// Push a page and load the returned URL into the current WebView tab.
   Future<void> _navigateAndLoad(BrowserProvider bValue, Widget page) async {
     final url = await Navigator.push<String>(
-        context, MaterialPageRoute(builder: (_) => page));
+      context,
+      MaterialPageRoute(builder: (_) => page),
+    );
+    if (!mounted) return;
     if (url != null) {
       bValue.wvcList[bValue.wListIndex].loadRequest(Uri.parse(url));
     }

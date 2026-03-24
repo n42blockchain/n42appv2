@@ -9,8 +9,9 @@ extension WalletActionProviderMarket on WalletActionProvider {
         DateTime.now().difference(_stablecoinPricesFetchTime!) <
             WalletActionProvider._stablecoinCacheDuration &&
         _stablecoinPrices.isNotEmpty) {
-      if (kDebugMode)
+      if (kDebugMode) {
         debugPrint('WalletActionProvider: Using cached stablecoin prices');
+      }
       return;
     }
 
@@ -49,10 +50,11 @@ extension WalletActionProviderMarket on WalletActionProvider {
               newPrices[symbol] = {'price': price, 'change': change};
             } else {
               newPrices[symbol] = {'price': 1.0, 'change': 0.0};
-              if (kDebugMode)
+              if (kDebugMode) {
                 debugPrint(
                   'WalletActionProvider: Stablecoin $symbol price out of range ($price), using default 1.0',
                 );
+              }
             }
 
             // 利用 USDT 的 CNY 报价推导 USD→CNY 汇率
@@ -61,10 +63,11 @@ extension WalletActionProviderMarket on WalletActionProvider {
               final cnyPrice = parseMarketDouble(coinData['cny'], 0.0);
               if (cnyPrice > 5.0 && cnyPrice < 12.0 && price > 0) {
                 _usdToCnyRate = cnyPrice / price;
-                if (kDebugMode)
+                if (kDebugMode) {
                   debugPrint(
                     'WalletActionProvider: USD→CNY rate updated: $_usdToCnyRate',
                   );
+                }
               }
             }
           }
@@ -108,10 +111,11 @@ extension WalletActionProviderMarket on WalletActionProvider {
       //查询coins中的币种信息
       var list = await MarketApi().getWalletCoinsInfo(coinSelectPriceKeys);
       if (list['error'] == true) {
-        if (kDebugMode)
+        if (kDebugMode) {
           debugPrint(
             'WalletActionProvider: getCoinInfo failed: ${list['data']}',
           );
+        }
         // 静默失败：保留旧缓存价格，不打扰用户（仅首次无数据时才 Toast）
         if (_coinMarketInfo.isEmpty) {
           ToastUtils.show(S.current.g_key_5);
@@ -122,17 +126,19 @@ extension WalletActionProviderMarket on WalletActionProvider {
         if (marketItems.isNotEmpty) {
           _coinMarketInfo = marketItems;
           _coinMarketInfoFetchTime = now;
-          if (kDebugMode)
+          if (kDebugMode) {
             debugPrint(
               'WalletActionProvider: Loaded ${_coinMarketInfo.length} coins market info',
             );
+          }
         }
       }
     } else {
-      if (kDebugMode)
+      if (kDebugMode) {
         debugPrint(
           'WalletActionProvider: Market data fresh (${now.difference(_coinMarketInfoFetchTime!).inSeconds}s old), skip fetch',
         );
+      }
     }
 
     // 无论是否重新拉取，都用最新缓存重算价格和总余额
@@ -212,20 +218,22 @@ extension WalletActionProviderMarket on WalletActionProvider {
         element['price_change_per_24h'],
         0.0,
       );
-      if (kDebugMode)
+      if (kDebugMode) {
         debugPrint(
           'WalletActionProvider: getCoinPriceWithUnit($unit) -> price=\$$price, change=$percentage%',
         );
+      }
       return {
         'icon': element['image'],
         'coinPrice': price,
         'percentage': percentage,
       };
     }
-    if (kDebugMode)
+    if (kDebugMode) {
       debugPrint(
         'WalletActionProvider: getCoinPriceWithUnit($unit) -> NOT FOUND in ${_coinMarketInfo.length} items',
       );
+    }
     return null;
   }
 
@@ -272,10 +280,11 @@ extension WalletActionProviderMarket on WalletActionProvider {
   Future<bool> getBalanceTokenAlgoWithCoinModel(CoinModel coinModel) async {
     // 检查 address 是否为 null
     if (coinModel.address == null) {
-      if (kDebugMode)
+      if (kDebugMode) {
         debugPrint(
           'WalletActionProvider: Skipping ALGO token balance fetch for ${coinModel.coin['miniName']} - address is null',
         );
+      }
       coinModel.loadError = true;
       return true;
     }
@@ -334,10 +343,11 @@ extension WalletActionProviderMarket on WalletActionProvider {
     // 标记不支持的代币为加载错误
     for (final cm in coinList) {
       if (cm is! AggregatedCoinModel && cm.address == null) {
-        if (kDebugMode)
+        if (kDebugMode) {
           debugPrint(
             'WalletActionProvider: Skipping ${cm.coin['miniName']} in refresh - address is null',
           );
+        }
         cm.loadError = true;
       }
     }
@@ -397,10 +407,11 @@ extension WalletActionProviderMarket on WalletActionProvider {
           try {
             await getBalanceWithCoinModel(currentCoin);
           } catch (e) {
-            if (kDebugMode)
+            if (kDebugMode) {
               debugPrint(
                 'WalletActionProvider: Error refreshing ${currentCoin.coin['miniName']}: $e',
               );
+            }
           }
 
           // 网络临时失败时不显示错误图标，因为已经使用了缓存数据
@@ -417,8 +428,9 @@ extension WalletActionProviderMarket on WalletActionProvider {
         }
       }
     } catch (e) {
-      if (kDebugMode)
+      if (kDebugMode) {
         debugPrint('WalletActionProvider: Critical error in coinRefresh: $e');
+      }
       // 继续处理下一个代币，避免整个刷新流程中断
       if (coinRefreshMap[index] != null &&
           coinRefreshMap[index]["coinList"] != null &&

@@ -8,7 +8,7 @@ extension _BrowserPageTabs on _BrowserPageState {
         horizontal: ScreenUtil().setWidth(30.0),
         vertical: ScreenUtil().setWidth(16.0),
       ),
-      itemCount: bValue.wList.length,
+      itemCount: bValue.wvcList.length,
       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
         maxCrossAxisExtent: 200,
         childAspectRatio: 2 / 3,
@@ -64,7 +64,7 @@ extension _BrowserPageTabs on _BrowserPageState {
           child: Stack(
             children: [
               Positioned.fill(
-                child: IgnorePointer(child: bValue.wList[index]),
+                child: _buildTabPreview(bValue, index),
               ),
               Positioned.fill(
                 child: Container(
@@ -76,6 +76,91 @@ extension _BrowserPageTabs on _BrowserPageState {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildTabPreview(BrowserProvider bValue, int index) {
+    final openUrl = bValue.wInfoList[index]['openUrl'] as String? ?? '';
+    final title = bValue.wInfoList[index]['title'] as String? ?? '';
+    final host = Uri.tryParse(openUrl)?.host ?? '';
+    final progress = (bValue.wInfoList[index]['progress'] as num?)?.toDouble() ?? 0;
+    final isLoading = bValue.wInfoList[index]['load'] == true;
+    final subtitleColor = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.itemSubtitleTextColor.name,
+    );
+    final accentColor = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.mainBlueColor.name,
+    );
+
+    return Container(
+      color: AppThemeUtils.getColorByKey(
+        context,
+        AppThemeKeys.itemBgColor.name,
+      ),
+      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: ScreenUtil().setWidth(48)),
+          Container(
+            height: ScreenUtil().setWidth(90),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  accentColor.withAlpha(28),
+                  accentColor.withAlpha(10),
+                ],
+              ),
+            ),
+            alignment: Alignment.center,
+            child: Icon(
+              Icons.language,
+              size: ScreenUtil().setWidth(40),
+              color: accentColor,
+            ),
+          ),
+          SizedBox(height: ScreenUtil().setWidth(16)),
+          Text(
+            title.isNotEmpty ? title : host,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              color: AppThemeUtils.getColorByKey(
+                context,
+                AppThemeKeys.mainTextColor.name,
+              ),
+              fontSize: ScreenUtil().setSp(22),
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          SizedBox(height: ScreenUtil().setWidth(8)),
+          Text(
+            openUrl,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              color: subtitleColor,
+              fontSize: ScreenUtil().setSp(18),
+            ),
+          ),
+          const Spacer(),
+          if (isLoading)
+            ClipRRect(
+              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(999)),
+              child: LinearProgressIndicator(
+                minHeight: ScreenUtil().setWidth(6),
+                value: progress > 0 ? progress : null,
+                backgroundColor: accentColor.withAlpha(20),
+                color: accentColor,
+              ),
+            ),
+        ],
       ),
     );
   }

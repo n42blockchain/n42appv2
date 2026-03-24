@@ -27,8 +27,10 @@ class _DeviceScanPageState extends State<DeviceScanPage>
   Color _blueColor(BuildContext context) =>
       AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
 
-  Color _subtitleColor(BuildContext context) =>
-      AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+  Color _subtitleColor(BuildContext context) => AppThemeUtils.getColorByKey(
+    context,
+    AppThemeKeys.itemSubtitleTextColor.name,
+  );
 
   Color _textColor(BuildContext context) =>
       AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
@@ -43,6 +45,7 @@ class _DeviceScanPageState extends State<DeviceScanPage>
 
     // 开始扫描
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
       _startScan();
     });
   }
@@ -82,9 +85,7 @@ class _DeviceScanPageState extends State<DeviceScanPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(
-        text: 'Find Device',
-      ),
+      appBar: AppBarWidget(text: 'Find Device'),
       body: SafeArea(
         child: ListenableBuilder(
           listenable: widget.provider,
@@ -96,9 +97,7 @@ class _DeviceScanPageState extends State<DeviceScanPage>
                 _buildScanAnimation(context, provider),
 
                 // 设备列表
-                Expanded(
-                  child: _buildDeviceList(context, provider),
-                ),
+                Expanded(child: _buildDeviceList(context, provider)),
 
                 // 底部按钮
                 _buildBottomActions(context, provider),
@@ -110,7 +109,10 @@ class _DeviceScanPageState extends State<DeviceScanPage>
     );
   }
 
-  Widget _buildScanAnimation(BuildContext context, HardwareWalletProvider provider) {
+  Widget _buildScanAnimation(
+    BuildContext context,
+    HardwareWalletProvider provider,
+  ) {
     final isScanning = provider.isScanning;
     final blueColor = _blueColor(context);
     final su = ScreenUtil();
@@ -128,7 +130,8 @@ class _DeviceScanPageState extends State<DeviceScanPage>
                   return AnimatedBuilder(
                     animation: _animationController,
                     builder: (context, child) {
-                      final value = (_animationController.value + index * 0.33) % 1.0;
+                      final value =
+                          (_animationController.value + index * 0.33) % 1.0;
                       final size = su.setWidth(200 + value * 100);
                       return Container(
                         width: size,
@@ -136,7 +139,9 @@ class _DeviceScanPageState extends State<DeviceScanPage>
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: blueColor.withAlpha((255 * (1 - value)).toInt()),
+                            color: blueColor.withAlpha(
+                              (255 * (1 - value)).toInt(),
+                            ),
                             width: 2,
                           ),
                         ),
@@ -190,7 +195,10 @@ class _DeviceScanPageState extends State<DeviceScanPage>
     );
   }
 
-  Widget _buildDeviceList(BuildContext context, HardwareWalletProvider provider) {
+  Widget _buildDeviceList(
+    BuildContext context,
+    HardwareWalletProvider provider,
+  ) {
     final devices = provider.discoveredDevices;
     final su = ScreenUtil();
 
@@ -201,17 +209,18 @@ class _DeviceScanPageState extends State<DeviceScanPage>
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
-              provider.isScanning ? Icons.bluetooth_searching : Icons.bluetooth_disabled,
+              provider.isScanning
+                  ? Icons.bluetooth_searching
+                  : Icons.bluetooth_disabled,
               size: su.setWidth(60),
               color: subtitle,
             ),
             SizedBox(height: su.setWidth(16)),
             Text(
-              provider.isScanning ? 'Looking for devices...' : 'No devices found',
-              style: TextStyle(
-                fontSize: su.setSp(28),
-                color: subtitle,
-              ),
+              provider.isScanning
+                  ? 'Looking for devices...'
+                  : 'No devices found',
+              style: TextStyle(fontSize: su.setSp(28), color: subtitle),
             ),
           ],
         ),
@@ -221,7 +230,8 @@ class _DeviceScanPageState extends State<DeviceScanPage>
     return ListView.builder(
       padding: EdgeInsets.symmetric(horizontal: su.setWidth(30)),
       itemCount: devices.length,
-      itemBuilder: (context, index) => _buildDeviceItem(context, provider, devices[index]),
+      itemBuilder: (context, index) =>
+          _buildDeviceItem(context, provider, devices[index]),
     );
   }
 
@@ -236,12 +246,17 @@ class _DeviceScanPageState extends State<DeviceScanPage>
     final su = ScreenUtil();
 
     return GestureDetector(
-      onTap: isConnecting ? null : () => _connectDevice(context, provider, device),
+      onTap: isConnecting
+          ? null
+          : () => _connectDevice(context, provider, device),
       child: Container(
         margin: EdgeInsets.only(bottom: su.setWidth(12)),
         padding: EdgeInsets.all(su.setWidth(20)),
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+          color: AppThemeUtils.getColorByKey(
+            context,
+            AppThemeKeys.itemBgColor.name,
+          ),
           borderRadius: BorderRadius.circular(su.setWidth(12)),
         ),
         child: Row(
@@ -254,11 +269,7 @@ class _DeviceScanPageState extends State<DeviceScanPage>
                 color: blueColor.withAlpha(30),
                 borderRadius: BorderRadius.circular(su.setWidth(12)),
               ),
-              child: Icon(
-                Icons.usb,
-                color: blueColor,
-                size: su.setWidth(32),
-              ),
+              child: Icon(Icons.usb, color: blueColor, size: su.setWidth(32)),
             ),
 
             SizedBox(width: su.setWidth(16)),
@@ -315,17 +326,17 @@ class _DeviceScanPageState extends State<DeviceScanPage>
                 child: const CircularProgressIndicator(strokeWidth: 2),
               )
             else
-              Icon(
-                Icons.chevron_right,
-                color: _subtitleColor(context),
-              ),
+              Icon(Icons.chevron_right, color: _subtitleColor(context)),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildBottomActions(BuildContext context, HardwareWalletProvider provider) {
+  Widget _buildBottomActions(
+    BuildContext context,
+    HardwareWalletProvider provider,
+  ) {
     final su = ScreenUtil();
     return Padding(
       padding: EdgeInsets.all(su.setWidth(30)),
@@ -334,7 +345,9 @@ class _DeviceScanPageState extends State<DeviceScanPage>
         child: ElevatedButton(
           onPressed: provider.isScanning ? _stopScan : _startScan,
           style: ElevatedButton.styleFrom(
-            backgroundColor: provider.isScanning ? Colors.orange : _blueColor(context),
+            backgroundColor: provider.isScanning
+                ? Colors.orange
+                : _blueColor(context),
             padding: EdgeInsets.symmetric(vertical: su.setWidth(18)),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(su.setWidth(12)),
@@ -385,7 +398,8 @@ class _DeviceScanPageState extends State<DeviceScanPage>
   void _showPermissionDialog() {
     _showAlertDialog(
       title: 'Bluetooth Permission Required',
-      content: 'Please grant Bluetooth permission to scan for hardware wallets.',
+      content:
+          'Please grant Bluetooth permission to scan for hardware wallets.',
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
@@ -405,7 +419,8 @@ class _DeviceScanPageState extends State<DeviceScanPage>
   void _showBluetoothDisabledDialog() {
     _showAlertDialog(
       title: 'Bluetooth Disabled',
-      content: 'Please enable Bluetooth in your device settings to connect to your hardware wallet.',
+      content:
+          'Please enable Bluetooth in your device settings to connect to your hardware wallet.',
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),

@@ -6,11 +6,7 @@ class NavShowDataItem extends StatelessWidget {
   final String desc;
   final String value;
 
-  const NavShowDataItem(
-      this.desc,
-      this.value, {
-        super.key,
-      });
+  const NavShowDataItem(this.desc, this.value, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,14 +19,15 @@ class NavShowDataItem extends StatelessWidget {
             child: Text(
               desc,
               style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.ff888888.name),
-                  fontSize: ScreenUtil().setSp(30)),
+                color: AppThemeUtils.getColorByKey(
+                  context,
+                  AppThemeKeys.ff888888.name,
+                ),
+                fontSize: ScreenUtil().setSp(30),
+              ),
             ),
           ),
-          SizedBox(
-            width: ScreenUtil().setWidth(12),
-          ),
+          SizedBox(width: ScreenUtil().setWidth(12)),
           Expanded(
             child: Text(
               value,
@@ -38,11 +35,14 @@ class NavShowDataItem extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.end,
               style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
-                  fontSize: ScreenUtil().setSp(30)),
+                color: AppThemeUtils.getColorByKey(
+                  context,
+                  AppThemeKeys.mainTextColor.name,
+                ),
+                fontSize: ScreenUtil().setSp(30),
+              ),
             ),
-          )
+          ),
         ],
       ),
     );

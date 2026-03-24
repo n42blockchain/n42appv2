@@ -21,23 +21,24 @@ part 'airdrop_home_page_widgets.dart';
 class AirdropHomePage extends StatefulWidget {
   final String walletAddress;
 
-  const AirdropHomePage({
-    super.key,
-    required this.walletAddress,
-  });
+  const AirdropHomePage({super.key, required this.walletAddress});
 
   @override
   State<AirdropHomePage> createState() => _AirdropHomePageState();
 }
 
 class _AirdropHomePageState extends State<AirdropHomePage>
-    with SingleTickerProviderStateMixin, AirdropHomeLogicMixin, AirdropHomeWidgetsMixin {
+    with
+        SingleTickerProviderStateMixin,
+        AirdropHomeLogicMixin,
+        AirdropHomeWidgetsMixin {
   @override
   void initState() {
     super.initState();
     tabController = TabController(length: 4, vsync: this);
     provider = AirdropProvider();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
       provider.initialize(widget.walletAddress);
     });
   }

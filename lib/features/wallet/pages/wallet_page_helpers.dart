@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 
 class WalletSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
-  WalletSliverAppBarDelegate({
+  const WalletSliverAppBarDelegate({
     required this.minHeight,
     required this.maxHeight,
     required this.child,
@@ -37,6 +37,7 @@ class WalletSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
 
 class WalletPinIconButton extends StatelessWidget {
   const WalletPinIconButton({
+    super.key,
     required this.isPinned,
     required this.onTap,
   });
@@ -72,7 +73,7 @@ class WalletPinIconButton extends StatelessWidget {
 }
 
 class WalletCoinListSkeleton extends StatefulWidget {
-  const WalletCoinListSkeleton();
+  const WalletCoinListSkeleton({super.key});
 
   @override
   State<WalletCoinListSkeleton> createState() => _WalletCoinListSkeletonState();
@@ -126,7 +127,10 @@ class _WalletCoinListSkeletonState extends State<WalletCoinListSkeleton>
 }
 
 class WalletSkeletonCoinRow extends StatelessWidget {
-  const WalletSkeletonCoinRow({required this.shimmerColor});
+  const WalletSkeletonCoinRow({
+    super.key,
+    required this.shimmerColor,
+  });
   final Color shimmerColor;
 
   Widget _shimmerBox(double w, double h, double radius) => Container(

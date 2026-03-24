@@ -103,6 +103,11 @@ class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
   Color _color(AppThemeKeys key) =>
       AppThemeUtils.getColorByKey(context, key.name);
 
+  void updateView([VoidCallback? action]) {
+    if (!mounted) return;
+    setState(action ?? () {});
+  }
+
   String get _currentNetworkLabel {
     if (importType == 1) return networkNameToken;
     return networkName.isEmpty ? S.of(context).g_token_m_key_4 : networkName;

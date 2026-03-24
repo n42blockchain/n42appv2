@@ -12,6 +12,7 @@ import 'package:n42_wallet/features/wallet/api/simplehash_nft_api.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/nft_model.dart';
 import 'package:n42_wallet/features/wallet/pages/nft/nft_detail_page.dart';
+import 'package:n42_wallet/features/wallet/utils/feature_address_utils.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 
 part 'nft_list_page_widgets.dart';
@@ -41,6 +42,7 @@ class _NftListPageState extends State<NftListPage> {
   List<NftModel> _nfts = [];
   _NftFilter _filter = _NftFilter.all;
   String _query = '';
+  String? _loadErrorMessage;
 
   @override
   void initState() {
@@ -57,12 +59,33 @@ class _NftListPageState extends State<NftListPage> {
     super.dispose();
   }
 
+  void _updateView([VoidCallback? fn]) {
+    if (!mounted) return;
+    setState(() {
+      fn?.call();
+    });
+  }
+
   void _load() {
-    final address = widget.coinModel.address?.toString() ?? '';
-    final coinType = widget.coinModel.coin['coinType'] as String? ?? '';
+    final address = FeatureAddressUtils.normalize(widget.coinModel.address?.toString());
+    final coinType = FeatureAddressUtils.normalize(
+      widget.coinModel.coin['coinType'] as String?,
+    );
+    _loadErrorMessage = null;
+
+    if (!FeatureAddressUtils.hasValue(address) ||
+        !FeatureAddressUtils.hasValue(coinType)) {
+      _future = Future.value(const <NftModel>[]);
+      _updateView(() => _nfts = []);
+      return;
+    }
+
     _future = _api.fetchNfts(address, coinType).then((list) {
-      if (mounted) setState(() => _nfts = list);
+      _updateView(() => _nfts = list);
       return list;
+    }).catchError((error, stackTrace) {
+      _loadErrorMessage = error.toString();
+      throw error;
     });
   }
 

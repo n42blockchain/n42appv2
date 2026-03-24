@@ -17,7 +17,11 @@ mixin BtcTokenApiMixin on TokenApiBase {
   /// Helper: GET a BTC list endpoint, handle 200/404 codes
   Future<MessageModel> _btcListGet(String path) async {
     try {
-      final a = await httpClient.get('${url}$path', params: <String, dynamic>{}, header: header);
+      final a = await httpClient.get(
+        '$url$path',
+        params: <String, dynamic>{},
+        header: header,
+      );
       final mm = MessageModel.error();
       if (a['code'] == 200) {
         mm.error = false;

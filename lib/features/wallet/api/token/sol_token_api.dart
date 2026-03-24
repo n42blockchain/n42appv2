@@ -94,7 +94,12 @@ mixin SolTokenApiMixin on TokenApiBase {
     int successCode = 200,
   }) async {
     try {
-      final a = await httpClient.post('${url}$endpoint', params: params, data: params, header: header);
+      final a = await httpClient.post(
+        '$url$endpoint',
+        params: params,
+        data: params,
+        header: header,
+      );
       final mm = MessageModel.error();
       if (a['code'] == successCode) {
         mm.error = false;
@@ -116,7 +121,12 @@ mixin SolTokenApiMixin on TokenApiBase {
     int successCode = 200,
   }) async {
     try {
-      final a = await httpClient.post('${url}$endpoint', params: params, data: params, header: header);
+      final a = await httpClient.post(
+        '$url$endpoint',
+        params: params,
+        data: params,
+        header: header,
+      );
       final mm = MessageModel.error();
       if (a['code'] == successCode) {
         if (a['data']['error']['code'] != 0) {
@@ -140,38 +150,37 @@ mixin SolTokenApiMixin on TokenApiBase {
     String contract, {
     bool isTest = false,
   }) async {
-    return _solPostWithErrorCheck(
-      'v1/sol/token/accounts/by/owner',
-      {'mint': contract, 'net_mode': isTest ? 'test' : 'main', 'pubkey': address},
-      (d) => d['result']['value'],
-    );
+    return _solPostWithErrorCheck('v1/sol/token/accounts/by/owner', {
+      'mint': contract,
+      'net_mode': isTest ? 'test' : 'main',
+      'pubkey': address,
+    }, (d) => d['result']['value']);
   }
 
   /// Get account info for Solana address
-  Future<MessageModel> getAccountInfoSolana(String address, {bool isTest = false}) async {
-    return _solPost(
-      'v1/sol/account/info',
-      {'net_mode': isTest ? 'test' : 'main', 'pubkey': address},
-      (d) => d['result']['value']['data'],
-    );
+  Future<MessageModel> getAccountInfoSolana(
+    String address, {
+    bool isTest = false,
+  }) async {
+    return _solPost('v1/sol/account/info', {
+      'net_mode': isTest ? 'test' : 'main',
+      'pubkey': address,
+    }, (d) => d['result']['value']['data']);
   }
 
   /// Get recent blockhash for Solana
   Future<MessageModel> getRecentBlockhashSolana({bool isTest = false}) async {
-    return _solPost(
-      'v1/sol/recent/block/hash',
-      {'net_mode': isTest ? 'test' : 'main'},
-      (d) => d['result']['value']['blockhash'],
-    );
+    return _solPost('v1/sol/recent/block/hash', {
+      'net_mode': isTest ? 'test' : 'main',
+    }, (d) => d['result']['value']['blockhash']);
   }
 
   /// Send Solana transaction
   Future<MessageModel> sendTxSolana(String signHash, String netMode) async {
-    return _solPostWithErrorCheck(
-      'v1/sol/tx/send',
-      {'net_mode': netMode, 'tx_hash': signHash},
-      (d) => d['result'],
-    );
+    return _solPostWithErrorCheck('v1/sol/tx/send', {
+      'net_mode': netMode,
+      'tx_hash': signHash,
+    }, (d) => d['result']);
   }
 
   /// Get gas fee for Solana (lamports per signature)
@@ -179,12 +188,17 @@ mixin SolTokenApiMixin on TokenApiBase {
     return _solPost(
       'v1/sol/fees',
       {'net_mode': isTest ? 'test' : 'main'},
-      (d) => BigInt.from(d['result']['value']['feeCalculator']['lamportsPerSignature']),
+      (d) => BigInt.from(
+        d['result']['value']['feeCalculator']['lamportsPerSignature'],
+      ),
     );
   }
 
   /// Get transaction by hash for Solana
-  Future<MessageModel> getTransactionSolana(String txHash, String netMode) async {
+  Future<MessageModel> getTransactionSolana(
+    String txHash,
+    String netMode,
+  ) async {
     return _solPostWithErrorCheck(
       'v1/sol/transaction',
       {'net_mode': netMode, 'tx_sign': txHash},

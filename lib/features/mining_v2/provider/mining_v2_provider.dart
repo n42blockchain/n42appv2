@@ -20,7 +20,6 @@ import 'package:n42_wallet/features/utils/data_utils.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
-import 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/widgets/chart_histogram.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -70,7 +69,11 @@ const int kMaxReconnectAttempts = 5;
 // ==================== Provider ====================
 
 class MiningV2Provider extends ChangeNotifier
-    with _MiningStateMixin, _MiningActionsMixin, _MiningBeaconMixin, _MiningWebSocketMixin {
+    with
+        _MiningStateMixin,
+        _MiningActionsMixin,
+        _MiningBeaconMixin,
+        _MiningWebSocketMixin {
   @override
   void dispose() {
     disposeState();
@@ -81,12 +84,7 @@ class MiningV2Provider extends ChangeNotifier
 // ==================== Supporting Types ====================
 
 /// WebSocket connection state.
-enum WebSocketState {
-  disconnected,
-  connecting,
-  connected,
-  reconnecting,
-}
+enum WebSocketState { disconnected, connecting, connected, reconnecting }
 
 /// Mining-specific wallet info.
 ///

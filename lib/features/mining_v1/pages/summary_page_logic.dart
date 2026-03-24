@@ -276,6 +276,7 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
               TextButton(
                 child: Text(S.current.g_key_78),
                 onPressed: () async {
+                  final dialogNavigator = Navigator.of(dialogContext);
                   try {
                     setState(() {
                       load = Load.loading;
@@ -317,7 +318,9 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
                     if (kDebugMode) debugPrint("err:${err.toString()}");
                   } finally {
                     if (mounted) {
-                      Navigator.of(dialogContext).pop();
+                      if (dialogNavigator.mounted && dialogNavigator.canPop()) {
+                        dialogNavigator.pop();
+                      }
                       setState(() {
                         load = Load.finish;
                       });
