@@ -303,6 +303,7 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
   }
 
   Future<void> signTx(TransationRecordModel trModel) async {
+    bool completedWithExit = false;
     try {
       final TransferApi transferApi = TransferApi();
       final MessageModel mm = await transferApi.transferWallet(
@@ -325,6 +326,7 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
         );
         ToastUtils.show(S.current.g_key_nft_41);
         if (!mounted) return;
+        completedWithExit = true;
         Navigator.pop(context);
       }
     } catch (e) {
@@ -332,7 +334,7 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
       ToastUtils.show(e.toString());
     } finally {
       load = Load.finish;
-      if (mounted) setState(() {});
+      if (mounted && !completedWithExit) setState(() {});
     }
   }
 

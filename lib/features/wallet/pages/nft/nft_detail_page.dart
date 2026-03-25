@@ -86,8 +86,8 @@ class _NftDetailPageState extends State<NftDetailPage> {
     final warning = nft.isSolana
         ? S.of(context).g_key_nft_send_sol_unsupported
         : nft.isOrdinal
-            ? S.of(context).g_key_nft_ordinals_unsupported
-            : null;
+        ? S.of(context).g_key_nft_ordinals_unsupported
+        : null;
     if (warning != null) ToastUtils.showWarning(warning);
     return warning != null;
   }
@@ -97,9 +97,7 @@ class _NftDetailPageState extends State<NftDetailPage> {
     if (_isUnsupportedChain()) return;
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (_) => NftSendPage(nft, coinModel),
-      ),
+      MaterialPageRoute(builder: (_) => NftSendPage(nft, coinModel)),
     );
   }
 
@@ -107,9 +105,7 @@ class _NftDetailPageState extends State<NftDetailPage> {
   void _handleReceive() {
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (_) => WalletReceiveQr(coinModel),
-      ),
+      MaterialPageRoute(builder: (_) => WalletReceiveQr(coinModel)),
     );
   }
 
@@ -160,6 +156,7 @@ class _NftDetailPageState extends State<NftDetailPage> {
 
     if (confirmed != true || !mounted) return;
 
+    bool completedWithExit = false;
     setState(() => _burning = true);
 
     try {
@@ -181,12 +178,15 @@ class _NftDetailPageState extends State<NftDetailPage> {
         ToastUtils.showWarning(mm.data?.toString() ?? 'Burn failed');
       } else {
         ToastUtils.showSuccess(S.of(context).g_key_nft_41);
+        completedWithExit = true;
         Navigator.pop(context);
       }
     } catch (e) {
       if (mounted) ToastUtils.showWarning(e.toString());
     } finally {
-      if (mounted) setState(() => _burning = false);
+      if (mounted && !completedWithExit) {
+        setState(() => _burning = false);
+      }
     }
   }
 
@@ -195,12 +195,15 @@ class _NftDetailPageState extends State<NftDetailPage> {
     return Builder(
       builder: (ctx) => Container(
         color: AppThemeUtils.getColorByKey(
-                ctx, AppThemeKeys.backGroundColor.name)
-            .withAlpha(200),
+          ctx,
+          AppThemeKeys.backGroundColor.name,
+        ).withAlpha(200),
         child: Center(
           child: CircularProgressIndicator(
             color: AppThemeUtils.getColorByKey(
-                ctx, AppThemeKeys.mainBlueColor.name),
+              ctx,
+              AppThemeKeys.mainBlueColor.name,
+            ),
           ),
         ),
       ),
@@ -209,7 +212,9 @@ class _NftDetailPageState extends State<NftDetailPage> {
 
   Widget? _buildMediaWidget() {
     if (!nft.hasVideo) return null;
-    if (_chewieController != null) return Chewie(controller: _chewieController!);
+    if (_chewieController != null) {
+      return Chewie(controller: _chewieController!);
+    }
     if (!_videoError) return _buildVideoPlaceholder();
 
     return Column(
@@ -217,8 +222,11 @@ class _NftDetailPageState extends State<NftDetailPage> {
       children: [
         if (nft.imageUrl != null)
           Expanded(
-            child: Image.network(nft.imageUrl!, fit: BoxFit.cover,
-                errorBuilder: (ctx, err, st) => const SizedBox()),
+            child: Image.network(
+              nft.imageUrl!,
+              fit: BoxFit.cover,
+              errorBuilder: (ctx, err, st) => const SizedBox(),
+            ),
           ),
         Padding(
           padding: const EdgeInsets.all(8),
@@ -226,9 +234,12 @@ class _NftDetailPageState extends State<NftDetailPage> {
             builder: (ctx) => Text(
               S.of(ctx).g_key_nft_no_video_support,
               style: TextStyle(
-                  fontSize: 12,
-                  color: AppThemeUtils.getColorByKey(
-                      ctx, AppThemeKeys.itemSubtitleTextColor.name)),
+                fontSize: 12,
+                color: AppThemeUtils.getColorByKey(
+                  ctx,
+                  AppThemeKeys.itemSubtitleTextColor.name,
+                ),
+              ),
             ),
           ),
         ),

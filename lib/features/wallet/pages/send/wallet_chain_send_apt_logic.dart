@@ -226,6 +226,7 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
   }
 
   Future<void> signTx(TransationRecordModel trModel) async {
+    bool completedWithExit = false;
     try {
       final mm = await TransferApi().transferWallet(
         trModel: trModel,
@@ -247,6 +248,7 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
         );
         if (!mounted) return;
         ToastUtils.show(S.current.g_key_nft_41);
+        completedWithExit = true;
         Navigator.pop(context);
       }
     } catch (e) {
@@ -254,7 +256,7 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
       ToastUtils.show(e.toString());
     } finally {
       load = Load.finish;
-      if (mounted) setState(() {});
+      if (mounted && !completedWithExit) setState(() {});
     }
   }
 

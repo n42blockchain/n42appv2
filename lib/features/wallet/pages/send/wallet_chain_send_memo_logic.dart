@@ -205,6 +205,7 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
   }
 
   Future<void> signTx(TransationRecordModel trModel) async {
+    bool completedWithExit = false;
     try {
       final MessageModel mm = await TransferApi().transferWallet(
         trModel: trModel,
@@ -227,6 +228,7 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
         );
         if (!mounted) return;
         ToastUtils.show(S.current.g_key_nft_41);
+        completedWithExit = true;
         Navigator.pop(context);
       }
     } catch (e) {
@@ -237,7 +239,7 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
       ToastUtils.show(friendly);
     } finally {
       load = Load.finish;
-      if (mounted) setState(() {});
+      if (mounted && !completedWithExit) setState(() {});
     }
   }
 
