@@ -79,6 +79,7 @@ class _PersonalSettingState extends ConsumerState<PersonalSetting> {
   }
 
   Future<void> saveUserInfo() async {
+    bool completedWithExit = false;
     try {
       if (load == Load.loading) return;
       setState(() => load = Load.loading);
@@ -97,14 +98,18 @@ class _PersonalSettingState extends ConsumerState<PersonalSetting> {
       if (!mounted) return;
       if (r.error == false) {
         ToastUtils.showSuccess(S.of(context).g_key_185);
-        if (mounted) Navigator.pop(context);
+        if (!mounted) return;
+        completedWithExit = true;
+        Navigator.pop(context);
       } else {
         ToastUtils.show(r.data);
       }
     } catch (e) {
       ToastUtils.show(e.toString());
     } finally {
-      setState(() => load = Load.finish);
+      if (mounted && !completedWithExit) {
+        setState(() => load = Load.finish);
+      }
     }
   }
 
@@ -120,14 +125,16 @@ class _PersonalSettingState extends ConsumerState<PersonalSetting> {
   // ── 样式辅助 ────────────────────────────────────────────────────
 
   BoxDecoration get _bottomBorder => BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            width: ScreenUtil().setWidth(1.0),
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.itemLineColor.name),
-          ),
+    border: Border(
+      bottom: BorderSide(
+        width: ScreenUtil().setWidth(1.0),
+        color: AppThemeUtils.getColorByKey(
+          context,
+          AppThemeKeys.itemLineColor.name,
         ),
-      );
+      ),
+    ),
+  );
 
   Widget _buildFieldLabel(String text) {
     return Padding(
@@ -136,7 +143,9 @@ class _PersonalSettingState extends ConsumerState<PersonalSetting> {
         text,
         style: TextStyle(
           color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainBlueColor.name),
+            context,
+            AppThemeKeys.mainBlueColor.name,
+          ),
           fontSize: ScreenUtil().setSp(30.0),
         ),
       ),
@@ -149,7 +158,9 @@ class _PersonalSettingState extends ConsumerState<PersonalSetting> {
       message,
       style: TextStyle(
         color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.errorTextColor.name),
+          context,
+          AppThemeKeys.errorTextColor.name,
+        ),
         fontSize: ScreenUtil().setSp(26.0),
       ),
     );
@@ -161,28 +172,28 @@ class _PersonalSettingState extends ConsumerState<PersonalSetting> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBarWidget(
-        text: S.of(context).personalInformation,
-      ),
+      appBar: AppBarWidget(text: S.of(context).personalInformation),
       body: Stack(
         children: [
           Positioned.fill(
             child: SingleChildScrollView(
               padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(30.0)),
+                horizontal: ScreenUtil().setWidth(30.0),
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   buildAvatar(),
                   buildEditPhotoButton(),
                   Padding(
-                    padding: EdgeInsets.only(
-                        top: ScreenUtil().setWidth(80.0)),
+                    padding: EdgeInsets.only(top: ScreenUtil().setWidth(80.0)),
                     child: Text(
                       S.of(context).g_key_u_2,
                       style: TextStyle(
                         color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.mainBlueColor.name),
+                          context,
+                          AppThemeKeys.mainBlueColor.name,
+                        ),
                         fontSize: ScreenUtil().setSp(30.0),
                       ),
                     ),
