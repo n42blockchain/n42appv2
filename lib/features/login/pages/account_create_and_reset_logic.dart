@@ -240,20 +240,26 @@ mixin _AccountCreateAndResetLogic on ConsumerState<AccountCreateAndReset> {
     uCodeErrorMessage = "";
     setState(() {});
 
+    bool completedWithExit = false;
     final inviteCode = _inviteCodeController.text.trim();
     try {
       setState(() {
         sendLoad = Load.loading;
       });
       if (_currentType == HandType.createAccount) {
-        await _submitCreateAccount(email, password, code, inviteCode);
+        completedWithExit = await _submitCreateAccount(
+          email,
+          password,
+          code,
+          inviteCode,
+        );
       } else {
-        await _submitResetPassword(email, password, code);
+        completedWithExit = await _submitResetPassword(email, password, code);
       }
     } catch (err) {
       ToastUtils.show(err.toString());
     } finally {
-      if (mounted) {
+      if (mounted && !completedWithExit) {
         setState(() {
           sendLoad = Load.finish;
         });
@@ -261,7 +267,7 @@ mixin _AccountCreateAndResetLogic on ConsumerState<AccountCreateAndReset> {
     }
   }
 
-  Future<void> _submitCreateAccount(
+  Future<bool> _submitCreateAccount(
     String email,
     String password,
     String code,
@@ -273,22 +279,24 @@ mixin _AccountCreateAndResetLogic on ConsumerState<AccountCreateAndReset> {
       code,
       inviteCode: inviteCode,
     );
-    if (!mounted) return;
+    if (!mounted) return false;
     if (data["code"] == 200) {
       ToastUtils.show(S.of(context).login_message_10);
-      bool rData = await login(email, password);
-      if (!mounted) return;
+      final bool rData = await login(email, password);
+      if (!mounted) return false;
       if (rData && widget.pushType == 0) {
         Navigator.pop(context, true);
       } else {
         Navigator.pop(context);
       }
+      return true;
     } else {
       ToastUtils.show(data["err"]);
     }
+    return false;
   }
 
-  Future<void> _submitResetPassword(
+  Future<bool> _submitResetPassword(
     String email,
     String password,
     String code,
@@ -298,19 +306,21 @@ mixin _AccountCreateAndResetLogic on ConsumerState<AccountCreateAndReset> {
       Md5Util().generateMd5(password),
       code,
     );
-    if (!mounted) return;
+    if (!mounted) return false;
     if (data["code"] == 200) {
       ToastUtils.show(S.of(context).login_message_11);
-      bool rData = await login(email, password);
-      if (!mounted) return;
+      final bool rData = await login(email, password);
+      if (!mounted) return false;
       if (rData && widget.pushType == 0) {
         Navigator.pop(context, true);
       } else {
         Navigator.pop(context);
       }
+      return true;
     } else {
       ToastUtils.show(data["err"]);
     }
+    return false;
   }
 
   void toggleShowPwd1() {

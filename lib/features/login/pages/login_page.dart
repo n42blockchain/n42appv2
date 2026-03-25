@@ -324,14 +324,17 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     );
   }
 
-  void _init() async {
+  Future<void> _init() async {
     final spUtil = SPUtil();
-    isSelectedUserProtocol = await spUtil.getReadLoginClause();
+    final readLoginClause = await spUtil.getReadLoginClause();
+    if (!mounted) return;
+    isSelectedUserProtocol = readLoginClause;
     final data = await spUtil.getUserInfo();
+    if (!mounted) return;
     if (data != null) {
       _unameController.text = UserInfo.fromJson(data).email ?? "";
     }
-    if (mounted) setState(() {});
+    setState(() {});
   }
 
   /// Validate inputs and perform login.
@@ -362,6 +365,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       ToastUtils.show(s.selected_user_protocol);
       return;
     }
+    bool completedWithExit = false;
     try {
       setState(() => load = Load.loading);
       final deviceInfo = await DeviceInfoUtil().getFullDeviceInfo();
@@ -378,7 +382,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         if (!mounted) return;
         await AppGlobals.login(userInfo);
         if (!mounted) return;
-        if (widget.type == 0) Navigator.pop(context);
+        if (widget.type == 0) {
+          completedWithExit = true;
+          Navigator.pop(context);
+        }
       } else if (data["code"] == -403) {
         ToastUtils.showFtToast(title: s.code_403);
       } else if (data["code"] == -1301) {
@@ -389,7 +396,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     } catch (err) {
       ToastUtils.show(err.toString());
     } finally {
-      if (mounted) {
+      if (mounted && !completedWithExit) {
         setState(() => load = Load.finish);
       }
     }

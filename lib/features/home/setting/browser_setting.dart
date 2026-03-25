@@ -26,7 +26,7 @@ class _BrowserSettingState extends State<BrowserSetting> {
     Map<String, dynamic>? b = await SPUtil().getBrowserSetting();
     if (!mounted) return;
     if (b != null) {
-      browser = b;
+      browser = {...browser, ...b};
       setState(() {});
     }
   }
@@ -65,7 +65,7 @@ class _BrowserSettingState extends State<BrowserSetting> {
                     ),
                   ),
                   Switch(
-                    value: browser['connectDApp'],
+                    value: browser['connectDApp'] == true,
                     activeTrackColor: AppThemeUtils.getColorByKey(
                       context,
                       AppThemeKeys.mainBlueColor.name,

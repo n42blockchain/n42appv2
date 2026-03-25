@@ -28,7 +28,9 @@ class ResetPasswordPage extends StatefulWidget {
 }
 
 class _ResetPasswordPageState extends State<ResetPasswordPage> {
-  static final RegExp _emailRegExp = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+  static final RegExp _emailRegExp = RegExp(
+    r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+  );
 
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
@@ -68,9 +70,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(
-        text: S.of(context).g_key_reset_password,
-      ),
+      appBar: AppBarWidget(text: S.of(context).g_key_reset_password),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
@@ -82,9 +82,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                 SizedBox(height: ScreenUtil().setWidth(20)),
 
                 // 步骤指示器
-                _ResetPasswordStepIndicator(
-                  currentStep: _currentStep,
-                ),
+                _ResetPasswordStepIndicator(currentStep: _currentStep),
 
                 SizedBox(height: ScreenUtil().setWidth(40)),
 
@@ -110,7 +108,10 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
           S.of(context).g_key_reset_password_email_desc,
           style: TextStyle(
             fontSize: ScreenUtil().setSp(28),
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+            color: AppThemeUtils.getColorByKey(
+              context,
+              AppThemeKeys.itemSubtitleTextColor.name,
+            ),
           ),
         ),
         SizedBox(height: ScreenUtil().setWidth(32)),
@@ -142,9 +143,14 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                 : S.of(context).g_key_send_code,
             AppThemeUtils.getColorByKey(
               context,
-              _isSendingCode ? AppThemeKeys.mainButtonBgColor3.name : AppThemeKeys.mainButtonBgColor.name,
+              _isSendingCode
+                  ? AppThemeKeys.mainButtonBgColor3.name
+                  : AppThemeKeys.mainButtonBgColor.name,
             ),
-            AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
+            AppThemeUtils.getColorByKey(
+              context,
+              AppThemeKeys.mainButtonTextColor.name,
+            ),
             _isSendingCode,
           ),
         ),
@@ -160,7 +166,10 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
           S.of(context).g_key_verification_code_sent(_emailController.text),
           style: TextStyle(
             fontSize: ScreenUtil().setSp(28),
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+            color: AppThemeUtils.getColorByKey(
+              context,
+              AppThemeKeys.itemSubtitleTextColor.name,
+            ),
           ),
         ),
         SizedBox(height: ScreenUtil().setWidth(32)),
@@ -186,12 +195,17 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             TextButton(
-              onPressed: _currentStep > 0 ? () => setState(() => _currentStep = 0) : null,
+              onPressed: _currentStep > 0
+                  ? () => setState(() => _currentStep = 0)
+                  : null,
               child: Text(
                 S.of(context).g_key_change_email,
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(26),
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                  color: AppThemeUtils.getColorByKey(
+                    context,
+                    AppThemeKeys.mainBlueColor.name,
+                  ),
                 ),
               ),
             ),
@@ -204,8 +218,14 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(26),
                   color: _countdown > 0
-                      ? AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name)
-                      : AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                      ? AppThemeUtils.getColorByKey(
+                          context,
+                          AppThemeKeys.itemSubtitleTextColor.name,
+                        )
+                      : AppThemeUtils.getColorByKey(
+                          context,
+                          AppThemeKeys.mainBlueColor.name,
+                        ),
                 ),
               ),
             ),
@@ -219,8 +239,14 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
             context,
             _verifyCode,
             S.of(context).g_key_next,
-            AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
-            AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
+            AppThemeUtils.getColorByKey(
+              context,
+              AppThemeKeys.mainButtonBgColor.name,
+            ),
+            AppThemeUtils.getColorByKey(
+              context,
+              AppThemeKeys.mainButtonTextColor.name,
+            ),
             false,
           ),
         ),
@@ -236,7 +262,10 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
           S.of(context).g_key_set_new_password_desc,
           style: TextStyle(
             fontSize: ScreenUtil().setSp(28),
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+            color: AppThemeUtils.getColorByKey(
+              context,
+              AppThemeKeys.itemSubtitleTextColor.name,
+            ),
           ),
         ),
         SizedBox(height: ScreenUtil().setWidth(32)),
@@ -253,7 +282,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
           label: S.of(context).g_key_confirm_new_password,
           hint: S.of(context).g_key_enter_confirm_password,
           obscure: _obscureConfirmPassword,
-          onToggle: () => setState(() => _obscureConfirmPassword = !_obscureConfirmPassword),
+          onToggle: () => setState(
+            () => _obscureConfirmPassword = !_obscureConfirmPassword,
+          ),
         ),
         SizedBox(height: ScreenUtil().setWidth(48)),
         SizedBox(
@@ -267,9 +298,14 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                 : S.of(context).g_key_reset_password,
             AppThemeUtils.getColorByKey(
               context,
-              _isLoading ? AppThemeKeys.mainButtonBgColor3.name : AppThemeKeys.mainButtonBgColor.name,
+              _isLoading
+                  ? AppThemeKeys.mainButtonBgColor3.name
+                  : AppThemeKeys.mainButtonBgColor.name,
             ),
-            AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
+            AppThemeUtils.getColorByKey(
+              context,
+              AppThemeKeys.mainButtonTextColor.name,
+            ),
             _isLoading,
           ),
         ),
@@ -283,6 +319,10 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
     _countdown = 60;
     _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
       if (_countdown > 0) {
         setState(() => _countdown--);
       } else {
@@ -305,7 +345,10 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
     setState(() => _isSendingCode = true);
 
     try {
-      final result = await UserInfoApi().sendEmailCode(_emailController.text, 'resetPwd');
+      final result = await UserInfoApi().sendEmailCode(
+        _emailController.text,
+        'resetPwd',
+      );
 
       if (!mounted) return;
 
@@ -353,6 +396,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       return;
     }
 
+    bool completedWithExit = false;
     setState(() => _isLoading = true);
 
     try {
@@ -368,6 +412,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
 
       if (result['code'] == 200) {
         ToastUtils.show(S.of(context).g_key_password_reset_success);
+        completedWithExit = true;
         Navigator.pop(context, true);
       } else {
         ToastUtils.show(result['err'] ?? 'Failed to reset password');
@@ -377,7 +422,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         ToastUtils.show(e.toString());
       }
     } finally {
-      if (mounted) {
+      if (mounted && !completedWithExit) {
         setState(() => _isLoading = false);
       }
     }

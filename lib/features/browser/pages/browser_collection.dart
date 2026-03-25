@@ -55,13 +55,15 @@ class BrowserCollectionState extends State<BrowserCollection> {
       titleErrorMessage = "";
       urlErrorMessage = "";
     });
+    bool completedWithExit = false;
     try {
       await BrowserApi().insertBrowserCollection(title, url, desc: desc);
       if (!mounted) return;
       ToastUtils.show(S.of(context).g_key_185);
+      completedWithExit = true;
       Navigator.pop(context);
     } finally {
-      if (mounted) {
+      if (mounted && !completedWithExit) {
         setState(() => _saving = false);
       }
     }

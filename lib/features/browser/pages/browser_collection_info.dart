@@ -53,13 +53,15 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
   Future<void> deleteCollection() async {
     if (_deleting) return;
     setState(() => _deleting = true);
+    bool completedWithExit = false;
     try {
       await browserApi.deleteBrowserCollection(widget.collectionModel.id!);
       if (!mounted) return;
       ToastUtils.show(S.of(context).g_key_address_5);
+      completedWithExit = true;
       Navigator.pop(context, "delete");
     } finally {
-      if (mounted) {
+      if (mounted && !completedWithExit) {
         setState(() => _deleting = false);
       }
     }
@@ -83,13 +85,15 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
       titleErrorMessage = "";
       urlErrorMessage = "";
     });
+    bool completedWithExit = false;
     try {
       await browserApi.updateBrowsercollection(widget.collectionModel);
       if (!mounted) return;
       ToastUtils.show(S.of(context).g_key_185);
+      completedWithExit = true;
       Navigator.pop(context, "save");
     } finally {
-      if (mounted) {
+      if (mounted && !completedWithExit) {
         setState(() => _saving = false);
       }
     }
