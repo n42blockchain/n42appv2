@@ -35,8 +35,19 @@ class _SetAmountState extends ConsumerState<SetAmount> {
   String amountErrorMessage = "";
 
   String _validateAmount(String value) {
-    if (regular.regularDouble(value) || regular.regularNums(value)) return "";
-    return S.of(context).g_key_payment_amount_invalid;
+    final normalized = value.trim();
+    if (normalized.isEmpty) {
+      return S.of(context).g_key_payment_amount_invalid;
+    }
+    if (!(regular.regularDouble(normalized) ||
+        regular.regularNums(normalized))) {
+      return S.of(context).g_key_payment_amount_invalid;
+    }
+    final amount = double.tryParse(normalized);
+    if (amount == null || !amount.isFinite || amount <= 0) {
+      return S.of(context).g_key_payment_amount_invalid;
+    }
+    return "";
   }
 
   @override
@@ -191,7 +202,7 @@ class _SetAmountState extends ConsumerState<SetAmount> {
       ToastUtils.show(S.of(context).g_key_payment_usdt_not_found);
       return;
     }
-    final amountStr = amountController.text;
+    final amountStr = amountController.text.trim();
     amountErrorMessage = _validateAmount(amountStr);
     if (amountErrorMessage.isNotEmpty) {
       setState(() {});

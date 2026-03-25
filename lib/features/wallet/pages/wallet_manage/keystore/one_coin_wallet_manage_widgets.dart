@@ -316,6 +316,9 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
   Future<void> _onExportKeystoreTap() async {
     try {
       if (load == Load.loading) return;
+      if (mounted) {
+        setState(() => load = Load.loading);
+      }
       if (widget.walletInfo.password == "") {
         await _exportKeystoreWithNewPassword();
       } else {

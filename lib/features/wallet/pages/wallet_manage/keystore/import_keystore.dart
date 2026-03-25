@@ -295,6 +295,7 @@ class _ImportKeystoreState extends ConsumerState<ImportKeystore> {
     String keystoreJson,
     String password,
   ) async {
+    var completedWithExit = false;
     try {
       setState(() => load = Load.loading);
 
@@ -330,6 +331,7 @@ class _ImportKeystoreState extends ConsumerState<ImportKeystore> {
       final res = await ref.read(wapBridgeProvider).addImportWalletInfo(info);
       if (!mounted) return;
       if (res) {
+        completedWithExit = true;
         Navigator.of(context).pop(true);
       } else {
         ToastUtils.show(S.of(context).g_key_keystore_19);
@@ -338,7 +340,7 @@ class _ImportKeystoreState extends ConsumerState<ImportKeystore> {
       debugPrint("import keystore json err: ${err.toString()}");
       ToastUtils.show(err.toString());
     } finally {
-      if (mounted) {
+      if (mounted && !completedWithExit) {
         setState(() => load = Load.finish);
       }
     }
