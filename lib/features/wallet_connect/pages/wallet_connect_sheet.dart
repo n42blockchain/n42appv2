@@ -5,7 +5,7 @@ import 'package:n42_wallet/features/component/enums/load.dart';
 import 'package:n42_wallet/features/component/pages/scan_page.dart';
 import 'package:n42_wallet/features/wallet_connect/pages/wallet_connect_widgets_mixin.dart';
 import 'package:n42_wallet/features/wallet_connect/presentation/providers/wallet_connect_providers.dart';
-import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_state.dart';
+import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_provider.dart';
 import 'package:n42_wallet/features/widgets/loading_page.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 
@@ -62,6 +62,22 @@ class _WalletConnectSheetState extends ConsumerState<WalletConnectSheet>
   @override
   Widget build(BuildContext context) {
     final connectV2 = ref.watch(wcpBridgeProvider);
+
+    // When a new WC connection is established (non-empty URI flow), auto-close
+    // the sheet so pageOpen becomes false. Subsequent transaction requests will
+    // then be handled by showAlertWidget() instead of rendering inside this sheet.
+    ref.listen<WalletConnectProvider>(wcpBridgeProvider, (prev, next) {
+      if (!widget.uri.isNotEmpty) return;
+      final prevState = prev?.walletConnectState;
+      final nextState = next.walletConnectState;
+      if (prevState != WalletConnectState.connect &&
+          nextState == WalletConnectState.connect) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) Navigator.pop(context, true);
+        });
+      }
+    });
+
     final bgColor =
         AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name);
 

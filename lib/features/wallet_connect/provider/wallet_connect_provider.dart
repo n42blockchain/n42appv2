@@ -128,7 +128,7 @@ class WalletConnectProvider
         cleanData();
       case WalletConnectState.transactionOK:
       case WalletConnectState.messageSignOK:
-        if (!pageOpen) showAlertWidget();
+        showAlertWidget();
       case WalletConnectState.error:
         errorMessage = (params as String?) ?? 'Unknown error';
       case WalletConnectState.selectChain:
