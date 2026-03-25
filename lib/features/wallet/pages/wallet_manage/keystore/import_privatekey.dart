@@ -423,9 +423,12 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                           if (rm['legacy'] != "") {
                             final ksjByte = hexToBytes(keystoreJson);
                             final base64Str = base64Encode(ksjByte);
-                            final findWalletInfo = ref
-                                .read(wapBridgeProvider)
-                                .findWallet(pk: base64Str);
+                            final walletProvider = ref.read(wapBridgeProvider);
+                            final beforeWalletCount =
+                                walletProvider.walletInfoLsit.length;
+                            final findWalletInfo = walletProvider.findWallet(
+                              pk: base64Str,
+                            );
                             if (findWalletInfo != null) {
                               _showError(
                                 s.g_key_214(findWalletInfo.walletName ?? ""),
@@ -453,7 +456,13 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                               ),
                             );
                             if (!mounted) return;
-                            navigator.pop(true);
+                            final afterWalletCount = ref
+                                .read(wapBridgeProvider)
+                                .walletInfoLsit
+                                .length;
+                            if (afterWalletCount > beforeWalletCount) {
+                              navigator.pop(true);
+                            }
                           } else {
                             _showError(s.g_key_210);
                           }

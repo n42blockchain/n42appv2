@@ -24,6 +24,7 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
   int pageNum = 1;
   bool lastPage = false;
   Load loading = Load.finish;
+  int _requestId = 0;
 
   @override
   void initState() {
@@ -44,12 +45,17 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
     required bool replace,
   }) async {
     if (loading == Load.loading || (!replace && lastPage)) return;
+    final requestId = ++_requestId;
     loading = Load.loading;
+    if (mounted) {
+      setState(() {});
+    }
     try {
       final list = await browserApi.selectBrowserHistory(
         pageNum: pageToLoad,
         pageSize: pageSize,
       );
+      if (requestId != _requestId) return;
       if (!mounted) return;
       if (replace) {
         historyList.clear();
@@ -70,6 +76,7 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
 
   Future<void> deleteHistory(int index) async {
     if (index < 0 || index >= historyList.length) return;
+    _requestId++;
     final bhm = historyList[index];
     if (bhm.id != null) {
       await browserApi.deleteBrowserHistoryById(bhm.id!);
@@ -105,6 +112,7 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
     if (!mounted) return;
     if (confirmed != true) return;
 
+    _requestId++;
     await browserApi.clearBrowserHistory();
     if (!mounted) return;
     historyList.clear();

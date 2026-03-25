@@ -26,6 +26,7 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
   int pageNum = 1;
   bool lastPage = false;
   Load loading = Load.finish;
+  int _requestId = 0;
 
   @override
   void initState() {
@@ -46,13 +47,18 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
     required bool replace,
   }) async {
     if (loading == Load.loading || (!replace && lastPage)) return;
+    final requestId = ++_requestId;
     loading = Load.loading;
+    if (mounted) {
+      setState(() {});
+    }
 
     try {
       final cList = await browserApi.selectBrowserCollection(
         pageNum: pageToLoad,
         pageSize: pageSize,
       );
+      if (requestId != _requestId) return;
       if (!mounted) return;
       if (replace) {
         collectionList.clear();
@@ -73,6 +79,7 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
 
   Future<void> deleteCollection(int index) async {
     if (index < 0 || index >= collectionList.length) return;
+    _requestId++;
     BrowserCollectionModel bcm = collectionList[index];
     await browserApi.deleteBrowserCollection(bcm.id!);
     if (!mounted) return;
@@ -89,6 +96,7 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
     );
     if (!mounted) return;
     if (edit != null) {
+      _requestId++;
       if (edit == "delete") {
         collectionList.removeWhere((element) => element.id == bcm.id);
       }

@@ -40,12 +40,20 @@ class BrowserProvider extends ChangeNotifier {
 
   late final BrowserApi browserApi = BrowserApi();
   Map<String, dynamic> browser = {"connectDApp": false};
+  bool _isDisposed = false;
+
+  void _safeNotify() {
+    if (!_isDisposed) {
+      notifyListeners();
+    }
+  }
 
   Future<void> getBrowserSetting() async {
     final b = await SPUtil().getBrowserSetting();
+    if (_isDisposed) return;
     if (b != null) {
-      browser = b;
-      notifyListeners();
+      browser = {...browser, ...b};
+      _safeNotify();
     }
   }
 
@@ -56,7 +64,7 @@ class BrowserProvider extends ChangeNotifier {
 
   void setShowWList(bool value) {
     showWList = value;
-    notifyListeners();
+    _safeNotify();
   }
 
   TextEditingController? titleEditingController;
@@ -114,12 +122,14 @@ class BrowserProvider extends ChangeNotifier {
   void browserInit() {
     titleEditingController = TextEditingController();
     titleFocusNode = FocusNode();
-    titleFocusNode?.addListener(notifyListeners);
+    titleFocusNode?.addListener(_safeNotify);
   }
 
   void browserDispose() {
     titleEditingController?.dispose();
     titleFocusNode?.dispose();
+    titleEditingController = null;
+    titleFocusNode = null;
   }
 
   void addUrl(String url) {
@@ -168,7 +178,7 @@ class BrowserProvider extends ChangeNotifier {
             final idx = _indexOfController(wvc);
             if (idx < 0) return;
             wInfoList[idx]['progress'] = progress * 0.01;
-            notifyListeners();
+            _safeNotify();
           },
           onPageStarted: (String url) {
             final idx = _indexOfController(wvc);
@@ -176,7 +186,7 @@ class BrowserProvider extends ChangeNotifier {
             debugPrint('Page started loading: $url');
             wInfoList[idx]['load'] = true;
             _injectProviderScript(wvc);
-            notifyListeners();
+            _safeNotify();
           },
           onPageFinished: (String url) async {
             final idx = _indexOfController(wvc);
@@ -199,14 +209,14 @@ class BrowserProvider extends ChangeNotifier {
               checkCanGo();
               getCollectionUrl(url);
             }
-            notifyListeners();
+            _safeNotify();
           },
           onWebResourceError: (WebResourceError error) {
             final idx = _indexOfController(wvc);
             if (idx < 0) return;
             wInfoList[idx]['load'] = false;
             wInfoList[idx]['progress'] = 0;
-            notifyListeners();
+            _safeNotify();
           },
           onNavigationRequest: (NavigationRequest request) {
             return checkUrl(request.url)
@@ -221,7 +231,7 @@ class BrowserProvider extends ChangeNotifier {
             if (idx == wListIndex) {
               titleEditingController?.text = wInfoList[idx]['openUrl'];
             }
-            notifyListeners();
+            _safeNotify();
           },
           onHttpError: (HttpResponseError error) {
             debugPrint('HTTP error: ${error.response?.statusCode}');
@@ -258,7 +268,7 @@ class BrowserProvider extends ChangeNotifier {
     wInfoList.add({"openUrl": url});
     showWList = false;
     wListIndex = wvcList.length - 1;
-    notifyListeners();
+    _safeNotify();
   }
 
   void loadRequest({String url = ""}) {
@@ -274,7 +284,7 @@ class BrowserProvider extends ChangeNotifier {
     showWList = false;
     titleEditingController?.text = _currentUrl;
     // Notify immediately so the UI switches tab right away
-    notifyListeners();
+    _safeNotify();
     // Then async-update navigation and bookmark state
     checkCanGo();
     getCollectionUrl(_currentUrl);
@@ -300,17 +310,18 @@ class BrowserProvider extends ChangeNotifier {
       checkCanGo();
       getCollectionUrl(_currentUrl);
     }
-    notifyListeners();
+    _safeNotify();
   }
 
   /// Check whether the given URL is in the bookmarks collection.
   Future<void> getCollectionUrl(String url) async {
     final requestId = ++_collectionRequestId;
     final list = await browserApi.selectBrowserCollectionUrl(url);
+    if (_isDisposed) return;
     if (requestId != _collectionRequestId) return;
     if (url != _currentUrl) return;
     collect = list.isNotEmpty;
-    notifyListeners();
+    _safeNotify();
   }
 
   Future<void> getTitle() async {
@@ -321,12 +332,13 @@ class BrowserProvider extends ChangeNotifier {
     final controller = wvcList[index];
     final requestId = ++_titleRequestId;
     final t = await controller.getTitle();
+    if (_isDisposed) return;
     if (requestId != _titleRequestId) return;
     if (index != wListIndex || index >= wInfoList.length) return;
     if (!identical(controller, wvcList[index])) return;
     if (t != null) {
       wInfoList[index]['title'] = t;
-      notifyListeners();
+      _safeNotify();
     }
   }
 
@@ -337,12 +349,13 @@ class BrowserProvider extends ChangeNotifier {
     final requestId = ++_navigationStateRequestId;
     final canGoBack = await controller.canGoBack();
     final canGoForward = await controller.canGoForward();
+    if (_isDisposed) return;
     if (requestId != _navigationStateRequestId) return;
     if (index != wListIndex || index >= wvcList.length) return;
     if (!identical(controller, wvcList[index])) return;
     canBack = canGoBack;
     canForward = canGoForward;
-    notifyListeners();
+    _safeNotify();
   }
 
   /// Try to handle a WalletConnect URI; returns true if handled.
@@ -427,7 +440,8 @@ class BrowserProvider extends ChangeNotifier {
     JavaScriptMessage message,
     WebViewController controller,
   ) async {
-    if (_dappHandler == null) return;
+    final handler = _dappHandler;
+    if (handler == null) return;
     try {
       final data = json.decode(message.message) as Map<String, dynamic>;
       final id = data['id'];
@@ -444,13 +458,14 @@ class BrowserProvider extends ChangeNotifier {
       unawaited(DAppPermissionsTracker.record(origin, method));
 
       try {
-        final result = await _dappHandler!.handleRequest(method, params);
+        final result = await handler.handleRequest(method, params);
+        if (_isDisposed) return;
 
         // If chain was switched, notify the JS side
         if (method == 'wallet_switchEthereumChain' ||
             method == 'wallet_addEthereumChain') {
-          final newChainHex = JsEscapeUtils.escapeJs(_dappHandler!.chainIdHex);
-          final newAddr = JsEscapeUtils.escapeJs(_dappHandler!.address);
+          final newChainHex = JsEscapeUtils.escapeJs(handler.chainIdHex);
+          final newAddr = JsEscapeUtils.escapeJs(handler.address);
           controller.runJavaScript(
             'window.ethereum._n42SetChain("$newChainHex");'
             'window.ethereum._n42SetAccounts(["$newAddr"]);',
@@ -510,5 +525,19 @@ class BrowserProvider extends ChangeNotifier {
     _dappHandler = null;
     wListIndex = -1;
     wListAdd();
+  }
+
+  @override
+  void dispose() {
+    _isDisposed = true;
+    browserDispose();
+    for (final wvc in wvcList) {
+      wvc.setNavigationDelegate(NavigationDelegate());
+    }
+    wvcList = [];
+    wInfoList = [];
+    _dappHandler?.dispose();
+    _dappHandler = null;
+    super.dispose();
   }
 }

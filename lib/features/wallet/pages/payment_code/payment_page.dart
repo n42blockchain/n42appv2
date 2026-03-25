@@ -219,6 +219,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
   }
 
   Future<void> web3Transaction() async {
+    var completedWithExit = false;
     setState(() => load = Load.loading);
     try {
       final payToken = coinModels[coinModelIndex];
@@ -252,12 +253,15 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
         }
         ToastUtils.show(S.current.g_key_payment_success);
         if (!mounted) return;
+        completedWithExit = true;
         Navigator.pop(context);
       }
     } catch (e) {
       errorMessage = e.toString();
     } finally {
-      if (mounted) setState(() => load = Load.finish);
+      if (mounted && !completedWithExit) {
+        setState(() => load = Load.finish);
+      }
     }
   }
 

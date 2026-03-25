@@ -28,6 +28,7 @@ class BrowserCollectionState extends State<BrowserCollection> {
   String titleErrorMessage = "";
   String urlErrorMessage = "";
   String descErrorMessage = "";
+  bool _saving = false;
 
   @override
   void initState() {
@@ -37,21 +38,33 @@ class BrowserCollectionState extends State<BrowserCollection> {
   }
 
   Future<void> _saveUrl() async {
-    final title = titleEditingController.text;
+    if (_saving) return;
+    final title = titleEditingController.text.trim();
     if (title == "") {
       setState(() => titleErrorMessage = S.of(context).g_browser_key4);
       return;
     }
-    final url = urlEditingController.text;
+    final url = urlEditingController.text.trim();
     if (url == "") {
       setState(() => urlErrorMessage = S.of(context).g_browser_key4);
       return;
     }
     final desc = descEditingController.text;
-    await BrowserApi().insertBrowserCollection(title, url, desc: desc);
-    if (!mounted) return;
-    ToastUtils.show(S.of(context).g_key_185);
-    Navigator.pop(context);
+    setState(() {
+      _saving = true;
+      titleErrorMessage = "";
+      urlErrorMessage = "";
+    });
+    try {
+      await BrowserApi().insertBrowserCollection(title, url, desc: desc);
+      if (!mounted) return;
+      ToastUtils.show(S.of(context).g_key_185);
+      Navigator.pop(context);
+    } finally {
+      if (mounted) {
+        setState(() => _saving = false);
+      }
+    }
   }
 
   @override
