@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
@@ -26,6 +27,7 @@ import 'package:n42_wallet/features/widgets/terms_of_service_widget.dart';
 import 'package:n42_wallet/features/home/api/version_api.dart';
 import 'package:n42_wallet/features/home/widgets/check_version_alert.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:n42_wallet/features/earn/pages/earn_page.dart';
 
 part 'home_page_navigation.dart';
 
@@ -46,6 +48,7 @@ class _HomePageState extends ConsumerState<HomePage>
     with WidgetsBindingObserver {
   final GlobalKey _tabTwo = GlobalKey();
   final GlobalKey _tabThree = GlobalKey();
+  final GlobalKey _tabFour = GlobalKey();
   final GlobalKey _tabFive = GlobalKey();
   final GlobalKey _tabSix = GlobalKey();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -63,6 +66,7 @@ class _HomePageState extends ConsumerState<HomePage>
     return [
       const WalletPage(),
       useV2 ? const MiningTodayV2() : const MiningHomePage(),
+      if(Platform.isAndroid)const EarnPage(),
       const MarketPage(),
     ];
   }

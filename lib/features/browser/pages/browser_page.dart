@@ -6,18 +6,15 @@ import 'package:n42_wallet/features/browser/pages/browser_history_page.dart';
 import 'package:n42_wallet/features/browser/pages/dapp_directory_page.dart';
 import 'package:n42_wallet/features/browser/pages/browser_setting.dart';
 import 'package:n42_wallet/features/browser/provider/browser_provider.dart';
-import 'package:n42_wallet/features/browser/widgets/dapp_signing_sheet.dart';
 import 'package:n42_wallet/features/browser/presentation/providers/browser_providers.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
-import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet_connect/pages/wallet_connect_sheet.dart';
+import 'package:n42_wallet/features/wallet_connect/wallet_connect_uri.dart';
 import 'package:n42_wallet/features/wallet_connect/presentation/providers/wallet_connect_providers.dart';
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_provider.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
 import 'package:n42_wallet/features/widgets/empty.dart';
-import 'package:n42_wallet/features/widgets/prompt_widget.dart';
-import 'package:n42_wallet/features/widgets/sheet_bottom.dart';
 import 'package:n42_wallet/features/widgets/text_field_widget.dart';
+import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -41,6 +38,11 @@ class _BrowserPageState extends ConsumerState<BrowserPage> {
   BrowserProvider? _browserProvider;
   bool _inited = false;
 
+  /// Polls clipboard every 2 s to detect WalletConnect URIs copied within
+  /// the in-app browser (app never leaves foreground in this case).
+  Timer? _clipboardTimer;
+  String? _lastClipboardUri;
+
   @override
   void initState() {
     super.initState();
@@ -51,82 +53,53 @@ class _BrowserPageState extends ConsumerState<BrowserPage> {
         _inited = true;
         _initWalletConnect();
       }
+      _startClipboardPolling();
     });
   }
 
   @override
   void dispose() {
+    _clipboardTimer?.cancel();
     _browserProvider?.connectDAPPCallBack = null;
     _browserProvider?.phishingCallBack = null;
-    if (_browserProvider?.dappHandler != null) {
-      _browserProvider!.dappHandler!.onSigningRequest = null;
-    }
     _browserProvider?.browserDispose();
     super.dispose();
+  }
+
+  void _startClipboardPolling() {
+    _clipboardTimer?.cancel();
+    _clipboardTimer = Timer.periodic(const Duration(seconds: 2), (_) {
+      _checkClipboardForWalletConnect();
+    });
+  }
+
+  Future<void> _checkClipboardForWalletConnect() async {
+    if (!mounted) return;
+    final data = await Clipboard.getData(Clipboard.kTextPlain);
+    final text = data?.text?.trim();
+    if (text == null || text.isEmpty) return;
+    if (text == _lastClipboardUri) return;
+
+    final normalized = normalizeWalletConnectUriString(text);
+    if (normalized == null) return;
+
+    _lastClipboardUri = text;
+    if (!mounted) return;
+    WalletConnectSheet.show(context, normalized);
   }
 
   void _initWalletConnect() {
     _browserProvider ??= ref.read(browserNotifierProvider);
     final bp = _browserProvider!;
-    bp.connectDAPPCallBack = (String url, bool connect) {
-      if (connect) {
-        WalletConnectSheet.show(context, url);
-      } else {
-        _showAlertWidgetConnectDapp(url);
-      }
+    bp.connectDAPPCallBack = (String url) {
+      WalletConnectSheet.show(context, url);
     };
     bp.phishingCallBack = (String url, VoidCallback proceed) {
       _showPhishingWarning(url, proceed);
     };
 
-    bp.initDAppHandler();
-    if (bp.dappHandler != null) {
-      bp.dappHandler!.onSigningRequest = _showDAppSigningSheet;
-    }
-
     bp.browserInit();
     bp.addUrl(widget.openUrl);
-  }
-
-  /// Show a signing confirmation bottom sheet for DApp requests.
-  Future<bool> _showDAppSigningSheet({
-    required String origin,
-    required String method,
-    required Map<String, dynamic> details,
-  }) async {
-    final bp = _browserProvider;
-    String displayOrigin = origin;
-    if (bp != null &&
-        bp.wListIndex >= 0 &&
-        bp.wListIndex < bp.wInfoList.length) {
-      final url = bp.wInfoList[bp.wListIndex]['openUrl'] as String? ?? '';
-      displayOrigin = Uri.tryParse(url)?.host ?? origin;
-    }
-
-    final result = await showModalBottomSheet<bool>(
-      context: context,
-      backgroundColor: Colors.transparent,
-      isScrollControlled: true,
-      builder: (ctx) => Container(
-        decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(
-            ctx,
-            AppThemeKeys.backGroundColor.name,
-          ),
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(ScreenUtil().setWidth(16.0)),
-          ),
-        ),
-        child: SafeArea(
-          child: DAppSigningSheet(
-            origin: displayOrigin,
-            method: method,
-            details: details,
-          ),
-        ),
-      ),
-    );
-    return result ?? false;
   }
 
   /// Show a phishing warning dialog.

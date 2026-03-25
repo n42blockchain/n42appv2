@@ -232,15 +232,10 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                           S.of(context).g_lock_key15,
                           style: TextStyle(
                             color: AppThemeUtils.getColorByKey(
-<<<<<<< HEAD
-                                context, AppThemeKeys.mainTextColor.name),
-                            fontSize: ScreenUtil().setSp(28),
-=======
                               context,
                               AppThemeKeys.mainTextColor.name,
                             ),
                             fontSize: ScreenUtil().setSp(30.0),
->>>>>>> origin/dev2603
                           ),
                         ),
                       ),

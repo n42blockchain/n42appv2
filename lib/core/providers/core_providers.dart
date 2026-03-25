@@ -142,14 +142,26 @@ final appInitProvider = FutureProvider<void>((ref) async {
   final secureStorage = SecureStorage();
   final currentUserNotifier = ref.read(currentUserProvider.notifier);
   try {
-    final userInfoJson = await spUtil.getUserInfo();
+    // SharedPreferences read should be fast; 5 s timeout guards against edge
+    // cases where the platform channel is slow to respond.
+    final userInfoJson = await spUtil
+        .getUserInfo()
+        .timeout(const Duration(seconds: 5), onTimeout: () => null);
     if (userInfoJson != null) {
       final userInfo = UserInfo.fromJson(userInfoJson);
+      // flutter_secure_storage on Android (custom AES cipher) can block
+      // indefinitely when the hardware Keystore is not yet ready (first boot
+      // after update, migration from legacy format, etc.).  Cap at 6 s so the
+      // splash screen is never permanently stuck.
       await _syncActiveUser(
         userInfo,
         secureStorage: secureStorage,
         currentUserNotifier: currentUserNotifier,
-      );
+      ).timeout(const Duration(seconds: 6), onTimeout: () {
+        if (kDebugMode) {
+          debugPrint('[appInit] _syncActiveUser timed out – continuing anyway');
+        }
+      });
       if ((userInfo.uuid ?? '').isNotEmpty &&
           (userInfo.token ?? '').isNotEmpty) {
         unawaited(

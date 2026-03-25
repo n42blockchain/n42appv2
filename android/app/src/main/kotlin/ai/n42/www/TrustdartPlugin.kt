@@ -5,16 +5,25 @@ import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
+import android.util.Base64 as aBase64
 import androidx.core.content.ContextCompat.startActivity
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
-
 import io.flutter.plugin.common.EventChannel
 import ai.n42.www.walletcore.KeyManagementHandler
 import ai.n42.www.walletcore.TransactionSignerHandler
 import ai.n42.www.walletcore.MiningHandler
+import wallet.core.jni.HDWallet
+import wallet.core.jni.CoinType
+import wallet.core.jni.TONWallet
+import wallet.core.jni.Curve
+import java.io.ByteArrayOutputStream
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
+import java.security.MessageDigest
+import org.json.JSONObject
 
 class TrustdartPlugin: FlutterPlugin, MethodCallHandler {
 

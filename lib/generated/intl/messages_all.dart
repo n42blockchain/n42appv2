@@ -121,7 +121,6 @@ MessageLookupByLibrary? _findExact(String localeName) {
       return messages_ur.messages;
     case 'vi':
       return messages_vi.messages;
-    case 'zh':
     case 'zh_TW':
       return messages_zh_tw.messages;
     default:

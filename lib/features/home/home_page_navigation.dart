@@ -11,7 +11,11 @@ extension on _HomePageState {
     return NavigationRail(
       selectedIndex: currentIndex,
       onDestinationSelected: (index) {
-        if (index < 3) {
+        int indexState=3;
+        if(Platform.isAndroid){
+          indexState=4;
+        }
+        if (index < indexState) {
           ref.read(homeTabIndexProvider.notifier).state = index;
         } else {
           _navigateToChat();
@@ -43,6 +47,12 @@ extension on _HomePageState {
           selectedIcon: Image.asset("assets/home/setting/mining.png", width: 22, height: 22, color: selectedColor),
           label: Text(S.of(context).g_home_key3),
         ),
+        if(Platform.isAndroid)
+        NavigationRailDestination(
+          icon: Image.asset("assets/home/tabbar/earn.png", width: 22, height: 22, color: unselectedColor),
+          selectedIcon: Image.asset("assets/home/tabbar/earn.png", width: 22, height: 22, color: selectedColor),
+          label: const Text('Earn'),
+        ),
         NavigationRailDestination(
           icon: Image.asset("assets/home/tabbar/news.png", width: 22, height: 22, color: unselectedColor),
           selectedIcon: Image.asset("assets/home/tabbar/news.png", width: 22, height: 22, color: selectedColor),
@@ -66,6 +76,60 @@ extension on _HomePageState {
     final fontSize = isWide ? 11.0 : ScreenUtil().setSp(20.0);
     final borderWidth = isWide ? 0.5 : ScreenUtil().setWidth(0.8);
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    List<Widget> bottomItems=[];
+    if(Platform.isAndroid){
+      bottomItems=[
+        _buildBottomItem(
+            S.of(context).g_key_6, 0, "assets/home/tabbar/wallet.png",
+            _tabTwo, 5,
+            fixedIconSize: isWide ? iconSize : null,
+            fixedFontSize: isWide ? fontSize : null),
+        _buildBottomItem(
+            S.of(context).g_home_key3, 1, "assets/home/setting/mining.png",
+            _tabThree, 5,
+            fixedIconSize: isWide ? iconSize : null,
+            fixedFontSize: isWide ? fontSize : null),
+        _buildBottomItem(
+            'Earn', 2, "assets/home/tabbar/earn.png",
+            _tabFour, 5,
+            fixedIconSize: isWide ? iconSize : null,
+            fixedFontSize: isWide ? fontSize : null),
+        _buildBottomItem(
+            'Market', 3, "assets/home/tabbar/news.png",
+            _tabSix, 5,
+            fixedIconSize: isWide ? iconSize : null,
+            fixedFontSize: isWide ? fontSize : null),
+        _buildChatBottomItem(
+            S.of(context).g_key_squad, "assets/home/tabbar/chat.png",
+            _tabFive, 5,
+            fixedIconSize: isWide ? iconSize : null,
+            fixedFontSize: isWide ? fontSize : null),
+      ];
+    }else{
+      bottomItems=[
+        _buildBottomItem(
+            S.of(context).g_key_6, 0, "assets/home/tabbar/wallet.png",
+            _tabTwo, 4,
+            fixedIconSize: isWide ? iconSize : null,
+            fixedFontSize: isWide ? fontSize : null),
+        _buildBottomItem(
+            S.of(context).g_home_key3, 1, "assets/home/setting/mining.png",
+            _tabThree, 4,
+            fixedIconSize: isWide ? iconSize : null,
+            fixedFontSize: isWide ? fontSize : null),
+        _buildBottomItem(
+            'Market', 2, "assets/home/tabbar/news.png",
+            _tabSix, 4,
+            fixedIconSize: isWide ? iconSize : null,
+            fixedFontSize: isWide ? fontSize : null),
+        _buildChatBottomItem(
+            S.of(context).g_key_squad, "assets/home/tabbar/chat.png",
+            _tabFive, 4,
+            fixedIconSize: isWide ? iconSize : null,
+            fixedFontSize: isWide ? fontSize : null),
+      ];
+
+    }
 
     return Container(
       width: double.infinity,
@@ -91,28 +155,7 @@ extension on _HomePageState {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          _buildBottomItem(
-              S.of(context).g_key_6, 0, "assets/home/tabbar/wallet.png",
-              _tabTwo, 4,
-              fixedIconSize: isWide ? iconSize : null,
-              fixedFontSize: isWide ? fontSize : null),
-          _buildBottomItem(
-              S.of(context).g_home_key3, 1, "assets/home/setting/mining.png",
-              _tabThree, 4,
-              fixedIconSize: isWide ? iconSize : null,
-              fixedFontSize: isWide ? fontSize : null),
-          _buildBottomItem(
-              'Market', 2, "assets/home/tabbar/news.png",
-              _tabSix, 4,
-              fixedIconSize: isWide ? iconSize : null,
-              fixedFontSize: isWide ? fontSize : null),
-          _buildChatBottomItem(
-              S.of(context).g_key_squad, "assets/home/tabbar/chat.png",
-              _tabFive, 4,
-              fixedIconSize: isWide ? iconSize : null,
-              fixedFontSize: isWide ? fontSize : null),
-        ],
+        children: bottomItems,
       ),
     );
   }

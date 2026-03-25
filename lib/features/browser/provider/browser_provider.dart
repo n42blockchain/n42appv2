@@ -1,17 +1,8 @@
-import 'dart:async';
-import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
-import 'package:n42_wallet/core/security/dapp_security_service.dart';
 import 'package:n42_wallet/core/security/phishing_detector.dart';
-import 'package:n42_wallet/core/utils/js_escape_utils.dart';
 import 'package:n42_wallet/features/browser/api/browser_api.dart';
-import 'package:n42_wallet/features/browser/handler/dapp_request_handler.dart';
-import 'package:n42_wallet/features/browser/js/ethereum_provider.dart';
 import 'package:n42_wallet/features/browser/pages/browser_collection.dart';
-import 'package:n42_wallet/features/component/enums/coin_type.dart';
-import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/features/wallet_connect/wallet_connect_uri.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +15,7 @@ import 'package:webview_flutter_android/webview_flutter_android.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 // #enddocregion platform_imports
 
-typedef ConnectDAPP = void Function(String url, bool connect);
+typedef ConnectDAPP = void Function(String url);
 
 /// Callback invoked when a navigation is blocked as phishing.
 ///
@@ -39,7 +30,7 @@ class BrowserProvider extends ChangeNotifier {
   }
 
   late final BrowserApi browserApi = BrowserApi();
-  Map<String, dynamic> browser = {"connectDApp": false};
+  Map<String, dynamic> browser = {};
 
   Future<void> getBrowserSetting() async {
     final b = await SPUtil().getBrowserSetting();
@@ -77,27 +68,6 @@ class BrowserProvider extends ChangeNotifier {
   /// Set by [BrowserPage] to display a phishing warning dialog.
   /// Cleared in [BrowserPage.dispose] to prevent stale context usage.
   PhishingWarning? phishingCallBack;
-
-  /// DApp request handler for EIP-1193 provider
-  DAppRequestHandler? _dappHandler;
-  DAppRequestHandler? get dappHandler => _dappHandler;
-
-  /// Initialize the DApp handler with EVM chains from the wallet
-  void initDAppHandler() {
-    try {
-      final cms = globalWapAdapter.coinModels;
-      final ethCoins = cms
-          .where(
-            (cm) => cm.coin['blockchainType'] == BlockchainType.Ethereum.name,
-          )
-          .toList();
-      if (ethCoins.isNotEmpty) {
-        _dappHandler = DAppRequestHandler(ethCoinModels: ethCoins);
-      }
-    } catch (e) {
-      debugPrint('[Browser] initDAppHandler error: $e');
-    }
-  }
 
   bool canBack = false;
   bool canForward = false;
@@ -167,15 +137,17 @@ class BrowserProvider extends ChangeNotifier {
             if (idx < 0) return;
             debugPrint('Page started loading: $url');
             wInfoList[idx]['load'] = true;
-            _injectProviderScript(wvc);
             notifyListeners();
+            // Re-inject on every navigation so SPAs don't lose the interceptor.
+            _injectWcClipboardScript(wvc);
           },
           onPageFinished: (String url) async {
             final idx = _indexOfController(wvc);
             if (idx < 0) return;
             wInfoList[idx]['load'] = false;
             wInfoList[idx]['progress'] = 0;
-            _injectProviderScript(wvc);
+            // Inject again after full load in case onPageStarted fired too early.
+            await _injectWcClipboardScript(wvc);
             // Fetch title for this tab
             final t = await wvc.getTitle();
             if (t != null) {
@@ -220,17 +192,19 @@ class BrowserProvider extends ChangeNotifier {
           },
         ),
       )
-      ..loadRequest(Uri.parse(url));
-
-    // Add DApp JavaScript channel for EIP-1193 communication
-    if (_dappHandler != null) {
-      webViewController.addJavaScriptChannel(
-        'N42Wallet',
+      ..addJavaScriptChannel(
+        'FlutterWcClipboard',
         onMessageReceived: (JavaScriptMessage message) {
-          _handleDAppMessage(message, webViewController);
+          if (kDebugMode) {
+            final preview = message.message.length > 80
+                ? '${message.message.substring(0, 80)}…'
+                : message.message;
+            debugPrint('[Browser] JS clipboard intercept: $preview');
+          }
+          _tryHandleWalletConnect(message.message);
         },
-      );
-    }
+      )
+      ..loadRequest(Uri.parse(url));
 
     // #docregion platform_features
     if (webViewController.platform is AndroidWebViewController) {
@@ -316,15 +290,74 @@ class BrowserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Last WC URI dispatched to [connectDAPPCallBack].  Used to deduplicate
+  /// rapid-fire events from both the JS channel and the clipboard poller.
+  String? _lastDispatchedWcUri;
+
   /// Try to handle a WalletConnect URI; returns true if handled.
   bool _tryHandleWalletConnect(String wcUri) {
     final normalizedWcUri = normalizeWalletConnectUriString(wcUri);
-    if (normalizedWcUri == null) {
-      return false;
-    }
+    if (normalizedWcUri == null) return false;
+    // Deduplicate: the JS channel may fire multiple times for the same URI
+    // (copy event + clipboard.writeText both firing).
+    if (normalizedWcUri == _lastDispatchedWcUri) return true;
     if (connectDAPPCallBack == null) return false;
-    connectDAPPCallBack!(normalizedWcUri, browser['connectDApp']);
+    _lastDispatchedWcUri = normalizedWcUri;
+    connectDAPPCallBack!(normalizedWcUri);
     return true;
+  }
+
+  /// JavaScript injected into every page to intercept clipboard writes.
+  /// The FlutterWcClipboard channel is registered on each WebViewController
+  /// via [addJavaScriptChannels] so it is always available on window.
+  static const _wcClipboardInterceptScript = r'''
+(function() {
+  if (window.__flutterWcInterceptorInstalled) return;
+  window.__flutterWcInterceptorInstalled = true;
+
+  function _send(text) {
+    try { FlutterWcClipboard.postMessage(String(text)); } catch(e) {}
+  }
+
+  // 1. Intercept navigator.clipboard.writeText (async Clipboard API)
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    var _orig = navigator.clipboard.writeText.bind(navigator.clipboard);
+    navigator.clipboard.writeText = function(text) {
+      _send(text);
+      return _orig(text);
+    };
+  }
+
+  // 2. Intercept document.execCommand('copy') (legacy sync copy)
+  var _origExec = document.execCommand.bind(document);
+  document.execCommand = function(cmd) {
+    var result = _origExec.apply(document, arguments);
+    if (String(cmd).toLowerCase() === 'copy' && result) {
+      try {
+        var sel = window.getSelection ? window.getSelection().toString() : '';
+        if (sel) _send(sel);
+      } catch(e) {}
+    }
+    return result;
+  };
+
+  // 3. Listen for the native copy event as a final fallback
+  document.addEventListener('copy', function(e) {
+    try {
+      var text = window.getSelection ? window.getSelection().toString() : '';
+      if (text) _send(text);
+    } catch(e) {}
+  }, true);
+})();
+''';
+
+  /// Inject the clipboard-intercept script into [wvc].
+  Future<void> _injectWcClipboardScript(WebViewController wvc) async {
+    try {
+      await wvc.runJavaScript(_wcClipboardInterceptScript);
+    } catch (e) {
+      if (kDebugMode) debugPrint('[Browser] WC clipboard script inject error: $e');
+    }
   }
 
   bool checkUrl(String url) {
@@ -389,85 +422,6 @@ class BrowserProvider extends ChangeNotifier {
     getCollectionUrl(_currentUrl);
   }
 
-  /// Handle incoming DApp JSON-RPC messages from the JavaScript channel.
-  ///
-  /// The [controller] reference is captured at channel creation time,
-  /// so it always points to the correct WebView regardless of tab switching.
-  Future<void> _handleDAppMessage(
-    JavaScriptMessage message,
-    WebViewController controller,
-  ) async {
-    if (_dappHandler == null) return;
-    try {
-      final data = json.decode(message.message) as Map<String, dynamic>;
-      final id = data['id'];
-      if (id == null) return;
-      final method = data['method'] as String;
-      final params = (data['params'] as List<dynamic>?) ?? [];
-
-      // Track permission usage for the WebView that actually emitted the request.
-      final idx = _indexOfController(controller);
-      final tabUrl = idx >= 0
-          ? wInfoList[idx]['openUrl'] as String? ?? ''
-          : await controller.currentUrl() ?? '';
-      final origin = Uri.tryParse(tabUrl)?.host ?? '';
-      unawaited(DAppPermissionsTracker.record(origin, method));
-
-      try {
-        final result = await _dappHandler!.handleRequest(method, params);
-
-        // If chain was switched, notify the JS side
-        if (method == 'wallet_switchEthereumChain' ||
-            method == 'wallet_addEthereumChain') {
-          final newChainHex = JsEscapeUtils.escapeJs(_dappHandler!.chainIdHex);
-          final newAddr = JsEscapeUtils.escapeJs(_dappHandler!.address);
-          controller.runJavaScript(
-            'window.ethereum._n42SetChain("$newChainHex");'
-            'window.ethereum._n42SetAccounts(["$newAddr"]);',
-          );
-        }
-
-        // Serialize result safely — handles null, strings, numbers, lists, maps
-        final resultStr = JsEscapeUtils.escapeJs(json.encode(result));
-        controller.runJavaScript(
-          'window.ethereum._n42Cb($id, "$resultStr", null);',
-        );
-      } catch (e) {
-        // Build a proper EIP-1193 error object {code, message}
-        final Map<String, dynamic> errObj;
-        if (e is Map) {
-          errObj = {
-            'code': e['code'] ?? -32603,
-            'message': e['message'] ?? e.toString(),
-          };
-        } else {
-          errObj = {'code': -32603, 'message': e.toString()};
-        }
-        final errorStr = JsEscapeUtils.escapeJs(json.encode(errObj));
-        controller.runJavaScript(
-          'window.ethereum._n42Cb($id, null, "$errorStr");',
-        );
-      }
-    } catch (e) {
-      debugPrint('[Browser] DApp message parse error: $e');
-    }
-  }
-
-  /// Inject the EIP-1193 provider script into the given WebView controller.
-  /// Idempotent — safe to call multiple times (the JS IIFE guards with `_isN42`).
-  void _injectProviderScript(WebViewController controller) {
-    if (_dappHandler == null) return;
-    try {
-      final script = EthereumProviderJs.buildProviderScript(
-        _dappHandler!.chainIdHex,
-        [_dappHandler!.address],
-      );
-      controller.runJavaScript(script);
-    } catch (e) {
-      debugPrint('[Browser] Provider injection error: $e');
-    }
-  }
-
   void cleanWList() {
     // Clear all navigation delegates before disposal
     for (final wvc in wvcList) {
@@ -476,8 +430,6 @@ class BrowserProvider extends ChangeNotifier {
     showWList = false;
     wvcList = [];
     wInfoList = [];
-    _dappHandler?.dispose();
-    _dappHandler = null;
     wListIndex = -1;
     wListAdd();
   }

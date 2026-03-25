@@ -159,8 +159,7 @@ Widget buildPnlCard(
   final textColor   = _tc(context, AppThemeKeys.mainTextColor.name);
   final subColor    = textColor.withAlpha(153);
   final cardBg      = _tc(context, AppThemeKeys.itemBgColor.name);
-  ////暂时屏蔽Earn功能
-  //final accentColor = _tc(context, AppThemeKeys.mainBlueColor.name);
+  final accentColor = _tc(context, AppThemeKeys.mainBlueColor.name);
   final s = S.of(context);
 
   final summary      = CoinPnlSummary(trades);
@@ -196,12 +195,11 @@ Widget buildPnlCard(
                 ),
               ),
               const Spacer(),
-              ////暂时屏蔽Earn功能
-              /*GestureDetector(
+              GestureDetector(
                 onTap: onAddTrade,
                 child: Icon(Icons.add_circle_outline,
                     color: accentColor, size: ScreenUtil().setSp(30)),
-              ),*/
+              ),
             ],
           ),
           SizedBox(height: ScreenUtil().setWidth(12)),
