@@ -420,7 +420,8 @@ class _WalletManageState extends ConsumerState<WalletManage> {
                 ),
               ),
             );
-            if (isEdit != null) initData();
+            if (!mounted || isEdit == null) return;
+            await initData();
           },
         );
       },

@@ -25,6 +25,13 @@ enum BatchTransferState {
 /// 批量转账 Provider
 class BatchTransferProvider extends ChangeNotifier {
   final BatchTransferApi _api = BatchTransferApi();
+  bool _disposed = false;
+
+  @override
+  void notifyListeners() {
+    if (_disposed) return;
+    super.notifyListeners();
+  }
 
   BatchTransferState _state = BatchTransferState.initial;
   BatchTransferState get state => _state;
@@ -100,7 +107,10 @@ class BatchTransferProvider extends ChangeNotifier {
     try {
       final result = _api.parseCsv(csvContent, _decimals);
       _items = result.items;
-      _cachedTotalAmount = result.items.fold(BigInt.zero, (s, i) => s + i.amount);
+      _cachedTotalAmount = result.items.fold(
+        BigInt.zero,
+        (s, i) => s + i.amount,
+      );
       _parseErrors = result.errors;
 
       if (result.success) {
@@ -119,12 +129,14 @@ class BatchTransferProvider extends ChangeNotifier {
 
   /// 手动添加转账项
   void addItem(String toAddress, BigInt amount, {String? memo}) {
-    _items.add(BatchTransferItem(
-      id: 'item_${_items.length}',
-      toAddress: toAddress,
-      amount: amount,
-      memo: memo,
-    ));
+    _items.add(
+      BatchTransferItem(
+        id: 'item_${_items.length}',
+        toAddress: toAddress,
+        amount: amount,
+        memo: memo,
+      ),
+    );
     _cachedTotalAmount += amount;
 
     if (_state == BatchTransferState.initial) {
@@ -223,7 +235,8 @@ class BatchTransferProvider extends ChangeNotifier {
       );
 
       if (result.error) {
-        _errorMessage = result.data?.toString() ?? 'Failed to build transaction';
+        _errorMessage =
+            result.data?.toString() ?? 'Failed to build transaction';
         _state = BatchTransferState.error;
         notifyListeners();
         return null;
@@ -307,6 +320,12 @@ class BatchTransferProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  @override
+  void dispose() {
+    _disposed = true;
+    super.dispose();
+  }
+
   static final RegExp _trailingZeros = RegExp(r'0+$');
 
   /// 格式化金额显示
@@ -339,7 +358,9 @@ class BatchTransferProvider extends ChangeNotifier {
     final buf = StringBuffer();
     // UTF-8 BOM — Excel 识别中文不乱码
     buf.write('\uFEFF');
-    buf.writeln('No,Address,Amount ($_tokenSymbol),Memo,Status,TxHash,Error,Time');
+    buf.writeln(
+      'No,Address,Amount ($_tokenSymbol),Memo,Status,TxHash,Error,Time',
+    );
     final time = DateTime.now()
         .toIso8601String()
         .replaceFirst('T', ' ')
@@ -351,7 +372,8 @@ class BatchTransferProvider extends ChangeNotifier {
       final txHash = item.txHash ?? '';
       final error = _escapeCsvField(item.error ?? '');
       buf.writeln(
-          '${i + 1},${item.toAddress},$amount,$memo,${item.status.name},$txHash,$error,$time');
+        '${i + 1},${item.toAddress},$amount,$memo,${item.status.name},$txHash,$error,$time',
+      );
     }
     return buf.toString();
   }
