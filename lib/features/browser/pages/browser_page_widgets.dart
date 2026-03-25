@@ -376,6 +376,7 @@ extension _BrowserPageWidgets on _BrowserPageState {
   void _showAlertWidgetConnectDapp(String uri) {
     final sp = ScreenUtil().setSp;
     final sw = ScreenUtil().setWidth;
+    final navigator = Navigator.of(context);
 
     sheetBottom(
       context,
@@ -432,7 +433,15 @@ extension _BrowserPageWidgets on _BrowserPageState {
                 SizedBox(width: sw(30)),
                 Expanded(
                   child: buttonStyle2(context, () async {
-                    Navigator.pop(context);
+                    navigator.pop();
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      if (!mounted) return;
+                      navigator.push(
+                        MaterialPageRoute(
+                          builder: (context) => WalletConnectPage(uri),
+                        ),
+                      );
+                    });
                   }, S.of(context).g_key_78),
                 ),
               ],
