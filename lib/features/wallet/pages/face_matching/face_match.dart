@@ -136,9 +136,10 @@ class _FaceMatchState extends State<FaceMatch> with WidgetsBindingObserver {
   }
 
   Future<void> _imageCrop() async {
-    final imageData = createModel.imgFile!.readAsBytesSync();
-    final Uint8List? cropped = await Navigator.push<Uint8List>(
-      context,
+    final navigator = Navigator.of(context);
+    final imageData = await createModel.imgFile!.readAsBytes();
+    if (!mounted) return;
+    final Uint8List? cropped = await navigator.push<Uint8List>(
       MaterialPageRoute(builder: (_) => ImageCropPage(imageData)),
     );
     if (!mounted) return;
@@ -160,31 +161,44 @@ class _FaceMatchState extends State<FaceMatch> with WidgetsBindingObserver {
     if (load == Load.loading) return;
     if (!_hasImage) return;
 
+    bool completedWithExit = false;
     setState(() => load = Load.loading);
-    final MessageModel rmm =
-        await FaceApi().match(createModel.imgMini!, 'face2.jpg', type: 1);
-    if (!mounted) return;
-    setState(() => load = Load.finish);
+    try {
+      final MessageModel rmm =
+          await FaceApi().match(createModel.imgMini!, 'face2.jpg', type: 1);
+      if (!mounted) return;
 
-    if (rmm.error) {
-      ToastUtils.show(S.of(context).g_face_network_error);
-      Navigator.pop(context); // null → 失败
-      return;
-    }
+      if (rmm.error) {
+        ToastUtils.show(S.of(context).g_face_network_error);
+        completedWithExit = true;
+        Navigator.pop(context); // null → 失败
+        return;
+      }
 
-    final data = rmm.data;
-    if (data is! Map) {
-      ToastUtils.show(S.of(context).g_face_match_key3);
-      Navigator.pop(context); // null
-      return;
-    }
+      final data = rmm.data;
+      if (data is! Map) {
+        ToastUtils.show(S.of(context).g_face_match_key3);
+        completedWithExit = true;
+        Navigator.pop(context); // null
+        return;
+      }
 
-    if (data['match'] == true) {
-      final String address = (data['address'] ?? '').toString();
-      Navigator.pop(context, address); // 成功：返回地址字符串
-    } else {
-      ToastUtils.show(S.of(context).g_face_match_key3);
-      Navigator.pop(context); // null → 未匹配
+      if (data['match'] == true) {
+        final String address = (data['address'] ?? '').toString();
+        completedWithExit = true;
+        Navigator.pop(context, address); // 成功：返回地址字符串
+      } else {
+        ToastUtils.show(S.of(context).g_face_match_key3);
+        completedWithExit = true;
+        Navigator.pop(context); // null → 未匹配
+      }
+    } catch (e) {
+      if (!mounted) return;
+      ToastUtils.show(e.toString());
+    } finally {
+      if (mounted && !completedWithExit) {
+        setState(() => load = Load.finish);
+      }
     }
   }
 
