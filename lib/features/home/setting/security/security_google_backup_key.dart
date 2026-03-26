@@ -54,17 +54,26 @@ class SecurityGoogleBackupKeyState extends State<SecurityGoogleBackupKey>{
   Future<void> bindGoogleVerification()async{
     if(load==Load.loading)return;
     load=Load.loading;
-    UserInfoApi userInfoAPI=UserInfoApi();
-    MessageModel mm=await userInfoAPI.bindGoogle();
-    if (!mounted) return;
-    if(mm.error){
-      ToastUtils.show(S.of(context).google_verification_message3);
-    }else{
-      googleAuthStr=mm.data;
+    try {
+      UserInfoApi userInfoAPI=UserInfoApi();
+      MessageModel mm=await userInfoAPI.bindGoogle();
+      if (!mounted) return;
+      if(mm.error){
+        ToastUtils.show(S.of(context).google_verification_message3);
+      }else{
+        googleAuthStr=mm.data;
+      }
+    } catch (e) {
+      if (mounted) {
+        ToastUtils.show(e.toString());
+      }
+    } finally {
+      load=Load.finish;
+      if (mounted) {
+        setState(() {
+        });
+      }
     }
-    load=Load.finish;
-    setState(() {
-    });
   }
 
   @override
