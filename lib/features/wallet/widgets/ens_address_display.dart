@@ -100,6 +100,7 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
   String? _avatarUrl;
   bool _isLoading = true;
   bool _hasResolved = false;
+  int _resolveRequestId = 0;
 
   @override
   void initState() {
@@ -132,7 +133,11 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
 
   Future<void> _resolveEns() async {
     if (_hasResolved) return;
+    final requestId = ++_resolveRequestId;
+    final address = widget.address;
+    final coinType = widget.coinType;
     if (widget.address.isEmpty) {
+      if (!mounted || requestId != _resolveRequestId) return;
       setState(() => _isLoading = false);
       return;
     }
@@ -140,13 +145,25 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
     // 如果已知 ENS 名称，直接使用
     final knownName = widget.knownEnsName;
     if (knownName != null && knownName.isNotEmpty) {
+      if (!mounted ||
+          requestId != _resolveRequestId ||
+          widget.address != address ||
+          widget.coinType != coinType) {
+        return;
+      }
       _markResolved(ensName: knownName);
-      if (widget.showAvatar) _fetchAvatar(knownName);
+      if (widget.showAvatar) _fetchAvatar(knownName, requestId, address, coinType);
       return;
     }
 
     // 检查链是否支持 ENS
     if (!EnsService.chainSupportsEns(widget.coinType)) {
+      if (!mounted ||
+          requestId != _resolveRequestId ||
+          widget.address != address ||
+          widget.coinType != coinType) {
+        return;
+      }
       _markResolved();
       return;
     }
@@ -158,17 +175,40 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
         widget.address,
         coinType: widget.coinType,
       );
+      if (!mounted ||
+          requestId != _resolveRequestId ||
+          widget.address != address ||
+          widget.coinType != coinType) {
+        return;
+      }
       _markResolved(ensName: ensName);
-      if (ensName != null && widget.showAvatar) _fetchAvatar(ensName);
+      if (ensName != null && widget.showAvatar) {
+        _fetchAvatar(ensName, requestId, address, coinType);
+      }
     } catch (e) {
+      if (!mounted ||
+          requestId != _resolveRequestId ||
+          widget.address != address ||
+          widget.coinType != coinType) {
+        return;
+      }
       _markResolved();
     }
   }
 
-  Future<void> _fetchAvatar(String ensName) async {
+  Future<void> _fetchAvatar(
+    String ensName,
+    int requestId,
+    String address,
+    String coinType,
+  ) async {
     try {
       final avatarUrl = await _ensService.getAvatar(ensName);
-      if (mounted && avatarUrl != null) {
+      if (mounted &&
+          requestId == _resolveRequestId &&
+          widget.address == address &&
+          widget.coinType == coinType &&
+          avatarUrl != null) {
         setState(() => _avatarUrl = avatarUrl);
       }
     } catch (e) {
