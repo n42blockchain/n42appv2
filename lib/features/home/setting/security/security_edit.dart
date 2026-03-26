@@ -180,18 +180,26 @@ class SecurityEditState extends State<SecurityEdit> {
       if (!mounted) return;
 
       setState(() => _disableLoading = true);
-      final MessageModel mm = await UserInfoApi().unbindGoogle(code);
-      if (!mounted) return;
-      setState(() => _disableLoading = false);
-
-      if (mm.error) {
-        ToastUtils.show(S.of(context).g_2fa_disable_error);
-      } else {
-        // 服务器验证成功后才写入本地
-        securityMap['google'] = false;
-        await saveSecurity();
+      try {
+        final MessageModel mm = await UserInfoApi().unbindGoogle(code);
         if (!mounted) return;
-        ToastUtils.show(S.of(context).g_2fa_disable_success);
+        if (mm.error) {
+          ToastUtils.show(S.of(context).g_2fa_disable_error);
+        } else {
+          // 服务器验证成功后才写入本地
+          securityMap['google'] = false;
+          await saveSecurity();
+          if (!mounted) return;
+          ToastUtils.show(S.of(context).g_2fa_disable_success);
+        }
+      } catch (e) {
+        if (mounted) {
+          ToastUtils.show(e.toString());
+        }
+      } finally {
+        if (mounted) {
+          setState(() => _disableLoading = false);
+        }
       }
     } finally {
       codeCtrl.dispose();
