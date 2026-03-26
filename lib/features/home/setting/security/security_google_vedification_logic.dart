@@ -146,6 +146,7 @@ mixin _SecurityGoogleVedificationLogic on State<SecurityGoogleVedification> {
     }
 
     final walletAll = await SPUtil().getWalletInfo();
+    if (!mounted) return false;
     WalletInfo? walletInfo;
 
     if (walletAll != null) {
