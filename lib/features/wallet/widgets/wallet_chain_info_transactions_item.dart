@@ -277,6 +277,7 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
       context,
       MaterialPageRoute(builder: (_) => page),
     );
+    if (!context.mounted) return;
     if (r == true) onBack();
   }
 
