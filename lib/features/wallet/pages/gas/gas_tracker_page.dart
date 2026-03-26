@@ -51,6 +51,7 @@ class _GasTrackerPageState extends State<GasTrackerPage> {
   Map<String, GasAlertConfig> _alertConfigs = {};
   bool _isLoading = true;
   Timer? _refreshTimer;
+  int _refreshGeneration = 0;
 
   static const _tokenViewApi = TokenViewEnhancedApi();
 
@@ -111,28 +112,34 @@ class _GasTrackerPageState extends State<GasTrackerPage> {
   }
 
   Future<void> _loadAlertConfigs() async {
-    final configs = await GasAlertService.loadAll();
-    if (mounted) setState(() => _alertConfigs = configs);
+    try {
+      final configs = await GasAlertService.loadAll();
+      if (mounted) setState(() => _alertConfigs = configs);
+    } catch (e) {
+      debugPrint('Failed to load gas alert configs: $e');
+    }
   }
 
   Future<void> _fetchAllGasData() async {
+    final generation = ++_refreshGeneration;
     await Future.wait([
-      ..._networks.map(_fetchGasForNetwork),
-      _fetchTokenViewData('eth'),
-      _fetchTokenViewData('bnb'),
+      ..._networks.map((network) => _fetchGasForNetwork(network, generation)),
+      _fetchTokenViewData('eth', generation),
+      _fetchTokenViewData('bnb', generation),
     ]);
-    if (mounted) setState(() => _isLoading = false);
+    if (!mounted || generation != _refreshGeneration) return;
+    setState(() => _isLoading = false);
     // 每次刷新后检查提醒阈值
     _checkAlerts();
   }
 
-  Future<void> _fetchTokenViewData(String chain) async {
+  Future<void> _fetchTokenViewData(String chain, int generation) async {
     try {
       final results = await Future.wait([
         _tokenViewApi.getGasNextBlock(chain),
         _tokenViewApi.getPendingStat(chain),
       ]);
-      if (!mounted) return;
+      if (!mounted || generation != _refreshGeneration) return;
       setState(() {
         final symbol = _chainToSymbol(chain);
         if (results[0] != null) {
@@ -153,7 +160,10 @@ class _GasTrackerPageState extends State<GasTrackerPage> {
     _ => chain.toUpperCase(),
   };
 
-  Future<void> _fetchGasForNetwork(NetworkConfig network) async {
+  Future<void> _fetchGasForNetwork(
+    NetworkConfig network,
+    int generation,
+  ) async {
     try {
       final rpcUrl = _getRpcUrl(network.symbol);
       if (rpcUrl.isEmpty) return;
@@ -174,7 +184,7 @@ class _GasTrackerPageState extends State<GasTrackerPage> {
 
         final eip1559 = await _fetchEip1559(client, rpcUrl);
 
-        if (mounted) {
+        if (mounted && generation == _refreshGeneration) {
           setState(() {
             _gasData[network.symbol] = NetworkGasData(
               gasPrice: gasPriceGwei,
