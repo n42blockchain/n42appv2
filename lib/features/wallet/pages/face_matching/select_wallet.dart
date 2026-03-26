@@ -31,6 +31,7 @@ class SelectWallet extends ConsumerStatefulWidget {
 
 class _SelectWalletState extends ConsumerState<SelectWallet> {
   List<WalletInfo> walletList = [];
+  List<int> _walletSourceIndexes = [];
   Load _load = Load.loading;
 
   @override
@@ -40,14 +41,19 @@ class _SelectWalletState extends ConsumerState<SelectWallet> {
   }
 
   Future<void> _initData() async {
-    final list = ref
-        .read(wapBridgeProvider)
-        .walletInfoLsit
-        .where(walletSupportsFaceBinding)
-        .toList();
+    final allWallets = ref.read(wapBridgeProvider).walletInfoLsit;
+    final sourceIndexes = <int>[];
+    final list = <WalletInfo>[];
+    for (var i = 0; i < allWallets.length; i++) {
+      final wallet = allWallets[i];
+      if (!walletSupportsFaceBinding(wallet)) continue;
+      sourceIndexes.add(i);
+      list.add(wallet);
+    }
     if (!mounted) return;
     setState(() {
       walletList = list;
+      _walletSourceIndexes = sourceIndexes;
       _load = Load.finish;
     });
   }
@@ -130,31 +136,40 @@ class _SelectWalletState extends ConsumerState<SelectWallet> {
       return;
     }
 
-    final int pathIndex = coinInfo['pathIndex'] ?? 0;
-    final path = getPathWithIndex(
-      coinInfo['baseInfo']['path']['legacy'],
-      pathIndex,
-    );
+    try {
+      final int pathIndex = coinInfo['pathIndex'] ?? 0;
+      final path = getPathWithIndex(
+        coinInfo['baseInfo']['path']['legacy'],
+        pathIndex,
+      );
 
-    final Map addressMap = await Trustdart().generateAddress(
-      coinInfo['baseInfo']['coinType'],
-      path,
-      'legacy',
-      mnemonic: info.mnemonic ?? '',
-      pk: info.privateKey ?? '',
-    );
-    if (!mounted) return;
+      final Map addressMap = await Trustdart().generateAddress(
+        coinInfo['baseInfo']['coinType'],
+        path,
+        'legacy',
+        mnemonic: info.mnemonic ?? '',
+        pk: info.privateKey ?? '',
+      );
+      if (!mounted) return;
 
-    final rData = await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => FaceBinding(
-          1,
-          address: addressMap['legacy'] as String?,
-          walletIndex: index,
+      final originalIndex = index >= 0 && index < _walletSourceIndexes.length
+          ? _walletSourceIndexes[index]
+          : index;
+
+      final rData = await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => FaceBinding(
+            1,
+            address: addressMap['legacy'] as String?,
+            walletIndex: originalIndex,
+          ),
         ),
-      ),
-    );
-    if (!mounted) return;
-    Navigator.pop(context, rData);
+      );
+      if (!mounted) return;
+      Navigator.pop(context, rData);
+    } catch (e) {
+      if (!mounted) return;
+      ToastUtils.show(e.toString());
+    }
   }
 }
