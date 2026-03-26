@@ -137,10 +137,10 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
       if (price.isEmpty) return;
 
       final signData = <String, dynamic>{
-        "referenceGasPrice": totalGasPrice,
-        "gasBudget": totalGasPrice.toInt() * 1.2,
+        "referenceGasPrice": totalGasPrice.toInt(),
+        "gasBudget": (totalGasPrice.toDouble() * 1.2).toInt(),
         "toAddress": toTextEditingController.text,
-        "amount": BigInt.parse(price),
+        "amount": transferValue.toInt(),
         "utxo": utxos,
       };
       final SuiApi suiApi = SuiApi(isTest: widget.coinModel.isTest);

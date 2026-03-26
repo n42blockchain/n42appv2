@@ -27,6 +27,14 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
     "eth_signTypedData",
     "eth_signTypedData_v3",
     "eth_signTypedData_v4",
+    // Basic EIP-1193 provider methods — DApps like Uniswap call these
+    // immediately after session establishment to verify the connection.
+    "eth_chainId",
+    "eth_accounts",
+    "eth_requestAccounts",
+    "net_version",
+    "wallet_switchEthereumChain",
+    "wallet_addEthereumChain",
   ];
 
   /// TRON methods registered for WalletConnect session handling.
@@ -205,7 +213,15 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
       namespace = {};
       // Only include eip155 if DApp requested EVM chains (non-empty accounts)
       if (accounts.isNotEmpty) {
+        // Derive chain IDs from accounts ("eip155:1:0xABC" → "eip155:1").
+        // WalletConnect v2 spec (CAIP-25) requires the `chains` field in the
+        // approved namespace; without it DApps like Uniswap fail validation.
+        final eip155Chains = accounts
+            .map((a) => a.split(':').take(2).join(':'))
+            .toSet()
+            .toList();
         namespace!['eip155'] = wallet_connect.Namespace(
+          chains: eip155Chains,
           accounts: accounts,
           methods: _ethMethods,
           events: _namespaceEvents,
@@ -298,6 +314,29 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
   // ── Request dispatch ──────────────────────────────────────────────────────
 
   Future<void> setActionDataMap(wallet_connect.SessionRequestEvent eventData) async {
+    // ── Auto-respond to stateless RPC calls (no UI, no web3 client needed) ──
+    // DApps like Uniswap call these immediately after session establishment to
+    // validate the connection. Rejecting them causes "connection failed" errors.
+    switch (eventData.method) {
+      case "eth_chainId":
+        _respondEthChainId(eventData);
+        return;
+      case "net_version":
+        _respondNetVersion(eventData);
+        return;
+      case "eth_accounts":
+      case "eth_requestAccounts":
+        _respondEthAccounts(eventData);
+        return;
+      case "wallet_switchEthereumChain":
+        _handleSwitchEthereumChain(eventData);
+        return;
+      case "wallet_addEthereumChain":
+        // Acknowledge without modifying the chain list.
+        _respondSuccess(eventData, null);
+        return;
+    }
+
     if (eventData.params == null) {
       viewStateDeal(WalletConnectState.error, params: 'Invalid request: params is null');
       return;
@@ -526,6 +565,108 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
     };
   }
 
+  // ── Stateless RPC auto-responders ─────────────────────────────────────────
+
+  /// Respond with the current chain ID in EIP-155 hex format (e.g. "0x1").
+  void _respondEthChainId(wallet_connect.SessionRequestEvent eventData) {
+    String? hex;
+    if (coinModelsIndex >= 0 && coinModelsIndex < coinModels.length) {
+      final cm = coinModels[coinModelsIndex];
+      final id = (cm.isTest ? cm.coin['chainId_test'] : cm.coin['chainId']);
+      if (id != null) {
+        hex = '0x${(id as int).toRadixString(16)}';
+      }
+    }
+    // Fall back to Ethereum mainnet if no chain is selected.
+    _respondSuccess(eventData, hex ?? '0x1');
+  }
+
+  /// Respond with the current chain ID as a decimal string (net_version).
+  void _respondNetVersion(wallet_connect.SessionRequestEvent eventData) {
+    int chainId = 1;
+    if (coinModelsIndex >= 0 && coinModelsIndex < coinModels.length) {
+      final cm = coinModels[coinModelsIndex];
+      final id = (cm.isTest ? cm.coin['chainId_test'] : cm.coin['chainId']);
+      if (id != null) chainId = id as int;
+    }
+    _respondSuccess(eventData, chainId.toString());
+  }
+
+  /// Respond with the list of EVM addresses in the current session.
+  void _respondEthAccounts(wallet_connect.SessionRequestEvent eventData) {
+    final addrs = coinModels
+        .where((cm) => cm.coin['blockchainType'] == BlockchainType.Ethereum.name)
+        .map((cm) => cm.address?.toString())
+        .where((a) => a != null && a.isNotEmpty && a != 'null')
+        .cast<String>()
+        .toList();
+    _respondSuccess(eventData, addrs);
+  }
+
+  /// Handle wallet_switchEthereumChain: update active chain if supported,
+  /// otherwise reject with EIP-1193 error code 4902.
+  void _handleSwitchEthereumChain(wallet_connect.SessionRequestEvent eventData) {
+    try {
+      final params = eventData.params;
+      if (params is List && params.isNotEmpty) {
+        final chainParams = params[0] as Map<String, dynamic>;
+        final rawId = chainParams['chainId'] as String? ?? '';
+        final requestedId = rawId.startsWith('0x')
+            ? int.tryParse(rawId.substring(2), radix: 16)
+            : int.tryParse(rawId);
+        if (requestedId != null) {
+          final idx = coinModels.indexWhere((cm) {
+            if (cm.coin['blockchainType'] != BlockchainType.Ethereum.name) {
+              return false;
+            }
+            final id = (cm.isTest
+                    ? cm.coin['chainId_test']
+                    : cm.coin['chainId']) as int?;
+            return id == requestedId;
+          });
+          if (idx != -1) {
+            setCoinModelsIndex(idx);
+            _respondSuccess(eventData, null);
+            return;
+          }
+        }
+      }
+      // Chain not in our supported list — reject per EIP-1193 spec.
+      signClient?.respondSessionRequest(
+        topic: eventData.topic,
+        response: wallet_connect.JsonRpcResponse(
+          id: eventData.id,
+          error: wallet_connect.JsonRpcError(
+            code: 4902,
+            message:
+                'Unrecognized chain ID. Try adding the chain using wallet_addEthereumChain.',
+          ),
+        ),
+      );
+    } catch (e) {
+      debugPrint('[WalletConnect] wallet_switchEthereumChain error: $e');
+      _rejectUnsupportedMethod(eventData);
+    }
+  }
+
+  /// Send a successful JSON-RPC response.
+  void _respondSuccess(
+    wallet_connect.SessionRequestEvent eventData,
+    dynamic result,
+  ) {
+    try {
+      signClient?.respondSessionRequest(
+        topic: eventData.topic,
+        response: wallet_connect.JsonRpcResponse(
+          id: eventData.id,
+          result: result,
+        ),
+      );
+    } catch (e) {
+      debugPrint('[WalletConnect] Error responding to ${eventData.method}: $e');
+    }
+  }
+
   /// Reject an unsupported method with a JSON-RPC error so the DApp
   /// doesn't hang indefinitely waiting for a response.
   void _rejectUnsupportedMethod(wallet_connect.SessionRequestEvent eventData) {
@@ -619,8 +760,11 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
       final blockchainType = cm.coin['blockchainType'];
 
       if (blockchainType == BlockchainType.Ethereum.name) {
+        final rawAddr = cm.address;
+        if (rawAddr == null) continue; // Skip chains without a derived address
+        final addr = rawAddr.toString();
+        if (addr.isEmpty || addr == 'null') continue;
         final chainId = "eip155:${cm.isTest ? cm.coin['chainId_test'] : cm.coin['chainId']}";
-        final addr = cm.address.toString();
         accounts.add("$chainId:$addr");
         for (final method in _ethMethods) {
           signClient!.registerRequestHandler(chainId: chainId, method: method);

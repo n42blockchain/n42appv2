@@ -460,6 +460,13 @@ class KeyManagementHandler {
             "THETA" -> CoinType.THETA
             "ADA" -> CoinType.CARDANO
             "EGLD" -> CoinType.MULTIVERSX
+            "ZKSYNC" -> CoinType.ETHEREUM
+            "LINEA" -> CoinType.ETHEREUM
+            "SCROLL" -> CoinType.ETHEREUM
+            "MNT" -> CoinType.ETHEREUM
+            "BLAST" -> CoinType.ETHEREUM
+            "GNOSIS" -> CoinType.ETHEREUM
+            "NOVA" -> CoinType.ETHEREUM
             else -> CoinType.ETHEREUM
         }
     }
@@ -534,6 +541,13 @@ class KeyManagementHandler {
             "THETA" -> "Theta"
             "ADA" -> "Cardano"
             "EGLD" -> "MultiversX"
+            "ZKSYNC" -> "Ethereum"
+            "LINEA" -> "Ethereum"
+            "SCROLL" -> "Ethereum"
+            "MNT" -> "Ethereum"
+            "BLAST" -> "Ethereum"
+            "GNOSIS" -> "Ethereum"
+            "NOVA" -> "Ethereum"
             else -> "Ethereum"
         }
     }

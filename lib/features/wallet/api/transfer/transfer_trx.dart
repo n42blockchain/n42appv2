@@ -151,15 +151,14 @@ mixin _TransferTrxMixin on _TransferBaseMixin {
       "parentHash": blockInfo['parentHash'],
       "version": blockInfo['version'],
       "number": blockInfo['number'],
-      "feeLimit": totalGasPrice.toString(),
+      "feeLimit": totalGasPrice.toInt(),
     };
     if (contractAddress != "") {
       txData['cmd'] = "TRC20";
       txData['contractAddress'] = contractAddress;
       txData['amount'] = dataUtils.bigIntToHex(valuePrice, need0x: false);
     } else {
-      // Use toString() instead of toInt() to prevent overflow for large amounts
-      txData['amount'] = valuePrice.toString();
+      txData['amount'] = valuePrice.toInt();
       txData['cmd'] = CoinType.TRX.name;
     }
 

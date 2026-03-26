@@ -109,15 +109,15 @@ mixin _TransferCosmosFamilyMixin on _TransferBaseMixin {
 
     int lt = ledgerTimestamp.data / 1000000 + 60;
     Map<String, dynamic> signMap = {
-      "amount": valuePrice,
+      "amount": valuePrice.toInt(),
       "toAddress": toAddress,
-      "sequenceNumber": sequenceNumber,
+      "SequenceNumber": sequenceNumber.data,
       "fromAddress": fromAddress,
-      "contractAddress": "contractAddress",
+      "contractAddress": contractAddress,
       "contractModule": contractModule,
       "contractName": contractName,
       "gasUnitPrice": gas,
-      "maxGasAmount": totalGasPrice,
+      "maxGasAmount": totalGasPrice.toInt(),
       "expirationTimestampSecs": lt,
       "chainId": chainId,
     };
@@ -144,12 +144,12 @@ mixin _TransferCosmosFamilyMixin on _TransferBaseMixin {
 
     int expireAt = DateTime.now().add(Duration(seconds: 60)).millisecondsSinceEpoch ~/ 1000;
     Map<String, dynamic> signMap = {
-      "amount": valuePrice.toString(),
+      "amount": dataUtils.bigIntToHex(valuePrice, need0x: false),
       "toAddress": toAddress,
       "sequenceNumber": sequenceNumber.data,
       "fromAddress": fromAddress,
       "contractAddress": contractAddress,
-      "maxGasAmount": totalGasPrice.toString(),
+      "maxGasAmount": dataUtils.bigIntToHex(totalGasPrice, need0x: false),
       "expireAt": expireAt,
     };
     final signResult = await _signCosmosTx(coinType, path, signMap, privateKey: privateKey);
@@ -316,8 +316,8 @@ mixin _TransferCosmosFamilyMixin on _TransferBaseMixin {
     Map<String, dynamic> signMap = {
       "chainId": "cosmoshub-4",
       "toAddress": toAddress,
-      "accountNumber": amm.data['account_number'],
-      "sequence": amm.data['sequence'],
+      "accountNumber": amm.data['account_number'].toString(),
+      "sequence": amm.data['sequence'].toString(),
       "memo": "memo",
       "fee": {
         "gas": totalGasPrice.toString(),

@@ -43,6 +43,17 @@ class _BrowserPageState extends ConsumerState<BrowserPage> {
   Timer? _clipboardTimer;
   String? _lastClipboardUri;
 
+  /// Guards against showing two WalletConnect sheets simultaneously.
+  /// Both the JS-channel callback and the clipboard poller funnel through
+  /// [_showWalletConnectSheet] so only one sheet can be open at a time.
+  bool _sheetIsOpen = false;
+
+  /// Timestamp of the last sheet close. Used to enforce a brief cooldown so
+  /// the DApp's automatic session-proposal retry doesn't immediately reopen
+  /// the sheet after the user dismisses it.
+  DateTime? _lastSheetCloseTime;
+  static const _sheetReopenCooldown = Duration(seconds: 5);
+
   @override
   void initState() {
     super.initState();
@@ -85,14 +96,40 @@ class _BrowserPageState extends ConsumerState<BrowserPage> {
 
     _lastClipboardUri = text;
     if (!mounted) return;
-    WalletConnectSheet.show(context, normalized);
+    _showWalletConnectSheet(normalized);
+  }
+
+  /// Show a WalletConnect sheet, but only if no sheet is already open.
+  /// Both the JS-channel callback and the clipboard poller call this so
+  /// the second trigger (whichever arrives first) is silently dropped.
+  Future<void> _showWalletConnectSheet(String url) async {
+    if (_sheetIsOpen) return;
+    // Cooldown guard: when the DApp sends a new session_propose immediately
+    // after a failed attempt (same pairing, auto-retry), block the reopen for
+    // a few seconds. User-initiated calls always provide a non-empty url, so
+    // they bypass the cooldown.
+    if (url.isEmpty && _lastSheetCloseTime != null) {
+      final elapsed = DateTime.now().difference(_lastSheetCloseTime!);
+      if (elapsed < _sheetReopenCooldown) return;
+    }
+    _sheetIsOpen = true;
+    try {
+      await WalletConnectSheet.show(context, url);
+    } finally {
+      _sheetIsOpen = false;
+      _lastSheetCloseTime = DateTime.now();
+      // Reset the dedup URI so the same WC link can be retried after close.
+      // Do NOT reset _lastClipboardUri — keeps the clipboard poller from
+      // re-triggering on the URI that's still sitting in the clipboard.
+      _browserProvider?.lastDispatchedWcUri = null;
+    }
   }
 
   void _initWalletConnect() {
     _browserProvider ??= ref.read(browserNotifierProvider);
     final bp = _browserProvider!;
     bp.connectDAPPCallBack = (String url) {
-      WalletConnectSheet.show(context, url);
+      _showWalletConnectSheet(url);
     };
     bp.phishingCallBack = (String url, VoidCallback proceed) {
       _showPhishingWarning(url, proceed);
@@ -150,7 +187,7 @@ class _BrowserPageState extends ConsumerState<BrowserPage> {
       if (prev?.walletConnectState == WalletConnectState.disconnect &&
           next.walletConnectState == WalletConnectState.selectChain) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (mounted) WalletConnectSheet.show(context, "");
+          if (mounted) _showWalletConnectSheet("");
         });
       }
     });

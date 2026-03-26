@@ -161,6 +161,17 @@ mixin WalletConnectConnection on ChangeNotifier {
       notifyListeners();
       return true;
     } catch (e) {
+      // "Pairing already exists" is non-fatal: the DApp may reuse the same URI
+      // on a retry. The existing pairing is still valid — just wait for the
+      // next session_propose event instead of entering error state.
+      final msg = e.toString().toLowerCase();
+      if (msg.contains('pairing already exists') ||
+          msg.contains('already exists') ||
+          msg.contains('already connected')) {
+        debugPrint('[WalletConnect] pair: $e — treating as non-fatal, waiting for session_propose');
+        notifyListeners();
+        return true;
+      }
       await viewStateDeal(WalletConnectState.error, params: e.toString());
       return false;
     }
@@ -356,6 +367,8 @@ mixin WalletConnectConnection on ChangeNotifier {
 
   /// Find a coin model matching the given WalletConnect chain ID string.
   CoinModel? coinModelFind(String chainId) {
+    // TODO: remove this debug filter once Blast connection issue is resolved.
+    if (chainId == 'eip155:81457') return null;
     return coinModels.where((element) {
       final blockchainType = element.coin['blockchainType'];
       if (blockchainType == BlockchainType.Ethereum.name) {

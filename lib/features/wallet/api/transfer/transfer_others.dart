@@ -213,6 +213,7 @@ mixin _TransferOthersMixin on _TransferBaseMixin {
       "gasLimit": 1101,
       "storageLimit": 257,
       "reveal": true,
+      "contractAddres": "",
     };
     XtzApi xtzApi = XtzApi();
     MessageModel mmCounter = await xtzApi.getCounterXtz(fromAddress, isTest);
@@ -460,8 +461,8 @@ mixin _TransferOthersMixin on _TransferBaseMixin {
       "version": version,
       "nonce": balanceMM.data['nonce'] + 1,
       "toAddress": toAddress,
-      "amount": valuePrice.toString(),
-      "gasPrice": gasPrice.toString(),
+      "amount": dataUtils.bigIntToHex(valuePrice, need0x: false),
+      "gasPrice": dataUtils.bigIntToHex(gasPrice, need0x: false),
       "gasLimit": gas.toString(),
       "code": "",
       "data": "",

@@ -24,6 +24,9 @@
 		52D8711E2C202EF100A5ACA8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 52D8711D2C202EF100A5ACA8 /* GoogleService-Info.plist */; };
 		690ACF652F1628AA00F9B66D /* MobileSdk.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69240F822EE6C4CD00C6CEE7 /* MobileSdk.xcframework */; };
 		690ACF662F1628CC00F9B66D /* MobileSdk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69240F832EE6C4CD00C6CEE7 /* MobileSdk.swift */; };
+		6980C3142F74E2520072AF1D /* WalletCorePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6980C3112F74E2520072AF1D /* WalletCorePlugin.swift */; };
+		6980C3152F74E2520072AF1D /* WalletCorePlugin+KeyManagement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6980C3122F74E2520072AF1D /* WalletCorePlugin+KeyManagement.swift */; };
+		6980C3162F74E2520072AF1D /* WalletCorePlugin+Signing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6980C3132F74E2520072AF1D /* WalletCorePlugin+Signing.swift */; };
 		69D7DAC12F15E36E004CA1FA /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D7DAC02F15E36E004CA1FA /* WebSocketManager.swift */; };
 		69D7DAC32F15EC6F004CA1FA /* TrustdartPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D7DAC22F15EC6F004CA1FA /* TrustdartPlugin.swift */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
@@ -92,6 +95,9 @@
 		69240F802EE6C4CD00C6CEE7 /* mobile_sdk.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mobile_sdk.h; sourceTree = "<group>"; };
 		69240F822EE6C4CD00C6CEE7 /* MobileSdk.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = MobileSdk.xcframework; sourceTree = "<group>"; };
 		69240F832EE6C4CD00C6CEE7 /* MobileSdk.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileSdk.swift; sourceTree = "<group>"; };
+		6980C3112F74E2520072AF1D /* WalletCorePlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletCorePlugin.swift; sourceTree = "<group>"; };
+		6980C3122F74E2520072AF1D /* WalletCorePlugin+KeyManagement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WalletCorePlugin+KeyManagement.swift"; sourceTree = "<group>"; };
+		6980C3132F74E2520072AF1D /* WalletCorePlugin+Signing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WalletCorePlugin+Signing.swift"; sourceTree = "<group>"; };
 		69D5E1C02EFA6F6400CAF028 /* libmobile_sdk.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmobile_sdk.a; path = "../../../Downloads/n42 doc/mobile-sdk-ios/MobileSdk.xcframework/ios-arm64/libmobile_sdk.a"; sourceTree = "<group>"; };
 		69D5E1C22EFA6F7800CAF028 /* libmobile_sdk.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmobile_sdk.a; path = "../../../Downloads/n42 doc/mobile-sdk-ios/MobileSdk.xcframework/ios-x86_64-simulator/libmobile_sdk.a"; sourceTree = "<group>"; };
 		69D7DAC02F15E36E004CA1FA /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
@@ -221,6 +227,9 @@
 		97C146E51CF9000F007C117D = {
 			isa = PBXGroup;
 			children = (
+				6980C3112F74E2520072AF1D /* WalletCorePlugin.swift */,
+				6980C3122F74E2520072AF1D /* WalletCorePlugin+KeyManagement.swift */,
+				6980C3132F74E2520072AF1D /* WalletCorePlugin+Signing.swift */,
 				69240F812EE6C4CD00C6CEE7 /* include */,
 				69240F822EE6C4CD00C6CEE7 /* MobileSdk.xcframework */,
 				69240F852EE6C4CD00C6CEE7 /* Swift */,
@@ -312,6 +321,7 @@
 			buildPhases = (
 				B60443F1BA6839E08233EFFF /* [CP] Check Pods Manifest.lock */,
 				526F3A0A2C10438C00FF9273 /* Embed Foundation Extensions */,
+				788FCFDB92E15FF0BE84D871 /* [Fix] Missing framework Info.plist */,
 				9740EEB61CF901F6004384FC /* Run Script */,
 				97C146EA1CF9000F007C117D /* Sources */,
 				97C146EB1CF9000F007C117D /* Frameworks */,
@@ -436,6 +446,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" embed_and_thin\n";
+		};
+		788FCFDB92E15FF0BE84D871 /* [Fix] Missing framework Info.plist */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "[Fix] Missing framework Info.plist";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "find \"$BUILT_PRODUCTS_DIR/$FRAMEWORKS_FOLDER_PATH\" -name \"*.framework\" | while read fw; do\n  plist=\"$fw/Info.plist\"\n  if [ ! -f \"$plist\" ]; then\n    name=$(basename \"$fw\" .framework)\n    /usr/libexec/PlistBuddy -c \"Add :CFBundleIdentifier string org.grpc.$name\" \\\n      -c \"Add :CFBundleInfoDictionaryVersion string 6.0\" \\\n      -c \"Add :CFBundlePackageType string FMWK\" \\\n      -c \"Add :CFBundleShortVersionString string 1.0\" \\\n      -c \"Add :CFBundleVersion string 1\" \\\n      \"$plist\" 2>/dev/null || true\n  fi\ndone\n";
 		};
 		884D19DC5AA2CCB07E010457 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -579,6 +607,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6980C3142F74E2520072AF1D /* WalletCorePlugin.swift in Sources */,
+				6980C3152F74E2520072AF1D /* WalletCorePlugin+KeyManagement.swift in Sources */,
+				6980C3162F74E2520072AF1D /* WalletCorePlugin+Signing.swift in Sources */,
 				690ACF662F1628CC00F9B66D /* MobileSdk.swift in Sources */,
 				69D7DAC32F15EC6F004CA1FA /* TrustdartPlugin.swift in Sources */,
 				526F3A0E2C10466E00FF9273 /* avPlay.swift in Sources */,
@@ -689,6 +720,7 @@
 				CURRENT_PROJECT_VERSION = 51;
 				DEVELOPMENT_TEAM = CFRXH38L48;
 				ENABLE_BITCODE = NO;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FLUTTER_BUILD_NAME = 1.0.16;
 				FLUTTER_BUILD_NUMBER = 51;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1258,6 +1290,7 @@
 				CURRENT_PROJECT_VERSION = 51;
 				DEVELOPMENT_TEAM = CFRXH38L48;
 				ENABLE_BITCODE = NO;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FLUTTER_BUILD_NAME = 1.0.16;
 				FLUTTER_BUILD_NUMBER = 51;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1539,6 +1572,7 @@
 				CURRENT_PROJECT_VERSION = 51;
 				DEVELOPMENT_TEAM = CFRXH38L48;
 				ENABLE_BITCODE = NO;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FLUTTER_BUILD_NAME = 1.0.16;
 				FLUTTER_BUILD_NUMBER = 51;
 				FRAMEWORK_SEARCH_PATHS = (

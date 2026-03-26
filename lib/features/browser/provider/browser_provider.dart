@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/security/phishing_detector.dart';
@@ -204,7 +205,27 @@ class BrowserProvider extends ChangeNotifier {
           _tryHandleWalletConnect(message.message);
         },
       )
-      ..loadRequest(Uri.parse(url));
+      // Use a desktop user agent so DApps (e.g. Uniswap/@reown/appkit) present
+      // the QR-code flow instead of the mobile deep-link flow, which fails
+      // inside a WebView because wc:// cannot be handled by an external wallet.
+      ..setUserAgent(
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) '
+        'AppleWebKit/605.1.15 (KHTML, like Gecko) '
+        'Version/17.0 Safari/605.1.15',
+      )
+      ..setOnConsoleMessage((JavaScriptConsoleMessage msg) {
+        if (kDebugMode) {
+          debugPrint('[DApp][${msg.level.name}] ${msg.message}');
+        }
+      });
+
+    // Clear localStorage via the native WebKit data store BEFORE loading the
+    // page so stale WalletConnect sessions (which may carry invalid "null"
+    // addresses from a previous pairing) are gone before any page JS runs.
+    // Both operations are queued on the same platform channel in FIFO order,
+    // so clearLocalStorage is guaranteed to complete first.
+    unawaited(webViewController.clearLocalStorage());
+    unawaited(webViewController.loadRequest(Uri.parse(url)));
 
     // #docregion platform_features
     if (webViewController.platform is AndroidWebViewController) {
@@ -292,7 +313,9 @@ class BrowserProvider extends ChangeNotifier {
 
   /// Last WC URI dispatched to [connectDAPPCallBack].  Used to deduplicate
   /// rapid-fire events from both the JS channel and the clipboard poller.
-  String? _lastDispatchedWcUri;
+  /// Reset by [BrowserPage] when the WalletConnect sheet closes so that
+  /// the same URI can be reused on a retry attempt.
+  String? lastDispatchedWcUri;
 
   /// Try to handle a WalletConnect URI; returns true if handled.
   bool _tryHandleWalletConnect(String wcUri) {
@@ -300,9 +323,9 @@ class BrowserProvider extends ChangeNotifier {
     if (normalizedWcUri == null) return false;
     // Deduplicate: the JS channel may fire multiple times for the same URI
     // (copy event + clipboard.writeText both firing).
-    if (normalizedWcUri == _lastDispatchedWcUri) return true;
+    if (normalizedWcUri == lastDispatchedWcUri) return true;
     if (connectDAPPCallBack == null) return false;
-    _lastDispatchedWcUri = normalizedWcUri;
+    lastDispatchedWcUri = normalizedWcUri;
     connectDAPPCallBack!(normalizedWcUri);
     return true;
   }
@@ -312,6 +335,59 @@ class BrowserProvider extends ChangeNotifier {
   /// via [addJavaScriptChannels] so it is always available on window.
   static const _wcClipboardInterceptScript = r'''
 (function() {
+  // ── Clear stale WalletConnect localStorage ───────────────────────────────
+  // A previous session may have stored an invalid ("null") address. Purge all
+  // WalletConnect / @reown/appkit keys so the DApp starts a fresh pairing.
+  if (!window.__flutterWcStorageCleared) {
+    window.__flutterWcStorageCleared = true;
+    try {
+      var toRemove = [];
+      for (var i = 0; i < localStorage.length; i++) {
+        var k = localStorage.key(i);
+        if (k && (
+          k.indexOf('wc@') === 0 ||
+          k.indexOf('@walletconnect') === 0 ||
+          k.indexOf('W3M') !== -1 ||
+          k.indexOf('@w3m') !== -1 ||
+          k.indexOf(':core:') !== -1 ||
+          k.indexOf('walletconnect') !== -1
+        )) {
+          toRemove.push(k);
+        }
+      }
+      for (var j = 0; j < toRemove.length; j++) {
+        try { localStorage.removeItem(toRemove[j]); } catch(e2) {}
+      }
+    } catch(e) {}
+  }
+
+  // ── iOS WebView masking ──────────────────────────────────────────────────
+  // @reown/appkit and similar DApp SDKs check window.webkit.messageHandlers
+  // to detect a mobile WebView, then fall back to deep-link mode (wc://) which
+  // fails inside a WebView. We hide webkit ONCE per page load so DApps treat
+  // this as a standard desktop browser and show the QR-code flow instead.
+  // FlutterWcClipboard is already registered as a global by the framework;
+  // we patch its postMessage to hold a direct reference to the native handler
+  // so it keeps working after webkit is hidden.
+  if (!window.__flutterWebkitHidden) {
+    window.__flutterWebkitHidden = true;
+    try {
+      if (window.webkit && window.webkit.messageHandlers) {
+        var _nativeHandler = window.webkit.messageHandlers['FlutterWcClipboard'];
+        if (window.FlutterWcClipboard && _nativeHandler) {
+          window.FlutterWcClipboard.postMessage = function(msg) {
+            _nativeHandler.postMessage([String(msg)]);
+          };
+        }
+        Object.defineProperty(window, 'webkit', { get: function() { return undefined; }, configurable: true });
+      }
+    } catch(e) {}
+    // Report as a non-touch desktop device (prevents touch-based mobile detection)
+    try {
+      Object.defineProperty(navigator, 'maxTouchPoints', { get: function() { return 0; }, configurable: true });
+    } catch(e) {}
+  }
+
   if (window.__flutterWcInterceptorInstalled) return;
   window.__flutterWcInterceptorInstalled = true;
 

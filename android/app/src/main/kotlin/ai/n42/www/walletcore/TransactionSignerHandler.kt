@@ -381,8 +381,14 @@ class TransactionSignerHandler(private val keyHandler: KeyManagementHandler) {
         val chainId: String = txData["chainId"] as String
         val fromAddress: String = CoinType.COSMOS.deriveAddress(privateKey)
         val toAddress: String = txData["toAddress"] as String
-        val accountNumber: Long = (txData["accountNumber"] as String).toLong()
-        val sequence: Long = (txData["sequence"] as String).toLong()
+        val accountNumber: Long = when (val v = txData["accountNumber"]) {
+            is Number -> v.toLong()
+            else -> v.toString().toLong()
+        }
+        val sequence: Long = when (val v = txData["sequence"]) {
+            is Number -> v.toLong()
+            else -> v.toString().toLong()
+        }
         val memo: String = txData["memo"] as String
 
         val fee = Cosmos.Fee.newBuilder()
@@ -1258,10 +1264,10 @@ class TransactionSignerHandler(private val keyHandler: KeyManagementHandler) {
     private fun signSuiTransaction(wallet: HDWallet?, path: String, txData: Map<String, Any>, pk: PrivateKey?): String {
         val privateKey = pk ?: wallet!!.getKey(CoinType.SUI, path)
 
-        val referenceGasPrice: Long = txData["referenceGasPrice"] as Long
-        val gasBudget: Long = txData["gasBudget"] as Long
+        val referenceGasPrice: Long = (txData["referenceGasPrice"] as Number).toLong()
+        val gasBudget: Long = (txData["gasBudget"] as Number).toLong()
         val toAddress: String = txData["toAddress"] as String
-        val amount: Long = txData["amount"] as Long
+        val amount: Long = (txData["amount"] as Number).toLong()
         val utxos: List<Map<String, Any>> = txData["utxo"] as List<Map<String, Any>>
 
         val paySui = Sui.PaySui.newBuilder()
@@ -1271,7 +1277,7 @@ class TransactionSignerHandler(private val keyHandler: KeyManagementHandler) {
             paySui.addInputCoins(
                 Sui.ObjectRef.newBuilder()
                     .setObjectId(utx["objectId"] as String)
-                    .setVersion(utx["version"] as Long)
+                    .setVersion((utx["version"] as String).toLong())
                     .setObjectDigest(utx["objectDigest"] as String)
             )
         }
@@ -1283,8 +1289,8 @@ class TransactionSignerHandler(private val keyHandler: KeyManagementHandler) {
             .setReferenceGasPrice(referenceGasPrice)
             .build()
 
-        val output = AnySigner.sign(signingInput, CoinType.SUI, Aptos.SigningOutput.parser())
-        return Numeric.toHexString(output.encoded.toByteArray())
+        val output = AnySigner.sign(signingInput, CoinType.SUI, Sui.SigningOutput.parser())
+        return output.encoded
     }
 
     private fun signTonTransaction(wallet: HDWallet?, path: String, txData: Map<String, Any>, pk: PrivateKey?): String? {
