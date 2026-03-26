@@ -27,6 +27,7 @@ class _BackupThreeState extends ConsumerState<BackupThree> {
   final TextEditingController _uPasswordConfirmController = TextEditingController();
   final FocusNode _uPasswordFocusNode = FocusNode();
   final FocusNode _uPasswordConfirmFocusNode = FocusNode();
+  bool _submitting = false;
   String uPasswordErrorMessage = "";
   String uPasswordConfirmErrorMessage = "";
   bool showPwd1 = true;
@@ -90,6 +91,7 @@ class _BackupThreeState extends ConsumerState<BackupThree> {
   }
 
   Future<void> _onSubmit() async {
+    if (_submitting) return;
     final password = _uPasswordController.text.trim();
     final rPassword = _uPasswordConfirmController.text.trim();
     if (password.isEmpty) {
@@ -115,15 +117,26 @@ class _BackupThreeState extends ConsumerState<BackupThree> {
     }
     setState(() => uPasswordConfirmErrorMessage = "");
     widget.walletInfo.password = password;
-    final wap = ref.read(wapBridgeProvider);
-    await wap.saveWalletInfo(widget.walletInfo, widget.walletIndex);
-    if (!mounted) return;
-    if (widget.walletIndex == wap.walletIndex) {
-      ref.read(wapBridgeProvider).initWallet();
+    setState(() => _submitting = true);
+    var completedWithExit = false;
+    try {
+      final wap = ref.read(wapBridgeProvider);
+      await wap.saveWalletInfo(widget.walletInfo, widget.walletIndex);
+      if (!mounted) return;
+      if (widget.walletIndex == wap.walletIndex) {
+        ref.read(wapBridgeProvider).initWallet();
+      }
+      ToastUtils.show(S.of(context).g_key_185);
+      eventBus.fire(EventPublic(EventPublicType.backup, param: widget.walletInfo));
+      completedWithExit = true;
+      Navigator.pop(context);
+    } catch (e) {
+      ToastUtils.show(e.toString());
+    } finally {
+      if (mounted && !completedWithExit) {
+        setState(() => _submitting = false);
+      }
     }
-    ToastUtils.show(S.of(context).g_key_185);
-    eventBus.fire(EventPublic(EventPublicType.backup, param: widget.walletInfo));
-    Navigator.pop(context);
   }
 
   @override
@@ -191,7 +204,7 @@ class _BackupThreeState extends ConsumerState<BackupThree> {
                       S.of(context).g_key_115,
                       AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
                       AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
-                      false,
+                      _submitting,
                     ),
                   ),
                 ],

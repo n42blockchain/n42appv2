@@ -275,39 +275,64 @@ class _MarketPageState extends ConsumerState<MarketPage>
         return;
       }
       setState(() => _searchLoading = true);
-      final result = await MarketApi().searchCoins(query);
-      if (mounted &&
-          shouldApplyMarketSearchResponse(
-            requestId: requestId,
-            activeRequestId: _searchGeneration,
-            requestQuery: query,
-            activeQuery: _activeSearchQuery,
-          )) {
-        setState(() {
-          _searchResults = result;
-          _searchLoading = false;
-        });
+      try {
+        final result = await MarketApi().searchCoins(query);
+        if (mounted &&
+            shouldApplyMarketSearchResponse(
+              requestId: requestId,
+              activeRequestId: _searchGeneration,
+              requestQuery: query,
+              activeQuery: _activeSearchQuery,
+            )) {
+          setState(() {
+            _searchResults = result;
+            _searchLoading = false;
+          });
+        }
+      } catch (e) {
+        debugPrint('MarketPage: failed to search coins: $e');
+        if (mounted &&
+            shouldApplyMarketSearchResponse(
+              requestId: requestId,
+              activeRequestId: _searchGeneration,
+              requestQuery: query,
+              activeQuery: _activeSearchQuery,
+            )) {
+          setState(() => _searchLoading = false);
+        }
       }
     });
   }
 
   Future<void> _loadWatchlist() async {
     final requestId = ++_watchlistGeneration;
-    final symbols = await SPUtil().getMarketWatchlist();
-    if (!mounted || requestId != _watchlistGeneration) return;
-    setState(() {
-      _watchlistSymbols = symbols;
-      _watchlistLoading = symbols.isNotEmpty;
-    });
-    if (symbols.isEmpty) return;
+    try {
+      final symbols = await SPUtil().getMarketWatchlist();
+      if (!mounted || requestId != _watchlistGeneration) return;
+      setState(() {
+        _watchlistSymbols = symbols;
+        _watchlistLoading = symbols.isNotEmpty;
+        if (symbols.isEmpty) {
+          _watchlistCoins = [];
+        }
+      });
+      if (symbols.isEmpty) return;
 
-    final resp = await MarketApi().getWalletCoinsInfo(symbols.join(','));
-    if (!mounted || requestId != _watchlistGeneration) return;
-    final coins = extractMarketCoinItems(resp['data']);
-    setState(() {
-      _watchlistCoins = coins;
-      _watchlistLoading = false;
-    });
+      final resp = await MarketApi().getWalletCoinsInfo(symbols.join(','));
+      if (!mounted || requestId != _watchlistGeneration) return;
+      final coins = extractMarketCoinItems(resp['data']);
+      setState(() {
+        _watchlistCoins = coins;
+        _watchlistLoading = false;
+      });
+    } catch (e) {
+      debugPrint('MarketPage: failed to load watchlist: $e');
+      if (!mounted || requestId != _watchlistGeneration) return;
+      setState(() {
+        _watchlistCoins = [];
+        _watchlistLoading = false;
+      });
+    }
   }
 
   Future<void> _toggleWatchlist(String symbol) async {
