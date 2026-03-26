@@ -151,10 +151,26 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
   Future<void> _resolveEns(String ensName, int requestId) async {
     if (!mounted || requestId != _resolveRequestId) return;
 
-    final result = await _ensService.resolveName(
-      ensName,
-      preferredChain: widget.coinType,
-    );
+    EnsResolutionResult result;
+    try {
+      result = await _ensService.resolveName(
+        ensName,
+        preferredChain: widget.coinType,
+      );
+    } catch (e) {
+      debugPrint('EnsAddressField: failed to resolve ENS: $e');
+      if (!mounted ||
+          requestId != _resolveRequestId ||
+          widget.controller.text.trim() != ensName) {
+        return;
+      }
+      _updateStatus(
+        EnsResolveStatus.failed,
+        EnsResolutionResult.failure(e.toString()),
+      );
+      widget.onAddressValidated?.call(null, true);
+      return;
+    }
 
     if (!mounted ||
         requestId != _resolveRequestId ||
