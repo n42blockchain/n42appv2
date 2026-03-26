@@ -303,13 +303,15 @@ class _AABatchTransactionPageState extends State<AABatchTransactionPage> {
         context: context,
         builder: (ctx) => AlertDialog(
           title: Text(S.of(ctx).g_key_aa_batch_save_template),
-          content: TextField(
-            controller: nameController,
-            autofocus: true,
-            decoration: InputDecoration(
-              labelText: S.of(ctx).g_key_aa_batch_template_name,
-              hintText: S.of(ctx).g_key_aa_batch_template_name_hint,
-              border: const OutlineInputBorder(),
+          content: SingleChildScrollView(
+            child: TextField(
+              controller: nameController,
+              autofocus: true,
+              decoration: InputDecoration(
+                labelText: S.of(ctx).g_key_aa_batch_template_name,
+                hintText: S.of(ctx).g_key_aa_batch_template_name_hint,
+                border: const OutlineInputBorder(),
+              ),
             ),
           ),
           actions: [

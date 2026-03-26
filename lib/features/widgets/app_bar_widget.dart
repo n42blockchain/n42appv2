@@ -24,6 +24,8 @@ class AppBarWidget extends AppBar{
               AppGlobals.navigatorKey.currentContext,
               AppThemeKeys.mainTextColor.name)
       ),
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
     ),
     titleSpacing: 0,//标题距离左边的距离
     centerTitle: true,

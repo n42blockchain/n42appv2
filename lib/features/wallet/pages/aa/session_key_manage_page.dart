@@ -306,6 +306,7 @@ class _SessionKeyManagePageState extends State<SessionKeyManagePage>
       ),
       child: TabBar(
         controller: _tabController,
+        isScrollable: true,
         indicator: BoxDecoration(
           color: blueColor,
           borderRadius: BorderRadius.circular(su.setWidth(10)),

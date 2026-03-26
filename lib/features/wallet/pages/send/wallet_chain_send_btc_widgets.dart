@@ -57,12 +57,15 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
         children: [
           Row(
             children: [
-              Text(
-                S.of(context).g_key_44,
-                style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
-                  fontSize: ScreenUtil().setSp(28.0),
+              Flexible(
+                child: Text(
+                  S.of(context).g_key_44,
+                  style: TextStyle(
+                    color: AppThemeUtils.getColorByKey(
+                        context, AppThemeKeys.mainTextColor.name),
+                    fontSize: ScreenUtil().setSp(28.0),
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
               SizedBox(width: ScreenUtil().setWidth(20.0)),

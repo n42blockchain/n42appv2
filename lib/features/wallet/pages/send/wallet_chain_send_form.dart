@@ -183,7 +183,11 @@ class SendAmountWidget extends StatelessWidget {
             ),
             child: Row(
               children: [
-                Text(S.of(context).g_key_44, style: _labelStyle(context)),
+                Flexible(
+                  child: Text(S.of(context).g_key_44, style: _labelStyle(context),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
                 SizedBox(width: su.setWidth(20.0)),
                 Expanded(child: _BalanceLabel(coinModel: coinModel)),
               ],

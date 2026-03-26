@@ -263,28 +263,30 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
         builder: (ctx) => StatefulBuilder(
           builder: (ctx, setDialogState) => AlertDialog(
             title: Text(S.of(ctx).g_key_ens_transfer),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  S.of(ctx).g_key_ens_transfer_warning,
-                  style: TextStyle(
-                    color: Colors.orange,
-                    fontSize: ScreenUtil().setSp(24),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    S.of(ctx).g_key_ens_transfer_warning,
+                    style: TextStyle(
+                      color: Colors.orange,
+                      fontSize: ScreenUtil().setSp(24),
+                    ),
                   ),
-                ),
-                SizedBox(height: ScreenUtil().setWidth(16)),
-                TextField(
-                  controller: controller,
-                  onChanged: (_) => setDialogState(() => validationError = null),
-                  decoration: InputDecoration(
-                    labelText: S.of(ctx).g_key_ens_new_owner,
-                    hintText: '0x...',
-                    errorText: validationError,
-                    border: const OutlineInputBorder(),
+                  SizedBox(height: ScreenUtil().setWidth(16)),
+                  TextField(
+                    controller: controller,
+                    onChanged: (_) => setDialogState(() => validationError = null),
+                    decoration: InputDecoration(
+                      labelText: S.of(ctx).g_key_ens_new_owner,
+                      hintText: '0x...',
+                      errorText: validationError,
+                      border: const OutlineInputBorder(),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             actions: [
               TextButton(

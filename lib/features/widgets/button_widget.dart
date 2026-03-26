@@ -20,12 +20,17 @@ Widget buttonStyle1(BuildContext context, VoidCallback onTap, String title) {
       ),
       alignment: Alignment.center,
     ),
-    child: Text(title,
-      style: TextStyle(
-        fontSize: ScreenUtil().setSp(32.0),
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+    child: Padding(
+      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(8.0)),
+      child: Text(title,
+        style: TextStyle(
+          fontSize: ScreenUtil().setSp(32.0),
+          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+        ),
+        textAlign: TextAlign.center,
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
       ),
-      textAlign: TextAlign.center,
     ),
   );
 }
@@ -46,12 +51,17 @@ Widget buttonStyle2(BuildContext context, VoidCallback? onTap, String title) {
       ),
       alignment: Alignment.center,
     ),
-    child: Text(title,
-      style: TextStyle(
-        fontSize: ScreenUtil().setSp(32.0),
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
+    child: Padding(
+      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(8.0)),
+      child: Text(title,
+        style: TextStyle(
+          fontSize: ScreenUtil().setSp(32.0),
+          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
+        ),
+        textAlign: TextAlign.center,
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
       ),
-      textAlign: TextAlign.center,
     ),
   );
 }
@@ -97,6 +107,8 @@ Widget buttonStyle3(
           color: textColor,
         ),
         textAlign: TextAlign.center,
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
       ),
     ),
   );

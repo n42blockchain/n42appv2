@@ -85,51 +85,53 @@ class SecurityEditState extends State<SecurityEdit> {
                     fontSize: ScreenUtil().setSp(32.0),
                   ),
                 ),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      S.of(ctx).g_2fa_disable_confirm_hint,
-                      style: TextStyle(
-                        color: AppThemeUtils.getColorByKey(
-                          ctx,
-                          AppThemeKeys.itemSubtitleTextColor.name,
-                        ),
-                        fontSize: ScreenUtil().setSp(26.0),
-                      ),
-                    ),
-                    SizedBox(height: ScreenUtil().setWidth(16.0)),
-                    TextField(
-                      controller: codeCtrl,
-                      keyboardType: TextInputType.number,
-                      maxLength: 6,
-                      style: TextStyle(
-                        color: AppThemeUtils.getColorByKey(
-                          ctx,
-                          AppThemeKeys.mainTextColor.name,
-                        ),
-                        fontSize: ScreenUtil().setSp(30.0),
-                      ),
-                      decoration: InputDecoration(
-                        hintText: S.of(ctx).google_verification_message19,
-                        hintStyle: TextStyle(
+                content: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        S.of(ctx).g_2fa_disable_confirm_hint,
+                        style: TextStyle(
                           color: AppThemeUtils.getColorByKey(
                             ctx,
                             AppThemeKeys.itemSubtitleTextColor.name,
                           ),
                           fontSize: ScreenUtil().setSp(26.0),
                         ),
-                        counterText: '',
-                        errorText: errorMsg,
                       ),
-                      onChanged: (_) {
-                        if (errorMsg != null) {
-                          setModalState(() => errorMsg = null);
-                        }
-                      },
-                    ),
-                  ],
+                      SizedBox(height: ScreenUtil().setWidth(16.0)),
+                      TextField(
+                        controller: codeCtrl,
+                        keyboardType: TextInputType.number,
+                        maxLength: 6,
+                        style: TextStyle(
+                          color: AppThemeUtils.getColorByKey(
+                            ctx,
+                            AppThemeKeys.mainTextColor.name,
+                          ),
+                          fontSize: ScreenUtil().setSp(30.0),
+                        ),
+                        decoration: InputDecoration(
+                          hintText: S.of(ctx).google_verification_message19,
+                          hintStyle: TextStyle(
+                            color: AppThemeUtils.getColorByKey(
+                              ctx,
+                              AppThemeKeys.itemSubtitleTextColor.name,
+                            ),
+                            fontSize: ScreenUtil().setSp(26.0),
+                          ),
+                          counterText: '',
+                          errorText: errorMsg,
+                        ),
+                        onChanged: (_) {
+                          if (errorMsg != null) {
+                            setModalState(() => errorMsg = null);
+                          }
+                        },
+                      ),
+                    ],
+                  ),
                 ),
                 actions: [
                   TextButton(

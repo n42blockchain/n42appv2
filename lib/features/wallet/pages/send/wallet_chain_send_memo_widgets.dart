@@ -78,9 +78,12 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
         children: [
           Row(
             children: [
-              Text(
-                S.of(context).g_key_44,
-                style: TextStyle(color: mainText, fontSize: su.setSp(28.0)),
+              Flexible(
+                child: Text(
+                  S.of(context).g_key_44,
+                  style: TextStyle(color: mainText, fontSize: su.setSp(28.0)),
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
               SizedBox(width: su.setWidth(20.0)),
               Expanded(

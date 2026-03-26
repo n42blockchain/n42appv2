@@ -10,10 +10,9 @@ Future<void> alertWidget(BuildContext context) async {
     barrierDismissible: true, // user must tap button!
     builder: (BuildContext context) {
       return AlertDialog(
-        content: SizedBox(
-          height: ScreenUtil().setWidth(460),
-          width: double.infinity,
+        content: SingleChildScrollView(
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
@@ -41,7 +40,7 @@ Future<void> alertWidget(BuildContext context) async {
                 maxLines: 2,
                 textAlign: TextAlign.center,
               ),
-              Spacer(),
+              SizedBox(height: ScreenUtil().setWidth(40)),
               InkWell(
                 onTap: (){
                   Navigator.pop(context);

@@ -174,8 +174,24 @@ mixin _StakeViewsMixin on _StakeLogicMixin, _StakeFormsMixin, _StakeSectionsMixi
           fontWeight: FontWeight.w600,
         ),
         tabs: [
-          Tab(text: S.of(context).g_key_stake_stake),
-          Tab(text: S.of(context).g_key_stake_unstake),
+          Tab(
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(24)),
+                child: Text(S.of(context).g_key_stake_stake),
+              ),
+            ),
+          ),
+          Tab(
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(24)),
+                child: Text(S.of(context).g_key_stake_unstake),
+              ),
+            ),
+          ),
         ],
       ),
     );

@@ -38,107 +38,109 @@ class GroupConfirm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(44)),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SizedBox(
-            height: ScreenUtil().setWidth(80),
-          ),
-          Image.asset(
-            'assets/img/ast_nft.png',
-            width: ScreenUtil().setWidth(160),
-            fit: BoxFit.cover,
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainTextColor.name),
-          ),
-          SizedBox(
-            height: ScreenUtil().setWidth(80),
-          ),
-          Text(
-            "Confirmation",
-            style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
-                fontSize: ScreenUtil().setSp(44)),
-          ),
-          SizedBox(
-            height: ScreenUtil().setWidth(54),
-          ),
-          Text(
-            // "Are you sure you want to lock $num AsT until $lockDate to run a node?",
-            S.of(context).g_mining_key76(num.toString(), lockDate),
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
-                fontSize: ScreenUtil().setSp(28)),
-          ),
-          SizedBox(
-            height: ScreenUtil().setWidth(90),
-          ),
-          SizedBox(
-            height: ScreenUtil().setWidth(88),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.of(context).pop(false);
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.itemBgColor.name),
-                          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8))),
-                      child: Center(
-                        child: Text(
-                          S.of(context).g_key_79,
-                          style: TextStyle(
-                              color: AppThemeUtils.getColorByKey(
-                                  context, AppThemeKeys.mainBlueColor.name),
-                              fontWeight: FontWeight.bold,
-                              fontSize: ScreenUtil().setSp(30)),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: ScreenUtil().setWidth(30),
-                ),
-                Expanded(
-                  child: InkWell(
-                    onTap: () {
-                      sureCall?.call();
-                      Navigator.of(context).pop(true);
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.mainBlueColor.name),
-                          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8))),
-                      child: Center(
-                        child: Text(
-                          S.of(context).g_key_78,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: ScreenUtil().setSp(30)),
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-              ],
+    return SingleChildScrollView(
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(44)),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              height: ScreenUtil().setWidth(80),
             ),
-          ),
-          SizedBox(
-            height: ScreenUtil().setWidth(54),
-          ),
-        ],
+            Image.asset(
+              'assets/img/ast_nft.png',
+              width: ScreenUtil().setWidth(160),
+              fit: BoxFit.cover,
+              color: AppThemeUtils.getColorByKey(
+                  context, AppThemeKeys.mainTextColor.name),
+            ),
+            SizedBox(
+              height: ScreenUtil().setWidth(80),
+            ),
+            Text(
+              "Confirmation",
+              style: TextStyle(
+                  color: AppThemeUtils.getColorByKey(
+                      context, AppThemeKeys.mainTextColor.name),
+                  fontSize: ScreenUtil().setSp(44)),
+            ),
+            SizedBox(
+              height: ScreenUtil().setWidth(54),
+            ),
+            Text(
+              // "Are you sure you want to lock $num AsT until $lockDate to run a node?",
+              S.of(context).g_mining_key76(num.toString(), lockDate),
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: AppThemeUtils.getColorByKey(
+                      context, AppThemeKeys.mainTextColor.name),
+                  fontSize: ScreenUtil().setSp(28)),
+            ),
+            SizedBox(
+              height: ScreenUtil().setWidth(90),
+            ),
+            SizedBox(
+              height: ScreenUtil().setWidth(88),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.of(context).pop(false);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: AppThemeUtils.getColorByKey(
+                                context, AppThemeKeys.itemBgColor.name),
+                            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8))),
+                        child: Center(
+                          child: Text(
+                            S.of(context).g_key_79,
+                            style: TextStyle(
+                                color: AppThemeUtils.getColorByKey(
+                                    context, AppThemeKeys.mainBlueColor.name),
+                                fontWeight: FontWeight.bold,
+                                fontSize: ScreenUtil().setSp(30)),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: ScreenUtil().setWidth(30),
+                  ),
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {
+                        sureCall?.call();
+                        Navigator.of(context).pop(true);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: AppThemeUtils.getColorByKey(
+                                context, AppThemeKeys.mainBlueColor.name),
+                            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8))),
+                        child: Center(
+                          child: Text(
+                            S.of(context).g_key_78,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: ScreenUtil().setSp(30)),
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            SizedBox(
+              height: ScreenUtil().setWidth(54),
+            ),
+          ],
+        ),
       ),
     );
   }

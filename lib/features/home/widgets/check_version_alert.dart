@@ -75,112 +75,114 @@ class CheckVersionAlert extends StatelessWidget {
           ScreenUtil().setWidth(36),
           ScreenUtil().setWidth(24),
         ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // ── 图标 ──────────────────────────────────────────────────
-            Image.asset(
-              "assets/img/huojian.png",
-              width: ScreenUtil().setWidth(88),
-              fit: BoxFit.cover,
-            ),
-            SizedBox(height: ScreenUtil().setWidth(20)),
-
-            // ── 标题 & 版本号 ─────────────────────────────────────────
-            Text(
-              S.of(context).g_key_v_k1,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: textColor,
-                fontSize: ScreenUtil().setSp(28),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // ── 图标 ──────────────────────────────────────────────────
+              Image.asset(
+                "assets/img/huojian.png",
+                width: ScreenUtil().setWidth(88),
+                fit: BoxFit.cover,
               ),
-            ),
-            SizedBox(height: ScreenUtil().setWidth(6)),
-            Text(
-              'V$newVersion',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: accentColor,
-                fontSize: ScreenUtil().setSp(40),
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: ScreenUtil().setWidth(20)),
+              SizedBox(height: ScreenUtil().setWidth(20)),
 
-            // ── 更新日志 ──────────────────────────────────────────────
-            if (updateTitle.isNotEmpty) ...[
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  updateTitle,
-                  style: TextStyle(
-                    color: textColor,
-                    fontSize: ScreenUtil().setSp(26),
-                    fontWeight: FontWeight.w600,
-                  ),
+              // ── 标题 & 版本号 ─────────────────────────────────────────
+              Text(
+                S.of(context).g_key_v_k1,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: textColor,
+                  fontSize: ScreenUtil().setSp(28),
                 ),
               ),
               SizedBox(height: ScreenUtil().setWidth(6)),
-            ],
-            if (introduction.isNotEmpty)
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  introduction,
-                  style: TextStyle(
-                    height: 1.6,
-                    fontSize: ScreenUtil().setSp(24),
-                    color: subtitleColor,
-                  ),
+              Text(
+                'V$newVersion',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: accentColor,
+                  fontSize: ScreenUtil().setSp(40),
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-            SizedBox(height: ScreenUtil().setWidth(28)),
+              SizedBox(height: ScreenUtil().setWidth(20)),
 
-            // ── 立即更新按钮 ──────────────────────────────────────────
-            SizedBox(
-              width: double.infinity,
-              height: ScreenUtil().setWidth(80),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: accentColor,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(ScreenUtil().setWidth(40)),
-                  ),
-                  elevation: 0,
-                ),
-                onPressed: () async {
-                  await _openUpdate(context);
-                  if (!_forced && context.mounted) {
-                    Navigator.of(context).pop();
-                  }
-                },
-                child: Text(
-                  S.of(context).g_key_v_k2,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(28),
-                    fontWeight: FontWeight.w600,
+              // ── 更新日志 ──────────────────────────────────────────────
+              if (updateTitle.isNotEmpty) ...[
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    updateTitle,
+                    style: TextStyle(
+                      color: textColor,
+                      fontSize: ScreenUtil().setSp(26),
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
-              ),
-            ),
+                SizedBox(height: ScreenUtil().setWidth(6)),
+              ],
+              if (introduction.isNotEmpty)
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    introduction,
+                    style: TextStyle(
+                      height: 1.6,
+                      fontSize: ScreenUtil().setSp(24),
+                      color: subtitleColor,
+                    ),
+                  ),
+                ),
+              SizedBox(height: ScreenUtil().setWidth(28)),
 
-            // ── 稍后提醒（非强制更新时显示） ──────────────────────────
-            if (!_forced) ...[
-              SizedBox(height: ScreenUtil().setWidth(4)),
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: Text(
-                  S.of(context).g_version_later,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24),
-                    color: subtitleColor,
+              // ── 立即更新按钮 ──────────────────────────────────────────
+              SizedBox(
+                width: double.infinity,
+                height: ScreenUtil().setWidth(80),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: accentColor,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(ScreenUtil().setWidth(40)),
+                    ),
+                    elevation: 0,
+                  ),
+                  onPressed: () async {
+                    await _openUpdate(context);
+                    if (!_forced && context.mounted) {
+                      Navigator.of(context).pop();
+                    }
+                  },
+                  child: Text(
+                    S.of(context).g_key_v_k2,
+                    style: TextStyle(
+                      fontSize: ScreenUtil().setSp(28),
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ),
+
+              // ── 稍后提醒（非强制更新时显示） ──────────────────────────
+              if (!_forced) ...[
+                SizedBox(height: ScreenUtil().setWidth(4)),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text(
+                    S.of(context).g_version_later,
+                    style: TextStyle(
+                      fontSize: ScreenUtil().setSp(24),
+                      color: subtitleColor,
+                    ),
+                  ),
+                ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );

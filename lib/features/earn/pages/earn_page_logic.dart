@@ -159,15 +159,17 @@ mixin EarnPageLogicMixin on ConsumerState<EarnPage> {
             ),
           ],
         ),
-        content: Text(
-          '${S.of(context).g_key_burn_nft_tip}\n\n'
-          '${S.of(context).g_key_burn_nft_steps}\n'
-          '${S.of(context).g_key_burn_nft_step1}\n'
-          '${S.of(context).g_key_burn_nft_step2}\n'
-          '${S.of(context).g_key_burn_nft_step3}\n'
-          '${S.of(context).g_key_burn_nft_step4}',
-          style: TextStyle(
-              color: isDark ? Colors.white70 : Colors.black87),
+        content: SingleChildScrollView(
+          child: Text(
+            '${S.of(context).g_key_burn_nft_tip}\n\n'
+            '${S.of(context).g_key_burn_nft_steps}\n'
+            '${S.of(context).g_key_burn_nft_step1}\n'
+            '${S.of(context).g_key_burn_nft_step2}\n'
+            '${S.of(context).g_key_burn_nft_step3}\n'
+            '${S.of(context).g_key_burn_nft_step4}',
+            style: TextStyle(
+                color: isDark ? Colors.white70 : Colors.black87),
+          ),
         ),
         actions: [
           TextButton(

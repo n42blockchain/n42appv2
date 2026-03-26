@@ -123,12 +123,15 @@ mixin _DotSendWidgetsMixin on _DotSendLogicMixin {
             ),
             child: Row(
               children: [
-                Text(
-                  S.of(context).g_key_44,
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainTextColor.name),
-                    fontSize: su.setSp(28.0),
+                Flexible(
+                  child: Text(
+                    S.of(context).g_key_44,
+                    style: TextStyle(
+                      color: AppThemeUtils.getColorByKey(
+                          context, AppThemeKeys.mainTextColor.name),
+                      fontSize: su.setSp(28.0),
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 SizedBox(width: su.setWidth(20.0)),

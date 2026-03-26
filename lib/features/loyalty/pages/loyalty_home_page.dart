@@ -102,6 +102,7 @@ class _LoyaltyHomePageState extends State<LoyaltyHomePage>
                   delegate: _SliverTabBarDelegate(
                     TabBar(
                       controller: _tabController,
+                      isScrollable: true,
                       labelColor: AppThemeUtils.getColorByKey(
                         context,
                         AppThemeKeys.mainBlueColor.name,

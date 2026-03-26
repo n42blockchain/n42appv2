@@ -113,11 +113,14 @@ mixin _TrxSendWidgetsMixin on _TrxSendLogicMixin {
         children: [
           Row(
             children: [
-              Text(
-                S.of(context).g_key_44,
-                style: TextStyle(
-                  color: _themeColor(AppThemeKeys.mainTextColor),
-                  fontSize: _sp28,
+              Flexible(
+                child: Text(
+                  S.of(context).g_key_44,
+                  style: TextStyle(
+                    color: _themeColor(AppThemeKeys.mainTextColor),
+                    fontSize: _sp28,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
               SizedBox(width: sw(20.0)),

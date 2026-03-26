@@ -154,11 +154,14 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
         children: [
           Row(
             children: [
-              Text(
-                S.of(context).g_key_44,
-                style: TextStyle(
-                  color: mainText,
-                  fontSize: ScreenUtil().setSp(28.0),
+              Flexible(
+                child: Text(
+                  S.of(context).g_key_44,
+                  style: TextStyle(
+                    color: mainText,
+                    fontSize: ScreenUtil().setSp(28.0),
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
               SizedBox(width: ScreenUtil().setWidth(20.0)),

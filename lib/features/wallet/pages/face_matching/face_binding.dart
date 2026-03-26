@@ -144,12 +144,14 @@ class _FaceBindingState extends ConsumerState<FaceBinding>
           barrierDismissible: false,
           builder: (ctx) => AlertDialog(
             title: Text(S.of(ctx).g_face_match_key6),
-            content: const Text(
-              'N42 Wallet will capture your facial image using the device camera. '
-              'This image is transmitted to N42 servers to bind or verify your identity '
-              'with your wallet address, and is stored securely.\n\n'
-              'By continuing, you consent to the collection and remote processing of '
-              'your biometric data as described in the N42 Privacy Policy.',
+            content: const SingleChildScrollView(
+              child: Text(
+                'N42 Wallet will capture your facial image using the device camera. '
+                'This image is transmitted to N42 servers to bind or verify your identity '
+                'with your wallet address, and is stored securely.\n\n'
+                'By continuing, you consent to the collection and remote processing of '
+                'your biometric data as described in the N42 Privacy Policy.',
+              ),
             ),
             actions: [
               TextButton(
