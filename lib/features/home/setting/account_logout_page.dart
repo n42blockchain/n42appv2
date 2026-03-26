@@ -228,25 +228,24 @@ class _AccountLogoutPageState extends State<AccountLogoutPage> {
               setState(() {
                 load = Load.loading;
               });
-              UserInfoApi loginApi = UserInfoApi();
-              final data = await loginApi.unRegisterAccount(code);
-              if (data != null && data["code"] == 200) {
-                try {
-                  ToastUtils.show("Account has been cancelled");
-                  await purgeCancelledChatSessionCompat();
-                  await AppGlobals.logout();
-                } catch (err) {
-                  debugPrint("err: ${err.toString()}");
-                } finally {
-                  if (mounted) {
-                    setState(() {
-                      load = Load.finish;
-                    });
+              try {
+                UserInfoApi loginApi = UserInfoApi();
+                final data = await loginApi.unRegisterAccount(code);
+                if (data != null && data["code"] == 200) {
+                  try {
+                    ToastUtils.show("Account has been cancelled");
+                    await purgeCancelledChatSessionCompat();
+                    await AppGlobals.logout();
+                  } catch (err) {
+                    debugPrint("err: ${err.toString()}");
                   }
+                } else {
+                  //注销失败
+                  ToastUtils.show(data?['err']?.toString() ?? S.current.g_key_5);
                 }
-              } else {
-                //注销失败
-                ToastUtils.show(data?['err']?.toString() ?? S.current.g_key_5);
+              } catch (err) {
+                ToastUtils.show(err.toString());
+              } finally {
                 if (mounted) {
                   setState(() {
                     load = Load.finish;

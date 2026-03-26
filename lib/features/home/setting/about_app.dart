@@ -31,26 +31,34 @@ class _AboutAppState extends State<AboutApp> {
   }
 
   Future<void> _initData() async {
-    final packageInfo = await PackageInfo.fromPlatform();
-    if (!mounted) return;
-    setState(() {
-      appVersion = '${packageInfo.version} (${packageInfo.buildNumber})';
-    });
+    try {
+      final packageInfo = await PackageInfo.fromPlatform();
+      if (!mounted) return;
+      setState(() {
+        appVersion = '${packageInfo.version} (${packageInfo.buildNumber})';
+      });
 
-    if (AppConfig.isOpenAppUpdate) {
-      _checkAppLastVersion(packageInfo);
+      if (AppConfig.isOpenAppUpdate) {
+        await _checkAppLastVersion(packageInfo);
+      }
+    } catch (e) {
+      debugPrint('AboutApp: failed to initialize version info: $e');
     }
   }
 
   Future<void> _checkAppLastVersion(PackageInfo packageInfo) async {
-    versionInfo = await VersionApi().getVersionInfo();
-    if (versionInfo == null) return;
+    try {
+      versionInfo = await VersionApi().getVersionInfo();
+      if (versionInfo == null) return;
 
-    final serverCode = versionInfo!.versionCode;
-    final localCode = int.tryParse(packageInfo.buildNumber) ?? 0;
-    if (serverCode != null && serverCode > localCode) {
-      findNewVersion = true;
-      if (mounted) setState(() {});
+      final serverCode = versionInfo!.versionCode;
+      final localCode = int.tryParse(packageInfo.buildNumber) ?? 0;
+      if (serverCode != null && serverCode > localCode) {
+        findNewVersion = true;
+        if (mounted) setState(() {});
+      }
+    } catch (e) {
+      debugPrint('AboutApp: failed to check app version: $e');
     }
   }
 

@@ -18,6 +18,7 @@ class NavSelectImage extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: () async {
+            final navigator = Navigator.of(context);
             //拍照
             XFile? result =
             await ImagePicker().pickImage(source: ImageSource.camera);
@@ -25,10 +26,11 @@ class NavSelectImage extends StatelessWidget {
             if (result != null) {
               File file = File(result.path);
               debugPrint("file path-->  ${file.path}");
-              //final filePath = file.absolute.path;
-              Uint8List imageData=file.readAsBytesSync();
-              Uint8List? rImageData=await Navigator.push(context, MaterialPageRoute(builder: (context)=>ImageCropPage(imageData)));
-              if(!context.mounted) return;
+              Uint8List imageData=await file.readAsBytes();
+              Uint8List? rImageData=await navigator.push(
+                MaterialPageRoute(builder: (context)=>ImageCropPage(imageData)),
+              );
+              if(!context.mounted || rImageData == null) return;
               if(returnImage!=null)returnImage(rImageData);
             }
           },
@@ -52,17 +54,20 @@ class NavSelectImage extends StatelessWidget {
         ),
         GestureDetector(
           onTap: () async {
+            final navigator = Navigator.of(context);
             //从相册选择
             FilePickerResult? result =
             await FilePicker.platform.pickFiles(type: FileType.image);
             if(!context.mounted) return;
-            if (result != null) {
-              File file = File(result.files.single.path!);
+            final path = result?.files.single.path;
+            if (path != null) {
+              File file = File(path);
               debugPrint("file path-->  ${file.path}");
-              //final filePath = file.absolute.path;
-              Uint8List imageData=file.readAsBytesSync();
-              Uint8List? rImageData=await Navigator.push(context, MaterialPageRoute(builder: (context)=>ImageCropPage(imageData)));
-              if(!context.mounted) return;
+              Uint8List imageData=await file.readAsBytes();
+              Uint8List? rImageData=await navigator.push(
+                MaterialPageRoute(builder: (context)=>ImageCropPage(imageData)),
+              );
+              if(!context.mounted || rImageData == null) return;
               if(returnImage!=null)returnImage(rImageData);
             }
           },
