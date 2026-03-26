@@ -223,10 +223,11 @@ class _AddTokenMenu extends StatelessWidget {
       context,
       MaterialPageRoute(builder: (_) => page),
     );
+    if (!context.mounted) return;
     if (result == true) {
       ref.read(wapBridgeProvider).initWallet(shouldInitCoinInfo: true);
     }
-    if (context.mounted) Navigator.pop(context);
+    Navigator.pop(context);
   }
 
   @override

@@ -75,6 +75,7 @@ class SettingHomePage extends ConsumerWidget {
                       builder: (context) => SettingSysLanguage(appSysLang),
                     ),
                   );
+                  if (!context.mounted) return;
                   if (returnStr != null && returnStr is String) {
                     // Update locale via Riverpod - UI will automatically update
                     ref.read(localeProvider.notifier).setLocale(returnStr);
