@@ -100,6 +100,23 @@ class _BrowserPageState extends ConsumerState<BrowserPage> {
 
     bp.browserInit();
     bp.addUrl(widget.openUrl);
+
+    // Ensure the WalletConnect signClient is initialized and resume any
+    // existing session so the toolbar icon appears if already connected.
+    _resumeWalletConnectSession();
+  }
+
+  Future<void> _resumeWalletConnectSession() async {
+    final wcp = ref.read(wcpBridgeProvider);
+    // Initialize signClient (no-op if already done).
+    await wcp.connectInit();
+    if (!mounted) return;
+    // If there are persisted sessions and we're not already connected,
+    // restore the most recent one so the toolbar icon reflects the state.
+    if (wcp.walletConnectState == WalletConnectState.connect) return;
+    final sessions = wcp.getActiveSessions();
+    if (sessions.isEmpty) return;
+    wcp.setActiveSession(sessions.values.last);
   }
 
   /// Show a phishing warning dialog.
