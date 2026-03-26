@@ -190,8 +190,10 @@ class _WalletSecurityVerificationState
     } on PlatformException catch (_) {
       canCheck = false;
     }
+    if (!mounted) return;
     if (canCheck) {
       final available = await auth.getAvailableBiometrics();
+      if (!mounted) return;
       canCheck = available.any(
         const {
           BiometricType.face,
@@ -201,6 +203,7 @@ class _WalletSecurityVerificationState
         }.contains,
       );
     }
+    if (!mounted) return;
     if (!canCheck) {
       setState(() => faceErrorMessage = S.of(context).g_lock_key7);
       return;
@@ -229,12 +232,14 @@ class _WalletSecurityVerificationState
         authMessages: [authMessage],
       );
     } on PlatformException catch (e) {
+      if (!mounted) return;
       setState(() {
         faceCheck = 2;
         faceErrorMessage = e.toString();
       });
       return;
     }
+    if (!mounted) return;
     setState(() {
       faceCheck = authenticated ? 1 : 2;
       faceErrorMessage = authenticated ? '' : S.of(context).g_lock_key6;
@@ -243,6 +248,7 @@ class _WalletSecurityVerificationState
 
   Future<void> pushSetting() async {
     await Navigator.pushNamed(context, '/securitySetting');
+    if (!mounted) return;
     initSecurity();
   }
 
@@ -255,6 +261,7 @@ class _WalletSecurityVerificationState
             EditWalletPassword(ref.read(wapBridgeProvider).walletInfo, wIndex),
       ),
     );
+    if (!mounted) return;
     initSecurity();
   }
 

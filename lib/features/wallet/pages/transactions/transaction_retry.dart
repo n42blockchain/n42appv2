@@ -91,6 +91,7 @@ class _TransactionRetryState extends ConsumerState<TransactionRetry>
       timer!.cancel();
       timer = null;
     }
+    searchEditingController.dispose();
     super.dispose();
   }
 

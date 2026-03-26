@@ -21,10 +21,7 @@ void clearChangeEmailCountdownState({
   setCountdown(0);
 }
 
-bool canResendChangeEmailCode({
-  required int countdown,
-  required bool loading,
-}) {
+bool canResendChangeEmailCode({required int countdown, required bool loading}) {
   return countdown <= 0 && !loading;
 }
 
@@ -154,8 +151,7 @@ mixin ChangeEmailPageLogicMixin on State<ChangeEmailPage> {
     });
 
     try {
-      final data =
-          await UserInfoApi().sendEmailCode(email, 'changeEmail');
+      final data = await UserInfoApi().sendEmailCode(email, 'changeEmail');
       if (!mounted) return;
       if (data['code'] == 200) {
         startCountdown();
@@ -163,7 +159,8 @@ mixin ChangeEmailPageLogicMixin on State<ChangeEmailPage> {
         ToastUtils.show(S.of(context).g_email_code_sent_to(email));
       } else {
         ToastUtils.show(
-            (data['err'] ?? data['msg'] ?? 'Failed to send code').toString());
+          (data['err'] ?? data['msg'] ?? 'Failed to send code').toString(),
+        );
       }
     } catch (e) {
       if (mounted) ToastUtils.show(e.toString());
@@ -181,8 +178,10 @@ mixin ChangeEmailPageLogicMixin on State<ChangeEmailPage> {
     }
     setState(() => sendingN42Code = true);
     try {
-      final data = await UserInfoApi()
-          .sendEmailCode(emailCtrl.text.trim(), 'changeEmail');
+      final data = await UserInfoApi().sendEmailCode(
+        emailCtrl.text.trim(),
+        'changeEmail',
+      );
       if (!mounted) return;
       if (data['code'] == 200) {
         startCountdown();
@@ -206,14 +205,17 @@ mixin ChangeEmailPageLogicMixin on State<ChangeEmailPage> {
       return;
     }
 
+    bool completedWithExit = false;
     setState(() {
       n42CodeError = null;
       confirmingN42 = true;
     });
 
     try {
-      final result =
-          await UserInfoApi().changeEmail(emailCtrl.text.trim(), code);
+      final result = await UserInfoApi().changeEmail(
+        emailCtrl.text.trim(),
+        code,
+      );
       if (!mounted) return;
       if (result.error == false) {
         AppGlobals.userInfo?.email = emailCtrl.text.trim();
@@ -231,16 +233,21 @@ mixin ChangeEmailPageLogicMixin on State<ChangeEmailPage> {
           await requestChatCode();
         } else {
           ToastUtils.showSuccess(S.of(context).g_email_success);
+          completedWithExit = true;
           Navigator.pop(context, true);
         }
       } else {
-        setState(() => n42CodeError =
-            result.data?.toString() ?? S.of(context).g_email_code_wrong);
+        setState(
+          () => n42CodeError =
+              result.data?.toString() ?? S.of(context).g_email_code_wrong,
+        );
       }
     } catch (e) {
       if (mounted) setState(() => n42CodeError = e.toString());
     } finally {
-      if (mounted) setState(() => confirmingN42 = false);
+      if (mounted && !completedWithExit) {
+        setState(() => confirmingN42 = false);
+      }
     }
   }
 
@@ -304,10 +311,7 @@ mixin ChangeEmailPageLogicMixin on State<ChangeEmailPage> {
     });
 
     try {
-      await N42Chat.confirmChatEmailChange(
-        emailCtrl.text.trim(),
-        code,
-      );
+      await N42Chat.confirmChatEmailChange(emailCtrl.text.trim(), code);
       if (!mounted) return;
       ToastUtils.showSuccess(S.of(context).g_email_both_success);
       Navigator.pop(context, true);

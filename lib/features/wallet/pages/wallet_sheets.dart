@@ -205,6 +205,7 @@ Future<void> showAddTokenSheet(BuildContext context, WidgetRef ref) async {
       context,
       MaterialPageRoute(builder: (_) => WalletCoinAddAll("", coinType: cType)),
     );
+    if (!context.mounted) return;
     if (result == true) {
       ref.read(wapBridgeProvider).initWallet(shouldInitCoinInfo: true);
     }
@@ -226,10 +227,11 @@ class _AddTokenMenu extends StatelessWidget {
       context,
       MaterialPageRoute(builder: (_) => page),
     );
+    if (!context.mounted) return;
     if (result == true) {
       ref.read(wapBridgeProvider).initWallet(shouldInitCoinInfo: true);
     }
-    if (context.mounted) Navigator.pop(context);
+    Navigator.pop(context);
   }
 
   @override

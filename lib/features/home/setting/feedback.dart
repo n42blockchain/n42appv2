@@ -63,6 +63,7 @@ class _FeedbackState extends State<Feedback> {
       appendixs.add(am);
       uploadFile(am);
     }
+    if (!mounted) return;
     setState(() {});
   }
 
@@ -72,12 +73,14 @@ class _FeedbackState extends State<Feedback> {
       quality: 25,
       position: -1,
     );
+    if (!mounted) return;
     setState(() {});
   }
 
   Future<void> uploadFile(AppendixModel am) async {
     try {
       am.cancelToken = CancelToken();
+      if (!mounted) return;
       setState(() {
         am.state = 1;
         am.upCount = 0;
@@ -89,8 +92,10 @@ class _FeedbackState extends State<Feedback> {
       ) {
         am.upCount = count;
         am.upTotal = total;
+        if (!mounted) return;
         setState(() {});
       }, cancelToken: am.cancelToken);
+      if (!mounted) return;
       setState(() {
         if (rData["error"]) {
           am.state = 3;
@@ -100,6 +105,7 @@ class _FeedbackState extends State<Feedback> {
         }
       });
     } catch (_) {
+      if (!mounted) return;
       setState(() => am.state = 3);
     }
   }
@@ -122,28 +128,39 @@ class _FeedbackState extends State<Feedback> {
       return;
     }
     final fjStr = appendixs.map((am) => am.url).join(';');
-    setState(() => load = Load.loading);
-    final walletService = ServiceLocatorSetup.walletService;
-    var address = "";
-    if (walletService != null) {
-      final mainWallet = walletService.getMainWallet();
-      if (mainWallet != null) {
-        address =
-            await walletService.getChainAddress(
-              mainWallet.address,
-              CoinType.N.name,
-            ) ??
-            "";
+    var completedWithExit = false;
+    try {
+      setState(() => load = Load.loading);
+      final walletService = ServiceLocatorSetup.walletService;
+      var address = "";
+      if (walletService != null) {
+        final mainWallet = walletService.getMainWallet();
+        if (mainWallet != null) {
+          address =
+              await walletService.getChainAddress(
+                mainWallet.address,
+                CoinType.N.name,
+              ) ??
+              "";
+        }
       }
-    }
-    final mm = await UserInfoApi().submitFeedback(address, content, fjStr);
-    if (!mounted) return;
-    setState(() => load = Load.finish);
-    if (!mm.error && mm.data['code'] == 200) {
-      ToastUtils.show(S.of(context).g_key_feedback_4);
-      Navigator.pop(context);
-    } else {
-      ToastUtils.show(S.of(context).g_key_feedback_3);
+      final mm = await UserInfoApi().submitFeedback(address, content, fjStr);
+      if (!mounted) return;
+      if (!mm.error && mm.data['code'] == 200) {
+        ToastUtils.show(S.of(context).g_key_feedback_4);
+        completedWithExit = true;
+        Navigator.pop(context);
+      } else {
+        ToastUtils.show(S.of(context).g_key_feedback_3);
+      }
+    } catch (_) {
+      if (mounted) {
+        ToastUtils.show(S.of(context).g_key_feedback_3);
+      }
+    } finally {
+      if (mounted && !completedWithExit) {
+        setState(() => load = Load.finish);
+      }
     }
   }
 

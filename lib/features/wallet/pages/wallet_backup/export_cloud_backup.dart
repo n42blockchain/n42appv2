@@ -64,6 +64,7 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
   // ── 导出 ──────────────────────────────────────────────────
 
   Future<void> _export() async {
+    if (_load == Load.loading) return;
     setState(() => _error = '');
 
     if (_selectedIndexes.isEmpty) {

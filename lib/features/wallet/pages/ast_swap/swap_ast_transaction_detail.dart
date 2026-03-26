@@ -47,12 +47,16 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
   }
 
   Future<void> _loadOrderDetail() async {
-    final MessageModel rData = await SwapAstApi().getNftOrAstDetail(
-      _orderModel.id ?? 0,
-    );
-    if (!mounted) return;
-    if (!rData.error) {
-      setState(() => _orderModel = SwapAstOrderModel.fromJson(rData.data));
+    try {
+      final MessageModel rData = await SwapAstApi().getNftOrAstDetail(
+        _orderModel.id ?? 0,
+      );
+      if (!mounted) return;
+      if (!rData.error) {
+        setState(() => _orderModel = SwapAstOrderModel.fromJson(rData.data));
+      }
+    } catch (e) {
+      debugPrint('SwapAstTransactionDetail._loadOrderDetail error: $e');
     }
   }
 

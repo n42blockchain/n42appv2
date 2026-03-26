@@ -179,6 +179,7 @@ mixin _XrpSendLogicMixin on ConsumerState<WalletChainSendXrp> {
       widget.coinModel.coin['coinType'],
       addr,
     );
+    if (!mounted) return null;
     if (!valid ||
         addr.toUpperCase() ==
             widget.coinModel.address.toString().toUpperCase()) {
@@ -311,6 +312,7 @@ mixin _XrpSendLogicMixin on ConsumerState<WalletChainSendXrp> {
 
   Future<void> signTx(TransationRecordModel trModel) async {
     if (!signTxCheck()) return;
+    bool completedWithExit = false;
     try {
       final TransferApi transferApi = TransferApi();
       final MessageModel mm = await transferApi.transferWallet(
@@ -331,6 +333,7 @@ mixin _XrpSendLogicMixin on ConsumerState<WalletChainSendXrp> {
         );
         ToastUtils.show(S.current.g_key_nft_41);
         if (!mounted) return;
+        completedWithExit = true;
         Navigator.pop(context);
       }
     } catch (e) {
@@ -338,7 +341,7 @@ mixin _XrpSendLogicMixin on ConsumerState<WalletChainSendXrp> {
       ToastUtils.show(e.toString());
     } finally {
       load = Load.finish;
-      if (mounted) setState(() {});
+      if (mounted && !completedWithExit) setState(() {});
     }
   }
 

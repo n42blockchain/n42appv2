@@ -42,6 +42,7 @@ class BridgeProvider extends ChangeNotifier
 
   @override
   final BridgeApiClient _lifiApi;
+  bool _isDisposed = false;
 
   /// 状态变化通知回调：仅在 completed / failed 时触发。
   /// 由 UI 层设置，dispose 时应置 null 防止野回调。
@@ -120,10 +121,13 @@ class BridgeProvider extends ChangeNotifier
   @override
   double get _slippage => __slippage;
   double get slippage => __slippage;
+  @override
+  bool get _isDisposedFlag => _isDisposed;
 
   /// 初始化：先恢复持久化历史，再加载链列表
   Future<void> initialize() async {
     await _loadPersisted();
+    if (_isDisposed) return;
     await loadChains();
   }
 
@@ -133,6 +137,7 @@ class BridgeProvider extends ChangeNotifier
     _clearError();
 
     final result = await _lifiApi.getChains();
+    if (_isDisposed) return;
 
     if (result.error) {
       _setError(result.data?.toString() ?? 'Failed to load chains');
@@ -177,6 +182,7 @@ class BridgeProvider extends ChangeNotifier
     _setState(BridgeState.loadingTokens);
 
     final result = await _lifiApi.getTokens(chainId: chainId);
+    if (_isDisposed) return;
 
     if (!result.error) {
       final tokens = result.data as List<BridgeToken>;
@@ -222,7 +228,7 @@ class BridgeProvider extends ChangeNotifier
       );
     }
 
-    notifyListeners();
+    _notifySafely();
   }
 
   /// 设置目标链
@@ -245,7 +251,7 @@ class BridgeProvider extends ChangeNotifier
       );
     }
 
-    notifyListeners();
+    _notifySafely();
   }
 
   /// 交换源链和目标链
@@ -261,7 +267,7 @@ class BridgeProvider extends ChangeNotifier
     _quoteResponse = null;
     __selectedRoute = null;
 
-    notifyListeners();
+    _notifySafely();
   }
 
   /// 设置源代币
@@ -269,7 +275,7 @@ class BridgeProvider extends ChangeNotifier
     __fromToken = token;
     _quoteResponse = null;
     __selectedRoute = null;
-    notifyListeners();
+    _notifySafely();
   }
 
   /// 设置目标代币
@@ -277,7 +283,7 @@ class BridgeProvider extends ChangeNotifier
     __toToken = token;
     _quoteResponse = null;
     __selectedRoute = null;
-    notifyListeners();
+    _notifySafely();
   }
 
   /// 设置转账金额
@@ -285,13 +291,13 @@ class BridgeProvider extends ChangeNotifier
     __fromAmount = amount;
     _quoteResponse = null;
     __selectedRoute = null;
-    notifyListeners();
+    _notifySafely();
   }
 
   /// 设置滑点
   void setSlippage(double slippage) {
     __slippage = slippage;
-    notifyListeners();
+    _notifySafely();
   }
 
   /// 获取报价
@@ -331,6 +337,7 @@ class BridgeProvider extends ChangeNotifier
 
     // 使用 advanced/routes 获取多个路由选项
     final result = await _lifiApi.getRoutes(request);
+    if (_isDisposed) return;
 
     if (result.error) {
       _setError(result.data?.toString() ?? 'Failed to get quote');
@@ -352,13 +359,15 @@ class BridgeProvider extends ChangeNotifier
   /// 选择路由
   void selectRoute(BridgeRoute route) {
     __selectedRoute = route;
-    notifyListeners();
+    _notifySafely();
   }
 
   @override
   void dispose() {
+    _isDisposed = true;
     _pollTimer?.cancel();
     _pollTimer = null;
+    onStatusChanged = null;
     super.dispose();
   }
 
@@ -400,19 +409,27 @@ class BridgeProvider extends ChangeNotifier
 
   @override
   void _setState(BridgeState state) {
+    if (_isDisposed) return;
     _state = state;
-    notifyListeners();
+    _notifySafely();
   }
 
   @override
   void _setError(String message) {
+    if (_isDisposed) return;
     __errorMessage = message;
     _state = BridgeState.error;
-    notifyListeners();
+    _notifySafely();
   }
 
   @override
   void _clearError() {
     __errorMessage = null;
+  }
+
+  @override
+  void _notifySafely() {
+    if (_isDisposed) return;
+    notifyListeners();
   }
 }

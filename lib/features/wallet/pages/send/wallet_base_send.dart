@@ -117,6 +117,7 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
     final s = await SPUtil().getSecurity();
     if (s == null) return;
     final userSecurityMap = s[AppGlobals.userInfo?.uuid ?? ""];
+    if (!mounted) return;
     if (userSecurityMap != null) {
       setState(() => securityMap = userSecurityMap);
     }

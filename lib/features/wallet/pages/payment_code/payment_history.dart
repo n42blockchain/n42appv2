@@ -29,9 +29,9 @@ class _PaymentHistoryState extends State<PaymentHistory> {
 
   @override
   void initState() {
+    super.initState();
     uuid = AppGlobals.userInfo?.uuid ?? "";
     loadHistory();
-    super.initState();
   }
 
   Future<void> loadHistory() async {
@@ -47,12 +47,16 @@ class _PaymentHistoryState extends State<PaymentHistory> {
       if (mm.error) {
         setState(() {
           load = Load.error;
-          errorMessage = mm.data?.toString() ?? S.current.g_key_payment_load_failed;
+          errorMessage =
+              mm.data?.toString() ?? S.current.g_key_payment_load_failed;
         });
       } else {
         final raw = mm.data;
         final parsed = (raw is List)
-            ? raw.whereType<Map>().map((e) => Map<String, dynamic>.from(e)).toList()
+            ? raw
+                  .whereType<Map>()
+                  .map((e) => Map<String, dynamic>.from(e))
+                  .toList()
             : <Map<String, dynamic>>[];
         setState(() {
           dataList = parsed;
@@ -84,8 +88,10 @@ class _PaymentHistoryState extends State<PaymentHistory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:
-          AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
+      backgroundColor: AppThemeUtils.getColorByKey(
+        context,
+        AppThemeKeys.backGroundColor.name,
+      ),
       appBar: AppBarWidget(
         text: S.of(context).g_key_payment_history,
         actions: [
@@ -103,19 +109,20 @@ class _PaymentHistoryState extends State<PaymentHistory> {
   Widget _buildBody() => switch (load) {
     Load.loading => const Center(child: CircularProgressIndicator()),
     Load.error => _buildError(),
-    _ => dataList.isEmpty
-        ? const Center(child: EmptyView())
-        : RefreshIndicator(
-            onRefresh: loadHistory,
-            child: ListView.builder(
-              padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(30),
-                vertical: ScreenUtil().setWidth(15),
+    _ =>
+      dataList.isEmpty
+          ? const Center(child: EmptyView())
+          : RefreshIndicator(
+              onRefresh: loadHistory,
+              child: ListView.builder(
+                padding: EdgeInsets.symmetric(
+                  horizontal: ScreenUtil().setWidth(30),
+                  vertical: ScreenUtil().setWidth(15),
+                ),
+                itemCount: dataList.length,
+                itemBuilder: (_, index) => _buildItem(dataList[index]),
               ),
-              itemCount: dataList.length,
-              itemBuilder: (_, index) => _buildItem(dataList[index]),
             ),
-          ),
   };
 
   Widget _buildError() {
@@ -127,7 +134,9 @@ class _PaymentHistoryState extends State<PaymentHistory> {
             errorMessage,
             style: TextStyle(
               color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.errorTextColor.name),
+                context,
+                AppThemeKeys.errorTextColor.name,
+              ),
               fontSize: ScreenUtil().setSp(28),
             ),
             textAlign: TextAlign.center,
@@ -142,7 +151,9 @@ class _PaymentHistoryState extends State<PaymentHistory> {
               child: Icon(
                 Icons.refresh,
                 color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
+                  context,
+                  AppThemeKeys.mainBlueColor.name,
+                ),
               ),
             ),
           ),
@@ -166,7 +177,9 @@ class _PaymentHistoryState extends State<PaymentHistory> {
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
         color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemBgColor.name),
+          context,
+          AppThemeKeys.itemBgColor.name,
+        ),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
       ),
       child: Column(
@@ -182,7 +195,11 @@ class _PaymentHistoryState extends State<PaymentHistory> {
   }
 
   Widget _buildTxHashRow(
-      Map<String, dynamic> data, String timeStr, Color dirColor, bool isIncoming) {
+    Map<String, dynamic> data,
+    String timeStr,
+    Color dirColor,
+    bool isIncoming,
+  ) {
     return Row(
       children: [
         Icon(
@@ -208,7 +225,9 @@ class _PaymentHistoryState extends State<PaymentHistory> {
               data['txHash'] ?? "",
               style: TextStyle(
                 color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
+                  context,
+                  AppThemeKeys.mainBlueColor.name,
+                ),
                 fontSize: ScreenUtil().setSp(28),
               ),
               maxLines: 1,
@@ -221,7 +240,9 @@ class _PaymentHistoryState extends State<PaymentHistory> {
             timeStr,
             style: TextStyle(
               color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name),
+                context,
+                AppThemeKeys.itemSubtitleTextColor.name,
+              ),
               fontSize: ScreenUtil().setSp(24),
             ),
           ),
@@ -230,11 +251,18 @@ class _PaymentHistoryState extends State<PaymentHistory> {
   }
 
   Widget _buildAmountRow(
-      Map<String, dynamic> data, Color dirColor, bool isIncoming) {
+    Map<String, dynamic> data,
+    Color dirColor,
+    bool isIncoming,
+  ) {
     final itemTextColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemTextColor.name);
+      context,
+      AppThemeKeys.itemTextColor.name,
+    );
     final subtitleColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
+      context,
+      AppThemeKeys.itemSubtitleTextColor.name,
+    );
 
     return Row(
       children: [
@@ -255,10 +283,12 @@ class _PaymentHistoryState extends State<PaymentHistory> {
                 ),
                 if ((data['tokenAmount'] ?? "").toString().isNotEmpty)
                   Text(
-                    S.of(context).g_key_payment_approx_token(
-                      data['tokenAmount'].toString(),
-                      data['token']?.toString() ?? "",
-                    ),
+                    S
+                        .of(context)
+                        .g_key_payment_approx_token(
+                          data['tokenAmount'].toString(),
+                          data['token']?.toString() ?? "",
+                        ),
                     style: TextStyle(
                       color: subtitleColor,
                       fontSize: ScreenUtil().setSp(28),
@@ -275,10 +305,7 @@ class _PaymentHistoryState extends State<PaymentHistory> {
             isIncoming
                 ? S.of(context).g_key_payment_incoming
                 : S.of(context).g_key_payment_outgoing,
-            style: TextStyle(
-              color: dirColor,
-              fontSize: ScreenUtil().setSp(28),
-            ),
+            style: TextStyle(color: dirColor, fontSize: ScreenUtil().setSp(28)),
           ),
         ),
       ],
@@ -287,7 +314,9 @@ class _PaymentHistoryState extends State<PaymentHistory> {
 
   Widget _buildTokenInfoRow(Map<String, dynamic> data) {
     final itemTextColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemTextColor.name);
+      context,
+      AppThemeKeys.itemTextColor.name,
+    );
     final tokenPrice = (data['tokenPrice'] ?? "").toString();
 
     return Row(

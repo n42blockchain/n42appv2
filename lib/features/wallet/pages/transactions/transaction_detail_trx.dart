@@ -70,6 +70,7 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
   @override
   void dispose() {
     _pollingTimer?.cancel();
+    searchEditingController.dispose();
     super.dispose();
   }
 

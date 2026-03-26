@@ -32,20 +32,28 @@ class _EnsRenewSuccessCardState extends State<EnsRenewSuccessCard> {
   bool _reminderSaving = false;
 
   Future<void> _toggleReminder(bool value) async {
+    if (_reminderSaving) return;
     setState(() => _reminderSaving = true);
-    if (value) {
-      await EnsExpiryReminderService.setReminder(
-        widget.ensName,
-        widget.renewResult.newExpiresAt!,
-      );
-    } else {
-      await EnsExpiryReminderService.disableReminder(widget.ensName);
-    }
-    if (mounted) {
-      setState(() {
-        _reminderEnabled = value;
-        _reminderSaving = false;
-      });
+    try {
+      if (value) {
+        await EnsExpiryReminderService.setReminder(
+          widget.ensName,
+          widget.renewResult.newExpiresAt!,
+        );
+      } else {
+        await EnsExpiryReminderService.disableReminder(widget.ensName);
+      }
+      if (mounted) {
+        setState(() {
+          _reminderEnabled = value;
+          _reminderSaving = false;
+        });
+      }
+    } catch (e) {
+      debugPrint('EnsRenewSuccessCard: failed to toggle reminder: $e');
+      if (mounted) {
+        setState(() => _reminderSaving = false);
+      }
     }
   }
 

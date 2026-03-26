@@ -35,8 +35,7 @@ class _PaymentCodeState extends State<PaymentCode> {
     return '$base?type=payment&amount=$amt&coinType=$coinType&address=$address&user=$uuid';
   }
 
-  Color _color(String key) =>
-      AppThemeUtils.getColorByKey(context, key);
+  Color _color(String key) => AppThemeUtils.getColorByKey(context, key);
 
   @override
   Widget build(BuildContext context) {
@@ -95,10 +94,7 @@ class _PaymentCodeState extends State<PaymentCode> {
               padding: EdgeInsets.only(bottom: su.setWidth(30)),
               child: Text(
                 userName,
-                style: TextStyle(
-                  fontSize: su.setSp(30),
-                  color: blockColor,
-                ),
+                style: TextStyle(fontSize: su.setSp(30), color: blockColor),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -144,7 +140,8 @@ class _PaymentCodeState extends State<PaymentCode> {
                   builder: (_) => SetAmount(type: 1, amount: amount),
                 ),
               );
-              if (rAmount != null) setState(() => amount = rAmount);
+              if (!mounted || rAmount == null) return;
+              setState(() => amount = rAmount);
             },
             child: Text(
               S.of(context).g_key_payment_set_amount_title,

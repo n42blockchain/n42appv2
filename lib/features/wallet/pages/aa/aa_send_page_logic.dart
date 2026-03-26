@@ -94,10 +94,9 @@ mixin _AASendLogicMixin on State<AASendPage> {
         ),
       ),
     );
-    if (result != null) {
-      setState(() => selectedPaymaster = result);
-      estimateGas();
-    }
+    if (!mounted || result == null) return;
+    setState(() => selectedPaymaster = result);
+    estimateGas();
   }
 
   void showTransactionPreview() {

@@ -262,6 +262,7 @@ mixin _SelfCustody1LogicMixin on ConsumerState<SelfCustody1> {
       }
     }
     inputUTXO = utxos;
+    if (!mounted) return;
     setState(() {});
     if (!inputValueOK) {
       getUTXO(address ?? "");

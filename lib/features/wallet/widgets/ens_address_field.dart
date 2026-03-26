@@ -89,6 +89,7 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
   EnsResolutionResult? _resolveResult;
   String? _avatarUrl;
   Timer? _debounceTimer;
+  int _resolveRequestId = 0;
 
   /// 防抖延迟时间
   static const _debounceDelay = Duration(milliseconds: 500);
@@ -103,6 +104,22 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
   }
 
   @override
+  void didUpdateWidget(covariant EnsAddressField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.controller != widget.controller) {
+      oldWidget.controller.removeListener(_onTextChanged);
+      widget.controller.addListener(_onTextChanged);
+      _onTextChanged();
+      return;
+    }
+
+    if (oldWidget.coinType != widget.coinType ||
+        oldWidget.senderAddress != widget.senderAddress) {
+      _onTextChanged();
+    }
+  }
+
+  @override
   void dispose() {
     widget.controller.removeListener(_onTextChanged);
     _debounceTimer?.cancel();
@@ -113,6 +130,7 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
     _debounceTimer?.cancel();
 
     final text = widget.controller.text.trim();
+    final requestId = ++_resolveRequestId;
 
     if (text.isEmpty) {
       _updateStatus(EnsResolveStatus.idle, null);
@@ -122,7 +140,7 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
     // 检查是否是 ENS 名称
     if (EnsService.isEnsName(text)) {
       _updateStatus(EnsResolveStatus.resolving, null);
-      _debounceTimer = Timer(_debounceDelay, () => _resolveEns(text));
+      _debounceTimer = Timer(_debounceDelay, () => _resolveEns(text, requestId));
     } else {
       _updateStatus(EnsResolveStatus.idle, null);
       // 验证普通地址
@@ -130,15 +148,35 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
     }
   }
 
-  Future<void> _resolveEns(String ensName) async {
-    if (!mounted) return;
+  Future<void> _resolveEns(String ensName, int requestId) async {
+    if (!mounted || requestId != _resolveRequestId) return;
 
-    final result = await _ensService.resolveName(
-      ensName,
-      preferredChain: widget.coinType,
-    );
+    EnsResolutionResult result;
+    try {
+      result = await _ensService.resolveName(
+        ensName,
+        preferredChain: widget.coinType,
+      );
+    } catch (e) {
+      debugPrint('EnsAddressField: failed to resolve ENS: $e');
+      if (!mounted ||
+          requestId != _resolveRequestId ||
+          widget.controller.text.trim() != ensName) {
+        return;
+      }
+      _updateStatus(
+        EnsResolveStatus.failed,
+        EnsResolutionResult.failure(e.toString()),
+      );
+      widget.onAddressValidated?.call(null, true);
+      return;
+    }
 
-    if (!mounted) return;
+    if (!mounted ||
+        requestId != _resolveRequestId ||
+        widget.controller.text.trim() != ensName) {
+      return;
+    }
 
     if (result.success && result.address != null) {
       // 检查是否自转
@@ -156,7 +194,7 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
       widget.onAddressValidated?.call(result.address, true);
 
       // 异步加载头像（不阻塞主流程）
-      _loadAvatar(result, ensName);
+      _loadAvatar(result, ensName, requestId);
     } else {
       _updateStatus(EnsResolveStatus.failed, result);
       widget.onAddressValidated?.call(null, true);
@@ -165,7 +203,11 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
 
   /// 异步加载 ENS 头像：优先使用已内联在解析结果中的 avatar URL，
   /// 否则单独请求 getAvatar。
-  Future<void> _loadAvatar(EnsResolutionResult result, String ensName) async {
+  Future<void> _loadAvatar(
+    EnsResolutionResult result,
+    String ensName,
+    int requestId,
+  ) async {
     var url = result.avatar;
     if (url?.isNotEmpty != true) {
       try {
@@ -174,7 +216,12 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
         url = null;
       }
     }
-    if (!mounted || url?.isNotEmpty != true) return;
+    if (!mounted ||
+        requestId != _resolveRequestId ||
+        widget.controller.text.trim() != ensName ||
+        url?.isNotEmpty != true) {
+      return;
+    }
     setState(() => _avatarUrl = url);
   }
 

@@ -35,6 +35,7 @@ class _MiningKeyListState extends ConsumerState<MiningKeyList> {
       miningList=miningData!.values.toList();
       miningKeyList=miningData!.keys.toList();
     }
+    if (!mounted) return;
     setState(() {});
   }
   Future<void> removeKey(int index) async {

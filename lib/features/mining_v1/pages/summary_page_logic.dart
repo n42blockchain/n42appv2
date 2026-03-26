@@ -309,6 +309,7 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
                       }
                       ToastUtils.show(
                           "Release the pledge and stop mining");
+                      if (!mounted) return;
                       setState(() {
                         isCanUnlock = false;
                         lockTimeStr = null;

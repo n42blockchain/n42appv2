@@ -28,6 +28,7 @@ class WalletCoinMarketPreview extends StatefulWidget {
 class _WalletCoinMarketPreviewState extends State<WalletCoinMarketPreview> {
   List<double> _prices = [];
   bool _loading = true;
+  int _chartRequestId = 0;
 
   @override
   void initState() {
@@ -35,17 +36,43 @@ class _WalletCoinMarketPreviewState extends State<WalletCoinMarketPreview> {
     _fetchChart();
   }
 
+  @override
+  void didUpdateWidget(covariant WalletCoinMarketPreview oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.geckoId != widget.geckoId) {
+      _prices = [];
+      _loading = true;
+      _fetchChart();
+    }
+  }
+
   Future<void> _fetchChart() async {
+    final requestId = ++_chartRequestId;
+    final geckoId = widget.geckoId.trim();
+    if (geckoId.isEmpty) {
+      if (mounted && requestId == _chartRequestId) {
+        setState(() {
+          _prices = [];
+          _loading = false;
+        });
+      }
+      return;
+    }
     try {
-      final data = await MarketApi().getMarketChart(widget.geckoId, days: 7);
-      if (mounted) {
+      final data = await MarketApi().getMarketChart(geckoId, days: 7);
+      if (mounted && requestId == _chartRequestId) {
         setState(() {
           _prices = data['prices'] ?? [];
           _loading = false;
         });
       }
     } catch (_) {
-      if (mounted) setState(() => _loading = false);
+      if (mounted && requestId == _chartRequestId) {
+        setState(() {
+          _prices = [];
+          _loading = false;
+        });
+      }
     }
   }
 

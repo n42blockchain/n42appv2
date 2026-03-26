@@ -116,9 +116,9 @@ class _OneCoinWalletManageState extends ConsumerState<OneCoinWalletManage>
   @override
   Future<void> jumpExportKeystoreDescPage({String? password}) async {
     setState(() => load = Load.loading);
-    await Future.delayed(const Duration(milliseconds: 300));
-    if (!mounted) return;
     try {
+      await Future.delayed(const Duration(milliseconds: 300));
+      if (!mounted) return;
       password ??= widget.walletInfo.password ?? "";
       final keystoreJson = await Trustdart().getKeyStore(
         widget.model.coin['coinType']!,
@@ -130,7 +130,7 @@ class _OneCoinWalletManageState extends ConsumerState<OneCoinWalletManage>
       );
       if (!mounted) return;
       final normalized = normalizeExportableKeystore(keystoreJson);
-      Navigator.push(
+      await Navigator.push(
         context,
         MaterialPageRoute(
           builder: (_) => ExportKeystoreDesc(keystoreJson: normalized),
@@ -139,6 +139,10 @@ class _OneCoinWalletManageState extends ConsumerState<OneCoinWalletManage>
     } catch (_) {
       if (!mounted) return;
       ToastUtils.show(S.of(context).g_key_keystore_21);
+    } finally {
+      if (mounted) {
+        setState(() => load = Load.finish);
+      }
     }
   }
 

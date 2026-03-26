@@ -26,6 +26,7 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
   int pageNum = 1;
   bool lastPage = false;
   Load loading = Load.finish;
+  int _requestId = 0;
 
   @override
   void initState() {
@@ -34,40 +35,55 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
   }
 
   Future<void> refreshCollectionList() async {
-    if (loading == Load.loading) return;
-    loading = Load.loading;
-    pageNum = 1;
-    lastPage = false;
-    collectionList.clear();
-    await getCollectionList();
-    if (!mounted) return;
-    loading = Load.finish;
-    setState(() {});
+    await _loadCollectionPage(pageToLoad: 1, replace: true);
   }
 
   Future<void> moreCollectionList() async {
-    loading = Load.loading;
-    pageNum++;
-    await getCollectionList();
-    if (!mounted) return;
-    loading = Load.finish;
-    setState(() {});
+    await _loadCollectionPage(pageToLoad: pageNum + 1, replace: false);
   }
 
-  Future<void> getCollectionList() async {
-    List<BrowserCollectionModel> cList = await browserApi
-        .selectBrowserCollection(pageNum: pageNum, pageSize: pageSize);
-    if (cList.length < pageSize) {
-      lastPage = true;
+  Future<void> _loadCollectionPage({
+    required int pageToLoad,
+    required bool replace,
+  }) async {
+    if (loading == Load.loading || (!replace && lastPage)) return;
+    final requestId = ++_requestId;
+    loading = Load.loading;
+    if (mounted) {
+      setState(() {});
     }
-    collectionList.addAll(cList);
+
+    try {
+      final cList = await browserApi.selectBrowserCollection(
+        pageNum: pageToLoad,
+        pageSize: pageSize,
+      );
+      if (requestId != _requestId) return;
+      if (!mounted) return;
+      if (replace) {
+        collectionList.clear();
+        lastPage = false;
+      }
+      pageNum = pageToLoad;
+      lastPage = cList.length < pageSize;
+      collectionList.addAll(cList);
+    } catch (e) {
+      debugPrint('load browser collection failed: $e');
+    } finally {
+      if (mounted) {
+        loading = Load.finish;
+        setState(() {});
+      }
+    }
   }
 
   Future<void> deleteCollection(int index) async {
+    if (index < 0 || index >= collectionList.length) return;
+    _requestId++;
     BrowserCollectionModel bcm = collectionList[index];
     await browserApi.deleteBrowserCollection(bcm.id!);
-    collectionList.remove(bcm);
     if (!mounted) return;
+    collectionList.removeWhere((element) => element.id == bcm.id);
     setState(() {});
     ToastUtils.show(S.of(context).g_key_address_5);
   }
@@ -80,8 +96,9 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
     );
     if (!mounted) return;
     if (edit != null) {
+      _requestId++;
       if (edit == "delete") {
-        collectionList.removeAt(index);
+        collectionList.removeWhere((element) => element.id == bcm.id);
       }
       setState(() {});
     }
@@ -118,151 +135,171 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
   }
 
   Widget listWidget() {
-    return ListView.builder(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
-      itemCount: collectionList.length + 1,
-      itemBuilder: (context, int index) {
-        if (index == collectionList.length) {
-          return Container(
-            alignment: Alignment.center,
-            height: ScreenUtil().setWidth(50.0),
-            child: lastPage
-                ? Text(S.of(context).g_key_105, style: _subtitleStyle(context))
-                : Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(
-                          right: ScreenUtil().setWidth(10.0),
-                        ),
-                        height: ScreenUtil().setWidth(40.0),
-                        width: ScreenUtil().setWidth(40.0),
-                        child: const CircularProgressIndicator(),
-                      ),
-                      Text(
-                        S.of(context).g_key_106,
-                        style: _subtitleStyle(context),
-                      ),
-                    ],
-                  ),
-          );
+    return NotificationListener<ScrollNotification>(
+      onNotification: (notification) {
+        if (notification is ScrollEndNotification &&
+            notification.metrics.pixels >=
+                notification.metrics.maxScrollExtent - 50 &&
+            !lastPage &&
+            loading != Load.loading) {
+          moreCollectionList();
         }
-        BrowserCollectionModel bcm = collectionList[index];
-        return InkWell(
-          onTap: () async {
-            if (widget.type == 0) {
-              Navigator.pop(context, bcm.url);
-            } else {
-              _navigateToInfo(bcm, index);
-            }
-          },
-          child: Container(
-            margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0)),
-            padding: EdgeInsets.symmetric(
-              vertical: ScreenUtil().setWidth(20.0),
-              horizontal: ScreenUtil().setWidth(30.0),
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(
-                Radius.circular(ScreenUtil().setWidth(20.0)),
-              ),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemBgColor.name,
-              ),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          vertical: ScreenUtil().setWidth(6.0),
-                        ),
-                        child: Text(
-                          bcm.name ?? "",
-                          style: TextStyle(
-                            color: AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.mainTextColor.name,
+        return false;
+      },
+      child: ListView.builder(
+        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+        itemCount: collectionList.length + 1,
+        itemBuilder: (context, int index) {
+          if (index == collectionList.length) {
+            final isLoadingMore =
+                loading == Load.loading && collectionList.isNotEmpty;
+            return Container(
+              alignment: Alignment.center,
+              height: ScreenUtil().setWidth(50.0),
+              child: lastPage
+                  ? Text(
+                      S.of(context).g_key_105,
+                      style: _subtitleStyle(context),
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        if (isLoadingMore)
+                          Container(
+                            margin: EdgeInsets.only(
+                              right: ScreenUtil().setWidth(10.0),
                             ),
-                            fontSize: ScreenUtil().setSp(28.0),
+                            height: ScreenUtil().setWidth(40.0),
+                            width: ScreenUtil().setWidth(40.0),
+                            child: const CircularProgressIndicator(),
                           ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          vertical: ScreenUtil().setWidth(6.0),
-                        ),
-                        child: Text(
-                          bcm.url ?? "",
+                        Text(
+                          S.of(context).g_key_106,
                           style: _subtitleStyle(context),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
                         ),
-                      ),
-                      Visibility(
-                        visible: (bcm.desc ?? "").isNotEmpty,
-                        child: Container(
+                      ],
+                    ),
+            );
+          }
+          BrowserCollectionModel bcm = collectionList[index];
+          return InkWell(
+            onTap: () async {
+              if (widget.type == 0) {
+                Navigator.pop(context, bcm.url);
+              } else {
+                _navigateToInfo(bcm, index);
+              }
+            },
+            child: Container(
+              margin: EdgeInsets.symmetric(
+                vertical: ScreenUtil().setWidth(20.0),
+              ),
+              padding: EdgeInsets.symmetric(
+                vertical: ScreenUtil().setWidth(20.0),
+                horizontal: ScreenUtil().setWidth(30.0),
+              ),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(ScreenUtil().setWidth(20.0)),
+                ),
+                color: AppThemeUtils.getColorByKey(
+                  context,
+                  AppThemeKeys.itemBgColor.name,
+                ),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
                           padding: EdgeInsets.symmetric(
                             vertical: ScreenUtil().setWidth(6.0),
                           ),
                           child: Text(
-                            bcm.desc ?? "",
-                            style: _subtitleStyle(context),
-                            maxLines: 2,
+                            bcm.name ?? "",
+                            style: TextStyle(
+                              color: AppThemeUtils.getColorByKey(
+                                context,
+                                AppThemeKeys.mainTextColor.name,
+                              ),
+                              fontSize: ScreenUtil().setSp(28.0),
+                            ),
+                            maxLines: 1,
                             overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                            vertical: ScreenUtil().setWidth(6.0),
+                          ),
+                          child: Text(
+                            bcm.url ?? "",
+                            style: _subtitleStyle(context),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        Visibility(
+                          visible: (bcm.desc ?? "").isNotEmpty,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              vertical: ScreenUtil().setWidth(6.0),
+                            ),
+                            child: Text(
+                              bcm.desc ?? "",
+                              style: _subtitleStyle(context),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        onTap: () => deleteCollection(index),
+                        child: SizedBox(
+                          height: ScreenUtil().setWidth(40.0),
+                          width: ScreenUtil().setWidth(40.0),
+                          child: Icon(
+                            Icons.delete,
+                            color: AppThemeUtils.getColorByKey(
+                              context,
+                              AppThemeKeys.mainButtonBgColor.name,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: ScreenUtil().setWidth(10.0)),
+                      InkWell(
+                        onTap: () => _navigateToInfo(bcm, index),
+                        child: SizedBox(
+                          height: ScreenUtil().setWidth(40.0),
+                          width: ScreenUtil().setWidth(40.0),
+                          child: Icon(
+                            Icons.edit_note,
+                            color: AppThemeUtils.getColorByKey(
+                              context,
+                              AppThemeKeys.mainButtonBgColor.name,
+                            ),
                           ),
                         ),
                       ),
                     ],
                   ),
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    InkWell(
-                      onTap: () => deleteCollection(index),
-                      child: SizedBox(
-                        height: ScreenUtil().setWidth(40.0),
-                        width: ScreenUtil().setWidth(40.0),
-                        child: Icon(
-                          Icons.delete,
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.mainButtonBgColor.name,
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: ScreenUtil().setWidth(10.0)),
-                    InkWell(
-                      onTap: () => _navigateToInfo(bcm, index),
-                      child: SizedBox(
-                        height: ScreenUtil().setWidth(40.0),
-                        width: ScreenUtil().setWidth(40.0),
-                        child: Icon(
-                          Icons.edit_note,
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.mainButtonBgColor.name,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 

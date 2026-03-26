@@ -56,6 +56,10 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
   List<double> _volumeData = [];
   bool _chartLoading = false;
   int _chartGeneration = 0;
+  int _priceGeneration = 0;
+  int _infoGeneration = 0;
+  int _alertGeneration = 0;
+  int _tradesGeneration = 0;
 
   CoinPriceAlertConfig? _alertConfig;
   List<PortfolioTrade> _trades = [];
@@ -81,26 +85,83 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
     super.dispose();
   }
 
+  @override
+  void didUpdateWidget(covariant MarketCoinInfo oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final oldGeckoId = (oldWidget.coin['coin_gecko_id'] ?? '')
+        .toString()
+        .trim();
+    final newGeckoId = (widget.coin['coin_gecko_id'] ?? '')
+        .toString()
+        .trim();
+    final oldSymbol = (oldWidget.coin['coin'] ?? '').toString().trim();
+    final newSymbol = (widget.coin['coin'] ?? '').toString().trim();
+    if (oldGeckoId == newGeckoId && oldSymbol == newSymbol) return;
+
+    _chartGeneration++;
+    _coin = Map<String, dynamic>.from(widget.coin);
+    _priceChange24h = toDouble(_coin['price_change_per_24h']);
+    _coinInfo = null;
+    _infoLoad = Load.loading;
+    _website = '';
+    _browsers = [];
+    _reddit = null;
+    _twitter = null;
+    _facebook = null;
+    _high24h = 0;
+    _low24h = 0;
+    _fdv = 0;
+    _ath = 0;
+    _atl = 0;
+    _pct7d = 0;
+    _pct30d = 0;
+    _liquidityScore = 0;
+    _rank = 0;
+    _ohlcvData = [];
+    _volumeData = [];
+    _chartLoading = false;
+    _alertConfig = null;
+    _trades = [];
+
+    setState(() {});
+    _fetchCoinPrice();
+    _fetchCoinInfo();
+    _loadAlertConfig();
+    _loadTrades();
+  }
+
   String get _coinId => (_coin['coin_gecko_id'] ?? '').toString().trim();
   String get _coinSymbol => (_coin['coin'] ?? '').toString().trim();
   String get _coinName => (_coin['name'] ?? '').toString().trim();
 
   Future<void> _loadAlertConfig() async {
-    if (_coinId.isEmpty) return;
+    final requestId = ++_alertGeneration;
+    final coinId = _coinId;
+    if (coinId.isEmpty) return;
     try {
       final all = await CoinPriceAlertService.loadAll();
-      if (!mounted) return;
-      setState(() => _alertConfig = all[_coinId]);
+      if (!mounted ||
+          requestId != _alertGeneration ||
+          _coinId != coinId) {
+        return;
+      }
+      setState(() => _alertConfig = all[coinId]);
     } catch (e) {
       debugPrint('MarketCoinInfo: failed to load alert config: $e');
     }
   }
 
   Future<void> _loadTrades() async {
-    if (_coinId.isEmpty) return;
+    final requestId = ++_tradesGeneration;
+    final coinId = _coinId;
+    if (coinId.isEmpty) return;
     try {
-      final list = await PortfolioTradeService.getTradesForCoin(_coinId);
-      if (!mounted) return;
+      final list = await PortfolioTradeService.getTradesForCoin(coinId);
+      if (!mounted ||
+          requestId != _tradesGeneration ||
+          _coinId != coinId) {
+        return;
+      }
       setState(() => _trades = list);
     } catch (e) {
       debugPrint('MarketCoinInfo: failed to load trades: $e');
@@ -115,7 +176,7 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
       name: _coinName,
       currentPrice: toDouble(_coin['price']),
     );
-    if (changed == true) await _loadTrades();
+    if (changed == true && mounted) await _loadTrades();
   }
 
   Future<void> _openAlertSheet() async {
@@ -126,14 +187,20 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
       name: _coinName,
       currentPrice: toDouble(_coin['price']),
     );
-    if (changed == true) await _loadAlertConfig();
+    if (changed == true && mounted) await _loadAlertConfig();
   }
 
   Future<void> _fetchCoinPrice() async {
+    final requestId = ++_priceGeneration;
     final coinSymbol = _coinSymbol;
     if (coinSymbol.isEmpty) return;
     try {
       final result = await MarketApi().getWalletCoinsInfo(coinSymbol);
+      if (!mounted ||
+          requestId != _priceGeneration ||
+          _coinSymbol != coinSymbol) {
+        return;
+      }
       if (result['error'] != false) return;
 
       final coins = extractMarketCoinItems(result['data']);
@@ -141,7 +208,6 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
 
       for (final c in coins) {
         if (!marketCoinMatchesSymbol(c, coinSymbol)) continue;
-        if (!mounted) return;
         setState(() {
           _coin = mergeMarketCoinSnapshot(_coin, c);
           _priceChange24h = toDouble(_coin['price_change_per_24h']);
@@ -154,6 +220,7 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
   }
 
   Future<void> _fetchCoinInfo() async {
+    final requestId = ++_infoGeneration;
     final geckoId = _coinId;
     if (geckoId.isEmpty) {
       if (mounted) setState(() => _infoLoad = Load.error);
@@ -161,7 +228,11 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
     }
     try {
       final info = await ref.read(wapBridgeProvider).getCoinsBaseInfo(geckoId);
-      if (!mounted) return;
+      if (!mounted ||
+          requestId != _infoGeneration ||
+          _coinId != geckoId) {
+        return;
+      }
 
       if (info == null) {
         setState(() => _infoLoad = Load.error);

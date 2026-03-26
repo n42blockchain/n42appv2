@@ -129,9 +129,11 @@ class _BrowserPageState extends ConsumerState<BrowserPage> {
     _browserProvider ??= ref.read(browserNotifierProvider);
     final bp = _browserProvider!;
     bp.connectDAPPCallBack = (String url) {
+      if (!mounted) return;
       _showWalletConnectSheet(url);
     };
     bp.phishingCallBack = (String url, VoidCallback proceed) {
+      if (!mounted) return;
       _showPhishingWarning(url, proceed);
     };
 

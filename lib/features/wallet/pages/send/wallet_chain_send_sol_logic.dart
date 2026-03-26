@@ -207,6 +207,7 @@ mixin _SolSendLogicMixin on ConsumerState<WalletChainSendSol> {
     if (parts.length == 2) addr = parts[1];
 
     final valid = await Trustdart().validateAddress(_coinType, addr);
+    if (!mounted) return null;
     if (!valid ||
         addr.toUpperCase() ==
             widget.coinModel.address.toString().toUpperCase()) {
@@ -289,6 +290,7 @@ mixin _SolSendLogicMixin on ConsumerState<WalletChainSendSol> {
   }
 
   Future<void> signTx(TransationRecordModel trModel) async {
+    bool completedWithExit = false;
     try {
       final mm = await TransferApi().transferWallet(
         trModel: trModel,
@@ -309,6 +311,7 @@ mixin _SolSendLogicMixin on ConsumerState<WalletChainSendSol> {
         );
         if (!mounted) return;
         ToastUtils.show(S.current.g_key_nft_41);
+        completedWithExit = true;
         Navigator.pop(context);
       }
     } catch (e) {
@@ -316,7 +319,7 @@ mixin _SolSendLogicMixin on ConsumerState<WalletChainSendSol> {
       ToastUtils.show(e.toString());
     } finally {
       load = Load.finish;
-      if (mounted) setState(() {});
+      if (mounted && !completedWithExit) setState(() {});
     }
   }
 

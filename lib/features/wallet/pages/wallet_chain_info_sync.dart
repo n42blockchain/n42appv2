@@ -354,14 +354,12 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
             .checkUndoneTrReturn(transationRecordModel) ??
         transationRecordModel;
     if (!mounted) return;
-    transactionList.firstWhere((element) {
-      final trm = element as TransationRecordModel;
-      if (trm.txHash == rtrm.txHash) {
-        trm.state = rtrm.state;
-        return true;
+    for (final element in transactionList) {
+      if (element is TransationRecordModel && element.txHash == rtrm.txHash) {
+        element.state = rtrm.state;
+        break;
       }
-      return false;
-    }, orElse: () => rtrm);
+    }
     setState(() {});
   }
 
@@ -374,14 +372,13 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
             .checkUndoneTrBtcReturn(transationRecordModel) ??
         transationRecordModel;
     if (!mounted) return;
-    transactionList.firstWhere((element) {
-      final trm = element as TransationRecordModel;
-      if (trm.txHash == rtrm.txHash) {
-        trm.state = rtrm.state;
-        return true;
+    for (final element in transactionList) {
+      if (element is BtcTransactionRecodeModel &&
+          element.txHash == rtrm.txHash) {
+        element.state = rtrm.state;
+        break;
       }
-      return false;
-    }, orElse: () => rtrm);
+    }
     setState(() {});
   }
 

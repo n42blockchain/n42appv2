@@ -68,6 +68,7 @@ class SettingHomePage extends ConsumerWidget {
                 MaterialPageRoute(
                     builder: (context) =>
                         SettingSysLanguage(appSysLang)));
+            if (!context.mounted) return;
             if (returnStr != null && returnStr is String) {
               ref.read(localeProvider.notifier).setLocale(returnStr);
             }

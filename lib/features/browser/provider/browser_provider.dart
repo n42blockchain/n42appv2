@@ -32,10 +32,21 @@ class BrowserProvider extends ChangeNotifier {
 
   late final BrowserApi browserApi = BrowserApi();
   Map<String, dynamic> browser = {};
+  bool _isDisposed = false;
+
+  void _safeNotify() {
+    if (!_isDisposed) {
+      notifyListeners();
+    }
+  }
 
   Future<void> getBrowserSetting() async {
     final b = await SPUtil().getBrowserSetting();
-    if (b != null) browser = b;
+    if (_isDisposed) return;
+    if (b != null) {
+      browser = {...browser, ...b};
+      _safeNotify();
+    }
   }
 
   List<WebViewController> wvcList = [];
@@ -45,7 +56,7 @@ class BrowserProvider extends ChangeNotifier {
 
   void setShowWList(bool value) {
     showWList = value;
-    notifyListeners();
+    _safeNotify();
   }
 
   TextEditingController? titleEditingController;
@@ -61,7 +72,9 @@ class BrowserProvider extends ChangeNotifier {
   /// Shortcut: WebViewController of the currently active tab
   WebViewController get _currentController {
     if (wListIndex < 0 || wListIndex >= wvcList.length) {
-      throw StateError('Invalid browser tab index: $wListIndex (tabs: ${wvcList.length})');
+      throw StateError(
+        'Invalid browser tab index: $wListIndex (tabs: ${wvcList.length})',
+      );
     }
     return wvcList[wListIndex];
   }
@@ -73,16 +86,21 @@ class BrowserProvider extends ChangeNotifier {
   bool canBack = false;
   bool canForward = false;
   bool collect = false;
+  int _collectionRequestId = 0;
+  int _navigationStateRequestId = 0;
+  int _titleRequestId = 0;
 
   void browserInit() {
     titleEditingController = TextEditingController();
     titleFocusNode = FocusNode();
-    titleFocusNode?.addListener(notifyListeners);
+    titleFocusNode?.addListener(_safeNotify);
   }
 
   void browserDispose() {
     titleEditingController?.dispose();
     titleFocusNode?.dispose();
+    titleEditingController = null;
+    titleFocusNode = null;
   }
 
   void addUrl(String url) {
@@ -131,16 +149,16 @@ class BrowserProvider extends ChangeNotifier {
             final idx = _indexOfController(wvc);
             if (idx < 0) return;
             wInfoList[idx]['progress'] = progress * 0.01;
-            notifyListeners();
+            _safeNotify();
           },
           onPageStarted: (String url) {
             final idx = _indexOfController(wvc);
             if (idx < 0) return;
             debugPrint('Page started loading: $url');
             wInfoList[idx]['load'] = true;
-            notifyListeners();
             // Re-inject on every navigation so SPAs don't lose the interceptor.
             _injectWcClipboardScript(wvc);
+            _safeNotify();
           },
           onPageFinished: (String url) async {
             final idx = _indexOfController(wvc);
@@ -164,14 +182,14 @@ class BrowserProvider extends ChangeNotifier {
               checkCanGo();
               getCollectionUrl(url);
             }
-            notifyListeners();
+            _safeNotify();
           },
           onWebResourceError: (WebResourceError error) {
             final idx = _indexOfController(wvc);
             if (idx < 0) return;
             wInfoList[idx]['load'] = false;
             wInfoList[idx]['progress'] = 0;
-            notifyListeners();
+            _safeNotify();
           },
           onNavigationRequest: (NavigationRequest request) {
             return checkUrl(request.url)
@@ -186,7 +204,7 @@ class BrowserProvider extends ChangeNotifier {
             if (idx == wListIndex) {
               titleEditingController?.text = wInfoList[idx]['openUrl'];
             }
-            notifyListeners();
+            _safeNotify();
           },
           onHttpError: (HttpResponseError error) {
             debugPrint('HTTP error: ${error.response?.statusCode}');
@@ -245,7 +263,7 @@ class BrowserProvider extends ChangeNotifier {
     wInfoList.add({"openUrl": url});
     showWList = false;
     wListIndex = wvcList.length - 1;
-    notifyListeners();
+    _safeNotify();
   }
 
   void loadRequest({String url = ""}) {
@@ -261,7 +279,7 @@ class BrowserProvider extends ChangeNotifier {
     showWList = false;
     titleEditingController?.text = _currentUrl;
     // Notify immediately so the UI switches tab right away
-    notifyListeners();
+    _safeNotify();
     // Then async-update navigation and bookmark state
     checkCanGo();
     getCollectionUrl(_currentUrl);
@@ -287,28 +305,52 @@ class BrowserProvider extends ChangeNotifier {
       checkCanGo();
       getCollectionUrl(_currentUrl);
     }
-    notifyListeners();
+    _safeNotify();
   }
 
   /// Check whether the given URL is in the bookmarks collection.
   Future<void> getCollectionUrl(String url) async {
+    final requestId = ++_collectionRequestId;
     final list = await browserApi.selectBrowserCollectionUrl(url);
+    if (_isDisposed) return;
+    if (requestId != _collectionRequestId) return;
+    if (url != _currentUrl) return;
     collect = list.isNotEmpty;
-    notifyListeners();
+    _safeNotify();
   }
 
   Future<void> getTitle() async {
-    final t = await _currentController.getTitle();
+    final index = wListIndex;
+    if (index < 0 || index >= wvcList.length || index >= wInfoList.length) {
+      return;
+    }
+    final controller = wvcList[index];
+    final requestId = ++_titleRequestId;
+    final t = await controller.getTitle();
+    if (_isDisposed) return;
+    if (requestId != _titleRequestId) return;
+    if (index != wListIndex || index >= wInfoList.length) return;
+    if (!identical(controller, wvcList[index])) return;
     if (t != null) {
-      wInfoList[wListIndex]['title'] = t;
-      notifyListeners();
+      wInfoList[index]['title'] = t;
+      _safeNotify();
     }
   }
 
   Future<void> checkCanGo() async {
-    canBack = await _currentController.canGoBack();
-    canForward = await _currentController.canGoForward();
-    notifyListeners();
+    final index = wListIndex;
+    if (index < 0 || index >= wvcList.length) return;
+    final controller = wvcList[index];
+    final requestId = ++_navigationStateRequestId;
+    final canGoBack = await controller.canGoBack();
+    final canGoForward = await controller.canGoForward();
+    if (_isDisposed) return;
+    if (requestId != _navigationStateRequestId) return;
+    if (index != wListIndex || index >= wvcList.length) return;
+    if (!identical(controller, wvcList[index])) return;
+    canBack = canGoBack;
+    canForward = canGoForward;
+    _safeNotify();
   }
 
   /// Last WC URI dispatched to [connectDAPPCallBack].  Used to deduplicate
@@ -495,6 +537,7 @@ class BrowserProvider extends ChangeNotifier {
         builder: (_) => BrowserCollection(title ?? "", currentUrl ?? ""),
       ),
     );
+    if (!context.mounted) return;
     getCollectionUrl(_currentUrl);
   }
 
@@ -508,5 +551,17 @@ class BrowserProvider extends ChangeNotifier {
     wInfoList = [];
     wListIndex = -1;
     wListAdd();
+  }
+
+  @override
+  void dispose() {
+    _isDisposed = true;
+    browserDispose();
+    for (final wvc in wvcList) {
+      wvc.setNavigationDelegate(NavigationDelegate());
+    }
+    wvcList = [];
+    wInfoList = [];
+    super.dispose();
   }
 }

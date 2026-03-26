@@ -147,6 +147,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                       builder: (context) => SecurityEdit('email'),
                     ),
                   );
+                  if (!mounted) return;
                   init();
                 },
               ),
@@ -198,6 +199,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                             TextButton(
                               onPressed: () async {
                                 await openAppSettings();
+                                if (!mounted) return;
                                 initFace();
                               },
                               child: Text(

@@ -86,6 +86,7 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
   @override
   void dispose() {
     _pollingTimer?.cancel();
+    searchEditingController.dispose();
     super.dispose();
   }
 

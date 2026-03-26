@@ -8,6 +8,7 @@ mixin _WalletListActionsMixin on ConsumerState<WalletList> {
         builder: (_) => WalletManage(walletInfo: info, walletIndex: index),
       ),
     );
+    if (!mounted) return;
     await (this as _WalletListState).initData();
   }
 
@@ -26,14 +27,18 @@ mixin _WalletListActionsMixin on ConsumerState<WalletList> {
       return;
     }
     final controller = TextEditingController();
-    final flag = await tipsDialog4(context, null, controller: controller);
-    if (!mounted) return;
-    if (flag == true) {
-      if (controller.text.trim() != info.password) {
-        ToastUtils.show(S.of(context).g_key_146);
-        return;
+    try {
+      final flag = await tipsDialog4(context, null, controller: controller);
+      if (!mounted) return;
+      if (flag == true) {
+        if (controller.text.trim() != info.password) {
+          ToastUtils.show(S.of(context).g_key_146);
+          return;
+        }
+        await jumpWalletInfoPage(info, index);
       }
-      await jumpWalletInfoPage(info, index);
+    } finally {
+      controller.dispose();
     }
   }
 

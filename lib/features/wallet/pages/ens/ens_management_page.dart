@@ -257,64 +257,67 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
   Future<void> _showTransferDialog() async {
     final controller = TextEditingController();
     String? validationError;
-
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => StatefulBuilder(
-        builder: (ctx, setDialogState) => AlertDialog(
-          title: Text(S.of(ctx).g_key_ens_transfer),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                S.of(ctx).g_key_ens_transfer_warning,
-                style: TextStyle(
-                  color: Colors.orange,
-                  fontSize: ScreenUtil().setSp(24),
+    try {
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (ctx) => StatefulBuilder(
+          builder: (ctx, setDialogState) => AlertDialog(
+            title: Text(S.of(ctx).g_key_ens_transfer),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  S.of(ctx).g_key_ens_transfer_warning,
+                  style: TextStyle(
+                    color: Colors.orange,
+                    fontSize: ScreenUtil().setSp(24),
+                  ),
                 ),
+                SizedBox(height: ScreenUtil().setWidth(16)),
+                TextField(
+                  controller: controller,
+                  onChanged: (_) => setDialogState(() => validationError = null),
+                  decoration: InputDecoration(
+                    labelText: S.of(ctx).g_key_ens_new_owner,
+                    hintText: '0x...',
+                    errorText: validationError,
+                    border: const OutlineInputBorder(),
+                  ),
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx, false),
+                child: Text(S.of(ctx).g_key_79),
               ),
-              SizedBox(height: ScreenUtil().setWidth(16)),
-              TextField(
-                controller: controller,
-                onChanged: (_) => setDialogState(() => validationError = null),
-                decoration: InputDecoration(
-                  labelText: S.of(ctx).g_key_ens_new_owner,
-                  hintText: '0x...',
-                  errorText: validationError,
-                  border: const OutlineInputBorder(),
+              ElevatedButton(
+                onPressed: () {
+                  final addr = controller.text.trim();
+                  if (!_isValidAddress(addr)) {
+                    setDialogState(
+                      () => validationError = S.of(ctx).g_key_ens_invalid_address,
+                    );
+                    return;
+                  }
+                  Navigator.pop(ctx, true);
+                },
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                child: Text(
+                  S.of(ctx).g_key_ens_transfer,
+                  style: const TextStyle(color: Colors.white),
                 ),
               ),
             ],
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx, false),
-              child: Text(S.of(ctx).g_key_79),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                final addr = controller.text.trim();
-                if (!_isValidAddress(addr)) {
-                  setDialogState(
-                    () => validationError = S.of(ctx).g_key_ens_invalid_address,
-                  );
-                  return;
-                }
-                Navigator.pop(ctx, true);
-              },
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-              child: Text(
-                S.of(ctx).g_key_ens_transfer,
-                style: const TextStyle(color: Colors.white),
-              ),
-            ),
-          ],
         ),
-      ),
-    );
+      );
 
-    if (confirmed == true) {
-      await _transferDomain(controller.text.trim());
+      if (confirmed == true) {
+        await _transferDomain(controller.text.trim());
+      }
+    } finally {
+      controller.dispose();
     }
   }
 

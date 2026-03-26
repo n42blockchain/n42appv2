@@ -76,8 +76,12 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
   // ── Search history ────────────────────────────────────────────────────────
 
   Future<void> _loadHistory() async {
-    final history = await SPUtil().getCoinSearchHistory();
-    if (mounted) setState(() => _history = history);
+    try {
+      final history = await SPUtil().getCoinSearchHistory();
+      if (mounted) setState(() => _history = history);
+    } catch (e) {
+      debugPrint('WalletSearchCoin._loadHistory error: $e');
+    }
   }
 
   /// 将关键词插到历史头部，去重后截断为 _maxHistory 条。
@@ -91,19 +95,37 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
     // 防抖写入：取消前次定时，重新计时
     _saveHistoryDebounce?.cancel();
     _saveHistoryDebounce = Timer(_historyIoDuration, () {
-      SPUtil().saveCoinSearchHistory(updated);
+      SPUtil().saveCoinSearchHistory(updated).catchError((e) {
+        debugPrint('WalletSearchCoin._saveToHistory error: $e');
+      });
     });
   }
 
   Future<void> _removeFromHistory(String keyword) async {
     final updated = _history.where((e) => e != keyword).toList();
+    final previous = List<String>.from(_history);
     setState(() => _history = updated);
-    await SPUtil().saveCoinSearchHistory(updated);
+    try {
+      await SPUtil().saveCoinSearchHistory(updated);
+    } catch (e) {
+      debugPrint('WalletSearchCoin._removeFromHistory error: $e');
+      if (mounted) {
+        setState(() => _history = previous);
+      }
+    }
   }
 
   Future<void> _clearHistory() async {
+    final previous = List<String>.from(_history);
     setState(() => _history = []);
-    await SPUtil().saveCoinSearchHistory([]);
+    try {
+      await SPUtil().saveCoinSearchHistory([]);
+    } catch (e) {
+      debugPrint('WalletSearchCoin._clearHistory error: $e');
+      if (mounted) {
+        setState(() => _history = previous);
+      }
+    }
   }
 
   // ── Search logic ──────────────────────────────────────────────────────────

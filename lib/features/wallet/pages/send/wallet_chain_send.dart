@@ -123,6 +123,7 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
       senderAddress: widget.coinModel.address.toString(),
       allowEns: isEnsSupported(coinType),
     );
+    if (!mounted) return null;
 
     if (!result.isValid) {
       toErrorMessage = result.errorMessage ?? S.current.g_key_t_50;
@@ -151,6 +152,7 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
     }
 
     toErrorMessage = '';
+    if (!mounted) return null;
     setState(() {});
     return result.resolvedAddress;
   }

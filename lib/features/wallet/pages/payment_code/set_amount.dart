@@ -8,6 +8,7 @@ import 'package:n42_wallet/features/widgets/button_widget.dart';
 import 'package:n42_wallet/features/widgets/empty.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
 import 'package:n42_wallet/features/widgets/text_field_widget.dart';
+import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -34,14 +35,25 @@ class _SetAmountState extends ConsumerState<SetAmount> {
   String amountErrorMessage = "";
 
   String _validateAmount(String value) {
-    if (regular.regularDouble(value) || regular.regularNums(value)) return "";
-    return S.of(context).g_key_payment_amount_invalid;
+    final normalized = value.trim();
+    if (normalized.isEmpty) {
+      return S.of(context).g_key_payment_amount_invalid;
+    }
+    if (!(regular.regularDouble(normalized) ||
+        regular.regularNums(normalized))) {
+      return S.of(context).g_key_payment_amount_invalid;
+    }
+    final amount = double.tryParse(normalized);
+    if (amount == null || !amount.isFinite || amount <= 0) {
+      return S.of(context).g_key_payment_amount_invalid;
+    }
+    return "";
   }
 
   @override
   void initState() {
-    _initCoin();
     super.initState();
+    _initCoin();
   }
 
   @override
@@ -62,9 +74,11 @@ class _SetAmountState extends ConsumerState<SetAmount> {
 
     coinListIndex = 0;
     if (widget.amount != null) {
-      final index = coinList.indexWhere((e) =>
-          widget.amount!['coinType'] == e.coin['coinType'] &&
-          widget.amount!['address'] == e.address);
+      final index = coinList.indexWhere(
+        (e) =>
+            widget.amount!['coinType'] == e.coin['coinType'] &&
+            widget.amount!['address'] == e.address,
+      );
       if (index != -1) {
         coinListIndex = index;
         amountController.text = widget.amount!["amount"].toString();
@@ -76,11 +90,11 @@ class _SetAmountState extends ConsumerState<SetAmount> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:
-          AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-      appBar: AppBarWidget(
-        text: S.of(context).g_key_payment_set_amount_title,
+      backgroundColor: AppThemeUtils.getColorByKey(
+        context,
+        AppThemeKeys.backGroundColor.name,
       ),
+      appBar: AppBarWidget(text: S.of(context).g_key_payment_set_amount_title),
       body: SafeArea(
         child: Column(
           children: [
@@ -104,7 +118,9 @@ class _SetAmountState extends ConsumerState<SetAmount> {
         height: ScreenUtil().setWidth(150.0),
         style: TextStyle(
           color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainTextColor.name),
+            context,
+            AppThemeKeys.mainTextColor.name,
+          ),
           fontSize: ScreenUtil().setWidth(50.0),
         ),
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
@@ -129,7 +145,9 @@ class _SetAmountState extends ConsumerState<SetAmount> {
             style: TextStyle(
               fontSize: ScreenUtil().setWidth(50.0),
               color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
+                context,
+                AppThemeKeys.mainTextColor.name,
+              ),
             ),
           ),
         ),
@@ -142,7 +160,9 @@ class _SetAmountState extends ConsumerState<SetAmount> {
       return Container(
         height: ScreenUtil().setWidth(300.0),
         color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.backGroundColor.name),
+          context,
+          AppThemeKeys.backGroundColor.name,
+        ),
         child: const EmptyView(),
       );
     }
@@ -163,16 +183,26 @@ class _SetAmountState extends ConsumerState<SetAmount> {
         _onConfirm,
         S.of(context).g_key_payment_confirm,
         AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainButtonBgColor.name),
+          context,
+          AppThemeKeys.mainButtonBgColor.name,
+        ),
         AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainButtonTextColor.name),
+          context,
+          AppThemeKeys.mainButtonTextColor.name,
+        ),
         false,
       ),
     );
   }
 
   void _onConfirm() {
-    final amountStr = amountController.text;
+    if (coinList.isEmpty ||
+        coinListIndex < 0 ||
+        coinListIndex >= coinList.length) {
+      ToastUtils.show(S.of(context).g_key_payment_usdt_not_found);
+      return;
+    }
+    final amountStr = amountController.text.trim();
     amountErrorMessage = _validateAmount(amountStr);
     if (amountErrorMessage.isNotEmpty) {
       setState(() {});
@@ -248,9 +278,13 @@ class _SetAmountState extends ConsumerState<SetAmount> {
       fallback: coinInfo.balanceString(),
     );
     final mainTextColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainTextColor.name);
+      context,
+      AppThemeKeys.mainTextColor.name,
+    );
     final subtitleColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
+      context,
+      AppThemeKeys.itemSubtitleTextColor.name,
+    );
 
     return InkWell(
       onTap: () => setState(() => coinListIndex = index),
@@ -261,7 +295,9 @@ class _SetAmountState extends ConsumerState<SetAmount> {
                 border: Border.all(
                   width: ScreenUtil().setWidth(1),
                   color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainBlueColor.name),
+                    context,
+                    AppThemeKeys.mainBlueColor.name,
+                  ),
                 ),
                 borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
               )

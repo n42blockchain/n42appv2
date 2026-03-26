@@ -77,6 +77,8 @@ mixin _HardwareWalletConnectionMixin on ChangeNotifier {
 
   String get _currentCoinType;
   set _currentCoinType(String v);
+  int get _accountLoadGeneration;
+  set _accountLoadGeneration(int v);
 
   bool get isConnected;
 
@@ -264,22 +266,38 @@ mixin _HardwareWalletConnectionMixin on ChangeNotifier {
   /// 加载账户列表（前 5 个）
   Future<void> loadAccounts(String coinType) async {
     if (!isConnected || _currentDevice == null) return;
+    final generation = ++_accountLoadGeneration;
     _accounts = [];
     _currentCoinType = coinType.toUpperCase();
-    await _loadAccountsFrom(coinType, startIndex: 0, count: 5);
+    notifyListeners();
+    final accounts = await _loadAccountsFrom(
+      _currentCoinType,
+      startIndex: 0,
+      count: 5,
+    );
+    if (generation != _accountLoadGeneration) return;
+    _accounts = accounts;
     await _persistAccountsAndNotify();
   }
 
   /// 加载更多账户（从当前最大 index 继续）
   Future<void> loadMoreAccounts() async {
     if (!isConnected || _currentDevice == null) return;
+    final generation = ++_accountLoadGeneration;
     final startIndex = _accounts.isEmpty ? 0 : _accounts.last.index + 1;
-    await _loadAccountsFrom(_currentCoinType, startIndex: startIndex, count: 5);
+    final existingAccounts = List<HardwareWalletAccount>.from(_accounts);
+    final nextAccounts = await _loadAccountsFrom(
+      _currentCoinType,
+      startIndex: startIndex,
+      count: 5,
+    );
+    if (generation != _accountLoadGeneration) return;
+    _accounts = [...existingAccounts, ...nextAccounts];
     await _persistAccountsAndNotify();
   }
 
   /// 内部：从 [startIndex] 开始加载 [count] 个账户
-  Future<void> _loadAccountsFrom(
+  Future<List<HardwareWalletAccount>> _loadAccountsFrom(
     String coinType, {
     required int startIndex,
     required int count,
@@ -289,6 +307,7 @@ mixin _HardwareWalletConnectionMixin on ChangeNotifier {
     final isEvm = _isEvmChain(coin);
     final isBtcLike = _isBitcoinLikeChain(coin);
     final isTrezor = _currentDevice?.isTrezor ?? false;
+    final accounts = <HardwareWalletAccount>[];
 
     for (var i = startIndex; i < startIndex + count; i++) {
       try {
@@ -312,7 +331,7 @@ mixin _HardwareWalletConnectionMixin on ChangeNotifier {
         }
 
         if (address != null) {
-          _accounts.add(HardwareWalletAccount(
+          accounts.add(HardwareWalletAccount(
             address: address,
             coinType: coin,
             derivationPath: path,
@@ -324,5 +343,6 @@ mixin _HardwareWalletConnectionMixin on ChangeNotifier {
         break;
       }
     }
+    return accounts;
   }
 }

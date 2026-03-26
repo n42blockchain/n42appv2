@@ -60,6 +60,7 @@ class _SettingShareState extends State<SettingShare> {
   int miningTotal = 0;
   double rewardTotal = 0;
   late final UserInfoApi loginApi = UserInfoApi();
+  int _statsLoadVersion = 0;
 
   String? get _uuid => AppGlobals.userInfo?.uuid;
 
@@ -76,59 +77,38 @@ class _SettingShareState extends State<SettingShare> {
 
   Future<void> _loadAllStats() async {
     if (_uuid == null) return;
-    await Future.wait<void>([
-      _loadInviteeDownloadCount(),
-      _loadInviteeCount(),
-      _loadMiningCount(),
-      _loadMiningReward(),
+    final uuid = _uuid!;
+    final loadVersion = ++_statsLoadVersion;
+    final results = await Future.wait<Map<String, dynamic>?>([
+      safeShareStatsRequest(() => loginApi.getInviteeDownloadList(uuid)),
+      safeShareStatsRequest(() => loginApi.getInviteeList(uuid)),
+      safeShareStatsRequest(() => loginApi.getInviteeMiningCount(uuid)),
+      safeShareStatsRequest(() => loginApi.getInviteeMiningInfo(uuid)),
     ]);
-    if (mounted) setState(() {});
-  }
-
-  Future<void> _loadMiningReward() async {
-    final data = await safeShareStatsRequest(
-      () => loginApi.getInviteeMiningInfo(_uuid!),
-    );
-    if (data == null) return;
-    rewardTotal = parseShareStatReward(data['total_reward']);
-  }
-
-  Future<void> _loadMiningCount() async {
-    final data = await safeShareStatsRequest(
-      () => loginApi.getInviteeMiningCount(_uuid!),
-    );
-    if (data == null) return;
-    miningTotal = parseShareStatCount(data['total']);
-  }
-
-  Future<void> _loadInviteeDownloadCount() async {
-    final data = await safeShareStatsRequest(
-      () => loginApi.getInviteeDownloadList(_uuid!),
-    );
-    if (data == null) return;
-    inviteeTotalDown = parseShareStatCount(data['total']);
-  }
-
-  Future<void> _loadInviteeCount() async {
-    final data = await safeShareStatsRequest(
-      () => loginApi.getInviteeList(_uuid!),
-    );
-    if (data == null) return;
-    inviteeTotal = parseShareStatCount(data['total']);
+    if (!mounted || loadVersion != _statsLoadVersion) return;
+    setState(() {
+      inviteeTotalDown = parseShareStatCount(results[0]?['total']);
+      inviteeTotal = parseShareStatCount(results[1]?['total']);
+      miningTotal = parseShareStatCount(results[2]?['total']);
+      rewardTotal = parseShareStatReward(results[3]?['total_reward']);
+    });
   }
 
   /// 截图并分享（内存直接分享）
   Future<void> _shareScreenshot() async {
     try {
-      RenderRepaintBoundary boundary = previewContainer.currentContext!
-          .findRenderObject() as RenderRepaintBoundary;
-      ui.Image image = await boundary.toImage(pixelRatio: 3.0);
-      ByteData? byteData =
-          await image.toByteData(format: ui.ImageByteFormat.png);
-      Uint8List pngBytes = byteData!.buffer.asUint8List();
+      final previewContext = previewContainer.currentContext;
+      if (previewContext == null) return;
+      final renderObject = previewContext.findRenderObject();
+      if (renderObject is! RenderRepaintBoundary) return;
+      final image = await renderObject.toImage(pixelRatio: 3.0);
+      final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+      if (byteData == null) return;
+      final pngBytes = byteData.buffer.asUint8List();
 
       if (!mounted) return;
       final box = context.findRenderObject() as RenderBox?;
+      if (box == null) return;
       await SharePlus.instance.share(
         ShareParams(
           files: [
@@ -140,7 +120,7 @@ class _SettingShareState extends State<SettingShare> {
           ],
           text:
               "${S.of(context).g_share_v3_key_3} ${S.of(context).g_share_v3_key_4} 25 ${S.of(context).g_share_v3_key_5}",
-          sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
+          sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size,
         ),
       );
     } catch (e) {

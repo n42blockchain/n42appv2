@@ -190,6 +190,7 @@ class _SwapAstHomeState extends ConsumerState<SwapAstHome> {
     getAstChainModel();
     final bool ok =
         await getAstList() && await getCoinPrice() && await getGasPrice();
+    if (!mounted) return;
     if (ok) {
       estimateGasEth();
     }
@@ -307,6 +308,7 @@ class _SwapAstHomeState extends ConsumerState<SwapAstHome> {
       _payCoinType,
       payCoinModel!.address.toString(),
     );
+    if (!mounted) return;
     setState(() => payLoad = Load.finish);
   }
 
@@ -333,6 +335,7 @@ class _SwapAstHomeState extends ConsumerState<SwapAstHome> {
             rData.data.toString(),
             youPay?.payCoinDecimal ?? 6,
           ).toDouble();
+    if (!mounted) return;
     setState(() => youPay!.load = Load.finish);
   }
 
@@ -344,6 +347,7 @@ class _SwapAstHomeState extends ConsumerState<SwapAstHome> {
       CoinType.N.name,
       getCoinModel!.address.toString(),
     );
+    if (!mounted) return;
     setState(() => getLoad = Load.finish);
   }
 

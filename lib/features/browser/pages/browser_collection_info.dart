@@ -28,6 +28,8 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
   String titleErrorMessage = "";
   String urlErrorMessage = "";
   String descErrorMessage = "";
+  bool _saving = false;
+  bool _deleting = false;
 
   @override
   void initState() {
@@ -49,28 +51,52 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
   }
 
   Future<void> deleteCollection() async {
-    await browserApi.deleteBrowserCollection(widget.collectionModel.id!);
-    if (!mounted) return;
-    ToastUtils.show(S.of(context).g_key_address_5);
-    Navigator.pop(context, "delete");
+    if (_deleting) return;
+    setState(() => _deleting = true);
+    bool completedWithExit = false;
+    try {
+      await browserApi.deleteBrowserCollection(widget.collectionModel.id!);
+      if (!mounted) return;
+      ToastUtils.show(S.of(context).g_key_address_5);
+      completedWithExit = true;
+      Navigator.pop(context, "delete");
+    } finally {
+      if (mounted && !completedWithExit) {
+        setState(() => _deleting = false);
+      }
+    }
   }
 
   Future<void> _saveUrl() async {
-    widget.collectionModel.name = titleEditingController.text;
+    if (_saving) return;
+    widget.collectionModel.name = titleEditingController.text.trim();
     if (widget.collectionModel.name == "") {
       setState(() => titleErrorMessage = S.of(context).g_browser_key4);
       return;
     }
-    widget.collectionModel.url = urlEditingController.text;
+    widget.collectionModel.url = urlEditingController.text.trim();
     if (widget.collectionModel.url == "") {
       setState(() => urlErrorMessage = S.of(context).g_browser_key4);
       return;
     }
     widget.collectionModel.desc = descEditingController.text;
-    await browserApi.updateBrowsercollection(widget.collectionModel);
-    if (!mounted) return;
-    ToastUtils.show(S.of(context).g_key_185);
-    Navigator.pop(context, "save");
+    setState(() {
+      _saving = true;
+      titleErrorMessage = "";
+      urlErrorMessage = "";
+    });
+    bool completedWithExit = false;
+    try {
+      await browserApi.updateBrowsercollection(widget.collectionModel);
+      if (!mounted) return;
+      ToastUtils.show(S.of(context).g_key_185);
+      completedWithExit = true;
+      Navigator.pop(context, "save");
+    } finally {
+      if (mounted && !completedWithExit) {
+        setState(() => _saving = false);
+      }
+    }
   }
 
   @override
@@ -80,19 +106,31 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
         text: S.of(context).g_browser_key5,
         actions: [
           InkWell(
-            onTap: deleteCollection,
+            onTap: _deleting ? null : deleteCollection,
             child: Container(
               padding: EdgeInsets.symmetric(
                 horizontal: ScreenUtil().setWidth(30.0),
               ),
               height: ScreenUtil().setWidth(40.0),
-              child: Icon(
-                Icons.delete,
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainBlueColor.name,
-                ),
-              ),
+              child: _deleting
+                  ? SizedBox(
+                      height: ScreenUtil().setWidth(24.0),
+                      width: ScreenUtil().setWidth(24.0),
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: AppThemeUtils.getColorByKey(
+                          context,
+                          AppThemeKeys.mainBlueColor.name,
+                        ),
+                      ),
+                    )
+                  : Icon(
+                      Icons.delete,
+                      color: AppThemeUtils.getColorByKey(
+                        context,
+                        AppThemeKeys.mainBlueColor.name,
+                      ),
+                    ),
             ),
           ),
         ],

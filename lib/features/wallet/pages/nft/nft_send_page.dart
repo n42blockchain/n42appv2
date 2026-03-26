@@ -70,6 +70,7 @@ class _NftSendPageState extends State<NftSendPage> {
       }
     }
 
+    bool completedWithExit = false;
     setState(() => _sending = true);
 
     try {
@@ -92,12 +93,15 @@ class _NftSendPageState extends State<NftSendPage> {
         ToastUtils.showSuccess(
           S.of(context).g_key_nft_41,
         ); // Transaction submitted
+        completedWithExit = true;
         Navigator.pop(context);
       }
     } catch (e) {
       if (mounted) ToastUtils.showWarning(e.toString());
     } finally {
-      if (mounted) setState(() => _sending = false);
+      if (mounted && !completedWithExit) {
+        setState(() => _sending = false);
+      }
     }
   }
 

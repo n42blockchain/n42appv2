@@ -60,10 +60,11 @@ mixin _AccountCreateAndResetLogic on ConsumerState<AccountCreateAndReset> {
   /// Load previously saved user email into the email field.
   Future<void> _loadSavedEmail() async {
     final data = await SPUtil().getUserInfo();
+    if (!mounted) return;
     if (data != null) {
       UserInfo info = UserInfo.fromJson(data);
       _unameController.text = info.email ?? "";
-      if (mounted) setState(() {});
+      setState(() {});
     }
   }
 
@@ -71,6 +72,7 @@ mixin _AccountCreateAndResetLogic on ConsumerState<AccountCreateAndReset> {
   Future<void> _loadInviterEmail() async {
     DeviceInfoUtil deviceInfoUtil = DeviceInfoUtil();
     Map<String, dynamic>? infoMap = await deviceInfoUtil.getDeviceInfo();
+    if (!mounted) return;
     if (infoMap != null) {
       UserInfoApi loginApi = UserInfoApi();
       String? email = await loginApi.getInviterCode(
@@ -78,6 +80,7 @@ mixin _AccountCreateAndResetLogic on ConsumerState<AccountCreateAndReset> {
         infoMap["mobileName"],
         infoMap["os"],
       );
+      if (!mounted) return;
       if (email != null) {
         _inviteCodeController.text = email;
         setState(() {});
@@ -87,6 +90,10 @@ mixin _AccountCreateAndResetLogic on ConsumerState<AccountCreateAndReset> {
 
   void _startTimer() {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
       if (_countdown > 1) {
         _countdown--;
       } else {
@@ -114,9 +121,11 @@ mixin _AccountCreateAndResetLogic on ConsumerState<AccountCreateAndReset> {
         ToastUtils.show(S.of(context).login_message_9);
       }
     } finally {
-      setState(() {
-        codeLoad = Load.finish;
-      });
+      if (mounted) {
+        setState(() {
+          codeLoad = Load.finish;
+        });
+      }
     }
   }
 
@@ -231,26 +240,34 @@ mixin _AccountCreateAndResetLogic on ConsumerState<AccountCreateAndReset> {
     uCodeErrorMessage = "";
     setState(() {});
 
+    bool completedWithExit = false;
     final inviteCode = _inviteCodeController.text.trim();
     try {
       setState(() {
         sendLoad = Load.loading;
       });
       if (_currentType == HandType.createAccount) {
-        await _submitCreateAccount(email, password, code, inviteCode);
+        completedWithExit = await _submitCreateAccount(
+          email,
+          password,
+          code,
+          inviteCode,
+        );
       } else {
-        await _submitResetPassword(email, password, code);
+        completedWithExit = await _submitResetPassword(email, password, code);
       }
     } catch (err) {
       ToastUtils.show(err.toString());
     } finally {
-      setState(() {
-        sendLoad = Load.finish;
-      });
+      if (mounted && !completedWithExit) {
+        setState(() {
+          sendLoad = Load.finish;
+        });
+      }
     }
   }
 
-  Future<void> _submitCreateAccount(
+  Future<bool> _submitCreateAccount(
     String email,
     String password,
     String code,
@@ -262,22 +279,24 @@ mixin _AccountCreateAndResetLogic on ConsumerState<AccountCreateAndReset> {
       code,
       inviteCode: inviteCode,
     );
-    if (!mounted) return;
+    if (!mounted) return false;
     if (data["code"] == 200) {
       ToastUtils.show(S.of(context).login_message_10);
-      bool rData = await login(email, password);
-      if (!mounted) return;
+      final bool rData = await login(email, password);
+      if (!mounted) return false;
       if (rData && widget.pushType == 0) {
         Navigator.pop(context, true);
       } else {
         Navigator.pop(context);
       }
+      return true;
     } else {
       ToastUtils.show(data["err"]);
     }
+    return false;
   }
 
-  Future<void> _submitResetPassword(
+  Future<bool> _submitResetPassword(
     String email,
     String password,
     String code,
@@ -287,19 +306,21 @@ mixin _AccountCreateAndResetLogic on ConsumerState<AccountCreateAndReset> {
       Md5Util().generateMd5(password),
       code,
     );
-    if (!mounted) return;
+    if (!mounted) return false;
     if (data["code"] == 200) {
       ToastUtils.show(S.of(context).login_message_11);
-      bool rData = await login(email, password);
-      if (!mounted) return;
+      final bool rData = await login(email, password);
+      if (!mounted) return false;
       if (rData && widget.pushType == 0) {
         Navigator.pop(context, true);
       } else {
         Navigator.pop(context);
       }
+      return true;
     } else {
       ToastUtils.show(data["err"]);
     }
+    return false;
   }
 
   void toggleShowPwd1() {

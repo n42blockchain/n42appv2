@@ -131,6 +131,7 @@ extension _SecurityGoogleVedificationWidgets
     return InkWell(
       onTap: () async {
         final cd = await Clipboard.getData(Clipboard.kTextPlain);
+        if (!mounted) return;
         final text = cd?.text;
         if (text != null && text != "null") {
           pasteGoogleCode(text);

@@ -112,6 +112,7 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
   }
 
   Future<void> _import() async {
+    var completedWithExit = false;
     if (_backupContent == null) {
       ToastUtils.show('Please select a backup file first');
       return;
@@ -175,6 +176,7 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
           'Imported $imported wallet(s)'
           '${skipped > 0 ? ', $skipped skipped' : ''}';
       ToastUtils.show(msg);
+      completedWithExit = true;
       Navigator.of(context).pop(true);
     } on WalletBackupException catch (e) {
       if (!mounted) return;
@@ -183,7 +185,9 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
       if (!mounted) return;
       setState(() => _error = e.toString());
     } finally {
-      if (mounted) setState(() => _load = Load.finish);
+      if (mounted && !completedWithExit) {
+        setState(() => _load = Load.finish);
+      }
     }
   }
 

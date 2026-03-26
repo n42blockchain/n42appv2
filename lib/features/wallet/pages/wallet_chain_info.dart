@@ -133,6 +133,7 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
         builder: (context) => UnifiedSendPage(widget.coinModel),
       ),
     );
+    if (!mounted) return;
     await getTransactionData(Load.refresh);
     if (!mounted) return;
     if (closeSheet) Navigator.pop(context);
@@ -397,6 +398,7 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
                   context,
                   MaterialPageRoute(builder: (_) => page),
                 );
+                if (!mounted) return;
                 if (r == true) getTransactionData(Load.refresh);
               },
               child: Container(

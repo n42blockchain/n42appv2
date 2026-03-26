@@ -58,16 +58,19 @@ mixin _SecurityGoogleVedificationLogic on State<SecurityGoogleVedification> {
     final walletService = ServiceLocatorSetup.walletService;
     if (walletService == null) {
       walletName = '${S.current.g_key_6} ';
+      if (!mounted) return;
       setState(() {});
       return;
     }
     final mainWallet = walletService.getMainWallet();
     walletName = '${S.current.g_key_6} ${mainWallet?.name ?? ""}';
+    if (!mounted) return;
     setState(() {});
   }
 
   Future<void> _loadSecuritySettings() async {
     Map<String, dynamic>? s = await SPUtil().getSecurity();
+    if (!mounted) return;
     if (s != null) {
       Map<String, dynamic>? userSecurityMap =
           s[AppGlobals.userInfo?.uuid ?? ""];
@@ -87,18 +90,29 @@ mixin _SecurityGoogleVedificationLogic on State<SecurityGoogleVedification> {
     setState(() {
       emailLoad = Load.loading;
     });
-    MessageModel mm = await userInfoAPI.getEmailVerification();
-    if (!mounted) return;
-    if (mm.error) {
-      ToastUtils.show(S.of(context).email_code_error);
-    } else {
-      ToastUtils.show(S.of(context).email_code_finish);
-      emailSendWait = true;
-      _startEmailCountdown();
+    try {
+      MessageModel mm = await userInfoAPI.getEmailVerification();
+      if (!mounted) return;
+      if (mm.error) {
+        ToastUtils.show(S.of(context).email_code_error);
+      } else {
+        ToastUtils.show(S.of(context).email_code_finish);
+        setState(() {
+          emailSendWait = true;
+        });
+        _startEmailCountdown();
+      }
+    } catch (e) {
+      if (mounted) {
+        ToastUtils.show(e.toString());
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          emailLoad = Load.finish;
+        });
+      }
     }
-    setState(() {
-      emailLoad = Load.finish;
-    });
   }
 
   void _startEmailCountdown() {
@@ -132,6 +146,7 @@ mixin _SecurityGoogleVedificationLogic on State<SecurityGoogleVedification> {
     }
 
     final walletAll = await SPUtil().getWalletInfo();
+    if (!mounted) return false;
     WalletInfo? walletInfo;
 
     if (walletAll != null) {
@@ -245,48 +260,53 @@ mixin _SecurityGoogleVedificationLogic on State<SecurityGoogleVedification> {
   /// Handle submit button press - validate all fields and save.
   Future<void> _handleSubmit() async {
     if (load == Load.loading) return;
+    bool completedWithExit = false;
     setState(() {
       load = Load.loading;
     });
 
-    bool rValue = await checkPwd();
-    if (!mounted) return;
-    if (!rValue) {
+    try {
+      bool rValue = await checkPwd();
+      if (!mounted) return;
+      if (!rValue) {
+        return;
+      }
+
+      if (securityMap['email']) {
+        rValue = await checkEmailVerification();
+        if (!mounted) return;
+        if (!rValue) {
+          return;
+        }
+      }
+
+      if (securityMap['google'] == false) {
+        rValue = await checkGoogleVerification();
+        if (!mounted) return;
+        if (!rValue) {
+          return;
+        }
+      }
+
+      securityMap['google'] = true;
+      await _saveSecurity();
+      if (!mounted) return;
       setState(() {
         load = Load.finish;
       });
-      return;
-    }
-
-    if (securityMap['email']) {
-      rValue = await checkEmailVerification();
-      if (!mounted) return;
-      if (!rValue) {
+      completedWithExit = true;
+      Navigator.popUntil(context, ModalRoute.withName('/securitySetting'));
+    } catch (e) {
+      if (mounted) {
+        ToastUtils.show(e.toString());
+      }
+    } finally {
+      if (mounted && !completedWithExit) {
         setState(() {
           load = Load.finish;
         });
-        return;
       }
     }
-
-    if (securityMap['google'] == false) {
-      rValue = await checkGoogleVerification();
-      if (!mounted) return;
-      if (!rValue) {
-        setState(() {
-          load = Load.finish;
-        });
-        return;
-      }
-    }
-
-    securityMap['google'] = true;
-    await _saveSecurity();
-    if (!mounted) return;
-    setState(() {
-      load = Load.finish;
-    });
-    Navigator.popUntil(context, ModalRoute.withName('/securitySetting'));
   }
 
   void toggleObscure() {

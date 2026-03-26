@@ -43,9 +43,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(
-        text: S.of(context).g_key_change_password,
-      ),
+      appBar: AppBarWidget(text: S.of(context).g_key_change_password),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
@@ -124,7 +122,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                   hint: S.of(context).g_key_enter_confirm_password,
                   obscure: _obscureConfirmPassword,
                   onToggle: () {
-                    setState(() => _obscureConfirmPassword = !_obscureConfirmPassword);
+                    setState(
+                      () => _obscureConfirmPassword = !_obscureConfirmPassword,
+                    );
                   },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -313,6 +313,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   Future<void> _onSubmit() async {
     if (!_formKey.currentState!.validate()) return;
 
+    bool completedWithExit = false;
     setState(() => _isLoading = true);
     try {
       final md5 = Md5Util();
@@ -326,12 +327,15 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
         ToastUtils.show(result.data?.toString() ?? 'Failed');
       } else {
         ToastUtils.show(S.of(context).g_key_password_changed_success);
+        completedWithExit = true;
         Navigator.pop(context, true);
       }
     } catch (e) {
       if (mounted) ToastUtils.show(e.toString());
     } finally {
-      if (mounted) setState(() => _isLoading = false);
+      if (mounted && !completedWithExit) {
+        setState(() => _isLoading = false);
+      }
     }
   }
 }

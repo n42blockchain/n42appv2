@@ -2,10 +2,8 @@ part of 'browser_page.dart';
 
 /// UI widget builders for BrowserPage.
 extension _BrowserPageWidgets on _BrowserPageState {
-  Color _mainTextColor() => AppThemeUtils.getColorByKey(
-        context,
-        AppThemeKeys.mainTextColor.name,
-      );
+  Color _mainTextColor() =>
+      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
 
   Widget _buildBrowserContent() {
     final bValue = ref.watch(browserNotifierProvider);
@@ -90,7 +88,9 @@ extension _BrowserPageWidgets on _BrowserPageState {
     final sw = ScreenUtil().setWidth;
 
     return InkWell(
-      onTap: () { bValue.wListAdd(); },
+      onTap: () {
+        bValue.wListAdd();
+      },
       child: Container(
         height: sw(60.0),
         width: sw(60.0),
@@ -110,7 +110,9 @@ extension _BrowserPageWidgets on _BrowserPageState {
     final sp = ScreenUtil().setSp;
 
     return InkWell(
-      onTap: () { bValue.setShowWList(true); },
+      onTap: () {
+        bValue.setShowWList(true);
+      },
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: sw(10.0)),
         height: sw(40),
@@ -129,16 +131,22 @@ extension _BrowserPageWidgets on _BrowserPageState {
   }
 
   Widget _buildProgressIndicator(BrowserProvider bValue) {
-    if (bValue.showWList || bValue.wListIndex == -1) return const SizedBox.shrink();
+    if (bValue.showWList || bValue.wListIndex == -1) {
+      return const SizedBox.shrink();
+    }
     final info = bValue.wInfoList[bValue.wListIndex];
     final isLoading = info['load'] ?? false;
     if (!isLoading) return const SizedBox.shrink();
     return LinearProgressIndicator(
       value: info['progress'] ?? 0,
       backgroundColor: AppThemeUtils.getColorByKey(
-          context, AppThemeKeys.mainButtonBgColor3.name),
+        context,
+        AppThemeKeys.mainButtonBgColor3.name,
+      ),
       color: AppThemeUtils.getColorByKey(
-          context, AppThemeKeys.mainButtonBgColor.name),
+        context,
+        AppThemeKeys.mainButtonBgColor.name,
+      ),
     );
   }
 
@@ -158,11 +166,13 @@ extension _BrowserPageWidgets on _BrowserPageState {
       height: ScreenUtil().setWidth(100.0),
       child: Row(
         children: [
-          _toolbarAssetButton("close",
-              onTap: () => Navigator.pop(context)),
-          _toolbarAssetButton("refresh", onTap: () async {
-            await bValue.wvcList[bValue.wListIndex].reload();
-          }),
+          _toolbarAssetButton("close", onTap: () => Navigator.pop(context)),
+          _toolbarAssetButton(
+            "refresh",
+            onTap: () async {
+              await bValue.wvcList[bValue.wListIndex].reload();
+            },
+          ),
           _toolbarAssetButton(
             "arrow-left",
             colorKey: bValue.canBack
@@ -204,22 +214,34 @@ extension _BrowserPageWidgets on _BrowserPageState {
               }
             },
           ),
-          _toolbarIconButton(Icons.history,
-              onTap: () =>
-                  _navigateAndLoad(bValue, const BrowserHistoryPage())),
-          _toolbarAssetButton("note",
-              onTap: () =>
-                  _navigateAndLoad(bValue, BrowserCollectionList())),
+          _toolbarIconButton(
+            Icons.history,
+            onTap: () => _navigateAndLoad(bValue, const BrowserHistoryPage()),
+          ),
+          _toolbarAssetButton(
+            "note",
+            onTap: () => _navigateAndLoad(bValue, BrowserCollectionList()),
+          ),
           if (Platform.isAndroid)
-            _toolbarIconButton(Icons.explore,
-                onTap: () =>
-                    _navigateAndLoad(bValue, const DAppDirectoryPage())),
-          _toolbarAssetButton("setting", onTap: () async {
-            final wv = bValue.wvcList[bValue.wListIndex];
-            await Navigator.push(context,
-                MaterialPageRoute(builder: (_) => BrowserSetting(webViewController: wv)));
-            bValue.getBrowserSetting();
-          }),
+            _toolbarIconButton(
+              Icons.explore,
+              onTap: () =>
+                  _navigateAndLoad(bValue, const DAppDirectoryPage()),
+            ),
+          _toolbarAssetButton(
+            "setting",
+            onTap: () async {
+              final wv = bValue.wvcList[bValue.wListIndex];
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => BrowserSetting(webViewController: wv),
+                ),
+              );
+              if (!mounted) return;
+              bValue.getBrowserSetting();
+            },
+          ),
           if (ref.watch(wcpBridgeProvider).walletConnectState == WalletConnectState.connect)
             _buildWalletConnectButton(),
         ],
@@ -252,7 +274,9 @@ extension _BrowserPageWidgets on _BrowserPageState {
           _tabToolbarItem(
             alignment: Alignment.centerLeft,
             margin: EdgeInsets.only(left: sp(30.0)),
-            onTap: () async { bValue.cleanWList(); },
+            onTap: () async {
+              bValue.cleanWList();
+            },
             child: Text(
               S.of(context).g_browser_key16,
               style: TextStyle(fontSize: sp(26.0), color: _mainTextColor()),
@@ -260,7 +284,9 @@ extension _BrowserPageWidgets on _BrowserPageState {
           ),
           _tabToolbarItem(
             alignment: Alignment.center,
-            onTap: () async { bValue.wListAdd(); },
+            onTap: () async {
+              bValue.wListAdd();
+            },
             child: Image.asset(
               "assets/browser/add.png",
               color: _mainTextColor(),
@@ -271,7 +297,9 @@ extension _BrowserPageWidgets on _BrowserPageState {
           _tabToolbarItem(
             alignment: Alignment.centerRight,
             margin: EdgeInsets.only(right: sp(30.0)),
-            onTap: () async { bValue.setShowWList(false); },
+            onTap: () async {
+              bValue.setShowWList(false);
+            },
             child: Text(
               S.of(context).g_browser_key17,
               style: TextStyle(fontSize: sp(26.0), color: _mainTextColor()),
@@ -309,11 +337,16 @@ extension _BrowserPageWidgets on _BrowserPageState {
   }
 
   /// Toolbar button with an asset image from `assets/browser/`.
-  Widget _toolbarAssetButton(String assetName,
-      {VoidCallback? onTap, String? colorKey}) {
+  Widget _toolbarAssetButton(
+    String assetName, {
+    VoidCallback? onTap,
+    String? colorKey,
+  }) {
     final sw = ScreenUtil().setWidth;
     final color = AppThemeUtils.getColorByKey(
-        context, colorKey ?? AppThemeKeys.mainTextColor.name);
+      context,
+      colorKey ?? AppThemeKeys.mainTextColor.name,
+    );
 
     return _toolbarButton(
       onTap: onTap,
@@ -356,5 +389,4 @@ extension _BrowserPageWidgets on _BrowserPageState {
       ),
     );
   }
-
 }

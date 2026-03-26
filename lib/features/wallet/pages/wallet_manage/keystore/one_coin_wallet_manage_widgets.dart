@@ -316,6 +316,9 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
   Future<void> _onExportKeystoreTap() async {
     try {
       if (load == Load.loading) return;
+      if (mounted) {
+        setState(() => load = Load.loading);
+      }
       if (widget.walletInfo.password == "") {
         await _exportKeystoreWithNewPassword();
       } else {
@@ -331,32 +334,37 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
   Future<void> _exportKeystoreWithNewPassword() async {
     final controller = TextEditingController();
     final controller2 = TextEditingController();
-    final flag = await tipsDialog3(
-      context,
-      _buildNewPasswordDialog(controller, controller2),
-    );
-    if (!mounted) return;
-    if (flag != true) return;
+    try {
+      final flag = await tipsDialog3(
+        context,
+        _buildNewPasswordDialog(controller, controller2),
+      );
+      if (!mounted) return;
+      if (flag != true) return;
 
-    final password = controller.text.trim();
-    final password2 = controller2.text.trim();
-    if (password.isEmpty) {
-      ToastUtils.show(S.of(context).g_key_21);
-      return;
+      final password = controller.text.trim();
+      final password2 = controller2.text.trim();
+      if (password.isEmpty) {
+        ToastUtils.show(S.of(context).g_key_21);
+        return;
+      }
+      if (!Regular().isPassword(password)) {
+        ToastUtils.show(S.of(context).rest_Choose_password);
+        return;
+      }
+      if (password2.isEmpty) {
+        ToastUtils.show(S.of(context).g_key_21);
+        return;
+      }
+      if (password != password2) {
+        ToastUtils.show(S.of(context).g_key_25);
+        return;
+      }
+      await jumpExportKeystoreDescPage(password: password);
+    } finally {
+      controller.dispose();
+      controller2.dispose();
     }
-    if (!Regular().isPassword(password)) {
-      ToastUtils.show(S.of(context).rest_Choose_password);
-      return;
-    }
-    if (password2.isEmpty) {
-      ToastUtils.show(S.of(context).g_key_21);
-      return;
-    }
-    if (password != password2) {
-      ToastUtils.show(S.of(context).g_key_25);
-      return;
-    }
-    jumpExportKeystoreDescPage(password: password);
   }
 
   Future<void> _exportKeystoreWithExistingPassword() async {
@@ -374,7 +382,7 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
         ToastUtils.show(S.of(context).g_key_146);
         return;
       }
-      jumpExportKeystoreDescPage();
+      await jumpExportKeystoreDescPage();
     } finally {
       controller.dispose();
     }

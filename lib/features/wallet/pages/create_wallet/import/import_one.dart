@@ -33,8 +33,9 @@ class _ImportOneState extends ConsumerState<ImportOne>
   }
 
   Future<void> handlerCopyText() async {
-    ClipboardData? clipboardData =
-        await Clipboard.getData(Clipboard.kTextPlain);
+    ClipboardData? clipboardData = await Clipboard.getData(
+      Clipboard.kTextPlain,
+    );
     final text = clipboardData?.text;
     unawaited(Clipboard.setData(const ClipboardData(text: "")));
     if (!mounted || text == null || text == "null" || text.isEmpty) return;
@@ -49,7 +50,10 @@ class _ImportOneState extends ConsumerState<ImportOne>
       }
       setState(() {});
     } catch (e) {
-      assert(() { debugPrint('import_one: checkMnemonic failed: $e'); return true; }());
+      assert(() {
+        debugPrint('import_one: checkMnemonic failed: $e');
+        return true;
+      }());
     }
   }
 
@@ -91,8 +95,9 @@ class _ImportOneState extends ConsumerState<ImportOne>
       ToastUtils.show(errorMessage);
       return;
     }
-    WalletInfo? fWalletInfo =
-        ref.read(wapBridgeProvider).findWallet(mnemonic: inputMW);
+    WalletInfo? fWalletInfo = ref
+        .read(wapBridgeProvider)
+        .findWallet(mnemonic: inputMW);
     if (fWalletInfo != null) {
       errorMessage = S.of(context).g_key_214(fWalletInfo.walletName ?? "");
       setState(() {});
@@ -107,26 +112,37 @@ class _ImportOneState extends ConsumerState<ImportOne>
       walletUuid: ref.read(wapBridgeProvider).userUUID,
       mnemonic: inputMW,
     );
+    final beforeWalletCount = ref.read(wapBridgeProvider).walletInfoLsit.length;
     await Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (_) => CreatePassword(wInfo, createMetod: "Import")),
+        builder: (_) => CreatePassword(wInfo, createMetod: "Import"),
+      ),
     );
     if (!mounted) return;
-    Navigator.pop(context);
+    final afterWalletCount = ref.read(wapBridgeProvider).walletInfoLsit.length;
+    if (afterWalletCount > beforeWalletCount) {
+      Navigator.pop(context);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final activeColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainBlueColor.name);
+      context,
+      AppThemeKeys.mainBlueColor.name,
+    );
     final inactiveColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.dividerColor.name);
+      context,
+      AppThemeKeys.dividerColor.name,
+    );
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.backGroundColor.name),
+          context,
+          AppThemeKeys.backGroundColor.name,
+        ),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -153,7 +169,9 @@ class _ImportOneState extends ConsumerState<ImportOne>
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(40.0),
                           color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.mainTextColor.name),
+                            context,
+                            AppThemeKeys.mainTextColor.name,
+                          ),
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -169,7 +187,9 @@ class _ImportOneState extends ConsumerState<ImportOne>
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(32.0),
                           color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.mainTextColor.name),
+                            context,
+                            AppThemeKeys.mainTextColor.name,
+                          ),
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -181,17 +201,23 @@ class _ImportOneState extends ConsumerState<ImportOne>
                         horizontal: ScreenUtil().setWidth(20),
                       ),
                       margin: EdgeInsets.symmetric(
-                          horizontal: ScreenUtil().setWidth(30.0)),
+                        horizontal: ScreenUtil().setWidth(30.0),
+                      ),
                       decoration: BoxDecoration(
                         color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.itemBgColor.name),
+                          context,
+                          AppThemeKeys.itemBgColor.name,
+                        ),
                         borderRadius: BorderRadius.circular(
-                            ScreenUtil().setWidth(8)),
+                          ScreenUtil().setWidth(8),
+                        ),
                       ),
                       child: TextField(
                         style: TextStyle(
                           color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.mainBlueColor.name),
+                            context,
+                            AppThemeKeys.mainBlueColor.name,
+                          ),
                           fontSize: ScreenUtil().setSp(32.0),
                         ),
                         controller: inputEditingController,
@@ -204,7 +230,8 @@ class _ImportOneState extends ConsumerState<ImportOne>
                           focusedBorder: InputBorder.none,
                           isCollapsed: true,
                           contentPadding: EdgeInsets.symmetric(
-                              vertical: ScreenUtil().setWidth(10.0)),
+                            vertical: ScreenUtil().setWidth(10.0),
+                          ),
                         ),
                         maxLines: 8,
                         onChanged: checkInput,
@@ -219,7 +246,9 @@ class _ImportOneState extends ConsumerState<ImportOne>
                         inputMW,
                         style: TextStyle(
                           color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.mainBlueColor.name),
+                            context,
+                            AppThemeKeys.mainBlueColor.name,
+                          ),
                           fontSize: ScreenUtil().setSp(32),
                         ),
                       ),
@@ -228,19 +257,23 @@ class _ImportOneState extends ConsumerState<ImportOne>
                       Container(
                         alignment: Alignment.center,
                         padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-                        margin:
-                            EdgeInsets.only(top: ScreenUtil().setWidth(30)),
+                        margin: EdgeInsets.only(top: ScreenUtil().setWidth(30)),
                         decoration: BoxDecoration(
                           color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.errorBgColor.name),
+                            context,
+                            AppThemeKeys.errorBgColor.name,
+                          ),
                           borderRadius: BorderRadius.circular(
-                              ScreenUtil().setWidth(8)),
+                            ScreenUtil().setWidth(8),
+                          ),
                         ),
                         child: Text(
                           errorMessage,
                           style: TextStyle(
                             color: AppThemeUtils.getColorByKey(
-                                context, AppThemeKeys.errorTextColor.name),
+                              context,
+                              AppThemeKeys.errorTextColor.name,
+                            ),
                             fontSize: ScreenUtil().setSp(26),
                           ),
                           textAlign: TextAlign.center,
@@ -262,7 +295,9 @@ class _ImportOneState extends ConsumerState<ImportOne>
                     padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
                     width: double.infinity,
                     color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.backGroundColor.name),
+                      context,
+                      AppThemeKeys.backGroundColor.name,
+                    ),
                     child: buttonStyle2(
                       context,
                       _onSubmit,

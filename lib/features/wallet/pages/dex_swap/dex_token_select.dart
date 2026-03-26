@@ -27,6 +27,7 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
   bool _remoteSearching = false;
   List<DexTokenModel> _remoteResults = [];
   String _remoteError = '';
+  int _remoteSearchRequestId = 0;
 
   @override
   void initState() {
@@ -48,15 +49,33 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
   }
 
   Future<void> _loadTokens() async {
-    setState(() { _loading = true; _error = ''; });
-    final res = await _api.getTokens(widget.chain);
-    if (!mounted) return;
-    if (res.error) {
-      setState(() { _loading = false; _error = res.data?.toString() ?? 'Load failed'; });
-      return;
+    setState(() {
+      _loading = true;
+      _error = '';
+    });
+    try {
+      final res = await _api.getTokens(widget.chain);
+      if (!mounted) return;
+      if (res.error) {
+        setState(() {
+          _loading = false;
+          _error = res.data?.toString() ?? 'Load failed';
+        });
+        return;
+      }
+      final list = _parseTokens(res.data);
+      setState(() {
+        _loading = false;
+        _all = list;
+        _filtered = list;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _loading = false;
+        _error = e.toString();
+      });
     }
-    final list = _parseTokens(res.data);
-    setState(() { _loading = false; _all = list; _filtered = list; });
   }
 
   static final _evmHexRe = RegExp(r'^[0-9a-fA-F]{40}$');
@@ -75,6 +94,7 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
   void _onSearch() {
     final raw = _searchCtrl.text.trim();
     final q = raw.toLowerCase();
+    _remoteSearchRequestId++;
 
     final local = q.isEmpty
         ? _all
@@ -94,20 +114,40 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
   }
 
   Future<void> _searchByAddress(String address) async {
+    final requestId = ++_remoteSearchRequestId;
     if (!mounted) return;
     setState(() => _remoteSearching = true);
-    final res = await _api.getTokens(widget.chain, q: address);
-    if (!mounted) return;
-    if (res.error) {
-      setState(() { _remoteSearching = false; _remoteError = 'Search failed'; });
-      return;
+    try {
+      final res = await _api.getTokens(widget.chain, q: address);
+      if (!mounted ||
+          requestId != _remoteSearchRequestId ||
+          _searchCtrl.text.trim() != address) {
+        return;
+      }
+      if (res.error) {
+        setState(() {
+          _remoteSearching = false;
+          _remoteError = 'Search failed';
+        });
+        return;
+      }
+      final results = _parseTokens(res.data);
+      setState(() {
+        _remoteSearching = false;
+        _remoteResults = results;
+        if (results.isEmpty) _remoteError = 'Token not found';
+      });
+    } catch (_) {
+      if (!mounted ||
+          requestId != _remoteSearchRequestId ||
+          _searchCtrl.text.trim() != address) {
+        return;
+      }
+      setState(() {
+        _remoteSearching = false;
+        _remoteError = 'Search failed';
+      });
     }
-    final results = _parseTokens(res.data);
-    setState(() {
-      _remoteSearching = false;
-      _remoteResults = results;
-      if (results.isEmpty) _remoteError = 'Token not found';
-    });
   }
 
   @override

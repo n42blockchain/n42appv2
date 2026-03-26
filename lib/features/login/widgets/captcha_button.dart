@@ -39,11 +39,12 @@ class _CaptchaButtonState extends State<CaptchaButton>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
+    if (!mounted) return;
     switch (state) {
       case AppLifecycleState.paused:
         if (_countdown != 61) {
           last = DateTime.now();
-          _timer!.cancel();
+          _timer?.cancel();
         }
         break;
       case AppLifecycleState.resumed:
@@ -103,6 +104,10 @@ class _CaptchaButtonState extends State<CaptchaButton>
 
   void _startTimer() {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
       if (_countdown > 1) {
         _countdown--;
       } else {

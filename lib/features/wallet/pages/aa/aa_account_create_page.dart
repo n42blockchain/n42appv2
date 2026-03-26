@@ -111,6 +111,7 @@ class _AAAccountCreatePageState extends State<AAAccountCreatePage>
 
   Future<void> _createAccount() async {
     if (previewAddress == null) return;
+    var completedWithExit = false;
     setState(() => isCreating = true);
 
     try {
@@ -134,12 +135,15 @@ class _AAAccountCreatePageState extends State<AAAccountCreatePage>
 
       if (mounted) {
         _showSnackBar(S.of(context).g_key_aa_account_created, Colors.green);
+        completedWithExit = true;
         Navigator.pop(context, account);
       }
     } catch (e) {
       if (mounted) _showSnackBar(e.toString(), Colors.red);
     } finally {
-      if (mounted) setState(() => isCreating = false);
+      if (mounted && !completedWithExit) {
+        setState(() => isCreating = false);
+      }
     }
   }
 

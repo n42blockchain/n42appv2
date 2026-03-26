@@ -34,6 +34,7 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
       ToastUtils.show(S.of(context).g_key_watch_address_hint);
       return;
     }
+    bool completedWithExit = false;
     setState(() => _loading = true);
     try {
       final wap = ref.read(wapBridgeProvider);
@@ -53,11 +54,14 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
           : _nameCtrl.text.trim();
       await wap.addWatchOnlyWallet(name, address);
       if (!mounted) return;
+      completedWithExit = true;
       Navigator.of(context).pop(true);
     } catch (e) {
       ToastUtils.show(e.toString());
     } finally {
-      if (mounted) setState(() => _loading = false);
+      if (mounted && !completedWithExit) {
+        setState(() => _loading = false);
+      }
     }
   }
 

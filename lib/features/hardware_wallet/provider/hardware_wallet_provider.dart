@@ -61,6 +61,8 @@ class HardwareWalletProvider extends ChangeNotifier
   // 当前选中的 coinType（用于 loadMoreAccounts）
   @override
   String _currentCoinType = 'ETH';
+  @override
+  int _accountLoadGeneration = 0;
 
   // 订阅
   StreamSubscription? _scanSubscription;

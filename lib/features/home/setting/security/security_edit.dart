@@ -63,135 +63,146 @@ class SecurityEditState extends State<SecurityEdit> {
   Future<void> _confirmDisableGoogle() async {
     final TextEditingController codeCtrl = TextEditingController();
     String? errorMsg;
-
-    final confirmed = await showDialog<bool>(
-      context: context,
-      barrierDismissible: false,
-      builder: (ctx) {
-        return StatefulBuilder(
-          builder: (ctx, setModalState) {
-            return AlertDialog(
-              backgroundColor: AppThemeUtils.getColorByKey(
-                ctx,
-                AppThemeKeys.itemBgColor.name,
-              ),
-              title: Text(
-                S.of(ctx).g_2fa_disable_confirm_title,
-                style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                    ctx,
-                    AppThemeKeys.mainTextColor.name,
-                  ),
-                  fontSize: ScreenUtil().setSp(32.0),
+    try {
+      final confirmed = await showDialog<bool>(
+        context: context,
+        barrierDismissible: false,
+        builder: (ctx) {
+          return StatefulBuilder(
+            builder: (ctx, setModalState) {
+              return AlertDialog(
+                backgroundColor: AppThemeUtils.getColorByKey(
+                  ctx,
+                  AppThemeKeys.itemBgColor.name,
                 ),
-              ),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    S.of(ctx).g_2fa_disable_confirm_hint,
-                    style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                        ctx,
-                        AppThemeKeys.itemSubtitleTextColor.name,
-                      ),
-                      fontSize: ScreenUtil().setSp(26.0),
+                title: Text(
+                  S.of(ctx).g_2fa_disable_confirm_title,
+                  style: TextStyle(
+                    color: AppThemeUtils.getColorByKey(
+                      ctx,
+                      AppThemeKeys.mainTextColor.name,
                     ),
+                    fontSize: ScreenUtil().setSp(32.0),
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(16.0)),
-                  TextField(
-                    controller: codeCtrl,
-                    keyboardType: TextInputType.number,
-                    maxLength: 6,
-                    style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                        ctx,
-                        AppThemeKeys.mainTextColor.name,
-                      ),
-                      fontSize: ScreenUtil().setSp(30.0),
-                    ),
-                    decoration: InputDecoration(
-                      hintText: S.of(ctx).google_verification_message19,
-                      hintStyle: TextStyle(
+                ),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      S.of(ctx).g_2fa_disable_confirm_hint,
+                      style: TextStyle(
                         color: AppThemeUtils.getColorByKey(
                           ctx,
                           AppThemeKeys.itemSubtitleTextColor.name,
                         ),
                         fontSize: ScreenUtil().setSp(26.0),
                       ),
-                      counterText: '',
-                      errorText: errorMsg,
                     ),
-                    onChanged: (_) {
-                      if (errorMsg != null) {
-                        setModalState(() => errorMsg = null);
+                    SizedBox(height: ScreenUtil().setWidth(16.0)),
+                    TextField(
+                      controller: codeCtrl,
+                      keyboardType: TextInputType.number,
+                      maxLength: 6,
+                      style: TextStyle(
+                        color: AppThemeUtils.getColorByKey(
+                          ctx,
+                          AppThemeKeys.mainTextColor.name,
+                        ),
+                        fontSize: ScreenUtil().setSp(30.0),
+                      ),
+                      decoration: InputDecoration(
+                        hintText: S.of(ctx).google_verification_message19,
+                        hintStyle: TextStyle(
+                          color: AppThemeUtils.getColorByKey(
+                            ctx,
+                            AppThemeKeys.itemSubtitleTextColor.name,
+                          ),
+                          fontSize: ScreenUtil().setSp(26.0),
+                        ),
+                        counterText: '',
+                        errorText: errorMsg,
+                      ),
+                      onChanged: (_) {
+                        if (errorMsg != null) {
+                          setModalState(() => errorMsg = null);
+                        }
+                      },
+                    ),
+                  ],
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(ctx, false),
+                    child: Text(
+                      S.of(ctx).g_key_79,
+                      style: TextStyle(
+                        color: AppThemeUtils.getColorByKey(
+                          ctx,
+                          AppThemeKeys.itemSubtitleTextColor.name,
+                        ),
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      final code = codeCtrl.text.trim();
+                      if (code.isEmpty ||
+                          code.length != 6 ||
+                          !_totpCodeRegExp.hasMatch(code)) {
+                        setModalState(
+                          () => errorMsg = S.of(ctx).g_2fa_invalid_format,
+                        );
+                        return;
                       }
+                      Navigator.pop(ctx, true);
                     },
+                    child: Text(
+                      S.of(ctx).g_key_78,
+                      style: TextStyle(
+                        color: AppThemeUtils.getColorByKey(
+                          ctx,
+                          AppThemeKeys.mainButtonBgColor.name,
+                        ),
+                      ),
+                    ),
                   ),
                 ],
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(ctx, false),
-                  child: Text(
-                    S.of(ctx).g_key_79,
-                    style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                        ctx,
-                        AppThemeKeys.itemSubtitleTextColor.name,
-                      ),
-                    ),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () async {
-                    final code = codeCtrl.text.trim();
-                    if (code.isEmpty ||
-                        code.length != 6 ||
-                        !_totpCodeRegExp.hasMatch(code)) {
-                      setModalState(
-                        () => errorMsg = S.of(ctx).g_2fa_invalid_format,
-                      );
-                      return;
-                    }
-                    Navigator.pop(ctx, true);
-                  },
-                  child: Text(
-                    S.of(ctx).g_key_78,
-                    style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                        ctx,
-                        AppThemeKeys.mainButtonBgColor.name,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            );
-          },
-        );
-      },
-    );
+              );
+            },
+          );
+        },
+      );
 
-    if (confirmed != true) return;
+      if (confirmed != true) return;
 
-    final code = codeCtrl.text.trim();
-    if (!mounted) return;
-
-    setState(() => _disableLoading = true);
-    final MessageModel mm = await UserInfoApi().unbindGoogle(code);
-    if (!mounted) return;
-    setState(() => _disableLoading = false);
-
-    if (mm.error) {
-      ToastUtils.show(S.of(context).g_2fa_disable_error);
-    } else {
-      // 服务器验证成功后才写入本地
-      securityMap['google'] = false;
-      await saveSecurity();
+      final code = codeCtrl.text.trim();
       if (!mounted) return;
-      ToastUtils.show(S.of(context).g_2fa_disable_success);
+
+      setState(() => _disableLoading = true);
+      try {
+        final MessageModel mm = await UserInfoApi().unbindGoogle(code);
+        if (!mounted) return;
+        if (mm.error) {
+          ToastUtils.show(S.of(context).g_2fa_disable_error);
+        } else {
+          // 服务器验证成功后才写入本地
+          securityMap['google'] = false;
+          await saveSecurity();
+          if (!mounted) return;
+          ToastUtils.show(S.of(context).g_2fa_disable_success);
+        }
+      } catch (e) {
+        if (mounted) {
+          ToastUtils.show(e.toString());
+        }
+      } finally {
+        if (mounted) {
+          setState(() => _disableLoading = false);
+        }
+      }
+    } finally {
+      codeCtrl.dispose();
     }
   }
 

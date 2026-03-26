@@ -71,20 +71,27 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
   }
 
   Future<void> _loadExisting() async {
-    final all = await CoinPriceAlertService.loadAll();
-    final config = all[widget.coinId];
-    if (!mounted) return;
-    setState(() {
-      _existing = config;
-      if (config != null) {
-        _priceCtrl.text = formatMarketPriceInput(config.targetPrice);
-        _alertAbove = config.alertAbove;
-        _enabled = config.enabled;
-      } else if (widget.currentPrice > 0) {
-        _priceCtrl.text = formatMarketPriceInput(widget.currentPrice);
+    try {
+      final all = await CoinPriceAlertService.loadAll();
+      final config = all[widget.coinId];
+      if (!mounted) return;
+      setState(() {
+        _existing = config;
+        if (config != null) {
+          _priceCtrl.text = formatMarketPriceInput(config.targetPrice);
+          _alertAbove = config.alertAbove;
+          _enabled = config.enabled;
+        } else if (widget.currentPrice > 0) {
+          _priceCtrl.text = formatMarketPriceInput(widget.currentPrice);
+        }
+        _loading = false;
+      });
+    } catch (err) {
+      debugPrint('PriceAlertSheet: failed to load existing config: $err');
+      if (mounted) {
+        setState(() => _loading = false);
       }
-      _loading = false;
-    });
+    }
   }
 
   Future<void> _save() async {
