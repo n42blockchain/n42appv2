@@ -110,8 +110,13 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
   @override
   void didUpdateWidget(EnsAddressDisplay oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.address != widget.address) {
+    if (oldWidget.address != widget.address ||
+        oldWidget.coinType != widget.coinType ||
+        oldWidget.knownEnsName != widget.knownEnsName) {
       _hasResolved = false;
+      _ensName = null;
+      _avatarUrl = null;
+      _isLoading = true;
       _resolveEns();
     }
   }
@@ -484,4 +489,3 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
     );
   }
 }
-

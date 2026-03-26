@@ -59,12 +59,18 @@ class _SessionKeyManagePageState extends State<SessionKeyManagePage>
 
   Future<void> _loadSessionKeys() async {
     setState(() => _isLoading = true);
-    final keys = await _repository.loadKeys(widget.account.chainId);
-    if (mounted) {
+    try {
+      final keys = await _repository.loadKeys(widget.account.chainId);
+      if (!mounted) return;
       setState(() {
         _sessionKeys = keys;
         _isLoading = false;
       });
+    } catch (e) {
+      debugPrint('SessionKeyManagePage._loadSessionKeys error: $e');
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
     }
   }
 

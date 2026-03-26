@@ -32,8 +32,9 @@ class _ImageCropPageState extends State<ImageCropPage> {
               widget.imageData,
               callbacks: ProImageEditorCallbacks(
                 onImageEditingComplete: (Uint8List bytes) async {
+                  if (!mounted) return;
                   setState(() => load = Load.finish);
-                  if (mounted) Navigator.pop(context, bytes);
+                  Navigator.pop(context, bytes);
                 },
               ),
             ),

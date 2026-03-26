@@ -65,21 +65,23 @@ class _HardwareWalletAccountsPageState
 
   Future<void> _loadAccounts() async {
     setState(() => _isLoading = true);
-
-    await widget.provider.loadAccounts(_selectedCoinType);
-
-    if (mounted) {
-      setState(() => _isLoading = false);
+    try {
+      await widget.provider.loadAccounts(_selectedCoinType);
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
     }
   }
 
   Future<void> _loadMoreAccounts() async {
     setState(() => _isLoadingMore = true);
-
-    await widget.provider.loadMoreAccounts();
-
-    if (mounted) {
-      setState(() => _isLoadingMore = false);
+    try {
+      await widget.provider.loadMoreAccounts();
+    } finally {
+      if (mounted) {
+        setState(() => _isLoadingMore = false);
+      }
     }
   }
 

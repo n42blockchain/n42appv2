@@ -179,6 +179,7 @@ class _FaceBindingState extends ConsumerState<FaceBinding>
         return;
       }
       await _saveFaceConsent();
+      if (!mounted) return;
     }
 
     _useCamera();

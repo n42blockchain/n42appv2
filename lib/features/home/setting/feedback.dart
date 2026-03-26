@@ -128,28 +128,39 @@ class _FeedbackState extends State<Feedback> {
       return;
     }
     final fjStr = appendixs.map((am) => am.url).join(';');
-    setState(() => load = Load.loading);
-    final walletService = ServiceLocatorSetup.walletService;
-    var address = "";
-    if (walletService != null) {
-      final mainWallet = walletService.getMainWallet();
-      if (mainWallet != null) {
-        address =
-            await walletService.getChainAddress(
-              mainWallet.address,
-              CoinType.N.name,
-            ) ??
-            "";
+    var completedWithExit = false;
+    try {
+      setState(() => load = Load.loading);
+      final walletService = ServiceLocatorSetup.walletService;
+      var address = "";
+      if (walletService != null) {
+        final mainWallet = walletService.getMainWallet();
+        if (mainWallet != null) {
+          address =
+              await walletService.getChainAddress(
+                mainWallet.address,
+                CoinType.N.name,
+              ) ??
+              "";
+        }
       }
-    }
-    final mm = await UserInfoApi().submitFeedback(address, content, fjStr);
-    if (!mounted) return;
-    setState(() => load = Load.finish);
-    if (!mm.error && mm.data['code'] == 200) {
-      ToastUtils.show(S.of(context).g_key_feedback_4);
-      Navigator.pop(context);
-    } else {
-      ToastUtils.show(S.of(context).g_key_feedback_3);
+      final mm = await UserInfoApi().submitFeedback(address, content, fjStr);
+      if (!mounted) return;
+      if (!mm.error && mm.data['code'] == 200) {
+        ToastUtils.show(S.of(context).g_key_feedback_4);
+        completedWithExit = true;
+        Navigator.pop(context);
+      } else {
+        ToastUtils.show(S.of(context).g_key_feedback_3);
+      }
+    } catch (_) {
+      if (mounted) {
+        ToastUtils.show(S.of(context).g_key_feedback_3);
+      }
+    } finally {
+      if (mounted && !completedWithExit) {
+        setState(() => load = Load.finish);
+      }
     }
   }
 
