@@ -10,6 +10,7 @@ import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_wallet/features/browser/pages/browser_page.dart';
 import 'package:n42_wallet/features/home/setting/about_app.dart';
 import 'package:n42_wallet/features/home/setting/setting_home_page.dart';
+import 'package:n42_wallet/features/profile/pages/profile_home_page.dart';
 import 'package:n42_wallet/features/notification/pages/message_list.dart';
 import 'package:n42_wallet/features/wallet/pages/address_book/address_book_list.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_manage/wallet_list.dart';
@@ -126,7 +127,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (_) => N42Chat.profileWidget(),
+                            builder: (_) => const ProfileHomePage(),
                           ),
                         );
                       },
