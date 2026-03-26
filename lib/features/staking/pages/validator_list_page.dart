@@ -174,7 +174,10 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
   Widget _buildSortBar(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
-      child: Row(
+      child: Wrap(
+        spacing: ScreenUtil().setWidth(8),
+        runSpacing: ScreenUtil().setWidth(8),
+        crossAxisAlignment: WrapCrossAlignment.center,
         children: [
           Text(
             S.of(context).g_key_stake_sort_by,
@@ -183,11 +186,8 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
               color: _subtitleColor(),
             ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(12)),
           _buildSortChip(context, S.of(context).g_key_stake_apy, ValidatorSortBy.apy),
-          SizedBox(width: ScreenUtil().setWidth(8)),
           _buildSortChip(context, S.of(context).g_key_stake_commission, ValidatorSortBy.commission),
-          SizedBox(width: ScreenUtil().setWidth(8)),
           _buildSortChip(context, S.of(context).g_key_stake_staked, ValidatorSortBy.totalStaked),
         ],
       ),

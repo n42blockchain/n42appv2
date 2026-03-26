@@ -57,15 +57,19 @@ class _AddressSheetHeader extends StatelessWidget {
       alignment: Alignment.centerLeft,
       child: Row(
         children: [
-          Text(
-            S.of(context).g_key_13,
-            style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainTextColor.name,
+          Flexible(
+            child: Text(
+              S.of(context).g_key_13,
+              style: TextStyle(
+                color: AppThemeUtils.getColorByKey(
+                  context,
+                  AppThemeKeys.mainTextColor.name,
+                ),
+                fontSize: ScreenUtil().setSp(36.0),
+                fontWeight: FontWeight.bold,
               ),
-              fontSize: ScreenUtil().setSp(36.0),
-              fontWeight: FontWeight.bold,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
             ),
           ),
           const Spacer(),
@@ -141,16 +145,19 @@ class _WalletAddressList extends StatelessWidget {
                       ),
                     )
                   else
-                    Text(
-                      wInfo.mainWallet
-                          ? S.of(context).g_key_14
-                          : S.of(context).g_key_6,
-                      style: TextStyle(
-                        color: walletColor,
-                        fontSize: ScreenUtil().setSp(36.0),
+                    Flexible(
+                      flex: 0,
+                      child: Text(
+                        wInfo.mainWallet
+                            ? S.of(context).g_key_14
+                            : S.of(context).g_key_6,
+                        style: TextStyle(
+                          color: walletColor,
+                          fontSize: ScreenUtil().setSp(36.0),
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
                       ),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
                     ),
                   SizedBox(width: ScreenUtil().setWidth(20.0)),
                   Expanded(

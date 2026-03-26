@@ -260,12 +260,16 @@ extension _SecurityGoogleVedificationWidgets
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             leftWidget,
-            Text(
-              S.of(context).Verification,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(30.0),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainButtonTextColor.name),
+            Flexible(
+              child: Text(
+                S.of(context).Verification,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(30.0),
+                  color: AppThemeUtils.getColorByKey(
+                      context, AppThemeKeys.mainButtonTextColor.name),
+                ),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
               ),
             ),
           ],

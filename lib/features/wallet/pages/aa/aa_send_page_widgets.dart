@@ -292,11 +292,14 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
                     color: _subText,
                   ),
                   SizedBox(width: ScreenUtil().setWidth(8)),
-                  Text(
-                    S.of(context).g_key_aa_estimated_gas,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(24),
-                      color: _subText,
+                  Flexible(
+                    child: Text(
+                      S.of(context).g_key_aa_estimated_gas,
+                      style: TextStyle(
+                        fontSize: ScreenUtil().setSp(24),
+                        color: _subText,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],

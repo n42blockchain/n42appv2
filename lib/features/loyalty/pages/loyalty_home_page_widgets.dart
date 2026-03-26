@@ -332,6 +332,8 @@ mixin _WidgetsMixin on _LogicMixin {
               hasCheckedIn
                   ? s.g_key_loyalty_checkin_done
                   : s.g_key_loyalty_checkin_btn,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
         ],

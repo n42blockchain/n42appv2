@@ -59,6 +59,8 @@ class GroupConfirm extends StatelessWidget {
             ),
             Text(
               S.of(context).g_mining_key_114,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(
                   color: AppThemeUtils.getColorByKey(
                       context, AppThemeKeys.mainTextColor.name),

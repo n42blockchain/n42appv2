@@ -261,6 +261,8 @@ class _ShareMiningState extends State<ShareMining> with SingleTickerProviderStat
                       ),
                       child: Text(
                         S.of(context).g_mining_key62,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(30),
                           fontWeight: FontWeight.w600,

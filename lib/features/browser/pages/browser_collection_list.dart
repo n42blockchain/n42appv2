@@ -159,6 +159,8 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
               child: lastPage
                   ? Text(
                       S.of(context).g_key_105,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
                       style: _subtitleStyle(context),
                     )
                   : Row(
@@ -175,6 +177,8 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
                           ),
                         Text(
                           S.of(context).g_key_106,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
                           style: _subtitleStyle(context),
                         ),
                       ],

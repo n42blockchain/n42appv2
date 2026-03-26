@@ -103,6 +103,8 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
               icon: const Icon(Icons.swap_horizontal_circle_outlined, color: Colors.white),
               label: Text(
                 S.of(context).g_key_stake_go_to_swap,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(28),
                   color: Colors.white,

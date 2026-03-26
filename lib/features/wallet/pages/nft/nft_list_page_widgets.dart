@@ -265,12 +265,17 @@ extension _NftListPageWidgets on _NftListPageState {
             SizedBox(height: su.setWidth(4)),
             Row(
               children: [
-                Text(
-                  '${S.of(context).g_key_nft_floor_price}: ',
-                  style: TextStyle(
-                    fontSize: su.setSp(20),
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.itemSubtitleTextColor.name),
+                Flexible(
+                  flex: 0,
+                  child: Text(
+                    '${S.of(context).g_key_nft_floor_price}: ',
+                    style: TextStyle(
+                      fontSize: su.setSp(20),
+                      color: AppThemeUtils.getColorByKey(
+                          context, AppThemeKeys.itemSubtitleTextColor.name),
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
                 ),
                 Expanded(

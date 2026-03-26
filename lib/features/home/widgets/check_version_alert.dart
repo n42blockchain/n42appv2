@@ -159,6 +159,8 @@ class CheckVersionAlert extends StatelessWidget {
                   },
                   child: Text(
                     S.of(context).g_key_v_k2,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(28),
                       fontWeight: FontWeight.w600,
@@ -174,6 +176,8 @@ class CheckVersionAlert extends StatelessWidget {
                   onPressed: () => Navigator.of(context).pop(),
                   child: Text(
                     S.of(context).g_version_later,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(24),
                       color: subtitleColor,

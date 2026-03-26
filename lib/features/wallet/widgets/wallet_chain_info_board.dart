@@ -79,13 +79,17 @@ class WalletChainInfoBoard extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(
-                  height: ScreenUtil().setWidth(40),
-                  child: Text(
-                    "${S.of(context).g_key_xml_0}: ${lockAmountStr??""} ",
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(28.0),
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                Flexible(
+                  child: SizedBox(
+                    height: ScreenUtil().setWidth(40),
+                    child: Text(
+                      "${S.of(context).g_key_xml_0}: ${lockAmountStr??""} ",
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: TextStyle(
+                        fontSize: ScreenUtil().setSp(28.0),
+                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                      ),
                     ),
                   ),
                 ),

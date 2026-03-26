@@ -187,12 +187,16 @@ extension on _HomeDrawPageState {
                     color: Colors.white,
                   ),
                   SizedBox(width: ScreenUtil().setWidth(8)),
-                  Text(
-                    S.of(context).g_home_key9,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: ScreenUtil().setSp(24),
-                      fontWeight: FontWeight.w500,
+                  Flexible(
+                    child: Text(
+                      S.of(context).g_home_key9,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: ScreenUtil().setSp(24),
+                        fontWeight: FontWeight.w500,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
                     ),
                   ),
                 ],
@@ -363,24 +367,28 @@ extension on _HomeDrawPageState {
                         ),
                 ),
                 SizedBox(width: ScreenUtil().setWidth(12)),
-                Text(
-                  showWalletLogout
-                      ? S.of(context).g_key_logout
-                      : showChatEntry
-                      ? S.of(context).g_key_squad
-                      : S.of(context).g_key_login,
-                  style: TextStyle(
-                    color: showWalletLogout
-                        ? AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.errorTextColor.name,
-                          )
-                        : AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.mainBlueColor.name,
-                          ),
-                    fontSize: ScreenUtil().setSp(28),
-                    fontWeight: FontWeight.w600,
+                Flexible(
+                  child: Text(
+                    showWalletLogout
+                        ? S.of(context).g_key_logout
+                        : showChatEntry
+                        ? S.of(context).g_key_squad
+                        : S.of(context).g_key_login,
+                    style: TextStyle(
+                      color: showWalletLogout
+                          ? AppThemeUtils.getColorByKey(
+                              context,
+                              AppThemeKeys.errorTextColor.name,
+                            )
+                          : AppThemeUtils.getColorByKey(
+                              context,
+                              AppThemeKeys.mainBlueColor.name,
+                            ),
+                      fontSize: ScreenUtil().setSp(28),
+                      fontWeight: FontWeight.w600,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
                 ),
               ],

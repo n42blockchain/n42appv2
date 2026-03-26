@@ -168,12 +168,15 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
                 color: blueColor,
               ),
               SizedBox(width: ScreenUtil().setWidth(12)),
-              Text(
-                S.of(context).g_key_aa_gas_payment_options,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(28),
-                  fontWeight: FontWeight.w600,
-                  color: _themeColor(AppThemeKeys.mainTextColor),
+              Flexible(
+                child: Text(
+                  S.of(context).g_key_aa_gas_payment_options,
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(28),
+                    fontWeight: FontWeight.w600,
+                    color: _themeColor(AppThemeKeys.mainTextColor),
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],
@@ -196,12 +199,15 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
                 color: isCurrentChainSupported ? Colors.green : Colors.red,
               ),
               SizedBox(width: ScreenUtil().setWidth(8)),
-              Text(
-                '${S.of(context).g_key_aa_paymaster_coverage}: '
-                '${supportedChains.length} ${S.of(context).g_key_aa_paymaster_chains_supported}',
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(22),
-                  color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
+              Flexible(
+                child: Text(
+                  '${S.of(context).g_key_aa_paymaster_coverage}: '
+                  '${supportedChains.length} ${S.of(context).g_key_aa_paymaster_chains_supported}',
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(22),
+                    color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
               const Spacer(),

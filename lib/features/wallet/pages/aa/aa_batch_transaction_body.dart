@@ -126,12 +126,15 @@ class AABatchTransactionBody extends StatelessWidget {
             children: [
               Icon(Icons.layers, size: ScreenUtil().setWidth(28), color: const Color(0xFFFF9800)),
               SizedBox(width: ScreenUtil().setWidth(12)),
-              Text(
-                S.of(context).g_key_aa_batch_transaction,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(28),
-                  fontWeight: FontWeight.w600,
-                  color: _themeColor(context, AppThemeKeys.mainTextColor),
+              Flexible(
+                child: Text(
+                  S.of(context).g_key_aa_batch_transaction,
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(28),
+                    fontWeight: FontWeight.w600,
+                    color: _themeColor(context, AppThemeKeys.mainTextColor),
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],
@@ -159,11 +162,14 @@ class AABatchTransactionBody extends StatelessWidget {
         children: [
           Icon(icon, size: ScreenUtil().setWidth(18), color: const Color(0xFFFF9800)),
           SizedBox(width: ScreenUtil().setWidth(8)),
-          Text(
-            text,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(22),
-              color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
+          Flexible(
+            child: Text(
+              text,
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(22),
+                color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
+              ),
+              overflow: TextOverflow.ellipsis,
             ),
           ),
         ],
@@ -409,11 +415,14 @@ class AABatchTransactionBody extends StatelessWidget {
                       ),
                     ),
                     SizedBox(width: ScreenUtil().setWidth(10)),
-                    Text(
-                      S.of(context).g_key_aa_batch_submitting,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(28),
-                        fontWeight: FontWeight.w600,
+                    Flexible(
+                      child: Text(
+                        S.of(context).g_key_aa_batch_submitting,
+                        style: TextStyle(
+                          fontSize: ScreenUtil().setSp(28),
+                          fontWeight: FontWeight.w600,
+                        ),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ],

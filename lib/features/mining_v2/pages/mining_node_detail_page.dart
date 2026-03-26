@@ -136,12 +136,17 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
           SizedBox(height: ScreenUtil().setWidth(16)),
           Row(
             children: [
-              Text(
-                '${S.of(context).g_mining_node_key2}: ',
-                style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemSubtitleTextColor.name),
-                  fontSize: ScreenUtil().setSp(24),
+              Flexible(
+                flex: 0,
+                child: Text(
+                  '${S.of(context).g_mining_node_key2}: ',
+                  style: TextStyle(
+                    color: AppThemeUtils.getColorByKey(
+                        context, AppThemeKeys.itemSubtitleTextColor.name),
+                    fontSize: ScreenUtil().setSp(24),
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                 ),
               ),
               Expanded(
@@ -204,6 +209,9 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
             SizedBox(height: ScreenUtil().setWidth(20)),
             Text(
               S.of(context).g_mining_key_47,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+              textAlign: TextAlign.center,
               style: TextStyle(
                 color: subColor,
                 fontSize: ScreenUtil().setSp(24),

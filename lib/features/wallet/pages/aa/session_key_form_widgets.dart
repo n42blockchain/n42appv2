@@ -63,14 +63,17 @@ class SessionKeyAmountLimit extends StatelessWidget {
         Row(
           children: [
             Checkbox(value: noLimit, onChanged: onNoLimitChanged),
-            Text(
-              S.of(context).g_key_aa_session_amount_limit,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(24),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemSubtitleTextColor.name,
+            Expanded(
+              child: Text(
+                S.of(context).g_key_aa_session_amount_limit,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(24),
+                  color: AppThemeUtils.getColorByKey(
+                    context,
+                    AppThemeKeys.itemSubtitleTextColor.name,
+                  ),
                 ),
+                overflow: TextOverflow.ellipsis,
               ),
             ),
           ],
@@ -173,15 +176,18 @@ class SessionKeyRiskSummary extends StatelessWidget {
               Icon(Icons.shield_outlined,
                   size: ScreenUtil().setWidth(20), color: riskColor),
               SizedBox(width: ScreenUtil().setWidth(8)),
-              Text(
-                S.of(context).g_key_aa_permission,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
-                  fontWeight: FontWeight.w700,
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainTextColor.name,
+              Expanded(
+                child: Text(
+                  S.of(context).g_key_aa_permission,
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(24),
+                    fontWeight: FontWeight.w700,
+                    color: AppThemeUtils.getColorByKey(
+                      context,
+                      AppThemeKeys.mainTextColor.name,
+                    ),
                   ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],

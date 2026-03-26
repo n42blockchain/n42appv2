@@ -129,26 +129,30 @@ mixin _MiningTodayV2LogicMixin on ConsumerState<MiningTodayV2> {
                         alignment: Alignment.centerLeft,
                         child: Row(
                           children: [
-                            Text(
-                              wInfo.isMainWallet
-                                  ? S.of(context).g_key_14
-                                  : S.of(context).g_key_6,
-                              style: TextStyle(
-                                color: walletColor,
-                                fontSize: ScreenUtil().setSp(36.0),
+                            Flexible(
+                              child: Text(
+                                wInfo.isMainWallet
+                                    ? S.of(context).g_key_14
+                                    : S.of(context).g_key_6,
+                                style: TextStyle(
+                                  color: walletColor,
+                                  fontSize: ScreenUtil().setSp(36.0),
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
                               ),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
                             ),
                             SizedBox(width: ScreenUtil().setWidth(20.0)),
-                            Text(
-                              wInfo.name,
-                              style: TextStyle(
-                                color: walletColor,
-                                fontSize: ScreenUtil().setSp(36.0),
+                            Flexible(
+                              child: Text(
+                                wInfo.name,
+                                style: TextStyle(
+                                  color: walletColor,
+                                  fontSize: ScreenUtil().setSp(36.0),
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
                               ),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
                             ),
                           ],
                         ),

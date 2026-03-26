@@ -200,6 +200,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                   : null,
               child: Text(
                 S.of(context).g_key_change_email,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(26),
                   color: AppThemeUtils.getColorByKey(
@@ -215,6 +217,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                 _countdown > 0
                     ? '${S.of(context).g_key_resend_code} (${_countdown}s)'
                     : S.of(context).g_key_resend_code,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(26),
                   color: _countdown > 0

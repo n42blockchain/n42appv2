@@ -175,6 +175,8 @@ Widget stakingEmptyPositions(
           ),
           child: Text(
             S.of(context).g_key_stake_start_staking,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(28),
               color: Colors.white,

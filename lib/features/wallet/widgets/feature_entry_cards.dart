@@ -65,12 +65,16 @@ class FeatureEntrySection extends StatelessWidget {
                   ),
                 ),
                 SizedBox(width: ScreenUtil().setWidth(12)),
-                Text(
-                  S.of(context).g_key_advanced_features,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(28),
-                    fontWeight: FontWeight.w600,
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                Flexible(
+                  child: Text(
+                    S.of(context).g_key_advanced_features,
+                    style: TextStyle(
+                      fontSize: ScreenUtil().setSp(28),
+                      fontWeight: FontWeight.w600,
+                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
                 ),
               ],

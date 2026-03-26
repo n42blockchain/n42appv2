@@ -46,6 +46,8 @@ class SkipDialogView extends StatelessWidget {
               // "Are you sure you want to skip?",
               S.current.g_mining_key_45,
               textAlign: TextAlign.center,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(
                   color: AppThemeUtils.getColorByKey(
                       context, AppThemeKeys.mainTextColor.name),
@@ -66,6 +68,8 @@ class SkipDialogView extends StatelessWidget {
               // "You will not receive any mining rewards until you choose 1 of the plans.",
               S.current.g_mining_key_46,
               textAlign: TextAlign.center,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(
                   color: AppThemeUtils.getColorByKey(
                       context, AppThemeKeys.mainTextColor.name),

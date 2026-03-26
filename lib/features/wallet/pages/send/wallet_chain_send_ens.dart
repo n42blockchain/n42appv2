@@ -143,11 +143,15 @@ class _ResolvingBanner extends StatelessWidget {
             ),
           ),
           SizedBox(width: w8),
-          Text(
-            S.of(context).g_key_ens_resolving,
-            style: TextStyle(
-              fontSize: su.setSp(22),
-              color: subtitleColor,
+          Flexible(
+            child: Text(
+              S.of(context).g_key_ens_resolving,
+              style: TextStyle(
+                fontSize: su.setSp(22),
+                color: subtitleColor,
+              ),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
             ),
           ),
         ],

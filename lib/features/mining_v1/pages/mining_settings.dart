@@ -119,11 +119,15 @@ class _MiningSettingsState extends State<MiningSettings> {
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            S.of(context).g_mining_key82,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(32),
-              color: _mainTextColor(),
+          Flexible(
+            child: Text(
+              S.of(context).g_mining_key82,
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(32),
+                color: _mainTextColor(),
+              ),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
             ),
           ),
           Switch(
@@ -162,20 +166,26 @@ class _MiningSettingsState extends State<MiningSettings> {
           children: [
             Expanded(child: label),
             SizedBox(width: ScreenUtil().setWidth(60)),
-            GestureDetector(
-              onTap: onTap,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    value,
-                    style: TextStyle(
-                      color: textColor,
-                      fontSize: ScreenUtil().setSp(32),
+            Flexible(
+              child: GestureDetector(
+                onTap: onTap,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Flexible(
+                      child: Text(
+                        value,
+                        style: TextStyle(
+                          color: textColor,
+                          fontSize: ScreenUtil().setSp(32),
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
                     ),
-                  ),
-                  const Icon(Icons.arrow_drop_down_sharp),
-                ],
+                    const Icon(Icons.arrow_drop_down_sharp),
+                  ],
+                ),
               ),
             ),
           ],

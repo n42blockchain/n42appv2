@@ -169,11 +169,15 @@ mixin _MiningNodeDetailWidgets
       ),
       child: Row(
         children: [
-          Text(
-            label,
-            style: TextStyle(
-              color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
-              fontSize: ScreenUtil().setSp(24),
+          Flexible(
+            child: Text(
+              label,
+              style: TextStyle(
+                color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
+                fontSize: ScreenUtil().setSp(24),
+              ),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
             ),
           ),
           const Spacer(),

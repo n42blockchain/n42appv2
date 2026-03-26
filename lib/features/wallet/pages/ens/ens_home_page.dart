@@ -63,6 +63,8 @@ class _EnsHomePageState extends State<EnsHomePage>
         icon: const Icon(Icons.search, color: Colors.white),
         label: Text(
           S.of(context).g_key_ens_search,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
           style: const TextStyle(color: Colors.white),
         ),
       ),

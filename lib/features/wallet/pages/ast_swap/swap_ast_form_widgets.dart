@@ -136,9 +136,11 @@ class SwapAstCheckWidget extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
-            width: ScreenUtil().setWidth(500),
+          ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: ScreenUtil().setWidth(500)),
             child: RichText(
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
               text: TextSpan(
                 text: S.of(context).g_swap_key_16,
                 style: TextStyle(

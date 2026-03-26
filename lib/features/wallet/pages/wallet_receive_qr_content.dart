@@ -98,12 +98,16 @@ extension _WalletReceiveQrContent on _WalletReceiveQrState {
                   placeholder: 'assets/img/list_default.png',
                 ),
                 SizedBox(width: ScreenUtil().setWidth(16)),
-                Text(
-                  network,
-                  style: TextStyle(
-                    color: mainText,
-                    fontSize: ScreenUtil().setSp(38.0),
-                    fontWeight: FontWeight.w600,
+                Expanded(
+                  child: Text(
+                    network,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: TextStyle(
+                      color: mainText,
+                      fontSize: ScreenUtil().setSp(38.0),
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ],

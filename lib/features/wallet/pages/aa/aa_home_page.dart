@@ -151,6 +151,8 @@ class _AAHomePageState extends State<AAHomePage> {
         icon: const Icon(Icons.add, color: Colors.white),
         label: Text(
           S.of(context).g_key_aa_create_account,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
           style: const TextStyle(color: Colors.white),
         ),
       ),

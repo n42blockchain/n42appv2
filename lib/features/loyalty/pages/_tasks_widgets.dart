@@ -418,6 +418,8 @@ mixin TasksWidgetsMixin on State<TasksPage>, TasksLogicMixin {
                 )
               : Text(
                   _getButtonText(task),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(24),
                     fontWeight: FontWeight.w600,

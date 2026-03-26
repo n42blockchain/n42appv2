@@ -204,6 +204,8 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                               },
                               child: Text(
                                 S.of(context).g_face_5,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   fontSize: ScreenUtil().setSp(28),
                                   color: AppThemeUtils.getColorByKey(

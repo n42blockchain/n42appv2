@@ -155,6 +155,8 @@ class _SessionKeyManagePageState extends State<SessionKeyManagePage>
         icon: const Icon(Icons.add, color: Colors.white),
         label: Text(
           s.g_key_aa_create_session,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
           style: const TextStyle(color: Colors.white),
         ),
       ),

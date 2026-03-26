@@ -309,6 +309,8 @@ class _NftSendPageState extends State<NftSendPage> {
                 SizedBox(height: ScreenUtil().setWidth(4)),
                 Text(
                   '${S.of(context).g_key_nft_token_id}: #${nft.tokenId}',
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(24),
                     color: subtitleColor,

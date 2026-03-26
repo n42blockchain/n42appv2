@@ -56,6 +56,8 @@ class SelectPlan extends StatelessWidget {
                     margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(4)),
                     child: Text(
                       title1,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
                       style: TextStyle(
                         color: AppThemeUtils.getColorByKey(
                           context,

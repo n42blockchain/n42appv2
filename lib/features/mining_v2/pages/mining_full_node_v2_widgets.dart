@@ -361,6 +361,8 @@ mixin _MiningFullNodeV2WidgetsMixin on ConsumerState<MiningFullNodeV2>, _MiningF
               ),
               child: Text(
                 S.of(context).g_mining_key_79,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(28),
                   fontWeight: FontWeight.w600,

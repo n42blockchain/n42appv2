@@ -275,9 +275,12 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
             child: const CircularProgressIndicator(strokeWidth: 2),
           ),
           SizedBox(width: 12.w),
-          Text(
-            S.of(context).g_key_aa_address_calculating,
-            style: TextStyle(fontSize: 22.sp, color: subtitleColor),
+          Flexible(
+            child: Text(
+              S.of(context).g_key_aa_address_calculating,
+              style: TextStyle(fontSize: 22.sp, color: subtitleColor),
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
         ],
       );
