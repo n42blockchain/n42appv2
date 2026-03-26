@@ -177,6 +177,15 @@ class _NonEvmFeeSelectorState extends State<NonEvmFeeSelector> {
     _selected = widget.feeModel.selectedSpeed;
   }
 
+  @override
+  void didUpdateWidget(covariant NonEvmFeeSelector oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.feeModel != widget.feeModel ||
+        oldWidget.feeModel.selectedSpeed != widget.feeModel.selectedSpeed) {
+      _selected = widget.feeModel.selectedSpeed;
+    }
+  }
+
   void _onTap(NonEvmFeeSpeed speed) {
     setState(() {
       _selected = speed;
