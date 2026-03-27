@@ -94,12 +94,15 @@ class SwapAstPayWidget extends ConsumerWidget {
   Widget _buildHeader(BuildContext context) {
     return Row(
       children: [
-        Text(
-          S.of(context).g_swap_key_3,
-          style: TextStyle(
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.itemTextColor.name),
-            fontSize: ScreenUtil().setSp(30),
+        Flexible(
+          child: Text(
+            S.of(context).g_swap_key_3,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              color: AppThemeUtils.getColorByKey(
+                  context, AppThemeKeys.itemTextColor.name),
+              fontSize: ScreenUtil().setSp(30),
+            ),
           ),
         ),
         const SizedBox(width: 10),
@@ -225,9 +228,12 @@ class SwapAstPayWidget extends ConsumerWidget {
 
     return Row(
       children: [
-        Text(
-          "${S.of(context).g_key_29}:$balanceText",
-          style: TextStyle(color: balanceColor, fontSize: ScreenUtil().setSp(26)),
+        Flexible(
+          child: Text(
+            "${S.of(context).g_key_29}:$balanceText",
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(color: balanceColor, fontSize: ScreenUtil().setSp(26)),
+          ),
         ),
         if (youPay?.load == Load.loading)
           SizedBox(

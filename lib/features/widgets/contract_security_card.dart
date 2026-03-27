@@ -69,12 +69,15 @@ class ContractSecurityCard extends StatelessWidget {
             ),
           ),
           SizedBox(width: ScreenUtil().setWidth(10)),
-          Text(
-            S.of(context).g_key_security_goplus_checking,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name),
+          Flexible(
+            child: Text(
+              S.of(context).g_key_security_goplus_checking,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(24),
+                color: AppThemeUtils.getColorByKey(
+                    context, AppThemeKeys.itemSubtitleTextColor.name),
+              ),
             ),
           ),
         ],
@@ -135,12 +138,15 @@ class ContractSecurityCard extends StatelessWidget {
                   ),
                 ),
               ),
-              Text(
-                S.of(context).g_key_security_goplus_powered_by,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(20),
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemSubtitleTextColor.name),
+              Flexible(
+                child: Text(
+                  S.of(context).g_key_security_goplus_powered_by,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(20),
+                    color: AppThemeUtils.getColorByKey(
+                        context, AppThemeKeys.itemSubtitleTextColor.name),
+                  ),
                 ),
               ),
             ],

@@ -190,14 +190,17 @@ mixin _MiningTodayV2WidgetsMixin on ConsumerState<MiningTodayV2>, _MiningTodayV2
                         ],
                       ),
                     ),
-                    Text(
-                      isActive
-                          ? S.current.g_key_193
-                          : S.current.g_mining_key_47,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: ScreenUtil().setSp(28),
-                        fontWeight: FontWeight.w700,
+                    Flexible(
+                      child: Text(
+                        isActive
+                            ? S.current.g_key_193
+                            : S.current.g_mining_key_47,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: ScreenUtil().setSp(28),
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
                   ],

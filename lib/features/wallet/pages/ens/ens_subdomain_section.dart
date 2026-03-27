@@ -53,12 +53,15 @@ class EnsSubdomainSection extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          S.of(context).g_key_ens_subdomains,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(28),
-            fontWeight: FontWeight.w600,
-            color: mainTextColor,
+        Flexible(
+          child: Text(
+            S.of(context).g_key_ens_subdomains,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(28),
+              fontWeight: FontWeight.w600,
+              color: mainTextColor,
+            ),
           ),
         ),
         Row(

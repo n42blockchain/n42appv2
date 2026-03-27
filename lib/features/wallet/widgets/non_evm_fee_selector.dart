@@ -243,12 +243,15 @@ class _NonEvmFeeSelectorState extends State<NonEvmFeeSelector> {
                 color: blueColor,
               ),
               SizedBox(width: ScreenUtil().setWidth(16)),
-              Text(
-                S.of(context).g_key_t_16,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(30),
-                  fontWeight: FontWeight.bold,
-                  color: mainText,
+              Flexible(
+                child: Text(
+                  S.of(context).g_key_t_16,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(30),
+                    fontWeight: FontWeight.bold,
+                    color: mainText,
+                  ),
                 ),
               ),
             ],

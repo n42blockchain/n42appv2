@@ -387,38 +387,40 @@ class EnsResolvingDialog extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
       ),
-      content: Padding(
-        padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(
-              width: ScreenUtil().setWidth(60),
-              height: ScreenUtil().setWidth(60),
-              child: CircularProgressIndicator(
-                strokeWidth: 3,
-                valueColor: AlwaysStoppedAnimation<Color>(blueColor),
+      content: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                width: ScreenUtil().setWidth(60),
+                height: ScreenUtil().setWidth(60),
+                child: CircularProgressIndicator(
+                  strokeWidth: 3,
+                  valueColor: AlwaysStoppedAnimation<Color>(blueColor),
+                ),
               ),
-            ),
-            SizedBox(height: ScreenUtil().setWidth(24)),
-            Text(
-              S.of(context).g_key_ens_resolving,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(28),
-                fontWeight: FontWeight.w600,
-                color: mainTextColor,
+              SizedBox(height: ScreenUtil().setWidth(24)),
+              Text(
+                S.of(context).g_key_ens_resolving,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(28),
+                  fontWeight: FontWeight.w600,
+                  color: mainTextColor,
+                ),
               ),
-            ),
-            SizedBox(height: ScreenUtil().setWidth(8)),
-            Text(
-              ensName,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(24),
-                color: blueColor,
-                fontFamily: 'monospace',
+              SizedBox(height: ScreenUtil().setWidth(8)),
+              Text(
+                ensName,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(24),
+                  color: blueColor,
+                  fontFamily: 'monospace',
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

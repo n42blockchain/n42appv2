@@ -77,9 +77,12 @@ class DexSlippageRow extends StatelessWidget {
 
     return Row(
       children: [
-        Text(
-          S.of(context).g_key_dex_slippage_label,
-          style: TextStyle(color: subText, fontSize: ScreenUtil().setSp(24)),
+        Flexible(
+          child: Text(
+            S.of(context).g_key_dex_slippage_label,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(color: subText, fontSize: ScreenUtil().setSp(24)),
+          ),
         ),
         SizedBox(width: ScreenUtil().setWidth(16)),
         ...slippageOptions.map((bps) {

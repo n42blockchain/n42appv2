@@ -57,14 +57,16 @@ mixin _WalletListActionsMixin on ConsumerState<WalletList> {
             fontSize: ScreenUtil().setSp(32),
           ),
         ),
-        content: Text(
-          S.of(ctx).g_key_192,
-          style: TextStyle(
-            color: AppThemeUtils.getColorByKey(
-              ctx,
-              AppThemeKeys.mainTextColor.name,
+        content: SingleChildScrollView(
+          child: Text(
+            S.of(ctx).g_key_192,
+            style: TextStyle(
+              color: AppThemeUtils.getColorByKey(
+                ctx,
+                AppThemeKeys.mainTextColor.name,
+              ),
+              fontSize: ScreenUtil().setSp(28),
             ),
-            fontSize: ScreenUtil().setSp(28),
           ),
         ),
         actions: [

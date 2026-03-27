@@ -96,7 +96,7 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text(s.g_browser_key19),
-        content: Text(s.g_browser_key20),
+        content: SingleChildScrollView(child: Text(s.g_browser_key20)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),

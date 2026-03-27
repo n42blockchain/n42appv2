@@ -158,14 +158,19 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(S.of(context).g_key_44, style: _sectionTitleStyle()),
+            Flexible(
+              child: Text(S.of(context).g_key_44, overflow: TextOverflow.ellipsis, style: _sectionTitleStyle()),
+            ),
             Row(
               children: [
-                Text(
-                  '${S.of(context).g_key_43}: 1.5 $selectedToken',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(22),
-                    color: _subText,
+                Flexible(
+                  child: Text(
+                    '${S.of(context).g_key_43}: 1.5 $selectedToken',
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: ScreenUtil().setSp(22),
+                      color: _subText,
+                    ),
                   ),
                 ),
                 TextButton(
@@ -243,9 +248,12 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              S.of(context).g_key_aa_gas_payment,
-              style: _sectionTitleStyle(),
+            Flexible(
+              child: Text(
+                S.of(context).g_key_aa_gas_payment,
+                overflow: TextOverflow.ellipsis,
+                style: _sectionTitleStyle(),
+              ),
             ),
             TextButton(
               onPressed: selectPaymaster,

@@ -110,12 +110,15 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
                   color: blueColor,
                 ),
                 SizedBox(width: ScreenUtil().setWidth(16)),
-                Text(
-                  S.of(context).g_key_t_16, // Gas Fee
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(30),
-                    fontWeight: FontWeight.bold,
-                    color: mainText,
+                Flexible(
+                  child: Text(
+                    S.of(context).g_key_t_16, // Gas Fee
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: ScreenUtil().setSp(30),
+                      fontWeight: FontWeight.bold,
+                      color: mainText,
+                    ),
                   ),
                 ),
               ],

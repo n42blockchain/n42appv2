@@ -94,16 +94,19 @@ class SettingTheme extends ConsumerWidget {
                 ScreenUtil().setWidth(8)),
             child: Row(
               children: [
-                Text(
-                  S.of(context).g_theme_accent_color,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(28),
-                    fontWeight: FontWeight.w600,
-                    color: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.color
-                        ?.withAlpha(180),
+                Flexible(
+                  child: Text(
+                    S.of(context).g_theme_accent_color,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: ScreenUtil().setSp(28),
+                      fontWeight: FontWeight.w600,
+                      color: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.color
+                          ?.withAlpha(180),
+                    ),
                   ),
                 ),
                 const Spacer(),

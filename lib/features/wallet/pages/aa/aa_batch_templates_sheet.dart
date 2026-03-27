@@ -50,12 +50,15 @@ class _BatchTemplatesSheetState extends State<BatchTemplatesSheet> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    S.of(context).g_key_aa_batch_templates,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(32),
-                      fontWeight: FontWeight.bold,
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                  Flexible(
+                    child: Text(
+                      S.of(context).g_key_aa_batch_templates,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: ScreenUtil().setSp(32),
+                        fontWeight: FontWeight.bold,
+                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                      ),
                     ),
                   ),
                   IconButton(

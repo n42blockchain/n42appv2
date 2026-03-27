@@ -29,11 +29,13 @@ mixin _MiningTodayV2LogicMixin on ConsumerState<MiningTodayV2> {
       barrierDismissible: false,
       builder: (BuildContext dialogContext) {
         return AlertDialog(
-          content: Text(
-            S.current.g_mining_key20,
-            style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name)),
+          content: SingleChildScrollView(
+            child: Text(
+              S.current.g_mining_key20,
+              style: TextStyle(
+                  color: AppThemeUtils.getColorByKey(
+                      context, AppThemeKeys.mainTextColor.name)),
+            ),
           ),
           actions: <Widget>[
             TextButton(

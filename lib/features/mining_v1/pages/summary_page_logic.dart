@@ -260,11 +260,13 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
         barrierDismissible: false,
         builder: (BuildContext dialogContext) {
           return AlertDialog(
-            content: Text(
-              S.current.g_mining_key20,
-              style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name)),
+            content: SingleChildScrollView(
+              child: Text(
+                S.current.g_mining_key20,
+                style: TextStyle(
+                    color: AppThemeUtils.getColorByKey(
+                        context, AppThemeKeys.mainTextColor.name)),
+              ),
             ),
             actions: <Widget>[
               TextButton(

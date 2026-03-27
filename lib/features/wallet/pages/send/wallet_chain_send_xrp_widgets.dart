@@ -308,11 +308,14 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  S.of(context).g_key_29,
-                  style: TextStyle(
-                    color: _themeColor(AppThemeKeys.itemSubtitleTextColor.name),
-                    fontSize: ScreenUtil().setSp(28.0),
+                Flexible(
+                  child: Text(
+                    S.of(context).g_key_29,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: _themeColor(AppThemeKeys.itemSubtitleTextColor.name),
+                      fontSize: ScreenUtil().setSp(28.0),
+                    ),
                   ),
                 ),
                 Text(
@@ -388,11 +391,14 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
                           width: ScreenUtil().setWidth(30.0),
                           child: CircularProgressIndicator(color: whiteColor),
                         ),
-                      Text(
-                        S.of(context).g_key_t_47,
-                        style: TextStyle(
-                          color: whiteColor,
-                          fontSize: ScreenUtil().setSp(24.0),
+                      Flexible(
+                        child: Text(
+                          S.of(context).g_key_t_47,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: whiteColor,
+                            fontSize: ScreenUtil().setSp(24.0),
+                          ),
                         ),
                       ),
                     ],

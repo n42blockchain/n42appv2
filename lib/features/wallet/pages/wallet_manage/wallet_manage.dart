@@ -139,11 +139,13 @@ class _WalletManageState extends ConsumerState<WalletManage> {
               fontSize: ScreenUtil().setSp(32.0),
             ),
           ),
-          content: Text(
-            s.g_key_192,
-            style: TextStyle(
-              color: mainText,
-              fontSize: ScreenUtil().setSp(28.0),
+          content: SingleChildScrollView(
+            child: Text(
+              s.g_key_192,
+              style: TextStyle(
+                color: mainText,
+                fontSize: ScreenUtil().setSp(28.0),
+              ),
             ),
           ),
           actions: [

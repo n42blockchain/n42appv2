@@ -3,6 +3,4 @@ dependency_overrides:
     path: packages/webview_flutter_wkwebview
   flutter_secure_storage: ^10.0.0
   n42_chat:
-    git:
-      url: https://github.com/n42blockchain/n42_chat
-      ref: main
+    git: https://github.com/n42blockchain/n42_chat

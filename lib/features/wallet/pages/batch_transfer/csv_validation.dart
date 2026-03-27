@@ -170,36 +170,38 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
         ),
         content: SizedBox(
           width: double.maxFinite,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Found $validCount valid, ${errors.length} issue(s).'),
-              const SizedBox(height: 12),
-              const Text('Issues:',
-                  style: TextStyle(fontWeight: FontWeight.bold)),
-              const SizedBox(height: 6),
-              ConstrainedBox(
-                constraints: const BoxConstraints(maxHeight: 180),
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: errors.length > 5 ? 5 : errors.length,
-                  itemBuilder: (_, index) => Padding(
-                    padding: const EdgeInsets.only(bottom: 4),
-                    child: Text(
-                      errors[index],
-                      style: const TextStyle(
-                          fontSize: 12, color: Colors.red),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Found $validCount valid, ${errors.length} issue(s).'),
+                const SizedBox(height: 12),
+                const Text('Issues:',
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                const SizedBox(height: 6),
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxHeight: 180),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: errors.length > 5 ? 5 : errors.length,
+                    itemBuilder: (_, index) => Padding(
+                      padding: const EdgeInsets.only(bottom: 4),
+                      child: Text(
+                        errors[index],
+                        style: const TextStyle(
+                            fontSize: 12, color: Colors.red),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              if (errors.length > 5)
-                Text(
-                  '… and ${errors.length - 5} more issues',
-                  style: const TextStyle(fontSize: 12, color: Colors.grey),
-                ),
-            ],
+                if (errors.length > 5)
+                  Text(
+                    '… and ${errors.length - 5} more issues',
+                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  ),
+              ],
+            ),
           ),
         ),
         actions: [

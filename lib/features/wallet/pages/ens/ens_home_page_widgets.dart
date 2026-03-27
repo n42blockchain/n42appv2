@@ -30,11 +30,14 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
                 color: subtitleColor,
               ),
               SizedBox(width: ScreenUtil().setWidth(6)),
-              Text(
-                S.of(context).g_key_aa_chain,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(22),
-                  color: subtitleColor,
+              Flexible(
+                child: Text(
+                  S.of(context).g_key_aa_chain,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(22),
+                    color: subtitleColor,
+                  ),
                 ),
               ),
               const Spacer(),
@@ -302,12 +305,15 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              S.of(context).g_key_ens_my_domains,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(30),
-                fontWeight: FontWeight.bold,
-                color: _themeColor(AppThemeKeys.mainTextColor.name),
+            Flexible(
+              child: Text(
+                S.of(context).g_key_ens_my_domains,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(30),
+                  fontWeight: FontWeight.bold,
+                  color: _themeColor(AppThemeKeys.mainTextColor.name),
+                ),
               ),
             ),
             if (ownedNames.isNotEmpty)

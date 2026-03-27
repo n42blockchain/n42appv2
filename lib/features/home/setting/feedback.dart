@@ -277,11 +277,14 @@ class _FeedbackState extends State<Feedback> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                S.of(context).g_key_feedback_5,
-                style: TextStyle(
-                  color: _color(AppThemeKeys.mainTextColor),
-                  fontSize: pad,
+              Flexible(
+                child: Text(
+                  S.of(context).g_key_feedback_5,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: _color(AppThemeKeys.mainTextColor),
+                    fontSize: pad,
+                  ),
                 ),
               ),
               IconButton(

@@ -322,28 +322,30 @@ mixin AirdropHomeLogicMixin on State<AirdropHomePage> {
           builder: (ctx, setDialogState) {
             return AlertDialog(
               title: Text(S.of(ctx).g_key_notification_settings),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SwitchListTile(
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(S.of(ctx).g_key_new_airdrops),
-                    value: newAirdrops,
-                    onChanged: (v) => setDialogState(() => newAirdrops = v),
-                  ),
-                  SwitchListTile(
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(S.of(ctx).g_key_eligibility_alerts),
-                    value: eligibilityAlerts,
-                    onChanged: (v) => setDialogState(() => eligibilityAlerts = v),
-                  ),
-                  SwitchListTile(
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(S.of(ctx).g_key_deadline_reminders),
-                    value: deadlineReminders,
-                    onChanged: (v) => setDialogState(() => deadlineReminders = v),
-                  ),
-                ],
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SwitchListTile(
+                      contentPadding: EdgeInsets.zero,
+                      title: Text(S.of(ctx).g_key_new_airdrops),
+                      value: newAirdrops,
+                      onChanged: (v) => setDialogState(() => newAirdrops = v),
+                    ),
+                    SwitchListTile(
+                      contentPadding: EdgeInsets.zero,
+                      title: Text(S.of(ctx).g_key_eligibility_alerts),
+                      value: eligibilityAlerts,
+                      onChanged: (v) => setDialogState(() => eligibilityAlerts = v),
+                    ),
+                    SwitchListTile(
+                      contentPadding: EdgeInsets.zero,
+                      title: Text(S.of(ctx).g_key_deadline_reminders),
+                      value: deadlineReminders,
+                      onChanged: (v) => setDialogState(() => deadlineReminders = v),
+                    ),
+                  ],
+                ),
               ),
               actions: [
                 TextButton(

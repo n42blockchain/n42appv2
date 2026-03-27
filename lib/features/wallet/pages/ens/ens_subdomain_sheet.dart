@@ -183,11 +183,14 @@ class _EnsCreateSubdomainSheetState extends State<EnsCreateSubdomainSheet> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          S.of(context).g_key_ens_subdomain_create,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(32),
-            fontWeight: FontWeight.bold,
+        Flexible(
+          child: Text(
+            S.of(context).g_key_ens_subdomain_create,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(32),
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
         IconButton(

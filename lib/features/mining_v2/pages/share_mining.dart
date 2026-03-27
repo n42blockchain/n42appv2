@@ -216,12 +216,15 @@ class _ShareMiningState extends State<ShareMining> with SingleTickerProviderStat
                                       size: ScreenUtil().setWidth(36),
                                     ),
                                     SizedBox(width: ScreenUtil().setWidth(12)),
-                                    Text(
-                                      S.of(context).g_mining_key61,
-                                      style: TextStyle(
-                                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                                        fontSize: ScreenUtil().setSp(28),
-                                        fontWeight: FontWeight.w600,
+                                    Flexible(
+                                      child: Text(
+                                        S.of(context).g_mining_key61,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                                          fontSize: ScreenUtil().setSp(28),
+                                          fontWeight: FontWeight.w600,
+                                        ),
                                       ),
                                     ),
                                   ],

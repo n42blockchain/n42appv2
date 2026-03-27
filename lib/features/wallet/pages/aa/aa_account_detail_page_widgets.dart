@@ -306,12 +306,15 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                S.of(context).g_key_tran_1,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(28),
-                  fontWeight: FontWeight.w600,
-                  color: _mainText,
+              Flexible(
+                child: Text(
+                  S.of(context).g_key_tran_1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(28),
+                    fontWeight: FontWeight.w600,
+                    color: _mainText,
+                  ),
                 ),
               ),
               TextButton(

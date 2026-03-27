@@ -299,12 +299,15 @@ extension _AAHomePageWidgets on _AAHomePageState {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              S.of(context).g_key_aa_my_accounts,
-              style: TextStyle(
-                fontSize: sp(30),
-                fontWeight: FontWeight.bold,
-                color: _mainTextColor(),
+            Flexible(
+              child: Text(
+                S.of(context).g_key_aa_my_accounts,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: sp(30),
+                  fontWeight: FontWeight.bold,
+                  color: _mainTextColor(),
+                ),
               ),
             ),
             if (accounts.isNotEmpty)

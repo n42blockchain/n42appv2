@@ -15,13 +15,16 @@ class ShareList extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text(
-                S.of(context).g_key_share_method,
-                style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainBlueColor.name),
-                    fontSize: ScreenUtil().setSp(32),
-                    fontWeight: FontWeight.bold),
+              Flexible(
+                child: Text(
+                  S.of(context).g_key_share_method,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                      color: AppThemeUtils.getColorByKey(
+                          context, AppThemeKeys.mainBlueColor.name),
+                      fontSize: ScreenUtil().setSp(32),
+                      fontWeight: FontWeight.bold),
+                ),
               ),
               Spacer(),
               IconButton(

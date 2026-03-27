@@ -127,12 +127,15 @@ mixin _SummaryPageWidgetsMixin on State<SummaryPage>, _SummaryPageLogicMixin {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          S.current.g_mining_key7,
-          style: TextStyle(
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.ff888888.name),
-            fontSize: ScreenUtil().setSp(26),
+        Flexible(
+          child: Text(
+            S.current.g_mining_key7,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              color: AppThemeUtils.getColorByKey(
+                  context, AppThemeKeys.ff888888.name),
+              fontSize: ScreenUtil().setSp(26),
+            ),
           ),
         ),
         if (isCanUnlock)

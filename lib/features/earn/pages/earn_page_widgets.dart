@@ -49,11 +49,14 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                S.of(context).g_key_earn_total_earnings,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(22),
-                  color: Colors.white.withAlpha(200),
+              Flexible(
+                child: Text(
+                  S.of(context).g_key_earn_total_earnings,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(22),
+                    color: Colors.white.withAlpha(200),
+                  ),
                 ),
               ),
               Container(

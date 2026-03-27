@@ -123,13 +123,16 @@ class DexTokenCard extends StatelessWidget {
               ),
               SizedBox(width: ScreenUtil().setWidth(8)),
             ],
-            Text(
-              token?.symbol ?? S.of(context).g_key_dex_select_token,
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
-                fontSize: ScreenUtil().setSp(28),
-                fontWeight: FontWeight.w600,
+            Flexible(
+              child: Text(
+                token?.symbol ?? S.of(context).g_key_dex_select_token,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: AppThemeUtils.getColorByKey(
+                      context, AppThemeKeys.mainBlueColor.name),
+                  fontSize: ScreenUtil().setSp(28),
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
             SizedBox(width: ScreenUtil().setWidth(4)),

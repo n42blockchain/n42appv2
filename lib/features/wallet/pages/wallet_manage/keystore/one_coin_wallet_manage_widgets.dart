@@ -146,11 +146,14 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          "${S.of(context).g_key_wallet_k53}:",
-          style: TextStyle(
-            color: _color(AppThemeKeys.mainTextColor),
-            fontSize: ScreenUtil().setSp(32.0),
+        Flexible(
+          child: Text(
+            "${S.of(context).g_key_wallet_k53}:",
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              color: _color(AppThemeKeys.mainTextColor),
+              fontSize: ScreenUtil().setSp(32.0),
+            ),
           ),
         ),
         Expanded(
@@ -295,11 +298,14 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
                 width: ScreenUtil().setWidth(40),
                 child: CircularProgressIndicator(),
               ),
-            Text(
-              S.of(context).g_key_ex_keystore,
-              style: TextStyle(
-                color: _color(AppThemeKeys.mainTextColor),
-                fontSize: ScreenUtil().setSp(28.0),
+            Flexible(
+              child: Text(
+                S.of(context).g_key_ex_keystore,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: _color(AppThemeKeys.mainTextColor),
+                  fontSize: ScreenUtil().setSp(28.0),
+                ),
               ),
             ),
             Icon(
@@ -494,11 +500,14 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              S.of(context).g_key_ex_keystore_19,
-              style: TextStyle(
-                color: _color(AppThemeKeys.mainTextColor),
-                fontSize: ScreenUtil().setSp(28.0),
+            Flexible(
+              child: Text(
+                S.of(context).g_key_ex_keystore_19,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: _color(AppThemeKeys.mainTextColor),
+                  fontSize: ScreenUtil().setSp(28.0),
+                ),
               ),
             ),
           ],

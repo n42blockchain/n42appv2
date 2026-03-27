@@ -78,16 +78,19 @@ mixin _WidgetsMixin on _LogicMixin {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        isActive
-                            ? S.current.g_key_193
-                            : S.current.g_mining_key_47,
-                        style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.itemTextColor.name,
+                      Flexible(
+                        child: Text(
+                          isActive
+                              ? S.current.g_key_193
+                              : S.current.g_mining_key_47,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: AppThemeUtils.getColorByKey(
+                              context,
+                              AppThemeKeys.itemTextColor.name,
+                            ),
+                            fontSize: ScreenUtil().setSp(32),
                           ),
-                          fontSize: ScreenUtil().setSp(32),
                         ),
                       ),
                       GestureDetector(

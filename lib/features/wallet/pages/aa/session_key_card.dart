@@ -298,13 +298,16 @@ class SessionKeyCard extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              S.of(context).g_key_aa_spending_limit,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemSubtitleTextColor.name,
+            Flexible(
+              child: Text(
+                S.of(context).g_key_aa_spending_limit,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(22),
+                  color: AppThemeUtils.getColorByKey(
+                    context,
+                    AppThemeKeys.itemSubtitleTextColor.name,
+                  ),
                 ),
               ),
             ),
@@ -382,7 +385,7 @@ class SessionKeyCard extends StatelessWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(S.of(ctx).g_key_aa_revoke_session),
-        content: Text(S.of(ctx).g_key_aa_revoke_confirm),
+        content: SingleChildScrollView(child: Text(S.of(ctx).g_key_aa_revoke_confirm)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),

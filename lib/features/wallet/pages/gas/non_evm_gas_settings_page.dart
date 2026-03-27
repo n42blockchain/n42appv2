@@ -186,12 +186,15 @@ class _NonEvmGasSettingsPageState extends State<NonEvmGasSettingsPage> {
             children: [
               Icon(Icons.tune, size: ScreenUtil().setWidth(36), color: blueColor),
               SizedBox(width: ScreenUtil().setWidth(12)),
-              Text(
-                S.of(context).g_key_gas_custom,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(28),
-                  fontWeight: FontWeight.bold,
-                  color: mainText,
+              Flexible(
+                child: Text(
+                  S.of(context).g_key_gas_custom,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(28),
+                    fontWeight: FontWeight.bold,
+                    color: mainText,
+                  ),
                 ),
               ),
             ],

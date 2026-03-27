@@ -17,10 +17,13 @@ class Loading extends StatelessWidget {
         children: [
           const CupertinoActivityIndicator(animating: true, radius: 18),
           const SizedBox(width: 12),
-          Text(
-            text ?? "${S.of(context).g_key_106}...",
-            style: TextStyle(
-                color: textColor ?? const Color(0xff666666), fontSize: 16),
+          Flexible(
+            child: Text(
+              text ?? "${S.of(context).g_key_106}...",
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                  color: textColor ?? const Color(0xff666666), fontSize: 16),
+            ),
           ),
         ],
       ),

@@ -240,11 +240,14 @@ class _EmailSendButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ?prefixWidget,
-            Text(
-              S.of(context).Verification,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(24.0),
-                color: btnTextColor,
+            Flexible(
+              child: Text(
+                S.of(context).Verification,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(24.0),
+                  color: btnTextColor,
+                ),
               ),
             ),
           ],

@@ -19,39 +19,48 @@ Future<bool?> tipsDialog4(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
-            padding: EdgeInsets.all(
-              ScreenUtil().setWidth(30),
-            ),
-            child: Text(
-              title ?? S.of(context).g_key_21,
-              style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
-                  fontSize: ScreenUtil().setSp(30),
-                  fontWeight: FontWeight.bold
-              ),
-            ),
-          ),
+          Flexible(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(
+                      ScreenUtil().setWidth(30),
+                    ),
+                    child: Text(
+                      title ?? S.of(context).g_key_21,
+                      style: TextStyle(
+                          color: AppThemeUtils.getColorByKey(
+                              context, AppThemeKeys.mainTextColor.name),
+                          fontSize: ScreenUtil().setSp(30),
+                          fontWeight: FontWeight.bold
+                      ),
+                    ),
+                  ),
 
-          Container(
-            height: ScreenUtil().setWidth(120),
-            decoration: BoxDecoration(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemBgColor.name),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16))),
-            padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
-            margin: EdgeInsets.only(
-              left: ScreenUtil().setWidth(30),
-              right: ScreenUtil().setWidth(30),
-              top: ScreenUtil().setWidth(20),
-              bottom: ScreenUtil().setWidth(50),
-            ),
-            child: CommInput(
-              type: InputFieldType.password,
-              hintText: hintText ?? S.of(context).g_key_21,
-              controller: controller,
-              maxLines: 1,
+                  Container(
+                    height: ScreenUtil().setWidth(120),
+                    decoration: BoxDecoration(
+                        color: AppThemeUtils.getColorByKey(
+                            context, AppThemeKeys.itemBgColor.name),
+                        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16))),
+                    padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
+                    margin: EdgeInsets.only(
+                      left: ScreenUtil().setWidth(30),
+                      right: ScreenUtil().setWidth(30),
+                      top: ScreenUtil().setWidth(20),
+                      bottom: ScreenUtil().setWidth(50),
+                    ),
+                    child: CommInput(
+                      type: InputFieldType.password,
+                      hintText: hintText ?? S.of(context).g_key_21,
+                      controller: controller,
+                      maxLines: 1,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
 

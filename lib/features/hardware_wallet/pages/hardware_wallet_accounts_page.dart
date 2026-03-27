@@ -178,13 +178,15 @@ class _HardwareWalletAccountsPageState
       context: context,
       builder: (dialogContext) => AlertDialog(
         title: Text(S.of(context).g_key_hw_add_account),
-        content: Text(
-          S
-              .of(context)
-              .g_key_hw_add_account_content(
-                account.shortAddress,
-                account.coinType,
-              ),
+        content: SingleChildScrollView(
+          child: Text(
+            S
+                .of(context)
+                .g_key_hw_add_account_content(
+                  account.shortAddress,
+                  account.coinType,
+                ),
+          ),
         ),
         actions: [
           TextButton(

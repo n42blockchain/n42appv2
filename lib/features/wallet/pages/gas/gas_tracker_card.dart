@@ -157,9 +157,12 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
           children: [
             Icon(Icons.show_chart, size: ScreenUtil().setWidth(28), color: subtitleColor),
             SizedBox(width: ScreenUtil().setWidth(6)),
-            Text(
-              S.of(context).g_key_gas_price_trend,
-              style: TextStyle(fontSize: ScreenUtil().setSp(22), color: subtitleColor),
+            Flexible(
+              child: Text(
+                S.of(context).g_key_gas_price_trend,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontSize: ScreenUtil().setSp(22), color: subtitleColor),
+              ),
             ),
             const Spacer(),
             Text(

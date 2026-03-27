@@ -254,12 +254,15 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            S.of(context).g_key_gas_custom,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(30),
-              fontWeight: FontWeight.bold,
-              color: _themeColor(context, AppThemeKeys.mainTextColor),
+          Flexible(
+            child: Text(
+              S.of(context).g_key_gas_custom,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(30),
+                fontWeight: FontWeight.bold,
+                color: _themeColor(context, AppThemeKeys.mainTextColor),
+              ),
             ),
           ),
           Switch(
@@ -365,11 +368,14 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                S.of(context).g_key_t_16,
-                style: TextStyle(
-                  fontSize: su.setSp(28),
-                  color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
+              Flexible(
+                child: Text(
+                  S.of(context).g_key_t_16,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: su.setSp(28),
+                    color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
+                  ),
                 ),
               ),
               Text(

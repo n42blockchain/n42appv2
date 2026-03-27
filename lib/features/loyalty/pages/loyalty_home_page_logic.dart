@@ -179,14 +179,17 @@ mixin _LogicMixin on State<LoyaltyHomePage> {
                     // Invited friends list
                     Row(
                       children: [
-                        Text(
-                          S.of(context).g_key_loyalty_invited_friends,
-                          style: TextStyle(
-                            fontSize: ScreenUtil().setSp(28),
-                            fontWeight: FontWeight.bold,
-                            color: AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.mainTextColor.name,
+                        Flexible(
+                          child: Text(
+                            S.of(context).g_key_loyalty_invited_friends,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: ScreenUtil().setSp(28),
+                              fontWeight: FontWeight.bold,
+                              color: AppThemeUtils.getColorByKey(
+                                context,
+                                AppThemeKeys.mainTextColor.name,
+                              ),
                             ),
                           ),
                         ),

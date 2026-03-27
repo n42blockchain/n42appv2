@@ -320,9 +320,12 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
 
                   Row(
                     children: [
-                      Text(
-                        S.of(context).g_alert_enable,
-                        style: TextStyle(fontSize: 14.sp, color: textColor),
+                      Flexible(
+                        child: Text(
+                          S.of(context).g_alert_enable,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(fontSize: 14.sp, color: textColor),
+                        ),
                       ),
                       const Spacer(),
                       Switch(

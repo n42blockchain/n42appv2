@@ -292,12 +292,15 @@ class NftInfoBoard extends StatelessWidget {
             color: blueColor,
           ),
           SizedBox(width: ScreenUtil().setWidth(6)),
-          Text(
-            '${S.of(context).g_key_nft_floor_price}: $floorPriceDisplay',
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
-              fontWeight: FontWeight.w600,
-              color: blueColor,
+          Flexible(
+            child: Text(
+              '${S.of(context).g_key_nft_floor_price}: $floorPriceDisplay',
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(24),
+                fontWeight: FontWeight.w600,
+                color: blueColor,
+              ),
             ),
           ),
         ],
@@ -433,12 +436,15 @@ class NftInfoBoard extends StatelessWidget {
               size: ScreenUtil().setWidth(32),
             ),
             SizedBox(width: ScreenUtil().setWidth(8)),
-            Text(
-              S.of(context).g_key_nft_burn_title,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(28),
-                fontWeight: FontWeight.w600,
-                color: Colors.red,
+            Flexible(
+              child: Text(
+                S.of(context).g_key_nft_burn_title,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(28),
+                  fontWeight: FontWeight.w600,
+                  color: Colors.red,
+                ),
               ),
             ),
           ],

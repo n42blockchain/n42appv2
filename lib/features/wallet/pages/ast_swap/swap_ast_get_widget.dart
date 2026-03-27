@@ -142,9 +142,12 @@ class SwapAstGetWidget extends StatelessWidget {
       BuildContext context, ScreenUtil su, Color textColor) {
     return Row(
       children: [
-        Text(
-          "${S.of(context).g_key_29}:${getCoinModel?.balanceDoubleAll()}",
-          style: TextStyle(color: textColor, fontSize: su.setSp(26)),
+        Flexible(
+          child: Text(
+            "${S.of(context).g_key_29}:${getCoinModel?.balanceDoubleAll()}",
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(color: textColor, fontSize: su.setSp(26)),
+          ),
         ),
         if (getLoad == Load.loading)
           SizedBox(

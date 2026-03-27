@@ -41,14 +41,17 @@ mixin BridgeHomeWidgetsMixin on ConsumerState<BridgeHomePage>,
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                isFrom
-                    ? S.of(context).g_key_75
-                    : S.of(context).g_key_38,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(26),
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemSubtitleTextColor.name),
+              Flexible(
+                child: Text(
+                  isFrom
+                      ? S.of(context).g_key_75
+                      : S.of(context).g_key_38,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(26),
+                    color: AppThemeUtils.getColorByKey(
+                        context, AppThemeKeys.itemSubtitleTextColor.name),
+                  ),
                 ),
               ),
               _buildChainPicker(context, provider, chain, isFrom),
@@ -166,13 +169,16 @@ mixin BridgeHomeWidgetsMixin on ConsumerState<BridgeHomePage>,
                 ),
               ),
             SizedBox(width: ScreenUtil().setWidth(10)),
-            Text(
-              chain?.name ?? S.of(context).g_key_17,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(28),
-                fontWeight: FontWeight.bold,
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
+            Flexible(
+              child: Text(
+                chain?.name ?? S.of(context).g_key_17,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(28),
+                  fontWeight: FontWeight.bold,
+                  color: AppThemeUtils.getColorByKey(
+                      context, AppThemeKeys.mainTextColor.name),
+                ),
               ),
             ),
             SizedBox(width: ScreenUtil().setWidth(4)),
@@ -238,13 +244,16 @@ mixin BridgeHomeWidgetsMixin on ConsumerState<BridgeHomePage>,
                 ),
               ),
             SizedBox(width: ScreenUtil().setWidth(10)),
-            Text(
-              token?.symbol ?? S.of(context).g_key_bridge_select,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(30),
-                fontWeight: FontWeight.bold,
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
+            Flexible(
+              child: Text(
+                token?.symbol ?? S.of(context).g_key_bridge_select,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(30),
+                  fontWeight: FontWeight.bold,
+                  color: AppThemeUtils.getColorByKey(
+                      context, AppThemeKeys.mainTextColor.name),
+                ),
               ),
             ),
             Icon(

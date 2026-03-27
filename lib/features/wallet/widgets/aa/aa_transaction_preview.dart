@@ -78,12 +78,15 @@ class AATransactionPreview extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                S.of(context).g_key_202,
-                style: TextStyle(
-                  fontSize: 32.sp,
-                  fontWeight: FontWeight.bold,
-                  color: _color(context, AppThemeKeys.mainTextColor),
+              Flexible(
+                child: Text(
+                  S.of(context).g_key_202,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 32.sp,
+                    fontWeight: FontWeight.bold,
+                    color: _color(context, AppThemeKeys.mainTextColor),
+                  ),
                 ),
               ),
               if (data.isGasSponsored)
@@ -260,30 +263,39 @@ class AATransactionPreview extends StatelessWidget {
                 color: sponsored ? Colors.green : subtitleColor,
               ),
               SizedBox(width: 8.w),
-              Text(
-                S.of(context).g_key_t_17,
-                style: TextStyle(fontSize: 24.sp, color: subtitleColor),
+              Flexible(
+                child: Text(
+                  S.of(context).g_key_t_17,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(fontSize: 24.sp, color: subtitleColor),
+                ),
               ),
             ],
           ),
           if (sponsored)
             Row(
               children: [
-                Text(
-                  data.formattedGasCost,
-                  style: TextStyle(
-                    fontSize: 24.sp,
-                    decoration: TextDecoration.lineThrough,
-                    color: subtitleColor,
+                Flexible(
+                  child: Text(
+                    data.formattedGasCost,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 24.sp,
+                      decoration: TextDecoration.lineThrough,
+                      color: subtitleColor,
+                    ),
                   ),
                 ),
                 SizedBox(width: 8.w),
-                Text(
-                  S.of(context).g_key_aa_free,
-                  style: TextStyle(
-                    fontSize: 26.sp,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.green,
+                Flexible(
+                  child: Text(
+                    S.of(context).g_key_aa_free,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 26.sp,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.green,
+                    ),
                   ),
                 ),
               ],

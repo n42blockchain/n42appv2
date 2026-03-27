@@ -173,7 +173,7 @@ class _AddressBookListState extends State<AddressBookList>
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(S.of(ctx).g_key_113),
-        content: Text(info.name ?? info.address ?? ''),
+        content: SingleChildScrollView(child: Text(info.name ?? info.address ?? '')),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),

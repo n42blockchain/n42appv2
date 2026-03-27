@@ -110,22 +110,25 @@ class EnsOwnedListItem extends StatelessWidget {
                                   ),
                       ),
                       SizedBox(width: ScreenUtil().setWidth(4)),
-                      Text(
-                        isExpired
-                            ? S.of(context).g_key_ens_expired
-                            : isExpiringSoon
-                                ? '${ownedEns.daysUntilExpiry} ${S.of(context).g_key_ens_days_left}'
-                                : ownedEns.formattedExpiresAt,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(22),
-                          color: isExpired
-                              ? Colors.red
+                      Flexible(
+                        child: Text(
+                          isExpired
+                              ? S.of(context).g_key_ens_expired
                               : isExpiringSoon
-                                  ? Colors.orange
-                                  : AppThemeUtils.getColorByKey(
-                                      context,
-                                      AppThemeKeys.itemSubtitleTextColor.name,
-                                    ),
+                                  ? '${ownedEns.daysUntilExpiry} ${S.of(context).g_key_ens_days_left}'
+                                  : ownedEns.formattedExpiresAt,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: ScreenUtil().setSp(22),
+                            color: isExpired
+                                ? Colors.red
+                                : isExpiringSoon
+                                    ? Colors.orange
+                                    : AppThemeUtils.getColorByKey(
+                                        context,
+                                        AppThemeKeys.itemSubtitleTextColor.name,
+                                      ),
+                          ),
                         ),
                       ),
                     ],

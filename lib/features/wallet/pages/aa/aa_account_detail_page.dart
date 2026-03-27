@@ -80,21 +80,23 @@ class _AAAccountDetailPageState extends ConsumerState<AAAccountDetailPage>
       context: context,
       builder: (_) => AlertDialog(
         title: Text(S.of(context).g_key_aa_receive_address),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            QrImageView(
-              data: address.isEmpty ? '0x0' : address,
-              version: QrVersions.auto,
-              size: 200.0,
-            ),
-            const SizedBox(height: 12),
-            SelectableText(
-              address,
-              style: const TextStyle(fontSize: 12),
-              textAlign: TextAlign.center,
-            ),
-          ],
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              QrImageView(
+                data: address.isEmpty ? '0x0' : address,
+                version: QrVersions.auto,
+                size: 200.0,
+              ),
+              const SizedBox(height: 12),
+              SelectableText(
+                address,
+                style: const TextStyle(fontSize: 12),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
         ),
         actions: [
           TextButton(

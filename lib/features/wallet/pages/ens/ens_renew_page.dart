@@ -219,13 +219,16 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
                 color: statusColor,
               ),
               SizedBox(width: ScreenUtil().setWidth(6)),
-              Text(
-                ens.isExpired
-                    ? S.of(context).g_key_ens_expired
-                    : '${S.of(context).g_key_ens_expires}: ${ens.formattedExpiresAt}',
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
-                  color: statusColor,
+              Flexible(
+                child: Text(
+                  ens.isExpired
+                      ? S.of(context).g_key_ens_expired
+                      : '${S.of(context).g_key_ens_expires}: ${ens.formattedExpiresAt}',
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(24),
+                    color: statusColor,
+                  ),
                 ),
               ),
             ],
@@ -314,11 +317,14 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                S.of(context).g_key_ens_current_expiry,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
-                  color: _color(AppThemeKeys.itemSubtitleTextColor),
+              Flexible(
+                child: Text(
+                  S.of(context).g_key_ens_current_expiry,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(24),
+                    color: _color(AppThemeKeys.itemSubtitleTextColor),
+                  ),
                 ),
               ),
               Text(
@@ -341,12 +347,15 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                S.of(context).g_key_ens_new_expiry,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
-                  fontWeight: FontWeight.w600,
-                  color: Colors.green,
+              Flexible(
+                child: Text(
+                  S.of(context).g_key_ens_new_expiry,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(24),
+                    fontWeight: FontWeight.w600,
+                    color: Colors.green,
+                  ),
                 ),
               ),
               Text(

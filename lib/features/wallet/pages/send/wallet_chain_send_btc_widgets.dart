@@ -246,12 +246,15 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            S.of(context).g_key_nft_141,
-            style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
-              fontSize: ScreenUtil().setSp(30.0),
+          Flexible(
+            child: Text(
+              S.of(context).g_key_nft_141,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: AppThemeUtils.getColorByKey(
+                    context, AppThemeKeys.mainTextColor.name),
+                fontSize: ScreenUtil().setSp(30.0),
+              ),
             ),
           ),
           const Spacer(),

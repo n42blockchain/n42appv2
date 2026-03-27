@@ -23,43 +23,52 @@ Future<bool?> deviceLoginDialog(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(height: ScreenUtil().setWidth(30)),
-          // 设备图标
-          Icon(
-            Icons.phone_android,
-            size: ScreenUtil().setWidth(60),
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainBlueColor.name),
-          ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
-          // 标题
-          Text(
-            S.of(context).device_login_title,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(32),
-              fontWeight: FontWeight.bold,
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemTextColor.name),
-            ),
-          ),
-          // 消息内容
-          Container(
-            padding: EdgeInsets.only(
-              top: ScreenUtil().setWidth(20),
-              bottom: ScreenUtil().setWidth(40),
-              left: ScreenUtil().setWidth(30),
-              right: ScreenUtil().setWidth(30),
-            ),
-            child: Text(
-              S.of(context).device_login_message(
-                info.displayName,
-                info.deviceOs,
-              ),
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemTextColor.name),
-                fontSize: ScreenUtil().setSp(28),
+          Flexible(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(height: ScreenUtil().setWidth(30)),
+                  // 设备图标
+                  Icon(
+                    Icons.phone_android,
+                    size: ScreenUtil().setWidth(60),
+                    color: AppThemeUtils.getColorByKey(
+                        context, AppThemeKeys.mainBlueColor.name),
+                  ),
+                  SizedBox(height: ScreenUtil().setWidth(16)),
+                  // 标题
+                  Text(
+                    S.of(context).device_login_title,
+                    style: TextStyle(
+                      fontSize: ScreenUtil().setSp(32),
+                      fontWeight: FontWeight.bold,
+                      color: AppThemeUtils.getColorByKey(
+                          context, AppThemeKeys.itemTextColor.name),
+                    ),
+                  ),
+                  // 消息内容
+                  Container(
+                    padding: EdgeInsets.only(
+                      top: ScreenUtil().setWidth(20),
+                      bottom: ScreenUtil().setWidth(40),
+                      left: ScreenUtil().setWidth(30),
+                      right: ScreenUtil().setWidth(30),
+                    ),
+                    child: Text(
+                      S.of(context).device_login_message(
+                        info.displayName,
+                        info.deviceOs,
+                      ),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: AppThemeUtils.getColorByKey(
+                            context, AppThemeKeys.itemTextColor.name),
+                        fontSize: ScreenUtil().setSp(28),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

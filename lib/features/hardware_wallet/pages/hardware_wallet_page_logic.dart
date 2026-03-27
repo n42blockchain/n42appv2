@@ -119,12 +119,14 @@ extension _HardwareWalletPageLogic on _HardwareWalletPageState {
       context: context,
       barrierDismissible: false,
       builder: (ctx) => AlertDialog(
-        content: Row(
-          children: [
-            const CircularProgressIndicator(),
-            const SizedBox(width: 20),
-            Text(s.g_key_hw_connecting),
-          ],
+        content: SingleChildScrollView(
+          child: Row(
+            children: [
+              const CircularProgressIndicator(),
+              const SizedBox(width: 20),
+              Expanded(child: Text(s.g_key_hw_connecting)),
+            ],
+          ),
         ),
       ),
     );
@@ -156,7 +158,7 @@ extension _HardwareWalletPageLogic on _HardwareWalletPageState {
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(s.g_key_hw_remove_device),
-        content: Text(s.g_key_hw_remove_device_confirm(device.name)),
+        content: SingleChildScrollView(child: Text(s.g_key_hw_remove_device_confirm(device.name))),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),

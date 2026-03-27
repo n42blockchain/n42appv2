@@ -103,12 +103,15 @@ class _DexSwapConfirmState extends State<DexSwapConfirm> {
       padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(14)),
       child: Row(
         children: [
-          Text(
-            S.of(context).g_key_dex_price_impact,
-            style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name),
-              fontSize: ScreenUtil().setSp(28),
+          Flexible(
+            child: Text(
+              S.of(context).g_key_dex_price_impact,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: AppThemeUtils.getColorByKey(
+                    context, AppThemeKeys.itemSubtitleTextColor.name),
+                fontSize: ScreenUtil().setSp(28),
+              ),
             ),
           ),
           const Spacer(),

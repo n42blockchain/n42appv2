@@ -197,12 +197,15 @@ class MiningRiskCard extends StatelessWidget {
                 color: riskColor,
               ),
               SizedBox(width: ScreenUtil().setWidth(10)),
-              Text(
-                S.of(context).g_mining_key_76,
-                style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                  fontSize: ScreenUtil().setSp(26),
-                  fontWeight: FontWeight.w500,
+              Flexible(
+                child: Text(
+                  S.of(context).g_mining_key_76,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                    fontSize: ScreenUtil().setSp(26),
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
             ],

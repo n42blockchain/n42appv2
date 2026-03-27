@@ -185,12 +185,15 @@ extension _PaymentPageWidgets on _PaymentPageState {
       ),
       child: Row(
         children: [
-          Text(
-            S.of(context).g_key_payment_wallet,
-            style: TextStyle(
-              color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
-              fontSize: su.setSp(30),
-              fontWeight: FontWeight.bold,
+          Flexible(
+            child: Text(
+              S.of(context).g_key_payment_wallet,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
+                fontSize: su.setSp(30),
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           Expanded(

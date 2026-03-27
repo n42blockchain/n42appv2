@@ -59,13 +59,16 @@ class _NetworkSheetHeader extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Text(
-            S.of(context).g_token_m_key_4,
-            style: TextStyle(
-              fontSize: scr.setSp(32),
-              fontWeight: FontWeight.bold,
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
+          Flexible(
+            child: Text(
+              S.of(context).g_token_m_key_4,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: scr.setSp(32),
+                fontWeight: FontWeight.bold,
+                color: AppThemeUtils.getColorByKey(
+                    context, AppThemeKeys.mainTextColor.name),
+              ),
             ),
           ),
           const Spacer(),
@@ -149,13 +152,16 @@ class _NetworkAllItem extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              S.of(context).g_token_m_key_4,
-              style: TextStyle(
-                fontSize: scr.setSp(30.0),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
-                fontWeight: FontWeight.bold,
+            Flexible(
+              child: Text(
+                S.of(context).g_token_m_key_4,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: scr.setSp(30.0),
+                  color: AppThemeUtils.getColorByKey(
+                      context, AppThemeKeys.mainTextColor.name),
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             if (selected) _buildCheckIcon(context),

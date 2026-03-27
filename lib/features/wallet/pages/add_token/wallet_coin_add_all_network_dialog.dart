@@ -43,12 +43,15 @@ extension _WalletCoinAddAllNetworkDialog on _WalletCoinAddAllState {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            S.of(context).g_token_m_key_4,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(30.0),
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-              fontWeight: FontWeight.bold,
+          Flexible(
+            child: Text(
+              S.of(context).g_token_m_key_4,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(30.0),
+                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           if (selected) _checkIcon(),

@@ -35,45 +35,47 @@ class BatchConfirmDialog extends StatelessWidget {
         S.of(context).g_key_batch_confirm_title,
         style: TextStyle(color: isDark ? Colors.white : Colors.black87),
       ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            '${S.of(context).g_key_batch_recipients}: ${provider.recipientCount}',
-            style: TextStyle(color: contentColor),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            '${S.of(context).g_key_batch_total_amount}: ${provider.formatAmount(provider.totalAmount)} $tokenSymbol',
-            style: TextStyle(color: contentColor),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Gas: ${formatGasFee(provider.gasEstimate!.totalFee)}',
-            style: TextStyle(color: contentColor),
-          ),
-          const SizedBox(height: 16),
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.orange.withAlpha(20),
-              borderRadius: BorderRadius.circular(8),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '${S.of(context).g_key_batch_recipients}: ${provider.recipientCount}',
+              style: TextStyle(color: contentColor),
             ),
-            child: Row(
-              children: [
-                const Icon(Icons.warning_amber, color: Colors.orange),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    S.of(context).importantNotice,
-                    style: TextStyle(fontSize: 12, color: contentColor),
+            const SizedBox(height: 8),
+            Text(
+              '${S.of(context).g_key_batch_total_amount}: ${provider.formatAmount(provider.totalAmount)} $tokenSymbol',
+              style: TextStyle(color: contentColor),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Gas: ${formatGasFee(provider.gasEstimate!.totalFee)}',
+              style: TextStyle(color: contentColor),
+            ),
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.orange.withAlpha(20),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.warning_amber, color: Colors.orange),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      S.of(context).importantNotice,
+                      style: TextStyle(fontSize: 12, color: contentColor),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       actions: [
         TextButton(

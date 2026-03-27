@@ -225,12 +225,15 @@ class AABatchTransactionBody extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              '${S.of(context).g_key_aa_operations} (${operations.length})',
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(26),
-                fontWeight: FontWeight.w600,
-                color: _themeColor(context, AppThemeKeys.mainTextColor),
+            Flexible(
+              child: Text(
+                '${S.of(context).g_key_aa_operations} (${operations.length})',
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(26),
+                  fontWeight: FontWeight.w600,
+                  color: _themeColor(context, AppThemeKeys.mainTextColor),
+                ),
               ),
             ),
             TextButton(
@@ -306,11 +309,14 @@ class AABatchTransactionBody extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                S.of(context).g_key_aa_total_gas,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
-                  color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
+              Flexible(
+                child: Text(
+                  S.of(context).g_key_aa_total_gas,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(24),
+                    color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
+                  ),
                 ),
               ),
               _buildGasValue(context, isSponsored),

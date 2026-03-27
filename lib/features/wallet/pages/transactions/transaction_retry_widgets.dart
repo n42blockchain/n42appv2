@@ -271,12 +271,15 @@ mixin _TransactionRetryWidgetsMixin on _TransactionRetryLogicMixin {
               child: const CircularProgressIndicator(),
             ),
             SizedBox(width: su.setWidth(10)),
-            Text(
-              S.of(context).g_key_106,
-              style: TextStyle(
-                fontSize: su.setSp(32.0),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainButtonTextColor.name),
+            Flexible(
+              child: Text(
+                S.of(context).g_key_106,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: su.setSp(32.0),
+                  color: AppThemeUtils.getColorByKey(
+                      context, AppThemeKeys.mainButtonTextColor.name),
+                ),
               ),
             ),
           ],

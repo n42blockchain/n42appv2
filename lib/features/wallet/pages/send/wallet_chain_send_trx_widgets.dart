@@ -250,11 +250,14 @@ mixin _TrxSendWidgetsMixin on _TrxSendLogicMixin {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  S.of(context).g_key_29,
-                  style: TextStyle(
-                    color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
-                    fontSize: _sp28,
+                Flexible(
+                  child: Text(
+                    S.of(context).g_key_29,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
+                      fontSize: _sp28,
+                    ),
                   ),
                 ),
                 Text(

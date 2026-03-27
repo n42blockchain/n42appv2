@@ -226,7 +226,7 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(S.of(ctx).g_key_ens_subdomain_delete),
-        content: Text(S.of(ctx).g_key_ens_subdomain_delete_confirm),
+        content: SingleChildScrollView(child: Text(S.of(ctx).g_key_ens_subdomain_delete_confirm)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),

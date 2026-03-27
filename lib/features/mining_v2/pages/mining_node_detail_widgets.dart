@@ -295,10 +295,12 @@ mixin _MiningNodeDetailWidgets
       barrierDismissible: false,
       builder: (BuildContext dialogContext) {
         return AlertDialog(
-          content: Text(
-            S.current.g_mining_key20,
-            style: TextStyle(
-              color: _themeColor(context, AppThemeKeys.mainTextColor),
+          content: SingleChildScrollView(
+            child: Text(
+              S.current.g_mining_key20,
+              style: TextStyle(
+                color: _themeColor(context, AppThemeKeys.mainTextColor),
+              ),
             ),
           ),
           actions: [

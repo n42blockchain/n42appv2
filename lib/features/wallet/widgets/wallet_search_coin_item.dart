@@ -163,12 +163,15 @@ extension _CoinItemWidgets on _WalletSearchCoinState {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                S.of(context).g_key_coin_search_recent,
-                style: TextStyle(
-                  fontSize: su.setSp(24.0),
-                  color: subColor,
-                  fontWeight: FontWeight.w600,
+              Flexible(
+                child: Text(
+                  S.of(context).g_key_coin_search_recent,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: su.setSp(24.0),
+                    color: subColor,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
               TextButton(

@@ -267,12 +267,15 @@ mixin _DotSendWidgetsMixin on _DotSendLogicMixin {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  S.of(context).g_key_29,
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.itemSubtitleTextColor.name),
-                    fontSize: ScreenUtil().setSp(28.0),
+                Flexible(
+                  child: Text(
+                    S.of(context).g_key_29,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: AppThemeUtils.getColorByKey(
+                          context, AppThemeKeys.itemSubtitleTextColor.name),
+                      fontSize: ScreenUtil().setSp(28.0),
+                    ),
                   ),
                 ),
                 Text(

@@ -137,7 +137,7 @@ class _NftDetailPageState extends State<NftDetailPage> {
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(S.of(ctx).g_key_nft_burn_title),
-        content: Text(S.of(ctx).g_key_nft_burn_confirm),
+        content: SingleChildScrollView(child: Text(S.of(ctx).g_key_nft_burn_confirm)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),

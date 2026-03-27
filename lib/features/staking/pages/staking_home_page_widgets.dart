@@ -338,11 +338,14 @@ mixin StakingHomePageWidgetsMixin on State<StakingHomePage>,
           color: isUnbonding ? Colors.orange : Colors.green,
         ),
         const Spacer(),
-        Text(
-          '${(liveApys[position.protocol.id] ?? position.protocol.apy).toStringAsFixed(1)}% ${S.of(context).g_key_stake_apy}',
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(26),
-            color: Colors.green,
+        Flexible(
+          child: Text(
+            '${(liveApys[position.protocol.id] ?? position.protocol.apy).toStringAsFixed(1)}% ${S.of(context).g_key_stake_apy}',
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(26),
+              color: Colors.green,
+            ),
           ),
         ),
       ],
@@ -421,12 +424,15 @@ mixin StakingHomePageWidgetsMixin on State<StakingHomePage>,
             color: Colors.orange,
           ),
           SizedBox(width: ScreenUtil().setWidth(8)),
-          Text(
-            S.of(context).g_key_stake_days_remaining(
-                position.unbondingDaysLeft.toString()),
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
-              color: Colors.orange,
+          Flexible(
+            child: Text(
+              S.of(context).g_key_stake_days_remaining(
+                  position.unbondingDaysLeft.toString()),
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(24),
+                color: Colors.orange,
+              ),
             ),
           ),
         ],

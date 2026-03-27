@@ -102,13 +102,16 @@ class _TopRow extends StatelessWidget {
 
     return Row(
       children: [
-        Text(
-          S.of(context).g_token_m_key_11,
-          style: TextStyle(
-            fontSize: su.setSp(32),
-            fontWeight: FontWeight.w600,
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainTextColor.name),
+        Flexible(
+          child: Text(
+            S.of(context).g_token_m_key_11,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: su.setSp(32),
+              fontWeight: FontWeight.w600,
+              color: AppThemeUtils.getColorByKey(
+                  context, AppThemeKeys.mainTextColor.name),
+            ),
           ),
         ),
         SizedBox(width: su.setWidth(12)),

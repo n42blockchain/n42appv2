@@ -44,12 +44,15 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>,
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                S.of(context).g_key_earn_active_products,
-                style: TextStyle(
-                  fontSize: su.setSp(32),
-                  fontWeight: FontWeight.bold,
-                  color: mainText,
+              Flexible(
+                child: Text(
+                  S.of(context).g_key_earn_active_products,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: su.setSp(32),
+                    fontWeight: FontWeight.bold,
+                    color: mainText,
+                  ),
                 ),
               ),
               TextButton(

@@ -66,7 +66,7 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
       context: context,
       builder: (ctx) => AlertDialog(
         title: title != null ? Text(title) : null,
-        content: Text(content),
+        content: SingleChildScrollView(child: Text(content)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),

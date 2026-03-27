@@ -323,9 +323,12 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            S.of(context).g_key_gas_alert,
-            style: TextStyle(fontSize: ScreenUtil().setSp(28), color: mainText),
+          Flexible(
+            child: Text(
+              S.of(context).g_key_gas_alert,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(fontSize: ScreenUtil().setSp(28), color: mainText),
+            ),
           ),
           Switch(
             value: _enabled,
