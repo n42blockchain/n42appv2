@@ -1,0 +1,4106 @@
+{
+  "summary": {
+    "total_keys": 1788,
+    "locales": 25,
+    "high_risk_count": 542,
+    "medium_risk_count": 719
+  },
+  "high_risk_keys": [
+    {
+      "key": "g_token_m_key_18",
+      "en_len": 3,
+      "max_len": 21,
+      "ratio": 7.0,
+      "max_locale": "ar"
+    },
+    {
+      "key": "g_key_stake_avg_apy",
+      "en_len": 7,
+      "max_len": 40,
+      "ratio": 5.71,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_key_aa_retry",
+      "en_len": 5,
+      "max_len": 28,
+      "ratio": 5.6,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_browser_key26",
+      "en_len": 3,
+      "max_len": 15,
+      "ratio": 5.0,
+      "max_locale": "ar"
+    },
+    {
+      "key": "g_key_loyalty_used",
+      "en_len": 4,
+      "max_len": 19,
+      "ratio": 4.75,
+      "max_locale": "ur"
+    },
+    {
+      "key": "g_key_197",
+      "en_len": 3,
+      "max_len": 14,
+      "ratio": 4.67,
+      "max_locale": "ur"
+    },
+    {
+      "key": "g_key_aa_paymaster_retry",
+      "en_len": 5,
+      "max_len": 23,
+      "ratio": 4.6,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_dex_retry",
+      "en_len": 5,
+      "max_len": 23,
+      "ratio": 4.6,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_earn_batch",
+      "en_len": 5,
+      "max_len": 22,
+      "ratio": 4.4,
+      "max_locale": "it"
+    },
+    {
+      "key": "g_mining_key_63",
+      "en_len": 3,
+      "max_len": 13,
+      "ratio": 4.33,
+      "max_locale": "vi"
+    },
+    {
+      "key": "g_browser_key27",
+      "en_len": 4,
+      "max_len": 17,
+      "ratio": 4.25,
+      "max_locale": "ar"
+    },
+    {
+      "key": "g_chat_key_66",
+      "en_len": 5,
+      "max_len": 20,
+      "ratio": 4.0,
+      "max_locale": "te"
+    },
+    {
+      "key": "g_key_ex_keystore_1",
+      "en_len": 11,
+      "max_len": 42,
+      "ratio": 3.82,
+      "max_locale": "es_ES"
+    },
+    {
+      "key": "g_mining_key_1",
+      "en_len": 4,
+      "max_len": 15,
+      "ratio": 3.75,
+      "max_locale": "ar"
+    },
+    {
+      "key": "g_key_105",
+      "en_len": 7,
+      "max_len": 26,
+      "ratio": 3.71,
+      "max_locale": "it"
+    },
+    {
+      "key": "g_key_159",
+      "en_len": 3,
+      "max_len": 11,
+      "ratio": 3.67,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_key_wallet_k47",
+      "en_len": 3,
+      "max_len": 11,
+      "ratio": 3.67,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_key_feedback_8",
+      "en_len": 9,
+      "max_len": 33,
+      "ratio": 3.67,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_stake_uptime",
+      "en_len": 6,
+      "max_len": 22,
+      "ratio": 3.67,
+      "max_locale": "cs"
+    },
+    {
+      "key": "g_key_dex_status_quoted",
+      "en_len": 6,
+      "max_len": 22,
+      "ratio": 3.67,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_home_key6",
+      "en_len": 5,
+      "max_len": 18,
+      "ratio": 3.6,
+      "max_locale": "ta"
+    },
+    {
+      "key": "login_email",
+      "en_len": 5,
+      "max_len": 18,
+      "ratio": 3.6,
+      "max_locale": "es_ES"
+    },
+    {
+      "key": "g_key_email",
+      "en_len": 5,
+      "max_len": 18,
+      "ratio": 3.6,
+      "max_locale": "es_ES"
+    },
+    {
+      "key": "g_key_step_email",
+      "en_len": 5,
+      "max_len": 18,
+      "ratio": 3.6,
+      "max_locale": "es_ES"
+    },
+    {
+      "key": "g_key_apply",
+      "en_len": 5,
+      "max_len": 18,
+      "ratio": 3.6,
+      "max_locale": "te"
+    },
+    {
+      "key": "g_market_low_24h",
+      "en_len": 7,
+      "max_len": 25,
+      "ratio": 3.57,
+      "max_locale": "sw"
+    },
+    {
+      "key": "g_mining_key36",
+      "en_len": 4,
+      "max_len": 14,
+      "ratio": 3.5,
+      "max_locale": "ru"
+    },
+    {
+      "key": "g_key_wallet_k56",
+      "en_len": 5,
+      "max_len": 17,
+      "ratio": 3.4,
+      "max_locale": "fr"
+    },
+    {
+      "key": "g_chat_key_31",
+      "en_len": 5,
+      "max_len": 17,
+      "ratio": 3.4,
+      "max_locale": "te"
+    },
+    {
+      "key": "g_chat_key_50",
+      "en_len": 5,
+      "max_len": 17,
+      "ratio": 3.4,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_aa_saved",
+      "en_len": 5,
+      "max_len": 17,
+      "ratio": 3.4,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_reset",
+      "en_len": 5,
+      "max_len": 17,
+      "ratio": 3.4,
+      "max_locale": "ur"
+    },
+    {
+      "key": "g_key_aa_chain_id",
+      "en_len": 8,
+      "max_len": 27,
+      "ratio": 3.38,
+      "max_locale": "it"
+    },
+    {
+      "key": "g_browser_key28",
+      "en_len": 3,
+      "max_len": 10,
+      "ratio": 3.33,
+      "max_locale": "ur"
+    },
+    {
+      "key": "g_face_match_key12",
+      "en_len": 6,
+      "max_len": 20,
+      "ratio": 3.33,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_stake_apy",
+      "en_len": 3,
+      "max_len": 10,
+      "ratio": 3.33,
+      "max_locale": "ur"
+    },
+    {
+      "key": "g_key_earn_mining",
+      "en_len": 6,
+      "max_len": 20,
+      "ratio": 3.33,
+      "max_locale": "it"
+    },
+    {
+      "key": "g_key_hw_add",
+      "en_len": 3,
+      "max_len": 10,
+      "ratio": 3.33,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_key_token_discovery_add",
+      "en_len": 3,
+      "max_len": 10,
+      "ratio": 3.33,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_key_wallet_c36",
+      "en_len": 10,
+      "max_len": 33,
+      "ratio": 3.3,
+      "max_locale": "es_ES"
+    },
+    {
+      "key": "g_key_ens_expires",
+      "en_len": 7,
+      "max_len": 23,
+      "ratio": 3.29,
+      "max_locale": "uk"
+    },
+    {
+      "key": "g_key_aa_expires",
+      "en_len": 7,
+      "max_len": 23,
+      "ratio": 3.29,
+      "max_locale": "uk"
+    },
+    {
+      "key": "g_pnl_unrealized",
+      "en_len": 14,
+      "max_len": 46,
+      "ratio": 3.29,
+      "max_locale": "id"
+    },
+    {
+      "key": "g_mining_key_40",
+      "en_len": 11,
+      "max_len": 36,
+      "ratio": 3.27,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_119",
+      "en_len": 4,
+      "max_len": 13,
+      "ratio": 3.25,
+      "max_locale": "ta"
+    },
+    {
+      "key": "Edit",
+      "en_len": 4,
+      "max_len": 13,
+      "ratio": 3.25,
+      "max_locale": "bn"
+    },
+    {
+      "key": "g_chat_key_5",
+      "en_len": 4,
+      "max_len": 13,
+      "ratio": 3.25,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_loyalty_copy",
+      "en_len": 4,
+      "max_len": 13,
+      "ratio": 3.25,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_ens_step_wait",
+      "en_len": 4,
+      "max_len": 13,
+      "ratio": 3.25,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_ens_wait",
+      "en_len": 4,
+      "max_len": 13,
+      "ratio": 3.25,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_tx_risk_safe",
+      "en_len": 4,
+      "max_len": 13,
+      "ratio": 3.25,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_nft_token_id",
+      "en_len": 8,
+      "max_len": 26,
+      "ratio": 3.25,
+      "max_locale": "it"
+    },
+    {
+      "key": "g_dapp_security_safe",
+      "en_len": 4,
+      "max_len": 13,
+      "ratio": 3.25,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_market_rank",
+      "en_len": 4,
+      "max_len": 13,
+      "ratio": 3.25,
+      "max_locale": "pt"
+    },
+    {
+      "key": "g_dapp_security_title",
+      "en_len": 13,
+      "max_len": 42,
+      "ratio": 3.23,
+      "max_locale": "ru"
+    },
+    {
+      "key": "g_mining_key_77",
+      "en_len": 6,
+      "max_len": 19,
+      "ratio": 3.17,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_chat_key_69",
+      "en_len": 6,
+      "max_len": 19,
+      "ratio": 3.17,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_loyalty_redeem",
+      "en_len": 6,
+      "max_len": 19,
+      "ratio": 3.17,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_token_m_key_15",
+      "en_len": 8,
+      "max_len": 25,
+      "ratio": 3.12,
+      "max_locale": "sw"
+    },
+    {
+      "key": "g_key_t_6",
+      "en_len": 8,
+      "max_len": 25,
+      "ratio": 3.12,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_wallet_c38",
+      "en_len": 13,
+      "max_len": 40,
+      "ratio": 3.08,
+      "max_locale": "es_ES"
+    },
+    {
+      "key": "g_key_115",
+      "en_len": 4,
+      "max_len": 12,
+      "ratio": 3.0,
+      "max_locale": "bn"
+    },
+    {
+      "key": "g_key_211",
+      "en_len": 3,
+      "max_len": 9,
+      "ratio": 3.0,
+      "max_locale": "mr"
+    },
+    {
+      "key": "g_browser_key8",
+      "en_len": 3,
+      "max_len": 9,
+      "ratio": 3.0,
+      "max_locale": "ar"
+    },
+    {
+      "key": "g_face_3",
+      "en_len": 4,
+      "max_len": 12,
+      "ratio": 3.0,
+      "max_locale": "it"
+    },
+    {
+      "key": "g_swap_key_3",
+      "en_len": 7,
+      "max_len": 21,
+      "ratio": 3.0,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_swap_key_4",
+      "en_len": 7,
+      "max_len": 21,
+      "ratio": 3.0,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_swap_key_35",
+      "en_len": 4,
+      "max_len": 12,
+      "ratio": 3.0,
+      "max_locale": "es_ES"
+    },
+    {
+      "key": "g_key_m_7",
+      "en_len": 4,
+      "max_len": 12,
+      "ratio": 3.0,
+      "max_locale": "id"
+    },
+    {
+      "key": "g_key_t_7",
+      "en_len": 3,
+      "max_len": 9,
+      "ratio": 3.0,
+      "max_locale": "id"
+    },
+    {
+      "key": "g_mining_key_36",
+      "en_len": 5,
+      "max_len": 15,
+      "ratio": 3.0,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_share_v3_key_7",
+      "en_len": 4,
+      "max_len": 12,
+      "ratio": 3.0,
+      "max_locale": "it"
+    },
+    {
+      "key": "g_chat_key_3",
+      "en_len": 5,
+      "max_len": 15,
+      "ratio": 3.0,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_chat_key_36",
+      "en_len": 10,
+      "max_len": 30,
+      "ratio": 3.0,
+      "max_locale": "ar"
+    },
+    {
+      "key": "g_chat_key_43",
+      "en_len": 7,
+      "max_len": 21,
+      "ratio": 3.0,
+      "max_locale": "ar"
+    },
+    {
+      "key": "g_key_stake_sort_by",
+      "en_len": 7,
+      "max_len": 21,
+      "ratio": 3.0,
+      "max_locale": "mr"
+    },
+    {
+      "key": "g_key_next",
+      "en_len": 4,
+      "max_len": 12,
+      "ratio": 3.0,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_key_airdrop_sort_by",
+      "en_len": 7,
+      "max_len": 21,
+      "ratio": 3.0,
+      "max_locale": "mr"
+    },
+    {
+      "key": "g_key_loyalty_next_prefix",
+      "en_len": 4,
+      "max_len": 12,
+      "ratio": 3.0,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_key_earn_burn",
+      "en_len": 4,
+      "max_len": 12,
+      "ratio": 3.0,
+      "max_locale": "sw"
+    },
+    {
+      "key": "g_key_earn_swap",
+      "en_len": 4,
+      "max_len": 12,
+      "ratio": 3.0,
+      "max_locale": "es_ES"
+    },
+    {
+      "key": "g_key_gas_alert_save",
+      "en_len": 4,
+      "max_len": 12,
+      "ratio": 3.0,
+      "max_locale": "bn"
+    },
+    {
+      "key": "g_key_ens_renew",
+      "en_len": 5,
+      "max_len": 15,
+      "ratio": 3.0,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_aa_revoked_status",
+      "en_len": 7,
+      "max_len": 21,
+      "ratio": 3.0,
+      "max_locale": "bn"
+    },
+    {
+      "key": "g_key_aa_never",
+      "en_len": 5,
+      "max_len": 15,
+      "ratio": 3.0,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_dex_you_pay",
+      "en_len": 7,
+      "max_len": 21,
+      "ratio": 3.0,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_dex_swap_btn",
+      "en_len": 4,
+      "max_len": 12,
+      "ratio": 3.0,
+      "max_locale": "es_ES"
+    },
+    {
+      "key": "g_mining_key_52",
+      "en_len": 4,
+      "max_len": 12,
+      "ratio": 3.0,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_mining_node_key2",
+      "en_len": 7,
+      "max_len": 21,
+      "ratio": 3.0,
+      "max_locale": "sw"
+    },
+    {
+      "key": "g_mining_node_key6",
+      "en_len": 6,
+      "max_len": 18,
+      "ratio": 3.0,
+      "max_locale": "cs"
+    },
+    {
+      "key": "g_email_skip",
+      "en_len": 4,
+      "max_len": 12,
+      "ratio": 3.0,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_pnl_save",
+      "en_len": 4,
+      "max_len": 12,
+      "ratio": 3.0,
+      "max_locale": "bn"
+    },
+    {
+      "key": "g_pnl_avg_cost",
+      "en_len": 8,
+      "max_len": 24,
+      "ratio": 3.0,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_market_fdv",
+      "en_len": 3,
+      "max_len": 9,
+      "ratio": 3.0,
+      "max_locale": "ur"
+    },
+    {
+      "key": "g_market_ath",
+      "en_len": 3,
+      "max_len": 9,
+      "ratio": 3.0,
+      "max_locale": "ur"
+    },
+    {
+      "key": "g_market_atl",
+      "en_len": 3,
+      "max_len": 9,
+      "ratio": 3.0,
+      "max_locale": "ur"
+    },
+    {
+      "key": "g_email_code_resent",
+      "en_len": 11,
+      "max_len": 32,
+      "ratio": 2.91,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_token_discovery_select_all",
+      "en_len": 10,
+      "max_len": 29,
+      "ratio": 2.9,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_alert_direction",
+      "en_len": 19,
+      "max_len": 55,
+      "ratio": 2.89,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_key_keystore_22",
+      "en_len": 8,
+      "max_len": 23,
+      "ratio": 2.88,
+      "max_locale": "pt"
+    },
+    {
+      "key": "g_key_earn_view_all",
+      "en_len": 8,
+      "max_len": 23,
+      "ratio": 2.88,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_aa_view_all",
+      "en_len": 8,
+      "max_len": 23,
+      "ratio": 2.88,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_market_high_24h",
+      "en_len": 8,
+      "max_len": 23,
+      "ratio": 2.88,
+      "max_locale": "sw"
+    },
+    {
+      "key": "g_chat_key_22",
+      "en_len": 7,
+      "max_len": 20,
+      "ratio": 2.86,
+      "max_locale": "te"
+    },
+    {
+      "key": "g_connect_key3",
+      "en_len": 6,
+      "max_len": 17,
+      "ratio": 2.83,
+      "max_locale": "bn"
+    },
+    {
+      "key": "g_swap_key_22",
+      "en_len": 6,
+      "max_len": 17,
+      "ratio": 2.83,
+      "max_locale": "sw"
+    },
+    {
+      "key": "g_key_ex_keystore_11",
+      "en_len": 6,
+      "max_len": 17,
+      "ratio": 2.83,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_gas_custom",
+      "en_len": 6,
+      "max_len": 17,
+      "ratio": 2.83,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_key_aa_custom",
+      "en_len": 6,
+      "max_len": 17,
+      "ratio": 2.83,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_key_aa_session_preset_contract",
+      "en_len": 11,
+      "max_len": 31,
+      "ratio": 2.82,
+      "max_locale": "ar"
+    },
+    {
+      "key": "s_key_10",
+      "en_len": 9,
+      "max_len": 25,
+      "ratio": 2.78,
+      "max_locale": "fr"
+    },
+    {
+      "key": "g_key_hw_check_app",
+      "en_len": 9,
+      "max_len": 25,
+      "ratio": 2.78,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_pnl_add_trade",
+      "en_len": 9,
+      "max_len": 25,
+      "ratio": 2.78,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_browser_key17",
+      "en_len": 4,
+      "max_len": 11,
+      "ratio": 2.75,
+      "max_locale": "sw"
+    },
+    {
+      "key": "g_home_key2",
+      "en_len": 4,
+      "max_len": 11,
+      "ratio": 2.75,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_face_match_key13",
+      "en_len": 4,
+      "max_len": 11,
+      "ratio": 2.75,
+      "max_locale": "de"
+    },
+    {
+      "key": "google_verification_message10",
+      "en_len": 4,
+      "max_len": 11,
+      "ratio": 2.75,
+      "max_locale": "de"
+    },
+    {
+      "key": "next",
+      "en_len": 4,
+      "max_len": 11,
+      "ratio": 2.75,
+      "max_locale": "id"
+    },
+    {
+      "key": "g_key_squad",
+      "en_len": 4,
+      "max_len": 11,
+      "ratio": 2.75,
+      "max_locale": "te"
+    },
+    {
+      "key": "g_key_loyalty_checkin_done",
+      "en_len": 4,
+      "max_len": 11,
+      "ratio": 2.75,
+      "max_locale": "sw"
+    },
+    {
+      "key": "g_key_earn_title",
+      "en_len": 4,
+      "max_len": 11,
+      "ratio": 2.75,
+      "max_locale": "cs"
+    },
+    {
+      "key": "g_key_burn_nft_title",
+      "en_len": 8,
+      "max_len": 22,
+      "ratio": 2.75,
+      "max_locale": "ur"
+    },
+    {
+      "key": "g_key_batch_done",
+      "en_len": 4,
+      "max_len": 11,
+      "ratio": 2.75,
+      "max_locale": "sw"
+    },
+    {
+      "key": "g_key_aa_free",
+      "en_len": 4,
+      "max_len": 11,
+      "ratio": 2.75,
+      "max_locale": "sw"
+    },
+    {
+      "key": "g_key_filter_type",
+      "en_len": 4,
+      "max_len": 11,
+      "ratio": 2.75,
+      "max_locale": "te"
+    },
+    {
+      "key": "g_key_nft_burn_title",
+      "en_len": 8,
+      "max_len": 22,
+      "ratio": 2.75,
+      "max_locale": "ur"
+    },
+    {
+      "key": "g_key_nft_type",
+      "en_len": 4,
+      "max_len": 11,
+      "ratio": 2.75,
+      "max_locale": "te"
+    },
+    {
+      "key": "g_market_news",
+      "en_len": 4,
+      "max_len": 11,
+      "ratio": 2.75,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_key_security_goplus_caution",
+      "en_len": 11,
+      "max_len": 30,
+      "ratio": 2.73,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_gas_max_fee",
+      "en_len": 7,
+      "max_len": 19,
+      "ratio": 2.71,
+      "max_locale": "uk"
+    },
+    {
+      "key": "g_key_stake_unstake",
+      "en_len": 7,
+      "max_len": 19,
+      "ratio": 2.71,
+      "max_locale": "id"
+    },
+    {
+      "key": "g_key_batch_preview",
+      "en_len": 7,
+      "max_len": 19,
+      "ratio": 2.71,
+      "max_locale": "uk"
+    },
+    {
+      "key": "g_key_ens_expired",
+      "en_len": 7,
+      "max_len": 19,
+      "ratio": 2.71,
+      "max_locale": "ru"
+    },
+    {
+      "key": "g_key_aa_expired",
+      "en_len": 7,
+      "max_len": 19,
+      "ratio": 2.71,
+      "max_locale": "ru"
+    },
+    {
+      "key": "g_key_m_2",
+      "en_len": 10,
+      "max_len": 27,
+      "ratio": 2.7,
+      "max_locale": "it"
+    },
+    {
+      "key": "g_key_share_link",
+      "en_len": 10,
+      "max_len": 27,
+      "ratio": 2.7,
+      "max_locale": "te"
+    },
+    {
+      "key": "g_key_7",
+      "en_len": 6,
+      "max_len": 16,
+      "ratio": 2.67,
+      "max_locale": "es_ES"
+    },
+    {
+      "key": "g_swap_key_23",
+      "en_len": 6,
+      "max_len": 16,
+      "ratio": 2.67,
+      "max_locale": "ar"
+    },
+    {
+      "key": "g_token_m_key_17",
+      "en_len": 3,
+      "max_len": 8,
+      "ratio": 2.67,
+      "max_locale": "ur"
+    },
+    {
+      "key": "g_key_nft_17",
+      "en_len": 12,
+      "max_len": 32,
+      "ratio": 2.67,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_face_match_key33",
+      "en_len": 9,
+      "max_len": 24,
+      "ratio": 2.67,
+      "max_locale": "pl"
+    },
+    {
+      "key": "g_lock_key4",
+      "en_len": 9,
+      "max_len": 24,
+      "ratio": 2.67,
+      "max_locale": "fr"
+    },
+    {
+      "key": "g_key_bridge_get_quote",
+      "en_len": 9,
+      "max_len": 24,
+      "ratio": 2.67,
+      "max_locale": "cs"
+    },
+    {
+      "key": "g_key_change_email",
+      "en_len": 12,
+      "max_len": 32,
+      "ratio": 2.67,
+      "max_locale": "ru"
+    },
+    {
+      "key": "g_key_earn_gas",
+      "en_len": 3,
+      "max_len": 8,
+      "ratio": 2.67,
+      "max_locale": "es_ES"
+    },
+    {
+      "key": "g_key_burn_nft_steps",
+      "en_len": 6,
+      "max_len": 16,
+      "ratio": 2.67,
+      "max_locale": "id"
+    },
+    {
+      "key": "g_market_empty_watchlist_hint",
+      "en_len": 24,
+      "max_len": 64,
+      "ratio": 2.67,
+      "max_locale": "tr"
+    },
+    {
+      "key": "g_email_change_title",
+      "en_len": 12,
+      "max_len": 32,
+      "ratio": 2.67,
+      "max_locale": "ru"
+    },
+    {
+      "key": "g_key_nft_filter_all",
+      "en_len": 3,
+      "max_len": 8,
+      "ratio": 2.67,
+      "max_locale": "pl"
+    },
+    {
+      "key": "g_face_match_key8",
+      "en_len": 8,
+      "max_len": 21,
+      "ratio": 2.62,
+      "max_locale": "bn"
+    },
+    {
+      "key": "rest_Verification_code",
+      "en_len": 8,
+      "max_len": 21,
+      "ratio": 2.62,
+      "max_locale": "ar"
+    },
+    {
+      "key": "g_key_bridge_to_chain",
+      "en_len": 8,
+      "max_len": 21,
+      "ratio": 2.62,
+      "max_locale": "it"
+    },
+    {
+      "key": "g_key_aa_deployed",
+      "en_len": 8,
+      "max_len": 21,
+      "ratio": 2.62,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_aa_pay_with",
+      "en_len": 8,
+      "max_len": 21,
+      "ratio": 2.62,
+      "max_locale": "ur"
+    },
+    {
+      "key": "g_key_aa_selected",
+      "en_len": 8,
+      "max_len": 21,
+      "ratio": 2.62,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_aa_batch_save_gas",
+      "en_len": 8,
+      "max_len": 21,
+      "ratio": 2.62,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_tx_filter_date_to",
+      "en_len": 8,
+      "max_len": 21,
+      "ratio": 2.62,
+      "max_locale": "es_ES"
+    },
+    {
+      "key": "g_mining_key_86",
+      "en_len": 13,
+      "max_len": 34,
+      "ratio": 2.62,
+      "max_locale": "ru"
+    },
+    {
+      "key": "g_key_error_20",
+      "en_len": 15,
+      "max_len": 39,
+      "ratio": 2.6,
+      "max_locale": "es_ES"
+    },
+    {
+      "key": "g_key_wallet_c4",
+      "en_len": 5,
+      "max_len": 13,
+      "ratio": 2.6,
+      "max_locale": "te"
+    },
+    {
+      "key": "editPhoto",
+      "en_len": 10,
+      "max_len": 26,
+      "ratio": 2.6,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_chat_key_63",
+      "en_len": 5,
+      "max_len": 13,
+      "ratio": 2.6,
+      "max_locale": "ru"
+    },
+    {
+      "key": "g_key_earn_buy_n",
+      "en_len": 5,
+      "max_len": 13,
+      "ratio": 2.6,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_aa_ready",
+      "en_len": 5,
+      "max_len": 13,
+      "ratio": 2.6,
+      "max_locale": "te"
+    },
+    {
+      "key": "g_key_error_15",
+      "en_len": 17,
+      "max_len": 44,
+      "ratio": 2.59,
+      "max_locale": "es_ES"
+    },
+    {
+      "key": "s_key_12",
+      "en_len": 12,
+      "max_len": 31,
+      "ratio": 2.58,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_alert_update",
+      "en_len": 12,
+      "max_len": 31,
+      "ratio": 2.58,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_u_13",
+      "en_len": 7,
+      "max_len": 18,
+      "ratio": 2.57,
+      "max_locale": "pl"
+    },
+    {
+      "key": "g_token_m_key_16",
+      "en_len": 7,
+      "max_len": 18,
+      "ratio": 2.57,
+      "max_locale": "pl"
+    },
+    {
+      "key": "g_key_m_9",
+      "en_len": 7,
+      "max_len": 18,
+      "ratio": 2.57,
+      "max_locale": "pl"
+    },
+    {
+      "key": "Create_account",
+      "en_len": 7,
+      "max_len": 18,
+      "ratio": 2.57,
+      "max_locale": "ru"
+    },
+    {
+      "key": "g_key_bridge_fastest",
+      "en_len": 7,
+      "max_len": 18,
+      "ratio": 2.57,
+      "max_locale": "te"
+    },
+    {
+      "key": "g_token_m_key_19",
+      "en_len": 16,
+      "max_len": 41,
+      "ratio": 2.56,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_swap_key_6",
+      "en_len": 9,
+      "max_len": 23,
+      "ratio": 2.56,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_aa_session_expiry",
+      "en_len": 9,
+      "max_len": 23,
+      "ratio": 2.56,
+      "max_locale": "ru"
+    },
+    {
+      "key": "g_alert_set",
+      "en_len": 9,
+      "max_len": 23,
+      "ratio": 2.56,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_face_match_key18",
+      "en_len": 11,
+      "max_len": 28,
+      "ratio": 2.55,
+      "max_locale": "ru"
+    },
+    {
+      "key": "g_key_4",
+      "en_len": 12,
+      "max_len": 30,
+      "ratio": 2.5,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_110",
+      "en_len": 6,
+      "max_len": 15,
+      "ratio": 2.5,
+      "max_locale": "mr"
+    },
+    {
+      "key": "g_key_154",
+      "en_len": 6,
+      "max_len": 15,
+      "ratio": 2.5,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_212",
+      "en_len": 4,
+      "max_len": 10,
+      "ratio": 2.5,
+      "max_locale": "mr"
+    },
+    {
+      "key": "g_face_5",
+      "en_len": 6,
+      "max_len": 15,
+      "ratio": 2.5,
+      "max_locale": "es_ES"
+    },
+    {
+      "key": "g_key_t_47",
+      "en_len": 4,
+      "max_len": 10,
+      "ratio": 2.5,
+      "max_locale": "fr"
+    },
+    {
+      "key": "g_mining_key_31",
+      "en_len": 12,
+      "max_len": 30,
+      "ratio": 2.5,
+      "max_locale": "ta"
+    },
+    {
+      "key": "google_verification_message17",
+      "en_len": 10,
+      "max_len": 25,
+      "ratio": 2.5,
+      "max_locale": "sw"
+    },
+    {
+      "key": "file",
+      "en_len": 4,
+      "max_len": 10,
+      "ratio": 2.5,
+      "max_locale": "id"
+    },
+    {
+      "key": "g_share_v3_key_4",
+      "en_len": 14,
+      "max_len": 35,
+      "ratio": 2.5,
+      "max_locale": "tr"
+    },
+    {
+      "key": "g_key_stake_staked",
+      "en_len": 6,
+      "max_len": 15,
+      "ratio": 2.5,
+      "max_locale": "hi"
+    },
+    {
+      "key": "g_key_batch_import_csv",
+      "en_len": 10,
+      "max_len": 25,
+      "ratio": 2.5,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_loyalty_checkin_btn",
+      "en_len": 8,
+      "max_len": 20,
+      "ratio": 2.5,
+      "max_locale": "it"
+    },
+    {
+      "key": "g_key_burn_got_it",
+      "en_len": 6,
+      "max_len": 15,
+      "ratio": 2.5,
+      "max_locale": "fr"
+    },
+    {
+      "key": "g_key_ens_try_another",
+      "en_len": 16,
+      "max_len": 40,
+      "ratio": 2.5,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_key_aa_feature_gas",
+      "en_len": 20,
+      "max_len": 50,
+      "ratio": 2.5,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_key_aa_version_v07",
+      "en_len": 4,
+      "max_len": 10,
+      "ratio": 2.5,
+      "max_locale": "pl"
+    },
+    {
+      "key": "g_key_aa_version_v08",
+      "en_len": 4,
+      "max_len": 10,
+      "ratio": 2.5,
+      "max_locale": "pl"
+    },
+    {
+      "key": "g_key_aa_revoke",
+      "en_len": 6,
+      "max_len": 15,
+      "ratio": 2.5,
+      "max_locale": "bn"
+    },
+    {
+      "key": "g_key_gesture_weak",
+      "en_len": 4,
+      "max_len": 10,
+      "ratio": 2.5,
+      "max_locale": "te"
+    },
+    {
+      "key": "g_referral_downloaded",
+      "en_len": 10,
+      "max_len": 25,
+      "ratio": 2.5,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_token_discovery_ignore",
+      "en_len": 6,
+      "max_len": 15,
+      "ratio": 2.5,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_email_required",
+      "en_len": 17,
+      "max_len": 42,
+      "ratio": 2.47,
+      "max_locale": "uk"
+    },
+    {
+      "key": "g_portfolio_no_assets",
+      "en_len": 15,
+      "max_len": 37,
+      "ratio": 2.47,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_resend_code",
+      "en_len": 11,
+      "max_len": 27,
+      "ratio": 2.45,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_email_resend",
+      "en_len": 11,
+      "max_len": 27,
+      "ratio": 2.45,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_16",
+      "en_len": 20,
+      "max_len": 49,
+      "ratio": 2.45,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_theme_accent_reset",
+      "en_len": 16,
+      "max_len": 39,
+      "ratio": 2.44,
+      "max_locale": "es_ES"
+    },
+    {
+      "key": "g_key_78",
+      "en_len": 7,
+      "max_len": 17,
+      "ratio": 2.43,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_t_2",
+      "en_len": 7,
+      "max_len": 17,
+      "ratio": 2.43,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_logout",
+      "en_len": 7,
+      "max_len": 17,
+      "ratio": 2.43,
+      "max_locale": "te"
+    },
+    {
+      "key": "g_key_squad_k24",
+      "en_len": 7,
+      "max_len": 17,
+      "ratio": 2.43,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_stake_no_lock",
+      "en_len": 7,
+      "max_len": 17,
+      "ratio": 2.43,
+      "max_locale": "it"
+    },
+    {
+      "key": "g_key_airdrop_claimed",
+      "en_len": 7,
+      "max_len": 17,
+      "ratio": 2.43,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_airdrop_expired",
+      "en_len": 7,
+      "max_len": 17,
+      "ratio": 2.43,
+      "max_locale": "cs"
+    },
+    {
+      "key": "g_key_airdrop_pending",
+      "en_len": 7,
+      "max_len": 17,
+      "ratio": 2.43,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_aa_pending",
+      "en_len": 7,
+      "max_len": 17,
+      "ratio": 2.43,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_aa_session_allowed",
+      "en_len": 7,
+      "max_len": 17,
+      "ratio": 2.43,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_hw_go_back",
+      "en_len": 7,
+      "max_len": 17,
+      "ratio": 2.43,
+      "max_locale": "uk"
+    },
+    {
+      "key": "g_key_bridge_status_pending",
+      "en_len": 7,
+      "max_len": 17,
+      "ratio": 2.43,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_payment_confirm",
+      "en_len": 7,
+      "max_len": 17,
+      "ratio": 2.43,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_dex_status_pending",
+      "en_len": 7,
+      "max_len": 17,
+      "ratio": 2.43,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_17",
+      "en_len": 12,
+      "max_len": 29,
+      "ratio": 2.42,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_mining_key_111",
+      "en_len": 12,
+      "max_len": 29,
+      "ratio": 2.42,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_address_6",
+      "en_len": 12,
+      "max_len": 29,
+      "ratio": 2.42,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_aa_select_chain",
+      "en_len": 12,
+      "max_len": 29,
+      "ratio": 2.42,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_ex_keystore_9",
+      "en_len": 17,
+      "max_len": 41,
+      "ratio": 2.41,
+      "max_locale": "uk"
+    },
+    {
+      "key": "g_browser_key30",
+      "en_len": 5,
+      "max_len": 12,
+      "ratio": 2.4,
+      "max_locale": "es_ES"
+    },
+    {
+      "key": "g_token_m_key_20",
+      "en_len": 10,
+      "max_len": 24,
+      "ratio": 2.4,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_m_6",
+      "en_len": 5,
+      "max_len": 12,
+      "ratio": 2.4,
+      "max_locale": "it"
+    },
+    {
+      "key": "g_face_match_key9",
+      "en_len": 5,
+      "max_len": 12,
+      "ratio": 2.4,
+      "max_locale": "es_ES"
+    },
+    {
+      "key": "g_2fa_backup_share",
+      "en_len": 5,
+      "max_len": 12,
+      "ratio": 2.4,
+      "max_locale": "pt"
+    },
+    {
+      "key": "g_share_v2_key_5",
+      "en_len": 5,
+      "max_len": 12,
+      "ratio": 2.4,
+      "max_locale": "pt"
+    },
+    {
+      "key": "g_chat_key_10",
+      "en_len": 5,
+      "max_len": 12,
+      "ratio": 2.4,
+      "max_locale": "id"
+    },
+    {
+      "key": "g_key_stake_validators",
+      "en_len": 10,
+      "max_len": 24,
+      "ratio": 2.4,
+      "max_locale": "vi"
+    },
+    {
+      "key": "g_key_stake_go_to_swap",
+      "en_len": 10,
+      "max_len": 24,
+      "ratio": 2.4,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_airdrop_claim",
+      "en_len": 5,
+      "max_len": 12,
+      "ratio": 2.4,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_key_loyalty_share",
+      "en_len": 5,
+      "max_len": 12,
+      "ratio": 2.4,
+      "max_locale": "pt"
+    },
+    {
+      "key": "g_key_ens_owner",
+      "en_len": 5,
+      "max_len": 12,
+      "ratio": 2.4,
+      "max_locale": "fr"
+    },
+    {
+      "key": "g_key_aa_owner",
+      "en_len": 5,
+      "max_len": 12,
+      "ratio": 2.4,
+      "max_locale": "fr"
+    },
+    {
+      "key": "g_email_current_label",
+      "en_len": 13,
+      "max_len": 31,
+      "ratio": 2.38,
+      "max_locale": "ru"
+    },
+    {
+      "key": "g_chat_key_41",
+      "en_len": 8,
+      "max_len": 19,
+      "ratio": 2.38,
+      "max_locale": "fr"
+    },
+    {
+      "key": "g_face_1",
+      "en_len": 19,
+      "max_len": 45,
+      "ratio": 2.37,
+      "max_locale": "pl"
+    },
+    {
+      "key": "g_chat_key_23",
+      "en_len": 11,
+      "max_len": 26,
+      "ratio": 2.36,
+      "max_locale": "te"
+    },
+    {
+      "key": "g_key_ens_please_wait",
+      "en_len": 11,
+      "max_len": 26,
+      "ratio": 2.36,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_biometric_retry",
+      "en_len": 22,
+      "max_len": 52,
+      "ratio": 2.36,
+      "max_locale": "sw"
+    },
+    {
+      "key": "g_email_resend_countdown",
+      "en_len": 11,
+      "max_len": 26,
+      "ratio": 2.36,
+      "max_locale": "ru"
+    },
+    {
+      "key": "g_email_chat_confirm",
+      "en_len": 17,
+      "max_len": 40,
+      "ratio": 2.35,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_lock_key1",
+      "en_len": 20,
+      "max_len": 47,
+      "ratio": 2.35,
+      "max_locale": "sw"
+    },
+    {
+      "key": "g_email_chat_sync_title",
+      "en_len": 23,
+      "max_len": 54,
+      "ratio": 2.35,
+      "max_locale": "es_ES"
+    },
+    {
+      "key": "g_key_193",
+      "en_len": 6,
+      "max_len": 14,
+      "ratio": 2.33,
+      "max_locale": "vi"
+    },
+    {
+      "key": "g_mining_key20",
+      "en_len": 9,
+      "max_len": 21,
+      "ratio": 2.33,
+      "max_locale": "sw"
+    },
+    {
+      "key": "g_key_nft_47",
+      "en_len": 12,
+      "max_len": 28,
+      "ratio": 2.33,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_face_match_key14",
+      "en_len": 6,
+      "max_len": 14,
+      "ratio": 2.33,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_lock_key6",
+      "en_len": 6,
+      "max_len": 14,
+      "ratio": 2.33,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_key_login",
+      "en_len": 6,
+      "max_len": 14,
+      "ratio": 2.33,
+      "max_locale": "es_ES"
+    },
+    {
+      "key": "search",
+      "en_len": 6,
+      "max_len": 14,
+      "ratio": 2.33,
+      "max_locale": "bn"
+    },
+    {
+      "key": "g_key_share_method",
+      "en_len": 12,
+      "max_len": 28,
+      "ratio": 2.33,
+      "max_locale": "uk"
+    },
+    {
+      "key": "g_key_feedback_7",
+      "en_len": 6,
+      "max_len": 14,
+      "ratio": 2.33,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_key_stake_active",
+      "en_len": 6,
+      "max_len": 14,
+      "ratio": 2.33,
+      "max_locale": "vi"
+    },
+    {
+      "key": "g_key_step_verify",
+      "en_len": 6,
+      "max_len": 14,
+      "ratio": 2.33,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_airdrop_active",
+      "en_len": 6,
+      "max_len": 14,
+      "ratio": 2.33,
+      "max_locale": "vi"
+    },
+    {
+      "key": "g_key_airdrop_filter",
+      "en_len": 6,
+      "max_len": 14,
+      "ratio": 2.33,
+      "max_locale": "te"
+    },
+    {
+      "key": "g_key_earn_more",
+      "en_len": 9,
+      "max_len": 21,
+      "ratio": 2.33,
+      "max_locale": "id"
+    },
+    {
+      "key": "g_key_ens_search",
+      "en_len": 6,
+      "max_len": 14,
+      "ratio": 2.33,
+      "max_locale": "bn"
+    },
+    {
+      "key": "g_key_ens_edit_records",
+      "en_len": 12,
+      "max_len": 28,
+      "ratio": 2.33,
+      "max_locale": "fr"
+    },
+    {
+      "key": "g_key_ens_renew_title",
+      "en_len": 9,
+      "max_len": 21,
+      "ratio": 2.33,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_ens_failed",
+      "en_len": 6,
+      "max_len": 14,
+      "ratio": 2.33,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_key_aa_deploy",
+      "en_len": 6,
+      "max_len": 14,
+      "ratio": 2.33,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_aa_pay_with_eth",
+      "en_len": 12,
+      "max_len": 28,
+      "ratio": 2.33,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_aa_active",
+      "en_len": 6,
+      "max_len": 14,
+      "ratio": 2.33,
+      "max_locale": "vi"
+    },
+    {
+      "key": "g_key_filter",
+      "en_len": 6,
+      "max_len": 14,
+      "ratio": 2.33,
+      "max_locale": "te"
+    },
+    {
+      "key": "g_key_bridge_status_failed",
+      "en_len": 6,
+      "max_len": 14,
+      "ratio": 2.33,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_key_dex_status_failed",
+      "en_len": 6,
+      "max_len": 14,
+      "ratio": 2.33,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_market_search",
+      "en_len": 6,
+      "max_len": 14,
+      "ratio": 2.33,
+      "max_locale": "bn"
+    },
+    {
+      "key": "g_market_watchlist",
+      "en_len": 9,
+      "max_len": 21,
+      "ratio": 2.33,
+      "max_locale": "fr"
+    },
+    {
+      "key": "g_key_error_13",
+      "en_len": 13,
+      "max_len": 30,
+      "ratio": 2.31,
+      "max_locale": "bn"
+    },
+    {
+      "key": "g_token_m_key_3",
+      "en_len": 13,
+      "max_len": 30,
+      "ratio": 2.31,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_stake_start_staking",
+      "en_len": 13,
+      "max_len": 30,
+      "ratio": 2.31,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_key_ens_commit_failed",
+      "en_len": 13,
+      "max_len": 30,
+      "ratio": 2.31,
+      "max_locale": "pl"
+    },
+    {
+      "key": "g_key_t_49",
+      "en_len": 10,
+      "max_len": 23,
+      "ratio": 2.3,
+      "max_locale": "uk"
+    },
+    {
+      "key": "g_key_wallet_c32",
+      "en_len": 10,
+      "max_len": 23,
+      "ratio": 2.3,
+      "max_locale": "fr"
+    },
+    {
+      "key": "g_portfolio_movers",
+      "en_len": 10,
+      "max_len": 23,
+      "ratio": 2.3,
+      "max_locale": "ru"
+    },
+    {
+      "key": "g_portfolio_losers",
+      "en_len": 10,
+      "max_len": 23,
+      "ratio": 2.3,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_nft_error_retry",
+      "en_len": 34,
+      "max_len": 78,
+      "ratio": 2.29,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_key_132",
+      "en_len": 7,
+      "max_len": 16,
+      "ratio": 2.29,
+      "max_locale": "vi"
+    },
+    {
+      "key": "g_key_148",
+      "en_len": 7,
+      "max_len": 16,
+      "ratio": 2.29,
+      "max_locale": "fr"
+    },
+    {
+      "key": "g_key_m_17",
+      "en_len": 7,
+      "max_len": 16,
+      "ratio": 2.29,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_ens_reminder_enabled",
+      "en_len": 21,
+      "max_len": 48,
+      "ratio": 2.29,
+      "max_locale": "uk"
+    },
+    {
+      "key": "g_key_aa_created",
+      "en_len": 7,
+      "max_len": 16,
+      "ratio": 2.29,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_sign_in_failed",
+      "en_len": 14,
+      "max_len": 32,
+      "ratio": 2.29,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_key_payment_name_not_set",
+      "en_len": 7,
+      "max_len": 16,
+      "ratio": 2.29,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_key_payment_title",
+      "en_len": 7,
+      "max_len": 16,
+      "ratio": 2.29,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_mining_key35",
+      "en_len": 7,
+      "max_len": 16,
+      "ratio": 2.29,
+      "max_locale": "uk"
+    },
+    {
+      "key": "g_key_dex_quote_expires",
+      "en_len": 18,
+      "max_len": 41,
+      "ratio": 2.28,
+      "max_locale": "uk"
+    },
+    {
+      "key": "g_mining_key_89",
+      "en_len": 11,
+      "max_len": 25,
+      "ratio": 2.27,
+      "max_locale": "it"
+    },
+    {
+      "key": "g_setting_mining_v2_label",
+      "en_len": 11,
+      "max_len": 25,
+      "ratio": 2.27,
+      "max_locale": "it"
+    },
+    {
+      "key": "g_key_t_17",
+      "en_len": 15,
+      "max_len": 34,
+      "ratio": 2.27,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_gas_network_idle",
+      "en_len": 15,
+      "max_len": 34,
+      "ratio": 2.27,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_48",
+      "en_len": 4,
+      "max_len": 9,
+      "ratio": 2.25,
+      "max_locale": "ru"
+    },
+    {
+      "key": "g_key_100",
+      "en_len": 4,
+      "max_len": 9,
+      "ratio": 2.25,
+      "max_locale": "ru"
+    },
+    {
+      "key": "g_key_129",
+      "en_len": 4,
+      "max_len": 9,
+      "ratio": 2.25,
+      "max_locale": "es_ES"
+    },
+    {
+      "key": "g_swap_key_5",
+      "en_len": 12,
+      "max_len": 27,
+      "ratio": 2.25,
+      "max_locale": "es_ES"
+    },
+    {
+      "key": "g_key_wallet_k25",
+      "en_len": 4,
+      "max_len": 9,
+      "ratio": 2.25,
+      "max_locale": "vi"
+    },
+    {
+      "key": "g_key_wallet_k53",
+      "en_len": 4,
+      "max_len": 9,
+      "ratio": 2.25,
+      "max_locale": "vi"
+    },
+    {
+      "key": "g_key_wallet_k58",
+      "en_len": 4,
+      "max_len": 9,
+      "ratio": 2.25,
+      "max_locale": "bn"
+    },
+    {
+      "key": "g_key_wallet_c15",
+      "en_len": 16,
+      "max_len": 36,
+      "ratio": 2.25,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_gas_slow",
+      "en_len": 4,
+      "max_len": 9,
+      "ratio": 2.25,
+      "max_locale": "te"
+    },
+    {
+      "key": "g_key_gas_base_fee",
+      "en_len": 8,
+      "max_len": 18,
+      "ratio": 2.25,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_bridge_select_token",
+      "en_len": 12,
+      "max_len": 27,
+      "ratio": 2.25,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_btc_redeem_locked_until",
+      "en_len": 12,
+      "max_len": 27,
+      "ratio": 2.25,
+      "max_locale": "tr"
+    },
+    {
+      "key": "g_key_burn_nft_step4",
+      "en_len": 20,
+      "max_len": 45,
+      "ratio": 2.25,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_key_batch_select_token",
+      "en_len": 12,
+      "max_len": 27,
+      "ratio": 2.25,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_ens_register_now",
+      "en_len": 12,
+      "max_len": 27,
+      "ratio": 2.25,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_key_ens_step_register",
+      "en_len": 8,
+      "max_len": 18,
+      "ratio": 2.25,
+      "max_locale": "ru"
+    },
+    {
+      "key": "g_key_ens_register",
+      "en_len": 8,
+      "max_len": 18,
+      "ratio": 2.25,
+      "max_locale": "ru"
+    },
+    {
+      "key": "g_key_aa_select_paymaster",
+      "en_len": 16,
+      "max_len": 36,
+      "ratio": 2.25,
+      "max_locale": "it"
+    },
+    {
+      "key": "g_key_dex_confirm_title",
+      "en_len": 12,
+      "max_len": 27,
+      "ratio": 2.25,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_token_discovery_deselect_all",
+      "en_len": 12,
+      "max_len": 27,
+      "ratio": 2.25,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_dapp_security_verified",
+      "en_len": 8,
+      "max_len": 18,
+      "ratio": 2.25,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_stake_amount_unstake",
+      "en_len": 17,
+      "max_len": 38,
+      "ratio": 2.24,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_face_match_key3",
+      "en_len": 13,
+      "max_len": 29,
+      "ratio": 2.23,
+      "max_locale": "pl"
+    },
+    {
+      "key": "g_key_ens_expiring_soon",
+      "en_len": 13,
+      "max_len": 29,
+      "ratio": 2.23,
+      "max_locale": "uk"
+    },
+    {
+      "key": "g_key_aa_deploy_failed",
+      "en_len": 13,
+      "max_len": 29,
+      "ratio": 2.23,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_key_wallet_c43",
+      "en_len": 9,
+      "max_len": 20,
+      "ratio": 2.22,
+      "max_locale": "it"
+    },
+    {
+      "key": "g_key_batch_clear_all",
+      "en_len": 9,
+      "max_len": 20,
+      "ratio": 2.22,
+      "max_locale": "te"
+    },
+    {
+      "key": "g_key_loyalty_max_level",
+      "en_len": 9,
+      "max_len": 20,
+      "ratio": 2.22,
+      "max_locale": "ru"
+    },
+    {
+      "key": "g_key_aa_clear_all",
+      "en_len": 9,
+      "max_len": 20,
+      "ratio": 2.22,
+      "max_locale": "te"
+    },
+    {
+      "key": "g_mining_key_50",
+      "en_len": 9,
+      "max_len": 20,
+      "ratio": 2.22,
+      "max_locale": "ru"
+    },
+    {
+      "key": "g_mining_key_64",
+      "en_len": 9,
+      "max_len": 20,
+      "ratio": 2.22,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_email_new_hint",
+      "en_len": 23,
+      "max_len": 51,
+      "ratio": 2.22,
+      "max_locale": "es_ES"
+    },
+    {
+      "key": "g_mining_key_110",
+      "en_len": 14,
+      "max_len": 31,
+      "ratio": 2.21,
+      "max_locale": "sw"
+    },
+    {
+      "key": "g_key_unlink_account",
+      "en_len": 14,
+      "max_len": 31,
+      "ratio": 2.21,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_phishing_go_back",
+      "en_len": 14,
+      "max_len": 31,
+      "ratio": 2.21,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_email_also_sync",
+      "en_len": 28,
+      "max_len": 62,
+      "ratio": 2.21,
+      "max_locale": "es_ES"
+    },
+    {
+      "key": "g_key_166",
+      "en_len": 5,
+      "max_len": 11,
+      "ratio": 2.2,
+      "max_locale": "ur"
+    },
+    {
+      "key": "g_browser_key22",
+      "en_len": 5,
+      "max_len": 11,
+      "ratio": 2.2,
+      "max_locale": "fr"
+    },
+    {
+      "key": "g_key_m_8",
+      "en_len": 5,
+      "max_len": 11,
+      "ratio": 2.2,
+      "max_locale": "tr"
+    },
+    {
+      "key": "g_key_wallet_c8",
+      "en_len": 10,
+      "max_len": 22,
+      "ratio": 2.2,
+      "max_locale": "te"
+    },
+    {
+      "key": "g_chat_key_61",
+      "en_len": 5,
+      "max_len": 11,
+      "ratio": 2.2,
+      "max_locale": "fr"
+    },
+    {
+      "key": "g_key_bridge_route",
+      "en_len": 5,
+      "max_len": 11,
+      "ratio": 2.2,
+      "max_locale": "vi"
+    },
+    {
+      "key": "g_key_stake_stake",
+      "en_len": 5,
+      "max_len": 11,
+      "ratio": 2.2,
+      "max_locale": "pt"
+    },
+    {
+      "key": "g_key_stake_days_left",
+      "en_len": 10,
+      "max_len": 22,
+      "ratio": 2.2,
+      "max_locale": "te"
+    },
+    {
+      "key": "g_key_airdrop_days_left",
+      "en_len": 10,
+      "max_len": 22,
+      "ratio": 2.2,
+      "max_locale": "te"
+    },
+    {
+      "key": "g_key_loyalty_spent",
+      "en_len": 5,
+      "max_len": 11,
+      "ratio": 2.2,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_time_minutes_ago",
+      "en_len": 5,
+      "max_len": 11,
+      "ratio": 2.2,
+      "max_locale": "id"
+    },
+    {
+      "key": "g_key_time_hours_ago",
+      "en_len": 5,
+      "max_len": 11,
+      "ratio": 2.2,
+      "max_locale": "id"
+    },
+    {
+      "key": "g_key_time_days_ago",
+      "en_len": 5,
+      "max_len": 11,
+      "ratio": 2.2,
+      "max_locale": "id"
+    },
+    {
+      "key": "g_key_hw_today",
+      "en_len": 5,
+      "max_len": 11,
+      "ratio": 2.2,
+      "max_locale": "fr"
+    },
+    {
+      "key": "g_version_later",
+      "en_len": 5,
+      "max_len": 11,
+      "ratio": 2.2,
+      "max_locale": "ar"
+    },
+    {
+      "key": "g_market_empty_watchlist",
+      "en_len": 16,
+      "max_len": 35,
+      "ratio": 2.19,
+      "max_locale": "fr"
+    },
+    {
+      "key": "g_browser_key4",
+      "en_len": 22,
+      "max_len": 48,
+      "ratio": 2.18,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_t_5",
+      "en_len": 11,
+      "max_len": 24,
+      "ratio": 2.18,
+      "max_locale": "it"
+    },
+    {
+      "key": "g_key_t_16",
+      "en_len": 11,
+      "max_len": 24,
+      "ratio": 2.18,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_wallet_edit",
+      "en_len": 11,
+      "max_len": 24,
+      "ratio": 2.18,
+      "max_locale": "fr"
+    },
+    {
+      "key": "g_key_stake_updating",
+      "en_len": 11,
+      "max_len": 24,
+      "ratio": 2.18,
+      "max_locale": "hi"
+    },
+    {
+      "key": "g_key_btc_redeem_title",
+      "en_len": 11,
+      "max_len": 24,
+      "ratio": 2.18,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_ens_reminder_enable",
+      "en_len": 22,
+      "max_len": 48,
+      "ratio": 2.18,
+      "max_locale": "uk"
+    },
+    {
+      "key": "g_mining_key_6",
+      "en_len": 34,
+      "max_len": 74,
+      "ratio": 2.18,
+      "max_locale": "fr"
+    },
+    {
+      "key": "g_email_new_label",
+      "en_len": 17,
+      "max_len": 37,
+      "ratio": 2.18,
+      "max_locale": "es_ES"
+    },
+    {
+      "key": "g_key_oidc_not_configured",
+      "en_len": 29,
+      "max_len": 63,
+      "ratio": 2.17,
+      "max_locale": "pl"
+    },
+    {
+      "key": "g_token_m_key_9",
+      "en_len": 6,
+      "max_len": 13,
+      "ratio": 2.17,
+      "max_locale": "ru"
+    },
+    {
+      "key": "g_key_t_36",
+      "en_len": 12,
+      "max_len": 26,
+      "ratio": 2.17,
+      "max_locale": "es_ES"
+    },
+    {
+      "key": "g_mining_key_79",
+      "en_len": 6,
+      "max_len": 13,
+      "ratio": 2.17,
+      "max_locale": "te"
+    },
+    {
+      "key": "please_enter_email",
+      "en_len": 18,
+      "max_len": 39,
+      "ratio": 2.17,
+      "max_locale": "es_ES"
+    },
+    {
+      "key": "g_chat_key_68",
+      "en_len": 12,
+      "max_len": 26,
+      "ratio": 2.17,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_key_loyalty_invite",
+      "en_len": 6,
+      "max_len": 13,
+      "ratio": 2.17,
+      "max_locale": "hi"
+    },
+    {
+      "key": "g_key_ens_step_commit",
+      "en_len": 6,
+      "max_len": 13,
+      "ratio": 2.17,
+      "max_locale": "es_ES"
+    },
+    {
+      "key": "g_key_ens_commit",
+      "en_len": 6,
+      "max_len": 13,
+      "ratio": 2.17,
+      "max_locale": "es_ES"
+    },
+    {
+      "key": "g_key_new_airdrops",
+      "en_len": 12,
+      "max_len": 26,
+      "ratio": 2.17,
+      "max_locale": "es_ES"
+    },
+    {
+      "key": "g_key_bridge_select",
+      "en_len": 6,
+      "max_len": 13,
+      "ratio": 2.17,
+      "max_locale": "bn"
+    },
+    {
+      "key": "g_key_coin_search_recent",
+      "en_len": 6,
+      "max_len": 13,
+      "ratio": 2.17,
+      "max_locale": "id"
+    },
+    {
+      "key": "g_key_dex_select_token",
+      "en_len": 6,
+      "max_len": 13,
+      "ratio": 2.17,
+      "max_locale": "bn"
+    },
+    {
+      "key": "g_key_token_discovery_add_selected",
+      "en_len": 6,
+      "max_len": 13,
+      "ratio": 2.17,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_key_206",
+      "en_len": 13,
+      "max_len": 28,
+      "ratio": 2.15,
+      "max_locale": "fr"
+    },
+    {
+      "key": "g_mining_key_13",
+      "en_len": 13,
+      "max_len": 28,
+      "ratio": 2.15,
+      "max_locale": "uk"
+    },
+    {
+      "key": "g_key_ex_keystore_17",
+      "en_len": 13,
+      "max_len": 28,
+      "ratio": 2.15,
+      "max_locale": "es_ES"
+    },
+    {
+      "key": "g_key_share_code",
+      "en_len": 13,
+      "max_len": 28,
+      "ratio": 2.15,
+      "max_locale": "ar"
+    },
+    {
+      "key": "g_key_stake_claim",
+      "en_len": 13,
+      "max_len": 28,
+      "ratio": 2.15,
+      "max_locale": "te"
+    },
+    {
+      "key": "g_key_hw_select_device",
+      "en_len": 13,
+      "max_len": 28,
+      "ratio": 2.15,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_nft_no_items",
+      "en_len": 13,
+      "max_len": 28,
+      "ratio": 2.15,
+      "max_locale": "id"
+    },
+    {
+      "key": "g_market_no_chart",
+      "en_len": 13,
+      "max_len": 28,
+      "ratio": 2.15,
+      "max_locale": "ar"
+    },
+    {
+      "key": "g_key_147",
+      "en_len": 7,
+      "max_len": 15,
+      "ratio": 2.14,
+      "max_locale": "vi"
+    },
+    {
+      "key": "g_browser_key25",
+      "en_len": 7,
+      "max_len": 15,
+      "ratio": 2.14,
+      "max_locale": "te"
+    },
+    {
+      "key": "login_button_text",
+      "en_len": 7,
+      "max_len": 15,
+      "ratio": 2.14,
+      "max_locale": "te"
+    },
+    {
+      "key": "g_key_bridge_refresh",
+      "en_len": 7,
+      "max_len": 15,
+      "ratio": 2.14,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_stake_title",
+      "en_len": 7,
+      "max_len": 15,
+      "ratio": 2.14,
+      "max_locale": "ar"
+    },
+    {
+      "key": "g_key_stake_restake",
+      "en_len": 7,
+      "max_len": 15,
+      "ratio": 2.14,
+      "max_locale": "hi"
+    },
+    {
+      "key": "g_key_airdrop_requirement_not_met",
+      "en_len": 7,
+      "max_len": 15,
+      "ratio": 2.14,
+      "max_locale": "id"
+    },
+    {
+      "key": "g_key_ens_records",
+      "en_len": 7,
+      "max_len": 15,
+      "ratio": 2.14,
+      "max_locale": "fr"
+    },
+    {
+      "key": "g_wc_disconnect_all",
+      "en_len": 14,
+      "max_len": 30,
+      "ratio": 2.14,
+      "max_locale": "te"
+    },
+    {
+      "key": "g_mining_key_19",
+      "en_len": 7,
+      "max_len": 15,
+      "ratio": 2.14,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_key_ens_reminder_disabled",
+      "en_len": 22,
+      "max_len": 47,
+      "ratio": 2.14,
+      "max_locale": "uk"
+    },
+    {
+      "key": "g_token_m_key_1",
+      "en_len": 15,
+      "max_len": 32,
+      "ratio": 2.13,
+      "max_locale": "uk"
+    },
+    {
+      "key": "g_key_dex_no_tokens_found",
+      "en_len": 15,
+      "max_len": 32,
+      "ratio": 2.13,
+      "max_locale": "ar"
+    },
+    {
+      "key": "g_mining_key_68",
+      "en_len": 8,
+      "max_len": 17,
+      "ratio": 2.12,
+      "max_locale": "ar"
+    },
+    {
+      "key": "g_key_feedback",
+      "en_len": 8,
+      "max_len": 17,
+      "ratio": 2.12,
+      "max_locale": "uk"
+    },
+    {
+      "key": "g_key_xml_0",
+      "en_len": 8,
+      "max_len": 17,
+      "ratio": 2.12,
+      "max_locale": "te"
+    },
+    {
+      "key": "g_key_earn_select_swap",
+      "en_len": 16,
+      "max_len": 34,
+      "ratio": 2.12,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_burn_nft_step2",
+      "en_len": 16,
+      "max_len": 34,
+      "ratio": 2.12,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_email_error_same",
+      "en_len": 40,
+      "max_len": 85,
+      "ratio": 2.12,
+      "max_locale": "ru"
+    },
+    {
+      "key": "g_key_nft_ordinals",
+      "en_len": 8,
+      "max_len": 17,
+      "ratio": 2.12,
+      "max_locale": "pl"
+    },
+    {
+      "key": "g_wc_disconnect_all_confirm",
+      "en_len": 26,
+      "max_len": 55,
+      "ratio": 2.12,
+      "max_locale": "ar"
+    },
+    {
+      "key": "g_share_v3_key_6",
+      "en_len": 9,
+      "max_len": 19,
+      "ratio": 2.11,
+      "max_locale": "mr"
+    },
+    {
+      "key": "g_key_deadline_reminders",
+      "en_len": 18,
+      "max_len": 38,
+      "ratio": 2.11,
+      "max_locale": "pl"
+    },
+    {
+      "key": "g_key_hw_days_ago",
+      "en_len": 9,
+      "max_len": 19,
+      "ratio": 2.11,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_dex_status_confirmed",
+      "en_len": 9,
+      "max_len": 19,
+      "ratio": 2.11,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_pnl_no_trades",
+      "en_len": 18,
+      "max_len": 38,
+      "ratio": 2.11,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_loyalty_complete_failed",
+      "en_len": 29,
+      "max_len": 61,
+      "ratio": 2.1,
+      "max_locale": "de"
+    },
+    {
+      "key": "rest_Please_enter",
+      "en_len": 10,
+      "max_len": 21,
+      "ratio": 2.1,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_batch_signing",
+      "en_len": 10,
+      "max_len": 21,
+      "ratio": 2.1,
+      "max_locale": "bn"
+    },
+    {
+      "key": "g_key_ens_new_expiry",
+      "en_len": 10,
+      "max_len": 21,
+      "ratio": 2.1,
+      "max_locale": "tr"
+    },
+    {
+      "key": "g_key_ens_waiting",
+      "en_len": 10,
+      "max_len": 21,
+      "ratio": 2.1,
+      "max_locale": "hi"
+    },
+    {
+      "key": "g_key_203",
+      "en_len": 31,
+      "max_len": 65,
+      "ratio": 2.1,
+      "max_locale": "ar"
+    },
+    {
+      "key": "g_swap_key_15",
+      "en_len": 21,
+      "max_len": 44,
+      "ratio": 2.1,
+      "max_locale": "it"
+    },
+    {
+      "key": "g_key_13",
+      "en_len": 11,
+      "max_len": 23,
+      "ratio": 2.09,
+      "max_locale": "fr"
+    },
+    {
+      "key": "g_mining_key_7",
+      "en_len": 11,
+      "max_len": 23,
+      "ratio": 2.09,
+      "max_locale": "ur"
+    },
+    {
+      "key": "g_chat_key_8",
+      "en_len": 11,
+      "max_len": 23,
+      "ratio": 2.09,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_aa_gas_savings",
+      "en_len": 11,
+      "max_len": 23,
+      "ratio": 2.09,
+      "max_locale": "id"
+    },
+    {
+      "key": "g_key_aa_benefit_gas_title",
+      "en_len": 22,
+      "max_len": 46,
+      "ratio": 2.09,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_mining_key7",
+      "en_len": 11,
+      "max_len": 23,
+      "ratio": 2.09,
+      "max_locale": "ur"
+    },
+    {
+      "key": "g_key_token_discovery_added",
+      "en_len": 11,
+      "max_len": 23,
+      "ratio": 2.09,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_swap_key_20",
+      "en_len": 12,
+      "max_len": 25,
+      "ratio": 2.08,
+      "max_locale": "fr"
+    },
+    {
+      "key": "g_token_m_key_5",
+      "en_len": 12,
+      "max_len": 25,
+      "ratio": 2.08,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_key_btc_stake_how_it_works",
+      "en_len": 12,
+      "max_len": 25,
+      "ratio": 2.08,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_btc_stake_step3_title",
+      "en_len": 12,
+      "max_len": 25,
+      "ratio": 2.08,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_key_social_login",
+      "en_len": 12,
+      "max_len": 25,
+      "ratio": 2.08,
+      "max_locale": "pl"
+    },
+    {
+      "key": "g_key_link_account",
+      "en_len": 12,
+      "max_len": 25,
+      "ratio": 2.08,
+      "max_locale": "uk"
+    },
+    {
+      "key": "g_key_aa_check_status",
+      "en_len": 12,
+      "max_len": 25,
+      "ratio": 2.08,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_key_earn_go_staking",
+      "en_len": 13,
+      "max_len": 27,
+      "ratio": 2.08,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_aa_paymaster_quote_expired",
+      "en_len": 13,
+      "max_len": 27,
+      "ratio": 2.08,
+      "max_locale": "uk"
+    },
+    {
+      "key": "g_key_wallet_m13",
+      "en_len": 14,
+      "max_len": 29,
+      "ratio": 2.07,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_lock_key9",
+      "en_len": 14,
+      "max_len": 29,
+      "ratio": 2.07,
+      "max_locale": "fr"
+    },
+    {
+      "key": "g_key_reset_password",
+      "en_len": 14,
+      "max_len": 29,
+      "ratio": 2.07,
+      "max_locale": "fr"
+    },
+    {
+      "key": "login_message_6",
+      "en_len": 15,
+      "max_len": 31,
+      "ratio": 2.07,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_squad_k25",
+      "en_len": 15,
+      "max_len": 31,
+      "ratio": 2.07,
+      "max_locale": "ar"
+    },
+    {
+      "key": "g_key_ens_confirm_renew",
+      "en_len": 15,
+      "max_len": 31,
+      "ratio": 2.07,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_email_confirm_continue",
+      "en_len": 31,
+      "max_len": 64,
+      "ratio": 2.06,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_chat_key_1",
+      "en_len": 16,
+      "max_len": 33,
+      "ratio": 2.06,
+      "max_locale": "fr"
+    },
+    {
+      "key": "g_key_ens_resolving",
+      "en_len": 16,
+      "max_len": 33,
+      "ratio": 2.06,
+      "max_locale": "hi"
+    },
+    {
+      "key": "g_face_match_key6",
+      "en_len": 17,
+      "max_len": 35,
+      "ratio": 2.06,
+      "max_locale": "ru"
+    },
+    {
+      "key": "g_key_wallet_c37",
+      "en_len": 19,
+      "max_len": 39,
+      "ratio": 2.05,
+      "max_locale": "fr"
+    },
+    {
+      "key": "g_key_stake_no_validators",
+      "en_len": 19,
+      "max_len": 39,
+      "ratio": 2.05,
+      "max_locale": "ar"
+    },
+    {
+      "key": "g_key_batch_max_recipients",
+      "en_len": 19,
+      "max_len": 39,
+      "ratio": 2.05,
+      "max_locale": "sw"
+    },
+    {
+      "key": "g_key_12",
+      "en_len": 20,
+      "max_len": 41,
+      "ratio": 2.05,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_lock_key24",
+      "en_len": 20,
+      "max_len": 41,
+      "ratio": 2.05,
+      "max_locale": "fr"
+    },
+    {
+      "key": "g_connect_key14",
+      "en_len": 21,
+      "max_len": 43,
+      "ratio": 2.05,
+      "max_locale": "bn"
+    },
+    {
+      "key": "email_verification_message2",
+      "en_len": 23,
+      "max_len": 47,
+      "ratio": 2.04,
+      "max_locale": "sw"
+    },
+    {
+      "key": "g_key_hw_connect_new_keystone",
+      "en_len": 26,
+      "max_len": 53,
+      "ratio": 2.04,
+      "max_locale": "uk"
+    },
+    {
+      "key": "g_key_ex_keystore_15",
+      "en_len": 27,
+      "max_len": 55,
+      "ratio": 2.04,
+      "max_locale": "sw"
+    },
+    {
+      "key": "g_key_6",
+      "en_len": 6,
+      "max_len": 12,
+      "ratio": 2.0,
+      "max_locale": "fr"
+    },
+    {
+      "key": "g_key_14",
+      "en_len": 11,
+      "max_len": 22,
+      "ratio": 2.0,
+      "max_locale": "fr"
+    },
+    {
+      "key": "g_key_15",
+      "en_len": 18,
+      "max_len": 36,
+      "ratio": 2.0,
+      "max_locale": "fr"
+    },
+    {
+      "key": "g_key_75",
+      "en_len": 4,
+      "max_len": 8,
+      "ratio": 2.0,
+      "max_locale": "tr"
+    },
+    {
+      "key": "g_key_85",
+      "en_len": 11,
+      "max_len": 22,
+      "ratio": 2.0,
+      "max_locale": "fr"
+    },
+    {
+      "key": "g_key_u_12",
+      "en_len": 10,
+      "max_len": 20,
+      "ratio": 2.0,
+      "max_locale": "fr"
+    },
+    {
+      "key": "g_browser_key6",
+      "en_len": 4,
+      "max_len": 8,
+      "ratio": 2.0,
+      "max_locale": "ru"
+    },
+    {
+      "key": "g_connect_key1",
+      "en_len": 7,
+      "max_len": 14,
+      "ratio": 2.0,
+      "max_locale": "te"
+    },
+    {
+      "key": "g_connect_key2",
+      "en_len": 10,
+      "max_len": 20,
+      "ratio": 2.0,
+      "max_locale": "bn"
+    },
+    {
+      "key": "g_connect_key13",
+      "en_len": 10,
+      "max_len": 20,
+      "ratio": 2.0,
+      "max_locale": "it"
+    },
+    {
+      "key": "g_face_8",
+      "en_len": 6,
+      "max_len": 12,
+      "ratio": 2.0,
+      "max_locale": "bn"
+    },
+    {
+      "key": "g_swap_key_18",
+      "en_len": 6,
+      "max_len": 12,
+      "ratio": 2.0,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_swap_key_24",
+      "en_len": 18,
+      "max_len": 36,
+      "ratio": 2.0,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_tran_7",
+      "en_len": 12,
+      "max_len": 24,
+      "ratio": 2.0,
+      "max_locale": "id"
+    },
+    {
+      "key": "g_key_tran_8",
+      "en_len": 10,
+      "max_len": 20,
+      "ratio": 2.0,
+      "max_locale": "id"
+    },
+    {
+      "key": "g_token_m_key_8",
+      "en_len": 13,
+      "max_len": 26,
+      "ratio": 2.0,
+      "max_locale": "cs"
+    },
+    {
+      "key": "g_app_share_key_2",
+      "en_len": 15,
+      "max_len": 30,
+      "ratio": 2.0,
+      "max_locale": "hi"
+    },
+    {
+      "key": "g_key_t_3",
+      "en_len": 7,
+      "max_len": 14,
+      "ratio": 2.0,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_key_t_30",
+      "en_len": 9,
+      "max_len": 18,
+      "ratio": 2.0,
+      "max_locale": "cs"
+    },
+    {
+      "key": "g_key_t_44",
+      "en_len": 18,
+      "max_len": 36,
+      "ratio": 2.0,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_mining_key_49",
+      "en_len": 9,
+      "max_len": 18,
+      "ratio": 2.0,
+      "max_locale": "id"
+    },
+    {
+      "key": "g_mining_key_62",
+      "en_len": 5,
+      "max_len": 10,
+      "ratio": 2.0,
+      "max_locale": "pl"
+    },
+    {
+      "key": "g_mining_key_76",
+      "en_len": 10,
+      "max_len": 20,
+      "ratio": 2.0,
+      "max_locale": "es_ES"
+    },
+    {
+      "key": "g_mining_key_84",
+      "en_len": 8,
+      "max_len": 16,
+      "ratio": 2.0,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_mining_key_101",
+      "en_len": 9,
+      "max_len": 18,
+      "ratio": 2.0,
+      "max_locale": "fr"
+    },
+    {
+      "key": "g_mining_key_113",
+      "en_len": 12,
+      "max_len": 24,
+      "ratio": 2.0,
+      "max_locale": "it"
+    },
+    {
+      "key": "g_key_wallet_k54",
+      "en_len": 5,
+      "max_len": 10,
+      "ratio": 2.0,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_key_wallet_m1",
+      "en_len": 16,
+      "max_len": 32,
+      "ratio": 2.0,
+      "max_locale": "sw"
+    },
+    {
+      "key": "g_key_wallet_c6",
+      "en_len": 17,
+      "max_len": 34,
+      "ratio": 2.0,
+      "max_locale": "fr"
+    },
+    {
+      "key": "g_key_wallet_c18",
+      "en_len": 12,
+      "max_len": 24,
+      "ratio": 2.0,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_wallet_c30",
+      "en_len": 19,
+      "max_len": 38,
+      "ratio": 2.0,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_wallet_c31",
+      "en_len": 16,
+      "max_len": 32,
+      "ratio": 2.0,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_wallet_c48",
+      "en_len": 11,
+      "max_len": 22,
+      "ratio": 2.0,
+      "max_locale": "es_ES"
+    },
+    {
+      "key": "g_key_nft_2",
+      "en_len": 4,
+      "max_len": 8,
+      "ratio": 2.0,
+      "max_locale": "ru"
+    },
+    {
+      "key": "g_key_nft_220",
+      "en_len": 4,
+      "max_len": 8,
+      "ratio": 2.0,
+      "max_locale": "it"
+    },
+    {
+      "key": "g_face_match_key35",
+      "en_len": 27,
+      "max_len": 54,
+      "ratio": 2.0,
+      "max_locale": "pl"
+    },
+    {
+      "key": "g_share_v3_key_8",
+      "en_len": 4,
+      "max_len": 8,
+      "ratio": 2.0,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_chat_key_4",
+      "en_len": 12,
+      "max_len": 24,
+      "ratio": 2.0,
+      "max_locale": "cs"
+    },
+    {
+      "key": "g_chat_key_40",
+      "en_len": 6,
+      "max_len": 12,
+      "ratio": 2.0,
+      "max_locale": "hi"
+    },
+    {
+      "key": "g_chat_key_47",
+      "en_len": 5,
+      "max_len": 10,
+      "ratio": 2.0,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_chat_key_60",
+      "en_len": 14,
+      "max_len": 28,
+      "ratio": 2.0,
+      "max_locale": "fr"
+    },
+    {
+      "key": "g_key_gas_estimated_time",
+      "en_len": 9,
+      "max_len": 18,
+      "ratio": 2.0,
+      "max_locale": "vi"
+    },
+    {
+      "key": "g_key_bridge_recommended",
+      "en_len": 11,
+      "max_len": 22,
+      "ratio": 2.0,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_stake_unbonding",
+      "en_len": 9,
+      "max_len": 18,
+      "ratio": 2.0,
+      "max_locale": "fr"
+    },
+    {
+      "key": "g_key_btc_stake_step1_title",
+      "en_len": 13,
+      "max_len": 26,
+      "ratio": 2.0,
+      "max_locale": "ur"
+    },
+    {
+      "key": "g_key_btc_stake_step2_title",
+      "en_len": 9,
+      "max_len": 18,
+      "ratio": 2.0,
+      "max_locale": "ru"
+    },
+    {
+      "key": "g_key_hw_ledger",
+      "en_len": 6,
+      "max_len": 12,
+      "ratio": 2.0,
+      "max_locale": "ar"
+    },
+    {
+      "key": "g_key_hw_add_account",
+      "en_len": 11,
+      "max_len": 22,
+      "ratio": 2.0,
+      "max_locale": "uk"
+    },
+    {
+      "key": "g_key_airdrop_deadline",
+      "en_len": 8,
+      "max_len": 16,
+      "ratio": 2.0,
+      "max_locale": "sw"
+    },
+    {
+      "key": "g_key_loyalty_total_points",
+      "en_len": 12,
+      "max_len": 24,
+      "ratio": 2.0,
+      "max_locale": "uk"
+    },
+    {
+      "key": "g_key_loyalty_next_tier",
+      "en_len": 9,
+      "max_len": 18,
+      "ratio": 2.0,
+      "max_locale": "id"
+    },
+    {
+      "key": "g_key_loyalty_earned",
+      "en_len": 6,
+      "max_len": 12,
+      "ratio": 2.0,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_time_just_now",
+      "en_len": 8,
+      "max_len": 16,
+      "ratio": 2.0,
+      "max_locale": "fr"
+    },
+    {
+      "key": "g_key_earn_recommended",
+      "en_len": 11,
+      "max_len": 22,
+      "ratio": 2.0,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_earn_ledger",
+      "en_len": 6,
+      "max_len": 12,
+      "ratio": 2.0,
+      "max_locale": "ar"
+    },
+    {
+      "key": "g_key_gas_alert",
+      "en_len": 9,
+      "max_len": 18,
+      "ratio": 2.0,
+      "max_locale": "cs"
+    },
+    {
+      "key": "g_key_batch_memo_optional",
+      "en_len": 16,
+      "max_len": 32,
+      "ratio": 2.0,
+      "max_locale": "ru"
+    },
+    {
+      "key": "g_key_ens_no_domains",
+      "en_len": 14,
+      "max_len": 28,
+      "ratio": 2.0,
+      "max_locale": "fr"
+    },
+    {
+      "key": "g_key_ens_year",
+      "en_len": 4,
+      "max_len": 8,
+      "ratio": 2.0,
+      "max_locale": "te"
+    },
+    {
+      "key": "g_key_ens_years",
+      "en_len": 5,
+      "max_len": 10,
+      "ratio": 2.0,
+      "max_locale": "te"
+    },
+    {
+      "key": "g_key_ens_management_title",
+      "en_len": 10,
+      "max_len": 20,
+      "ratio": 2.0,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_ens_set_primary",
+      "en_len": 14,
+      "max_len": 28,
+      "ratio": 2.0,
+      "max_locale": "hi"
+    },
+    {
+      "key": "g_key_ens_text_records",
+      "en_len": 12,
+      "max_len": 24,
+      "ratio": 2.0,
+      "max_locale": "fr"
+    },
+    {
+      "key": "g_key_ens_subdomain_owner",
+      "en_len": 13,
+      "max_len": 26,
+      "ratio": 2.0,
+      "max_locale": "it"
+    },
+    {
+      "key": "g_key_ens_subdomain_owner_hint",
+      "en_len": 33,
+      "max_len": 66,
+      "ratio": 2.0,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_key_ens_subdomain_empty",
+      "en_len": 17,
+      "max_len": 34,
+      "ratio": 2.0,
+      "max_locale": "ur"
+    },
+    {
+      "key": "g_key_aa_gas_sponsored",
+      "en_len": 13,
+      "max_len": 26,
+      "ratio": 2.0,
+      "max_locale": "te"
+    },
+    {
+      "key": "g_key_aa_no_operations",
+      "en_len": 19,
+      "max_len": 38,
+      "ratio": 2.0,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_aa_recommended",
+      "en_len": 11,
+      "max_len": 22,
+      "ratio": 2.0,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_aa_paymaster_est_cost",
+      "en_len": 9,
+      "max_len": 18,
+      "ratio": 2.0,
+      "max_locale": "uk"
+    },
+    {
+      "key": "g_key_aa_smart_wallet",
+      "en_len": 12,
+      "max_len": 24,
+      "ratio": 2.0,
+      "max_locale": "fr"
+    },
+    {
+      "key": "g_key_aa_session_risk_low",
+      "en_len": 8,
+      "max_len": 16,
+      "ratio": 2.0,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_key_aa_session_blocked",
+      "en_len": 7,
+      "max_len": 14,
+      "ratio": 2.0,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_aa_session_amount_hint",
+      "en_len": 11,
+      "max_len": 22,
+      "ratio": 2.0,
+      "max_locale": "ar"
+    },
+    {
+      "key": "g_key_aa_just_now",
+      "en_len": 8,
+      "max_len": 16,
+      "ratio": 2.0,
+      "max_locale": "fr"
+    },
+    {
+      "key": "g_key_eligibility_alerts",
+      "en_len": 18,
+      "max_len": 36,
+      "ratio": 2.0,
+      "max_locale": "uk"
+    },
+    {
+      "key": "g_key_hw_load_more",
+      "en_len": 9,
+      "max_len": 18,
+      "ratio": 2.0,
+      "max_locale": "uk"
+    },
+    {
+      "key": "g_key_hw_disconnect",
+      "en_len": 10,
+      "max_len": 20,
+      "ratio": 2.0,
+      "max_locale": "bn"
+    },
+    {
+      "key": "g_key_hw_view_accounts",
+      "en_len": 13,
+      "max_len": 26,
+      "ratio": 2.0,
+      "max_locale": "uk"
+    },
+    {
+      "key": "g_key_coin_list_show_all",
+      "en_len": 15,
+      "max_len": 30,
+      "ratio": 2.0,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_key_payment_load_failed",
+      "en_len": 11,
+      "max_len": 22,
+      "ratio": 2.0,
+      "max_locale": "uk"
+    },
+    {
+      "key": "g_key_payment_wallet",
+      "en_len": 6,
+      "max_len": 12,
+      "ratio": 2.0,
+      "max_locale": "fr"
+    },
+    {
+      "key": "g_key_aa_benefit_batch_title",
+      "en_len": 23,
+      "max_len": 46,
+      "ratio": 2.0,
+      "max_locale": "vi"
+    },
+    {
+      "key": "g_key_dex_chain",
+      "en_len": 5,
+      "max_len": 10,
+      "ratio": 2.0,
+      "max_locale": "de"
+    },
+    {
+      "key": "g_key_dex_no_tokens",
+      "en_len": 9,
+      "max_len": 18,
+      "ratio": 2.0,
+      "max_locale": "ru"
+    },
+    {
+      "key": "g_key_uuid",
+      "en_len": 4,
+      "max_len": 8,
+      "ratio": 2.0,
+      "max_locale": "hi"
+    },
+    {
+      "key": "g_market_no_results",
+      "en_len": 10,
+      "max_len": 20,
+      "ratio": 2.0,
+      "max_locale": "mr"
+    },
+    {
+      "key": "g_referral_invited",
+      "en_len": 7,
+      "max_len": 14,
+      "ratio": 2.0,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_referral_mining",
+      "en_len": 12,
+      "max_len": 24,
+      "ratio": 2.0,
+      "max_locale": "sw"
+    },
+    {
+      "key": "g_key_nft_send",
+      "en_len": 8,
+      "max_len": 16,
+      "ratio": 2.0,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_dex_approving",
+      "en_len": 10,
+      "max_len": 20,
+      "ratio": 2.0,
+      "max_locale": "bn"
+    },
+    {
+      "key": "g_key_token_discovery_empty",
+      "en_len": 19,
+      "max_len": 38,
+      "ratio": 2.0,
+      "max_locale": "ta"
+    },
+    {
+      "key": "g_key_watch_only_banner",
+      "en_len": 10,
+      "max_len": 20,
+      "ratio": 2.0,
+      "max_locale": "bn"
+    },
+    {
+      "key": "g_pnl_buy_price_usd",
+      "en_len": 15,
+      "max_len": 30,
+      "ratio": 2.0,
+      "max_locale": "ar"
+    },
+    {
+      "key": "g_dapp_security_blocked",
+      "en_len": 7,
+      "max_len": 14,
+      "ratio": 2.0,
+      "max_locale": "ta"
+    }
+  ],
+  "top50": [
+    {
+      "key": "g_token_m_key_18",
+      "ratio": 7.0,
+      "max_locale": "ar",
+      "en_text": "API"
+    },
+    {
+      "key": "g_key_stake_avg_apy",
+      "ratio": 5.71,
+      "max_locale": "de",
+      "en_text": "Avg APY"
+    },
+    {
+      "key": "g_key_aa_retry",
+      "ratio": 5.6,
+      "max_locale": "de",
+      "en_text": "Retry"
+    },
+    {
+      "key": "g_browser_key26",
+      "ratio": 5.0,
+      "max_locale": "ar",
+      "en_text": "DEX"
+    },
+    {
+      "key": "g_key_loyalty_used",
+      "ratio": 4.75,
+      "max_locale": "ur",
+      "en_text": "Used"
+    },
+    {
+      "key": "g_key_197",
+      "ratio": 4.67,
+      "max_locale": "ur",
+      "en_text": "Max"
+    },
+    {
+      "key": "g_key_aa_paymaster_retry",
+      "ratio": 4.6,
+      "max_locale": "ta",
+      "en_text": "Retry"
+    },
+    {
+      "key": "g_key_dex_retry",
+      "ratio": 4.6,
+      "max_locale": "ta",
+      "en_text": "Retry"
+    },
+    {
+      "key": "g_key_earn_batch",
+      "ratio": 4.4,
+      "max_locale": "it",
+      "en_text": "Batch"
+    },
+    {
+      "key": "g_mining_key_63",
+      "ratio": 4.33,
+      "max_locale": "vi",
+      "en_text": "Pro"
+    },
+    {
+      "key": "g_browser_key27",
+      "ratio": 4.25,
+      "max_locale": "ar",
+      "en_text": "DeFi"
+    },
+    {
+      "key": "g_chat_key_66",
+      "ratio": 4.0,
+      "max_locale": "te",
+      "en_text": "Reply"
+    },
+    {
+      "key": "g_key_ex_keystore_1",
+      "ratio": 3.82,
+      "max_locale": "es_ES",
+      "en_text": "Backup Tips"
+    },
+    {
+      "key": "g_mining_key_1",
+      "ratio": 3.75,
+      "max_locale": "ar",
+      "en_text": "Home"
+    },
+    {
+      "key": "g_key_105",
+      "ratio": 3.71,
+      "max_locale": "it",
+      "en_text": "No more"
+    },
+    {
+      "key": "g_key_159",
+      "ratio": 3.67,
+      "max_locale": "de",
+      "en_text": "Add"
+    },
+    {
+      "key": "g_key_wallet_k47",
+      "ratio": 3.67,
+      "max_locale": "de",
+      "en_text": "Add"
+    },
+    {
+      "key": "g_key_feedback_8",
+      "ratio": 3.67,
+      "max_locale": "ta",
+      "en_text": "Click try"
+    },
+    {
+      "key": "g_key_stake_uptime",
+      "ratio": 3.67,
+      "max_locale": "cs",
+      "en_text": "Uptime"
+    },
+    {
+      "key": "g_key_dex_status_quoted",
+      "ratio": 3.67,
+      "max_locale": "ta",
+      "en_text": "Quoted"
+    },
+    {
+      "key": "g_home_key6",
+      "ratio": 3.6,
+      "max_locale": "ta",
+      "en_text": "Learn"
+    },
+    {
+      "key": "login_email",
+      "ratio": 3.6,
+      "max_locale": "es_ES",
+      "en_text": "Email"
+    },
+    {
+      "key": "g_key_email",
+      "ratio": 3.6,
+      "max_locale": "es_ES",
+      "en_text": "Email"
+    },
+    {
+      "key": "g_key_step_email",
+      "ratio": 3.6,
+      "max_locale": "es_ES",
+      "en_text": "Email"
+    },
+    {
+      "key": "g_key_apply",
+      "ratio": 3.6,
+      "max_locale": "te",
+      "en_text": "Apply"
+    },
+    {
+      "key": "g_market_low_24h",
+      "ratio": 3.57,
+      "max_locale": "sw",
+      "en_text": "Low 24H"
+    },
+    {
+      "key": "g_mining_key36",
+      "ratio": 3.5,
+      "max_locale": "ru",
+      "en_text": "Mute"
+    },
+    {
+      "key": "g_key_wallet_k56",
+      "ratio": 3.4,
+      "max_locale": "fr",
+      "en_text": "Nonce"
+    },
+    {
+      "key": "g_chat_key_31",
+      "ratio": 3.4,
+      "max_locale": "te",
+      "en_text": "agree"
+    },
+    {
+      "key": "g_chat_key_50",
+      "ratio": 3.4,
+      "max_locale": "ta",
+      "en_text": "Agree"
+    },
+    {
+      "key": "g_key_aa_saved",
+      "ratio": 3.4,
+      "max_locale": "ta",
+      "en_text": "saved"
+    },
+    {
+      "key": "g_key_reset",
+      "ratio": 3.4,
+      "max_locale": "ur",
+      "en_text": "Reset"
+    },
+    {
+      "key": "g_key_aa_chain_id",
+      "ratio": 3.38,
+      "max_locale": "it",
+      "en_text": "Chain ID"
+    },
+    {
+      "key": "g_browser_key28",
+      "ratio": 3.33,
+      "max_locale": "ur",
+      "en_text": "NFT"
+    },
+    {
+      "key": "g_face_match_key12",
+      "ratio": 3.33,
+      "max_locale": "ta",
+      "en_text": "Rebind"
+    },
+    {
+      "key": "g_key_stake_apy",
+      "ratio": 3.33,
+      "max_locale": "ur",
+      "en_text": "APY"
+    },
+    {
+      "key": "g_key_earn_mining",
+      "ratio": 3.33,
+      "max_locale": "it",
+      "en_text": "Mining"
+    },
+    {
+      "key": "g_key_hw_add",
+      "ratio": 3.33,
+      "max_locale": "de",
+      "en_text": "Add"
+    },
+    {
+      "key": "g_key_token_discovery_add",
+      "ratio": 3.33,
+      "max_locale": "de",
+      "en_text": "Add"
+    },
+    {
+      "key": "g_key_wallet_c36",
+      "ratio": 3.3,
+      "max_locale": "es_ES",
+      "en_text": "Backup Now"
+    },
+    {
+      "key": "g_key_ens_expires",
+      "ratio": 3.29,
+      "max_locale": "uk",
+      "en_text": "Expires"
+    },
+    {
+      "key": "g_key_aa_expires",
+      "ratio": 3.29,
+      "max_locale": "uk",
+      "en_text": "Expires"
+    },
+    {
+      "key": "g_pnl_unrealized",
+      "ratio": 3.29,
+      "max_locale": "id",
+      "en_text": "Unrealized P&L"
+    },
+    {
+      "key": "g_mining_key_40",
+      "ratio": 3.27,
+      "max_locale": "ta",
+      "en_text": "Pay using N"
+    },
+    {
+      "key": "g_key_119",
+      "ratio": 3.25,
+      "max_locale": "ta",
+      "en_text": "Copy"
+    },
+    {
+      "key": "Edit",
+      "ratio": 3.25,
+      "max_locale": "bn",
+      "en_text": "Edit"
+    },
+    {
+      "key": "g_chat_key_5",
+      "ratio": 3.25,
+      "max_locale": "ta",
+      "en_text": "Wait"
+    },
+    {
+      "key": "g_key_loyalty_copy",
+      "ratio": 3.25,
+      "max_locale": "ta",
+      "en_text": "Copy"
+    },
+    {
+      "key": "g_key_ens_step_wait",
+      "ratio": 3.25,
+      "max_locale": "ta",
+      "en_text": "Wait"
+    },
+    {
+      "key": "g_key_ens_wait",
+      "ratio": 3.25,
+      "max_locale": "ta",
+      "en_text": "Wait"
+    }
+  ]
+}
