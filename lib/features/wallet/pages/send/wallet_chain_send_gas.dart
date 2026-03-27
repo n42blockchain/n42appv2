@@ -320,12 +320,15 @@ class _FeeRow extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            label,
-            style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name),
-              fontSize: ScreenUtil().setSp(28.0),
+          Flexible(
+            child: Text(
+              label,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: AppThemeUtils.getColorByKey(
+                    context, AppThemeKeys.itemSubtitleTextColor.name),
+                fontSize: ScreenUtil().setSp(28.0),
+              ),
             ),
           ),
           SizedBox(width: ScreenUtil().setWidth(10)),
@@ -368,7 +371,9 @@ class _GasLimitRow extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: TextStyle(color: labelColor, fontSize: fontSize)),
+          Flexible(
+            child: Text(label, overflow: TextOverflow.ellipsis, style: TextStyle(color: labelColor, fontSize: fontSize)),
+          ),
           SizedBox(width: ScreenUtil().setWidth(10)),
           Expanded(
             child: Text(

@@ -102,26 +102,28 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: [
-                Icon(
-                  Icons.local_gas_station,
-                  size: ScreenUtil().setWidth(40),
-                  color: blueColor,
-                ),
-                SizedBox(width: ScreenUtil().setWidth(16)),
-                Flexible(
-                  child: Text(
-                    S.of(context).g_key_t_16, // Gas Fee
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(30),
-                      fontWeight: FontWeight.bold,
-                      color: mainText,
+            Flexible(
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.local_gas_station,
+                    size: ScreenUtil().setWidth(40),
+                    color: blueColor,
+                  ),
+                  SizedBox(width: ScreenUtil().setWidth(16)),
+                  Flexible(
+                    child: Text(
+                      S.of(context).g_key_t_16, // Gas Fee
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: ScreenUtil().setSp(30),
+                        fontWeight: FontWeight.bold,
+                        color: mainText,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             Row(
               children: [
@@ -268,11 +270,14 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(26),
-            color: subtitleText,
+        Flexible(
+          child: Text(
+            label,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(26),
+              color: subtitleText,
+            ),
           ),
         ),
         Text(

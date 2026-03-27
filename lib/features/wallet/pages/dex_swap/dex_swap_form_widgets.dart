@@ -217,14 +217,17 @@ class DexPriceChart extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text(
-                tokenInSymbol != null
-                    ? '$tokenInSymbol · ${s.g_key_dex_price_chart}'
-                    : s.g_key_dex_price_chart,
-                style: TextStyle(
-                  color: mainText,
-                  fontSize: ScreenUtil().setSp(26),
-                  fontWeight: FontWeight.w500,
+              Flexible(
+                child: Text(
+                  tokenInSymbol != null
+                      ? '$tokenInSymbol · ${s.g_key_dex_price_chart}'
+                      : s.g_key_dex_price_chart,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: mainText,
+                    fontSize: ScreenUtil().setSp(26),
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
               const Spacer(),
