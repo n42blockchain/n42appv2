@@ -128,9 +128,10 @@ class ContractSecurityCard extends StatelessWidget {
             children: [
               Icon(icon, size: ScreenUtil().setWidth(20), color: color),
               SizedBox(width: ScreenUtil().setWidth(8)),
-              Expanded(
+              Flexible(
                 child: Text(
                   title,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(26),
                     fontWeight: FontWeight.w600,

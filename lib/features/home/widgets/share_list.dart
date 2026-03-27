@@ -14,6 +14,7 @@ class ShareList extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Flexible(
                 child: Text(
@@ -26,7 +27,6 @@ class ShareList extends StatelessWidget {
                       fontWeight: FontWeight.bold),
                 ),
               ),
-              Spacer(),
               IconButton(
                   onPressed: () {
                     Navigator.of(context).pop();

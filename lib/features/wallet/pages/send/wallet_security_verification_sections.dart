@@ -225,7 +225,7 @@ class _EmailSendButton extends StatelessWidget {
     }
 
     return InkWell(
-      onTap: onSend,
+      onTap: isDisabled ? null : onSend,
       child: Container(
         padding: EdgeInsets.symmetric(
           vertical: ScreenUtil().setWidth(10.0),

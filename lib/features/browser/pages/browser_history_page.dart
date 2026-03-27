@@ -74,18 +74,16 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
     }
   }
 
-  Future<void> deleteHistory(int index) async {
-    if (index < 0 || index >= historyList.length) return;
+  Future<void> deleteHistory(BrowserHistoryModel item) async {
     _requestId++;
-    final bhm = historyList[index];
-    if (bhm.id != null) {
-      await browserApi.deleteBrowserHistoryById(bhm.id!);
+    if (item.id != null) {
+      await browserApi.deleteBrowserHistoryById(item.id!);
     }
     if (!mounted) return;
-    if (bhm.id != null) {
-      historyList.removeWhere((element) => element.id == bhm.id);
-    } else if (index >= 0 && index < historyList.length) {
-      historyList.removeAt(index);
+    if (item.id != null) {
+      historyList.removeWhere((element) => element.id == item.id);
+    } else {
+      historyList.remove(item);
     }
     setState(() {});
   }
@@ -250,7 +248,7 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
                   color: Colors.red,
                   child: const Icon(Icons.delete, color: Colors.white),
                 ),
-                onDismissed: (_) => deleteHistory(index),
+                onDismissed: (_) => deleteHistory(item),
                 child: InkWell(
                   onTap: () => Navigator.pop(context, item.url),
                   child: Container(

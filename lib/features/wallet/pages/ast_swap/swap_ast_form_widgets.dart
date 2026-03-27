@@ -9,7 +9,6 @@ import 'package:n42_wallet/features/widgets/button_widget.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:decimal/decimal.dart' as dec;
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -149,16 +148,11 @@ class SwapAstCheckWidget extends StatelessWidget {
                   fontSize: ScreenUtil().setSp(22),
                 ),
                 children: [
-                  TextSpan(
-                    text: S.of(context).g_swap_key_17,
-                    style: TextStyle(
-                      decoration: TextDecoration.underline,
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainBlueColor.name),
-                      fontSize: ScreenUtil().setSp(24),
-                    ),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
+                  WidgetSpan(
+                    alignment: PlaceholderAlignment.baseline,
+                    baseline: TextBaseline.alphabetic,
+                    child: GestureDetector(
+                      onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -168,6 +162,16 @@ class SwapAstCheckWidget extends StatelessWidget {
                           ),
                         );
                       },
+                      child: Text(
+                        S.of(context).g_swap_key_17,
+                        style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          color: AppThemeUtils.getColorByKey(
+                              context, AppThemeKeys.mainBlueColor.name),
+                          fontSize: ScreenUtil().setSp(24),
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),

@@ -54,6 +54,7 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
 
   Future<void> miningBarchartData() async {
     try {
+      if (!mounted) return;
       setState(() => isLoading7DayData = true);
       epochList = await MiningApi.generateRewardsArray();
       if (epochList.isNotEmpty) {
@@ -104,7 +105,8 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
     );
     final boldStyle = TextStyle(
       fontSize: ScreenUtil().setSp(22),
-      color: Colors.black,
+      color: AppThemeUtils.getColorByKey(
+          context, AppThemeKeys.mainTextColor.name),
       fontWeight: FontWeight.bold,
     );
     final spacerStyle = TextStyle(
@@ -327,9 +329,9 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
                       setState(() {
                         load = Load.finish;
                       });
+                      eventBus.fire(
+                          EventPublic(EventPublicType.refreshMiningData));
                     }
-                    eventBus.fire(
-                        EventPublic(EventPublicType.refreshMiningData));
                   }
                 },
               ),

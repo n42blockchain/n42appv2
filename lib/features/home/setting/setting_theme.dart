@@ -93,6 +93,7 @@ class SettingTheme extends ConsumerWidget {
                 ScreenUtil().setWidth(30),
                 ScreenUtil().setWidth(8)),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Flexible(
                   child: Text(
@@ -109,7 +110,6 @@ class SettingTheme extends ConsumerWidget {
                     ),
                   ),
                 ),
-                const Spacer(),
                 if (!isDefault)
                   GestureDetector(
                     onTap: () =>
