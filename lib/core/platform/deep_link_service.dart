@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:app_links/app_links.dart';
 import 'package:flutter/foundation.dart';
-import 'package:n42_wallet/features/wallet_connect/wallet_connect_uri.dart';
+import 'package:n42_wallet/shared/utils/wallet_connect_uri.dart';
 
 /// Deep Link 类型
 enum DeepLinkType {

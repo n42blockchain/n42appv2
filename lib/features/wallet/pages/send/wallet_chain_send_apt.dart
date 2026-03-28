@@ -15,7 +15,7 @@ import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
 import 'package:n42_wallet/features/wallet/pages/send/send_utils.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_base_send.dart';
-import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
+import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/services/recent_address_service.dart';
 import 'package:n42_wallet/features/wallet/widgets/non_evm_fee_selector.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';

@@ -6,7 +6,7 @@ import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/pages/face_matching/face_binding.dart';
 import 'package:n42_wallet/features/wallet/pages/face_matching/face_wallet_utils.dart';
-import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
+import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/features/widgets/container_widget.dart';

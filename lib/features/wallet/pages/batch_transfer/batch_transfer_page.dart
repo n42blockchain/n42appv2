@@ -12,7 +12,7 @@ import 'package:n42_wallet/features/wallet/presentation/providers/wallet_provide
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/provider/batch_transfer_provider.dart';
-import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
+import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/pages/batch_transfer/csv_import_page.dart';
 import 'package:n42_wallet/features/wallet/pages/batch_transfer/batch_transfer_bottom_bar.dart';

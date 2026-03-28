@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/constants/language_constants.dart';
-import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/core/constants/app_colors.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
@@ -95,7 +94,7 @@ class _LanguageItem extends StatelessWidget {
                   width: ScreenUtil().setWidth(48),
                   height: ScreenUtil().setWidth(34),
                   decoration: BoxDecoration(
-                    color: subTextColor?.withAlpha(40),
+                    color: subTextColor.withAlpha(40),
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Icon(

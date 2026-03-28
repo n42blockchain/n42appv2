@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model_build_utils.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model_wallet_access.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
-import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
+import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:intl/intl.dart';
 import 'package:decimal/decimal.dart';

@@ -1,7 +1,7 @@
 // Copyright 2021-2026 N42 Inc. All rights reserved.
 
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
-import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
+import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/features/wallet/services/ens_service.dart';
 

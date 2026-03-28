@@ -8,7 +8,7 @@ import 'package:n42_wallet/core/di/service_locator_setup.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
-import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
+import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/features/wallet_connect/wallet_connect_uri.dart';
@@ -367,8 +367,6 @@ mixin WalletConnectConnection on ChangeNotifier {
 
   /// Find a coin model matching the given WalletConnect chain ID string.
   CoinModel? coinModelFind(String chainId) {
-    // TODO: remove this debug filter once Blast connection issue is resolved.
-    if (chainId == 'eip155:81457') return null;
     return coinModels.where((element) {
       final blockchainType = element.coin['blockchainType'];
       if (blockchainType == BlockchainType.Ethereum.name) {

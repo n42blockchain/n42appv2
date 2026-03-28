@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:n42_wallet/core/error/exceptions.dart';
 import 'package:n42_wallet/core/wallet_sdk/models/wallet_sdk_models.dart';
-import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
+import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 
 /// Address generation, validation, and chain-specific utilities.
 class WalletAddress {

@@ -246,7 +246,7 @@ class SecurityEditState extends State<SecurityEdit> {
                           right: ScreenUtil().setWidth(10.0),
                         ),
                         child: Image.asset(
-                          'assets/home/setting/scurity/item_${widget.type}.png',
+                          'assets/home/setting/security/item_${widget.type}.png',
                         ),
                       ),
                       Expanded(

@@ -7,9 +7,12 @@ import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/features/models/message_model.dart';
 import 'package:n42_wallet/features/utils/data_utils.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
+import 'package:n42_wallet/features/wallet/api/transfer_api.dart';
 import 'package:n42_wallet/features/wallet/models/btc_transaction_recode_model.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
-import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
+import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
+
+import 'package:n42_wallet/features/wallet/utils/transaction/coin_gas.dart';
 
 import '../transfer_handler.dart';
 
@@ -19,6 +22,7 @@ import '../transfer_handler.dart';
 abstract class BaseTransferHandler implements TransferHandler {
   // Lazy-loaded services
   TokenViewApi? _tokenViewApi;
+  TransferApi? _transferApi;
   DataUtils? _dataUtils;
   Trustdart? _trustdart;
 
@@ -26,6 +30,12 @@ abstract class BaseTransferHandler implements TransferHandler {
   TokenViewApi get tokenViewApi {
     _tokenViewApi ??= TokenViewApi();
     return _tokenViewApi!;
+  }
+
+  /// Transfer API for chain-specific transfers
+  TransferApi get transferApi {
+    _transferApi ??= TransferApi();
+    return _transferApi!;
   }
 
   /// Data utilities
@@ -83,6 +93,35 @@ abstract class BaseTransferHandler implements TransferHandler {
     final model = MessageModel();
     model.data = data;
     return model;
+  }
+
+  /// Shared gas estimation for non-EVM chains using getCoinGas + getGasPrice.
+  Future<GasEstimation> estimateGasSimple({
+    required String blockchainType,
+    required String coinType,
+    bool hasContract = false,
+    bool isTest = false,
+  }) async {
+    final gasLimit = BigInt.from(getCoinGas(coinType, contract: hasContract));
+    final mmg = await tokenViewApi.getGasPrice(
+      blockchainType, coinType, isTest: isTest,
+    );
+    if (mmg == null || mmg.error) {
+      return GasEstimation(
+        gasLimit: gasLimit,
+        gasPrice: BigInt.zero,
+        totalFee: BigInt.zero,
+        errorMessage: mmg?.data?.toString() ?? 'Failed to get gas price',
+      );
+    }
+    final BigInt gasPrice = mmg.data is BigInt
+        ? mmg.data
+        : BigInt.tryParse(mmg.data.toString()) ?? BigInt.zero;
+    return GasEstimation(
+      gasLimit: gasLimit,
+      gasPrice: gasPrice,
+      totalFee: gasPrice * gasLimit,
+    );
   }
 
   /// Return a not-yet-migrated error for stub handlers

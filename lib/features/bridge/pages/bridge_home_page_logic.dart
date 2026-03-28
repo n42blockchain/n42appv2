@@ -10,7 +10,7 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/bridge/models/bridge_models.dart';
 import 'package:n42_wallet/features/bridge/pages/bridge_history_page.dart';
 import 'package:n42_wallet/features/bridge/provider/bridge_provider.dart';
-import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
+import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';

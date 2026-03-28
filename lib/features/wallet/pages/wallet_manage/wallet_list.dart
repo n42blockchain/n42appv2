@@ -13,7 +13,7 @@ import 'package:n42_wallet/features/wallet/pages/face_matching/face_user_notice.
 import 'package:n42_wallet/features/wallet/pages/face_matching/face_wallet_utils.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_manage/wallet_manage.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_manage/wallet_manage_flags_utils.dart';
-import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
+import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/widgets/create_wallet_button.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';

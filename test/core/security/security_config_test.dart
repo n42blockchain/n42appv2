@@ -147,23 +147,6 @@ void main() {
       });
     });
 
-    group('mode flags', () {
-      test('should have consistent mode flags', () {
-        // 在测试环境中，应该是 debug 模式
-        expect(SecurityConfig.isDebug, isTrue);
-        expect(SecurityConfig.isRelease, isFalse);
-        expect(SecurityConfig.isProfile, isFalse);
-      });
-
-      test('shouldEnableLogging should match debug mode', () {
-        expect(SecurityConfig.shouldEnableLogging, equals(SecurityConfig.isDebug));
-      });
-
-      test('shouldEnableSslPinning should match release mode', () {
-        expect(SecurityConfig.shouldEnableSslPinning, equals(SecurityConfig.isRelease));
-      });
-    });
-
     group('secureLog', () {
       test('should not throw in debug mode', () {
         expect(

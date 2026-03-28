@@ -10,8 +10,8 @@ import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/models/message_model.dart';
-import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
+import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/chain_eip1559.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/utils/transaction/coin_gas.dart';
@@ -153,7 +153,7 @@ class EvmTransferHandler extends BaseTransferHandler {
         : baseFee;
 
     // Estimate gas
-    final estimateMm = await TokenViewApi().getGasEstimateEthV2(
+    final estimateMm = await tokenViewApi.getGasEstimateEthV2(
       fromAddress, toAddress, gasPrice,
       ethToWeiString(value.toString(), isContract ? tokenDecimals : decimals),
       BigInt.from(gas), coinType,

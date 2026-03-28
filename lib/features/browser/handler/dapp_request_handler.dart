@@ -5,7 +5,7 @@ import 'package:http/http.dart';
 import 'package:n42_wallet/core/config/proxy_config.dart';
 import 'package:n42_wallet/core/di/service_locator_setup.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
-import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
+import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:eip712/eip712.dart';
 import 'package:web3dart/web3dart.dart' as web3;

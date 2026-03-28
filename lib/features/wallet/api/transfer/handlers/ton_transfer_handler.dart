@@ -3,7 +3,9 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
+import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/models/message_model.dart';
+
 import '../transfer_handler.dart';
 import 'base_transfer_handler.dart';
 
@@ -16,11 +18,27 @@ class TonTransferHandler extends BaseTransferHandler {
   bool supports(String chainSymbol) => chainSymbol.toUpperCase() == 'TON';
 
   @override
-  // TODO: Migrate from transfer_api.dart transferTon method
-  Future<MessageModel> transfer(TransferParams params) => notYetMigrated();
+  Future<MessageModel> transfer(TransferParams params) async {
+    // TON doesn't have a standalone transferTon() method in the legacy API.
+    // Use the high-level TransferApi.transfer() which routes through the
+    // switch-case and handles TON via the Cosmos-family mixin path.
+    return transferApi.transfer(
+      params.chainSymbol,
+      params.toAddress,
+      params.value,
+      contractAddress: params.contractAddress,
+      fromAddress: params.fromAddress,
+      isTest: params.isTest,
+      maxValue: params.maxValue,
+      message: params.message,
+    );
+  }
 
   @override
-  // TODO: Implement gas estimation
   Future<GasEstimation> estimateGas(TransferParams params) async =>
-      notImplementedGas();
+      estimateGasSimple(
+        blockchainType: BlockchainType.TheOpenNetwork.name,
+        coinType: CoinType.TON.name,
+        isTest: params.isTest,
+      );
 }

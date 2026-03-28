@@ -3,12 +3,17 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
+import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/models/message_model.dart';
+
 import '../transfer_handler.dart';
 import 'base_transfer_handler.dart';
 
 /// Transfer handler for Zilliqa chain
-// Active implementation: see transfer_api.dart for the working transfer methods
+///
+/// ZIL transfers require pre-computed parameters (gas, nonce) obtained
+/// through the full UI flow (TransferApi.transferWallet -> transferZilSend).
+/// Direct transfer() is not supported; use transferFromModel() instead.
 class ZilTransferHandler extends BaseTransferHandler {
   @override
   String get chainSymbol => 'ZIL';
@@ -17,11 +22,14 @@ class ZilTransferHandler extends BaseTransferHandler {
   bool supports(String chainSymbol) => chainSymbol.toUpperCase() == 'ZIL';
 
   @override
-  // TODO: Migrate from transfer_api.dart transferZil method
-  Future<MessageModel> transfer(TransferParams params) => notYetMigrated();
+  Future<MessageModel> transfer(TransferParams params) =>
+      notYetMigrated();
 
   @override
-  // TODO: Implement gas estimation
   Future<GasEstimation> estimateGas(TransferParams params) async =>
-      notImplementedGas();
+      estimateGasSimple(
+        blockchainType: BlockchainType.Zilliqa.name,
+        coinType: CoinType.ZIL.name,
+        isTest: params.isTest,
+      );
 }

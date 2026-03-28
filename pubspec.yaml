@@ -5,7 +5,7 @@ publish_to: 'none'
 version: 2.3.587+101
 
 environment:
-  sdk: ^3.9.2
+  sdk: ">=3.9.2 <4.0.0"
 
 dependencies:
   flutter:
@@ -25,7 +25,6 @@ dependencies:
   gesture_password_widget: ^2.0.1
   roundcheckbox: ^2.0.5
   simple_html_css: ^5.0.0
-  file_icon: ^1.0.0
   chewie: ^1.8.5
 
   # === Internationalization ===
@@ -79,7 +78,6 @@ dependencies:
   fluttertoast: ^9.0.0
   flustars_flutter3: ^3.0.0
   date_format: ^2.0.9
-  archive: ^4.0.9
   convert: ^3.1.2
   cryptography: ^2.7.0
 
@@ -142,8 +140,12 @@ dependencies:
 
   # === N42 Chat Module ===
   n42_chat:
-    git: https://github.com/n42blockchain/n42_chat
+    git:
+      url: https://github.com/n42blockchain/n42_chat
+      ref: 34c964209d622006f938bbd0f9d509fc9facb174
 
+# Override: flutter_secure_storage 10.x needed for compatibility with
+# matrix_dart_sdk which pins an older version via vodozemac dependency chain
 dependency_overrides:
   flutter_secure_storage: ^10.0.0
 
@@ -175,7 +177,7 @@ flutter:
     - assets/home/
     - assets/home/tabbar/
     - assets/home/setting/
-    - assets/home/setting/scurity/
+    - assets/home/setting/security/
     - assets/home/about/
     - assets/img/
     - assets/browser/

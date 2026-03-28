@@ -224,7 +224,7 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
   Widget _buildTokenSelector(BuildContext context) {
     const tokens = ['ETH', 'USDT', 'USDC', 'DAI', 'WBTC'];
     return DropdownButtonFormField<String>(
-      value: _selectedToken,
+      initialValue: _selectedToken,
       decoration: const InputDecoration(
         labelText: 'Token',
         border: OutlineInputBorder(),

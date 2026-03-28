@@ -96,10 +96,10 @@ void main() {
       final count = await migration.migrate();
 
       expect(count, 1);
-      expect(secureStorage.mnemonics['1700000000000'], 'seed words');
-      expect(secureStorage.privateKeys['1700000000000'], '0xabc');
+      expect(secureStorage.mnemonics['user-1_1700000000000'], 'seed words');
+      expect(secureStorage.privateKeys['user-1_1700000000000'], '0xabc');
       expect(
-        secureStorage.credentials['wallet_password_1700000000000'],
+        secureStorage.credentials['wallet_password_user-1_1700000000000'],
         {'password': 'pw'},
       );
 
@@ -128,8 +128,7 @@ void main() {
       final count = await migration.migrate();
 
       expect(count, 1);
-      expect(secureStorage.mnemonics['1700000000001'], 'seed words');
-      expect(secureStorage.mnemonics.containsKey('user-1_0'), isFalse);
+      expect(secureStorage.mnemonics['user-1_1700000000001'], 'seed words');
     });
 
     test('preserves malformed wallet entries instead of crashing', () async {

@@ -13,7 +13,7 @@ import 'package:n42_wallet/shared/di/service_locator.dart';
 import 'package:n42_wallet/shared/domain/services/wallet_service_interface.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
-import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
+import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart'
     show chainUrlMap, getPathWithIndex;

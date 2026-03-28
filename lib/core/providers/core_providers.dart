@@ -20,10 +20,10 @@ import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/core/utils/theme_mode_utils.dart';
 import 'package:n42_wallet/data/models/user_info.dart';
 import 'package:n42_wallet/shared/domain/entities/wallet_info.dart';
-import 'package:n42_wallet/features/component/enums/load.dart';
+import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/core/network/ipfs_api.dart';
 import 'package:n42_wallet/features/login/api/user_info_api.dart';
-import 'package:n42_wallet/features/models/message_model.dart';
+import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_chat/n42_chat.dart';
 
 part 'core_providers_ui.dart';

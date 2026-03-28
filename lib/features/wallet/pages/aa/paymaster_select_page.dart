@@ -63,7 +63,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
       final options = await PaymasterService.loadOptions(
         chainId: widget.chainId,
         chainSymbol: _resolvedSymbol,
-        apiKey: AAConfig.getBundlerApiKey(),
+        apiKey: null,
       );
       if (mounted && requestId == _loadRequestId) {
         setState(() {

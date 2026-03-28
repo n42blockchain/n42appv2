@@ -10,7 +10,7 @@ import 'package:n42_wallet/features/mining_v1/provider/mining_v1_providers.dart'
 import 'package:n42_wallet/features/mining_v1/utils/mining_cache_utils.dart';
 import 'package:n42_wallet/features/mining_v1/utils/mining_plugin_utils.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
-import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
+import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:web3dart/web3dart.dart';
 

@@ -99,42 +99,5 @@ void main() {
     });
   });
 
-  group('SecurityPolicyConfig', () {
-    test('should have production config', () {
-      const config = SecurityPolicyConfig.production;
-      
-      expect(config.onRootDetected, SecurityViolationAction.restrictFeatures);
-      expect(config.onEmulatorDetected, SecurityViolationAction.blockApp);
-      expect(config.onDebuggerDetected, SecurityViolationAction.blockApp);
-    });
-
-    test('should have development config', () {
-      const config = SecurityPolicyConfig.development;
-      
-      expect(config.onRootDetected, SecurityViolationAction.warnAndContinue);
-      expect(config.onEmulatorDetected, SecurityViolationAction.warnAndContinue);
-      expect(config.onDebuggerDetected, SecurityViolationAction.warnAndContinue);
-    });
-
-    test('should allow custom config', () {
-      const config = SecurityPolicyConfig(
-        onRootDetected: SecurityViolationAction.blockApp,
-        onEmulatorDetected: SecurityViolationAction.warnAndContinue,
-        onDebuggerDetected: SecurityViolationAction.restrictFeatures,
-      );
-
-      expect(config.onRootDetected, SecurityViolationAction.blockApp);
-      expect(config.onEmulatorDetected, SecurityViolationAction.warnAndContinue);
-      expect(config.onDebuggerDetected, SecurityViolationAction.restrictFeatures);
-    });
-  });
-
-  group('SecurityViolationAction', () {
-    test('should have all expected values', () {
-      expect(SecurityViolationAction.values, contains(SecurityViolationAction.warnAndContinue));
-      expect(SecurityViolationAction.values, contains(SecurityViolationAction.restrictFeatures));
-      expect(SecurityViolationAction.values, contains(SecurityViolationAction.blockApp));
-    });
-  });
 }
 

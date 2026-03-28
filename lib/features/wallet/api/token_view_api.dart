@@ -20,7 +20,7 @@ import 'package:n42_wallet/features/wallet/api/chain_api/trx_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/xrp_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/xtz_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/zil_api.dart';
-import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
+import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/chain_eip1559.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/generated/l10n.dart';

@@ -50,6 +50,10 @@ pubspec.lock
 **/android/local.properties
 **/android/key.properties
 **/android/keystores/
+**/android/app/google-services.json
+
+# iOS Firebase config
+**/ios/Runner/GoogleService-Info.plist
 **/android/**/GeneratedPluginRegistrant.java
 
 # iOS/Xcode specific

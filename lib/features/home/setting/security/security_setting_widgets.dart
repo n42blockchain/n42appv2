@@ -25,7 +25,7 @@ extension on _SecuritySettingState {
               height: ScreenUtil().setWidth(40.0),
               margin: EdgeInsets.only(right: ScreenUtil().setWidth(10.0)),
               child: Image.asset(
-                "assets/home/setting/scurity/${open ? "open" : "closs"}.png",
+                "assets/home/setting/security/${open ? "open" : "closs"}.png",
               ),
             ),
             Expanded(

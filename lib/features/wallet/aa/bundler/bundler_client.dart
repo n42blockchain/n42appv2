@@ -60,7 +60,7 @@ class BundlerClient {
       throw AAUnsupportedChainError(chainSymbol);
     }
 
-    final url = config.getBundlerUrlWithKey(apiKey);
+    final url = config.bundlerUrl;
 
     return BundlerClient(
       bundlerUrl: url,
@@ -457,7 +457,7 @@ class BundlerClientBuilder {
 
     final url = _useBackup && config.backupBundlerUrl != null
         ? config.backupBundlerUrl!
-        : config.getBundlerUrlWithKey(_apiKey);
+        : config.bundlerUrl;
 
     return BundlerClient(
       bundlerUrl: url,

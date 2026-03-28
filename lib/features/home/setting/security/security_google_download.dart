@@ -35,7 +35,7 @@ class SecurityGoogleDownload extends StatelessWidget {
                     width: ScreenUtil().setWidth(120.0),
                     margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(50.0)),
                     child: Image.asset(
-                      'assets/home/setting/scurity/item_google.png',
+                      'assets/home/setting/security/item_google.png',
                     ),
                   ),
                   Text(
@@ -78,7 +78,7 @@ class SecurityGoogleDownload extends StatelessWidget {
                 child: Row(
                   children: [
                     Image.asset(
-                      'assets/home/setting/scurity/item_google.png',
+                      'assets/home/setting/security/item_google.png',
                       width: ScreenUtil().setWidth(40),
                       fit: BoxFit.cover,
                     ),

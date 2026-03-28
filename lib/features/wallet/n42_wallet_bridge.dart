@@ -3,26 +3,38 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:n42_chat/n42_chat.dart';
+import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
+import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
+import 'package:n42_wallet/features/component/enums/coin_type.dart';
+import 'package:n42_wallet/features/wallet/api/address_book_api.dart';
+import 'package:n42_wallet/features/wallet/api/transfer_api.dart';
+import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/pages/wallet_receive_qr.dart';
 import 'package:n42_wallet/features/wallet/services/ens_service.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
+import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart'
+    show getPathWithIndex;
+import 'package:n42_wallet/shared/di/service_locator.dart';
+import 'package:web3dart/web3dart.dart' as web3;
+import 'package:eip712/eip712.dart';
 
 /// N42 钱包桥接实现
 ///
 /// 将主应用的钱包功能桥接到 n42_chat 插件
 class N42WalletBridge implements IWalletBridge {
-  WalletActionProvider? _walletProvider;
-
   WalletActionProvider? get _provider {
-    if (_walletProvider != null) return _walletProvider;
     try {
-      _walletProvider = globalWapAdapter;
+      return globalWapAdapter;
     } catch (e) {
       if (kDebugMode) debugPrint('N42WalletBridge: Failed to get WalletActionProvider: $e');
+      return null;
     }
-    return _walletProvider;
   }
 
   @override
@@ -104,10 +116,34 @@ class N42WalletBridge implements IWalletBridge {
     required String token,
     String? memo,
   }) async {
-    // 转账功能需要导航到转账页面，这里暂时返回取消
-    // TODO: 实现实际转账逻辑
-    if (kDebugMode) debugPrint('N42WalletBridge: Transfer requested - to: $toAddress, amount: $amount $token');
-    return TransferResult.cancelled();
+    try {
+      if (!isWalletConnected) {
+        return TransferResult.failure('Wallet not connected');
+      }
+
+      final value = double.tryParse(amount) ?? 0.0;
+      if (value <= 0) {
+        return TransferResult.failure('Invalid transfer amount');
+      }
+
+      // TransferApi.transfer() 内部自动从钱包查找链信息、地址、path 等
+      final api = TransferApi();
+      final result = await api.transfer(token, toAddress, value);
+
+      if (result.error) {
+        return TransferResult.failure(
+          result.data?.toString() ?? 'Transfer failed',
+        );
+      }
+
+      final txHash = result.data is Map
+          ? (result.data['txHash'] ?? '').toString()
+          : result.data?.toString() ?? '';
+      return TransferResult.success(txHash);
+    } catch (e) {
+      if (kDebugMode) debugPrint('N42WalletBridge: Transfer error: $e');
+      return TransferResult.failure(e.toString());
+    }
   }
 
   @override
@@ -145,8 +181,35 @@ class N42WalletBridge implements IWalletBridge {
 
   @override
   Future<void> showReceiveQRCode() async {
-    // TODO: 导航到收款二维码页面
-    if (kDebugMode) debugPrint('N42WalletBridge: Show receive QR code requested');
+    try {
+      final provider = _provider;
+      if (provider == null) return;
+
+      // 找到 ETH 主链 coinModel 作为默认收款链
+      CoinModel? chainCoin;
+      for (final cm in provider.coinModels) {
+        final coinType = cm.coin['coinType'] as String?;
+        if (coinType == CoinType.ETH.name && cm.coin['isContract'] != true) {
+          chainCoin = cm;
+          break;
+        }
+      }
+      chainCoin ??= provider.coinModels.isNotEmpty
+          ? provider.coinModels.first
+          : null;
+      if (chainCoin == null) return;
+
+      final context = AppGlobals.navigatorKey.currentContext;
+      if (context == null || !context.mounted) return;
+
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => WalletReceiveQr(chainCoin!),
+        ),
+      );
+    } catch (e) {
+      if (kDebugMode) debugPrint('N42WalletBridge: showReceiveQRCode error: $e');
+    }
   }
 
   static final _ethAddressRegExp = RegExp(r'^0x[0-9a-fA-F]{40}$');
@@ -158,10 +221,25 @@ class N42WalletBridge implements IWalletBridge {
         (address.startsWith('N') && address.length >= 30 && address.length <= 50);
   }
 
+  final AddressBookApi _addressBookApi = AddressBookApi();
+
   @override
   Future<WalletUserInfo?> getUserInfoByAddress(String address) async {
-    // TODO: 从地址簿或服务器获取用户信息
-    return null;
+    try {
+      final results = await _addressBookApi.searchAddressBook(address);
+      for (final item in results) {
+        if (item.address?.toLowerCase() == address.toLowerCase()) {
+          return WalletUserInfo(
+            address: address,
+            username: item.name,
+          );
+        }
+      }
+      return null;
+    } catch (e) {
+      if (kDebugMode) debugPrint('N42WalletBridge: getUserInfoByAddress error: $e');
+      return null;
+    }
   }
 
   // ============================================
@@ -217,16 +295,111 @@ class N42WalletBridge implements IWalletBridge {
 
   @override
   Future<String?> signMessage(String message) async {
-    // TODO: 接入 WalletConnect 或本地钱包的 personal_sign
-    if (kDebugMode) debugPrint('N42WalletBridge: signMessage requested');
-    return null;
+    try {
+      final ethKey = await _getEthPrivateKey();
+      if (ethKey == null) return null;
+
+      // Detect hex-encoded vs UTF-8 message
+      final Uint8List encodedMessage;
+      if (message.startsWith('0x')) {
+        final stripped = message.substring(2);
+        encodedMessage = _isValidHex(stripped)
+            ? web3.hexToBytes(stripped)
+            : Uint8List.fromList(utf8.encode(message));
+      } else {
+        encodedMessage = Uint8List.fromList(utf8.encode(message));
+      }
+
+      final signedData = ethKey.signPersonalMessageToUint8List(encodedMessage);
+      return web3.bytesToHex(signedData, include0x: true);
+    } catch (e) {
+      if (kDebugMode) debugPrint('N42WalletBridge: signMessage error: $e');
+      return null;
+    }
   }
 
   @override
   Future<String?> signTypedData(String typedDataJson) async {
-    // TODO: 接入 WalletConnect 或本地钱包的 eth_signTypedData_v4
-    if (kDebugMode) debugPrint('N42WalletBridge: signTypedData requested');
-    return null;
+    try {
+      final ethKey = await _getEthPrivateKey();
+      if (ethKey == null) return null;
+
+      final Map<String, dynamic> typedData = json.decode(typedDataJson);
+      const requiredFields = ['types', 'primaryType', 'domain', 'message'];
+      for (final field in requiredFields) {
+        if (!typedData.containsKey(field)) {
+          if (kDebugMode) debugPrint('N42WalletBridge: Missing EIP-712 field "$field"');
+          return null;
+        }
+      }
+
+      final typedMessage = TypedMessage.fromJson(typedData);
+      final hash = hashTypedData(typedData: typedMessage, version: TypedDataVersion.v4);
+      final signature = web3.sign(hash, ethKey.privateKey);
+
+      final r = signature.r.toRadixString(16).padLeft(64, '0');
+      final s = signature.s.toRadixString(16).padLeft(64, '0');
+      final v = signature.v.toRadixString(16).padLeft(2, '0');
+      return '0x$r$s$v';
+    } catch (e) {
+      if (kDebugMode) debugPrint('N42WalletBridge: signTypedData error: $e');
+      return null;
+    }
+  }
+
+  /// 获取 ETH 链的私钥用于签名
+  Future<web3.EthPrivateKey?> _getEthPrivateKey() async {
+    try {
+      final provider = _provider;
+      if (provider == null) return null;
+
+      // 查找 ETH coinModel
+      CoinModel? ethCoin;
+      for (final cm in provider.coinModels) {
+        if (cm.coin['coinType'] == CoinType.ETH.name &&
+            cm.coin['isContract'] != true) {
+          ethCoin = cm;
+          break;
+        }
+      }
+      if (ethCoin == null) return null;
+
+      final walletService = ServiceLocatorSetup.walletService;
+      if (walletService == null) return null;
+
+      final walletIndex = provider.walletIndex;
+      String? pKey = await walletService.getPrivateKeyForWallet(walletIndex);
+
+      if (pKey == null) {
+        final mnemonic = await walletService.getMnemonicForWallet(walletIndex);
+        if (mnemonic != null) {
+          final path = getPathWithIndex(
+            ethCoin.coin['path']?['legacy'] ?? "m/44'/60'/0'/0/0",
+            ethCoin.pathIndex,
+          );
+          pKey = await Trustdart().getPrivateKey(mnemonic, CoinType.ETH.name, path);
+        }
+      }
+
+      if (pKey == null) return null;
+
+      final decodedKey = base64Decode(pKey);
+      if (decodedKey.length != 32) return null;
+
+      final ethKey = web3.EthPrivateKey(Uint8List.fromList(decodedKey));
+      // Zero out the decoded key bytes from memory
+      decodedKey.fillRange(0, decodedKey.length, 0);
+      return ethKey;
+    } catch (e) {
+      if (kDebugMode) debugPrint('N42WalletBridge: _getEthPrivateKey error: $e');
+      return null;
+    }
+  }
+
+  static final _hexRegExp = RegExp(r'^[0-9a-fA-F]+$');
+  static bool _isValidHex(String s) {
+    if (s.isEmpty || s.length.isOdd) return false;
+    return _hexRegExp.hasMatch(s);
   }
 
   // ============================================
@@ -274,22 +447,8 @@ class N42WalletBridge implements IWalletBridge {
     required int tokenId,
     required int chainId,
   }) async {
-    try {
-      final address = walletAddress;
-      if (address == null) return null;
-
-      // 通过 TokenViewApi 查询 NFT tokenURI
-      final result = await _tokenViewApi.getBalanceEth('ETH', address, contractAddress);
-      if (!result.error && result.data != null) {
-        // tokenURI 通常需要通过合约调用获取，当前 API 不直接支持
-        // 返回 null 由调用方处理
-        return null;
-      }
-      return null;
-    } catch (e) {
-      if (kDebugMode) debugPrint('N42WalletBridge: Failed to get ERC-721 tokenURI: $e');
-      return null;
-    }
+    // tokenURI requires a dedicated contract call not supported by current API
+    return null;
   }
 
   /// Query token balance via TokenViewApi; returns raw balance string or '0'.

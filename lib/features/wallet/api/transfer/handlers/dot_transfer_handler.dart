@@ -3,7 +3,9 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
+import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/models/message_model.dart';
+
 import '../transfer_handler.dart';
 import 'base_transfer_handler.dart';
 
@@ -26,11 +28,38 @@ class DotTransferHandler extends BaseTransferHandler {
       supportedChains.contains(chainSymbol.toUpperCase());
 
   @override
-  // TODO: Migrate from transfer_api.dart transferDot method
-  Future<MessageModel> transfer(TransferParams params) => notYetMigrated();
+  Future<MessageModel> transfer(TransferParams params) async {
+    final chainMap = params.chainMap ?? getChainMap(params.chainSymbol);
+    if (chainMap == null) {
+      return createError('${params.chainSymbol} chain map not found');
+    }
+
+    final baseInfo = chainMap['baseInfo'] as Map<String, dynamic>;
+    final int decimals = baseInfo['decimals'] ?? 10;
+    final String path = baseInfo['path'] is Map
+        ? baseInfo['path'][chainMap['addrType']] ?? ''
+        : baseInfo['path']?.toString() ?? '';
+    final String coinType = params.chainSymbol.toUpperCase();
+
+    return transferApi.transferDot(
+      params.fromAddress,
+      params.toAddress,
+      params.value,
+      decimals,
+      path,
+      coinType,
+      contractAddress: params.contractAddress,
+      tokenDecimals: params.token?['decimals'] ?? 0,
+      maxValue: params.maxValue,
+      privateKey: params.privateKey,
+    );
+  }
 
   @override
-  // TODO: Implement gas estimation
   Future<GasEstimation> estimateGas(TransferParams params) async =>
-      notImplementedGas();
+      estimateGasSimple(
+        blockchainType: BlockchainType.Polkadot.name,
+        coinType: CoinType.DOT.name,
+        isTest: params.isTest,
+      );
 }

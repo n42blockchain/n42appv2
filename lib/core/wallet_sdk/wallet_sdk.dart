@@ -1,7 +1,7 @@
 import 'package:n42_wallet/core/wallet_sdk/wallet_address.dart';
 import 'package:n42_wallet/core/wallet_sdk/wallet_key_manager.dart';
 import 'package:n42_wallet/core/wallet_sdk/wallet_signer.dart';
-import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
+import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 
 export 'models/wallet_sdk_models.dart';
 export 'wallet_address.dart';

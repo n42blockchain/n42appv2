@@ -25,7 +25,7 @@ import 'package:n42_wallet/features/wallet/pages/send/send_utils.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_base_send.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/transaction_providers.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
-import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
+import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/services/recent_address_service.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/utils/transaction/coin_gas.dart';

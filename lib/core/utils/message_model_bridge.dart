@@ -4,7 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:n42_wallet/core/utils/result.dart';
-import 'package:n42_wallet/features/models/message_model.dart';
+import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 
 /// 将 Result 转为 MessageModel，在迁移期保持 UI 层调用方不变。
 ///

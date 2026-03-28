@@ -81,7 +81,7 @@ void main() {
       },
     );
 
-    test('fails open when host lookup throws', () async {
+    test('fails closed when host lookup throws', () async {
       final result = await UrlSecurityAggregator.checkUrlWithLookups(
         'https://unknown.example/path',
         phishingLookup: (_) => PhishingCheckResult.safe,
@@ -90,7 +90,7 @@ void main() {
         remoteHostLookup: (_) async => throw Exception('boom'),
       );
 
-      expect(result.isMalicious, isFalse);
+      expect(result.isMalicious, isTrue);
     });
   });
 }

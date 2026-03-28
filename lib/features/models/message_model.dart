@@ -1,8 +1,2 @@
-class MessageModel {
-  bool error;
-  dynamic data;
-
-  MessageModel() : error = false;
-
-  MessageModel.error() : error = true;
-}
+// Moved to shared/domain/entities/message_model.dart
+export 'package:n42_wallet/shared/domain/entities/message_model.dart';

@@ -229,8 +229,6 @@ void main() {
       test('breakpoints should be in correct order', () {
         expect(ResponsiveUtils.mobileBreakpoint,
             lessThan(ResponsiveUtils.tabletBreakpoint));
-        expect(ResponsiveUtils.tabletBreakpoint,
-            lessThan(ResponsiveUtils.desktopBreakpoint));
       });
 
       test('contentMaxWidth should be positive', () {

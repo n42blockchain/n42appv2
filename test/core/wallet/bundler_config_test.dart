@@ -214,11 +214,8 @@ void main() {
       expect(p.name, 'Alchemy');
     });
 
-    test('unknown name throws StateError', () {
-      expect(
-        () => BundlerProviders.getByName('Unknown'),
-        throwsStateError,
-      );
+    test('unknown name returns null', () {
+      expect(BundlerProviders.getByName('unknown'), isNull);
     });
   });
 

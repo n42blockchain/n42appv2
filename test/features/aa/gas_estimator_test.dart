@@ -10,7 +10,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/wallet/aa/utils/gas_estimator.dart';
 import 'package:n42_wallet/features/wallet/aa/core/aa_constants.dart';
 import 'package:n42_wallet/features/wallet/aa/builder/user_op_builder.dart';
-import 'package:n42_wallet/features/wallet/aa/models/smart_account.dart';
 import 'package:n42_wallet/features/wallet/aa/bundler/bundler_client.dart';
 import 'package:n42_wallet/features/wallet/aa/core/aa_errors.dart';
 
@@ -34,19 +33,6 @@ GasEstimateResult _makeEstimate({
   );
 }
 
-/// Build a minimal SmartAccount for test purposes.
-SmartAccount _makeAccount({SmartAccountType type = SmartAccountType.simpleAccount}) {
-  return SmartAccount(
-    address: '0x' + 'ab' * 20,
-    type: type,
-    ownerAddress: '0x' + 'cd' * 20,
-    state: SmartAccountState.notDeployed,
-    chainId: 1,
-    salt: BigInt.zero,
-    factoryAddress: '0x' + 'ef' * 20,
-    createdAt: DateTime(2024),
-  );
-}
 
 /// Build a minimal UserOpBuilder with the required fields set.
 UserOpBuilder _minimalBuilder({bool withGasFees = false}) {

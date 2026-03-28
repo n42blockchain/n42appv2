@@ -4,7 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:n42_wallet/features/models/message_model.dart';
-import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
+import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 
 import 'token_api_base.dart';
 

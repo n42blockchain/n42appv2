@@ -14,7 +14,7 @@ import 'package:n42_wallet/features/wallet/api/transfer_api.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_chain_send_btc.dart';
 import 'package:n42_wallet/features/wallet/pages/staking_btc/staking_btc_utils.dart';
-import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
+import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/utils/transaction/create_btc_tx_1.dart';
 import 'package:n42_wallet/features/wallet/utils/transaction/create_btc_tx_2.dart';

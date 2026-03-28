@@ -43,11 +43,10 @@ class AppConfig {
   /// Use mainnet for mining
   static bool isMainChainMining = true;
 
-  /// Production environment flag
-  ///
-  /// TODO: Replace with environment variable or build flavor
-  /// Example: static final bool isOnline = const String.fromEnvironment('ENV') == 'production';
-  static const bool isOnline = true;
+  /// Production environment flag.
+  /// Use `--dart-define=ENV=development` to switch to test endpoints.
+  static const bool isOnline =
+      String.fromEnvironment('ENV', defaultValue: 'production') != 'development';
 
   // ============ API Endpoints ============
   

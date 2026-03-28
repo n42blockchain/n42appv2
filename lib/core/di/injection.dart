@@ -19,7 +19,11 @@ import 'package:n42_wallet/features/mining/data/services/mining_service_impl.dar
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/core/wallet_sdk/wallet_sdk.dart';
 
-/// Dependency Injection Container
+/// Dependency Injection Container (Composition Root)
+///
+/// This file is the DI composition root and legitimately imports feature-level
+/// implementations to wire them to shared interfaces. This is an accepted
+/// exception to the "core must not import features" rule.
 final GetIt getIt = GetIt.instance;
 
 /// Environment Types
