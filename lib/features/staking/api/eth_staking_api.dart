@@ -4,7 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:n42_wallet/core/network/base_api.dart';
-import 'package:n42_wallet/features/models/message_model.dart';
+import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/staking/models/staking_models.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 

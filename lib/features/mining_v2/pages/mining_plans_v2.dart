@@ -5,7 +5,7 @@ import 'package:n42_wallet/features/mining_v2/api/mining_api.dart';
 import 'package:n42_wallet/features/mining_v2/pages/mining_full_node_v2.dart';
 import 'package:n42_wallet/features/mining_v2/utils/mining_utils.dart';
 import 'package:n42_wallet/features/mining_v2/widgets/mining_board_widget.dart';
-import 'package:n42_wallet/features/models/message_model.dart';
+import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/generated/l10n.dart';

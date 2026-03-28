@@ -4,7 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:n42_wallet/core/network/base_api.dart';
-import 'package:n42_wallet/features/models/message_model.dart';
+import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/bridge/models/bridge_models.dart';
 
 abstract interface class BridgeApiClient {

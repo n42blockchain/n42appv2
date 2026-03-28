@@ -1,5 +1,5 @@
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
-import 'package:n42_wallet/features/component/enums/load.dart';
+import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/utils/regular.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
@@ -12,7 +12,7 @@ import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dar
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/features/widgets/button_widget.dart';
 import 'package:n42_wallet/features/widgets/comm_input.dart';
-import 'package:n42_wallet/features/widgets/dialog_widget/tips_dialog_3.dart';
+import 'package:n42_wallet/shared/widgets/tips_dialog_3.dart';
 import 'package:n42_wallet/features/widgets/dialog_widget/tips_dialog_4.dart';
 import 'package:n42_wallet/features/widgets/sheet_bottom.dart';
 import 'package:flutter/material.dart';

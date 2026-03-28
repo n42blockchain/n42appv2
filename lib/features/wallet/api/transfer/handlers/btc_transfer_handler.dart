@@ -3,7 +3,7 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
-import 'package:n42_wallet/features/models/message_model.dart';
+import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/wallet/utils/transaction/coin_gas.dart';
 
 import '../transfer_handler.dart';
@@ -36,7 +36,8 @@ class BtcTransferHandler extends BaseTransferHandler {
       return createError('${params.chainSymbol} chain map not found');
     }
 
-    final baseInfo = chainMap['baseInfo'] as Map<String, dynamic>;
+    final baseInfo = chainMap['baseInfo'] as Map<String, dynamic>?;
+    if (baseInfo == null) return createError('${params.chainSymbol} baseInfo not found');
     final String path = baseInfo['path'] is Map
         ? baseInfo['path'][chainMap['addrType']] ?? ''
         : baseInfo['path']?.toString() ?? '';

@@ -4,7 +4,7 @@ import 'package:n42_wallet/features/wallet/pages/create_wallet/create/create_thr
 import 'package:n42_wallet/features/wallet/pages/create_wallet/create_finish.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/widgets/button_widget.dart';
-import 'package:n42_wallet/features/widgets/dialog_widget/tips_dialog_3.dart';
+import 'package:n42_wallet/shared/widgets/tips_dialog_3.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';

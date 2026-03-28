@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/token_discovery/discovered_token.dart';
-import 'package:n42_wallet/features/component/enums/load.dart';
+import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/pages/token_discovery/token_discovery_page.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_page_helpers.dart';

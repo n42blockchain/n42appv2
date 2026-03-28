@@ -13,6 +13,7 @@ import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 /// values. The [PlatformException] catches here are forward-compatible — they
 /// will activate once [Trustdart] is updated to propagate exceptions.
 class WalletKeyManager {
+  static final _hexPattern = RegExp(r'^[0-9a-fA-F]+$');
   final Trustdart _trustdart;
 
   WalletKeyManager(this._trustdart);
@@ -186,9 +187,13 @@ class WalletKeyManager {
       if (parts.length >= 2) {
         final privatePart = parts[0].trim();
         final publicPart = parts[1].trim();
-        if (privatePart.isNotEmpty && publicPart.isNotEmpty) {
-          return KeyPair(privateKey: privatePart, publicKey: publicPart);
+        if (!_hexPattern.hasMatch(privatePart) || !_hexPattern.hasMatch(publicPart)) {
+          throw WalletException(
+            message: 'Invalid key pair format: not valid hex',
+            code: 'KEY_PAIR_DERIVATION_FAILED',
+          );
         }
+        return KeyPair(privateKey: privatePart, publicKey: publicPart);
       }
 
       throw WalletException(

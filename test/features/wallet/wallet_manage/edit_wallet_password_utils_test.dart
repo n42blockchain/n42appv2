@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42_wallet/features/component/enums/load.dart';
+import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_manage/edit_wallet_password_utils.dart';
 
 void main() {

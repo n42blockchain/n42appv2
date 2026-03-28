@@ -3,8 +3,8 @@
 import 'dart:io';
 import 'package:n42_wallet/features/component/pages/image_crop_page.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/features/component/enums/load.dart';
-import 'package:n42_wallet/features/models/message_model.dart';
+import 'package:n42_wallet/core/enums/load.dart';
+import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/api/face_api.dart';

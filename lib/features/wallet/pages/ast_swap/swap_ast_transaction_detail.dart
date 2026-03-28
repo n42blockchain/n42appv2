@@ -1,5 +1,5 @@
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
-import 'package:n42_wallet/features/models/message_model.dart';
+import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/api/swap_ast_api.dart';
 import 'package:n42_wallet/features/wallet/models/ast_swap/swap_ast_order_model.dart';

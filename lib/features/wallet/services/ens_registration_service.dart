@@ -9,7 +9,7 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/network/base_api.dart';
-import 'package:n42_wallet/features/models/message_model.dart';
+import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/wallet/services/ens_models.dart';
 import 'package:web3dart/web3dart.dart';
 
@@ -257,7 +257,10 @@ class EnsRegistrationService {
   }
 
   /// 获取待处理的承诺
+  ///
+  /// 自动清理已过期的承诺缓存后再查找。
   CommitResult? getPendingCommitment(String name) {
+    cleanExpiredCommitments();
     return _pendingCommitments[_baseName(name)];
   }
 

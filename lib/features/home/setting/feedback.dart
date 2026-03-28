@@ -14,7 +14,7 @@ import 'package:n42_wallet/core/di/service_locator_setup.dart';
 import 'package:n42_wallet/core/network/ipfs_api.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
-import 'package:n42_wallet/features/component/enums/load.dart';
+import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/home/models/appendix_model.dart';
 import 'package:n42_wallet/features/login/api/user_info_api.dart';
 import 'package:n42_wallet/features/utils/regular.dart';

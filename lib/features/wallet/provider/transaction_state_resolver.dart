@@ -1,5 +1,5 @@
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
-import 'package:n42_wallet/features/models/message_model.dart';
+import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/algo_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/btc_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/fil_api.dart';
@@ -51,7 +51,7 @@ class TransactionStateResolver {
       case BlockchainType.Zilliqa:
         return _resolveZilliqa(trm);
       default:
-        // TODO: Handle remaining chain types
+        // Unsupported chain type — return 0 (unknown confirmation count)
         return 0;
     }
   }

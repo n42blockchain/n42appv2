@@ -1,7 +1,7 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42_wallet/features/component/enums/load.dart';
+import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/mining_v2/api/mining_api.dart';
 import 'package:n42_wallet/features/mining_v2/pages/key_management/data_encryption.dart';
 import 'package:n42_wallet/features/mining_v2/pages/key_management/file_import.dart';
@@ -38,7 +38,6 @@ class _MiningImportState extends ConsumerState<MiningImport> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     //_encryptedDataController.text='{"version":"1","timestamp":"2026-01-06T06:17:27.242127Z","kdf":{"name":"pbkdf2","params":{"iterations":150000,"dklen":32},"salt":"tsYiFXiXMvEYZooGWPgttA=="},"cipher":{"name":"aes-256-gcm","iv":"bS/oYySmQN06y8V6"},"ciphertext":"QTdTjLDB50YcTW+rBObQoKDBlvTYBIv6lNR4TgdHdSI4Mq4yvsrcgBgyIDCsTkMMthpz3QHO21yplLBtZQcz6K60arMrTWV0AkREiDxw3bH6/dsa5l+qTV7ridijom8dwSUGKSMYLEYzRAwSdx2L7HPoG8ImvQZZiwhm+sTzmLQ/TH47zpS7UzeMVrKLCmh2tTxuPzR0DO7LmQvLRz8JlaX29mvLmeIEKpLTTne9pC8QAySjc7LutjsBPSEekxRYUFTGNhykkn4ahAMZjbiFGVJTyvnly4VDPDA4BfILW+444HmQrVuy+BJX6z4g69r62HsFGic5TmwhVo66/Eh6PFLqR+OXsae7WfKezozrmCJsWrsVeyozu53kRK9rWFUMaZgDKX60ymzx4TyM1O4zCDCv1sN/luS3xinOtkm3wqMR79C4Xx5tMo3I46ODrUArrb8RRAOBHZbEewX3RynDfnqgnMY++q7NA0is","tag":"4UX62Xy5HPal1AtekQFQIQ=="}';
   }

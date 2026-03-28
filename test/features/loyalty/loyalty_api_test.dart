@@ -11,7 +11,7 @@
 // Actual HTTP calls are not made; we test the MessageModel structure.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42_wallet/features/models/message_model.dart';
+import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 
 void main() {
   group('LoyaltyApi — MessageModel contract', () {

@@ -4,7 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
-import 'package:n42_wallet/features/models/message_model.dart';
+import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/utils/transaction/coin_gas.dart';
 
@@ -66,8 +66,14 @@ class AlgoTransferHandler extends BaseTransferHandler {
       );
     }
 
-    final BigInt gasPrice =
-        mmg.data is Map ? BigInt.from(mmg.data['min-fee']) : mmg.data as BigInt;
+    final BigInt gasPrice;
+    if (mmg.data is Map) {
+      gasPrice = BigInt.tryParse(mmg.data['min-fee']?.toString() ?? '') ?? BigInt.zero;
+    } else if (mmg.data is BigInt) {
+      gasPrice = mmg.data;
+    } else {
+      gasPrice = BigInt.tryParse(mmg.data.toString()) ?? BigInt.zero;
+    }
     return GasEstimation(
       gasLimit: gasLimit,
       gasPrice: gasPrice,

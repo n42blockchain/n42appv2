@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 /// API proxy configuration
 ///
 /// Services are routed through proxy ONLY when it makes sense:
@@ -16,8 +18,23 @@ class ProxyConfig {
 
   static const String authToken = String.fromEnvironment(
     'PROXY_AUTH_TOKEN',
-    defaultValue: 'dd0f3335acaf177bd5bc75b4661b53b87af81216fd198d1503bf5649401e5387',
+    defaultValue: '',
   );
+
+  /// Debug assertion: warns if auth token is empty (likely missing --dart-define).
+  static bool _debugCheckToken() {
+    assert(() {
+      if (authToken.isEmpty) {
+        debugPrint('WARNING: PROXY_AUTH_TOKEN is empty. '
+            'Pass --dart-define=PROXY_AUTH_TOKEN=<token> for proxy auth.');
+      }
+      return true;
+    }());
+    return true;
+  }
+
+  // ignore: unused_field
+  static final bool _tokenChecked = _debugCheckToken();
 
   static String get _normalizedBaseUrl => baseUrl.endsWith('/')
       ? baseUrl.substring(0, baseUrl.length - 1)

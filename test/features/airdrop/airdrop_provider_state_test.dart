@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/airdrop/api/airdrop_api.dart';
 import 'package:n42_wallet/features/airdrop/models/airdrop_model.dart';
 import 'package:n42_wallet/features/airdrop/provider/airdrop_provider.dart';
-import 'package:n42_wallet/features/models/message_model.dart';
+import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 
 void main() {
   group('AirdropProvider.refresh', () {

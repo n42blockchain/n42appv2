@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
@@ -67,15 +68,19 @@ class TransactionRecordItemProvider with ChangeNotifier {
   void timerStart() {
     if (_timer != null && _timer!.isActive) return;
     _timer = Timer.periodic(const Duration(seconds: 10), (timer) async {
-      if (_unDoneTrModelList.isEmpty) {
-        timer.cancel();
-        _timer = null;
-        return;
-      }
-      // Snapshot list to avoid concurrent modification during async iteration
-      final pending = List<TransationRecordModel>.from(_unDoneTrModelList);
-      for (final trm in pending) {
-        await checkUndoneTr(trm);
+      try {
+        if (_unDoneTrModelList.isEmpty) {
+          timer.cancel();
+          _timer = null;
+          return;
+        }
+        // Snapshot list to avoid concurrent modification during async iteration
+        final pending = List<TransationRecordModel>.of(_unDoneTrModelList);
+        for (final trm in pending) {
+          await checkUndoneTr(trm);
+        }
+      } on Exception catch (e) {
+        if (kDebugMode) debugPrint('timerStart callback error: $e');
       }
     });
   }
@@ -83,14 +88,18 @@ class TransactionRecordItemProvider with ChangeNotifier {
   void timerStartBtc() {
     if (_timerBtc != null) return;
     _timerBtc = Timer.periodic(const Duration(seconds: 180), (timer) {
-      if (_trUndoneList.isNotEmpty) {
-        for (final trm in List<BtcTransactionRecodeModel>.from(_trUndoneList)) {
-          checkUndoneTrBtc(trm);
+      try {
+        if (_trUndoneList.isNotEmpty) {
+          for (final trm in List<BtcTransactionRecodeModel>.of(_trUndoneList)) {
+            checkUndoneTrBtc(trm);
+          }
         }
-      }
-      if (_trUndoneList.isEmpty && _timerBtc != null) {
-        _timerBtc!.cancel();
-        _timerBtc = null;
+        if (_trUndoneList.isEmpty && _timerBtc != null) {
+          _timerBtc!.cancel();
+          _timerBtc = null;
+        }
+      } on Exception catch (e) {
+        if (kDebugMode) debugPrint('timerStartBtc callback error: $e');
       }
     });
   }

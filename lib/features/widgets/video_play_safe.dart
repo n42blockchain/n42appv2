@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:n42_wallet/features/component/enums/load.dart';
+import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/features/widgets/loading_page.dart';
 import 'package:chewie/chewie.dart';

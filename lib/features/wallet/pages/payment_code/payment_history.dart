@@ -1,9 +1,9 @@
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/features/browser/pages/browser_page.dart';
-import 'package:n42_wallet/features/component/enums/load.dart';
+import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/features/login/api/user_info_api.dart';
-import 'package:n42_wallet/features/models/message_model.dart';
+import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/utils/browser/browser_txhash.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';

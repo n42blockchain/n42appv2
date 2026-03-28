@@ -4,7 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/foundation.dart';
-import 'package:n42_wallet/features/models/message_model.dart';
+import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/staking/api/atom_staking_api.dart';
 import 'package:n42_wallet/features/staking/api/eth_staking_api.dart';
 import 'package:n42_wallet/features/staking/api/sol_staking_api.dart';

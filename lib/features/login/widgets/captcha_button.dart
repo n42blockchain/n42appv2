@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:n42_wallet/features/component/enums/load.dart';
+import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/login/api/handtype.dart';
 import 'package:n42_wallet/features/login/api/user_info_api.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';

@@ -40,7 +40,9 @@ class TransferHandlerFactory {
   ///
   /// Throws [UnsupportedChainException] if the chain is not supported
   TransferHandler getHandler(String chainSymbol) {
-    final normalizedSymbol = _normalizeChainSymbol(chainSymbol);
+    final trimmed = chainSymbol.trim();
+    if (trimmed.isEmpty) throw UnsupportedChainException('empty');
+    final normalizedSymbol = _normalizeChainSymbol(trimmed);
 
     // Return cached handler if available
     if (_handlers.containsKey(normalizedSymbol)) {

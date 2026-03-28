@@ -1,4 +1,4 @@
-import 'package:n42_wallet/features/component/enums/load.dart';
+import 'package:n42_wallet/core/enums/load.dart';
 
 class SwapAstModel {
   int? id;

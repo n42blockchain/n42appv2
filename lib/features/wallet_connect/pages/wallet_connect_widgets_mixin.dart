@@ -4,7 +4,7 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/security/dapp_security_service.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_provider.dart';
-import 'package:n42_wallet/features/wallet_connect/wallet_connect_uri.dart';
+import 'package:n42_wallet/shared/utils/wallet_connect_uri.dart';
 import 'package:n42_wallet/features/widgets/button_widget.dart';
 import 'package:n42_wallet/features/widgets/dapp_security_badge.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';

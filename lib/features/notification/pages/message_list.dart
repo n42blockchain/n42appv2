@@ -7,7 +7,7 @@ import 'package:n42_wallet/features/home/setting/about_app.dart';
 import 'package:n42_wallet/features/home/setting/personal_setting.dart';
 import 'package:n42_wallet/features/home/setting/setting_share.dart';
 import 'package:n42_wallet/features/login/api/user_info_api.dart';
-import 'package:n42_wallet/features/models/message_model.dart';
+import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/news/news_page.dart';
 import 'package:n42_wallet/features/notification/pages/message_info.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';

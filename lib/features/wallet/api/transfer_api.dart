@@ -5,7 +5,7 @@ import 'dart:typed_data';
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/core/network/activity_api.dart';
-import 'package:n42_wallet/features/models/message_model.dart';
+import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/utils/data_utils.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/algo_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/apt_api.dart';

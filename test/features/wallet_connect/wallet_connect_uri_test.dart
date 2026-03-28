@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42_wallet/features/wallet_connect/wallet_connect_uri.dart';
+import 'package:n42_wallet/shared/utils/wallet_connect_uri.dart';
 
 void main() {
   group('parseWalletConnectUri', () {

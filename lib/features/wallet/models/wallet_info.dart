@@ -95,10 +95,11 @@ class WalletInfo {
     }
   }
 
-  /// SECURITY: 包含 mnemonic / password / privateKey 敏感字段。
-  /// 仅可通过 SPUtil.setWalletInfo() → SecureStorage 路径使用。
+  /// Serializes ALL fields including sensitive data (mnemonic, password, privateKey).
+  /// Use [toJsonPublic] for any non-secure-storage serialization.
+  ///
+  /// SECURITY: 仅可通过 SPUtil.setWalletInfo() → SecureStorage 路径使用。
   /// 严禁用于日志、网络请求、错误上报或非加密存储。
-  /// 如需对外展示或传递，请使用 [toJsonPublic]。
   Map<String, dynamic> toJson() {
     return {
       "walletName": walletName,

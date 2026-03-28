@@ -311,7 +311,9 @@ class N42WalletBridge implements IWalletBridge {
       }
 
       final signedData = ethKey.signPersonalMessageToUint8List(encodedMessage);
-      return web3.bytesToHex(signedData, include0x: true);
+      final result = web3.bytesToHex(signedData, include0x: true);
+      _zeroKey(ethKey);
+      return result;
     } catch (e) {
       if (kDebugMode) debugPrint('N42WalletBridge: signMessage error: $e');
       return null;
@@ -340,7 +342,9 @@ class N42WalletBridge implements IWalletBridge {
       final r = signature.r.toRadixString(16).padLeft(64, '0');
       final s = signature.s.toRadixString(16).padLeft(64, '0');
       final v = signature.v.toRadixString(16).padLeft(2, '0');
-      return '0x$r$s$v';
+      final result = '0x$r$s$v';
+      _zeroKey(ethKey);
+      return result;
     } catch (e) {
       if (kDebugMode) debugPrint('N42WalletBridge: signTypedData error: $e');
       return null;
@@ -393,6 +397,15 @@ class N42WalletBridge implements IWalletBridge {
     } catch (e) {
       if (kDebugMode) debugPrint('N42WalletBridge: _getEthPrivateKey error: $e');
       return null;
+    }
+  }
+
+  /// Zero out the private key bytes to minimize in-memory exposure.
+  void _zeroKey(web3.EthPrivateKey key) {
+    try {
+      key.privateKey.fillRange(0, key.privateKey.length, 0);
+    } catch (_) {
+      // privateKey may be unmodifiable; best-effort zeroing
     }
   }
 

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
-import 'package:n42_wallet/features/component/enums/load.dart';
+import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/mining_v1/api/mining_api.dart';
 import 'package:n42_wallet/features/mining_v1/pages/share_mining.dart';
 import 'package:n42_wallet/features/mining_v1/provider/mining_provider.dart';
@@ -10,7 +10,7 @@ import 'package:n42_wallet/features/mining_v1/utils/mining_plugin_utils.dart';
 import 'package:n42_wallet/features/mining_v1/utils/mining_utils.dart';
 import 'package:n42_wallet/features/mining_v1/widgets/ast_level.dart';
 import 'package:n42_wallet/features/mining_v1/widgets/group_confrim.dart';
-import 'package:n42_wallet/features/models/message_model.dart';
+import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/utils/data_utils.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';

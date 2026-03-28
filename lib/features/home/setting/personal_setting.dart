@@ -1,13 +1,13 @@
 import 'package:flutter/services.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
-import 'package:n42_wallet/features/component/enums/load.dart';
+import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/home/setting/account_logout_page.dart';
 import 'package:n42_wallet/features/home/setting/change_email_page.dart';
 import 'package:n42_wallet/features/home/setting/setting_share.dart';
 import 'package:n42_wallet/features/wallet/services/ens_service.dart';
 import 'package:n42_wallet/features/home/widgets/nav_select_image.dart';
 import 'package:n42_wallet/features/home/widgets/nav_setting_item.dart';
-import 'package:n42_wallet/features/models/message_model.dart';
+import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/data/models/user_info.dart';
 import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';

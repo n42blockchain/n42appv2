@@ -4,7 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
-import 'package:n42_wallet/features/models/message_model.dart';
+import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/utils/data_utils.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/features/wallet/api/transfer_api.dart';
@@ -114,9 +114,14 @@ abstract class BaseTransferHandler implements TransferHandler {
         errorMessage: mmg?.data?.toString() ?? 'Failed to get gas price',
       );
     }
-    final BigInt gasPrice = mmg.data is BigInt
-        ? mmg.data
-        : BigInt.tryParse(mmg.data.toString()) ?? BigInt.zero;
+    final BigInt gasPrice;
+    if (mmg.data is BigInt) {
+      gasPrice = mmg.data;
+    } else if (mmg.data is int) {
+      gasPrice = BigInt.from(mmg.data);
+    } else {
+      gasPrice = BigInt.tryParse(mmg.data.toString()) ?? BigInt.zero;
+    }
     return GasEstimation(
       gasLimit: gasLimit,
       gasPrice: gasPrice,

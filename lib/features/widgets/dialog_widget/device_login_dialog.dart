@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/data/models/device_login_info.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
-import 'package:n42_wallet/features/widgets/dialog_widget/tips_dialog_3.dart';
+import 'package:n42_wallet/shared/widgets/tips_dialog_3.dart';
 
 /// 新设备登录通知弹窗
 /// 返回 true 表示用户选择"修改密码"，false/null 表示"知道了"

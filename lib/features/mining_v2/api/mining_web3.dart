@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:n42_wallet/core/config/app_config.dart';
-import 'package:n42_wallet/features/models/message_model.dart';
+import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:wallet/wallet.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:http/http.dart';

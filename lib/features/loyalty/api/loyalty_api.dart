@@ -6,7 +6,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/network/base_api.dart';
 import 'package:n42_wallet/features/loyalty/models/loyalty_model.dart';
-import 'package:n42_wallet/features/models/message_model.dart';
+import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 
 part '_loyalty_api_extras.dart';
 part '_loyalty_api_mock.dart';

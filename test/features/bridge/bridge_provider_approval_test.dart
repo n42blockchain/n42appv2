@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/bridge/api/lifi_api.dart';
 import 'package:n42_wallet/features/bridge/models/bridge_models.dart';
 import 'package:n42_wallet/features/bridge/provider/bridge_provider.dart';
-import 'package:n42_wallet/features/models/message_model.dart';
+import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 
 class FakeBridgeApiClient implements BridgeApiClient {
   FakeBridgeApiClient({

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
-import 'package:n42_wallet/features/component/enums/load.dart';
+import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/mining_v1/api/mining_api.dart';
 import 'package:n42_wallet/features/mining_v1/models/mining_type.dart';
 import 'package:n42_wallet/features/mining_v2/pages/mining_background.dart';

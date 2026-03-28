@@ -9,7 +9,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/features/bridge/api/lifi_api.dart';
 import 'package:n42_wallet/features/bridge/models/bridge_models.dart';
-import 'package:n42_wallet/features/models/message_model.dart';
+import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part '_bridge_execution.dart';

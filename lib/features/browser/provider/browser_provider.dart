@@ -5,7 +5,7 @@ import 'package:n42_wallet/core/security/phishing_detector.dart';
 import 'package:n42_wallet/features/browser/api/browser_api.dart';
 import 'package:n42_wallet/features/browser/pages/browser_collection.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
-import 'package:n42_wallet/features/wallet_connect/wallet_connect_uri.dart';
+import 'package:n42_wallet/shared/utils/wallet_connect_uri.dart';
 import 'package:flutter/material.dart';
 import 'package:validators/validators.dart';
 import 'package:webview_flutter/webview_flutter.dart';

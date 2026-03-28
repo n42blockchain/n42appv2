@@ -12,7 +12,7 @@
 //   - DexSwapApi.getHistory   (null data guard)
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42_wallet/features/models/message_model.dart';
+import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/wallet/api/dex_swap_api.dart';
 import 'package:n42_wallet/features/wallet/models/dex/dex_history_model.dart';
 import 'package:n42_wallet/features/wallet/models/dex/dex_quote_model.dart';
