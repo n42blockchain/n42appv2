@@ -3,6 +3,12 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/config/proxy_config.dart';
 import 'package:n42_wallet/core/network/external_http.dart';
+import 'package:n42_wallet/features/wallet/models/tokenview/chain_abstract.dart';
+import 'package:n42_wallet/features/wallet/models/tokenview/coin_market_info.dart';
+import 'package:n42_wallet/features/wallet/models/tokenview/stablecoin_event.dart';
+import 'package:n42_wallet/features/wallet/models/tokenview/token_metadata.dart';
+import 'package:n42_wallet/features/wallet/models/tokenview/parse_helpers.dart';
+import 'package:n42_wallet/features/wallet/models/tokenview/token_supply_info.dart';
 
 /// TokenView 增强 API — Gas 预测、Mempool、合约创建者
 class TokenViewEnhancedApi {
@@ -82,6 +88,124 @@ class TokenViewEnhancedApi {
       return null;
     }
   }
+
+  // ── Chain Heights ─────────────────────────────────────────
+
+  /// All chain latest block heights (cached 15s on server)
+  Future<Map<String, int>?> getChainHeights() async {
+    try {
+      final raw = await ExternalHttp.get(
+        ProxyConfig.tokenviewChainHeights,
+      );
+      if (raw == null || raw is! Map) return null;
+      final data = raw['data'];
+      if (data == null || data is! Map) return null;
+      return Map<String, dynamic>.from(data).map(
+        (key, value) => MapEntry(key, toIntSafe(value) ?? 0),
+      );
+    } catch (e) {
+      if (kDebugMode) debugPrint('TokenViewEnhancedApi.getChainHeights error: $e');
+      return null;
+    }
+  }
+
+  // ── Chain Info ────────────────────────────────────────────
+
+  /// Chain basic information (cached 6h on server)
+  Future<ChainAbstract?> getChainInfo(String chain) async {
+    try {
+      final raw = await ExternalHttp.get(
+        '${ProxyConfig.tokenviewChainInfo}?chain=${Uri.encodeComponent(chain)}',
+      );
+      if (raw == null || raw is! Map) return null;
+      final data = raw['data'];
+      if (data == null || data is! Map) return null;
+      return ChainAbstract.fromJson(Map<String, dynamic>.from(data));
+    } catch (e) {
+      if (kDebugMode) debugPrint('TokenViewEnhancedApi.getChainInfo error: $e');
+      return null;
+    }
+  }
+
+  // ── Token Info ────────────────────────────────────────────
+
+  /// Token metadata by contract (cached 24h on server)
+  Future<TokenMetadata?> getTokenInfo(String chain, String contract) async {
+    try {
+      final raw = await ExternalHttp.get(
+        '${ProxyConfig.tokenviewTokenInfo}?chain=${Uri.encodeComponent(chain)}&contract=${Uri.encodeComponent(contract)}',
+      );
+      if (raw == null || raw is! Map) return null;
+      final data = raw['data'];
+      if (data == null || data is! Map) return null;
+      return TokenMetadata.fromJson(Map<String, dynamic>.from(data));
+    } catch (e) {
+      if (kDebugMode) debugPrint('TokenViewEnhancedApi.getTokenInfo error: $e');
+      return null;
+    }
+  }
+
+  // ── Token Supply ──────────────────────────────────────────
+
+  /// Token supply data (cached 1h on server)
+  Future<TokenSupplyInfo?> getTokenSupply(String chain, String contract) async {
+    try {
+      final raw = await ExternalHttp.get(
+        '${ProxyConfig.tokenviewTokenSupply}?chain=${Uri.encodeComponent(chain)}&contract=${Uri.encodeComponent(contract)}',
+      );
+      if (raw == null || raw is! Map) return null;
+      final data = raw['data'];
+      if (data == null || data is! Map) return null;
+      return TokenSupplyInfo.fromJson(Map<String, dynamic>.from(data));
+    } catch (e) {
+      if (kDebugMode) debugPrint('TokenViewEnhancedApi.getTokenSupply error: $e');
+      return null;
+    }
+  }
+
+  // ── Market Info ───────────────────────────────────────────
+
+  /// Market info for a coin (cached 60s on server)
+  Future<CoinMarketInfo?> getMarketInfo(String coin) async {
+    try {
+      final raw = await ExternalHttp.get(
+        '${ProxyConfig.tokenviewMarketInfo}?coin=${Uri.encodeComponent(coin)}',
+      );
+      if (raw == null || raw is! Map) return null;
+      final data = raw['data'];
+      if (data == null || data is! Map) return null;
+      return CoinMarketInfo.fromJson(Map<String, dynamic>.from(data));
+    } catch (e) {
+      if (kDebugMode) debugPrint('TokenViewEnhancedApi.getMarketInfo error: $e');
+      return null;
+    }
+  }
+
+  // ── Stablecoin Events ────────────────────────────────────
+
+  /// Stablecoin mint/burn/freeze events (cached 5min on server)
+  Future<List<StablecoinEvent>> getStablecoinEvents(
+    String coin,
+    String action, {
+    int page = 1,
+    int size = 10,
+  }) async {
+    try {
+      final raw = await ExternalHttp.get(
+        '${ProxyConfig.tokenviewStablecoinEvents}?coin=${Uri.encodeComponent(coin)}&action=${Uri.encodeComponent(action)}&page=$page&size=$size',
+      );
+      if (raw == null || raw is! Map) return [];
+      final data = raw['data'];
+      if (data is! List) return [];
+      return data
+          .whereType<Map>()
+          .map((e) => StablecoinEvent.fromJson(Map<String, dynamic>.from(e)))
+          .toList();
+    } catch (e) {
+      if (kDebugMode) debugPrint('TokenViewEnhancedApi.getStablecoinEvents error: $e');
+      return [];
+    }
+  }
 }
 
 // ══════════════════════════════════════════════════════════
@@ -98,10 +222,10 @@ class GasNextBlockPrediction {
 
   factory GasNextBlockPrediction.fromJson(Map<String, dynamic> json) {
     return GasNextBlockPrediction(
-      low: _toDouble(json['low'] ?? json['slow']),
-      medium: _toDouble(json['medium'] ?? json['standard']),
-      high: _toDouble(json['high'] ?? json['fast']),
-      pendingTxCount: _toInt(json['pendingTxCount'] ?? json['pendingCount']),
+      low: toDoubleSafe(json['low'] ?? json['slow']),
+      medium: toDoubleSafe(json['medium'] ?? json['standard']),
+      high: toDoubleSafe(json['high'] ?? json['fast']),
+      pendingTxCount: toIntSafe(json['pendingTxCount'] ?? json['pendingCount']),
     );
   }
 }
@@ -114,8 +238,8 @@ class MempoolCongestion {
   const MempoolCongestion({this.pendingCount, this.queuedCount, this.congestionLevel});
 
   factory MempoolCongestion.fromJson(Map<String, dynamic> json) {
-    final pending = _toInt(json['pendingCount'] ?? json['pending']);
-    final queued = _toInt(json['queuedCount'] ?? json['queued']);
+    final pending = toIntSafe(json['pendingCount'] ?? json['pending']);
+    final queued = toIntSafe(json['queuedCount'] ?? json['queued']);
     return MempoolCongestion(
       pendingCount: pending,
       queuedCount: queued,
@@ -170,7 +294,7 @@ class MempoolTxItem {
       to: (json['to'] ?? '').toString(),
       value: (json['value'] ?? '0').toString(),
       gasPrice: (json['gasPrice'] ?? json['gas_price'] ?? '0').toString(),
-      nonce: _toInt(json['nonce']),
+      nonce: toIntSafe(json['nonce']),
     );
   }
 }
@@ -205,19 +329,4 @@ class ContractCreatorInfo {
     final days = contractAgeDays;
     return days != null && days < 7;
   }
-}
-
-// ── Shared helpers ───────────────────────────────────────
-
-double? _toDouble(dynamic v) {
-  if (v is num) return v.toDouble();
-  if (v is String) return double.tryParse(v);
-  return null;
-}
-
-int? _toInt(dynamic v) {
-  if (v is int) return v;
-  if (v is num) return v.toInt();
-  if (v is String) return int.tryParse(v);
-  return null;
 }

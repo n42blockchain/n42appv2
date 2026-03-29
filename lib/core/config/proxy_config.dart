@@ -58,6 +58,18 @@ class ProxyConfig {
       '$_normalizedBaseUrl/v1/tokenview/pending/tx';
   static String get tokenviewContractCreator =>
       '$_normalizedBaseUrl/v1/tokenview/contract/creator';
+  static String get tokenviewChainHeights =>
+      '$_normalizedBaseUrl/v1/tokenview/chain/heights';
+  static String get tokenviewChainInfo =>
+      '$_normalizedBaseUrl/v1/tokenview/chain/info';
+  static String get tokenviewTokenInfo =>
+      '$_normalizedBaseUrl/v1/tokenview/token/info';
+  static String get tokenviewTokenSupply =>
+      '$_normalizedBaseUrl/v1/tokenview/token/supply';
+  static String get tokenviewMarketInfo =>
+      '$_normalizedBaseUrl/v1/tokenview/market/info';
+  static String get tokenviewStablecoinEvents =>
+      '$_normalizedBaseUrl/v1/tokenview/stablecoin/events';
 
   // ==================== MoonPay (HMAC signing, must be server-side) ====================
   static String get moonpaySign => '$_normalizedBaseUrl/v1/moonpay/sign';
