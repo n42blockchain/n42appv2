@@ -1290,7 +1290,7 @@ class TransactionSignerHandler(private val keyHandler: KeyManagementHandler) {
             .build()
 
         val output = AnySigner.sign(signingInput, CoinType.SUI, Sui.SigningOutput.parser())
-        return output.encoded
+        return output.unsignedTx
     }
 
     private fun signTonTransaction(wallet: HDWallet?, path: String, txData: Map<String, Any>, pk: PrivateKey?): String? {
