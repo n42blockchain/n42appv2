@@ -143,7 +143,9 @@ class DeepLinkService {
 
     final data = _parseUri(uri);
     _lastDeepLink = data;
-    _deepLinkController.add(data);
+    if (!_deepLinkController.isClosed) {
+      _deepLinkController.add(data);
+    }
   }
 
   DeepLinkData _parseUri(Uri uri) {

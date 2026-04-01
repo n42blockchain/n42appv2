@@ -318,14 +318,14 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
     final String feeUnit = chainModel == null
         ? widget.coinModel.coin['unit'].toString().toUpperCase()
         : chainModel!.coin['unit'].toString().toUpperCase();
-    final bool check = await Navigator.push(
+    final bool? check = await Navigator.push<bool>(
       context,
       MaterialPageRoute(
         builder: (context) => WalletBaseSend(trModel, null, feeUnit),
       ),
     );
     if (!mounted) return;
-    if (check) {
+    if (check == true) {
       signTx(trModel);
     } else {
       _resetLoad();
@@ -417,7 +417,7 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
   }
 
   void closeKeyboard() {
-    FocusScope.of(context).requestFocus(FocusNode());
+    FocusScope.of(context).unfocus();
   }
 
   void searchToAddressWidget() {

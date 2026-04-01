@@ -100,8 +100,8 @@ class TransactionStateResolver {
     if (mm.error) return 0;
     if (mm.data.length == 0) return 0;
 
-    final err = mm.data['Err']['InstructionError'];
-    if (err != null) return 2;
+    final errObj = mm.data['Err'];
+    if (errObj != null && errObj['InstructionError'] != null) return 2;
     final ok = mm.data['Ok'];
     return ok == null ? 1 : 0;
   }

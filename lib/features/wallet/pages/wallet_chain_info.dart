@@ -231,6 +231,7 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
       final cIndex = wap.coinModels.indexWhere(
         (e) => e.coin['coinType'] == coin['coinType'],
       );
+      if (cIndex < 0) return;
       _chainCoinModel = wap.coinModels[cIndex];
       _chainName = _chainCoinModel?.coin['name'];
       _chainSymbol = _chainCoinModel?.coin['miniName'];

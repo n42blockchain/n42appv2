@@ -9,6 +9,7 @@ import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/utils/feature_address_utils.dart';
 import 'package:n42_wallet/features/wallet/widgets/aa/batch_operation_item.dart';
+import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 
 class AddOperationSheet extends StatefulWidget {
   final ValueChanged<BatchOperation> onAdd;
@@ -71,7 +72,7 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
     final to = _toController.text.trim();
     final amount = double.tryParse(_amountController.text.trim()) ?? 0;
     const decimals = 18;
-    final amountWei = BigInt.from((amount * 1e18).round());
+    final amountWei = ethToWeiString(amount.toString(), 18);
     final isCustom = _selectedType == BatchOperationType.custom;
 
     final isErc20 = _selectedType == BatchOperationType.transfer &&

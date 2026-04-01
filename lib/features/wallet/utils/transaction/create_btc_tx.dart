@@ -266,9 +266,11 @@ class CreateBTCTX {
     return result.isEmpty ? [0] : result;
   }
 
-  Future<MessageModel> getUTXOTxid(String txid) async {
+  Future<MessageModel> getUTXOTxid(String txid, {bool isTest = false}) async {
     try {
-      final uri = 'https://mempool.space/testnet4/api/tx/$txid';
+      final uri = isTest
+          ? 'https://mempool.space/testnet4/api/tx/$txid'
+          : 'https://mempool.space/api/tx/$txid';
       final data = await BaseApi.requestEmptyH.get(
         uri,
         params: {},

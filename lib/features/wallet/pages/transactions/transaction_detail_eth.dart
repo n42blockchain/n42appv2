@@ -246,7 +246,7 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
   }
 
   void closeKeyboard() {
-    FocusScope.of(context).requestFocus(FocusNode());
+    FocusScope.of(context).unfocus();
   }
 
   @override

@@ -259,7 +259,7 @@ class _ImportKeystoreState extends ConsumerState<ImportKeystore> {
               context,
               () async {
                 if (load == Load.loading) return;
-                FocusScope.of(context).requestFocus(FocusNode());
+                FocusScope.of(context).unfocus();
                 final keystoreJson = _keystoreController.text.trim();
                 if (keystoreJson.isEmpty) {
                   ToastUtils.show(S.of(context).g_key_ex_keystore_18);

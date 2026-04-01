@@ -179,7 +179,7 @@ class _BackupThreeState extends ConsumerState<BackupThree> {
                       obscure: showPwd2,
                       textInputAction: TextInputAction.done,
                       onToggleObscure: () => setState(() => showPwd2 = !showPwd2),
-                      onEditingComplete: () => FocusScope.of(context).requestFocus(FocusNode()),
+                      onEditingComplete: () => FocusScope.of(context).unfocus(),
                       margin: EdgeInsets.only(top: ScreenUtil().setWidth(10)),
                     ),
                     SizedBox(height: ScreenUtil().setWidth(148.0)),

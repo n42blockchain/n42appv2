@@ -97,7 +97,7 @@ mixin _TransferEvmMixin on _TransferBaseMixin {
     int pathIndex=txChainMap["pathIndex"]??0;
     path=getPathWithIndex(path, pathIndex);
     String signStr = await trustdart.signTransaction(
-        coinType, path, signMap, mnemonic: wi.mnemonic??"",pk: wi.password??"");
+        coinType, path, signMap, mnemonic: wi.mnemonic??"",pk: wi.privateKey??"");
     if(signStr==""){
       return MessageModel.error()..data=S.current.g_key_wallet_m6;
     }

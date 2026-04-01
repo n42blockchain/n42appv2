@@ -179,7 +179,7 @@ mixin _TransferOthersMixin on _TransferBaseMixin {
       coinSymbol: "XTZ",
       fromAddress: fromAddress,
       getBalance: getBalanceXtz,
-      blockchainName: BlockchainType.Algorand.name,
+      blockchainName: BlockchainType.Tezos.name,
       extractGasPrice: (data) => data as BigInt,
       value: value,
       decimals: decimals,
@@ -264,7 +264,7 @@ mixin _TransferOthersMixin on _TransferBaseMixin {
     if (mm.error) {
       return MessageModel.error()..data = S.current.g_key_t_45(toAddress);
     }
-    final bool isCreate = mm.data['validated'] == true;
+    final bool isCreate = mm.data['account'] == true;
     if (!isCreate && value < 10) {
       return MessageModel.error()..data = S.current.g_key_t_54;
     }
@@ -272,8 +272,8 @@ mixin _TransferOthersMixin on _TransferBaseMixin {
     final result = await _validateBalanceAndGas(
       coinSymbol: "XRP",
       fromAddress: fromAddress,
-      getBalance: getBalanceXtz,
-      blockchainName: BlockchainType.Algorand.name,
+      getBalance: getBalanceXrp,
+      blockchainName: BlockchainType.Ripple.name,
       extractGasPrice: (data) => data as BigInt,
       value: value,
       decimals: decimals,
@@ -450,16 +450,20 @@ mixin _TransferOthersMixin on _TransferBaseMixin {
     int version = latestBlockMM.data['header']['Version'];
 
     MessageModel balanceMM = await zilApi.getBalance(fromAddress, nonce: true);
+    int nonce = 0;
     if (balanceMM.error) {
       final errStr = balanceMM.data.toString();
       if (!errStr.contains('not found') && !errStr.contains('-5')) {
         return balanceMM;
       }
+      // Account not found — use nonce 0
+    } else {
+      nonce = (balanceMM.data['nonce'] ?? 0) + 1;
     }
 
     Map<String, dynamic> signMap = {
       "version": version,
-      "nonce": balanceMM.data['nonce'] + 1,
+      "nonce": nonce,
       "toAddress": toAddress,
       "amount": dataUtils.bigIntToHex(valuePrice, need0x: false),
       "gasPrice": dataUtils.bigIntToHex(gasPrice, need0x: false),

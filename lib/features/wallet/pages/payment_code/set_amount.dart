@@ -128,7 +128,7 @@ class _SetAmountState extends ConsumerState<SetAmount> {
         maxLines: 1,
         errorMessage: amountErrorMessage,
         onEditingComplete: () {
-          FocusScope.of(context).requestFocus(FocusNode());
+          FocusScope.of(context).unfocus();
           setState(() {
             amountErrorMessage = _validateAmount(amountController.text);
           });

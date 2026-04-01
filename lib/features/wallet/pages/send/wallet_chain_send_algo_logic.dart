@@ -275,14 +275,14 @@ mixin _AlgoSendLogicMixin on ConsumerState<WalletChainSendAlgo> {
 
   /// Shows the send confirmation page and signs on approval.
   Future<void> _confirmAndSign(TransationRecordModel trModel) async {
-    final bool check = await Navigator.push(
+    final bool? check = await Navigator.push<bool>(
       context,
       MaterialPageRoute(
         builder: (context) => WalletBaseSend(trModel, null, _sendUnit),
       ),
     );
     if (!mounted) return;
-    if (check) {
+    if (check == true) {
       signTx(trModel);
     } else {
       _finishLoading();
@@ -377,7 +377,7 @@ mixin _AlgoSendLogicMixin on ConsumerState<WalletChainSendAlgo> {
   }
 
   void closeKeyboard() {
-    FocusScope.of(context).requestFocus(FocusNode());
+    FocusScope.of(context).unfocus();
   }
 
   void searchToAddressWidget() {

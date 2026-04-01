@@ -360,6 +360,6 @@ mixin _TransactionRetryLogicMixin on ConsumerState<TransactionRetry> {
   }
 
   void closeKeyboard() {
-    FocusScope.of(context).requestFocus(FocusNode());
+    FocusScope.of(context).unfocus();
   }
 }

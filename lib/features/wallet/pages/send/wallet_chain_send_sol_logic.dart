@@ -277,12 +277,12 @@ mixin _SolSendLogicMixin on ConsumerState<WalletChainSendSol> {
     final feeUnit = (chainModel ?? widget.coinModel).coin['unit']
         .toString()
         .toUpperCase();
-    final check = await Navigator.push(
+    final check = await Navigator.push<bool>(
       context,
       MaterialPageRoute(builder: (_) => WalletBaseSend(trModel, null, feeUnit)),
     );
     if (!mounted) return;
-    if (check) {
+    if (check == true) {
       signTx(trModel);
     } else {
       setState(() => load = Load.finish);
@@ -355,7 +355,7 @@ mixin _SolSendLogicMixin on ConsumerState<WalletChainSendSol> {
   }
 
   void closeKeyboard() {
-    FocusScope.of(context).requestFocus(FocusNode());
+    FocusScope.of(context).unfocus();
   }
 
   void searchToAddressWidget() {

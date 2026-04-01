@@ -16,6 +16,8 @@ import 'package:n42_wallet/features/wallet/utils/chain/chain_eip1559.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/utils/transaction/coin_gas.dart';
 
+import 'package:n42_wallet/features/wallet/utils/validation/signature_validator.dart';
+
 import '../transfer_handler.dart';
 import 'base_transfer_handler.dart';
 
@@ -304,6 +306,15 @@ class EvmTransferHandler extends BaseTransferHandler {
 
     if (returnSignHash) {
       return createSuccess(data: signStr);
+    }
+
+    // Validate signature before broadcast
+    final sigResult = SignatureValidator.validateSignedTransaction(
+      signedTx: signStr,
+      coinType: coinType,
+    );
+    if (!sigResult.isValid) {
+      return createError(sigResult.errorMessage ?? 'Signature validation failed');
     }
 
     return await tokenViewApi.sendTx(

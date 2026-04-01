@@ -220,7 +220,7 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
             focusNode: memoNode,
             hintText: S.of(context).g_key_send_memo_hint,
             onEditingComplete: () =>
-                FocusScope.of(context).requestFocus(FocusNode()),
+                FocusScope.of(context).unfocus(),
             maxLines: 2,
             height: ScreenUtil().setWidth(120.0),
             bgColor: AppThemeUtils.getColorByKey(

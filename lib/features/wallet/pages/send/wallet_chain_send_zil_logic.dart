@@ -296,7 +296,7 @@ mixin _ZilSendLogicMixin on ConsumerState<WalletChainSendZil> {
   }
 
   void closeKeyboard() {
-    FocusScope.of(context).requestFocus(FocusNode());
+    FocusScope.of(context).unfocus();
   }
 
   void searchToAddressWidget() {

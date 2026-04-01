@@ -194,7 +194,7 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
   }
 
   void closeKeyboard() {
-    FocusScope.of(context).requestFocus(FocusNode());
+    FocusScope.of(context).unfocus();
   }
 
   @override

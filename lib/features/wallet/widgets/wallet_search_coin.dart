@@ -197,7 +197,7 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
   }
 
   void _closeKeyboard() {
-    FocusScope.of(context).requestFocus(FocusNode());
+    FocusScope.of(context).unfocus();
   }
 
   // ── Navigation ────────────────────────────────────────────────────────────

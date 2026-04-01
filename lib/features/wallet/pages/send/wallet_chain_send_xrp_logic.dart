@@ -266,7 +266,7 @@ mixin _XrpSendLogicMixin on ConsumerState<WalletChainSendXrp> {
     errorMessage = "";
 
     final TransationRecordModel trModel = _buildTransactionRecord(toAddr);
-    final bool check = await Navigator.push(
+    final bool? check = await Navigator.push<bool>(
       context,
       MaterialPageRoute(
         builder: (context) =>
@@ -274,7 +274,7 @@ mixin _XrpSendLogicMixin on ConsumerState<WalletChainSendXrp> {
       ),
     );
     if (!mounted) return;
-    if (check) {
+    if (check == true) {
       signTx(trModel);
     } else {
       _finishLoading();
@@ -388,7 +388,7 @@ mixin _XrpSendLogicMixin on ConsumerState<WalletChainSendXrp> {
   }
 
   void closeKeyboard() {
-    FocusScope.of(context).requestFocus(FocusNode());
+    FocusScope.of(context).unfocus();
   }
 
   void searchToAddressWidget() {

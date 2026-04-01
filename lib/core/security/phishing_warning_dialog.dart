@@ -173,5 +173,5 @@ Future<bool?> showPhishingWarningDialog(
       ),
     ),
   );
-  return result as bool?;
+  return result is bool ? result : null;
 }

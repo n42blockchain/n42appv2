@@ -148,7 +148,7 @@ extension _SwapAstHomeBuild on _SwapAstHomeState {
   }
 
   void closeKeyboard() {
-    FocusScope.of(context).requestFocus(FocusNode());
+    FocusScope.of(context).unfocus();
   }
 
   void queryWidget() {

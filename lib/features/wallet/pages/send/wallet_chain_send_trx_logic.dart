@@ -284,14 +284,14 @@ mixin _TrxSendLogicMixin on ConsumerState<WalletChainSendTrx> {
     final feeUnit = (chainModel ?? widget.coinModel).coin['unit']
         .toString()
         .toUpperCase();
-    final bool check = await Navigator.push(
+    final bool? check = await Navigator.push<bool>(
       context,
       MaterialPageRoute(
         builder: (context) => WalletBaseSend(trModel, null, feeUnit),
       ),
     );
     if (!mounted) return;
-    if (check) {
+    if (check == true) {
       signTx(trModel);
     } else {
       setState(() => load = Load.finish);
@@ -377,7 +377,7 @@ mixin _TrxSendLogicMixin on ConsumerState<WalletChainSendTrx> {
   }
 
   void closeKeyboard() {
-    FocusScope.of(context).requestFocus(FocusNode());
+    FocusScope.of(context).unfocus();
   }
 
   void searchToAddressWidget() {

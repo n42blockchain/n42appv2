@@ -159,7 +159,7 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
 
   @override
   void closeKeyboard() {
-    FocusScope.of(context).requestFocus(FocusNode());
+    FocusScope.of(context).unfocus();
   }
 
   Future<void> _openGasSettings() async {

@@ -182,7 +182,7 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
       ..other = FilTrModel(gasFeeCap, gasPremium)
       ..nonce = rDataNonce.data.toString();
 
-    final bool check = await Navigator.push(
+    final bool? check = await Navigator.push<bool>(
       context,
       MaterialPageRoute(
         builder: (context) =>
@@ -190,7 +190,7 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
       ),
     );
     if (!mounted) return;
-    if (check) {
+    if (check == true) {
       signTx(trModel);
     } else {
       _resetLoad();
@@ -311,6 +311,6 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
   }
 
   void closeKeyboard() {
-    FocusScope.of(context).requestFocus(FocusNode());
+    FocusScope.of(context).unfocus();
   }
 }

@@ -269,7 +269,7 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
   }
 
   void closeKeyboard() {
-    FocusScope.of(context).requestFocus(FocusNode());
+    FocusScope.of(context).unfocus();
   }
 
   void scanQR() =>

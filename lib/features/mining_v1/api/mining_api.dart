@@ -138,7 +138,7 @@ class MiningApi {
     List<dynamic> params,
   ) async {
     final p = _rpcParams(method, params);
-    return await BaseApi.requestEmptyH.post(chainUrl, data: p, params: p);
+    return await BaseApi.requestEmptyH.post(chainUrl, data: p, params: {});
   }
 
   static Future<int> _getStartBlockHeight() async {

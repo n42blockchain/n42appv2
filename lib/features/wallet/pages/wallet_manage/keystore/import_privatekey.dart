@@ -397,7 +397,7 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                         var completedWithExit = false;
                         final s = S.of(context);
                         final navigator = Navigator.of(context);
-                        FocusScope.of(context).requestFocus(FocusNode());
+                        FocusScope.of(context).unfocus();
                         setState(() => load = Load.loading);
                         try {
                           String keystoreJson = _keystoreController.text.trim();

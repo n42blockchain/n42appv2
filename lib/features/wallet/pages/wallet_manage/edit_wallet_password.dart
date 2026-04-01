@@ -249,7 +249,7 @@ class _EditWalletPasswordState extends ConsumerState<EditWalletPassword> {
                         onToggleObscure: () =>
                             setState(() => showPwd2 = !showPwd2),
                         onEditingComplete: () =>
-                            FocusScope.of(context).requestFocus(FocusNode()),
+                            FocusScope.of(context).unfocus(),
                         margin: EdgeInsets.only(top: ScreenUtil().setWidth(10)),
                       ),
                       SizedBox(height: ScreenUtil().setWidth(148.0)),

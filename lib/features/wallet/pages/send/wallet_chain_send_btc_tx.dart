@@ -238,7 +238,7 @@ mixin _BtcSendTxMixin on _BtcSendLogicMixin {
   }
 
   void closeKeyboard() {
-    FocusScope.of(context).requestFocus(FocusNode());
+    FocusScope.of(context).unfocus();
   }
 
   void searchToAddressWidget() {

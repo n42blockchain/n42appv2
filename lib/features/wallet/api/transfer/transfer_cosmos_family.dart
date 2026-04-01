@@ -58,8 +58,8 @@ mixin _TransferCosmosFamilyMixin on _TransferBaseMixin {
       {String contractAddress = "", int tokenDecimals = 0, bool maxValue = true, String? privateKey}) async {
     //获取每个byte 消耗多少gas
     int gas = getCoinGas(coinType, contract: contractAddress.isNotEmpty);
-    DotApi dotApi = DotApi();
-    MessageModel mm = await dotApi.getTokens(fromAddress, coinType, isTest: false);
+    AptApi aptApi = AptApi(isTest: false);
+    MessageModel mm = await aptApi.getBalance(fromAddress, contract: contractAddress);
 
     //获取余额
     if (mm.error) return mm;
@@ -69,7 +69,7 @@ mixin _TransferCosmosFamilyMixin on _TransferBaseMixin {
     }
     //获取gas 费
     MessageModel mmg = await tokenViewApi.getGasPrice(
-        BlockchainType.Cosmos.name, CoinType.ATOM.name,
+        BlockchainType.Aptos.name, coinType,
         isTest: false) ?? MessageModel.error();
     if (mmg.error) return mmg;
     final BigInt gasPrice = mmg.data; //当前旷工费
@@ -82,16 +82,16 @@ mixin _TransferCosmosFamilyMixin on _TransferBaseMixin {
       //如果是全部转账
       if (valuePrice == chainBalance && maxValue) {
         if (totalGasPrice >= valuePrice) {
-          return _insufficientBalanceError(CoinType.ATOM.name);
+          return _insufficientBalanceError(coinType);
         }
         valuePrice = valuePrice - totalGasPrice;
         value = toEther(valuePrice.toString(), decimals).toDouble();
       }
       if (valuePrice <= BigInt.zero || totalGasPrice + valuePrice > chainBalance) {
-        return _insufficientBalanceError(CoinType.ATOM.name);
+        return _insufficientBalanceError(coinType);
       }
     }
-    MessageModel mmtx = await transferAtomSend(fromAddress, toAddress, valuePrice, path, totalGasPrice, contractAddress: contractAddress);
+    MessageModel mmtx = await transferAptSend(fromAddress, toAddress, valuePrice, path, gas, totalGasPrice, coinType, chainId, contractAddress: contractAddress, privateKey: privateKey);
     if (!mmtx.error) {
       return MessageModel()..data = {"txHash": mmtx.data, "value": value};
     }
@@ -107,7 +107,7 @@ mixin _TransferCosmosFamilyMixin on _TransferBaseMixin {
     MessageModel ledgerTimestamp = await aptApi.getServiceInfo();
     if (ledgerTimestamp.error) return ledgerTimestamp;
 
-    int lt = ledgerTimestamp.data / 1000000 + 60;
+    int lt = ledgerTimestamp.data ~/ 1000000 + 60;
     Map<String, dynamic> signMap = {
       "amount": valuePrice.toInt(),
       "toAddress": toAddress,
@@ -177,12 +177,9 @@ mixin _TransferCosmosFamilyMixin on _TransferBaseMixin {
     if (chainBalance == BigInt.zero) {
       return _insufficientBalanceError(coinType);
     }
-    //获取gas 费
-    MessageModel mmg = await tokenViewApi.getGasPrice(
-        BlockchainType.Cosmos.name, CoinType.ATOM.name,
-        isTest: false) ?? MessageModel.error();
-    if (mmg.error) return mmg;
-    final BigInt gasPrice = mmg.data;
+    //获取gas 费 — Polkadot 使用固定估算费用
+    // TODO: implement proper DOT fee estimation via runtime API
+    final BigInt gasPrice = BigInt.from(10000000); // 0.01 DOT in planck as default estimate
 
     BigInt totalGasPrice = gasPrice * BigInt.from(gas);
     BigInt valuePrice = BigInt.zero;
@@ -199,7 +196,7 @@ mixin _TransferCosmosFamilyMixin on _TransferBaseMixin {
         return _insufficientBalanceError(coinType);
       }
     }
-    MessageModel mmtx = await transferAtomSend(fromAddress, toAddress, valuePrice, path, totalGasPrice, contractAddress: contractAddress);
+    MessageModel mmtx = await transferDotSend(fromAddress, toAddress, valuePrice, path, totalGasPrice, coinType, contractAddress: contractAddress, privateKey: privateKey);
     if (!mmtx.error) {
       return MessageModel()..data = {"txHash": mmtx.data, "value": value};
     }
@@ -251,14 +248,18 @@ mixin _TransferCosmosFamilyMixin on _TransferBaseMixin {
       {String contractAddress = "", int tokenDecimals = 0, bool maxValue = true, String? privateKey}) async {
     //获取每个byte 消耗多少gas
     int gas = getCoinGas(CoinType.ATOM.name, contract: contractAddress.isNotEmpty);
-    MessageModel mm = await getBalanceAllTrx(fromAddress);
+    MessageModel mm = await tokenViewApi.getBalance(
+        BlockchainType.Cosmos.name, CoinType.ATOM.name, fromAddress,
+        isTest: false) ?? MessageModel.error();
 
     //获取余额
     if (mm.error) return mm;
     final BigInt chainBalance = mm.data;
 
     if (contractAddress.isNotEmpty) {
-      MessageModel mmToken = await getBalanceAllTrx(fromAddress, contractAddress: contractAddress);
+      MessageModel mmToken = await tokenViewApi.getBalance(
+          BlockchainType.Cosmos.name, CoinType.ATOM.name, fromAddress,
+          contract: contractAddress, isTest: false) ?? MessageModel.error();
       if (mmToken.error) return mmToken;
       final BigInt balance = mmToken.data;
       if (balance == BigInt.zero) {
@@ -266,7 +267,7 @@ mixin _TransferCosmosFamilyMixin on _TransferBaseMixin {
       }
     }
     if (chainBalance == BigInt.zero) {
-      return _insufficientBalanceError("TRX");
+      return _insufficientBalanceError(CoinType.ATOM.name);
     }
     //获取gas 费
     MessageModel mmg = await tokenViewApi.getGasPrice(

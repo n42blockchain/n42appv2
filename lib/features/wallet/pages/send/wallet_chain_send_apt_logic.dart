@@ -203,7 +203,7 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
           : widget.coinModel.coin['chainId'];
 
     if (!mounted) return;
-    final bool check = await Navigator.push(
+    final bool? check = await Navigator.push<bool>(
       context,
       MaterialPageRoute(
         builder: (_) => WalletBaseSend(
@@ -218,7 +218,7 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
       ),
     );
     if (!mounted) return;
-    if (check) {
+    if (check == true) {
       signTx(trModel);
     } else {
       _finishLoading();
@@ -279,7 +279,7 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
   }
 
   void closeKeyboard() {
-    FocusScope.of(context).requestFocus(FocusNode());
+    FocusScope.of(context).unfocus();
   }
 
   void searchToAddressWidget() {

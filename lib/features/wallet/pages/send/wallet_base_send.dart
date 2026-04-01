@@ -182,7 +182,7 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
     return '0xa9059cbb$toAddress$paddedAmount';
   }
 
-  void closeKeyboard() => FocusScope.of(context).requestFocus(FocusNode());
+  void closeKeyboard() => FocusScope.of(context).unfocus();
 
   Future<bool> _pageBack() {
     if (Navigator.canPop(context)) {

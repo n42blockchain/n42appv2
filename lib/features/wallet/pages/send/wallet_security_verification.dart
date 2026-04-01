@@ -103,7 +103,7 @@ class _WalletSecurityVerificationState
   }
 
   void closeKeyboard() {
-    FocusScope.of(context).requestFocus(FocusNode());
+    FocusScope.of(context).unfocus();
   }
 
   Future<void> getEmailVerification() async {
