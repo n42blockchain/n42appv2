@@ -8,8 +8,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
-import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
+import 'package:n42_wallet/core/providers/core_providers.dart' show spUtilProvider;
 export 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart';
 import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
 
@@ -169,9 +169,6 @@ class CoinBalanceData {
 }
 
 // ============ Providers ============
-
-/// SPUtil Provider
-final spUtilProvider = Provider<SPUtil>((ref) => SPUtil());
 
 /// Wallet List Provider (Async)
 final walletListProvider =

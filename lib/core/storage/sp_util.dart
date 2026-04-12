@@ -7,6 +7,7 @@
 
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/storage/secure_preferences.dart';
 import 'package:n42_wallet/data/models/user_info.dart';
@@ -46,7 +47,8 @@ class SPUtil {
     if (raw == null || raw.isEmpty) return [];
     try {
       return (json.decode(raw) as List<dynamic>).cast<String>();
-    } catch (_) {
+    } catch (e) {
+      if (kDebugMode) debugPrint('[SPUtil._decodeJsonList] JSON decode failed: $e');
       return [];
     }
   }
@@ -56,7 +58,8 @@ class SPUtil {
     if (raw == null || raw.isEmpty) return null;
     try {
       return json.decode(raw) as Map<String, dynamic>;
-    } catch (_) {
+    } catch (e) {
+      if (kDebugMode) debugPrint('[SPUtil._decodeJsonMap] JSON decode failed: $e');
       return null;
     }
   }

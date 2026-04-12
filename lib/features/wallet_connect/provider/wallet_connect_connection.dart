@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/di/service_locator_setup.dart';
+import 'package:n42_wallet/core/security/secure_storage.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
@@ -22,7 +23,14 @@ mixin WalletConnectConnection on ChangeNotifier {
   wallet_connect.ReownWalletKit? signClient;
   web3.Web3Client? web3client;
   String? dAppTopic;
-  late web3.EthPrivateKey privateKey;
+  web3.EthPrivateKey? _privateKey;
+  web3.EthPrivateKey get privateKey {
+    final key = _privateKey;
+    if (key == null) {
+      throw StateError('Private key not initialized. Call web3clientInit first.');
+    }
+    return key;
+  }
   int coinModelsIndex = -1;
   List<CoinModel> coinModels = [];
   WalletConnectState walletConnectState = WalletConnectState.loading;
@@ -161,16 +169,37 @@ mixin WalletConnectConnection on ChangeNotifier {
       notifyListeners();
       return true;
     } catch (e) {
-      // "Pairing already exists" is non-fatal: the DApp may reuse the same URI
-      // on a retry. The existing pairing is still valid — just wait for the
-      // next session_propose event instead of entering error state.
       final msg = e.toString().toLowerCase();
       if (msg.contains('pairing already exists') ||
           msg.contains('already exists') ||
           msg.contains('already connected')) {
-        debugPrint('[WalletConnect] pair: $e — treating as non-fatal, waiting for session_propose');
-        notifyListeners();
-        return true;
+        // Extract topic from the incoming URI to verify it matches existing pairing.
+        // WC v2 URI format: wc:<topic>@2?relay-protocol=...&symKey=...
+        final uri = parseWalletConnectUri(relayUrl);
+        final uriPath = uri?.path ?? '';
+        final incomingTopic = uriPath.contains('@')
+            ? uriPath.split('@').first
+            : uriPath;
+
+        final existingPairings = signClient?.core.pairing.getPairings() ?? [];
+        final isMatchingPairing = incomingTopic.isNotEmpty &&
+            existingPairings.any(
+              (p) => p.topic == incomingTopic && p.active,
+            );
+
+        if (isMatchingPairing) {
+          debugPrint('[WalletConnect] pair: same URI retry, waiting for session_propose');
+          notifyListeners();
+          return true;
+        }
+
+        // Different DApp or stale pairing — prompt user
+        final s = wcL10n();
+        ToastUtils.show(
+          s?.g_wc_connection_lost ?? 'Please disconnect existing session first.',
+        );
+        debugPrint('[WalletConnect] pair: pairing conflict with different DApp');
+        return false;
       }
       await viewStateDeal(WalletConnectState.error, params: e.toString());
       return false;
@@ -235,7 +264,8 @@ mixin WalletConnectConnection on ChangeNotifier {
         );
         return false;
       }
-      privateKey = web3.EthPrivateKey(decodedKey);
+      _privateKey = web3.EthPrivateKey(Uint8List.fromList(decodedKey));
+      SecureStorage.secureWipeBytes(decodedKey);
       return true;
     } catch (e) {
       viewStateDeal(WalletConnectState.error, params: e.toString());

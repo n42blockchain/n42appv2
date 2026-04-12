@@ -255,13 +255,29 @@ class SecureStorage {
   }
 
   /// 清除用户相关数据（登出时调用）
+  ///
+  /// 删除认证信息、钱包凭证、助记词、私钥和安全设置。
+  /// 保留 [_keyDeviceId] 以便跨登出持久化。
   Future<void> clearUserData() async {
-    await Future.wait([
-      _storage.delete(key: _keyToken),
-      _storage.delete(key: _keyUuid),
-      _storage.delete(key: _keyEmail),
-      _storage.delete(key: _keyUserInfo),
-    ]);
+    final allEntries = await _storage.readAll();
+    final keysToDelete = <String>[
+      _keyToken,
+      _keyUuid,
+      _keyEmail,
+      _keyUserInfo,
+      _keyBiometricEnabled,
+      _keyGesturePassword,
+    ];
+
+    for (final key in allEntries.keys) {
+      if (key.startsWith(_keyWalletPrefix) ||
+          key.startsWith(_keyMnemonicPrefix) ||
+          key.startsWith(_keyPrivateKeyPrefix)) {
+        keysToDelete.add(key);
+      }
+    }
+
+    await Future.wait(keysToDelete.map((key) => _storage.delete(key: key)));
   }
 
   /// 检查是否有存储的凭证

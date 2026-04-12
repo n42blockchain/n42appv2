@@ -44,7 +44,10 @@ class EthereumProviderJs {
     return err;
   }
 
-  // Proxy to make property access work for DApps that do `if (ethereum.isMetaMask)`
+  // NOTE: isMetaMask is intentionally true for DApp compatibility.
+  // Many legacy DApps only check `window.ethereum.isMetaMask` to detect
+  // an injected wallet. Setting false causes "Install MetaMask" prompts.
+  // Our true identity is exposed via EIP-6963 with rdns "ai.n42.wallet".
   var ethereum = {
     _isN42: true,
     isMetaMask: true,

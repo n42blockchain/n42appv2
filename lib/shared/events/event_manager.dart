@@ -6,31 +6,33 @@
 // Author: Jiang Yiwei
 
 import 'dart:async';
-import 'package:event_bus/event_bus.dart';
 import 'package:flutter/foundation.dart';
+import 'package:n42_wallet/core/utils/event_bus.dart' as global_bus;
 import 'package:n42_wallet/shared/domain/entities/wallet_info.dart';
 import 'cross_feature_events.dart';
 
 /// Centralized event manager for cross-feature communication.
+///
+/// Uses the global [eventBus] instance from `core/utils/event_bus.dart`
+/// so that all event types (EventPublic and CrossFeatureEvent) flow
+/// through a single bus. The types are distinct so listeners don't interfere.
 class EventManager {
   static final EventManager _instance = EventManager._internal();
   factory EventManager() => _instance;
   EventManager._internal();
-
-  final EventBus _eventBus = EventBus();
   final List<StreamSubscription> _subscriptions = [];
 
   void emit<T extends CrossFeatureEvent>(T event) {
     if (kDebugMode) {
       debugPrint('[EventManager] Emitting: ${event.runtimeType}');
     }
-    _eventBus.fire(event);
+    global_bus.eventBus.fire(event);
   }
 
   StreamSubscription<T> on<T extends CrossFeatureEvent>(
     void Function(T event) handler,
   ) {
-    final subscription = _eventBus.on<T>().listen(handler);
+    final subscription = global_bus.eventBus.on<T>().listen(handler);
     _subscriptions.add(subscription);
     return subscription;
   }
@@ -49,7 +51,6 @@ class EventManager {
 
   void destroy() {
     cancelAll();
-    _eventBus.destroy();
   }
 
   // — Convenience emitters —

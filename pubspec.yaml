@@ -140,9 +140,7 @@ dependencies:
 
   # === N42 Chat Module ===
   n42_chat:
-    git:
-      url: https://github.com/n42blockchain/n42_chat
-      ref: e6125e8
+    path: packages/n42_chat
 
 # Override: flutter_secure_storage 10.x needed for compatibility with
 # matrix_dart_sdk which pins an older version via vodozemac dependency chain

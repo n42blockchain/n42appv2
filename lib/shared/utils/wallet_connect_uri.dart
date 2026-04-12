@@ -76,6 +76,7 @@ String? _normalizeWalletConnectCandidate(String value, int depthLevel) {
         }
       }
     } catch (_) {
+      // Fragment parse failure is expected for non-WC URIs
       return null;
     }
   }
@@ -88,6 +89,7 @@ String? _safeDecode(String value) {
     final decoded = Uri.decodeComponent(value);
     return decoded == value ? null : decoded;
   } catch (_) {
+    // URI decode failure is expected for non-encoded strings
     return null;
   }
 }

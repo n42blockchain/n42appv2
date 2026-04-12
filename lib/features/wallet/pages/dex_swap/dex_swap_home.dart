@@ -194,12 +194,16 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
 
   // ── Quote fetching ────────────────────────────────────────────────────────
 
+  /// 单调递增请求 ID，防止过期响应覆盖最新状态
+  int _quoteRequestId = 0;
+
   Future<void> _fetchQuote(String amountHuman) async {
     if (_tokenIn == null || _tokenOut == null || _userAddr.isEmpty) return;
 
     final BigInt amountWei = dexToWei(amountHuman, _tokenIn!.decimals);
     if (amountWei == BigInt.zero) return;
 
+    final requestId = ++_quoteRequestId;
     _clearQuote();
     setState(() => _quoteLoad = Load.loading);
 
@@ -211,7 +215,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
       userAddr: _userAddr,
       slippageBps: _slippageBps,
     );
-    if (!mounted) return;
+    if (!mounted || requestId != _quoteRequestId) return;
 
     if (res.error) {
       setState(() {
@@ -229,7 +233,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
 
     // For EVM non-native tokens, check if approval is needed
     final bool needsApprove = await _checkApprovalNeeded(amountWei, quote);
-    if (!mounted) return;
+    if (!mounted || requestId != _quoteRequestId) return;
 
     setState(() {
       _quoteLoad = Load.finish;
