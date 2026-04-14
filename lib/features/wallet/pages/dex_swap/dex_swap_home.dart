@@ -514,7 +514,12 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
     final blueColor = AppThemeUtils.getColorByKey(
         context, AppThemeKeys.mainBlueColor.name);
     return GestureDetector(
-      onTap: () => setState(() => _isLimitMode = label == 'Limit'),
+      onTap: () {
+        final newMode = label == 'Limit';
+        if (newMode == _isLimitMode) return;
+        _clearQuote();
+        setState(() => _isLimitMode = newMode);
+      },
       child: Container(
         padding: EdgeInsets.symmetric(
           horizontal: ScreenUtil().setWidth(24),

@@ -48,6 +48,13 @@ func (pm *PriceMonitor) Start(ctx context.Context) {
 	}
 }
 
+// pairKey groups orders by chain+tokenIn+tokenOut for batch price queries
+type pairKey struct {
+	chain    string
+	tokenIn  string
+	tokenOut string
+}
+
 func (pm *PriceMonitor) tick(ctx context.Context) {
 	// Expire stale orders first
 	if expired, err := pm.db.ExpireStaleOrders(); err != nil {
@@ -66,54 +73,57 @@ func (pm *PriceMonitor) tick(ctx context.Context) {
 		return
 	}
 
-	for _, order := range orders {
+	// Group orders by trading pair to avoid redundant price queries
+	grouped := map[pairKey][]*db.LimitOrder{}
+	for _, o := range orders {
+		k := pairKey{chain: o.Chain, tokenIn: o.TokenIn, tokenOut: o.TokenOut}
+		grouped[k] = append(grouped[k], o)
+	}
+
+	for pair, pairOrders := range grouped {
 		select {
 		case <-ctx.Done():
 			return
 		default:
 		}
-		pm.checkOrder(ctx, order)
+		pm.checkPair(ctx, pair, pairOrders)
 	}
 }
 
-func (pm *PriceMonitor) checkOrder(ctx context.Context, order *db.LimitOrder) {
-	// Get current quote for a small reference amount to derive the price
-	// Use 1 unit of tokenIn (in wei) to get the exchange rate
-	refAmount := referenceAmount(order.Chain)
+func (pm *PriceMonitor) checkPair(ctx context.Context, pair pairKey, orders []*db.LimitOrder) {
+	refAmount := referenceAmount(pair.chain)
 
 	quoteCtx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
 
 	resp, err := pm.agg.BestQuote(quoteCtx, models.QuoteReq{
-		Chain:       order.Chain,
-		TokenIn:     order.TokenIn,
-		TokenOut:    order.TokenOut,
+		Chain:       pair.chain,
+		TokenIn:     pair.tokenIn,
+		TokenOut:    pair.tokenOut,
 		AmountIn:    refAmount,
 		AmountInWei: mustParseBigInt(refAmount),
-		UserAddr:    "0x0000000000000000000000000000000000000000", // price check only
+		UserAddr:    "0x0000000000000000000000000000000000000000",
 		SlippageBps: 100,
 	})
 	if err != nil {
-		// Silently skip — aggregator may be temporarily unavailable
 		return
 	}
 
-	// Compare: current price (amountOut / refAmount) vs limit price
 	currentPrice, ok := parseDecimal(resp.AmountOut)
 	if !ok || currentPrice <= 0 {
 		return
 	}
 
-	limitPrice, ok := parseDecimal(order.LimitPrice)
-	if !ok || limitPrice <= 0 {
-		return
-	}
-
-	// Trigger if current price >= limit price (user gets at least what they asked for)
-	if currentPrice >= limitPrice {
-		log.Printf("[price-monitor] triggered order %s: current=%.6f >= limit=%.6f",
-			order.OrderID, currentPrice, limitPrice)
-		pm.triggerOrder(order)
+	for _, order := range orders {
+		limitPrice, ok := parseDecimal(order.LimitPrice)
+		if !ok || limitPrice <= 0 {
+			continue
+		}
+		if currentPrice >= limitPrice {
+			log.Printf("[price-monitor] triggered order %s: current=%.6f >= limit=%.6f",
+				order.OrderID, currentPrice, limitPrice)
+			pm.triggerOrder(order)
+		}
 	}
 }
 

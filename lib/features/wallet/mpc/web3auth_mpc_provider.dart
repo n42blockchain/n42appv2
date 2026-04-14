@@ -18,6 +18,7 @@ import 'mpc_provider.dart';
 class Web3AuthMpcProvider implements MpcProvider {
   Web3AuthResponse? _state;
   String? _privateKey;
+  EthPrivateKey? _cachedCredentials;
   bool _initialized = false;
 
   /// Web3Auth Client ID（从 dashboard.web3auth.io 获取）
@@ -123,6 +124,7 @@ class Web3AuthMpcProvider implements MpcProvider {
       await Web3AuthFlutter.logout();
     } catch (_) {}
     _privateKey = null;
+    _cachedCredentials = null;
     _state = null;
   }
 
@@ -196,12 +198,14 @@ class Web3AuthMpcProvider implements MpcProvider {
     return detail.isNotEmpty ? '$label: $detail' : label;
   }
 
-  /// Get EthPrivateKey from hex string
+  /// Get cached EthPrivateKey from hex string
   EthPrivateKey _getCredentials(String privateKeyHex) {
+    if (_cachedCredentials != null) return _cachedCredentials!;
     final clean = privateKeyHex.startsWith('0x')
         ? privateKeyHex
         : '0x$privateKeyHex';
-    return EthPrivateKey.fromHex(clean);
+    _cachedCredentials = EthPrivateKey.fromHex(clean);
+    return _cachedCredentials!;
   }
 
   /// Derive EVM address from secp256k1 private key

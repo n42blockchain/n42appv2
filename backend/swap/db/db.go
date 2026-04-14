@@ -166,7 +166,8 @@ func (d *DB) ListActiveLimitOrders() ([]*LimitOrder, error) {
 	err := d.db.Select(&orders, `
 		SELECT * FROM dex_limit_orders
 		WHERE status = 0
-		ORDER BY created_at ASC`)
+		ORDER BY created_at ASC
+		LIMIT 5000`)
 	return orders, err
 }
 
@@ -208,8 +209,8 @@ func (d *DB) ExpireStaleOrders() (int64, error) {
 	res, err := d.db.Exec(`
 		UPDATE dex_limit_orders
 		SET status=$1, updated_at=$2
-		WHERE status=0 AND expires_at < $2`,
-		LimitStatusExpired, now,
+		WHERE status=0 AND expires_at < $3`,
+		LimitStatusExpired, now, now,
 	)
 	if err != nil {
 		return 0, err
