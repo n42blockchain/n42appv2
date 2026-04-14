@@ -141,6 +141,7 @@ dependencies:
   # === N42 Chat Module ===
   n42_chat:
     path: packages/n42_chat
+  web3auth_flutter: ^6.3.0
 
 # Override: flutter_secure_storage 10.x needed for compatibility with
 # matrix_dart_sdk which pins an older version via vodozemac dependency chain
