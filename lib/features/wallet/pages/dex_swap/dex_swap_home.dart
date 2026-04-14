@@ -16,6 +16,8 @@ import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_swap_action_button
 import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_swap_constants.dart';
 import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_swap_form_widgets.dart';
 import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_swap_history.dart';
+import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_limit_order_form.dart';
+import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_limit_orders_page.dart';
 import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_swap_quote_card.dart';
 import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_swap_token_card.dart';
 import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_token_select.dart';
@@ -25,6 +27,7 @@ import 'package:n42_wallet/features/wallet/api/transfer/handlers/aa_transfer_han
 import 'package:n42_wallet/features/wallet/api/transfer/transfer_handler_factory.dart';
 import 'package:n42_wallet/features/wallet/aa/models/smart_account.dart';
 import 'package:web3dart/web3dart.dart' show hexToBytes;
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -75,6 +78,9 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
   List<double> _chartPrices = [];
   bool _chartLoading = false;
   int _chartPeriodDays = 1;
+
+  // ── Mode: Market swap vs Limit order ────────────────────────────────────────
+  bool _isLimitMode = false;
 
   // ── Gas-free (AA / Paymaster) state ────────────────────────────────────────
   bool _gasFreeEnabled = false;
@@ -502,6 +508,35 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
     _onAmountChanged();
   }
 
+  // ── Mode tab widget ────────────────────────────────────────────────────────
+
+  Widget _modeTab(String label, bool active) {
+    final blueColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.mainBlueColor.name);
+    return GestureDetector(
+      onTap: () => setState(() => _isLimitMode = label == 'Limit'),
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: ScreenUtil().setWidth(24),
+          vertical: ScreenUtil().setWidth(10),
+        ),
+        decoration: BoxDecoration(
+          color: active ? blueColor : Colors.transparent,
+          borderRadius: BorderRadius.circular(8),
+          border: active ? null : Border.all(color: blueColor.withValues(alpha: 0.3)),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            fontSize: ScreenUtil().setSp(28),
+            fontWeight: FontWeight.w600,
+            color: active ? Colors.white : blueColor,
+          ),
+        ),
+      ),
+    );
+  }
+
   // ── Gas-free toggle widget ─────────────────────────────────────────────────
 
   Widget _buildGasFreeToggle() {
@@ -551,7 +586,9 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
             },
             onOpenHistory: () => Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => const DexSwapHistory()),
+              MaterialPageRoute(builder: (_) => _isLimitMode
+                  ? const DexLimitOrdersPage()
+                  : const DexSwapHistory()),
             ),
           ),
         ],
@@ -566,6 +603,19 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
                 selectedChain: _chain,
                 onChainChanged: _onChainChanged,
               ),
+              SizedBox(height: ScreenUtil().setWidth(12)),
+              // Market / Limit mode toggle
+              Row(
+                children: [
+                  _modeTab('Market', !_isLimitMode),
+                  SizedBox(width: ScreenUtil().setWidth(12)),
+                  _modeTab('Limit', _isLimitMode),
+                ],
+              ),
+              SizedBox(height: ScreenUtil().setWidth(16)),
+              if (_isLimitMode)
+                DexLimitOrderForm(chain: _chain)
+              else ...[
               if (_showChart) ...[
                 SizedBox(height: ScreenUtil().setWidth(16)),
                 DexPriceChart(
@@ -635,6 +685,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
                 onApprove: _executeApprove,
                 onSwapConfirmed: _executeSwap,
               ),
+              ], // end else (market mode)
             ],
           ),
         ),

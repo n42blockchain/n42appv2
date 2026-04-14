@@ -39,6 +39,7 @@ func setupRouter(
 	qh *handlers.QuoteHandler,
 	ch *handlers.CommitHandler,
 	hh *handlers.HistoryHandler,
+	lh *handlers.LimitHandler,
 ) *gin.Engine {
 	r := gin.New()
 	r.Use(gin.Logger(), gin.Recovery(), corsMiddleware())
@@ -54,6 +55,11 @@ func setupRouter(
 		v1.POST("/quote", qh.Quote)
 		v1.POST("/commit", ch.Commit)
 		v1.GET("/history", hh.GetHistory)
+
+		// Limit orders
+		v1.POST("/limit", lh.Create)
+		v1.DELETE("/limit/:id", lh.Cancel)
+		v1.GET("/limit", lh.List)
 	}
 
 	return r

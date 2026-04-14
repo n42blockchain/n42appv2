@@ -96,6 +96,76 @@ class DexSwapApi {
     }
   }
 
+  // ── Limit orders ──────────────────────────────────────────────────────────
+
+  /// POST /v1/dex/limit — 创建限价单
+  Future<MessageModel> createLimitOrder({
+    required String uuid,
+    required String chain,
+    required String tokenIn,
+    required String tokenOut,
+    required String symbolIn,
+    required String symbolOut,
+    required String amountIn,
+    required String limitPrice,
+    int expiresIn = 86400,
+  }) async {
+    try {
+      final data = await BaseApi.requestEmptyH.post(
+        '$_base/v1/dex/limit',
+        params: {},
+        data: {
+          'uuid': uuid,
+          'chain': chain,
+          'token_in': tokenIn,
+          'token_out': tokenOut,
+          'symbol_in': symbolIn,
+          'symbol_out': symbolOut,
+          'amount_in': amountIn,
+          'limit_price': limitPrice,
+          'expires_in': expiresIn,
+        },
+        header: _header,
+      );
+      if (data['code'] == 200) return MessageModel()..data = data['data'];
+      return MessageModel.error()
+        ..data = data['err'] ?? 'Failed to create limit order';
+    } catch (e) {
+      return MessageModel.error()..data = e.toString();
+    }
+  }
+
+  /// DELETE /v1/dex/limit/:id — 取消限价单
+  Future<MessageModel> cancelLimitOrder(String orderId, String uuid) async {
+    try {
+      final data = await BaseApi.requestEmptyH.delete(
+        '$_base/v1/dex/limit/$orderId?uuid=$uuid',
+        params: {},
+        header: _header,
+      );
+      if (data['code'] == 200) return MessageModel()..data = true;
+      return MessageModel.error()..data = data['err'] ?? 'Cancel failed';
+    } catch (e) {
+      return MessageModel.error()..data = e.toString();
+    }
+  }
+
+  /// GET /v1/dex/limit — 查询用户限价单列表
+  Future<MessageModel> getLimitOrders(String uuid,
+      {int page = 1, int size = 20}) async {
+    try {
+      final data = await BaseApi.requestEmptyH.get(
+        '$_base/v1/dex/limit',
+        params: {'uuid': uuid, 'page': page, 'size': size},
+        header: _header,
+      );
+      if (data['code'] == 200) return MessageModel()..data = data['data'];
+      return MessageModel.error()..data = data['err'] ?? 'Query failed';
+    } catch (e) {
+      return MessageModel.error()..data = e.toString();
+    }
+  }
+
   // ── ERC-20 approval helpers ───────────────────────────────────────────────
 
   /// Check current ERC-20 token allowance via `eth_call`.
