@@ -58,6 +58,9 @@ class WalletInfo {
   /// 观察地址（EVM 格式，如 0x...），仅在 watchOnly=true 时有意义
   String watchAddress = '';
 
+  /// 用户自定义钱包标签（如"交易"、"长期持有"、"DeFi"等），用于分组过滤
+  List<String> tags = [];
+
   /// Account Abstraction (ERC-4337) account information
   AAAccountInfo? aaAccountInfo;
 
@@ -83,6 +86,7 @@ class WalletInfo {
     networkIndex = json['networkIndex'] as int;
     pinnedCoins = ((json['pinnedCoins'] as List<dynamic>?)?.cast<String>() ?? []).take(200).toList();
     chainOrder = ((json['chainOrder'] as List<dynamic>?)?.cast<String>() ?? []);
+    tags = ((json['tags'] as List<dynamic>?)?.cast<String>() ?? []);
     faceBinding = json['faceBinding'] as bool?;
     mainWallet = json['mainWallet'] as bool;
     watchOnly = (json['watchOnly'] as bool?) ?? false;
@@ -113,6 +117,7 @@ class WalletInfo {
       "networkIndex": networkIndex,
       "pinnedCoins": pinnedCoins,
       "chainOrder": chainOrder,
+      "tags": tags,
       "faceBinding": faceBinding,
       "mainWallet": mainWallet,
       "watchOnly": watchOnly,
@@ -131,6 +136,7 @@ class WalletInfo {
       "networkIndex": networkIndex,
       "pinnedCoins": pinnedCoins,
       "chainOrder": chainOrder,
+      "tags": tags,
       "faceBinding": faceBinding,
       "mainWallet": mainWallet,
       "watchOnly": watchOnly,

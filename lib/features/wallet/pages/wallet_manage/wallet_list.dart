@@ -41,6 +41,8 @@ class _WalletListState extends ConsumerState<WalletList>
     with _WalletListFaceMixin, _WalletListActionsMixin, _WalletListTilesMixin {
   List<WalletInfo> walletList = [];
   Load load = Load.finish;
+  String? _selectedTag;
+  List<String> _cachedTags = [];
 
   @override
   void initState() {
@@ -50,8 +52,75 @@ class _WalletListState extends ConsumerState<WalletList>
 
   Future<void> initData() async {
     walletList = ref.read(wapBridgeProvider).walletInfoLsit;
+    _rebuildTagCache();
     checkFaceBindingWallet();
     setState(() {});
+  }
+
+  void _rebuildTagCache() {
+    final tags = <String>{};
+    for (final w in walletList) {
+      tags.addAll(w.tags);
+    }
+    _cachedTags = tags.toList()..sort();
+  }
+
+  /// Filter wallets by selected tag
+  List<WalletInfo> get _filteredWalletList {
+    if (_selectedTag == null) return walletList;
+    return walletList.where((w) => w.tags.contains(_selectedTag)).toList();
+  }
+
+  Widget _buildTagFilter() {
+    final tags = _cachedTags;
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: ScreenUtil().setWidth(30),
+        vertical: ScreenUtil().setWidth(8),
+      ),
+      child: SizedBox(
+        height: 34,
+        child: ListView(
+          scrollDirection: Axis.horizontal,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: ChoiceChip(
+                label: Text('All', style: TextStyle(fontSize: ScreenUtil().setSp(24))),
+                selected: _selectedTag == null,
+                onSelected: (_) => setState(() => _selectedTag = null),
+                selectedColor: AppThemeUtils.getColorByKey(
+                    context, AppThemeKeys.mainBlueColor.name),
+                labelStyle: TextStyle(
+                  color: _selectedTag == null ? Colors.white : null,
+                  fontSize: ScreenUtil().setSp(24),
+                ),
+                side: BorderSide.none,
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                visualDensity: VisualDensity.compact,
+              ),
+            ),
+            ...tags.map((tag) => Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: ChoiceChip(
+                label: Text(tag, style: TextStyle(fontSize: ScreenUtil().setSp(24))),
+                selected: _selectedTag == tag,
+                onSelected: (_) => setState(() => _selectedTag = tag),
+                selectedColor: AppThemeUtils.getColorByKey(
+                    context, AppThemeKeys.mainBlueColor.name),
+                labelStyle: TextStyle(
+                  color: _selectedTag == tag ? Colors.white : null,
+                  fontSize: ScreenUtil().setSp(24),
+                ),
+                side: BorderSide.none,
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                visualDensity: VisualDensity.compact,
+              ),
+            )),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -108,6 +177,8 @@ class _WalletListState extends ConsumerState<WalletList>
                       ),
                     ),
                     _buildFaceBind(),
+                    if (_cachedTags.isNotEmpty)
+                      _buildTagFilter(),
                     Padding(
                       padding: EdgeInsets.only(
                         top: ScreenUtil().setWidth(20.0),
