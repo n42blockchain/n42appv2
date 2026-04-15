@@ -12024,6 +12024,131 @@ class S {
     );
   }
 
+  /// `Sign in with Passkey`
+  String get g_key_sign_in_with_passkey {
+    return Intl.message(
+      'Sign in with Passkey',
+      name: 'g_key_sign_in_with_passkey',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Passkey`
+  String get g_key_passkey {
+    return Intl.message('Passkey', name: 'g_key_passkey', desc: '', args: []);
+  }
+
+  /// `Passkey Management`
+  String get g_key_passkey_management {
+    return Intl.message(
+      'Passkey Management',
+      name: 'g_key_passkey_management',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Register Passkey`
+  String get g_key_register_passkey {
+    return Intl.message(
+      'Register Passkey',
+      name: 'g_key_register_passkey',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Passkey registered successfully`
+  String get g_key_passkey_registered {
+    return Intl.message(
+      'Passkey registered successfully',
+      name: 'g_key_passkey_registered',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Passkey deleted`
+  String get g_key_passkey_deleted {
+    return Intl.message(
+      'Passkey deleted',
+      name: 'g_key_passkey_deleted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Passkey is not supported on this device`
+  String get g_key_passkey_not_supported {
+    return Intl.message(
+      'Passkey is not supported on this device',
+      name: 'g_key_passkey_not_supported',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No Passkey registered`
+  String get g_key_passkey_no_credentials {
+    return Intl.message(
+      'No Passkey registered',
+      name: 'g_key_passkey_no_credentials',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rename Passkey`
+  String get g_key_passkey_rename {
+    return Intl.message(
+      'Rename Passkey',
+      name: 'g_key_passkey_rename',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to delete this Passkey?`
+  String get g_key_passkey_delete_confirm {
+    return Intl.message(
+      'Are you sure you want to delete this Passkey?',
+      name: 'g_key_passkey_delete_confirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Last used: {time}`
+  String g_key_passkey_last_used(Object time) {
+    return Intl.message(
+      'Last used: $time',
+      name: 'g_key_passkey_last_used',
+      desc: '',
+      args: [time],
+    );
+  }
+
+  /// `Created: {time}`
+  String g_key_passkey_created(Object time) {
+    return Intl.message(
+      'Created: $time',
+      name: 'g_key_passkey_created',
+      desc: '',
+      args: [time],
+    );
+  }
+
+  /// `Synced to cloud`
+  String get g_key_passkey_backed_up {
+    return Intl.message(
+      'Synced to cloud',
+      name: 'g_key_passkey_backed_up',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Enterprise SSO not configured`
   String get g_key_oidc_not_configured {
     return Intl.message(
