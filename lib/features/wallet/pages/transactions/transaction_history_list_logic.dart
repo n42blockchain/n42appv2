@@ -12,10 +12,15 @@ mixin _TransactionHistoryLogicMixin on State<TransactionHistoryList> {
   late final String addr;
   late final bool isBtcChain;
 
+  static const int _pageSize = 50;
+
   List<dynamic> allRecords = [];
   _TxFilter filter = const _TxFilter();
   bool isLoading = true;
   bool isExporting = false;
+  int _currentPage = 1;
+  bool _hasMore = true;
+  bool _isLoadingMore = false;
 
   List<dynamic> get filtered => _applyFilter(allRecords);
 
@@ -25,47 +30,76 @@ mixin _TransactionHistoryLogicMixin on State<TransactionHistoryList> {
         widget.coinModel.coin['blockchainType'] == BlockchainType.Bitcoin.name;
   }
 
+  Future<List<dynamic>> _queryPage(int page) async {
+    final coinKey = widget.coinModel.coin['coinType'] as String;
+    final contract = resolveCoinContractForNetwork(
+      coin: widget.coinModel.coin,
+      isTest: widget.coinModel.isTest,
+    );
+
+    if (isBtcChain) {
+      return await db.selectBtcTransationRecord(
+        AppGlobals.userInfo?.uuid ?? '',
+        addr,
+        coinKey,
+        0,
+        pageSize: _pageSize,
+        pageNum: page,
+      );
+    } else {
+      return await db.selectTransationRecordMiniName(
+        addr,
+        coinKey,
+        0,
+        contract: contract,
+        pageSize: _pageSize,
+        pageNum: page,
+        isTest: widget.coinModel.isTest ? 1 : 0,
+      );
+    }
+  }
+
   Future<void> loadAll() async {
     if (!mounted) return;
-    setState(() => isLoading = true);
+    setState(() {
+      isLoading = true;
+      _currentPage = 1;
+      _hasMore = true;
+    });
 
     try {
-      final coinKey = widget.coinModel.coin['coinType'] as String;
-      final contract = resolveCoinContractForNetwork(
-        coin: widget.coinModel.coin,
-        isTest: widget.coinModel.isTest,
-      );
-
-      List<dynamic> list;
-      if (isBtcChain) {
-        list = await db.selectBtcTransationRecord(
-          AppGlobals.userInfo?.uuid ?? '',
-          addr,
-          coinKey,
-          0,
-          pageSize: 5000,
-          pageNum: 1,
-        );
-      } else {
-        list = await db.selectTransationRecordMiniName(
-          addr,
-          coinKey,
-          0,
-          contract: contract,
-          pageSize: 5000,
-          pageNum: 1,
-          isTest: widget.coinModel.isTest ? 1 : 0,
-        );
-      }
+      final list = await _queryPage(1);
       if (mounted) {
         setState(() {
           allRecords = list;
+          _hasMore = list.length >= _pageSize;
           isLoading = false;
         });
       }
     } catch (e) {
       debugPrint('[TxHistory] _loadAll error: $e');
       if (mounted) setState(() => isLoading = false);
+    }
+  }
+
+  Future<void> loadMore() async {
+    if (!mounted || _isLoadingMore || !_hasMore) return;
+    setState(() => _isLoadingMore = true);
+
+    try {
+      final nextPage = _currentPage + 1;
+      final list = await _queryPage(nextPage);
+      if (mounted) {
+        setState(() {
+          allRecords.addAll(list);
+          _currentPage = nextPage;
+          _hasMore = list.length >= _pageSize;
+        });
+      }
+    } catch (e) {
+      debugPrint('[TxHistory] loadMore error: $e');
+    } finally {
+      if (mounted) setState(() => _isLoadingMore = false);
     }
   }
 

@@ -52,6 +52,7 @@ import 'package:n42_chat/l10n/app_localizations.dart' as chat_l10n;
 import 'package:n42_wallet/core/config/api_keys_config.dart';
 import 'package:n42_wallet/core/config/rpc_config.dart';
 import 'package:n42_wallet/core/security/phishing_detector.dart';
+import 'package:n42_wallet/core/security/security_config.dart';
 import 'package:n42_wallet/core/security/secure_storage.dart';
 import 'package:n42_wallet/core/security/wallet_data_migration.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -84,7 +85,7 @@ void main() async {
     ]);
   }
 
-  await _clearKeychainOnFreshInstall();
+  // _clearKeychainOnFreshInstall moved to _initDeferredServices (post-first-frame)
   await Firebase.initializeApp();
 
   globalProviderContainer = ProviderContainer();
@@ -105,6 +106,12 @@ void main() async {
     getIt.registerSingleton<MiningRepository>(
       MiningRepositoryImpl(globalMiningInstance),
     );
+  }
+
+  // SECURITY: Warn if SSL certificate pinning is not configured
+  if (kReleaseMode && !SecurityConfig.isCertPinningConfigured) {
+    debugPrint('CRITICAL: SSL certificate pinning uses placeholder fingerprints. '
+        'Replace with real server certificate fingerprints before production.');
   }
 
   // SECURITY: Initialize and validate API keys / RPC / config
@@ -179,7 +186,10 @@ class _N42AppV2State extends ConsumerState<N42AppV2>
   }
 
   void _initDeferredServices() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      // Keychain cleanup must complete before other services that may
+      // read/write secure storage, to avoid a race on fresh install.
+      await _clearKeychainOnFreshInstall();
       unawaited(_initLocalNotifications());
       unawaited(_migrateWalletData());
       unawaited(initN42Chat());

@@ -147,8 +147,7 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
         }
       });
 
-      await N42Chat.initialize(
-        N42ChatConfig(
+      await N42Chat.initialize(N42ChatConfig(
           defaultHomeserver: 'https://m.si46.world',
           enableEncryption: true,
           enablePushNotifications: true,
@@ -214,7 +213,12 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
           alchemyBaseUrl: 'https://eth-mainnet.g.alchemy.com/v2',
           alchemyUseProxyEndpoint: false,
         ),
-      );
+      ).timeout(const Duration(seconds: 15), onTimeout: () {
+        if (kDebugMode) {
+          debugPrint('[N42Chat] Initialization timed out after 15s');
+        }
+        throw TimeoutException('N42Chat.initialize', const Duration(seconds: 15));
+      });
       await flushPendingChatDeepLink();
       await flushPendingChatSsoDeepLink();
       await AppPushUtils.flushPendingChatNotification();

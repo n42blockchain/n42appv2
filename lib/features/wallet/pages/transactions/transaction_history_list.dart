@@ -125,20 +125,37 @@ class _TransactionHistoryListState extends State<TransactionHistoryList>
         ),
       );
     }
-    return ListView.separated(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-      itemCount: items.length,
-      separatorBuilder: (_, _) => SizedBox(height: ScreenUtil().setWidth(30)),
-      itemBuilder: (ctx, i) {
-        final tx = items[i];
-        final isBtcTx = tx is BtcTransactionRecodeModel;
-        return WalletChainInfoTransactionsItem(
-          coinModel: widget.coinModel,
-          type: isBtcTx ? 0 : 1,
-          transactionModel: tx,
-          onBack: loadAll,
-        );
+    final itemCount = items.length + (_isLoadingMore ? 1 : 0);
+    return NotificationListener<ScrollNotification>(
+      onNotification: (notification) {
+        if (notification is ScrollEndNotification &&
+            notification.metrics.pixels >=
+                notification.metrics.maxScrollExtent - 200) {
+          loadMore();
+        }
+        return false;
       },
+      child: ListView.separated(
+        padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+        itemCount: itemCount,
+        separatorBuilder: (_, _) => SizedBox(height: ScreenUtil().setWidth(30)),
+        itemBuilder: (ctx, i) {
+          if (i >= items.length) {
+            return const Padding(
+              padding: EdgeInsets.symmetric(vertical: 16),
+              child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
+            );
+          }
+          final tx = items[i];
+          final isBtcTx = tx is BtcTransactionRecodeModel;
+          return WalletChainInfoTransactionsItem(
+            coinModel: widget.coinModel,
+            type: isBtcTx ? 0 : 1,
+            transactionModel: tx,
+            onBack: loadAll,
+          );
+        },
+      ),
     );
   }
 }

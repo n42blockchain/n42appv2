@@ -56,6 +56,12 @@ import UIKit
       WalletCorePlugin.register(
         with: self.registrar(forPlugin: "WalletCorePlugin")!
       )
+      // Passkey (WebAuthn) channel
+      if #available(iOS 16.0, *) {
+        PasskeyHandler.register(
+          with: self.registrar(forPlugin: "PasskeyHandler")!
+        )
+      }
 
       if let controller = window?.rootViewController as? FlutterViewController {
         let channel = FlutterMethodChannel(

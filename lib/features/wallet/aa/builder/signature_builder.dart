@@ -6,8 +6,11 @@
 import 'dart:typed_data';
 import 'package:web3dart/web3dart.dart';
 
+import 'package:n42_wallet/core/passkey/passkey_credential.dart';
+
 import '../core/aa_errors.dart';
 import '../models/user_operation.dart';
+import 'passkey_signature_builder.dart';
 
 /// Builder for creating signatures for UserOperations
 ///
@@ -157,6 +160,27 @@ class SignatureBuilder {
     // Create a valid-looking but fake signature
     // This is used for gas estimation when we don't have the real signature yet
     return Uint8List.fromList(List.filled(65, 0xFF));
+  }
+
+  /// Create a dummy Passkey signature for gas estimation.
+  ///
+  /// Passkey signatures are larger than secp256k1 (ABI-encoded vs 65 bytes),
+  /// so gas estimation must use a correctly-sized dummy.
+  static Uint8List createDummyPasskeySignature() {
+    return PasskeySignatureBuilder.createDummyPasskeySignature();
+  }
+
+  /// Format a Passkey (P-256) authentication result for on-chain verification.
+  ///
+  /// Returns ABI-encoded (authenticatorData, clientDataJSON,
+  /// challengeIndex, typeIndex, r, s).
+  static Uint8List formatPasskeySignature(PasskeyAuthResult authResult) {
+    return PasskeySignatureBuilder.formatPasskeySignature(authResult);
+  }
+
+  /// Check if a signature is a Passkey signature (> 65 bytes).
+  static bool isPasskeySignature(Uint8List signature) {
+    return PasskeySignatureBuilder.isPasskeySignature(signature);
   }
 
   /// Check if a signature looks valid (basic format check)

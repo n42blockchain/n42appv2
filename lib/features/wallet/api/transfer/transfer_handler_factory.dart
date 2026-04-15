@@ -21,6 +21,7 @@ import 'handlers/xtz_transfer_handler.dart';
 import 'handlers/fil_transfer_handler.dart';
 import 'handlers/zil_transfer_handler.dart';
 import 'handlers/aa_transfer_handler.dart';
+import '../../mpc/mpc_transfer_handler.dart';
 
 /// Factory for creating chain-specific transfer handlers
 ///
@@ -196,5 +197,24 @@ class TransferHandlerFactory {
       handler.dispose();
     }
     _aaHandlers.clear();
+  }
+
+  // ==================== MPC Support ====================
+
+  /// Cache of MPC handler instances
+  final Map<String, MpcTransferHandler> _mpcHandlers = {};
+
+  /// Get an MPC transfer handler for the given chain
+  MpcTransferHandler getMpcHandler(String chainSymbol) {
+    final normalized = _normalizeChainSymbol(chainSymbol);
+    return _mpcHandlers.putIfAbsent(
+      normalized,
+      () => MpcTransferHandler(normalized),
+    );
+  }
+
+  /// Check if MPC is supported for a chain (all EVM chains)
+  bool isMpcSupported(String chainSymbol) {
+    return _isEvmChain(_normalizeChainSymbol(chainSymbol));
   }
 }

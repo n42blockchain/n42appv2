@@ -59,9 +59,10 @@ The app follows a layered architecture with feature-based organization:
 - **`core/`** — Framework-level infrastructure shared across all features:
   - `di/` — GetIt + Riverpod dependency injection (`injection.dart` is the central DI config)
   - `providers/` — Global Riverpod providers (user auth, theme, UI state); split into `core_providers.dart` + part files (`_ui`, `_security`, `_profile`)
-  - `network/` — Dio HTTP client, API base classes, retry/circuit-breaker interceptors, RPC URL configs (mainnet/testnet)
+  - `network/` — Dio HTTP client, API base classes, retry/circuit-breaker interceptors, RPC URL configs (mainnet/testnet), MEV protection (Flashbots)
   - `wallet_sdk/` — Low-level blockchain operations (key management, signing, address derivation)
-  - `security/` — Secure storage, device security, phishing detection, transaction risk analysis, DApp security
+  - `passkey/` — WebAuthn Passkey support (config, credentials, platform adapter, service) for app auth and AA signing
+  - `security/` — Secure storage, device security, phishing detection, transaction risk analysis, DApp security, signature decoder (human-readable)
   - `storage/` — SQLite (`app_database.dart`), SharedPreferences (`sp_util.dart`), encrypted preferences
   - `config/` — App config, API keys, RPC config, proxy config
   - `api_hub/` — Aggregated API layer with datasources and models
@@ -70,7 +71,7 @@ The app follows a layered architecture with feature-based organization:
   - `platform/` — Platform-specific services (deep links, social auth)
 
 - **`features/`** — Feature modules, each typically with `data/`, `domain/`, `presentation/`, `provider/`, `pages/`:
-  - `wallet/` — Core wallet: create/import, send/receive, token management, transaction history, account abstraction (`aa/`)
+  - `wallet/` — Core wallet: create/import, send/receive, token management, transaction history, account abstraction (`aa/` with Passkey signing + social recovery), lending (Aave V3), perpetuals (Hyperliquid), custom EVM chains
   - `browser/` — DApp browser with JS bridge, WebView integration
   - `mining/`, `mining_v1/`, `mining_v2/` — Mining functionality across protocol versions
   - `wallet_connect/` — WalletConnect v2 (via `reown_walletkit`)
@@ -78,7 +79,7 @@ The app follows a layered architecture with feature-based organization:
   - `login/` — Login/signup pages
   - `staking/`, `earn/`, `airdrop/`, `loyalty/` — DeFi features
   - `bridge/` — Cross-chain bridge
-  - `pay/` — Payment feature
+  - `pay/` — Payment feature (MoonPay buy/sell, Transak off-ramp)
   - `home/` — Main tab container and settings
   - `proto/` — Protocol Buffer definitions (`.proto` files + generated `.pb.dart`)
   - `sqlite/` — Feature-level database operations
@@ -115,6 +116,7 @@ Features communicate through:
 - `packages/n42_chat/` — Chat package (also available via git)
 - `plugins/flutter_mining/` — Native mining plugin (v1)
 - `packages/webview_flutter_wkwebview/` — Custom WebView fork
+- `chrome-extension/` — Chrome browser extension (Manifest V3, React/TypeScript, independent build with `npm run build`)
 
 ### Backend
 

@@ -120,7 +120,8 @@ class DeepLinkService {
   /// 初始化服务
   Future<void> init() async {
     try {
-      final initialUri = await _appLinks.getInitialLink();
+      final initialUri = await _appLinks.getInitialLink()
+          .timeout(const Duration(seconds: 5), onTimeout: () => null);
       if (initialUri != null) _handleUri(initialUri);
     } catch (e) {
       if (kDebugMode) debugPrint('Failed to get initial link: $e');

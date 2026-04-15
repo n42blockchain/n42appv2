@@ -16,9 +16,18 @@ import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_swap_action_button
 import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_swap_constants.dart';
 import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_swap_form_widgets.dart';
 import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_swap_history.dart';
+import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_limit_order_form.dart';
+import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_limit_orders_page.dart';
 import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_swap_quote_card.dart';
 import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_swap_token_card.dart';
 import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_token_select.dart';
+import 'package:n42_wallet/features/wallet/aa/core/aa_config.dart';
+import 'package:n42_wallet/features/wallet/aa/builder/calldata_builder.dart';
+import 'package:n42_wallet/features/wallet/api/transfer/handlers/aa_transfer_handler.dart';
+import 'package:n42_wallet/features/wallet/api/transfer/transfer_handler_factory.dart';
+import 'package:n42_wallet/features/wallet/aa/models/smart_account.dart';
+import 'package:web3dart/web3dart.dart' show hexToBytes;
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -70,11 +79,34 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
   bool _chartLoading = false;
   int _chartPeriodDays = 1;
 
+  // ── Mode: Market swap vs Limit order ────────────────────────────────────────
+  bool _isLimitMode = false;
+
+  // ── Gas-free (AA / Paymaster) state ────────────────────────────────────────
+  bool _gasFreeEnabled = false;
+
+  /// Max uint256 for unlimited ERC-20 approvals
+  static final BigInt _maxUint256 = BigInt.two.pow(256) - BigInt.one;
+
   // ── Wallet addresses by chain ─────────────────────────────────────────────
   String _evmAddr = '';
   String _solAddr = '';
 
   String get _userAddr => _chain == 'SOL' ? _solAddr : _evmAddr;
+
+  /// Check if current chain supports AA Gas-free swaps
+  bool get _canUseGasFree {
+    return _smartAccount != null;
+  }
+
+  /// Get the primary smart account for the current chain
+  SmartAccount? get _smartAccount {
+    final walletInfo = ref.read(wapBridgeProvider).walletInfo;
+    if (walletInfo == null || !walletInfo.hasAAAccounts) return null;
+    final chainId = AAConfig.chainIds[_chain];
+    if (chainId == null) return null;
+    return walletInfo.getPrimarySmartAccount(chainId);
+  }
 
   // ── Lifecycle ─────────────────────────────────────────────────────────────
   @override
@@ -144,6 +176,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
       _tokenIn = null;
       _tokenOut = null;
       _chartPrices = [];
+      _gasFreeEnabled = false;
     });
     _amountCtrl.clear();
   }
@@ -194,12 +227,16 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
 
   // ── Quote fetching ────────────────────────────────────────────────────────
 
+  /// 单调递增请求 ID，防止过期响应覆盖最新状态
+  int _quoteRequestId = 0;
+
   Future<void> _fetchQuote(String amountHuman) async {
     if (_tokenIn == null || _tokenOut == null || _userAddr.isEmpty) return;
 
     final BigInt amountWei = dexToWei(amountHuman, _tokenIn!.decimals);
     if (amountWei == BigInt.zero) return;
 
+    final requestId = ++_quoteRequestId;
     _clearQuote();
     setState(() => _quoteLoad = Load.loading);
 
@@ -211,7 +248,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
       userAddr: _userAddr,
       slippageBps: _slippageBps,
     );
-    if (!mounted) return;
+    if (!mounted || requestId != _quoteRequestId) return;
 
     if (res.error) {
       setState(() {
@@ -229,7 +266,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
 
     // For EVM non-native tokens, check if approval is needed
     final bool needsApprove = await _checkApprovalNeeded(amountWei, quote);
-    if (!mounted) return;
+    if (!mounted || requestId != _quoteRequestId) return;
 
     setState(() {
       _quoteLoad = Load.finish;
@@ -346,15 +383,22 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
       _errorMsg = '';
     });
 
-    final MessageModel txRes = await _transferApi.transfer(
-      _tokenIn?.chain ?? _chain,
-      q.routerAddr,
-      0.0, // ERC-20 swap: ETH value = 0
-      fromAddress: _userAddr,
-      contractAddress: '',
-      isTest: false,
-      message: q.calldata,
-    );
+    MessageModel txRes;
+
+    // Gas-free path: route through AA handler with Paymaster
+    if (_gasFreeEnabled && _smartAccount != null) {
+      txRes = await _executeAASwap(q);
+    } else {
+      txRes = await _transferApi.transfer(
+        _tokenIn?.chain ?? _chain,
+        q.routerAddr,
+        0.0, // ERC-20 swap: ETH value = 0
+        fromAddress: _userAddr,
+        contractAddress: '',
+        isTest: false,
+        message: q.calldata,
+      );
+    }
     if (!mounted) return;
 
     if (txRes.error) {
@@ -375,6 +419,49 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(S.of(context).g_key_dex_swap_success)),
     );
+  }
+
+  /// Execute swap via Account Abstraction (ERC-4337) with Paymaster
+  Future<MessageModel> _executeAASwap(DexQuoteModel quote) async {
+    final smartAccount = _smartAccount;
+    if (smartAccount == null) {
+      return MessageModel.error()..data = 'No smart account available';
+    }
+
+    final handler = TransferHandlerFactory.instance.getAAHandler(_chain);
+    if (handler == null) {
+      return MessageModel.error()..data = 'AA not supported for $_chain';
+    }
+
+    // Build batch calls: approve (if needed) + swap
+    final batchCalls = <ExecuteCall>[];
+
+    // Add approve call if needed (max uint256)
+    if (_needsApproval && _tokenIn != null) {
+      batchCalls.add(ExecuteCall.erc20Approve(
+        token: _tokenIn!.address,
+        spender: quote.routerAddr,
+        amount: _maxUint256,
+      ));
+    }
+
+    // Add swap call with the DEX calldata
+    batchCalls.add(ExecuteCall(
+      target: quote.routerAddr,
+      value: BigInt.zero,
+      data: hexToBytes(quote.calldata.replaceFirst('0x', '')),
+    ));
+
+    final params = AATransferParams(
+      chainSymbol: _chain,
+      fromAddress: smartAccount.address,
+      toAddress: quote.routerAddr,
+      value: 0.0,
+      smartAccount: smartAccount,
+      batchCalls: batchCalls,
+    );
+
+    return handler.transfer(params);
   }
 
   // ── Token selection helpers ───────────────────────────────────────────────
@@ -421,6 +508,72 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
     _onAmountChanged();
   }
 
+  // ── Mode tab widget ────────────────────────────────────────────────────────
+
+  Widget _modeTab(String label, bool active) {
+    final blueColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.mainBlueColor.name);
+    return GestureDetector(
+      onTap: () {
+        final newMode = label == 'Limit';
+        if (newMode == _isLimitMode) return;
+        _clearQuote();
+        setState(() => _isLimitMode = newMode);
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: ScreenUtil().setWidth(24),
+          vertical: ScreenUtil().setWidth(10),
+        ),
+        decoration: BoxDecoration(
+          color: active ? blueColor : Colors.transparent,
+          borderRadius: BorderRadius.circular(8),
+          border: active ? null : Border.all(color: blueColor.withValues(alpha: 0.3)),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            fontSize: ScreenUtil().setSp(28),
+            fontWeight: FontWeight.w600,
+            color: active ? Colors.white : blueColor,
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ── Gas-free toggle widget ─────────────────────────────────────────────────
+
+  Widget _buildGasFreeToggle() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(4)),
+      child: Row(
+        children: [
+          Icon(Icons.local_gas_station_outlined,
+              size: 18, color: _gasFreeEnabled ? const Color(0xFF4CAF50) : Colors.grey),
+          SizedBox(width: ScreenUtil().setWidth(8)),
+          Text(
+            'Gas-free Swap',
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(26),
+              fontWeight: FontWeight.w500,
+              color: _gasFreeEnabled ? const Color(0xFF4CAF50) : Colors.grey,
+            ),
+          ),
+          const Spacer(),
+          SizedBox(
+            height: 28,
+            child: Switch.adaptive(
+              value: _gasFreeEnabled,
+              onChanged: (v) => setState(() => _gasFreeEnabled = v),
+              activeTrackColor: const Color(0xFF4CAF50),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   // ── Build ─────────────────────────────────────────────────────────────────
 
   @override
@@ -438,7 +591,9 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
             },
             onOpenHistory: () => Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => const DexSwapHistory()),
+              MaterialPageRoute(builder: (_) => _isLimitMode
+                  ? const DexLimitOrdersPage()
+                  : const DexSwapHistory()),
             ),
           ),
         ],
@@ -453,6 +608,19 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
                 selectedChain: _chain,
                 onChainChanged: _onChainChanged,
               ),
+              SizedBox(height: ScreenUtil().setWidth(12)),
+              // Market / Limit mode toggle
+              Row(
+                children: [
+                  _modeTab('Market', !_isLimitMode),
+                  SizedBox(width: ScreenUtil().setWidth(12)),
+                  _modeTab('Limit', _isLimitMode),
+                ],
+              ),
+              SizedBox(height: ScreenUtil().setWidth(16)),
+              if (_isLimitMode)
+                DexLimitOrderForm(chain: _chain)
+              else ...[
               if (_showChart) ...[
                 SizedBox(height: ScreenUtil().setWidth(16)),
                 DexPriceChart(
@@ -472,6 +640,10 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
                 selectedBps: _slippageBps,
                 onChanged: _onSlippageChanged,
               ),
+              if (_canUseGasFree) ...[
+                SizedBox(height: ScreenUtil().setWidth(12)),
+                _buildGasFreeToggle(),
+              ],
               SizedBox(height: ScreenUtil().setWidth(24)),
               DexTokenCard(
                 label: s.g_swap_key_3,
@@ -518,6 +690,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
                 onApprove: _executeApprove,
                 onSwapConfirmed: _executeSwap,
               ),
+              ], // end else (market mode)
             ],
           ),
         ),

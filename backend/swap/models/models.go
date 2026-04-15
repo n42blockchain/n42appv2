@@ -68,6 +68,35 @@ type TokenInfo struct {
 	Chain    string `json:"chain"`
 }
 
+// ─── 限价单请求 / 响应 ─────────────────────────────────────────────────
+
+// LimitOrderReq 创建限价单请求
+type LimitOrderReq struct {
+	UUID       string `json:"uuid"`
+	Chain      string `json:"chain"`
+	TokenIn    string `json:"token_in"`
+	TokenOut   string `json:"token_out"`
+	SymbolIn   string `json:"symbol_in"`
+	SymbolOut  string `json:"symbol_out"`
+	AmountIn   string `json:"amount_in"`   // 人类可读数量
+	LimitPrice string `json:"limit_price"` // 触发价格（tokenOut per tokenIn）
+	ExpiresIn  int64  `json:"expires_in"`  // 有效期（秒），如 86400 = 24h
+}
+
+// LimitOrderItem 限价单列表条目
+type LimitOrderItem struct {
+	OrderID    string `json:"order_id"`
+	Chain      string `json:"chain"`
+	SymbolIn   string `json:"symbol_in"`
+	SymbolOut  string `json:"symbol_out"`
+	AmountIn   string `json:"amount_in"`
+	LimitPrice string `json:"limit_price"`
+	ExpiresAt  int64  `json:"expires_at"`
+	Status     int    `json:"status"` // 0=active 1=triggered 2=executed 3=cancelled 4=expired
+	TxHash     string `json:"tx_hash"`
+	CreatedAt  int64  `json:"created_at"`
+}
+
 // ─── 聚合器接口 ───────────────────────────────────────────────────────
 
 // Adapter DEX 适配器接口

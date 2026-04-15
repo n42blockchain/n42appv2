@@ -28,6 +28,8 @@ class SecureStorage {
   static const String _keyBiometricEnabled = 'biometric_enabled';
   static const String _keyGesturePassword = 'gesture_password';
   static const String _keyDeviceId = 'n42_device_id';
+  static const String _keyPasskeyCredentials = 'passkey_credentials';
+  static const String _keyPasskeyEnabled = 'passkey_enabled';
 
   SecureStorage() {
     _storage = const FlutterSecureStorage(
@@ -233,6 +235,34 @@ class SecureStorage {
     return _storage.read(key: _keyDeviceId);
   }
 
+  // ==================== Passkey 管理 ====================
+
+  /// 保存 Passkey 凭证列表（JSON 序列化）
+  Future<void> savePasskeyCredentials(String credentialsJson) async {
+    await _storage.write(key: _keyPasskeyCredentials, value: credentialsJson);
+  }
+
+  /// 获取 Passkey 凭证列表
+  Future<String?> getPasskeyCredentials() async {
+    return _storage.read(key: _keyPasskeyCredentials);
+  }
+
+  /// 删除 Passkey 凭证
+  Future<void> deletePasskeyCredentials() async {
+    await _storage.delete(key: _keyPasskeyCredentials);
+  }
+
+  /// 设置 Passkey 启用状态
+  Future<void> setPasskeyEnabled(bool enabled) async {
+    await _storage.write(key: _keyPasskeyEnabled, value: enabled.toString());
+  }
+
+  /// 获取 Passkey 启用状态
+  Future<bool> isPasskeyEnabled() async {
+    final value = await _storage.read(key: _keyPasskeyEnabled);
+    return value == 'true';
+  }
+
   // ==================== 内部辅助 ====================
 
   /// 读取并解码 JSON 值，失败时返回 null
@@ -255,13 +285,31 @@ class SecureStorage {
   }
 
   /// 清除用户相关数据（登出时调用）
+  ///
+  /// 删除认证信息、钱包凭证、助记词、私钥和安全设置。
+  /// 保留 [_keyDeviceId] 以便跨登出持久化。
   Future<void> clearUserData() async {
-    await Future.wait([
-      _storage.delete(key: _keyToken),
-      _storage.delete(key: _keyUuid),
-      _storage.delete(key: _keyEmail),
-      _storage.delete(key: _keyUserInfo),
-    ]);
+    final allEntries = await _storage.readAll();
+    final keysToDelete = <String>[
+      _keyToken,
+      _keyUuid,
+      _keyEmail,
+      _keyUserInfo,
+      _keyBiometricEnabled,
+      _keyGesturePassword,
+      _keyPasskeyCredentials,
+      _keyPasskeyEnabled,
+    ];
+
+    for (final key in allEntries.keys) {
+      if (key.startsWith(_keyWalletPrefix) ||
+          key.startsWith(_keyMnemonicPrefix) ||
+          key.startsWith(_keyPrivateKeyPrefix)) {
+        keysToDelete.add(key);
+      }
+    }
+
+    await Future.wait(keysToDelete.map((key) => _storage.delete(key: key)));
   }
 
   /// 检查是否有存储的凭证

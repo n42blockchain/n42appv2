@@ -93,14 +93,9 @@ class SecurityConfig {
   /// Returns false if still using placeholder values
   static bool get isCertPinningConfigured {
     const placeholderPattern = 'sha256/47DEQpj8HBSa';
-    final hasPlaceholder = allowedCertFingerprints.any(
+    return !allowedCertFingerprints.any(
       (fp) => fp.contains(placeholderPattern),
     );
-    if (hasPlaceholder) {
-      debugPrint('WARNING: SSL certificate pinning uses placeholder fingerprints. '
-          'Replace with real server certificate fingerprints before production deployment.');
-    }
-    return !hasPlaceholder || kDebugMode;
   }
 
   /// 验证 SSL 证书
@@ -113,12 +108,16 @@ class SecurityConfig {
     if (!isPinnedHost) return true;
 
     if (!isCertPinningConfigured) {
-      // Cert pinning uses placeholder fingerprints — fall back to standard TLS.
-      // To enable strict pinning, replace allowedCertFingerprints with the
-      // real server certificate fingerprints before production deployment.
+      // Cert pinning uses placeholder fingerprints.
+      // badCertificateCallback only fires for certs that ALREADY failed system
+      // TLS validation, so returning true would accept MITM certs.
+      // Debug mode: allow (local dev servers). Release: reject.
+      //
+      // This branch is only reached in release mode because the caller
+      // (line 110) returns true early in debug mode.
       debugPrint('⚠️ WARNING: SSL Pinning not configured for $host. '
-          'Falling back to standard TLS validation.');
-      return true;
+          'Rejecting untrusted certificate in release mode.');
+      return false;
     }
 
     if (allowedCertFingerprints.isEmpty && backupCertFingerprints.isEmpty) {

@@ -3,9 +3,29 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
+/// Signer type for AA smart accounts.
+enum SignerType {
+  /// Traditional EOA signer (secp256k1).
+  eoa,
+
+  /// Passkey signer (P-256 / secp256r1 via WebAuthn).
+  passkey,
+
+  /// MPC signer (key shares via Web3Auth or similar).
+  mpc;
+
+  static SignerType fromString(String value) {
+    return SignerType.values.firstWhere(
+      (e) => e.name.toLowerCase() == value.toLowerCase(),
+      orElse: () => SignerType.eoa,
+    );
+  }
+}
+
 /// Smart Account model for ERC-4337 Account Abstraction
 ///
-/// Represents a smart contract wallet that can be controlled by an EOA owner.
+/// Represents a smart contract wallet that can be controlled by an EOA owner
+/// or a Passkey signer (P-256).
 class SmartAccount {
   /// Smart account address (counterfactual or deployed)
   final String address;
@@ -40,6 +60,18 @@ class SmartAccount {
   /// Account label/name for UI display
   String? label;
 
+  /// Signer type (EOA, Passkey, or MPC)
+  final SignerType signerType;
+
+  /// Passkey credential ID (when signerType == passkey)
+  final String? passkeyCredentialId;
+
+  /// Passkey P-256 public key X coordinate (hex, when signerType == passkey)
+  final String? passkeyPublicKeyX;
+
+  /// Passkey P-256 public key Y coordinate (hex, when signerType == passkey)
+  final String? passkeyPublicKeyY;
+
   SmartAccount({
     required this.address,
     required this.type,
@@ -52,6 +84,10 @@ class SmartAccount {
     required this.createdAt,
     this.lastActivityAt,
     this.label,
+    this.signerType = SignerType.eoa,
+    this.passkeyCredentialId,
+    this.passkeyPublicKeyX,
+    this.passkeyPublicKeyY,
   });
 
   /// Check if account is deployed on-chain
@@ -68,6 +104,9 @@ class SmartAccount {
     if (address.length < 10) return address;
     return '${address.substring(0, 6)}...${address.substring(address.length - 4)}';
   }
+
+  /// Whether this account uses a Passkey signer.
+  bool get isPasskeySigner => signerType == SignerType.passkey;
 
   factory SmartAccount.fromJson(Map<String, dynamic> json) {
     return SmartAccount(
@@ -86,6 +125,12 @@ class SmartAccount {
           ? DateTime.parse(json['lastActivityAt'] as String)
           : null,
       label: json['label'] as String?,
+      signerType: json['signerType'] != null
+          ? SignerType.fromString(json['signerType'] as String)
+          : SignerType.eoa,
+      passkeyCredentialId: json['passkeyCredentialId'] as String?,
+      passkeyPublicKeyX: json['passkeyPublicKeyX'] as String?,
+      passkeyPublicKeyY: json['passkeyPublicKeyY'] as String?,
     );
   }
 
@@ -102,6 +147,10 @@ class SmartAccount {
       'createdAt': createdAt.toIso8601String(),
       'lastActivityAt': lastActivityAt?.toIso8601String(),
       'label': label,
+      'signerType': signerType.name,
+      if (passkeyCredentialId != null) 'passkeyCredentialId': passkeyCredentialId,
+      if (passkeyPublicKeyX != null) 'passkeyPublicKeyX': passkeyPublicKeyX,
+      if (passkeyPublicKeyY != null) 'passkeyPublicKeyY': passkeyPublicKeyY,
     };
   }
 
@@ -117,6 +166,10 @@ class SmartAccount {
     DateTime? createdAt,
     DateTime? lastActivityAt,
     String? label,
+    SignerType? signerType,
+    String? passkeyCredentialId,
+    String? passkeyPublicKeyX,
+    String? passkeyPublicKeyY,
   }) {
     return SmartAccount(
       address: address ?? this.address,
@@ -130,6 +183,10 @@ class SmartAccount {
       createdAt: createdAt ?? this.createdAt,
       lastActivityAt: lastActivityAt ?? this.lastActivityAt,
       label: label ?? this.label,
+      signerType: signerType ?? this.signerType,
+      passkeyCredentialId: passkeyCredentialId ?? this.passkeyCredentialId,
+      passkeyPublicKeyX: passkeyPublicKeyX ?? this.passkeyPublicKeyX,
+      passkeyPublicKeyY: passkeyPublicKeyY ?? this.passkeyPublicKeyY,
     );
   }
 

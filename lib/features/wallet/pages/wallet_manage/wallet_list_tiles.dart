@@ -2,14 +2,19 @@ part of 'wallet_list.dart';
 
 mixin _WalletListTilesMixin on _WalletListActionsMixin {
   Widget _buildList() {
-    final walletList = (this as _WalletListState).walletList;
-    if (walletList.isEmpty) return const EmptyView();
+    final state = this as _WalletListState;
+    final allWallets = state.walletList;
+    final filteredWallets = state._filteredWalletList;
+    if (filteredWallets.isEmpty) return const EmptyView();
+
+    // Pre-build index map for O(1) lookup
+    final indexMap = {for (var i = 0; i < allWallets.length; i++) allWallets[i]: i};
 
     final hdWallets = <_IndexedWallet>[];
     final singleWallets = <_IndexedWallet>[];
-    for (var i = 0; i < walletList.length; i++) {
-      final w = _IndexedWallet(walletList[i], i);
-      if (walletList[i].hasMnemonic) {
+    for (final info in filteredWallets) {
+      final w = _IndexedWallet(info, indexMap[info] ?? 0);
+      if (info.hasMnemonic) {
         hdWallets.add(w);
       } else {
         singleWallets.add(w);
@@ -164,6 +169,32 @@ mixin _WalletListTilesMixin on _WalletListActionsMixin {
                       fontSize: ScreenUtil().setSp(24),
                     ),
                   ),
+                  if (info.tags.isNotEmpty) ...[
+                    SizedBox(height: ScreenUtil().setWidth(6)),
+                    Wrap(
+                      spacing: 4,
+                      children: info.tags.map((tag) => Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: ScreenUtil().setWidth(8),
+                          vertical: ScreenUtil().setWidth(2),
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppThemeUtils.getColorByKey(
+                              context, AppThemeKeys.mainBlueColor.name)
+                              .withValues(alpha: 0.12),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Text(
+                          tag,
+                          style: TextStyle(
+                            color: AppThemeUtils.getColorByKey(
+                                context, AppThemeKeys.mainBlueColor.name),
+                            fontSize: ScreenUtil().setSp(20),
+                          ),
+                        ),
+                      )).toList(),
+                    ),
+                  ],
                 ],
               ),
             ),

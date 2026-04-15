@@ -36,6 +36,7 @@ class DeepLinkHandler {
     DeepLinkType.chat: 'roomId',
     DeepLinkType.user: 'userId',
     DeepLinkType.group: 'groupId',
+    DeepLinkType.friendCard: 'userId',
   };
 
   void _handleDeepLink(DeepLinkData data) {
@@ -61,6 +62,21 @@ class DeepLinkHandler {
         debugPrint('DeepLinkHandler: Navigating to ${data.type.name} $value');
         return true;
       }());
+    }
+
+    // walletConnect: 需要 wcUri 参数或 URI scheme 为 wc:
+    if (data.type == DeepLinkType.walletConnect) {
+      final wcUri = data.params['wcUri'] ?? '';
+      final isWcScheme = data.uri.scheme == 'wc';
+      if (wcUri.isEmpty && !isWcScheme) return;
+    }
+
+    // chatSso: 需要 loginToken / login_token / token 任一存在
+    if (data.type == DeepLinkType.chatSso) {
+      final hasToken = (data.params['loginToken'] ?? '').isNotEmpty ||
+          (data.params['login_token'] ?? '').isNotEmpty ||
+          (data.params['token'] ?? '').isNotEmpty;
+      if (!hasToken) return;
     }
 
     try {

@@ -58,6 +58,21 @@ class WalletInfo {
   /// 观察地址（EVM 格式，如 0x...），仅在 watchOnly=true 时有意义
   String watchAddress = '';
 
+  /// 用户自定义钱包标签（如"交易"、"长期持有"、"DeFi"等），用于分组过滤
+  List<String> tags = [];
+
+  /// MPC 钱包标记 — 使用 MPC-TSS 协议，无助记词
+  bool isMpc = false;
+
+  /// MPC 服务商标识（如 'web3auth'、'particle'、'lit'）
+  String? mpcProvider;
+
+  /// MPC 用户标识（服务商返回的用户 ID / verifier ID）
+  String? mpcUserId;
+
+  /// MPC 恢复因子描述（如 'Google: user@gmail.com'）
+  List<String> mpcRecoveryFactors = [];
+
   /// Account Abstraction (ERC-4337) account information
   AAAccountInfo? aaAccountInfo;
 
@@ -83,6 +98,11 @@ class WalletInfo {
     networkIndex = json['networkIndex'] as int;
     pinnedCoins = ((json['pinnedCoins'] as List<dynamic>?)?.cast<String>() ?? []).take(200).toList();
     chainOrder = ((json['chainOrder'] as List<dynamic>?)?.cast<String>() ?? []);
+    tags = ((json['tags'] as List<dynamic>?)?.cast<String>() ?? []);
+    isMpc = (json['isMpc'] as bool?) ?? false;
+    mpcProvider = json['mpcProvider'] as String?;
+    mpcUserId = json['mpcUserId'] as String?;
+    mpcRecoveryFactors = ((json['mpcRecoveryFactors'] as List<dynamic>?)?.cast<String>() ?? []);
     faceBinding = json['faceBinding'] as bool?;
     mainWallet = json['mainWallet'] as bool;
     watchOnly = (json['watchOnly'] as bool?) ?? false;
@@ -113,6 +133,11 @@ class WalletInfo {
       "networkIndex": networkIndex,
       "pinnedCoins": pinnedCoins,
       "chainOrder": chainOrder,
+      "tags": tags,
+      "isMpc": isMpc,
+      "mpcProvider": mpcProvider,
+      "mpcUserId": mpcUserId,
+      "mpcRecoveryFactors": mpcRecoveryFactors,
       "faceBinding": faceBinding,
       "mainWallet": mainWallet,
       "watchOnly": watchOnly,
@@ -131,6 +156,11 @@ class WalletInfo {
       "networkIndex": networkIndex,
       "pinnedCoins": pinnedCoins,
       "chainOrder": chainOrder,
+      "tags": tags,
+      "isMpc": isMpc,
+      "mpcProvider": mpcProvider,
+      "mpcUserId": mpcUserId,
+      "mpcRecoveryFactors": mpcRecoveryFactors,
       "faceBinding": faceBinding,
       "mainWallet": mainWallet,
       "watchOnly": watchOnly,

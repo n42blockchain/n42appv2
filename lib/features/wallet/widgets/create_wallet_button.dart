@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/features/wallet/pages/create_wallet/create_mpc_wallet.dart';
 import 'package:n42_wallet/features/wallet/pages/create_wallet/import/import_cloud_backup.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_manage/add_watch_wallet_page.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_manage/keystore/import_keystore.dart';
@@ -79,6 +80,21 @@ class _CreateWalletButtonState extends State<CreateWalletButton> {
           subtitleColor: subtitleText,
           onTap: () => _navigateAndCallback(
             Navigator.pushNamed(context, '/CreateOne'),
+          ),
+        ),
+        indentedDivider,
+
+        // MPC 无助记词创建
+        _buildMenuItem(
+          icon: Icons.shield_outlined,
+          title: 'No Seed Phrase',
+          subtitle: 'Create with social login (MPC)',
+          blueColor: blueColor,
+          subtitleColor: subtitleText,
+          onTap: () => _navigateAndCallback(
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const CreateMpcWallet()),
+            ),
           ),
         ),
         indentedDivider,

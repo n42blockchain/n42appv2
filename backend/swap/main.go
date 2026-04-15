@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 	"os"
 
@@ -44,9 +45,14 @@ func main() {
 	quoteHandler := handlers.NewQuoteHandler(aggregator, database)
 	commitHandler := handlers.NewCommitHandler(database, mon)
 	historyHandler := handlers.NewHistoryHandler(database)
+	limitHandler := handlers.NewLimitHandler(database)
+
+	// ─── 限价单价格监控 ──────────────────────────────────────────────────
+	priceMonitor := services.NewPriceMonitor(database, aggregator)
+	go priceMonitor.Start(context.Background())
 
 	// ─── 路由 & 启动 ─────────────────────────────────────────────────────
-	router := setupRouter(quoteHandler, commitHandler, historyHandler)
+	router := setupRouter(quoteHandler, commitHandler, historyHandler, limitHandler)
 
 	log.Printf("DEX swap service starting on :%s", port)
 	if err := router.Run(":" + port); err != nil {

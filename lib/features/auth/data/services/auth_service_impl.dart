@@ -16,6 +16,8 @@ import 'package:n42_wallet/core/security/secure_storage.dart';
 import 'package:n42_wallet/shared/domain/entities/wallet_info.dart';
 import 'package:n42_wallet/shared/domain/services/auth_service_interface.dart';
 import 'package:n42_wallet/features/home/widgets/face_recognition_public.dart';
+import 'package:n42_wallet/core/passkey/passkey_service.dart';
+import 'package:n42_wallet/core/passkey/passkey_platform_adapter.dart';
 
 /// Implementation of IAuthService
 @LazySingleton(as: IAuthService)
@@ -104,6 +106,51 @@ class AuthServiceImpl implements IAuthService {
         debugPrint('Biometric auth error: $e');
         return true;
       }());
+      return false;
+    }
+  }
+
+  PasskeyService? _passkeyService;
+  PasskeyService get _passkey =>
+      _passkeyService ??= PasskeyService(_secureStorage);
+
+  @override
+  Future<bool> verifyPasskey() async {
+    try {
+      final enabled = await _passkey.isEnabled();
+      if (!enabled) return false;
+      await _passkey.authenticate();
+      return true;
+    } on PasskeyException catch (e) {
+      if (e.isCancelled) return false;
+      assert(() {
+        debugPrint('Passkey auth error: $e');
+        return true;
+      }());
+      return false;
+    } catch (e) {
+      assert(() {
+        debugPrint('Passkey auth error: $e');
+        return true;
+      }());
+      return false;
+    }
+  }
+
+  @override
+  Future<bool> isPasskeyAvailable() async {
+    try {
+      return PasskeyPlatformAdapter.isSupported();
+    } catch (_) {
+      return false;
+    }
+  }
+
+  @override
+  Future<bool> isPasskeyEnabled() async {
+    try {
+      return _passkey.isEnabled();
+    } catch (_) {
       return false;
     }
   }
