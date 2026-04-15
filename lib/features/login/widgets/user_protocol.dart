@@ -18,11 +18,27 @@ class UserProtocol extends StatefulWidget {
 
 class _UserProtocolState extends State<UserProtocol> {
   bool flag = false;
+  late final TapGestureRecognizer _termsTapRecognizer;
 
   @override
   void initState() {
     super.initState();
+    _termsTapRecognizer = TapGestureRecognizer()
+      ..onTap = () async {
+        final url = Uri.parse(
+          "${AppConfig.apiUrl['walletamazeBrowser']!}/static/terms_of_use.html",
+        );
+        if (await canLaunchUrl(url)) {
+          await launchUrl(url, mode: LaunchMode.externalApplication);
+        }
+      };
     init();
+  }
+
+  @override
+  void dispose() {
+    _termsTapRecognizer.dispose();
+    super.dispose();
   }
 
   Future<void> init() async {
@@ -41,25 +57,31 @@ class _UserProtocolState extends State<UserProtocol> {
       ),
       child: Row(
         children: [
-          RoundCheckBox(
-            isChecked: flag,
-            size: ScreenUtil().setWidth(60),
-            onTap: (selected) {
+          GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () {
               setState(() => flag = !flag);
               widget.onChanged?.call(flag);
             },
-            checkedWidget: Center(
-              child: Icon(
-                Icons.check,
-                size: ScreenUtil().setWidth(40),
-                color: Colors.white,
+            child: AbsorbPointer(
+              child: RoundCheckBox(
+                isChecked: flag,
+                size: ScreenUtil().setWidth(60),
+                onTap: null,
+                checkedWidget: Center(
+                  child: Icon(
+                    Icons.check,
+                    size: ScreenUtil().setWidth(40),
+                    color: Colors.white,
+                  ),
+                ),
+                checkedColor: AppThemeUtils.getColorByKey(
+                  context,
+                  AppThemeKeys.mainBlueColor.name,
+                ),
+                animationDuration: const Duration(milliseconds: 50),
               ),
             ),
-            checkedColor: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainBlueColor.name,
-            ),
-            animationDuration: const Duration(milliseconds: 50),
           ),
           SizedBox(width: ScreenUtil().setWidth(20.0)),
           Expanded(
@@ -88,18 +110,7 @@ class _UserProtocolState extends State<UserProtocol> {
                       ),
                       decoration: TextDecoration.underline,
                     ),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () async {
-                        final url = Uri.parse(
-                          "${AppConfig.apiUrl['walletamazeBrowser']!}/static/terms_of_use.html",
-                        );
-                        if (await canLaunchUrl(url)) {
-                          await launchUrl(
-                            url,
-                            mode: LaunchMode.externalApplication,
-                          );
-                        }
-                      },
+                    recognizer: _termsTapRecognizer,
                   ),
                 ],
               ),
