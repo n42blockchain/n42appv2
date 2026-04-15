@@ -14,6 +14,9 @@ abstract class IAuthService {
   Future<String?> getAuthToken();
   Future<bool> verifyPassword(String password);
   Future<bool> verifyBiometric();
+  Future<bool> verifyPasskey();
+  Future<bool> isPasskeyAvailable();
+  Future<bool> isPasskeyEnabled();
   Stream<bool> get authStateStream;
   Future<void> logout();
 }

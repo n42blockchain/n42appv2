@@ -28,6 +28,8 @@ class SecureStorage {
   static const String _keyBiometricEnabled = 'biometric_enabled';
   static const String _keyGesturePassword = 'gesture_password';
   static const String _keyDeviceId = 'n42_device_id';
+  static const String _keyPasskeyCredentials = 'passkey_credentials';
+  static const String _keyPasskeyEnabled = 'passkey_enabled';
 
   SecureStorage() {
     _storage = const FlutterSecureStorage(
@@ -233,6 +235,34 @@ class SecureStorage {
     return _storage.read(key: _keyDeviceId);
   }
 
+  // ==================== Passkey 管理 ====================
+
+  /// 保存 Passkey 凭证列表（JSON 序列化）
+  Future<void> savePasskeyCredentials(String credentialsJson) async {
+    await _storage.write(key: _keyPasskeyCredentials, value: credentialsJson);
+  }
+
+  /// 获取 Passkey 凭证列表
+  Future<String?> getPasskeyCredentials() async {
+    return _storage.read(key: _keyPasskeyCredentials);
+  }
+
+  /// 删除 Passkey 凭证
+  Future<void> deletePasskeyCredentials() async {
+    await _storage.delete(key: _keyPasskeyCredentials);
+  }
+
+  /// 设置 Passkey 启用状态
+  Future<void> setPasskeyEnabled(bool enabled) async {
+    await _storage.write(key: _keyPasskeyEnabled, value: enabled.toString());
+  }
+
+  /// 获取 Passkey 启用状态
+  Future<bool> isPasskeyEnabled() async {
+    final value = await _storage.read(key: _keyPasskeyEnabled);
+    return value == 'true';
+  }
+
   // ==================== 内部辅助 ====================
 
   /// 读取并解码 JSON 值，失败时返回 null
@@ -267,6 +297,8 @@ class SecureStorage {
       _keyUserInfo,
       _keyBiometricEnabled,
       _keyGesturePassword,
+      _keyPasskeyCredentials,
+      _keyPasskeyEnabled,
     ];
 
     for (final key in allEntries.keys) {

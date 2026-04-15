@@ -64,5 +64,9 @@ class MainActivity: FlutterFragmentActivity() {
                     result.notImplemented()
                 }
             }
+
+        // Passkey (WebAuthn) channel
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "n42.wallet/passkey")
+            .setMethodCallHandler(PasskeyHandler(this))
     }
 }

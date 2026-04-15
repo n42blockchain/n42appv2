@@ -18,6 +18,7 @@ import 'package:n42_wallet/features/wallet/data/services/wallet_service_impl.dar
 import 'package:n42_wallet/features/mining/data/services/mining_service_impl.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/core/wallet_sdk/wallet_sdk.dart';
+import 'package:n42_wallet/core/passkey/passkey_service.dart';
 
 /// Dependency Injection Container (Composition Root)
 ///
@@ -96,6 +97,7 @@ Future<void> configureDependencies(
   _registerIfAbsent<TokenViewApi>(() => TokenViewApi());
   _registerIfAbsent<DeepLinkService>(() => DeepLinkService());
   _registerIfAbsent<SecureStorage>(() => SecureStorage());
+  _registerIfAbsent<PasskeyService>(() => PasskeyService(getIt<SecureStorage>()));
 }
 
 /// Reset dependencies (for testing)
