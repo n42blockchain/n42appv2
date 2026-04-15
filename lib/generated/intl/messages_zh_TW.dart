@@ -114,6 +114,10 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m45(value) => "${value} 指向下一層";
 
+  static String m93(time) => "建立時間：${time}";
+
+  static String m94(time) => "最近使用：${time}";
+
   static String m46(amount, token) => "≈ ${amount}${token}";
 
   static String m47(amount) => "≈ ${amount} USDT";
@@ -1920,6 +1924,25 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_old_password": MessageLookupByLibrary.simpleMessage("目前密碼"),
     "g_key_or": MessageLookupByLibrary.simpleMessage("或者"),
+    "g_key_passkey": MessageLookupByLibrary.simpleMessage("通行密鑰"),
+    "g_key_passkey_backed_up": MessageLookupByLibrary.simpleMessage("已同步至雲端"),
+    "g_key_passkey_created": m93,
+    "g_key_passkey_delete_confirm": MessageLookupByLibrary.simpleMessage(
+      "確定要刪除此通行密鑰嗎？",
+    ),
+    "g_key_passkey_deleted": MessageLookupByLibrary.simpleMessage("通行密鑰已刪除"),
+    "g_key_passkey_last_used": m94,
+    "g_key_passkey_management": MessageLookupByLibrary.simpleMessage("通行密鑰管理"),
+    "g_key_passkey_no_credentials": MessageLookupByLibrary.simpleMessage(
+      "尚未註冊通行密鑰",
+    ),
+    "g_key_passkey_not_supported": MessageLookupByLibrary.simpleMessage(
+      "此設備不支援通行密鑰",
+    ),
+    "g_key_passkey_registered": MessageLookupByLibrary.simpleMessage(
+      "通行密鑰註冊成功",
+    ),
+    "g_key_passkey_rename": MessageLookupByLibrary.simpleMessage("重新命名通行密鑰"),
     "g_key_password_changed_success": MessageLookupByLibrary.simpleMessage(
       "密碼修改成功",
     ),
@@ -1972,6 +1995,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_payment_wallet": MessageLookupByLibrary.simpleMessage("錢包"),
     "g_key_personal_1": MessageLookupByLibrary.simpleMessage("從手機圖庫中選擇"),
+    "g_key_register_passkey": MessageLookupByLibrary.simpleMessage("註冊通行密鑰"),
     "g_key_resend_code": MessageLookupByLibrary.simpleMessage("重新發送驗證碼"),
     "g_key_reset": MessageLookupByLibrary.simpleMessage("重置"),
     "g_key_reset_password": MessageLookupByLibrary.simpleMessage("重設密碼"),
@@ -2007,6 +2031,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_share_link": MessageLookupByLibrary.simpleMessage("分享連結"),
     "g_key_share_method": MessageLookupByLibrary.simpleMessage("分享方法"),
     "g_key_sign_in_failed": MessageLookupByLibrary.simpleMessage("登入失敗"),
+    "g_key_sign_in_with_passkey": MessageLookupByLibrary.simpleMessage(
+      "使用通行密鑰登入",
+    ),
     "g_key_sim_gas_estimate": m48,
     "g_key_sim_reverted": MessageLookupByLibrary.simpleMessage("交易可能會失敗"),
     "g_key_sim_reverted_reason": m49,

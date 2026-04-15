@@ -125,6 +125,10 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m45(value) => "${value} points to next tier";
 
+  static String m93(time) => "Created: ${time}";
+
+  static String m94(time) => "Last used: ${time}";
+
   static String m46(amount, token) => "≈ ${amount}${token}";
 
   static String m47(amount) => "≈ ${amount} USDT";
@@ -2710,6 +2714,33 @@ class MessageLookup extends MessageLookupByLibrary {
       "Current Password",
     ),
     "g_key_or": MessageLookupByLibrary.simpleMessage("or"),
+    "g_key_passkey": MessageLookupByLibrary.simpleMessage("Passkey"),
+    "g_key_passkey_backed_up": MessageLookupByLibrary.simpleMessage(
+      "Synced to cloud",
+    ),
+    "g_key_passkey_created": m93,
+    "g_key_passkey_delete_confirm": MessageLookupByLibrary.simpleMessage(
+      "Are you sure you want to delete this Passkey?",
+    ),
+    "g_key_passkey_deleted": MessageLookupByLibrary.simpleMessage(
+      "Passkey deleted",
+    ),
+    "g_key_passkey_last_used": m94,
+    "g_key_passkey_management": MessageLookupByLibrary.simpleMessage(
+      "Passkey Management",
+    ),
+    "g_key_passkey_no_credentials": MessageLookupByLibrary.simpleMessage(
+      "No Passkey registered",
+    ),
+    "g_key_passkey_not_supported": MessageLookupByLibrary.simpleMessage(
+      "Passkey is not supported on this device",
+    ),
+    "g_key_passkey_registered": MessageLookupByLibrary.simpleMessage(
+      "Passkey registered successfully",
+    ),
+    "g_key_passkey_rename": MessageLookupByLibrary.simpleMessage(
+      "Rename Passkey",
+    ),
     "g_key_password_changed_success": MessageLookupByLibrary.simpleMessage(
       "Password changed successfully",
     ),
@@ -2780,6 +2811,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_personal_1": MessageLookupByLibrary.simpleMessage(
       "Select from phone gallery",
     ),
+    "g_key_register_passkey": MessageLookupByLibrary.simpleMessage(
+      "Register Passkey",
+    ),
     "g_key_resend_code": MessageLookupByLibrary.simpleMessage("Resend Code"),
     "g_key_reset": MessageLookupByLibrary.simpleMessage("Reset"),
     "g_key_reset_password": MessageLookupByLibrary.simpleMessage(
@@ -2822,6 +2856,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_share_method": MessageLookupByLibrary.simpleMessage("Share method"),
     "g_key_sign_in_failed": MessageLookupByLibrary.simpleMessage(
       "Sign in failed",
+    ),
+    "g_key_sign_in_with_passkey": MessageLookupByLibrary.simpleMessage(
+      "Sign in with Passkey",
     ),
     "g_key_sim_gas_estimate": m48,
     "g_key_sim_reverted": MessageLookupByLibrary.simpleMessage(
