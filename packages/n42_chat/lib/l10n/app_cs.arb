@@ -1,0 +1,2747 @@
+{
+  "@@locale": "cs",
+  "commonRetry": "Zkuste to znovu",
+  "commonUnknownUser": "Neznámý uživatel",
+  "transferWalletNotConnected": "Peněženka není připojena",
+  "chatCallServiceNotInitialized": "Služba volání není inicializována",
+  "authLoginFailed": "Přihlášení se nezdařilo: {error}",
+  "chatCallBack": "Zavolejte zpět",
+  "chatMissedVideoCall": "Zmeškaný videohovor",
+  "chatMissedVoiceCall": "Zmeškaný hlasový hovor",
+  "chatCallNotAnswered": "Nezodpovězeno",
+  "chatCallDurationLabel": "Délka hovoru",
+  "chatVoiceCallCancelled": "Hlasový hovor byl zrušen",
+  "chatVideoCallCancelled": "Videohovor zrušen",
+  "commonImage": "[obrázek]",
+  "chatVideo": "[video]",
+  "chatVoice": "[Hlas]",
+  "commonFile": "[Soubor]",
+  "chatLocation": "[místo]",
+  "chatUnknownMessage": "[Neznámá zpráva]",
+  "commonDelete": "Smazat",
+  "chatDeleteThisMessage": "Smazat tuto zprávu?",
+  "chatMessageDeleted": "Zpráva smazána",
+  "profileNotLoggedIn": "Nejste přihlášeni",
+  "chatMyLocation": "Moje poloha",
+  "commonGroupChat": "Skupinový chat",
+  "commonSearch": "Hledat",
+  "commonCancel": "Zrušit",
+  "commonLoadFailed": "Načtení se nezdařilo",
+  "commonMessages": "Zprávy",
+  "commonContacts": "Kontakty",
+  "commonMe": "já",
+  "commonVoiceLoading": "Hlasové načítání, zkuste to znovu později",
+  "commonVoiceToTextFailed": "Hlas na text se nezdařil",
+  "commonConvertToText": "Na text",
+  "chatCopy": "Kopírovat",
+  "commonForward": "Vpřed",
+  "commonUnfavorite": "Neoblíbené",
+  "commonFavorite": "Oblíbené",
+  "settingsResend": "Odeslat znovu",
+  "chatRecall": "Odvolání",
+  "commonQuote": "Citace",
+  "commonRemind": "Připomeňte",
+  "chatCopied": "Zkopírováno",
+  "storySendMessageHint": "Pošlete zprávu",
+  "commonMicrophonePermissionRequired": "Povolte prosím přístup k mikrofonu",
+  "chatMicrophonePermissionDeniedPermanent": "Povolení mikrofonu bylo odepřeno. Chcete-li používat hlasové zprávy, povolte jej v nastavení systému.",
+  "commonStartRecordingFailed": "Nepodařilo se spustit nahrávání: {error}",
+  "commonRecordingTooShort": "Nahrávání je příliš krátké",
+  "commonStopRecordingFailed": "Nepodařilo se zastavit nahrávání: {error}",
+  "chatReleaseToCancel": "Uvolněním zrušíte",
+  "chatReleaseToSend": "Uvolněním odešlete, přejetím nahoru zrušíte",
+  "commonHoldToTalk": "Vydržte, abyste mohli mluvit",
+  "commonSend": "Odeslat",
+  "commonAddFriend": "Přidat přítele",
+  "commonChatServiceNotConnected": "Chatová služba není připojena",
+  "contactUserNotFoundHint": "Uživatel \"{query}\" nebyl nalezen\n\nTipy:\n• Zkuste zadat celé ID uživatele, např. @username:server.com\n• Zkontrolujte pravopis uživatelského jména",
+  "@contactUserNotFoundHint": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "contactCreateChatFailed": "Nepodařilo se vytvořit chat: {error}",
+  "@contactCreateChatFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "contactSearchFailed": "Vyhledávání se nezdařilo: {error}",
+  "@contactSearchFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "contactEnterUserIdOrUsername": "Pro vyhledávání zadejte ID uživatele nebo uživatelské jméno",
+  "contactSearching": "Hledání...",
+  "contactSearchUserToChat": "Vyhledejte uživatele a začněte chatovat",
+  "contactMatrixIdExample": "Můžete zadat úplné ID matice\nnapř. @user:matrix.n42.network",
+  "contactUserNotFound": "Uživatel \"{username}\" nebyl nalezen",
+  "@contactUserNotFound": {
+    "placeholders": {
+      "username": {
+        "type": "String"
+      }
+    }
+  },
+  "commonChat": "Povídání",
+  "commonSettings": "Nastavení",
+  "profileEditProfile": "Upravit profil",
+  "authLogin": "Přihlaste se",
+  "commonCreateGroup": "Vytvořit skupinu",
+  "chatError": "Chyba",
+  "commonTransfer": "Přenést",
+  "commonReceived": "Přijato",
+  "commonRefunded": "Vráceno",
+  "commonExpired": "Platnost vypršela",
+  "chatRedPacketGreeting": "S pozdravem",
+  "commonN42RedPacket": "N42 červený balíček",
+  "commonClaimed": "Nárokováno",
+  "commonAllClaimed": "Vše nárokováno",
+  "chatReadAloud": "Čtěte nahlas",
+  "chatReply": "Odpovědět",
+  "commonEdit": "Upravit",
+  "chatSelectForwardTarget": "Vyberte Dopředný cíl",
+  "commonSendCount": "Odeslat ({count})",
+  "contactN42Id": "N42 ID: {id}",
+  "profileN42IdTitle": "ID N42",
+  "profileN42Bean": "N42 Fazole",
+  "contactFriendInfo": "Informace o příteli",
+  "contactFriendInfoDesc": "Přidejte poznámku přítele, telefon, štítky, poznámky, fotografie a nastavte oprávnění.",
+  "commonMoments": "Okamžiky",
+  "commonSendMessage": "Zpráva",
+  "contactAudioVideoCall": "Audio/Video hovor",
+  "contactVideoChannel": "Video kanál",
+  "contactRemark": "Poznámka",
+  "contactRemarkName": "Poznámka Jméno",
+  "contactPhone": "Telefon",
+  "contactTags": "Tagy",
+  "contactNotes": "Poznámky",
+  "contactPhotos": "Fotografie",
+  "contactPermissions": "Oprávnění",
+  "contactChatMomentsEtc": "Chat, Momenty, Sport atd.",
+  "contactMoreInfo": "Více informací",
+  "contactCommonGroups": "Společné skupiny",
+  "contactSource": "Zdroj",
+  "settingsNotificationSettings": "Oznámení",
+  "settingsPrivacy": "soukromí",
+  "settingsAppearance": "Vzhled",
+  "settingsAbout": "O",
+  "commonLogout": "Odhlásit se",
+  "commonLogoutConfirm": "Opravdu se chcete odhlásit?",
+  "commonSave": "Uložit",
+  "profileNickname": "přezdívka",
+  "profileEnterNickname": "Zadejte přezdívku",
+  "profileSignature": "Podpis",
+  "profileAddSignature": "Přidejte podpis",
+  "commonTakePhoto": "Vyfotit",
+  "profileChooseFromGallery": "Vyberte si z Galerie",
+  "profileSaveFailed": "Uložení se nezdařilo: {error}",
+  "authSecureDecentralizedChat": "Bezpečné, decentralizované zasílání zpráv",
+  "commonEndToEndEncryption": "End-to-End šifrování",
+  "authMessagesOnlyYouCanSee": "Zprávy viditelné pouze vám a příjemci",
+  "authDecentralized": "Decentralizované",
+  "authBasedOnMatrix": "Postaveno na otevřeném protokolu Matrix",
+  "authWalletIntegration": "Integrace peněženky",
+  "authEasyCryptoTransfer": "Snadné převody kryptoměn",
+  "authRegister": "Zaregistrujte se",
+  "authAgreeTerms": "Přihlášením souhlasíte",
+  "authTermsOfService": "Podmínky služby",
+  "authAnd": "a",
+  "authPrivacyPolicy": "Zásady ochrany osobních údajů",
+  "authServerAddress": "Adresa serveru",
+  "authEnterServerAddress": "Zadejte adresu serveru",
+  "authConnectedTo": "Připojeno k {serverName}",
+  "authUsername": "Uživatelské jméno",
+  "authEnterUsername": "Zadejte uživatelské jméno",
+  "authUsernameOrEmail": "Uživatelské jméno nebo e-mail",
+  "authEnterUsernameOrEmail": "Zadejte uživatelské jméno nebo e-mail",
+  "authPassword": "Heslo",
+  "authEnterPassword": "Zadejte heslo",
+  "authRegisterAccount": "Zaregistrujte se",
+  "authForgotPassword": "Zapomenuté heslo",
+  "authOtherLoginMethods": "Další způsoby přihlášení",
+  "authCreateAccount": "Vytvořit účet",
+  "authJoinN42Chat": "Připojte se k chatu N42 a začněte chatovat",
+  "authUsernameHint": "3–20 znaků, písmen/číslic/_",
+  "authUsernameMinLength": "Uživatelské jméno musí mít alespoň 3 znaky",
+  "authUsernameMaxLength": "Uživatelské jméno musí mít maximálně 20 znaků",
+  "authUsernameFormat": "Uživatelské jméno může obsahovat pouze písmena, čísla a podtržítka",
+  "authPasswordHint": "Minimálně 8 znaků",
+  "commonPasswordMinLength": "Heslo musí mít alespoň 8 znaků",
+  "authConfirmPassword": "Potvrďte heslo",
+  "authFilled": "Naplněno",
+  "authEnterInviteCode": "Zadejte kód pozvánky",
+  "authAlreadyHaveAccount": "Už máte účet?",
+  "authLoginNow": "Přihlaste se nyní",
+  "profileAvatar": "Avatar",
+  "profileStatus": "Stav",
+  "commonLoading": "Načítání...",
+  "conversationNoConversations": "Žádné konverzace",
+  "conversationTapToChat": "Klepnutím vpravo nahoře začněte chatovat",
+  "conversationStartGroup": "Spusťte skupinový chat",
+  "commonScan": "Skenujte",
+  "commonPayment": "Platba",
+  "commonFeatureComingSoon": "{feature} již brzy",
+  "conversationMarkAsRead": "Označit jako přečtené",
+  "commonUnmute": "Zapnout zvuk",
+  "commonMute": "Ztlumit",
+  "conversationUnpin": "Odepnout",
+  "conversationPin": "Kolík",
+  "conversationDeleteConversation": "Smazat konverzaci",
+  "conversationDeleteConversationConfirm": "Smazat konverzaci s \"{name}\"?",
+  "commonNoContacts": "Žádné kontakty",
+  "contactAddFriendsToChat": "Přidejte přátele a začněte chatovat",
+  "contactNotFound": "Kontakt nenalezen",
+  "contactTryOtherKeywords": "Zkuste jiná klíčová slova nebo globální vyhledávání",
+  "contactSearchResults": "Výsledky vyhledávání",
+  "contactNewFriends": "Noví přátelé",
+  "contactChatOnlyFriends": "Přátelé pouze pro chat",
+  "contactOfficialAccounts": "Oficiální účty",
+  "contactServiceAccounts": "Servisní účty",
+  "contactEnterpriseContacts": "Podnikové kontakty",
+  "contactRecommendToFriend": "Sdílejte kontakt",
+  "commonSetRemark": "Nastavit poznámku",
+  "contactSendingCard": "Odesílání kontaktní karty...",
+  "commonFileLabel": "Soubor",
+  "commonLocationLabel": "Umístění",
+  "contactRecommendFailed": "Doporučení selhalo: {error}",
+  "profileEnterRemark": "Zadejte poznámku",
+  "contactOpeningChat": "Otevírání chatu...",
+  "contactOpenChatFailed": "Chat se nepodařilo otevřít: {error}",
+  "contactAddContact": "Přidat kontakt",
+  "contactEnterUserId": "Zadejte ID uživatele",
+  "contactNoFriendRequests": "Žádné žádosti o přátelství",
+  "commonAccept": "Přijmout",
+  "commonReject": "Odmítnout",
+  "commonNoGroups": "Žádné skupiny",
+  "contactSelectFriendToRecommend": "Vyberte přítele, kterému chcete doporučit",
+  "commonSearchContacts": "Hledat kontakty",
+  "contactNoContactsFound": "Nebyly nalezeny žádné kontakty",
+  "favoriteYesterday": "včera",
+  "chatJustNow": "Právě teď",
+  "profileOnline": "Online",
+  "profileOffline": "Offline",
+  "searchContactsGroupsMessages": "Vyhledávejte kontakty, skupiny a zprávy",
+  "searchError": "Chyba vyhledávání",
+  "chatSearchHint": "Hledat",
+  "searchHistory": "Historie vyhledávání",
+  "commonClear": "Jasný",
+  "commonAll": "všechny",
+  "searchGroups": "Skupiny",
+  "searchNoResults": "Žádné výsledky",
+  "commonGroupMembers": "Členové ({count})",
+  "groupMembersTitle": "Členové skupiny",
+  "groupViewAll": "Zobrazit vše",
+  "groupOwner": "vlastník",
+  "groupAdmin": "Admin",
+  "groupInvite": "Pozvat",
+  "commonGroupAnnouncement": "Skupinové oznámení",
+  "commonNotSet": "Nenastaveno",
+  "groupDescription": "Popis skupiny",
+  "groupPublicGroup": "Veřejná skupina",
+  "commonClearChatHistory": "Vymazat historii chatu",
+  "commonDissolveGroup": "Rozpustit skupinu",
+  "commonLeaveGroup": "Opustit skupinu",
+  "groupChangeGroupName": "Změňte název skupiny",
+  "commonEnterGroupName": "Zadejte název skupiny",
+  "commonConfirm": "Potvrďte",
+  "groupEnterGroupDescription": "Zadejte popis skupiny",
+  "groupPublish": "Publikovat",
+  "chatClearHistoryConfirm": "Vymazat celou historii chatu? Toto nelze vrátit zpět.",
+  "chatClearAction": "Jasný",
+  "commonChatHistoryCleared": "Historie chatu byla vymazána",
+  "commonDissolve": "Rozpustit",
+  "groupQrCode": "Skupinový QR kód",
+  "commonSearchChatHistory": "Hledat historii chatu",
+  "groupIdCopied": "ID skupiny zkopírováno",
+  "transferEnterOrPasteAddress": "Zadejte nebo vložte adresu peněženky",
+  "transferSelectToken": "Vyberte Token",
+  "commonTransferAmount": "Částka převodu",
+  "transferAvailable": "K dispozici",
+  "transferMemoOptional": "Poznámka (volitelné)",
+  "transferConfirmTransfer": "Potvrďte přenos",
+  "transferAddressVerified": "Adresa ověřena",
+  "transferAvailableBalance": "Dostupné: {balance} {symbol}",
+  "commonEnterAmount": "Zadejte částku",
+  "commonRedPacketCountMin": "Vyžaduje se alespoň 1 červený balíček",
+  "commonViewRedPacketDetails": "Zobrazit podrobnosti o červeném paketu",
+  "commonEnterTransferAmount": "Zadejte částku převodu",
+  "commonTransferTo": "Přenést do",
+  "commonFromSender": "Od {name}",
+  "commonConfirmReceive": "Potvrďte příjem",
+  "groupProfile": "Informace o skupině",
+  "groupRemoveMember": "Odebrat ze skupiny",
+  "commonRemove": "Odebrat",
+  "profileClearStatus": "Vymazat stav",
+  "profileClearStatusConfirm": "Vymazat aktuální stav?",
+  "profileStatusCleared": "Stav vymazán",
+  "profileUserNotExist": "Uživatel neexistuje",
+  "profileUserIdCopied": "ID uživatele zkopírováno",
+  "commonReport": "Zpráva",
+  "profileQrCode": "QR kód",
+  "profileAvatarUpdated": "Avatar aktualizován",
+  "commonSelectImageFailed": "Nepodařilo se vybrat obrázek: {error}",
+  "profileChangeName": "Změnit jméno",
+  "profileMale": "Mužské",
+  "profileFemale": "Žena",
+  "chatFeatureInDev": "Funkce {feature} ve vývoji...",
+  "profileSaveAddressFailed": "Nepodařilo se uložit adresu: {error}",
+  "profileAddNew": "Přidat",
+  "profileAddAddress": "Přidat adresu",
+  "profileAddressAdded": "Adresa přidána",
+  "profileAddressUpdated": "Adresa aktualizována",
+  "profileDeleteAddress": "Smazat adresu",
+  "profileAddressDeleted": "Adresa smazána",
+  "profileSaveInvoiceFailed": "Fakturu se nepodařilo uložit: {error}",
+  "profileMyInvoices": "Moje faktury",
+  "profileAddInvoice": "Přidat fakturu",
+  "profileInvoiceAdded": "Faktura přidána",
+  "profileInvoiceUpdated": "Faktura aktualizována",
+  "profileDeleteInvoice": "Smazat fakturu",
+  "profileInvoiceDeleted": "Faktura smazána",
+  "profilePersonal": "Osobní",
+  "groupSelectAtLeastOne": "Vyberte prosím alespoň jednoho člena",
+  "chatFileNotExist": "Soubor neexistuje",
+  "chatSendFailed": "Odeslání se nezdařilo: {error}",
+  "chatCannotOpenBrowser": "Nelze otevřít prohlížeč",
+  "chatSelectFileFailed": "Nepodařilo se vybrat soubor: {error}",
+  "settingsSetupFailed": "Nastavení se nezdařilo: {error}",
+  "transferEnterValidAmount": "Zadejte platnou částku",
+  "commonAddressCopied": "Adresa zkopírována",
+  "favoriteOpenItem": "Otevřeno: {content}",
+  "favoriteDeleted": "Smazáno",
+  "profileWallet": "Peněženka",
+  "chatRecording": "Nahrávání",
+  "chatInvalidVideoUrl": "Neplatná adresa URL videa",
+  "chatDownloadFile": "Stáhnout soubor",
+  "chatClearChatHistoryTitle": "Vymazat historii chatu",
+  "chatVideoCall": "Videohovor",
+  "commonVoiceCall": "Hlasový hovor",
+  "callLeaveMeeting": "Opustit schůzku",
+  "chatDetails": "Podrobnosti chatu",
+  "chatViewAllGroupMembers": "Zobrazit všechny členy",
+  "chatGroupName": "Název skupiny",
+  "chatGroupNameUpdated": "Název skupiny byl aktualizován",
+  "chatUpdateFailed": "Aktualizace se nezdařila",
+  "chatNoPermissionToModify": "Nemáte oprávnění k úpravám",
+  "chatGroupManagement": "Správa skupiny",
+  "chatMyNicknameInGroup": "Moje přezdívka ve skupině",
+  "chatPinChat": "Připnout chat",
+  "chatStrongReminder": "Silné připomenutí",
+  "chatSetChatBackground": "Nastavit pozadí chatu",
+  "chatUnknownFile": "Neznámý soubor",
+  "chatDownload": "Stáhnout",
+  "chatInvalidLocation": "Neplatné umístění",
+  "chatTapToCancel": "Klepnutím zrušte",
+  "chatCaptureFailed": "Zachycení se nezdařilo: {error}",
+  "chatProcessingVideo": "Zpracování videa...",
+  "chatVideoFileNotExist": "Video soubor neexistuje",
+  "chatVideoDataEmpty": "Data videa jsou prázdná",
+  "chatVideoTooLarge": "Velikost videa nesmí přesáhnout 100 MB",
+  "chatSendingVideo": "Odesílání videa...",
+  "chatSendVideoFailed": "Video se nepodařilo odeslat: {error}",
+  "chatImageFileNotExist": "Soubor obrázku neexistuje",
+  "commonImageDataEmpty": "Obrazová data jsou prázdná",
+  "chatSendingImage": "Odesílání obrázku...",
+  "chatSendImageFailed": "Nepodařilo se odeslat obrázek: {error}",
+  "chatSendLocation": "Odeslat polohu",
+  "chatSelectLocationAndSend": "Vyberte umístění a odešlete",
+  "chatShareRealTimeLocation": "Sdílejte polohu v reálném čase",
+  "chatShareLocationForOneHour": "Sdílejte polohu v reálném čase s přítelem po dobu 1 hodiny",
+  "chatLocationSent": "Poloha odeslána",
+  "chatSelectMessages": "Vyberte zprávy",
+  "chatSelectedCount": "Vybrané {count}",
+  "chatSelectAll": "Vyberte Vše",
+  "chatGroupChatCount": "Skupinový chat ({count})",
+  "chatPrivateChat": "Soukromý chat",
+  "chatNoMessages": "Žádné zprávy",
+  "chatSendFirstMessage": "Chcete-li začít chatovat, odešlete první zprávu",
+  "chatEncryptionNotice": "Tento chat je šifrován end-to-end. Zprávy můžete číst pouze vy a příjemce.",
+  "chatMultiForward": "Vpřed",
+  "chatCollect": "Sbírejte",
+  "chatNoMembers": "Žádní členové",
+  "chatMemberNotFound": "Člen nenalezen",
+  "chatVoiceFileNotExist": "Hlasový soubor neexistuje",
+  "chatVoiceFileEmpty": "Hlasový soubor je prázdný",
+  "chatSendingVoice": "Odesílání hlasu...",
+  "chatSendVoiceFailed": "Nepodařilo se odeslat hlas: {error}",
+  "chatMessageForwarded": "Zpráva přeposlána",
+  "chatForwardFailed": "Přesměrování se nezdařilo: {error}",
+  "chatUnfavorited": "Neoblíbený",
+  "chatFavorited": "Oblíbené",
+  "chatReactionAdded": "Přidána reakce",
+  "chatReactionRemoved": "Reakce odstraněna",
+  "chatFailedMessageDeleted": "Neúspěšná zpráva byla smazána",
+  "chatDeleteMessages": "Odstraňte zprávy",
+  "chatDeleteMessagesConfirm": "Opravdu chcete smazat zprávy {count}?",
+  "chatNoteOtherMessages": "Poznámka: Zprávy {count} jsou od ostatních a budou smazány pouze pro vás.",
+  "chatMyMessagesWillBeRecalled": "Zprávy {count} od vás budou vyvolány pro všechny.",
+  "chatRecalledCount": "Připomenuté zprávy {count}, {localCount} odstraněny pouze pro vás",
+  "chatRecalledMessages": "Vyvolání zpráv {count}",
+  "chatDeletedLocally": "Zprávy {count} smazané pouze pro vás",
+  "chatForwardedCount": "Přeposlané zprávy {count}",
+  "chatForwardComplete": "Předání dokončeno: {success} bylo úspěšné, {failed} se nezdařilo",
+  "chatRemindOnlyInGroup": "Funkce připomenutí je dostupná pouze ve skupinovém chatu",
+  "chatOnlyTextSearchable": "Lze vyhledávat pouze textové zprávy",
+  "chatSearchFor": "Hledat \"{text}\"",
+  "chatBaiduSearch": "Vyhledávání Baidu",
+  "chatGoogleSearch": "Vyhledávání Google",
+  "chatBingSearch": "Bing Search",
+  "chatCalling": "Volání...",
+  "chatRinging": "Vyzvánění...",
+  "chatInCall": "V hovoru",
+  "commonFeatureInDevelopment": "Funkce {feature} ve vývoji...",
+  "chatCollectMessages": "Shromážděné zprávy {count}",
+  "commonMemberCount": "Členové {count}",
+  "groupDone": "Hotovo ({count})",
+  "@groupDone": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "profileServices": "Služby",
+  "commonFavorites": "Oblíbené",
+  "profileOrdersAndCards": "Objednávky a karty",
+  "profileStickers": "Samolepky",
+  "profileStatusSetTo": "Stav nastaven na: {status}",
+  "@profileStatusSetTo": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "profileAvatarUploadFailed": "Nahrání avatara se nezdařilo",
+  "profilePersonalProfile": "Osobní profil",
+  "profileName": "Jméno",
+  "profileGender": "Pohlaví",
+  "profileRegion": "Kraj",
+  "commonMyQrCode": "Můj QR kód",
+  "profilePoke": "Strčit",
+  "profileRingtone": "Vyzváněcí tón",
+  "profileDefaultRingtone": "Výchozí vyzváněcí tón",
+  "profileMyAddresses": "Moje adresy",
+  "profileGenderSetTo": "Pohlaví nastaveno na: {gender}",
+  "@profileGenderSetTo": {
+    "placeholders": {
+      "gender": {
+        "type": "String"
+      }
+    }
+  },
+  "profileSelectRegion": "Vyberte Region",
+  "profileSelectCity": "Vyberte Město",
+  "profileRegionSetTo": "Oblast nastavena na: {region}",
+  "@profileRegionSetTo": {
+    "placeholders": {
+      "region": {
+        "type": "String"
+      }
+    }
+  },
+  "profileSetPoke": "Nastavte Poke",
+  "profileFriendPokedMe": "Přítel mě šťouchl",
+  "profileExample": "Příklad",
+  "profileOnTheShoulder": " na rameni",
+  "profilePokeCleared": "Poke vymazán",
+  "profilePokeSetTo": "Poke nastaven na: poked me{suffix}",
+  "@profilePokeSetTo": {
+    "placeholders": {
+      "suffix": {
+        "type": "String"
+      }
+    }
+  },
+  "profileEditSignature": "Upravit podpis",
+  "profileIntroduceYourself": "Věta na představení",
+  "profileSignatureCleared": "Podpis vymazán",
+  "profileSignatureUpdated": "Podpis aktualizován",
+  "profileScanToAddFriend": "Naskenujte QR kód výše a přidejte si mě jako přítele",
+  "profileRingtoneSetTo": "Vyzváněcí tón nastaven na: {ringtone}",
+  "@profileRingtoneSetTo": {
+    "placeholders": {
+      "ringtone": {
+        "type": "String"
+      }
+    }
+  },
+  "commonConfirmDissolveGroup": "Opravdu chcete rozpustit \"{name}\"? Tuto akci nelze vrátit zpět.",
+  "@commonConfirmDissolveGroup": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "authEnterValidServerAddress": "Zadejte platnou adresu serveru",
+  "authEnterServerAddressFirst": "Nejprve zadejte adresu serveru",
+  "authPasskeyRequiresServer": "Přihlášení pomocí hesla vyžaduje podporu serveru",
+  "authLoginAgreement": "Přihlášením souhlasíte ",
+  "authPleaseAgreeToTerms": "Přečtěte si prosím Podmínky služby a Zásady ochrany osobních údajů a odsouhlaste je",
+  "authRegisterFailed": "Registrace se nezdařila",
+  "commonReenterPassword": "Znovu zadejte heslo",
+  "commonPasswordsDoNotMatch": "Hesla se neshodují",
+  "authInviteCodeBuiltIn": "Zvací kód (vestavěný)",
+  "authInviteCodeBuiltInNote": "Zvací kód je vestavěný, obvykle jej není třeba upravovat",
+  "authIHaveReadAndAgree": "Přečetl jsem a souhlasím ",
+  "mainStartGroupChat": "Spusťte skupinový chat",
+  "mainAddFriends": "Přidat přátele",
+  "mainPaymentAndCollection": "Platba",
+  "contactCount": "Kontakty {count}",
+  "@contactCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "contactAddToHomeScreen": "Přidat na domovskou obrazovku",
+  "contactRecommendedCardTo": "Doporučená karta {contact} na {recipient}",
+  "@contactRecommendedCardTo": {
+    "placeholders": {
+      "contact": {
+        "type": "String"
+      },
+      "recipient": {
+        "type": "String"
+      }
+    }
+  },
+  "contactEnterRemarkName": "Zadejte název poznámky",
+  "contactRemarkSetTo": "Poznámka nastavena na: {remark}",
+  "@contactRemarkSetTo": {
+    "placeholders": {
+      "remark": {
+        "type": "String"
+      }
+    }
+  },
+  "contactAcceptedFriendRequest": "Přijal jsem žádost o přátelství {name}",
+  "@contactAcceptedFriendRequest": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "contactRejectedFriendRequest": "Žádost o přátelství {name} byla zamítnuta",
+  "@contactRejectedFriendRequest": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "commonGroupInvites": "Skupinové pozvánky",
+  "commonMyGroups": "Moje skupiny ({count})",
+  "@commonMyGroups": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "commonInvitedToJoinGroup": "Pozván do skupiny",
+  "commonConfirmLeaveGroup": "Opravdu chcete opustit \"{name}\"?",
+  "@commonConfirmLeaveGroup": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "commonLeave": "Odejděte",
+  "commonRecallThisMessage": "Pamatujete si tuto zprávu?",
+  "commonSavedToGallery": "Uloženo do galerie",
+  "commonFailedToSave": "Uložení se nezdařilo",
+  "chatSaving": "Ukládání...",
+  "commonShare": "Sdílejte",
+  "chatSaveToGallery": "Uložit do Galerie",
+  "chatFailedToLoadImage": "Načtení obrázku se nezdařilo",
+  "chatVideoRecordingFailed": "Záznam videa se nezdařil",
+  "profileRedPacket": "Červený balíček",
+  "commonMusic": "Hudba",
+  "commonCoupon": "kupon",
+  "commonGift": "Dárek",
+  "commonPoll": "Anketa",
+  "favoriteText": "Text",
+  "favoriteLinkLabel": "Odkaz",
+  "favoriteNote": "Poznámka",
+  "favoriteMyNotes": "Moje poznámky",
+  "favoriteToday": "dnes",
+  "favoriteDaysAgoText": "Před {count} dny",
+  "@favoriteDaysAgoText": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "favoriteDateFormat": "{month}/{day}",
+  "@favoriteDateFormat": {
+    "placeholders": {
+      "month": {
+        "type": "int"
+      },
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "favoriteNoFavorites": "Zatím žádné oblíbené",
+  "favoriteLongPressToFavorite": "Dlouhým stisknutím zprávy přejdete do oblíbené položky",
+  "favoriteNewNote": "Nová poznámka",
+  "favoriteLink": "Oblíbený odkaz",
+  "favoriteEditTags": "Upravit značky",
+  "favoriteDeleteFavorite": "Smazat oblíbené",
+  "favoriteDeleteFavoriteConfirm": "Opravdu chcete tuto oblíbenou položku smazat?",
+  "favoriteNoSearchResultsFound": "Nebyly nalezeny žádné výsledky",
+  "commonSendRedPacket": "Pošlete červený balíček",
+  "transferAmount": "Částka",
+  "commonRedPacketCover": "Červený obal na balíček",
+  "commonRedPacketType": "Červený typ paketu",
+  "commonNormalRedPacket": "Normální",
+  "commonLuckyRedPacket": "Štěstí",
+  "commonRedPacketCount": "Počet červených paketů",
+  "commonPieces": "kusy",
+  "commonPutMoneyInRedPacket": "Vložte peníze do červeného balíčku",
+  "commonRedPacketRefundNotice": "Nevyzvednuté červené balíčky budou vráceny po 24 hodinách",
+  "commonOpenRedPacket": "Otevřít",
+  "commonRedPacketAllClaimed": "Červený balíček vše nárokováno",
+  "commonRedPacketExpired": "Platnost červeného balíčku vypršela",
+  "commonAddTransferNote": "Přidejte poznámku o převodu",
+  "commonYuan": "CNY",
+  "commonReplyWithEmoji": "Odpovězte tímto emotikonem",
+  "contactEditRemark": "Upravit poznámku",
+  "contactSetPermissions": "Nastavte oprávnění",
+  "profileAddToBlacklist": "Přidat na černou listinu",
+  "contactDeleteContact": "Smazat kontakt",
+  "contactDeleteContactConfirm": "Opravdu chcete smazat {name}?",
+  "@contactDeleteContactConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "transferTitle": "Přenést",
+  "transferReceiverAddressLabel": "Adresa příjemce",
+  "transferSelectTokenLabel": "Vyberte Token",
+  "transferAmountLabel": "Částka převodu",
+  "transferMemoLabel": "Poznámka (volitelné)",
+  "transferAddMemoHint": "Přidejte poznámku",
+  "transferSendPaymentRequest": "Odeslat žádost o platbu",
+  "transferQrCodeGenerateFailed": "Generování QR kódu se nezdařilo",
+  "transferScanQrToPayMe": "Zaplaťte mi naskenováním QR kódu",
+  "transferMyWalletAddress": "Adresa mé peněženky",
+  "transferCreatePaymentRequest": "Vytvořit žádost o platbu",
+  "profileN42IdLabel": "N42 ID: {id}",
+  "@profileN42IdLabel": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "commonRedPacketDefaultGreeting": "S pozdravem",
+  "commonSenderRedPacket": "Červený paket {name}",
+  "@commonSenderRedPacket": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "transferEnterValidAddress": "Zadejte prosím platnou adresu",
+  "transferPleaseSelectToken": "Vyberte token",
+  "commonReceivedTransfer": "Přijatý převod",
+  "@commonFromSender": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@commonSendCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "commonSenderSentRedPacket": "{name} odeslal červený paket",
+  "@commonSenderSentRedPacket": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "commonSavedToBalance": "Uloženo do zůstatku, lze převést přímo",
+  "commonRedPacketExpiredOrEmpty": "Platnost červeného balíčku vypršela/všechno nárokováno",
+  "transferScanFeatureComingSoon": "Funkce skenování již brzy...",
+  "contactSetAsStarred": "Nastavit jako S hvězdičkou",
+  "contactAddToBlocklist": "Přidat do seznamu blokovaných",
+  "commonClaimedYour": " nárokoval váš ",
+  "commonClaimedText": " tvrdil ",
+  "commonUserTyping": "{name} píše...",
+  "@commonUserTyping": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "commonTyping": "Psaní...",
+  "commonWaitingToReceive": "Čekání na přijetí",
+  "commonTapToClaim": "Klepnutím nárokujte",
+  "commonHasBeenReceived": "Bylo přijato",
+  "commonGetLucky": "Mít štěstí",
+  "qrcodeCameraStartFailed": "Fotoaparát se nepodařilo spustit",
+  "qrcodeUnknownError": "Neznámá chyba",
+  "qrcodePlaceQrCodeInFrame": "Umístěte QR kód do rámečku, který chcete naskenovat",
+  "qrcodeCloseManualInput": "Zavřete ruční vstup",
+  "qrcodeManualInputUserId": "Ruční zadání ID uživatele",
+  "commonAdd": "Přidat",
+  "profileSetStatus": "Nastavit stav",
+  "profileVisibleToFriends24h": "Viditelné pro přátele po dobu 24 hodin",
+  "profileWriteStatus": "Zapsat stav",
+  "profileEnterYourStatus": "Zadejte svůj stav...",
+  "profileOk": "OK",
+  "qrcodeCameraPermissionRequired": "Ke skenování QR kódu je vyžadováno povolení fotoaparátu",
+  "qrcodeCameraPermissionDenied": "Povolení fotoaparátu bylo trvale odepřeno. Povolte jej prosím v nastavení systému.",
+  "qrcodePermissionCheckError": "Chyba při kontrole oprávnění: {error}",
+  "@qrcodePermissionCheckError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "qrcodeInvalidQrCode": "Neplatný QR kód",
+  "qrcodeCannotAddFriend": "Nelze přidat přítele: {error}",
+  "@qrcodeCannotAddFriend": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "qrcodeScanQrCode": "Naskenujte QR kód",
+  "qrcodeCheckingCameraPermission": "Kontrola oprávnění fotoaparátu...",
+  "qrcodeNeedCameraPermission": "Je vyžadováno oprávnění k fotoaparátu",
+  "qrcodeRetryPermission": "Zkuste to znovu",
+  "qrcodeOpenSettings": "Otevřete Nastavení",
+  "groupInviteMembers": "Pozvat členy",
+  "groupInviteCount": "Pozvat ({count})",
+  "@groupInviteCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "profileNoShippingAddress": "Žádná dodací adresa",
+  "profileDefaultLabel": "Výchozí",
+  "profileNoInvoice": "Žádná faktura",
+  "profileCompany": "Společnost",
+  "profileTaxNumber": "Daňové číslo",
+  "profileConfirmDeleteAddress": "Opravdu chcete smazat tuto adresu?",
+  "profileConfirmDeleteInvoice": "Opravdu chcete smazat tuto fakturu?",
+  "commonGroupOwner": "vlastník",
+  "commonGroupAdmin": "Admin",
+  "groupSearchMembers": "Hledat členy",
+  "groupTotalMembers": "Členové {count}",
+  "@groupTotalMembers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatRemoveFromGroup": "Odebrat ze skupiny",
+  "groupConfirmRemoveMember": "Opravdu chcete odebrat \"{name}\" ze skupiny?",
+  "@groupConfirmRemoveMember": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatUnknownSong": "Neznámá píseň",
+  "chatUnknownArtist": "Neznámý umělec",
+  "chatUnknownContact": "Neznámý kontakt",
+  "chatPersonalCard": "Kontaktní karta",
+  "chatSingleChoice": "Svobodný",
+  "chatMultiChoice": "Multi",
+  "chatEnded": "Skončilo",
+  "chatEndPollButton": "Ukončit hlasování",
+  "chatPollHint": "Anketa se zobrazí v chatu. Členové skupiny mohou hlasovat.",
+  "chatSearchSongOrArtist": "Vyhledejte skladbu nebo interpreta",
+  "chatNoSongsFound": "Nebyly nalezeny žádné skladby",
+  "chatSongNameOptional": "Název skladby (volitelné)",
+  "chatEnterSongName": "Zadejte název skladby",
+  "chatArtistNameOptional": "Jméno interpreta (volitelné)",
+  "chatEnterArtistName": "Zadejte jméno interpreta",
+  "chatRealTimeLocationSharing": "Sdílení polohy v reálném čase ve vývoji...",
+  "profileVoiceCallFeatureInDev": "Funkce hlasového volání ve vývoji...",
+  "profileReportFeatureInDev": "Funkce hlášení ve vývoji...",
+  "profileShareFeatureInDev": "Sdílejte funkci ve vývoji...",
+  "profileQrCodeFeatureInDev": "Funkce QR kódu ve vývoji...",
+  "qrcodeScanQrToAddMe": "Naskenujte QR kód výše a přidejte si mě jako přítele",
+  "qrcodeSaveToAlbum": "Uložit do alba",
+  "qrcodeChangeStyle": "Změnit styl",
+  "qrcodeCopyId": "Zkopírovat ID",
+  "qrcodeIdCopied": "ID zkopírováno",
+  "qrcodeMoreStylesFeatureComingSoon": "Další styly již brzy",
+  "@chatFeatureInDev": {
+    "placeholders": {
+      "feature": {
+        "type": "String"
+      }
+    }
+  },
+  "profileBio": "Bio",
+  "profileHomeServer": "Server",
+  "profileShareContactCard": "Sdílet kartu kontaktu",
+  "profileRemoveFromBlacklist": "Odebrat z černé listiny",
+  "profileConfirmAddBlacklist": "Opravdu chcete tohoto uživatele přidat na černou listinu? Nebudete od nich dostávat zprávy.",
+  "profileConfirmRemoveBlacklist": "Opravdu chcete tohoto uživatele odebrat z černé listiny?",
+  "profileRemarkSaved": "Poznámka uložena",
+  "profileRemarkCleared": "Poznámka vymazána",
+  "transferReceive": "Příjem",
+  "transferPleaseConnectWallet": "Nejprve připojte peněženku",
+  "transferSendRequest": "Odeslat žádost",
+  "transferPleaseEnterValidAmount": "Zadejte platnou částku",
+  "searchPlaceholder": "Vyhledávání kontaktů, skupin, zpráv",
+  "searchEnterKeywordToSearch": "Zadejte klíčové slovo pro zahájení vyhledávání",
+  "searchClearHistory": "Jasný",
+  "searchNoResultsForQuery": "Pro výraz \"{query}\" nebyly nalezeny žádné výsledky",
+  "@searchNoResultsForQuery": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "searchAllResults": "všechny",
+  "searchInChat": "Hledat v chatu",
+  "searchContactLabel": "Kontakt",
+  "searchGroupLabel": "Skupina",
+  "searchConversationLabel": "Konverzace",
+  "searchMessageLabel": "Zpráva",
+  "settingsSecurityTitle": "Bezpečnost",
+  "settingsKeyBackup": "Záloha klíčů",
+  "settingsBackupEncryptionKeys": "Záložní šifrovací klíče",
+  "settingsKeysBackedUp": "Zálohované klíče {count}",
+  "@settingsKeysBackedUp": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsBackupNotSet": "Záloha není nastavena",
+  "settingsRestoreKeys": "Obnovit klíče",
+  "settingsRestoreKeysFromBackup": "Obnovte šifrovací klíče ze zálohy",
+  "settingsExportKeys": "Exportovat klíče",
+  "settingsExportKeysToFile": "Export klíčů do souboru",
+  "settingsLoggedInDevices": "Přihlášená zařízení",
+  "settingsNoOtherDevices": "Žádná další zařízení",
+  "settingsVerified": "Ověřeno",
+  "settingsUnverified": "Neověřeno",
+  "settingsAdvanced": "Pokročilé",
+  "settingsCrossSigning": "Křížové podepisování",
+  "settingsEnabled": "Povoleno",
+  "settingsNotEnabled": "Není povoleno",
+  "settingsResetEncryption": "Obnovit šifrování",
+  "settingsDeleteAllEncryptionKeys": "Odstraňte všechny šifrovací klíče",
+  "settingsEncryptionNotSupported": "Šifrování není podporováno",
+  "settingsNotInitialized": "Neinicializováno",
+  "settingsBackupKeyTitle": "Záložní klíče",
+  "settingsBackupKeyMessage": "Vytvořit novou zálohu klíče? To vám pomůže obnovit šifrované zprávy na novém zařízení.",
+  "settingsBackup": "Zálohování",
+  "settingsRestoreKeyTitle": "Obnovit klíče",
+  "settingsRestoreKeyMessage": "Chcete-li obnovit šifrované zprávy, zadejte heslo pro obnovení nebo klíč pro obnovení.",
+  "settingsRestore": "Obnovit",
+  "settingsExportKeyTitle": "Exportovat klíče",
+  "settingsExportKeyMessage": "Exportovaný soubor klíče obsahuje všechny vaše šifrovací klíče. Prosím, uschovejte to.",
+  "settingsExport": "Exportovat",
+  "settingsDeviceIdLabel": "ID zařízení: {deviceId}",
+  "@settingsDeviceIdLabel": {
+    "placeholders": {
+      "deviceId": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsDeviceStatusVerified": "Stav: Ověřeno",
+  "settingsDeviceStatusUnverified": "Stav: Neověřeno",
+  "settingsLastActiveLabel": "Naposledy aktivní: {lastSeen}",
+  "@settingsLastActiveLabel": {
+    "placeholders": {
+      "lastSeen": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsVerifyThisDevice": "Ověřte toto zařízení",
+  "settingsCrossSigningAlreadyEnabled": "Křížové podepisování je již povoleno",
+  "settingsCrossSigningSetupSuccess": "Nastavení křížového podepisování bylo úspěšné",
+  "@settingsSetupFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsResetEncryptionTitle": "Obnovit šifrování",
+  "settingsResetEncryptionWarning": "Upozornění: Tímto smažete všechny vaše šifrovací klíče. Předchozí zašifrované zprávy nebudete moci dešifrovat. Tuto akci nelze vrátit zpět.",
+  "settingsReset": "Resetovat",
+  "settingsBackupSuccess": "Klíče byly úspěšně zálohovány",
+  "settingsBackupFailed": "Zálohování se nezdařilo",
+  "settingsRecoveryKey": "Obnovovací klíč",
+  "settingsRecoveryKeySaveWarning": "Uložte si prosím tento obnovovací klíč na bezpečném místě. Budete jej potřebovat k obnovení šifrovaných zpráv na novém zařízení.",
+  "settingsRecoveryKeySaved": "Uložil jsem to",
+  "settingsRestoreSuccess": "Klíče byly úspěšně obnoveny",
+  "settingsRestoreFailed": "Obnovení se nezdařilo",
+  "settingsPassword": "Heslo",
+  "settingsEnterRecoveryKey": "Zadejte klíč pro obnovení",
+  "settingsEnterPassword": "Zadejte heslo",
+  "settingsExportSuccess": "Klíče byly úspěšně exportovány do zálohy serveru",
+  "settingsExportNeedBackupFirst": "Nejprve prosím vytvořte zálohu klíče",
+  "settingsExportFailed": "Export se nezdařil",
+  "settingsResetSuccess": "Resetování šifrování bylo úspěšné",
+  "settingsResetFailed": "Resetování se nezdařilo",
+  "callLeaveMeetingConfirm": "Opravdu chcete schůzku opustit?",
+  "chatPokedSomeone": "šťouchaný {name}{suffix}",
+  "@chatPokedSomeone": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "suffix": {
+        "type": "String"
+      }
+    }
+  },
+  "chatNoContactsToAdd": "Nejsou k dispozici žádné kontakty k přidání",
+  "chatAddMembers": "Přidat členy",
+  "chatInvitedMembers": "Pozvaní členové {count}",
+  "@chatInvitedMembers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatInviteFailed": "Pozvání se nezdařilo: {error}",
+  "@chatInviteFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatMemberRemoved": "Člen odebrán",
+  "chatRemoveFailed": "Odebrání se nezdařilo: {error}",
+  "@chatRemoveFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatRealTimeLocationShareMessage": "Po sdílení uvidí druhá strana vaši polohu v reálném čase po dobu 1 hodiny.",
+  "chatStartSharing": "Začněte sdílet",
+  "chatLocationServiceNotEnabled": "Služba určování polohy není povolena",
+  "chatEnableLocationService": "Chcete-li používat tuto funkci, povolte službu určování polohy",
+  "chatGoToSettings": "Přejděte do Nastavení",
+  "chatLocationPermissionRequired": "Tato funkce vyžaduje oprávnění k poloze",
+  "chatLocationPermissionDeniedPermanent": "Povolení k poloze bylo trvale odepřeno. Povolte jej prosím v nastavení.",
+  "chatLocationPermissionDenied": "Povolení k poloze odepřeno",
+  "chatGettingLocation": "Získávání polohy...",
+  "chatGetLocationFailed": "Nepodařilo se získat polohu: {error}",
+  "@chatGetLocationFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatMapPreview": "Náhled mapy",
+  "chatSearchLocation": "Vyhledat místo",
+  "chatRedPacketSent": "Odeslán červený paket {amount} {token}",
+  "@chatRedPacketSent": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "token": {
+        "type": "String"
+      }
+    }
+  },
+  "chatTransferDefault": "Přenést",
+  "chatTransferSent": "Odeslán převod {amount} {token}",
+  "@chatTransferSent": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "token": {
+        "type": "String"
+      }
+    }
+  },
+  "chatPickFileFailed": "Nepodařilo se vybrat soubor: {error}",
+  "@chatPickFileFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatFileSizeLimit": "Velikost souboru nesmí přesáhnout 50 MB",
+  "chatFileSending": "Odesílám soubor: {filename}",
+  "@chatFileSending": {
+    "placeholders": {
+      "filename": {
+        "type": "String"
+      }
+    }
+  },
+  "chatSendFileFailed": "Odeslání souboru se nezdařilo: {error}",
+  "@chatSendFileFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatContactCardSent": "Odeslána kontaktní karta {name}",
+  "@chatContactCardSent": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatFavoritesFeature": "Oblíbené",
+  "chatCouponsFeature": "kupony",
+  "chatGiftFeature": "Dárek",
+  "chatSharedMusic": "Sdílené {name}",
+  "@chatSharedMusic": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@chatSendFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatEndPollTitle": "Ukončit hlasování",
+  "chatEndPollConfirmMessage": "Opravdu chcete ukončit toto hlasování? Po ukončení bude hlasování uzavřeno.",
+  "chatPollEndedMessage": "Anketa skončila",
+  "chatConnectingCall": "Připojování...",
+  "chatMuteCall": "Ztlumit",
+  "chatSpeakerOff": "Vypnutý reproduktor",
+  "chatSpeakerOn": "Mluvčí",
+  "chatCameraOn": "Kamera zapnutá",
+  "chatCameraOff": "Kamera je vypnutá",
+  "chatHangUp": "Zavěste",
+  "chatSelectForwardTargetTitle": "Vyberte Dopředný cíl",
+  "chatNoForwardableChat": "Nejsou k dispozici žádné chaty pro přeposílání",
+  "chatNoMatchingChat": "Nebyly nalezeny žádné odpovídající chaty",
+  "chatLocationTitle": "Umístění",
+  "chatSendButton": "Odeslat",
+  "chatRetryButton": "Zkuste to znovu",
+  "chatSearchContactHint": "Hledat kontakty",
+  "chatShareMusic": "Sdílejte hudbu",
+  "chatRecentPlayed": "Nedávné",
+  "chatMyFavorites": "Oblíbené",
+  "chatNetworkLink": "Odkaz",
+  "chatLocalFile": "Místní",
+  "chatPasteMusicLink": "Vložte odkaz na hudbu",
+  "chatShareMusicButton": "Sdílejte hudbu",
+  "chatSelectLocalAudio": "Vyberte Místní zvukový soubor",
+  "chatSupportedAudioFormats": "Podporuje MP3, M4A, WAV, FLAC atd.",
+  "chatSelectFileButton": "Vyberte Soubor",
+  "chatPleaseEnterMusicLink": "Zadejte odkaz na hudbu",
+  "chatPleaseEnterValidLink": "Zadejte prosím platnou adresu URL",
+  "chatSharedSong": "Sdílená píseň",
+  "chatSelectMember": "Vyberte Člen",
+  "chatSearchMemberHint": "Hledat členy",
+  "chatNoMatchingMembers": "Nebyli nalezeni žádní odpovídající členové",
+  "commonUnknownMember": "Neznámý",
+  "chatSelectedMessagesCount": "Vybrané zprávy {count}",
+  "@chatSelectedMessagesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatSearchContactsOrGroups": "Hledat kontakty nebo skupiny",
+  "chatVideoTitle": "Video",
+  "chatLoadingText": "Načítání...",
+  "chatVideoLoadFailed": "Načtení videa se nezdařilo",
+  "chatPlayerInitFailed": "Inicializace přehrávače se nezdařila",
+  "chatCreatePollTitle": "Vytvořit anketu",
+  "chatSubmitPoll": "Odeslat",
+  "chatPollQuestionLabel": "Anketní otázka",
+  "chatEnterPollQuestionHint": "Zadejte dotaz do ankety",
+  "chatPollOptionsLabel": "Možnosti hlasování",
+  "chatOptionHintWithIndex": "Možnost {index}",
+  "@chatOptionHintWithIndex": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "chatAddOptionButton": "Přidat možnost",
+  "chatPollSettingsLabel": "Nastavení ankety",
+  "chatSelectionType": "Typ výběru",
+  "chatSingleChoiceLabel": "Svobodný",
+  "chatMultiChoiceLabel": "Multi",
+  "chatAnonymousPollSwitch": "Anonymní hlasování",
+  "chatPleaseEnterQuestion": "Zadejte dotaz do ankety",
+  "chatAtLeastTwoOptions": "Jsou vyžadovány alespoň 2 možnosti",
+  "chatConfirmWithCount": "Potvrdit ({count})",
+  "@chatConfirmWithCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@chatSelectedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@commonMemberCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@chatGroupChatCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "authEmailVerificationTitle": "Ověření e-mailem",
+  "authEnterValidEmailAddress": "Zadejte prosím platnou e-mailovou adresu",
+  "authVerificationCodeSentTo": "Ověřovací kód byl odeslán na {email}",
+  "@authVerificationCodeSentTo": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "authSendCodeFailed": "Kód se nepodařilo odeslat: {error}",
+  "@authSendCodeFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "authVerificationSuccess": "Ověření proběhlo úspěšně",
+  "authVerificationFailed": "Ověření se nezdařilo",
+  "authVerificationCodeError": "Chyba ověřovacího kódu: {error}",
+  "@authVerificationCodeError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "commonEnterVerificationCode": "Zadejte ověřovací kód",
+  "authEnterYourEmail": "Zadejte email",
+  "authWeSentCodeTo": "Poslali jsme 6místný kód na\n{email}",
+  "@authWeSentCodeTo": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "authEnterEmailForCode": "Zadejte svou e-mailovou adresu, zašleme vám ověřovací kód",
+  "commonSendVerificationCode": "Odeslat ověřovací kód",
+  "authResendVerificationCode": "Znovu odeslat ověřovací kód",
+  "authCanResendAfter": "Lze znovu odeslat po {seconds} sekundách",
+  "@authCanResendAfter": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "commonChangeEmail": "Změnit e-mail",
+  "contactAddToContacts": "Přidat do Kontaktů",
+  "contactAddingToContacts": "Přidávání...",
+  "contactAddedToContacts": "Přidáno do kontaktů",
+  "contactAddFailedWithError": "Přidání se nezdařilo: {error}",
+  "@contactAddFailedWithError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "contactAddPhone": "Přidat telefon",
+  "contactAddTag": "Přidejte značky",
+  "contactAddText": "Přidejte text",
+  "contactAddPhoto": "Přidat fotku",
+  "contactGroupCountLabel": "Skupiny {count}",
+  "@contactGroupCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "contactAddedViaSearch": "Přidáno pomocí vyhledávání",
+  "contactAddTime": "Přidejte čas",
+  "contactDoneButton": "Hotovo",
+  "callWaitingForParticipants": "Čekání na připojení účastníků...",
+  "callParticipantMe": "{name} (já)",
+  "@callParticipantMe": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "callSharingLabel": "Sdílení",
+  "callScreenSharingBy": "{name} sdílí obrazovku",
+  "@callScreenSharingBy": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "callParticipantCount": "Účastníci {count}",
+  "@callParticipantCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "callMuteLabel": "Ztlumit",
+  "callUnmuteLabel": "Zapnout zvuk",
+  "callTurnOffVideo": "Vypněte video",
+  "callTurnOnVideo": "Zapněte video",
+  "callShareScreen": "Sdílet obrazovku",
+  "callStopSharing": "Přestat sdílet",
+  "callSwitchCameraLabel": "Přepnout",
+  "callLeaveLabel": "Odejděte",
+  "callParticipantsLabel": "Účastníci",
+  "callJoiningMeeting": "Připojování ke schůzce...",
+  "chatPollVotesFormat": "{count} hlasy ({percentage} %)",
+  "@chatPollVotesFormat": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "percentage": {
+        "type": "String"
+      }
+    }
+  },
+  "chatPollParticipantsFormat": "Účastníci {count}",
+  "@chatPollParticipantsFormat": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@chatSelectFileFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatNoMediaUrlAvailable": "Není k dispozici žádná adresa URL média",
+  "chatDownloadFailed": "Stahování se nezdařilo: {code}",
+  "@chatDownloadFailed": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "chatErrorWithMessage": "Chyba: {message}",
+  "@chatErrorWithMessage": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "chatMusicLinkLabel": "Odkaz na hudbu",
+  "chatRedPacketTransferCannotForward": "Červené pakety a přenosy nelze přeposílat",
+  "commonShareFailed": "Sdílení se nezdařilo: {error}",
+  "@commonShareFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "commonTapToRetry": "Klepnutím to zkuste znovu",
+  "chatDefaultRedPacketGreeting": "Všechno nejlepší k prosperitě",
+  "groupAllowOthersToSearchAndJoin": "Umožněte ostatním hledat a připojit se",
+  "groupConfirmClearChatHistory": "Opravdu chcete vymazat historii chatu?",
+  "groupCreateGroupToChat": "Vytvořte skupinu a začněte chatovat",
+  "groupEditGroupAnnouncement": "Upravit oznámení skupiny",
+  "groupEditGroupDescription": "Upravit popis skupiny",
+  "groupEnterGroupAnnouncement": "Zadejte oznámení skupiny",
+  "groupMemberCountClickToCopy": "Členové {count}, kliknutím zkopírujte ID skupiny",
+  "groupNoPermissionToEditGroupName": "Nemáte oprávnění upravovat název skupiny",
+  "authEmailAddress": "E-mailová adresa",
+  "commonEnterEmailAddress": "Zadejte e-mailovou adresu",
+  "authEmailRecoveryHint": "Slouží k obnovení hesla",
+  "commonInvalidEmailFormat": "Zadejte prosím platnou e-mailovou adresu",
+  "authOptional": "Volitelné",
+  "authResetPassword": "Obnovit heslo",
+  "authEnterRegisteredEmail": "Zadejte e-mailovou adresu, se kterou jste se registrovali",
+  "authSendResetCode": "Odeslat resetovací kód",
+  "authResetCodeSent": "Resetovací kód byl odeslán na {email}",
+  "@authResetCodeSent": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "authEnterResetCode": "Zadejte resetovací kód",
+  "authSetNewPassword": "Nastavit nové heslo",
+  "commonConfirmNewPassword": "Potvrďte nové heslo",
+  "commonNewPassword": "Nové heslo",
+  "authPasswordResetSuccess": "Resetování hesla bylo úspěšné. Přihlaste se prosím pomocí svého nového hesla.",
+  "authResetPasswordFailed": "Resetování hesla se nezdařilo",
+  "settingsChangePassword": "Změnit heslo",
+  "settingsCurrentPassword": "Aktuální heslo",
+  "settingsEnterCurrentPassword": "Zadejte aktuální heslo",
+  "settingsEnterNewPassword": "Zadejte nové heslo",
+  "settingsPasswordChanged": "Heslo bylo úspěšně změněno. Přihlaste se prosím pomocí svého nového hesla.",
+  "settingsChangePasswordFailed": "Změna hesla se nezdařila",
+  "settingsNewPasswordMustBeDifferent": "Nové heslo se musí lišit od aktuálního hesla",
+  "settingsChangePasswordInfo": "Po změně hesla budete odhlášeni a musíte se přihlásit pomocí nového hesla.",
+  "settingsPasswordRequirements": "Požadavky na heslo:",
+  "settingsSecurityNote": "Z bezpečnostních důvodů se po změně hesla budete muset na všech zařízeních znovu přihlásit.",
+  "settingsSecurity": "Bezpečnost",
+  "settingsCurrentBoundEmail": "Aktuální vázaný email",
+  "settingsNewEmailAddress": "Nová emailová adresa",
+  "settingsEnterNewEmail": "Zadejte novou e-mailovou adresu",
+  "settingsVerificationCode": "Ověřovací kód",
+  "settingsVerificationCodeSent": "Ověřovací kód odeslán",
+  "settingsCodeSentTo": "Ověřovací kód byl odeslán na adresu",
+  "settingsDidNotReceiveCode": "Neobdrželi jste kód?",
+  "settingsEmailChangedSuccess": "E-mail byl úspěšně změněn",
+  "settingsChangeEmailFailed": "Změna e-mailu se nezdařila",
+  "settingsEmailSecurityNote": "Váš e-mail slouží k obnovení hesla. Prosím, uchovejte jej v bezpečí.",
+  "commonGoogleLogin": "Přihlaste se pomocí Google",
+  "commonAppleLogin": "Přihlaste se pomocí Apple",
+  "commonWechat": "WeChat",
+  "settingsLanguage": "Jazyk",
+  "settingsLanguageChanged": "Jazyk se změnil",
+  "settingsTranslation": "Překlad",
+  "settingsTranslateTextTo": "Přeložit text do",
+  "settingsTranslateDescription": "Vyberte jazyk, do kterého chcete zprávy překládat.",
+  "settingsAutoTranslate": "Automaticky překládat přijaté zprávy",
+  "settingsAutoTranslateDescription": "Automaticky překládat zprávy přijaté v chatu do vámi zvoleného jazyka.",
+  "settingsBiometricLogin": "Biometrické přihlášení",
+  "authLoginWithBiometric": "Přihlaste se pomocí {type}",
+  "@authLoginWithBiometric": {
+    "placeholders": {
+      "type": {
+        "type": "Object"
+      }
+    }
+  },
+  "settingsBiometricLoginEnabled": "Biometrické přihlášení povoleno",
+  "settingsBiometricLoginDisabled": "Biometrické přihlášení zakázáno",
+  "settingsEnableBiometricLogin": "Povolit biometrické přihlášení",
+  "settingsBiometricEnabled": "Povoleno – k přihlášení použijte biometrické údaje",
+  "settingsBiometricDisabled": "Vypnuto – klepnutím povolíte",
+  "settingsBiometricNeedRelogin": "Pro aktivaci biometrického přihlášení se prosím odhlaste a znovu přihlaste",
+  "authOr": "NEBO",
+  "qrcodeCameraPermissionRestricted": "Přístup k fotoaparátu je na tomto zařízení omezen",
+  "authPasskeyLabel": "Přístupový klíč",
+  "authGoogleLabel": "Google",
+  "authAppleLabel": "Jablko",
+  "authSsoLabel": "SSO",
+  "transferAmountHintZero": "0,00",
+  "commonMatrixIdHint": "@username:server.com",
+  "authServerAddressHint": "https://m.si46.world",
+  "authEmailExampleHint": "example@email.com",
+  "authVerificationCodePlaceholder": "------",
+  "profileEnterPokeSuffixHint": "Zadejte příponu poke, např.: na rameni",
+  "groupAlbum": "Skupinové album",
+  "groupFiles": "Skupinové soubory",
+  "groupImages": "Obrázky",
+  "groupVideos": "videa",
+  "groupTotal": "Celkem",
+  "groupSize": "Velikost",
+  "groupNoMedia": "Žádná média",
+  "groupNoMediaDescription": "V této skupině zatím nejsou žádné fotky ani videa",
+  "groupDocuments": "Docs",
+  "groupNoFiles": "Žádné soubory",
+  "groupNoFilesDescription": "V této skupině zatím nejsou žádné soubory",
+  "groupDownloadStarted": "Stahování {filename}...",
+  "@groupDownloadStarted": {
+    "placeholders": {
+      "filename": {
+        "type": "String"
+      }
+    }
+  },
+  "contactNoCommonGroups": "Žádné společné skupiny",
+  "contactNoCommonGroupsDescription": "Nemáte žádné společné skupiny",
+  "chatVoiceMessage": "Hlas",
+  "chatMessage": "Zpráva",
+  "conversationHideChat": "Skrýt",
+  "settingsQuickReply": "Rychlá odpověď",
+  "commonTranslate": "Přeložit",
+  "contactCreateTag": "Vytvořit značku",
+  "contactEnterTagName": "Zadejte název značky",
+  "contactEditTag": "Upravit značku",
+  "contactDeleteTag": "Smazat značku",
+  "contactDeleteTagConfirm": "Opravdu chcete smazat značku \"{tagName}\"?",
+  "@contactDeleteTagConfirm": {
+    "placeholders": {
+      "tagName": {
+        "type": "String"
+      }
+    }
+  },
+  "contactNoTags": "Zatím žádné značky",
+  "contactFriendPermissions": "Oprávnění přátel",
+  "contactSetChatOnly": "Nastavit jako pouze chat",
+  "contactChatOnlyDesc": "Může chatovat pouze s vámi, ostatní obsah bude skrytý",
+  "contactHideMyMoments": "Skrýt mé okamžiky",
+  "contactHideMyMomentsDesc": "Tento přítel nevidí mé okamžiky",
+  "contactHideTheirMoments": "Skryjte jejich okamžiky",
+  "contactHideTheirMomentsDesc": "Nezobrazovat momentky tohoto přítele",
+  "contactHideMyStatus": "Skrýt můj stav",
+  "contactHideMyStatusDesc": "Tento přítel nevidí aktualizace mého stavu",
+  "contactNoChatOnlyFriends": "Žádní přátelé pouze pro chat",
+  "contactNoOfficialAccounts": "Žádné oficiální účty",
+  "contactFollowOfficialAccountsDesc": "Sledujte oficiální účty a získejte nejnovější aktualizace",
+  "contactNoServiceAccounts": "Žádné servisní účty",
+  "contactSubscribeServiceAccountsDesc": "Přihlaste se k odběru servisních účtů pro pohodlné služby",
+  "contactNoEnterpriseContacts": "Žádné podnikové kontakty",
+  "contactEnterpriseContactsDesc": "Zde se zobrazí podnikové kontakty",
+  "profileCardPack": "Balíček karet",
+  "profileOrders": "Objednávky",
+  "profileNoOrders": "Žádné rozkazy",
+  "profileOrdersDesc": "Zde se zobrazí vaše objednávky",
+  "profileNoCards": "Žádné karty",
+  "profileCardsDesc": "Zde se zobrazí vaše karty",
+  "favoriteEnterTagsHint": "Zadejte značky oddělené čárkami",
+  "favoriteTagsUpdated": "Tagy byly aktualizovány",
+  "favoriteForwardedContent": "Obsah přeposlán",
+  "favoriteEnterNoteContent": "Zadejte obsah poznámky",
+  "favoriteNoteAdded": "Poznámka přidána",
+  "favoriteLinkTitle": "Název odkazu",
+  "favoriteLinkUrl": "https://",
+  "favoriteLinkAdded": "Odkaz přidán",
+  "contactPhotoAdded": "Foto přidáno",
+  "contactEnterPhone": "Zadejte telefonní číslo",
+  "commonConversationWithId": "Konverzace: {roomId}",
+  "commonContactWithId": "Kontakt: {userId}",
+  "commonDiscover": "Objevte",
+  "commonDeveloping": "{title}\n(již brzy)",
+  "commonPageNotFound": "Stránka nenalezena",
+  "commonBackToHome": "Zpět na domovskou stránku",
+  "settingsMessageNotifications": "Upozornění na zprávy",
+  "settingsReceiveNewMessageNotifications": "Přijímat upozornění na nové zprávy",
+  "settingsShowMessagePreview": "Zobrazit náhled zprávy",
+  "settingsShowMessageContentInNotification": "Zobrazit obsah zprávy v oznámení",
+  "settingsNotificationSound": "Zvuk upozornění",
+  "settingsPlaySoundOnMessage": "Přehrát zvuk při příjmu zpráv",
+  "commonVibration": "Vibrace",
+  "settingsVibrateOnMessage": "Při příjmu zpráv vibrovat",
+  "settingsDoNotDisturbMode": "Nerušit",
+  "settingsDoNotDisturbDescription": "Nedostávejte upozornění během stanovené doby",
+  "settingsStartTime": "Čas zahájení",
+  "settingsEndTime": "Čas ukončení",
+  "settingsDeleteQuickReply": "Smazat rychlou odpověď",
+  "settingsEditQuickReply": "Upravit rychlou odpověď",
+  "settingsAddQuickReply": "Přidat rychlou odpověď",
+  "settingsManageQuickReplies": "Správa rychlých odpovědí",
+  "settingsNoQuickReplies": "Žádné rychlé odpovědi",
+  "settingsDefaultQuickReplies": "Zobrazí se výchozí rychlé odpovědi",
+  "settingsWhoCanSee": "Kdo může vidět",
+  "settingsLastSeen": "Naposledy viděno",
+  "settingsHiddenChats": "Skryté chaty",
+  "settingsMessagesLabel": "Zprávy",
+  "settingsAllowStrangerMessages": "Povolit cizí zprávy",
+  "settingsReceiveMessagesFromNonContacts": "Přijímat zprávy od lidí, kteří nejsou v kontaktu",
+  "settingsReadReceipts": "Přečtěte si účtenky",
+  "settingsLetOthersKnowYouRead": "Dejte ostatním vědět, že čtete",
+  "settingsTypingIndicator": "Indikátor psaní",
+  "settingsLetOthersKnowYouTyping": "Dejte ostatním vědět, že píšete",
+  "settingsEveryone": "Všichni",
+  "settingsContactsOnly": "Pouze kontakty",
+  "settingsNobody": "Nikdo",
+  "settingsWhoCanSeeTitle": "Kdo může vidět {title}",
+  "@settingsWhoCanSeeTitle": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsVersionInfo": "Verze {version}",
+  "@settingsVersionInfo": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsCheckForUpdates": "Zkontrolujte aktualizace",
+  "settingsOpenSourceLicenses": "Open Source licence",
+  "settingsFeedbackAndSuggestions": "Zpětná vazba a návrhy",
+  "settingsBuiltOnMatrix": "Postaveno na protokolu Matrix",
+  "settingsNoHiddenChats": "Žádné skryté chaty",
+  "settingsNoHiddenChatsDescription": "Zde se zobrazí chaty, které skryjete",
+  "settingsUnhideChat": "Odkrýt",
+  "settingsDarkMode": "Tmavý režim",
+  "settingsFontSize": "Velikost písma",
+  "settingsBubbleStyle": "Bublinový styl",
+  "settingsFollowSystem": "Sledujte systém",
+  "settingsAutoSwitchBySystem": "Automatické přepínání systémem",
+  "settingsLightMode": "Světelný režim",
+  "settingsAlwaysUseLightTheme": "Vždy používejte světlé téma",
+  "settingsDarkModeOption": "Možnost tmavého režimu",
+  "settingsAlwaysUseDarkTheme": "Vždy používejte tmavé téma",
+  "settingsFontSizeSmall": "Malý",
+  "settingsFontSizeStandard": "Standardní",
+  "settingsFontSizeLarge": "Velký",
+  "settingsFontSizeExtraLarge": "Extra velký",
+  "settingsBubbleStyleWechat": "styl WeChat",
+  "settingsBubbleStyleWechatDesc": "Klasický styl bublin WeChat",
+  "settingsBubbleStyleModern": "Moderní styl",
+  "settingsBubbleStyleModernDesc": "Čistý moderní bublinkový styl",
+  "settingsBubbleStyleClassic": "Klasický styl",
+  "settingsBubbleStyleClassicDesc": "Tradiční bublinkový styl",
+  "discoverVideoChannels": "Kanály",
+  "discoverLive": "Živě",
+  "discoverListen": "Poslouchejte",
+  "discoverWatch": "Sledujte",
+  "discoverSearchDiscover": "Hledat",
+  "discoverNearbyPeople": "Nedaleko",
+  "discoverGames": "Hry",
+  "discoverMiniPrograms": "Mini programy",
+  "chatAlreadyInCall": "Již probíhá hovor",
+  "commonConnectionFailed": "Připojení se nezdařilo",
+  "chatCallRejected": "Hovor byl odmítnut",
+  "chatNoAnswer": "Žádná odpověď",
+  "commonClose": "Zavřít",
+  "chatSelectContact": "Vyberte možnost Kontakt",
+  "chatVoteRemoved": "Hlas odstraněn",
+  "chatVoteChanged": "Hlasování změněno",
+  "chatVoted": "Hlasováno",
+  "chatReplyTo": "Odpověď na {name}",
+  "@chatReplyTo": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatCurrentLocation": "Aktuální poloha",
+  "chatNearbyPlace": "Blízké místo {index}",
+  "@chatNearbyPlace": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "chatApproximateDistance": "O {distance}",
+  "@chatApproximateDistance": {
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      }
+    }
+  },
+  "chatAddress": "Adresa",
+  "chatLatitude": "Zeměpisná šířka",
+  "chatLongitude": "Zeměpisná délka",
+  "groupDescriptionUpdated": "Popis skupiny aktualizován",
+  "groupAvatarUpdated": "Avatar skupiny byl aktualizován",
+  "groupVisibilityUpdated": "Viditelnost skupiny aktualizována",
+  "groupChannelCreated": "Kanál vytvořen",
+  "groupChannelUpdated": "Kanál aktualizován",
+  "groupChannelDeleted": "Kanál byl smazán",
+  "callDecline": "Odmítnout",
+  "callAnswer": "Odpověď",
+  "callIncomingVideoCall": "Příchozí videohovor",
+  "callIncomingVoiceCall": "Příchozí hlasový hovor",
+  "callVideoCallInProgress": "Probíhá videohovor",
+  "callVoiceCallInProgress": "Probíhá hlasový hovor",
+  "callReconnectingCall": "Opětovné připojení...",
+  "callEnded": "Hovor ukončen",
+  "callFailed": "Hovor se nezdařil",
+  "callLivekitNotConfigured": "LiveKit není nakonfigurován",
+  "callJoinMeetingFailed": "Připojení ke schůzce se nezdařilo: {error}",
+  "callScreenShareFailed": "Sdílení obrazovky se nezdařilo: {error}",
+  "profileN42BeanTitle": "N42 Fazole",
+  "profileNoN42Bean": "Žádná fazole N42",
+  "profileN42BeanDetails": "Podrobnosti o fazolích N42",
+  "profileN42BeanDescription": "N42 Bean je token používaný k uplatnění virtuálních položek a služeb v N42. Aktuálně dostupné pro:",
+  "profileN42BeanFeature1": "Exkluzivní členské nálepky a motivy",
+  "profileN42BeanFeature2": "Přizpůsobení chatovací bubliny",
+  "profileN42BeanFeature3": "Přizpůsobení červeného obalu paketu",
+  "profileN42BeanFeature4": "Exkluzivní přezdívka",
+  "profileN42BeanFeature5": "Oprávnění skupinového chatu",
+  "profileN42BeanFeature6": "Rozšíření cloudového úložiště",
+  "profileN42BeanFeature7": "Filtry krásy pro videohovory",
+  "profileN42BeanFeature8": "Přizpůsobení pozadí momentů",
+  "profileN42BeanFeature9": "Priorita VIP zákaznických služeb",
+  "profileGotIt": "Rozumím",
+  "profileNoN42BeanRecords": "Žádné záznamy N42 Bean",
+  "profileMoodAndThoughts": "Nálada a myšlenky",
+  "profileStatusHappy": "Šťastný",
+  "profileStatusCracked": "Rozbité",
+  "profileStatusLucky": "Štěstí",
+  "profileStatusSunny": "Slunečno",
+  "profileStatusTired": "Unavený",
+  "profileStatusDaydream": "Denní snění",
+  "profileStatusRushing": "Spěchání",
+  "profileStatusOverthinking": "Přemýšlení",
+  "profileStatusEnergized": "Nabitý energií",
+  "profileWorkAndStudy": "Práce a studium",
+  "profileStatusWorking": "Práce",
+  "profileStatusStudying": "Studium",
+  "profileStatusBusy": "Zaneprázdněný",
+  "profileStatusSlacking": "Flákání",
+  "profileStatusTraveling": "Cestování",
+  "profileStatusGoingHome": "Jít domů",
+  "profileStatusDnd": "Nerušit",
+  "profileActivities": "Činnosti",
+  "profileStatusHanging": "Setkání venku",
+  "profileStatusCheckIn": "Přihlásit se",
+  "profileStatusExercising": "Cvičení",
+  "profileStatusCoffee": "Káva",
+  "profileStatusBubbleTea": "Bubble Tea",
+  "profileStatusEating": "Stravování",
+  "profileStatusParenting": "Rodičovství",
+  "profileStatusSavingWorld": "Záchrana světa",
+  "profileStatusSelfie": "Selfie",
+  "profileRest": "Odpočívej",
+  "profileStatusRetreat": "Ustoupit",
+  "profileStatusHome": "Domů",
+  "profileStatusSleeping": "Spaní",
+  "profileStatusCatLover": "Milovník koček",
+  "profileStatusDogWalking": "Venčící pes",
+  "profileStatusGaming": "Hraní",
+  "profileStatusListening": "Poslouchání",
+  "profileEditAddress": "Upravit adresu",
+  "profileRecipient": "Příjemce",
+  "profileEnterRecipientName": "Zadejte jméno příjemce",
+  "profilePhoneNumber": "Telefonní číslo",
+  "profileEnterPhoneNumber": "Zadejte telefonní číslo",
+  "profileRegionHint": "Provincie/město/okres",
+  "profileDetailedAddress": "Podrobná adresa",
+  "profileDetailedAddressHint": "Ulice, číslo budovy atd.",
+  "profileSetAsDefaultAddress": "Nastavit jako výchozí adresu",
+  "profilePleaseCompleteInfo": "Vyplňte prosím všechna pole",
+  "profileEditInvoice": "Upravit fakturu",
+  "profileInvoiceType": "Typ faktury",
+  "profileCompanyName": "Název společnosti",
+  "profilePersonalName": "Osobní jméno",
+  "profileEnterCompanyName": "Zadejte název společnosti",
+  "profileEnterName": "Zadejte jméno",
+  "profileTaxIdNumber": "DIČ",
+  "profileEnterTaxIdNumber": "Zadejte daňové identifikační číslo",
+  "profileBankNameOptional": "Název banky (volitelné)",
+  "profileEnterBankName": "Zadejte název banky",
+  "profileBankAccountOptional": "Bankovní účet (volitelné)",
+  "profileEnterBankAccount": "Zadejte bankovní účet",
+  "profileCompanyAddressOptional": "Adresa společnosti (volitelné)",
+  "profileEnterCompanyAddress": "Zadejte adresu společnosti",
+  "profileCompanyPhoneOptional": "Firemní telefon (volitelné)",
+  "profileEnterCompanyPhone": "Zadejte firemní telefon",
+  "profileSetAsDefaultInvoice": "Nastavit jako výchozí fakturu",
+  "profileRingtoneVibrate": "Vibrovat",
+  "profileRingtoneSilent": "Tichý",
+  "profileVibrateMode": "Vibrační režim",
+  "profileSilentMode": "Tichý režim",
+  "profilePlayFailed": "Nepodařilo se přehrát: {ringtoneName}",
+  "profilePlaying": "Hraje: {ringtoneName}",
+  "profileStop": "Přestaň",
+  "profileSelectRingtone": "Vyberte Vyzváněcí tón",
+  "profileLoadingRingtones": "Načítání vyzváněcích tónů...",
+  "profileNoRingtonesFound": "Nebyly nalezeny žádné vyzváněcí tóny",
+  "mainMessagesWithCount": "Zprávy ({count})",
+  "@mainMessagesWithCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "storyViewers": "Diváci",
+  "storyNoViewers": "Zatím žádní diváci",
+  "storyReplyToStory": "Odpovědět na příběh...",
+  "commonCopiedToClipboard": "Zkopírováno do schránky",
+  "commonMore": "více",
+  "commonTranslating": "Překlad...",
+  "commonTranslatedFrom": "Přeloženo z {language}",
+  "@commonTranslatedFrom": {
+    "placeholders": {
+      "language": {
+        "type": "String"
+      }
+    }
+  },
+  "commonTranslation": "Překlad",
+  "commonTranslationFailed": "Překlad se nezdařil",
+  "commonAllRead": "Vše přečteno",
+  "commonReadCount": "Čtení {count}",
+  "commonYouRecalledMessage": "Vzpomněl sis na zprávu",
+  "commonMessageRecalled": "Zpráva odvolána",
+  "commonReEdit": "Znovu upravit",
+  "commonWalletArea": "Oblast peněženky",
+  "callIncomingCall": "Příchozí hovor",
+  "callMissedCall": "Zmeškaný hovor",
+  "groupRemoveAdmin": "Odebrat správce",
+  "chatSelectCurrency": "Vyberte měnu",
+  "chatSelectEmoji": "Vyberte Emoji",
+  "chatSelectRedPacketCover": "Vyberte Cover",
+  "groupSetAsAdmin": "Nastavit jako správce",
+  "chatVideoPlaybackFailed": "Přehrávání videa se nezdařilo",
+  "@chatVideoPlaybackFailed": {
+    "description": "Used with error message"
+  },
+  "groupViewProfile": "Zobrazit profil",
+  "favoriteAddLinkComingSoon": "Přidání funkce odkazu již brzy",
+  "favoriteNewNoteComingSoon": "Nová funkce poznámek již brzy",
+  "qrcodeSaveFeatureComingSoon": "Funkce ukládání již brzy",
+  "qrcodeShareFeatureComingSoon": "Funkce sdílení již brzy",
+  "qrcodeProcessFailed": "Nepodařilo se zpracovat QR kód: {error}",
+  "@qrcodeProcessFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "securityDeviceIdRequired": "ID zařízení je povinné",
+  "securityVerificationStartFailed": "Nepodařilo se spustit ověření: {error}",
+  "@securityVerificationStartFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "securityVerificationFailed": "Ověření se nezdařilo",
+  "securityVerificationFailedWithReason": "Ověření se nezdařilo: {reason}",
+  "@securityVerificationFailedWithReason": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "securityEmojiMismatchRejected": "Ověření zamítnuto – emotikony se neshodují",
+  "securityWaitingForDeviceAccept": "Čekání na přijetí druhým zařízením...",
+  "securityVerifyDevice": "Ověřte toto zařízení",
+  "securityConfirmEmojiMatch": "Potvrďte, že se níže uvedené emotikony zobrazují na obou zařízeních ve stejném pořadí",
+  "securityEmojiDontMatch": "Neshodují se",
+  "securityEmojiMatch": "Shodují se",
+  "securityWaitingForDeviceConfirm": "Čekání na potvrzení druhým zařízením...",
+  "securityVerificationSuccess": "Ověření proběhlo úspěšně!",
+  "securityDeviceVerifiedTrusted": "Toto zařízení je nyní ověřeno a důvěryhodné.",
+  "securityCompareEmoji": "Porovnejte emotikony na obou zařízeních",
+  "securityCompareNumbers": "Porovnejte čísla na obou zařízeních",
+  "commonTryAgain": "Zkuste to znovu",
+  "commonDone": "Hotovo",
+  "chatExportTitle": "Exportovat chat",
+  "chatExportSuccess": "Export byl úspěšný",
+  "chatExportFailed": "Export se nezdařil: {error}",
+  "@chatExportFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatExportFormat": "Formát exportu",
+  "chatExportHtmlDesc": "Čitelné v jakémkoli prohlížeči se stylizovaným rozložením",
+  "chatExportJsonDesc": "Strojově čitelný formát strukturovaných dat",
+  "chatExportDateRange": "Časové období",
+  "chatExportAll": "Všechny zprávy",
+  "chatExportLastWeek": "Posledních 7 dní",
+  "chatExportLastMonth": "Minulý měsíc",
+  "chatExportLast3Months": "Poslední 3 měsíce",
+  "chatExportMessageCount": "Zprávy k exportu",
+  "chatExportButton": "Exportovat a sdílet",
+  "chatMediaGallery": "Galerie médií",
+  "chatExportHistory": "Exportovat historii chatu",
+  "pdfLoadFailed": "Načtení PDF se nezdařilo",
+  "pdfPageIndicator": "{current} / {total}",
+  "@pdfPageIndicator": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "mediaAll": "všechny",
+  "mediaImages": "Obrázky",
+  "mediaVideos": "videa",
+  "mediaFiles": "Soubory",
+  "mediaAudio": "Zvuk",
+  "mediaItemsCount": "{count} položky",
+  "@mediaItemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mediaNoMediaFound": "Nebyla nalezena žádná média",
+  "spacesTitle": "společenství",
+  "spacesCreate": "Vytvořit komunitu",
+  "spacesJoined": "Připojeno",
+  "spacesDiscover": "Objevte",
+  "spacesNoJoined": "Dosud se nepřipojily žádné komunity",
+  "spacesExplore": "Prozkoumejte komunity",
+  "spacesNoPublic": "Nebyly nalezeny žádné veřejné komunity",
+  "spacesJoin": "Připojte se",
+  "spacesSubSpaces": "Dílčí komunity",
+  "spacesChannels": "Kanály",
+  "spacesMembersCount": "Členové {count}",
+  "@spacesMembersCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "spacesPublic": "Veřejné",
+  "spacesPrivate": "Soukromé",
+  "spacesSuggested": "Doporučeno",
+  "spacesChannelsCount": "Kanály {count}",
+  "@spacesChannelsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "callInCallChat": "In-Call Chat",
+  "callMessagesCount": "Zprávy {count}",
+  "@callMessagesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "callNoMessagesYet": "Zatím žádné zprávy.\nZačněte odesláním zprávy.",
+  "callTypeMessage": "Napište zprávu...",
+  "callYouSender": "vy",
+  "callChatLabel": "Povídání",
+  "chatEdited": "Upraveno",
+  "chatEditHistory": "Upravit historii",
+  "chatOriginalMessage": "Původní",
+  "chatEditedAt": "Upraveno v {time}",
+  "@chatEditedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "chatViewOnce": "Zobrazit jednou",
+  "chatViewOncePhoto": "Zobrazit jednou fotografii",
+  "chatViewOnceVideo": "Zobrazit jednou video",
+  "chatViewOnceViewed": "Zobrazeno",
+  "chatViewOnceExpired": "Platnost vypršela",
+  "chatViewOnceTap": "Klepnutím zobrazíte",
+  "chatAutoFaceBlur": "Automatické rozostření obličeje",
+  "chatAutoFaceBlurDesc": "Automatické rozmazání obličejů při odesílání fotografií",
+  "threadReplyInThread": "Odpověď ve vláknu",
+  "threadReplies": "{count} odpovídá",
+  "@threadReplies": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "threadReply": "1 odpověď",
+  "threadLatestReply": "Nejnovější: {preview}",
+  "@threadLatestReply": {
+    "placeholders": {
+      "preview": {
+        "type": "String"
+      }
+    }
+  },
+  "threadTitle": "Závit",
+  "threadReplyPlaceholder": "Odpověď ve vláknu...",
+  "threadParticipants": "Účastníci {count}",
+  "@threadParticipants": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "voiceRoomTitle": "Hlasová místnost",
+  "voiceRoomCreate": "Vytvořit hlasovou místnost",
+  "voiceRoomJoin": "Připojte se",
+  "voiceRoomLeave": "Odejděte",
+  "voiceRoomEnd": "Koncová místnost",
+  "voiceRoomRaiseHand": "Zvedněte ruku",
+  "voiceRoomLowerHand": "Dolní ruka",
+  "voiceRoomMute": "Ztlumit",
+  "voiceRoomUnmute": "Zapnout zvuk",
+  "voiceRoomHost": "Hostitel",
+  "voiceRoomSpeakers": "Reproduktory",
+  "voiceRoomListeners": "Posluchači",
+  "voiceRoomLive": "ŽIVĚ",
+  "voiceRoomEnded": "Skončilo",
+  "voiceRoomScheduled": "Naplánováno",
+  "voiceRoomApprove": "Schválit",
+  "voiceRoomDemote": "Přesunout do Posluchače",
+  "voiceRoomHandRaised": "{name} zvedl ruku",
+  "@voiceRoomHandRaised": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "voiceRoomName": "Název místnosti",
+  "voiceRoomTopic": "Téma (volitelné)",
+  "voiceRoomNoActive": "Žádné aktivní hlasové místnosti",
+  "voiceRoomConnecting": "Připojování...",
+  "usernameTitle": "Uživatelské jméno",
+  "usernameSet": "Nastavit uživatelské jméno",
+  "usernameChange": "Změnit uživatelské jméno",
+  "usernamePlaceholder": "Zadejte uživatelské jméno",
+  "usernameAvailable": "Uživatelské jméno je k dispozici",
+  "usernameUnavailable": "Uživatelské jméno je již obsazeno",
+  "usernameInvalid": "3-30 znaků, malá písmena, čísla, podtržítko. Musí začínat písmenem.",
+  "usernameReserved": "Toto uživatelské jméno je rezervováno",
+  "usernameSaved": "Uživatelské jméno bylo uloženo",
+  "usernameSearchHint": "Hledejte podle @username",
+  "ensName": "Název ENS",
+  "ensLinked": "Propojeno s ENS",
+  "ensResolving": "Řešení ENS...",
+  "ensNotFound": "Název ENS nebyl nalezen",
+  "tokenGateTitle": "Token Gate",
+  "tokenGateEnable": "Povolit Token Gate",
+  "tokenGateDisable": "Deaktivovat Token Gate",
+  "tokenGateAddRule": "Přidat pravidlo",
+  "tokenGateRemoveRule": "Odebrat pravidlo",
+  "tokenGateContractAddress": "Adresa smlouvy",
+  "tokenGateMinBalance": "Minimální zůstatek",
+  "tokenGateTokenId": "ID tokenu (ERC-1155)",
+  "tokenGateChainId": "ID řetězce",
+  "tokenGateVerifying": "Ověřování držení tokenů...",
+  "tokenGateVerified": "Ověření proběhlo úspěšně",
+  "tokenGateDenied": "Nesplňujete požadavky na token",
+  "tokenGateOperatorAnd": "Musí splňovat VŠECHNA pravidla",
+  "tokenGateOperatorOr": "Musí splňovat JAKÉKOLI pravidlo",
+  "tokenGateRuleErc20": "Token ERC-20",
+  "tokenGateRuleErc721": "NFT (ERC-721)",
+  "tokenGateRuleErc1155": "Multi-Token (ERC-1155)",
+  "tokenGateRuleNative": "Nativní token",
+  "tokenGateSaved": "Tokenová brána uložena",
+  "tokenGateEnableDescription": "Chcete-li se připojit, vyžadovat, aby členové drželi tokeny",
+  "tokenGateOperator": "Logika pravidel",
+  "tokenGateRules": "Pravidla",
+  "tokenGateSymbol": "Symbol (volitelné)",
+  "tokenGateChain": "řetěz",
+  "tokenGateTokenStandard": "Token Standard",
+  "tokenGateDenialMessage": "Zpráva o odmítnutí",
+  "tokenGateDenialMessageHint": "Zpráva se zobrazí, když se ověření nezdaří",
+  "tokenGateVerifyTitle": "Ověření tokenu",
+  "tokenGateVerifyPassed": "Ověření proběhlo úspěšně",
+  "tokenGateVerifyFailed": "Ověření se nezdařilo",
+  "tokenGateRetryVerify": "Zkuste to znovu",
+  "tokenGateRequired": "Povinné",
+  "tokenGateYourBalance": "Vaše bilance",
+  "tokenGateRulesActive": "pravidla aktivní",
+  "tokenGateDisabled": "Zakázáno",
+  "ensNotBound": "Není vázán",
+  "liveLocation": "Živá poloha",
+  "stopLiveLocation": "Přestat sdílet",
+  "startLiveLocation": "Začněte sdílet",
+  "selectDuration": "Vyberte možnost Trvání",
+  "groupChatFiles": "Soubory chatu",
+  "groupLinks": "Odkazy",
+  "groupNoLinks": "Zatím žádné odkazy",
+  "chatBackground": "Pozadí chatu",
+  "solidColors": "Pevné barvy",
+  "gradients": "Přechody",
+  "defaultBackground": "Výchozí",
+  "settingsFontSizeSlider": "Velikost písma",
+  "autoDownload": "Automatické stahování",
+  "images": "Obrázky",
+  "voice": "Hlas",
+  "video": "Video",
+  "files": "Soubory",
+  "mobileData": "Mobilní data",
+  "roaming": "Roaming",
+  "storageManagement": "Skladování",
+  "totalUsage": "Celkové využití",
+  "cache": "Cache",
+  "other": "Jiné",
+  "clearCache": "Vymazat mezipaměť",
+  "cacheCleared": "Cache vymazána",
+  "clearCacheFailed": "Vymazání mezipaměti se nezdařilo",
+  "confirmClearCache": "Vymazat všechna data mezipaměti?",
+  "mapView": "Zobrazení mapy",
+  "liveLocationSharingCount": "{count} lidí sdílejících polohu",
+  "@liveLocationSharingCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "minutes15": "15 minut",
+  "minutes30": "30 minut",
+  "hour1": "1 hodina",
+  "hours8": "8 hodin",
+  "personalCard": "Osobní karta",
+  "downloadFailed": "Stahování se nezdařilo",
+  "locationExpired": "Platnost vypršela",
+  "secondsRemaining": "{count} sekund",
+  "@secondsRemaining": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "minutesRemaining": "{count} minut",
+  "@minutesRemaining": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hoursMinutesRemaining": "{hours} hodin {minutes} minut",
+  "@hoursMinutesRemaining": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "favoriteMessages": "Oblíbené",
+  "linksCopied": "Odkaz zkopírován",
+  "noLinksFound": "Nebyly nalezeny žádné odkazy",
+  "roomStorageRanking": "Hodnocení místností",
+  "downloadComplete": "Stahování dokončeno",
+  "downloading": "Stahování...",
+  "draftSaved": "Koncept byl uložen",
+  "voiceRecording": "Hlasový záznam",
+  "searchLocation": "Vyhledat místo",
+  "tapToSearch": "Klepnutím vyhledáte",
+  "settingsThisDevice": "Toto zařízení",
+  "settingsJustNow": "Právě teď",
+  "settingsDeviceId": "ID zařízení",
+  "settingsStatus": "Stav",
+  "settingsLastActive": "Poslední aktivní",
+  "settingsIpAddress": "IP adresa",
+  "settingsRenameDevice": "Přejmenujte zařízení",
+  "settingsDeviceNameHint": "Zadejte název zařízení",
+  "settingsDeviceRenamed": "Zařízení přejmenováno",
+  "settingsRenameFailed": "Přejmenování se nezdařilo",
+  "settingsRemoteLogout": "Vzdálené odhlášení",
+  "settingsRemoteLogoutConfirm": "Opravdu se chcete odhlásit \"{deviceName}\"? Tuto akci nelze vrátit zpět.",
+  "@settingsRemoteLogoutConfirm": {
+    "placeholders": {
+      "deviceName": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsDeviceLoggedOut": "Zařízení se odhlásilo",
+  "settingsLogoutFailed": "Odhlášení se nezdařilo",
+  "settingsLogout": "Odhlášení",
+  "settingsVerifyIdentity": "Ověřte identitu",
+  "settingsEnterPasswordToConfirm": "Pro potvrzení této akce zadejte své heslo.",
+  "scheduledSendTitle": "Naplánovat zprávu",
+  "scheduledSendInOneHour": "Za 1 hodinu",
+  "scheduledSendTonight": "Dnes večer (20:00)",
+  "scheduledSendTomorrowMorning": "Zítra ráno (9:00)",
+  "scheduledSendCustom": "Vyberte datum a čas",
+  "scheduledMessageLabel": "Naplánováno",
+  "scheduledMessageCancel": "Zrušit naplánovanou zprávu",
+  "chatLockTitle": "Zámek chatu",
+  "chatLockEnable": "Uzamknout tento chat",
+  "chatLockDisable": "Odemkněte tento chat",
+  "chatLockDescription": "Zamčené chaty vyžadují k otevření biometrické nebo PIN ověření",
+  "chatLockVerifyTitle": "Chat uzamčen",
+  "chatLockVerifySubtitle": "Ověřte pro přístup k tomuto chatu",
+  "chatLockVerifyFailed": "Ověření se nezdařilo",
+  "chatLockEnabled": "Chat uzamčen",
+  "chatLockDisabled": "Chat odemčen",
+  "chatLockPinTitle": "Zadejte PIN",
+  "chatLockPinSetTitle": "Nastavte PIN",
+  "chatLockPinConfirmTitle": "Potvrďte PIN",
+  "chatLockPinMismatch": "PIN se neshoduje",
+  "chatLockUseBiometric": "Použijte biometrické údaje",
+  "chatLockUsePin": "Použijte PIN",
+  "mediaEditorUndo": "Vrátit zpět",
+  "mediaEditorRedo": "Znovu",
+  "mediaEditorCrop": "Oříznout",
+  "mediaEditorFilter": "Filtr",
+  "mediaEditorDraw": "Kreslit",
+  "mediaEditorText": "Text",
+  "aiAssistant": "Asistent AI",
+  "aiAssistantWelcome": "Dobrý den! Jsem asistent umělé inteligence N42. Jak vám mohu pomoci?",
+  "aiAssistantNotConfigured": "Služba AI není nakonfigurována",
+  "aiAssistantSettings": "Nastavení AI",
+  "aiAssistantClearHistory": "Vymazat historii chatu",
+  "aiAssistantClearHistoryConfirm": "Opravdu chcete vymazat celou historii chatů AI?",
+  "aiAssistantStopGenerating": "Přestaňte generovat",
+  "aiAssistantModel": "Model",
+  "aiAssistantTemperature": "Teplota",
+  "aiAssistantMaxTokens": "Maximální počet žetonů",
+  "aiAssistantContextWindow": "Kontextové okno",
+  "aiAssistantServiceStatus": "Stav služby",
+  "aiAssistantAvailable": "K dispozici",
+  "aiAssistantUnavailable": "Není k dispozici",
+  "aiSummarize": "Shrnutí AI",
+  "aiSummarizeUnread": "Shrňte nepřečtené zprávy {count}",
+  "@aiSummarizeUnread": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "aiSummarizeLoading": "Shrnutí...",
+  "aiSummarizeError": "Nepodařilo se shrnout",
+  "aiRewrite": "Přepis AI",
+  "aiRewriteFormal": "Formální",
+  "aiRewriteCasual": "Neformální",
+  "aiRewritePlayful": "Hravý",
+  "aiRewriteProfessional": "Profesionální",
+  "aiRewriteAccept": "Použijte",
+  "aiRewriteCancel": "Zrušit",
+  "aiRewriteLoading": "Přepisování...",
+  "aiLinkSummary": "Shrnutí AI",
+  "aiLinkSummaryAnalyzing": "Probíhá analýza...",
+  "chatFolderManagement": "Správa složek",
+  "chatFolderSystem": "Systémové složky",
+  "chatFolderCustom": "Vlastní složky",
+  "chatFolderEmpty": "Zatím žádné vlastní složky",
+  "chatFolderCreate": "Vytvořit složku",
+  "chatFolderEdit": "Upravit složku",
+  "chatFolderNameHint": "Název složky",
+  "chatFolderAll": "všechny",
+  "chatFolderUnread": "Nepřečteno",
+  "chatFolderPersonal": "Osobní",
+  "chatFolderGroups": "Skupiny",
+  "chatFolderChannels": "Kanály",
+  "chatFolderMuted": "Ztlumeno",
+  "storyAddMusic": "Přidat hudbu",
+  "storyChangeMusic": "Změnit hudbu",
+  "storyBackgroundMusic": "Hudba na pozadí",
+  "storyMusicPreview": "Náhled (max 15 s)",
+  "storyChooseFromDevice": "Vyberte z nabídky Zařízení",
+  "storyUseThisMusic": "Použijte tuto hudbu",
+  "authPasskeyNotSupported": "Přístupový klíč není na tomto zařízení podporován",
+  "authPasskeyRegister": "Zaregistrujte přístupový klíč",
+  "authPasskeyNoRegistered": "Nejsou zaregistrovány žádné přístupové klíče",
+  "authPasskeyRegisterHint": "Zaregistrujte přístupový klíč pro tento účet. Samostatné přihlášení pomocí přístupového klíče bude povoleno později.",
+  "authPasskeyNameYours": "Pojmenujte svůj přístupový klíč",
+  "authPasskeyRegistered": "Přístupový klíč byl uložen do tohoto účtu",
+  "authPasskeyDeleted": "Přístupový klíč byl z tohoto účtu odstraněn",
+  "authPasskeyDeleteConfirm": "Smazat přístupový klíč \"{name}\"? Než později použijete přihlášení pomocí hesla, budete jej muset znovu zaregistrovat.",
+  "@authPasskeyDeleteConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "momentVisibilityPublic": "Veřejné",
+  "momentVisibilityPrivate": "Soukromé",
+  "momentVisibilityPartial": "Vybraní přátelé",
+  "momentVisibilityExcluded": "Vyloučit některé přátele",
+  "momentUserMoments": "Okamžiky {userName}",
+  "@momentUserMoments": {
+    "placeholders": {
+      "userName": {
+        "type": "String"
+      }
+    }
+  },
+  "momentForwardTo": "Předat dál",
+  "momentForwardSuccess": "Úspěšně předáno",
+  "momentSelectFriends": "Vyberte Přátelé",
+  "momentSelectTags": "Vyberte podle značek",
+  "momentSelectedCount": "Vybráno ({count})",
+  "@momentSelectedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "momentNoMomentsYet": "Zatím žádné momenty",
+  "momentForwardMoment": "Okamžik vpřed",
+  "momentAddComment": "Přidat komentář...",
+  "momentForwardContent": "[Moment] {content}",
+  "@momentForwardContent": {
+    "placeholders": {
+      "content": {
+        "type": "String"
+      }
+    }
+  },
+  "momentDeleteMoment": "Smazat okamžik",
+  "momentDeleteConfirm": "Opravdu chcete tento okamžik smazat?",
+  "momentComment": "Komentář",
+  "momentWriteComment": "Napište komentář...",
+  "momentLike": "Jako",
+  "momentUnlike": "Na rozdíl od",
+  "momentForward": "Vpřed",
+  "momentDelete": "Smazat",
+  "momentReply": "odpovědět",
+  "momentMoment": "Okamžik",
+  "momentLikesCount": "{count} se líbí",
+  "@momentLikesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "momentCommentsCount": "Komentáře {count}",
+  "@momentCommentsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "momentNoComments": "Zatím žádné komentáře",
+  "momentFailedToLoad": "Načtení obrázku se nezdařilo",
+  "momentReplyTo": "Odpovědět uživateli {userName}...",
+  "@momentReplyTo": {
+    "placeholders": {
+      "userName": {
+        "type": "String"
+      }
+    }
+  },
+  "momentNoConversations": "Žádné konverzace",
+  "momentJustNow": "právě teď",
+  "momentMinutesAgo": "Před {count}m",
+  "@momentMinutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "momentHoursAgo": "Před {count}h",
+  "@momentHoursAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "momentDaysAgo": "Před {count}d",
+  "@momentDaysAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatGroupAnnouncementHint": "Zadejte oznámení skupiny",
+  "chatGroupAnnouncementEmpty": "Žádné oznámení",
+  "chatEditNickname": "Upravit přezdívku",
+  "chatNicknameHint": "Zadejte svou přezdívku do této skupiny",
+  "contactAddPhoneHint": "Zadejte telefonní číslo",
+  "contactNotesHint": "Přidejte poznámky k tomuto kontaktu",
+  "reportTitle": "Zpráva",
+  "reportReasonSpam": "Spam",
+  "reportReasonHarassment": "Obtěžování",
+  "reportReasonFraud": "Podvod",
+  "reportReasonOther": "Jiné",
+  "reportSubmitted": "Zpráva předložena",
+  "reportDescription": "Další popis (volitelné)",
+  "qrcodeSaved": "QR kód byl uložen do alba",
+  "chatSendRedPacketInChat": "Pošlete prosím červený balíček do chatu",
+  "commonSaveFailed": "Uložení se nezdařilo",
+  "reportSelectReason": "Vyberte prosím důvod",
+  "gameCenter": "Hry",
+  "gameHighScore": "Nejlepší",
+  "gameScore": "skóre",
+  "gameOver": "Konec hry",
+  "gamePlayAgain": "Hrát znovu",
+  "gameLeaderboard": "Žebříček",
+  "gamePause": "Pozastaveno",
+  "gameResume": "Klepnutím obnovíte",
+  "gameConfirmExit": "Ukončit tuto hru?",
+  "gameNoScores": "Zatím žádné skóre",
+  "game2048": "2048",
+  "game2048Desc": "Sloučením dlaždic dosáhnete roku 2048",
+  "gameBlockDrop": "Block Drop",
+  "gameBlockDropDesc": "Pokles a jasné linie",
+  "gameMinesweeper": "Hledání min",
+  "gameMinesweeperDesc": "Najděte všechny bezpečné buňky",
+  "gameMatch3": "zápas 3",
+  "gameMatch3Desc": "Spojte 3 nebo více drahokamů",
+  "gameMinesweeperEasy": "Snadno",
+  "gameMinesweeperMedium": "Střední",
+  "gameMinesLeft": "Miny vlevo",
+  "gameTimeLeft": "Čas",
+  "gameLevel": "úroveň",
+  "gameNext": "Další",
+  "gameBestTime": "Nejlepší čas",
+  "gameNewRecord": "Nový rekord!",
+  "gameLines": "Čáry",
+  "storyMyStory": "Můj příběh",
+  "storageSmartCleanup": "Chytré čištění",
+  "storageOldMediaFiles": "Staré mediální soubory",
+  "storageLargeFiles": "Velké soubory",
+  "storageAppCache": "Mezipaměť aplikace",
+  "storageSettings": "Nastavení úložiště",
+  "storageAutoCleanup": "Automatické čištění",
+  "storageAutoCleanupDesc": "Automaticky čistit soubory starší než {days} dnů",
+  "@storageAutoCleanupDesc": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "storageCleanupPeriod": "Období čištění",
+  "storagePreserveThumbnails": "Zachovat miniatury",
+  "storagePreserveThumbnailsDesc": "Během čištění ponechejte miniatury obrázků",
+  "storageWarningHigh": "Využití úložiště je vysoké. Zvažte vyčištění starých souborů.",
+  "storageWarningCritical": "Úložiště je kriticky málo. Ukliďte prosím do volného místa.",
+  "storageFreed": "Uvolněné {size} (soubory {count})",
+  "@storageFreed": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "storageDays": "{days} dní",
+  "@storageDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "storageViewAllRooms": "Zobrazit všechny pokoje {count}",
+  "@storageViewAllRooms": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "storageNoFiles": "Nebyly nalezeny žádné soubory",
+  "storageFilePinned": "Připnuto",
+  "storageDeleteSelected": "Smazat vybrané soubory {count}? Lze je znovu stáhnout ze serveru.",
+  "@storageDeleteSelected": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "backupRestore": "Zálohování a obnovení",
+  "backupCreate": "Vytvořit zálohu",
+  "backupCreateDesc": "Zálohujte svá nastavení a šifrovací klíče. Zprávy budou obnoveny ze serveru po opětovném přihlášení.",
+  "backupIncludeKeys": "Zahrnout šifrovací klíče",
+  "backupIncludeKeysDesc": "Vyžaduje se pro čtení šifrovaných zpráv",
+  "backupPasswordProtect": "Ochrana heslem",
+  "backupEnterPassword": "Zadejte záložní heslo",
+  "backupHistory": "Historie zálohování",
+  "backupNoBackups": "Zatím žádné zálohy",
+  "backupRestore2": "Obnovit",
+  "backupDelete": "Smazat",
+  "backupDeleteConfirm": "Opravdu chcete tuto zálohu smazat? Toto nelze vrátit zpět.",
+  "backupRestoreFromFile": "Obnovit ze souboru",
+  "backupRestoreFromFileDesc": "Importujte soubor .n42backup z jiného zařízení nebo předchozí zálohy.",
+  "backupChooseFile": "Vyberte Záložní soubor",
+  "backupRestoring": "Obnovování...",
+  "backupCreated": "Vytvořená záloha: místnosti {rooms}, zprávy {messages}",
+  "@backupCreated": {
+    "placeholders": {
+      "rooms": {
+        "type": "int"
+      },
+      "messages": {
+        "type": "int"
+      }
+    }
+  },
+  "backupRestored": "Obnoveno nastavení {settings} z místností {rooms}",
+  "@backupRestored": {
+    "placeholders": {
+      "settings": {
+        "type": "int"
+      },
+      "rooms": {
+        "type": "int"
+      }
+    }
+  },
+  "backupFailed": "Zálohování se nezdařilo: {error}",
+  "@backupFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "backupPasswordRequired": "Tato záloha je chráněna heslem",
+  "blocGroupNotFound": "Skupina nenalezena",
+  "blocGroupMembersInvited": "Pozvaní členové {count}",
+  "@blocGroupMembersInvited": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "blocGroupMemberRemoved": "Člen odebrán",
+  "blocGroupAdminRemoved": "Správce odstraněn",
+  "blocGroupLeft": "Opustil skupinu",
+  "blocGroupDisbanded": "Skupina se rozpadla",
+  "blocGroupJoined": "Připojil se ke skupině",
+  "blocGroupInviteDeclined": "Pozvánka odmítnuta",
+  "blocGroupTokenGateUpdated": "Tokenová brána aktualizována",
+  "blocTransferProcessing": "Zpracovává se přenos...",
+  "blocTransferCancelled": "Převod zrušen",
+  "blocTransferFailed": "Přenos se nezdařil",
+  "blocPaymentProcessing": "Zpracování platby...",
+  "blocPaymentFailed": "Platba se nezdařila",
+  "groupMaxMembers": "Limit členů",
+  "groupMaxMembersUnlimited": "Neomezené",
+  "groupMaxMembersHint": "Zadejte limit (nechejte prázdné pro neomezené)",
+  "groupMaxMembersUpdated": "Limit členů aktualizován",
+  "groupFull": "Skupina je naplněna",
+  "groupChannels": "Tématické kanály",
+  "groupChannelsEmpty": "Zatím žádné kanály",
+  "groupChannelsCount": "kanály",
+  "groupChannelCreate": "Nový kanál",
+  "groupChannelName": "Název kanálu",
+  "groupChannelTopic": "Téma kanálu (volitelné)",
+  "groupChannelDelete": "Smazat kanál",
+  "groupChannelDeleteConfirm": "Smazat tento kanál? Všechny zprávy budou ztraceny.",
+  "groupBotSettings": "Nastavení robota",
+  "groupBotEnabled": "Povolit robota",
+  "groupBotWelcomeMessage": "Šablona uvítací zprávy",
+  "groupBotWelcomeHint": "Použijte 'name' jako zástupný symbol pro jméno nového člena",
+  "groupBotConfigUpdated": "Nastavení robota aktualizováno",
+  "groupContentFilter": "Filtr obsahu",
+  "groupContentFilterEnabled": "Povolit filtr klíčových slov",
+  "groupContentFilterReplace": "Nahradit ***",
+  "groupContentFilterHide": "Skrýt zprávu",
+  "groupContentFilterAddWord": "Přidat klíčové slovo",
+  "groupContentFilterUpdated": "Filtr obsahu byl aktualizován",
+  "chatSlashCommands": "Příkazy",
+  "chatCommandPoll": "/poll — Vytvořte anketu",
+  "chatCommandAnnounce": "/announce — Odeslat oznámení",
+  "chatCommandWelcome": "/welcome — Nastavení uvítací zprávy",
+  "chatReportMessage": "Zpráva",
+  "chatReportReason": "Důvod zprávy",
+  "chatReportSpam": "Spam",
+  "chatReportHarassment": "Obtěžování",
+  "chatReportInappropriate": "Nevhodný obsah",
+  "chatReportOther": "Jiné",
+  "chatReportSuccess": "Zpráva předložena",
+  "spacesName": "Název komunity",
+  "spacesNameHint": "např. Obchodníci s kryptoměnami",
+  "spacesNameRequired": "Jméno je povinné",
+  "spacesDescription": "Popis",
+  "spacesDescriptionHint": "O čem tato komunita je?",
+  "spacesType": "Typ komunity",
+  "spacesPublicDesc": "Kdokoli může objevit a připojit se",
+  "spacesPrivateDesc": "Připojit se mohou pouze pozvaní členové",
+  "spacesNotFound": "Komunita nenalezena",
+  "spacesSearch": "Hledat komunity...",
+  "spacesMembers": "členové",
+  "spacesNoChannels": "Zatím žádné kanály",
+  "spacesLeave": "Opustit komunitu",
+  "spacesLeaveConfirm": "Opravdu chcete opustit \"{name}\"?",
+  "@spacesLeaveConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spacesDelete": "Smazat komunitu",
+  "spacesDeleteConfirm": "Tím trvale smažete „{name}“ a všechny jeho kanály. Tuto akci nelze vrátit zpět.",
+  "@spacesDeleteConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spacesCreateChannel": "Přidat kanál",
+  "spacesChannelName": "Název kanálu",
+  "spacesChannelTopic": "Téma (volitelné)",
+  "spacesDeleteChannel": "Smazat kanál",
+  "spacesDeleteChannelConfirm": "Opravdu chcete smazat \"#{name}\"?",
+  "@spacesDeleteChannelConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spacesEditName": "Upravit jméno",
+  "spacesEditDescription": "Upravit popis",
+  "spacesViewAllMembers": "Zobrazit všechny členy {count}",
+  "@spacesViewAllMembers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "spacesKickMemberTitle": "Kick {name}",
+  "@spacesKickMemberTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spacesBanMemberTitle": "Zákaz {name}",
+  "@spacesBanMemberTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spacesPromoteAdmin": "Povýšit na správce",
+  "spacesDemoteAdmin": "Odebrat správce",
+  "spacesInviteMember": "Pozvat člena",
+  "spacesInviteMemberUserId": "ID uživatele (např. @user:server.com)",
+  "spacesSave": "Uložit",
+  "settingsScreenshotProtection": "Ochrana snímku obrazovky",
+  "settingsScreenshotProtectionDesc": "Zabránit vytváření snímků obrazovky a nahrávání obrazovky",
+  "chatSelfDestructTimer": "Sebedestrukce",
+  "chatTimerPickerTitle": "Autodestrukční časovač",
+  "chatTimerOff": "Vypnuto",
+  "onChainNotificationsTitle": "On-chain Events",
+  "onChainMarkAllRead": "Označte vše jako přečtené",
+  "onChainNoNotifications": "Zatím žádné on-chain akce",
+  "onChainNoNotificationsDesc": "Zde se zobrazí události z odebíraných kanálů",
+  "onChainViewDetails": "Zobrazit podrobnosti",
+  "chatCommandHelp": "/help — Zobrazí všechny příkazy",
+  "chatCommandPrice": "/price — Získat cenu tokenu",
+  "chatCommandBalance": "/balance — Zobrazí zůstatek v peněžence",
+  "chatCommandChains": "/chains — Seznam 236+ podporovaných řetězců",
+  "chatMiniApps": "Aplikace",
+  "miniAppMarketTitle": "Mini aplikace",
+  "miniAppCategoryAll": "všechny",
+  "miniAppSearch": "Hledat aplikace...",
+  "miniAppFeatured": "Nejlepší",
+  "miniAppAllApps": "Všechny aplikace",
+  "miniAppNoResults": "Nebyly nalezeny žádné aplikace",
+  "slideToPayLabel": "→→→ Posunutím potvrďte",
+  "slideToPayConfirming": "Potvrzuje se...",
+  "redPacketBestLuck": "Hodně štěstí",
+  "redPacketBestLuckCongrats": "Hodně štěstí! Máš nejvíc!",
+  "redPacketStats": "Nárokováno na {claimed} / {total}",
+  "@redPacketStats": {
+    "placeholders": {
+      "claimed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "redPacketStatsTotal": "celkem",
+  "redPacketGrabbedViral": "🧧 popadl červený balíček • {amount} {token}",
+  "@redPacketGrabbedViral": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "token": {
+        "type": "String"
+      }
+    }
+  },
+  "web3SearchHint": "@matrix:id • 0x adresa peněženky • jméno.eth",
+  "web3SearchPlaceholder": "Hledat podle ID, peněženky nebo ENS...",
+  "web3WalletAddress": "Adresa peněženky",
+  "web3AddressCopied": "Adresa zkopírována",
+  "web3Copy": "Kopírovat",
+  "web3SendMessage": "Odeslat zprávu",
+  "web3SendToWallet": "Peněženka zpráv",
+  "web3WalletOnlyHint": "Tato adresa zatím nemá účet N42. Zpráva bude doručena, když se připojí.",
+  "web3NftAvatar": "Avatar NFT",
+  "web3ResolveFailed": "Nepodařilo se vyřešit identitu",
+  "web3EnsNotFound": "Název ENS \"{name}\" nebyl nalezen",
+  "@web3EnsNotFound": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "web3NoN42AccountTitle": "Žádný účet N42",
+  "web3NoN42AccountDesc": "Tato adresa peněženky zatím nemá účet N42. Chcete-li začít, můžete s nimi sdílet svůj odkaz na pozvánku N42.",
+  "web3ShareInvite": "Sdílejte pozvánku",
+  "nftPickerTitle": "Vyberte NFT Avatar",
+  "nftPickerTabPopular": "Populární",
+  "nftPickerTabCustom": "Vlastní",
+  "nftPickerChain": "řetěz",
+  "nftPickerContract": "Adresa smlouvy",
+  "nftPickerTokenId": "ID tokenu",
+  "nftPickerVerifyOwnership": "Ověřte vlastnictví a náhled",
+  "nftPickerUseAsAvatar": "Použít jako Avatar",
+  "nftPickerPreview": "Náhled",
+  "nftPickerNotOwned": "Toto NFT nevlastníte",
+  "nftPickerInvalidTokenId": "Neplatné ID tokenu",
+  "nftPickerEnterBoth": "Zadejte adresu smlouvy a ID tokenu",
+  "nftPickerInfoTitle": "NFT Avatar — Ověřeno na řetězci",
+  "nftPickerInfoDesc": "Svažte NFT, který vlastníte, jako svého avatara. Kdokoli může ověřit vlastnictví v řetězci. Zobrazeno se zlatým prstenem přes N42.",
+  "nftPickerPopularCollections": "Populární kolekce",
+  "nftPickerWalletHint": "Připojte svou peněženku N42 a automaticky zjistěte své NFT ve více než 236 řetězcích.",
+  "profileBindNftAvatar": "Bind NFT Avatar",
+  "profileChangeAvatar": "Změňte avatara",
+  "groupTopics": "Témata",
+  "groupTopicsEmpty": "Zatím žádná témata",
+  "syncInProgress": "Synchronizace historie zpráv...",
+  "recoveryKeyReminderTitle": "Chraňte své zprávy",
+  "recoveryKeyReminderDesc": "Vytvořte obnovovací klíč pro bezpečnou synchronizaci šifrovaných zpráv mezi zařízeními",
+  "recoveryKeySetupNow": "Nastavit nyní",
+  "recoveryKeyRemindLater": "Připomeňte mi později",
+  "channelReadOnly": "Do tohoto kanálu mohou přispívat pouze administrátoři",
+  "channelSubscribers": "předplatitelů",
+  "channelVerified": "Ověřený kanál",
+  "redPacketHistory": "Historie červených paketů",
+  "redPacketSent": "Odesláno",
+  "redPacketReceived": "Přijato",
+  "redPacketExpired": "Platnost vypršela",
+  "redPacketClaimed": "Nárokováno",
+  "redPacketInsufficientBalance": "Nedostatečná rovnováha",
+  "selfDestructCountdown": "Sebedestrukce v {time}",
+  "@selfDestructCountdown": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "messageDestroyed": "Zpráva zničena",
+  "miniAppPermissionDenied": "Povolení odepřeno: {permission}",
+  "@miniAppPermissionDenied": {
+    "placeholders": {
+      "permission": {
+        "type": "String"
+      }
+    }
+  },
+  "aiSuggestionGasFee": "Co je poplatek za plyn?",
+  "aiSuggestionDefi": "Průvodce pro začátečníky DeFi",
+  "aiSuggestionSecurity": "Jak zkontrolovat zabezpečení smlouvy",
+  "aiSuggestionBridge": "Křížové přemostění",
+  "channelDiscoverTitle": "Objevte kanály",
+  "channelDiscoverSearch": "Hledat kanály...",
+  "channelJoin": "Připojte se",
+  "channelJoined": "Připojeno",
+  "channelCategory": "Kategorie",
+  "slowModeCooldown": "Pomalý režim: čekejte {seconds}s",
+  "@slowModeCooldown": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "addressCopyAction": "Kopírovat adresu",
+  "addressSendMessage": "Odeslat zprávu",
+  "addressViewProfile": "Zobrazit profil",
+  "sendToAddress": "Odeslat na adresu peněženky",
+  "blocAuthSendVerificationCodeFailed": "Odeslání ověřovacího kódu se nezdařilo",
+  "blocAuthServerNoEmailPasswordReset": "Tento server nepodporuje obnovení hesla e-mailu",
+  "blocAuthResetPasswordFailed": "Obnovení hesla se nezdařilo",
+  "blocAuthChangePasswordFailed": "Změna hesla se nezdařila",
+  "blocAuthOldPasswordWrong": "Nesprávné aktuální heslo",
+  "blocAuthLoginCancelled": "Přihlášení zrušeno",
+  "blocAuthGoogleLoginFailed": "Přihlášení Google se nezdařilo",
+  "blocAuthAppleLoginFailed": "Přihlášení Apple se nezdařilo",
+  "blocAuthSsoLoginFailed": "Přihlášení SSO se nezdařilo",
+  "blocAuthFacebookLoginFailed": "Přihlášení na Facebook se nezdařilo",
+  "blocAuthTwitterLoginFailed": "Přihlášení na Twitter se nezdařilo",
+  "blocAuthWeChatLoginFailed": "Přihlášení na WeChat se nezdařilo",
+  "blocAuthWeChatNotConfigured": "Přihlášení WeChat není nakonfigurováno",
+  "blocAuthWeChatNotInstalled": "Nejprve si prosím nainstalujte WeChat",
+  "blocAuthPasswordWrong": "Nesprávné heslo",
+  "blocAuthEmailAlreadyBound": "Tento e-mail je již spojen s jiným účtem",
+  "blocAuthChangeEmailFailed": "Změna e-mailu se nezdařila",
+  "blocAuthVerificationCodeInvalid": "Ověřovací kód je nesprávný nebo jeho platnost vypršela",
+  "blocAuthSessionExpired": "Platnost relace vypršela, přihlaste se prosím znovu",
+  "blocAuthSessionIncomplete": "Údaje o relaci nejsou úplné, přihlaste se prosím znovu"
+}

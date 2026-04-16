@@ -1,0 +1,2747 @@
+{
+  "@@locale": "uk",
+  "commonRetry": "Повторіть спробу",
+  "commonUnknownUser": "Невідомий користувач",
+  "transferWalletNotConnected": "Гаманець не підключений",
+  "chatCallServiceNotInitialized": "Служба виклику не ініціалізована",
+  "authLoginFailed": "Помилка входу: {error}",
+  "chatCallBack": "Передзвоніть",
+  "chatMissedVideoCall": "Пропущений відеодзвінок",
+  "chatMissedVoiceCall": "Пропущений голосовий виклик",
+  "chatCallNotAnswered": "Без відповіді",
+  "chatCallDurationLabel": "Тривалість дзвінка",
+  "chatVoiceCallCancelled": "Голосовий виклик скасовано",
+  "chatVideoCallCancelled": "Відеодзвінок скасовано",
+  "commonImage": "[Зображення]",
+  "chatVideo": "[Відео]",
+  "chatVoice": "[Голос]",
+  "commonFile": "[Файл]",
+  "chatLocation": "[Розташування]",
+  "chatUnknownMessage": "[Невідоме повідомлення]",
+  "commonDelete": "Видалити",
+  "chatDeleteThisMessage": "Видалити це повідомлення?",
+  "chatMessageDeleted": "Повідомлення видалено",
+  "profileNotLoggedIn": "Не ввійшли в систему",
+  "chatMyLocation": "Моє місцезнаходження",
+  "commonGroupChat": "Груповий чат",
+  "commonSearch": "Пошук",
+  "commonCancel": "Скасувати",
+  "commonLoadFailed": "Не вдалося завантажити",
+  "commonMessages": "Повідомлення",
+  "commonContacts": "Контакти",
+  "commonMe": "я",
+  "commonVoiceLoading": "Голосове завантаження, спробуйте пізніше",
+  "commonVoiceToTextFailed": "Помилка перетворення голосу в текст",
+  "commonConvertToText": "До тексту",
+  "chatCopy": "Копія",
+  "commonForward": "вперед",
+  "commonUnfavorite": "Нелюб",
+  "commonFavorite": "улюблений",
+  "settingsResend": "Надіслати повторно",
+  "chatRecall": "Відкликати",
+  "commonQuote": "Цитата",
+  "commonRemind": "Нагадати",
+  "chatCopied": "Скопійовано",
+  "storySendMessageHint": "Надіслати повідомлення",
+  "commonMicrophonePermissionRequired": "Дозвольте дозвіл на використання мікрофона",
+  "chatMicrophonePermissionDeniedPermanent": "У дозволі на мікрофон відмовлено. Будь ласка, увімкніть це в налаштуваннях системи, щоб використовувати голосові повідомлення.",
+  "commonStartRecordingFailed": "Не вдалося почати запис: {error}",
+  "commonRecordingTooShort": "Запис занадто короткий",
+  "commonStopRecordingFailed": "Не вдалося зупинити запис: {error}",
+  "chatReleaseToCancel": "Відпустіть, щоб скасувати",
+  "chatReleaseToSend": "Відпустіть, щоб надіслати, проведіть пальцем угору, щоб скасувати",
+  "commonHoldToTalk": "Тримайте, щоб говорити",
+  "commonSend": "Надіслати",
+  "commonAddFriend": "Додати друга",
+  "commonChatServiceNotConnected": "Служба чату не підключена",
+  "contactUserNotFoundHint": "Користувача \"{query}\" не знайдено\n\nПоради:\n• Спробуйте ввести повний ідентифікатор користувача, напр. @username:server.com\n• Перевірте написання імені користувача",
+  "@contactUserNotFoundHint": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "contactCreateChatFailed": "Не вдалося створити чат: {error}",
+  "@contactCreateChatFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "contactSearchFailed": "Помилка пошуку: {error}",
+  "@contactSearchFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "contactEnterUserIdOrUsername": "Введіть ідентифікатор користувача або ім’я користувача для пошуку",
+  "contactSearching": "Пошук...",
+  "contactSearchUserToChat": "Знайдіть користувача, щоб розпочати спілкування",
+  "contactMatrixIdExample": "Ви можете ввести повний ідентифікатор матриці\nнапр. @user:matrix.n42.network",
+  "contactUserNotFound": "Користувача \"{username}\" не знайдено",
+  "@contactUserNotFound": {
+    "placeholders": {
+      "username": {
+        "type": "String"
+      }
+    }
+  },
+  "commonChat": "Чат",
+  "commonSettings": "Налаштування",
+  "profileEditProfile": "Редагувати профіль",
+  "authLogin": "Увійти",
+  "commonCreateGroup": "Створити групу",
+  "chatError": "Помилка",
+  "commonTransfer": "Трансфер",
+  "commonReceived": "Отримано",
+  "commonRefunded": "Повернено",
+  "commonExpired": "Термін дії минув",
+  "chatRedPacketGreeting": "найкращі побажання",
+  "commonN42RedPacket": "N42 Червоний пакет",
+  "commonClaimed": "Заявлено",
+  "commonAllClaimed": "Все заявлено",
+  "chatReadAloud": "Читайте вголос",
+  "chatReply": "Відповісти",
+  "commonEdit": "Редагувати",
+  "chatSelectForwardTarget": "Виберіть Переслати ціль",
+  "commonSendCount": "Надіслати ({count})",
+  "contactN42Id": "N42 ID: {id}",
+  "profileN42IdTitle": "N42 ID",
+  "profileN42Bean": "N42 Бін",
+  "contactFriendInfo": "Інформація про друга",
+  "contactFriendInfoDesc": "Додайте зауваження друга, телефон, теги, нотатки, фотографії та встановіть дозволи.",
+  "commonMoments": "Моменти",
+  "commonSendMessage": "повідомлення",
+  "contactAudioVideoCall": "Аудіо/відеодзвінок",
+  "contactVideoChannel": "Відеоканал",
+  "contactRemark": "Зауваження",
+  "contactRemarkName": "Примітка Назва",
+  "contactPhone": "Телефон",
+  "contactTags": "Теги",
+  "contactNotes": "Примітки",
+  "contactPhotos": "Фотографії",
+  "contactPermissions": "Дозволи",
+  "contactChatMomentsEtc": "Чат, моменти, спорт тощо.",
+  "contactMoreInfo": "Більше інформації",
+  "contactCommonGroups": "Спільні групи",
+  "contactSource": "Джерело",
+  "settingsNotificationSettings": "Сповіщення",
+  "settingsPrivacy": "Конфіденційність",
+  "settingsAppearance": "Зовнішній вигляд",
+  "settingsAbout": "про",
+  "commonLogout": "Вийти",
+  "commonLogoutConfirm": "Ви впевнені, що бажаєте вийти?",
+  "commonSave": "зберегти",
+  "profileNickname": "псевдонім",
+  "profileEnterNickname": "Введіть псевдонім",
+  "profileSignature": "Підпис",
+  "profileAddSignature": "Додайте підпис",
+  "commonTakePhoto": "Зробити фото",
+  "profileChooseFromGallery": "Виберіть із галереї",
+  "profileSaveFailed": "Не вдалося зберегти: {error}",
+  "authSecureDecentralizedChat": "Безпечний децентралізований обмін повідомленнями",
+  "commonEndToEndEncryption": "Наскрізне шифрування",
+  "authMessagesOnlyYouCanSee": "Повідомлення, видимі лише вам і одержувачу",
+  "authDecentralized": "Децентралізована",
+  "authBasedOnMatrix": "Побудований на основі відкритого протоколу Matrix",
+  "authWalletIntegration": "Інтеграція гаманця",
+  "authEasyCryptoTransfer": "Прості перекази криптовалюти",
+  "authRegister": "Зареєструватися",
+  "authAgreeTerms": "Увійшовши в систему, ви погоджуєтесь",
+  "authTermsOfService": "Умови обслуговування",
+  "authAnd": "і",
+  "authPrivacyPolicy": "Політика конфіденційності",
+  "authServerAddress": "Адреса сервера",
+  "authEnterServerAddress": "Введіть адресу сервера",
+  "authConnectedTo": "Підключено до {serverName}",
+  "authUsername": "Ім'я користувача",
+  "authEnterUsername": "Введіть ім'я користувача",
+  "authUsernameOrEmail": "Ім'я користувача або електронна пошта",
+  "authEnterUsernameOrEmail": "Введіть ім'я користувача або електронну адресу",
+  "authPassword": "Пароль",
+  "authEnterPassword": "Введіть пароль",
+  "authRegisterAccount": "Зареєструватися",
+  "authForgotPassword": "Забули пароль",
+  "authOtherLoginMethods": "Інші методи входу",
+  "authCreateAccount": "Створити акаунт",
+  "authJoinN42Chat": "Приєднайтеся до чату N42, щоб розпочати спілкування",
+  "authUsernameHint": "3-20 символів, літери/цифри/_",
+  "authUsernameMinLength": "Ім'я користувача має містити не менше 3 символів",
+  "authUsernameMaxLength": "Ім'я користувача має містити не більше 20 символів",
+  "authUsernameFormat": "Ім'я користувача може містити лише літери, цифри та підкреслення",
+  "authPasswordHint": "Мінімум 8 символів",
+  "commonPasswordMinLength": "Пароль має бути не менше 8 символів",
+  "authConfirmPassword": "Підтвердьте пароль",
+  "authFilled": "Заповнений",
+  "authEnterInviteCode": "Введіть код запрошення",
+  "authAlreadyHaveAccount": "Вже маєте акаунт?",
+  "authLoginNow": "Увійдіть зараз",
+  "profileAvatar": "Аватар",
+  "profileStatus": "Статус",
+  "commonLoading": "Завантаження...",
+  "conversationNoConversations": "Жодних розмов",
+  "conversationTapToChat": "Торкніться вгорі праворуч, щоб розпочати спілкування",
+  "conversationStartGroup": "Запустіть груповий чат",
+  "commonScan": "Сканувати",
+  "commonPayment": "Оплата",
+  "commonFeatureComingSoon": "{feature} незабаром",
+  "conversationMarkAsRead": "Позначити як прочитане",
+  "commonUnmute": "Увімкнути звук",
+  "commonMute": "Вимкнути звук",
+  "conversationUnpin": "Відкріпити",
+  "conversationPin": "Pin",
+  "conversationDeleteConversation": "Видалити розмову",
+  "conversationDeleteConversationConfirm": "Видалити розмову з \"{name}\"?",
+  "commonNoContacts": "Немає контактів",
+  "contactAddFriendsToChat": "Додайте друзів, щоб почати спілкуватися",
+  "contactNotFound": "Контакт не знайдено",
+  "contactTryOtherKeywords": "Спробуйте інші ключові слова або глобальний пошук",
+  "contactSearchResults": "Результати пошуку",
+  "contactNewFriends": "Нові друзі",
+  "contactChatOnlyFriends": "Друзі лише в чаті",
+  "contactOfficialAccounts": "Офіційні облікові записи",
+  "contactServiceAccounts": "Сервісні облікові записи",
+  "contactEnterpriseContacts": "Контакти підприємства",
+  "contactRecommendToFriend": "Поділіться контактом",
+  "commonSetRemark": "Встановити зауваження",
+  "contactSendingCard": "Надсилання картки контакту...",
+  "commonFileLabel": "Файл",
+  "commonLocationLabel": "Розташування",
+  "contactRecommendFailed": "Не вдалося рекомендувати: {error}",
+  "profileEnterRemark": "Введіть зауваження",
+  "contactOpeningChat": "Відкриття чату...",
+  "contactOpenChatFailed": "Не вдалося відкрити чат: {error}",
+  "contactAddContact": "Додати контакт",
+  "contactEnterUserId": "Введіть ідентифікатор користувача",
+  "contactNoFriendRequests": "Без запитів друзів",
+  "commonAccept": "прийняти",
+  "commonReject": "Відхиляти",
+  "commonNoGroups": "Немає груп",
+  "contactSelectFriendToRecommend": "Виберіть друга, якому потрібно порекомендувати",
+  "commonSearchContacts": "Пошук контактів",
+  "contactNoContactsFound": "Контакти не знайдено",
+  "favoriteYesterday": "вчора",
+  "chatJustNow": "Просто зараз",
+  "profileOnline": "Онлайн",
+  "profileOffline": "Офлайн",
+  "searchContactsGroupsMessages": "Пошук контактів, груп і повідомлень",
+  "searchError": "Помилка пошуку",
+  "chatSearchHint": "Пошук",
+  "searchHistory": "Історія пошуку",
+  "commonClear": "ясно",
+  "commonAll": "всі",
+  "searchGroups": "Групи",
+  "searchNoResults": "Немає результатів",
+  "commonGroupMembers": "Учасники ({count})",
+  "groupMembersTitle": "Члени групи",
+  "groupViewAll": "Переглянути всі",
+  "groupOwner": "Власник",
+  "groupAdmin": "адмін",
+  "groupInvite": "Запросити",
+  "commonGroupAnnouncement": "Групове оголошення",
+  "commonNotSet": "Не встановлено",
+  "groupDescription": "Опис групи",
+  "groupPublicGroup": "Громадська група",
+  "commonClearChatHistory": "Очистити історію чату",
+  "commonDissolveGroup": "Розпустити групу",
+  "commonLeaveGroup": "Вийти з групи",
+  "groupChangeGroupName": "Змінити назву групи",
+  "commonEnterGroupName": "Введіть назву групи",
+  "commonConfirm": "Підтвердити",
+  "groupEnterGroupDescription": "Введіть опис групи",
+  "groupPublish": "Опублікувати",
+  "chatClearHistoryConfirm": "Очистити всю історію чату? Це неможливо скасувати.",
+  "chatClearAction": "ясно",
+  "commonChatHistoryCleared": "Історію чату очищено",
+  "commonDissolve": "Розчинити",
+  "groupQrCode": "QR-код групи",
+  "commonSearchChatHistory": "Пошук в історії чату",
+  "groupIdCopied": "Ідентифікатор групи скопійовано",
+  "transferEnterOrPasteAddress": "Введіть або вставте адресу гаманця",
+  "transferSelectToken": "Виберіть Токен",
+  "commonTransferAmount": "Сума переказу",
+  "transferAvailable": "в наявності",
+  "transferMemoOptional": "Пам'ятка (необов'язково)",
+  "transferConfirmTransfer": "Підтвердити передачу",
+  "transferAddressVerified": "Адреса підтверджена",
+  "transferAvailableBalance": "В наявності: {balance} {symbol}",
+  "commonEnterAmount": "Введіть суму",
+  "commonRedPacketCountMin": "Потрібен принаймні 1 червоний пакет",
+  "commonViewRedPacketDetails": "Переглянути інформацію про червоний пакет",
+  "commonEnterTransferAmount": "Будь ласка, введіть суму переказу",
+  "commonTransferTo": "Передача в",
+  "commonFromSender": "Від {name}",
+  "commonConfirmReceive": "Підтвердити отримання",
+  "groupProfile": "Інформація про групу",
+  "groupRemoveMember": "Видалити з групи",
+  "commonRemove": "видалити",
+  "profileClearStatus": "Очистити статус",
+  "profileClearStatusConfirm": "Очистити поточний статус?",
+  "profileStatusCleared": "Статус очищено",
+  "profileUserNotExist": "Користувач не існує",
+  "profileUserIdCopied": "ID користувача скопійовано",
+  "commonReport": "звіт",
+  "profileQrCode": "QR-код",
+  "profileAvatarUpdated": "Аватар оновлено",
+  "commonSelectImageFailed": "Не вдалося вибрати зображення: {error}",
+  "profileChangeName": "Змінити ім'я",
+  "profileMale": "Чоловік",
+  "profileFemale": "Жінка",
+  "chatFeatureInDev": "Функція {feature} у розробці...",
+  "profileSaveAddressFailed": "Не вдалося зберегти адресу: {error}",
+  "profileAddNew": "додати",
+  "profileAddAddress": "Додати адресу",
+  "profileAddressAdded": "Адресу додано",
+  "profileAddressUpdated": "Адреса оновлена",
+  "profileDeleteAddress": "Видалити адресу",
+  "profileAddressDeleted": "Адреса видалена",
+  "profileSaveInvoiceFailed": "Не вдалося зберегти рахунок-фактуру: {error}",
+  "profileMyInvoices": "Мої рахунки-фактури",
+  "profileAddInvoice": "Додати рахунок-фактуру",
+  "profileInvoiceAdded": "Рахунок додано",
+  "profileInvoiceUpdated": "Рахунок оновлено",
+  "profileDeleteInvoice": "Видалити рахунок-фактуру",
+  "profileInvoiceDeleted": "Рахунок видалено",
+  "profilePersonal": "Особисті",
+  "groupSelectAtLeastOne": "Виберіть хоча б одного учасника",
+  "chatFileNotExist": "Файл не існує",
+  "chatSendFailed": "Не вдалося надіслати: {error}",
+  "chatCannotOpenBrowser": "Не вдається відкрити браузер",
+  "chatSelectFileFailed": "Не вдалося вибрати файл: {error}",
+  "settingsSetupFailed": "Помилка налаштування: {error}",
+  "transferEnterValidAmount": "Введіть дійсну суму",
+  "commonAddressCopied": "Адресу скопійовано",
+  "favoriteOpenItem": "Відкрити: {content}",
+  "favoriteDeleted": "Видалено",
+  "profileWallet": "Гаманець",
+  "chatRecording": "Запис",
+  "chatInvalidVideoUrl": "Недійсна URL-адреса відео",
+  "chatDownloadFile": "Завантажити файл",
+  "chatClearChatHistoryTitle": "Очистити історію чату",
+  "chatVideoCall": "Відеодзвінок",
+  "commonVoiceCall": "Голосовий виклик",
+  "callLeaveMeeting": "Залишити зустріч",
+  "chatDetails": "Деталі чату",
+  "chatViewAllGroupMembers": "Переглянути всіх учасників",
+  "chatGroupName": "Назва групи",
+  "chatGroupNameUpdated": "Назва групи оновлена",
+  "chatUpdateFailed": "Помилка оновлення",
+  "chatNoPermissionToModify": "Ви не маєте дозволу на зміну",
+  "chatGroupManagement": "Управління групою",
+  "chatMyNicknameInGroup": "Мій нік у групі",
+  "chatPinChat": "Закріпити чат",
+  "chatStrongReminder": "Сильне нагадування",
+  "chatSetChatBackground": "Встановити фон чату",
+  "chatUnknownFile": "Невідомий файл",
+  "chatDownload": "Завантажити",
+  "chatInvalidLocation": "Недійсне розташування",
+  "chatTapToCancel": "Торкніться, щоб скасувати",
+  "chatCaptureFailed": "Помилка захоплення: {error}",
+  "chatProcessingVideo": "Обробка відео...",
+  "chatVideoFileNotExist": "Відеофайл не існує",
+  "chatVideoDataEmpty": "Дані відео порожні",
+  "chatVideoTooLarge": "Розмір відео не може перевищувати 100 МБ",
+  "chatSendingVideo": "Надсилання відео...",
+  "chatSendVideoFailed": "Не вдалося надіслати відео: {error}",
+  "chatImageFileNotExist": "Файл зображення не існує",
+  "commonImageDataEmpty": "Дані зображення порожні",
+  "chatSendingImage": "Надсилання зображення...",
+  "chatSendImageFailed": "Не вдалося надіслати зображення: {error}",
+  "chatSendLocation": "Надіслати місцезнаходження",
+  "chatSelectLocationAndSend": "Виберіть місце та надішліть",
+  "chatShareRealTimeLocation": "Поділіться місцезнаходженням у реальному часі",
+  "chatShareLocationForOneHour": "Поділіться з друзями місцезнаходженням у реальному часі протягом 1 години",
+  "chatLocationSent": "Розташування надіслано",
+  "chatSelectMessages": "Виберіть повідомлення",
+  "chatSelectedCount": "Вибрано {count}",
+  "chatSelectAll": "Виберіть усі",
+  "chatGroupChatCount": "Груповий чат ({count})",
+  "chatPrivateChat": "Приватний чат",
+  "chatNoMessages": "Немає повідомлень",
+  "chatSendFirstMessage": "Надішліть перше повідомлення, щоб розпочати спілкування",
+  "chatEncryptionNotice": "Цей чат має наскрізне шифрування. Лише ви та одержувач можете читати повідомлення.",
+  "chatMultiForward": "вперед",
+  "chatCollect": "Збирати",
+  "chatNoMembers": "Немає учасників",
+  "chatMemberNotFound": "Учасника не знайдено",
+  "chatVoiceFileNotExist": "Голосовий файл не існує",
+  "chatVoiceFileEmpty": "Голосовий файл порожній",
+  "chatSendingVoice": "Надсилання голосу...",
+  "chatSendVoiceFailed": "Не вдалося надіслати голос: {error}",
+  "chatMessageForwarded": "Повідомлення переслано",
+  "chatForwardFailed": "Не вдалося переслати: {error}",
+  "chatUnfavorited": "Не додано до вибраного",
+  "chatFavorited": "Вибране",
+  "chatReactionAdded": "Реакція додана",
+  "chatReactionRemoved": "Реакцію видалено",
+  "chatFailedMessageDeleted": "Невдале повідомлення видалено",
+  "chatDeleteMessages": "Видалити повідомлення",
+  "chatDeleteMessagesConfirm": "Ви впевнені, що хочете видалити повідомлення {count}?",
+  "chatNoteOtherMessages": "Примітка: повідомлення {count} надходять від інших і будуть видалені лише для вас.",
+  "chatMyMessagesWillBeRecalled": "{count} повідомлення від вас будуть відкликані для всіх.",
+  "chatRecalledCount": "Відкликані повідомлення {count}, {localCount} видалено лише для вас",
+  "chatRecalledMessages": "Відкликані повідомлення {count}",
+  "chatDeletedLocally": "{count} повідомлення видалено лише для вас",
+  "chatForwardedCount": "Переслані повідомлення {count}",
+  "chatForwardComplete": "Пересилання завершено: {success} вдалося, {failed} не вдалося",
+  "chatRemindOnlyInGroup": "Функція нагадування доступна лише в груповому чаті",
+  "chatOnlyTextSearchable": "Можна шукати лише текстові повідомлення",
+  "chatSearchFor": "Пошук \"{text}\"",
+  "chatBaiduSearch": "Пошук Baidu",
+  "chatGoogleSearch": "Пошук Google",
+  "chatBingSearch": "Пошук Bing",
+  "chatCalling": "Телефоную...",
+  "chatRinging": "Дзвінок...",
+  "chatInCall": "У дзвінку",
+  "commonFeatureInDevelopment": "Функція {feature} у розробці...",
+  "chatCollectMessages": "Зібрані повідомлення {count}",
+  "commonMemberCount": "Учасники {count}",
+  "groupDone": "Готово ({count})",
+  "@groupDone": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "profileServices": "Послуги",
+  "commonFavorites": "Вибране",
+  "profileOrdersAndCards": "Замовлення та картки",
+  "profileStickers": "наклейки",
+  "profileStatusSetTo": "Встановлено статус: {status}",
+  "@profileStatusSetTo": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "profileAvatarUploadFailed": "Не вдалося завантажити аватар",
+  "profilePersonalProfile": "Особистий профіль",
+  "profileName": "Ім'я",
+  "profileGender": "Стать",
+  "profileRegion": "Регіон",
+  "commonMyQrCode": "Мій QR-код",
+  "profilePoke": "Тикати",
+  "profileRingtone": "Рінгтон",
+  "profileDefaultRingtone": "Мелодія за замовчуванням",
+  "profileMyAddresses": "Мої адреси",
+  "profileGenderSetTo": "Встановлено стать: {gender}",
+  "@profileGenderSetTo": {
+    "placeholders": {
+      "gender": {
+        "type": "String"
+      }
+    }
+  },
+  "profileSelectRegion": "Виберіть регіон",
+  "profileSelectCity": "Виберіть місто",
+  "profileRegionSetTo": "Для регіону встановлено: {region}",
+  "@profileRegionSetTo": {
+    "placeholders": {
+      "region": {
+        "type": "String"
+      }
+    }
+  },
+  "profileSetPoke": "Встановити Poke",
+  "profileFriendPokedMe": "Друг тицьнув мене",
+  "profileExample": "приклад",
+  "profileOnTheShoulder": " на плечі",
+  "profilePokeCleared": "Пок очищено",
+  "profilePokeSetTo": "Poke встановлено на: poked me{suffix}",
+  "@profilePokeSetTo": {
+    "placeholders": {
+      "suffix": {
+        "type": "String"
+      }
+    }
+  },
+  "profileEditSignature": "Редагувати підпис",
+  "profileIntroduceYourself": "Речення для представлення",
+  "profileSignatureCleared": "Підпис очищено",
+  "profileSignatureUpdated": "Підпис оновлено",
+  "profileScanToAddFriend": "Відскануйте QR-код вище, щоб додати мене до друзів",
+  "profileRingtoneSetTo": "Встановлено сигнал дзвінка: {ringtone}",
+  "@profileRingtoneSetTo": {
+    "placeholders": {
+      "ringtone": {
+        "type": "String"
+      }
+    }
+  },
+  "commonConfirmDissolveGroup": "Ви впевнені, що хочете розпустити \"{name}\"? Цю дію не можна скасувати.",
+  "@commonConfirmDissolveGroup": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "authEnterValidServerAddress": "Введіть дійсну адресу сервера",
+  "authEnterServerAddressFirst": "Спочатку введіть адресу сервера",
+  "authPasskeyRequiresServer": "Пароль для входу вимагає підтримки сервера",
+  "authLoginAgreement": "Увійшовши в систему, ви погоджуєтесь ",
+  "authPleaseAgreeToTerms": "Прочитайте та погодьтеся з Умовами надання послуг і Політикою конфіденційності",
+  "authRegisterFailed": "Помилка реєстрації",
+  "commonReenterPassword": "Повторно введіть пароль",
+  "commonPasswordsDoNotMatch": "Паролі не збігаються",
+  "authInviteCodeBuiltIn": "Код запрошення (вбудований)",
+  "authInviteCodeBuiltInNote": "Код запрошення вбудований, зазвичай не потрібно змінювати",
+  "authIHaveReadAndAgree": "Я прочитав і згоден ",
+  "mainStartGroupChat": "Запустіть груповий чат",
+  "mainAddFriends": "Додати друзів",
+  "mainPaymentAndCollection": "Оплата",
+  "contactCount": "{count} контакти",
+  "@contactCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "contactAddToHomeScreen": "Додати на головний екран",
+  "contactRecommendedCardTo": "Рекомендована картка {contact} для {recipient}",
+  "@contactRecommendedCardTo": {
+    "placeholders": {
+      "contact": {
+        "type": "String"
+      },
+      "recipient": {
+        "type": "String"
+      }
+    }
+  },
+  "contactEnterRemarkName": "Введіть назву зауваження",
+  "contactRemarkSetTo": "Примітка встановлена на: {remark}",
+  "@contactRemarkSetTo": {
+    "placeholders": {
+      "remark": {
+        "type": "String"
+      }
+    }
+  },
+  "contactAcceptedFriendRequest": "Прийняв запит {name} про друзі",
+  "@contactAcceptedFriendRequest": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "contactRejectedFriendRequest": "Відхилено запит {name} про дружбу",
+  "@contactRejectedFriendRequest": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "commonGroupInvites": "Групові запрошення",
+  "commonMyGroups": "Мої групи ({count})",
+  "@commonMyGroups": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "commonInvitedToJoinGroup": "Запрошено приєднатися до групи",
+  "commonConfirmLeaveGroup": "Ви впевнені, що бажаєте залишити \"{name}\"?",
+  "@commonConfirmLeaveGroup": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "commonLeave": "Залиште",
+  "commonRecallThisMessage": "Відкликати це повідомлення?",
+  "commonSavedToGallery": "Збережено в галерею",
+  "commonFailedToSave": "Не вдалося зберегти",
+  "chatSaving": "Збереження...",
+  "commonShare": "Поділіться",
+  "chatSaveToGallery": "Зберегти в галерею",
+  "chatFailedToLoadImage": "Не вдалося завантажити зображення",
+  "chatVideoRecordingFailed": "Помилка запису відео",
+  "profileRedPacket": "Червоний пакет",
+  "commonMusic": "музика",
+  "commonCoupon": "Купон",
+  "commonGift": "Подарунок",
+  "commonPoll": "Опитування",
+  "favoriteText": "текст",
+  "favoriteLinkLabel": "Посилання",
+  "favoriteNote": "Примітка",
+  "favoriteMyNotes": "Мої нотатки",
+  "favoriteToday": "Сьогодні",
+  "favoriteDaysAgoText": "{count} днів тому",
+  "@favoriteDaysAgoText": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "favoriteDateFormat": "{month}/{day}",
+  "@favoriteDateFormat": {
+    "placeholders": {
+      "month": {
+        "type": "int"
+      },
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "favoriteNoFavorites": "Вибраних ще немає",
+  "favoriteLongPressToFavorite": "Тривале натискання повідомлення до вибраного",
+  "favoriteNewNote": "Нова примітка",
+  "favoriteLink": "Улюблене посилання",
+  "favoriteEditTags": "Редагувати теги",
+  "favoriteDeleteFavorite": "Видалити улюблене",
+  "favoriteDeleteFavoriteConfirm": "Ви впевнені, що хочете видалити це улюблене?",
+  "favoriteNoSearchResultsFound": "Результатів не знайдено",
+  "commonSendRedPacket": "Надіслати червоний пакет",
+  "transferAmount": "Сума",
+  "commonRedPacketCover": "Червона обкладинка пакета",
+  "commonRedPacketType": "Червоний тип пакета",
+  "commonNormalRedPacket": "нормальний",
+  "commonLuckyRedPacket": "Щасливчик",
+  "commonRedPacketCount": "Кількість червоних пакетів",
+  "commonPieces": "штук",
+  "commonPutMoneyInRedPacket": "Покладіть гроші в червоний пакет",
+  "commonRedPacketRefundNotice": "Незатребувані червоні пакети буде повернено через 24 години",
+  "commonOpenRedPacket": "відкритий",
+  "commonRedPacketAllClaimed": "Червоний пакет весь затребуваний",
+  "commonRedPacketExpired": "Термін дії червоного пакета закінчився",
+  "commonAddTransferNote": "Додати переказну записку",
+  "commonYuan": "CNY",
+  "commonReplyWithEmoji": "Відповісти цим смайлом",
+  "contactEditRemark": "Редагувати зауваження",
+  "contactSetPermissions": "Встановити дозволи",
+  "profileAddToBlacklist": "Додати в чорний список",
+  "contactDeleteContact": "Видалити контакт",
+  "contactDeleteContactConfirm": "Ви впевнені, що хочете видалити {name}?",
+  "@contactDeleteContactConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "transferTitle": "Трансфер",
+  "transferReceiverAddressLabel": "Адреса отримувача",
+  "transferSelectTokenLabel": "Виберіть Токен",
+  "transferAmountLabel": "Сума переказу",
+  "transferMemoLabel": "Пам'ятка (необов'язково)",
+  "transferAddMemoHint": "Додайте пам'ятку",
+  "transferSendPaymentRequest": "Надіслати запит на оплату",
+  "transferQrCodeGenerateFailed": "Не вдалося створити QR-код",
+  "transferScanQrToPayMe": "Відскануйте QR-код, щоб заплатити мені",
+  "transferMyWalletAddress": "Адреса мого гаманця",
+  "transferCreatePaymentRequest": "Створення платіжного запиту",
+  "profileN42IdLabel": "N42 ID: {id}",
+  "@profileN42IdLabel": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "commonRedPacketDefaultGreeting": "найкращі побажання",
+  "commonSenderRedPacket": "Червоний пакет {name}",
+  "@commonSenderRedPacket": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "transferEnterValidAddress": "Введіть дійсну адресу",
+  "transferPleaseSelectToken": "Будь ласка, виберіть маркер",
+  "commonReceivedTransfer": "Отримано передачу",
+  "@commonFromSender": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@commonSendCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "commonSenderSentRedPacket": "{name} надіслав червоний пакет",
+  "@commonSenderSentRedPacket": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "commonSavedToBalance": "Збережено на балансі, можна передавати напряму",
+  "commonRedPacketExpiredOrEmpty": "Термін дії червоного пакета минув/усі заявлені",
+  "transferScanFeatureComingSoon": "Незабаром буде доступна функція сканування...",
+  "contactSetAsStarred": "Установити як із зірочкою",
+  "contactAddToBlocklist": "Додати до чорного списку",
+  "commonClaimedYour": " вимагав ваш ",
+  "commonClaimedText": " стверджував ",
+  "commonUserTyping": "{name} друкує...",
+  "@commonUserTyping": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "commonTyping": "Введення...",
+  "commonWaitingToReceive": "Очікування отримання",
+  "commonTapToClaim": "Торкніться, щоб вимагати",
+  "commonHasBeenReceived": "Отримано",
+  "commonGetLucky": "Пощастить",
+  "qrcodeCameraStartFailed": "Не вдалося запустити камеру",
+  "qrcodeUnknownError": "Невідома помилка",
+  "qrcodePlaceQrCodeInFrame": "Помістіть QR-код у рамку для сканування",
+  "qrcodeCloseManualInput": "Закрити ручне введення",
+  "qrcodeManualInputUserId": "Ручне введення ідентифікатора користувача",
+  "commonAdd": "додати",
+  "profileSetStatus": "Встановити статус",
+  "profileVisibleToFriends24h": "Видно для друзів протягом 24 годин",
+  "profileWriteStatus": "Напишіть статус",
+  "profileEnterYourStatus": "Введіть свій статус...",
+  "profileOk": "добре",
+  "qrcodeCameraPermissionRequired": "Для сканування QR-коду потрібен дозвіл камери",
+  "qrcodeCameraPermissionDenied": "Назавжди заборонено доступ до камери. Увімкніть його в налаштуваннях системи.",
+  "qrcodePermissionCheckError": "Помилка перевірки дозволу: {error}",
+  "@qrcodePermissionCheckError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "qrcodeInvalidQrCode": "Недійсний QR-код",
+  "qrcodeCannotAddFriend": "Неможливо додати друга: {error}",
+  "@qrcodeCannotAddFriend": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "qrcodeScanQrCode": "Відскануйте QR-код",
+  "qrcodeCheckingCameraPermission": "Перевірка дозволу камери...",
+  "qrcodeNeedCameraPermission": "Потрібен дозвіл камери",
+  "qrcodeRetryPermission": "Повторіть спробу",
+  "qrcodeOpenSettings": "Відкрийте налаштування",
+  "groupInviteMembers": "Запросити учасників",
+  "groupInviteCount": "Запросити ({count})",
+  "@groupInviteCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "profileNoShippingAddress": "Немає адреси доставки",
+  "profileDefaultLabel": "За замовчуванням",
+  "profileNoInvoice": "Без рахунку-фактури",
+  "profileCompany": "Компанія",
+  "profileTaxNumber": "Податковий номер",
+  "profileConfirmDeleteAddress": "Ви впевнені, що хочете видалити цю адресу?",
+  "profileConfirmDeleteInvoice": "Ви впевнені, що бажаєте видалити цей рахунок?",
+  "commonGroupOwner": "Власник",
+  "commonGroupAdmin": "адмін",
+  "groupSearchMembers": "Пошук учасників",
+  "groupTotalMembers": "Учасники {count}",
+  "@groupTotalMembers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatRemoveFromGroup": "Видалити з групи",
+  "groupConfirmRemoveMember": "Ви впевнені, що хочете видалити \"{name}\" із групи?",
+  "@groupConfirmRemoveMember": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatUnknownSong": "Невідома пісня",
+  "chatUnknownArtist": "Невідомий художник",
+  "chatUnknownContact": "Невідомий контакт",
+  "chatPersonalCard": "Картка контакту",
+  "chatSingleChoice": "неодружений",
+  "chatMultiChoice": "Мульти",
+  "chatEnded": "Завершено",
+  "chatEndPollButton": "Завершити опитування",
+  "chatPollHint": "Опитування буде відображено в чаті. Члени групи можуть голосувати.",
+  "chatSearchSongOrArtist": "Пошук пісні чи виконавця",
+  "chatNoSongsFound": "Пісень не знайдено",
+  "chatSongNameOptional": "Назва пісні (необов'язково)",
+  "chatEnterSongName": "Введіть назву пісні",
+  "chatArtistNameOptional": "Ім'я виконавця (необов'язково)",
+  "chatEnterArtistName": "Введіть ім'я виконавця",
+  "chatRealTimeLocationSharing": "Передача геоданих у реальному часі в розробці...",
+  "profileVoiceCallFeatureInDev": "Функція голосового виклику в розробці...",
+  "profileReportFeatureInDev": "Функція звіту в розробці...",
+  "profileShareFeatureInDev": "Поділитися функцією в розробці...",
+  "profileQrCodeFeatureInDev": "Функція QR-коду в розробці...",
+  "qrcodeScanQrToAddMe": "Відскануйте QR-код вище, щоб додати мене до друзів",
+  "qrcodeSaveToAlbum": "Зберегти в альбом",
+  "qrcodeChangeStyle": "Змінити стиль",
+  "qrcodeCopyId": "Копіювати ідентифікатор",
+  "qrcodeIdCopied": "ID скопійовано",
+  "qrcodeMoreStylesFeatureComingSoon": "Більше стилів незабаром",
+  "@chatFeatureInDev": {
+    "placeholders": {
+      "feature": {
+        "type": "String"
+      }
+    }
+  },
+  "profileBio": "біографія",
+  "profileHomeServer": "Сервер",
+  "profileShareContactCard": "Поділитися карткою контакту",
+  "profileRemoveFromBlacklist": "Видалити з чорного списку",
+  "profileConfirmAddBlacklist": "Ви впевнені, що хочете додати цього користувача до чорного списку? Ви не отримаєте від них повідомлень.",
+  "profileConfirmRemoveBlacklist": "Ви впевнені, що хочете видалити цього користувача з чорного списку?",
+  "profileRemarkSaved": "Зауваження збережено",
+  "profileRemarkCleared": "Зауваження видалено",
+  "transferReceive": "Отримати",
+  "transferPleaseConnectWallet": "Спочатку підключіть свій гаманець",
+  "transferSendRequest": "Надіслати запит",
+  "transferPleaseEnterValidAmount": "Введіть дійсну суму",
+  "searchPlaceholder": "Пошук контактів, груп, повідомлень",
+  "searchEnterKeywordToSearch": "Введіть ключове слово, щоб почати пошук",
+  "searchClearHistory": "ясно",
+  "searchNoResultsForQuery": "Немає результатів для \"{query}\"",
+  "@searchNoResultsForQuery": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "searchAllResults": "всі",
+  "searchInChat": "Пошук в чаті",
+  "searchContactLabel": "контакт",
+  "searchGroupLabel": "Група",
+  "searchConversationLabel": "Розмова",
+  "searchMessageLabel": "повідомлення",
+  "settingsSecurityTitle": "Безпека",
+  "settingsKeyBackup": "Резервне копіювання ключів",
+  "settingsBackupEncryptionKeys": "Резервні ключі шифрування",
+  "settingsKeysBackedUp": "Збережено резервні копії ключів {count}",
+  "@settingsKeysBackedUp": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsBackupNotSet": "Резервне копіювання не встановлено",
+  "settingsRestoreKeys": "Відновити ключі",
+  "settingsRestoreKeysFromBackup": "Відновити ключі шифрування з резервної копії",
+  "settingsExportKeys": "Ключі експорту",
+  "settingsExportKeysToFile": "Експортувати ключі у файл",
+  "settingsLoggedInDevices": "Пристрої, на яких виконано вхід",
+  "settingsNoOtherDevices": "Немає інших пристроїв",
+  "settingsVerified": "Перевірено",
+  "settingsUnverified": "Неперевірений",
+  "settingsAdvanced": "Просунутий",
+  "settingsCrossSigning": "Перехресне підписання",
+  "settingsEnabled": "Увімкнено",
+  "settingsNotEnabled": "Не включено",
+  "settingsResetEncryption": "Скинути шифрування",
+  "settingsDeleteAllEncryptionKeys": "Видалити всі ключі шифрування",
+  "settingsEncryptionNotSupported": "Шифрування не підтримується",
+  "settingsNotInitialized": "Не ініціалізовано",
+  "settingsBackupKeyTitle": "Резервні ключі",
+  "settingsBackupKeyMessage": "Створити нову резервну копію ключа? Це допоможе вам відновити зашифровані повідомлення на новому пристрої.",
+  "settingsBackup": "Резервне копіювання",
+  "settingsRestoreKeyTitle": "Відновити ключі",
+  "settingsRestoreKeyMessage": "Введіть свій пароль відновлення або ключ відновлення, щоб відновити зашифровані повідомлення.",
+  "settingsRestore": "Відновити",
+  "settingsExportKeyTitle": "Ключі експорту",
+  "settingsExportKeyMessage": "Експортований файл ключа містить усі ваші ключі шифрування. Будь ласка, бережіть його в безпеці.",
+  "settingsExport": "Експорт",
+  "settingsDeviceIdLabel": "ID пристрою: {deviceId}",
+  "@settingsDeviceIdLabel": {
+    "placeholders": {
+      "deviceId": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsDeviceStatusVerified": "Статус: перевірено",
+  "settingsDeviceStatusUnverified": "Статус: не перевірено",
+  "settingsLastActiveLabel": "Остання активність: {lastSeen}",
+  "@settingsLastActiveLabel": {
+    "placeholders": {
+      "lastSeen": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsVerifyThisDevice": "Підтвердьте цей пристрій",
+  "settingsCrossSigningAlreadyEnabled": "Перехресне підписання вже ввімкнено",
+  "settingsCrossSigningSetupSuccess": "Перехресне підписання налаштовано успішно",
+  "@settingsSetupFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsResetEncryptionTitle": "Скинути шифрування",
+  "settingsResetEncryptionWarning": "Попередження: це призведе до видалення всіх ваших ключів шифрування. Ви не зможете розшифрувати попередні зашифровані повідомлення. Цю дію не можна скасувати.",
+  "settingsReset": "Скинути",
+  "settingsBackupSuccess": "Резервну копію ключів успішно створено",
+  "settingsBackupFailed": "Помилка резервного копіювання",
+  "settingsRecoveryKey": "Ключ відновлення",
+  "settingsRecoveryKeySaveWarning": "Збережіть цей ключ відновлення в безпечному місці. Він знадобиться вам, щоб відновити зашифровані повідомлення на новому пристрої.",
+  "settingsRecoveryKeySaved": "Я зберіг його",
+  "settingsRestoreSuccess": "Ключі успішно відновлені",
+  "settingsRestoreFailed": "Не вдалося відновити",
+  "settingsPassword": "Пароль",
+  "settingsEnterRecoveryKey": "Введіть ключ відновлення",
+  "settingsEnterPassword": "Введіть пароль",
+  "settingsExportSuccess": "Ключі успішно експортовано в резервну копію сервера",
+  "settingsExportNeedBackupFirst": "Спершу створіть резервну копію ключа",
+  "settingsExportFailed": "Помилка експорту",
+  "settingsResetSuccess": "Скидання шифрування успішне",
+  "settingsResetFailed": "Помилка скидання",
+  "callLeaveMeetingConfirm": "Ви впевнені, що бажаєте залишити зустріч?",
+  "chatPokedSomeone": "тицьнув {name}{suffix}",
+  "@chatPokedSomeone": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "suffix": {
+        "type": "String"
+      }
+    }
+  },
+  "chatNoContactsToAdd": "Немає доступних контактів для додавання",
+  "chatAddMembers": "Додати учасників",
+  "chatInvitedMembers": "Запрошені члени {count}",
+  "@chatInvitedMembers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatInviteFailed": "Помилка запрошення: {error}",
+  "@chatInviteFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatMemberRemoved": "Учасника видалено",
+  "chatRemoveFailed": "Не вдалося видалити: {error}",
+  "@chatRemoveFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatRealTimeLocationShareMessage": "Після надсилання інша сторона може бачити ваше місцезнаходження в реальному часі протягом 1 години.",
+  "chatStartSharing": "Почніть ділитися",
+  "chatLocationServiceNotEnabled": "Службу локації не ввімкнено",
+  "chatEnableLocationService": "Увімкніть службу визначення місцезнаходження, щоб використовувати цю функцію",
+  "chatGoToSettings": "Перейдіть до Налаштувань",
+  "chatLocationPermissionRequired": "Для цієї функції потрібен дозвіл на місцезнаходження",
+  "chatLocationPermissionDeniedPermanent": "Дозвіл на визначення місцезнаходження назавжди відмовлено. Увімкніть його в налаштуваннях.",
+  "chatLocationPermissionDenied": "Дозвіл на місцезнаходження відмовлено",
+  "chatGettingLocation": "Отримання місцезнаходження...",
+  "chatGetLocationFailed": "Не вдалося отримати місцезнаходження: {error}",
+  "@chatGetLocationFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatMapPreview": "Попередній перегляд карти",
+  "chatSearchLocation": "Місце пошуку",
+  "chatRedPacketSent": "Надіслано червоний пакет {amount} {token}",
+  "@chatRedPacketSent": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "token": {
+        "type": "String"
+      }
+    }
+  },
+  "chatTransferDefault": "Трансфер",
+  "chatTransferSent": "Надіслано переказ {amount} {token}",
+  "@chatTransferSent": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "token": {
+        "type": "String"
+      }
+    }
+  },
+  "chatPickFileFailed": "Не вдалося вибрати файл: {error}",
+  "@chatPickFileFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatFileSizeLimit": "Розмір файлу не може перевищувати 50 МБ",
+  "chatFileSending": "Надсилання файлу: {filename}",
+  "@chatFileSending": {
+    "placeholders": {
+      "filename": {
+        "type": "String"
+      }
+    }
+  },
+  "chatSendFileFailed": "Не вдалося надіслати файл: {error}",
+  "@chatSendFileFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatContactCardSent": "Надіслано контактну картку {name}",
+  "@chatContactCardSent": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatFavoritesFeature": "Вибране",
+  "chatCouponsFeature": "Купони",
+  "chatGiftFeature": "Подарунок",
+  "chatSharedMusic": "Поділився {name}",
+  "@chatSharedMusic": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@chatSendFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatEndPollTitle": "Завершити опитування",
+  "chatEndPollConfirmMessage": "Ви впевнені, що бажаєте завершити це опитування? Після закінчення голосування буде закрито.",
+  "chatPollEndedMessage": "Опитування завершено",
+  "chatConnectingCall": "Підключення...",
+  "chatMuteCall": "Вимкнути звук",
+  "chatSpeakerOff": "Динамік вимкнено",
+  "chatSpeakerOn": "Спікер",
+  "chatCameraOn": "Камера включена",
+  "chatCameraOff": "Камера вимкнена",
+  "chatHangUp": "Повісити трубку",
+  "chatSelectForwardTargetTitle": "Виберіть Переслати ціль",
+  "chatNoForwardableChat": "Немає чатів, доступних для пересилання",
+  "chatNoMatchingChat": "Відповідних чатів не знайдено",
+  "chatLocationTitle": "Розташування",
+  "chatSendButton": "Надіслати",
+  "chatRetryButton": "Повторіть спробу",
+  "chatSearchContactHint": "Пошук контактів",
+  "chatShareMusic": "Поділіться музикою",
+  "chatRecentPlayed": "Останні",
+  "chatMyFavorites": "Вибране",
+  "chatNetworkLink": "Посилання",
+  "chatLocalFile": "Місцевий",
+  "chatPasteMusicLink": "Вставте посилання на музику",
+  "chatShareMusicButton": "Поділіться музикою",
+  "chatSelectLocalAudio": "Виберіть Локальний аудіофайл",
+  "chatSupportedAudioFormats": "Підтримує MP3, M4A, WAV, FLAC тощо.",
+  "chatSelectFileButton": "Виберіть Файл",
+  "chatPleaseEnterMusicLink": "Введіть посилання на музику",
+  "chatPleaseEnterValidLink": "Введіть дійсну URL-адресу",
+  "chatSharedSong": "Спільна пісня",
+  "chatSelectMember": "Виберіть Член",
+  "chatSearchMemberHint": "Пошук учасників",
+  "chatNoMatchingMembers": "Відповідних учасників не знайдено",
+  "commonUnknownMember": "Невідомий",
+  "chatSelectedMessagesCount": "Вибрані повідомлення {count}",
+  "@chatSelectedMessagesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatSearchContactsOrGroups": "Пошук контактів або груп",
+  "chatVideoTitle": "відео",
+  "chatLoadingText": "Завантаження...",
+  "chatVideoLoadFailed": "Помилка завантаження відео",
+  "chatPlayerInitFailed": "Помилка ініціалізації програвача",
+  "chatCreatePollTitle": "Створити опитування",
+  "chatSubmitPoll": "Надіслати",
+  "chatPollQuestionLabel": "Опитування",
+  "chatEnterPollQuestionHint": "Введіть запитання опитування",
+  "chatPollOptionsLabel": "Опції опитування",
+  "chatOptionHintWithIndex": "Варіант {index}",
+  "@chatOptionHintWithIndex": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "chatAddOptionButton": "Додати варіант",
+  "chatPollSettingsLabel": "Налаштування опитування",
+  "chatSelectionType": "Тип вибору",
+  "chatSingleChoiceLabel": "неодружений",
+  "chatMultiChoiceLabel": "Мульти",
+  "chatAnonymousPollSwitch": "Анонімне опитування",
+  "chatPleaseEnterQuestion": "Введіть запитання опитування",
+  "chatAtLeastTwoOptions": "Потрібно принаймні 2 варіанти",
+  "chatConfirmWithCount": "Підтвердити ({count})",
+  "@chatConfirmWithCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@chatSelectedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@commonMemberCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@chatGroupChatCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "authEmailVerificationTitle": "Підтвердження електронної пошти",
+  "authEnterValidEmailAddress": "Введіть дійсну електронну адресу",
+  "authVerificationCodeSentTo": "Код підтвердження надіслано на {email}",
+  "@authVerificationCodeSentTo": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "authSendCodeFailed": "Не вдалося надіслати код: {error}",
+  "@authSendCodeFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "authVerificationSuccess": "Перевірка успішна",
+  "authVerificationFailed": "Не вдалося перевірити",
+  "authVerificationCodeError": "Помилка коду підтвердження: {error}",
+  "@authVerificationCodeError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "commonEnterVerificationCode": "Введіть код підтвердження",
+  "authEnterYourEmail": "Введіть адресу електронної пошти",
+  "authWeSentCodeTo": "Ми надіслали 6-значний код на адресу\n{email}",
+  "@authWeSentCodeTo": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "authEnterEmailForCode": "Введіть адресу електронної пошти, ми надішлемо код підтвердження",
+  "commonSendVerificationCode": "Надіслати код підтвердження",
+  "authResendVerificationCode": "Повторно надіслати код підтвердження",
+  "authCanResendAfter": "Можна повторно надіслати через {seconds} секунд",
+  "@authCanResendAfter": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "commonChangeEmail": "Змінити електронну адресу",
+  "contactAddToContacts": "Додати до контактів",
+  "contactAddingToContacts": "Додавання...",
+  "contactAddedToContacts": "Додано до контактів",
+  "contactAddFailedWithError": "Не вдалося додати: {error}",
+  "@contactAddFailedWithError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "contactAddPhone": "Додати телефон",
+  "contactAddTag": "Додайте теги",
+  "contactAddText": "Додайте текст",
+  "contactAddPhoto": "Додайте фото",
+  "contactGroupCountLabel": "Групи {count}",
+  "@contactGroupCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "contactAddedViaSearch": "Додано через пошук",
+  "contactAddTime": "Додайте час",
+  "contactDoneButton": "Готово",
+  "callWaitingForParticipants": "Чекаємо на приєднання учасників...",
+  "callParticipantMe": "{name} (Я)",
+  "@callParticipantMe": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "callSharingLabel": "Обмін",
+  "callScreenSharingBy": "{name} ділиться екраном",
+  "@callScreenSharingBy": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "callParticipantCount": "{count} учасників",
+  "@callParticipantCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "callMuteLabel": "Вимкнути звук",
+  "callUnmuteLabel": "Увімкнути звук",
+  "callTurnOffVideo": "Вимкніть відео",
+  "callTurnOnVideo": "Увімкніть відео",
+  "callShareScreen": "Поділитися екраном",
+  "callStopSharing": "Припинити ділитися",
+  "callSwitchCameraLabel": "Перемикач",
+  "callLeaveLabel": "Залиште",
+  "callParticipantsLabel": "Учасники",
+  "callJoiningMeeting": "Приєднання до зустрічі...",
+  "chatPollVotesFormat": "{count} голосів ({percentage}%)",
+  "@chatPollVotesFormat": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "percentage": {
+        "type": "String"
+      }
+    }
+  },
+  "chatPollParticipantsFormat": "{count} учасників",
+  "@chatPollParticipantsFormat": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@chatSelectFileFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatNoMediaUrlAvailable": "Немає доступної URL-адреси медіа",
+  "chatDownloadFailed": "Помилка завантаження: {code}",
+  "@chatDownloadFailed": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "chatErrorWithMessage": "Помилка: {message}",
+  "@chatErrorWithMessage": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "chatMusicLinkLabel": "Посилання на музику",
+  "chatRedPacketTransferCannotForward": "Червоні пакети та перекази не пересилаються",
+  "commonShareFailed": "Не вдалося поділитися: {error}",
+  "@commonShareFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "commonTapToRetry": "Торкніться, щоб повторити спробу",
+  "chatDefaultRedPacketGreeting": "Найкращі побажання процвітання",
+  "groupAllowOthersToSearchAndJoin": "Дозвольте іншим шукати та приєднуватися",
+  "groupConfirmClearChatHistory": "Ви впевнені, що бажаєте очистити історію чату?",
+  "groupCreateGroupToChat": "Створіть групу, щоб розпочати спілкування",
+  "groupEditGroupAnnouncement": "Редагувати оголошення групи",
+  "groupEditGroupDescription": "Редагувати опис групи",
+  "groupEnterGroupAnnouncement": "Введіть групове оголошення",
+  "groupMemberCountClickToCopy": "Учасники {count}, натисніть, щоб скопіювати ідентифікатор групи",
+  "groupNoPermissionToEditGroupName": "Ви не маєте дозволу редагувати назву групи",
+  "authEmailAddress": "Адреса електронної пошти",
+  "commonEnterEmailAddress": "Введіть електронну адресу",
+  "authEmailRecoveryHint": "Використовується для відновлення пароля",
+  "commonInvalidEmailFormat": "Введіть дійсну електронну адресу",
+  "authOptional": "Додатково",
+  "authResetPassword": "Скинути пароль",
+  "authEnterRegisteredEmail": "Введіть адресу електронної пошти, яку ви зареєстрували",
+  "authSendResetCode": "Надіслати код скидання",
+  "authResetCodeSent": "Код скидання, надісланий на {email}",
+  "@authResetCodeSent": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "authEnterResetCode": "Введіть код скидання",
+  "authSetNewPassword": "Встановити новий пароль",
+  "commonConfirmNewPassword": "Підтвердьте новий пароль",
+  "commonNewPassword": "Новий пароль",
+  "authPasswordResetSuccess": "Скидання пароля успішне. Будь ласка, увійдіть з новим паролем.",
+  "authResetPasswordFailed": "Не вдалося скинути пароль",
+  "settingsChangePassword": "Змінити пароль",
+  "settingsCurrentPassword": "Поточний пароль",
+  "settingsEnterCurrentPassword": "Введіть поточний пароль",
+  "settingsEnterNewPassword": "Введіть новий пароль",
+  "settingsPasswordChanged": "Пароль успішно змінено. Будь ласка, увійдіть з новим паролем.",
+  "settingsChangePasswordFailed": "Не вдалося змінити пароль",
+  "settingsNewPasswordMustBeDifferent": "Новий пароль має відрізнятися від поточного",
+  "settingsChangePasswordInfo": "Після зміни пароля ви вийдете з системи, і вам потрібно буде увійти з новим паролем.",
+  "settingsPasswordRequirements": "Вимоги до пароля:",
+  "settingsSecurityNote": "З міркувань безпеки вам потрібно буде повторно ввійти на всіх пристроях після зміни пароля.",
+  "settingsSecurity": "Безпека",
+  "settingsCurrentBoundEmail": "Поточний прив'язаний електронний лист",
+  "settingsNewEmailAddress": "Нова електронна адреса",
+  "settingsEnterNewEmail": "Введіть нову електронну адресу",
+  "settingsVerificationCode": "Код підтвердження",
+  "settingsVerificationCodeSent": "Код підтвердження надіслано",
+  "settingsCodeSentTo": "Код підтвердження надіслано",
+  "settingsDidNotReceiveCode": "Не отримали код?",
+  "settingsEmailChangedSuccess": "Електронну адресу змінено успішно",
+  "settingsChangeEmailFailed": "Не вдалося змінити електронну адресу",
+  "settingsEmailSecurityNote": "Ваша електронна пошта використовується для відновлення пароля. Будь ласка, тримайте його в безпеці.",
+  "commonGoogleLogin": "Увійдіть за допомогою Google",
+  "commonAppleLogin": "Увійдіть за допомогою Apple",
+  "commonWechat": "WeChat",
+  "settingsLanguage": "Мова",
+  "settingsLanguageChanged": "Мова змінена",
+  "settingsTranslation": "Переклад",
+  "settingsTranslateTextTo": "Перекласти текст на",
+  "settingsTranslateDescription": "Виберіть мову, на яку потрібно перекладати повідомлення.",
+  "settingsAutoTranslate": "Автоматичний переклад отриманих повідомлень",
+  "settingsAutoTranslateDescription": "Автоматично перекладайте повідомлення, отримані в чаті, на вибрану мову.",
+  "settingsBiometricLogin": "Біометричний логін",
+  "authLoginWithBiometric": "Увійдіть за допомогою {type}",
+  "@authLoginWithBiometric": {
+    "placeholders": {
+      "type": {
+        "type": "Object"
+      }
+    }
+  },
+  "settingsBiometricLoginEnabled": "Біометричний вхід увімкнено",
+  "settingsBiometricLoginDisabled": "Біометричний вхід вимкнено",
+  "settingsEnableBiometricLogin": "Увімкнути біометричний вхід",
+  "settingsBiometricEnabled": "Увімкнено – використовувати біометричні дані для входу",
+  "settingsBiometricDisabled": "Вимкнено – торкніться, щоб увімкнути",
+  "settingsBiometricNeedRelogin": "Будь ласка, вийдіть із системи та увійдіть знову, щоб увімкнути біометричний вхід",
+  "authOr": "АБО",
+  "qrcodeCameraPermissionRestricted": "Доступ до камери на цьому пристрої обмежено",
+  "authPasskeyLabel": "Ключ доступу",
+  "authGoogleLabel": "Google",
+  "authAppleLabel": "Яблуко",
+  "authSsoLabel": "SSO",
+  "transferAmountHintZero": "0,00",
+  "commonMatrixIdHint": "@username:server.com",
+  "authServerAddressHint": "https://m.si46.world",
+  "authEmailExampleHint": "example@email.com",
+  "authVerificationCodePlaceholder": "------",
+  "profileEnterPokeSuffixHint": "Введіть суфікс тицьнути, наприклад: на плечі",
+  "groupAlbum": "Альбом групи",
+  "groupFiles": "Файли групи",
+  "groupImages": "Зображення",
+  "groupVideos": "Відео",
+  "groupTotal": "Всього",
+  "groupSize": "Розмір",
+  "groupNoMedia": "Без медіа",
+  "groupNoMediaDescription": "У цій групі ще немає фото чи відео",
+  "groupDocuments": "документи",
+  "groupNoFiles": "Немає файлів",
+  "groupNoFilesDescription": "У цій групі ще немає файлів",
+  "groupDownloadStarted": "Завантаження {filename}...",
+  "@groupDownloadStarted": {
+    "placeholders": {
+      "filename": {
+        "type": "String"
+      }
+    }
+  },
+  "contactNoCommonGroups": "Немає спільних груп",
+  "contactNoCommonGroupsDescription": "У вас немає спільних груп",
+  "chatVoiceMessage": "Голос",
+  "chatMessage": "повідомлення",
+  "conversationHideChat": "Сховати",
+  "settingsQuickReply": "Швидка відповідь",
+  "commonTranslate": "Перекласти",
+  "contactCreateTag": "Створити тег",
+  "contactEnterTagName": "Введіть назву тегу",
+  "contactEditTag": "Редагувати тег",
+  "contactDeleteTag": "Видалити тег",
+  "contactDeleteTagConfirm": "Ви впевнені, що хочете видалити тег \"{tagName}\"?",
+  "@contactDeleteTagConfirm": {
+    "placeholders": {
+      "tagName": {
+        "type": "String"
+      }
+    }
+  },
+  "contactNoTags": "Тегів ще немає",
+  "contactFriendPermissions": "Дозволи друзів",
+  "contactSetChatOnly": "Установити лише для чату",
+  "contactChatOnlyDesc": "Можна спілкуватися лише з вами, інший вміст буде приховано",
+  "contactHideMyMoments": "Приховати мої моменти",
+  "contactHideMyMomentsDesc": "Цей друг не може бачити мої моменти",
+  "contactHideTheirMoments": "Приховати їхні моменти",
+  "contactHideTheirMomentsDesc": "Не бачити моменти цього друга",
+  "contactHideMyStatus": "Приховати мій статус",
+  "contactHideMyStatusDesc": "Цей друг не може бачити оновлення мого статусу",
+  "contactNoChatOnlyFriends": "Без друзів, які спілкуються лише в чаті",
+  "contactNoOfficialAccounts": "Немає офіційних облікових записів",
+  "contactFollowOfficialAccountsDesc": "Слідкуйте за офіційними акаунтами, щоб отримувати останні оновлення",
+  "contactNoServiceAccounts": "Немає сервісних облікових записів",
+  "contactSubscribeServiceAccountsDesc": "Підпишіться на сервісні акаунти, щоб отримати зручні послуги",
+  "contactNoEnterpriseContacts": "Немає контактів підприємства",
+  "contactEnterpriseContactsDesc": "Тут відображатимуться контакти підприємства",
+  "profileCardPack": "Пакет карток",
+  "profileOrders": "Замовлення",
+  "profileNoOrders": "Без замовлень",
+  "profileOrdersDesc": "Тут відображатимуться ваші замовлення",
+  "profileNoCards": "Без карток",
+  "profileCardsDesc": "Тут відображатимуться ваші картки",
+  "favoriteEnterTagsHint": "Введіть теги, розділені комами",
+  "favoriteTagsUpdated": "Теги оновлено",
+  "favoriteForwardedContent": "Вміст переслано",
+  "favoriteEnterNoteContent": "Введіть вміст нотатки",
+  "favoriteNoteAdded": "Примітка додана",
+  "favoriteLinkTitle": "Назва посилання",
+  "favoriteLinkUrl": "https://",
+  "favoriteLinkAdded": "Посилання додано",
+  "contactPhotoAdded": "Фото додано",
+  "contactEnterPhone": "Введіть номер телефону",
+  "commonConversationWithId": "Розмова: {roomId}",
+  "commonContactWithId": "Контакт: {userId}",
+  "commonDiscover": "Відкрийте для себе",
+  "commonDeveloping": "{title}\n(Незабаром)",
+  "commonPageNotFound": "Сторінка не знайдена",
+  "commonBackToHome": "Назад додому",
+  "settingsMessageNotifications": "Сповіщення про повідомлення",
+  "settingsReceiveNewMessageNotifications": "Отримувати сповіщення про нові повідомлення",
+  "settingsShowMessagePreview": "Показати попередній перегляд повідомлення",
+  "settingsShowMessageContentInNotification": "Показати вміст повідомлення в сповіщенні",
+  "settingsNotificationSound": "Звук сповіщення",
+  "settingsPlaySoundOnMessage": "Відтворення звуку під час отримання повідомлень",
+  "commonVibration": "Вібрація",
+  "settingsVibrateOnMessage": "Вібрувати під час отримання повідомлень",
+  "settingsDoNotDisturbMode": "Не турбувати",
+  "settingsDoNotDisturbDescription": "Не отримувати сповіщення протягом зазначеного часу",
+  "settingsStartTime": "Час початку",
+  "settingsEndTime": "Час закінчення",
+  "settingsDeleteQuickReply": "Видалити швидку відповідь",
+  "settingsEditQuickReply": "Редагувати швидку відповідь",
+  "settingsAddQuickReply": "Додати швидку відповідь",
+  "settingsManageQuickReplies": "Керуйте швидкими відповідями",
+  "settingsNoQuickReplies": "Немає швидких відповідей",
+  "settingsDefaultQuickReplies": "Відображатимуться стандартні швидкі відповіді",
+  "settingsWhoCanSee": "Хто бачить",
+  "settingsLastSeen": "Останній раз",
+  "settingsHiddenChats": "Приховані чати",
+  "settingsMessagesLabel": "Повідомлення",
+  "settingsAllowStrangerMessages": "Дозволити незнайомі повідомлення",
+  "settingsReceiveMessagesFromNonContacts": "Отримувати повідомлення від неконтактних осіб",
+  "settingsReadReceipts": "Прочитати квитанції",
+  "settingsLetOthersKnowYouRead": "Нехай інші знають, що ви читаєте",
+  "settingsTypingIndicator": "Індикатор набору тексту",
+  "settingsLetOthersKnowYouTyping": "Нехай інші знають, що ви друкуєте",
+  "settingsEveryone": "Всі",
+  "settingsContactsOnly": "Лише контакти",
+  "settingsNobody": "ніхто",
+  "settingsWhoCanSeeTitle": "Хто може бачити {title}",
+  "@settingsWhoCanSeeTitle": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsVersionInfo": "Версія {version}",
+  "@settingsVersionInfo": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsCheckForUpdates": "Перевірте наявність оновлень",
+  "settingsOpenSourceLicenses": "Ліцензії з відкритим кодом",
+  "settingsFeedbackAndSuggestions": "Відгуки та пропозиції",
+  "settingsBuiltOnMatrix": "Побудований на основі протоколу Matrix",
+  "settingsNoHiddenChats": "Жодних прихованих чатів",
+  "settingsNoHiddenChatsDescription": "Чати, які ви приховуєте, відображатимуться тут",
+  "settingsUnhideChat": "Показати",
+  "settingsDarkMode": "Темний режим",
+  "settingsFontSize": "Розмір шрифту",
+  "settingsBubbleStyle": "Стиль бульбашки",
+  "settingsFollowSystem": "Слідкуйте за системою",
+  "settingsAutoSwitchBySystem": "Автоматичне перемикання системою",
+  "settingsLightMode": "Світловий режим",
+  "settingsAlwaysUseLightTheme": "Завжди використовуйте світлу тему",
+  "settingsDarkModeOption": "Опція темного режиму",
+  "settingsAlwaysUseDarkTheme": "Завжди використовуйте темну тему",
+  "settingsFontSizeSmall": "Маленький",
+  "settingsFontSizeStandard": "Стандартний",
+  "settingsFontSizeLarge": "Великий",
+  "settingsFontSizeExtraLarge": "Дуже великий",
+  "settingsBubbleStyleWechat": "Стиль WeChat",
+  "settingsBubbleStyleWechatDesc": "Класичний стиль бульбашки WeChat",
+  "settingsBubbleStyleModern": "Сучасний стиль",
+  "settingsBubbleStyleModernDesc": "Чистий сучасний стиль міхура",
+  "settingsBubbleStyleClassic": "Класичний стиль",
+  "settingsBubbleStyleClassicDesc": "Традиційний стиль бульбашок",
+  "discoverVideoChannels": "Канали",
+  "discoverLive": "Жити",
+  "discoverListen": "Слухай",
+  "discoverWatch": "Дивитися",
+  "discoverSearchDiscover": "Пошук",
+  "discoverNearbyPeople": "Поруч",
+  "discoverGames": "Ігри",
+  "discoverMiniPrograms": "Міні програми",
+  "chatAlreadyInCall": "Уже в дзвінку",
+  "commonConnectionFailed": "Помилка підключення",
+  "chatCallRejected": "Дзвінок відхилено",
+  "chatNoAnswer": "Відповіді немає",
+  "commonClose": "Закрити",
+  "chatSelectContact": "Виберіть Контакт",
+  "chatVoteRemoved": "Голос видалено",
+  "chatVoteChanged": "Голосування змінено",
+  "chatVoted": "Проголосував",
+  "chatReplyTo": "Відповісти {name}",
+  "@chatReplyTo": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatCurrentLocation": "Поточне місцезнаходження",
+  "chatNearbyPlace": "Місце поблизу {index}",
+  "@chatNearbyPlace": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "chatApproximateDistance": "Про {distance}",
+  "@chatApproximateDistance": {
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      }
+    }
+  },
+  "chatAddress": "Адреса",
+  "chatLatitude": "Широта",
+  "chatLongitude": "Довгота",
+  "groupDescriptionUpdated": "Оновлено опис групи",
+  "groupAvatarUpdated": "Аватар групи оновлено",
+  "groupVisibilityUpdated": "Видимість групи оновлено",
+  "groupChannelCreated": "Канал створено",
+  "groupChannelUpdated": "Канал оновлено",
+  "groupChannelDeleted": "Канал видалено",
+  "callDecline": "відхилити",
+  "callAnswer": "Відповідь",
+  "callIncomingVideoCall": "Вхідний відеодзвінок",
+  "callIncomingVoiceCall": "Вхідний голосовий виклик",
+  "callVideoCallInProgress": "Триває відеодзвінок",
+  "callVoiceCallInProgress": "Виконується голосовий виклик",
+  "callReconnectingCall": "Повторне підключення...",
+  "callEnded": "Дзвінок завершено",
+  "callFailed": "Помилка виклику",
+  "callLivekitNotConfigured": "LiveKit не налаштовано",
+  "callJoinMeetingFailed": "Не вдалося приєднатися до зустрічі: {error}",
+  "callScreenShareFailed": "Не вдалося поділитися екраном: {error}",
+  "profileN42BeanTitle": "N42 Бін",
+  "profileNoN42Bean": "Ні N42 Bean",
+  "profileN42BeanDetails": "N42 Bean Деталі",
+  "profileN42BeanDescription": "N42 Bean — це маркер, який використовується для викупу віртуальних предметів і послуг у N42. На даний момент доступний для:",
+  "profileN42BeanFeature1": "Ексклюзивні наклейки та теми для учасників",
+  "profileN42BeanFeature2": "Налаштування спливаючої підказки чату",
+  "profileN42BeanFeature3": "Налаштування червоної обкладинки пакета",
+  "profileN42BeanFeature4": "Ексклюзивний значок з псевдонімом",
+  "profileN42BeanFeature5": "Привілеї групового чату",
+  "profileN42BeanFeature6": "Розширення хмарного сховища",
+  "profileN42BeanFeature7": "Фільтри краси для відеодзвінків",
+  "profileN42BeanFeature8": "Налаштування фону моментів",
+  "profileN42BeanFeature9": "Пріоритет обслуговування клієнтів VIP",
+  "profileGotIt": "зрозумів",
+  "profileNoN42BeanRecords": "Немає записів N42 Bean",
+  "profileMoodAndThoughts": "Настрій і думки",
+  "profileStatusHappy": "Щаслива",
+  "profileStatusCracked": "Розбитий",
+  "profileStatusLucky": "Щасливчик",
+  "profileStatusSunny": "Сонячно",
+  "profileStatusTired": "Втомилася",
+  "profileStatusDaydream": "мрія",
+  "profileStatusRushing": "Поспіх",
+  "profileStatusOverthinking": "Надмірне мислення",
+  "profileStatusEnergized": "Під напругою",
+  "profileWorkAndStudy": "Робота та навчання",
+  "profileStatusWorking": "Працює",
+  "profileStatusStudying": "навчання",
+  "profileStatusBusy": "зайнятий",
+  "profileStatusSlacking": "розхитування",
+  "profileStatusTraveling": "Подорожі",
+  "profileStatusGoingHome": "Йду додому",
+  "profileStatusDnd": "Не турбувати",
+  "profileActivities": "Діяльність",
+  "profileStatusHanging": "Тусовка",
+  "profileStatusCheckIn": "Заїзд",
+  "profileStatusExercising": "Заняття спортом",
+  "profileStatusCoffee": "кава",
+  "profileStatusBubbleTea": "Bubble Tea",
+  "profileStatusEating": "прийом їжі",
+  "profileStatusParenting": "Виховання дітей",
+  "profileStatusSavingWorld": "Порятунок світу",
+  "profileStatusSelfie": "Селфі",
+  "profileRest": "Відпочинок",
+  "profileStatusRetreat": "Відступ",
+  "profileStatusHome": "додому",
+  "profileStatusSleeping": "спить",
+  "profileStatusCatLover": "Любитель кішок",
+  "profileStatusDogWalking": "Вигул собаки",
+  "profileStatusGaming": "Ігри",
+  "profileStatusListening": "Слухання",
+  "profileEditAddress": "Редагувати адресу",
+  "profileRecipient": "одержувач",
+  "profileEnterRecipientName": "Введіть ім'я одержувача",
+  "profilePhoneNumber": "Номер телефону",
+  "profileEnterPhoneNumber": "Введіть номер телефону",
+  "profileRegionHint": "Провінція/місто/район",
+  "profileDetailedAddress": "Детальна адреса",
+  "profileDetailedAddressHint": "Вулиця, номер будинку тощо.",
+  "profileSetAsDefaultAddress": "Встановити як адресу за умовчанням",
+  "profilePleaseCompleteInfo": "Будь ласка, заповніть усі поля",
+  "profileEditInvoice": "Редагувати рахунок-фактуру",
+  "profileInvoiceType": "Тип рахунку-фактури",
+  "profileCompanyName": "Назва компанії",
+  "profilePersonalName": "Особисте ім'я",
+  "profileEnterCompanyName": "Введіть назву компанії",
+  "profileEnterName": "Введіть ім'я",
+  "profileTaxIdNumber": "Ідентифікаційний податковий номер",
+  "profileEnterTaxIdNumber": "Введіть податковий номер",
+  "profileBankNameOptional": "Назва банку (необов'язково)",
+  "profileEnterBankName": "Введіть назву банку",
+  "profileBankAccountOptional": "Банківський рахунок (необов'язково)",
+  "profileEnterBankAccount": "Введіть банківський рахунок",
+  "profileCompanyAddressOptional": "Адреса компанії (необов'язково)",
+  "profileEnterCompanyAddress": "Введіть адресу компанії",
+  "profileCompanyPhoneOptional": "Телефон компанії (необов'язково)",
+  "profileEnterCompanyPhone": "Введіть телефон компанії",
+  "profileSetAsDefaultInvoice": "Встановити як рахунок-фактуру за умовчанням",
+  "profileRingtoneVibrate": "Вібрувати",
+  "profileRingtoneSilent": "Мовчазний",
+  "profileVibrateMode": "Режим вібрації",
+  "profileSilentMode": "Безшумний режим",
+  "profilePlayFailed": "Не вдалося відтворити: {ringtoneName}",
+  "profilePlaying": "Грає: {ringtoneName}",
+  "profileStop": "Стоп",
+  "profileSelectRingtone": "Виберіть Мелодія",
+  "profileLoadingRingtones": "Завантаження мелодій...",
+  "profileNoRingtonesFound": "Мелодії дзвінка не знайдено",
+  "mainMessagesWithCount": "Повідомлення ({count})",
+  "@mainMessagesWithCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "storyViewers": "Глядачі",
+  "storyNoViewers": "Глядачів ще немає",
+  "storyReplyToStory": "Відповісти на історію...",
+  "commonCopiedToClipboard": "Скопійовано в буфер обміну",
+  "commonMore": "більше",
+  "commonTranslating": "Переклад...",
+  "commonTranslatedFrom": "Переклад з {language}",
+  "@commonTranslatedFrom": {
+    "placeholders": {
+      "language": {
+        "type": "String"
+      }
+    }
+  },
+  "commonTranslation": "Переклад",
+  "commonTranslationFailed": "Помилка перекладу",
+  "commonAllRead": "Всі читали",
+  "commonReadCount": "{count} читати",
+  "commonYouRecalledMessage": "Ви відкликали повідомлення",
+  "commonMessageRecalled": "Повідомлення відкликано",
+  "commonReEdit": "Перередагувати",
+  "commonWalletArea": "Зона гаманця",
+  "callIncomingCall": "Вхідний дзвінок",
+  "callMissedCall": "Пропущений дзвінок",
+  "groupRemoveAdmin": "Видалити адміністратора",
+  "chatSelectCurrency": "Виберіть валюту",
+  "chatSelectEmoji": "Виберіть Emoji",
+  "chatSelectRedPacketCover": "Виберіть Обкладинка",
+  "groupSetAsAdmin": "Встановити як адміністратора",
+  "chatVideoPlaybackFailed": "Помилка відтворення відео",
+  "@chatVideoPlaybackFailed": {
+    "description": "Used with error message"
+  },
+  "groupViewProfile": "Переглянути профіль",
+  "favoriteAddLinkComingSoon": "Незабаром додайте функцію посилання",
+  "favoriteNewNoteComingSoon": "Незабаром з’явиться нова функція нотаток",
+  "qrcodeSaveFeatureComingSoon": "Незабаром з’явиться функція збереження",
+  "qrcodeShareFeatureComingSoon": "Незабаром буде доступна функція спільного доступу",
+  "qrcodeProcessFailed": "Не вдалося обробити QR-код: {error}",
+  "@qrcodeProcessFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "securityDeviceIdRequired": "Потрібно ввести ідентифікатор пристрою",
+  "securityVerificationStartFailed": "Не вдалося розпочати перевірку: {error}",
+  "@securityVerificationStartFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "securityVerificationFailed": "Не вдалося перевірити",
+  "securityVerificationFailedWithReason": "Не вдалося перевірити: {reason}",
+  "@securityVerificationFailedWithReason": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "securityEmojiMismatchRejected": "Перевірку відхилено – смайли не збігаються",
+  "securityWaitingForDeviceAccept": "Очікування на прийняття іншим пристроєм...",
+  "securityVerifyDevice": "Підтвердьте цей пристрій",
+  "securityConfirmEmojiMatch": "Переконайтеся, що наведені нижче смайли відображаються на обох пристроях в однаковому порядку",
+  "securityEmojiDontMatch": "Вони не збігаються",
+  "securityEmojiMatch": "Вони збігаються",
+  "securityWaitingForDeviceConfirm": "Очікування підтвердження від іншого пристрою...",
+  "securityVerificationSuccess": "Перевірка успішна!",
+  "securityDeviceVerifiedTrusted": "Цей пристрій тепер перевірено та надійно.",
+  "securityCompareEmoji": "Порівняйте емодзі на обох пристроях",
+  "securityCompareNumbers": "Порівняйте цифри на обох пристроях",
+  "commonTryAgain": "Спробуйте знову",
+  "commonDone": "Готово",
+  "chatExportTitle": "Експорт чату",
+  "chatExportSuccess": "Експорт успішно",
+  "chatExportFailed": "Помилка експорту: {error}",
+  "@chatExportFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatExportFormat": "Формат експорту",
+  "chatExportHtmlDesc": "Можна читати в будь-якому браузері зі стилізованим макетом",
+  "chatExportJsonDesc": "Машиночитаний формат структурованих даних",
+  "chatExportDateRange": "Діапазон дат",
+  "chatExportAll": "Усі повідомлення",
+  "chatExportLastWeek": "Останні 7 днів",
+  "chatExportLastMonth": "Останній місяць",
+  "chatExportLast3Months": "Останні 3 місяці",
+  "chatExportMessageCount": "Повідомлення для експорту",
+  "chatExportButton": "Експортуйте та діліться",
+  "chatMediaGallery": "Медіа галерея",
+  "chatExportHistory": "Експорт історії чату",
+  "pdfLoadFailed": "Не вдалося завантажити PDF",
+  "pdfPageIndicator": "{current} / {total}",
+  "@pdfPageIndicator": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "mediaAll": "всі",
+  "mediaImages": "Зображення",
+  "mediaVideos": "Відео",
+  "mediaFiles": "Файли",
+  "mediaAudio": "Аудіо",
+  "mediaItemsCount": "{count} елементів",
+  "@mediaItemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mediaNoMediaFound": "Медіа не знайдено",
+  "spacesTitle": "Спільноти",
+  "spacesCreate": "Створити спільноту",
+  "spacesJoined": "Приєднався",
+  "spacesDiscover": "Відкрийте для себе",
+  "spacesNoJoined": "Жодна спільнота ще не приєдналася",
+  "spacesExplore": "Дослідіть спільноти",
+  "spacesNoPublic": "Публічні спільноти не знайдено",
+  "spacesJoin": "Приєднуйтесь",
+  "spacesSubSpaces": "Підспільноти",
+  "spacesChannels": "Канали",
+  "spacesMembersCount": "Учасники {count}",
+  "@spacesMembersCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "spacesPublic": "Громадський",
+  "spacesPrivate": "Приватний",
+  "spacesSuggested": "Запропоновано",
+  "spacesChannelsCount": "канали {count}",
+  "@spacesChannelsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "callInCallChat": "Чат під час виклику",
+  "callMessagesCount": "{count} повідомлення",
+  "@callMessagesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "callNoMessagesYet": "Поки немає повідомлень.\nНадішліть повідомлення, щоб почати.",
+  "callTypeMessage": "Введіть повідомлення...",
+  "callYouSender": "Ви",
+  "callChatLabel": "Чат",
+  "chatEdited": "Відредаговано",
+  "chatEditHistory": "Історія редагування",
+  "chatOriginalMessage": "Оригінал",
+  "chatEditedAt": "Відредаговано в {time}",
+  "@chatEditedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "chatViewOnce": "Переглянути один раз",
+  "chatViewOncePhoto": "Переглянути один раз фото",
+  "chatViewOnceVideo": "Переглянути один раз відео",
+  "chatViewOnceViewed": "Переглянуто",
+  "chatViewOnceExpired": "Термін дії минув",
+  "chatViewOnceTap": "Торкніться, щоб переглянути",
+  "chatAutoFaceBlur": "Автоматичне розмиття обличчя",
+  "chatAutoFaceBlurDesc": "Автоматично розмивати обличчя під час надсилання фотографій",
+  "threadReplyInThread": "Відповісти в ланцюжку",
+  "threadReplies": "{count} відповідає",
+  "@threadReplies": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "threadReply": "1 відповідь",
+  "threadLatestReply": "Останні: {preview}",
+  "@threadLatestReply": {
+    "placeholders": {
+      "preview": {
+        "type": "String"
+      }
+    }
+  },
+  "threadTitle": "Нитка",
+  "threadReplyPlaceholder": "Відповісти в ланцюжку...",
+  "threadParticipants": "{count} учасників",
+  "@threadParticipants": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "voiceRoomTitle": "Голосова кімната",
+  "voiceRoomCreate": "Створіть голосову кімнату",
+  "voiceRoomJoin": "Приєднуйтесь",
+  "voiceRoomLeave": "Залиште",
+  "voiceRoomEnd": "Кінцева кімната",
+  "voiceRoomRaiseHand": "Підняти руку",
+  "voiceRoomLowerHand": "Нижня рука",
+  "voiceRoomMute": "Вимкнути звук",
+  "voiceRoomUnmute": "Увімкнути звук",
+  "voiceRoomHost": "Хост",
+  "voiceRoomSpeakers": "Доповідачі",
+  "voiceRoomListeners": "Слухачі",
+  "voiceRoomLive": "НАЖИВО",
+  "voiceRoomEnded": "Завершено",
+  "voiceRoomScheduled": "За розкладом",
+  "voiceRoomApprove": "Затвердити",
+  "voiceRoomDemote": "Перейти до Слухача",
+  "voiceRoomHandRaised": "{name} підняли руку",
+  "@voiceRoomHandRaised": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "voiceRoomName": "Назва кімнати",
+  "voiceRoomTopic": "Тема (необов'язково)",
+  "voiceRoomNoActive": "Немає активних голосових кімнат",
+  "voiceRoomConnecting": "Підключення...",
+  "usernameTitle": "Ім'я користувача",
+  "usernameSet": "Встановити ім'я користувача",
+  "usernameChange": "Змінити ім'я користувача",
+  "usernamePlaceholder": "Введіть ім'я користувача",
+  "usernameAvailable": "Доступне ім'я користувача",
+  "usernameUnavailable": "Ім'я користувача вже зайнято",
+  "usernameInvalid": "3-30 символів, малі літери, цифри, підкреслення. Має починатися з букви.",
+  "usernameReserved": "Це ім'я користувача зарезервовано",
+  "usernameSaved": "Ім'я користувача збережено",
+  "usernameSearchHint": "Пошук за @username",
+  "ensName": "Назва ENS",
+  "ensLinked": "Пов’язано з ENS",
+  "ensResolving": "Вирішення ENS...",
+  "ensNotFound": "Ім'я ENS не знайдено",
+  "tokenGateTitle": "Токен Гейт",
+  "tokenGateEnable": "Увімкнути Token Gate",
+  "tokenGateDisable": "Вимкнути Token Gate",
+  "tokenGateAddRule": "Додати правило",
+  "tokenGateRemoveRule": "Видалити правило",
+  "tokenGateContractAddress": "Адреса договору",
+  "tokenGateMinBalance": "Мінімальний баланс",
+  "tokenGateTokenId": "Ідентифікатор токена (ERC-1155)",
+  "tokenGateChainId": "ID ланцюга",
+  "tokenGateVerifying": "Перевірка токенів...",
+  "tokenGateVerified": "Перевірку пройдено",
+  "tokenGateDenied": "Ви не відповідаєте вимогам до маркера",
+  "tokenGateOperatorAnd": "Має відповідати ВСІМ правилам",
+  "tokenGateOperatorOr": "Має відповідати БУДЬ-ЯКОМУ правилу",
+  "tokenGateRuleErc20": "Токен ERC-20",
+  "tokenGateRuleErc721": "NFT (ERC-721)",
+  "tokenGateRuleErc1155": "Multi-Token (ERC-1155)",
+  "tokenGateRuleNative": "Рідний токен",
+  "tokenGateSaved": "Токен ворота збережено",
+  "tokenGateEnableDescription": "Щоб приєднатися, учасники повинні мати маркери",
+  "tokenGateOperator": "Логічне правило",
+  "tokenGateRules": "правила",
+  "tokenGateSymbol": "Символ (необов'язково)",
+  "tokenGateChain": "ланцюг",
+  "tokenGateTokenStandard": "Токен Стандарт",
+  "tokenGateDenialMessage": "Повідомлення про відмову",
+  "tokenGateDenialMessageHint": "Повідомлення відображається, коли перевірка не вдається",
+  "tokenGateVerifyTitle": "Перевірка маркера",
+  "tokenGateVerifyPassed": "Перевірка пройдена",
+  "tokenGateVerifyFailed": "Не вдалося перевірити",
+  "tokenGateRetryVerify": "Повторіть спробу",
+  "tokenGateRequired": "Обов'язковий",
+  "tokenGateYourBalance": "Ваш баланс",
+  "tokenGateRulesActive": "правила активні",
+  "tokenGateDisabled": "Вимкнено",
+  "ensNotBound": "Не переплетений",
+  "liveLocation": "Живе розташування",
+  "stopLiveLocation": "Зупинити спільний доступ",
+  "startLiveLocation": "Почніть ділитися",
+  "selectDuration": "Виберіть Тривалість",
+  "groupChatFiles": "Файли чату",
+  "groupLinks": "Посилання",
+  "groupNoLinks": "Поки немає посилань",
+  "chatBackground": "Фон чату",
+  "solidColors": "Суцільні кольори",
+  "gradients": "градієнти",
+  "defaultBackground": "За замовчуванням",
+  "settingsFontSizeSlider": "Розмір шрифту",
+  "autoDownload": "Автоматичне завантаження",
+  "images": "Зображення",
+  "voice": "Голос",
+  "video": "відео",
+  "files": "Файли",
+  "mobileData": "Мобільні дані",
+  "roaming": "Роумінг",
+  "storageManagement": "Зберігання",
+  "totalUsage": "Загальне використання",
+  "cache": "Кеш",
+  "other": "інше",
+  "clearCache": "Очистити кеш",
+  "cacheCleared": "Кеш очищено",
+  "clearCacheFailed": "Не вдалося очистити кеш",
+  "confirmClearCache": "Очистити всі дані кешу?",
+  "mapView": "Перегляд карти",
+  "liveLocationSharingCount": "{count} люди діляться геоданими",
+  "@liveLocationSharingCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "minutes15": "15 хвилин",
+  "minutes30": "30 хвилин",
+  "hour1": "1 година",
+  "hours8": "8 годин",
+  "personalCard": "Особиста картка",
+  "downloadFailed": "Помилка завантаження",
+  "locationExpired": "Термін дії минув",
+  "secondsRemaining": "{count} секунд",
+  "@secondsRemaining": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "minutesRemaining": "{count}хв",
+  "@minutesRemaining": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hoursMinutesRemaining": "{hours}h {minutes}мін",
+  "@hoursMinutesRemaining": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "favoriteMessages": "Вибране",
+  "linksCopied": "Посилання скопійовано",
+  "noLinksFound": "Посилання не знайдено",
+  "roomStorageRanking": "Рейтинг зберігання номерів",
+  "downloadComplete": "Завантаження завершено",
+  "downloading": "Завантаження...",
+  "draftSaved": "Чернетку збережено",
+  "voiceRecording": "Запис голосу",
+  "searchLocation": "Місце пошуку",
+  "tapToSearch": "Торкніться для пошуку",
+  "settingsThisDevice": "Цей пристрій",
+  "settingsJustNow": "Просто зараз",
+  "settingsDeviceId": "ID пристрою",
+  "settingsStatus": "Статус",
+  "settingsLastActive": "Останній активний",
+  "settingsIpAddress": "IP адреса",
+  "settingsRenameDevice": "Перейменувати пристрій",
+  "settingsDeviceNameHint": "Введіть назву пристрою",
+  "settingsDeviceRenamed": "Пристрій перейменовано",
+  "settingsRenameFailed": "Не вдалося перейменувати",
+  "settingsRemoteLogout": "Віддалений вихід із системи",
+  "settingsRemoteLogoutConfirm": "Ви впевнені, що бажаєте вийти з системи \"{deviceName}\"? Цю дію не можна скасувати.",
+  "@settingsRemoteLogoutConfirm": {
+    "placeholders": {
+      "deviceName": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsDeviceLoggedOut": "Пристрій вийшов із системи",
+  "settingsLogoutFailed": "Помилка виходу",
+  "settingsLogout": "Вийти",
+  "settingsVerifyIdentity": "Підтвердити особу",
+  "settingsEnterPasswordToConfirm": "Введіть свій пароль, щоб підтвердити цю дію.",
+  "scheduledSendTitle": "Розклад повідомлення",
+  "scheduledSendInOneHour": "Через 1 годину",
+  "scheduledSendTonight": "Сьогодні ввечері (20:00)",
+  "scheduledSendTomorrowMorning": "Завтра вранці (9:00)",
+  "scheduledSendCustom": "Виберіть дату й час",
+  "scheduledMessageLabel": "За розкладом",
+  "scheduledMessageCancel": "Скасувати заплановане повідомлення",
+  "chatLockTitle": "Блокування чату",
+  "chatLockEnable": "Заблокуйте цей чат",
+  "chatLockDisable": "Розблокуйте цей чат",
+  "chatLockDescription": "Для відкриття заблокованих чатів потрібна біометрична перевірка або підтвердження PIN-кодом",
+  "chatLockVerifyTitle": "Чат заблоковано",
+  "chatLockVerifySubtitle": "Підтвердьте, щоб отримати доступ до цього чату",
+  "chatLockVerifyFailed": "Не вдалося перевірити",
+  "chatLockEnabled": "Чат заблоковано",
+  "chatLockDisabled": "Чат розблоковано",
+  "chatLockPinTitle": "Введіть PIN-код",
+  "chatLockPinSetTitle": "Встановити PIN-код",
+  "chatLockPinConfirmTitle": "Підтвердьте PIN-код",
+  "chatLockPinMismatch": "PIN-код не збігається",
+  "chatLockUseBiometric": "Використовуйте біометрію",
+  "chatLockUsePin": "Використовуйте PIN-код",
+  "mediaEditorUndo": "Скасувати",
+  "mediaEditorRedo": "Повторити",
+  "mediaEditorCrop": "кадрування",
+  "mediaEditorFilter": "фільтр",
+  "mediaEditorDraw": "малювати",
+  "mediaEditorText": "текст",
+  "aiAssistant": "ШІ помічник",
+  "aiAssistantWelcome": "Привіт! Я помічник N42 AI. Чим я можу вам допомогти?",
+  "aiAssistantNotConfigured": "Службу AI не налаштовано",
+  "aiAssistantSettings": "Налаштування AI",
+  "aiAssistantClearHistory": "Очистити історію чату",
+  "aiAssistantClearHistoryConfirm": "Ви впевнені, що бажаєте очистити всю історію чатів AI?",
+  "aiAssistantStopGenerating": "Припинити генерацію",
+  "aiAssistantModel": "Модель",
+  "aiAssistantTemperature": "Температура",
+  "aiAssistantMaxTokens": "Макс жетонів",
+  "aiAssistantContextWindow": "Контекстне вікно",
+  "aiAssistantServiceStatus": "Статус служби",
+  "aiAssistantAvailable": "в наявності",
+  "aiAssistantUnavailable": "Недоступний",
+  "aiSummarize": "AI Резюме",
+  "aiSummarizeUnread": "Узагальніть {count} непрочитані повідомлення",
+  "@aiSummarizeUnread": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "aiSummarizeLoading": "Підведення підсумків...",
+  "aiSummarizeError": "Не вдалося підсумувати",
+  "aiRewrite": "AI Rewrite",
+  "aiRewriteFormal": "Формальний",
+  "aiRewriteCasual": "Повсякденний",
+  "aiRewritePlayful": "Грайливий",
+  "aiRewriteProfessional": "професійний",
+  "aiRewriteAccept": "використання",
+  "aiRewriteCancel": "Скасувати",
+  "aiRewriteLoading": "Переписування...",
+  "aiLinkSummary": "AI Резюме",
+  "aiLinkSummaryAnalyzing": "Аналіз...",
+  "chatFolderManagement": "Керування папками",
+  "chatFolderSystem": "Системні папки",
+  "chatFolderCustom": "Спеціальні папки",
+  "chatFolderEmpty": "Ще немає спеціальних папок",
+  "chatFolderCreate": "Створити папку",
+  "chatFolderEdit": "Редагувати папку",
+  "chatFolderNameHint": "Назва папки",
+  "chatFolderAll": "всі",
+  "chatFolderUnread": "Непрочитаний",
+  "chatFolderPersonal": "Особисті",
+  "chatFolderGroups": "Групи",
+  "chatFolderChannels": "Канали",
+  "chatFolderMuted": "Вимкнено",
+  "storyAddMusic": "Додати музику",
+  "storyChangeMusic": "Змінити музику",
+  "storyBackgroundMusic": "Фонова музика",
+  "storyMusicPreview": "Попередній перегляд (макс. 15 с)",
+  "storyChooseFromDevice": "Виберіть із пристрою",
+  "storyUseThisMusic": "Використовуйте цю музику",
+  "authPasskeyNotSupported": "Ключ доступу не підтримується на цьому пристрої",
+  "authPasskeyRegister": "Зареєструвати пароль",
+  "authPasskeyNoRegistered": "Ключі доступу не зареєстровані",
+  "authPasskeyRegisterHint": "Зареєструйте пароль для цього облікового запису. Окремий вхід за допомогою ключа доступу буде ввімкнено пізніше.",
+  "authPasskeyNameYours": "Назвіть свій пароль",
+  "authPasskeyRegistered": "Ключ доступу збережено в цьому обліковому записі",
+  "authPasskeyDeleted": "Ключ доступу видалено з цього облікового запису",
+  "authPasskeyDeleteConfirm": "Видалити ключ доступу \"{name}\"? Вам потрібно буде зареєструвати його знову, перш ніж використовувати пароль для входу пізніше.",
+  "@authPasskeyDeleteConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "momentVisibilityPublic": "Громадський",
+  "momentVisibilityPrivate": "Приватний",
+  "momentVisibilityPartial": "Вибрані друзі",
+  "momentVisibilityExcluded": "Виключити деяких друзів",
+  "momentUserMoments": "Моменти {userName}",
+  "@momentUserMoments": {
+    "placeholders": {
+      "userName": {
+        "type": "String"
+      }
+    }
+  },
+  "momentForwardTo": "Переслати до",
+  "momentForwardSuccess": "Переслано успішно",
+  "momentSelectFriends": "Виберіть Друзі",
+  "momentSelectTags": "Виберіть за тегами",
+  "momentSelectedCount": "Вибране ({count})",
+  "@momentSelectedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "momentNoMomentsYet": "Ще немає моментів",
+  "momentForwardMoment": "Момент вперед",
+  "momentAddComment": "Додати коментар...",
+  "momentForwardContent": "[Момент] {content}",
+  "@momentForwardContent": {
+    "placeholders": {
+      "content": {
+        "type": "String"
+      }
+    }
+  },
+  "momentDeleteMoment": "Видалити момент",
+  "momentDeleteConfirm": "Ви впевнені, що хочете видалити цей момент?",
+  "momentComment": "коментар",
+  "momentWriteComment": "Напишіть коментар...",
+  "momentLike": "Подобається",
+  "momentUnlike": "На відміну від",
+  "momentForward": "вперед",
+  "momentDelete": "Видалити",
+  "momentReply": "відповісти",
+  "momentMoment": "Момент",
+  "momentLikesCount": "Подобається {count}",
+  "@momentLikesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "momentCommentsCount": "Коментарі {count}",
+  "@momentCommentsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "momentNoComments": "Поки немає коментарів",
+  "momentFailedToLoad": "Не вдалося завантажити зображення",
+  "momentReplyTo": "Відповісти {userName}...",
+  "@momentReplyTo": {
+    "placeholders": {
+      "userName": {
+        "type": "String"
+      }
+    }
+  },
+  "momentNoConversations": "Жодних розмов",
+  "momentJustNow": "тільки зараз",
+  "momentMinutesAgo": "{count}м тому",
+  "@momentMinutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "momentHoursAgo": "{count}h тому",
+  "@momentHoursAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "momentDaysAgo": "{count}д тому",
+  "@momentDaysAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatGroupAnnouncementHint": "Введіть групове оголошення",
+  "chatGroupAnnouncementEmpty": "Без оголошення",
+  "chatEditNickname": "Редагувати псевдонім",
+  "chatNicknameHint": "Введіть свій нік у цій групі",
+  "contactAddPhoneHint": "Введіть номер телефону",
+  "contactNotesHint": "Додайте примітки про цей контакт",
+  "reportTitle": "звіт",
+  "reportReasonSpam": "Спам",
+  "reportReasonHarassment": "Переслідування",
+  "reportReasonFraud": "Шахрайство",
+  "reportReasonOther": "інше",
+  "reportSubmitted": "Звіт подано",
+  "reportDescription": "Додатковий опис (необов'язково)",
+  "qrcodeSaved": "QR-код збережено в альбомі",
+  "chatSendRedPacketInChat": "Будь ласка, надішліть червоний пакет у чаті",
+  "commonSaveFailed": "Не вдалося зберегти",
+  "reportSelectReason": "Виберіть причину",
+  "gameCenter": "Ігри",
+  "gameHighScore": "Найкращий",
+  "gameScore": "Оцінка",
+  "gameOver": "Гра закінчена",
+  "gamePlayAgain": "Грати знову",
+  "gameLeaderboard": "Таблиця лідерів",
+  "gamePause": "Призупинено",
+  "gameResume": "Торкніться, щоб відновити",
+  "gameConfirmExit": "Вийти з цієї гри?",
+  "gameNoScores": "Ще немає балів",
+  "game2048": "2048",
+  "game2048Desc": "Об’єднайте плитки, щоб досягти 2048",
+  "gameBlockDrop": "Випадання блоку",
+  "gameBlockDropDesc": "Краплі та чіткі лінії",
+  "gameMinesweeper": "Тральщик",
+  "gameMinesweeperDesc": "Знайти всі безпечні клітини",
+  "gameMatch3": "Матч 3",
+  "gameMatch3Desc": "Зіставте 3 або більше дорогоцінних каменів",
+  "gameMinesweeperEasy": "легко",
+  "gameMinesweeperMedium": "Середній",
+  "gameMinesLeft": "Залишені міни",
+  "gameTimeLeft": "час",
+  "gameLevel": "Рівень",
+  "gameNext": "Далі",
+  "gameBestTime": "Кращий час",
+  "gameNewRecord": "Новий рекорд!",
+  "gameLines": "Лінії",
+  "storyMyStory": "Моя історія",
+  "storageSmartCleanup": "Розумне очищення",
+  "storageOldMediaFiles": "Старі мультимедійні файли",
+  "storageLargeFiles": "Великі файли",
+  "storageAppCache": "Кеш програми",
+  "storageSettings": "Налаштування зберігання",
+  "storageAutoCleanup": "Автоматичне очищення",
+  "storageAutoCleanupDesc": "Автоматично очищати файли старше {days} днів",
+  "@storageAutoCleanupDesc": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "storageCleanupPeriod": "Період очищення",
+  "storagePreserveThumbnails": "Зберегти мініатюри",
+  "storagePreserveThumbnailsDesc": "Зберігайте мініатюри зображень під час очищення",
+  "storageWarningHigh": "Високе використання пам’яті. Подумайте про очищення старих файлів.",
+  "storageWarningCritical": "Пам'яті критично мало. Очистіть, будь ласка, вільне місце.",
+  "storageFreed": "Звільнено {size} (файли {count})",
+  "@storageFreed": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "storageDays": "{days} днів",
+  "@storageDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "storageViewAllRooms": "Переглянути всі номери {count}",
+  "@storageViewAllRooms": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "storageNoFiles": "Файли не знайдено",
+  "storageFilePinned": "Закріплено",
+  "storageDeleteSelected": "Видалити вибрані файли {count}? Їх можна повторно завантажити з сервера.",
+  "@storageDeleteSelected": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "backupRestore": "Резервне копіювання та відновлення",
+  "backupCreate": "Створити резервну копію",
+  "backupCreateDesc": "Резервне копіювання налаштувань і ключів шифрування. Повідомлення будуть відновлені з сервера після повторного входу.",
+  "backupIncludeKeys": "Додайте ключі шифрування",
+  "backupIncludeKeysDesc": "Необхідний для читання зашифрованих повідомлень",
+  "backupPasswordProtect": "Захист паролем",
+  "backupEnterPassword": "Введіть резервний пароль",
+  "backupHistory": "Історія резервного копіювання",
+  "backupNoBackups": "Резервних копій ще немає",
+  "backupRestore2": "Відновити",
+  "backupDelete": "Видалити",
+  "backupDeleteConfirm": "Ви впевнені, що хочете видалити цю резервну копію? Це неможливо скасувати.",
+  "backupRestoreFromFile": "Відновити з файлу",
+  "backupRestoreFromFileDesc": "Імпортуйте файл резервної копії .n42 з іншого пристрою або попередньої резервної копії.",
+  "backupChooseFile": "Виберіть файл резервної копії",
+  "backupRestoring": "Відновлення...",
+  "backupCreated": "Створено резервну копію: {rooms} кімнат, {messages} повідомлень",
+  "@backupCreated": {
+    "placeholders": {
+      "rooms": {
+        "type": "int"
+      },
+      "messages": {
+        "type": "int"
+      }
+    }
+  },
+  "backupRestored": "Відновлено налаштування {settings} з кімнат {rooms}",
+  "@backupRestored": {
+    "placeholders": {
+      "settings": {
+        "type": "int"
+      },
+      "rooms": {
+        "type": "int"
+      }
+    }
+  },
+  "backupFailed": "Помилка резервного копіювання: {error}",
+  "@backupFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "backupPasswordRequired": "Ця резервна копія захищена паролем",
+  "blocGroupNotFound": "Групу не знайдено",
+  "blocGroupMembersInvited": "Запрошений член(и) {count}",
+  "@blocGroupMembersInvited": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "blocGroupMemberRemoved": "Учасника видалено",
+  "blocGroupAdminRemoved": "Адміністратора видалено",
+  "blocGroupLeft": "Вийшов із групи",
+  "blocGroupDisbanded": "Група розпущена",
+  "blocGroupJoined": "Приєднався до групи",
+  "blocGroupInviteDeclined": "Запрошення відхилено",
+  "blocGroupTokenGateUpdated": "Токен-шлюз оновлено",
+  "blocTransferProcessing": "Обробка передачі...",
+  "blocTransferCancelled": "Переказ скасовано",
+  "blocTransferFailed": "Помилка передачі",
+  "blocPaymentProcessing": "Обробка платежу...",
+  "blocPaymentFailed": "Платіж не вдалося",
+  "groupMaxMembers": "Ліміт учасників",
+  "groupMaxMembersUnlimited": "Необмежений",
+  "groupMaxMembersHint": "Введіть ліміт (залиште порожнім для необмеженого)",
+  "groupMaxMembersUpdated": "Ліміт учасників оновлено",
+  "groupFull": "Група завантажена",
+  "groupChannels": "Тематичні канали",
+  "groupChannelsEmpty": "Ще немає каналів",
+  "groupChannelsCount": "канали",
+  "groupChannelCreate": "Новий канал",
+  "groupChannelName": "Назва каналу",
+  "groupChannelTopic": "Тема каналу (необов'язково)",
+  "groupChannelDelete": "Видалити канал",
+  "groupChannelDeleteConfirm": "Видалити цей канал? Усі повідомлення буде втрачено.",
+  "groupBotSettings": "Налаштування бота",
+  "groupBotEnabled": "Увімкнути бота",
+  "groupBotWelcomeMessage": "Шаблон привітального повідомлення",
+  "groupBotWelcomeHint": "Використовуйте «name» як заповнювач для імені нового учасника",
+  "groupBotConfigUpdated": "Налаштування бота оновлено",
+  "groupContentFilter": "Фільтр вмісту",
+  "groupContentFilterEnabled": "Увімкнути фільтр ключових слів",
+  "groupContentFilterReplace": "Замінити на ***",
+  "groupContentFilterHide": "Приховати повідомлення",
+  "groupContentFilterAddWord": "Додати ключове слово",
+  "groupContentFilterUpdated": "Оновлено фільтр вмісту",
+  "chatSlashCommands": "Команди",
+  "chatCommandPoll": "/poll — створити опитування",
+  "chatCommandAnnounce": "/announce — Надіслати оголошення",
+  "chatCommandWelcome": "/welcome — встановити вітальне повідомлення",
+  "chatReportMessage": "звіт",
+  "chatReportReason": "Повідомити про причину",
+  "chatReportSpam": "Спам",
+  "chatReportHarassment": "Переслідування",
+  "chatReportInappropriate": "Невідповідний вміст",
+  "chatReportOther": "інше",
+  "chatReportSuccess": "Звіт подано",
+  "spacesName": "Назва спільноти",
+  "spacesNameHint": "напр. Криптотрейдери",
+  "spacesNameRequired": "Необхідно вказати ім'я",
+  "spacesDescription": "опис",
+  "spacesDescriptionHint": "Про що ця спільнота?",
+  "spacesType": "Тип спільноти",
+  "spacesPublicDesc": "Будь-хто може знайти та приєднатися",
+  "spacesPrivateDesc": "Тільки запрошені учасники можуть приєднатися",
+  "spacesNotFound": "Спільнота не знайдена",
+  "spacesSearch": "Пошук спільнот...",
+  "spacesMembers": "Члени",
+  "spacesNoChannels": "Ще немає каналів",
+  "spacesLeave": "Вийти зі спільноти",
+  "spacesLeaveConfirm": "Ви впевнені, що бажаєте залишити \"{name}\"?",
+  "@spacesLeaveConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spacesDelete": "Видалити спільноту",
+  "spacesDeleteConfirm": "Це призведе до остаточного видалення \"{name}\" і всіх його каналів. Цю дію не можна скасувати.",
+  "@spacesDeleteConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spacesCreateChannel": "Додати канал",
+  "spacesChannelName": "Назва каналу",
+  "spacesChannelTopic": "Тема (необов'язково)",
+  "spacesDeleteChannel": "Видалити канал",
+  "spacesDeleteChannelConfirm": "Ви впевнені, що хочете видалити \"#{name}\"?",
+  "@spacesDeleteChannelConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spacesEditName": "Редагувати назву",
+  "spacesEditDescription": "Редагувати опис",
+  "spacesViewAllMembers": "Переглянути всіх учасників {count}",
+  "@spacesViewAllMembers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "spacesKickMemberTitle": "Удар {name}",
+  "@spacesKickMemberTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spacesBanMemberTitle": "Забанити {name}",
+  "@spacesBanMemberTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spacesPromoteAdmin": "Підвищити до адміністратора",
+  "spacesDemoteAdmin": "Видалити адміністратора",
+  "spacesInviteMember": "Запросити учасника",
+  "spacesInviteMemberUserId": "Ідентифікатор користувача (наприклад, @user:server.com)",
+  "spacesSave": "зберегти",
+  "settingsScreenshotProtection": "Захист скріншотів",
+  "settingsScreenshotProtectionDesc": "Запобігайте знімкам екрана та запису екрана",
+  "chatSelfDestructTimer": "Самознищення",
+  "chatTimerPickerTitle": "Таймер самознищення",
+  "chatTimerOff": "Вимкнено",
+  "onChainNotificationsTitle": "Події в мережі",
+  "onChainMarkAllRead": "Позначити все прочитане",
+  "onChainNoNotifications": "Подій у мережі ще немає",
+  "onChainNoNotificationsDesc": "Тут відображатимуться події з каналів, на які ви підписалися",
+  "onChainViewDetails": "Переглянути деталі",
+  "chatCommandHelp": "/help — Показати всі команди",
+  "chatCommandPrice": "/price — отримати ціну токена",
+  "chatCommandBalance": "/balance — Показати баланс гаманця",
+  "chatCommandChains": "/chains — список 236+ підтримуваних мереж",
+  "chatMiniApps": "програми",
+  "miniAppMarketTitle": "Міні-додатки",
+  "miniAppCategoryAll": "всі",
+  "miniAppSearch": "Пошук програм...",
+  "miniAppFeatured": "Рекомендовані",
+  "miniAppAllApps": "Усі додатки",
+  "miniAppNoResults": "Програм не знайдено",
+  "slideToPayLabel": "→→→ Проведіть пальцем для підтвердження",
+  "slideToPayConfirming": "Підтвердження...",
+  "redPacketBestLuck": "Краща удача",
+  "redPacketBestLuckCongrats": "Удачі! Ви отримали найбільше!",
+  "redPacketStats": "Заявлено {claimed} / {total}",
+  "@redPacketStats": {
+    "placeholders": {
+      "claimed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "redPacketStatsTotal": "всього",
+  "redPacketGrabbedViral": "🧧 схопив червоний пакунок • {amount} {token}",
+  "@redPacketGrabbedViral": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "token": {
+        "type": "String"
+      }
+    }
+  },
+  "web3SearchHint": "@matrix:id • 0x адреса гаманця • name.eth",
+  "web3SearchPlaceholder": "Пошук за ID, гаманцем або ENS...",
+  "web3WalletAddress": "Адреса гаманця",
+  "web3AddressCopied": "Адресу скопійовано",
+  "web3Copy": "Копія",
+  "web3SendMessage": "Надіслати повідомлення",
+  "web3SendToWallet": "Гаманець для повідомлень",
+  "web3WalletOnlyHint": "Ця адреса ще не має облікового запису N42. Повідомлення буде доставлено, коли вони приєднаються.",
+  "web3NftAvatar": "Аватар NFT",
+  "web3ResolveFailed": "Не вдалося визначити особу",
+  "web3EnsNotFound": "Назва ENS \"{name}\" не знайдено",
+  "@web3EnsNotFound": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "web3NoN42AccountTitle": "Немає облікового запису N42",
+  "web3NoN42AccountDesc": "Ця адреса гаманця ще не має облікового запису N42. Ви можете поділитися з ними посиланням на запрошення N42, щоб почати.",
+  "web3ShareInvite": "Поділитися запрошенням",
+  "nftPickerTitle": "Виберіть NFT Avatar",
+  "nftPickerTabPopular": "Популярний",
+  "nftPickerTabCustom": "Custom",
+  "nftPickerChain": "ланцюг",
+  "nftPickerContract": "Адреса договору",
+  "nftPickerTokenId": "Ідентифікатор маркера",
+  "nftPickerVerifyOwnership": "Перевірити право власності та переглянути",
+  "nftPickerUseAsAvatar": "Використовувати як аватар",
+  "nftPickerPreview": "Попередній перегляд",
+  "nftPickerNotOwned": "Ви не є власником цього NFT",
+  "nftPickerInvalidTokenId": "Недійсний ідентифікатор маркера",
+  "nftPickerEnterBoth": "Введіть адресу контракту та ідентифікатор токена",
+  "nftPickerInfoTitle": "NFT Avatar — Verified On-Chain",
+  "nftPickerInfoDesc": "Прив’яжіть свій аватар до NFT, яким ви володієте. Будь-хто може підтвердити право власності в мережі. Показано із золотим кільцем на N42.",
+  "nftPickerPopularCollections": "Популярні колекції",
+  "nftPickerWalletHint": "Підключіть свій гаманець N42, щоб автоматично знаходити свої NFT у понад 236 мережах.",
+  "profileBindNftAvatar": "Прив’язати аватар NFT",
+  "profileChangeAvatar": "Змінити аватар",
+  "groupTopics": "Теми",
+  "groupTopicsEmpty": "Ще немає тем",
+  "syncInProgress": "Синхронізація історії повідомлень...",
+  "recoveryKeyReminderTitle": "Захистіть свої повідомлення",
+  "recoveryKeyReminderDesc": "Створіть ключ відновлення для безпечної синхронізації зашифрованих повідомлень між пристроями",
+  "recoveryKeySetupNow": "Налаштувати зараз",
+  "recoveryKeyRemindLater": "Нагадай мені пізніше",
+  "channelReadOnly": "Лише адміністратори можуть публікувати дописи на цьому каналі",
+  "channelSubscribers": "підписників",
+  "channelVerified": "Перевірений канал",
+  "redPacketHistory": "Історія червоних пакетів",
+  "redPacketSent": "Надіслано",
+  "redPacketReceived": "Отримано",
+  "redPacketExpired": "Термін дії минув",
+  "redPacketClaimed": "Заявлено",
+  "redPacketInsufficientBalance": "Недостатній баланс",
+  "selfDestructCountdown": "Самознищення в {time}",
+  "@selfDestructCountdown": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "messageDestroyed": "Повідомлення знищено",
+  "miniAppPermissionDenied": "У дозволі відмовлено: {permission}",
+  "@miniAppPermissionDenied": {
+    "placeholders": {
+      "permission": {
+        "type": "String"
+      }
+    }
+  },
+  "aiSuggestionGasFee": "Що таке плата за газ?",
+  "aiSuggestionDefi": "Посібник для початківців DeFi",
+  "aiSuggestionSecurity": "Як перевірити безпеку договору",
+  "aiSuggestionBridge": "Перехресне ланцюгове перемикання",
+  "channelDiscoverTitle": "Відкрийте канали",
+  "channelDiscoverSearch": "Пошук каналів...",
+  "channelJoin": "Приєднуйтесь",
+  "channelJoined": "Приєднався",
+  "channelCategory": "Категорія",
+  "slowModeCooldown": "Повільний режим: зачекайте {seconds}s",
+  "@slowModeCooldown": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "addressCopyAction": "Копіювати адресу",
+  "addressSendMessage": "Надіслати повідомлення",
+  "addressViewProfile": "Переглянути профіль",
+  "sendToAddress": "Надіслати на адресу гаманця",
+  "blocAuthSendVerificationCodeFailed": "Не вдалося надіслати код підтвердження",
+  "blocAuthServerNoEmailPasswordReset": "Цей сервер не підтримує скидання пароля електронної пошти",
+  "blocAuthResetPasswordFailed": "Не вдалося скинути пароль",
+  "blocAuthChangePasswordFailed": "Не вдалося змінити пароль",
+  "blocAuthOldPasswordWrong": "Неправильний поточний пароль",
+  "blocAuthLoginCancelled": "Вхід скасовано",
+  "blocAuthGoogleLoginFailed": "Помилка входу в Google",
+  "blocAuthAppleLoginFailed": "Помилка входу в систему Apple",
+  "blocAuthSsoLoginFailed": "Помилка входу в систему єдиного входу",
+  "blocAuthFacebookLoginFailed": "Помилка входу в Facebook",
+  "blocAuthTwitterLoginFailed": "Помилка входу в Twitter",
+  "blocAuthWeChatLoginFailed": "Помилка входу в WeChat",
+  "blocAuthWeChatNotConfigured": "Вхід у WeChat не налаштовано",
+  "blocAuthWeChatNotInstalled": "Спочатку встановіть WeChat",
+  "blocAuthPasswordWrong": "Невірний пароль",
+  "blocAuthEmailAlreadyBound": "Ця електронна адреса вже прив’язана до іншого облікового запису",
+  "blocAuthChangeEmailFailed": "Не вдалося змінити електронну адресу",
+  "blocAuthVerificationCodeInvalid": "Код підтвердження неправильний або термін дії минув",
+  "blocAuthSessionExpired": "Сеанс закінчився, увійдіть знову",
+  "blocAuthSessionIncomplete": "Дані сеансу неповні, увійдіть знову"
+}

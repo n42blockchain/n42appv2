@@ -1,0 +1,2747 @@
+{
+  "@@locale": "te",
+  "commonRetry": "మళ్లీ ప్రయత్నించండి",
+  "commonUnknownUser": "తెలియని వినియోగదారు",
+  "transferWalletNotConnected": "వాలెట్ కనెక్ట్ కాలేదు",
+  "chatCallServiceNotInitialized": "కాల్ సేవ ప్రారంభించబడలేదు",
+  "authLoginFailed": "లాగిన్ విఫలమైంది: {error}",
+  "chatCallBack": "తిరిగి కాల్ చేయండి",
+  "chatMissedVideoCall": "మిస్డ్ వీడియో కాల్",
+  "chatMissedVoiceCall": "మిస్డ్ వాయిస్ కాల్",
+  "chatCallNotAnswered": "సమాధానం చెప్పలేదు",
+  "chatCallDurationLabel": "కాల్ వ్యవధి",
+  "chatVoiceCallCancelled": "వాయిస్ కాల్ రద్దు చేయబడింది",
+  "chatVideoCallCancelled": "వీడియో కాల్ రద్దు చేయబడింది",
+  "commonImage": "[చిత్రం]",
+  "chatVideo": "[వీడియో]",
+  "chatVoice": "[వాయిస్]",
+  "commonFile": "[ఫైల్]",
+  "chatLocation": "[స్థానం]",
+  "chatUnknownMessage": "[తెలియని సందేశం]",
+  "commonDelete": "తొలగించు",
+  "chatDeleteThisMessage": "ఈ సందేశాన్ని తొలగించాలా?",
+  "chatMessageDeleted": "సందేశం తొలగించబడింది",
+  "profileNotLoggedIn": "లాగిన్ కాలేదు",
+  "chatMyLocation": "నా స్థానం",
+  "commonGroupChat": "గ్రూప్ చాట్",
+  "commonSearch": "శోధించండి",
+  "commonCancel": "రద్దు చేయి",
+  "commonLoadFailed": "లోడ్ చేయడంలో విఫలమైంది",
+  "commonMessages": "సందేశాలు",
+  "commonContacts": "పరిచయాలు",
+  "commonMe": "నేను",
+  "commonVoiceLoading": "వాయిస్ లోడ్ అవుతోంది, దయచేసి తర్వాత మళ్లీ ప్రయత్నించండి",
+  "commonVoiceToTextFailed": "వాయిస్ టు టెక్స్ట్ విఫలమైంది",
+  "commonConvertToText": "వచనానికి",
+  "chatCopy": "కాపీ చేయండి",
+  "commonForward": "ముందుకు",
+  "commonUnfavorite": "అన్‌ఫేవ్",
+  "commonFavorite": "ఇష్టమైనది",
+  "settingsResend": "మళ్లీ పంపండి",
+  "chatRecall": "గుర్తుచేసుకోండి",
+  "commonQuote": "కోట్",
+  "commonRemind": "గుర్తు చేయండి",
+  "chatCopied": "కాపీ చేయబడింది",
+  "storySendMessageHint": "సందేశం పంపండి",
+  "commonMicrophonePermissionRequired": "దయచేసి మైక్రోఫోన్ అనుమతిని అనుమతించండి",
+  "chatMicrophonePermissionDeniedPermanent": "మైక్రోఫోన్ అనుమతి నిరాకరించబడింది. వాయిస్ సందేశాలను ఉపయోగించడానికి దయచేసి సిస్టమ్ సెట్టింగ్‌లలో దీన్ని ప్రారంభించండి.",
+  "commonStartRecordingFailed": "రికార్డింగ్ ప్రారంభించడంలో విఫలమైంది: {error}",
+  "commonRecordingTooShort": "రికార్డింగ్ చాలా చిన్నది",
+  "commonStopRecordingFailed": "రికార్డింగ్‌ని ఆపడంలో విఫలమైంది: {error}",
+  "chatReleaseToCancel": "రద్దు చేయడానికి విడుదల",
+  "chatReleaseToSend": "పంపడానికి విడుదల చేయండి, రద్దు చేయడానికి పైకి స్వైప్ చేయండి",
+  "commonHoldToTalk": "మాట్లాడటానికి పట్టుకోండి",
+  "commonSend": "పంపండి",
+  "commonAddFriend": "స్నేహితుడిని జోడించండి",
+  "commonChatServiceNotConnected": "చాట్ సర్వీస్ కనెక్ట్ కాలేదు",
+  "contactUserNotFoundHint": "వినియోగదారు \"{query}\" కనుగొనబడలేదు\n\nచిట్కాలు:\n• పూర్తి వినియోగదారు IDని నమోదు చేయడానికి ప్రయత్నించండి, ఉదా. @username:server.com\n• వినియోగదారు పేరు స్పెల్లింగ్‌ను తనిఖీ చేయండి",
+  "@contactUserNotFoundHint": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "contactCreateChatFailed": "చాట్‌ని సృష్టించడం విఫలమైంది: {error}",
+  "@contactCreateChatFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "contactSearchFailed": "శోధన విఫలమైంది: {error}",
+  "@contactSearchFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "contactEnterUserIdOrUsername": "శోధించడానికి వినియోగదారు ID లేదా వినియోగదారు పేరును నమోదు చేయండి",
+  "contactSearching": "శోధిస్తోంది...",
+  "contactSearchUserToChat": "చాటింగ్ ప్రారంభించడానికి వినియోగదారుని శోధించండి",
+  "contactMatrixIdExample": "మీరు పూర్తి మ్యాట్రిక్స్ IDని నమోదు చేయవచ్చు\nఉదా @user:matrix.n42.network",
+  "contactUserNotFound": "వినియోగదారు \"{username}\" కనుగొనబడలేదు",
+  "@contactUserNotFound": {
+    "placeholders": {
+      "username": {
+        "type": "String"
+      }
+    }
+  },
+  "commonChat": "చాట్ చేయండి",
+  "commonSettings": "సెట్టింగ్‌లు",
+  "profileEditProfile": "ప్రొఫైల్‌ని సవరించండి",
+  "authLogin": "లాగిన్ చేయండి",
+  "commonCreateGroup": "సమూహాన్ని సృష్టించండి",
+  "chatError": "లోపం",
+  "commonTransfer": "బదిలీ చేయండి",
+  "commonReceived": "అందుకుంది",
+  "commonRefunded": "వాపసు ఇచ్చారు",
+  "commonExpired": "గడువు ముగిసింది",
+  "chatRedPacketGreeting": "శుభాకాంక్షలు",
+  "commonN42RedPacket": "N42 రెడ్ ప్యాకెట్",
+  "commonClaimed": "దావా వేసింది",
+  "commonAllClaimed": "అన్నీ క్లెయిమ్ చేశాయి",
+  "chatReadAloud": "బిగ్గరగా చదవండి",
+  "chatReply": "ప్రత్యుత్తరం ఇవ్వండి",
+  "commonEdit": "సవరించు",
+  "chatSelectForwardTarget": "ఫార్వర్డ్ టార్గెట్ ఎంచుకోండి",
+  "commonSendCount": "పంపు({count})",
+  "contactN42Id": "N42 ID: {id}",
+  "profileN42IdTitle": "N42 ID",
+  "profileN42Bean": "N42 బీన్",
+  "contactFriendInfo": "స్నేహితుని సమాచారం",
+  "contactFriendInfoDesc": "స్నేహితుడి రిమార్క్, ఫోన్, ట్యాగ్‌లు, గమనికలు, ఫోటోలు మరియు సెట్ అనుమతులను జోడించండి.",
+  "commonMoments": "క్షణాలు",
+  "commonSendMessage": "సందేశం",
+  "contactAudioVideoCall": "ఆడియో/వీడియో కాల్",
+  "contactVideoChannel": "వీడియో ఛానెల్",
+  "contactRemark": "వ్యాఖ్య",
+  "contactRemarkName": "రిమార్క్ పేరు",
+  "contactPhone": "ఫోన్",
+  "contactTags": "ట్యాగ్‌లు",
+  "contactNotes": "గమనికలు",
+  "contactPhotos": "ఫోటోలు",
+  "contactPermissions": "అనుమతులు",
+  "contactChatMomentsEtc": "చాట్, క్షణాలు, క్రీడలు మొదలైనవి.",
+  "contactMoreInfo": "మరింత సమాచారం",
+  "contactCommonGroups": "ఉమ్మడిగా ఉన్న సమూహాలు",
+  "contactSource": "మూలం",
+  "settingsNotificationSettings": "నోటిఫికేషన్‌లు",
+  "settingsPrivacy": "గోప్యత",
+  "settingsAppearance": "స్వరూపం",
+  "settingsAbout": "గురించి",
+  "commonLogout": "లాగ్ అవుట్ చేయండి",
+  "commonLogoutConfirm": "మీరు ఖచ్చితంగా లాగ్ అవుట్ చేయాలనుకుంటున్నారా?",
+  "commonSave": "సేవ్ చేయండి",
+  "profileNickname": "మారుపేరు",
+  "profileEnterNickname": "మారుపేరును నమోదు చేయండి",
+  "profileSignature": "సంతకం",
+  "profileAddSignature": "సంతకాన్ని జోడించండి",
+  "commonTakePhoto": "ఫోటో తీయండి",
+  "profileChooseFromGallery": "గ్యాలరీ నుండి ఎంచుకోండి",
+  "profileSaveFailed": "సేవ్ చేయడం విఫలమైంది: {error}",
+  "authSecureDecentralizedChat": "సురక్షితమైన, వికేంద్రీకృత సందేశం",
+  "commonEndToEndEncryption": "ఎండ్-టు-ఎండ్ ఎన్‌క్రిప్షన్",
+  "authMessagesOnlyYouCanSee": "సందేశాలు మీకు మరియు స్వీకర్తకు మాత్రమే కనిపిస్తాయి",
+  "authDecentralized": "వికేంద్రీకరించబడింది",
+  "authBasedOnMatrix": "మ్యాట్రిక్స్ ఓపెన్ ప్రోటోకాల్‌పై నిర్మించబడింది",
+  "authWalletIntegration": "వాలెట్ ఇంటిగ్రేషన్",
+  "authEasyCryptoTransfer": "సులభమైన క్రిప్టోకరెన్సీ బదిలీలు",
+  "authRegister": "సైన్ అప్ చేయండి",
+  "authAgreeTerms": "లాగిన్ చేయడం ద్వారా, మీరు అంగీకరిస్తున్నారు",
+  "authTermsOfService": "సేవా నిబంధనలు",
+  "authAnd": "మరియు",
+  "authPrivacyPolicy": "గోప్యతా విధానం",
+  "authServerAddress": "సర్వర్ చిరునామా",
+  "authEnterServerAddress": "సర్వర్ చిరునామాను నమోదు చేయండి",
+  "authConnectedTo": "{serverName}కి కనెక్ట్ చేయబడింది",
+  "authUsername": "వినియోగదారు పేరు",
+  "authEnterUsername": "వినియోగదారు పేరును నమోదు చేయండి",
+  "authUsernameOrEmail": "వినియోగదారు పేరు లేదా ఇమెయిల్",
+  "authEnterUsernameOrEmail": "వినియోగదారు పేరు లేదా ఇమెయిల్‌ను నమోదు చేయండి",
+  "authPassword": "పాస్వర్డ్",
+  "authEnterPassword": "పాస్వర్డ్ను నమోదు చేయండి",
+  "authRegisterAccount": "సైన్ అప్ చేయండి",
+  "authForgotPassword": "పాస్‌వర్డ్ మర్చిపోయాను",
+  "authOtherLoginMethods": "ఇతర లాగిన్ పద్ధతులు",
+  "authCreateAccount": "ఖాతాను సృష్టించండి",
+  "authJoinN42Chat": "చాటింగ్ ప్రారంభించడానికి N42 చాట్‌లో చేరండి",
+  "authUsernameHint": "3-20 అక్షరాలు, అక్షరాలు/సంఖ్యలు/_",
+  "authUsernameMinLength": "వినియోగదారు పేరు తప్పనిసరిగా కనీసం 3 అక్షరాలు ఉండాలి",
+  "authUsernameMaxLength": "వినియోగదారు పేరు తప్పనిసరిగా గరిష్టంగా 20 అక్షరాలు ఉండాలి",
+  "authUsernameFormat": "వినియోగదారు పేరు అక్షరాలు, సంఖ్యలు మరియు అండర్‌స్కోర్‌లను మాత్రమే కలిగి ఉంటుంది",
+  "authPasswordHint": "కనిష్టంగా 8 అక్షరాలు",
+  "commonPasswordMinLength": "పాస్‌వర్డ్ తప్పనిసరిగా కనీసం 8 అక్షరాలు ఉండాలి",
+  "authConfirmPassword": "పాస్‌వర్డ్‌ని నిర్ధారించండి",
+  "authFilled": "నిండిపోయింది",
+  "authEnterInviteCode": "ఆహ్వాన కోడ్‌ని నమోదు చేయండి",
+  "authAlreadyHaveAccount": "ఇప్పటికే ఖాతా ఉందా?",
+  "authLoginNow": "ఇప్పుడే లాగిన్ అవ్వండి",
+  "profileAvatar": "అవతార్",
+  "profileStatus": "స్థితి",
+  "commonLoading": "లోడ్ అవుతోంది...",
+  "conversationNoConversations": "సంభాషణలు లేవు",
+  "conversationTapToChat": "చాటింగ్ ప్రారంభించడానికి కుడి ఎగువన నొక్కండి",
+  "conversationStartGroup": "గ్రూప్ చాట్ ప్రారంభించండి",
+  "commonScan": "స్కాన్ చేయండి",
+  "commonPayment": "చెల్లింపు",
+  "commonFeatureComingSoon": "{feature} త్వరలో వస్తుంది",
+  "conversationMarkAsRead": "చదివినట్లు గుర్తు పెట్టండి",
+  "commonUnmute": "అన్‌మ్యూట్ చేయండి",
+  "commonMute": "మ్యూట్ చేయండి",
+  "conversationUnpin": "అన్‌పిన్ చేయండి",
+  "conversationPin": "పిన్ చేయండి",
+  "conversationDeleteConversation": "సంభాషణను తొలగించండి",
+  "conversationDeleteConversationConfirm": "\"{name}\"తో సంభాషణను తొలగించాలా?",
+  "commonNoContacts": "పరిచయాలు లేవు",
+  "contactAddFriendsToChat": "చాటింగ్ ప్రారంభించడానికి స్నేహితులను జోడించండి",
+  "contactNotFound": "పరిచయం కనుగొనబడలేదు",
+  "contactTryOtherKeywords": "No search results found for గ్లోబల్ సెర్చ్, Try other keywords",
+  "contactSearchResults": "శోధన ఫలితాలు",
+  "contactNewFriends": "కొత్త స్నేహితులు",
+  "contactChatOnlyFriends": "చాట్-మాత్రమే స్నేహితులు",
+  "contactOfficialAccounts": "అధికారిక ఖాతాలు",
+  "contactServiceAccounts": "సేవా ఖాతాలు",
+  "contactEnterpriseContacts": "ఎంటర్ప్రైజ్ పరిచయాలు",
+  "contactRecommendToFriend": "పరిచయాన్ని పంచుకోండి",
+  "commonSetRemark": "వ్యాఖ్యను సెట్ చేయండి",
+  "contactSendingCard": "కాంటాక్ట్ కార్డ్‌ని పంపుతోంది...",
+  "commonFileLabel": "ఫైల్",
+  "commonLocationLabel": "స్థానం",
+  "contactRecommendFailed": "సిఫార్సు విఫలమైంది: {error}",
+  "profileEnterRemark": "వ్యాఖ్యను నమోదు చేయండి",
+  "contactOpeningChat": "చాట్‌ని తెరుస్తోంది...",
+  "contactOpenChatFailed": "చాట్ తెరవడంలో విఫలమైంది: {error}",
+  "contactAddContact": "పరిచయాన్ని జోడించండి",
+  "contactEnterUserId": "వినియోగదారు IDని నమోదు చేయండి",
+  "contactNoFriendRequests": "స్నేహితుని అభ్యర్థనలు లేవు",
+  "commonAccept": "అంగీకరించు",
+  "commonReject": "తిరస్కరించు",
+  "commonNoGroups": "సమూహాలు లేవు",
+  "contactSelectFriendToRecommend": "సిఫార్సు చేయడానికి స్నేహితుడిని ఎంచుకోండి",
+  "commonSearchContacts": "పరిచయాలను శోధించండి",
+  "contactNoContactsFound": "పరిచయాలు ఏవీ కనుగొనబడలేదు",
+  "favoriteYesterday": "నిన్న",
+  "chatJustNow": "ఇప్పుడే",
+  "profileOnline": "ఆన్‌లైన్",
+  "profileOffline": "ఆఫ్‌లైన్",
+  "searchContactsGroupsMessages": "పరిచయాలు, సమూహాలు మరియు సందేశాలను శోధించండి",
+  "searchError": "శోధన లోపం",
+  "chatSearchHint": "శోధించండి",
+  "searchHistory": "శోధన చరిత్ర",
+  "commonClear": "క్లియర్",
+  "commonAll": "అన్నీ",
+  "searchGroups": "గుంపులు",
+  "searchNoResults": "ఫలితాలు లేవు",
+  "commonGroupMembers": "సభ్యులు ({count})",
+  "groupMembersTitle": "గుంపు సభ్యులు",
+  "groupViewAll": "అన్నీ చూడండి",
+  "groupOwner": "యజమాని",
+  "groupAdmin": "అడ్మిన్",
+  "groupInvite": "ఆహ్వానించండి",
+  "commonGroupAnnouncement": "సమూహం ప్రకటన",
+  "commonNotSet": "సెట్ కాలేదు",
+  "groupDescription": "సమూహ వివరణ",
+  "groupPublicGroup": "పబ్లిక్ గ్రూప్",
+  "commonClearChatHistory": "చాట్ చరిత్రను క్లియర్ చేయండి",
+  "commonDissolveGroup": "సమూహాన్ని రద్దు చేయండి",
+  "commonLeaveGroup": "సమూహాన్ని వదిలివేయండి",
+  "groupChangeGroupName": "గ్రూప్ పేరు మార్చండి",
+  "commonEnterGroupName": "సమూహం పేరును నమోదు చేయండి",
+  "commonConfirm": "నిర్ధారించండి",
+  "groupEnterGroupDescription": "సమూహ వివరణను నమోదు చేయండి",
+  "groupPublish": "ప్రచురించండి",
+  "chatClearHistoryConfirm": "మొత్తం చాట్ చరిత్రను క్లియర్ చేయాలా? ఇది రద్దు చేయబడదు.",
+  "chatClearAction": "క్లియర్",
+  "commonChatHistoryCleared": "చాట్ చరిత్ర క్లియర్ చేయబడింది",
+  "commonDissolve": "కరిగించండి",
+  "groupQrCode": "గ్రూప్ QR కోడ్",
+  "commonSearchChatHistory": "చాట్ చరిత్రను శోధించండి",
+  "groupIdCopied": "గ్రూప్ ID కాపీ చేయబడింది",
+  "transferEnterOrPasteAddress": "వాలెట్ చిరునామాను నమోదు చేయండి లేదా అతికించండి",
+  "transferSelectToken": "టోకెన్‌ని ఎంచుకోండి",
+  "commonTransferAmount": "బదిలీ మొత్తం",
+  "transferAvailable": "అందుబాటులో ఉంది",
+  "transferMemoOptional": "మెమో (ఐచ్ఛికం)",
+  "transferConfirmTransfer": "బదిలీని నిర్ధారించండి",
+  "transferAddressVerified": "చిరునామా ధృవీకరించబడింది",
+  "transferAvailableBalance": "అందుబాటులో ఉంది: {balance} {symbol}",
+  "commonEnterAmount": "మొత్తాన్ని నమోదు చేయండి",
+  "commonRedPacketCountMin": "కనీసం 1 ఎరుపు ప్యాకెట్ అవసరం",
+  "commonViewRedPacketDetails": "రెడ్ ప్యాకెట్ వివరాలను వీక్షించండి",
+  "commonEnterTransferAmount": "దయచేసి బదిలీ మొత్తాన్ని నమోదు చేయండి",
+  "commonTransferTo": "కు బదిలీ చేయండి",
+  "commonFromSender": "{name} నుండి",
+  "commonConfirmReceive": "రసీదుని నిర్ధారించండి",
+  "groupProfile": "గ్రూప్ సమాచారం",
+  "groupRemoveMember": "సమూహం నుండి తీసివేయండి",
+  "commonRemove": "తొలగించు",
+  "profileClearStatus": "క్లియర్ స్థితి",
+  "profileClearStatusConfirm": "ప్రస్తుత స్థితిని క్లియర్ చేయాలా?",
+  "profileStatusCleared": "స్థితి క్లియర్ చేయబడింది",
+  "profileUserNotExist": "వినియోగదారు ఉనికిలో లేరు",
+  "profileUserIdCopied": "వినియోగదారు ID కాపీ చేయబడింది",
+  "commonReport": "నివేదించండి",
+  "profileQrCode": "QR కోడ్",
+  "profileAvatarUpdated": "అవతార్ నవీకరించబడింది",
+  "commonSelectImageFailed": "చిత్రాన్ని ఎంచుకోవడంలో విఫలమైంది: {error}",
+  "profileChangeName": "పేరు మార్చండి",
+  "profileMale": "పురుషుడు",
+  "profileFemale": "స్త్రీ",
+  "chatFeatureInDev": "{feature} ఫీచర్ అభివృద్ధిలో ఉంది...",
+  "profileSaveAddressFailed": "చిరునామాను సేవ్ చేయడంలో విఫలమైంది: {error}",
+  "profileAddNew": "జోడించు",
+  "profileAddAddress": "చిరునామాను జోడించండి",
+  "profileAddressAdded": "చిరునామా జోడించబడింది",
+  "profileAddressUpdated": "చిరునామా నవీకరించబడింది",
+  "profileDeleteAddress": "చిరునామాను తొలగించండి",
+  "profileAddressDeleted": "చిరునామా తొలగించబడింది",
+  "profileSaveInvoiceFailed": "ఇన్‌వాయిస్‌ని సేవ్ చేయడంలో విఫలమైంది: {error}",
+  "profileMyInvoices": "నా ఇన్‌వాయిస్‌లు",
+  "profileAddInvoice": "ఇన్వాయిస్ జోడించండి",
+  "profileInvoiceAdded": "ఇన్‌వాయిస్ జోడించబడింది",
+  "profileInvoiceUpdated": "ఇన్‌వాయిస్ నవీకరించబడింది",
+  "profileDeleteInvoice": "ఇన్‌వాయిస్‌ని తొలగించండి",
+  "profileInvoiceDeleted": "ఇన్‌వాయిస్ తొలగించబడింది",
+  "profilePersonal": "వ్యక్తిగత",
+  "groupSelectAtLeastOne": "దయచేసి కనీసం ఒక సభ్యుడిని ఎంచుకోండి",
+  "chatFileNotExist": "ఫైల్ ఉనికిలో లేదు",
+  "chatSendFailed": "పంపడం విఫలమైంది: {error}",
+  "chatCannotOpenBrowser": "బ్రౌజర్‌ని తెరవడం సాధ్యం కాదు",
+  "chatSelectFileFailed": "ఫైల్‌ని ఎంచుకోవడంలో విఫలమైంది: {error}",
+  "settingsSetupFailed": "సెటప్ విఫలమైంది: {error}",
+  "transferEnterValidAmount": "దయచేసి చెల్లుబాటు అయ్యే మొత్తాన్ని నమోదు చేయండి",
+  "commonAddressCopied": "చిరునామా కాపీ చేయబడింది",
+  "favoriteOpenItem": "తెరువు: {content}",
+  "favoriteDeleted": "తొలగించబడింది",
+  "profileWallet": "వాలెట్",
+  "chatRecording": "రికార్డింగ్",
+  "chatInvalidVideoUrl": "చెల్లని వీడియో URL",
+  "chatDownloadFile": "ఫైల్‌ని డౌన్‌లోడ్ చేయండి",
+  "chatClearChatHistoryTitle": "చాట్ చరిత్రను క్లియర్ చేయండి",
+  "chatVideoCall": "వీడియో కాల్",
+  "commonVoiceCall": "వాయిస్ కాల్",
+  "callLeaveMeeting": "సమావేశాన్ని వదిలివేయండి",
+  "chatDetails": "చాట్ వివరాలు",
+  "chatViewAllGroupMembers": "సభ్యులందరినీ వీక్షించండి",
+  "chatGroupName": "సమూహం పేరు",
+  "chatGroupNameUpdated": "సమూహం పేరు నవీకరించబడింది",
+  "chatUpdateFailed": "నవీకరణ విఫలమైంది",
+  "chatNoPermissionToModify": "సవరించడానికి మీకు అనుమతి లేదు",
+  "chatGroupManagement": "గ్రూప్ మేనేజ్‌మెంట్",
+  "chatMyNicknameInGroup": "సమూహంలో నా ముద్దుపేరు",
+  "chatPinChat": "పిన్ చాట్",
+  "chatStrongReminder": "బలమైన రిమైండర్",
+  "chatSetChatBackground": "చాట్ నేపథ్యాన్ని సెట్ చేయండి",
+  "chatUnknownFile": "తెలియని ఫైల్",
+  "chatDownload": "డౌన్‌లోడ్ చేయండి",
+  "chatInvalidLocation": "చెల్లని స్థానం",
+  "chatTapToCancel": "రద్దు చేయడానికి నొక్కండి",
+  "chatCaptureFailed": "క్యాప్చర్ విఫలమైంది: {error}",
+  "chatProcessingVideo": "వీడియోను ప్రాసెస్ చేస్తోంది...",
+  "chatVideoFileNotExist": "వీడియో ఫైల్ ఉనికిలో లేదు",
+  "chatVideoDataEmpty": "వీడియో డేటా ఖాళీగా ఉంది",
+  "chatVideoTooLarge": "వీడియో పరిమాణం 100MB మించకూడదు",
+  "chatSendingVideo": "వీడియోను పంపుతోంది...",
+  "chatSendVideoFailed": "వీడియోను పంపడంలో విఫలమైంది: {error}",
+  "chatImageFileNotExist": "ఇమేజ్ ఫైల్ ఉనికిలో లేదు",
+  "commonImageDataEmpty": "చిత్ర డేటా ఖాళీగా ఉంది",
+  "chatSendingImage": "చిత్రాన్ని పంపుతోంది...",
+  "chatSendImageFailed": "చిత్రాన్ని పంపడంలో విఫలమైంది: {error}",
+  "chatSendLocation": "స్థానాన్ని పంపండి",
+  "chatSelectLocationAndSend": "లొకేషన్‌ని ఎంచుకుని పంపండి",
+  "chatShareRealTimeLocation": "నిజ-సమయ స్థానాన్ని భాగస్వామ్యం చేయండి",
+  "chatShareLocationForOneHour": "స్నేహితుడితో 1 గంట పాటు నిజ-సమయ స్థానాన్ని షేర్ చేయండి",
+  "chatLocationSent": "స్థానం పంపబడింది",
+  "chatSelectMessages": "సందేశాలను ఎంచుకోండి",
+  "chatSelectedCount": "{count} ఎంచుకోబడింది",
+  "chatSelectAll": "అన్నీ ఎంచుకోండి",
+  "chatGroupChatCount": "గ్రూప్ చాట్({count})",
+  "chatPrivateChat": "ప్రైవేట్ చాట్",
+  "chatNoMessages": "సందేశాలు లేవు",
+  "chatSendFirstMessage": "చాటింగ్ ప్రారంభించడానికి మొదటి సందేశాన్ని పంపండి",
+  "chatEncryptionNotice": "ఈ చాట్ ఎండ్-టు-ఎండ్ ఎన్‌క్రిప్ట్ చేయబడింది. మీరు మరియు గ్రహీత మాత్రమే సందేశాలను చదవగలరు.",
+  "chatMultiForward": "ముందుకు",
+  "chatCollect": "సేకరించండి",
+  "chatNoMembers": "సభ్యులు లేరు",
+  "chatMemberNotFound": "సభ్యుడు దొరకలేదు",
+  "chatVoiceFileNotExist": "వాయిస్ ఫైల్ ఉనికిలో లేదు",
+  "chatVoiceFileEmpty": "వాయిస్ ఫైల్ ఖాళీగా ఉంది",
+  "chatSendingVoice": "వాయిస్ పంపుతోంది...",
+  "chatSendVoiceFailed": "వాయిస్ పంపడంలో విఫలమైంది: {error}",
+  "chatMessageForwarded": "సందేశం ఫార్వార్డ్ చేయబడింది",
+  "chatForwardFailed": "ఫార్వార్డ్ విఫలమైంది: {error}",
+  "chatUnfavorited": "ఇష్టపడనిది",
+  "chatFavorited": "ఇష్టమైనవి",
+  "chatReactionAdded": "ప్రతిచర్య జోడించబడింది",
+  "chatReactionRemoved": "ప్రతిచర్య తీసివేయబడింది",
+  "chatFailedMessageDeleted": "విఫలమైన సందేశం తొలగించబడింది",
+  "chatDeleteMessages": "సందేశాలను తొలగించండి",
+  "chatDeleteMessagesConfirm": "మీరు ఖచ్చితంగా {count} సందేశాలను తొలగించాలనుకుంటున్నారా?",
+  "chatNoteOtherMessages": "గమనిక: {count} సందేశాలు ఇతరుల నుండి వచ్చినవి మరియు మీ కోసం మాత్రమే తొలగించబడతాయి.",
+  "chatMyMessagesWillBeRecalled": "మీ నుండి వచ్చిన {count} సందేశాలు ప్రతి ఒక్కరికీ రీకాల్ చేయబడతాయి.",
+  "chatRecalledCount": "{count} సందేశాలను రీకాల్ చేసారు, {localCount} మీ కోసం మాత్రమే తొలగించబడింది",
+  "chatRecalledMessages": "{count} సందేశాలను గుర్తుచేసుకున్నారు",
+  "chatDeletedLocally": "{count} సందేశాలు మీ కోసం మాత్రమే తొలగించబడ్డాయి",
+  "chatForwardedCount": "{count} సందేశాలు ఫార్వార్డ్ చేయబడ్డాయి",
+  "chatForwardComplete": "ఫార్వార్డ్ పూర్తయింది: {success} విజయవంతమైంది, {failed} విఫలమైంది",
+  "chatRemindOnlyInGroup": "రిమైండ్ ఫీచర్ గ్రూప్ చాట్‌లో మాత్రమే అందుబాటులో ఉంటుంది",
+  "chatOnlyTextSearchable": "వచన సందేశాలను మాత్రమే శోధించవచ్చు",
+  "chatSearchFor": "\"{text}\"ని శోధించండి",
+  "chatBaiduSearch": "Baidu శోధన",
+  "chatGoogleSearch": "Google శోధన",
+  "chatBingSearch": "బింగ్ శోధన",
+  "chatCalling": "కాల్ చేస్తోంది...",
+  "chatRinging": "మోగుతోంది...",
+  "chatInCall": "కాల్ లో",
+  "commonFeatureInDevelopment": "{feature} ఫీచర్ అభివృద్ధిలో ఉంది...",
+  "chatCollectMessages": "సేకరించిన {count} సందేశాలు",
+  "commonMemberCount": "{count} సభ్యులు",
+  "groupDone": "పూర్తయింది({count})",
+  "@groupDone": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "profileServices": "సేవలు",
+  "commonFavorites": "ఇష్టమైనవి",
+  "profileOrdersAndCards": "ఆర్డర్‌లు & కార్డ్‌లు",
+  "profileStickers": "స్టిక్కర్లు",
+  "profileStatusSetTo": "స్థితి దీనికి సెట్ చేయబడింది: {status}",
+  "@profileStatusSetTo": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "profileAvatarUploadFailed": "అవతార్ అప్‌లోడ్ విఫలమైంది",
+  "profilePersonalProfile": "వ్యక్తిగత ప్రొఫైల్",
+  "profileName": "పేరు",
+  "profileGender": "లింగం",
+  "profileRegion": "ప్రాంతం",
+  "commonMyQrCode": "నా QR కోడ్",
+  "profilePoke": "దూర్చు",
+  "profileRingtone": "రింగ్‌టోన్",
+  "profileDefaultRingtone": "డిఫాల్ట్ రింగ్‌టోన్",
+  "profileMyAddresses": "నా చిరునామాలు",
+  "profileGenderSetTo": "లింగం దీనికి సెట్ చేయబడింది: {gender}",
+  "@profileGenderSetTo": {
+    "placeholders": {
+      "gender": {
+        "type": "String"
+      }
+    }
+  },
+  "profileSelectRegion": "ప్రాంతాన్ని ఎంచుకోండి",
+  "profileSelectCity": "నగరాన్ని ఎంచుకోండి",
+  "profileRegionSetTo": "ప్రాంతం దీనికి సెట్ చేయబడింది: {region}",
+  "@profileRegionSetTo": {
+    "placeholders": {
+      "region": {
+        "type": "String"
+      }
+    }
+  },
+  "profileSetPoke": "పోక్ సెట్ చేయండి",
+  "profileFriendPokedMe": "స్నేహితుడు నన్ను పొడుచుకున్నాడు",
+  "profileExample": "ఉదాహరణ",
+  "profileOnTheShoulder": " భుజం మీద",
+  "profilePokeCleared": "పోక్ క్లియర్ చేయబడింది",
+  "profilePokeSetTo": "పోక్ దీనికి సెట్ చేయబడింది: poked me{suffix}",
+  "@profilePokeSetTo": {
+    "placeholders": {
+      "suffix": {
+        "type": "String"
+      }
+    }
+  },
+  "profileEditSignature": "సంతకాన్ని సవరించండి",
+  "profileIntroduceYourself": "మిమ్మల్ని మీరు పరిచయం చేసుకోవడానికి ఒక వాక్యం",
+  "profileSignatureCleared": "సంతకం క్లియర్ చేయబడింది",
+  "profileSignatureUpdated": "సంతకం నవీకరించబడింది",
+  "profileScanToAddFriend": "నన్ను స్నేహితునిగా చేర్చుకోవడానికి పైన ఉన్న QR కోడ్‌ని స్కాన్ చేయండి",
+  "profileRingtoneSetTo": "రింగ్‌టోన్ దీనికి సెట్ చేయబడింది: {ringtone}",
+  "@profileRingtoneSetTo": {
+    "placeholders": {
+      "ringtone": {
+        "type": "String"
+      }
+    }
+  },
+  "commonConfirmDissolveGroup": "మీరు ఖచ్చితంగా \"{name}\"ని రద్దు చేయాలనుకుంటున్నారా? ఈ చర్య రద్దు చేయబడదు.",
+  "@commonConfirmDissolveGroup": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "authEnterValidServerAddress": "దయచేసి చెల్లుబాటు అయ్యే సర్వర్ చిరునామాను నమోదు చేయండి",
+  "authEnterServerAddressFirst": "దయచేసి ముందుగా సర్వర్ చిరునామాను నమోదు చేయండి",
+  "authPasskeyRequiresServer": "పాస్‌కీ లాగిన్‌కి సర్వర్ మద్దతు అవసరం",
+  "authLoginAgreement": "లాగిన్ చేయడం ద్వారా, మీరు అంగీకరిస్తున్నారు ",
+  "authPleaseAgreeToTerms": "దయచేసి సేవా నిబంధనలు మరియు గోప్యతా విధానాన్ని చదివి, అంగీకరించండి",
+  "authRegisterFailed": "నమోదు విఫలమైంది",
+  "commonReenterPassword": "పాస్వర్డ్ను మళ్లీ నమోదు చేయండి",
+  "commonPasswordsDoNotMatch": "పాస్‌వర్డ్‌లు సరిపోలడం లేదు",
+  "authInviteCodeBuiltIn": "ఆహ్వాన కోడ్ (అంతర్నిర్మిత)",
+  "authInviteCodeBuiltInNote": "ఆహ్వాన కోడ్ అంతర్నిర్మితమైంది, సాధారణంగా సవరించాల్సిన అవసరం లేదు",
+  "authIHaveReadAndAgree": "నేను చదివి అంగీకరించాను ",
+  "mainStartGroupChat": "గ్రూప్ చాట్ ప్రారంభించండి",
+  "mainAddFriends": "స్నేహితులను జోడించండి",
+  "mainPaymentAndCollection": "చెల్లింపు",
+  "contactCount": "{count} పరిచయాలు",
+  "@contactCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "contactAddToHomeScreen": "హోమ్ స్క్రీన్‌కి జోడించండి",
+  "contactRecommendedCardTo": "{contact} యొక్క కార్డ్ {recipient}కి సిఫార్సు చేయబడింది",
+  "@contactRecommendedCardTo": {
+    "placeholders": {
+      "contact": {
+        "type": "String"
+      },
+      "recipient": {
+        "type": "String"
+      }
+    }
+  },
+  "contactEnterRemarkName": "రిమార్క్ పేరును నమోదు చేయండి",
+  "contactRemarkSetTo": "రిమార్క్ దీనికి సెట్ చేయబడింది: {remark}",
+  "@contactRemarkSetTo": {
+    "placeholders": {
+      "remark": {
+        "type": "String"
+      }
+    }
+  },
+  "contactAcceptedFriendRequest": "{name} స్నేహితుని అభ్యర్థన ఆమోదించబడింది",
+  "@contactAcceptedFriendRequest": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "contactRejectedFriendRequest": "{name} స్నేహితుని అభ్యర్థన తిరస్కరించబడింది",
+  "@contactRejectedFriendRequest": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "commonGroupInvites": "సమూహం ఆహ్వానాలు",
+  "commonMyGroups": "నా గుంపులు ({count})",
+  "@commonMyGroups": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "commonInvitedToJoinGroup": "సమూహంలో చేరడానికి ఆహ్వానించబడ్డారు",
+  "commonConfirmLeaveGroup": "మీరు ఖచ్చితంగా \"{name}\" నుండి నిష్క్రమించాలనుకుంటున్నారా?",
+  "@commonConfirmLeaveGroup": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "commonLeave": "వదిలేయండి",
+  "commonRecallThisMessage": "ఈ సందేశాన్ని గుర్తుకు తెచ్చుకోవాలా?",
+  "commonSavedToGallery": "గ్యాలరీకి సేవ్ చేయబడింది",
+  "commonFailedToSave": "సేవ్ చేయడంలో విఫలమైంది",
+  "chatSaving": "సేవ్ చేస్తోంది...",
+  "commonShare": "షేర్ చేయండి",
+  "chatSaveToGallery": "గ్యాలరీకి సేవ్ చేయండి",
+  "chatFailedToLoadImage": "చిత్రాన్ని లోడ్ చేయడంలో విఫలమైంది",
+  "chatVideoRecordingFailed": "వీడియో రికార్డింగ్ విఫలమైంది",
+  "profileRedPacket": "రెడ్ ప్యాకెట్",
+  "commonMusic": "సంగీతం",
+  "commonCoupon": "కూపన్",
+  "commonGift": "బహుమతి",
+  "commonPoll": "పోల్",
+  "favoriteText": "వచనం",
+  "favoriteLinkLabel": "లింక్",
+  "favoriteNote": "గమనిక",
+  "favoriteMyNotes": "నా గమనికలు",
+  "favoriteToday": "ఈరోజు",
+  "favoriteDaysAgoText": "{count} రోజుల క్రితం",
+  "@favoriteDaysAgoText": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "favoriteDateFormat": "{month}/{day}",
+  "@favoriteDateFormat": {
+    "placeholders": {
+      "month": {
+        "type": "int"
+      },
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "favoriteNoFavorites": "ఇంకా ఇష్టమైనవి లేవు",
+  "favoriteLongPressToFavorite": "ఇష్టమైన వాటికి సందేశాన్ని ఎక్కువసేపు నొక్కండి",
+  "favoriteNewNote": "కొత్త నోట్",
+  "favoriteLink": "ఇష్టమైన లింక్",
+  "favoriteEditTags": "ట్యాగ్‌లను సవరించండి",
+  "favoriteDeleteFavorite": "ఇష్టమైన వాటిని తొలగించండి",
+  "favoriteDeleteFavoriteConfirm": "మీరు ఈ ఇష్టమైనవిని ఖచ్చితంగా తొలగించాలనుకుంటున్నారా?",
+  "favoriteNoSearchResultsFound": "ఫలితాలు ఏవీ కనుగొనబడలేదు",
+  "commonSendRedPacket": "రెడ్ ప్యాకెట్ పంపండి",
+  "transferAmount": "మొత్తం",
+  "commonRedPacketCover": "రెడ్ ప్యాకెట్ కవర్",
+  "commonRedPacketType": "రెడ్ ప్యాకెట్ రకం",
+  "commonNormalRedPacket": "సాధారణ",
+  "commonLuckyRedPacket": "అదృష్టవంతుడు",
+  "commonRedPacketCount": "రెడ్ ప్యాకెట్ కౌంట్",
+  "commonPieces": "ముక్కలు",
+  "commonPutMoneyInRedPacket": "ఎరుపు ప్యాకెట్‌లో డబ్బు ఉంచండి",
+  "commonRedPacketRefundNotice": "క్లెయిమ్ చేయని రెడ్ ప్యాకెట్లు 24 గంటల తర్వాత వాపసు ఇవ్వబడతాయి",
+  "commonOpenRedPacket": "తెరవండి",
+  "commonRedPacketAllClaimed": "రెడ్ ప్యాకెట్ అన్నీ క్లెయిమ్ చేయబడ్డాయి",
+  "commonRedPacketExpired": "ఎరుపు ప్యాకెట్ గడువు ముగిసింది",
+  "commonAddTransferNote": "బదిలీ గమనికను జోడించండి",
+  "commonYuan": "CNY",
+  "commonReplyWithEmoji": "ఈ ఎమోజితో ప్రత్యుత్తరం ఇవ్వండి",
+  "contactEditRemark": "రిమార్క్‌ని సవరించండి",
+  "contactSetPermissions": "అనుమతులను సెట్ చేయండి",
+  "profileAddToBlacklist": "బ్లాక్‌లిస్ట్‌కు జోడించండి",
+  "contactDeleteContact": "పరిచయాన్ని తొలగించండి",
+  "contactDeleteContactConfirm": "మీరు ఖచ్చితంగా {name}ని తొలగించాలనుకుంటున్నారా?",
+  "@contactDeleteContactConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "transferTitle": "బదిలీ చేయండి",
+  "transferReceiverAddressLabel": "గ్రహీత చిరునామా",
+  "transferSelectTokenLabel": "టోకెన్‌ని ఎంచుకోండి",
+  "transferAmountLabel": "బదిలీ మొత్తం",
+  "transferMemoLabel": "మెమో (ఐచ్ఛికం)",
+  "transferAddMemoHint": "మెమోని జోడించండి",
+  "transferSendPaymentRequest": "చెల్లింపు అభ్యర్థనను పంపండి",
+  "transferQrCodeGenerateFailed": "QR కోడ్ ఉత్పత్తి విఫలమైంది",
+  "transferScanQrToPayMe": "నాకు చెల్లించడానికి QR కోడ్‌ని స్కాన్ చేయండి",
+  "transferMyWalletAddress": "నా వాలెట్ చిరునామా",
+  "transferCreatePaymentRequest": "చెల్లింపు అభ్యర్థనను సృష్టించండి",
+  "profileN42IdLabel": "N42 ID: {id}",
+  "@profileN42IdLabel": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "commonRedPacketDefaultGreeting": "శుభాకాంక్షలు",
+  "commonSenderRedPacket": "{name} యొక్క రెడ్ ప్యాకెట్",
+  "@commonSenderRedPacket": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "transferEnterValidAddress": "దయచేసి చెల్లుబాటు అయ్యే చిరునామాను నమోదు చేయండి",
+  "transferPleaseSelectToken": "దయచేసి టోకెన్‌ను ఎంచుకోండి",
+  "commonReceivedTransfer": "బదిలీని స్వీకరించారు",
+  "@commonFromSender": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@commonSendCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "commonSenderSentRedPacket": "{name} ఎరుపు రంగు ప్యాకెట్‌ని పంపింది",
+  "@commonSenderSentRedPacket": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "commonSavedToBalance": "బ్యాలెన్స్‌కు సేవ్ చేయబడింది, నేరుగా బదిలీ చేయవచ్చు",
+  "commonRedPacketExpiredOrEmpty": "ఎరుపు ప్యాకెట్ గడువు ముగిసింది/అన్నీ క్లెయిమ్ చేయబడ్డాయి",
+  "transferScanFeatureComingSoon": "స్కాన్ ఫీచర్ త్వరలో...",
+  "contactSetAsStarred": "నక్షత్రం గుర్తుగా సెట్ చేయండి",
+  "contactAddToBlocklist": "బ్లాక్‌లిస్ట్‌కు జోడించండి",
+  "commonClaimedYour": " క్లెయిమ్ చేసింది మీ ",
+  "commonClaimedText": " పేర్కొన్నారు ",
+  "commonUserTyping": "{name} టైప్ చేస్తోంది...",
+  "@commonUserTyping": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "commonTyping": "టైప్ చేస్తోంది...",
+  "commonWaitingToReceive": "అందుకోవడానికి వేచి ఉంది",
+  "commonTapToClaim": "క్లెయిమ్ చేయడానికి నొక్కండి",
+  "commonHasBeenReceived": "అందుకుంది",
+  "commonGetLucky": "అదృష్టాన్ని పొందండి",
+  "qrcodeCameraStartFailed": "కెమెరా ప్రారంభించడంలో విఫలమైంది",
+  "qrcodeUnknownError": "తెలియని లోపం",
+  "qrcodePlaceQrCodeInFrame": "స్కాన్ చేయడానికి ఫ్రేమ్‌లో QR కోడ్‌ని ఉంచండి",
+  "qrcodeCloseManualInput": "మాన్యువల్ ఇన్‌పుట్‌ను మూసివేయండి",
+  "qrcodeManualInputUserId": "మాన్యువల్ ఇన్‌పుట్ వినియోగదారు ID",
+  "commonAdd": "జోడించు",
+  "profileSetStatus": "స్థితిని సెట్ చేయండి",
+  "profileVisibleToFriends24h": "స్నేహితులకు 24 గంటల పాటు కనిపిస్తుంది",
+  "profileWriteStatus": "స్థితిని వ్రాయండి",
+  "profileEnterYourStatus": "మీ స్థితిని నమోదు చేయండి...",
+  "profileOk": "సరే",
+  "qrcodeCameraPermissionRequired": "QR కోడ్‌ని స్కాన్ చేయడానికి కెమెరా అనుమతి అవసరం",
+  "qrcodeCameraPermissionDenied": "కెమెరా అనుమతి శాశ్వతంగా తిరస్కరించబడింది. దయచేసి సిస్టమ్ సెట్టింగ్‌లలో దీన్ని ప్రారంభించండి.",
+  "qrcodePermissionCheckError": "అనుమతిని తనిఖీ చేయడంలో లోపం: {error}",
+  "@qrcodePermissionCheckError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "qrcodeInvalidQrCode": "చెల్లని QR కోడ్",
+  "qrcodeCannotAddFriend": "స్నేహితుడిని జోడించలేరు: {error}",
+  "@qrcodeCannotAddFriend": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "qrcodeScanQrCode": "QR కోడ్‌ని స్కాన్ చేయండి",
+  "qrcodeCheckingCameraPermission": "కెమెరా అనుమతిని తనిఖీ చేస్తోంది...",
+  "qrcodeNeedCameraPermission": "కెమెరా అనుమతి అవసరం",
+  "qrcodeRetryPermission": "మళ్లీ ప్రయత్నించండి",
+  "qrcodeOpenSettings": "సెట్టింగ్‌లను తెరవండి",
+  "groupInviteMembers": "సభ్యులను ఆహ్వానించండి",
+  "groupInviteCount": "ఆహ్వానం({count})",
+  "@groupInviteCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "profileNoShippingAddress": "షిప్పింగ్ చిరునామా లేదు",
+  "profileDefaultLabel": "డిఫాల్ట్",
+  "profileNoInvoice": "ఇన్వాయిస్ లేదు",
+  "profileCompany": "కంపెనీ",
+  "profileTaxNumber": "పన్ను సంఖ్య",
+  "profileConfirmDeleteAddress": "మీరు ఖచ్చితంగా ఈ చిరునామాను తొలగించాలనుకుంటున్నారా?",
+  "profileConfirmDeleteInvoice": "మీరు ఖచ్చితంగా ఈ ఇన్‌వాయిస్‌ని తొలగించాలనుకుంటున్నారా?",
+  "commonGroupOwner": "యజమాని",
+  "commonGroupAdmin": "అడ్మిన్",
+  "groupSearchMembers": "శోధన సభ్యులు",
+  "groupTotalMembers": "{count} సభ్యులు",
+  "@groupTotalMembers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatRemoveFromGroup": "సమూహం నుండి తీసివేయండి",
+  "groupConfirmRemoveMember": "మీరు ఖచ్చితంగా సమూహం నుండి \"{name}\"ని తీసివేయాలనుకుంటున్నారా?",
+  "@groupConfirmRemoveMember": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatUnknownSong": "తెలియని పాట",
+  "chatUnknownArtist": "తెలియని కళాకారుడు",
+  "chatUnknownContact": "తెలియని పరిచయం",
+  "chatPersonalCard": "సంప్రదింపు కార్డ్",
+  "chatSingleChoice": "సింగిల్",
+  "chatMultiChoice": "బహుళ",
+  "chatEnded": "ముగిసింది",
+  "chatEndPollButton": "పోల్ ముగించు",
+  "chatPollHint": "పోల్ చాట్‌లో ప్రదర్శించబడుతుంది. గ్రూప్ సభ్యులు ఓటు వేయవచ్చు.",
+  "chatSearchSongOrArtist": "పాట లేదా కళాకారుడిని శోధించండి",
+  "chatNoSongsFound": "పాటలు ఏవీ కనుగొనబడలేదు",
+  "chatSongNameOptional": "పాట పేరు (ఐచ్ఛికం)",
+  "chatEnterSongName": "పాట పేరు నమోదు చేయండి",
+  "chatArtistNameOptional": "కళాకారుడి పేరు (ఐచ్ఛికం)",
+  "chatEnterArtistName": "కళాకారుడి పేరును నమోదు చేయండి",
+  "chatRealTimeLocationSharing": "అభివృద్ధిలో నిజ-సమయ స్థాన భాగస్వామ్యం...",
+  "profileVoiceCallFeatureInDev": "వాయిస్ కాల్ ఫీచర్ అభివృద్ధిలో ఉంది...",
+  "profileReportFeatureInDev": "అభివృద్ధిలో ఫీచర్‌ని నివేదించండి...",
+  "profileShareFeatureInDev": "అభివృద్ధిలో ఫీచర్‌ను భాగస్వామ్యం చేయండి...",
+  "profileQrCodeFeatureInDev": "అభివృద్ధిలో QR కోడ్ ఫీచర్...",
+  "qrcodeScanQrToAddMe": "నన్ను స్నేహితునిగా చేర్చుకోవడానికి పైన ఉన్న QR కోడ్‌ని స్కాన్ చేయండి",
+  "qrcodeSaveToAlbum": "ఆల్బమ్‌కు సేవ్ చేయండి",
+  "qrcodeChangeStyle": "శైలిని మార్చండి",
+  "qrcodeCopyId": "IDని కాపీ చేయండి",
+  "qrcodeIdCopied": "ID కాపీ చేయబడింది",
+  "qrcodeMoreStylesFeatureComingSoon": "మరిన్ని స్టైల్స్ త్వరలో వస్తాయి",
+  "@chatFeatureInDev": {
+    "placeholders": {
+      "feature": {
+        "type": "String"
+      }
+    }
+  },
+  "profileBio": "బయో",
+  "profileHomeServer": "సర్వర్",
+  "profileShareContactCard": "కాంటాక్ట్ కార్డ్ షేర్ చేయండి",
+  "profileRemoveFromBlacklist": "బ్లాక్‌లిస్ట్ నుండి తీసివేయండి",
+  "profileConfirmAddBlacklist": "మీరు ఖచ్చితంగా ఈ వినియోగదారుని బ్లాక్‌లిస్ట్‌కి జోడించాలనుకుంటున్నారా? మీరు వారి నుండి సందేశాలను స్వీకరించరు.",
+  "profileConfirmRemoveBlacklist": "మీరు ఖచ్చితంగా ఈ వినియోగదారుని బ్లాక్‌లిస్ట్ నుండి తీసివేయాలనుకుంటున్నారా?",
+  "profileRemarkSaved": "రిమార్క్ సేవ్ చేయబడింది",
+  "profileRemarkCleared": "వ్యాఖ్య క్లియర్ చేయబడింది",
+  "transferReceive": "స్వీకరించండి",
+  "transferPleaseConnectWallet": "దయచేసి ముందుగా మీ వాలెట్‌ని కనెక్ట్ చేయండి",
+  "transferSendRequest": "అభ్యర్థనను పంపండి",
+  "transferPleaseEnterValidAmount": "దయచేసి చెల్లుబాటు అయ్యే మొత్తాన్ని నమోదు చేయండి",
+  "searchPlaceholder": "పరిచయాలు, సమూహాలు, సందేశాలను శోధించండి",
+  "searchEnterKeywordToSearch": "శోధనను ప్రారంభించడానికి కీవర్డ్‌ని నమోదు చేయండి",
+  "searchClearHistory": "క్లియర్",
+  "searchNoResultsForQuery": "\"{query}\" కోసం ఫలితాలు కనుగొనబడలేదు",
+  "@searchNoResultsForQuery": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "searchAllResults": "అన్నీ",
+  "searchInChat": "చాట్‌లో శోధించండి",
+  "searchContactLabel": "సంప్రదించండి",
+  "searchGroupLabel": "సమూహం",
+  "searchConversationLabel": "సంభాషణ",
+  "searchMessageLabel": "సందేశం",
+  "settingsSecurityTitle": "భద్రత",
+  "settingsKeyBackup": "కీ బ్యాకప్",
+  "settingsBackupEncryptionKeys": "బ్యాకప్ ఎన్‌క్రిప్షన్ కీలు",
+  "settingsKeysBackedUp": "{count} కీలు బ్యాకప్ చేయబడ్డాయి",
+  "@settingsKeysBackedUp": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsBackupNotSet": "బ్యాకప్ సెట్ చేయబడలేదు",
+  "settingsRestoreKeys": "కీలను పునరుద్ధరించండి",
+  "settingsRestoreKeysFromBackup": "బ్యాకప్ నుండి ఎన్క్రిప్షన్ కీలను పునరుద్ధరించండి",
+  "settingsExportKeys": "కీలను ఎగుమతి చేయండి",
+  "settingsExportKeysToFile": "ఫైల్‌కి కీలను ఎగుమతి చేయండి",
+  "settingsLoggedInDevices": "పరికరాలకు లాగిన్ చేయబడింది",
+  "settingsNoOtherDevices": "ఇతర పరికరాలు లేవు",
+  "settingsVerified": "ధృవీకరించబడింది",
+  "settingsUnverified": "ధృవీకరించబడలేదు",
+  "settingsAdvanced": "అధునాతనమైనది",
+  "settingsCrossSigning": "క్రాస్-సైనింగ్",
+  "settingsEnabled": "ప్రారంభించబడింది",
+  "settingsNotEnabled": "ప్రారంభించబడలేదు",
+  "settingsResetEncryption": "ఎన్క్రిప్షన్ రీసెట్ చేయండి",
+  "settingsDeleteAllEncryptionKeys": "అన్ని ఎన్క్రిప్షన్ కీలను తొలగించండి",
+  "settingsEncryptionNotSupported": "గుప్తీకరణకు మద్దతు లేదు",
+  "settingsNotInitialized": "ప్రారంభించబడలేదు",
+  "settingsBackupKeyTitle": "బ్యాకప్ కీలు",
+  "settingsBackupKeyMessage": "కొత్త కీ బ్యాకప్‌ని సృష్టించాలా? కొత్త పరికరంలో గుప్తీకరించిన సందేశాలను పునరుద్ధరించడానికి ఇది మీకు సహాయం చేస్తుంది.",
+  "settingsBackup": "బ్యాకప్",
+  "settingsRestoreKeyTitle": "కీలను పునరుద్ధరించండి",
+  "settingsRestoreKeyMessage": "గుప్తీకరించిన సందేశాలను పునరుద్ధరించడానికి మీ పునరుద్ధరణ పాస్‌వర్డ్ లేదా పునరుద్ధరణ కీని నమోదు చేయండి.",
+  "settingsRestore": "పునరుద్ధరించు",
+  "settingsExportKeyTitle": "కీలను ఎగుమతి చేయండి",
+  "settingsExportKeyMessage": "ఎగుమతి చేయబడిన కీ ఫైల్ మీ అన్ని ఎన్‌క్రిప్షన్ కీలను కలిగి ఉంటుంది. దయచేసి దానిని సురక్షితంగా ఉంచండి.",
+  "settingsExport": "ఎగుమతి చేయండి",
+  "settingsDeviceIdLabel": "పరికరం ID: {deviceId}",
+  "@settingsDeviceIdLabel": {
+    "placeholders": {
+      "deviceId": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsDeviceStatusVerified": "స్థితి: ధృవీకరించబడింది",
+  "settingsDeviceStatusUnverified": "స్థితి: ధృవీకరించబడలేదు",
+  "settingsLastActiveLabel": "చివరిగా సక్రియం: {lastSeen}",
+  "@settingsLastActiveLabel": {
+    "placeholders": {
+      "lastSeen": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsVerifyThisDevice": "ఈ పరికరాన్ని ధృవీకరించండి",
+  "settingsCrossSigningAlreadyEnabled": "క్రాస్-సైనింగ్ ఇప్పటికే ప్రారంభించబడింది",
+  "settingsCrossSigningSetupSuccess": "క్రాస్-సైనింగ్ సెటప్ విజయవంతమైంది",
+  "@settingsSetupFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsResetEncryptionTitle": "ఎన్క్రిప్షన్ రీసెట్ చేయండి",
+  "settingsResetEncryptionWarning": "హెచ్చరిక: ఇది మీ అన్ని ఎన్‌క్రిప్షన్ కీలను తొలగిస్తుంది. మీరు మునుపటి గుప్తీకరించిన సందేశాలను డీక్రిప్ట్ చేయలేరు. ఈ చర్య రద్దు చేయబడదు.",
+  "settingsReset": "రీసెట్ చేయండి",
+  "settingsBackupSuccess": "కీలు విజయవంతంగా బ్యాకప్ చేయబడ్డాయి",
+  "settingsBackupFailed": "బ్యాకప్ విఫలమైంది",
+  "settingsRecoveryKey": "రికవరీ కీ",
+  "settingsRecoveryKeySaveWarning": "దయచేసి ఈ రికవరీ కీని సురక్షితమైన స్థలంలో సేవ్ చేయండి. కొత్త పరికరంలో మీ గుప్తీకరించిన సందేశాలను పునరుద్ధరించడానికి మీకు ఇది అవసరం.",
+  "settingsRecoveryKeySaved": "నేను దానిని సేవ్ చేసాను",
+  "settingsRestoreSuccess": "కీలు విజయవంతంగా పునరుద్ధరించబడ్డాయి",
+  "settingsRestoreFailed": "పునరుద్ధరించడం విఫలమైంది",
+  "settingsPassword": "పాస్వర్డ్",
+  "settingsEnterRecoveryKey": "రికవరీ కీని నమోదు చేయండి",
+  "settingsEnterPassword": "పాస్వర్డ్ను నమోదు చేయండి",
+  "settingsExportSuccess": "కీలు సర్వర్ బ్యాకప్‌కి విజయవంతంగా ఎగుమతి చేయబడ్డాయి",
+  "settingsExportNeedBackupFirst": "దయచేసి ముందుగా కీ బ్యాకప్‌ని సృష్టించండి",
+  "settingsExportFailed": "ఎగుమతి విఫలమైంది",
+  "settingsResetSuccess": "ఎన్‌క్రిప్షన్ రీసెట్ విజయవంతమైంది",
+  "settingsResetFailed": "రీసెట్ విఫలమైంది",
+  "callLeaveMeetingConfirm": "మీరు ఖచ్చితంగా సమావేశం నుండి నిష్క్రమించాలనుకుంటున్నారా?",
+  "chatPokedSomeone": "{name}{suffix}ని పొడిచారు",
+  "@chatPokedSomeone": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "suffix": {
+        "type": "String"
+      }
+    }
+  },
+  "chatNoContactsToAdd": "జోడించడానికి పరిచయాలు ఏవీ అందుబాటులో లేవు",
+  "chatAddMembers": "సభ్యులను జోడించండి",
+  "chatInvitedMembers": "{count} సభ్యులు ఆహ్వానించబడ్డారు",
+  "@chatInvitedMembers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatInviteFailed": "ఆహ్వానం విఫలమైంది: {error}",
+  "@chatInviteFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatMemberRemoved": "సభ్యుడు తొలగించబడ్డారు",
+  "chatRemoveFailed": "తీసివేయడం విఫలమైంది: {error}",
+  "@chatRemoveFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatRealTimeLocationShareMessage": "భాగస్వామ్యం చేసిన తర్వాత, అవతలి పక్షం 1 గంట పాటు మీ నిజ-సమయ స్థానాన్ని చూడగలరు.",
+  "chatStartSharing": "భాగస్వామ్యం చేయడం ప్రారంభించండి",
+  "chatLocationServiceNotEnabled": "స్థాన సేవ ప్రారంభించబడలేదు",
+  "chatEnableLocationService": "దయచేసి ఈ లక్షణాన్ని ఉపయోగించడానికి స్థాన సేవను ప్రారంభించండి",
+  "chatGoToSettings": "సెట్టింగ్‌లకు వెళ్లండి",
+  "chatLocationPermissionRequired": "ఈ ఫీచర్ కోసం స్థాన అనుమతి అవసరం",
+  "chatLocationPermissionDeniedPermanent": "స్థాన అనుమతి శాశ్వతంగా తిరస్కరించబడింది. దయచేసి సెట్టింగ్‌లలో దీన్ని ప్రారంభించండి.",
+  "chatLocationPermissionDenied": "స్థాన అనుమతి నిరాకరించబడింది",
+  "chatGettingLocation": "స్థానాన్ని పొందుతోంది...",
+  "chatGetLocationFailed": "స్థానాన్ని పొందడంలో విఫలమైంది: {error}",
+  "@chatGetLocationFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatMapPreview": "మ్యాప్ ప్రివ్యూ",
+  "chatSearchLocation": "స్థానాన్ని శోధించండి",
+  "chatRedPacketSent": "{amount} {token} ఎరుపు ప్యాకెట్ పంపబడింది",
+  "@chatRedPacketSent": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "token": {
+        "type": "String"
+      }
+    }
+  },
+  "chatTransferDefault": "బదిలీ చేయండి",
+  "chatTransferSent": "{amount} {token} బదిలీ పంపబడింది",
+  "@chatTransferSent": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "token": {
+        "type": "String"
+      }
+    }
+  },
+  "chatPickFileFailed": "ఫైల్‌ను ఎంచుకోవడంలో విఫలమైంది: {error}",
+  "@chatPickFileFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatFileSizeLimit": "ఫైల్ పరిమాణం 50MB మించకూడదు",
+  "chatFileSending": "ఫైల్‌ని పంపుతోంది: {filename}",
+  "@chatFileSending": {
+    "placeholders": {
+      "filename": {
+        "type": "String"
+      }
+    }
+  },
+  "chatSendFileFailed": "ఫైల్‌ని పంపడంలో విఫలమైంది: {error}",
+  "@chatSendFileFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatContactCardSent": "{name} యొక్క సంప్రదింపు కార్డ్ పంపబడింది",
+  "@chatContactCardSent": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatFavoritesFeature": "ఇష్టమైనవి",
+  "chatCouponsFeature": "కూపన్లు",
+  "chatGiftFeature": "బహుమతి",
+  "chatSharedMusic": "భాగస్వామ్యం చేయబడిన {name}",
+  "@chatSharedMusic": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@chatSendFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatEndPollTitle": "పోల్ ముగించు",
+  "chatEndPollConfirmMessage": "మీరు ఖచ్చితంగా ఈ పోల్‌ను ముగించాలనుకుంటున్నారా? ముగిసిన తర్వాత ఓటింగ్ మూసివేయబడుతుంది.",
+  "chatPollEndedMessage": "పోల్ ముగిసింది",
+  "chatConnectingCall": "కనెక్ట్ అవుతోంది...",
+  "chatMuteCall": "మ్యూట్ చేయండి",
+  "chatSpeakerOff": "స్పీకర్ ఆఫ్",
+  "chatSpeakerOn": "స్పీకర్",
+  "chatCameraOn": "కెమెరా ఆన్",
+  "chatCameraOff": "కెమెరా ఆఫ్",
+  "chatHangUp": "హ్యాంగ్ అప్ చేయండి",
+  "chatSelectForwardTargetTitle": "ఫార్వర్డ్ టార్గెట్ ఎంచుకోండి",
+  "chatNoForwardableChat": "ఫార్వార్డింగ్ కోసం చాట్‌లు ఏవీ అందుబాటులో లేవు",
+  "chatNoMatchingChat": "సరిపోలే చాట్‌లు ఏవీ కనుగొనబడలేదు",
+  "chatLocationTitle": "స్థానం",
+  "chatSendButton": "పంపండి",
+  "chatRetryButton": "మళ్లీ ప్రయత్నించండి",
+  "chatSearchContactHint": "పరిచయాలను శోధించండి",
+  "chatShareMusic": "సంగీతాన్ని భాగస్వామ్యం చేయండి",
+  "chatRecentPlayed": "ఇటీవలి",
+  "chatMyFavorites": "ఇష్టమైనవి",
+  "chatNetworkLink": "లింక్",
+  "chatLocalFile": "స్థానిక",
+  "chatPasteMusicLink": "మ్యూజిక్ లింక్‌ని అతికించండి",
+  "chatShareMusicButton": "సంగీతాన్ని భాగస్వామ్యం చేయండి",
+  "chatSelectLocalAudio": "లోకల్ ఆడియో ఫైల్‌ని ఎంచుకోండి",
+  "chatSupportedAudioFormats": "MP3, M4A, WAV, FLAC మొదలైన వాటికి మద్దతు ఇస్తుంది.",
+  "chatSelectFileButton": "ఫైల్‌ని ఎంచుకోండి",
+  "chatPleaseEnterMusicLink": "దయచేసి సంగీత లింక్‌ని నమోదు చేయండి",
+  "chatPleaseEnterValidLink": "దయచేసి చెల్లుబాటు అయ్యే URLని నమోదు చేయండి",
+  "chatSharedSong": "షేర్డ్ సాంగ్",
+  "chatSelectMember": "సభ్యుడిని ఎంచుకోండి",
+  "chatSearchMemberHint": "శోధన సభ్యులు",
+  "chatNoMatchingMembers": "సరిపోలే సభ్యులు కనుగొనబడలేదు",
+  "commonUnknownMember": "తెలియదు",
+  "chatSelectedMessagesCount": "ఎంచుకున్న {count} సందేశాలు",
+  "@chatSelectedMessagesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatSearchContactsOrGroups": "పరిచయాలు లేదా సమూహాలను శోధించండి",
+  "chatVideoTitle": "వీడియో",
+  "chatLoadingText": "లోడ్ అవుతోంది...",
+  "chatVideoLoadFailed": "వీడియో లోడ్ విఫలమైంది",
+  "chatPlayerInitFailed": "ప్లేయర్ ప్రారంభించడం విఫలమైంది",
+  "chatCreatePollTitle": "పోల్‌ని సృష్టించండి",
+  "chatSubmitPoll": "సమర్పించండి",
+  "chatPollQuestionLabel": "పోల్ ప్రశ్న",
+  "chatEnterPollQuestionHint": "దయచేసి పోల్ ప్రశ్నను నమోదు చేయండి",
+  "chatPollOptionsLabel": "పోల్ ఎంపికలు",
+  "chatOptionHintWithIndex": "ఎంపిక {index}",
+  "@chatOptionHintWithIndex": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "chatAddOptionButton": "ఎంపికను జోడించండి",
+  "chatPollSettingsLabel": "పోల్ సెట్టింగ్‌లు",
+  "chatSelectionType": "ఎంపిక రకం",
+  "chatSingleChoiceLabel": "సింగిల్",
+  "chatMultiChoiceLabel": "బహుళ",
+  "chatAnonymousPollSwitch": "అనామక పోల్",
+  "chatPleaseEnterQuestion": "దయచేసి పోల్ ప్రశ్నను నమోదు చేయండి",
+  "chatAtLeastTwoOptions": "కనీసం 2 ఎంపికలు అవసరం",
+  "chatConfirmWithCount": "నిర్ధారించండి ({count})",
+  "@chatConfirmWithCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@chatSelectedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@commonMemberCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@chatGroupChatCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "authEmailVerificationTitle": "ఇమెయిల్ ధృవీకరణ",
+  "authEnterValidEmailAddress": "దయచేసి చెల్లుబాటు అయ్యే ఇమెయిల్ చిరునామాను నమోదు చేయండి",
+  "authVerificationCodeSentTo": "ధృవీకరణ కోడ్ {email}కి పంపబడింది",
+  "@authVerificationCodeSentTo": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "authSendCodeFailed": "కోడ్‌ని పంపడంలో విఫలమైంది: {error}",
+  "@authSendCodeFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "authVerificationSuccess": "ధృవీకరణ విజయవంతమైంది",
+  "authVerificationFailed": "ధృవీకరణ విఫలమైంది",
+  "authVerificationCodeError": "ధృవీకరణ కోడ్ లోపం: {error}",
+  "@authVerificationCodeError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "commonEnterVerificationCode": "ధృవీకరణ కోడ్‌ను నమోదు చేయండి",
+  "authEnterYourEmail": "ఇమెయిల్‌ని నమోదు చేయండి",
+  "authWeSentCodeTo": "మేము 6 అంకెల కోడ్‌ని పంపాము\n{email}",
+  "@authWeSentCodeTo": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "authEnterEmailForCode": "మీ ఇమెయిల్ చిరునామాను నమోదు చేయండి, మేము ధృవీకరణ కోడ్‌ని పంపుతాము",
+  "commonSendVerificationCode": "ధృవీకరణ కోడ్‌ని పంపండి",
+  "authResendVerificationCode": "ధృవీకరణ కోడ్‌ని మళ్లీ పంపండి",
+  "authCanResendAfter": "{seconds} సెకన్ల తర్వాత మళ్లీ పంపవచ్చు",
+  "@authCanResendAfter": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "commonChangeEmail": "ఇమెయిల్ మార్చండి",
+  "contactAddToContacts": "పరిచయాలకు జోడించండి",
+  "contactAddingToContacts": "జోడిస్తోంది...",
+  "contactAddedToContacts": "పరిచయాలకు జోడించబడింది",
+  "contactAddFailedWithError": "జోడించడం విఫలమైంది: {error}",
+  "@contactAddFailedWithError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "contactAddPhone": "ఫోన్ జోడించండి",
+  "contactAddTag": "ట్యాగ్‌లను జోడించండి",
+  "contactAddText": "వచనాన్ని జోడించండి",
+  "contactAddPhoto": "ఫోటోను జోడించండి",
+  "contactGroupCountLabel": "{count} సమూహాలు",
+  "@contactGroupCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "contactAddedViaSearch": "శోధన ద్వారా జోడించబడింది",
+  "contactAddTime": "సమయాన్ని జోడించండి",
+  "contactDoneButton": "పూర్తయింది",
+  "callWaitingForParticipants": "పాల్గొనేవారి కోసం వేచి ఉంది...",
+  "callParticipantMe": "{name} (నేను)",
+  "@callParticipantMe": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "callSharingLabel": "భాగస్వామ్యం",
+  "callScreenSharingBy": "{name} స్క్రీన్‌ను షేర్ చేస్తోంది",
+  "@callScreenSharingBy": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "callParticipantCount": "{count} పాల్గొనేవారు",
+  "@callParticipantCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "callMuteLabel": "మ్యూట్ చేయండి",
+  "callUnmuteLabel": "అన్‌మ్యూట్ చేయండి",
+  "callTurnOffVideo": "వీడియోను ఆఫ్ చేయండి",
+  "callTurnOnVideo": "వీడియోను ఆన్ చేయండి",
+  "callShareScreen": "స్క్రీన్ షేర్ చేయండి",
+  "callStopSharing": "భాగస్వామ్యం చేయడం ఆపివేయండి",
+  "callSwitchCameraLabel": "మారండి",
+  "callLeaveLabel": "వదిలేయండి",
+  "callParticipantsLabel": "పాల్గొనేవారు",
+  "callJoiningMeeting": "సమావేశంలో చేరుతున్నారు...",
+  "chatPollVotesFormat": "{count} ఓట్లు ({percentage}%)",
+  "@chatPollVotesFormat": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "percentage": {
+        "type": "String"
+      }
+    }
+  },
+  "chatPollParticipantsFormat": "{count} పాల్గొనేవారు",
+  "@chatPollParticipantsFormat": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@chatSelectFileFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatNoMediaUrlAvailable": "మీడియా URL అందుబాటులో లేదు",
+  "chatDownloadFailed": "డౌన్‌లోడ్ విఫలమైంది: {code}",
+  "@chatDownloadFailed": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "chatErrorWithMessage": "లోపం: {message}",
+  "@chatErrorWithMessage": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "chatMusicLinkLabel": "సంగీతం లింక్",
+  "chatRedPacketTransferCannotForward": "ఎరుపు ప్యాకెట్లు మరియు బదిలీలు ఫార్వార్డ్ చేయబడవు",
+  "commonShareFailed": "భాగస్వామ్యం విఫలమైంది: {error}",
+  "@commonShareFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "commonTapToRetry": "మళ్లీ ప్రయత్నించడానికి నొక్కండి",
+  "chatDefaultRedPacketGreeting": "శ్రేయస్సు కోసం శుభాకాంక్షలు",
+  "groupAllowOthersToSearchAndJoin": "శోధించడానికి మరియు చేరడానికి ఇతరులను అనుమతించండి",
+  "groupConfirmClearChatHistory": "మీరు ఖచ్చితంగా చాట్ చరిత్రను క్లియర్ చేయాలనుకుంటున్నారా?",
+  "groupCreateGroupToChat": "చాటింగ్ ప్రారంభించడానికి ఒక సమూహాన్ని సృష్టించండి",
+  "groupEditGroupAnnouncement": "సమూహ ప్రకటనను సవరించండి",
+  "groupEditGroupDescription": "సమూహ వివరణను సవరించండి",
+  "groupEnterGroupAnnouncement": "సమూహ ప్రకటనను నమోదు చేయండి",
+  "groupMemberCountClickToCopy": "{count} సభ్యులు, గ్రూప్ IDని కాపీ చేయడానికి క్లిక్ చేయండి",
+  "groupNoPermissionToEditGroupName": "సమూహం పేరును సవరించడానికి మీకు అనుమతి లేదు",
+  "authEmailAddress": "ఇమెయిల్ చిరునామా",
+  "commonEnterEmailAddress": "ఇమెయిల్ చిరునామాను నమోదు చేయండి",
+  "authEmailRecoveryHint": "పాస్‌వర్డ్ రికవరీ కోసం ఉపయోగించబడుతుంది",
+  "commonInvalidEmailFormat": "దయచేసి చెల్లుబాటు అయ్యే ఇమెయిల్ చిరునామాను నమోదు చేయండి",
+  "authOptional": "ఐచ్ఛికం",
+  "authResetPassword": "పాస్‌వర్డ్‌ని రీసెట్ చేయండి",
+  "authEnterRegisteredEmail": "మీరు నమోదు చేసుకున్న ఇమెయిల్ చిరునామాను నమోదు చేయండి",
+  "authSendResetCode": "రీసెట్ కోడ్‌ని పంపండి",
+  "authResetCodeSent": "రీసెట్ కోడ్ {email}కి పంపబడింది",
+  "@authResetCodeSent": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "authEnterResetCode": "రీసెట్ కోడ్‌ని నమోదు చేయండి",
+  "authSetNewPassword": "కొత్త పాస్‌వర్డ్‌ని సెట్ చేయండి",
+  "commonConfirmNewPassword": "కొత్త పాస్‌వర్డ్‌ని నిర్ధారించండి",
+  "commonNewPassword": "కొత్త పాస్‌వర్డ్",
+  "authPasswordResetSuccess": "పాస్‌వర్డ్ రీసెట్ విజయవంతమైంది. దయచేసి మీ కొత్త పాస్‌వర్డ్‌తో లాగిన్ చేయండి.",
+  "authResetPasswordFailed": "పాస్‌వర్డ్ రీసెట్ చేయడం విఫలమైంది",
+  "settingsChangePassword": "పాస్‌వర్డ్ మార్చండి",
+  "settingsCurrentPassword": "ప్రస్తుత పాస్వర్డ్",
+  "settingsEnterCurrentPassword": "ప్రస్తుత పాస్వర్డ్ను నమోదు చేయండి",
+  "settingsEnterNewPassword": "కొత్త పాస్‌వర్డ్‌ను నమోదు చేయండి",
+  "settingsPasswordChanged": "పాస్‌వర్డ్ విజయవంతంగా మార్చబడింది. దయచేసి మీ కొత్త పాస్‌వర్డ్‌తో లాగిన్ చేయండి.",
+  "settingsChangePasswordFailed": "పాస్‌వర్డ్ మార్చడం విఫలమైంది",
+  "settingsNewPasswordMustBeDifferent": "కొత్త పాస్‌వర్డ్ తప్పనిసరిగా ప్రస్తుత పాస్‌వర్డ్‌కి భిన్నంగా ఉండాలి",
+  "settingsChangePasswordInfo": "పాస్‌వర్డ్ మార్చిన తర్వాత, మీరు లాగ్ అవుట్ చేయబడతారు మరియు కొత్త పాస్‌వర్డ్‌తో లాగిన్ అవ్వాలి.",
+  "settingsPasswordRequirements": "పాస్‌వర్డ్ అవసరాలు:",
+  "settingsSecurityNote": "భద్రత కోసం, మీరు పాస్‌వర్డ్‌ని మార్చిన తర్వాత అన్ని పరికరాలలో మళ్లీ లాగిన్ చేయాలి.",
+  "settingsSecurity": "భద్రత",
+  "settingsCurrentBoundEmail": "ప్రస్తుత బౌండ్ ఇమెయిల్",
+  "settingsNewEmailAddress": "కొత్త ఇమెయిల్ చిరునామా",
+  "settingsEnterNewEmail": "కొత్త ఇమెయిల్ చిరునామాను నమోదు చేయండి",
+  "settingsVerificationCode": "ధృవీకరణ కోడ్",
+  "settingsVerificationCodeSent": "ధృవీకరణ కోడ్ పంపబడింది",
+  "settingsCodeSentTo": "ధృవీకరణ కోడ్ పంపబడింది",
+  "settingsDidNotReceiveCode": "కోడ్ అందలేదా?",
+  "settingsEmailChangedSuccess": "ఇమెయిల్ విజయవంతంగా మార్చబడింది",
+  "settingsChangeEmailFailed": "ఇమెయిల్ మార్పు విఫలమైంది",
+  "settingsEmailSecurityNote": "మీ ఇమెయిల్ పాస్‌వర్డ్ రికవరీ కోసం ఉపయోగించబడుతుంది. దయచేసి దానిని సురక్షితంగా ఉంచండి.",
+  "commonGoogleLogin": "Googleతో సైన్ ఇన్ చేయండి",
+  "commonAppleLogin": "Appleతో సైన్ ఇన్ చేయండి",
+  "commonWechat": "WeChat",
+  "settingsLanguage": "భాష",
+  "settingsLanguageChanged": "భాష మారింది",
+  "settingsTranslation": "అనువాదం",
+  "settingsTranslateTextTo": "వచనాన్ని అనువదించండి",
+  "settingsTranslateDescription": "మీరు సందేశాలను అనువదించాలనుకుంటున్న భాషను ఎంచుకోండి.",
+  "settingsAutoTranslate": "అందుకున్న సందేశాలను స్వయంచాలకంగా అనువదించండి",
+  "settingsAutoTranslateDescription": "చాట్‌లో స్వీకరించిన సందేశాలను మీరు ఎంచుకున్న భాషకు స్వయంచాలకంగా అనువదించండి.",
+  "settingsBiometricLogin": "బయోమెట్రిక్ లాగిన్",
+  "authLoginWithBiometric": "{type}తో లాగిన్ చేయండి",
+  "@authLoginWithBiometric": {
+    "placeholders": {
+      "type": {
+        "type": "Object"
+      }
+    }
+  },
+  "settingsBiometricLoginEnabled": "బయోమెట్రిక్ లాగిన్ ప్రారంభించబడింది",
+  "settingsBiometricLoginDisabled": "బయోమెట్రిక్ లాగిన్ నిలిపివేయబడింది",
+  "settingsEnableBiometricLogin": "బయోమెట్రిక్ లాగిన్‌ని ప్రారంభించండి",
+  "settingsBiometricEnabled": "ప్రారంభించబడింది - లాగిన్ చేయడానికి బయోమెట్రిక్ ఉపయోగించండి",
+  "settingsBiometricDisabled": "నిలిపివేయబడింది - ప్రారంభించడానికి నొక్కండి",
+  "settingsBiometricNeedRelogin": "బయోమెట్రిక్ లాగిన్‌ని ప్రారంభించడానికి దయచేసి లాగ్ అవుట్ చేసి, మళ్లీ లాగిన్ చేయండి",
+  "authOr": "లేదా",
+  "qrcodeCameraPermissionRestricted": "ఈ పరికరంలో కెమెరా యాక్సెస్ పరిమితం చేయబడింది",
+  "authPasskeyLabel": "పాస్కీ",
+  "authGoogleLabel": "Google",
+  "authAppleLabel": "ఆపిల్",
+  "authSsoLabel": "SSO",
+  "transferAmountHintZero": "0.00",
+  "commonMatrixIdHint": "@username:server.com",
+  "authServerAddressHint": "https://m.si46.world",
+  "authEmailExampleHint": "example@email.com",
+  "authVerificationCodePlaceholder": "------",
+  "profileEnterPokeSuffixHint": "పోక్ ప్రత్యయాన్ని నమోదు చేయండి, ఉదా: భుజంపై",
+  "groupAlbum": "సమూహ ఆల్బమ్",
+  "groupFiles": "సమూహ ఫైల్‌లు",
+  "groupImages": "చిత్రాలు",
+  "groupVideos": "వీడియోలు",
+  "groupTotal": "మొత్తం",
+  "groupSize": "పరిమాణం",
+  "groupNoMedia": "మీడియా లేదు",
+  "groupNoMediaDescription": "ఈ సమూహంలో ఇంకా ఫోటోలు లేదా వీడియోలు లేవు",
+  "groupDocuments": "డాక్స్",
+  "groupNoFiles": "ఫైల్‌లు లేవు",
+  "groupNoFilesDescription": "ఈ గుంపులో ఇంకా ఫైల్‌లు లేవు",
+  "groupDownloadStarted": "{filename} డౌన్‌లోడ్ చేస్తోంది...",
+  "@groupDownloadStarted": {
+    "placeholders": {
+      "filename": {
+        "type": "String"
+      }
+    }
+  },
+  "contactNoCommonGroups": "సాధారణ సమూహాలు లేవు",
+  "contactNoCommonGroupsDescription": "మీకు ఉమ్మడిగా సమూహాలు ఏవీ లేవు",
+  "chatVoiceMessage": "వాయిస్",
+  "chatMessage": "సందేశం",
+  "conversationHideChat": "దాచు",
+  "settingsQuickReply": "శీఘ్ర ప్రత్యుత్తరం",
+  "commonTranslate": "అనువదించు",
+  "contactCreateTag": "ట్యాగ్‌ని సృష్టించండి",
+  "contactEnterTagName": "ట్యాగ్ పేరును నమోదు చేయండి",
+  "contactEditTag": "ట్యాగ్‌ని సవరించండి",
+  "contactDeleteTag": "ట్యాగ్‌ని తొలగించండి",
+  "contactDeleteTagConfirm": "మీరు \"{tagName}\" ట్యాగ్‌ని ఖచ్చితంగా తొలగించాలనుకుంటున్నారా?",
+  "@contactDeleteTagConfirm": {
+    "placeholders": {
+      "tagName": {
+        "type": "String"
+      }
+    }
+  },
+  "contactNoTags": "ఇంకా ట్యాగ్‌లు లేవు",
+  "contactFriendPermissions": "స్నేహితుని అనుమతులు",
+  "contactSetChatOnly": "చాట్-మాత్రమేగా సెట్ చేయండి",
+  "contactChatOnlyDesc": "మీతో మాత్రమే చాట్ చేయగలరు, ఇతర కంటెంట్ దాచబడుతుంది",
+  "contactHideMyMoments": "నా క్షణాలను దాచు",
+  "contactHideMyMomentsDesc": "ఈ స్నేహితుడు నా క్షణాలను చూడలేరు",
+  "contactHideTheirMoments": "వారి క్షణాలను దాచండి",
+  "contactHideTheirMomentsDesc": "ఈ స్నేహితుడి మూమెంట్స్ చూడవద్దు",
+  "contactHideMyStatus": "నా స్థితిని దాచు",
+  "contactHideMyStatusDesc": "ఈ స్నేహితుడు నా స్థితి నవీకరణలను చూడలేరు",
+  "contactNoChatOnlyFriends": "చాట్-మాత్రమే స్నేహితులు లేరు",
+  "contactNoOfficialAccounts": "అధికారిక ఖాతాలు లేవు",
+  "contactFollowOfficialAccountsDesc": "తాజా అప్‌డేట్‌లను పొందడానికి అధికారిక ఖాతాలను అనుసరించండి",
+  "contactNoServiceAccounts": "సేవా ఖాతాలు లేవు",
+  "contactSubscribeServiceAccountsDesc": "అనుకూలమైన సేవల కోసం సేవా ఖాతాలకు సభ్యత్వాన్ని పొందండి",
+  "contactNoEnterpriseContacts": "ఎంటర్‌ప్రైజ్ పరిచయాలు లేవు",
+  "contactEnterpriseContactsDesc": "ఎంటర్‌ప్రైజ్ పరిచయాలు ఇక్కడ ప్రదర్శించబడతాయి",
+  "profileCardPack": "కార్డ్ ప్యాక్",
+  "profileOrders": "ఆర్డర్లు",
+  "profileNoOrders": "ఆదేశాలు లేవు",
+  "profileOrdersDesc": "మీ ఆర్డర్‌లు ఇక్కడ ప్రదర్శించబడతాయి",
+  "profileNoCards": "కార్డులు లేవు",
+  "profileCardsDesc": "మీ కార్డ్‌లు ఇక్కడ ప్రదర్శించబడతాయి",
+  "favoriteEnterTagsHint": "కామాలతో వేరు చేయబడిన ట్యాగ్‌లను నమోదు చేయండి",
+  "favoriteTagsUpdated": "ట్యాగ్‌లు నవీకరించబడ్డాయి",
+  "favoriteForwardedContent": "కంటెంట్ ఫార్వార్డ్ చేయబడింది",
+  "favoriteEnterNoteContent": "గమనిక కంటెంట్‌ని నమోదు చేయండి",
+  "favoriteNoteAdded": "గమనిక జోడించబడింది",
+  "favoriteLinkTitle": "లింక్ శీర్షిక",
+  "favoriteLinkUrl": "https://",
+  "favoriteLinkAdded": "లింక్ జోడించబడింది",
+  "contactPhotoAdded": "ఫోటో జోడించబడింది",
+  "contactEnterPhone": "ఫోన్ నంబర్‌ను నమోదు చేయండి",
+  "commonConversationWithId": "సంభాషణ: {roomId}",
+  "commonContactWithId": "సంప్రదించండి: {userId}",
+  "commonDiscover": "కనుగొనండి",
+  "commonDeveloping": "{title}\n(త్వరలో వస్తుంది)",
+  "commonPageNotFound": "పేజీ కనుగొనబడలేదు",
+  "commonBackToHome": "ఇంటికి తిరిగి వెళ్ళు",
+  "settingsMessageNotifications": "సందేశ నోటిఫికేషన్‌లు",
+  "settingsReceiveNewMessageNotifications": "కొత్త సందేశ నోటిఫికేషన్‌లను స్వీకరించండి",
+  "settingsShowMessagePreview": "సందేశ ప్రివ్యూను చూపు",
+  "settingsShowMessageContentInNotification": "నోటిఫికేషన్‌లో సందేశ కంటెంట్‌ని చూపండి",
+  "settingsNotificationSound": "నోటిఫికేషన్ సౌండ్",
+  "settingsPlaySoundOnMessage": "సందేశాలను స్వీకరించేటప్పుడు ధ్వనిని ప్లే చేయండి",
+  "commonVibration": "కంపనం",
+  "settingsVibrateOnMessage": "సందేశాలను స్వీకరించేటప్పుడు వైబ్రేట్ చేయండి",
+  "settingsDoNotDisturbMode": "డిస్టర్బ్ చేయవద్దు",
+  "settingsDoNotDisturbDescription": "నిర్దిష్ట సమయంలో నోటిఫికేషన్‌లను స్వీకరించవద్దు",
+  "settingsStartTime": "ప్రారంభ సమయం",
+  "settingsEndTime": "ముగింపు సమయం",
+  "settingsDeleteQuickReply": "త్వరిత ప్రత్యుత్తరాన్ని తొలగించండి",
+  "settingsEditQuickReply": "త్వరిత ప్రత్యుత్తరాన్ని సవరించండి",
+  "settingsAddQuickReply": "త్వరిత ప్రత్యుత్తరాన్ని జోడించండి",
+  "settingsManageQuickReplies": "త్వరిత ప్రత్యుత్తరాలను నిర్వహించండి",
+  "settingsNoQuickReplies": "త్వరిత సమాధానాలు లేవు",
+  "settingsDefaultQuickReplies": "డిఫాల్ట్ త్వరిత ప్రత్యుత్తరాలు చూపబడతాయి",
+  "settingsWhoCanSee": "ఎవరు చూడగలరు",
+  "settingsLastSeen": "చివరిగా చూసింది",
+  "settingsHiddenChats": "దాచిన చాట్‌లు",
+  "settingsMessagesLabel": "సందేశాలు",
+  "settingsAllowStrangerMessages": "అపరిచిత సందేశాలను అనుమతించండి",
+  "settingsReceiveMessagesFromNonContacts": "కాని పరిచయాల నుండి సందేశాలను స్వీకరించండి",
+  "settingsReadReceipts": "రసీదులను చదవండి",
+  "settingsLetOthersKnowYouRead": "మీరు చదివినట్లు ఇతరులకు తెలియజేయండి",
+  "settingsTypingIndicator": "టైపింగ్ సూచిక",
+  "settingsLetOthersKnowYouTyping": "మీరు టైప్ చేస్తున్నారని ఇతరులకు తెలియజేయండి",
+  "settingsEveryone": "అందరూ",
+  "settingsContactsOnly": "పరిచయాలు మాత్రమే",
+  "settingsNobody": "ఎవరూ",
+  "settingsWhoCanSeeTitle": "{title}ని ఎవరు చూడగలరు",
+  "@settingsWhoCanSeeTitle": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsVersionInfo": "వెర్షన్ {version}",
+  "@settingsVersionInfo": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsCheckForUpdates": "నవీకరణల కోసం తనిఖీ చేయండి",
+  "settingsOpenSourceLicenses": "ఓపెన్ సోర్స్ లైసెన్స్‌లు",
+  "settingsFeedbackAndSuggestions": "అభిప్రాయం మరియు సూచనలు",
+  "settingsBuiltOnMatrix": "మ్యాట్రిక్స్ ప్రోటోకాల్‌పై నిర్మించబడింది",
+  "settingsNoHiddenChats": "దాచిన చాట్‌లు లేవు",
+  "settingsNoHiddenChatsDescription": "మీరు దాచిన చాట్‌లు ఇక్కడ కనిపిస్తాయి",
+  "settingsUnhideChat": "దాచిపెట్టు",
+  "settingsDarkMode": "డార్క్ మోడ్",
+  "settingsFontSize": "ఫాంట్ పరిమాణం",
+  "settingsBubbleStyle": "బబుల్ శైలి",
+  "settingsFollowSystem": "వ్యవస్థను అనుసరించండి",
+  "settingsAutoSwitchBySystem": "సిస్టమ్ ద్వారా ఆటో స్విచ్",
+  "settingsLightMode": "లైట్ మోడ్",
+  "settingsAlwaysUseLightTheme": "ఎల్లప్పుడూ లైట్ థీమ్‌ని ఉపయోగించండి",
+  "settingsDarkModeOption": "డార్క్ మోడ్ ఎంపిక",
+  "settingsAlwaysUseDarkTheme": "ఎల్లప్పుడూ డార్క్ థీమ్‌ని ఉపయోగించండి",
+  "settingsFontSizeSmall": "చిన్నది",
+  "settingsFontSizeStandard": "ప్రామాణికం",
+  "settingsFontSizeLarge": "పెద్దది",
+  "settingsFontSizeExtraLarge": "అదనపు పెద్దది",
+  "settingsBubbleStyleWechat": "WeChat శైలి",
+  "settingsBubbleStyleWechatDesc": "క్లాసిక్ WeChat బబుల్ శైలి",
+  "settingsBubbleStyleModern": "ఆధునిక శైలి",
+  "settingsBubbleStyleModernDesc": "ఆధునిక బబుల్ శైలిని శుభ్రం చేయండి",
+  "settingsBubbleStyleClassic": "క్లాసిక్ శైలి",
+  "settingsBubbleStyleClassicDesc": "సాంప్రదాయ బబుల్ శైలి",
+  "discoverVideoChannels": "ఛానెల్‌లు",
+  "discoverLive": "ప్రత్యక్షం",
+  "discoverListen": "వినండి",
+  "discoverWatch": "చూడండి",
+  "discoverSearchDiscover": "శోధించండి",
+  "discoverNearbyPeople": "సమీపంలో",
+  "discoverGames": "ఆటలు",
+  "discoverMiniPrograms": "మినీ ప్రోగ్రామ్‌లు",
+  "chatAlreadyInCall": "ఇప్పటికే కాల్‌లో ఉన్నారు",
+  "commonConnectionFailed": "కనెక్షన్ విఫలమైంది",
+  "chatCallRejected": "కాల్ తిరస్కరించబడింది",
+  "chatNoAnswer": "సమాధానం లేదు",
+  "commonClose": "మూసివేయి",
+  "chatSelectContact": "పరిచయాన్ని ఎంచుకోండి",
+  "chatVoteRemoved": "ఓటు తీసివేయబడింది",
+  "chatVoteChanged": "ఓటు మారింది",
+  "chatVoted": "ఓటు వేశారు",
+  "chatReplyTo": "{name}కి ప్రత్యుత్తరం ఇవ్వండి",
+  "@chatReplyTo": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatCurrentLocation": "ప్రస్తుత స్థానం",
+  "chatNearbyPlace": "సమీప స్థలం {index}",
+  "@chatNearbyPlace": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "chatApproximateDistance": "{distance} గురించి",
+  "@chatApproximateDistance": {
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      }
+    }
+  },
+  "chatAddress": "చిరునామా",
+  "chatLatitude": "అక్షాంశం",
+  "chatLongitude": "రేఖాంశం",
+  "groupDescriptionUpdated": "సమూహ వివరణ నవీకరించబడింది",
+  "groupAvatarUpdated": "సమూహ అవతార్ నవీకరించబడింది",
+  "groupVisibilityUpdated": "సమూహ దృశ్యమానత నవీకరించబడింది",
+  "groupChannelCreated": "ఛానెల్ సృష్టించబడింది",
+  "groupChannelUpdated": "ఛానెల్ నవీకరించబడింది",
+  "groupChannelDeleted": "ఛానెల్ తొలగించబడింది",
+  "callDecline": "తిరస్కరించు",
+  "callAnswer": "సమాధానం",
+  "callIncomingVideoCall": "ఇన్‌కమింగ్ వీడియో కాల్",
+  "callIncomingVoiceCall": "ఇన్‌కమింగ్ వాయిస్ కాల్",
+  "callVideoCallInProgress": "వీడియో కాల్ ప్రోగ్రెస్‌లో ఉంది",
+  "callVoiceCallInProgress": "వాయిస్ కాల్ ప్రోగ్రెస్‌లో ఉంది",
+  "callReconnectingCall": "మళ్లీ కనెక్ట్ అవుతోంది...",
+  "callEnded": "కాల్ ముగిసింది",
+  "callFailed": "కాల్ విఫలమైంది",
+  "callLivekitNotConfigured": "LiveKit కాన్ఫిగర్ చేయబడలేదు",
+  "callJoinMeetingFailed": "సమావేశంలో చేరడం విఫలమైంది: {error}",
+  "callScreenShareFailed": "స్క్రీన్ భాగస్వామ్యం విఫలమైంది: {error}",
+  "profileN42BeanTitle": "N42 బీన్",
+  "profileNoN42Bean": "N42 బీన్ లేదు",
+  "profileN42BeanDetails": "N42 బీన్ వివరాలు",
+  "profileN42BeanDescription": "N42 బీన్ అనేది N42లో వర్చువల్ అంశాలు మరియు సేవలను రీడీమ్ చేయడానికి ఉపయోగించే టోకెన్. ప్రస్తుతం అందుబాటులో ఉంది:",
+  "profileN42BeanFeature1": "ప్రత్యేకమైన సభ్యుల స్టిక్కర్లు మరియు థీమ్‌లు",
+  "profileN42BeanFeature2": "చాట్ బబుల్ అనుకూలీకరణ",
+  "profileN42BeanFeature3": "రెడ్ ప్యాకెట్ కవర్ అనుకూలీకరణ",
+  "profileN42BeanFeature4": "ప్రత్యేకమైన మారుపేరు బ్యాడ్జ్",
+  "profileN42BeanFeature5": "సమూహ చాట్ అధికారాలు",
+  "profileN42BeanFeature6": "క్లౌడ్ నిల్వ విస్తరణ",
+  "profileN42BeanFeature7": "వీడియో కాల్ బ్యూటీ ఫిల్టర్‌లు",
+  "profileN42BeanFeature8": "క్షణాల నేపథ్య అనుకూలీకరణ",
+  "profileN42BeanFeature9": "VIP కస్టమర్ సేవ ప్రాధాన్యత",
+  "profileGotIt": "అర్థమైంది",
+  "profileNoN42BeanRecords": "N42 బీన్ రికార్డులు లేవు",
+  "profileMoodAndThoughts": "మూడ్ & ఆలోచనలు",
+  "profileStatusHappy": "సంతోషం",
+  "profileStatusCracked": "పగిలిపోయింది",
+  "profileStatusLucky": "అదృష్టవంతుడు",
+  "profileStatusSunny": "సన్నీ",
+  "profileStatusTired": "అలసిపోయింది",
+  "profileStatusDaydream": "పగటి కల",
+  "profileStatusRushing": "పరుగెత్తుతోంది",
+  "profileStatusOverthinking": "అతిగా ఆలోచించడం",
+  "profileStatusEnergized": "శక్తివంతమైంది",
+  "profileWorkAndStudy": "పని & అధ్యయనం",
+  "profileStatusWorking": "పని చేస్తోంది",
+  "profileStatusStudying": "చదువుతున్నారు",
+  "profileStatusBusy": "బిజీ",
+  "profileStatusSlacking": "స్లాకింగ్",
+  "profileStatusTraveling": "ప్రయాణిస్తున్నాను",
+  "profileStatusGoingHome": "ఇంటికి వెళుతున్నాను",
+  "profileStatusDnd": "డిస్టర్బ్ చేయవద్దు",
+  "profileActivities": "కార్యకలాపాలు",
+  "profileStatusHanging": "హ్యాంగ్ అవుట్",
+  "profileStatusCheckIn": "చెక్ ఇన్ చేయండి",
+  "profileStatusExercising": "వ్యాయామం చేస్తున్నారు",
+  "profileStatusCoffee": "కాఫీ",
+  "profileStatusBubbleTea": "బబుల్ టీ",
+  "profileStatusEating": "తినడం",
+  "profileStatusParenting": "పేరెంటింగ్",
+  "profileStatusSavingWorld": "ప్రపంచాన్ని కాపాడుతోంది",
+  "profileStatusSelfie": "సెల్ఫీ",
+  "profileRest": "విశ్రాంతి",
+  "profileStatusRetreat": "తిరోగమనం",
+  "profileStatusHome": "హోమ్",
+  "profileStatusSleeping": "నిద్రపోతున్నాను",
+  "profileStatusCatLover": "పిల్లి ప్రేమికుడు",
+  "profileStatusDogWalking": "వాకింగ్ డాగ్",
+  "profileStatusGaming": "గేమింగ్",
+  "profileStatusListening": "వింటున్నాను",
+  "profileEditAddress": "చిరునామాను సవరించండి",
+  "profileRecipient": "గ్రహీత",
+  "profileEnterRecipientName": "గ్రహీత పేరును నమోదు చేయండి",
+  "profilePhoneNumber": "ఫోన్ నంబర్",
+  "profileEnterPhoneNumber": "ఫోన్ నంబర్‌ను నమోదు చేయండి",
+  "profileRegionHint": "ప్రావిన్స్/నగరం/జిల్లా",
+  "profileDetailedAddress": "వివరణాత్మక చిరునామా",
+  "profileDetailedAddressHint": "వీధి, భవనం సంఖ్య మొదలైనవి.",
+  "profileSetAsDefaultAddress": "డిఫాల్ట్ చిరునామాగా సెట్ చేయండి",
+  "profilePleaseCompleteInfo": "దయచేసి అన్ని ఫీల్డ్‌లను పూర్తి చేయండి",
+  "profileEditInvoice": "ఇన్‌వాయిస్‌ని సవరించండి",
+  "profileInvoiceType": "ఇన్వాయిస్ రకం",
+  "profileCompanyName": "కంపెనీ పేరు",
+  "profilePersonalName": "వ్యక్తిగత పేరు",
+  "profileEnterCompanyName": "కంపెనీ పేరును నమోదు చేయండి",
+  "profileEnterName": "పేరు నమోదు చేయండి",
+  "profileTaxIdNumber": "పన్ను ID సంఖ్య",
+  "profileEnterTaxIdNumber": "పన్ను ID నంబర్‌ను నమోదు చేయండి",
+  "profileBankNameOptional": "బ్యాంక్ పేరు (ఐచ్ఛికం)",
+  "profileEnterBankName": "బ్యాంక్ పేరును నమోదు చేయండి",
+  "profileBankAccountOptional": "బ్యాంక్ ఖాతా (ఐచ్ఛికం)",
+  "profileEnterBankAccount": "బ్యాంక్ ఖాతాను నమోదు చేయండి",
+  "profileCompanyAddressOptional": "కంపెనీ చిరునామా (ఐచ్ఛికం)",
+  "profileEnterCompanyAddress": "కంపెనీ చిరునామాను నమోదు చేయండి",
+  "profileCompanyPhoneOptional": "కంపెనీ ఫోన్ (ఐచ్ఛికం)",
+  "profileEnterCompanyPhone": "కంపెనీ ఫోన్‌ని నమోదు చేయండి",
+  "profileSetAsDefaultInvoice": "డిఫాల్ట్ ఇన్‌వాయిస్‌గా సెట్ చేయండి",
+  "profileRingtoneVibrate": "కంపించు",
+  "profileRingtoneSilent": "నిశ్శబ్దం",
+  "profileVibrateMode": "వైబ్రేట్ మోడ్",
+  "profileSilentMode": "సైలెంట్ మోడ్",
+  "profilePlayFailed": "ప్లే చేయడంలో విఫలమైంది: {ringtoneName}",
+  "profilePlaying": "ప్లే చేస్తోంది: {ringtoneName}",
+  "profileStop": "ఆపు",
+  "profileSelectRingtone": "రింగ్‌టోన్‌ని ఎంచుకోండి",
+  "profileLoadingRingtones": "రింగ్‌టోన్‌లను లోడ్ చేస్తోంది...",
+  "profileNoRingtonesFound": "రింగ్‌టోన్‌లు ఏవీ కనుగొనబడలేదు",
+  "mainMessagesWithCount": "సందేశాలు({count})",
+  "@mainMessagesWithCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "storyViewers": "వీక్షకులు",
+  "storyNoViewers": "ఇంకా వీక్షకులు లేరు",
+  "storyReplyToStory": "కథకు ప్రత్యుత్తరం ఇవ్వండి...",
+  "commonCopiedToClipboard": "క్లిప్‌బోర్డ్‌కి కాపీ చేయబడింది",
+  "commonMore": "మరిన్ని",
+  "commonTranslating": "అనువదిస్తోంది...",
+  "commonTranslatedFrom": "{language} నుండి అనువదించబడింది",
+  "@commonTranslatedFrom": {
+    "placeholders": {
+      "language": {
+        "type": "String"
+      }
+    }
+  },
+  "commonTranslation": "అనువాదం",
+  "commonTranslationFailed": "అనువాదం విఫలమైంది",
+  "commonAllRead": "అన్నీ చదివారు",
+  "commonReadCount": "{count} చదివారు",
+  "commonYouRecalledMessage": "మీరు ఒక సందేశాన్ని గుర్తు చేసుకున్నారు",
+  "commonMessageRecalled": "సందేశం గుర్తుకు వచ్చింది",
+  "commonReEdit": "మళ్లీ సవరించండి",
+  "commonWalletArea": "వాలెట్ ప్రాంతం",
+  "callIncomingCall": "ఇన్‌కమింగ్ కాల్",
+  "callMissedCall": "మిస్డ్ కాల్",
+  "groupRemoveAdmin": "అడ్మిన్‌ని తీసివేయండి",
+  "chatSelectCurrency": "కరెన్సీని ఎంచుకోండి",
+  "chatSelectEmoji": "ఎమోజిని ఎంచుకోండి",
+  "chatSelectRedPacketCover": "కవర్ ఎంచుకోండి",
+  "groupSetAsAdmin": "అడ్మిన్‌గా సెట్ చేయండి",
+  "chatVideoPlaybackFailed": "వీడియో ప్లేబ్యాక్ విఫలమైంది",
+  "@chatVideoPlaybackFailed": {
+    "description": "Used with error message"
+  },
+  "groupViewProfile": "ప్రొఫైల్‌ని వీక్షించండి",
+  "favoriteAddLinkComingSoon": "లింక్ ఫీచర్‌ని జోడించు త్వరలో వస్తుంది",
+  "favoriteNewNoteComingSoon": "కొత్త నోట్ ఫీచర్ త్వరలో రానుంది",
+  "qrcodeSaveFeatureComingSoon": "సేవ్ ఫీచర్ త్వరలో వస్తుంది",
+  "qrcodeShareFeatureComingSoon": "షేర్ ఫీచర్ త్వరలో వస్తుంది",
+  "qrcodeProcessFailed": "QR కోడ్‌ని ప్రాసెస్ చేయడంలో విఫలమైంది: {error}",
+  "@qrcodeProcessFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "securityDeviceIdRequired": "పరికర ID అవసరం",
+  "securityVerificationStartFailed": "ధృవీకరణను ప్రారంభించడంలో విఫలమైంది: {error}",
+  "@securityVerificationStartFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "securityVerificationFailed": "ధృవీకరణ విఫలమైంది",
+  "securityVerificationFailedWithReason": "ధృవీకరణ విఫలమైంది: {reason}",
+  "@securityVerificationFailedWithReason": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "securityEmojiMismatchRejected": "ధృవీకరణ తిరస్కరించబడింది - ఎమోజి సరిపోలలేదు",
+  "securityWaitingForDeviceAccept": "ఇతర పరికరం ఆమోదించడానికి వేచి ఉంది...",
+  "securityVerifyDevice": "ఈ పరికరాన్ని ధృవీకరించండి",
+  "securityConfirmEmojiMatch": "దిగువన ఉన్న ఎమోజీలు రెండు పరికరాలలో ఒకే క్రమంలో ప్రదర్శించబడతాయని నిర్ధారించండి",
+  "securityEmojiDontMatch": "అవి సరిపోలడం లేదు",
+  "securityEmojiMatch": "అవి సరిపోతాయి",
+  "securityWaitingForDeviceConfirm": "ఇతర పరికరం నిర్ధారించడానికి వేచి ఉంది...",
+  "securityVerificationSuccess": "ధృవీకరణ విజయవంతమైంది!",
+  "securityDeviceVerifiedTrusted": "ఈ పరికరం ఇప్పుడు ధృవీకరించబడింది మరియు విశ్వసనీయమైనది.",
+  "securityCompareEmoji": "రెండు పరికరాలలో ఎమోజీని సరిపోల్చండి",
+  "securityCompareNumbers": "రెండు పరికరాల్లోని సంఖ్యలను సరిపోల్చండి",
+  "commonTryAgain": "మళ్లీ ప్రయత్నించండి",
+  "commonDone": "పూర్తయింది",
+  "chatExportTitle": "చాట్‌ని ఎగుమతి చేయండి",
+  "chatExportSuccess": "ఎగుమతి విజయవంతమైంది",
+  "chatExportFailed": "ఎగుమతి విఫలమైంది: {error}",
+  "@chatExportFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatExportFormat": "ఎగుమతి ఫార్మాట్",
+  "chatExportHtmlDesc": "స్టైల్ లేఅవుట్‌తో ఏదైనా బ్రౌజర్‌లో చదవగలిగేది",
+  "chatExportJsonDesc": "మెషిన్-రీడబుల్ స్ట్రక్చర్డ్ డేటా ఫార్మాట్",
+  "chatExportDateRange": "తేదీ పరిధి",
+  "chatExportAll": "అన్ని సందేశాలు",
+  "chatExportLastWeek": "గత 7 రోజులు",
+  "chatExportLastMonth": "గత నెల",
+  "chatExportLast3Months": "గత 3 నెలలు",
+  "chatExportMessageCount": "ఎగుమతి చేయడానికి సందేశాలు",
+  "chatExportButton": "ఎగుమతి & భాగస్వామ్యం చేయండి",
+  "chatMediaGallery": "మీడియా గ్యాలరీ",
+  "chatExportHistory": "చాట్ చరిత్రను ఎగుమతి చేయండి",
+  "pdfLoadFailed": "PDFని లోడ్ చేయడంలో విఫలమైంది",
+  "pdfPageIndicator": "{current} / {total}",
+  "@pdfPageIndicator": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "mediaAll": "అన్నీ",
+  "mediaImages": "చిత్రాలు",
+  "mediaVideos": "వీడియోలు",
+  "mediaFiles": "ఫైళ్లు",
+  "mediaAudio": "ఆడియో",
+  "mediaItemsCount": "{count} అంశాలు",
+  "@mediaItemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mediaNoMediaFound": "మీడియా ఏదీ కనుగొనబడలేదు",
+  "spacesTitle": "సంఘాలు",
+  "spacesCreate": "సంఘాన్ని సృష్టించండి",
+  "spacesJoined": "చేరారు",
+  "spacesDiscover": "కనుగొనండి",
+  "spacesNoJoined": "ఇంకా సంఘాలు ఏవీ చేరలేదు",
+  "spacesExplore": "సంఘాలను అన్వేషించండి",
+  "spacesNoPublic": "పబ్లిక్ కమ్యూనిటీలు ఏవీ కనుగొనబడలేదు",
+  "spacesJoin": "చేరండి",
+  "spacesSubSpaces": "ఉప సంఘాలు",
+  "spacesChannels": "ఛానెల్‌లు",
+  "spacesMembersCount": "{count} సభ్యులు",
+  "@spacesMembersCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "spacesPublic": "పబ్లిక్",
+  "spacesPrivate": "ప్రైవేట్",
+  "spacesSuggested": "సూచించారు",
+  "spacesChannelsCount": "{count} ఛానెల్‌లు",
+  "@spacesChannelsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "callInCallChat": "ఇన్-కాల్ చాట్",
+  "callMessagesCount": "{count} సందేశాలు",
+  "@callMessagesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "callNoMessagesYet": "ఇంకా సందేశాలు లేవు.\nప్రారంభించడానికి సందేశాన్ని పంపండి.",
+  "callTypeMessage": "సందేశాన్ని టైప్ చేయండి...",
+  "callYouSender": "మీరు",
+  "callChatLabel": "చాట్ చేయండి",
+  "chatEdited": "సవరించబడింది",
+  "chatEditHistory": "చరిత్రను సవరించండి",
+  "chatOriginalMessage": "అసలైనది",
+  "chatEditedAt": "{time}లో సవరించబడింది",
+  "@chatEditedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "chatViewOnce": "ఒకసారి చూడండి",
+  "chatViewOncePhoto": "ఒక్కసారి ఫోటో చూడండి",
+  "chatViewOnceVideo": "ఒక్కసారి వీడియో చూడండి",
+  "chatViewOnceViewed": "వీక్షించారు",
+  "chatViewOnceExpired": "గడువు ముగిసింది",
+  "chatViewOnceTap": "వీక్షించడానికి నొక్కండి",
+  "chatAutoFaceBlur": "ఆటో ముఖం బ్లర్",
+  "chatAutoFaceBlurDesc": "ఫోటోలను పంపేటప్పుడు ఆటోమేటిక్‌గా ముఖాలను బ్లర్ చేయండి",
+  "threadReplyInThread": "థ్రెడ్‌లో ప్రత్యుత్తరం ఇవ్వండి",
+  "threadReplies": "{count} ప్రత్యుత్తరాలు",
+  "@threadReplies": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "threadReply": "1 ప్రత్యుత్తరం",
+  "threadLatestReply": "తాజాది: {preview}",
+  "@threadLatestReply": {
+    "placeholders": {
+      "preview": {
+        "type": "String"
+      }
+    }
+  },
+  "threadTitle": "థ్రెడ్",
+  "threadReplyPlaceholder": "థ్రెడ్‌లో ప్రత్యుత్తరం ఇవ్వండి...",
+  "threadParticipants": "{count} పాల్గొనేవారు",
+  "@threadParticipants": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "voiceRoomTitle": "వాయిస్ రూమ్",
+  "voiceRoomCreate": "వాయిస్ గదిని సృష్టించండి",
+  "voiceRoomJoin": "చేరండి",
+  "voiceRoomLeave": "వదిలేయండి",
+  "voiceRoomEnd": "ముగింపు గది",
+  "voiceRoomRaiseHand": "చేయి పైకెత్తండి",
+  "voiceRoomLowerHand": "దిగువ చేయి",
+  "voiceRoomMute": "మ్యూట్ చేయండి",
+  "voiceRoomUnmute": "అన్‌మ్యూట్ చేయండి",
+  "voiceRoomHost": "హోస్ట్",
+  "voiceRoomSpeakers": "వక్తలు",
+  "voiceRoomListeners": "శ్రోతలు",
+  "voiceRoomLive": "ప్రత్యక్ష ప్రసారం",
+  "voiceRoomEnded": "ముగిసింది",
+  "voiceRoomScheduled": "షెడ్యూల్ చేయబడింది",
+  "voiceRoomApprove": "ఆమోదించండి",
+  "voiceRoomDemote": "శ్రోతకి తరలించండి",
+  "voiceRoomHandRaised": "{name} చేతులెత్తేసింది",
+  "@voiceRoomHandRaised": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "voiceRoomName": "గది పేరు",
+  "voiceRoomTopic": "అంశం (ఐచ్ఛికం)",
+  "voiceRoomNoActive": "యాక్టివ్ వాయిస్ రూమ్‌లు లేవు",
+  "voiceRoomConnecting": "కనెక్ట్ అవుతోంది...",
+  "usernameTitle": "వినియోగదారు పేరు",
+  "usernameSet": "వినియోగదారు పేరును సెట్ చేయండి",
+  "usernameChange": "వినియోగదారు పేరు మార్చండి",
+  "usernamePlaceholder": "వినియోగదారు పేరును నమోదు చేయండి",
+  "usernameAvailable": "వినియోగదారు పేరు అందుబాటులో ఉంది",
+  "usernameUnavailable": "వినియోగదారు పేరు ఇప్పటికే తీసుకోబడింది",
+  "usernameInvalid": "3-30 అక్షరాలు, చిన్న అక్షరాలు, సంఖ్యలు, అండర్ స్కోర్. అక్షరంతో ప్రారంభించాలి.",
+  "usernameReserved": "ఈ వినియోగదారు పేరు రిజర్వ్ చేయబడింది",
+  "usernameSaved": "వినియోగదారు పేరు సేవ్ చేయబడింది",
+  "usernameSearchHint": "@username ద్వారా శోధించండి",
+  "ensName": "ENS పేరు",
+  "ensLinked": "ENSకి లింక్ చేయబడింది",
+  "ensResolving": "ENS ని పరిష్కరిస్తోంది...",
+  "ensNotFound": "ENS పేరు కనుగొనబడలేదు",
+  "tokenGateTitle": "టోకెన్ గేట్",
+  "tokenGateEnable": "టోకెన్ గేట్‌ని ప్రారంభించండి",
+  "tokenGateDisable": "టోకెన్ గేట్‌ను నిలిపివేయండి",
+  "tokenGateAddRule": "నియమాన్ని జోడించండి",
+  "tokenGateRemoveRule": "నియమాన్ని తీసివేయండి",
+  "tokenGateContractAddress": "కాంట్రాక్ట్ చిరునామా",
+  "tokenGateMinBalance": "కనీస బ్యాలెన్స్",
+  "tokenGateTokenId": "టోకెన్ ID (ERC-1155)",
+  "tokenGateChainId": "చైన్ ID",
+  "tokenGateVerifying": "టోకెన్ హోల్డింగ్‌లను ధృవీకరిస్తోంది...",
+  "tokenGateVerified": "ధృవీకరణ ఆమోదించబడింది",
+  "tokenGateDenied": "మీరు టోకెన్ అవసరాలను తీర్చలేదు",
+  "tokenGateOperatorAnd": "అన్ని నియమాలకు అనుగుణంగా ఉండాలి",
+  "tokenGateOperatorOr": "ఏదైనా నియమానికి అనుగుణంగా ఉండాలి",
+  "tokenGateRuleErc20": "ERC-20 టోకెన్",
+  "tokenGateRuleErc721": "NFT (ERC-721)",
+  "tokenGateRuleErc1155": "బహుళ-టోకెన్ (ERC-1155)",
+  "tokenGateRuleNative": "స్థానిక టోకెన్",
+  "tokenGateSaved": "టోకెన్ గేట్ సేవ్ చేయబడింది",
+  "tokenGateEnableDescription": "చేరడానికి సభ్యులు టోకెన్‌లను కలిగి ఉండవలసి ఉంటుంది",
+  "tokenGateOperator": "రూల్ లాజిక్",
+  "tokenGateRules": "నియమాలు",
+  "tokenGateSymbol": "చిహ్నం (ఐచ్ఛికం)",
+  "tokenGateChain": "చైన్",
+  "tokenGateTokenStandard": "టోకెన్ స్టాండర్డ్",
+  "tokenGateDenialMessage": "తిరస్కరణ సందేశం",
+  "tokenGateDenialMessageHint": "ధృవీకరణ విఫలమైనప్పుడు సందేశం చూపబడుతుంది",
+  "tokenGateVerifyTitle": "టోకెన్ ధృవీకరణ",
+  "tokenGateVerifyPassed": "ధృవీకరణ ఆమోదించబడింది",
+  "tokenGateVerifyFailed": "ధృవీకరణ విఫలమైంది",
+  "tokenGateRetryVerify": "మళ్లీ ప్రయత్నించండి",
+  "tokenGateRequired": "అవసరం",
+  "tokenGateYourBalance": "మీ బ్యాలెన్స్",
+  "tokenGateRulesActive": "నియమాలు చురుకుగా ఉంటాయి",
+  "tokenGateDisabled": "వికలాంగుడు",
+  "ensNotBound": "కట్టుబడి లేదు",
+  "liveLocation": "ప్రత్యక్ష స్థానం",
+  "stopLiveLocation": "భాగస్వామ్యం చేయడం ఆపు",
+  "startLiveLocation": "భాగస్వామ్యం చేయడం ప్రారంభించండి",
+  "selectDuration": "వ్యవధిని ఎంచుకోండి",
+  "groupChatFiles": "చాట్ ఫైల్స్",
+  "groupLinks": "లింకులు",
+  "groupNoLinks": "ఇంకా లింక్‌లు లేవు",
+  "chatBackground": "చాట్ నేపథ్యం",
+  "solidColors": "ఘన రంగులు",
+  "gradients": "ప్రవణతలు",
+  "defaultBackground": "డిఫాల్ట్",
+  "settingsFontSizeSlider": "ఫాంట్ పరిమాణం",
+  "autoDownload": "ఆటో-డౌన్‌లోడ్",
+  "images": "చిత్రాలు",
+  "voice": "వాయిస్",
+  "video": "వీడియో",
+  "files": "ఫైళ్లు",
+  "mobileData": "మొబైల్ డేటా",
+  "roaming": "రోమింగ్",
+  "storageManagement": "నిల్వ",
+  "totalUsage": "మొత్తం వినియోగం",
+  "cache": "కాష్",
+  "other": "ఇతర",
+  "clearCache": "కాష్‌ని క్లియర్ చేయండి",
+  "cacheCleared": "కాష్ క్లియర్ చేయబడింది",
+  "clearCacheFailed": "కాష్‌ని క్లియర్ చేయడంలో విఫలమైంది",
+  "confirmClearCache": "మొత్తం కాష్ డేటాను క్లియర్ చేయాలా?",
+  "mapView": "మ్యాప్ వీక్షణ",
+  "liveLocationSharingCount": "{count} వ్యక్తులు స్థానాన్ని భాగస్వామ్యం చేస్తున్నారు",
+  "@liveLocationSharingCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "minutes15": "15 నిమిషాలు",
+  "minutes30": "30 నిమిషాలు",
+  "hour1": "1 గంట",
+  "hours8": "8 గంటలు",
+  "personalCard": "వ్యక్తిగత కార్డ్",
+  "downloadFailed": "డౌన్‌లోడ్ విఫలమైంది",
+  "locationExpired": "గడువు ముగిసింది",
+  "secondsRemaining": "{count}లు",
+  "@secondsRemaining": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "minutesRemaining": "{count} నిమిషాలు",
+  "@minutesRemaining": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hoursMinutesRemaining": "{hours} గంటలు {minutes} నిమిషాలు",
+  "@hoursMinutesRemaining": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "favoriteMessages": "ఇష్టమైనవి",
+  "linksCopied": "లింక్ కాపీ చేయబడింది",
+  "noLinksFound": "లింక్‌లు ఏవీ కనుగొనబడలేదు",
+  "roomStorageRanking": "గది నిల్వ ర్యాంకింగ్",
+  "downloadComplete": "డౌన్‌లోడ్ పూర్తయింది",
+  "downloading": "డౌన్‌లోడ్ చేస్తోంది...",
+  "draftSaved": "డ్రాఫ్ట్ సేవ్ చేయబడింది",
+  "voiceRecording": "వాయిస్ రికార్డింగ్",
+  "searchLocation": "స్థానాన్ని శోధించండి",
+  "tapToSearch": "శోధించడానికి నొక్కండి",
+  "settingsThisDevice": "ఈ పరికరం",
+  "settingsJustNow": "ఇప్పుడే",
+  "settingsDeviceId": "పరికరం ID",
+  "settingsStatus": "స్థితి",
+  "settingsLastActive": "చివరిగా సక్రియం",
+  "settingsIpAddress": "IP చిరునామా",
+  "settingsRenameDevice": "పరికరం పేరు మార్చండి",
+  "settingsDeviceNameHint": "పరికరం పేరును నమోదు చేయండి",
+  "settingsDeviceRenamed": "పరికరం పేరు మార్చబడింది",
+  "settingsRenameFailed": "పేరు మార్చడం విఫలమైంది",
+  "settingsRemoteLogout": "రిమోట్ లాగ్అవుట్",
+  "settingsRemoteLogoutConfirm": "మీరు ఖచ్చితంగా \"{deviceName}\" నుండి లాగ్ అవుట్ చేయాలనుకుంటున్నారా? ఈ చర్య రద్దు చేయబడదు.",
+  "@settingsRemoteLogoutConfirm": {
+    "placeholders": {
+      "deviceName": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsDeviceLoggedOut": "పరికరం లాగ్ అవుట్ చేయబడింది",
+  "settingsLogoutFailed": "లాగ్ అవుట్ విఫలమైంది",
+  "settingsLogout": "లాగ్అవుట్",
+  "settingsVerifyIdentity": "గుర్తింపును ధృవీకరించండి",
+  "settingsEnterPasswordToConfirm": "ఈ చర్యను నిర్ధారించడానికి మీ పాస్‌వర్డ్‌ను నమోదు చేయండి.",
+  "scheduledSendTitle": "సందేశాన్ని షెడ్యూల్ చేయండి",
+  "scheduledSendInOneHour": "1 గంటలో",
+  "scheduledSendTonight": "ఈ రాత్రి (8:00 PM)",
+  "scheduledSendTomorrowMorning": "రేపు ఉదయం (9:00 AM)",
+  "scheduledSendCustom": "తేదీ & సమయాన్ని ఎంచుకోండి",
+  "scheduledMessageLabel": "షెడ్యూల్ చేయబడింది",
+  "scheduledMessageCancel": "షెడ్యూల్ చేసిన సందేశాన్ని రద్దు చేయండి",
+  "chatLockTitle": "చాట్ లాక్",
+  "chatLockEnable": "ఈ చాట్‌ని లాక్ చేయండి",
+  "chatLockDisable": "ఈ చాట్‌ని అన్‌లాక్ చేయండి",
+  "chatLockDescription": "లాక్ చేయబడిన చాట్‌లను తెరవడానికి బయోమెట్రిక్ లేదా పిన్ ధృవీకరణ అవసరం",
+  "chatLockVerifyTitle": "చాట్ లాక్ చేయబడింది",
+  "chatLockVerifySubtitle": "ఈ చాట్‌ని యాక్సెస్ చేయడానికి వెరిఫై చేయండి",
+  "chatLockVerifyFailed": "ధృవీకరణ విఫలమైంది",
+  "chatLockEnabled": "చాట్ లాక్ చేయబడింది",
+  "chatLockDisabled": "చాట్ అన్‌లాక్ చేయబడింది",
+  "chatLockPinTitle": "PINని నమోదు చేయండి",
+  "chatLockPinSetTitle": "PINని సెట్ చేయండి",
+  "chatLockPinConfirmTitle": "PINని నిర్ధారించండి",
+  "chatLockPinMismatch": "పిన్ సరిపోలలేదు",
+  "chatLockUseBiometric": "బయోమెట్రిక్ ఉపయోగించండి",
+  "chatLockUsePin": "పిన్ ఉపయోగించండి",
+  "mediaEditorUndo": "అన్డు",
+  "mediaEditorRedo": "పునరావృతం చేయండి",
+  "mediaEditorCrop": "పంట",
+  "mediaEditorFilter": "ఫిల్టర్ చేయండి",
+  "mediaEditorDraw": "గీయండి",
+  "mediaEditorText": "వచనం",
+  "aiAssistant": "AI అసిస్టెంట్",
+  "aiAssistantWelcome": "హలో! నేను N42 AI అసిస్టెంట్‌ని. నేను మీకు ఎలా సహాయం చేయగలను?",
+  "aiAssistantNotConfigured": "AI సేవ కాన్ఫిగర్ చేయబడలేదు",
+  "aiAssistantSettings": "AI సెట్టింగ్‌లు",
+  "aiAssistantClearHistory": "చాట్ చరిత్రను క్లియర్ చేయండి",
+  "aiAssistantClearHistoryConfirm": "మీరు ఖచ్చితంగా మొత్తం AI చాట్ చరిత్రను క్లియర్ చేయాలనుకుంటున్నారా?",
+  "aiAssistantStopGenerating": "ఉత్పత్తి చేయడం ఆపివేయండి",
+  "aiAssistantModel": "మోడల్",
+  "aiAssistantTemperature": "ఉష్ణోగ్రత",
+  "aiAssistantMaxTokens": "గరిష్ట టోకెన్లు",
+  "aiAssistantContextWindow": "సందర్భ విండో",
+  "aiAssistantServiceStatus": "సేవా స్థితి",
+  "aiAssistantAvailable": "అందుబాటులో ఉంది",
+  "aiAssistantUnavailable": "అందుబాటులో లేదు",
+  "aiSummarize": "AI సారాంశం",
+  "aiSummarizeUnread": "{count} చదవని సందేశాలను సంగ్రహించండి",
+  "@aiSummarizeUnread": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "aiSummarizeLoading": "సంగ్రహించడం...",
+  "aiSummarizeError": "సంగ్రహించడంలో విఫలమైంది",
+  "aiRewrite": "AI తిరిగి వ్రాయండి",
+  "aiRewriteFormal": "అధికారిక",
+  "aiRewriteCasual": "సాధారణం",
+  "aiRewritePlayful": "ఉల్లాసభరితమైన",
+  "aiRewriteProfessional": "వృత్తిపరమైన",
+  "aiRewriteAccept": "ఉపయోగించండి",
+  "aiRewriteCancel": "రద్దు చేయి",
+  "aiRewriteLoading": "తిరిగి రాస్తోంది...",
+  "aiLinkSummary": "AI సారాంశం",
+  "aiLinkSummaryAnalyzing": "విశ్లేషిస్తోంది...",
+  "chatFolderManagement": "ఫోల్డర్‌లను నిర్వహించండి",
+  "chatFolderSystem": "సిస్టమ్ ఫోల్డర్లు",
+  "chatFolderCustom": "కస్టమ్ ఫోల్డర్లు",
+  "chatFolderEmpty": "ఇంకా అనుకూల ఫోల్డర్‌లు లేవు",
+  "chatFolderCreate": "ఫోల్డర్‌ని సృష్టించండి",
+  "chatFolderEdit": "ఫోల్డర్‌ని సవరించండి",
+  "chatFolderNameHint": "ఫోల్డర్ పేరు",
+  "chatFolderAll": "అన్నీ",
+  "chatFolderUnread": "చదవలేదు",
+  "chatFolderPersonal": "వ్యక్తిగత",
+  "chatFolderGroups": "గుంపులు",
+  "chatFolderChannels": "ఛానెల్‌లు",
+  "chatFolderMuted": "మ్యూట్ చేయబడింది",
+  "storyAddMusic": "సంగీతాన్ని జోడించండి",
+  "storyChangeMusic": "సంగీతాన్ని మార్చండి",
+  "storyBackgroundMusic": "నేపథ్య సంగీతం",
+  "storyMusicPreview": "ప్రివ్యూ (గరిష్టంగా 15సె)",
+  "storyChooseFromDevice": "పరికరం నుండి ఎంచుకోండి",
+  "storyUseThisMusic": "ఈ సంగీతాన్ని ఉపయోగించండి",
+  "authPasskeyNotSupported": "ఈ పరికరంలో పాస్‌కీకి మద్దతు లేదు",
+  "authPasskeyRegister": "పాస్‌కీని నమోదు చేయండి",
+  "authPasskeyNoRegistered": "పాస్‌కీలు నమోదు కాలేదు",
+  "authPasskeyRegisterHint": "ఈ ఖాతా కోసం పాస్‌కీని నమోదు చేయండి. స్వతంత్ర పాస్‌కీ సైన్-ఇన్ తర్వాత ప్రారంభించబడుతుంది.",
+  "authPasskeyNameYours": "మీ పాస్‌కీకి పేరు పెట్టండి",
+  "authPasskeyRegistered": "పాస్‌కీ ఈ ఖాతాలో సేవ్ చేయబడింది",
+  "authPasskeyDeleted": "ఈ ఖాతా నుండి పాస్‌కీ తీసివేయబడింది",
+  "authPasskeyDeleteConfirm": "\"{name}\" పాస్‌కీని తొలగించాలా? పాస్‌కీ సైన్-ఇన్‌ని ఉపయోగించే ముందు మీరు దాన్ని మళ్లీ నమోదు చేసుకోవాలి.",
+  "@authPasskeyDeleteConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "momentVisibilityPublic": "పబ్లిక్",
+  "momentVisibilityPrivate": "ప్రైవేట్",
+  "momentVisibilityPartial": "ఎంచుకున్న స్నేహితులు",
+  "momentVisibilityExcluded": "కొంతమంది స్నేహితులను మినహాయించండి",
+  "momentUserMoments": "{userName} యొక్క క్షణాలు",
+  "@momentUserMoments": {
+    "placeholders": {
+      "userName": {
+        "type": "String"
+      }
+    }
+  },
+  "momentForwardTo": "ముందుకు",
+  "momentForwardSuccess": "విజయవంతంగా ఫార్వార్డ్ చేయబడింది",
+  "momentSelectFriends": "స్నేహితులను ఎంచుకోండి",
+  "momentSelectTags": "ట్యాగ్‌ల ద్వారా ఎంచుకోండి",
+  "momentSelectedCount": "ఎంచుకోబడింది ({count})",
+  "@momentSelectedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "momentNoMomentsYet": "ఇంకా క్షణాలు లేవు",
+  "momentForwardMoment": "ఫార్వర్డ్ మూమెంట్",
+  "momentAddComment": "వ్యాఖ్యను జోడించండి...",
+  "momentForwardContent": "[క్షణం] {content}",
+  "@momentForwardContent": {
+    "placeholders": {
+      "content": {
+        "type": "String"
+      }
+    }
+  },
+  "momentDeleteMoment": "క్షణం తొలగించు",
+  "momentDeleteConfirm": "మీరు ఖచ్చితంగా ఈ క్షణాన్ని తొలగించాలనుకుంటున్నారా?",
+  "momentComment": "వ్యాఖ్యానించండి",
+  "momentWriteComment": "వ్యాఖ్య వ్రాయండి...",
+  "momentLike": "ఇష్టం",
+  "momentUnlike": "కాకుండా",
+  "momentForward": "ముందుకు",
+  "momentDelete": "తొలగించు",
+  "momentReply": "ప్రత్యుత్తరం ఇవ్వండి",
+  "momentMoment": "క్షణం",
+  "momentLikesCount": "{count} ఇష్టపడ్డారు",
+  "@momentLikesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "momentCommentsCount": "{count} వ్యాఖ్యలు",
+  "@momentCommentsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "momentNoComments": "ఇంకా వ్యాఖ్యలు లేవు",
+  "momentFailedToLoad": "చిత్రాన్ని లోడ్ చేయడంలో విఫలమైంది",
+  "momentReplyTo": "{userName}కి ప్రత్యుత్తరం ఇవ్వండి...",
+  "@momentReplyTo": {
+    "placeholders": {
+      "userName": {
+        "type": "String"
+      }
+    }
+  },
+  "momentNoConversations": "సంభాషణలు లేవు",
+  "momentJustNow": "ఇప్పుడే",
+  "momentMinutesAgo": "{count}m క్రితం",
+  "@momentMinutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "momentHoursAgo": "{count}h క్రితం",
+  "@momentHoursAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "momentDaysAgo": "{count}d క్రితం",
+  "@momentDaysAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatGroupAnnouncementHint": "సమూహ ప్రకటనను నమోదు చేయండి",
+  "chatGroupAnnouncementEmpty": "ప్రకటన లేదు",
+  "chatEditNickname": "మారుపేరును సవరించండి",
+  "chatNicknameHint": "ఈ గుంపులో మీ మారుపేరును నమోదు చేయండి",
+  "contactAddPhoneHint": "ఫోన్ నంబర్‌ను నమోదు చేయండి",
+  "contactNotesHint": "ఈ పరిచయం గురించి గమనికలను జోడించండి",
+  "reportTitle": "నివేదించండి",
+  "reportReasonSpam": "స్పామ్",
+  "reportReasonHarassment": "వేధింపులు",
+  "reportReasonFraud": "మోసం",
+  "reportReasonOther": "ఇతర",
+  "reportSubmitted": "నివేదిక సమర్పించారు",
+  "reportDescription": "అదనపు వివరణ (ఐచ్ఛికం)",
+  "qrcodeSaved": "QR కోడ్ ఆల్బమ్‌లో సేవ్ చేయబడింది",
+  "chatSendRedPacketInChat": "దయచేసి చాట్‌లో ఎరుపు ప్యాకెట్‌ని పంపండి",
+  "commonSaveFailed": "సేవ్ చేయడం విఫలమైంది",
+  "reportSelectReason": "దయచేసి ఒక కారణాన్ని ఎంచుకోండి",
+  "gameCenter": "ఆటలు",
+  "gameHighScore": "ఉత్తమమైనది",
+  "gameScore": "స్కోర్",
+  "gameOver": "గేమ్ ముగిసింది",
+  "gamePlayAgain": "మళ్లీ ఆడండి",
+  "gameLeaderboard": "లీడర్‌బోర్డ్",
+  "gamePause": "పాజ్ చేయబడింది",
+  "gameResume": "పునఃప్రారంభించడానికి నొక్కండి",
+  "gameConfirmExit": "ఈ గేమ్ నుండి నిష్క్రమించాలా?",
+  "gameNoScores": "ఇంకా స్కోర్లు లేవు",
+  "game2048": "2048",
+  "game2048Desc": "2048కి చేరుకోవడానికి టైల్స్‌ను విలీనం చేయండి",
+  "gameBlockDrop": "బ్లాక్ డ్రాప్",
+  "gameBlockDropDesc": "పంక్తులను వదలండి మరియు క్లియర్ చేయండి",
+  "gameMinesweeper": "మైన్స్వీపర్",
+  "gameMinesweeperDesc": "అన్ని సురక్షిత సెల్‌లను కనుగొనండి",
+  "gameMatch3": "మ్యాచ్ 3",
+  "gameMatch3Desc": "3 లేదా అంతకంటే ఎక్కువ రత్నాలను సరిపోల్చండి",
+  "gameMinesweeperEasy": "సులువు",
+  "gameMinesweeperMedium": "మధ్యస్థం",
+  "gameMinesLeft": "గనులు మిగిలాయి",
+  "gameTimeLeft": "సమయం",
+  "gameLevel": "స్థాయి",
+  "gameNext": "తదుపరి",
+  "gameBestTime": "ఉత్తమ సమయం",
+  "gameNewRecord": "కొత్త రికార్డు!",
+  "gameLines": "లైన్లు",
+  "storyMyStory": "నా కథ",
+  "storageSmartCleanup": "స్మార్ట్ క్లీనప్",
+  "storageOldMediaFiles": "పాత మీడియా ఫైల్స్",
+  "storageLargeFiles": "పెద్ద ఫైల్స్",
+  "storageAppCache": "యాప్ కాష్",
+  "storageSettings": "నిల్వ సెట్టింగ్‌లు",
+  "storageAutoCleanup": "ఆటో క్లీనప్",
+  "storageAutoCleanupDesc": "{days} రోజుల కంటే పాత ఫైల్‌లను ఆటోమేటిక్‌గా క్లీన్ చేయండి",
+  "@storageAutoCleanupDesc": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "storageCleanupPeriod": "శుభ్రపరిచే కాలం",
+  "storagePreserveThumbnails": "సూక్ష్మచిత్రాలను సంరక్షించండి",
+  "storagePreserveThumbnailsDesc": "శుభ్రపరిచే సమయంలో చిత్ర సూక్ష్మచిత్రాలను ఉంచండి",
+  "storageWarningHigh": "నిల్వ వినియోగం ఎక్కువ. పాత ఫైళ్లను శుభ్రం చేయడాన్ని పరిగణించండి.",
+  "storageWarningCritical": "నిల్వ చాలా తక్కువగా ఉంది. దయచేసి ఖాళీ స్థలం వరకు శుభ్రం చేయండి.",
+  "storageFreed": "ఫ్రీడ్ {size} ({count} ఫైల్‌లు)",
+  "@storageFreed": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "storageDays": "{days} రోజులు",
+  "@storageDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "storageViewAllRooms": "అన్ని {count} గదులను వీక్షించండి",
+  "@storageViewAllRooms": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "storageNoFiles": "ఫైల్‌లు ఏవీ కనుగొనబడలేదు",
+  "storageFilePinned": "పిన్ చేయబడింది",
+  "storageDeleteSelected": "{count} ఎంచుకున్న ఫైల్‌లను తొలగించాలా? వాటిని సర్వర్ నుండి మళ్లీ డౌన్‌లోడ్ చేసుకోవచ్చు.",
+  "@storageDeleteSelected": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "backupRestore": "బ్యాకప్ & పునరుద్ధరించు",
+  "backupCreate": "బ్యాకప్ సృష్టించండి",
+  "backupCreateDesc": "మీ సెట్టింగ్‌లు మరియు ఎన్‌క్రిప్షన్ కీలను బ్యాకప్ చేయండి. మళ్లీ లాగిన్ అయిన తర్వాత సర్వర్ నుండి సందేశాలు పునరుద్ధరించబడతాయి.",
+  "backupIncludeKeys": "ఎన్క్రిప్షన్ కీలను చేర్చండి",
+  "backupIncludeKeysDesc": "గుప్తీకరించిన సందేశాలను చదవడం అవసరం",
+  "backupPasswordProtect": "పాస్‌వర్డ్ రక్షణ",
+  "backupEnterPassword": "బ్యాకప్ పాస్‌వర్డ్‌ను నమోదు చేయండి",
+  "backupHistory": "బ్యాకప్ చరిత్ర",
+  "backupNoBackups": "ఇంకా బ్యాకప్‌లు లేవు",
+  "backupRestore2": "పునరుద్ధరించు",
+  "backupDelete": "తొలగించు",
+  "backupDeleteConfirm": "మీరు ఖచ్చితంగా ఈ బ్యాకప్‌ని తొలగించాలనుకుంటున్నారా? ఇది రద్దు చేయబడదు.",
+  "backupRestoreFromFile": "ఫైల్ నుండి పునరుద్ధరించండి",
+  "backupRestoreFromFileDesc": "మరొక పరికరం లేదా మునుపటి బ్యాకప్ నుండి .n42backup ఫైల్‌ని దిగుమతి చేయండి.",
+  "backupChooseFile": "బ్యాకప్ ఫైల్‌ని ఎంచుకోండి",
+  "backupRestoring": "పునరుద్ధరిస్తోంది...",
+  "backupCreated": "బ్యాకప్ సృష్టించబడింది: {rooms} గదులు, {messages} సందేశాలు",
+  "@backupCreated": {
+    "placeholders": {
+      "rooms": {
+        "type": "int"
+      },
+      "messages": {
+        "type": "int"
+      }
+    }
+  },
+  "backupRestored": "{rooms} గదుల నుండి {settings} సెట్టింగ్‌లు పునరుద్ధరించబడ్డాయి",
+  "@backupRestored": {
+    "placeholders": {
+      "settings": {
+        "type": "int"
+      },
+      "rooms": {
+        "type": "int"
+      }
+    }
+  },
+  "backupFailed": "బ్యాకప్ విఫలమైంది: {error}",
+  "@backupFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "backupPasswordRequired": "ఈ బ్యాకప్ పాస్‌వర్డ్-రక్షితమైనది",
+  "blocGroupNotFound": "సమూహం కనుగొనబడలేదు",
+  "blocGroupMembersInvited": "ఆహ్వానించబడిన {count} సభ్యులు(లు)",
+  "@blocGroupMembersInvited": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "blocGroupMemberRemoved": "సభ్యుడు తొలగించబడ్డారు",
+  "blocGroupAdminRemoved": "అడ్మిన్ తీసివేయబడ్డారు",
+  "blocGroupLeft": "సమూహం నుండి నిష్క్రమించారు",
+  "blocGroupDisbanded": "సమూహం రద్దు చేయబడింది",
+  "blocGroupJoined": "సమూహంలో చేరారు",
+  "blocGroupInviteDeclined": "ఆహ్వానం తిరస్కరించబడింది",
+  "blocGroupTokenGateUpdated": "టోకెన్ గేట్ నవీకరించబడింది",
+  "blocTransferProcessing": "బదిలీని ప్రాసెస్ చేస్తోంది...",
+  "blocTransferCancelled": "బదిలీ రద్దు చేయబడింది",
+  "blocTransferFailed": "బదిలీ విఫలమైంది",
+  "blocPaymentProcessing": "చెల్లింపును ప్రాసెస్ చేస్తోంది...",
+  "blocPaymentFailed": "చెల్లింపు విఫలమైంది",
+  "groupMaxMembers": "సభ్యుల పరిమితి",
+  "groupMaxMembersUnlimited": "అపరిమిత",
+  "groupMaxMembersHint": "పరిమితిని నమోదు చేయండి (అపరిమిత కోసం ఖాళీగా ఉంచండి)",
+  "groupMaxMembersUpdated": "సభ్యుల పరిమితి నవీకరించబడింది",
+  "groupFull": "సమూహం సామర్థ్యంలో ఉంది",
+  "groupChannels": "టాపిక్ ఛానెల్‌లు",
+  "groupChannelsEmpty": "ఇంకా ఛానెల్‌లు లేవు",
+  "groupChannelsCount": "ఛానెల్‌లు",
+  "groupChannelCreate": "కొత్త ఛానెల్",
+  "groupChannelName": "ఛానెల్ పేరు",
+  "groupChannelTopic": "ఛానెల్ అంశం (ఐచ్ఛికం)",
+  "groupChannelDelete": "ఛానెల్‌ని తొలగించండి",
+  "groupChannelDeleteConfirm": "ఈ ఛానెల్‌ని తొలగించాలా? అన్ని సందేశాలు పోతాయి.",
+  "groupBotSettings": "బాట్ సెట్టింగ్‌లు",
+  "groupBotEnabled": "బాట్‌ని ప్రారంభించండి",
+  "groupBotWelcomeMessage": "స్వాగతం సందేశం టెంప్లేట్",
+  "groupBotWelcomeHint": "కొత్త సభ్యుని పేరు కోసం ప్లేస్‌హోల్డర్‌గా 'పేరు'ని ఉపయోగించండి",
+  "groupBotConfigUpdated": "బాట్ సెట్టింగ్‌లు నవీకరించబడ్డాయి",
+  "groupContentFilter": "కంటెంట్ ఫిల్టర్",
+  "groupContentFilterEnabled": "కీవర్డ్ ఫిల్టర్‌ని ప్రారంభించండి",
+  "groupContentFilterReplace": "***తో భర్తీ చేయండి",
+  "groupContentFilterHide": "సందేశాన్ని దాచు",
+  "groupContentFilterAddWord": "కీవర్డ్ జోడించండి",
+  "groupContentFilterUpdated": "కంటెంట్ ఫిల్టర్ నవీకరించబడింది",
+  "chatSlashCommands": "ఆదేశాలు",
+  "chatCommandPoll": "/poll — పోల్‌ను సృష్టించండి",
+  "chatCommandAnnounce": "/ప్రకటించండి - ప్రకటన పంపండి",
+  "chatCommandWelcome": "/ స్వాగతం — స్వాగత సందేశాన్ని సెట్ చేయండి",
+  "chatReportMessage": "నివేదించండి",
+  "chatReportReason": "కారణం నివేదించండి",
+  "chatReportSpam": "స్పామ్",
+  "chatReportHarassment": "వేధింపులు",
+  "chatReportInappropriate": "తగని కంటెంట్",
+  "chatReportOther": "ఇతర",
+  "chatReportSuccess": "నివేదిక సమర్పించారు",
+  "spacesName": "సంఘం పేరు",
+  "spacesNameHint": "ఉదా క్రిప్టో వ్యాపారులు",
+  "spacesNameRequired": "పేరు అవసరం",
+  "spacesDescription": "వివరణ",
+  "spacesDescriptionHint": "ఈ సంఘం దేనికి సంబంధించినది?",
+  "spacesType": "సంఘం రకం",
+  "spacesPublicDesc": "ఎవరైనా కనుగొనవచ్చు మరియు చేరవచ్చు",
+  "spacesPrivateDesc": "ఆహ్వానించబడిన సభ్యులు మాత్రమే చేరగలరు",
+  "spacesNotFound": "సంఘం కనుగొనబడలేదు",
+  "spacesSearch": "సంఘాలను శోధించండి...",
+  "spacesMembers": "సభ్యులు",
+  "spacesNoChannels": "ఇంకా ఛానెల్‌లు లేవు",
+  "spacesLeave": "సంఘం నుండి నిష్క్రమించండి",
+  "spacesLeaveConfirm": "మీరు ఖచ్చితంగా \"{name}\" నుండి నిష్క్రమించాలనుకుంటున్నారా?",
+  "@spacesLeaveConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spacesDelete": "సంఘాన్ని తొలగించండి",
+  "spacesDeleteConfirm": "ఇది \"{name}\" మరియు దాని అన్ని ఛానెల్‌లను శాశ్వతంగా తొలగిస్తుంది. ఈ చర్య రద్దు చేయబడదు.",
+  "@spacesDeleteConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spacesCreateChannel": "ఛానెల్‌ని జోడించండి",
+  "spacesChannelName": "ఛానెల్ పేరు",
+  "spacesChannelTopic": "అంశం (ఐచ్ఛికం)",
+  "spacesDeleteChannel": "ఛానెల్‌ని తొలగించండి",
+  "spacesDeleteChannelConfirm": "మీరు ఖచ్చితంగా \"#{name}\"ని తొలగించాలనుకుంటున్నారా?",
+  "@spacesDeleteChannelConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spacesEditName": "పేరును సవరించండి",
+  "spacesEditDescription": "వివరణను సవరించండి",
+  "spacesViewAllMembers": "{count} సభ్యులందరినీ వీక్షించండి",
+  "@spacesViewAllMembers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "spacesKickMemberTitle": "{name} కిక్ చేయండి",
+  "@spacesKickMemberTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spacesBanMemberTitle": "{name}ని నిషేధించండి",
+  "@spacesBanMemberTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spacesPromoteAdmin": "అడ్మిన్‌గా ప్రమోట్ చేయండి",
+  "spacesDemoteAdmin": "అడ్మిన్‌ని తీసివేయండి",
+  "spacesInviteMember": "సభ్యుడిని ఆహ్వానించండి",
+  "spacesInviteMemberUserId": "వినియోగదారు ID (ఉదా. @user:server.com)",
+  "spacesSave": "సేవ్ చేయండి",
+  "settingsScreenshotProtection": "స్క్రీన్షాట్ రక్షణ",
+  "settingsScreenshotProtectionDesc": "స్క్రీన్‌షాట్‌లు మరియు స్క్రీన్ రికార్డింగ్‌ను నిరోధించండి",
+  "chatSelfDestructTimer": "స్వీయ-నాశనము",
+  "chatTimerPickerTitle": "స్వీయ-విధ్వంసక టైమర్",
+  "chatTimerOff": "ఆఫ్",
+  "onChainNotificationsTitle": "ఆన్-చైన్ ఈవెంట్‌లు",
+  "onChainMarkAllRead": "అన్నీ చదివినట్లు గుర్తు పెట్టండి",
+  "onChainNoNotifications": "ఇంకా ఆన్-చైన్ ఈవెంట్‌లు లేవు",
+  "onChainNoNotificationsDesc": "సభ్యత్వం పొందిన ఛానెల్‌ల నుండి ఈవెంట్‌లు ఇక్కడ కనిపిస్తాయి",
+  "onChainViewDetails": "వివరాలను వీక్షించండి",
+  "chatCommandHelp": "/help — అన్ని ఆదేశాలను చూపించు",
+  "chatCommandPrice": "/ ధర - టోకెన్ ధర పొందండి",
+  "chatCommandBalance": "/ బ్యాలెన్స్ - వాలెట్ బ్యాలెన్స్ చూపించు",
+  "chatCommandChains": "/ గొలుసులు — జాబితా 236+ మద్దతు గొలుసులు",
+  "chatMiniApps": "యాప్‌లు",
+  "miniAppMarketTitle": "మినీ యాప్‌లు",
+  "miniAppCategoryAll": "అన్నీ",
+  "miniAppSearch": "యాప్‌లను శోధించండి...",
+  "miniAppFeatured": "ఫీచర్ చేయబడింది",
+  "miniAppAllApps": "అన్ని యాప్‌లు",
+  "miniAppNoResults": "యాప్‌లు ఏవీ కనుగొనబడలేదు",
+  "slideToPayLabel": "→→→ నిర్ధారించడానికి స్లయిడ్ చేయండి",
+  "slideToPayConfirming": "ధృవీకరిస్తోంది...",
+  "redPacketBestLuck": "బెస్ట్ లక్",
+  "redPacketBestLuckCongrats": "బెస్ట్ లక్! మీరు ఎక్కువగా పొందారు!",
+  "redPacketStats": "{claimed} / {total} దావా వేయబడింది",
+  "@redPacketStats": {
+    "placeholders": {
+      "claimed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "redPacketStatsTotal": "మొత్తం",
+  "redPacketGrabbedViral": "🧧 ఎరుపు రంగు ప్యాకెట్‌ని పట్టుకున్నారు • {amount} {token}",
+  "@redPacketGrabbedViral": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "token": {
+        "type": "String"
+      }
+    }
+  },
+  "web3SearchHint": "@matrix:id • 0x వాలెట్ చిరునామా • name.eth",
+  "web3SearchPlaceholder": "ID, వాలెట్ లేదా ENS ద్వారా శోధించండి...",
+  "web3WalletAddress": "వాలెట్ చిరునామా",
+  "web3AddressCopied": "చిరునామా కాపీ చేయబడింది",
+  "web3Copy": "కాపీ చేయండి",
+  "web3SendMessage": "సందేశం పంపండి",
+  "web3SendToWallet": "సందేశం వాలెట్",
+  "web3WalletOnlyHint": "ఈ చిరునామాకు ఇంకా N42 ఖాతా లేదు. వారు చేరినప్పుడు సందేశం పంపబడుతుంది.",
+  "web3NftAvatar": "NFT అవతార్",
+  "web3ResolveFailed": "గుర్తింపును పరిష్కరించడంలో విఫలమైంది",
+  "web3EnsNotFound": "ENS పేరు \"{name}\" కనుగొనబడలేదు",
+  "@web3EnsNotFound": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "web3NoN42AccountTitle": "N42 ఖాతా లేదు",
+  "web3NoN42AccountDesc": "ఈ వాలెట్ చిరునామాకు ఇంకా N42 ఖాతా లేదు. మీరు ప్రారంభించడానికి మీ N42 ఆహ్వాన లింక్‌ని వారితో పంచుకోవచ్చు.",
+  "web3ShareInvite": "ఆహ్వానాన్ని షేర్ చేయండి",
+  "nftPickerTitle": "NFT అవతార్‌ని ఎంచుకోండి",
+  "nftPickerTabPopular": "జనాదరణ పొందినది",
+  "nftPickerTabCustom": "కస్టమ్",
+  "nftPickerChain": "చైన్",
+  "nftPickerContract": "కాంట్రాక్ట్ చిరునామా",
+  "nftPickerTokenId": "టోకెన్ ID",
+  "nftPickerVerifyOwnership": "యాజమాన్యం & ప్రివ్యూను ధృవీకరించండి",
+  "nftPickerUseAsAvatar": "అవతార్‌గా ఉపయోగించండి",
+  "nftPickerPreview": "ప్రివ్యూ",
+  "nftPickerNotOwned": "మీరు ఈ NFTని కలిగి లేరు",
+  "nftPickerInvalidTokenId": "చెల్లని టోకెన్ ID",
+  "nftPickerEnterBoth": "ఒప్పంద చిరునామా మరియు టోకెన్ IDని నమోదు చేయండి",
+  "nftPickerInfoTitle": "NFT అవతార్ — ధృవీకరించబడిన ఆన్-చైన్",
+  "nftPickerInfoDesc": "మీకు స్వంతమైన NFTని మీ అవతార్‌గా బంధించండి. చైన్‌లో ఎవరైనా యాజమాన్యాన్ని ధృవీకరించవచ్చు. N42 అంతటా బంగారు ఉంగరంతో ప్రదర్శించబడింది.",
+  "nftPickerPopularCollections": "జనాదరణ పొందిన సేకరణలు",
+  "nftPickerWalletHint": "236+ చైన్‌లలో మీ NFTలను స్వయంచాలకంగా కనుగొనడానికి మీ N42 వాలెట్‌ని కనెక్ట్ చేయండి.",
+  "profileBindNftAvatar": "NFT అవతార్‌ను బంధించండి",
+  "profileChangeAvatar": "అవతార్ మార్చండి",
+  "groupTopics": "అంశాలు",
+  "groupTopicsEmpty": "ఇంకా టాపిక్‌లు లేవు",
+  "syncInProgress": "సందేశ చరిత్రను సమకాలీకరిస్తోంది...",
+  "recoveryKeyReminderTitle": "మీ సందేశాలను రక్షించండి",
+  "recoveryKeyReminderDesc": "పరికరాల్లో గుప్తీకరించిన సందేశాలను సురక్షితంగా సమకాలీకరించడానికి రికవరీ కీని సృష్టించండి",
+  "recoveryKeySetupNow": "ఇప్పుడే సెటప్ చేయండి",
+  "recoveryKeyRemindLater": "నాకు తర్వాత గుర్తు చేయండి",
+  "channelReadOnly": "ఈ ఛానెల్‌లో నిర్వాహకులు మాత్రమే పోస్ట్ చేయగలరు",
+  "channelSubscribers": "చందాదారులు",
+  "channelVerified": "ధృవీకరించబడిన ఛానెల్",
+  "redPacketHistory": "రెడ్ ప్యాకెట్ చరిత్ర",
+  "redPacketSent": "పంపబడింది",
+  "redPacketReceived": "అందుకుంది",
+  "redPacketExpired": "గడువు ముగిసింది",
+  "redPacketClaimed": "దావా వేసింది",
+  "redPacketInsufficientBalance": "సరిపోని బ్యాలెన్స్",
+  "selfDestructCountdown": "{time}లో స్వీయ-విధ్వంసం",
+  "@selfDestructCountdown": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "messageDestroyed": "సందేశం నాశనం చేయబడింది",
+  "miniAppPermissionDenied": "అనుమతి నిరాకరించబడింది: {permission}",
+  "@miniAppPermissionDenied": {
+    "placeholders": {
+      "permission": {
+        "type": "String"
+      }
+    }
+  },
+  "aiSuggestionGasFee": "గ్యాస్ ఫీజు అంటే ఏమిటి?",
+  "aiSuggestionDefi": "DeFi బిగినర్స్ గైడ్",
+  "aiSuggestionSecurity": "కాంట్రాక్ట్ భద్రతను ఎలా తనిఖీ చేయాలి",
+  "aiSuggestionBridge": "క్రాస్ చైన్ బ్రిడ్జింగ్",
+  "channelDiscoverTitle": "ఛానెల్‌లను కనుగొనండి",
+  "channelDiscoverSearch": "ఛానెల్‌లను శోధించండి...",
+  "channelJoin": "చేరండి",
+  "channelJoined": "చేరారు",
+  "channelCategory": "వర్గం",
+  "slowModeCooldown": "స్లో మోడ్: {seconds}లు వేచి ఉండండి",
+  "@slowModeCooldown": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "addressCopyAction": "చిరునామాను కాపీ చేయండి",
+  "addressSendMessage": "సందేశం పంపండి",
+  "addressViewProfile": "ప్రొఫైల్‌ని వీక్షించండి",
+  "sendToAddress": "వాలెట్ చిరునామాకు పంపండి",
+  "blocAuthSendVerificationCodeFailed": "ధృవీకరణ కోడ్‌ని పంపడంలో విఫలమైంది",
+  "blocAuthServerNoEmailPasswordReset": "ఈ సర్వర్ ఇమెయిల్ పాస్‌వర్డ్ రీసెట్‌కు మద్దతు ఇవ్వదు",
+  "blocAuthResetPasswordFailed": "పాస్‌వర్డ్ రీసెట్ చేయడంలో విఫలమైంది",
+  "blocAuthChangePasswordFailed": "పాస్‌వర్డ్‌ని మార్చడంలో విఫలమైంది",
+  "blocAuthOldPasswordWrong": "ప్రస్తుత పాస్‌వర్డ్ తప్పు",
+  "blocAuthLoginCancelled": "లాగిన్ రద్దు చేయబడింది",
+  "blocAuthGoogleLoginFailed": "Google లాగిన్ విఫలమైంది",
+  "blocAuthAppleLoginFailed": "Apple లాగిన్ విఫలమైంది",
+  "blocAuthSsoLoginFailed": "SSO లాగిన్ విఫలమైంది",
+  "blocAuthFacebookLoginFailed": "Facebook లాగిన్ విఫలమైంది",
+  "blocAuthTwitterLoginFailed": "ట్విట్టర్ లాగిన్ విఫలమైంది",
+  "blocAuthWeChatLoginFailed": "WeChat లాగిన్ విఫలమైంది",
+  "blocAuthWeChatNotConfigured": "WeChat లాగిన్ కాన్ఫిగర్ చేయబడలేదు",
+  "blocAuthWeChatNotInstalled": "దయచేసి ముందుగా WeChatని ఇన్‌స్టాల్ చేయండి",
+  "blocAuthPasswordWrong": "పాస్‌వర్డ్ తప్పు",
+  "blocAuthEmailAlreadyBound": "ఈ ఇమెయిల్ ఇప్పటికే మరొక ఖాతాకు కట్టుబడి ఉంది",
+  "blocAuthChangeEmailFailed": "ఇమెయిల్‌ని మార్చడంలో విఫలమైంది",
+  "blocAuthVerificationCodeInvalid": "ధృవీకరణ కోడ్ తప్పు లేదా గడువు ముగిసింది",
+  "blocAuthSessionExpired": "సెషన్ గడువు ముగిసింది, దయచేసి మళ్లీ లాగిన్ చేయండి",
+  "blocAuthSessionIncomplete": "సెషన్ డేటా అసంపూర్తిగా ఉంది, దయచేసి మళ్లీ లాగిన్ చేయండి"
+}

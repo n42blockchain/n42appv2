@@ -1,0 +1,2747 @@
+{
+  "@@locale": "ta",
+  "commonRetry": "மீண்டும் முயற்சிக்கவும்",
+  "commonUnknownUser": "தெரியாத பயனர்",
+  "transferWalletNotConnected": "பணப்பை இணைக்கப்படவில்லை",
+  "chatCallServiceNotInitialized": "அழைப்பு சேவை தொடங்கப்படவில்லை",
+  "authLoginFailed": "உள்நுழைவு தோல்வி: {error}",
+  "chatCallBack": "திரும்ப அழைக்கவும்",
+  "chatMissedVideoCall": "தவறவிட்ட வீடியோ அழைப்பு",
+  "chatMissedVoiceCall": "தவறிய குரல் அழைப்பு",
+  "chatCallNotAnswered": "பதில் சொல்லவில்லை",
+  "chatCallDurationLabel": "அழைப்பு காலம்",
+  "chatVoiceCallCancelled": "குரல் அழைப்பு ரத்து செய்யப்பட்டது",
+  "chatVideoCallCancelled": "வீடியோ அழைப்பு ரத்து செய்யப்பட்டது",
+  "commonImage": "[படம்]",
+  "chatVideo": "[வீடியோ]",
+  "chatVoice": "[குரல்]",
+  "commonFile": "[கோப்பு]",
+  "chatLocation": "[இடம்]",
+  "chatUnknownMessage": "[தெரியாத செய்தி]",
+  "commonDelete": "நீக்கு",
+  "chatDeleteThisMessage": "இந்த செய்தியை நீக்கவா?",
+  "chatMessageDeleted": "செய்தி நீக்கப்பட்டது",
+  "profileNotLoggedIn": "உள்நுழையவில்லை",
+  "chatMyLocation": "எனது இருப்பிடம்",
+  "commonGroupChat": "குழு அரட்டை",
+  "commonSearch": "தேடு",
+  "commonCancel": "ரத்து செய்",
+  "commonLoadFailed": "ஏற்றுவதில் தோல்வி",
+  "commonMessages": "செய்திகள்",
+  "commonContacts": "தொடர்புகள்",
+  "commonMe": "நான்",
+  "commonVoiceLoading": "குரல் ஏற்றப்படுகிறது, பிறகு முயற்சிக்கவும்",
+  "commonVoiceToTextFailed": "உரைக்கு குரல் கொடுக்க முடியவில்லை",
+  "commonConvertToText": "உரைக்கு",
+  "chatCopy": "நகலெடுக்கவும்",
+  "commonForward": "முன்னோக்கி",
+  "commonUnfavorite": "அன்ஃபாவ்",
+  "commonFavorite": "பிடித்தது",
+  "settingsResend": "மீண்டும் அனுப்பு",
+  "chatRecall": "நினைவு கூருங்கள்",
+  "commonQuote": "மேற்கோள்",
+  "commonRemind": "நினைவூட்டு",
+  "chatCopied": "நகலெடுக்கப்பட்டது",
+  "storySendMessageHint": "செய்தி அனுப்பு",
+  "commonMicrophonePermissionRequired": "மைக்ரோஃபோன் அனுமதியை அனுமதிக்கவும்",
+  "chatMicrophonePermissionDeniedPermanent": "மைக்ரோஃபோன் அனுமதி மறுக்கப்பட்டது. குரல் செய்திகளைப் பயன்படுத்த, கணினி அமைப்புகளில் அதை இயக்கவும்.",
+  "commonStartRecordingFailed": "பதிவைத் தொடங்குவதில் தோல்வி: {error}",
+  "commonRecordingTooShort": "மிகக் குறுகிய பதிவு",
+  "commonStopRecordingFailed": "பதிவு செய்வதை நிறுத்த முடியவில்லை: {error}",
+  "chatReleaseToCancel": "ரத்து செய்ய விடுவிக்கவும்",
+  "chatReleaseToSend": "அனுப்புவதற்கு விடுவிக்கவும், ரத்துசெய்ய மேலே ஸ்வைப் செய்யவும்",
+  "commonHoldToTalk": "பேச பிடி",
+  "commonSend": "அனுப்பு",
+  "commonAddFriend": "நண்பரைச் சேர்க்கவும்",
+  "commonChatServiceNotConnected": "அரட்டை சேவை இணைக்கப்படவில்லை",
+  "contactUserNotFoundHint": "\"{query}\" பயனர் கிடைக்கவில்லை\n\nகுறிப்புகள்:\n• முழு பயனர் ஐடியை உள்ளிட முயற்சிக்கவும், எ.கா. @username:server.com\n• பயனர்பெயர் எழுத்துப்பிழையைச் சரிபார்க்கவும்",
+  "@contactUserNotFoundHint": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "contactCreateChatFailed": "அரட்டையை உருவாக்க முடியவில்லை: {error}",
+  "@contactCreateChatFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "contactSearchFailed": "தேடல் தோல்வி: {error}",
+  "@contactSearchFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "contactEnterUserIdOrUsername": "தேடுவதற்கு பயனர் ஐடி அல்லது பயனர் பெயரை உள்ளிடவும்",
+  "contactSearching": "தேடுகிறது...",
+  "contactSearchUserToChat": "அரட்டையைத் தொடங்க பயனரைத் தேடுங்கள்",
+  "contactMatrixIdExample": "நீங்கள் முழு மேட்ரிக்ஸ் ஐடியை உள்ளிடலாம்\nஎ.கா. @user:matrix.n42.network",
+  "contactUserNotFound": "\"{username}\" பயனர் கிடைக்கவில்லை",
+  "@contactUserNotFound": {
+    "placeholders": {
+      "username": {
+        "type": "String"
+      }
+    }
+  },
+  "commonChat": "அரட்டை",
+  "commonSettings": "அமைப்புகள்",
+  "profileEditProfile": "சுயவிவரத்தைத் திருத்து",
+  "authLogin": "உள்நுழைக",
+  "commonCreateGroup": "குழுவை உருவாக்கவும்",
+  "chatError": "பிழை",
+  "commonTransfer": "இடமாற்றம்",
+  "commonReceived": "பெற்றது",
+  "commonRefunded": "திருப்பி கொடுக்கப்பட்டது",
+  "commonExpired": "காலாவதியானது",
+  "chatRedPacketGreeting": "மனமார்ந்த வாழ்த்துக்கள்",
+  "commonN42RedPacket": "N42 சிவப்பு பாக்கெட்",
+  "commonClaimed": "உரிமை கோரப்பட்டது",
+  "commonAllClaimed": "அனைவரும் உரிமை கோரினர்",
+  "chatReadAloud": "உரக்கப் படியுங்கள்",
+  "chatReply": "பதில்",
+  "commonEdit": "திருத்தவும்",
+  "chatSelectForwardTarget": "முன்னோக்கி இலக்கைத் தேர்ந்தெடுக்கவும்",
+  "commonSendCount": "அனுப்பு({count})",
+  "contactN42Id": "N42 ஐடி: {id}",
+  "profileN42IdTitle": "N42 ஐடி",
+  "profileN42Bean": "N42 பீன்",
+  "contactFriendInfo": "நண்பர் தகவல்",
+  "contactFriendInfoDesc": "நண்பரின் கருத்து, தொலைபேசி, குறிச்சொற்கள், குறிப்புகள், புகைப்படங்கள் மற்றும் செட் அனுமதிகளைச் சேர்க்கவும்.",
+  "commonMoments": "தருணங்கள்",
+  "commonSendMessage": "செய்தி",
+  "contactAudioVideoCall": "ஆடியோ/வீடியோ அழைப்பு",
+  "contactVideoChannel": "வீடியோ சேனல்",
+  "contactRemark": "குறிப்பு",
+  "contactRemarkName": "குறிப்பு பெயர்",
+  "contactPhone": "தொலைபேசி",
+  "contactTags": "குறிச்சொற்கள்",
+  "contactNotes": "குறிப்புகள்",
+  "contactPhotos": "புகைப்படங்கள்",
+  "contactPermissions": "அனுமதிகள்",
+  "contactChatMomentsEtc": "அரட்டை, தருணங்கள், விளையாட்டு போன்றவை.",
+  "contactMoreInfo": "மேலும் தகவல்",
+  "contactCommonGroups": "பொதுவான குழுக்கள்",
+  "contactSource": "ஆதாரம்",
+  "settingsNotificationSettings": "அறிவிப்புகள்",
+  "settingsPrivacy": "தனியுரிமை",
+  "settingsAppearance": "தோற்றம்",
+  "settingsAbout": "பற்றி",
+  "commonLogout": "வெளியேறு",
+  "commonLogoutConfirm": "நிச்சயமாக வெளியேற விரும்புகிறீர்களா?",
+  "commonSave": "சேமிக்கவும்",
+  "profileNickname": "புனைப்பெயர்",
+  "profileEnterNickname": "புனைப்பெயரை உள்ளிடவும்",
+  "profileSignature": "கையெழுத்து",
+  "profileAddSignature": "கையொப்பத்தைச் சேர்க்கவும்",
+  "commonTakePhoto": "புகைப்படம் எடு",
+  "profileChooseFromGallery": "கேலரியில் இருந்து தேர்வு செய்யவும்",
+  "profileSaveFailed": "சேமிக்க முடியவில்லை: {error}",
+  "authSecureDecentralizedChat": "பாதுகாப்பான, பரவலாக்கப்பட்ட செய்தியிடல்",
+  "commonEndToEndEncryption": "எண்ட்-டு-எண்ட் என்க்ரிப்ஷன்",
+  "authMessagesOnlyYouCanSee": "உங்களுக்கும் பெறுநருக்கும் மட்டுமே தெரியும் செய்திகள்",
+  "authDecentralized": "பரவலாக்கப்பட்டது",
+  "authBasedOnMatrix": "மேட்ரிக்ஸ் திறந்த நெறிமுறையில் கட்டப்பட்டது",
+  "authWalletIntegration": "வாலட் ஒருங்கிணைப்பு",
+  "authEasyCryptoTransfer": "எளிதான கிரிப்டோகரன்சி பரிமாற்றங்கள்",
+  "authRegister": "பதிவு செய்யவும்",
+  "authAgreeTerms": "உள்நுழைவதன் மூலம், நீங்கள் ஒப்புக்கொள்கிறீர்கள்",
+  "authTermsOfService": "சேவை விதிமுறைகள்",
+  "authAnd": "மற்றும்",
+  "authPrivacyPolicy": "தனியுரிமைக் கொள்கை",
+  "authServerAddress": "சேவையக முகவரி",
+  "authEnterServerAddress": "சேவையக முகவரியை உள்ளிடவும்",
+  "authConnectedTo": "{serverName} உடன் இணைக்கப்பட்டது",
+  "authUsername": "பயனர் பெயர்",
+  "authEnterUsername": "பயனர் பெயரை உள்ளிடவும்",
+  "authUsernameOrEmail": "பயனர்பெயர் அல்லது மின்னஞ்சல்",
+  "authEnterUsernameOrEmail": "பயனர்பெயர் அல்லது மின்னஞ்சலை உள்ளிடவும்",
+  "authPassword": "கடவுச்சொல்",
+  "authEnterPassword": "கடவுச்சொல்லை உள்ளிடவும்",
+  "authRegisterAccount": "பதிவு செய்யவும்",
+  "authForgotPassword": "கடவுச்சொல் மறந்துவிட்டது",
+  "authOtherLoginMethods": "பிற உள்நுழைவு முறைகள்",
+  "authCreateAccount": "கணக்கை உருவாக்கவும்",
+  "authJoinN42Chat": "அரட்டையைத் தொடங்க N42 அரட்டையில் சேரவும்",
+  "authUsernameHint": "3-20 எழுத்துகள், எழுத்துக்கள்/எண்கள்/_",
+  "authUsernameMinLength": "பயனர்பெயரில் குறைந்தது 3 எழுத்துகள் இருக்க வேண்டும்",
+  "authUsernameMaxLength": "பயனர்பெயரில் அதிகபட்சம் 20 எழுத்துகள் இருக்க வேண்டும்",
+  "authUsernameFormat": "பயனர்பெயரில் எழுத்துக்கள், எண்கள் மற்றும் அடிக்கோடுகள் மட்டுமே இருக்க வேண்டும்",
+  "authPasswordHint": "குறைந்தபட்சம் 8 எழுத்துகள்",
+  "commonPasswordMinLength": "கடவுச்சொல் குறைந்தது 8 எழுத்துகளாக இருக்க வேண்டும்",
+  "authConfirmPassword": "கடவுச்சொல்லை உறுதிப்படுத்தவும்",
+  "authFilled": "நிரப்பப்பட்டது",
+  "authEnterInviteCode": "அழைப்புக் குறியீட்டை உள்ளிடவும்",
+  "authAlreadyHaveAccount": "ஏற்கனவே கணக்கு உள்ளதா?",
+  "authLoginNow": "இப்போது உள்நுழைக",
+  "profileAvatar": "அவதாரம்",
+  "profileStatus": "நிலை",
+  "commonLoading": "ஏற்றுகிறது...",
+  "conversationNoConversations": "உரையாடல்கள் இல்லை",
+  "conversationTapToChat": "அரட்டையைத் தொடங்க மேல் வலதுபுறத்தைத் தட்டவும்",
+  "conversationStartGroup": "குழு அரட்டையைத் தொடங்கவும்",
+  "commonScan": "ஸ்கேன் செய்யவும்",
+  "commonPayment": "பணம் செலுத்துதல்",
+  "commonFeatureComingSoon": "{feature} விரைவில்",
+  "conversationMarkAsRead": "படித்ததாகக் குறி",
+  "commonUnmute": "ஒலியடக்கவும்",
+  "commonMute": "முடக்கு",
+  "conversationUnpin": "அன்பின்",
+  "conversationPin": "பின்",
+  "conversationDeleteConversation": "உரையாடலை நீக்கு",
+  "conversationDeleteConversationConfirm": "\"{name}\" உடனான உரையாடலை நீக்கவா?",
+  "commonNoContacts": "தொடர்புகள் இல்லை",
+  "contactAddFriendsToChat": "அரட்டையடிக்க நண்பர்களைச் சேர்க்கவும்",
+  "contactNotFound": "தொடர்பு கிடைக்கவில்லை",
+  "contactTryOtherKeywords": "மற்ற முக்கிய வார்த்தைகள் அல்லது உலகளாவிய தேடலை முயற்சிக்கவும்",
+  "contactSearchResults": "தேடல் முடிவுகள்",
+  "contactNewFriends": "புதிய நண்பர்கள்",
+  "contactChatOnlyFriends": "அரட்டை மட்டும் நண்பர்கள்",
+  "contactOfficialAccounts": "அதிகாரப்பூர்வ கணக்குகள்",
+  "contactServiceAccounts": "சேவை கணக்குகள்",
+  "contactEnterpriseContacts": "நிறுவன தொடர்புகள்",
+  "contactRecommendToFriend": "தொடர்பைப் பகிரவும்",
+  "commonSetRemark": "குறிப்பை அமைக்கவும்",
+  "contactSendingCard": "தொடர்பு அட்டையை அனுப்புகிறது...",
+  "commonFileLabel": "கோப்பு",
+  "commonLocationLabel": "இடம்",
+  "contactRecommendFailed": "பரிந்துரைக்கப்படவில்லை: {error}",
+  "profileEnterRemark": "குறிப்பை உள்ளிடவும்",
+  "contactOpeningChat": "அரட்டையைத் திறக்கிறது...",
+  "contactOpenChatFailed": "அரட்டையைத் திறக்க முடியவில்லை: {error}",
+  "contactAddContact": "தொடர்பைச் சேர்க்கவும்",
+  "contactEnterUserId": "பயனர் ஐடியை உள்ளிடவும்",
+  "contactNoFriendRequests": "நண்பர் கோரிக்கைகள் இல்லை",
+  "commonAccept": "ஏற்றுக்கொள்",
+  "commonReject": "நிராகரிக்கவும்",
+  "commonNoGroups": "குழுக்கள் இல்லை",
+  "contactSelectFriendToRecommend": "பரிந்துரைக்க ஒரு நண்பரைத் தேர்ந்தெடுக்கவும்",
+  "commonSearchContacts": "தொடர்புகளைத் தேடுங்கள்",
+  "contactNoContactsFound": "தொடர்புகள் எதுவும் இல்லை",
+  "favoriteYesterday": "நேற்று",
+  "chatJustNow": "இப்போதுதான்",
+  "profileOnline": "ஆன்லைன்",
+  "profileOffline": "ஆஃப்லைன்",
+  "searchContactsGroupsMessages": "தொடர்புகள், குழுக்கள் மற்றும் செய்திகளைத் தேடுங்கள்",
+  "searchError": "தேடல் பிழை",
+  "chatSearchHint": "தேடு",
+  "searchHistory": "தேடல் வரலாறு",
+  "commonClear": "தெளிவு",
+  "commonAll": "அனைத்து",
+  "searchGroups": "குழுக்கள்",
+  "searchNoResults": "முடிவுகள் இல்லை",
+  "commonGroupMembers": "உறுப்பினர்கள் ({count})",
+  "groupMembersTitle": "குழு உறுப்பினர்கள்",
+  "groupViewAll": "அனைத்தையும் பார்க்கவும்",
+  "groupOwner": "உரிமையாளர்",
+  "groupAdmin": "நிர்வாகி",
+  "groupInvite": "அழைக்கவும்",
+  "commonGroupAnnouncement": "குழு அறிவிப்பு",
+  "commonNotSet": "அமைக்கப்படவில்லை",
+  "groupDescription": "குழு விளக்கம்",
+  "groupPublicGroup": "பொது குழு",
+  "commonClearChatHistory": "அரட்டை வரலாற்றை அழிக்கவும்",
+  "commonDissolveGroup": "குழுவை கலைக்கவும்",
+  "commonLeaveGroup": "குழுவிலிருந்து வெளியேறு",
+  "groupChangeGroupName": "குழுவின் பெயரை மாற்றவும்",
+  "commonEnterGroupName": "குழுவின் பெயரை உள்ளிடவும்",
+  "commonConfirm": "உறுதிப்படுத்தவும்",
+  "groupEnterGroupDescription": "குழு விளக்கத்தை உள்ளிடவும்",
+  "groupPublish": "வெளியிடு",
+  "chatClearHistoryConfirm": "அனைத்து அரட்டை வரலாற்றையும் அழிக்கவா? இதை செயல்தவிர்க்க முடியாது.",
+  "chatClearAction": "தெளிவு",
+  "commonChatHistoryCleared": "அரட்டை வரலாறு அழிக்கப்பட்டது",
+  "commonDissolve": "கரைக்கவும்",
+  "groupQrCode": "குழு QR குறியீடு",
+  "commonSearchChatHistory": "அரட்டை வரலாற்றைத் தேடுங்கள்",
+  "groupIdCopied": "குழு ஐடி நகலெடுக்கப்பட்டது",
+  "transferEnterOrPasteAddress": "வாலட் முகவரியை உள்ளிடவும் அல்லது ஒட்டவும்",
+  "transferSelectToken": "டோக்கனைத் தேர்ந்தெடுக்கவும்",
+  "commonTransferAmount": "பரிமாற்ற தொகை",
+  "transferAvailable": "கிடைக்கும்",
+  "transferMemoOptional": "மெமோ (விரும்பினால்)",
+  "transferConfirmTransfer": "பரிமாற்றத்தை உறுதிப்படுத்தவும்",
+  "transferAddressVerified": "முகவரி சரிபார்க்கப்பட்டது",
+  "transferAvailableBalance": "கிடைக்கும்: {balance} {symbol}",
+  "commonEnterAmount": "தொகையை உள்ளிடவும்",
+  "commonRedPacketCountMin": "குறைந்தது 1 சிவப்பு பாக்கெட் தேவை",
+  "commonViewRedPacketDetails": "சிவப்பு பாக்கெட் விவரங்களைக் காண்க",
+  "commonEnterTransferAmount": "பரிமாற்றத் தொகையை உள்ளிடவும்",
+  "commonTransferTo": "இடமாற்றம்",
+  "commonFromSender": "{name} இலிருந்து",
+  "commonConfirmReceive": "ரசீதை உறுதிப்படுத்தவும்",
+  "groupProfile": "குழு தகவல்",
+  "groupRemoveMember": "குழுவிலிருந்து நீக்கு",
+  "commonRemove": "அகற்று",
+  "profileClearStatus": "தெளிவான நிலை",
+  "profileClearStatusConfirm": "தற்போதைய நிலையை அழிக்கவா?",
+  "profileStatusCleared": "நிலை அழிக்கப்பட்டது",
+  "profileUserNotExist": "பயனர் இல்லை",
+  "profileUserIdCopied": "பயனர் ஐடி நகலெடுக்கப்பட்டது",
+  "commonReport": "அறிக்கை",
+  "profileQrCode": "QR குறியீடு",
+  "profileAvatarUpdated": "அவதார் புதுப்பிக்கப்பட்டது",
+  "commonSelectImageFailed": "படத்தைத் தேர்ந்தெடுக்க முடியவில்லை: {error}",
+  "profileChangeName": "பெயரை மாற்றவும்",
+  "profileMale": "ஆண்",
+  "profileFemale": "பெண்",
+  "chatFeatureInDev": "{feature} அம்சம் வளர்ச்சியில் உள்ளது...",
+  "profileSaveAddressFailed": "முகவரியைச் சேமிப்பதில் தோல்வி: {error}",
+  "profileAddNew": "சேர்",
+  "profileAddAddress": "முகவரியைச் சேர்க்கவும்",
+  "profileAddressAdded": "முகவரி சேர்க்கப்பட்டது",
+  "profileAddressUpdated": "முகவரி புதுப்பிக்கப்பட்டது",
+  "profileDeleteAddress": "முகவரியை நீக்கு",
+  "profileAddressDeleted": "முகவரி நீக்கப்பட்டது",
+  "profileSaveInvoiceFailed": "விலைப்பட்டியல் சேமிப்பதில் தோல்வி: {error}",
+  "profileMyInvoices": "எனது இன்வாய்ஸ்கள்",
+  "profileAddInvoice": "விலைப்பட்டியல் சேர்க்கவும்",
+  "profileInvoiceAdded": "விலைப்பட்டியல் சேர்க்கப்பட்டது",
+  "profileInvoiceUpdated": "இன்வாய்ஸ் புதுப்பிக்கப்பட்டது",
+  "profileDeleteInvoice": "விலைப்பட்டியலை நீக்கு",
+  "profileInvoiceDeleted": "விலைப்பட்டியல் நீக்கப்பட்டது",
+  "profilePersonal": "தனிப்பட்ட",
+  "groupSelectAtLeastOne": "குறைந்தபட்சம் ஒரு உறுப்பினரையாவது தேர்ந்தெடுக்கவும்",
+  "chatFileNotExist": "கோப்பு இல்லை",
+  "chatSendFailed": "அனுப்ப முடியவில்லை: {error}",
+  "chatCannotOpenBrowser": "உலாவியைத் திறக்க முடியவில்லை",
+  "chatSelectFileFailed": "கோப்பைத் தேர்ந்தெடுக்க முடியவில்லை: {error}",
+  "settingsSetupFailed": "அமைவு தோல்வி: {error}",
+  "transferEnterValidAmount": "சரியான தொகையை உள்ளிடவும்",
+  "commonAddressCopied": "முகவரி நகலெடுக்கப்பட்டது",
+  "favoriteOpenItem": "திற: {content}",
+  "favoriteDeleted": "நீக்கப்பட்டது",
+  "profileWallet": "பணப்பை",
+  "chatRecording": "பதிவு செய்தல்",
+  "chatInvalidVideoUrl": "தவறான வீடியோ URL",
+  "chatDownloadFile": "கோப்பைப் பதிவிறக்கவும்",
+  "chatClearChatHistoryTitle": "அரட்டை வரலாற்றை அழிக்கவும்",
+  "chatVideoCall": "வீடியோ அழைப்பு",
+  "commonVoiceCall": "குரல் அழைப்பு",
+  "callLeaveMeeting": "மீட்டிங் லீவ்",
+  "chatDetails": "அரட்டை விவரங்கள்",
+  "chatViewAllGroupMembers": "அனைத்து உறுப்பினர்களையும் பார்க்கவும்",
+  "chatGroupName": "குழுவின் பெயர்",
+  "chatGroupNameUpdated": "குழுவின் பெயர் புதுப்பிக்கப்பட்டது",
+  "chatUpdateFailed": "புதுப்பிப்பு தோல்வியடைந்தது",
+  "chatNoPermissionToModify": "மாற்ற உங்களுக்கு அனுமதி இல்லை",
+  "chatGroupManagement": "குழு மேலாண்மை",
+  "chatMyNicknameInGroup": "குழுவில் எனது புனைப்பெயர்",
+  "chatPinChat": "பின் அரட்டை",
+  "chatStrongReminder": "வலுவான நினைவூட்டல்",
+  "chatSetChatBackground": "அரட்டை பின்னணியை அமைக்கவும்",
+  "chatUnknownFile": "தெரியாத கோப்பு",
+  "chatDownload": "பதிவிறக்கவும்",
+  "chatInvalidLocation": "தவறான இடம்",
+  "chatTapToCancel": "ரத்துசெய்ய தட்டவும்",
+  "chatCaptureFailed": "பிடிப்பதில் தோல்வி: {error}",
+  "chatProcessingVideo": "வீடியோவைச் செயலாக்குகிறது...",
+  "chatVideoFileNotExist": "வீடியோ கோப்பு இல்லை",
+  "chatVideoDataEmpty": "வீடியோ தரவு காலியாக உள்ளது",
+  "chatVideoTooLarge": "வீடியோ அளவு 100MB ஐ விட அதிகமாக இருக்கக்கூடாது",
+  "chatSendingVideo": "வீடியோவை அனுப்புகிறது...",
+  "chatSendVideoFailed": "வீடியோவை அனுப்புவதில் தோல்வி: {error}",
+  "chatImageFileNotExist": "படக் கோப்பு இல்லை",
+  "commonImageDataEmpty": "படத்தின் தரவு காலியாக உள்ளது",
+  "chatSendingImage": "படத்தை அனுப்புகிறது...",
+  "chatSendImageFailed": "படத்தை அனுப்புவதில் தோல்வி: {error}",
+  "chatSendLocation": "இருப்பிடத்தை அனுப்பு",
+  "chatSelectLocationAndSend": "இடத்தைத் தேர்ந்தெடுத்து அனுப்பவும்",
+  "chatShareRealTimeLocation": "நிகழ்நேர இருப்பிடத்தைப் பகிரவும்",
+  "chatShareLocationForOneHour": "நிகழ்நேர இருப்பிடத்தை நண்பருடன் 1 மணிநேரம் பகிரவும்",
+  "chatLocationSent": "இடம் அனுப்பப்பட்டது",
+  "chatSelectMessages": "செய்திகளைத் தேர்ந்தெடுக்கவும்",
+  "chatSelectedCount": "தேர்ந்தெடுக்கப்பட்ட {count}",
+  "chatSelectAll": "அனைத்தையும் தேர்ந்தெடுக்கவும்",
+  "chatGroupChatCount": "குழு அரட்டை({count})",
+  "chatPrivateChat": "தனிப்பட்ட அரட்டை",
+  "chatNoMessages": "செய்திகள் இல்லை",
+  "chatSendFirstMessage": "அரட்டையைத் தொடங்க முதல் செய்தியை அனுப்பவும்",
+  "chatEncryptionNotice": "இந்த அரட்டை எண்ட்-டு-எண்ட் என்க்ரிப்ட் செய்யப்பட்டுள்ளது. நீங்களும் பெறுநரும் மட்டுமே செய்திகளைப் படிக்க முடியும்.",
+  "chatMultiForward": "முன்னோக்கி",
+  "chatCollect": "சேகரிக்கவும்",
+  "chatNoMembers": "உறுப்பினர்கள் இல்லை",
+  "chatMemberNotFound": "உறுப்பினர் கிடைக்கவில்லை",
+  "chatVoiceFileNotExist": "குரல் கோப்பு இல்லை",
+  "chatVoiceFileEmpty": "குரல் கோப்பு காலியாக உள்ளது",
+  "chatSendingVoice": "குரல் அனுப்புகிறது...",
+  "chatSendVoiceFailed": "குரலை அனுப்புவதில் தோல்வி: {error}",
+  "chatMessageForwarded": "செய்தி அனுப்பப்பட்டது",
+  "chatForwardFailed": "முன்னனுப்ப முடியவில்லை: {error}",
+  "chatUnfavorited": "விருப்பமில்லாதது",
+  "chatFavorited": "பிடித்தது",
+  "chatReactionAdded": "எதிர்வினை சேர்க்கப்பட்டது",
+  "chatReactionRemoved": "எதிர்வினை அகற்றப்பட்டது",
+  "chatFailedMessageDeleted": "தோல்வியுற்ற செய்தி நீக்கப்பட்டது",
+  "chatDeleteMessages": "செய்திகளை நீக்கு",
+  "chatDeleteMessagesConfirm": "{count} செய்திகளை நிச்சயமாக நீக்க விரும்புகிறீர்களா?",
+  "chatNoteOtherMessages": "குறிப்பு: {count} செய்திகள் பிறரிடமிருந்து வந்தவை, உங்களுக்காக மட்டுமே நீக்கப்படும்.",
+  "chatMyMessagesWillBeRecalled": "உங்களிடமிருந்து வரும் {count} செய்திகள் அனைவருக்கும் திரும்ப அழைக்கப்படும்.",
+  "chatRecalledCount": "நினைவுபடுத்தப்பட்ட {count} செய்திகள், {localCount} உங்களுக்காக மட்டுமே நீக்கப்பட்டது",
+  "chatRecalledMessages": "நினைவுபடுத்தப்பட்ட {count} செய்திகள்",
+  "chatDeletedLocally": "{count} செய்திகள் உங்களுக்காக மட்டுமே நீக்கப்பட்டன",
+  "chatForwardedCount": "அனுப்பப்பட்ட {count} செய்திகள்",
+  "chatForwardComplete": "முன்னோக்கி முடிந்தது: {success} வெற்றி பெற்றது, {failed} தோல்வியடைந்தது",
+  "chatRemindOnlyInGroup": "நினைவூட்டல் அம்சம் குழு அரட்டையில் மட்டுமே கிடைக்கும்",
+  "chatOnlyTextSearchable": "குறுஞ்செய்திகளை மட்டுமே தேட முடியும்",
+  "chatSearchFor": "\"{text}\" தேடு",
+  "chatBaiduSearch": "பைடு தேடல்",
+  "chatGoogleSearch": "கூகுள் தேடல்",
+  "chatBingSearch": "பிங் தேடல்",
+  "chatCalling": "அழைக்கிறது...",
+  "chatRinging": "ஒலிக்கிறது...",
+  "chatInCall": "அழைப்பில்",
+  "commonFeatureInDevelopment": "{feature} அம்சம் வளர்ச்சியில் உள்ளது...",
+  "chatCollectMessages": "சேகரிக்கப்பட்ட {count} செய்திகள்",
+  "commonMemberCount": "{count} உறுப்பினர்கள்",
+  "groupDone": "முடிந்தது({count})",
+  "@groupDone": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "profileServices": "சேவைகள்",
+  "commonFavorites": "பிடித்தவை",
+  "profileOrdersAndCards": "ஆர்டர்கள் & கார்டுகள்",
+  "profileStickers": "ஸ்டிக்கர்கள்",
+  "profileStatusSetTo": "நிலை அமைக்கப்பட்டுள்ளது: {status}",
+  "@profileStatusSetTo": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "profileAvatarUploadFailed": "அவதார் பதிவேற்றம் தோல்வியடைந்தது",
+  "profilePersonalProfile": "தனிப்பட்ட சுயவிவரம்",
+  "profileName": "பெயர்",
+  "profileGender": "பாலினம்",
+  "profileRegion": "பிராந்தியம்",
+  "commonMyQrCode": "எனது QR குறியீடு",
+  "profilePoke": "குத்து",
+  "profileRingtone": "ரிங்டோன்",
+  "profileDefaultRingtone": "இயல்புநிலை ரிங்டோன்",
+  "profileMyAddresses": "எனது முகவரிகள்",
+  "profileGenderSetTo": "பாலினம் இதற்கு அமைக்கப்பட்டுள்ளது: {gender}",
+  "@profileGenderSetTo": {
+    "placeholders": {
+      "gender": {
+        "type": "String"
+      }
+    }
+  },
+  "profileSelectRegion": "பிராந்தியத்தைத் தேர்ந்தெடுக்கவும்",
+  "profileSelectCity": "நகரத்தைத் தேர்ந்தெடுக்கவும்",
+  "profileRegionSetTo": "மண்டலம் அமைக்கப்பட்டுள்ளது: {region}",
+  "@profileRegionSetTo": {
+    "placeholders": {
+      "region": {
+        "type": "String"
+      }
+    }
+  },
+  "profileSetPoke": "போக் அமைக்கவும்",
+  "profileFriendPokedMe": "நண்பர் என்னைக் குத்தினார்",
+  "profileExample": "உதாரணம்",
+  "profileOnTheShoulder": " தோளில்",
+  "profilePokeCleared": "போக் அழிக்கப்பட்டது",
+  "profilePokeSetTo": "போக் அமைக்கப்பட்டது: poked me{suffix}",
+  "@profilePokeSetTo": {
+    "placeholders": {
+      "suffix": {
+        "type": "String"
+      }
+    }
+  },
+  "profileEditSignature": "கையொப்பத்தைத் திருத்தவும்",
+  "profileIntroduceYourself": "உங்களை அறிமுகப்படுத்த ஒரு வாக்கியம்",
+  "profileSignatureCleared": "கையெழுத்து அழிக்கப்பட்டது",
+  "profileSignatureUpdated": "கையொப்பம் புதுப்பிக்கப்பட்டது",
+  "profileScanToAddFriend": "என்னை நண்பராகச் சேர்க்க மேலே உள்ள QR குறியீட்டை ஸ்கேன் செய்யவும்",
+  "profileRingtoneSetTo": "ரிங்டோன் அமைக்கப்பட்டுள்ளது: {ringtone}",
+  "@profileRingtoneSetTo": {
+    "placeholders": {
+      "ringtone": {
+        "type": "String"
+      }
+    }
+  },
+  "commonConfirmDissolveGroup": "\"{name}\" ஐ நிச்சயமாக கலைக்க விரும்புகிறீர்களா? இந்தச் செயலைச் செயல்தவிர்க்க முடியாது.",
+  "@commonConfirmDissolveGroup": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "authEnterValidServerAddress": "சரியான சர்வர் முகவரியை உள்ளிடவும்",
+  "authEnterServerAddressFirst": "முதலில் சர்வர் முகவரியை உள்ளிடவும்",
+  "authPasskeyRequiresServer": "கடவுச்சொல் உள்நுழைவுக்கு சேவையக ஆதரவு தேவை",
+  "authLoginAgreement": "உள்நுழைவதன் மூலம், நீங்கள் ஒப்புக்கொள்கிறீர்கள் ",
+  "authPleaseAgreeToTerms": "சேவை விதிமுறைகள் மற்றும் தனியுரிமைக் கொள்கையைப் படித்து ஒப்புக்கொள்ளவும்",
+  "authRegisterFailed": "பதிவு தோல்வியடைந்தது",
+  "commonReenterPassword": "கடவுச்சொல்லை மீண்டும் உள்ளிடவும்",
+  "commonPasswordsDoNotMatch": "கடவுச்சொற்கள் பொருந்தவில்லை",
+  "authInviteCodeBuiltIn": "அழைப்புக் குறியீடு (உள்ளமைக்கப்பட்ட)",
+  "authInviteCodeBuiltInNote": "அழைப்புக் குறியீடு உள்ளமைந்துள்ளது, பொதுவாக மாற்ற வேண்டிய அவசியமில்லை",
+  "authIHaveReadAndAgree": "படித்துவிட்டு ஒப்புக்கொண்டேன் ",
+  "mainStartGroupChat": "குழு அரட்டையைத் தொடங்கவும்",
+  "mainAddFriends": "நண்பர்களைச் சேர்க்கவும்",
+  "mainPaymentAndCollection": "பணம் செலுத்துதல்",
+  "contactCount": "{count} தொடர்புகள்",
+  "@contactCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "contactAddToHomeScreen": "முகப்புத் திரையில் சேர்க்கவும்",
+  "contactRecommendedCardTo": "{contact} கார்டு {recipient} க்கு பரிந்துரைக்கப்படுகிறது",
+  "@contactRecommendedCardTo": {
+    "placeholders": {
+      "contact": {
+        "type": "String"
+      },
+      "recipient": {
+        "type": "String"
+      }
+    }
+  },
+  "contactEnterRemarkName": "குறிப்பு பெயரை உள்ளிடவும்",
+  "contactRemarkSetTo": "கருத்து இவ்வாறு அமைக்கப்பட்டது: {remark}",
+  "@contactRemarkSetTo": {
+    "placeholders": {
+      "remark": {
+        "type": "String"
+      }
+    }
+  },
+  "contactAcceptedFriendRequest": "{name} இன் நண்பர் கோரிக்கை ஏற்கப்பட்டது",
+  "@contactAcceptedFriendRequest": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "contactRejectedFriendRequest": "{name} இன் நண்பர் கோரிக்கை நிராகரிக்கப்பட்டது",
+  "@contactRejectedFriendRequest": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "commonGroupInvites": "குழு அழைப்புகள்",
+  "commonMyGroups": "எனது குழுக்கள் ({count})",
+  "@commonMyGroups": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "commonInvitedToJoinGroup": "குழுவில் சேர அழைக்கப்பட்டுள்ளார்",
+  "commonConfirmLeaveGroup": "நிச்சயமாக \"{name}\" ஐ விட்டு வெளியேற விரும்புகிறீர்களா?",
+  "@commonConfirmLeaveGroup": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "commonLeave": "கிளம்பு",
+  "commonRecallThisMessage": "இந்த செய்தியை நினைவுபடுத்தவா?",
+  "commonSavedToGallery": "கேலரியில் சேமிக்கப்பட்டது",
+  "commonFailedToSave": "சேமிக்க முடியவில்லை",
+  "chatSaving": "சேமிக்கிறது...",
+  "commonShare": "பகிரவும்",
+  "chatSaveToGallery": "கேலரியில் சேமிக்கவும்",
+  "chatFailedToLoadImage": "படத்தை ஏற்ற முடியவில்லை",
+  "chatVideoRecordingFailed": "வீடியோ பதிவு தோல்வி",
+  "profileRedPacket": "சிவப்பு பாக்கெட்",
+  "commonMusic": "இசை",
+  "commonCoupon": "கூப்பன்",
+  "commonGift": "பரிசு",
+  "commonPoll": "கருத்துக்கணிப்பு",
+  "favoriteText": "உரை",
+  "favoriteLinkLabel": "இணைப்பு",
+  "favoriteNote": "குறிப்பு",
+  "favoriteMyNotes": "எனது குறிப்புகள்",
+  "favoriteToday": "இன்று",
+  "favoriteDaysAgoText": "{count} நாட்களுக்கு முன்பு",
+  "@favoriteDaysAgoText": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "favoriteDateFormat": "{month}/{day}",
+  "@favoriteDateFormat": {
+    "placeholders": {
+      "month": {
+        "type": "int"
+      },
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "favoriteNoFavorites": "இன்னும் பிடித்தவை இல்லை",
+  "favoriteLongPressToFavorite": "பிடித்த செய்தியை நீண்ட நேரம் அழுத்தவும்",
+  "favoriteNewNote": "புதிய குறிப்பு",
+  "favoriteLink": "பிடித்த இணைப்பு",
+  "favoriteEditTags": "குறிச்சொற்களைத் திருத்து",
+  "favoriteDeleteFavorite": "பிடித்ததை நீக்கு",
+  "favoriteDeleteFavoriteConfirm": "பிடித்தமானதை நிச்சயமாக நீக்க விரும்புகிறீர்களா?",
+  "favoriteNoSearchResultsFound": "முடிவுகள் எதுவும் கிடைக்கவில்லை",
+  "commonSendRedPacket": "சிவப்பு பாக்கெட் அனுப்பவும்",
+  "transferAmount": "தொகை",
+  "commonRedPacketCover": "சிவப்பு பாக்கெட் கவர்",
+  "commonRedPacketType": "சிவப்பு பாக்கெட் வகை",
+  "commonNormalRedPacket": "இயல்பானது",
+  "commonLuckyRedPacket": "அதிர்ஷ்டசாலி",
+  "commonRedPacketCount": "சிவப்பு பாக்கெட் எண்ணிக்கை",
+  "commonPieces": "துண்டுகள்",
+  "commonPutMoneyInRedPacket": "சிவப்பு பாக்கெட்டில் பணத்தை வைக்கவும்",
+  "commonRedPacketRefundNotice": "உரிமை கோரப்படாத சிவப்பு பாக்கெட்டுகள் 24 மணிநேரத்திற்குப் பிறகு திருப்பித் தரப்படும்",
+  "commonOpenRedPacket": "திற",
+  "commonRedPacketAllClaimed": "சிவப்பு பாக்கெட் அனைத்தும் கோரப்பட்டது",
+  "commonRedPacketExpired": "சிவப்பு பாக்கெட் காலாவதியானது",
+  "commonAddTransferNote": "பரிமாற்ற குறிப்பைச் சேர்க்கவும்",
+  "commonYuan": "CNY",
+  "commonReplyWithEmoji": "இந்த ஈமோஜியுடன் பதிலளிக்கவும்",
+  "contactEditRemark": "குறிப்பு திருத்தவும்",
+  "contactSetPermissions": "அனுமதிகளை அமைக்கவும்",
+  "profileAddToBlacklist": "தடுப்புப்பட்டியலில் சேர்க்கவும்",
+  "contactDeleteContact": "தொடர்பை நீக்கு",
+  "contactDeleteContactConfirm": "{name} ஐ நிச்சயமாக நீக்க விரும்புகிறீர்களா?",
+  "@contactDeleteContactConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "transferTitle": "இடமாற்றம்",
+  "transferReceiverAddressLabel": "பெறுநரின் முகவரி",
+  "transferSelectTokenLabel": "டோக்கனைத் தேர்ந்தெடுக்கவும்",
+  "transferAmountLabel": "பரிமாற்ற தொகை",
+  "transferMemoLabel": "மெமோ (விரும்பினால்)",
+  "transferAddMemoHint": "மெமோவைச் சேர்க்கவும்",
+  "transferSendPaymentRequest": "கட்டண கோரிக்கையை அனுப்பவும்",
+  "transferQrCodeGenerateFailed": "QR குறியீடு உருவாக்கம் தோல்வியடைந்தது",
+  "transferScanQrToPayMe": "எனக்கு பணம் செலுத்த QR குறியீட்டை ஸ்கேன் செய்யவும்",
+  "transferMyWalletAddress": "எனது பணப்பையின் முகவரி",
+  "transferCreatePaymentRequest": "கட்டண கோரிக்கையை உருவாக்கவும்",
+  "profileN42IdLabel": "N42 ஐடி: {id}",
+  "@profileN42IdLabel": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "commonRedPacketDefaultGreeting": "மனமார்ந்த வாழ்த்துக்கள்",
+  "commonSenderRedPacket": "{name} சிவப்பு பாக்கெட்",
+  "@commonSenderRedPacket": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "transferEnterValidAddress": "சரியான முகவரியை உள்ளிடவும்",
+  "transferPleaseSelectToken": "டோக்கனைத் தேர்ந்தெடுக்கவும்",
+  "commonReceivedTransfer": "பரிமாற்றம் கிடைத்தது",
+  "@commonFromSender": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@commonSendCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "commonSenderSentRedPacket": "{name} சிவப்பு நிற பாக்கெட்டை அனுப்பியது",
+  "@commonSenderSentRedPacket": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "commonSavedToBalance": "சமநிலையில் சேமிக்கப்பட்டது, நேரடியாகப் பரிமாற்றம் செய்யலாம்",
+  "commonRedPacketExpiredOrEmpty": "சிவப்பு பாக்கெட் காலாவதியானது/அனைத்தும் கோரப்பட்டது",
+  "transferScanFeatureComingSoon": "ஸ்கேன் அம்சம் விரைவில்...",
+  "contactSetAsStarred": "நட்சத்திரமிட்டதாக அமைக்கவும்",
+  "contactAddToBlocklist": "தடுப்புப்பட்டியலில் சேர்க்கவும்",
+  "commonClaimedYour": " உங்கள் உரிமை கோரினார் ",
+  "commonClaimedText": " கோரினார் ",
+  "commonUserTyping": "{name} தட்டச்சு செய்கிறது...",
+  "@commonUserTyping": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "commonTyping": "தட்டச்சு செய்கிறது...",
+  "commonWaitingToReceive": "பெற காத்திருக்கிறது",
+  "commonTapToClaim": "உரிமைகோர, தட்டவும்",
+  "commonHasBeenReceived": "பெறப்பட்டுள்ளது",
+  "commonGetLucky": "அதிர்ஷ்டம் கிடைக்கும்",
+  "qrcodeCameraStartFailed": "கேமராவைத் தொடங்க முடியவில்லை",
+  "qrcodeUnknownError": "அறியப்படாத பிழை",
+  "qrcodePlaceQrCodeInFrame": "ஸ்கேன் செய்ய ஃப்ரேமிற்குள் QR குறியீட்டை வைக்கவும்",
+  "qrcodeCloseManualInput": "கைமுறை உள்ளீட்டை மூடு",
+  "qrcodeManualInputUserId": "கைமுறை உள்ளீடு பயனர் ஐடி",
+  "commonAdd": "சேர்",
+  "profileSetStatus": "நிலையை அமைக்கவும்",
+  "profileVisibleToFriends24h": "24 மணிநேரமும் நண்பர்களுக்குத் தெரியும்",
+  "profileWriteStatus": "நிலையை எழுதுங்கள்",
+  "profileEnterYourStatus": "உங்கள் நிலையை உள்ளிடவும்...",
+  "profileOk": "சரி",
+  "qrcodeCameraPermissionRequired": "QR குறியீட்டை ஸ்கேன் செய்ய கேமரா அனுமதி தேவை",
+  "qrcodeCameraPermissionDenied": "கேமரா அனுமதி நிரந்தரமாக மறுக்கப்பட்டது. கணினி அமைப்புகளில் அதை இயக்கவும்.",
+  "qrcodePermissionCheckError": "அனுமதியைச் சரிபார்ப்பதில் பிழை: {error}",
+  "@qrcodePermissionCheckError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "qrcodeInvalidQrCode": "தவறான QR குறியீடு",
+  "qrcodeCannotAddFriend": "நண்பரைச் சேர்க்க முடியாது: {error}",
+  "@qrcodeCannotAddFriend": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "qrcodeScanQrCode": "QR குறியீட்டை ஸ்கேன் செய்யவும்",
+  "qrcodeCheckingCameraPermission": "கேமரா அனுமதியைச் சரிபார்க்கிறது...",
+  "qrcodeNeedCameraPermission": "கேமரா அனுமதி தேவை",
+  "qrcodeRetryPermission": "மீண்டும் முயற்சிக்கவும்",
+  "qrcodeOpenSettings": "அமைப்புகளைத் திறக்கவும்",
+  "groupInviteMembers": "உறுப்பினர்களை அழைக்கவும்",
+  "groupInviteCount": "அழை({count})",
+  "@groupInviteCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "profileNoShippingAddress": "ஷிப்பிங் முகவரி இல்லை",
+  "profileDefaultLabel": "இயல்புநிலை",
+  "profileNoInvoice": "விலைப்பட்டியல் இல்லை",
+  "profileCompany": "நிறுவனம்",
+  "profileTaxNumber": "வரி எண்",
+  "profileConfirmDeleteAddress": "இந்த முகவரியை நிச்சயமாக நீக்க விரும்புகிறீர்களா?",
+  "profileConfirmDeleteInvoice": "இந்த இன்வாய்ஸை நிச்சயமாக நீக்க விரும்புகிறீர்களா?",
+  "commonGroupOwner": "உரிமையாளர்",
+  "commonGroupAdmin": "நிர்வாகி",
+  "groupSearchMembers": "உறுப்பினர்களைத் தேடுங்கள்",
+  "groupTotalMembers": "{count} உறுப்பினர்கள்",
+  "@groupTotalMembers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatRemoveFromGroup": "குழுவிலிருந்து நீக்கு",
+  "groupConfirmRemoveMember": "குழுவிலிருந்து \"{name}\" ஐ நிச்சயமாக அகற்ற விரும்புகிறீர்களா?",
+  "@groupConfirmRemoveMember": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatUnknownSong": "தெரியாத பாடல்",
+  "chatUnknownArtist": "தெரியாத கலைஞர்",
+  "chatUnknownContact": "தெரியாத தொடர்பு",
+  "chatPersonalCard": "தொடர்பு அட்டை",
+  "chatSingleChoice": "ஒற்றை",
+  "chatMultiChoice": "பல",
+  "chatEnded": "முடிந்தது",
+  "chatEndPollButton": "முடிவு வாக்கெடுப்பு",
+  "chatPollHint": "வாக்கெடுப்பு அரட்டையில் காட்டப்படும். குழு உறுப்பினர்கள் வாக்களிக்கலாம்.",
+  "chatSearchSongOrArtist": "பாடல் அல்லது கலைஞரைத் தேடுங்கள்",
+  "chatNoSongsFound": "பாடல்கள் எதுவும் கிடைக்கவில்லை",
+  "chatSongNameOptional": "பாடலின் பெயர் (விரும்பினால்)",
+  "chatEnterSongName": "பாடலின் பெயரை உள்ளிடவும்",
+  "chatArtistNameOptional": "கலைஞரின் பெயர் (விரும்பினால்)",
+  "chatEnterArtistName": "கலைஞரின் பெயரை உள்ளிடவும்",
+  "chatRealTimeLocationSharing": "நிகழ்நேர இருப்பிடப் பகிர்வு மேம்பாட்டில் உள்ளது...",
+  "profileVoiceCallFeatureInDev": "குரல் அழைப்பு அம்சம் வளர்ச்சியில் உள்ளது...",
+  "profileReportFeatureInDev": "வளர்ச்சியில் உள்ள அம்சத்தைப் புகாரளி...",
+  "profileShareFeatureInDev": "வளர்ச்சியில் அம்சத்தைப் பகிரவும்...",
+  "profileQrCodeFeatureInDev": "QR குறியீடு அம்சம் வளர்ச்சியில் உள்ளது...",
+  "qrcodeScanQrToAddMe": "என்னை நண்பராகச் சேர்க்க மேலே உள்ள QR குறியீட்டை ஸ்கேன் செய்யவும்",
+  "qrcodeSaveToAlbum": "ஆல்பத்தில் சேமிக்கவும்",
+  "qrcodeChangeStyle": "உடையை மாற்றவும்",
+  "qrcodeCopyId": "நகல் ஐடி",
+  "qrcodeIdCopied": "ஐடி நகலெடுக்கப்பட்டது",
+  "qrcodeMoreStylesFeatureComingSoon": "மேலும் ஸ்டைல்கள் விரைவில் வரும்",
+  "@chatFeatureInDev": {
+    "placeholders": {
+      "feature": {
+        "type": "String"
+      }
+    }
+  },
+  "profileBio": "உயிர்",
+  "profileHomeServer": "சேவையகம்",
+  "profileShareContactCard": "தொடர்பு அட்டையைப் பகிரவும்",
+  "profileRemoveFromBlacklist": "தடுப்புப்பட்டியலில் இருந்து நீக்கு",
+  "profileConfirmAddBlacklist": "இந்த பயனரை தடுப்புப்பட்டியலில் நிச்சயமாக சேர்க்க விரும்புகிறீர்களா? அவர்களிடமிருந்து நீங்கள் செய்திகளைப் பெற மாட்டீர்கள்.",
+  "profileConfirmRemoveBlacklist": "தடுப்புப்பட்டியலில் இருந்து இந்தப் பயனரை நிச்சயமாக நீக்க விரும்புகிறீர்களா?",
+  "profileRemarkSaved": "கருத்து சேமிக்கப்பட்டது",
+  "profileRemarkCleared": "கருத்து அழிக்கப்பட்டது",
+  "transferReceive": "பெறு",
+  "transferPleaseConnectWallet": "முதலில் உங்கள் பணப்பையை இணைக்கவும்",
+  "transferSendRequest": "கோரிக்கையை அனுப்பவும்",
+  "transferPleaseEnterValidAmount": "சரியான தொகையை உள்ளிடவும்",
+  "searchPlaceholder": "தொடர்புகள், குழுக்கள், செய்திகளைத் தேடுங்கள்",
+  "searchEnterKeywordToSearch": "தேடலைத் தொடங்க முக்கிய சொல்லை உள்ளிடவும்",
+  "searchClearHistory": "தெளிவு",
+  "searchNoResultsForQuery": "\"{query}\" க்கான முடிவுகள் எதுவும் இல்லை",
+  "@searchNoResultsForQuery": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "searchAllResults": "அனைத்து",
+  "searchInChat": "அரட்டையில் தேடவும்",
+  "searchContactLabel": "தொடர்பு கொள்ளவும்",
+  "searchGroupLabel": "குழு",
+  "searchConversationLabel": "உரையாடல்",
+  "searchMessageLabel": "செய்தி",
+  "settingsSecurityTitle": "பாதுகாப்பு",
+  "settingsKeyBackup": "முக்கிய காப்புப்பிரதி",
+  "settingsBackupEncryptionKeys": "காப்பு குறியாக்க விசைகள்",
+  "settingsKeysBackedUp": "{count} விசைகள் காப்புப் பிரதி எடுக்கப்பட்டன",
+  "@settingsKeysBackedUp": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsBackupNotSet": "காப்புப்பிரதி அமைக்கப்படவில்லை",
+  "settingsRestoreKeys": "விசைகளை மீட்டமை",
+  "settingsRestoreKeysFromBackup": "காப்புப்பிரதியிலிருந்து குறியாக்க விசைகளை மீட்டெடுக்கவும்",
+  "settingsExportKeys": "ஏற்றுமதி விசைகள்",
+  "settingsExportKeysToFile": "கோப்பிற்கு விசைகளை ஏற்றுமதி செய்யவும்",
+  "settingsLoggedInDevices": "உள்நுழைந்த சாதனங்கள்",
+  "settingsNoOtherDevices": "வேறு சாதனங்கள் இல்லை",
+  "settingsVerified": "சரிபார்க்கப்பட்டது",
+  "settingsUnverified": "சரிபார்க்கப்படவில்லை",
+  "settingsAdvanced": "மேம்பட்டது",
+  "settingsCrossSigning": "குறுக்கு-கையொப்பமிடுதல்",
+  "settingsEnabled": "இயக்கப்பட்டது",
+  "settingsNotEnabled": "இயக்கப்படவில்லை",
+  "settingsResetEncryption": "குறியாக்கத்தை மீட்டமைக்கவும்",
+  "settingsDeleteAllEncryptionKeys": "அனைத்து குறியாக்க விசைகளையும் நீக்கு",
+  "settingsEncryptionNotSupported": "என்க்ரிப்ஷன் ஆதரிக்கப்படவில்லை",
+  "settingsNotInitialized": "துவக்கப்படவில்லை",
+  "settingsBackupKeyTitle": "காப்பு விசைகள்",
+  "settingsBackupKeyMessage": "புதிய விசை காப்புப்பிரதியை உருவாக்கவா? இது புதிய சாதனத்தில் மறைகுறியாக்கப்பட்ட செய்திகளை மீட்டெடுக்க உதவும்.",
+  "settingsBackup": "காப்புப்பிரதி",
+  "settingsRestoreKeyTitle": "விசைகளை மீட்டமை",
+  "settingsRestoreKeyMessage": "மறைகுறியாக்கப்பட்ட செய்திகளை மீட்டெடுக்க உங்கள் மீட்பு கடவுச்சொல் அல்லது மீட்பு விசையை உள்ளிடவும்.",
+  "settingsRestore": "மீட்டமை",
+  "settingsExportKeyTitle": "ஏற்றுமதி விசைகள்",
+  "settingsExportKeyMessage": "ஏற்றுமதி செய்யப்பட்ட விசை கோப்பில் உங்களின் அனைத்து குறியாக்க விசைகளும் உள்ளன. தயவு செய்து பத்திரமாக வைத்துக் கொள்ளவும்.",
+  "settingsExport": "ஏற்றுமதி",
+  "settingsDeviceIdLabel": "சாதன ஐடி: {deviceId}",
+  "@settingsDeviceIdLabel": {
+    "placeholders": {
+      "deviceId": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsDeviceStatusVerified": "நிலை: சரிபார்க்கப்பட்டது",
+  "settingsDeviceStatusUnverified": "நிலை: சரிபார்க்கப்படவில்லை",
+  "settingsLastActiveLabel": "கடைசியாக செயல்பட்டது: {lastSeen}",
+  "@settingsLastActiveLabel": {
+    "placeholders": {
+      "lastSeen": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsVerifyThisDevice": "இந்தச் சாதனத்தைச் சரிபார்க்கவும்",
+  "settingsCrossSigningAlreadyEnabled": "குறுக்கு கையொப்பம் ஏற்கனவே இயக்கப்பட்டுள்ளது",
+  "settingsCrossSigningSetupSuccess": "குறுக்கு-கையொப்பமிடும் அமைப்பு வெற்றிகரமாக உள்ளது",
+  "@settingsSetupFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsResetEncryptionTitle": "குறியாக்கத்தை மீட்டமைக்கவும்",
+  "settingsResetEncryptionWarning": "எச்சரிக்கை: இது உங்களின் அனைத்து குறியாக்க விசைகளையும் நீக்கும். முந்தைய மறைகுறியாக்கப்பட்ட செய்திகளை உங்களால் டிக்ரிப்ட் செய்ய முடியாது. இந்தச் செயலைச் செயல்தவிர்க்க முடியாது.",
+  "settingsReset": "மீட்டமை",
+  "settingsBackupSuccess": "விசைகள் வெற்றிகரமாக காப்புப் பிரதி எடுக்கப்பட்டன",
+  "settingsBackupFailed": "காப்புப்பிரதி தோல்வியடைந்தது",
+  "settingsRecoveryKey": "மீட்பு விசை",
+  "settingsRecoveryKeySaveWarning": "இந்த மீட்பு விசையை பாதுகாப்பான இடத்தில் சேமிக்கவும். உங்கள் மறைகுறியாக்கப்பட்ட செய்திகளை புதிய சாதனத்தில் மீட்டமைக்க இது தேவைப்படும்.",
+  "settingsRecoveryKeySaved": "நான் சேமித்து விட்டேன்",
+  "settingsRestoreSuccess": "விசைகள் வெற்றிகரமாக மீட்டெடுக்கப்பட்டன",
+  "settingsRestoreFailed": "மீட்டமைக்க முடியவில்லை",
+  "settingsPassword": "கடவுச்சொல்",
+  "settingsEnterRecoveryKey": "மீட்பு விசையை உள்ளிடவும்",
+  "settingsEnterPassword": "கடவுச்சொல்லை உள்ளிடவும்",
+  "settingsExportSuccess": "விசைகள் சர்வர் காப்புப்பிரதிக்கு வெற்றிகரமாக ஏற்றுமதி செய்யப்பட்டன",
+  "settingsExportNeedBackupFirst": "முதலில் ஒரு முக்கிய காப்புப்பிரதியை உருவாக்கவும்",
+  "settingsExportFailed": "ஏற்றுமதி தோல்வியடைந்தது",
+  "settingsResetSuccess": "என்க்ரிப்ஷன் மீட்டமைப்பு வெற்றிகரமாக உள்ளது",
+  "settingsResetFailed": "மீட்டமைக்க முடியவில்லை",
+  "callLeaveMeetingConfirm": "மீட்டிங்கில் இருந்து நிச்சயமாக வெளியேற விரும்புகிறீர்களா?",
+  "chatPokedSomeone": "{name}{suffix} குத்தப்பட்டது",
+  "@chatPokedSomeone": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "suffix": {
+        "type": "String"
+      }
+    }
+  },
+  "chatNoContactsToAdd": "சேர்க்க தொடர்புகள் எதுவும் இல்லை",
+  "chatAddMembers": "உறுப்பினர்களைச் சேர்க்கவும்",
+  "chatInvitedMembers": "{count} உறுப்பினர்கள் அழைக்கப்பட்டுள்ளனர்",
+  "@chatInvitedMembers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatInviteFailed": "அழைப்பு தோல்வி: {error}",
+  "@chatInviteFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatMemberRemoved": "உறுப்பினர் நீக்கப்பட்டார்",
+  "chatRemoveFailed": "அகற்ற முடியவில்லை: {error}",
+  "@chatRemoveFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatRealTimeLocationShareMessage": "பகிர்ந்த பிறகு, மற்ற தரப்பினர் உங்கள் நிகழ்நேர இருப்பிடத்தை 1 மணிநேரம் பார்க்க முடியும்.",
+  "chatStartSharing": "பகிரத் தொடங்கு",
+  "chatLocationServiceNotEnabled": "இருப்பிடச் சேவை இயக்கப்படவில்லை",
+  "chatEnableLocationService": "இந்த அம்சத்தைப் பயன்படுத்த, இருப்பிடச் சேவையை இயக்கவும்",
+  "chatGoToSettings": "அமைப்புகளுக்குச் செல்லவும்",
+  "chatLocationPermissionRequired": "இந்த அம்சத்திற்கு இருப்பிட அனுமதி தேவை",
+  "chatLocationPermissionDeniedPermanent": "இருப்பிட அனுமதி நிரந்தரமாக மறுக்கப்பட்டது. அமைப்புகளில் அதை இயக்கவும்.",
+  "chatLocationPermissionDenied": "இருப்பிட அனுமதி மறுக்கப்பட்டது",
+  "chatGettingLocation": "இருப்பிடத்தைப் பெறுகிறது...",
+  "chatGetLocationFailed": "இருப்பிடத்தைப் பெறுவதில் தோல்வி: {error}",
+  "@chatGetLocationFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatMapPreview": "வரைபட முன்னோட்டம்",
+  "chatSearchLocation": "இடம் தேடு",
+  "chatRedPacketSent": "{amount} {token} சிவப்பு பாக்கெட் அனுப்பப்பட்டது",
+  "@chatRedPacketSent": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "token": {
+        "type": "String"
+      }
+    }
+  },
+  "chatTransferDefault": "இடமாற்றம்",
+  "chatTransferSent": "அனுப்பப்பட்டது {amount} {token} பரிமாற்றம்",
+  "@chatTransferSent": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "token": {
+        "type": "String"
+      }
+    }
+  },
+  "chatPickFileFailed": "கோப்பைத் தேர்ந்தெடுப்பதில் தோல்வி: {error}",
+  "@chatPickFileFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatFileSizeLimit": "கோப்பு அளவு 50MB ஐ விட அதிகமாக இருக்கக்கூடாது",
+  "chatFileSending": "கோப்பு அனுப்புகிறது: {filename}",
+  "@chatFileSending": {
+    "placeholders": {
+      "filename": {
+        "type": "String"
+      }
+    }
+  },
+  "chatSendFileFailed": "கோப்பை அனுப்புவதில் தோல்வி: {error}",
+  "@chatSendFileFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatContactCardSent": "{name} இன் தொடர்பு அட்டை அனுப்பப்பட்டது",
+  "@chatContactCardSent": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatFavoritesFeature": "பிடித்தவை",
+  "chatCouponsFeature": "கூப்பன்கள்",
+  "chatGiftFeature": "பரிசு",
+  "chatSharedMusic": "பகிரப்பட்டது {name}",
+  "@chatSharedMusic": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@chatSendFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatEndPollTitle": "முடிவு வாக்கெடுப்பு",
+  "chatEndPollConfirmMessage": "இந்த வாக்கெடுப்பை நிச்சயமாக முடிக்க விரும்புகிறீர்களா? வாக்குப்பதிவு முடிந்ததும் மூடப்படும்.",
+  "chatPollEndedMessage": "கருத்துக்கணிப்பு முடிந்தது",
+  "chatConnectingCall": "இணைக்கிறது...",
+  "chatMuteCall": "முடக்கு",
+  "chatSpeakerOff": "ஸ்பீக்கர் ஆஃப்",
+  "chatSpeakerOn": "பேச்சாளர்",
+  "chatCameraOn": "கேமரா ஆன்",
+  "chatCameraOff": "கேமரா ஆஃப்",
+  "chatHangUp": "நிறுத்து",
+  "chatSelectForwardTargetTitle": "முன்னோக்கி இலக்கைத் தேர்ந்தெடுக்கவும்",
+  "chatNoForwardableChat": "முன்னனுப்புவதற்கு அரட்டைகள் எதுவும் இல்லை",
+  "chatNoMatchingChat": "பொருத்தமான அரட்டைகள் எதுவும் இல்லை",
+  "chatLocationTitle": "இடம்",
+  "chatSendButton": "அனுப்பு",
+  "chatRetryButton": "மீண்டும் முயற்சிக்கவும்",
+  "chatSearchContactHint": "தொடர்புகளைத் தேடுங்கள்",
+  "chatShareMusic": "இசையைப் பகிரவும்",
+  "chatRecentPlayed": "சமீபத்திய",
+  "chatMyFavorites": "பிடித்தவை",
+  "chatNetworkLink": "இணைப்பு",
+  "chatLocalFile": "உள்ளூர்",
+  "chatPasteMusicLink": "இசை இணைப்பை ஒட்டவும்",
+  "chatShareMusicButton": "இசையைப் பகிரவும்",
+  "chatSelectLocalAudio": "உள்ளூர் ஆடியோ கோப்பைத் தேர்ந்தெடுக்கவும்",
+  "chatSupportedAudioFormats": "MP3, M4A, WAV, FLAC போன்றவற்றை ஆதரிக்கிறது.",
+  "chatSelectFileButton": "கோப்பைத் தேர்ந்தெடுக்கவும்",
+  "chatPleaseEnterMusicLink": "இசை இணைப்பை உள்ளிடவும்",
+  "chatPleaseEnterValidLink": "சரியான URL ஐ உள்ளிடவும்",
+  "chatSharedSong": "பகிரப்பட்ட பாடல்",
+  "chatSelectMember": "உறுப்பினரைத் தேர்ந்தெடுக்கவும்",
+  "chatSearchMemberHint": "உறுப்பினர்களைத் தேடுங்கள்",
+  "chatNoMatchingMembers": "பொருந்தக்கூடிய உறுப்பினர்கள் இல்லை",
+  "commonUnknownMember": "தெரியவில்லை",
+  "chatSelectedMessagesCount": "தேர்ந்தெடுக்கப்பட்ட {count} செய்திகள்",
+  "@chatSelectedMessagesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatSearchContactsOrGroups": "தொடர்புகள் அல்லது குழுக்களைத் தேடுங்கள்",
+  "chatVideoTitle": "வீடியோ",
+  "chatLoadingText": "ஏற்றுகிறது...",
+  "chatVideoLoadFailed": "வீடியோ ஏற்ற முடியவில்லை",
+  "chatPlayerInitFailed": "பிளேயர் துவக்கம் தோல்வியடைந்தது",
+  "chatCreatePollTitle": "வாக்கெடுப்பை உருவாக்கவும்",
+  "chatSubmitPoll": "சமர்ப்பிக்கவும்",
+  "chatPollQuestionLabel": "கருத்துக்கணிப்பு கேள்வி",
+  "chatEnterPollQuestionHint": "வாக்கெடுப்பு கேள்வியை உள்ளிடவும்",
+  "chatPollOptionsLabel": "வாக்கெடுப்பு விருப்பங்கள்",
+  "chatOptionHintWithIndex": "விருப்பம் {index}",
+  "@chatOptionHintWithIndex": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "chatAddOptionButton": "விருப்பத்தைச் சேர்க்கவும்",
+  "chatPollSettingsLabel": "வாக்கெடுப்பு அமைப்புகள்",
+  "chatSelectionType": "தேர்வு வகை",
+  "chatSingleChoiceLabel": "ஒற்றை",
+  "chatMultiChoiceLabel": "பல",
+  "chatAnonymousPollSwitch": "அநாமதேய கருத்துக்கணிப்பு",
+  "chatPleaseEnterQuestion": "வாக்கெடுப்பு கேள்வியை உள்ளிடவும்",
+  "chatAtLeastTwoOptions": "குறைந்தது 2 விருப்பங்கள் தேவை",
+  "chatConfirmWithCount": "உறுதிப்படுத்தவும் ({count})",
+  "@chatConfirmWithCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@chatSelectedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@commonMemberCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@chatGroupChatCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "authEmailVerificationTitle": "மின்னஞ்சல் சரிபார்ப்பு",
+  "authEnterValidEmailAddress": "சரியான மின்னஞ்சல் முகவரியை உள்ளிடவும்",
+  "authVerificationCodeSentTo": "சரிபார்ப்புக் குறியீடு {email} க்கு அனுப்பப்பட்டது",
+  "@authVerificationCodeSentTo": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "authSendCodeFailed": "குறியீட்டை அனுப்புவதில் தோல்வி: {error}",
+  "@authSendCodeFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "authVerificationSuccess": "சரிபார்ப்பு வெற்றி பெற்றது",
+  "authVerificationFailed": "சரிபார்ப்பு தோல்வியடைந்தது",
+  "authVerificationCodeError": "சரிபார்ப்புக் குறியீடு பிழை: {error}",
+  "@authVerificationCodeError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "commonEnterVerificationCode": "சரிபார்ப்புக் குறியீட்டை உள்ளிடவும்",
+  "authEnterYourEmail": "மின்னஞ்சலை உள்ளிடவும்",
+  "authWeSentCodeTo": "6 இலக்கக் குறியீட்டை அனுப்பினோம்\n{email}",
+  "@authWeSentCodeTo": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "authEnterEmailForCode": "உங்கள் மின்னஞ்சல் முகவரியை உள்ளிடவும், நாங்கள் சரிபார்ப்புக் குறியீட்டை அனுப்புவோம்",
+  "commonSendVerificationCode": "சரிபார்ப்புக் குறியீட்டை அனுப்பவும்",
+  "authResendVerificationCode": "சரிபார்ப்புக் குறியீட்டை மீண்டும் அனுப்பவும்",
+  "authCanResendAfter": "{seconds} வினாடிகளுக்குப் பிறகு மீண்டும் அனுப்பலாம்",
+  "@authCanResendAfter": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "commonChangeEmail": "மின்னஞ்சலை மாற்றவும்",
+  "contactAddToContacts": "தொடர்புகளில் சேர்க்கவும்",
+  "contactAddingToContacts": "சேர்க்கிறது...",
+  "contactAddedToContacts": "தொடர்புகளில் சேர்க்கப்பட்டது",
+  "contactAddFailedWithError": "சேர்க்க முடியவில்லை: {error}",
+  "@contactAddFailedWithError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "contactAddPhone": "தொலைபேசியைச் சேர்க்கவும்",
+  "contactAddTag": "குறிச்சொற்களைச் சேர்க்கவும்",
+  "contactAddText": "உரையைச் சேர்க்கவும்",
+  "contactAddPhoto": "புகைப்படத்தைச் சேர்க்கவும்",
+  "contactGroupCountLabel": "{count} குழுக்கள்",
+  "@contactGroupCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "contactAddedViaSearch": "தேடல் மூலம் சேர்க்கப்பட்டது",
+  "contactAddTime": "நேரத்தைச் சேர்க்கவும்",
+  "contactDoneButton": "முடிந்தது",
+  "callWaitingForParticipants": "பங்கேற்பாளர்கள் சேர்வதற்குக் காத்திருக்கிறது...",
+  "callParticipantMe": "{name} (நான்)",
+  "@callParticipantMe": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "callSharingLabel": "பகிர்தல்",
+  "callScreenSharingBy": "{name} திரையைப் பகிர்கிறது",
+  "@callScreenSharingBy": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "callParticipantCount": "{count} பங்கேற்பாளர்கள்",
+  "@callParticipantCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "callMuteLabel": "முடக்கு",
+  "callUnmuteLabel": "ஒலியடக்கவும்",
+  "callTurnOffVideo": "வீடியோவை முடக்கு",
+  "callTurnOnVideo": "வீடியோவை இயக்கவும்",
+  "callShareScreen": "திரையைப் பகிரவும்",
+  "callStopSharing": "பகிர்வதை நிறுத்து",
+  "callSwitchCameraLabel": "மாறவும்",
+  "callLeaveLabel": "கிளம்பு",
+  "callParticipantsLabel": "பங்கேற்பாளர்கள்",
+  "callJoiningMeeting": "மீட்டிங்கில் இணைகிறது...",
+  "chatPollVotesFormat": "{count} வாக்குகள் ({percentage}%)",
+  "@chatPollVotesFormat": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "percentage": {
+        "type": "String"
+      }
+    }
+  },
+  "chatPollParticipantsFormat": "{count} பங்கேற்பாளர்கள்",
+  "@chatPollParticipantsFormat": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@chatSelectFileFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatNoMediaUrlAvailable": "மீடியா URL இல்லை",
+  "chatDownloadFailed": "பதிவிறக்கம் தோல்வி: {code}",
+  "@chatDownloadFailed": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "chatErrorWithMessage": "பிழை: {message}",
+  "@chatErrorWithMessage": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "chatMusicLinkLabel": "இசை இணைப்பு",
+  "chatRedPacketTransferCannotForward": "சிவப்பு பாக்கெட்டுகள் மற்றும் இடமாற்றங்களை அனுப்ப முடியாது",
+  "commonShareFailed": "பகிர்வு தோல்வி: {error}",
+  "@commonShareFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "commonTapToRetry": "மீண்டும் முயற்சிக்க தட்டவும்",
+  "chatDefaultRedPacketGreeting": "வளம் பெற வாழ்த்துக்கள்",
+  "groupAllowOthersToSearchAndJoin": "தேட மற்றும் சேர மற்றவர்களை அனுமதிக்கவும்",
+  "groupConfirmClearChatHistory": "அரட்டை வரலாற்றை நிச்சயமாக அழிக்க விரும்புகிறீர்களா?",
+  "groupCreateGroupToChat": "அரட்டையடிக்க ஒரு குழுவை உருவாக்கவும்",
+  "groupEditGroupAnnouncement": "குழு அறிவிப்பைத் திருத்தவும்",
+  "groupEditGroupDescription": "குழு விளக்கத்தைத் திருத்தவும்",
+  "groupEnterGroupAnnouncement": "குழு அறிவிப்பை உள்ளிடவும்",
+  "groupMemberCountClickToCopy": "{count} உறுப்பினர்கள், குழு ஐடியை நகலெடுக்க கிளிக் செய்யவும்",
+  "groupNoPermissionToEditGroupName": "குழுவின் பெயரைத் திருத்த உங்களுக்கு அனுமதி இல்லை",
+  "authEmailAddress": "மின்னஞ்சல் முகவரி",
+  "commonEnterEmailAddress": "மின்னஞ்சல் முகவரியை உள்ளிடவும்",
+  "authEmailRecoveryHint": "கடவுச்சொல்லை மீட்டெடுக்கப் பயன்படுகிறது",
+  "commonInvalidEmailFormat": "சரியான மின்னஞ்சல் முகவரியை உள்ளிடவும்",
+  "authOptional": "விருப்பமானது",
+  "authResetPassword": "கடவுச்சொல்லை மீட்டமைக்கவும்",
+  "authEnterRegisteredEmail": "நீங்கள் பதிவுசெய்த மின்னஞ்சல் முகவரியை உள்ளிடவும்",
+  "authSendResetCode": "மீட்டமை குறியீட்டை அனுப்பவும்",
+  "authResetCodeSent": "{email}க்கு அனுப்பப்பட்ட குறியீட்டை மீட்டமைக்கவும்",
+  "@authResetCodeSent": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "authEnterResetCode": "மீட்டமைக் குறியீட்டை உள்ளிடவும்",
+  "authSetNewPassword": "புதிய கடவுச்சொல்லை அமைக்கவும்",
+  "commonConfirmNewPassword": "புதிய கடவுச்சொல்லை உறுதிப்படுத்தவும்",
+  "commonNewPassword": "புதிய கடவுச்சொல்",
+  "authPasswordResetSuccess": "கடவுச்சொல் மீட்டமைப்பு வெற்றிகரமாக உள்ளது. உங்கள் புதிய கடவுச்சொல் மூலம் உள்நுழையவும்.",
+  "authResetPasswordFailed": "கடவுச்சொல்லை மீட்டமைக்க முடியவில்லை",
+  "settingsChangePassword": "கடவுச்சொல்லை மாற்றவும்",
+  "settingsCurrentPassword": "தற்போதைய கடவுச்சொல்",
+  "settingsEnterCurrentPassword": "தற்போதைய கடவுச்சொல்லை உள்ளிடவும்",
+  "settingsEnterNewPassword": "புதிய கடவுச்சொல்லை உள்ளிடவும்",
+  "settingsPasswordChanged": "கடவுச்சொல் வெற்றிகரமாக மாற்றப்பட்டது. உங்கள் புதிய கடவுச்சொல் மூலம் உள்நுழையவும்.",
+  "settingsChangePasswordFailed": "கடவுச்சொல்லை மாற்ற முடியவில்லை",
+  "settingsNewPasswordMustBeDifferent": "புதிய கடவுச்சொல் தற்போதைய கடவுச்சொல்லிலிருந்து வேறுபட்டதாக இருக்க வேண்டும்",
+  "settingsChangePasswordInfo": "கடவுச்சொல்லை மாற்றிய பிறகு, நீங்கள் வெளியேற்றப்படுவீர்கள், மேலும் புதிய கடவுச்சொல்லைப் பயன்படுத்தி உள்நுழைய வேண்டும்.",
+  "settingsPasswordRequirements": "கடவுச்சொல் தேவைகள்:",
+  "settingsSecurityNote": "பாதுகாப்பிற்காக, கடவுச்சொல்லை மாற்றிய பிறகு எல்லா சாதனங்களிலும் மீண்டும் உள்நுழைய வேண்டும்.",
+  "settingsSecurity": "பாதுகாப்பு",
+  "settingsCurrentBoundEmail": "தற்போதைய பிணைப்பு மின்னஞ்சல்",
+  "settingsNewEmailAddress": "புதிய மின்னஞ்சல் முகவரி",
+  "settingsEnterNewEmail": "புதிய மின்னஞ்சல் முகவரியை உள்ளிடவும்",
+  "settingsVerificationCode": "சரிபார்ப்பு குறியீடு",
+  "settingsVerificationCodeSent": "சரிபார்ப்புக் குறியீடு அனுப்பப்பட்டது",
+  "settingsCodeSentTo": "சரிபார்ப்புக் குறியீடு அனுப்பப்பட்டது",
+  "settingsDidNotReceiveCode": "குறியீட்டைப் பெறவில்லையா?",
+  "settingsEmailChangedSuccess": "மின்னஞ்சல் வெற்றிகரமாக மாற்றப்பட்டது",
+  "settingsChangeEmailFailed": "மின்னஞ்சலை மாற்ற முடியவில்லை",
+  "settingsEmailSecurityNote": "கடவுச்சொல் மீட்டெடுப்பிற்கு உங்கள் மின்னஞ்சல் பயன்படுத்தப்படுகிறது. தயவு செய்து பத்திரமாக வைக்கவும்.",
+  "commonGoogleLogin": "Google மூலம் உள்நுழையவும்",
+  "commonAppleLogin": "ஆப்பிள் மூலம் உள்நுழையவும்",
+  "commonWechat": "WeChat",
+  "settingsLanguage": "மொழி",
+  "settingsLanguageChanged": "மொழி மாறியது",
+  "settingsTranslation": "மொழிபெயர்ப்பு",
+  "settingsTranslateTextTo": "உரையை மொழிபெயர்",
+  "settingsTranslateDescription": "செய்திகளை மொழிபெயர்க்க விரும்பும் மொழியைத் தேர்ந்தெடுக்கவும்.",
+  "settingsAutoTranslate": "பெறப்பட்ட செய்திகளை தானாக மொழிபெயர்க்கவும்",
+  "settingsAutoTranslateDescription": "அரட்டையில் பெறப்பட்ட செய்திகளை நீங்கள் தேர்ந்தெடுத்த மொழியில் தானாக மொழிபெயர்க்கவும்.",
+  "settingsBiometricLogin": "பயோமெட்ரிக் உள்நுழைவு",
+  "authLoginWithBiometric": "{type} உடன் உள்நுழைக",
+  "@authLoginWithBiometric": {
+    "placeholders": {
+      "type": {
+        "type": "Object"
+      }
+    }
+  },
+  "settingsBiometricLoginEnabled": "பயோமெட்ரிக் உள்நுழைவு இயக்கப்பட்டது",
+  "settingsBiometricLoginDisabled": "பயோமெட்ரிக் உள்நுழைவு முடக்கப்பட்டது",
+  "settingsEnableBiometricLogin": "பயோமெட்ரிக் உள்நுழைவை இயக்கு",
+  "settingsBiometricEnabled": "இயக்கப்பட்டது - உள்நுழைய பயோமெட்ரிக் பயன்படுத்தவும்",
+  "settingsBiometricDisabled": "முடக்கப்பட்டது - இயக்க தட்டவும்",
+  "settingsBiometricNeedRelogin": "பயோமெட்ரிக் உள்நுழைவை இயக்க, வெளியேறி மீண்டும் உள்நுழையவும்",
+  "authOr": "அல்லது",
+  "qrcodeCameraPermissionRestricted": "இந்தச் சாதனத்தில் கேமரா அணுகல் தடைசெய்யப்பட்டுள்ளது",
+  "authPasskeyLabel": "பாஸ்கீ",
+  "authGoogleLabel": "கூகுள்",
+  "authAppleLabel": "ஆப்பிள்",
+  "authSsoLabel": "SSO",
+  "transferAmountHintZero": "0.00",
+  "commonMatrixIdHint": "@username:server.com",
+  "authServerAddressHint": "https://m.si46.world",
+  "authEmailExampleHint": "example@email.com",
+  "authVerificationCodePlaceholder": "------",
+  "profileEnterPokeSuffixHint": "குத்து பின்னொட்டை உள்ளிடவும், எ.கா: தோளில்",
+  "groupAlbum": "குழு ஆல்பம்",
+  "groupFiles": "குழு கோப்புகள்",
+  "groupImages": "படங்கள்",
+  "groupVideos": "வீடியோக்கள்",
+  "groupTotal": "மொத்தம்",
+  "groupSize": "அளவு",
+  "groupNoMedia": "மீடியா இல்லை",
+  "groupNoMediaDescription": "இந்தக் குழுவில் இதுவரை புகைப்படங்கள் அல்லது வீடியோக்கள் இல்லை",
+  "groupDocuments": "ஆவணங்கள்",
+  "groupNoFiles": "கோப்புகள் இல்லை",
+  "groupNoFilesDescription": "இந்தக் குழுவில் இதுவரை கோப்புகள் எதுவும் இல்லை",
+  "groupDownloadStarted": "{filename} ஐப் பதிவிறக்குகிறது...",
+  "@groupDownloadStarted": {
+    "placeholders": {
+      "filename": {
+        "type": "String"
+      }
+    }
+  },
+  "contactNoCommonGroups": "பொதுவான குழுக்கள் இல்லை",
+  "contactNoCommonGroupsDescription": "உங்களுக்கு பொதுவான குழுக்கள் எதுவும் இல்லை",
+  "chatVoiceMessage": "குரல்",
+  "chatMessage": "செய்தி",
+  "conversationHideChat": "மறை",
+  "settingsQuickReply": "விரைவான பதில்",
+  "commonTranslate": "மொழிபெயர்",
+  "contactCreateTag": "குறிச்சொல்லை உருவாக்கவும்",
+  "contactEnterTagName": "குறிச்சொல் பெயரை உள்ளிடவும்",
+  "contactEditTag": "குறியைத் திருத்து",
+  "contactDeleteTag": "குறிச்சொல்லை நீக்கு",
+  "contactDeleteTagConfirm": "\"{tagName}\" குறிச்சொல்லை நிச்சயமாக நீக்க விரும்புகிறீர்களா?",
+  "@contactDeleteTagConfirm": {
+    "placeholders": {
+      "tagName": {
+        "type": "String"
+      }
+    }
+  },
+  "contactNoTags": "இன்னும் குறிச்சொற்கள் இல்லை",
+  "contactFriendPermissions": "நண்பர் அனுமதிகள்",
+  "contactSetChatOnly": "அரட்டை மட்டும் என அமைக்கவும்",
+  "contactChatOnlyDesc": "உங்களுடன் மட்டுமே அரட்டையடிக்க முடியும், மற்ற உள்ளடக்கம் மறைக்கப்படும்",
+  "contactHideMyMoments": "எனது தருணங்களை மறை",
+  "contactHideMyMomentsDesc": "இந்த நண்பரால் எனது தருணங்களைப் பார்க்க முடியாது",
+  "contactHideTheirMoments": "அவர்களின் தருணங்களை மறைக்கவும்",
+  "contactHideTheirMomentsDesc": "இந்த நண்பரின் தருணங்களைப் பார்க்க வேண்டாம்",
+  "contactHideMyStatus": "எனது நிலையை மறை",
+  "contactHideMyStatusDesc": "எனது நிலை புதுப்பிப்புகளை இந்த நண்பரால் பார்க்க முடியவில்லை",
+  "contactNoChatOnlyFriends": "அரட்டை மட்டுமே நண்பர்கள் இல்லை",
+  "contactNoOfficialAccounts": "அதிகாரப்பூர்வ கணக்குகள் இல்லை",
+  "contactFollowOfficialAccountsDesc": "சமீபத்திய புதுப்பிப்புகளைப் பெற அதிகாரப்பூர்வ கணக்குகளைப் பின்தொடரவும்",
+  "contactNoServiceAccounts": "சேவை கணக்குகள் இல்லை",
+  "contactSubscribeServiceAccountsDesc": "வசதியான சேவைகளுக்கு சேவை கணக்குகளுக்கு குழுசேரவும்",
+  "contactNoEnterpriseContacts": "நிறுவன தொடர்புகள் இல்லை",
+  "contactEnterpriseContactsDesc": "நிறுவன தொடர்புகள் இங்கே காட்டப்படும்",
+  "profileCardPack": "கார்டு பேக்",
+  "profileOrders": "ஆர்டர்கள்",
+  "profileNoOrders": "ஆர்டர்கள் இல்லை",
+  "profileOrdersDesc": "உங்கள் ஆர்டர்கள் இங்கே காட்டப்படும்",
+  "profileNoCards": "அட்டைகள் இல்லை",
+  "profileCardsDesc": "உங்கள் கார்டுகள் இங்கே காட்டப்படும்",
+  "favoriteEnterTagsHint": "காற்புள்ளிகளால் பிரிக்கப்பட்ட குறிச்சொற்களை உள்ளிடவும்",
+  "favoriteTagsUpdated": "குறிச்சொற்கள் புதுப்பிக்கப்பட்டன",
+  "favoriteForwardedContent": "உள்ளடக்கம் அனுப்பப்பட்டது",
+  "favoriteEnterNoteContent": "குறிப்பு உள்ளடக்கத்தை உள்ளிடவும்",
+  "favoriteNoteAdded": "குறிப்பு சேர்க்கப்பட்டது",
+  "favoriteLinkTitle": "இணைப்பு தலைப்பு",
+  "favoriteLinkUrl": "https://",
+  "favoriteLinkAdded": "இணைப்பு சேர்க்கப்பட்டது",
+  "contactPhotoAdded": "புகைப்படம் சேர்க்கப்பட்டது",
+  "contactEnterPhone": "தொலைபேசி எண்ணை உள்ளிடவும்",
+  "commonConversationWithId": "உரையாடல்: {roomId}",
+  "commonContactWithId": "தொடர்புக்கு: {userId}",
+  "commonDiscover": "கண்டறியவும்",
+  "commonDeveloping": "{title}\n(விரைவில்)",
+  "commonPageNotFound": "பக்கம் கிடைக்கவில்லை",
+  "commonBackToHome": "முகப்புக்குத் திரும்பு",
+  "settingsMessageNotifications": "செய்தி அறிவிப்புகள்",
+  "settingsReceiveNewMessageNotifications": "புதிய செய்தி அறிவிப்புகளைப் பெறவும்",
+  "settingsShowMessagePreview": "செய்தி முன்னோட்டத்தைக் காட்டு",
+  "settingsShowMessageContentInNotification": "அறிவிப்பில் செய்தி உள்ளடக்கத்தைக் காட்டு",
+  "settingsNotificationSound": "அறிவிப்பு ஒலி",
+  "settingsPlaySoundOnMessage": "செய்திகளைப் பெறும்போது ஒலியை இயக்கவும்",
+  "commonVibration": "அதிர்வு",
+  "settingsVibrateOnMessage": "செய்திகளைப் பெறும்போது அதிர்வுறும்",
+  "settingsDoNotDisturbMode": "தொந்தரவு செய்யாதே",
+  "settingsDoNotDisturbDescription": "குறிப்பிட்ட நேரத்தில் அறிவிப்புகளைப் பெற வேண்டாம்",
+  "settingsStartTime": "தொடக்க நேரம்",
+  "settingsEndTime": "முடிவு நேரம்",
+  "settingsDeleteQuickReply": "விரைவான பதிலை நீக்கு",
+  "settingsEditQuickReply": "விரைவான பதிலைத் திருத்தவும்",
+  "settingsAddQuickReply": "விரைவான பதிலைச் சேர்க்கவும்",
+  "settingsManageQuickReplies": "விரைவான பதில்களை நிர்வகிக்கவும்",
+  "settingsNoQuickReplies": "விரைவான பதில்கள் இல்லை",
+  "settingsDefaultQuickReplies": "இயல்புநிலை விரைவான பதில்கள் காண்பிக்கப்படும்",
+  "settingsWhoCanSee": "யாரால் பார்க்க முடியும்",
+  "settingsLastSeen": "கடைசியாக பார்த்தது",
+  "settingsHiddenChats": "மறைக்கப்பட்ட அரட்டைகள்",
+  "settingsMessagesLabel": "செய்திகள்",
+  "settingsAllowStrangerMessages": "அந்நியர் செய்திகளை அனுமதிக்கவும்",
+  "settingsReceiveMessagesFromNonContacts": "தொடர்பு இல்லாதவர்களிடமிருந்து செய்திகளைப் பெறுங்கள்",
+  "settingsReadReceipts": "ரசீதுகளைப் படிக்கவும்",
+  "settingsLetOthersKnowYouRead": "நீங்கள் படித்ததை மற்றவர்களுக்கு தெரியப்படுத்துங்கள்",
+  "settingsTypingIndicator": "தட்டச்சு காட்டி",
+  "settingsLetOthersKnowYouTyping": "நீங்கள் தட்டச்சு செய்கிறீர்கள் என்பதை மற்றவர்களுக்குத் தெரியப்படுத்துங்கள்",
+  "settingsEveryone": "அனைவரும்",
+  "settingsContactsOnly": "தொடர்புகள் மட்டும்",
+  "settingsNobody": "யாரும் இல்லை",
+  "settingsWhoCanSeeTitle": "{title} யார் பார்க்கலாம்",
+  "@settingsWhoCanSeeTitle": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsVersionInfo": "பதிப்பு {version}",
+  "@settingsVersionInfo": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsCheckForUpdates": "புதுப்பிப்புகளைச் சரிபார்க்கவும்",
+  "settingsOpenSourceLicenses": "திறந்த மூல உரிமங்கள்",
+  "settingsFeedbackAndSuggestions": "கருத்து மற்றும் பரிந்துரைகள்",
+  "settingsBuiltOnMatrix": "மேட்ரிக்ஸ் நெறிமுறையில் கட்டப்பட்டது",
+  "settingsNoHiddenChats": "மறைக்கப்பட்ட அரட்டைகள் இல்லை",
+  "settingsNoHiddenChatsDescription": "நீங்கள் மறைக்கும் அரட்டைகள் இங்கே தோன்றும்",
+  "settingsUnhideChat": "மறை",
+  "settingsDarkMode": "இருண்ட பயன்முறை",
+  "settingsFontSize": "எழுத்துரு அளவு",
+  "settingsBubbleStyle": "குமிழி நடை",
+  "settingsFollowSystem": "முறையைப் பின்பற்றவும்",
+  "settingsAutoSwitchBySystem": "கணினி மூலம் தானாக மாறவும்",
+  "settingsLightMode": "ஒளி முறை",
+  "settingsAlwaysUseLightTheme": "எப்போதும் ஒளி தீம் பயன்படுத்தவும்",
+  "settingsDarkModeOption": "இருண்ட பயன்முறை விருப்பம்",
+  "settingsAlwaysUseDarkTheme": "எப்போதும் இருண்ட தீம் பயன்படுத்தவும்",
+  "settingsFontSizeSmall": "சிறியது",
+  "settingsFontSizeStandard": "தரநிலை",
+  "settingsFontSizeLarge": "பெரியது",
+  "settingsFontSizeExtraLarge": "கூடுதல் பெரியது",
+  "settingsBubbleStyleWechat": "WeChat பாணி",
+  "settingsBubbleStyleWechatDesc": "கிளாசிக் WeChat குமிழி பாணி",
+  "settingsBubbleStyleModern": "நவீன பாணி",
+  "settingsBubbleStyleModernDesc": "சுத்தமான நவீன குமிழி பாணி",
+  "settingsBubbleStyleClassic": "கிளாசிக் பாணி",
+  "settingsBubbleStyleClassicDesc": "பாரம்பரிய குமிழி பாணி",
+  "discoverVideoChannels": "சேனல்கள்",
+  "discoverLive": "வாழ்க",
+  "discoverListen": "கேள்",
+  "discoverWatch": "பார்க்கவும்",
+  "discoverSearchDiscover": "தேடு",
+  "discoverNearbyPeople": "அருகில்",
+  "discoverGames": "விளையாட்டுகள்",
+  "discoverMiniPrograms": "மினி நிகழ்ச்சிகள்",
+  "chatAlreadyInCall": "ஏற்கனவே அழைப்பில் உள்ளது",
+  "commonConnectionFailed": "இணைப்பு தோல்வியடைந்தது",
+  "chatCallRejected": "அழைப்பு நிராகரிக்கப்பட்டது",
+  "chatNoAnswer": "பதில் இல்லை",
+  "commonClose": "மூடு",
+  "chatSelectContact": "தொடர்பைத் தேர்ந்தெடுக்கவும்",
+  "chatVoteRemoved": "வாக்கு நீக்கப்பட்டது",
+  "chatVoteChanged": "வாக்கு மாறியது",
+  "chatVoted": "வாக்களித்தார்",
+  "chatReplyTo": "{name} க்கு பதிலளிக்கவும்",
+  "@chatReplyTo": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatCurrentLocation": "தற்போதைய இடம்",
+  "chatNearbyPlace": "அருகிலுள்ள இடம் {index}",
+  "@chatNearbyPlace": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "chatApproximateDistance": "{distance} பற்றி",
+  "@chatApproximateDistance": {
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      }
+    }
+  },
+  "chatAddress": "முகவரி",
+  "chatLatitude": "அட்சரேகை",
+  "chatLongitude": "தீர்க்கரேகை",
+  "groupDescriptionUpdated": "குழு விளக்கம் புதுப்பிக்கப்பட்டது",
+  "groupAvatarUpdated": "குழு அவதார் புதுப்பிக்கப்பட்டது",
+  "groupVisibilityUpdated": "குழு தெரிவுநிலை புதுப்பிக்கப்பட்டது",
+  "groupChannelCreated": "சேனல் உருவாக்கப்பட்டது",
+  "groupChannelUpdated": "சேனல் புதுப்பிக்கப்பட்டது",
+  "groupChannelDeleted": "சேனல் நீக்கப்பட்டது",
+  "callDecline": "நிராகரி",
+  "callAnswer": "பதில்",
+  "callIncomingVideoCall": "உள்வரும் வீடியோ அழைப்பு",
+  "callIncomingVoiceCall": "உள்வரும் குரல் அழைப்பு",
+  "callVideoCallInProgress": "வீடியோ அழைப்பு செயலில் உள்ளது",
+  "callVoiceCallInProgress": "குரல் அழைப்பு செயலில் உள்ளது",
+  "callReconnectingCall": "மீண்டும் இணைக்கிறது...",
+  "callEnded": "அழைப்பு முடிந்தது",
+  "callFailed": "அழைப்பு தோல்வியடைந்தது",
+  "callLivekitNotConfigured": "LiveKit உள்ளமைக்கப்படவில்லை",
+  "callJoinMeetingFailed": "சந்திப்பில் சேர முடியவில்லை: {error}",
+  "callScreenShareFailed": "திரைப் பகிர்வு தோல்வி: {error}",
+  "profileN42BeanTitle": "N42 பீன்",
+  "profileNoN42Bean": "N42 பீன் இல்லை",
+  "profileN42BeanDetails": "N42 பீன் விவரங்கள்",
+  "profileN42BeanDescription": "N42 பீன் என்பது N42 இல் மெய்நிகர் பொருட்கள் மற்றும் சேவைகளை மீட்டெடுக்கப் பயன்படும் டோக்கன் ஆகும். தற்போது கிடைக்கும்:",
+  "profileN42BeanFeature1": "பிரத்தியேக உறுப்பினர் ஸ்டிக்கர்கள் மற்றும் தீம்கள்",
+  "profileN42BeanFeature2": "அரட்டை குமிழி தனிப்பயனாக்கம்",
+  "profileN42BeanFeature3": "சிவப்பு பாக்கெட் கவர் தனிப்பயனாக்கம்",
+  "profileN42BeanFeature4": "பிரத்தியேக புனைப்பெயர் பேட்ஜ்",
+  "profileN42BeanFeature5": "குழு அரட்டை சலுகைகள்",
+  "profileN42BeanFeature6": "கிளவுட் சேமிப்பக விரிவாக்கம்",
+  "profileN42BeanFeature7": "வீடியோ அழைப்பு அழகு வடிப்பான்கள்",
+  "profileN42BeanFeature8": "தருணங்களின் பின்னணி தனிப்பயனாக்கம்",
+  "profileN42BeanFeature9": "விஐபி வாடிக்கையாளர் சேவை முன்னுரிமை",
+  "profileGotIt": "கிடைத்தது",
+  "profileNoN42BeanRecords": "N42 பீன் பதிவுகள் இல்லை",
+  "profileMoodAndThoughts": "மனநிலை மற்றும் எண்ணங்கள்",
+  "profileStatusHappy": "மகிழ்ச்சி",
+  "profileStatusCracked": "நொறுங்கியது",
+  "profileStatusLucky": "அதிர்ஷ்டசாலி",
+  "profileStatusSunny": "சன்னி",
+  "profileStatusTired": "சோர்வாக",
+  "profileStatusDaydream": "பகல் கனவு",
+  "profileStatusRushing": "விரைகிறது",
+  "profileStatusOverthinking": "அதிகமாகச் சிந்திப்பது",
+  "profileStatusEnergized": "உற்சாகமூட்டியது",
+  "profileWorkAndStudy": "வேலை & படிப்பு",
+  "profileStatusWorking": "வேலை",
+  "profileStatusStudying": "படிக்கிறது",
+  "profileStatusBusy": "பிஸி",
+  "profileStatusSlacking": "தளர்ச்சி",
+  "profileStatusTraveling": "பயணம்",
+  "profileStatusGoingHome": "வீட்டிற்கு செல்கிறேன்",
+  "profileStatusDnd": "தொந்தரவு செய்யாதே",
+  "profileActivities": "செயல்பாடுகள்",
+  "profileStatusHanging": "ஹேங் அவுட்",
+  "profileStatusCheckIn": "செக் இன்",
+  "profileStatusExercising": "உடற்பயிற்சி",
+  "profileStatusCoffee": "காபி",
+  "profileStatusBubbleTea": "குமிழி தேநீர்",
+  "profileStatusEating": "சாப்பிடுவது",
+  "profileStatusParenting": "குழந்தை வளர்ப்பு",
+  "profileStatusSavingWorld": "உலகைக் காப்பாற்றுதல்",
+  "profileStatusSelfie": "செல்ஃபி",
+  "profileRest": "ஓய்வு",
+  "profileStatusRetreat": "பின்வாங்கவும்",
+  "profileStatusHome": "வீடு",
+  "profileStatusSleeping": "தூங்குகிறது",
+  "profileStatusCatLover": "பூனை காதலன்",
+  "profileStatusDogWalking": "நடைபயிற்சி நாய்",
+  "profileStatusGaming": "கேமிங்",
+  "profileStatusListening": "கேட்பது",
+  "profileEditAddress": "முகவரியைத் திருத்தவும்",
+  "profileRecipient": "பெறுபவர்",
+  "profileEnterRecipientName": "பெறுநரின் பெயரை உள்ளிடவும்",
+  "profilePhoneNumber": "தொலைபேசி எண்",
+  "profileEnterPhoneNumber": "தொலைபேசி எண்ணை உள்ளிடவும்",
+  "profileRegionHint": "மாகாணம்/நகரம்/மாவட்டம்",
+  "profileDetailedAddress": "விரிவான முகவரி",
+  "profileDetailedAddressHint": "தெரு, கட்டிட எண் போன்றவை.",
+  "profileSetAsDefaultAddress": "இயல்புநிலை முகவரியாக அமைக்கவும்",
+  "profilePleaseCompleteInfo": "அனைத்து புலங்களையும் பூர்த்தி செய்யவும்",
+  "profileEditInvoice": "விலைப்பட்டியல் திருத்தவும்",
+  "profileInvoiceType": "விலைப்பட்டியல் வகை",
+  "profileCompanyName": "நிறுவனத்தின் பெயர்",
+  "profilePersonalName": "தனிப்பட்ட பெயர்",
+  "profileEnterCompanyName": "நிறுவனத்தின் பெயரை உள்ளிடவும்",
+  "profileEnterName": "பெயரை உள்ளிடவும்",
+  "profileTaxIdNumber": "வரி ஐடி எண்",
+  "profileEnterTaxIdNumber": "வரி அடையாள எண்ணை உள்ளிடவும்",
+  "profileBankNameOptional": "வங்கியின் பெயர் (விரும்பினால்)",
+  "profileEnterBankName": "வங்கி பெயரை உள்ளிடவும்",
+  "profileBankAccountOptional": "வங்கி கணக்கு (விரும்பினால்)",
+  "profileEnterBankAccount": "வங்கிக் கணக்கை உள்ளிடவும்",
+  "profileCompanyAddressOptional": "நிறுவனத்தின் முகவரி (விரும்பினால்)",
+  "profileEnterCompanyAddress": "நிறுவனத்தின் முகவரியை உள்ளிடவும்",
+  "profileCompanyPhoneOptional": "நிறுவனத்தின் தொலைபேசி (விரும்பினால்)",
+  "profileEnterCompanyPhone": "நிறுவனத்தின் தொலைபேசியை உள்ளிடவும்",
+  "profileSetAsDefaultInvoice": "இயல்புநிலை விலைப்பட்டியலாக அமைக்கவும்",
+  "profileRingtoneVibrate": "அதிர்வு",
+  "profileRingtoneSilent": "மௌனம்",
+  "profileVibrateMode": "அதிர்வு முறை",
+  "profileSilentMode": "அமைதியான முறை",
+  "profilePlayFailed": "விளையாடுவதில் தோல்வி: {ringtoneName}",
+  "profilePlaying": "விளையாடுவது: {ringtoneName}",
+  "profileStop": "நிறுத்து",
+  "profileSelectRingtone": "ரிங்டோனைத் தேர்ந்தெடுக்கவும்",
+  "profileLoadingRingtones": "ரிங்டோன்களை ஏற்றுகிறது...",
+  "profileNoRingtonesFound": "ரிங்டோன்கள் எதுவும் இல்லை",
+  "mainMessagesWithCount": "செய்திகள்({count})",
+  "@mainMessagesWithCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "storyViewers": "பார்வையாளர்கள்",
+  "storyNoViewers": "இன்னும் பார்வையாளர்கள் இல்லை",
+  "storyReplyToStory": "கதைக்கு பதில்...",
+  "commonCopiedToClipboard": "கிளிப்போர்டுக்கு நகலெடுக்கப்பட்டது",
+  "commonMore": "மேலும்",
+  "commonTranslating": "மொழிபெயர்க்கிறது...",
+  "commonTranslatedFrom": "{language} இலிருந்து மொழிபெயர்க்கப்பட்டது",
+  "@commonTranslatedFrom": {
+    "placeholders": {
+      "language": {
+        "type": "String"
+      }
+    }
+  },
+  "commonTranslation": "மொழிபெயர்ப்பு",
+  "commonTranslationFailed": "மொழிபெயர்ப்பு தோல்வியடைந்தது",
+  "commonAllRead": "அனைத்தும் படித்தது",
+  "commonReadCount": "{count} படித்தேன்",
+  "commonYouRecalledMessage": "நீங்கள் ஒரு செய்தியை நினைவு கூர்ந்தீர்கள்",
+  "commonMessageRecalled": "செய்தி நினைவுக்கு வந்தது",
+  "commonReEdit": "மீண்டும் திருத்தவும்",
+  "commonWalletArea": "பணப்பை பகுதி",
+  "callIncomingCall": "உள்வரும் அழைப்பு",
+  "callMissedCall": "தவறவிட்ட அழைப்பு",
+  "groupRemoveAdmin": "நிர்வாகியை அகற்று",
+  "chatSelectCurrency": "நாணயத்தைத் தேர்ந்தெடுக்கவும்",
+  "chatSelectEmoji": "ஈமோஜியைத் தேர்ந்தெடுக்கவும்",
+  "chatSelectRedPacketCover": "கவர் என்பதைத் தேர்ந்தெடுக்கவும்",
+  "groupSetAsAdmin": "நிர்வாகியாக அமைக்கவும்",
+  "chatVideoPlaybackFailed": "வீடியோ பிளேபேக் தோல்வியடைந்தது",
+  "@chatVideoPlaybackFailed": {
+    "description": "Used with error message"
+  },
+  "groupViewProfile": "சுயவிவரத்தைக் காண்க",
+  "favoriteAddLinkComingSoon": "இணைப்பு அம்சத்தைச் சேர் விரைவில்",
+  "favoriteNewNoteComingSoon": "புதிய குறிப்பு அம்சம் விரைவில்",
+  "qrcodeSaveFeatureComingSoon": "சேவ் அம்சம் விரைவில் வரும்",
+  "qrcodeShareFeatureComingSoon": "பகிர்வு அம்சம் விரைவில்",
+  "qrcodeProcessFailed": "QR குறியீட்டைச் செயலாக்க முடியவில்லை: {error}",
+  "@qrcodeProcessFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "securityDeviceIdRequired": "சாதன ஐடி தேவை",
+  "securityVerificationStartFailed": "சரிபார்ப்பைத் தொடங்குவதில் தோல்வி: {error}",
+  "@securityVerificationStartFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "securityVerificationFailed": "சரிபார்ப்பு தோல்வியடைந்தது",
+  "securityVerificationFailedWithReason": "சரிபார்ப்பு தோல்வியடைந்தது: {reason}",
+  "@securityVerificationFailedWithReason": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "securityEmojiMismatchRejected": "சரிபார்ப்பு நிராகரிக்கப்பட்டது - ஈமோஜி பொருந்தவில்லை",
+  "securityWaitingForDeviceAccept": "மற்ற சாதனம் ஏற்கும் வரை காத்திருக்கிறது...",
+  "securityVerifyDevice": "இந்தச் சாதனத்தைச் சரிபார்க்கவும்",
+  "securityConfirmEmojiMatch": "கீழே உள்ள ஈமோஜிகள் இரண்டு சாதனங்களிலும் ஒரே வரிசையில் காட்டப்படுவதை உறுதிப்படுத்தவும்",
+  "securityEmojiDontMatch": "அவை பொருந்தவில்லை",
+  "securityEmojiMatch": "அவை பொருந்துகின்றன",
+  "securityWaitingForDeviceConfirm": "மற்ற சாதனம் உறுதிசெய்ய காத்திருக்கிறது...",
+  "securityVerificationSuccess": "சரிபார்ப்பு வெற்றி!",
+  "securityDeviceVerifiedTrusted": "இந்தச் சாதனம் இப்போது சரிபார்க்கப்பட்டு நம்பகமானதாக உள்ளது.",
+  "securityCompareEmoji": "இரண்டு சாதனங்களிலும் உள்ள ஈமோஜியை ஒப்பிடுக",
+  "securityCompareNumbers": "இரண்டு சாதனங்களிலும் உள்ள எண்களை ஒப்பிடுக",
+  "commonTryAgain": "மீண்டும் முயற்சிக்கவும்",
+  "commonDone": "முடிந்தது",
+  "chatExportTitle": "ஏற்றுமதி அரட்டை",
+  "chatExportSuccess": "ஏற்றுமதி வெற்றி",
+  "chatExportFailed": "ஏற்றுமதி தோல்வி: {error}",
+  "@chatExportFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatExportFormat": "ஏற்றுமதி வடிவம்",
+  "chatExportHtmlDesc": "பாணியிலான தளவமைப்புடன் எந்த உலாவியிலும் படிக்கக்கூடியது",
+  "chatExportJsonDesc": "இயந்திரம் படிக்கக்கூடிய கட்டமைக்கப்பட்ட தரவு வடிவம்",
+  "chatExportDateRange": "தேதி வரம்பு",
+  "chatExportAll": "அனைத்து செய்திகளும்",
+  "chatExportLastWeek": "கடந்த 7 நாட்கள்",
+  "chatExportLastMonth": "கடந்த மாதம்",
+  "chatExportLast3Months": "கடந்த 3 மாதங்கள்",
+  "chatExportMessageCount": "ஏற்றுமதி செய்ய வேண்டிய செய்திகள்",
+  "chatExportButton": "ஏற்றுமதி & பகிர்",
+  "chatMediaGallery": "மீடியா கேலரி",
+  "chatExportHistory": "அரட்டை வரலாற்றை ஏற்றுமதி செய்யவும்",
+  "pdfLoadFailed": "PDFஐ ஏற்ற முடியவில்லை",
+  "pdfPageIndicator": "{current} / {total}",
+  "@pdfPageIndicator": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "mediaAll": "அனைத்து",
+  "mediaImages": "படங்கள்",
+  "mediaVideos": "வீடியோக்கள்",
+  "mediaFiles": "கோப்புகள்",
+  "mediaAudio": "ஆடியோ",
+  "mediaItemsCount": "{count} உருப்படிகள்",
+  "@mediaItemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mediaNoMediaFound": "மீடியா எதுவும் இல்லை",
+  "spacesTitle": "சமூகங்கள்",
+  "spacesCreate": "சமூகத்தை உருவாக்குங்கள்",
+  "spacesJoined": "சேர்ந்தார்",
+  "spacesDiscover": "கண்டறியவும்",
+  "spacesNoJoined": "இதுவரை எந்த சமூகமும் சேரவில்லை",
+  "spacesExplore": "சமூகங்களை ஆராயுங்கள்",
+  "spacesNoPublic": "பொது சமூகங்கள் எதுவும் இல்லை",
+  "spacesJoin": "சேருங்கள்",
+  "spacesSubSpaces": "துணை சமூகங்கள்",
+  "spacesChannels": "சேனல்கள்",
+  "spacesMembersCount": "{count} உறுப்பினர்கள்",
+  "@spacesMembersCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "spacesPublic": "பொது",
+  "spacesPrivate": "தனியார்",
+  "spacesSuggested": "பரிந்துரைக்கப்பட்டது",
+  "spacesChannelsCount": "{count} சேனல்கள்",
+  "@spacesChannelsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "callInCallChat": "அழைப்பு அரட்டை",
+  "callMessagesCount": "{count} செய்திகள்",
+  "@callMessagesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "callNoMessagesYet": "இதுவரை செய்திகள் இல்லை.\nதொடங்குவதற்கு ஒரு செய்தியை அனுப்பவும்.",
+  "callTypeMessage": "செய்தியை உள்ளிடவும்...",
+  "callYouSender": "நீங்கள்",
+  "callChatLabel": "அரட்டை",
+  "chatEdited": "திருத்தப்பட்டது",
+  "chatEditHistory": "வரலாற்றைத் திருத்தவும்",
+  "chatOriginalMessage": "அசல்",
+  "chatEditedAt": "{time} இல் திருத்தப்பட்டது",
+  "@chatEditedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "chatViewOnce": "ஒருமுறை பார்க்கவும்",
+  "chatViewOncePhoto": "புகைப்படத்தை ஒருமுறை பார்க்கவும்",
+  "chatViewOnceVideo": "வீடியோவை ஒருமுறை பார்க்கவும்",
+  "chatViewOnceViewed": "பார்க்கப்பட்டது",
+  "chatViewOnceExpired": "காலாவதியானது",
+  "chatViewOnceTap": "பார்க்க தட்டவும்",
+  "chatAutoFaceBlur": "ஆட்டோ முகம் மங்கலாகிறது",
+  "chatAutoFaceBlurDesc": "புகைப்படங்களை அனுப்பும் போது தானாகவே முகங்களை மங்கலாக்கும்",
+  "threadReplyInThread": "இழையில் பதிலளிக்கவும்",
+  "threadReplies": "{count} பதில்கள்",
+  "@threadReplies": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "threadReply": "1 பதில்",
+  "threadLatestReply": "சமீபத்தியது: {preview}",
+  "@threadLatestReply": {
+    "placeholders": {
+      "preview": {
+        "type": "String"
+      }
+    }
+  },
+  "threadTitle": "நூல்",
+  "threadReplyPlaceholder": "இழையில் பதிலளிக்கவும்...",
+  "threadParticipants": "{count} பங்கேற்பாளர்கள்",
+  "@threadParticipants": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "voiceRoomTitle": "குரல் அறை",
+  "voiceRoomCreate": "குரல் அறையை உருவாக்கவும்",
+  "voiceRoomJoin": "சேருங்கள்",
+  "voiceRoomLeave": "கிளம்பு",
+  "voiceRoomEnd": "இறுதி அறை",
+  "voiceRoomRaiseHand": "கையை உயர்த்துங்கள்",
+  "voiceRoomLowerHand": "கீழ் கை",
+  "voiceRoomMute": "முடக்கு",
+  "voiceRoomUnmute": "ஒலியடக்கவும்",
+  "voiceRoomHost": "புரவலன்",
+  "voiceRoomSpeakers": "பேச்சாளர்கள்",
+  "voiceRoomListeners": "கேட்போர்",
+  "voiceRoomLive": "நேரலை",
+  "voiceRoomEnded": "முடிந்தது",
+  "voiceRoomScheduled": "திட்டமிடப்பட்டது",
+  "voiceRoomApprove": "ஒப்புதல்",
+  "voiceRoomDemote": "கேட்பவருக்கு நகர்த்தவும்",
+  "voiceRoomHandRaised": "{name} கையை உயர்த்தியது",
+  "@voiceRoomHandRaised": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "voiceRoomName": "அறையின் பெயர்",
+  "voiceRoomTopic": "தலைப்பு (விரும்பினால்)",
+  "voiceRoomNoActive": "செயலில் குரல் அறைகள் இல்லை",
+  "voiceRoomConnecting": "இணைக்கிறது...",
+  "usernameTitle": "பயனர் பெயர்",
+  "usernameSet": "பயனர்பெயரை அமைக்கவும்",
+  "usernameChange": "பயனர் பெயரை மாற்றவும்",
+  "usernamePlaceholder": "பயனர் பெயரை உள்ளிடவும்",
+  "usernameAvailable": "பயனர் பெயர் உள்ளது",
+  "usernameUnavailable": "பயனர் பெயர் ஏற்கனவே எடுக்கப்பட்டது",
+  "usernameInvalid": "3-30 எழுத்துகள், சிறிய எழுத்துக்கள், எண்கள், அடிக்கோடிட்டு. கடிதத்துடன் தொடங்க வேண்டும்.",
+  "usernameReserved": "இந்த பயனர்பெயர் ஒதுக்கப்பட்டுள்ளது",
+  "usernameSaved": "பயனர் பெயர் சேமிக்கப்பட்டது",
+  "usernameSearchHint": "@username மூலம் தேடவும்",
+  "ensName": "ENS பெயர்",
+  "ensLinked": "ENS உடன் இணைக்கப்பட்டுள்ளது",
+  "ensResolving": "ENS ஐ தீர்க்கிறது...",
+  "ensNotFound": "ENS பெயர் கிடைக்கவில்லை",
+  "tokenGateTitle": "டோக்கன் கேட்",
+  "tokenGateEnable": "டோக்கன் கேட்டை இயக்கவும்",
+  "tokenGateDisable": "டோக்கன் கேட்டை முடக்கு",
+  "tokenGateAddRule": "விதியைச் சேர்க்கவும்",
+  "tokenGateRemoveRule": "விதியை அகற்று",
+  "tokenGateContractAddress": "ஒப்பந்த முகவரி",
+  "tokenGateMinBalance": "குறைந்தபட்ச இருப்பு",
+  "tokenGateTokenId": "டோக்கன் ஐடி (ERC-1155)",
+  "tokenGateChainId": "சங்கிலி ஐடி",
+  "tokenGateVerifying": "டோக்கன் வைத்திருப்பதைச் சரிபார்க்கிறது...",
+  "tokenGateVerified": "சரிபார்ப்பு நிறைவேற்றப்பட்டது",
+  "tokenGateDenied": "டோக்கன் தேவைகளை நீங்கள் பூர்த்தி செய்யவில்லை",
+  "tokenGateOperatorAnd": "அனைத்து விதிகளையும் பூர்த்தி செய்ய வேண்டும்",
+  "tokenGateOperatorOr": "எந்த விதியையும் சந்திக்க வேண்டும்",
+  "tokenGateRuleErc20": "ERC-20 டோக்கன்",
+  "tokenGateRuleErc721": "NFT (ERC-721)",
+  "tokenGateRuleErc1155": "மல்டி-டோக்கன் (ERC-1155)",
+  "tokenGateRuleNative": "பூர்வீக டோக்கன்",
+  "tokenGateSaved": "டோக்கன் கேட் சேமிக்கப்பட்டது",
+  "tokenGateEnableDescription": "உறுப்பினர்கள் சேர டோக்கன்களை வைத்திருக்க வேண்டும்",
+  "tokenGateOperator": "விதி தர்க்கம்",
+  "tokenGateRules": "விதிகள்",
+  "tokenGateSymbol": "சின்னம் (விரும்பினால்)",
+  "tokenGateChain": "சங்கிலி",
+  "tokenGateTokenStandard": "டோக்கன் தரநிலை",
+  "tokenGateDenialMessage": "மறுப்புச் செய்தி",
+  "tokenGateDenialMessageHint": "சரிபார்ப்பு தோல்வியுற்றால் செய்தி காட்டப்படும்",
+  "tokenGateVerifyTitle": "டோக்கன் சரிபார்ப்பு",
+  "tokenGateVerifyPassed": "சரிபார்ப்பு நிறைவேற்றப்பட்டது",
+  "tokenGateVerifyFailed": "சரிபார்ப்பு தோல்வியடைந்தது",
+  "tokenGateRetryVerify": "மீண்டும் முயற்சிக்கவும்",
+  "tokenGateRequired": "தேவை",
+  "tokenGateYourBalance": "உங்கள் இருப்பு",
+  "tokenGateRulesActive": "செயலில் உள்ள விதிகள்",
+  "tokenGateDisabled": "முடக்கப்பட்டது",
+  "ensNotBound": "கட்டுப்படவில்லை",
+  "liveLocation": "நேரடி இடம்",
+  "stopLiveLocation": "பகிர்வதை நிறுத்து",
+  "startLiveLocation": "பகிரத் தொடங்கு",
+  "selectDuration": "கால அளவைத் தேர்ந்தெடுக்கவும்",
+  "groupChatFiles": "அரட்டை கோப்புகள்",
+  "groupLinks": "இணைப்புகள்",
+  "groupNoLinks": "இன்னும் இணைப்புகள் இல்லை",
+  "chatBackground": "அரட்டை பின்னணி",
+  "solidColors": "திட நிறங்கள்",
+  "gradients": "சாய்வுகள்",
+  "defaultBackground": "இயல்புநிலை",
+  "settingsFontSizeSlider": "எழுத்துரு அளவு",
+  "autoDownload": "தானியங்கு-பதிவிறக்கம்",
+  "images": "படங்கள்",
+  "voice": "குரல்",
+  "video": "வீடியோ",
+  "files": "கோப்புகள்",
+  "mobileData": "மொபைல் டேட்டா",
+  "roaming": "ரோமிங்",
+  "storageManagement": "சேமிப்பு",
+  "totalUsage": "மொத்த பயன்பாடு",
+  "cache": "தற்காலிக சேமிப்பு",
+  "other": "மற்றவை",
+  "clearCache": "தற்காலிக சேமிப்பை அழிக்கவும்",
+  "cacheCleared": "தற்காலிக சேமிப்பு அழிக்கப்பட்டது",
+  "clearCacheFailed": "தற்காலிக சேமிப்பை அழிக்க முடியவில்லை",
+  "confirmClearCache": "அனைத்து கேச் தரவையும் அழிக்கவா?",
+  "mapView": "வரைபடக் காட்சி",
+  "liveLocationSharingCount": "{count} நபர்கள் இருப்பிடத்தைப் பகிர்கின்றனர்",
+  "@liveLocationSharingCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "minutes15": "15 நிமிடங்கள்",
+  "minutes30": "30 நிமிடங்கள்",
+  "hour1": "1 மணிநேரம்",
+  "hours8": "8 மணி நேரம்",
+  "personalCard": "தனிப்பட்ட அட்டை",
+  "downloadFailed": "பதிவிறக்கம் தோல்வியடைந்தது",
+  "locationExpired": "காலாவதியானது",
+  "secondsRemaining": "{count}கள்",
+  "@secondsRemaining": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "minutesRemaining": "{count} நிமிடங்கள்",
+  "@minutesRemaining": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hoursMinutesRemaining": "{hours} மணிநேரம் {minutes} நிமிடங்கள்",
+  "@hoursMinutesRemaining": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "favoriteMessages": "பிடித்தவை",
+  "linksCopied": "இணைப்பு நகலெடுக்கப்பட்டது",
+  "noLinksFound": "இணைப்புகள் எதுவும் இல்லை",
+  "roomStorageRanking": "அறை சேமிப்பு தரவரிசை",
+  "downloadComplete": "பதிவிறக்கம் முடிந்தது",
+  "downloading": "பதிவிறக்குகிறது...",
+  "draftSaved": "வரைவு சேமிக்கப்பட்டது",
+  "voiceRecording": "குரல் பதிவு",
+  "searchLocation": "இருப்பிடத்தைத் தேடுங்கள்",
+  "tapToSearch": "தேட தட்டவும்",
+  "settingsThisDevice": "இந்த சாதனம்",
+  "settingsJustNow": "இப்போதுதான்",
+  "settingsDeviceId": "சாதன ஐடி",
+  "settingsStatus": "நிலை",
+  "settingsLastActive": "கடைசியாக செயல்பட்டது",
+  "settingsIpAddress": "ஐபி முகவரி",
+  "settingsRenameDevice": "சாதனத்தை மறுபெயரிடவும்",
+  "settingsDeviceNameHint": "சாதனத்தின் பெயரை உள்ளிடவும்",
+  "settingsDeviceRenamed": "சாதனம் பெயர் மாற்றப்பட்டது",
+  "settingsRenameFailed": "மறுபெயரிட முடியவில்லை",
+  "settingsRemoteLogout": "ரிமோட் லாக்அவுட்",
+  "settingsRemoteLogoutConfirm": "\"{deviceName}\" இலிருந்து நிச்சயமாக வெளியேற விரும்புகிறீர்களா? இந்தச் செயலைச் செயல்தவிர்க்க முடியாது.",
+  "@settingsRemoteLogoutConfirm": {
+    "placeholders": {
+      "deviceName": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsDeviceLoggedOut": "சாதனம் வெளியேறியது",
+  "settingsLogoutFailed": "வெளியேற முடியவில்லை",
+  "settingsLogout": "வெளியேறு",
+  "settingsVerifyIdentity": "அடையாளத்தைச் சரிபார்க்கவும்",
+  "settingsEnterPasswordToConfirm": "இந்த செயலை உறுதிப்படுத்த உங்கள் கடவுச்சொல்லை உள்ளிடவும்.",
+  "scheduledSendTitle": "அட்டவணை செய்தி",
+  "scheduledSendInOneHour": "1 மணி நேரத்தில்",
+  "scheduledSendTonight": "இன்று இரவு (8:00 PM)",
+  "scheduledSendTomorrowMorning": "நாளை காலை (9:00 AM)",
+  "scheduledSendCustom": "தேதி & நேரத்தைத் தேர்ந்தெடுக்கவும்",
+  "scheduledMessageLabel": "திட்டமிடப்பட்டது",
+  "scheduledMessageCancel": "திட்டமிடப்பட்ட செய்தியை ரத்துசெய்",
+  "chatLockTitle": "அரட்டை பூட்டு",
+  "chatLockEnable": "இந்த அரட்டையைப் பூட்டவும்",
+  "chatLockDisable": "இந்த அரட்டையைத் திறக்கவும்",
+  "chatLockDescription": "பூட்டப்பட்ட அரட்டைகளைத் திறக்க பயோமெட்ரிக் அல்லது பின் சரிபார்ப்பு தேவை",
+  "chatLockVerifyTitle": "அரட்டை பூட்டப்பட்டது",
+  "chatLockVerifySubtitle": "இந்த அரட்டையை அணுக சரிபார்க்கவும்",
+  "chatLockVerifyFailed": "சரிபார்ப்பு தோல்வியடைந்தது",
+  "chatLockEnabled": "அரட்டை பூட்டப்பட்டது",
+  "chatLockDisabled": "அரட்டை திறக்கப்பட்டது",
+  "chatLockPinTitle": "பின்னை உள்ளிடவும்",
+  "chatLockPinSetTitle": "பின்னை அமைக்கவும்",
+  "chatLockPinConfirmTitle": "பின்னை உறுதிப்படுத்தவும்",
+  "chatLockPinMismatch": "பின் பொருந்தவில்லை",
+  "chatLockUseBiometric": "பயோமெட்ரிக் பயன்படுத்தவும்",
+  "chatLockUsePin": "பின்னைப் பயன்படுத்தவும்",
+  "mediaEditorUndo": "செயல்தவிர்",
+  "mediaEditorRedo": "மீண்டும் செய்",
+  "mediaEditorCrop": "பயிர்",
+  "mediaEditorFilter": "வடிகட்டி",
+  "mediaEditorDraw": "வரையவும்",
+  "mediaEditorText": "உரை",
+  "aiAssistant": "AI உதவியாளர்",
+  "aiAssistantWelcome": "வணக்கம்! நான் N42 AI உதவியாளர். நான் உங்களுக்கு எப்படி உதவ முடியும்?",
+  "aiAssistantNotConfigured": "AI சேவை உள்ளமைக்கப்படவில்லை",
+  "aiAssistantSettings": "AI அமைப்புகள்",
+  "aiAssistantClearHistory": "அரட்டை வரலாற்றை அழிக்கவும்",
+  "aiAssistantClearHistoryConfirm": "அனைத்து AI அரட்டை வரலாற்றையும் அழிக்க விரும்புகிறீர்களா?",
+  "aiAssistantStopGenerating": "உருவாக்குவதை நிறுத்துங்கள்",
+  "aiAssistantModel": "மாதிரி",
+  "aiAssistantTemperature": "வெப்பநிலை",
+  "aiAssistantMaxTokens": "அதிகபட்ச டோக்கன்கள்",
+  "aiAssistantContextWindow": "சூழல் சாளரம்",
+  "aiAssistantServiceStatus": "சேவை நிலை",
+  "aiAssistantAvailable": "கிடைக்கும்",
+  "aiAssistantUnavailable": "கிடைக்கவில்லை",
+  "aiSummarize": "AI சுருக்கம்",
+  "aiSummarizeUnread": "{count} படிக்காத செய்திகளை சுருக்கவும்",
+  "@aiSummarizeUnread": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "aiSummarizeLoading": "சுருக்கமாக...",
+  "aiSummarizeError": "சுருக்கமாக கூற முடியவில்லை",
+  "aiRewrite": "AI மீண்டும் எழுதுதல்",
+  "aiRewriteFormal": "முறையான",
+  "aiRewriteCasual": "சாதாரண",
+  "aiRewritePlayful": "விளையாட்டுத்தனமான",
+  "aiRewriteProfessional": "தொழில்முறை",
+  "aiRewriteAccept": "பயன்படுத்தவும்",
+  "aiRewriteCancel": "ரத்து செய்",
+  "aiRewriteLoading": "மீண்டும் எழுதுகிறது...",
+  "aiLinkSummary": "AI சுருக்கம்",
+  "aiLinkSummaryAnalyzing": "பகுப்பாய்வு செய்கிறது...",
+  "chatFolderManagement": "கோப்புறைகளை நிர்வகிக்கவும்",
+  "chatFolderSystem": "கணினி கோப்புறைகள்",
+  "chatFolderCustom": "தனிப்பயன் கோப்புறைகள்",
+  "chatFolderEmpty": "இதுவரை தனிப்பயன் கோப்புறைகள் இல்லை",
+  "chatFolderCreate": "கோப்புறையை உருவாக்கவும்",
+  "chatFolderEdit": "கோப்புறையைத் திருத்து",
+  "chatFolderNameHint": "கோப்புறை பெயர்",
+  "chatFolderAll": "அனைத்து",
+  "chatFolderUnread": "படிக்காதது",
+  "chatFolderPersonal": "தனிப்பட்ட",
+  "chatFolderGroups": "குழுக்கள்",
+  "chatFolderChannels": "சேனல்கள்",
+  "chatFolderMuted": "முடக்கப்பட்டது",
+  "storyAddMusic": "இசையைச் சேர்க்கவும்",
+  "storyChangeMusic": "இசையை மாற்றவும்",
+  "storyBackgroundMusic": "பின்னணி இசை",
+  "storyMusicPreview": "முன்னோட்டம் (அதிகபட்சம் 15வி)",
+  "storyChooseFromDevice": "சாதனத்திலிருந்து தேர்வு செய்யவும்",
+  "storyUseThisMusic": "இந்த இசையைப் பயன்படுத்தவும்",
+  "authPasskeyNotSupported": "இந்தச் சாதனத்தில் Passkey ஆதரிக்கப்படவில்லை",
+  "authPasskeyRegister": "பதிவு பாஸ்கி",
+  "authPasskeyNoRegistered": "எந்த கடவுச்சீட்டுகளும் பதிவு செய்யப்படவில்லை",
+  "authPasskeyRegisterHint": "இந்தக் கணக்கிற்கான கடவுச் சாவியைப் பதிவு செய்யவும். தனித்த கடவுச்சொல் உள்நுழைவு பின்னர் இயக்கப்படும்.",
+  "authPasskeyNameYours": "உங்கள் பாஸ்கிக்கு பெயரிடவும்",
+  "authPasskeyRegistered": "கடவுச்சொல் இந்தக் கணக்கில் சேமிக்கப்பட்டது",
+  "authPasskeyDeleted": "இந்தக் கணக்கிலிருந்து கடவுச்சொல் அகற்றப்பட்டது",
+  "authPasskeyDeleteConfirm": "\"{name}\" கடவுவிசையை நீக்கவா? கடவுச்சொல் உள்நுழைவைப் பயன்படுத்துவதற்கு முன்பு அதை மீண்டும் பதிவு செய்ய வேண்டும்.",
+  "@authPasskeyDeleteConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "momentVisibilityPublic": "பொது",
+  "momentVisibilityPrivate": "தனியார்",
+  "momentVisibilityPartial": "தேர்ந்தெடுக்கப்பட்ட நண்பர்கள்",
+  "momentVisibilityExcluded": "சில நண்பர்களை தவிர்த்து விடுங்கள்",
+  "momentUserMoments": "{userName} இன் தருணங்கள்",
+  "@momentUserMoments": {
+    "placeholders": {
+      "userName": {
+        "type": "String"
+      }
+    }
+  },
+  "momentForwardTo": "முன்னோக்கி",
+  "momentForwardSuccess": "வெற்றிகரமாக அனுப்பப்பட்டது",
+  "momentSelectFriends": "நண்பர்களைத் தேர்ந்தெடுக்கவும்",
+  "momentSelectTags": "குறிச்சொற்கள் மூலம் தேர்ந்தெடுக்கவும்",
+  "momentSelectedCount": "தேர்ந்தெடுக்கப்பட்டது ({count})",
+  "@momentSelectedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "momentNoMomentsYet": "இன்னும் தருணங்கள் இல்லை",
+  "momentForwardMoment": "முன்னோக்கி தருணம்",
+  "momentAddComment": "கருத்தைச் சேர்...",
+  "momentForwardContent": "[தருணம்] {content}",
+  "@momentForwardContent": {
+    "placeholders": {
+      "content": {
+        "type": "String"
+      }
+    }
+  },
+  "momentDeleteMoment": "தருணத்தை நீக்கு",
+  "momentDeleteConfirm": "இந்த தருணத்தை நிச்சயமாக நீக்க விரும்புகிறீர்களா?",
+  "momentComment": "கருத்து",
+  "momentWriteComment": "கருத்து எழுது...",
+  "momentLike": "பிடிக்கும்",
+  "momentUnlike": "போலல்லாமல்",
+  "momentForward": "முன்னோக்கி",
+  "momentDelete": "நீக்கு",
+  "momentReply": "பதில்",
+  "momentMoment": "கணம்",
+  "momentLikesCount": "{count} விரும்புகிறது",
+  "@momentLikesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "momentCommentsCount": "{count} கருத்துகள்",
+  "@momentCommentsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "momentNoComments": "இதுவரை கருத்துகள் இல்லை",
+  "momentFailedToLoad": "படத்தை ஏற்ற முடியவில்லை",
+  "momentReplyTo": "{userName} க்கு பதிலளிக்கவும்...",
+  "@momentReplyTo": {
+    "placeholders": {
+      "userName": {
+        "type": "String"
+      }
+    }
+  },
+  "momentNoConversations": "உரையாடல்கள் இல்லை",
+  "momentJustNow": "இப்போது தான்",
+  "momentMinutesAgo": "{count}m முன்பு",
+  "@momentMinutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "momentHoursAgo": "{count}h முன்பு",
+  "@momentHoursAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "momentDaysAgo": "{count}d முன்பு",
+  "@momentDaysAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatGroupAnnouncementHint": "குழு அறிவிப்பை உள்ளிடவும்",
+  "chatGroupAnnouncementEmpty": "அறிவிப்பு இல்லை",
+  "chatEditNickname": "புனைப்பெயரை திருத்து",
+  "chatNicknameHint": "இந்த குழுவில் உங்கள் புனைப்பெயரை உள்ளிடவும்",
+  "contactAddPhoneHint": "தொலைபேசி எண்ணை உள்ளிடவும்",
+  "contactNotesHint": "இந்தத் தொடர்பைப் பற்றிய குறிப்புகளைச் சேர்க்கவும்",
+  "reportTitle": "அறிக்கை",
+  "reportReasonSpam": "ஸ்பேம்",
+  "reportReasonHarassment": "துன்புறுத்தல்",
+  "reportReasonFraud": "மோசடி",
+  "reportReasonOther": "மற்றவை",
+  "reportSubmitted": "அறிக்கை சமர்ப்பிக்கப்பட்டது",
+  "reportDescription": "கூடுதல் விளக்கம் (விரும்பினால்)",
+  "qrcodeSaved": "QR குறியீடு ஆல்பத்தில் சேமிக்கப்பட்டது",
+  "chatSendRedPacketInChat": "அரட்டையில் சிவப்பு பொட்டலத்தை அனுப்பவும்",
+  "commonSaveFailed": "சேமிக்க முடியவில்லை",
+  "reportSelectReason": "தயவுசெய்து காரணத்தைத் தேர்ந்தெடுக்கவும்",
+  "gameCenter": "விளையாட்டுகள்",
+  "gameHighScore": "சிறந்த",
+  "gameScore": "மதிப்பெண்",
+  "gameOver": "விளையாட்டு முடிந்தது",
+  "gamePlayAgain": "மீண்டும் விளையாடு",
+  "gameLeaderboard": "லீடர்போர்டு",
+  "gamePause": "இடைநிறுத்தப்பட்டது",
+  "gameResume": "மீண்டும் தொடங்க தட்டவும்",
+  "gameConfirmExit": "இந்த விளையாட்டிலிருந்து வெளியேறவா?",
+  "gameNoScores": "இன்னும் மதிப்பெண்கள் இல்லை",
+  "game2048": "2048",
+  "game2048Desc": "2048 ஐ அடைய ஓடுகளை ஒன்றிணைக்கவும்",
+  "gameBlockDrop": "பிளாக் டிராப்",
+  "gameBlockDropDesc": "துளி மற்றும் தெளிவான வரிகளை",
+  "gameMinesweeper": "மைன்ஸ்வீப்பர்",
+  "gameMinesweeperDesc": "அனைத்து பாதுகாப்பான செல்களைக் கண்டறியவும்",
+  "gameMatch3": "போட்டி 3",
+  "gameMatch3Desc": "3 அல்லது அதற்கு மேற்பட்ட கற்களை பொருத்தவும்",
+  "gameMinesweeperEasy": "எளிதானது",
+  "gameMinesweeperMedium": "நடுத்தர",
+  "gameMinesLeft": "சுரங்கங்கள் விட்டு",
+  "gameTimeLeft": "நேரம்",
+  "gameLevel": "நிலை",
+  "gameNext": "அடுத்து",
+  "gameBestTime": "சிறந்த நேரம்",
+  "gameNewRecord": "புதிய சாதனை!",
+  "gameLines": "கோடுகள்",
+  "storyMyStory": "என் கதை",
+  "storageSmartCleanup": "ஸ்மார்ட் துப்புரவு",
+  "storageOldMediaFiles": "பழைய மீடியா கோப்புகள்",
+  "storageLargeFiles": "பெரிய கோப்புகள்",
+  "storageAppCache": "ஆப் கேச்",
+  "storageSettings": "சேமிப்பக அமைப்புகள்",
+  "storageAutoCleanup": "தானாக சுத்தம் செய்தல்",
+  "storageAutoCleanupDesc": "{days} நாட்களை விட பழைய கோப்புகளை தானாக சுத்தம் செய்யவும்",
+  "@storageAutoCleanupDesc": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "storageCleanupPeriod": "சுத்தம் செய்யும் காலம்",
+  "storagePreserveThumbnails": "சிறுபடங்களைப் பாதுகாக்கவும்",
+  "storagePreserveThumbnailsDesc": "சுத்தம் செய்யும் போது படத்தின் சிறுபடங்களை வைத்திருங்கள்",
+  "storageWarningHigh": "சேமிப்பக பயன்பாடு அதிகம். பழைய கோப்புகளை சுத்தம் செய்வதைக் கவனியுங்கள்.",
+  "storageWarningCritical": "சேமிப்பு மிகவும் குறைவாக உள்ளது. தயவு செய்து இலவச இடத்தை சுத்தம் செய்யவும்.",
+  "storageFreed": "விடுவிக்கப்பட்ட {size} ({count} கோப்புகள்)",
+  "@storageFreed": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "storageDays": "{days} நாட்கள்",
+  "@storageDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "storageViewAllRooms": "அனைத்து {count} அறைகளையும் காண்க",
+  "@storageViewAllRooms": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "storageNoFiles": "கோப்புகள் எதுவும் இல்லை",
+  "storageFilePinned": "பின் செய்யப்பட்டது",
+  "storageDeleteSelected": "{count} தேர்ந்தெடுத்த கோப்புகளை நீக்கவா? அவை சேவையகத்திலிருந்து மீண்டும் பதிவிறக்கம் செய்யப்படலாம்.",
+  "@storageDeleteSelected": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "backupRestore": "காப்புப்பிரதி & மீட்டமை",
+  "backupCreate": "காப்புப்பிரதியை உருவாக்கவும்",
+  "backupCreateDesc": "உங்கள் அமைப்புகள் மற்றும் குறியாக்க விசைகளை காப்புப் பிரதி எடுக்கவும். மீண்டும் உள்நுழைந்த பிறகு, சேவையகத்திலிருந்து செய்திகள் மீட்டமைக்கப்படும்.",
+  "backupIncludeKeys": "குறியாக்க விசைகளைச் சேர்க்கவும்",
+  "backupIncludeKeysDesc": "மறைகுறியாக்கப்பட்ட செய்திகளைப் படிக்கத் தேவை",
+  "backupPasswordProtect": "கடவுச்சொல் பாதுகாப்பு",
+  "backupEnterPassword": "காப்பு கடவுச்சொல்லை உள்ளிடவும்",
+  "backupHistory": "காப்பு வரலாறு",
+  "backupNoBackups": "இதுவரை காப்புப்பிரதிகள் இல்லை",
+  "backupRestore2": "மீட்டமை",
+  "backupDelete": "நீக்கு",
+  "backupDeleteConfirm": "இந்தக் காப்புப் பிரதியை நிச்சயமாக நீக்க விரும்புகிறீர்களா? இதை செயல்தவிர்க்க முடியாது.",
+  "backupRestoreFromFile": "கோப்பிலிருந்து மீட்டமைக்கவும்",
+  "backupRestoreFromFileDesc": "மற்றொரு சாதனம் அல்லது முந்தைய காப்புப்பிரதியிலிருந்து .n42backup கோப்பை இறக்குமதி செய்யவும்.",
+  "backupChooseFile": "காப்பு கோப்பைத் தேர்ந்தெடுக்கவும்",
+  "backupRestoring": "மீட்டெடுக்கிறது...",
+  "backupCreated": "காப்புப்பிரதி உருவாக்கப்பட்டது: {rooms} அறைகள், {messages} செய்திகள்",
+  "@backupCreated": {
+    "placeholders": {
+      "rooms": {
+        "type": "int"
+      },
+      "messages": {
+        "type": "int"
+      }
+    }
+  },
+  "backupRestored": "{rooms} அறைகளிலிருந்து {settings} அமைப்புகள் மீட்டமைக்கப்பட்டது",
+  "@backupRestored": {
+    "placeholders": {
+      "settings": {
+        "type": "int"
+      },
+      "rooms": {
+        "type": "int"
+      }
+    }
+  },
+  "backupFailed": "காப்புப்பிரதி தோல்வியடைந்தது: {error}",
+  "@backupFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "backupPasswordRequired": "இந்த காப்புப்பிரதி கடவுச்சொல் பாதுகாக்கப்பட்டதாகும்",
+  "blocGroupNotFound": "குழு காணப்படவில்லை",
+  "blocGroupMembersInvited": "அழைக்கப்பட்ட {count} உறுப்பினர்(கள்)",
+  "@blocGroupMembersInvited": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "blocGroupMemberRemoved": "உறுப்பினர் நீக்கப்பட்டார்",
+  "blocGroupAdminRemoved": "நிர்வாகி நீக்கப்பட்டார்",
+  "blocGroupLeft": "குழுவை விட்டு வெளியேறினார்",
+  "blocGroupDisbanded": "குழு கலைக்கப்பட்டது",
+  "blocGroupJoined": "குழுவில் சேர்ந்தார்",
+  "blocGroupInviteDeclined": "அழைப்பு நிராகரிக்கப்பட்டது",
+  "blocGroupTokenGateUpdated": "டோக்கன் கேட் புதுப்பிக்கப்பட்டது",
+  "blocTransferProcessing": "பரிமாற்றத்தைச் செயலாக்குகிறது...",
+  "blocTransferCancelled": "இடமாற்றம் ரத்து செய்யப்பட்டது",
+  "blocTransferFailed": "பரிமாற்றம் தோல்வியடைந்தது",
+  "blocPaymentProcessing": "கட்டணத்தைச் செயலாக்குகிறது...",
+  "blocPaymentFailed": "பணம் செலுத்த முடியவில்லை",
+  "groupMaxMembers": "உறுப்பினர் வரம்பு",
+  "groupMaxMembersUnlimited": "வரம்பற்ற",
+  "groupMaxMembersHint": "வரம்பை உள்ளிடவும் (வரம்பற்றதாக காலியாக விடவும்)",
+  "groupMaxMembersUpdated": "உறுப்பினர் வரம்பு புதுப்பிக்கப்பட்டது",
+  "groupFull": "குழு திறன் உள்ளது",
+  "groupChannels": "தலைப்பு சேனல்கள்",
+  "groupChannelsEmpty": "இதுவரை சேனல்கள் இல்லை",
+  "groupChannelsCount": "சேனல்கள்",
+  "groupChannelCreate": "புதிய சேனல்",
+  "groupChannelName": "சேனல் பெயர்",
+  "groupChannelTopic": "சேனல் தலைப்பு (விரும்பினால்)",
+  "groupChannelDelete": "சேனலை நீக்கு",
+  "groupChannelDeleteConfirm": "இந்த சேனலை நீக்கவா? அனைத்து செய்திகளும் இழக்கப்படும்.",
+  "groupBotSettings": "பாட் அமைப்புகள்",
+  "groupBotEnabled": "Bot ஐ இயக்கு",
+  "groupBotWelcomeMessage": "வரவேற்பு செய்தி டெம்ப்ளேட்",
+  "groupBotWelcomeHint": "புதிய உறுப்பினர் பெயருக்கு 'பெயரை' ஒதுக்கிடமாகப் பயன்படுத்தவும்",
+  "groupBotConfigUpdated": "பாட் அமைப்புகள் புதுப்பிக்கப்பட்டன",
+  "groupContentFilter": "உள்ளடக்க வடிகட்டி",
+  "groupContentFilterEnabled": "முக்கிய வடிப்பானைச் செயல்படுத்தவும்",
+  "groupContentFilterReplace": "*** உடன் மாற்றவும்",
+  "groupContentFilterHide": "செய்தியை மறை",
+  "groupContentFilterAddWord": "முக்கிய சொல்லைச் சேர்க்கவும்",
+  "groupContentFilterUpdated": "உள்ளடக்க வடிப்பான் புதுப்பிக்கப்பட்டது",
+  "chatSlashCommands": "கட்டளைகள்",
+  "chatCommandPoll": "/வாக்கெடுப்பு - வாக்கெடுப்பை உருவாக்கவும்",
+  "chatCommandAnnounce": "/அறிவிக்கவும் - அறிவிப்பை அனுப்பவும்",
+  "chatCommandWelcome": "/ வரவேற்கிறோம் - வரவேற்பு செய்தியை அமைக்கவும்",
+  "chatReportMessage": "அறிக்கை",
+  "chatReportReason": "காரணம் தெரிவிக்கவும்",
+  "chatReportSpam": "ஸ்பேம்",
+  "chatReportHarassment": "துன்புறுத்தல்",
+  "chatReportInappropriate": "பொருத்தமற்ற உள்ளடக்கம்",
+  "chatReportOther": "மற்றவை",
+  "chatReportSuccess": "அறிக்கை சமர்ப்பிக்கப்பட்டது",
+  "spacesName": "சமூகத்தின் பெயர்",
+  "spacesNameHint": "எ.கா. கிரிப்டோ வர்த்தகர்கள்",
+  "spacesNameRequired": "பெயர் தேவை",
+  "spacesDescription": "விளக்கம்",
+  "spacesDescriptionHint": "இந்த சமூகம் எதைப் பற்றியது?",
+  "spacesType": "சமூக வகை",
+  "spacesPublicDesc": "யார் வேண்டுமானாலும் கண்டுபிடித்து சேரலாம்",
+  "spacesPrivateDesc": "அழைக்கப்பட்ட உறுப்பினர்கள் மட்டுமே சேர முடியும்",
+  "spacesNotFound": "சமூகம் கிடைக்கவில்லை",
+  "spacesSearch": "சமூகங்களைத் தேடு...",
+  "spacesMembers": "உறுப்பினர்கள்",
+  "spacesNoChannels": "இதுவரை சேனல்கள் இல்லை",
+  "spacesLeave": "சமூகத்தை விட்டு வெளியேறு",
+  "spacesLeaveConfirm": "நிச்சயமாக \"{name}\" ஐ விட்டு வெளியேற விரும்புகிறீர்களா?",
+  "@spacesLeaveConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spacesDelete": "சமூகத்தை நீக்கு",
+  "spacesDeleteConfirm": "இது \"{name}\" மற்றும் அதன் அனைத்து சேனல்களையும் நிரந்தரமாக நீக்கும். இந்தச் செயலைச் செயல்தவிர்க்க முடியாது.",
+  "@spacesDeleteConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spacesCreateChannel": "சேனலைச் சேர்க்கவும்",
+  "spacesChannelName": "சேனல் பெயர்",
+  "spacesChannelTopic": "தலைப்பு (விரும்பினால்)",
+  "spacesDeleteChannel": "சேனலை நீக்கு",
+  "spacesDeleteChannelConfirm": "\"#{name}\" ஐ நிச்சயமாக நீக்க விரும்புகிறீர்களா?",
+  "@spacesDeleteChannelConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spacesEditName": "பெயரைத் திருத்தவும்",
+  "spacesEditDescription": "விளக்கத்தைத் திருத்து",
+  "spacesViewAllMembers": "அனைத்து {count} உறுப்பினர்களையும் காண்க",
+  "@spacesViewAllMembers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "spacesKickMemberTitle": "{name} உதை",
+  "@spacesKickMemberTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spacesBanMemberTitle": "தடை {name}",
+  "@spacesBanMemberTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spacesPromoteAdmin": "நிர்வாகியாக பதவி உயர்வு",
+  "spacesDemoteAdmin": "நிர்வாகியை அகற்று",
+  "spacesInviteMember": "உறுப்பினரை அழைக்கவும்",
+  "spacesInviteMemberUserId": "பயனர் ஐடி (எ.கா. @user:server.com)",
+  "spacesSave": "சேமிக்கவும்",
+  "settingsScreenshotProtection": "ஸ்கிரீன்ஷாட் பாதுகாப்பு",
+  "settingsScreenshotProtectionDesc": "ஸ்கிரீன் ஷாட்கள் மற்றும் ஸ்கிரீன் ரெக்கார்டிங்கைத் தடுக்கவும்",
+  "chatSelfDestructTimer": "சுய அழிவு",
+  "chatTimerPickerTitle": "சுய அழிவு டைமர்",
+  "chatTimerOff": "ஆஃப்",
+  "onChainNotificationsTitle": "தொடர் நிகழ்வுகள்",
+  "onChainMarkAllRead": "அனைத்தையும் படித்ததாகக் குறிக்கவும்",
+  "onChainNoNotifications": "இதுவரை தொடர் நிகழ்வுகள் எதுவும் இல்லை",
+  "onChainNoNotificationsDesc": "குழுசேர்ந்த சேனல்களின் நிகழ்வுகள் இங்கே தோன்றும்",
+  "onChainViewDetails": "விவரங்களைக் காண்க",
+  "chatCommandHelp": "/help — எல்லா கட்டளைகளையும் காட்டு",
+  "chatCommandPrice": "/ விலை - டோக்கன் விலை கிடைக்கும்",
+  "chatCommandBalance": "/ இருப்பு - பணப்பை இருப்பைக் காட்டு",
+  "chatCommandChains": "/ சங்கிலிகள் - 236+ ஆதரிக்கப்படும் சங்கிலிகளின் பட்டியல்",
+  "chatMiniApps": "பயன்பாடுகள்",
+  "miniAppMarketTitle": "மினி ஆப்ஸ்",
+  "miniAppCategoryAll": "அனைத்து",
+  "miniAppSearch": "பயன்பாடுகளைத் தேடு...",
+  "miniAppFeatured": "இடம்பெற்றது",
+  "miniAppAllApps": "அனைத்து பயன்பாடுகள்",
+  "miniAppNoResults": "பயன்பாடுகள் எதுவும் இல்லை",
+  "slideToPayLabel": "→→→ உறுதிப்படுத்த ஸ்லைடு",
+  "slideToPayConfirming": "உறுதிப்படுத்துகிறது...",
+  "redPacketBestLuck": "சிறந்த அதிர்ஷ்டம்",
+  "redPacketBestLuckCongrats": "நல்ல அதிர்ஷ்டம்! நீங்கள் அதிகம் பெற்றீர்கள்!",
+  "redPacketStats": "{claimed} / {total} உரிமை கோரப்பட்டது",
+  "@redPacketStats": {
+    "placeholders": {
+      "claimed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "redPacketStatsTotal": "மொத்தம்",
+  "redPacketGrabbedViral": "🧧 ஒரு சிவப்பு பாக்கெட்டைப் பிடித்தார் • {amount} {token}",
+  "@redPacketGrabbedViral": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "token": {
+        "type": "String"
+      }
+    }
+  },
+  "web3SearchHint": "@matrix:id • 0x வாலட் முகவரி • name.eth",
+  "web3SearchPlaceholder": "ஐடி, பணப்பை அல்லது ENS மூலம் தேடவும்...",
+  "web3WalletAddress": "பணப்பையின் முகவரி",
+  "web3AddressCopied": "முகவரி நகலெடுக்கப்பட்டது",
+  "web3Copy": "நகலெடுக்கவும்",
+  "web3SendMessage": "செய்தி அனுப்பு",
+  "web3SendToWallet": "செய்தி பணப்பை",
+  "web3WalletOnlyHint": "இந்த முகவரிக்கு இதுவரை N42 கணக்கு இல்லை. அவர்கள் இணைந்ததும் செய்தி வழங்கப்படும்.",
+  "web3NftAvatar": "NFT அவதார்",
+  "web3ResolveFailed": "அடையாளத்தைத் தீர்க்க முடியவில்லை",
+  "web3EnsNotFound": "ENS பெயர் \"{name}\" இல்லை",
+  "@web3EnsNotFound": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "web3NoN42AccountTitle": "N42 கணக்கு இல்லை",
+  "web3NoN42AccountDesc": "இந்த வாலட் முகவரிக்கு இதுவரை N42 கணக்கு இல்லை. தொடங்குவதற்கு உங்கள் N42 அழைப்பிதழ் இணைப்பை அவர்களுடன் பகிர்ந்து கொள்ளலாம்.",
+  "web3ShareInvite": "அழைப்பைப் பகிரவும்",
+  "nftPickerTitle": "NFT அவதாரத்தைத் தேர்ந்தெடுக்கவும்",
+  "nftPickerTabPopular": "பிரபலமானது",
+  "nftPickerTabCustom": "தனிப்பயன்",
+  "nftPickerChain": "சங்கிலி",
+  "nftPickerContract": "ஒப்பந்த முகவரி",
+  "nftPickerTokenId": "டோக்கன் ஐடி",
+  "nftPickerVerifyOwnership": "உரிமை மற்றும் முன்னோட்டத்தை சரிபார்க்கவும்",
+  "nftPickerUseAsAvatar": "அவதாரமாக பயன்படுத்தவும்",
+  "nftPickerPreview": "முன்னோட்டம்",
+  "nftPickerNotOwned": "இந்த NFT உங்களுக்குச் சொந்தமில்லை",
+  "nftPickerInvalidTokenId": "தவறான டோக்கன் ஐடி",
+  "nftPickerEnterBoth": "ஒப்பந்த முகவரி மற்றும் டோக்கன் ஐடியை உள்ளிடவும்",
+  "nftPickerInfoTitle": "NFT அவதார் — சரிபார்க்கப்பட்ட ஆன்-செயின்",
+  "nftPickerInfoDesc": "உங்களுக்குச் சொந்தமான NFTயை உங்கள் அவதாரமாக இணைக்கவும். சங்கிலியின் உரிமையை யார் வேண்டுமானாலும் சரிபார்க்கலாம். N42 முழுவதும் தங்க மோதிரத்துடன் காட்டப்பட்டது.",
+  "nftPickerPopularCollections": "பிரபலமான தொகுப்புகள்",
+  "nftPickerWalletHint": "236+ சங்கிலிகளில் உங்கள் NFTகளை தானாக கண்டறிய உங்கள் N42 வாலட்டை இணைக்கவும்.",
+  "profileBindNftAvatar": "NFT அவதாரத்தை பிணைக்கவும்",
+  "profileChangeAvatar": "அவதாரத்தை மாற்றவும்",
+  "groupTopics": "தலைப்புகள்",
+  "groupTopicsEmpty": "இதுவரை தலைப்புகள் இல்லை",
+  "syncInProgress": "செய்தி வரலாற்றை ஒத்திசைக்கிறது...",
+  "recoveryKeyReminderTitle": "உங்கள் செய்திகளைப் பாதுகாக்கவும்",
+  "recoveryKeyReminderDesc": "சாதனங்கள் முழுவதும் மறைகுறியாக்கப்பட்ட செய்திகளைப் பாதுகாப்பாக ஒத்திசைக்க மீட்பு விசையை உருவாக்கவும்",
+  "recoveryKeySetupNow": "இப்போது அமைக்கவும்",
+  "recoveryKeyRemindLater": "பிறகு நினைவூட்டு",
+  "channelReadOnly": "இந்த சேனலில் நிர்வாகிகள் மட்டுமே இடுகையிட முடியும்",
+  "channelSubscribers": "சந்தாதாரர்கள்",
+  "channelVerified": "சரிபார்க்கப்பட்ட சேனல்",
+  "redPacketHistory": "சிவப்பு பாக்கெட் வரலாறு",
+  "redPacketSent": "அனுப்பப்பட்டது",
+  "redPacketReceived": "பெற்றது",
+  "redPacketExpired": "காலாவதியானது",
+  "redPacketClaimed": "உரிமை கோரப்பட்டது",
+  "redPacketInsufficientBalance": "போதுமான இருப்பு இல்லை",
+  "selfDestructCountdown": "{time} இல் சுய அழிவு",
+  "@selfDestructCountdown": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "messageDestroyed": "செய்தி அழிக்கப்பட்டது",
+  "miniAppPermissionDenied": "அனுமதி மறுக்கப்பட்டது: {permission}",
+  "@miniAppPermissionDenied": {
+    "placeholders": {
+      "permission": {
+        "type": "String"
+      }
+    }
+  },
+  "aiSuggestionGasFee": "எரிவாயு கட்டணம் என்றால் என்ன?",
+  "aiSuggestionDefi": "DeFi தொடக்க வழிகாட்டி",
+  "aiSuggestionSecurity": "ஒப்பந்தத்தின் பாதுகாப்பை எவ்வாறு சரிபார்க்கலாம்",
+  "aiSuggestionBridge": "குறுக்கு சங்கிலி பாலம்",
+  "channelDiscoverTitle": "சேனல்களைக் கண்டறியவும்",
+  "channelDiscoverSearch": "சேனல்களைத் தேடு...",
+  "channelJoin": "சேருங்கள்",
+  "channelJoined": "சேர்ந்தார்",
+  "channelCategory": "வகை",
+  "slowModeCooldown": "மெதுவான பயன்முறை: {seconds}கள் காத்திருக்கவும்",
+  "@slowModeCooldown": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "addressCopyAction": "முகவரியை நகலெடுக்கவும்",
+  "addressSendMessage": "செய்தி அனுப்பு",
+  "addressViewProfile": "சுயவிவரத்தைக் காண்க",
+  "sendToAddress": "பணப்பை முகவரிக்கு அனுப்பவும்",
+  "blocAuthSendVerificationCodeFailed": "சரிபார்ப்புக் குறியீட்டை அனுப்ப முடியவில்லை",
+  "blocAuthServerNoEmailPasswordReset": "இந்த சேவையகம் மின்னஞ்சல் கடவுச்சொல் மீட்டமைப்பை ஆதரிக்காது",
+  "blocAuthResetPasswordFailed": "கடவுச்சொல்லை மீட்டமைக்க முடியவில்லை",
+  "blocAuthChangePasswordFailed": "கடவுச்சொல்லை மாற்ற முடியவில்லை",
+  "blocAuthOldPasswordWrong": "தவறான தற்போதைய கடவுச்சொல்",
+  "blocAuthLoginCancelled": "உள்நுழைவு ரத்து செய்யப்பட்டது",
+  "blocAuthGoogleLoginFailed": "Google உள்நுழைவு தோல்வியடைந்தது",
+  "blocAuthAppleLoginFailed": "ஆப்பிள் உள்நுழைவு தோல்வியடைந்தது",
+  "blocAuthSsoLoginFailed": "SSO உள்நுழைவு தோல்வியடைந்தது",
+  "blocAuthFacebookLoginFailed": "பேஸ்புக் உள்நுழைவு தோல்வியடைந்தது",
+  "blocAuthTwitterLoginFailed": "ட்விட்டர் உள்நுழைவு தோல்வியடைந்தது",
+  "blocAuthWeChatLoginFailed": "WeChat உள்நுழைவு தோல்வியடைந்தது",
+  "blocAuthWeChatNotConfigured": "WeChat உள்நுழைவு கட்டமைக்கப்படவில்லை",
+  "blocAuthWeChatNotInstalled": "முதலில் WeChat ஐ நிறுவவும்",
+  "blocAuthPasswordWrong": "தவறான கடவுச்சொல்",
+  "blocAuthEmailAlreadyBound": "இந்த மின்னஞ்சல் ஏற்கனவே மற்றொரு கணக்குடன் இணைக்கப்பட்டுள்ளது",
+  "blocAuthChangeEmailFailed": "மின்னஞ்சலை மாற்ற முடியவில்லை",
+  "blocAuthVerificationCodeInvalid": "சரிபார்ப்புக் குறியீடு தவறானது அல்லது காலாவதியானது",
+  "blocAuthSessionExpired": "அமர்வு காலாவதியானது, மீண்டும் உள்நுழையவும்",
+  "blocAuthSessionIncomplete": "அமர்வு தரவு முழுமையடையவில்லை, மீண்டும் உள்நுழையவும்"
+}

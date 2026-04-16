@@ -1,0 +1,2747 @@
+{
+  "@@locale": "hi",
+  "commonRetry": "पुनः प्रयास करें",
+  "commonUnknownUser": "अज्ञात उपयोगकर्ता",
+  "transferWalletNotConnected": "वॉलेट कनेक्ट नहीं है",
+  "chatCallServiceNotInitialized": "कॉल सेवा प्रारंभ नहीं की गई",
+  "authLoginFailed": "लॉगिन विफल: {error}",
+  "chatCallBack": "वापस कॉल करें",
+  "chatMissedVideoCall": "वीडियो कॉल छूट गई",
+  "chatMissedVoiceCall": "मिस्ड वॉयस कॉल",
+  "chatCallNotAnswered": "उत्तर नहीं दिया गया",
+  "chatCallDurationLabel": "कॉल अवधि",
+  "chatVoiceCallCancelled": "वॉइस कॉल रद्द कर दी गई",
+  "chatVideoCallCancelled": "वीडियो कॉल रद्द कर दी गई",
+  "commonImage": "[छवि]",
+  "chatVideo": "[वीडियो]",
+  "chatVoice": "[आवाज़]",
+  "commonFile": "[फ़ाइल]",
+  "chatLocation": "[स्थान]",
+  "chatUnknownMessage": "[अज्ञात संदेश]",
+  "commonDelete": "हटाएँ",
+  "chatDeleteThisMessage": "यह संदेश हटाएं?",
+  "chatMessageDeleted": "संदेश हटा दिया गया",
+  "profileNotLoggedIn": "लॉग इन नहीं है",
+  "chatMyLocation": "मेरा स्थान",
+  "commonGroupChat": "समूह चैट",
+  "commonSearch": "खोजें",
+  "commonCancel": "रद्द करें",
+  "commonLoadFailed": "लोड करने में विफल",
+  "commonMessages": "संदेश",
+  "commonContacts": "संपर्क",
+  "commonMe": "मैं",
+  "commonVoiceLoading": "ध्वनि लोड हो रही है, कृपया बाद में पुनः प्रयास करें",
+  "commonVoiceToTextFailed": "वॉयस टू टेक्स्ट विफल रहा",
+  "commonConvertToText": "पाठ करने के लिए",
+  "chatCopy": "प्रतिलिपि",
+  "commonForward": "आगे",
+  "commonUnfavorite": "अनफेव",
+  "commonFavorite": "पसंदीदा",
+  "settingsResend": "पुनः भेजें",
+  "chatRecall": "स्मरण करो",
+  "commonQuote": "उद्धरण",
+  "commonRemind": "याद दिलाना",
+  "chatCopied": "नकल की गई",
+  "storySendMessageHint": "एक संदेश भेजें",
+  "commonMicrophonePermissionRequired": "कृपया माइक्रोफ़ोन की अनुमति दें",
+  "chatMicrophonePermissionDeniedPermanent": "माइक्रोफ़ोन की अनुमति अस्वीकार कर दी गई है. ध्वनि संदेशों का उपयोग करने के लिए कृपया इसे सिस्टम सेटिंग्स में सक्षम करें।",
+  "commonStartRecordingFailed": "रिकॉर्डिंग प्रारंभ करने में विफल: {error}",
+  "commonRecordingTooShort": "रिकॉर्डिंग बहुत छोटी है",
+  "commonStopRecordingFailed": "रिकॉर्डिंग रोकने में विफल: {error}",
+  "chatReleaseToCancel": "रद्द करने के लिए जारी करें",
+  "chatReleaseToSend": "भेजने के लिए रिलीज़ करें, रद्द करने के लिए ऊपर की ओर स्वाइप करें",
+  "commonHoldToTalk": "बात करने के लिए रुकें",
+  "commonSend": "भेजें",
+  "commonAddFriend": "मित्र जोड़ें",
+  "commonChatServiceNotConnected": "चैट सेवा कनेक्ट नहीं है",
+  "contactUserNotFoundHint": "उपयोगकर्ता \"{query}\" नहीं मिला\n\nयुक्तियाँ:\n• पूर्ण उपयोगकर्ता आईडी दर्ज करने का प्रयास करें, उदा. @username:server.com\n• उपयोगकर्ता नाम की वर्तनी जांचें",
+  "@contactUserNotFoundHint": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "contactCreateChatFailed": "चैट बनाने में विफल: {error}",
+  "@contactCreateChatFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "contactSearchFailed": "खोज विफल: {error}",
+  "@contactSearchFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "contactEnterUserIdOrUsername": "खोजने के लिए उपयोगकर्ता आईडी या उपयोगकर्ता नाम दर्ज करें",
+  "contactSearching": "खोज रहे हैं...",
+  "contactSearchUserToChat": "चैटिंग शुरू करने के लिए उपयोगकर्ता खोजें",
+  "contactMatrixIdExample": "आप पूर्ण मैट्रिक्स आईडी दर्ज कर सकते हैं\nजैसे @user:matrix.n42.network",
+  "contactUserNotFound": "उपयोगकर्ता \"{username}\" नहीं मिला",
+  "@contactUserNotFound": {
+    "placeholders": {
+      "username": {
+        "type": "String"
+      }
+    }
+  },
+  "commonChat": "बातचीत",
+  "commonSettings": "सेटिंग्स",
+  "profileEditProfile": "प्रोफ़ाइल संपादित करें",
+  "authLogin": "लॉग इन करें",
+  "commonCreateGroup": "समूह बनाएं",
+  "chatError": "त्रुटि",
+  "commonTransfer": "स्थानांतरण",
+  "commonReceived": "प्राप्त हुआ",
+  "commonRefunded": "वापस कर दिया गया",
+  "commonExpired": "समाप्त हो गया",
+  "chatRedPacketGreeting": "शुभकामनाएँ",
+  "commonN42RedPacket": "N42 लाल पैकेट",
+  "commonClaimed": "दावा किया",
+  "commonAllClaimed": "सभी ने दावा किया",
+  "chatReadAloud": "ज़ोर से पढ़ें",
+  "chatReply": "उत्तर",
+  "commonEdit": "संपादित करें",
+  "chatSelectForwardTarget": "अग्रेषित लक्ष्य का चयन करें",
+  "commonSendCount": "भेजें({count})",
+  "contactN42Id": "N42 आईडी: {id}",
+  "profileN42IdTitle": "एन42 आईडी",
+  "profileN42Bean": "N42 बीन",
+  "contactFriendInfo": "मित्र जानकारी",
+  "contactFriendInfoDesc": "मित्र की टिप्पणी, फ़ोन, टैग, नोट्स, फ़ोटो जोड़ें और अनुमतियाँ सेट करें।",
+  "commonMoments": "क्षण",
+  "commonSendMessage": "संदेश",
+  "contactAudioVideoCall": "ऑडियो/वीडियो कॉल",
+  "contactVideoChannel": "वीडियो चैनल",
+  "contactRemark": "टिप्पणी",
+  "contactRemarkName": "टिप्पणी नाम",
+  "contactPhone": "फ़ोन",
+  "contactTags": "टैग",
+  "contactNotes": "टिप्पणियाँ",
+  "contactPhotos": "तस्वीरें",
+  "contactPermissions": "अनुमतियाँ",
+  "contactChatMomentsEtc": "चैट, क्षण, खेल आदि।",
+  "contactMoreInfo": "अधिक जानकारी",
+  "contactCommonGroups": "समान समूह",
+  "contactSource": "स्रोत",
+  "settingsNotificationSettings": "सूचनाएं",
+  "settingsPrivacy": "गोपनीयता",
+  "settingsAppearance": "दिखावट",
+  "settingsAbout": "के बारे में",
+  "commonLogout": "लॉग आउट करें",
+  "commonLogoutConfirm": "क्या आप वाकई लॉग आउट करना चाहते हैं?",
+  "commonSave": "सहेजें",
+  "profileNickname": "उपनाम",
+  "profileEnterNickname": "उपनाम दर्ज करें",
+  "profileSignature": "हस्ताक्षर",
+  "profileAddSignature": "एक हस्ताक्षर जोड़ें",
+  "commonTakePhoto": "फ़ोटो लें",
+  "profileChooseFromGallery": "गैलरी से चुनें",
+  "profileSaveFailed": "सहेजना विफल: {error}",
+  "authSecureDecentralizedChat": "सुरक्षित, विकेन्द्रीकृत संदेश सेवा",
+  "commonEndToEndEncryption": "एंड-टू-एंड एन्क्रिप्शन",
+  "authMessagesOnlyYouCanSee": "संदेश केवल आपको और प्राप्तकर्ता को दिखाई देते हैं",
+  "authDecentralized": "विकेन्द्रीकृत",
+  "authBasedOnMatrix": "मैट्रिक्स ओपन प्रोटोकॉल पर निर्मित",
+  "authWalletIntegration": "वॉलेट एकीकरण",
+  "authEasyCryptoTransfer": "आसान क्रिप्टोकरेंसी ट्रांसफर",
+  "authRegister": "साइन अप करें",
+  "authAgreeTerms": "लॉग इन करके, आप सहमत हैं",
+  "authTermsOfService": "सेवा की शर्तें",
+  "authAnd": "और",
+  "authPrivacyPolicy": "गोपनीयता नीति",
+  "authServerAddress": "सर्वर पता",
+  "authEnterServerAddress": "सर्वर पता दर्ज करें",
+  "authConnectedTo": "{serverName} से जुड़ा",
+  "authUsername": "उपयोगकर्ता नाम",
+  "authEnterUsername": "उपयोक्तानाम दर्ज करें",
+  "authUsernameOrEmail": "उपयोगकर्ता नाम या ईमेल",
+  "authEnterUsernameOrEmail": "उपयोगकर्ता नाम या ईमेल दर्ज करें",
+  "authPassword": "पासवर्ड",
+  "authEnterPassword": "पासवर्ड दर्ज करें",
+  "authRegisterAccount": "साइन अप करें",
+  "authForgotPassword": "पासवर्ड भूल गए",
+  "authOtherLoginMethods": "अन्य लॉगिन विधियाँ",
+  "authCreateAccount": "खाता बनाएँ",
+  "authJoinN42Chat": "चैटिंग शुरू करने के लिए N42 चैट से जुड़ें",
+  "authUsernameHint": "3-20 वर्ण, अक्षर/संख्या/_",
+  "authUsernameMinLength": "उपयोगकर्ता नाम कम से कम 3 अक्षर का होना चाहिए",
+  "authUsernameMaxLength": "उपयोगकर्ता नाम अधिकतम 20 अक्षर का होना चाहिए",
+  "authUsernameFormat": "उपयोगकर्ता नाम में केवल अक्षर, संख्याएँ और अंडरस्कोर हो सकते हैं",
+  "authPasswordHint": "न्यूनतम 8 अक्षर",
+  "commonPasswordMinLength": "पासवर्ड कम से कम 8 अक्षर का होना चाहिए",
+  "authConfirmPassword": "पासवर्ड की पुष्टि करें",
+  "authFilled": "भरा हुआ",
+  "authEnterInviteCode": "आमंत्रण कोड दर्ज करें",
+  "authAlreadyHaveAccount": "क्या आपके पास पहले से ही एक खाता है?",
+  "authLoginNow": "अभी लॉग इन करें",
+  "profileAvatar": "अवतार",
+  "profileStatus": "स्थिति",
+  "commonLoading": "लोड हो रहा है...",
+  "conversationNoConversations": "कोई बातचीत नहीं",
+  "conversationTapToChat": "चैटिंग शुरू करने के लिए ऊपर दाईं ओर टैप करें",
+  "conversationStartGroup": "समूह चैट प्रारंभ करें",
+  "commonScan": "स्कैन करें",
+  "commonPayment": "भुगतान",
+  "commonFeatureComingSoon": "{feature} जल्द ही आ रहा है",
+  "conversationMarkAsRead": "पढ़ा गया के रूप में चिह्नित करें",
+  "commonUnmute": "अनम्यूट करें",
+  "commonMute": "मूक",
+  "conversationUnpin": "अनपिन करें",
+  "conversationPin": "पिन",
+  "conversationDeleteConversation": "वार्तालाप हटाएँ",
+  "conversationDeleteConversationConfirm": "\"{name}\" से वार्तालाप हटाएं?",
+  "commonNoContacts": "कोई संपर्क नहीं",
+  "contactAddFriendsToChat": "चैटिंग शुरू करने के लिए मित्रों को जोड़ें",
+  "contactNotFound": "संपर्क नहीं मिला",
+  "contactTryOtherKeywords": "अन्य कीवर्ड या वैश्विक खोज आज़माएँ",
+  "contactSearchResults": "खोज परिणाम",
+  "contactNewFriends": "नए दोस्त",
+  "contactChatOnlyFriends": "केवल चैट मित्र",
+  "contactOfficialAccounts": "आधिकारिक खाते",
+  "contactServiceAccounts": "सेवा खाते",
+  "contactEnterpriseContacts": "उद्यम संपर्क",
+  "contactRecommendToFriend": "संपर्क साझा करें",
+  "commonSetRemark": "टिप्पणी सेट करें",
+  "contactSendingCard": "संपर्क कार्ड भेजा जा रहा है...",
+  "commonFileLabel": "फ़ाइल",
+  "commonLocationLabel": "स्थान",
+  "contactRecommendFailed": "अनुशंसा विफल: {error}",
+  "profileEnterRemark": "टिप्पणी दर्ज करें",
+  "contactOpeningChat": "चैट खुल रही है...",
+  "contactOpenChatFailed": "चैट खोलने में विफल: {error}",
+  "contactAddContact": "संपर्क जोड़ें",
+  "contactEnterUserId": "उपयोगकर्ता आईडी दर्ज करें",
+  "contactNoFriendRequests": "कोई मित्र अनुरोध नहीं",
+  "commonAccept": "स्वीकार करो",
+  "commonReject": "अस्वीकार करें",
+  "commonNoGroups": "कोई समूह नहीं",
+  "contactSelectFriendToRecommend": "अनुशंसा करने के लिए किसी मित्र का चयन करें",
+  "commonSearchContacts": "संपर्क खोजें",
+  "contactNoContactsFound": "कोई संपर्क नहीं मिला",
+  "favoriteYesterday": "कल",
+  "chatJustNow": "अभी अभी",
+  "profileOnline": "ऑनलाइन",
+  "profileOffline": "ऑफ़लाइन",
+  "searchContactsGroupsMessages": "संपर्क, समूह और संदेश खोजें",
+  "searchError": "खोज त्रुटि",
+  "chatSearchHint": "खोजें",
+  "searchHistory": "खोज इतिहास",
+  "commonClear": "स्पष्ट",
+  "commonAll": "सब",
+  "searchGroups": "समूह",
+  "searchNoResults": "कोई परिणाम नहीं",
+  "commonGroupMembers": "सदस्य ({count})",
+  "groupMembersTitle": "समूह के सदस्य",
+  "groupViewAll": "सभी देखें",
+  "groupOwner": "मालिक",
+  "groupAdmin": "व्यवस्थापक",
+  "groupInvite": "आमंत्रित करें",
+  "commonGroupAnnouncement": "समूह घोषणा",
+  "commonNotSet": "सेट नहीं",
+  "groupDescription": "समूह विवरण",
+  "groupPublicGroup": "सार्वजनिक समूह",
+  "commonClearChatHistory": "चैट इतिहास साफ़ करें",
+  "commonDissolveGroup": "समूह को विघटित करें",
+  "commonLeaveGroup": "समूह छोड़ें",
+  "groupChangeGroupName": "समूह का नाम बदलें",
+  "commonEnterGroupName": "समूह का नाम दर्ज करें",
+  "commonConfirm": "पुष्टि करें",
+  "groupEnterGroupDescription": "समूह विवरण दर्ज करें",
+  "groupPublish": "प्रकाशित करें",
+  "chatClearHistoryConfirm": "संपूर्ण चैट इतिहास साफ़ करें? इसे असंपादित नहीं किया जा सकता है।",
+  "chatClearAction": "स्पष्ट",
+  "commonChatHistoryCleared": "चैट इतिहास साफ़ किया गया",
+  "commonDissolve": "घोलना",
+  "groupQrCode": "समूह क्यूआर कोड",
+  "commonSearchChatHistory": "चैट इतिहास खोजें",
+  "groupIdCopied": "ग्रुप आईडी कॉपी की गई",
+  "transferEnterOrPasteAddress": "वॉलेट पता दर्ज करें या पेस्ट करें",
+  "transferSelectToken": "टोकन चुनें",
+  "commonTransferAmount": "स्थानांतरण राशि",
+  "transferAvailable": "उपलब्ध",
+  "transferMemoOptional": "मेमो (वैकल्पिक)",
+  "transferConfirmTransfer": "स्थानांतरण की पुष्टि करें",
+  "transferAddressVerified": "पता सत्यापित",
+  "transferAvailableBalance": "उपलब्ध: {balance} {symbol}",
+  "commonEnterAmount": "राशि दर्ज करें",
+  "commonRedPacketCountMin": "कम से कम 1 लाल पैकेट आवश्यक है",
+  "commonViewRedPacketDetails": "लाल पैकेट विवरण देखें",
+  "commonEnterTransferAmount": "कृपया स्थानांतरण राशि दर्ज करें",
+  "commonTransferTo": "में स्थानांतरित करें",
+  "commonFromSender": "{name} से",
+  "commonConfirmReceive": "प्राप्ति की पुष्टि करें",
+  "groupProfile": "समूह जानकारी",
+  "groupRemoveMember": "समूह से हटाएँ",
+  "commonRemove": "हटाओ",
+  "profileClearStatus": "स्पष्ट स्थिति",
+  "profileClearStatusConfirm": "वर्तमान स्थिति साफ़ करें?",
+  "profileStatusCleared": "स्थिति साफ़ हो गई",
+  "profileUserNotExist": "उपयोगकर्ता मौजूद नहीं है",
+  "profileUserIdCopied": "उपयोगकर्ता आईडी की प्रतिलिपि बनाई गई",
+  "commonReport": "रिपोर्ट करें",
+  "profileQrCode": "क्यूआर कोड",
+  "profileAvatarUpdated": "अवतार अपडेट किया गया",
+  "commonSelectImageFailed": "छवि का चयन करने में विफल: {error}",
+  "profileChangeName": "नाम बदलें",
+  "profileMale": "पुरुष",
+  "profileFemale": "स्त्री",
+  "chatFeatureInDev": "{feature} सुविधा विकास में है...",
+  "profileSaveAddressFailed": "पता सहेजने में विफल: {error}",
+  "profileAddNew": "जोड़ें",
+  "profileAddAddress": "पता जोड़ें",
+  "profileAddressAdded": "पता जोड़ा गया",
+  "profileAddressUpdated": "पता अपडेट किया गया",
+  "profileDeleteAddress": "पता हटाएँ",
+  "profileAddressDeleted": "पता हटा दिया गया",
+  "profileSaveInvoiceFailed": "चालान सहेजने में विफल: {error}",
+  "profileMyInvoices": "मेरे चालान",
+  "profileAddInvoice": "चालान जोड़ें",
+  "profileInvoiceAdded": "चालान जोड़ा गया",
+  "profileInvoiceUpdated": "चालान अद्यतन किया गया",
+  "profileDeleteInvoice": "चालान हटाएँ",
+  "profileInvoiceDeleted": "चालान हटा दिया गया",
+  "profilePersonal": "निजी",
+  "groupSelectAtLeastOne": "कृपया कम से कम एक सदस्य का चयन करें",
+  "chatFileNotExist": "फ़ाइल मौजूद नहीं है",
+  "chatSendFailed": "भेजना विफल: {error}",
+  "chatCannotOpenBrowser": "ब्राउज़र नहीं खुल सकता",
+  "chatSelectFileFailed": "फ़ाइल का चयन करने में विफल: {error}",
+  "settingsSetupFailed": "सेटअप विफल: {error}",
+  "transferEnterValidAmount": "कृपया एक वैध राशि दर्ज करें",
+  "commonAddressCopied": "पता कॉपी किया गया",
+  "favoriteOpenItem": "खुला: {content}",
+  "favoriteDeleted": "हटा दिया गया",
+  "profileWallet": "बटुआ",
+  "chatRecording": "रिकॉर्डिंग",
+  "chatInvalidVideoUrl": "अमान्य वीडियो यूआरएल",
+  "chatDownloadFile": "फ़ाइल डाउनलोड करें",
+  "chatClearChatHistoryTitle": "चैट इतिहास साफ़ करें",
+  "chatVideoCall": "वीडियो कॉल",
+  "commonVoiceCall": "वॉयस कॉल",
+  "callLeaveMeeting": "मीटिंग छोड़ें",
+  "chatDetails": "चैट विवरण",
+  "chatViewAllGroupMembers": "सभी सदस्यों को देखें",
+  "chatGroupName": "समूह का नाम",
+  "chatGroupNameUpdated": "समूह का नाम अपडेट किया गया",
+  "chatUpdateFailed": "अद्यतन विफल रहा",
+  "chatNoPermissionToModify": "आपको संशोधित करने की अनुमति नहीं है",
+  "chatGroupManagement": "समूह प्रबंधन",
+  "chatMyNicknameInGroup": "समूह में मेरा उपनाम",
+  "chatPinChat": "चैट पिन करें",
+  "chatStrongReminder": "सशक्त अनुस्मारक",
+  "chatSetChatBackground": "चैट पृष्ठभूमि सेट करें",
+  "chatUnknownFile": "अज्ञात फ़ाइल",
+  "chatDownload": "डाउनलोड करें",
+  "chatInvalidLocation": "अमान्य स्थान",
+  "chatTapToCancel": "रद्द करने के लिए टैप करें",
+  "chatCaptureFailed": "कैप्चर विफल: {error}",
+  "chatProcessingVideo": "वीडियो संसाधित हो रहा है...",
+  "chatVideoFileNotExist": "वीडियो फ़ाइल मौजूद नहीं है",
+  "chatVideoDataEmpty": "वीडियो डेटा खाली है",
+  "chatVideoTooLarge": "वीडियो का आकार 100 एमबी से अधिक नहीं हो सकता",
+  "chatSendingVideo": "वीडियो भेजा जा रहा है...",
+  "chatSendVideoFailed": "वीडियो भेजने में विफल: {error}",
+  "chatImageFileNotExist": "छवि फ़ाइल मौजूद नहीं है",
+  "commonImageDataEmpty": "छवि डेटा खाली है",
+  "chatSendingImage": "छवि भेजी जा रही है...",
+  "chatSendImageFailed": "छवि भेजने में विफल: {error}",
+  "chatSendLocation": "स्थान भेजें",
+  "chatSelectLocationAndSend": "स्थान चुनें और भेजें",
+  "chatShareRealTimeLocation": "वास्तविक समय स्थान साझा करें",
+  "chatShareLocationForOneHour": "1 घंटे के लिए मित्र के साथ वास्तविक समय का स्थान साझा करें",
+  "chatLocationSent": "स्थान भेजा गया",
+  "chatSelectMessages": "संदेश चुनें",
+  "chatSelectedCount": "चयनित {count}",
+  "chatSelectAll": "सभी का चयन करें",
+  "chatGroupChatCount": "समूह चैट({count})",
+  "chatPrivateChat": "निजी चैट",
+  "chatNoMessages": "कोई संदेश नहीं",
+  "chatSendFirstMessage": "चैटिंग शुरू करने के लिए पहला संदेश भेजें",
+  "chatEncryptionNotice": "यह चैट एंड-टू-एंड एन्क्रिप्टेड है. केवल आप और प्राप्तकर्ता ही संदेशों को पढ़ सकते हैं।",
+  "chatMultiForward": "आगे",
+  "chatCollect": "इकट्ठा करो",
+  "chatNoMembers": "कोई सदस्य नहीं",
+  "chatMemberNotFound": "सदस्य नहीं मिला",
+  "chatVoiceFileNotExist": "ध्वनि फ़ाइल मौजूद नहीं है",
+  "chatVoiceFileEmpty": "वॉइस फ़ाइल खाली है",
+  "chatSendingVoice": "आवाज भेजी जा रही है...",
+  "chatSendVoiceFailed": "आवाज भेजने में विफल: {error}",
+  "chatMessageForwarded": "संदेश अग्रेषित किया गया",
+  "chatForwardFailed": "अग्रेषित विफल: {error}",
+  "chatUnfavorited": "पसंदीदा नहीं",
+  "chatFavorited": "पसंदीदा",
+  "chatReactionAdded": "प्रतिक्रिया जोड़ी गई",
+  "chatReactionRemoved": "प्रतिक्रिया हटा दी गई",
+  "chatFailedMessageDeleted": "विफल संदेश हटा दिया गया",
+  "chatDeleteMessages": "संदेश हटाएँ",
+  "chatDeleteMessagesConfirm": "क्या आप वाकई {count} संदेशों को हटाना चाहते हैं?",
+  "chatNoteOtherMessages": "ध्यान दें: {count} संदेश दूसरों के हैं और केवल आपके लिए हटाए जाएंगे।",
+  "chatMyMessagesWillBeRecalled": "आपके द्वारा भेजे गए {count} संदेश सभी के लिए याद रखे जाएंगे।",
+  "chatRecalledCount": "{count} संदेशों को याद किया गया, {localCount} केवल आपके लिए हटाया गया",
+  "chatRecalledMessages": "{count} संदेशों को याद किया गया",
+  "chatDeletedLocally": "{count} संदेश केवल आपके लिए हटाए गए",
+  "chatForwardedCount": "अग्रेषित {count} संदेश",
+  "chatForwardComplete": "अग्रेषित पूर्ण: {success} सफल हुआ, {failed} विफल रहा",
+  "chatRemindOnlyInGroup": "रिमाइंड सुविधा केवल समूह चैट में उपलब्ध है",
+  "chatOnlyTextSearchable": "केवल टेक्स्ट संदेश ही खोजे जा सकते हैं",
+  "chatSearchFor": "\"{text}\" खोजें",
+  "chatBaiduSearch": "Baidu खोज",
+  "chatGoogleSearch": "गूगल खोज",
+  "chatBingSearch": "बिंग खोज",
+  "chatCalling": "कॉल कर रहा हूँ...",
+  "chatRinging": "बज रहा है...",
+  "chatInCall": "कॉल में",
+  "commonFeatureInDevelopment": "{feature} सुविधा विकास में है...",
+  "chatCollectMessages": "एकत्रित {count} संदेश",
+  "commonMemberCount": "{count} सदस्य",
+  "groupDone": "हो गया({count})",
+  "@groupDone": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "profileServices": "सेवाएँ",
+  "commonFavorites": "पसंदीदा",
+  "profileOrdersAndCards": "आदेश और कार्ड",
+  "profileStickers": "स्टिकर",
+  "profileStatusSetTo": "स्थिति इस पर सेट है: {status}",
+  "@profileStatusSetTo": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "profileAvatarUploadFailed": "अवतार अपलोड विफल रहा",
+  "profilePersonalProfile": "व्यक्तिगत प्रोफ़ाइल",
+  "profileName": "नाम",
+  "profileGender": "लिंग",
+  "profileRegion": "क्षेत्र",
+  "commonMyQrCode": "मेरा क्यूआर कोड",
+  "profilePoke": "प्रहार",
+  "profileRingtone": "रिंगटोन",
+  "profileDefaultRingtone": "डिफ़ॉल्ट रिंगटोन",
+  "profileMyAddresses": "मेरे पते",
+  "profileGenderSetTo": "लिंग इस पर सेट है: {gender}",
+  "@profileGenderSetTo": {
+    "placeholders": {
+      "gender": {
+        "type": "String"
+      }
+    }
+  },
+  "profileSelectRegion": "क्षेत्र चुनें",
+  "profileSelectCity": "शहर चुनें",
+  "profileRegionSetTo": "क्षेत्र इस पर सेट है: {region}",
+  "@profileRegionSetTo": {
+    "placeholders": {
+      "region": {
+        "type": "String"
+      }
+    }
+  },
+  "profileSetPoke": "पोक सेट करें",
+  "profileFriendPokedMe": "दोस्त ने मुझे पोक किया",
+  "profileExample": "उदाहरण",
+  "profileOnTheShoulder": " कंधे पर",
+  "profilePokeCleared": "पोक साफ़ हो गया",
+  "profilePokeSetTo": "पोक को इस पर सेट करें: पोक्ड मी{suffix}",
+  "@profilePokeSetTo": {
+    "placeholders": {
+      "suffix": {
+        "type": "String"
+      }
+    }
+  },
+  "profileEditSignature": "हस्ताक्षर संपादित करें",
+  "profileIntroduceYourself": "अपना परिचय देने के लिए एक वाक्य",
+  "profileSignatureCleared": "हस्ताक्षर साफ़ हो गए",
+  "profileSignatureUpdated": "हस्ताक्षर अद्यतन किया गया",
+  "profileScanToAddFriend": "मुझे मित्र के रूप में जोड़ने के लिए ऊपर दिए गए QR कोड को स्कैन करें",
+  "profileRingtoneSetTo": "रिंगटोन इस पर सेट है: {ringtone}",
+  "@profileRingtoneSetTo": {
+    "placeholders": {
+      "ringtone": {
+        "type": "String"
+      }
+    }
+  },
+  "commonConfirmDissolveGroup": "क्या आप वाकई \"{name}\" को भंग करना चाहते हैं? इस एक्शन को वापस नहीं किया जा सकता।",
+  "@commonConfirmDissolveGroup": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "authEnterValidServerAddress": "कृपया एक वैध सर्वर पता दर्ज करें",
+  "authEnterServerAddressFirst": "कृपया पहले सर्वर पता दर्ज करें",
+  "authPasskeyRequiresServer": "पासकी लॉगिन के लिए सर्वर समर्थन की आवश्यकता होती है",
+  "authLoginAgreement": "लॉग इन करके, आप सहमत हैं ",
+  "authPleaseAgreeToTerms": "कृपया सेवा की शर्तें और गोपनीयता नीति पढ़ें और उनसे सहमत हों",
+  "authRegisterFailed": "पंजीकरण विफल रहा",
+  "commonReenterPassword": "पासवर्ड पुनः दर्ज करें",
+  "commonPasswordsDoNotMatch": "पासवर्ड मेल नहीं खाते",
+  "authInviteCodeBuiltIn": "आमंत्रण कोड (अंतर्निहित)",
+  "authInviteCodeBuiltInNote": "आमंत्रण कोड अंतर्निहित है, आमतौर पर संशोधित करने की कोई आवश्यकता नहीं है",
+  "authIHaveReadAndAgree": "मैंने पढ़ा है और इससे सहमत हूं ",
+  "mainStartGroupChat": "समूह चैट प्रारंभ करें",
+  "mainAddFriends": "मित्र जोड़ें",
+  "mainPaymentAndCollection": "भुगतान",
+  "contactCount": "{count} संपर्क",
+  "@contactCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "contactAddToHomeScreen": "होम स्क्रीन पर जोड़ें",
+  "contactRecommendedCardTo": "{recipient} को {contact} का कार्ड अनुशंसित",
+  "@contactRecommendedCardTo": {
+    "placeholders": {
+      "contact": {
+        "type": "String"
+      },
+      "recipient": {
+        "type": "String"
+      }
+    }
+  },
+  "contactEnterRemarkName": "टिप्पणी नाम दर्ज करें",
+  "contactRemarkSetTo": "टिप्पणी इस पर सेट है: {remark}",
+  "@contactRemarkSetTo": {
+    "placeholders": {
+      "remark": {
+        "type": "String"
+      }
+    }
+  },
+  "contactAcceptedFriendRequest": "{name} का मित्र अनुरोध स्वीकार कर लिया",
+  "@contactAcceptedFriendRequest": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "contactRejectedFriendRequest": "{name} का मित्र अनुरोध अस्वीकार कर दिया गया",
+  "@contactRejectedFriendRequest": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "commonGroupInvites": "समूह आमंत्रण",
+  "commonMyGroups": "मेरे समूह ({count})",
+  "@commonMyGroups": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "commonInvitedToJoinGroup": "समूह में शामिल होने के लिए आमंत्रित किया गया",
+  "commonConfirmLeaveGroup": "क्या आप वाकई \"{name}\" छोड़ना चाहते हैं?",
+  "@commonConfirmLeaveGroup": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "commonLeave": "छोड़ो",
+  "commonRecallThisMessage": "यह संदेश याद है?",
+  "commonSavedToGallery": "गैलरी में सहेजा गया",
+  "commonFailedToSave": "सहेजने में विफल",
+  "chatSaving": "सहेजा जा रहा है...",
+  "commonShare": "साझा करें",
+  "chatSaveToGallery": "गैलरी में सहेजें",
+  "chatFailedToLoadImage": "छवि लोड करने में विफल",
+  "chatVideoRecordingFailed": "वीडियो रिकॉर्डिंग विफल रही",
+  "profileRedPacket": "लाल पैकेट",
+  "commonMusic": "संगीत",
+  "commonCoupon": "कूपन",
+  "commonGift": "उपहार",
+  "commonPoll": "मतदान",
+  "favoriteText": "पाठ",
+  "favoriteLinkLabel": "लिंक",
+  "favoriteNote": "नोट",
+  "favoriteMyNotes": "मेरे नोट्स",
+  "favoriteToday": "आज",
+  "favoriteDaysAgoText": "{count} दिन पहले",
+  "@favoriteDaysAgoText": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "favoriteDateFormat": "{month}/{day}",
+  "@favoriteDateFormat": {
+    "placeholders": {
+      "month": {
+        "type": "int"
+      },
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "favoriteNoFavorites": "अभी तक कोई पसंदीदा नहीं",
+  "favoriteLongPressToFavorite": "पसंदीदा के लिए संदेश को देर तक दबाएँ",
+  "favoriteNewNote": "नया नोट",
+  "favoriteLink": "पसंदीदा लिंक",
+  "favoriteEditTags": "टैग संपादित करें",
+  "favoriteDeleteFavorite": "पसंदीदा हटाएँ",
+  "favoriteDeleteFavoriteConfirm": "क्या आप वाकई इस पसंदीदा को हटाना चाहते हैं?",
+  "favoriteNoSearchResultsFound": "कोई परिणाम नहीं मिला",
+  "commonSendRedPacket": "लाल पैकेट भेजें",
+  "transferAmount": "रकम",
+  "commonRedPacketCover": "लाल पैकेट कवर",
+  "commonRedPacketType": "लाल पैकेट प्रकार",
+  "commonNormalRedPacket": "सामान्य",
+  "commonLuckyRedPacket": "भाग्यशाली",
+  "commonRedPacketCount": "लाल पैकेट गिनती",
+  "commonPieces": "टुकड़े",
+  "commonPutMoneyInRedPacket": "लाल पैकेट में पैसे रखें",
+  "commonRedPacketRefundNotice": "लावारिस लाल पैकेट 24 घंटे के बाद वापस कर दिए जाएंगे",
+  "commonOpenRedPacket": "खुला",
+  "commonRedPacketAllClaimed": "लाल पैकेट सभी पर दावा किया गया",
+  "commonRedPacketExpired": "लाल पैकेट समाप्त हो गया",
+  "commonAddTransferNote": "स्थानांतरण नोट जोड़ें",
+  "commonYuan": "सीएनवाई",
+  "commonReplyWithEmoji": "इस इमोजी के साथ जवाब दें",
+  "contactEditRemark": "टिप्पणी संपादित करें",
+  "contactSetPermissions": "अनुमतियाँ सेट करें",
+  "profileAddToBlacklist": "काली सूची में जोड़ें",
+  "contactDeleteContact": "संपर्क हटाएँ",
+  "contactDeleteContactConfirm": "क्या आप वाकई {name} को हटाना चाहते हैं?",
+  "@contactDeleteContactConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "transferTitle": "स्थानांतरण",
+  "transferReceiverAddressLabel": "प्राप्तकर्ता का पता",
+  "transferSelectTokenLabel": "टोकन चुनें",
+  "transferAmountLabel": "स्थानांतरण राशि",
+  "transferMemoLabel": "मेमो (वैकल्पिक)",
+  "transferAddMemoHint": "एक मेमो जोड़ें",
+  "transferSendPaymentRequest": "भुगतान अनुरोध भेजें",
+  "transferQrCodeGenerateFailed": "QR कोड जनरेशन विफल",
+  "transferScanQrToPayMe": "मुझे भुगतान करने के लिए QR कोड स्कैन करें",
+  "transferMyWalletAddress": "मेरा बटुआ पता",
+  "transferCreatePaymentRequest": "भुगतान अनुरोध बनाएँ",
+  "profileN42IdLabel": "N42 आईडी: {id}",
+  "@profileN42IdLabel": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "commonRedPacketDefaultGreeting": "शुभकामनाएँ",
+  "commonSenderRedPacket": "{name} का लाल पैकेट",
+  "@commonSenderRedPacket": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "transferEnterValidAddress": "कृपया एक वैध पता दर्ज करें",
+  "transferPleaseSelectToken": "कृपया एक टोकन चुनें",
+  "commonReceivedTransfer": "स्थानांतरण प्राप्त हुआ",
+  "@commonFromSender": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@commonSendCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "commonSenderSentRedPacket": "{name} ने एक लाल पैकेट भेजा",
+  "@commonSenderSentRedPacket": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "commonSavedToBalance": "शेष राशि में सहेजा गया, सीधे स्थानांतरित किया जा सकता है",
+  "commonRedPacketExpiredOrEmpty": "लाल पैकेट की समय सीमा समाप्त/सभी पर दावा किया गया",
+  "transferScanFeatureComingSoon": "स्कैन सुविधा जल्द ही आ रही है...",
+  "contactSetAsStarred": "तारांकित के रूप में सेट करें",
+  "contactAddToBlocklist": "ब्लॉकलिस्ट में जोड़ें",
+  "commonClaimedYour": " आपका दावा किया ",
+  "commonClaimedText": " दावा किया ",
+  "commonUserTyping": "{name} टाइप कर रहा है...",
+  "@commonUserTyping": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "commonTyping": "टाइपिंग...",
+  "commonWaitingToReceive": "प्राप्त करने की प्रतीक्षा कर रहा हूँ",
+  "commonTapToClaim": "दावा करने के लिए टैप करें",
+  "commonHasBeenReceived": "प्राप्त हो गया है",
+  "commonGetLucky": "भाग्यशाली बनो",
+  "qrcodeCameraStartFailed": "कैमरा प्रारंभ होने में विफल रहा",
+  "qrcodeUnknownError": "अज्ञात त्रुटि",
+  "qrcodePlaceQrCodeInFrame": "स्कैन करने के लिए QR कोड को फ्रेम के भीतर रखें",
+  "qrcodeCloseManualInput": "मैन्युअल इनपुट बंद करें",
+  "qrcodeManualInputUserId": "मैनुअल इनपुट यूजर आईडी",
+  "commonAdd": "जोड़ें",
+  "profileSetStatus": "स्थिति निर्धारित करें",
+  "profileVisibleToFriends24h": "मित्रों के लिए 24 घंटे दृश्यमान",
+  "profileWriteStatus": "स्थिति लिखें",
+  "profileEnterYourStatus": "अपनी स्थिति दर्ज करें...",
+  "profileOk": "ठीक है",
+  "qrcodeCameraPermissionRequired": "क्यूआर कोड को स्कैन करने के लिए कैमरे की अनुमति आवश्यक है",
+  "qrcodeCameraPermissionDenied": "कैमरे की अनुमति स्थायी रूप से अस्वीकार कर दी गई थी. कृपया इसे सिस्टम सेटिंग्स में सक्षम करें।",
+  "qrcodePermissionCheckError": "अनुमति जाँचने में त्रुटि: {error}",
+  "@qrcodePermissionCheckError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "qrcodeInvalidQrCode": "अमान्य क्यूआर कोड",
+  "qrcodeCannotAddFriend": "मित्र नहीं जोड़ा जा सकता: {error}",
+  "@qrcodeCannotAddFriend": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "qrcodeScanQrCode": "QR कोड स्कैन करें",
+  "qrcodeCheckingCameraPermission": "कैमरे की अनुमति जाँची जा रही है...",
+  "qrcodeNeedCameraPermission": "कैमरे की अनुमति आवश्यक है",
+  "qrcodeRetryPermission": "पुनः प्रयास करें",
+  "qrcodeOpenSettings": "सेटिंग्स खोलें",
+  "groupInviteMembers": "सदस्यों को आमंत्रित करें",
+  "groupInviteCount": "आमंत्रित करें({count})",
+  "@groupInviteCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "profileNoShippingAddress": "कोई शिपिंग पता नहीं",
+  "profileDefaultLabel": "डिफ़ॉल्ट",
+  "profileNoInvoice": "कोई चालान नहीं",
+  "profileCompany": "कंपनी",
+  "profileTaxNumber": "कर क्रमांक",
+  "profileConfirmDeleteAddress": "क्या आप वाकई यह पता हटाना चाहते हैं?",
+  "profileConfirmDeleteInvoice": "क्या आप वाकई इस चालान को हटाना चाहते हैं?",
+  "commonGroupOwner": "मालिक",
+  "commonGroupAdmin": "व्यवस्थापक",
+  "groupSearchMembers": "सदस्यों को खोजें",
+  "groupTotalMembers": "{count} सदस्य",
+  "@groupTotalMembers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatRemoveFromGroup": "समूह से हटाएँ",
+  "groupConfirmRemoveMember": "क्या आप वाकई \"{name}\" को समूह से हटाना चाहते हैं?",
+  "@groupConfirmRemoveMember": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatUnknownSong": "अज्ञात गीत",
+  "chatUnknownArtist": "अज्ञात कलाकार",
+  "chatUnknownContact": "अज्ञात संपर्क",
+  "chatPersonalCard": "संपर्क कार्ड",
+  "chatSingleChoice": "एकल",
+  "chatMultiChoice": "बहु",
+  "chatEnded": "समाप्त",
+  "chatEndPollButton": "मतदान समाप्त करें",
+  "chatPollHint": "पोल चैट में प्रदर्शित किया जाएगा. समूह के सदस्य मतदान कर सकते हैं.",
+  "chatSearchSongOrArtist": "गीत या कलाकार खोजें",
+  "chatNoSongsFound": "कोई गाना नहीं मिला",
+  "chatSongNameOptional": "गाने का नाम (वैकल्पिक)",
+  "chatEnterSongName": "गीत का नाम दर्ज करें",
+  "chatArtistNameOptional": "कलाकार का नाम (वैकल्पिक)",
+  "chatEnterArtistName": "कलाकार का नाम दर्ज करें",
+  "chatRealTimeLocationSharing": "विकास में वास्तविक समय स्थान साझाकरण...",
+  "profileVoiceCallFeatureInDev": "वॉयस कॉल सुविधा विकास में...",
+  "profileReportFeatureInDev": "विकास में रिपोर्ट सुविधा...",
+  "profileShareFeatureInDev": "विकास में सुविधा साझा करें...",
+  "profileQrCodeFeatureInDev": "विकास में क्यूआर कोड सुविधा...",
+  "qrcodeScanQrToAddMe": "मुझे मित्र के रूप में जोड़ने के लिए ऊपर दिए गए QR कोड को स्कैन करें",
+  "qrcodeSaveToAlbum": "एल्बम में सहेजें",
+  "qrcodeChangeStyle": "शैली बदलें",
+  "qrcodeCopyId": "आईडी कॉपी करें",
+  "qrcodeIdCopied": "आईडी कॉपी की गई",
+  "qrcodeMoreStylesFeatureComingSoon": "अधिक शैलियाँ जल्द ही आ रही हैं",
+  "@chatFeatureInDev": {
+    "placeholders": {
+      "feature": {
+        "type": "String"
+      }
+    }
+  },
+  "profileBio": "बायो",
+  "profileHomeServer": "सर्वर",
+  "profileShareContactCard": "संपर्क कार्ड साझा करें",
+  "profileRemoveFromBlacklist": "काली सूची से हटाएँ",
+  "profileConfirmAddBlacklist": "क्या आप वाकई इस उपयोगकर्ता को काली सूची में जोड़ना चाहते हैं? आपको उनसे संदेश प्राप्त नहीं होंगे.",
+  "profileConfirmRemoveBlacklist": "क्या आप वाकई इस उपयोगकर्ता को काली सूची से हटाना चाहते हैं?",
+  "profileRemarkSaved": "टिप्पणी सहेजी गई",
+  "profileRemarkCleared": "टिप्पणी साफ़ कर दी गई",
+  "transferReceive": "प्राप्त करें",
+  "transferPleaseConnectWallet": "कृपया पहले अपना वॉलेट कनेक्ट करें",
+  "transferSendRequest": "अनुरोध भेजें",
+  "transferPleaseEnterValidAmount": "कृपया एक वैध राशि दर्ज करें",
+  "searchPlaceholder": "संपर्क, समूह, संदेश खोजें",
+  "searchEnterKeywordToSearch": "खोज शुरू करने के लिए कीवर्ड दर्ज करें",
+  "searchClearHistory": "स्पष्ट",
+  "searchNoResultsForQuery": "\"{query}\" के लिए कोई परिणाम नहीं मिला",
+  "@searchNoResultsForQuery": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "searchAllResults": "सब",
+  "searchInChat": "चैट में खोजें",
+  "searchContactLabel": "संपर्क करें",
+  "searchGroupLabel": "समूह",
+  "searchConversationLabel": "बातचीत",
+  "searchMessageLabel": "संदेश",
+  "settingsSecurityTitle": "सुरक्षा",
+  "settingsKeyBackup": "कुंजी बैकअप",
+  "settingsBackupEncryptionKeys": "बैकअप एन्क्रिप्शन कुंजी",
+  "settingsKeysBackedUp": "{count} कुंजियों का बैकअप लिया गया",
+  "@settingsKeysBackedUp": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsBackupNotSet": "बैकअप सेट नहीं है",
+  "settingsRestoreKeys": "कुंजियाँ पुनर्स्थापित करें",
+  "settingsRestoreKeysFromBackup": "बैकअप से एन्क्रिप्शन कुंजियाँ पुनर्स्थापित करें",
+  "settingsExportKeys": "कुंजी निर्यात करें",
+  "settingsExportKeysToFile": "फ़ाइल में कुंजी निर्यात करें",
+  "settingsLoggedInDevices": "लॉग इन डिवाइस",
+  "settingsNoOtherDevices": "कोई अन्य उपकरण नहीं",
+  "settingsVerified": "सत्यापित",
+  "settingsUnverified": "असत्यापित",
+  "settingsAdvanced": "उन्नत",
+  "settingsCrossSigning": "क्रॉस-साइनिंग",
+  "settingsEnabled": "सक्षम",
+  "settingsNotEnabled": "सक्षम नहीं",
+  "settingsResetEncryption": "एन्क्रिप्शन रीसेट करें",
+  "settingsDeleteAllEncryptionKeys": "सभी एन्क्रिप्शन कुंजियाँ हटाएँ",
+  "settingsEncryptionNotSupported": "एन्क्रिप्शन समर्थित नहीं है",
+  "settingsNotInitialized": "प्रारंभ नहीं किया गया",
+  "settingsBackupKeyTitle": "बैकअप कुंजियाँ",
+  "settingsBackupKeyMessage": "एक नई कुंजी बैकअप बनाएँ? यह आपको नए डिवाइस पर एन्क्रिप्टेड संदेशों को पुनर्स्थापित करने में मदद करेगा।",
+  "settingsBackup": "बैकअप",
+  "settingsRestoreKeyTitle": "कुंजियाँ पुनर्स्थापित करें",
+  "settingsRestoreKeyMessage": "एन्क्रिप्टेड संदेशों को पुनर्स्थापित करने के लिए अपना पुनर्प्राप्ति पासवर्ड या पुनर्प्राप्ति कुंजी दर्ज करें।",
+  "settingsRestore": "पुनर्स्थापित करें",
+  "settingsExportKeyTitle": "कुंजी निर्यात करें",
+  "settingsExportKeyMessage": "निर्यात की गई कुंजी फ़ाइल में आपकी सभी एन्क्रिप्शन कुंजियाँ शामिल हैं। कृपया इसे सुरक्षित रखें.",
+  "settingsExport": "निर्यात करें",
+  "settingsDeviceIdLabel": "डिवाइस आईडी: {deviceId}",
+  "@settingsDeviceIdLabel": {
+    "placeholders": {
+      "deviceId": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsDeviceStatusVerified": "स्थिति: सत्यापित",
+  "settingsDeviceStatusUnverified": "स्थिति: असत्यापित",
+  "settingsLastActiveLabel": "अंतिम सक्रिय: {lastSeen}",
+  "@settingsLastActiveLabel": {
+    "placeholders": {
+      "lastSeen": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsVerifyThisDevice": "इस डिवाइस को सत्यापित करें",
+  "settingsCrossSigningAlreadyEnabled": "क्रॉस-साइनिंग पहले से ही सक्षम है",
+  "settingsCrossSigningSetupSuccess": "क्रॉस-साइनिंग सेटअप सफल",
+  "@settingsSetupFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsResetEncryptionTitle": "एन्क्रिप्शन रीसेट करें",
+  "settingsResetEncryptionWarning": "चेतावनी: यह आपकी सभी एन्क्रिप्शन कुंजियाँ हटा देगा. आप पिछले एन्क्रिप्टेड संदेशों को डिक्रिप्ट नहीं कर पाएंगे. इस एक्शन को वापस नहीं किया जा सकता।",
+  "settingsReset": "रीसेट करें",
+  "settingsBackupSuccess": "कुंजियों का सफलतापूर्वक बैकअप लिया गया",
+  "settingsBackupFailed": "बैकअप विफल रहा",
+  "settingsRecoveryKey": "पुनर्प्राप्ति कुंजी",
+  "settingsRecoveryKeySaveWarning": "कृपया इस पुनर्प्राप्ति कुंजी को सुरक्षित स्थान पर सहेजें। आपको किसी नए डिवाइस पर अपने एन्क्रिप्टेड संदेशों को पुनर्स्थापित करने के लिए इसकी आवश्यकता होगी।",
+  "settingsRecoveryKeySaved": "मैंने इसे सेव कर लिया है",
+  "settingsRestoreSuccess": "कुंजियाँ सफलतापूर्वक पुनर्स्थापित की गईं",
+  "settingsRestoreFailed": "पुनर्स्थापना विफल",
+  "settingsPassword": "पासवर्ड",
+  "settingsEnterRecoveryKey": "पुनर्प्राप्ति कुंजी दर्ज करें",
+  "settingsEnterPassword": "पासवर्ड दर्ज करें",
+  "settingsExportSuccess": "सर्वर बैकअप में कुंजियाँ सफलतापूर्वक निर्यात की गईं",
+  "settingsExportNeedBackupFirst": "कृपया पहले एक कुंजी बैकअप बनाएं",
+  "settingsExportFailed": "निर्यात विफल",
+  "settingsResetSuccess": "एन्क्रिप्शन रीसेट सफल",
+  "settingsResetFailed": "रीसेट विफल रहा",
+  "callLeaveMeetingConfirm": "क्या आप वाकई मीटिंग छोड़ना चाहते हैं?",
+  "chatPokedSomeone": "पोक्ड {name}{suffix}",
+  "@chatPokedSomeone": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "suffix": {
+        "type": "String"
+      }
+    }
+  },
+  "chatNoContactsToAdd": "जोड़ने के लिए कोई संपर्क उपलब्ध नहीं है",
+  "chatAddMembers": "सदस्य जोड़ें",
+  "chatInvitedMembers": "{count} सदस्यों को आमंत्रित किया गया",
+  "@chatInvitedMembers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatInviteFailed": "आमंत्रण विफल: {error}",
+  "@chatInviteFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatMemberRemoved": "सदस्य हटा दिया गया",
+  "chatRemoveFailed": "हटाना विफल: {error}",
+  "@chatRemoveFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatRealTimeLocationShareMessage": "शेयर करने के बाद दूसरा पक्ष 1 घंटे तक आपकी रियल टाइम लोकेशन देख सकता है.",
+  "chatStartSharing": "साझा करना प्रारंभ करें",
+  "chatLocationServiceNotEnabled": "स्थान सेवा सक्षम नहीं है",
+  "chatEnableLocationService": "कृपया इस सुविधा का उपयोग करने के लिए स्थान सेवा सक्षम करें",
+  "chatGoToSettings": "सेटिंग्स पर जाएं",
+  "chatLocationPermissionRequired": "इस सुविधा के लिए स्थान की अनुमति आवश्यक है",
+  "chatLocationPermissionDeniedPermanent": "स्थान की अनुमति स्थायी रूप से अस्वीकार कर दी गई है. कृपया इसे सेटिंग्स में सक्षम करें।",
+  "chatLocationPermissionDenied": "स्थान की अनुमति अस्वीकृत",
+  "chatGettingLocation": "स्थान प्राप्त हो रहा है...",
+  "chatGetLocationFailed": "स्थान प्राप्त करने में विफल: {error}",
+  "@chatGetLocationFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatMapPreview": "मानचित्र पूर्वावलोकन",
+  "chatSearchLocation": "स्थान खोजें",
+  "chatRedPacketSent": "{amount} {token} लाल पैकेट भेजा गया",
+  "@chatRedPacketSent": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "token": {
+        "type": "String"
+      }
+    }
+  },
+  "chatTransferDefault": "स्थानांतरण",
+  "chatTransferSent": "{amount} {token} स्थानांतरण भेजा गया",
+  "@chatTransferSent": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "token": {
+        "type": "String"
+      }
+    }
+  },
+  "chatPickFileFailed": "फ़ाइल चुनने में विफल: {error}",
+  "@chatPickFileFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatFileSizeLimit": "फ़ाइल का आकार 50MB से अधिक नहीं हो सकता",
+  "chatFileSending": "फ़ाइल भेजी जा रही है: {filename}",
+  "@chatFileSending": {
+    "placeholders": {
+      "filename": {
+        "type": "String"
+      }
+    }
+  },
+  "chatSendFileFailed": "फ़ाइल भेजने में विफल: {error}",
+  "@chatSendFileFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatContactCardSent": "{name} का संपर्क कार्ड भेजा गया",
+  "@chatContactCardSent": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatFavoritesFeature": "पसंदीदा",
+  "chatCouponsFeature": "कूपन",
+  "chatGiftFeature": "उपहार",
+  "chatSharedMusic": "साझा किया गया {name}",
+  "@chatSharedMusic": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@chatSendFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatEndPollTitle": "मतदान समाप्त करें",
+  "chatEndPollConfirmMessage": "क्या आप वाकई इस मतदान को समाप्त करना चाहते हैं? मतदान समाप्त होने के बाद बंद कर दिया जाएगा.",
+  "chatPollEndedMessage": "मतदान समाप्त हुआ",
+  "chatConnectingCall": "कनेक्ट हो रहा है...",
+  "chatMuteCall": "मूक",
+  "chatSpeakerOff": "स्पीकर बंद",
+  "chatSpeakerOn": "वक्ता",
+  "chatCameraOn": "कैमरा चालू",
+  "chatCameraOff": "कैमरा बंद",
+  "chatHangUp": "रुको",
+  "chatSelectForwardTargetTitle": "अग्रेषित लक्ष्य का चयन करें",
+  "chatNoForwardableChat": "अग्रेषित करने के लिए कोई चैट उपलब्ध नहीं है",
+  "chatNoMatchingChat": "कोई मेल खाती चैट नहीं मिली",
+  "chatLocationTitle": "स्थान",
+  "chatSendButton": "भेजें",
+  "chatRetryButton": "पुनः प्रयास करें",
+  "chatSearchContactHint": "संपर्क खोजें",
+  "chatShareMusic": "संगीत साझा करें",
+  "chatRecentPlayed": "हाल का",
+  "chatMyFavorites": "पसंदीदा",
+  "chatNetworkLink": "लिंक",
+  "chatLocalFile": "स्थानीय",
+  "chatPasteMusicLink": "संगीत लिंक चिपकाएँ",
+  "chatShareMusicButton": "संगीत साझा करें",
+  "chatSelectLocalAudio": "स्थानीय ऑडियो फ़ाइल का चयन करें",
+  "chatSupportedAudioFormats": "MP3, M4A, WAV, FLAC आदि को सपोर्ट करता है।",
+  "chatSelectFileButton": "फ़ाइल चुनें",
+  "chatPleaseEnterMusicLink": "कृपया संगीत लिंक दर्ज करें",
+  "chatPleaseEnterValidLink": "कृपया एक मान्य यूआरएल दर्ज करें",
+  "chatSharedSong": "साझा किया गया गाना",
+  "chatSelectMember": "सदस्य का चयन करें",
+  "chatSearchMemberHint": "सदस्यों को खोजें",
+  "chatNoMatchingMembers": "कोई मेल खाने वाला सदस्य नहीं मिला",
+  "commonUnknownMember": "अज्ञात",
+  "chatSelectedMessagesCount": "चयनित {count} संदेश",
+  "@chatSelectedMessagesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatSearchContactsOrGroups": "संपर्क या समूह खोजें",
+  "chatVideoTitle": "वीडियो",
+  "chatLoadingText": "लोड हो रहा है...",
+  "chatVideoLoadFailed": "वीडियो लोड विफल रहा",
+  "chatPlayerInitFailed": "प्लेयर आरंभीकरण विफल रहा",
+  "chatCreatePollTitle": "पोल बनाएं",
+  "chatSubmitPoll": "सबमिट करें",
+  "chatPollQuestionLabel": "मतदान प्रश्न",
+  "chatEnterPollQuestionHint": "कृपया जनमत प्रश्न दर्ज करें",
+  "chatPollOptionsLabel": "मतदान विकल्प",
+  "chatOptionHintWithIndex": "विकल्प {index}",
+  "@chatOptionHintWithIndex": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "chatAddOptionButton": "विकल्प जोड़ें",
+  "chatPollSettingsLabel": "पोल सेटिंग्स",
+  "chatSelectionType": "चयन प्रकार",
+  "chatSingleChoiceLabel": "एकल",
+  "chatMultiChoiceLabel": "बहु",
+  "chatAnonymousPollSwitch": "अनाम पोल",
+  "chatPleaseEnterQuestion": "कृपया जनमत प्रश्न दर्ज करें",
+  "chatAtLeastTwoOptions": "कम से कम 2 विकल्प आवश्यक हैं",
+  "chatConfirmWithCount": "पुष्टि करें ({count})",
+  "@chatConfirmWithCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@chatSelectedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@commonMemberCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@chatGroupChatCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "authEmailVerificationTitle": "ईमेल सत्यापन",
+  "authEnterValidEmailAddress": "कृपया एक वैध ईमेल पता दर्ज करें",
+  "authVerificationCodeSentTo": "सत्यापन कोड {email} पर भेजा गया",
+  "@authVerificationCodeSentTo": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "authSendCodeFailed": "कोड भेजने में विफल: {error}",
+  "@authSendCodeFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "authVerificationSuccess": "सत्यापन सफल",
+  "authVerificationFailed": "सत्यापन विफल रहा",
+  "authVerificationCodeError": "सत्यापन कोड त्रुटि: {error}",
+  "@authVerificationCodeError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "commonEnterVerificationCode": "सत्यापन कोड दर्ज करें",
+  "authEnterYourEmail": "ईमेल दर्ज करें",
+  "authWeSentCodeTo": "हमने 6 अंकों का कोड भेजा\n{email}",
+  "@authWeSentCodeTo": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "authEnterEmailForCode": "अपना ईमेल पता दर्ज करें, हम सत्यापन कोड भेजेंगे",
+  "commonSendVerificationCode": "सत्यापन कोड भेजें",
+  "authResendVerificationCode": "सत्यापन कोड पुनः भेजें",
+  "authCanResendAfter": "{seconds} सेकंड के बाद पुनः भेज सकते हैं",
+  "@authCanResendAfter": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "commonChangeEmail": "ईमेल बदलें",
+  "contactAddToContacts": "संपर्कों में जोड़ें",
+  "contactAddingToContacts": "जोड़ा जा रहा है...",
+  "contactAddedToContacts": "संपर्कों में जोड़ा गया",
+  "contactAddFailedWithError": "जोड़ें विफल: {error}",
+  "@contactAddFailedWithError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "contactAddPhone": "फ़ोन जोड़ें",
+  "contactAddTag": "टैग जोड़ें",
+  "contactAddText": "पाठ जोड़ें",
+  "contactAddPhoto": "फ़ोटो जोड़ें",
+  "contactGroupCountLabel": "{count} समूह",
+  "@contactGroupCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "contactAddedViaSearch": "खोज के माध्यम से जोड़ा गया",
+  "contactAddTime": "समय जोड़ें",
+  "contactDoneButton": "हो गया",
+  "callWaitingForParticipants": "प्रतिभागियों के शामिल होने की प्रतीक्षा की जा रही है...",
+  "callParticipantMe": "{name} (मैं)",
+  "@callParticipantMe": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "callSharingLabel": "साझा करना",
+  "callScreenSharingBy": "{name} स्क्रीन साझा कर रहा है",
+  "@callScreenSharingBy": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "callParticipantCount": "{count} प्रतिभागी",
+  "@callParticipantCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "callMuteLabel": "मूक",
+  "callUnmuteLabel": "अनम्यूट करें",
+  "callTurnOffVideo": "वीडियो बंद करें",
+  "callTurnOnVideo": "वीडियो चालू करें",
+  "callShareScreen": "स्क्रीन साझा करें",
+  "callStopSharing": "साझा करना बंद करो",
+  "callSwitchCameraLabel": "स्विच करें",
+  "callLeaveLabel": "छोड़ो",
+  "callParticipantsLabel": "प्रतिभागियों",
+  "callJoiningMeeting": "मीटिंग में शामिल हो रहे हैं...",
+  "chatPollVotesFormat": "{count} वोट ({percentage}%)",
+  "@chatPollVotesFormat": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "percentage": {
+        "type": "String"
+      }
+    }
+  },
+  "chatPollParticipantsFormat": "{count} प्रतिभागी",
+  "@chatPollParticipantsFormat": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@chatSelectFileFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatNoMediaUrlAvailable": "कोई मीडिया यूआरएल उपलब्ध नहीं है",
+  "chatDownloadFailed": "डाउनलोड विफल: {code}",
+  "@chatDownloadFailed": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "chatErrorWithMessage": "त्रुटि: {message}",
+  "@chatErrorWithMessage": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "chatMusicLinkLabel": "संगीत लिंक",
+  "chatRedPacketTransferCannotForward": "लाल पैकेट और स्थानांतरण अग्रेषित नहीं किए जा सकते",
+  "commonShareFailed": "शेयर विफल: {error}",
+  "@commonShareFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "commonTapToRetry": "पुनः प्रयास करने के लिए टैप करें",
+  "chatDefaultRedPacketGreeting": "समृद्धि के लिए शुभकामनाएँ",
+  "groupAllowOthersToSearchAndJoin": "दूसरों को खोजने और शामिल होने की अनुमति दें",
+  "groupConfirmClearChatHistory": "क्या आप वाकई चैट इतिहास साफ़ करना चाहते हैं?",
+  "groupCreateGroupToChat": "चैटिंग शुरू करने के लिए एक समूह बनाएं",
+  "groupEditGroupAnnouncement": "समूह घोषणा संपादित करें",
+  "groupEditGroupDescription": "समूह विवरण संपादित करें",
+  "groupEnterGroupAnnouncement": "समूह घोषणा दर्ज करें",
+  "groupMemberCountClickToCopy": "{count} सदस्य, समूह आईडी कॉपी करने के लिए क्लिक करें",
+  "groupNoPermissionToEditGroupName": "आपके पास समूह का नाम संपादित करने की अनुमति नहीं है",
+  "authEmailAddress": "ईमेल पता",
+  "commonEnterEmailAddress": "ईमेल पता दर्ज करें",
+  "authEmailRecoveryHint": "पासवर्ड पुनर्प्राप्ति के लिए उपयोग किया जाता है",
+  "commonInvalidEmailFormat": "कृपया एक वैध ईमेल पता दर्ज करें",
+  "authOptional": "वैकल्पिक",
+  "authResetPassword": "पासवर्ड रीसेट करें",
+  "authEnterRegisteredEmail": "वह ईमेल पता दर्ज करें जिससे आपने पंजीकरण कराया था",
+  "authSendResetCode": "रीसेट कोड भेजें",
+  "authResetCodeSent": "रीसेट कोड {email} पर भेजा गया",
+  "@authResetCodeSent": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "authEnterResetCode": "रीसेट कोड दर्ज करें",
+  "authSetNewPassword": "नया पासवर्ड सेट करें",
+  "commonConfirmNewPassword": "नये पासवर्ड की पुष्टि करें",
+  "commonNewPassword": "नया पासवर्ड",
+  "authPasswordResetSuccess": "पासवर्ड रीसेट सफल. कृपया अपने नए पासवर्ड से लॉगिन करें.",
+  "authResetPasswordFailed": "पासवर्ड रीसेट विफल रहा",
+  "settingsChangePassword": "पासवर्ड बदलें",
+  "settingsCurrentPassword": "वर्तमान पासवर्ड",
+  "settingsEnterCurrentPassword": "वर्तमान पासवर्ड दर्ज करें",
+  "settingsEnterNewPassword": "नया पासवर्ड दर्ज करें",
+  "settingsPasswordChanged": "पासवर्ड सफलतापूर्वक बदला गया. कृपया अपने नए पासवर्ड से लॉगिन करें.",
+  "settingsChangePasswordFailed": "पासवर्ड बदलना विफल रहा",
+  "settingsNewPasswordMustBeDifferent": "नया पासवर्ड मौजूदा पासवर्ड से अलग होना चाहिए",
+  "settingsChangePasswordInfo": "पासवर्ड बदलने के बाद आप लॉग आउट हो जाएंगे और नए पासवर्ड से लॉग इन करना होगा।",
+  "settingsPasswordRequirements": "पासवर्ड आवश्यकताएँ:",
+  "settingsSecurityNote": "सुरक्षा के लिए आपको पासवर्ड बदलने के बाद सभी डिवाइस पर दोबारा लॉग इन करना होगा।",
+  "settingsSecurity": "सुरक्षा",
+  "settingsCurrentBoundEmail": "वर्तमान बाध्य ईमेल",
+  "settingsNewEmailAddress": "नया ईमेल पता",
+  "settingsEnterNewEmail": "नया ईमेल पता दर्ज करें",
+  "settingsVerificationCode": "सत्यापन कोड",
+  "settingsVerificationCodeSent": "सत्यापन कोड भेजा गया",
+  "settingsCodeSentTo": "सत्यापन कोड भेजा गया",
+  "settingsDidNotReceiveCode": "कोड प्राप्त नहीं हुआ?",
+  "settingsEmailChangedSuccess": "ईमेल सफलतापूर्वक बदला गया",
+  "settingsChangeEmailFailed": "ईमेल परिवर्तन विफल",
+  "settingsEmailSecurityNote": "आपके ईमेल का उपयोग पासवर्ड पुनर्प्राप्ति के लिए किया जाता है. कृपया इसे सुरक्षित रखें.",
+  "commonGoogleLogin": "Google से साइन इन करें",
+  "commonAppleLogin": "Apple के साथ साइन इन करें",
+  "commonWechat": "WeChat",
+  "settingsLanguage": "भाषा",
+  "settingsLanguageChanged": "भाषा बदल गई",
+  "settingsTranslation": "अनुवाद",
+  "settingsTranslateTextTo": "पाठ का अनुवाद करें",
+  "settingsTranslateDescription": "वह भाषा चुनें जिसमें आप संदेशों का अनुवाद कराना चाहते हैं।",
+  "settingsAutoTranslate": "प्राप्त संदेशों का स्वतः अनुवाद करें",
+  "settingsAutoTranslateDescription": "चैट में प्राप्त संदेशों का स्वचालित रूप से आपकी चयनित भाषा में अनुवाद करें।",
+  "settingsBiometricLogin": "बायोमेट्रिक लॉगिन",
+  "authLoginWithBiometric": "{type} से लॉगिन करें",
+  "@authLoginWithBiometric": {
+    "placeholders": {
+      "type": {
+        "type": "Object"
+      }
+    }
+  },
+  "settingsBiometricLoginEnabled": "बायोमेट्रिक लॉगिन सक्षम",
+  "settingsBiometricLoginDisabled": "बायोमेट्रिक लॉगिन अक्षम",
+  "settingsEnableBiometricLogin": "बायोमेट्रिक लॉगिन सक्षम करें",
+  "settingsBiometricEnabled": "सक्षम - लॉगिन करने के लिए बायोमेट्रिक का उपयोग करें",
+  "settingsBiometricDisabled": "अक्षम - सक्षम करने के लिए टैप करें",
+  "settingsBiometricNeedRelogin": "बायोमेट्रिक लॉगिन सक्षम करने के लिए कृपया लॉग आउट करें और दोबारा लॉग इन करें",
+  "authOr": "या",
+  "qrcodeCameraPermissionRestricted": "इस डिवाइस पर कैमरे का उपयोग प्रतिबंधित है",
+  "authPasskeyLabel": "पासकी",
+  "authGoogleLabel": "गूगल",
+  "authAppleLabel": "सेब",
+  "authSsoLabel": "एसएसओ",
+  "transferAmountHintZero": "0.00",
+  "commonMatrixIdHint": "@username:server.com",
+  "authServerAddressHint": "https://m.si46.world",
+  "authEmailExampleHint": "example@email.com",
+  "authVerificationCodePlaceholder": "------",
+  "profileEnterPokeSuffixHint": "पोक प्रत्यय दर्ज करें, जैसे: कंधे पर",
+  "groupAlbum": "समूह एलबम",
+  "groupFiles": "समूह फ़ाइलें",
+  "groupImages": "छवियाँ",
+  "groupVideos": "वीडियो",
+  "groupTotal": "कुल",
+  "groupSize": "आकार",
+  "groupNoMedia": "कोई मीडिया नहीं",
+  "groupNoMediaDescription": "इस समूह में अभी तक कोई फ़ोटो या वीडियो नहीं है",
+  "groupDocuments": "दस्तावेज़",
+  "groupNoFiles": "कोई फ़ाइलें नहीं",
+  "groupNoFilesDescription": "इस समूह में अभी तक कोई फ़ाइल नहीं है",
+  "groupDownloadStarted": "डाउनलोड हो रहा है {filename}...",
+  "@groupDownloadStarted": {
+    "placeholders": {
+      "filename": {
+        "type": "String"
+      }
+    }
+  },
+  "contactNoCommonGroups": "कोई सामान्य समूह नहीं",
+  "contactNoCommonGroupsDescription": "आपके पास कोई समान समूह नहीं है",
+  "chatVoiceMessage": "आवाज",
+  "chatMessage": "संदेश",
+  "conversationHideChat": "छिपाओ",
+  "settingsQuickReply": "त्वरित उत्तर",
+  "commonTranslate": "अनुवाद करें",
+  "contactCreateTag": "टैग बनाएं",
+  "contactEnterTagName": "टैग नाम दर्ज करें",
+  "contactEditTag": "टैग संपादित करें",
+  "contactDeleteTag": "टैग हटाएँ",
+  "contactDeleteTagConfirm": "क्या आप वाकई \"{tagName}\" टैग हटाना चाहते हैं?",
+  "@contactDeleteTagConfirm": {
+    "placeholders": {
+      "tagName": {
+        "type": "String"
+      }
+    }
+  },
+  "contactNoTags": "अभी तक कोई टैग नहीं",
+  "contactFriendPermissions": "मित्र अनुमतियाँ",
+  "contactSetChatOnly": "केवल चैट के रूप में सेट करें",
+  "contactChatOnlyDesc": "केवल आपसे चैट कर सकते हैं, अन्य सामग्री छिपी रहेगी",
+  "contactHideMyMoments": "मेरे क्षण छिपाएँ",
+  "contactHideMyMomentsDesc": "यह मित्र मेरे क्षण नहीं देख सकता",
+  "contactHideTheirMoments": "उनके पल छुपाएं",
+  "contactHideTheirMomentsDesc": "इस मित्र के क्षण न देखें",
+  "contactHideMyStatus": "मेरी स्थिति छिपाएँ",
+  "contactHideMyStatusDesc": "यह मित्र मेरा स्टेटस अपडेट नहीं देख सकता",
+  "contactNoChatOnlyFriends": "केवल चैट करने वाले मित्र नहीं",
+  "contactNoOfficialAccounts": "कोई आधिकारिक खाता नहीं",
+  "contactFollowOfficialAccountsDesc": "नवीनतम अपडेट प्राप्त करने के लिए आधिकारिक खातों का अनुसरण करें",
+  "contactNoServiceAccounts": "कोई सेवा खाता नहीं",
+  "contactSubscribeServiceAccountsDesc": "सुविधाजनक सेवाओं के लिए सेवा खातों की सदस्यता लें",
+  "contactNoEnterpriseContacts": "कोई उद्यम संपर्क नहीं",
+  "contactEnterpriseContactsDesc": "एंटरप्राइज़ संपर्क यहां प्रदर्शित किए जाएंगे",
+  "profileCardPack": "कार्ड पैक",
+  "profileOrders": "आदेश",
+  "profileNoOrders": "कोई आदेश नहीं",
+  "profileOrdersDesc": "आपके ऑर्डर यहां प्रदर्शित किए जाएंगे",
+  "profileNoCards": "कोई कार्ड नहीं",
+  "profileCardsDesc": "आपके कार्ड यहां प्रदर्शित होंगे",
+  "favoriteEnterTagsHint": "अल्पविराम से अलग किए गए टैग दर्ज करें",
+  "favoriteTagsUpdated": "टैग अपडेट किए गए",
+  "favoriteForwardedContent": "सामग्री अग्रेषित की गई",
+  "favoriteEnterNoteContent": "नोट सामग्री दर्ज करें",
+  "favoriteNoteAdded": "नोट जोड़ा गया",
+  "favoriteLinkTitle": "लिंक शीर्षक",
+  "favoriteLinkUrl": "https://",
+  "favoriteLinkAdded": "लिंक जोड़ा गया",
+  "contactPhotoAdded": "फोटो जोड़ा गया",
+  "contactEnterPhone": "फ़ोन नंबर दर्ज करें",
+  "commonConversationWithId": "बातचीत: {roomId}",
+  "commonContactWithId": "संपर्क करें: {userId}",
+  "commonDiscover": "खोजें",
+  "commonDeveloping": "{title}\n(जल्द ही आ रहा है)",
+  "commonPageNotFound": "पेज नहीं मिला",
+  "commonBackToHome": "घर वापस",
+  "settingsMessageNotifications": "संदेश सूचनाएं",
+  "settingsReceiveNewMessageNotifications": "नए संदेश सूचनाएं प्राप्त करें",
+  "settingsShowMessagePreview": "संदेश पूर्वावलोकन दिखाएँ",
+  "settingsShowMessageContentInNotification": "अधिसूचना में संदेश सामग्री दिखाएँ",
+  "settingsNotificationSound": "अधिसूचना ध्वनि",
+  "settingsPlaySoundOnMessage": "संदेश प्राप्त करते समय ध्वनि बजाएं",
+  "commonVibration": "कंपन",
+  "settingsVibrateOnMessage": "संदेश प्राप्त करते समय कंपन करें",
+  "settingsDoNotDisturbMode": "परेशान मत करो",
+  "settingsDoNotDisturbDescription": "निर्दिष्ट समय के दौरान सूचनाएं प्राप्त न करें",
+  "settingsStartTime": "प्रारंभ समय",
+  "settingsEndTime": "समाप्ति समय",
+  "settingsDeleteQuickReply": "त्वरित उत्तर हटाएँ",
+  "settingsEditQuickReply": "त्वरित उत्तर संपादित करें",
+  "settingsAddQuickReply": "त्वरित उत्तर जोड़ें",
+  "settingsManageQuickReplies": "त्वरित उत्तर प्रबंधित करें",
+  "settingsNoQuickReplies": "कोई त्वरित उत्तर नहीं",
+  "settingsDefaultQuickReplies": "डिफ़ॉल्ट त्वरित उत्तर दिखाए जाएंगे",
+  "settingsWhoCanSee": "कौन देख सकता है",
+  "settingsLastSeen": "अंतिम बार देखा गया",
+  "settingsHiddenChats": "छुपी हुई चैट",
+  "settingsMessagesLabel": "संदेश",
+  "settingsAllowStrangerMessages": "अजनबी संदेशों को अनुमति दें",
+  "settingsReceiveMessagesFromNonContacts": "गैर-संपर्कों से संदेश प्राप्त करें",
+  "settingsReadReceipts": "रसीदें पढ़ें",
+  "settingsLetOthersKnowYouRead": "दूसरों को बताएं कि आप पढ़ते हैं",
+  "settingsTypingIndicator": "टाइपिंग सूचक",
+  "settingsLetOthersKnowYouTyping": "दूसरों को बताएं कि आप टाइप कर रहे हैं",
+  "settingsEveryone": "हर कोई",
+  "settingsContactsOnly": "केवल संपर्क",
+  "settingsNobody": "कोई नहीं",
+  "settingsWhoCanSeeTitle": "{title} को कौन देख सकता है",
+  "@settingsWhoCanSeeTitle": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsVersionInfo": "संस्करण {version}",
+  "@settingsVersionInfo": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsCheckForUpdates": "अपडेट के लिए जांचें",
+  "settingsOpenSourceLicenses": "ओपन सोर्स लाइसेंस",
+  "settingsFeedbackAndSuggestions": "प्रतिक्रिया और सुझाव",
+  "settingsBuiltOnMatrix": "मैट्रिक्स प्रोटोकॉल पर निर्मित",
+  "settingsNoHiddenChats": "कोई छिपी हुई चैट नहीं",
+  "settingsNoHiddenChatsDescription": "आपके द्वारा छिपाई गई चैट यहां दिखाई देंगी",
+  "settingsUnhideChat": "उजागर करें",
+  "settingsDarkMode": "डार्क मोड",
+  "settingsFontSize": "फ़ॉन्ट आकार",
+  "settingsBubbleStyle": "बुलबुला शैली",
+  "settingsFollowSystem": "सिस्टम का पालन करें",
+  "settingsAutoSwitchBySystem": "सिस्टम द्वारा ऑटो स्विच",
+  "settingsLightMode": "लाइट मोड",
+  "settingsAlwaysUseLightTheme": "हमेशा लाइट थीम का प्रयोग करें",
+  "settingsDarkModeOption": "डार्क मोड विकल्प",
+  "settingsAlwaysUseDarkTheme": "हमेशा डार्क थीम का इस्तेमाल करें",
+  "settingsFontSizeSmall": "छोटा",
+  "settingsFontSizeStandard": "मानक",
+  "settingsFontSizeLarge": "बड़ा",
+  "settingsFontSizeExtraLarge": "अतिरिक्त बड़ा",
+  "settingsBubbleStyleWechat": "WeChat शैली",
+  "settingsBubbleStyleWechatDesc": "क्लासिक WeChat बुलबुला शैली",
+  "settingsBubbleStyleModern": "आधुनिक शैली",
+  "settingsBubbleStyleModernDesc": "स्वच्छ आधुनिक बुलबुला शैली",
+  "settingsBubbleStyleClassic": "क्लासिक शैली",
+  "settingsBubbleStyleClassicDesc": "पारंपरिक बुलबुला शैली",
+  "discoverVideoChannels": "चैनल",
+  "discoverLive": "जियो",
+  "discoverListen": "सुनो",
+  "discoverWatch": "देखो",
+  "discoverSearchDiscover": "खोजें",
+  "discoverNearbyPeople": "पास में",
+  "discoverGames": "खेल",
+  "discoverMiniPrograms": "लघु कार्यक्रम",
+  "chatAlreadyInCall": "पहले से ही एक कॉल में",
+  "commonConnectionFailed": "कनेक्शन विफल",
+  "chatCallRejected": "कॉल अस्वीकृत",
+  "chatNoAnswer": "कोई जवाब नहीं",
+  "commonClose": "बंद करें",
+  "chatSelectContact": "संपर्क चुनें",
+  "chatVoteRemoved": "वोट हटा दिया गया",
+  "chatVoteChanged": "वोट बदल गया",
+  "chatVoted": "मतदान किया",
+  "chatReplyTo": "{name} का उत्तर दें",
+  "@chatReplyTo": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatCurrentLocation": "वर्तमान स्थान",
+  "chatNearbyPlace": "निकटवर्ती स्थान {index}",
+  "@chatNearbyPlace": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "chatApproximateDistance": "{distance} के बारे में",
+  "@chatApproximateDistance": {
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      }
+    }
+  },
+  "chatAddress": "पता",
+  "chatLatitude": "अक्षांश",
+  "chatLongitude": "देशांतर",
+  "groupDescriptionUpdated": "समूह विवरण अपडेट किया गया",
+  "groupAvatarUpdated": "समूह अवतार अद्यतन किया गया",
+  "groupVisibilityUpdated": "समूह दृश्यता अद्यतन की गई",
+  "groupChannelCreated": "चैनल बनाया गया",
+  "groupChannelUpdated": "चैनल अपडेट किया गया",
+  "groupChannelDeleted": "चैनल हटा दिया गया",
+  "callDecline": "अस्वीकार",
+  "callAnswer": "उत्तर",
+  "callIncomingVideoCall": "इनकमिंग वीडियो कॉल",
+  "callIncomingVoiceCall": "इनकमिंग वॉयस कॉल",
+  "callVideoCallInProgress": "वीडियो कॉल चल रही है",
+  "callVoiceCallInProgress": "वॉइस कॉल प्रगति पर है",
+  "callReconnectingCall": "पुनः कनेक्ट हो रहा है...",
+  "callEnded": "कॉल समाप्त हो गई",
+  "callFailed": "कॉल विफल",
+  "callLivekitNotConfigured": "LiveKit कॉन्फ़िगर नहीं किया गया",
+  "callJoinMeetingFailed": "मीटिंग में शामिल होने में विफल: {error}",
+  "callScreenShareFailed": "स्क्रीन शेयर विफल: {error}",
+  "profileN42BeanTitle": "N42 बीन",
+  "profileNoN42Bean": "कोई N42 बीन नहीं",
+  "profileN42BeanDetails": "N42 बीन विवरण",
+  "profileN42BeanDescription": "N42 बीन एक टोकन है जिसका उपयोग N42 में आभासी वस्तुओं और सेवाओं को भुनाने के लिए किया जाता है। वर्तमान में इसके लिए उपलब्ध है:",
+  "profileN42BeanFeature1": "विशिष्ट सदस्य स्टिकर और थीम",
+  "profileN42BeanFeature2": "चैट बबल अनुकूलन",
+  "profileN42BeanFeature3": "लाल पैकेट कवर अनुकूलन",
+  "profileN42BeanFeature4": "विशिष्ट उपनाम बैज",
+  "profileN42BeanFeature5": "समूह चैट विशेषाधिकार",
+  "profileN42BeanFeature6": "क्लाउड स्टोरेज का विस्तार",
+  "profileN42BeanFeature7": "वीडियो कॉल सौंदर्य फिल्टर",
+  "profileN42BeanFeature8": "क्षण पृष्ठभूमि अनुकूलन",
+  "profileN42BeanFeature9": "वीआईपी ग्राहक सेवा प्राथमिकता",
+  "profileGotIt": "समझ गया",
+  "profileNoN42BeanRecords": "कोई N42 बीन रिकॉर्ड नहीं",
+  "profileMoodAndThoughts": "मनोदशा एवं विचार",
+  "profileStatusHappy": "खुश",
+  "profileStatusCracked": "बिखरा हुआ",
+  "profileStatusLucky": "भाग्यशाली",
+  "profileStatusSunny": "सनी",
+  "profileStatusTired": "थका हुआ",
+  "profileStatusDaydream": "दिवास्वप्न",
+  "profileStatusRushing": "दौड़ना",
+  "profileStatusOverthinking": "ज़्यादा सोचना",
+  "profileStatusEnergized": "ऊर्जावान",
+  "profileWorkAndStudy": "काम और अध्ययन",
+  "profileStatusWorking": "कार्य करना",
+  "profileStatusStudying": "पढ़ाई",
+  "profileStatusBusy": "व्यस्त",
+  "profileStatusSlacking": "ढिलाई करना",
+  "profileStatusTraveling": "यात्रा",
+  "profileStatusGoingHome": "घर जा रहे हैं",
+  "profileStatusDnd": "परेशान मत करो",
+  "profileActivities": "गतिविधियाँ",
+  "profileStatusHanging": "बाहर घूमना",
+  "profileStatusCheckIn": "चेक इन करें",
+  "profileStatusExercising": "व्यायाम करना",
+  "profileStatusCoffee": "कॉफ़ी",
+  "profileStatusBubbleTea": "बुलबुला चाय",
+  "profileStatusEating": "खाना",
+  "profileStatusParenting": "पालन-पोषण",
+  "profileStatusSavingWorld": "विश्व को बचाना",
+  "profileStatusSelfie": "सेल्फी",
+  "profileRest": "आराम करो",
+  "profileStatusRetreat": "पीछे हटना",
+  "profileStatusHome": "घर",
+  "profileStatusSleeping": "सो रहा है",
+  "profileStatusCatLover": "बिल्ली प्रेमी",
+  "profileStatusDogWalking": "चलने वाला कुत्ता",
+  "profileStatusGaming": "गेमिंग",
+  "profileStatusListening": "सुनना",
+  "profileEditAddress": "पता संपादित करें",
+  "profileRecipient": "प्राप्तकर्ता",
+  "profileEnterRecipientName": "प्राप्तकर्ता का नाम दर्ज करें",
+  "profilePhoneNumber": "फ़ोन नंबर",
+  "profileEnterPhoneNumber": "फ़ोन नंबर दर्ज करें",
+  "profileRegionHint": "प्रांत/शहर/जिला",
+  "profileDetailedAddress": "विस्तृत पता",
+  "profileDetailedAddressHint": "सड़क, भवन संख्या, आदि।",
+  "profileSetAsDefaultAddress": "डिफ़ॉल्ट पते के रूप में सेट करें",
+  "profilePleaseCompleteInfo": "कृपया सभी फ़ील्ड पूर्ण करें",
+  "profileEditInvoice": "चालान संपादित करें",
+  "profileInvoiceType": "चालान प्रकार",
+  "profileCompanyName": "कंपनी का नाम",
+  "profilePersonalName": "व्यक्तिगत नाम",
+  "profileEnterCompanyName": "कंपनी का नाम दर्ज करें",
+  "profileEnterName": "नाम दर्ज करें",
+  "profileTaxIdNumber": "टैक्स आईडी नंबर",
+  "profileEnterTaxIdNumber": "टैक्स आईडी नंबर दर्ज करें",
+  "profileBankNameOptional": "बैंक का नाम (वैकल्पिक)",
+  "profileEnterBankName": "बैंक का नाम दर्ज करें",
+  "profileBankAccountOptional": "बैंक खाता (वैकल्पिक)",
+  "profileEnterBankAccount": "बैंक खाता दर्ज करें",
+  "profileCompanyAddressOptional": "कंपनी का पता (वैकल्पिक)",
+  "profileEnterCompanyAddress": "कंपनी का पता दर्ज करें",
+  "profileCompanyPhoneOptional": "कंपनी फ़ोन (वैकल्पिक)",
+  "profileEnterCompanyPhone": "कंपनी का फ़ोन दर्ज करें",
+  "profileSetAsDefaultInvoice": "डिफ़ॉल्ट चालान के रूप में सेट करें",
+  "profileRingtoneVibrate": "कंपन",
+  "profileRingtoneSilent": "चुप",
+  "profileVibrateMode": "कंपन मोड",
+  "profileSilentMode": "मौन मोड",
+  "profilePlayFailed": "चलाने में विफल: {ringtoneName}",
+  "profilePlaying": "बजाना: {ringtoneName}",
+  "profileStop": "रुकें",
+  "profileSelectRingtone": "रिंगटोन चुनें",
+  "profileLoadingRingtones": "रिंगटोन लोड हो रहा है...",
+  "profileNoRingtonesFound": "कोई रिंगटोन नहीं मिला",
+  "mainMessagesWithCount": "संदेश({count})",
+  "@mainMessagesWithCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "storyViewers": "दर्शक",
+  "storyNoViewers": "अभी तक कोई दर्शक नहीं",
+  "storyReplyToStory": "कहानी का उत्तर दें...",
+  "commonCopiedToClipboard": "क्लिपबोर्ड पर कॉपी किया गया",
+  "commonMore": "अधिक",
+  "commonTranslating": "अनुवाद हो रहा है...",
+  "commonTranslatedFrom": "{language} से अनुवादित",
+  "@commonTranslatedFrom": {
+    "placeholders": {
+      "language": {
+        "type": "String"
+      }
+    }
+  },
+  "commonTranslation": "अनुवाद",
+  "commonTranslationFailed": "अनुवाद विफल",
+  "commonAllRead": "सभी पढ़ें",
+  "commonReadCount": "{count} पढ़ें",
+  "commonYouRecalledMessage": "आपको एक संदेश याद आया",
+  "commonMessageRecalled": "संदेश याद किया गया",
+  "commonReEdit": "पुनः संपादित करें",
+  "commonWalletArea": "बटुआ क्षेत्र",
+  "callIncomingCall": "इनकमिंग कॉल",
+  "callMissedCall": "मिस्ड कॉल",
+  "groupRemoveAdmin": "व्यवस्थापक हटाएँ",
+  "chatSelectCurrency": "मुद्रा चुनें",
+  "chatSelectEmoji": "इमोजी चुनें",
+  "chatSelectRedPacketCover": "कवर का चयन करें",
+  "groupSetAsAdmin": "व्यवस्थापक के रूप में सेट करें",
+  "chatVideoPlaybackFailed": "वीडियो प्लेबैक विफल रहा",
+  "@chatVideoPlaybackFailed": {
+    "description": "Used with error message"
+  },
+  "groupViewProfile": "प्रोफ़ाइल देखें",
+  "favoriteAddLinkComingSoon": "लिंक जोड़ें सुविधा जल्द ही आ रही है",
+  "favoriteNewNoteComingSoon": "नया नोट फीचर जल्द ही आ रहा है",
+  "qrcodeSaveFeatureComingSoon": "सेव सुविधा जल्द ही आ रही है",
+  "qrcodeShareFeatureComingSoon": "शेयर सुविधा जल्द ही आ रही है",
+  "qrcodeProcessFailed": "QR कोड संसाधित करने में विफल: {error}",
+  "@qrcodeProcessFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "securityDeviceIdRequired": "डिवाइस आईडी आवश्यक है",
+  "securityVerificationStartFailed": "सत्यापन प्रारंभ करने में विफल: {error}",
+  "@securityVerificationStartFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "securityVerificationFailed": "सत्यापन विफल रहा",
+  "securityVerificationFailedWithReason": "सत्यापन विफल: {reason}",
+  "@securityVerificationFailedWithReason": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "securityEmojiMismatchRejected": "सत्यापन अस्वीकृत - इमोजी मेल नहीं खाता",
+  "securityWaitingForDeviceAccept": "अन्य डिवाइस के स्वीकार करने की प्रतीक्षा की जा रही है...",
+  "securityVerifyDevice": "इस डिवाइस को सत्यापित करें",
+  "securityConfirmEmojiMatch": "पुष्टि करें कि नीचे दिए गए इमोजी दोनों डिवाइसों पर एक ही क्रम में प्रदर्शित होते हैं",
+  "securityEmojiDontMatch": "वे मेल नहीं खाते",
+  "securityEmojiMatch": "वे मेल खाते हैं",
+  "securityWaitingForDeviceConfirm": "अन्य डिवाइस की पुष्टि की प्रतीक्षा की जा रही है...",
+  "securityVerificationSuccess": "सत्यापन सफल!",
+  "securityDeviceVerifiedTrusted": "यह डिवाइस अब सत्यापित और विश्वसनीय है.",
+  "securityCompareEmoji": "दोनों डिवाइस पर इमोजी की तुलना करें",
+  "securityCompareNumbers": "दोनों डिवाइसों पर संख्याओं की तुलना करें",
+  "commonTryAgain": "पुनः प्रयास करें",
+  "commonDone": "हो गया",
+  "chatExportTitle": "चैट निर्यात करें",
+  "chatExportSuccess": "निर्यात सफल",
+  "chatExportFailed": "निर्यात विफल: {error}",
+  "@chatExportFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatExportFormat": "निर्यात प्रारूप",
+  "chatExportHtmlDesc": "स्टाइल लेआउट वाले किसी भी ब्राउज़र में पढ़ने योग्य",
+  "chatExportJsonDesc": "मशीन-पठनीय संरचित डेटा प्रारूप",
+  "chatExportDateRange": "दिनांक सीमा",
+  "chatExportAll": "सभी संदेश",
+  "chatExportLastWeek": "पिछले 7 दिन",
+  "chatExportLastMonth": "पिछले महीने",
+  "chatExportLast3Months": "पिछले 3 महीने",
+  "chatExportMessageCount": "निर्यात करने के लिए संदेश",
+  "chatExportButton": "निर्यात एवं साझा करें",
+  "chatMediaGallery": "मीडिया गैलरी",
+  "chatExportHistory": "चैट इतिहास निर्यात करें",
+  "pdfLoadFailed": "पीडीएफ लोड करने में विफल",
+  "pdfPageIndicator": "{current} / {total}",
+  "@pdfPageIndicator": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "mediaAll": "सब",
+  "mediaImages": "छवियाँ",
+  "mediaVideos": "वीडियो",
+  "mediaFiles": "फ़ाइलें",
+  "mediaAudio": "ऑडियो",
+  "mediaItemsCount": "{count} आइटम",
+  "@mediaItemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mediaNoMediaFound": "कोई मीडिया नहीं मिला",
+  "spacesTitle": "समुदाय",
+  "spacesCreate": "समुदाय बनाएं",
+  "spacesJoined": "सम्मिलित हुए",
+  "spacesDiscover": "खोजें",
+  "spacesNoJoined": "अभी तक कोई समुदाय शामिल नहीं हुआ",
+  "spacesExplore": "समुदायों का अन्वेषण करें",
+  "spacesNoPublic": "कोई सार्वजनिक समुदाय नहीं मिला",
+  "spacesJoin": "सम्मिलित हों",
+  "spacesSubSpaces": "उप-समुदाय",
+  "spacesChannels": "चैनल",
+  "spacesMembersCount": "{count} सदस्य",
+  "@spacesMembersCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "spacesPublic": "सार्वजनिक",
+  "spacesPrivate": "निजी",
+  "spacesSuggested": "सुझाव दिया",
+  "spacesChannelsCount": "{count} चैनल",
+  "@spacesChannelsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "callInCallChat": "इन-कॉल चैट",
+  "callMessagesCount": "{count} संदेश",
+  "@callMessagesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "callNoMessagesYet": "अभी तक कोई संदेश नहीं.\nआरंभ करने के लिए एक संदेश भेजें.",
+  "callTypeMessage": "एक संदेश टाइप करें...",
+  "callYouSender": "आप",
+  "callChatLabel": "बातचीत",
+  "chatEdited": "संपादित",
+  "chatEditHistory": "इतिहास संपादित करें",
+  "chatOriginalMessage": "मौलिक",
+  "chatEditedAt": "{time} पर संपादित",
+  "@chatEditedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "chatViewOnce": "एक बार देखें",
+  "chatViewOncePhoto": "एक बार फोटो देखें",
+  "chatViewOnceVideo": "एक बार वीडियो देखें",
+  "chatViewOnceViewed": "देखा",
+  "chatViewOnceExpired": "समाप्त हो गया",
+  "chatViewOnceTap": "देखने के लिए टैप करें",
+  "chatAutoFaceBlur": "ऑटो फेस ब्लर",
+  "chatAutoFaceBlurDesc": "फ़ोटो भेजते समय चेहरे स्वचालित रूप से धुंधले हो जाते हैं",
+  "threadReplyInThread": "थ्रेड में उत्तर दें",
+  "threadReplies": "{count} उत्तर देता है",
+  "@threadReplies": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "threadReply": "1 उत्तर",
+  "threadLatestReply": "नवीनतम: {preview}",
+  "@threadLatestReply": {
+    "placeholders": {
+      "preview": {
+        "type": "String"
+      }
+    }
+  },
+  "threadTitle": "धागा",
+  "threadReplyPlaceholder": "थ्रेड में उत्तर दें...",
+  "threadParticipants": "{count} प्रतिभागी",
+  "@threadParticipants": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "voiceRoomTitle": "आवाज कक्ष",
+  "voiceRoomCreate": "वॉइस रूम बनाएं",
+  "voiceRoomJoin": "सम्मिलित हों",
+  "voiceRoomLeave": "छोड़ो",
+  "voiceRoomEnd": "अंत कक्ष",
+  "voiceRoomRaiseHand": "हाथ उठाओ",
+  "voiceRoomLowerHand": "निचला हाथ",
+  "voiceRoomMute": "मूक",
+  "voiceRoomUnmute": "अनम्यूट करें",
+  "voiceRoomHost": "मेज़बान",
+  "voiceRoomSpeakers": "वक्ता",
+  "voiceRoomListeners": "श्रोता",
+  "voiceRoomLive": "लाइव",
+  "voiceRoomEnded": "समाप्त",
+  "voiceRoomScheduled": "अनुसूचित",
+  "voiceRoomApprove": "स्वीकृत करें",
+  "voiceRoomDemote": "श्रोता की ओर बढ़ें",
+  "voiceRoomHandRaised": "{name} ने अपना हाथ उठाया",
+  "@voiceRoomHandRaised": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "voiceRoomName": "कमरे का नाम",
+  "voiceRoomTopic": "विषय (वैकल्पिक)",
+  "voiceRoomNoActive": "कोई सक्रिय वॉयस रूम नहीं",
+  "voiceRoomConnecting": "कनेक्ट हो रहा है...",
+  "usernameTitle": "उपयोगकर्ता नाम",
+  "usernameSet": "उपयोगकर्ता नाम सेट करें",
+  "usernameChange": "उपयोगकर्ता नाम बदलें",
+  "usernamePlaceholder": "उपयोक्तानाम दर्ज करें",
+  "usernameAvailable": "उपयोगकर्ता नाम उपलब्ध है",
+  "usernameUnavailable": "उपयोगकर्ता नाम पहले ही लिया जा चुका है",
+  "usernameInvalid": "3-30 अक्षर, छोटे अक्षर, संख्याएँ, अंडरस्कोर। एक अक्षर से शुरू करना चाहिए.",
+  "usernameReserved": "यह उपयोक्तानाम आरक्षित है",
+  "usernameSaved": "उपयोक्तानाम सहेजा गया",
+  "usernameSearchHint": "@उपयोगकर्ता नाम से खोजें",
+  "ensName": "ईएनएस नाम",
+  "ensLinked": "ईएनएस से जुड़ा हुआ",
+  "ensResolving": "ईएनएस का समाधान किया जा रहा है...",
+  "ensNotFound": "ईएनएस नाम नहीं मिला",
+  "tokenGateTitle": "टोकन गेट",
+  "tokenGateEnable": "टोकन गेट सक्षम करें",
+  "tokenGateDisable": "टोकन गेट अक्षम करें",
+  "tokenGateAddRule": "नियम जोड़ें",
+  "tokenGateRemoveRule": "नियम हटाएँ",
+  "tokenGateContractAddress": "अनुबंध का पता",
+  "tokenGateMinBalance": "न्यूनतम शेष",
+  "tokenGateTokenId": "टोकन आईडी (ईआरसी-1155)",
+  "tokenGateChainId": "चेन आईडी",
+  "tokenGateVerifying": "टोकन होल्डिंग्स का सत्यापन किया जा रहा है...",
+  "tokenGateVerified": "सत्यापन पारित हो गया",
+  "tokenGateDenied": "आप टोकन आवश्यकताओं को पूरा नहीं करते हैं",
+  "tokenGateOperatorAnd": "सभी नियमों को पूरा करना होगा",
+  "tokenGateOperatorOr": "किसी भी नियम को पूरा करना होगा",
+  "tokenGateRuleErc20": "ईआरसी-20 टोकन",
+  "tokenGateRuleErc721": "एनएफटी (ईआरसी-721)",
+  "tokenGateRuleErc1155": "मल्टी-टोकन (ईआरसी-1155)",
+  "tokenGateRuleNative": "मूल टोकन",
+  "tokenGateSaved": "टोकन गेट सहेजा गया",
+  "tokenGateEnableDescription": "सदस्यों को शामिल होने के लिए टोकन रखना आवश्यक है",
+  "tokenGateOperator": "नियम तर्क",
+  "tokenGateRules": "नियम",
+  "tokenGateSymbol": "प्रतीक (वैकल्पिक)",
+  "tokenGateChain": "जंजीर",
+  "tokenGateTokenStandard": "टोकन मानक",
+  "tokenGateDenialMessage": "इनकार संदेश",
+  "tokenGateDenialMessageHint": "सत्यापन विफल होने पर संदेश दिखाया जाता है",
+  "tokenGateVerifyTitle": "टोकन सत्यापन",
+  "tokenGateVerifyPassed": "सत्यापन उत्तीर्ण",
+  "tokenGateVerifyFailed": "सत्यापन विफल",
+  "tokenGateRetryVerify": "पुनः प्रयास करें",
+  "tokenGateRequired": "आवश्यक",
+  "tokenGateYourBalance": "आपका संतुलन",
+  "tokenGateRulesActive": "नियम सक्रिय",
+  "tokenGateDisabled": "विकलांग",
+  "ensNotBound": "बाध्य नहीं",
+  "liveLocation": "लाइव लोकेशन",
+  "stopLiveLocation": "साझा करना बंद करें",
+  "startLiveLocation": "साझा करना प्रारंभ करें",
+  "selectDuration": "अवधि चुनें",
+  "groupChatFiles": "चैट फ़ाइलें",
+  "groupLinks": "कड़ियाँ",
+  "groupNoLinks": "अभी तक कोई लिंक नहीं",
+  "chatBackground": "चैट पृष्ठभूमि",
+  "solidColors": "ठोस रंग",
+  "gradients": "स्नातक",
+  "defaultBackground": "डिफ़ॉल्ट",
+  "settingsFontSizeSlider": "फ़ॉन्ट आकार",
+  "autoDownload": "स्वतः डाउनलोड",
+  "images": "छवियाँ",
+  "voice": "आवाज",
+  "video": "वीडियो",
+  "files": "फ़ाइलें",
+  "mobileData": "मोबाइल डेटा",
+  "roaming": "घूमना",
+  "storageManagement": "भंडारण",
+  "totalUsage": "कुल उपयोग",
+  "cache": "कैश",
+  "other": "अन्य",
+  "clearCache": "कैश साफ़ करें",
+  "cacheCleared": "कैश साफ़ किया गया",
+  "clearCacheFailed": "कैश साफ़ करने में विफल",
+  "confirmClearCache": "सभी कैश डेटा साफ़ करें?",
+  "mapView": "मानचित्र दृश्य",
+  "liveLocationSharingCount": "{count} लोग स्थान साझा कर रहे हैं",
+  "@liveLocationSharingCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "minutes15": "15 मिनट",
+  "minutes30": "30 मिनट",
+  "hour1": "1 घंटा",
+  "hours8": "8 घंटे",
+  "personalCard": "व्यक्तिगत कार्ड",
+  "downloadFailed": "डाउनलोड विफल रहा",
+  "locationExpired": "समाप्त हो गया",
+  "secondsRemaining": "{count} सेकंड",
+  "@secondsRemaining": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "minutesRemaining": "{count} मिनट",
+  "@minutesRemaining": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hoursMinutesRemaining": "{hours} घंटे {minutes} मिनट",
+  "@hoursMinutesRemaining": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "favoriteMessages": "पसंदीदा",
+  "linksCopied": "लिंक कॉपी किया गया",
+  "noLinksFound": "कोई लिंक नहीं मिला",
+  "roomStorageRanking": "कक्ष भंडारण रैंकिंग",
+  "downloadComplete": "पूरा डाउनलोड करें",
+  "downloading": "डाउनलोड हो रहा है...",
+  "draftSaved": "ड्राफ्ट सहेजा गया",
+  "voiceRecording": "आवाज रिकार्डिंग",
+  "searchLocation": "स्थान खोजें",
+  "tapToSearch": "खोजने के लिए टैप करें",
+  "settingsThisDevice": "यह उपकरण",
+  "settingsJustNow": "अभी अभी",
+  "settingsDeviceId": "डिवाइस आईडी",
+  "settingsStatus": "स्थिति",
+  "settingsLastActive": "अंतिम सक्रिय",
+  "settingsIpAddress": "आईपी पता",
+  "settingsRenameDevice": "डिवाइस का नाम बदलें",
+  "settingsDeviceNameHint": "डिवाइस का नाम दर्ज करें",
+  "settingsDeviceRenamed": "डिवाइस का नाम बदला गया",
+  "settingsRenameFailed": "नाम बदलें विफल",
+  "settingsRemoteLogout": "रिमोट लॉगआउट",
+  "settingsRemoteLogoutConfirm": "क्या आप वाकई \"{deviceName}\" लॉग आउट करना चाहते हैं? इस एक्शन को वापस नहीं किया जा सकता।",
+  "@settingsRemoteLogoutConfirm": {
+    "placeholders": {
+      "deviceName": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsDeviceLoggedOut": "डिवाइस लॉग आउट हो गया",
+  "settingsLogoutFailed": "लॉगआउट विफल",
+  "settingsLogout": "लॉगआउट करें",
+  "settingsVerifyIdentity": "पहचान सत्यापित करें",
+  "settingsEnterPasswordToConfirm": "इस कार्रवाई की पुष्टि करने के लिए अपना पासवर्ड दर्ज करें।",
+  "scheduledSendTitle": "संदेश शेड्यूल करें",
+  "scheduledSendInOneHour": "1 घंटे में",
+  "scheduledSendTonight": "आज रात (8:00 बजे)",
+  "scheduledSendTomorrowMorning": "कल सुबह (9:00 पूर्वाह्न)",
+  "scheduledSendCustom": "कोई दिनांक और समय चुनें",
+  "scheduledMessageLabel": "अनुसूचित",
+  "scheduledMessageCancel": "निर्धारित संदेश रद्द करें",
+  "chatLockTitle": "चैट लॉक",
+  "chatLockEnable": "इस चैट को लॉक करें",
+  "chatLockDisable": "इस चैट को अनलॉक करें",
+  "chatLockDescription": "लॉक की गई चैट को खोलने के लिए बायोमेट्रिक या पिन सत्यापन की आवश्यकता होती है",
+  "chatLockVerifyTitle": "चैट लॉक हो गई",
+  "chatLockVerifySubtitle": "इस चैट तक पहुंचने के लिए सत्यापित करें",
+  "chatLockVerifyFailed": "सत्यापन विफल रहा",
+  "chatLockEnabled": "चैट लॉक हो गई",
+  "chatLockDisabled": "चैट अनलॉक हो गई",
+  "chatLockPinTitle": "पिन दर्ज करें",
+  "chatLockPinSetTitle": "पिन सेट करें",
+  "chatLockPinConfirmTitle": "पिन की पुष्टि करें",
+  "chatLockPinMismatch": "पिन मेल नहीं खाता",
+  "chatLockUseBiometric": "बायोमेट्रिक का प्रयोग करें",
+  "chatLockUsePin": "पिन का प्रयोग करें",
+  "mediaEditorUndo": "पूर्ववत करें",
+  "mediaEditorRedo": "पुनः करें",
+  "mediaEditorCrop": "फसल",
+  "mediaEditorFilter": "फ़िल्टर करें",
+  "mediaEditorDraw": "ड्रा",
+  "mediaEditorText": "पाठ",
+  "aiAssistant": "एआई सहायक",
+  "aiAssistantWelcome": "नमस्ते! मैं N42 AI असिस्टेंट हूं। मैं आपकी कैसे मदद कर सकता हूँ?",
+  "aiAssistantNotConfigured": "AI सेवा कॉन्फ़िगर नहीं की गई",
+  "aiAssistantSettings": "एआई सेटिंग्स",
+  "aiAssistantClearHistory": "चैट इतिहास साफ़ करें",
+  "aiAssistantClearHistoryConfirm": "क्या आप वाकई सभी AI चैट इतिहास साफ़ करना चाहते हैं?",
+  "aiAssistantStopGenerating": "उत्पादन बंद करो",
+  "aiAssistantModel": "मॉडल",
+  "aiAssistantTemperature": "तापमान",
+  "aiAssistantMaxTokens": "अधिकतम टोकन",
+  "aiAssistantContextWindow": "प्रसंग विंडो",
+  "aiAssistantServiceStatus": "सेवा की स्थिति",
+  "aiAssistantAvailable": "उपलब्ध",
+  "aiAssistantUnavailable": "अनुपलब्ध",
+  "aiSummarize": "एआई सारांश",
+  "aiSummarizeUnread": "{count} अपठित संदेशों को सारांशित करें",
+  "@aiSummarizeUnread": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "aiSummarizeLoading": "संक्षेप में...",
+  "aiSummarizeError": "सारांशित करने में विफल",
+  "aiRewrite": "ऐ पुनर्लेखन",
+  "aiRewriteFormal": "औपचारिक",
+  "aiRewriteCasual": "आकस्मिक",
+  "aiRewritePlayful": "चंचल",
+  "aiRewriteProfessional": "पेशेवर",
+  "aiRewriteAccept": "उपयोग करें",
+  "aiRewriteCancel": "रद्द करें",
+  "aiRewriteLoading": "पुनर्लेखन...",
+  "aiLinkSummary": "एआई सारांश",
+  "aiLinkSummaryAnalyzing": "विश्लेषण कर रहा हूँ...",
+  "chatFolderManagement": "फ़ोल्डर प्रबंधित करें",
+  "chatFolderSystem": "सिस्टम फ़ोल्डर",
+  "chatFolderCustom": "कस्टम फ़ोल्डर",
+  "chatFolderEmpty": "अभी तक कोई कस्टम फ़ोल्डर नहीं",
+  "chatFolderCreate": "फ़ोल्डर बनाएँ",
+  "chatFolderEdit": "फ़ोल्डर संपादित करें",
+  "chatFolderNameHint": "फ़ोल्डर का नाम",
+  "chatFolderAll": "सब",
+  "chatFolderUnread": "अपठित",
+  "chatFolderPersonal": "निजी",
+  "chatFolderGroups": "समूह",
+  "chatFolderChannels": "चैनल",
+  "chatFolderMuted": "मौन",
+  "storyAddMusic": "संगीत जोड़ें",
+  "storyChangeMusic": "संगीत बदलें",
+  "storyBackgroundMusic": "पृष्ठभूमि संगीत",
+  "storyMusicPreview": "पूर्वावलोकन (अधिकतम 15 सेकंड)",
+  "storyChooseFromDevice": "डिवाइस से चुनें",
+  "storyUseThisMusic": "इस संगीत का प्रयोग करें",
+  "authPasskeyNotSupported": "इस डिवाइस पर पासकी समर्थित नहीं है",
+  "authPasskeyRegister": "पासकी पंजीकृत करें",
+  "authPasskeyNoRegistered": "कोई पासकी पंजीकृत नहीं",
+  "authPasskeyRegisterHint": "इस खाते के लिए एक पासकी पंजीकृत करें. स्टैंडअलोन पासकी साइन-इन बाद में सक्षम किया जाएगा।",
+  "authPasskeyNameYours": "अपने पासकी को नाम दें",
+  "authPasskeyRegistered": "पासकी इस खाते में सहेजी गई",
+  "authPasskeyDeleted": "इस खाते से पासकी हटा दी गई",
+  "authPasskeyDeleteConfirm": "पासकी \"{name}\" हटाएं? बाद में पासकी साइन-इन का उपयोग करने से पहले आपको इसे फिर से पंजीकृत करना होगा।",
+  "@authPasskeyDeleteConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "momentVisibilityPublic": "सार्वजनिक",
+  "momentVisibilityPrivate": "निजी",
+  "momentVisibilityPartial": "चयनित मित्र",
+  "momentVisibilityExcluded": "कुछ मित्रों को बाहर करें",
+  "momentUserMoments": "{userName} के क्षण",
+  "@momentUserMoments": {
+    "placeholders": {
+      "userName": {
+        "type": "String"
+      }
+    }
+  },
+  "momentForwardTo": "को अग्रेषित करें",
+  "momentForwardSuccess": "सफलतापूर्वक अग्रेषित किया गया",
+  "momentSelectFriends": "मित्र चुनें",
+  "momentSelectTags": "टैग द्वारा चयन करें",
+  "momentSelectedCount": "चयनित ({count})",
+  "@momentSelectedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "momentNoMomentsYet": "अभी तक कोई क्षण नहीं",
+  "momentForwardMoment": "आगे का क्षण",
+  "momentAddComment": "एक टिप्पणी जोड़ें...",
+  "momentForwardContent": "[क्षण] {content}",
+  "@momentForwardContent": {
+    "placeholders": {
+      "content": {
+        "type": "String"
+      }
+    }
+  },
+  "momentDeleteMoment": "क्षण हटाएँ",
+  "momentDeleteConfirm": "क्या आप वाकई इस क्षण को हटाना चाहते हैं?",
+  "momentComment": "टिप्पणी करें",
+  "momentWriteComment": "एक टिप्पणी लिखें...",
+  "momentLike": "जैसे",
+  "momentUnlike": "भिन्न",
+  "momentForward": "आगे",
+  "momentDelete": "हटाएँ",
+  "momentReply": "उत्तर",
+  "momentMoment": "पल",
+  "momentLikesCount": "{count} को पसंद है",
+  "@momentLikesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "momentCommentsCount": "{count} टिप्पणियाँ",
+  "@momentCommentsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "momentNoComments": "अभी तक कोई टिप्पणी नहीं",
+  "momentFailedToLoad": "छवि लोड करने में विफल",
+  "momentReplyTo": "{userName} का उत्तर दें...",
+  "@momentReplyTo": {
+    "placeholders": {
+      "userName": {
+        "type": "String"
+      }
+    }
+  },
+  "momentNoConversations": "कोई बातचीत नहीं",
+  "momentJustNow": "अभी अभी",
+  "momentMinutesAgo": "{count}m पहले",
+  "@momentMinutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "momentHoursAgo": "{count}h पहले",
+  "@momentHoursAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "momentDaysAgo": "{count}d पहले",
+  "@momentDaysAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatGroupAnnouncementHint": "समूह घोषणा दर्ज करें",
+  "chatGroupAnnouncementEmpty": "कोई घोषणा नहीं",
+  "chatEditNickname": "उपनाम संपादित करें",
+  "chatNicknameHint": "इस समूह में अपना उपनाम दर्ज करें",
+  "contactAddPhoneHint": "फ़ोन नंबर दर्ज करें",
+  "contactNotesHint": "इस संपर्क के बारे में नोट्स जोड़ें",
+  "reportTitle": "रिपोर्ट करें",
+  "reportReasonSpam": "स्पैम",
+  "reportReasonHarassment": "उत्पीड़न",
+  "reportReasonFraud": "धोखाधड़ी",
+  "reportReasonOther": "अन्य",
+  "reportSubmitted": "रिपोर्ट सौंपी गई",
+  "reportDescription": "अतिरिक्त विवरण (वैकल्पिक)",
+  "qrcodeSaved": "क्यूआर कोड एल्बम में सहेजा गया",
+  "chatSendRedPacketInChat": "कृपया चैट में लाल पैकेट भेजें",
+  "commonSaveFailed": "सहेजना विफल",
+  "reportSelectReason": "कृपया कोई कारण चुनें",
+  "gameCenter": "खेल",
+  "gameHighScore": "सर्वोत्तम",
+  "gameScore": "स्कोर",
+  "gameOver": "खेल ख़त्म",
+  "gamePlayAgain": "फिर से खेलें",
+  "gameLeaderboard": "लीडरबोर्ड",
+  "gamePause": "रुका हुआ",
+  "gameResume": "फिर से शुरू करने के लिए टैप करें",
+  "gameConfirmExit": "यह खेल छोड़ें?",
+  "gameNoScores": "अभी तक कोई अंक नहीं",
+  "game2048": "2048",
+  "game2048Desc": "2048 तक पहुंचने के लिए टाइल्स को मर्ज करें",
+  "gameBlockDrop": "ब्लॉक ड्रॉप",
+  "gameBlockDropDesc": "रेखाएं गिराएं और साफ़ करें",
+  "gameMinesweeper": "माइनस्वीपर",
+  "gameMinesweeperDesc": "सभी सुरक्षित सेल ढूंढें",
+  "gameMatch3": "मैच 3",
+  "gameMatch3Desc": "3 या अधिक रत्नों का मिलान करें",
+  "gameMinesweeperEasy": "आसान",
+  "gameMinesweeperMedium": "मध्यम",
+  "gameMinesLeft": "माइन्स लेफ्ट",
+  "gameTimeLeft": "समय",
+  "gameLevel": "स्तर",
+  "gameNext": "अगला",
+  "gameBestTime": "सर्वोत्तम समय",
+  "gameNewRecord": "नया रिकॉर्ड!",
+  "gameLines": "पंक्तियाँ",
+  "storyMyStory": "मेरी कहानी",
+  "storageSmartCleanup": "स्मार्ट सफाई",
+  "storageOldMediaFiles": "पुरानी मीडिया फ़ाइलें",
+  "storageLargeFiles": "बड़ी फ़ाइलें",
+  "storageAppCache": "ऐप कैश",
+  "storageSettings": "भंडारण सेटिंग्स",
+  "storageAutoCleanup": "ऑटो सफाई",
+  "storageAutoCleanupDesc": "{days} दिनों से अधिक पुरानी फ़ाइलों को स्वचालित रूप से साफ़ करें",
+  "@storageAutoCleanupDesc": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "storageCleanupPeriod": "सफ़ाई अवधि",
+  "storagePreserveThumbnails": "थंबनेल सुरक्षित रखें",
+  "storagePreserveThumbnailsDesc": "सफ़ाई के दौरान छवि थंबनेल रखें",
+  "storageWarningHigh": "भंडारण का उपयोग अधिक है. पुरानी फ़ाइलों को साफ़ करने पर विचार करें.",
+  "storageWarningCritical": "भंडारण अत्यंत कम है. कृपया खाली स्थान तक सफाई करें।",
+  "storageFreed": "मुक्त {size} ({count} फ़ाइलें)",
+  "@storageFreed": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "storageDays": "{days} दिन",
+  "@storageDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "storageViewAllRooms": "सभी {count} कमरे देखें",
+  "@storageViewAllRooms": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "storageNoFiles": "कोई फ़ाइल नहीं मिली",
+  "storageFilePinned": "पिन किया गया",
+  "storageDeleteSelected": "{count} चयनित फ़ाइलें हटाएं? इन्हें सर्वर से पुनः डाउनलोड किया जा सकता है।",
+  "@storageDeleteSelected": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "backupRestore": "बैकअप और पुनर्स्थापना",
+  "backupCreate": "बैकअप बनाएं",
+  "backupCreateDesc": "अपनी सेटिंग्स और एन्क्रिप्शन कुंजियों का बैकअप लें। दोबारा लॉगिन करने के बाद सर्वर से संदेश बहाल हो जाएंगे।",
+  "backupIncludeKeys": "एन्क्रिप्शन कुंजी शामिल करें",
+  "backupIncludeKeysDesc": "एन्क्रिप्टेड संदेशों को पढ़ने के लिए आवश्यक",
+  "backupPasswordProtect": "पासवर्ड सुरक्षित रखें",
+  "backupEnterPassword": "बैकअप पासवर्ड दर्ज करें",
+  "backupHistory": "बैकअप इतिहास",
+  "backupNoBackups": "अभी तक कोई बैकअप नहीं है",
+  "backupRestore2": "पुनर्स्थापित करें",
+  "backupDelete": "हटाएँ",
+  "backupDeleteConfirm": "क्या आप वाकई इस बैकअप को हटाना चाहते हैं? इसे असंपादित नहीं किया जा सकता है।",
+  "backupRestoreFromFile": "फ़ाइल से पुनर्स्थापित करें",
+  "backupRestoreFromFileDesc": "किसी अन्य डिवाइस या पिछले बैकअप से .n42backup फ़ाइल आयात करें।",
+  "backupChooseFile": "बैकअप फ़ाइल चुनें",
+  "backupRestoring": "पुनर्स्थापित किया जा रहा है...",
+  "backupCreated": "बैकअप बनाया गया: {rooms} कमरे, {messages} संदेश",
+  "@backupCreated": {
+    "placeholders": {
+      "rooms": {
+        "type": "int"
+      },
+      "messages": {
+        "type": "int"
+      }
+    }
+  },
+  "backupRestored": "{rooms} कमरों से {settings} सेटिंग्स पुनर्स्थापित की गईं",
+  "@backupRestored": {
+    "placeholders": {
+      "settings": {
+        "type": "int"
+      },
+      "rooms": {
+        "type": "int"
+      }
+    }
+  },
+  "backupFailed": "बैकअप विफल: {error}",
+  "@backupFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "backupPasswordRequired": "यह बैकअप पासवर्ड से सुरक्षित है",
+  "blocGroupNotFound": "समूह नहीं मिला",
+  "blocGroupMembersInvited": "आमंत्रित {count} सदस्य",
+  "@blocGroupMembersInvited": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "blocGroupMemberRemoved": "सदस्य हटा दिया गया",
+  "blocGroupAdminRemoved": "व्यवस्थापक हटा दिया गया",
+  "blocGroupLeft": "समूह छोड़ दिया",
+  "blocGroupDisbanded": "समूह भंग",
+  "blocGroupJoined": "समूह में शामिल हो गए",
+  "blocGroupInviteDeclined": "निमंत्रण अस्वीकार कर दिया गया",
+  "blocGroupTokenGateUpdated": "टोकन गेट अपडेट किया गया",
+  "blocTransferProcessing": "स्थानांतरण संसाधित किया जा रहा है...",
+  "blocTransferCancelled": "स्थानांतरण रद्द कर दिया गया",
+  "blocTransferFailed": "स्थानांतरण विफल रहा",
+  "blocPaymentProcessing": "भुगतान संसाधित हो रहा है...",
+  "blocPaymentFailed": "भुगतान विफल",
+  "groupMaxMembers": "सदस्य सीमा",
+  "groupMaxMembersUnlimited": "असीमित",
+  "groupMaxMembersHint": "सीमा दर्ज करें (असीमित के लिए खाली छोड़ें)",
+  "groupMaxMembersUpdated": "सदस्य सीमा अद्यतन की गई",
+  "groupFull": "समूह क्षमता पर है",
+  "groupChannels": "विषय चैनल",
+  "groupChannelsEmpty": "अभी तक कोई चैनल नहीं",
+  "groupChannelsCount": "चैनल",
+  "groupChannelCreate": "नया चैनल",
+  "groupChannelName": "चैनल का नाम",
+  "groupChannelTopic": "चैनल विषय (वैकल्पिक)",
+  "groupChannelDelete": "चैनल हटाएं",
+  "groupChannelDeleteConfirm": "यह चैनल हटाएं? सभी संदेश खो जायेंगे.",
+  "groupBotSettings": "बॉट सेटिंग्स",
+  "groupBotEnabled": "बॉट सक्षम करें",
+  "groupBotWelcomeMessage": "स्वागत संदेश टेम्पलेट",
+  "groupBotWelcomeHint": "नए सदस्य के नाम के लिए प्लेसहोल्डर के रूप में 'नाम' का उपयोग करें",
+  "groupBotConfigUpdated": "बॉट सेटिंग्स अपडेट की गईं",
+  "groupContentFilter": "सामग्री फ़िल्टर",
+  "groupContentFilterEnabled": "कीवर्ड फ़िल्टर सक्षम करें",
+  "groupContentFilterReplace": "*** से बदलें",
+  "groupContentFilterHide": "संदेश छिपाएँ",
+  "groupContentFilterAddWord": "कीवर्ड जोड़ें",
+  "groupContentFilterUpdated": "सामग्री फ़िल्टर अपडेट किया गया",
+  "chatSlashCommands": "आदेश",
+  "chatCommandPoll": "/पोल - एक पोल बनाएं",
+  "chatCommandAnnounce": "/घोषणा - घोषणा भेजें",
+  "chatCommandWelcome": "/स्वागत - स्वागत संदेश सेट करें",
+  "chatReportMessage": "रिपोर्ट करें",
+  "chatReportReason": "कारण रिपोर्ट करें",
+  "chatReportSpam": "स्पैम",
+  "chatReportHarassment": "उत्पीड़न",
+  "chatReportInappropriate": "अनुपयुक्त सामग्री",
+  "chatReportOther": "अन्य",
+  "chatReportSuccess": "रिपोर्ट सौंपी गई",
+  "spacesName": "समुदाय का नाम",
+  "spacesNameHint": "जैसे क्रिप्टो ट्रेडर्स",
+  "spacesNameRequired": "नाम आवश्यक है",
+  "spacesDescription": "विवरण",
+  "spacesDescriptionHint": "यह समुदाय किस बारे में है?",
+  "spacesType": "सामुदायिक प्रकार",
+  "spacesPublicDesc": "कोई भी खोज सकता है और शामिल हो सकता है",
+  "spacesPrivateDesc": "केवल आमंत्रित सदस्य ही शामिल हो सकते हैं",
+  "spacesNotFound": "समुदाय नहीं मिला",
+  "spacesSearch": "समुदाय खोजें...",
+  "spacesMembers": "सदस्य",
+  "spacesNoChannels": "अभी तक कोई चैनल नहीं",
+  "spacesLeave": "समुदाय छोड़ें",
+  "spacesLeaveConfirm": "क्या आप वाकई \"{name}\" छोड़ना चाहते हैं?",
+  "@spacesLeaveConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spacesDelete": "समुदाय हटाएँ",
+  "spacesDeleteConfirm": "यह \"{name}\" और उसके सभी चैनलों को स्थायी रूप से हटा देगा। इस एक्शन को वापस नहीं किया जा सकता।",
+  "@spacesDeleteConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spacesCreateChannel": "चैनल जोड़ें",
+  "spacesChannelName": "चैनल का नाम",
+  "spacesChannelTopic": "विषय (वैकल्पिक)",
+  "spacesDeleteChannel": "चैनल हटाएं",
+  "spacesDeleteChannelConfirm": "क्या आप वाकई \"#{name}\" को हटाना चाहते हैं?",
+  "@spacesDeleteChannelConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spacesEditName": "नाम संपादित करें",
+  "spacesEditDescription": "विवरण संपादित करें",
+  "spacesViewAllMembers": "सभी {count} सदस्यों को देखें",
+  "@spacesViewAllMembers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "spacesKickMemberTitle": "{name} को किक करें",
+  "@spacesKickMemberTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spacesBanMemberTitle": "{name} पर प्रतिबंध लगाएं",
+  "@spacesBanMemberTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spacesPromoteAdmin": "व्यवस्थापक के लिए प्रचार करें",
+  "spacesDemoteAdmin": "व्यवस्थापक हटाएँ",
+  "spacesInviteMember": "सदस्य को आमंत्रित करें",
+  "spacesInviteMemberUserId": "उपयोगकर्ता आईडी (जैसे @user:server.com)",
+  "spacesSave": "सहेजें",
+  "settingsScreenshotProtection": "स्क्रीनशॉट सुरक्षा",
+  "settingsScreenshotProtectionDesc": "स्क्रीनशॉट और स्क्रीन रिकॉर्डिंग रोकें",
+  "chatSelfDestructTimer": "आत्म-विनाश",
+  "chatTimerPickerTitle": "स्व-विनाशकारी टाइमर",
+  "chatTimerOff": "बंद",
+  "onChainNotificationsTitle": "ऑन-चेन इवेंट",
+  "onChainMarkAllRead": "सभी पढ़े गए को चिह्नित करें",
+  "onChainNoNotifications": "अभी तक कोई ऑन-चेन इवेंट नहीं",
+  "onChainNoNotificationsDesc": "सब्स्क्राइब्ड चैनलों के इवेंट यहां दिखाई देंगे",
+  "onChainViewDetails": "विवरण देखें",
+  "chatCommandHelp": "/सहायता - सभी आदेश दिखाएँ",
+  "chatCommandPrice": "/ कीमत - टोकन मूल्य प्राप्त करें",
+  "chatCommandBalance": "/बैलेंस - वॉलेट बैलेंस दिखाएं",
+  "chatCommandChains": "/चेन - 236+ समर्थित श्रृंखलाओं की सूची बनाएं",
+  "chatMiniApps": "ऐप्स",
+  "miniAppMarketTitle": "मिनी ऐप्स",
+  "miniAppCategoryAll": "सब",
+  "miniAppSearch": "ऐप्स खोजें...",
+  "miniAppFeatured": "विशेष रुप से प्रदर्शित",
+  "miniAppAllApps": "सभी ऐप्स",
+  "miniAppNoResults": "कोई ऐप्स नहीं मिला",
+  "slideToPayLabel": "→→→ पुष्टि करने के लिए स्लाइड करें",
+  "slideToPayConfirming": "पुष्टि की जा रही है...",
+  "redPacketBestLuck": "शुभकामनाएँ",
+  "redPacketBestLuckCongrats": "शुभकामनाएँ! आपको सबसे ज्यादा मिला!",
+  "redPacketStats": "{claimed} / {total} दावा किया गया",
+  "@redPacketStats": {
+    "placeholders": {
+      "claimed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "redPacketStatsTotal": "कुल",
+  "redPacketGrabbedViral": "🧧 ने एक लाल पैकेट उठाया • {amount} {token}",
+  "@redPacketGrabbedViral": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "token": {
+        "type": "String"
+      }
+    }
+  },
+  "web3SearchHint": "@मैट्रिक्स:आईडी • 0x वॉलेट पता • name.eth",
+  "web3SearchPlaceholder": "आईडी, वॉलेट या ईएनएस द्वारा खोजें...",
+  "web3WalletAddress": "बटुआ पता",
+  "web3AddressCopied": "पता कॉपी किया गया",
+  "web3Copy": "प्रतिलिपि",
+  "web3SendMessage": "संदेश भेजें",
+  "web3SendToWallet": "संदेश बटुआ",
+  "web3WalletOnlyHint": "इस पते पर अभी तक कोई N42 खाता नहीं है. उनके शामिल होने पर संदेश भेजा जाएगा.",
+  "web3NftAvatar": "एनएफटी अवतार",
+  "web3ResolveFailed": "पहचान का समाधान करने में विफल",
+  "web3EnsNotFound": "ENS नाम \"{name}\" नहीं मिला",
+  "@web3EnsNotFound": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "web3NoN42AccountTitle": "कोई N42 खाता नहीं",
+  "web3NoN42AccountDesc": "इस वॉलेट पते पर अभी तक कोई N42 खाता नहीं है। आरंभ करने के लिए आप अपना N42 आमंत्रण लिंक उनके साथ साझा कर सकते हैं।",
+  "web3ShareInvite": "आमंत्रण साझा करें",
+  "nftPickerTitle": "एनएफटी अवतार चुनें",
+  "nftPickerTabPopular": "लोकप्रिय",
+  "nftPickerTabCustom": "कस्टम",
+  "nftPickerChain": "जंजीर",
+  "nftPickerContract": "अनुबंध का पता",
+  "nftPickerTokenId": "टोकन आईडी",
+  "nftPickerVerifyOwnership": "स्वामित्व सत्यापित करें और पूर्वावलोकन करें",
+  "nftPickerUseAsAvatar": "अवतार के रूप में प्रयोग करें",
+  "nftPickerPreview": "पूर्वावलोकन",
+  "nftPickerNotOwned": "आपके पास यह एनएफटी नहीं है",
+  "nftPickerInvalidTokenId": "अमान्य टोकन आईडी",
+  "nftPickerEnterBoth": "अनुबंध का पता और टोकन आईडी दर्ज करें",
+  "nftPickerInfoTitle": "एनएफटी अवतार - सत्यापित ऑन-चेन",
+  "nftPickerInfoDesc": "अपने पास मौजूद एनएफटी को अपने अवतार के रूप में बांधें। कोई भी ऑन-चेन स्वामित्व सत्यापित कर सकता है। N42 पर एक सोने की अंगूठी के साथ प्रदर्शित।",
+  "nftPickerPopularCollections": "लोकप्रिय संग्रह",
+  "nftPickerWalletHint": "236+ श्रृंखलाओं में अपने एनएफटी को स्वचालित रूप से खोजने के लिए अपने एन42 वॉलेट को कनेक्ट करें।",
+  "profileBindNftAvatar": "बाइंड एनएफटी अवतार",
+  "profileChangeAvatar": "अवतार बदलें",
+  "groupTopics": "विषय",
+  "groupTopicsEmpty": "अभी तक कोई विषय नहीं",
+  "syncInProgress": "संदेश इतिहास समन्वयित किया जा रहा है...",
+  "recoveryKeyReminderTitle": "अपने संदेशों को सुरक्षित रखें",
+  "recoveryKeyReminderDesc": "एन्क्रिप्टेड संदेशों को सभी डिवाइसों में सुरक्षित रूप से सिंक करने के लिए एक पुनर्प्राप्ति कुंजी बनाएं",
+  "recoveryKeySetupNow": "अभी सेट करें",
+  "recoveryKeyRemindLater": "मुझे बाद में याद दिलाना",
+  "channelReadOnly": "इस चैनल में केवल एडमिन ही पोस्ट कर सकते हैं",
+  "channelSubscribers": "ग्राहक",
+  "channelVerified": "सत्यापित चैनल",
+  "redPacketHistory": "लाल पैकेट का इतिहास",
+  "redPacketSent": "भेजा गया",
+  "redPacketReceived": "प्राप्त हुआ",
+  "redPacketExpired": "समाप्त हो गया",
+  "redPacketClaimed": "दावा किया",
+  "redPacketInsufficientBalance": "अपर्याप्त संतुलन",
+  "selfDestructCountdown": "{time} में आत्म-विनाश",
+  "@selfDestructCountdown": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "messageDestroyed": "संदेश नष्ट हो गया",
+  "miniAppPermissionDenied": "अनुमति अस्वीकृत: {permission}",
+  "@miniAppPermissionDenied": {
+    "placeholders": {
+      "permission": {
+        "type": "String"
+      }
+    }
+  },
+  "aiSuggestionGasFee": "गैस शुल्क क्या है?",
+  "aiSuggestionDefi": "डेफी शुरुआती गाइड",
+  "aiSuggestionSecurity": "अनुबंध सुरक्षा की जांच कैसे करें",
+  "aiSuggestionBridge": "क्रॉस-चेन ब्रिजिंग",
+  "channelDiscoverTitle": "चैनल खोजें",
+  "channelDiscoverSearch": "चैनल खोजें...",
+  "channelJoin": "सम्मिलित हों",
+  "channelJoined": "सम्मिलित हुए",
+  "channelCategory": "श्रेणी",
+  "slowModeCooldown": "धीमा मोड: {seconds}s प्रतीक्षा करें",
+  "@slowModeCooldown": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "addressCopyAction": "पता कॉपी करें",
+  "addressSendMessage": "संदेश भेजें",
+  "addressViewProfile": "प्रोफ़ाइल देखें",
+  "sendToAddress": "वॉलेट पते पर भेजें",
+  "blocAuthSendVerificationCodeFailed": "सत्यापन कोड भेजने में विफल",
+  "blocAuthServerNoEmailPasswordReset": "यह सर्वर ईमेल पासवर्ड रीसेट का समर्थन नहीं करता है",
+  "blocAuthResetPasswordFailed": "पासवर्ड रीसेट करने में विफल",
+  "blocAuthChangePasswordFailed": "पासवर्ड बदलने में विफल",
+  "blocAuthOldPasswordWrong": "ग़लत वर्तमान पासवर्ड",
+  "blocAuthLoginCancelled": "लॉगिन रद्द कर दिया गया",
+  "blocAuthGoogleLoginFailed": "Google लॉगिन विफल रहा",
+  "blocAuthAppleLoginFailed": "Apple लॉगिन विफल रहा",
+  "blocAuthSsoLoginFailed": "SSO लॉगिन विफल रहा",
+  "blocAuthFacebookLoginFailed": "फेसबुक लॉगिन विफल रहा",
+  "blocAuthTwitterLoginFailed": "ट्विटर लॉगिन विफल रहा",
+  "blocAuthWeChatLoginFailed": "WeChat लॉगिन विफल रहा",
+  "blocAuthWeChatNotConfigured": "WeChat लॉगिन कॉन्फ़िगर नहीं किया गया",
+  "blocAuthWeChatNotInstalled": "कृपया पहले WeChat इंस्टॉल करें",
+  "blocAuthPasswordWrong": "ग़लत पासवर्ड",
+  "blocAuthEmailAlreadyBound": "यह ईमेल पहले से ही दूसरे खाते से जुड़ा हुआ है",
+  "blocAuthChangeEmailFailed": "ईमेल बदलने में विफल",
+  "blocAuthVerificationCodeInvalid": "सत्यापन कोड ग़लत है या समाप्त हो गया है",
+  "blocAuthSessionExpired": "सत्र समाप्त हो गया, कृपया पुनः लॉगिन करें",
+  "blocAuthSessionIncomplete": "सत्र डेटा अधूरा, कृपया पुनः लॉगिन करें"
+}

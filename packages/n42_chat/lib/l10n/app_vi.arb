@@ -1,0 +1,2757 @@
+{
+  "@@locale": "vi",
+  "commonRetry": "Thu lai",
+  "commonUnknownUser": "Nguoi dung khong xac dinh",
+  "transferWalletNotConnected": "Vi chua ket noi",
+  "chatCallServiceNotInitialized": "Dich vu goi chua khoi tao",
+  "authLoginFailed": "Dang nhap that bai: {error}",
+  "chatCallBack": "Goi lai",
+  "chatMissedVideoCall": "Cuoc goi video nho",
+  "chatMissedVoiceCall": "Cuoc goi thoai nho",
+  "chatCallNotAnswered": "Không trả lời",
+  "chatCallDurationLabel": "Thời lượng cuộc gọi",
+  "chatVoiceCallCancelled": "Cuộc gọi thoại đã bị huỷ",
+  "chatVideoCallCancelled": "Cuộc gọi video đã bị huỷ",
+  "commonImage": "[Hinh anh]",
+  "chatVideo": "[Băng hình]",
+  "chatVoice": "[Tin nhan thoai]",
+  "commonFile": "[Tep]",
+  "chatLocation": "[Vi tri]",
+  "chatUnknownMessage": "[Tin nhan khong xac dinh]",
+  "commonDelete": "Xoa",
+  "chatDeleteThisMessage": "Xóa tin nhắn này?",
+  "chatMessageDeleted": "Tin nhắn đã xóa",
+  "profileNotLoggedIn": "Chua dang nhap",
+  "chatMyLocation": "Vi tri cua toi",
+  "commonGroupChat": "Chat nhom",
+  "commonSearch": "Tim kiem",
+  "commonCancel": "Huy",
+  "commonLoadFailed": "Tai that bai",
+  "commonMessages": "Tin nhan",
+  "commonContacts": "Danh ba",
+  "commonMe": "Toi",
+  "commonVoiceLoading": "Dang tai tin nhan thoai, vui long thu lai sau",
+  "commonVoiceToTextFailed": "Chuyen giong noi thanh van ban that bai",
+  "commonConvertToText": "Chuyen thanh van ban",
+  "chatCopy": "Sao chep",
+  "commonForward": "Chuyen tiep",
+  "commonUnfavorite": "Bo yeu thich",
+  "commonFavorite": "Yeu thich",
+  "settingsResend": "Gui lai",
+  "chatRecall": "Thu hoi",
+  "commonQuote": "Trich dan",
+  "commonRemind": "Nhac nho",
+  "chatCopied": "Da sao chep",
+  "storySendMessageHint": "Gui tin nhan",
+  "commonMicrophonePermissionRequired": "Vui long cap quyen truy cap micro",
+  "chatMicrophonePermissionDeniedPermanent": "Quyền sử dụng micrô đã bị từ chối. Vui lòng kích hoạt nó trong cài đặt hệ thống để sử dụng tin nhắn thoại.",
+  "commonStartRecordingFailed": "Bat dau ghi am that bai: {error}",
+  "commonRecordingTooShort": "Ban ghi qua ngan",
+  "commonStopRecordingFailed": "Dung ghi am that bai: {error}",
+  "chatReleaseToCancel": "Tha de huy",
+  "chatReleaseToSend": "Tha de gui, vuot len de huy",
+  "commonHoldToTalk": "Giu de noi",
+  "commonSend": "Gui",
+  "commonAddFriend": "Them ban",
+  "commonChatServiceNotConnected": "Dich vu chat chua ket noi",
+  "contactUserNotFoundHint": "Khong tim thay nguoi dung \"{query}\"\n\nGoi y:\n• Thu nhap day du ID nguoi dung, vi du @username:server.com\n• Kiem tra chinh ta ten nguoi dung",
+  "@contactUserNotFoundHint": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "contactCreateChatFailed": "Tao cuoc tro chuyen that bai: {error}",
+  "@contactCreateChatFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "contactSearchFailed": "Tim kiem that bai: {error}",
+  "@contactSearchFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "contactEnterUserIdOrUsername": "Nhap ID nguoi dung hoac ten dang nhap de tim kiem",
+  "contactSearching": "Dang tim kiem...",
+  "contactSearchUserToChat": "Tim nguoi dung de bat dau tro chuyen",
+  "contactMatrixIdExample": "Ban co the nhap day du Matrix ID\nvi du @user:matrix.n42.network",
+  "contactUserNotFound": "Khong tim thay nguoi dung \"{username}\"",
+  "@contactUserNotFound": {
+    "placeholders": {
+      "username": {
+        "type": "String"
+      }
+    }
+  },
+  "commonChat": "Tro chuyen",
+  "commonSettings": "Cai dat",
+  "profileEditProfile": "Chinh sua ho so",
+  "authLogin": "Dang nhap",
+  "commonCreateGroup": "Tao nhom",
+  "chatError": "Loi",
+  "commonTransfer": "Chuyen tien",
+  "commonReceived": "Da nhan",
+  "commonRefunded": "Da hoan tien",
+  "commonExpired": "Het han",
+  "chatRedPacketGreeting": "Chuc mung tot lanh",
+  "commonN42RedPacket": "Li xi N42",
+  "commonClaimed": "Da nhan",
+  "commonAllClaimed": "Da nhan het",
+  "chatReadAloud": "Đọc to",
+  "chatReply": "Tra loi",
+  "commonEdit": "Chinh sua",
+  "chatSelectForwardTarget": "Chon nguoi nhan",
+  "commonSendCount": "Gui ({count})",
+  "contactN42Id": "Mã N42: {id}",
+  "profileN42IdTitle": "Mã số N42",
+  "profileN42Bean": "Đậu N42",
+  "contactFriendInfo": "Thong tin ban be",
+  "contactFriendInfoDesc": "Them ghi chu, dien thoai, the, ghi nhan, anh cua ban be va cai dat quyen.",
+  "commonMoments": "Khoang khac",
+  "commonSendMessage": "Tin nhan",
+  "contactAudioVideoCall": "Goi Am thanh/Video",
+  "contactVideoChannel": "Kenh Video",
+  "contactRemark": "Ghi chu",
+  "contactRemarkName": "Ten ghi chu",
+  "contactPhone": "Dien thoai",
+  "contactTags": "The",
+  "contactNotes": "Ghi chu",
+  "contactPhotos": "Anh",
+  "contactPermissions": "Quyen",
+  "contactChatMomentsEtc": "Chat, Khoang khac, The thao, v.v.",
+  "contactMoreInfo": "Thong tin them",
+  "contactCommonGroups": "Nhom chung",
+  "contactSource": "Nguon",
+  "settingsNotificationSettings": "Thong bao",
+  "settingsPrivacy": "Quyen rieng tu",
+  "settingsAppearance": "Giao dien",
+  "settingsAbout": "Gioi thieu",
+  "commonLogout": "Dang xuat",
+  "commonLogoutConfirm": "Ban co chac muon dang xuat?",
+  "commonSave": "Luu",
+  "profileNickname": "Biet danh",
+  "profileEnterNickname": "Nhap biet danh",
+  "profileSignature": "Chu ky",
+  "profileAddSignature": "Them chu ky",
+  "commonTakePhoto": "Chup anh",
+  "profileChooseFromGallery": "Chon tu thu vien",
+  "profileSaveFailed": "Luu that bai: {error}",
+  "authSecureDecentralizedChat": "Nhan tin bao mat, phi tap trung",
+  "commonEndToEndEncryption": "Ma hoa dau cuoi",
+  "authMessagesOnlyYouCanSee": "Chi ban va nguoi nhan moi xem duoc tin nhan",
+  "authDecentralized": "Phi tap trung",
+  "authBasedOnMatrix": "Xay dung tren giao thuc mo Matrix",
+  "authWalletIntegration": "Tich hop Vi",
+  "authEasyCryptoTransfer": "Chuyen tien dien tu de dang",
+  "authRegister": "Dang ky",
+  "authAgreeTerms": "Bang viec dang nhap, ban dong y voi",
+  "authTermsOfService": "Dieu khoan Dich vu",
+  "authAnd": "va",
+  "authPrivacyPolicy": "Chinh sach Bao mat",
+  "authServerAddress": "Dia chi May chu",
+  "authEnterServerAddress": "Nhap dia chi may chu",
+  "authConnectedTo": "Da ket noi toi {serverName}",
+  "authUsername": "Ten dang nhap",
+  "authEnterUsername": "Nhap ten dang nhap",
+  "authUsernameOrEmail": "Ten dang nhap hoac Email",
+  "authEnterUsernameOrEmail": "Nhap ten dang nhap hoac email",
+  "authPassword": "Mat khau",
+  "authEnterPassword": "Nhap mat khau",
+  "authRegisterAccount": "Dang ky",
+  "authForgotPassword": "Quen mat khau",
+  "authOtherLoginMethods": "Phuong thuc dang nhap khac",
+  "authCreateAccount": "Tao tai khoan",
+  "authJoinN42Chat": "Tham gia N42 Chat de bat dau tro chuyen",
+  "authUsernameHint": "3-20 ky tu, chu/so/_",
+  "authUsernameMinLength": "Ten dang nhap phai co it nhat 3 ky tu",
+  "authUsernameMaxLength": "Ten dang nhap toi da 20 ky tu",
+  "authUsernameFormat": "Ten dang nhap chi co the chua chu, so va dau gach duoi",
+  "authPasswordHint": "Toi thieu 8 ky tu",
+  "commonPasswordMinLength": "Mat khau phai co it nhat 8 ky tu",
+  "authConfirmPassword": "Xac nhan mat khau",
+  "authFilled": "Da dien",
+  "authEnterInviteCode": "Nhap ma moi",
+  "authAlreadyHaveAccount": "Da co tai khoan?",
+  "authLoginNow": "Dang nhap ngay",
+  "profileAvatar": "Anh dai dien",
+  "profileStatus": "Trang thai",
+  "commonLoading": "Dang tai...",
+  "conversationNoConversations": "Khong co cuoc tro chuyen",
+  "conversationTapToChat": "Nhan vao goc tren ben phai de bat dau tro chuyen",
+  "conversationStartGroup": "Bat dau Chat nhom",
+  "commonScan": "Quet",
+  "commonPayment": "Thanh toan",
+  "commonFeatureComingSoon": "{feature} sap ra mat",
+  "conversationMarkAsRead": "Danh dau da doc",
+  "commonUnmute": "Bo tat tieng",
+  "commonMute": "Tat tieng",
+  "conversationUnpin": "Bo ghim",
+  "conversationPin": "Ghim",
+  "conversationDeleteConversation": "Xoa cuoc tro chuyen",
+  "conversationDeleteConversationConfirm": "Xoa cuoc tro chuyen voi \"{name}\"?",
+  "commonNoContacts": "Khong co lien he",
+  "contactAddFriendsToChat": "Them ban de bat dau tro chuyen",
+  "contactNotFound": "Khong tim thay lien he",
+  "contactTryOtherKeywords": "Thu tu khoa khac hoac tim kiem toan cau",
+  "contactSearchResults": "Ket qua tim kiem",
+  "contactNewFriends": "Ban moi",
+  "contactChatOnlyFriends": "Bạn bè chỉ trò chuyện",
+  "contactOfficialAccounts": "Tai khoan chinh thuc",
+  "contactServiceAccounts": "Tai khoan dich vu",
+  "contactEnterpriseContacts": "Lien he doanh nghiep",
+  "contactRecommendToFriend": "Chia se lien he",
+  "commonSetRemark": "Dat ghi chu",
+  "contactSendingCard": "Dang gui the lien he...",
+  "commonFileLabel": "Tep",
+  "commonLocationLabel": "Vi tri",
+  "contactRecommendFailed": "Gioi thieu that bai: {error}",
+  "profileEnterRemark": "Nhap ghi chu",
+  "contactOpeningChat": "Dang mo tro chuyen...",
+  "contactOpenChatFailed": "Mo tro chuyen that bai: {error}",
+  "contactAddContact": "Them lien he",
+  "contactEnterUserId": "Nhap ID nguoi dung",
+  "contactNoFriendRequests": "Khong co yeu cau ket ban",
+  "commonAccept": "Chap nhan",
+  "commonReject": "Tu choi",
+  "commonNoGroups": "Khong co nhom",
+  "contactSelectFriendToRecommend": "Chon ban de gioi thieu",
+  "commonSearchContacts": "Tim kiem lien he",
+  "contactNoContactsFound": "Khong tim thay lien he",
+  "favoriteYesterday": "Hom qua",
+  "chatJustNow": "Vua xong",
+  "profileOnline": "Truc tuyen",
+  "profileOffline": "Ngoai tuyen",
+  "searchContactsGroupsMessages": "Tim lien he, nhom, tin nhan",
+  "searchError": "Loi tim kiem",
+  "chatSearchHint": "Tim lien he, nhom va tin nhan",
+  "searchHistory": "Lich su tim kiem",
+  "commonClear": "Xoa",
+  "commonAll": "Tat ca",
+  "searchGroups": "Nhom",
+  "searchNoResults": "Khong co ket qua",
+  "commonGroupMembers": "Thanh vien ({count})",
+  "groupMembersTitle": "Thành viên nhóm",
+  "groupViewAll": "Xem tat ca",
+  "groupOwner": "Chu so huu",
+  "groupAdmin": "Quan tri vien",
+  "groupInvite": "Moi",
+  "commonGroupAnnouncement": "Thong bao nhom",
+  "commonNotSet": "Chua dat",
+  "groupDescription": "Mo ta nhom",
+  "groupPublicGroup": "Nhom cong khai",
+  "commonClearChatHistory": "Xoa lich su tro chuyen",
+  "commonDissolveGroup": "Giai tan nhom",
+  "commonLeaveGroup": "Roi nhom",
+  "groupChangeGroupName": "Doi ten nhom",
+  "commonEnterGroupName": "Nhap ten nhom",
+  "commonConfirm": "Xac nhan",
+  "groupEnterGroupDescription": "Nhap mo ta nhom",
+  "groupPublish": "Dang",
+  "chatClearHistoryConfirm": "Xoa tat ca lich su tro chuyen? Hanh dong nay khong the hoan tac.",
+  "chatClearAction": "Xoa",
+  "commonChatHistoryCleared": "Da xoa lich su tro chuyen",
+  "commonDissolve": "Giai tan",
+  "groupQrCode": "Ma QR nhom",
+  "commonSearchChatHistory": "Tim kich su tro chuyen",
+  "groupIdCopied": "Da sao chep ID nhom",
+  "transferEnterOrPasteAddress": "Nhap hoac dan dia chi vi",
+  "transferSelectToken": "Chon Token",
+  "commonTransferAmount": "So tien chuyen",
+  "transferAvailable": "Kha dung",
+  "transferMemoOptional": "Ghi chu (tuy chon)",
+  "transferConfirmTransfer": "Xac nhan chuyen tien",
+  "transferAddressVerified": "Dia chi da xac minh",
+  "transferAvailableBalance": "Kha dung: {balance} {symbol}",
+  "commonEnterAmount": "Nhap so tien",
+  "commonRedPacketCountMin": "Can it nhat 1 li xi",
+  "commonViewRedPacketDetails": "Xem chi tiet li xi",
+  "commonEnterTransferAmount": "Nhap so tien chuyen",
+  "commonTransferTo": "Chuyen den",
+  "commonFromSender": "Tu {senderName}",
+  "commonConfirmReceive": "Xac nhan nhan",
+  "groupProfile": "Thong tin nhom",
+  "groupRemoveMember": "Xoa khoi nhom",
+  "commonRemove": "Xoa",
+  "profileClearStatus": "Xoa trang thai",
+  "profileClearStatusConfirm": "Xoa trang thai hien tai?",
+  "profileStatusCleared": "Da xoa trang thai",
+  "profileUserNotExist": "Nguoi dung khong ton tai",
+  "profileUserIdCopied": "Da sao chep ID nguoi dung",
+  "commonReport": "Bao cao",
+  "profileQrCode": "Ma QR",
+  "profileAvatarUpdated": "Da cap nhat anh dai dien",
+  "commonSelectImageFailed": "Chon hinh anh that bai: {error}",
+  "profileChangeName": "Doi ten",
+  "profileMale": "Nam",
+  "profileFemale": "Nu",
+  "chatFeatureInDev": "{feature} dang phat trien...",
+  "profileSaveAddressFailed": "Luu dia chi that bai: {error}",
+  "profileAddNew": "Them",
+  "profileAddAddress": "Them dia chi",
+  "profileAddressAdded": "Da them dia chi",
+  "profileAddressUpdated": "Da cap nhat dia chi",
+  "profileDeleteAddress": "Xoa dia chi",
+  "profileAddressDeleted": "Da xoa dia chi",
+  "profileSaveInvoiceFailed": "Luu hoa don that bai: {error}",
+  "profileMyInvoices": "Hoa don cua toi",
+  "profileAddInvoice": "Them hoa don",
+  "profileInvoiceAdded": "Da them hoa don",
+  "profileInvoiceUpdated": "Da cap nhat hoa don",
+  "profileDeleteInvoice": "Xoa hoa don",
+  "profileInvoiceDeleted": "Da xoa hoa don",
+  "profilePersonal": "Ca nhan",
+  "groupSelectAtLeastOne": "Vui long chon it nhat mot thanh vien",
+  "chatFileNotExist": "Tep khong ton tai",
+  "chatSendFailed": "Gui that bai: {error}",
+  "chatCannotOpenBrowser": "Khong the mo trinh duyet",
+  "chatSelectFileFailed": "Chon tep that bai: {error}",
+  "settingsSetupFailed": "Cai dat that bai: {error}",
+  "transferEnterValidAmount": "Vui long nhap so tien hop le",
+  "commonAddressCopied": "Da sao chep dia chi",
+  "favoriteOpenItem": "Mo: {content}",
+  "favoriteDeleted": "Da xoa",
+  "profileWallet": "Vi",
+  "chatRecording": "Dang ghi am",
+  "chatInvalidVideoUrl": "URL video khong hop le",
+  "chatDownloadFile": "Tai tep xuong",
+  "chatClearChatHistoryTitle": "Xoa lich su tro chuyen",
+  "chatVideoCall": "Goi Video",
+  "commonVoiceCall": "Goi Thoai",
+  "callLeaveMeeting": "Roi cuoc hop",
+  "chatDetails": "Chi tiet tro chuyen",
+  "chatViewAllGroupMembers": "Xem tat ca thanh vien",
+  "chatGroupName": "Ten nhom",
+  "chatGroupNameUpdated": "Da cap nhat ten nhom",
+  "chatUpdateFailed": "Cap nhat that bai",
+  "chatNoPermissionToModify": "Ban khong co quyen sua doi",
+  "chatGroupManagement": "Quan ly nhom",
+  "chatMyNicknameInGroup": "Biet danh trong nhom",
+  "chatPinChat": "Ghim tro chuyen",
+  "chatStrongReminder": "Nhac nho manh",
+  "chatSetChatBackground": "Dat hinh nen tro chuyen",
+  "chatUnknownFile": "Tep khong xac dinh",
+  "chatDownload": "Tai xuong",
+  "chatInvalidLocation": "Vi tri khong hop le",
+  "chatTapToCancel": "Nhan de huy",
+  "chatCaptureFailed": "Chup that bai: {error}",
+  "chatProcessingVideo": "Dang xu ly video...",
+  "chatVideoFileNotExist": "Tep video khong ton tai",
+  "chatVideoDataEmpty": "Du lieu video trong",
+  "chatVideoTooLarge": "Kich thuoc video khong the vuot qua 100MB",
+  "chatSendingVideo": "Dang gui video...",
+  "chatSendVideoFailed": "Gui video that bai: {error}",
+  "chatImageFileNotExist": "Tep hinh anh khong ton tai",
+  "commonImageDataEmpty": "Du lieu hinh anh trong",
+  "chatSendingImage": "Dang gui hinh anh...",
+  "chatSendImageFailed": "Gui hinh anh that bai: {error}",
+  "chatSendLocation": "Gui vi tri",
+  "chatSelectLocationAndSend": "Chon vi tri va gui",
+  "chatShareRealTimeLocation": "Chia se vi tri thoi gian thuc",
+  "chatShareLocationForOneHour": "Chia se vi tri thoi gian thuc voi ban trong 1 gio",
+  "chatLocationSent": "Da gui vi tri",
+  "chatSelectMessages": "Chon tin nhan",
+  "chatSelectedCount": "Da chon {count}",
+  "chatSelectAll": "Chon tat ca",
+  "chatGroupChatCount": "Chat nhom ({count})",
+  "chatPrivateChat": "Chat rieng",
+  "chatNoMessages": "Khong co tin nhan",
+  "chatSendFirstMessage": "Gui tin nhan dau tien de bat dau tro chuyen",
+  "chatEncryptionNotice": "Cuoc tro chuyen nay duoc ma hoa dau cuoi. Chi ban va nguoi nhan moi doc duoc tin nhan.",
+  "chatMultiForward": "Chuyen tiep",
+  "chatCollect": "Luu tap",
+  "chatNoMembers": "Khong co thanh vien",
+  "chatMemberNotFound": "Khong tim thay thanh vien",
+  "chatVoiceFileNotExist": "Tep giong noi khong ton tai",
+  "chatVoiceFileEmpty": "Tep giong noi trong",
+  "chatSendingVoice": "Dang gui tin nhan thoai...",
+  "chatSendVoiceFailed": "Gui tin nhan thoai that bai: {error}",
+  "chatMessageForwarded": "Da chuyen tiep tin nhan",
+  "chatForwardFailed": "Chuyen tiep that bai: {error}",
+  "chatUnfavorited": "Da bo yeu thich",
+  "chatFavorited": "Da yeu thich",
+  "chatReactionAdded": "Da them phan ung",
+  "chatReactionRemoved": "Da xoa phan ung",
+  "chatFailedMessageDeleted": "Da xoa tin nhan that bai",
+  "chatDeleteMessages": "Xoa tin nhan",
+  "chatDeleteMessagesConfirm": "Ban co chac muon xoa {count} tin nhan?",
+  "chatNoteOtherMessages": "Luu y: {count} tin nhan tu nguoi khac va chi bi xoa cho ban.",
+  "chatMyMessagesWillBeRecalled": "{count} tin nhan tu ban se bi thu hoi cho tat ca.",
+  "chatRecalledCount": "Da thu hoi {count} tin nhan, {localCount} chi bi xoa cho ban",
+  "chatRecalledMessages": "Da thu hoi {count} tin nhan",
+  "chatDeletedLocally": "{count} tin nhan chi bi xoa cho ban",
+  "chatForwardedCount": "Da chuyen tiep {count} tin nhan",
+  "chatForwardComplete": "Chuyen tiep hoan tat: {success} thanh cong, {failed} that bai",
+  "chatRemindOnlyInGroup": "Tinh nang nhac nho chi kha dung trong chat nhom",
+  "chatOnlyTextSearchable": "Chi co the tim kiem tin nhan van ban",
+  "chatSearchFor": "Tim \"{text}\"",
+  "chatBaiduSearch": "Tim Baidu",
+  "chatGoogleSearch": "Tim Google",
+  "chatBingSearch": "Tim Bing",
+  "chatCalling": "Dang goi...",
+  "chatRinging": "Dang reo...",
+  "chatInCall": "Dang trong cuoc goi",
+  "commonFeatureInDevelopment": "Tinh nang dang phat trien...",
+  "chatCollectMessages": "Da luu {count} tin nhan",
+  "commonMemberCount": "{count} thanh vien",
+  "groupDone": "Xong({count})",
+  "@groupDone": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "profileServices": "Dich vu",
+  "commonFavorites": "Yeu thich",
+  "profileOrdersAndCards": "Don hang & The",
+  "profileStickers": "Nhan dan",
+  "profileStatusSetTo": "Trang thai da dat: {status}",
+  "@profileStatusSetTo": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "profileAvatarUploadFailed": "Tai len anh dai dien that bai",
+  "profilePersonalProfile": "Ho so ca nhan",
+  "profileName": "Ten",
+  "profileGender": "Gioi tinh",
+  "profileRegion": "Khu vuc",
+  "commonMyQrCode": "Ma QR cua toi",
+  "profilePoke": "Vo vai",
+  "profileRingtone": "Nhac chuong",
+  "profileDefaultRingtone": "Nhac chuong mac dinh",
+  "profileMyAddresses": "Dia chi cua toi",
+  "profileGenderSetTo": "Gioi tinh da dat: {gender}",
+  "@profileGenderSetTo": {
+    "placeholders": {
+      "gender": {
+        "type": "String"
+      }
+    }
+  },
+  "profileSelectRegion": "Chon khu vuc",
+  "profileSelectCity": "Chon thanh pho",
+  "profileRegionSetTo": "Khu vuc da dat: {region}",
+  "@profileRegionSetTo": {
+    "placeholders": {
+      "region": {
+        "type": "String"
+      }
+    }
+  },
+  "profileSetPoke": "Dat vo vai",
+  "profileFriendPokedMe": "Ban be vo vai toi",
+  "profileExample": "Vi du",
+  "profileOnTheShoulder": " vao vai",
+  "profilePokeCleared": "Da xoa vo vai",
+  "profilePokeSetTo": "Vo vai da dat: vo vai toi{suffix}",
+  "@profilePokeSetTo": {
+    "placeholders": {
+      "suffix": {
+        "type": "String"
+      }
+    }
+  },
+  "profileEditSignature": "Chinh sua chu ky",
+  "profileIntroduceYourself": "Mot cau gioi thieu ban than",
+  "profileSignatureCleared": "Da xoa chu ky",
+  "profileSignatureUpdated": "Da cap nhat chu ky",
+  "profileScanToAddFriend": "Quet ma QR tren de ket ban voi toi",
+  "profileRingtoneSetTo": "Nhac chuong da dat: {ringtone}",
+  "@profileRingtoneSetTo": {
+    "placeholders": {
+      "ringtone": {
+        "type": "String"
+      }
+    }
+  },
+  "commonConfirmDissolveGroup": "Ban co chac chac muon giai tan \"{name}\" khong? Hanh dong nay khong the hoan tac.",
+  "@commonConfirmDissolveGroup": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "authEnterValidServerAddress": "Vui long nhap dia chi may chu hop le",
+  "authEnterServerAddressFirst": "Vui long nhap dia chi may chu truoc",
+  "authPasskeyRequiresServer": "Dang nhap Passkey can ho tro may chu",
+  "authLoginAgreement": "Bang viec dang nhap, ban dong y voi ",
+  "authPleaseAgreeToTerms": "Vui long doc va dong y voi Dieu khoan Dich vu va Chinh sach Bao mat",
+  "authRegisterFailed": "Dang ky that bai",
+  "commonReenterPassword": "Nhap lai mat khau",
+  "commonPasswordsDoNotMatch": "Mat khau khong khop",
+  "authInviteCodeBuiltIn": "Ma moi (tich hop san)",
+  "authInviteCodeBuiltInNote": "Ma moi da tich hop san, thuong khong can thay doi",
+  "authIHaveReadAndAgree": "Toi da doc va dong y voi ",
+  "mainStartGroupChat": "Bat dau Chat nhom",
+  "mainAddFriends": "Them ban",
+  "mainPaymentAndCollection": "Thanh toan",
+  "contactCount": "{count} lien he",
+  "@contactCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "contactAddToHomeScreen": "Them vao man hinh chinh",
+  "contactRecommendedCardTo": "Da gioi thieu the cua {contact} cho {recipient}",
+  "@contactRecommendedCardTo": {
+    "placeholders": {
+      "contact": {
+        "type": "String"
+      },
+      "recipient": {
+        "type": "String"
+      }
+    }
+  },
+  "contactEnterRemarkName": "Nhap ten ghi chu",
+  "contactRemarkSetTo": "Ghi chu da dat: {remark}",
+  "@contactRemarkSetTo": {
+    "placeholders": {
+      "remark": {
+        "type": "String"
+      }
+    }
+  },
+  "contactAcceptedFriendRequest": "Da chap nhan yeu cau ket ban cua {name}",
+  "@contactAcceptedFriendRequest": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "contactRejectedFriendRequest": "Da tu choi yeu cau ket ban cua {name}",
+  "@contactRejectedFriendRequest": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "commonGroupInvites": "Loi moi nhom",
+  "commonMyGroups": "Nhom cua toi ({count})",
+  "@commonMyGroups": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "commonInvitedToJoinGroup": "Duoc moi tham gia nhom",
+  "commonConfirmLeaveGroup": "Ban co chac chac muon roi khoi \"{name}\" khong?",
+  "@commonConfirmLeaveGroup": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "commonLeave": "Roi",
+  "commonRecallThisMessage": "Thu hoi tin nhan nay?",
+  "commonSavedToGallery": "Da luu vao thu vien",
+  "commonFailedToSave": "Luu that bai",
+  "chatSaving": "Dang luu...",
+  "commonShare": "Chia se",
+  "chatSaveToGallery": "Luu vao Thu vien",
+  "chatFailedToLoadImage": "Tai hinh anh that bai",
+  "chatVideoRecordingFailed": "Quay video that bai. Vui long thu lai.",
+  "profileRedPacket": "Li xi",
+  "commonMusic": "Nhac",
+  "commonCoupon": "Phieu giam gia",
+  "commonGift": "Qua tang",
+  "commonPoll": "Binh chon",
+  "favoriteText": "Van ban",
+  "favoriteLinkLabel": "Lien ket",
+  "favoriteNote": "Ghi chu",
+  "favoriteMyNotes": "Ghi chu cua toi",
+  "favoriteToday": "Hom nay",
+  "favoriteDaysAgoText": "{count} ngay truoc",
+  "@favoriteDaysAgoText": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "favoriteDateFormat": "{day}/{month}",
+  "@favoriteDateFormat": {
+    "placeholders": {
+      "month": {
+        "type": "int"
+      },
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "favoriteNoFavorites": "Chua co yeu thich",
+  "favoriteLongPressToFavorite": "Nhan giu tin nhan de yeu thich",
+  "favoriteNewNote": "Ghi chu moi",
+  "favoriteLink": "Lien ket yeu thich",
+  "favoriteEditTags": "Chinh sua the",
+  "favoriteDeleteFavorite": "Xoa yeu thich",
+  "favoriteDeleteFavoriteConfirm": "Ban co chac muon xoa yeu thich nay?",
+  "favoriteNoSearchResultsFound": "Khong tim thay ket qua",
+  "commonSendRedPacket": "Gui li xi",
+  "transferAmount": "So tien",
+  "commonRedPacketCover": "Bia li xi",
+  "commonRedPacketType": "Loai li xi",
+  "commonNormalRedPacket": "Thuong",
+  "commonLuckyRedPacket": "May man",
+  "commonRedPacketCount": "So li xi",
+  "commonPieces": "cai",
+  "commonPutMoneyInRedPacket": "Bo tien vao li xi",
+  "commonRedPacketRefundNotice": "Li xi chua nhan se duoc hoan sau 24 gio",
+  "commonOpenRedPacket": "Mo",
+  "commonRedPacketAllClaimed": "Li xi da nhan het",
+  "commonRedPacketExpired": "Li xi het han",
+  "commonAddTransferNote": "Them ghi chu chuyen tien",
+  "commonYuan": "VND",
+  "commonReplyWithEmoji": "Tra loi bang bieu tuong nay",
+  "contactEditRemark": "Chinh sua ghi chu",
+  "contactSetPermissions": "Dat quyen",
+  "profileAddToBlacklist": "Them vao danh sach chan",
+  "contactDeleteContact": "Xoa lien he",
+  "contactDeleteContactConfirm": "Ban co chac muon xoa {name}?",
+  "@contactDeleteContactConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "transferTitle": "Chuyen tien",
+  "transferReceiverAddressLabel": "Dia chi nguoi nhan",
+  "transferSelectTokenLabel": "Chon Token",
+  "transferAmountLabel": "So tien chuyen",
+  "transferMemoLabel": "Ghi chu (tuy chon)",
+  "transferAddMemoHint": "Them ghi chu",
+  "transferSendPaymentRequest": "Gui yeu cau thanh toan",
+  "transferQrCodeGenerateFailed": "Tao ma QR that bai",
+  "transferScanQrToPayMe": "Quet ma QR de thanh toan cho toi",
+  "transferMyWalletAddress": "Dia chi vi cua toi",
+  "transferCreatePaymentRequest": "Tao yeu cau thanh toan",
+  "profileN42IdLabel": "Mã N42: {id}",
+  "@profileN42IdLabel": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "commonRedPacketDefaultGreeting": "Chuc mung tot lanh",
+  "commonSenderRedPacket": "Li xi cua {name}",
+  "@commonSenderRedPacket": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "transferEnterValidAddress": "Vui long nhap dia chi hop le",
+  "transferPleaseSelectToken": "Vui long chon token",
+  "commonReceivedTransfer": "Da nhan chuyen tien",
+  "@commonFromSender": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@commonSendCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "commonSenderSentRedPacket": "{name} da gui li xi",
+  "@commonSenderSentRedPacket": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "commonSavedToBalance": "Da luu vao so du, co the chuyen truc tiep",
+  "commonRedPacketExpiredOrEmpty": "Li xi het han/da nhan het",
+  "transferScanFeatureComingSoon": "Tinh nang quet sap ra mat...",
+  "contactSetAsStarred": "Dat lam yeu thich",
+  "contactAddToBlocklist": "Them vao danh sach chan",
+  "commonClaimedYour": " da nhan ",
+  "commonClaimedText": " da nhan ",
+  "commonUserTyping": "{name} dang nhap...",
+  "@commonUserTyping": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "commonTyping": "Dang nhap...",
+  "commonWaitingToReceive": "Cho nhan",
+  "commonTapToClaim": "Nhan de nhan",
+  "commonHasBeenReceived": "Da nhan",
+  "commonGetLucky": "Chuc may man",
+  "qrcodeCameraStartFailed": "Camera khoi dong that bai",
+  "qrcodeUnknownError": "Loi khong xac dinh",
+  "qrcodePlaceQrCodeInFrame": "Dat ma QR trong khung de quet",
+  "qrcodeCloseManualInput": "Dong nhap thu cong",
+  "qrcodeManualInputUserId": "Nhap ID nguoi dung thu cong",
+  "commonAdd": "Them",
+  "profileSetStatus": "Dat trang thai",
+  "profileVisibleToFriends24h": "Hien thi voi ban be trong 24 gio",
+  "profileWriteStatus": "Viet trang thai",
+  "profileEnterYourStatus": "Nhap trang thai...",
+  "profileOk": "được rồi",
+  "qrcodeCameraPermissionRequired": "Can quyen camera de quet ma QR",
+  "qrcodeCameraPermissionDenied": "Quyen camera bi tu choi vinh vien. Vui long bat trong cai dat he thong.",
+  "qrcodePermissionCheckError": "Loi kiem tra quyen: {error}",
+  "@qrcodePermissionCheckError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "qrcodeInvalidQrCode": "Ma QR khong hop le",
+  "qrcodeCannotAddFriend": "Khong the ket ban: {error}",
+  "@qrcodeCannotAddFriend": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "qrcodeScanQrCode": "Quet ma QR",
+  "qrcodeCheckingCameraPermission": "Dang kiem tra quyen camera...",
+  "qrcodeNeedCameraPermission": "Can quyen camera",
+  "qrcodeRetryPermission": "Thu lai",
+  "qrcodeOpenSettings": "Mo cai dat",
+  "groupInviteMembers": "Moi thanh vien",
+  "groupInviteCount": "Moi({count})",
+  "@groupInviteCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "profileNoShippingAddress": "Khong co dia chi giao hang",
+  "profileDefaultLabel": "Mac dinh",
+  "profileNoInvoice": "Khong co hoa don",
+  "profileCompany": "Cong ty",
+  "profileTaxNumber": "Ma so thue",
+  "profileConfirmDeleteAddress": "Ban co chac muon xoa dia chi nay?",
+  "profileConfirmDeleteInvoice": "Ban co chac muon xoa hoa don nay?",
+  "commonGroupOwner": "Chu so huu",
+  "commonGroupAdmin": "Quan tri vien",
+  "groupSearchMembers": "Tim thanh vien",
+  "groupTotalMembers": "{count} thanh vien",
+  "@groupTotalMembers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatRemoveFromGroup": "Xoa khoi nhom",
+  "groupConfirmRemoveMember": "Ban co chac muon xoa \"{name}\" khoi nhom?",
+  "@groupConfirmRemoveMember": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatUnknownSong": "Bai hat khong xac dinh",
+  "chatUnknownArtist": "Nghe si khong xac dinh",
+  "chatUnknownContact": "Lien he khong xac dinh",
+  "chatPersonalCard": "The lien he",
+  "chatSingleChoice": "Chon mot",
+  "chatMultiChoice": "Chon nhieu",
+  "chatEnded": "Ket thuc",
+  "chatEndPollButton": "Ket thuc binh chon",
+  "chatPollHint": "Binh chon se hien trong chat. Thanh vien nhom co the binh chon.",
+  "chatSearchSongOrArtist": "Tim bai hat hoac nghe si",
+  "chatNoSongsFound": "Khong tim thay bai hat",
+  "chatSongNameOptional": "Ten bai hat (Tuy chon)",
+  "chatEnterSongName": "Nhap ten bai hat",
+  "chatArtistNameOptional": "Ten nghe si (Tuy chon)",
+  "chatEnterArtistName": "Nhap ten nghe si",
+  "chatRealTimeLocationSharing": "Chia se vi tri thoi gian thuc dang phat trien...",
+  "profileVoiceCallFeatureInDev": "Tinh nang goi thoai dang phat trien...",
+  "profileReportFeatureInDev": "Tinh nang bao cao dang phat trien...",
+  "profileShareFeatureInDev": "Tinh nang chia se dang phat trien...",
+  "profileQrCodeFeatureInDev": "Tinh nang ma QR dang phat trien...",
+  "qrcodeScanQrToAddMe": "Quet ma QR tren de ket ban voi toi",
+  "qrcodeSaveToAlbum": "Luu vao Album",
+  "qrcodeChangeStyle": "Doi kieu",
+  "qrcodeCopyId": "Sao chep ID",
+  "qrcodeIdCopied": "Da sao chep ID",
+  "qrcodeMoreStylesFeatureComingSoon": "Them kieu sap ra mat",
+  "@chatFeatureInDev": {
+    "placeholders": {
+      "feature": {
+        "type": "String"
+      }
+    }
+  },
+  "profileBio": "Tieu su",
+  "profileHomeServer": "May chu",
+  "profileShareContactCard": "Chia se the lien he",
+  "profileRemoveFromBlacklist": "Xoa khoi danh sach chan",
+  "profileConfirmAddBlacklist": "Ban co chac muon them nguoi nay vao danh sach chan? Ban se khong nhan tin nhan tu ho.",
+  "profileConfirmRemoveBlacklist": "Ban co chac muon xoa nguoi nay khoi danh sach chan?",
+  "profileRemarkSaved": "Da luu ghi chu",
+  "profileRemarkCleared": "Da xoa ghi chu",
+  "transferReceive": "Nhan",
+  "transferPleaseConnectWallet": "Vui long ket noi vi truoc",
+  "transferSendRequest": "Gui yeu cau",
+  "transferPleaseEnterValidAmount": "Vui long nhap so tien hop le",
+  "searchPlaceholder": "Tim lien he, nhom, tin nhan",
+  "searchEnterKeywordToSearch": "Nhap tu khoa de bat dau tim kiem",
+  "searchClearHistory": "Xoa",
+  "searchNoResultsForQuery": "Khong tim thay ket qua cho \"{query}\"",
+  "@searchNoResultsForQuery": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "searchAllResults": "Tat ca",
+  "searchInChat": "Tim trong tro chuyen",
+  "searchContactLabel": "Lien he",
+  "searchGroupLabel": "Nhom",
+  "searchConversationLabel": "Cuộc trò chuyện",
+  "searchMessageLabel": "Tin nhan",
+  "settingsSecurityTitle": "Bao mat",
+  "settingsKeyBackup": "Sao luu khoa",
+  "settingsBackupEncryptionKeys": "Sao luu khoa ma hoa",
+  "settingsKeysBackedUp": "{count} khoa da sao luu",
+  "@settingsKeysBackedUp": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsBackupNotSet": "Chua dat sao luu",
+  "settingsRestoreKeys": "Khoi phuc khoa",
+  "settingsRestoreKeysFromBackup": "Khoi phuc khoa ma hoa tu ban sao luu",
+  "settingsExportKeys": "Xuat khoa",
+  "settingsExportKeysToFile": "Xuat khoa ra tep",
+  "settingsLoggedInDevices": "Thiet bi da dang nhap",
+  "settingsNoOtherDevices": "Khong co thiet bi khac",
+  "settingsVerified": "Da xac minh",
+  "settingsUnverified": "Chua xac minh",
+  "settingsAdvanced": "Nang cao",
+  "settingsCrossSigning": "Ky cheo",
+  "settingsEnabled": "Da bat",
+  "settingsNotEnabled": "Chua bat",
+  "settingsResetEncryption": "Dat lai ma hoa",
+  "settingsDeleteAllEncryptionKeys": "Xoa tat ca khoa ma hoa",
+  "settingsEncryptionNotSupported": "Khong ho tro ma hoa",
+  "settingsNotInitialized": "Chua khoi tao",
+  "settingsBackupKeyTitle": "Sao luu khoa",
+  "settingsBackupKeyMessage": "Tao ban sao luu khoa moi? Dieu nay se giup ban khoi phuc tin nhan ma hoa tren thiet bi moi.",
+  "settingsBackup": "Sao luu",
+  "settingsRestoreKeyTitle": "Khoi phuc khoa",
+  "settingsRestoreKeyMessage": "Nhap mat khau khoi phuc hoac khoa khoi phuc de khoi phuc tin nhan ma hoa.",
+  "settingsRestore": "Khoi phuc",
+  "settingsExportKeyTitle": "Xuat khoa",
+  "settingsExportKeyMessage": "Tep khoa xuat chua tat ca khoa ma hoa cua ban. Vui long giu an toan.",
+  "settingsExport": "Xuat",
+  "settingsDeviceIdLabel": "ID thiet bi: {deviceId}",
+  "@settingsDeviceIdLabel": {
+    "placeholders": {
+      "deviceId": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsDeviceStatusVerified": "Trang thai: Da xac minh",
+  "settingsDeviceStatusUnverified": "Trang thai: Chua xac minh",
+  "settingsLastActiveLabel": "Hoat dong cuoi: {lastSeen}",
+  "@settingsLastActiveLabel": {
+    "placeholders": {
+      "lastSeen": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsVerifyThisDevice": "Xac minh thiet bi nay",
+  "settingsCrossSigningAlreadyEnabled": "Ky cheo da duoc bat",
+  "settingsCrossSigningSetupSuccess": "Cai dat ky cheo thanh cong",
+  "@settingsSetupFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsResetEncryptionTitle": "Dat lai ma hoa",
+  "settingsResetEncryptionWarning": "Canh bao: Hanh dong nay se xoa tat ca khoa ma hoa cua ban. Ban se khong the giai ma tin nhan ma hoa truoc do. Hanh dong nay khong the hoan tac.",
+  "settingsReset": "Dat lai",
+  "settingsBackupSuccess": "Đã sao lưu khóa thành công",
+  "settingsBackupFailed": "Sao lưu không thành công",
+  "settingsRecoveryKey": "Khóa khôi phục",
+  "settingsRecoveryKeySaveWarning": "Vui lòng lưu khóa khôi phục này ở nơi an toàn. Bạn sẽ cần nó để khôi phục tin nhắn được mã hóa của mình trên thiết bị mới.",
+  "settingsRecoveryKeySaved": "Tôi đã lưu nó",
+  "settingsRestoreSuccess": "Đã khôi phục khóa thành công",
+  "settingsRestoreFailed": "Khôi phục không thành công",
+  "settingsPassword": "Mật khẩu",
+  "settingsEnterRecoveryKey": "Nhập khóa khôi phục",
+  "settingsEnterPassword": "Nhập mật khẩu",
+  "settingsExportSuccess": "Đã xuất khóa sang bản sao lưu máy chủ thành công",
+  "settingsExportNeedBackupFirst": "Vui lòng tạo bản sao lưu khóa trước",
+  "settingsExportFailed": "Xuất không thành công",
+  "settingsResetSuccess": "Đặt lại mã hóa thành công",
+  "settingsResetFailed": "Đặt lại không thành công",
+  "callLeaveMeetingConfirm": "Ban co chac muon roi cuoc hop?",
+  "chatPokedSomeone": "da vo vai {name}{suffix}",
+  "@chatPokedSomeone": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "suffix": {
+        "type": "String"
+      }
+    }
+  },
+  "chatNoContactsToAdd": "Khong co lien he de them",
+  "chatAddMembers": "Them thanh vien",
+  "chatInvitedMembers": "Da moi {count} thanh vien",
+  "@chatInvitedMembers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatInviteFailed": "Moi that bai: {error}",
+  "@chatInviteFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatMemberRemoved": "Da xoa thanh vien",
+  "chatRemoveFailed": "Xoa that bai: {error}",
+  "@chatRemoveFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatRealTimeLocationShareMessage": "Sau khi chia se, nguoi kia co the thay vi tri thoi gian thuc cua ban trong 1 gio.",
+  "chatStartSharing": "Bat dau chia se",
+  "chatLocationServiceNotEnabled": "Dich vu vi tri chua duoc bat",
+  "chatEnableLocationService": "Vui long bat dich vu vi tri de su dung tinh nang nay",
+  "chatGoToSettings": "Di den Cai dat",
+  "chatLocationPermissionRequired": "Can quyen vi tri cho tinh nang nay",
+  "chatLocationPermissionDeniedPermanent": "Quyen vi tri bi tu choi vinh vien. Vui long bat trong cai dat.",
+  "chatLocationPermissionDenied": "Quyen vi tri bi tu choi",
+  "chatGettingLocation": "Dang lay vi tri...",
+  "chatGetLocationFailed": "Lay vi tri that bai: {error}",
+  "@chatGetLocationFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatMapPreview": "Xem truoc ban do",
+  "chatSearchLocation": "Tim vi tri",
+  "chatRedPacketSent": "Da gui li xi {amount} {token}",
+  "@chatRedPacketSent": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "token": {
+        "type": "String"
+      }
+    }
+  },
+  "chatTransferDefault": "Chuyen tien",
+  "chatTransferSent": "Da gui chuyen tien {amount} {token}",
+  "@chatTransferSent": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "token": {
+        "type": "String"
+      }
+    }
+  },
+  "chatPickFileFailed": "Chon tep that bai: {error}",
+  "@chatPickFileFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatFileSizeLimit": "Kich thuoc tep khong the vuot qua 50MB",
+  "chatFileSending": "Dang gui tep: {filename}",
+  "@chatFileSending": {
+    "placeholders": {
+      "filename": {
+        "type": "String"
+      }
+    }
+  },
+  "chatSendFileFailed": "Gui tep that bai: {error}",
+  "@chatSendFileFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatContactCardSent": "Da gui the lien he cua {name}",
+  "@chatContactCardSent": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatFavoritesFeature": "Yeu thich",
+  "chatCouponsFeature": "Phieu giam gia",
+  "chatGiftFeature": "Qua tang",
+  "chatSharedMusic": "Da chia se {name}",
+  "@chatSharedMusic": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@chatSendFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatEndPollTitle": "Ket thuc binh chon",
+  "chatEndPollConfirmMessage": "Ban co chac muon ket thuc binh chon nay? Binh chon se dong sau khi ket thuc.",
+  "chatPollEndedMessage": "Binh chon da ket thuc",
+  "chatConnectingCall": "Đang kết nối...",
+  "chatMuteCall": "Tat tieng",
+  "chatSpeakerOff": "Tat loa",
+  "chatSpeakerOn": "Loa",
+  "chatCameraOn": "Bat camera",
+  "chatCameraOff": "Tat camera",
+  "chatHangUp": "Cup may",
+  "chatSelectForwardTargetTitle": "Chon muc tieu chuyen tiep",
+  "chatNoForwardableChat": "Khong co tro chuyen de chuyen tiep",
+  "chatNoMatchingChat": "Khong tim thay tro chuyen phu hop",
+  "chatLocationTitle": "Vi tri",
+  "chatSendButton": "Gui",
+  "chatRetryButton": "Thu lai",
+  "chatSearchContactHint": "Tim lien he",
+  "chatShareMusic": "Chia se nhac",
+  "chatRecentPlayed": "Gan day",
+  "chatMyFavorites": "Yeu thich",
+  "chatNetworkLink": "Lien ket",
+  "chatLocalFile": "Tep",
+  "chatPasteMusicLink": "Dan lien ket nhac",
+  "chatShareMusicButton": "Chia se nhac",
+  "chatSelectLocalAudio": "Chon tep am thanh",
+  "chatSupportedAudioFormats": "Ho tro MP3, M4A, WAV, FLAC, v.v.",
+  "chatSelectFileButton": "Chon tep",
+  "chatPleaseEnterMusicLink": "Vui long nhap lien ket nhac",
+  "chatPleaseEnterValidLink": "Vui long nhap URL hop le",
+  "chatSharedSong": "Bai hat da chia se",
+  "chatSelectMember": "Chon thanh vien",
+  "chatSearchMemberHint": "Tim thanh vien",
+  "chatNoMatchingMembers": "Khong tim thay thanh vien phu hop",
+  "commonUnknownMember": "Khong xac dinh",
+  "chatSelectedMessagesCount": "Da chon {count} tin nhan",
+  "@chatSelectedMessagesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatSearchContactsOrGroups": "Tim lien he hoac nhom",
+  "chatVideoTitle": "Băng hình",
+  "chatLoadingText": "Dang tai...",
+  "chatVideoLoadFailed": "Tai video that bai",
+  "chatPlayerInitFailed": "Khoi tao trinh phat that bai",
+  "chatCreatePollTitle": "Tao binh chon",
+  "chatSubmitPoll": "Gui",
+  "chatPollQuestionLabel": "Cau hoi binh chon",
+  "chatEnterPollQuestionHint": "Vui long nhap cau hoi binh chon",
+  "chatPollOptionsLabel": "Cac lua chon",
+  "chatOptionHintWithIndex": "Lua chon {index}",
+  "@chatOptionHintWithIndex": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "chatAddOptionButton": "Them lua chon",
+  "chatPollSettingsLabel": "Cai dat binh chon",
+  "chatSelectionType": "Loai chon",
+  "chatSingleChoiceLabel": "Chon mot",
+  "chatMultiChoiceLabel": "Chon nhieu",
+  "chatAnonymousPollSwitch": "Binh chon an danh",
+  "chatPleaseEnterQuestion": "Vui long nhap cau hoi binh chon",
+  "chatAtLeastTwoOptions": "Can it nhat 2 lua chon",
+  "chatConfirmWithCount": "Xac nhan ({count})",
+  "@chatConfirmWithCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@chatSelectedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@commonMemberCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@chatGroupChatCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "authEmailVerificationTitle": "Xac minh Email",
+  "authEnterValidEmailAddress": "Vui long nhap dia chi email hop le",
+  "authVerificationCodeSentTo": "Ma xac minh da gui den {email}",
+  "@authVerificationCodeSentTo": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "authSendCodeFailed": "Gui ma that bai: {error}",
+  "@authSendCodeFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "authVerificationSuccess": "Xac minh thanh cong",
+  "authVerificationFailed": "Xac minh that bai",
+  "authVerificationCodeError": "Loi ma xac minh: {error}",
+  "@authVerificationCodeError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "commonEnterVerificationCode": "Nhap ma xac minh",
+  "authEnterYourEmail": "Nhap email",
+  "authWeSentCodeTo": "Chung toi da gui ma 6 so den\n{email}",
+  "@authWeSentCodeTo": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "authEnterEmailForCode": "Nhap dia chi email, chung toi se gui ma xac minh",
+  "commonSendVerificationCode": "Gui ma xac minh",
+  "authResendVerificationCode": "Gui lai ma xac minh",
+  "authCanResendAfter": "Co the gui lai sau {seconds} giay",
+  "@authCanResendAfter": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "commonChangeEmail": "Doi email",
+  "contactAddToContacts": "Them vao danh ba",
+  "contactAddingToContacts": "Dang them...",
+  "contactAddedToContacts": "Da them vao danh ba",
+  "contactAddFailedWithError": "Them that bai: {error}",
+  "@contactAddFailedWithError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "contactAddPhone": "Them dien thoai",
+  "contactAddTag": "Them the",
+  "contactAddText": "Them van ban",
+  "contactAddPhoto": "Them anh",
+  "contactGroupCountLabel": "{count} nhom",
+  "@contactGroupCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "contactAddedViaSearch": "Da them qua tim kiem",
+  "contactAddTime": "Thoi gian them",
+  "contactDoneButton": "Xong",
+  "callWaitingForParticipants": "Dang cho nguoi tham gia...",
+  "callParticipantMe": "{name} (Toi)",
+  "@callParticipantMe": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "callSharingLabel": "Dang chia se",
+  "callScreenSharingBy": "{name} dang chia se man hinh",
+  "@callScreenSharingBy": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "callParticipantCount": "{count} nguoi tham gia",
+  "@callParticipantCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "callMuteLabel": "Tat tieng",
+  "callUnmuteLabel": "Bat tieng",
+  "callTurnOffVideo": "Tat video",
+  "callTurnOnVideo": "Bat video",
+  "callShareScreen": "Chia se man hinh",
+  "callStopSharing": "Dung chia se",
+  "callSwitchCameraLabel": "Chuyen",
+  "callLeaveLabel": "Roi",
+  "callParticipantsLabel": "Nguoi tham gia",
+  "callJoiningMeeting": "Dang tham gia cuoc hop...",
+  "chatPollVotesFormat": "{count} phiếu ({percentage}%)",
+  "@chatPollVotesFormat": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "percentage": {
+        "type": "String"
+      }
+    }
+  },
+  "chatPollParticipantsFormat": "{count} người tham gia",
+  "@chatPollParticipantsFormat": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@chatSelectFileFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatNoMediaUrlAvailable": "URL phương tiện không khả dụng",
+  "chatDownloadFailed": "Tai xuong that bai: {code}",
+  "@chatDownloadFailed": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "chatErrorWithMessage": "Lỗi: {message}",
+  "@chatErrorWithMessage": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "chatMusicLinkLabel": "Liên kết nhạc",
+  "chatRedPacketTransferCannotForward": "Lì xì và chuyển khoản không thể chuyển tiếp",
+  "commonShareFailed": "Chia se that bai: {error}",
+  "@commonShareFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "commonTapToRetry": "Nhấn để thử lại",
+  "chatDefaultRedPacketGreeting": "Chúc phát tài phát lộc",
+  "groupAllowOthersToSearchAndJoin": "Cho phép những người khác tìm kiếm và tham gia",
+  "groupConfirmClearChatHistory": "Bạn có chắc chắn muốn xóa lịch sử trò chuyện không?",
+  "groupCreateGroupToChat": "Tạo một nhóm để bắt đầu trò chuyện",
+  "groupEditGroupAnnouncement": "Chỉnh sửa thông báo nhóm",
+  "groupEditGroupDescription": "Chỉnh sửa mô tả nhóm",
+  "groupEnterGroupAnnouncement": "Nhập thông báo nhóm",
+  "groupMemberCountClickToCopy": "{count} thành viên, nhấp để sao chép ID nhóm",
+  "groupNoPermissionToEditGroupName": "Bạn không có quyền chỉnh sửa tên nhóm",
+  "authEmailAddress": "Địa chỉ email",
+  "commonEnterEmailAddress": "Nhập địa chỉ email",
+  "authEmailRecoveryHint": "Dùng để khôi phục mật khẩu",
+  "commonInvalidEmailFormat": "Vui lòng nhập địa chỉ email hợp lệ",
+  "authOptional": "Tùy chọn",
+  "authResetPassword": "Đặt lại mật khẩu",
+  "authEnterRegisteredEmail": "Nhập địa chỉ email bạn đã đăng ký",
+  "authSendResetCode": "Gửi mã đặt lại",
+  "authResetCodeSent": "Mã đặt lại đã gửi đến {email}",
+  "@authResetCodeSent": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "authEnterResetCode": "Nhập mã đặt lại",
+  "authSetNewPassword": "Đặt mật khẩu mới",
+  "commonConfirmNewPassword": "Xác nhận mật khẩu mới",
+  "commonNewPassword": "Mật khẩu mới",
+  "authPasswordResetSuccess": "Mật khẩu đã được đặt lại thành công. Vui lòng đăng nhập bằng mật khẩu mới.",
+  "authResetPasswordFailed": "Đặt lại mật khẩu thất bại",
+  "settingsChangePassword": "Đổi mật khẩu",
+  "settingsCurrentPassword": "Mật khẩu hiện tại",
+  "settingsEnterCurrentPassword": "Nhập mật khẩu hiện tại",
+  "settingsEnterNewPassword": "Nhập mật khẩu mới",
+  "settingsPasswordChanged": "Mật khẩu đã được thay đổi thành công. Vui lòng đăng nhập bằng mật khẩu mới.",
+  "settingsChangePasswordFailed": "Đổi mật khẩu thất bại",
+  "settingsNewPasswordMustBeDifferent": "Mật khẩu mới phải khác mật khẩu hiện tại",
+  "settingsChangePasswordInfo": "Sau khi đổi mật khẩu, bạn sẽ bị đăng xuất và cần đăng nhập lại bằng mật khẩu mới.",
+  "settingsPasswordRequirements": "Yêu cầu mật khẩu:",
+  "settingsSecurityNote": "Vì lý do bảo mật, bạn sẽ cần đăng nhập lại trên tất cả thiết bị sau khi đổi mật khẩu.",
+  "settingsSecurity": "Bảo mật",
+  "settingsCurrentBoundEmail": "Email hiện đang liên kết",
+  "settingsNewEmailAddress": "Địa chỉ email mới",
+  "settingsEnterNewEmail": "Nhập địa chỉ email mới",
+  "settingsVerificationCode": "Mã xác nhận",
+  "settingsVerificationCodeSent": "Mã xác nhận đã được gửi",
+  "settingsCodeSentTo": "Mã xác nhận đã gửi đến",
+  "settingsDidNotReceiveCode": "Không nhận được mã?",
+  "settingsEmailChangedSuccess": "Email đã được thay đổi thành công",
+  "settingsChangeEmailFailed": "Thay đổi email thất bại",
+  "settingsEmailSecurityNote": "Email của bạn được dùng để khôi phục mật khẩu. Hãy giữ an toàn.",
+  "commonGoogleLogin": "Đăng nhập bằng Google",
+  "commonAppleLogin": "Đăng nhập bằng Apple",
+  "commonWechat": "WeChat",
+  "settingsLanguage": "Ngôn ngữ",
+  "settingsLanguageChanged": "Ngôn ngữ đã thay đổi",
+  "settingsTranslation": "Dịch thuật",
+  "settingsTranslateTextTo": "Dịch văn bản sang",
+  "settingsTranslateDescription": "Chọn ngôn ngữ bạn muốn dịch tin nhắn sang.",
+  "settingsAutoTranslate": "Tự động dịch tin nhắn đã nhận",
+  "settingsAutoTranslateDescription": "Tự động dịch tin nhắn nhận được trong cuộc trò chuyện sang ngôn ngữ bạn đã chọn.",
+  "settingsBiometricLogin": "Đăng nhập sinh trắc học",
+  "authLoginWithBiometric": "Đăng nhập bằng {type}",
+  "@authLoginWithBiometric": {
+    "placeholders": {
+      "type": {
+        "type": "Object"
+      }
+    }
+  },
+  "settingsBiometricLoginEnabled": "Đăng nhập sinh trắc học đã bật",
+  "settingsBiometricLoginDisabled": "Đăng nhập sinh trắc học đã tắt",
+  "settingsEnableBiometricLogin": "Bật đăng nhập sinh trắc học",
+  "settingsBiometricEnabled": "Đã bật - Dùng sinh trắc học để đăng nhập",
+  "settingsBiometricDisabled": "Đã tắt - Nhấn để bật",
+  "settingsBiometricNeedRelogin": "Vui lòng đăng xuất và đăng nhập lại để bật đăng nhập sinh trắc học",
+  "authOr": "HOẶC",
+  "qrcodeCameraPermissionRestricted": "Quyền truy cập camera bị hạn chế trên thiết bị này",
+  "authPasskeyLabel": "Mật khẩu",
+  "authGoogleLabel": "Google",
+  "authAppleLabel": "táo",
+  "authSsoLabel": "SSO",
+  "transferAmountHintZero": "0,00",
+  "commonMatrixIdHint": "@username:server.com",
+  "authServerAddressHint": "https://m.si46.world",
+  "authEmailExampleHint": "example@email.com",
+  "authVerificationCodePlaceholder": "------",
+  "profileEnterPokeSuffixHint": "Nhập hậu tố chọc, ví dụ: vào vai",
+  "groupAlbum": "Album nhóm",
+  "groupFiles": "Tệp nhóm",
+  "groupImages": "Hình ảnh",
+  "groupVideos": "Video",
+  "groupTotal": "Tổng cộng",
+  "groupSize": "Kích thước",
+  "groupNoMedia": "Không có phương tiện",
+  "groupNoMediaDescription": "Chưa có ảnh hoặc video nào trong nhóm này",
+  "groupDocuments": "Tài liệu",
+  "groupNoFiles": "Không có tệp",
+  "groupNoFilesDescription": "Chưa có tệp nào trong nhóm này",
+  "groupDownloadStarted": "Đang tải {filename}...",
+  "@groupDownloadStarted": {
+    "placeholders": {
+      "filename": {
+        "type": "String"
+      }
+    }
+  },
+  "contactNoCommonGroups": "Không có nhóm chung",
+  "contactNoCommonGroupsDescription": "Các bạn không có nhóm chung nào",
+  "chatVoiceMessage": "Giọng nói",
+  "chatMessage": "Tin nhắn",
+  "conversationHideChat": "Ẩn",
+  "settingsQuickReply": "Trả lời nhanh",
+  "commonTranslate": "Dịch",
+  "contactCreateTag": "Tạo thẻ",
+  "contactEnterTagName": "Nhập tên thẻ",
+  "contactEditTag": "Chỉnh sửa thẻ",
+  "contactDeleteTag": "Xóa thẻ",
+  "contactDeleteTagConfirm": "Bạn có chắc chắn muốn xóa thẻ \"{tagName}\" không?",
+  "@contactDeleteTagConfirm": {
+    "placeholders": {
+      "tagName": {
+        "type": "String"
+      }
+    }
+  },
+  "contactNoTags": "Chưa có thẻ nào",
+  "contactFriendPermissions": "Quyền của bạn bè",
+  "contactSetChatOnly": "Đặt ở chế độ chỉ trò chuyện",
+  "contactChatOnlyDesc": "Chỉ có thể trò chuyện với bạn, nội dung khác sẽ bị ẩn",
+  "contactHideMyMoments": "Ẩn khoảnh khắc của tôi",
+  "contactHideMyMomentsDesc": "Người bạn này không thể nhìn thấy Khoảnh khắc của tôi",
+  "contactHideTheirMoments": "Giấu khoảnh khắc của họ",
+  "contactHideTheirMomentsDesc": "Không xem được Khoảnh khắc của người bạn này",
+  "contactHideMyStatus": "Ẩn trạng thái của tôi",
+  "contactHideMyStatusDesc": "Người bạn này không thể xem cập nhật trạng thái của tôi",
+  "contactNoChatOnlyFriends": "Không có bạn bè chỉ trò chuyện",
+  "contactNoOfficialAccounts": "Không có tài khoản chính thức",
+  "contactFollowOfficialAccountsDesc": "Theo dõi các tài khoản chính thức để nhận được thông tin cập nhật mới nhất",
+  "contactNoServiceAccounts": "Không có tài khoản dịch vụ",
+  "contactSubscribeServiceAccountsDesc": "Đăng ký tài khoản dịch vụ để được sử dụng các dịch vụ tiện lợi",
+  "contactNoEnterpriseContacts": "Không có liên hệ doanh nghiệp",
+  "contactEnterpriseContactsDesc": "Địa chỉ liên hệ doanh nghiệp sẽ được hiển thị ở đây",
+  "profileCardPack": "Gói thẻ",
+  "profileOrders": "Đơn đặt hàng",
+  "profileNoOrders": "Không có đơn đặt hàng",
+  "profileOrdersDesc": "Đơn đặt hàng của bạn sẽ được hiển thị ở đây",
+  "profileNoCards": "Không có thẻ",
+  "profileCardsDesc": "Thẻ của bạn sẽ được hiển thị ở đây",
+  "favoriteEnterTagsHint": "Nhập các thẻ được phân tách bằng dấu phẩy",
+  "favoriteTagsUpdated": "Đã cập nhật thẻ",
+  "favoriteForwardedContent": "Nội dung được chuyển tiếp",
+  "favoriteEnterNoteContent": "Nhập nội dung ghi chú",
+  "favoriteNoteAdded": "Đã thêm ghi chú",
+  "favoriteLinkTitle": "Tiêu đề liên kết",
+  "favoriteLinkUrl": "https://",
+  "favoriteLinkAdded": "Đã thêm liên kết",
+  "contactPhotoAdded": "Đã thêm ảnh",
+  "contactEnterPhone": "Nhập số điện thoại",
+  "commonConversationWithId": "Cuoc tro chuyen: {roomId}",
+  "commonContactWithId": "Lien he: {userId}",
+  "commonDiscover": "Kham pha",
+  "commonDeveloping": "{title}\n(Sap ra mat)",
+  "commonPageNotFound": "Khong tim thay trang",
+  "commonBackToHome": "Quay lai trang chu",
+  "settingsMessageNotifications": "Thông báo tin nhắn",
+  "settingsReceiveNewMessageNotifications": "Nhận thông báo tin nhắn mới",
+  "settingsShowMessagePreview": "Hiển thị xem trước tin nhắn",
+  "settingsShowMessageContentInNotification": "Hiển thị nội dung tin nhắn trong thông báo",
+  "settingsNotificationSound": "Am thanh thong bao",
+  "settingsPlaySoundOnMessage": "Phat am thanh khi nhan tin nhan",
+  "commonVibration": "Rung",
+  "settingsVibrateOnMessage": "Rung khi nhan tin nhan",
+  "settingsDoNotDisturbMode": "Không làm phiền",
+  "settingsDoNotDisturbDescription": "Không nhận thông báo trong khoảng thời gian chỉ định",
+  "settingsStartTime": "Thoi gian bat dau",
+  "settingsEndTime": "Thoi gian ket thuc",
+  "settingsDeleteQuickReply": "Xóa trả lời nhanh",
+  "settingsEditQuickReply": "Sửa trả lời nhanh",
+  "settingsAddQuickReply": "Thêm trả lời nhanh",
+  "settingsManageQuickReplies": "Quản lý trả lời nhanh",
+  "settingsNoQuickReplies": "Không có trả lời nhanh",
+  "settingsDefaultQuickReplies": "Trả lời nhanh mặc định sẽ được hiển thị",
+  "settingsWhoCanSee": "Ai co the xem",
+  "settingsLastSeen": "Lan cuoi truc tuyen",
+  "settingsHiddenChats": "Cuộc trò chuyện ẩn",
+  "settingsMessagesLabel": "Tin nhắn",
+  "settingsAllowStrangerMessages": "Cho phép tin nhắn từ người lạ",
+  "settingsReceiveMessagesFromNonContacts": "Nhận tin nhắn từ người không có trong danh bạ",
+  "settingsReadReceipts": "Xac nhan da doc",
+  "settingsLetOthersKnowYouRead": "Cho người khác biết bạn đã đọc tin nhắn của họ",
+  "settingsTypingIndicator": "Chỉ báo đang nhập",
+  "settingsLetOthersKnowYouTyping": "Cho người khác biết bạn đang nhập",
+  "settingsEveryone": "Tat ca moi nguoi",
+  "settingsContactsOnly": "Chi danh ba",
+  "settingsNobody": "Khong ai",
+  "settingsWhoCanSeeTitle": "Ai có thể xem {title}",
+  "@settingsWhoCanSeeTitle": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsVersionInfo": "Phiên bản {version}",
+  "@settingsVersionInfo": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsCheckForUpdates": "Kiểm tra cập nhật",
+  "settingsOpenSourceLicenses": "Giay phep ma nguon mo",
+  "settingsFeedbackAndSuggestions": "Phản hồi và đề xuất",
+  "settingsBuiltOnMatrix": "Xay dung tren giao thuc Matrix",
+  "settingsNoHiddenChats": "Không có cuộc trò chuyện ẩn",
+  "settingsNoHiddenChatsDescription": "Các cuộc trò chuyện bạn ẩn sẽ xuất hiện ở đây",
+  "settingsUnhideChat": "Bỏ ẩn",
+  "settingsDarkMode": "Chế độ tối",
+  "settingsFontSize": "Cỡ chữ",
+  "settingsBubbleStyle": "Kiểu bong bóng",
+  "settingsFollowSystem": "Theo hệ thống",
+  "settingsAutoSwitchBySystem": "Tự động chuyển theo cài đặt hệ thống",
+  "settingsLightMode": "Chế độ sáng",
+  "settingsAlwaysUseLightTheme": "Luôn dùng giao diện sáng",
+  "settingsDarkModeOption": "Chế độ tối",
+  "settingsAlwaysUseDarkTheme": "Luôn dùng giao diện tối",
+  "settingsFontSizeSmall": "Nhỏ",
+  "settingsFontSizeStandard": "Tiêu chuẩn",
+  "settingsFontSizeLarge": "Lớn",
+  "settingsFontSizeExtraLarge": "Rất lớn",
+  "settingsBubbleStyleWechat": "Kiểu WeChat",
+  "settingsBubbleStyleWechatDesc": "Kiểu bong bóng WeChat cổ điển",
+  "settingsBubbleStyleModern": "Kiểu hiện đại",
+  "settingsBubbleStyleModernDesc": "Kiểu bong bóng hiện đại sạch sẽ",
+  "settingsBubbleStyleClassic": "Kiểu cổ điển",
+  "settingsBubbleStyleClassicDesc": "Kiểu bong bóng truyền thống",
+  "discoverVideoChannels": "Kenh",
+  "discoverLive": "Truc tiep",
+  "discoverListen": "Nghe",
+  "discoverWatch": "Xem",
+  "discoverSearchDiscover": "Tim kiem",
+  "discoverNearbyPeople": "Gan day",
+  "discoverGames": "Tro choi",
+  "discoverMiniPrograms": "Ung dung mini",
+  "chatAlreadyInCall": "Dang trong cuoc goi",
+  "commonConnectionFailed": "Ket noi that bai",
+  "chatCallRejected": "Cuoc goi bi tu choi",
+  "chatNoAnswer": "Khong tra loi",
+  "commonClose": "Dong",
+  "chatSelectContact": "Chon lien he",
+  "chatVoteRemoved": "Da xoa binh chon",
+  "chatVoteChanged": "Da thay doi binh chon",
+  "chatVoted": "Da binh chon",
+  "chatReplyTo": "Tra loi {name}",
+  "@chatReplyTo": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatCurrentLocation": "Vi tri hien tai",
+  "chatNearbyPlace": "Dia diem gan {index}",
+  "@chatNearbyPlace": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "chatApproximateDistance": "Khoang {distance}",
+  "@chatApproximateDistance": {
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      }
+    }
+  },
+  "chatAddress": "Dia chi",
+  "chatLatitude": "Vi do",
+  "chatLongitude": "Kinh do",
+  "groupDescriptionUpdated": "Đã cập nhật mô tả nhóm",
+  "groupAvatarUpdated": "Đã cập nhật ảnh đại diện nhóm",
+  "groupVisibilityUpdated": "Đã cập nhật chế độ hiển thị nhóm",
+  "groupChannelCreated": "Đã tạo kênh",
+  "groupChannelUpdated": "Đã cập nhật kênh",
+  "groupChannelDeleted": "Đã xóa kênh",
+  "callDecline": "Tu choi",
+  "callAnswer": "Tra loi",
+  "callIncomingVideoCall": "Cuộc gọi video đến",
+  "callIncomingVoiceCall": "Cuộc gọi thoại đến",
+  "callVideoCallInProgress": "Cuộc gọi video",
+  "callVoiceCallInProgress": "Cuộc gọi thoại",
+  "callReconnectingCall": "Đang kết nối lại...",
+  "callEnded": "Cuộc gọi kết thúc",
+  "callFailed": "Cuộc gọi thất bại",
+  "callLivekitNotConfigured": "LiveKit chua duoc cau hinh",
+  "callJoinMeetingFailed": "Tham gia cuoc hop that bai: {error}",
+  "callScreenShareFailed": "Chia se man hinh that bai: {error}",
+  "profileN42BeanTitle": "Đậu N42",
+  "profileNoN42Bean": "Không có N42 Bean",
+  "profileN42BeanDetails": "Chi tiết N42 Bean",
+  "profileN42BeanDescription": "N42 Bean là token dùng để đổi vật phẩm ảo và dịch vụ trong N42. Hiện có thể dùng cho:",
+  "profileN42BeanFeature1": "Nhãn dán và chủ đề độc quyền cho thành viên",
+  "profileN42BeanFeature2": "Tùy chỉnh bong bóng chat",
+  "profileN42BeanFeature3": "Tùy chỉnh bìa phong bao đỏ",
+  "profileN42BeanFeature4": "Huy hiệu biệt danh độc quyền",
+  "profileN42BeanFeature5": "Đặc quyền trò chuyện nhóm",
+  "profileN42BeanFeature6": "Mở rộng lưu trữ đám mây",
+  "profileN42BeanFeature7": "Bộ lọc làm đẹp cuộc gọi video",
+  "profileN42BeanFeature8": "Tùy chỉnh nền Khoảnh khắc",
+  "profileN42BeanFeature9": "Ưu tiên dịch vụ khách hàng VIP",
+  "profileGotIt": "Đã hiểu",
+  "profileNoN42BeanRecords": "Không có bản ghi N42 Bean",
+  "profileMoodAndThoughts": "Tam trang & Suy nghi",
+  "profileStatusHappy": "Vui ve",
+  "profileStatusCracked": "Vo tan",
+  "profileStatusLucky": "May man",
+  "profileStatusSunny": "Nang ve",
+  "profileStatusTired": "Met moi",
+  "profileStatusDaydream": "Mo mong",
+  "profileStatusRushing": "Ban ron",
+  "profileStatusOverthinking": "Suy nghi qua nhieu",
+  "profileStatusEnergized": "Day nang luong",
+  "profileWorkAndStudy": "Cong viec & Hoc tap",
+  "profileStatusWorking": "Dang lam viec",
+  "profileStatusStudying": "Dang hoc",
+  "profileStatusBusy": "Ban",
+  "profileStatusSlacking": "Nghi ngoi",
+  "profileStatusTraveling": "Di du lich",
+  "profileStatusGoingHome": "Ve nha",
+  "profileStatusDnd": "Khong lam phien",
+  "profileActivities": "Hoat dong",
+  "profileStatusHanging": "Di choi",
+  "profileStatusCheckIn": "Diem danh",
+  "profileStatusExercising": "Tap the duc",
+  "profileStatusCoffee": "Uong ca phe",
+  "profileStatusBubbleTea": "Uong tra sua",
+  "profileStatusEating": "An uong",
+  "profileStatusParenting": "Cham con",
+  "profileStatusSavingWorld": "Cuu the gioi",
+  "profileStatusSelfie": "Chup selfie",
+  "profileRest": "Nghi ngoi",
+  "profileStatusRetreat": "An cu",
+  "profileStatusHome": "O nha",
+  "profileStatusSleeping": "Dang ngu",
+  "profileStatusCatLover": "Nguoi yeu meo",
+  "profileStatusDogWalking": "Dat cho di dao",
+  "profileStatusGaming": "Choi game",
+  "profileStatusListening": "Dang nghe",
+  "profileEditAddress": "Chinh sua dia chi",
+  "profileRecipient": "Nguoi nhan",
+  "profileEnterRecipientName": "Nhap ten nguoi nhan",
+  "profilePhoneNumber": "So dien thoai",
+  "profileEnterPhoneNumber": "Nhap so dien thoai",
+  "profileRegionHint": "Tinh/Thanh pho/Quan",
+  "profileDetailedAddress": "Dia chi chi tiet",
+  "profileDetailedAddressHint": "Duong, so nha, v.v.",
+  "profileSetAsDefaultAddress": "Dat lam dia chi mac dinh",
+  "profilePleaseCompleteInfo": "Vui long dien day du thong tin",
+  "profileEditInvoice": "Chinh sua hoa don",
+  "profileInvoiceType": "Loai hoa don: ",
+  "profileCompanyName": "Ten cong ty",
+  "profilePersonalName": "Ten ca nhan",
+  "profileEnterCompanyName": "Nhap ten cong ty",
+  "profileEnterName": "Nhap ten",
+  "profileTaxIdNumber": "Ma so thue",
+  "profileEnterTaxIdNumber": "Nhap ma so thue",
+  "profileBankNameOptional": "Ten ngan hang (Tuy chon)",
+  "profileEnterBankName": "Nhap ten ngan hang",
+  "profileBankAccountOptional": "Tai khoan ngan hang (Tuy chon)",
+  "profileEnterBankAccount": "Nhap tai khoan ngan hang",
+  "profileCompanyAddressOptional": "Dia chi cong ty (Tuy chon)",
+  "profileEnterCompanyAddress": "Nhap dia chi cong ty",
+  "profileCompanyPhoneOptional": "Dien thoai cong ty (Tuy chon)",
+  "profileEnterCompanyPhone": "Nhap dien thoai cong ty",
+  "profileSetAsDefaultInvoice": "Dat lam hoa don mac dinh",
+  "profileRingtoneVibrate": "Rung",
+  "profileRingtoneSilent": "Im lang",
+  "profileVibrateMode": "Che do rung",
+  "profileSilentMode": "Che do im lang",
+  "profilePlayFailed": "Phat that bai: {ringtoneName}",
+  "profilePlaying": "Dang phat: {ringtoneName}",
+  "profileStop": "Dung",
+  "profileSelectRingtone": "Chon nhac chuong",
+  "profileLoadingRingtones": "Dang tai nhac chuong...",
+  "profileNoRingtonesFound": "Khong tim thay nhac chuong",
+  "mainMessagesWithCount": "Tin nhan({count})",
+  "@mainMessagesWithCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "storyViewers": "Người xem",
+  "storyNoViewers": "Chưa có người xem",
+  "storyReplyToStory": "Trả lời trạng thái...",
+  "commonCopiedToClipboard": "Da sao chep vao clipboard",
+  "commonMore": "Them",
+  "commonTranslating": "Đang dịch...",
+  "commonTranslatedFrom": "Dịch từ {language}",
+  "@commonTranslatedFrom": {
+    "placeholders": {
+      "language": {
+        "type": "String"
+      }
+    }
+  },
+  "commonTranslation": "Bản dịch",
+  "commonTranslationFailed": "Dịch thất bại",
+  "commonAllRead": "Da doc tat ca",
+  "commonReadCount": "{count} da doc",
+  "commonYouRecalledMessage": "Ban da thu hoi mot tin nhan",
+  "commonMessageRecalled": "Tin nhan da thu hoi",
+  "commonReEdit": "Chinh sua lai",
+  "commonWalletArea": "Khu vuc vi",
+  "callIncomingCall": "Cuoc goi den",
+  "callMissedCall": "Cuoc goi nho",
+  "groupRemoveAdmin": "Xoa quyen quan tri",
+  "chatSelectCurrency": "Chon loai tien",
+  "chatSelectEmoji": "Chon bieu tuong cam xuc",
+  "chatSelectRedPacketCover": "Chon bia",
+  "groupSetAsAdmin": "Dat lam quan tri vien",
+  "chatVideoPlaybackFailed": "Phat video that bai",
+  "@chatVideoPlaybackFailed": {
+    "description": "Used with error message"
+  },
+  "groupViewProfile": "Xem ho so",
+  "favoriteAddLinkComingSoon": "Tinh nang them lien ket sap ra mat",
+  "favoriteNewNoteComingSoon": "Tinh nang ghi chu moi sap ra mat",
+  "qrcodeSaveFeatureComingSoon": "Tinh nang luu sap ra mat",
+  "qrcodeShareFeatureComingSoon": "Tinh nang chia se sap ra mat",
+  "qrcodeProcessFailed": "Xu ly ma QR that bai: {error}",
+  "@qrcodeProcessFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "securityDeviceIdRequired": "ID thiết bị là bắt buộc",
+  "securityVerificationStartFailed": "Không thể bắt đầu xác minh: {error}",
+  "@securityVerificationStartFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "securityVerificationFailed": "Xác minh không thành công",
+  "securityVerificationFailedWithReason": "Xác minh không thành công: {reason}",
+  "@securityVerificationFailedWithReason": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "securityEmojiMismatchRejected": "Xác minh bị từ chối - biểu tượng cảm xúc không khớp",
+  "securityWaitingForDeviceAccept": "Đang chờ thiết bị kia chấp nhận...",
+  "securityVerifyDevice": "Xác minh thiết bị này",
+  "securityConfirmEmojiMatch": "Xác nhận biểu tượng cảm xúc bên dưới được hiển thị trên cả hai thiết bị, theo cùng một thứ tự",
+  "securityEmojiDontMatch": "Họ không phù hợp",
+  "securityEmojiMatch": "Họ hợp nhau",
+  "securityWaitingForDeviceConfirm": "Đang chờ thiết bị kia xác nhận...",
+  "securityVerificationSuccess": "Xác minh thành công!",
+  "securityDeviceVerifiedTrusted": "Thiết bị này hiện đã được xác minh và tin cậy.",
+  "securityCompareEmoji": "So sánh biểu tượng cảm xúc trên cả hai thiết bị",
+  "securityCompareNumbers": "So sánh các con số trên cả hai thiết bị",
+  "commonTryAgain": "Thử lại",
+  "commonDone": "Xong",
+  "chatExportTitle": "Xuất trò chuyện",
+  "chatExportSuccess": "Xuất thành công",
+  "chatExportFailed": "Xuất không thành công: {error}",
+  "@chatExportFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatExportFormat": "Định dạng xuất",
+  "chatExportHtmlDesc": "Có thể đọc được trong bất kỳ trình duyệt nào có bố cục theo kiểu",
+  "chatExportJsonDesc": "Định dạng dữ liệu có cấu trúc có thể đọc được bằng máy",
+  "chatExportDateRange": "Phạm vi ngày",
+  "chatExportAll": "Tất cả tin nhắn",
+  "chatExportLastWeek": "7 ngày qua",
+  "chatExportLastMonth": "Tháng trước",
+  "chatExportLast3Months": "3 tháng qua",
+  "chatExportMessageCount": "Tin nhắn để xuất",
+  "chatExportButton": "Xuất & Chia sẻ",
+  "chatMediaGallery": "Thư viện phương tiện",
+  "chatExportHistory": "Xuất lịch sử trò chuyện",
+  "pdfLoadFailed": "Không tải được PDF",
+  "pdfPageIndicator": "{current} / {total}",
+  "@pdfPageIndicator": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "mediaAll": "Tất cả",
+  "mediaImages": "Hình ảnh",
+  "mediaVideos": "Video",
+  "mediaFiles": "Tập tin",
+  "mediaAudio": "Âm thanh",
+  "mediaItemsCount": "Vật phẩm {count}",
+  "@mediaItemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mediaNoMediaFound": "Không tìm thấy phương tiện nào",
+  "spacesTitle": "Cộng đồng",
+  "spacesCreate": "Tạo cộng đồng",
+  "spacesJoined": "Đã tham gia",
+  "spacesDiscover": "Khám phá",
+  "spacesNoJoined": "Chưa có cộng đồng nào tham gia",
+  "spacesExplore": "Khám phá cộng đồng",
+  "spacesNoPublic": "Không tìm thấy cộng đồng công cộng nào",
+  "spacesJoin": "Tham gia",
+  "spacesSubSpaces": "Tiểu cộng đồng",
+  "spacesChannels": "Kênh",
+  "spacesMembersCount": "Thành viên {count}",
+  "@spacesMembersCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "spacesPublic": "công cộng",
+  "spacesPrivate": "Riêng tư",
+  "spacesSuggested": "được đề xuất",
+  "spacesChannelsCount": "Các kênh {count}",
+  "@spacesChannelsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "callInCallChat": "Trò chuyện trong cuộc gọi",
+  "callMessagesCount": "Tin nhắn {count}",
+  "@callMessagesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "callNoMessagesYet": "Chưa có tin nhắn nào.\nGửi tin nhắn để bắt đầu.",
+  "callTypeMessage": "Nhập tin nhắn...",
+  "callYouSender": "bạn",
+  "callChatLabel": "Trò chuyện",
+  "chatEdited": "Đã chỉnh sửa",
+  "chatEditHistory": "Chỉnh sửa lịch sử",
+  "chatOriginalMessage": "Bản gốc",
+  "chatEditedAt": "Đã chỉnh sửa tại {time}",
+  "@chatEditedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "chatViewOnce": "Xem một lần",
+  "chatViewOncePhoto": "Xem ảnh một lần",
+  "chatViewOnceVideo": "Xem một lần video",
+  "chatViewOnceViewed": "Đã xem",
+  "chatViewOnceExpired": "Đã hết hạn",
+  "chatViewOnceTap": "Nhấn để xem",
+  "chatAutoFaceBlur": "Tự động làm mờ khuôn mặt",
+  "chatAutoFaceBlurDesc": "Tự động làm mờ khuôn mặt khi gửi ảnh",
+  "threadReplyInThread": "Trả lời trong chủ đề",
+  "threadReplies": "{count} trả lời",
+  "@threadReplies": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "threadReply": "1 câu trả lời",
+  "threadLatestReply": "Mới nhất: {preview}",
+  "@threadLatestReply": {
+    "placeholders": {
+      "preview": {
+        "type": "String"
+      }
+    }
+  },
+  "threadTitle": "chủ đề",
+  "threadReplyPlaceholder": "Trả lời trong chủ đề...",
+  "threadParticipants": "Người tham gia {count}",
+  "@threadParticipants": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "voiceRoomTitle": "Phòng thoại",
+  "voiceRoomCreate": "Tạo phòng thoại",
+  "voiceRoomJoin": "Tham gia",
+  "voiceRoomLeave": "Rời khỏi",
+  "voiceRoomEnd": "Phòng cuối",
+  "voiceRoomRaiseHand": "Giơ tay",
+  "voiceRoomLowerHand": "Hạ tay",
+  "voiceRoomMute": "Tắt tiếng",
+  "voiceRoomUnmute": "Bật tiếng",
+  "voiceRoomHost": "Máy chủ",
+  "voiceRoomSpeakers": "Loa",
+  "voiceRoomListeners": "Người nghe",
+  "voiceRoomLive": "TRỰC TIẾP",
+  "voiceRoomEnded": "Đã kết thúc",
+  "voiceRoomScheduled": "Đã lên lịch",
+  "voiceRoomApprove": "Phê duyệt",
+  "voiceRoomDemote": "Di chuyển đến Trình nghe",
+  "voiceRoomHandRaised": "{name} giơ tay",
+  "@voiceRoomHandRaised": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "voiceRoomName": "Tên phòng",
+  "voiceRoomTopic": "Chủ đề (tùy chọn)",
+  "voiceRoomNoActive": "Không có phòng thoại đang hoạt động",
+  "voiceRoomConnecting": "Đang kết nối...",
+  "usernameTitle": "Tên người dùng",
+  "usernameSet": "Đặt tên người dùng",
+  "usernameChange": "Thay đổi tên người dùng",
+  "usernamePlaceholder": "Nhập tên người dùng",
+  "usernameAvailable": "Tên người dùng có sẵn",
+  "usernameUnavailable": "Tên người dùng đã được sử dụng",
+  "usernameInvalid": "3-30 ký tự, chữ thường, số, dấu gạch dưới. Phải bắt đầu bằng một chữ cái.",
+  "usernameReserved": "Tên người dùng này được bảo lưu",
+  "usernameSaved": "Đã lưu tên người dùng",
+  "usernameSearchHint": "Tìm kiếm theo @tên người dùng",
+  "ensName": "Tên ENS",
+  "ensLinked": "Đã liên kết với ENS",
+  "ensResolving": "Giải quyết ENS...",
+  "ensNotFound": "Không tìm thấy tên ENS",
+  "tokenGateTitle": "Cổng mã thông báo",
+  "tokenGateEnable": "Kích hoạt Cổng Token",
+  "tokenGateDisable": "Tắt cổng mã thông báo",
+  "tokenGateAddRule": "Thêm quy tắc",
+  "tokenGateRemoveRule": "Xóa quy tắc",
+  "tokenGateContractAddress": "Địa chỉ hợp đồng",
+  "tokenGateMinBalance": "Số dư tối thiểu",
+  "tokenGateTokenId": "ID mã thông báo (ERC-1155)",
+  "tokenGateChainId": "ID chuỗi",
+  "tokenGateVerifying": "Đang xác minh việc nắm giữ mã thông báo...",
+  "tokenGateVerified": "Xác minh đã được thông qua",
+  "tokenGateDenied": "Bạn không đáp ứng các yêu cầu về mã thông báo",
+  "tokenGateOperatorAnd": "Phải đáp ứng TẤT CẢ các quy tắc",
+  "tokenGateOperatorOr": "Phải đáp ứng BẤT KỲ quy tắc nào",
+  "tokenGateRuleErc20": "Mã thông báo ERC-20",
+  "tokenGateRuleErc721": "NFT (ERC-721)",
+  "tokenGateRuleErc1155": "Mã thông báo đa năng (ERC-1155)",
+  "tokenGateRuleNative": "Mã thông báo gốc",
+  "tokenGateSaved": "Đã lưu cổng mã thông báo",
+  "tokenGateEnableDescription": "Yêu cầu thành viên phải giữ token để tham gia",
+  "tokenGateOperator": "Quy tắc logic",
+  "tokenGateRules": "Quy tắc",
+  "tokenGateSymbol": "Biểu tượng (tùy chọn)",
+  "tokenGateChain": "Chuỗi",
+  "tokenGateTokenStandard": "Tiêu chuẩn mã thông báo",
+  "tokenGateDenialMessage": "Tin nhắn từ chối",
+  "tokenGateDenialMessageHint": "Thông báo hiển thị khi xác minh không thành công",
+  "tokenGateVerifyTitle": "Xác minh mã thông báo",
+  "tokenGateVerifyPassed": "Xác minh đã thông qua",
+  "tokenGateVerifyFailed": "Xác minh không thành công",
+  "tokenGateRetryVerify": "Thử lại",
+  "tokenGateRequired": "Bắt buộc",
+  "tokenGateYourBalance": "Số dư của bạn",
+  "tokenGateRulesActive": "quy tắc hoạt động",
+  "tokenGateDisabled": "Đã tắt",
+  "ensNotBound": "Không bị ràng buộc",
+  "liveLocation": "Vị trí trực tiếp",
+  "stopLiveLocation": "Dừng chia sẻ",
+  "startLiveLocation": "Bắt đầu chia sẻ",
+  "selectDuration": "Chọn thời lượng",
+  "groupChatFiles": "Tệp trò chuyện",
+  "groupLinks": "Liên kết",
+  "groupNoLinks": "Chưa có liên kết nào",
+  "chatBackground": "Nền trò chuyện",
+  "solidColors": "Màu sắc đồng nhất",
+  "gradients": "Độ dốc",
+  "defaultBackground": "Mặc định",
+  "settingsFontSizeSlider": "Cỡ chữ",
+  "autoDownload": "Tự động tải xuống",
+  "images": "Hình ảnh",
+  "voice": "Giọng nói",
+  "video": "Băng hình",
+  "files": "Tập tin",
+  "mobileData": "Dữ liệu di động",
+  "roaming": "Chuyển vùng",
+  "storageManagement": "Lưu trữ",
+  "totalUsage": "Tổng mức sử dụng",
+  "cache": "Bộ nhớ đệm",
+  "other": "Khác",
+  "clearCache": "Xóa bộ nhớ đệm",
+  "cacheCleared": "Đã xóa bộ nhớ đệm",
+  "clearCacheFailed": "Không xóa được bộ nhớ đệm",
+  "confirmClearCache": "Xóa tất cả dữ liệu bộ nhớ đệm?",
+  "mapView": "Xem bản đồ",
+  "liveLocationSharingCount": "{count} người chia sẻ vị trí",
+  "@liveLocationSharingCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "minutes15": "15 phút",
+  "minutes30": "30 phút",
+  "hour1": "1 giờ",
+  "hours8": "8 giờ",
+  "personalCard": "Thẻ cá nhân",
+  "downloadFailed": "Tải xuống không thành công",
+  "locationExpired": "Đã hết hạn",
+  "secondsRemaining": "{count}",
+  "@secondsRemaining": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "minutesRemaining": "{count} phút",
+  "@minutesRemaining": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hoursMinutesRemaining": "{hours} giờ {minutes} phút",
+  "@hoursMinutesRemaining": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "favoriteMessages": "Yêu thích",
+  "linksCopied": "Đã sao chép liên kết",
+  "noLinksFound": "Không tìm thấy liên kết nào",
+  "roomStorageRanking": "Xếp hạng lưu trữ phòng",
+  "downloadComplete": "Tải xuống hoàn tất",
+  "downloading": "Đang tải xuống...",
+  "draftSaved": "Đã lưu bản nháp",
+  "voiceRecording": "Ghi âm giọng nói",
+  "searchLocation": "Tìm kiếm vị trí",
+  "tapToSearch": "Nhấn để tìm kiếm",
+  "settingsThisDevice": "Thiết bị này",
+  "settingsJustNow": "Vừa rồi",
+  "settingsDeviceId": "ID thiết bị",
+  "settingsStatus": "Trạng thái",
+  "settingsLastActive": "Hoạt động lần cuối",
+  "settingsIpAddress": "địa chỉ IP",
+  "settingsRenameDevice": "Đổi tên thiết bị",
+  "settingsDeviceNameHint": "Nhập tên thiết bị",
+  "settingsDeviceRenamed": "Đã đổi tên thiết bị",
+  "settingsRenameFailed": "Đổi tên không thành công",
+  "settingsRemoteLogout": "Đăng xuất từ xa",
+  "settingsRemoteLogoutConfirm": "Bạn có chắc chắn muốn đăng xuất \"{deviceName}\" không? Không thể hoàn tác hành động này.",
+  "@settingsRemoteLogoutConfirm": {
+    "placeholders": {
+      "deviceName": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsDeviceLoggedOut": "Thiết bị đã đăng xuất",
+  "settingsLogoutFailed": "Đăng xuất không thành công",
+  "settingsLogout": "Đăng xuất",
+  "settingsVerifyIdentity": "Xác minh danh tính",
+  "settingsEnterPasswordToConfirm": "Nhập mật khẩu của bạn để xác nhận hành động này.",
+  "scheduledSendTitle": "Lên lịch nhắn tin",
+  "scheduledSendInOneHour": "trong 1 giờ",
+  "scheduledSendTonight": "Tối nay (8 giờ tối)",
+  "scheduledSendTomorrowMorning": "Sáng mai (9 giờ sáng)",
+  "scheduledSendCustom": "Chọn ngày và giờ",
+  "scheduledMessageLabel": "Đã lên lịch",
+  "scheduledMessageCancel": "Hủy tin nhắn đã lên lịch",
+  "chatLockTitle": "Khóa trò chuyện",
+  "chatLockEnable": "Khóa cuộc trò chuyện này",
+  "chatLockDisable": "Mở khóa cuộc trò chuyện này",
+  "chatLockDescription": "Các cuộc trò chuyện bị khóa yêu cầu xác minh sinh trắc học hoặc mã PIN để mở",
+  "chatLockVerifyTitle": "Đã khóa cuộc trò chuyện",
+  "chatLockVerifySubtitle": "Xác minh để truy cập cuộc trò chuyện này",
+  "chatLockVerifyFailed": "Xác minh không thành công",
+  "chatLockEnabled": "Đã khóa cuộc trò chuyện",
+  "chatLockDisabled": "Đã mở khóa trò chuyện",
+  "chatLockPinTitle": "Nhập mã PIN",
+  "chatLockPinSetTitle": "Đặt mã PIN",
+  "chatLockPinConfirmTitle": "Xác nhận mã PIN",
+  "chatLockPinMismatch": "Mã PIN không khớp",
+  "chatLockUseBiometric": "Sử dụng sinh trắc học",
+  "chatLockUsePin": "Sử dụng mã PIN",
+  "mediaEditorUndo": "Hoàn tác",
+  "mediaEditorRedo": "Làm lại",
+  "mediaEditorCrop": "Cắt",
+  "mediaEditorFilter": "Lọc",
+  "mediaEditorDraw": "Vẽ",
+  "mediaEditorText": "văn bản",
+  "aiAssistant": "Trợ lý AI",
+  "aiAssistantWelcome": "Xin chào! Tôi là Trợ lý AI N42. Tôi có thể giúp gì cho bạn?",
+  "aiAssistantNotConfigured": "Dịch vụ AI chưa được định cấu hình",
+  "aiAssistantSettings": "Cài đặt AI",
+  "aiAssistantClearHistory": "Xóa lịch sử trò chuyện",
+  "aiAssistantClearHistoryConfirm": "Bạn có chắc chắn muốn xóa tất cả lịch sử trò chuyện AI không?",
+  "aiAssistantStopGenerating": "Dừng tạo",
+  "aiAssistantModel": "người mẫu",
+  "aiAssistantTemperature": "Nhiệt độ",
+  "aiAssistantMaxTokens": "Mã thông báo tối đa",
+  "aiAssistantContextWindow": "Cửa sổ ngữ cảnh",
+  "aiAssistantServiceStatus": "Trạng thái dịch vụ",
+  "aiAssistantAvailable": "Có sẵn",
+  "aiAssistantUnavailable": "Không có sẵn",
+  "aiSummarize": "Tóm tắt AI",
+  "aiSummarizeUnread": "Tổng hợp {count} tin nhắn chưa đọc",
+  "@aiSummarizeUnread": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "aiSummarizeLoading": "Tóm tắt...",
+  "aiSummarizeError": "Không thể tóm tắt",
+  "aiRewrite": "Viết lại AI",
+  "aiRewriteFormal": "chính thức",
+  "aiRewriteCasual": "Bình thường",
+  "aiRewritePlayful": "vui tươi",
+  "aiRewriteProfessional": "chuyên nghiệp",
+  "aiRewriteAccept": "sử dụng",
+  "aiRewriteCancel": "Hủy bỏ",
+  "aiRewriteLoading": "Viết lại...",
+  "aiLinkSummary": "Tóm tắt AI",
+  "aiLinkSummaryAnalyzing": "Đang phân tích...",
+  "chatFolderManagement": "Quản lý thư mục",
+  "chatFolderSystem": "Thư mục hệ thống",
+  "chatFolderCustom": "Thư mục tùy chỉnh",
+  "chatFolderEmpty": "Chưa có thư mục tùy chỉnh nào",
+  "chatFolderCreate": "Tạo thư mục",
+  "chatFolderEdit": "Chỉnh sửa thư mục",
+  "chatFolderNameHint": "Tên thư mục",
+  "chatFolderAll": "Tất cả",
+  "chatFolderUnread": "Chưa đọc",
+  "chatFolderPersonal": "cá nhân",
+  "chatFolderGroups": "Nhóm",
+  "chatFolderChannels": "Kênh",
+  "chatFolderMuted": "Đã tắt tiếng",
+  "storyAddMusic": "Thêm nhạc",
+  "storyChangeMusic": "Thay đổi âm nhạc",
+  "storyBackgroundMusic": "Nhạc nền",
+  "storyMusicPreview": "Xem trước (tối đa 15 giây)",
+  "storyChooseFromDevice": "Chọn từ thiết bị",
+  "storyUseThisMusic": "Sử dụng nhạc này",
+  "authPasskeyNotSupported": "Mật mã không được hỗ trợ trên thiết bị này",
+  "authPasskeyRegister": "Đăng ký mật khẩu",
+  "authPasskeyNoRegistered": "Không có mật mã nào được đăng ký",
+  "authPasskeyRegisterHint": "Đăng ký mật mã cho tài khoản này. Đăng nhập bằng mật mã độc lập sẽ được kích hoạt sau.",
+  "authPasskeyNameYours": "Đặt tên cho mật mã của bạn",
+  "authPasskeyRegistered": "Đã lưu mật mã vào tài khoản này",
+  "authPasskeyDeleted": "Mật mã đã bị xóa khỏi tài khoản này",
+  "authPasskeyDeleteConfirm": "Xóa mật mã \"{name}\"? Bạn sẽ cần phải đăng ký lại trước khi sử dụng mật mã đăng nhập sau này.",
+  "@authPasskeyDeleteConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "momentVisibilityPublic": "công cộng",
+  "momentVisibilityPrivate": "Riêng tư",
+  "momentVisibilityPartial": "Bạn bè đã chọn",
+  "momentVisibilityExcluded": "Loại trừ một số bạn bè",
+  "momentUserMoments": "Những khoảnh khắc của {userName}",
+  "@momentUserMoments": {
+    "placeholders": {
+      "userName": {
+        "type": "String"
+      }
+    }
+  },
+  "momentForwardTo": "Chuyển tiếp tới",
+  "momentForwardSuccess": "Đã chuyển tiếp thành công",
+  "momentSelectFriends": "Chọn bạn bè",
+  "momentSelectTags": "Chọn theo Thẻ",
+  "momentSelectedCount": "Đã chọn ({count})",
+  "@momentSelectedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "momentNoMomentsYet": "Chưa có khoảnh khắc nào",
+  "momentForwardMoment": "Khoảnh khắc chuyển tiếp",
+  "momentAddComment": "Thêm một bình luận...",
+  "momentForwardContent": "[Khoảnh khắc] {content}",
+  "@momentForwardContent": {
+    "placeholders": {
+      "content": {
+        "type": "String"
+      }
+    }
+  },
+  "momentDeleteMoment": "Xóa khoảnh khắc",
+  "momentDeleteConfirm": "Bạn có chắc chắn muốn xóa khoảnh khắc này?",
+  "momentComment": "Bình luận",
+  "momentWriteComment": "Viết bình luận...",
+  "momentLike": "thích",
+  "momentUnlike": "Không giống",
+  "momentForward": "Chuyển tiếp",
+  "momentDelete": "Xóa",
+  "momentReply": "trả lời",
+  "momentMoment": "Khoảnh khắc",
+  "momentLikesCount": "{count} lượt thích",
+  "@momentLikesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "momentCommentsCount": "{count} bình luận",
+  "@momentCommentsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "momentNoComments": "Chưa có bình luận nào",
+  "momentFailedToLoad": "Không thể tải hình ảnh",
+  "momentReplyTo": "Trả lời {userName}...",
+  "@momentReplyTo": {
+    "placeholders": {
+      "userName": {
+        "type": "String"
+      }
+    }
+  },
+  "momentNoConversations": "Không có cuộc trò chuyện nào",
+  "momentJustNow": "ngay bây giờ",
+  "momentMinutesAgo": "{count}m trước đây",
+  "@momentMinutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "momentHoursAgo": "{count}h trước",
+  "@momentHoursAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "momentDaysAgo": "{count}d trước",
+  "@momentDaysAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatGroupAnnouncementHint": "Nhập thông báo nhóm",
+  "chatGroupAnnouncementEmpty": "Không có thông báo",
+  "chatEditNickname": "Chỉnh sửa biệt hiệu",
+  "chatNicknameHint": "Nhập biệt hiệu của bạn vào nhóm này",
+  "contactAddPhoneHint": "Nhập số điện thoại",
+  "contactNotesHint": "Thêm ghi chú về liên hệ này",
+  "reportTitle": "Báo cáo",
+  "reportReasonSpam": "Thư rác",
+  "reportReasonHarassment": "Quấy rối",
+  "reportReasonFraud": "Lừa đảo",
+  "reportReasonOther": "Khác",
+  "reportSubmitted": "Đã gửi báo cáo",
+  "reportDescription": "Mô tả bổ sung (tùy chọn)",
+  "qrcodeSaved": "Đã lưu mã QR vào album",
+  "chatSendRedPacketInChat": "Vui lòng gửi gói màu đỏ trong trò chuyện",
+  "commonSaveFailed": "Lưu không thành công",
+  "reportSelectReason": "Vui lòng chọn một lý do",
+  "gameCenter": "Trò chơi",
+  "gameHighScore": "Tốt nhất",
+  "gameScore": "Điểm",
+  "gameOver": "Kết thúc",
+  "gamePlayAgain": "Chơi lại",
+  "gameLeaderboard": "Bảng xếp hạng",
+  "gamePause": "Tạm dừng",
+  "gameResume": "Chạm để tiếp tục",
+  "gameConfirmExit": "Thoát trò chơi?",
+  "gameNoScores": "Chưa có điểm",
+  "game2048": "2048",
+  "game2048Desc": "Ghép ô để đạt 2048",
+  "gameBlockDrop": "Khối thả",
+  "gameBlockDropDesc": "Thả và xóa các hàng",
+  "gameMinesweeper": "Dò mìn",
+  "gameMinesweeperDesc": "Tìm tất cả ô an toàn",
+  "gameMatch3": "Trận đấu 3",
+  "gameMatch3Desc": "Nối 3 viên đá quý trở lên",
+  "gameMinesweeperEasy": "Dễ",
+  "gameMinesweeperMedium": "Trung bình",
+  "gameMinesLeft": "Mìn còn lại",
+  "gameTimeLeft": "Thời gian",
+  "gameLevel": "Cấp độ",
+  "gameNext": "Tiếp theo",
+  "gameBestTime": "Thời gian tốt nhất",
+  "gameNewRecord": "Kỷ lục mới!",
+  "gameLines": "Hàng",
+  "storyMyStory": "Câu chuyện của tôi",
+  "storageSmartCleanup": "Dọn dẹp thông minh",
+  "storageOldMediaFiles": "Tệp phương tiện cũ",
+  "storageLargeFiles": "Tệp lớn",
+  "storageAppCache": "Bộ đệm ứng dụng",
+  "storageSettings": "Cài đặt lưu trữ",
+  "storageAutoCleanup": "Tự động dọn dẹp",
+  "storageAutoCleanupDesc": "Tự động xóa các tệp cũ hơn {days} ngày",
+  "@storageAutoCleanupDesc": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "storageCleanupPeriod": "Thời gian dọn dẹp",
+  "storagePreserveThumbnails": "Giữ nguyên hình thu nhỏ",
+  "storagePreserveThumbnailsDesc": "Giữ hình thu nhỏ của hình ảnh trong quá trình dọn dẹp",
+  "storageWarningHigh": "Mức sử dụng bộ nhớ cao. Hãy cân nhắc việc dọn dẹp các tập tin cũ.",
+  "storageWarningCritical": "Dung lượng lưu trữ cực kỳ thấp. Hãy dọn dẹp để có không gian trống.",
+  "storageFreed": "Đã giải phóng {size} (tệp {count})",
+  "@storageFreed": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "storageDays": "{days} ngày",
+  "@storageDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "storageViewAllRooms": "Xem tất cả các phòng {count}",
+  "@storageViewAllRooms": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "storageNoFiles": "Không tìm thấy tập tin nào",
+  "storageFilePinned": "Đã ghim",
+  "storageDeleteSelected": "Xóa các tập tin đã chọn {count}? Chúng có thể được tải xuống lại từ máy chủ.",
+  "@storageDeleteSelected": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "backupRestore": "Sao lưu & Khôi phục",
+  "backupCreate": "Tạo bản sao lưu",
+  "backupCreateDesc": "Sao lưu cài đặt và khóa mã hóa của bạn. Tin nhắn sẽ được khôi phục từ máy chủ sau khi đăng nhập lại.",
+  "backupIncludeKeys": "Bao gồm các khóa mã hóa",
+  "backupIncludeKeysDesc": "Cần thiết để đọc tin nhắn được mã hóa",
+  "backupPasswordProtect": "Bảo vệ bằng mật khẩu",
+  "backupEnterPassword": "Nhập mật khẩu dự phòng",
+  "backupHistory": "Lịch sử sao lưu",
+  "backupNoBackups": "Chưa có bản sao lưu nào",
+  "backupRestore2": "Khôi phục",
+  "backupDelete": "Xóa",
+  "backupDeleteConfirm": "Bạn có chắc chắn muốn xóa bản sao lưu này không? Điều này không thể hoàn tác được.",
+  "backupRestoreFromFile": "Khôi phục từ tệp",
+  "backupRestoreFromFileDesc": "Nhập tệp .n42backup từ thiết bị khác hoặc bản sao lưu trước đó.",
+  "backupChooseFile": "Chọn tập tin sao lưu",
+  "backupRestoring": "Đang khôi phục...",
+  "backupCreated": "Đã tạo bản sao lưu: phòng {rooms}, tin nhắn {messages}",
+  "@backupCreated": {
+    "placeholders": {
+      "rooms": {
+        "type": "int"
+      },
+      "messages": {
+        "type": "int"
+      }
+    }
+  },
+  "backupRestored": "Đã khôi phục cài đặt {settings} từ các phòng {rooms}",
+  "@backupRestored": {
+    "placeholders": {
+      "settings": {
+        "type": "int"
+      },
+      "rooms": {
+        "type": "int"
+      }
+    }
+  },
+  "backupFailed": "Sao lưu không thành công: {error}",
+  "@backupFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "backupPasswordRequired": "Bản sao lưu này được bảo vệ bằng mật khẩu",
+  "blocGroupNotFound": "Không tìm thấy nhóm",
+  "blocGroupMembersInvited": "Đã mời (các) thành viên {count}",
+  "@blocGroupMembersInvited": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "blocGroupMemberRemoved": "Thành viên đã bị xóa",
+  "blocGroupAdminRemoved": "Quản trị viên đã xóa",
+  "blocGroupLeft": "Đã rời nhóm",
+  "blocGroupDisbanded": "Nhóm đã tan rã",
+  "blocGroupJoined": "Đã tham gia nhóm",
+  "blocGroupInviteDeclined": "Lời mời đã bị từ chối",
+  "blocGroupTokenGateUpdated": "Cổng mã thông báo đã được cập nhật",
+  "blocTransferProcessing": "Đang xử lý chuyển...",
+  "blocTransferCancelled": "Đã hủy chuyển khoản",
+  "blocTransferFailed": "Chuyển không thành công",
+  "blocPaymentProcessing": "Đang xử lý thanh toán...",
+  "blocPaymentFailed": "Thanh toán không thành công",
+  "groupMaxMembers": "Giới hạn thành viên",
+  "groupMaxMembersUnlimited": "Không giới hạn",
+  "groupMaxMembersHint": "Nhập giới hạn (để trống nếu không giới hạn)",
+  "groupMaxMembersUpdated": "Đã cập nhật giới hạn thành viên",
+  "groupFull": "Nhóm đã đạt công suất",
+  "groupChannels": "Kênh chủ đề",
+  "groupChannelsEmpty": "Chưa có kênh nào",
+  "groupChannelsCount": "kênh",
+  "groupChannelCreate": "Kênh mới",
+  "groupChannelName": "Tên kênh",
+  "groupChannelTopic": "Chủ đề kênh (tùy chọn)",
+  "groupChannelDelete": "Xóa kênh",
+  "groupChannelDeleteConfirm": "Xóa kênh này? Tất cả tin nhắn sẽ bị mất.",
+  "groupBotSettings": "Cài đặt bot",
+  "groupBotEnabled": "Kích hoạt Bot",
+  "groupBotWelcomeMessage": "Mẫu tin nhắn chào mừng",
+  "groupBotWelcomeHint": "Sử dụng 'tên' làm trình giữ chỗ cho tên thành viên mới",
+  "groupBotConfigUpdated": "Đã cập nhật cài đặt bot",
+  "groupContentFilter": "Bộ lọc nội dung",
+  "groupContentFilterEnabled": "Bật bộ lọc từ khóa",
+  "groupContentFilterReplace": "Thay thế bằng ***",
+  "groupContentFilterHide": "Ẩn tin nhắn",
+  "groupContentFilterAddWord": "Thêm từ khóa",
+  "groupContentFilterUpdated": "Đã cập nhật bộ lọc nội dung",
+  "chatSlashCommands": "Lệnh",
+  "chatCommandPoll": "/polll - Tạo một cuộc thăm dò",
+  "chatCommandAnnounce": "/ thông báo - Gửi thông báo",
+  "chatCommandWelcome": "/Chào mừng - Đặt tin nhắn chào mừng",
+  "chatReportMessage": "Báo cáo",
+  "chatReportReason": "Lý do báo cáo",
+  "chatReportSpam": "Thư rác",
+  "chatReportHarassment": "Quấy rối",
+  "chatReportInappropriate": "Nội dung không phù hợp",
+  "chatReportOther": "Khác",
+  "chatReportSuccess": "Đã gửi báo cáo",
+  "spacesName": "Tên cộng đồng",
+  "spacesNameHint": "ví dụ: Nhà giao dịch tiền điện tử",
+  "spacesNameRequired": "Tên là bắt buộc",
+  "spacesDescription": "Mô tả",
+  "spacesDescriptionHint": "Cộng đồng này nói về cái gì?",
+  "spacesType": "Loại cộng đồng",
+  "spacesPublicDesc": "Bất cứ ai cũng có thể khám phá và tham gia",
+  "spacesPrivateDesc": "Chỉ những thành viên được mời mới có thể tham gia",
+  "spacesNotFound": "Không tìm thấy cộng đồng",
+  "spacesSearch": "Tìm kiếm cộng đồng...",
+  "spacesMembers": "Thành viên",
+  "spacesNoChannels": "Chưa có kênh nào",
+  "spacesLeave": "Rời khỏi cộng đồng",
+  "spacesLeaveConfirm": "Bạn có chắc chắn muốn rời khỏi \"{name}\" không?",
+  "@spacesLeaveConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spacesDelete": "Xóa cộng đồng",
+  "spacesDeleteConfirm": "Thao tác này sẽ xóa vĩnh viễn \"{name}\" và tất cả các kênh của nó. Không thể hoàn tác hành động này.",
+  "@spacesDeleteConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spacesCreateChannel": "Thêm kênh",
+  "spacesChannelName": "Tên kênh",
+  "spacesChannelTopic": "Chủ đề (tùy chọn)",
+  "spacesDeleteChannel": "Xóa kênh",
+  "spacesDeleteChannelConfirm": "Bạn có chắc chắn muốn xóa \"#{name}\" không?",
+  "@spacesDeleteChannelConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spacesEditName": "Chỉnh sửa tên",
+  "spacesEditDescription": "Chỉnh sửa mô tả",
+  "spacesViewAllMembers": "Xem tất cả thành viên {count}",
+  "@spacesViewAllMembers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "spacesKickMemberTitle": "Đá {name}",
+  "@spacesKickMemberTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spacesBanMemberTitle": "Cấm {name}",
+  "@spacesBanMemberTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spacesPromoteAdmin": "Thăng cấp lên quản trị viên",
+  "spacesDemoteAdmin": "Xóa quản trị viên",
+  "spacesInviteMember": "Mời thành viên",
+  "spacesInviteMemberUserId": "ID người dùng (ví dụ: @user:server.com)",
+  "spacesSave": "Lưu",
+  "settingsScreenshotProtection": "Bảo vệ ảnh chụp màn hình",
+  "settingsScreenshotProtectionDesc": "Ngăn chặn ảnh chụp màn hình và ghi màn hình",
+  "chatSelfDestructTimer": "Tự hủy",
+  "chatTimerPickerTitle": "Hẹn giờ tự hủy",
+  "chatTimerOff": "Tắt",
+  "onChainNotificationsTitle": "Sự kiện On-chain",
+  "onChainMarkAllRead": "Đánh dấu tất cả đã đọc",
+  "onChainNoNotifications": "Chưa có sự kiện on-chain",
+  "onChainNoNotificationsDesc": "Sự kiện từ các kênh đã đăng ký sẽ xuất hiện ở đây",
+  "onChainViewDetails": "Xem chi tiết",
+  "chatCommandHelp": "/help — Xem tất cả lệnh",
+  "chatCommandPrice": "/price — Lấy giá token",
+  "chatCommandBalance": "/balance — Xem số dư ví",
+  "chatCommandChains": "/chains — Danh sách 236+ chain",
+  "chatMiniApps": "Ứng dụng",
+  "miniAppMarketTitle": "Mini App",
+  "miniAppCategoryAll": "Tất cả",
+  "miniAppSearch": "Tìm kiếm ứng dụng...",
+  "miniAppFeatured": "Nổi bật",
+  "miniAppAllApps": "Tất cả ứng dụng",
+  "miniAppNoResults": "Không tìm thấy ứng dụng",
+  "slideToPayLabel": "→→→ Trượt để xác nhận",
+  "slideToPayConfirming": "Đang xác nhận...",
+  "redPacketBestLuck": "May mắn nhất",
+  "redPacketBestLuckCongrats": "You got the best luck! 👑",
+  "redPacketStats": "{claimed} / {total} grabbed",
+  "@redPacketStats": {
+    "placeholders": {
+      "claimed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "redPacketStatsTotal": "Total: {amount} {token}",
+  "redPacketGrabbedViral": "I grabbed a {amount} {token} red packet! 🧧",
+  "@redPacketGrabbedViral": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "token": {
+        "type": "String"
+      }
+    }
+  },
+  "web3SearchHint": "@matrix:id • Địa chỉ ví 0x • name.eth",
+  "web3SearchPlaceholder": "Tìm kiếm theo ID, ví hoặc ENS...",
+  "web3WalletAddress": "Địa chỉ ví",
+  "web3AddressCopied": "Đã sao chép địa chỉ",
+  "web3Copy": "Sao chép",
+  "web3SendMessage": "Gửi tin nhắn",
+  "web3SendToWallet": "Ví tin nhắn",
+  "web3WalletOnlyHint": "Địa chỉ này chưa có tài khoản N42. Tin nhắn sẽ được gửi khi họ tham gia.",
+  "web3NftAvatar": "Hình đại diện NFT",
+  "web3ResolveFailed": "Không thể giải quyết danh tính",
+  "web3EnsNotFound": "Không tìm thấy tên ENS \"{name}\"",
+  "@web3EnsNotFound": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "web3NoN42AccountTitle": "Không có tài khoản N42",
+  "web3NoN42AccountDesc": "Địa chỉ ví này chưa có tài khoản N42. Bạn có thể chia sẻ liên kết mời N42 của mình với họ để bắt đầu.",
+  "web3ShareInvite": "Chia sẻ Mời",
+  "nftPickerTitle": "Chọn Hình đại diện NFT",
+  "nftPickerTabPopular": "phổ biến",
+  "nftPickerTabCustom": "tùy chỉnh",
+  "nftPickerChain": "Chuỗi",
+  "nftPickerContract": "Địa chỉ hợp đồng",
+  "nftPickerTokenId": "ID mã thông báo",
+  "nftPickerVerifyOwnership": "Xác minh quyền sở hữu và xem trước",
+  "nftPickerUseAsAvatar": "Sử dụng làm Hình đại diện",
+  "nftPickerPreview": "Xem trước",
+  "nftPickerNotOwned": "Bạn không sở hữu NFT này",
+  "nftPickerInvalidTokenId": "ID mã thông báo không hợp lệ",
+  "nftPickerEnterBoth": "Nhập địa chỉ hợp đồng và ID mã thông báo",
+  "nftPickerInfoTitle": "Avatar NFT — Đã được xác minh trên chuỗi",
+  "nftPickerInfoDesc": "Liên kết NFT mà bạn sở hữu làm hình đại diện của mình. Bất cứ ai cũng có thể xác minh quyền sở hữu trên chuỗi. Được trưng bày với một chiếc nhẫn vàng trên N42.",
+  "nftPickerPopularCollections": "Bộ sưu tập phổ biến",
+  "nftPickerWalletHint": "Kết nối ví N42 của bạn để tự động khám phá NFT của bạn trên hơn 236 chuỗi.",
+  "profileBindNftAvatar": "Liên kết hình đại diện NFT",
+  "profileChangeAvatar": "Thay đổi hình đại diện",
+  "groupTopics": "chủ đề",
+  "groupTopicsEmpty": "Chưa có chủ đề nào",
+  "syncInProgress": "Đang đồng bộ hóa lịch sử tin nhắn...",
+  "recoveryKeyReminderTitle": "Bảo vệ tin nhắn của bạn",
+  "recoveryKeyReminderDesc": "Tạo khóa khôi phục để đồng bộ hóa an toàn các tin nhắn được mã hóa trên các thiết bị",
+  "recoveryKeySetupNow": "Thiết lập ngay bây giờ",
+  "recoveryKeyRemindLater": "Nhắc tôi sau",
+  "channelReadOnly": "Chỉ quản trị viên mới có thể đăng bài trên kênh này",
+  "channelSubscribers": "người đăng ký",
+  "channelVerified": "Kênh đã được xác minh",
+  "redPacketHistory": "Lịch sử gói màu đỏ",
+  "redPacketSent": "Đã gửi",
+  "redPacketReceived": "Đã nhận",
+  "redPacketExpired": "Đã hết hạn",
+  "redPacketClaimed": "Đã xác nhận quyền sở hữu",
+  "redPacketInsufficientBalance": "Số dư không đủ",
+  "selfDestructCountdown": "Tự hủy trong {time}",
+  "@selfDestructCountdown": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "messageDestroyed": "Tin nhắn bị hủy",
+  "miniAppPermissionDenied": "Quyền bị từ chối: {permission}",
+  "@miniAppPermissionDenied": {
+    "placeholders": {
+      "permission": {
+        "type": "String"
+      }
+    }
+  },
+  "aiSuggestionGasFee": "Phí gas là gì?",
+  "aiSuggestionDefi": "Hướng dẫn cho người mới bắt đầu DeFi",
+  "aiSuggestionSecurity": "Cách kiểm tra bảo mật hợp đồng",
+  "aiSuggestionBridge": "Cầu nối chuỗi chéo",
+  "channelDiscoverTitle": "Khám phá kênh",
+  "channelDiscoverSearch": "Tìm kiếm kênh...",
+  "channelJoin": "Tham gia",
+  "channelJoined": "Đã tham gia",
+  "channelCategory": "Danh mục",
+  "slowModeCooldown": "Chế độ chậm: chờ {seconds}s",
+  "@slowModeCooldown": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "addressCopyAction": "Sao chép địa chỉ",
+  "addressSendMessage": "Gửi tin nhắn",
+  "addressViewProfile": "Xem hồ sơ",
+  "sendToAddress": "Gửi đến địa chỉ ví",
+  "blocAuthSendVerificationCodeFailed": "Không gửi được mã xác minh",
+  "blocAuthServerNoEmailPasswordReset": "Máy chủ này không hỗ trợ đặt lại mật khẩu email",
+  "blocAuthResetPasswordFailed": "Không thể đặt lại mật khẩu",
+  "blocAuthChangePasswordFailed": "Không thể thay đổi mật khẩu",
+  "blocAuthOldPasswordWrong": "Mật khẩu hiện tại không chính xác",
+  "blocAuthLoginCancelled": "Đăng nhập bị hủy",
+  "blocAuthGoogleLoginFailed": "Đăng nhập Google không thành công",
+  "blocAuthAppleLoginFailed": "Đăng nhập Apple không thành công",
+  "blocAuthSsoLoginFailed": "Đăng nhập SSO không thành công",
+  "blocAuthFacebookLoginFailed": "Đăng nhập Facebook không thành công",
+  "blocAuthTwitterLoginFailed": "Đăng nhập Twitter không thành công",
+  "blocAuthWeChatLoginFailed": "Đăng nhập WeChat không thành công",
+  "blocAuthWeChatNotConfigured": "Đăng nhập WeChat không được định cấu hình",
+  "blocAuthWeChatNotInstalled": "Vui lòng cài đặt WeChat trước",
+  "blocAuthPasswordWrong": "Mật khẩu không chính xác",
+  "blocAuthEmailAlreadyBound": "Email này đã được liên kết với một tài khoản khác",
+  "blocAuthChangeEmailFailed": "Không thể thay đổi email",
+  "blocAuthVerificationCodeInvalid": "Mã xác minh không chính xác hoặc đã hết hạn",
+  "blocAuthSessionExpired": "Phiên đã hết hạn, vui lòng đăng nhập lại",
+  "blocAuthSessionIncomplete": "Dữ liệu phiên không đầy đủ, vui lòng đăng nhập lại",
+  "@redPacketStatsTotal": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "token": {
+        "type": "String"
+      }
+    }
+  }
+}

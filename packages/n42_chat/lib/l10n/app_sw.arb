@@ -1,0 +1,2747 @@
+{
+  "@@locale": "sw",
+  "commonRetry": "Jaribu tena",
+  "commonUnknownUser": "Mtumiaji asiyejulikana",
+  "transferWalletNotConnected": "Wallet Haijaunganishwa",
+  "chatCallServiceNotInitialized": "Huduma ya kupiga simu haijaanzishwa",
+  "authLoginFailed": "Kuingia kumeshindwa: {error}",
+  "chatCallBack": "Piga simu tena",
+  "chatMissedVideoCall": "Hukujibu simu ya video",
+  "chatMissedVoiceCall": "Simu ambayo haikupokelewa",
+  "chatCallNotAnswered": "Haijajibiwa",
+  "chatCallDurationLabel": "Muda wa simu",
+  "chatVoiceCallCancelled": "Simu ya sauti imeghairiwa",
+  "chatVideoCallCancelled": "Hangout ya Video imeghairiwa",
+  "commonImage": "[Picha]",
+  "chatVideo": "[Video]",
+  "chatVoice": "[Sauti]",
+  "commonFile": "[Faili]",
+  "chatLocation": "[Mahali]",
+  "chatUnknownMessage": "[Ujumbe usiojulikana]",
+  "commonDelete": "Futa",
+  "chatDeleteThisMessage": "Ungependa kufuta ujumbe huu?",
+  "chatMessageDeleted": "Ujumbe umefutwa",
+  "profileNotLoggedIn": "Hujaingia",
+  "chatMyLocation": "Eneo langu",
+  "commonGroupChat": "Gumzo la Kikundi",
+  "commonSearch": "Tafuta",
+  "commonCancel": "Ghairi",
+  "commonLoadFailed": "Imeshindwa kupakia",
+  "commonMessages": "Ujumbe",
+  "commonContacts": "Anwani",
+  "commonMe": "Mimi",
+  "commonVoiceLoading": "Inapakia sauti, tafadhali jaribu tena baadaye",
+  "commonVoiceToTextFailed": "Sauti kwa maandishi imeshindwa",
+  "commonConvertToText": "Kwa maandishi",
+  "chatCopy": "Nakili",
+  "commonForward": "Mbele",
+  "commonUnfavorite": "Unfav",
+  "commonFavorite": "Kipendwa",
+  "settingsResend": "Tuma tena",
+  "chatRecall": "Kumbuka",
+  "commonQuote": "Nukuu",
+  "commonRemind": "Kumbusha",
+  "chatCopied": "Imenakiliwa",
+  "storySendMessageHint": "Tuma ujumbe",
+  "commonMicrophonePermissionRequired": "Tafadhali ruhusu maikrofoni ruhusa",
+  "chatMicrophonePermissionDeniedPermanent": "Ruhusa ya maikrofoni imekataliwa. Tafadhali iwashe katika mipangilio ya mfumo ili kutumia ujumbe wa sauti.",
+  "commonStartRecordingFailed": "Imeshindwa kuanza kurekodi: {error}",
+  "commonRecordingTooShort": "Kurekodi ni fupi mno",
+  "commonStopRecordingFailed": "Imeshindwa kuacha kurekodi: {error}",
+  "chatReleaseToCancel": "Toa ili kughairi",
+  "chatReleaseToSend": "Achilia ili kutuma, telezesha kidole juu ili kughairi",
+  "commonHoldToTalk": "Shikilia kuzungumza",
+  "commonSend": "Tuma",
+  "commonAddFriend": "Ongeza Rafiki",
+  "commonChatServiceNotConnected": "Huduma ya gumzo haijaunganishwa",
+  "contactUserNotFoundHint": "Mtumiaji \"{query}\" hajapatikana\n\nVidokezo:\n• Jaribu kuweka kitambulisho kamili cha mtumiaji, k.m. @username:server.com\n• Angalia tahajia ya jina la mtumiaji",
+  "@contactUserNotFoundHint": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "contactCreateChatFailed": "Imeshindwa kuunda gumzo: {error}",
+  "@contactCreateChatFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "contactSearchFailed": "Utafutaji haukufaulu: {error}",
+  "@contactSearchFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "contactEnterUserIdOrUsername": "Weka kitambulisho cha mtumiaji au jina la mtumiaji ili kutafuta",
+  "contactSearching": "Inatafuta...",
+  "contactSearchUserToChat": "Tafuta mtumiaji ili kuanza kupiga gumzo",
+  "contactMatrixIdExample": "Unaweza kuingiza Kitambulisho kamili cha Matrix\nk.m. @user:matrix.n42.network",
+  "contactUserNotFound": "Mtumiaji \"{username}\" hajapatikana",
+  "@contactUserNotFound": {
+    "placeholders": {
+      "username": {
+        "type": "String"
+      }
+    }
+  },
+  "commonChat": "Soga",
+  "commonSettings": "Mipangilio",
+  "profileEditProfile": "Badilisha Wasifu",
+  "authLogin": "Ingia",
+  "commonCreateGroup": "Unda Kikundi",
+  "chatError": "Hitilafu",
+  "commonTransfer": "Uhamisho",
+  "commonReceived": "Imepokelewa",
+  "commonRefunded": "Imerejeshwa",
+  "commonExpired": "Muda wake umeisha",
+  "chatRedPacketGreeting": "Kila la heri",
+  "commonN42RedPacket": "Pakiti Nyekundu ya N42",
+  "commonClaimed": "Imedaiwa",
+  "commonAllClaimed": "Wote walidai",
+  "chatReadAloud": "Soma Kwa Sauti",
+  "chatReply": "Jibu",
+  "commonEdit": "Hariri",
+  "chatSelectForwardTarget": "Chagua Lengo la Mbele",
+  "commonSendCount": "Tuma({count})",
+  "contactN42Id": "N42 ID: {id}",
+  "profileN42IdTitle": "Kitambulisho cha N42",
+  "profileN42Bean": "N42 Maharage",
+  "contactFriendInfo": "Habari Rafiki",
+  "contactFriendInfoDesc": "Ongeza maoni ya rafiki, simu, lebo, madokezo, picha na uweke ruhusa.",
+  "commonMoments": "Muda mfupi",
+  "commonSendMessage": "Ujumbe",
+  "contactAudioVideoCall": "Simu ya Sauti/Video",
+  "contactVideoChannel": "Kituo cha Video",
+  "contactRemark": "Toa maoni",
+  "contactRemarkName": "Rejea Jina",
+  "contactPhone": "Simu",
+  "contactTags": "Lebo",
+  "contactNotes": "Vidokezo",
+  "contactPhotos": "Picha",
+  "contactPermissions": "Ruhusa",
+  "contactChatMomentsEtc": "Gumzo, Matukio, Michezo, n.k.",
+  "contactMoreInfo": "Maelezo Zaidi",
+  "contactCommonGroups": "Vikundi kwa pamoja",
+  "contactSource": "Chanzo",
+  "settingsNotificationSettings": "Arifa",
+  "settingsPrivacy": "Faragha",
+  "settingsAppearance": "Muonekano",
+  "settingsAbout": "Kuhusu",
+  "commonLogout": "Toka nje",
+  "commonLogoutConfirm": "Je, una uhakika unataka kutoka?",
+  "commonSave": "Hifadhi",
+  "profileNickname": "Jina la utani",
+  "profileEnterNickname": "Weka jina la utani",
+  "profileSignature": "Sahihi",
+  "profileAddSignature": "Ongeza saini",
+  "commonTakePhoto": "Piga Picha",
+  "profileChooseFromGallery": "Chagua kutoka kwenye Matunzio",
+  "profileSaveFailed": "Imeshindwa kuhifadhi: {error}",
+  "authSecureDecentralizedChat": "Ujumbe salama, uliogatuliwa",
+  "commonEndToEndEncryption": "Usimbaji wa Mwisho-hadi-Mwisho",
+  "authMessagesOnlyYouCanSee": "Ujumbe unaoonekana kwako na mpokeaji pekee",
+  "authDecentralized": "Iliyogatuliwa",
+  "authBasedOnMatrix": "Imejengwa juu ya itifaki wazi ya Matrix",
+  "authWalletIntegration": "Ujumuishaji wa Wallet",
+  "authEasyCryptoTransfer": "Uhamisho rahisi wa cryptocurrency",
+  "authRegister": "Jisajili",
+  "authAgreeTerms": "Kwa kuingia, unakubali",
+  "authTermsOfService": "Masharti ya Huduma",
+  "authAnd": "na",
+  "authPrivacyPolicy": "Sera ya Faragha",
+  "authServerAddress": "Anwani ya Seva",
+  "authEnterServerAddress": "Ingiza anwani ya seva",
+  "authConnectedTo": "Imeunganishwa kwa {serverName}",
+  "authUsername": "Jina la mtumiaji",
+  "authEnterUsername": "Ingiza jina la mtumiaji",
+  "authUsernameOrEmail": "Jina la mtumiaji au Barua pepe",
+  "authEnterUsernameOrEmail": "Weka jina la mtumiaji au barua pepe",
+  "authPassword": "Nenosiri",
+  "authEnterPassword": "Weka nenosiri",
+  "authRegisterAccount": "Jisajili",
+  "authForgotPassword": "Umesahau Nenosiri",
+  "authOtherLoginMethods": "Njia zingine za kuingia",
+  "authCreateAccount": "Fungua Akaunti",
+  "authJoinN42Chat": "Jiunge na N42 Chat ili kuanza kupiga gumzo",
+  "authUsernameHint": "herufi 3-20, herufi/nambari/_",
+  "authUsernameMinLength": "Jina la mtumiaji lazima liwe na angalau vibambo 3",
+  "authUsernameMaxLength": "Jina la mtumiaji lazima liwe na vibambo 20",
+  "authUsernameFormat": "Jina la mtumiaji linaweza tu kuwa na herufi, nambari, na mistari chini",
+  "authPasswordHint": "Chini ya herufi 8",
+  "commonPasswordMinLength": "Nenosiri lazima liwe na angalau vibambo 8",
+  "authConfirmPassword": "Thibitisha Nenosiri",
+  "authFilled": "Imejazwa",
+  "authEnterInviteCode": "Weka msimbo wa mwaliko",
+  "authAlreadyHaveAccount": "Je, tayari una akaunti?",
+  "authLoginNow": "Ingia sasa",
+  "profileAvatar": "Avatar",
+  "profileStatus": "Hali",
+  "commonLoading": "Inapakia...",
+  "conversationNoConversations": "Hakuna mazungumzo",
+  "conversationTapToChat": "Gusa sehemu ya juu kulia ili kuanza kupiga gumzo",
+  "conversationStartGroup": "Anzisha Gumzo la Kikundi",
+  "commonScan": "Changanua",
+  "commonPayment": "Malipo",
+  "commonFeatureComingSoon": "{feature} inakuja hivi karibuni",
+  "conversationMarkAsRead": "Weka alama kama imesomwa",
+  "commonUnmute": "Rejesha sauti",
+  "commonMute": "Nyamazisha",
+  "conversationUnpin": "Bandua",
+  "conversationPin": "Bandika",
+  "conversationDeleteConversation": "Futa Mazungumzo",
+  "conversationDeleteConversationConfirm": "Je, ungependa kufuta mazungumzo na \"{name}\"?",
+  "commonNoContacts": "Hakuna anwani",
+  "contactAddFriendsToChat": "Ongeza marafiki ili kuanza kupiga gumzo",
+  "contactNotFound": "Anwani haijapatikana",
+  "contactTryOtherKeywords": "Jaribu maneno mengine muhimu au utafutaji wa kimataifa",
+  "contactSearchResults": "Matokeo ya utafutaji",
+  "contactNewFriends": "Marafiki Wapya",
+  "contactChatOnlyFriends": "Marafiki wa gumzo pekee",
+  "contactOfficialAccounts": "Hesabu Rasmi",
+  "contactServiceAccounts": "Hesabu za Huduma",
+  "contactEnterpriseContacts": "Anwani za Biashara",
+  "contactRecommendToFriend": "Shiriki anwani",
+  "commonSetRemark": "Weka maoni",
+  "contactSendingCard": "Inatuma kadi ya mawasiliano...",
+  "commonFileLabel": "Faili",
+  "commonLocationLabel": "Mahali",
+  "contactRecommendFailed": "Imeshindwa kupendekeza: {error}",
+  "profileEnterRemark": "Ingiza maoni",
+  "contactOpeningChat": "Inafungua gumzo...",
+  "contactOpenChatFailed": "Imeshindwa kufungua gumzo: {error}",
+  "contactAddContact": "Ongeza Anwani",
+  "contactEnterUserId": "Weka kitambulisho cha mtumiaji",
+  "contactNoFriendRequests": "Hakuna maombi ya urafiki",
+  "commonAccept": "Kubali",
+  "commonReject": "Kataa",
+  "commonNoGroups": "Hakuna vikundi",
+  "contactSelectFriendToRecommend": "Chagua rafiki wa kumpendekeza",
+  "commonSearchContacts": "Tafuta anwani",
+  "contactNoContactsFound": "Hakuna anwani zilizopatikana",
+  "favoriteYesterday": "Jana",
+  "chatJustNow": "Sasa hivi",
+  "profileOnline": "Mtandaoni",
+  "profileOffline": "Nje ya mtandao",
+  "searchContactsGroupsMessages": "Tafuta anwani, vikundi na ujumbe",
+  "searchError": "Hitilafu ya Utafutaji",
+  "chatSearchHint": "Tafuta",
+  "searchHistory": "Historia ya Utafutaji",
+  "commonClear": "Wazi",
+  "commonAll": "Wote",
+  "searchGroups": "Vikundi",
+  "searchNoResults": "Hakuna Matokeo",
+  "commonGroupMembers": "Wanachama ({count})",
+  "groupMembersTitle": "Wajumbe wa Kikundi",
+  "groupViewAll": "Tazama zote",
+  "groupOwner": "Mmiliki",
+  "groupAdmin": "Msimamizi",
+  "groupInvite": "Alika",
+  "commonGroupAnnouncement": "Tangazo la Kikundi",
+  "commonNotSet": "Haijawekwa",
+  "groupDescription": "Maelezo ya Kikundi",
+  "groupPublicGroup": "Kikundi cha Umma",
+  "commonClearChatHistory": "Futa Historia ya Gumzo",
+  "commonDissolveGroup": "Futa Kikundi",
+  "commonLeaveGroup": "Ondoka kwenye Kikundi",
+  "groupChangeGroupName": "Badilisha Jina la Kikundi",
+  "commonEnterGroupName": "Ingiza jina la kikundi",
+  "commonConfirm": "Thibitisha",
+  "groupEnterGroupDescription": "Weka maelezo ya kikundi",
+  "groupPublish": "Chapisha",
+  "chatClearHistoryConfirm": "Ungependa kufuta historia yote ya gumzo? Hili haliwezi kutenduliwa.",
+  "chatClearAction": "Wazi",
+  "commonChatHistoryCleared": "Historia ya gumzo imefutwa",
+  "commonDissolve": "kuyeyusha",
+  "groupQrCode": "Msimbo wa QR wa Kikundi",
+  "commonSearchChatHistory": "Tafuta Historia ya Gumzo",
+  "groupIdCopied": "Kitambulisho cha kikundi kimenakiliwa",
+  "transferEnterOrPasteAddress": "Ingiza au ubandike anwani ya mkoba",
+  "transferSelectToken": "Chagua Tokeni",
+  "commonTransferAmount": "Kiasi cha Uhamisho",
+  "transferAvailable": "Inapatikana",
+  "transferMemoOptional": "Memo (ya hiari)",
+  "transferConfirmTransfer": "Thibitisha Uhamisho",
+  "transferAddressVerified": "Anwani imethibitishwa",
+  "transferAvailableBalance": "Inapatikana: {balance} {symbol}",
+  "commonEnterAmount": "Weka kiasi",
+  "commonRedPacketCountMin": "Angalau pakiti 1 nyekundu inahitajika",
+  "commonViewRedPacketDetails": "Tazama Maelezo ya Pakiti Nyekundu",
+  "commonEnterTransferAmount": "Tafadhali weka kiasi cha uhamisho",
+  "commonTransferTo": "Hamisha hadi",
+  "commonFromSender": "Kutoka {name}",
+  "commonConfirmReceive": "Thibitisha Risiti",
+  "groupProfile": "Maelezo ya Kikundi",
+  "groupRemoveMember": "Ondoa kwenye Kikundi",
+  "commonRemove": "Ondoa",
+  "profileClearStatus": "Wazi Hali",
+  "profileClearStatusConfirm": "Je, ungependa kufuta hali ya sasa?",
+  "profileStatusCleared": "Hali imefutwa",
+  "profileUserNotExist": "Mtumiaji hayupo",
+  "profileUserIdCopied": "Kitambulisho cha Mtumiaji kimenakiliwa",
+  "commonReport": "Ripoti",
+  "profileQrCode": "Msimbo wa QR",
+  "profileAvatarUpdated": "Avatar imesasishwa",
+  "commonSelectImageFailed": "Imeshindwa kuchagua picha: {error}",
+  "profileChangeName": "Badilisha Jina",
+  "profileMale": "Mwanaume",
+  "profileFemale": "Mwanamke",
+  "chatFeatureInDev": "Kipengele cha {feature} katika maendeleo...",
+  "profileSaveAddressFailed": "Imeshindwa kuhifadhi anwani: {error}",
+  "profileAddNew": "Ongeza",
+  "profileAddAddress": "Ongeza Anwani",
+  "profileAddressAdded": "Anwani imeongezwa",
+  "profileAddressUpdated": "Anwani imesasishwa",
+  "profileDeleteAddress": "Futa Anwani",
+  "profileAddressDeleted": "Anwani imefutwa",
+  "profileSaveInvoiceFailed": "Imeshindwa kuhifadhi ankara: {error}",
+  "profileMyInvoices": "Ankara Zangu",
+  "profileAddInvoice": "Ongeza ankara",
+  "profileInvoiceAdded": "Ankara imeongezwa",
+  "profileInvoiceUpdated": "Ankara imesasishwa",
+  "profileDeleteInvoice": "Futa ankara",
+  "profileInvoiceDeleted": "Ankara imefutwa",
+  "profilePersonal": "Binafsi",
+  "groupSelectAtLeastOne": "Tafadhali chagua angalau mwanachama mmoja",
+  "chatFileNotExist": "Faili haipo",
+  "chatSendFailed": "Imeshindwa kutuma: {error}",
+  "chatCannotOpenBrowser": "Haiwezi kufungua kivinjari",
+  "chatSelectFileFailed": "Imeshindwa kuchagua faili: {error}",
+  "settingsSetupFailed": "Imeshindwa kuweka mipangilio: {error}",
+  "transferEnterValidAmount": "Tafadhali weka kiasi halali",
+  "commonAddressCopied": "Anwani imenakiliwa",
+  "favoriteOpenItem": "Fungua: {content}",
+  "favoriteDeleted": "Imefutwa",
+  "profileWallet": "Mkoba",
+  "chatRecording": "Kurekodi",
+  "chatInvalidVideoUrl": "URL ya video si sahihi",
+  "chatDownloadFile": "Pakua faili",
+  "chatClearChatHistoryTitle": "Futa Historia ya Gumzo",
+  "chatVideoCall": "Simu ya Video",
+  "commonVoiceCall": "Wito wa Sauti",
+  "callLeaveMeeting": "Ondoka kwenye Mkutano",
+  "chatDetails": "Maelezo ya Gumzo",
+  "chatViewAllGroupMembers": "Tazama wanachama wote",
+  "chatGroupName": "Jina la Kikundi",
+  "chatGroupNameUpdated": "Jina la kikundi limesasishwa",
+  "chatUpdateFailed": "Usasishaji haukufaulu",
+  "chatNoPermissionToModify": "Huna ruhusa ya kurekebisha",
+  "chatGroupManagement": "Usimamizi wa Kikundi",
+  "chatMyNicknameInGroup": "Jina Langu La Utani Katika Kundi",
+  "chatPinChat": "Bandika Gumzo",
+  "chatStrongReminder": "Kikumbusho chenye Nguvu",
+  "chatSetChatBackground": "Weka Mandharinyuma ya Gumzo",
+  "chatUnknownFile": "Faili isiyojulikana",
+  "chatDownload": "Pakua",
+  "chatInvalidLocation": "Mahali si sahihi",
+  "chatTapToCancel": "Gusa ili kughairi",
+  "chatCaptureFailed": "Imeshindwa kupiga picha: {error}",
+  "chatProcessingVideo": "Inachakata video...",
+  "chatVideoFileNotExist": "Faili ya video haipo",
+  "chatVideoDataEmpty": "Data ya video ni tupu",
+  "chatVideoTooLarge": "Ukubwa wa video hauwezi kuzidi MB 100",
+  "chatSendingVideo": "Inatuma video...",
+  "chatSendVideoFailed": "Imeshindwa kutuma video: {error}",
+  "chatImageFileNotExist": "Faili ya picha haipo",
+  "commonImageDataEmpty": "Data ya picha ni tupu",
+  "chatSendingImage": "Inatuma picha...",
+  "chatSendImageFailed": "Imeshindwa kutuma picha: {error}",
+  "chatSendLocation": "Tuma Mahali",
+  "chatSelectLocationAndSend": "Chagua eneo na utume",
+  "chatShareRealTimeLocation": "Shiriki Mahali pa Wakati Halisi",
+  "chatShareLocationForOneHour": "Shiriki eneo la wakati halisi na rafiki kwa saa 1",
+  "chatLocationSent": "Mahali pa kutumwa",
+  "chatSelectMessages": "Chagua ujumbe",
+  "chatSelectedCount": "Imechaguliwa {count}",
+  "chatSelectAll": "Chagua Zote",
+  "chatGroupChatCount": "Gumzo la Kikundi({count})",
+  "chatPrivateChat": "Gumzo la Kibinafsi",
+  "chatNoMessages": "Hakuna ujumbe",
+  "chatSendFirstMessage": "Tuma ujumbe wa kwanza ili kuanza kupiga gumzo",
+  "chatEncryptionNotice": "Gumzo hili limesimbwa kwa njia fiche kutoka mwanzo hadi mwisho. Ni wewe tu na mpokeaji mnaweza kusoma ujumbe.",
+  "chatMultiForward": "Mbele",
+  "chatCollect": "Kusanya",
+  "chatNoMembers": "Hakuna wanachama",
+  "chatMemberNotFound": "Mwanachama hajapatikana",
+  "chatVoiceFileNotExist": "Faili ya sauti haipo",
+  "chatVoiceFileEmpty": "Faili ya sauti haina chochote",
+  "chatSendingVoice": "Inatuma sauti...",
+  "chatSendVoiceFailed": "Imeshindwa kutuma sauti: {error}",
+  "chatMessageForwarded": "Ujumbe umetumwa",
+  "chatForwardFailed": "Usambazaji mbele haukufaulu: {error}",
+  "chatUnfavorited": "Isiyopendelewa",
+  "chatFavorited": "Imependekezwa",
+  "chatReactionAdded": "Maoni yameongezwa",
+  "chatReactionRemoved": "Maoni yameondolewa",
+  "chatFailedMessageDeleted": "Ujumbe ambao haukufaulu umefutwa",
+  "chatDeleteMessages": "Futa ujumbe",
+  "chatDeleteMessagesConfirm": "Je, una uhakika unataka kufuta ujumbe wa {count}?",
+  "chatNoteOtherMessages": "Kumbuka: Ujumbe wa {count} unatoka kwa wengine na utafutwa kwa ajili yako pekee.",
+  "chatMyMessagesWillBeRecalled": "Ujumbe wa {count} kutoka kwako utakumbukwa kwa kila mtu.",
+  "chatRecalledCount": "Umekumbuka ujumbe wa {count}, {localCount} ilifutwa kwa ajili yako tu",
+  "chatRecalledMessages": "Ujumbe wa {count} ulikumbuka",
+  "chatDeletedLocally": "Ujumbe wa {count} umefutwa kwa ajili yako tu",
+  "chatForwardedCount": "Imesambazwa ujumbe wa {count}",
+  "chatForwardComplete": "Usambazaji umekamilika: {success} imefaulu, {failed} haikufaulu",
+  "chatRemindOnlyInGroup": "Kipengele cha kukumbusha kinapatikana kwenye gumzo la kikundi pekee",
+  "chatOnlyTextSearchable": "Ni SMS pekee zinazoweza kutafutwa",
+  "chatSearchFor": "Tafuta \"{text}\"",
+  "chatBaiduSearch": "Utafutaji wa Baidu",
+  "chatGoogleSearch": "Utafutaji wa Google",
+  "chatBingSearch": "Utafutaji wa Bing",
+  "chatCalling": "Inapiga...",
+  "chatRinging": "Inapigia...",
+  "chatInCall": "Katika simu",
+  "commonFeatureInDevelopment": "Kipengele cha {feature} katika maendeleo...",
+  "chatCollectMessages": "Imekusanya ujumbe wa {count}",
+  "commonMemberCount": "Wanachama wa {count}",
+  "groupDone": "Imekamilika({count})",
+  "@groupDone": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "profileServices": "Huduma",
+  "commonFavorites": "Vipendwa",
+  "profileOrdersAndCards": "Maagizo na Kadi",
+  "profileStickers": "Vibandiko",
+  "profileStatusSetTo": "Hali imewekwa kuwa: {status}",
+  "@profileStatusSetTo": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "profileAvatarUploadFailed": "Imeshindwa kupakia avatar",
+  "profilePersonalProfile": "Wasifu wa Kibinafsi",
+  "profileName": "Jina",
+  "profileGender": "Jinsia",
+  "profileRegion": "Mkoa",
+  "commonMyQrCode": "Msimbo wangu wa QR",
+  "profilePoke": "Poke",
+  "profileRingtone": "Mlio wa simu",
+  "profileDefaultRingtone": "Mlio Chaguomsingi",
+  "profileMyAddresses": "Anwani Zangu",
+  "profileGenderSetTo": "Jinsia imewekwa kuwa: {gender}",
+  "@profileGenderSetTo": {
+    "placeholders": {
+      "gender": {
+        "type": "String"
+      }
+    }
+  },
+  "profileSelectRegion": "Chagua Mkoa",
+  "profileSelectCity": "Chagua Jiji",
+  "profileRegionSetTo": "Mkoa umewekwa kuwa: {region}",
+  "@profileRegionSetTo": {
+    "placeholders": {
+      "region": {
+        "type": "String"
+      }
+    }
+  },
+  "profileSetPoke": "Weka Poke",
+  "profileFriendPokedMe": "Rafiki alinichokoza",
+  "profileExample": "Mfano",
+  "profileOnTheShoulder": " kwenye bega",
+  "profilePokeCleared": "Poke imefutwa",
+  "profilePokeSetTo": "Poke imewekwa kwa: poked me{suffix}",
+  "@profilePokeSetTo": {
+    "placeholders": {
+      "suffix": {
+        "type": "String"
+      }
+    }
+  },
+  "profileEditSignature": "Badilisha Sahihi",
+  "profileIntroduceYourself": "Sentensi ya kujitambulisha",
+  "profileSignatureCleared": "Sahihi imefutwa",
+  "profileSignatureUpdated": "Sahihi imesasishwa",
+  "profileScanToAddFriend": "Changanua msimbo wa QR hapo juu ili kuniongeza kama rafiki",
+  "profileRingtoneSetTo": "Mlio wa simu umewekwa kuwa: {ringtone}",
+  "@profileRingtoneSetTo": {
+    "placeholders": {
+      "ringtone": {
+        "type": "String"
+      }
+    }
+  },
+  "commonConfirmDissolveGroup": "Je, una uhakika unataka kufuta \"{name}\"? Kitendo hiki hakiwezi kutenduliwa.",
+  "@commonConfirmDissolveGroup": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "authEnterValidServerAddress": "Tafadhali weka anwani sahihi ya seva",
+  "authEnterServerAddressFirst": "Tafadhali weka anwani ya seva kwanza",
+  "authPasskeyRequiresServer": "Kuingia kwa nenosiri kunahitaji usaidizi wa seva",
+  "authLoginAgreement": "Kwa kuingia, unakubali ",
+  "authPleaseAgreeToTerms": "Tafadhali soma na ukubali Sheria na Masharti na Sera ya Faragha",
+  "authRegisterFailed": "Usajili umeshindwa",
+  "commonReenterPassword": "Ingiza tena nenosiri",
+  "commonPasswordsDoNotMatch": "Manenosiri hayalingani",
+  "authInviteCodeBuiltIn": "Nambari ya Mwaliko (Imejengwa ndani)",
+  "authInviteCodeBuiltInNote": "Msimbo wa mwaliko umejengewa ndani, kwa kawaida hakuna haja ya kurekebisha",
+  "authIHaveReadAndAgree": "Nimesoma na kukubali ",
+  "mainStartGroupChat": "Anzisha Gumzo la Kikundi",
+  "mainAddFriends": "Ongeza Marafiki",
+  "mainPaymentAndCollection": "Malipo",
+  "contactCount": "Anwani za {count}",
+  "@contactCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "contactAddToHomeScreen": "Ongeza kwenye skrini ya kwanza",
+  "contactRecommendedCardTo": "Kadi ya {contact} iliyopendekezwa kwa {recipient}",
+  "@contactRecommendedCardTo": {
+    "placeholders": {
+      "contact": {
+        "type": "String"
+      },
+      "recipient": {
+        "type": "String"
+      }
+    }
+  },
+  "contactEnterRemarkName": "Weka jina la maoni",
+  "contactRemarkSetTo": "Maoni yamewekwa kuwa: {remark}",
+  "@contactRemarkSetTo": {
+    "placeholders": {
+      "remark": {
+        "type": "String"
+      }
+    }
+  },
+  "contactAcceptedFriendRequest": "Ombi la urafiki la {name} limekubaliwa",
+  "@contactAcceptedFriendRequest": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "contactRejectedFriendRequest": "Ombi la urafiki la {name} limekataliwa",
+  "@contactRejectedFriendRequest": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "commonGroupInvites": "Mialiko ya Kikundi",
+  "commonMyGroups": "Vikundi Vyangu ({count})",
+  "@commonMyGroups": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "commonInvitedToJoinGroup": "Umealikwa kujiunga na kikundi",
+  "commonConfirmLeaveGroup": "Je, una uhakika unataka kuondoka \"{name}\"?",
+  "@commonConfirmLeaveGroup": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "commonLeave": "Ondoka",
+  "commonRecallThisMessage": "Je, unakumbuka ujumbe huu?",
+  "commonSavedToGallery": "Imehifadhiwa kwenye ghala",
+  "commonFailedToSave": "Imeshindwa kuhifadhi",
+  "chatSaving": "Inahifadhi...",
+  "commonShare": "Shiriki",
+  "chatSaveToGallery": "Hifadhi kwenye Matunzio",
+  "chatFailedToLoadImage": "Imeshindwa kupakia picha",
+  "chatVideoRecordingFailed": "Imeshindwa kurekodi video",
+  "profileRedPacket": "Kifurushi Nyekundu",
+  "commonMusic": "Muziki",
+  "commonCoupon": "Kuponi",
+  "commonGift": "Zawadi",
+  "commonPoll": "Kura ya maoni",
+  "favoriteText": "Maandishi",
+  "favoriteLinkLabel": "Kiungo",
+  "favoriteNote": "Kumbuka",
+  "favoriteMyNotes": "Vidokezo Vyangu",
+  "favoriteToday": "Leo",
+  "favoriteDaysAgoText": "{count} siku zilizopita",
+  "@favoriteDaysAgoText": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "favoriteDateFormat": "{month}/{day}",
+  "@favoriteDateFormat": {
+    "placeholders": {
+      "month": {
+        "type": "int"
+      },
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "favoriteNoFavorites": "Bado hakuna vipendwa",
+  "favoriteLongPressToFavorite": "Bonyeza kwa muda mrefu ujumbe ili uupende",
+  "favoriteNewNote": "Ujumbe Mpya",
+  "favoriteLink": "Kiungo Unachopenda",
+  "favoriteEditTags": "Hariri Lebo",
+  "favoriteDeleteFavorite": "Futa Vipendwa",
+  "favoriteDeleteFavoriteConfirm": "Je, una uhakika unataka kufuta kipendwa hiki?",
+  "favoriteNoSearchResultsFound": "Hakuna matokeo yaliyopatikana",
+  "commonSendRedPacket": "Tuma Kifurushi Nyekundu",
+  "transferAmount": "Kiasi",
+  "commonRedPacketCover": "Jalada la Pakiti Nyekundu",
+  "commonRedPacketType": "Aina ya Pakiti Nyekundu",
+  "commonNormalRedPacket": "Kawaida",
+  "commonLuckyRedPacket": "Bahati",
+  "commonRedPacketCount": "Hesabu ya Pakiti Nyekundu",
+  "commonPieces": "vipande",
+  "commonPutMoneyInRedPacket": "Weka pesa kwenye pakiti nyekundu",
+  "commonRedPacketRefundNotice": "Pakiti nyekundu ambazo hazijadaiwa zitarejeshwa baada ya saa 24",
+  "commonOpenRedPacket": "Fungua",
+  "commonRedPacketAllClaimed": "Pakiti nyekundu zote zinadaiwa",
+  "commonRedPacketExpired": "Pakiti nyekundu imeisha muda wake",
+  "commonAddTransferNote": "Ongeza kidokezo cha uhamishaji",
+  "commonYuan": "CNY",
+  "commonReplyWithEmoji": "Jibu ukitumia emoji hii",
+  "contactEditRemark": "Hariri Maoni",
+  "contactSetPermissions": "Weka Ruhusa",
+  "profileAddToBlacklist": "Ongeza kwenye Orodha Nyeusi",
+  "contactDeleteContact": "Futa Anwani",
+  "contactDeleteContactConfirm": "Je, una uhakika unataka kufuta {name}?",
+  "@contactDeleteContactConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "transferTitle": "Uhamisho",
+  "transferReceiverAddressLabel": "Anwani ya Mpokeaji",
+  "transferSelectTokenLabel": "Chagua Tokeni",
+  "transferAmountLabel": "Kiasi cha Uhamisho",
+  "transferMemoLabel": "Memo (ya hiari)",
+  "transferAddMemoHint": "Ongeza memo",
+  "transferSendPaymentRequest": "Tuma Ombi la Malipo",
+  "transferQrCodeGenerateFailed": "Imeshindwa kuunda msimbo wa QR",
+  "transferScanQrToPayMe": "Changanua msimbo wa QR ili kunilipa",
+  "transferMyWalletAddress": "Anwani yangu ya Wallet",
+  "transferCreatePaymentRequest": "Unda Ombi la Malipo",
+  "profileN42IdLabel": "N42 ID: {id}",
+  "@profileN42IdLabel": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "commonRedPacketDefaultGreeting": "Kila la heri",
+  "commonSenderRedPacket": "Pakiti Nyekundu ya {name}",
+  "@commonSenderRedPacket": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "transferEnterValidAddress": "Tafadhali weka anwani halali",
+  "transferPleaseSelectToken": "Tafadhali chagua tokeni",
+  "commonReceivedTransfer": "Uhamisho Umepokea",
+  "@commonFromSender": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@commonSendCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "commonSenderSentRedPacket": "{name} ilituma pakiti nyekundu",
+  "@commonSenderSentRedPacket": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "commonSavedToBalance": "Imehifadhiwa kwa usawa, inaweza kuhamisha moja kwa moja",
+  "commonRedPacketExpiredOrEmpty": "Pakiti nyekundu imeisha muda wake/zote zinadaiwa",
+  "transferScanFeatureComingSoon": "Kipengele cha Scan kinakuja hivi karibuni...",
+  "contactSetAsStarred": "Weka kama Yenye Nyota",
+  "contactAddToBlocklist": "Ongeza kwenye Orodha ya Kuzuia",
+  "commonClaimedYour": " alidai yako ",
+  "commonClaimedText": " alidai ",
+  "commonUserTyping": "{name} anaandika...",
+  "@commonUserTyping": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "commonTyping": "Inaandika...",
+  "commonWaitingToReceive": "Inasubiri kupokea",
+  "commonTapToClaim": "Gusa ili kudai",
+  "commonHasBeenReceived": "Imepokelewa",
+  "commonGetLucky": "Pata bahati",
+  "qrcodeCameraStartFailed": "Kamera imeshindwa kuanza",
+  "qrcodeUnknownError": "Hitilafu isiyojulikana",
+  "qrcodePlaceQrCodeInFrame": "Weka msimbo wa QR ndani ya fremu ili uchanganue",
+  "qrcodeCloseManualInput": "Funga Uingizaji wa Mwongozo",
+  "qrcodeManualInputUserId": "Kitambulisho cha Mtumiaji cha Kuingiza kwa Mwongozo",
+  "commonAdd": "Ongeza",
+  "profileSetStatus": "Weka Hali",
+  "profileVisibleToFriends24h": "Inaonekana kwa marafiki kwa saa 24",
+  "profileWriteStatus": "Andika Hali",
+  "profileEnterYourStatus": "Weka hali yako...",
+  "profileOk": "Sawa",
+  "qrcodeCameraPermissionRequired": "Ruhusa ya kamera inahitajika ili kuchanganua msimbo wa QR",
+  "qrcodeCameraPermissionDenied": "Ruhusa ya kamera ilikataliwa kabisa. Tafadhali iwashe katika mipangilio ya mfumo.",
+  "qrcodePermissionCheckError": "Hitilafu katika kuangalia ruhusa: {error}",
+  "@qrcodePermissionCheckError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "qrcodeInvalidQrCode": "Msimbo wa QR si sahihi",
+  "qrcodeCannotAddFriend": "Haiwezi kuongeza rafiki: {error}",
+  "@qrcodeCannotAddFriend": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "qrcodeScanQrCode": "Changanua Msimbo wa QR",
+  "qrcodeCheckingCameraPermission": "Inakagua ruhusa ya kamera...",
+  "qrcodeNeedCameraPermission": "Ruhusa ya Kamera Inahitajika",
+  "qrcodeRetryPermission": "Jaribu tena",
+  "qrcodeOpenSettings": "Fungua Mipangilio",
+  "groupInviteMembers": "Alika Wanachama",
+  "groupInviteCount": "Alika({count})",
+  "@groupInviteCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "profileNoShippingAddress": "Hakuna anwani ya usafirishaji",
+  "profileDefaultLabel": "Chaguomsingi",
+  "profileNoInvoice": "Hakuna ankara",
+  "profileCompany": "Kampuni",
+  "profileTaxNumber": "Nambari ya Ushuru",
+  "profileConfirmDeleteAddress": "Je, una uhakika unataka kufuta anwani hii?",
+  "profileConfirmDeleteInvoice": "Je, una uhakika unataka kufuta ankara hii?",
+  "commonGroupOwner": "Mmiliki",
+  "commonGroupAdmin": "Msimamizi",
+  "groupSearchMembers": "Tafuta wanachama",
+  "groupTotalMembers": "Wanachama wa {count}",
+  "@groupTotalMembers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatRemoveFromGroup": "Ondoa kwenye Kikundi",
+  "groupConfirmRemoveMember": "Je, una uhakika unataka kuondoa \"{name}\" kutoka kwa kikundi?",
+  "@groupConfirmRemoveMember": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatUnknownSong": "Wimbo Usiojulikana",
+  "chatUnknownArtist": "Msanii Asiyejulikana",
+  "chatUnknownContact": "Anwani Isiyojulikana",
+  "chatPersonalCard": "Kadi ya Mawasiliano",
+  "chatSingleChoice": "Mtu mmoja",
+  "chatMultiChoice": "Nyingi",
+  "chatEnded": "Imeisha",
+  "chatEndPollButton": "Maliza Kura",
+  "chatPollHint": "Kura itaonyeshwa kwenye gumzo. Wanakikundi wanaweza kupiga kura.",
+  "chatSearchSongOrArtist": "Tafuta wimbo au msanii",
+  "chatNoSongsFound": "Hakuna nyimbo zilizopatikana",
+  "chatSongNameOptional": "Jina la Wimbo (Si lazima)",
+  "chatEnterSongName": "Ingiza jina la wimbo",
+  "chatArtistNameOptional": "Jina la Msanii (Si lazima)",
+  "chatEnterArtistName": "Weka jina la msanii",
+  "chatRealTimeLocationSharing": "Kushiriki mahali kwa wakati halisi katika ukuzaji...",
+  "profileVoiceCallFeatureInDev": "Kipengele cha simu ya sauti katika usanidi...",
+  "profileReportFeatureInDev": "Ripoti kipengele katika maendeleo...",
+  "profileShareFeatureInDev": "Shiriki kipengele katika ukuzaji...",
+  "profileQrCodeFeatureInDev": "Kipengele cha msimbo wa QR katika ukuzaji...",
+  "qrcodeScanQrToAddMe": "Changanua msimbo wa QR hapo juu ili kuniongeza kama rafiki",
+  "qrcodeSaveToAlbum": "Hifadhi kwenye Albamu",
+  "qrcodeChangeStyle": "Badilisha Mtindo",
+  "qrcodeCopyId": "Nakili ID",
+  "qrcodeIdCopied": "Kitambulisho kimenakiliwa",
+  "qrcodeMoreStylesFeatureComingSoon": "Mitindo zaidi inakuja hivi karibuni",
+  "@chatFeatureInDev": {
+    "placeholders": {
+      "feature": {
+        "type": "String"
+      }
+    }
+  },
+  "profileBio": "Wasifu",
+  "profileHomeServer": "Seva",
+  "profileShareContactCard": "Shiriki Kadi ya Mawasiliano",
+  "profileRemoveFromBlacklist": "Ondoa kutoka kwa Orodha Nyeusi",
+  "profileConfirmAddBlacklist": "Je, una uhakika unataka kuongeza mtumiaji huyu kwenye orodha isiyoruhusiwa? Hutapokea ujumbe kutoka kwao.",
+  "profileConfirmRemoveBlacklist": "Je, una uhakika unataka kumwondoa mtumiaji huyu kwenye orodha iliyoidhinishwa?",
+  "profileRemarkSaved": "Maoni yamehifadhiwa",
+  "profileRemarkCleared": "Maoni yamefutwa",
+  "transferReceive": "Pokea",
+  "transferPleaseConnectWallet": "Tafadhali unganisha pochi yako kwanza",
+  "transferSendRequest": "Tuma Ombi",
+  "transferPleaseEnterValidAmount": "Tafadhali weka kiasi halali",
+  "searchPlaceholder": "Tafuta anwani, vikundi, ujumbe",
+  "searchEnterKeywordToSearch": "Weka nenomsingi ili kuanza kutafuta",
+  "searchClearHistory": "Wazi",
+  "searchNoResultsForQuery": "Hakuna matokeo yaliyopatikana ya \"{query}\"",
+  "@searchNoResultsForQuery": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "searchAllResults": "Wote",
+  "searchInChat": "Tafuta kwenye gumzo",
+  "searchContactLabel": "Wasiliana",
+  "searchGroupLabel": "Kikundi",
+  "searchConversationLabel": "Mazungumzo",
+  "searchMessageLabel": "Ujumbe",
+  "settingsSecurityTitle": "Usalama",
+  "settingsKeyBackup": "Hifadhi Nakala muhimu",
+  "settingsBackupEncryptionKeys": "Vifunguo vya Usimbaji Nakala",
+  "settingsKeysBackedUp": "Vifunguo vya {count} vimechelezwa",
+  "@settingsKeysBackedUp": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsBackupNotSet": "Hifadhi rudufu haijawekwa",
+  "settingsRestoreKeys": "Rejesha Funguo",
+  "settingsRestoreKeysFromBackup": "Rejesha funguo za usimbuaji kutoka kwa nakala rudufu",
+  "settingsExportKeys": "Funguo za kuuza nje",
+  "settingsExportKeysToFile": "Hamisha vitufe kwenye faili",
+  "settingsLoggedInDevices": "Vifaa Ulivyoingia",
+  "settingsNoOtherDevices": "Hakuna vifaa vingine",
+  "settingsVerified": "Imethibitishwa",
+  "settingsUnverified": "Haijathibitishwa",
+  "settingsAdvanced": "Advanced",
+  "settingsCrossSigning": "Kusaini Mtambuka",
+  "settingsEnabled": "Imewashwa",
+  "settingsNotEnabled": "Haijawezeshwa",
+  "settingsResetEncryption": "Weka Usimbaji upya",
+  "settingsDeleteAllEncryptionKeys": "Futa funguo zote za usimbaji fiche",
+  "settingsEncryptionNotSupported": "Usimbaji fiche hautumiki",
+  "settingsNotInitialized": "Haijaanzishwa",
+  "settingsBackupKeyTitle": "Vifunguo vya Hifadhi Nakala",
+  "settingsBackupKeyMessage": "Ungependa kuunda nakala mpya ya ufunguo? Hii itakusaidia kurejesha ujumbe uliosimbwa kwa njia fiche kwenye kifaa kipya.",
+  "settingsBackup": "Hifadhi nakala",
+  "settingsRestoreKeyTitle": "Rejesha Funguo",
+  "settingsRestoreKeyMessage": "Weka nenosiri lako la kurejesha akaunti au ufunguo wa kurejesha akaunti ili kurejesha ujumbe uliosimbwa.",
+  "settingsRestore": "Rejesha",
+  "settingsExportKeyTitle": "Funguo za kuuza nje",
+  "settingsExportKeyMessage": "Faili ya ufunguo iliyohamishwa ina funguo zako zote za usimbaji fiche. Tafadhali weka salama.",
+  "settingsExport": "Hamisha",
+  "settingsDeviceIdLabel": "Kitambulisho cha Kifaa: {deviceId}",
+  "@settingsDeviceIdLabel": {
+    "placeholders": {
+      "deviceId": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsDeviceStatusVerified": "Hali: Imethibitishwa",
+  "settingsDeviceStatusUnverified": "Hali: Haijathibitishwa",
+  "settingsLastActiveLabel": "Mara ya mwisho kutumika: {lastSeen}",
+  "@settingsLastActiveLabel": {
+    "placeholders": {
+      "lastSeen": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsVerifyThisDevice": "Thibitisha kifaa hiki",
+  "settingsCrossSigningAlreadyEnabled": "Kutia sahihi kwa njia tofauti tayari kumewezeshwa",
+  "settingsCrossSigningSetupSuccess": "Usanidi wa kuambatisha cheti umefaulu",
+  "@settingsSetupFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsResetEncryptionTitle": "Weka Usimbaji upya",
+  "settingsResetEncryptionWarning": "Onyo: Hii itafuta funguo zako zote za usimbaji fiche. Hutaweza kusimbua ujumbe uliosimbwa kwa njia fiche hapo awali. Kitendo hiki hakiwezi kutenduliwa.",
+  "settingsReset": "Weka upya",
+  "settingsBackupSuccess": "Vifunguo vimechelezwa",
+  "settingsBackupFailed": "Imeshindwa kuhifadhi nakala",
+  "settingsRecoveryKey": "Ufunguo wa Kuokoa",
+  "settingsRecoveryKeySaveWarning": "Tafadhali hifadhi ufunguo huu wa kurejesha akaunti mahali salama. Utaihitaji ili kurejesha ujumbe wako uliosimbwa kwa njia fiche kwenye kifaa kipya.",
+  "settingsRecoveryKeySaved": "Nimeihifadhi",
+  "settingsRestoreSuccess": "Vifunguo vimerejeshwa",
+  "settingsRestoreFailed": "Kurejesha kumeshindwa",
+  "settingsPassword": "Nenosiri",
+  "settingsEnterRecoveryKey": "Ingiza ufunguo wa kurejesha",
+  "settingsEnterPassword": "Weka nenosiri",
+  "settingsExportSuccess": "Vifunguo vimehamishwa kwa hifadhi rudufu ya seva",
+  "settingsExportNeedBackupFirst": "Tafadhali unda nakala rudufu ya ufunguo kwanza",
+  "settingsExportFailed": "Imeshindwa kuhamisha",
+  "settingsResetSuccess": "Usimbaji upya umefaulu",
+  "settingsResetFailed": "Imeshindwa kuweka upya",
+  "callLeaveMeetingConfirm": "Je, una uhakika unataka kuondoka kwenye mkutano?",
+  "chatPokedSomeone": "ilipigwa {name}{suffix}",
+  "@chatPokedSomeone": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "suffix": {
+        "type": "String"
+      }
+    }
+  },
+  "chatNoContactsToAdd": "Hakuna anwani zinazopatikana za kuongeza",
+  "chatAddMembers": "Ongeza Wanachama",
+  "chatInvitedMembers": "Wamealikwa washiriki wa {count}",
+  "@chatInvitedMembers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatInviteFailed": "Imeshindwa kualika: {error}",
+  "@chatInviteFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatMemberRemoved": "Mwanachama ameondolewa",
+  "chatRemoveFailed": "Imeshindwa kuondoa: {error}",
+  "@chatRemoveFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatRealTimeLocationShareMessage": "Baada ya kushiriki, mhusika mwingine anaweza kuona eneo lako la wakati halisi kwa saa 1.",
+  "chatStartSharing": "Anza Kushiriki",
+  "chatLocationServiceNotEnabled": "Huduma ya eneo haijawashwa",
+  "chatEnableLocationService": "Tafadhali wezesha huduma ya eneo ili kutumia kipengele hiki",
+  "chatGoToSettings": "Nenda kwa Mipangilio",
+  "chatLocationPermissionRequired": "Ruhusa ya eneo inahitajika kwa kipengele hiki",
+  "chatLocationPermissionDeniedPermanent": "Ruhusa ya eneo imekataliwa kabisa. Tafadhali iwashe katika mipangilio.",
+  "chatLocationPermissionDenied": "Ruhusa ya eneo imekataliwa",
+  "chatGettingLocation": "Inapata eneo...",
+  "chatGetLocationFailed": "Imeshindwa kupata eneo: {error}",
+  "@chatGetLocationFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatMapPreview": "Hakiki ya Ramani",
+  "chatSearchLocation": "Tafuta eneo",
+  "chatRedPacketSent": "Imetumwa pakiti nyekundu ya {amount} {token}",
+  "@chatRedPacketSent": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "token": {
+        "type": "String"
+      }
+    }
+  },
+  "chatTransferDefault": "Uhamisho",
+  "chatTransferSent": "Imetuma uhamisho wa {amount} {token}",
+  "@chatTransferSent": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "token": {
+        "type": "String"
+      }
+    }
+  },
+  "chatPickFileFailed": "Imeshindwa kuchagua faili: {error}",
+  "@chatPickFileFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatFileSizeLimit": "Ukubwa wa faili hauwezi kuzidi MB 50",
+  "chatFileSending": "Inatuma faili: {filename}",
+  "@chatFileSending": {
+    "placeholders": {
+      "filename": {
+        "type": "String"
+      }
+    }
+  },
+  "chatSendFileFailed": "Imeshindwa kutuma faili: {error}",
+  "@chatSendFileFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatContactCardSent": "Imetuma kadi ya mawasiliano ya {name}",
+  "@chatContactCardSent": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatFavoritesFeature": "Vipendwa",
+  "chatCouponsFeature": "Kuponi",
+  "chatGiftFeature": "Zawadi",
+  "chatSharedMusic": "Iliyoshirikiwa {name}",
+  "@chatSharedMusic": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@chatSendFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatEndPollTitle": "Maliza Kura",
+  "chatEndPollConfirmMessage": "Je, una uhakika ungependa kusitisha kura hii? Upigaji kura utafungwa baada ya kumalizika.",
+  "chatPollEndedMessage": "Kura ya maoni imekamilika",
+  "chatConnectingCall": "Inaunganisha...",
+  "chatMuteCall": "Nyamazisha",
+  "chatSpeakerOff": "Spika Imezimwa",
+  "chatSpeakerOn": "Spika",
+  "chatCameraOn": "Kamera Imewashwa",
+  "chatCameraOff": "Kamera Imezimwa",
+  "chatHangUp": "Kata Simu",
+  "chatSelectForwardTargetTitle": "Chagua Lengo la Mbele",
+  "chatNoForwardableChat": "Hakuna gumzo zinazopatikana za kusambaza",
+  "chatNoMatchingChat": "Hakuna soga zinazolingana zilizopatikana",
+  "chatLocationTitle": "Mahali",
+  "chatSendButton": "Tuma",
+  "chatRetryButton": "Jaribu tena",
+  "chatSearchContactHint": "Tafuta anwani",
+  "chatShareMusic": "Shiriki Muziki",
+  "chatRecentPlayed": "Hivi karibuni",
+  "chatMyFavorites": "Vipendwa",
+  "chatNetworkLink": "Kiungo",
+  "chatLocalFile": "Ndani",
+  "chatPasteMusicLink": "Bandika kiungo cha muziki",
+  "chatShareMusicButton": "Shiriki Muziki",
+  "chatSelectLocalAudio": "Chagua Faili ya Sauti ya Karibu Nawe",
+  "chatSupportedAudioFormats": "Inasaidia MP3, M4A, WAV, FLAC, nk.",
+  "chatSelectFileButton": "Chagua Faili",
+  "chatPleaseEnterMusicLink": "Tafadhali weka kiungo cha muziki",
+  "chatPleaseEnterValidLink": "Tafadhali weka URL halali",
+  "chatSharedSong": "Wimbo Ulioshirikiwa",
+  "chatSelectMember": "Chagua Mwanachama",
+  "chatSearchMemberHint": "Tafuta wanachama",
+  "chatNoMatchingMembers": "Hakuna wanachama wanaolingana waliopatikana",
+  "commonUnknownMember": "Haijulikani",
+  "chatSelectedMessagesCount": "Ujumbe wa {count} uliochaguliwa",
+  "@chatSelectedMessagesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatSearchContactsOrGroups": "Tafuta anwani au vikundi",
+  "chatVideoTitle": "Video",
+  "chatLoadingText": "Inapakia...",
+  "chatVideoLoadFailed": "Imeshindwa kupakia video",
+  "chatPlayerInitFailed": "Uanzishaji wa mchezaji haukufaulu",
+  "chatCreatePollTitle": "Unda Kura",
+  "chatSubmitPoll": "Wasilisha",
+  "chatPollQuestionLabel": "Swali la Kura",
+  "chatEnterPollQuestionHint": "Tafadhali ingiza swali la kura ya maoni",
+  "chatPollOptionsLabel": "Chaguo za Kura",
+  "chatOptionHintWithIndex": "Chaguo {index}",
+  "@chatOptionHintWithIndex": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "chatAddOptionButton": "Ongeza Chaguo",
+  "chatPollSettingsLabel": "Mipangilio ya Kura",
+  "chatSelectionType": "Aina ya Uteuzi",
+  "chatSingleChoiceLabel": "Mtu mmoja",
+  "chatMultiChoiceLabel": "Nyingi",
+  "chatAnonymousPollSwitch": "Kura Isiyojulikana",
+  "chatPleaseEnterQuestion": "Tafadhali ingiza swali la kura ya maoni",
+  "chatAtLeastTwoOptions": "Angalau chaguzi 2 zinahitajika",
+  "chatConfirmWithCount": "Thibitisha ({count})",
+  "@chatConfirmWithCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@chatSelectedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@commonMemberCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@chatGroupChatCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "authEmailVerificationTitle": "Uthibitishaji wa Barua Pepe",
+  "authEnterValidEmailAddress": "Tafadhali weka barua pepe halali",
+  "authVerificationCodeSentTo": "Nambari ya kuthibitisha imetumwa kwa {email}",
+  "@authVerificationCodeSentTo": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "authSendCodeFailed": "Imeshindwa kutuma msimbo: {error}",
+  "@authSendCodeFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "authVerificationSuccess": "Uthibitishaji umefaulu",
+  "authVerificationFailed": "Uthibitishaji haukufaulu",
+  "authVerificationCodeError": "Hitilafu ya msimbo wa uthibitishaji: {error}",
+  "@authVerificationCodeError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "commonEnterVerificationCode": "Weka nambari ya kuthibitisha",
+  "authEnterYourEmail": "Weka barua pepe",
+  "authWeSentCodeTo": "Tulituma msimbo wa tarakimu 6 kwa\n{email}",
+  "@authWeSentCodeTo": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "authEnterEmailForCode": "Weka barua pepe yako, tutakutumia nambari ya kuthibitisha",
+  "commonSendVerificationCode": "Tuma nambari ya kuthibitisha",
+  "authResendVerificationCode": "Tuma tena nambari ya kuthibitisha",
+  "authCanResendAfter": "Inaweza kutuma tena baada ya sekunde {seconds}",
+  "@authCanResendAfter": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "commonChangeEmail": "Badilisha Barua pepe",
+  "contactAddToContacts": "Ongeza kwa Anwani",
+  "contactAddingToContacts": "Inaongeza...",
+  "contactAddedToContacts": "Imeongezwa kwa anwani",
+  "contactAddFailedWithError": "Imeshindwa kuongeza: {error}",
+  "@contactAddFailedWithError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "contactAddPhone": "Ongeza simu",
+  "contactAddTag": "Ongeza vitambulisho",
+  "contactAddText": "Ongeza maandishi",
+  "contactAddPhoto": "Ongeza picha",
+  "contactGroupCountLabel": "Vikundi vya {count}",
+  "@contactGroupCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "contactAddedViaSearch": "Imeongezwa kupitia utafutaji",
+  "contactAddTime": "Ongeza muda",
+  "contactDoneButton": "Imekamilika",
+  "callWaitingForParticipants": "Inasubiri washiriki kujiunga...",
+  "callParticipantMe": "{name} (Mimi)",
+  "@callParticipantMe": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "callSharingLabel": "Kushiriki",
+  "callScreenSharingBy": "{name} inashiriki skrini",
+  "@callScreenSharingBy": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "callParticipantCount": "washiriki wa {count}",
+  "@callParticipantCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "callMuteLabel": "Nyamazisha",
+  "callUnmuteLabel": "Rejesha sauti",
+  "callTurnOffVideo": "Zima video",
+  "callTurnOnVideo": "Washa video",
+  "callShareScreen": "Shiriki skrini",
+  "callStopSharing": "Acha kushiriki",
+  "callSwitchCameraLabel": "Badili",
+  "callLeaveLabel": "Ondoka",
+  "callParticipantsLabel": "Washiriki",
+  "callJoiningMeeting": "Unajiunga na mkutano...",
+  "chatPollVotesFormat": "Kura za {count} ({percentage}%)",
+  "@chatPollVotesFormat": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "percentage": {
+        "type": "String"
+      }
+    }
+  },
+  "chatPollParticipantsFormat": "washiriki wa {count}",
+  "@chatPollParticipantsFormat": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@chatSelectFileFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatNoMediaUrlAvailable": "Hakuna URL ya midia inayopatikana",
+  "chatDownloadFailed": "Imeshindwa kupakua: {code}",
+  "@chatDownloadFailed": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "chatErrorWithMessage": "Hitilafu: {message}",
+  "@chatErrorWithMessage": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "chatMusicLinkLabel": "Kiungo cha muziki",
+  "chatRedPacketTransferCannotForward": "Vifurushi vyekundu na uhamishaji hauwezi kusambazwa",
+  "commonShareFailed": "Imeshindwa kushiriki: {error}",
+  "@commonShareFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "commonTapToRetry": "Gusa ili kujaribu tena",
+  "chatDefaultRedPacketGreeting": "Matakwa bora kwa ustawi",
+  "groupAllowOthersToSearchAndJoin": "Ruhusu wengine kutafuta na kujiunga",
+  "groupConfirmClearChatHistory": "Je, una uhakika unataka kufuta historia ya gumzo?",
+  "groupCreateGroupToChat": "Unda kikundi ili kuanza kupiga gumzo",
+  "groupEditGroupAnnouncement": "Badilisha tangazo la kikundi",
+  "groupEditGroupDescription": "Badilisha maelezo ya kikundi",
+  "groupEnterGroupAnnouncement": "Weka tangazo la kikundi",
+  "groupMemberCountClickToCopy": "Wanachama wa {count}, bofya ili kunakili kitambulisho cha kikundi",
+  "groupNoPermissionToEditGroupName": "Huna ruhusa ya kuhariri jina la kikundi",
+  "authEmailAddress": "Anwani ya Barua Pepe",
+  "commonEnterEmailAddress": "Weka barua pepe",
+  "authEmailRecoveryHint": "Inatumika kurejesha nenosiri",
+  "commonInvalidEmailFormat": "Tafadhali weka barua pepe halali",
+  "authOptional": "Hiari",
+  "authResetPassword": "Weka upya Nenosiri",
+  "authEnterRegisteredEmail": "Weka barua pepe uliyojiandikisha nayo",
+  "authSendResetCode": "Tuma Msimbo wa Kuweka Upya",
+  "authResetCodeSent": "Weka upya msimbo umetumwa kwa {email}",
+  "@authResetCodeSent": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "authEnterResetCode": "Weka msimbo wa kuweka upya",
+  "authSetNewPassword": "Weka Nenosiri Jipya",
+  "commonConfirmNewPassword": "Thibitisha Nenosiri Jipya",
+  "commonNewPassword": "Nenosiri Mpya",
+  "authPasswordResetSuccess": "Uwekaji upya nenosiri umefaulu. Tafadhali ingia kwa nenosiri lako jipya.",
+  "authResetPasswordFailed": "Imeshindwa kuweka upya nenosiri",
+  "settingsChangePassword": "Badilisha Nenosiri",
+  "settingsCurrentPassword": "Nenosiri la Sasa",
+  "settingsEnterCurrentPassword": "Weka nenosiri la sasa",
+  "settingsEnterNewPassword": "Weka nenosiri jipya",
+  "settingsPasswordChanged": "Nenosiri limebadilishwa. Tafadhali ingia kwa nenosiri lako jipya.",
+  "settingsChangePasswordFailed": "Imeshindwa kubadilisha nenosiri",
+  "settingsNewPasswordMustBeDifferent": "Nenosiri mpya lazima liwe tofauti na nenosiri la sasa",
+  "settingsChangePasswordInfo": "Baada ya kubadilisha nenosiri, utatoka nje na unahitaji kuingia na nenosiri jipya.",
+  "settingsPasswordRequirements": "Mahitaji ya nenosiri:",
+  "settingsSecurityNote": "Kwa usalama, utahitaji kuingia tena kwenye vifaa vyote baada ya kubadilisha nenosiri.",
+  "settingsSecurity": "Usalama",
+  "settingsCurrentBoundEmail": "Barua pepe iliyofungwa kwa sasa",
+  "settingsNewEmailAddress": "Anwani Mpya ya Barua Pepe",
+  "settingsEnterNewEmail": "Weka barua pepe mpya",
+  "settingsVerificationCode": "Nambari ya Uthibitishaji",
+  "settingsVerificationCodeSent": "Nambari ya kuthibitisha imetumwa",
+  "settingsCodeSentTo": "Nambari ya kuthibitisha imetumwa kwa",
+  "settingsDidNotReceiveCode": "Hukupokea nambari ya kuthibitisha?",
+  "settingsEmailChangedSuccess": "Barua pepe imebadilishwa",
+  "settingsChangeEmailFailed": "Imeshindwa kubadilisha barua pepe",
+  "settingsEmailSecurityNote": "Barua pepe yako inatumika kurejesha nenosiri. Tafadhali ihifadhi salama.",
+  "commonGoogleLogin": "Ingia kwa kutumia Google",
+  "commonAppleLogin": "Ingia kwa kutumia Apple",
+  "commonWechat": "WeChat",
+  "settingsLanguage": "Lugha",
+  "settingsLanguageChanged": "Lugha imebadilika",
+  "settingsTranslation": "Tafsiri",
+  "settingsTranslateTextTo": "Tafsiri maandishi kwa",
+  "settingsTranslateDescription": "Chagua lugha unayotaka ujumbe utafsiriwe.",
+  "settingsAutoTranslate": "Tafsiri kiotomatiki ujumbe uliopokelewa",
+  "settingsAutoTranslateDescription": "Tafsiri kiotomatiki ujumbe uliopokewa kwenye gumzo hadi lugha uliyochagua.",
+  "settingsBiometricLogin": "Kuingia kwa Biometriska",
+  "authLoginWithBiometric": "Ingia ukitumia {type}",
+  "@authLoginWithBiometric": {
+    "placeholders": {
+      "type": {
+        "type": "Object"
+      }
+    }
+  },
+  "settingsBiometricLoginEnabled": "Kuingia kwa kibayometriki kumewashwa",
+  "settingsBiometricLoginDisabled": "Kuingia kwa kibayometriki kumezimwa",
+  "settingsEnableBiometricLogin": "Washa kuingia kwa kibayometriki",
+  "settingsBiometricEnabled": "Imewashwa - Tumia kibayometriki kuingia",
+  "settingsBiometricDisabled": "Imezimwa - Gusa ili kuwezesha",
+  "settingsBiometricNeedRelogin": "Tafadhali ondoka na uingie tena ili kuwezesha kuingia kwa kibayometriki",
+  "authOr": "AU",
+  "qrcodeCameraPermissionRestricted": "Ufikiaji wa kamera umezuiwa kwenye kifaa hiki",
+  "authPasskeyLabel": "Nenosiri",
+  "authGoogleLabel": "Google",
+  "authAppleLabel": "Apple",
+  "authSsoLabel": "SSO",
+  "transferAmountHintZero": "0.00",
+  "commonMatrixIdHint": "@username:server.com",
+  "authServerAddressHint": "https://m.si46.world",
+  "authEmailExampleHint": "example@email.com",
+  "authVerificationCodePlaceholder": "------",
+  "profileEnterPokeSuffixHint": "Ingiza kiambishi cha poke, kwa mfano: kwenye bega",
+  "groupAlbum": "Albamu ya Kikundi",
+  "groupFiles": "Faili za Kikundi",
+  "groupImages": "Picha",
+  "groupVideos": "Video",
+  "groupTotal": "Jumla",
+  "groupSize": "Ukubwa",
+  "groupNoMedia": "Hakuna Vyombo vya Habari",
+  "groupNoMediaDescription": "Bado hakuna picha au video katika kikundi hiki",
+  "groupDocuments": "Hati",
+  "groupNoFiles": "Hakuna Faili",
+  "groupNoFilesDescription": "Bado hakuna faili katika kikundi hiki",
+  "groupDownloadStarted": "Inapakua {filename}...",
+  "@groupDownloadStarted": {
+    "placeholders": {
+      "filename": {
+        "type": "String"
+      }
+    }
+  },
+  "contactNoCommonGroups": "Hakuna vikundi vya kawaida",
+  "contactNoCommonGroupsDescription": "Huna vikundi vyovyote vya pamoja",
+  "chatVoiceMessage": "Sauti",
+  "chatMessage": "Ujumbe",
+  "conversationHideChat": "Ficha",
+  "settingsQuickReply": "Jibu la Haraka",
+  "commonTranslate": "Tafsiri",
+  "contactCreateTag": "Unda Lebo",
+  "contactEnterTagName": "Ingiza jina la lebo",
+  "contactEditTag": "Hariri Lebo",
+  "contactDeleteTag": "Futa Lebo",
+  "contactDeleteTagConfirm": "Je, una uhakika unataka kufuta lebo \"{tagName}\"?",
+  "@contactDeleteTagConfirm": {
+    "placeholders": {
+      "tagName": {
+        "type": "String"
+      }
+    }
+  },
+  "contactNoTags": "Bado hakuna lebo",
+  "contactFriendPermissions": "Ruhusa za Marafiki",
+  "contactSetChatOnly": "Weka kama Chat-pekee",
+  "contactChatOnlyDesc": "Anaweza tu kuzungumza nawe, maudhui mengine yatafichwa",
+  "contactHideMyMoments": "Ficha Dakika Zangu",
+  "contactHideMyMomentsDesc": "Rafiki huyu hawezi kuona Nyakati zangu",
+  "contactHideTheirMoments": "Ficha Nyakati zao",
+  "contactHideTheirMomentsDesc": "Usione Nyakati za rafiki huyu",
+  "contactHideMyStatus": "Ficha Hali Yangu",
+  "contactHideMyStatusDesc": "Rafiki huyu hawezi kuona masasisho yangu ya hali",
+  "contactNoChatOnlyFriends": "Hakuna marafiki wa gumzo pekee",
+  "contactNoOfficialAccounts": "Hakuna akaunti rasmi",
+  "contactFollowOfficialAccountsDesc": "Fuata akaunti rasmi ili kupata masasisho ya hivi punde",
+  "contactNoServiceAccounts": "Hakuna akaunti za huduma",
+  "contactSubscribeServiceAccountsDesc": "Jiunge na akaunti za huduma kwa huduma zinazofaa",
+  "contactNoEnterpriseContacts": "Hakuna mawasiliano ya biashara",
+  "contactEnterpriseContactsDesc": "Anwani za biashara zitaonyeshwa hapa",
+  "profileCardPack": "Kifurushi cha Kadi",
+  "profileOrders": "Maagizo",
+  "profileNoOrders": "Hakuna maagizo",
+  "profileOrdersDesc": "Maagizo yako yataonyeshwa hapa",
+  "profileNoCards": "Hakuna kadi",
+  "profileCardsDesc": "Kadi zako zitaonyeshwa hapa",
+  "favoriteEnterTagsHint": "Ingiza lebo zilizotenganishwa na koma",
+  "favoriteTagsUpdated": "Lebo zimesasishwa",
+  "favoriteForwardedContent": "Maudhui yamesambazwa",
+  "favoriteEnterNoteContent": "Ingiza maudhui ya dokezo",
+  "favoriteNoteAdded": "Dokezo limeongezwa",
+  "favoriteLinkTitle": "Kichwa cha kiungo",
+  "favoriteLinkUrl": "https://",
+  "favoriteLinkAdded": "Kiungo kimeongezwa",
+  "contactPhotoAdded": "Picha imeongezwa",
+  "contactEnterPhone": "Weka nambari ya simu",
+  "commonConversationWithId": "Mazungumzo: {roomId}",
+  "commonContactWithId": "Mawasiliano: {userId}",
+  "commonDiscover": "Gundua",
+  "commonDeveloping": "{title}\n(Inakuja hivi karibuni)",
+  "commonPageNotFound": "Ukurasa haujapatikana",
+  "commonBackToHome": "Rudi Nyumbani",
+  "settingsMessageNotifications": "Arifa za ujumbe",
+  "settingsReceiveNewMessageNotifications": "Pokea arifa za ujumbe mpya",
+  "settingsShowMessagePreview": "Onyesha onyesho la kukagua ujumbe",
+  "settingsShowMessageContentInNotification": "Onyesha maudhui ya ujumbe katika arifa",
+  "settingsNotificationSound": "Sauti ya Arifa",
+  "settingsPlaySoundOnMessage": "Cheza sauti unapopokea ujumbe",
+  "commonVibration": "Mtetemo",
+  "settingsVibrateOnMessage": "Tetema unapopokea ujumbe",
+  "settingsDoNotDisturbMode": "Usisumbue",
+  "settingsDoNotDisturbDescription": "Usipokee arifa wakati uliowekwa",
+  "settingsStartTime": "Wakati wa Kuanza",
+  "settingsEndTime": "Wakati wa Mwisho",
+  "settingsDeleteQuickReply": "Futa Jibu la Haraka",
+  "settingsEditQuickReply": "Hariri Jibu la Haraka",
+  "settingsAddQuickReply": "Ongeza Jibu la Haraka",
+  "settingsManageQuickReplies": "Dhibiti Majibu ya Haraka",
+  "settingsNoQuickReplies": "Hakuna majibu ya haraka",
+  "settingsDefaultQuickReplies": "Majibu chaguomsingi ya haraka yataonyeshwa",
+  "settingsWhoCanSee": "Nani anaweza kuona",
+  "settingsLastSeen": "Mara ya Mwisho Kuonekana",
+  "settingsHiddenChats": "Gumzo Siri",
+  "settingsMessagesLabel": "Ujumbe",
+  "settingsAllowStrangerMessages": "Ruhusu ujumbe usiowajua",
+  "settingsReceiveMessagesFromNonContacts": "Pokea ujumbe kutoka kwa wasio waasiliani",
+  "settingsReadReceipts": "Risiti za Kusoma",
+  "settingsLetOthersKnowYouRead": "Wajulishe wengine kuwa unasoma",
+  "settingsTypingIndicator": "Kiashiria cha kuandika",
+  "settingsLetOthersKnowYouTyping": "Wajulishe wengine kuwa unaandika",
+  "settingsEveryone": "Kila mtu",
+  "settingsContactsOnly": "Anwani Pekee",
+  "settingsNobody": "Hakuna mtu",
+  "settingsWhoCanSeeTitle": "Nani anaweza kuona {title}",
+  "@settingsWhoCanSeeTitle": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsVersionInfo": "Toleo la {version}",
+  "@settingsVersionInfo": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsCheckForUpdates": "Angalia masasisho",
+  "settingsOpenSourceLicenses": "Leseni za Chanzo Huria",
+  "settingsFeedbackAndSuggestions": "Maoni na mapendekezo",
+  "settingsBuiltOnMatrix": "Imejengwa kwa Itifaki ya Matrix",
+  "settingsNoHiddenChats": "Hakuna gumzo zilizofichwa",
+  "settingsNoHiddenChatsDescription": "Gumzo unazoficha zitaonekana hapa",
+  "settingsUnhideChat": "Onyesha",
+  "settingsDarkMode": "Hali ya giza",
+  "settingsFontSize": "Ukubwa wa herufi",
+  "settingsBubbleStyle": "Mtindo wa Bubble",
+  "settingsFollowSystem": "Fuata mfumo",
+  "settingsAutoSwitchBySystem": "Badilisha kiotomatiki kwa mfumo",
+  "settingsLightMode": "Hali ya mwanga",
+  "settingsAlwaysUseLightTheme": "Tumia mandhari mepesi kila wakati",
+  "settingsDarkModeOption": "Chaguo la hali ya giza",
+  "settingsAlwaysUseDarkTheme": "Tumia mandhari meusi kila wakati",
+  "settingsFontSizeSmall": "Ndogo",
+  "settingsFontSizeStandard": "Kawaida",
+  "settingsFontSizeLarge": "Kubwa",
+  "settingsFontSizeExtraLarge": "Kubwa zaidi",
+  "settingsBubbleStyleWechat": "Mtindo wa WeChat",
+  "settingsBubbleStyleWechatDesc": "Mtindo wa Bubble wa WeChat wa kawaida",
+  "settingsBubbleStyleModern": "Mtindo wa kisasa",
+  "settingsBubbleStyleModernDesc": "Safi mtindo wa kisasa wa Bubble",
+  "settingsBubbleStyleClassic": "Mtindo wa classic",
+  "settingsBubbleStyleClassicDesc": "Mtindo wa Bubble wa jadi",
+  "discoverVideoChannels": "Vituo",
+  "discoverLive": "Ishi",
+  "discoverListen": "Sikiliza",
+  "discoverWatch": "Tazama",
+  "discoverSearchDiscover": "Tafuta",
+  "discoverNearbyPeople": "Karibu",
+  "discoverGames": "Michezo",
+  "discoverMiniPrograms": "Programu Ndogo",
+  "chatAlreadyInCall": "Tayari katika simu",
+  "commonConnectionFailed": "Muunganisho haukufaulu",
+  "chatCallRejected": "Simu ilikataliwa",
+  "chatNoAnswer": "Hakuna jibu",
+  "commonClose": "Funga",
+  "chatSelectContact": "Chagua Anwani",
+  "chatVoteRemoved": "Kura imeondolewa",
+  "chatVoteChanged": "Kura imebadilishwa",
+  "chatVoted": "Imepiga kura",
+  "chatReplyTo": "Jibu kwa {name}",
+  "@chatReplyTo": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatCurrentLocation": "Eneo la Sasa",
+  "chatNearbyPlace": "Mahali pa Karibu {index}",
+  "@chatNearbyPlace": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "chatApproximateDistance": "Kuhusu {distance}",
+  "@chatApproximateDistance": {
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      }
+    }
+  },
+  "chatAddress": "Anwani",
+  "chatLatitude": "Latitudo",
+  "chatLongitude": "Longitude",
+  "groupDescriptionUpdated": "Maelezo ya kikundi yamesasishwa",
+  "groupAvatarUpdated": "Ishara ya kikundi imesasishwa",
+  "groupVisibilityUpdated": "Mwonekano wa kikundi umesasishwa",
+  "groupChannelCreated": "Kituo kimeundwa",
+  "groupChannelUpdated": "Kituo kimesasishwa",
+  "groupChannelDeleted": "Kituo kimefutwa",
+  "callDecline": "Kataa",
+  "callAnswer": "Jibu",
+  "callIncomingVideoCall": "Simu ya video inayoingia",
+  "callIncomingVoiceCall": "Simu ya sauti inayoingia",
+  "callVideoCallInProgress": "Hangout ya Video inaendelea",
+  "callVoiceCallInProgress": "Hangout ya sauti inaendelea",
+  "callReconnectingCall": "Inaunganisha upya...",
+  "callEnded": "Simu imekatika",
+  "callFailed": "Simu haikufaulu",
+  "callLivekitNotConfigured": "LiveKit haijasanidiwa",
+  "callJoinMeetingFailed": "Imeshindwa kujiunga na mkutano: {error}",
+  "callScreenShareFailed": "Imeshindwa kushiriki skrini: {error}",
+  "profileN42BeanTitle": "N42 Maharage",
+  "profileNoN42Bean": "Hakuna N42 Bean",
+  "profileN42BeanDetails": "Maelezo ya Maharage ya N42",
+  "profileN42BeanDescription": "N42 Bean ni tokeni inayotumika kukomboa bidhaa na huduma pepe katika N42. Inapatikana kwa sasa kwa:",
+  "profileN42BeanFeature1": "Vibandiko na mandhari za wanachama wa kipekee",
+  "profileN42BeanFeature2": "Ubinafsishaji wa kiputo cha gumzo",
+  "profileN42BeanFeature3": "Ubinafsishaji wa kifuniko cha pakiti nyekundu",
+  "profileN42BeanFeature4": "Beji ya jina la utani la kipekee",
+  "profileN42BeanFeature5": "Mapendeleo ya gumzo la kikundi",
+  "profileN42BeanFeature6": "Upanuzi wa hifadhi ya wingu",
+  "profileN42BeanFeature7": "Vichujio vya urembo vya Hangout ya Video",
+  "profileN42BeanFeature8": "Urekebishaji wa mandharinyuma ya matukio",
+  "profileN42BeanFeature9": "VIP kipaumbele huduma kwa wateja",
+  "profileGotIt": "Nimeipata",
+  "profileNoN42BeanRecords": "Hakuna rekodi za N42 Bean",
+  "profileMoodAndThoughts": "Mood & Mawazo",
+  "profileStatusHappy": "Furaha",
+  "profileStatusCracked": "Imevunjwa",
+  "profileStatusLucky": "Bahati",
+  "profileStatusSunny": "Jua",
+  "profileStatusTired": "Uchovu",
+  "profileStatusDaydream": "Ndoto ya mchana",
+  "profileStatusRushing": "Kukimbilia",
+  "profileStatusOverthinking": "Kufikiri kupita kiasi",
+  "profileStatusEnergized": "Imetiwa nguvu",
+  "profileWorkAndStudy": "Kazi & Jifunze",
+  "profileStatusWorking": "Kufanya kazi",
+  "profileStatusStudying": "Kusoma",
+  "profileStatusBusy": "Shughuli",
+  "profileStatusSlacking": "Kulegea",
+  "profileStatusTraveling": "Kusafiri",
+  "profileStatusGoingHome": "Kwenda Nyumbani",
+  "profileStatusDnd": "Usinisumbue",
+  "profileActivities": "Shughuli",
+  "profileStatusHanging": "Kubarizi",
+  "profileStatusCheckIn": "Ingia",
+  "profileStatusExercising": "Kufanya mazoezi",
+  "profileStatusCoffee": "Kahawa",
+  "profileStatusBubbleTea": "Chai ya Bubble",
+  "profileStatusEating": "Kula",
+  "profileStatusParenting": "Uzazi",
+  "profileStatusSavingWorld": "Kuokoa Ulimwengu",
+  "profileStatusSelfie": "Selfie",
+  "profileRest": "Pumzika",
+  "profileStatusRetreat": "Rudi nyuma",
+  "profileStatusHome": "Nyumbani",
+  "profileStatusSleeping": "Kulala",
+  "profileStatusCatLover": "Mpenzi wa Paka",
+  "profileStatusDogWalking": "Kutembea Mbwa",
+  "profileStatusGaming": "Michezo ya kubahatisha",
+  "profileStatusListening": "Kusikiliza",
+  "profileEditAddress": "Hariri Anwani",
+  "profileRecipient": "Mpokeaji",
+  "profileEnterRecipientName": "Weka jina la mpokeaji",
+  "profilePhoneNumber": "Nambari ya Simu",
+  "profileEnterPhoneNumber": "Weka nambari ya simu",
+  "profileRegionHint": "Mkoa/Jiji/Wilaya",
+  "profileDetailedAddress": "Anwani ya Kina",
+  "profileDetailedAddressHint": "Mtaa, nambari ya jengo, nk.",
+  "profileSetAsDefaultAddress": "Weka kama anwani chaguo-msingi",
+  "profilePleaseCompleteInfo": "Tafadhali kamilisha sehemu zote",
+  "profileEditInvoice": "Badilisha ankara",
+  "profileInvoiceType": "Aina ya ankara",
+  "profileCompanyName": "Jina la Kampuni",
+  "profilePersonalName": "Jina la kibinafsi",
+  "profileEnterCompanyName": "Ingiza jina la kampuni",
+  "profileEnterName": "Ingiza jina",
+  "profileTaxIdNumber": "Nambari ya Kitambulisho cha Ushuru",
+  "profileEnterTaxIdNumber": "Weka nambari ya kitambulisho cha ushuru",
+  "profileBankNameOptional": "Jina la Benki (Si lazima)",
+  "profileEnterBankName": "Weka jina la benki",
+  "profileBankAccountOptional": "Akaunti ya Benki (Si lazima)",
+  "profileEnterBankAccount": "Ingiza akaunti ya benki",
+  "profileCompanyAddressOptional": "Anwani ya Kampuni (Si lazima)",
+  "profileEnterCompanyAddress": "Weka anwani ya kampuni",
+  "profileCompanyPhoneOptional": "Simu ya Kampuni (Si lazima)",
+  "profileEnterCompanyPhone": "Ingiza simu ya kampuni",
+  "profileSetAsDefaultInvoice": "Weka kama ankara chaguomsingi",
+  "profileRingtoneVibrate": "Tetema",
+  "profileRingtoneSilent": "Kimya",
+  "profileVibrateMode": "Hali ya mtetemo",
+  "profileSilentMode": "Hali ya kimya",
+  "profilePlayFailed": "Imeshindwa kucheza: {ringtoneName}",
+  "profilePlaying": "Inacheza: {ringtoneName}",
+  "profileStop": "Acha",
+  "profileSelectRingtone": "Chagua Mlio wa Simu",
+  "profileLoadingRingtones": "Inapakia milio ya simu...",
+  "profileNoRingtonesFound": "Hakuna sauti za simu zilizopatikana",
+  "mainMessagesWithCount": "Ujumbe({count})",
+  "@mainMessagesWithCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "storyViewers": "Watazamaji",
+  "storyNoViewers": "Bado hakuna watazamaji",
+  "storyReplyToStory": "Jibu hadithi...",
+  "commonCopiedToClipboard": "Imenakiliwa kwenye ubao wa kunakili",
+  "commonMore": "Zaidi",
+  "commonTranslating": "Inatafsiri...",
+  "commonTranslatedFrom": "Imetafsiriwa kutoka {language}",
+  "@commonTranslatedFrom": {
+    "placeholders": {
+      "language": {
+        "type": "String"
+      }
+    }
+  },
+  "commonTranslation": "Tafsiri",
+  "commonTranslationFailed": "Tafsiri imeshindwa",
+  "commonAllRead": "Wote wamesoma",
+  "commonReadCount": "Imesomwa kwa {count}",
+  "commonYouRecalledMessage": "Umekumbuka ujumbe",
+  "commonMessageRecalled": "Ujumbe umekumbukwa",
+  "commonReEdit": "Badilisha upya",
+  "commonWalletArea": "Eneo la Wallet",
+  "callIncomingCall": "Simu inayoingia",
+  "callMissedCall": "Simu ambayo haikujibiwa",
+  "groupRemoveAdmin": "Ondoa Admin",
+  "chatSelectCurrency": "Chagua sarafu",
+  "chatSelectEmoji": "Chagua Emoji",
+  "chatSelectRedPacketCover": "Chagua Jalada",
+  "groupSetAsAdmin": "Weka kama Msimamizi",
+  "chatVideoPlaybackFailed": "Uchezaji wa video umeshindwa",
+  "@chatVideoPlaybackFailed": {
+    "description": "Used with error message"
+  },
+  "groupViewProfile": "Tazama Wasifu",
+  "favoriteAddLinkComingSoon": "Ongeza kipengele cha kiungo kinakuja hivi karibuni",
+  "favoriteNewNoteComingSoon": "Kipengele kipya cha dokezo kinakuja hivi karibuni",
+  "qrcodeSaveFeatureComingSoon": "Hifadhi kipengele kinakuja hivi karibuni",
+  "qrcodeShareFeatureComingSoon": "Shiriki kipengele kinakuja hivi karibuni",
+  "qrcodeProcessFailed": "Imeshindwa kuchakata msimbo wa QR: {error}",
+  "@qrcodeProcessFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "securityDeviceIdRequired": "Kitambulisho cha Kifaa kinahitajika",
+  "securityVerificationStartFailed": "Imeshindwa kuanza uthibitishaji: {error}",
+  "@securityVerificationStartFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "securityVerificationFailed": "Uthibitishaji haukufaulu",
+  "securityVerificationFailedWithReason": "Uthibitishaji haukufaulu: {reason}",
+  "@securityVerificationFailedWithReason": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "securityEmojiMismatchRejected": "Uthibitishaji umekataliwa - emoji haikulingana",
+  "securityWaitingForDeviceAccept": "Inasubiri kifaa kingine kikubali...",
+  "securityVerifyDevice": "Thibitisha kifaa hiki",
+  "securityConfirmEmojiMatch": "Thibitisha kuwa emoji hapa chini inaonyeshwa kwenye vifaa vyote viwili, kwa mpangilio sawa",
+  "securityEmojiDontMatch": "Hazilingani",
+  "securityEmojiMatch": "Wanalingana",
+  "securityWaitingForDeviceConfirm": "Inasubiri kifaa kingine kuthibitisha...",
+  "securityVerificationSuccess": "Uthibitishaji umefaulu!",
+  "securityDeviceVerifiedTrusted": "Kifaa hiki sasa kimethibitishwa na kuaminiwa.",
+  "securityCompareEmoji": "Linganisha emoji kwenye vifaa vyote viwili",
+  "securityCompareNumbers": "Linganisha nambari kwenye vifaa vyote viwili",
+  "commonTryAgain": "Jaribu Tena",
+  "commonDone": "Imekamilika",
+  "chatExportTitle": "Hamisha Gumzo",
+  "chatExportSuccess": "Uhamishaji umefaulu",
+  "chatExportFailed": "Uhamishaji haukufaulu: {error}",
+  "@chatExportFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatExportFormat": "Hamisha Umbizo",
+  "chatExportHtmlDesc": "Inaweza kusomeka katika kivinjari chochote kilicho na mpangilio maalum",
+  "chatExportJsonDesc": "Umbizo la data iliyopangwa inayoweza kusomeka kwa mashine",
+  "chatExportDateRange": "Masafa ya Tarehe",
+  "chatExportAll": "Ujumbe Zote",
+  "chatExportLastWeek": "Siku 7 zilizopita",
+  "chatExportLastMonth": "Mwezi uliopita",
+  "chatExportLast3Months": "Miezi 3 iliyopita",
+  "chatExportMessageCount": "Ujumbe wa kusafirisha",
+  "chatExportButton": "Hamisha na Shiriki",
+  "chatMediaGallery": "Matunzio ya Vyombo vya Habari",
+  "chatExportHistory": "Hamisha Historia ya Gumzo",
+  "pdfLoadFailed": "Imeshindwa kupakia PDF",
+  "pdfPageIndicator": "{current} / {total}",
+  "@pdfPageIndicator": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "mediaAll": "Wote",
+  "mediaImages": "Picha",
+  "mediaVideos": "Video",
+  "mediaFiles": "Faili",
+  "mediaAudio": "Sauti",
+  "mediaItemsCount": "Vipengee vya {count}",
+  "@mediaItemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mediaNoMediaFound": "Hakuna media iliyopatikana",
+  "spacesTitle": "Jumuiya",
+  "spacesCreate": "Unda Jumuiya",
+  "spacesJoined": "Imejiunga",
+  "spacesDiscover": "Gundua",
+  "spacesNoJoined": "Bado hakuna jumuiya zilizojiunga",
+  "spacesExplore": "Gundua Jumuiya",
+  "spacesNoPublic": "Hakuna jumuiya za umma zilizopatikana",
+  "spacesJoin": "Jiunge",
+  "spacesSubSpaces": "Jumuiya Ndogo",
+  "spacesChannels": "Vituo",
+  "spacesMembersCount": "Wanachama wa {count}",
+  "@spacesMembersCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "spacesPublic": "Hadharani",
+  "spacesPrivate": "Binafsi",
+  "spacesSuggested": "Imependekezwa",
+  "spacesChannelsCount": "Njia za {count}",
+  "@spacesChannelsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "callInCallChat": "Gumzo la Ndani ya Simu",
+  "callMessagesCount": "Ujumbe wa {count}",
+  "@callMessagesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "callNoMessagesYet": "Bado hakuna ujumbe.\nTuma ujumbe ili kuanza.",
+  "callTypeMessage": "Andika ujumbe...",
+  "callYouSender": "Wewe",
+  "callChatLabel": "Soga",
+  "chatEdited": "Imehaririwa",
+  "chatEditHistory": "Hariri Historia",
+  "chatOriginalMessage": "Asili",
+  "chatEditedAt": "Ilibadilishwa katika {time}",
+  "@chatEditedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "chatViewOnce": "Tazama Mara Moja",
+  "chatViewOncePhoto": "Tazama Picha Mara Moja",
+  "chatViewOnceVideo": "Tazama Video Mara Moja",
+  "chatViewOnceViewed": "Imetazamwa",
+  "chatViewOnceExpired": "Muda wake umeisha",
+  "chatViewOnceTap": "Gusa ili kutazama",
+  "chatAutoFaceBlur": "Ukungu wa uso wa kiotomatiki",
+  "chatAutoFaceBlurDesc": "Weka ukungu kwenye nyuso kiotomatiki unapotuma picha",
+  "threadReplyInThread": "Jibu kwenye thread",
+  "threadReplies": "{count} majibu",
+  "@threadReplies": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "threadReply": "Jibu 1",
+  "threadLatestReply": "Hivi karibuni: {preview}",
+  "@threadLatestReply": {
+    "placeholders": {
+      "preview": {
+        "type": "String"
+      }
+    }
+  },
+  "threadTitle": "Uzi",
+  "threadReplyPlaceholder": "Jibu kwenye thread...",
+  "threadParticipants": "washiriki wa {count}",
+  "@threadParticipants": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "voiceRoomTitle": "Chumba cha Sauti",
+  "voiceRoomCreate": "Unda Chumba cha Sauti",
+  "voiceRoomJoin": "Jiunge",
+  "voiceRoomLeave": "Ondoka",
+  "voiceRoomEnd": "Chumba cha Mwisho",
+  "voiceRoomRaiseHand": "Inua Mkono",
+  "voiceRoomLowerHand": "Mkono wa Chini",
+  "voiceRoomMute": "Nyamazisha",
+  "voiceRoomUnmute": "Rejesha sauti",
+  "voiceRoomHost": "Mwenyeji",
+  "voiceRoomSpeakers": "Wazungumzaji",
+  "voiceRoomListeners": "Wasikilizaji",
+  "voiceRoomLive": "LIVE",
+  "voiceRoomEnded": "Imeisha",
+  "voiceRoomScheduled": "Imepangwa",
+  "voiceRoomApprove": "Idhinisha",
+  "voiceRoomDemote": "Nenda kwa Msikilizaji",
+  "voiceRoomHandRaised": "{name} waliinua mikono yao",
+  "@voiceRoomHandRaised": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "voiceRoomName": "Jina la chumba",
+  "voiceRoomTopic": "Mada (ya hiari)",
+  "voiceRoomNoActive": "Hakuna vyumba vya sauti vinavyotumika",
+  "voiceRoomConnecting": "Inaunganisha...",
+  "usernameTitle": "Jina la mtumiaji",
+  "usernameSet": "Weka Jina la mtumiaji",
+  "usernameChange": "Badilisha Jina la mtumiaji",
+  "usernamePlaceholder": "Ingiza jina la mtumiaji",
+  "usernameAvailable": "Jina la mtumiaji linapatikana",
+  "usernameUnavailable": "Jina la mtumiaji tayari limechukuliwa",
+  "usernameInvalid": "Herufi 3-30, herufi ndogo, nambari, chini. Lazima kuanza na barua.",
+  "usernameReserved": "Jina hili la mtumiaji limehifadhiwa",
+  "usernameSaved": "Jina la mtumiaji limehifadhiwa",
+  "usernameSearchHint": "Tafuta kwa @username",
+  "ensName": "Jina la ENS",
+  "ensLinked": "Imeunganishwa na ENS",
+  "ensResolving": "Inatatua ENS...",
+  "ensNotFound": "Jina la ENS halijapatikana",
+  "tokenGateTitle": "Lango la Ishara",
+  "tokenGateEnable": "Washa Lango la Tokeni",
+  "tokenGateDisable": "Zima Lango la Tokeni",
+  "tokenGateAddRule": "Ongeza Kanuni",
+  "tokenGateRemoveRule": "Ondoa Kanuni",
+  "tokenGateContractAddress": "Anwani ya Mkataba",
+  "tokenGateMinBalance": "Usawa wa Chini",
+  "tokenGateTokenId": "Kitambulisho cha Tokeni (ERC-1155)",
+  "tokenGateChainId": "Kitambulisho cha mnyororo",
+  "tokenGateVerifying": "Inathibitisha umiliki wa tokeni...",
+  "tokenGateVerified": "Uthibitishaji umepitishwa",
+  "tokenGateDenied": "Hufikii mahitaji ya ishara",
+  "tokenGateOperatorAnd": "Lazima utimize sheria ZOTE",
+  "tokenGateOperatorOr": "Lazima utimize sheria YOYOTE",
+  "tokenGateRuleErc20": "Ishara ya ERC-20",
+  "tokenGateRuleErc721": "NFT (ERC-721)",
+  "tokenGateRuleErc1155": "Multi-Token (ERC-1155)",
+  "tokenGateRuleNative": "Ishara ya asili",
+  "tokenGateSaved": "Lango la ishara limehifadhiwa",
+  "tokenGateEnableDescription": "Inahitaji wanachama kushikilia tokeni ili kujiunga",
+  "tokenGateOperator": "Utawala Mantiki",
+  "tokenGateRules": "Kanuni",
+  "tokenGateSymbol": "Alama (si lazima)",
+  "tokenGateChain": "Mnyororo",
+  "tokenGateTokenStandard": "Kiwango cha Tokeni",
+  "tokenGateDenialMessage": "Ujumbe wa Kukataa",
+  "tokenGateDenialMessageHint": "Ujumbe unaonyeshwa wakati uthibitishaji unashindwa",
+  "tokenGateVerifyTitle": "Uthibitishaji wa Ishara",
+  "tokenGateVerifyPassed": "Uthibitishaji Umepitishwa",
+  "tokenGateVerifyFailed": "Uthibitishaji Umeshindwa",
+  "tokenGateRetryVerify": "Jaribu tena",
+  "tokenGateRequired": "Inahitajika",
+  "tokenGateYourBalance": "Mizani yako",
+  "tokenGateRulesActive": "sheria kazi",
+  "tokenGateDisabled": "Imezimwa",
+  "ensNotBound": "Haijafungwa",
+  "liveLocation": "Mahali pa Moja kwa Moja",
+  "stopLiveLocation": "Acha Kushiriki",
+  "startLiveLocation": "Anza Kushiriki",
+  "selectDuration": "Chagua Muda",
+  "groupChatFiles": "Faili za Gumzo",
+  "groupLinks": "Viungo",
+  "groupNoLinks": "Bado hakuna viungo",
+  "chatBackground": "Mandharinyuma ya Gumzo",
+  "solidColors": "Rangi Imara",
+  "gradients": "Gradients",
+  "defaultBackground": "Chaguomsingi",
+  "settingsFontSizeSlider": "Ukubwa wa herufi",
+  "autoDownload": "Pakua Kiotomatiki",
+  "images": "Picha",
+  "voice": "Sauti",
+  "video": "Video",
+  "files": "Faili",
+  "mobileData": "Data ya Simu",
+  "roaming": "Kuzurura",
+  "storageManagement": "Hifadhi",
+  "totalUsage": "Jumla ya Matumizi",
+  "cache": "Akiba",
+  "other": "Nyingine",
+  "clearCache": "Futa Cache",
+  "cacheCleared": "Akiba imefutwa",
+  "clearCacheFailed": "Imeshindwa kufuta akiba",
+  "confirmClearCache": "Je, ungependa kufuta data yote ya akiba?",
+  "mapView": "Mwonekano wa Ramani",
+  "liveLocationSharingCount": "Watu wa {count} wanashiriki eneo",
+  "@liveLocationSharingCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "minutes15": "Dakika 15",
+  "minutes30": "Dakika 30",
+  "hour1": "Saa 1",
+  "hours8": "Saa 8",
+  "personalCard": "Kadi ya kibinafsi",
+  "downloadFailed": "Imeshindwa kupakua",
+  "locationExpired": "Muda wake umeisha",
+  "secondsRemaining": "Sekunde {count}",
+  "@secondsRemaining": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "minutesRemaining": "Dakika za {count}",
+  "@minutesRemaining": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hoursMinutesRemaining": "{hours} masaa {minutes} dakika",
+  "@hoursMinutesRemaining": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "favoriteMessages": "Vipendwa",
+  "linksCopied": "Kiungo kimenakiliwa",
+  "noLinksFound": "Hakuna viungo vilivyopatikana",
+  "roomStorageRanking": "Nafasi ya Hifadhi ya Chumba",
+  "downloadComplete": "Upakuaji umekamilika",
+  "downloading": "Inapakua...",
+  "draftSaved": "Rasimu imehifadhiwa",
+  "voiceRecording": "Kurekodi Sauti",
+  "searchLocation": "Tafuta Mahali",
+  "tapToSearch": "Gusa ili utafute",
+  "settingsThisDevice": "Kifaa hiki",
+  "settingsJustNow": "Sasa hivi",
+  "settingsDeviceId": "Kitambulisho cha Kifaa",
+  "settingsStatus": "Hali",
+  "settingsLastActive": "Mara ya mwisho kutumika",
+  "settingsIpAddress": "Anwani ya IP",
+  "settingsRenameDevice": "Badilisha jina la kifaa",
+  "settingsDeviceNameHint": "Weka jina la kifaa",
+  "settingsDeviceRenamed": "Kifaa kimepewa jina jipya",
+  "settingsRenameFailed": "Imeshindwa kubadilisha jina",
+  "settingsRemoteLogout": "Kuondoka kwa mbali",
+  "settingsRemoteLogoutConfirm": "Je, una uhakika unataka kuondoka kwenye \"{deviceName}\"? Kitendo hiki hakiwezi kutenduliwa.",
+  "@settingsRemoteLogoutConfirm": {
+    "placeholders": {
+      "deviceName": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsDeviceLoggedOut": "Kifaa kimetoka",
+  "settingsLogoutFailed": "Imeshindwa kuondoka",
+  "settingsLogout": "Ondoka",
+  "settingsVerifyIdentity": "Thibitisha utambulisho",
+  "settingsEnterPasswordToConfirm": "Weka nenosiri lako ili kuthibitisha kitendo hiki.",
+  "scheduledSendTitle": "Panga ujumbe",
+  "scheduledSendInOneHour": "Katika saa 1",
+  "scheduledSendTonight": "Leo usiku (8:00 PM)",
+  "scheduledSendTomorrowMorning": "Kesho asubuhi (9:00 AM)",
+  "scheduledSendCustom": "Chagua tarehe na saa",
+  "scheduledMessageLabel": "Imepangwa",
+  "scheduledMessageCancel": "Ghairi ujumbe ulioratibiwa",
+  "chatLockTitle": "Kufunga gumzo",
+  "chatLockEnable": "Funga gumzo hili",
+  "chatLockDisable": "Fungua gumzo hili",
+  "chatLockDescription": "Gumzo zilizofungwa zinahitaji uthibitishaji wa kibayometriki au PIN ili kufunguliwa",
+  "chatLockVerifyTitle": "Soga imefungwa",
+  "chatLockVerifySubtitle": "Thibitisha ili kufikia gumzo hili",
+  "chatLockVerifyFailed": "Uthibitishaji haukufaulu",
+  "chatLockEnabled": "Soga imefungwa",
+  "chatLockDisabled": "Gumzo limefunguliwa",
+  "chatLockPinTitle": "Weka PIN",
+  "chatLockPinSetTitle": "Weka PIN",
+  "chatLockPinConfirmTitle": "Thibitisha PIN",
+  "chatLockPinMismatch": "PIN hailingani",
+  "chatLockUseBiometric": "Tumia biometriska",
+  "chatLockUsePin": "Tumia PIN",
+  "mediaEditorUndo": "Tendua",
+  "mediaEditorRedo": "Rudia",
+  "mediaEditorCrop": "Mazao",
+  "mediaEditorFilter": "Chuja",
+  "mediaEditorDraw": "Chora",
+  "mediaEditorText": "Maandishi",
+  "aiAssistant": "Msaidizi wa AI",
+  "aiAssistantWelcome": "Habari! Mimi ni Msaidizi wa AI wa N42. Nikusaidieje?",
+  "aiAssistantNotConfigured": "Huduma ya AI haijasanidiwa",
+  "aiAssistantSettings": "Mipangilio ya AI",
+  "aiAssistantClearHistory": "Futa historia ya gumzo",
+  "aiAssistantClearHistoryConfirm": "Je, una uhakika unataka kufuta historia yote ya gumzo ya AI?",
+  "aiAssistantStopGenerating": "Acha kuzalisha",
+  "aiAssistantModel": "Mfano",
+  "aiAssistantTemperature": "Halijoto",
+  "aiAssistantMaxTokens": "Tokeni za kiwango cha juu",
+  "aiAssistantContextWindow": "Dirisha la muktadha",
+  "aiAssistantServiceStatus": "Hali ya huduma",
+  "aiAssistantAvailable": "Inapatikana",
+  "aiAssistantUnavailable": "Haipatikani",
+  "aiSummarize": "Muhtasari wa AI",
+  "aiSummarizeUnread": "Fanya muhtasari wa ujumbe wa {count} ambao haujasomwa",
+  "@aiSummarizeUnread": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "aiSummarizeLoading": "Inafupisha...",
+  "aiSummarizeError": "Imeshindwa kufanya muhtasari",
+  "aiRewrite": "AI Andika Upya",
+  "aiRewriteFormal": "Rasmi",
+  "aiRewriteCasual": "Kawaida",
+  "aiRewritePlayful": "Ya kucheza",
+  "aiRewriteProfessional": "Mtaalamu",
+  "aiRewriteAccept": "Tumia",
+  "aiRewriteCancel": "Ghairi",
+  "aiRewriteLoading": "Inaandika upya...",
+  "aiLinkSummary": "Muhtasari wa AI",
+  "aiLinkSummaryAnalyzing": "Inachanganua...",
+  "chatFolderManagement": "Dhibiti Folda",
+  "chatFolderSystem": "Folda za Mfumo",
+  "chatFolderCustom": "Folda Maalum",
+  "chatFolderEmpty": "Bado hakuna folda maalum",
+  "chatFolderCreate": "Unda Folda",
+  "chatFolderEdit": "Badilisha Folda",
+  "chatFolderNameHint": "Jina la folda",
+  "chatFolderAll": "Wote",
+  "chatFolderUnread": "Haijasomwa",
+  "chatFolderPersonal": "Binafsi",
+  "chatFolderGroups": "Vikundi",
+  "chatFolderChannels": "Vituo",
+  "chatFolderMuted": "Imenyamazishwa",
+  "storyAddMusic": "Ongeza Muziki",
+  "storyChangeMusic": "Badilisha Muziki",
+  "storyBackgroundMusic": "Muziki wa Usuli",
+  "storyMusicPreview": "Hakiki (isizidi sekunde 15)",
+  "storyChooseFromDevice": "Chagua kutoka kwa Kifaa",
+  "storyUseThisMusic": "Tumia Muziki Huu",
+  "authPasskeyNotSupported": "Nenosiri halitumiki kwenye kifaa hiki",
+  "authPasskeyRegister": "Usajili wa nenosiri",
+  "authPasskeyNoRegistered": "Hakuna funguo za siri zilizosajiliwa",
+  "authPasskeyRegisterHint": "Sajili nenosiri la akaunti hii. Kuingia kwa nenosiri la pekee kutawezeshwa baadaye.",
+  "authPasskeyNameYours": "Taja Nenosiri lako",
+  "authPasskeyRegistered": "Nenosiri limehifadhiwa kwenye akaunti hii",
+  "authPasskeyDeleted": "Nenosiri limeondolewa kwenye akaunti hii",
+  "authPasskeyDeleteConfirm": "Ungependa kufuta nenosiri \"{name}\"? Utahitaji kukisajili tena kabla ya kutumia nenosiri la kuingia baadaye.",
+  "@authPasskeyDeleteConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "momentVisibilityPublic": "Hadharani",
+  "momentVisibilityPrivate": "Binafsi",
+  "momentVisibilityPartial": "Marafiki Waliochaguliwa",
+  "momentVisibilityExcluded": "Usijumuishe Baadhi ya Marafiki",
+  "momentUserMoments": "Nyakati za {userName}",
+  "@momentUserMoments": {
+    "placeholders": {
+      "userName": {
+        "type": "String"
+      }
+    }
+  },
+  "momentForwardTo": "Mbele kwa",
+  "momentForwardSuccess": "Imesambazwa kwa mafanikio",
+  "momentSelectFriends": "Chagua Marafiki",
+  "momentSelectTags": "Chagua kwa Lebo",
+  "momentSelectedCount": "Imechaguliwa ({count})",
+  "@momentSelectedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "momentNoMomentsYet": "Bado hakuna muda mfupi",
+  "momentForwardMoment": "Muda Mbele",
+  "momentAddComment": "Ongeza maoni...",
+  "momentForwardContent": "[Moment] {content}",
+  "@momentForwardContent": {
+    "placeholders": {
+      "content": {
+        "type": "String"
+      }
+    }
+  },
+  "momentDeleteMoment": "Futa Muda",
+  "momentDeleteConfirm": "Je, una uhakika unataka kufuta wakati huu?",
+  "momentComment": "Maoni",
+  "momentWriteComment": "Andika maoni...",
+  "momentLike": "Kama",
+  "momentUnlike": "Tofauti",
+  "momentForward": "Mbele",
+  "momentDelete": "Futa",
+  "momentReply": "jibu",
+  "momentMoment": "Muda mfupi",
+  "momentLikesCount": "{count} imependwa",
+  "@momentLikesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "momentCommentsCount": "Maoni ya {count}",
+  "@momentCommentsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "momentNoComments": "Hakuna maoni bado",
+  "momentFailedToLoad": "Imeshindwa kupakia picha",
+  "momentReplyTo": "Jibu kwa {userName}...",
+  "@momentReplyTo": {
+    "placeholders": {
+      "userName": {
+        "type": "String"
+      }
+    }
+  },
+  "momentNoConversations": "Hakuna mazungumzo",
+  "momentJustNow": "sasa hivi",
+  "momentMinutesAgo": "{count}m iliyopita",
+  "@momentMinutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "momentHoursAgo": "{count}h iliyopita",
+  "@momentHoursAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "momentDaysAgo": "{count}d iliyopita",
+  "@momentDaysAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatGroupAnnouncementHint": "Weka tangazo la kikundi",
+  "chatGroupAnnouncementEmpty": "Hakuna tangazo",
+  "chatEditNickname": "Hariri Jina la Utani",
+  "chatNicknameHint": "Weka jina lako la utani kwenye kikundi hiki",
+  "contactAddPhoneHint": "Weka nambari ya simu",
+  "contactNotesHint": "Ongeza maelezo kuhusu mtu huyu",
+  "reportTitle": "Ripoti",
+  "reportReasonSpam": "Barua taka",
+  "reportReasonHarassment": "Unyanyasaji",
+  "reportReasonFraud": "Ulaghai",
+  "reportReasonOther": "Nyingine",
+  "reportSubmitted": "Ripoti imewasilishwa",
+  "reportDescription": "Maelezo ya ziada (si lazima)",
+  "qrcodeSaved": "Msimbo wa QR umehifadhiwa kwenye albamu",
+  "chatSendRedPacketInChat": "Tafadhali tuma pakiti nyekundu kwenye gumzo",
+  "commonSaveFailed": "Imeshindwa kuhifadhi",
+  "reportSelectReason": "Tafadhali chagua sababu",
+  "gameCenter": "Michezo",
+  "gameHighScore": "Bora zaidi",
+  "gameScore": "Alama",
+  "gameOver": "Mchezo Umekwisha",
+  "gamePlayAgain": "Cheza Tena",
+  "gameLeaderboard": "Ubao wa wanaoongoza",
+  "gamePause": "Imesitishwa",
+  "gameResume": "Gusa ili uendelee",
+  "gameConfirmExit": "Ungependa kuacha mchezo huu?",
+  "gameNoScores": "Bado hakuna alama",
+  "game2048": "2048",
+  "game2048Desc": "Unganisha vigae kufikia 2048",
+  "gameBlockDrop": "Kuacha kuzuia",
+  "gameBlockDropDesc": "Tone na wazi mistari",
+  "gameMinesweeper": "Mfagia madini",
+  "gameMinesweeperDesc": "Pata seli zote salama",
+  "gameMatch3": "Mechi 3",
+  "gameMatch3Desc": "Linganisha vito 3 au zaidi",
+  "gameMinesweeperEasy": "Rahisi",
+  "gameMinesweeperMedium": "Kati",
+  "gameMinesLeft": "Migodi Imesalia",
+  "gameTimeLeft": "Muda",
+  "gameLevel": "Kiwango",
+  "gameNext": "Inayofuata",
+  "gameBestTime": "Wakati Bora",
+  "gameNewRecord": "Rekodi Mpya!",
+  "gameLines": "Mistari",
+  "storyMyStory": "Hadithi Yangu",
+  "storageSmartCleanup": "Smart Cleanup",
+  "storageOldMediaFiles": "Faili za Midia ya Zamani",
+  "storageLargeFiles": "Faili Kubwa",
+  "storageAppCache": "Akiba ya Programu",
+  "storageSettings": "Mipangilio ya Hifadhi",
+  "storageAutoCleanup": "Kusafisha Kiotomatiki",
+  "storageAutoCleanupDesc": "Safisha faili za zamani zaidi ya siku {days} kiotomatiki",
+  "@storageAutoCleanupDesc": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "storageCleanupPeriod": "Kipindi cha Kusafisha",
+  "storagePreserveThumbnails": "Hifadhi Vijipicha",
+  "storagePreserveThumbnailsDesc": "Weka vijipicha vya picha wakati wa kusafisha",
+  "storageWarningHigh": "Matumizi ya hifadhi ni ya juu. Fikiria kusafisha faili za zamani.",
+  "storageWarningCritical": "Hifadhi iko chini sana. Tafadhali safisha ili upate nafasi.",
+  "storageFreed": "Imeachiliwa huru {size} (faili {count})",
+  "@storageFreed": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "storageDays": "Siku za {days}",
+  "@storageDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "storageViewAllRooms": "Tazama vyumba vyote vya {count}",
+  "@storageViewAllRooms": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "storageNoFiles": "Hakuna faili zilizopatikana",
+  "storageFilePinned": "Imebandikwa",
+  "storageDeleteSelected": "Ungependa kufuta faili za {count} zilizochaguliwa? Wanaweza kupakuliwa tena kutoka kwa seva.",
+  "@storageDeleteSelected": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "backupRestore": "Hifadhi nakala na Rejesha",
+  "backupCreate": "Unda Hifadhi Nakala",
+  "backupCreateDesc": "Hifadhi nakala za mipangilio yako na vitufe vya usimbaji fiche. Ujumbe utarejeshwa kutoka kwa seva baada ya kuingia tena.",
+  "backupIncludeKeys": "Jumuisha funguo za usimbaji fiche",
+  "backupIncludeKeysDesc": "Inahitajika kwa kusoma ujumbe uliosimbwa kwa njia fiche",
+  "backupPasswordProtect": "Ulinzi wa nenosiri",
+  "backupEnterPassword": "Weka nenosiri mbadala",
+  "backupHistory": "Hifadhi nakala ya Historia",
+  "backupNoBackups": "Bado hakuna chelezo",
+  "backupRestore2": "Rejesha",
+  "backupDelete": "Futa",
+  "backupDeleteConfirm": "Je, una uhakika unataka kufuta nakala rudufu hii? Hili haliwezi kutenduliwa.",
+  "backupRestoreFromFile": "Rejesha kutoka kwa Faili",
+  "backupRestoreFromFileDesc": "Ingiza faili ya chelezo ya .n42 kutoka kwa kifaa kingine au nakala rudufu ya awali.",
+  "backupChooseFile": "Chagua Faili ya Hifadhi Nakala",
+  "backupRestoring": "Inarejesha...",
+  "backupCreated": "Hifadhi rudufu imeundwa: Vyumba vya {rooms}, ujumbe wa {messages}",
+  "@backupCreated": {
+    "placeholders": {
+      "rooms": {
+        "type": "int"
+      },
+      "messages": {
+        "type": "int"
+      }
+    }
+  },
+  "backupRestored": "Mipangilio ya {settings} iliyorejeshwa kutoka vyumba vya {rooms}",
+  "@backupRestored": {
+    "placeholders": {
+      "settings": {
+        "type": "int"
+      },
+      "rooms": {
+        "type": "int"
+      }
+    }
+  },
+  "backupFailed": "Imeshindwa kuhifadhi nakala: {error}",
+  "@backupFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "backupPasswordRequired": "Hifadhi rudufu hii inalindwa na nenosiri",
+  "blocGroupNotFound": "Kikundi hakijapatikana",
+  "blocGroupMembersInvited": "Wanachama wa {count} walioalikwa",
+  "@blocGroupMembersInvited": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "blocGroupMemberRemoved": "Mwanachama ameondolewa",
+  "blocGroupAdminRemoved": "Msimamizi ameondolewa",
+  "blocGroupLeft": "Aliondoka kwenye kikundi",
+  "blocGroupDisbanded": "Kikundi kimevunjwa",
+  "blocGroupJoined": "Alijiunga na kikundi",
+  "blocGroupInviteDeclined": "Mwaliko umekataliwa",
+  "blocGroupTokenGateUpdated": "Lango la ishara limesasishwa",
+  "blocTransferProcessing": "Inachakata uhamishaji...",
+  "blocTransferCancelled": "Uhamisho umeghairiwa",
+  "blocTransferFailed": "Imeshindwa kuhamisha",
+  "blocPaymentProcessing": "Inachakata malipo...",
+  "blocPaymentFailed": "Malipo yameshindwa",
+  "groupMaxMembers": "Kikomo cha Wanachama",
+  "groupMaxMembersUnlimited": "Bila kikomo",
+  "groupMaxMembersHint": "Weka kikomo (wacha tupu kwa ukomo)",
+  "groupMaxMembersUpdated": "Kikomo cha wanachama kimesasishwa",
+  "groupFull": "Kikundi kiko kwenye uwezo",
+  "groupChannels": "Mada ya Njia",
+  "groupChannelsEmpty": "Bado hakuna chaneli",
+  "groupChannelsCount": "njia",
+  "groupChannelCreate": "Kituo Kipya",
+  "groupChannelName": "Jina la Kituo",
+  "groupChannelTopic": "Mada ya Kituo (si lazima)",
+  "groupChannelDelete": "Futa Kituo",
+  "groupChannelDeleteConfirm": "Ungependa kufuta kituo hiki? Barua pepe zote zitapotea.",
+  "groupBotSettings": "Mipangilio ya Kijibu",
+  "groupBotEnabled": "Washa Kijibu",
+  "groupBotWelcomeMessage": "Kiolezo cha Ujumbe wa Karibu",
+  "groupBotWelcomeHint": "Tumia 'jina' kama kishika nafasi kwa jina jipya la mwanachama",
+  "groupBotConfigUpdated": "Mipangilio ya kijibu imesasishwa",
+  "groupContentFilter": "Kichujio cha Maudhui",
+  "groupContentFilterEnabled": "Washa Kichujio cha Maneno Muhimu",
+  "groupContentFilterReplace": "Badilisha na ***",
+  "groupContentFilterHide": "Ficha Ujumbe",
+  "groupContentFilterAddWord": "Ongeza Nenomsingi",
+  "groupContentFilterUpdated": "Kichujio cha maudhui kimesasishwa",
+  "chatSlashCommands": "Amri",
+  "chatCommandPoll": "/ kura - Tengeneza kura",
+  "chatCommandAnnounce": "/tangaza - Tuma tangazo",
+  "chatCommandWelcome": "/karibu - Weka ujumbe wa kukaribisha",
+  "chatReportMessage": "Ripoti",
+  "chatReportReason": "Ripoti Sababu",
+  "chatReportSpam": "Barua taka",
+  "chatReportHarassment": "Unyanyasaji",
+  "chatReportInappropriate": "Maudhui Yasiyofaa",
+  "chatReportOther": "Nyingine",
+  "chatReportSuccess": "Ripoti imewasilishwa",
+  "spacesName": "Jina la Jumuiya",
+  "spacesNameHint": "k.m. Wafanyabiashara wa Crypto",
+  "spacesNameRequired": "Jina linahitajika",
+  "spacesDescription": "Maelezo",
+  "spacesDescriptionHint": "Jumuiya hii inahusu nini?",
+  "spacesType": "Aina ya Jumuiya",
+  "spacesPublicDesc": "Mtu yeyote anaweza kugundua na kujiunga",
+  "spacesPrivateDesc": "Wanachama walioalikwa pekee ndio wanaoweza kujiunga",
+  "spacesNotFound": "Jumuiya haijapatikana",
+  "spacesSearch": "Tafuta jumuiya...",
+  "spacesMembers": "Wanachama",
+  "spacesNoChannels": "Bado hakuna chaneli",
+  "spacesLeave": "Ondoka kwenye Jumuiya",
+  "spacesLeaveConfirm": "Je, una uhakika unataka kuondoka \"{name}\"?",
+  "@spacesLeaveConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spacesDelete": "Futa Jumuiya",
+  "spacesDeleteConfirm": "Hii itafuta kabisa \"{name}\" na vituo vyake vyote. Kitendo hiki hakiwezi kutenduliwa.",
+  "@spacesDeleteConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spacesCreateChannel": "Ongeza Kituo",
+  "spacesChannelName": "Jina la Kituo",
+  "spacesChannelTopic": "Mada (ya hiari)",
+  "spacesDeleteChannel": "Futa Kituo",
+  "spacesDeleteChannelConfirm": "Je, una uhakika unataka kufuta \"#{name}\"?",
+  "@spacesDeleteChannelConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spacesEditName": "Hariri Jina",
+  "spacesEditDescription": "Hariri Maelezo",
+  "spacesViewAllMembers": "Tazama wanachama wote wa {count}",
+  "@spacesViewAllMembers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "spacesKickMemberTitle": "Piga {name}",
+  "@spacesKickMemberTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spacesBanMemberTitle": "Piga marufuku {name}",
+  "@spacesBanMemberTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spacesPromoteAdmin": "Pandisha cheo hadi Msimamizi",
+  "spacesDemoteAdmin": "Ondoa Admin",
+  "spacesInviteMember": "Alika Mwanachama",
+  "spacesInviteMemberUserId": "Kitambulisho cha Mtumiaji (k.m. @user:server.com)",
+  "spacesSave": "Hifadhi",
+  "settingsScreenshotProtection": "Ulinzi wa Picha ya skrini",
+  "settingsScreenshotProtectionDesc": "Zuia picha za skrini na kurekodi skrini",
+  "chatSelfDestructTimer": "Kujiharibu",
+  "chatTimerPickerTitle": "Kipima Muda cha kujiharibu",
+  "chatTimerOff": "Imezimwa",
+  "onChainNotificationsTitle": "Matukio kwenye mnyororo",
+  "onChainMarkAllRead": "Weka alama kuwa zote zimesomwa",
+  "onChainNoNotifications": "Bado hakuna matukio ya mtandaoni",
+  "onChainNoNotificationsDesc": "Matukio kutoka kwa vituo unavyofuatilia yataonekana hapa",
+  "onChainViewDetails": "Tazama maelezo",
+  "chatCommandHelp": "/msaada — Onyesha amri zote",
+  "chatCommandPrice": "/bei - Pata bei ya ishara",
+  "chatCommandBalance": "/balance — Onyesha salio la pochi",
+  "chatCommandChains": "/minyororo - Orodhesha minyororo 236+ inayotumika",
+  "chatMiniApps": "Programu",
+  "miniAppMarketTitle": "Programu Ndogo",
+  "miniAppCategoryAll": "Wote",
+  "miniAppSearch": "Tafuta programu...",
+  "miniAppFeatured": "Iliyoangaziwa",
+  "miniAppAllApps": "Programu Zote",
+  "miniAppNoResults": "Hakuna programu zilizopatikana",
+  "slideToPayLabel": "→→→ Telezesha kidole ili kuthibitisha",
+  "slideToPayConfirming": "Inathibitisha...",
+  "redPacketBestLuck": "Bahati nzuri",
+  "redPacketBestLuckCongrats": "Bahati nzuri! Umepata zaidi!",
+  "redPacketStats": "{claimed} / {total} inadaiwa",
+  "@redPacketStats": {
+    "placeholders": {
+      "claimed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "redPacketStatsTotal": "jumla",
+  "redPacketGrabbedViral": "🧧 alinyakua pakiti nyekundu • {amount} {token}",
+  "@redPacketGrabbedViral": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "token": {
+        "type": "String"
+      }
+    }
+  },
+  "web3SearchHint": "@matrix:id • 0x anwani ya pochi • name.eth",
+  "web3SearchPlaceholder": "Tafuta kwa kitambulisho, pochi, au ENS...",
+  "web3WalletAddress": "Anwani ya Wallet",
+  "web3AddressCopied": "Anwani imenakiliwa",
+  "web3Copy": "Nakili",
+  "web3SendMessage": "Tuma Ujumbe",
+  "web3SendToWallet": "Mkoba wa Ujumbe",
+  "web3WalletOnlyHint": "Anwani hii bado haina akaunti ya N42. Ujumbe utawasilishwa watakapojiunga.",
+  "web3NftAvatar": "Avatar ya NFT",
+  "web3ResolveFailed": "Imeshindwa kutatua utambulisho",
+  "web3EnsNotFound": "Jina la ENS \"{name}\" halijapatikana",
+  "@web3EnsNotFound": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "web3NoN42AccountTitle": "Hakuna Akaunti ya N42",
+  "web3NoN42AccountDesc": "Anwani hii ya pochi bado haina akaunti ya N42. Unaweza kushiriki nao kiungo chako cha mwaliko wa N42 ili kuanza.",
+  "web3ShareInvite": "Shiriki Mwaliko",
+  "nftPickerTitle": "Chagua Avatar ya NFT",
+  "nftPickerTabPopular": "Maarufu",
+  "nftPickerTabCustom": "Desturi",
+  "nftPickerChain": "Mnyororo",
+  "nftPickerContract": "Anwani ya Mkataba",
+  "nftPickerTokenId": "Kitambulisho cha ishara",
+  "nftPickerVerifyOwnership": "Thibitisha Umiliki na Hakiki",
+  "nftPickerUseAsAvatar": "Tumia kama Avatar",
+  "nftPickerPreview": "Hakiki",
+  "nftPickerNotOwned": "Humiliki NFT hii",
+  "nftPickerInvalidTokenId": "Kitambulisho cha tokeni si sahihi",
+  "nftPickerEnterBoth": "Weka anwani ya mkataba na kitambulisho cha tokeni",
+  "nftPickerInfoTitle": "Avatar ya NFT - Imethibitishwa Kwenye Mnyororo",
+  "nftPickerInfoDesc": "Unganisha NFT unayomiliki kama avatar yako. Mtu yeyote anaweza kuthibitisha umiliki kwenye mnyororo. Imeonyeshwa kwa pete ya dhahabu kote N42.",
+  "nftPickerPopularCollections": "Mikusanyiko Maarufu",
+  "nftPickerWalletHint": "Unganisha pochi yako ya N42 ili kugundua NFT zako kiotomatiki kwenye minyororo 236+.",
+  "profileBindNftAvatar": "Funga Avatar ya NFT",
+  "profileChangeAvatar": "Badilisha Avatar",
+  "groupTopics": "Mada",
+  "groupTopicsEmpty": "Bado hakuna mada",
+  "syncInProgress": "Inasawazisha historia ya ujumbe...",
+  "recoveryKeyReminderTitle": "Linda ujumbe wako",
+  "recoveryKeyReminderDesc": "Unda ufunguo wa kurejesha akaunti ili kusawazisha ujumbe uliosimbwa kwa njia salama kwenye vifaa vyote",
+  "recoveryKeySetupNow": "Sanidi sasa",
+  "recoveryKeyRemindLater": "Nikumbushe baadaye",
+  "channelReadOnly": "Wasimamizi pekee ndio wanaweza kuchapisha katika kituo hiki",
+  "channelSubscribers": "waliojisajili",
+  "channelVerified": "Kituo kilichothibitishwa",
+  "redPacketHistory": "Historia ya Pakiti Nyekundu",
+  "redPacketSent": "Imetumwa",
+  "redPacketReceived": "Imepokelewa",
+  "redPacketExpired": "Muda wake umeisha",
+  "redPacketClaimed": "Imedaiwa",
+  "redPacketInsufficientBalance": "Usawa usiotosha",
+  "selfDestructCountdown": "Kujiharibu katika {time}",
+  "@selfDestructCountdown": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "messageDestroyed": "Ujumbe umeharibiwa",
+  "miniAppPermissionDenied": "Ruhusa imekataliwa: {permission}",
+  "@miniAppPermissionDenied": {
+    "placeholders": {
+      "permission": {
+        "type": "String"
+      }
+    }
+  },
+  "aiSuggestionGasFee": "Ada ya gesi ni nini?",
+  "aiSuggestionDefi": "Mwongozo wa Mwanzo wa DeFi",
+  "aiSuggestionSecurity": "Jinsi ya kuangalia usalama wa mkataba",
+  "aiSuggestionBridge": "Madaraja ya mnyororo",
+  "channelDiscoverTitle": "Gundua Vituo",
+  "channelDiscoverSearch": "Tafuta vituo...",
+  "channelJoin": "Jiunge",
+  "channelJoined": "Imejiunga",
+  "channelCategory": "Kategoria",
+  "slowModeCooldown": "Hali ya polepole: subiri {seconds}s",
+  "@slowModeCooldown": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "addressCopyAction": "Nakili Anwani",
+  "addressSendMessage": "Tuma Ujumbe",
+  "addressViewProfile": "Tazama Wasifu",
+  "sendToAddress": "Tuma kwa anwani ya mkoba",
+  "blocAuthSendVerificationCodeFailed": "Imeshindwa kutuma nambari ya kuthibitisha",
+  "blocAuthServerNoEmailPasswordReset": "Seva hii haiauni kuweka upya nenosiri la barua pepe",
+  "blocAuthResetPasswordFailed": "Imeshindwa kuweka upya nenosiri",
+  "blocAuthChangePasswordFailed": "Imeshindwa kubadilisha nenosiri",
+  "blocAuthOldPasswordWrong": "Nenosiri la sasa si sahihi",
+  "blocAuthLoginCancelled": "Kuingia kumeghairiwa",
+  "blocAuthGoogleLoginFailed": "Kuingia kwenye Google kumeshindwa",
+  "blocAuthAppleLoginFailed": "Kuingia kwa Apple kumeshindwa",
+  "blocAuthSsoLoginFailed": "Kuingia kwa SSO kumeshindwa",
+  "blocAuthFacebookLoginFailed": "Kuingia kwenye Facebook kumeshindwa",
+  "blocAuthTwitterLoginFailed": "Kuingia kwenye Twitter kumeshindwa",
+  "blocAuthWeChatLoginFailed": "Kuingia kwenye WeChat kumeshindwa",
+  "blocAuthWeChatNotConfigured": "Kuingia kwa WeChat hakujasanidiwa",
+  "blocAuthWeChatNotInstalled": "Tafadhali sakinisha WeChat kwanza",
+  "blocAuthPasswordWrong": "Nenosiri si sahihi",
+  "blocAuthEmailAlreadyBound": "Barua pepe hii tayari imefungwa kwa akaunti nyingine",
+  "blocAuthChangeEmailFailed": "Imeshindwa kubadilisha barua pepe",
+  "blocAuthVerificationCodeInvalid": "Nambari ya uthibitishaji si sahihi au muda wake umeisha",
+  "blocAuthSessionExpired": "Kipindi kimekwisha, tafadhali ingia tena",
+  "blocAuthSessionIncomplete": "Data ya kipindi haijakamilika, tafadhali ingia tena"
+}

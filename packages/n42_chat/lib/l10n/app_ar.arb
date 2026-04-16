@@ -1,0 +1,2747 @@
+{
+  "@@locale": "ar",
+  "commonRetry": "أعد المحاولة",
+  "commonUnknownUser": "مستخدم غير معروف",
+  "transferWalletNotConnected": "المحفظة غير متصلة",
+  "chatCallServiceNotInitialized": "لم تتم تهيئة خدمة الاتصال",
+  "authLoginFailed": "فشل تسجيل الدخول: {error}",
+  "chatCallBack": "اتصل مرة أخرى",
+  "chatMissedVideoCall": "مكالمة فيديو فائتة",
+  "chatMissedVoiceCall": "مكالمة صوتية فائتة",
+  "chatCallNotAnswered": "لم يتم الرد",
+  "chatCallDurationLabel": "مدة المكالمة",
+  "chatVoiceCallCancelled": "تم إلغاء المكالمة الصوتية",
+  "chatVideoCallCancelled": "تم إلغاء مكالمة الفيديو",
+  "commonImage": "[صورة]",
+  "chatVideo": "[فيديو]",
+  "chatVoice": "[صوت]",
+  "commonFile": "[ملف]",
+  "chatLocation": "[الموقع]",
+  "chatUnknownMessage": "[رسالة غير معروفة]",
+  "commonDelete": "حذف",
+  "chatDeleteThisMessage": "هل تريد حذف هذه الرسالة؟",
+  "chatMessageDeleted": "تم حذف الرسالة",
+  "profileNotLoggedIn": "لم يتم تسجيل الدخول",
+  "chatMyLocation": "موقعي",
+  "commonGroupChat": "دردشة جماعية",
+  "commonSearch": "بحث",
+  "commonCancel": "إلغاء",
+  "commonLoadFailed": "فشل التحميل",
+  "commonMessages": "الرسائل",
+  "commonContacts": "اتصالات",
+  "commonMe": "أنا",
+  "commonVoiceLoading": "جارٍ التحميل الصوتي، يرجى المحاولة مرة أخرى لاحقًا",
+  "commonVoiceToTextFailed": "فشل تحويل الصوت إلى نص",
+  "commonConvertToText": "إلى النص",
+  "chatCopy": "نسخ",
+  "commonForward": "إلى الأمام",
+  "commonUnfavorite": "غير مفضل",
+  "commonFavorite": "المفضلة",
+  "settingsResend": "إعادة الإرسال",
+  "chatRecall": "أذكر",
+  "commonQuote": "اقتباس",
+  "commonRemind": "تذكير",
+  "chatCopied": "منقول",
+  "storySendMessageHint": "أرسل رسالة",
+  "commonMicrophonePermissionRequired": "يرجى السماح إذن الميكروفون",
+  "chatMicrophonePermissionDeniedPermanent": "تم رفض إذن الميكروفون. يرجى تفعيله في إعدادات النظام لاستخدام الرسائل الصوتية.",
+  "commonStartRecordingFailed": "فشل بدء التسجيل: {error}",
+  "commonRecordingTooShort": "التسجيل قصير جدًا",
+  "commonStopRecordingFailed": "فشل في إيقاف التسجيل: {error}",
+  "chatReleaseToCancel": "الافراج عن الإلغاء",
+  "chatReleaseToSend": "حرر للإرسال، اسحب لأعلى للإلغاء",
+  "commonHoldToTalk": "عقد للحديث",
+  "commonSend": "أرسل",
+  "commonAddFriend": "إضافة صديق",
+  "commonChatServiceNotConnected": "خدمة الدردشة غير متصلة",
+  "contactUserNotFoundHint": "لم يتم العثور على المستخدم \"{query}\".\n\nنصائح:\n• حاول إدخال معرف المستخدم الكامل، على سبيل المثال. @username:server.com\n• التدقيق الإملائي لاسم المستخدم",
+  "@contactUserNotFoundHint": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "contactCreateChatFailed": "فشل إنشاء الدردشة: {error}",
+  "@contactCreateChatFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "contactSearchFailed": "فشل البحث: {error}",
+  "@contactSearchFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "contactEnterUserIdOrUsername": "أدخل معرف المستخدم أو اسم المستخدم للبحث",
+  "contactSearching": "جارٍ البحث...",
+  "contactSearchUserToChat": "ابحث عن المستخدم لبدء الدردشة",
+  "contactMatrixIdExample": "يمكنك إدخال معرف مصفوفة كامل\nعلى سبيل المثال @user:matrix.n42.network",
+  "contactUserNotFound": "لم يتم العثور على المستخدم \"{username}\".",
+  "@contactUserNotFound": {
+    "placeholders": {
+      "username": {
+        "type": "String"
+      }
+    }
+  },
+  "commonChat": "الدردشة",
+  "commonSettings": "الإعدادات",
+  "profileEditProfile": "تحرير الملف الشخصي",
+  "authLogin": "تسجيل الدخول",
+  "commonCreateGroup": "إنشاء مجموعة",
+  "chatError": "خطأ",
+  "commonTransfer": "نقل",
+  "commonReceived": "تم الاستلام",
+  "commonRefunded": "ردها",
+  "commonExpired": "انتهت صلاحيتها",
+  "chatRedPacketGreeting": "أطيب التمنيات",
+  "commonN42RedPacket": "N42 الحزمة الحمراء",
+  "commonClaimed": "ادعى",
+  "commonAllClaimed": "ادعى الجميع",
+  "chatReadAloud": "اقرأ بصوت عالٍ",
+  "chatReply": "رد",
+  "commonEdit": "تحرير",
+  "chatSelectForwardTarget": "حدد الهدف الأمامي",
+  "commonSendCount": "إرسال({count})",
+  "contactN42Id": "معرف N42: {id}",
+  "profileN42IdTitle": "معرف N42",
+  "profileN42Bean": "N42 فول",
+  "contactFriendInfo": "معلومات الصديق",
+  "contactFriendInfoDesc": "أضف ملاحظة الصديق والهاتف والعلامات والملاحظات والصور وتعيين الأذونات.",
+  "commonMoments": "لحظات",
+  "commonSendMessage": "رسالة",
+  "contactAudioVideoCall": "مكالمة صوتية/فيديو",
+  "contactVideoChannel": "قناة الفيديو",
+  "contactRemark": "ملاحظة",
+  "contactRemarkName": "اسم الملاحظة",
+  "contactPhone": "الهاتف",
+  "contactTags": "العلامات",
+  "contactNotes": "ملاحظات",
+  "contactPhotos": "صور",
+  "contactPermissions": "الأذونات",
+  "contactChatMomentsEtc": "الدردشة واللحظات والرياضة وما إلى ذلك.",
+  "contactMoreInfo": "مزيد من المعلومات",
+  "contactCommonGroups": "المجموعات المشتركة",
+  "contactSource": "المصدر",
+  "settingsNotificationSettings": "الإخطارات",
+  "settingsPrivacy": "الخصوصية",
+  "settingsAppearance": "المظهر",
+  "settingsAbout": "حول",
+  "commonLogout": "تسجيل الخروج",
+  "commonLogoutConfirm": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
+  "commonSave": "حفظ",
+  "profileNickname": "اللقب",
+  "profileEnterNickname": "أدخل اللقب",
+  "profileSignature": "التوقيع",
+  "profileAddSignature": "أضف توقيعا",
+  "commonTakePhoto": "التقط صورة",
+  "profileChooseFromGallery": "اختر من المعرض",
+  "profileSaveFailed": "فشل الحفظ: {error}",
+  "authSecureDecentralizedChat": "المراسلة الآمنة واللامركزية",
+  "commonEndToEndEncryption": "التشفير من النهاية إلى النهاية",
+  "authMessagesOnlyYouCanSee": "الرسائل مرئية لك وللمستلم فقط",
+  "authDecentralized": "لامركزية",
+  "authBasedOnMatrix": "مبني على بروتوكول ماتريكس المفتوح",
+  "authWalletIntegration": "تكامل المحفظة",
+  "authEasyCryptoTransfer": "تحويلات العملة المشفرة بسهولة",
+  "authRegister": "قم بالتسجيل",
+  "authAgreeTerms": "بتسجيل الدخول فإنك توافق على",
+  "authTermsOfService": "شروط الخدمة",
+  "authAnd": "و",
+  "authPrivacyPolicy": "سياسة الخصوصية",
+  "authServerAddress": "عنوان الخادم",
+  "authEnterServerAddress": "أدخل عنوان الخادم",
+  "authConnectedTo": "متصل بـ {serverName}",
+  "authUsername": "اسم المستخدم",
+  "authEnterUsername": "أدخل اسم المستخدم",
+  "authUsernameOrEmail": "اسم المستخدم أو البريد الإلكتروني",
+  "authEnterUsernameOrEmail": "أدخل اسم المستخدم أو البريد الإلكتروني",
+  "authPassword": "كلمة المرور",
+  "authEnterPassword": "أدخل كلمة المرور",
+  "authRegisterAccount": "قم بالتسجيل",
+  "authForgotPassword": "نسيت كلمة المرور",
+  "authOtherLoginMethods": "طرق تسجيل الدخول الأخرى",
+  "authCreateAccount": "إنشاء حساب",
+  "authJoinN42Chat": "انضم إلى N42 Chat لبدء الدردشة",
+  "authUsernameHint": "3-20 حرفًا، حروفًا/أرقامًا/_",
+  "authUsernameMinLength": "يجب أن يكون اسم المستخدم 3 أحرف على الأقل",
+  "authUsernameMaxLength": "يجب أن يكون اسم المستخدم 20 حرفًا على الأكثر",
+  "authUsernameFormat": "يمكن أن يحتوي اسم المستخدم على أحرف وأرقام وشرطات سفلية فقط",
+  "authPasswordHint": "الحد الأدنى 8 أحرف",
+  "commonPasswordMinLength": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل",
+  "authConfirmPassword": "تأكيد كلمة المرور",
+  "authFilled": "معبأ",
+  "authEnterInviteCode": "أدخل رمز الدعوة",
+  "authAlreadyHaveAccount": "هل لديك حساب بالفعل؟",
+  "authLoginNow": "قم بتسجيل الدخول الآن",
+  "profileAvatar": "الصورة الرمزية",
+  "profileStatus": "الحالة",
+  "commonLoading": "جار التحميل...",
+  "conversationNoConversations": "لا محادثات",
+  "conversationTapToChat": "اضغط على الجزء العلوي الأيمن لبدء الدردشة",
+  "conversationStartGroup": "ابدأ الدردشة الجماعية",
+  "commonScan": "مسح",
+  "commonPayment": "الدفع",
+  "commonFeatureComingSoon": "{feature} قريبا",
+  "conversationMarkAsRead": "وضع علامة كمقروءة",
+  "commonUnmute": "إلغاء كتم الصوت",
+  "commonMute": "كتم الصوت",
+  "conversationUnpin": "إزالة التثبيت",
+  "conversationPin": "دبوس",
+  "conversationDeleteConversation": "حذف المحادثة",
+  "conversationDeleteConversationConfirm": "هل تريد حذف المحادثة مع \"{name}\"؟",
+  "commonNoContacts": "لا اتصالات",
+  "contactAddFriendsToChat": "أضف أصدقاء لبدء الدردشة",
+  "contactNotFound": "لم يتم العثور على جهة الاتصال",
+  "contactTryOtherKeywords": "جرب كلمات رئيسية أخرى أو بحث عالمي",
+  "contactSearchResults": "نتائج البحث",
+  "contactNewFriends": "أصدقاء جدد",
+  "contactChatOnlyFriends": "أصدقاء الدردشة فقط",
+  "contactOfficialAccounts": "الحسابات الرسمية",
+  "contactServiceAccounts": "حسابات الخدمة",
+  "contactEnterpriseContacts": "اتصالات المؤسسة",
+  "contactRecommendToFriend": "مشاركة الاتصال",
+  "commonSetRemark": "تعيين الملاحظة",
+  "contactSendingCard": "جارٍ إرسال بطاقة جهة الاتصال...",
+  "commonFileLabel": "ملف",
+  "commonLocationLabel": "الموقع",
+  "contactRecommendFailed": "فشل التوصية: {error}",
+  "profileEnterRemark": "أدخل الملاحظة",
+  "contactOpeningChat": "جارٍ فتح الدردشة...",
+  "contactOpenChatFailed": "فشل فتح الدردشة: {error}",
+  "contactAddContact": "إضافة جهة اتصال",
+  "contactEnterUserId": "أدخل معرف المستخدم",
+  "contactNoFriendRequests": "لا توجد طلبات صداقة",
+  "commonAccept": "قبول",
+  "commonReject": "رفض",
+  "commonNoGroups": "لا توجد مجموعات",
+  "contactSelectFriendToRecommend": "اختر صديقًا للتوصية به",
+  "commonSearchContacts": "البحث في جهات الاتصال",
+  "contactNoContactsFound": "لم يتم العثور على جهات اتصال",
+  "favoriteYesterday": "أمس",
+  "chatJustNow": "الآن فقط",
+  "profileOnline": "على الانترنت",
+  "profileOffline": "غير متصل",
+  "searchContactsGroupsMessages": "البحث في جهات الاتصال والمجموعات والرسائل",
+  "searchError": "خطأ في البحث",
+  "chatSearchHint": "بحث",
+  "searchHistory": "سجل البحث",
+  "commonClear": "واضح",
+  "commonAll": "الكل",
+  "searchGroups": "المجموعات",
+  "searchNoResults": "لا توجد نتائج",
+  "commonGroupMembers": "الأعضاء ({count})",
+  "groupMembersTitle": "أعضاء المجموعة",
+  "groupViewAll": "عرض الكل",
+  "groupOwner": "المالك",
+  "groupAdmin": "المشرف",
+  "groupInvite": "دعوة",
+  "commonGroupAnnouncement": "إعلان المجموعة",
+  "commonNotSet": "لم يتم ضبطه",
+  "groupDescription": "وصف المجموعة",
+  "groupPublicGroup": "المجموعة العامة",
+  "commonClearChatHistory": "مسح سجل الدردشة",
+  "commonDissolveGroup": "حل المجموعة",
+  "commonLeaveGroup": "مغادرة المجموعة",
+  "groupChangeGroupName": "تغيير اسم المجموعة",
+  "commonEnterGroupName": "أدخل اسم المجموعة",
+  "commonConfirm": "تأكيد",
+  "groupEnterGroupDescription": "أدخل وصف المجموعة",
+  "groupPublish": "نشر",
+  "chatClearHistoryConfirm": "هل تريد مسح سجل الدردشة بالكامل؟ لا يمكن التراجع عن هذا.",
+  "chatClearAction": "واضح",
+  "commonChatHistoryCleared": "تم مسح سجل الدردشة",
+  "commonDissolve": "حل",
+  "groupQrCode": "رمز الاستجابة السريعة للمجموعة",
+  "commonSearchChatHistory": "البحث في سجل الدردشة",
+  "groupIdCopied": "تم نسخ معرف المجموعة",
+  "transferEnterOrPasteAddress": "أدخل أو الصق عنوان المحفظة",
+  "transferSelectToken": "حدد الرمز المميز",
+  "commonTransferAmount": "مبلغ التحويل",
+  "transferAvailable": "متاح",
+  "transferMemoOptional": "مذكرة (اختياري)",
+  "transferConfirmTransfer": "تأكيد النقل",
+  "transferAddressVerified": "تم التحقق من العنوان",
+  "transferAvailableBalance": "متاح: {balance} {symbol}",
+  "commonEnterAmount": "أدخل المبلغ",
+  "commonRedPacketCountMin": "مطلوب حزمة حمراء واحدة على الأقل",
+  "commonViewRedPacketDetails": "عرض تفاصيل الحزمة الحمراء",
+  "commonEnterTransferAmount": "الرجاء إدخال مبلغ التحويل",
+  "commonTransferTo": "نقل إلى",
+  "commonFromSender": "من {name}",
+  "commonConfirmReceive": "تأكيد الاستلام",
+  "groupProfile": "معلومات المجموعة",
+  "groupRemoveMember": "إزالة من المجموعة",
+  "commonRemove": "إزالة",
+  "profileClearStatus": "مسح الحالة",
+  "profileClearStatusConfirm": "هل تريد مسح الوضع الحالي؟",
+  "profileStatusCleared": "تم مسح الحالة",
+  "profileUserNotExist": "المستخدم غير موجود",
+  "profileUserIdCopied": "تم نسخ معرف المستخدم",
+  "commonReport": "تقرير",
+  "profileQrCode": "رمز الاستجابة السريعة",
+  "profileAvatarUpdated": "تم تحديث الصورة الرمزية",
+  "commonSelectImageFailed": "فشل في تحديد الصورة: {error}",
+  "profileChangeName": "تغيير الاسم",
+  "profileMale": "ذكر",
+  "profileFemale": "أنثى",
+  "chatFeatureInDev": "ميزة {feature} قيد التطوير...",
+  "profileSaveAddressFailed": "فشل حفظ العنوان: {error}",
+  "profileAddNew": "أضف",
+  "profileAddAddress": "إضافة عنوان",
+  "profileAddressAdded": "تمت إضافة العنوان",
+  "profileAddressUpdated": "تم تحديث العنوان",
+  "profileDeleteAddress": "حذف العنوان",
+  "profileAddressDeleted": "تم حذف العنوان",
+  "profileSaveInvoiceFailed": "فشل حفظ الفاتورة: {error}",
+  "profileMyInvoices": "فواتيري",
+  "profileAddInvoice": "أضف الفاتورة",
+  "profileInvoiceAdded": "تمت إضافة الفاتورة",
+  "profileInvoiceUpdated": "تم تحديث الفاتورة",
+  "profileDeleteInvoice": "حذف الفاتورة",
+  "profileInvoiceDeleted": "تم حذف الفاتورة",
+  "profilePersonal": "شخصي",
+  "groupSelectAtLeastOne": "الرجاء اختيار عضو واحد على الأقل",
+  "chatFileNotExist": "الملف غير موجود",
+  "chatSendFailed": "فشل الإرسال: {error}",
+  "chatCannotOpenBrowser": "لا يمكن فتح المتصفح",
+  "chatSelectFileFailed": "فشل في تحديد الملف: {error}",
+  "settingsSetupFailed": "فشل الإعداد: {error}",
+  "transferEnterValidAmount": "الرجاء إدخال مبلغ صالح",
+  "commonAddressCopied": "تم نسخ العنوان",
+  "favoriteOpenItem": "فتح: {content}",
+  "favoriteDeleted": "تم الحذف",
+  "profileWallet": "المحفظة",
+  "chatRecording": "التسجيل",
+  "chatInvalidVideoUrl": "عنوان URL للفيديو غير صالح",
+  "chatDownloadFile": "تنزيل الملف",
+  "chatClearChatHistoryTitle": "مسح سجل الدردشة",
+  "chatVideoCall": "مكالمة فيديو",
+  "commonVoiceCall": "مكالمة صوتية",
+  "callLeaveMeeting": "مغادرة الاجتماع",
+  "chatDetails": "تفاصيل الدردشة",
+  "chatViewAllGroupMembers": "مشاهدة كافة الأعضاء",
+  "chatGroupName": "اسم المجموعة",
+  "chatGroupNameUpdated": "تم تحديث اسم المجموعة",
+  "chatUpdateFailed": "فشل التحديث",
+  "chatNoPermissionToModify": "ليس لديك الإذن بالتعديل",
+  "chatGroupManagement": "إدارة المجموعة",
+  "chatMyNicknameInGroup": "لقبي في المجموعة",
+  "chatPinChat": "دبوس الدردشة",
+  "chatStrongReminder": "تذكير قوي",
+  "chatSetChatBackground": "تعيين خلفية الدردشة",
+  "chatUnknownFile": "ملف غير معروف",
+  "chatDownload": "تحميل",
+  "chatInvalidLocation": "الموقع غير صالح",
+  "chatTapToCancel": "انقر للإلغاء",
+  "chatCaptureFailed": "فشل الالتقاط: {error}",
+  "chatProcessingVideo": "جارٍ معالجة الفيديو...",
+  "chatVideoFileNotExist": "ملف الفيديو غير موجود",
+  "chatVideoDataEmpty": "بيانات الفيديو فارغة",
+  "chatVideoTooLarge": "لا يمكن أن يتجاوز حجم الفيديو 100 ميجابايت",
+  "chatSendingVideo": "جارٍ إرسال الفيديو...",
+  "chatSendVideoFailed": "فشل إرسال الفيديو: {error}",
+  "chatImageFileNotExist": "ملف الصورة غير موجود",
+  "commonImageDataEmpty": "بيانات الصورة فارغة",
+  "chatSendingImage": "جارٍ إرسال الصورة...",
+  "chatSendImageFailed": "فشل إرسال الصورة: {error}",
+  "chatSendLocation": "إرسال الموقع",
+  "chatSelectLocationAndSend": "حدد الموقع وأرسل",
+  "chatShareRealTimeLocation": "مشاركة الموقع في الوقت الحقيقي",
+  "chatShareLocationForOneHour": "مشاركة الموقع في الوقت الفعلي مع صديق لمدة ساعة واحدة",
+  "chatLocationSent": "تم إرسال الموقع",
+  "chatSelectMessages": "حدد الرسائل",
+  "chatSelectedCount": "تم التحديد {count}",
+  "chatSelectAll": "حدد الكل",
+  "chatGroupChatCount": "الدردشة الجماعية({count})",
+  "chatPrivateChat": "دردشة خاصة",
+  "chatNoMessages": "لا توجد رسائل",
+  "chatSendFirstMessage": "أرسل الرسالة الأولى لبدء الدردشة",
+  "chatEncryptionNotice": "هذه الدردشة مشفرة من طرف إلى طرف. يمكنك أنت والمستلم فقط قراءة الرسائل.",
+  "chatMultiForward": "إلى الأمام",
+  "chatCollect": "اجمع",
+  "chatNoMembers": "لا أعضاء",
+  "chatMemberNotFound": "لم يتم العثور على العضو",
+  "chatVoiceFileNotExist": "الملف الصوتي غير موجود",
+  "chatVoiceFileEmpty": "الملف الصوتي فارغ",
+  "chatSendingVoice": "جارٍ إرسال الصوت...",
+  "chatSendVoiceFailed": "فشل إرسال الصوت: {error}",
+  "chatMessageForwarded": "تم إعادة توجيه الرسالة",
+  "chatForwardFailed": "فشل إعادة التوجيه: {error}",
+  "chatUnfavorited": "غير مفضل",
+  "chatFavorited": "المفضلة",
+  "chatReactionAdded": "تمت إضافة التفاعل",
+  "chatReactionRemoved": "تمت إزالة التفاعل",
+  "chatFailedMessageDeleted": "تم حذف الرسالة الفاشلة",
+  "chatDeleteMessages": "حذف الرسائل",
+  "chatDeleteMessagesConfirm": "هل أنت متأكد أنك تريد حذف رسائل {count}؟",
+  "chatNoteOtherMessages": "ملاحظة: رسائل {count} هي من الآخرين وسيتم حذفها لك فقط.",
+  "chatMyMessagesWillBeRecalled": "سيتم استدعاء رسائل {count} منك للجميع.",
+  "chatRecalledCount": "تم استدعاء رسائل {count}، وتم حذف {localCount} لك فقط",
+  "chatRecalledMessages": "تم استدعاء رسائل {count}",
+  "chatDeletedLocally": "تم حذف رسائل {count} لك فقط",
+  "chatForwardedCount": "رسائل {count} المعاد توجيهها",
+  "chatForwardComplete": "اكتمل إعادة التوجيه: نجح {success}، وفشل {failed}",
+  "chatRemindOnlyInGroup": "ميزة التذكير متاحة فقط في الدردشة الجماعية",
+  "chatOnlyTextSearchable": "يمكن البحث في الرسائل النصية فقط",
+  "chatSearchFor": "بحث \"{text}\"",
+  "chatBaiduSearch": "بحث بايدو",
+  "chatGoogleSearch": "بحث جوجل",
+  "chatBingSearch": "بحث بنج",
+  "chatCalling": "جارٍ الاتصال...",
+  "chatRinging": "رنين...",
+  "chatInCall": "في المكالمة",
+  "commonFeatureInDevelopment": "ميزة {feature} قيد التطوير...",
+  "chatCollectMessages": "رسائل {count} المجمعة",
+  "commonMemberCount": "أعضاء {count}",
+  "groupDone": "تم ({count})",
+  "@groupDone": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "profileServices": "الخدمات",
+  "commonFavorites": "المفضلة",
+  "profileOrdersAndCards": "الطلبات والبطاقات",
+  "profileStickers": "ملصقات",
+  "profileStatusSetTo": "تم ضبط الحالة على: {status}",
+  "@profileStatusSetTo": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "profileAvatarUploadFailed": "فشل تحميل الصورة الرمزية",
+  "profilePersonalProfile": "الملف الشخصي",
+  "profileName": "الاسم",
+  "profileGender": "الجنس",
+  "profileRegion": "المنطقة",
+  "commonMyQrCode": "رمز الاستجابة السريعة الخاص بي",
+  "profilePoke": "كزة",
+  "profileRingtone": "نغمة رنين",
+  "profileDefaultRingtone": "نغمة الرنين الافتراضية",
+  "profileMyAddresses": "عناويني",
+  "profileGenderSetTo": "تم ضبط الجنس على: {gender}",
+  "@profileGenderSetTo": {
+    "placeholders": {
+      "gender": {
+        "type": "String"
+      }
+    }
+  },
+  "profileSelectRegion": "حدد المنطقة",
+  "profileSelectCity": "اختر المدينة",
+  "profileRegionSetTo": "تم ضبط المنطقة على: {region}",
+  "@profileRegionSetTo": {
+    "placeholders": {
+      "region": {
+        "type": "String"
+      }
+    }
+  },
+  "profileSetPoke": "تعيين كزة",
+  "profileFriendPokedMe": "صديق طعنني",
+  "profileExample": "مثال",
+  "profileOnTheShoulder": "على الكتف",
+  "profilePokeCleared": "تم مسح كزة",
+  "profilePokeSetTo": "تم ضبط النكز على: poked me{suffix}",
+  "@profilePokeSetTo": {
+    "placeholders": {
+      "suffix": {
+        "type": "String"
+      }
+    }
+  },
+  "profileEditSignature": "تحرير التوقيع",
+  "profileIntroduceYourself": "جملة للتعريف بنفسك",
+  "profileSignatureCleared": "تم مسح التوقيع",
+  "profileSignatureUpdated": "تم تحديث التوقيع",
+  "profileScanToAddFriend": "امسح رمز الاستجابة السريعة أعلاه لإضافتي كصديق",
+  "profileRingtoneSetTo": "تم ضبط نغمة الرنين على: {ringtone}",
+  "@profileRingtoneSetTo": {
+    "placeholders": {
+      "ringtone": {
+        "type": "String"
+      }
+    }
+  },
+  "commonConfirmDissolveGroup": "هل أنت متأكد أنك تريد حل \"{name}\"؟ لا يمكن التراجع عن هذا الإجراء.",
+  "@commonConfirmDissolveGroup": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "authEnterValidServerAddress": "الرجاء إدخال عنوان خادم صالح",
+  "authEnterServerAddressFirst": "الرجاء إدخال عنوان الخادم أولاً",
+  "authPasskeyRequiresServer": "يتطلب تسجيل الدخول بمفتاح المرور دعم الخادم",
+  "authLoginAgreement": "بتسجيل الدخول فإنك توافق على",
+  "authPleaseAgreeToTerms": "يرجى قراءة شروط الخدمة وسياسة الخصوصية والموافقة عليها",
+  "authRegisterFailed": "فشل التسجيل",
+  "commonReenterPassword": "أعد إدخال كلمة المرور",
+  "commonPasswordsDoNotMatch": "كلمات المرور غير متطابقة",
+  "authInviteCodeBuiltIn": "رمز الدعوة (مدمج)",
+  "authInviteCodeBuiltInNote": "رمز الدعوة مدمج، وعادة لا يحتاج إلى تعديل",
+  "authIHaveReadAndAgree": "لقد قرأت ووافقت على",
+  "mainStartGroupChat": "ابدأ الدردشة الجماعية",
+  "mainAddFriends": "أضف أصدقاء",
+  "mainPaymentAndCollection": "الدفع",
+  "contactCount": "اتصالات {count}",
+  "@contactCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "contactAddToHomeScreen": "أضف إلى الشاشة الرئيسية",
+  "contactRecommendedCardTo": "أوصى بطاقة {contact} ل{recipient}",
+  "@contactRecommendedCardTo": {
+    "placeholders": {
+      "contact": {
+        "type": "String"
+      },
+      "recipient": {
+        "type": "String"
+      }
+    }
+  },
+  "contactEnterRemarkName": "أدخل اسم الملاحظة",
+  "contactRemarkSetTo": "تم ضبط الملاحظة على: {remark}",
+  "@contactRemarkSetTo": {
+    "placeholders": {
+      "remark": {
+        "type": "String"
+      }
+    }
+  },
+  "contactAcceptedFriendRequest": "تم قبول طلب الصداقة الخاص بـ {name}",
+  "@contactAcceptedFriendRequest": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "contactRejectedFriendRequest": "تم رفض طلب الصداقة الخاص بـ {name}",
+  "@contactRejectedFriendRequest": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "commonGroupInvites": "دعوات المجموعة",
+  "commonMyGroups": "مجموعاتي ({count})",
+  "@commonMyGroups": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "commonInvitedToJoinGroup": "تمت دعوته للانضمام إلى المجموعة",
+  "commonConfirmLeaveGroup": "هل أنت متأكد أنك تريد مغادرة \"{name}\"؟",
+  "@commonConfirmLeaveGroup": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "commonLeave": "غادر",
+  "commonRecallThisMessage": "هل تتذكر هذه الرسالة؟",
+  "commonSavedToGallery": "تم الحفظ في المعرض",
+  "commonFailedToSave": "فشل الحفظ",
+  "chatSaving": "جارٍ الحفظ...",
+  "commonShare": "شارك",
+  "chatSaveToGallery": "حفظ في المعرض",
+  "chatFailedToLoadImage": "فشل تحميل الصورة",
+  "chatVideoRecordingFailed": "فشل تسجيل الفيديو",
+  "profileRedPacket": "الحزمة الحمراء",
+  "commonMusic": "موسيقى",
+  "commonCoupon": "قسيمة",
+  "commonGift": "هدية",
+  "commonPoll": "استطلاع",
+  "favoriteText": "نص",
+  "favoriteLinkLabel": "رابط",
+  "favoriteNote": "ملاحظة",
+  "favoriteMyNotes": "ملاحظاتي",
+  "favoriteToday": "اليوم",
+  "favoriteDaysAgoText": "منذ أيام {count}",
+  "@favoriteDaysAgoText": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "favoriteDateFormat": "{month}/{day}",
+  "@favoriteDateFormat": {
+    "placeholders": {
+      "month": {
+        "type": "int"
+      },
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "favoriteNoFavorites": "لا يوجد مفضلة بعد",
+  "favoriteLongPressToFavorite": "اضغط لفترة طويلة على الرسالة إلى المفضلة",
+  "favoriteNewNote": "ملاحظة جديدة",
+  "favoriteLink": "الرابط المفضل",
+  "favoriteEditTags": "تحرير العلامات",
+  "favoriteDeleteFavorite": "حذف المفضلة",
+  "favoriteDeleteFavoriteConfirm": "هل أنت متأكد أنك تريد حذف هذه المفضلة؟",
+  "favoriteNoSearchResultsFound": "لم يتم العثور على نتائج",
+  "commonSendRedPacket": "إرسال الحزمة الحمراء",
+  "transferAmount": "المبلغ",
+  "commonRedPacketCover": "غطاء الحزمة الحمراء",
+  "commonRedPacketType": "نوع الحزمة الحمراء",
+  "commonNormalRedPacket": "عادي",
+  "commonLuckyRedPacket": "محظوظ",
+  "commonRedPacketCount": "عدد الحزم الحمراء",
+  "commonPieces": "قطع",
+  "commonPutMoneyInRedPacket": "ضع المال في الحزمة الحمراء",
+  "commonRedPacketRefundNotice": "سيتم استرداد الحزم الحمراء غير المطالب بها بعد 24 ساعة",
+  "commonOpenRedPacket": "مفتوح",
+  "commonRedPacketAllClaimed": "ادعى كل حزمة حمراء",
+  "commonRedPacketExpired": "انتهت صلاحية الحزمة الحمراء",
+  "commonAddTransferNote": "إضافة مذكرة نقل",
+  "commonYuan": "يوان صيني",
+  "commonReplyWithEmoji": "الرد بهذا الرمز التعبيري",
+  "contactEditRemark": "تحرير الملاحظة",
+  "contactSetPermissions": "تعيين الأذونات",
+  "profileAddToBlacklist": "أضف إلى القائمة السوداء",
+  "contactDeleteContact": "حذف جهة الاتصال",
+  "contactDeleteContactConfirm": "هل أنت متأكد من أنك تريد حذف {name}؟",
+  "@contactDeleteContactConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "transferTitle": "نقل",
+  "transferReceiverAddressLabel": "عنوان المستلم",
+  "transferSelectTokenLabel": "حدد الرمز المميز",
+  "transferAmountLabel": "مبلغ التحويل",
+  "transferMemoLabel": "مذكرة (اختياري)",
+  "transferAddMemoHint": "أضف مذكرة",
+  "transferSendPaymentRequest": "إرسال طلب الدفع",
+  "transferQrCodeGenerateFailed": "فشل إنشاء رمز الاستجابة السريعة",
+  "transferScanQrToPayMe": "امسح رمز الاستجابة السريعة ضوئيًا لتدفع لي",
+  "transferMyWalletAddress": "عنوان محفظتي",
+  "transferCreatePaymentRequest": "إنشاء طلب الدفع",
+  "profileN42IdLabel": "معرف N42: {id}",
+  "@profileN42IdLabel": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "commonRedPacketDefaultGreeting": "أطيب التمنيات",
+  "commonSenderRedPacket": "الحزمة الحمراء لـ {name}",
+  "@commonSenderRedPacket": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "transferEnterValidAddress": "الرجاء إدخال عنوان صالح",
+  "transferPleaseSelectToken": "الرجاء تحديد رمز مميز",
+  "commonReceivedTransfer": "التحويل المستلم",
+  "@commonFromSender": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@commonSendCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "commonSenderSentRedPacket": "أرسل {name} حزمة حمراء",
+  "@commonSenderSentRedPacket": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "commonSavedToBalance": "محفوظ في الرصيد، يمكن التحويل مباشرة",
+  "commonRedPacketExpiredOrEmpty": "انتهت صلاحية الحزمة الحمراء/تم المطالبة بكل شيء",
+  "transferScanFeatureComingSoon": "ميزة المسح قريبا...",
+  "contactSetAsStarred": "تعيين كنجمة",
+  "contactAddToBlocklist": "أضف إلى قائمة الحظر",
+  "commonClaimedYour": "ادعى الخاص بك",
+  "commonClaimedText": "ادعى",
+  "commonUserTyping": "{name} يكتب...",
+  "@commonUserTyping": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "commonTyping": "جاري الكتابة...",
+  "commonWaitingToReceive": "في انتظار تلقي",
+  "commonTapToClaim": "انقر للمطالبة",
+  "commonHasBeenReceived": "تم استلامه",
+  "commonGetLucky": "كن محظوظا",
+  "qrcodeCameraStartFailed": "فشل تشغيل الكاميرا",
+  "qrcodeUnknownError": "خطأ غير معروف",
+  "qrcodePlaceQrCodeInFrame": "ضع رمز QR داخل الإطار لمسحه ضوئيًا",
+  "qrcodeCloseManualInput": "إغلاق الإدخال اليدوي",
+  "qrcodeManualInputUserId": "معرف مستخدم الإدخال اليدوي",
+  "commonAdd": "أضف",
+  "profileSetStatus": "تعيين الحالة",
+  "profileVisibleToFriends24h": "مرئية للأصدقاء لمدة 24 ساعة",
+  "profileWriteStatus": "كتابة الحالة",
+  "profileEnterYourStatus": "أدخل حالتك...",
+  "profileOk": "حسنًا",
+  "qrcodeCameraPermissionRequired": "مطلوب إذن الكاميرا لمسح رمز الاستجابة السريعة",
+  "qrcodeCameraPermissionDenied": "تم رفض إذن الكاميرا بشكل دائم. يرجى تمكينه في إعدادات النظام.",
+  "qrcodePermissionCheckError": "خطأ في التحقق من الإذن: {error}",
+  "@qrcodePermissionCheckError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "qrcodeInvalidQrCode": "رمز الاستجابة السريعة غير صالح",
+  "qrcodeCannotAddFriend": "لا يمكن إضافة صديق: {error}",
+  "@qrcodeCannotAddFriend": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "qrcodeScanQrCode": "مسح رمز الاستجابة السريعة",
+  "qrcodeCheckingCameraPermission": "جارٍ التحقق من إذن الكاميرا...",
+  "qrcodeNeedCameraPermission": "مطلوب إذن الكاميرا",
+  "qrcodeRetryPermission": "أعد المحاولة",
+  "qrcodeOpenSettings": "افتح الإعدادات",
+  "groupInviteMembers": "دعوة الأعضاء",
+  "groupInviteCount": "دعوة ({count})",
+  "@groupInviteCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "profileNoShippingAddress": "لا يوجد عنوان الشحن",
+  "profileDefaultLabel": "الافتراضي",
+  "profileNoInvoice": "لا فاتورة",
+  "profileCompany": "الشركة",
+  "profileTaxNumber": "الرقم الضريبي",
+  "profileConfirmDeleteAddress": "هل أنت متأكد أنك تريد حذف هذا العنوان؟",
+  "profileConfirmDeleteInvoice": "هل أنت متأكد أنك تريد حذف هذه الفاتورة؟",
+  "commonGroupOwner": "المالك",
+  "commonGroupAdmin": "المشرف",
+  "groupSearchMembers": "أعضاء البحث",
+  "groupTotalMembers": "أعضاء {count}",
+  "@groupTotalMembers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatRemoveFromGroup": "إزالة من المجموعة",
+  "groupConfirmRemoveMember": "هل أنت متأكد أنك تريد إزالة \"{name}\" من المجموعة؟",
+  "@groupConfirmRemoveMember": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatUnknownSong": "أغنية غير معروفة",
+  "chatUnknownArtist": "فنان غير معروف",
+  "chatUnknownContact": "جهة اتصال غير معروفة",
+  "chatPersonalCard": "بطاقة الاتصال",
+  "chatSingleChoice": "واحد",
+  "chatMultiChoice": "متعدد",
+  "chatEnded": "انتهى",
+  "chatEndPollButton": "إنهاء الاستطلاع",
+  "chatPollHint": "سيتم عرض الاستطلاع في الدردشة. يمكن لأعضاء المجموعة التصويت.",
+  "chatSearchSongOrArtist": "البحث عن أغنية أو فنان",
+  "chatNoSongsFound": "لم يتم العثور على أي أغاني",
+  "chatSongNameOptional": "اسم الأغنية (اختياري)",
+  "chatEnterSongName": "أدخل اسم الأغنية",
+  "chatArtistNameOptional": "اسم الفنان (اختياري)",
+  "chatEnterArtistName": "أدخل اسم الفنان",
+  "chatRealTimeLocationSharing": "مشاركة الموقع في الوقت الفعلي قيد التطوير...",
+  "profileVoiceCallFeatureInDev": "ميزة المكالمات الصوتية قيد التطوير...",
+  "profileReportFeatureInDev": "ميزة التقرير قيد التطوير...",
+  "profileShareFeatureInDev": "ميزة المشاركة قيد التطوير...",
+  "profileQrCodeFeatureInDev": "ميزة QR Code قيد التطوير...",
+  "qrcodeScanQrToAddMe": "امسح رمز الاستجابة السريعة أعلاه لإضافتي كصديق",
+  "qrcodeSaveToAlbum": "حفظ في الألبوم",
+  "qrcodeChangeStyle": "تغيير النمط",
+  "qrcodeCopyId": "نسخ معرف",
+  "qrcodeIdCopied": "تم نسخ الهوية",
+  "qrcodeMoreStylesFeatureComingSoon": "المزيد من الأساليب قريبا",
+  "@chatFeatureInDev": {
+    "placeholders": {
+      "feature": {
+        "type": "String"
+      }
+    }
+  },
+  "profileBio": "السيرة الذاتية",
+  "profileHomeServer": "الخادم",
+  "profileShareContactCard": "مشاركة بطاقة الاتصال",
+  "profileRemoveFromBlacklist": "إزالة من القائمة السوداء",
+  "profileConfirmAddBlacklist": "هل أنت متأكد أنك تريد إضافة هذا المستخدم إلى القائمة السوداء؟ لن تتلقى رسائل منهم.",
+  "profileConfirmRemoveBlacklist": "هل أنت متأكد أنك تريد إزالة هذا المستخدم من القائمة السوداء؟",
+  "profileRemarkSaved": "تم حفظ الملاحظة",
+  "profileRemarkCleared": "تم مسح الملاحظة",
+  "transferReceive": "تلقي",
+  "transferPleaseConnectWallet": "يرجى توصيل محفظتك أولا",
+  "transferSendRequest": "إرسال الطلب",
+  "transferPleaseEnterValidAmount": "الرجاء إدخال مبلغ صالح",
+  "searchPlaceholder": "البحث في جهات الاتصال والمجموعات والرسائل",
+  "searchEnterKeywordToSearch": "أدخل الكلمة الرئيسية لبدء البحث",
+  "searchClearHistory": "واضح",
+  "searchNoResultsForQuery": "لم يتم العثور على أي نتائج \"{query}\"",
+  "@searchNoResultsForQuery": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "searchAllResults": "الكل",
+  "searchInChat": "البحث في الدردشة",
+  "searchContactLabel": "الاتصال",
+  "searchGroupLabel": "المجموعة",
+  "searchConversationLabel": "محادثة",
+  "searchMessageLabel": "رسالة",
+  "settingsSecurityTitle": "الأمن",
+  "settingsKeyBackup": "النسخ الاحتياطي للمفتاح",
+  "settingsBackupEncryptionKeys": "مفاتيح التشفير الاحتياطية",
+  "settingsKeysBackedUp": "تم عمل نسخة احتياطية من مفاتيح {count}",
+  "@settingsKeysBackedUp": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsBackupNotSet": "لم يتم تعيين النسخ الاحتياطي",
+  "settingsRestoreKeys": "استعادة المفاتيح",
+  "settingsRestoreKeysFromBackup": "استعادة مفاتيح التشفير من النسخة الاحتياطية",
+  "settingsExportKeys": "مفاتيح التصدير",
+  "settingsExportKeysToFile": "تصدير المفاتيح إلى الملف",
+  "settingsLoggedInDevices": "الأجهزة التي تم تسجيل دخولها",
+  "settingsNoOtherDevices": "لا توجد أجهزة أخرى",
+  "settingsVerified": "تم التحقق منه",
+  "settingsUnverified": "لم يتم التحقق منها",
+  "settingsAdvanced": "متقدم",
+  "settingsCrossSigning": "التوقيع المتبادل",
+  "settingsEnabled": "ممكّن",
+  "settingsNotEnabled": "غير ممكّن",
+  "settingsResetEncryption": "إعادة تعيين التشفير",
+  "settingsDeleteAllEncryptionKeys": "احذف كافة مفاتيح التشفير",
+  "settingsEncryptionNotSupported": "التشفير غير مدعوم",
+  "settingsNotInitialized": "لم تتم التهيئة",
+  "settingsBackupKeyTitle": "مفاتيح النسخ الاحتياطي",
+  "settingsBackupKeyMessage": "هل تريد إنشاء نسخة احتياطية جديدة للمفتاح؟ سيساعدك هذا على استعادة الرسائل المشفرة على جهاز جديد.",
+  "settingsBackup": "النسخ الاحتياطي",
+  "settingsRestoreKeyTitle": "استعادة المفاتيح",
+  "settingsRestoreKeyMessage": "أدخل كلمة مرور الاسترداد أو مفتاح الاسترداد لاستعادة الرسائل المشفرة.",
+  "settingsRestore": "استعادة",
+  "settingsExportKeyTitle": "مفاتيح التصدير",
+  "settingsExportKeyMessage": "يحتوي ملف المفتاح الذي تم تصديره على جميع مفاتيح التشفير الخاصة بك. يرجى الحفاظ عليها آمنة.",
+  "settingsExport": "تصدير",
+  "settingsDeviceIdLabel": "معرف الجهاز: {deviceId}",
+  "@settingsDeviceIdLabel": {
+    "placeholders": {
+      "deviceId": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsDeviceStatusVerified": "الحالة: تم التحقق منها",
+  "settingsDeviceStatusUnverified": "الحالة: لم يتم التحقق منها",
+  "settingsLastActiveLabel": "آخر نشاط: {lastSeen}",
+  "@settingsLastActiveLabel": {
+    "placeholders": {
+      "lastSeen": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsVerifyThisDevice": "التحقق من هذا الجهاز",
+  "settingsCrossSigningAlreadyEnabled": "تم تمكين التوقيع المتبادل بالفعل",
+  "settingsCrossSigningSetupSuccess": "تم إعداد التوقيع المتبادل بنجاح",
+  "@settingsSetupFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsResetEncryptionTitle": "إعادة تعيين التشفير",
+  "settingsResetEncryptionWarning": "تحذير: سيؤدي هذا إلى حذف كافة مفاتيح التشفير الخاصة بك. لن تتمكن من فك تشفير الرسائل المشفرة السابقة. لا يمكن التراجع عن هذا الإجراء.",
+  "settingsReset": "إعادة تعيين",
+  "settingsBackupSuccess": "تم نسخ المفاتيح احتياطيًا بنجاح",
+  "settingsBackupFailed": "فشل النسخ الاحتياطي",
+  "settingsRecoveryKey": "مفتاح الاسترداد",
+  "settingsRecoveryKeySaveWarning": "الرجاء حفظ مفتاح الاسترداد هذا في مكان آمن. ستحتاج إليه لاستعادة رسائلك المشفرة على جهاز جديد.",
+  "settingsRecoveryKeySaved": "لقد أنقذته",
+  "settingsRestoreSuccess": "تمت استعادة المفاتيح بنجاح",
+  "settingsRestoreFailed": "فشلت عملية الاستعادة",
+  "settingsPassword": "كلمة المرور",
+  "settingsEnterRecoveryKey": "أدخل مفتاح الاسترداد",
+  "settingsEnterPassword": "أدخل كلمة المرور",
+  "settingsExportSuccess": "تم تصدير المفاتيح إلى النسخة الاحتياطية للخادم بنجاح",
+  "settingsExportNeedBackupFirst": "الرجاء إنشاء نسخة احتياطية للمفتاح أولاً",
+  "settingsExportFailed": "فشل التصدير",
+  "settingsResetSuccess": "تمت إعادة تعيين التشفير بنجاح",
+  "settingsResetFailed": "فشلت إعادة التعيين",
+  "callLeaveMeetingConfirm": "هل أنت متأكد أنك تريد مغادرة الاجتماع؟",
+  "chatPokedSomeone": "مطعون {name}{suffix}",
+  "@chatPokedSomeone": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "suffix": {
+        "type": "String"
+      }
+    }
+  },
+  "chatNoContactsToAdd": "لا توجد جهات اتصال متاحة لإضافتها",
+  "chatAddMembers": "إضافة أعضاء",
+  "chatInvitedMembers": "تمت دعوة أعضاء {count}",
+  "@chatInvitedMembers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatInviteFailed": "فشلت الدعوة: {error}",
+  "@chatInviteFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatMemberRemoved": "تمت إزالة العضو",
+  "chatRemoveFailed": "فشلت الإزالة: {error}",
+  "@chatRemoveFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatRealTimeLocationShareMessage": "بعد المشاركة، يمكن للطرف الآخر رؤية موقعك في الوقت الفعلي لمدة ساعة واحدة.",
+  "chatStartSharing": "ابدأ المشاركة",
+  "chatLocationServiceNotEnabled": "خدمة الموقع غير ممكّنة",
+  "chatEnableLocationService": "يرجى تمكين خدمة الموقع لاستخدام هذه الميزة",
+  "chatGoToSettings": "انتقل إلى الإعدادات",
+  "chatLocationPermissionRequired": "مطلوب إذن الموقع لهذه الميزة",
+  "chatLocationPermissionDeniedPermanent": "تم رفض إذن الموقع بشكل دائم. يرجى تمكينه في الإعدادات.",
+  "chatLocationPermissionDenied": "تم رفض إذن تحديد الموقع",
+  "chatGettingLocation": "جارٍ الحصول على الموقع...",
+  "chatGetLocationFailed": "فشل الحصول على الموقع: {error}",
+  "@chatGetLocationFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatMapPreview": "معاينة الخريطة",
+  "chatSearchLocation": "موقع البحث",
+  "chatRedPacketSent": "تم إرسال الحزمة الحمراء {amount} {token}",
+  "@chatRedPacketSent": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "token": {
+        "type": "String"
+      }
+    }
+  },
+  "chatTransferDefault": "نقل",
+  "chatTransferSent": "تم إرسال تحويل {amount} {token}",
+  "@chatTransferSent": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "token": {
+        "type": "String"
+      }
+    }
+  },
+  "chatPickFileFailed": "فشل في اختيار الملف: {error}",
+  "@chatPickFileFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatFileSizeLimit": "لا يمكن أن يتجاوز حجم الملف 50 ميغابايت",
+  "chatFileSending": "إرسال الملف: {filename}",
+  "@chatFileSending": {
+    "placeholders": {
+      "filename": {
+        "type": "String"
+      }
+    }
+  },
+  "chatSendFileFailed": "فشل إرسال الملف: {error}",
+  "@chatSendFileFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatContactCardSent": "تم إرسال بطاقة جهة اتصال {name}",
+  "@chatContactCardSent": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatFavoritesFeature": "المفضلة",
+  "chatCouponsFeature": "كوبونات",
+  "chatGiftFeature": "هدية",
+  "chatSharedMusic": "تمت مشاركة ‏{name}",
+  "@chatSharedMusic": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@chatSendFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatEndPollTitle": "إنهاء الاستطلاع",
+  "chatEndPollConfirmMessage": "هل أنت متأكد أنك تريد إنهاء هذا الاستطلاع؟ سيتم إغلاق التصويت بعد الإنتهاء.",
+  "chatPollEndedMessage": "انتهى الاستطلاع",
+  "chatConnectingCall": "جارٍ الاتصال...",
+  "chatMuteCall": "كتم الصوت",
+  "chatSpeakerOff": "مكبر الصوت معطل",
+  "chatSpeakerOn": "المتحدث",
+  "chatCameraOn": "تشغيل الكاميرا",
+  "chatCameraOff": "الكاميرا معطلة",
+  "chatHangUp": "شنق",
+  "chatSelectForwardTargetTitle": "حدد الهدف الأمامي",
+  "chatNoForwardableChat": "لا توجد محادثات متاحة لإعادة التوجيه",
+  "chatNoMatchingChat": "لم يتم العثور على محادثات مطابقة",
+  "chatLocationTitle": "الموقع",
+  "chatSendButton": "أرسل",
+  "chatRetryButton": "أعد المحاولة",
+  "chatSearchContactHint": "البحث في جهات الاتصال",
+  "chatShareMusic": "مشاركة الموسيقى",
+  "chatRecentPlayed": "الأخيرة",
+  "chatMyFavorites": "المفضلة",
+  "chatNetworkLink": "رابط",
+  "chatLocalFile": "محلي",
+  "chatPasteMusicLink": "لصق رابط الموسيقى",
+  "chatShareMusicButton": "مشاركة الموسيقى",
+  "chatSelectLocalAudio": "حدد ملف الصوت المحلي",
+  "chatSupportedAudioFormats": "يدعم ملفات MP3، M4A، WAV، FLAC، إلخ.",
+  "chatSelectFileButton": "حدد ملف",
+  "chatPleaseEnterMusicLink": "الرجاء إدخال رابط الموسيقى",
+  "chatPleaseEnterValidLink": "الرجاء إدخال عنوان URL صالح",
+  "chatSharedSong": "أغنية مشتركة",
+  "chatSelectMember": "اختر عضوا",
+  "chatSearchMemberHint": "أعضاء البحث",
+  "chatNoMatchingMembers": "لم يتم العثور على أعضاء متطابقين",
+  "commonUnknownMember": "غير معروف",
+  "chatSelectedMessagesCount": "رسائل {count} مختارة",
+  "@chatSelectedMessagesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatSearchContactsOrGroups": "البحث في جهات الاتصال أو المجموعات",
+  "chatVideoTitle": "فيديو",
+  "chatLoadingText": "جار التحميل...",
+  "chatVideoLoadFailed": "فشل تحميل الفيديو",
+  "chatPlayerInitFailed": "فشلت تهيئة المشغل",
+  "chatCreatePollTitle": "إنشاء استطلاع",
+  "chatSubmitPoll": "إرسال",
+  "chatPollQuestionLabel": "سؤال الاستطلاع",
+  "chatEnterPollQuestionHint": "الرجاء إدخال سؤال الاستطلاع",
+  "chatPollOptionsLabel": "خيارات الاستطلاع",
+  "chatOptionHintWithIndex": "الخيار {index}",
+  "@chatOptionHintWithIndex": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "chatAddOptionButton": "إضافة خيار",
+  "chatPollSettingsLabel": "إعدادات الاستطلاع",
+  "chatSelectionType": "نوع الاختيار",
+  "chatSingleChoiceLabel": "واحد",
+  "chatMultiChoiceLabel": "متعدد",
+  "chatAnonymousPollSwitch": "استطلاع مجهول",
+  "chatPleaseEnterQuestion": "الرجاء إدخال سؤال الاستطلاع",
+  "chatAtLeastTwoOptions": "مطلوب خيارين على الأقل",
+  "chatConfirmWithCount": "تأكيد ({count})",
+  "@chatConfirmWithCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@chatSelectedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@commonMemberCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@chatGroupChatCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "authEmailVerificationTitle": "التحقق من البريد الإلكتروني",
+  "authEnterValidEmailAddress": "الرجاء إدخال عنوان بريد إلكتروني صالح",
+  "authVerificationCodeSentTo": "تم إرسال رمز التحقق إلى {email}",
+  "@authVerificationCodeSentTo": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "authSendCodeFailed": "فشل إرسال الرمز: {error}",
+  "@authSendCodeFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "authVerificationSuccess": "تم التحقق بنجاح",
+  "authVerificationFailed": "فشل التحقق",
+  "authVerificationCodeError": "خطأ في رمز التحقق: {error}",
+  "@authVerificationCodeError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "commonEnterVerificationCode": "أدخل رمز التحقق",
+  "authEnterYourEmail": "أدخل البريد الإلكتروني",
+  "authWeSentCodeTo": "لقد أرسلنا رمزًا مكونًا من 6 أرقام إلى\n{email}",
+  "@authWeSentCodeTo": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "authEnterEmailForCode": "أدخل عنوان بريدك الإلكتروني، وسنرسل لك رمز التحقق",
+  "commonSendVerificationCode": "إرسال رمز التحقق",
+  "authResendVerificationCode": "إعادة إرسال رمز التحقق",
+  "authCanResendAfter": "يمكن إعادة الإرسال بعد ثواني {seconds}",
+  "@authCanResendAfter": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "commonChangeEmail": "تغيير البريد الإلكتروني",
+  "contactAddToContacts": "إضافة إلى جهات الاتصال",
+  "contactAddingToContacts": "جارٍ الإضافة...",
+  "contactAddedToContacts": "تمت إضافتها إلى جهات الاتصال",
+  "contactAddFailedWithError": "فشلت الإضافة: {error}",
+  "@contactAddFailedWithError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "contactAddPhone": "إضافة هاتف",
+  "contactAddTag": "إضافة العلامات",
+  "contactAddText": "أضف نصًا",
+  "contactAddPhoto": "أضف صورة",
+  "contactGroupCountLabel": "مجموعات {count}",
+  "@contactGroupCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "contactAddedViaSearch": "تمت إضافتها عبر البحث",
+  "contactAddTime": "أضف الوقت",
+  "contactDoneButton": "تم",
+  "callWaitingForParticipants": "في انتظار انضمام المشاركين...",
+  "callParticipantMe": "{name} (أنا)",
+  "@callParticipantMe": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "callSharingLabel": "المشاركة",
+  "callScreenSharingBy": "{name} يشارك الشاشة",
+  "@callScreenSharingBy": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "callParticipantCount": "المشاركين {count}",
+  "@callParticipantCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "callMuteLabel": "كتم الصوت",
+  "callUnmuteLabel": "إلغاء كتم الصوت",
+  "callTurnOffVideo": "قم بإيقاف تشغيل الفيديو",
+  "callTurnOnVideo": "قم بتشغيل الفيديو",
+  "callShareScreen": "مشاركة الشاشة",
+  "callStopSharing": "توقف عن المشاركة",
+  "callSwitchCameraLabel": "التبديل",
+  "callLeaveLabel": "غادر",
+  "callParticipantsLabel": "المشاركون",
+  "callJoiningMeeting": "الانضمام إلى الاجتماع...",
+  "chatPollVotesFormat": "أصوات {count} ({percentage}%)",
+  "@chatPollVotesFormat": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "percentage": {
+        "type": "String"
+      }
+    }
+  },
+  "chatPollParticipantsFormat": "المشاركين {count}",
+  "@chatPollParticipantsFormat": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@chatSelectFileFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatNoMediaUrlAvailable": "لا يتوفر عنوان URL للوسائط",
+  "chatDownloadFailed": "فشل التنزيل: {code}",
+  "@chatDownloadFailed": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "chatErrorWithMessage": "خطأ: {message}",
+  "@chatErrorWithMessage": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "chatMusicLinkLabel": "رابط الموسيقى",
+  "chatRedPacketTransferCannotForward": "لا يمكن إعادة توجيه الحزم الحمراء وعمليات النقل",
+  "commonShareFailed": "فشلت المشاركة: {error}",
+  "@commonShareFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "commonTapToRetry": "انقر لإعادة المحاولة",
+  "chatDefaultRedPacketGreeting": "أطيب التمنيات بالازدهار",
+  "groupAllowOthersToSearchAndJoin": "السماح للآخرين بالبحث والانضمام",
+  "groupConfirmClearChatHistory": "هل أنت متأكد أنك تريد مسح سجل الدردشة؟",
+  "groupCreateGroupToChat": "قم بإنشاء مجموعة لبدء الدردشة",
+  "groupEditGroupAnnouncement": "تحرير إعلان المجموعة",
+  "groupEditGroupDescription": "تحرير وصف المجموعة",
+  "groupEnterGroupAnnouncement": "أدخل إعلان المجموعة",
+  "groupMemberCountClickToCopy": "أعضاء {count}، انقر لنسخ معرف المجموعة",
+  "groupNoPermissionToEditGroupName": "ليس لديك إذن لتعديل اسم المجموعة",
+  "authEmailAddress": "عنوان البريد الإلكتروني",
+  "commonEnterEmailAddress": "أدخل عنوان البريد الإلكتروني",
+  "authEmailRecoveryHint": "تستخدم لاستعادة كلمة المرور",
+  "commonInvalidEmailFormat": "الرجاء إدخال عنوان بريد إلكتروني صالح",
+  "authOptional": "اختياري",
+  "authResetPassword": "إعادة تعيين كلمة المرور",
+  "authEnterRegisteredEmail": "أدخل عنوان البريد الإلكتروني الذي قمت بالتسجيل به",
+  "authSendResetCode": "أرسل رمز إعادة الضبط",
+  "authResetCodeSent": "تم إرسال رمز إعادة الضبط إلى {email}",
+  "@authResetCodeSent": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "authEnterResetCode": "أدخل رمز إعادة الضبط",
+  "authSetNewPassword": "تعيين كلمة مرور جديدة",
+  "commonConfirmNewPassword": "تأكيد كلمة المرور الجديدة",
+  "commonNewPassword": "كلمة المرور الجديدة",
+  "authPasswordResetSuccess": "تمت إعادة تعيين كلمة المرور بنجاح. الرجاء تسجيل الدخول باستخدام كلمة المرور الجديدة الخاصة بك.",
+  "authResetPasswordFailed": "فشلت إعادة تعيين كلمة المرور",
+  "settingsChangePassword": "تغيير كلمة المرور",
+  "settingsCurrentPassword": "كلمة المرور الحالية",
+  "settingsEnterCurrentPassword": "أدخل كلمة المرور الحالية",
+  "settingsEnterNewPassword": "أدخل كلمة المرور الجديدة",
+  "settingsPasswordChanged": "تم تغيير كلمة المرور بنجاح. الرجاء تسجيل الدخول باستخدام كلمة المرور الجديدة الخاصة بك.",
+  "settingsChangePasswordFailed": "فشل تغيير كلمة المرور",
+  "settingsNewPasswordMustBeDifferent": "كلمة المرور الجديدة يجب أن تكون مختلفة عن كلمة المرور الحالية",
+  "settingsChangePasswordInfo": "بعد تغيير كلمة المرور، سيتم تسجيل خروجك وسيتعين عليك تسجيل الدخول باستخدام كلمة المرور الجديدة.",
+  "settingsPasswordRequirements": "متطلبات كلمة المرور:",
+  "settingsSecurityNote": "للأمان، ستحتاج إلى إعادة تسجيل الدخول على جميع الأجهزة بعد تغيير كلمة المرور.",
+  "settingsSecurity": "الأمن",
+  "settingsCurrentBoundEmail": "البريد الإلكتروني المنضم الحالي",
+  "settingsNewEmailAddress": "عنوان البريد الإلكتروني الجديد",
+  "settingsEnterNewEmail": "أدخل عنوان البريد الإلكتروني الجديد",
+  "settingsVerificationCode": "رمز التحقق",
+  "settingsVerificationCodeSent": "تم إرسال رمز التحقق",
+  "settingsCodeSentTo": "تم إرسال رمز التحقق إلى",
+  "settingsDidNotReceiveCode": "لم تتلق الرمز؟",
+  "settingsEmailChangedSuccess": "تم تغيير البريد الإلكتروني بنجاح",
+  "settingsChangeEmailFailed": "فشل تغيير البريد الإلكتروني",
+  "settingsEmailSecurityNote": "يتم استخدام بريدك الإلكتروني لاستعادة كلمة المرور. يرجى الاحتفاظ بها آمنة.",
+  "commonGoogleLogin": "قم بتسجيل الدخول باستخدام جوجل",
+  "commonAppleLogin": "تسجيل الدخول مع أبل",
+  "commonWechat": "وي شات",
+  "settingsLanguage": "اللغة",
+  "settingsLanguageChanged": "تغيرت اللغة",
+  "settingsTranslation": "الترجمة",
+  "settingsTranslateTextTo": "ترجمة النص إلى",
+  "settingsTranslateDescription": "حدد اللغة التي تريد ترجمة الرسائل إليها.",
+  "settingsAutoTranslate": "الترجمة التلقائية للرسائل المستلمة",
+  "settingsAutoTranslateDescription": "ترجمة الرسائل المستلمة في الدردشة تلقائيًا إلى لغتك المحددة.",
+  "settingsBiometricLogin": "تسجيل الدخول البيومتري",
+  "authLoginWithBiometric": "تسجيل الدخول باستخدام {type}",
+  "@authLoginWithBiometric": {
+    "placeholders": {
+      "type": {
+        "type": "Object"
+      }
+    }
+  },
+  "settingsBiometricLoginEnabled": "تم تمكين تسجيل الدخول البيومتري",
+  "settingsBiometricLoginDisabled": "تم تعطيل تسجيل الدخول البيومتري",
+  "settingsEnableBiometricLogin": "تمكين تسجيل الدخول البيومتري",
+  "settingsBiometricEnabled": "ممكّن - استخدم القياسات الحيوية لتسجيل الدخول",
+  "settingsBiometricDisabled": "معطل - انقر للتمكين",
+  "settingsBiometricNeedRelogin": "يرجى تسجيل الخروج وتسجيل الدخول مرة أخرى لتمكين تسجيل الدخول البيومتري",
+  "authOr": "أو",
+  "qrcodeCameraPermissionRestricted": "الوصول إلى الكاميرا مقيد على هذا الجهاز",
+  "authPasskeyLabel": "مفتاح المرور",
+  "authGoogleLabel": "جوجل",
+  "authAppleLabel": "أبل",
+  "authSsoLabel": "الدخول الموحد",
+  "transferAmountHintZero": "0.00",
+  "commonMatrixIdHint": "@username:server.com",
+  "authServerAddressHint": "https://m.si46.world",
+  "authEmailExampleHint": "example@email.com",
+  "authVerificationCodePlaceholder": "------",
+  "profileEnterPokeSuffixHint": "أدخل لاحقة الوخز، على سبيل المثال: على الكتف",
+  "groupAlbum": "ألبوم المجموعة",
+  "groupFiles": "ملفات المجموعة",
+  "groupImages": "الصور",
+  "groupVideos": "فيديوهات",
+  "groupTotal": "المجموع",
+  "groupSize": "الحجم",
+  "groupNoMedia": "لا وسائل الإعلام",
+  "groupNoMediaDescription": "لا توجد صور أو مقاطع فيديو في هذه المجموعة حتى الآن",
+  "groupDocuments": "المستندات",
+  "groupNoFiles": "لا توجد ملفات",
+  "groupNoFilesDescription": "لا توجد ملفات في هذه المجموعة حتى الآن",
+  "groupDownloadStarted": "جارٍ التحميل {filename}...",
+  "@groupDownloadStarted": {
+    "placeholders": {
+      "filename": {
+        "type": "String"
+      }
+    }
+  },
+  "contactNoCommonGroups": "لا توجد مجموعات مشتركة",
+  "contactNoCommonGroupsDescription": "ليس لديك أي مجموعات مشتركة",
+  "chatVoiceMessage": "صوت",
+  "chatMessage": "رسالة",
+  "conversationHideChat": "إخفاء",
+  "settingsQuickReply": "الرد السريع",
+  "commonTranslate": "ترجمة",
+  "contactCreateTag": "إنشاء علامة",
+  "contactEnterTagName": "أدخل اسم العلامة",
+  "contactEditTag": "تحرير العلامة",
+  "contactDeleteTag": "حذف العلامة",
+  "contactDeleteTagConfirm": "هل أنت متأكد أنك تريد حذف العلامة \"{tagName}\"؟",
+  "@contactDeleteTagConfirm": {
+    "placeholders": {
+      "tagName": {
+        "type": "String"
+      }
+    }
+  },
+  "contactNoTags": "لا توجد علامات حتى الآن",
+  "contactFriendPermissions": "أذونات الصديق",
+  "contactSetChatOnly": "تعيين كدردشة فقط",
+  "contactChatOnlyDesc": "يمكن الدردشة معك فقط، وسيتم إخفاء المحتوى الآخر",
+  "contactHideMyMoments": "إخفاء لحظاتي",
+  "contactHideMyMomentsDesc": "هذا الصديق لا يمكنه رؤية لحظاتي",
+  "contactHideTheirMoments": "إخفاء لحظاتهم",
+  "contactHideTheirMomentsDesc": "لا ترى لحظات هذا الصديق",
+  "contactHideMyStatus": "إخفاء حالتي",
+  "contactHideMyStatusDesc": "لا يستطيع هذا الصديق رؤية تحديثات حالتي",
+  "contactNoChatOnlyFriends": "لا يوجد أصدقاء للدردشة فقط",
+  "contactNoOfficialAccounts": "لا حسابات رسمية",
+  "contactFollowOfficialAccountsDesc": "اتبع الحسابات الرسمية للحصول على آخر التحديثات",
+  "contactNoServiceAccounts": "لا توجد حسابات الخدمة",
+  "contactSubscribeServiceAccountsDesc": "اشترك في حسابات الخدمة للحصول على خدمات مريحة",
+  "contactNoEnterpriseContacts": "لا توجد اتصالات المؤسسة",
+  "contactEnterpriseContactsDesc": "سيتم عرض جهات اتصال المؤسسة هنا",
+  "profileCardPack": "حزمة البطاقة",
+  "profileOrders": "أوامر",
+  "profileNoOrders": "لا أوامر",
+  "profileOrdersDesc": "سيتم عرض طلباتك هنا",
+  "profileNoCards": "لا بطاقات",
+  "profileCardsDesc": "سيتم عرض البطاقات الخاصة بك هنا",
+  "favoriteEnterTagsHint": "أدخل العلامات مفصولة بفواصل",
+  "favoriteTagsUpdated": "تم تحديث العلامات",
+  "favoriteForwardedContent": "تم إعادة توجيه المحتوى",
+  "favoriteEnterNoteContent": "أدخل محتوى الملاحظة",
+  "favoriteNoteAdded": "تمت إضافة الملاحظة",
+  "favoriteLinkTitle": "عنوان الرابط",
+  "favoriteLinkUrl": "https://",
+  "favoriteLinkAdded": "تمت إضافة الرابط",
+  "contactPhotoAdded": "تمت إضافة الصورة",
+  "contactEnterPhone": "أدخل رقم الهاتف",
+  "commonConversationWithId": "المحادثة: {roomId}",
+  "commonContactWithId": "جهة الاتصال: {userId}",
+  "commonDiscover": "اكتشف",
+  "commonDeveloping": "{title}\n(قريبا)",
+  "commonPageNotFound": "لم يتم العثور على الصفحة",
+  "commonBackToHome": "العودة إلى المنزل",
+  "settingsMessageNotifications": "إشعارات الرسائل",
+  "settingsReceiveNewMessageNotifications": "تلقي إشعارات الرسائل الجديدة",
+  "settingsShowMessagePreview": "إظهار معاينة الرسالة",
+  "settingsShowMessageContentInNotification": "إظهار محتوى الرسالة في الإخطار",
+  "settingsNotificationSound": "صوت الإخطار",
+  "settingsPlaySoundOnMessage": "تشغيل الصوت عند تلقي الرسائل",
+  "commonVibration": "الاهتزاز",
+  "settingsVibrateOnMessage": "يهتز عند تلقي الرسائل",
+  "settingsDoNotDisturbMode": "لا تزعج",
+  "settingsDoNotDisturbDescription": "لا تتلقى الإخطارات خلال الوقت المحدد",
+  "settingsStartTime": "وقت البدء",
+  "settingsEndTime": "وقت النهاية",
+  "settingsDeleteQuickReply": "حذف الرد السريع",
+  "settingsEditQuickReply": "تحرير الرد السريع",
+  "settingsAddQuickReply": "إضافة الرد السريع",
+  "settingsManageQuickReplies": "إدارة الردود السريعة",
+  "settingsNoQuickReplies": "لا ردود سريعة",
+  "settingsDefaultQuickReplies": "سيتم عرض الردود السريعة الافتراضية",
+  "settingsWhoCanSee": "من يستطيع أن يرى",
+  "settingsLastSeen": "شوهد آخر مرة",
+  "settingsHiddenChats": "الدردشات المخفية",
+  "settingsMessagesLabel": "الرسائل",
+  "settingsAllowStrangerMessages": "السماح برسائل الغرباء",
+  "settingsReceiveMessagesFromNonContacts": "تلقي رسائل من غير جهات الاتصال",
+  "settingsReadReceipts": "قراءة الإيصالات",
+  "settingsLetOthersKnowYouRead": "دع الآخرين يعرفون أنك تقرأ",
+  "settingsTypingIndicator": "مؤشر الكتابة",
+  "settingsLetOthersKnowYouTyping": "دع الآخرين يعرفون أنك تكتب",
+  "settingsEveryone": "الجميع",
+  "settingsContactsOnly": "جهات الاتصال فقط",
+  "settingsNobody": "لا أحد",
+  "settingsWhoCanSeeTitle": "من يستطيع رؤية {title}",
+  "@settingsWhoCanSeeTitle": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsVersionInfo": "الإصدار {version}",
+  "@settingsVersionInfo": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsCheckForUpdates": "التحقق من وجود تحديثات",
+  "settingsOpenSourceLicenses": "تراخيص مفتوحة المصدر",
+  "settingsFeedbackAndSuggestions": "ردود الفعل والاقتراحات",
+  "settingsBuiltOnMatrix": "مبني على بروتوكول المصفوفة",
+  "settingsNoHiddenChats": "لا توجد محادثات مخفية",
+  "settingsNoHiddenChatsDescription": "ستظهر هنا الدردشات التي تخفيها",
+  "settingsUnhideChat": "إظهار",
+  "settingsDarkMode": "الوضع المظلم",
+  "settingsFontSize": "حجم الخط",
+  "settingsBubbleStyle": "نمط الفقاعة",
+  "settingsFollowSystem": "اتبع النظام",
+  "settingsAutoSwitchBySystem": "التبديل التلقائي عن طريق النظام",
+  "settingsLightMode": "وضع الضوء",
+  "settingsAlwaysUseLightTheme": "استخدم دائمًا المظهر الفاتح",
+  "settingsDarkModeOption": "خيار الوضع المظلم",
+  "settingsAlwaysUseDarkTheme": "استخدم المظهر الداكن دائمًا",
+  "settingsFontSizeSmall": "صغير",
+  "settingsFontSizeStandard": "قياسي",
+  "settingsFontSizeLarge": "كبير",
+  "settingsFontSizeExtraLarge": "كبيرة جدًا",
+  "settingsBubbleStyleWechat": "أسلوب ويتشات",
+  "settingsBubbleStyleWechatDesc": "نمط فقاعة WeChat الكلاسيكي",
+  "settingsBubbleStyleModern": "الطراز الحديث",
+  "settingsBubbleStyleModernDesc": "نمط الفقاعة الحديث النظيف",
+  "settingsBubbleStyleClassic": "النمط الكلاسيكي",
+  "settingsBubbleStyleClassicDesc": "نمط الفقاعة التقليدي",
+  "discoverVideoChannels": "القنوات",
+  "discoverLive": "مباشر",
+  "discoverListen": "استمع",
+  "discoverWatch": "شاهد",
+  "discoverSearchDiscover": "بحث",
+  "discoverNearbyPeople": "قريب",
+  "discoverGames": "العاب",
+  "discoverMiniPrograms": "البرامج المصغرة",
+  "chatAlreadyInCall": "في مكالمة بالفعل",
+  "commonConnectionFailed": "فشل الاتصال",
+  "chatCallRejected": "تم رفض المكالمة",
+  "chatNoAnswer": "لا إجابة",
+  "commonClose": "إغلاق",
+  "chatSelectContact": "حدد جهة الاتصال",
+  "chatVoteRemoved": "تمت إزالة التصويت",
+  "chatVoteChanged": "تم تغيير التصويت",
+  "chatVoted": "تم التصويت",
+  "chatReplyTo": "الرد على {name}",
+  "@chatReplyTo": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatCurrentLocation": "الموقع الحالي",
+  "chatNearbyPlace": "مكان قريب {index}",
+  "@chatNearbyPlace": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "chatApproximateDistance": "حول {distance}",
+  "@chatApproximateDistance": {
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      }
+    }
+  },
+  "chatAddress": "العنوان",
+  "chatLatitude": "خط العرض",
+  "chatLongitude": "خط الطول",
+  "groupDescriptionUpdated": "تم تحديث وصف المجموعة",
+  "groupAvatarUpdated": "تم تحديث الصورة الرمزية للمجموعة",
+  "groupVisibilityUpdated": "تم تحديث رؤية المجموعة",
+  "groupChannelCreated": "تم إنشاء القناة",
+  "groupChannelUpdated": "تم تحديث القناة",
+  "groupChannelDeleted": "تم حذف القناة",
+  "callDecline": "رفض",
+  "callAnswer": "الإجابة",
+  "callIncomingVideoCall": "مكالمة فيديو واردة",
+  "callIncomingVoiceCall": "مكالمة صوتية واردة",
+  "callVideoCallInProgress": "مكالمة الفيديو قيد التقدم",
+  "callVoiceCallInProgress": "المكالمة الصوتية جارية",
+  "callReconnectingCall": "جارٍ إعادة الاتصال...",
+  "callEnded": "انتهت المكالمة",
+  "callFailed": "فشل الاتصال",
+  "callLivekitNotConfigured": "لم يتم تكوين LiveKit",
+  "callJoinMeetingFailed": "فشل الانضمام إلى الاجتماع: {error}",
+  "callScreenShareFailed": "فشلت مشاركة الشاشة: {error}",
+  "profileN42BeanTitle": "N42 فول",
+  "profileNoN42Bean": "لا يوجد فول N42",
+  "profileN42BeanDetails": "تفاصيل الفول N42",
+  "profileN42BeanDescription": "N42 Bean هو رمز مميز يستخدم لاسترداد العناصر والخدمات الافتراضية في N42. متاح حاليا ل:",
+  "profileN42BeanFeature1": "ملصقات وموضوعات الأعضاء الحصرية",
+  "profileN42BeanFeature2": "تخصيص فقاعة الدردشة",
+  "profileN42BeanFeature3": "تخصيص غطاء الحزمة الحمراء",
+  "profileN42BeanFeature4": "شارة اللقب الحصرية",
+  "profileN42BeanFeature5": "امتيازات الدردشة الجماعية",
+  "profileN42BeanFeature6": "توسيع التخزين السحابي",
+  "profileN42BeanFeature7": "مرشحات الجمال لمكالمات الفيديو",
+  "profileN42BeanFeature8": "لحظات تخصيص الخلفية",
+  "profileN42BeanFeature9": "أولوية خدمة العملاء لكبار الشخصيات",
+  "profileGotIt": "حصلت عليه",
+  "profileNoN42BeanRecords": "لا توجد سجلات N42 Bean",
+  "profileMoodAndThoughts": "المزاج والأفكار",
+  "profileStatusHappy": "سعيد",
+  "profileStatusCracked": "تحطمت",
+  "profileStatusLucky": "محظوظ",
+  "profileStatusSunny": "مشمس",
+  "profileStatusTired": "متعب",
+  "profileStatusDaydream": "أحلام اليقظة",
+  "profileStatusRushing": "التسرع",
+  "profileStatusOverthinking": "الإفراط في التفكير",
+  "profileStatusEnergized": "تنشيط",
+  "profileWorkAndStudy": "العمل والدراسة",
+  "profileStatusWorking": "العمل",
+  "profileStatusStudying": "دراسة",
+  "profileStatusBusy": "مشغول",
+  "profileStatusSlacking": "التراخي",
+  "profileStatusTraveling": "السفر",
+  "profileStatusGoingHome": "الذهاب إلى المنزل",
+  "profileStatusDnd": "لا تزعج",
+  "profileActivities": "الأنشطة",
+  "profileStatusHanging": "التسكع",
+  "profileStatusCheckIn": "تسجيل الوصول",
+  "profileStatusExercising": "ممارسة الرياضة",
+  "profileStatusCoffee": "قهوة",
+  "profileStatusBubbleTea": "شاي الفقاعات",
+  "profileStatusEating": "الأكل",
+  "profileStatusParenting": "الأبوة والأمومة",
+  "profileStatusSavingWorld": "إنقاذ العالم",
+  "profileStatusSelfie": "صورة شخصية",
+  "profileRest": "الراحة",
+  "profileStatusRetreat": "تراجع",
+  "profileStatusHome": "الصفحة الرئيسية",
+  "profileStatusSleeping": "النوم",
+  "profileStatusCatLover": "عاشق القطط",
+  "profileStatusDogWalking": "كلب يمشي",
+  "profileStatusGaming": "الألعاب",
+  "profileStatusListening": "الاستماع",
+  "profileEditAddress": "تحرير العنوان",
+  "profileRecipient": "المستلم",
+  "profileEnterRecipientName": "أدخل اسم المستلم",
+  "profilePhoneNumber": "رقم الهاتف",
+  "profileEnterPhoneNumber": "أدخل رقم الهاتف",
+  "profileRegionHint": "المقاطعة / المدينة / المنطقة",
+  "profileDetailedAddress": "العنوان التفصيلي",
+  "profileDetailedAddressHint": "الشارع ورقم المبنى وما إلى ذلك.",
+  "profileSetAsDefaultAddress": "تعيين كعنوان افتراضي",
+  "profilePleaseCompleteInfo": "الرجاء إكمال كافة الحقول",
+  "profileEditInvoice": "تحرير الفاتورة",
+  "profileInvoiceType": "نوع الفاتورة",
+  "profileCompanyName": "اسم الشركة",
+  "profilePersonalName": "الاسم الشخصي",
+  "profileEnterCompanyName": "أدخل اسم الشركة",
+  "profileEnterName": "أدخل الاسم",
+  "profileTaxIdNumber": "رقم التعريف الضريبي",
+  "profileEnterTaxIdNumber": "أدخل رقم الهوية الضريبية",
+  "profileBankNameOptional": "اسم البنك (اختياري)",
+  "profileEnterBankName": "أدخل اسم البنك",
+  "profileBankAccountOptional": "الحساب البنكي (اختياري)",
+  "profileEnterBankAccount": "أدخل الحساب البنكي",
+  "profileCompanyAddressOptional": "عنوان الشركة (اختياري)",
+  "profileEnterCompanyAddress": "أدخل عنوان الشركة",
+  "profileCompanyPhoneOptional": "هاتف الشركة (اختياري)",
+  "profileEnterCompanyPhone": "أدخل هاتف الشركة",
+  "profileSetAsDefaultInvoice": "تعيين كفاتورة افتراضية",
+  "profileRingtoneVibrate": "يهتز",
+  "profileRingtoneSilent": "صامت",
+  "profileVibrateMode": "وضع الاهتزاز",
+  "profileSilentMode": "الوضع الصامت",
+  "profilePlayFailed": "فشل اللعب: {ringtoneName}",
+  "profilePlaying": "التشغيل: {ringtoneName}",
+  "profileStop": "توقف",
+  "profileSelectRingtone": "حدد نغمة الرنين",
+  "profileLoadingRingtones": "جارٍ تحميل نغمات الرنين...",
+  "profileNoRingtonesFound": "لم يتم العثور على نغمات رنين",
+  "mainMessagesWithCount": "الرسائل({count})",
+  "@mainMessagesWithCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "storyViewers": "المشاهدين",
+  "storyNoViewers": "لا يوجد مشاهدين حتى الآن",
+  "storyReplyToStory": "الرد على القصة...",
+  "commonCopiedToClipboard": "تم النسخ إلى الحافظة",
+  "commonMore": "المزيد",
+  "commonTranslating": "ترجمة...",
+  "commonTranslatedFrom": "مترجم من {language}",
+  "@commonTranslatedFrom": {
+    "placeholders": {
+      "language": {
+        "type": "String"
+      }
+    }
+  },
+  "commonTranslation": "الترجمة",
+  "commonTranslationFailed": "فشلت الترجمة",
+  "commonAllRead": "كل قراءة",
+  "commonReadCount": "قراءة {count}",
+  "commonYouRecalledMessage": "لقد تذكرت رسالة",
+  "commonMessageRecalled": "تم تذكر الرسالة",
+  "commonReEdit": "إعادة التحرير",
+  "commonWalletArea": "منطقة المحفظة",
+  "callIncomingCall": "مكالمة واردة",
+  "callMissedCall": "مكالمة فائتة",
+  "groupRemoveAdmin": "إزالة المشرف",
+  "chatSelectCurrency": "اختر العملة",
+  "chatSelectEmoji": "حدد الرموز التعبيرية",
+  "chatSelectRedPacketCover": "حدد الغلاف",
+  "groupSetAsAdmin": "تعيين كمسؤول",
+  "chatVideoPlaybackFailed": "فشل تشغيل الفيديو",
+  "@chatVideoPlaybackFailed": {
+    "description": "Used with error message"
+  },
+  "groupViewProfile": "عرض الملف الشخصي",
+  "favoriteAddLinkComingSoon": "إضافة ميزة الارتباط قريبا",
+  "favoriteNewNoteComingSoon": "ميزة مذكرة جديدة قريبا",
+  "qrcodeSaveFeatureComingSoon": "ميزة الحفظ قريبا",
+  "qrcodeShareFeatureComingSoon": "ميزة المشاركة قريبا",
+  "qrcodeProcessFailed": "فشلت معالجة رمز الاستجابة السريعة: {error}",
+  "@qrcodeProcessFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "securityDeviceIdRequired": "معرف الجهاز مطلوب",
+  "securityVerificationStartFailed": "فشل بدء التحقق: {error}",
+  "@securityVerificationStartFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "securityVerificationFailed": "فشل التحقق",
+  "securityVerificationFailedWithReason": "فشل التحقق: {reason}",
+  "@securityVerificationFailedWithReason": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "securityEmojiMismatchRejected": "تم رفض التحقق - الرموز التعبيرية غير متطابقة",
+  "securityWaitingForDeviceAccept": "في انتظار قبول الجهاز الآخر...",
+  "securityVerifyDevice": "التحقق من هذا الجهاز",
+  "securityConfirmEmojiMatch": "تأكد من عرض الرموز التعبيرية أدناه على كلا الجهازين بنفس الترتيب",
+  "securityEmojiDontMatch": "أنها لا تتطابق",
+  "securityEmojiMatch": "إنهم متطابقون",
+  "securityWaitingForDeviceConfirm": "في انتظار تأكيد الجهاز الآخر...",
+  "securityVerificationSuccess": "تم التحقق بنجاح!",
+  "securityDeviceVerifiedTrusted": "تم الآن التحقق من هذا الجهاز وموثوق به.",
+  "securityCompareEmoji": "قارن الرموز التعبيرية على كلا الجهازين",
+  "securityCompareNumbers": "قارن الأرقام على كلا الجهازين",
+  "commonTryAgain": "حاول مرة أخرى",
+  "commonDone": "تم",
+  "chatExportTitle": "تصدير الدردشة",
+  "chatExportSuccess": "تم التصدير بنجاح",
+  "chatExportFailed": "فشل التصدير: {error}",
+  "@chatExportFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatExportFormat": "تنسيق التصدير",
+  "chatExportHtmlDesc": "يمكن قراءتها في أي متصفح بتصميم أنيق",
+  "chatExportJsonDesc": "تنسيق بيانات منظمة يمكن قراءته آليًا",
+  "chatExportDateRange": "النطاق الزمني",
+  "chatExportAll": "جميع الرسائل",
+  "chatExportLastWeek": "آخر 7 أيام",
+  "chatExportLastMonth": "الشهر الماضي",
+  "chatExportLast3Months": "آخر 3 أشهر",
+  "chatExportMessageCount": "رسائل للتصدير",
+  "chatExportButton": "تصدير ومشاركة",
+  "chatMediaGallery": "معرض الوسائط",
+  "chatExportHistory": "تصدير سجل الدردشة",
+  "pdfLoadFailed": "فشل تحميل PDF",
+  "pdfPageIndicator": "{current} / {total}",
+  "@pdfPageIndicator": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "mediaAll": "الكل",
+  "mediaImages": "الصور",
+  "mediaVideos": "فيديوهات",
+  "mediaFiles": "ملفات",
+  "mediaAudio": "الصوت",
+  "mediaItemsCount": "عناصر {count}",
+  "@mediaItemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mediaNoMediaFound": "لم يتم العثور على أي وسائط",
+  "spacesTitle": "المجتمعات",
+  "spacesCreate": "إنشاء مجتمع",
+  "spacesJoined": "انضم",
+  "spacesDiscover": "اكتشف",
+  "spacesNoJoined": "لم تنضم أي مجتمعات حتى الآن",
+  "spacesExplore": "اكتشف المجتمعات",
+  "spacesNoPublic": "لم يتم العثور على مجتمعات عامة",
+  "spacesJoin": "انضم",
+  "spacesSubSpaces": "المجتمعات الفرعية",
+  "spacesChannels": "القنوات",
+  "spacesMembersCount": "أعضاء {count}",
+  "@spacesMembersCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "spacesPublic": "عام",
+  "spacesPrivate": "خاص",
+  "spacesSuggested": "مقترح",
+  "spacesChannelsCount": "قنوات {count}",
+  "@spacesChannelsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "callInCallChat": "الدردشة أثناء المكالمة",
+  "callMessagesCount": "رسائل {count}",
+  "@callMessagesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "callNoMessagesYet": "لا توجد رسائل حتى الآن.\nأرسل رسالة للبدء.",
+  "callTypeMessage": "اكتب رسالة...",
+  "callYouSender": "أنت",
+  "callChatLabel": "الدردشة",
+  "chatEdited": "تم تحريره",
+  "chatEditHistory": "تحرير التاريخ",
+  "chatOriginalMessage": "أصلي",
+  "chatEditedAt": "تم التعديل في {time}",
+  "@chatEditedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "chatViewOnce": "عرض مرة واحدة",
+  "chatViewOncePhoto": "عرض الصورة مرة واحدة",
+  "chatViewOnceVideo": "شاهد الفيديو مرة واحدة",
+  "chatViewOnceViewed": "تم المشاهدة",
+  "chatViewOnceExpired": "انتهت صلاحيتها",
+  "chatViewOnceTap": "انقر للعرض",
+  "chatAutoFaceBlur": "طمس الوجه التلقائي",
+  "chatAutoFaceBlurDesc": "طمس الوجوه تلقائيًا عند إرسال الصور",
+  "threadReplyInThread": "الرد في الموضوع",
+  "threadReplies": "ردود {count}",
+  "@threadReplies": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "threadReply": "1 رد",
+  "threadLatestReply": "الأحدث: {preview}",
+  "@threadLatestReply": {
+    "placeholders": {
+      "preview": {
+        "type": "String"
+      }
+    }
+  },
+  "threadTitle": "الموضوع",
+  "threadReplyPlaceholder": "الرد في الموضوع...",
+  "threadParticipants": "المشاركين {count}",
+  "@threadParticipants": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "voiceRoomTitle": "غرفة الصوت",
+  "voiceRoomCreate": "إنشاء غرفة صوتية",
+  "voiceRoomJoin": "انضم",
+  "voiceRoomLeave": "غادر",
+  "voiceRoomEnd": "غرفة النهاية",
+  "voiceRoomRaiseHand": "ارفع اليد",
+  "voiceRoomLowerHand": "اليد السفلى",
+  "voiceRoomMute": "كتم الصوت",
+  "voiceRoomUnmute": "إلغاء كتم الصوت",
+  "voiceRoomHost": "المضيف",
+  "voiceRoomSpeakers": "مكبرات الصوت",
+  "voiceRoomListeners": "المستمعون",
+  "voiceRoomLive": "مباشر",
+  "voiceRoomEnded": "انتهى",
+  "voiceRoomScheduled": "المقرر",
+  "voiceRoomApprove": "موافقة",
+  "voiceRoomDemote": "انتقل إلى المستمع",
+  "voiceRoomHandRaised": "رفع {name} أيديهم",
+  "@voiceRoomHandRaised": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "voiceRoomName": "اسم الغرفة",
+  "voiceRoomTopic": "الموضوع (اختياري)",
+  "voiceRoomNoActive": "لا توجد غرف صوتية نشطة",
+  "voiceRoomConnecting": "جارٍ الاتصال...",
+  "usernameTitle": "اسم المستخدم",
+  "usernameSet": "تعيين اسم المستخدم",
+  "usernameChange": "تغيير اسم المستخدم",
+  "usernamePlaceholder": "أدخل اسم المستخدم",
+  "usernameAvailable": "اسم المستخدم متاح",
+  "usernameUnavailable": "اسم المستخدم مأخوذ بالفعل",
+  "usernameInvalid": "3-30 حرفًا، أحرف صغيرة، أرقام، شرطة سفلية. يجب أن تبدأ بحرف.",
+  "usernameReserved": "اسم المستخدم هذا محجوز",
+  "usernameSaved": "تم حفظ اسم المستخدم",
+  "usernameSearchHint": "البحث عن طريق @اسم المستخدم",
+  "ensName": "اسم إنس",
+  "ensLinked": "مرتبط بـ ENS",
+  "ensResolving": "حل مشكلة ENS...",
+  "ensNotFound": "لم يتم العثور على اسم ENS",
+  "tokenGateTitle": "بوابة الرمز",
+  "tokenGateEnable": "تمكين بوابة الرمز المميز",
+  "tokenGateDisable": "تعطيل بوابة الرمز المميز",
+  "tokenGateAddRule": "أضف القاعدة",
+  "tokenGateRemoveRule": "إزالة القاعدة",
+  "tokenGateContractAddress": "عنوان العقد",
+  "tokenGateMinBalance": "الحد الأدنى للرصيد",
+  "tokenGateTokenId": "معرف الرمز المميز (ERC-1155)",
+  "tokenGateChainId": "معرف السلسلة",
+  "tokenGateVerifying": "التحقق من ملكية الرموز المميزة...",
+  "tokenGateVerified": "تم التحقق",
+  "tokenGateDenied": "أنت لا تستوفي متطلبات الرمز المميز",
+  "tokenGateOperatorAnd": "يجب أن تستوفي جميع القواعد",
+  "tokenGateOperatorOr": "يجب أن تستوفي أي قاعدة",
+  "tokenGateRuleErc20": "رمز ERC-20",
+  "tokenGateRuleErc721": "ان اف تي (ERC-721)",
+  "tokenGateRuleErc1155": "الرموز المتعددة (ERC-1155)",
+  "tokenGateRuleNative": "الرمز الأصلي",
+  "tokenGateSaved": "تم حفظ بوابة الرمز المميز",
+  "tokenGateEnableDescription": "مطالبة الأعضاء بحمل الرموز المميزة للانضمام",
+  "tokenGateOperator": "منطق القاعدة",
+  "tokenGateRules": "القواعد",
+  "tokenGateSymbol": "الرمز (اختياري)",
+  "tokenGateChain": "سلسلة",
+  "tokenGateTokenStandard": "معيار الرمز المميز",
+  "tokenGateDenialMessage": "رسالة الرفض",
+  "tokenGateDenialMessageHint": "تظهر الرسالة عند فشل التحقق",
+  "tokenGateVerifyTitle": "التحقق من الرمز المميز",
+  "tokenGateVerifyPassed": "تم التحقق",
+  "tokenGateVerifyFailed": "فشل التحقق",
+  "tokenGateRetryVerify": "أعد المحاولة",
+  "tokenGateRequired": "مطلوب",
+  "tokenGateYourBalance": "رصيدك",
+  "tokenGateRulesActive": "القواعد نشطة",
+  "tokenGateDisabled": "معطل",
+  "ensNotBound": "غير ملزمة",
+  "liveLocation": "الموقع المباشر",
+  "stopLiveLocation": "توقف عن المشاركة",
+  "startLiveLocation": "ابدأ المشاركة",
+  "selectDuration": "حدد المدة",
+  "groupChatFiles": "ملفات الدردشة",
+  "groupLinks": "روابط",
+  "groupNoLinks": "لا توجد روابط حتى الآن",
+  "chatBackground": "خلفية الدردشة",
+  "solidColors": "الألوان الصلبة",
+  "gradients": "التدرجات",
+  "defaultBackground": "الافتراضي",
+  "settingsFontSizeSlider": "حجم الخط",
+  "autoDownload": "التنزيل التلقائي",
+  "images": "الصور",
+  "voice": "صوت",
+  "video": "فيديو",
+  "files": "ملفات",
+  "mobileData": "بيانات الجوال",
+  "roaming": "التجوال",
+  "storageManagement": "التخزين",
+  "totalUsage": "الاستخدام الإجمالي",
+  "cache": "ذاكرة التخزين المؤقت",
+  "other": "أخرى",
+  "clearCache": "مسح ذاكرة التخزين المؤقت",
+  "cacheCleared": "تم مسح ذاكرة التخزين المؤقت",
+  "clearCacheFailed": "فشل في مسح ذاكرة التخزين المؤقت",
+  "confirmClearCache": "هل تريد مسح جميع بيانات ذاكرة التخزين المؤقت؟",
+  "mapView": "عرض الخريطة",
+  "liveLocationSharingCount": "{count} يشارك الأشخاص الموقع",
+  "@liveLocationSharingCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "minutes15": "15 دقيقة",
+  "minutes30": "30 دقيقة",
+  "hour1": "1 ساعة",
+  "hours8": "8 ساعات",
+  "personalCard": "البطاقة الشخصية",
+  "downloadFailed": "فشل التنزيل",
+  "locationExpired": "انتهت صلاحيتها",
+  "secondsRemaining": "{count} ثانية",
+  "@secondsRemaining": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "minutesRemaining": "دقائق {count}",
+  "@minutesRemaining": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hoursMinutesRemaining": "{hours} ساعة {minutes} دقيقة",
+  "@hoursMinutesRemaining": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "favoriteMessages": "المفضلة",
+  "linksCopied": "تم نسخ الرابط",
+  "noLinksFound": "لم يتم العثور على روابط",
+  "roomStorageRanking": "تصنيف تخزين الغرفة",
+  "downloadComplete": "اكتمل التنزيل",
+  "downloading": "جارٍ التنزيل...",
+  "draftSaved": "تم حفظ المسودة",
+  "voiceRecording": "تسجيل صوتي",
+  "searchLocation": "موقع البحث",
+  "tapToSearch": "انقر للبحث",
+  "settingsThisDevice": "هذا الجهاز",
+  "settingsJustNow": "الآن فقط",
+  "settingsDeviceId": "معرف الجهاز",
+  "settingsStatus": "الحالة",
+  "settingsLastActive": "آخر نشاط",
+  "settingsIpAddress": "عنوان IP",
+  "settingsRenameDevice": "إعادة تسمية الجهاز",
+  "settingsDeviceNameHint": "أدخل اسم الجهاز",
+  "settingsDeviceRenamed": "تمت إعادة تسمية الجهاز",
+  "settingsRenameFailed": "فشلت إعادة التسمية",
+  "settingsRemoteLogout": "تسجيل الخروج عن بعد",
+  "settingsRemoteLogoutConfirm": "هل أنت متأكد أنك تريد تسجيل الخروج \"{deviceName}\"؟ لا يمكن التراجع عن هذا الإجراء.",
+  "@settingsRemoteLogoutConfirm": {
+    "placeholders": {
+      "deviceName": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsDeviceLoggedOut": "تم تسجيل خروج الجهاز",
+  "settingsLogoutFailed": "فشل تسجيل الخروج",
+  "settingsLogout": "تسجيل الخروج",
+  "settingsVerifyIdentity": "التحقق من الهوية",
+  "settingsEnterPasswordToConfirm": "أدخل كلمة المرور الخاصة بك لتأكيد هذا الإجراء.",
+  "scheduledSendTitle": "جدولة الرسالة",
+  "scheduledSendInOneHour": "في 1 ساعة",
+  "scheduledSendTonight": "الليلة (8:00 مساءً)",
+  "scheduledSendTomorrowMorning": "صباح الغد (9:00 صباحًا)",
+  "scheduledSendCustom": "اختر التاريخ والوقت",
+  "scheduledMessageLabel": "المقرر",
+  "scheduledMessageCancel": "إلغاء الرسالة المجدولة",
+  "chatLockTitle": "قفل الدردشة",
+  "chatLockEnable": "قفل هذه الدردشة",
+  "chatLockDisable": "فتح هذه الدردشة",
+  "chatLockDescription": "تتطلب الدردشات المقفلة التحقق من المقاييس الحيوية أو رقم التعريف الشخصي لفتحها",
+  "chatLockVerifyTitle": "الدردشة مغلقة",
+  "chatLockVerifySubtitle": "قم بالتحقق للوصول إلى هذه الدردشة",
+  "chatLockVerifyFailed": "فشل التحقق",
+  "chatLockEnabled": "الدردشة مغلقة",
+  "chatLockDisabled": "تم فتح الدردشة",
+  "chatLockPinTitle": "أدخل رقم التعريف الشخصي",
+  "chatLockPinSetTitle": "تعيين رقم التعريف الشخصي",
+  "chatLockPinConfirmTitle": "تأكيد رقم التعريف الشخصي",
+  "chatLockPinMismatch": "رقم التعريف الشخصي غير متطابق",
+  "chatLockUseBiometric": "استخدم القياسات الحيوية",
+  "chatLockUsePin": "استخدم رقم التعريف الشخصي",
+  "mediaEditorUndo": "تراجع",
+  "mediaEditorRedo": "إعادة",
+  "mediaEditorCrop": "المحاصيل",
+  "mediaEditorFilter": "تصفية",
+  "mediaEditorDraw": "ارسم",
+  "mediaEditorText": "نص",
+  "aiAssistant": "مساعد الذكاء الاصطناعي",
+  "aiAssistantWelcome": "مرحبا! أنا مساعد الذكاء الاصطناعي N42. كيف يمكنني مساعدك؟",
+  "aiAssistantNotConfigured": "لم يتم تكوين خدمة الذكاء الاصطناعي",
+  "aiAssistantSettings": "إعدادات الذكاء الاصطناعي",
+  "aiAssistantClearHistory": "مسح سجل الدردشة",
+  "aiAssistantClearHistoryConfirm": "هل أنت متأكد من أنك تريد مسح كل سجل دردشة الذكاء الاصطناعي؟",
+  "aiAssistantStopGenerating": "توقف عن التوليد",
+  "aiAssistantModel": "نموذج",
+  "aiAssistantTemperature": "درجة الحرارة",
+  "aiAssistantMaxTokens": "الرموز القصوى",
+  "aiAssistantContextWindow": "نافذة السياق",
+  "aiAssistantServiceStatus": "حالة الخدمة",
+  "aiAssistantAvailable": "متاح",
+  "aiAssistantUnavailable": "غير متاح",
+  "aiSummarize": "ملخص الذكاء الاصطناعي",
+  "aiSummarizeUnread": "تلخيص الرسائل غير المقروءة {count}",
+  "@aiSummarizeUnread": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "aiSummarizeLoading": "تلخيص...",
+  "aiSummarizeError": "فشل في التلخيص",
+  "aiRewrite": "إعادة كتابة الذكاء الاصطناعي",
+  "aiRewriteFormal": "رسمي",
+  "aiRewriteCasual": "عادية",
+  "aiRewritePlayful": "لعوب",
+  "aiRewriteProfessional": "محترف",
+  "aiRewriteAccept": "استخدم",
+  "aiRewriteCancel": "إلغاء",
+  "aiRewriteLoading": "إعادة الكتابة...",
+  "aiLinkSummary": "ملخص الذكاء الاصطناعي",
+  "aiLinkSummaryAnalyzing": "جارٍ التحليل...",
+  "chatFolderManagement": "إدارة المجلدات",
+  "chatFolderSystem": "مجلدات النظام",
+  "chatFolderCustom": "المجلدات المخصصة",
+  "chatFolderEmpty": "لا توجد مجلدات مخصصة حتى الآن",
+  "chatFolderCreate": "إنشاء مجلد",
+  "chatFolderEdit": "تحرير المجلد",
+  "chatFolderNameHint": "اسم المجلد",
+  "chatFolderAll": "الكل",
+  "chatFolderUnread": "غير مقروءة",
+  "chatFolderPersonal": "شخصي",
+  "chatFolderGroups": "المجموعات",
+  "chatFolderChannels": "القنوات",
+  "chatFolderMuted": "كتم الصوت",
+  "storyAddMusic": "أضف موسيقى",
+  "storyChangeMusic": "تغيير الموسيقى",
+  "storyBackgroundMusic": "موسيقى خلفية",
+  "storyMusicPreview": "المعاينة (بحد أقصى 15 ثانية)",
+  "storyChooseFromDevice": "اختر من الجهاز",
+  "storyUseThisMusic": "استخدم هذه الموسيقى",
+  "authPasskeyNotSupported": "مفتاح المرور غير مدعوم على هذا الجهاز",
+  "authPasskeyRegister": "تسجيل مفتاح المرور",
+  "authPasskeyNoRegistered": "لم يتم تسجيل أي مفاتيح مرور",
+  "authPasskeyRegisterHint": "تسجيل مفتاح مرور لهذا الحساب. سيتم تمكين تسجيل الدخول بمفتاح المرور المستقل لاحقًا.",
+  "authPasskeyNameYours": "قم بتسمية مفتاح المرور الخاص بك",
+  "authPasskeyRegistered": "تم حفظ مفتاح المرور في هذا الحساب",
+  "authPasskeyDeleted": "تمت إزالة مفتاح المرور من هذا الحساب",
+  "authPasskeyDeleteConfirm": "هل تريد حذف مفتاح المرور \"{name}\"؟ ستحتاج إلى تسجيله مرة أخرى قبل استخدام تسجيل الدخول بمفتاح المرور لاحقًا.",
+  "@authPasskeyDeleteConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "momentVisibilityPublic": "عام",
+  "momentVisibilityPrivate": "خاص",
+  "momentVisibilityPartial": "الأصدقاء المختارون",
+  "momentVisibilityExcluded": "استبعاد بعض الأصدقاء",
+  "momentUserMoments": "لحظات {userName}",
+  "@momentUserMoments": {
+    "placeholders": {
+      "userName": {
+        "type": "String"
+      }
+    }
+  },
+  "momentForwardTo": "إلى الأمام ل",
+  "momentForwardSuccess": "تم الإرسال بنجاح",
+  "momentSelectFriends": "حدد الأصدقاء",
+  "momentSelectTags": "اختر حسب العلامات",
+  "momentSelectedCount": "محدد ({count})",
+  "@momentSelectedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "momentNoMomentsYet": "لا توجد لحظات بعد",
+  "momentForwardMoment": "لحظة إلى الأمام",
+  "momentAddComment": "إضافة تعليق...",
+  "momentForwardContent": "[لحظة] {content}",
+  "@momentForwardContent": {
+    "placeholders": {
+      "content": {
+        "type": "String"
+      }
+    }
+  },
+  "momentDeleteMoment": "حذف لحظة",
+  "momentDeleteConfirm": "هل أنت متأكد أنك تريد حذف هذه اللحظة؟",
+  "momentComment": "التعليق",
+  "momentWriteComment": "أكتب تعليق...",
+  "momentLike": "مثل",
+  "momentUnlike": "على عكس",
+  "momentForward": "إلى الأمام",
+  "momentDelete": "حذف",
+  "momentReply": "الرد",
+  "momentMoment": "لحظة",
+  "momentLikesCount": "{count} يحب",
+  "@momentLikesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "momentCommentsCount": "تعليقات {count}",
+  "@momentCommentsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "momentNoComments": "لا توجد تعليقات حتى الآن",
+  "momentFailedToLoad": "فشل تحميل الصورة",
+  "momentReplyTo": "الرد على {userName}...",
+  "@momentReplyTo": {
+    "placeholders": {
+      "userName": {
+        "type": "String"
+      }
+    }
+  },
+  "momentNoConversations": "لا محادثات",
+  "momentJustNow": "الآن فقط",
+  "momentMinutesAgo": "منذ {count}m",
+  "@momentMinutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "momentHoursAgo": "منذ {count}h",
+  "@momentHoursAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "momentDaysAgo": "منذ {count}d",
+  "@momentDaysAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatGroupAnnouncementHint": "أدخل إعلان المجموعة",
+  "chatGroupAnnouncementEmpty": "لا يوجد إعلان",
+  "chatEditNickname": "تحرير اللقب",
+  "chatNicknameHint": "أدخل لقبك في هذه المجموعة",
+  "contactAddPhoneHint": "أدخل رقم الهاتف",
+  "contactNotesHint": "أضف ملاحظات حول جهة الاتصال هذه",
+  "reportTitle": "تقرير",
+  "reportReasonSpam": "البريد العشوائي",
+  "reportReasonHarassment": "التحرش",
+  "reportReasonFraud": "الاحتيال",
+  "reportReasonOther": "أخرى",
+  "reportSubmitted": "تم تقديم التقرير",
+  "reportDescription": "وصف إضافي (اختياري)",
+  "qrcodeSaved": "تم حفظ رمز الاستجابة السريعة في الألبوم",
+  "chatSendRedPacketInChat": "يرجى إرسال الحزمة الحمراء في الدردشة",
+  "commonSaveFailed": "فشل الحفظ",
+  "reportSelectReason": "الرجاء تحديد السبب",
+  "gameCenter": "العاب",
+  "gameHighScore": "الأفضل",
+  "gameScore": "النتيجة",
+  "gameOver": "انتهت اللعبة",
+  "gamePlayAgain": "العب مرة أخرى",
+  "gameLeaderboard": "المتصدرين",
+  "gamePause": "متوقف مؤقتًا",
+  "gameResume": "انقر للاستئناف",
+  "gameConfirmExit": "ترك هذه اللعبة؟",
+  "gameNoScores": "لا توجد نتائج حتى الآن",
+  "game2048": "2048",
+  "game2048Desc": "دمج البلاط للوصول إلى 2048",
+  "gameBlockDrop": "إسقاط الكتلة",
+  "gameBlockDropDesc": "إسقاط وخطوط واضحة",
+  "gameMinesweeper": "كاسحة ألغام",
+  "gameMinesweeperDesc": "البحث عن جميع الخلايا الآمنة",
+  "gameMatch3": "المباراة 3",
+  "gameMatch3Desc": "المباراة 3 أو أكثر من الأحجار الكريمة",
+  "gameMinesweeperEasy": "سهل",
+  "gameMinesweeperMedium": "متوسط",
+  "gameMinesLeft": "الألغام اليسار",
+  "gameTimeLeft": "الوقت",
+  "gameLevel": "المستوى",
+  "gameNext": "التالي",
+  "gameBestTime": "أفضل وقت",
+  "gameNewRecord": "رقم قياسي جديد!",
+  "gameLines": "خطوط",
+  "storyMyStory": "قصتي",
+  "storageSmartCleanup": "التنظيف الذكي",
+  "storageOldMediaFiles": "ملفات الوسائط القديمة",
+  "storageLargeFiles": "ملفات كبيرة",
+  "storageAppCache": "ذاكرة التخزين المؤقت للتطبيق",
+  "storageSettings": "إعدادات التخزين",
+  "storageAutoCleanup": "التنظيف التلقائي",
+  "storageAutoCleanupDesc": "يقوم تلقائيًا بتنظيف الملفات الأقدم من أيام {days}",
+  "@storageAutoCleanupDesc": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "storageCleanupPeriod": "فترة التنظيف",
+  "storagePreserveThumbnails": "الحفاظ على الصور المصغرة",
+  "storagePreserveThumbnailsDesc": "احتفظ بالصور المصغرة للصور أثناء عملية التنظيف",
+  "storageWarningHigh": "استخدام التخزين مرتفع. فكر في تنظيف الملفات القديمة.",
+  "storageWarningCritical": "التخزين منخفض للغاية. يرجى تنظيف المساحة الحرة.",
+  "storageFreed": "تم تحرير {size} (ملفات {count})",
+  "@storageFreed": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "storageDays": "أيام {days}",
+  "@storageDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "storageViewAllRooms": "عرض جميع غرف {count}",
+  "@storageViewAllRooms": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "storageNoFiles": "لم يتم العثور على ملفات",
+  "storageFilePinned": "مثبت",
+  "storageDeleteSelected": "هل تريد حذف الملفات المحددة {count}؟ يمكن إعادة تنزيلها من الخادم.",
+  "@storageDeleteSelected": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "backupRestore": "النسخ الاحتياطي والاستعادة",
+  "backupCreate": "إنشاء نسخة احتياطية",
+  "backupCreateDesc": "قم بعمل نسخة احتياطية من إعداداتك ومفاتيح التشفير. سيتم استعادة الرسائل من الخادم بعد إعادة تسجيل الدخول.",
+  "backupIncludeKeys": "تضمين مفاتيح التشفير",
+  "backupIncludeKeysDesc": "مطلوب لقراءة الرسائل المشفرة",
+  "backupPasswordProtect": "حماية كلمة المرور",
+  "backupEnterPassword": "أدخل كلمة المرور الاحتياطية",
+  "backupHistory": "تاريخ النسخ الاحتياطي",
+  "backupNoBackups": "لا توجد نسخ احتياطية حتى الآن",
+  "backupRestore2": "استعادة",
+  "backupDelete": "حذف",
+  "backupDeleteConfirm": "هل أنت متأكد أنك تريد حذف هذه النسخة الاحتياطية؟ لا يمكن التراجع عن هذا.",
+  "backupRestoreFromFile": "استعادة من الملف",
+  "backupRestoreFromFileDesc": "قم باستيراد ملف .n42backup من جهاز آخر أو نسخة احتياطية سابقة.",
+  "backupChooseFile": "اختر ملف النسخ الاحتياطي",
+  "backupRestoring": "جارٍ الاستعادة...",
+  "backupCreated": "تم إنشاء النسخة الاحتياطية: غرف {rooms}، رسائل {messages}",
+  "@backupCreated": {
+    "placeholders": {
+      "rooms": {
+        "type": "int"
+      },
+      "messages": {
+        "type": "int"
+      }
+    }
+  },
+  "backupRestored": "تمت استعادة إعدادات {settings} من غرف {rooms}",
+  "@backupRestored": {
+    "placeholders": {
+      "settings": {
+        "type": "int"
+      },
+      "rooms": {
+        "type": "int"
+      }
+    }
+  },
+  "backupFailed": "فشل النسخ الاحتياطي: {error}",
+  "@backupFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "backupPasswordRequired": "هذه النسخة الاحتياطية محمية بكلمة مرور",
+  "blocGroupNotFound": "لم يتم العثور على المجموعة",
+  "blocGroupMembersInvited": "أعضاء {count} المدعوين",
+  "@blocGroupMembersInvited": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "blocGroupMemberRemoved": "تمت إزالة العضو",
+  "blocGroupAdminRemoved": "تمت إزالة المشرف",
+  "blocGroupLeft": "غادر المجموعة",
+  "blocGroupDisbanded": "تم حل المجموعة",
+  "blocGroupJoined": "انضم إلى المجموعة",
+  "blocGroupInviteDeclined": "تم رفض الدعوة",
+  "blocGroupTokenGateUpdated": "تم تحديث بوابة الرمز المميز",
+  "blocTransferProcessing": "جارٍ معالجة النقل...",
+  "blocTransferCancelled": "تم إلغاء النقل",
+  "blocTransferFailed": "فشل النقل",
+  "blocPaymentProcessing": "جارٍ معالجة الدفع...",
+  "blocPaymentFailed": "فشل الدفع",
+  "groupMaxMembers": "حد الأعضاء",
+  "groupMaxMembersUnlimited": "غير محدود",
+  "groupMaxMembersHint": "أدخل الحد (اتركه فارغًا لعدد غير محدود)",
+  "groupMaxMembersUpdated": "تم تحديث حد الأعضاء",
+  "groupFull": "المجموعة في القدرة",
+  "groupChannels": "قنوات الموضوع",
+  "groupChannelsEmpty": "لا توجد قنوات بعد",
+  "groupChannelsCount": "القنوات",
+  "groupChannelCreate": "قناة جديدة",
+  "groupChannelName": "اسم القناة",
+  "groupChannelTopic": "موضوع القناة (اختياري)",
+  "groupChannelDelete": "حذف القناة",
+  "groupChannelDeleteConfirm": "هل تريد حذف هذه القناة؟ سيتم فقدان كافة الرسائل.",
+  "groupBotSettings": "إعدادات البوت",
+  "groupBotEnabled": "تمكين بوت",
+  "groupBotWelcomeMessage": "قالب رسالة الترحيب",
+  "groupBotWelcomeHint": "استخدم \"الاسم\" كعنصر نائب لاسم العضو الجديد",
+  "groupBotConfigUpdated": "تم تحديث إعدادات الروبوت",
+  "groupContentFilter": "مرشح المحتوى",
+  "groupContentFilterEnabled": "تمكين تصفية الكلمات الرئيسية",
+  "groupContentFilterReplace": "استبدل بـ ***",
+  "groupContentFilterHide": "إخفاء الرسالة",
+  "groupContentFilterAddWord": "أضف كلمة رئيسية",
+  "groupContentFilterUpdated": "تم تحديث فلتر المحتوى",
+  "chatSlashCommands": "الأوامر",
+  "chatCommandPoll": "/ استطلاع - إنشاء استطلاع",
+  "chatCommandAnnounce": "/ إعلان - إرسال إعلان",
+  "chatCommandWelcome": "/ ترحيب - تعيين رسالة الترحيب",
+  "chatReportMessage": "تقرير",
+  "chatReportReason": "سبب التقرير",
+  "chatReportSpam": "البريد العشوائي",
+  "chatReportHarassment": "التحرش",
+  "chatReportInappropriate": "محتوى غير لائق",
+  "chatReportOther": "أخرى",
+  "chatReportSuccess": "تم تقديم التقرير",
+  "spacesName": "اسم المجتمع",
+  "spacesNameHint": "على سبيل المثال تجار التشفير",
+  "spacesNameRequired": "الاسم مطلوب",
+  "spacesDescription": "الوصف",
+  "spacesDescriptionHint": "ما هو هذا المجتمع عنه؟",
+  "spacesType": "نوع المجتمع",
+  "spacesPublicDesc": "يمكن لأي شخص اكتشاف والانضمام",
+  "spacesPrivateDesc": "يمكن للأعضاء المدعوين فقط الانضمام",
+  "spacesNotFound": "لم يتم العثور على المجتمع",
+  "spacesSearch": "بحث في المجتمعات...",
+  "spacesMembers": "الأعضاء",
+  "spacesNoChannels": "لا توجد قنوات بعد",
+  "spacesLeave": "مغادرة المجتمع",
+  "spacesLeaveConfirm": "هل أنت متأكد أنك تريد مغادرة \"{name}\"؟",
+  "@spacesLeaveConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spacesDelete": "حذف المجتمع",
+  "spacesDeleteConfirm": "سيؤدي هذا إلى حذف \"{name}\" وجميع قنواتها نهائيًا. لا يمكن التراجع عن هذا الإجراء.",
+  "@spacesDeleteConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spacesCreateChannel": "أضف قناة",
+  "spacesChannelName": "اسم القناة",
+  "spacesChannelTopic": "الموضوع (اختياري)",
+  "spacesDeleteChannel": "حذف القناة",
+  "spacesDeleteChannelConfirm": "هل أنت متأكد أنك تريد حذف \"#{name}\"؟",
+  "@spacesDeleteChannelConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spacesEditName": "تحرير الاسم",
+  "spacesEditDescription": "تحرير الوصف",
+  "spacesViewAllMembers": "عرض جميع أعضاء {count}",
+  "@spacesViewAllMembers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "spacesKickMemberTitle": "ركلة {name}",
+  "@spacesKickMemberTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spacesBanMemberTitle": "حظر {name}",
+  "@spacesBanMemberTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spacesPromoteAdmin": "ترقية إلى المشرف",
+  "spacesDemoteAdmin": "إزالة المشرف",
+  "spacesInviteMember": "دعوة العضو",
+  "spacesInviteMemberUserId": "معرف المستخدم (مثل @user:server.com)",
+  "spacesSave": "حفظ",
+  "settingsScreenshotProtection": "حماية لقطة الشاشة",
+  "settingsScreenshotProtectionDesc": "منع لقطات الشاشة وتسجيل الشاشة",
+  "chatSelfDestructTimer": "التدمير الذاتي",
+  "chatTimerPickerTitle": "مؤقت التدمير الذاتي",
+  "chatTimerOff": "إيقاف",
+  "onChainNotificationsTitle": "الأحداث على السلسلة",
+  "onChainMarkAllRead": "وضع علامة على كل قراءة",
+  "onChainNoNotifications": "لا توجد أحداث على السلسلة حتى الآن",
+  "onChainNoNotificationsDesc": "ستظهر هنا الأحداث من القنوات المشتركة",
+  "onChainViewDetails": "عرض التفاصيل",
+  "chatCommandHelp": "/ مساعدة — إظهار كافة الأوامر",
+  "chatCommandPrice": "/السعر - احصل على سعر الرمز المميز",
+  "chatCommandBalance": "/التوازن - إظهار رصيد المحفظة",
+  "chatCommandChains": "/chains - قائمة بأكثر من 236 سلسلة مدعومة",
+  "chatMiniApps": "تطبيقات",
+  "miniAppMarketTitle": "تطبيقات مصغرة",
+  "miniAppCategoryAll": "الكل",
+  "miniAppSearch": "تطبيقات البحث...",
+  "miniAppFeatured": "مميز",
+  "miniAppAllApps": "جميع التطبيقات",
+  "miniAppNoResults": "لم يتم العثور على أي تطبيقات",
+  "slideToPayLabel": "→ → → قم بالتمرير للتأكيد",
+  "slideToPayConfirming": "جارٍ التأكيد...",
+  "redPacketBestLuck": "حظا سعيدا",
+  "redPacketBestLuckCongrats": "حظا سعيدا! لقد حصلت على أكثر!",
+  "redPacketStats": "ادعى {claimed} / {total}",
+  "@redPacketStats": {
+    "placeholders": {
+      "claimed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "redPacketStatsTotal": "المجموع",
+  "redPacketGrabbedViral": "🧧 أمسكت بعلبة حمراء • {amount} {token}",
+  "@redPacketGrabbedViral": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "token": {
+        "type": "String"
+      }
+    }
+  },
+  "web3SearchHint": "@matrix:id • عنوان المحفظة 0x • name.eth",
+  "web3SearchPlaceholder": "البحث حسب الهوية أو المحفظة أو ENS...",
+  "web3WalletAddress": "عنوان المحفظة",
+  "web3AddressCopied": "تم نسخ العنوان",
+  "web3Copy": "نسخ",
+  "web3SendMessage": "أرسل رسالة",
+  "web3SendToWallet": "محفظة الرسائل",
+  "web3WalletOnlyHint": "هذا العنوان ليس لديه حساب N42 حتى الآن. سيتم تسليم الرسالة عند انضمامهم.",
+  "web3NftAvatar": "الصورة الرمزية NFT",
+  "web3ResolveFailed": "فشل في حل الهوية",
+  "web3EnsNotFound": "لم يتم العثور على اسم ENS \"{name}\".",
+  "@web3EnsNotFound": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "web3NoN42AccountTitle": "لا يوجد حساب N42",
+  "web3NoN42AccountDesc": "عنوان المحفظة هذا لا يحتوي على حساب N42 حتى الآن. يمكنك مشاركة رابط دعوة N42 معهم للبدء.",
+  "web3ShareInvite": "مشاركة الدعوة",
+  "nftPickerTitle": "حدد الصورة الرمزية NFT",
+  "nftPickerTabPopular": "شعبية",
+  "nftPickerTabCustom": "مخصص",
+  "nftPickerChain": "سلسلة",
+  "nftPickerContract": "عنوان العقد",
+  "nftPickerTokenId": "معرف الرمز المميز",
+  "nftPickerVerifyOwnership": "التحقق من الملكية والمعاينة",
+  "nftPickerUseAsAvatar": "استخدم كصورة رمزية",
+  "nftPickerPreview": "معاينة",
+  "nftPickerNotOwned": "أنت لا تملك هذا NFT",
+  "nftPickerInvalidTokenId": "معرف الرمز المميز غير صالح",
+  "nftPickerEnterBoth": "أدخل عنوان العقد ومعرف الرمز المميز",
+  "nftPickerInfoTitle": "الصورة الرمزية NFT - تم التحقق منها على السلسلة",
+  "nftPickerInfoDesc": "قم بربط NFT الذي تمتلكه باعتباره الصورة الرمزية الخاصة بك. يمكن لأي شخص التحقق من الملكية على السلسلة. معروض بحلقة ذهبية عبر N42.",
+  "nftPickerPopularCollections": "مجموعات شعبية",
+  "nftPickerWalletHint": "قم بتوصيل محفظة N42 الخاصة بك لاكتشاف NFTs الخاصة بك تلقائيًا عبر أكثر من 236 سلسلة.",
+  "profileBindNftAvatar": "ربط الصورة الرمزية NFT",
+  "profileChangeAvatar": "تغيير الصورة الرمزية",
+  "groupTopics": "المواضيع",
+  "groupTopicsEmpty": "لا توجد مواضيع حتى الآن",
+  "syncInProgress": "جارٍ مزامنة سجل الرسائل...",
+  "recoveryKeyReminderTitle": "حماية رسائلك",
+  "recoveryKeyReminderDesc": "قم بإنشاء مفتاح استرداد لمزامنة الرسائل المشفرة بشكل آمن عبر الأجهزة",
+  "recoveryKeySetupNow": "قم بالإعداد الآن",
+  "recoveryKeyRemindLater": "ذكرني لاحقا",
+  "channelReadOnly": "يمكن للمسؤولين فقط النشر في هذه القناة",
+  "channelSubscribers": "المشتركين",
+  "channelVerified": "قناة تم التحقق منها",
+  "redPacketHistory": "تاريخ الحزمة الحمراء",
+  "redPacketSent": "تم الإرسال",
+  "redPacketReceived": "تم الاستلام",
+  "redPacketExpired": "انتهت صلاحيتها",
+  "redPacketClaimed": "ادعى",
+  "redPacketInsufficientBalance": "رصيد غير كاف",
+  "selfDestructCountdown": "التدمير الذاتي في {time}",
+  "@selfDestructCountdown": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "messageDestroyed": "تم تدمير الرسالة",
+  "miniAppPermissionDenied": "تم رفض الإذن: {permission}",
+  "@miniAppPermissionDenied": {
+    "placeholders": {
+      "permission": {
+        "type": "String"
+      }
+    }
+  },
+  "aiSuggestionGasFee": "ما هي رسوم الغاز؟",
+  "aiSuggestionDefi": "دليل DeFi للمبتدئين",
+  "aiSuggestionSecurity": "كيفية التحقق من سلامة العقد",
+  "aiSuggestionBridge": "الجسور عبر السلسلة",
+  "channelDiscoverTitle": "اكتشف القنوات",
+  "channelDiscoverSearch": "بحث في القنوات...",
+  "channelJoin": "انضم",
+  "channelJoined": "انضم",
+  "channelCategory": "الفئة",
+  "slowModeCooldown": "الوضع البطيء: انتظر {seconds}s",
+  "@slowModeCooldown": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "addressCopyAction": "نسخ العنوان",
+  "addressSendMessage": "أرسل رسالة",
+  "addressViewProfile": "عرض الملف الشخصي",
+  "sendToAddress": "إرسال إلى عنوان المحفظة",
+  "blocAuthSendVerificationCodeFailed": "فشل في إرسال رمز التحقق",
+  "blocAuthServerNoEmailPasswordReset": "هذا الخادم لا يدعم إعادة تعيين كلمة مرور البريد الإلكتروني",
+  "blocAuthResetPasswordFailed": "فشل في إعادة تعيين كلمة المرور",
+  "blocAuthChangePasswordFailed": "فشل في تغيير كلمة المرور",
+  "blocAuthOldPasswordWrong": "كلمة المرور الحالية غير صحيحة",
+  "blocAuthLoginCancelled": "تم إلغاء تسجيل الدخول",
+  "blocAuthGoogleLoginFailed": "فشل تسجيل الدخول إلى جوجل",
+  "blocAuthAppleLoginFailed": "فشل تسجيل دخول أبل",
+  "blocAuthSsoLoginFailed": "فشل تسجيل الدخول الموحّد (SSO).",
+  "blocAuthFacebookLoginFailed": "فشل تسجيل الدخول الفيسبوك",
+  "blocAuthTwitterLoginFailed": "فشل تسجيل الدخول إلى تويتر",
+  "blocAuthWeChatLoginFailed": "فشل تسجيل الدخول إلى WeChat",
+  "blocAuthWeChatNotConfigured": "لم يتم تكوين تسجيل الدخول إلى WeChat",
+  "blocAuthWeChatNotInstalled": "الرجاء تثبيت WeChat أولاً",
+  "blocAuthPasswordWrong": "كلمة مرور غير صحيحة",
+  "blocAuthEmailAlreadyBound": "هذا البريد الإلكتروني مرتبط بالفعل بحساب آخر",
+  "blocAuthChangeEmailFailed": "فشل في تغيير البريد الإلكتروني",
+  "blocAuthVerificationCodeInvalid": "رمز التحقق غير صحيح أو منتهي الصلاحية",
+  "blocAuthSessionExpired": "انتهت الجلسة، يرجى تسجيل الدخول مرة أخرى",
+  "blocAuthSessionIncomplete": "بيانات الجلسة غير كاملة، يرجى تسجيل الدخول مرة أخرى"
+}
