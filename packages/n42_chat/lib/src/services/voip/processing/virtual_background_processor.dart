@@ -168,6 +168,12 @@ class VirtualBackgroundProcessor {
   }
 }
 
+/// 人像前景置信度阈值：高于此值视为人物区域。
+const double _foregroundThreshold = 0.7;
+
+/// 边缘混合起始阈值：此值与 [_foregroundThreshold] 之间做 alpha blend 过渡。
+const double _edgeBlendMin = 0.3;
+
 /// Isolate 中运行的帧合成函数（避免阻塞 UI 线程）。
 Uint8List _compositeFrame(_CompositeParams params) {
   final w = params.width;
@@ -207,7 +213,7 @@ Uint8List _compositeFrame(_CompositeParams params) {
       // confidence > 0.7 → 人像（保留原始帧），否则 → 背景（替换）
       final alpha = confidence.clamp(0.0, 1.0);
 
-      if (alpha > 0.7) {
+      if (alpha > _foregroundThreshold) {
         // 人像区域：直接使用原始帧
         result[pixelIdx] = frame[pixelIdx];
         result[pixelIdx + 1] = frame[pixelIdx + 1];
@@ -237,8 +243,8 @@ Uint8List _compositeFrame(_CompositeParams params) {
         }
 
         // 边缘过渡混合（0.3~0.7 之间做 alpha blend）
-        if (alpha > 0.3) {
-          final t = (alpha - 0.3) / 0.4; // 0→1
+        if (alpha > _edgeBlendMin) {
+          final t = (alpha - _edgeBlendMin) / (_foregroundThreshold - _edgeBlendMin);
           result[pixelIdx] = _lerp(bgR, frame[pixelIdx], t);
           result[pixelIdx + 1] = _lerp(bgG, frame[pixelIdx + 1], t);
           result[pixelIdx + 2] = _lerp(bgB, frame[pixelIdx + 2], t);

@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 import '../../domain/entities/favorite_entity.dart';
+import '../utils/debug_log.dart';
 
 /// 待办提醒服务
 ///
@@ -97,7 +98,9 @@ class ReminderService {
         _notifiedIds.add(item.id);
         await _showNotification(item);
       }
-    } catch (_) {}
+    } catch (e) {
+      debugLog('ReminderService: _checkDueTodos error - $e');
+    }
   }
 
   Future<void> _showNotification(FavoriteEntity item) async {

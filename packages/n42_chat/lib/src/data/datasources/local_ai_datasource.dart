@@ -52,6 +52,15 @@ class LocalAiDatasource implements AiService {
   // 高层任务（组装 prompt → 调用本地推理）
   // ============================================
 
+  /// 单轮 prompt 快捷构建 + 推理。
+  Future<String?> _singleTurn(String instruction, {int maxTokens = 512}) {
+    final prompt = _buildSingleTurnPrompt(instruction);
+    return _llm.generate(prompt, maxOutputTokens: maxTokens);
+  }
+
+  static String _buildSingleTurnPrompt(String instruction) =>
+      '<start_of_turn>user\n$instruction\n<end_of_turn>\n<start_of_turn>model\n';
+
   @override
   Future<String> summarize(
     String text, {
@@ -59,10 +68,10 @@ class LocalAiDatasource implements AiService {
     int maxLength = 200,
   }) async {
     final lang = language ?? '中文';
-    final prompt = '<start_of_turn>user\n'
-        '请用$lang将以下内容总结为不超过${maxLength}字的摘要：\n\n$text\n'
-        '<end_of_turn>\n<start_of_turn>model\n';
-    final result = await _llm.generate(prompt, maxOutputTokens: maxLength);
+    final result = await _singleTurn(
+      '请用$lang将以下内容总结为不超过${maxLength}字的摘要：\n\n$text',
+      maxTokens: maxLength,
+    );
     return result?.trim() ?? '无法生成摘要';
   }
 
@@ -74,19 +83,18 @@ class LocalAiDatasource implements AiService {
       AiTone.playful => '俏皮',
       AiTone.professional => '专业',
     };
-    final prompt = '<start_of_turn>user\n'
-        '请用$toneLabel的语气改写以下消息，保持原意：\n\n$text\n'
-        '<end_of_turn>\n<start_of_turn>model\n';
-    final result = await _llm.generate(prompt, maxOutputTokens: 256);
+    final result = await _singleTurn(
+      '请用$toneLabel的语气改写以下消息，保持原意：\n\n$text',
+      maxTokens: 256,
+    );
     return result?.trim() ?? text;
   }
 
   @override
   Future<String> translateMessage(String text, String targetLanguage) async {
-    final prompt = '<start_of_turn>user\n'
-        '将以下内容翻译为$targetLanguage，只输出翻译结果：\n\n$text\n'
-        '<end_of_turn>\n<start_of_turn>model\n';
-    final result = await _llm.generate(prompt, maxOutputTokens: 512);
+    final result = await _singleTurn(
+      '将以下内容翻译为$targetLanguage，只输出翻译结果：\n\n$text',
+    );
     return result?.trim() ?? text;
   }
 
@@ -95,11 +103,10 @@ class LocalAiDatasource implements AiService {
     final truncated = pageContent.length > 4000
         ? pageContent.substring(0, 4000)
         : pageContent;
-    final prompt = '<start_of_turn>user\n'
-        '请用中文为以下网页内容生成简短摘要（100字以内）：\n'
-        'URL: $url\n\n$truncated\n'
-        '<end_of_turn>\n<start_of_turn>model\n';
-    final result = await _llm.generate(prompt, maxOutputTokens: 150);
+    final result = await _singleTurn(
+      '请用中文为以下网页内容生成简短摘要（100字以内）：\nURL: $url\n\n$truncated',
+      maxTokens: 150,
+    );
     return result?.trim() ?? '无法生成摘要';
   }
 
@@ -116,12 +123,10 @@ class LocalAiDatasource implements AiService {
     final context = lastFew
         .map((m) => '${m.role == AiRole.user ? "我" : "对方"}: ${m.content}')
         .join('\n');
-
-    final prompt = '<start_of_turn>user\n'
-        '根据以下对话上下文，用$lang给出$count条简短的回复建议，每条一行，不要编号：\n\n'
-        '$context\n'
-        '<end_of_turn>\n<start_of_turn>model\n';
-    final result = await _llm.generate(prompt, maxOutputTokens: 200);
+    final result = await _singleTurn(
+      '根据以下对话上下文，用$lang给出$count条简短的回复建议，每条一行，不要编号：\n\n$context',
+      maxTokens: 200,
+    );
     if (result == null || result.trim().isEmpty) return const [];
     return result
         .trim()

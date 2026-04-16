@@ -485,6 +485,7 @@ class MessageRepositoryImpl implements IMessageRepository {
       );
     } catch (e) {
       // relation 发送失败不应阻塞后续清理——仍需 redact 本地副本
+      debugLog('markViewOnceConsumed: relation send failed for $messageId: $e');
     }
 
     // 2) redact 原消息，清空服务端可见的媒体 URL

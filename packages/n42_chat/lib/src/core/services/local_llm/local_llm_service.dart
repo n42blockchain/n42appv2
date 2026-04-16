@@ -77,15 +77,15 @@ class LocalLlmService {
     return File(path).existsSync();
   }
 
-  /// 获取所有已下载模型的 ID。
+  /// 获取所有已下载模型的 ID（并行检查）。
   Future<List<String>> getDownloadedModelIds() async {
-    final results = <String>[];
-    for (final preset in LocalModelInfo.presets) {
-      if (await isModelDownloaded(preset.id)) {
-        results.add(preset.id);
-      }
-    }
-    return results;
+    final checks = await Future.wait(
+      LocalModelInfo.presets.map((p) => isModelDownloaded(p.id)),
+    );
+    return [
+      for (int i = 0; i < LocalModelInfo.presets.length; i++)
+        if (checks[i]) LocalModelInfo.presets[i].id,
+    ];
   }
 
   bool _isDownloading = false;
@@ -236,17 +236,17 @@ class LocalLlmService {
     );
   }
 
-  /// 获取已用磁盘空间。
+  /// 获取已用磁盘空间（并行查询）。
   Future<int> getUsedDiskBytes() async {
-    int total = 0;
-    for (final preset in LocalModelInfo.presets) {
-      final path = await _modelPath(preset.id);
-      final file = File(path);
-      if (await file.exists()) {
-        total += await file.length();
-      }
-    }
-    return total;
+    final sizes = await Future.wait(
+      LocalModelInfo.presets.map((preset) async {
+        final path = await _modelPath(preset.id);
+        final file = File(path);
+        if (await file.exists()) return await file.length();
+        return 0;
+      }),
+    );
+    return sizes.fold<int>(0, (sum, size) => sum + size);
   }
 
   Future<void> dispose() async {
