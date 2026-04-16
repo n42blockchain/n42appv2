@@ -37,6 +37,19 @@ late AndroidNotificationChannel channel;
 late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
 class AppPushUtils {
+  static FlutterLocalNotificationsPlugin? _bgLocalNotifications;
+
+  static Future<FlutterLocalNotificationsPlugin>
+      _initBgLocalNotifications() async {
+    final plugin = FlutterLocalNotificationsPlugin();
+    const android = AndroidInitializationSettings('push_small_icon');
+    const ios = DarwinInitializationSettings();
+    await plugin.initialize(
+      settings: const InitializationSettings(android: android, iOS: ios),
+    );
+    return plugin;
+  }
+
   static const Duration _chatTapDedupWindow = Duration(seconds: 8);
   static String? _pendingChatRoomId;
   static String? _pendingChatEventId;
@@ -80,8 +93,10 @@ class AppPushUtils {
         >()
         ?.createNotificationChannel(channel);
 
-    /// Update the iOS foreground notification presentation options to allow
-    /// heads up notifications.
+    /// iOS 前台通知展示选项由 n42_chat FirebasePushService 根据用户隐私设置
+    /// 统一管理（在 initialize() 中调用 _applyIOSForegroundPresentationOptions），
+    /// 这里仅设置非 chat 通知的默认值。
+    /// Chat 通知的 alert/badge/sound 选项会在 FirebasePushService 初始化时覆盖。
     await FirebaseMessaging.instance
         .setForegroundNotificationPresentationOptions(
           alert: true,
@@ -401,16 +416,23 @@ class AppPushUtils {
       final brand = message.data['device_brand'] ?? '';
       final os = message.data['device_os'] ?? '';
       final deviceName = os.isNotEmpty ? '$brand $os' : brand;
-      // flutter_local_notifications 20.0.0 使用命名参数
-      FlutterLocalNotificationsPlugin().show(
+
+      // 后台 isolate 中 top-level channel/plugin 未初始化，使用静态缓存避免重复初始化
+      _bgLocalNotifications ??= await _initBgLocalNotifications();
+
+      const bgChannelId = 'high_importance_channel';
+      const bgChannelName = 'High Importance Notifications';
+
+      await _bgLocalNotifications!.show(
         id: 'device_login'.hashCode,
         title: 'New Device Login',
         body: 'Your account was logged in on $deviceName',
-        notificationDetails: NotificationDetails(
+        notificationDetails: const NotificationDetails(
           android: AndroidNotificationDetails(
-            channel.id,
-            channel.name,
-            channelDescription: channel.description,
+            bgChannelId,
+            bgChannelName,
+            channelDescription:
+                'This channel is used for important notifications.',
             color: Colors.black,
           ),
         ),

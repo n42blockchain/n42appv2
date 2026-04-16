@@ -43,9 +43,9 @@ import UIKit
           GeneratedPluginRegistrant.register(withRegistry: registry)
       }*/
 
-      /// ios notification添加
+      /// ios notification添加 — FlutterAppDelegate 已遵循 UNUserNotificationCenterDelegate
       if #available(iOS 10.0, *) {
-        UNUserNotificationCenter.current().delegate = self as? UNUserNotificationCenterDelegate
+        UNUserNotificationCenter.current().delegate = self as UNUserNotificationCenterDelegate
       }
       GeneratedPluginRegistrant.register(with: self)
       // Mining WebSocket channel

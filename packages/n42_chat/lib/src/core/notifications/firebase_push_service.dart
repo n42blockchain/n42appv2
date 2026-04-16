@@ -91,8 +91,8 @@ class FirebasePushService implements IPushNotificationService {
   static int _notificationIdCounter = 0;
   static int _nextNotificationId() => (_notificationIdCounter++ & 0x7FFFFFFF);
 
-  /// 房间 ID → 最后一条通知 ID 的映射（用于 clearNotificationsForRoom）
-  final Map<String, int> _roomNotificationIds = {};
+  /// 房间 ID → 该房间所有通知 ID 列表（用于 clearNotificationsForRoom）
+  final Map<String, List<int>> _roomNotificationIds = {};
 
   /// 当前活跃的房间 ID（用户正在查看的房间不弹通知）
   String? _activeRoomId;
@@ -530,6 +530,14 @@ class FirebasePushService implements IPushNotificationService {
     final roomId = message.data['room_id'] as String?;
     final eventId = message.data['event_id'] as String?;
 
+    // 不显示用户正在查看的房间的通知
+    if (roomId != null && _activeRoomId == roomId) {
+      debugLog(
+        'FirebasePushService: Skipping foreground FCM notification for active room $roomId',
+      );
+      return;
+    }
+
     if (roomId != null) {
       final room = _client.getRoomById(roomId);
       if (room != null) {
@@ -630,6 +638,20 @@ class FirebasePushService implements IPushNotificationService {
       return;
     }
 
+    // 如果有 notification payload，Firebase 会自动显示通知，无需手动处理
+    if (message.notification != null) {
+      return;
+    }
+
+    // 先加载配置检查是否应该显示通知（避免在 DND/禁用时浪费资源初始化插件）
+    final config = await _loadPersistedNotificationConfig();
+    if (!config.enabled || config.isInDoNotDisturbPeriod()) {
+      debugLog(
+        'FirebasePushService: Skipping background local notification due to saved config',
+      );
+      return;
+    }
+
     // 后台消息在单独的 isolate 中运行，需要初始化本地通知
     if (_localNotifications == null) {
       _localNotifications = FlutterLocalNotificationsPlugin();
@@ -648,50 +670,36 @@ class FirebasePushService implements IPushNotificationService {
       await _ensureAndroidMessageChannels();
     }
 
-    // 如果没有 notification payload，手动显示通知
-    if (message.notification == null) {
-      final config = await _loadPersistedNotificationConfig();
-      if (!config.enabled || config.isInDoNotDisturbPeriod()) {
-        debugLog(
-          'FirebasePushService: Skipping background local notification due to saved config',
-        );
-        return;
-      }
-      final roomId = message.data['room_id'] as String?;
-      final eventId = message.data['event_id'] as String?;
+    final roomId = message.data['room_id'] as String?;
+    final eventId = message.data['event_id'] as String?;
+    final payload = json.encode({'room_id': roomId, 'event_id': eventId});
+    final notificationId = _nextNotificationId();
 
-      // 构建 payload
-      final payload = json.encode({'room_id': roomId, 'event_id': eventId});
+    final androidDetails = _androidMessageDetails(
+      config,
+      importance: Importance.high,
+      priority: Priority.high,
+    );
 
-      // 使用原子计数器生成唯一通知 ID（避免时间戳在同一毫秒内碰撞）
-      final notificationId = _nextNotificationId();
+    final iosDetails = _iosMessageDetails(config);
 
-      final androidDetails = _androidMessageDetails(
-        config,
-        importance: Importance.high,
-        priority: Priority.high,
-      );
+    final details = NotificationDetails(
+      android: androidDetails,
+      iOS: iosDetails,
+    );
 
-      final iosDetails = _iosMessageDetails(config);
+    final presentation = config.presentMessage(
+      title: 'N42 Chat',
+      body: 'You have a new message',
+    );
 
-      final details = NotificationDetails(
-        android: androidDetails,
-        iOS: iosDetails,
-      );
-
-      final presentation = config.presentMessage(
-        title: 'N42 Chat',
-        body: 'You have a new message',
-      );
-
-      await _localNotifications!.show(
-        id: notificationId,
-        title: presentation.title,
-        body: presentation.body,
-        notificationDetails: details,
-        payload: payload,
-      );
-    }
+    await _localNotifications!.show(
+      id: notificationId,
+      title: presentation.title,
+      body: presentation.body,
+      notificationDetails: details,
+      payload: payload,
+    );
   }
 
   /// 后台推送触发 CallKit 来电界面（静态方法，可在后台 isolate 中调用）
@@ -1224,9 +1232,13 @@ class FirebasePushService implements IPushNotificationService {
 
       // 使用原子计数器生成唯一通知 ID（避免时间戳在同一毫秒内碰撞）
       final notificationId = _nextNotificationId();
-      // 记录 roomId → notificationId 映射，供 clearNotificationsForRoom 使用
       if (roomId != null) {
-        _roomNotificationIds[roomId] = notificationId;
+        final ids = _roomNotificationIds[roomId] ??= [];
+        ids.add(notificationId);
+        // 限制每个房间最多保留 50 个通知 ID，超出时丢弃最旧的
+        if (ids.length > 50) {
+          ids.removeRange(0, ids.length - 50);
+        }
       }
 
       // Android 通知详情
@@ -1266,9 +1278,9 @@ class FirebasePushService implements IPushNotificationService {
   @override
   Future<void> clearNotificationsForRoom(String roomId) async {
     if (_localNotifications == null) return;
-    final notificationId = _roomNotificationIds.remove(roomId);
-    if (notificationId != null) {
-      await _localNotifications!.cancel(id: notificationId);
+    final ids = _roomNotificationIds.remove(roomId);
+    if (ids != null && ids.isNotEmpty) {
+      await Future.wait(ids.map((id) => _localNotifications!.cancel(id: id)));
     }
   }
 
