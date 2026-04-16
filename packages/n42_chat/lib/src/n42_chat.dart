@@ -27,6 +27,7 @@ import 'domain/entities/user_entity.dart';
 import 'domain/entities/user_profile_entity.dart';
 import 'core/router/app_router.dart';
 import 'core/services/local_llm/local_llm_service.dart';
+import 'domain/protocols/fiat_ramp_bridge.dart';
 import 'domain/protocols/passkey_bridge_protocol.dart';
 import 'domain/protocols/token_gate_bridge_protocol.dart';
 import 'domain/repositories/auth_repository.dart';
@@ -861,6 +862,14 @@ class N42Chat {
   /// 注入 Token-Gate 验证能力。
   static void configureTokenGateBridge(TokenGateBridge? bridge) {
     _tokenGateBridge = bridge;
+  }
+
+  /// 法币出入金桥接（MoonPay / Transak）。
+  static FiatRampBridge? _fiatRampBridge;
+  static FiatRampBridge? get fiatRampBridge => _fiatRampBridge;
+
+  static void configureFiatRampBridge(FiatRampBridge? bridge) {
+    _fiatRampBridge = bridge;
   }
 
   /// 初始化本地 LLM（启动时自动加载上次使用的模型）。

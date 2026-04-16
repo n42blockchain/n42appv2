@@ -166,6 +166,10 @@ dependencies {
     compileOnly(files("libs/mobile-sdk-android.aar"))
     // compileOnly：仅供编译期，运行时由 flutter_mining 插件的 evm-module 提供
     compileOnly(files("libs/evm.aar"))
+    // MediaPipe LLM Inference — 本地 Gemma 推理（可选，未安装时 LocalLlmHandler 走 fallback）
+    implementation("com.google.mediapipe:tasks-genai:0.10.22")
+    // Kotlin Coroutines（LocalLlmHandler 异步推理）
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
 }
 
 flutter {

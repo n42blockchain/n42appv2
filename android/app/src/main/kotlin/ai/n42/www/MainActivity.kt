@@ -68,5 +68,8 @@ class MainActivity: FlutterFragmentActivity() {
         // Passkey (WebAuthn) channel
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "n42.wallet/passkey")
             .setMethodCallHandler(PasskeyHandler(this))
+
+        // 本地 LLM 推理 (MediaPipe Gemma)
+        LocalLlmHandler.register(flutterEngine, this)
     }
 }
