@@ -4193,6 +4193,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "please_input_address": MessageLookupByLibrary.simpleMessage(
       "Bitte Adresse eingeben",
     ),
+    "push_permission_btn_dismiss": MessageLookupByLibrary.simpleMessage(
+      "Nicht mehr erinnern",
+    ),
+    "push_permission_btn_later": MessageLookupByLibrary.simpleMessage("Später"),
+    "push_permission_btn_settings": MessageLookupByLibrary.simpleMessage(
+      "Zu den Einstellungen",
+    ),
+    "push_permission_dialog_content": MessageLookupByLibrary.simpleMessage(
+      "Push-Benachrichtigungen sind deaktiviert. Sie könnten Chat-Nachrichten und Überweisungsbenachrichtigungen verpassen.\n\nBitte aktivieren Sie Benachrichtigungen für diese App in den Systemeinstellungen.",
+    ),
+    "push_permission_dialog_title": MessageLookupByLibrary.simpleMessage(
+      "Benachrichtigungen deaktiviert",
+    ),
     "repeatPassword": MessageLookupByLibrary.simpleMessage(
       "Passwort wiederholen",
     ),

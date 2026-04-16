@@ -3971,6 +3971,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "please_input_address": MessageLookupByLibrary.simpleMessage(
       "कृपया पता इनपुट करें",
     ),
+    "push_permission_btn_dismiss": MessageLookupByLibrary.simpleMessage(
+      "याद न दिलाएं",
+    ),
+    "push_permission_btn_later": MessageLookupByLibrary.simpleMessage(
+      "बाद में",
+    ),
+    "push_permission_btn_settings": MessageLookupByLibrary.simpleMessage(
+      "सेटिंग पर जाएं",
+    ),
+    "push_permission_dialog_content": MessageLookupByLibrary.simpleMessage(
+      "पुश नोटिफिकेशन अक्षम हैं। आप चैट संदेश और ट्रांसफर अलर्ट मिस कर सकते हैं।\n\nकृपया सिस्टम सेटिंग में इस ऐप के लिए नोटिफिकेशन सक्षम करें।",
+    ),
+    "push_permission_dialog_title": MessageLookupByLibrary.simpleMessage(
+      "सूचनाएं अक्षम हैं",
+    ),
     "repeatPassword": MessageLookupByLibrary.simpleMessage(
       "पासवर्ड पुनः दर्ज करें",
     ),

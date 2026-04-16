@@ -4065,6 +4065,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "please_input_address": MessageLookupByLibrary.simpleMessage(
       "অনুগ্রহ করে ঠিকানা ইনপুট করুন",
     ),
+    "push_permission_btn_dismiss": MessageLookupByLibrary.simpleMessage(
+      "আর মনে করিয়ে দিও না",
+    ),
+    "push_permission_btn_later": MessageLookupByLibrary.simpleMessage("পরে"),
+    "push_permission_btn_settings": MessageLookupByLibrary.simpleMessage(
+      "সেটিংসে যান",
+    ),
+    "push_permission_dialog_content": MessageLookupByLibrary.simpleMessage(
+      "পুশ নোটিফিকেশন নিষ্ক্রিয়। আপনি চ্যাট বার্তা এবং ট্রান্সফার সতর্কতা মিস করতে পারেন।\n\nসিস্টেম সেটিংসে এই অ্যাপের জন্য নোটিফিকেশন সক্রিয় করুন।",
+    ),
+    "push_permission_dialog_title": MessageLookupByLibrary.simpleMessage(
+      "বিজ্ঞপ্তি নিষ্ক্রিয়",
+    ),
     "repeatPassword": MessageLookupByLibrary.simpleMessage(
       "পাসওয়ার্ড পুনরায় লিখুন",
     ),

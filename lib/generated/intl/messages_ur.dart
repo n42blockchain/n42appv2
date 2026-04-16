@@ -4036,6 +4036,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "please_input_address": MessageLookupByLibrary.simpleMessage(
       "براہ کرم پتہ درج کریں۔",
     ),
+    "push_permission_btn_dismiss": MessageLookupByLibrary.simpleMessage(
+      "دوبارہ یاد نہ دلائیں",
+    ),
+    "push_permission_btn_later": MessageLookupByLibrary.simpleMessage(
+      "بعد میں",
+    ),
+    "push_permission_btn_settings": MessageLookupByLibrary.simpleMessage(
+      "ترتیبات پر جائیں",
+    ),
+    "push_permission_dialog_content": MessageLookupByLibrary.simpleMessage(
+      "پش اطلاعات غیر فعال ہیں۔ آپ چیٹ پیغامات اور ٹرانسفر الرٹس مِس کر سکتے ہیں۔\n\nبراہ کرم سسٹم سیٹنگز میں اس ایپ کے لیے اطلاعات فعال کریں۔",
+    ),
+    "push_permission_dialog_title": MessageLookupByLibrary.simpleMessage(
+      "اطلاعات غیر فعال ہیں",
+    ),
     "repeatPassword": MessageLookupByLibrary.simpleMessage(
       "پاس ورڈ دوبارہ درج کریں۔",
     ),

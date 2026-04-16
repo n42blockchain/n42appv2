@@ -1982,5 +1982,10 @@
   "g_market_7d_change": "Cambio 7D",
   "g_market_30d_change": "Cambio 30D",
   "g_market_depth": "Profundidad del mercado",
-  "g_market_no_chart": "Sin datos del gráfico"
+  "g_market_no_chart": "Sin datos del gráfico",
+  "push_permission_dialog_title": "Notificaciones desactivadas",
+  "push_permission_dialog_content": "Las notificaciones push están desactivadas. Podría perderse mensajes de chat y alertas de transferencias.\n\nActive las notificaciones para esta aplicación en la configuración del sistema.",
+  "push_permission_btn_dismiss": "No recordar más",
+  "push_permission_btn_later": "Más tarde",
+  "push_permission_btn_settings": "Ir a Ajustes"
 }

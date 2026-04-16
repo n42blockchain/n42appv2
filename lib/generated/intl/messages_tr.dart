@@ -3981,6 +3981,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "please_input_address": MessageLookupByLibrary.simpleMessage(
       "Lütfen Adres Girin",
     ),
+    "push_permission_btn_dismiss": MessageLookupByLibrary.simpleMessage(
+      "Bir daha hatırlatma",
+    ),
+    "push_permission_btn_later": MessageLookupByLibrary.simpleMessage("Sonra"),
+    "push_permission_btn_settings": MessageLookupByLibrary.simpleMessage(
+      "Ayarlara Git",
+    ),
+    "push_permission_dialog_content": MessageLookupByLibrary.simpleMessage(
+      "Anlık bildirimler devre dışı. Sohbet mesajlarını ve transfer uyarılarını kaçırabilirsiniz.\n\nLütfen sistem ayarlarından bu uygulama için bildirimleri etkinleştirin.",
+    ),
+    "push_permission_dialog_title": MessageLookupByLibrary.simpleMessage(
+      "Bildirimler devre dışı",
+    ),
     "repeatPassword": MessageLookupByLibrary.simpleMessage(
       "Şifreyi Tekrar Girin",
     ),

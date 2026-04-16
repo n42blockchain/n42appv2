@@ -4149,6 +4149,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "please_input_address": MessageLookupByLibrary.simpleMessage(
       "Введите адрес",
     ),
+    "push_permission_btn_dismiss": MessageLookupByLibrary.simpleMessage(
+      "Не напоминать",
+    ),
+    "push_permission_btn_later": MessageLookupByLibrary.simpleMessage("Позже"),
+    "push_permission_btn_settings": MessageLookupByLibrary.simpleMessage(
+      "Перейти в настройки",
+    ),
+    "push_permission_dialog_content": MessageLookupByLibrary.simpleMessage(
+      "Push-уведомления отключены. Вы можете пропустить сообщения чата и уведомления о переводах.\n\nВключите уведомления для этого приложения в настройках системы.",
+    ),
+    "push_permission_dialog_title": MessageLookupByLibrary.simpleMessage(
+      "Уведомления отключены",
+    ),
     "repeatPassword": MessageLookupByLibrary.simpleMessage("Повторите пароль"),
     "rest_Choose_password": MessageLookupByLibrary.simpleMessage(
       "Выберите пароль (8~18 символов)",

@@ -4168,6 +4168,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "please_input_address": MessageLookupByLibrary.simpleMessage(
       "Будь ласка, введіть адресу",
     ),
+    "push_permission_btn_dismiss": MessageLookupByLibrary.simpleMessage(
+      "Більше не нагадувати",
+    ),
+    "push_permission_btn_later": MessageLookupByLibrary.simpleMessage(
+      "Пізніше",
+    ),
+    "push_permission_btn_settings": MessageLookupByLibrary.simpleMessage(
+      "Перейти до налаштувань",
+    ),
+    "push_permission_dialog_content": MessageLookupByLibrary.simpleMessage(
+      "Push-сповіщення вимкнені. Ви можете пропустити повідомлення чату та сповіщення про перекази.\n\nБудь ласка, увімкніть сповіщення для цього додатку в системних налаштуваннях.",
+    ),
+    "push_permission_dialog_title": MessageLookupByLibrary.simpleMessage(
+      "Сповіщення вимкнені",
+    ),
     "repeatPassword": MessageLookupByLibrary.simpleMessage(
       "Повторно введіть пароль",
     ),

@@ -1989,5 +1989,10 @@
         "type": "String"
       }
     }
-  }
+  },
+  "push_permission_dialog_title": "Notifiche disabilitate",
+  "push_permission_dialog_content": "Le notifiche push sono disabilitate. Potresti perdere messaggi in chat e avvisi di trasferimento.\n\nAbilita le notifiche per questa app nelle impostazioni di sistema.",
+  "push_permission_btn_dismiss": "Non ricordare più",
+  "push_permission_btn_later": "Più tardi",
+  "push_permission_btn_settings": "Vai alle impostazioni"
 }

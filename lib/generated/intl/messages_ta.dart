@@ -4340,6 +4340,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "please_input_address": MessageLookupByLibrary.simpleMessage(
       "தயவுசெய்து முகவரியை உள்ளிடவும்",
     ),
+    "push_permission_btn_dismiss": MessageLookupByLibrary.simpleMessage(
+      "மீண்டும் நினைவூட்டாதே",
+    ),
+    "push_permission_btn_later": MessageLookupByLibrary.simpleMessage("பிறகு"),
+    "push_permission_btn_settings": MessageLookupByLibrary.simpleMessage(
+      "அமைப்புகளுக்கு செல்",
+    ),
+    "push_permission_dialog_content": MessageLookupByLibrary.simpleMessage(
+      "புஷ் அறிவிப்புகள் முடக்கப்பட்டுள்ளன. நீங்கள் அரட்டை செய்திகள் மற்றும் பரிமாற்ற எச்சரிக்கைகளை தவறவிடலாம்.\n\nகணினி அமைப்புகளில் இந்த ஆப்பிற்கு அறிவிப்புகளை இயக்கவும்.",
+    ),
+    "push_permission_dialog_title": MessageLookupByLibrary.simpleMessage(
+      "அறிவிப்புகள் முடக்கப்பட்டுள்ளன",
+    ),
     "repeatPassword": MessageLookupByLibrary.simpleMessage(
       "கடவுச்சொல்லை மீண்டும் உள்ளிடவும்",
     ),

@@ -4228,6 +4228,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "please_input_address": MessageLookupByLibrary.simpleMessage(
       "దయచేసి చిరునామాను ఇన్‌పుట్ చేయండి",
     ),
+    "push_permission_btn_dismiss": MessageLookupByLibrary.simpleMessage(
+      "మళ్ళీ గుర్తుచేయవద్దు",
+    ),
+    "push_permission_btn_later": MessageLookupByLibrary.simpleMessage("తర్వాత"),
+    "push_permission_btn_settings": MessageLookupByLibrary.simpleMessage(
+      "సెట్టింగ్‌లకు వెళ్ళు",
+    ),
+    "push_permission_dialog_content": MessageLookupByLibrary.simpleMessage(
+      "పుష్ నోటిఫికేషన్లు నిలిపివేయబడ్డాయి. మీరు చాట్ సందేశాలు మరియు బదిలీ హెచ్చరికలను మిస్ అవుతారు.\n\nసిస్టమ్ సెట్టింగ్‌లలో ఈ యాప్‌కు నోటిఫికేషన్లను ప్రారంభించండి.",
+    ),
+    "push_permission_dialog_title": MessageLookupByLibrary.simpleMessage(
+      "నోటిఫికేషన్లు నిలిపివేయబడ్డాయి",
+    ),
     "repeatPassword": MessageLookupByLibrary.simpleMessage(
       "పాస్‌వర్డ్‌ని మళ్లీ నమోదు చేయండి",
     ),

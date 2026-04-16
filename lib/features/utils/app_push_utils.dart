@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/providers/core_providers.dart';
+import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/main.dart' show globalProviderContainer;
 import 'package:n42_wallet/features/browser/pages/browser_page.dart';
 import 'package:n42_wallet/features/home/setting/about_app.dart';
@@ -25,6 +26,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_new_badger/flutter_new_badger.dart';
 import 'package:intl/intl.dart';
+import 'package:n42_wallet/generated/l10n.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 part 'app_push_navigation.dart';
 
@@ -137,7 +140,19 @@ class AppPushUtils {
 
     ///前台消息
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-      if (kDebugMode) debugPrint('在前台收到消息！');
+      if (kDebugMode) {
+        debugPrint('在前台收到消息！');
+        debugPrint('[PushData][Foreground] messageId=${message.messageId}');
+        debugPrint('[PushData][Foreground] messageType=${message.messageType}');
+        debugPrint('[PushData][Foreground] senderId=${message.senderId}');
+        debugPrint('[PushData][Foreground] from=${message.from}');
+        debugPrint('[PushData][Foreground] collapseKey=${message.collapseKey}');
+        debugPrint('[PushData][Foreground] ttl=${message.ttl}');
+        debugPrint('[PushData][Foreground] sentTime=${message.sentTime}');
+        debugPrint('[PushData][Foreground] category=${message.category}');
+        debugPrint('[PushData][Foreground] notification=${message.notification?.toMap()}');
+        debugPrint('[PushData][Foreground] data=${message.data}');
+      }
 
       try {
         // Matrix chat 推送（含 room_id 或 type 为 m.call.*）由 n42_chat 插件处理
@@ -202,7 +217,11 @@ class AppPushUtils {
 
     ///点击后台消息打开App
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      if (kDebugMode) debugPrint('从后台打开应用，自动清除通知');
+      if (kDebugMode) {
+        debugPrint('从后台打开应用，自动清除通知');
+        debugPrint('[PushData][Background] notification=${message.notification?.toMap()}');
+        debugPrint('[PushData][Background] data=${message.data}');
+      }
 
       final dataType = message.data['type'] as String?;
       final roomId = message.data['room_id'] as String?;
@@ -219,11 +238,14 @@ class AppPushUtils {
         if (kDebugMode) {
           debugPrint('Chat/Matrix notification tap - delegating to n42_chat');
         }
-        if (!N42Chat.isInitialized) {
-          _queuePendingChatNotification(
-            roomId: roomId,
-            eventId: message.data['event_id'] as String?,
-          );
+        _queuePendingChatNotification(
+          roomId: roomId,
+          eventId: message.data['event_id'] as String?,
+        );
+        // 若 N42Chat 已初始化则立即跳转；否则等 initN42Chat 完成后会调用 flushPendingChatNotification
+        if (N42Chat.isInitialized) {
+          // ignore: discarded_futures
+          flushPendingChatNotification();
         }
         return;
       }
@@ -235,7 +257,11 @@ class AppPushUtils {
     ///应用从终止状态打开
     var m = await FirebaseMessaging.instance.getInitialMessage();
     if (m != null) {
-      if (kDebugMode) debugPrint('应用从终止状态打开:${m.notification?.title}');
+      if (kDebugMode) {
+        debugPrint('应用从终止状态打开:${m.notification?.title}');
+        debugPrint('[PushData][ColdStart] notification=${m.notification?.toMap()}');
+        debugPrint('[PushData][ColdStart] data=${m.data}');
+      }
       final dataType = m.data['type'] as String?;
       final roomId = m.data['room_id'] as String?;
       final isCallEvent = dataType != null && dataType.startsWith('m.call.');
@@ -269,6 +295,7 @@ class AppPushUtils {
       // Matrix Pusher 的 token 轮换由 n42_chat 插件内部的
       // FirebaseMessaging.onTokenRefresh 监听统一处理，宿主侧不重复注册。
     });
+
   }
 
   //绑定用户推送的token
@@ -348,6 +375,11 @@ class AppPushUtils {
   ) async {
     // 后台 isolate 需要确保 Firebase 已初始化
     await Firebase.initializeApp();
+
+    if (kDebugMode) {
+      debugPrint('[PushData][BackgroundIsolate] notification=${message.notification?.toMap()}');
+      debugPrint('[PushData][BackgroundIsolate] data=${message.data}');
+    }
 
     // Matrix/Chat 消息（含 room_id 或 type 为 m.call.*）委托给 n42_chat 插件处理
     // 包括后台来电 CallKit 触发、消息本地通知等
@@ -529,6 +561,79 @@ class AppPushUtils {
   static void _clearPendingChatNotification() {
     _pendingChatRoomId = null;
     _pendingChatEventId = null;
+  }
+
+  /// 登录成功后检查推送权限，若未授权且用户未选择"不再提醒"则弹窗引导。
+  ///
+  /// 通过全局 navigatorKey 获取 context，不依赖调用方 Widget 的 mounted 状态。
+  /// 适用平台：
+  ///   - iOS / Android 13+：用户拒绝后 authorizationStatus == denied
+  ///   - Android < 13：无需显式权限，getNotificationSettings 返回 authorized，
+  ///     说明通知确实可用，不需要提醒。
+  static Future<void> checkAndPromptPermission() async {
+    debugPrint('[PushCheck] ① checkAndPromptPermission called');
+    try {
+      await Future<void>.delayed(const Duration(milliseconds: 800));
+      debugPrint('[PushCheck] ② after 800ms delay');
+
+      final settings =
+          await FirebaseMessaging.instance.getNotificationSettings();
+      debugPrint('[PushCheck] ③ authorizationStatus = ${settings.authorizationStatus}');
+
+      final enabled =
+          settings.authorizationStatus == AuthorizationStatus.authorized ||
+          settings.authorizationStatus == AuthorizationStatus.provisional;
+      if (enabled) {
+        debugPrint('[PushCheck] ④ notifications enabled, skip');
+        return;
+      }
+
+      final dismissed = await SPUtil().getPushPermissionDismissed();
+      debugPrint('[PushCheck] ⑤ dismissed = $dismissed');
+      if (dismissed) return;
+
+      final ctx = AppGlobals.navigatorKey.currentContext;
+      debugPrint('[PushCheck] ⑥ ctx = $ctx, mounted = ${ctx?.mounted}');
+      if (ctx == null || !ctx.mounted) return;
+
+      debugPrint('[PushCheck] ⑦ showing dialog');
+      final s = S.of(ctx);
+      // ignore: use_build_context_synchronously
+      await showDialog<void>(
+        context: ctx,
+        barrierDismissible: false,
+        builder: (dialogCtx) => AlertDialog(
+          title: Text(s.push_permission_dialog_title),
+          content: Text(s.push_permission_dialog_content),
+          actionsAlignment: MainAxisAlignment.center,
+          actions: [
+            TextButton(
+              onPressed: () async {
+                await SPUtil().setPushPermissionDismissed(true);
+                if (dialogCtx.mounted) Navigator.of(dialogCtx).pop();
+              },
+              child: Text(s.push_permission_btn_dismiss),
+            ),
+            TextButton(
+              onPressed: () {
+                if (dialogCtx.mounted) Navigator.of(dialogCtx).pop();
+              },
+              child: Text(s.push_permission_btn_later),
+            ),
+            TextButton(
+              onPressed: () async {
+                if (dialogCtx.mounted) Navigator.of(dialogCtx).pop();
+                await openAppSettings();
+              },
+              child: Text(s.push_permission_btn_settings),
+            ),
+          ],
+        ),
+      );
+      debugPrint('[PushCheck] ⑧ dialog closed');
+    } catch (e, st) {
+      debugPrint('[PushCheck] ❌ exception: $e\n$st');
+    }
   }
 
   //显示本地通知 test

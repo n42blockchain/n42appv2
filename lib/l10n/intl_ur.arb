@@ -1982,5 +1982,10 @@
   "g_market_7d_change": "7D تبدیلی",
   "g_market_30d_change": "30D تبدیلی",
   "g_market_depth": "مارکیٹ کی گہرائی",
-  "g_market_no_chart": "کوئی چارٹ ڈیٹا نہیں ہے۔"
+  "g_market_no_chart": "کوئی چارٹ ڈیٹا نہیں ہے۔",
+  "push_permission_dialog_title": "اطلاعات غیر فعال ہیں",
+  "push_permission_dialog_content": "پش اطلاعات غیر فعال ہیں۔ آپ چیٹ پیغامات اور ٹرانسفر الرٹس مِس کر سکتے ہیں۔\n\nبراہ کرم سسٹم سیٹنگز میں اس ایپ کے لیے اطلاعات فعال کریں۔",
+  "push_permission_btn_dismiss": "دوبارہ یاد نہ دلائیں",
+  "push_permission_btn_later": "بعد میں",
+  "push_permission_btn_settings": "ترتیبات پر جائیں"
 }

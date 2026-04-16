@@ -33,7 +33,7 @@ import java.security.spec.X509EncodedKeySpec
  * Requires:
  * - Android 9+ (API 28) for FIDO2, Android 14+ for best UX
  * - `androidx.credentials:credentials:1.5+`
- * - `.well-known/assetlinks.json` configured on rpId domain
+ * - `.well-known/assetlinks.json` configured on rpId domaind
  */
 class PasskeyHandler(private val activity: Activity) : MethodChannel.MethodCallHandler {
     companion object {

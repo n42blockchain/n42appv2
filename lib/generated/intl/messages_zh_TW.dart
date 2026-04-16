@@ -2741,6 +2741,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "please_enter_email": MessageLookupByLibrary.simpleMessage("請輸入電子郵件"),
     "please_enter_password": MessageLookupByLibrary.simpleMessage("請輸入密碼"),
     "please_input_address": MessageLookupByLibrary.simpleMessage("請輸入地址"),
+    "push_permission_btn_dismiss": MessageLookupByLibrary.simpleMessage("不再提醒"),
+    "push_permission_btn_later": MessageLookupByLibrary.simpleMessage("稍後再說"),
+    "push_permission_btn_settings": MessageLookupByLibrary.simpleMessage("去設定"),
+    "push_permission_dialog_content": MessageLookupByLibrary.simpleMessage(
+      "您尚未開啟推送通知權限，將無法及時收到聊天訊息和轉帳提醒。\n\n建議前往系統設定為本應用開啟通知權限。",
+    ),
+    "push_permission_dialog_title": MessageLookupByLibrary.simpleMessage(
+      "推送通知未開啟",
+    ),
     "repeatPassword": MessageLookupByLibrary.simpleMessage("重新輸入密碼"),
     "rest_Choose_password": MessageLookupByLibrary.simpleMessage(
       "選擇密碼（8~18個字元）",

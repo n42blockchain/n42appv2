@@ -4118,6 +4118,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "please_input_address": MessageLookupByLibrary.simpleMessage(
       "Wprowadź adres",
     ),
+    "push_permission_btn_dismiss": MessageLookupByLibrary.simpleMessage(
+      "Nie przypominaj",
+    ),
+    "push_permission_btn_later": MessageLookupByLibrary.simpleMessage(
+      "Później",
+    ),
+    "push_permission_btn_settings": MessageLookupByLibrary.simpleMessage(
+      "Przejdź do ustawień",
+    ),
+    "push_permission_dialog_content": MessageLookupByLibrary.simpleMessage(
+      "Powiadomienia push są wyłączone. Możesz przegapić wiadomości czatu i alerty o przelewach.\n\nWłącz powiadomienia dla tej aplikacji w ustawieniach systemowych.",
+    ),
+    "push_permission_dialog_title": MessageLookupByLibrary.simpleMessage(
+      "Powiadomienia wyłączone",
+    ),
     "repeatPassword": MessageLookupByLibrary.simpleMessage(
       "Wprowadź hasło ponownie",
     ),

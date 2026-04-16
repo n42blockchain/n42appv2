@@ -1982,5 +1982,10 @@
   "g_market_7d_change": "تغيير 7D",
   "g_market_30d_change": "تغيير 30D",
   "g_market_depth": "عمق السوق",
-  "g_market_no_chart": "لا توجد بيانات الرسم البياني"
+  "g_market_no_chart": "لا توجد بيانات الرسم البياني",
+  "push_permission_dialog_title": "الإشعارات معطلة",
+  "push_permission_dialog_content": "إشعارات الدفع معطلة. قد تفوتك رسائل الدردشة وتنبيهات التحويل.\n\nيرجى تفعيل الإشعارات لهذا التطبيق في إعدادات النظام.",
+  "push_permission_btn_dismiss": "لا تذكرني",
+  "push_permission_btn_later": "لاحقاً",
+  "push_permission_btn_settings": "الذهاب إلى الإعدادات"
 }

@@ -1989,5 +1989,10 @@
         "type": "String"
       }
     }
-  }
+  },
+  "push_permission_dialog_title": "Benachrichtigungen deaktiviert",
+  "push_permission_dialog_content": "Push-Benachrichtigungen sind deaktiviert. Sie könnten Chat-Nachrichten und Überweisungsbenachrichtigungen verpassen.\n\nBitte aktivieren Sie Benachrichtigungen für diese App in den Systemeinstellungen.",
+  "push_permission_btn_dismiss": "Nicht mehr erinnern",
+  "push_permission_btn_later": "Später",
+  "push_permission_btn_settings": "Zu den Einstellungen"
 }

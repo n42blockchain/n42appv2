@@ -218,6 +218,17 @@ class SPUtil {
     return prefs?.getBool(SPkey.showTermsOfService.name) ?? false;
   }
 
+  // 推送权限提醒：用户是否已选择"不再提醒"
+  Future<bool> getPushPermissionDismissed() async {
+    await initPrefs();
+    return prefs?.getBool(SPkey.pushPermissionDismissed.name) ?? false;
+  }
+
+  Future<void> setPushPermissionDismissed(bool value) async {
+    await initPrefs();
+    await prefs?.setBool(SPkey.pushPermissionDismissed.name, value);
+  }
+
   // ── 锁屏后台计时（跨进程持久化） ──────────────────────────────────────────
   //
   // 在 AppLifecycleState.hidden / paused 时写入时间戳，应用恢复后读取并清除。
@@ -449,4 +460,5 @@ enum SPkey {
   accentColor, // 自定义主色调，存 ARGB int（0 表示默认蓝色）
   ignoredTokenContracts, // 代币自动发现：用户手动忽略的合约地址 JSON List<String>
   smallAssetsThreshold, // 小额资产过滤阈值（double: 0=关闭, 1/5/10/50 表示过滤低于该 USD 价值的代币）
+  pushPermissionDismissed, // 用户已明确关闭推送权限提醒，不再弹窗
 }

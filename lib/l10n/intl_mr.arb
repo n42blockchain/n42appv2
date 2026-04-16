@@ -1982,5 +1982,10 @@
   "g_market_7d_change": "7D बदल",
   "g_market_30d_change": "30D बदल",
   "g_market_depth": "बाजाराची खोली",
-  "g_market_no_chart": "चार्ट डेटा नाही"
+  "g_market_no_chart": "चार्ट डेटा नाही",
+  "push_permission_dialog_title": "सूचना अक्षम आहेत",
+  "push_permission_dialog_content": "पुश नोटिफिकेशन अक्षम आहेत. तुम्हाला चॅट संदेश आणि ट्रान्सफर अलर्ट चुकू शकतात.\n\nकृपया सिस्टम सेटिंग्जमध्ये या अ‍ॅपसाठी नोटिफिकेशन सक्षम करा.",
+  "push_permission_btn_dismiss": "पुन्हा आठवण देऊ नका",
+  "push_permission_btn_later": "नंतर",
+  "push_permission_btn_settings": "सेटिंग्जवर जा"
 }

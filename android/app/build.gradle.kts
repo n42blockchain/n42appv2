@@ -162,6 +162,9 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.9.0")
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
+    // Passkey / Credential Manager API
+    implementation("androidx.credentials:credentials:1.5.0")
+    implementation("androidx.credentials:credentials-play-services-auth:1.5.0")
     // compileOnly：仅供编译期使用，运行时由 flutter_mining 插件的 mobile-sdk-release.aar 提供，避免 duplicate class 冲突
     compileOnly(files("libs/mobile-sdk-android.aar"))
     // compileOnly：仅供编译期，运行时由 flutter_mining 插件的 evm-module 提供

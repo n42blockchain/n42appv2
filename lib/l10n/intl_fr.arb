@@ -1989,5 +1989,10 @@
         "type": "String"
       }
     }
-  }
+  },
+  "push_permission_dialog_title": "Notifications désactivées",
+  "push_permission_dialog_content": "Les notifications push sont désactivées. Vous pourriez manquer des messages de chat et des alertes de transfert.\n\nVeuillez activer les notifications pour cette application dans les paramètres système.",
+  "push_permission_btn_dismiss": "Ne plus rappeler",
+  "push_permission_btn_later": "Plus tard",
+  "push_permission_btn_settings": "Aller aux paramètres"
 }

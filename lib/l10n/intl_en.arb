@@ -1838,21 +1838,17 @@
   "g_portfolio_movers": "24h Movers",
   "g_portfolio_gainers": "Top Gainers",
   "g_theme_accent_color": "Accent Color",
-  "g_theme_accent_reset": "Reset to default"
-,
+  "g_theme_accent_reset": "Reset to default",
   "g_referral_invite_code": "Invite Code",
   "g_referral_stats_title": "Referral Stats",
   "g_referral_invited": "Invited",
   "g_referral_downloaded": "Downloaded",
   "g_referral_mining": "Mining Nodes",
-  "g_referral_reward": "Reward (N)"
-,
+  "g_referral_reward": "Reward (N)",
   "g_portfolio_pie_total": "Total",
   "g_portfolio_losers": "Top Losers",
-  "g_portfolio_all_holdings": "All Holdings"
-,
-  "g_version_later": "Later"
-,
+  "g_portfolio_all_holdings": "All Holdings",
+  "g_version_later": "Later",
   "g_key_send_memo_label": "Memo / Note (optional)",
   "g_key_send_memo_hint": "Memo / Note",
   "g_key_chain_transfer_not_supported": "This chain does not support transfers yet, stay tuned",
@@ -1889,14 +1885,18 @@
   "g_key_sim_reverted_reason": "Reason: {reason}",
   "@g_key_sim_reverted_reason": {
     "placeholders": {
-      "reason": {"type": "String"}
+      "reason": {
+        "type": "String"
+      }
     }
   },
   "g_key_sim_unavailable": "Simulation unavailable for this network",
   "g_key_sim_gas_estimate": "Est. gas: ~{value} units",
   "@g_key_sim_gas_estimate": {
     "placeholders": {
-      "value": {"type": "String"}
+      "value": {
+        "type": "String"
+      }
     }
   },
   "g_key_dex_min_received": "Min. Received",
@@ -1904,19 +1904,25 @@
   "g_key_dex_quote_expires": "Quote expires in {secs}s",
   "@g_key_dex_quote_expires": {
     "placeholders": {
-      "secs": {"type": "String"}
+      "secs": {
+        "type": "String"
+      }
     }
   },
   "g_key_dex_price_impact_high": "High price impact ({impact})! Proceed with caution.",
   "@g_key_dex_price_impact_high": {
     "placeholders": {
-      "impact": {"type": "String"}
+      "impact": {
+        "type": "String"
+      }
     }
   },
   "g_key_dex_approve_required": "Approve {token} to continue",
   "@g_key_dex_approve_required": {
     "placeholders": {
-      "token": {"type": "String"}
+      "token": {
+        "type": "String"
+      }
     }
   },
   "g_key_dex_approving": "Approving…",
@@ -1927,11 +1933,12 @@
   "g_key_dex_approve_exact": "Exact Amount",
   "g_key_dex_approve_unlimited_info": "Unlimited approval: the router can spend this token any time. Standard practice, but carries risk if the contract is compromised.",
   "g_key_dex_price_chart": "Price Chart",
-
   "g_key_token_discovery_banner": "{count, plural, =1{1 new token detected} other{{count} new tokens detected}} — tap to review",
   "@g_key_token_discovery_banner": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "g_key_token_discovery_title": "Discovered Tokens",
@@ -1939,7 +1946,9 @@
   "g_key_token_discovery_add_selected": "Add ({count})",
   "@g_key_token_discovery_add_selected": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "g_key_token_discovery_select_all": "Select all",
@@ -1953,18 +1962,14 @@
   "g_key_watch_address_hint": "Enter Ethereum address (0x...)",
   "g_key_watch_only_banner": "Watch-only",
   "g_key_watch_only_cant_send": "Watch-only wallet cannot send or sign transactions",
-
   "g_key_security_goplus_checking": "Checking contract security...",
   "g_key_security_goplus_safe": "Contract Verified Safe",
   "g_key_security_goplus_caution": "Use Caution",
   "g_key_security_goplus_danger": "High Risk Detected",
   "g_key_security_goplus_powered_by": "GoPlus",
-
   "g_market_news": "News",
-
   "g_news_empty": "No news available",
   "g_news_source": "Source",
-
   "g_pnl_add_trade": "Add Trade",
   "g_pnl_quantity": "Quantity",
   "g_pnl_buy_price_usd": "Buy Price (USD)",
@@ -1974,14 +1979,12 @@
   "g_pnl_avg_cost": "Avg Cost",
   "g_pnl_unrealized": "Unrealized P&L",
   "g_pnl_no_trades": "No trades recorded",
-
   "g_dapp_security_verified": "Verified",
   "g_dapp_security_safe": "Safe",
   "g_dapp_security_caution": "Caution",
   "g_dapp_security_blocked": "Blocked",
   "g_dapp_security_title": "DApp Security",
   "g_mining_inactivity_warning": "Validator inactivity score is high. Check your node status to avoid penalties.",
-
   "g_market_high_24h": "High 24H",
   "g_market_low_24h": "Low 24H",
   "g_market_fdv": "FDV",
@@ -1992,5 +1995,10 @@
   "g_market_7d_change": "7D Change",
   "g_market_30d_change": "30D Change",
   "g_market_depth": "Market Depth",
-  "g_market_no_chart": "No chart data"
+  "g_market_no_chart": "No chart data",
+  "push_permission_dialog_title": "Notifications Disabled",
+  "push_permission_dialog_content": "Push notifications are disabled. You may miss chat messages and transfer alerts.\n\nPlease enable notifications for this app in system settings.",
+  "push_permission_btn_dismiss": "Don't remind me",
+  "push_permission_btn_later": "Later",
+  "push_permission_btn_settings": "Go to Settings"
 }

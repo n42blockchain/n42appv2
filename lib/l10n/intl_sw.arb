@@ -1982,5 +1982,10 @@
   "g_market_7d_change": "Mabadiliko ya 7D",
   "g_market_30d_change": "Mabadiliko ya 30D",
   "g_market_depth": "Undani wa Soko",
-  "g_market_no_chart": "Hakuna data ya chati"
+  "g_market_no_chart": "Hakuna data ya chati",
+  "push_permission_dialog_title": "Arifa zimezimwa",
+  "push_permission_dialog_content": "Arifa za kusukuma zimezimwa. Unaweza kukosa ujumbe wa mazungumzo na arifa za uhamisho.\n\nTafadhali wezesha arifa kwa programu hii katika mipangilio ya mfumo.",
+  "push_permission_btn_dismiss": "Usikumbushe tena",
+  "push_permission_btn_later": "Baadaye",
+  "push_permission_btn_settings": "Nenda Mipangilio"
 }

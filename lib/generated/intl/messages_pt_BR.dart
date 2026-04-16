@@ -4159,6 +4159,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "please_input_address": MessageLookupByLibrary.simpleMessage(
       "Por favor, digite o endereço",
     ),
+    "push_permission_btn_dismiss": MessageLookupByLibrary.simpleMessage(
+      "Não lembrar mais",
+    ),
+    "push_permission_btn_later": MessageLookupByLibrary.simpleMessage(
+      "Mais tarde",
+    ),
+    "push_permission_btn_settings": MessageLookupByLibrary.simpleMessage(
+      "Ir para Configurações",
+    ),
+    "push_permission_dialog_content": MessageLookupByLibrary.simpleMessage(
+      "As notificações push estão desativadas. Você pode perder mensagens de chat e alertas de transferência.\n\nAtive as notificações para este aplicativo nas configurações do sistema.",
+    ),
+    "push_permission_dialog_title": MessageLookupByLibrary.simpleMessage(
+      "Notificações desativadas",
+    ),
     "repeatPassword": MessageLookupByLibrary.simpleMessage(
       "Digite a Senha Novamente",
     ),

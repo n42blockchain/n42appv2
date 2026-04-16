@@ -3049,6 +3049,19 @@ class MessageLookup extends MessageLookupByLibrary {
       "비밀번호를 입력하세요",
     ),
     "please_input_address": MessageLookupByLibrary.simpleMessage("주소를 입력하세요"),
+    "push_permission_btn_dismiss": MessageLookupByLibrary.simpleMessage(
+      "다시 알리지 않기",
+    ),
+    "push_permission_btn_later": MessageLookupByLibrary.simpleMessage("나중에"),
+    "push_permission_btn_settings": MessageLookupByLibrary.simpleMessage(
+      "설정으로 이동",
+    ),
+    "push_permission_dialog_content": MessageLookupByLibrary.simpleMessage(
+      "푸시 알림이 비활성화되어 있습니다. 채팅 메시지와 이체 알림을 놓칠 수 있습니다.\n\n시스템 설정에서 이 앱의 알림을 활성화하세요.",
+    ),
+    "push_permission_dialog_title": MessageLookupByLibrary.simpleMessage(
+      "알림이 비활성화됨",
+    ),
     "repeatPassword": MessageLookupByLibrary.simpleMessage("비밀번호 다시 입력"),
     "rest_Choose_password": MessageLookupByLibrary.simpleMessage(
       "비밀번호 선택(8~18자)",

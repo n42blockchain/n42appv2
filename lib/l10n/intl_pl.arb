@@ -1989,5 +1989,10 @@
         "type": "String"
       }
     }
-  }
+  },
+  "push_permission_dialog_title": "Powiadomienia wyłączone",
+  "push_permission_dialog_content": "Powiadomienia push są wyłączone. Możesz przegapić wiadomości czatu i alerty o przelewach.\n\nWłącz powiadomienia dla tej aplikacji w ustawieniach systemowych.",
+  "push_permission_btn_dismiss": "Nie przypominaj",
+  "push_permission_btn_later": "Później",
+  "push_permission_btn_settings": "Przejdź do ustawień"
 }

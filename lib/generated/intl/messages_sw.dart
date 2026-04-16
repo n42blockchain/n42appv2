@@ -4180,6 +4180,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "please_input_address": MessageLookupByLibrary.simpleMessage(
       "Tafadhali Ingiza Anwani",
     ),
+    "push_permission_btn_dismiss": MessageLookupByLibrary.simpleMessage(
+      "Usikumbushe tena",
+    ),
+    "push_permission_btn_later": MessageLookupByLibrary.simpleMessage(
+      "Baadaye",
+    ),
+    "push_permission_btn_settings": MessageLookupByLibrary.simpleMessage(
+      "Nenda Mipangilio",
+    ),
+    "push_permission_dialog_content": MessageLookupByLibrary.simpleMessage(
+      "Arifa za kusukuma zimezimwa. Unaweza kukosa ujumbe wa mazungumzo na arifa za uhamisho.\n\nTafadhali wezesha arifa kwa programu hii katika mipangilio ya mfumo.",
+    ),
+    "push_permission_dialog_title": MessageLookupByLibrary.simpleMessage(
+      "Arifa zimezimwa",
+    ),
     "repeatPassword": MessageLookupByLibrary.simpleMessage(
       "Weka tena Nenosiri",
     ),

@@ -3935,6 +3935,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "please_input_address": MessageLookupByLibrary.simpleMessage(
       "Please Input Address",
     ),
+    "push_permission_btn_dismiss": MessageLookupByLibrary.simpleMessage(
+      "Don\'t remind me",
+    ),
+    "push_permission_btn_later": MessageLookupByLibrary.simpleMessage("Later"),
+    "push_permission_btn_settings": MessageLookupByLibrary.simpleMessage(
+      "Go to Settings",
+    ),
+    "push_permission_dialog_content": MessageLookupByLibrary.simpleMessage(
+      "Push notifications are disabled. You may miss chat messages and transfer alerts.\n\nPlease enable notifications for this app in system settings.",
+    ),
+    "push_permission_dialog_title": MessageLookupByLibrary.simpleMessage(
+      "Notifications Disabled",
+    ),
     "repeatPassword": MessageLookupByLibrary.simpleMessage("Re-enter Password"),
     "rest_Choose_password": MessageLookupByLibrary.simpleMessage(
       "Choose a password(8~18 characters)",

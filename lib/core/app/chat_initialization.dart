@@ -497,6 +497,8 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
         previousStatus != AuthStatus.authenticated) {
       unawaited(clearPendingCancelledChatDataPurgeCompat());
       N42Chat.notifyUserChanged();
+      // Chat 登录成功后检查推送权限，未开启则提醒用户
+      AppPushUtils.checkAndPromptPermission();
       return;
     }
 

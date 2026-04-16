@@ -1989,5 +1989,10 @@
         "type": "String"
       }
     }
-  }
+  },
+  "push_permission_dialog_title": "Notifikasi Dinonaktifkan",
+  "push_permission_dialog_content": "Notifikasi push dinonaktifkan. Anda mungkin melewatkan pesan obrolan dan peringatan transfer.\n\nAktifkan notifikasi untuk aplikasi ini di pengaturan sistem.",
+  "push_permission_btn_dismiss": "Jangan ingatkan lagi",
+  "push_permission_btn_later": "Nanti",
+  "push_permission_btn_settings": "Buka Pengaturan"
 }

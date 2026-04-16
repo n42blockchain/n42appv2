@@ -4064,6 +4064,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "please_input_address": MessageLookupByLibrary.simpleMessage(
       "Silakan Masukkan Alamat",
     ),
+    "push_permission_btn_dismiss": MessageLookupByLibrary.simpleMessage(
+      "Jangan ingatkan lagi",
+    ),
+    "push_permission_btn_later": MessageLookupByLibrary.simpleMessage("Nanti"),
+    "push_permission_btn_settings": MessageLookupByLibrary.simpleMessage(
+      "Buka Pengaturan",
+    ),
+    "push_permission_dialog_content": MessageLookupByLibrary.simpleMessage(
+      "Notifikasi push dinonaktifkan. Anda mungkin melewatkan pesan obrolan dan peringatan transfer.\n\nAktifkan notifikasi untuk aplikasi ini di pengaturan sistem.",
+    ),
+    "push_permission_dialog_title": MessageLookupByLibrary.simpleMessage(
+      "Notifikasi Dinonaktifkan",
+    ),
     "repeatPassword": MessageLookupByLibrary.simpleMessage(
       "Masukkan Ulang Kata Sandi",
     ),

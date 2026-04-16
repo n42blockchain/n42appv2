@@ -4035,6 +4035,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "please_input_address": MessageLookupByLibrary.simpleMessage(
       "Zadejte adresu",
     ),
+    "push_permission_btn_dismiss": MessageLookupByLibrary.simpleMessage(
+      "Nepřipomínat",
+    ),
+    "push_permission_btn_later": MessageLookupByLibrary.simpleMessage(
+      "Později",
+    ),
+    "push_permission_btn_settings": MessageLookupByLibrary.simpleMessage(
+      "Přejít do nastavení",
+    ),
+    "push_permission_dialog_content": MessageLookupByLibrary.simpleMessage(
+      "Nabízená oznámení jsou zakázána. Můžete přijít o zprávy v chatu a upozornění na převody.\n\nPovolte oznámení pro tuto aplikaci v nastavení systému.",
+    ),
+    "push_permission_dialog_title": MessageLookupByLibrary.simpleMessage(
+      "Oznámení jsou zakázána",
+    ),
     "repeatPassword": MessageLookupByLibrary.simpleMessage(
       "Znovu zadejte heslo",
     ),

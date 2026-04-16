@@ -1982,5 +1982,10 @@
   "g_market_7d_change": "Зміна 7D",
   "g_market_30d_change": "Зміна 30D",
   "g_market_depth": "Глибина ринку",
-  "g_market_no_chart": "Немає даних діаграми"
+  "g_market_no_chart": "Немає даних діаграми",
+  "push_permission_dialog_title": "Сповіщення вимкнені",
+  "push_permission_dialog_content": "Push-сповіщення вимкнені. Ви можете пропустити повідомлення чату та сповіщення про перекази.\n\nБудь ласка, увімкніть сповіщення для цього додатку в системних налаштуваннях.",
+  "push_permission_btn_dismiss": "Більше не нагадувати",
+  "push_permission_btn_later": "Пізніше",
+  "push_permission_btn_settings": "Перейти до налаштувань"
 }

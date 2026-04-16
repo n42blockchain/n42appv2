@@ -4227,6 +4227,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "please_input_address": MessageLookupByLibrary.simpleMessage(
       "Inserisci l\'indirizzo",
     ),
+    "push_permission_btn_dismiss": MessageLookupByLibrary.simpleMessage(
+      "Non ricordare più",
+    ),
+    "push_permission_btn_later": MessageLookupByLibrary.simpleMessage(
+      "Più tardi",
+    ),
+    "push_permission_btn_settings": MessageLookupByLibrary.simpleMessage(
+      "Vai alle impostazioni",
+    ),
+    "push_permission_dialog_content": MessageLookupByLibrary.simpleMessage(
+      "Le notifiche push sono disabilitate. Potresti perdere messaggi in chat e avvisi di trasferimento.\n\nAbilita le notifiche per questa app nelle impostazioni di sistema.",
+    ),
+    "push_permission_dialog_title": MessageLookupByLibrary.simpleMessage(
+      "Notifiche disabilitate",
+    ),
     "repeatPassword": MessageLookupByLibrary.simpleMessage(
       "Reinserisci la password",
     ),

@@ -1989,5 +1989,10 @@
         "type": "String"
       }
     }
-  }
+  },
+  "push_permission_dialog_title": "Уведомления отключены",
+  "push_permission_dialog_content": "Push-уведомления отключены. Вы можете пропустить сообщения чата и уведомления о переводах.\n\nВключите уведомления для этого приложения в настройках системы.",
+  "push_permission_btn_dismiss": "Не напоминать",
+  "push_permission_btn_later": "Позже",
+  "push_permission_btn_settings": "Перейти в настройки"
 }

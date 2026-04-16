@@ -1989,5 +1989,10 @@
         "type": "String"
       }
     }
-  }
+  },
+  "push_permission_dialog_title": "Bildirimler devre dışı",
+  "push_permission_dialog_content": "Anlık bildirimler devre dışı. Sohbet mesajlarını ve transfer uyarılarını kaçırabilirsiniz.\n\nLütfen sistem ayarlarından bu uygulama için bildirimleri etkinleştirin.",
+  "push_permission_btn_dismiss": "Bir daha hatırlatma",
+  "push_permission_btn_later": "Sonra",
+  "push_permission_btn_settings": "Ayarlara Git"
 }

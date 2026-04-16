@@ -3985,6 +3985,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "please_input_address": MessageLookupByLibrary.simpleMessage(
       "Vui lòng nhập địa chỉ",
     ),
+    "push_permission_btn_dismiss": MessageLookupByLibrary.simpleMessage(
+      "Không nhắc lại",
+    ),
+    "push_permission_btn_later": MessageLookupByLibrary.simpleMessage("Để sau"),
+    "push_permission_btn_settings": MessageLookupByLibrary.simpleMessage(
+      "Đến Cài đặt",
+    ),
+    "push_permission_dialog_content": MessageLookupByLibrary.simpleMessage(
+      "Thông báo đẩy bị tắt. Bạn có thể bỏ lỡ tin nhắn trò chuyện và cảnh báo chuyển khoản.\n\nVui lòng bật thông báo cho ứng dụng này trong cài đặt hệ thống.",
+    ),
+    "push_permission_dialog_title": MessageLookupByLibrary.simpleMessage(
+      "Thông báo bị tắt",
+    ),
     "repeatPassword": MessageLookupByLibrary.simpleMessage("Nhập lại mật khẩu"),
     "rest_Choose_password": MessageLookupByLibrary.simpleMessage(
       "Chọn mật khẩu (8~18 ký tự)",

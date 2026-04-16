@@ -1989,5 +1989,10 @@
         "type": "String"
       }
     }
-  }
+  },
+  "push_permission_dialog_title": "Thông báo bị tắt",
+  "push_permission_dialog_content": "Thông báo đẩy bị tắt. Bạn có thể bỏ lỡ tin nhắn trò chuyện và cảnh báo chuyển khoản.\n\nVui lòng bật thông báo cho ứng dụng này trong cài đặt hệ thống.",
+  "push_permission_btn_dismiss": "Không nhắc lại",
+  "push_permission_btn_later": "Để sau",
+  "push_permission_btn_settings": "Đến Cài đặt"
 }

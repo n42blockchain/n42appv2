@@ -3923,6 +3923,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "please_input_address": MessageLookupByLibrary.simpleMessage(
       "कृपया पत्ता प्रविष्ट करा",
     ),
+    "push_permission_btn_dismiss": MessageLookupByLibrary.simpleMessage(
+      "पुन्हा आठवण देऊ नका",
+    ),
+    "push_permission_btn_later": MessageLookupByLibrary.simpleMessage("नंतर"),
+    "push_permission_btn_settings": MessageLookupByLibrary.simpleMessage(
+      "सेटिंग्जवर जा",
+    ),
+    "push_permission_dialog_content": MessageLookupByLibrary.simpleMessage(
+      "पुश नोटिफिकेशन अक्षम आहेत. तुम्हाला चॅट संदेश आणि ट्रान्सफर अलर्ट चुकू शकतात.\n\nकृपया सिस्टम सेटिंग्जमध्ये या अ‍ॅपसाठी नोटिफिकेशन सक्षम करा.",
+    ),
+    "push_permission_dialog_title": MessageLookupByLibrary.simpleMessage(
+      "सूचना अक्षम आहेत",
+    ),
     "repeatPassword": MessageLookupByLibrary.simpleMessage(
       "पासवर्ड पुन्हा एंटर करा",
     ),

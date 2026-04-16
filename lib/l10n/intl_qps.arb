@@ -1982,5 +1982,10 @@
   "g_market_7d_change": "[# 7Ð Çĥàñĝé ~~~~#]",
   "g_market_30d_change": "[# 30Ð Çĥàñĝé ~~~~~#]",
   "g_market_depth": "[# Ṁàŗķéť Ðéƥťĥ ~~~~~~#]",
-  "g_market_no_chart": "[# Ñö çĥàŗť ðàťà ~~~~~~#]"
+  "g_market_no_chart": "[# Ñö çĥàŗť ðàťà ~~~~~~#]",
+  "push_permission_dialog_title": "[# Ñötïfïcätïöñs Ðïsäblëð ~~~#]",
+  "push_permission_dialog_content": "[# Püsh ñötïfïcätïöñs ärë ðïsäblëð. Ýöü mäý mïss çhät mëssägës äñð träñsfër äläŗts.\n\nPlëäsë ëñäblë ñötïfïcätïöñs föŗ thïs äpp ïñ sýstëm sëttïñgs. ~~~~~~~~~~~~~~~~~~~#]",
+  "push_permission_btn_dismiss": "[# Ðöñ't ŗëmïñð më ~~~#]",
+  "push_permission_btn_later": "[# Lätëŗ ~#]",
+  "push_permission_btn_settings": "[# Gö tö Sëttïñgs ~~~#]"
 }

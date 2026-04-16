@@ -1989,5 +1989,10 @@
         "type": "String"
       }
     }
-  }
+  },
+  "push_permission_dialog_title": "通知が無効です",
+  "push_permission_dialog_content": "プッシュ通知が無効になっています。チャットメッセージや送金アラートを見逃す可能性があります。\n\nシステム設定でこのアプリの通知を有効にしてください。",
+  "push_permission_btn_dismiss": "次から表示しない",
+  "push_permission_btn_later": "後で",
+  "push_permission_btn_settings": "設定に移動"
 }

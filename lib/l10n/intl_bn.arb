@@ -1982,5 +1982,10 @@
   "g_market_7d_change": "7D পরিবর্তন",
   "g_market_30d_change": "30D পরিবর্তন",
   "g_market_depth": "বাজারের গভীরতা",
-  "g_market_no_chart": "কোন চার্ট ডেটা নেই"
+  "g_market_no_chart": "কোন চার্ট ডেটা নেই",
+  "push_permission_dialog_title": "বিজ্ঞপ্তি নিষ্ক্রিয়",
+  "push_permission_dialog_content": "পুশ নোটিফিকেশন নিষ্ক্রিয়। আপনি চ্যাট বার্তা এবং ট্রান্সফার সতর্কতা মিস করতে পারেন।\n\nসিস্টেম সেটিংসে এই অ্যাপের জন্য নোটিফিকেশন সক্রিয় করুন।",
+  "push_permission_btn_dismiss": "আর মনে করিয়ে দিও না",
+  "push_permission_btn_later": "পরে",
+  "push_permission_btn_settings": "সেটিংসে যান"
 }

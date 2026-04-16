@@ -260,12 +260,16 @@ class _MessageListState extends ConsumerState<MessageList> {
         getData: (int page, int pageSize) async {
           //调用接口
           //获取消息列表
+          debugPrint('[MessageList] 请求消息列表 page=$page pageSize=$pageSize');
           MessageModel marketData = await userInfoApi.getMsgNoticeList(
             page: page,
             pageSize: pageSize,
           );
+          debugPrint('[MessageList] 响应 error=${marketData.error} data=${marketData.data}');
           if (!marketData.error && marketData.data != null) {
-            return (marketData.data['list'] as List);
+            final list = marketData.data['list'] as List;
+            debugPrint('[MessageList] 获取到 ${list.length} 条消息');
+            return list;
           }
           return [];
         },

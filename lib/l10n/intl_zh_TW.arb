@@ -1995,5 +1995,10 @@
   "g_market_7d_change": "7D變化",
   "g_market_30d_change": "30D變化",
   "g_market_depth": "市場深度",
-  "g_market_no_chart": "無圖表數據"
+  "g_market_no_chart": "無圖表數據",
+  "push_permission_dialog_title": "推送通知未開啟",
+  "push_permission_dialog_content": "您尚未開啟推送通知權限，將無法及時收到聊天訊息和轉帳提醒。\n\n建議前往系統設定為本應用開啟通知權限。",
+  "push_permission_btn_dismiss": "不再提醒",
+  "push_permission_btn_later": "稍後再說",
+  "push_permission_btn_settings": "去設定"
 }

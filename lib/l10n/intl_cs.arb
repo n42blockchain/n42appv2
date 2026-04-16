@@ -1982,5 +1982,10 @@
   "g_market_7d_change": "Změna 7D",
   "g_market_30d_change": "30D změna",
   "g_market_depth": "Hloubka trhu",
-  "g_market_no_chart": "Žádná data grafu"
+  "g_market_no_chart": "Žádná data grafu",
+  "push_permission_dialog_title": "Oznámení jsou zakázána",
+  "push_permission_dialog_content": "Nabízená oznámení jsou zakázána. Můžete přijít o zprávy v chatu a upozornění na převody.\n\nPovolte oznámení pro tuto aplikaci v nastavení systému.",
+  "push_permission_btn_dismiss": "Nepřipomínat",
+  "push_permission_btn_later": "Později",
+  "push_permission_btn_settings": "Přejít do nastavení"
 }

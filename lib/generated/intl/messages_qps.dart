@@ -4862,6 +4862,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "please_input_address": MessageLookupByLibrary.simpleMessage(
       "[# Ƥĺéàšé Ìñƥüť Àððŗéšš ~~~~~~~~~~#]",
     ),
+    "push_permission_btn_dismiss": MessageLookupByLibrary.simpleMessage(
+      "[# Ðöñ\'t ŗëmïñð më ~~~#]",
+    ),
+    "push_permission_btn_later": MessageLookupByLibrary.simpleMessage(
+      "[# Lätëŗ ~#]",
+    ),
+    "push_permission_btn_settings": MessageLookupByLibrary.simpleMessage(
+      "[# Gö tö Sëttïñgs ~~~#]",
+    ),
+    "push_permission_dialog_content": MessageLookupByLibrary.simpleMessage(
+      "[# Püsh ñötïfïcätïöñs ärë ðïsäblëð. Ýöü mäý mïss çhät mëssägës äñð träñsfër äläŗts.\n\nPlëäsë ëñäblë ñötïfïcätïöñs föŗ thïs äpp ïñ sýstëm sëttïñgs. ~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "push_permission_dialog_title": MessageLookupByLibrary.simpleMessage(
+      "[# Ñötïfïcätïöñs Ðïsäblëð ~~~#]",
+    ),
     "repeatPassword": MessageLookupByLibrary.simpleMessage(
       "[# Ŗé-éñťéŗ Ƥàššŵöŗð ~~~~~~~~#]",
     ),

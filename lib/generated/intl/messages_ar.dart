@@ -3896,6 +3896,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "please_input_address": MessageLookupByLibrary.simpleMessage(
       "الرجاء إدخال العنوان",
     ),
+    "push_permission_btn_dismiss": MessageLookupByLibrary.simpleMessage(
+      "لا تذكرني",
+    ),
+    "push_permission_btn_later": MessageLookupByLibrary.simpleMessage("لاحقاً"),
+    "push_permission_btn_settings": MessageLookupByLibrary.simpleMessage(
+      "الذهاب إلى الإعدادات",
+    ),
+    "push_permission_dialog_content": MessageLookupByLibrary.simpleMessage(
+      "إشعارات الدفع معطلة. قد تفوتك رسائل الدردشة وتنبيهات التحويل.\n\nيرجى تفعيل الإشعارات لهذا التطبيق في إعدادات النظام.",
+    ),
+    "push_permission_dialog_title": MessageLookupByLibrary.simpleMessage(
+      "الإشعارات معطلة",
+    ),
     "repeatPassword": MessageLookupByLibrary.simpleMessage(
       "أعد إدخال كلمة المرور",
     ),

@@ -16658,6 +16658,56 @@ class S {
       args: [],
     );
   }
+
+  /// `Notifications Disabled`
+  String get push_permission_dialog_title {
+    return Intl.message(
+      'Notifications Disabled',
+      name: 'push_permission_dialog_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Push notifications are disabled. You may miss chat messages and transfer alerts.\n\nPlease enable notifications for this app in system settings.`
+  String get push_permission_dialog_content {
+    return Intl.message(
+      'Push notifications are disabled. You may miss chat messages and transfer alerts.\n\nPlease enable notifications for this app in system settings.',
+      name: 'push_permission_dialog_content',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Don't remind me`
+  String get push_permission_btn_dismiss {
+    return Intl.message(
+      'Don\'t remind me',
+      name: 'push_permission_btn_dismiss',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Later`
+  String get push_permission_btn_later {
+    return Intl.message(
+      'Later',
+      name: 'push_permission_btn_later',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Go to Settings`
+  String get push_permission_btn_settings {
+    return Intl.message(
+      'Go to Settings',
+      name: 'push_permission_btn_settings',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

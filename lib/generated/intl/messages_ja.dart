@@ -3178,6 +3178,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "please_input_address": MessageLookupByLibrary.simpleMessage(
       "アドレスを入力してください",
     ),
+    "push_permission_btn_dismiss": MessageLookupByLibrary.simpleMessage(
+      "次から表示しない",
+    ),
+    "push_permission_btn_later": MessageLookupByLibrary.simpleMessage("後で"),
+    "push_permission_btn_settings": MessageLookupByLibrary.simpleMessage(
+      "設定に移動",
+    ),
+    "push_permission_dialog_content": MessageLookupByLibrary.simpleMessage(
+      "プッシュ通知が無効になっています。チャットメッセージや送金アラートを見逃す可能性があります。\n\nシステム設定でこのアプリの通知を有効にしてください。",
+    ),
+    "push_permission_dialog_title": MessageLookupByLibrary.simpleMessage(
+      "通知が無効です",
+    ),
     "repeatPassword": MessageLookupByLibrary.simpleMessage("パスワードを再入力"),
     "rest_Choose_password": MessageLookupByLibrary.simpleMessage(
       "パスワードを選択（8〜18文字）",
