@@ -30,7 +30,9 @@ import '../services/chat_lock_service.dart';
 import '../services/download_service.dart';
 import '../services/lottie_cache_service.dart';
 import '../services/vault_service.dart';
+import '../services/local_llm/local_llm_service.dart';
 import '../services/reminder_service.dart';
+import '../../data/datasources/local_ai_datasource.dart';
 import '../../services/voip/processing/audio_processing_service.dart';
 import '../../services/voip/processing/video_processing_service.dart';
 import '../services/auto_download_policy_service.dart';
@@ -326,6 +328,17 @@ Future<void> _registerServices(N42ChatConfig config) async {
   getIt.registerLazySingleton<VaultService>(
     () => VaultService(lockService: getIt<ChatLockService>()),
     dispose: (service) => service.dispose(),
+  );
+
+  // 本地 LLM 推理
+  getIt.registerLazySingleton<LocalLlmService>(
+    () => LocalLlmService(),
+    dispose: (service) => service.dispose(),
+  );
+
+  // 本地 AI 数据源（设备端 Gemma 推理，作为云端 AiService 的 fallback）
+  getIt.registerLazySingleton<LocalAiDatasource>(
+    () => LocalAiDatasource(getIt<LocalLlmService>()),
   );
 
   // 待办提醒

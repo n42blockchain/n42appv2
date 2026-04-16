@@ -26,6 +26,7 @@ import 'domain/entities/conversation_entity.dart';
 import 'domain/entities/user_entity.dart';
 import 'domain/entities/user_profile_entity.dart';
 import 'core/router/app_router.dart';
+import 'core/services/local_llm/local_llm_service.dart';
 import 'domain/protocols/passkey_bridge_protocol.dart';
 import 'domain/protocols/token_gate_bridge_protocol.dart';
 import 'domain/repositories/auth_repository.dart';
@@ -860,6 +861,16 @@ class N42Chat {
   /// 注入 Token-Gate 验证能力。
   static void configureTokenGateBridge(TokenGateBridge? bridge) {
     _tokenGateBridge = bridge;
+  }
+
+  /// 初始化本地 LLM（启动时自动加载上次使用的模型）。
+  ///
+  /// 调用后 `LocalLlmService` 和 `LocalAiDatasource` 可用，
+  /// AI 功能会自动在云端与本地之间 fallback。
+  static Future<void> initLocalLlm() async {
+    if (!getIt.isRegistered<LocalLlmService>()) return;
+    final service = getIt<LocalLlmService>();
+    await service.autoLoad();
   }
 
   /// 释放通话管理器
