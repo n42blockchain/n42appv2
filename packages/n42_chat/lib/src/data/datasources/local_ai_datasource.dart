@@ -162,12 +162,21 @@ class LocalAiDatasource implements AiService {
     for (final msg in messages) {
       final role = msg.role == AiRole.user ? 'user' : 'model';
       buffer.writeln('<start_of_turn>$role');
-      buffer.writeln(msg.content);
+      buffer.writeln(_sanitize(msg.content));
       buffer.writeln('<end_of_turn>');
     }
 
     buffer.writeln('<start_of_turn>model');
     return buffer.toString();
+  }
+
+  /// 过滤 Gemma 控制 token，防止 prompt injection。
+  static String _sanitize(String input) {
+    return input
+        .replaceAll('<start_of_turn>', '< start_of_turn>')
+        .replaceAll('<end_of_turn>', '< end_of_turn>')
+        .replaceAll('<bos>', '< bos>')
+        .replaceAll('<eos>', '< eos>');
   }
 
   @override

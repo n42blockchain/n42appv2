@@ -88,8 +88,15 @@ class LocalLlmService {
     return results;
   }
 
+  bool _isDownloading = false;
+
   /// 下载模型文件。
   Future<bool> downloadModel(LocalModelInfo model) async {
+    if (_isDownloading) {
+      debugLog('LocalLlm: Download already in progress, ignoring');
+      return false;
+    }
+
     final path = await _modelPath(model.id);
     final file = File(path);
     if (await file.exists() && await file.length() > 0) {
@@ -97,6 +104,7 @@ class LocalLlmService {
       return true;
     }
 
+    _isDownloading = true;
     _downloadCancelToken?.cancel();
     _downloadCancelToken = CancelToken();
 
@@ -128,8 +136,10 @@ class LocalLlmService {
         totalBytes: model.fileSizeBytes,
       ));
       debugLog('LocalLlm: Model ${model.id} downloaded to $path');
+      _isDownloading = false;
       return true;
     } catch (e) {
+      _isDownloading = false;
       if (e is DioException && e.type == DioExceptionType.cancel) {
         downloadProgress.add(ModelDownloadProgress(
           modelId: model.id,

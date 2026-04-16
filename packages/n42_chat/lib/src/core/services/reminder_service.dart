@@ -55,6 +55,7 @@ class ReminderService {
     final idx = list.indexWhere((e) => e.id == id);
     if (idx < 0) return;
     list[idx] = list[idx].copyWith(isCompleted: true);
+    _notifiedIds.remove(id);
     await _persist(prefs, list);
   }
 
@@ -63,6 +64,7 @@ class ReminderService {
     final prefs = await SharedPreferences.getInstance();
     final list = await _loadAll(prefs);
     list.removeWhere((e) => e.id == id);
+    _notifiedIds.remove(id);
     await _persist(prefs, list);
   }
 

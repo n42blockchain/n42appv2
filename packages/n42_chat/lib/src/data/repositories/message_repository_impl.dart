@@ -488,11 +488,16 @@ class MessageRepositoryImpl implements IMessageRepository {
     }
 
     // 2) redact 原消息，清空服务端可见的媒体 URL
-    await _messageDataSource.redactMessage(
-      roomId,
-      messageId,
-      reason: 'view-once consumed',
-    );
+    try {
+      await _messageDataSource.redactMessage(
+        roomId,
+        messageId,
+        reason: 'view-once consumed',
+      );
+    } catch (e) {
+      debugLog('markViewOnceConsumed: redact failed for $messageId: $e');
+      return false;
+    }
 
     // 3) 清理本地缓存（若媒体已缓存）——复用 MediaLifecycleService 会自动处理 redacted
     return true;

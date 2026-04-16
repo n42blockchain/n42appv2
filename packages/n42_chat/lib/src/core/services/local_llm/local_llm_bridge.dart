@@ -95,12 +95,20 @@ class LocalLlmBridge {
     }
   }
 
-  /// 流式推理（逐 token 返回）。
+  StreamController<String>? _activeStreamController;
+
+  /// 流式推理（逐 token 返回）。同一时间仅允许一路流。
   Stream<String> generateStream({
     required String prompt,
     int maxOutputTokens = 512,
   }) {
+    // 关闭上一路流，防止 EventChannel 串台
+    if (_activeStreamController != null && !_activeStreamController!.isClosed) {
+      _activeStreamController!.close();
+    }
+
     final controller = StreamController<String>();
+    _activeStreamController = controller;
 
     _channel.invokeMethod('startStreamGenerate', {
       'prompt': prompt,

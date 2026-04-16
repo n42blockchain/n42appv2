@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:uuid/uuid.dart';
+
 import '../../domain/entities/token_gate_entity.dart';
 import '../../domain/protocols/token_gate_bridge_protocol.dart';
 import '../utils/debug_log.dart';
@@ -89,7 +91,7 @@ class TokenGateVerificationService {
     required String matrixUserId,
     required String roomId,
   }) async {
-    final nonce = DateTime.now().millisecondsSinceEpoch.toString();
+    final nonce = const Uuid().v4();
     final message = 'N42 Token Gate Binding\n'
         'Matrix User: $matrixUserId\n'
         'Room: $roomId\n'

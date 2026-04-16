@@ -115,7 +115,9 @@ class CallManager {
   void _clearActiveRoom() {
     if (_activeRoom == null) return;
     _activeRoom = null;
-    _activeRoomController.add(null);
+    if (!_activeRoomController.isClosed) {
+      _activeRoomController.add(null);
+    }
   }
 
   void _setPendingAnswer(bool pending) {

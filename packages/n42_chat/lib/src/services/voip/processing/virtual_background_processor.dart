@@ -31,6 +31,7 @@ class VirtualBackgroundProcessor {
   SelfieSegmenter? _segmenter;
   VirtualBackground _background = const VirtualBackground.none();
   img.Image? _backgroundImage;
+  Uint8List? _bgImagePngCache; // 预编码 PNG，避免每帧重复编码
   bool _processing = false;
   int _processedFrames = 0;
   int _skippedFrames = 0;
@@ -58,12 +59,16 @@ class VirtualBackgroundProcessor {
   Future<void> updateBackground(VirtualBackground background) async {
     _background = background;
     _backgroundImage = null;
+    _bgImagePngCache = null;
 
     if (background is VirtualBackgroundImage) {
       try {
         final bytes = await _loadImageFile(background.assetOrFilePath);
         if (bytes != null) {
           _backgroundImage = img.decodeImage(bytes);
+          if (_backgroundImage != null) {
+            _bgImagePngCache = Uint8List.fromList(img.encodePng(_backgroundImage!));
+          }
         }
       } catch (e) {
         debugLog('VirtualBackground: Failed to load bg image: $e');
@@ -126,9 +131,7 @@ class VirtualBackgroundProcessor {
           maskWidth: mask.width,
           maskHeight: mask.height,
           background: _background,
-          bgImageBytes: _backgroundImage != null
-              ? Uint8List.fromList(img.encodePng(_backgroundImage!))
-              : null,
+          bgImageBytes: _bgImagePngCache,
           bgImageWidth: _backgroundImage?.width,
           bgImageHeight: _backgroundImage?.height,
         ),

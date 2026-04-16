@@ -82,6 +82,19 @@ class _FiatRampPageState extends State<FiatRampPage> {
     final controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setNavigationDelegate(NavigationDelegate(
+        onNavigationRequest: (request) {
+          final uri = Uri.tryParse(request.url);
+          if (uri == null) return NavigationDecision.prevent;
+          final host = uri.host.toLowerCase();
+          const allowed = [
+            'moonpay.com', 'buy.moonpay.com', 'sell.moonpay.com',
+            'global.transak.com', 'transak.com',
+          ];
+          if (allowed.any((d) => host == d || host.endsWith('.$d'))) {
+            return NavigationDecision.navigate;
+          }
+          return NavigationDecision.prevent;
+        },
         onPageStarted: (_) {
           if (mounted) setState(() => _loading = true);
         },
