@@ -18,12 +18,6 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        repositories {
-            flatDir {
-                dirs("$rootDir/app/libs")
-                //dirs project(':flutter_mining').file('libs')
-            }
-        }
     }
 }
 
