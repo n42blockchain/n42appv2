@@ -103,6 +103,11 @@ class FirebasePushService implements IPushNotificationService {
   /// 上次同步时间（用于过滤旧消息）
   DateTime? _lastSyncTime;
 
+  /// 最近已显示通知的 eventId 集合（用于 FCM/Sync 双通道去重）
+  /// 使用 Queue-like 机制限制大小，避免无界增长
+  final Set<String> _recentlyNotifiedEventIds = {};
+  static const int _maxRecentEventIds = 200;
+
   FirebasePushService(
     this._client, {
     this.pushGatewayUrl,
@@ -230,6 +235,14 @@ class FirebasePushService implements IPushNotificationService {
       _androidMessageChannelForConfig(config).id;
 
   @visibleForTesting
+  bool markEventAsNotifiedForTest(String eventId) =>
+      _markEventAsNotified(eventId);
+
+  @visibleForTesting
+  int get recentlyNotifiedEventCountForTest =>
+      _recentlyNotifiedEventIds.length;
+
+  @visibleForTesting
   static Future<NotificationConfig> loadPersistedNotificationConfigForTest() =>
       _loadPersistedNotificationConfig();
 
@@ -245,6 +258,19 @@ class FirebasePushService implements IPushNotificationService {
         sound: allowNativePreview && config.playSound,
       ),
     );
+  }
+
+  /// 尝试将 eventId 标记为已通知。返回 true 表示首次标记（应显示通知），
+  /// 返回 false 表示已存在（应跳过，避免重复通知）。
+  bool _markEventAsNotified(String eventId) {
+    if (_recentlyNotifiedEventIds.contains(eventId)) {
+      return false;
+    }
+    _recentlyNotifiedEventIds.add(eventId);
+    if (_recentlyNotifiedEventIds.length > _maxRecentEventIds) {
+      _recentlyNotifiedEventIds.remove(_recentlyNotifiedEventIds.first);
+    }
+    return true;
   }
 
   /// 设置通知配置
@@ -534,6 +560,14 @@ class FirebasePushService implements IPushNotificationService {
     if (roomId != null && _activeRoomId == roomId) {
       debugLog(
         'FirebasePushService: Skipping foreground FCM notification for active room $roomId',
+      );
+      return;
+    }
+
+    // FCM/Sync 双通道去重：如果此 eventId 已经显示过通知，跳过
+    if (eventId != null && !_markEventAsNotified(eventId)) {
+      debugLog(
+        'FirebasePushService: Skipping duplicate foreground notification for event $eventId',
       );
       return;
     }
@@ -880,6 +914,14 @@ class FirebasePushService implements IPushNotificationService {
 
     // 检查免打扰
     if (_notificationConfig.isInDoNotDisturbPeriod()) {
+      return false;
+    }
+
+    // FCM/Sync 双通道去重：如果此 eventId 已经通过 FCM 前台通知显示过，跳过
+    if (!_markEventAsNotified(event.eventId)) {
+      debugLog(
+        'FirebasePushService: Skipping duplicate sync notification for event ${event.eventId}',
+      );
       return false;
     }
 
@@ -1332,6 +1374,7 @@ class FirebasePushService implements IPushNotificationService {
     await _syncSubscription?.cancel();
     _callStateResetTimer?.cancel();
     _roomNotificationIds.clear();
+    _recentlyNotifiedEventIds.clear();
     _isInitialized = false;
   }
 }

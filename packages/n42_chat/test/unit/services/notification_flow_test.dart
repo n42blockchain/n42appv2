@@ -1000,4 +1000,61 @@ void main() {
       });
     }
   });
+
+  // ════════════════════════════════════════════
+  // 18. FCM/Sync 双通道 eventId 去重
+  // ════════════════════════════════════════════
+  group('Event ID deduplication', () {
+    late FirebasePushService service;
+
+    setUp(() {
+      service = FirebasePushService(MockMatrixClient());
+    });
+
+    tearDown(() async {
+      await service.dispose();
+    });
+
+    test('首次标记 eventId 返回 true', () {
+      expect(service.markEventAsNotifiedForTest('\$event1'), isTrue);
+    });
+
+    test('重复标记同一 eventId 返回 false', () {
+      service.markEventAsNotifiedForTest('\$event1');
+      expect(service.markEventAsNotifiedForTest('\$event1'), isFalse);
+    });
+
+    test('不同 eventId 各返回 true', () {
+      expect(service.markEventAsNotifiedForTest('\$event1'), isTrue);
+      expect(service.markEventAsNotifiedForTest('\$event2'), isTrue);
+      expect(service.markEventAsNotifiedForTest('\$event3'), isTrue);
+    });
+
+    test('超过上限时自动淘汰最旧的 eventId', () {
+      // 填充到上限
+      for (var i = 0; i < 200; i++) {
+        service.markEventAsNotifiedForTest('\$fill_$i');
+      }
+      expect(service.recentlyNotifiedEventCountForTest, 200);
+
+      // 再添加一个，应该淘汰最旧的 $fill_0
+      service.markEventAsNotifiedForTest('\$new_event');
+      expect(service.recentlyNotifiedEventCountForTest, 200);
+
+      // $fill_0 已被淘汰，再次标记应返回 true
+      expect(service.markEventAsNotifiedForTest('\$fill_0'), isTrue);
+    });
+
+    test('dispose 后去重集合被清空', () async {
+      service.markEventAsNotifiedForTest('\$event1');
+      expect(service.recentlyNotifiedEventCountForTest, 1);
+
+      await service.dispose();
+      // dispose 后计数归零
+      expect(service.recentlyNotifiedEventCountForTest, 0);
+
+      // 重新创建实例以继续后续测试
+      service = FirebasePushService(MockMatrixClient());
+    });
+  });
 }

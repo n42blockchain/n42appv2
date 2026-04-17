@@ -56,6 +56,7 @@ class AppPushUtils {
   static String? _lastHandledChatRoomId;
   static String? _lastHandledChatEventId;
   static DateTime? _lastHandledChatTapAt;
+  static bool _isFlushing = false;
 
   /// 返回设备的令牌Token
   /// Returns the default FCM token for this device.
@@ -202,10 +203,8 @@ class AppPushUtils {
           } else {
             RemoteNotification? notification = message.notification;
 
-            ///显示通知
-            if (notification != null && notification.android != null) {
-              // flutter_local_notifications 20.0.0 使用命名参数
-              FlutterLocalNotificationsPlugin().show(
+            if (notification != null) {
+              flutterLocalNotificationsPlugin.show(
                 id: notification.hashCode,
                 title: notification.title,
                 body: notification.body,
@@ -215,6 +214,11 @@ class AppPushUtils {
                     channel.name,
                     channelDescription: channel.description,
                     color: Colors.black,
+                  ),
+                  iOS: const DarwinNotificationDetails(
+                    presentAlert: true,
+                    presentBadge: true,
+                    presentSound: true,
                   ),
                 ),
                 payload: jsonStr,
@@ -505,10 +509,14 @@ class AppPushUtils {
     if (roomId == null || !N42Chat.isInitialized) {
       return;
     }
+    // 防止并发重入（可从 onMessageOpenedApp、chatUserStream、initN42Chat 同时触发）
+    if (_isFlushing) return;
+    _isFlushing = true;
     final eventId = _pendingChatEventId;
 
     if (_wasChatNotificationHandledRecently(roomId: roomId, eventId: eventId)) {
       _clearPendingChatNotification();
+      _isFlushing = false;
       return;
     }
 
@@ -520,12 +528,14 @@ class AppPushUtils {
         }
       }
       if (!N42Chat.isLoggedIn) {
+        _isFlushing = false;
         return;
       }
     }
 
     if (_wasChatNotificationHandledRecently(roomId: roomId, eventId: eventId)) {
       _clearPendingChatNotification();
+      _isFlushing = false;
       return;
     }
 
@@ -543,6 +553,7 @@ class AppPushUtils {
       }
     } finally {
       _clearPendingChatNotification();
+      _isFlushing = false;
     }
   }
 
@@ -589,40 +600,53 @@ class AppPushUtils {
     _pendingChatEventId = null;
   }
 
-  /// 登录成功后检查推送权限，若未授权且用户未选择"不再提醒"则弹窗引导。
+  /// 登录成功后检查推送权限，若未授权则先尝试系统弹窗请求，
+  /// 仍被拒绝且用户未选择"不再提醒"时弹对话框引导去设置。
   ///
-  /// 通过全局 navigatorKey 获取 context，不依赖调用方 Widget 的 mounted 状态。
   /// 适用平台：
-  ///   - iOS / Android 13+：用户拒绝后 authorizationStatus == denied
-  ///   - Android < 13：无需显式权限，getNotificationSettings 返回 authorized，
-  ///     说明通知确实可用，不需要提醒。
+  ///   - Android 13+：需要 POST_NOTIFICATIONS 运行时权限
+  ///   - iOS：首次通过 FirebaseMessaging 请求，拒绝后只能引导去设置
+  ///   - Android < 13：getNotificationSettings 返回 authorized，无需处理
   static Future<void> checkAndPromptPermission() async {
-    if (kDebugMode) debugPrint('[PushCheck] ① checkAndPromptPermission called');
     try {
       await Future<void>.delayed(const Duration(milliseconds: 800));
-      if (kDebugMode) debugPrint('[PushCheck] ② after 800ms delay');
 
-      final settings =
+      // 先检查当前状态
+      var settings =
           await FirebaseMessaging.instance.getNotificationSettings();
-      if (kDebugMode) debugPrint('[PushCheck] ③ authorizationStatus = ${settings.authorizationStatus}');
 
-      final enabled =
+      var enabled =
           settings.authorizationStatus == AuthorizationStatus.authorized ||
           settings.authorizationStatus == AuthorizationStatus.provisional;
-      if (enabled) {
-        if (kDebugMode) debugPrint('[PushCheck] ④ notifications enabled, skip');
-        return;
+      if (enabled) return;
+
+      // Android 13+: 尝试通过 permission_handler 触发系统权限弹窗
+      // （FirebaseMessaging.requestPermission 在 Android 上不触发系统弹窗）
+      if (defaultTargetPlatform == TargetPlatform.android) {
+        final status = await Permission.notification.request();
+        if (status.isGranted || status.isProvisional) return;
       }
 
+      // iOS: 尝试通过 Firebase 请求权限（首次会弹系统弹窗）
+      if (defaultTargetPlatform == TargetPlatform.iOS) {
+        settings = await FirebaseMessaging.instance.requestPermission(
+          alert: true,
+          badge: true,
+          sound: true,
+        );
+        enabled =
+            settings.authorizationStatus == AuthorizationStatus.authorized ||
+            settings.authorizationStatus == AuthorizationStatus.provisional;
+        if (enabled) return;
+      }
+
+      // 系统弹窗被拒绝，检查用户是否已选择"不再提醒"
       final dismissed = await SPUtil().getPushPermissionDismissed();
-      if (kDebugMode) debugPrint('[PushCheck] ⑤ dismissed = $dismissed');
       if (dismissed) return;
 
       final ctx = AppGlobals.navigatorKey.currentContext;
-      if (kDebugMode) debugPrint('[PushCheck] ⑥ ctx = $ctx, mounted = ${ctx?.mounted}');
       if (ctx == null || !ctx.mounted) return;
 
-      if (kDebugMode) debugPrint('[PushCheck] ⑦ showing dialog');
       final s = S.of(ctx);
       // ignore: use_build_context_synchronously
       await showDialog<void>(
@@ -656,9 +680,8 @@ class AppPushUtils {
           ],
         ),
       );
-      if (kDebugMode) debugPrint('[PushCheck] ⑧ dialog closed');
-    } catch (e, st) {
-      if (kDebugMode) debugPrint('[PushCheck] ❌ exception: $e\n$st');
+    } catch (e) {
+      if (kDebugMode) debugPrint('checkAndPromptPermission error: $e');
     }
   }
 
