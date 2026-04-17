@@ -441,15 +441,19 @@ class AppPushUtils {
       return;
     }
 
-    _updateBadgeCount();
+    _updateBadgeCountBackground();
     if (kDebugMode) debugPrint('Background: app message ${message.messageId}');
   }
 
-  //更新未读消息数
+  //更新未读消息数（主 isolate 调用，可访问 Riverpod）
   static void _updateBadgeCount() {
     FlutterNewBadger.incrementBadgeCount();
-    // 使用 Riverpod 增加未读消息数
     globalProviderContainer.read(unreadCountProvider.notifier).increment();
+  }
+
+  // 后台 isolate 专用：仅更新角标，不访问 Riverpod（globalProviderContainer 在后台 isolate 中未初始化）
+  static void _updateBadgeCountBackground() {
+    FlutterNewBadger.incrementBadgeCount();
   }
 
   //清理未读消息数
@@ -593,32 +597,32 @@ class AppPushUtils {
   ///   - Android < 13：无需显式权限，getNotificationSettings 返回 authorized，
   ///     说明通知确实可用，不需要提醒。
   static Future<void> checkAndPromptPermission() async {
-    debugPrint('[PushCheck] ① checkAndPromptPermission called');
+    if (kDebugMode) debugPrint('[PushCheck] ① checkAndPromptPermission called');
     try {
       await Future<void>.delayed(const Duration(milliseconds: 800));
-      debugPrint('[PushCheck] ② after 800ms delay');
+      if (kDebugMode) debugPrint('[PushCheck] ② after 800ms delay');
 
       final settings =
           await FirebaseMessaging.instance.getNotificationSettings();
-      debugPrint('[PushCheck] ③ authorizationStatus = ${settings.authorizationStatus}');
+      if (kDebugMode) debugPrint('[PushCheck] ③ authorizationStatus = ${settings.authorizationStatus}');
 
       final enabled =
           settings.authorizationStatus == AuthorizationStatus.authorized ||
           settings.authorizationStatus == AuthorizationStatus.provisional;
       if (enabled) {
-        debugPrint('[PushCheck] ④ notifications enabled, skip');
+        if (kDebugMode) debugPrint('[PushCheck] ④ notifications enabled, skip');
         return;
       }
 
       final dismissed = await SPUtil().getPushPermissionDismissed();
-      debugPrint('[PushCheck] ⑤ dismissed = $dismissed');
+      if (kDebugMode) debugPrint('[PushCheck] ⑤ dismissed = $dismissed');
       if (dismissed) return;
 
       final ctx = AppGlobals.navigatorKey.currentContext;
-      debugPrint('[PushCheck] ⑥ ctx = $ctx, mounted = ${ctx?.mounted}');
+      if (kDebugMode) debugPrint('[PushCheck] ⑥ ctx = $ctx, mounted = ${ctx?.mounted}');
       if (ctx == null || !ctx.mounted) return;
 
-      debugPrint('[PushCheck] ⑦ showing dialog');
+      if (kDebugMode) debugPrint('[PushCheck] ⑦ showing dialog');
       final s = S.of(ctx);
       // ignore: use_build_context_synchronously
       await showDialog<void>(
@@ -652,9 +656,9 @@ class AppPushUtils {
           ],
         ),
       );
-      debugPrint('[PushCheck] ⑧ dialog closed');
+      if (kDebugMode) debugPrint('[PushCheck] ⑧ dialog closed');
     } catch (e, st) {
-      debugPrint('[PushCheck] ❌ exception: $e\n$st');
+      if (kDebugMode) debugPrint('[PushCheck] ❌ exception: $e\n$st');
     }
   }
 
