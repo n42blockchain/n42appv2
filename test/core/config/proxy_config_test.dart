@@ -17,7 +17,7 @@ void main() {
 
   group('ProxyConfig.mergeAuthHeaders', () {
     test('adds bearer token for proxy requests when token is provided', () {
-      final headers = ProxyConfig.mergeAuthHeaders(ProxyConfig.moonpaySign, {
+      final headers = ProxyConfig.mergeAuthHeaders(ProxyConfig.marketBase, {
         'Content-Type': 'application/json',
       }, 'proxy-token');
 

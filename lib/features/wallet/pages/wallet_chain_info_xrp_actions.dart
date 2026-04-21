@@ -1,9 +1,6 @@
-import 'dart:io';
-
 import 'package:n42_wallet/features/browser/pages/browser_page.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/core/enums/load.dart';
-import 'package:n42_wallet/features/pay/moonpay/moonpay.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/pages/add_token/wallet_coin_token_add2.dart';
 import 'package:n42_wallet/features/wallet/pages/market/market_coin_info.dart';
@@ -61,19 +58,6 @@ mixin WalletChainInfoXrpActionsMixin<T extends ConsumerStatefulWidget>
         label: s.g_key_196,
         onTap: () => pushThenPop(BrowserPage(browserUrl)),
       ),
-      if(Platform.isAndroid)
-        _buildSheetItem(
-          icon: Image.asset('assets/wallet/w_buy.png', color: _blue),
-          label: s.g_key_211,
-          onTap: () => pushThenPop(Moonpay(coinModel: coinModel)),
-        ),
-      if(Platform.isAndroid)
-        _buildSheetItem(
-          icon: Image.asset('assets/wallet/w_sell.png', color: _blue),
-          label: s.g_key_212,
-          onTap: () => pushThenPop(Moonpay(coinModel: coinModel, type: 1)),
-        ),
-
     ];
 
     final bool showAddToken = coinModel.privateKey != null &&

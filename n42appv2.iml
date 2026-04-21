@@ -501,6 +501,15 @@
       <excludeFolder url="file://$MODULE_DIR$/packages/webview_flutter_wkwebview/example/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/packages/webview_flutter_wkwebview/example/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/packages/webview_flutter_wkwebview/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/n42_chat/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/n42_chat/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/n42_chat/build" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/n42_chat/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/n42_chat/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/n42_chat/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/n42_jmt_verify/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/n42_jmt_verify/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/n42_jmt_verify/build" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Dart SDK" level="project" />

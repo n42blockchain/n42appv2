@@ -13,7 +13,6 @@ import 'package:flutter/foundation.dart';
 /// 已迁移到代理的 Key:
 /// - Infura, Etherscan, BSCScan, Basescan, Sonicscan
 /// - TON, DOT (Subscan), CoinGecko, SimpleHash
-/// - MoonPay (签名已走代理)
 /// - AI (Groq/OpenAI/DeepSeek)
 class ApiKeysConfig {
   ApiKeysConfig._();

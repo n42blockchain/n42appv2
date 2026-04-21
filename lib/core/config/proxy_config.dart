@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 ///
 /// Services are routed through proxy ONLY when it makes sense:
 /// - Shared/cacheable data (market prices, gas fees) → proxy with server cache
-/// - API key protection (explorer, bundler, MoonPay HMAC) → proxy
+/// - API key protection (explorer, bundler) → proxy
 /// - Per-user streaming/heavy content (AI chat, speech, giphy) → direct client
 ///
 /// Proxy URL configured via --dart-define=PROXY_BASE_URL
@@ -70,9 +70,6 @@ class ProxyConfig {
       '$_normalizedBaseUrl/v1/tokenview/market/info';
   static String get tokenviewStablecoinEvents =>
       '$_normalizedBaseUrl/v1/tokenview/stablecoin/events';
-
-  // ==================== MoonPay (HMAC signing, must be server-side) ====================
-  static String get moonpaySign => '$_normalizedBaseUrl/v1/moonpay/sign';
 
   // ==================== Bundler (API key protection, low volume) ====================
   static String bundler(String chainId) =>

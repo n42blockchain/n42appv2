@@ -11,7 +11,6 @@ import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/component/pages/scan_page.dart';
-import 'package:n42_wallet/features/pay/moonpay/moonpay.dart';
 import 'package:n42_wallet/features/wallet/pages/aa/aa_home_page.dart';
 import 'package:n42_wallet/features/wallet/pages/ens/ens_home_page.dart';
 import 'package:n42_wallet/features/wallet/pages/payment_code/payment_page.dart';
@@ -374,18 +373,6 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (_) => SetAmount(),
-                                      ),
-                                    ),
-                                    buyTap: () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => Moonpay(type: 0),
-                                      ),
-                                    ),
-                                    sellTap: () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => Moonpay(type: 1),
                                       ),
                                     ),
                                   ),

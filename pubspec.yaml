@@ -58,6 +58,7 @@ dependencies:
   bitcoin_base: ^7.1.0
   eip712: ^1.0.1  # 替换 eth_sig_util，支持 EIP-712 typed data signing
   web3dart: ^3.0.1
+  web3auth_flutter: ^6.3.0
   fast_base58: ^0.2.1
   bech32: ^0.2.2
   crypto: ^3.0.7

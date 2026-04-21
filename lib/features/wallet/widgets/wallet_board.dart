@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
@@ -20,10 +18,6 @@ class WalletBoard extends StatefulWidget {
   final GestureTapCallback? receiveTap;
   //payment code
   final GestureTapCallback? paymentCodeTap;
-  //buy
-  final GestureTapCallback? buyTap;
-  //sell
-  final GestureTapCallback? sellTap;
 
   const WalletBoard({
     super.key,
@@ -35,8 +29,6 @@ class WalletBoard extends StatefulWidget {
     this.receiveTap,
     this.sendTap,
     this.paymentCodeTap,
-    this.buyTap,
-    this.sellTap,
   });
 
   @override
@@ -210,14 +202,6 @@ class _WalletBoardState extends State<WalletBoard> {
       SizedBox(width: ScreenUtil().setWidth(32)),
       _buildActionBtn(S.of(context).g_key_33, 'assets/wallet/w_receive.png', widget.receiveTap),
     ];
-    if (Platform.isAndroid) {
-      buttons.addAll([
-        SizedBox(width: ScreenUtil().setWidth(32)),
-        _buildActionBtn(S.of(context).g_key_211, 'assets/wallet/w_buy.png', widget.buyTap),
-        SizedBox(width: ScreenUtil().setWidth(32)),
-        _buildActionBtn(S.of(context).g_key_212, 'assets/wallet/w_sell.png', widget.sellTap),
-      ]);
-    }
     return buttons;
   }
 

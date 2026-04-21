@@ -60,8 +60,8 @@ android {
 
     defaultConfig {
         applicationId = "ai.n42.www"
-        // Google Play 要求: minSdk 24 (Android 7.0), targetSdk 35 (Android 15)
-        minSdk = 24
+        // web3auth_flutter 要求 minSdk 26 (Android 8.0)
+        minSdk = 26
         targetSdk = 35
         versionCode = flutter.versionCode
         versionName = flutter.versionName
