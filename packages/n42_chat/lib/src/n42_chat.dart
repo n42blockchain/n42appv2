@@ -106,6 +106,11 @@ class N42Chat {
   /// 通知点击回调
   static void Function(String? roomId, String? eventId)? _onNotificationTap;
 
+  /// 宿主打开钱包 / 卡包的回调（chat 包内 ServicesPage 触发）。
+  /// 若宿主未注册，则 ServicesPage 会降级为信息提示。
+  static VoidCallback? _onOpenWallet;
+  static VoidCallback? _onOpenCardPack;
+
   /// Moment 邀请节流时间戳（10 秒内不重复处理）
   static DateTime? _lastMomentInviteCheck;
 
@@ -599,6 +604,34 @@ class N42Chat {
   ) {
     _onNotificationTap = handler;
     _flushPendingNotificationTap();
+  }
+
+  /// 注册宿主侧"打开钱包"回调。
+  /// 由 chat 内的 ServicesPage 在用户点击 Wallet 时调用；
+  /// 宿主应在此切换到钱包 Tab 或 push 钱包页面。
+  static void setOpenWalletHandler(VoidCallback? handler) {
+    _onOpenWallet = handler;
+  }
+
+  /// 注册宿主侧"打开卡包"回调。
+  static void setOpenCardPackHandler(VoidCallback? handler) {
+    _onOpenCardPack = handler;
+  }
+
+  /// 内部使用：ServicesPage 触发 Wallet，若未注册返回 false。
+  static bool invokeOpenWallet() {
+    final cb = _onOpenWallet;
+    if (cb == null) return false;
+    cb();
+    return true;
+  }
+
+  /// 内部使用：ServicesPage 触发 CardPack，若未注册返回 false。
+  static bool invokeOpenCardPack() {
+    final cb = _onOpenCardPack;
+    if (cb == null) return false;
+    cb();
+    return true;
   }
 
   /// 供宿主应用在更早的推送生命周期中转发聊天通知点击。

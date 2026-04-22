@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../core/extensions/context_extension.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../n42_chat.dart';
 import '../../widgets/common/common_widgets.dart';
 import '../transfer/receive_page.dart';
 import 'n42_bean_page.dart';
@@ -97,10 +98,12 @@ class ServicesPage extends StatelessWidget {
               cardColor: cardColor,
               textColor: textColor,
               onTap: () {
+                if (N42Chat.invokeOpenWallet()) return;
+                // 宿主未注册 handler，降级为提示（例如 chat 独立运行时）
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(S.of(context)?.commonFeatureComingSoon(S.of(context)?.profileWallet ?? 'Wallet') ?? 'Wallet coming soon'),
-                    duration: const Duration(seconds: 1),
+                  const SnackBar(
+                    content: Text('Wallet is managed in the main app'),
+                    duration: Duration(seconds: 2),
                   ),
                 );
               },
@@ -113,10 +116,11 @@ class ServicesPage extends StatelessWidget {
               cardColor: cardColor,
               textColor: textColor,
               onTap: () {
+                if (N42Chat.invokeOpenCardPack()) return;
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(S.of(context)?.commonFeatureComingSoon(S.of(context)?.profileCardPack ?? 'Card Pack') ?? 'Card Pack coming soon'),
-                    duration: const Duration(seconds: 1),
+                  const SnackBar(
+                    content: Text('Card Pack is managed in the main app'),
+                    duration: Duration(seconds: 2),
                   ),
                 );
               },

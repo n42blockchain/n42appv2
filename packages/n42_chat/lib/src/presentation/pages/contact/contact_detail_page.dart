@@ -1503,18 +1503,14 @@ class _EditRemarkPageState extends State<EditRemarkPage> {
                 borderRadius: BorderRadius.circular(8),
               ),
               child: InkWell(
+                // 复用 MomentListPage 按 userId 过滤显示对方的朋友圈照片/视频
                 onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        S
-                                .of(context)
-                                ?.commonFeatureComingSoon(
-                                  S.of(context)?.contactPhotos ?? 'Photos',
-                                ) ??
-                            'Photos coming soon',
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => MomentListPage(
+                        userId: widget.userId,
+                        userName: widget.displayName,
                       ),
-                      duration: const Duration(seconds: 1),
                     ),
                   );
                 },
