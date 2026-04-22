@@ -28,6 +28,7 @@ import '../../widgets/common/n42_avatar.dart';
 import '../contact/contact_detail_page.dart';
 import '../group/group_media_hub_page.dart';
 import '../group/group_settings_page.dart';
+import '../group/invite_members_page.dart';
 import 'chat_export_page.dart';
 import 'scheduled_messages_page.dart';
 import '../settings/auto_download_settings_page.dart';
@@ -1098,20 +1099,26 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   void _addMemberToGroup() {
     if (widget.onAddMember != null) {
       widget.onAddMember!();
-    } else {
-      // TODO: 默认实现
-      debugLog('Add member to group');
+      return;
     }
+    // 默认实现：打开联系人多选页面，由 InviteMembersPage 内部通过
+    // GroupBloc.add(InviteMembers(...)) 完成邀请。
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => InviteMembersPage(roomId: widget.conversation.id),
+      ),
+    );
   }
 
   /// 从群中移除成员
   void _removeMemberFromGroup() {
-    if (widget.onRemoveMember != null) {
-      // 显示选择成员的对话框
-      _showRemoveMemberDialog();
-    } else {
-      debugLog('Remove member from group');
+    if (widget.onRemoveMember == null) {
+      // 无回调时默认跳转到群设置页面的成员管理区域
+      debugLog('Remove member from group: no callback, skipping');
+      return;
     }
+    // 显示选择成员的对话框（回调由调用方注入）
+    _showRemoveMemberDialog();
   }
 
   /// 显示移除成员的对话框

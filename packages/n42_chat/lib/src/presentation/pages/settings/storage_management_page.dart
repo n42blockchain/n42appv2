@@ -522,7 +522,14 @@ class _RoomStorageSection extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               onTap: () {
-                // TODO: Navigate to full room list
+                Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (_) => BlocProvider.value(
+                      value: context.read<StorageManagementBloc>(),
+                      child: const _AllRoomsStoragePage(),
+                    ),
+                  ),
+                );
               },
             ),
           const SizedBox(height: 8),
@@ -763,5 +770,86 @@ class _StorageRingPainter extends CustomPainter {
         fileRatio != oldDelegate.fileRatio ||
         cacheRatio != oldDelegate.cacheRatio ||
         otherRatio != oldDelegate.otherRatio;
+  }
+}
+
+/// 所有房间的存储占用列表（"View all N rooms" 入口）。
+/// 复用主页的 StorageManagementBloc，故无需重新加载数据。
+class _AllRoomsStoragePage extends StatelessWidget {
+  const _AllRoomsStoragePage();
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = context.isDarkMode;
+    final textColor = isDark ? AppColors.textPrimaryDark : AppColors.textPrimary;
+    final secondaryColor =
+        isDark ? AppColors.textSecondaryDark : AppColors.textSecondary;
+
+    return Scaffold(
+      backgroundColor:
+          isDark ? AppColors.backgroundDark : AppColors.background,
+      appBar: AppBar(
+        title: Text(
+          S.of(context)?.roomStorageRanking ?? 'Room Storage',
+        ),
+      ),
+      body: BlocBuilder<StorageManagementBloc, StorageManagementState>(
+        builder: (context, state) {
+          final rooms = state.roomStorageList;
+          if (rooms.isEmpty) {
+            return Center(
+              child: Text(
+                'No rooms',
+                style: TextStyle(color: secondaryColor),
+              ),
+            );
+          }
+          return ListView.separated(
+            itemCount: rooms.length,
+            separatorBuilder: (_, __) => const Divider(height: 1),
+            itemBuilder: (_, index) {
+              final room = rooms[index];
+              return ListTile(
+                title: Text(
+                  room.roomName,
+                  style: TextStyle(fontSize: 15, color: textColor),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                subtitle: Text(
+                  '${room.mediaCount} files',
+                  style: TextStyle(fontSize: 12, color: secondaryColor),
+                ),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      room.formattedSize,
+                      style: TextStyle(fontSize: 14, color: secondaryColor),
+                    ),
+                    const SizedBox(width: 4),
+                    Icon(Icons.chevron_right,
+                        size: 20, color: secondaryColor),
+                  ],
+                ),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => BlocProvider.value(
+                        value: context.read<StorageManagementBloc>(),
+                        child: RoomStorageDetailPage(
+                          roomId: room.roomId,
+                          roomName: room.roomName,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              );
+            },
+          );
+        },
+      ),
+    );
   }
 }
