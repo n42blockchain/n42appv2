@@ -241,12 +241,6 @@ class _SendRedPacketPageState extends State<SendRedPacketPage> {
           ),
         ),
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.more_horiz, color: textColor),
-            onPressed: () {},
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.only(bottom: bottomInset > 0 ? bottomInset : 48),

@@ -89,7 +89,7 @@ class RedPacketDetailPage extends StatelessWidget {
                           ),
                           const Spacer(),
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () => _showMoreMenu(context),
                             icon: const Icon(Icons.more_horiz,
                                 color: Colors.white),
                           ),
@@ -182,26 +182,16 @@ class RedPacketDetailPage extends StatelessWidget {
 
                       const SizedBox(height: 16),
 
-                      GestureDetector(
-                        onTap: () {},
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              S.of(context)?.commonSavedToBalance ??
-                                  'Saved to balance, can transfer directly',
-                              style: TextStyle(
-                                color: Colors.white.withValues(alpha: 0.7),
-                                fontSize: 14,
-                              ),
-                            ),
-                            Icon(
-                              Icons.chevron_right,
-                              color: Colors.white.withValues(alpha: 0.7),
-                              size: 18,
-                            ),
-                          ],
+                      // 展示性文案（红包详情页不持有 roomId，无法直接跳转转账）。
+                      // 移除 chevron 与 GestureDetector 避免误导用户可点。
+                      Text(
+                        S.of(context)?.commonSavedToBalance ??
+                            'Saved to balance, can transfer directly',
+                        style: TextStyle(
+                          color: Colors.white.withValues(alpha: 0.7),
+                          fontSize: 14,
                         ),
+                        textAlign: TextAlign.center,
                       ),
 
                       const SizedBox(height: 24),
@@ -286,6 +276,48 @@ class RedPacketDetailPage extends StatelessWidget {
           const SliverToBoxAdapter(child: SizedBox(height: 32)),
         ],
       ),
+    );
+  }
+
+  void _showMoreMenu(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (sheetCtx) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.help_outline),
+                title: const Text('Red packet rules'),
+                onTap: () {
+                  Navigator.of(sheetCtx).pop();
+                  showDialog<void>(
+                    context: context,
+                    builder: (dlgCtx) => AlertDialog(
+                      title: const Text('Red packet rules'),
+                      content: const Text(
+                        'Red packets expire after 24 hours. Unclaimed amounts are returned to the sender.',
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(dlgCtx).pop(),
+                          child: const Text('OK'),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.close),
+                title: Text(S.of(sheetCtx)?.commonCancel ?? 'Cancel'),
+                onTap: () => Navigator.of(sheetCtx).pop(),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

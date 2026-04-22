@@ -866,7 +866,6 @@ class _FriendInfoPageState extends State<FriendInfoPage> {
                       'Added via search',
                   textColor: textColor,
                   secondaryTextColor: secondaryTextColor,
-                  onTap: () {},
                   showArrow: false,
                 ),
                 _buildDivider(dividerColor),
@@ -875,7 +874,6 @@ class _FriendInfoPageState extends State<FriendInfoPage> {
                   value: S.of(context)?.commonUnknownMember ?? 'Unknown',
                   textColor: textColor,
                   secondaryTextColor: secondaryTextColor,
-                  onTap: () {},
                   showArrow: false,
                 ),
               ],
@@ -939,43 +937,40 @@ class _FriendInfoPageState extends State<FriendInfoPage> {
     String? value,
     required Color textColor,
     required Color secondaryTextColor,
-    required VoidCallback onTap,
+    VoidCallback? onTap,
     bool showArrow = true,
   }) {
-    return InkWell(
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        child: Row(
-          children: [
-            // 左侧标题
-            Text(title, style: TextStyle(fontSize: 16, color: textColor)),
-            // 中间弹性空间
-            Expanded(
-              child: value != null
-                  ? Padding(
-                      padding: const EdgeInsets.only(left: 16),
-                      child: Text(
-                        value,
-                        textAlign: TextAlign.right,
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: secondaryTextColor,
-                        ),
-                        overflow: TextOverflow.ellipsis,
+    final content = Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      child: Row(
+        children: [
+          Text(title, style: TextStyle(fontSize: 16, color: textColor)),
+          Expanded(
+            child: value != null
+                ? Padding(
+                    padding: const EdgeInsets.only(left: 16),
+                    child: Text(
+                      value,
+                      textAlign: TextAlign.right,
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: secondaryTextColor,
                       ),
-                    )
-                  : const SizedBox.shrink(),
-            ),
-            // 右侧箭头
-            if (showArrow) ...[
-              const SizedBox(width: 4),
-              Icon(Icons.chevron_right, color: secondaryTextColor, size: 20),
-            ],
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  )
+                : const SizedBox.shrink(),
+          ),
+          if (showArrow) ...[
+            const SizedBox(width: 4),
+            Icon(Icons.chevron_right, color: secondaryTextColor, size: 20),
           ],
-        ),
+        ],
       ),
     );
+    // onTap=null 的展示型行不做 InkWell 包装，避免误响应手势
+    if (onTap == null) return content;
+    return InkWell(onTap: onTap, child: content);
   }
 
   Widget _buildDivider(Color color) {

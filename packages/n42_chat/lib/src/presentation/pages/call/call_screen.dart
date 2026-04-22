@@ -616,7 +616,10 @@ class _CallScreenState extends State<CallScreen> with TickerProviderStateMixin {
       top: MediaQuery.of(context).padding.top + 60,
       right: 16,
       child: GestureDetector(
-        onTap: () {},
+        // 点击本地预览切换前后摄像头（视频通话通用交互）
+        onTap: _isVideoEnabled
+            ? () => widget.webRTCService.switchCamera()
+            : null,
         child: Container(
           width: 100,
           height: 140,

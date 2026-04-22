@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../core/extensions/context_extension.dart';
@@ -358,19 +359,11 @@ class _ContactSettingsPageState extends State<ContactSettingsPage> {
   }
 
   void _shareContact() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          S
-                  .of(context)
-                  ?.commonFeatureComingSoon(
-                    S.of(context)?.contactRecommendToFriend ?? 'Share contact',
-                  ) ??
-              'Share contact coming soon',
-        ),
-        duration: const Duration(seconds: 2),
-      ),
-    );
+    // 通过系统 share sheet 分享联系人 deeplink，接收方点击即可跳转到对方资料。
+    // 与 my_qrcode_page 使用的 scheme 保持一致：n42chat://user/<userId>
+    final link = 'n42chat://user/${widget.userId}';
+    final text = '${widget.displayName}\n$link';
+    SharePlus.instance.share(ShareParams(text: text));
   }
 
   void _showReportDialog() {

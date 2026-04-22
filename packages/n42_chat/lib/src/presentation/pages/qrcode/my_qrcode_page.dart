@@ -24,12 +24,66 @@ class MyQRCodePage extends StatefulWidget {
   State<MyQRCodePage> createState() => _MyQRCodePageState();
 }
 
+/// 二维码可选样式（"Change Style" 菜单循环切换）。
+enum _QrStylePreset {
+  classic, // 绿色方块眼
+  roundBlue, // 蓝色圆角眼 + 圆点模块
+  mono, // 全黑方块
+}
+
 class _MyQRCodePageState extends State<MyQRCodePage> {
   final GlobalKey _qrKey = GlobalKey();
   String? _userId;
   String? _displayName;
   String? _avatarUrl;
   AvatarDecorationPreset _avatarDecorationPreset = AvatarDecorationPreset.none;
+  _QrStylePreset _stylePreset = _QrStylePreset.classic;
+
+  QrEyeStyle get _eyeStyle {
+    switch (_stylePreset) {
+      case _QrStylePreset.classic:
+        return const QrEyeStyle(
+          eyeShape: QrEyeShape.square,
+          color: Color(0xFF07C160),
+        );
+      case _QrStylePreset.roundBlue:
+        return const QrEyeStyle(
+          eyeShape: QrEyeShape.circle,
+          color: Color(0xFF007AFF),
+        );
+      case _QrStylePreset.mono:
+        return const QrEyeStyle(
+          eyeShape: QrEyeShape.square,
+          color: Colors.black,
+        );
+    }
+  }
+
+  QrDataModuleStyle get _dataModuleStyle {
+    switch (_stylePreset) {
+      case _QrStylePreset.classic:
+        return const QrDataModuleStyle(
+          dataModuleShape: QrDataModuleShape.square,
+          color: Colors.black,
+        );
+      case _QrStylePreset.roundBlue:
+        return const QrDataModuleStyle(
+          dataModuleShape: QrDataModuleShape.circle,
+          color: Color(0xFF007AFF),
+        );
+      case _QrStylePreset.mono:
+        return const QrDataModuleStyle(
+          dataModuleShape: QrDataModuleShape.square,
+          color: Colors.black,
+        );
+    }
+  }
+
+  void _cycleStyle() {
+    const values = _QrStylePreset.values;
+    final next = values[(_stylePreset.index + 1) % values.length];
+    setState(() => _stylePreset = next);
+  }
 
   @override
   void initState() {
@@ -251,14 +305,8 @@ class _MyQRCodePageState extends State<MyQRCodePage> {
                       version: QrVersions.auto,
                       size: 200,
                       backgroundColor: Colors.white,
-                      eyeStyle: const QrEyeStyle(
-                        eyeShape: QrEyeShape.square,
-                        color: Color(0xFF07C160),
-                      ),
-                      dataModuleStyle: const QrDataModuleStyle(
-                        dataModuleShape: QrDataModuleShape.square,
-                        color: Colors.black,
-                      ),
+                      eyeStyle: _eyeStyle,
+                      dataModuleStyle: _dataModuleStyle,
                     ),
                   )
                 else
@@ -384,16 +432,7 @@ class _MyQRCodePageState extends State<MyQRCodePage> {
                   ),
                   onTap: () {
                     Navigator.pop(sheetContext);
-                    if (mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            S.of(context)?.qrcodeMoreStylesFeatureComingSoon ??
-                                'More styles coming soon',
-                          ),
-                        ),
-                      );
-                    }
+                    _cycleStyle();
                   },
                 ),
                 const SizedBox(height: 8),
