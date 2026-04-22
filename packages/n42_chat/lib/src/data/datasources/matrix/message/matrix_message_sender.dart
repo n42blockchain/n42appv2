@@ -343,14 +343,14 @@ class MatrixMessageSender {
         'emoji': emoji,
         if (kind != null && kind.isNotEmpty) 'kind': kind,
         if (kind == 'lottie') 'lottie_url': url,
-        if (fallbackHttpUrl != null) 'fallback_http_url': fallbackHttpUrl,
+        'fallback_http_url': ?fallbackHttpUrl,
       };
 
       final content = <String, dynamic>{
         'body': name ?? emoji ?? 'sticker',
         // Lottie 贴纸：url 字段仍用 mxc 原始地址；兼容客户端看到 body 与 fallback。
         'url': url,
-        if (fallbackHttpUrl != null) 'org.n42.sticker.thumbnail': fallbackHttpUrl,
+        'org.n42.sticker.thumbnail': ?fallbackHttpUrl,
         'info': info,
         // 添加自定义字段标识贴纸来源
         'org.n42.sticker': n42Sticker,

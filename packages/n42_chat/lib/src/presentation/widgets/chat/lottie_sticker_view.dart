@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -92,9 +93,9 @@ class _LottieStickerViewState extends State<LottieStickerView>
       _controller.duration = composition.duration;
       if (widget.autoPlay) {
         if (widget.repeatCount == 0) {
-          _controller.repeat();
+          unawaited(_controller.repeat());
         } else {
-          _controller.forward(from: 0);
+          unawaited(_controller.forward(from: 0));
         }
       }
     } catch (e) {

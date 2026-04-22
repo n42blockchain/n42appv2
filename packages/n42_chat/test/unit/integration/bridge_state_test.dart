@@ -218,7 +218,7 @@ void main() {
   // ─────────────────────────────────────────────────
 
   group('BridgeState.copyWith', () {
-    final base = BridgeState(
+    const base = BridgeState(
       platform: BridgePlatform.whatsapp,
       status: BridgeConnectionStatus.connected,
       remoteUsername: 'alice',
@@ -267,7 +267,7 @@ void main() {
     });
 
     test('sentinel: statusMessage cleared when explicitly set to null', () {
-      final withMsg = BridgeState(
+      const withMsg = BridgeState(
         platform: BridgePlatform.signal,
         statusMessage: 'Connected',
       );
@@ -276,7 +276,7 @@ void main() {
     });
 
     test('sentinel: errorMessage cleared when explicitly set to null', () {
-      final withErr = BridgeState(
+      const withErr = BridgeState(
         platform: BridgePlatform.telegram,
         status: BridgeConnectionStatus.error,
         errorMessage: 'Timeout',
@@ -293,7 +293,7 @@ void main() {
     });
 
     test('sentinel: managementRoomId cleared when explicitly set to null', () {
-      final withRoom = BridgeState(
+      const withRoom = BridgeState(
         platform: BridgePlatform.discord, managementRoomId: '!room:server',
       );
       final copy = withRoom.copyWith(managementRoomId: null);

@@ -15,7 +15,6 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path/path.dart' as p;
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:n42_wallet/features/sqlite/app_database.dart';
 
 // ---------------------------------------------------------------------------

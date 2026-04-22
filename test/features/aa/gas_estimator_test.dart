@@ -37,7 +37,7 @@ GasEstimateResult _makeEstimate({
 /// Build a minimal UserOpBuilder with the required fields set.
 UserOpBuilder _minimalBuilder({bool withGasFees = false}) {
   final b = UserOpBuilder()
-    ..setSender('0x' + 'ab' * 20)
+    ..setSender('0x${'ab' * 20}')
     ..setNonce(BigInt.zero)
     ..setCallData(Uint8List.fromList([0x01, 0x02, 0x03]));
 
@@ -56,9 +56,9 @@ void _testCalculatePreVerificationGas() {
   group('calculatePreVerificationGas', () {
     // Build a UserOperation with known calldata for predictable gas calculation.
     // We test by constructing a full UserOperation via builder.
-    UserOpBuilder _builderWithCalldata(Uint8List data) {
+    UserOpBuilder builderWithCalldata(Uint8List data) {
       return UserOpBuilder()
-        ..setSender('0x' + 'aa' * 20)
+        ..setSender('0x${'aa' * 20}')
         ..setNonce(BigInt.zero)
         ..setCallData(data)
         ..setGasFees(
@@ -67,7 +67,7 @@ void _testCalculatePreVerificationGas() {
 
     test('all-zero calldata: charges 4 gas per byte', () {
       final data = Uint8List(100); // 100 zero bytes
-      final builder = _builderWithCalldata(data);
+      final builder = builderWithCalldata(data);
       final userOp = builder.build();
 
       final gas = AAGasEstimator.calculatePreVerificationGas(userOp);
@@ -77,7 +77,7 @@ void _testCalculatePreVerificationGas() {
 
     test('all-nonzero calldata: charges 16 gas per byte', () {
       final data = Uint8List.fromList(List.filled(10, 0xFF)); // 10 non-zero bytes
-      final builder = _builderWithCalldata(data);
+      final builder = builderWithCalldata(data);
       final userOp = builder.build();
 
       final gas = AAGasEstimator.calculatePreVerificationGas(userOp);
@@ -88,7 +88,7 @@ void _testCalculatePreVerificationGas() {
     test('mixed calldata: zero bytes cost 4, nonzero cost 16', () {
       // 5 zero bytes + 5 non-zero bytes
       final data = Uint8List.fromList([0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]);
-      final builder = _builderWithCalldata(data);
+      final builder = builderWithCalldata(data);
       final userOp = builder.build();
 
       final gas = AAGasEstimator.calculatePreVerificationGas(userOp);
@@ -100,7 +100,7 @@ void _testCalculatePreVerificationGas() {
       // setCallData requires non-empty, so build directly with 1-byte data
       // and verify the formula is correct, not the empty case (builder rejects empty)
       final data = Uint8List.fromList([0x00]); // 1 zero byte
-      final builder = _builderWithCalldata(data);
+      final builder = builderWithCalldata(data);
       final userOp = builder.build();
 
       final gas = AAGasEstimator.calculatePreVerificationGas(userOp);
@@ -112,8 +112,8 @@ void _testCalculatePreVerificationGas() {
       final zeroData = Uint8List(50); // 50 zeros
       final nonZeroData = Uint8List.fromList(List.filled(50, 0xAB)); // 50 non-zeros
 
-      UserOpBuilder zeroBuilder() => _builderWithCalldata(zeroData);
-      UserOpBuilder nonZeroBuilder() => _builderWithCalldata(nonZeroData);
+      UserOpBuilder zeroBuilder() => builderWithCalldata(zeroData);
+      UserOpBuilder nonZeroBuilder() => builderWithCalldata(nonZeroData);
 
       final zeroGas = AAGasEstimator.calculatePreVerificationGas(zeroBuilder().build());
       final nonZeroGas = AAGasEstimator.calculatePreVerificationGas(nonZeroBuilder().build());
@@ -129,7 +129,7 @@ void _testCalculatePreVerificationGas() {
       final abiParam = Uint8List(32);
       abiParam[31] = 0x01; // uint256(1)
 
-      final builder = _builderWithCalldata(abiParam);
+      final builder = builderWithCalldata(abiParam);
       final userOp = builder.build();
 
       final eip2028Gas = AAGasEstimator.calculatePreVerificationGas(userOp);
@@ -548,7 +548,7 @@ void _testBuildForEstimation() {
 
     test('throws when nonce is missing', () {
       final builder = UserOpBuilder()
-        ..setSender('0x' + 'aa' * 20)
+        ..setSender('0x${'aa' * 20}')
         ..setCallData(Uint8List.fromList([0x01]));
 
       expect(
@@ -559,7 +559,7 @@ void _testBuildForEstimation() {
 
     test('throws when callData is missing', () {
       final builder = UserOpBuilder()
-        ..setSender('0x' + 'aa' * 20)
+        ..setSender('0x${'aa' * 20}')
         ..setNonce(BigInt.zero);
 
       expect(
@@ -572,14 +572,14 @@ void _testBuildForEstimation() {
       final callData = Uint8List.fromList([0xb6, 0x1d, 0x27, 0xf6]);
       final initCode = Uint8List.fromList([0xAB, 0xCD]);
       final builder = UserOpBuilder()
-        ..setSender('0x' + 'aa' * 20)
+        ..setSender('0x${'aa' * 20}')
         ..setNonce(BigInt.from(42))
         ..setCallData(callData)
         ..setInitCode(initCode);
 
       final userOp = builder.buildForEstimation();
 
-      expect(userOp.sender, '0x' + 'aa' * 20);
+      expect(userOp.sender, '0x${'aa' * 20}');
       expect(userOp.nonce, BigInt.from(42));
       expect(userOp.callData, equals(callData));
       expect(userOp.initCode, equals(initCode));

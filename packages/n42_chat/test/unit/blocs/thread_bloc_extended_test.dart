@@ -157,7 +157,7 @@ void main() {
     blocTest<ThreadBloc, ThreadState>(
       'does nothing when roomId is null (initial state)',
       build: buildBloc,
-      act: (bloc) => bloc.add(SendThreadImageMessage(
+      act: (bloc) => bloc.add(const SendThreadImageMessage(
         imageBytes: [1, 2, 3],
         filename: 'img.jpg',
       )),
@@ -177,7 +177,7 @@ void main() {
               mimeType: any(named: 'mimeType'),
             )).thenAnswer((_) async => null);
       },
-      act: (bloc) => bloc.add(SendThreadImageMessage(
+      act: (bloc) => bloc.add(const SendThreadImageMessage(
         imageBytes: [1, 2, 3],
         filename: 'photo.jpg',
         mimeType: 'image/jpeg',
@@ -210,7 +210,7 @@ void main() {
               mimeType: any(named: 'mimeType'),
             )).thenThrow(Exception('upload failed'));
       },
-      act: (bloc) => bloc.add(SendThreadImageMessage(
+      act: (bloc) => bloc.add(const SendThreadImageMessage(
         imageBytes: [1, 2, 3],
         filename: 'photo.jpg',
       )),
@@ -231,7 +231,7 @@ void main() {
     blocTest<ThreadBloc, ThreadState>(
       'does nothing when roomId is null (initial state)',
       build: buildBloc,
-      act: (bloc) => bloc.add(SendThreadFileMessage(
+      act: (bloc) => bloc.add(const SendThreadFileMessage(
         fileBytes: [4, 5, 6],
         filename: 'doc.pdf',
       )),
@@ -251,7 +251,7 @@ void main() {
               mimeType: any(named: 'mimeType'),
             )).thenAnswer((_) async => null);
       },
-      act: (bloc) => bloc.add(SendThreadFileMessage(
+      act: (bloc) => bloc.add(const SendThreadFileMessage(
         fileBytes: [4, 5, 6],
         filename: 'document.pdf',
         mimeType: 'application/pdf',
@@ -284,7 +284,7 @@ void main() {
               mimeType: any(named: 'mimeType'),
             )).thenThrow(Exception('upload error'));
       },
-      act: (bloc) => bloc.add(SendThreadFileMessage(
+      act: (bloc) => bloc.add(const SendThreadFileMessage(
         fileBytes: [4, 5, 6],
         filename: 'doc.pdf',
       )),

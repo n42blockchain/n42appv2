@@ -199,7 +199,7 @@ void main() {
           'type': 'm.call.invite',
           'room_id': '!room:matrix.org',
         },
-        notification: const RemoteNotification(
+        notification: RemoteNotification(
           title: 'Call from Bob',
         ),
       );
@@ -218,7 +218,7 @@ void main() {
           'sender_display_name': 'Alice Wonderland',
           'room_id': '!room:matrix.org',
         },
-        notification: const RemoteNotification(
+        notification: RemoteNotification(
           title: 'Different Title',
         ),
       );

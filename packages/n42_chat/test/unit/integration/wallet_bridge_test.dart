@@ -98,10 +98,10 @@ void main() {
   // ─────────────────────────────────────────────────
 
   // Fixed test date — avoids wall-clock dependency in all PaymentRequest tests.
-  final _created = DateTime.utc(2024, 1, 1);
+  final created0 = DateTime.utc(2024, 1, 1);
 
   group('PaymentRequest constructor', () {
-    final created = _created;
+    final created = created0;
 
     test('stores required fields', () {
       final r = PaymentRequest(
@@ -124,7 +124,7 @@ void main() {
       final r = PaymentRequest(
         requestId: 'r', amount: '1', token: 'ETH',
         receiverAddress: '0x', qrCodeData: 'qr',
-        createdAt: _created,
+        createdAt: created0,
       );
       expect(r.memo, isNull);
     });
@@ -133,7 +133,7 @@ void main() {
       final r = PaymentRequest(
         requestId: 'r', amount: '1', token: 'ETH',
         receiverAddress: '0x', qrCodeData: 'qr',
-        createdAt: _created,
+        createdAt: created0,
       );
       expect(r.expiresAt, isNull);
     });
@@ -144,7 +144,7 @@ void main() {
       final r = PaymentRequest(
         requestId: 'r', amount: '1', token: 'ETH',
         receiverAddress: '0x', qrCodeData: 'qr',
-        createdAt: _created,
+        createdAt: created0,
       );
       expect(r.isExpired, isFalse);
     });
@@ -153,7 +153,7 @@ void main() {
       final r = PaymentRequest(
         requestId: 'r', amount: '1', token: 'ETH',
         receiverAddress: '0x', qrCodeData: 'qr',
-        createdAt: _created,
+        createdAt: created0,
         expiresAt: DateTime.utc(2100, 1, 1), // deterministic far-future
       );
       expect(r.isExpired, isFalse);
@@ -163,7 +163,7 @@ void main() {
       final r = PaymentRequest(
         requestId: 'r', amount: '1', token: 'ETH',
         receiverAddress: '0x', qrCodeData: 'qr',
-        createdAt: _created,
+        createdAt: created0,
         expiresAt: DateTime.utc(2000, 1, 1), // deterministic past date
       );
       expect(r.isExpired, isTrue);
@@ -175,7 +175,7 @@ void main() {
       final r = PaymentRequest(
         requestId: 'r', amount: '2.5', token: 'USDT',
         receiverAddress: '0x', qrCodeData: 'qr',
-        createdAt: _created,
+        createdAt: created0,
       );
       expect(r.formattedAmount, '2.5 USDT');
     });
@@ -184,7 +184,7 @@ void main() {
       final r = PaymentRequest(
         requestId: 'r', amount: '1', token: 'ETH',
         receiverAddress: '0x', qrCodeData: 'qr',
-        createdAt: _created,
+        createdAt: created0,
       );
       expect(r.formattedAmount, '1 ETH');
     });

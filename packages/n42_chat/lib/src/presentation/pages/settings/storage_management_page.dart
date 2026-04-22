@@ -806,7 +806,7 @@ class _AllRoomsStoragePage extends StatelessWidget {
           }
           return ListView.separated(
             itemCount: rooms.length,
-            separatorBuilder: (_, __) => const Divider(height: 1),
+            separatorBuilder: (_, _) => const Divider(height: 1),
             itemBuilder: (_, index) {
               final room = rooms[index];
               return ListTile(

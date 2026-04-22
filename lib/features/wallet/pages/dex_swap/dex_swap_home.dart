@@ -102,7 +102,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
   /// Get the primary smart account for the current chain
   SmartAccount? get _smartAccount {
     final walletInfo = ref.read(wapBridgeProvider).walletInfo;
-    if (walletInfo == null || !walletInfo.hasAAAccounts) return null;
+    if (!walletInfo.hasAAAccounts) return null;
     final chainId = AAConfig.chainIds[_chain];
     if (chainId == null) return null;
     return walletInfo.getPrimarySmartAccount(chainId);

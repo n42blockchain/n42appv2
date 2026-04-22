@@ -136,6 +136,7 @@ class _ConversationListPageState extends State<ConversationListPage> {
     final vault = getIt<VaultService>();
     final inVault = await vault.isInVault(conversation.id);
 
+    if (!mounted) return;
     if (inVault) {
       final confirm = await showDialog<bool>(
         context: context,
@@ -161,6 +162,7 @@ class _ConversationListPageState extends State<ConversationListPage> {
 
     // 首次使用：启用金库功能
     final enabled = await vault.isVaultEnabled();
+    if (!mounted) return;
     if (!enabled) {
       final go = await showDialog<bool>(
         context: context,

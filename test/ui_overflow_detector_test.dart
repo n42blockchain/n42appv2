@@ -15,6 +15,8 @@
 ///   - Text length: normal (EN), long (+50%), very long (+100%)
 ///   - Screen: 320x480 (SE), 375x667 (iPhone 8), 375x812 (iPhone X)
 ///   - Direction: LTR, RTL
+library;
+
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -204,7 +206,9 @@ String _fmt(Map<String, List<String>> r) {
   final b = StringBuffer();
   for (final e in r.entries) {
     b.writeln('  ${e.key}:');
-    for (final m in e.value) b.writeln('    - ${m.split('\n').first}');
+    for (final m in e.value) {
+      b.writeln('    - ${m.split('\n').first}');
+    }
   }
   return b.toString();
 }

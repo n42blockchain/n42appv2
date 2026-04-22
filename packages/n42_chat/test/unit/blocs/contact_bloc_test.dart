@@ -1,7 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:n42_chat/src/core/services/remark_service.dart';
 import 'package:n42_chat/src/data/datasources/local/preferences_datasource.dart';
 import 'package:n42_chat/src/core/di/injection.dart';
 import 'package:n42_chat/src/domain/entities/contact_entity.dart';
@@ -943,7 +942,7 @@ void main() {
         contacts: [_contact1, _contact2],
         filteredContacts: [_contact1, _contact2],
       ),
-      act: (bloc) => bloc.add(OnlineStatusUpdated({
+      act: (bloc) => bloc.add(const OnlineStatusUpdated({
         _userId1: true,
         _userId2: false,
       })),
@@ -971,7 +970,7 @@ void main() {
         filteredContacts: [_contact1],
         searchQuery: 'Alice',
       ),
-      act: (bloc) => bloc.add(OnlineStatusUpdated({_userId1: true})),
+      act: (bloc) => bloc.add(const OnlineStatusUpdated({_userId1: true})),
       expect: () => [
         isA<ContactState>()
             .having((s) => s.filteredContacts.length, 'filteredContacts preserved', 1),
@@ -987,7 +986,7 @@ void main() {
         filteredContacts: [_contact1, _contact2],
         searchQuery: '',
       ),
-      act: (bloc) => bloc.add(OnlineStatusUpdated({_userId1: true})),
+      act: (bloc) => bloc.add(const OnlineStatusUpdated({_userId1: true})),
       expect: () => [
         isA<ContactState>()
             .having((s) => s.filteredContacts.length, 'filteredContacts updated', 2)

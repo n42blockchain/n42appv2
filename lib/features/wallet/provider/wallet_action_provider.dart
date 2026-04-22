@@ -312,7 +312,7 @@ class WalletActionProvider extends ChangeNotifier
     final symbolList = symbols.split(",");
     return [
       for (final symbol in symbolList)
-        if (getCoinModelWithCoinType(symbol) case final cm?) cm,
+        ?getCoinModelWithCoinType(symbol),
     ];
   }
 

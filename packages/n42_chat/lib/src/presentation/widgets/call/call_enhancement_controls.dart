@@ -39,7 +39,7 @@ class _CallEnhancementControlsState extends State<CallEnhancementControls> {
       builder: (context, audioSettings, _) {
         return ValueListenableBuilder<CallEnhancementSettings>(
           valueListenable: _video.settings,
-          builder: (context, videoSettings, __) {
+          builder: (context, videoSettings, _) {
             return Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,

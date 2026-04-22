@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 // Copyright 2021-2026 N42 Inc. All rights reserved.
 // Use of this source code is governed by a dual license:
 // Apache License 2.0 and MIT License.

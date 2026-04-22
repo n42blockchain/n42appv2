@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -79,38 +81,40 @@ class _FiatRampPageState extends State<FiatRampPage> {
       return;
     }
 
-    final controller = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setNavigationDelegate(NavigationDelegate(
-        onNavigationRequest: (request) {
-          final uri = Uri.tryParse(request.url);
-          if (uri == null) return NavigationDecision.prevent;
-          final host = uri.host.toLowerCase();
-          const allowed = [
-            'moonpay.com', 'buy.moonpay.com', 'sell.moonpay.com',
-            'global.transak.com', 'transak.com',
-          ];
-          if (allowed.any((d) => host == d || host.endsWith('.$d'))) {
-            return NavigationDecision.navigate;
-          }
-          return NavigationDecision.prevent;
-        },
-        onPageStarted: (_) {
-          if (mounted) setState(() => _loading = true);
-        },
-        onPageFinished: (_) {
-          if (mounted) setState(() => _loading = false);
-        },
-        onWebResourceError: (error) {
-          if (mounted) {
-            setState(() {
-              _error = error.description;
-              _loading = false;
-            });
-          }
-        },
-      ))
-      ..loadRequest(Uri.parse(rampUrl.url));
+    final controller = WebViewController();
+    // 这些 setter 都返回 Future 但是为异步初始化；WebView 在 build 时用 controller
+    // 作参数，async 完成时视图会自动刷新。用 unawaited 显式标记 fire-and-forget。
+    unawaited(controller.setJavaScriptMode(JavaScriptMode.unrestricted));
+    unawaited(controller.setNavigationDelegate(NavigationDelegate(
+      onNavigationRequest: (request) {
+        final uri = Uri.tryParse(request.url);
+        if (uri == null) return NavigationDecision.prevent;
+        final host = uri.host.toLowerCase();
+        const allowed = [
+          'moonpay.com', 'buy.moonpay.com', 'sell.moonpay.com',
+          'global.transak.com', 'transak.com',
+        ];
+        if (allowed.any((d) => host == d || host.endsWith('.$d'))) {
+          return NavigationDecision.navigate;
+        }
+        return NavigationDecision.prevent;
+      },
+      onPageStarted: (_) {
+        if (mounted) setState(() => _loading = true);
+      },
+      onPageFinished: (_) {
+        if (mounted) setState(() => _loading = false);
+      },
+      onWebResourceError: (error) {
+        if (mounted) {
+          setState(() {
+            _error = error.description;
+            _loading = false;
+          });
+        }
+      },
+    )));
+    unawaited(controller.loadRequest(Uri.parse(rampUrl.url)));
 
     if (mounted) {
       setState(() {

@@ -2,9 +2,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_chat/src/domain/entities/favorite_entity.dart';
 
 void main() {
-  final _createdAt = DateTime(2025, 6, 1);
+  final createdAt = DateTime(2025, 6, 1);
 
-  FavoriteEntity _makeFavorite({
+  FavoriteEntity makeFavorite({
     String id = 'fav-1',
     FavoriteType type = FavoriteType.text,
     String content = 'Hello, world!',
@@ -21,7 +21,7 @@ void main() {
       mediaUrl: mediaUrl,
       fileName: fileName,
       fileSize: fileSize,
-      createdAt: _createdAt,
+      createdAt: createdAt,
       tags: tags,
       remark: remark,
     );
@@ -45,17 +45,17 @@ void main() {
 
   group('FavoriteEntity construction', () {
     test('creates with required fields', () {
-      final entity = _makeFavorite();
+      final entity = makeFavorite();
 
       expect(entity.id, 'fav-1');
       expect(entity.type, FavoriteType.text);
       expect(entity.content, 'Hello, world!');
-      expect(entity.createdAt, _createdAt);
+      expect(entity.createdAt, createdAt);
       expect(entity.tags, isEmpty);
     });
 
     test('optional fields default to null', () {
-      final entity = _makeFavorite();
+      final entity = makeFavorite();
 
       expect(entity.mediaUrl, isNull);
       expect(entity.thumbnailUrl, isNull);
@@ -83,7 +83,7 @@ void main() {
         sourceMessageId: '\$msg:s',
         sourceSenderId: '@alice:s',
         sourceSenderName: 'Alice',
-        createdAt: _createdAt,
+        createdAt: createdAt,
         tags: ['work', 'important'],
         remark: 'Monthly report',
       );
@@ -110,7 +110,7 @@ void main() {
 
     for (final entry in expectations.entries) {
       test('${entry.key.name} → "${entry.value}"', () {
-        final entity = _makeFavorite(type: entry.key);
+        final entity = makeFavorite(type: entry.key);
         expect(entity.typeDescription, entry.value);
       });
     }
@@ -119,7 +119,7 @@ void main() {
   group('typeIcon', () {
     test('all types have a non-empty icon', () {
       for (final type in FavoriteType.values) {
-        final entity = _makeFavorite(type: type);
+        final entity = makeFavorite(type: type);
         expect(entity.typeIcon, isNotEmpty,
             reason: 'FavoriteType.${type.name} should have an icon');
       }
@@ -128,23 +128,23 @@ void main() {
 
   group('props equality', () {
     test('equal entities with same fields', () {
-      final a = _makeFavorite();
-      final b = _makeFavorite();
+      final a = makeFavorite();
+      final b = makeFavorite();
 
       expect(a, equals(b));
       expect(a.hashCode, equals(b.hashCode));
     });
 
     test('different id produces different entities', () {
-      final a = _makeFavorite(id: 'fav-1');
-      final b = _makeFavorite(id: 'fav-2');
+      final a = makeFavorite(id: 'fav-1');
+      final b = makeFavorite(id: 'fav-2');
 
       expect(a, isNot(equals(b)));
     });
 
     test('different type produces different entities', () {
-      final a = _makeFavorite(type: FavoriteType.text);
-      final b = _makeFavorite(type: FavoriteType.image);
+      final a = makeFavorite(type: FavoriteType.text);
+      final b = makeFavorite(type: FavoriteType.image);
 
       expect(a, isNot(equals(b)));
     });
@@ -152,7 +152,7 @@ void main() {
 
   group('copyWith', () {
     test('replaces type and remark', () {
-      final original = _makeFavorite();
+      final original = makeFavorite();
       final updated = original.copyWith(
         type: FavoriteType.image,
         remark: 'Updated remark',
@@ -166,7 +166,7 @@ void main() {
     });
 
     test('replaces tags list', () {
-      final original = _makeFavorite(tags: ['a', 'b']);
+      final original = makeFavorite(tags: ['a', 'b']);
       final updated = original.copyWith(tags: ['c', 'd', 'e']);
 
       expect(updated.tags, ['c', 'd', 'e']);
@@ -236,7 +236,7 @@ void main() {
         senderName: 'Alice',
         amount: '10.0',
         token: 'ETH',
-        createdAt: _createdAt,
+        createdAt: createdAt,
       );
 
       expect(entity.type, RedPacketType.normal);
@@ -255,7 +255,7 @@ void main() {
         senderName: 'Alice',
         amount: '1.0',
         token: 'ETH',
-        createdAt: _createdAt,
+        createdAt: createdAt,
         status: RedPacketEntityStatus.pending,
         expiredAt: DateTime.now().add(const Duration(hours: 24)),
       );
@@ -269,7 +269,7 @@ void main() {
         senderName: 'Alice',
         amount: '1.0',
         token: 'ETH',
-        createdAt: _createdAt,
+        createdAt: createdAt,
         status: RedPacketEntityStatus.pending,
         expiredAt: DateTime(2020, 1, 1),
       );
@@ -284,7 +284,7 @@ void main() {
         senderName: 'Alice',
         amount: '1.0',
         token: 'ETH',
-        createdAt: _createdAt,
+        createdAt: createdAt,
         status: RedPacketEntityStatus.empty,
       );
       expect(entity.isEmpty, isTrue);

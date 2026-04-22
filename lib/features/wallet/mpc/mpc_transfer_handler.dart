@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';

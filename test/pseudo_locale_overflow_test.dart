@@ -15,6 +15,8 @@
 /// Run: flutter test test/pseudo_locale_overflow_test.dart
 ///
 /// Prerequisites: python scripts/generate_pseudo_locale.py (generates intl_qps.arb)
+library;
+
 
 import 'dart:convert';
 import 'dart:io';
@@ -33,7 +35,7 @@ void _startCapture() {
     final msg = details.exceptionAsString();
     if (msg.contains('overflowed')) {
       _overflows.add(
-          '${msg.split('\n').first}');
+          msg.split('\n').first);
     } else {
       original?.call(details);
     }

@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 // Copyright 2021-2026 N42 Inc. All rights reserved.
 // Use of this source code is governed by a dual license:
 // Apache License 2.0 and MIT License.
@@ -14,6 +16,8 @@
 ///   dart run scripts/file_header.dart --path=lib/features
 ///
 /// This script adds standardized copyright headers to all Dart files.
+library;
+
 
 import 'dart:io';
 

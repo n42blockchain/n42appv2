@@ -89,7 +89,7 @@ void main() {
   // ─────────────────────────────────────────────────
 
   group('TransactionReceiptInfo.fromJson _parseBigInt', () {
-    Map<String, dynamic> _base({dynamic blockNumber = '0x64'}) => {
+    Map<String, dynamic> base({dynamic blockNumber = '0x64'}) => {
           'blockHash': '0xabc',
           'blockNumber': blockNumber,
           'transactionHash': '0xtx',
@@ -103,22 +103,22 @@ void main() {
         };
 
     test('hex string "0x64" → BigInt 100', () {
-      final r = TransactionReceiptInfo.fromJson(_base(blockNumber: '0x64'));
+      final r = TransactionReceiptInfo.fromJson(base(blockNumber: '0x64'));
       expect(r.blockNumber, BigInt.from(100));
     });
 
     test('decimal string "100" → BigInt 100', () {
-      final r = TransactionReceiptInfo.fromJson(_base(blockNumber: '100'));
+      final r = TransactionReceiptInfo.fromJson(base(blockNumber: '100'));
       expect(r.blockNumber, BigInt.from(100));
     });
 
     test('int 100 → BigInt 100', () {
-      final r = TransactionReceiptInfo.fromJson(_base(blockNumber: 100));
+      final r = TransactionReceiptInfo.fromJson(base(blockNumber: 100));
       expect(r.blockNumber, BigInt.from(100));
     });
 
     test('null → BigInt.zero', () {
-      final r = TransactionReceiptInfo.fromJson(_base(blockNumber: null));
+      final r = TransactionReceiptInfo.fromJson(base(blockNumber: null));
       expect(r.blockNumber, BigInt.zero);
     });
   });
@@ -128,7 +128,7 @@ void main() {
   // ─────────────────────────────────────────────────
 
   group('TransactionReceiptInfo.fromJson _parseInt', () {
-    Map<String, dynamic> _base({dynamic transactionIndex = '0x1'}) => {
+    Map<String, dynamic> base({dynamic transactionIndex = '0x1'}) => {
           'blockHash': '0xabc',
           'blockNumber': '0x1',
           'transactionHash': '0xtx',
@@ -142,22 +142,22 @@ void main() {
         };
 
     test('hex string "0x1" → 1', () {
-      final r = TransactionReceiptInfo.fromJson(_base(transactionIndex: '0x1'));
+      final r = TransactionReceiptInfo.fromJson(base(transactionIndex: '0x1'));
       expect(r.transactionIndex, 1);
     });
 
     test('decimal string "5" → 5', () {
-      final r = TransactionReceiptInfo.fromJson(_base(transactionIndex: '5'));
+      final r = TransactionReceiptInfo.fromJson(base(transactionIndex: '5'));
       expect(r.transactionIndex, 5);
     });
 
     test('int 3 → 3', () {
-      final r = TransactionReceiptInfo.fromJson(_base(transactionIndex: 3));
+      final r = TransactionReceiptInfo.fromJson(base(transactionIndex: 3));
       expect(r.transactionIndex, 3);
     });
 
     test('null → 0', () {
-      final r = TransactionReceiptInfo.fromJson(_base(transactionIndex: null));
+      final r = TransactionReceiptInfo.fromJson(base(transactionIndex: null));
       expect(r.transactionIndex, 0);
     });
   });
@@ -190,7 +190,7 @@ void main() {
   // ─────────────────────────────────────────────────
 
   group('UserOperationLog.fromJson', () {
-    final _logJson = <String, dynamic>{
+    final logJson = <String, dynamic>{
       'logIndex': '0x0',
       'transactionIndex': '0x0',
       'transactionHash': '0xtx',
@@ -202,7 +202,7 @@ void main() {
     };
 
     test('stores all fields from JSON', () {
-      final log = UserOperationLog.fromJson(_logJson);
+      final log = UserOperationLog.fromJson(logJson);
       expect(log.transactionHash, '0xtx');
       expect(log.address, '0xcontract');
       expect(log.data, '0xdata');
@@ -210,23 +210,23 @@ void main() {
     });
 
     test('parses logIndex from hex', () {
-      final log = UserOperationLog.fromJson(_logJson);
+      final log = UserOperationLog.fromJson(logJson);
       expect(log.logIndex, 0);
     });
 
     test('parses blockNumber from hex', () {
-      final log = UserOperationLog.fromJson(_logJson);
+      final log = UserOperationLog.fromJson(logJson);
       expect(log.blockNumber, BigInt.one);
     });
 
     test('missing topics defaults to empty list', () {
-      final json = Map<String, dynamic>.from(_logJson)..remove('topics');
+      final json = Map<String, dynamic>.from(logJson)..remove('topics');
       final log = UserOperationLog.fromJson(json);
       expect(log.topics, isEmpty);
     });
 
     test('missing data defaults to "0x"', () {
-      final json = Map<String, dynamic>.from(_logJson)..remove('data');
+      final json = Map<String, dynamic>.from(logJson)..remove('data');
       final log = UserOperationLog.fromJson(json);
       expect(log.data, '0x');
     });
@@ -279,7 +279,7 @@ void main() {
   // ─────────────────────────────────────────────────
 
   group('UserOperationReceipt.fromJson', () {
-    Map<String, dynamic> _receiptJson() => {
+    Map<String, dynamic> receiptJson() => {
           'blockHash': '0xblock',
           'blockNumber': '0x1',
           'transactionHash': '0xtx',
@@ -292,7 +292,7 @@ void main() {
           'effectiveGasPrice': '0x3b9aca00',
         };
 
-    Map<String, dynamic> _json({bool? success}) => {
+    Map<String, dynamic> json0({bool? success}) => {
           'userOpHash': '0xopHash',
           'sender': '0xsender',
           'nonce': '0x5',
@@ -300,12 +300,12 @@ void main() {
           'paymaster': '0xpaymaster',
           'actualGasUsed': '0xc350',  // 50000
           'actualGasCost': '0xf4240', // 1000000
-          'receipt': _receiptJson(),
+          'receipt': receiptJson(),
           'logs': [],
         };
 
     test('parses all fields correctly', () {
-      final op = UserOperationReceipt.fromJson(_json(success: true));
+      final op = UserOperationReceipt.fromJson(json0(success: true));
       expect(op.userOpHash, '0xopHash');
       expect(op.sender, '0xsender');
       expect(op.nonce, BigInt.from(5));
@@ -317,13 +317,13 @@ void main() {
     });
 
     test('missing success field defaults to true', () {
-      final json = _json(success: null);
+      final json = json0(success: null);
       final op = UserOperationReceipt.fromJson(json);
       expect(op.success, isTrue);
     });
 
     test('missing logs defaults to empty list', () {
-      final json = Map<String, dynamic>.from(_json(success: true))
+      final json = Map<String, dynamic>.from(json0(success: true))
         ..remove('logs');
       final op = UserOperationReceipt.fromJson(json);
       expect(op.logs, isEmpty);

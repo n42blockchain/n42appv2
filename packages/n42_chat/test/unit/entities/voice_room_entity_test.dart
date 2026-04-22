@@ -99,7 +99,7 @@ void main() {
   });
 
   group('VoiceRoomEntity', () {
-    VoiceRoomParticipant _makeParticipant({
+    VoiceRoomParticipant makeParticipant({
       required String userId,
       VoiceRoomRole role = VoiceRoomRole.listener,
       bool isHandRaised = false,
@@ -132,9 +132,9 @@ void main() {
 
     test('participantCount returns participants length', () {
       final participants = [
-        _makeParticipant(userId: '@a:s'),
-        _makeParticipant(userId: '@b:s'),
-        _makeParticipant(userId: '@c:s'),
+        makeParticipant(userId: '@a:s'),
+        makeParticipant(userId: '@b:s'),
+        makeParticipant(userId: '@c:s'),
       ];
 
       final room = VoiceRoomEntity(
@@ -149,10 +149,10 @@ void main() {
 
     test('hosts returns host and coHost participants', () {
       final participants = [
-        _makeParticipant(userId: '@host:s', role: VoiceRoomRole.host),
-        _makeParticipant(userId: '@cohost:s', role: VoiceRoomRole.coHost),
-        _makeParticipant(userId: '@speaker:s', role: VoiceRoomRole.speaker),
-        _makeParticipant(userId: '@listener:s', role: VoiceRoomRole.listener),
+        makeParticipant(userId: '@host:s', role: VoiceRoomRole.host),
+        makeParticipant(userId: '@cohost:s', role: VoiceRoomRole.coHost),
+        makeParticipant(userId: '@speaker:s', role: VoiceRoomRole.speaker),
+        makeParticipant(userId: '@listener:s', role: VoiceRoomRole.listener),
       ];
 
       final room = VoiceRoomEntity(
@@ -169,9 +169,9 @@ void main() {
 
     test('raisedHands filters by isHandRaised', () {
       final participants = [
-        _makeParticipant(userId: '@a:s', isHandRaised: true),
-        _makeParticipant(userId: '@b:s', isHandRaised: false),
-        _makeParticipant(userId: '@c:s', isHandRaised: true),
+        makeParticipant(userId: '@a:s', isHandRaised: true),
+        makeParticipant(userId: '@b:s', isHandRaised: false),
+        makeParticipant(userId: '@c:s', isHandRaised: true),
       ];
 
       final room = VoiceRoomEntity(

@@ -200,12 +200,12 @@ void main() {
     });
 
     test('content defaults to null', () {
-      final e = PostImageMoment(images: []);
+      const e = PostImageMoment(images: []);
       expect(e.content, isNull);
     });
 
     test('visibility defaults to public', () {
-      expect(PostImageMoment(images: const []).visibility, MomentVisibility.public);
+      expect(const PostImageMoment(images: []).visibility, MomentVisibility.public);
     });
 
     test('empty images list → equal (const-capable)', () {

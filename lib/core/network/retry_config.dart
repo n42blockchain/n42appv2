@@ -46,6 +46,6 @@ extension RetryOptionsExtension on Options {
   /// Returns a copy with retry explicitly enabled (e.g. for idempotent POST).
   Options withRetry({int? maxRetries}) => _copyWith({
         RetryOptions.kRetryEnabled: true,
-        if (maxRetries != null) RetryOptions.kMaxRetries: maxRetries,
+        RetryOptions.kMaxRetries: ?maxRetries,
       });
 }

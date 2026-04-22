@@ -1,0 +1,17 @@
+include: ../analysis_options.yaml
+
+# Test files commonly use untyped literals and raw Map/List for fixtures/mocks.
+# Relax strict-* inference flags here (still enforced in lib/).
+analyzer:
+  language:
+    strict-casts: false
+    strict-inference: false
+    strict-raw-types: false
+  errors:
+    # These warnings are overzealous for fixture code; keep them as info in lib/
+    # but silence in test/ to avoid maintenance drag.
+    inference_failure_on_collection_literal: ignore
+    inference_failure_on_instance_creation: ignore
+    strict_raw_type: ignore
+    unused_local_variable: ignore
+    library_private_types_in_public_api: ignore

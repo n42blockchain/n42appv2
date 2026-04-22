@@ -68,7 +68,7 @@ void main() {
             .thenAnswer((_) async => [rootMsg, replyMsg]);
         // Stream subscription after loading
         when(() => mockRepo.watchThreadMessages(any(), any()))
-            .thenAnswer((_) => Stream.empty());
+            .thenAnswer((_) => const Stream.empty());
       },
       act: (bloc) => bloc.add(const InitializeThread(
         roomId: _kRoomId,

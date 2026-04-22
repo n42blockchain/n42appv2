@@ -293,7 +293,7 @@ void main() {
   group('UserStories', () {
     final t = DateTime(2025, 6, 1);
 
-    UserStories _makeUserStories({List<StoryEntity>? stories}) => UserStories(
+    UserStories makeUserStories({List<StoryEntity>? stories}) => UserStories(
           userId: '@alice:s',
           userName: 'Alice',
           stories: stories ??
@@ -305,30 +305,30 @@ void main() {
         );
 
     test('unviewedCount returns count of unviewed stories', () {
-      final us = _makeUserStories();
+      final us = makeUserStories();
       expect(us.unviewedCount, 1);
     });
 
     test('hasUnviewed returns true when any unviewed', () {
-      expect(_makeUserStories().hasUnviewed, isTrue);
+      expect(makeUserStories().hasUnviewed, isTrue);
     });
 
     test('hasUnviewed returns false when all viewed', () {
-      final us = _makeUserStories(stories: [_makeStory(isViewed: true)]);
+      final us = makeUserStories(stories: [_makeStory(isViewed: true)]);
       expect(us.hasUnviewed, isFalse);
     });
 
     test('storyCount returns stories.length', () {
-      expect(_makeUserStories().storyCount, 2);
+      expect(makeUserStories().storyCount, 2);
     });
 
     test('latestStory returns first story', () {
-      final us = _makeUserStories();
+      final us = makeUserStories();
       expect(us.latestStory?.id, 's1');
     });
 
     test('latestStory returns null for empty list', () {
-      final us = _makeUserStories(stories: []);
+      final us = makeUserStories(stories: []);
       expect(us.latestStory, isNull);
     });
   });

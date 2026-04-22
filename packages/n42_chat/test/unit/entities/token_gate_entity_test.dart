@@ -25,7 +25,7 @@ void main() {
   });
 
   group('TokenGateRule', () {
-    TokenGateRule _makeRule({
+    TokenGateRule makeRule({
       String id = 'rule-1',
       TokenStandard tokenStandard = TokenStandard.erc20,
       int chainId = 1,
@@ -48,7 +48,7 @@ void main() {
     }
 
     test('constructs with required fields', () {
-      final rule = _makeRule();
+      final rule = makeRule();
 
       expect(rule.id, 'rule-1');
       expect(rule.tokenStandard, TokenStandard.erc20);
@@ -84,16 +84,16 @@ void main() {
 
     group('props equality', () {
       test('equal rules with same fields', () {
-        final a = _makeRule();
-        final b = _makeRule();
+        final a = makeRule();
+        final b = makeRule();
 
         expect(a, equals(b));
         expect(a.hashCode, equals(b.hashCode));
       });
 
       test('different id produces different rules', () {
-        final a = _makeRule(id: 'r1');
-        final b = _makeRule(id: 'r2');
+        final a = makeRule(id: 'r1');
+        final b = makeRule(id: 'r2');
 
         expect(a, isNot(equals(b)));
       });
@@ -101,7 +101,7 @@ void main() {
 
     group('toJson / fromJson', () {
       test('round trip preserves fields', () {
-        final original = _makeRule(
+        final original = makeRule(
           id: 'rule-rt',
           tokenStandard: TokenStandard.erc721,
           chainId: 56,

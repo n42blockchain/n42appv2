@@ -191,7 +191,7 @@ class GoldenTestHelper {
     final themeSuffix = themeMode == ThemeMode.dark ? '_dark' : '_light';
     await expectLater(
       find.byType(MaterialApp),
-      matchesGoldenFile('$goldenDir/${name}$themeSuffix.png'),
+      matchesGoldenFile('$goldenDir/$name$themeSuffix.png'),
     );
   }
 }

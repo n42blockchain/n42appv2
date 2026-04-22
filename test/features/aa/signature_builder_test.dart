@@ -99,8 +99,12 @@ void main() {
 
       test('parse → combine roundtrip should be identity', () {
         final original = Uint8List(65);
-        for (int i = 0; i < 32; i++) original[i] = i;
-        for (int i = 32; i < 64; i++) original[i] = i + 32;
+        for (int i = 0; i < 32; i++) {
+          original[i] = i;
+        }
+        for (int i = 32; i < 64; i++) {
+          original[i] = i + 32;
+        }
         original[64] = 27;
 
         final parsed = SignatureBuilder.parseSignature(original);

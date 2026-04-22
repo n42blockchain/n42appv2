@@ -96,31 +96,31 @@ class BridgeManagementService {
 
   /// 预置可用桥接模板（首次使用时显示可安装项）。
   List<BridgeEntity> get availableBridgeTemplates => [
-        BridgeEntity(
+        const BridgeEntity(
           id: 'slack_template',
           protocol: BridgeProtocol.slack,
           displayName: 'Slack',
           iconUrl: 'assets/icons/bridge_slack.png',
         ),
-        BridgeEntity(
+        const BridgeEntity(
           id: 'discord_template',
           protocol: BridgeProtocol.discord,
           displayName: 'Discord',
           iconUrl: 'assets/icons/bridge_discord.png',
         ),
-        BridgeEntity(
+        const BridgeEntity(
           id: 'telegram_template',
           protocol: BridgeProtocol.telegram,
           displayName: 'Telegram',
           iconUrl: 'assets/icons/bridge_telegram.png',
         ),
-        BridgeEntity(
+        const BridgeEntity(
           id: 'whatsapp_template',
           protocol: BridgeProtocol.whatsapp,
           displayName: 'WhatsApp',
           iconUrl: 'assets/icons/bridge_whatsapp.png',
         ),
-        BridgeEntity(
+        const BridgeEntity(
           id: 'signal_template',
           protocol: BridgeProtocol.signal,
           displayName: 'Signal',

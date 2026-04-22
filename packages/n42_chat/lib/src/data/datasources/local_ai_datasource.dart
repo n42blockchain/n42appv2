@@ -69,7 +69,7 @@ class LocalAiDatasource implements AiService {
   }) async {
     final lang = language ?? '中文';
     final result = await _singleTurn(
-      '请用$lang将以下内容总结为不超过${maxLength}字的摘要：\n\n$text',
+      '请用$lang将以下内容总结为不超过$maxLength字的摘要：\n\n$text',
       maxTokens: maxLength,
     );
     return result?.trim() ?? '无法生成摘要';

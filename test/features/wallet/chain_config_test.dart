@@ -107,7 +107,7 @@ void main() {
             expect(
               pathPattern.hasMatch(path),
               true,
-              reason: '${entry.key} path "${path}" should match derivation path format',
+              reason: '${entry.key} path "$path" should match derivation path format',
             );
           }
         }

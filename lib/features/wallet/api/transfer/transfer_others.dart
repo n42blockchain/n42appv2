@@ -314,7 +314,7 @@ mixin _TransferOthersMixin on _TransferBaseMixin {
       "txType": "XRP",
       "issuer": "",
       "currency": "",
-      if (destinationTag != null) "destinationTag": destinationTag,
+      "destinationTag": ?destinationTag,
     };
     XrpApi xrpApi = XrpApi();
     if (sequence == 0) {

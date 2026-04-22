@@ -33,7 +33,7 @@ void main() {
   // ─────────────────────────────────────────────────
 
   group('ChainBalance.balanceDouble', () {
-    ChainBalance _make({required BigInt balance, required int decimals}) {
+    ChainBalance make({required BigInt balance, required int decimals}) {
       return ChainBalance(
         chainSymbol: 'TEST',
         contract: '0x0',
@@ -45,11 +45,11 @@ void main() {
     }
 
     test('zero balance → 0.0', () {
-      expect(_make(balance: BigInt.zero, decimals: 18).balanceDouble, 0.0);
+      expect(make(balance: BigInt.zero, decimals: 18).balanceDouble, 0.0);
     });
 
     test('1 ETH (18 decimals) → 1.0', () {
-      final cb = _make(
+      final cb = make(
         balance: BigInt.parse('1000000000000000000'),
         decimals: 18,
       );
@@ -57,7 +57,7 @@ void main() {
     });
 
     test('0.5 ETH (18 decimals) → 0.5', () {
-      final cb = _make(
+      final cb = make(
         balance: BigInt.parse('500000000000000000'),
         decimals: 18,
       );
@@ -65,33 +65,33 @@ void main() {
     });
 
     test('1 USDT (6 decimals) → 1.0', () {
-      final cb = _make(balance: BigInt.from(1000000), decimals: 6);
+      final cb = make(balance: BigInt.from(1000000), decimals: 6);
       expect(cb.balanceDouble, closeTo(1.0, 1e-9));
     });
 
     test('1.5 USDT (6 decimals) → 1.5', () {
-      final cb = _make(balance: BigInt.from(1500000), decimals: 6);
+      final cb = make(balance: BigInt.from(1500000), decimals: 6);
       expect(cb.balanceDouble, closeTo(1.5, 1e-9));
     });
 
     test('100 USDC (6 decimals) → 100.0', () {
-      final cb = _make(balance: BigInt.from(100000000), decimals: 6);
+      final cb = make(balance: BigInt.from(100000000), decimals: 6);
       expect(cb.balanceDouble, closeTo(100.0, 1e-6));
     });
 
     test('1 satoshi (8 decimals) → 0.00000001', () {
-      final cb = _make(balance: BigInt.one, decimals: 8);
+      final cb = make(balance: BigInt.one, decimals: 8);
       expect(cb.balanceDouble, closeTo(1e-8, 1e-15));
     });
 
     test('1 BTC (8 decimals): 1e8 satoshi → 1.0', () {
-      final cb = _make(balance: BigInt.from(100000000), decimals: 8);
+      final cb = make(balance: BigInt.from(100000000), decimals: 8);
       expect(cb.balanceDouble, closeTo(1.0, 1e-9));
     });
 
     test('large balance with 18 decimals', () {
       // 100 ETH
-      final cb = _make(
+      final cb = make(
         balance: BigInt.parse('100000000000000000000'),
         decimals: 18,
       );

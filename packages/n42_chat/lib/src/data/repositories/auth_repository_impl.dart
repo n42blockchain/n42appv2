@@ -1364,7 +1364,7 @@ class AuthRepositoryImpl implements IAuthRepository {
 
   /// 生成一个 32 字节的随机挑战（服务端不可用时的占位实现）。
   Uint8List _randomChallenge() {
-    final uuid = const Uuid();
+    const uuid = Uuid();
     final bytes = <int>[];
     // 两个 v4 UUID 拼接 = 32 字节
     bytes.addAll(uuid.v4obj().toBytes());

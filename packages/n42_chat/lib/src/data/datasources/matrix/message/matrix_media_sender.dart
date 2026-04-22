@@ -114,7 +114,7 @@ class MatrixMediaSender {
       if (viewOnce) {
         content['org.n42.view_once'] = {
           'consumed': false,
-          if (fallbackHttpUrl != null) 'fallback_http_url': fallbackHttpUrl,
+          'fallback_http_url': ?fallbackHttpUrl,
         };
         content['n42.self_destruct'] ??= {'after': 0};
       }

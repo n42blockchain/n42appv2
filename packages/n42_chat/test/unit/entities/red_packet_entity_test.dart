@@ -4,7 +4,7 @@ import 'package:n42_chat/src/domain/entities/red_packet_entity.dart';
 void main() {
   // ─── Helpers ───────────────────────────────────────────────────────────────
 
-  RedPacketClaim _claim(String userId, double amount, {int daysAgo = 0}) {
+  RedPacketClaim claim0(String userId, double amount, {int daysAgo = 0}) {
     return RedPacketClaim(
       userId: userId,
       userName: 'User $userId',
@@ -13,7 +13,7 @@ void main() {
     );
   }
 
-  RedPacketEntity _packet({
+  RedPacketEntity packet0({
     List<RedPacketClaim> claims = const [],
     int totalCount = 5,
     double totalAmount = 100.0,
@@ -42,7 +42,7 @@ void main() {
   group('RedPacketEntity', () {
     group('construction', () {
       test('stores all required fields correctly', () {
-        final packet = _packet(totalAmount: 50.0, totalCount: 3);
+        final packet = packet0(totalAmount: 50.0, totalCount: 3);
         expect(packet.id, 'rp_001');
         expect(packet.token, 'USDT');
         expect(packet.totalAmount, 50.0);
@@ -53,21 +53,21 @@ void main() {
       });
 
       test('defaults coverColor to #E64340', () {
-        final packet = _packet();
+        final packet = packet0();
         expect(packet.coverColor, '#E64340');
       });
     });
 
     group('claimedAmount', () {
       test('returns 0 for empty claims', () {
-        expect(_packet().claimedAmount, 0.0);
+        expect(packet0().claimedAmount, 0.0);
       });
 
       test('sums amounts across all claims', () {
-        final packet = _packet(claims: [
-          _claim('u1', 30.0),
-          _claim('u2', 25.5),
-          _claim('u3', 10.0),
+        final packet = packet0(claims: [
+          claim0('u1', 30.0),
+          claim0('u2', 25.5),
+          claim0('u3', 10.0),
         ]);
         expect(packet.claimedAmount, 65.5);
       });
@@ -75,14 +75,14 @@ void main() {
 
     group('remainingAmount', () {
       test('equals totalAmount when no claims', () {
-        final packet = _packet(totalAmount: 100.0);
+        final packet = packet0(totalAmount: 100.0);
         expect(packet.remainingAmount, 100.0);
       });
 
       test('decreases as claims are added', () {
-        final packet = _packet(
+        final packet = packet0(
           totalAmount: 100.0,
-          claims: [_claim('u1', 40.0), _claim('u2', 35.0)],
+          claims: [claim0('u1', 40.0), claim0('u2', 35.0)],
         );
         expect(packet.remainingAmount, closeTo(25.0, 0.001));
       });
@@ -90,18 +90,18 @@ void main() {
 
     group('claimedCount & remainingCount', () {
       test('claimedCount matches claims.length', () {
-        final packet = _packet(
+        final packet = packet0(
           totalCount: 5,
-          claims: [_claim('u1', 10.0), _claim('u2', 20.0)],
+          claims: [claim0('u1', 10.0), claim0('u2', 20.0)],
         );
         expect(packet.claimedCount, 2);
         expect(packet.remainingCount, 3);
       });
 
       test('remainingCount is 0 when fully claimed', () {
-        final packet = _packet(
+        final packet = packet0(
           totalCount: 2,
-          claims: [_claim('u1', 50.0), _claim('u2', 50.0)],
+          claims: [claim0('u1', 50.0), claim0('u2', 50.0)],
         );
         expect(packet.remainingCount, 0);
       });
@@ -109,14 +109,14 @@ void main() {
 
     group('isExpired', () {
       test('returns false when expiresAt is in the future', () {
-        final packet = _packet(
+        final packet = packet0(
           expiresAt: DateTime.now().add(const Duration(hours: 1)),
         );
         expect(packet.isExpired, isFalse);
       });
 
       test('returns true when expiresAt is in the past', () {
-        final packet = _packet(
+        final packet = packet0(
           expiresAt: DateTime.now().subtract(const Duration(seconds: 1)),
         );
         expect(packet.isExpired, isTrue);
@@ -125,17 +125,17 @@ void main() {
 
     group('isCompleted', () {
       test('returns false when slots remain', () {
-        final packet = _packet(
+        final packet = packet0(
           totalCount: 5,
-          claims: [_claim('u1', 20.0)],
+          claims: [claim0('u1', 20.0)],
         );
         expect(packet.isCompleted, isFalse);
       });
 
       test('returns true when all slots are claimed', () {
-        final packet = _packet(
+        final packet = packet0(
           totalCount: 2,
-          claims: [_claim('u1', 50.0), _claim('u2', 50.0)],
+          claims: [claim0('u1', 50.0), claim0('u2', 50.0)],
         );
         expect(packet.isCompleted, isTrue);
       });
@@ -143,26 +143,26 @@ void main() {
 
     group('lifecycle', () {
       test('is active when not expired and not completed', () {
-        final packet = _packet(
+        final packet = packet0(
           totalCount: 5,
-          claims: [_claim('u1', 10.0)],
+          claims: [claim0('u1', 10.0)],
           expiresAt: DateTime.now().add(const Duration(hours: 1)),
         );
         expect(packet.lifecycle, RedPacketLifecycle.active);
       });
 
       test('is completed when all packets claimed', () {
-        final packet = _packet(
+        final packet = packet0(
           totalCount: 2,
-          claims: [_claim('u1', 50.0), _claim('u2', 50.0)],
+          claims: [claim0('u1', 50.0), claim0('u2', 50.0)],
         );
         expect(packet.lifecycle, RedPacketLifecycle.completed);
       });
 
       test('is expired when past expiry with remaining slots', () {
-        final packet = _packet(
+        final packet = packet0(
           totalCount: 5,
-          claims: [_claim('u1', 10.0)],
+          claims: [claim0('u1', 10.0)],
           expiresAt: DateTime.now().subtract(const Duration(hours: 1)),
         );
         expect(packet.lifecycle, RedPacketLifecycle.expired);
@@ -170,9 +170,9 @@ void main() {
 
       test('completed takes priority over expired', () {
         // All claimed AND past expiry → completed wins
-        final packet = _packet(
+        final packet = packet0(
           totalCount: 2,
-          claims: [_claim('u1', 50.0), _claim('u2', 50.0)],
+          claims: [claim0('u1', 50.0), claim0('u2', 50.0)],
           expiresAt: DateTime.now().subtract(const Duration(hours: 1)),
         );
         expect(packet.lifecycle, RedPacketLifecycle.completed);
@@ -181,28 +181,28 @@ void main() {
 
     group('bestLuckClaim', () {
       test('returns null when no claims', () {
-        expect(_packet().bestLuckClaim, isNull);
+        expect(packet0().bestLuckClaim, isNull);
       });
 
       test('returns null when only one claim', () {
-        final packet = _packet(claims: [_claim('u1', 50.0)]);
+        final packet = packet0(claims: [claim0('u1', 50.0)]);
         expect(packet.bestLuckClaim, isNull);
       });
 
       test('returns claim with highest amount', () {
-        final packet = _packet(claims: [
-          _claim('u1', 10.0),
-          _claim('u2', 45.0), // highest
-          _claim('u3', 25.0),
+        final packet = packet0(claims: [
+          claim0('u1', 10.0),
+          claim0('u2', 45.0), // highest
+          claim0('u3', 25.0),
         ]);
         expect(packet.bestLuckClaim?.userId, 'u2');
         expect(packet.bestLuckClaim?.amount, 45.0);
       });
 
       test('handles tied amounts — later claim wins via reduce (not strictly >)', () {
-        final packet = _packet(claims: [
-          _claim('u1', 50.0),
-          _claim('u2', 50.0), // tie — reduce(a,b) returns b when a.amount == b.amount
+        final packet = packet0(claims: [
+          claim0('u1', 50.0),
+          claim0('u2', 50.0), // tie — reduce(a,b) returns b when a.amount == b.amount
         ]);
         // When amounts are equal, a > b is false, so b (u2) is returned
         expect(packet.bestLuckClaim?.userId, 'u2');
@@ -211,23 +211,23 @@ void main() {
 
     group('isClaimBestLuck', () {
       test('returns false when no best luck (< 2 claims)', () {
-        final packet = _packet(claims: [_claim('u1', 50.0)]);
+        final packet = packet0(claims: [claim0('u1', 50.0)]);
         expect(packet.isClaimBestLuck('u1'), isFalse);
       });
 
       test('returns true for the best luck user', () {
-        final packet = _packet(claims: [
-          _claim('u1', 10.0),
-          _claim('u2', 90.0), // best luck
+        final packet = packet0(claims: [
+          claim0('u1', 10.0),
+          claim0('u2', 90.0), // best luck
         ]);
         expect(packet.isClaimBestLuck('u2'), isTrue);
         expect(packet.isClaimBestLuck('u1'), isFalse);
       });
 
       test('returns false for unknown user', () {
-        final packet = _packet(claims: [
-          _claim('u1', 30.0),
-          _claim('u2', 70.0),
+        final packet = packet0(claims: [
+          claim0('u1', 30.0),
+          claim0('u2', 70.0),
         ]);
         expect(packet.isClaimBestLuck('unknown'), isFalse);
       });
@@ -235,8 +235,8 @@ void main() {
 
     group('JSON serialization', () {
       test('round-trips via fromJson/toJson', () {
-        final original = _packet(
-          claims: [_claim('u1', 30.5), _claim('u2', 19.5)],
+        final original = packet0(
+          claims: [claim0('u1', 30.5), claim0('u2', 19.5)],
         );
         final json = original.toJson();
         final restored = RedPacketEntity.fromJson(json);
@@ -255,14 +255,14 @@ void main() {
       });
 
       test('fromJson defaults type to normal for unknown type string', () {
-        final json = _packet().toJson();
+        final json = packet0().toJson();
         json['type'] = 'unknown_type';
         final restored = RedPacketEntity.fromJson(json);
         expect(restored.type, RedPacketType.normal);
       });
 
       test('fromJson handles missing optional fields gracefully', () {
-        final json = _packet().toJson()
+        final json = packet0().toJson()
           ..['sender_avatar'] = null
           ..['cover_color'] = null;
         final restored = RedPacketEntity.fromJson(json);
@@ -271,8 +271,8 @@ void main() {
       });
 
       test('toJson type field matches enum name', () {
-        expect(_packet(type: RedPacketType.lucky).toJson()['type'], 'lucky');
-        expect(_packet(type: RedPacketType.normal).toJson()['type'], 'normal');
+        expect(packet0(type: RedPacketType.lucky).toJson()['type'], 'lucky');
+        expect(packet0(type: RedPacketType.normal).toJson()['type'], 'normal');
       });
     });
   });
@@ -297,7 +297,7 @@ void main() {
     });
 
     test('avatarUrl defaults to null', () {
-      final claim = _claim('u1', 10.0);
+      final claim = claim0('u1', 10.0);
       expect(claim.avatarUrl, isNull);
     });
 
@@ -321,13 +321,13 @@ void main() {
       });
 
       test('fromJson defaults userName to empty string when missing', () {
-        final json = _claim('u1', 10.0).toJson()..remove('user_name');
+        final json = claim0('u1', 10.0).toJson()..remove('user_name');
         final restored = RedPacketClaim.fromJson(json);
         expect(restored.userName, '');
       });
 
       test('fromJson handles null avatarUrl', () {
-        final json = _claim('u1', 10.0).toJson();
+        final json = claim0('u1', 10.0).toJson();
         json['avatar_url'] = null;
         final restored = RedPacketClaim.fromJson(json);
         expect(restored.avatarUrl, isNull);

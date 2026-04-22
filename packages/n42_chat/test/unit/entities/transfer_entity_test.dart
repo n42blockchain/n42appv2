@@ -2,9 +2,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_chat/src/domain/entities/transfer_entity.dart';
 
 void main() {
-  final _createdAt = DateTime(2025, 6, 1);
+  final createdAt = DateTime(2025, 6, 1);
 
-  TransferEntity _makeTransfer({
+  TransferEntity makeTransfer({
     String id = 'tx-1',
     TransferStatus status = TransferStatus.pending,
     String amount = '1.0',
@@ -21,7 +21,7 @@ void main() {
       amount: amount,
       token: token,
       status: status,
-      createdAt: _createdAt,
+      createdAt: createdAt,
       transactionHash: transactionHash,
       fee: fee,
       feeToken: feeToken,
@@ -54,7 +54,7 @@ void main() {
 
   group('TransferEntity construction', () {
     test('creates with required fields', () {
-      final entity = _makeTransfer();
+      final entity = makeTransfer();
 
       expect(entity.id, 'tx-1');
       expect(entity.senderAddress, '0xSender');
@@ -62,11 +62,11 @@ void main() {
       expect(entity.amount, '1.0');
       expect(entity.token, 'ETH');
       expect(entity.status, TransferStatus.pending);
-      expect(entity.createdAt, _createdAt);
+      expect(entity.createdAt, createdAt);
     });
 
     test('optional fields default to null', () {
-      final entity = _makeTransfer();
+      final entity = makeTransfer();
 
       expect(entity.eventId, isNull);
       expect(entity.senderUserId, isNull);
@@ -85,72 +85,72 @@ void main() {
 
   group('status getters', () {
     test('isPending is true for pending', () {
-      expect(_makeTransfer(status: TransferStatus.pending).isPending, isTrue);
+      expect(makeTransfer(status: TransferStatus.pending).isPending, isTrue);
     });
 
     test('isPending is true for processing', () {
-      expect(_makeTransfer(status: TransferStatus.processing).isPending, isTrue);
+      expect(makeTransfer(status: TransferStatus.processing).isPending, isTrue);
     });
 
     test('isPending is false for completed', () {
-      expect(_makeTransfer(status: TransferStatus.completed).isPending, isFalse);
+      expect(makeTransfer(status: TransferStatus.completed).isPending, isFalse);
     });
 
     test('isSuccess is true for completed', () {
-      expect(_makeTransfer(status: TransferStatus.completed).isSuccess, isTrue);
+      expect(makeTransfer(status: TransferStatus.completed).isSuccess, isTrue);
     });
 
     test('isSuccess is false for pending', () {
-      expect(_makeTransfer(status: TransferStatus.pending).isSuccess, isFalse);
+      expect(makeTransfer(status: TransferStatus.pending).isSuccess, isFalse);
     });
 
     test('isFailed is true for failed', () {
-      expect(_makeTransfer(status: TransferStatus.failed).isFailed, isTrue);
+      expect(makeTransfer(status: TransferStatus.failed).isFailed, isTrue);
     });
 
     test('isFailed is false for cancelled', () {
-      expect(_makeTransfer(status: TransferStatus.cancelled).isFailed, isFalse);
+      expect(makeTransfer(status: TransferStatus.cancelled).isFailed, isFalse);
     });
   });
 
   group('formattedAmount', () {
     test('combines amount and token', () {
-      final entity = _makeTransfer(amount: '2.5', token: 'USDT');
+      final entity = makeTransfer(amount: '2.5', token: 'USDT');
       expect(entity.formattedAmount, '2.5 USDT');
     });
   });
 
   group('formattedFee', () {
     test('returns null when fee is null', () {
-      final entity = _makeTransfer();
+      final entity = makeTransfer();
       expect(entity.formattedFee, isNull);
     });
 
     test('uses feeToken when provided', () {
-      final entity = _makeTransfer(fee: '0.001', feeToken: 'BNB');
+      final entity = makeTransfer(fee: '0.001', feeToken: 'BNB');
       expect(entity.formattedFee, '0.001 BNB');
     });
 
     test('falls back to token when feeToken is null', () {
-      final entity = _makeTransfer(fee: '0.001', token: 'ETH');
+      final entity = makeTransfer(fee: '0.001', token: 'ETH');
       expect(entity.formattedFee, '0.001 ETH');
     });
   });
 
   group('shortTxHash', () {
     test('returns null when transactionHash is null', () {
-      final entity = _makeTransfer();
+      final entity = makeTransfer();
       expect(entity.shortTxHash, isNull);
     });
 
     test('returns full hash when length <= 16', () {
       // '0x1234567890ab' = 14 chars ≤ 16 → returned as-is
-      final entity = _makeTransfer(transactionHash: '0x1234567890ab');
+      final entity = makeTransfer(transactionHash: '0x1234567890ab');
       expect(entity.shortTxHash, '0x1234567890ab');
     });
 
     test('shortens long hash', () {
-      final entity = _makeTransfer(
+      final entity = makeTransfer(
         transactionHash: '0xabcdef1234567890abcdef1234567890abcdef12',
       );
       final short = entity.shortTxHash!;
@@ -161,30 +161,30 @@ void main() {
 
   group('isSentBy', () {
     test('returns true for matching sender address (case-insensitive)', () {
-      final entity = _makeTransfer();
+      final entity = makeTransfer();
       expect(entity.isSentBy('0xsender'), isTrue);
       expect(entity.isSentBy('0xSENDER'), isTrue);
     });
 
     test('returns false for non-matching address', () {
-      final entity = _makeTransfer();
+      final entity = makeTransfer();
       expect(entity.isSentBy('0xOther'), isFalse);
     });
 
     test('returns false for null address', () {
-      final entity = _makeTransfer();
+      final entity = makeTransfer();
       expect(entity.isSentBy(null), isFalse);
     });
   });
 
   group('getDirection', () {
     test('returns sent for sender address', () {
-      final entity = _makeTransfer();
+      final entity = makeTransfer();
       expect(entity.getDirection('0xSender'), TransferDirection.sent);
     });
 
     test('returns received for receiver address', () {
-      final entity = _makeTransfer();
+      final entity = makeTransfer();
       expect(entity.getDirection('0xReceiver'), TransferDirection.received);
     });
   });
@@ -202,16 +202,16 @@ void main() {
 
   group('props equality', () {
     test('equal entities with same fields', () {
-      final a = _makeTransfer();
-      final b = _makeTransfer();
+      final a = makeTransfer();
+      final b = makeTransfer();
 
       expect(a, equals(b));
       expect(a.hashCode, equals(b.hashCode));
     });
 
     test('different id produces different entities', () {
-      final a = _makeTransfer(id: 'tx-1');
-      final b = _makeTransfer(id: 'tx-2');
+      final a = makeTransfer(id: 'tx-1');
+      final b = makeTransfer(id: 'tx-2');
 
       expect(a, isNot(equals(b)));
     });
@@ -219,7 +219,7 @@ void main() {
 
   group('copyWith', () {
     test('replaces status and completedAt', () {
-      final original = _makeTransfer();
+      final original = makeTransfer();
       final completed = DateTime(2025, 6, 2);
       final updated = original.copyWith(
         status: TransferStatus.completed,

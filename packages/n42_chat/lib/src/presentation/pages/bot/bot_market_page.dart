@@ -60,7 +60,7 @@ class _BotMarketPageState extends State<BotMarketPage> {
     return Scaffold(
       backgroundColor:
           isDark ? AppColors.backgroundDark : AppColors.background,
-      appBar: N42AppBar(
+      appBar: const N42AppBar(
         title: 'Bot Market',
       ),
       body: Column(

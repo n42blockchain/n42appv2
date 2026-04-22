@@ -1,0 +1,10 @@
+include: ../analysis_options.yaml
+
+# Tests intentionally exercise deprecated APIs (e.g. aa_config_test.dart
+# validates backwards-compat behavior of deprecated bundler URL helpers)
+# and sometimes keep snake_case identifiers aligned with external data.
+analyzer:
+  errors:
+    deprecated_member_use_from_same_package: ignore
+    non_constant_identifier_names: ignore
+    library_private_types_in_public_api: ignore

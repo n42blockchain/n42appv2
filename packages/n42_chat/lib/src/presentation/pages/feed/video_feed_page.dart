@@ -113,7 +113,7 @@ class _VideoFeedItemState extends State<_VideoFeedItem> {
     _controller = VideoPlayerController.networkUrl(Uri.parse(url));
     try {
       await _controller!.initialize();
-      _controller!.setLooping(true);
+      await _controller!.setLooping(true);
       if (widget.isActive) {
         await _controller!.play();
       }
