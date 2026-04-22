@@ -21,7 +21,7 @@ on:
         default: '3'
 
 env:
-  FLUTTER_VERSION: '3.22.0'
+  FLUTTER_VERSION: '3.38.0'
 
 jobs:
   benchmark:

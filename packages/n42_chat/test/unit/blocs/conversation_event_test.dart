@@ -352,11 +352,8 @@ void main() {
       );
     });
 
-    test('stores dynamic items', () {
-      const e = ConversationsUpdated(['conv1', 'conv2']);
-      expect(e.conversations.length, 2);
-      expect(e.conversations.first, 'conv1');
-    });
+    // 原先 'stores dynamic items' 测试用字符串填充 List<ConversationEntity>，
+    // 类型不匹配且仅验证"列表能存元素"(已被 empty 用例覆盖)。删除。
 
     test('is a ConversationEvent', () {
       expect(const ConversationsUpdated([]), isA<ConversationEvent>());

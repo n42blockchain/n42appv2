@@ -11,7 +11,7 @@ on:
       - 'v*'
 
 env:
-  FLUTTER_VERSION: '3.27.0'
+  FLUTTER_VERSION: '3.38.0'
   JAVA_VERSION: '21'
 
 jobs:

@@ -15,6 +15,18 @@ analyzer:
     - "lib/generated/**"
     - "**.g.dart"
     - "**.freezed.dart"
+    # Nested Flutter example/test projects with their own pubspec — should not
+    # be analyzed by the host project (would error on their own imports).
+    - "packages/webview_flutter_wkwebview/example/**"
+    - "plugins/flutter_mining/example/**"
+    # Pigeon schema files are code-generation input, not Dart source.
+    - "packages/webview_flutter_wkwebview/pigeons/**"
+    # n42_jmt_verify is not currently referenced by the host (verified via
+    # grep over lib/) and depends on a blake3 API that pub.dev's `hashlib`
+    # package no longer exposes. Keep the package on disk until we either
+    # wire it up or re-home the Blake3 impl; suppress its 22 analyze errors
+    # so the root analyze reflects what actually ships.
+    - "packages/n42_jmt_verify/**"
 
   errors:
     # wallet package is a transitive dependency, suppress this warning
