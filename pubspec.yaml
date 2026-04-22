@@ -141,8 +141,9 @@ dependencies:
 
   # === N42 Chat Module ===
   n42_chat:
-    url: https://github.com/n42blockchain/n42_chat
-    ref: 45244a1
+    git:
+      url: https://github.com/n42blockchain/n42_chat
+      ref: 45244a1
     #path: /Users/jiangyiwei/Desktop/n42_chat
 
 # Override: flutter_secure_storage 10.x needed for compatibility with
