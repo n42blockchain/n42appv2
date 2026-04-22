@@ -37,6 +37,7 @@ import '../group/create_group_page.dart';
 import '../notification/on_chain_notifications_page.dart';
 import '../vault/vault_list_page.dart';
 import '../qrcode/scan_qr_page.dart';
+import '../transfer/receive_page.dart';
 import '../search/global_search_page.dart';
 import '../story/create_story_page.dart';
 import '../story/story_viewer_page.dart';
@@ -742,18 +743,6 @@ class _ConversationListPageState extends State<ConversationListPage> {
     );
   }
 
-  void _showComingSoon(String feature) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          S.of(context)?.commonFeatureComingSoon(feature) ??
-              '$feature coming soon',
-        ),
-        duration: const Duration(seconds: 2),
-      ),
-    );
-  }
-
   void _showAddMenu() {
     final isDark = context.isDarkMode;
 
@@ -825,7 +814,7 @@ class _ConversationListPageState extends State<ConversationListPage> {
                 },
               ),
 
-              // 收付款
+              // 收付款 → 复用个人中心已有的收款二维码页面
               _buildAddMenuItem(
                 ctx,
                 icon: Icons.payment,
@@ -833,7 +822,11 @@ class _ConversationListPageState extends State<ConversationListPage> {
                 title: S.of(context)?.commonPayment ?? 'Payment',
                 onTap: () {
                   Navigator.pop(ctx);
-                  _showComingSoon(S.of(context)?.commonPayment ?? 'Payment');
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => const ReceivePage(),
+                    ),
+                  );
                 },
               ),
 

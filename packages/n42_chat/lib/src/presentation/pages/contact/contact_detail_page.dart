@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../core/extensions/context_extension.dart';
@@ -793,7 +794,7 @@ class _FriendInfoPageState extends State<FriendInfoPage> {
                   title: S.of(context)?.contactPhone ?? 'Phone',
                   textColor: textColor,
                   secondaryTextColor: secondaryTextColor,
-                  onTap: () {},
+                  onTap: _showPhoneDialog,
                 ),
                 _buildDivider(dividerColor),
                 _buildMenuItem(
@@ -1055,6 +1056,41 @@ class _FriendInfoPageState extends State<FriendInfoPage> {
               );
             },
             child: Text(S.of(context)?.commonSave ?? 'Save'),
+          ),
+        ],
+      ),
+    ).whenComplete(controller.dispose);
+  }
+
+  void _showPhoneDialog() {
+    // 联系人模型暂无 phone 字段；打开一个简单的系统拨号/提示对话框，
+    // 让用户手动输入号码拨打（降级体验，直到后端联系人支持 phone）。
+    final controller = TextEditingController();
+    showDialog<void>(
+      context: context,
+      builder: (dialogCtx) => AlertDialog(
+        title: Text(S.of(dialogCtx)?.contactPhone ?? 'Phone'),
+        content: TextField(
+          controller: controller,
+          keyboardType: TextInputType.phone,
+          decoration: const InputDecoration(hintText: '+1 234 567 8900'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogCtx).pop(),
+            child: Text(S.of(dialogCtx)?.commonCancel ?? 'Cancel'),
+          ),
+          TextButton(
+            onPressed: () async {
+              final number = controller.text.trim();
+              Navigator.of(dialogCtx).pop();
+              if (number.isEmpty) return;
+              final uri = Uri(scheme: 'tel', path: number);
+              if (await canLaunchUrl(uri)) {
+                await launchUrl(uri);
+              }
+            },
+            child: const Text('Call'),
           ),
         ],
       ),

@@ -51,11 +51,11 @@ class ServicesPage extends StatelessWidget {
               cardColor: cardColor,
               textColor: textColor,
               onTap: () {
-                // 通用转账入口，需要在聊天上下文中使用
+                // 转账需要聊天上下文中的收款方，提示用户从会话中发起（与 Red Packet 同模式）
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(S.of(context)?.commonFeatureComingSoon(S.of(context)?.commonTransfer ?? 'Transfer') ?? 'Transfer coming soon'),
-                    duration: const Duration(seconds: 1),
+                  const SnackBar(
+                    content: Text('Please initiate transfer from a chat'),
+                    duration: Duration(seconds: 2),
                   ),
                 );
               },

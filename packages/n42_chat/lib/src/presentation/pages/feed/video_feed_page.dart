@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_player/video_player.dart';
 
@@ -138,6 +139,94 @@ class _VideoFeedItemState extends State<_VideoFeedItem> {
     super.dispose();
   }
 
+  void _showCommentSheet(BuildContext context, MomentEntity moment) {
+    final controller = TextEditingController();
+    final bloc = context.read<MomentBloc>();
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (sheetCtx) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(sheetCtx).viewInsets.bottom,
+          ),
+          child: Container(
+            color: Colors.white,
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+            child: SafeArea(
+              top: false,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: controller,
+                      autofocus: true,
+                      maxLines: 3,
+                      minLines: 1,
+                      decoration: const InputDecoration(
+                        hintText: '写评论…',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  TextButton(
+                    onPressed: () {
+                      final text = controller.text.trim();
+                      if (text.isEmpty) return;
+                      bloc.add(CommentMoment(
+                        momentId: moment.id,
+                        content: text,
+                      ));
+                      Navigator.of(sheetCtx).pop();
+                    },
+                    child: const Text('发送'),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _shareMomentLink(BuildContext context, MomentEntity moment) {
+    // 分享链接走标准 share sheet；若平台不支持则降级显示链接。
+    // 后端生成的 moment deeplink 形如 n42://moment/<id>
+    final link = 'n42://moment/${moment.id}';
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (sheetCtx) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.link),
+                title: const Text('复制链接'),
+                subtitle: Text(
+                  link,
+                  style: const TextStyle(fontSize: 12, color: Colors.black54),
+                ),
+                onTap: () async {
+                  await Clipboard.setData(ClipboardData(text: link));
+                  if (sheetCtx.mounted) {
+                    Navigator.of(sheetCtx).pop();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('已复制到剪贴板')),
+                    );
+                  }
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -233,19 +322,26 @@ class _VideoFeedItemState extends State<_VideoFeedItem> {
                     : Icons.favorite_border,
                 label: '${widget.moment.likes.length}',
                 color: widget.moment.isLikedByMe ? Colors.red : Colors.white,
-                onTap: () {},
+                onTap: () {
+                  final bloc = context.read<MomentBloc>();
+                  if (widget.moment.isLikedByMe) {
+                    bloc.add(UnlikeMoment(widget.moment.id));
+                  } else {
+                    bloc.add(LikeMoment(widget.moment.id));
+                  }
+                },
               ),
               const SizedBox(height: 20),
               _ActionButton(
                 icon: Icons.comment_outlined,
                 label: '${widget.moment.comments.length}',
-                onTap: () {},
+                onTap: () => _showCommentSheet(context, widget.moment),
               ),
               const SizedBox(height: 20),
               _ActionButton(
                 icon: Icons.share_outlined,
                 label: '分享',
-                onTap: () {},
+                onTap: () => _shareMomentLink(context, widget.moment),
               ),
             ],
           ),
