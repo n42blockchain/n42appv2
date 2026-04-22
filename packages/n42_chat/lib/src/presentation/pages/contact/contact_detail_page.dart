@@ -1093,17 +1093,14 @@ class _FriendInfoPageState extends State<FriendInfoPage> {
   }
 
   void _showPhotosDialog() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          S
-                  .of(context)
-                  ?.commonFeatureComingSoon(
-                    S.of(context)?.contactPhotos ?? 'Photos',
-                  ) ??
-              'Photos coming soon',
+    // "Photos" 实际对应微信语义下该用户的朋友圈/动态列表 —
+    // 复用 MomentListPage 按 userId 过滤（通过 LoadUserMoments 事件）
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => MomentListPage(
+          userId: widget.userId,
+          userName: _currentRemark ?? widget.displayName,
         ),
-        duration: const Duration(seconds: 1),
       ),
     );
   }

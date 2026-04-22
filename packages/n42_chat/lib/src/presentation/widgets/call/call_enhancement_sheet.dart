@@ -2,7 +2,6 @@ library;
 
 import 'package:flutter/material.dart';
 
-import '../../../../l10n/app_localizations.dart';
 import '../../../core/extensions/context_extension.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../services/voip/livekit_service.dart';
@@ -210,10 +209,11 @@ class _CallEnhancementSheetState extends State<CallEnhancementSheet> {
         widget.onChanged();
         context.showSuccessSnackBar('Recording started');
       } else {
-        final s = S.of(context);
+        // 具体化提示：录制需要 LiveKit Egress 等服务端组件，与泛泛的
+        // "coming soon" 相比能让用户/运维明确不是客户端 bug。
         context.showSnackBar(
-          s?.commonFeatureComingSoon(_controller.recordingFeatureName) ??
-              '${_controller.recordingFeatureName} coming soon',
+          '${_controller.recordingFeatureName} is not available — '
+          'server-side egress is not configured.',
         );
       }
     } catch (e) {

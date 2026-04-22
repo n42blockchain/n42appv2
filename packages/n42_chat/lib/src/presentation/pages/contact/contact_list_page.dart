@@ -23,7 +23,12 @@ import '../../widgets/common/common_widgets.dart';
 import '../chat/chat_page.dart';
 import '../group/create_group_page.dart';
 import '../../../n42_chat.dart';
+import 'chat_only_friends_page.dart';
 import 'contact_tile.dart';
+import 'enterprise_contacts_page.dart';
+import 'official_accounts_page.dart';
+import 'service_accounts_page.dart';
+import 'tags_management_page.dart';
 import '../../../core/utils/debug_log.dart';
 
 /// 通讯录页面（仿微信）
@@ -373,9 +378,13 @@ class _ContactListPageState extends State<ContactListPage> {
             isDark: isDark,
             icon: _ChatOnlyFriendIcon(),
             title: S.of(context)?.contactChatOnlyFriends ?? 'Chat-only Friends',
-            onTap: () => _showComingSoon(
-              S.of(context)?.contactChatOnlyFriends ?? 'Chat-only Friends',
-            ),
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => const ChatOnlyFriendsPage(),
+                ),
+              );
+            },
           ),
 
           const SizedBox(height: 8),
@@ -402,13 +411,18 @@ class _ContactListPageState extends State<ContactListPage> {
                 ),
                 _buildItemDivider(isDark),
 
-                // 标签
+                // 标签（管理模式：查看 / 新增 / 删除所有标签）
                 _buildFunctionItem(
                   isDark: isDark,
                   icon: _TagIcon(),
                   title: S.of(context)?.contactTags ?? 'Tags',
-                  onTap: () =>
-                      _showComingSoon(S.of(context)?.contactTags ?? 'Tags'),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (_) => const TagsManagementPage(),
+                      ),
+                    );
+                  },
                 ),
                 _buildItemDivider(isDark),
 
@@ -419,10 +433,13 @@ class _ContactListPageState extends State<ContactListPage> {
                   title:
                       S.of(context)?.contactOfficialAccounts ??
                       'Official Accounts',
-                  onTap: () => _showComingSoon(
-                    S.of(context)?.contactOfficialAccounts ??
-                        'Official Accounts',
-                  ),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (_) => const OfficialAccountsPage(),
+                      ),
+                    );
+                  },
                 ),
                 _buildItemDivider(isDark),
 
@@ -433,9 +450,13 @@ class _ContactListPageState extends State<ContactListPage> {
                   title:
                       S.of(context)?.contactServiceAccounts ??
                       'Service Accounts',
-                  onTap: () => _showComingSoon(
-                    S.of(context)?.contactServiceAccounts ?? 'Service Accounts',
-                  ),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (_) => const ServiceAccountsPage(),
+                      ),
+                    );
+                  },
                 ),
                 _buildItemDivider(isDark),
 
@@ -446,10 +467,13 @@ class _ContactListPageState extends State<ContactListPage> {
                   title:
                       S.of(context)?.contactEnterpriseContacts ??
                       'Enterprise Contacts',
-                  onTap: () => _showComingSoon(
-                    S.of(context)?.contactEnterpriseContacts ??
-                        'Enterprise Contacts',
-                  ),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (_) => const EnterpriseContactsPage(),
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
@@ -569,17 +593,6 @@ class _ContactListPageState extends State<ContactListPage> {
     );
   }
 
-  void _showComingSoon(String feature) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          S.of(context)?.commonFeatureComingSoon(feature) ??
-              '$feature coming soon',
-        ),
-        duration: const Duration(seconds: 2),
-      ),
-    );
-  }
 
   void _onContactTap(ContactEntity contact) {
     _startChatWithContact(contact);

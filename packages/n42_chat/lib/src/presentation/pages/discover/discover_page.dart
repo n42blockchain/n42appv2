@@ -426,8 +426,6 @@ class _MomentsIconPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
-// TODO: 待产品闭环后补充：_MusicIcon, _WatchIcon, _NearbyIcon
-
 /// 游戏图标 - 游戏手柄
 class _GameIcon extends StatelessWidget {
   @override
