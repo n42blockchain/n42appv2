@@ -295,13 +295,14 @@ class FirebasePushService implements IPushNotificationService {
     _callStateResetTimer = null;
     _isInCall = inCall;
     if (inCall) {
-      // 安全机制：10 分钟后自动重置，防止状态泄漏
-      // （正常通话会由 CallManager 主动调用 setInCall(false)）
-      _callStateResetTimer = Timer(const Duration(minutes: 10), () {
+      // 安全机制：60 分钟后自动重置，防止状态泄漏
+      // （正常通话会由 CallManager 主动调用 setInCall(false)）。
+      // 设为 60 分钟避免打断长时间会议/群通话。
+      _callStateResetTimer = Timer(const Duration(minutes: 60), () {
         if (_isInCall) {
           _isInCall = false;
           debugLog(
-            'FirebasePushService: Auto-reset _isInCall after 10min safety timeout',
+            'FirebasePushService: Auto-reset _isInCall after 60min safety timeout',
           );
         }
       });
@@ -344,6 +345,10 @@ class FirebasePushService implements IPushNotificationService {
       if (initialMessage != null) {
         _handleNotificationTap(initialMessage);
       }
+
+      // 处理本地通知的冷启动/后台点击（flutter_local_notifications 的本地通知
+      // 点击不会触发 FirebaseMessaging.onMessageOpenedApp）。
+      await consumePendingLocalNotificationTap();
 
       // 获取 FCM Token
       await _initializeToken();
@@ -505,6 +510,17 @@ class FirebasePushService implements IPushNotificationService {
 
   /// 处理前台消息
   void _handleForegroundMessage(RemoteMessage message) {
+    try {
+      _handleForegroundMessageImpl(message);
+    } catch (e, st) {
+      // StreamSubscription 异常会中断后续消息，必须吞掉并记录
+      debugLog(
+        'FirebasePushService: _handleForegroundMessage error: $e\n$st',
+      );
+    }
+  }
+
+  void _handleForegroundMessageImpl(RemoteMessage message) {
     // 检查通知配置
     if (!_notificationConfig.enabled) return;
     if (_notificationConfig.isInDoNotDisturbPeriod()) return;
@@ -564,6 +580,19 @@ class FirebasePushService implements IPushNotificationService {
       return;
     }
 
+    // 前台时 Matrix Sync 通道正在运行，带有完整事件内容、mentions 模式判断的通知
+    // 由 _handleSyncUpdate 负责。若此处再显示 FCM 的占位通知（通常是
+    // event_id_only，body 为 "You have a new message"），会抢先 mark eventId，
+    // 导致后续 Sync 的详细通知被去重 —— 结果用户始终看到粗糙通知。
+    // 因此 room 已在内存中（Sync 能处理）时直接让位给 Sync。
+    if (roomId != null && _client.getRoomById(roomId) != null) {
+      debugLog(
+        'FirebasePushService: Foreground FCM for known room $roomId '
+        '— deferring to Matrix sync for full-content notification',
+      );
+      return;
+    }
+
     // FCM/Sync 双通道去重：如果此 eventId 已经显示过通知，跳过
     if (eventId != null && !_markEventAsNotified(eventId)) {
       debugLog(
@@ -572,27 +601,7 @@ class FirebasePushService implements IPushNotificationService {
       return;
     }
 
-    if (roomId != null) {
-      final room = _client.getRoomById(roomId);
-      if (room != null) {
-        // 检查房间是否静音
-        if (room.pushRuleState == matrix.PushRuleState.dontNotify) {
-          return;
-        }
-
-        // 从房间获取信息显示通知
-        final roomName = room.getLocalizedDisplayname();
-        showLocalNotification(
-          title: roomName,
-          body: 'You have a new message',
-          roomId: roomId,
-          eventId: eventId,
-        );
-        return;
-      }
-    }
-
-    // 如果有 notification payload，使用它
+    // Fallback：room 未加载（例如 Sync 尚未完成）或非 Matrix 聊天路径
     final notification = message.notification;
     if (notification != null) {
       showLocalNotification(
@@ -604,7 +613,6 @@ class FirebasePushService implements IPushNotificationService {
             notification.android?.imageUrl ?? notification.apple?.imageUrl,
       );
     } else {
-      // 没有 notification payload，显示默认通知
       showLocalNotification(
         title: 'N42 Chat',
         body: 'You have a new message',
@@ -699,7 +707,13 @@ class FirebasePushService implements IPushNotificationService {
         iOS: iosSettings,
       );
 
-      await _localNotifications!.initialize(settings: initSettings);
+      // 必须绑定后台点击响应，否则用户点击后台 isolate 弹出的通知后
+      // payload 会丢失，主 app 启动后无从跳转到对应房间。
+      await _localNotifications!.initialize(
+        settings: initSettings,
+        onDidReceiveBackgroundNotificationResponse:
+            _onBackgroundNotificationResponse,
+      );
 
       await _ensureAndroidMessageChannels();
     }
@@ -796,13 +810,96 @@ class FirebasePushService implements IPushNotificationService {
   }
 
   /// 后台通知点击响应
+  ///
+  /// flutter_local_notifications 的本地通知点击 **不会** 触发
+  /// FirebaseMessaging.onMessageOpenedApp（那是 FCM 推送的路由）。
+  /// 当 app 被杀/在后台时点击本地通知，此函数会在后台 isolate 被调用 —
+  /// 我们在这里解析 payload 并转交给冷启动处理逻辑。
+  ///
+  /// 注意：此函数运行在独立 isolate，无法访问主 isolate 的 onNotificationTap
+  /// 回调，所以通过 SharedPreferences 缓存 payload，由主 app 启动后消费。
   @pragma('vm:entry-point')
   static void _onBackgroundNotificationResponse(NotificationResponse response) {
-    // 后台点击会通过 FirebaseMessaging.onMessageOpenedApp 处理
+    final payload = response.payload;
+    if (payload == null || payload.isEmpty) return;
+    // 缓存到 SharedPreferences，主 isolate 启动时通过
+    // consumePendingLocalNotificationTap 消费
+    // ignore: discarded_futures
+    _persistPendingLocalNotificationTap(payload);
+  }
+
+  static const String _pendingLocalNotificationKey =
+      'n42_chat.pending_local_notification_tap';
+
+  static Future<void> _persistPendingLocalNotificationTap(
+    String payload,
+  ) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(_pendingLocalNotificationKey, payload);
+    } catch (e) {
+      debugLog(
+        'FirebasePushService: Failed to persist pending local notification: $e',
+      );
+    }
+  }
+
+  /// 启动时消费 `_onBackgroundNotificationResponse` 缓存的点击 payload
+  /// 以及冷启动时通过 `getNotificationAppLaunchDetails` 获取到的 payload。
+  /// 应在 initialize() 完成后调用。
+  Future<void> consumePendingLocalNotificationTap() async {
+    try {
+      // 1) 冷启动时通过 getNotificationAppLaunchDetails 获取（从杀死态启动）
+      final plugin = _localNotifications;
+      if (plugin != null) {
+        final details = await plugin.getNotificationAppLaunchDetails();
+        if (details != null &&
+            details.didNotificationLaunchApp &&
+            details.notificationResponse?.payload != null) {
+          _dispatchLocalNotificationPayload(
+            details.notificationResponse!.payload!,
+          );
+        }
+      }
+      // 2) 后台点击 isolate 缓存（进程仍在时通常直接走 onDidReceiveNotificationResponse）
+      final prefs = await SharedPreferences.getInstance();
+      final cached = prefs.getString(_pendingLocalNotificationKey);
+      if (cached != null && cached.isNotEmpty) {
+        await prefs.remove(_pendingLocalNotificationKey);
+        _dispatchLocalNotificationPayload(cached);
+      }
+    } catch (e) {
+      debugLog(
+        'FirebasePushService: Failed to consume pending local notification tap: $e',
+      );
+    }
+  }
+
+  void _dispatchLocalNotificationPayload(String payload) {
+    try {
+      final data = json.decode(payload);
+      if (data is! Map) return;
+      final roomId = data['room_id'] as String?;
+      final eventId = data['event_id'] as String?;
+      onNotificationTap?.call(roomId, eventId);
+    } catch (e) {
+      debugLog(
+        'FirebasePushService: Failed to dispatch local notification payload: $e',
+      );
+    }
   }
 
   /// 处理 Matrix 同步更新（用于本地通知）
   void _handleSyncUpdate(matrix.SyncUpdate syncUpdate) {
+    try {
+      _handleSyncUpdateImpl(syncUpdate);
+    } catch (e, st) {
+      // StreamSubscription 异常会中断后续 sync，必须吞掉并记录
+      debugLog('FirebasePushService: _handleSyncUpdate error: $e\n$st');
+    }
+  }
+
+  void _handleSyncUpdateImpl(matrix.SyncUpdate syncUpdate) {
     if (!_notificationConfig.enabled) return;
 
     final joinedRooms = syncUpdate.rooms?.join;
@@ -1203,13 +1300,28 @@ class FirebasePushService implements IPushNotificationService {
     if (_lastRegisteredPushkey != null) {
       pushkeys.add(_lastRegisteredPushkey!);
     }
-    if (pushkeys.isEmpty) return;
-
     for (final pushkey in pushkeys) {
       await _deletePusherByKey(pushkey);
     }
     _lastRegisteredPushkey = null;
+    _isPusherVerified = false;
+    // 登出时清理通知相关的内存状态（即使没有 pushkey 可删除也要执行），
+    // 避免新账号复用旧 eventId 被误去重，或 clearNotificationsForRoom 时
+    // 取消到旧账号遗留的通知 ID。
+    _recentlyNotifiedEventIds.clear();
+    _roomNotificationIds.clear();
+    _lastSyncTime = null;
     await _clearStoredPushkey();
+    // 清理系统通知栏中的旧账号残留通知
+    if (_localNotifications != null) {
+      try {
+        await _localNotifications!.cancelAll();
+      } catch (e) {
+        debugLog(
+          'FirebasePushService: Failed to cancel notifications on unregister: $e',
+        );
+      }
+    }
   }
 
   Future<void> _deletePusherByKey(String pushkey) async {
@@ -1284,11 +1396,12 @@ class FirebasePushService implements IPushNotificationService {
       }
 
       // Android 通知详情
+      // fullScreenIntent 仅用于来电/闹钟等必须立即响应的通知；
+      // 普通消息通知启用会打断用户当前操作，不可使用。
       final androidDetails = _androidMessageDetails(
         _notificationConfig,
         groupKey: 'n42_chat_messages',
         category: AndroidNotificationCategory.message,
-        fullScreenIntent: true,
       );
 
       // iOS 通知详情

@@ -32,6 +32,10 @@ class MockRoom extends Mock implements matrix.Room {}
 
 class MockEvent extends Mock implements matrix.Event {}
 
+class FakePusher extends Fake implements matrix.Pusher {}
+
+class FakePusherId extends Fake implements matrix.PusherId {}
+
 class FakeMatrixEvent extends Fake implements matrix.MatrixEvent {
   @override
   final String type;
@@ -55,6 +59,11 @@ class FakeMatrixEvent extends Fake implements matrix.MatrixEvent {
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+
+  setUpAll(() {
+    registerFallbackValue(FakePusher());
+    registerFallbackValue(FakePusherId());
+  });
 
   final List<MethodCall> callkitCalls = [];
 
@@ -1055,6 +1064,58 @@ void main() {
 
       // 重新创建实例以继续后续测试
       service = FirebasePushService(MockMatrixClient());
+    });
+  });
+
+  // ════════════════════════════════════════════
+  // 19. 登出清理（unregisterPush 副作用）
+  // ════════════════════════════════════════════
+  group('unregisterPush state cleanup', () {
+    setUp(() {
+      SharedPreferences.setMockInitialValues({});
+    });
+
+    test('unregisterPush 清理 recentlyNotifiedEventIds 与 active room 状态',
+        () async {
+      final client = MockMatrixClient();
+      when(() => client.isLogged()).thenReturn(false);
+      when(() => client.userID).thenReturn('@me:matrix.org');
+      when(() => client.deviceID).thenReturn('DEV1');
+      when(() => client.deviceName).thenReturn('test');
+      // deletePusher 对未知 pushkey 抛 MatrixException - 我们让它安静完成
+      when(() => client.deletePusher(any())).thenAnswer((_) async {});
+
+      final service = FirebasePushService(
+        client,
+        pushGatewayUrl: 'https://push.example.com',
+      );
+
+      // 填入一些状态
+      service.markEventAsNotifiedForTest('\$event_a');
+      service.markEventAsNotifiedForTest('\$event_b');
+      service.setActiveRoom('!room1:matrix.org');
+      expect(service.recentlyNotifiedEventCountForTest, 2);
+
+      await service.unregisterPush();
+
+      // dedup 集合应被清空，允许新账号相同 eventId 再次通知
+      expect(service.recentlyNotifiedEventCountForTest, 0);
+      // isPusherVerified 应被重置
+      expect(service.isPusherVerified, isFalse);
+
+      await service.dispose();
+    });
+
+    test('unregisterPush 不抛异常即使无待删除 pushkey', () async {
+      final client = MockMatrixClient();
+      when(() => client.isLogged()).thenReturn(false);
+      when(() => client.userID).thenReturn('@me:matrix.org');
+      when(() => client.deviceID).thenReturn('DEV1');
+
+      final service = FirebasePushService(client);
+
+      await expectLater(service.unregisterPush(), completes);
+      await service.dispose();
     });
   });
 }
