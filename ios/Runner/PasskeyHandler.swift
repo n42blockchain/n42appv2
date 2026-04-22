@@ -82,13 +82,15 @@ class PasskeyHandler: NSObject, FlutterPlugin {
             // attestation configuration available in newer versions
         }
 
-        // Exclude existing credentials
-        if let excludeIds = args["excludeCredentialIds"] as? [String] {
-            let excludeDescriptors = excludeIds.compactMap { id -> ASAuthorizationPlatformPublicKeyCredentialDescriptor? in
-                guard let data = Data(base64URLEncoded: id) else { return nil }
-                return ASAuthorizationPlatformPublicKeyCredentialDescriptor(credentialID: data)
+        // Exclude existing credentials (API available iOS 17.4+)
+        if #available(iOS 17.4, *) {
+            if let excludeIds = args["excludeCredentialIds"] as? [String] {
+                let excludeDescriptors = excludeIds.compactMap { id -> ASAuthorizationPlatformPublicKeyCredentialDescriptor? in
+                    guard let data = Data(base64URLEncoded: id) else { return nil }
+                    return ASAuthorizationPlatformPublicKeyCredentialDescriptor(credentialID: data)
+                }
+                request.excludedCredentials = excludeDescriptors
             }
-            request.excludedCredentials = excludeDescriptors
         }
 
         pendingResult = result
