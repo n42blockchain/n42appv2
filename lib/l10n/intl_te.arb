@@ -1988,4 +1988,16 @@
   "push_permission_btn_dismiss": "మళ్ళీ గుర్తుచేయవద్దు",
   "push_permission_btn_later": "తర్వాత",
   "push_permission_btn_settings": "సెట్టింగ్‌లకు వెళ్ళు"
+,
+  "g_iap_title": "కొనుగోలు",
+  "g_iap_restore": "కొనుగోళ్ళను పునరుద్ధరించు",
+  "g_iap_restoring": "కొనుగోళ్ళను పునరుద్ధరిస్తున్నాము…",
+  "g_iap_restored": "పునరుద్ధరించబడింది: {productId}",
+  "g_iap_purchased": "కొనుగోలు విజయవంతమైంది: {productId}",
+  "g_iap_failed": "కొనుగోలు విఫలమైంది: {message}",
+  "g_iap_cancelled": "రద్దు చేయబడింది",
+  "g_iap_store_unavailable": "స్టోర్ అందుబాటులో లేదు",
+  "g_iap_check_network": "మీ నెట్‌వర్క్ కనెక్షన్ తనిఖీ చేసి మళ్ళీ ప్రయత్నించండి",
+  "g_iap_no_products": "ఏ ఉత్పత్తులూ అందుబాటులో లేవు",
+  "g_iap_retry": "మళ్ళీ ప్రయత్నించు"
 }

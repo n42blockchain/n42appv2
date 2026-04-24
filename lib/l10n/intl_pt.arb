@@ -1995,4 +1995,16 @@
   "push_permission_btn_dismiss": "Não lembrar mais",
   "push_permission_btn_later": "Mais tarde",
   "push_permission_btn_settings": "Ir para Definições"
+,
+  "g_iap_title": "Comprar",
+  "g_iap_restore": "Restaurar compras",
+  "g_iap_restoring": "A restaurar compras…",
+  "g_iap_restored": "Restaurado: {productId}",
+  "g_iap_purchased": "Compra bem-sucedida: {productId}",
+  "g_iap_failed": "Falha na compra: {message}",
+  "g_iap_cancelled": "Cancelado",
+  "g_iap_store_unavailable": "Loja indisponível",
+  "g_iap_check_network": "Verifique a sua ligação de rede e tente novamente",
+  "g_iap_no_products": "Sem produtos disponíveis",
+  "g_iap_retry": "Tentar novamente"
 }

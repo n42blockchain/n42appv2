@@ -1988,4 +1988,16 @@
   "push_permission_btn_dismiss": "மீண்டும் நினைவூட்டாதே",
   "push_permission_btn_later": "பிறகு",
   "push_permission_btn_settings": "அமைப்புகளுக்கு செல்"
+,
+  "g_iap_title": "வாங்கு",
+  "g_iap_restore": "கொள்முதல்களை மீட்டமை",
+  "g_iap_restoring": "கொள்முதல்களை மீட்டமைக்கிறது…",
+  "g_iap_restored": "மீட்டமைக்கப்பட்டது: {productId}",
+  "g_iap_purchased": "கொள்முதல் வெற்றிகரமானது: {productId}",
+  "g_iap_failed": "கொள்முதல் தோல்வியடைநதது: {message}",
+  "g_iap_cancelled": "ரத்து செய்யப்பட்டது",
+  "g_iap_store_unavailable": "கடை கிடைக்கவில்லை",
+  "g_iap_check_network": "உங்கள் நெட்வர்க் இணைப்பை சரிபார்த்து மீண்டும் முயற்சிக்கவும்",
+  "g_iap_no_products": "தயாரிப்புகள் எதுவுமில்லை",
+  "g_iap_retry": "மீண்டும் முயற்சி"
 }

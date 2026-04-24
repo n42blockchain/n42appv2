@@ -1988,4 +1988,16 @@
   "push_permission_btn_dismiss": "पुन्हा आठवण देऊ नका",
   "push_permission_btn_later": "नंतर",
   "push_permission_btn_settings": "सेटिंग्जवर जा"
+,
+  "g_iap_title": "खरेदी करा",
+  "g_iap_restore": "खरेदी पुनर्संचयित करा",
+  "g_iap_restoring": "खरेदी पुनर्संचयित होत आहे…",
+  "g_iap_restored": "पुनर्संचयित: {productId}",
+  "g_iap_purchased": "खरेदी यशस्वी: {productId}",
+  "g_iap_failed": "खरेदी अयशस्वी: {message}",
+  "g_iap_cancelled": "रद्द केले",
+  "g_iap_store_unavailable": "स्टोर उपलब्ध नाही",
+  "g_iap_check_network": "आपले नेटवर्क कनेक्शन तपासा आणि पुन्हा प्रयत्न करा",
+  "g_iap_no_products": "कोणतीही उत्पादने उपलब्ध नाहीत",
+  "g_iap_retry": "पुन्हा प्रयत्न करा"
 }

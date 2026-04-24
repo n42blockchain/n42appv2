@@ -1995,4 +1995,16 @@
   "push_permission_btn_dismiss": "Không nhắc lại",
   "push_permission_btn_later": "Để sau",
   "push_permission_btn_settings": "Đến Cài đặt"
+,
+  "g_iap_title": "Mua",
+  "g_iap_restore": "Khôi phục giao dịch",
+  "g_iap_restoring": "Đang khôi phục giao dịch…",
+  "g_iap_restored": "Đã khôi phục: {productId}",
+  "g_iap_purchased": "Mua thành công: {productId}",
+  "g_iap_failed": "Mua thất bại: {message}",
+  "g_iap_cancelled": "Đã hủy",
+  "g_iap_store_unavailable": "Cửa hàng không khả dụng",
+  "g_iap_check_network": "Kiểm tra kết nối mạng và thử lại",
+  "g_iap_no_products": "Không có sản phẩm nào",
+  "g_iap_retry": "Thử lại"
 }

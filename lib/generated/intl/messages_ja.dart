@@ -45,180 +45,186 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m11(value) => "マッチング成功。アドレス：${value}";
 
-  static String m12(value) => "${value}より大きい金額です。";
+  static String m12(message) => "購入失敗：${message}";
 
-  static String m13(value) => "ウォレットは既に存在します。ウォレット名は「${value}」です";
+  static String m13(productId) => "購入成功：${productId}";
 
-  static String m14(value) => "${value}以上の金額を入力してください。";
+  static String m14(productId) => "復元済み：${productId}";
 
-  static String m15(gas) =>
-      "実行ガス(${gas})が高くなっています。呼び出したコントラクトが予想以上のガスを消費する可能性があります。";
+  static String m15(value) => "${value}より大きい金額です。";
 
-  static String m16(gas) =>
-      "最初のトランザクションにはアカウントのデプロイが含まれます（~${gas}ガス）。以降のトランザクションは安くなります。";
+  static String m16(value) => "ウォレットは既に存在します。ウォレット名は「${value}」です";
 
-  static String m17(gas) =>
-      "Paymasterガスオーバーヘッド(${gas})が高くなっています。ガスフリートランザクションのコストが増加する可能性があります。";
+  static String m17(value) => "${value}以上の金額を入力してください。";
 
   static String m18(gas) =>
-      "推定総ガス(${gas})が異常に高くなっています。トランザクションにエラーがないか確認してください。";
+      "実行ガス(${gas})が高くなっています。呼び出したコントラクトが予想以上のガスを消費する可能性があります。";
 
   static String m19(gas) =>
+      "最初のトランザクションにはアカウントのデプロイが含まれます（~${gas}ガス）。以降のトランザクションは安くなります。";
+
+  static String m20(gas) =>
+      "Paymasterガスオーバーヘッド(${gas})が高くなっています。ガスフリートランザクションのコストが増加する可能性があります。";
+
+  static String m21(gas) =>
+      "推定総ガス(${gas})が異常に高くなっています。トランザクションにエラーがないか確認してください。";
+
+  static String m22(gas) =>
       "検証ガス(${gas})が高すぎる可能性があります。複雑なアカウントロジックで発生することがあります。";
 
-  static String m20(value) => "残り${value}日";
+  static String m23(value) => "残り${value}日";
 
-  static String m21(value) => "行${value}のアドレスが重複しています";
+  static String m24(value) => "行${value}のアドレスが重複しています";
 
-  static String m22(value) => "残高が不十分です: 合計金額が利用可能な ${value} を超える可能性があります";
+  static String m25(value) => "残高が不十分です: 合計金額が利用可能な ${value} を超える可能性があります";
 
-  static String m23(value) => "行${value}のアドレスが無効です";
+  static String m26(value) => "行${value}のアドレスが無効です";
 
-  static String m24(value) => "行${value}の金額が無効です";
+  static String m27(value) => "行${value}の金額が無効です";
 
-  static String m25(value) => "最大${value}人の受取人";
+  static String m28(value) => "最大${value}人の受取人";
 
-  static String m26(token) => "続行するには${token}を承認してください";
+  static String m29(token) => "続行するには${token}を承認してください";
 
-  static String m27(impact) => "高価格インパクト(${impact})！慎重に作業を進めてください。";
+  static String m30(impact) => "高価格インパクト(${impact})！慎重に作業を進めてください。";
 
-  static String m28(secs) => "見積もりの有効期限は ${secs}s です";
+  static String m31(secs) => "見積もりの有効期限は ${secs}s です";
 
-  static String m29(value) => "+${value}ポイント/日";
+  static String m32(value) => "+${value}ポイント/日";
 
-  static String m30(value) => "最大${value}% APYを獲得";
+  static String m33(value) => "最大${value}% APYを獲得";
 
-  static String m31(value) => "おめでとうございます！あなたは現在、${value} を所有しています";
+  static String m34(value) => "おめでとうございます！あなたは現在、${value} を所有しています";
 
-  static String m32(value) => "${value} 秒待ってください";
+  static String m35(value) => "${value} 秒待ってください";
 
-  static String m33(value) => "${value}秒ごとに自動更新";
+  static String m36(value) => "${value}秒ごとに自動更新";
 
-  static String m34(address) => "アカウント${address}を追加しました";
+  static String m37(address) => "アカウント${address}を追加しました";
 
-  static String m35(address, network) =>
+  static String m38(address, network) =>
       "このハードウェアウォレットアカウントを追跡しますか？\n\nアドレス: ${address}\nネットワーク: ${network}";
 
-  static String m36(app) => "現在のアプリ: ${app}";
+  static String m39(app) => "現在のアプリ: ${app}";
 
-  static String m37(days) => "${days} 日前";
+  static String m40(days) => "${days} 日前";
 
-  static String m38(value) => "アカウントのインポートに失敗しました: ${value}";
+  static String m41(value) => "アカウントのインポートに失敗しました: ${value}";
 
-  static String m39(date) => "最後に接続しました: ${date}";
+  static String m42(date) => "最後に接続しました: ${date}";
 
-  static String m40(value) => "デバイスで${value}アプリを開いてください";
+  static String m43(value) => "デバイスで${value}アプリを開いてください";
 
-  static String m41(app) => "Ledgerで${app}アプリが開いていることを確認してください";
+  static String m44(app) => "Ledgerで${app}アプリが開いていることを確認してください";
 
-  static String m42(name) => "保存されたデバイスから「${name}」を削除してもよろしいですか?";
+  static String m45(name) => "保存されたデバイスから「${name}」を削除してもよろしいですか?";
 
-  static String m43(value) => "${value} ポイントを獲得する";
+  static String m46(value) => "${value} ポイントを獲得する";
 
-  static String m44(value) => "参加する友達ごとに ${value} ポイントを獲得しましょう!";
+  static String m47(value) => "参加する友達ごとに ${value} ポイントを獲得しましょう!";
 
-  static String m45(value) => "次のランクまで${value}ポイント";
+  static String m48(value) => "次のランクまで${value}ポイント";
 
-  static String m46(amount, token) => "≈ ${amount}${token}";
+  static String m49(amount, token) => "≈ ${amount}${token}";
 
-  static String m47(amount) => "≈ ${amount} USDT";
+  static String m50(amount) => "≈ ${amount} USDT";
 
-  static String m48(value) => "推定ガス: ~${value} 単位";
+  static String m51(value) => "推定ガス: ~${value} 単位";
 
-  static String m49(reason) => "理由: ${reason}";
+  static String m52(reason) => "理由: ${reason}";
 
-  static String m50(value) => "連絡先${value}を削除してもよろしいですか？";
+  static String m53(value) => "連絡先${value}を削除してもよろしいですか？";
 
-  static String m51(value) => "${value}d 結合解除";
+  static String m54(value) => "${value}d 結合解除";
 
-  static String m52(value) => "残り${value}日";
+  static String m55(value) => "残り${value}日";
 
-  static String m53(value) => "残り ${value} 日";
+  static String m56(value) => "残り ${value} 日";
 
-  static String m54(value) => "アンステークには ${value} 日かかります。この期間中、トークンはロックされます。";
+  static String m57(value) => "アンステークには ${value} 日かかります。この期間中、トークンはロックされます。";
 
-  static String m55(value) => "「${value}」が不足しています";
+  static String m58(value) => "「${value}」が不足しています";
 
-  static String m56(value) => "「${value}」アカウントの取得に失敗しました";
+  static String m59(value) => "「${value}」アカウントの取得に失敗しました";
 
-  static String m57(value) => "初回送金には最低${value} XRPが必要です";
+  static String m60(value) => "初回送金には最低${value} XRPが必要です";
 
-  static String m58(value) => "${value}日前";
+  static String m61(value) => "${value}日前";
 
-  static String m59(value) => "${value}1時間前";
+  static String m62(value) => "${value}1時間前";
 
-  static String m60(value) => "${value}分前";
+  static String m63(value) => "${value}分前";
 
-  static String m61(count) => "追加 (${count})";
+  static String m64(count) => "追加 (${count})";
 
-  static String m62(count) =>
+  static String m65(count) =>
       "${Intl.plural(count, one: '1 個の新しいトークンが検出されました', other: '${count} 新しいトークンが検出されました')} — タップして確認してください";
 
-  static String m63(value) => "検証コードが ${value} に送信されました";
+  static String m66(value) => "検証コードが ${value} に送信されました";
 
-  static String m64(value) => "${value}チェーンが追加されていません。";
+  static String m67(value) => "${value}チェーンが追加されていません。";
 
-  static String m65(value) => "${value}には未完了の取引があります。後でもう一度お試しください。";
+  static String m68(value) => "${value}には未完了の取引があります。後でもう一度お試しください。";
 
-  static String m66(value) => "${value}のアドレスが見つかりません。";
+  static String m69(value) => "${value}のアドレスが見つかりません。";
 
-  static String m67(value) => "${value}の残高が不足しています。";
+  static String m70(value) => "${value}の残高が不足しています。";
 
-  static String m68(value, value1) =>
+  static String m71(value, value1) =>
       "すべてのXRPアカウントはベースラインとして${value} XRP（${value1}ドロップ）を準備金として確保する必要があり、これは使用できません。";
 
-  static String m69(value, value1) =>
+  static String m72(value, value1) =>
       "アカウントが所有するオブジェクトごとに、${value} XRP（${value1}ドロップ）が準備金に追加されます。";
 
-  static String m70(value, value1) =>
+  static String m73(value, value1) =>
       "このアカウントは${value}個のオブジェクトを所有しているため、追加で${value1} XRPが準備金として確保されています。";
 
-  static String m71(value) => "パターンパスワードの入力エラー、あと${value}回試行できます";
+  static String m74(value) => "パターンパスワードの入力エラー、あと${value}回試行できます";
 
-  static String m72(value) => "パターンパスワードの入力エラー、あと${value}回試行できます";
+  static String m75(value) => "パターンパスワードの入力エラー、あと${value}回試行できます";
 
-  static String m73(value) => "${value}のセットアップに成功しました。N42Walletで認証を開始します！";
+  static String m76(value) => "${value}のセットアップに成功しました。N42Walletで認証を開始します！";
 
-  static String m74(value) =>
+  static String m77(value) =>
       "@N42Walletで私の${value}グループに参加して、Layer 1チェーンの初期マイナーになり、スマホで暗号資産を獲得しよう！";
 
-  static String m75(value, value1) =>
+  static String m78(value, value1) =>
       "ノードを実行するために${value1}まで${value} Nをロックしてもよろしいですか？";
 
-  static String m76(value) => "インポートに失敗しました：${value}";
+  static String m79(value) => "インポートに失敗しました：${value}";
 
-  static String m77(value) => "報酬を得るには、最低${value}のステーキング残高が必要です。";
+  static String m80(value) => "報酬を得るには、最低${value}のステーキング残高が必要です。";
 
-  static String m78(value, value1) => "${value1}ブロックマイニングごとに${value} N";
+  static String m81(value, value1) => "${value1}ブロックマイニングごとに${value} N";
 
-  static String m79(value) => "${value}文字である必要があります";
+  static String m82(value) => "${value}文字である必要があります";
 
-  static String m80(value) => "${value}の残高が不足しています。";
+  static String m83(value) => "${value}の残高が不足しています。";
 
-  static String m81(value) => "${value}を受取中...";
+  static String m84(value) => "${value}を受取中...";
 
-  static String m82(value) =>
+  static String m85(value) =>
       "アプリ内でスワップされた${value}はまもなくウォレットに配布され、このプロセスでは売却できません。ノードの運用に使用できます。";
 
-  static String m83(value) => "最大${value}文字";
+  static String m86(value) => "最大${value}文字";
 
-  static String m84(value) => "${value}チェーンは既にアプリでサポートされています！";
+  static String m87(value) => "${value}チェーンは既にアプリでサポートされています！";
 
-  static String m85(value) => "${value}チェーンは既にアプリでサポートされています。追加しますか？";
+  static String m88(value) => "${value}チェーンは既にアプリでサポートされています。追加しますか？";
 
-  static String m86(value) => "${value}アドレスのテストリンクに失敗しました！";
+  static String m89(value) => "${value}アドレスのテストリンクに失敗しました！";
 
-  static String m87(value) => "アプリケーションは${value}秒後にロック解除されます。";
+  static String m90(value) => "アプリケーションは${value}秒後にロック解除されます。";
 
-  static String m88(value) => "パターンパスワードの入力エラー、あと${value}回試行できます";
+  static String m91(value) => "パターンパスワードの入力エラー、あと${value}回試行できます";
 
-  static String m89(value) => "パスワードの入力エラー、あと${value}回試行できます";
+  static String m92(value) => "パスワードの入力エラー、あと${value}回試行できます";
 
-  static String m90(value) => "パスワードの入力エラー、あと${value}回試行できます";
+  static String m93(value) => "パスワードの入力エラー、あと${value}回試行できます";
 
-  static String m91(value) => "${value}パスワードを入力";
+  static String m94(value) => "${value}パスワードを入力";
 
-  static String m92(value) => "0〜${value}文字";
+  static String m95(value) => "0〜${value}文字";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -593,6 +599,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_home_key5": MessageLookupByLibrary.simpleMessage("メッセージ"),
     "g_home_key6": MessageLookupByLibrary.simpleMessage("学習"),
     "g_home_key9": MessageLookupByLibrary.simpleMessage("友達を招待"),
+    "g_iap_cancelled": MessageLookupByLibrary.simpleMessage("キャンセルしました"),
+    "g_iap_check_network": MessageLookupByLibrary.simpleMessage(
+      "ネットワーク接続を確認して再試行してください",
+    ),
+    "g_iap_failed": m12,
+    "g_iap_no_products": MessageLookupByLibrary.simpleMessage("購入できる商品がありません"),
+    "g_iap_purchased": m13,
+    "g_iap_restore": MessageLookupByLibrary.simpleMessage("購入を復元"),
+    "g_iap_restored": m14,
+    "g_iap_restoring": MessageLookupByLibrary.simpleMessage("購入を復元中…"),
+    "g_iap_retry": MessageLookupByLibrary.simpleMessage("再試行"),
+    "g_iap_store_unavailable": MessageLookupByLibrary.simpleMessage(
+      "ストアを利用できません",
+    ),
+    "g_iap_title": MessageLookupByLibrary.simpleMessage("購入"),
     "g_key_1": MessageLookupByLibrary.simpleMessage("削除に失敗しました！"),
     "g_key_100": MessageLookupByLibrary.simpleMessage("送信"),
     "g_key_101": MessageLookupByLibrary.simpleMessage("ガスリミット"),
@@ -613,7 +634,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_13": MessageLookupByLibrary.simpleMessage("ウォレット一覧"),
     "g_key_132": MessageLookupByLibrary.simpleMessage("データなし"),
     "g_key_134": MessageLookupByLibrary.simpleMessage("金額が無効です"),
-    "g_key_135": m12,
+    "g_key_135": m15,
     "g_key_14": MessageLookupByLibrary.simpleMessage("メインウォレット"),
     "g_key_140": MessageLookupByLibrary.simpleMessage("取引が成功しました"),
     "g_key_146": MessageLookupByLibrary.simpleMessage("パスワードが正しくありません"),
@@ -655,7 +676,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_211": MessageLookupByLibrary.simpleMessage("購入"),
     "g_key_212": MessageLookupByLibrary.simpleMessage("売却"),
     "g_key_213": MessageLookupByLibrary.simpleMessage("市場情報"),
-    "g_key_214": m13,
+    "g_key_214": m16,
     "g_key_25": MessageLookupByLibrary.simpleMessage("パスワードが一致しません。"),
     "g_key_29": MessageLookupByLibrary.simpleMessage("残高"),
     "g_key_3": MessageLookupByLibrary.simpleMessage("追加に失敗しました！"),
@@ -666,7 +687,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_41": MessageLookupByLibrary.simpleMessage("ウォレットアドレスを入力"),
     "g_key_43": MessageLookupByLibrary.simpleMessage("利用可能残高"),
     "g_key_44": MessageLookupByLibrary.simpleMessage("金額"),
-    "g_key_46": m14,
+    "g_key_46": m17,
     "g_key_47": MessageLookupByLibrary.simpleMessage(
       "この取引をカバーするための残高が不足しています。",
     ),
@@ -872,19 +893,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_gas_warn_call_high": MessageLookupByLibrary.simpleMessage(
       "実行ガスが高い",
     ),
-    "g_key_aa_gas_warn_call_high_desc": m15,
+    "g_key_aa_gas_warn_call_high_desc": m18,
     "g_key_aa_gas_warn_deploy": MessageLookupByLibrary.simpleMessage(
       "デプロイメントガスオーバーヘッド",
     ),
-    "g_key_aa_gas_warn_deploy_desc": m16,
+    "g_key_aa_gas_warn_deploy_desc": m19,
     "g_key_aa_gas_warn_paymaster": MessageLookupByLibrary.simpleMessage(
       "Paymasterオーバーヘッドが高い",
     ),
-    "g_key_aa_gas_warn_paymaster_desc": m17,
+    "g_key_aa_gas_warn_paymaster_desc": m20,
     "g_key_aa_gas_warn_total_high": MessageLookupByLibrary.simpleMessage(
       "ガスリミットが非常に高い",
     ),
-    "g_key_aa_gas_warn_total_high_desc": m18,
+    "g_key_aa_gas_warn_total_high_desc": m21,
     "g_key_aa_gas_warn_under_est": MessageLookupByLibrary.simpleMessage(
       "ガスの過小評価の可能性",
     ),
@@ -894,7 +915,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_gas_warn_verify_high": MessageLookupByLibrary.simpleMessage(
       "検証ガスが高い",
     ),
-    "g_key_aa_gas_warn_verify_high_desc": m19,
+    "g_key_aa_gas_warn_verify_high_desc": m22,
     "g_key_aa_gasless": MessageLookupByLibrary.simpleMessage("ガスレス"),
     "g_key_aa_gasless_transactions": MessageLookupByLibrary.simpleMessage(
       "ガスレストランザクションとバッチ操作",
@@ -1124,7 +1145,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_airdrop_claim": MessageLookupByLibrary.simpleMessage("請求"),
     "g_key_airdrop_claimed": MessageLookupByLibrary.simpleMessage("請求済み"),
-    "g_key_airdrop_days_left": m20,
+    "g_key_airdrop_days_left": m23,
     "g_key_airdrop_deadline": MessageLookupByLibrary.simpleMessage("締切"),
     "g_key_airdrop_eligible": MessageLookupByLibrary.simpleMessage("対象"),
     "g_key_airdrop_estimated_value": MessageLookupByLibrary.simpleMessage(
@@ -1168,7 +1189,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "CSV形式: アドレス,金額,ラベル",
     ),
     "g_key_batch_done": MessageLookupByLibrary.simpleMessage("完了"),
-    "g_key_batch_duplicate_address": m21,
+    "g_key_batch_duplicate_address": m24,
     "g_key_batch_estimating_gas": MessageLookupByLibrary.simpleMessage(
       "ガスを見積もっています...",
     ),
@@ -1180,10 +1201,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_batch_gas_savings": MessageLookupByLibrary.simpleMessage("ガス節約額"),
     "g_key_batch_help_title": MessageLookupByLibrary.simpleMessage("一括転送のヘルプ"),
     "g_key_batch_import_csv": MessageLookupByLibrary.simpleMessage("CSVインポート"),
-    "g_key_batch_insufficient_balance": m22,
-    "g_key_batch_invalid_address": m23,
-    "g_key_batch_invalid_amount": m24,
-    "g_key_batch_max_recipients": m25,
+    "g_key_batch_insufficient_balance": m25,
+    "g_key_batch_invalid_address": m26,
+    "g_key_batch_invalid_amount": m27,
+    "g_key_batch_max_recipients": m28,
     "g_key_batch_memo_optional": MessageLookupByLibrary.simpleMessage(
       "メモはオプションです",
     ),
@@ -1370,7 +1391,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "承認されました！ 「交換」をタップして続行します。",
     ),
     "g_key_dex_approve_exact": MessageLookupByLibrary.simpleMessage("正確な金額"),
-    "g_key_dex_approve_required": m26,
+    "g_key_dex_approve_required": m29,
     "g_key_dex_approve_unlimited": MessageLookupByLibrary.simpleMessage("無制限"),
     "g_key_dex_approve_unlimited_info": MessageLookupByLibrary.simpleMessage(
       "無制限承認：ルーターはいつでもこのトークンを使用できます。標準的な方法ですが、コントラクトが侵害された場合はリスクがあります。",
@@ -1389,8 +1410,8 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_dex_price_chart": MessageLookupByLibrary.simpleMessage("価格チャート"),
     "g_key_dex_price_impact": MessageLookupByLibrary.simpleMessage("価格インパクト"),
-    "g_key_dex_price_impact_high": m27,
-    "g_key_dex_quote_expires": m28,
+    "g_key_dex_price_impact_high": m30,
+    "g_key_dex_quote_expires": m31,
     "g_key_dex_quote_failed": MessageLookupByLibrary.simpleMessage("見積もり失敗"),
     "g_key_dex_quote_refreshed": MessageLookupByLibrary.simpleMessage(
       "見積もりが更新されました",
@@ -1471,7 +1492,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_points_daily": MessageLookupByLibrary.simpleMessage(
       "毎日ポイントを獲得",
     ),
-    "g_key_earn_pts_day": m29,
+    "g_key_earn_pts_day": m32,
     "g_key_earn_quick_tools": MessageLookupByLibrary.simpleMessage("クイックツール"),
     "g_key_earn_recommended": MessageLookupByLibrary.simpleMessage("おすすめ"),
     "g_key_earn_select_swap": MessageLookupByLibrary.simpleMessage(
@@ -1483,7 +1504,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_swap": MessageLookupByLibrary.simpleMessage("スワップ"),
     "g_key_earn_title": MessageLookupByLibrary.simpleMessage("稼ぐ"),
     "g_key_earn_total_earnings": MessageLookupByLibrary.simpleMessage("総収益"),
-    "g_key_earn_up_to_apy": m30,
+    "g_key_earn_up_to_apy": m33,
     "g_key_earn_view_all": MessageLookupByLibrary.simpleMessage("すべて表示"),
     "g_key_eligibility_alerts": MessageLookupByLibrary.simpleMessage(
       "資格に関するアラート",
@@ -1685,7 +1706,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_ens_subdomains": MessageLookupByLibrary.simpleMessage("サブドメイン"),
     "g_key_ens_success": MessageLookupByLibrary.simpleMessage("成功!"),
-    "g_key_ens_success_message": m31,
+    "g_key_ens_success_message": m34,
     "g_key_ens_suggestions": MessageLookupByLibrary.simpleMessage("提案"),
     "g_key_ens_text_records": MessageLookupByLibrary.simpleMessage("テキストレコード"),
     "g_key_ens_title": MessageLookupByLibrary.simpleMessage("ENSマネージャー"),
@@ -1713,7 +1734,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_wait_time_info": MessageLookupByLibrary.simpleMessage(
       "待機期間により前倒しが防止される",
     ),
-    "g_key_ens_wait_timer": m32,
+    "g_key_ens_wait_timer": m35,
     "g_key_ens_waiting": MessageLookupByLibrary.simpleMessage("待っています..."),
     "g_key_ens_warning": MessageLookupByLibrary.simpleMessage(
       "続行する前に解決されたアドレスを確認してください。ENS名は所有者によって転送または変更される可能性があります。",
@@ -1855,7 +1876,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_gas_alert_threshold": MessageLookupByLibrary.simpleMessage(
       "しきい値 (Gwei)",
     ),
-    "g_key_gas_auto_refresh": m33,
+    "g_key_gas_auto_refresh": m36,
     "g_key_gas_base_fee": MessageLookupByLibrary.simpleMessage("基本料金"),
     "g_key_gas_custom": MessageLookupByLibrary.simpleMessage("カスタム"),
     "g_key_gas_estimated_time": MessageLookupByLibrary.simpleMessage("予想時間"),
@@ -1888,14 +1909,14 @@ class MessageLookup extends MessageLookupByLibrary {
       "Google サインインがキャンセルされました",
     ),
     "g_key_high_value_only": MessageLookupByLibrary.simpleMessage("高価値のみ"),
-    "g_key_hw_account_added": m34,
+    "g_key_hw_account_added": m37,
     "g_key_hw_account_already_imported": MessageLookupByLibrary.simpleMessage(
       "アカウントはすでにインポートされています",
     ),
     "g_key_hw_accounts": MessageLookupByLibrary.simpleMessage("アカウント"),
     "g_key_hw_add": MessageLookupByLibrary.simpleMessage("追加"),
     "g_key_hw_add_account": MessageLookupByLibrary.simpleMessage("アカウント追加"),
-    "g_key_hw_add_account_content": m35,
+    "g_key_hw_add_account_content": m38,
     "g_key_hw_address_copied": MessageLookupByLibrary.simpleMessage(
       "アドレスをコピーしました",
     ),
@@ -1922,8 +1943,8 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_hw_connected": MessageLookupByLibrary.simpleMessage("接続済み"),
     "g_key_hw_connecting": MessageLookupByLibrary.simpleMessage("接続中..."),
-    "g_key_hw_current_app_label": m36,
-    "g_key_hw_days_ago": m37,
+    "g_key_hw_current_app_label": m39,
+    "g_key_hw_days_ago": m40,
     "g_key_hw_derivation_path": MessageLookupByLibrary.simpleMessage("導出パス"),
     "g_key_hw_disconnect": MessageLookupByLibrary.simpleMessage("切断する"),
     "g_key_hw_disconnected": MessageLookupByLibrary.simpleMessage("切断済み"),
@@ -1932,7 +1953,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_hw_firmware": MessageLookupByLibrary.simpleMessage("ファームウェアバージョン"),
     "g_key_hw_go_back": MessageLookupByLibrary.simpleMessage("戻る"),
-    "g_key_hw_import_failed": m38,
+    "g_key_hw_import_failed": m41,
     "g_key_hw_keystone_connect_title": MessageLookupByLibrary.simpleMessage(
       "キーストーンを接続する",
     ),
@@ -1962,7 +1983,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_hw_keystone_tap_to_scan": MessageLookupByLibrary.simpleMessage(
       "タップしてキーストーン応答をスキャンします",
     ),
-    "g_key_hw_last_connected": m39,
+    "g_key_hw_last_connected": m42,
     "g_key_hw_ledger": MessageLookupByLibrary.simpleMessage("元帳"),
     "g_key_hw_load_more": MessageLookupByLibrary.simpleMessage("さらに読み込む"),
     "g_key_hw_loading_accounts": MessageLookupByLibrary.simpleMessage(
@@ -1984,12 +2005,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_hw_not_connected_label": MessageLookupByLibrary.simpleMessage(
       "接続されていません",
     ),
-    "g_key_hw_open_app": m40,
-    "g_key_hw_open_ledger_app_hint": m41,
+    "g_key_hw_open_app": m43,
+    "g_key_hw_open_ledger_app_hint": m44,
     "g_key_hw_rejected": MessageLookupByLibrary.simpleMessage("デバイスで拒否されました"),
     "g_key_hw_remove": MessageLookupByLibrary.simpleMessage("削除"),
     "g_key_hw_remove_device": MessageLookupByLibrary.simpleMessage("デバイスの削除"),
-    "g_key_hw_remove_device_confirm": m42,
+    "g_key_hw_remove_device_confirm": m45,
     "g_key_hw_saved_devices": MessageLookupByLibrary.simpleMessage("保存されたデバイス"),
     "g_key_hw_scanning": MessageLookupByLibrary.simpleMessage("デバイス検索中..."),
     "g_key_hw_select_device": MessageLookupByLibrary.simpleMessage("デバイス選択"),
@@ -2075,11 +2096,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_loyalty_daily_checkin": MessageLookupByLibrary.simpleMessage(
       "デイリーチェックイン",
     ),
-    "g_key_loyalty_earn_points": m43,
+    "g_key_loyalty_earn_points": m46,
     "g_key_loyalty_earned": MessageLookupByLibrary.simpleMessage("獲得"),
     "g_key_loyalty_history": MessageLookupByLibrary.simpleMessage("ポイント履歴"),
     "g_key_loyalty_invite": MessageLookupByLibrary.simpleMessage("招待する"),
-    "g_key_loyalty_invite_bonus": m44,
+    "g_key_loyalty_invite_bonus": m47,
     "g_key_loyalty_invite_friends": MessageLookupByLibrary.simpleMessage(
       "友達を招待する",
     ),
@@ -2096,7 +2117,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "利用可能なタスクなし",
     ),
     "g_key_loyalty_points": MessageLookupByLibrary.simpleMessage("ポイント"),
-    "g_key_loyalty_points_to_next": m45,
+    "g_key_loyalty_points_to_next": m48,
     "g_key_loyalty_redeem": MessageLookupByLibrary.simpleMessage("交換"),
     "g_key_loyalty_referral": MessageLookupByLibrary.simpleMessage("紹介"),
     "g_key_loyalty_referral_bonus": MessageLookupByLibrary.simpleMessage(
@@ -2253,8 +2274,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_payment_amount_invalid": MessageLookupByLibrary.simpleMessage(
       "無効な金額",
     ),
-    "g_key_payment_approx_token": m46,
-    "g_key_payment_approx_usdt": m47,
+    "g_key_payment_approx_token": m49,
+    "g_key_payment_approx_usdt": m50,
     "g_key_payment_code_title": MessageLookupByLibrary.simpleMessage("支払いQR"),
     "g_key_payment_confirm": MessageLookupByLibrary.simpleMessage("確認"),
     "g_key_payment_history": MessageLookupByLibrary.simpleMessage("支払い履歴"),
@@ -2321,11 +2342,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_sign_in_failed": MessageLookupByLibrary.simpleMessage(
       "サインインに失敗しました",
     ),
-    "g_key_sim_gas_estimate": m48,
+    "g_key_sim_gas_estimate": m51,
     "g_key_sim_reverted": MessageLookupByLibrary.simpleMessage(
       "トランザクションが失敗する可能性が高い",
     ),
-    "g_key_sim_reverted_reason": m49,
+    "g_key_sim_reverted_reason": m52,
     "g_key_sim_simulating": MessageLookupByLibrary.simpleMessage(
       "トランザクションをシミュレートしています…",
     ),
@@ -2340,7 +2361,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_squad_k11": MessageLookupByLibrary.simpleMessage(
       "ファイルが大きすぎてアップロードできません",
     ),
-    "g_key_squad_k15": m50,
+    "g_key_squad_k15": m53,
     "g_key_squad_k18": MessageLookupByLibrary.simpleMessage("連絡先を追加"),
     "g_key_squad_k24": MessageLookupByLibrary.simpleMessage("連絡先"),
     "g_key_squad_k25": MessageLookupByLibrary.simpleMessage("メールで検索"),
@@ -2356,9 +2377,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_stake_avg_apy": MessageLookupByLibrary.simpleMessage("平均APY"),
     "g_key_stake_claim": MessageLookupByLibrary.simpleMessage("報酬を請求"),
     "g_key_stake_commission": MessageLookupByLibrary.simpleMessage("手数料"),
-    "g_key_stake_d_unbond": m51,
-    "g_key_stake_days_left": m52,
-    "g_key_stake_days_remaining": m53,
+    "g_key_stake_d_unbond": m54,
+    "g_key_stake_days_left": m55,
+    "g_key_stake_days_remaining": m56,
     "g_key_stake_delegators": MessageLookupByLibrary.simpleMessage("委任者数"),
     "g_key_stake_estimated_daily": MessageLookupByLibrary.simpleMessage(
       "推定毎日の報酬",
@@ -2430,7 +2451,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_stake_unbonding_period": MessageLookupByLibrary.simpleMessage(
       "アンボンディング期間",
     ),
-    "g_key_stake_unbonding_warning": m54,
+    "g_key_stake_unbonding_warning": m57,
     "g_key_stake_unstake": MessageLookupByLibrary.simpleMessage("アンステーク"),
     "g_key_stake_updating": MessageLookupByLibrary.simpleMessage("更新中..."),
     "g_key_stake_uptime": MessageLookupByLibrary.simpleMessage("稼働率"),
@@ -2445,7 +2466,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_t_16": MessageLookupByLibrary.simpleMessage("最大ガス手数料"),
     "g_key_t_17": MessageLookupByLibrary.simpleMessage("ガスあたりの最大手数料"),
     "g_key_t_2": MessageLookupByLibrary.simpleMessage("保留中"),
-    "g_key_t_29": m55,
+    "g_key_t_29": m58,
     "g_key_t_3": MessageLookupByLibrary.simpleMessage("失敗"),
     "g_key_t_30": MessageLookupByLibrary.simpleMessage("マイナー手数料"),
     "g_key_t_31": MessageLookupByLibrary.simpleMessage("続行"),
@@ -2458,29 +2479,29 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_t_4": MessageLookupByLibrary.simpleMessage("送金"),
     "g_key_t_43": MessageLookupByLibrary.simpleMessage("0より大きい整数を入力してください。"),
     "g_key_t_44": MessageLookupByLibrary.simpleMessage("データの取得に失敗しました"),
-    "g_key_t_45": m56,
+    "g_key_t_45": m59,
     "g_key_t_46": MessageLookupByLibrary.simpleMessage("受取アドレスアカウントを確認"),
     "g_key_t_47": MessageLookupByLibrary.simpleMessage("検索"),
     "g_key_t_49": MessageLookupByLibrary.simpleMessage("アカウントなし"),
     "g_key_t_5": MessageLookupByLibrary.simpleMessage("入金"),
     "g_key_t_50": MessageLookupByLibrary.simpleMessage("無効なアドレス"),
     "g_key_t_51": MessageLookupByLibrary.simpleMessage("アカウント確認成功"),
-    "g_key_t_52": m57,
+    "g_key_t_52": m60,
     "g_key_t_54": MessageLookupByLibrary.simpleMessage(
       "受取アドレスにはアカウントがなく、初回送金には最低10XRPが必要です",
     ),
     "g_key_t_6": MessageLookupByLibrary.simpleMessage("使用ガス"),
     "g_key_t_7": MessageLookupByLibrary.simpleMessage("ガス"),
-    "g_key_time_days_ago": m58,
-    "g_key_time_hours_ago": m59,
+    "g_key_time_days_ago": m61,
+    "g_key_time_hours_ago": m62,
     "g_key_time_just_now": MessageLookupByLibrary.simpleMessage("たった今"),
-    "g_key_time_minutes_ago": m60,
+    "g_key_time_minutes_ago": m63,
     "g_key_token_discovery_add": MessageLookupByLibrary.simpleMessage("追加"),
-    "g_key_token_discovery_add_selected": m61,
+    "g_key_token_discovery_add_selected": m64,
     "g_key_token_discovery_added": MessageLookupByLibrary.simpleMessage(
       "トークンが追加されました",
     ),
-    "g_key_token_discovery_banner": m62,
+    "g_key_token_discovery_banner": m65,
     "g_key_token_discovery_deselect_all": MessageLookupByLibrary.simpleMessage(
       "すべての選択を解除します",
     ),
@@ -2539,7 +2560,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_v_k3": MessageLookupByLibrary.simpleMessage("新しいバージョンが見つかりました"),
     "g_key_v_k4": MessageLookupByLibrary.simpleMessage("既に最新バージョンです"),
     "g_key_verification_code": MessageLookupByLibrary.simpleMessage("検証コード"),
-    "g_key_verification_code_sent": m63,
+    "g_key_verification_code_sent": m66,
     "g_key_wallet_c10": MessageLookupByLibrary.simpleMessage("シードフレーズを表示"),
     "g_key_wallet_c11": MessageLookupByLibrary.simpleMessage(
       "シードフレーズを記録し、安全に保管してください。",
@@ -2637,7 +2658,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_wallet_k56": MessageLookupByLibrary.simpleMessage("ノンス"),
     "g_key_wallet_k57": MessageLookupByLibrary.simpleMessage("高速化"),
     "g_key_wallet_k58": MessageLookupByLibrary.simpleMessage("メモ"),
-    "g_key_wallet_m1": m64,
+    "g_key_wallet_m1": m67,
     "g_key_wallet_m11": MessageLookupByLibrary.simpleMessage(
       "本当にアカウントを削除しますか？",
     ),
@@ -2645,7 +2666,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_wallet_m17": MessageLookupByLibrary.simpleMessage(
       "Google認証コードを入力してください。",
     ),
-    "g_key_wallet_m19": m65,
+    "g_key_wallet_m19": m68,
     "g_key_wallet_m2": MessageLookupByLibrary.simpleMessage(
       "現在のトークンが追加されていません。",
     ),
@@ -2653,11 +2674,11 @@ class MessageLookup extends MessageLookupByLibrary {
       "シードフレーズをスペースで区切って入力してください",
     ),
     "g_key_wallet_m22": MessageLookupByLibrary.simpleMessage("ウォレットをインポート"),
-    "g_key_wallet_m3": m66,
+    "g_key_wallet_m3": m69,
     "g_key_wallet_m4": MessageLookupByLibrary.simpleMessage(
       "現在のトークン残高が不足しています。",
     ),
-    "g_key_wallet_m5": m67,
+    "g_key_wallet_m5": m70,
     "g_key_wallet_m6": MessageLookupByLibrary.simpleMessage("署名エラー"),
     "g_key_wallet_m8": MessageLookupByLibrary.simpleMessage("アカウント削除"),
     "g_key_wallet_m9": MessageLookupByLibrary.simpleMessage(
@@ -2677,11 +2698,11 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_xml_0": MessageLookupByLibrary.simpleMessage("予約済み"),
     "g_key_xml_1": MessageLookupByLibrary.simpleMessage("基本準備金"),
-    "g_key_xml_11": m68,
+    "g_key_xml_11": m71,
     "g_key_xml_2": MessageLookupByLibrary.simpleMessage("増分準備金"),
-    "g_key_xml_22": m69,
+    "g_key_xml_22": m72,
     "g_key_xml_3": MessageLookupByLibrary.simpleMessage("所有オブジェクト数"),
-    "g_key_xml_33": m70,
+    "g_key_xml_33": m73,
     "g_key_xml_4": MessageLookupByLibrary.simpleMessage("合計準備金額の計算方法"),
     "g_key_xml_44": MessageLookupByLibrary.simpleMessage(
       "合計準備金 = 基本準備金 +（所有オブジェクト数 × 増分準備金）",
@@ -2699,13 +2720,13 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_lock_key19": MessageLookupByLibrary.simpleMessage("2回目のパターンパスワード描画"),
     "g_lock_key20": MessageLookupByLibrary.simpleMessage("パターンパスワードを描画"),
-    "g_lock_key21": m71,
+    "g_lock_key21": m74,
     "g_lock_key22": MessageLookupByLibrary.simpleMessage("パターンパスワードをリセット"),
     "g_lock_key23": MessageLookupByLibrary.simpleMessage(
       "入力エラーが多すぎます。パスワードをリセットしてください",
     ),
     "g_lock_key24": MessageLookupByLibrary.simpleMessage("ウォレットパスワードを追加しますか？"),
-    "g_lock_key25": m72,
+    "g_lock_key25": m75,
     "g_lock_key3": MessageLookupByLibrary.simpleMessage("ロック画面ページ"),
     "g_lock_key4": MessageLookupByLibrary.simpleMessage("自動ロック"),
     "g_lock_key5": MessageLookupByLibrary.simpleMessage("成功"),
@@ -2758,13 +2779,13 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_mining_key61": MessageLookupByLibrary.simpleMessage("友達に共有"),
     "g_mining_key62": MessageLookupByLibrary.simpleMessage("続行"),
-    "g_mining_key63": m73,
+    "g_mining_key63": m76,
     "g_mining_key7": MessageLookupByLibrary.simpleMessage("ロック解除日"),
-    "g_mining_key73": m74,
+    "g_mining_key73": m77,
     "g_mining_key74": MessageLookupByLibrary.simpleMessage(
       "@N42Walletでノードをセットアップし、モバイルデバイスで認証を開始しました！ぜひ参加してください。分散化された未来はモバイルです！",
     ),
-    "g_mining_key76": m75,
+    "g_mining_key76": m78,
     "g_mining_key82": MessageLookupByLibrary.simpleMessage("ミネラル"),
     "g_mining_key83": MessageLookupByLibrary.simpleMessage("ノード"),
     "g_mining_key84": MessageLookupByLibrary.simpleMessage("ネットワーク"),
@@ -2796,7 +2817,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_108": MessageLookupByLibrary.simpleMessage(
       "サポートされていない暗号化データ形式です！",
     ),
-    "g_mining_key_109": m76,
+    "g_mining_key_109": m79,
     "g_mining_key_11": MessageLookupByLibrary.simpleMessage("昨日の報酬"),
     "g_mining_key_110": MessageLookupByLibrary.simpleMessage("暗号化データ"),
     "g_mining_key_111": MessageLookupByLibrary.simpleMessage("ファイルをインポート"),
@@ -2808,7 +2829,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_115": MessageLookupByLibrary.simpleMessage(
       "引き換えには時間がかかります。しばらくお待ちください！",
     ),
-    "g_mining_key_116": m77,
+    "g_mining_key_116": m80,
     "g_mining_key_12": MessageLookupByLibrary.simpleMessage(
       "報酬は毎日蓄積され、約0.5 Nに達した時にのみNウォレットに送信されます。",
     ),
@@ -2865,7 +2886,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_69": MessageLookupByLibrary.simpleMessage("1日500ブロック〜約70分"),
     "g_mining_key_7": MessageLookupByLibrary.simpleMessage("ロック解除日"),
     "g_mining_key_70": MessageLookupByLibrary.simpleMessage("1日100ブロック〜約15分"),
-    "g_mining_key_71": m78,
+    "g_mining_key_71": m81,
     "g_mining_key_72": MessageLookupByLibrary.simpleMessage("128秒ごとにチェック"),
     "g_mining_key_73": MessageLookupByLibrary.simpleMessage("クラウド認証が開始されました"),
     "g_mining_key_74": MessageLookupByLibrary.simpleMessage(
@@ -2916,7 +2937,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_97": MessageLookupByLibrary.simpleMessage(
       "暗号化パスワードを入力してください",
     ),
-    "g_mining_key_98": m79,
+    "g_mining_key_98": m82,
     "g_mining_key_99": MessageLookupByLibrary.simpleMessage(
       "正確であることを確認するために、パスワードを再入力してください",
     ),
@@ -2993,7 +3014,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_share_v3_key_6": MessageLookupByLibrary.simpleMessage("紹介方法"),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("リンク"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("コード"),
-    "g_swap_key_14": m80,
+    "g_swap_key_14": m83,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage("コイン価格の取得エラー。"),
     "g_swap_key_16": MessageLookupByLibrary.simpleMessage(
       "続行すると、以下に同意したことになります：",
@@ -3003,7 +3024,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "スワップはまもなく配布されます。しばらくお待ちください。",
     ),
-    "g_swap_key_20": m81,
+    "g_swap_key_20": m84,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "ノード運用コスト：グループ認証 1-49 N、ベーシックノード：50 N、プレミアムノード：100 N、プロノード：500 N。",
     ),
@@ -3015,7 +3036,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("新残高"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("支払い"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("日付"),
-    "g_swap_key_31": m82,
+    "g_swap_key_31": m85,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "スワップは関連するチェーンエクスプローラー（Etherscan、BscScan、TRONSCAN、および当社独自のエクスプローラー）で確認できます。",
     ),
@@ -3028,7 +3049,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "デフォルトにリセットする",
     ),
-    "g_token_m_key_1": m83,
+    "g_token_m_key_1": m86,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "誰でもトークンを作成できます。既存のトークンの偽バージョンを作成することも可能です。インポートする前に必ずトークンを調査してください。",
     ),
@@ -3044,9 +3065,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_2": MessageLookupByLibrary.simpleMessage("0〜18の整数"),
     "g_token_m_key_20": MessageLookupByLibrary.simpleMessage("トークンを追加"),
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage("フォーマットエラー！"),
-    "g_token_m_key_22": m84,
-    "g_token_m_key_23": m85,
-    "g_token_m_key_24": m86,
+    "g_token_m_key_22": m87,
+    "g_token_m_key_23": m88,
+    "g_token_m_key_24": m89,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("トークンをインポート"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("全てのネットワーク"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage("カスタムトークン"),
@@ -3057,16 +3078,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("注意"),
     "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("高リスク"),
     "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("安全"),
-    "g_unlock_key10": m87,
+    "g_unlock_key10": m90,
     "g_unlock_key2": MessageLookupByLibrary.simpleMessage(
       "指紋または顔認証が有効になっていませんか？",
     ),
     "g_unlock_key3": MessageLookupByLibrary.simpleMessage("パターンパスワードを描画"),
-    "g_unlock_key4": m88,
+    "g_unlock_key4": m91,
     "g_unlock_key5": MessageLookupByLibrary.simpleMessage("パスワードを入力"),
-    "g_unlock_key6": m89,
+    "g_unlock_key6": m92,
     "g_unlock_key7": MessageLookupByLibrary.simpleMessage("認証に失敗しました"),
-    "g_unlock_key8": m90,
+    "g_unlock_key8": m93,
     "g_unlock_key9": MessageLookupByLibrary.simpleMessage("または"),
     "g_version_later": MessageLookupByLibrary.simpleMessage("後で"),
     "g_wc_connection_lost": MessageLookupByLibrary.simpleMessage(
@@ -3126,7 +3147,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "google_verification_message20": MessageLookupByLibrary.simpleMessage(
       "メール認証コードを入力",
     ),
-    "google_verification_message21": m91,
+    "google_verification_message21": m94,
     "google_verification_message3": MessageLookupByLibrary.simpleMessage(
       "Googleキーの取得に失敗しました",
     ),
@@ -3164,7 +3185,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_need_login": MessageLookupByLibrary.simpleMessage("まずログインしてください"),
     "login_password": MessageLookupByLibrary.simpleMessage("パスワード"),
     "next": MessageLookupByLibrary.simpleMessage("次へ"),
-    "nicknameMessage": m92,
+    "nicknameMessage": m95,
     "password_diff": MessageLookupByLibrary.simpleMessage("パスワードが一致しません"),
     "personalInformation": MessageLookupByLibrary.simpleMessage("プロフィール編集"),
     "photograph": MessageLookupByLibrary.simpleMessage("撮影"),

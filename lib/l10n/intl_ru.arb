@@ -1995,4 +1995,16 @@
   "push_permission_btn_dismiss": "Не напоминать",
   "push_permission_btn_later": "Позже",
   "push_permission_btn_settings": "Перейти в настройки"
+,
+  "g_iap_title": "Купить",
+  "g_iap_restore": "Восстановить покупки",
+  "g_iap_restoring": "Восстановление покупок…",
+  "g_iap_restored": "Восстановлено: {productId}",
+  "g_iap_purchased": "Покупка выполнена: {productId}",
+  "g_iap_failed": "Ошибка покупки: {message}",
+  "g_iap_cancelled": "Отменено",
+  "g_iap_store_unavailable": "Магазин недоступен",
+  "g_iap_check_network": "Проверьте подключение к сети и попробуйте ещё раз",
+  "g_iap_no_products": "Нет доступных товаров",
+  "g_iap_retry": "Повторить"
 }

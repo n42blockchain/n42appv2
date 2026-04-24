@@ -1995,4 +1995,16 @@
   "push_permission_btn_dismiss": "Nicht mehr erinnern",
   "push_permission_btn_later": "Später",
   "push_permission_btn_settings": "Zu den Einstellungen"
+,
+  "g_iap_title": "Kaufen",
+  "g_iap_restore": "Käufe wiederherstellen",
+  "g_iap_restoring": "Käufe werden wiederhergestellt…",
+  "g_iap_restored": "Wiederhergestellt: {productId}",
+  "g_iap_purchased": "Kauf erfolgreich: {productId}",
+  "g_iap_failed": "Kauf fehlgeschlagen: {message}",
+  "g_iap_cancelled": "Abgebrochen",
+  "g_iap_store_unavailable": "App Store nicht verfügbar",
+  "g_iap_check_network": "Überprüfen Sie Ihre Netzwerkverbindung und versuchen Sie es erneut",
+  "g_iap_no_products": "Keine Produkte verfügbar",
+  "g_iap_retry": "Wiederholen"
 }

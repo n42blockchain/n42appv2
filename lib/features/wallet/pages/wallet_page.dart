@@ -12,6 +12,7 @@ import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/component/pages/scan_page.dart';
 import 'package:n42_wallet/features/wallet/pages/aa/aa_home_page.dart';
+import 'package:n42_wallet/features/wallet/pages/iap/iap_page.dart';
 import 'package:n42_wallet/features/wallet/pages/ens/ens_home_page.dart';
 import 'package:n42_wallet/features/wallet/pages/payment_code/payment_page.dart';
 import 'package:n42_wallet/features/wallet/pages/payment_code/set_amount.dart';
@@ -373,6 +374,12 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (_) => SetAmount(),
+                                      ),
+                                    ),
+                                    buyTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => const IapPage(),
                                       ),
                                     ),
                                   ),

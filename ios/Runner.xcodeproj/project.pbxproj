@@ -27,10 +27,11 @@
 		6980C3142F74E2520072AF1D /* WalletCorePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6980C3112F74E2520072AF1D /* WalletCorePlugin.swift */; };
 		6980C3152F74E2520072AF1D /* WalletCorePlugin+KeyManagement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6980C3122F74E2520072AF1D /* WalletCorePlugin+KeyManagement.swift */; };
 		6980C3162F74E2520072AF1D /* WalletCorePlugin+Signing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6980C3132F74E2520072AF1D /* WalletCorePlugin+Signing.swift */; };
+		69AC47A92F9B4A1D00DE4DA7 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69AC47A82F9B4A1D00DE4DA7 /* StoreKit.framework */; };
 		69D7DAC12F15E36E004CA1FA /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D7DAC02F15E36E004CA1FA /* WebSocketManager.swift */; };
 		69D7DAC32F15EC6F004CA1FA /* TrustdartPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D7DAC22F15EC6F004CA1FA /* TrustdartPlugin.swift */; };
-		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		69PK0001PasskeyHandler000 /* PasskeyHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69PK0000PasskeyHandler000 /* PasskeyHandler.swift */; };
+		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		80DF6CA187EF2D544C26CFCA /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56C53ED41BD5DB7271872A76 /* Pods_Runner.framework */; };
 		91638B74777D7C9D4B2A0D49 /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F04F9C4638963A4198071CD6 /* Pods_RunnerTests.framework */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
@@ -99,13 +100,14 @@
 		6980C3112F74E2520072AF1D /* WalletCorePlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletCorePlugin.swift; sourceTree = "<group>"; };
 		6980C3122F74E2520072AF1D /* WalletCorePlugin+KeyManagement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WalletCorePlugin+KeyManagement.swift"; sourceTree = "<group>"; };
 		6980C3132F74E2520072AF1D /* WalletCorePlugin+Signing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WalletCorePlugin+Signing.swift"; sourceTree = "<group>"; };
+		69AC47A82F9B4A1D00DE4DA7 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		69D5E1C02EFA6F6400CAF028 /* libmobile_sdk.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmobile_sdk.a; path = "../../../Downloads/n42 doc/mobile-sdk-ios/MobileSdk.xcframework/ios-arm64/libmobile_sdk.a"; sourceTree = "<group>"; };
 		69D5E1C22EFA6F7800CAF028 /* libmobile_sdk.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmobile_sdk.a; path = "../../../Downloads/n42 doc/mobile-sdk-ios/MobileSdk.xcframework/ios-x86_64-simulator/libmobile_sdk.a"; sourceTree = "<group>"; };
 		69D7DAC02F15E36E004CA1FA /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
 		69D7DAC22F15EC6F004CA1FA /* TrustdartPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrustdartPlugin.swift; sourceTree = "<group>"; };
+		69PK0000PasskeyHandler000 /* PasskeyHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasskeyHandler.swift; sourceTree = "<group>"; };
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
 		74858FAE1ED2DC5600515810 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		69PK0000PasskeyHandler000 /* PasskeyHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasskeyHandler.swift; sourceTree = "<group>"; };
 		764E347C82549ABBCDA7A27F /* Pods-RunnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release.xcconfig"; sourceTree = "<group>"; };
 		7AFA3C8E1D35360C0083082E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Release.xcconfig; path = Flutter/Release.xcconfig; sourceTree = "<group>"; };
 		7E35A4F5141451D69C10A43D /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
@@ -144,6 +146,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				69AC47A92F9B4A1D00DE4DA7 /* StoreKit.framework in Frameworks */,
 				690ACF652F1628AA00F9B66D /* MobileSdk.xcframework in Frameworks */,
 				80DF6CA187EF2D544C26CFCA /* Pods_Runner.framework in Frameworks */,
 			);
@@ -176,6 +179,7 @@
 		526F39F22C10438900FF9273 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				69AC47A82F9B4A1D00DE4DA7 /* StoreKit.framework */,
 				69D5E1C02EFA6F6400CAF028 /* libmobile_sdk.a */,
 				69D5E1C22EFA6F7800CAF028 /* libmobile_sdk.a */,
 				523BA9BB2D757CF7003C8E38 /* fluttertoast.framework */,

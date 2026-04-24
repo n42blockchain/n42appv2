@@ -1988,4 +1988,16 @@
   "push_permission_btn_dismiss": "আর মনে করিয়ে দিও না",
   "push_permission_btn_later": "পরে",
   "push_permission_btn_settings": "সেটিংসে যান"
+,
+  "g_iap_title": "কিনুন",
+  "g_iap_restore": "ক্রয় পুনরুদ্ধার করুন",
+  "g_iap_restoring": "ক্রয় পুনরুদ্ধার হচ্ছে…",
+  "g_iap_restored": "পুনরুদ্ধার হয়েছে: {productId}",
+  "g_iap_purchased": "ক্রয় সফল: {productId}",
+  "g_iap_failed": "ক্রয় ব্যর্থ: {message}",
+  "g_iap_cancelled": "বাতিল",
+  "g_iap_store_unavailable": "অ্যাপ স্টোর অনুপলব্ধ",
+  "g_iap_check_network": "নেটওয়ার্ক সংযোগ পরীক্ষা করুন এবং পুনরায় চেষ্টা করুন",
+  "g_iap_no_products": "কোনো পণ্য নেই",
+  "g_iap_retry": "পুনরায় চেষ্টা করুন"
 }

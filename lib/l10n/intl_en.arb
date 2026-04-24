@@ -2001,4 +2001,16 @@
   "push_permission_btn_dismiss": "Don't remind me",
   "push_permission_btn_later": "Later",
   "push_permission_btn_settings": "Go to Settings"
+,
+  "g_iap_title": "Buy",
+  "g_iap_restore": "Restore Purchases",
+  "g_iap_restoring": "Restoring purchases…",
+  "g_iap_restored": "Restored: {productId}",
+  "g_iap_purchased": "Purchase successful: {productId}",
+  "g_iap_failed": "Purchase failed: {message}",
+  "g_iap_cancelled": "Cancelled",
+  "g_iap_store_unavailable": "Store Unavailable",
+  "g_iap_check_network": "Check your network connection and try again",
+  "g_iap_no_products": "No products available",
+  "g_iap_retry": "Retry"
 }

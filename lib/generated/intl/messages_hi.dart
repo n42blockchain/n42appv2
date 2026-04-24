@@ -47,196 +47,202 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m11(value) => "मैच सफल.पता:${value}.";
 
-  static String m12(value) => "${value} से अधिक राशि.";
+  static String m12(message) => "खरीदारी विफल: ${message}";
 
-  static String m13(value) =>
+  static String m13(productId) => "खरीदारी सफल: ${productId}";
+
+  static String m14(productId) => "पुनर्स्थापित: ${productId}";
+
+  static String m15(value) => "${value} से अधिक राशि.";
+
+  static String m16(value) =>
       "वॉलेट पहले से मौजूद है, वॉलेट का नाम \"${value}\" है";
 
-  static String m14(value) => "${value} से अधिक राशि दर्ज करें.";
-
-  static String m15(gas) =>
-      "निष्पादन गैस (${gas}) अधिक है। कथित अनुबंध में अपेक्षा से अधिक गैस की खपत हो सकती है।";
-
-  static String m16(gas) =>
-      "पहले लेनदेन में खाता परिनियोजन (~${gas} गैस) शामिल है। इसके बाद लेनदेन सस्ता हो जाएगा.";
-
-  static String m17(gas) =>
-      "पेमास्टर गैस ओवरहेड (${gas}) अधिक है। गैस-मुक्त लेनदेन पर अधिक खर्च हो सकता है।";
+  static String m17(value) => "${value} से अधिक राशि दर्ज करें.";
 
   static String m18(gas) =>
-      "अनुमानित कुल गैस (${gas}) असामान्य रूप से अधिक है। त्रुटियों के लिए अपने लेन-देन की जाँच करें.";
+      "निष्पादन गैस (${gas}) अधिक है। कथित अनुबंध में अपेक्षा से अधिक गैस की खपत हो सकती है।";
 
   static String m19(gas) =>
+      "पहले लेनदेन में खाता परिनियोजन (~${gas} गैस) शामिल है। इसके बाद लेनदेन सस्ता हो जाएगा.";
+
+  static String m20(gas) =>
+      "पेमास्टर गैस ओवरहेड (${gas}) अधिक है। गैस-मुक्त लेनदेन पर अधिक खर्च हो सकता है।";
+
+  static String m21(gas) =>
+      "अनुमानित कुल गैस (${gas}) असामान्य रूप से अधिक है। त्रुटियों के लिए अपने लेन-देन की जाँच करें.";
+
+  static String m22(gas) =>
       "सत्यापन गैस (${gas}) बहुत अधिक हो सकती है। यह जटिल खाता तर्क के साथ हो सकता है.";
 
-  static String m20(value) => "${value} दिन बचे हैं";
+  static String m23(value) => "${value} दिन बचे हैं";
 
-  static String m21(value) => "पंक्ति ${value} पर डुप्लिकेट पता";
+  static String m24(value) => "पंक्ति ${value} पर डुप्लिकेट पता";
 
-  static String m22(value) =>
+  static String m25(value) =>
       "अपर्याप्त शेष: कुल राशि उपलब्ध ${value} से अधिक होगी";
 
-  static String m23(value) => "पंक्ति ${value} पर अमान्य पता";
+  static String m26(value) => "पंक्ति ${value} पर अमान्य पता";
 
-  static String m24(value) => "पंक्ति ${value} पर अमान्य राशि";
+  static String m27(value) => "पंक्ति ${value} पर अमान्य राशि";
 
-  static String m25(value) => "अधिकतम ${value} प्राप्तकर्ता";
+  static String m28(value) => "अधिकतम ${value} प्राप्तकर्ता";
 
-  static String m26(token) => "जारी रखने के लिए ${token} को स्वीकृत करें";
+  static String m29(token) => "जारी रखने के लिए ${token} को स्वीकृत करें";
 
-  static String m27(impact) =>
+  static String m30(impact) =>
       "उच्च कीमत प्रभाव (${impact})! सावधानी के साथ आगे बढ़ना।";
 
-  static String m28(secs) => "कोटेशन ${secs}s में समाप्त होता है";
+  static String m31(secs) => "कोटेशन ${secs}s में समाप्त होता है";
 
-  static String m29(value) => "+${value} अंक/दिन";
+  static String m32(value) => "+${value} अंक/दिन";
 
-  static String m30(value) => "${value}% APY तक कमाएँ";
+  static String m33(value) => "${value}% APY तक कमाएँ";
 
-  static String m31(value) => "बधाई हो! अब आप ${value} के स्वामी हैं";
+  static String m34(value) => "बधाई हो! अब आप ${value} के स्वामी हैं";
 
-  static String m32(value) => "कृपया ${value} सेकंड प्रतीक्षा करें";
+  static String m35(value) => "कृपया ${value} सेकंड प्रतीक्षा करें";
 
-  static String m33(value) => "हर ${value} सेकंड में ऑटो-रिफ्रेश करें";
+  static String m36(value) => "हर ${value} सेकंड में ऑटो-रिफ्रेश करें";
 
-  static String m34(address) => "खाता ${address} जोड़ा गया";
+  static String m37(address) => "खाता ${address} जोड़ा गया";
 
-  static String m35(address, network) =>
+  static String m38(address, network) =>
       "क्या आप इस हार्डवेयर वॉलेट खाते को ट्रैक करना चाहते हैं?\n\nपता: ${address}\nनेटवर्क: ${network}";
 
-  static String m36(app) => "वर्तमान ऐप: ${app}";
+  static String m39(app) => "वर्तमान ऐप: ${app}";
 
-  static String m37(days) => "${days} दिन पहले";
+  static String m40(days) => "${days} दिन पहले";
 
-  static String m38(value) => "खाता आयात करने में विफल: ${value}";
+  static String m41(value) => "खाता आयात करने में विफल: ${value}";
 
-  static String m39(date) => "अंतिम बार कनेक्ट: ${date}";
+  static String m42(date) => "अंतिम बार कनेक्ट: ${date}";
 
-  static String m40(value) => "कृपया अपने डिवाइस पर ${value} ऐप खोलें";
+  static String m43(value) => "कृपया अपने डिवाइस पर ${value} ऐप खोलें";
 
-  static String m41(app) => "सुनिश्चित करें कि ${app} ऐप आपके लेजर पर खुला है";
+  static String m44(app) => "सुनिश्चित करें कि ${app} ऐप आपके लेजर पर खुला है";
 
-  static String m42(name) =>
+  static String m45(name) =>
       "क्या आप वाकई सहेजे गए डिवाइस से \"${name}\" हटाना चाहते हैं?";
 
-  static String m43(value) => "${value} अंक अर्जित करें";
+  static String m46(value) => "${value} अंक अर्जित करें";
 
-  static String m44(value) =>
+  static String m47(value) =>
       "शामिल होने वाले प्रत्येक मित्र के लिए ${value} अंक अर्जित करें!";
 
-  static String m45(value) => "${value} अगले स्तर की ओर इशारा करता है";
+  static String m48(value) => "${value} अगले स्तर की ओर इशारा करता है";
 
-  static String m46(amount, token) => "≈ ${amount}${token}";
+  static String m49(amount, token) => "≈ ${amount}${token}";
 
-  static String m47(amount) => "≈ ${amount} USDT";
+  static String m50(amount) => "≈ ${amount} USDT";
 
-  static String m48(value) => "स्था. गैस: ~${value} इकाइयाँ";
+  static String m51(value) => "स्था. गैस: ~${value} इकाइयाँ";
 
-  static String m49(reason) => "कारण: ${reason}";
+  static String m52(reason) => "कारण: ${reason}";
 
-  static String m50(value) =>
+  static String m53(value) =>
       "क्या आप वाकई संपर्क ${value} को हटाना चाहते हैं?";
 
-  static String m51(value) => "${value}d बंधन मुक्त";
+  static String m54(value) => "${value}d बंधन मुक्त";
 
-  static String m52(value) => "${value} दिन बचे हैं";
+  static String m55(value) => "${value} दिन बचे हैं";
 
-  static String m53(value) => "${value} दिन शेष हैं";
+  static String m56(value) => "${value} दिन शेष हैं";
 
-  static String m54(value) =>
+  static String m57(value) =>
       "अनस्टैकिंग में ${value} दिन लगते हैं। इस अवधि के दौरान आपके टोकन लॉक कर दिये जायेंगे।";
 
-  static String m55(value) => "आपके पास पर्याप्त \"${value}\" नहीं है";
+  static String m58(value) => "आपके पास पर्याप्त \"${value}\" नहीं है";
 
-  static String m56(value) => "\"${value}\" खाता प्राप्त करने में विफल";
+  static String m59(value) => "\"${value}\" खाता प्राप्त करने में विफल";
 
-  static String m57(value) => "पहले स्थानांतरण के लिए न्यूनतम ${value} XRP";
+  static String m60(value) => "पहले स्थानांतरण के लिए न्यूनतम ${value} XRP";
 
-  static String m58(value) => "${value}d पहले";
+  static String m61(value) => "${value}d पहले";
 
-  static String m59(value) => "${value}h पहले";
+  static String m62(value) => "${value}h पहले";
 
-  static String m60(value) => "${value}m पहले";
+  static String m63(value) => "${value}m पहले";
 
-  static String m61(count) => "जोड़ें (${count})";
+  static String m64(count) => "जोड़ें (${count})";
 
-  static String m62(count) =>
+  static String m65(count) =>
       "${Intl.plural(count, one: '1 नये टोकन का पता चला', other: '${count} नए टोकन का पता चला')} — समीक्षा करने के लिए टैप करें";
 
-  static String m63(value) => "सत्यापन कोड ${value} पर भेजा गया";
+  static String m66(value) => "सत्यापन कोड ${value} पर भेजा गया";
 
-  static String m64(value) => "कोई ${value} श्रृंखला नहीं जोड़ी गई।";
+  static String m67(value) => "कोई ${value} श्रृंखला नहीं जोड़ी गई।";
 
-  static String m65(value) =>
+  static String m68(value) =>
       "${value} में लेनदेन अधूरा है, कृपया बाद में पुनः प्रयास करें।";
 
-  static String m66(value) => "${value} के लिए कोई पता नहीं मिला.";
+  static String m69(value) => "${value} के लिए कोई पता नहीं मिला.";
 
-  static String m67(value) => "${value} का अपर्याप्त संतुलन।";
+  static String m70(value) => "${value} का अपर्याप्त संतुलन।";
 
-  static String m68(value, value1) =>
+  static String m71(value, value1) =>
       "प्रत्येक XRP खाते को आधार रेखा के रूप में ${value} XRP (${value1} ड्रॉप्स) आरक्षित करना होगा, जिसे खर्च नहीं किया जा सकता है।";
 
-  static String m69(value, value1) =>
+  static String m72(value, value1) =>
       "खाते के स्वामित्व वाली प्रत्येक वस्तु के लिए, ${value} XRP (${value1} ड्रॉप्स) रिजर्व में जोड़ा जाता है।";
 
-  static String m70(value, value1) =>
+  static String m73(value, value1) =>
       "यह खाता ${value} ऑब्जेक्ट का स्वामी है, जिसका अर्थ है कि एक अतिरिक्त ${value1} XRP आरक्षित है।";
 
-  static String m71(value) =>
+  static String m74(value) =>
       "पैटर्न पासवर्ड इनपुट त्रुटि, आपके पास ${value} संभावनाएं हैं";
 
-  static String m72(value) =>
+  static String m75(value) =>
       "पैटर्न पासवर्ड इनपुट त्रुटि, आपके पास ${value} मौका है";
 
-  static String m73(value) =>
+  static String m76(value) =>
       "आपने सफलतापूर्वक ${value} सेट अप कर लिया है और N42Wallet के साथ सत्यापन शुरू कर देंगे!";
 
-  static String m74(value) =>
+  static String m77(value) =>
       "लेयर 1 श्रृंखला के प्रारंभिक खनिक बनने के लिए @N42Wallet पर मेरे ${value} समूह में शामिल हों, और अपने फ़ोन पर क्रिप्टो प्राप्त करें!";
 
-  static String m75(value, value1) =>
+  static String m78(value, value1) =>
       "क्या आप वाकई नोड चलाने के लिए ${value} N को ${value1} तक लॉक करना चाहते हैं?";
 
-  static String m76(value) => "आयात विफल:${value}";
+  static String m79(value) => "आयात विफल:${value}";
 
-  static String m77(value) =>
+  static String m80(value) =>
       "पुरस्कार अर्जित करने के लिए कम से कम ${value} का स्टेकिंग बैलेंस आवश्यक है।";
 
-  static String m78(value, value1) =>
+  static String m81(value, value1) =>
       "${value} N प्रत्येक ${value1} ब्लॉक का खनन किया गया";
 
-  static String m79(value) => "${value} वर्ण होने चाहिए";
+  static String m82(value) => "${value} वर्ण होने चाहिए";
 
-  static String m80(value) => "${value} अपर्याप्त शेष।";
+  static String m83(value) => "${value} अपर्याप्त शेष।";
 
-  static String m81(value) => "${value} इनकमिंग...";
-
-  static String m82(value) =>
-      "${value} स्वैप-इन-ऐप शीघ्र ही आपके वॉलेट में वितरित किया जाएगा और इस प्रक्रिया के माध्यम से बेचा नहीं जा सकता है। इसका उपयोग नोड को चलाने के लिए किया जा सकता है।";
-
-  static String m83(value) => "अधिकतम ${value} वर्ण";
-
-  static String m84(value) => "${value} श्रृंखला एपीपी पहले से ही समर्थित है!";
+  static String m84(value) => "${value} इनकमिंग...";
 
   static String m85(value) =>
-      "${value} श्रृंखला एपीपी पहले से ही समर्थित है, क्या आप इसे जोड़ना चाहते हैं?";
+      "${value} स्वैप-इन-ऐप शीघ्र ही आपके वॉलेट में वितरित किया जाएगा और इस प्रक्रिया के माध्यम से बेचा नहीं जा सकता है। इसका उपयोग नोड को चलाने के लिए किया जा सकता है।";
 
-  static String m86(value) => "${value} पता परीक्षण लिंक विफल!";
+  static String m86(value) => "अधिकतम ${value} वर्ण";
 
-  static String m87(value) => "एप्लिकेशन ${value} सेकंड में अनलॉक हो जाएगा।";
+  static String m87(value) => "${value} श्रृंखला एपीपी पहले से ही समर्थित है!";
 
   static String m88(value) =>
+      "${value} श्रृंखला एपीपी पहले से ही समर्थित है, क्या आप इसे जोड़ना चाहते हैं?";
+
+  static String m89(value) => "${value} पता परीक्षण लिंक विफल!";
+
+  static String m90(value) => "एप्लिकेशन ${value} सेकंड में अनलॉक हो जाएगा।";
+
+  static String m91(value) =>
       "पैटर्न पासवर्ड इनपुट त्रुटि, आपके पास ${value} संभावनाएं हैं";
 
-  static String m89(value) =>
+  static String m92(value) =>
       "पासवर्ड इनपुट त्रुटि, आपके पास ${value} संभावना है";
 
-  static String m90(value) => "पासवर्ड इनपुट त्रुटि, आपके पास ${value} मौका है";
+  static String m93(value) => "पासवर्ड इनपुट त्रुटि, आपके पास ${value} मौका है";
 
-  static String m91(value) => "${value} पासवर्ड दर्ज करें";
+  static String m94(value) => "${value} पासवर्ड दर्ज करें";
 
-  static String m92(value) => "0~${value} अक्षर";
+  static String m95(value) => "0~${value} अक्षर";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -715,6 +721,27 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_home_key9": MessageLookupByLibrary.simpleMessage(
       "किसी मित्र को आमंत्रित करें",
     ),
+    "g_iap_cancelled": MessageLookupByLibrary.simpleMessage("रद्द किया गया"),
+    "g_iap_check_network": MessageLookupByLibrary.simpleMessage(
+      "अपना नेटवर्क कनेक्शन जांचें और पुनः प्रयास करें",
+    ),
+    "g_iap_failed": m12,
+    "g_iap_no_products": MessageLookupByLibrary.simpleMessage(
+      "कोई उत्पाद उपलब्ध नहीं",
+    ),
+    "g_iap_purchased": m13,
+    "g_iap_restore": MessageLookupByLibrary.simpleMessage(
+      "खरीदारी पुनर्स्थापित करें",
+    ),
+    "g_iap_restored": m14,
+    "g_iap_restoring": MessageLookupByLibrary.simpleMessage(
+      "खरीदारी पुनर्स्थापित हो रही है…",
+    ),
+    "g_iap_retry": MessageLookupByLibrary.simpleMessage("पुनः प्रयास करें"),
+    "g_iap_store_unavailable": MessageLookupByLibrary.simpleMessage(
+      "ऐप स्टोर अनुपलब्ध है",
+    ),
+    "g_iap_title": MessageLookupByLibrary.simpleMessage("खरीदें"),
     "g_key_1": MessageLookupByLibrary.simpleMessage("हटाने में विफल!"),
     "g_key_100": MessageLookupByLibrary.simpleMessage("भेजें"),
     "g_key_101": MessageLookupByLibrary.simpleMessage("गैस सीमा"),
@@ -735,7 +762,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_13": MessageLookupByLibrary.simpleMessage("वॉलेट सूची"),
     "g_key_132": MessageLookupByLibrary.simpleMessage("कोई डेटा नहीं"),
     "g_key_134": MessageLookupByLibrary.simpleMessage("राशि मान्य नहीं है"),
-    "g_key_135": m12,
+    "g_key_135": m15,
     "g_key_14": MessageLookupByLibrary.simpleMessage("मुख्य बटुआ"),
     "g_key_140": MessageLookupByLibrary.simpleMessage("लेनदेन सफल"),
     "g_key_146": MessageLookupByLibrary.simpleMessage("ग़लत पासवर्ड"),
@@ -791,7 +818,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_211": MessageLookupByLibrary.simpleMessage("खरीदें"),
     "g_key_212": MessageLookupByLibrary.simpleMessage("बेचो"),
     "g_key_213": MessageLookupByLibrary.simpleMessage("बाज़ार की जानकारी"),
-    "g_key_214": m13,
+    "g_key_214": m16,
     "g_key_25": MessageLookupByLibrary.simpleMessage("पासवर्ड मेल नहीं खाता."),
     "g_key_29": MessageLookupByLibrary.simpleMessage("संतुलन"),
     "g_key_3": MessageLookupByLibrary.simpleMessage("जोड़ने में विफल!"),
@@ -802,7 +829,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_41": MessageLookupByLibrary.simpleMessage("वॉलेट पता दर्ज करें"),
     "g_key_43": MessageLookupByLibrary.simpleMessage("उपलब्ध शेष"),
     "g_key_44": MessageLookupByLibrary.simpleMessage("रकम"),
-    "g_key_46": m14,
+    "g_key_46": m17,
     "g_key_47": MessageLookupByLibrary.simpleMessage(
       "इस लेनदेन को कवर करने के लिए अपर्याप्त धनराशि उपलब्ध है।",
     ),
@@ -1040,19 +1067,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_gas_warn_call_high": MessageLookupByLibrary.simpleMessage(
       "निष्पादन गैस उच्च",
     ),
-    "g_key_aa_gas_warn_call_high_desc": m15,
+    "g_key_aa_gas_warn_call_high_desc": m18,
     "g_key_aa_gas_warn_deploy": MessageLookupByLibrary.simpleMessage(
       "परिनियोजन गैस ओवरहेड",
     ),
-    "g_key_aa_gas_warn_deploy_desc": m16,
+    "g_key_aa_gas_warn_deploy_desc": m19,
     "g_key_aa_gas_warn_paymaster": MessageLookupByLibrary.simpleMessage(
       "पेमास्टर ओवरहेड हाई",
     ),
-    "g_key_aa_gas_warn_paymaster_desc": m17,
+    "g_key_aa_gas_warn_paymaster_desc": m20,
     "g_key_aa_gas_warn_total_high": MessageLookupByLibrary.simpleMessage(
       "गैस की सीमा बहुत अधिक है",
     ),
-    "g_key_aa_gas_warn_total_high_desc": m18,
+    "g_key_aa_gas_warn_total_high_desc": m21,
     "g_key_aa_gas_warn_under_est": MessageLookupByLibrary.simpleMessage(
       "संभावित गैस का कम अनुमान",
     ),
@@ -1062,7 +1089,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_gas_warn_verify_high": MessageLookupByLibrary.simpleMessage(
       "सत्यापन गैस उच्च",
     ),
-    "g_key_aa_gas_warn_verify_high_desc": m19,
+    "g_key_aa_gas_warn_verify_high_desc": m22,
     "g_key_aa_gasless": MessageLookupByLibrary.simpleMessage("गैस रहित"),
     "g_key_aa_gasless_transactions": MessageLookupByLibrary.simpleMessage(
       "गैस रहित लेनदेन और बैच संचालन",
@@ -1340,7 +1367,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_airdrop_claim": MessageLookupByLibrary.simpleMessage("दावा"),
     "g_key_airdrop_claimed": MessageLookupByLibrary.simpleMessage("दावा किया"),
-    "g_key_airdrop_days_left": m20,
+    "g_key_airdrop_days_left": m23,
     "g_key_airdrop_deadline": MessageLookupByLibrary.simpleMessage("समयसीमा"),
     "g_key_airdrop_eligible": MessageLookupByLibrary.simpleMessage("योग्य"),
     "g_key_airdrop_estimated_value": MessageLookupByLibrary.simpleMessage(
@@ -1408,7 +1435,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "सीएसवी प्रारूप: पता, राशि, लेबल",
     ),
     "g_key_batch_done": MessageLookupByLibrary.simpleMessage("हो गया"),
-    "g_key_batch_duplicate_address": m21,
+    "g_key_batch_duplicate_address": m24,
     "g_key_batch_estimating_gas": MessageLookupByLibrary.simpleMessage(
       "गैस का अनुमान...",
     ),
@@ -1430,10 +1457,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_batch_import_csv": MessageLookupByLibrary.simpleMessage(
       "सीएसवी आयात करें",
     ),
-    "g_key_batch_insufficient_balance": m22,
-    "g_key_batch_invalid_address": m23,
-    "g_key_batch_invalid_amount": m24,
-    "g_key_batch_max_recipients": m25,
+    "g_key_batch_insufficient_balance": m25,
+    "g_key_batch_invalid_address": m26,
+    "g_key_batch_invalid_amount": m27,
+    "g_key_batch_max_recipients": m28,
     "g_key_batch_memo_optional": MessageLookupByLibrary.simpleMessage(
       "मेमो वैकल्पिक है",
     ),
@@ -1656,7 +1683,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_approve_exact": MessageLookupByLibrary.simpleMessage(
       "सटीक मात्रा",
     ),
-    "g_key_dex_approve_required": m26,
+    "g_key_dex_approve_required": m29,
     "g_key_dex_approve_unlimited": MessageLookupByLibrary.simpleMessage(
       "असीमित",
     ),
@@ -1695,8 +1722,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_price_impact": MessageLookupByLibrary.simpleMessage(
       "मूल्य प्रभाव",
     ),
-    "g_key_dex_price_impact_high": m27,
-    "g_key_dex_quote_expires": m28,
+    "g_key_dex_price_impact_high": m30,
+    "g_key_dex_quote_expires": m31,
     "g_key_dex_quote_failed": MessageLookupByLibrary.simpleMessage(
       "उद्धरण विफल रहा",
     ),
@@ -1793,7 +1820,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_points_daily": MessageLookupByLibrary.simpleMessage(
       "प्रतिदिन अंक अर्जित करें",
     ),
-    "g_key_earn_pts_day": m29,
+    "g_key_earn_pts_day": m32,
     "g_key_earn_quick_tools": MessageLookupByLibrary.simpleMessage(
       "त्वरित उपकरण",
     ),
@@ -1809,7 +1836,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_total_earnings": MessageLookupByLibrary.simpleMessage(
       "कुल कमाई",
     ),
-    "g_key_earn_up_to_apy": m30,
+    "g_key_earn_up_to_apy": m33,
     "g_key_earn_view_all": MessageLookupByLibrary.simpleMessage("सभी देखें"),
     "g_key_eligibility_alerts": MessageLookupByLibrary.simpleMessage(
       "पात्रता अलर्ट",
@@ -2083,7 +2110,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_ens_subdomains": MessageLookupByLibrary.simpleMessage("उपडोमेन"),
     "g_key_ens_success": MessageLookupByLibrary.simpleMessage("सफलता!"),
-    "g_key_ens_success_message": m31,
+    "g_key_ens_success_message": m34,
     "g_key_ens_suggestions": MessageLookupByLibrary.simpleMessage("सुझाव"),
     "g_key_ens_text_records": MessageLookupByLibrary.simpleMessage(
       "पाठ अभिलेख",
@@ -2115,7 +2142,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_wait_time_info": MessageLookupByLibrary.simpleMessage(
       "प्रतीक्षा अवधि आगे बढ़ने से रोकती है",
     ),
-    "g_key_ens_wait_timer": m32,
+    "g_key_ens_wait_timer": m35,
     "g_key_ens_waiting": MessageLookupByLibrary.simpleMessage(
       "इंतज़ार कर रहा हूँ...",
     ),
@@ -2301,7 +2328,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_gas_alert_threshold": MessageLookupByLibrary.simpleMessage(
       "दहलीज (ग्वेई)",
     ),
-    "g_key_gas_auto_refresh": m33,
+    "g_key_gas_auto_refresh": m36,
     "g_key_gas_base_fee": MessageLookupByLibrary.simpleMessage("आधार शुल्क"),
     "g_key_gas_custom": MessageLookupByLibrary.simpleMessage("कस्टम"),
     "g_key_gas_estimated_time": MessageLookupByLibrary.simpleMessage(
@@ -2346,14 +2373,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_high_value_only": MessageLookupByLibrary.simpleMessage(
       "केवल उच्च मूल्य",
     ),
-    "g_key_hw_account_added": m34,
+    "g_key_hw_account_added": m37,
     "g_key_hw_account_already_imported": MessageLookupByLibrary.simpleMessage(
       "खाता पहले ही आयात किया जा चुका है",
     ),
     "g_key_hw_accounts": MessageLookupByLibrary.simpleMessage("लेखा"),
     "g_key_hw_add": MessageLookupByLibrary.simpleMessage("जोड़ें"),
     "g_key_hw_add_account": MessageLookupByLibrary.simpleMessage("खाता जोड़ें"),
-    "g_key_hw_add_account_content": m35,
+    "g_key_hw_add_account_content": m38,
     "g_key_hw_address_copied": MessageLookupByLibrary.simpleMessage(
       "पता कॉपी किया गया",
     ),
@@ -2384,8 +2411,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_hw_connecting": MessageLookupByLibrary.simpleMessage(
       "कनेक्ट हो रहा है...",
     ),
-    "g_key_hw_current_app_label": m36,
-    "g_key_hw_days_ago": m37,
+    "g_key_hw_current_app_label": m39,
+    "g_key_hw_days_ago": m40,
     "g_key_hw_derivation_path": MessageLookupByLibrary.simpleMessage(
       "व्युत्पत्ति पथ",
     ),
@@ -2400,7 +2427,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "फ़र्मवेयर संस्करण",
     ),
     "g_key_hw_go_back": MessageLookupByLibrary.simpleMessage("वापस जाओ"),
-    "g_key_hw_import_failed": m38,
+    "g_key_hw_import_failed": m41,
     "g_key_hw_keystone_connect_title": MessageLookupByLibrary.simpleMessage(
       "कीस्टोन कनेक्ट करें",
     ),
@@ -2431,7 +2458,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_hw_keystone_tap_to_scan": MessageLookupByLibrary.simpleMessage(
       "कीस्टोन प्रतिक्रिया को स्कैन करने के लिए टैप करें",
     ),
-    "g_key_hw_last_connected": m39,
+    "g_key_hw_last_connected": m42,
     "g_key_hw_ledger": MessageLookupByLibrary.simpleMessage("बही"),
     "g_key_hw_load_more": MessageLookupByLibrary.simpleMessage("अधिक लोड करें"),
     "g_key_hw_loading_accounts": MessageLookupByLibrary.simpleMessage(
@@ -2455,8 +2482,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_hw_not_connected_label": MessageLookupByLibrary.simpleMessage(
       "कनेक्टेड नहीं",
     ),
-    "g_key_hw_open_app": m40,
-    "g_key_hw_open_ledger_app_hint": m41,
+    "g_key_hw_open_app": m43,
+    "g_key_hw_open_ledger_app_hint": m44,
     "g_key_hw_rejected": MessageLookupByLibrary.simpleMessage(
       "डिवाइस पर अस्वीकृत",
     ),
@@ -2464,7 +2491,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_hw_remove_device": MessageLookupByLibrary.simpleMessage(
       "डिवाइस हटाएँ",
     ),
-    "g_key_hw_remove_device_confirm": m42,
+    "g_key_hw_remove_device_confirm": m45,
     "g_key_hw_saved_devices": MessageLookupByLibrary.simpleMessage(
       "सहेजे गए उपकरण",
     ),
@@ -2568,13 +2595,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_loyalty_daily_checkin": MessageLookupByLibrary.simpleMessage(
       "दैनिक चेक-इन",
     ),
-    "g_key_loyalty_earn_points": m43,
+    "g_key_loyalty_earn_points": m46,
     "g_key_loyalty_earned": MessageLookupByLibrary.simpleMessage("कमाया"),
     "g_key_loyalty_history": MessageLookupByLibrary.simpleMessage("अंक इतिहास"),
     "g_key_loyalty_invite": MessageLookupByLibrary.simpleMessage(
       "आमंत्रित करें",
     ),
-    "g_key_loyalty_invite_bonus": m44,
+    "g_key_loyalty_invite_bonus": m47,
     "g_key_loyalty_invite_friends": MessageLookupByLibrary.simpleMessage(
       "मित्रों को आमंत्रित करें",
     ),
@@ -2595,7 +2622,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "कोई कार्य उपलब्ध नहीं",
     ),
     "g_key_loyalty_points": MessageLookupByLibrary.simpleMessage("अंक"),
-    "g_key_loyalty_points_to_next": m45,
+    "g_key_loyalty_points_to_next": m48,
     "g_key_loyalty_redeem": MessageLookupByLibrary.simpleMessage("छुड़ाओ"),
     "g_key_loyalty_referral": MessageLookupByLibrary.simpleMessage("रेफरल"),
     "g_key_loyalty_referral_bonus": MessageLookupByLibrary.simpleMessage(
@@ -2768,8 +2795,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_payment_amount_invalid": MessageLookupByLibrary.simpleMessage(
       "अमान्य भुगतान राशि",
     ),
-    "g_key_payment_approx_token": m46,
-    "g_key_payment_approx_usdt": m47,
+    "g_key_payment_approx_token": m49,
+    "g_key_payment_approx_usdt": m50,
     "g_key_payment_code_title": MessageLookupByLibrary.simpleMessage(
       "भुगतान क्यूआर",
     ),
@@ -2856,11 +2883,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_sign_in_failed": MessageLookupByLibrary.simpleMessage(
       "साइन इन विफल",
     ),
-    "g_key_sim_gas_estimate": m48,
+    "g_key_sim_gas_estimate": m51,
     "g_key_sim_reverted": MessageLookupByLibrary.simpleMessage(
       "लेन-देन विफल होने की संभावना है",
     ),
-    "g_key_sim_reverted_reason": m49,
+    "g_key_sim_reverted_reason": m52,
     "g_key_sim_simulating": MessageLookupByLibrary.simpleMessage(
       "लेन-देन का अनुकरण किया जा रहा है...",
     ),
@@ -2875,7 +2902,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_squad_k11": MessageLookupByLibrary.simpleMessage(
       "फ़ाइल अपलोड करने के लिए बहुत बड़ी है",
     ),
-    "g_key_squad_k15": m50,
+    "g_key_squad_k15": m53,
     "g_key_squad_k18": MessageLookupByLibrary.simpleMessage("संपर्क जोड़ें"),
     "g_key_squad_k24": MessageLookupByLibrary.simpleMessage("संपर्क करें"),
     "g_key_squad_k25": MessageLookupByLibrary.simpleMessage(
@@ -2895,9 +2922,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "पुरस्कार का दावा करें",
     ),
     "g_key_stake_commission": MessageLookupByLibrary.simpleMessage("आयोग"),
-    "g_key_stake_d_unbond": m51,
-    "g_key_stake_days_left": m52,
-    "g_key_stake_days_remaining": m53,
+    "g_key_stake_d_unbond": m54,
+    "g_key_stake_days_left": m55,
+    "g_key_stake_days_remaining": m56,
     "g_key_stake_delegators": MessageLookupByLibrary.simpleMessage("प्रतिनिधि"),
     "g_key_stake_estimated_daily": MessageLookupByLibrary.simpleMessage(
       "स्था. दैनिक इनाम",
@@ -2987,7 +3014,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_stake_unbonding_period": MessageLookupByLibrary.simpleMessage(
       "बंधन मुक्त करने की अवधि",
     ),
-    "g_key_stake_unbonding_warning": m54,
+    "g_key_stake_unbonding_warning": m57,
     "g_key_stake_unstake": MessageLookupByLibrary.simpleMessage(
       "दाँव से उतारना",
     ),
@@ -3014,7 +3041,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "प्रति गैस अधिकतम शुल्क",
     ),
     "g_key_t_2": MessageLookupByLibrary.simpleMessage("लंबित"),
-    "g_key_t_29": m55,
+    "g_key_t_29": m58,
     "g_key_t_3": MessageLookupByLibrary.simpleMessage("विफलता"),
     "g_key_t_30": MessageLookupByLibrary.simpleMessage("खनिक शुल्क"),
     "g_key_t_31": MessageLookupByLibrary.simpleMessage("आगे बढ़ें"),
@@ -3037,7 +3064,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_t_44": MessageLookupByLibrary.simpleMessage(
       "डेटा प्राप्त करने में विफल",
     ),
-    "g_key_t_45": m56,
+    "g_key_t_45": m59,
     "g_key_t_46": MessageLookupByLibrary.simpleMessage(
       "प्राप्तकर्ता पता खाते की जाँच करें",
     ),
@@ -3046,22 +3073,22 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_t_5": MessageLookupByLibrary.simpleMessage("में स्थानांतरण"),
     "g_key_t_50": MessageLookupByLibrary.simpleMessage("अमान्य पता"),
     "g_key_t_51": MessageLookupByLibrary.simpleMessage("खाता सत्यापन सफल हुआ"),
-    "g_key_t_52": m57,
+    "g_key_t_52": m60,
     "g_key_t_54": MessageLookupByLibrary.simpleMessage(
       "प्राप्तकर्ता पते पर कोई खाता नहीं है, और पहला स्थानांतरण कम से कम 10XRP है",
     ),
     "g_key_t_6": MessageLookupByLibrary.simpleMessage("प्रयुक्त गैस"),
     "g_key_t_7": MessageLookupByLibrary.simpleMessage("गैस"),
-    "g_key_time_days_ago": m58,
-    "g_key_time_hours_ago": m59,
+    "g_key_time_days_ago": m61,
+    "g_key_time_hours_ago": m62,
     "g_key_time_just_now": MessageLookupByLibrary.simpleMessage("अभी अभी"),
-    "g_key_time_minutes_ago": m60,
+    "g_key_time_minutes_ago": m63,
     "g_key_token_discovery_add": MessageLookupByLibrary.simpleMessage("जोड़ें"),
-    "g_key_token_discovery_add_selected": m61,
+    "g_key_token_discovery_add_selected": m64,
     "g_key_token_discovery_added": MessageLookupByLibrary.simpleMessage(
       "टोकन जोड़ा गया",
     ),
-    "g_key_token_discovery_banner": m62,
+    "g_key_token_discovery_banner": m65,
     "g_key_token_discovery_deselect_all": MessageLookupByLibrary.simpleMessage(
       "सभी का चयन रद्द करें",
     ),
@@ -3134,7 +3161,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_verification_code": MessageLookupByLibrary.simpleMessage(
       "सत्यापन कोड",
     ),
-    "g_key_verification_code_sent": m63,
+    "g_key_verification_code_sent": m66,
     "g_key_wallet_c10": MessageLookupByLibrary.simpleMessage(
       "बीज वाक्यांश देखें",
     ),
@@ -3258,7 +3285,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_wallet_k56": MessageLookupByLibrary.simpleMessage("गैर"),
     "g_key_wallet_k57": MessageLookupByLibrary.simpleMessage("तेज़ करो"),
     "g_key_wallet_k58": MessageLookupByLibrary.simpleMessage("नोट"),
-    "g_key_wallet_m1": m64,
+    "g_key_wallet_m1": m67,
     "g_key_wallet_m11": MessageLookupByLibrary.simpleMessage(
       "क्या आप वाकई अपना खाता रद्द करना चाहते हैं?",
     ),
@@ -3268,7 +3295,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_wallet_m17": MessageLookupByLibrary.simpleMessage(
       "कृपया Google सत्यापन कोड दर्ज करें.",
     ),
-    "g_key_wallet_m19": m65,
+    "g_key_wallet_m19": m68,
     "g_key_wallet_m2": MessageLookupByLibrary.simpleMessage(
       "वर्तमान टोकन नहीं जोड़ा गया है.",
     ),
@@ -3276,11 +3303,11 @@ class MessageLookup extends MessageLookupByLibrary {
       "रिक्त स्थान से अलग किए गए शब्दों के साथ अपना बीज वाक्यांश दर्ज करें",
     ),
     "g_key_wallet_m22": MessageLookupByLibrary.simpleMessage("वॉलेट आयात करें"),
-    "g_key_wallet_m3": m66,
+    "g_key_wallet_m3": m69,
     "g_key_wallet_m4": MessageLookupByLibrary.simpleMessage(
       "वर्तमान टोकन शेष अपर्याप्त है.",
     ),
-    "g_key_wallet_m5": m67,
+    "g_key_wallet_m5": m70,
     "g_key_wallet_m6": MessageLookupByLibrary.simpleMessage(
       "हस्ताक्षर करने में त्रुटि",
     ),
@@ -3306,13 +3333,13 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_xml_0": MessageLookupByLibrary.simpleMessage("आरक्षित"),
     "g_key_xml_1": MessageLookupByLibrary.simpleMessage("बेस रिजर्व"),
-    "g_key_xml_11": m68,
+    "g_key_xml_11": m71,
     "g_key_xml_2": MessageLookupByLibrary.simpleMessage("वृद्धिशील रिजर्व"),
-    "g_key_xml_22": m69,
+    "g_key_xml_22": m72,
     "g_key_xml_3": MessageLookupByLibrary.simpleMessage(
       "स्वामित्व वाली वस्तुओं की संख्या",
     ),
-    "g_key_xml_33": m70,
+    "g_key_xml_33": m73,
     "g_key_xml_4": MessageLookupByLibrary.simpleMessage(
       "कुल आरक्षित राशि की गणना कैसे करें",
     ),
@@ -3342,7 +3369,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_lock_key20": MessageLookupByLibrary.simpleMessage(
       "पैटर्न पासवर्ड बनाएं",
     ),
-    "g_lock_key21": m71,
+    "g_lock_key21": m74,
     "g_lock_key22": MessageLookupByLibrary.simpleMessage(
       "पैटर्न पासवर्ड रीसेट करें",
     ),
@@ -3352,7 +3379,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_lock_key24": MessageLookupByLibrary.simpleMessage(
       "वॉलेट पासवर्ड जोड़ें?",
     ),
-    "g_lock_key25": m72,
+    "g_lock_key25": m75,
     "g_lock_key3": MessageLookupByLibrary.simpleMessage("लॉक स्क्रीन पेज"),
     "g_lock_key4": MessageLookupByLibrary.simpleMessage("ऑटो-लॉक"),
     "g_lock_key5": MessageLookupByLibrary.simpleMessage("सफल हुआ"),
@@ -3425,13 +3452,13 @@ class MessageLookup extends MessageLookupByLibrary {
       "मित्रों को साझा करें",
     ),
     "g_mining_key62": MessageLookupByLibrary.simpleMessage("जारी रखें"),
-    "g_mining_key63": m73,
+    "g_mining_key63": m76,
     "g_mining_key7": MessageLookupByLibrary.simpleMessage("अनलॉक तिथि"),
-    "g_mining_key73": m74,
+    "g_mining_key73": m77,
     "g_mining_key74": MessageLookupByLibrary.simpleMessage(
       "मैंने अभी @N42Wallet पर एक नोड स्थापित किया है और मोबाइल उपकरणों पर सत्यापन शुरू किया है! आओ और मेरे साथ जुड़ो. विकेन्द्रीकृत भविष्य मोबाइल है!",
     ),
-    "g_mining_key76": m75,
+    "g_mining_key76": m78,
     "g_mining_key82": MessageLookupByLibrary.simpleMessage("खनिज"),
     "g_mining_key83": MessageLookupByLibrary.simpleMessage("नोड"),
     "g_mining_key84": MessageLookupByLibrary.simpleMessage("नेटवर्क"),
@@ -3467,7 +3494,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_108": MessageLookupByLibrary.simpleMessage(
       "असमर्थित एन्क्रिप्टेड डेटा प्रारूप!",
     ),
-    "g_mining_key_109": m76,
+    "g_mining_key_109": m79,
     "g_mining_key_11": MessageLookupByLibrary.simpleMessage("कल के पुरस्कार"),
     "g_mining_key_110": MessageLookupByLibrary.simpleMessage(
       "एन्क्रिप्टेड डेटा",
@@ -3485,7 +3512,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_115": MessageLookupByLibrary.simpleMessage(
       "मुक्ति में कुछ समय लगता है, कृपया एक क्षण प्रतीक्षा करें!",
     ),
-    "g_mining_key_116": m77,
+    "g_mining_key_116": m80,
     "g_mining_key_12": MessageLookupByLibrary.simpleMessage(
       "इनाम प्रतिदिन जमा होता है और आपके एन वॉलेट में तभी भेजा जाता है जब यह ~0.5 एन तक पहुंच जाता है।",
     ),
@@ -3562,7 +3589,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_70": MessageLookupByLibrary.simpleMessage(
       "100 ब्लॉक/दिन~15 मिनट",
     ),
-    "g_mining_key_71": m78,
+    "g_mining_key_71": m81,
     "g_mining_key_72": MessageLookupByLibrary.simpleMessage(
       "प्रति चेक 128 सेकंड",
     ),
@@ -3631,7 +3658,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_97": MessageLookupByLibrary.simpleMessage(
       "कृपया एन्क्रिप्शन पासवर्ड दर्ज करें",
     ),
-    "g_mining_key_98": m79,
+    "g_mining_key_98": m82,
     "g_mining_key_99": MessageLookupByLibrary.simpleMessage(
       "कृपया यह सुनिश्चित करने के लिए अपना पासवर्ड पुनः दर्ज करें कि यह सही है",
     ),
@@ -3746,7 +3773,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("लिंक"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("कोड"),
-    "g_swap_key_14": m80,
+    "g_swap_key_14": m83,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "सिक्का मूल्य त्रुटि प्राप्त करें.",
     ),
@@ -3758,7 +3785,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "आपका स्वैप शीघ्र ही वितरित किया जाएगा। कृपया धैर्य रखें।",
     ),
-    "g_swap_key_20": m81,
+    "g_swap_key_20": m84,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "एक नोड चलाने की लागत: समूह सत्यापन 1-49 एन मूल नोड: 50 एन प्रीमियम नोड: 100 एन प्रो नोड: 500 एन।",
     ),
@@ -3772,7 +3799,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("नया संतुलन"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("आप भुगतान करें"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("दिनांक"),
-    "g_swap_key_31": m82,
+    "g_swap_key_31": m85,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "स्वैप को संबंधित श्रृंखला खोजकर्ताओं (इथरस्कैन, बीएससीस्कैन, ट्रॉनस्कैन और हमारे अपने) पर देखा जा सकता है।",
     ),
@@ -3785,7 +3812,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "डिफ़ॉल्ट पर रीसेट करें",
     ),
-    "g_token_m_key_1": m83,
+    "g_token_m_key_1": m86,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "कोई भी टोकन बना सकता है, जिसमें मौजूदा टोकन के नकली संस्करण बनाना भी शामिल है। किसी टोकन को आयात करने से पहले हमेशा उस पर शोध करें।",
     ),
@@ -3803,9 +3830,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_2": MessageLookupByLibrary.simpleMessage("0~18 यूइंट"),
     "g_token_m_key_20": MessageLookupByLibrary.simpleMessage("टोकन जोड़ें"),
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage("प्रारूप त्रुटि!"),
-    "g_token_m_key_22": m84,
-    "g_token_m_key_23": m85,
-    "g_token_m_key_24": m86,
+    "g_token_m_key_22": m87,
+    "g_token_m_key_23": m88,
+    "g_token_m_key_24": m89,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("टोकन आयात करें"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("सभी नेटवर्क"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage("कस्टम टोकन"),
@@ -3816,20 +3843,20 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("सावधानी"),
     "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("उच्च जोखिम"),
     "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("सुरक्षित"),
-    "g_unlock_key10": m87,
+    "g_unlock_key10": m90,
     "g_unlock_key2": MessageLookupByLibrary.simpleMessage(
       "फ़िंगरप्रिंट या चेहरे की पहचान सक्षम नहीं है?",
     ),
     "g_unlock_key3": MessageLookupByLibrary.simpleMessage(
       "पैटर्न पासवर्ड बनाएं",
     ),
-    "g_unlock_key4": m88,
+    "g_unlock_key4": m91,
     "g_unlock_key5": MessageLookupByLibrary.simpleMessage("पासवर्ड दर्ज करें"),
-    "g_unlock_key6": m89,
+    "g_unlock_key6": m92,
     "g_unlock_key7": MessageLookupByLibrary.simpleMessage(
       "प्रमाणीकरण विफल रहा",
     ),
-    "g_unlock_key8": m90,
+    "g_unlock_key8": m93,
     "g_unlock_key9": MessageLookupByLibrary.simpleMessage("आप भी कर सकते हैं "),
     "g_version_later": MessageLookupByLibrary.simpleMessage("बाद में"),
     "g_wc_connection_lost": MessageLookupByLibrary.simpleMessage(
@@ -3897,7 +3924,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "google_verification_message20": MessageLookupByLibrary.simpleMessage(
       "ई-मेल सत्यापन कोड दर्ज करें",
     ),
-    "google_verification_message21": m91,
+    "google_verification_message21": m94,
     "google_verification_message3": MessageLookupByLibrary.simpleMessage(
       "गूगल कुंजी प्राप्त करने में विफल",
     ),
@@ -3951,7 +3978,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "login_password": MessageLookupByLibrary.simpleMessage("पासवर्ड"),
     "next": MessageLookupByLibrary.simpleMessage("अगला"),
-    "nicknameMessage": m92,
+    "nicknameMessage": m95,
     "password_diff": MessageLookupByLibrary.simpleMessage(
       "पासवर्ड मेल नहीं खाते",
     ),

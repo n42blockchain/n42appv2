@@ -120,6 +120,7 @@ dependencies:
 
   # === External Store ===
   rate_us_on_store: ^0.0.4
+  in_app_purchase: ^3.2.0
 
   # === Firebase ===
   firebase_core: ^4.5.0

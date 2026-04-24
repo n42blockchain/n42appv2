@@ -1995,4 +1995,16 @@
   "push_permission_btn_dismiss": "Bir daha hatırlatma",
   "push_permission_btn_later": "Sonra",
   "push_permission_btn_settings": "Ayarlara Git"
+,
+  "g_iap_title": "Satın Al",
+  "g_iap_restore": "Satın Alımları Geri Yükle",
+  "g_iap_restoring": "Satın alımlar geri yükleniyor…",
+  "g_iap_restored": "Geri yüklendi: {productId}",
+  "g_iap_purchased": "Satın alma başarılı: {productId}",
+  "g_iap_failed": "Satın alma başarısız: {message}",
+  "g_iap_cancelled": "İptal edildi",
+  "g_iap_store_unavailable": "Mağaza kullanılamıyor",
+  "g_iap_check_network": "Ağ bağlantınızı kontrol edin ve yeniden deneyin",
+  "g_iap_no_products": "Kullanılabilir ürün yok",
+  "g_iap_retry": "Yeniden dene"
 }

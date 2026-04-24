@@ -18,6 +18,8 @@ class WalletBoard extends StatefulWidget {
   final GestureTapCallback? receiveTap;
   //payment code
   final GestureTapCallback? paymentCodeTap;
+  //buy (in-app purchase)
+  final GestureTapCallback? buyTap;
 
   const WalletBoard({
     super.key,
@@ -29,6 +31,7 @@ class WalletBoard extends StatefulWidget {
     this.receiveTap,
     this.sendTap,
     this.paymentCodeTap,
+    this.buyTap,
   });
 
   @override
@@ -201,6 +204,8 @@ class _WalletBoardState extends State<WalletBoard> {
       _buildActionBtn(S.of(context).g_key_100, 'assets/wallet/w_send.png', widget.sendTap),
       SizedBox(width: ScreenUtil().setWidth(32)),
       _buildActionBtn(S.of(context).g_key_33, 'assets/wallet/w_receive.png', widget.receiveTap),
+      SizedBox(width: ScreenUtil().setWidth(32)),
+      _buildActionBtn('购买', 'assets/wallet/w_buy.png', widget.buyTap),
     ];
     return buttons;
   }

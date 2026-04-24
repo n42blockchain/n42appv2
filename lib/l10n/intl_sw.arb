@@ -1988,4 +1988,16 @@
   "push_permission_btn_dismiss": "Usikumbushe tena",
   "push_permission_btn_later": "Baadaye",
   "push_permission_btn_settings": "Nenda Mipangilio"
+,
+  "g_iap_title": "Nunua",
+  "g_iap_restore": "Rejesha Manunuzi",
+  "g_iap_restoring": "Kurudisha manunuzi…",
+  "g_iap_restored": "Imerudishwa: {productId}",
+  "g_iap_purchased": "Ununuzi umefanikiwa: {productId}",
+  "g_iap_failed": "Ununuzi umeshindwa: {message}",
+  "g_iap_cancelled": "Imeghairiwa",
+  "g_iap_store_unavailable": "Duka halipatikani",
+  "g_iap_check_network": "Angalia muunganiko wako wa mtandao na ujaribu tena",
+  "g_iap_no_products": "Hakuna bidhaa zinazopatikana",
+  "g_iap_retry": "Jaribu tena"
 }

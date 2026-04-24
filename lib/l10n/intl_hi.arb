@@ -1988,4 +1988,16 @@
   "push_permission_btn_dismiss": "याद न दिलाएं",
   "push_permission_btn_later": "बाद में",
   "push_permission_btn_settings": "सेटिंग पर जाएं"
+,
+  "g_iap_title": "खरीदें",
+  "g_iap_restore": "खरीदारी पुनर्स्थापित करें",
+  "g_iap_restoring": "खरीदारी पुनर्स्थापित हो रही है…",
+  "g_iap_restored": "पुनर्स्थापित: {productId}",
+  "g_iap_purchased": "खरीदारी सफल: {productId}",
+  "g_iap_failed": "खरीदारी विफल: {message}",
+  "g_iap_cancelled": "रद्द किया गया",
+  "g_iap_store_unavailable": "ऐप स्टोर अनुपलब्ध है",
+  "g_iap_check_network": "अपना नेटवर्क कनेक्शन जांचें और पुनः प्रयास करें",
+  "g_iap_no_products": "कोई उत्पाद उपलब्ध नहीं",
+  "g_iap_retry": "पुनः प्रयास करें"
 }

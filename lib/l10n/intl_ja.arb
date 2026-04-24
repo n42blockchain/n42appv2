@@ -1995,4 +1995,16 @@
   "push_permission_btn_dismiss": "次から表示しない",
   "push_permission_btn_later": "後で",
   "push_permission_btn_settings": "設定に移動"
+,
+  "g_iap_title": "購入",
+  "g_iap_restore": "購入を復元",
+  "g_iap_restoring": "購入を復元中…",
+  "g_iap_restored": "復元済み：{productId}",
+  "g_iap_purchased": "購入成功：{productId}",
+  "g_iap_failed": "購入失敗：{message}",
+  "g_iap_cancelled": "キャンセルしました",
+  "g_iap_store_unavailable": "ストアを利用できません",
+  "g_iap_check_network": "ネットワーク接続を確認して再試行してください",
+  "g_iap_no_products": "購入できる商品がありません",
+  "g_iap_retry": "再試行"
 }

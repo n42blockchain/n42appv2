@@ -1988,4 +1988,16 @@
   "push_permission_btn_dismiss": "دوبارہ یاد نہ دلائیں",
   "push_permission_btn_later": "بعد میں",
   "push_permission_btn_settings": "ترتیبات پر جائیں"
+,
+  "g_iap_title": "خریدیں",
+  "g_iap_restore": "خریداری بحال کریں",
+  "g_iap_restoring": "خریداری بحال ہو رہی ہے…",
+  "g_iap_restored": "بحال ہو گئی: {productId}",
+  "g_iap_purchased": "خریداری کامیاب: {productId}",
+  "g_iap_failed": "خریداری ناکام: {message}",
+  "g_iap_cancelled": "منسوخ کر دیا",
+  "g_iap_store_unavailable": "اسٹور دستیاب نہیں",
+  "g_iap_check_network": "اپنا نیٹ ورک کنکشن چیک کریں اور دوبارہ کوشش کریں",
+  "g_iap_no_products": "کوئی مصنوعات دستیاب نہیں",
+  "g_iap_retry": "دوبارہ کوشش کریں"
 }

@@ -1988,4 +1988,16 @@
   "push_permission_btn_dismiss": "لا تذكرني",
   "push_permission_btn_later": "لاحقاً",
   "push_permission_btn_settings": "الذهاب إلى الإعدادات"
+,
+  "g_iap_title": "شراء",
+  "g_iap_restore": "استعادة المشتريات",
+  "g_iap_restoring": "جارٍ استعادة المشتريات…",
+  "g_iap_restored": "تمت الاستعادة: {productId}",
+  "g_iap_purchased": "تم الشراء بنجاح: {productId}",
+  "g_iap_failed": "فشل الشراء: {message}",
+  "g_iap_cancelled": "تم الإلغاء",
+  "g_iap_store_unavailable": "المتجر غير متاح",
+  "g_iap_check_network": "يرجى التحقق من اتصال الإنترنت والمحاولة مجددًا",
+  "g_iap_no_products": "لا توجد منتجات متاحة",
+  "g_iap_retry": "إعادة المحاولة"
 }

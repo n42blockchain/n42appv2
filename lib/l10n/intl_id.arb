@@ -1995,4 +1995,16 @@
   "push_permission_btn_dismiss": "Jangan ingatkan lagi",
   "push_permission_btn_later": "Nanti",
   "push_permission_btn_settings": "Buka Pengaturan"
+,
+  "g_iap_title": "Beli",
+  "g_iap_restore": "Pulihkan Pembelian",
+  "g_iap_restoring": "Memulihkan pembelian…",
+  "g_iap_restored": "Dipulihkan: {productId}",
+  "g_iap_purchased": "Pembelian berhasil: {productId}",
+  "g_iap_failed": "Pembelian gagal: {message}",
+  "g_iap_cancelled": "Dibatalkan",
+  "g_iap_store_unavailable": "Toko tidak tersedia",
+  "g_iap_check_network": "Periksa koneksi jaringan Anda dan coba lagi",
+  "g_iap_no_products": "Tidak ada produk tersedia",
+  "g_iap_retry": "Coba lagi"
 }

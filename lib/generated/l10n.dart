@@ -16708,6 +16708,106 @@ class S {
       args: [],
     );
   }
+
+  /// `Buy`
+  String get g_iap_title {
+    return Intl.message('Buy', name: 'g_iap_title', desc: '', args: []);
+  }
+
+  /// `Restore Purchases`
+  String get g_iap_restore {
+    return Intl.message(
+      'Restore Purchases',
+      name: 'g_iap_restore',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Restoring purchases…`
+  String get g_iap_restoring {
+    return Intl.message(
+      'Restoring purchases…',
+      name: 'g_iap_restoring',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Restored: {productId}`
+  String g_iap_restored(Object productId) {
+    return Intl.message(
+      'Restored: $productId',
+      name: 'g_iap_restored',
+      desc: '',
+      args: [productId],
+    );
+  }
+
+  /// `Purchase successful: {productId}`
+  String g_iap_purchased(Object productId) {
+    return Intl.message(
+      'Purchase successful: $productId',
+      name: 'g_iap_purchased',
+      desc: '',
+      args: [productId],
+    );
+  }
+
+  /// `Purchase failed: {message}`
+  String g_iap_failed(Object message) {
+    return Intl.message(
+      'Purchase failed: $message',
+      name: 'g_iap_failed',
+      desc: '',
+      args: [message],
+    );
+  }
+
+  /// `Cancelled`
+  String get g_iap_cancelled {
+    return Intl.message(
+      'Cancelled',
+      name: 'g_iap_cancelled',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Store Unavailable`
+  String get g_iap_store_unavailable {
+    return Intl.message(
+      'Store Unavailable',
+      name: 'g_iap_store_unavailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Check your network connection and try again`
+  String get g_iap_check_network {
+    return Intl.message(
+      'Check your network connection and try again',
+      name: 'g_iap_check_network',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No products available`
+  String get g_iap_no_products {
+    return Intl.message(
+      'No products available',
+      name: 'g_iap_no_products',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Retry`
+  String get g_iap_retry {
+    return Intl.message('Retry', name: 'g_iap_retry', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

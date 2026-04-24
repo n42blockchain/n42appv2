@@ -1988,4 +1988,16 @@
   "push_permission_btn_dismiss": "Більше не нагадувати",
   "push_permission_btn_later": "Пізніше",
   "push_permission_btn_settings": "Перейти до налаштувань"
+,
+  "g_iap_title": "Купити",
+  "g_iap_restore": "Відновити покупки",
+  "g_iap_restoring": "Відновлення покупок…",
+  "g_iap_restored": "Відновлено: {productId}",
+  "g_iap_purchased": "Покупку виконано: {productId}",
+  "g_iap_failed": "Помилка покупки: {message}",
+  "g_iap_cancelled": "Скасовано",
+  "g_iap_store_unavailable": "Магазин недоступний",
+  "g_iap_check_network": "Перевірте підключення до мережі і спробуйте знову",
+  "g_iap_no_products": "Немає доступних товарів",
+  "g_iap_retry": "Повторити"
 }

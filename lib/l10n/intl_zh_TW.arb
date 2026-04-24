@@ -2001,4 +2001,16 @@
   "push_permission_btn_dismiss": "不再提醒",
   "push_permission_btn_later": "稍後再說",
   "push_permission_btn_settings": "去設定"
+,
+  "g_iap_title": "購買",
+  "g_iap_restore": "恢復購買",
+  "g_iap_restoring": "正在恢復購買…",
+  "g_iap_restored": "已恢復購買：{productId}",
+  "g_iap_purchased": "購買成功：{productId}",
+  "g_iap_failed": "購買失敗：{message}",
+  "g_iap_cancelled": "已取消",
+  "g_iap_store_unavailable": "應用商店暫不可用",
+  "g_iap_check_network": "請檢查網路連線後重試",
+  "g_iap_no_products": "暫無可購買商品",
+  "g_iap_retry": "重試"
 }

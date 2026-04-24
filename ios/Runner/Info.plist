@@ -54,6 +54,17 @@
 			</array>
 		</dict>
 	</array>
+	<key>CFBundleVersion</key>
+	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>weixin</string>
+		<string>weixinULAPI</string>
+	</array>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
 	<key>N42ChatGoogleClientID</key>
 	<string>$(N42_CHAT_GOOGLE_CLIENT_ID)</string>
 	<key>N42ChatGoogleServerClientID</key>
@@ -68,18 +79,6 @@
 	<string>$(N42_CHAT_WECHAT_APP_ID)</string>
 	<key>N42ChatWeChatUniversalLink</key>
 	<string>$(N42_CHAT_WECHAT_UNIVERSAL_LINK)</string>
-	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
-	<key>ITSAppUsesNonExemptEncryption</key>
-	<false/>
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-		<string>weixin</string>
-		<string>weixinULAPI</string>
-	</array>
-	<key>LSRequiresIPhoneOS</key>
-	<true/>
-	<!-- DApp browser requires loading arbitrary web content (HTTP/HTTPS) -->
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoadsInWebContent</key>
@@ -105,7 +104,7 @@
 	<string>N42 Wallet needs photo library access to select images for your profile picture and to share files in chat.</string>
 	<key>NSSupportsLiveActivities</key>
 	<true/>
-<key>UIApplicationSupportsIndirectInputEvents</key>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>
 	<array>

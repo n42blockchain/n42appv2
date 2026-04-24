@@ -1988,4 +1988,16 @@
   "push_permission_btn_dismiss": "Nepřipomínat",
   "push_permission_btn_later": "Později",
   "push_permission_btn_settings": "Přejít do nastavení"
+,
+  "g_iap_title": "Koupit",
+  "g_iap_restore": "Obnovit nákupy",
+  "g_iap_restoring": "Obnovení nákupů…",
+  "g_iap_restored": "Obnoveno: {productId}",
+  "g_iap_purchased": "Nákup úspěšný: {productId}",
+  "g_iap_failed": "Nákup se nezdařil: {message}",
+  "g_iap_cancelled": "Zrušeno",
+  "g_iap_store_unavailable": "Obchod není dostupný",
+  "g_iap_check_network": "Zkontrolujte připojení k síti a zkuste to znovu",
+  "g_iap_no_products": "Žádné produkty k dispozici",
+  "g_iap_retry": "Zkusit znovu"
 }
