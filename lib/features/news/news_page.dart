@@ -55,7 +55,7 @@ class _NewsPageState extends State<NewsPage> {
               },
               getData: (int page, int pageSize) async {
                 final data = await _newsApi.newsList(skip: page, limit: pageSize);
-                if (data != null && data["code"] == 200) {
+                if (data["code"] == 200) {
                   return data["data"];
                 }
                 return [];

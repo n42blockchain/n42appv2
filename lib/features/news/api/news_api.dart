@@ -2,13 +2,10 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:xml/xml.dart' as xml;
 
-/// Crypto news fetcher.
-///
-/// 历史实现调用 `https://astranet.world/newsList`，该域名 2026-04 起 NXDOMAIN —
-/// 改用公开的 RSS feed（无需 API key、无认证），并保留原有返回结构
-/// `{code:200, data:[{title,image,pubDate,link}]}` 以兼容上层 BaseList。
+/// Crypto news fetcher backed by public RSS feeds (no API key required).
+/// Returns the legacy `{code:200, data:[{title,image,pubDate,link}]}`
+/// shape so the existing BaseList consumer in NewsPage doesn't change.
 class NewsApi {
-  // 主源 / 备份源（按顺序尝试，第一条返回非空就停）
   static const List<String> _feeds = [
     'https://cointelegraph.com/rss',
     'https://decrypt.co/feed',
@@ -18,7 +15,7 @@ class NewsApi {
     BaseOptions(
       connectTimeout: const Duration(seconds: 8),
       receiveTimeout: const Duration(seconds: 12),
-      // 明确接收纯文本，避免 dio 误把 RSS 当 JSON 解析。
+      // RSS 是 XML，明确成 plain 避免 dio 把响应当 JSON 解析。
       responseType: ResponseType.plain,
       headers: {
         'Accept': 'application/rss+xml, application/xml, text/xml, */*',
@@ -27,12 +24,20 @@ class NewsApi {
     ),
   );
 
-  // 简单内存缓存：5 分钟内复用同一份结果，减轻外部 RSS 服务压力。
   static List<Map<String, dynamic>>? _cached;
   static DateTime? _cachedAt;
+  static Future<List<Map<String, dynamic>>>? _inflight;
   static const Duration _cacheTtl = Duration(minutes: 5);
 
-  Future<dynamic> newsList({
+  /// Reset all static state. Test-only.
+  @visibleForTesting
+  static void resetForTest() {
+    _cached = null;
+    _cachedAt = null;
+    _inflight = null;
+  }
+
+  Future<Map<String, dynamic>> newsList({
     required int skip,
     required int limit,
   }) async {
@@ -46,7 +51,7 @@ class NewsApi {
       return {'code': 200, 'data': all.sublist(start, end)};
     } catch (e) {
       debugPrint('NewsApi.newsList error: $e');
-      return null;
+      return {'code': 200, 'data': <Map<String, dynamic>>[]};
     }
   }
 
@@ -57,7 +62,11 @@ class NewsApi {
         DateTime.now().difference(cachedAt) < _cacheTtl) {
       return _cached!;
     }
+    // 防止并发首屏触发的多次抓取打到外部 RSS 服务。
+    return _inflight ??= _doFetch().whenComplete(() => _inflight = null);
+  }
 
+  Future<List<Map<String, dynamic>>> _doFetch() async {
     for (final url in _feeds) {
       final items = await _fetchFeed(url);
       if (items.isNotEmpty) {
@@ -138,9 +147,12 @@ class NewsApi {
     }
     final desc = _firstText(item, 'description');
     if (desc.isNotEmpty) {
-      final m = RegExp(r'''<img[^>]+src=["']([^"']+)["']''').firstMatch(desc);
+      final m = _imgInDescriptionRe.firstMatch(desc);
       if (m != null) return m.group(1) ?? '';
     }
     return '';
   }
+
+  static final RegExp _imgInDescriptionRe =
+      RegExp(r'''<img[^>]+src=["']([^"']+)["']''');
 }

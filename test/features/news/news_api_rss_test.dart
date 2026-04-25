@@ -2,6 +2,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/news/api/news_api.dart';
 
 void main() {
+  // Ensure the module-level static cache doesn't leak between groups when
+  // future integration tests are added that exercise newsList().
+  tearDown(NewsApi.resetForTest);
+
   group('NewsApi.parseRss', () {
     test('RSS 2.0 with media:content + enclosure 图片', () {
       const body = '''
