@@ -44,6 +44,8 @@ dependencies:
 
   # === Network ===
   dio: ^5.9.2
+  # NewsApi 解析 RSS feed（已在 transitive 树里，这里显式声明以避免依赖飘移）
+  xml: ^6.6.0
   connectivity_plus: ^7.0.0
   cached_network_image: ^3.4.1
   webview_flutter: ^4.13.1
