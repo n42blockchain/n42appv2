@@ -107,10 +107,26 @@ class _SelfCustody1State extends ConsumerState<SelfCustody1>
       ..setNavigationDelegate(
         NavigationDelegate(
           onNavigationRequest: (_) => NavigationDecision.navigate,
+          onWebResourceError: _handleWebViewError,
         ),
       )
       ..loadRequest(Uri.parse(AppConfig.getApiUrlOnline('btcStaking')))
       ..addJavaScriptChannel("N42APP", onMessageReceived: _onJsMessage);
+  }
+
+  void _handleWebViewError(WebResourceError err) {
+    // staking.n42.ai DNS unresolvable since 2026-04. Surface a toast so
+    // users don't see a blank webview without context.
+    if (!mounted || err.isForMainFrame == false) return;
+    if (kDebugMode) {
+      debugPrint('BTC staking webview error: ${err.errorCode} ${err.description}');
+    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('BTC staking service is temporarily unavailable.'),
+        duration: Duration(seconds: 4),
+      ),
+    );
   }
 
   Future<void> _onJsMessage(JavaScriptMessage message) async {

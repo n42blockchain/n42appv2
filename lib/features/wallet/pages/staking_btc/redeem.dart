@@ -87,6 +87,7 @@ class _RedeemState extends ConsumerState<Redeem> {
           onProgress: (progress) => debugPrint('WebView loading: $progress%'),
           onPageStarted: (url) => debugPrint('Page started: $url'),
           onNavigationRequest: (_) => NavigationDecision.navigate,
+          onWebResourceError: _handleWebViewError,
         ),
       )
       ..loadRequest(
@@ -95,6 +96,17 @@ class _RedeemState extends ConsumerState<Redeem> {
         ),
       )
       ..addJavaScriptChannel("N42APP", onMessageReceived: _onJsMessage);
+  }
+
+  void _handleWebViewError(WebResourceError err) {
+    if (!mounted || err.isForMainFrame == false) return;
+    debugPrint('BTC redeem webview error: ${err.errorCode} ${err.description}');
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('BTC staking service is temporarily unavailable.'),
+        duration: Duration(seconds: 4),
+      ),
+    );
   }
 
   Future<void> _onJsMessage(JavaScriptMessage message) async {

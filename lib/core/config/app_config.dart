@@ -53,7 +53,9 @@ class AppConfig {
   static const Map<String, dynamic> apiUrl = {
     'walletName': 'N42Wallet',
     'walletamazeBrowser': 'https://www.n42.ai',
-    'walletBuyHost': 'https://api-service.walletamaze.com/otc',
+    // walletBuyHost (api-service.walletamaze.com) was retired; no callers
+    // remained in lib/. walletBuyHostV2 still references onramper but the
+    // upstream returns 502 — server side; keep for tracking.
     'walletBuyHostV2': 'https://api.n42.ai/otc/r/onramper/url',
     
     // Market API
@@ -87,8 +89,12 @@ class AppConfig {
     },
     
     // IPFS
+    // Upload goes through n42 cluster (api.n42.ai/ipfsapi). Reads use the
+    // canonical public IPFS gateway since the previous custom gateway
+    // (api.astranet.app) went NXDOMAIN in 2026-04 and broke avatar /
+    // feedback image rendering.
     'ipfsHost': 'https://api.n42.ai',
-    'ipfsAddress': 'https://api.astranet.app/ipfs/ipfs/',
+    'ipfsAddress': 'https://ipfs.io/ipfs/',
     
     // Wallet/Token API
     'tokenViewUri': {
