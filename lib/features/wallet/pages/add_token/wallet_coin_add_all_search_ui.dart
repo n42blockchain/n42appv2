@@ -99,7 +99,7 @@ extension _WalletCoinAddAllSearchUI on _WalletCoinAddAllState {
     final String chainName = item['chain_name']?.toString() ?? '';
     final String fullname = item['fullname']?.toString() ?? sym;
     final String iconUrl =
-        'https://api-wallet.walletamaze.com/market/v1/r/coinImage/$fullname.png';
+        'https://api.n42.ai/market/v1/r/coinImage/$fullname.png';
 
     final Color blueColor = AppThemeUtils.getColorByKey(
         context, AppThemeKeys.mainBlueColor.name);
@@ -212,9 +212,9 @@ extension _WalletCoinAddAllSearchUI on _WalletCoinAddAllState {
     final String icon = switch (fullname) {
       'LoveCoin' => rowValue['icon']?.toString() ?? '',
       'Base' =>
-        "${AppConfig.apiUrl['walletamazeBrowser']}/static/${rowValue['coin_name']}.png",
+        "${AppConfig.apiUrl['n42Browser']}/static/${rowValue['coin_name']}.png",
       _ =>
-        'https://api-wallet.walletamaze.com/market/v1/r/coinImage/$fullname.png',
+        'https://api.n42.ai/market/v1/r/coinImage/$fullname.png',
     };
 
     return Container(

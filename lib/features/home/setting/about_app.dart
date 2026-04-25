@@ -116,7 +116,7 @@ class _AboutAppState extends State<AboutApp> {
         NavSettingItem(
           path: "assets/home/about/w.png",
           action: S.of(context).g_key_m_9,
-          callback: () => _openBrowser(AppConfig.apiUrl['walletamazeBrowser']!),
+          callback: () => _openBrowser(AppConfig.apiUrl['n42Browser']!),
         ),
       ],
     );
@@ -184,7 +184,7 @@ class _AboutAppState extends State<AboutApp> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                AppConfig.apiUrl['walletamazeBrowser'],
+                AppConfig.apiUrl['n42Browser'],
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(32.0),
                   color: AppThemeUtils.getColorByKey(

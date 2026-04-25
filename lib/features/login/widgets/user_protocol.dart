@@ -26,7 +26,7 @@ class _UserProtocolState extends State<UserProtocol> {
     _termsTapRecognizer = TapGestureRecognizer()
       ..onTap = () async {
         final url = Uri.parse(
-          "${AppConfig.apiUrl['walletamazeBrowser']!}/static/terms_of_use.html",
+          "${AppConfig.apiUrl['n42Browser']!}/static/terms_of_use.html",
         );
         if (await canLaunchUrl(url)) {
           await launchUrl(url, mode: LaunchMode.externalApplication);

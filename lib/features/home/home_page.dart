@@ -238,7 +238,7 @@ class _HomePageState extends ConsumerState<HomePage>
             if (showTermsOfService == false)
               Positioned.fill(
                 child: TermsOfServiceWidget(
-                  '${AppConfig.apiUrl['walletamazeBrowser']}/static/terms_of_use.html',
+                  '${AppConfig.apiUrl['n42Browser']}/static/terms_of_use.html',
                   agreeCallBack: () {
                     SPUtil().setShowTermsOfService(true);
                     showTermsOfService = true;

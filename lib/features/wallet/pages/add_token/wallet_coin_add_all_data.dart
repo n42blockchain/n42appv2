@@ -147,8 +147,8 @@ extension _WalletCoinAddAllData on _WalletCoinAddAllState {
     final fullname = _mapString(chainMap, 'fullname', fallback: symbol);
     final icon = switch (fullname) {
       'LoveCoin' => _mapString(chainMap, 'icon'),
-      'Base' => "${AppConfig.apiUrl['walletamazeBrowser']}/static/${chainMap['coin_name']}.png",
-      _ => "https://api-wallet.walletamaze.com/market/v1/r/coinImage/$fullname.png",
+      'Base' => "${AppConfig.apiUrl['n42Browser']}/static/${chainMap['coin_name']}.png",
+      _ => "https://api.n42.ai/market/v1/r/coinImage/$fullname.png",
     };
     Map<String, dynamic> chainInfoMap = {
       "isTest": coinType == "ZETA",

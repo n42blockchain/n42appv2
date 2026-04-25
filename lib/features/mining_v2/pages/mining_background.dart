@@ -11,7 +11,7 @@ class MiningBackground{
   void backgroundStart() {
     unawaited(_channel.liveActivityStart());
     if(Platform.isAndroid){
-      notification.sendAndroid(AppConfig.apiUrl['walletamazeBrowser'], S.current.g_mining_key_73,notificationId:10086);
+      notification.sendAndroid(AppConfig.apiUrl['n42Browser'], S.current.g_mining_key_73,notificationId:10086);
     }
   }
   void backgroundEnd() {

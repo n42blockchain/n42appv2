@@ -157,7 +157,7 @@ class SwapAstCheckWidget extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                             builder: (context) => BrowserPage(
-                              "${AppConfig.apiUrl['walletamazeBrowser']!}/static/terms_of_use-astranet.html",
+                              "${AppConfig.apiUrl['n42Browser']!}/static/terms_of_use-astranet.html",
                             ),
                           ),
                         );

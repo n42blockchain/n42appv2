@@ -316,7 +316,7 @@ class _WalletCoinTokenAdd2State extends ConsumerState<WalletCoinTokenAdd2> {
   Widget _buildCoinItem(Map<String, dynamic> rowValue) {
     final coinName = rowValue['coin_name'].toString();
     String icon =
-        'https://api-wallet.walletamaze.com/market/v1/r/coinImage/$coinName.png';
+        'https://api.n42.ai/market/v1/r/coinImage/$coinName.png';
     if (rowValue['fullname'] == 'LoveCoin') icon = rowValue['icon'];
 
     final imgWidget = rowValue['fullname'] == 'N42'

@@ -144,7 +144,7 @@ mixin WalletConnectConnection on ChangeNotifier {
         metadata: wallet_connect.PairingMetadata(
           name: AppConfig.apiUrl['walletName'],
           description: AppConfig.apiUrl['walletName'],
-          url: AppConfig.apiUrl['walletamazeBrowser']!,
+          url: AppConfig.apiUrl['n42Browser']!,
           icons: ["https://n42.ai/static/n42.png"],
         ),
       );

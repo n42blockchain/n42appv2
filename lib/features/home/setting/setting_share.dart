@@ -71,7 +71,7 @@ class _SettingShareState extends State<SettingShare> {
   void initState() {
     super.initState();
     linkStr =
-        '${AppConfig.apiUrl['walletamazeBrowser']!}/download?uuid=${_uuid ?? ""}&code=${AppGlobals.userInfo?.inviteCode ?? ""}';
+        '${AppConfig.apiUrl['n42Browser']!}/download?uuid=${_uuid ?? ""}&code=${AppGlobals.userInfo?.inviteCode ?? ""}';
     _loadAllStats();
   }
 
@@ -140,7 +140,7 @@ class _SettingShareState extends State<SettingShare> {
             ShareParams(
               text:
                   "${S.of(context).g_share_v3_key_3} ${S.of(context).g_share_v3_key_4} 25 ${S.of(context).g_share_v3_key_5} ${S.of(context).g_share_v3_key_7}: $linkStr",
-              subject: AppConfig.apiUrl['walletamazeBrowser'],
+              subject: AppConfig.apiUrl['n42Browser'],
             ),
           );
         }
@@ -336,7 +336,7 @@ class _SettingShareState extends State<SettingShare> {
                 ),
                 SizedBox(width: ScreenUtil().setWidth(20)),
                 Text(
-                  AppConfig.apiUrl['walletamazeBrowser'],
+                  AppConfig.apiUrl['n42Browser'],
                   style: TextStyle(
                     color: _color(AppThemeKeys.mainTextColor),
                     fontSize: ScreenUtil().setSp(30),

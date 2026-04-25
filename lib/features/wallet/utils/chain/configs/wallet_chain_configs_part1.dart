@@ -372,7 +372,7 @@ Map<String,dynamic> walletChainConfigsPart1={
     "baseInfo":<String,dynamic>{
       "blockchainType": BlockchainType.Ethereum.name,
       "coinType": CoinType.OP.name,
-      "icon": "https://api-wallet.walletamaze.com/market/v1/r/coinImage/Optimism Ethereum.png",
+      "icon": "https://api.n42.ai/market/v1/r/coinImage/Optimism Ethereum.png",
       "name": "Optimism",
       "miniName": "OP",
       "unit":"ETH",
@@ -498,7 +498,7 @@ Map<String,dynamic> walletChainConfigsPart1={
     "baseInfo":<String,dynamic>{
       "blockchainType": BlockchainType.Ethereum.name,
       "coinType": CoinType.AVAX.name,
-      "icon": "https://api-wallet.walletamaze.com/market/v1/r/coinImage/Avalanche C-Chain.png",
+      "icon": "https://api.n42.ai/market/v1/r/coinImage/Avalanche C-Chain.png",
       "name": "Avalanche C-Chain",
       "miniName": "AVAX",
       "unit":"AVAX",
@@ -548,7 +548,7 @@ Map<String,dynamic> walletChainConfigsPart1={
     "baseInfo":<String,dynamic>{
       "blockchainType": BlockchainType.Ethereum.name,
       "coinType": CoinType.MATIC.name,
-      "icon": "https://api-wallet.walletamaze.com/market/v1/r/coinImage/Polygon.png",
+      "icon": "https://api.n42.ai/market/v1/r/coinImage/Polygon.png",
       "name": "Polygon",
       "miniName": "MATIC",
       "unit":"MATIC",

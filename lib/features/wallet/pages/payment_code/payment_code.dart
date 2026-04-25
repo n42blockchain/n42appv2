@@ -27,7 +27,7 @@ class _PaymentCodeState extends State<PaymentCode> {
   }
 
   String _buildQrData() {
-    final base = AppConfig.apiUrl['walletamazeBrowser'] ?? '';
+    final base = AppConfig.apiUrl['n42Browser'] ?? '';
     final amt = amount?['amount'] ?? '';
     final coinType = amount?['coinType'] ?? '';
     final address = amount?['address'] ?? '';
@@ -121,7 +121,7 @@ class _PaymentCodeState extends State<PaymentCode> {
               data: _buildQrData(),
               version: QrVersions.min + 7,
               embeddedImage: Image.network(
-                "${AppConfig.apiUrl['walletamazeBrowser']}/static/ast.png",
+                "${AppConfig.apiUrl['n42Browser']}/static/ast.png",
               ).image,
               embeddedImageStyle: QrEmbeddedImageStyle(
                 size: Size(su.setWidth(80.0), su.setWidth(80.0)),

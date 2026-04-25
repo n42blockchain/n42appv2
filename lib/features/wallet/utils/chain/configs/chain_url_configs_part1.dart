@@ -79,7 +79,7 @@ final Map<String, dynamic> chainUrlConfigsPart1 = <String, dynamic>{
     "baseInfo": <String,dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "AVAX",
-      "icon": "https://api-wallet.walletamaze.com/market/v1/r/coinImage/Avalanche C-Chain.png",
+      "icon": "https://api.n42.ai/market/v1/r/coinImage/Avalanche C-Chain.png",
       "name": "Avalanche C-Chain",
       "miniName": "AVAX",
       "unit": "avax",
@@ -169,7 +169,7 @@ final Map<String, dynamic> chainUrlConfigsPart1 = <String, dynamic>{
     "baseInfo": <String,dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "BNB",
-      "icon": "https://api-wallet.walletamaze.com/market/v1/r/coinImage/Binance Smart Chain.png",
+      "icon": "https://api.n42.ai/market/v1/r/coinImage/Binance Smart Chain.png",
       "name": "Binance Smart Chain",
       "miniName": "BNB",
       "unit": "bnb",
@@ -214,7 +214,7 @@ final Map<String, dynamic> chainUrlConfigsPart1 = <String, dynamic>{
     "baseInfo": <String,dynamic>{
       "blockchainType": "Bitcoin",
       "coinType": "BTC",
-      "icon": "https://api-wallet.walletamaze.com/market/v1/r/coinImage/Bitcoin.png",
+      "icon": "https://api.n42.ai/market/v1/r/coinImage/Bitcoin.png",
       "name": "Bitcoin",
       "miniName": "BTC",
       "unit": "btc",
@@ -261,7 +261,7 @@ final Map<String, dynamic> chainUrlConfigsPart1 = <String, dynamic>{
     "baseInfo": <String,dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "BOBA",
-      "icon": "https://api-wallet.walletamaze.com/market/v1/r/coinImage/Boba Network.png",
+      "icon": "https://api.n42.ai/market/v1/r/coinImage/Boba Network.png",
       "name": "Boba Network",
       "miniName": "BOBA",
       "unit": "ETH",
@@ -306,7 +306,7 @@ final Map<String, dynamic> chainUrlConfigsPart1 = <String, dynamic>{
     "baseInfo": <String,dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "CELO",
-      "icon": "https://api-wallet.walletamaze.com/market/v1/r/coinImage/Celo.png",
+      "icon": "https://api.n42.ai/market/v1/r/coinImage/Celo.png",
       "name": "Celo",
       "miniName": "CELO",
       "unit": "celo",
@@ -351,7 +351,7 @@ final Map<String, dynamic> chainUrlConfigsPart1 = <String, dynamic>{
     "baseInfo": <String,dynamic>{
       "blockchainType": "Bitcoin",
       "coinType": "DASH",
-      "icon": "https://api-wallet.walletamaze.com/market/v1/r/coinImage/Dash.png",
+      "icon": "https://api.n42.ai/market/v1/r/coinImage/Dash.png",
       "name": "Dash",
       "miniName": "DASH",
       "unit": "dash",
@@ -396,7 +396,7 @@ final Map<String, dynamic> chainUrlConfigsPart1 = <String, dynamic>{
     "baseInfo": <String,dynamic>{
       "blockchainType": "Bitcoin",
       "coinType": "DOGE",
-      "icon": "https://api-wallet.walletamaze.com/market/v1/r/coinImage/Dogecoin.png",
+      "icon": "https://api.n42.ai/market/v1/r/coinImage/Dogecoin.png",
       "name": "Dogecoin",
       "miniName": "DOGE",
       "unit": "doge",
@@ -441,7 +441,7 @@ final Map<String, dynamic> chainUrlConfigsPart1 = <String, dynamic>{
     "baseInfo": <String,dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "ETH",
-      "icon": "https://api-wallet.walletamaze.com/market/v1/r/coinImage/Ethereum.png",
+      "icon": "https://api.n42.ai/market/v1/r/coinImage/Ethereum.png",
       "name": "Ethereum",
       "miniName": "ETH",
       "unit": "eth",
@@ -486,7 +486,7 @@ final Map<String, dynamic> chainUrlConfigsPart1 = <String, dynamic>{
     "baseInfo": <String,dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "ETC",
-      "icon": "https://api-wallet.walletamaze.com/market/v1/r/coinImage/Ethereum Classic.png",
+      "icon": "https://api.n42.ai/market/v1/r/coinImage/Ethereum Classic.png",
       "name": "Ethereum Classic",
       "miniName": "ETC",
       "unit": "etc",
@@ -531,7 +531,7 @@ final Map<String, dynamic> chainUrlConfigsPart1 = <String, dynamic>{
     "baseInfo": <String,dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "FTM",
-      "icon": "https://api-wallet.walletamaze.com/market/v1/r/coinImage/Fantom.png",
+      "icon": "https://api.n42.ai/market/v1/r/coinImage/Fantom.png",
       "name": "Fantom",
       "miniName": "FTM",
       "unit": "ftm",
@@ -576,7 +576,7 @@ final Map<String, dynamic> chainUrlConfigsPart1 = <String, dynamic>{
     "baseInfo": <String,dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "GO",
-      "icon": "https://api-wallet.walletamaze.com/market/v1/r/coinImage/GoChain.png",
+      "icon": "https://api.n42.ai/market/v1/r/coinImage/GoChain.png",
       "name": "GoChain",
       "miniName": "GO",
       "unit": "go",
@@ -621,7 +621,7 @@ final Map<String, dynamic> chainUrlConfigsPart1 = <String, dynamic>{
     "baseInfo": <String,dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "HT",
-      "icon": "https://api-wallet.walletamaze.com/market/v1/r/coinImage/Huobi ECO Chain.png",
+      "icon": "https://api.n42.ai/market/v1/r/coinImage/Huobi ECO Chain.png",
       "name": "Huobi ECO Chain",
       "miniName": "HT",
       "unit": "ht",
@@ -666,7 +666,7 @@ final Map<String, dynamic> chainUrlConfigsPart1 = <String, dynamic>{
     "baseInfo": <String,dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "KLAY",
-      "icon": "https://api-wallet.walletamaze.com/market/v1/r/coinImage/Klaytn.png",
+      "icon": "https://api.n42.ai/market/v1/r/coinImage/Klaytn.png",
       "name": "Klaytn",
       "miniName": "KLAY",
       "unit": "klay",
@@ -711,7 +711,7 @@ final Map<String, dynamic> chainUrlConfigsPart1 = <String, dynamic>{
     "baseInfo": <String,dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "KCS",
-      "icon": "https://api-wallet.walletamaze.com/market/v1/r/coinImage/KuCoin Community Chain.png",
+      "icon": "https://api.n42.ai/market/v1/r/coinImage/KuCoin Community Chain.png",
       "name": "KuCoin Community Chain",
       "miniName": "KCS",
       "unit": "kcs",
@@ -756,7 +756,7 @@ final Map<String, dynamic> chainUrlConfigsPart1 = <String, dynamic>{
     "baseInfo": <String,dynamic>{
       "blockchainType": "Bitcoin",
       "coinType": "LTC",
-      "icon": "https://api-wallet.walletamaze.com/market/v1/r/coinImage/Litecoin.png",
+      "icon": "https://api.n42.ai/market/v1/r/coinImage/Litecoin.png",
       "name": "Litecoin",
       "miniName": "LTC",
       "unit": "ltc",
@@ -802,7 +802,7 @@ final Map<String, dynamic> chainUrlConfigsPart1 = <String, dynamic>{
     "baseInfo": <String,dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "MTR",
-      "icon": "https://api-wallet.walletamaze.com/market/v1/r/coinImage/Meter.png",
+      "icon": "https://api.n42.ai/market/v1/r/coinImage/Meter.png",
       "name": "Meter",
       "miniName": "MTR",
       "unit": "mtr",
@@ -847,7 +847,7 @@ final Map<String, dynamic> chainUrlConfigsPart1 = <String, dynamic>{
     "baseInfo": <String,dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "METIS",
-      "icon": "https://api-wallet.walletamaze.com/market/v1/r/coinImage/Metis.png",
+      "icon": "https://api.n42.ai/market/v1/r/coinImage/Metis.png",
       "name": "Metis",
       "miniName": "METIS",
       "unit": "metis",
@@ -892,7 +892,7 @@ final Map<String, dynamic> chainUrlConfigsPart1 = <String, dynamic>{
     "baseInfo": <String,dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "GLMR",
-      "icon": "https://api-wallet.walletamaze.com/market/v1/r/coinImage/Moonbeam.png",
+      "icon": "https://api.n42.ai/market/v1/r/coinImage/Moonbeam.png",
       "name": "Moonbeam",
       "miniName": "GLMR",
       "unit": "glmr",
@@ -937,7 +937,7 @@ final Map<String, dynamic> chainUrlConfigsPart1 = <String, dynamic>{
     "baseInfo": <String,dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "MOVR",
-      "icon": "https://api-wallet.walletamaze.com/market/v1/r/coinImage/Moonriver.png",
+      "icon": "https://api.n42.ai/market/v1/r/coinImage/Moonriver.png",
       "name": "Moonriver",
       "miniName": "MOVR",
       "unit": "movr",
@@ -982,7 +982,7 @@ final Map<String, dynamic> chainUrlConfigsPart1 = <String, dynamic>{
     "baseInfo": <String,dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "OKT",
-      "icon": "https://api-wallet.walletamaze.com/market/v1/r/coinImage/OKX Chain.png",
+      "icon": "https://api.n42.ai/market/v1/r/coinImage/OKX Chain.png",
       "name": "OKX Chain",
       "miniName": "OKT",
       "unit": "okt",
@@ -1027,7 +1027,7 @@ final Map<String, dynamic> chainUrlConfigsPart1 = <String, dynamic>{
     "baseInfo": <String,dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "OP",
-      "icon": "https://api-wallet.walletamaze.com/market/v1/r/coinImage/Optimism Ethereum.png",
+      "icon": "https://api.n42.ai/market/v1/r/coinImage/Optimism Ethereum.png",
       "name": "Optimism Ethereum",
       "miniName": "OP",
       "unit": "ETH",
@@ -1072,7 +1072,7 @@ final Map<String, dynamic> chainUrlConfigsPart1 = <String, dynamic>{
     "baseInfo": <String,dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "MATIC",
-      "icon": "https://api-wallet.walletamaze.com/market/v1/r/coinImage/Polygon.png",
+      "icon": "https://api.n42.ai/market/v1/r/coinImage/Polygon.png",
       "name": "Polygon",
       "miniName": "MATIC",
       "unit": "matic",
@@ -1117,7 +1117,7 @@ final Map<String, dynamic> chainUrlConfigsPart1 = <String, dynamic>{
     "baseInfo": <String,dynamic>{
       "blockchainType": "Solana",
       "coinType": "SOL",
-      "icon": "https://api-wallet.walletamaze.com/market/v1/r/coinImage/Solana.png",
+      "icon": "https://api.n42.ai/market/v1/r/coinImage/Solana.png",
       "name": "Solana",
       "miniName": "SOL",
       "unit": "sol",
@@ -1162,7 +1162,7 @@ final Map<String, dynamic> chainUrlConfigsPart1 = <String, dynamic>{
     "baseInfo": <String,dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "TT",
-      "icon": "https://api-wallet.walletamaze.com/market/v1/r/coinImage/Thunder Token.png",
+      "icon": "https://api.n42.ai/market/v1/r/coinImage/Thunder Token.png",
       "name": "Thunder Token",
       "miniName": "TT",
       "unit": "tt",
@@ -1207,7 +1207,7 @@ final Map<String, dynamic> chainUrlConfigsPart1 = <String, dynamic>{
     "baseInfo": <String,dynamic>{
       "blockchainType": "Tron",
       "coinType": "TRX",
-      "icon": "https://api-wallet.walletamaze.com/market/v1/r/coinImage/Tron.png",
+      "icon": "https://api.n42.ai/market/v1/r/coinImage/Tron.png",
       "name": "Tron",
       "miniName": "TRX",
       "unit": "trx",
@@ -1252,7 +1252,7 @@ final Map<String, dynamic> chainUrlConfigsPart1 = <String, dynamic>{
     "baseInfo": <String,dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "WAN",
-      "icon": "https://api-wallet.walletamaze.com/market/v1/r/coinImage/wanChain.png",
+      "icon": "https://api.n42.ai/market/v1/r/coinImage/wanChain.png",
       "name": "wanChain",
       "miniName": "WAN",
       "unit": "wan",

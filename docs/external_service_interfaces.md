@@ -613,7 +613,7 @@ stun:stun.stunprotocol.org:3478
 | 配置 | 值 |
 |-----|---|
 | API 网关 | `https://api.n42.ai` |
-| 内容地址 | `https://api.astranet.app/ipfs/ipfs/` |
+| 内容地址 | `https://ipfs.io/ipfs/` |
 | 认证方式 | Basic Auth (用户名: `n42`) |
 
 ---
@@ -761,7 +761,6 @@ stun:stun.stunprotocol.org:3478
 | 配置项 | 值 |
 |-------|---|
 | API 端点 | `https://api.n42.ai/otc/r/onramper/url` |
-| 旧版端点 | `https://api-service.walletamaze.com/otc` |
 
 ---
 
@@ -805,13 +804,14 @@ stun:stun.stunprotocol.org:3478
 
 ## 23. 新闻资讯服务
 
-**基础 URL**: `https://astranet.world`
-**文件**: `lib/src/news/api/news_api.dart` (行 9-44)
+**文件**: `lib/features/news/api/news_api.dart`
 
-| 端点 | 方法 | 参数 | 用途 |
-|------|------|------|------|
-| `/newsList` | POST | skip, limit | 获取新闻列表 |
-| `/newsList?` | POST | newId | 获取新闻详情 |
+公开 RSS feed (无需 API key)，按顺序尝试，5 分钟内存缓存：
+
+| 来源 | URL | 用途 |
+|------|-----|------|
+| 主源 | `https://cointelegraph.com/rss` | 加密资讯 RSS |
+| 备用 | `https://decrypt.co/feed` | 主源失败时回退 |
 
 ---
 

@@ -65,10 +65,10 @@ class _ShareMiningState extends State<ShareMining> with SingleTickerProviderStat
   String generateShareText() {
     if (widget.fromType == 0 || widget.fromType == 1) {
       final shareUrl =
-          "${AppConfig.apiUrl['walletamazeBrowser']}?type=group_mining&id=${widget.groupId}";
+          "${AppConfig.apiUrl['n42Browser']}?type=group_mining&id=${widget.groupId}";
       return "${S.of(context).g_mining_key73(widget.groupName ?? '')} $shareUrl";
     }
-    final shareUrl = "${AppConfig.apiUrl['walletamazeBrowser']}?type=full_node";
+    final shareUrl = "${AppConfig.apiUrl['n42Browser']}?type=full_node";
     return "${S.of(context).g_mining_key74} $shareUrl";
   }
 
@@ -190,7 +190,7 @@ class _ShareMiningState extends State<ShareMining> with SingleTickerProviderStat
                                 SharePlus.instance.share(
                                   ShareParams(
                                     text: generateShareText(),
-                                    subject: AppConfig.apiUrl['walletamazeBrowser'],
+                                    subject: AppConfig.apiUrl['n42Browser'],
                                   ),
                                 );
                               },

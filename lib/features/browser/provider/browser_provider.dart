@@ -116,7 +116,7 @@ class BrowserProvider extends ChangeNotifier {
 
   void wListAdd({String url = ""}) {
     if (url == "") {
-      url = AppConfig.apiUrl['walletamazeBrowser']!;
+      url = AppConfig.apiUrl['n42Browser']!;
     }
     titleEditingController?.text = url;
     late WebViewController webViewController;

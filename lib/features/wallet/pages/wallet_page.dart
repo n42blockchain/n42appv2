@@ -216,7 +216,7 @@ class _WalletPageState extends ConsumerState<WalletPage> {
       return;
     }
 
-    final idx = scanStr.indexOf(AppConfig.apiUrl['walletamazeBrowser']);
+    final idx = scanStr.indexOf(AppConfig.apiUrl['n42Browser']);
     if (idx == -1) return;
     final params = Uri.parse(scanStr).queryParameters;
     if (params['type'] != 'payment') return;

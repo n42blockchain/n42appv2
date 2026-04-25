@@ -52,10 +52,8 @@ class AppConfig {
   
   static const Map<String, dynamic> apiUrl = {
     'walletName': 'N42Wallet',
-    'walletamazeBrowser': 'https://www.n42.ai',
-    // walletBuyHost (api-service.walletamaze.com) was retired; no callers
-    // remained in lib/. walletBuyHostV2 still references onramper but the
-    // upstream returns 502 — server side; keep for tracking.
+    'n42Browser': 'https://www.n42.ai',
+    // Onramper proxy. Upstream currently returns 502; tracked server-side.
     'walletBuyHostV2': 'https://api.n42.ai/otc/r/onramper/url',
     
     // Market API
@@ -88,11 +86,8 @@ class AppConfig {
       'test': 'https://5.78.28.90:9393', // TODO(production): Replace with domain name
     },
     
-    // IPFS
-    // Upload goes through n42 cluster (api.n42.ai/ipfsapi). Reads use the
-    // canonical public IPFS gateway since the previous custom gateway
-    // (api.astranet.app) went NXDOMAIN in 2026-04 and broke avatar /
-    // feedback image rendering.
+    // IPFS — uploads go through the n42 cluster, reads through the public
+    // gateway (writable cluster doesn't expose a permissioned read path).
     'ipfsHost': 'https://api.n42.ai',
     'ipfsAddress': 'https://ipfs.io/ipfs/',
     
@@ -108,9 +103,9 @@ class AppConfig {
       'test': 'https://5.78.28.90:9391', // TODO(production): Replace with domain name
     },
     
-    // News API
-    'newsHostUrl': 'https://astranet.world',
-    
+    // News API endpoint key was removed; NewsApi now reads public RSS
+    // feeds directly (see lib/features/news/api/news_api.dart).
+
     // TRON API
     'tronUri': 'https://api.trongrid.io',
     

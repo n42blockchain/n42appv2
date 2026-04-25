@@ -188,7 +188,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
                           MaterialPageRoute(
                             builder: (context) {
                               return BrowserPage(
-                                AppConfig.apiUrl['walletamazeBrowser'],
+                                AppConfig.apiUrl['n42Browser'],
                               );
                             },
                           ),
