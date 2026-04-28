@@ -3,7 +3,6 @@ import 'package:n42_wallet/features/home/setting/security/gesture_password_setti
 import 'package:n42_wallet/features/home/setting/security/lock_screen_resetpassword.dart';
 import 'package:n42_wallet/features/home/setting/security/security_edit.dart';
 import 'package:n42_wallet/features/home/widgets/face_recognition_public.dart';
-import 'package:n42_wallet/features/login/pages/change_password_page.dart';
 import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
@@ -123,20 +122,6 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                   ),
                 ),
               ),
-              // ── 修改登录密码 ─────────────────────────────────────────
-              if (AppGlobals.userInfo != null)
-                buildRowItemNew(
-                  S.of(context).g_key_change_password,
-                  false,
-                  () async {
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const ChangePasswordPage(),
-                      ),
-                    );
-                  },
-                ),
               buildRowItemNew(
                 S.of(context).email_verification,
                 securityMap['email'],

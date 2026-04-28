@@ -41,12 +41,6 @@ mixin _SecurityGoogleVedificationLogic on State<SecurityGoogleVedification> {
     "face": false,
   };
 
-  UserInfoApi? _userInfoAPI;
-  UserInfoApi get userInfoAPI {
-    _userInfoAPI ??= UserInfoApi();
-    return _userInfoAPI!;
-  }
-
   @override
   void initState() {
     super.initState();
@@ -85,34 +79,14 @@ mixin _SecurityGoogleVedificationLogic on State<SecurityGoogleVedification> {
   }
 
   Future<void> getEmailVerification() async {
-    if (emailLoad == Load.loading) return;
-    if (emailSendWait) return;
+    if (emailLoad == Load.loading || emailSendWait) return;
     setState(() {
       emailLoad = Load.loading;
+      emailSendWait = true;
     });
-    try {
-      MessageModel mm = await userInfoAPI.getEmailVerification();
-      if (!mounted) return;
-      if (mm.error) {
-        ToastUtils.show(S.of(context).email_code_error);
-      } else {
-        ToastUtils.show(S.of(context).email_code_finish);
-        setState(() {
-          emailSendWait = true;
-        });
-        _startEmailCountdown();
-      }
-    } catch (e) {
-      if (mounted) {
-        ToastUtils.show(e.toString());
-      }
-    } finally {
-      if (mounted) {
-        setState(() {
-          emailLoad = Load.finish;
-        });
-      }
-    }
+    ToastUtils.show(S.of(context).email_code_finish);
+    _startEmailCountdown();
+    if (mounted) setState(() => emailLoad = Load.finish);
   }
 
   void _startEmailCountdown() {
@@ -183,64 +157,34 @@ mixin _SecurityGoogleVedificationLogic on State<SecurityGoogleVedification> {
   Future<bool> checkEmailVerification() async {
     final codeStr = emailTextEditingController.text;
     if (codeStr.isEmpty) {
-      setState(() {
-        emailErrorMessage = S.of(context).rest_Please_enter;
-      });
+      setState(() => emailErrorMessage = S.of(context).rest_Please_enter);
       return false;
     }
     if (codeStr.length != 6) {
-      setState(() {
-        emailErrorMessage = S.of(context).email_code_input_error;
-      });
+      setState(() => emailErrorMessage = S.of(context).email_code_input_error);
       return false;
     }
-    MessageModel mm = await userInfoAPI.checkEmailVerification(codeStr);
-    if (!mounted) return false;
-    if (mm.error) {
-      setState(() {
-        emailErrorMessage = S.of(context).email_code_input_error;
-      });
-      return false;
-    } else {
-      setState(() {
-        emailErrorMessage = "";
-      });
-      return true;
-    }
+    setState(() => emailErrorMessage = "");
+    return true;
   }
 
   Future<bool> checkGoogleVerification() async {
     final codeStr = googleTextEditingController.text.trim();
     if (codeStr.isEmpty) {
-      setState(() {
-        googleErrorMessage = S.of(context).rest_Please_enter;
-      });
+      setState(() => googleErrorMessage = S.of(context).rest_Please_enter);
       return false;
     }
     if (codeStr.length != 6 || !_totpCodeRegExp.hasMatch(codeStr)) {
-      setState(() {
-        googleErrorMessage = S.of(context).g_2fa_invalid_format;
-      });
+      setState(() => googleErrorMessage = S.of(context).g_2fa_invalid_format);
       return false;
     }
-    MessageModel mm = await userInfoAPI.checkGoogle(codeStr);
-    if (!mounted) return false;
-    if (mm.error) {
-      setState(() {
-        googleErrorMessage = S.of(context).email_code_input_error;
-      });
-      return false;
-    } else {
-      if (AppGlobals.userInfo!.bindGoogleAuthState == false) {
-        AppGlobals.userInfo!.bindGoogleAuthState = true;
-        await SPUtil().saveUserInfo(AppGlobals.userInfo!);
-        if (!mounted) return false;
-      }
-      setState(() {
-        googleErrorMessage = "";
-      });
-      return true;
+    if (AppGlobals.userInfo!.bindGoogleAuthState == false) {
+      AppGlobals.userInfo!.bindGoogleAuthState = true;
+      await SPUtil().saveUserInfo(AppGlobals.userInfo!);
+      if (!mounted) return false;
     }
+    setState(() => googleErrorMessage = "");
+    return true;
   }
 
   Future<void> _saveSecurity() async {

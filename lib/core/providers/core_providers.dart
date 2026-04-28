@@ -14,21 +14,16 @@ import 'package:flutter_riverpod/legacy.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/security/secure_storage.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
-import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/constants/language_constants.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/core/utils/theme_mode_utils.dart';
 import 'package:n42_wallet/data/models/user_info.dart';
 import 'package:n42_wallet/shared/domain/entities/wallet_info.dart';
 import 'package:n42_wallet/core/enums/load.dart';
-import 'package:n42_wallet/core/network/ipfs_api.dart';
-import 'package:n42_wallet/features/login/api/user_info_api.dart';
-import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_chat/n42_chat.dart';
 
 part 'core_providers_ui.dart';
 part 'core_providers_security.dart';
-part 'core_providers_profile.dart';
 
 /// SPUtil Provider
 final spUtilProvider = Provider<SPUtil>((ref) => SPUtil());
@@ -162,17 +157,6 @@ final appInitProvider = FutureProvider<void>((ref) async {
           debugPrint('[appInit] _syncActiveUser timed out – continuing anyway');
         }
       });
-      if ((userInfo.uuid ?? '').isNotEmpty &&
-          (userInfo.token ?? '').isNotEmpty) {
-        unawaited(
-          _refreshUserInfoInBackground(
-            initialUser: userInfo,
-            spUtil: spUtil,
-            secureStorage: secureStorage,
-            currentUserNotifier: currentUserNotifier,
-          ),
-        );
-      }
     }
   } catch (e) {
     if (kDebugMode) debugPrint('appInitProvider._getUserInfo error: $e');
@@ -219,36 +203,4 @@ Future<void> _syncActiveUser(
     syncTasks.add(spUtil.saveUserInfo(userInfo));
   }
   await Future.wait(syncTasks);
-}
-
-Future<void> _refreshUserInfoInBackground({
-  required UserInfo initialUser,
-  required SPUtil spUtil,
-  required SecureStorage secureStorage,
-  required CurrentUserNotifier currentUserNotifier,
-}) async {
-  try {
-    final loginApi = UserInfoApi();
-    final freshUser = await loginApi
-        .getUserInfo(
-          initialUser.uuid ?? '',
-          initialUser.token ?? '',
-          initialUser.hashCode.toString(),
-        )
-        .timeout(const Duration(seconds: 8), onTimeout: () => null);
-    if (freshUser == null) return;
-    final activeUser = AppGlobals.userInfo;
-    if (activeUser?.uuid != initialUser.uuid ||
-        activeUser?.token != initialUser.token) {
-      return;
-    }
-    await _syncActiveUser(
-      freshUser,
-      secureStorage: secureStorage,
-      currentUserNotifier: currentUserNotifier,
-      spUtil: spUtil,
-    );
-  } catch (e) {
-    if (kDebugMode) debugPrint('appInitProvider._refreshUserInfoInBackground error: $e');
-  }
 }

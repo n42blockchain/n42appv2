@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
-import 'package:n42_wallet/features/login/widgets/login_title.dart';
+import 'package:n42_wallet/features/widgets/login_title.dart';
 import 'package:n42_wallet/features/utils/regular.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';

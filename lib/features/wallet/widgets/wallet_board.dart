@@ -16,8 +16,6 @@ class WalletBoard extends StatefulWidget {
   final GestureTapCallback? sendTap;
   //receive
   final GestureTapCallback? receiveTap;
-  //payment code
-  final GestureTapCallback? paymentCodeTap;
   //buy (in-app purchase)
   final GestureTapCallback? buyTap;
 
@@ -30,7 +28,6 @@ class WalletBoard extends StatefulWidget {
     this.walletName,
     this.receiveTap,
     this.sendTap,
-    this.paymentCodeTap,
     this.buyTap,
   });
 

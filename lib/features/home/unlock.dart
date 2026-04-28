@@ -1,13 +1,10 @@
 import 'dart:async';
 
-import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_wallet/features/home/widgets/face_recognition_public.dart';
 import 'package:n42_wallet/features/home/widgets/gesture_password/gesture_password.dart';
-import 'package:n42_wallet/features/login/pages/login_page.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -32,7 +29,6 @@ class _UnlockState extends ConsumerState<Unlock> {
   bool check = false;
   bool obscure = true;
 
-  final TapGestureRecognizer _loginTapRecognizer = TapGestureRecognizer();
 
   bool faceShow = false;
   bool gestureShow = false;
@@ -197,7 +193,6 @@ class _UnlockState extends ConsumerState<Unlock> {
   void dispose() {
     passwordTimer?.cancel();
     passwordTimer = null;
-    _loginTapRecognizer.dispose();
     super.dispose();
   }
 

@@ -1,4 +1,4 @@
-﻿import 'package:n42_wallet/features/login/widgets/view_pwd_icon.dart';
+﻿import 'package:n42_wallet/features/widgets/view_pwd_icon.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

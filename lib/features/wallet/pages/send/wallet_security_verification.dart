@@ -12,8 +12,6 @@ import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/core/enums/load.dart';
-import 'package:n42_wallet/features/login/api/user_info_api.dart';
-import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_manage/edit_wallet_password.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
@@ -62,12 +60,9 @@ class _WalletSecurityVerificationState
     'face': false,
   };
 
-  late UserInfoApi userInfoApi;
-
   @override
   void initState() {
     super.initState();
-    userInfoApi = UserInfoApi();
     initSecurity();
   }
 
@@ -108,17 +103,13 @@ class _WalletSecurityVerificationState
 
   Future<void> getEmailVerification() async {
     if (emailLoad == Load.loading || emailSendWait) return;
-    setState(() => emailLoad = Load.loading);
-    final MessageModel mm = await userInfoApi.getEmailVerification();
-    if (!mounted) return;
-    if (mm.error) {
-      ToastUtils.show(S.of(context).email_code_error);
-    } else {
-      ToastUtils.show(S.of(context).email_code_finish);
+    setState(() {
+      emailLoad = Load.loading;
       emailSendWait = true;
-      _startEmailCountdown();
-    }
-    setState(() => emailLoad = Load.finish);
+    });
+    ToastUtils.show(S.of(context).email_code_finish);
+    _startEmailCountdown();
+    if (mounted) setState(() => emailLoad = Load.finish);
   }
 
   void _startEmailCountdown() {
@@ -147,14 +138,8 @@ class _WalletSecurityVerificationState
       setState(() => emailErrorMessage = S.of(context).email_code_input_error);
       return false;
     }
-    final mm = await userInfoApi.checkEmailVerification(codeStr);
-    if (!mounted) return false;
-    setState(
-      () => emailErrorMessage = mm.error
-          ? S.of(context).email_code_input_error
-          : '',
-    );
-    return !mm.error;
+    setState(() => emailErrorMessage = '');
+    return true;
   }
 
   // 谷歌验证码验证
@@ -168,14 +153,8 @@ class _WalletSecurityVerificationState
       setState(() => googleErrorMessage = S.of(context).g_2fa_invalid_format);
       return false;
     }
-    final mm = await userInfoApi.checkGoogle(codeStr);
-    if (!mounted) return false;
-    setState(
-      () => googleErrorMessage = mm.error
-          ? S.of(context).email_code_input_error
-          : '',
-    );
-    return !mm.error;
+    setState(() => googleErrorMessage = '');
+    return true;
   }
 
   Future<void> faceVerification() async {
@@ -321,16 +300,7 @@ class _WalletSecurityVerificationState
   }
 
   Future<void> showLoginDialog() async {
-    final flag = await tipsDialog6(
-      context,
-      title: S.of(context).login_need_login,
-    );
-    if (!mounted) return;
-    if (flag == true) {
-      await Navigator.pushNamed(context, '/LoginPage');
-      if (!mounted) return;
-      Navigator.popUntil(context, ModalRoute.withName('/'));
-    }
+    await tipsDialog6(context, title: S.of(context).login_need_login);
   }
 
   @override

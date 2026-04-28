@@ -19,11 +19,7 @@ extension _PushNavigation on AppPushUtils {
       _navigateToChatHome(ctx, type);
       return;
     }
-    // 未登录 统一去登录
-    if (AppGlobals.userInfo == null) {
-      Navigator.push(ctx, MaterialPageRoute(builder: (_) => LoginPage()));
-      return;
-    }
+    if (AppGlobals.userInfo == null) return;
     if (data['type'] == 'device_login') {
       // 点击设备登录通知打开 App 时，通过 EventBus 触发弹窗
       AppPushUtils._handleDeviceLoginNotification(data);
@@ -31,13 +27,6 @@ extension _PushNavigation on AppPushUtils {
     }
 
     switch (type) {
-      case 'payment_received':
-        // 「确认收款」通知 — 跳转到支付历史页
-        Navigator.push(
-          ctx,
-          MaterialPageRoute(builder: (_) => const PaymentHistory()),
-        );
-
       case 'transfer':
       case 'normal_transaction_failed':
         _navigateToTxBrowser(ctx, data);

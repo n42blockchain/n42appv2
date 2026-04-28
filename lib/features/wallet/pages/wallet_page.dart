@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/core/token_discovery/discovered_token.dart';
 import 'package:n42_wallet/core/token_discovery/token_discovery_service.dart';
@@ -14,8 +13,6 @@ import 'package:n42_wallet/features/component/pages/scan_page.dart';
 import 'package:n42_wallet/features/wallet/pages/aa/aa_home_page.dart';
 import 'package:n42_wallet/features/wallet/pages/iap/iap_page.dart';
 import 'package:n42_wallet/features/wallet/pages/ens/ens_home_page.dart';
-import 'package:n42_wallet/features/wallet/pages/payment_code/payment_page.dart';
-import 'package:n42_wallet/features/wallet/pages/payment_code/set_amount.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_flow_utils.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_one.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_coin_item.dart';
@@ -216,21 +213,6 @@ class _WalletPageState extends ConsumerState<WalletPage> {
       return;
     }
 
-    final idx = scanStr.indexOf(AppConfig.apiUrl['n42Browser']);
-    if (idx == -1) return;
-    final params = Uri.parse(scanStr).queryParameters;
-    if (params['type'] != 'payment') return;
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => PaymentPage(
-          params["amount"],
-          params["user"],
-          params["coinType"],
-          params["address"],
-        ),
-      ),
-    );
   }
 
   Future<void> _pushAndRefreshWc(Widget page, dynamic wcp) async {
@@ -370,13 +352,7 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                                     sendTap: () => _onSendTap(waValue),
                                     receiveTap: () => _onReceiveTap(waValue),
                                     swapTap: () => _onSwapTap(waValue),
-                                    paymentCodeTap: () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => SetAmount(),
-                                      ),
-                                    ),
-                                    buyTap: () => Navigator.push(
+                                                    buyTap: () => Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         builder: (_) => const IapPage(),

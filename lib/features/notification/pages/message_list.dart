@@ -6,8 +6,6 @@ import 'package:n42_wallet/features/browser/pages/browser_page.dart';
 import 'package:n42_wallet/features/home/setting/about_app.dart';
 import 'package:n42_wallet/features/home/setting/personal_setting.dart';
 import 'package:n42_wallet/features/home/setting/setting_share.dart';
-import 'package:n42_wallet/features/login/api/user_info_api.dart';
-import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/news/news_page.dart';
 import 'package:n42_wallet/features/notification/pages/message_info.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
@@ -35,8 +33,6 @@ class MessageList extends ConsumerStatefulWidget {
 class _MessageListState extends ConsumerState<MessageList> {
   static final DateFormat _dateTimeFmt = DateFormat("dd-MM-yyyy HH:mm");
   static final DateFormat _dateFmt = DateFormat("dd-MM-yyyy");
-  late final UserInfoApi userInfoApi = UserInfoApi();
-
   @override
   void initState() {
     super.initState();
@@ -261,16 +257,6 @@ class _MessageListState extends ConsumerState<MessageList> {
           //调用接口
           //获取消息列表
           debugPrint('[MessageList] 请求消息列表 page=$page pageSize=$pageSize');
-          MessageModel marketData = await userInfoApi.getMsgNoticeList(
-            page: page,
-            pageSize: pageSize,
-          );
-          debugPrint('[MessageList] 响应 error=${marketData.error} data=${marketData.data}');
-          if (!marketData.error && marketData.data != null) {
-            final list = marketData.data['list'] as List;
-            debugPrint('[MessageList] 获取到 ${list.length} 条消息');
-            return list;
-          }
           return [];
         },
         isGridview: false,

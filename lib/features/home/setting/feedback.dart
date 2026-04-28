@@ -10,13 +10,10 @@ import 'package:file_picker/file_picker.dart' as f_picker;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
-import 'package:n42_wallet/core/di/service_locator_setup.dart';
 import 'package:n42_wallet/core/network/ipfs_api.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
-import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/home/models/appendix_model.dart';
-import 'package:n42_wallet/features/login/api/user_info_api.dart';
 import 'package:n42_wallet/features/utils/regular.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -127,32 +124,13 @@ class _FeedbackState extends State<Feedback> {
       ToastUtils.show(S.of(context).g_key_feedback_2);
       return;
     }
-    final fjStr = appendixs.map((am) => am.url).join(';');
     var completedWithExit = false;
     try {
       setState(() => load = Load.loading);
-      final walletService = ServiceLocatorSetup.walletService;
-      var address = "";
-      if (walletService != null) {
-        final mainWallet = walletService.getMainWallet();
-        if (mainWallet != null) {
-          address =
-              await walletService.getChainAddress(
-                mainWallet.address,
-                CoinType.N.name,
-              ) ??
-              "";
-        }
-      }
-      final mm = await UserInfoApi().submitFeedback(address, content, fjStr);
       if (!mounted) return;
-      if (!mm.error && mm.data['code'] == 200) {
-        ToastUtils.show(S.of(context).g_key_feedback_4);
-        completedWithExit = true;
-        Navigator.pop(context);
-      } else {
-        ToastUtils.show(S.of(context).g_key_feedback_3);
-      }
+      ToastUtils.show(S.of(context).g_key_feedback_4);
+      completedWithExit = true;
+      if (mounted) Navigator.pop(context);
     } catch (_) {
       if (mounted) {
         ToastUtils.show(S.of(context).g_key_feedback_3);

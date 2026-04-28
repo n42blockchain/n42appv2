@@ -1,4 +1,4 @@
-import 'package:n42_wallet/features/login/widgets/login_title.dart';
+import 'package:n42_wallet/features/widgets/login_title.dart';
 import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/features/utils/regular.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';

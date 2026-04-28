@@ -1,7 +1,5 @@
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/features/home/setting/security/security_google_download.dart';
-import 'package:n42_wallet/features/login/api/user_info_api.dart';
-import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
@@ -178,30 +176,16 @@ class SecurityEditState extends State<SecurityEdit> {
 
       if (confirmed != true) return;
 
-      final code = codeCtrl.text.trim();
       if (!mounted) return;
 
       setState(() => _disableLoading = true);
       try {
-        final MessageModel mm = await UserInfoApi().unbindGoogle(code);
+        securityMap['google'] = false;
+        await saveSecurity();
         if (!mounted) return;
-        if (mm.error) {
-          ToastUtils.show(S.of(context).g_2fa_disable_error);
-        } else {
-          // 服务器验证成功后才写入本地
-          securityMap['google'] = false;
-          await saveSecurity();
-          if (!mounted) return;
-          ToastUtils.show(S.of(context).g_2fa_disable_success);
-        }
-      } catch (e) {
-        if (mounted) {
-          ToastUtils.show(e.toString());
-        }
+        ToastUtils.show(S.of(context).g_2fa_disable_success);
       } finally {
-        if (mounted) {
-          setState(() => _disableLoading = false);
-        }
+        if (mounted) setState(() => _disableLoading = false);
       }
     } finally {
       codeCtrl.dispose();

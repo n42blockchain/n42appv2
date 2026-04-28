@@ -255,43 +255,13 @@ extension on _UnlockState {
       padding: EdgeInsets.all(ScreenUtil().setWidth(12.0)),
       width: double.infinity,
       alignment: Alignment.center,
-      child: RichText(
-        maxLines: 3,
+      child: Text(
+        textspanStr,
         textAlign: TextAlign.center,
-        text: TextSpan(children: [
-          TextSpan(
-            text: textspanStr,
-            style: TextStyle(
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-              fontSize: ScreenUtil().setSp(26.0),
-            ),
-          ),
-          TextSpan(
-            text: S.of(context).g_unlock_key9,
-            style: TextStyle(
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-              fontSize: ScreenUtil().setSp(26.0),
-            ),
-          ),
-          TextSpan(
-            text: S.of(context).g_key_login,
-            style: TextStyle(
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-              fontSize: ScreenUtil().setSp(30.0),
-            ),
-            recognizer: _loginTapRecognizer
-              ..onTap = () async {
-                String tokenId = AppGlobals.userInfo?.token ?? "";
-                await Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
-                if (AppGlobals.userInfo != null) {
-                  if ((AppGlobals.userInfo?.token ?? "") != tokenId) {
-                    check = true;
-                    back();
-                  }
-                }
-              },
-          ),
-        ]),
+        style: TextStyle(
+          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+          fontSize: ScreenUtil().setSp(26.0),
+        ),
       ),
     );
   }

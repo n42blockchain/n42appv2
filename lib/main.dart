@@ -19,7 +19,6 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/home/home_page.dart';
 import 'package:n42_wallet/features/home/setting/security/security_setting.dart';
 import 'package:n42_wallet/features/splash/splash_page.dart';
-import 'package:n42_wallet/features/login/pages/login_page.dart';
 import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/transaction_providers.dart';
 import 'package:n42_wallet/features/wallet_connect/presentation/providers/wallet_connect_providers.dart';
@@ -390,7 +389,6 @@ class _N42AppV2State extends ConsumerState<N42AppV2>
     "/ImportOne": (context) => ImportOne(),
     "/ImportPrivatekey": (context) => ImportPrivatekey(),
     "/ImportCloudBackup": (context) => ImportCloudBackup(),
-    "/LoginPage": (context) => LoginPage(),
     "/securitySetting": (context) => SecuritySetting(),
   };
 }

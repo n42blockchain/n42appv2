@@ -8,14 +8,11 @@ import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/main.dart' show globalProviderContainer;
 import 'package:n42_wallet/features/browser/pages/browser_page.dart';
 import 'package:n42_wallet/features/home/setting/about_app.dart';
-import 'package:n42_wallet/features/wallet/pages/payment_code/payment_history.dart';
 import 'package:n42_wallet/features/home/setting/personal_setting.dart';
 import 'package:n42_wallet/features/home/setting/setting_share.dart';
-import 'package:n42_wallet/features/login/api/user_info_api.dart';
 import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/data/models/device_login_info.dart';
 import 'package:n42_wallet/features/utils/device_info_util.dart';
-import 'package:n42_wallet/features/login/pages/login_page.dart';
 import 'package:n42_wallet/features/notification/pages/message_info.dart';
 import 'package:n42_wallet/features/wallet/utils/browser/browser_txhash.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -318,28 +315,7 @@ class AppPushUtils {
   }
 
   //绑定用户推送的token
-  static Future<void> bindUserPushToken(dynamic newToken) async {
-    try {
-      // 绑定token
-      if (kDebugMode) debugPrint('new token : $newToken');
-      if (newToken != null && AppGlobals.userInfo != null) {
-        UserInfoApi loginApi = UserInfoApi();
-        final deviceId = await DeviceInfoUtil().getOrCreateDeviceId();
-        final data = await loginApi.bindPushUserToken(
-          newToken,
-          deviceId: deviceId,
-        );
-        if (data != null && data["code"] == 200) {
-          //success
-          if (kDebugMode) debugPrint("更新推送用户Token成功");
-        } else {
-          if (kDebugMode) debugPrint("更新推送用户Token失败");
-        }
-      }
-    } catch (err) {
-      if (kDebugMode) debugPrint("bindUserPushToken err: ${err.toString()}");
-    }
-  }
+  static Future<void> bindUserPushToken(dynamic newToken) async {}
 
   ///前台通知点击
   static void _onSelectNotification(String? payload) {

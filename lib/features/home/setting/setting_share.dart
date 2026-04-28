@@ -13,7 +13,6 @@ import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/home/widgets/share_list.dart';
-import 'package:n42_wallet/features/login/api/user_info_api.dart';
 import 'package:n42_wallet/features/widgets/button_widget.dart';
 import 'package:n42_wallet/features/widgets/prompt_widget.dart';
 import 'package:n42_wallet/features/widgets/sheet_bottom.dart';
@@ -59,9 +58,6 @@ class _SettingShareState extends State<SettingShare> {
   int inviteeTotal = 0;
   int miningTotal = 0;
   double rewardTotal = 0;
-  late final UserInfoApi loginApi = UserInfoApi();
-  int _statsLoadVersion = 0;
-
   String? get _uuid => AppGlobals.userInfo?.uuid;
 
   Color _color(AppThemeKeys key) =>
@@ -72,26 +68,6 @@ class _SettingShareState extends State<SettingShare> {
     super.initState();
     linkStr =
         '${AppConfig.apiUrl['n42Browser']!}/download?uuid=${_uuid ?? ""}&code=${AppGlobals.userInfo?.inviteCode ?? ""}';
-    _loadAllStats();
-  }
-
-  Future<void> _loadAllStats() async {
-    if (_uuid == null) return;
-    final uuid = _uuid!;
-    final loadVersion = ++_statsLoadVersion;
-    final results = await Future.wait<Map<String, dynamic>?>([
-      safeShareStatsRequest(() => loginApi.getInviteeDownloadList(uuid)),
-      safeShareStatsRequest(() => loginApi.getInviteeList(uuid)),
-      safeShareStatsRequest(() => loginApi.getInviteeMiningCount(uuid)),
-      safeShareStatsRequest(() => loginApi.getInviteeMiningInfo(uuid)),
-    ]);
-    if (!mounted || loadVersion != _statsLoadVersion) return;
-    setState(() {
-      inviteeTotalDown = parseShareStatCount(results[0]?['total']);
-      inviteeTotal = parseShareStatCount(results[1]?['total']);
-      miningTotal = parseShareStatCount(results[2]?['total']);
-      rewardTotal = parseShareStatReward(results[3]?['total_reward']);
-    });
   }
 
   /// 截图并分享（内存直接分享）
