@@ -229,13 +229,6 @@ extension _ProfileHomePageWidgets on ProfileHomePage {
     );
   }
 
-  void _navigateToHelpCenter(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => const setting.Feedback()),
-    );
-  }
-
   void _rateApp(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Thank you for your support!')),

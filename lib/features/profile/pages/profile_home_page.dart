@@ -17,7 +17,6 @@ import 'package:n42_wallet/features/wallet/pages/wallet_backup/export_cloud_back
 import 'package:n42_wallet/features/home/setting/setting_sys_language.dart';
 import 'package:n42_wallet/features/home/setting/setting_theme.dart';
 import 'package:n42_wallet/features/wallet/pages/manage_chains_page.dart';
-import 'package:n42_wallet/features/home/setting/feedback.dart' as setting;
 import 'package:n42_wallet/features/home/setting/about_app.dart';
 
 part 'profile_home_page_widgets.dart';
@@ -305,14 +304,6 @@ class ProfileHomePage extends ConsumerWidget {
       context,
       'About',
       [
-        _buildMenuItem(
-          context,
-          'Help Center',
-          'FAQ & Support',
-          Icons.help_outline,
-          Colors.blue,
-          () => _navigateToHelpCenter(context),
-        ),
         _buildMenuItem(
           context,
           'Rate Us',
