@@ -571,6 +571,8 @@
   "g_lock_key23": "Забагато неправильних введень, скиньте пароль",
   "g_lock_key24": "Додати пароль Wallet?",
   "g_lock_key25": "Помилка введення пароля шаблону, у вас є шанс {value}",
+  "g_lock_key26": "Transfer Verification",
+  "g_lock_key27": "Require biometric authentication (Face ID / fingerprint) to confirm each wallet transfer.",
   "g_unlock_key2": "Розпізнавання відбитків пальців або обличчя не ввімкнено?",
   "g_unlock_key3": "Намалюйте шаблон пароля",
   "g_unlock_key4": "Помилка введення шаблону пароля, у вас є шанси {value}",

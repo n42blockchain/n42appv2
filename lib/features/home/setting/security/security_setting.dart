@@ -1,7 +1,6 @@
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/features/home/setting/security/gesture_password_setting.dart';
 import 'package:n42_wallet/features/home/setting/security/lock_screen_resetpassword.dart';
-import 'package:n42_wallet/features/home/setting/security/security_edit.dart';
 import 'package:n42_wallet/features/home/widgets/face_recognition_public.dart';
 import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
@@ -100,44 +99,26 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // ── 转账验证区块 ──────────────────────────────────────
               Container(
-                padding: EdgeInsets.symmetric(
-                  vertical: ScreenUtil().setWidth(20.0),
-                ),
+                height: ScreenUtil().setWidth(60.0),
+                alignment: Alignment.centerLeft,
                 child: Text(
-                  S.of(context).google_verification_message5,
+                  S.of(context).g_lock_key26,
                   style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                    fontSize: ScreenUtil().setSp(28),
-                  ),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(30.0)),
-                child: Text(
-                  S.of(context).google_verification_message6,
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.ff888888.name),
-                    fontSize: ScreenUtil().setSp(28),
-                  ),
-                ),
-              ),
-              buildRowItemNew(
-                S.of(context).email_verification,
-                securityMap['email'],
-                () async {
-                  await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => SecurityEdit('email'),
+                    color: AppThemeUtils.getColorByKey(
+                      context,
+                      AppThemeKeys.mainTextColor.name,
                     ),
-                  );
-                  if (!mounted) return;
-                  init();
-                },
+                    fontSize: ScreenUtil().setSp(30.0),
+                  ),
+                ),
               ),
               Container(
-                margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20.0)),
+                margin: EdgeInsets.only(
+                  top: ScreenUtil().setWidth(12.0),
+                  bottom: ScreenUtil().setWidth(20.0),
+                ),
                 decoration: BoxDecoration(
                   color: AppThemeUtils.getColorByKey(
                     context,
@@ -148,23 +129,41 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                   ),
                 ),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     buildOpenWidget(
                       S.of(context).g_lock_key1,
                       securityMap['face'],
                       (value) async {
-                        if (checkBiometrics) {
-                          securityMap['face'] = value;
-                          saveSecurity();
-                        }
+                        securityMap['face'] = value;
+                        saveSecurity();
                         setState(() {});
                       },
+                      enabled: checkBiometrics,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        left: ScreenUtil().setWidth(30.0),
+                        right: ScreenUtil().setWidth(30.0),
+                        bottom: ScreenUtil().setWidth(20.0),
+                      ),
+                      child: Text(
+                        S.of(context).g_lock_key27,
+                        style: TextStyle(
+                          fontSize: ScreenUtil().setSp(24.0),
+                          color: AppThemeUtils.getColorByKey(
+                            context,
+                            AppThemeKeys.itemSubtitleTextColor.name,
+                          ),
+                        ),
+                      ),
                     ),
                     if (checkBiometrics == false)
                       Padding(
                         padding: EdgeInsets.only(
                           left: ScreenUtil().setWidth(30.0),
                           right: ScreenUtil().setWidth(10.0),
+                          bottom: ScreenUtil().setWidth(16.0),
                         ),
                         child: Row(
                           children: [

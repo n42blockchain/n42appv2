@@ -2727,6 +2727,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_lock_key24": MessageLookupByLibrary.simpleMessage("ウォレットパスワードを追加しますか？"),
     "g_lock_key25": m75,
+    "g_lock_key26": MessageLookupByLibrary.simpleMessage(
+      "Transfer Verification",
+    ),
+    "g_lock_key27": MessageLookupByLibrary.simpleMessage(
+      "Require biometric authentication (Face ID / fingerprint) to confirm each wallet transfer.",
+    ),
     "g_lock_key3": MessageLookupByLibrary.simpleMessage("ロック画面ページ"),
     "g_lock_key4": MessageLookupByLibrary.simpleMessage("自動ロック"),
     "g_lock_key5": MessageLookupByLibrary.simpleMessage("成功"),

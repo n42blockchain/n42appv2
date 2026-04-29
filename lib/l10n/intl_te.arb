@@ -571,6 +571,8 @@
   "g_lock_key23": "చాలా తప్పు ఇన్‌పుట్‌లు ఉన్నాయి, దయచేసి పాస్‌వర్డ్‌ని రీసెట్ చేయండి",
   "g_lock_key24": "Wallet పాస్‌వర్డ్‌ని జోడించాలా?",
   "g_lock_key25": "నమూనా పాస్‌వర్డ్ ఇన్‌పుట్ లోపం, మీకు {value} అవకాశం ఉంది",
+  "g_lock_key26": "Transfer Verification",
+  "g_lock_key27": "Require biometric authentication (Face ID / fingerprint) to confirm each wallet transfer.",
   "g_unlock_key2": "వేలిముద్ర లేదా ముఖ గుర్తింపు ప్రారంభించబడలేదా?",
   "g_unlock_key3": "నమూనా పాస్‌వర్డ్‌ని గీయండి",
   "g_unlock_key4": "నమూనా పాస్‌వర్డ్ ఇన్‌పుట్ లోపం, మీకు {value} అవకాశాలు ఉన్నాయి",

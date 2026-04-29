@@ -2356,6 +2356,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_lock_key23": MessageLookupByLibrary.simpleMessage("輸入錯誤次數過多，請重設密碼"),
     "g_lock_key24": MessageLookupByLibrary.simpleMessage("新增錢包密碼？"),
     "g_lock_key25": m75,
+    "g_lock_key26": MessageLookupByLibrary.simpleMessage("轉帳驗證"),
+    "g_lock_key27": MessageLookupByLibrary.simpleMessage(
+      "開啟後，每次發起轉帳時需透過面容 ID 或指紋進行身份驗證。",
+    ),
     "g_lock_key3": MessageLookupByLibrary.simpleMessage("鎖定螢幕頁面"),
     "g_lock_key4": MessageLookupByLibrary.simpleMessage("自動上鎖"),
     "g_lock_key5": MessageLookupByLibrary.simpleMessage("成功了"),

@@ -571,6 +571,8 @@
   "g_lock_key23": "Trop de saisies incorrectes, veuillez réinitialiser le mot de passe",
   "g_lock_key24": "Ajouter un mot de passe de portefeuille ?",
   "g_lock_key25": "Erreur de saisie du mot de passe par schéma, il vous reste {value} tentative",
+  "g_lock_key26": "Transfer Verification",
+  "g_lock_key27": "Require biometric authentication (Face ID / fingerprint) to confirm each wallet transfer.",
   "g_unlock_key2": "La reconnaissance d'empreinte ou faciale n'est pas activée ?",
   "g_unlock_key3": "Dessiner le mot de passe par schéma",
   "g_unlock_key4": "Erreur de saisie du mot de passe par schéma, il vous reste {value} tentatives",

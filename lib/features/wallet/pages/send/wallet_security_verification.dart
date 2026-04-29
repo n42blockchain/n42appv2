@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -10,13 +9,11 @@ import 'package:local_auth_android/local_auth_android.dart' as auth_android;
 import 'package:local_auth_darwin/local_auth_darwin.dart' as auth_ios;
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
-import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_manage/edit_wallet_password.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/features/widgets/button_widget.dart';
-import 'package:n42_wallet/features/widgets/dialog_widget/tips_dialog_6.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 
@@ -35,30 +32,15 @@ class _WalletSecurityVerificationState
     extends ConsumerState<WalletSecurityVerification> {
   final TextEditingController pwdTextEditingController =
       TextEditingController();
-  final TextEditingController emailTextEditingController =
-      TextEditingController();
-  final TextEditingController googleTextEditingController =
-      TextEditingController();
 
   bool obscure = true;
   String pwdErrorMessage = '';
-  String emailErrorMessage = '';
-  String googleErrorMessage = '';
   String faceErrorMessage = '';
   int faceCheck = 0; // 0未验证，1验证成功，2验证失败
-  int emailSendWaitNum = 60;
-  bool emailSendWait = false;
   Load load = Load.finish;
-  Load emailLoad = Load.finish;
   bool showWalletPassword = false;
-  Timer? _emailTimer;
 
-  // 账号安全开关
-  Map<String, dynamic> securityMap = {
-    'email': false,
-    'google': false,
-    'face': false,
-  };
+  Map<String, dynamic> securityMap = {'face': false};
 
   @override
   void initState() {
@@ -68,10 +50,7 @@ class _WalletSecurityVerificationState
 
   @override
   void dispose() {
-    _emailTimer?.cancel();
     pwdTextEditingController.dispose();
-    emailTextEditingController.dispose();
-    googleTextEditingController.dispose();
     super.dispose();
   }
 
@@ -79,8 +58,6 @@ class _WalletSecurityVerificationState
     final s = await SPUtil().getSecurity();
     final userMap = s?[AppGlobals.userInfo?.uuid ?? ''];
     if (userMap is Map<String, dynamic>) {
-      securityMap['email'] = userMap['email'] ?? false;
-      securityMap['google'] = userMap['google'] ?? false;
       securityMap['face'] = userMap['face'] ?? false;
     }
     if (!mounted) return;
@@ -99,62 +76,6 @@ class _WalletSecurityVerificationState
 
   void closeKeyboard() {
     FocusScope.of(context).unfocus();
-  }
-
-  Future<void> getEmailVerification() async {
-    if (emailLoad == Load.loading || emailSendWait) return;
-    setState(() {
-      emailLoad = Load.loading;
-      emailSendWait = true;
-    });
-    ToastUtils.show(S.of(context).email_code_finish);
-    _startEmailCountdown();
-    if (mounted) setState(() => emailLoad = Load.finish);
-  }
-
-  void _startEmailCountdown() {
-    _emailTimer = Timer(const Duration(seconds: 1), () {
-      if (!mounted) return;
-      setState(() {
-        emailSendWaitNum--;
-      });
-      if (emailSendWaitNum <= 0) {
-        emailSendWaitNum = 60;
-        emailSendWait = false;
-      } else {
-        _startEmailCountdown();
-      }
-    });
-  }
-
-  // 验证邮箱验证码
-  Future<bool> checkEmailVerification() async {
-    final codeStr = emailTextEditingController.text;
-    if (codeStr.isEmpty) {
-      setState(() => emailErrorMessage = S.of(context).rest_Please_enter);
-      return false;
-    }
-    if (codeStr.length != 6) {
-      setState(() => emailErrorMessage = S.of(context).email_code_input_error);
-      return false;
-    }
-    setState(() => emailErrorMessage = '');
-    return true;
-  }
-
-  // 谷歌验证码验证
-  Future<bool> checkGoogleVerification() async {
-    final codeStr = googleTextEditingController.text.trim();
-    if (codeStr.isEmpty) {
-      setState(() => googleErrorMessage = S.of(context).rest_Please_enter);
-      return false;
-    }
-    if (codeStr.length != 6 || !RegExp(r'^\d{6}$').hasMatch(codeStr)) {
-      setState(() => googleErrorMessage = S.of(context).g_2fa_invalid_format);
-      return false;
-    }
-    setState(() => googleErrorMessage = '');
-    return true;
   }
 
   Future<void> faceVerification() async {
@@ -257,10 +178,7 @@ class _WalletSecurityVerificationState
   void _finishLoading() => setState(() => load = Load.finish);
 
   bool get _anySecurityEnabled =>
-      showWalletPassword ||
-      securityMap['face'] == true ||
-      securityMap['email'] == true ||
-      securityMap['google'] == true;
+      showWalletPassword || securityMap['face'] == true;
 
   Future<void> _onConfirm() async {
     closeKeyboard();
@@ -281,26 +199,9 @@ class _WalletSecurityVerificationState
       return;
     }
 
-    if (securityMap['email'] == true) {
-      if (!await checkEmailVerification()) {
-        if (mounted) _finishLoading();
-        return;
-      }
-    }
-    if (securityMap['google'] == true) {
-      if (!await checkGoogleVerification()) {
-        if (mounted) _finishLoading();
-        return;
-      }
-    }
-
     if (!mounted) return;
     _finishLoading();
     Navigator.pop(context, true);
-  }
-
-  Future<void> showLoginDialog() async {
-    await tipsDialog6(context, title: S.of(context).login_need_login);
   }
 
   @override

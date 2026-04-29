@@ -142,83 +142,25 @@ class _SetupPromptRow extends StatelessWidget {
 extension _SecurityVerificationBuild on _WalletSecurityVerificationState {
   // 按优先级排列：已启用的安全项插入头部，未启用的追加到末尾
   List<Widget> _buildVerificationWidgets() {
-    final List<Widget> widgets = [];
-
-    widgets.add(
+    return [
       _WalletPasswordSection(
         showPasswordInput: showWalletPassword,
         pwdController: pwdTextEditingController,
         obscure: obscure,
         pwdErrorMessage: pwdErrorMessage,
         onToggleObscure: () => setState(() => obscure = !obscure),
-        onSetupPassword: AppGlobals.userInfo == null
-            ? showLoginDialog
-            : pushEditWallet,
+        onSetupPassword: pushEditWallet,
         onEditingComplete: closeKeyboard,
       ),
-    );
-
-    _insertOrAppend(
-      widgets,
-      _EmailSection(
-        enabled: securityMap['email'] == true,
-        emailController: emailTextEditingController,
-        emailErrorMessage: emailErrorMessage,
-        emailLoad: emailLoad,
-        emailSendWait: emailSendWait,
-        emailSendWaitNum: emailSendWaitNum,
-        onSendCode: getEmailVerification,
-        onSetup: AppGlobals.userInfo == null ? showLoginDialog : pushSetting,
-        onEditingComplete: closeKeyboard,
-      ),
-      securityMap['email'] == true,
-    );
-
-    _insertOrAppend(
-      widgets,
-      _GoogleSection(
-        enabled: securityMap['google'] == true,
-        googleController: googleTextEditingController,
-        googleErrorMessage: googleErrorMessage,
-        onPaste: _pasteGoogleCode,
-        onSetup: AppGlobals.userInfo == null ? showLoginDialog : pushSetting,
-        onEditingComplete: closeKeyboard,
-      ),
-      securityMap['google'] == true,
-    );
-
-    _insertOrAppend(
-      widgets,
       _FaceSection(
         enabled: securityMap['face'] == true,
         faceCheck: faceCheck,
         faceErrorMessage: faceErrorMessage,
         onVerify: faceVerification,
-        onSetup: AppGlobals.userInfo == null ? showLoginDialog : pushSetting,
+        onSetup: pushSetting,
       ),
-      securityMap['face'] == true,
-    );
-
-    widgets.add(SizedBox(height: ScreenUtil().setWidth(50.0)));
-    return widgets;
-  }
-
-  /// 已启用项插入到索引 1（钱包密码之后），未启用项追加到末尾
-  void _insertOrAppend(List<Widget> list, Widget widget, bool enabled) {
-    if (enabled) {
-      list.insert(1, widget);
-    } else {
-      list.add(widget);
-    }
-  }
-
-  Future<void> _pasteGoogleCode() async {
-    final ClipboardData? cd = await Clipboard.getData(Clipboard.kTextPlain);
-    if (!mounted) return;
-    if (cd?.text != null && cd!.text != 'null') {
-      googleTextEditingController.text = cd.text!.trim();
-      setState(() {});
-    }
+      SizedBox(height: ScreenUtil().setWidth(50.0)),
+    ];
   }
 
   Widget _buildBottomBar(bool anyEnabled) {

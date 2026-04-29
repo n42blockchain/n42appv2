@@ -4,56 +4,6 @@ part of 'security_setting.dart';
 // ── Security setting widget components ───────────────────────────────────────
 
 extension on _SecuritySettingState {
-  Widget buildRowItemNew(String title, bool open, Function callback) {
-    return InkWell(
-      onTap: () => callback(),
-      child: Container(
-        height: ScreenUtil().setWidth(88.0),
-        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
-        margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(30.0)),
-        decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.itemBgColor.name,
-          ),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16.0)),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: ScreenUtil().setWidth(40.0),
-              height: ScreenUtil().setWidth(40.0),
-              margin: EdgeInsets.only(right: ScreenUtil().setWidth(10.0)),
-              child: Image.asset(
-                "assets/home/setting/security/${open ? "open" : "closs"}.png",
-              ),
-            ),
-            Expanded(
-              child: Text(
-                title,
-                style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainTextColor.name,
-                  ),
-                  fontSize: ScreenUtil().setSp(26.0),
-                ),
-              ),
-            ),
-            Icon(
-              Icons.arrow_forward_ios_sharp,
-              size: ScreenUtil().setWidth(40.0),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget buildOpenLockScreenWidget(ScreenLockState screenLockState) {
     return Container(
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20.0)),
@@ -235,7 +185,18 @@ extension on _SecuritySettingState {
     );
   }
 
-  Widget buildOpenWidget(String title, bool value, Function valueChange) {
+  Widget buildOpenWidget(
+    String title,
+    bool value,
+    Function valueChange, {
+    bool enabled = true,
+  }) {
+    final titleColor = AppThemeUtils.getColorByKey(
+      context,
+      enabled
+          ? AppThemeKeys.mainTextColor.name
+          : AppThemeKeys.itemSubtitleTextColor.name,
+    );
     return Container(
       height: ScreenUtil().setWidth(88.0),
       padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
@@ -244,10 +205,7 @@ extension on _SecuritySettingState {
           Expanded(
             child: Text(
               title,
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                fontSize: ScreenUtil().setSp(28),
-              ),
+              style: TextStyle(color: titleColor, fontSize: ScreenUtil().setSp(28)),
             ),
           ),
           Switch(
@@ -256,7 +214,7 @@ extension on _SecuritySettingState {
               AppThemeKeys.mainButtonBgColor.name,
             ),
             value: value,
-            onChanged: (v) => valueChange(v),
+            onChanged: enabled ? (v) => valueChange(v) : null,
           ),
         ],
       ),

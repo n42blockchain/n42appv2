@@ -2612,6 +2612,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_lock_key24": MessageLookupByLibrary.simpleMessage("지갑 비밀번호를 추가하시겠습니까?"),
     "g_lock_key25": m75,
+    "g_lock_key26": MessageLookupByLibrary.simpleMessage(
+      "Transfer Verification",
+    ),
+    "g_lock_key27": MessageLookupByLibrary.simpleMessage(
+      "Require biometric authentication (Face ID / fingerprint) to confirm each wallet transfer.",
+    ),
     "g_lock_key3": MessageLookupByLibrary.simpleMessage("잠금 화면 페이지"),
     "g_lock_key4": MessageLookupByLibrary.simpleMessage("자동 잠금"),
     "g_lock_key5": MessageLookupByLibrary.simpleMessage("성공"),

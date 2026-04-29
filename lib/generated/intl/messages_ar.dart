@@ -3315,6 +3315,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "إضافة كلمة مرور المحفظة؟",
     ),
     "g_lock_key25": m75,
+    "g_lock_key26": MessageLookupByLibrary.simpleMessage(
+      "Transfer Verification",
+    ),
+    "g_lock_key27": MessageLookupByLibrary.simpleMessage(
+      "Require biometric authentication (Face ID / fingerprint) to confirm each wallet transfer.",
+    ),
     "g_lock_key3": MessageLookupByLibrary.simpleMessage("صفحة قفل الشاشة"),
     "g_lock_key4": MessageLookupByLibrary.simpleMessage("القفل التلقائي"),
     "g_lock_key5": MessageLookupByLibrary.simpleMessage("نجحت"),

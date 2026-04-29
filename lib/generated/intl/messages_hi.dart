@@ -3380,6 +3380,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "वॉलेट पासवर्ड जोड़ें?",
     ),
     "g_lock_key25": m75,
+    "g_lock_key26": MessageLookupByLibrary.simpleMessage(
+      "Transfer Verification",
+    ),
+    "g_lock_key27": MessageLookupByLibrary.simpleMessage(
+      "Require biometric authentication (Face ID / fingerprint) to confirm each wallet transfer.",
+    ),
     "g_lock_key3": MessageLookupByLibrary.simpleMessage("लॉक स्क्रीन पेज"),
     "g_lock_key4": MessageLookupByLibrary.simpleMessage("ऑटो-लॉक"),
     "g_lock_key5": MessageLookupByLibrary.simpleMessage("सफल हुआ"),

@@ -571,6 +571,8 @@
   "g_lock_key23": "Demasiadas entradas incorrectas, restablezca la contraseña",
   "g_lock_key24": "¿Agregar contraseña de billetera?",
   "g_lock_key25": "Error al ingresar la contraseña del patrón, tiene {value} posibilidades",
+  "g_lock_key26": "Transfer Verification",
+  "g_lock_key27": "Require biometric authentication (Face ID / fingerprint) to confirm each wallet transfer.",
   "g_unlock_key2": "El reconocimiento de huellas dactilares o facial no está habilitado. Inicie sesión.",
   "g_unlock_key3": "Contraseña del patrón de dibujo",
   "g_unlock_key4": "Error al ingresar la contraseña del patrón, tienes {value} posibilidades",

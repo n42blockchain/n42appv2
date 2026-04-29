@@ -571,6 +571,8 @@
   "g_lock_key23": "Zbyt wiele nieprawidłowych prób, zresetuj hasło",
   "g_lock_key24": "Dodać hasło portfela?",
   "g_lock_key25": "Błąd wprowadzenia hasła wzorowego, masz {value} próbę",
+  "g_lock_key26": "Transfer Verification",
+  "g_lock_key27": "Require biometric authentication (Face ID / fingerprint) to confirm each wallet transfer.",
   "g_unlock_key2": "Rozpoznawanie odcisku palca lub twarzy nie jest włączone?",
   "g_unlock_key3": "Narysuj hasło wzorowe",
   "g_unlock_key4": "Błąd wprowadzenia hasła wzorowego, masz {value} prób",

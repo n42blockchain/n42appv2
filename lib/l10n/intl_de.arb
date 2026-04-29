@@ -571,6 +571,8 @@
   "g_lock_key23": "Zu viele falsche Eingaben, bitte setzen Sie das Passwort zurueck",
   "g_lock_key24": "Wallet-Passwort hinzufuegen?",
   "g_lock_key25": "Muster-Passwort-Eingabefehler, Sie haben noch {value} Versuch",
+  "g_lock_key26": "Transfer Verification",
+  "g_lock_key27": "Require biometric authentication (Face ID / fingerprint) to confirm each wallet transfer.",
   "g_unlock_key2": "Fingerabdruck- oder Gesichtserkennung nicht aktiviert?",
   "g_unlock_key3": "Muster-Passwort zeichnen",
   "g_unlock_key4": "Muster-Passwort-Eingabefehler, Sie haben noch {value} Versuche",

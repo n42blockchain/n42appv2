@@ -3675,6 +3675,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Wallet கடவுச்சொல்லைச் சேர்க்கவா?",
     ),
     "g_lock_key25": m75,
+    "g_lock_key26": MessageLookupByLibrary.simpleMessage(
+      "Transfer Verification",
+    ),
+    "g_lock_key27": MessageLookupByLibrary.simpleMessage(
+      "Require biometric authentication (Face ID / fingerprint) to confirm each wallet transfer.",
+    ),
     "g_lock_key3": MessageLookupByLibrary.simpleMessage(
       "திரைப் பக்கத்தைப் பூட்டு",
     ),

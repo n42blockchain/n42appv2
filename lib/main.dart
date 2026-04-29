@@ -17,7 +17,6 @@ import 'package:n42_wallet/core/di/injection.dart';
 import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/home/home_page.dart';
-import 'package:n42_wallet/features/home/setting/security/security_setting.dart';
 import 'package:n42_wallet/features/splash/splash_page.dart';
 import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/transaction_providers.dart';
@@ -35,6 +34,7 @@ import 'package:n42_wallet/features/wallet/pages/create_wallet/create/create_one
 import 'package:n42_wallet/features/wallet/pages/create_wallet/import/import_one.dart';
 import 'package:n42_wallet/features/wallet/pages/create_wallet/import/import_cloud_backup.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_manage/keystore/import_privatekey.dart';
+import 'package:n42_wallet/features/home/setting/security/security_setting.dart';
 import 'package:n42_wallet/features/wallet/provider/transaction_record_iterms_provider.dart';
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_provider.dart';
 import 'package:firebase_core/firebase_core.dart';

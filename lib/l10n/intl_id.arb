@@ -571,6 +571,8 @@
   "g_lock_key23": "Terlalu banyak input salah, silakan reset kata sandi",
   "g_lock_key24": "Tambahkan Kata Sandi Dompet?",
   "g_lock_key25": "Kesalahan input kata sandi pola, Anda memiliki {value} kesempatan",
+  "g_lock_key26": "Transfer Verification",
+  "g_lock_key27": "Require biometric authentication (Face ID / fingerprint) to confirm each wallet transfer.",
   "g_unlock_key2": "Sidik jari atau pengenalan wajah tidak diaktifkan?",
   "g_unlock_key3": "Gambar kata sandi pola",
   "g_unlock_key4": "Kesalahan input kata sandi pola, Anda memiliki {value} kesempatan",

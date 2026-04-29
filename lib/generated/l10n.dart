@@ -4874,6 +4874,26 @@ class S {
     );
   }
 
+  /// `Transfer Verification`
+  String get g_lock_key26 {
+    return Intl.message(
+      'Transfer Verification',
+      name: 'g_lock_key26',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Require biometric authentication (Face ID / fingerprint) to confirm each wallet transfer.`
+  String get g_lock_key27 {
+    return Intl.message(
+      'Require biometric authentication (Face ID / fingerprint) to confirm each wallet transfer.',
+      name: 'g_lock_key27',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Fingerprint or face recognition is not enabled?`
   String get g_unlock_key2 {
     return Intl.message(

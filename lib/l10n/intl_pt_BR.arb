@@ -571,6 +571,8 @@
   "g_lock_key23": "Muitas tentativas incorretas, por favor redefina a senha",
   "g_lock_key24": "Adicionar Senha da Carteira?",
   "g_lock_key25": "Erro na senha de padrão, você tem {value} tentativa",
+  "g_lock_key26": "Transfer Verification",
+  "g_lock_key27": "Require biometric authentication (Face ID / fingerprint) to confirm each wallet transfer.",
   "g_unlock_key2": "Impressão digital ou reconhecimento facial não está ativado?",
   "g_unlock_key3": "Desenhar senha de padrão",
   "g_unlock_key4": "Erro na senha de padrão, você tem {value} tentativas",

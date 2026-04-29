@@ -571,6 +571,8 @@
   "g_lock_key23": "هناك الكثير من المدخلات غير الصحيحة، يرجى إعادة تعيين كلمة المرور",
   "g_lock_key24": "إضافة كلمة مرور المحفظة؟",
   "g_lock_key25": "خطأ في إدخال كلمة المرور، لديك فرصة {value}",
+  "g_lock_key26": "Transfer Verification",
+  "g_lock_key27": "Require biometric authentication (Face ID / fingerprint) to confirm each wallet transfer.",
   "g_unlock_key2": "لم يتم تمكين بصمة الإصبع أو التعرف على الوجه؟",
   "g_unlock_key3": "رسم كلمة مرور النمط",
   "g_unlock_key4": "خطأ في إدخال كلمة المرور، لديك فرص {value}",

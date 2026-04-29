@@ -571,6 +571,8 @@
   "g_lock_key23": "बहुत सारे गलत इनपुट हैं, कृपया पासवर्ड रीसेट करें",
   "g_lock_key24": "वॉलेट पासवर्ड जोड़ें?",
   "g_lock_key25": "पैटर्न पासवर्ड इनपुट त्रुटि, आपके पास {value} मौका है",
+  "g_lock_key26": "Transfer Verification",
+  "g_lock_key27": "Require biometric authentication (Face ID / fingerprint) to confirm each wallet transfer.",
   "g_unlock_key2": "फ़िंगरप्रिंट या चेहरे की पहचान सक्षम नहीं है?",
   "g_unlock_key3": "पैटर्न पासवर्ड बनाएं",
   "g_unlock_key4": "पैटर्न पासवर्ड इनपुट त्रुटि, आपके पास {value} संभावनाएं हैं",

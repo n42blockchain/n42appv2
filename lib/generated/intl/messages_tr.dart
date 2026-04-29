@@ -3388,6 +3388,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Cüzdan Şifresi Eklensin mi?",
     ),
     "g_lock_key25": m75,
+    "g_lock_key26": MessageLookupByLibrary.simpleMessage(
+      "Transfer Verification",
+    ),
+    "g_lock_key27": MessageLookupByLibrary.simpleMessage(
+      "Require biometric authentication (Face ID / fingerprint) to confirm each wallet transfer.",
+    ),
     "g_lock_key3": MessageLookupByLibrary.simpleMessage("Kilit ekranı sayfası"),
     "g_lock_key4": MessageLookupByLibrary.simpleMessage("Otomatik kilitleme"),
     "g_lock_key5": MessageLookupByLibrary.simpleMessage("Başarılı"),

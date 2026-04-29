@@ -571,6 +571,8 @@
   "g_lock_key23": "Çok fazla hatalı giriş, lütfen şifreyi sıfırlayın",
   "g_lock_key24": "Cüzdan Şifresi Eklensin mi?",
   "g_lock_key25": "Desen şifresi giriş hatası, {value} hakkınız kaldı",
+  "g_lock_key26": "Transfer Verification",
+  "g_lock_key27": "Require biometric authentication (Face ID / fingerprint) to confirm each wallet transfer.",
   "g_unlock_key2": "Parmak izi veya yüz tanıma etkin değil mi?",
   "g_unlock_key3": "Desen şifresi çiz",
   "g_unlock_key4": "Desen şifresi giriş hatası, {value} hakkınız kaldı",

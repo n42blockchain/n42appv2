@@ -571,6 +571,8 @@
   "g_lock_key23": "Слишком много неверных попыток, сбросьте пароль",
   "g_lock_key24": "Добавить пароль кошелька?",
   "g_lock_key25": "Ошибка ввода графического пароля, осталась {value} попытка",
+  "g_lock_key26": "Transfer Verification",
+  "g_lock_key27": "Require biometric authentication (Face ID / fingerprint) to confirm each wallet transfer.",
   "g_unlock_key2": "Отпечаток пальца или распознавание лица не включено?",
   "g_unlock_key3": "Нарисуйте графический пароль",
   "g_unlock_key4": "Ошибка ввода графического пароля, осталось {value} попыток",

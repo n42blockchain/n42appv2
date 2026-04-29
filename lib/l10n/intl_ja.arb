@@ -571,6 +571,8 @@
   "g_lock_key23": "入力エラーが多すぎます。パスワードをリセットしてください",
   "g_lock_key24": "ウォレットパスワードを追加しますか？",
   "g_lock_key25": "パターンパスワードの入力エラー、あと{value}回試行できます",
+  "g_lock_key26": "Transfer Verification",
+  "g_lock_key27": "Require biometric authentication (Face ID / fingerprint) to confirm each wallet transfer.",
   "g_unlock_key2": "指紋または顔認証が有効になっていませんか？",
   "g_unlock_key3": "パターンパスワードを描画",
   "g_unlock_key4": "パターンパスワードの入力エラー、あと{value}回試行できます",

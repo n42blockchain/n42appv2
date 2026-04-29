@@ -571,6 +571,8 @@
   "g_lock_key23": "பல தவறான உள்ளீடுகள், கடவுச்சொல்லை மீட்டமைக்கவும்",
   "g_lock_key24": "Wallet கடவுச்சொல்லைச் சேர்க்கவா?",
   "g_lock_key25": "பேட்டர்ன் கடவுச்சொல் உள்ளீடு பிழை, உங்களுக்கு {value} வாய்ப்பு உள்ளது",
+  "g_lock_key26": "Transfer Verification",
+  "g_lock_key27": "Require biometric authentication (Face ID / fingerprint) to confirm each wallet transfer.",
   "g_unlock_key2": "கைரேகை அல்லது முகம் கண்டறிதல் இயக்கப்படவில்லையா?",
   "g_unlock_key3": "வடிவ கடவுச்சொல்லை வரையவும்",
   "g_unlock_key4": "பேட்டர்ன் கடவுச்சொல் உள்ளீடு பிழை, உங்களுக்கு {value} வாய்ப்புகள் உள்ளன",
