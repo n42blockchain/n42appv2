@@ -10,7 +10,6 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/earn/provider/earn_provider.dart';
 import 'package:n42_wallet/features/staking/models/staking_models.dart';
 import 'package:n42_wallet/features/staking/pages/staking_home_page.dart';
-import 'package:n42_wallet/features/loyalty/pages/loyalty_home_page.dart';
 import 'package:n42_wallet/features/earn/pages/earn_page.dart';
 import 'package:n42_wallet/features/earn/pages/earn_page_logic.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
@@ -311,19 +310,6 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>,
             apy: apyStr(earnState.solApy),
             color: const Color(0xFF9945FF),
             onTap: () => _pushStaking(context),
-          ),
-          SizedBox(height: su.setWidth(12)),
-          _buildRecommendedItem(
-            context,
-            name: s.g_key_loyalty_daily_checkin,
-            description: s.g_key_earn_points_daily,
-            apy: s.g_key_earn_pts_day('10'),
-            color: const Color(0xFFFFC107),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (_) => LoyaltyHomePage(walletAddress: walletAddress)),
-            ),
           ),
         ],
       ),

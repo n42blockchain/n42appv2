@@ -1,12 +1,8 @@
 import 'package:n42_wallet/core/app/app_globals.dart';
-import 'package:n42_wallet/features/home/setting/security/gesture_password_setting.dart';
-import 'package:n42_wallet/features/home/setting/security/lock_screen_resetpassword.dart';
 import 'package:n42_wallet/features/home/widgets/face_recognition_public.dart';
-import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/sheet_bottom.dart';
 import 'package:flutter/material.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -23,24 +19,6 @@ class SecuritySetting extends ConsumerStatefulWidget {
 }
 
 class _SecuritySettingState extends ConsumerState<SecuritySetting> {
-  List<String> lockTimeList = [
-    "10",
-    "30",
-    "60",
-    "120",
-    "180",
-    "240",
-    "300",
-    "600",
-  ];
-
-  /// 将秒数格式化为人类可读形式：< 60 显示秒，>= 60 显示分钟
-  String _formatLockTime(int seconds) {
-    if (seconds < 60) return '${seconds}s';
-    final minutes = seconds ~/ 60;
-    return '${minutes}min';
-  }
-
   Map<String, dynamic> securityMap = {
     "email": false,
     "google": false,
@@ -204,35 +182,6 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                       ),
                   ],
                 ),
-              ),
-              Builder(
-                builder: (context) {
-                  final screenLockState = ref.watch(screenLockProvider);
-                  return Column(
-                    children: [
-                      Container(
-                        height: ScreenUtil().setWidth(60.0),
-                        margin: EdgeInsets.only(
-                          top: ScreenUtil().setWidth(40.0),
-                        ),
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          S.of(context).g_lock_key15,
-                          style: TextStyle(
-                            color: AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.mainTextColor.name,
-                            ),
-                            fontSize: ScreenUtil().setSp(30.0),
-                          ),
-                        ),
-                      ),
-                      buildOpenLockScreenWidget(screenLockState),
-                      buildOpenGesturePasswordWidget(screenLockState),
-                      buildOpenFaceWidget(screenLockState),
-                    ],
-                  );
-                },
               ),
               SizedBox(height: ScreenUtil().setWidth(100)),
             ],

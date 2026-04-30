@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42_wallet/features/wallet/pages/face_matching/face_user_notice.dart';
 import 'package:n42_wallet/features/wallet_connect/presentation/providers/wallet_connect_providers.dart';
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_provider.dart';
 import 'package:n42_wallet/features/widgets/app_home_top_bar.dart';
@@ -48,8 +47,6 @@ class WalletTopBar extends ConsumerWidget {
           onReceiveTap: onReceiveTap,
         ),
         _WalletConnectButton(onTap: onWalletConnectTap),
-        _FacePortraitButton(),
-
       ],
     );
   }
@@ -248,30 +245,3 @@ class _WalletConnectButton extends ConsumerWidget {
   }
 }
 
-// ── 面部识别入口按钮 ─────────────────────────────────────────────────────────
-
-class _FacePortraitButton extends StatelessWidget {
-  const _FacePortraitButton();
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => FaceUserNotice()),
-        );
-      },
-      child: Container(
-        width: ScreenUtil().setWidth(40.0),
-        height: ScreenUtil().setWidth(40.0),
-        margin: EdgeInsets.only(left: ScreenUtil().setWidth(20.0)),
-        child: Image.asset(
-          "assets/face/portrait.png",
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainBlueColor.name),
-        ),
-      ),
-    );
-  }
-}

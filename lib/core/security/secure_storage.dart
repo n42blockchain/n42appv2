@@ -26,7 +26,6 @@ class SecureStorage {
   static const String _keyMnemonicPrefix = 'mnemonic_';
   static const String _keyPrivateKeyPrefix = 'pk_';
   static const String _keyBiometricEnabled = 'biometric_enabled';
-  static const String _keyGesturePassword = 'gesture_password';
   static const String _keyDeviceId = 'n42_device_id';
   static const String _keyPasskeyCredentials = 'passkey_credentials';
   static const String _keyPasskeyEnabled = 'passkey_enabled';
@@ -204,25 +203,6 @@ class SecureStorage {
     return value == 'true';
   }
 
-  /// 保存手势密码
-  Future<void> saveGesturePassword(List<int> pattern) async {
-    await _storage.write(key: _keyGesturePassword, value: jsonEncode(pattern));
-  }
-
-  /// 获取手势密码
-  Future<List<int>?> getGesturePassword() async {
-    final list = await _readJson<List<dynamic>>(
-      _keyGesturePassword,
-      'gesture password',
-    );
-    return list?.cast<int>();
-  }
-
-  /// 删除手势密码
-  Future<void> deleteGesturePassword() async {
-    await _storage.delete(key: _keyGesturePassword);
-  }
-
   // ==================== 设备标识 ====================
 
   /// 保存设备唯一标识
@@ -296,7 +276,6 @@ class SecureStorage {
       _keyEmail,
       _keyUserInfo,
       _keyBiometricEnabled,
-      _keyGesturePassword,
       _keyPasskeyCredentials,
       _keyPasskeyEnabled,
     ];

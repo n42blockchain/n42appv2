@@ -80,7 +80,6 @@ void main() {
       secureStore.values.addAll({
         'walletInfo': '{}',
         'security': '{}',
-        'lockScreen': '{}',
         'userInfo': '{}',
         'miningData': '{}',
       });

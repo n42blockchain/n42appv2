@@ -83,7 +83,6 @@ class SecurePreferences {
   static const List<String> _sensitiveKeys = [
     'walletInfo',
     'security',
-    'lockScreen',
     'userInfo',
     'miningData',
   ];
@@ -169,19 +168,6 @@ class SecurePreferences {
 
   /// 获取安全设置
   Future<Map<String, dynamic>?> getSecurity() => _readSecureJson('security');
-
-  // ==================== 锁屏设置（敏感） ====================
-
-  /// 保存锁屏设置
-  Future<void> setLockScreen(String uuid, Map<String, dynamic> value) async {
-    await _updateSecureMap('lockScreen', uuid, value);
-  }
-
-  /// 获取锁屏设置
-  Future<Map<String, dynamic>?> getLockScreen(String uuid) async {
-    final allData = await _readSecureJson('lockScreen');
-    return allData?[uuid] as Map<String, dynamic>?;
-  }
 
   // ==================== 用户信息（敏感） ====================
 

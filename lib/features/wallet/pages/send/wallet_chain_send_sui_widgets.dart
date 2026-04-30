@@ -316,44 +316,4 @@ mixin _SuiSendWidgetsMixin on _SuiSendLogicMixin {
     );
   }
 
-  void faceMatchTypeWidget() {
-    Widget faceMatchOption(int type, String label) {
-      return InkWell(
-        onTap: () async {
-          final String? address = await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => FaceMatch(type)),
-          );
-          if (!mounted) return;
-          if (address != null) {
-            toTextEditingController.text = address;
-            toAddressCheck(address);
-          }
-          Navigator.pop(context);
-        },
-        child: SizedBox(
-          height: ScreenUtil().setWidth(88.0),
-          width: double.infinity,
-          child: Text(
-            label,
-            style: TextStyle(
-              fontSize: ScreenUtil().setWidth(32.0),
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ),
-      );
-    }
-
-    final Widget child = Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        faceMatchOption(1, S.of(context).photograph),
-        faceMatchOption(2, S.of(context).g_key_nft_16),
-      ],
-    );
-    sheetBottom(context, S.of(context).g_face_match_key1, child);
-  }
 }

@@ -11,7 +11,6 @@ import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/gas_estimate_model.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
-import 'package:n42_wallet/features/wallet/pages/face_matching/face_match.dart';
 import 'package:n42_wallet/features/wallet/pages/gas/gas_settings_page.dart';
 import 'package:n42_wallet/features/wallet/pages/send/send_utils.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_base_send.dart';
@@ -25,7 +24,6 @@ import 'package:n42_wallet/features/wallet/widgets/ens_address_field.dart';
 import 'package:n42_wallet/features/wallet/widgets/ens_confirm_dialog.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/features/widgets/button_widget.dart';
-import 'package:n42_wallet/features/widgets/sheet_bottom.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 
@@ -202,51 +200,6 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
     }
   }
 
-  void faceMatchTypeWidget() {
-    sheetBottom(
-      context,
-      S.of(context).g_face_match_key1,
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          _faceMatchOption(context, 1, S.of(context).photograph),
-          _faceMatchOption(context, 2, S.of(context).g_key_nft_16),
-        ],
-      ),
-    );
-  }
-
-  Widget _faceMatchOption(BuildContext context, int mode, String label) {
-    final sw = ScreenUtil().setWidth;
-    return InkWell(
-      onTap: () async {
-        final nav = Navigator.of(context);
-        final address = await Navigator.push<String>(
-          context,
-          MaterialPageRoute(builder: (_) => FaceMatch(mode)),
-        );
-        if (!mounted) return;
-        if (address != null) {
-          toTextEditingController.text = address;
-          toAddressCheck(address);
-        }
-        nav.pop();
-      },
-      child: SizedBox(
-        height: sw(88.0),
-        width: double.infinity,
-        child: Text(
-          label,
-          style: TextStyle(
-            fontSize: sw(32.0),
-            color: _themeColor(AppThemeKeys.mainTextColor),
-          ),
-          textAlign: TextAlign.center,
-        ),
-      ),
-    );
-  }
-
   void searchToAddressWidget() {
     showAddressPickerSheet(
       context,
@@ -255,7 +208,6 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
         toTextEditingController.text = addr;
         toAddressCheck(addr);
       },
-      isEvm: true,
     );
   }
 

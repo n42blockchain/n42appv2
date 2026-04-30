@@ -13,7 +13,6 @@ import 'package:n42_wallet/features/home/setting/setting_share.dart';
 import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/data/models/device_login_info.dart';
 import 'package:n42_wallet/features/utils/device_info_util.dart';
-import 'package:n42_wallet/features/notification/pages/message_info.dart';
 import 'package:n42_wallet/features/wallet/utils/browser/browser_txhash.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -22,7 +21,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_new_badger/flutter_new_badger.dart';
-import 'package:intl/intl.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:permission_handler/permission_handler.dart';
 

@@ -6,8 +6,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42_wallet/core/providers/core_providers.dart';
-import 'package:n42_wallet/features/notification/pages/message_list.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/hardware_wallet/pages/hardware_wallet_page.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_manage/wallet_list.dart';
@@ -69,8 +67,6 @@ class ProfileHomePage extends ConsumerWidget {
   }
 
   Widget _buildUserHeader(BuildContext context, WidgetRef ref) {
-    final unreadCount = ref.watch(unreadCountProvider);
-
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
       child: Row(
@@ -125,38 +121,6 @@ class ProfileHomePage extends ConsumerWidget {
                 ),
               ],
             ),
-          ),
-
-          // 通知按钮
-          Stack(
-            children: [
-              IconButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const MessageList()),
-                  );
-                },
-                icon: Icon(
-                  Icons.notifications_outlined,
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                  size: ScreenUtil().setWidth(36),
-                ),
-              ),
-              if (unreadCount > 0)
-                Positioned(
-                  top: ScreenUtil().setWidth(8),
-                  right: ScreenUtil().setWidth(8),
-                  child: Container(
-                    width: ScreenUtil().setWidth(16),
-                    height: ScreenUtil().setWidth(16),
-                    decoration: const BoxDecoration(
-                      color: Colors.red,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                ),
-            ],
           ),
         ],
       ),

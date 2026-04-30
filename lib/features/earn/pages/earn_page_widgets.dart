@@ -127,12 +127,6 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
                     : '\$${earnState.totalPendingRewardsUsd.toStringAsFixed(2)}',
                 Icons.stars,
               ),
-              SizedBox(width: ScreenUtil().setWidth(32)),
-              _buildEarningsStat(
-                S.of(context).g_key_airdrop_title,
-                '0',
-                Icons.card_giftcard,
-              ),
             ],
           ),
         ],

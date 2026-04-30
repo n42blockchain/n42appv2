@@ -11,7 +11,6 @@ import 'package:n42_wallet/features/browser/pages/browser_page.dart';
 import 'package:n42_wallet/features/home/setting/about_app.dart';
 import 'package:n42_wallet/features/home/setting/setting_home_page.dart';
 import 'package:n42_wallet/features/profile/pages/profile_home_page.dart';
-import 'package:n42_wallet/features/notification/pages/message_list.dart';
 import 'package:n42_wallet/features/wallet/pages/address_book/address_book_list.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_manage/wallet_list.dart';
 import 'package:n42_wallet/features/widgets/dialog_widget/tips_dialog_2.dart';
@@ -80,7 +79,6 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
                 ),
                 child: Row(
                   children: [
-                    buildNotificationButton(),
                     const Spacer(),
                     Container(
                       width: ScreenUtil().setWidth(44),

@@ -4,7 +4,6 @@ import 'dart:typed_data';
 
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
-import 'package:n42_wallet/core/network/activity_api.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/utils/data_utils.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/algo_api.dart';
@@ -52,17 +51,6 @@ class TransferApi
         _TransferOthersMixin {
 
   // ── Helpers ───────────────────────────────────────────────────────────────
-
-  /// 交易成功后延迟上报活动事件
-  void _pushTransactionActivity(String coinType, dynamic txData, String network) {
-    final pushMap = {
-      "uuid": AppGlobals.userInfo?.uuid ?? "",
-      "coin": coinType,
-      "tx": txData,
-      "network": network,
-    };
-    ActivityApi().collectDelayPush(json.encode(pushMap), event: "transaction");
-  }
 
   /// Convert isTest flag (0/1) to network string.
   static String _networkStr(int isTest) => isTest == 0 ? "main" : "test";
@@ -209,9 +197,6 @@ class TransferApi
         );
     }
 
-    if (txmm.error == false) {
-      _pushTransactionActivity(coinType, txmm.data['txHash'], networkStr);
-    }
     return txmm;
   }
 
@@ -445,9 +430,6 @@ class TransferApi
         );
     }
 
-    if (txmm.error == false) {
-      _pushTransactionActivity(coinType, txmm.data, network);
-    }
     return txmm;
   }
 }

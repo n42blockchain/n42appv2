@@ -31,9 +31,6 @@ extension _PushNavigation on AppPushUtils {
       case 'normal_transaction_failed':
         _navigateToTxBrowser(ctx, data);
 
-      case 'normal_price_changed':
-        _navigateToPriceChanged(ctx, data);
-
       case 'tell_friends':
       case 'Tell Friends #1_normal':
       case 'Tell Friends #2_normal':
@@ -112,30 +109,4 @@ extension _PushNavigation on AppPushUtils {
     Navigator.push(ctx, MaterialPageRoute(builder: (_) => BrowserPage(bUri)));
   }
 
-  /// 解析价格变动数据并跳转到消息详情页
-  static void _navigateToPriceChanged(
-    BuildContext ctx,
-    Map<String, dynamic> data,
-  ) {
-    Map<String, dynamic> txContent = {};
-    try {
-      txContent = json.decode(data['data']);
-    } catch (_) {
-      // JSON 解析失败时使用空 map，安全忽略
-    }
-    String chain = (txContent['chain'] ?? "").toUpperCase();
-    double percentage = txContent['percentage'] ?? 0;
-    String content =
-        "Over $percentage% change in the price of $chain within 24 hours. ";
-    DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
-    Map<String, dynamic> infoMap = {
-      "title": data['body'],
-      "content": content,
-      "created": dateFormat.format(DateTime.now()),
-    };
-    Navigator.push(
-      ctx,
-      MaterialPageRoute(builder: (_) => MessageInfo(infoMap)),
-    );
-  }
 }

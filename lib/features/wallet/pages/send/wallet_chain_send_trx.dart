@@ -18,7 +18,6 @@ import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dar
 import 'package:n42_wallet/features/wallet/utils/transaction/coin_gas.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/features/widgets/button_widget.dart';
-import 'package:n42_wallet/features/widgets/sheet_bottom.dart';
 import 'package:n42_wallet/features/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -27,7 +26,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/transaction_providers.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/features/wallet/pages/face_matching/face_match.dart';
 import 'package:n42_wallet/features/wallet/pages/send/send_utils.dart';
 import 'package:n42_wallet/features/wallet/services/recent_address_service.dart';
 import 'package:n42_wallet/features/wallet/widgets/non_evm_fee_selector.dart';
@@ -147,52 +145,6 @@ class _WalletChainSendTrxState extends ConsumerState<WalletChainSendTrx>
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  void faceMatchTypeWidget() {
-    sheetBottom(
-      context,
-      S.of(context).g_face_match_key1,
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          _faceMatchOption(1, S.of(context).photograph),
-          _faceMatchOption(2, S.of(context).g_key_nft_16),
-        ],
-      ),
-    );
-  }
-
-  Widget _faceMatchOption(int mode, String label) {
-    return InkWell(
-      onTap: () async {
-        final address = await Navigator.push<String>(
-          context,
-          MaterialPageRoute(builder: (_) => FaceMatch(mode)),
-        );
-        if (!mounted) return;
-        if (address != null) {
-          toTextEditingController.text = address;
-          toAddressCheck(address);
-        }
-        Navigator.pop(context);
-      },
-      child: SizedBox(
-        height: ScreenUtil().setWidth(88.0),
-        width: double.infinity,
-        child: Text(
-          label,
-          style: TextStyle(
-            fontSize: ScreenUtil().setWidth(32.0),
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainTextColor.name,
-            ),
-          ),
-          textAlign: TextAlign.center,
-        ),
       ),
     );
   }

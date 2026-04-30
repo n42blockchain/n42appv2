@@ -29,7 +29,6 @@ import 'package:n42_wallet/features/mining_v1/provider/mining_v1_providers.dart'
 import 'package:n42_wallet/features/mining_v1/provider/mining_provider.dart'
     show MiningProvider;
 import 'package:n42_wallet/features/utils/app_push_utils.dart';
-import 'package:n42_wallet/features/utils/notfication_utils.dart';
 import 'package:n42_wallet/features/wallet/pages/create_wallet/create/create_one.dart';
 import 'package:n42_wallet/features/wallet/pages/create_wallet/import/import_one.dart';
 import 'package:n42_wallet/features/wallet/pages/create_wallet/import/import_cloud_backup.dart';
@@ -189,19 +188,10 @@ class _N42AppV2State extends ConsumerState<N42AppV2>
       // Keychain cleanup must complete before other services that may
       // read/write secure storage, to avoid a race on fresh install.
       await _clearKeychainOnFreshInstall();
-      unawaited(_initLocalNotifications());
       unawaited(_migrateWalletData());
       unawaited(initN42Chat());
       unawaited(_initPhishingDetector());
     });
-  }
-
-  Future<void> _initLocalNotifications() async {
-    try {
-      await notification.init();
-    } catch (e) {
-      if (kDebugMode) debugPrint('Local notification initialization failed: $e');
-    }
   }
 
   Future<void> _initPhishingDetector() async {

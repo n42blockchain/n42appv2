@@ -11,7 +11,6 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/component/pages/scan_page.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/pages/address_book/address_book_list.dart';
-import 'package:n42_wallet/features/wallet/pages/face_matching/face_match.dart';
 import 'package:n42_wallet/features/wallet/services/recent_address_service.dart';
 import 'package:n42_wallet/features/widgets/sheet_bottom.dart';
 
@@ -106,15 +105,12 @@ Future<void> performPasteAddress(
   }
 }
 
-/// Show address picker bottom sheet (address book / scan / paste / EVM face match).
-///
-/// When [isEvm] is true, face match options are appended.
+/// Show address picker bottom sheet (address book / scan / paste).
 Future<void> showAddressPickerSheet(
   BuildContext context, {
   required CoinModel coinModel,
   required ValueChanged<String> onAddressSelected,
   VoidCallback? onScanQR,
-  bool isEvm = false,
 }) async {
   void defaultScanQR() async {
     final scanValue = await Navigator.push(
@@ -224,43 +220,9 @@ Future<void> showAddressPickerSheet(
     divider,
   ];
 
-  if (isEvm) {
-    Future<void> faceMatchAction(int type) async {
-      final address = await Navigator.push<String>(
-        context,
-        MaterialPageRoute(builder: (_) => FaceMatch(type)),
-      );
-      if (!context.mounted) return;
-      if (address != null) onAddressSelected(address);
-      if (context.mounted) Navigator.pop(context);
-    }
-
-    childs.addAll([
-      buildSheetRow(
-        context,
-        iconWidget: Icon(
-          Icons.photo_album_outlined,
-          color: blueColor,
-          size: iconSize,
-        ),
-        label:
-            '${S.of(context).g_face_match_key1}(${S.of(context).photograph})',
-        onTap: () => faceMatchAction(1),
-      ),
-      divider,
-      buildSheetRow(
-        context,
-        iconWidget: Icon(Icons.face_outlined, color: blueColor, size: iconSize),
-        label:
-            '${S.of(context).g_face_match_key1}(${S.of(context).g_key_nft_16})',
-        onTap: () => faceMatchAction(2),
-      ),
-    ]);
-  }
-
   sheetBottom(
     context,
-    S.of(context).g_face_match_key1,
+    S.of(context).g_key_108,
     Column(children: childs),
   );
 }

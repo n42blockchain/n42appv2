@@ -259,32 +259,6 @@ class MockSecureStorage extends _i1.Mock implements _i8.SecureStorage {
           as _i9.Future<bool>);
 
   @override
-  _i9.Future<void> saveGesturePassword(List<int>? pattern) =>
-      (super.noSuchMethod(
-            Invocation.method(#saveGesturePassword, [pattern]),
-            returnValue: _i9.Future<void>.value(),
-            returnValueForMissingStub: _i9.Future<void>.value(),
-          )
-          as _i9.Future<void>);
-
-  @override
-  _i9.Future<List<int>?> getGesturePassword() =>
-      (super.noSuchMethod(
-            Invocation.method(#getGesturePassword, []),
-            returnValue: _i9.Future<List<int>?>.value(),
-          )
-          as _i9.Future<List<int>?>);
-
-  @override
-  _i9.Future<void> deleteGesturePassword() =>
-      (super.noSuchMethod(
-            Invocation.method(#deleteGesturePassword, []),
-            returnValue: _i9.Future<void>.value(),
-            returnValueForMissingStub: _i9.Future<void>.value(),
-          )
-          as _i9.Future<void>);
-
-  @override
   _i9.Future<void> clearAll() =>
       (super.noSuchMethod(
             Invocation.method(#clearAll, []),

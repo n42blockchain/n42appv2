@@ -138,7 +138,3 @@ class AppBackgroundedEvent extends CrossFeatureEvent {}
 
 class AppForegroundedEvent extends CrossFeatureEvent {}
 
-class ScreenLockedEvent extends CrossFeatureEvent {}
-
-class ScreenUnlockedEvent extends CrossFeatureEvent {}
-

@@ -440,21 +440,6 @@ extension WalletActionProviderWallet on WalletActionProvider {
     }
   }
 
-  //修改面部数据绑定钱包
-  void setWalletFaceBinding(int? setIndex, {bool faceBinding = true}) {
-    if (faceBinding) {
-      int cancelIndex = walletInfoLsit.indexWhere((e) => e.faceBinding == true);
-      if (cancelIndex != -1) {
-        WalletInfo wi = walletInfoLsit[cancelIndex];
-        wi.faceBinding = false;
-      }
-    }
-    setIndex ??= walletIndex;
-    WalletInfo wiSet = walletInfoLsit[setIndex];
-    wiSet.faceBinding = faceBinding;
-    saveWalletInfoAll();
-  }
-
   //添加一个导入钱包
   Future<bool> addImportWalletInfo(WalletInfo info) async {
     try {

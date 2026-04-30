@@ -319,48 +319,6 @@ mixin _DotSendLogicMixin on ConsumerState<WalletChainSendDot> {
     FocusScope.of(context).unfocus();
   }
 
-  void faceMatchTypeWidget() {
-    final textColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainTextColor.name,
-    );
-    final textStyle = TextStyle(
-      fontSize: ScreenUtil().setWidth(32.0),
-      color: textColor,
-    );
-
-    Widget faceOption(int type, String label) {
-      return InkWell(
-        onTap: () async {
-          final String? address = await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => FaceMatch(type)),
-          );
-          if (!mounted) return;
-          if (address != null) {
-            toTextEditingController.text = address;
-            toAddressCheck(address);
-          }
-          Navigator.pop(context);
-        },
-        child: SizedBox(
-          height: ScreenUtil().setWidth(88.0),
-          width: double.infinity,
-          child: Text(label, style: textStyle, textAlign: TextAlign.center),
-        ),
-      );
-    }
-
-    final Widget child = Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        faceOption(1, S.of(context).photograph),
-        faceOption(2, S.of(context).g_key_nft_16),
-      ],
-    );
-    sheetBottom(context, S.of(context).g_face_match_key1, child);
-  }
-
   void searchToAddressWidget() {
     showAddressPickerSheet(
       context,

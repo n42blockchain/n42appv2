@@ -34,9 +34,7 @@ class AppHomeTopBar extends ConsumerStatefulWidget {
 class _AppHomeTopBarState extends ConsumerState<AppHomeTopBar> {
   @override
   Widget build(BuildContext context) {
-    // Watch user info and unread count from Riverpod
     final userInfo = ref.watch(currentUserProvider);
-    final messageNotReadCount = ref.watch(unreadCountProvider);
     final isWide = ResponsiveUtils.isTablet(context);
 
     return Container(
@@ -70,7 +68,7 @@ class _AppHomeTopBarState extends ConsumerState<AppHomeTopBar> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _buildLeftWidget(userInfo?.image, messageNotReadCount),
+              _buildLeftWidget(userInfo?.image),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: widget.actions ?? [],
@@ -82,20 +80,16 @@ class _AppHomeTopBarState extends ConsumerState<AppHomeTopBar> {
     );
   }
 
-  /// Build left widget with avatar and notification badge
-  Widget _buildLeftWidget(String? userImage, int messageNotReadCount) {
-    Widget child;
+  Widget _buildLeftWidget(String? userImage) {
     if (widget.onLeftImageUri == null) {
-      child = GestureDetector(
+      return GestureDetector(
         onTap: widget.onLeftImageClick,
         child: Container(
           width: ScreenUtil().setWidth(64.0),
           height: ScreenUtil().setWidth(64.0),
           clipBehavior: Clip.hardEdge,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(
-              ScreenUtil().setWidth(32.0),
-            ),
+            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(32.0)),
           ),
           child: ImageNetWork(
             imageUrl: userImage ?? '',
@@ -103,55 +97,19 @@ class _AppHomeTopBarState extends ConsumerState<AppHomeTopBar> {
           ),
         ),
       );
-    } else {
-      // 扩大点击区域，让用户更容易点击
-      child = GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: widget.onLeftImageClick,
-        child: Container(
-          width: ScreenUtil().setWidth(80.0),
-          height: ScreenUtil().setWidth(80.0),
-          alignment: Alignment.centerLeft,
-          child: Image.asset(
-            widget.onLeftImageUri ?? "",
-            width: ScreenUtil().setWidth(44),
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-          ),
-        ),
-      );
     }
-
-    return SizedBox(
-      width: ScreenUtil().setWidth(80.0),
-      height: ScreenUtil().setWidth(80.0),
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: child,
-          ),
-          if (messageNotReadCount != 0)
-            Positioned(
-              top: 0,
-              right: 0,
-              child: Container(
-                width: ScreenUtil().setWidth(30),
-                height: ScreenUtil().setWidth(30),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(30)),
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
-                ),
-                alignment: Alignment.center,
-                child: Text(
-                  "${messageNotReadCount > 99 ? 99 : messageNotReadCount}",
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainWhiteColor.name),
-                    fontSize: ScreenUtil().setSp(14),
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-        ],
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: widget.onLeftImageClick,
+      child: Container(
+        width: ScreenUtil().setWidth(80.0),
+        height: ScreenUtil().setWidth(80.0),
+        alignment: Alignment.centerLeft,
+        child: Image.asset(
+          widget.onLeftImageUri ?? "",
+          width: ScreenUtil().setWidth(44),
+          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+        ),
       ),
     );
   }

@@ -162,7 +162,6 @@ final appInitProvider = FutureProvider<void>((ref) async {
     if (kDebugMode) debugPrint('appInitProvider._getUserInfo error: $e');
   }
 
-  ref.read(screenLockProvider);
   ref.read(appLoadStateProvider.notifier).state = Load.finish;
 });
 

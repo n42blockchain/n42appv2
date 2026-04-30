@@ -27,8 +27,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/transaction_providers.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/features/wallet/pages/face_matching/face_match.dart';
-import 'package:n42_wallet/features/widgets/sheet_bottom.dart';
 import 'package:n42_wallet/features/wallet/pages/send/send_utils.dart';
 import 'package:n42_wallet/features/wallet/services/recent_address_service.dart';
 import 'package:n42_wallet/features/wallet/widgets/non_evm_fee_selector.dart';

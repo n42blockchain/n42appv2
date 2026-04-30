@@ -10,7 +10,6 @@ import 'package:n42_wallet/data/models/device_login_info.dart';
 import 'package:n42_wallet/features/mining_v1/pages/mining_home_page.dart';
 import 'package:n42_wallet/features/widgets/dialog_widget/device_login_dialog.dart';
 import 'package:n42_wallet/features/home/home_draw_page.dart';
-import 'package:n42_wallet/features/home/unlock.dart';
 import 'package:n42_wallet/features/mining_v2/pages/mining_background.dart';
 import 'package:n42_wallet/features/mining_v2/pages/mining_today_v2.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
@@ -34,7 +33,6 @@ part 'home_page_navigation.dart';
 ///
 /// Uses ConsumerStatefulWidget with WidgetsBindingObserver for:
 /// - Home tab index via homeTabIndexProvider
-/// - Screen lock state via screenLockProvider
 /// - App lifecycle management
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -54,10 +52,6 @@ class _HomePageState extends ConsumerState<HomePage>
   bool? showTermsOfService;
   StreamSubscription? _deviceLoginSubscription;
   bool _isDeviceLoginDialogShowing = false;
-
-  /// 是否启用了任意一种锁屏方式。
-  bool _hasAnyLock(ScreenLockState lockState) =>
-      lockState.isLocked || lockState.faceEnabled || lockState.gestureEnabled;
 
   /// Build pages list (不包含 Chat，Chat 作为独立页面跳转)
   List<Widget> _buildPages() {
@@ -111,44 +105,7 @@ class _HomePageState extends ConsumerState<HomePage>
     setState(() {});
     if (AppGlobals.userInfo == null) return;
 
-    final lockState = ref.read(screenLockProvider);
-
-    if (_hasAnyLock(lockState)) {
-      // 检查跨进程持久化的后台时间戳，判断是否真正超时
-      // 场景：OS 将应用在后台杀死后冷重启，此时 didChangeAppLifecycleState
-      // 不会再触发，但我们在 hidden/paused 时已经持久化了 pausedAt。
-      final storedPausedAt = await SPUtil().getPausedAt();
-      bool shouldLock;
-      if (storedPausedAt != null) {
-        final elapsed =
-            DateTime.now().millisecondsSinceEpoch ~/ 1000 - storedPausedAt;
-        // elapsed < 0 说明系统时间被调后了，保守处理：触发锁屏
-        shouldLock = elapsed < 0 || elapsed >= lockState.lockTimeSeconds;
-      } else {
-        // 没有持久化时间戳（首次启动 / 上次正常退出）→ 触发锁屏
-        shouldLock = true;
-      }
-      // 无论是否锁屏，清理旧时间戳，避免下次冷启动使用过期数据
-      await SPUtil().clearPausedAt();
-      pausedTime = 0;
-
-      if (shouldLock) {
-        Timer(const Duration(milliseconds: 500), () async {
-          if (!mounted) return;
-          final rData = await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const Unlock()),
-          );
-          if (rData == true && mounted) {
-            AppGlobals.login(AppGlobals.userInfo!);
-          }
-        });
-      } else {
-        AppGlobals.login(AppGlobals.userInfo!);
-      }
-    } else {
-      AppGlobals.login(AppGlobals.userInfo!);
-    }
+    AppGlobals.login(AppGlobals.userInfo!);
 
     // 启动后延迟 2 秒检查版本更新，避免阻塞主界面渲染
     Future.delayed(const Duration(seconds: 2), _checkVersionOnStartup);
@@ -253,87 +210,11 @@ class _HomePageState extends ConsumerState<HomePage>
     );
   }
 
-  // ── 后台计时 ──────────────────────────────────────────────────────────────
-  //
-  // pausedTime：内存中的后台开始时间戳（秒），应用正常在前后台切换时使用。
-  // SPUtil.setPausedAt：持久化版本，跨进程重启后仍可读取（应对 OS 杀进程场景）。
-  //
-  // 记录时机：hidden（iOS 在被杀前的最后事件）+ paused（Android / iOS 正常后台）。
-  // 清除时机：resumed（前台恢复后清除，无论是否触发锁屏）。
-  int pausedTime = 0;
-
-  /// 记录进入后台时间戳（内存 + 持久化双写）。
-  void _recordPausedTimestamp() {
-    final lockState = ref.read(screenLockProvider);
-    if (!_hasAnyLock(lockState)) return;
-    final ts = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-    pausedTime = ts;
-    // 持久化：应对 OS 在后台杀死进程后冷重启的场景
-    // 使用 unawaited 写法，避免阻塞 lifecycle callback
-    SPUtil().setPausedAt(ts);
-  }
-
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) async {
+  void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-
-    final lockState = ref.read(screenLockProvider);
-
-    switch (state) {
-      case AppLifecycleState.resumed:
-        MiningBackground().backgroundEnd();
-
-        if (!_hasAnyLock(lockState)) {
-          // 无锁屏配置 → 清理可能遗留的时间戳并退出
-          pausedTime = 0;
-          await SPUtil().clearPausedAt();
-          break;
-        }
-
-        // 优先使用内存时间戳；若为 0（进程重启场景），读取持久化值
-        int effectivePausedTime = pausedTime;
-        if (effectivePausedTime == 0) {
-          final stored = await SPUtil().getPausedAt();
-          effectivePausedTime = stored ?? 0;
-        }
-
-        // 清理时间戳（无论是否触发锁屏，避免下次误判）
-        pausedTime = 0;
-        await SPUtil().clearPausedAt();
-
-        if (effectivePausedTime == 0) break; // 没有有效的后台起始时间
-
-        final resumedAt = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-        final elapsed = resumedAt - effectivePausedTime;
-        // elapsed < 0：系统时钟被往前调了 → 保守处理，触发锁屏
-        if ((elapsed < 0 || elapsed >= lockState.lockTimeSeconds) &&
-            AppGlobals.userInfo != null &&
-            mounted) {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const Unlock()),
-          );
-        }
-        break;
-
-      case AppLifecycleState.inactive:
-        // inactive 在 iOS 通知栏下拉、接听电话时也会触发，
-        // 不在此记录时间戳，避免误触发。
-        break;
-
-      case AppLifecycleState.hidden:
-        // iOS：hidden 在 paused 之前触发，是 OS 杀进程前的最后状态。
-        // 在此记录时间戳，确保即使进程被杀也留有记录。
-        _recordPausedTimestamp();
-        break;
-
-      case AppLifecycleState.paused:
-        // Android & iOS 正常后台：在此再次写入（覆盖 hidden 的值，时间更精确）。
-        _recordPausedTimestamp();
-        break;
-
-      case AppLifecycleState.detached:
-        break;
+    if (state == AppLifecycleState.resumed) {
+      MiningBackground().backgroundEnd();
     }
   }
 }

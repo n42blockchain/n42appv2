@@ -8,12 +8,10 @@ import 'package:n42_wallet/features/wallet/models/address_book_model.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/pages/address_book/address_book_input_utils.dart';
 import 'package:n42_wallet/features/wallet/pages/address_book/choose_coins_page.dart';
-import 'package:n42_wallet/features/wallet/pages/face_matching/face_match.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/features/widgets/container_widget.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
-import 'package:n42_wallet/features/widgets/sheet_bottom.dart';
 import 'package:n42_wallet/features/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
@@ -273,21 +271,6 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
       messageMargin: EdgeInsets.symmetric(
         horizontal: ScreenUtil().setWidth(30.0),
       ),
-      rightWidget3: blockchainType == BlockchainType.Ethereum.name
-          ? Container(
-              width: ScreenUtil().setWidth(60.0),
-              height: ScreenUtil().setWidth(60.0),
-              padding: EdgeInsets.all(ScreenUtil().setWidth(5.0)),
-              child: Icon(
-                Icons.face_outlined,
-                size: ScreenUtil().setWidth(50.0),
-                color: _themeColor(AppThemeKeys.mainBlueColor),
-              ),
-            )
-          : null,
-      rightOnTap3: blockchainType == BlockchainType.Ethereum.name
-          ? faceMatchTypeWidget
-          : null,
       rightWidget1: Container(
         width: ScreenUtil().setWidth(60.0),
         height: ScreenUtil().setWidth(60.0),
@@ -404,42 +387,4 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
     }
   }
 
-  void faceMatchTypeWidget() {
-    final su = ScreenUtil();
-    final textColor = _themeColor(AppThemeKeys.mainTextColor);
-
-    Widget buildFaceOption(String label, int matchType) {
-      return InkWell(
-        onTap: () async {
-          final address = await Navigator.push<String>(
-            context,
-            MaterialPageRoute(builder: (_) => FaceMatch(matchType)),
-          );
-          if (!mounted) return;
-          if (address != null) {
-            setState(() => addressController.text = address);
-          }
-          Navigator.pop(context);
-        },
-        child: SizedBox(
-          height: su.setWidth(88.0),
-          width: double.infinity,
-          child: Text(
-            label,
-            style: TextStyle(fontSize: su.setWidth(32.0), color: textColor),
-            textAlign: TextAlign.center,
-          ),
-        ),
-      );
-    }
-
-    final child = Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        buildFaceOption(S.of(context).photograph, 1),
-        buildFaceOption(S.of(context).g_key_nft_16, 2),
-      ],
-    );
-    sheetBottom(context, S.of(context).g_face_match_key1, child);
-  }
 }

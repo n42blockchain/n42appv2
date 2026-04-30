@@ -10,8 +10,6 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/bridge/pages/bridge_home_page.dart';
 import 'package:n42_wallet/features/earn/provider/earn_provider.dart';
 import 'package:n42_wallet/features/staking/pages/staking_home_page.dart';
-import 'package:n42_wallet/features/airdrop/pages/airdrop_home_page.dart';
-import 'package:n42_wallet/features/loyalty/pages/loyalty_home_page.dart';
 import 'package:n42_wallet/features/hardware_wallet/pages/hardware_wallet_page.dart';
 import 'package:n42_wallet/features/mining_v2/pages/mining_today_v2.dart';
 import 'package:n42_wallet/features/wallet/pages/gas/gas_tracker_page.dart';
@@ -30,7 +28,6 @@ mixin EarnPageSectionsMixin on ConsumerState<EarnPage>,
   // ──────────────────────────────────────────────────────────────────────────
 
   Widget buildMainFeatures(BuildContext context, EarnState earnState) {
-    final address = walletAddress;
     final maxApyStr = earnState.apyLoading
         ? '...'
         : earnState.maxApy.toStringAsFixed(1);
@@ -115,41 +112,6 @@ mixin EarnPageSectionsMixin on ConsumerState<EarnPage>,
                     context,
                     MaterialPageRoute(
                         builder: (_) => const BridgeHomePage()),
-                  ),
-                ),
-                SizedBox(width: ScreenUtil().setWidth(16)),
-                buildFeatureCard(
-                  context,
-                  title: S.of(context).g_key_airdrop_claim,
-                  subtitle: S.of(context).g_key_earn_claim_free,
-                  icon: Icons.card_giftcard_rounded,
-                  gradientColors: const [
-                    Color(0xFFf093fb),
-                    Color(0xFFf5576c)
-                  ],
-                  badge: 'NEW',
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) =>
-                            AirdropHomePage(walletAddress: address)),
-                  ),
-                ),
-                SizedBox(width: ScreenUtil().setWidth(16)),
-                buildFeatureCard(
-                  context,
-                  title: S.of(context).g_key_loyalty_rewards,
-                  subtitle: S.of(context).g_key_earn_daily_bonus,
-                  icon: Icons.stars_rounded,
-                  gradientColors: const [
-                    Color(0xFFf7971e),
-                    Color(0xFFffd200)
-                  ],
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) =>
-                            LoyaltyHomePage(walletAddress: address)),
                   ),
                 ),
                 SizedBox(width: ScreenUtil().setWidth(16)),

@@ -90,23 +90,4 @@ void main() {
     });
   });
 
-  group('ScreenLockState Tests', () {
-    test('default state should be unlocked', () {
-      const state = ScreenLockState();
-      expect(state.isLocked, false);
-    });
-
-    test('should create from map', () {
-      final map = {'lock': true, 'lockPW': '123456'};
-      final state = ScreenLockState.fromMap(map);
-      expect(state.isLocked, true);
-      expect(state.lockPassword, '123456');
-    });
-
-    test('should verify password', () {
-      const state = ScreenLockState(lockPassword: '123456');
-      expect(state.verifyPassword('123456'), true);
-      expect(state.verifyPassword('wrong'), false);
-    });
-  });
 }

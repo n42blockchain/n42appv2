@@ -15,7 +15,6 @@ import 'core/providers/core_providers_test.dart' as core_providers_test;
 import 'core/providers/theme_provider_test.dart' as theme_provider_test;
 import 'core/providers/locale_provider_test.dart' as locale_provider_test;
 import 'core/providers/use_new_chat_provider_test.dart' as use_new_chat_test;
-import 'core/providers/screen_lock_provider_test.dart' as screen_lock_test;
 
 // Core Security Tests
 import 'core/security/device_security_test.dart' as device_security_test;
@@ -99,19 +98,12 @@ import 'features/hardware_wallet/hardware_wallet_model_test.dart'
 import 'features/batch_transfer/batch_transfer_model_test.dart'
     as batch_transfer_model_test;
 
-// Feature Tests - Airdrop
-import 'features/airdrop/airdrop_model_test.dart' as airdrop_model_test;
-
-// Feature Tests - Loyalty
-import 'features/loyalty/loyalty_model_test.dart' as loyalty_model_test;
-
 void main() {
   // Core Provider Tests
   core_providers_test.main();
   theme_provider_test.main();
   locale_provider_test.main();
   use_new_chat_test.main();
-  screen_lock_test.main();
 
   // Core Security Tests
   device_security_test.main();
@@ -175,6 +167,4 @@ void main() {
   staking_model_test.main();
   hardware_wallet_model_test.main();
   batch_transfer_model_test.main();
-  airdrop_model_test.main();
-  loyalty_model_test.main();
 }

@@ -28,7 +28,7 @@ List<String> normalizeMarketWatchlistSymbols(Iterable<dynamic> symbols) {
 ///
 /// Provides a centralized interface for local storage operations.
 /// Handles user preferences, settings, and cached data.
-/// Sensitive data (wallet, security, user info, lock screen) uses SecureStorage.
+/// Sensitive data (wallet, security, user info) uses SecureStorage.
 /// Non-sensitive data uses SharedPreferences.
 class SPUtil {
   SharedPreferences? prefs;
@@ -157,19 +157,6 @@ class SPUtil {
     return _securePrefs.getUserInfo();
   }
 
-  // 锁屏设置（安全存储）
-  Future<void> setLockScreen(Map<String, dynamic> value) async {
-    final uuid = AppGlobals.userInfo?.uuid;
-    if (uuid == null || uuid.isEmpty) return;
-    await _securePrefs.setLockScreen(uuid, value);
-  }
-
-  Future<Map<String, dynamic>?> getLockScreen() async {
-    final uuid = AppGlobals.userInfo?.uuid;
-    if (uuid == null || uuid.isEmpty) return null;
-    return await _securePrefs.getLockScreen(uuid);
-  }
-
   // 挖矿数据（安全存储）
   Future<void> setMiningData(Map<String, dynamic> value) async {
     final uuid = AppGlobals.userInfo?.uuid;
@@ -227,27 +214,6 @@ class SPUtil {
   Future<void> setPushPermissionDismissed(bool value) async {
     await initPrefs();
     await prefs?.setBool(SPkey.pushPermissionDismissed.name, value);
-  }
-
-  // ── 锁屏后台计时（跨进程持久化） ──────────────────────────────────────────
-  //
-  // 在 AppLifecycleState.hidden / paused 时写入时间戳，应用恢复后读取并清除。
-  // 目的：即使 OS 在后台杀死进程，重启后仍可判断后台时长是否超过锁屏超时。
-
-  Future<void> setPausedAt(int timestampSeconds) async {
-    await initPrefs();
-    await prefs!.setInt(SPkey.lockPausedAt.name, timestampSeconds);
-  }
-
-  Future<int?> getPausedAt() async {
-    await initPrefs();
-    final v = prefs?.getInt(SPkey.lockPausedAt.name);
-    return (v != null && v > 0) ? v : null;
-  }
-
-  Future<void> clearPausedAt() async {
-    await initPrefs();
-    await prefs?.remove(SPkey.lockPausedAt.name);
   }
 
   // 小额资产隐藏开关（< $1 USD 的代币不在资产列表中显示）
@@ -440,7 +406,6 @@ enum SPkey {
   userInfo, // 用户信息（已迁移到 SecureStorage）
   backgroundMiningMusic, // 后台挖矿音乐
   hasAcceptedChatTerms, // 是否阅读Chat 用户须知
-  lockScreen, // 锁屏配置（已迁移到 SecureStorage）
   showTermsOfService, // 显示服务条款
   miningData, // 挖矿数据（已迁移到 SecureStorage）
   readLoginClause, // 是否阅读登录条款
@@ -449,7 +414,6 @@ enum SPkey {
   recentSendAddresses, // 最近转账地址 JSON：Map<coinType, List<{address,name?,time}>>
   gasAlertSettings, // Gas 价格提醒配置 JSON：Map<symbol, GasAlertConfig>
   ensExpiryReminders, // ENS 域名到期提醒配置 JSON：Map<domainName, EnsExpiryReminderConfig>
-  lockPausedAt, // 应用进入后台时的 Unix 时间戳（秒），用于跨进程重启的锁屏计时
   miningV1Status, // V1 挖矿状态（按地址）
   miningV1NodeAddress, // V1 当前选中节点
   miningV1OpenMining, // V1 挖矿开关
