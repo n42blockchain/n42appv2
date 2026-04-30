@@ -132,7 +132,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
                     ),
                     _menuItem(
                       "assets/home/manage_wallet.png",
-                      S.of(context).s_key_1,
+                      S.of(context).g_key_wallet_manage,
                       onTap: () {
                         Navigator.push(
                           context,

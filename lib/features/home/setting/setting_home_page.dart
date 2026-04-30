@@ -76,7 +76,7 @@ class SettingHomePage extends ConsumerWidget {
         )),
         _settingCard(context, child: NavSettingItem(
           path: "assets/home/setting/nav_img_7.png",
-          action: S.of(context).s_key_5,
+          action: S.of(context).g_key_126,
           imgColor: Colors.blueAccent,
           callback: () {
             Navigator.of(context).push(MaterialPageRoute(builder: (_) => const SettingTheme()));

@@ -162,7 +162,7 @@ extension _HardwareWalletPageLogic on _HardwareWalletPageState {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: Text(s.g_key_hw_cancel),
+            child: Text(s.g_key_79),
           ),
           TextButton(
             onPressed: () {

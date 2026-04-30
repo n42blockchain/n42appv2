@@ -191,7 +191,7 @@ class _HardwareWalletAccountsPageState
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: Text(S.of(context).g_key_hw_cancel),
+            child: Text(S.of(context).g_key_79),
           ),
           TextButton(
             onPressed: () async {

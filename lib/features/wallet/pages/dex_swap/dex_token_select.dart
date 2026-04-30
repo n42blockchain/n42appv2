@@ -225,7 +225,7 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
                     color: AppThemeUtils.getColorByKey(
                         context, AppThemeKeys.errorTextColor.name))),
             SizedBox(height: ScreenUtil().setWidth(20)),
-            TextButton(onPressed: _loadTokens, child: Text(S.of(context).g_key_dex_retry)),
+            TextButton(onPressed: _loadTokens, child: Text(S.of(context).g_key_aa_retry)),
           ],
         ),
       );

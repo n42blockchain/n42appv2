@@ -150,7 +150,7 @@ mixin EarnPageLogicMixin on ConsumerState<EarnPage> {
             const SizedBox(width: 8),
             Expanded(
               child: Text(
-                S.of(context).g_key_burn_nft_title,
+                S.of(context).g_key_nft_burn_title,
                 style: TextStyle(
                     color: isDark ? Colors.white : Colors.black87),
                 maxLines: 1,

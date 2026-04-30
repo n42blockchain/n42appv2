@@ -27,247 +27,146 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m2(symbol) => "விலை எச்சரிக்கை · ${symbol}";
 
-  static String m3(value) => "நான் ${value}";
+  static String m3(s) => "${s}களில் மீண்டும் அனுப்பவும்";
 
-  static String m4(value) => "அரட்டை உறுப்பினர்(${value})";
+  static String m4(message) => "கொள்முதல் தோல்வியடைநதது: ${message}";
 
-  static String m5(value) =>
-      "நிச்சயமாக ${value} ஐ நண்பராகச் சேர்க்க விரும்புகிறீர்களா";
+  static String m5(productId) => "கொள்முதல் வெற்றிகரமானது: ${productId}";
 
-  static String m6(email) =>
-      "சரிபார்ப்புக் குறியீடு ${email} க்கு அனுப்பப்பட்டது";
+  static String m6(productId) => "மீட்டமைக்கப்பட்டது: ${productId}";
 
-  static String m7(s) => "${s}களில் மீண்டும் அனுப்பவும்";
+  static String m7(value) => "${value} ஐ விட அதிகமான தொகை.";
 
   static String m8(value) =>
-      "நீங்கள் பிணைக்கப்பட்டிருக்கிறீர்கள், தற்போது மீண்டும் பிணைக்க முடியாது. பிணைப்பு முகவரி: ${value}.";
-
-  static String m9(value) =>
-      "பிணைப்பு வெற்றிகரமாக உள்ளது. பிணைப்பு முகவரி: ${value}";
-
-  static String m10(value) => "${value} வாலட்டில் N42chain இல்லை!";
-
-  static String m11(value) => "போட்டி வெற்றியடைந்தது. முகவரி:${value}.";
-
-  static String m12(message) => "கொள்முதல் தோல்வியடைநதது: ${message}";
-
-  static String m13(productId) => "கொள்முதல் வெற்றிகரமானது: ${productId}";
-
-  static String m14(productId) => "மீட்டமைக்கப்பட்டது: ${productId}";
-
-  static String m15(value) => "${value} ஐ விட அதிகமான தொகை.";
-
-  static String m16(value) =>
       "பணப்பை ஏற்கனவே உள்ளது, பணப்பையின் பெயர் \"${value}\"";
 
-  static String m17(value) => "${value} ஐ விட அதிகமான தொகையை உள்ளிடவும்.";
+  static String m9(value) => "${value} ஐ விட அதிகமான தொகையை உள்ளிடவும்.";
 
-  static String m18(gas) =>
-      "செயல்படுத்தும் வாயு (${gas}) அதிகமாக உள்ளது. அழைக்கப்பட்ட ஒப்பந்தம் எதிர்பார்த்ததை விட அதிக எரிவாயுவை உட்கொள்ளலாம்.";
+  static String m10(value) => "${value} வரிசையில் நகல் முகவரி";
 
-  static String m19(gas) =>
-      "முதல் பரிவர்த்தனை கணக்கு வரிசைப்படுத்தலை உள்ளடக்கியது (~${gas} வாயு). அடுத்தடுத்த பரிவர்த்தனைகள் மலிவாக இருக்கும்.";
-
-  static String m20(gas) =>
-      "பேமாஸ்டர் எரிவாயு மேல்நிலை (${gas}) அதிகமாக உள்ளது. காஸ் இல்லாத பரிவர்த்தனைகளுக்கு அதிகச் செலவாகும்.";
-
-  static String m21(gas) =>
-      "மதிப்பிடப்பட்ட மொத்த வாயு (${gas}) வழக்கத்திற்கு மாறாக அதிகமாக உள்ளது. உங்கள் பரிவர்த்தனை பிழைகளுக்குச் சரிபார்க்கவும்.";
-
-  static String m22(gas) =>
-      "சரிபார்ப்பு வாயு (${gas}) மிக அதிகமாக இருக்கலாம். சிக்கலான கணக்கு தர்க்கத்தில் இது நிகழலாம்.";
-
-  static String m23(value) => "${value} நாட்கள் உள்ளன";
-
-  static String m24(value) => "${value} வரிசையில் நகல் முகவரி";
-
-  static String m25(value) =>
+  static String m11(value) =>
       "போதுமான இருப்பு இல்லை: மொத்தத் தொகை கிடைக்கும் ${value} ஐ விட அதிகமாக இருக்கும்";
 
-  static String m26(value) => "${value} வரிசையில் தவறான முகவரி";
+  static String m12(value) => "${value} வரிசையில் தவறான முகவரி";
 
-  static String m27(value) => "${value} வரிசையில் தவறான தொகை";
+  static String m13(value) => "${value} வரிசையில் தவறான தொகை";
 
-  static String m28(value) => "அதிகபட்ச ${value} பெறுநர்கள்";
+  static String m14(value) => "அதிகபட்ச ${value} பெறுநர்கள்";
 
-  static String m29(token) => "தொடர, ${token}ஐ அங்கீகரிக்கவும்";
+  static String m15(token) => "தொடர, ${token}ஐ அங்கீகரிக்கவும்";
 
-  static String m30(impact) =>
+  static String m16(impact) =>
       "அதிக விலை தாக்கம் (${impact})! எச்சரிக்கையுடன் தொடரவும்.";
 
-  static String m31(secs) => "மேற்கோள் ${secs}களில் காலாவதியாகும்";
+  static String m17(secs) => "மேற்கோள் ${secs}களில் காலாவதியாகும்";
 
-  static String m32(value) => "+${value} புள்ளிகள்/நாள்";
+  static String m18(value) => "${value}% APY வரை சம்பாதிக்கவும்";
 
-  static String m33(value) => "${value}% APY வரை சம்பாதிக்கவும்";
-
-  static String m34(value) =>
-      "வாழ்த்துகள்! நீங்கள் இப்போது ${value} வைத்திருக்கிறீர்கள்";
-
-  static String m35(value) => "தயவுசெய்து ${value} வினாடிகள் காத்திருக்கவும்";
-
-  static String m36(value) =>
+  static String m19(value) =>
       "ஒவ்வொரு ${value} வினாடிகளிலும் தானாக புதுப்பிக்கவும்";
 
-  static String m37(address) => "கணக்கு ${address} சேர்க்கப்பட்டது";
+  static String m20(address) => "கணக்கு ${address} சேர்க்கப்பட்டது";
 
-  static String m38(address, network) =>
+  static String m21(address, network) =>
       "இந்த வன்பொருள் வாலட் கணக்கைக் கண்காணிக்க விரும்புகிறீர்களா?\n\nமுகவரி: ${address}\nநெட்வொர்க்: ${network}";
 
-  static String m39(app) => "தற்போதைய பயன்பாடு: ${app}";
+  static String m22(app) => "தற்போதைய பயன்பாடு: ${app}";
 
-  static String m40(days) => "${days} நாட்களுக்கு முன்பு";
+  static String m23(days) => "${days} நாட்களுக்கு முன்பு";
 
-  static String m41(value) => "கணக்கை இறக்குமதி செய்வதில் தோல்வி: ${value}";
+  static String m24(value) => "கணக்கை இறக்குமதி செய்வதில் தோல்வி: ${value}";
 
-  static String m42(date) => "கடைசியாக இணைக்கப்பட்டது: ${date}";
+  static String m25(date) => "கடைசியாக இணைக்கப்பட்டது: ${date}";
 
-  static String m43(value) =>
-      "உங்கள் சாதனத்தில் ${value} பயன்பாட்டைத் திறக்கவும்";
-
-  static String m44(app) =>
+  static String m26(app) =>
       "உங்கள் லெட்ஜரில் ${app} ஆப்ஸ் திறந்திருப்பதை உறுதிசெய்யவும்";
 
-  static String m45(name) =>
+  static String m27(name) =>
       "சேமித்த சாதனங்களிலிருந்து \"${name}\" ஐ நிச்சயமாக அகற்ற விரும்புகிறீர்களா?";
 
-  static String m46(value) => "${value} புள்ளிகளைப் பெறுங்கள்";
+  static String m28(value) => "Est. வாயு: ~${value} அலகுகள்";
 
-  static String m47(value) =>
-      "சேரும் ஒவ்வொரு நண்பருக்கும் ${value} புள்ளிகளைப் பெறுங்கள்!";
+  static String m29(reason) => "காரணம்: ${reason}";
 
-  static String m48(value) => "${value} அடுத்த அடுக்குக்குச் செல்கிறது";
+  static String m30(value) => "${value}d unbond";
 
-  static String m49(amount, token) => "≈ ${amount}${token}";
+  static String m31(value) => "${value} நாட்கள் மீதமுள்ளன";
 
-  static String m50(amount) => "≈ ${amount} USDT";
-
-  static String m51(value) => "Est. வாயு: ~${value} அலகுகள்";
-
-  static String m52(reason) => "காரணம்: ${reason}";
-
-  static String m53(value) =>
-      "${value} தொடர்பை நிச்சயமாக நீக்க விரும்புகிறீர்களா?";
-
-  static String m54(value) => "${value}d unbond";
-
-  static String m55(value) => "${value} நாட்கள் உள்ளன";
-
-  static String m56(value) => "${value} நாட்கள் மீதமுள்ளன";
-
-  static String m57(value) =>
+  static String m32(value) =>
       "அன்ஸ்டேக்கிற்கு ${value} நாட்கள் ஆகும். இந்த காலகட்டத்தில் உங்கள் டோக்கன்கள் பூட்டப்படும்.";
 
-  static String m58(value) => "உங்களிடம் போதுமான \"${value}\" இல்லை";
+  static String m33(value) => "உங்களிடம் போதுமான \"${value}\" இல்லை";
 
-  static String m59(value) => "\"${value}\" கணக்கைப் பெறுவதில் தோல்வி";
+  static String m34(value) => "\"${value}\" கணக்கைப் பெறுவதில் தோல்வி";
 
-  static String m60(value) =>
+  static String m35(value) =>
       "முதல் பரிமாற்றத்திற்கான குறைந்தபட்ச ${value} XRP";
 
-  static String m61(value) => "${value}d முன்பு";
+  static String m36(count) => "சேர் (${count})";
 
-  static String m62(value) => "${value}h முன்பு";
-
-  static String m63(value) => "${value}m முன்பு";
-
-  static String m64(count) => "சேர் (${count})";
-
-  static String m65(count) =>
+  static String m37(count) =>
       "${Intl.plural(count, one: '1 புதிய டோக்கன் கண்டறியப்பட்டது', other: '${count} புதிய டோக்கன்கள் கண்டறியப்பட்டன')} — மதிப்பாய்வு செய்ய தட்டவும்";
 
-  static String m66(value) =>
-      "சரிபார்ப்புக் குறியீடு ${value} க்கு அனுப்பப்பட்டது";
+  static String m38(value) => "${value} சங்கிலி சேர்க்கப்படவில்லை.";
 
-  static String m67(value) => "${value} சங்கிலி சேர்க்கப்படவில்லை.";
-
-  static String m68(value) =>
+  static String m39(value) =>
       "${value} முடிக்கப்படாத பரிவர்த்தனைகள் உள்ளன, பின்னர் மீண்டும் முயற்சிக்கவும்.";
 
-  static String m69(value) => "${value}க்கான முகவரி இல்லை.";
+  static String m40(value) => "${value}க்கான முகவரி இல்லை.";
 
-  static String m70(value) => "${value} இன் போதிய இருப்பு இல்லை.";
+  static String m41(value) => "${value} இன் போதிய இருப்பு இல்லை.";
 
-  static String m71(value, value1) =>
+  static String m42(value, value1) =>
       "ஒவ்வொரு XRP கணக்கும் ${value} XRP (${value1} சொட்டுகள்) ஒரு அடிப்படையாக ஒதுக்க வேண்டும், அதைச் செலவிட முடியாது.";
 
-  static String m72(value, value1) =>
+  static String m43(value, value1) =>
       "கணக்கு வைத்திருக்கும் ஒவ்வொரு பொருளுக்கும், ${value} XRP (${value1} சொட்டுகள்) இருப்பில் சேர்க்கப்படும்.";
 
-  static String m73(value, value1) =>
+  static String m44(value, value1) =>
       "இந்தக் கணக்கு ${value} பொருள்களைக் கொண்டுள்ளது, அதாவது கூடுதல் ${value1} XRP ஒதுக்கப்பட்டுள்ளது.";
 
-  static String m74(value) =>
-      "பேட்டர்ன் கடவுச்சொல் உள்ளீடு பிழை, உங்களுக்கு ${value} வாய்ப்புகள் உள்ளன";
-
-  static String m75(value) =>
-      "பேட்டர்ன் கடவுச்சொல் உள்ளீடு பிழை, உங்களுக்கு ${value} வாய்ப்பு உள்ளது";
-
-  static String m76(value) =>
+  static String m45(value) =>
       "நீங்கள் வெற்றிகரமாக ${value} ஐ அமைத்துள்ளீர்கள், மேலும் N42Wallet மூலம் சரிபார்ப்பைத் தொடங்குவீர்கள்!";
 
-  static String m77(value) =>
+  static String m46(value) =>
       "லேயர் 1 சங்கிலியின் ஆரம்ப சுரங்கத் தொழிலாளியாக இருக்க @N42Wallet இல் உள்ள எனது ${value} குழுவில் சேர்ந்து உங்கள் மொபைலில் கிரிப்டோவைப் பெறுங்கள்!";
 
-  static String m78(value, value1) =>
+  static String m47(value, value1) =>
       "ஒரு முனையை இயக்க, ${value1} வரை ${value} N ஐ நிச்சயமாகப் பூட்ட விரும்புகிறீர்களா?";
 
-  static String m79(value) => "இறக்குமதி தோல்வி:${value}";
+  static String m48(value) => "இறக்குமதி தோல்வி:${value}";
 
-  static String m80(value) =>
+  static String m49(value) =>
       "ரிவார்டுகளைப் பெற குறைந்தபட்சம் ${value} பேலன்ஸ் தேவை.";
 
-  static String m81(value, value1) =>
+  static String m50(value, value1) =>
       "${value} N ஒவ்வொரு ${value1} தொகுதிகளும் வெட்டப்படுகின்றன";
 
-  static String m82(value) => "${value} எழுத்துகள் இருக்க வேண்டும்";
+  static String m51(value) => "${value} எழுத்துகள் இருக்க வேண்டும்";
 
-  static String m83(value) => "${value} போதிய இருப்பு இல்லை.";
+  static String m52(value) => "${value} போதிய இருப்பு இல்லை.";
 
-  static String m84(value) => "${value} உள்வரும்...";
+  static String m53(value) => "${value} உள்வரும்...";
 
-  static String m85(value) =>
+  static String m54(value) =>
       "${value} மாற்றப்பட்ட பயன்பாட்டில் விரைவில் உங்கள் பணப்பையில் விநியோகிக்கப்படும் மற்றும் இந்த செயல்முறை மூலம் விற்க முடியாது. ஒரு முனையை இயக்க இது பயன்படுத்தப்படலாம்.";
 
-  static String m86(value) => "அதிகபட்ச ${value} எழுத்துகள்";
+  static String m55(value) => "அதிகபட்ச ${value} எழுத்துகள்";
 
-  static String m87(value) => "${value} சங்கிலி APP ஏற்கனவே ஆதரிக்கப்படுகிறது!";
+  static String m56(value) => "${value} சங்கிலி APP ஏற்கனவே ஆதரிக்கப்படுகிறது!";
 
-  static String m88(value) =>
+  static String m57(value) =>
       "${value} சங்கிலி APP ஏற்கனவே ஆதரிக்கப்படுகிறது, அதைச் சேர்க்க விரும்புகிறீர்களா?";
 
-  static String m89(value) => "${value} முகவரி சோதனை இணைப்பு தோல்வியடைந்தது!";
+  static String m58(value) => "${value} முகவரி சோதனை இணைப்பு தோல்வியடைந்தது!";
 
-  static String m90(value) => "பயன்பாடு ${value} வினாடிகளில் திறக்கப்படும்.";
-
-  static String m91(value) =>
-      "பேட்டர்ன் கடவுச்சொல் உள்ளீடு பிழை, உங்களுக்கு ${value} வாய்ப்புகள் உள்ளன";
-
-  static String m92(value) =>
-      "கடவுச்சொல் உள்ளீடு பிழை, உங்களுக்கு ${value} வாய்ப்புகள் உள்ளன";
-
-  static String m93(value) =>
-      "கடவுச்சொல் உள்ளீடு பிழை, உங்களுக்கு ${value} வாய்ப்பு உள்ளது";
-
-  static String m94(value) => "${value} கடவுச்சொல்லை உள்ளிடவும்";
-
-  static String m95(value) => "0~${value} எழுத்துகள்";
+  static String m59(value) => "0~${value} எழுத்துகள்";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
-    "Create_account": MessageLookupByLibrary.simpleMessage("பதிவு செய்யவும்"),
-    "Create_your_account": MessageLookupByLibrary.simpleMessage(
-      "உங்கள் கணக்கை உருவாக்கவும்",
-    ),
     "Edit": MessageLookupByLibrary.simpleMessage("திருத்தவும்"),
     "Verification": MessageLookupByLibrary.simpleMessage("சரிபார்ப்பு"),
     "address_Information": MessageLookupByLibrary.simpleMessage("முகவரி தகவல்"),
-    "code_403": MessageLookupByLibrary.simpleMessage(
-      "கணக்கு ஒரு நாளுக்கு தற்காலிகமாக பூட்டப்பட்டுள்ளது",
-    ),
-    "code_err_tips": MessageLookupByLibrary.simpleMessage(
-      "குறியீடு தவறானது. மீண்டும் முயற்சிக்கவும்.",
-    ),
     "copy": MessageLookupByLibrary.simpleMessage("நகலெடுக்கப்பட்டது"),
     "copyAddress": MessageLookupByLibrary.simpleMessage(
       "முகவரியை நகலெடுக்கவும்",
@@ -281,53 +180,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "device_login_title": MessageLookupByLibrary.simpleMessage(
       "புதிய சாதன உள்நுழைவு",
     ),
-    "editPhoto": MessageLookupByLibrary.simpleMessage(
-      "புகைப்படத்தைத் திருத்தவும்",
-    ),
-    "email_code_error": MessageLookupByLibrary.simpleMessage(
-      "அங்கீகாரக் குறியீட்டைப் பெறுவதில் தோல்வி",
-    ),
-    "email_code_finish": MessageLookupByLibrary.simpleMessage(
-      "அங்கீகாரக் குறியீடு வெற்றிகரமாக அனுப்பப்பட்டது, உங்கள் மின்னஞ்சலைச் சரிபார்க்கவும்",
-    ),
-    "email_code_input_error": MessageLookupByLibrary.simpleMessage(
-      "அங்கீகாரக் குறியீடு பிழை",
-    ),
-    "email_error": MessageLookupByLibrary.simpleMessage(
-      "தவறான மின்னஞ்சல் முகவரி",
-    ),
-    "email_verification": MessageLookupByLibrary.simpleMessage(
-      "மின்னஞ்சல் முகவரி அங்கீகாரம்",
-    ),
-    "email_verification_message1": MessageLookupByLibrary.simpleMessage(
-      "மின்னஞ்சல் முகவரி அங்கீகரிப்பு பயன்பாடு உங்கள் திரும்பப் பெறுதல் மற்றும் N42Wallet கணக்கைப் பாதுகாக்கிறது.",
-    ),
-    "email_verification_message2": MessageLookupByLibrary.simpleMessage(
-      "மின்னஞ்சல் சரிபார்ப்பைச் சேர்க்கவா?",
-    ),
     "file": MessageLookupByLibrary.simpleMessage("கோப்பு"),
-    "g_2fa_backup_hint": MessageLookupByLibrary.simpleMessage(
-      "இந்த விசையைச் சேமிக்கவும் - உங்கள் தொலைபேசி தொலைந்தால் உங்களுக்கு இது தேவைப்படும்",
-    ),
-    "g_2fa_backup_share": MessageLookupByLibrary.simpleMessage("பகிரவும்"),
-    "g_2fa_backup_share_text": MessageLookupByLibrary.simpleMessage(
-      "N42Wallet Google அங்கீகரிப்பு காப்பு விசை",
-    ),
-    "g_2fa_disable_confirm_hint": MessageLookupByLibrary.simpleMessage(
-      "2FA ஐ முடக்குவதை உறுதிப்படுத்த உங்களின் தற்போதைய 6 இலக்க Google அங்கீகரிப்பு குறியீட்டை உள்ளிடவும்.",
-    ),
-    "g_2fa_disable_confirm_title": MessageLookupByLibrary.simpleMessage(
-      "Google 2FA ஐ முடக்கு",
-    ),
-    "g_2fa_disable_error": MessageLookupByLibrary.simpleMessage(
-      "Google 2FA ஐ முடக்குவதில் தோல்வி. குறியீட்டைச் சரிபார்த்து, மீண்டும் முயற்சிக்கவும்.",
-    ),
-    "g_2fa_disable_success": MessageLookupByLibrary.simpleMessage(
-      "Google 2FA முடக்கப்பட்டுள்ளது",
-    ),
-    "g_2fa_invalid_format": MessageLookupByLibrary.simpleMessage(
-      "சரியான 6 இலக்கக் குறியீட்டை உள்ளிடவும்",
-    ),
     "g_alert_above": MessageLookupByLibrary.simpleMessage("மேலே செல்கிறது ↑"),
     "g_alert_below": MessageLookupByLibrary.simpleMessage("கீழே துளிகள் ↓"),
     "g_alert_current_price": m1,
@@ -357,15 +210,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_app_share_key_2": MessageLookupByLibrary.simpleMessage(
       "பெற ஸ்கேன் செய்யவும்",
     ),
-    "g_biometric_locked_out": MessageLookupByLibrary.simpleMessage(
-      "பல தோல்விகள். பயோமெட்ரிக் பூட்டப்பட்டுள்ளது - கடவுக்குறியீட்டைப் பயன்படுத்தவும்.",
-    ),
-    "g_biometric_not_enrolled": MessageLookupByLibrary.simpleMessage(
-      "பயோமெட்ரிக் அமைக்கப்படவில்லை. சாதன அமைப்புகளில் இயக்கவும்.",
-    ),
-    "g_biometric_retry": MessageLookupByLibrary.simpleMessage(
-      "ஃபேஸ் ஐடி / டச் ஐடியைப் பயன்படுத்தவும்",
-    ),
     "g_browser_key1": MessageLookupByLibrary.simpleMessage("URL ஐ உள்ளிடவும்"),
     "g_browser_key10": MessageLookupByLibrary.simpleMessage(
       "விளக்கத்தை உள்ளிடவும்",
@@ -376,9 +220,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_browser_key13": MessageLookupByLibrary.simpleMessage(
       "DApp ஐ தானாக இணைக்கவும்",
-    ),
-    "g_browser_key14": MessageLookupByLibrary.simpleMessage(
-      "DApp உடன் இணைப்பதை உறுதிப்படுத்தவும்",
     ),
     "g_browser_key16": MessageLookupByLibrary.simpleMessage("அனைத்தையும் மூடு"),
     "g_browser_key17": MessageLookupByLibrary.simpleMessage("முடிந்தது"),
@@ -412,125 +253,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_browser_key7": MessageLookupByLibrary.simpleMessage("பெயரை உள்ளிடவும்"),
     "g_browser_key8": MessageLookupByLibrary.simpleMessage("URL"),
     "g_browser_key9": MessageLookupByLibrary.simpleMessage("விளக்கம்"),
-    "g_chat_key_1": MessageLookupByLibrary.simpleMessage(
-      "குழு அரட்டையைத் தொடங்கவும்",
-    ),
-    "g_chat_key_10": m3,
-    "g_chat_key_11": MessageLookupByLibrary.simpleMessage(
-      "நண்பர்களை அழைக்கவும்",
-    ),
-    "g_chat_key_12": MessageLookupByLibrary.simpleMessage(
-      "தொடர்பைத் தேர்ந்தெடுக்கவும்",
-    ),
-    "g_chat_key_13": MessageLookupByLibrary.simpleMessage("முடிக்கவும்"),
-    "g_chat_key_14": MessageLookupByLibrary.simpleMessage(
-      "குறைந்தது 2 தொடர்புகளைத் தேர்ந்தெடுக்கவும்",
-    ),
-    "g_chat_key_16": MessageLookupByLibrary.simpleMessage("நண்பர் விவரம்"),
-    "g_chat_key_17": MessageLookupByLibrary.simpleMessage("குழு விவரம்"),
-    "g_chat_key_18": MessageLookupByLibrary.simpleMessage(
-      "மேலும் குழு உறுப்பினர்களைக் காண்க",
-    ),
-    "g_chat_key_19": MessageLookupByLibrary.simpleMessage("குழுவின் பெயர்"),
-    "g_chat_key_2": MessageLookupByLibrary.simpleMessage("புதிய நண்பர்"),
-    "g_chat_key_20": MessageLookupByLibrary.simpleMessage(
-      "நாங்கள் கலைக்கிறோம் என்பதில் உறுதியாக உள்ளோமா?",
-    ),
-    "g_chat_key_21": MessageLookupByLibrary.simpleMessage(
-      "இந்தக் குழுவிலிருந்து நிச்சயமாக வெளியேற விரும்புகிறீர்களா?",
-    ),
-    "g_chat_key_22": MessageLookupByLibrary.simpleMessage("குழுவிலக்கு"),
-    "g_chat_key_23": MessageLookupByLibrary.simpleMessage(
-      "குழுவிலிருந்து வெளியேறு",
-    ),
-    "g_chat_key_24": MessageLookupByLibrary.simpleMessage(
-      "குழு அரட்டை பெயரை மாற்றவும்",
-    ),
-    "g_chat_key_25": MessageLookupByLibrary.simpleMessage(
-      "குழு அரட்டையின் பெயர் மாற்றப்பட்டால், குழுவில் உள்ள மற்ற உறுப்பினர்களுக்கு அறிவிக்கப்படும்.",
-    ),
-    "g_chat_key_26": MessageLookupByLibrary.simpleMessage("முடிக்கவும்"),
-    "g_chat_key_27": MessageLookupByLibrary.simpleMessage(
-      "நண்பர் சேர்க்க கோரிக்கை",
-    ),
-    "g_chat_key_28": MessageLookupByLibrary.simpleMessage(
-      "உங்களை நண்பராக சேர்க்க வேண்டுகோள்",
-    ),
-    "g_chat_key_29": MessageLookupByLibrary.simpleMessage(
-      "நண்பர் கோரிக்கை ஏற்கப்பட்டது",
-    ),
-    "g_chat_key_3": MessageLookupByLibrary.simpleMessage("சேர்க்கப்பட்டது"),
-    "g_chat_key_30": MessageLookupByLibrary.simpleMessage(
-      "நீங்கள் நண்பராக சேர்க்கப்பட்டுள்ளீர்கள்",
-    ),
-    "g_chat_key_31": MessageLookupByLibrary.simpleMessage("ஒப்புக்கொள்"),
-    "g_chat_key_32": m4,
-    "g_chat_key_33": MessageLookupByLibrary.simpleMessage(
-      "கடவுச்சொல்லை சரியாக பாகுபடுத்த முடியாது, மேலும் செய்தியை தற்காலிகமாக அனுப்ப முடியாது. குழுவில் நுழையும்போது பணப்பையை இறக்குமதி செய்யவும்",
-    ),
-    "g_chat_key_34": MessageLookupByLibrary.simpleMessage(
-      "அரட்டை வரலாற்றை நீக்கவா?",
-    ),
-    "g_chat_key_35": MessageLookupByLibrary.simpleMessage("உறுப்பினரை அகற்று"),
-    "g_chat_key_36": MessageLookupByLibrary.simpleMessage("எனது QR குறியீடு"),
-    "g_chat_key_4": MessageLookupByLibrary.simpleMessage("காலாவதியாகிவிட்டது"),
-    "g_chat_key_40": MessageLookupByLibrary.simpleMessage("அறிக்கை"),
-    "g_chat_key_41": MessageLookupByLibrary.simpleMessage("புதிய அரட்டை"),
-    "g_chat_key_42": MessageLookupByLibrary.simpleMessage("புதிய குழு"),
-    "g_chat_key_43": MessageLookupByLibrary.simpleMessage("QR குறியீடு"),
-    "g_chat_key_44": MessageLookupByLibrary.simpleMessage(
-      "அறிக்கை மற்றும் தடு",
-    ),
-    "g_chat_key_45": MessageLookupByLibrary.simpleMessage(
-      "இந்த செய்தி N42Wallet க்கு அனுப்பப்படும். இந்தத் தொடர்புக்கு அறிவிக்கப்படாது.",
-    ),
-    "g_chat_key_46": MessageLookupByLibrary.simpleMessage("வீடியோ"),
-    "g_chat_key_47": MessageLookupByLibrary.simpleMessage("புகைப்படம்"),
-    "g_chat_key_48": MessageLookupByLibrary.simpleMessage("செய்தியை நீக்கு"),
-    "g_chat_key_49": MessageLookupByLibrary.simpleMessage(
-      "எனது சாதனத்தில் நீக்கு",
-    ),
-    "g_chat_key_5": MessageLookupByLibrary.simpleMessage("காத்திருங்கள்"),
     "g_chat_key_50": MessageLookupByLibrary.simpleMessage("ஒப்புக்கொள்கிறேன்"),
-    "g_chat_key_54": MessageLookupByLibrary.simpleMessage(
-      "காரணம் தெரிவிக்கவும்",
-    ),
-    "g_chat_key_55": MessageLookupByLibrary.simpleMessage(
-      "உங்கள் புகாருக்கான காரணத்தை உள்ளிடவும்",
-    ),
-    "g_chat_key_56": MessageLookupByLibrary.simpleMessage(
-      "உங்கள் புகாரைச் சரிபார்த்து, 24 மணி நேரத்திற்குள் பதிலளிப்போம்.",
-    ),
-    "g_chat_key_57": MessageLookupByLibrary.simpleMessage(
-      "நீங்கள் இதைப் புகாரளித்தீர்கள் - பார்க்க கிளிக் செய்யவும்",
-    ),
-    "g_chat_key_58": MessageLookupByLibrary.simpleMessage("தடுப்புப்பட்டியல்"),
-    "g_chat_key_59": MessageLookupByLibrary.simpleMessage("அகற்று"),
-    "g_chat_key_6": m5,
-    "g_chat_key_60": MessageLookupByLibrary.simpleMessage(
-      "இதுவரை தொடர்பு இல்லை",
-    ),
-    "g_chat_key_61": MessageLookupByLibrary.simpleMessage("இன்று"),
-    "g_chat_key_62": MessageLookupByLibrary.simpleMessage(
-      "3 நாட்களுக்கு முன்பு",
-    ),
-    "g_chat_key_63": MessageLookupByLibrary.simpleMessage("தடு"),
-    "g_chat_key_64": MessageLookupByLibrary.simpleMessage(
-      "ஏய், நான் அரட்டை அடிக்கவும் பணம் அனுப்பவும் N42Wallet ஐப் பயன்படுத்துகிறேன். Wallet ஐ நிறுவி எனக்கு செய்தி அனுப்பவும்",
-    ),
-    "g_chat_key_66": MessageLookupByLibrary.simpleMessage("பதில்"),
     "g_chat_key_67": MessageLookupByLibrary.simpleMessage(
       "செய்தி நீக்கப்பட்டது",
-    ),
-    "g_chat_key_68": MessageLookupByLibrary.simpleMessage("யாரோ @ நான்"),
-    "g_chat_key_69": MessageLookupByLibrary.simpleMessage(
-      "வணக்கம் சொல்லுங்கள்",
-    ),
-    "g_chat_key_8": MessageLookupByLibrary.simpleMessage(
-      "நண்பர்களைச் சேர்க்கவும்",
-    ),
-    "g_chat_key_9": MessageLookupByLibrary.simpleMessage(
-      "விண்ணப்பத்திற்கான காரணம்",
     ),
     "g_coin_key_1": MessageLookupByLibrary.simpleMessage("பரிவர்த்தனைகள்"),
     "g_connect_key1": MessageLookupByLibrary.simpleMessage("இணைக்கவும்"),
@@ -553,228 +278,28 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_dapp_security_safe": MessageLookupByLibrary.simpleMessage(
       "பாதுகாப்பானது",
     ),
-    "g_dapp_security_title": MessageLookupByLibrary.simpleMessage(
-      "DApp பாதுகாப்பு",
-    ),
     "g_dapp_security_verified": MessageLookupByLibrary.simpleMessage(
       "சரிபார்க்கப்பட்டது",
-    ),
-    "g_email_also_sync": MessageLookupByLibrary.simpleMessage(
-      "அரட்டை கணக்கு மின்னஞ்சலையும் ஒத்திசைக்கவும்",
-    ),
-    "g_email_back_to_email": MessageLookupByLibrary.simpleMessage(
-      "← மின்னஞ்சல் முகவரியை மாற்றவும்",
-    ),
-    "g_email_both_success": MessageLookupByLibrary.simpleMessage(
-      "இரண்டு கணக்குகளும் வெற்றிகரமாக புதுப்பிக்கப்பட்டன!",
-    ),
-    "g_email_change_title": MessageLookupByLibrary.simpleMessage(
-      "மின்னஞ்சலை மாற்றவும்",
-    ),
-    "g_email_chat_code_hint": MessageLookupByLibrary.simpleMessage(
-      "6 இலக்க அரட்டைக் குறியீட்டை உள்ளிடவும்",
-    ),
-    "g_email_chat_code_sent_to": MessageLookupByLibrary.simpleMessage(
-      "அரட்டைக் குறியீடு அனுப்பப்பட்டது",
-    ),
-    "g_email_chat_confirm": MessageLookupByLibrary.simpleMessage(
-      "அரட்டை ஒத்திசைவை உறுதிப்படுத்தவும்",
-    ),
-    "g_email_chat_send_fail": MessageLookupByLibrary.simpleMessage(
-      "அரட்டைக் குறியீட்டை அனுப்புவதில் தோல்வி",
-    ),
-    "g_email_chat_sending": MessageLookupByLibrary.simpleMessage(
-      "அரட்டை சரிபார்ப்புக் குறியீட்டை அனுப்புகிறது...",
-    ),
-    "g_email_chat_sync_title": MessageLookupByLibrary.simpleMessage(
-      "அரட்டை கணக்கு மின்னஞ்சலை ஒத்திசைக்கவும்",
-    ),
-    "g_email_code_invalid": MessageLookupByLibrary.simpleMessage(
-      "6 இலக்கக் குறியீட்டை உள்ளிடவும்",
-    ),
-    "g_email_code_resent": MessageLookupByLibrary.simpleMessage(
-      "குறியீடு மீண்டும் அனுப்பப்பட்டது",
-    ),
-    "g_email_code_sent_to": m6,
-    "g_email_code_wrong": MessageLookupByLibrary.simpleMessage(
-      "தவறான குறியீடு, மீண்டும் முயற்சிக்கவும்",
-    ),
-    "g_email_confirm_change": MessageLookupByLibrary.simpleMessage(
-      "மாற்றத்தை உறுதிப்படுத்தவும்",
-    ),
-    "g_email_confirm_continue": MessageLookupByLibrary.simpleMessage(
-      "உறுதிசெய்து, அரட்டை ஒத்திசைவைத் தொடரவும்",
-    ),
-    "g_email_current_label": MessageLookupByLibrary.simpleMessage(
-      "தற்போதைய மின்னஞ்சல்",
-    ),
-    "g_email_enter_code": MessageLookupByLibrary.simpleMessage(
-      "6 இலக்கக் குறியீட்டை உள்ளிடவும்",
-    ),
-    "g_email_error_empty": MessageLookupByLibrary.simpleMessage(
-      "தயவுசெய்து புதிய மின்னஞ்சல் முகவரியை உள்ளிடவும்",
-    ),
-    "g_email_error_invalid": MessageLookupByLibrary.simpleMessage(
-      "தவறான மின்னஞ்சல் முகவரி",
-    ),
-    "g_email_error_same": MessageLookupByLibrary.simpleMessage(
-      "புதிய மின்னஞ்சல் தற்போதைய மின்னஞ்சலில் இருந்து வேறுபட்டிருக்க வேண்டும்",
-    ),
-    "g_email_n42_only": MessageLookupByLibrary.simpleMessage(
-      "N42 மின்னஞ்சல் புதுப்பிக்கப்பட்டது. அரட்டை > அமைப்புகளில் அரட்டை மின்னஞ்சலைப் புதுப்பிக்கலாம்.",
-    ),
-    "g_email_n42_updated": MessageLookupByLibrary.simpleMessage(
-      "N42 கணக்கு மின்னஞ்சல் புதுப்பிக்கப்பட்டது",
-    ),
-    "g_email_new_hint": MessageLookupByLibrary.simpleMessage(
-      "புதிய மின்னஞ்சல் முகவரியை உள்ளிடவும்",
-    ),
-    "g_email_new_label": MessageLookupByLibrary.simpleMessage(
-      "புதிய மின்னஞ்சல் முகவரி",
-    ),
-    "g_email_pwd_hint": MessageLookupByLibrary.simpleMessage(
-      "கடவுச்சொல்லை உள்ளிடவும்",
-    ),
-    "g_email_pwd_label": MessageLookupByLibrary.simpleMessage(
-      "தற்போதைய கடவுச்சொல் (அரட்டைக்கு)",
-    ),
-    "g_email_pwd_required": MessageLookupByLibrary.simpleMessage(
-      "அரட்டை ஒத்திசைவுக்கு கடவுச்சொல் தேவை",
     ),
     "g_email_resend": MessageLookupByLibrary.simpleMessage(
       "குறியீட்டை மீண்டும் அனுப்பு",
     ),
-    "g_email_resend_countdown": m7,
-    "g_email_send_code": MessageLookupByLibrary.simpleMessage(
-      "சரிபார்ப்புக் குறியீட்டை அனுப்பவும்",
-    ),
-    "g_email_skip": MessageLookupByLibrary.simpleMessage("தவிர்க்கவும்"),
-    "g_email_skip_full": MessageLookupByLibrary.simpleMessage(
-      "தவிர் - N42 மின்னஞ்சல் ஏற்கனவே புதுப்பிக்கப்பட்டது",
-    ),
-    "g_email_success": MessageLookupByLibrary.simpleMessage(
-      "மின்னஞ்சல் வெற்றிகரமாக புதுப்பிக்கப்பட்டது",
-    ),
+    "g_email_resend_countdown": m3,
     "g_face_1": MessageLookupByLibrary.simpleMessage(
       "பயோமெட்ரிக் ஸ்கேன் குறிப்புகள்",
     ),
     "g_face_10": MessageLookupByLibrary.simpleMessage(
       "அங்கீகாரத்திற்காக உங்கள் கைரேகை அல்லது முகத்தை ஸ்கேன் செய்யவும்.",
     ),
-    "g_face_2": MessageLookupByLibrary.simpleMessage(
-      "பயோமெட்ரிக் ஸ்கேன் வேலை செய்யவில்லை",
-    ),
     "g_face_3": MessageLookupByLibrary.simpleMessage("குறிப்புகள்"),
-    "g_face_4": MessageLookupByLibrary.simpleMessage(
-      "பயோமெட்ரிக் ஸ்கேன் வெற்றி",
-    ),
     "g_face_5": MessageLookupByLibrary.simpleMessage("அமைக்க"),
-    "g_face_6": MessageLookupByLibrary.simpleMessage(
-      "நீங்கள் பயோமெட்ரிக் உள்நுழைவை அமைக்கவில்லை. அதை அமைக்க கணினி அமைப்புகளுக்குச் செல்லவும்.",
-    ),
     "g_face_7": MessageLookupByLibrary.simpleMessage(
       "தொடர, உங்கள் முகம் அல்லது கைரேகையை ஸ்கேன் செய்யவும்.",
     ),
     "g_face_8": MessageLookupByLibrary.simpleMessage("திரும்பு"),
-    "g_face_9": MessageLookupByLibrary.simpleMessage(
-      "பயோமெட்ரிக்ஸை மீண்டும் இயக்குமாறு பரிந்துரைக்கப்படுகிறது.",
-    ),
-    "g_face_liveness_failed": MessageLookupByLibrary.simpleMessage(
-      "முகம் கண்டறியப்படவில்லை. கேமராவை நேரடியாகப் பார்த்து மீண்டும் முயற்சிக்கவும்.",
-    ),
-    "g_face_match_key1": MessageLookupByLibrary.simpleMessage(
-      "முகம் பொருத்தும் முறை",
-    ),
-    "g_face_match_key10": m8,
-    "g_face_match_key11": m9,
-    "g_face_match_key12": MessageLookupByLibrary.simpleMessage(
-      "மீண்டும் பிணைக்கவும்",
-    ),
-    "g_face_match_key13": MessageLookupByLibrary.simpleMessage("கட்டு"),
-    "g_face_match_key14": MessageLookupByLibrary.simpleMessage(
-      "சரிபார்க்கவும்",
-    ),
-    "g_face_match_key15": MessageLookupByLibrary.simpleMessage(
-      "உங்கள் முகத் தரவை ஒரு பணப்பை முகவரியுடன் நேரடியாக இணைக்கலாம் (நீங்கள் முன்பு ஒன்றை இணைத்திருந்தால், பழைய பணப்பையின் முகவரி மேலெழுதப்படும்), அல்லது நீங்கள் முன்பு ஒரு பணப்பையை பிணைத்திருந்தால், பிணைக்கப்பட்ட வாலட் முகவரியை மீட்டெடுக்க கைமுறையாக சரிபார்க்கலாம்.",
-    ),
-    "g_face_match_key16": MessageLookupByLibrary.simpleMessage(
-      "உங்கள் முகத் தரவோடு இணைக்கப்பட்ட வாலட் முகவரி பின்வருமாறு கண்டறியப்பட்டது, ஆனால் நீங்கள் இந்தப் பணப்பையை உங்கள் வாலட் பட்டியலில் இன்னும் இறக்குமதி செய்யவில்லை.",
-    ),
-    "g_face_match_key17": MessageLookupByLibrary.simpleMessage(
-      "இந்த பணப்பையுடன் உங்கள் முகத் தரவை இணைத்துள்ளீர்கள்.",
-    ),
-    "g_face_match_key18": MessageLookupByLibrary.simpleMessage(
-      "பயனர் அறிவிப்பு",
-    ),
-    "g_face_match_key19": MessageLookupByLibrary.simpleMessage(
-      "ஃபேஸ் பைண்டிங் என்றால் என்ன?",
-    ),
-    "g_face_match_key20": MessageLookupByLibrary.simpleMessage(
-      "உங்கள் பிளாக்செயின் வாலட் முகவரியுடன் உங்கள் பயோமெட்ரிக் முக அம்சங்களைப் பொருத்த ஃபேஸ் பைண்டிங் ஃபேஷியல் ரெக்கக்னிஷன் தொழில்நுட்பத்தைப் பயன்படுத்துகிறது.",
-    ),
-    "g_face_match_key21": MessageLookupByLibrary.simpleMessage(
-      "இந்த செயல்முறை பரிவர்த்தனை வசதியை மேம்படுத்துவது மட்டுமல்லாமல் கணக்கு பாதுகாப்பையும் பலப்படுத்துகிறது, ஒவ்வொரு செயலும் உங்களால் அங்கீகரிக்கப்படுவதை உறுதி செய்கிறது.",
-    ),
-    "g_face_match_key22": MessageLookupByLibrary.simpleMessage(
-      "ஃபேஸ் பைண்டிங் ஏன் அவசியம்?",
-    ),
-    "g_face_match_key23": MessageLookupByLibrary.simpleMessage(
-      "உங்கள் முகத் தரவை பிணைப்பதன் மூலம், உங்கள் அடையாளம் நேரடியாக பரிவர்த்தனை நடவடிக்கைகளுடன் இணைக்கப்பட்டுள்ளது, அடையாள சரிபார்ப்பு செயல்முறையை எளிதாக்குகிறது மற்றும் செயல்பாட்டு செயல்திறனை மேம்படுத்துகிறது. இந்த தொழில்நுட்பமானது சொத்துக்களை மாற்றுவது அல்லது ஒப்பந்தங்களுடன் தொடர்புகொள்வது போன்ற முக்கியமான செயல்பாடுகளைச் செய்யும்போது விரைவான மற்றும் பாதுகாப்பான அடையாளச் சரிபார்ப்பை உறுதி செய்கிறது.",
-    ),
-    "g_face_match_key24": MessageLookupByLibrary.simpleMessage(
-      "எனது முகத் தரவு எவ்வாறு சேமிக்கப்படுகிறது மற்றும் அது பாதுகாப்பானதா?",
-    ),
-    "g_face_match_key25": MessageLookupByLibrary.simpleMessage(
-      "உங்கள் முகத் தரவு ஒரு பொது பிளாக்செயினில் மறைகுறியாக்கப்பட்ட வடிவத்தில் சேமிக்கப்படுகிறது, எந்த மையப்படுத்தப்பட்ட தரவுத்தளத்திலும் இல்லை. உங்கள் தனியுரிமை மற்றும் தரவுப் பாதுகாப்பை உறுதிசெய்து, உங்களால் அங்கீகரிக்கப்படும் போது, ​​அடையாளச் சரிபார்ப்பிற்காக மட்டுமே கணினி உங்கள் தரவை டிக்ரிப்ட் செய்து பயன்படுத்த முடியும்.",
-    ),
-    "g_face_match_key26": MessageLookupByLibrary.simpleMessage(
-      "முகக் கட்டுதல் எனது கணக்கின் பாதுகாப்பை எவ்வாறு பாதிக்கிறது?",
-    ),
-    "g_face_match_key27": MessageLookupByLibrary.simpleMessage(
-      "அனைத்து முக்கியமான செயல்களும் உங்களின் வெளிப்படையான அங்கீகாரத்துடன் மட்டுமே மேற்கொள்ளப்படுவதை உறுதிசெய்வதன் மூலம், முக பிணைப்பு உங்கள் கணக்கின் பாதுகாப்பை மேம்படுத்துகிறது. உங்கள் பயோமெட்ரிக் தரவைப் பாதுகாக்க, அங்கீகரிக்கப்படாத அணுகலைத் தடுக்க, தொழில்துறையின் முன்னணி குறியாக்க தொழில்நுட்பத்தைப் பயன்படுத்துகிறோம்.",
-    ),
-    "g_face_match_key28": MessageLookupByLibrary.simpleMessage(
-      "எனது முகத் தரவு பாதுகாப்பானதா?",
-    ),
-    "g_face_match_key29": MessageLookupByLibrary.simpleMessage(
-      "முற்றிலும். அனைத்து பயோமெட்ரிக் தரவுகளும் கடுமையான குறியாக்கத்திற்கு உட்படுகின்றன, மேலும் தரவு பரிமாற்றம் மற்றும் சேமிப்பிற்காக மிக உயர்ந்த பாதுகாப்பு தரநிலைகள் பின்பற்றப்படுகின்றன. அடையாள சரிபார்ப்பை முடிக்க தேவைப்படும் போது மட்டுமே கணினி இந்தத் தரவை டிக்ரிப்ட் செய்யும்.",
-    ),
-    "g_face_match_key3": MessageLookupByLibrary.simpleMessage("போட்டி தோல்வி!"),
-    "g_face_match_key30": MessageLookupByLibrary.simpleMessage("கிடைத்தது"),
-    "g_face_match_key31": MessageLookupByLibrary.simpleMessage(
-      "பணப்பை முகவரியைத் தேர்ந்தெடுக்கவும்",
-    ),
-    "g_face_match_key32": m10,
-    "g_face_match_key33": MessageLookupByLibrary.simpleMessage("பிணைக்காதது"),
-    "g_face_match_key34": MessageLookupByLibrary.simpleMessage(
-      "முக தரவு சரிபார்ப்பு தோல்வியடைந்தது!",
-    ),
-    "g_face_match_key35": MessageLookupByLibrary.simpleMessage(
-      "முகத் தரவை இணைக்க முடியவில்லை!",
-    ),
-    "g_face_match_key4": m11,
-    "g_face_match_key5": MessageLookupByLibrary.simpleMessage("முகவரி பிழை!"),
-    "g_face_match_key6": MessageLookupByLibrary.simpleMessage(
-      "முகத் தரவு பிணைப்பு",
-    ),
-    "g_face_match_key7": MessageLookupByLibrary.simpleMessage(
-      "முகம் பொருத்தம்",
-    ),
-    "g_face_match_key8": MessageLookupByLibrary.simpleMessage(
-      "மீண்டும் தேர்ந்தெடு",
-    ),
-    "g_face_match_key9": MessageLookupByLibrary.simpleMessage("போட்டி"),
-    "g_face_network_error": MessageLookupByLibrary.simpleMessage(
-      "நெட்வொர்க் பிழை. உங்கள் இணைப்பைச் சரிபார்த்து மீண்டும் முயற்சிக்கவும்.",
-    ),
-    "g_face_sdk_init_failed": MessageLookupByLibrary.simpleMessage(
-      "முகம் அறிதலைத் தொடங்குவதில் தோல்வி. மீண்டும் முயற்சிக்கவும்.",
-    ),
     "g_home_key1": MessageLookupByLibrary.simpleMessage("சுயவிவரம்"),
     "g_home_key2": MessageLookupByLibrary.simpleMessage("செய்தி"),
     "g_home_key3": MessageLookupByLibrary.simpleMessage("சரிபார்ப்பு"),
-    "g_home_key5": MessageLookupByLibrary.simpleMessage("செய்திகள்"),
-    "g_home_key6": MessageLookupByLibrary.simpleMessage("கற்றுக்கொள்ளுங்கள்"),
     "g_home_key9": MessageLookupByLibrary.simpleMessage("நண்பரை அழைக்கவும்"),
     "g_iap_cancelled": MessageLookupByLibrary.simpleMessage(
       "ரத்து செய்யப்பட்டது",
@@ -782,15 +307,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_iap_check_network": MessageLookupByLibrary.simpleMessage(
       "உங்கள் நெட்வர்க் இணைப்பை சரிபார்த்து மீண்டும் முயற்சிக்கவும்",
     ),
-    "g_iap_failed": m12,
+    "g_iap_failed": m4,
     "g_iap_no_products": MessageLookupByLibrary.simpleMessage(
       "தயாரிப்புகள் எதுவுமில்லை",
     ),
-    "g_iap_purchased": m13,
+    "g_iap_purchased": m5,
     "g_iap_restore": MessageLookupByLibrary.simpleMessage(
       "கொள்முதல்களை மீட்டமை",
     ),
-    "g_iap_restored": m14,
+    "g_iap_restored": m6,
     "g_iap_restoring": MessageLookupByLibrary.simpleMessage(
       "கொள்முதல்களை மீட்டமைக்கிறது…",
     ),
@@ -800,7 +325,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_iap_title": MessageLookupByLibrary.simpleMessage("வாங்கு"),
     "g_key_1": MessageLookupByLibrary.simpleMessage("அகற்ற முடியவில்லை!"),
-    "g_key_100": MessageLookupByLibrary.simpleMessage("அனுப்பு"),
     "g_key_101": MessageLookupByLibrary.simpleMessage("எரிவாயு வரம்பு"),
     "g_key_105": MessageLookupByLibrary.simpleMessage("இனி இல்லை"),
     "g_key_106": MessageLookupByLibrary.simpleMessage("ஏற்றுகிறது "),
@@ -821,7 +345,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_13": MessageLookupByLibrary.simpleMessage("பணப்பை பட்டியல்"),
     "g_key_132": MessageLookupByLibrary.simpleMessage("தரவு இல்லை"),
     "g_key_134": MessageLookupByLibrary.simpleMessage("தொகை செல்லாது"),
-    "g_key_135": m15,
+    "g_key_135": m7,
     "g_key_14": MessageLookupByLibrary.simpleMessage("முக்கிய பணப்பை"),
     "g_key_140": MessageLookupByLibrary.simpleMessage(
       "பரிவர்த்தனை வெற்றிகரமாக முடிந்தது",
@@ -833,7 +357,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_15": MessageLookupByLibrary.simpleMessage(
       "முதன்மை பணப்பையாக அமைக்கவும்",
     ),
-    "g_key_154": MessageLookupByLibrary.simpleMessage("சமர்ப்பிக்கவும்"),
     "g_key_155": MessageLookupByLibrary.simpleMessage("பணப்பையின் முகவரி"),
     "g_key_156": MessageLookupByLibrary.simpleMessage(
       "முகவரியை நகலெடுக்க ஸ்கேன் செய்யவும்",
@@ -873,9 +396,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_203": MessageLookupByLibrary.simpleMessage(
       "இணைப்பு பிழை, QR குறியீட்டை மீண்டும் ஸ்கேன் செய்யவும்.",
     ),
-    "g_key_205": MessageLookupByLibrary.simpleMessage(
-      "புகைப்பட ஆல்பத்தை அணுக அனுமதி இல்லை.",
-    ),
     "g_key_206": MessageLookupByLibrary.simpleMessage("கடவுச்சொல் திருத்தம்"),
     "g_key_207": MessageLookupByLibrary.simpleMessage("பழைய கடவுச்சொல்"),
     "g_key_208": MessageLookupByLibrary.simpleMessage(
@@ -886,10 +406,8 @@ class MessageLookup extends MessageLookupByLibrary {
       "பணப்பையின் கடவுச்சொல்லை உள்ளிடவும்",
     ),
     "g_key_210": MessageLookupByLibrary.simpleMessage("தனிப்பட்ட விசை பிழை"),
-    "g_key_211": MessageLookupByLibrary.simpleMessage("வாங்க"),
-    "g_key_212": MessageLookupByLibrary.simpleMessage("விற்கவும்"),
     "g_key_213": MessageLookupByLibrary.simpleMessage("சந்தை தகவல்"),
-    "g_key_214": m16,
+    "g_key_214": m8,
     "g_key_25": MessageLookupByLibrary.simpleMessage(
       "கடவுச்சொல் பொருந்தவில்லை.",
     ),
@@ -906,7 +424,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_43": MessageLookupByLibrary.simpleMessage("இருப்பு உள்ளது"),
     "g_key_44": MessageLookupByLibrary.simpleMessage("தொகை"),
-    "g_key_46": m17,
+    "g_key_46": m9,
     "g_key_47": MessageLookupByLibrary.simpleMessage(
       "இந்த பரிவர்த்தனையை ஈடுகட்ட போதுமான நிதி இல்லை.",
     ),
@@ -917,8 +435,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_75": MessageLookupByLibrary.simpleMessage("இருந்து"),
     "g_key_78": MessageLookupByLibrary.simpleMessage("உறுதிப்படுத்தவும்"),
     "g_key_79": MessageLookupByLibrary.simpleMessage("ரத்து செய்"),
-    "g_key_8": MessageLookupByLibrary.simpleMessage("குறிப்பு"),
-    "g_key_85": MessageLookupByLibrary.simpleMessage("விதை சொற்றொடர்"),
     "g_key_9": MessageLookupByLibrary.simpleMessage("அனைத்து டோக்கன்கள்"),
     "g_key_94": MessageLookupByLibrary.simpleMessage("அமைப்புகள்"),
     "g_key_aa_account_created": MessageLookupByLibrary.simpleMessage(
@@ -946,9 +462,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_aa_address_error": MessageLookupByLibrary.simpleMessage(
       "முகவரியைக் கணக்கிட முடியவில்லை. மீண்டும் முயற்சிக்கவும்.",
-    ),
-    "g_key_aa_address_preview": MessageLookupByLibrary.simpleMessage(
-      "இந்த முகவரி முன்கூட்டியே கணக்கிடப்பட்டது மற்றும் உங்கள் முதல் பரிவர்த்தனை செய்யும் போது பயன்படுத்தப்படும்.",
     ),
     "g_key_aa_approve": MessageLookupByLibrary.simpleMessage("ஒப்புதல்"),
     "g_key_aa_batch": MessageLookupByLibrary.simpleMessage("தொகுதி"),
@@ -997,9 +510,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_batch_templates": MessageLookupByLibrary.simpleMessage(
       "வார்ப்புருக்கள்",
     ),
-    "g_key_aa_batch_title": MessageLookupByLibrary.simpleMessage(
-      "தொகுதி பரிமாற்றம்",
-    ),
     "g_key_aa_batch_transaction": MessageLookupByLibrary.simpleMessage(
       "தொகுதி பரிவர்த்தனை",
     ),
@@ -1021,9 +531,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_benefit_recovery_title": MessageLookupByLibrary.simpleMessage(
       "சமூக மீட்பு",
     ),
-    "g_key_aa_biconomy_account": MessageLookupByLibrary.simpleMessage(
-      "பைகானமி கணக்கு",
-    ),
     "g_key_aa_biconomy_desc": MessageLookupByLibrary.simpleMessage(
       "எரிவாயு இல்லாத பரிவர்த்தனை ஆதரவுடன் மாடுலர் ERC-7579 ஸ்மார்ட் கணக்கு",
     ),
@@ -1034,15 +541,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_check_status": MessageLookupByLibrary.simpleMessage(
       "நிலையை சரிபார்க்கவும்",
     ),
-    "g_key_aa_clear_all": MessageLookupByLibrary.simpleMessage(
-      "அனைத்தையும் அழி",
-    ),
     "g_key_aa_coming_soon": MessageLookupByLibrary.simpleMessage("விரைவில்"),
-    "g_key_aa_continue": MessageLookupByLibrary.simpleMessage("தொடரவும்"),
-    "g_key_aa_contract": MessageLookupByLibrary.simpleMessage("ஒப்பந்தம்"),
-    "g_key_aa_counterfactual_address": MessageLookupByLibrary.simpleMessage(
-      "எதிர் முகவரி",
-    ),
     "g_key_aa_counterfactual_note": MessageLookupByLibrary.simpleMessage(
       "இது ஒரு எதிர்நிலை முகவரி. இது உங்கள் முதல் பரிவர்த்தனையின் போது பயன்படுத்தப்படும்.",
     ),
@@ -1052,46 +551,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_create_first": MessageLookupByLibrary.simpleMessage(
       "உங்கள் முதல் ஸ்மார்ட் கணக்கை உருவாக்கவும்",
     ),
-    "g_key_aa_create_first_account": MessageLookupByLibrary.simpleMessage(
-      "தொடங்குவதற்கு ஸ்மார்ட் கணக்கை உருவாக்கவும்",
-    ),
     "g_key_aa_create_session": MessageLookupByLibrary.simpleMessage(
       "அமர்வு விசையை உருவாக்கவும்",
-    ),
-    "g_key_aa_create_session_desc": MessageLookupByLibrary.simpleMessage(
-      "அமர்வு விசைகள் வரையறுக்கப்பட்ட அனுமதிகள் மற்றும் நேரக் கட்டுப்பாடுகளுடன் உங்கள் சார்பாக பரிவர்த்தனைகளைச் செய்ய DApps ஐ அனுமதிக்கின்றன.",
-    ),
-    "g_key_aa_create_smart_account": MessageLookupByLibrary.simpleMessage(
-      "ஸ்மார்ட் கணக்கை உருவாக்கவும்",
     ),
     "g_key_aa_created": MessageLookupByLibrary.simpleMessage(
       "உருவாக்கப்பட்டது",
     ),
     "g_key_aa_custom": MessageLookupByLibrary.simpleMessage("தனிப்பயன்"),
-    "g_key_aa_deploy": MessageLookupByLibrary.simpleMessage("வரிசைப்படுத்து"),
     "g_key_aa_deploy_auto_note": MessageLookupByLibrary.simpleMessage(
       "உங்கள் முதல் பரிவர்த்தனையின் போது கணக்கு தானாகவே பயன்படுத்தப்படும்",
-    ),
-    "g_key_aa_deploy_failed": MessageLookupByLibrary.simpleMessage(
-      "பயன்படுத்த முடியவில்லை",
-    ),
-    "g_key_aa_deploy_failed_desc": MessageLookupByLibrary.simpleMessage(
-      "வரிசைப்படுத்தல் தோல்வியடைந்தது. மீண்டும் முயற்சிக்கவும்.",
-    ),
-    "g_key_aa_deploy_started": MessageLookupByLibrary.simpleMessage(
-      "வரிசைப்படுத்தல் தொடங்கியது",
     ),
     "g_key_aa_deployed": MessageLookupByLibrary.simpleMessage(
       "வரிசைப்படுத்தப்பட்டது",
     ),
-    "g_key_aa_deployed_desc": MessageLookupByLibrary.simpleMessage(
-      "கணக்கு பயன்படுத்த தயாராக உள்ளது",
-    ),
     "g_key_aa_deploying": MessageLookupByLibrary.simpleMessage(
       "வரிசைப்படுத்துகிறது...",
-    ),
-    "g_key_aa_deploying_desc": MessageLookupByLibrary.simpleMessage(
-      "வரிசைப்படுத்தல் பரிவர்த்தனை செயல்படுத்தப்படுகிறது",
     ),
     "g_key_aa_deployment_note": MessageLookupByLibrary.simpleMessage(
       "உங்கள் முதல் பரிவர்த்தனையின் மூலம் வரிசைப்படுத்தல் தானாகவே நிகழும்.",
@@ -1100,10 +574,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "மேம்படுத்தப்பட்ட அம்சங்களுடன் அடுத்த தலைமுறை Ethereum கணக்குகளை அனுபவிக்கவும்",
     ),
     "g_key_aa_details": MessageLookupByLibrary.simpleMessage("விவரங்கள்"),
-    "g_key_aa_eip7702_account": MessageLookupByLibrary.simpleMessage(
-      "EIP-7702 கணக்கு",
-    ),
-    "g_key_aa_eip7702_badge": MessageLookupByLibrary.simpleMessage("EIP-7702"),
     "g_key_aa_eip7702_desc": MessageLookupByLibrary.simpleMessage(
       "ஹைப்ரிட் EOA/ஸ்மார்ட் கணக்கு - வரிசைப்படுத்தல் தேவையில்லை",
     ),
@@ -1111,29 +581,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_estimated_gas": MessageLookupByLibrary.simpleMessage(
       "மதிப்பிடப்பட்ட வாயு",
     ),
-    "g_key_aa_estimating": MessageLookupByLibrary.simpleMessage(
-      "மதிப்பிடுகிறது...",
-    ),
     "g_key_aa_execute_batch": MessageLookupByLibrary.simpleMessage(
       "தொகுப்பை இயக்கவும்",
     ),
     "g_key_aa_expired": MessageLookupByLibrary.simpleMessage("காலாவதியானது"),
     "g_key_aa_expires": MessageLookupByLibrary.simpleMessage("காலாவதியாகிறது"),
     "g_key_aa_factory": MessageLookupByLibrary.simpleMessage("தொழிற்சாலை"),
-    "g_key_aa_feature_batch": MessageLookupByLibrary.simpleMessage(
-      "பல பரிவர்த்தனைகளைத் தொகுக்கவும்",
-    ),
-    "g_key_aa_feature_gas": MessageLookupByLibrary.simpleMessage(
-      "எந்த டோக்கனிலும் எரிவாயு செலுத்துங்கள்",
-    ),
-    "g_key_aa_feature_security": MessageLookupByLibrary.simpleMessage(
-      "மேம்படுத்தப்பட்ட பாதுகாப்பு",
-    ),
     "g_key_aa_free": MessageLookupByLibrary.simpleMessage("இலவசம்"),
-    "g_key_aa_full_access": MessageLookupByLibrary.simpleMessage("முழு அணுகல்"),
-    "g_key_aa_gas_estimate": MessageLookupByLibrary.simpleMessage(
-      "எரிவாயு மதிப்பீடு",
-    ),
     "g_key_aa_gas_estimate_failed": MessageLookupByLibrary.simpleMessage(
       "இயல்புநிலையைப் பயன்படுத்தி எரிவாயு மதிப்பீடு தோல்வியடைந்தது",
     ),
@@ -1143,48 +597,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_gas_payment_options": MessageLookupByLibrary.simpleMessage(
       "எரிவாயு கட்டண விருப்பங்கள்",
     ),
-    "g_key_aa_gas_savings": MessageLookupByLibrary.simpleMessage(
-      "எரிவாயு சேமிப்பு",
-    ),
     "g_key_aa_gas_sponsored": MessageLookupByLibrary.simpleMessage(
       "எரிவாயு நிதியுதவி",
     ),
-    "g_key_aa_gas_warn_call_high": MessageLookupByLibrary.simpleMessage(
-      "மரணதண்டனை வாயு உயர்",
-    ),
-    "g_key_aa_gas_warn_call_high_desc": m18,
-    "g_key_aa_gas_warn_deploy": MessageLookupByLibrary.simpleMessage(
-      "வரிசைப்படுத்தல் எரிவாயு மேல்நிலை",
-    ),
-    "g_key_aa_gas_warn_deploy_desc": m19,
-    "g_key_aa_gas_warn_paymaster": MessageLookupByLibrary.simpleMessage(
-      "பேமாஸ்டர் மேல்நிலை உயர்",
-    ),
-    "g_key_aa_gas_warn_paymaster_desc": m20,
-    "g_key_aa_gas_warn_total_high": MessageLookupByLibrary.simpleMessage(
-      "எரிவாயு வரம்பு மிக அதிகம்",
-    ),
-    "g_key_aa_gas_warn_total_high_desc": m21,
-    "g_key_aa_gas_warn_under_est": MessageLookupByLibrary.simpleMessage(
-      "சாத்தியமான எரிவாயு குறைவாக மதிப்பிடப்பட்டுள்ளது",
-    ),
-    "g_key_aa_gas_warn_under_est_desc": MessageLookupByLibrary.simpleMessage(
-      "பயன்படுத்தப்படும் உண்மையான வாயு மதிப்பீட்டை விட அதிகமாக இருக்கலாம். ஒரு பெரிய இடையகத்தைச் சேர்ப்பதைக் கவனியுங்கள்.",
-    ),
-    "g_key_aa_gas_warn_verify_high": MessageLookupByLibrary.simpleMessage(
-      "சரிபார்ப்பு வாயு உயர்",
-    ),
-    "g_key_aa_gas_warn_verify_high_desc": m22,
     "g_key_aa_gasless": MessageLookupByLibrary.simpleMessage("வாயு இல்லாதது"),
     "g_key_aa_gasless_transactions": MessageLookupByLibrary.simpleMessage(
       "எரிவாயு இல்லா பரிவர்த்தனைகள் & தொகுதி செயல்பாடுகள்",
-    ),
-    "g_key_aa_home_title": MessageLookupByLibrary.simpleMessage(
-      "கணக்கு சுருக்கம்",
-    ),
-    "g_key_aa_just_now": MessageLookupByLibrary.simpleMessage("இப்போதுதான்"),
-    "g_key_aa_kernel_account": MessageLookupByLibrary.simpleMessage(
-      "கர்னல் கணக்கு",
     ),
     "g_key_aa_kernel_desc": MessageLookupByLibrary.simpleMessage(
       "ZeroDev இலிருந்து சொருகி ஆதரவுடன் மாடுலர் கணக்கு",
@@ -1196,7 +614,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_my_accounts": MessageLookupByLibrary.simpleMessage(
       "எனது ஸ்மார்ட் கணக்குகள்",
     ),
-    "g_key_aa_never": MessageLookupByLibrary.simpleMessage("ஒருபோதும் இல்லை"),
     "g_key_aa_no_accounts": MessageLookupByLibrary.simpleMessage(
       "இன்னும் ஸ்மார்ட் கணக்குகள் இல்லை",
     ),
@@ -1211,9 +628,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_aa_not_deployed": MessageLookupByLibrary.simpleMessage(
       "பயன்படுத்தப்படவில்லை",
-    ),
-    "g_key_aa_not_deployed_desc": MessageLookupByLibrary.simpleMessage(
-      "முதல் பரிவர்த்தனையின் போது கணக்கு பயன்படுத்தப்படும்",
     ),
     "g_key_aa_onboard_step1": MessageLookupByLibrary.simpleMessage(
       "ஸ்மார்ட் கணக்கை உருவாக்கவும் (இலவசம், ETH தேவையில்லை)",
@@ -1238,9 +652,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_pay_with_eth": MessageLookupByLibrary.simpleMessage(
       "ETH மூலம் பணம் செலுத்துங்கள்",
     ),
-    "g_key_aa_paymaster_balance": MessageLookupByLibrary.simpleMessage(
-      "இருப்பு",
-    ),
     "g_key_aa_paymaster_chains_supported": MessageLookupByLibrary.simpleMessage(
       "சங்கிலிகள் ஆதரிக்கப்படுகின்றன",
     ),
@@ -1259,17 +670,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_paymaster_load_failed": MessageLookupByLibrary.simpleMessage(
       "எரிவாயு விருப்பங்களை ஏற்றுவதில் தோல்வி",
     ),
-    "g_key_aa_paymaster_not_supported": MessageLookupByLibrary.simpleMessage(
-      "இந்த சங்கிலியில் கிடைக்கவில்லை",
-    ),
-    "g_key_aa_paymaster_quote_expired": MessageLookupByLibrary.simpleMessage(
-      "மேற்கோள் காலாவதியானது",
-    ),
     "g_key_aa_paymaster_retry": MessageLookupByLibrary.simpleMessage(
       "மீண்டும் முயற்சிக்கவும்",
     ),
-    "g_key_aa_paymaster_sponsored_unavailable":
-        MessageLookupByLibrary.simpleMessage("ஸ்பான்சர்ஷிப் கிடைக்கவில்லை"),
     "g_key_aa_pending": MessageLookupByLibrary.simpleMessage(
       "நிலுவையில் உள்ளது",
     ),
@@ -1280,9 +683,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_ready": MessageLookupByLibrary.simpleMessage("தயார்"),
     "g_key_aa_receive_address": MessageLookupByLibrary.simpleMessage(
       "முகவரியைப் பெறவும்",
-    ),
-    "g_key_aa_recommended": MessageLookupByLibrary.simpleMessage(
-      "பரிந்துரைக்கப்படுகிறது",
     ),
     "g_key_aa_retry": MessageLookupByLibrary.simpleMessage(
       "மீண்டும் முயற்சிக்கவும்",
@@ -1303,16 +703,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_revoking": MessageLookupByLibrary.simpleMessage(
       "அமர்வு விசையை ரத்துசெய்கிறது...",
     ),
-    "g_key_aa_safe_account": MessageLookupByLibrary.simpleMessage(
-      "பாதுகாப்பான கணக்கு",
-    ),
     "g_key_aa_safe_desc": MessageLookupByLibrary.simpleMessage(
       "மேம்பட்ட பாதுகாப்பு அம்சங்களுடன் கூடிய பல கையொப்ப கணக்கு",
     ),
-    "g_key_aa_safe_guardians": MessageLookupByLibrary.simpleMessage(
-      "பாதுகாவலர்கள்",
-    ),
-    "g_key_aa_safe_threshold": MessageLookupByLibrary.simpleMessage("வாசல்"),
     "g_key_aa_saved": MessageLookupByLibrary.simpleMessage("காப்பாற்றப்பட்டது"),
     "g_key_aa_select_chain": MessageLookupByLibrary.simpleMessage(
       "சங்கிலியைத் தேர்ந்தெடுக்கவும்",
@@ -1320,31 +713,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_select_paymaster": MessageLookupByLibrary.simpleMessage(
       "Paymaster என்பதைத் தேர்ந்தெடுக்கவும்",
     ),
-    "g_key_aa_select_type": MessageLookupByLibrary.simpleMessage(
-      "கணக்கு வகையைத் தேர்ந்தெடுக்கவும்",
-    ),
     "g_key_aa_selected": MessageLookupByLibrary.simpleMessage(
       "தேர்ந்தெடுக்கப்பட்டது",
     ),
     "g_key_aa_send_desc": MessageLookupByLibrary.simpleMessage(
       "உங்கள் ஸ்மார்ட் கணக்கைப் பயன்படுத்தி டோக்கன்களை அனுப்பவும்",
     ),
-    "g_key_aa_send_title": MessageLookupByLibrary.simpleMessage("ஏஏ இடமாற்றம்"),
     "g_key_aa_session_1d": MessageLookupByLibrary.simpleMessage("1 நாள்"),
     "g_key_aa_session_1h": MessageLookupByLibrary.simpleMessage("1 மணிநேரம்"),
     "g_key_aa_session_30d": MessageLookupByLibrary.simpleMessage("30 நாட்கள்"),
     "g_key_aa_session_7d": MessageLookupByLibrary.simpleMessage("7 நாட்கள்"),
-    "g_key_aa_session_allowed": MessageLookupByLibrary.simpleMessage(
-      "அனுமதிக்கப்பட்டது",
-    ),
     "g_key_aa_session_amount_hint": MessageLookupByLibrary.simpleMessage(
       "எ.கா. 100.00",
     ),
     "g_key_aa_session_amount_limit": MessageLookupByLibrary.simpleMessage(
       "அதிகபட்ச தொகை",
-    ),
-    "g_key_aa_session_blocked": MessageLookupByLibrary.simpleMessage(
-      "தடுக்கப்பட்டது",
     ),
     "g_key_aa_session_confirm_risk": MessageLookupByLibrary.simpleMessage(
       "இந்த விசையின் அனுமதிகளை நான் புரிந்துகொள்கிறேன்",
@@ -1406,14 +789,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_session_transfer_can": MessageLookupByLibrary.simpleMessage(
       "நிர்ணயிக்கப்பட்ட வரம்பிற்குள் டோக்கன்களை மாற்றவும்",
     ),
-    "g_key_aa_simple_account": MessageLookupByLibrary.simpleMessage(
-      "எளிய கணக்கு",
-    ),
     "g_key_aa_simple_desc": MessageLookupByLibrary.simpleMessage(
       "ஒற்றை உரிமையாளருடன் அடிப்படை ஸ்மார்ட் கணக்கு - பெரும்பாலான பயனர்களுக்கு பரிந்துரைக்கப்படுகிறது",
-    ),
-    "g_key_aa_smart_account": MessageLookupByLibrary.simpleMessage(
-      "ஸ்மார்ட் கணக்கு",
     ),
     "g_key_aa_smart_accounts": MessageLookupByLibrary.simpleMessage(
       "ஸ்மார்ட் கணக்குகள்",
@@ -1429,25 +806,11 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_aa_title": MessageLookupByLibrary.simpleMessage("ஸ்மார்ட் கணக்கு"),
     "g_key_aa_total_gas": MessageLookupByLibrary.simpleMessage("மொத்த எரிவாயு"),
-    "g_key_aa_total_value": MessageLookupByLibrary.simpleMessage(
-      "மொத்த மதிப்பு",
-    ),
     "g_key_aa_transactions": MessageLookupByLibrary.simpleMessage(
       "பரிவர்த்தனைகள்",
     ),
-    "g_key_aa_unavailable": MessageLookupByLibrary.simpleMessage(
-      "கிடைக்கவில்லை",
-    ),
-    "g_key_aa_version_v07": MessageLookupByLibrary.simpleMessage("v0.7"),
-    "g_key_aa_version_v08": MessageLookupByLibrary.simpleMessage("v0.8"),
     "g_key_aa_view_all": MessageLookupByLibrary.simpleMessage(
       "அனைத்தையும் பார்க்கவும்",
-    ),
-    "g_key_account_linked": MessageLookupByLibrary.simpleMessage(
-      "கணக்கு வெற்றிகரமாக இணைக்கப்பட்டது",
-    ),
-    "g_key_account_unlinked": MessageLookupByLibrary.simpleMessage(
-      "கணக்கு வெற்றிகரமாக இணைக்கப்பட்டது",
     ),
     "g_key_address": MessageLookupByLibrary.simpleMessage("முகவரி"),
     "g_key_address_1": MessageLookupByLibrary.simpleMessage(
@@ -1474,69 +837,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_advanced_features": MessageLookupByLibrary.simpleMessage(
       "மேம்பட்ட அம்சங்கள்",
     ),
-    "g_key_airdrop_active": MessageLookupByLibrary.simpleMessage("செயலில்"),
-    "g_key_airdrop_check_eligibility": MessageLookupByLibrary.simpleMessage(
-      "தகுதியைச் சரிபார்க்கவும்",
-    ),
-    "g_key_airdrop_claim": MessageLookupByLibrary.simpleMessage("உரிமைகோரவும்"),
-    "g_key_airdrop_claimed": MessageLookupByLibrary.simpleMessage(
-      "உரிமை கோரப்பட்டது",
-    ),
-    "g_key_airdrop_days_left": m23,
-    "g_key_airdrop_deadline": MessageLookupByLibrary.simpleMessage("காலக்கெடு"),
-    "g_key_airdrop_eligible": MessageLookupByLibrary.simpleMessage(
-      "தகுதியானவர்",
-    ),
-    "g_key_airdrop_estimated_value": MessageLookupByLibrary.simpleMessage(
-      "மதிப்பிடப்பட்ட மதிப்பு",
-    ),
-    "g_key_airdrop_expired": MessageLookupByLibrary.simpleMessage(
-      "காலாவதியானது",
-    ),
-    "g_key_airdrop_filter": MessageLookupByLibrary.simpleMessage("வடிகட்டி"),
-    "g_key_airdrop_no_airdrops": MessageLookupByLibrary.simpleMessage(
-      "ஏர் டிராப்ஸ் இல்லை",
-    ),
-    "g_key_airdrop_not_eligible": MessageLookupByLibrary.simpleMessage(
-      "தகுதி இல்லை",
-    ),
-    "g_key_airdrop_pending": MessageLookupByLibrary.simpleMessage(
-      "நிலுவையில் உள்ளது",
-    ),
-    "g_key_airdrop_priority_high": MessageLookupByLibrary.simpleMessage(
-      "அதிக முன்னுரிமை",
-    ),
-    "g_key_airdrop_priority_low": MessageLookupByLibrary.simpleMessage(
-      "குறைந்த முன்னுரிமை",
-    ),
-    "g_key_airdrop_priority_medium": MessageLookupByLibrary.simpleMessage(
-      "நடுத்தர முன்னுரிமை",
-    ),
-    "g_key_airdrop_requirement_met": MessageLookupByLibrary.simpleMessage(
-      "தேவை பூர்த்தி செய்யப்பட்டது",
-    ),
-    "g_key_airdrop_requirement_not_met": MessageLookupByLibrary.simpleMessage(
-      "சந்திக்கவில்லை",
-    ),
-    "g_key_airdrop_requirements": MessageLookupByLibrary.simpleMessage(
-      "தேவைகள்",
-    ),
-    "g_key_airdrop_sort_by": MessageLookupByLibrary.simpleMessage(
-      "வரிசைப்படுத்து",
-    ),
-    "g_key_airdrop_title": MessageLookupByLibrary.simpleMessage(
-      "ஏர் டிராப் டிராக்கர்",
-    ),
-    "g_key_airdrop_total_claimed": MessageLookupByLibrary.simpleMessage(
-      "மொத்தம் உரிமை கோரப்பட்டது",
-    ),
-    "g_key_airdrop_upcoming": MessageLookupByLibrary.simpleMessage(
-      "வரவிருக்கிறது",
-    ),
-    "g_key_apple_sign_in_cancelled": MessageLookupByLibrary.simpleMessage(
-      "ஆப்பிள் உள்நுழைவு ரத்து செய்யப்பட்டது",
-    ),
-    "g_key_apply": MessageLookupByLibrary.simpleMessage("விண்ணப்பிக்கவும்"),
     "g_key_batch_add_recipient": MessageLookupByLibrary.simpleMessage(
       "பெறுநரைச் சேர்க்கவும்",
     ),
@@ -1554,21 +854,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "CSV வடிவம்: முகவரி, தொகை, லேபிள்",
     ),
     "g_key_batch_done": MessageLookupByLibrary.simpleMessage("முடிந்தது"),
-    "g_key_batch_duplicate_address": m24,
+    "g_key_batch_duplicate_address": m10,
     "g_key_batch_estimating_gas": MessageLookupByLibrary.simpleMessage(
       "எரிவாயுவை மதிப்பிடுகிறது...",
     ),
     "g_key_batch_evm_only": MessageLookupByLibrary.simpleMessage(
       "தொகுதி பரிமாற்றம் EVM சங்கிலிகளை மட்டுமே ஆதரிக்கிறது",
     ),
-    "g_key_batch_execute": MessageLookupByLibrary.simpleMessage(
-      "தொகுப்பை இயக்கவும்",
-    ),
     "g_key_batch_export_csv": MessageLookupByLibrary.simpleMessage(
       "ஏற்றுமதி CSV",
-    ),
-    "g_key_batch_gas_savings": MessageLookupByLibrary.simpleMessage(
-      "எரிவாயு சேமிப்பு",
     ),
     "g_key_batch_help_title": MessageLookupByLibrary.simpleMessage(
       "தொகுதி பரிமாற்ற உதவி",
@@ -1576,10 +870,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_batch_import_csv": MessageLookupByLibrary.simpleMessage(
       "CSV ஐ இறக்குமதி செய்யவும்",
     ),
-    "g_key_batch_insufficient_balance": m25,
-    "g_key_batch_invalid_address": m26,
-    "g_key_batch_invalid_amount": m27,
-    "g_key_batch_max_recipients": m28,
+    "g_key_batch_insufficient_balance": m11,
+    "g_key_batch_invalid_address": m12,
+    "g_key_batch_invalid_amount": m13,
+    "g_key_batch_max_recipients": m14,
     "g_key_batch_memo_optional": MessageLookupByLibrary.simpleMessage(
       "மெமோ விருப்பமானது",
     ),
@@ -1589,7 +883,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_batch_no_supported": MessageLookupByLibrary.simpleMessage(
       "ஆதரிக்கப்படும் டோக்கன்கள் இல்லை",
     ),
-    "g_key_batch_preview": MessageLookupByLibrary.simpleMessage("முன்னோட்டம்"),
     "g_key_batch_recipients": MessageLookupByLibrary.simpleMessage(
       "பெற்றவர்கள்",
     ),
@@ -1611,7 +904,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_batch_total_amount": MessageLookupByLibrary.simpleMessage(
       "மொத்த தொகை",
     ),
-    "g_key_bridge_amount": MessageLookupByLibrary.simpleMessage("தொகை"),
     "g_key_bridge_chain_not_supported": MessageLookupByLibrary.simpleMessage(
       "சங்கிலி ஆதரிக்கப்படவில்லை",
     ),
@@ -1620,10 +912,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "நீங்கள் பெறுவீர்கள் (மதிப்பீடு)",
     ),
     "g_key_bridge_fastest": MessageLookupByLibrary.simpleMessage("வேகமான"),
-    "g_key_bridge_fee": MessageLookupByLibrary.simpleMessage("பாலம் கட்டணம்"),
-    "g_key_bridge_from_chain": MessageLookupByLibrary.simpleMessage(
-      "சங்கிலியிலிருந்து",
-    ),
     "g_key_bridge_get_quote": MessageLookupByLibrary.simpleMessage(
       "மேற்கோள் பெறவும்",
     ),
@@ -1660,14 +948,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_bridge_status_pending": MessageLookupByLibrary.simpleMessage(
       "நிலுவையில் உள்ளது",
     ),
-    "g_key_bridge_swap": MessageLookupByLibrary.simpleMessage("பாலம்"),
-    "g_key_bridge_time": MessageLookupByLibrary.simpleMessage(
-      "மதிப்பிடப்பட்ட நேரம்",
-    ),
     "g_key_bridge_title": MessageLookupByLibrary.simpleMessage("பாலம்"),
-    "g_key_bridge_to_chain": MessageLookupByLibrary.simpleMessage(
-      "சங்கிலிக்கு",
-    ),
     "g_key_bridge_tx_failed": MessageLookupByLibrary.simpleMessage(
       "பாலம் தோல்வியடைந்தது",
     ),
@@ -1743,9 +1024,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_btc_stake_step4_title": MessageLookupByLibrary.simpleMessage(
       "திறத்த பிறகு மீட்டெடுக்கவும்",
     ),
-    "g_key_btc_stake_subtitle": MessageLookupByLibrary.simpleMessage(
-      "VBTC ஐ உருவாக்க BTC ஐப் பூட்டி வெகுமதிகளைப் பெறுங்கள்",
-    ),
     "g_key_btc_stake_title": MessageLookupByLibrary.simpleMessage(
       "BTC சுய-கஸ்டடி ஸ்டேக்கிங்",
     ),
@@ -1766,29 +1044,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_burn_nft_tip": MessageLookupByLibrary.simpleMessage(
       "ஒரு NFTஐ எரிக்க, தயவுசெய்து NFT விவரங்கள் பக்கத்திற்குச் சென்று \"எரிக்கவும்\" பொத்தானைத் தட்டவும்.",
     ),
-    "g_key_burn_nft_title": MessageLookupByLibrary.simpleMessage(
-      "NFTயை எரிக்கவும்",
-    ),
     "g_key_chain_transfer_not_supported": MessageLookupByLibrary.simpleMessage(
       "இந்த சங்கிலி இன்னும் இடமாற்றங்களை ஆதரிக்கவில்லை, காத்திருங்கள்",
-    ),
-    "g_key_change_email": MessageLookupByLibrary.simpleMessage(
-      "மின்னஞ்சலை மாற்றவும்",
-    ),
-    "g_key_change_password": MessageLookupByLibrary.simpleMessage(
-      "கடவுச்சொல்லை மாற்றவும்",
-    ),
-    "g_key_change_password_desc": MessageLookupByLibrary.simpleMessage(
-      "உங்கள் தற்போதைய கடவுச்சொல்லை உள்ளிட்டு புதிய கடவுச்சொல்லை அமைக்கவும்",
-    ),
-    "g_key_code_length": MessageLookupByLibrary.simpleMessage(
-      "6 இலக்கக் குறியீட்டை உள்ளிடவும்",
-    ),
-    "g_key_code_required": MessageLookupByLibrary.simpleMessage(
-      "சரிபார்ப்புக் குறியீடு தேவை",
-    ),
-    "g_key_code_sent": MessageLookupByLibrary.simpleMessage(
-      "சரிபார்ப்புக் குறியீடு அனுப்பப்பட்டது",
     ),
     "g_key_coin_list_all_hidden": MessageLookupByLibrary.simpleMessage(
       "அனைத்து சொத்துகளும் \$1க்குக் கீழே உள்ளன",
@@ -1802,25 +1059,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_coin_search_recent": MessageLookupByLibrary.simpleMessage(
       "சமீபத்திய",
     ),
-    "g_key_confirm_new_password": MessageLookupByLibrary.simpleMessage(
-      "புதிய கடவுச்சொல்லை உறுதிப்படுத்தவும்",
-    ),
-    "g_key_continue_with_apple": MessageLookupByLibrary.simpleMessage(
-      "ஆப்பிளுடன் தொடரவும்",
-    ),
-    "g_key_continue_with_google": MessageLookupByLibrary.simpleMessage(
-      "Google உடன் தொடரவும்",
-    ),
-    "g_key_deadline_reminders": MessageLookupByLibrary.simpleMessage(
-      "காலக்கெடு நினைவூட்டல்கள்",
-    ),
     "g_key_dex_approval_success": MessageLookupByLibrary.simpleMessage(
       "அங்கீகரிக்கப்பட்டது! தொடர, இடமாற்று என்பதைத் தட்டவும்.",
     ),
     "g_key_dex_approve_exact": MessageLookupByLibrary.simpleMessage(
       "சரியான தொகை",
     ),
-    "g_key_dex_approve_required": m29,
+    "g_key_dex_approve_required": m15,
     "g_key_dex_approve_unlimited": MessageLookupByLibrary.simpleMessage(
       "வரம்பற்ற",
     ),
@@ -1859,16 +1104,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_price_impact": MessageLookupByLibrary.simpleMessage(
       "விலை தாக்கம்",
     ),
-    "g_key_dex_price_impact_high": m30,
-    "g_key_dex_quote_expires": m31,
+    "g_key_dex_price_impact_high": m16,
+    "g_key_dex_quote_expires": m17,
     "g_key_dex_quote_failed": MessageLookupByLibrary.simpleMessage(
       "மேற்கோள் தோல்வியடைந்தது",
-    ),
-    "g_key_dex_quote_refreshed": MessageLookupByLibrary.simpleMessage(
-      "மேற்கோள் புதுப்பிக்கப்பட்டது",
-    ),
-    "g_key_dex_retry": MessageLookupByLibrary.simpleMessage(
-      "மீண்டும் முயற்சிக்கவும்",
     ),
     "g_key_dex_search_hint": MessageLookupByLibrary.simpleMessage(
       "தேடல் சின்னம் / பெயர் / முகவரி",
@@ -1876,17 +1115,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_select_token": MessageLookupByLibrary.simpleMessage(
       "தேர்ந்தெடு",
     ),
-    "g_key_dex_slippage": MessageLookupByLibrary.simpleMessage(
-      "சறுக்கல் சகிப்புத்தன்மை",
-    ),
     "g_key_dex_slippage_label": MessageLookupByLibrary.simpleMessage(
       "அதிகபட்ச சறுக்கல்",
-    ),
-    "g_key_dex_sol_note": MessageLookupByLibrary.simpleMessage(
-      "சோலானா ஸ்வாப்: உங்கள் சோலனா வாலட்டில் பரிவர்த்தனையில் கையெழுத்திடுங்கள்.",
-    ),
-    "g_key_dex_sol_unsupported": MessageLookupByLibrary.simpleMessage(
-      "Solana DEX ஸ்வாப் இன்னும் பயன்பாட்டில் ஆதரிக்கப்படவில்லை",
     ),
     "g_key_dex_status_confirmed": MessageLookupByLibrary.simpleMessage(
       "உறுதி செய்யப்பட்டது",
@@ -1904,29 +1134,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_swap_success": MessageLookupByLibrary.simpleMessage(
       "இடமாற்று வெற்றிகரமாக சமர்ப்பிக்கப்பட்டது",
     ),
-    "g_key_dex_tx_failed": MessageLookupByLibrary.simpleMessage(
-      "பரிவர்த்தனை தோல்வியடைந்தது",
-    ),
     "g_key_dex_you_pay": MessageLookupByLibrary.simpleMessage(
       "நீங்கள் செலுத்துங்கள்",
     ),
     "g_key_dex_you_receive": MessageLookupByLibrary.simpleMessage(
       "நீங்கள் பெறுங்கள்",
-    ),
-    "g_key_domain_resolve_hint": MessageLookupByLibrary.simpleMessage(
-      "ENS (.eth), தடுக்க முடியாத டொமைன்கள் (.crypto/.wallet/…) மற்றும் Solana SNS (.sol) ஆகியவற்றை ஆதரிக்கிறது",
-    ),
-    "g_key_domain_sns_name": MessageLookupByLibrary.simpleMessage(
-      "சோலனா பெயர் சேவை",
-    ),
-    "g_key_domain_sns_not_found": MessageLookupByLibrary.simpleMessage(
-      "சோலனா டொமைன் கிடைக்கவில்லை",
-    ),
-    "g_key_domain_ud_name": MessageLookupByLibrary.simpleMessage(
-      "தடுக்க முடியாத டொமைன்கள்",
-    ),
-    "g_key_domain_ud_not_found": MessageLookupByLibrary.simpleMessage(
-      "நிறுத்த முடியாத டொமைன் கிடைக்கவில்லை அல்லது இந்த சங்கிலிக்கான முகவரி இல்லை",
     ),
     "g_key_earn_active_products": MessageLookupByLibrary.simpleMessage(
       "செயலில் உள்ள தயாரிப்புகள்",
@@ -1937,17 +1149,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_buy_n_desc": MessageLookupByLibrary.simpleMessage(
       "AST நெறிமுறையுடன் N ஐ வாங்கவும்",
     ),
-    "g_key_earn_claim_free": MessageLookupByLibrary.simpleMessage(
-      "இலவச டோக்கன்களைப் பெறுங்கள்",
-    ),
     "g_key_earn_cross_chain": MessageLookupByLibrary.simpleMessage(
       "குறுக்கு சங்கிலி பரிமாற்றம்",
-    ),
-    "g_key_earn_daily_bonus": MessageLookupByLibrary.simpleMessage(
-      "தினசரி செக்-இன் போனஸ்",
-    ),
-    "g_key_earn_dex_desc": MessageLookupByLibrary.simpleMessage(
-      "Uniswap / 1inch மூலம் எந்த டோக்கனையும் மாற்றவும்",
     ),
     "g_key_earn_dex_swap": MessageLookupByLibrary.simpleMessage("DEX இடமாற்று"),
     "g_key_earn_gas": MessageLookupByLibrary.simpleMessage("வாயு"),
@@ -1968,16 +1171,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_no_positions": MessageLookupByLibrary.simpleMessage(
       "செயலில் உள்ள நிலைகள் இல்லை",
     ),
-    "g_key_earn_node_mining": MessageLookupByLibrary.simpleMessage(
-      "முனை சுரங்கம்",
-    ),
     "g_key_earn_node_mining_desc": MessageLookupByLibrary.simpleMessage(
       "நோட் மைனிங்கில் பங்கேற்பதன் மூலம் வெகுமதிகளைப் பெறுங்கள்",
     ),
-    "g_key_earn_points_daily": MessageLookupByLibrary.simpleMessage(
-      "தினமும் புள்ளிகளைப் பெறுங்கள்",
-    ),
-    "g_key_earn_pts_day": m32,
     "g_key_earn_quick_tools": MessageLookupByLibrary.simpleMessage(
       "விரைவான கருவிகள்",
     ),
@@ -1995,22 +1191,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_total_earnings": MessageLookupByLibrary.simpleMessage(
       "மொத்த வருவாய்",
     ),
-    "g_key_earn_up_to_apy": m33,
+    "g_key_earn_up_to_apy": m18,
     "g_key_earn_view_all": MessageLookupByLibrary.simpleMessage(
       "அனைத்தையும் பார்க்கவும்",
-    ),
-    "g_key_eligibility_alerts": MessageLookupByLibrary.simpleMessage(
-      "தகுதி எச்சரிக்கைகள்",
-    ),
-    "g_key_eligible_only": MessageLookupByLibrary.simpleMessage(
-      "தகுதி மட்டுமே",
-    ),
-    "g_key_email": MessageLookupByLibrary.simpleMessage("மின்னஞ்சல்"),
-    "g_key_email_invalid": MessageLookupByLibrary.simpleMessage(
-      "சரியான மின்னஞ்சல் முகவரியை உள்ளிடவும்",
-    ),
-    "g_key_email_required": MessageLookupByLibrary.simpleMessage(
-      "மின்னஞ்சல் தேவை",
     ),
     "g_key_ens_address_updated": MessageLookupByLibrary.simpleMessage(
       "தீர்க்கப்பட்ட முகவரி புதுப்பிக்கப்பட்டது",
@@ -2029,9 +1212,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_commit": MessageLookupByLibrary.simpleMessage("உறுதி"),
     "g_key_ens_commit_failed": MessageLookupByLibrary.simpleMessage(
       "உறுதிமொழி தோல்வியடைந்தது",
-    ),
-    "g_key_ens_commit_tx": MessageLookupByLibrary.simpleMessage(
-      "பரிவர்த்தனை செய்கிறது...",
     ),
     "g_key_ens_commitment_expired_msg": MessageLookupByLibrary.simpleMessage(
       "பதிவு உறுதி காலாவதியானது. பதிவு செயல்முறையை மீண்டும் தொடங்கவும்.",
@@ -2063,15 +1243,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_detected": MessageLookupByLibrary.simpleMessage(
       "ENS பெயர் கண்டறியப்பட்டது",
     ),
-    "g_key_ens_duration": MessageLookupByLibrary.simpleMessage("பதிவு காலம்"),
-    "g_key_ens_edit_records": MessageLookupByLibrary.simpleMessage(
-      "பதிவுகளைத் திருத்து",
-    ),
     "g_key_ens_expired": MessageLookupByLibrary.simpleMessage("காலாவதியானது"),
     "g_key_ens_expires": MessageLookupByLibrary.simpleMessage("காலாவதியாகிறது"),
-    "g_key_ens_expiring_soon": MessageLookupByLibrary.simpleMessage(
-      "விரைவில் காலாவதியாகும்",
-    ),
     "g_key_ens_extend_period": MessageLookupByLibrary.simpleMessage(
       "பதிவு காலத்தை நீட்டிக்கவும்",
     ),
@@ -2085,7 +1258,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_get_your_name": MessageLookupByLibrary.simpleMessage(
       "உங்கள் .eth பெயரைப் பெறுங்கள்",
     ),
-    "g_key_ens_home_title": MessageLookupByLibrary.simpleMessage("ENS மேலாளர்"),
     "g_key_ens_invalid_address": MessageLookupByLibrary.simpleMessage(
       "தவறான முகவரி (0x + 40 ஹெக்ஸ் எழுத்துக்கள் இருக்க வேண்டும்)",
     ),
@@ -2100,9 +1272,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_ens_manage_your_identity": MessageLookupByLibrary.simpleMessage(
       "உங்கள் Web3 அடையாளத்தை நிர்வகிக்கவும்",
-    ),
-    "g_key_ens_management_title": MessageLookupByLibrary.simpleMessage(
-      "ENS ஐ நிர்வகிக்கவும்",
     ),
     "g_key_ens_min_length": MessageLookupByLibrary.simpleMessage(
       "குறைந்தபட்சம் 3 எழுத்துகள்",
@@ -2120,12 +1289,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_no_domains": MessageLookupByLibrary.simpleMessage(
       "இதுவரை டொமைன்கள் இல்லை",
     ),
-    "g_key_ens_no_names": MessageLookupByLibrary.simpleMessage(
-      "உங்களிடம் இன்னும் ENS பெயர்கள் எதுவும் இல்லை",
-    ),
-    "g_key_ens_owned_names": MessageLookupByLibrary.simpleMessage(
-      "எனது ENS பெயர்கள்",
-    ),
     "g_key_ens_owner": MessageLookupByLibrary.simpleMessage("உரிமையாளர்"),
     "g_key_ens_please_wait": MessageLookupByLibrary.simpleMessage(
       "தயவுசெய்து காத்திருக்கவும்",
@@ -2135,9 +1298,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_ens_price_breakdown": MessageLookupByLibrary.simpleMessage(
       "விலை முறிவு",
-    ),
-    "g_key_ens_price_per_year": MessageLookupByLibrary.simpleMessage(
-      "வருடத்திற்கு",
     ),
     "g_key_ens_primary": MessageLookupByLibrary.simpleMessage("முதன்மை"),
     "g_key_ens_primary_set": MessageLookupByLibrary.simpleMessage(
@@ -2149,7 +1309,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_purchase_title": MessageLookupByLibrary.simpleMessage(
       "பதிவு ENS",
     ),
-    "g_key_ens_records": MessageLookupByLibrary.simpleMessage("பதிவுகள்"),
     "g_key_ens_register": MessageLookupByLibrary.simpleMessage(
       "பதிவு செய்யுங்கள்",
     ),
@@ -2162,9 +1321,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_register_now": MessageLookupByLibrary.simpleMessage(
       "இப்போது பதிவு செய்யவும்",
     ),
-    "g_key_ens_register_tx": MessageLookupByLibrary.simpleMessage(
-      "பெயரை பதிவு செய்கிறது...",
-    ),
     "g_key_ens_registering": MessageLookupByLibrary.simpleMessage(
       "பதிவு செய்கிறது...",
     ),
@@ -2174,33 +1330,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_registration_period": MessageLookupByLibrary.simpleMessage(
       "பதிவு காலம்",
     ),
-    "g_key_ens_reminder_disabled": MessageLookupByLibrary.simpleMessage(
-      "காலாவதி நினைவூட்டல் முடக்கப்பட்டுள்ளது",
-    ),
     "g_key_ens_reminder_enable": MessageLookupByLibrary.simpleMessage(
       "காலாவதி நினைவூட்டலை இயக்கு",
-    ),
-    "g_key_ens_reminder_enabled": MessageLookupByLibrary.simpleMessage(
-      "காலாவதி நினைவூட்டல் இயக்கத்தில் உள்ளது",
     ),
     "g_key_ens_reminder_hint": MessageLookupByLibrary.simpleMessage(
       "காலாவதியாகும் முன் 30, 7 மற்றும் 1 நாள் அறிவிக்கவும்",
     ),
     "g_key_ens_renew": MessageLookupByLibrary.simpleMessage("புதுப்பிக்கவும்"),
-    "g_key_ens_renew_cost": MessageLookupByLibrary.simpleMessage(
-      "புதுப்பித்தல் செலவு",
-    ),
     "g_key_ens_renew_desc": MessageLookupByLibrary.simpleMessage(
       "உங்கள் டொமைன் பதிவை நீட்டிக்கவும்",
     ),
     "g_key_ens_renew_success": MessageLookupByLibrary.simpleMessage(
       "புதுப்பித்தல் வெற்றிகரமாக உள்ளது",
-    ),
-    "g_key_ens_renew_title": MessageLookupByLibrary.simpleMessage(
-      "ENS ஐ புதுப்பிக்கவும்",
-    ),
-    "g_key_ens_resolution_failed": MessageLookupByLibrary.simpleMessage(
-      "ENS தீர்மானம் தோல்வியடைந்தது",
     ),
     "g_key_ens_resolved_address": MessageLookupByLibrary.simpleMessage(
       "தீர்க்கப்பட்ட முகவரி",
@@ -2242,14 +1383,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_step_1": MessageLookupByLibrary.simpleMessage("படி 1"),
     "g_key_ens_step_2": MessageLookupByLibrary.simpleMessage("படி 2"),
     "g_key_ens_step_3": MessageLookupByLibrary.simpleMessage("படி 3"),
-    "g_key_ens_step_commit": MessageLookupByLibrary.simpleMessage("உறுதி"),
-    "g_key_ens_step_register": MessageLookupByLibrary.simpleMessage(
-      "பதிவு செய்யுங்கள்",
-    ),
-    "g_key_ens_step_success": MessageLookupByLibrary.simpleMessage("வெற்றி"),
-    "g_key_ens_step_wait": MessageLookupByLibrary.simpleMessage(
-      "காத்திருங்கள்",
-    ),
     "g_key_ens_subdomain_create": MessageLookupByLibrary.simpleMessage(
       "துணை டொமைனை உருவாக்கவும்",
     ),
@@ -2287,7 +1420,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "துணை டொமைன்கள்",
     ),
     "g_key_ens_success": MessageLookupByLibrary.simpleMessage("வெற்றி!"),
-    "g_key_ens_success_message": m34,
     "g_key_ens_suggestions": MessageLookupByLibrary.simpleMessage(
       "பரிந்துரைகள்",
     ),
@@ -2296,7 +1428,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_ens_title": MessageLookupByLibrary.simpleMessage("ENS மேலாளர்"),
     "g_key_ens_total": MessageLookupByLibrary.simpleMessage("மொத்தம்"),
-    "g_key_ens_total_cost": MessageLookupByLibrary.simpleMessage("மொத்த செலவு"),
     "g_key_ens_transfer": MessageLookupByLibrary.simpleMessage("இடமாற்றம்"),
     "g_key_ens_transfer_desc": MessageLookupByLibrary.simpleMessage(
       "உரிமையை வேறொரு முகவரிக்கு மாற்றவும்",
@@ -2323,7 +1454,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_wait_time_info": MessageLookupByLibrary.simpleMessage(
       "காத்திருப்பு காலம் முன் ஓடுவதைத் தடுக்கிறது",
     ),
-    "g_key_ens_wait_timer": m35,
     "g_key_ens_waiting": MessageLookupByLibrary.simpleMessage(
       "காத்திருக்கிறது...",
     ),
@@ -2334,18 +1464,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_years": MessageLookupByLibrary.simpleMessage("ஆண்டுகள்"),
     "g_key_ens_your_identity": MessageLookupByLibrary.simpleMessage(
       "உங்கள் அடையாளம்",
-    ),
-    "g_key_enter_confirm_password": MessageLookupByLibrary.simpleMessage(
-      "புதிய கடவுச்சொல்லை மீண்டும் உள்ளிடவும்",
-    ),
-    "g_key_enter_email": MessageLookupByLibrary.simpleMessage(
-      "உங்கள் மின்னஞ்சல் முகவரியை உள்ளிடவும்",
-    ),
-    "g_key_enter_new_password": MessageLookupByLibrary.simpleMessage(
-      "புதிய கடவுச்சொல்லை உள்ளிடவும்",
-    ),
-    "g_key_enter_old_password": MessageLookupByLibrary.simpleMessage(
-      "தற்போதைய கடவுச்சொல்லை உள்ளிடவும்",
     ),
     "g_key_error_1": MessageLookupByLibrary.simpleMessage(
       "பதில் தரவை பாகுபடுத்துவதில் பிழை!",
@@ -2360,13 +1478,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_error_13": MessageLookupByLibrary.simpleMessage(
       "அணுகல் மறுக்கப்பட்டது",
     ),
-    "g_key_error_1301": MessageLookupByLibrary.simpleMessage(
-      "தவறான கணக்கு அல்லது கடவுச்சொல்",
-    ),
     "g_key_error_14": MessageLookupByLibrary.simpleMessage("கோரிக்கை பிழை"),
-    "g_key_error_1403": MessageLookupByLibrary.simpleMessage(
-      "நீங்கள் ஏற்கனவே மற்றொரு தொலைபேசியில் உள்நுழைந்துள்ளீர்கள், மேலும் வெளியேற வேண்டிய கட்டாயத்தில் உள்ளீர்கள்.",
-    ),
     "g_key_error_15": MessageLookupByLibrary.simpleMessage(
       "கோரிக்கை நேரம் முடிந்தது",
     ),
@@ -2483,33 +1595,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ex_pk_pwd_title": MessageLookupByLibrary.simpleMessage(
       "தனிப்பட்ட விசையைப் பார்க்க, வாலட்டின் கடவுச்சொல்லை உள்ளிடவும்",
     ),
-    "g_key_feedback": MessageLookupByLibrary.simpleMessage("பின்னூட்டம்"),
-    "g_key_feedback_1": MessageLookupByLibrary.simpleMessage(
-      "பின்னூட்டத் தகவலை நிரப்பவும்",
-    ),
-    "g_key_feedback_2": MessageLookupByLibrary.simpleMessage(
-      "பதிவேற்றப்படாத இணைப்புகள் உள்ளன",
-    ),
-    "g_key_feedback_3": MessageLookupByLibrary.simpleMessage(
-      "சமர்ப்பிப்பு தோல்வியடைந்தது",
-    ),
-    "g_key_feedback_4": MessageLookupByLibrary.simpleMessage(
-      "வெற்றிகரமாக சமர்ப்பிக்கப்பட்டது",
-    ),
-    "g_key_feedback_5": MessageLookupByLibrary.simpleMessage("இணைப்புகள்"),
-    "g_key_feedback_6": MessageLookupByLibrary.simpleMessage(
-      "5 இணைப்புகள் வரை பதிவேற்றவும், ஒவ்வொரு இணைப்பும் 100MBக்கு அதிகமாக இருக்கக்கூடாது",
-    ),
-    "g_key_feedback_7": MessageLookupByLibrary.simpleMessage("தோல்வியடைந்தது"),
-    "g_key_feedback_8": MessageLookupByLibrary.simpleMessage(
-      "முயற்சி என்பதைக் கிளிக் செய்யவும்",
-    ),
-    "g_key_feedback_9": MessageLookupByLibrary.simpleMessage("உள்நுழையவும்"),
     "g_key_filter": MessageLookupByLibrary.simpleMessage("வடிகட்டி"),
-    "g_key_filter_type": MessageLookupByLibrary.simpleMessage("வகை"),
-    "g_key_forgot_password": MessageLookupByLibrary.simpleMessage(
-      "கடவுச்சொல் மறந்துவிட்டதா?",
-    ),
     "g_key_gas_alert": MessageLookupByLibrary.simpleMessage(
       "எரிவாயு எச்சரிக்கை",
     ),
@@ -2523,14 +1609,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_gas_alert_threshold": MessageLookupByLibrary.simpleMessage(
       "வாசல் (Gwei)",
     ),
-    "g_key_gas_auto_refresh": m36,
+    "g_key_gas_auto_refresh": m19,
     "g_key_gas_base_fee": MessageLookupByLibrary.simpleMessage(
       "அடிப்படைக் கட்டணம்",
     ),
     "g_key_gas_custom": MessageLookupByLibrary.simpleMessage("தனிப்பயன்"),
-    "g_key_gas_estimated_time": MessageLookupByLibrary.simpleMessage(
-      "Est. நேரம்",
-    ),
     "g_key_gas_fast": MessageLookupByLibrary.simpleMessage("வேகமாக"),
     "g_key_gas_footer": MessageLookupByLibrary.simpleMessage(
       "நெட்வொர்க் தேவையின் அடிப்படையில் எரிவாயு விலைகள் மாறுபடும். குறைந்த வாயு = மெதுவான உறுதிப்படுத்தல், அதிக வாயு = வேகமான உறுதிப்படுத்தல்.",
@@ -2564,43 +1647,23 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_gas_tracker": MessageLookupByLibrary.simpleMessage(
       "எரிவாயு டிராக்கர்",
     ),
-    "g_key_gesture_medium": MessageLookupByLibrary.simpleMessage("நடுத்தர"),
-    "g_key_gesture_strong": MessageLookupByLibrary.simpleMessage("வலுவான"),
-    "g_key_gesture_too_simple": MessageLookupByLibrary.simpleMessage(
-      "வடிவம் மிகவும் எளிமையானது, மேலும் முனைகளைப் பயன்படுத்தவும்",
-    ),
-    "g_key_gesture_weak": MessageLookupByLibrary.simpleMessage("பலவீனமான"),
-    "g_key_google_sign_in_cancelled": MessageLookupByLibrary.simpleMessage(
-      "Google உள்நுழைவு ரத்து செய்யப்பட்டது",
-    ),
-    "g_key_high_value_only": MessageLookupByLibrary.simpleMessage(
-      "அதிக மதிப்பு மட்டுமே",
-    ),
-    "g_key_hw_account_added": m37,
+    "g_key_hw_account_added": m20,
     "g_key_hw_account_already_imported": MessageLookupByLibrary.simpleMessage(
       "கணக்கு ஏற்கனவே இறக்குமதி செய்யப்பட்டுள்ளது",
     ),
-    "g_key_hw_accounts": MessageLookupByLibrary.simpleMessage("கணக்குகள்"),
     "g_key_hw_add": MessageLookupByLibrary.simpleMessage("சேர்"),
     "g_key_hw_add_account": MessageLookupByLibrary.simpleMessage(
       "கணக்கைச் சேர்க்கவும்",
     ),
-    "g_key_hw_add_account_content": m38,
+    "g_key_hw_add_account_content": m21,
     "g_key_hw_address_copied": MessageLookupByLibrary.simpleMessage(
       "முகவரி நகலெடுக்கப்பட்டது",
     ),
     "g_key_hw_ble_hint": MessageLookupByLibrary.simpleMessage(
       "இணைக்கும் முன் உங்கள் சாதனம் திறக்கப்பட்டிருப்பதையும் புளூடூத் இயக்கப்பட்டிருப்பதையும் உறுதிசெய்யவும்.",
     ),
-    "g_key_hw_cancel": MessageLookupByLibrary.simpleMessage("ரத்து செய்"),
     "g_key_hw_check_app": MessageLookupByLibrary.simpleMessage(
       "பயன்பாட்டை சரிபார்க்கவும்",
-    ),
-    "g_key_hw_confirm_on_device": MessageLookupByLibrary.simpleMessage(
-      "உங்கள் சாதனத்தில் உறுதிப்படுத்தவும்",
-    ),
-    "g_key_hw_connect": MessageLookupByLibrary.simpleMessage(
-      "வன்பொருள் வாலட்டை இணைக்கவும்",
     ),
     "g_key_hw_connect_new_device": MessageLookupByLibrary.simpleMessage(
       "புதிய சாதனத்தை இணைக்கவும்",
@@ -2620,33 +1683,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_hw_connecting": MessageLookupByLibrary.simpleMessage(
       "இணைக்கிறது...",
     ),
-    "g_key_hw_current_app_label": m39,
-    "g_key_hw_days_ago": m40,
-    "g_key_hw_derivation_path": MessageLookupByLibrary.simpleMessage(
-      "வழித்தோன்றல் பாதை",
-    ),
+    "g_key_hw_current_app_label": m22,
+    "g_key_hw_days_ago": m23,
     "g_key_hw_disconnect": MessageLookupByLibrary.simpleMessage(
       "துண்டிக்கவும்",
     ),
-    "g_key_hw_disconnected": MessageLookupByLibrary.simpleMessage(
-      "துண்டிக்கப்பட்டது",
-    ),
-    "g_key_hw_enable_bluetooth": MessageLookupByLibrary.simpleMessage(
-      "புளூடூத்தை இயக்கவும்",
-    ),
-    "g_key_hw_firmware": MessageLookupByLibrary.simpleMessage(
-      "நிலைபொருள் பதிப்பு",
-    ),
     "g_key_hw_go_back": MessageLookupByLibrary.simpleMessage("திரும்பி செல்"),
-    "g_key_hw_import_failed": m41,
+    "g_key_hw_import_failed": m24,
     "g_key_hw_keystone_connect_title": MessageLookupByLibrary.simpleMessage(
       "கீஸ்டோனை இணைக்கவும்",
-    ),
-    "g_key_hw_keystone_invalid_response": MessageLookupByLibrary.simpleMessage(
-      "கீஸ்டோன் சாதனத்திலிருந்து தவறான பதில்",
-    ),
-    "g_key_hw_keystone_scan_error": MessageLookupByLibrary.simpleMessage(
-      "QR குறியீட்டை அலசுவதில் தோல்வி. மீண்டும் முயற்சிக்கவும்.",
     ),
     "g_key_hw_keystone_scan_request_hint": MessageLookupByLibrary.simpleMessage(
       "பரிவர்த்தனையில் கையொப்பமிட உங்கள் கீஸ்டோன் சாதனம் மூலம் இந்த QR குறியீட்டை ஸ்கேன் செய்யவும்",
@@ -2661,18 +1706,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_hw_keystone_scan_xpub_hint": MessageLookupByLibrary.simpleMessage(
       "கணக்குகளை இறக்குமதி செய்ய உங்கள் கீஸ்டோன் சாதனத்திலிருந்து QR குறியீட்டை ஸ்கேன் செய்யவும்",
     ),
-    "g_key_hw_keystone_signature_received":
-        MessageLookupByLibrary.simpleMessage(
-          "கையொப்பம் வெற்றிகரமாக பெறப்பட்டது",
-        ),
-    "g_key_hw_keystone_signing": MessageLookupByLibrary.simpleMessage(
-      "கீஸ்டோன் கையொப்பத்திற்காக காத்திருக்கிறது...",
-    ),
     "g_key_hw_keystone_tap_to_scan": MessageLookupByLibrary.simpleMessage(
       "கீஸ்டோன் பதிலை ஸ்கேன் செய்ய தட்டவும்",
     ),
-    "g_key_hw_last_connected": m42,
-    "g_key_hw_ledger": MessageLookupByLibrary.simpleMessage("லெட்ஜர்"),
+    "g_key_hw_last_connected": m25,
     "g_key_hw_load_more": MessageLookupByLibrary.simpleMessage(
       "மேலும் ஏற்றவும்",
     ),
@@ -2688,52 +1725,25 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_hw_no_app_open": MessageLookupByLibrary.simpleMessage(
       "எந்த ஆப்ஸும் தற்போது திறக்கப்படவில்லை",
     ),
-    "g_key_hw_no_devices": MessageLookupByLibrary.simpleMessage(
-      "சாதனங்கள் எதுவும் இல்லை",
-    ),
     "g_key_hw_not_connected": MessageLookupByLibrary.simpleMessage(
       "சாதனம் இணைக்கப்படவில்லை",
     ),
     "g_key_hw_not_connected_label": MessageLookupByLibrary.simpleMessage(
       "இணைக்கப்படவில்லை",
     ),
-    "g_key_hw_open_app": m43,
-    "g_key_hw_open_ledger_app_hint": m44,
-    "g_key_hw_rejected": MessageLookupByLibrary.simpleMessage(
-      "சாதனத்தில் நிராகரிக்கப்பட்டது",
-    ),
+    "g_key_hw_open_ledger_app_hint": m26,
     "g_key_hw_remove": MessageLookupByLibrary.simpleMessage("அகற்று"),
     "g_key_hw_remove_device": MessageLookupByLibrary.simpleMessage(
       "சாதனத்தை அகற்று",
     ),
-    "g_key_hw_remove_device_confirm": m45,
+    "g_key_hw_remove_device_confirm": m27,
     "g_key_hw_saved_devices": MessageLookupByLibrary.simpleMessage(
       "சேமிக்கப்பட்ட சாதனங்கள்",
-    ),
-    "g_key_hw_scanning": MessageLookupByLibrary.simpleMessage(
-      "சாதனங்களை ஸ்கேன் செய்கிறது...",
-    ),
-    "g_key_hw_select_device": MessageLookupByLibrary.simpleMessage(
-      "சாதனத்தைத் தேர்ந்தெடுக்கவும்",
-    ),
-    "g_key_hw_sign_message": MessageLookupByLibrary.simpleMessage(
-      "கையொப்பம் செய்தி",
-    ),
-    "g_key_hw_sign_tx": MessageLookupByLibrary.simpleMessage(
-      "கையெழுத்து பரிவர்த்தனை",
-    ),
-    "g_key_hw_signal_strength": MessageLookupByLibrary.simpleMessage(
-      "சிக்னல் வலிமை",
     ),
     "g_key_hw_supported_devices": MessageLookupByLibrary.simpleMessage(
       "ஆதரிக்கப்படும் சாதனங்கள்",
     ),
-    "g_key_hw_timeout": MessageLookupByLibrary.simpleMessage(
-      "இணைப்பு நேரம் முடிந்தது",
-    ),
-    "g_key_hw_title": MessageLookupByLibrary.simpleMessage("வன்பொருள் வாலட்"),
     "g_key_hw_today": MessageLookupByLibrary.simpleMessage("இன்று"),
-    "g_key_hw_trezor": MessageLookupByLibrary.simpleMessage("Trezor"),
     "g_key_hw_trezor_connect_failed": MessageLookupByLibrary.simpleMessage(
       "Trezor உடன் இணைப்பதில் தோல்வி. USB இணைக்கப்பட்டுள்ளதா என்பதை உறுதிப்படுத்தவும்.",
     ),
@@ -2745,12 +1755,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_hw_trezor_connecting": MessageLookupByLibrary.simpleMessage(
       "Trezor உடன் இணைக்கிறது...",
-    ),
-    "g_key_hw_trezor_passphrase_required": MessageLookupByLibrary.simpleMessage(
-      "உங்கள் Trezor சாதனத்தில் கடவுச்சொற்றொடரை உள்ளிடவும்",
-    ),
-    "g_key_hw_trezor_pin_required": MessageLookupByLibrary.simpleMessage(
-      "உங்கள் Trezor சாதனத்தில் PIN ஐ உள்ளிடவும்",
     ),
     "g_key_hw_trezor_usb_hint": MessageLookupByLibrary.simpleMessage(
       "USB கேபிள் வழியாக உங்கள் Trezor சாதனத்தை இணைத்து அதைத் திறக்கவும்",
@@ -2769,122 +1773,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "கீஸ்டோரைப் படிக்க முடியவில்லை",
     ),
     "g_key_keystore_22": MessageLookupByLibrary.simpleMessage("கீஸ்டோர்"),
-    "g_key_link_account": MessageLookupByLibrary.simpleMessage(
-      "கணக்கை இணைக்கவும்",
-    ),
-    "g_key_linked_accounts": MessageLookupByLibrary.simpleMessage(
-      "இணைக்கப்பட்ட கணக்குகள்",
-    ),
     "g_key_login": MessageLookupByLibrary.simpleMessage("உள்நுழைக"),
-    "g_key_login_success": MessageLookupByLibrary.simpleMessage(
-      "உள்நுழைவு வெற்றிகரமாக உள்ளது",
-    ),
     "g_key_logout": MessageLookupByLibrary.simpleMessage("வெளியேறு"),
     "g_key_logout_sure": MessageLookupByLibrary.simpleMessage(
       "பயன்பாட்டிலிருந்து நிச்சயமாக வெளியேற விரும்புகிறீர்களா?",
-    ),
-    "g_key_loyalty_available_points": MessageLookupByLibrary.simpleMessage(
-      "கிடைக்கும் புள்ளிகள்",
-    ),
-    "g_key_loyalty_checked_today": MessageLookupByLibrary.simpleMessage(
-      "இன்று செக்-இன் செய்தேன்!",
-    ),
-    "g_key_loyalty_checkin_btn": MessageLookupByLibrary.simpleMessage(
-      "செக் இன்",
-    ),
-    "g_key_loyalty_checkin_done": MessageLookupByLibrary.simpleMessage(
-      "முடிந்தது",
-    ),
-    "g_key_loyalty_checkin_failed": MessageLookupByLibrary.simpleMessage(
-      "செக்-இன் தோல்வியடைந்தது, மீண்டும் முயற்சிக்கவும்",
-    ),
-    "g_key_loyalty_checkin_success": MessageLookupByLibrary.simpleMessage(
-      "செக்-இன் வெற்றி!",
-    ),
-    "g_key_loyalty_claim_points": MessageLookupByLibrary.simpleMessage(
-      "உரிமைகோரல் புள்ளிகள்",
-    ),
-    "g_key_loyalty_complete_failed": MessageLookupByLibrary.simpleMessage(
-      "பணி தோல்வியடைந்தது, மீண்டும் முயற்சிக்கவும்",
-    ),
-    "g_key_loyalty_complete_success": MessageLookupByLibrary.simpleMessage(
-      "பணி முடிந்தது!",
-    ),
-    "g_key_loyalty_copy": MessageLookupByLibrary.simpleMessage("நகலெடுக்கவும்"),
-    "g_key_loyalty_daily_checkin": MessageLookupByLibrary.simpleMessage(
-      "தினசரி செக்-இன்",
-    ),
-    "g_key_loyalty_earn_points": m46,
-    "g_key_loyalty_earned": MessageLookupByLibrary.simpleMessage(
-      "சம்பாதித்தது",
-    ),
-    "g_key_loyalty_history": MessageLookupByLibrary.simpleMessage(
-      "புள்ளிகள் வரலாறு",
-    ),
-    "g_key_loyalty_invite": MessageLookupByLibrary.simpleMessage("அழைக்கவும்"),
-    "g_key_loyalty_invite_bonus": m47,
-    "g_key_loyalty_invite_friends": MessageLookupByLibrary.simpleMessage(
-      "நண்பர்களை அழைக்கவும்",
-    ),
-    "g_key_loyalty_invited_friends": MessageLookupByLibrary.simpleMessage(
-      "அழைக்கப்பட்ட நண்பர்கள்",
-    ),
-    "g_key_loyalty_max_level": MessageLookupByLibrary.simpleMessage(
-      "அதிகபட்ச நிலை",
-    ),
-    "g_key_loyalty_next_prefix": MessageLookupByLibrary.simpleMessage(
-      "அடுத்து",
-    ),
-    "g_key_loyalty_next_tier": MessageLookupByLibrary.simpleMessage(
-      "அடுத்த அடுக்கு",
-    ),
-    "g_key_loyalty_no_rewards": MessageLookupByLibrary.simpleMessage(
-      "வெகுமதிகள் இல்லை",
-    ),
-    "g_key_loyalty_no_tasks": MessageLookupByLibrary.simpleMessage(
-      "பணிகள் எதுவும் இல்லை",
-    ),
-    "g_key_loyalty_points": MessageLookupByLibrary.simpleMessage("புள்ளிகள்"),
-    "g_key_loyalty_points_to_next": m48,
-    "g_key_loyalty_redeem": MessageLookupByLibrary.simpleMessage(
-      "மீட்டுக்கொள்ளுங்கள்",
-    ),
-    "g_key_loyalty_referral": MessageLookupByLibrary.simpleMessage("பரிந்துரை"),
-    "g_key_loyalty_referral_bonus": MessageLookupByLibrary.simpleMessage(
-      "பரிந்துரை போனஸ்",
-    ),
-    "g_key_loyalty_referral_code": MessageLookupByLibrary.simpleMessage(
-      "உங்கள் பரிந்துரை குறியீடு",
-    ),
-    "g_key_loyalty_referral_link": MessageLookupByLibrary.simpleMessage(
-      "பரிந்துரை இணைப்பு",
-    ),
-    "g_key_loyalty_rewards": MessageLookupByLibrary.simpleMessage("வெகுமதிகள்"),
-    "g_key_loyalty_share": MessageLookupByLibrary.simpleMessage("பகிரவும்"),
-    "g_key_loyalty_spent": MessageLookupByLibrary.simpleMessage("செலவழித்தது"),
-    "g_key_loyalty_task_complete": MessageLookupByLibrary.simpleMessage(
-      "பணி முடிந்தது",
-    ),
-    "g_key_loyalty_tasks": MessageLookupByLibrary.simpleMessage("பணிகள்"),
-    "g_key_loyalty_tier": MessageLookupByLibrary.simpleMessage("அடுக்கு"),
-    "g_key_loyalty_tier_bronze": MessageLookupByLibrary.simpleMessage(
-      "வெண்கலம்",
-    ),
-    "g_key_loyalty_tier_diamond": MessageLookupByLibrary.simpleMessage("வைரம்"),
-    "g_key_loyalty_tier_gold": MessageLookupByLibrary.simpleMessage("தங்கம்"),
-    "g_key_loyalty_tier_platinum": MessageLookupByLibrary.simpleMessage(
-      "பிளாட்டினம்",
-    ),
-    "g_key_loyalty_tier_silver": MessageLookupByLibrary.simpleMessage("வெள்ளி"),
-    "g_key_loyalty_title": MessageLookupByLibrary.simpleMessage("புள்ளிகள்"),
-    "g_key_loyalty_total_earned": MessageLookupByLibrary.simpleMessage(
-      "மொத்தம் சம்பாதித்தது",
-    ),
-    "g_key_loyalty_total_points": MessageLookupByLibrary.simpleMessage(
-      "மொத்த புள்ளிகள்",
-    ),
-    "g_key_loyalty_used": MessageLookupByLibrary.simpleMessage(
-      "பயன்படுத்தப்பட்டது",
     ),
     "g_key_m_10": MessageLookupByLibrary.simpleMessage("Facebook"),
     "g_key_m_11": MessageLookupByLibrary.simpleMessage("ட்விட்டர்"),
@@ -2914,29 +1806,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_mnemonic": MessageLookupByLibrary.simpleMessage(
       "விதை சொற்றொடரை உள்ளிடவும்",
     ),
-    "g_key_new_airdrops": MessageLookupByLibrary.simpleMessage(
-      "புதிய விமானத் துளிகள்",
-    ),
-    "g_key_new_password": MessageLookupByLibrary.simpleMessage(
-      "புதிய கடவுச்சொல்",
-    ),
-    "g_key_new_password_same_as_old": MessageLookupByLibrary.simpleMessage(
-      "புதிய கடவுச்சொல் தற்போதைய கடவுச்சொல்லிலிருந்து வேறுபட்டதாக இருக்க வேண்டும்",
-    ),
-    "g_key_next": MessageLookupByLibrary.simpleMessage("அடுத்து"),
     "g_key_nft_141": MessageLookupByLibrary.simpleMessage("மொத்தம்"),
-    "g_key_nft_16": MessageLookupByLibrary.simpleMessage("கேமரா"),
-    "g_key_nft_17": MessageLookupByLibrary.simpleMessage(
-      "புகைப்படத்தைத் தேர்ந்தெடுக்கவும்",
-    ),
-    "g_key_nft_18": MessageLookupByLibrary.simpleMessage("உள்ளடக்கம்"),
     "g_key_nft_2": MessageLookupByLibrary.simpleMessage("பெயர்"),
     "g_key_nft_220": MessageLookupByLibrary.simpleMessage("மீண்டும்"),
     "g_key_nft_41": MessageLookupByLibrary.simpleMessage(
       "பரிவர்த்தனை சமர்ப்பிக்கப்பட்டது",
-    ),
-    "g_key_nft_47": MessageLookupByLibrary.simpleMessage(
-      "வீடியோவைத் தேர்ந்தெடுக்கவும்",
     ),
     "g_key_nft_address_invalid": MessageLookupByLibrary.simpleMessage(
       "தவறான பணப்பை முகவரி",
@@ -2944,12 +1818,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_nft_balance": MessageLookupByLibrary.simpleMessage("இருப்பு"),
     "g_key_nft_burn_confirm": MessageLookupByLibrary.simpleMessage(
       "இந்த நடவடிக்கை மீள முடியாதது. எரிந்த முகவரிக்கு NFT அனுப்பப்படும்.",
-    ),
-    "g_key_nft_burn_evm_only": MessageLookupByLibrary.simpleMessage(
-      "EVM சங்கிலிகளில் மட்டுமே பர்ன் ஆதரிக்கப்படும்",
-    ),
-    "g_key_nft_burn_sol_unsupported": MessageLookupByLibrary.simpleMessage(
-      "Solana NFT பர்ன் விரைவில் வருகிறது",
     ),
     "g_key_nft_burn_title": MessageLookupByLibrary.simpleMessage(
       "NFTயை எரிக்கவும்",
@@ -2976,9 +1844,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_nft_no_video_support": MessageLookupByLibrary.simpleMessage(
       "வீடியோ பிளேபேக் ஆதரிக்கப்படவில்லை",
     ),
-    "g_key_nft_open_browser": MessageLookupByLibrary.simpleMessage(
-      "எக்ஸ்ப்ளோரரில் காண்க",
-    ),
     "g_key_nft_ordinals": MessageLookupByLibrary.simpleMessage("ஆர்டினல்கள்"),
     "g_key_nft_ordinals_unsupported": MessageLookupByLibrary.simpleMessage(
       "ஆர்டினல்கள் இடமாற்றங்கள் இன்னும் ஆதரிக்கப்படவில்லை",
@@ -2993,110 +1858,13 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_nft_token_id": MessageLookupByLibrary.simpleMessage("டோக்கன் ஐடி"),
     "g_key_nft_type": MessageLookupByLibrary.simpleMessage("வகை"),
-    "g_key_no_linked_accounts": MessageLookupByLibrary.simpleMessage(
-      "இணைக்கப்பட்ட கணக்குகள் இல்லை",
-    ),
-    "g_key_notification_settings": MessageLookupByLibrary.simpleMessage(
-      "அறிவிப்பு அமைப்புகள்",
-    ),
-    "g_key_oidc_login": MessageLookupByLibrary.simpleMessage(
-      "நிறுவன உள்நுழைவு (SSO)",
-    ),
-    "g_key_oidc_not_configured": MessageLookupByLibrary.simpleMessage(
-      "எண்டர்பிரைஸ் SSO உள்ளமைக்கப்படவில்லை",
-    ),
-    "g_key_old_password": MessageLookupByLibrary.simpleMessage(
-      "தற்போதைய கடவுச்சொல்",
-    ),
-    "g_key_or": MessageLookupByLibrary.simpleMessage("அல்லது"),
-    "g_key_password_changed_success": MessageLookupByLibrary.simpleMessage(
-      "கடவுச்சொல் வெற்றிகரமாக மாற்றப்பட்டது",
-    ),
-    "g_key_password_min_length": MessageLookupByLibrary.simpleMessage(
-      "கடவுச்சொல் குறைந்தது 6 எழுத்துகளாக இருக்க வேண்டும்",
-    ),
-    "g_key_password_req_different": MessageLookupByLibrary.simpleMessage(
-      "தற்போதைய கடவுச்சொல்லிலிருந்து வேறுபட்டது",
-    ),
-    "g_key_password_req_length": MessageLookupByLibrary.simpleMessage(
-      "குறைந்தது 6 எழுத்துகள்",
-    ),
-    "g_key_password_required": MessageLookupByLibrary.simpleMessage(
-      "கடவுச்சொல் தேவை",
-    ),
-    "g_key_password_requirements": MessageLookupByLibrary.simpleMessage(
-      "கடவுச்சொல் தேவைகள்",
-    ),
-    "g_key_password_reset_success": MessageLookupByLibrary.simpleMessage(
-      "கடவுச்சொல் மீட்டமைக்கப்பட்டது",
-    ),
     "g_key_passwords_not_match": MessageLookupByLibrary.simpleMessage(
       "கடவுச்சொற்கள் பொருந்தவில்லை",
     ),
-    "g_key_payment_amount_invalid": MessageLookupByLibrary.simpleMessage(
-      "தவறான கட்டணத் தொகை",
-    ),
-    "g_key_payment_approx_token": m49,
-    "g_key_payment_approx_usdt": m50,
-    "g_key_payment_code_title": MessageLookupByLibrary.simpleMessage(
-      "கட்டணம் QR",
-    ),
-    "g_key_payment_confirm": MessageLookupByLibrary.simpleMessage(
-      "உறுதிப்படுத்தவும்",
-    ),
-    "g_key_payment_history": MessageLookupByLibrary.simpleMessage(
-      "கட்டண வரலாறு",
-    ),
-    "g_key_payment_history_btn": MessageLookupByLibrary.simpleMessage("வரலாறு"),
-    "g_key_payment_incoming": MessageLookupByLibrary.simpleMessage("உள்வரும்"),
-    "g_key_payment_load_failed": MessageLookupByLibrary.simpleMessage(
-      "ஏற்ற முடியவில்லை",
-    ),
-    "g_key_payment_name_not_set": MessageLookupByLibrary.simpleMessage(
-      "அமைக்கப்படவில்லை",
-    ),
-    "g_key_payment_native_insufficient": MessageLookupByLibrary.simpleMessage(
-      "போதுமான பூர்வீக இருப்பு இல்லை!",
-    ),
-    "g_key_payment_native_not_found": MessageLookupByLibrary.simpleMessage(
-      "பூர்வீக சங்கிலி கிடைக்கவில்லை!",
-    ),
-    "g_key_payment_outgoing": MessageLookupByLibrary.simpleMessage(
-      "வெளிச்செல்லும்",
-    ),
-    "g_key_payment_set_amount_title": MessageLookupByLibrary.simpleMessage(
-      "கட்டணத் தொகையை அமைக்கவும்",
-    ),
-    "g_key_payment_success": MessageLookupByLibrary.simpleMessage(
-      "பணம் செலுத்தப்பட்டது!",
-    ),
-    "g_key_payment_title": MessageLookupByLibrary.simpleMessage(
-      "பணம் செலுத்துதல்",
-    ),
-    "g_key_payment_usdt_insufficient": MessageLookupByLibrary.simpleMessage(
-      "போதுமான USDT இருப்பு இல்லை!",
-    ),
-    "g_key_payment_usdt_not_found": MessageLookupByLibrary.simpleMessage(
-      "USDT டோக்கனைச் சேர்க்கவும்!",
-    ),
-    "g_key_payment_wallet": MessageLookupByLibrary.simpleMessage("பணப்பை"),
     "g_key_personal_1": MessageLookupByLibrary.simpleMessage(
       "தொலைபேசி கேலரியில் இருந்து தேர்ந்தெடுக்கவும்",
     ),
-    "g_key_resend_code": MessageLookupByLibrary.simpleMessage(
-      "குறியீட்டை மீண்டும் அனுப்பு",
-    ),
     "g_key_reset": MessageLookupByLibrary.simpleMessage("மீட்டமை"),
-    "g_key_reset_password": MessageLookupByLibrary.simpleMessage(
-      "கடவுச்சொல்லை மீட்டமைக்கவும்",
-    ),
-    "g_key_reset_password_email_desc": MessageLookupByLibrary.simpleMessage(
-      "சரிபார்ப்புக் குறியீட்டைப் பெற உங்கள் மின்னஞ்சல் முகவரியை உள்ளிடவும்",
-    ),
-    "g_key_saml_login": MessageLookupByLibrary.simpleMessage("SAML உள்நுழைவு"),
-    "g_key_saml_not_configured": MessageLookupByLibrary.simpleMessage(
-      "SAML உள்ளமைக்கப்படவில்லை",
-    ),
     "g_key_security_goplus_caution": MessageLookupByLibrary.simpleMessage(
       "எச்சரிக்கையுடன் பயன்படுத்தவும்",
     ),
@@ -3112,17 +1880,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_security_goplus_safe": MessageLookupByLibrary.simpleMessage(
       "ஒப்பந்தம் சரிபார்க்கப்பட்டது பாதுகாப்பானது",
     ),
-    "g_key_send_code": MessageLookupByLibrary.simpleMessage(
-      "சரிபார்ப்புக் குறியீட்டை அனுப்பவும்",
-    ),
     "g_key_send_memo_hint": MessageLookupByLibrary.simpleMessage(
       "குறிப்பு / குறிப்பு",
     ),
     "g_key_send_memo_label": MessageLookupByLibrary.simpleMessage(
       "மெமோ / குறிப்பு (விரும்பினால்)",
-    ),
-    "g_key_set_new_password_desc": MessageLookupByLibrary.simpleMessage(
-      "உங்கள் புதிய கடவுச்சொல்லை அமைக்கவும்",
     ),
     "g_key_share_code": MessageLookupByLibrary.simpleMessage(
       "QR குறியீட்டைப் பகிரவும்",
@@ -3131,14 +1893,11 @@ class MessageLookup extends MessageLookupByLibrary {
       "இணைப்பைப் பகிரவும்",
     ),
     "g_key_share_method": MessageLookupByLibrary.simpleMessage("பகிர்வு முறை"),
-    "g_key_sign_in_failed": MessageLookupByLibrary.simpleMessage(
-      "உள்நுழைவு தோல்வியடைந்தது",
-    ),
-    "g_key_sim_gas_estimate": m51,
+    "g_key_sim_gas_estimate": m28,
     "g_key_sim_reverted": MessageLookupByLibrary.simpleMessage(
       "பரிவர்த்தனை தோல்வியடைய வாய்ப்புள்ளது",
     ),
-    "g_key_sim_reverted_reason": m52,
+    "g_key_sim_reverted_reason": m29,
     "g_key_sim_simulating": MessageLookupByLibrary.simpleMessage(
       "பரிவர்த்தனையை உருவகப்படுத்துகிறது…",
     ),
@@ -3148,23 +1907,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_sim_unavailable": MessageLookupByLibrary.simpleMessage(
       "இந்த நெட்வொர்க்கிற்கு உருவகப்படுத்துதல் கிடைக்கவில்லை",
     ),
-    "g_key_social_login": MessageLookupByLibrary.simpleMessage(
-      "சமூக உள்நுழைவு",
-    ),
     "g_key_squad": MessageLookupByLibrary.simpleMessage("அரட்டை"),
-    "g_key_squad_k11": MessageLookupByLibrary.simpleMessage(
-      "பதிவேற்ற முடியாத அளவுக்கு கோப்பு பெரிதாக உள்ளது",
-    ),
-    "g_key_squad_k15": m53,
-    "g_key_squad_k18": MessageLookupByLibrary.simpleMessage(
-      "தொடர்பைச் சேர்க்கவும்",
-    ),
-    "g_key_squad_k24": MessageLookupByLibrary.simpleMessage(
-      "தொடர்பு கொள்ளவும்",
-    ),
-    "g_key_squad_k25": MessageLookupByLibrary.simpleMessage(
-      "மின்னஞ்சல் மூலம் தேடவும்",
-    ),
     "g_key_stake_active": MessageLookupByLibrary.simpleMessage("செயலில்"),
     "g_key_stake_active_positions": MessageLookupByLibrary.simpleMessage(
       "செயலில் உள்ள நிலைகள்",
@@ -3175,16 +1918,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_stake_apy": MessageLookupByLibrary.simpleMessage("APY"),
     "g_key_stake_avg_apy": MessageLookupByLibrary.simpleMessage("சராசரி APY"),
-    "g_key_stake_claim": MessageLookupByLibrary.simpleMessage(
-      "வெகுமதிகளை கோருங்கள்",
-    ),
     "g_key_stake_commission": MessageLookupByLibrary.simpleMessage("கமிஷன்"),
-    "g_key_stake_d_unbond": m54,
-    "g_key_stake_days_left": m55,
-    "g_key_stake_days_remaining": m56,
-    "g_key_stake_delegators": MessageLookupByLibrary.simpleMessage(
-      "பிரதிநிதிகள்",
-    ),
+    "g_key_stake_d_unbond": m30,
+    "g_key_stake_days_remaining": m31,
     "g_key_stake_estimated_daily": MessageLookupByLibrary.simpleMessage(
       "Est. தினசரி வெகுமதி",
     ),
@@ -3193,9 +1929,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_stake_go_to_swap": MessageLookupByLibrary.simpleMessage(
       "இடமாற்றுக்குச் செல்லவும்",
-    ),
-    "g_key_stake_liquid": MessageLookupByLibrary.simpleMessage(
-      "திரவ ஸ்டேக்கிங்",
     ),
     "g_key_stake_liquid_staking_label": MessageLookupByLibrary.simpleMessage(
       "திரவ ஸ்டேக்கிங்",
@@ -3211,9 +1944,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "அகற்றுவதற்கு செயலில் உள்ள நிலைகள் இல்லை",
     ),
     "g_key_stake_no_lock": MessageLookupByLibrary.simpleMessage("பூட்டு இல்லை"),
-    "g_key_stake_no_positions": MessageLookupByLibrary.simpleMessage(
-      "ஸ்டாக்கிங் நிலைகள் இல்லை",
-    ),
     "g_key_stake_no_positions_yet": MessageLookupByLibrary.simpleMessage(
       "இன்னும் ஸ்டேக்கிங் நிலைகள் இல்லை",
     ),
@@ -3226,17 +1956,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_stake_overview": MessageLookupByLibrary.simpleMessage(
       "மொத்த ஸ்டேக்கிங் மேலோட்டம்",
     ),
-    "g_key_stake_pending_rewards": MessageLookupByLibrary.simpleMessage(
-      "நிலுவையில் உள்ள வெகுமதிகள்",
-    ),
     "g_key_stake_positions": MessageLookupByLibrary.simpleMessage(
       "எனது நிலைகள்",
     ),
-    "g_key_stake_protocol": MessageLookupByLibrary.simpleMessage("நெறிமுறை"),
     "g_key_stake_protocols": MessageLookupByLibrary.simpleMessage(
       "நெறிமுறைகள்",
     ),
-    "g_key_stake_restake": MessageLookupByLibrary.simpleMessage("மீள்பதிவு"),
     "g_key_stake_rewards": MessageLookupByLibrary.simpleMessage("வெகுமதிகள்"),
     "g_key_stake_search_validator": MessageLookupByLibrary.simpleMessage(
       "வேலிடேட்டர்களைத் தேடு...",
@@ -3259,36 +1984,23 @@ class MessageLookup extends MessageLookupByLibrary {
       "ஸ்டாக்கிங்கைத் தொடங்குங்கள்",
     ),
     "g_key_stake_title": MessageLookupByLibrary.simpleMessage("ஸ்டாக்கிங்"),
-    "g_key_stake_total_staked": MessageLookupByLibrary.simpleMessage(
-      "மொத்த பங்கு",
-    ),
     "g_key_stake_tx_prepared": MessageLookupByLibrary.simpleMessage(
       "பரிவர்த்தனை வெற்றிகரமாக தயாரிக்கப்பட்டது",
     ),
     "g_key_stake_unbonding": MessageLookupByLibrary.simpleMessage(
       "பிணைப்பை நீக்குதல்",
     ),
-    "g_key_stake_unbonding_period": MessageLookupByLibrary.simpleMessage(
-      "பிணைப்பை நீக்கும் காலம்",
-    ),
-    "g_key_stake_unbonding_warning": m57,
+    "g_key_stake_unbonding_warning": m32,
     "g_key_stake_unstake": MessageLookupByLibrary.simpleMessage("அன்ஸ்டேக்"),
     "g_key_stake_updating": MessageLookupByLibrary.simpleMessage(
       "புதுப்பிக்கிறது...",
     ),
-    "g_key_stake_uptime": MessageLookupByLibrary.simpleMessage("இயக்க நேரம்"),
     "g_key_stake_validator": MessageLookupByLibrary.simpleMessage(
       "சரிபார்ப்பவர்",
-    ),
-    "g_key_stake_validators": MessageLookupByLibrary.simpleMessage(
-      "சரிபார்ப்பவர்கள்",
     ),
     "g_key_stake_you_receive": MessageLookupByLibrary.simpleMessage(
       "நீங்கள் பெறுவீர்கள்",
     ),
-    "g_key_step_email": MessageLookupByLibrary.simpleMessage("மின்னஞ்சல்"),
-    "g_key_step_password": MessageLookupByLibrary.simpleMessage("கடவுச்சொல்"),
-    "g_key_step_verify": MessageLookupByLibrary.simpleMessage("சரிபார்க்கவும்"),
     "g_key_t_1": MessageLookupByLibrary.simpleMessage("நிறைவு"),
     "g_key_t_15": MessageLookupByLibrary.simpleMessage("எரிவாயு விலை"),
     "g_key_t_16": MessageLookupByLibrary.simpleMessage(
@@ -3298,14 +2010,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "ஒரு எரிவாயுவிற்கு அதிகபட்ச கட்டணம்",
     ),
     "g_key_t_2": MessageLookupByLibrary.simpleMessage("நிலுவையில் உள்ளது"),
-    "g_key_t_29": m58,
+    "g_key_t_29": m33,
     "g_key_t_3": MessageLookupByLibrary.simpleMessage("தோல்வி"),
-    "g_key_t_30": MessageLookupByLibrary.simpleMessage("மைனர் கட்டணம்"),
     "g_key_t_31": MessageLookupByLibrary.simpleMessage("தொடரவும்"),
     "g_key_t_32": MessageLookupByLibrary.simpleMessage("Wallet கடவுச்சொல்"),
-    "g_key_t_33": MessageLookupByLibrary.simpleMessage(
-      "Wallet கடவுச்சொல் காலியாக இருக்கக்கூடாது",
-    ),
     "g_key_t_34": MessageLookupByLibrary.simpleMessage(
       "தவறான பணப்பையின் கடவுச்சொல்",
     ),
@@ -3323,7 +2031,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_t_44": MessageLookupByLibrary.simpleMessage(
       "தரவைப் பெறுவதில் தோல்வி",
     ),
-    "g_key_t_45": m59,
+    "g_key_t_45": m34,
     "g_key_t_46": MessageLookupByLibrary.simpleMessage(
       "பெறப்பட்ட முகவரி கணக்கைச் சரிபார்க்கவும்",
     ),
@@ -3334,7 +2042,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_t_51": MessageLookupByLibrary.simpleMessage(
       "கணக்கு சரிபார்ப்பு வெற்றியடைந்தது",
     ),
-    "g_key_t_52": m60,
+    "g_key_t_52": m35,
     "g_key_t_54": MessageLookupByLibrary.simpleMessage(
       "பெறும் முகவரிக்கு கணக்கு இல்லை, முதல் பரிமாற்றம் குறைந்தது 10XRP ஆகும்",
     ),
@@ -3342,16 +2050,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "பயன்படுத்தப்படும் எரிவாயு",
     ),
     "g_key_t_7": MessageLookupByLibrary.simpleMessage("வாயு"),
-    "g_key_time_days_ago": m61,
-    "g_key_time_hours_ago": m62,
-    "g_key_time_just_now": MessageLookupByLibrary.simpleMessage("இப்போதுதான்"),
-    "g_key_time_minutes_ago": m63,
     "g_key_token_discovery_add": MessageLookupByLibrary.simpleMessage("சேர்"),
-    "g_key_token_discovery_add_selected": m64,
+    "g_key_token_discovery_add_selected": m36,
     "g_key_token_discovery_added": MessageLookupByLibrary.simpleMessage(
       "டோக்கன் சேர்க்கப்பட்டது",
     ),
-    "g_key_token_discovery_banner": m65,
+    "g_key_token_discovery_banner": m37,
     "g_key_token_discovery_deselect_all": MessageLookupByLibrary.simpleMessage(
       "அனைத்தையும் தேர்வுநீக்கவும்",
     ),
@@ -3387,37 +2091,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_tx_no_results": MessageLookupByLibrary.simpleMessage(
       "உங்கள் வடிப்பானுடன் எந்தப் பணப் பரிமாற்றமும் இல்லை",
     ),
-    "g_key_u_10": MessageLookupByLibrary.simpleMessage("NFT வகைகள்"),
-    "g_key_u_11": MessageLookupByLibrary.simpleMessage("பின்பற்றுபவர்கள்"),
-    "g_key_u_12": MessageLookupByLibrary.simpleMessage("பயனர் வகைகள்"),
-    "g_key_u_13": MessageLookupByLibrary.simpleMessage("இணையதளம்"),
-    "g_key_u_14": MessageLookupByLibrary.simpleMessage("தயாரிப்பு இணைப்பு"),
-    "g_key_u_15": MessageLookupByLibrary.simpleMessage("ஊடக தளங்கள்"),
-    "g_key_u_16": MessageLookupByLibrary.simpleMessage("பணப்பையின் முகவரி"),
-    "g_key_u_2": MessageLookupByLibrary.simpleMessage("புனைப்பெயர்"),
-    "g_key_u_23": MessageLookupByLibrary.simpleMessage(
-      "அவதார் பதிவேற்றம் தோல்வியடைந்தது",
-    ),
-    "g_key_u_3": MessageLookupByLibrary.simpleMessage("விளக்கம்"),
-    "g_key_u_5": MessageLookupByLibrary.simpleMessage("கலைஞர் தகவல்"),
-    "g_key_u_6": MessageLookupByLibrary.simpleMessage("நீங்கள் கலைஞர் அல்ல"),
-    "g_key_u_7": MessageLookupByLibrary.simpleMessage(
-      "கலைஞராக விண்ணப்பிக்க இங்கே கிளிக் செய்யவும்",
-    ),
-    "g_key_u_8": MessageLookupByLibrary.simpleMessage("பெயர்"),
-    "g_key_u_9": MessageLookupByLibrary.simpleMessage("வருவாய்"),
-    "g_key_unlink_account": MessageLookupByLibrary.simpleMessage(
-      "கணக்கின் இணைப்பை நீக்கு",
-    ),
-    "g_key_user_p1": MessageLookupByLibrary.simpleMessage(
-      "நான் படித்து ஏற்றுக்கொண்டேன் ",
-    ),
-    "g_key_user_p2": MessageLookupByLibrary.simpleMessage(
-      "விதிமுறைகள் & நிபந்தனைகள்",
-    ),
-    "g_key_user_p3": MessageLookupByLibrary.simpleMessage(
-      "தனியுரிமைக் கொள்கை மற்றும் தனிப்பட்ட தகவல் சேகரிப்பு அறிக்கை",
-    ),
     "g_key_uuid": MessageLookupByLibrary.simpleMessage("UUID"),
     "g_key_v_k1": MessageLookupByLibrary.simpleMessage(
       "சமீபத்திய பதிப்பைக் கண்டறியவும்",
@@ -3431,15 +2104,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_v_k4": MessageLookupByLibrary.simpleMessage(
       "ஏற்கனவே சமீபத்திய பதிப்பு",
     ),
-    "g_key_verification_code": MessageLookupByLibrary.simpleMessage(
-      "சரிபார்ப்பு குறியீடு",
-    ),
-    "g_key_verification_code_sent": m66,
     "g_key_wallet_c10": MessageLookupByLibrary.simpleMessage(
       "விதை சொற்றொடரைக் காண்க",
-    ),
-    "g_key_wallet_c11": MessageLookupByLibrary.simpleMessage(
-      "தயவு செய்து உங்கள் விதை சொற்றொடரை பதிவு செய்து பாதுகாப்பாக சேமித்து வைக்கவும்.",
     ),
     "g_key_wallet_c12": MessageLookupByLibrary.simpleMessage(
       "இப்போது உங்கள் விதை சொற்றொடரை மீண்டும் வைக்க முயற்சிக்கவும்.",
@@ -3572,17 +2238,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_wallet_k56": MessageLookupByLibrary.simpleMessage("இல்லை"),
     "g_key_wallet_k57": MessageLookupByLibrary.simpleMessage("முடுக்கி"),
     "g_key_wallet_k58": MessageLookupByLibrary.simpleMessage("குறிப்பு"),
-    "g_key_wallet_m1": m67,
-    "g_key_wallet_m11": MessageLookupByLibrary.simpleMessage(
-      "உங்கள் கணக்கை நிச்சயமாக ரத்து செய்ய விரும்புகிறீர்களா?",
-    ),
-    "g_key_wallet_m13": MessageLookupByLibrary.simpleMessage(
-      "வெளியேறுவதை உறுதிப்படுத்தவும்",
-    ),
-    "g_key_wallet_m17": MessageLookupByLibrary.simpleMessage(
-      "Google சரிபார்ப்புக் குறியீட்டை உள்ளிடவும்.",
-    ),
-    "g_key_wallet_m19": m68,
+    "g_key_wallet_m1": m38,
+    "g_key_wallet_m19": m39,
     "g_key_wallet_m2": MessageLookupByLibrary.simpleMessage(
       "தற்போதைய டோக்கன் சேர்க்கப்படவில்லை.",
     ),
@@ -3592,26 +2249,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_wallet_m22": MessageLookupByLibrary.simpleMessage(
       "வாலட்டை இறக்குமதி செய்",
     ),
-    "g_key_wallet_m3": m69,
+    "g_key_wallet_m3": m40,
     "g_key_wallet_m4": MessageLookupByLibrary.simpleMessage(
       "தற்போதைய டோக்கன் இருப்பு போதுமானதாக இல்லை.",
     ),
-    "g_key_wallet_m5": m70,
+    "g_key_wallet_m5": m41,
     "g_key_wallet_m6": MessageLookupByLibrary.simpleMessage(
       "கையொப்பமிடுவதில் பிழை",
-    ),
-    "g_key_wallet_m8": MessageLookupByLibrary.simpleMessage("கணக்கு ரத்து"),
-    "g_key_wallet_m9": MessageLookupByLibrary.simpleMessage(
-      "மின்னஞ்சல் சரிபார்ப்புக் குறியீட்டை உள்ளிடவும்.",
     ),
     "g_key_wallet_manage": MessageLookupByLibrary.simpleMessage(
       "வாலட்டை நிர்வகிக்கவும்",
     ),
     "g_key_watch_address_hint": MessageLookupByLibrary.simpleMessage(
       "Ethereum முகவரியை உள்ளிடவும் (0x...)",
-    ),
-    "g_key_watch_only_banner": MessageLookupByLibrary.simpleMessage(
-      "பார்க்க மட்டும்",
     ),
     "g_key_watch_only_cant_send": MessageLookupByLibrary.simpleMessage(
       "வாட்ச் மட்டும் வாலட் மூலம் பரிவர்த்தனைகளை அனுப்பவோ கையொப்பமிடவோ முடியாது",
@@ -3624,13 +2274,13 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_xml_0": MessageLookupByLibrary.simpleMessage("ஒதுக்கப்பட்டது"),
     "g_key_xml_1": MessageLookupByLibrary.simpleMessage("அடிப்படை இருப்பு"),
-    "g_key_xml_11": m71,
+    "g_key_xml_11": m42,
     "g_key_xml_2": MessageLookupByLibrary.simpleMessage("அதிகரிக்கும் இருப்பு"),
-    "g_key_xml_22": m72,
+    "g_key_xml_22": m43,
     "g_key_xml_3": MessageLookupByLibrary.simpleMessage(
       "சொந்தமான பொருள்களின் எண்ணிக்கை",
     ),
-    "g_key_xml_33": m73,
+    "g_key_xml_33": m44,
     "g_key_xml_4": MessageLookupByLibrary.simpleMessage(
       "மொத்த ஒதுக்கப்பட்ட தொகையை எவ்வாறு கணக்கிடுவது",
     ),
@@ -3640,51 +2290,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_lock_key1": MessageLookupByLibrary.simpleMessage(
       "டச் ஐடி மற்றும் ஃபேஸ் ஐடி",
     ),
-    "g_lock_key10": MessageLookupByLibrary.simpleMessage("தற்போதைய கடவுச்சொல்"),
-    "g_lock_key11": MessageLookupByLibrary.simpleMessage("புதிய கடவுச்சொல்"),
-    "g_lock_key12": MessageLookupByLibrary.simpleMessage(
-      "புதிய கடவுச்சொல்லை உறுதிப்படுத்தவும்",
-    ),
-    "g_lock_key13": MessageLookupByLibrary.simpleMessage("6 இலக்க எண்"),
-    "g_lock_key15": MessageLookupByLibrary.simpleMessage(
-      "கடவுச்சொற்கள் மற்றும் பயோமெட்ரிக்ஸ்",
-    ),
-    "g_lock_key16": MessageLookupByLibrary.simpleMessage(
-      "பேட்டர்ன் கடவுச்சொல்",
-    ),
-    "g_lock_key17": MessageLookupByLibrary.simpleMessage(
-      "பேட்டர்ன் கடவுக்குறியீட்டை அமைக்கவும்",
-    ),
-    "g_lock_key18": MessageLookupByLibrary.simpleMessage(
-      "உங்கள் கணக்கின் பாதுகாப்பிற்காக, குழு கடவுச்சொல்லை அமைக்கவும்",
-    ),
-    "g_lock_key19": MessageLookupByLibrary.simpleMessage(
-      "இரண்டாம் நிலை வரைதல் முறை கடவுச்சொல்",
-    ),
-    "g_lock_key20": MessageLookupByLibrary.simpleMessage(
-      "பேட்டர்ன் பாஸ்வேர்டை வரையவும்",
-    ),
-    "g_lock_key21": m74,
-    "g_lock_key22": MessageLookupByLibrary.simpleMessage(
-      "பேட்டர்ன் கடவுச்சொல்லை மீட்டமைக்கவும்",
-    ),
-    "g_lock_key23": MessageLookupByLibrary.simpleMessage(
-      "பல தவறான உள்ளீடுகள், கடவுச்சொல்லை மீட்டமைக்கவும்",
-    ),
     "g_lock_key24": MessageLookupByLibrary.simpleMessage(
       "Wallet கடவுச்சொல்லைச் சேர்க்கவா?",
     ),
-    "g_lock_key25": m75,
     "g_lock_key26": MessageLookupByLibrary.simpleMessage(
       "Transfer Verification",
     ),
     "g_lock_key27": MessageLookupByLibrary.simpleMessage(
       "Require biometric authentication (Face ID / fingerprint) to confirm each wallet transfer.",
     ),
-    "g_lock_key3": MessageLookupByLibrary.simpleMessage(
-      "திரைப் பக்கத்தைப் பூட்டு",
-    ),
-    "g_lock_key4": MessageLookupByLibrary.simpleMessage("தானாக பூட்டு"),
     "g_lock_key5": MessageLookupByLibrary.simpleMessage("வெற்றி பெற்றது"),
     "g_lock_key6": MessageLookupByLibrary.simpleMessage("தோல்வியடைந்தது"),
     "g_lock_key7": MessageLookupByLibrary.simpleMessage(
@@ -3693,9 +2307,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_lock_key8": MessageLookupByLibrary.simpleMessage(
       "பயோமெட்ரிக் சரிபார்ப்பைச் சேர்க்கவா?",
     ),
-    "g_lock_key9": MessageLookupByLibrary.simpleMessage(
-      "கடவுச்சொல்லை மீட்டமைக்கவும்",
-    ),
     "g_market_30d_change": MessageLookupByLibrary.simpleMessage("30டி மாற்றம்"),
     "g_market_7d_change": MessageLookupByLibrary.simpleMessage("7D மாற்றம்"),
     "g_market_ath": MessageLookupByLibrary.simpleMessage("ATH"),
@@ -3703,9 +2314,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_market_depth": MessageLookupByLibrary.simpleMessage("சந்தை ஆழம்"),
     "g_market_empty_watchlist": MessageLookupByLibrary.simpleMessage(
       "இதுவரை கண்காணிப்பு பட்டியல் இல்லை",
-    ),
-    "g_market_empty_watchlist_hint": MessageLookupByLibrary.simpleMessage(
-      "சேர்க்க எந்த நாணயத்திலும் ★ தட்டவும்",
     ),
     "g_market_fdv": MessageLookupByLibrary.simpleMessage("FDV"),
     "g_market_high_24h": MessageLookupByLibrary.simpleMessage("உயர் 24H"),
@@ -3732,7 +2340,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_inactivity_warning": MessageLookupByLibrary.simpleMessage(
       "வேலிடேட்டர் செயலற்ற மதிப்பெண் அதிகமாக உள்ளது. அபராதங்களைத் தவிர்க்க உங்கள் முனை நிலையைச் சரிபார்க்கவும்.",
     ),
-    "g_mining_key15": MessageLookupByLibrary.simpleMessage("பணி விவரம்"),
     "g_mining_key20": MessageLookupByLibrary.simpleMessage("N ஐ திறக்கவா?"),
     "g_mining_key31": MessageLookupByLibrary.simpleMessage(
       "கிளவுட் சரிபார்ப்பு செயல்பாடு",
@@ -3759,13 +2366,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "நண்பர்களுக்கு பகிரவும்",
     ),
     "g_mining_key62": MessageLookupByLibrary.simpleMessage("தொடரவும்"),
-    "g_mining_key63": m76,
-    "g_mining_key7": MessageLookupByLibrary.simpleMessage("திறக்கும் தேதி"),
-    "g_mining_key73": m77,
+    "g_mining_key63": m45,
+    "g_mining_key73": m46,
     "g_mining_key74": MessageLookupByLibrary.simpleMessage(
       "@N42Wallet இல் ஒரு முனையை அமைத்து, மொபைல் சாதனங்களில் சரிபார்ப்பைத் தொடங்கினேன்! என்னுடன் வந்து சேருங்கள். பரவலாக்கப்பட்ட எதிர்காலம் மொபைல்!",
     ),
-    "g_mining_key76": m78,
+    "g_mining_key76": m47,
     "g_mining_key82": MessageLookupByLibrary.simpleMessage("கனிம"),
     "g_mining_key83": MessageLookupByLibrary.simpleMessage("முனை"),
     "g_mining_key84": MessageLookupByLibrary.simpleMessage("நெட்வொர்க்"),
@@ -3787,9 +2393,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "தரவை நகலெடுக்கவும்",
     ),
     "g_mining_key_102": MessageLookupByLibrary.simpleMessage("செயலற்றது"),
-    "g_mining_key_103": MessageLookupByLibrary.simpleMessage(
-      "சரிபார்ப்பாளர் பட்டியல்",
-    ),
     "g_mining_key_104": MessageLookupByLibrary.simpleMessage(
       "இறக்குமதி வெற்றி",
     ),
@@ -3805,7 +2408,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_108": MessageLookupByLibrary.simpleMessage(
       "ஆதரிக்கப்படாத என்க்ரிப்ட் செய்யப்பட்ட தரவு வடிவம்!",
     ),
-    "g_mining_key_109": m79,
+    "g_mining_key_109": m48,
     "g_mining_key_11": MessageLookupByLibrary.simpleMessage(
       "நேற்றைய வெகுமதிகள்",
     ),
@@ -3825,7 +2428,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_115": MessageLookupByLibrary.simpleMessage(
       "மீட்டெடுக்க சிறிது நேரம் எடுக்கும், சிறிது நேரம் காத்திருக்கவும்!",
     ),
-    "g_mining_key_116": m80,
+    "g_mining_key_116": m49,
     "g_mining_key_12": MessageLookupByLibrary.simpleMessage(
       "வெகுமதி தினமும் குவிந்து, ~0.5 N ஐ எட்டும்போது மட்டுமே உங்கள் N வாலட்டுக்கு அனுப்பப்படும்.",
     ),
@@ -3839,9 +2442,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_mining_key_21": MessageLookupByLibrary.simpleMessage(
       "சரிபார்ப்பு முதல்",
-    ),
-    "g_mining_key_22": MessageLookupByLibrary.simpleMessage(
-      "வெகுமதி விநியோகம்",
     ),
     "g_mining_key_23": MessageLookupByLibrary.simpleMessage("லாப எண்ணிக்கை"),
     "g_mining_key_24": MessageLookupByLibrary.simpleMessage(
@@ -3914,12 +2514,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_70": MessageLookupByLibrary.simpleMessage(
       "100 தொகுதிகள்/நாள்~15 நிமிடங்கள்",
     ),
-    "g_mining_key_71": m81,
+    "g_mining_key_71": m50,
     "g_mining_key_72": MessageLookupByLibrary.simpleMessage(
       "ஒரு காசோலைக்கு 128 வினாடிகள்",
-    ),
-    "g_mining_key_73": MessageLookupByLibrary.simpleMessage(
-      "கிளவுட் சரிபார்ப்பு தொடங்கியது",
     ),
     "g_mining_key_74": MessageLookupByLibrary.simpleMessage(
       "சோதனைச் சங்கிலி மேம்படுத்தப்படுகிறது மற்றும் தொகுதிகளை தற்காலிகமாக சரிபார்க்க முடியாது.",
@@ -3989,7 +2586,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_97": MessageLookupByLibrary.simpleMessage(
       "குறியாக்க கடவுச்சொல்லை உள்ளிடவும்",
     ),
-    "g_mining_key_98": m82,
+    "g_mining_key_98": m51,
     "g_mining_key_99": MessageLookupByLibrary.simpleMessage(
       "உங்கள் கடவுச்சொல் சரியானதா என்பதை உறுதிப்படுத்த மீண்டும் உள்ளிடவும்",
     ),
@@ -4016,10 +2613,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_news_empty": MessageLookupByLibrary.simpleMessage(
       "எந்த செய்தியும் கிடைக்கவில்லை",
     ),
-    "g_news_source": MessageLookupByLibrary.simpleMessage("ஆதாரம்"),
-    "g_notification_key_1": MessageLookupByLibrary.simpleMessage(
-      "அறிவிப்புகள்",
-    ),
     "g_phishing_go_back": MessageLookupByLibrary.simpleMessage(
       "திரும்பிச் செல் (பாதுகாப்பானது)",
     ),
@@ -4042,11 +2635,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_pnl_buy_price_usd": MessageLookupByLibrary.simpleMessage(
       "வாங்கும் விலை (USD)",
     ),
-    "g_pnl_cancel": MessageLookupByLibrary.simpleMessage("ரத்து செய்"),
     "g_pnl_cost_basis": MessageLookupByLibrary.simpleMessage("செலவு அடிப்படை"),
-    "g_pnl_no_trades": MessageLookupByLibrary.simpleMessage(
-      "எந்த வர்த்தகமும் பதிவு செய்யப்படவில்லை",
-    ),
     "g_pnl_quantity": MessageLookupByLibrary.simpleMessage("அளவு"),
     "g_pnl_save": MessageLookupByLibrary.simpleMessage("சேமிக்கவும்"),
     "g_pnl_unrealized": MessageLookupByLibrary.simpleMessage(
@@ -4088,9 +2677,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_referral_mining": MessageLookupByLibrary.simpleMessage("சுரங்க முனைகள்"),
     "g_referral_reward": MessageLookupByLibrary.simpleMessage("வெகுமதி (N)"),
-    "g_referral_stats_title": MessageLookupByLibrary.simpleMessage(
-      "பரிந்துரை புள்ளிவிவரங்கள்",
-    ),
     "g_setting_mining_v1_label": MessageLookupByLibrary.simpleMessage(
       "கிளாசிக் மைனிங் (V1)",
     ),
@@ -4116,7 +2702,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("இணைப்பு"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("குறியீடு"),
-    "g_swap_key_14": m83,
+    "g_swap_key_14": m52,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "நாணய விலை பிழையைப் பெறுங்கள்.",
     ),
@@ -4130,7 +2716,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "உங்கள் ஸ்வாப் விரைவில் விநியோகிக்கப்படும். பொறுமையாக இருங்கள்.",
     ),
-    "g_swap_key_20": m84,
+    "g_swap_key_20": m53,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "ஒரு முனையை இயக்குவதற்கான செலவுகள்: குழு சரிபார்ப்பு 1-49 N அடிப்படை முனை: 50 N பிரீமியம் முனை: 100 N புரோ முனை: 500 N.",
     ),
@@ -4148,7 +2734,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "நீங்கள் செலுத்துங்கள்",
     ),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("தேதி"),
-    "g_swap_key_31": m85,
+    "g_swap_key_31": m54,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "இடமாற்றங்களை தொடர்புடைய செயின் எக்ஸ்ப்ளோரர்களில் (Etherscan, BscScan, TRONSCAN மற்றும் எங்கள் சொந்தம்) பார்க்கலாம்.",
     ),
@@ -4167,7 +2753,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "இயல்புநிலைக்கு மீட்டமைக்கவும்",
     ),
-    "g_token_m_key_1": m86,
+    "g_token_m_key_1": m55,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "ஏற்கனவே உள்ள டோக்கன்களின் போலி பதிப்புகளை உருவாக்குவது உட்பட, யார் வேண்டுமானாலும் டோக்கனை உருவாக்கலாம். டோக்கனை இறக்குமதி செய்வதற்கு முன் எப்போதும் ஆராய்ச்சி செய்யுங்கள்.",
     ),
@@ -4178,7 +2764,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_15": MessageLookupByLibrary.simpleMessage("சங்கிலி ஐடி"),
     "g_token_m_key_16": MessageLookupByLibrary.simpleMessage("தசம"),
     "g_token_m_key_17": MessageLookupByLibrary.simpleMessage("RPC"),
-    "g_token_m_key_18": MessageLookupByLibrary.simpleMessage("API"),
     "g_token_m_key_19": MessageLookupByLibrary.simpleMessage(
       "தனிப்பயன் சங்கிலியைச் சேர்க்கவும்",
     ),
@@ -4189,9 +2774,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage(
       "வடிவமைப்பு பிழை!",
     ),
-    "g_token_m_key_22": m87,
-    "g_token_m_key_23": m88,
-    "g_token_m_key_24": m89,
+    "g_token_m_key_22": m56,
+    "g_token_m_key_23": m57,
+    "g_token_m_key_24": m58,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage(
       "டோக்கன்களை இறக்குமதி செய்யவும்",
     ),
@@ -4208,25 +2793,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("எச்சரிக்கை"),
     "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("அதிக ஆபத்து"),
     "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("பாதுகாப்பானது"),
-    "g_unlock_key10": m90,
-    "g_unlock_key2": MessageLookupByLibrary.simpleMessage(
-      "கைரேகை அல்லது முகம் கண்டறிதல் இயக்கப்படவில்லையா?",
-    ),
-    "g_unlock_key3": MessageLookupByLibrary.simpleMessage(
-      "வடிவ கடவுச்சொல்லை வரையவும்",
-    ),
-    "g_unlock_key4": m91,
-    "g_unlock_key5": MessageLookupByLibrary.simpleMessage(
-      "கடவுச்சொல்லை உள்ளிடவும்",
-    ),
-    "g_unlock_key6": m92,
-    "g_unlock_key7": MessageLookupByLibrary.simpleMessage(
-      "அங்கீகாரம் தோல்வியடைந்தது",
-    ),
-    "g_unlock_key8": m93,
-    "g_unlock_key9": MessageLookupByLibrary.simpleMessage(
-      "உங்களாலும் முடியும் ",
-    ),
     "g_version_later": MessageLookupByLibrary.simpleMessage("பின்னர்"),
     "g_wc_connection_lost": MessageLookupByLibrary.simpleMessage(
       "இணைப்பு துண்டிக்கப்பட்டது. தயவுசெய்து மீண்டும் இணைக்கவும்.",
@@ -4243,9 +2809,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_wc_disconnect_confirm": MessageLookupByLibrary.simpleMessage(
       "இந்த DApp இலிருந்து துண்டிக்கவா?",
     ),
-    "g_wc_new_connection": MessageLookupByLibrary.simpleMessage(
-      "புதிய இணைப்பு",
-    ),
     "g_wc_no_sessions": MessageLookupByLibrary.simpleMessage(
       "செயலில் உள்ள இணைப்புகள் இல்லை",
     ),
@@ -4259,119 +2822,20 @@ class MessageLookup extends MessageLookupByLibrary {
       "அமர்வு காலாவதியானது",
     ),
     "g_wc_sessions": MessageLookupByLibrary.simpleMessage("இணைக்கப்பட்ட DApps"),
-    "google_verification": MessageLookupByLibrary.simpleMessage(
-      "கூகுள் அங்கீகாரம்",
-    ),
     "google_verification_message10": MessageLookupByLibrary.simpleMessage(
       "இணைப்பு",
-    ),
-    "google_verification_message11": MessageLookupByLibrary.simpleMessage(
-      "Google அங்கீகாரத்தைப் பதிவிறக்கவும்",
-    ),
-    "google_verification_message12": MessageLookupByLibrary.simpleMessage(
-      "வழிமுறைகள்",
-    ),
-    "google_verification_message13": MessageLookupByLibrary.simpleMessage(
-      "Google அங்கீகரிப்பைத் திறக்கவும்.",
-    ),
-    "google_verification_message14": MessageLookupByLibrary.simpleMessage(
-      "திரையில் 6 இலக்க சரிபார்ப்புக் குறியீட்டைக் காண்பீர்கள்.",
-    ),
-    "google_verification_message15": MessageLookupByLibrary.simpleMessage(
-      "6 இலக்க குறியீட்டை நகலெடுத்து N42Wallet இல் ஒட்டவும்.",
-    ),
-    "google_verification_message16": MessageLookupByLibrary.simpleMessage(
-      "பிறகு, உங்கள் அங்கீகரிப்பு வெற்றிகரமாக இணைக்கப்படும்.",
-    ),
-    "google_verification_message17": MessageLookupByLibrary.simpleMessage(
-      "காப்பு விசை",
-    ),
-    "google_verification_message18": MessageLookupByLibrary.simpleMessage(
-      "விசையை Google அங்கீகரிப்புக்கு நகலெடுக்கவும்",
-    ),
-    "google_verification_message19": MessageLookupByLibrary.simpleMessage(
-      "Google சரிபார்ப்புக் குறியீட்டை உள்ளிடவும்",
-    ),
-    "google_verification_message20": MessageLookupByLibrary.simpleMessage(
-      "மின்னஞ்சல் சரிபார்ப்புக் குறியீட்டை உள்ளிடவும்",
-    ),
-    "google_verification_message21": m94,
-    "google_verification_message3": MessageLookupByLibrary.simpleMessage(
-      "Google விசையைப் பெறுவதில் தோல்வி",
-    ),
-    "google_verification_message5": MessageLookupByLibrary.simpleMessage(
-      "இரு காரணி அங்கீகாரம்(2FA)",
-    ),
-    "google_verification_message6": MessageLookupByLibrary.simpleMessage(
-      "உங்கள் கணக்கைப் பாதுகாக்க, குறைந்தது ஒரு 2FA ஐ இயக்க பரிந்துரைக்கப்படுகிறது.",
-    ),
-    "google_verification_message7": MessageLookupByLibrary.simpleMessage(
-      "Google Authenticator ஆப்ஸ் உங்கள் திரும்பப் பெறுதல் மற்றும் N42Wallet கணக்கைப் பாதுகாக்கிறது.",
-    ),
-    "google_verification_message8": MessageLookupByLibrary.simpleMessage(
-      "பதிவிறக்கி நிறுவவும்",
-    ),
-    "google_verification_message9": MessageLookupByLibrary.simpleMessage(
-      "Google Authenticator ஐ பதிவிறக்கி நிறுவவும். உங்கள் N42Wallet கணக்கை இணைக்க \'Link\' ஐ அழுத்தவும்.",
     ),
     "importantNotice": MessageLookupByLibrary.simpleMessage(
       "முக்கிய அறிவிப்பு",
     ),
-    "login_button_text": MessageLookupByLibrary.simpleMessage("உள்நுழைக"),
     "login_email": MessageLookupByLibrary.simpleMessage("மின்னஞ்சல்"),
-    "login_forgot_password": MessageLookupByLibrary.simpleMessage(
-      "கடவுச்சொல் மறந்துவிட்டதா?",
-    ),
-    "login_invite_code": MessageLookupByLibrary.simpleMessage(
-      "பரிந்துரை குறியீடு",
-    ),
-    "login_invite_code_title": MessageLookupByLibrary.simpleMessage(
-      "பரிந்துரை குறியீடு",
-    ),
-    "login_message_1": MessageLookupByLibrary.simpleMessage("கணக்கு இல்லையா? "),
-    "login_message_10": MessageLookupByLibrary.simpleMessage(
-      "வெற்றிகரமாக உருவாக்கப்பட்டது",
-    ),
-    "login_message_11": MessageLookupByLibrary.simpleMessage(
-      "வெற்றிகரமாக மீட்டமை",
-    ),
-    "login_message_2": MessageLookupByLibrary.simpleMessage(
-      "ஏற்கனவே கணக்கு உள்ளதா? ",
-    ),
-    "login_message_6": MessageLookupByLibrary.simpleMessage(
-      "குறியீட்டை மீண்டும் அனுப்பவும் ",
-    ),
-    "login_message_7": MessageLookupByLibrary.simpleMessage(
-      "குறியீடு வெற்றிகரமாக அனுப்பப்பட்டது",
-    ),
-    "login_message_8": MessageLookupByLibrary.simpleMessage(
-      "மின்னஞ்சல் பதிவு செய்யப்படவில்லை",
-    ),
-    "login_message_9": MessageLookupByLibrary.simpleMessage(
-      "குறியீட்டை அனுப்ப முடியவில்லை",
-    ),
-    "login_need_login": MessageLookupByLibrary.simpleMessage(
-      "முதலில் உள்நுழையவும்",
-    ),
     "login_password": MessageLookupByLibrary.simpleMessage("கடவுச்சொல்"),
     "next": MessageLookupByLibrary.simpleMessage("அடுத்து"),
-    "nicknameMessage": m95,
-    "password_diff": MessageLookupByLibrary.simpleMessage(
-      "கடவுச்சொற்கள் பொருந்தவில்லை",
-    ),
+    "nicknameMessage": m59,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "சுயவிவரத்தைத் திருத்து",
     ),
     "photograph": MessageLookupByLibrary.simpleMessage("புகைப்படம்"),
-    "please_enter_code": MessageLookupByLibrary.simpleMessage(
-      "சரிபார்ப்புக் குறியீட்டை உள்ளிடவும்",
-    ),
-    "please_enter_email": MessageLookupByLibrary.simpleMessage(
-      "மின்னஞ்சலை உள்ளிடவும்",
-    ),
-    "please_enter_password": MessageLookupByLibrary.simpleMessage(
-      "கடவுச்சொல்லை உள்ளிடவும்",
-    ),
     "please_input_address": MessageLookupByLibrary.simpleMessage(
       "தயவுசெய்து முகவரியை உள்ளிடவும்",
     ),
@@ -4397,35 +2861,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "rest_Confirm_password": MessageLookupByLibrary.simpleMessage(
       "கடவுச்சொல்லை உறுதிப்படுத்தவும்",
     ),
-    "rest_Enter_the_password_again": MessageLookupByLibrary.simpleMessage(
-      "மீண்டும் கடவுச்சொல்லை உள்ளிடவும்",
-    ),
-    "rest_Please_enter": MessageLookupByLibrary.simpleMessage(
-      "குறியீட்டை உள்ளிடவும்",
-    ),
-    "rest_Verification_code": MessageLookupByLibrary.simpleMessage(
-      "OTP குறியீடு",
-    ),
-    "rest_your_password": MessageLookupByLibrary.simpleMessage(
-      "உங்கள் கடவுச்சொல்லை மீட்டமைக்கவும்",
-    ),
-    "s_key_1": MessageLookupByLibrary.simpleMessage("வாலட்டை நிர்வகிக்கவும்"),
     "s_key_10": MessageLookupByLibrary.simpleMessage("ஆப் பற்றி"),
     "s_key_11": MessageLookupByLibrary.simpleMessage("பாதுகாப்பு"),
-    "s_key_12": MessageLookupByLibrary.simpleMessage(
-      "புதிய அரட்டையைப் பயன்படுத்தவும்",
-    ),
-    "s_key_13": MessageLookupByLibrary.simpleMessage(
-      "மேம்படுத்தப்பட்ட அரட்டை அனுபவத்தை இயக்கவும்",
-    ),
-    "s_key_2": MessageLookupByLibrary.simpleMessage("பணப்பை முகவரிகள்"),
     "s_key_3": MessageLookupByLibrary.simpleMessage("பரிவர்த்தனை"),
     "s_key_4": MessageLookupByLibrary.simpleMessage("மொழி"),
-    "s_key_5": MessageLookupByLibrary.simpleMessage("தீம்"),
     "search": MessageLookupByLibrary.simpleMessage("தேடு"),
-    "selected_user_protocol": MessageLookupByLibrary.simpleMessage(
-      "ஒப்பந்தத்தைப் படித்து உறுதிப்படுத்தவும்",
-    ),
     "verification": MessageLookupByLibrary.simpleMessage("சரிபார்ப்பு"),
     "w_item_1": MessageLookupByLibrary.simpleMessage(
       "எனது ரகசிய சொற்றொடரை நான் இழந்தால், எனது நிதி என்றென்றும் இழக்கப்படும்.",

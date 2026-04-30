@@ -99,11 +99,6 @@ class S {
     return Intl.message('Create', name: 'g_key_7', desc: '', args: []);
   }
 
-  /// `Remark`
-  String get g_key_8 {
-    return Intl.message('Remark', name: 'g_key_8', desc: '', args: []);
-  }
-
   /// `All tokens`
   String get g_key_9 {
     return Intl.message('All tokens', name: 'g_key_9', desc: '', args: []);
@@ -264,19 +259,9 @@ class S {
     return Intl.message('Cancel', name: 'g_key_79', desc: '', args: []);
   }
 
-  /// `Seed phrase`
-  String get g_key_85 {
-    return Intl.message('Seed phrase', name: 'g_key_85', desc: '', args: []);
-  }
-
   /// `Settings`
   String get g_key_94 {
     return Intl.message('Settings', name: 'g_key_94', desc: '', args: []);
-  }
-
-  /// `Send`
-  String get g_key_100 {
-    return Intl.message('Send', name: 'g_key_100', desc: '', args: []);
   }
 
   /// `Gas limit`
@@ -407,11 +392,6 @@ class S {
       desc: '',
       args: [],
     );
-  }
-
-  /// `Submit`
-  String get g_key_154 {
-    return Intl.message('Submit', name: 'g_key_154', desc: '', args: []);
   }
 
   /// `Wallet address`
@@ -549,16 +529,6 @@ class S {
     );
   }
 
-  /// `No permission to access the photo album.`
-  String get g_key_205 {
-    return Intl.message(
-      'No permission to access the photo album.',
-      name: 'g_key_205',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Password Edit`
   String get g_key_206 {
     return Intl.message('Password Edit', name: 'g_key_206', desc: '', args: []);
@@ -594,16 +564,6 @@ class S {
     );
   }
 
-  /// `Buy`
-  String get g_key_211 {
-    return Intl.message('Buy', name: 'g_key_211', desc: '', args: []);
-  }
-
-  /// `Sell`
-  String get g_key_212 {
-    return Intl.message('Sell', name: 'g_key_212', desc: '', args: []);
-  }
-
   /// `Market Information`
   String get g_key_213 {
     return Intl.message(
@@ -621,116 +581,6 @@ class S {
       name: 'g_key_214',
       desc: '',
       args: [value],
-    );
-  }
-
-  /// `Nickname`
-  String get g_key_u_2 {
-    return Intl.message('Nickname', name: 'g_key_u_2', desc: '', args: []);
-  }
-
-  /// `Description`
-  String get g_key_u_3 {
-    return Intl.message('Description', name: 'g_key_u_3', desc: '', args: []);
-  }
-
-  /// `Artist information`
-  String get g_key_u_5 {
-    return Intl.message(
-      'Artist information',
-      name: 'g_key_u_5',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `You are not an artist`
-  String get g_key_u_6 {
-    return Intl.message(
-      'You are not an artist',
-      name: 'g_key_u_6',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Click here to apply to become an artist`
-  String get g_key_u_7 {
-    return Intl.message(
-      'Click here to apply to become an artist',
-      name: 'g_key_u_7',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Name`
-  String get g_key_u_8 {
-    return Intl.message('Name', name: 'g_key_u_8', desc: '', args: []);
-  }
-
-  /// `Revenue`
-  String get g_key_u_9 {
-    return Intl.message('Revenue', name: 'g_key_u_9', desc: '', args: []);
-  }
-
-  /// `NFT Types`
-  String get g_key_u_10 {
-    return Intl.message('NFT Types', name: 'g_key_u_10', desc: '', args: []);
-  }
-
-  /// `Followers`
-  String get g_key_u_11 {
-    return Intl.message('Followers', name: 'g_key_u_11', desc: '', args: []);
-  }
-
-  /// `User Types`
-  String get g_key_u_12 {
-    return Intl.message('User Types', name: 'g_key_u_12', desc: '', args: []);
-  }
-
-  /// `Website`
-  String get g_key_u_13 {
-    return Intl.message('Website', name: 'g_key_u_13', desc: '', args: []);
-  }
-
-  /// `Products link`
-  String get g_key_u_14 {
-    return Intl.message(
-      'Products link',
-      name: 'g_key_u_14',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Media platforms`
-  String get g_key_u_15 {
-    return Intl.message(
-      'Media platforms',
-      name: 'g_key_u_15',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Wallet address`
-  String get g_key_u_16 {
-    return Intl.message(
-      'Wallet address',
-      name: 'g_key_u_16',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Avatar upload failed`
-  String get g_key_u_23 {
-    return Intl.message(
-      'Avatar upload failed',
-      name: 'g_key_u_23',
-      desc: '',
-      args: [],
     );
   }
 
@@ -974,41 +824,6 @@ class S {
     );
   }
 
-  /// `Incorrect account or password`
-  String get g_key_error_1301 {
-    return Intl.message(
-      'Incorrect account or password',
-      name: 'g_key_error_1301',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `You are already logged in on another phone and are forced to log out.`
-  String get g_key_error_1403 {
-    return Intl.message(
-      'You are already logged in on another phone and are forced to log out.',
-      name: 'g_key_error_1403',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Manage Wallet`
-  String get s_key_1 {
-    return Intl.message('Manage Wallet', name: 's_key_1', desc: '', args: []);
-  }
-
-  /// `Wallet Addresses`
-  String get s_key_2 {
-    return Intl.message(
-      'Wallet Addresses',
-      name: 's_key_2',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Transaction`
   String get s_key_3 {
     return Intl.message('Transaction', name: 's_key_3', desc: '', args: []);
@@ -1019,11 +834,6 @@ class S {
     return Intl.message('Language', name: 's_key_4', desc: '', args: []);
   }
 
-  /// `Theme`
-  String get s_key_5 {
-    return Intl.message('Theme', name: 's_key_5', desc: '', args: []);
-  }
-
   /// `About App`
   String get s_key_10 {
     return Intl.message('About App', name: 's_key_10', desc: '', args: []);
@@ -1032,21 +842,6 @@ class S {
   /// `Security`
   String get s_key_11 {
     return Intl.message('Security', name: 's_key_11', desc: '', args: []);
-  }
-
-  /// `Use New Chat`
-  String get s_key_12 {
-    return Intl.message('Use New Chat', name: 's_key_12', desc: '', args: []);
-  }
-
-  /// `Enable enhanced Chat experience`
-  String get s_key_13 {
-    return Intl.message(
-      'Enable enhanced Chat experience',
-      name: 's_key_13',
-      desc: '',
-      args: [],
-    );
   }
 
   /// `Please enter the URL`
@@ -1144,16 +939,6 @@ class S {
     return Intl.message(
       'Connect DApp automatically',
       name: 'g_browser_key13',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Please confirm connecting to DApp`
-  String get g_browser_key14 {
-    return Intl.message(
-      'Please confirm connecting to DApp',
-      name: 'g_browser_key14',
       desc: '',
       args: [],
     );
@@ -1334,44 +1119,14 @@ class S {
     );
   }
 
-  /// `Biometric scan didn't work`
-  String get g_face_2 {
-    return Intl.message(
-      'Biometric scan didn\'t work',
-      name: 'g_face_2',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Tips`
   String get g_face_3 {
     return Intl.message('Tips', name: 'g_face_3', desc: '', args: []);
   }
 
-  /// `Biometric scan success`
-  String get g_face_4 {
-    return Intl.message(
-      'Biometric scan success',
-      name: 'g_face_4',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `To set`
   String get g_face_5 {
     return Intl.message('To set', name: 'g_face_5', desc: '', args: []);
-  }
-
-  /// `You haven't set biometric login. Go to System Settings to set it.`
-  String get g_face_6 {
-    return Intl.message(
-      'You haven\'t set biometric login. Go to System Settings to set it.',
-      name: 'g_face_6',
-      desc: '',
-      args: [],
-    );
   }
 
   /// `Scan your face or fingerprint to continue.`
@@ -1387,16 +1142,6 @@ class S {
   /// `Return`
   String get g_face_8 {
     return Intl.message('Return', name: 'g_face_8', desc: '', args: []);
-  }
-
-  /// `It is recommended that you re-enable biometrics.`
-  String get g_face_9 {
-    return Intl.message(
-      'It is recommended that you re-enable biometrics.',
-      name: 'g_face_9',
-      desc: '',
-      args: [],
-    );
   }
 
   /// `Scan your fingerprint or face for authentication.`
@@ -1794,11 +1539,6 @@ class S {
     return Intl.message('RPC', name: 'g_token_m_key_17', desc: '', args: []);
   }
 
-  /// `API`
-  String get g_token_m_key_18 {
-    return Intl.message('API', name: 'g_token_m_key_18', desc: '', args: []);
-  }
-
   /// `Add custom chain`
   String get g_token_m_key_19 {
     return Intl.message(
@@ -2034,11 +1774,6 @@ class S {
     );
   }
 
-  /// `Miner Fee`
-  String get g_key_t_30 {
-    return Intl.message('Miner Fee', name: 'g_key_t_30', desc: '', args: []);
-  }
-
   /// `Proceed`
   String get g_key_t_31 {
     return Intl.message('Proceed', name: 'g_key_t_31', desc: '', args: []);
@@ -2049,16 +1784,6 @@ class S {
     return Intl.message(
       'Wallet password',
       name: 'g_key_t_32',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Wallet password cannot be empty`
-  String get g_key_t_33 {
-    return Intl.message(
-      'Wallet password cannot be empty',
-      name: 'g_key_t_33',
       desc: '',
       args: [],
     );
@@ -2209,16 +1934,6 @@ class S {
     );
   }
 
-  /// `Messages`
-  String get g_home_key5 {
-    return Intl.message('Messages', name: 'g_home_key5', desc: '', args: []);
-  }
-
-  /// `Learn`
-  String get g_home_key6 {
-    return Intl.message('Learn', name: 'g_home_key6', desc: '', args: []);
-  }
-
   /// `Invite a friend`
   String get g_home_key9 {
     return Intl.message(
@@ -2229,169 +1944,9 @@ class S {
     );
   }
 
-  /// `Referral code`
-  String get login_invite_code {
-    return Intl.message(
-      'Referral code',
-      name: 'login_invite_code',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Referral code`
-  String get login_invite_code_title {
-    return Intl.message(
-      'Referral code',
-      name: 'login_invite_code_title',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Email`
   String get login_email {
     return Intl.message('Email', name: 'login_email', desc: '', args: []);
-  }
-
-  /// `Sign in`
-  String get login_button_text {
-    return Intl.message(
-      'Sign in',
-      name: 'login_button_text',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Forgot password?`
-  String get login_forgot_password {
-    return Intl.message(
-      'Forgot password?',
-      name: 'login_forgot_password',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Don’t have an account? `
-  String get login_message_1 {
-    return Intl.message(
-      'Don’t have an account? ',
-      name: 'login_message_1',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Already have an account? `
-  String get login_message_2 {
-    return Intl.message(
-      'Already have an account? ',
-      name: 'login_message_2',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Resend code in `
-  String get login_message_6 {
-    return Intl.message(
-      'Resend code in ',
-      name: 'login_message_6',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `please log in first`
-  String get login_need_login {
-    return Intl.message(
-      'please log in first',
-      name: 'login_need_login',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Code sent successfully`
-  String get login_message_7 {
-    return Intl.message(
-      'Code sent successfully',
-      name: 'login_message_7',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `E-mail unregistered`
-  String get login_message_8 {
-    return Intl.message(
-      'E-mail unregistered',
-      name: 'login_message_8',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Failed to send code`
-  String get login_message_9 {
-    return Intl.message(
-      'Failed to send code',
-      name: 'login_message_9',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Created successfully`
-  String get login_message_10 {
-    return Intl.message(
-      'Created successfully',
-      name: 'login_message_10',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Reset successfully`
-  String get login_message_11 {
-    return Intl.message(
-      'Reset successfully',
-      name: 'login_message_11',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `I have read and accepted the `
-  String get g_key_user_p1 {
-    return Intl.message(
-      'I have read and accepted the ',
-      name: 'g_key_user_p1',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Terms & Conditions`
-  String get g_key_user_p2 {
-    return Intl.message(
-      'Terms & Conditions',
-      name: 'g_key_user_p2',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Privacy Policy and Personal Information Collection Statement`
-  String get g_key_user_p3 {
-    return Intl.message(
-      'Privacy Policy and Personal Information Collection Statement',
-      name: 'g_key_user_p3',
-      desc: '',
-      args: [],
-    );
   }
 
   /// `Transactions`
@@ -2399,16 +1954,6 @@ class S {
     return Intl.message(
       'Transactions',
       name: 'g_coin_key_1',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Notifications`
-  String get g_notification_key_1 {
-    return Intl.message(
-      'Notifications',
-      name: 'g_notification_key_1',
       desc: '',
       args: [],
     );
@@ -2754,16 +2299,6 @@ class S {
     );
   }
 
-  /// `Cloud Verification Started`
-  String get g_mining_key_73 {
-    return Intl.message(
-      'Cloud Verification Started',
-      name: 'g_mining_key_73',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `The test chain is being upgraded and blocks cannot be verified temporarily.`
   String get g_mining_key_74 {
     return Intl.message(
@@ -3039,16 +2574,6 @@ class S {
     return Intl.message(
       'Inactive',
       name: 'g_mining_key_102',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Validator List`
-  String get g_mining_key_103 {
-    return Intl.message(
-      'Validator List',
-      name: 'g_mining_key_103',
       desc: '',
       args: [],
     );
@@ -3419,56 +2944,6 @@ class S {
     );
   }
 
-  /// `Account cancellation`
-  String get g_key_wallet_m8 {
-    return Intl.message(
-      'Account cancellation',
-      name: 'g_key_wallet_m8',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Enter email verification code.`
-  String get g_key_wallet_m9 {
-    return Intl.message(
-      'Enter email verification code.',
-      name: 'g_key_wallet_m9',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Are you sure you want to cancel your account?`
-  String get g_key_wallet_m11 {
-    return Intl.message(
-      'Are you sure you want to cancel your account?',
-      name: 'g_key_wallet_m11',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Confirm logout`
-  String get g_key_wallet_m13 {
-    return Intl.message(
-      'Confirm logout',
-      name: 'g_key_wallet_m13',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Please enter Google verification code.`
-  String get g_key_wallet_m17 {
-    return Intl.message(
-      'Please enter Google verification code.',
-      name: 'g_key_wallet_m17',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `{value} has unfinished transactions, please try again later.`
   String g_key_wallet_m19(Object value) {
     return Intl.message(
@@ -3549,16 +3024,6 @@ class S {
     return Intl.message(
       'View Seed Phrase',
       name: 'g_key_wallet_c10',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Please Make sure you record your seed phrase and store it safely.`
-  String get g_key_wallet_c11 {
-    return Intl.message(
-      'Please Make sure you record your seed phrase and store it safely.',
-      name: 'g_key_wallet_c11',
       desc: '',
       args: [],
     );
@@ -4199,41 +3664,11 @@ class S {
     return Intl.message('Name', name: 'g_key_nft_2', desc: '', args: []);
   }
 
-  /// `Camera`
-  String get g_key_nft_16 {
-    return Intl.message('Camera', name: 'g_key_nft_16', desc: '', args: []);
-  }
-
-  /// `Select photo`
-  String get g_key_nft_17 {
-    return Intl.message(
-      'Select photo',
-      name: 'g_key_nft_17',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Content`
-  String get g_key_nft_18 {
-    return Intl.message('Content', name: 'g_key_nft_18', desc: '', args: []);
-  }
-
   /// `Transaction submitted`
   String get g_key_nft_41 {
     return Intl.message(
       'Transaction submitted',
       name: 'g_key_nft_41',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Select video`
-  String get g_key_nft_47 {
-    return Intl.message(
-      'Select video',
-      name: 'g_key_nft_47',
       desc: '',
       args: [],
     );
@@ -4299,366 +3734,6 @@ class S {
     );
   }
 
-  /// `Face matching method`
-  String get g_face_match_key1 {
-    return Intl.message(
-      'Face matching method',
-      name: 'g_face_match_key1',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Match failed!`
-  String get g_face_match_key3 {
-    return Intl.message(
-      'Match failed!',
-      name: 'g_face_match_key3',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Face not detected. Please look directly at the camera and try again.`
-  String get g_face_liveness_failed {
-    return Intl.message(
-      'Face not detected. Please look directly at the camera and try again.',
-      name: 'g_face_liveness_failed',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Failed to start face recognition. Please try again.`
-  String get g_face_sdk_init_failed {
-    return Intl.message(
-      'Failed to start face recognition. Please try again.',
-      name: 'g_face_sdk_init_failed',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Network error. Please check your connection and try again.`
-  String get g_face_network_error {
-    return Intl.message(
-      'Network error. Please check your connection and try again.',
-      name: 'g_face_network_error',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Match successful.Address:{value}.`
-  String g_face_match_key4(Object value) {
-    return Intl.message(
-      'Match successful.Address:$value.',
-      name: 'g_face_match_key4',
-      desc: '',
-      args: [value],
-    );
-  }
-
-  /// `Address error!`
-  String get g_face_match_key5 {
-    return Intl.message(
-      'Address error!',
-      name: 'g_face_match_key5',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Face Data Binding`
-  String get g_face_match_key6 {
-    return Intl.message(
-      'Face Data Binding',
-      name: 'g_face_match_key6',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Face matching`
-  String get g_face_match_key7 {
-    return Intl.message(
-      'Face matching',
-      name: 'g_face_match_key7',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Reselect`
-  String get g_face_match_key8 {
-    return Intl.message(
-      'Reselect',
-      name: 'g_face_match_key8',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Match`
-  String get g_face_match_key9 {
-    return Intl.message('Match', name: 'g_face_match_key9', desc: '', args: []);
-  }
-
-  /// `You have been bound and cannot be re-bound at the moment. Binding address: {value}.`
-  String g_face_match_key10(Object value) {
-    return Intl.message(
-      'You have been bound and cannot be re-bound at the moment. Binding address: $value.',
-      name: 'g_face_match_key10',
-      desc: '',
-      args: [value],
-    );
-  }
-
-  /// `Binding successful.Binding address: {value}`
-  String g_face_match_key11(Object value) {
-    return Intl.message(
-      'Binding successful.Binding address: $value',
-      name: 'g_face_match_key11',
-      desc: '',
-      args: [value],
-    );
-  }
-
-  /// `Rebind`
-  String get g_face_match_key12 {
-    return Intl.message(
-      'Rebind',
-      name: 'g_face_match_key12',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Bind`
-  String get g_face_match_key13 {
-    return Intl.message('Bind', name: 'g_face_match_key13', desc: '', args: []);
-  }
-
-  /// `Verify`
-  String get g_face_match_key14 {
-    return Intl.message(
-      'Verify',
-      name: 'g_face_match_key14',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `You can bind your facial data to a wallet address directly (if you have previously bound one, the old wallet address will be overwritten), or if you have previously bound a wallet address, you can also manually verify to retrieve the bound wallet address.`
-  String get g_face_match_key15 {
-    return Intl.message(
-      'You can bind your facial data to a wallet address directly (if you have previously bound one, the old wallet address will be overwritten), or if you have previously bound a wallet address, you can also manually verify to retrieve the bound wallet address.',
-      name: 'g_face_match_key15',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `The wallet address linked to your facial data has been detected as follows, but you have not yet imported this wallet into your wallet list.`
-  String get g_face_match_key16 {
-    return Intl.message(
-      'The wallet address linked to your facial data has been detected as follows, but you have not yet imported this wallet into your wallet list.',
-      name: 'g_face_match_key16',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `You have linked your facial data with this wallet.`
-  String get g_face_match_key17 {
-    return Intl.message(
-      'You have linked your facial data with this wallet.',
-      name: 'g_face_match_key17',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `User Notice`
-  String get g_face_match_key18 {
-    return Intl.message(
-      'User Notice',
-      name: 'g_face_match_key18',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `What is Face Binding?`
-  String get g_face_match_key19 {
-    return Intl.message(
-      'What is Face Binding?',
-      name: 'g_face_match_key19',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Face binding utilizes facial recognition technology to match your biometric facial features with your blockchain wallet address.`
-  String get g_face_match_key20 {
-    return Intl.message(
-      'Face binding utilizes facial recognition technology to match your biometric facial features with your blockchain wallet address.',
-      name: 'g_face_match_key20',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `This process not only enhances transaction convenience but also strengthens account security, ensuring that every action is authorized by you.`
-  String get g_face_match_key21 {
-    return Intl.message(
-      'This process not only enhances transaction convenience but also strengthens account security, ensuring that every action is authorized by you.',
-      name: 'g_face_match_key21',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Why is Face Binding Necessary?`
-  String get g_face_match_key22 {
-    return Intl.message(
-      'Why is Face Binding Necessary?',
-      name: 'g_face_match_key22',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `By binding your face data, your identity is directly linked to transaction activities, simplifying the identity verification process and improving operational efficiency. This technology ensures quick and secure identity verification when performing sensitive operations such as transferring assets or interacting with contracts.`
-  String get g_face_match_key23 {
-    return Intl.message(
-      'By binding your face data, your identity is directly linked to transaction activities, simplifying the identity verification process and improving operational efficiency. This technology ensures quick and secure identity verification when performing sensitive operations such as transferring assets or interacting with contracts.',
-      name: 'g_face_match_key23',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `How is My Face Data Stored and Is It Secure?`
-  String get g_face_match_key24 {
-    return Intl.message(
-      'How is My Face Data Stored and Is It Secure?',
-      name: 'g_face_match_key24',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Your face data is stored in an encrypted form on a public blockchain, not in any centralized database. This means the system can only decrypt and use your data for identity verification when authorized by you, ensuring your privacy and data security.`
-  String get g_face_match_key25 {
-    return Intl.message(
-      'Your face data is stored in an encrypted form on a public blockchain, not in any centralized database. This means the system can only decrypt and use your data for identity verification when authorized by you, ensuring your privacy and data security.',
-      name: 'g_face_match_key25',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `How Does Face Binding Affect My Account Security?`
-  String get g_face_match_key26 {
-    return Intl.message(
-      'How Does Face Binding Affect My Account Security?',
-      name: 'g_face_match_key26',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Face binding enhances your account security by ensuring that all sensitive actions are carried out only with your explicit authorization. We use industry-leading encryption technology to protect your biometric data, preventing unauthorized access.`
-  String get g_face_match_key27 {
-    return Intl.message(
-      'Face binding enhances your account security by ensuring that all sensitive actions are carried out only with your explicit authorization. We use industry-leading encryption technology to protect your biometric data, preventing unauthorized access.',
-      name: 'g_face_match_key27',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Is My Face Data Secure?`
-  String get g_face_match_key28 {
-    return Intl.message(
-      'Is My Face Data Secure?',
-      name: 'g_face_match_key28',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Absolutely. All biometric data undergoes strict encryption, and the highest security standards are followed for data transmission and storage. The system will only decrypt this data when necessary to complete identity verification.`
-  String get g_face_match_key29 {
-    return Intl.message(
-      'Absolutely. All biometric data undergoes strict encryption, and the highest security standards are followed for data transmission and storage. The system will only decrypt this data when necessary to complete identity verification.',
-      name: 'g_face_match_key29',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Got it`
-  String get g_face_match_key30 {
-    return Intl.message(
-      'Got it',
-      name: 'g_face_match_key30',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Select wallet address`
-  String get g_face_match_key31 {
-    return Intl.message(
-      'Select wallet address',
-      name: 'g_face_match_key31',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `There is no N42chain in the {value} wallet!`
-  String g_face_match_key32(Object value) {
-    return Intl.message(
-      'There is no N42chain in the $value wallet!',
-      name: 'g_face_match_key32',
-      desc: '',
-      args: [value],
-    );
-  }
-
-  /// `Unbinding`
-  String get g_face_match_key33 {
-    return Intl.message(
-      'Unbinding',
-      name: 'g_face_match_key33',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Facial data verification failed!`
-  String get g_face_match_key34 {
-    return Intl.message(
-      'Facial data verification failed!',
-      name: 'g_face_match_key34',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Face data unbinding failed!`
-  String get g_face_match_key35 {
-    return Intl.message(
-      'Face data unbinding failed!',
-      name: 'g_face_match_key35',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Touch ID and Face ID`
   String get g_lock_key1 {
     return Intl.message(
@@ -4667,21 +3742,6 @@ class S {
       desc: '',
       args: [],
     );
-  }
-
-  /// `Lock screen page`
-  String get g_lock_key3 {
-    return Intl.message(
-      'Lock screen page',
-      name: 'g_lock_key3',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Auto-lock`
-  String get g_lock_key4 {
-    return Intl.message('Auto-lock', name: 'g_lock_key4', desc: '', args: []);
   }
 
   /// `Succeeded`
@@ -4714,146 +3774,6 @@ class S {
     );
   }
 
-  /// `Reset password`
-  String get g_lock_key9 {
-    return Intl.message(
-      'Reset password',
-      name: 'g_lock_key9',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Current password`
-  String get g_lock_key10 {
-    return Intl.message(
-      'Current password',
-      name: 'g_lock_key10',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `New password`
-  String get g_lock_key11 {
-    return Intl.message(
-      'New password',
-      name: 'g_lock_key11',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Confirm new password`
-  String get g_lock_key12 {
-    return Intl.message(
-      'Confirm new password',
-      name: 'g_lock_key12',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `6-digit number`
-  String get g_lock_key13 {
-    return Intl.message(
-      '6-digit number',
-      name: 'g_lock_key13',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Passwords and biometrics`
-  String get g_lock_key15 {
-    return Intl.message(
-      'Passwords and biometrics',
-      name: 'g_lock_key15',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Pattern password`
-  String get g_lock_key16 {
-    return Intl.message(
-      'Pattern password',
-      name: 'g_lock_key16',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Set pattern passcode`
-  String get g_lock_key17 {
-    return Intl.message(
-      'Set pattern passcode',
-      name: 'g_lock_key17',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `For your account security,please set a group password`
-  String get g_lock_key18 {
-    return Intl.message(
-      'For your account security,please set a group password',
-      name: 'g_lock_key18',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Secondary drawing pattern password`
-  String get g_lock_key19 {
-    return Intl.message(
-      'Secondary drawing pattern password',
-      name: 'g_lock_key19',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Draw pattern password`
-  String get g_lock_key20 {
-    return Intl.message(
-      'Draw pattern password',
-      name: 'g_lock_key20',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Pattern password input error,you have {value} chances`
-  String g_lock_key21(Object value) {
-    return Intl.message(
-      'Pattern password input error,you have $value chances',
-      name: 'g_lock_key21',
-      desc: '',
-      args: [value],
-    );
-  }
-
-  /// `Reset the pattern password`
-  String get g_lock_key22 {
-    return Intl.message(
-      'Reset the pattern password',
-      name: 'g_lock_key22',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Too many incorrect inputs, please reset the password`
-  String get g_lock_key23 {
-    return Intl.message(
-      'Too many incorrect inputs, please reset the password',
-      name: 'g_lock_key23',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Add Wallet Password?`
   String get g_lock_key24 {
     return Intl.message(
@@ -4861,16 +3781,6 @@ class S {
       name: 'g_lock_key24',
       desc: '',
       args: [],
-    );
-  }
-
-  /// `Pattern password input error,you have {value} chance`
-  String g_lock_key25(Object value) {
-    return Intl.message(
-      'Pattern password input error,you have $value chance',
-      name: 'g_lock_key25',
-      desc: '',
-      args: [value],
     );
   }
 
@@ -4894,256 +3804,6 @@ class S {
     );
   }
 
-  /// `Fingerprint or face recognition is not enabled?`
-  String get g_unlock_key2 {
-    return Intl.message(
-      'Fingerprint or face recognition is not enabled?',
-      name: 'g_unlock_key2',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Draw pattern password`
-  String get g_unlock_key3 {
-    return Intl.message(
-      'Draw pattern password',
-      name: 'g_unlock_key3',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Pattern password input error,you have {value} chances`
-  String g_unlock_key4(Object value) {
-    return Intl.message(
-      'Pattern password input error,you have $value chances',
-      name: 'g_unlock_key4',
-      desc: '',
-      args: [value],
-    );
-  }
-
-  /// `Enter password`
-  String get g_unlock_key5 {
-    return Intl.message(
-      'Enter password',
-      name: 'g_unlock_key5',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Password input error,you have {value} chances`
-  String g_unlock_key6(Object value) {
-    return Intl.message(
-      'Password input error,you have $value chances',
-      name: 'g_unlock_key6',
-      desc: '',
-      args: [value],
-    );
-  }
-
-  /// `Authentication failed`
-  String get g_unlock_key7 {
-    return Intl.message(
-      'Authentication failed',
-      name: 'g_unlock_key7',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Password input error,you have {value} chance`
-  String g_unlock_key8(Object value) {
-    return Intl.message(
-      'Password input error,you have $value chance',
-      name: 'g_unlock_key8',
-      desc: '',
-      args: [value],
-    );
-  }
-
-  /// `You can also `
-  String get g_unlock_key9 {
-    return Intl.message(
-      'You can also ',
-      name: 'g_unlock_key9',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `The application will unlock in {value} seconds.`
-  String g_unlock_key10(Object value) {
-    return Intl.message(
-      'The application will unlock in $value seconds.',
-      name: 'g_unlock_key10',
-      desc: '',
-      args: [value],
-    );
-  }
-
-  /// `Reset your password`
-  String get rest_your_password {
-    return Intl.message(
-      'Reset your password',
-      name: 'rest_your_password',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Enter code`
-  String get rest_Please_enter {
-    return Intl.message(
-      'Enter code',
-      name: 'rest_Please_enter',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Failed to get authentication code`
-  String get email_code_error {
-    return Intl.message(
-      'Failed to get authentication code',
-      name: 'email_code_error',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Authentication code sent successfully, please check your email`
-  String get email_code_finish {
-    return Intl.message(
-      'Authentication code sent successfully, please check your email',
-      name: 'email_code_finish',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Email Address Authentication`
-  String get email_verification {
-    return Intl.message(
-      'Email Address Authentication',
-      name: 'email_verification',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `The Email Address Authenticator app protects your withdrawals and N42Wallet account.`
-  String get email_verification_message1 {
-    return Intl.message(
-      'The Email Address Authenticator app protects your withdrawals and N42Wallet account.',
-      name: 'email_verification_message1',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Add Email verification?`
-  String get email_verification_message2 {
-    return Intl.message(
-      'Add Email verification?',
-      name: 'email_verification_message2',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Authentication code error`
-  String get email_code_input_error {
-    return Intl.message(
-      'Authentication code error',
-      name: 'email_code_input_error',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Create your account`
-  String get Create_your_account {
-    return Intl.message(
-      'Create your account',
-      name: 'Create_your_account',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Google Authentication`
-  String get google_verification {
-    return Intl.message(
-      'Google Authentication',
-      name: 'google_verification',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Failed to get google key`
-  String get google_verification_message3 {
-    return Intl.message(
-      'Failed to get google key',
-      name: 'google_verification_message3',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Two-Factor Authentication(2FA)`
-  String get google_verification_message5 {
-    return Intl.message(
-      'Two-Factor Authentication(2FA)',
-      name: 'google_verification_message5',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `To protect your account,it is recommended to turn on at least one 2FA.`
-  String get google_verification_message6 {
-    return Intl.message(
-      'To protect your account,it is recommended to turn on at least one 2FA.',
-      name: 'google_verification_message6',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `The Google Authenticator app protects your withdrawals and N42Wallet account.`
-  String get google_verification_message7 {
-    return Intl.message(
-      'The Google Authenticator app protects your withdrawals and N42Wallet account.',
-      name: 'google_verification_message7',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Download And Install`
-  String get google_verification_message8 {
-    return Intl.message(
-      'Download And Install',
-      name: 'google_verification_message8',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Please download and install Google Authenticator. Then press ‘Link’ to link your N42Wallet account.`
-  String get google_verification_message9 {
-    return Intl.message(
-      'Please download and install Google Authenticator. Then press ‘Link’ to link your N42Wallet account.',
-      name: 'google_verification_message9',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Link`
   String get google_verification_message10 {
     return Intl.message(
@@ -5152,201 +3812,6 @@ class S {
       desc: '',
       args: [],
     );
-  }
-
-  /// `Download Google Authentication`
-  String get google_verification_message11 {
-    return Intl.message(
-      'Download Google Authentication',
-      name: 'google_verification_message11',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Instructions`
-  String get google_verification_message12 {
-    return Intl.message(
-      'Instructions',
-      name: 'google_verification_message12',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Open Google Authenticator.`
-  String get google_verification_message13 {
-    return Intl.message(
-      'Open Google Authenticator.',
-      name: 'google_verification_message13',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `You will see a 6-digit verification code on the screen.`
-  String get google_verification_message14 {
-    return Intl.message(
-      'You will see a 6-digit verification code on the screen.',
-      name: 'google_verification_message14',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Copy the 6-digit code and paste it in N42Wallet.`
-  String get google_verification_message15 {
-    return Intl.message(
-      'Copy the 6-digit code and paste it in N42Wallet.',
-      name: 'google_verification_message15',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Then，your Authenticator will be successfully linked.`
-  String get google_verification_message16 {
-    return Intl.message(
-      'Then，your Authenticator will be successfully linked.',
-      name: 'google_verification_message16',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Backup Key`
-  String get google_verification_message17 {
-    return Intl.message(
-      'Backup Key',
-      name: 'google_verification_message17',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Copy the key to Google Authentication`
-  String get google_verification_message18 {
-    return Intl.message(
-      'Copy the key to Google Authentication',
-      name: 'google_verification_message18',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Enter Google verification code`
-  String get google_verification_message19 {
-    return Intl.message(
-      'Enter Google verification code',
-      name: 'google_verification_message19',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Enter E-mail verification code`
-  String get google_verification_message20 {
-    return Intl.message(
-      'Enter E-mail verification code',
-      name: 'google_verification_message20',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Enter {value} password`
-  String google_verification_message21(Object value) {
-    return Intl.message(
-      'Enter $value password',
-      name: 'google_verification_message21',
-      desc: '',
-      args: [value],
-    );
-  }
-
-  /// `Disable Google 2FA`
-  String get g_2fa_disable_confirm_title {
-    return Intl.message(
-      'Disable Google 2FA',
-      name: 'g_2fa_disable_confirm_title',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Enter your current 6-digit Google Authenticator code to confirm disabling 2FA.`
-  String get g_2fa_disable_confirm_hint {
-    return Intl.message(
-      'Enter your current 6-digit Google Authenticator code to confirm disabling 2FA.',
-      name: 'g_2fa_disable_confirm_hint',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Google 2FA has been disabled`
-  String get g_2fa_disable_success {
-    return Intl.message(
-      'Google 2FA has been disabled',
-      name: 'g_2fa_disable_success',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Failed to disable Google 2FA. Please verify the code and try again.`
-  String get g_2fa_disable_error {
-    return Intl.message(
-      'Failed to disable Google 2FA. Please verify the code and try again.',
-      name: 'g_2fa_disable_error',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Save this key — you'll need it if you lose your phone`
-  String get g_2fa_backup_hint {
-    return Intl.message(
-      'Save this key — you\'ll need it if you lose your phone',
-      name: 'g_2fa_backup_hint',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Share`
-  String get g_2fa_backup_share {
-    return Intl.message(
-      'Share',
-      name: 'g_2fa_backup_share',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `N42Wallet Google Authenticator backup key`
-  String get g_2fa_backup_share_text {
-    return Intl.message(
-      'N42Wallet Google Authenticator backup key',
-      name: 'g_2fa_backup_share_text',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Please enter a valid 6-digit code`
-  String get g_2fa_invalid_format {
-    return Intl.message(
-      'Please enter a valid 6-digit code',
-      name: 'g_2fa_invalid_format',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Sign up`
-  String get Create_account {
-    return Intl.message('Sign up', name: 'Create_account', desc: '', args: []);
   }
 
   /// `Log In`
@@ -5369,46 +3834,6 @@ class S {
     );
   }
 
-  /// `Please enter email`
-  String get please_enter_email {
-    return Intl.message(
-      'Please enter email',
-      name: 'please_enter_email',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Please enter password`
-  String get please_enter_password {
-    return Intl.message(
-      'Please enter password',
-      name: 'please_enter_password',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Invalid email address`
-  String get email_error {
-    return Intl.message(
-      'Invalid email address',
-      name: 'email_error',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Passwords don't match`
-  String get password_diff {
-    return Intl.message(
-      'Passwords don\'t match',
-      name: 'password_diff',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Next`
   String get next {
     return Intl.message('Next', name: 'next', desc: '', args: []);
@@ -5419,36 +3844,6 @@ class S {
     return Intl.message(
       'Choose a password(8~18 characters)',
       name: 'rest_Choose_password',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Enter the password again`
-  String get rest_Enter_the_password_again {
-    return Intl.message(
-      'Enter the password again',
-      name: 'rest_Enter_the_password_again',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `OTP Code`
-  String get rest_Verification_code {
-    return Intl.message(
-      'OTP Code',
-      name: 'rest_Verification_code',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Please read the agreement and confirm`
-  String get selected_user_protocol {
-    return Intl.message(
-      'Please read the agreement and confirm',
-      name: 'selected_user_protocol',
       desc: '',
       args: [],
     );
@@ -5519,16 +3914,6 @@ class S {
     );
   }
 
-  /// `Enter verification code`
-  String get please_enter_code {
-    return Intl.message(
-      'Enter verification code',
-      name: 'please_enter_code',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Address Information`
   String get address_Information {
     return Intl.message(
@@ -5554,26 +3939,6 @@ class S {
     return Intl.message(
       'Description(Optional)',
       name: 'descO',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Account temporarily locked for one day`
-  String get code_403 {
-    return Intl.message(
-      'Account temporarily locked for one day',
-      name: 'code_403',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `The code is incorrect. Please try again.`
-  String get code_err_tips {
-    return Intl.message(
-      'The code is incorrect. Please try again.',
-      name: 'code_err_tips',
       desc: '',
       args: [],
     );
@@ -5607,11 +3972,6 @@ class S {
       desc: '',
       args: [],
     );
-  }
-
-  /// `Edit photo`
-  String get editPhoto {
-    return Intl.message('Edit photo', name: 'editPhoto', desc: '', args: []);
   }
 
   /// `Select from phone gallery`
@@ -5874,569 +4234,9 @@ class S {
     return Intl.message('code', name: 'g_share_v3_key_8', desc: '', args: []);
   }
 
-  /// `Feedback`
-  String get g_key_feedback {
-    return Intl.message('Feedback', name: 'g_key_feedback', desc: '', args: []);
-  }
-
-  /// `Please fill in the feedback information`
-  String get g_key_feedback_1 {
-    return Intl.message(
-      'Please fill in the feedback information',
-      name: 'g_key_feedback_1',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `There are unuploaded attachments`
-  String get g_key_feedback_2 {
-    return Intl.message(
-      'There are unuploaded attachments',
-      name: 'g_key_feedback_2',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Submission Failed`
-  String get g_key_feedback_3 {
-    return Intl.message(
-      'Submission Failed',
-      name: 'g_key_feedback_3',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Submitted successfully`
-  String get g_key_feedback_4 {
-    return Intl.message(
-      'Submitted successfully',
-      name: 'g_key_feedback_4',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Attachments`
-  String get g_key_feedback_5 {
-    return Intl.message(
-      'Attachments',
-      name: 'g_key_feedback_5',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Upload up to 5 attachments, each attachment cannot be larger than 100MB`
-  String get g_key_feedback_6 {
-    return Intl.message(
-      'Upload up to 5 attachments, each attachment cannot be larger than 100MB',
-      name: 'g_key_feedback_6',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Failed`
-  String get g_key_feedback_7 {
-    return Intl.message('Failed', name: 'g_key_feedback_7', desc: '', args: []);
-  }
-
-  /// `Click try`
-  String get g_key_feedback_8 {
-    return Intl.message(
-      'Click try',
-      name: 'g_key_feedback_8',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Please log in`
-  String get g_key_feedback_9 {
-    return Intl.message(
-      'Please log in',
-      name: 'g_key_feedback_9',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Start group chat`
-  String get g_chat_key_1 {
-    return Intl.message(
-      'Start group chat',
-      name: 'g_chat_key_1',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `New friend`
-  String get g_chat_key_2 {
-    return Intl.message('New friend', name: 'g_chat_key_2', desc: '', args: []);
-  }
-
-  /// `Added`
-  String get g_chat_key_3 {
-    return Intl.message('Added', name: 'g_chat_key_3', desc: '', args: []);
-  }
-
-  /// `Have expired`
-  String get g_chat_key_4 {
-    return Intl.message(
-      'Have expired',
-      name: 'g_chat_key_4',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Wait`
-  String get g_chat_key_5 {
-    return Intl.message('Wait', name: 'g_chat_key_5', desc: '', args: []);
-  }
-
-  /// `Are you sure you want to add {value} as a friend`
-  String g_chat_key_6(Object value) {
-    return Intl.message(
-      'Are you sure you want to add $value as a friend',
-      name: 'g_chat_key_6',
-      desc: '',
-      args: [value],
-    );
-  }
-
-  /// `Add friends`
-  String get g_chat_key_8 {
-    return Intl.message(
-      'Add friends',
-      name: 'g_chat_key_8',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `reason for application`
-  String get g_chat_key_9 {
-    return Intl.message(
-      'reason for application',
-      name: 'g_chat_key_9',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `I am {value}`
-  String g_chat_key_10(Object value) {
-    return Intl.message(
-      'I am $value',
-      name: 'g_chat_key_10',
-      desc: '',
-      args: [value],
-    );
-  }
-
-  /// `Invite friends`
-  String get g_chat_key_11 {
-    return Intl.message(
-      'Invite friends',
-      name: 'g_chat_key_11',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Select contact`
-  String get g_chat_key_12 {
-    return Intl.message(
-      'Select contact',
-      name: 'g_chat_key_12',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Finish`
-  String get g_chat_key_13 {
-    return Intl.message('Finish', name: 'g_chat_key_13', desc: '', args: []);
-  }
-
-  /// `Select at least 2 contacts`
-  String get g_chat_key_14 {
-    return Intl.message(
-      'Select at least 2 contacts',
-      name: 'g_chat_key_14',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Friend detail`
-  String get g_chat_key_16 {
-    return Intl.message(
-      'Friend detail',
-      name: 'g_chat_key_16',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Group detail`
-  String get g_chat_key_17 {
-    return Intl.message(
-      'Group detail',
-      name: 'g_chat_key_17',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `View more group members`
-  String get g_chat_key_18 {
-    return Intl.message(
-      'View more group members',
-      name: 'g_chat_key_18',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Group name`
-  String get g_chat_key_19 {
-    return Intl.message(
-      'Group name',
-      name: 'g_chat_key_19',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Are we sure we're disbanding ?`
-  String get g_chat_key_20 {
-    return Intl.message(
-      'Are we sure we\'re disbanding ?',
-      name: 'g_chat_key_20',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Are you sure you want to leave this group?`
-  String get g_chat_key_21 {
-    return Intl.message(
-      'Are you sure you want to leave this group?',
-      name: 'g_chat_key_21',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Ungroup`
-  String get g_chat_key_22 {
-    return Intl.message('Ungroup', name: 'g_chat_key_22', desc: '', args: []);
-  }
-
-  /// `Leave group`
-  String get g_chat_key_23 {
-    return Intl.message(
-      'Leave group',
-      name: 'g_chat_key_23',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Change the group chat name`
-  String get g_chat_key_24 {
-    return Intl.message(
-      'Change the group chat name',
-      name: 'g_chat_key_24',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `When the group chat name is changed, other members will be notified within the group.`
-  String get g_chat_key_25 {
-    return Intl.message(
-      'When the group chat name is changed, other members will be notified within the group.',
-      name: 'g_chat_key_25',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Finish`
-  String get g_chat_key_26 {
-    return Intl.message('Finish', name: 'g_chat_key_26', desc: '', args: []);
-  }
-
-  /// `Friend add request`
-  String get g_chat_key_27 {
-    return Intl.message(
-      'Friend add request',
-      name: 'g_chat_key_27',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Request to add you as a friend`
-  String get g_chat_key_28 {
-    return Intl.message(
-      'Request to add you as a friend',
-      name: 'g_chat_key_28',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Friend request approved`
-  String get g_chat_key_29 {
-    return Intl.message(
-      'Friend request approved',
-      name: 'g_chat_key_29',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `You have been added as a friend`
-  String get g_chat_key_30 {
-    return Intl.message(
-      'You have been added as a friend',
-      name: 'g_chat_key_30',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `agree`
-  String get g_chat_key_31 {
-    return Intl.message('agree', name: 'g_chat_key_31', desc: '', args: []);
-  }
-
-  /// `Chat member({value})`
-  String g_chat_key_32(Object value) {
-    return Intl.message(
-      'Chat member($value)',
-      name: 'g_chat_key_32',
-      desc: '',
-      args: [value],
-    );
-  }
-
-  /// `The password cannot be parsed properly, and the message cannot be sent temporarily. Please import the wallet when entering the group`
-  String get g_chat_key_33 {
-    return Intl.message(
-      'The password cannot be parsed properly, and the message cannot be sent temporarily. Please import the wallet when entering the group',
-      name: 'g_chat_key_33',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Delete the chat history？`
-  String get g_chat_key_34 {
-    return Intl.message(
-      'Delete the chat history？',
-      name: 'g_chat_key_34',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Remove member`
-  String get g_chat_key_35 {
-    return Intl.message(
-      'Remove member',
-      name: 'g_chat_key_35',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `My QR Code`
-  String get g_chat_key_36 {
-    return Intl.message(
-      'My QR Code',
-      name: 'g_chat_key_36',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Report`
-  String get g_chat_key_40 {
-    return Intl.message('Report', name: 'g_chat_key_40', desc: '', args: []);
-  }
-
-  /// `New Chat`
-  String get g_chat_key_41 {
-    return Intl.message('New Chat', name: 'g_chat_key_41', desc: '', args: []);
-  }
-
-  /// `New Group`
-  String get g_chat_key_42 {
-    return Intl.message('New Group', name: 'g_chat_key_42', desc: '', args: []);
-  }
-
-  /// `QR Code`
-  String get g_chat_key_43 {
-    return Intl.message('QR Code', name: 'g_chat_key_43', desc: '', args: []);
-  }
-
-  /// `Report and Block`
-  String get g_chat_key_44 {
-    return Intl.message(
-      'Report and Block',
-      name: 'g_chat_key_44',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `This message will be forwarded to N42Wallet. This contact will not be notified.`
-  String get g_chat_key_45 {
-    return Intl.message(
-      'This message will be forwarded to N42Wallet. This contact will not be notified.',
-      name: 'g_chat_key_45',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Video`
-  String get g_chat_key_46 {
-    return Intl.message('Video', name: 'g_chat_key_46', desc: '', args: []);
-  }
-
-  /// `Photo`
-  String get g_chat_key_47 {
-    return Intl.message('Photo', name: 'g_chat_key_47', desc: '', args: []);
-  }
-
-  /// `Delete Message`
-  String get g_chat_key_48 {
-    return Intl.message(
-      'Delete Message',
-      name: 'g_chat_key_48',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Delete on my device`
-  String get g_chat_key_49 {
-    return Intl.message(
-      'Delete on my device',
-      name: 'g_chat_key_49',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Agree`
   String get g_chat_key_50 {
     return Intl.message('Agree', name: 'g_chat_key_50', desc: '', args: []);
-  }
-
-  /// `Report Reason`
-  String get g_chat_key_54 {
-    return Intl.message(
-      'Report Reason',
-      name: 'g_chat_key_54',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Enter your report reason`
-  String get g_chat_key_55 {
-    return Intl.message(
-      'Enter your report reason',
-      name: 'g_chat_key_55',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `We will verify your report and respond within 24 hours.`
-  String get g_chat_key_56 {
-    return Intl.message(
-      'We will verify your report and respond within 24 hours.',
-      name: 'g_chat_key_56',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `You reported this - Click to see`
-  String get g_chat_key_57 {
-    return Intl.message(
-      'You reported this - Click to see',
-      name: 'g_chat_key_57',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Blacklist`
-  String get g_chat_key_58 {
-    return Intl.message('Blacklist', name: 'g_chat_key_58', desc: '', args: []);
-  }
-
-  /// `Remove`
-  String get g_chat_key_59 {
-    return Intl.message('Remove', name: 'g_chat_key_59', desc: '', args: []);
-  }
-
-  /// `No contact yet`
-  String get g_chat_key_60 {
-    return Intl.message(
-      'No contact yet',
-      name: 'g_chat_key_60',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Today`
-  String get g_chat_key_61 {
-    return Intl.message('Today', name: 'g_chat_key_61', desc: '', args: []);
-  }
-
-  /// `Over 3 days ago`
-  String get g_chat_key_62 {
-    return Intl.message(
-      'Over 3 days ago',
-      name: 'g_chat_key_62',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Block`
-  String get g_chat_key_63 {
-    return Intl.message('Block', name: 'g_chat_key_63', desc: '', args: []);
-  }
-
-  /// `Hey, I’m using N42Wallet to chat and send money. Install Wallet and message me at`
-  String get g_chat_key_64 {
-    return Intl.message(
-      'Hey, I’m using N42Wallet to chat and send money. Install Wallet and message me at',
-      name: 'g_chat_key_64',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Reply`
-  String get g_chat_key_66 {
-    return Intl.message('Reply', name: 'g_chat_key_66', desc: '', args: []);
   }
 
   /// `The message has been deleted`
@@ -6449,69 +4249,9 @@ class S {
     );
   }
 
-  /// `Someone @ me`
-  String get g_chat_key_68 {
-    return Intl.message(
-      'Someone @ me',
-      name: 'g_chat_key_68',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Say hi`
-  String get g_chat_key_69 {
-    return Intl.message('Say hi', name: 'g_chat_key_69', desc: '', args: []);
-  }
-
   /// `Chat`
   String get g_key_squad {
     return Intl.message('Chat', name: 'g_key_squad', desc: '', args: []);
-  }
-
-  /// `The file is too large to upload`
-  String get g_key_squad_k11 {
-    return Intl.message(
-      'The file is too large to upload',
-      name: 'g_key_squad_k11',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Are you sure you want to delete the contact {value}?`
-  String g_key_squad_k15(Object value) {
-    return Intl.message(
-      'Are you sure you want to delete the contact $value?',
-      name: 'g_key_squad_k15',
-      desc: '',
-      args: [value],
-    );
-  }
-
-  /// `Add Contact`
-  String get g_key_squad_k18 {
-    return Intl.message(
-      'Add Contact',
-      name: 'g_key_squad_k18',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Contact`
-  String get g_key_squad_k24 {
-    return Intl.message('Contact', name: 'g_key_squad_k24', desc: '', args: []);
-  }
-
-  /// `Search by email`
-  String get g_key_squad_k25 {
-    return Intl.message(
-      'Search by email',
-      name: 'g_key_squad_k25',
-      desc: '',
-      args: [],
-    );
   }
 
   /// `Reserved`
@@ -6629,16 +4369,6 @@ class S {
     );
   }
 
-  /// `Est. Time`
-  String get g_key_gas_estimated_time {
-    return Intl.message(
-      'Est. Time',
-      name: 'g_key_gas_estimated_time',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Base Fee`
   String get g_key_gas_base_fee {
     return Intl.message(
@@ -6714,16 +4444,6 @@ class S {
     );
   }
 
-  /// `Bridge`
-  String get g_key_bridge_swap {
-    return Intl.message(
-      'Bridge',
-      name: 'g_key_bridge_swap',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Get Quote`
   String get g_key_bridge_get_quote {
     return Intl.message(
@@ -6774,26 +4494,6 @@ class S {
     );
   }
 
-  /// `From Chain`
-  String get g_key_bridge_from_chain {
-    return Intl.message(
-      'From Chain',
-      name: 'g_key_bridge_from_chain',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `To Chain`
-  String get g_key_bridge_to_chain {
-    return Intl.message(
-      'To Chain',
-      name: 'g_key_bridge_to_chain',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Select Token`
   String get g_key_bridge_select_token {
     return Intl.message(
@@ -6804,41 +4504,11 @@ class S {
     );
   }
 
-  /// `Amount`
-  String get g_key_bridge_amount {
-    return Intl.message(
-      'Amount',
-      name: 'g_key_bridge_amount',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `You will receive (estimated)`
   String get g_key_bridge_estimated_receive {
     return Intl.message(
       'You will receive (estimated)',
       name: 'g_key_bridge_estimated_receive',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Bridge Fee`
-  String get g_key_bridge_fee {
-    return Intl.message(
-      'Bridge Fee',
-      name: 'g_key_bridge_fee',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Estimated Time`
-  String get g_key_bridge_time {
-    return Intl.message(
-      'Estimated Time',
-      name: 'g_key_bridge_time',
       desc: '',
       args: [],
     );
@@ -6949,39 +4619,9 @@ class S {
     );
   }
 
-  /// `Claim Rewards`
-  String get g_key_stake_claim {
-    return Intl.message(
-      'Claim Rewards',
-      name: 'g_key_stake_claim',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Restake`
-  String get g_key_stake_restake {
-    return Intl.message(
-      'Restake',
-      name: 'g_key_stake_restake',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `APY`
   String get g_key_stake_apy {
     return Intl.message('APY', name: 'g_key_stake_apy', desc: '', args: []);
-  }
-
-  /// `Total Staked`
-  String get g_key_stake_total_staked {
-    return Intl.message(
-      'Total Staked',
-      name: 'g_key_stake_total_staked',
-      desc: '',
-      args: [],
-    );
   }
 
   /// `Rewards`
@@ -6989,16 +4629,6 @@ class S {
     return Intl.message(
       'Rewards',
       name: 'g_key_stake_rewards',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Pending Rewards`
-  String get g_key_stake_pending_rewards {
-    return Intl.message(
-      'Pending Rewards',
-      name: 'g_key_stake_pending_rewards',
       desc: '',
       args: [],
     );
@@ -7014,41 +4644,11 @@ class S {
     );
   }
 
-  /// `Unbonding Period`
-  String get g_key_stake_unbonding_period {
-    return Intl.message(
-      'Unbonding Period',
-      name: 'g_key_stake_unbonding_period',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `{value} days left`
-  String g_key_stake_days_left(Object value) {
-    return Intl.message(
-      '$value days left',
-      name: 'g_key_stake_days_left',
-      desc: '',
-      args: [value],
-    );
-  }
-
   /// `Validator`
   String get g_key_stake_validator {
     return Intl.message(
       'Validator',
       name: 'g_key_stake_validator',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Validators`
-  String get g_key_stake_validators {
-    return Intl.message(
-      'Validators',
-      name: 'g_key_stake_validators',
       desc: '',
       args: [],
     );
@@ -7074,41 +4674,11 @@ class S {
     );
   }
 
-  /// `Uptime`
-  String get g_key_stake_uptime {
-    return Intl.message(
-      'Uptime',
-      name: 'g_key_stake_uptime',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Delegators`
-  String get g_key_stake_delegators {
-    return Intl.message(
-      'Delegators',
-      name: 'g_key_stake_delegators',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Minimum Stake`
   String get g_key_stake_min_stake {
     return Intl.message(
       'Minimum Stake',
       name: 'g_key_stake_min_stake',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Liquid Staking`
-  String get g_key_stake_liquid {
-    return Intl.message(
-      'Liquid Staking',
-      name: 'g_key_stake_liquid',
       desc: '',
       args: [],
     );
@@ -7124,31 +4694,11 @@ class S {
     );
   }
 
-  /// `No staking positions`
-  String get g_key_stake_no_positions {
-    return Intl.message(
-      'No staking positions',
-      name: 'g_key_stake_no_positions',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Active`
   String get g_key_stake_active {
     return Intl.message(
       'Active',
       name: 'g_key_stake_active',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Protocol`
-  String get g_key_stake_protocol {
-    return Intl.message(
-      'Protocol',
-      name: 'g_key_stake_protocol',
       desc: '',
       args: [],
     );
@@ -7454,16 +5004,6 @@ class S {
     );
   }
 
-  /// `Lock BTC to mint vBTC and earn rewards`
-  String get g_key_btc_stake_subtitle {
-    return Intl.message(
-      'Lock BTC to mint vBTC and earn rewards',
-      name: 'g_key_btc_stake_subtitle',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `How It Works`
   String get g_key_btc_stake_how_it_works {
     return Intl.message(
@@ -7684,116 +5224,6 @@ class S {
     );
   }
 
-  /// `Change Password`
-  String get g_key_change_password {
-    return Intl.message(
-      'Change Password',
-      name: 'g_key_change_password',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Enter your current password and set a new password`
-  String get g_key_change_password_desc {
-    return Intl.message(
-      'Enter your current password and set a new password',
-      name: 'g_key_change_password_desc',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Current Password`
-  String get g_key_old_password {
-    return Intl.message(
-      'Current Password',
-      name: 'g_key_old_password',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Enter current password`
-  String get g_key_enter_old_password {
-    return Intl.message(
-      'Enter current password',
-      name: 'g_key_enter_old_password',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `New Password`
-  String get g_key_new_password {
-    return Intl.message(
-      'New Password',
-      name: 'g_key_new_password',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Enter new password`
-  String get g_key_enter_new_password {
-    return Intl.message(
-      'Enter new password',
-      name: 'g_key_enter_new_password',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Confirm New Password`
-  String get g_key_confirm_new_password {
-    return Intl.message(
-      'Confirm New Password',
-      name: 'g_key_confirm_new_password',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Re-enter new password`
-  String get g_key_enter_confirm_password {
-    return Intl.message(
-      'Re-enter new password',
-      name: 'g_key_enter_confirm_password',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Password is required`
-  String get g_key_password_required {
-    return Intl.message(
-      'Password is required',
-      name: 'g_key_password_required',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Password must be at least 6 characters`
-  String get g_key_password_min_length {
-    return Intl.message(
-      'Password must be at least 6 characters',
-      name: 'g_key_password_min_length',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `New password must be different from current password`
-  String get g_key_new_password_same_as_old {
-    return Intl.message(
-      'New password must be different from current password',
-      name: 'g_key_new_password_same_as_old',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Passwords do not match`
   String get g_key_passwords_not_match {
     return Intl.message(
@@ -7804,426 +5234,11 @@ class S {
     );
   }
 
-  /// `Password Requirements`
-  String get g_key_password_requirements {
-    return Intl.message(
-      'Password Requirements',
-      name: 'g_key_password_requirements',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `At least 6 characters`
-  String get g_key_password_req_length {
-    return Intl.message(
-      'At least 6 characters',
-      name: 'g_key_password_req_length',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Different from current password`
-  String get g_key_password_req_different {
-    return Intl.message(
-      'Different from current password',
-      name: 'g_key_password_req_different',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Password changed successfully`
-  String get g_key_password_changed_success {
-    return Intl.message(
-      'Password changed successfully',
-      name: 'g_key_password_changed_success',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Reset Password`
-  String get g_key_reset_password {
-    return Intl.message(
-      'Reset Password',
-      name: 'g_key_reset_password',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Enter your email address to receive a verification code`
-  String get g_key_reset_password_email_desc {
-    return Intl.message(
-      'Enter your email address to receive a verification code',
-      name: 'g_key_reset_password_email_desc',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Email`
-  String get g_key_email {
-    return Intl.message('Email', name: 'g_key_email', desc: '', args: []);
-  }
-
-  /// `Enter your email address`
-  String get g_key_enter_email {
-    return Intl.message(
-      'Enter your email address',
-      name: 'g_key_enter_email',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Email is required`
-  String get g_key_email_required {
-    return Intl.message(
-      'Email is required',
-      name: 'g_key_email_required',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Please enter a valid email address`
-  String get g_key_email_invalid {
-    return Intl.message(
-      'Please enter a valid email address',
-      name: 'g_key_email_invalid',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Send Verification Code`
-  String get g_key_send_code {
-    return Intl.message(
-      'Send Verification Code',
-      name: 'g_key_send_code',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Email`
-  String get g_key_step_email {
-    return Intl.message('Email', name: 'g_key_step_email', desc: '', args: []);
-  }
-
-  /// `Verify`
-  String get g_key_step_verify {
-    return Intl.message(
-      'Verify',
-      name: 'g_key_step_verify',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Password`
-  String get g_key_step_password {
-    return Intl.message(
-      'Password',
-      name: 'g_key_step_password',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Verification code sent to {value}`
-  String g_key_verification_code_sent(Object value) {
-    return Intl.message(
-      'Verification code sent to $value',
-      name: 'g_key_verification_code_sent',
-      desc: '',
-      args: [value],
-    );
-  }
-
-  /// `Verification Code`
-  String get g_key_verification_code {
-    return Intl.message(
-      'Verification Code',
-      name: 'g_key_verification_code',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Verification code is required`
-  String get g_key_code_required {
-    return Intl.message(
-      'Verification code is required',
-      name: 'g_key_code_required',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Please enter 6-digit code`
-  String get g_key_code_length {
-    return Intl.message(
-      'Please enter 6-digit code',
-      name: 'g_key_code_length',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Change Email`
-  String get g_key_change_email {
-    return Intl.message(
-      'Change Email',
-      name: 'g_key_change_email',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Resend Code`
-  String get g_key_resend_code {
-    return Intl.message(
-      'Resend Code',
-      name: 'g_key_resend_code',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Verification code sent`
-  String get g_key_code_sent {
-    return Intl.message(
-      'Verification code sent',
-      name: 'g_key_code_sent',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Next`
-  String get g_key_next {
-    return Intl.message('Next', name: 'g_key_next', desc: '', args: []);
-  }
-
-  /// `Set your new password`
-  String get g_key_set_new_password_desc {
-    return Intl.message(
-      'Set your new password',
-      name: 'g_key_set_new_password_desc',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Password reset successfully`
-  String get g_key_password_reset_success {
-    return Intl.message(
-      'Password reset successfully',
-      name: 'g_key_password_reset_success',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Forgot Password?`
-  String get g_key_forgot_password {
-    return Intl.message(
-      'Forgot Password?',
-      name: 'g_key_forgot_password',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Hardware Wallet`
-  String get g_key_hw_title {
-    return Intl.message(
-      'Hardware Wallet',
-      name: 'g_key_hw_title',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Connect Hardware Wallet`
-  String get g_key_hw_connect {
-    return Intl.message(
-      'Connect Hardware Wallet',
-      name: 'g_key_hw_connect',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Scanning for devices...`
-  String get g_key_hw_scanning {
-    return Intl.message(
-      'Scanning for devices...',
-      name: 'g_key_hw_scanning',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Disconnected`
-  String get g_key_hw_disconnected {
-    return Intl.message(
-      'Disconnected',
-      name: 'g_key_hw_disconnected',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Ledger`
-  String get g_key_hw_ledger {
-    return Intl.message('Ledger', name: 'g_key_hw_ledger', desc: '', args: []);
-  }
-
-  /// `Trezor`
-  String get g_key_hw_trezor {
-    return Intl.message('Trezor', name: 'g_key_hw_trezor', desc: '', args: []);
-  }
-
-  /// `Select Device`
-  String get g_key_hw_select_device {
-    return Intl.message(
-      'Select Device',
-      name: 'g_key_hw_select_device',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `No devices found`
-  String get g_key_hw_no_devices {
-    return Intl.message(
-      'No devices found',
-      name: 'g_key_hw_no_devices',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Please enable Bluetooth`
-  String get g_key_hw_enable_bluetooth {
-    return Intl.message(
-      'Please enable Bluetooth',
-      name: 'g_key_hw_enable_bluetooth',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Please open the {value} app on your device`
-  String g_key_hw_open_app(Object value) {
-    return Intl.message(
-      'Please open the $value app on your device',
-      name: 'g_key_hw_open_app',
-      desc: '',
-      args: [value],
-    );
-  }
-
-  /// `Confirm on your device`
-  String get g_key_hw_confirm_on_device {
-    return Intl.message(
-      'Confirm on your device',
-      name: 'g_key_hw_confirm_on_device',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Sign Transaction`
-  String get g_key_hw_sign_tx {
-    return Intl.message(
-      'Sign Transaction',
-      name: 'g_key_hw_sign_tx',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Sign Message`
-  String get g_key_hw_sign_message {
-    return Intl.message(
-      'Sign Message',
-      name: 'g_key_hw_sign_message',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Rejected on device`
-  String get g_key_hw_rejected {
-    return Intl.message(
-      'Rejected on device',
-      name: 'g_key_hw_rejected',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Connection timeout`
-  String get g_key_hw_timeout {
-    return Intl.message(
-      'Connection timeout',
-      name: 'g_key_hw_timeout',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Accounts`
-  String get g_key_hw_accounts {
-    return Intl.message(
-      'Accounts',
-      name: 'g_key_hw_accounts',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Add Account`
   String get g_key_hw_add_account {
     return Intl.message(
       'Add Account',
       name: 'g_key_hw_add_account',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Derivation Path`
-  String get g_key_hw_derivation_path {
-    return Intl.message(
-      'Derivation Path',
-      name: 'g_key_hw_derivation_path',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Firmware Version`
-  String get g_key_hw_firmware {
-    return Intl.message(
-      'Firmware Version',
-      name: 'g_key_hw_firmware',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Signal Strength`
-  String get g_key_hw_signal_strength {
-    return Intl.message(
-      'Signal Strength',
-      name: 'g_key_hw_signal_strength',
       desc: '',
       args: [],
     );
@@ -8269,16 +5284,6 @@ class S {
     );
   }
 
-  /// `Gas Savings`
-  String get g_key_batch_gas_savings {
-    return Intl.message(
-      'Gas Savings',
-      name: 'g_key_batch_gas_savings',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Import CSV`
   String get g_key_batch_import_csv {
     return Intl.message(
@@ -8304,26 +5309,6 @@ class S {
     return Intl.message(
       'Clear All',
       name: 'g_key_batch_clear_all',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Preview`
-  String get g_key_batch_preview {
-    return Intl.message(
-      'Preview',
-      name: 'g_key_batch_preview',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Execute Batch`
-  String get g_key_batch_execute {
-    return Intl.message(
-      'Execute Batch',
-      name: 'g_key_batch_execute',
       desc: '',
       args: [],
     );
@@ -8376,711 +5361,6 @@ class S {
       name: 'g_key_batch_max_recipients',
       desc: '',
       args: [value],
-    );
-  }
-
-  /// `Airdrop Tracker`
-  String get g_key_airdrop_title {
-    return Intl.message(
-      'Airdrop Tracker',
-      name: 'g_key_airdrop_title',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Upcoming`
-  String get g_key_airdrop_upcoming {
-    return Intl.message(
-      'Upcoming',
-      name: 'g_key_airdrop_upcoming',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Active`
-  String get g_key_airdrop_active {
-    return Intl.message(
-      'Active',
-      name: 'g_key_airdrop_active',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Claimed`
-  String get g_key_airdrop_claimed {
-    return Intl.message(
-      'Claimed',
-      name: 'g_key_airdrop_claimed',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Expired`
-  String get g_key_airdrop_expired {
-    return Intl.message(
-      'Expired',
-      name: 'g_key_airdrop_expired',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Eligible`
-  String get g_key_airdrop_eligible {
-    return Intl.message(
-      'Eligible',
-      name: 'g_key_airdrop_eligible',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Not Eligible`
-  String get g_key_airdrop_not_eligible {
-    return Intl.message(
-      'Not Eligible',
-      name: 'g_key_airdrop_not_eligible',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Check Eligibility`
-  String get g_key_airdrop_check_eligibility {
-    return Intl.message(
-      'Check Eligibility',
-      name: 'g_key_airdrop_check_eligibility',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Claim`
-  String get g_key_airdrop_claim {
-    return Intl.message(
-      'Claim',
-      name: 'g_key_airdrop_claim',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Estimated Value`
-  String get g_key_airdrop_estimated_value {
-    return Intl.message(
-      'Estimated Value',
-      name: 'g_key_airdrop_estimated_value',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Deadline`
-  String get g_key_airdrop_deadline {
-    return Intl.message(
-      'Deadline',
-      name: 'g_key_airdrop_deadline',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `{value} days left`
-  String g_key_airdrop_days_left(Object value) {
-    return Intl.message(
-      '$value days left',
-      name: 'g_key_airdrop_days_left',
-      desc: '',
-      args: [value],
-    );
-  }
-
-  /// `Requirements`
-  String get g_key_airdrop_requirements {
-    return Intl.message(
-      'Requirements',
-      name: 'g_key_airdrop_requirements',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Requirement met`
-  String get g_key_airdrop_requirement_met {
-    return Intl.message(
-      'Requirement met',
-      name: 'g_key_airdrop_requirement_met',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Not met`
-  String get g_key_airdrop_requirement_not_met {
-    return Intl.message(
-      'Not met',
-      name: 'g_key_airdrop_requirement_not_met',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Total Claimed`
-  String get g_key_airdrop_total_claimed {
-    return Intl.message(
-      'Total Claimed',
-      name: 'g_key_airdrop_total_claimed',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Pending`
-  String get g_key_airdrop_pending {
-    return Intl.message(
-      'Pending',
-      name: 'g_key_airdrop_pending',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `High Priority`
-  String get g_key_airdrop_priority_high {
-    return Intl.message(
-      'High Priority',
-      name: 'g_key_airdrop_priority_high',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Medium Priority`
-  String get g_key_airdrop_priority_medium {
-    return Intl.message(
-      'Medium Priority',
-      name: 'g_key_airdrop_priority_medium',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Low Priority`
-  String get g_key_airdrop_priority_low {
-    return Intl.message(
-      'Low Priority',
-      name: 'g_key_airdrop_priority_low',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Filter`
-  String get g_key_airdrop_filter {
-    return Intl.message(
-      'Filter',
-      name: 'g_key_airdrop_filter',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Sort By`
-  String get g_key_airdrop_sort_by {
-    return Intl.message(
-      'Sort By',
-      name: 'g_key_airdrop_sort_by',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `No airdrops available`
-  String get g_key_airdrop_no_airdrops {
-    return Intl.message(
-      'No airdrops available',
-      name: 'g_key_airdrop_no_airdrops',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Points`
-  String get g_key_loyalty_title {
-    return Intl.message(
-      'Points',
-      name: 'g_key_loyalty_title',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Points`
-  String get g_key_loyalty_points {
-    return Intl.message(
-      'Points',
-      name: 'g_key_loyalty_points',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Total Points`
-  String get g_key_loyalty_total_points {
-    return Intl.message(
-      'Total Points',
-      name: 'g_key_loyalty_total_points',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Available Points`
-  String get g_key_loyalty_available_points {
-    return Intl.message(
-      'Available Points',
-      name: 'g_key_loyalty_available_points',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Tier`
-  String get g_key_loyalty_tier {
-    return Intl.message('Tier', name: 'g_key_loyalty_tier', desc: '', args: []);
-  }
-
-  /// `Bronze`
-  String get g_key_loyalty_tier_bronze {
-    return Intl.message(
-      'Bronze',
-      name: 'g_key_loyalty_tier_bronze',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Silver`
-  String get g_key_loyalty_tier_silver {
-    return Intl.message(
-      'Silver',
-      name: 'g_key_loyalty_tier_silver',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Gold`
-  String get g_key_loyalty_tier_gold {
-    return Intl.message(
-      'Gold',
-      name: 'g_key_loyalty_tier_gold',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Platinum`
-  String get g_key_loyalty_tier_platinum {
-    return Intl.message(
-      'Platinum',
-      name: 'g_key_loyalty_tier_platinum',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Diamond`
-  String get g_key_loyalty_tier_diamond {
-    return Intl.message(
-      'Diamond',
-      name: 'g_key_loyalty_tier_diamond',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Next Tier`
-  String get g_key_loyalty_next_tier {
-    return Intl.message(
-      'Next Tier',
-      name: 'g_key_loyalty_next_tier',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `{value} points to next tier`
-  String g_key_loyalty_points_to_next(Object value) {
-    return Intl.message(
-      '$value points to next tier',
-      name: 'g_key_loyalty_points_to_next',
-      desc: '',
-      args: [value],
-    );
-  }
-
-  /// `Tasks`
-  String get g_key_loyalty_tasks {
-    return Intl.message(
-      'Tasks',
-      name: 'g_key_loyalty_tasks',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Daily Check-in`
-  String get g_key_loyalty_daily_checkin {
-    return Intl.message(
-      'Daily Check-in',
-      name: 'g_key_loyalty_daily_checkin',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Task Complete`
-  String get g_key_loyalty_task_complete {
-    return Intl.message(
-      'Task Complete',
-      name: 'g_key_loyalty_task_complete',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Claim Points`
-  String get g_key_loyalty_claim_points {
-    return Intl.message(
-      'Claim Points',
-      name: 'g_key_loyalty_claim_points',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Rewards`
-  String get g_key_loyalty_rewards {
-    return Intl.message(
-      'Rewards',
-      name: 'g_key_loyalty_rewards',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Redeem`
-  String get g_key_loyalty_redeem {
-    return Intl.message(
-      'Redeem',
-      name: 'g_key_loyalty_redeem',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Points History`
-  String get g_key_loyalty_history {
-    return Intl.message(
-      'Points History',
-      name: 'g_key_loyalty_history',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Earned`
-  String get g_key_loyalty_earned {
-    return Intl.message(
-      'Earned',
-      name: 'g_key_loyalty_earned',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Spent`
-  String get g_key_loyalty_spent {
-    return Intl.message(
-      'Spent',
-      name: 'g_key_loyalty_spent',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Referral`
-  String get g_key_loyalty_referral {
-    return Intl.message(
-      'Referral',
-      name: 'g_key_loyalty_referral',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Your Referral Code`
-  String get g_key_loyalty_referral_code {
-    return Intl.message(
-      'Your Referral Code',
-      name: 'g_key_loyalty_referral_code',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Referral Link`
-  String get g_key_loyalty_referral_link {
-    return Intl.message(
-      'Referral Link',
-      name: 'g_key_loyalty_referral_link',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Invited Friends`
-  String get g_key_loyalty_invited_friends {
-    return Intl.message(
-      'Invited Friends',
-      name: 'g_key_loyalty_invited_friends',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Referral Bonus`
-  String get g_key_loyalty_referral_bonus {
-    return Intl.message(
-      'Referral Bonus',
-      name: 'g_key_loyalty_referral_bonus',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `No tasks available`
-  String get g_key_loyalty_no_tasks {
-    return Intl.message(
-      'No tasks available',
-      name: 'g_key_loyalty_no_tasks',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `No rewards available`
-  String get g_key_loyalty_no_rewards {
-    return Intl.message(
-      'No rewards available',
-      name: 'g_key_loyalty_no_rewards',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Check-in successful!`
-  String get g_key_loyalty_checkin_success {
-    return Intl.message(
-      'Check-in successful!',
-      name: 'g_key_loyalty_checkin_success',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Check-in failed, please try again`
-  String get g_key_loyalty_checkin_failed {
-    return Intl.message(
-      'Check-in failed, please try again',
-      name: 'g_key_loyalty_checkin_failed',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Task completed!`
-  String get g_key_loyalty_complete_success {
-    return Intl.message(
-      'Task completed!',
-      name: 'g_key_loyalty_complete_success',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Task failed, please try again`
-  String get g_key_loyalty_complete_failed {
-    return Intl.message(
-      'Task failed, please try again',
-      name: 'g_key_loyalty_complete_failed',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Done`
-  String get g_key_loyalty_checkin_done {
-    return Intl.message(
-      'Done',
-      name: 'g_key_loyalty_checkin_done',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Check In`
-  String get g_key_loyalty_checkin_btn {
-    return Intl.message(
-      'Check In',
-      name: 'g_key_loyalty_checkin_btn',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Checked in today!`
-  String get g_key_loyalty_checked_today {
-    return Intl.message(
-      'Checked in today!',
-      name: 'g_key_loyalty_checked_today',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Earn {value} points`
-  String g_key_loyalty_earn_points(Object value) {
-    return Intl.message(
-      'Earn $value points',
-      name: 'g_key_loyalty_earn_points',
-      desc: '',
-      args: [value],
-    );
-  }
-
-  /// `Invite`
-  String get g_key_loyalty_invite {
-    return Intl.message(
-      'Invite',
-      name: 'g_key_loyalty_invite',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Invite Friends`
-  String get g_key_loyalty_invite_friends {
-    return Intl.message(
-      'Invite Friends',
-      name: 'g_key_loyalty_invite_friends',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Earn {value} points for each friend who joins!`
-  String g_key_loyalty_invite_bonus(Object value) {
-    return Intl.message(
-      'Earn $value points for each friend who joins!',
-      name: 'g_key_loyalty_invite_bonus',
-      desc: '',
-      args: [value],
-    );
-  }
-
-  /// `Total Earned`
-  String get g_key_loyalty_total_earned {
-    return Intl.message(
-      'Total Earned',
-      name: 'g_key_loyalty_total_earned',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Used`
-  String get g_key_loyalty_used {
-    return Intl.message('Used', name: 'g_key_loyalty_used', desc: '', args: []);
-  }
-
-  /// `Copy`
-  String get g_key_loyalty_copy {
-    return Intl.message('Copy', name: 'g_key_loyalty_copy', desc: '', args: []);
-  }
-
-  /// `Share`
-  String get g_key_loyalty_share {
-    return Intl.message(
-      'Share',
-      name: 'g_key_loyalty_share',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Max Level`
-  String get g_key_loyalty_max_level {
-    return Intl.message(
-      'Max Level',
-      name: 'g_key_loyalty_max_level',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Next`
-  String get g_key_loyalty_next_prefix {
-    return Intl.message(
-      'Next',
-      name: 'g_key_loyalty_next_prefix',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `{value}m ago`
-  String g_key_time_minutes_ago(Object value) {
-    return Intl.message(
-      '${value}m ago',
-      name: 'g_key_time_minutes_ago',
-      desc: '',
-      args: [value],
-    );
-  }
-
-  /// `{value}h ago`
-  String g_key_time_hours_ago(Object value) {
-    return Intl.message(
-      '${value}h ago',
-      name: 'g_key_time_hours_ago',
-      desc: '',
-      args: [value],
-    );
-  }
-
-  /// `{value}d ago`
-  String g_key_time_days_ago(Object value) {
-    return Intl.message(
-      '${value}d ago',
-      name: 'g_key_time_days_ago',
-      desc: '',
-      args: [value],
-    );
-  }
-
-  /// `Just now`
-  String get g_key_time_just_now {
-    return Intl.message(
-      'Just now',
-      name: 'g_key_time_just_now',
-      desc: '',
-      args: [],
     );
   }
 
@@ -9189,26 +5469,6 @@ class S {
     );
   }
 
-  /// `Claim free tokens`
-  String get g_key_earn_claim_free {
-    return Intl.message(
-      'Claim free tokens',
-      name: 'g_key_earn_claim_free',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Daily check-in bonus`
-  String get g_key_earn_daily_bonus {
-    return Intl.message(
-      'Daily check-in bonus',
-      name: 'g_key_earn_daily_bonus',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Stake ETH with Lido`
   String get g_key_earn_stake_eth_lido {
     return Intl.message(
@@ -9226,26 +5486,6 @@ class S {
       name: 'g_key_earn_native_sol',
       desc: '',
       args: [],
-    );
-  }
-
-  /// `Earn points daily`
-  String get g_key_earn_points_daily {
-    return Intl.message(
-      'Earn points daily',
-      name: 'g_key_earn_points_daily',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `+{value} pts/day`
-  String g_key_earn_pts_day(Object value) {
-    return Intl.message(
-      '+$value pts/day',
-      name: 'g_key_earn_pts_day',
-      desc: '',
-      args: [value],
     );
   }
 
@@ -9287,16 +5527,6 @@ class S {
   /// `Swap`
   String get g_key_earn_swap {
     return Intl.message('Swap', name: 'g_key_earn_swap', desc: '', args: []);
-  }
-
-  /// `Node Mining`
-  String get g_key_earn_node_mining {
-    return Intl.message(
-      'Node Mining',
-      name: 'g_key_earn_node_mining',
-      desc: '',
-      args: [],
-    );
   }
 
   /// `Earn rewards by participating in node mining`
@@ -9354,16 +5584,6 @@ class S {
     );
   }
 
-  /// `Swap any token via Uniswap / 1inch`
-  String get g_key_earn_dex_desc {
-    return Intl.message(
-      'Swap any token via Uniswap / 1inch',
-      name: 'g_key_earn_dex_desc',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Select Swap Type`
   String get g_key_earn_select_swap {
     return Intl.message(
@@ -9379,16 +5599,6 @@ class S {
     return Intl.message(
       'Loading APY...',
       name: 'g_key_earn_loading_apy',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Burn NFT`
-  String get g_key_burn_nft_title {
-    return Intl.message(
-      'Burn NFT',
-      name: 'g_key_burn_nft_title',
       desc: '',
       args: [],
     );
@@ -9764,16 +5974,6 @@ class S {
     );
   }
 
-  /// `ENS resolution failed`
-  String get g_key_ens_resolution_failed {
-    return Intl.message(
-      'ENS resolution failed',
-      name: 'g_key_ens_resolution_failed',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Invalid ENS name`
   String get g_key_ens_invalid_name {
     return Intl.message(
@@ -9789,16 +5989,6 @@ class S {
     return Intl.message(
       'ENS Manager',
       name: 'g_key_ens_title',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `ENS Manager`
-  String get g_key_ens_home_title {
-    return Intl.message(
-      'ENS Manager',
-      name: 'g_key_ens_home_title',
       desc: '',
       args: [],
     );
@@ -9989,41 +6179,11 @@ class S {
     );
   }
 
-  /// `per year`
-  String get g_key_ens_price_per_year {
-    return Intl.message(
-      'per year',
-      name: 'g_key_ens_price_per_year',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Register Now`
   String get g_key_ens_register_now {
     return Intl.message(
       'Register Now',
       name: 'g_key_ens_register_now',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `My ENS Names`
-  String get g_key_ens_owned_names {
-    return Intl.message(
-      'My ENS Names',
-      name: 'g_key_ens_owned_names',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `You don't own any ENS names yet`
-  String get g_key_ens_no_names {
-    return Intl.message(
-      'You don\'t own any ENS names yet',
-      name: 'g_key_ens_no_names',
       desc: '',
       args: [],
     );
@@ -10049,111 +6209,11 @@ class S {
     );
   }
 
-  /// `Expiring Soon`
-  String get g_key_ens_expiring_soon {
-    return Intl.message(
-      'Expiring Soon',
-      name: 'g_key_ens_expiring_soon',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Register ENS`
   String get g_key_ens_purchase_title {
     return Intl.message(
       'Register ENS',
       name: 'g_key_ens_purchase_title',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Commit`
-  String get g_key_ens_step_commit {
-    return Intl.message(
-      'Commit',
-      name: 'g_key_ens_step_commit',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Wait`
-  String get g_key_ens_step_wait {
-    return Intl.message(
-      'Wait',
-      name: 'g_key_ens_step_wait',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Register`
-  String get g_key_ens_step_register {
-    return Intl.message(
-      'Register',
-      name: 'g_key_ens_step_register',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Success`
-  String get g_key_ens_step_success {
-    return Intl.message(
-      'Success',
-      name: 'g_key_ens_step_success',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Committing transaction...`
-  String get g_key_ens_commit_tx {
-    return Intl.message(
-      'Committing transaction...',
-      name: 'g_key_ens_commit_tx',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Please wait {value} seconds`
-  String g_key_ens_wait_timer(Object value) {
-    return Intl.message(
-      'Please wait $value seconds',
-      name: 'g_key_ens_wait_timer',
-      desc: '',
-      args: [value],
-    );
-  }
-
-  /// `Registering name...`
-  String get g_key_ens_register_tx {
-    return Intl.message(
-      'Registering name...',
-      name: 'g_key_ens_register_tx',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Congratulations! You now own {value}`
-  String g_key_ens_success_message(Object value) {
-    return Intl.message(
-      'Congratulations! You now own $value',
-      name: 'g_key_ens_success_message',
-      desc: '',
-      args: [value],
-    );
-  }
-
-  /// `Registration Period`
-  String get g_key_ens_duration {
-    return Intl.message(
-      'Registration Period',
-      name: 'g_key_ens_duration',
       desc: '',
       args: [],
     );
@@ -10167,46 +6227,6 @@ class S {
   /// `years`
   String get g_key_ens_years {
     return Intl.message('years', name: 'g_key_ens_years', desc: '', args: []);
-  }
-
-  /// `Total Cost`
-  String get g_key_ens_total_cost {
-    return Intl.message(
-      'Total Cost',
-      name: 'g_key_ens_total_cost',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Manage ENS`
-  String get g_key_ens_management_title {
-    return Intl.message(
-      'Manage ENS',
-      name: 'g_key_ens_management_title',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Records`
-  String get g_key_ens_records {
-    return Intl.message(
-      'Records',
-      name: 'g_key_ens_records',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Edit Records`
-  String get g_key_ens_edit_records {
-    return Intl.message(
-      'Edit Records',
-      name: 'g_key_ens_edit_records',
-      desc: '',
-      args: [],
-    );
   }
 
   /// `Set as Primary`
@@ -10234,16 +6254,6 @@ class S {
     return Intl.message('Renew', name: 'g_key_ens_renew', desc: '', args: []);
   }
 
-  /// `Renew ENS`
-  String get g_key_ens_renew_title {
-    return Intl.message(
-      'Renew ENS',
-      name: 'g_key_ens_renew_title',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Current Expiry`
   String get g_key_ens_current_expiry {
     return Intl.message(
@@ -10259,16 +6269,6 @@ class S {
     return Intl.message(
       'New Expiry',
       name: 'g_key_ens_new_expiry',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Renewal Cost`
-  String get g_key_ens_renew_cost {
-    return Intl.message(
-      'Renewal Cost',
-      name: 'g_key_ens_renew_cost',
       desc: '',
       args: [],
     );
@@ -10329,26 +6329,6 @@ class S {
     return Intl.message(
       'Registration commitment expired. Please start the registration process again.',
       name: 'g_key_ens_commitment_expired_msg',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Expiry reminder is off`
-  String get g_key_ens_reminder_disabled {
-    return Intl.message(
-      'Expiry reminder is off',
-      name: 'g_key_ens_reminder_disabled',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Expiry reminder is on`
-  String get g_key_ens_reminder_enabled {
-    return Intl.message(
-      'Expiry reminder is on',
-      name: 'g_key_ens_reminder_enabled',
       desc: '',
       args: [],
     );
@@ -10854,16 +6834,6 @@ class S {
     );
   }
 
-  /// `Account Abstraction`
-  String get g_key_aa_home_title {
-    return Intl.message(
-      'Account Abstraction',
-      name: 'g_key_aa_home_title',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `My Smart Accounts`
   String get g_key_aa_my_accounts {
     return Intl.message(
@@ -10964,31 +6934,11 @@ class S {
     );
   }
 
-  /// `Simple Account`
-  String get g_key_aa_simple_account {
-    return Intl.message(
-      'Simple Account',
-      name: 'g_key_aa_simple_account',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Basic smart account with single owner - recommended for most users`
   String get g_key_aa_simple_desc {
     return Intl.message(
       'Basic smart account with single owner - recommended for most users',
       name: 'g_key_aa_simple_desc',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `EIP-7702 Account`
-  String get g_key_aa_eip7702_account {
-    return Intl.message(
-      'EIP-7702 Account',
-      name: 'g_key_aa_eip7702_account',
       desc: '',
       args: [],
     );
@@ -11004,31 +6954,11 @@ class S {
     );
   }
 
-  /// `Safe Account`
-  String get g_key_aa_safe_account {
-    return Intl.message(
-      'Safe Account',
-      name: 'g_key_aa_safe_account',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Multi-signature account with advanced security features`
   String get g_key_aa_safe_desc {
     return Intl.message(
       'Multi-signature account with advanced security features',
       name: 'g_key_aa_safe_desc',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Kernel Account`
-  String get g_key_aa_kernel_account {
-    return Intl.message(
-      'Kernel Account',
-      name: 'g_key_aa_kernel_account',
       desc: '',
       args: [],
     );
@@ -11049,36 +6979,6 @@ class S {
     return Intl.message(
       'Select Chain',
       name: 'g_key_aa_select_chain',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Select Account Type`
-  String get g_key_aa_select_type {
-    return Intl.message(
-      'Select Account Type',
-      name: 'g_key_aa_select_type',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Counterfactual Address`
-  String get g_key_aa_counterfactual_address {
-    return Intl.message(
-      'Counterfactual Address',
-      name: 'g_key_aa_counterfactual_address',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `This address is pre-computed and will be deployed when you make your first transaction.`
-  String get g_key_aa_address_preview {
-    return Intl.message(
-      'This address is pre-computed and will be deployed when you make your first transaction.',
-      name: 'g_key_aa_address_preview',
       desc: '',
       args: [],
     );
@@ -11109,21 +7009,6 @@ class S {
     return Intl.message(
       'Deploying...',
       name: 'g_key_aa_deploying',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Deploy`
-  String get g_key_aa_deploy {
-    return Intl.message('Deploy', name: 'g_key_aa_deploy', desc: '', args: []);
-  }
-
-  /// `Deployment started`
-  String get g_key_aa_deploy_started {
-    return Intl.message(
-      'Deployment started',
-      name: 'g_key_aa_deploy_started',
       desc: '',
       args: [],
     );
@@ -11234,36 +7119,6 @@ class S {
     );
   }
 
-  /// `Pay gas in any token`
-  String get g_key_aa_feature_gas {
-    return Intl.message(
-      'Pay gas in any token',
-      name: 'g_key_aa_feature_gas',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Batch multiple transactions`
-  String get g_key_aa_feature_batch {
-    return Intl.message(
-      'Batch multiple transactions',
-      name: 'g_key_aa_feature_batch',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Enhanced security`
-  String get g_key_aa_feature_security {
-    return Intl.message(
-      'Enhanced security',
-      name: 'g_key_aa_feature_security',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Send tokens using your smart account`
   String get g_key_aa_send_desc {
     return Intl.message(
@@ -11299,16 +7154,6 @@ class S {
     );
   }
 
-  /// `Create a smart account to get started`
-  String get g_key_aa_create_first_account {
-    return Intl.message(
-      'Create a smart account to get started',
-      name: 'g_key_aa_create_first_account',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Change`
   String get g_key_aa_change {
     return Intl.message('Change', name: 'g_key_aa_change', desc: '', args: []);
@@ -11319,16 +7164,6 @@ class S {
     return Intl.message(
       'Estimated Gas',
       name: 'g_key_aa_estimated_gas',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `AA Transfer`
-  String get g_key_aa_send_title {
-    return Intl.message(
-      'AA Transfer',
-      name: 'g_key_aa_send_title',
       desc: '',
       args: [],
     );
@@ -11419,51 +7254,11 @@ class S {
     );
   }
 
-  /// `Unavailable`
-  String get g_key_aa_unavailable {
-    return Intl.message(
-      'Unavailable',
-      name: 'g_key_aa_unavailable',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Estimating...`
-  String get g_key_aa_estimating {
-    return Intl.message(
-      'Estimating...',
-      name: 'g_key_aa_estimating',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Gas Estimate`
-  String get g_key_aa_gas_estimate {
-    return Intl.message(
-      'Gas Estimate',
-      name: 'g_key_aa_gas_estimate',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Gas Sponsored`
   String get g_key_aa_gas_sponsored {
     return Intl.message(
       'Gas Sponsored',
       name: 'g_key_aa_gas_sponsored',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Batch Transfer`
-  String get g_key_aa_batch_title {
-    return Intl.message(
-      'Batch Transfer',
-      name: 'g_key_aa_batch_title',
       desc: '',
       args: [],
     );
@@ -11519,16 +7314,6 @@ class S {
     );
   }
 
-  /// `Total Value`
-  String get g_key_aa_total_value {
-    return Intl.message(
-      'Total Value',
-      name: 'g_key_aa_total_value',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Total Gas`
   String get g_key_aa_total_gas {
     return Intl.message(
@@ -11564,16 +7349,6 @@ class S {
     return Intl.message(
       'Add your first operation',
       name: 'g_key_aa_add_first_operation',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Clear All`
-  String get g_key_aa_clear_all {
-    return Intl.message(
-      'Clear All',
-      name: 'g_key_aa_clear_all',
       desc: '',
       args: [],
     );
@@ -11689,56 +7464,6 @@ class S {
     );
   }
 
-  /// `EIP-7702`
-  String get g_key_aa_eip7702_badge {
-    return Intl.message(
-      'EIP-7702',
-      name: 'g_key_aa_eip7702_badge',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `v0.7`
-  String get g_key_aa_version_v07 {
-    return Intl.message(
-      'v0.7',
-      name: 'g_key_aa_version_v07',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `v0.8`
-  String get g_key_aa_version_v08 {
-    return Intl.message(
-      'v0.8',
-      name: 'g_key_aa_version_v08',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Recommended`
-  String get g_key_aa_recommended {
-    return Intl.message(
-      'Recommended',
-      name: 'g_key_aa_recommended',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Gas Savings`
-  String get g_key_aa_gas_savings {
-    return Intl.message(
-      'Gas Savings',
-      name: 'g_key_aa_gas_savings',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Batch Operations`
   String get g_key_aa_batch_operations {
     return Intl.message(
@@ -11829,51 +7554,11 @@ class S {
     );
   }
 
-  /// `Not available on this chain`
-  String get g_key_aa_paymaster_not_supported {
-    return Intl.message(
-      'Not available on this chain',
-      name: 'g_key_aa_paymaster_not_supported',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Sponsorship not available`
-  String get g_key_aa_paymaster_sponsored_unavailable {
-    return Intl.message(
-      'Sponsorship not available',
-      name: 'g_key_aa_paymaster_sponsored_unavailable',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Est. cost`
   String get g_key_aa_paymaster_est_cost {
     return Intl.message(
       'Est. cost',
       name: 'g_key_aa_paymaster_est_cost',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Balance`
-  String get g_key_aa_paymaster_balance {
-    return Intl.message(
-      'Balance',
-      name: 'g_key_aa_paymaster_balance',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Quote expired`
-  String get g_key_aa_paymaster_quote_expired {
-    return Intl.message(
-      'Quote expired',
-      name: 'g_key_aa_paymaster_quote_expired',
       desc: '',
       args: [],
     );
@@ -11894,306 +7579,6 @@ class S {
     return Intl.message(
       'chains supported',
       name: 'g_key_aa_paymaster_chains_supported',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `or`
-  String get g_key_or {
-    return Intl.message('or', name: 'g_key_or', desc: '', args: []);
-  }
-
-  /// `Login successful`
-  String get g_key_login_success {
-    return Intl.message(
-      'Login successful',
-      name: 'g_key_login_success',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Social Login`
-  String get g_key_social_login {
-    return Intl.message(
-      'Social Login',
-      name: 'g_key_social_login',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Continue with Google`
-  String get g_key_continue_with_google {
-    return Intl.message(
-      'Continue with Google',
-      name: 'g_key_continue_with_google',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Continue with Apple`
-  String get g_key_continue_with_apple {
-    return Intl.message(
-      'Continue with Apple',
-      name: 'g_key_continue_with_apple',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Google sign-in cancelled`
-  String get g_key_google_sign_in_cancelled {
-    return Intl.message(
-      'Google sign-in cancelled',
-      name: 'g_key_google_sign_in_cancelled',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Apple sign-in cancelled`
-  String get g_key_apple_sign_in_cancelled {
-    return Intl.message(
-      'Apple sign-in cancelled',
-      name: 'g_key_apple_sign_in_cancelled',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Sign in failed`
-  String get g_key_sign_in_failed {
-    return Intl.message(
-      'Sign in failed',
-      name: 'g_key_sign_in_failed',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Linked Accounts`
-  String get g_key_linked_accounts {
-    return Intl.message(
-      'Linked Accounts',
-      name: 'g_key_linked_accounts',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Link Account`
-  String get g_key_link_account {
-    return Intl.message(
-      'Link Account',
-      name: 'g_key_link_account',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Unlink Account`
-  String get g_key_unlink_account {
-    return Intl.message(
-      'Unlink Account',
-      name: 'g_key_unlink_account',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Account linked successfully`
-  String get g_key_account_linked {
-    return Intl.message(
-      'Account linked successfully',
-      name: 'g_key_account_linked',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Account unlinked successfully`
-  String get g_key_account_unlinked {
-    return Intl.message(
-      'Account unlinked successfully',
-      name: 'g_key_account_unlinked',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `No linked accounts`
-  String get g_key_no_linked_accounts {
-    return Intl.message(
-      'No linked accounts',
-      name: 'g_key_no_linked_accounts',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Enterprise Login (SSO)`
-  String get g_key_oidc_login {
-    return Intl.message(
-      'Enterprise Login (SSO)',
-      name: 'g_key_oidc_login',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Sign in with Passkey`
-  String get g_key_sign_in_with_passkey {
-    return Intl.message(
-      'Sign in with Passkey',
-      name: 'g_key_sign_in_with_passkey',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Passkey`
-  String get g_key_passkey {
-    return Intl.message('Passkey', name: 'g_key_passkey', desc: '', args: []);
-  }
-
-  /// `Passkey Management`
-  String get g_key_passkey_management {
-    return Intl.message(
-      'Passkey Management',
-      name: 'g_key_passkey_management',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Register Passkey`
-  String get g_key_register_passkey {
-    return Intl.message(
-      'Register Passkey',
-      name: 'g_key_register_passkey',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Passkey registered successfully`
-  String get g_key_passkey_registered {
-    return Intl.message(
-      'Passkey registered successfully',
-      name: 'g_key_passkey_registered',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Passkey deleted`
-  String get g_key_passkey_deleted {
-    return Intl.message(
-      'Passkey deleted',
-      name: 'g_key_passkey_deleted',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Passkey is not supported on this device`
-  String get g_key_passkey_not_supported {
-    return Intl.message(
-      'Passkey is not supported on this device',
-      name: 'g_key_passkey_not_supported',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `No Passkey registered`
-  String get g_key_passkey_no_credentials {
-    return Intl.message(
-      'No Passkey registered',
-      name: 'g_key_passkey_no_credentials',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Rename Passkey`
-  String get g_key_passkey_rename {
-    return Intl.message(
-      'Rename Passkey',
-      name: 'g_key_passkey_rename',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Are you sure you want to delete this Passkey?`
-  String get g_key_passkey_delete_confirm {
-    return Intl.message(
-      'Are you sure you want to delete this Passkey?',
-      name: 'g_key_passkey_delete_confirm',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Last used: {time}`
-  String g_key_passkey_last_used(Object time) {
-    return Intl.message(
-      'Last used: $time',
-      name: 'g_key_passkey_last_used',
-      desc: '',
-      args: [time],
-    );
-  }
-
-  /// `Created: {time}`
-  String g_key_passkey_created(Object time) {
-    return Intl.message(
-      'Created: $time',
-      name: 'g_key_passkey_created',
-      desc: '',
-      args: [time],
-    );
-  }
-
-  /// `Synced to cloud`
-  String get g_key_passkey_backed_up {
-    return Intl.message(
-      'Synced to cloud',
-      name: 'g_key_passkey_backed_up',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Enterprise SSO not configured`
-  String get g_key_oidc_not_configured {
-    return Intl.message(
-      'Enterprise SSO not configured',
-      name: 'g_key_oidc_not_configured',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `SAML Login`
-  String get g_key_saml_login {
-    return Intl.message(
-      'SAML Login',
-      name: 'g_key_saml_login',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `SAML not configured`
-  String get g_key_saml_not_configured {
-    return Intl.message(
-      'SAML not configured',
-      name: 'g_key_saml_not_configured',
       desc: '',
       args: [],
     );
@@ -12244,26 +7629,6 @@ class S {
     return Intl.message(
       'Your Identity',
       name: 'g_key_ens_your_identity',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Smart Account`
-  String get g_key_aa_smart_account {
-    return Intl.message(
-      'Smart Account',
-      name: 'g_key_aa_smart_account',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Create Smart Account`
-  String get g_key_aa_create_smart_account {
-    return Intl.message(
-      'Create Smart Account',
-      name: 'g_key_aa_create_smart_account',
       desc: '',
       args: [],
     );
@@ -12399,26 +7764,6 @@ class S {
     return Intl.message(
       'High Risk',
       name: 'g_key_aa_session_risk_high',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Allowed`
-  String get g_key_aa_session_allowed {
-    return Intl.message(
-      'Allowed',
-      name: 'g_key_aa_session_allowed',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Blocked`
-  String get g_key_aa_session_blocked {
-    return Intl.message(
-      'Blocked',
-      name: 'g_key_aa_session_blocked',
       desc: '',
       args: [],
     );
@@ -12674,16 +8019,6 @@ class S {
     );
   }
 
-  /// `Session keys allow DApps to execute transactions on your behalf with limited permissions and time constraints.`
-  String get g_key_aa_create_session_desc {
-    return Intl.message(
-      'Session keys allow DApps to execute transactions on your behalf with limited permissions and time constraints.',
-      name: 'g_key_aa_create_session_desc',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Details`
   String get g_key_aa_details {
     return Intl.message(
@@ -12749,51 +8084,6 @@ class S {
     );
   }
 
-  /// `Contract`
-  String get g_key_aa_contract {
-    return Intl.message(
-      'Contract',
-      name: 'g_key_aa_contract',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Full Access`
-  String get g_key_aa_full_access {
-    return Intl.message(
-      'Full Access',
-      name: 'g_key_aa_full_access',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Continue`
-  String get g_key_aa_continue {
-    return Intl.message(
-      'Continue',
-      name: 'g_key_aa_continue',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Never`
-  String get g_key_aa_never {
-    return Intl.message('Never', name: 'g_key_aa_never', desc: '', args: []);
-  }
-
-  /// `Just now`
-  String get g_key_aa_just_now {
-    return Intl.message(
-      'Just now',
-      name: 'g_key_aa_just_now',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Chain`
   String get g_key_aa_chain {
     return Intl.message('Chain', name: 'g_key_aa_chain', desc: '', args: []);
@@ -12802,66 +8092,6 @@ class S {
   /// `Retry`
   String get g_key_aa_retry {
     return Intl.message('Retry', name: 'g_key_aa_retry', desc: '', args: []);
-  }
-
-  /// `Deploy Failed`
-  String get g_key_aa_deploy_failed {
-    return Intl.message(
-      'Deploy Failed',
-      name: 'g_key_aa_deploy_failed',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Account will be deployed on first transaction`
-  String get g_key_aa_not_deployed_desc {
-    return Intl.message(
-      'Account will be deployed on first transaction',
-      name: 'g_key_aa_not_deployed_desc',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Deployment transaction is being processed`
-  String get g_key_aa_deploying_desc {
-    return Intl.message(
-      'Deployment transaction is being processed',
-      name: 'g_key_aa_deploying_desc',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Account is ready to use`
-  String get g_key_aa_deployed_desc {
-    return Intl.message(
-      'Account is ready to use',
-      name: 'g_key_aa_deployed_desc',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Deployment failed. Please try again.`
-  String get g_key_aa_deploy_failed_desc {
-    return Intl.message(
-      'Deployment failed. Please try again.',
-      name: 'g_key_aa_deploy_failed_desc',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Biconomy Account`
-  String get g_key_aa_biconomy_account {
-    return Intl.message(
-      'Biconomy Account',
-      name: 'g_key_aa_biconomy_account',
-      desc: '',
-      args: [],
-    );
   }
 
   /// `Modular ERC-7579 smart account with gasless transaction support`
@@ -12889,26 +8119,6 @@ class S {
     return Intl.message(
       'Failed to calculate address. Please try again.',
       name: 'g_key_aa_address_error',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Threshold`
-  String get g_key_aa_safe_threshold {
-    return Intl.message(
-      'Threshold',
-      name: 'g_key_aa_safe_threshold',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Guardians`
-  String get g_key_aa_safe_guardians {
-    return Intl.message(
-      'Guardians',
-      name: 'g_key_aa_safe_guardians',
       desc: '',
       args: [],
     );
@@ -12962,76 +8172,6 @@ class S {
   /// `Reset`
   String get g_key_reset {
     return Intl.message('Reset', name: 'g_key_reset', desc: '', args: []);
-  }
-
-  /// `Type`
-  String get g_key_filter_type {
-    return Intl.message('Type', name: 'g_key_filter_type', desc: '', args: []);
-  }
-
-  /// `Eligible only`
-  String get g_key_eligible_only {
-    return Intl.message(
-      'Eligible only',
-      name: 'g_key_eligible_only',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `High value only`
-  String get g_key_high_value_only {
-    return Intl.message(
-      'High value only',
-      name: 'g_key_high_value_only',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Apply`
-  String get g_key_apply {
-    return Intl.message('Apply', name: 'g_key_apply', desc: '', args: []);
-  }
-
-  /// `Notification Settings`
-  String get g_key_notification_settings {
-    return Intl.message(
-      'Notification Settings',
-      name: 'g_key_notification_settings',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `New airdrops`
-  String get g_key_new_airdrops {
-    return Intl.message(
-      'New airdrops',
-      name: 'g_key_new_airdrops',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Eligibility alerts`
-  String get g_key_eligibility_alerts {
-    return Intl.message(
-      'Eligibility alerts',
-      name: 'g_key_eligibility_alerts',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Deadline reminders`
-  String get g_key_deadline_reminders {
-    return Intl.message(
-      'Deadline reminders',
-      name: 'g_key_deadline_reminders',
-      desc: '',
-      args: [],
-    );
   }
 
   /// `Insufficient balance: total amount would exceed available {value}`
@@ -13162,11 +8302,6 @@ class S {
       desc: '',
       args: [address],
     );
-  }
-
-  /// `Cancel`
-  String get g_key_hw_cancel {
-    return Intl.message('Cancel', name: 'g_key_hw_cancel', desc: '', args: []);
   }
 
   /// `Add`
@@ -13424,26 +8559,6 @@ class S {
     );
   }
 
-  /// `Enter PIN on your Trezor device`
-  String get g_key_hw_trezor_pin_required {
-    return Intl.message(
-      'Enter PIN on your Trezor device',
-      name: 'g_key_hw_trezor_pin_required',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Enter passphrase on your Trezor device`
-  String get g_key_hw_trezor_passphrase_required {
-    return Intl.message(
-      'Enter passphrase on your Trezor device',
-      name: 'g_key_hw_trezor_passphrase_required',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Trezor connected successfully`
   String get g_key_hw_trezor_connected {
     return Intl.message(
@@ -13509,46 +8624,6 @@ class S {
     return Intl.message(
       'Point your camera at the QR code displayed on your Keystone device',
       name: 'g_key_hw_keystone_scan_response_hint',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Waiting for Keystone signature...`
-  String get g_key_hw_keystone_signing {
-    return Intl.message(
-      'Waiting for Keystone signature...',
-      name: 'g_key_hw_keystone_signing',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Signature received successfully`
-  String get g_key_hw_keystone_signature_received {
-    return Intl.message(
-      'Signature received successfully',
-      name: 'g_key_hw_keystone_signature_received',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Failed to parse QR code. Please try again.`
-  String get g_key_hw_keystone_scan_error {
-    return Intl.message(
-      'Failed to parse QR code. Please try again.',
-      name: 'g_key_hw_keystone_scan_error',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Invalid response from Keystone device`
-  String get g_key_hw_keystone_invalid_response {
-    return Intl.message(
-      'Invalid response from Keystone device',
-      name: 'g_key_hw_keystone_invalid_response',
       desc: '',
       args: [],
     );
@@ -13709,316 +8784,6 @@ class S {
     return Intl.message(
       'No transactions match your filter',
       name: 'g_key_tx_no_results',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Payment History`
-  String get g_key_payment_history {
-    return Intl.message(
-      'Payment History',
-      name: 'g_key_payment_history',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Load failed`
-  String get g_key_payment_load_failed {
-    return Intl.message(
-      'Load failed',
-      name: 'g_key_payment_load_failed',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Incoming`
-  String get g_key_payment_incoming {
-    return Intl.message(
-      'Incoming',
-      name: 'g_key_payment_incoming',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Outgoing`
-  String get g_key_payment_outgoing {
-    return Intl.message(
-      'Outgoing',
-      name: 'g_key_payment_outgoing',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `≈ {amount}{token}`
-  String g_key_payment_approx_token(String amount, String token) {
-    return Intl.message(
-      '≈ $amount$token',
-      name: 'g_key_payment_approx_token',
-      desc: '',
-      args: [amount, token],
-    );
-  }
-
-  /// `Payment QR`
-  String get g_key_payment_code_title {
-    return Intl.message(
-      'Payment QR',
-      name: 'g_key_payment_code_title',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `History`
-  String get g_key_payment_history_btn {
-    return Intl.message(
-      'History',
-      name: 'g_key_payment_history_btn',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Not Set`
-  String get g_key_payment_name_not_set {
-    return Intl.message(
-      'Not Set',
-      name: 'g_key_payment_name_not_set',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Set Payment Amount`
-  String get g_key_payment_set_amount_title {
-    return Intl.message(
-      'Set Payment Amount',
-      name: 'g_key_payment_set_amount_title',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Confirm`
-  String get g_key_payment_confirm {
-    return Intl.message(
-      'Confirm',
-      name: 'g_key_payment_confirm',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Invalid payment amount`
-  String get g_key_payment_amount_invalid {
-    return Intl.message(
-      'Invalid payment amount',
-      name: 'g_key_payment_amount_invalid',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Payment`
-  String get g_key_payment_title {
-    return Intl.message(
-      'Payment',
-      name: 'g_key_payment_title',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Payment successful!`
-  String get g_key_payment_success {
-    return Intl.message(
-      'Payment successful!',
-      name: 'g_key_payment_success',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Wallet`
-  String get g_key_payment_wallet {
-    return Intl.message(
-      'Wallet',
-      name: 'g_key_payment_wallet',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `≈ {amount} USDT`
-  String g_key_payment_approx_usdt(String amount) {
-    return Intl.message(
-      '≈ $amount USDT',
-      name: 'g_key_payment_approx_usdt',
-      desc: '',
-      args: [amount],
-    );
-  }
-
-  /// `Insufficient USDT balance!`
-  String get g_key_payment_usdt_insufficient {
-    return Intl.message(
-      'Insufficient USDT balance!',
-      name: 'g_key_payment_usdt_insufficient',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Please add USDT token!`
-  String get g_key_payment_usdt_not_found {
-    return Intl.message(
-      'Please add USDT token!',
-      name: 'g_key_payment_usdt_not_found',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Insufficient native balance!`
-  String get g_key_payment_native_insufficient {
-    return Intl.message(
-      'Insufficient native balance!',
-      name: 'g_key_payment_native_insufficient',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Native chain not found!`
-  String get g_key_payment_native_not_found {
-    return Intl.message(
-      'Native chain not found!',
-      name: 'g_key_payment_native_not_found',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Gas Limit Very High`
-  String get g_key_aa_gas_warn_total_high {
-    return Intl.message(
-      'Gas Limit Very High',
-      name: 'g_key_aa_gas_warn_total_high',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Estimated total gas ({gas}) is unusually high. Check your transaction for errors.`
-  String g_key_aa_gas_warn_total_high_desc(String gas) {
-    return Intl.message(
-      'Estimated total gas ($gas) is unusually high. Check your transaction for errors.',
-      name: 'g_key_aa_gas_warn_total_high_desc',
-      desc: '',
-      args: [gas],
-    );
-  }
-
-  /// `Verification Gas High`
-  String get g_key_aa_gas_warn_verify_high {
-    return Intl.message(
-      'Verification Gas High',
-      name: 'g_key_aa_gas_warn_verify_high',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Verification gas ({gas}) may be too high. This can happen with complex account logic.`
-  String g_key_aa_gas_warn_verify_high_desc(String gas) {
-    return Intl.message(
-      'Verification gas ($gas) may be too high. This can happen with complex account logic.',
-      name: 'g_key_aa_gas_warn_verify_high_desc',
-      desc: '',
-      args: [gas],
-    );
-  }
-
-  /// `Execution Gas High`
-  String get g_key_aa_gas_warn_call_high {
-    return Intl.message(
-      'Execution Gas High',
-      name: 'g_key_aa_gas_warn_call_high',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Execution gas ({gas}) is high. The called contract may consume more gas than expected.`
-  String g_key_aa_gas_warn_call_high_desc(String gas) {
-    return Intl.message(
-      'Execution gas ($gas) is high. The called contract may consume more gas than expected.',
-      name: 'g_key_aa_gas_warn_call_high_desc',
-      desc: '',
-      args: [gas],
-    );
-  }
-
-  /// `Paymaster Overhead High`
-  String get g_key_aa_gas_warn_paymaster {
-    return Intl.message(
-      'Paymaster Overhead High',
-      name: 'g_key_aa_gas_warn_paymaster',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Paymaster gas overhead ({gas}) is high. Gas-free transactions may cost more.`
-  String g_key_aa_gas_warn_paymaster_desc(String gas) {
-    return Intl.message(
-      'Paymaster gas overhead ($gas) is high. Gas-free transactions may cost more.',
-      name: 'g_key_aa_gas_warn_paymaster_desc',
-      desc: '',
-      args: [gas],
-    );
-  }
-
-  /// `Deployment Gas Overhead`
-  String get g_key_aa_gas_warn_deploy {
-    return Intl.message(
-      'Deployment Gas Overhead',
-      name: 'g_key_aa_gas_warn_deploy',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `First transaction includes account deployment (~{gas} gas). Subsequent transactions will be cheaper.`
-  String g_key_aa_gas_warn_deploy_desc(String gas) {
-    return Intl.message(
-      'First transaction includes account deployment (~$gas gas). Subsequent transactions will be cheaper.',
-      name: 'g_key_aa_gas_warn_deploy_desc',
-      desc: '',
-      args: [gas],
-    );
-  }
-
-  /// `Possible Gas Under-Estimate`
-  String get g_key_aa_gas_warn_under_est {
-    return Intl.message(
-      'Possible Gas Under-Estimate',
-      name: 'g_key_aa_gas_warn_under_est',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `The actual gas used may exceed the estimate. Consider adding a larger buffer.`
-  String get g_key_aa_gas_warn_under_est_desc {
-    return Intl.message(
-      'The actual gas used may exceed the estimate. Consider adding a larger buffer.',
-      name: 'g_key_aa_gas_warn_under_est_desc',
       desc: '',
       args: [],
     );
@@ -14239,16 +9004,6 @@ class S {
     return Intl.message('Chain', name: 'g_key_dex_chain', desc: '', args: []);
   }
 
-  /// `Slippage Tolerance`
-  String get g_key_dex_slippage {
-    return Intl.message(
-      'Slippage Tolerance',
-      name: 'g_key_dex_slippage',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Select`
   String get g_key_dex_select_token {
     return Intl.message(
@@ -14299,16 +9054,6 @@ class S {
     );
   }
 
-  /// `Solana DEX swap not yet supported in-app`
-  String get g_key_dex_sol_unsupported {
-    return Intl.message(
-      'Solana DEX swap not yet supported in-app',
-      name: 'g_key_dex_sol_unsupported',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Quote failed`
   String get g_key_dex_quote_failed {
     return Intl.message(
@@ -14317,21 +9062,6 @@ class S {
       desc: '',
       args: [],
     );
-  }
-
-  /// `Transaction failed`
-  String get g_key_dex_tx_failed {
-    return Intl.message(
-      'Transaction failed',
-      name: 'g_key_dex_tx_failed',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Retry`
-  String get g_key_dex_retry {
-    return Intl.message('Retry', name: 'g_key_dex_retry', desc: '', args: []);
   }
 
   /// `Swap`
@@ -14394,121 +9124,6 @@ class S {
     return Intl.message(
       'Address copied',
       name: 'g_key_ens_copy_address',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Unstoppable Domains`
-  String get g_key_domain_ud_name {
-    return Intl.message(
-      'Unstoppable Domains',
-      name: 'g_key_domain_ud_name',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Solana Name Service`
-  String get g_key_domain_sns_name {
-    return Intl.message(
-      'Solana Name Service',
-      name: 'g_key_domain_sns_name',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Unstoppable domain not found or no address for this chain`
-  String get g_key_domain_ud_not_found {
-    return Intl.message(
-      'Unstoppable domain not found or no address for this chain',
-      name: 'g_key_domain_ud_not_found',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Solana domain not found`
-  String get g_key_domain_sns_not_found {
-    return Intl.message(
-      'Solana domain not found',
-      name: 'g_key_domain_sns_not_found',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Supports ENS (.eth), Unstoppable Domains (.crypto/.wallet/…) and Solana SNS (.sol)`
-  String get g_key_domain_resolve_hint {
-    return Intl.message(
-      'Supports ENS (.eth), Unstoppable Domains (.crypto/.wallet/…) and Solana SNS (.sol)',
-      name: 'g_key_domain_resolve_hint',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Weak`
-  String get g_key_gesture_weak {
-    return Intl.message('Weak', name: 'g_key_gesture_weak', desc: '', args: []);
-  }
-
-  /// `Medium`
-  String get g_key_gesture_medium {
-    return Intl.message(
-      'Medium',
-      name: 'g_key_gesture_medium',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Strong`
-  String get g_key_gesture_strong {
-    return Intl.message(
-      'Strong',
-      name: 'g_key_gesture_strong',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Pattern too simple, please use more nodes`
-  String get g_key_gesture_too_simple {
-    return Intl.message(
-      'Pattern too simple, please use more nodes',
-      name: 'g_key_gesture_too_simple',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Use Face ID / Touch ID`
-  String get g_biometric_retry {
-    return Intl.message(
-      'Use Face ID / Touch ID',
-      name: 'g_biometric_retry',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Biometric not set up. Please enable in device Settings.`
-  String get g_biometric_not_enrolled {
-    return Intl.message(
-      'Biometric not set up. Please enable in device Settings.',
-      name: 'g_biometric_not_enrolled',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Too many failures. Biometric locked — please use passcode.`
-  String get g_biometric_locked_out {
-    return Intl.message(
-      'Too many failures. Biometric locked — please use passcode.',
-      name: 'g_biometric_locked_out',
       desc: '',
       args: [],
     );
@@ -14689,16 +9304,6 @@ class S {
     );
   }
 
-  /// `New Connection`
-  String get g_wc_new_connection {
-    return Intl.message(
-      'New Connection',
-      name: 'g_wc_new_connection',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Home`
   String get g_mining_key_1 {
     return Intl.message('Home', name: 'g_mining_key_1', desc: '', args: []);
@@ -14744,16 +9349,6 @@ class S {
     return Intl.message(
       'Verification Since',
       name: 'g_mining_key_21',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Reward Distribution`
-  String get g_mining_key_22 {
-    return Intl.message(
-      'Reward Distribution',
-      name: 'g_mining_key_22',
       desc: '',
       args: [],
     );
@@ -14869,26 +9464,6 @@ class S {
     return Intl.message(
       'MINS/DAY',
       name: 'g_mining_key_65',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Unlock Date`
-  String get g_mining_key7 {
-    return Intl.message(
-      'Unlock Date',
-      name: 'g_mining_key7',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Task detail`
-  String get g_mining_key15 {
-    return Intl.message(
-      'Task detail',
-      name: 'g_mining_key15',
       desc: '',
       args: [],
     );
@@ -15119,16 +9694,6 @@ class S {
     );
   }
 
-  /// `Tap ★ on any coin to add`
-  String get g_market_empty_watchlist_hint {
-    return Intl.message(
-      'Tap ★ on any coin to add',
-      name: 'g_market_empty_watchlist_hint',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Remove`
   String get g_alert_remove {
     return Intl.message('Remove', name: 'g_alert_remove', desc: '', args: []);
@@ -15229,286 +9794,6 @@ class S {
     );
   }
 
-  /// `Change Email`
-  String get g_email_change_title {
-    return Intl.message(
-      'Change Email',
-      name: 'g_email_change_title',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Current email`
-  String get g_email_current_label {
-    return Intl.message(
-      'Current email',
-      name: 'g_email_current_label',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `New email address`
-  String get g_email_new_label {
-    return Intl.message(
-      'New email address',
-      name: 'g_email_new_label',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Enter new email address`
-  String get g_email_new_hint {
-    return Intl.message(
-      'Enter new email address',
-      name: 'g_email_new_hint',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Please enter a new email address`
-  String get g_email_error_empty {
-    return Intl.message(
-      'Please enter a new email address',
-      name: 'g_email_error_empty',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Invalid email address`
-  String get g_email_error_invalid {
-    return Intl.message(
-      'Invalid email address',
-      name: 'g_email_error_invalid',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `New email must differ from current email`
-  String get g_email_error_same {
-    return Intl.message(
-      'New email must differ from current email',
-      name: 'g_email_error_same',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Password required for Chat sync`
-  String get g_email_pwd_required {
-    return Intl.message(
-      'Password required for Chat sync',
-      name: 'g_email_pwd_required',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Verification code sent to {email}`
-  String g_email_code_sent_to(String email) {
-    return Intl.message(
-      'Verification code sent to $email',
-      name: 'g_email_code_sent_to',
-      desc: '',
-      args: [email],
-    );
-  }
-
-  /// `Code resent`
-  String get g_email_code_resent {
-    return Intl.message(
-      'Code resent',
-      name: 'g_email_code_resent',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Please enter the 6-digit code`
-  String get g_email_code_invalid {
-    return Intl.message(
-      'Please enter the 6-digit code',
-      name: 'g_email_code_invalid',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Email updated successfully`
-  String get g_email_success {
-    return Intl.message(
-      'Email updated successfully',
-      name: 'g_email_success',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Incorrect code, please try again`
-  String get g_email_code_wrong {
-    return Intl.message(
-      'Incorrect code, please try again',
-      name: 'g_email_code_wrong',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Both accounts updated successfully!`
-  String get g_email_both_success {
-    return Intl.message(
-      'Both accounts updated successfully!',
-      name: 'g_email_both_success',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `N42 email updated. Chat email can be updated in Chat > Settings.`
-  String get g_email_n42_only {
-    return Intl.message(
-      'N42 email updated. Chat email can be updated in Chat > Settings.',
-      name: 'g_email_n42_only',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Send Verification Code`
-  String get g_email_send_code {
-    return Intl.message(
-      'Send Verification Code',
-      name: 'g_email_send_code',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Enter 6-digit code`
-  String get g_email_enter_code {
-    return Intl.message(
-      'Enter 6-digit code',
-      name: 'g_email_enter_code',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Confirm & Continue to Chat Sync`
-  String get g_email_confirm_continue {
-    return Intl.message(
-      'Confirm & Continue to Chat Sync',
-      name: 'g_email_confirm_continue',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Confirm Change`
-  String get g_email_confirm_change {
-    return Intl.message(
-      'Confirm Change',
-      name: 'g_email_confirm_change',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `← Change email address`
-  String get g_email_back_to_email {
-    return Intl.message(
-      '← Change email address',
-      name: 'g_email_back_to_email',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `N42 account email updated`
-  String get g_email_n42_updated {
-    return Intl.message(
-      'N42 account email updated',
-      name: 'g_email_n42_updated',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Sync Chat Account Email`
-  String get g_email_chat_sync_title {
-    return Intl.message(
-      'Sync Chat Account Email',
-      name: 'g_email_chat_sync_title',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Sending Chat verification code...`
-  String get g_email_chat_sending {
-    return Intl.message(
-      'Sending Chat verification code...',
-      name: 'g_email_chat_sending',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Failed to send Chat code`
-  String get g_email_chat_send_fail {
-    return Intl.message(
-      'Failed to send Chat code',
-      name: 'g_email_chat_send_fail',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Chat code sent to`
-  String get g_email_chat_code_sent_to {
-    return Intl.message(
-      'Chat code sent to',
-      name: 'g_email_chat_code_sent_to',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Enter 6-digit Chat code`
-  String get g_email_chat_code_hint {
-    return Intl.message(
-      'Enter 6-digit Chat code',
-      name: 'g_email_chat_code_hint',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Confirm Chat Sync`
-  String get g_email_chat_confirm {
-    return Intl.message(
-      'Confirm Chat Sync',
-      name: 'g_email_chat_confirm',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Skip – N42 email is already updated`
-  String get g_email_skip_full {
-    return Intl.message(
-      'Skip – N42 email is already updated',
-      name: 'g_email_skip_full',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Resend in {s}s`
   String g_email_resend_countdown(int s) {
     return Intl.message(
@@ -15527,41 +9812,6 @@ class S {
       desc: '',
       args: [],
     );
-  }
-
-  /// `Also sync Chat account email`
-  String get g_email_also_sync {
-    return Intl.message(
-      'Also sync Chat account email',
-      name: 'g_email_also_sync',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Current password (for Chat)`
-  String get g_email_pwd_label {
-    return Intl.message(
-      'Current password (for Chat)',
-      name: 'g_email_pwd_label',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Enter password`
-  String get g_email_pwd_hint {
-    return Intl.message(
-      'Enter password',
-      name: 'g_email_pwd_hint',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Skip`
-  String get g_email_skip {
-    return Intl.message('Skip', name: 'g_email_skip', desc: '', args: []);
   }
 
   /// `Portfolio`
@@ -15669,16 +9919,6 @@ class S {
     return Intl.message(
       'Invite Code',
       name: 'g_referral_invite_code',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Referral Stats`
-  String get g_referral_stats_title {
-    return Intl.message(
-      'Referral Stats',
-      name: 'g_referral_stats_title',
       desc: '',
       args: [],
     );
@@ -15869,31 +10109,11 @@ class S {
     );
   }
 
-  /// `View on Explorer`
-  String get g_key_nft_open_browser {
-    return Intl.message(
-      'View on Explorer',
-      name: 'g_key_nft_open_browser',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Solana NFT transfers are coming soon`
   String get g_key_nft_send_sol_unsupported {
     return Intl.message(
       'Solana NFT transfers are coming soon',
       name: 'g_key_nft_send_sol_unsupported',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Solana NFT burn is coming soon`
-  String get g_key_nft_burn_sol_unsupported {
-    return Intl.message(
-      'Solana NFT burn is coming soon',
-      name: 'g_key_nft_burn_sol_unsupported',
       desc: '',
       args: [],
     );
@@ -15924,16 +10144,6 @@ class S {
     return Intl.message(
       'Invalid wallet address',
       name: 'g_key_nft_address_invalid',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Burn is only supported on EVM chains`
-  String get g_key_nft_burn_evm_only {
-    return Intl.message(
-      'Burn is only supported on EVM chains',
-      name: 'g_key_nft_burn_evm_only',
       desc: '',
       args: [],
     );
@@ -16179,26 +10389,6 @@ class S {
     );
   }
 
-  /// `Solana swap: sign the transaction in your Solana wallet.`
-  String get g_key_dex_sol_note {
-    return Intl.message(
-      'Solana swap: sign the transaction in your Solana wallet.',
-      name: 'g_key_dex_sol_note',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Quote refreshed`
-  String get g_key_dex_quote_refreshed {
-    return Intl.message(
-      'Quote refreshed',
-      name: 'g_key_dex_quote_refreshed',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Unlimited`
   String get g_key_dex_approve_unlimited {
     return Intl.message(
@@ -16369,16 +10559,6 @@ class S {
     );
   }
 
-  /// `Watch-only`
-  String get g_key_watch_only_banner {
-    return Intl.message(
-      'Watch-only',
-      name: 'g_key_watch_only_banner',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Watch-only wallet cannot send or sign transactions`
   String get g_key_watch_only_cant_send {
     return Intl.message(
@@ -16454,11 +10634,6 @@ class S {
     );
   }
 
-  /// `Source`
-  String get g_news_source {
-    return Intl.message('Source', name: 'g_news_source', desc: '', args: []);
-  }
-
   /// `Add Trade`
   String get g_pnl_add_trade {
     return Intl.message(
@@ -16489,11 +10664,6 @@ class S {
     return Intl.message('Save', name: 'g_pnl_save', desc: '', args: []);
   }
 
-  /// `Cancel`
-  String get g_pnl_cancel {
-    return Intl.message('Cancel', name: 'g_pnl_cancel', desc: '', args: []);
-  }
-
   /// `Cost Basis`
   String get g_pnl_cost_basis {
     return Intl.message(
@@ -16514,16 +10684,6 @@ class S {
     return Intl.message(
       'Unrealized P&L',
       name: 'g_pnl_unrealized',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `No trades recorded`
-  String get g_pnl_no_trades {
-    return Intl.message(
-      'No trades recorded',
-      name: 'g_pnl_no_trades',
       desc: '',
       args: [],
     );
@@ -16564,16 +10724,6 @@ class S {
     return Intl.message(
       'Blocked',
       name: 'g_dapp_security_blocked',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `DApp Security`
-  String get g_dapp_security_title {
-    return Intl.message(
-      'DApp Security',
-      name: 'g_dapp_security_title',
       desc: '',
       args: [],
     );

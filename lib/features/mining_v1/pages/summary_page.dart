@@ -110,7 +110,7 @@ class _SummaryPageState extends State<SummaryPage>
                 ),
                 Text(
                   // "Reward History"
-                  S.current.g_mining_key_22,
+                  S.current.g_mining_key_34,
                   style: TextStyle(
                       color: AppThemeUtils.getColorByKey(
                           context, AppThemeKeys.mainTextColor.name),

@@ -27,240 +27,146 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m2(symbol) => "Сповіщення про ціну · ${symbol}";
 
-  static String m3(value) => "Я ${value}";
+  static String m3(s) => "Повторно надішліть через ${s}s";
 
-  static String m4(value) => "Учасник чату (${value})";
+  static String m4(message) => "Помилка покупки: ${message}";
 
-  static String m5(value) => "Ви впевнені, що хочете додати ${value} як друга";
+  static String m5(productId) => "Покупку виконано: ${productId}";
 
-  static String m6(email) => "Код підтвердження надіслано на ${email}";
+  static String m6(productId) => "Відновлено: ${productId}";
 
-  static String m7(s) => "Повторно надішліть через ${s}s";
+  static String m7(value) => "Сума більша за ${value}.";
 
-  static String m8(value) =>
-      "Ви були зв’язані, і наразі ви не можете бути знову зв’язані. Адреса прив\'язки: ${value}.";
+  static String m8(value) => "Гаманець уже існує, ім\'я гаманця \"${value}\"";
 
-  static String m9(value) => "Прив’язка успішна. Адреса прив’язки: ${value}";
+  static String m9(value) => "Введіть суму більше, ніж ${value}.";
 
-  static String m10(value) => "У гаманці ${value} немає N42chain!";
+  static String m10(value) => "Дубльована адреса в рядку ${value}";
 
-  static String m11(value) => "Збіг успішний. Адреса: ${value}.";
-
-  static String m12(message) => "Помилка покупки: ${message}";
-
-  static String m13(productId) => "Покупку виконано: ${productId}";
-
-  static String m14(productId) => "Відновлено: ${productId}";
-
-  static String m15(value) => "Сума більша за ${value}.";
-
-  static String m16(value) => "Гаманець уже існує, ім\'я гаманця \"${value}\"";
-
-  static String m17(value) => "Введіть суму більше, ніж ${value}.";
-
-  static String m18(gas) =>
-      "Випускний газ (${gas}) високий. Викликаний контракт може споживати більше газу, ніж очікувалося.";
-
-  static String m19(gas) =>
-      "Перша транзакція включає розгортання облікового запису (~${gas} газу). Подальші операції будуть дешевшими.";
-
-  static String m20(gas) =>
-      "Накладні витрати на газ платника (${gas}) високі. Транзакції без газу можуть коштувати дорожче.";
-
-  static String m21(gas) =>
-      "Розрахунковий загальний газ (${gas}) надзвичайно високий. Перевірте транзакцію на наявність помилок.";
-
-  static String m22(gas) =>
-      "Газ перевірки (${gas}) може бути занадто високим. Це може статися зі складною логікою облікового запису.";
-
-  static String m23(value) => "Залишилося ${value} днів";
-
-  static String m24(value) => "Дубльована адреса в рядку ${value}";
-
-  static String m25(value) =>
+  static String m11(value) =>
       "Недостатній баланс: загальна сума перевищить доступний ${value}";
 
-  static String m26(value) => "Недійсна адреса в рядку ${value}";
+  static String m12(value) => "Недійсна адреса в рядку ${value}";
 
-  static String m27(value) => "Недійсна сума в рядку ${value}";
+  static String m13(value) => "Недійсна сума в рядку ${value}";
 
-  static String m28(value) => "Максимальна кількість одержувачів ${value}";
+  static String m14(value) => "Максимальна кількість одержувачів ${value}";
 
-  static String m29(token) => "Підтвердьте ${token}, щоб продовжити";
+  static String m15(token) => "Підтвердьте ${token}, щоб продовжити";
 
-  static String m30(impact) =>
+  static String m16(impact) =>
       "Високий вплив на ціну (${impact})! Дійте обережно.";
 
-  static String m31(secs) => "Термін дії пропозиції закінчується через ${secs}";
+  static String m17(secs) => "Термін дії пропозиції закінчується через ${secs}";
 
-  static String m32(value) => "+${value} балів/день";
+  static String m18(value) => "Заробляйте до ${value}% APY";
 
-  static String m33(value) => "Заробляйте до ${value}% APY";
+  static String m19(value) => "Автоматичне оновлення кожні ${value} секунд";
 
-  static String m34(value) => "Щиро вітаю! Тепер ви володієте ${value}";
+  static String m20(address) => "Обліковий запис ${address} додано";
 
-  static String m35(value) => "Зачекайте ${value} секунд";
-
-  static String m36(value) => "Автоматичне оновлення кожні ${value} секунд";
-
-  static String m37(address) => "Обліковий запис ${address} додано";
-
-  static String m38(address, network) =>
+  static String m21(address, network) =>
       "Ви бажаєте відстежувати цей обліковий запис апаратного гаманця?\n\nАдреса: ${address}\nМережа: ${network}";
 
-  static String m39(app) => "Поточний додаток: ${app}";
+  static String m22(app) => "Поточний додаток: ${app}";
 
-  static String m40(days) => "${days} днів тому";
+  static String m23(days) => "${days} днів тому";
 
-  static String m41(value) =>
+  static String m24(value) =>
       "Не вдалося імпортувати обліковий запис: ${value}";
 
-  static String m42(date) => "Останнє підключення: ${date}";
+  static String m25(date) => "Останнє підключення: ${date}";
 
-  static String m43(value) => "Відкрийте програму ${value} на своєму пристрої";
-
-  static String m44(app) =>
+  static String m26(app) =>
       "Переконайтеся, що програму ${app} відкрито на вашому Ledger";
 
-  static String m45(name) =>
+  static String m27(name) =>
       "Ви впевнені, що хочете видалити \"${name}\" зі збережених пристроїв?";
 
-  static String m46(value) => "Заробіть ${value} балів";
+  static String m28(value) => "Приблизно газ: ~${value} од";
 
-  static String m47(value) =>
-      "Заробляйте ${value} балів за кожного друга, який приєднується!";
+  static String m29(reason) => "Причина: ${reason}";
 
-  static String m48(value) => "${value} вказує на наступний рівень";
+  static String m30(value) => "${value}d роз\'єднати";
 
-  static String m49(amount, token) => "≈ ${amount}${token}";
+  static String m31(value) => "Залишилося ${value} днів";
 
-  static String m50(amount) => "≈ ${amount} USDT";
-
-  static String m51(value) => "Приблизно газ: ~${value} од";
-
-  static String m52(reason) => "Причина: ${reason}";
-
-  static String m53(value) =>
-      "Ви впевнені, що хочете видалити контакт ${value}?";
-
-  static String m54(value) => "${value}d роз\'єднати";
-
-  static String m55(value) => "Залишилося ${value} днів";
-
-  static String m56(value) => "Залишилося ${value} днів";
-
-  static String m57(value) =>
+  static String m32(value) =>
       "Розставка займає ${value} днів. Протягом цього періоду ваші токени будуть заблоковані.";
 
-  static String m58(value) => "Вам не вистачає \"${value}\"";
+  static String m33(value) => "Вам не вистачає \"${value}\"";
 
-  static String m59(value) =>
+  static String m34(value) =>
       "Не вдалося отримати обліковий запис \"${value}\".";
 
-  static String m60(value) => "Мінімальний ${value} XRP для першого переказу";
+  static String m35(value) => "Мінімальний ${value} XRP для першого переказу";
 
-  static String m61(value) => "${value}д тому";
+  static String m36(count) => "Додати (${count})";
 
-  static String m62(value) => "${value}h тому";
-
-  static String m63(value) => "${value}м тому";
-
-  static String m64(count) => "Додати (${count})";
-
-  static String m65(count) =>
+  static String m37(count) =>
       "${Intl.plural(count, one: 'Виявлено 1 новий маркер', other: '${count} виявлено нові маркери')} — натисніть, щоб переглянути";
 
-  static String m66(value) => "Код підтвердження надіслано на ${value}";
+  static String m38(value) => "Ланцюжок ${value} не додано.";
 
-  static String m67(value) => "Ланцюжок ${value} не додано.";
-
-  static String m68(value) =>
+  static String m39(value) =>
       "${value} має незавершені транзакції, спробуйте пізніше.";
 
-  static String m69(value) => "Не знайдено адреси для ${value}.";
+  static String m40(value) => "Не знайдено адреси для ${value}.";
 
-  static String m70(value) => "Недостатній баланс ${value}.";
+  static String m41(value) => "Недостатній баланс ${value}.";
 
-  static String m71(value, value1) =>
+  static String m42(value, value1) =>
       "Кожен обліковий запис XRP має резервувати ${value} XRP (зниження ${value1}) як базовий рівень, який не можна витрачати.";
 
-  static String m72(value, value1) =>
+  static String m43(value, value1) =>
       "Для кожного об’єкта, яким володіє обліковий запис, ${value} XRP (випадки ${value1}) додається до резерву.";
 
-  static String m73(value, value1) =>
+  static String m44(value, value1) =>
       "Цей обліковий запис володіє об’єктами ${value}, що означає, що зарезервовано додатковий ${value1} XRP.";
 
-  static String m74(value) =>
-      "Помилка введення шаблону пароля, у вас є шанси ${value}";
-
-  static String m75(value) =>
-      "Помилка введення пароля шаблону, у вас є шанс ${value}";
-
-  static String m76(value) =>
+  static String m45(value) =>
       "Ви успішно налаштували ${value} і почнете перевірку за допомогою N42Wallet!";
 
-  static String m77(value) =>
+  static String m46(value) =>
       "Приєднуйтеся до моєї групи ${value} на @N42Wallet, щоб стати першим майнером ланцюга рівня 1 і отримати криптовалюту на свій телефон!";
 
-  static String m78(value, value1) =>
+  static String m47(value, value1) =>
       "Ви впевнені, що бажаєте заблокувати ${value} N до ${value1} для запуску вузла?";
 
-  static String m79(value) => "Помилка імпорту: ${value}";
+  static String m48(value) => "Помилка імпорту: ${value}";
 
-  static String m80(value) =>
+  static String m49(value) =>
       "Щоб отримати винагороду, потрібен баланс ставки принаймні ${value}.";
 
-  static String m81(value, value1) =>
+  static String m50(value, value1) =>
       "${value} N кожні здобуті блоки ${value1}";
 
-  static String m82(value) => "Має бути ${value} символів";
+  static String m51(value) => "Має бути ${value} символів";
 
-  static String m83(value) => "${value} Недостатній баланс.";
+  static String m52(value) => "${value} Недостатній баланс.";
 
-  static String m84(value) => "${value} вхідний...";
+  static String m53(value) => "${value} вхідний...";
 
-  static String m85(value) =>
+  static String m54(value) =>
       "${value}, замінений у додатку, незабаром буде розповсюджений у ваш гаманець і не може бути проданий через цей процес. Його можна використовувати для запуску вузла.";
 
-  static String m86(value) => "Максимальна кількість символів: ${value}";
+  static String m55(value) => "Максимальна кількість символів: ${value}";
 
-  static String m87(value) => "${value} chain APP вже підтримується!";
+  static String m56(value) => "${value} chain APP вже підтримується!";
 
-  static String m88(value) =>
+  static String m57(value) =>
       "${value} chain APP уже підтримується, хочете додати?";
 
-  static String m89(value) => "Помилка перевірки адреси ${value}!";
+  static String m58(value) => "Помилка перевірки адреси ${value}!";
 
-  static String m90(value) => "Програма розблокується за ${value} секунд.";
-
-  static String m91(value) =>
-      "Помилка введення шаблону пароля, у вас є шанси ${value}";
-
-  static String m92(value) =>
-      "Помилка введення пароля, у вас є ${value} шансів";
-
-  static String m93(value) => "Помилка введення пароля, у вас є шанс ${value}";
-
-  static String m94(value) => "Введіть пароль ${value}";
-
-  static String m95(value) => "0~${value} символів";
+  static String m59(value) => "0~${value} символів";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
-    "Create_account": MessageLookupByLibrary.simpleMessage("Зареєструватися"),
-    "Create_your_account": MessageLookupByLibrary.simpleMessage(
-      "Створіть свій акаунт",
-    ),
     "Edit": MessageLookupByLibrary.simpleMessage("Редагувати"),
     "Verification": MessageLookupByLibrary.simpleMessage("Перевірка"),
     "address_Information": MessageLookupByLibrary.simpleMessage(
       "Інформація про адресу",
-    ),
-    "code_403": MessageLookupByLibrary.simpleMessage(
-      "Обліковий запис тимчасово заблоковано на один день",
-    ),
-    "code_err_tips": MessageLookupByLibrary.simpleMessage(
-      "Код невірний. Спробуйте ще раз.",
     ),
     "copy": MessageLookupByLibrary.simpleMessage("Успішно скопійовано"),
     "copyAddress": MessageLookupByLibrary.simpleMessage("Копіювати адресу"),
@@ -273,51 +179,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "device_login_title": MessageLookupByLibrary.simpleMessage(
       "Новий вхід на пристрій",
     ),
-    "editPhoto": MessageLookupByLibrary.simpleMessage("Редагувати фото"),
-    "email_code_error": MessageLookupByLibrary.simpleMessage(
-      "Не вдалося отримати код автентифікації",
-    ),
-    "email_code_finish": MessageLookupByLibrary.simpleMessage(
-      "Код автентифікації надіслано успішно, перевірте свою електронну пошту",
-    ),
-    "email_code_input_error": MessageLookupByLibrary.simpleMessage(
-      "Помилка коду автентифікації",
-    ),
-    "email_error": MessageLookupByLibrary.simpleMessage(
-      "Недійсна адреса електронної пошти",
-    ),
-    "email_verification": MessageLookupByLibrary.simpleMessage(
-      "Автентифікація електронної адреси",
-    ),
-    "email_verification_message1": MessageLookupByLibrary.simpleMessage(
-      "Додаток Email Address Authenticator захищає ваші зняття коштів і обліковий запис N42Wallet.",
-    ),
-    "email_verification_message2": MessageLookupByLibrary.simpleMessage(
-      "Додати підтвердження електронною поштою?",
-    ),
     "file": MessageLookupByLibrary.simpleMessage("Файл"),
-    "g_2fa_backup_hint": MessageLookupByLibrary.simpleMessage(
-      "Збережіть цей ключ — він вам знадобиться, якщо ви загубите телефон",
-    ),
-    "g_2fa_backup_share": MessageLookupByLibrary.simpleMessage("Поділіться"),
-    "g_2fa_backup_share_text": MessageLookupByLibrary.simpleMessage(
-      "Резервний ключ Google Authenticator N42Wallet",
-    ),
-    "g_2fa_disable_confirm_hint": MessageLookupByLibrary.simpleMessage(
-      "Введіть поточний 6-значний код Google Authenticator, щоб підтвердити вимкнення 2FA.",
-    ),
-    "g_2fa_disable_confirm_title": MessageLookupByLibrary.simpleMessage(
-      "Вимкніть Google 2FA",
-    ),
-    "g_2fa_disable_error": MessageLookupByLibrary.simpleMessage(
-      "Не вдалося вимкнути Google 2FA. Перевірте код і повторіть спробу.",
-    ),
-    "g_2fa_disable_success": MessageLookupByLibrary.simpleMessage(
-      "Google 2FA вимкнено",
-    ),
-    "g_2fa_invalid_format": MessageLookupByLibrary.simpleMessage(
-      "Введіть дійсний 6-значний код",
-    ),
     "g_alert_above": MessageLookupByLibrary.simpleMessage("Переходить вище ↑"),
     "g_alert_below": MessageLookupByLibrary.simpleMessage("Падає нижче ↓"),
     "g_alert_current_price": m1,
@@ -347,15 +209,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_app_share_key_2": MessageLookupByLibrary.simpleMessage(
       "Сканувати для отримання",
     ),
-    "g_biometric_locked_out": MessageLookupByLibrary.simpleMessage(
-      "Забагато невдач. Біометрично заблоковано — використовуйте пароль.",
-    ),
-    "g_biometric_not_enrolled": MessageLookupByLibrary.simpleMessage(
-      "Біометрія не встановлена. Увімкніть у налаштуваннях пристрою.",
-    ),
-    "g_biometric_retry": MessageLookupByLibrary.simpleMessage(
-      "Використовуйте Face ID / Touch ID",
-    ),
     "g_browser_key1": MessageLookupByLibrary.simpleMessage(
       "Будь ласка, введіть URL",
     ),
@@ -366,9 +219,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_browser_key13": MessageLookupByLibrary.simpleMessage(
       "Підключіть DApp автоматично",
-    ),
-    "g_browser_key14": MessageLookupByLibrary.simpleMessage(
-      "Підтвердьте підключення до DApp",
     ),
     "g_browser_key16": MessageLookupByLibrary.simpleMessage("Закрити всі"),
     "g_browser_key17": MessageLookupByLibrary.simpleMessage("Готово"),
@@ -402,116 +252,10 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_browser_key8": MessageLookupByLibrary.simpleMessage("URL"),
     "g_browser_key9": MessageLookupByLibrary.simpleMessage("опис"),
-    "g_chat_key_1": MessageLookupByLibrary.simpleMessage(
-      "Почніть груповий чат",
-    ),
-    "g_chat_key_10": m3,
-    "g_chat_key_11": MessageLookupByLibrary.simpleMessage("Запрошуйте друзів"),
-    "g_chat_key_12": MessageLookupByLibrary.simpleMessage("Виберіть контакт"),
-    "g_chat_key_13": MessageLookupByLibrary.simpleMessage("Закінчити"),
-    "g_chat_key_14": MessageLookupByLibrary.simpleMessage(
-      "Виберіть принаймні 2 контакти",
-    ),
-    "g_chat_key_16": MessageLookupByLibrary.simpleMessage("Деталі друга"),
-    "g_chat_key_17": MessageLookupByLibrary.simpleMessage("Деталі групи"),
-    "g_chat_key_18": MessageLookupByLibrary.simpleMessage(
-      "Переглянути більше учасників групи",
-    ),
-    "g_chat_key_19": MessageLookupByLibrary.simpleMessage("Назва групи"),
-    "g_chat_key_2": MessageLookupByLibrary.simpleMessage("Новий друг"),
-    "g_chat_key_20": MessageLookupByLibrary.simpleMessage(
-      "Ми впевнені, що розпускаємося?",
-    ),
-    "g_chat_key_21": MessageLookupByLibrary.simpleMessage(
-      "Ви впевнені, що бажаєте залишити цю групу?",
-    ),
-    "g_chat_key_22": MessageLookupByLibrary.simpleMessage("Розгрупувати"),
-    "g_chat_key_23": MessageLookupByLibrary.simpleMessage("Вийти з групи"),
-    "g_chat_key_24": MessageLookupByLibrary.simpleMessage(
-      "Змініть назву групового чату",
-    ),
-    "g_chat_key_25": MessageLookupByLibrary.simpleMessage(
-      "Коли назву групового чату буде змінено, інші учасники групи отримають сповіщення.",
-    ),
-    "g_chat_key_26": MessageLookupByLibrary.simpleMessage("Закінчити"),
-    "g_chat_key_27": MessageLookupByLibrary.simpleMessage(
-      "Запит на додавання друга",
-    ),
-    "g_chat_key_28": MessageLookupByLibrary.simpleMessage(
-      "Прохання додати вас у друзі",
-    ),
-    "g_chat_key_29": MessageLookupByLibrary.simpleMessage(
-      "Запит на дружбу схвалено",
-    ),
-    "g_chat_key_3": MessageLookupByLibrary.simpleMessage("Додано"),
-    "g_chat_key_30": MessageLookupByLibrary.simpleMessage(
-      "Вас додали як друга",
-    ),
-    "g_chat_key_31": MessageLookupByLibrary.simpleMessage("згоден"),
-    "g_chat_key_32": m4,
-    "g_chat_key_33": MessageLookupByLibrary.simpleMessage(
-      "Пароль не може бути проаналізувати належним чином, і повідомлення тимчасово не може бути надіслано. Імпортуйте гаманець під час входу в групу",
-    ),
-    "g_chat_key_34": MessageLookupByLibrary.simpleMessage(
-      "Видалити історію чату?",
-    ),
-    "g_chat_key_35": MessageLookupByLibrary.simpleMessage("Видалити учасника"),
-    "g_chat_key_36": MessageLookupByLibrary.simpleMessage("Мій QR-код"),
-    "g_chat_key_4": MessageLookupByLibrary.simpleMessage(
-      "Термін дії закінчився",
-    ),
-    "g_chat_key_40": MessageLookupByLibrary.simpleMessage("звіт"),
-    "g_chat_key_41": MessageLookupByLibrary.simpleMessage("Новий чат"),
-    "g_chat_key_42": MessageLookupByLibrary.simpleMessage("Нова група"),
-    "g_chat_key_43": MessageLookupByLibrary.simpleMessage("QR-код"),
-    "g_chat_key_44": MessageLookupByLibrary.simpleMessage(
-      "Повідомити та заблокувати",
-    ),
-    "g_chat_key_45": MessageLookupByLibrary.simpleMessage(
-      "Це повідомлення буде перенаправлено на N42Wallet. Цей контакт не буде повідомлено.",
-    ),
-    "g_chat_key_46": MessageLookupByLibrary.simpleMessage("відео"),
-    "g_chat_key_47": MessageLookupByLibrary.simpleMessage("Фото"),
-    "g_chat_key_48": MessageLookupByLibrary.simpleMessage(
-      "Видалити повідомлення",
-    ),
-    "g_chat_key_49": MessageLookupByLibrary.simpleMessage(
-      "Видалити на моєму пристрої",
-    ),
-    "g_chat_key_5": MessageLookupByLibrary.simpleMessage("Зачекайте"),
     "g_chat_key_50": MessageLookupByLibrary.simpleMessage("Погодьтеся"),
-    "g_chat_key_54": MessageLookupByLibrary.simpleMessage(
-      "Повідомити про причину",
-    ),
-    "g_chat_key_55": MessageLookupByLibrary.simpleMessage(
-      "Введіть причину звіту",
-    ),
-    "g_chat_key_56": MessageLookupByLibrary.simpleMessage(
-      "Ми перевіримо ваш звіт і відповімо протягом 24 годин.",
-    ),
-    "g_chat_key_57": MessageLookupByLibrary.simpleMessage(
-      "Ви повідомили про це - натисніть, щоб побачити",
-    ),
-    "g_chat_key_58": MessageLookupByLibrary.simpleMessage("Чорний список"),
-    "g_chat_key_59": MessageLookupByLibrary.simpleMessage("видалити"),
-    "g_chat_key_6": m5,
-    "g_chat_key_60": MessageLookupByLibrary.simpleMessage(
-      "Поки немає контакту",
-    ),
-    "g_chat_key_61": MessageLookupByLibrary.simpleMessage("Сьогодні"),
-    "g_chat_key_62": MessageLookupByLibrary.simpleMessage("Більше 3 днів тому"),
-    "g_chat_key_63": MessageLookupByLibrary.simpleMessage("Блокувати"),
-    "g_chat_key_64": MessageLookupByLibrary.simpleMessage(
-      "Привіт, я використовую N42Wallet для спілкування в чаті та надсилання грошей. Установіть Wallet і надішліть мені повідомлення на адресу",
-    ),
-    "g_chat_key_66": MessageLookupByLibrary.simpleMessage("Відповісти"),
     "g_chat_key_67": MessageLookupByLibrary.simpleMessage(
       "Повідомлення видалено",
     ),
-    "g_chat_key_68": MessageLookupByLibrary.simpleMessage("Хтось @ мені"),
-    "g_chat_key_69": MessageLookupByLibrary.simpleMessage("передай привіт"),
-    "g_chat_key_8": MessageLookupByLibrary.simpleMessage("Додайте друзів"),
-    "g_chat_key_9": MessageLookupByLibrary.simpleMessage("причина звернення"),
     "g_coin_key_1": MessageLookupByLibrary.simpleMessage("транзакції"),
     "g_connect_key1": MessageLookupByLibrary.simpleMessage("Підключитися"),
     "g_connect_key11": MessageLookupByLibrary.simpleMessage("Доступні мережі"),
@@ -529,240 +273,40 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_dapp_security_caution": MessageLookupByLibrary.simpleMessage("Обережно"),
     "g_dapp_security_safe": MessageLookupByLibrary.simpleMessage("Безпечний"),
-    "g_dapp_security_title": MessageLookupByLibrary.simpleMessage(
-      "Безпека DApp",
-    ),
     "g_dapp_security_verified": MessageLookupByLibrary.simpleMessage(
       "Перевірено",
-    ),
-    "g_email_also_sync": MessageLookupByLibrary.simpleMessage(
-      "Також синхронізуйте електронну пошту облікового запису чату",
-    ),
-    "g_email_back_to_email": MessageLookupByLibrary.simpleMessage(
-      "← Змінити електронну адресу",
-    ),
-    "g_email_both_success": MessageLookupByLibrary.simpleMessage(
-      "Обидва облікові записи успішно оновлено!",
-    ),
-    "g_email_change_title": MessageLookupByLibrary.simpleMessage(
-      "Змінити електронну адресу",
-    ),
-    "g_email_chat_code_hint": MessageLookupByLibrary.simpleMessage(
-      "Введіть 6-значний код чату",
-    ),
-    "g_email_chat_code_sent_to": MessageLookupByLibrary.simpleMessage(
-      "Код чату надіслано",
-    ),
-    "g_email_chat_confirm": MessageLookupByLibrary.simpleMessage(
-      "Підтвердьте синхронізацію чату",
-    ),
-    "g_email_chat_send_fail": MessageLookupByLibrary.simpleMessage(
-      "Не вдалося надіслати код чату",
-    ),
-    "g_email_chat_sending": MessageLookupByLibrary.simpleMessage(
-      "Надсилання коду підтвердження в чаті...",
-    ),
-    "g_email_chat_sync_title": MessageLookupByLibrary.simpleMessage(
-      "Синхронізація електронної пошти облікового запису чату",
-    ),
-    "g_email_code_invalid": MessageLookupByLibrary.simpleMessage(
-      "Будь ласка, введіть 6-значний код",
-    ),
-    "g_email_code_resent": MessageLookupByLibrary.simpleMessage(
-      "Код повторно надіслано",
-    ),
-    "g_email_code_sent_to": m6,
-    "g_email_code_wrong": MessageLookupByLibrary.simpleMessage(
-      "Неправильний код, спробуйте ще раз",
-    ),
-    "g_email_confirm_change": MessageLookupByLibrary.simpleMessage(
-      "Підтвердити зміну",
-    ),
-    "g_email_confirm_continue": MessageLookupByLibrary.simpleMessage(
-      "Підтвердити та продовжити синхронізацію чату",
-    ),
-    "g_email_current_label": MessageLookupByLibrary.simpleMessage(
-      "Актуальна електронна адреса",
-    ),
-    "g_email_enter_code": MessageLookupByLibrary.simpleMessage(
-      "Введіть 6-значний код",
-    ),
-    "g_email_error_empty": MessageLookupByLibrary.simpleMessage(
-      "Введіть нову електронну адресу",
-    ),
-    "g_email_error_invalid": MessageLookupByLibrary.simpleMessage(
-      "Недійсна адреса електронної пошти",
-    ),
-    "g_email_error_same": MessageLookupByLibrary.simpleMessage(
-      "Нова електронна пошта має відрізнятися від поточної",
-    ),
-    "g_email_n42_only": MessageLookupByLibrary.simpleMessage(
-      "Електронна адреса N42 оновлена. Електронну адресу чату можна оновити в розділі «Чат» > «Налаштування».",
-    ),
-    "g_email_n42_updated": MessageLookupByLibrary.simpleMessage(
-      "Електронна адреса облікового запису N42 оновлена",
-    ),
-    "g_email_new_hint": MessageLookupByLibrary.simpleMessage(
-      "Введіть нову електронну адресу",
-    ),
-    "g_email_new_label": MessageLookupByLibrary.simpleMessage(
-      "Нова електронна адреса",
-    ),
-    "g_email_pwd_hint": MessageLookupByLibrary.simpleMessage("Введіть пароль"),
-    "g_email_pwd_label": MessageLookupByLibrary.simpleMessage(
-      "Поточний пароль (для чату)",
-    ),
-    "g_email_pwd_required": MessageLookupByLibrary.simpleMessage(
-      "Для синхронізації чату потрібен пароль",
     ),
     "g_email_resend": MessageLookupByLibrary.simpleMessage(
       "Повторно надіслати код",
     ),
-    "g_email_resend_countdown": m7,
-    "g_email_send_code": MessageLookupByLibrary.simpleMessage(
-      "Надіслати код підтвердження",
-    ),
-    "g_email_skip": MessageLookupByLibrary.simpleMessage("Пропустити"),
-    "g_email_skip_full": MessageLookupByLibrary.simpleMessage(
-      "Пропустити – електронна пошта N42 уже оновлена",
-    ),
-    "g_email_success": MessageLookupByLibrary.simpleMessage(
-      "Електронну пошту успішно оновлено",
-    ),
+    "g_email_resend_countdown": m3,
     "g_face_1": MessageLookupByLibrary.simpleMessage(
       "Поради щодо біометричного сканування",
     ),
     "g_face_10": MessageLookupByLibrary.simpleMessage(
       "Скануйте свій відбиток пальця або обличчя для автентифікації.",
     ),
-    "g_face_2": MessageLookupByLibrary.simpleMessage(
-      "Біометричне сканування не спрацювало",
-    ),
     "g_face_3": MessageLookupByLibrary.simpleMessage("Поради"),
-    "g_face_4": MessageLookupByLibrary.simpleMessage(
-      "Успішне біометричне сканування",
-    ),
     "g_face_5": MessageLookupByLibrary.simpleMessage("Встановити"),
-    "g_face_6": MessageLookupByLibrary.simpleMessage(
-      "Ви не встановили біометричний вхід. Щоб налаштувати його, перейдіть до системних налаштувань.",
-    ),
     "g_face_7": MessageLookupByLibrary.simpleMessage(
       "Щоб продовжити, відскануйте своє обличчя або відбиток пальця.",
     ),
     "g_face_8": MessageLookupByLibrary.simpleMessage("Повернення"),
-    "g_face_9": MessageLookupByLibrary.simpleMessage(
-      "Рекомендується повторно ввімкнути біометрію.",
-    ),
-    "g_face_liveness_failed": MessageLookupByLibrary.simpleMessage(
-      "Обличчя не виявлено. Подивіться прямо в камеру та повторіть спробу.",
-    ),
-    "g_face_match_key1": MessageLookupByLibrary.simpleMessage(
-      "Метод зіставлення облич",
-    ),
-    "g_face_match_key10": m8,
-    "g_face_match_key11": m9,
-    "g_face_match_key12": MessageLookupByLibrary.simpleMessage("Перезв\'язати"),
-    "g_face_match_key13": MessageLookupByLibrary.simpleMessage("Зв\'язати"),
-    "g_face_match_key14": MessageLookupByLibrary.simpleMessage("Підтвердити"),
-    "g_face_match_key15": MessageLookupByLibrary.simpleMessage(
-      "Ви можете прив’язати дані свого обличчя безпосередньо до адреси гаманця (якщо ви прив’язували його раніше, стару адресу гаманця буде перезаписано), або якщо ви раніше прив’язували адресу гаманця, ви також можете вручну перевірити, щоб отримати прив’язану адресу гаманця.",
-    ),
-    "g_face_match_key16": MessageLookupByLibrary.simpleMessage(
-      "Адресу гаманця, пов’язану з даними вашого обличчя, було виявлено наступним чином, але ви ще не імпортували цей гаманець у свій список гаманців.",
-    ),
-    "g_face_match_key17": MessageLookupByLibrary.simpleMessage(
-      "Ви пов’язали дані свого обличчя з цим гаманцем.",
-    ),
-    "g_face_match_key18": MessageLookupByLibrary.simpleMessage(
-      "Повідомлення користувача",
-    ),
-    "g_face_match_key19": MessageLookupByLibrary.simpleMessage(
-      "Що таке прив\'язка обличчя?",
-    ),
-    "g_face_match_key20": MessageLookupByLibrary.simpleMessage(
-      "Прив’язка обличчя використовує технологію розпізнавання обличчя, щоб зіставити ваші біометричні риси обличчя з адресою вашого гаманця в блокчейні.",
-    ),
-    "g_face_match_key21": MessageLookupByLibrary.simpleMessage(
-      "Цей процес не лише підвищує зручність транзакцій, але й посилює безпеку облікового запису, гарантуючи, що кожна дія авторизована вами.",
-    ),
-    "g_face_match_key22": MessageLookupByLibrary.simpleMessage(
-      "Чому потрібне прив’язування обличчя?",
-    ),
-    "g_face_match_key23": MessageLookupByLibrary.simpleMessage(
-      "Завдяки прив’язці даних вашого обличчя ваша особистість безпосередньо пов’язана з транзакціями, що спрощує процес підтвердження особи та підвищує ефективність роботи. Ця технологія забезпечує швидку та безпечну перевірку особи під час виконання конфіденційних операцій, таких як передача активів або взаємодія з контрактами.",
-    ),
-    "g_face_match_key24": MessageLookupByLibrary.simpleMessage(
-      "Як зберігаються дані мого обличчя та чи вони безпечні?",
-    ),
-    "g_face_match_key25": MessageLookupByLibrary.simpleMessage(
-      "Дані вашого обличчя зберігаються в зашифрованому вигляді в загальнодоступному блокчейні, а не в централізованій базі даних. Це означає, що система може розшифровувати та використовувати ваші дані для підтвердження особи лише після вашого дозволу, забезпечуючи вашу конфіденційність і безпеку даних.",
-    ),
-    "g_face_match_key26": MessageLookupByLibrary.simpleMessage(
-      "Як прив’язка обличчя впливає на безпеку мого облікового запису?",
-    ),
-    "g_face_match_key27": MessageLookupByLibrary.simpleMessage(
-      "Прив’язка обличчя підвищує безпеку вашого облікового запису, гарантуючи, що всі конфіденційні дії виконуються лише з вашого явного дозволу. Ми використовуємо передову технологію шифрування для захисту ваших біометричних даних, запобігаючи несанкціонованому доступу.",
-    ),
-    "g_face_match_key28": MessageLookupByLibrary.simpleMessage(
-      "Чи захищені дані мого обличчя?",
-    ),
-    "g_face_match_key29": MessageLookupByLibrary.simpleMessage(
-      "Абсолютно. Усі біометричні дані проходять суворе шифрування, а при передачі та зберіганні даних дотримуються найвищі стандарти безпеки. Система розшифрує ці дані лише тоді, коли це необхідно для завершення перевірки особи.",
-    ),
-    "g_face_match_key3": MessageLookupByLibrary.simpleMessage(
-      "Матч провалився!",
-    ),
-    "g_face_match_key30": MessageLookupByLibrary.simpleMessage("зрозумів"),
-    "g_face_match_key31": MessageLookupByLibrary.simpleMessage(
-      "Виберіть адресу гаманця",
-    ),
-    "g_face_match_key32": m10,
-    "g_face_match_key33": MessageLookupByLibrary.simpleMessage(
-      "Розв\'язування",
-    ),
-    "g_face_match_key34": MessageLookupByLibrary.simpleMessage(
-      "Не вдалося перевірити дані обличчя!",
-    ),
-    "g_face_match_key35": MessageLookupByLibrary.simpleMessage(
-      "Не вдалося скасувати прив’язку даних обличчя!",
-    ),
-    "g_face_match_key4": m11,
-    "g_face_match_key5": MessageLookupByLibrary.simpleMessage(
-      "Помилка адреси!",
-    ),
-    "g_face_match_key6": MessageLookupByLibrary.simpleMessage(
-      "Прив\'язка даних обличчя",
-    ),
-    "g_face_match_key7": MessageLookupByLibrary.simpleMessage(
-      "Зіставлення обличчя",
-    ),
-    "g_face_match_key8": MessageLookupByLibrary.simpleMessage(
-      "Виберіть повторно",
-    ),
-    "g_face_match_key9": MessageLookupByLibrary.simpleMessage("Матч"),
-    "g_face_network_error": MessageLookupByLibrary.simpleMessage(
-      "Помилка мережі. Перевірте підключення та повторіть спробу.",
-    ),
-    "g_face_sdk_init_failed": MessageLookupByLibrary.simpleMessage(
-      "Не вдалося запустити розпізнавання обличчя. Спробуйте ще раз.",
-    ),
     "g_home_key1": MessageLookupByLibrary.simpleMessage("Профіль"),
     "g_home_key2": MessageLookupByLibrary.simpleMessage("Новини"),
     "g_home_key3": MessageLookupByLibrary.simpleMessage("Перевірка"),
-    "g_home_key5": MessageLookupByLibrary.simpleMessage("Повідомлення"),
-    "g_home_key6": MessageLookupByLibrary.simpleMessage("вчитися"),
     "g_home_key9": MessageLookupByLibrary.simpleMessage("Запросіть друга"),
     "g_iap_cancelled": MessageLookupByLibrary.simpleMessage("Скасовано"),
     "g_iap_check_network": MessageLookupByLibrary.simpleMessage(
       "Перевірте підключення до мережі і спробуйте знову",
     ),
-    "g_iap_failed": m12,
+    "g_iap_failed": m4,
     "g_iap_no_products": MessageLookupByLibrary.simpleMessage(
       "Немає доступних товарів",
     ),
-    "g_iap_purchased": m13,
+    "g_iap_purchased": m5,
     "g_iap_restore": MessageLookupByLibrary.simpleMessage("Відновити покупки"),
-    "g_iap_restored": m14,
+    "g_iap_restored": m6,
     "g_iap_restoring": MessageLookupByLibrary.simpleMessage(
       "Відновлення покупок…",
     ),
@@ -772,7 +316,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_iap_title": MessageLookupByLibrary.simpleMessage("Купити"),
     "g_key_1": MessageLookupByLibrary.simpleMessage("Не вдалося видалити!"),
-    "g_key_100": MessageLookupByLibrary.simpleMessage("Надіслати"),
     "g_key_101": MessageLookupByLibrary.simpleMessage("Ліміт газу"),
     "g_key_105": MessageLookupByLibrary.simpleMessage("Не більше"),
     "g_key_106": MessageLookupByLibrary.simpleMessage("Завантаження "),
@@ -793,7 +336,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_13": MessageLookupByLibrary.simpleMessage("Список гаманців"),
     "g_key_132": MessageLookupByLibrary.simpleMessage("Немає даних"),
     "g_key_134": MessageLookupByLibrary.simpleMessage("Сума недійсна"),
-    "g_key_135": m15,
+    "g_key_135": m7,
     "g_key_14": MessageLookupByLibrary.simpleMessage("Основний гаманець"),
     "g_key_140": MessageLookupByLibrary.simpleMessage("Трансакція успішна"),
     "g_key_146": MessageLookupByLibrary.simpleMessage("Невірний пароль"),
@@ -803,7 +346,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_15": MessageLookupByLibrary.simpleMessage(
       "Встановити як основний гаманець",
     ),
-    "g_key_154": MessageLookupByLibrary.simpleMessage("Надіслати"),
     "g_key_155": MessageLookupByLibrary.simpleMessage("Адреса гаманця"),
     "g_key_156": MessageLookupByLibrary.simpleMessage(
       "Сканувати, щоб скопіювати адресу",
@@ -835,9 +377,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_203": MessageLookupByLibrary.simpleMessage(
       "помилка посилання, відскануйте QR-код ще раз.",
     ),
-    "g_key_205": MessageLookupByLibrary.simpleMessage(
-      "Немає дозволу на доступ до фотоальбому.",
-    ),
     "g_key_206": MessageLookupByLibrary.simpleMessage("Редагування пароля"),
     "g_key_207": MessageLookupByLibrary.simpleMessage("Старий пароль"),
     "g_key_208": MessageLookupByLibrary.simpleMessage(
@@ -848,10 +387,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_210": MessageLookupByLibrary.simpleMessage(
       "Помилка закритого ключа",
     ),
-    "g_key_211": MessageLookupByLibrary.simpleMessage("купити"),
-    "g_key_212": MessageLookupByLibrary.simpleMessage("Продати"),
     "g_key_213": MessageLookupByLibrary.simpleMessage("Ринкова інформація"),
-    "g_key_214": m16,
+    "g_key_214": m8,
     "g_key_25": MessageLookupByLibrary.simpleMessage("Пароль не збігається."),
     "g_key_29": MessageLookupByLibrary.simpleMessage("Баланс"),
     "g_key_3": MessageLookupByLibrary.simpleMessage("Не вдалося додати!"),
@@ -862,7 +399,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_41": MessageLookupByLibrary.simpleMessage("Введіть адресу гаманця"),
     "g_key_43": MessageLookupByLibrary.simpleMessage("Доступний баланс"),
     "g_key_44": MessageLookupByLibrary.simpleMessage("Сума"),
-    "g_key_46": m17,
+    "g_key_46": m9,
     "g_key_47": MessageLookupByLibrary.simpleMessage(
       "Недостатньо коштів для покриття цієї операції.",
     ),
@@ -873,8 +410,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_75": MessageLookupByLibrary.simpleMessage("Від"),
     "g_key_78": MessageLookupByLibrary.simpleMessage("Підтвердити"),
     "g_key_79": MessageLookupByLibrary.simpleMessage("Скасувати"),
-    "g_key_8": MessageLookupByLibrary.simpleMessage("Зауваження"),
-    "g_key_85": MessageLookupByLibrary.simpleMessage("Насіння фраза"),
     "g_key_9": MessageLookupByLibrary.simpleMessage("Усі жетони"),
     "g_key_94": MessageLookupByLibrary.simpleMessage("Налаштування"),
     "g_key_aa_account_created": MessageLookupByLibrary.simpleMessage(
@@ -904,9 +439,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_aa_address_error": MessageLookupByLibrary.simpleMessage(
       "Не вдалося обчислити адресу. Спробуйте ще раз.",
-    ),
-    "g_key_aa_address_preview": MessageLookupByLibrary.simpleMessage(
-      "Ця адреса попередньо розрахована та буде застосована, коли ви зробите першу транзакцію.",
     ),
     "g_key_aa_approve": MessageLookupByLibrary.simpleMessage("Затвердити"),
     "g_key_aa_batch": MessageLookupByLibrary.simpleMessage("партія"),
@@ -953,9 +485,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "Шаблон збережено",
     ),
     "g_key_aa_batch_templates": MessageLookupByLibrary.simpleMessage("Шаблони"),
-    "g_key_aa_batch_title": MessageLookupByLibrary.simpleMessage(
-      "Пакетна передача",
-    ),
     "g_key_aa_batch_transaction": MessageLookupByLibrary.simpleMessage(
       "Пакетна транзакція",
     ),
@@ -977,9 +506,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_benefit_recovery_title": MessageLookupByLibrary.simpleMessage(
       "Соціальне відновлення",
     ),
-    "g_key_aa_biconomy_account": MessageLookupByLibrary.simpleMessage(
-      "Бікономічний рахунок",
-    ),
     "g_key_aa_biconomy_desc": MessageLookupByLibrary.simpleMessage(
       "Модульний смарт-акаунт ERC-7579 із підтримкою безгазових транзакцій",
     ),
@@ -990,13 +516,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_check_status": MessageLookupByLibrary.simpleMessage(
       "Перевірте статус",
     ),
-    "g_key_aa_clear_all": MessageLookupByLibrary.simpleMessage("Очистити все"),
     "g_key_aa_coming_soon": MessageLookupByLibrary.simpleMessage("Незабаром"),
-    "g_key_aa_continue": MessageLookupByLibrary.simpleMessage("Продовжити"),
-    "g_key_aa_contract": MessageLookupByLibrary.simpleMessage("Договір"),
-    "g_key_aa_counterfactual_address": MessageLookupByLibrary.simpleMessage(
-      "Контрфактична адреса",
-    ),
     "g_key_aa_counterfactual_note": MessageLookupByLibrary.simpleMessage(
       "Це контрфактична адреса. Його буде розгорнуто під час вашої першої транзакції.",
     ),
@@ -1006,42 +526,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_create_first": MessageLookupByLibrary.simpleMessage(
       "Створіть свій перший розумний обліковий запис",
     ),
-    "g_key_aa_create_first_account": MessageLookupByLibrary.simpleMessage(
-      "Щоб почати, створіть розумний обліковий запис",
-    ),
     "g_key_aa_create_session": MessageLookupByLibrary.simpleMessage(
       "Створити ключ сеансу",
     ),
-    "g_key_aa_create_session_desc": MessageLookupByLibrary.simpleMessage(
-      "Ключі сеансу дозволяють DApps виконувати транзакції від вашого імені з обмеженими дозволами та часовими обмеженнями.",
-    ),
-    "g_key_aa_create_smart_account": MessageLookupByLibrary.simpleMessage(
-      "Створити розумний обліковий запис",
-    ),
     "g_key_aa_created": MessageLookupByLibrary.simpleMessage("Створено"),
     "g_key_aa_custom": MessageLookupByLibrary.simpleMessage("Custom"),
-    "g_key_aa_deploy": MessageLookupByLibrary.simpleMessage("Розгорнути"),
     "g_key_aa_deploy_auto_note": MessageLookupByLibrary.simpleMessage(
       "Обліковий запис буде розгорнуто автоматично під час вашої першої транзакції",
     ),
-    "g_key_aa_deploy_failed": MessageLookupByLibrary.simpleMessage(
-      "Помилка розгортання",
-    ),
-    "g_key_aa_deploy_failed_desc": MessageLookupByLibrary.simpleMessage(
-      "Помилка розгортання. Спробуйте ще раз.",
-    ),
-    "g_key_aa_deploy_started": MessageLookupByLibrary.simpleMessage(
-      "Розгортання розпочато",
-    ),
     "g_key_aa_deployed": MessageLookupByLibrary.simpleMessage("Розгорнуто"),
-    "g_key_aa_deployed_desc": MessageLookupByLibrary.simpleMessage(
-      "Обліковий запис готовий до використання",
-    ),
     "g_key_aa_deploying": MessageLookupByLibrary.simpleMessage(
       "Розгортання...",
-    ),
-    "g_key_aa_deploying_desc": MessageLookupByLibrary.simpleMessage(
-      "Транзакція розгортання обробляється",
     ),
     "g_key_aa_deployment_note": MessageLookupByLibrary.simpleMessage(
       "Розгортання відбудеться автоматично з вашою першою транзакцією.",
@@ -1050,10 +545,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "Відчуйте наступне покоління облікових записів Ethereum із покращеними функціями",
     ),
     "g_key_aa_details": MessageLookupByLibrary.simpleMessage("Подробиці"),
-    "g_key_aa_eip7702_account": MessageLookupByLibrary.simpleMessage(
-      "Обліковий запис EIP-7702",
-    ),
-    "g_key_aa_eip7702_badge": MessageLookupByLibrary.simpleMessage("EIP-7702"),
     "g_key_aa_eip7702_desc": MessageLookupByLibrary.simpleMessage(
       "Гібридний EOA/Smart Account - розгортання не потрібне",
     ),
@@ -1061,7 +552,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_estimated_gas": MessageLookupByLibrary.simpleMessage(
       "Розрахунковий газ",
     ),
-    "g_key_aa_estimating": MessageLookupByLibrary.simpleMessage("Оцінка..."),
     "g_key_aa_execute_batch": MessageLookupByLibrary.simpleMessage(
       "Виконати пакет",
     ),
@@ -1072,22 +562,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Термін дії закінчується",
     ),
     "g_key_aa_factory": MessageLookupByLibrary.simpleMessage("Фабрика"),
-    "g_key_aa_feature_batch": MessageLookupByLibrary.simpleMessage(
-      "Групуйте кілька транзакцій",
-    ),
-    "g_key_aa_feature_gas": MessageLookupByLibrary.simpleMessage(
-      "Оплачуйте газ будь-якими жетонами",
-    ),
-    "g_key_aa_feature_security": MessageLookupByLibrary.simpleMessage(
-      "Посилена безпека",
-    ),
     "g_key_aa_free": MessageLookupByLibrary.simpleMessage("БЕЗКОШТОВНО"),
-    "g_key_aa_full_access": MessageLookupByLibrary.simpleMessage(
-      "Повний доступ",
-    ),
-    "g_key_aa_gas_estimate": MessageLookupByLibrary.simpleMessage(
-      "Кошторис газу",
-    ),
     "g_key_aa_gas_estimate_failed": MessageLookupByLibrary.simpleMessage(
       "Помилка оцінки газу, використовується за умовчанням",
     ),
@@ -1095,48 +570,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_gas_payment_options": MessageLookupByLibrary.simpleMessage(
       "Варіанти оплати за газ",
     ),
-    "g_key_aa_gas_savings": MessageLookupByLibrary.simpleMessage(
-      "Економія газу",
-    ),
     "g_key_aa_gas_sponsored": MessageLookupByLibrary.simpleMessage(
       "Газовий спонсор",
     ),
-    "g_key_aa_gas_warn_call_high": MessageLookupByLibrary.simpleMessage(
-      "Виконання Gas High",
-    ),
-    "g_key_aa_gas_warn_call_high_desc": m18,
-    "g_key_aa_gas_warn_deploy": MessageLookupByLibrary.simpleMessage(
-      "Накладні витрати на газ",
-    ),
-    "g_key_aa_gas_warn_deploy_desc": m19,
-    "g_key_aa_gas_warn_paymaster": MessageLookupByLibrary.simpleMessage(
-      "Високі накладні витрати Paymaster",
-    ),
-    "g_key_aa_gas_warn_paymaster_desc": m20,
-    "g_key_aa_gas_warn_total_high": MessageLookupByLibrary.simpleMessage(
-      "Дуже високий ліміт газу",
-    ),
-    "g_key_aa_gas_warn_total_high_desc": m21,
-    "g_key_aa_gas_warn_under_est": MessageLookupByLibrary.simpleMessage(
-      "Можлива занижена оцінка газу",
-    ),
-    "g_key_aa_gas_warn_under_est_desc": MessageLookupByLibrary.simpleMessage(
-      "Фактично використаний газ може перевищувати оцінку. Розгляньте можливість додавання більшого буфера.",
-    ),
-    "g_key_aa_gas_warn_verify_high": MessageLookupByLibrary.simpleMessage(
-      "Перевірка високого рівня газу",
-    ),
-    "g_key_aa_gas_warn_verify_high_desc": m22,
     "g_key_aa_gasless": MessageLookupByLibrary.simpleMessage("Безгазовий"),
     "g_key_aa_gasless_transactions": MessageLookupByLibrary.simpleMessage(
       "Безгазові транзакції та пакетні операції",
-    ),
-    "g_key_aa_home_title": MessageLookupByLibrary.simpleMessage(
-      "Абстракція облікового запису",
-    ),
-    "g_key_aa_just_now": MessageLookupByLibrary.simpleMessage("Просто зараз"),
-    "g_key_aa_kernel_account": MessageLookupByLibrary.simpleMessage(
-      "Обліковий запис ядра",
     ),
     "g_key_aa_kernel_desc": MessageLookupByLibrary.simpleMessage(
       "Модульний обліковий запис із підтримкою плагінів від ZeroDev",
@@ -1148,7 +587,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_my_accounts": MessageLookupByLibrary.simpleMessage(
       "Мої розумні облікові записи",
     ),
-    "g_key_aa_never": MessageLookupByLibrary.simpleMessage("Ніколи"),
     "g_key_aa_no_accounts": MessageLookupByLibrary.simpleMessage(
       "Розумних облікових записів ще немає",
     ),
@@ -1163,9 +601,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_aa_not_deployed": MessageLookupByLibrary.simpleMessage(
       "Не розгорнуто",
-    ),
-    "g_key_aa_not_deployed_desc": MessageLookupByLibrary.simpleMessage(
-      "Обліковий запис буде розгорнуто під час першої транзакції",
     ),
     "g_key_aa_onboard_step1": MessageLookupByLibrary.simpleMessage(
       "Створіть розумний обліковий запис (безкоштовно, ETH не потрібен)",
@@ -1188,9 +623,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_pay_with_eth": MessageLookupByLibrary.simpleMessage(
       "Оплатіть ETH",
     ),
-    "g_key_aa_paymaster_balance": MessageLookupByLibrary.simpleMessage(
-      "Баланс",
-    ),
     "g_key_aa_paymaster_chains_supported": MessageLookupByLibrary.simpleMessage(
       "ланцюги підтримуються",
     ),
@@ -1209,17 +641,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_paymaster_load_failed": MessageLookupByLibrary.simpleMessage(
       "Не вдалося завантажити параметри газу",
     ),
-    "g_key_aa_paymaster_not_supported": MessageLookupByLibrary.simpleMessage(
-      "Не доступний у цій мережі",
-    ),
-    "g_key_aa_paymaster_quote_expired": MessageLookupByLibrary.simpleMessage(
-      "Термін дії пропозиції минув",
-    ),
     "g_key_aa_paymaster_retry": MessageLookupByLibrary.simpleMessage(
       "Повторіть спробу",
     ),
-    "g_key_aa_paymaster_sponsored_unavailable":
-        MessageLookupByLibrary.simpleMessage("Спонсорство недоступне"),
     "g_key_aa_pending": MessageLookupByLibrary.simpleMessage("В очікуванні"),
     "g_key_aa_permission": MessageLookupByLibrary.simpleMessage("Дозвіл"),
     "g_key_aa_preview_address": MessageLookupByLibrary.simpleMessage(
@@ -1228,9 +652,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_ready": MessageLookupByLibrary.simpleMessage("Готовий"),
     "g_key_aa_receive_address": MessageLookupByLibrary.simpleMessage(
       "Отримати адресу",
-    ),
-    "g_key_aa_recommended": MessageLookupByLibrary.simpleMessage(
-      "Рекомендовано",
     ),
     "g_key_aa_retry": MessageLookupByLibrary.simpleMessage("Повторіть спробу"),
     "g_key_aa_revoke": MessageLookupByLibrary.simpleMessage("Відкликати"),
@@ -1249,14 +670,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_revoking": MessageLookupByLibrary.simpleMessage(
       "Відкликання ключа сеансу...",
     ),
-    "g_key_aa_safe_account": MessageLookupByLibrary.simpleMessage(
-      "Безпечний акаунт",
-    ),
     "g_key_aa_safe_desc": MessageLookupByLibrary.simpleMessage(
       "Мультипідписний обліковий запис із розширеними функціями безпеки",
     ),
-    "g_key_aa_safe_guardians": MessageLookupByLibrary.simpleMessage("Охоронці"),
-    "g_key_aa_safe_threshold": MessageLookupByLibrary.simpleMessage("Поріг"),
     "g_key_aa_saved": MessageLookupByLibrary.simpleMessage("збережено"),
     "g_key_aa_select_chain": MessageLookupByLibrary.simpleMessage(
       "Виберіть Ланцюжок",
@@ -1264,29 +680,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_select_paymaster": MessageLookupByLibrary.simpleMessage(
       "Виберіть Paymaster",
     ),
-    "g_key_aa_select_type": MessageLookupByLibrary.simpleMessage(
-      "Виберіть тип облікового запису",
-    ),
     "g_key_aa_selected": MessageLookupByLibrary.simpleMessage("Вибране"),
     "g_key_aa_send_desc": MessageLookupByLibrary.simpleMessage(
       "Надсилайте токени за допомогою свого смарт-облікового запису",
     ),
-    "g_key_aa_send_title": MessageLookupByLibrary.simpleMessage("АА Передача"),
     "g_key_aa_session_1d": MessageLookupByLibrary.simpleMessage("1 день"),
     "g_key_aa_session_1h": MessageLookupByLibrary.simpleMessage("1 година"),
     "g_key_aa_session_30d": MessageLookupByLibrary.simpleMessage("30 днів"),
     "g_key_aa_session_7d": MessageLookupByLibrary.simpleMessage("7 днів"),
-    "g_key_aa_session_allowed": MessageLookupByLibrary.simpleMessage(
-      "Дозволено",
-    ),
     "g_key_aa_session_amount_hint": MessageLookupByLibrary.simpleMessage(
       "напр. 100,00",
     ),
     "g_key_aa_session_amount_limit": MessageLookupByLibrary.simpleMessage(
       "Максимальна сума",
-    ),
-    "g_key_aa_session_blocked": MessageLookupByLibrary.simpleMessage(
-      "заблоковано",
     ),
     "g_key_aa_session_confirm_risk": MessageLookupByLibrary.simpleMessage(
       "Я розумію дозволи цього ключа",
@@ -1348,14 +754,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_session_transfer_can": MessageLookupByLibrary.simpleMessage(
       "Передайте токени в межах встановленого ліміту",
     ),
-    "g_key_aa_simple_account": MessageLookupByLibrary.simpleMessage(
-      "Простий обліковий запис",
-    ),
     "g_key_aa_simple_desc": MessageLookupByLibrary.simpleMessage(
       "Базовий смарт-акаунт з одним власником - рекомендований для більшості користувачів",
-    ),
-    "g_key_aa_smart_account": MessageLookupByLibrary.simpleMessage(
-      "Розумний обліковий запис",
     ),
     "g_key_aa_smart_accounts": MessageLookupByLibrary.simpleMessage(
       "Розумні облікові записи",
@@ -1373,21 +773,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Розумний обліковий запис",
     ),
     "g_key_aa_total_gas": MessageLookupByLibrary.simpleMessage("Загальний газ"),
-    "g_key_aa_total_value": MessageLookupByLibrary.simpleMessage(
-      "Загальна вартість",
-    ),
     "g_key_aa_transactions": MessageLookupByLibrary.simpleMessage("транзакції"),
-    "g_key_aa_unavailable": MessageLookupByLibrary.simpleMessage("Недоступний"),
-    "g_key_aa_version_v07": MessageLookupByLibrary.simpleMessage("v0.7"),
-    "g_key_aa_version_v08": MessageLookupByLibrary.simpleMessage("v0.8"),
     "g_key_aa_view_all": MessageLookupByLibrary.simpleMessage(
       "Переглянути всі",
-    ),
-    "g_key_account_linked": MessageLookupByLibrary.simpleMessage(
-      "Обліковий запис успішно пов’язано",
-    ),
-    "g_key_account_unlinked": MessageLookupByLibrary.simpleMessage(
-      "Обліковий запис успішно від’єднано",
     ),
     "g_key_address": MessageLookupByLibrary.simpleMessage("Адреса"),
     "g_key_address_1": MessageLookupByLibrary.simpleMessage(
@@ -1408,63 +796,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_advanced_features": MessageLookupByLibrary.simpleMessage(
       "Розширені функції",
     ),
-    "g_key_airdrop_active": MessageLookupByLibrary.simpleMessage("Активний"),
-    "g_key_airdrop_check_eligibility": MessageLookupByLibrary.simpleMessage(
-      "Перевірте відповідність вимогам",
-    ),
-    "g_key_airdrop_claim": MessageLookupByLibrary.simpleMessage("Претензія"),
-    "g_key_airdrop_claimed": MessageLookupByLibrary.simpleMessage("Заявлено"),
-    "g_key_airdrop_days_left": m23,
-    "g_key_airdrop_deadline": MessageLookupByLibrary.simpleMessage("Дедлайн"),
-    "g_key_airdrop_eligible": MessageLookupByLibrary.simpleMessage("Придатний"),
-    "g_key_airdrop_estimated_value": MessageLookupByLibrary.simpleMessage(
-      "Оціночна вартість",
-    ),
-    "g_key_airdrop_expired": MessageLookupByLibrary.simpleMessage(
-      "Термін дії минув",
-    ),
-    "g_key_airdrop_filter": MessageLookupByLibrary.simpleMessage("фільтр"),
-    "g_key_airdrop_no_airdrops": MessageLookupByLibrary.simpleMessage(
-      "Немає доступних аеродромів",
-    ),
-    "g_key_airdrop_not_eligible": MessageLookupByLibrary.simpleMessage(
-      "Не відповідає вимогам",
-    ),
-    "g_key_airdrop_pending": MessageLookupByLibrary.simpleMessage(
-      "В очікуванні",
-    ),
-    "g_key_airdrop_priority_high": MessageLookupByLibrary.simpleMessage(
-      "Високий пріоритет",
-    ),
-    "g_key_airdrop_priority_low": MessageLookupByLibrary.simpleMessage(
-      "Низький пріоритет",
-    ),
-    "g_key_airdrop_priority_medium": MessageLookupByLibrary.simpleMessage(
-      "Середній пріоритет",
-    ),
-    "g_key_airdrop_requirement_met": MessageLookupByLibrary.simpleMessage(
-      "Вимога виконана",
-    ),
-    "g_key_airdrop_requirement_not_met": MessageLookupByLibrary.simpleMessage(
-      "Не зустрів",
-    ),
-    "g_key_airdrop_requirements": MessageLookupByLibrary.simpleMessage(
-      "Вимоги",
-    ),
-    "g_key_airdrop_sort_by": MessageLookupByLibrary.simpleMessage(
-      "Сортувати за",
-    ),
-    "g_key_airdrop_title": MessageLookupByLibrary.simpleMessage(
-      "Airdrop Tracker",
-    ),
-    "g_key_airdrop_total_claimed": MessageLookupByLibrary.simpleMessage(
-      "Всього заявлено",
-    ),
-    "g_key_airdrop_upcoming": MessageLookupByLibrary.simpleMessage("Майбутні"),
-    "g_key_apple_sign_in_cancelled": MessageLookupByLibrary.simpleMessage(
-      "Вхід в систему Apple скасовано",
-    ),
-    "g_key_apply": MessageLookupByLibrary.simpleMessage("Застосувати"),
     "g_key_batch_add_recipient": MessageLookupByLibrary.simpleMessage(
       "Додати одержувача",
     ),
@@ -1482,21 +813,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "Формат CSV: адреса, сума, мітка",
     ),
     "g_key_batch_done": MessageLookupByLibrary.simpleMessage("Готово"),
-    "g_key_batch_duplicate_address": m24,
+    "g_key_batch_duplicate_address": m10,
     "g_key_batch_estimating_gas": MessageLookupByLibrary.simpleMessage(
       "Оцінка газу...",
     ),
     "g_key_batch_evm_only": MessageLookupByLibrary.simpleMessage(
       "Пакетна передача підтримує лише ланцюжки EVM",
     ),
-    "g_key_batch_execute": MessageLookupByLibrary.simpleMessage(
-      "Виконати пакет",
-    ),
     "g_key_batch_export_csv": MessageLookupByLibrary.simpleMessage(
       "Експорт CSV",
-    ),
-    "g_key_batch_gas_savings": MessageLookupByLibrary.simpleMessage(
-      "Економія газу",
     ),
     "g_key_batch_help_title": MessageLookupByLibrary.simpleMessage(
       "Довідка щодо пакетного перенесення",
@@ -1504,10 +829,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_batch_import_csv": MessageLookupByLibrary.simpleMessage(
       "Імпорт CSV",
     ),
-    "g_key_batch_insufficient_balance": m25,
-    "g_key_batch_invalid_address": m26,
-    "g_key_batch_invalid_amount": m27,
-    "g_key_batch_max_recipients": m28,
+    "g_key_batch_insufficient_balance": m11,
+    "g_key_batch_invalid_address": m12,
+    "g_key_batch_invalid_amount": m13,
+    "g_key_batch_max_recipients": m14,
     "g_key_batch_memo_optional": MessageLookupByLibrary.simpleMessage(
       "Пам\'ятка необов\'язкова",
     ),
@@ -1516,9 +841,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_batch_no_supported": MessageLookupByLibrary.simpleMessage(
       "Немає підтримуваних токенів",
-    ),
-    "g_key_batch_preview": MessageLookupByLibrary.simpleMessage(
-      "Попередній перегляд",
     ),
     "g_key_batch_recipients": MessageLookupByLibrary.simpleMessage(
       "Одержувачі",
@@ -1541,7 +863,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_batch_total_amount": MessageLookupByLibrary.simpleMessage(
       "Загальна сума",
     ),
-    "g_key_bridge_amount": MessageLookupByLibrary.simpleMessage("Сума"),
     "g_key_bridge_chain_not_supported": MessageLookupByLibrary.simpleMessage(
       "Ланцюг не підтримується",
     ),
@@ -1552,10 +873,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "Ви отримаєте (приблизно)",
     ),
     "g_key_bridge_fastest": MessageLookupByLibrary.simpleMessage("Найшвидший"),
-    "g_key_bridge_fee": MessageLookupByLibrary.simpleMessage("Містовий збір"),
-    "g_key_bridge_from_chain": MessageLookupByLibrary.simpleMessage(
-      "Від ланцюжка",
-    ),
     "g_key_bridge_get_quote": MessageLookupByLibrary.simpleMessage(
       "Отримати пропозицію",
     ),
@@ -1590,12 +907,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_bridge_status_pending": MessageLookupByLibrary.simpleMessage(
       "В очікуванні",
     ),
-    "g_key_bridge_swap": MessageLookupByLibrary.simpleMessage("Міст"),
-    "g_key_bridge_time": MessageLookupByLibrary.simpleMessage(
-      "Розрахунковий час",
-    ),
     "g_key_bridge_title": MessageLookupByLibrary.simpleMessage("Міст"),
-    "g_key_bridge_to_chain": MessageLookupByLibrary.simpleMessage("До ланцюга"),
     "g_key_bridge_tx_failed": MessageLookupByLibrary.simpleMessage(
       "Міст не вдається",
     ),
@@ -1671,9 +983,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_btc_stake_step4_title": MessageLookupByLibrary.simpleMessage(
       "Викупити після розблокування",
     ),
-    "g_key_btc_stake_subtitle": MessageLookupByLibrary.simpleMessage(
-      "Заблокуйте BTC, щоб карбувати vBTC і отримувати винагороди",
-    ),
     "g_key_btc_stake_title": MessageLookupByLibrary.simpleMessage(
       "Ставка самостійної опіки BTC",
     ),
@@ -1694,29 +1003,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_burn_nft_tip": MessageLookupByLibrary.simpleMessage(
       "Щоб записати NFT, перейдіть на сторінку деталей NFT і натисніть кнопку «Записати».",
     ),
-    "g_key_burn_nft_title": MessageLookupByLibrary.simpleMessage(
-      "Записати NFT",
-    ),
     "g_key_chain_transfer_not_supported": MessageLookupByLibrary.simpleMessage(
       "Ця мережа ще не підтримує перекази, слідкуйте за оновленнями",
-    ),
-    "g_key_change_email": MessageLookupByLibrary.simpleMessage(
-      "Змінити електронну адресу",
-    ),
-    "g_key_change_password": MessageLookupByLibrary.simpleMessage(
-      "Змінити пароль",
-    ),
-    "g_key_change_password_desc": MessageLookupByLibrary.simpleMessage(
-      "Введіть поточний пароль і встановіть новий пароль",
-    ),
-    "g_key_code_length": MessageLookupByLibrary.simpleMessage(
-      "Будь ласка, введіть 6-значний код",
-    ),
-    "g_key_code_required": MessageLookupByLibrary.simpleMessage(
-      "Потрібен код підтвердження",
-    ),
-    "g_key_code_sent": MessageLookupByLibrary.simpleMessage(
-      "Код підтвердження надіслано",
     ),
     "g_key_coin_list_all_hidden": MessageLookupByLibrary.simpleMessage(
       "Усі активи нижчі за 1 долар США",
@@ -1728,25 +1016,13 @@ class MessageLookup extends MessageLookupByLibrary {
       "Торкніться, щоб показати все",
     ),
     "g_key_coin_search_recent": MessageLookupByLibrary.simpleMessage("Останні"),
-    "g_key_confirm_new_password": MessageLookupByLibrary.simpleMessage(
-      "Підтвердьте новий пароль",
-    ),
-    "g_key_continue_with_apple": MessageLookupByLibrary.simpleMessage(
-      "Продовжуйте з Apple",
-    ),
-    "g_key_continue_with_google": MessageLookupByLibrary.simpleMessage(
-      "Продовжуйте з Google",
-    ),
-    "g_key_deadline_reminders": MessageLookupByLibrary.simpleMessage(
-      "Нагадування про кінцевий термін",
-    ),
     "g_key_dex_approval_success": MessageLookupByLibrary.simpleMessage(
       "Затверджено! Натисніть «Поміняти», щоб продовжити.",
     ),
     "g_key_dex_approve_exact": MessageLookupByLibrary.simpleMessage(
       "Точна сума",
     ),
-    "g_key_dex_approve_required": m29,
+    "g_key_dex_approve_required": m15,
     "g_key_dex_approve_unlimited": MessageLookupByLibrary.simpleMessage(
       "Необмежений",
     ),
@@ -1785,30 +1061,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_price_impact": MessageLookupByLibrary.simpleMessage(
       "Вплив ціни",
     ),
-    "g_key_dex_price_impact_high": m30,
-    "g_key_dex_quote_expires": m31,
+    "g_key_dex_price_impact_high": m16,
+    "g_key_dex_quote_expires": m17,
     "g_key_dex_quote_failed": MessageLookupByLibrary.simpleMessage(
       "Помилка цитати",
     ),
-    "g_key_dex_quote_refreshed": MessageLookupByLibrary.simpleMessage(
-      "Цитату оновлено",
-    ),
-    "g_key_dex_retry": MessageLookupByLibrary.simpleMessage("Повторіть спробу"),
     "g_key_dex_search_hint": MessageLookupByLibrary.simpleMessage(
       "Символ пошуку / ім\'я / адреса",
     ),
     "g_key_dex_select_token": MessageLookupByLibrary.simpleMessage("Виберіть"),
-    "g_key_dex_slippage": MessageLookupByLibrary.simpleMessage(
-      "Толерантність до ковзання",
-    ),
     "g_key_dex_slippage_label": MessageLookupByLibrary.simpleMessage(
       "Максимальне ковзання",
-    ),
-    "g_key_dex_sol_note": MessageLookupByLibrary.simpleMessage(
-      "Обмін Solana: підпишіть транзакцію у своєму гаманці Solana.",
-    ),
-    "g_key_dex_sol_unsupported": MessageLookupByLibrary.simpleMessage(
-      "Solana DEX swap ще не підтримується в програмі",
     ),
     "g_key_dex_status_confirmed": MessageLookupByLibrary.simpleMessage(
       "Підтверджено",
@@ -1826,27 +1089,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_swap_success": MessageLookupByLibrary.simpleMessage(
       "Обмін успішно надіслано",
     ),
-    "g_key_dex_tx_failed": MessageLookupByLibrary.simpleMessage(
-      "Помилка транзакції",
-    ),
     "g_key_dex_you_pay": MessageLookupByLibrary.simpleMessage("Ви платите"),
     "g_key_dex_you_receive": MessageLookupByLibrary.simpleMessage(
       "Ви отримуєте",
-    ),
-    "g_key_domain_resolve_hint": MessageLookupByLibrary.simpleMessage(
-      "Підтримує ENS (.eth), Unstoppable Domains (.crypto/.wallet/…) і Solana SNS (.sol)",
-    ),
-    "g_key_domain_sns_name": MessageLookupByLibrary.simpleMessage(
-      "Служба імен Solana",
-    ),
-    "g_key_domain_sns_not_found": MessageLookupByLibrary.simpleMessage(
-      "Домен Solana не знайдено",
-    ),
-    "g_key_domain_ud_name": MessageLookupByLibrary.simpleMessage(
-      "Нестримні домени",
-    ),
-    "g_key_domain_ud_not_found": MessageLookupByLibrary.simpleMessage(
-      "Домен, який неможливо зупинити, не знайдено або немає адреси для цього ланцюжка",
     ),
     "g_key_earn_active_products": MessageLookupByLibrary.simpleMessage(
       "Активні продукти",
@@ -1857,17 +1102,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_buy_n_desc": MessageLookupByLibrary.simpleMessage(
       "Купуйте N з протоколом AST",
     ),
-    "g_key_earn_claim_free": MessageLookupByLibrary.simpleMessage(
-      "Вимагайте безкоштовні токени",
-    ),
     "g_key_earn_cross_chain": MessageLookupByLibrary.simpleMessage(
       "Перехресна передача",
-    ),
-    "g_key_earn_daily_bonus": MessageLookupByLibrary.simpleMessage(
-      "Щоденний бонус за реєстрацію",
-    ),
-    "g_key_earn_dex_desc": MessageLookupByLibrary.simpleMessage(
-      "Обміняйте будь-який токен через Uniswap / 1inch",
     ),
     "g_key_earn_dex_swap": MessageLookupByLibrary.simpleMessage("Обмін DEX"),
     "g_key_earn_gas": MessageLookupByLibrary.simpleMessage("газ"),
@@ -1888,16 +1124,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_no_positions": MessageLookupByLibrary.simpleMessage(
       "Немає активних позицій",
     ),
-    "g_key_earn_node_mining": MessageLookupByLibrary.simpleMessage(
-      "Майнінг вузлів",
-    ),
     "g_key_earn_node_mining_desc": MessageLookupByLibrary.simpleMessage(
       "Отримуйте нагороди, беручи участь у видобутку вузлів",
     ),
-    "g_key_earn_points_daily": MessageLookupByLibrary.simpleMessage(
-      "Заробляйте бали щодня",
-    ),
-    "g_key_earn_pts_day": m32,
     "g_key_earn_quick_tools": MessageLookupByLibrary.simpleMessage(
       "Швидкі інструменти",
     ),
@@ -1915,22 +1144,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_total_earnings": MessageLookupByLibrary.simpleMessage(
       "Загальний прибуток",
     ),
-    "g_key_earn_up_to_apy": m33,
+    "g_key_earn_up_to_apy": m18,
     "g_key_earn_view_all": MessageLookupByLibrary.simpleMessage(
       "Переглянути всі",
-    ),
-    "g_key_eligibility_alerts": MessageLookupByLibrary.simpleMessage(
-      "Сповіщення про відповідність вимогам",
-    ),
-    "g_key_eligible_only": MessageLookupByLibrary.simpleMessage(
-      "Тільки придатні",
-    ),
-    "g_key_email": MessageLookupByLibrary.simpleMessage("Електронна пошта"),
-    "g_key_email_invalid": MessageLookupByLibrary.simpleMessage(
-      "Введіть дійсну електронну адресу",
-    ),
-    "g_key_email_required": MessageLookupByLibrary.simpleMessage(
-      "Необхідно вказати адресу електронної пошти",
     ),
     "g_key_ens_address_updated": MessageLookupByLibrary.simpleMessage(
       "Вирішена адреса оновлена",
@@ -1945,9 +1161,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_commit": MessageLookupByLibrary.simpleMessage("Здійснити"),
     "g_key_ens_commit_failed": MessageLookupByLibrary.simpleMessage(
       "Помилка фіксації",
-    ),
-    "g_key_ens_commit_tx": MessageLookupByLibrary.simpleMessage(
-      "Здійснення транзакції...",
     ),
     "g_key_ens_commitment_expired_msg": MessageLookupByLibrary.simpleMessage(
       "Термін дії реєстраційного зобов’язання закінчився. Будь ласка, почніть процес реєстрації знову.",
@@ -1979,20 +1192,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_detected": MessageLookupByLibrary.simpleMessage(
       "Виявлено назву ENS",
     ),
-    "g_key_ens_duration": MessageLookupByLibrary.simpleMessage(
-      "Період реєстрації",
-    ),
-    "g_key_ens_edit_records": MessageLookupByLibrary.simpleMessage(
-      "Редагувати записи",
-    ),
     "g_key_ens_expired": MessageLookupByLibrary.simpleMessage(
       "Термін дії минув",
     ),
     "g_key_ens_expires": MessageLookupByLibrary.simpleMessage(
       "Термін дії закінчується",
-    ),
-    "g_key_ens_expiring_soon": MessageLookupByLibrary.simpleMessage(
-      "Термін дії скоро закінчується",
     ),
     "g_key_ens_extend_period": MessageLookupByLibrary.simpleMessage(
       "Подовження терміну реєстрації",
@@ -2007,9 +1211,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_get_your_name": MessageLookupByLibrary.simpleMessage(
       "Отримайте своє ім’я .eth",
     ),
-    "g_key_ens_home_title": MessageLookupByLibrary.simpleMessage(
-      "Менеджер ENS",
-    ),
     "g_key_ens_invalid_address": MessageLookupByLibrary.simpleMessage(
       "Недійсна адреса (має бути 0x + 40 шістнадцяткових символів)",
     ),
@@ -2022,9 +1223,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_ens_manage_your_identity": MessageLookupByLibrary.simpleMessage(
       "Керуйте своєю ідентифікацією Web3",
-    ),
-    "g_key_ens_management_title": MessageLookupByLibrary.simpleMessage(
-      "Керуйте ENS",
     ),
     "g_key_ens_min_length": MessageLookupByLibrary.simpleMessage(
       "Мінімум 3 символи",
@@ -2040,12 +1238,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_no_domains": MessageLookupByLibrary.simpleMessage(
       "Доменів ще немає",
     ),
-    "g_key_ens_no_names": MessageLookupByLibrary.simpleMessage(
-      "Ви ще не володієте жодними іменами ENS",
-    ),
-    "g_key_ens_owned_names": MessageLookupByLibrary.simpleMessage(
-      "Мої імена ENS",
-    ),
     "g_key_ens_owner": MessageLookupByLibrary.simpleMessage("Власник"),
     "g_key_ens_please_wait": MessageLookupByLibrary.simpleMessage(
       "Будь ласка, зачекайте",
@@ -2056,7 +1248,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_price_breakdown": MessageLookupByLibrary.simpleMessage(
       "Розбивка цін",
     ),
-    "g_key_ens_price_per_year": MessageLookupByLibrary.simpleMessage("на рік"),
     "g_key_ens_primary": MessageLookupByLibrary.simpleMessage("Первинний"),
     "g_key_ens_primary_set": MessageLookupByLibrary.simpleMessage(
       "Первинне ім\'я встановлено успішно",
@@ -2065,7 +1256,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_purchase_title": MessageLookupByLibrary.simpleMessage(
       "Зареєструвати ENS",
     ),
-    "g_key_ens_records": MessageLookupByLibrary.simpleMessage("Записи"),
     "g_key_ens_register": MessageLookupByLibrary.simpleMessage(
       "зареєструватися",
     ),
@@ -2078,9 +1268,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_register_now": MessageLookupByLibrary.simpleMessage(
       "Зареєструватися зараз",
     ),
-    "g_key_ens_register_tx": MessageLookupByLibrary.simpleMessage(
-      "Реєстрація імені...",
-    ),
     "g_key_ens_registering": MessageLookupByLibrary.simpleMessage(
       "Реєстрація...",
     ),
@@ -2090,33 +1277,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_registration_period": MessageLookupByLibrary.simpleMessage(
       "Період реєстрації",
     ),
-    "g_key_ens_reminder_disabled": MessageLookupByLibrary.simpleMessage(
-      "Нагадування про закінчення терміну дії вимкнено",
-    ),
     "g_key_ens_reminder_enable": MessageLookupByLibrary.simpleMessage(
       "Увімкнути нагадування про закінчення терміну дії",
-    ),
-    "g_key_ens_reminder_enabled": MessageLookupByLibrary.simpleMessage(
-      "Увімкнено нагадування про закінчення терміну дії",
     ),
     "g_key_ens_reminder_hint": MessageLookupByLibrary.simpleMessage(
       "Повідомити за 30, 7 і 1 день до закінчення терміну дії",
     ),
     "g_key_ens_renew": MessageLookupByLibrary.simpleMessage("Відновити"),
-    "g_key_ens_renew_cost": MessageLookupByLibrary.simpleMessage(
-      "Вартість поновлення",
-    ),
     "g_key_ens_renew_desc": MessageLookupByLibrary.simpleMessage(
       "Продовжте реєстрацію домену",
     ),
     "g_key_ens_renew_success": MessageLookupByLibrary.simpleMessage(
       "Оновлення успішне",
-    ),
-    "g_key_ens_renew_title": MessageLookupByLibrary.simpleMessage(
-      "Поновити ENS",
-    ),
-    "g_key_ens_resolution_failed": MessageLookupByLibrary.simpleMessage(
-      "Помилка вирішення ENS",
     ),
     "g_key_ens_resolved_address": MessageLookupByLibrary.simpleMessage(
       "Вирішена адреса",
@@ -2156,12 +1328,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_step_1": MessageLookupByLibrary.simpleMessage("Крок 1"),
     "g_key_ens_step_2": MessageLookupByLibrary.simpleMessage("Крок 2"),
     "g_key_ens_step_3": MessageLookupByLibrary.simpleMessage("Крок 3"),
-    "g_key_ens_step_commit": MessageLookupByLibrary.simpleMessage("Здійснити"),
-    "g_key_ens_step_register": MessageLookupByLibrary.simpleMessage(
-      "зареєструватися",
-    ),
-    "g_key_ens_step_success": MessageLookupByLibrary.simpleMessage("Успіх"),
-    "g_key_ens_step_wait": MessageLookupByLibrary.simpleMessage("Зачекайте"),
     "g_key_ens_subdomain_create": MessageLookupByLibrary.simpleMessage(
       "Створити субдомен",
     ),
@@ -2197,16 +1363,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_ens_subdomains": MessageLookupByLibrary.simpleMessage("Субдомени"),
     "g_key_ens_success": MessageLookupByLibrary.simpleMessage("Успіх!"),
-    "g_key_ens_success_message": m34,
     "g_key_ens_suggestions": MessageLookupByLibrary.simpleMessage("Пропозиції"),
     "g_key_ens_text_records": MessageLookupByLibrary.simpleMessage(
       "Текстові записи",
     ),
     "g_key_ens_title": MessageLookupByLibrary.simpleMessage("Менеджер ENS"),
     "g_key_ens_total": MessageLookupByLibrary.simpleMessage("Всього"),
-    "g_key_ens_total_cost": MessageLookupByLibrary.simpleMessage(
-      "Загальна вартість",
-    ),
     "g_key_ens_transfer": MessageLookupByLibrary.simpleMessage("Трансфер"),
     "g_key_ens_transfer_desc": MessageLookupByLibrary.simpleMessage(
       "Передача права власності на іншу адресу",
@@ -2233,7 +1395,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_wait_time_info": MessageLookupByLibrary.simpleMessage(
       "Період очікування запобігає передові",
     ),
-    "g_key_ens_wait_timer": m35,
     "g_key_ens_waiting": MessageLookupByLibrary.simpleMessage("Очікування..."),
     "g_key_ens_warning": MessageLookupByLibrary.simpleMessage(
       "Перш ніж продовжити, перевірте вибрану адресу. Імена ENS можуть бути передані або змінені їх власником.",
@@ -2242,18 +1403,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_years": MessageLookupByLibrary.simpleMessage("років"),
     "g_key_ens_your_identity": MessageLookupByLibrary.simpleMessage(
       "Ваша особистість",
-    ),
-    "g_key_enter_confirm_password": MessageLookupByLibrary.simpleMessage(
-      "Повторно введіть новий пароль",
-    ),
-    "g_key_enter_email": MessageLookupByLibrary.simpleMessage(
-      "Введіть адресу електронної пошти",
-    ),
-    "g_key_enter_new_password": MessageLookupByLibrary.simpleMessage(
-      "Введіть новий пароль",
-    ),
-    "g_key_enter_old_password": MessageLookupByLibrary.simpleMessage(
-      "Введіть поточний пароль",
     ),
     "g_key_error_1": MessageLookupByLibrary.simpleMessage(
       "Помилка аналізу даних відповіді!",
@@ -2266,13 +1415,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Не авторизовано, будь ласка, увійдіть",
     ),
     "g_key_error_13": MessageLookupByLibrary.simpleMessage("Доступ заборонено"),
-    "g_key_error_1301": MessageLookupByLibrary.simpleMessage(
-      "Неправильний обліковий запис або пароль",
-    ),
     "g_key_error_14": MessageLookupByLibrary.simpleMessage("Помилка запиту"),
-    "g_key_error_1403": MessageLookupByLibrary.simpleMessage(
-      "Ви вже ввійшли в систему на іншому телефоні та змушені вийти.",
-    ),
     "g_key_error_15": MessageLookupByLibrary.simpleMessage(
       "Час очікування запиту минув",
     ),
@@ -2387,37 +1530,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ex_pk_pwd_title": MessageLookupByLibrary.simpleMessage(
       "Введіть пароль гаманця, щоб переглянути закритий ключ",
     ),
-    "g_key_feedback": MessageLookupByLibrary.simpleMessage(
-      "Зворотній зв\'язок",
-    ),
-    "g_key_feedback_1": MessageLookupByLibrary.simpleMessage(
-      "Будь ласка, заповніть інформацію для відгуку",
-    ),
-    "g_key_feedback_2": MessageLookupByLibrary.simpleMessage(
-      "Є незавантажені вкладення",
-    ),
-    "g_key_feedback_3": MessageLookupByLibrary.simpleMessage(
-      "Не вдалося подати",
-    ),
-    "g_key_feedback_4": MessageLookupByLibrary.simpleMessage(
-      "Надіслано успішно",
-    ),
-    "g_key_feedback_5": MessageLookupByLibrary.simpleMessage("Додатки"),
-    "g_key_feedback_6": MessageLookupByLibrary.simpleMessage(
-      "Завантажте до 5 вкладень, розмір кожного вкладення не може перевищувати 100 Мб",
-    ),
-    "g_key_feedback_7": MessageLookupByLibrary.simpleMessage("Не вдалося"),
-    "g_key_feedback_8": MessageLookupByLibrary.simpleMessage(
-      "Натисніть спробувати",
-    ),
-    "g_key_feedback_9": MessageLookupByLibrary.simpleMessage(
-      "Будь ласка, увійдіть",
-    ),
     "g_key_filter": MessageLookupByLibrary.simpleMessage("фільтр"),
-    "g_key_filter_type": MessageLookupByLibrary.simpleMessage("Тип"),
-    "g_key_forgot_password": MessageLookupByLibrary.simpleMessage(
-      "Забули пароль?",
-    ),
     "g_key_gas_alert": MessageLookupByLibrary.simpleMessage(
       "Сповіщення про газ",
     ),
@@ -2431,12 +1544,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_gas_alert_threshold": MessageLookupByLibrary.simpleMessage(
       "Поріг (Gwei)",
     ),
-    "g_key_gas_auto_refresh": m36,
+    "g_key_gas_auto_refresh": m19,
     "g_key_gas_base_fee": MessageLookupByLibrary.simpleMessage("Базовий збір"),
     "g_key_gas_custom": MessageLookupByLibrary.simpleMessage("Custom"),
-    "g_key_gas_estimated_time": MessageLookupByLibrary.simpleMessage(
-      "Приблизно час",
-    ),
     "g_key_gas_fast": MessageLookupByLibrary.simpleMessage("швидко"),
     "g_key_gas_footer": MessageLookupByLibrary.simpleMessage(
       "Ціни на газ коливаються залежно від попиту в мережі. Менший газ = повільніше підтвердження, більший газ = швидше підтвердження.",
@@ -2468,45 +1578,23 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_gas_slow": MessageLookupByLibrary.simpleMessage("Повільно"),
     "g_key_gas_standard": MessageLookupByLibrary.simpleMessage("Стандартний"),
     "g_key_gas_tracker": MessageLookupByLibrary.simpleMessage("Газовий трекер"),
-    "g_key_gesture_medium": MessageLookupByLibrary.simpleMessage("Середній"),
-    "g_key_gesture_strong": MessageLookupByLibrary.simpleMessage("Сильний"),
-    "g_key_gesture_too_simple": MessageLookupByLibrary.simpleMessage(
-      "Шаблон занадто простий, використовуйте більше вузлів",
-    ),
-    "g_key_gesture_weak": MessageLookupByLibrary.simpleMessage("Слабкий"),
-    "g_key_google_sign_in_cancelled": MessageLookupByLibrary.simpleMessage(
-      "Вхід у Google скасовано",
-    ),
-    "g_key_high_value_only": MessageLookupByLibrary.simpleMessage(
-      "Тільки висока вартість",
-    ),
-    "g_key_hw_account_added": m37,
+    "g_key_hw_account_added": m20,
     "g_key_hw_account_already_imported": MessageLookupByLibrary.simpleMessage(
       "Обліковий запис уже імпортовано",
-    ),
-    "g_key_hw_accounts": MessageLookupByLibrary.simpleMessage(
-      "Облікові записи",
     ),
     "g_key_hw_add": MessageLookupByLibrary.simpleMessage("додати"),
     "g_key_hw_add_account": MessageLookupByLibrary.simpleMessage(
       "Додати обліковий запис",
     ),
-    "g_key_hw_add_account_content": m38,
+    "g_key_hw_add_account_content": m21,
     "g_key_hw_address_copied": MessageLookupByLibrary.simpleMessage(
       "Адресу скопійовано",
     ),
     "g_key_hw_ble_hint": MessageLookupByLibrary.simpleMessage(
       "Перед підключенням переконайтеся, що ваш пристрій розблоковано та Bluetooth увімкнено.",
     ),
-    "g_key_hw_cancel": MessageLookupByLibrary.simpleMessage("Скасувати"),
     "g_key_hw_check_app": MessageLookupByLibrary.simpleMessage(
       "Перевірте додаток",
-    ),
-    "g_key_hw_confirm_on_device": MessageLookupByLibrary.simpleMessage(
-      "Підтвердьте на своєму пристрої",
-    ),
-    "g_key_hw_connect": MessageLookupByLibrary.simpleMessage(
-      "Підключіть апаратний гаманець",
     ),
     "g_key_hw_connect_new_device": MessageLookupByLibrary.simpleMessage(
       "Підключити новий пристрій",
@@ -2524,31 +1612,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_hw_connecting": MessageLookupByLibrary.simpleMessage(
       "Підключення...",
     ),
-    "g_key_hw_current_app_label": m39,
-    "g_key_hw_days_ago": m40,
-    "g_key_hw_derivation_path": MessageLookupByLibrary.simpleMessage(
-      "Шлях виведення",
-    ),
+    "g_key_hw_current_app_label": m22,
+    "g_key_hw_days_ago": m23,
     "g_key_hw_disconnect": MessageLookupByLibrary.simpleMessage("Відключити"),
-    "g_key_hw_disconnected": MessageLookupByLibrary.simpleMessage("Відключено"),
-    "g_key_hw_enable_bluetooth": MessageLookupByLibrary.simpleMessage(
-      "Увімкніть Bluetooth",
-    ),
-    "g_key_hw_firmware": MessageLookupByLibrary.simpleMessage(
-      "Версія мікропрограми",
-    ),
     "g_key_hw_go_back": MessageLookupByLibrary.simpleMessage(
       "Повернутися назад",
     ),
-    "g_key_hw_import_failed": m41,
+    "g_key_hw_import_failed": m24,
     "g_key_hw_keystone_connect_title": MessageLookupByLibrary.simpleMessage(
       "Підключіть Keystone",
-    ),
-    "g_key_hw_keystone_invalid_response": MessageLookupByLibrary.simpleMessage(
-      "Недійсна відповідь від пристрою Keystone",
-    ),
-    "g_key_hw_keystone_scan_error": MessageLookupByLibrary.simpleMessage(
-      "Не вдалося розібрати QR-код. Спробуйте ще раз.",
     ),
     "g_key_hw_keystone_scan_request_hint": MessageLookupByLibrary.simpleMessage(
       "Відскануйте цей QR-код за допомогою пристрою Keystone, щоб підписати транзакцію",
@@ -2561,16 +1633,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_hw_keystone_scan_xpub_hint": MessageLookupByLibrary.simpleMessage(
       "Відскануйте QR-код зі свого пристрою Keystone, щоб імпортувати облікові записи",
     ),
-    "g_key_hw_keystone_signature_received":
-        MessageLookupByLibrary.simpleMessage("Підпис успішно отримано"),
-    "g_key_hw_keystone_signing": MessageLookupByLibrary.simpleMessage(
-      "Очікування підпису Keystone...",
-    ),
     "g_key_hw_keystone_tap_to_scan": MessageLookupByLibrary.simpleMessage(
       "Торкніться, щоб відсканувати відповідь Keystone",
     ),
-    "g_key_hw_last_connected": m42,
-    "g_key_hw_ledger": MessageLookupByLibrary.simpleMessage("Леджер"),
+    "g_key_hw_last_connected": m25,
     "g_key_hw_load_more": MessageLookupByLibrary.simpleMessage(
       "Завантажити більше",
     ),
@@ -2586,54 +1652,25 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_hw_no_app_open": MessageLookupByLibrary.simpleMessage(
       "Наразі жодна програма не відкрита",
     ),
-    "g_key_hw_no_devices": MessageLookupByLibrary.simpleMessage(
-      "Пристроїв не знайдено",
-    ),
     "g_key_hw_not_connected": MessageLookupByLibrary.simpleMessage(
       "Пристрій не підключено",
     ),
     "g_key_hw_not_connected_label": MessageLookupByLibrary.simpleMessage(
       "Не підключено",
     ),
-    "g_key_hw_open_app": m43,
-    "g_key_hw_open_ledger_app_hint": m44,
-    "g_key_hw_rejected": MessageLookupByLibrary.simpleMessage(
-      "Відхилено на пристрої",
-    ),
+    "g_key_hw_open_ledger_app_hint": m26,
     "g_key_hw_remove": MessageLookupByLibrary.simpleMessage("видалити"),
     "g_key_hw_remove_device": MessageLookupByLibrary.simpleMessage(
       "Видалити пристрій",
     ),
-    "g_key_hw_remove_device_confirm": m45,
+    "g_key_hw_remove_device_confirm": m27,
     "g_key_hw_saved_devices": MessageLookupByLibrary.simpleMessage(
       "Збережені пристрої",
-    ),
-    "g_key_hw_scanning": MessageLookupByLibrary.simpleMessage(
-      "Пошук пристроїв...",
-    ),
-    "g_key_hw_select_device": MessageLookupByLibrary.simpleMessage(
-      "Виберіть Пристрій",
-    ),
-    "g_key_hw_sign_message": MessageLookupByLibrary.simpleMessage(
-      "Підписати повідомлення",
-    ),
-    "g_key_hw_sign_tx": MessageLookupByLibrary.simpleMessage(
-      "Підписати транзакцію",
-    ),
-    "g_key_hw_signal_strength": MessageLookupByLibrary.simpleMessage(
-      "Сила сигналу",
     ),
     "g_key_hw_supported_devices": MessageLookupByLibrary.simpleMessage(
       "Підтримувані пристрої",
     ),
-    "g_key_hw_timeout": MessageLookupByLibrary.simpleMessage(
-      "Час очікування підключення",
-    ),
-    "g_key_hw_title": MessageLookupByLibrary.simpleMessage(
-      "Апаратний гаманець",
-    ),
     "g_key_hw_today": MessageLookupByLibrary.simpleMessage("Сьогодні"),
-    "g_key_hw_trezor": MessageLookupByLibrary.simpleMessage("Трезор"),
     "g_key_hw_trezor_connect_failed": MessageLookupByLibrary.simpleMessage(
       "Не вдалося підключитися до Trezor. Переконайтеся, що USB підключено.",
     ),
@@ -2645,12 +1682,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_hw_trezor_connecting": MessageLookupByLibrary.simpleMessage(
       "Підключення до Trezor...",
-    ),
-    "g_key_hw_trezor_passphrase_required": MessageLookupByLibrary.simpleMessage(
-      "Введіть парольну фразу на своєму пристрої Trezor",
-    ),
-    "g_key_hw_trezor_pin_required": MessageLookupByLibrary.simpleMessage(
-      "Введіть PIN-код на своєму пристрої Trezor",
     ),
     "g_key_hw_trezor_usb_hint": MessageLookupByLibrary.simpleMessage(
       "Підключіть свій пристрій Trezor через USB-кабель і розблокуйте його",
@@ -2669,115 +1700,11 @@ class MessageLookup extends MessageLookupByLibrary {
       "Не вдалося прочитати Keystore",
     ),
     "g_key_keystore_22": MessageLookupByLibrary.simpleMessage("Сховище ключів"),
-    "g_key_link_account": MessageLookupByLibrary.simpleMessage(
-      "Пов’язати обліковий запис",
-    ),
-    "g_key_linked_accounts": MessageLookupByLibrary.simpleMessage(
-      "Пов’язані облікові записи",
-    ),
     "g_key_login": MessageLookupByLibrary.simpleMessage("Увійти"),
-    "g_key_login_success": MessageLookupByLibrary.simpleMessage(
-      "Вхід успішний",
-    ),
     "g_key_logout": MessageLookupByLibrary.simpleMessage("Вийти"),
     "g_key_logout_sure": MessageLookupByLibrary.simpleMessage(
       "Ви впевнені, що бажаєте вийти з програми?",
     ),
-    "g_key_loyalty_available_points": MessageLookupByLibrary.simpleMessage(
-      "Доступні бали",
-    ),
-    "g_key_loyalty_checked_today": MessageLookupByLibrary.simpleMessage(
-      "Зареєструвався сьогодні!",
-    ),
-    "g_key_loyalty_checkin_btn": MessageLookupByLibrary.simpleMessage("Заїзд"),
-    "g_key_loyalty_checkin_done": MessageLookupByLibrary.simpleMessage(
-      "Готово",
-    ),
-    "g_key_loyalty_checkin_failed": MessageLookupByLibrary.simpleMessage(
-      "Не вдалося зареєструватися, спробуйте ще раз",
-    ),
-    "g_key_loyalty_checkin_success": MessageLookupByLibrary.simpleMessage(
-      "Реєстрація успішна!",
-    ),
-    "g_key_loyalty_claim_points": MessageLookupByLibrary.simpleMessage(
-      "Очки претензій",
-    ),
-    "g_key_loyalty_complete_failed": MessageLookupByLibrary.simpleMessage(
-      "Не вдалося виконати завдання, спробуйте ще раз",
-    ),
-    "g_key_loyalty_complete_success": MessageLookupByLibrary.simpleMessage(
-      "Завдання виконано!",
-    ),
-    "g_key_loyalty_copy": MessageLookupByLibrary.simpleMessage("Копія"),
-    "g_key_loyalty_daily_checkin": MessageLookupByLibrary.simpleMessage(
-      "Щоденний заїзд",
-    ),
-    "g_key_loyalty_earn_points": m46,
-    "g_key_loyalty_earned": MessageLookupByLibrary.simpleMessage("Зароблено"),
-    "g_key_loyalty_history": MessageLookupByLibrary.simpleMessage(
-      "Історія балів",
-    ),
-    "g_key_loyalty_invite": MessageLookupByLibrary.simpleMessage("Запросити"),
-    "g_key_loyalty_invite_bonus": m47,
-    "g_key_loyalty_invite_friends": MessageLookupByLibrary.simpleMessage(
-      "Запросити друзів",
-    ),
-    "g_key_loyalty_invited_friends": MessageLookupByLibrary.simpleMessage(
-      "Запрошені друзі",
-    ),
-    "g_key_loyalty_max_level": MessageLookupByLibrary.simpleMessage(
-      "Максимальний рівень",
-    ),
-    "g_key_loyalty_next_prefix": MessageLookupByLibrary.simpleMessage("Далі"),
-    "g_key_loyalty_next_tier": MessageLookupByLibrary.simpleMessage(
-      "Наступний рівень",
-    ),
-    "g_key_loyalty_no_rewards": MessageLookupByLibrary.simpleMessage(
-      "Немає нагород",
-    ),
-    "g_key_loyalty_no_tasks": MessageLookupByLibrary.simpleMessage(
-      "Немає доступних завдань",
-    ),
-    "g_key_loyalty_points": MessageLookupByLibrary.simpleMessage("Очки"),
-    "g_key_loyalty_points_to_next": m48,
-    "g_key_loyalty_redeem": MessageLookupByLibrary.simpleMessage("Викупити"),
-    "g_key_loyalty_referral": MessageLookupByLibrary.simpleMessage(
-      "Направлення",
-    ),
-    "g_key_loyalty_referral_bonus": MessageLookupByLibrary.simpleMessage(
-      "Реферальний бонус",
-    ),
-    "g_key_loyalty_referral_code": MessageLookupByLibrary.simpleMessage(
-      "Ваш реферальний код",
-    ),
-    "g_key_loyalty_referral_link": MessageLookupByLibrary.simpleMessage(
-      "Реферальне посилання",
-    ),
-    "g_key_loyalty_rewards": MessageLookupByLibrary.simpleMessage("Нагороди"),
-    "g_key_loyalty_share": MessageLookupByLibrary.simpleMessage("Поділіться"),
-    "g_key_loyalty_spent": MessageLookupByLibrary.simpleMessage("Витрачено"),
-    "g_key_loyalty_task_complete": MessageLookupByLibrary.simpleMessage(
-      "Завдання виконано",
-    ),
-    "g_key_loyalty_tasks": MessageLookupByLibrary.simpleMessage("завдання"),
-    "g_key_loyalty_tier": MessageLookupByLibrary.simpleMessage("Рівень"),
-    "g_key_loyalty_tier_bronze": MessageLookupByLibrary.simpleMessage("Бронза"),
-    "g_key_loyalty_tier_diamond": MessageLookupByLibrary.simpleMessage(
-      "діамант",
-    ),
-    "g_key_loyalty_tier_gold": MessageLookupByLibrary.simpleMessage("золото"),
-    "g_key_loyalty_tier_platinum": MessageLookupByLibrary.simpleMessage(
-      "Платина",
-    ),
-    "g_key_loyalty_tier_silver": MessageLookupByLibrary.simpleMessage("Срібло"),
-    "g_key_loyalty_title": MessageLookupByLibrary.simpleMessage("Очки"),
-    "g_key_loyalty_total_earned": MessageLookupByLibrary.simpleMessage(
-      "Всього зароблено",
-    ),
-    "g_key_loyalty_total_points": MessageLookupByLibrary.simpleMessage(
-      "Загальна кількість балів",
-    ),
-    "g_key_loyalty_used": MessageLookupByLibrary.simpleMessage("б/в"),
     "g_key_m_10": MessageLookupByLibrary.simpleMessage("Facebook"),
     "g_key_m_11": MessageLookupByLibrary.simpleMessage("Twitter"),
     "g_key_m_14": MessageLookupByLibrary.simpleMessage("Reddit"),
@@ -2806,34 +1733,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_mnemonic": MessageLookupByLibrary.simpleMessage(
       "Введіть вихідну фразу",
     ),
-    "g_key_new_airdrops": MessageLookupByLibrary.simpleMessage(
-      "Нові аеродроми",
-    ),
-    "g_key_new_password": MessageLookupByLibrary.simpleMessage("Новий пароль"),
-    "g_key_new_password_same_as_old": MessageLookupByLibrary.simpleMessage(
-      "Новий пароль має відрізнятися від поточного",
-    ),
-    "g_key_next": MessageLookupByLibrary.simpleMessage("Далі"),
     "g_key_nft_141": MessageLookupByLibrary.simpleMessage("Всього"),
-    "g_key_nft_16": MessageLookupByLibrary.simpleMessage("Камера"),
-    "g_key_nft_17": MessageLookupByLibrary.simpleMessage("Виберіть фото"),
-    "g_key_nft_18": MessageLookupByLibrary.simpleMessage("Зміст"),
     "g_key_nft_2": MessageLookupByLibrary.simpleMessage("Ім\'я"),
     "g_key_nft_220": MessageLookupByLibrary.simpleMessage("Назад"),
     "g_key_nft_41": MessageLookupByLibrary.simpleMessage("Трансакцію подано"),
-    "g_key_nft_47": MessageLookupByLibrary.simpleMessage("Виберіть відео"),
     "g_key_nft_address_invalid": MessageLookupByLibrary.simpleMessage(
       "Недійсна адреса гаманця",
     ),
     "g_key_nft_balance": MessageLookupByLibrary.simpleMessage("Баланс"),
     "g_key_nft_burn_confirm": MessageLookupByLibrary.simpleMessage(
       "Ця дія незворотна. NFT буде надіслано на адресу запису.",
-    ),
-    "g_key_nft_burn_evm_only": MessageLookupByLibrary.simpleMessage(
-      "Запис підтримується лише в ланцюжках EVM",
-    ),
-    "g_key_nft_burn_sol_unsupported": MessageLookupByLibrary.simpleMessage(
-      "Незабаром буде запис Solana NFT",
     ),
     "g_key_nft_burn_title": MessageLookupByLibrary.simpleMessage(
       "Записати NFT",
@@ -2858,9 +1767,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_nft_no_video_support": MessageLookupByLibrary.simpleMessage(
       "Відтворення відео не підтримується",
     ),
-    "g_key_nft_open_browser": MessageLookupByLibrary.simpleMessage(
-      "Переглянути в Провіднику",
-    ),
     "g_key_nft_ordinals": MessageLookupByLibrary.simpleMessage("Порядкові"),
     "g_key_nft_ordinals_unsupported": MessageLookupByLibrary.simpleMessage(
       "Порядкові перекази ще не підтримуються",
@@ -2877,108 +1783,13 @@ class MessageLookup extends MessageLookupByLibrary {
       "Ідентифікатор маркера",
     ),
     "g_key_nft_type": MessageLookupByLibrary.simpleMessage("Тип"),
-    "g_key_no_linked_accounts": MessageLookupByLibrary.simpleMessage(
-      "Немає пов’язаних облікових записів",
-    ),
-    "g_key_notification_settings": MessageLookupByLibrary.simpleMessage(
-      "Налаштування сповіщень",
-    ),
-    "g_key_oidc_login": MessageLookupByLibrary.simpleMessage(
-      "Корпоративний вхід (SSO)",
-    ),
-    "g_key_oidc_not_configured": MessageLookupByLibrary.simpleMessage(
-      "Enterprise SSO не налаштовано",
-    ),
-    "g_key_old_password": MessageLookupByLibrary.simpleMessage(
-      "Поточний пароль",
-    ),
-    "g_key_or": MessageLookupByLibrary.simpleMessage("або"),
-    "g_key_password_changed_success": MessageLookupByLibrary.simpleMessage(
-      "Пароль успішно змінено",
-    ),
-    "g_key_password_min_length": MessageLookupByLibrary.simpleMessage(
-      "Пароль має бути не менше 6 символів",
-    ),
-    "g_key_password_req_different": MessageLookupByLibrary.simpleMessage(
-      "Відрізняється від поточного пароля",
-    ),
-    "g_key_password_req_length": MessageLookupByLibrary.simpleMessage(
-      "Мінімум 6 символів",
-    ),
-    "g_key_password_required": MessageLookupByLibrary.simpleMessage(
-      "Необхідно ввести пароль",
-    ),
-    "g_key_password_requirements": MessageLookupByLibrary.simpleMessage(
-      "Вимоги до пароля",
-    ),
-    "g_key_password_reset_success": MessageLookupByLibrary.simpleMessage(
-      "Пароль скинуто успішно",
-    ),
     "g_key_passwords_not_match": MessageLookupByLibrary.simpleMessage(
       "Паролі не збігаються",
     ),
-    "g_key_payment_amount_invalid": MessageLookupByLibrary.simpleMessage(
-      "Недійсна сума платежу",
-    ),
-    "g_key_payment_approx_token": m49,
-    "g_key_payment_approx_usdt": m50,
-    "g_key_payment_code_title": MessageLookupByLibrary.simpleMessage(
-      "Оплата QR",
-    ),
-    "g_key_payment_confirm": MessageLookupByLibrary.simpleMessage(
-      "Підтвердити",
-    ),
-    "g_key_payment_history": MessageLookupByLibrary.simpleMessage(
-      "Історія платежів",
-    ),
-    "g_key_payment_history_btn": MessageLookupByLibrary.simpleMessage(
-      "історія",
-    ),
-    "g_key_payment_incoming": MessageLookupByLibrary.simpleMessage("Вхідні"),
-    "g_key_payment_load_failed": MessageLookupByLibrary.simpleMessage(
-      "Не вдалося завантажити",
-    ),
-    "g_key_payment_name_not_set": MessageLookupByLibrary.simpleMessage(
-      "Не встановлено",
-    ),
-    "g_key_payment_native_insufficient": MessageLookupByLibrary.simpleMessage(
-      "Недостатній нативний баланс!",
-    ),
-    "g_key_payment_native_not_found": MessageLookupByLibrary.simpleMessage(
-      "Рідна мережа не знайдена!",
-    ),
-    "g_key_payment_outgoing": MessageLookupByLibrary.simpleMessage("Вихідний"),
-    "g_key_payment_set_amount_title": MessageLookupByLibrary.simpleMessage(
-      "Встановити суму платежу",
-    ),
-    "g_key_payment_success": MessageLookupByLibrary.simpleMessage(
-      "Оплата успішна!",
-    ),
-    "g_key_payment_title": MessageLookupByLibrary.simpleMessage("Оплата"),
-    "g_key_payment_usdt_insufficient": MessageLookupByLibrary.simpleMessage(
-      "Недостатній баланс USDT!",
-    ),
-    "g_key_payment_usdt_not_found": MessageLookupByLibrary.simpleMessage(
-      "Будь ласка, додайте токен USDT!",
-    ),
-    "g_key_payment_wallet": MessageLookupByLibrary.simpleMessage("Гаманець"),
     "g_key_personal_1": MessageLookupByLibrary.simpleMessage(
       "Виберіть із галереї телефону",
     ),
-    "g_key_resend_code": MessageLookupByLibrary.simpleMessage(
-      "Повторно надіслати код",
-    ),
     "g_key_reset": MessageLookupByLibrary.simpleMessage("Скинути"),
-    "g_key_reset_password": MessageLookupByLibrary.simpleMessage(
-      "Скинути пароль",
-    ),
-    "g_key_reset_password_email_desc": MessageLookupByLibrary.simpleMessage(
-      "Введіть адресу електронної пошти, щоб отримати код підтвердження",
-    ),
-    "g_key_saml_login": MessageLookupByLibrary.simpleMessage("Логін SAML"),
-    "g_key_saml_not_configured": MessageLookupByLibrary.simpleMessage(
-      "SAML не налаштовано",
-    ),
     "g_key_security_goplus_caution": MessageLookupByLibrary.simpleMessage(
       "Будьте обережні",
     ),
@@ -2994,17 +1805,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_security_goplus_safe": MessageLookupByLibrary.simpleMessage(
       "Контракт підтверджено безпечно",
     ),
-    "g_key_send_code": MessageLookupByLibrary.simpleMessage(
-      "Надіслати код підтвердження",
-    ),
     "g_key_send_memo_hint": MessageLookupByLibrary.simpleMessage(
       "Пам\'ятка / Примітка",
     ),
     "g_key_send_memo_label": MessageLookupByLibrary.simpleMessage(
       "Пам\'ятка / Примітка (необов\'язково)",
-    ),
-    "g_key_set_new_password_desc": MessageLookupByLibrary.simpleMessage(
-      "Встановіть новий пароль",
     ),
     "g_key_share_code": MessageLookupByLibrary.simpleMessage(
       "Поділіться QR-кодом",
@@ -3015,14 +1820,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_share_method": MessageLookupByLibrary.simpleMessage(
       "Метод спільного використання",
     ),
-    "g_key_sign_in_failed": MessageLookupByLibrary.simpleMessage(
-      "Помилка входу",
-    ),
-    "g_key_sim_gas_estimate": m51,
+    "g_key_sim_gas_estimate": m28,
     "g_key_sim_reverted": MessageLookupByLibrary.simpleMessage(
       "Транзакція, ймовірно, не вдасться",
     ),
-    "g_key_sim_reverted_reason": m52,
+    "g_key_sim_reverted_reason": m29,
     "g_key_sim_simulating": MessageLookupByLibrary.simpleMessage(
       "Імітація транзакції…",
     ),
@@ -3032,19 +1834,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_sim_unavailable": MessageLookupByLibrary.simpleMessage(
       "Симуляція недоступна для цієї мережі",
     ),
-    "g_key_social_login": MessageLookupByLibrary.simpleMessage(
-      "Соціальний вхід",
-    ),
     "g_key_squad": MessageLookupByLibrary.simpleMessage("Чат"),
-    "g_key_squad_k11": MessageLookupByLibrary.simpleMessage(
-      "Файл завеликий для завантаження",
-    ),
-    "g_key_squad_k15": m53,
-    "g_key_squad_k18": MessageLookupByLibrary.simpleMessage("Додати контакт"),
-    "g_key_squad_k24": MessageLookupByLibrary.simpleMessage("контакт"),
-    "g_key_squad_k25": MessageLookupByLibrary.simpleMessage(
-      "Пошук по електронній пошті",
-    ),
     "g_key_stake_active": MessageLookupByLibrary.simpleMessage("Активний"),
     "g_key_stake_active_positions": MessageLookupByLibrary.simpleMessage(
       "Активні позиції",
@@ -3055,16 +1845,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_stake_apy": MessageLookupByLibrary.simpleMessage("APY"),
     "g_key_stake_avg_apy": MessageLookupByLibrary.simpleMessage("Середній APY"),
-    "g_key_stake_claim": MessageLookupByLibrary.simpleMessage(
-      "Вимагайте винагороди",
-    ),
     "g_key_stake_commission": MessageLookupByLibrary.simpleMessage("Комісія"),
-    "g_key_stake_d_unbond": m54,
-    "g_key_stake_days_left": m55,
-    "g_key_stake_days_remaining": m56,
-    "g_key_stake_delegators": MessageLookupByLibrary.simpleMessage(
-      "Делегатори",
-    ),
+    "g_key_stake_d_unbond": m30,
+    "g_key_stake_days_remaining": m31,
     "g_key_stake_estimated_daily": MessageLookupByLibrary.simpleMessage(
       "Приблизно Щоденна винагорода",
     ),
@@ -3073,9 +1856,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_stake_go_to_swap": MessageLookupByLibrary.simpleMessage(
       "Перейдіть до Swap",
-    ),
-    "g_key_stake_liquid": MessageLookupByLibrary.simpleMessage(
-      "Рідкий стейкинг",
     ),
     "g_key_stake_liquid_staking_label": MessageLookupByLibrary.simpleMessage(
       "Рідкий стейкинг",
@@ -3091,9 +1871,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "Немає активних позицій для скасування ставок",
     ),
     "g_key_stake_no_lock": MessageLookupByLibrary.simpleMessage("Без замка"),
-    "g_key_stake_no_positions": MessageLookupByLibrary.simpleMessage(
-      "Жодних ставок",
-    ),
     "g_key_stake_no_positions_yet": MessageLookupByLibrary.simpleMessage(
       "Поки що немає ставок",
     ),
@@ -3106,17 +1883,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_stake_overview": MessageLookupByLibrary.simpleMessage(
       "Огляд загальної ставки",
     ),
-    "g_key_stake_pending_rewards": MessageLookupByLibrary.simpleMessage(
-      "Нагороди в очікуванні",
-    ),
     "g_key_stake_positions": MessageLookupByLibrary.simpleMessage(
       "Мої позиції",
     ),
-    "g_key_stake_protocol": MessageLookupByLibrary.simpleMessage("Протокол"),
     "g_key_stake_protocols": MessageLookupByLibrary.simpleMessage("Протоколи"),
-    "g_key_stake_restake": MessageLookupByLibrary.simpleMessage(
-      "Повторна ставка",
-    ),
     "g_key_stake_rewards": MessageLookupByLibrary.simpleMessage("Нагороди"),
     "g_key_stake_search_validator": MessageLookupByLibrary.simpleMessage(
       "Пошук валідаторів...",
@@ -3137,36 +1907,21 @@ class MessageLookup extends MessageLookupByLibrary {
       "Почніть робити ставки",
     ),
     "g_key_stake_title": MessageLookupByLibrary.simpleMessage("Ставка"),
-    "g_key_stake_total_staked": MessageLookupByLibrary.simpleMessage(
-      "Загальна ставка",
-    ),
     "g_key_stake_tx_prepared": MessageLookupByLibrary.simpleMessage(
       "Трансакцію підготовлено успішно",
     ),
     "g_key_stake_unbonding": MessageLookupByLibrary.simpleMessage(
       "Роз\'єднання",
     ),
-    "g_key_stake_unbonding_period": MessageLookupByLibrary.simpleMessage(
-      "Період відключення",
-    ),
-    "g_key_stake_unbonding_warning": m57,
+    "g_key_stake_unbonding_warning": m32,
     "g_key_stake_unstake": MessageLookupByLibrary.simpleMessage("Зняти ставку"),
     "g_key_stake_updating": MessageLookupByLibrary.simpleMessage(
       "Оновлення...",
     ),
-    "g_key_stake_uptime": MessageLookupByLibrary.simpleMessage("Час роботи"),
     "g_key_stake_validator": MessageLookupByLibrary.simpleMessage("Валідатор"),
-    "g_key_stake_validators": MessageLookupByLibrary.simpleMessage(
-      "Валідатори",
-    ),
     "g_key_stake_you_receive": MessageLookupByLibrary.simpleMessage(
       "Ви отримаєте",
     ),
-    "g_key_step_email": MessageLookupByLibrary.simpleMessage(
-      "Електронна пошта",
-    ),
-    "g_key_step_password": MessageLookupByLibrary.simpleMessage("Пароль"),
-    "g_key_step_verify": MessageLookupByLibrary.simpleMessage("Підтвердити"),
     "g_key_t_1": MessageLookupByLibrary.simpleMessage("Повний"),
     "g_key_t_15": MessageLookupByLibrary.simpleMessage("Ціна на газ"),
     "g_key_t_16": MessageLookupByLibrary.simpleMessage(
@@ -3176,14 +1931,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Максимальна плата за газ",
     ),
     "g_key_t_2": MessageLookupByLibrary.simpleMessage("В очікуванні"),
-    "g_key_t_29": m58,
+    "g_key_t_29": m33,
     "g_key_t_3": MessageLookupByLibrary.simpleMessage("провал"),
-    "g_key_t_30": MessageLookupByLibrary.simpleMessage("Плата Майнеру"),
     "g_key_t_31": MessageLookupByLibrary.simpleMessage("Продовжуйте"),
     "g_key_t_32": MessageLookupByLibrary.simpleMessage("Пароль гаманця"),
-    "g_key_t_33": MessageLookupByLibrary.simpleMessage(
-      "Пароль гаманця не може бути порожнім",
-    ),
     "g_key_t_34": MessageLookupByLibrary.simpleMessage(
       "Неправильний пароль гаманця",
     ),
@@ -3201,7 +1952,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_t_44": MessageLookupByLibrary.simpleMessage(
       "Не вдалося отримати дані",
     ),
-    "g_key_t_45": m59,
+    "g_key_t_45": m34,
     "g_key_t_46": MessageLookupByLibrary.simpleMessage(
       "Перевірте рахунок адреси отримання",
     ),
@@ -3214,22 +1965,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_t_51": MessageLookupByLibrary.simpleMessage(
       "Перевірка облікового запису успішна",
     ),
-    "g_key_t_52": m60,
+    "g_key_t_52": m35,
     "g_key_t_54": MessageLookupByLibrary.simpleMessage(
       "Адреса отримання не має облікового запису, і перший переказ становить принаймні 10 XRP",
     ),
     "g_key_t_6": MessageLookupByLibrary.simpleMessage("Використаний газ"),
     "g_key_t_7": MessageLookupByLibrary.simpleMessage("газ"),
-    "g_key_time_days_ago": m61,
-    "g_key_time_hours_ago": m62,
-    "g_key_time_just_now": MessageLookupByLibrary.simpleMessage("Просто зараз"),
-    "g_key_time_minutes_ago": m63,
     "g_key_token_discovery_add": MessageLookupByLibrary.simpleMessage("додати"),
-    "g_key_token_discovery_add_selected": m64,
+    "g_key_token_discovery_add_selected": m36,
     "g_key_token_discovery_added": MessageLookupByLibrary.simpleMessage(
       "Маркер додано",
     ),
-    "g_key_token_discovery_banner": m65,
+    "g_key_token_discovery_banner": m37,
     "g_key_token_discovery_deselect_all": MessageLookupByLibrary.simpleMessage(
       "Зняти вибір із усіх",
     ),
@@ -3267,37 +2014,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_tx_no_results": MessageLookupByLibrary.simpleMessage(
       "Жодна трансакція не відповідає вашому фільтру",
     ),
-    "g_key_u_10": MessageLookupByLibrary.simpleMessage("Типи NFT"),
-    "g_key_u_11": MessageLookupByLibrary.simpleMessage("Послідовники"),
-    "g_key_u_12": MessageLookupByLibrary.simpleMessage("Типи користувачів"),
-    "g_key_u_13": MessageLookupByLibrary.simpleMessage("Веб-сайт"),
-    "g_key_u_14": MessageLookupByLibrary.simpleMessage("Посилання на продукти"),
-    "g_key_u_15": MessageLookupByLibrary.simpleMessage("Медіаплатформи"),
-    "g_key_u_16": MessageLookupByLibrary.simpleMessage("Адреса гаманця"),
-    "g_key_u_2": MessageLookupByLibrary.simpleMessage("псевдонім"),
-    "g_key_u_23": MessageLookupByLibrary.simpleMessage(
-      "Не вдалося завантажити аватар",
-    ),
-    "g_key_u_3": MessageLookupByLibrary.simpleMessage("опис"),
-    "g_key_u_5": MessageLookupByLibrary.simpleMessage(
-      "Інформація про виконавця",
-    ),
-    "g_key_u_6": MessageLookupByLibrary.simpleMessage("Ви не художник"),
-    "g_key_u_7": MessageLookupByLibrary.simpleMessage(
-      "Натисніть тут, щоб подати заявку, щоб стати художником",
-    ),
-    "g_key_u_8": MessageLookupByLibrary.simpleMessage("Ім\'я"),
-    "g_key_u_9": MessageLookupByLibrary.simpleMessage("Дохід"),
-    "g_key_unlink_account": MessageLookupByLibrary.simpleMessage(
-      "Від’єднати обліковий запис",
-    ),
-    "g_key_user_p1": MessageLookupByLibrary.simpleMessage(
-      "Я прочитав і прийняв ",
-    ),
-    "g_key_user_p2": MessageLookupByLibrary.simpleMessage("Правила та умови"),
-    "g_key_user_p3": MessageLookupByLibrary.simpleMessage(
-      "Політика конфіденційності та Заява про збір особистої інформації",
-    ),
     "g_key_uuid": MessageLookupByLibrary.simpleMessage("UUID"),
     "g_key_v_k1": MessageLookupByLibrary.simpleMessage(
       "Знайдіть останню версію",
@@ -3305,15 +2021,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_v_k2": MessageLookupByLibrary.simpleMessage("Оновіть негайно"),
     "g_key_v_k3": MessageLookupByLibrary.simpleMessage("Знайдено нову версію"),
     "g_key_v_k4": MessageLookupByLibrary.simpleMessage("Вже остання версія"),
-    "g_key_verification_code": MessageLookupByLibrary.simpleMessage(
-      "Код підтвердження",
-    ),
-    "g_key_verification_code_sent": m66,
     "g_key_wallet_c10": MessageLookupByLibrary.simpleMessage(
       "Переглянути вихідну фразу",
-    ),
-    "g_key_wallet_c11": MessageLookupByLibrary.simpleMessage(
-      "Будь ласка, переконайтеся, що ви записали свою початкову фразу та безпечно її зберігали.",
     ),
     "g_key_wallet_c12": MessageLookupByLibrary.simpleMessage(
       "Тепер спробуйте ще раз поставити початкову фразу.",
@@ -3438,17 +2147,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_wallet_k56": MessageLookupByLibrary.simpleMessage("Один раз"),
     "g_key_wallet_k57": MessageLookupByLibrary.simpleMessage("Прискорити"),
     "g_key_wallet_k58": MessageLookupByLibrary.simpleMessage("Примітка"),
-    "g_key_wallet_m1": m67,
-    "g_key_wallet_m11": MessageLookupByLibrary.simpleMessage(
-      "Ви впевнені, що бажаєте скасувати свій обліковий запис?",
-    ),
-    "g_key_wallet_m13": MessageLookupByLibrary.simpleMessage(
-      "Підтвердити вихід",
-    ),
-    "g_key_wallet_m17": MessageLookupByLibrary.simpleMessage(
-      "Будь ласка, введіть код підтвердження Google.",
-    ),
-    "g_key_wallet_m19": m68,
+    "g_key_wallet_m1": m38,
+    "g_key_wallet_m19": m39,
     "g_key_wallet_m2": MessageLookupByLibrary.simpleMessage(
       "Поточний маркер не додано.",
     ),
@@ -3456,26 +2156,17 @@ class MessageLookup extends MessageLookupByLibrary {
       "Введіть початкову фразу словами, розділеними пробілами",
     ),
     "g_key_wallet_m22": MessageLookupByLibrary.simpleMessage("Імпорт гаманця"),
-    "g_key_wallet_m3": m69,
+    "g_key_wallet_m3": m40,
     "g_key_wallet_m4": MessageLookupByLibrary.simpleMessage(
       "Поточний баланс токенів недостатній.",
     ),
-    "g_key_wallet_m5": m70,
+    "g_key_wallet_m5": m41,
     "g_key_wallet_m6": MessageLookupByLibrary.simpleMessage("Помилка підпису"),
-    "g_key_wallet_m8": MessageLookupByLibrary.simpleMessage(
-      "Анулювання облікового запису",
-    ),
-    "g_key_wallet_m9": MessageLookupByLibrary.simpleMessage(
-      "Введіть код підтвердження електронної пошти.",
-    ),
     "g_key_wallet_manage": MessageLookupByLibrary.simpleMessage(
       "Керувати Wallet",
     ),
     "g_key_watch_address_hint": MessageLookupByLibrary.simpleMessage(
       "Введіть адресу Ethereum (0x...)",
-    ),
-    "g_key_watch_only_banner": MessageLookupByLibrary.simpleMessage(
-      "Тільки для перегляду",
     ),
     "g_key_watch_only_cant_send": MessageLookupByLibrary.simpleMessage(
       "Гаманець лише для перегляду не може надсилати або підписувати транзакції",
@@ -3486,13 +2177,13 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_xml_0": MessageLookupByLibrary.simpleMessage("Зарезервовано"),
     "g_key_xml_1": MessageLookupByLibrary.simpleMessage("Базовий резерв"),
-    "g_key_xml_11": m71,
+    "g_key_xml_11": m42,
     "g_key_xml_2": MessageLookupByLibrary.simpleMessage("Додатковий резерв"),
-    "g_key_xml_22": m72,
+    "g_key_xml_22": m43,
     "g_key_xml_3": MessageLookupByLibrary.simpleMessage(
       "Підрахунок об\'єктів власності",
     ),
-    "g_key_xml_33": m73,
+    "g_key_xml_33": m44,
     "g_key_xml_4": MessageLookupByLibrary.simpleMessage(
       "Як розрахувати загальну зарезервовану суму",
     ),
@@ -3500,47 +2191,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "Загальний резерв = базовий резерв + (кількість об’єктів власності × додатковий резерв)",
     ),
     "g_lock_key1": MessageLookupByLibrary.simpleMessage("Touch ID і Face ID"),
-    "g_lock_key10": MessageLookupByLibrary.simpleMessage("Поточний пароль"),
-    "g_lock_key11": MessageLookupByLibrary.simpleMessage("Новий пароль"),
-    "g_lock_key12": MessageLookupByLibrary.simpleMessage(
-      "Підтвердьте новий пароль",
-    ),
-    "g_lock_key13": MessageLookupByLibrary.simpleMessage("6-значне число"),
-    "g_lock_key15": MessageLookupByLibrary.simpleMessage("Паролі та біометрія"),
-    "g_lock_key16": MessageLookupByLibrary.simpleMessage("Шаблон пароля"),
-    "g_lock_key17": MessageLookupByLibrary.simpleMessage(
-      "Встановіть шаблон пароля",
-    ),
-    "g_lock_key18": MessageLookupByLibrary.simpleMessage(
-      "Для безпеки свого облікового запису встановіть пароль групи",
-    ),
-    "g_lock_key19": MessageLookupByLibrary.simpleMessage(
-      "Пароль шаблону додаткового малюнка",
-    ),
-    "g_lock_key20": MessageLookupByLibrary.simpleMessage(
-      "Намалюйте шаблон пароля",
-    ),
-    "g_lock_key21": m74,
-    "g_lock_key22": MessageLookupByLibrary.simpleMessage(
-      "Скинути шаблон пароля",
-    ),
-    "g_lock_key23": MessageLookupByLibrary.simpleMessage(
-      "Забагато неправильних введень, скиньте пароль",
-    ),
     "g_lock_key24": MessageLookupByLibrary.simpleMessage(
       "Додати пароль Wallet?",
     ),
-    "g_lock_key25": m75,
     "g_lock_key26": MessageLookupByLibrary.simpleMessage(
       "Transfer Verification",
     ),
     "g_lock_key27": MessageLookupByLibrary.simpleMessage(
       "Require biometric authentication (Face ID / fingerprint) to confirm each wallet transfer.",
     ),
-    "g_lock_key3": MessageLookupByLibrary.simpleMessage(
-      "Сторінка блокування екрана",
-    ),
-    "g_lock_key4": MessageLookupByLibrary.simpleMessage("Автоблокування"),
     "g_lock_key5": MessageLookupByLibrary.simpleMessage("Вдався"),
     "g_lock_key6": MessageLookupByLibrary.simpleMessage("Не вдалося"),
     "g_lock_key7": MessageLookupByLibrary.simpleMessage(
@@ -3549,7 +2208,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_lock_key8": MessageLookupByLibrary.simpleMessage(
       "Додати біометричне підтвердження?",
     ),
-    "g_lock_key9": MessageLookupByLibrary.simpleMessage("Скинути пароль"),
     "g_market_30d_change": MessageLookupByLibrary.simpleMessage("Зміна 30D"),
     "g_market_7d_change": MessageLookupByLibrary.simpleMessage("Зміна 7D"),
     "g_market_ath": MessageLookupByLibrary.simpleMessage("ATH"),
@@ -3557,9 +2215,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_market_depth": MessageLookupByLibrary.simpleMessage("Глибина ринку"),
     "g_market_empty_watchlist": MessageLookupByLibrary.simpleMessage(
       "Ще немає списку спостереження",
-    ),
-    "g_market_empty_watchlist_hint": MessageLookupByLibrary.simpleMessage(
-      "Натисніть ★ на будь-якій монеті, щоб додати",
     ),
     "g_market_fdv": MessageLookupByLibrary.simpleMessage("FDV"),
     "g_market_high_24h": MessageLookupByLibrary.simpleMessage(
@@ -3590,9 +2245,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_inactivity_warning": MessageLookupByLibrary.simpleMessage(
       "Показник бездіяльності валідатора високий. Перевірте статус свого вузла, щоб уникнути штрафів.",
     ),
-    "g_mining_key15": MessageLookupByLibrary.simpleMessage(
-      "Деталізація завдання",
-    ),
     "g_mining_key20": MessageLookupByLibrary.simpleMessage("Розблокувати N?"),
     "g_mining_key31": MessageLookupByLibrary.simpleMessage("Хмарна перевірка"),
     "g_mining_key33": MessageLookupByLibrary.simpleMessage(
@@ -3617,13 +2269,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Поділіться з друзями",
     ),
     "g_mining_key62": MessageLookupByLibrary.simpleMessage("Продовжити"),
-    "g_mining_key63": m76,
-    "g_mining_key7": MessageLookupByLibrary.simpleMessage("Дата розблокування"),
-    "g_mining_key73": m77,
+    "g_mining_key63": m45,
+    "g_mining_key73": m46,
     "g_mining_key74": MessageLookupByLibrary.simpleMessage(
       "Я щойно налаштував вузол на @N42Wallet і почав перевірку на мобільних пристроях! Приходь і приєднуйся до мене. Децентралізоване майбутнє – це мобільно!",
     ),
-    "g_mining_key76": m78,
+    "g_mining_key76": m47,
     "g_mining_key82": MessageLookupByLibrary.simpleMessage("мінеральні"),
     "g_mining_key83": MessageLookupByLibrary.simpleMessage("Вузол"),
     "g_mining_key84": MessageLookupByLibrary.simpleMessage("Мережа"),
@@ -3645,9 +2296,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_mining_key_101": MessageLookupByLibrary.simpleMessage("Копіювати дані"),
     "g_mining_key_102": MessageLookupByLibrary.simpleMessage("Неактивний"),
-    "g_mining_key_103": MessageLookupByLibrary.simpleMessage(
-      "Список валідатора",
-    ),
     "g_mining_key_104": MessageLookupByLibrary.simpleMessage("Імпорт успішний"),
     "g_mining_key_105": MessageLookupByLibrary.simpleMessage(
       "Зашифровані дані не можуть бути порожніми!",
@@ -3661,7 +2309,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_108": MessageLookupByLibrary.simpleMessage(
       "Непідтримуваний формат зашифрованих даних!",
     ),
-    "g_mining_key_109": m79,
+    "g_mining_key_109": m48,
     "g_mining_key_11": MessageLookupByLibrary.simpleMessage(
       "Вчорашні нагороди",
     ),
@@ -3677,7 +2325,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_115": MessageLookupByLibrary.simpleMessage(
       "Погашення займає деякий час, зачекайте трохи!",
     ),
-    "g_mining_key_116": m80,
+    "g_mining_key_116": m49,
     "g_mining_key_12": MessageLookupByLibrary.simpleMessage(
       "Винагорода накопичується щодня та надсилається на ваш гаманець N лише тоді, коли вона досягає ~0,5 N.",
     ),
@@ -3696,9 +2344,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "Загальна вартість видобутого",
     ),
     "g_mining_key_21": MessageLookupByLibrary.simpleMessage("Перевірка З"),
-    "g_mining_key_22": MessageLookupByLibrary.simpleMessage(
-      "Розподіл винагороди",
-    ),
     "g_mining_key_23": MessageLookupByLibrary.simpleMessage(
       "Підрахунок прибутку",
     ),
@@ -3772,12 +2417,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_70": MessageLookupByLibrary.simpleMessage(
       "100 блоків/день ~ 15 хв",
     ),
-    "g_mining_key_71": m81,
+    "g_mining_key_71": m50,
     "g_mining_key_72": MessageLookupByLibrary.simpleMessage(
       "128 секунд на перевірку",
-    ),
-    "g_mining_key_73": MessageLookupByLibrary.simpleMessage(
-      "Розпочато хмарну перевірку",
     ),
     "g_mining_key_74": MessageLookupByLibrary.simpleMessage(
       "Тестовий ланцюжок оновлюється, тому тимчасово неможливо перевірити блоки.",
@@ -3841,7 +2483,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_97": MessageLookupByLibrary.simpleMessage(
       "Будь ласка, введіть пароль для шифрування",
     ),
-    "g_mining_key_98": m82,
+    "g_mining_key_98": m51,
     "g_mining_key_99": MessageLookupByLibrary.simpleMessage(
       "Введіть свій пароль повторно, щоб переконатися, що він правильний",
     ),
@@ -3864,8 +2506,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "Можна розблокувати в будь-який час",
     ),
     "g_news_empty": MessageLookupByLibrary.simpleMessage("Немає новин"),
-    "g_news_source": MessageLookupByLibrary.simpleMessage("Джерело"),
-    "g_notification_key_1": MessageLookupByLibrary.simpleMessage("Сповіщення"),
     "g_phishing_go_back": MessageLookupByLibrary.simpleMessage(
       "Повернутися назад (безпечно)",
     ),
@@ -3886,11 +2526,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_pnl_buy_price_usd": MessageLookupByLibrary.simpleMessage(
       "Ціна покупки (USD)",
     ),
-    "g_pnl_cancel": MessageLookupByLibrary.simpleMessage("Скасувати"),
     "g_pnl_cost_basis": MessageLookupByLibrary.simpleMessage("Основа витрат"),
-    "g_pnl_no_trades": MessageLookupByLibrary.simpleMessage(
-      "Угод не зареєстровано",
-    ),
     "g_pnl_quantity": MessageLookupByLibrary.simpleMessage("Кількість"),
     "g_pnl_save": MessageLookupByLibrary.simpleMessage("зберегти"),
     "g_pnl_unrealized": MessageLookupByLibrary.simpleMessage(
@@ -3930,9 +2566,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "Майнінгові вузли",
     ),
     "g_referral_reward": MessageLookupByLibrary.simpleMessage("Винагорода (N)"),
-    "g_referral_stats_title": MessageLookupByLibrary.simpleMessage(
-      "Статистика рефералів",
-    ),
     "g_setting_mining_v1_label": MessageLookupByLibrary.simpleMessage(
       "Класичний майнінг (V1)",
     ),
@@ -3956,7 +2589,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("Посилання"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("код"),
-    "g_swap_key_14": m83,
+    "g_swap_key_14": m52,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "Отримати помилку ціни монети.",
     ),
@@ -3968,7 +2601,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "Ваш обмін буде розповсюджено незабаром. Будь ласка, будьте терплячі.",
     ),
-    "g_swap_key_20": m84,
+    "g_swap_key_20": m53,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "Витрати на запуск вузла: Групова перевірка 1-49 N Базовий вузол: 50 N Преміум-вузол: 100 N Професійний вузол: 500 N.",
     ),
@@ -3982,7 +2615,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("Новий баланс"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("Ви платите"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("Дата"),
-    "g_swap_key_31": m85,
+    "g_swap_key_31": m54,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "Свопи можна переглянути у відповідних дослідниках ланцюгів (Etherscan, BscScan, TRONSCAN і наш власний).",
     ),
@@ -3999,7 +2632,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "Скинути до замовчування",
     ),
-    "g_token_m_key_1": m86,
+    "g_token_m_key_1": m55,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "Будь-хто може створити маркер, у тому числі створити підроблені версії існуючих маркерів. Завжди досліджуйте токен перед його імпортом.",
     ),
@@ -4010,7 +2643,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_15": MessageLookupByLibrary.simpleMessage("ID ланцюга"),
     "g_token_m_key_16": MessageLookupByLibrary.simpleMessage("Десятковий"),
     "g_token_m_key_17": MessageLookupByLibrary.simpleMessage("RPC"),
-    "g_token_m_key_18": MessageLookupByLibrary.simpleMessage("API"),
     "g_token_m_key_19": MessageLookupByLibrary.simpleMessage(
       "Додайте спеціальний ланцюжок",
     ),
@@ -4019,9 +2651,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage(
       "Помилка формату!",
     ),
-    "g_token_m_key_22": m87,
-    "g_token_m_key_23": m88,
-    "g_token_m_key_24": m89,
+    "g_token_m_key_22": m56,
+    "g_token_m_key_23": m57,
+    "g_token_m_key_24": m58,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("Імпорт жетонів"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("Всі мережі"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage(
@@ -4034,21 +2666,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("Обережно"),
     "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("Високий ризик"),
     "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("Безпечний"),
-    "g_unlock_key10": m90,
-    "g_unlock_key2": MessageLookupByLibrary.simpleMessage(
-      "Розпізнавання відбитків пальців або обличчя не ввімкнено?",
-    ),
-    "g_unlock_key3": MessageLookupByLibrary.simpleMessage(
-      "Намалюйте шаблон пароля",
-    ),
-    "g_unlock_key4": m91,
-    "g_unlock_key5": MessageLookupByLibrary.simpleMessage("Введіть пароль"),
-    "g_unlock_key6": m92,
-    "g_unlock_key7": MessageLookupByLibrary.simpleMessage(
-      "Помилка автентифікації",
-    ),
-    "g_unlock_key8": m93,
-    "g_unlock_key9": MessageLookupByLibrary.simpleMessage("Ви також можете "),
     "g_version_later": MessageLookupByLibrary.simpleMessage("Пізніше"),
     "g_wc_connection_lost": MessageLookupByLibrary.simpleMessage(
       "З\'єднання втрачено. Підключіться повторно.",
@@ -4065,9 +2682,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_wc_disconnect_confirm": MessageLookupByLibrary.simpleMessage(
       "Відключитися від цього DApp?",
     ),
-    "g_wc_new_connection": MessageLookupByLibrary.simpleMessage(
-      "Нове підключення",
-    ),
     "g_wc_no_sessions": MessageLookupByLibrary.simpleMessage(
       "Немає активних з\'єднань",
     ),
@@ -4081,121 +2695,20 @@ class MessageLookup extends MessageLookupByLibrary {
       "Сеанс закінчився",
     ),
     "g_wc_sessions": MessageLookupByLibrary.simpleMessage("Підключені DApps"),
-    "google_verification": MessageLookupByLibrary.simpleMessage(
-      "Автентифікація Google",
-    ),
     "google_verification_message10": MessageLookupByLibrary.simpleMessage(
       "Посилання",
-    ),
-    "google_verification_message11": MessageLookupByLibrary.simpleMessage(
-      "Завантажити Google Authentication",
-    ),
-    "google_verification_message12": MessageLookupByLibrary.simpleMessage(
-      "Інструкції",
-    ),
-    "google_verification_message13": MessageLookupByLibrary.simpleMessage(
-      "Відкрийте Google Authenticator.",
-    ),
-    "google_verification_message14": MessageLookupByLibrary.simpleMessage(
-      "На екрані ви побачите 6-значний код підтвердження.",
-    ),
-    "google_verification_message15": MessageLookupByLibrary.simpleMessage(
-      "Скопіюйте 6-значний код і вставте його в N42Wallet.",
-    ),
-    "google_verification_message16": MessageLookupByLibrary.simpleMessage(
-      "Тоді ваш Authenticator буде успішно підключено.",
-    ),
-    "google_verification_message17": MessageLookupByLibrary.simpleMessage(
-      "Резервний ключ",
-    ),
-    "google_verification_message18": MessageLookupByLibrary.simpleMessage(
-      "Скопіюйте ключ до Google Authentication",
-    ),
-    "google_verification_message19": MessageLookupByLibrary.simpleMessage(
-      "Введіть код підтвердження Google",
-    ),
-    "google_verification_message20": MessageLookupByLibrary.simpleMessage(
-      "Введіть код підтвердження електронної пошти",
-    ),
-    "google_verification_message21": m94,
-    "google_verification_message3": MessageLookupByLibrary.simpleMessage(
-      "Не вдалося отримати ключ Google",
-    ),
-    "google_verification_message5": MessageLookupByLibrary.simpleMessage(
-      "Двофакторна автентифікація (2FA)",
-    ),
-    "google_verification_message6": MessageLookupByLibrary.simpleMessage(
-      "Щоб захистити свій обліковий запис, рекомендується ввімкнути хоча б один 2FA.",
-    ),
-    "google_verification_message7": MessageLookupByLibrary.simpleMessage(
-      "Програма Google Authenticator захищає ваші зняття коштів і обліковий запис N42Wallet.",
-    ),
-    "google_verification_message8": MessageLookupByLibrary.simpleMessage(
-      "Завантажити та встановити",
-    ),
-    "google_verification_message9": MessageLookupByLibrary.simpleMessage(
-      "Завантажте та встановіть Google Authenticator. Потім натисніть «Посилання», щоб пов’язати свій обліковий запис N42Wallet.",
     ),
     "importantNotice": MessageLookupByLibrary.simpleMessage(
       "Важливе повідомлення",
     ),
-    "login_button_text": MessageLookupByLibrary.simpleMessage("Увійдіть"),
     "login_email": MessageLookupByLibrary.simpleMessage("Електронна пошта"),
-    "login_forgot_password": MessageLookupByLibrary.simpleMessage(
-      "Забули пароль?",
-    ),
-    "login_invite_code": MessageLookupByLibrary.simpleMessage(
-      "Реферальний код",
-    ),
-    "login_invite_code_title": MessageLookupByLibrary.simpleMessage(
-      "Реферальний код",
-    ),
-    "login_message_1": MessageLookupByLibrary.simpleMessage(
-      "Немає облікового запису? ",
-    ),
-    "login_message_10": MessageLookupByLibrary.simpleMessage(
-      "Створено успішно",
-    ),
-    "login_message_11": MessageLookupByLibrary.simpleMessage(
-      "Скидання успішно",
-    ),
-    "login_message_2": MessageLookupByLibrary.simpleMessage(
-      "Вже маєте акаунт? ",
-    ),
-    "login_message_6": MessageLookupByLibrary.simpleMessage(
-      "Повторно надіслати код ",
-    ),
-    "login_message_7": MessageLookupByLibrary.simpleMessage(
-      "Код успішно надіслано",
-    ),
-    "login_message_8": MessageLookupByLibrary.simpleMessage(
-      "Електронна пошта незареєстрована",
-    ),
-    "login_message_9": MessageLookupByLibrary.simpleMessage(
-      "Не вдалося надіслати код",
-    ),
-    "login_need_login": MessageLookupByLibrary.simpleMessage(
-      "будь ласка, спочатку увійдіть",
-    ),
     "login_password": MessageLookupByLibrary.simpleMessage("Пароль"),
     "next": MessageLookupByLibrary.simpleMessage("Далі"),
-    "nicknameMessage": m95,
-    "password_diff": MessageLookupByLibrary.simpleMessage(
-      "Паролі не збігаються",
-    ),
+    "nicknameMessage": m59,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "Редагувати профіль",
     ),
     "photograph": MessageLookupByLibrary.simpleMessage("Фотографія"),
-    "please_enter_code": MessageLookupByLibrary.simpleMessage(
-      "Введіть код підтвердження",
-    ),
-    "please_enter_email": MessageLookupByLibrary.simpleMessage(
-      "Введіть адресу електронної пошти",
-    ),
-    "please_enter_password": MessageLookupByLibrary.simpleMessage(
-      "Будь ласка, введіть пароль",
-    ),
     "please_input_address": MessageLookupByLibrary.simpleMessage(
       "Будь ласка, введіть адресу",
     ),
@@ -4223,31 +2736,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "rest_Confirm_password": MessageLookupByLibrary.simpleMessage(
       "Підтвердьте пароль",
     ),
-    "rest_Enter_the_password_again": MessageLookupByLibrary.simpleMessage(
-      "Введіть пароль ще раз",
-    ),
-    "rest_Please_enter": MessageLookupByLibrary.simpleMessage("Введіть код"),
-    "rest_Verification_code": MessageLookupByLibrary.simpleMessage("Код OTP"),
-    "rest_your_password": MessageLookupByLibrary.simpleMessage(
-      "Скинути пароль",
-    ),
-    "s_key_1": MessageLookupByLibrary.simpleMessage("Керувати Wallet"),
     "s_key_10": MessageLookupByLibrary.simpleMessage("Про додаток"),
     "s_key_11": MessageLookupByLibrary.simpleMessage("Безпека"),
-    "s_key_12": MessageLookupByLibrary.simpleMessage(
-      "Використовуйте новий чат",
-    ),
-    "s_key_13": MessageLookupByLibrary.simpleMessage(
-      "Увімкніть покращений досвід чату",
-    ),
-    "s_key_2": MessageLookupByLibrary.simpleMessage("Адреси гаманців"),
     "s_key_3": MessageLookupByLibrary.simpleMessage("Транзакція"),
     "s_key_4": MessageLookupByLibrary.simpleMessage("Мова"),
-    "s_key_5": MessageLookupByLibrary.simpleMessage("Тема"),
     "search": MessageLookupByLibrary.simpleMessage("Пошук"),
-    "selected_user_protocol": MessageLookupByLibrary.simpleMessage(
-      "Будь ласка, прочитайте угоду та підтвердьте",
-    ),
     "verification": MessageLookupByLibrary.simpleMessage("перевірка"),
     "w_item_1": MessageLookupByLibrary.simpleMessage(
       "Якщо я втрачу свою секретну фразу, мої кошти будуть втрачені назавжди.",

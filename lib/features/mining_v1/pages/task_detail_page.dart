@@ -58,7 +58,7 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
-        text: S.of(context).g_mining_key15,
+        text: S.of(context).g_mining_key_15,
         actions: [
           Row(
             children: [

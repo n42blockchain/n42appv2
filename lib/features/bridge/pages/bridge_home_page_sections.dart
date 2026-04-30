@@ -383,7 +383,7 @@ mixin BridgeHomeSectionsMixin on ConsumerState<BridgeHomePage>,
           isLoading
               ? '${S.of(context).g_key_106}...'
               : canExecute
-                  ? S.of(context).g_key_bridge_swap
+                  ? S.of(context).g_key_bridge_title
                   : S.of(context).g_key_bridge_get_quote,
           AppThemeUtils.getColorByKey(
             context,

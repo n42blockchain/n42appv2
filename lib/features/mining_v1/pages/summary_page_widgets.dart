@@ -129,7 +129,7 @@ mixin _SummaryPageWidgetsMixin on State<SummaryPage>, _SummaryPageLogicMixin {
       children: [
         Flexible(
           child: Text(
-            S.current.g_mining_key7,
+            S.current.g_mining_key_7,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
               color: AppThemeUtils.getColorByKey(

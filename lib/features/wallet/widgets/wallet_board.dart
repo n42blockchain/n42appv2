@@ -198,7 +198,7 @@ class _WalletBoardState extends State<WalletBoard> {
 
   List<Widget> buttonList() {
     final buttons = <Widget>[
-      _buildActionBtn(S.of(context).g_key_100, 'assets/wallet/w_send.png', widget.sendTap),
+      _buildActionBtn(S.of(context).g_key_48, 'assets/wallet/w_send.png', widget.sendTap),
       SizedBox(width: ScreenUtil().setWidth(32)),
       _buildActionBtn(S.of(context).g_key_33, 'assets/wallet/w_receive.png', widget.receiveTap),
       SizedBox(width: ScreenUtil().setWidth(32)),

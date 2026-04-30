@@ -27,242 +27,145 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m2(symbol) => "মূল্য সতর্কতা · ${symbol}";
 
-  static String m3(value) => "আমি ${value}";
+  static String m3(s) => "${s}s এ আবার পাঠান";
 
-  static String m4(value) => "চ্যাট সদস্য (${value})";
+  static String m4(message) => "ক্রয় ব্যর্থ: ${message}";
 
-  static String m5(value) =>
-      "আপনি কি ${value} কে বন্ধু হিসেবে যোগ করার বিষয়ে নিশ্চিত";
+  static String m5(productId) => "ক্রয় সফল: ${productId}";
 
-  static String m6(email) => "যাচাইকরণ কোড ${email} এ পাঠানো হয়েছে";
+  static String m6(productId) => "পুনরুদ্ধার হয়েছে: ${productId}";
 
-  static String m7(s) => "${s}s এ আবার পাঠান";
+  static String m7(value) => "${value} এর থেকে বেশি পরিমাণ।";
 
   static String m8(value) =>
-      "আপনি আবদ্ধ হয়েছেন এবং এই মুহূর্তে পুনরায় আবদ্ধ হতে পারবেন না। বাঁধাই ঠিকানা: ${value}।";
-
-  static String m9(value) => "বাইন্ডিং সফল৷ বাইন্ডিং ঠিকানা: ${value}৷";
-
-  static String m10(value) => "${value} ওয়ালেটে কোন N42 চেইন নেই!";
-
-  static String m11(value) => "ম্যাচ সফল। ঠিকানা:${value}।";
-
-  static String m12(message) => "ক্রয় ব্যর্থ: ${message}";
-
-  static String m13(productId) => "ক্রয় সফল: ${productId}";
-
-  static String m14(productId) => "পুনরুদ্ধার হয়েছে: ${productId}";
-
-  static String m15(value) => "${value} এর থেকে বেশি পরিমাণ।";
-
-  static String m16(value) =>
       "মানিব্যাগটি ইতিমধ্যেই বিদ্যমান, ওয়ালেটের নাম \"${value}\"";
 
-  static String m17(value) => "${value} এর চেয়ে বেশি পরিমাণ লিখুন।";
+  static String m9(value) => "${value} এর চেয়ে বেশি পরিমাণ লিখুন।";
 
-  static String m18(gas) =>
-      "এক্সিকিউশন গ্যাস (${gas}) বেশি। কথিত চুক্তি প্রত্যাশার চেয়ে বেশি গ্যাস ব্যবহার করতে পারে।";
+  static String m10(value) => "${value} সারিতে ডুপ্লিকেট ঠিকানা";
 
-  static String m19(gas) =>
-      "প্রথম লেনদেনে অ্যাকাউন্ট স্থাপনা (~${gas} গ্যাস) অন্তর্ভুক্ত। পরবর্তী লেনদেন সস্তা হবে।";
-
-  static String m20(gas) =>
-      "পেমাস্টার গ্যাস ওভারহেড (${gas}) বেশি। গ্যাস-মুক্ত লেনদেনে বেশি খরচ হতে পারে।";
-
-  static String m21(gas) =>
-      "আনুমানিক মোট গ্যাস (${gas}) অস্বাভাবিকভাবে বেশি। ত্রুটির জন্য আপনার লেনদেন পরীক্ষা করুন.";
-
-  static String m22(gas) =>
-      "যাচাইকরণ গ্যাস (${gas}) খুব বেশি হতে পারে। এটি জটিল অ্যাকাউন্ট যুক্তির সাথে ঘটতে পারে।";
-
-  static String m23(value) => "${value} দিন বাকি";
-
-  static String m24(value) => "${value} সারিতে ডুপ্লিকেট ঠিকানা";
-
-  static String m25(value) =>
+  static String m11(value) =>
       "অপর্যাপ্ত ব্যালেন্স: মোট পরিমাণ উপলব্ধ ${value} ছাড়িয়ে যাবে";
 
-  static String m26(value) => "${value} সারিতে অবৈধ ঠিকানা";
+  static String m12(value) => "${value} সারিতে অবৈধ ঠিকানা";
 
-  static String m27(value) => "${value} সারিতে অবৈধ পরিমাণ";
+  static String m13(value) => "${value} সারিতে অবৈধ পরিমাণ";
 
-  static String m28(value) => "সর্বাধিক ${value} প্রাপক";
+  static String m14(value) => "সর্বাধিক ${value} প্রাপক";
 
-  static String m29(token) => "চালিয়ে যেতে ${token} অনুমোদন করুন";
+  static String m15(token) => "চালিয়ে যেতে ${token} অনুমোদন করুন";
 
-  static String m30(impact) =>
+  static String m16(impact) =>
       "উচ্চ মূল্যের প্রভাব (${impact})! সাবধানে এগিয়ে যান।";
 
-  static String m31(secs) => "${secs}s-এ উদ্ধৃতির মেয়াদ শেষ হয়";
+  static String m17(secs) => "${secs}s-এ উদ্ধৃতির মেয়াদ শেষ হয়";
 
-  static String m32(value) => "+${value} পয়েন্ট/দিন";
+  static String m18(value) => "${value}% APY পর্যন্ত উপার্জন করুন";
 
-  static String m33(value) => "${value}% APY পর্যন্ত উপার্জন করুন";
-
-  static String m34(value) => "অভিনন্দন! আপনি এখন ${value} এর মালিক৷";
-
-  static String m35(value) => "অনুগ্রহ করে ${value} সেকেন্ড অপেক্ষা করুন";
-
-  static String m36(value) =>
+  static String m19(value) =>
       "প্রতি ${value} সেকেন্ডে স্বয়ংক্রিয়ভাবে রিফ্রেশ করুন";
 
-  static String m37(address) => "অ্যাকাউন্ট ${address} যোগ করা হয়েছে";
+  static String m20(address) => "অ্যাকাউন্ট ${address} যোগ করা হয়েছে";
 
-  static String m38(address, network) =>
+  static String m21(address, network) =>
       "আপনি কি এই হার্ডওয়্যার ওয়ালেট অ্যাকাউন্ট ট্র্যাক করতে চান?\n\nঠিকানা: ${address}\nনেটওয়ার্ক: ${network}";
 
-  static String m39(app) => "বর্তমান অ্যাপ: ${app}";
+  static String m22(app) => "বর্তমান অ্যাপ: ${app}";
 
-  static String m40(days) => "${days} দিন আগে";
+  static String m23(days) => "${days} দিন আগে";
 
-  static String m41(value) => "অ্যাকাউন্ট আমদানি করতে ব্যর্থ হয়েছে: ${value}৷";
+  static String m24(value) => "অ্যাকাউন্ট আমদানি করতে ব্যর্থ হয়েছে: ${value}৷";
 
-  static String m42(date) => "সর্বশেষ সংযুক্ত: ${date}";
+  static String m25(date) => "সর্বশেষ সংযুক্ত: ${date}";
 
-  static String m43(value) =>
-      "অনুগ্রহ করে আপনার ডিভাইসে ${value} অ্যাপটি খুলুন";
-
-  static String m44(app) =>
+  static String m26(app) =>
       "নিশ্চিত করুন যে আপনার লেজারে ${app} অ্যাপ খোলা আছে";
 
-  static String m45(name) =>
+  static String m27(name) =>
       "আপনি কি সংরক্ষিত ডিভাইস থেকে \"${name}\" সরানোর বিষয়ে নিশ্চিত?";
 
-  static String m46(value) => "${value} পয়েন্ট অর্জন করুন";
+  static String m28(value) => "অনুমান। গ্যাস: ~${value} ইউনিট";
 
-  static String m47(value) =>
-      "যোগদানকারী প্রতিটি বন্ধুর জন্য ${value} পয়েন্ট অর্জন করুন!";
+  static String m29(reason) => "কারণ: ${reason}";
 
-  static String m48(value) => "${value} পরবর্তী স্তরে পয়েন্ট করে";
+  static String m30(value) => "${value}d আনবন্ড";
 
-  static String m49(amount, token) => "≈ ${amount}${token}";
+  static String m31(value) => "${value} দিন বাকি";
 
-  static String m50(amount) => "≈ ${amount} USDT";
-
-  static String m51(value) => "অনুমান। গ্যাস: ~${value} ইউনিট";
-
-  static String m52(reason) => "কারণ: ${reason}";
-
-  static String m53(value) =>
-      "আপনি কি নিশ্চিত আপনি ${value} পরিচিতি মুছে ফেলতে চান?";
-
-  static String m54(value) => "${value}d আনবন্ড";
-
-  static String m55(value) => "${value} দিন বাকি";
-
-  static String m56(value) => "${value} দিন বাকি";
-
-  static String m57(value) =>
+  static String m32(value) =>
       "আনস্টেক করতে ${value} দিন লাগে। এই সময়ের মধ্যে আপনার টোকেন লক করা হবে।";
 
-  static String m58(value) => "আপনার কাছে যথেষ্ট \"${value}\" নেই";
+  static String m33(value) => "আপনার কাছে যথেষ্ট \"${value}\" নেই";
 
-  static String m59(value) => "\"${value}\" অ্যাকাউন্ট পেতে ব্যর্থ হয়েছে৷";
+  static String m34(value) => "\"${value}\" অ্যাকাউন্ট পেতে ব্যর্থ হয়েছে৷";
 
-  static String m60(value) => "প্রথম স্থানান্তরের জন্য ন্যূনতম ${value} XRP";
+  static String m35(value) => "প্রথম স্থানান্তরের জন্য ন্যূনতম ${value} XRP";
 
-  static String m61(value) => "${value}d আগে";
+  static String m36(count) => "যোগ করুন (${count})";
 
-  static String m62(value) => "${value}h আগে";
-
-  static String m63(value) => "${value}m আগে";
-
-  static String m64(count) => "যোগ করুন (${count})";
-
-  static String m65(count) =>
+  static String m37(count) =>
       "${Intl.plural(count, one: '1টি নতুন টোকেন শনাক্ত হয়েছে৷', other: '${count} নতুন টোকেন সনাক্ত করা হয়েছে৷')} — পর্যালোচনা করতে আলতো চাপুন";
 
-  static String m66(value) => "যাচাইকরণ কোড ${value} এ পাঠানো হয়েছে";
+  static String m38(value) => "কোন ${value} চেইন যোগ করা হয়নি।";
 
-  static String m67(value) => "কোন ${value} চেইন যোগ করা হয়নি।";
-
-  static String m68(value) =>
+  static String m39(value) =>
       "${value} এর লেনদেন অসমাপ্ত আছে, অনুগ্রহ করে পরে আবার চেষ্টা করুন।";
 
-  static String m69(value) => "${value} এর কোনো ঠিকানা পাওয়া যায়নি।";
+  static String m40(value) => "${value} এর কোনো ঠিকানা পাওয়া যায়নি।";
 
-  static String m70(value) => "${value} এর অপর্যাপ্ত ব্যালেন্স।";
+  static String m41(value) => "${value} এর অপর্যাপ্ত ব্যালেন্স।";
 
-  static String m71(value, value1) =>
+  static String m42(value, value1) =>
       "প্রতিটি XRP অ্যাকাউন্টে অবশ্যই ${value} XRP (${value1} ড্রপস) বেসলাইন হিসাবে সংরক্ষণ করতে হবে, যা ব্যয় করা যাবে না।";
 
-  static String m72(value, value1) =>
+  static String m43(value, value1) =>
       "অ্যাকাউন্টের মালিকানাধীন প্রতিটি বস্তুর জন্য, রিজার্ভে ${value} XRP (${value1} ড্রপস) যোগ করা হয়।";
 
-  static String m73(value, value1) =>
+  static String m44(value, value1) =>
       "এই অ্যাকাউন্টটি ${value} বস্তুর মালিক, যার মানে একটি অতিরিক্ত ${value1} XRP সংরক্ষিত।";
 
-  static String m74(value) =>
-      "প্যাটার্ন পাসওয়ার্ড ইনপুট ত্রুটি, আপনি ${value} সম্ভাবনা আছে";
-
-  static String m75(value) =>
-      "প্যাটার্ন পাসওয়ার্ড ইনপুট ত্রুটি, আপনি ${value} সুযোগ আছে";
-
-  static String m76(value) =>
+  static String m45(value) =>
       "আপনি সফলভাবে একটি ${value} সেট আপ করেছেন এবং N42Wallet দিয়ে যাচাইকরণ শুরু করবেন!";
 
-  static String m77(value) =>
+  static String m46(value) =>
       "লেয়ার 1 চেইনের প্রথম দিকের মাইনার হতে @N42Wallet-এ আমার ${value} গ্রুপে যোগ দিন এবং আপনার ফোনে ক্রিপ্টো পান!";
 
-  static String m78(value, value1) =>
+  static String m47(value, value1) =>
       "আপনি একটি নোড চালানোর জন্য ${value1} পর্যন্ত ${value} N লক করতে চান?";
 
-  static String m79(value) => "আমদানি ব্যর্থ হয়েছে:${value}৷";
+  static String m48(value) => "আমদানি ব্যর্থ হয়েছে:${value}৷";
 
-  static String m80(value) =>
+  static String m49(value) =>
       "পুরষ্কার জিততে কমপক্ষে ${value} এর একটি স্টেকিং ব্যালেন্স প্রয়োজন।";
 
-  static String m81(value, value1) =>
+  static String m50(value, value1) =>
       "${value} N প্রতি ${value1} ব্লক খনন করা হয়";
 
-  static String m82(value) => "${value} অক্ষর হতে হবে";
+  static String m51(value) => "${value} অক্ষর হতে হবে";
 
-  static String m83(value) => "${value} অপর্যাপ্ত ব্যালেন্স।";
+  static String m52(value) => "${value} অপর্যাপ্ত ব্যালেন্স।";
 
-  static String m84(value) => "${value} ইনকামিং...";
+  static String m53(value) => "${value} ইনকামিং...";
 
-  static String m85(value) =>
+  static String m54(value) =>
       "${value} সোয়াপড ইন-অ্যাপ শীঘ্রই আপনার ওয়ালেটে বিতরণ করা হবে এবং এই প্রক্রিয়ার মাধ্যমে বিক্রি করা যাবে না। এটি একটি নোড চালানোর জন্য ব্যবহার করা যেতে পারে।";
 
-  static String m86(value) => "সর্বাধিক ${value} অক্ষর";
+  static String m55(value) => "সর্বাধিক ${value} অক্ষর";
 
-  static String m87(value) => "${value} চেইন অ্যাপ ইতিমধ্যেই সমর্থিত!";
+  static String m56(value) => "${value} চেইন অ্যাপ ইতিমধ্যেই সমর্থিত!";
 
-  static String m88(value) =>
+  static String m57(value) =>
       "${value} চেইন APP ইতিমধ্যেই সমর্থিত, আপনি কি এটি যোগ করতে চান?";
 
-  static String m89(value) => "${value} ঠিকানা পরীক্ষার লিঙ্ক ব্যর্থ হয়েছে!";
+  static String m58(value) => "${value} ঠিকানা পরীক্ষার লিঙ্ক ব্যর্থ হয়েছে!";
 
-  static String m90(value) => "অ্যাপ্লিকেশন ${value} সেকেন্ডের মধ্যে আনলক হবে।";
-
-  static String m91(value) =>
-      "প্যাটার্ন পাসওয়ার্ড ইনপুট ত্রুটি, আপনি ${value} সম্ভাবনা আছে";
-
-  static String m92(value) =>
-      "পাসওয়ার্ড ইনপুট ত্রুটি, আপনি ${value} সম্ভাবনা আছে";
-
-  static String m93(value) =>
-      "পাসওয়ার্ড ইনপুট ত্রুটি, আপনি ${value} সুযোগ আছে";
-
-  static String m94(value) => "${value} পাসওয়ার্ড লিখুন";
-
-  static String m95(value) => "0~${value} অক্ষর";
+  static String m59(value) => "0~${value} অক্ষর";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
-    "Create_account": MessageLookupByLibrary.simpleMessage("সাইন আপ করুন"),
-    "Create_your_account": MessageLookupByLibrary.simpleMessage(
-      "আপনার অ্যাকাউন্ট তৈরি করুন",
-    ),
     "Edit": MessageLookupByLibrary.simpleMessage("সম্পাদনা করুন"),
     "Verification": MessageLookupByLibrary.simpleMessage("যাচাইকরণ"),
     "address_Information": MessageLookupByLibrary.simpleMessage("ঠিকানা তথ্য"),
-    "code_403": MessageLookupByLibrary.simpleMessage(
-      "অ্যাকাউন্ট সাময়িকভাবে একদিনের জন্য লক করা হয়েছে",
-    ),
-    "code_err_tips": MessageLookupByLibrary.simpleMessage(
-      "কোডটি ভুল। আবার চেষ্টা করুন.",
-    ),
     "copy": MessageLookupByLibrary.simpleMessage("সফলভাবে অনুলিপি করা হয়েছে৷"),
     "copyAddress": MessageLookupByLibrary.simpleMessage("কপি ঠিকানা"),
     "descO": MessageLookupByLibrary.simpleMessage("বর্ণনা (ঐচ্ছিক)"),
@@ -274,49 +177,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "device_login_title": MessageLookupByLibrary.simpleMessage(
       "নতুন ডিভাইস লগইন",
     ),
-    "editPhoto": MessageLookupByLibrary.simpleMessage("ছবি সম্পাদনা করুন"),
-    "email_code_error": MessageLookupByLibrary.simpleMessage(
-      "প্রমাণীকরণ কোড পেতে ব্যর্থ হয়েছে",
-    ),
-    "email_code_finish": MessageLookupByLibrary.simpleMessage(
-      "প্রমাণীকরণ কোড সফলভাবে পাঠানো হয়েছে, আপনার ইমেল চেক করুন",
-    ),
-    "email_code_input_error": MessageLookupByLibrary.simpleMessage(
-      "প্রমাণীকরণ কোড ত্রুটি",
-    ),
-    "email_error": MessageLookupByLibrary.simpleMessage("অবৈধ ইমেল ঠিকানা"),
-    "email_verification": MessageLookupByLibrary.simpleMessage(
-      "ইমেল ঠিকানা প্রমাণীকরণ",
-    ),
-    "email_verification_message1": MessageLookupByLibrary.simpleMessage(
-      "ইমেল ঠিকানা প্রমাণীকরণকারী অ্যাপটি আপনার তোলা এবং N42Wallet অ্যাকাউন্টকে রক্ষা করে।",
-    ),
-    "email_verification_message2": MessageLookupByLibrary.simpleMessage(
-      "ইমেল যাচাইকরণ যোগ করবেন?",
-    ),
     "file": MessageLookupByLibrary.simpleMessage("ফাইল"),
-    "g_2fa_backup_hint": MessageLookupByLibrary.simpleMessage(
-      "এই কীটি সংরক্ষণ করুন — আপনি যদি আপনার ফোনটি হারিয়ে ফেলেন তবে আপনার এটির প্রয়োজন হবে৷",
-    ),
-    "g_2fa_backup_share": MessageLookupByLibrary.simpleMessage("শেয়ার করুন"),
-    "g_2fa_backup_share_text": MessageLookupByLibrary.simpleMessage(
-      "N42Wallet Google প্রমাণীকরণকারী ব্যাকআপ কী",
-    ),
-    "g_2fa_disable_confirm_hint": MessageLookupByLibrary.simpleMessage(
-      "2FA নিষ্ক্রিয় করা নিশ্চিত করতে আপনার বর্তমান 6-সংখ্যার Google প্রমাণীকরণকারী কোড লিখুন।",
-    ),
-    "g_2fa_disable_confirm_title": MessageLookupByLibrary.simpleMessage(
-      "Google 2FA অক্ষম করুন",
-    ),
-    "g_2fa_disable_error": MessageLookupByLibrary.simpleMessage(
-      "Google 2FA নিষ্ক্রিয় করতে ব্যর্থ হয়েছে৷ অনুগ্রহ করে কোডটি যাচাই করুন এবং আবার চেষ্টা করুন।",
-    ),
-    "g_2fa_disable_success": MessageLookupByLibrary.simpleMessage(
-      "Google 2FA নিষ্ক্রিয় করা হয়েছে",
-    ),
-    "g_2fa_invalid_format": MessageLookupByLibrary.simpleMessage(
-      "অনুগ্রহ করে একটি বৈধ 6-সংখ্যার কোড লিখুন",
-    ),
     "g_alert_above": MessageLookupByLibrary.simpleMessage("উপরে যায় ↑"),
     "g_alert_below": MessageLookupByLibrary.simpleMessage("ড্রপ নিচে ↓"),
     "g_alert_current_price": m1,
@@ -342,15 +203,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_app_share_key_2": MessageLookupByLibrary.simpleMessage(
       "গ্রহণ করতে স্ক্যান করুন",
     ),
-    "g_biometric_locked_out": MessageLookupByLibrary.simpleMessage(
-      "অনেক ব্যর্থতা. বায়োমেট্রিক লকড — অনুগ্রহ করে পাসকোড ব্যবহার করুন।",
-    ),
-    "g_biometric_not_enrolled": MessageLookupByLibrary.simpleMessage(
-      "বায়োমেট্রিক সেট আপ করা হয়নি। অনুগ্রহ করে ডিভাইস সেটিংসে সক্ষম করুন৷",
-    ),
-    "g_biometric_retry": MessageLookupByLibrary.simpleMessage(
-      "ফেস আইডি/টাচ আইডি ব্যবহার করুন",
-    ),
     "g_browser_key1": MessageLookupByLibrary.simpleMessage("URL লিখুন"),
     "g_browser_key10": MessageLookupByLibrary.simpleMessage("একটি বিবরণ লিখুন"),
     "g_browser_key11": MessageLookupByLibrary.simpleMessage("ব্রাউজার"),
@@ -359,9 +211,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_browser_key13": MessageLookupByLibrary.simpleMessage(
       "স্বয়ংক্রিয়ভাবে DApp সংযুক্ত করুন",
-    ),
-    "g_browser_key14": MessageLookupByLibrary.simpleMessage(
-      "দয়া করে DApp-এর সাথে সংযোগ নিশ্চিত করুন৷",
     ),
     "g_browser_key16": MessageLookupByLibrary.simpleMessage("সব বন্ধ করুন"),
     "g_browser_key17": MessageLookupByLibrary.simpleMessage("সম্পন্ন"),
@@ -395,112 +244,10 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_browser_key8": MessageLookupByLibrary.simpleMessage("URL"),
     "g_browser_key9": MessageLookupByLibrary.simpleMessage("বর্ণনা"),
-    "g_chat_key_1": MessageLookupByLibrary.simpleMessage(
-      "গ্রুপ চ্যাট শুরু করুন",
-    ),
-    "g_chat_key_10": m3,
-    "g_chat_key_11": MessageLookupByLibrary.simpleMessage(
-      "বন্ধুদের আমন্ত্রণ জানান",
-    ),
-    "g_chat_key_12": MessageLookupByLibrary.simpleMessage(
-      "পরিচিতি নির্বাচন করুন",
-    ),
-    "g_chat_key_13": MessageLookupByLibrary.simpleMessage("শেষ করুন"),
-    "g_chat_key_14": MessageLookupByLibrary.simpleMessage(
-      "কমপক্ষে 2টি পরিচিতি নির্বাচন করুন৷",
-    ),
-    "g_chat_key_16": MessageLookupByLibrary.simpleMessage("বন্ধু বিস্তারিত"),
-    "g_chat_key_17": MessageLookupByLibrary.simpleMessage("গ্রুপ বিস্তারিত"),
-    "g_chat_key_18": MessageLookupByLibrary.simpleMessage(
-      "আরো গ্রুপ সদস্য দেখুন",
-    ),
-    "g_chat_key_19": MessageLookupByLibrary.simpleMessage("গ্রুপের নাম"),
-    "g_chat_key_2": MessageLookupByLibrary.simpleMessage("নতুন বন্ধু"),
-    "g_chat_key_20": MessageLookupByLibrary.simpleMessage(
-      "আমরা কি নিশ্চিত যে আমরা ভেঙে যাচ্ছি?",
-    ),
-    "g_chat_key_21": MessageLookupByLibrary.simpleMessage(
-      "আপনি কি এই গোষ্ঠীটি ছেড়ে যাওয়ার বিষয়ে নিশ্চিত?",
-    ),
-    "g_chat_key_22": MessageLookupByLibrary.simpleMessage("আনগ্রুপ করুন"),
-    "g_chat_key_23": MessageLookupByLibrary.simpleMessage("গ্রুপ ত্যাগ করুন"),
-    "g_chat_key_24": MessageLookupByLibrary.simpleMessage(
-      "গ্রুপ চ্যাট নাম পরিবর্তন করুন",
-    ),
-    "g_chat_key_25": MessageLookupByLibrary.simpleMessage(
-      "যখন গ্রুপ চ্যাটের নাম পরিবর্তন করা হয়, তখন অন্য সদস্যদের গ্রুপের মধ্যে অবহিত করা হবে।",
-    ),
-    "g_chat_key_26": MessageLookupByLibrary.simpleMessage("শেষ করুন"),
-    "g_chat_key_27": MessageLookupByLibrary.simpleMessage("বন্ধু যোগ অনুরোধ"),
-    "g_chat_key_28": MessageLookupByLibrary.simpleMessage(
-      "আপনাকে একটি বন্ধু হিসাবে যোগ করার অনুরোধ",
-    ),
-    "g_chat_key_29": MessageLookupByLibrary.simpleMessage(
-      "বন্ধুর অনুরোধ অনুমোদিত",
-    ),
-    "g_chat_key_3": MessageLookupByLibrary.simpleMessage("যোগ করা হয়েছে"),
-    "g_chat_key_30": MessageLookupByLibrary.simpleMessage(
-      "আপনাকে বন্ধু হিসেবে যুক্ত করা হয়েছে",
-    ),
-    "g_chat_key_31": MessageLookupByLibrary.simpleMessage("একমত"),
-    "g_chat_key_32": m4,
-    "g_chat_key_33": MessageLookupByLibrary.simpleMessage(
-      "পাসওয়ার্ডটি সঠিকভাবে পার্স করা যাবে না, এবং বার্তাটি অস্থায়ীভাবে পাঠানো যাবে না। গ্রুপে প্রবেশ করার সময় অনুগ্রহ করে ওয়ালেট আমদানি করুন",
-    ),
-    "g_chat_key_34": MessageLookupByLibrary.simpleMessage(
-      "চ্যাটের ইতিহাস মুছে ফেলবেন?",
-    ),
-    "g_chat_key_35": MessageLookupByLibrary.simpleMessage("সদস্য সরান"),
-    "g_chat_key_36": MessageLookupByLibrary.simpleMessage("আমার QR কোড"),
-    "g_chat_key_4": MessageLookupByLibrary.simpleMessage(
-      "মেয়াদ শেষ হয়ে গেছে",
-    ),
-    "g_chat_key_40": MessageLookupByLibrary.simpleMessage("রিপোর্ট"),
-    "g_chat_key_41": MessageLookupByLibrary.simpleMessage("নতুন চ্যাট"),
-    "g_chat_key_42": MessageLookupByLibrary.simpleMessage("নতুন গ্রুপ"),
-    "g_chat_key_43": MessageLookupByLibrary.simpleMessage("QR কোড"),
-    "g_chat_key_44": MessageLookupByLibrary.simpleMessage(
-      "রিপোর্ট করুন এবং ব্লক করুন",
-    ),
-    "g_chat_key_45": MessageLookupByLibrary.simpleMessage(
-      "এই বার্তাটি N42Wallet এ ফরোয়ার্ড করা হবে। এই পরিচিতি অবহিত করা হবে না.",
-    ),
-    "g_chat_key_46": MessageLookupByLibrary.simpleMessage("ভিডিও"),
-    "g_chat_key_47": MessageLookupByLibrary.simpleMessage("ছবি"),
-    "g_chat_key_48": MessageLookupByLibrary.simpleMessage("বার্তা মুছুন"),
-    "g_chat_key_49": MessageLookupByLibrary.simpleMessage("আমার ডিভাইসে মুছুন"),
-    "g_chat_key_5": MessageLookupByLibrary.simpleMessage("অপেক্ষা করুন"),
     "g_chat_key_50": MessageLookupByLibrary.simpleMessage("একমত"),
-    "g_chat_key_54": MessageLookupByLibrary.simpleMessage("রিপোর্ট কারণ"),
-    "g_chat_key_55": MessageLookupByLibrary.simpleMessage(
-      "আপনার রিপোর্ট কারণ লিখুন",
-    ),
-    "g_chat_key_56": MessageLookupByLibrary.simpleMessage(
-      "আমরা আপনার রিপোর্ট যাচাই করব এবং 24 ঘন্টার মধ্যে প্রতিক্রিয়া জানাব।",
-    ),
-    "g_chat_key_57": MessageLookupByLibrary.simpleMessage(
-      "আপনি এই রিপোর্ট - দেখতে ক্লিক করুন",
-    ),
-    "g_chat_key_58": MessageLookupByLibrary.simpleMessage("কালো তালিকা"),
-    "g_chat_key_59": MessageLookupByLibrary.simpleMessage("সরান"),
-    "g_chat_key_6": m5,
-    "g_chat_key_60": MessageLookupByLibrary.simpleMessage(
-      "এখনো কোনো যোগাযোগ নেই",
-    ),
-    "g_chat_key_61": MessageLookupByLibrary.simpleMessage("আজ"),
-    "g_chat_key_62": MessageLookupByLibrary.simpleMessage("৩ দিন আগে"),
-    "g_chat_key_63": MessageLookupByLibrary.simpleMessage("ব্লক"),
-    "g_chat_key_64": MessageLookupByLibrary.simpleMessage(
-      "আরে, আমি চ্যাট করতে এবং টাকা পাঠাতে N42Wallet ব্যবহার করছি। Wallet ইনস্টল করুন এবং আমাকে মেসেজ করুন",
-    ),
-    "g_chat_key_66": MessageLookupByLibrary.simpleMessage("উত্তর দিন"),
     "g_chat_key_67": MessageLookupByLibrary.simpleMessage(
       "বার্তাটি মুছে ফেলা হয়েছে",
     ),
-    "g_chat_key_68": MessageLookupByLibrary.simpleMessage("কেউ @ আমাকে"),
-    "g_chat_key_69": MessageLookupByLibrary.simpleMessage("হাই বলুন"),
-    "g_chat_key_8": MessageLookupByLibrary.simpleMessage("বন্ধুদের যোগ করুন"),
-    "g_chat_key_9": MessageLookupByLibrary.simpleMessage("আবেদনের কারণ"),
     "g_coin_key_1": MessageLookupByLibrary.simpleMessage("লেনদেন"),
     "g_connect_key1": MessageLookupByLibrary.simpleMessage("সংযোগ করুন"),
     "g_connect_key11": MessageLookupByLibrary.simpleMessage(
@@ -518,220 +265,26 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_dapp_security_blocked": MessageLookupByLibrary.simpleMessage("অবরুদ্ধ"),
     "g_dapp_security_caution": MessageLookupByLibrary.simpleMessage("সতর্কতা"),
     "g_dapp_security_safe": MessageLookupByLibrary.simpleMessage("নিরাপদ"),
-    "g_dapp_security_title": MessageLookupByLibrary.simpleMessage(
-      "DApp নিরাপত্তা",
-    ),
     "g_dapp_security_verified": MessageLookupByLibrary.simpleMessage(
       "যাচাই করা হয়েছে",
     ),
-    "g_email_also_sync": MessageLookupByLibrary.simpleMessage(
-      "এছাড়াও চ্যাট অ্যাকাউন্ট ইমেল সিঙ্ক করুন",
-    ),
-    "g_email_back_to_email": MessageLookupByLibrary.simpleMessage(
-      "← ইমেল ঠিকানা পরিবর্তন করুন",
-    ),
-    "g_email_both_success": MessageLookupByLibrary.simpleMessage(
-      "উভয় অ্যাকাউন্ট সফলভাবে আপডেট!",
-    ),
-    "g_email_change_title": MessageLookupByLibrary.simpleMessage(
-      "ইমেইল পরিবর্তন করুন",
-    ),
-    "g_email_chat_code_hint": MessageLookupByLibrary.simpleMessage(
-      "6-সংখ্যার চ্যাট কোড লিখুন",
-    ),
-    "g_email_chat_code_sent_to": MessageLookupByLibrary.simpleMessage(
-      "চ্যাট কোড পাঠানো হয়েছে",
-    ),
-    "g_email_chat_confirm": MessageLookupByLibrary.simpleMessage(
-      "চ্যাট সিঙ্ক নিশ্চিত করুন",
-    ),
-    "g_email_chat_send_fail": MessageLookupByLibrary.simpleMessage(
-      "চ্যাট কোড পাঠাতে ব্যর্থ হয়েছে",
-    ),
-    "g_email_chat_sending": MessageLookupByLibrary.simpleMessage(
-      "চ্যাট যাচাইকরণ কোড পাঠানো হচ্ছে...",
-    ),
-    "g_email_chat_sync_title": MessageLookupByLibrary.simpleMessage(
-      "চ্যাট অ্যাকাউন্ট ইমেল সিঙ্ক করুন",
-    ),
-    "g_email_code_invalid": MessageLookupByLibrary.simpleMessage(
-      "অনুগ্রহ করে 6-সংখ্যার কোড লিখুন",
-    ),
-    "g_email_code_resent": MessageLookupByLibrary.simpleMessage(
-      "কোড আবার পাঠানো হয়েছে",
-    ),
-    "g_email_code_sent_to": m6,
-    "g_email_code_wrong": MessageLookupByLibrary.simpleMessage(
-      "ভুল কোড, আবার চেষ্টা করুন",
-    ),
-    "g_email_confirm_change": MessageLookupByLibrary.simpleMessage(
-      "পরিবর্তন নিশ্চিত করুন",
-    ),
-    "g_email_confirm_continue": MessageLookupByLibrary.simpleMessage(
-      "নিশ্চিত করুন এবং চ্যাট সিঙ্ক চালিয়ে যান",
-    ),
-    "g_email_current_label": MessageLookupByLibrary.simpleMessage(
-      "বর্তমান ইমেল",
-    ),
-    "g_email_enter_code": MessageLookupByLibrary.simpleMessage(
-      "6-সংখ্যার কোড লিখুন",
-    ),
-    "g_email_error_empty": MessageLookupByLibrary.simpleMessage(
-      "একটি নতুন ইমেল ঠিকানা লিখুন",
-    ),
-    "g_email_error_invalid": MessageLookupByLibrary.simpleMessage(
-      "অবৈধ ইমেল ঠিকানা",
-    ),
-    "g_email_error_same": MessageLookupByLibrary.simpleMessage(
-      "নতুন ইমেল বর্তমান ইমেল থেকে আলাদা হতে হবে",
-    ),
-    "g_email_n42_only": MessageLookupByLibrary.simpleMessage(
-      "N42 ইমেল আপডেট করা হয়েছে। চ্যাট ইমেল চ্যাট > সেটিংসে আপডেট করা যেতে পারে।",
-    ),
-    "g_email_n42_updated": MessageLookupByLibrary.simpleMessage(
-      "N42 অ্যাকাউন্ট ইমেল আপডেট করা হয়েছে",
-    ),
-    "g_email_new_hint": MessageLookupByLibrary.simpleMessage(
-      "নতুন ইমেল ঠিকানা লিখুন",
-    ),
-    "g_email_new_label": MessageLookupByLibrary.simpleMessage(
-      "নতুন ইমেল ঠিকানা",
-    ),
-    "g_email_pwd_hint": MessageLookupByLibrary.simpleMessage(
-      "পাসওয়ার্ড লিখুন",
-    ),
-    "g_email_pwd_label": MessageLookupByLibrary.simpleMessage(
-      "বর্তমান পাসওয়ার্ড (চ্যাটের জন্য)",
-    ),
-    "g_email_pwd_required": MessageLookupByLibrary.simpleMessage(
-      "চ্যাট সিঙ্কের জন্য পাসওয়ার্ড প্রয়োজন",
-    ),
     "g_email_resend": MessageLookupByLibrary.simpleMessage("কোড আবার পাঠান"),
-    "g_email_resend_countdown": m7,
-    "g_email_send_code": MessageLookupByLibrary.simpleMessage(
-      "যাচাইকরণ কোড পাঠান",
-    ),
-    "g_email_skip": MessageLookupByLibrary.simpleMessage("এড়িয়ে যান"),
-    "g_email_skip_full": MessageLookupByLibrary.simpleMessage(
-      "এড়িয়ে যান - N42 ইমেল ইতিমধ্যেই আপডেট করা হয়েছে",
-    ),
-    "g_email_success": MessageLookupByLibrary.simpleMessage(
-      "ইমেল সফলভাবে আপডেট করা হয়েছে",
-    ),
+    "g_email_resend_countdown": m3,
     "g_face_1": MessageLookupByLibrary.simpleMessage(
       "বায়োমেট্রিক স্ক্যান টিপস",
     ),
     "g_face_10": MessageLookupByLibrary.simpleMessage(
       "প্রমাণীকরণের জন্য আপনার আঙুলের ছাপ বা মুখ স্ক্যান করুন।",
     ),
-    "g_face_2": MessageLookupByLibrary.simpleMessage(
-      "বায়োমেট্রিক স্ক্যান কাজ করেনি",
-    ),
     "g_face_3": MessageLookupByLibrary.simpleMessage("টিপস"),
-    "g_face_4": MessageLookupByLibrary.simpleMessage(
-      "বায়োমেট্রিক স্ক্যান সাফল্য",
-    ),
     "g_face_5": MessageLookupByLibrary.simpleMessage("সেট করতে"),
-    "g_face_6": MessageLookupByLibrary.simpleMessage(
-      "আপনি বায়োমেট্রিক লগইন সেট করেননি। এটি সেট করতে সিস্টেম সেটিংসে যান।",
-    ),
     "g_face_7": MessageLookupByLibrary.simpleMessage(
       "চালিয়ে যেতে আপনার মুখ বা আঙুলের ছাপ স্ক্যান করুন।",
     ),
     "g_face_8": MessageLookupByLibrary.simpleMessage("প্রত্যাবর্তন"),
-    "g_face_9": MessageLookupByLibrary.simpleMessage(
-      "এটি সুপারিশ করা হয় যে আপনি বায়োমেট্রিক্স পুনরায় সক্ষম করুন৷",
-    ),
-    "g_face_liveness_failed": MessageLookupByLibrary.simpleMessage(
-      "মুখ শনাক্ত হয়নি। অনুগ্রহ করে সরাসরি ক্যামেরার দিকে তাকান এবং আবার চেষ্টা করুন।",
-    ),
-    "g_face_match_key1": MessageLookupByLibrary.simpleMessage(
-      "ফেস ম্যাচিং পদ্ধতি",
-    ),
-    "g_face_match_key10": m8,
-    "g_face_match_key11": m9,
-    "g_face_match_key12": MessageLookupByLibrary.simpleMessage("রিবাইন্ড"),
-    "g_face_match_key13": MessageLookupByLibrary.simpleMessage("বাঁধন"),
-    "g_face_match_key14": MessageLookupByLibrary.simpleMessage("যাচাই করুন"),
-    "g_face_match_key15": MessageLookupByLibrary.simpleMessage(
-      "আপনি আপনার মুখের ডেটা সরাসরি একটি ওয়ালেট ঠিকানার সাথে আবদ্ধ করতে পারেন (যদি আপনি পূর্বে একটি আবদ্ধ করে থাকেন তবে পুরানো ওয়ালেট ঠিকানাটি ওভাররাইট করা হবে), অথবা আপনি যদি পূর্বে একটি ওয়ালেট ঠিকানা আবদ্ধ করে থাকেন তবে আপনি আবদ্ধ ওয়ালেট ঠিকানাটি পুনরুদ্ধার করতে ম্যানুয়ালি যাচাই করতে পারেন।",
-    ),
-    "g_face_match_key16": MessageLookupByLibrary.simpleMessage(
-      "আপনার মুখের ডেটার সাথে লিঙ্কযুক্ত ওয়ালেট ঠিকানাটি নিম্নলিখিত হিসাবে সনাক্ত করা হয়েছে, তবে আপনি এখনও এই ওয়ালেটটিকে আপনার ওয়ালেট তালিকায় আমদানি করেননি৷",
-    ),
-    "g_face_match_key17": MessageLookupByLibrary.simpleMessage(
-      "আপনি এই ওয়ালেটের সাথে আপনার মুখের ডেটা লিঙ্ক করেছেন৷",
-    ),
-    "g_face_match_key18": MessageLookupByLibrary.simpleMessage(
-      "ব্যবহারকারীর বিজ্ঞপ্তি",
-    ),
-    "g_face_match_key19": MessageLookupByLibrary.simpleMessage(
-      "ফেস বাইন্ডিং কি?",
-    ),
-    "g_face_match_key20": MessageLookupByLibrary.simpleMessage(
-      "ফেস বাইন্ডিং আপনার ব্লকচেইন ওয়ালেট অ্যাড্রেসের সাথে আপনার বায়োমেট্রিক ফেসিয়াল বৈশিষ্ট্যগুলিকে মেলাতে ফেসিয়াল রিকগনিশন প্রযুক্তি ব্যবহার করে।",
-    ),
-    "g_face_match_key21": MessageLookupByLibrary.simpleMessage(
-      "এই প্রক্রিয়াটি শুধুমাত্র লেনদেনের সুবিধাই বাড়ায় না বরং অ্যাকাউন্টের নিরাপত্তাও শক্তিশালী করে, নিশ্চিত করে যে প্রতিটি কাজ আপনার দ্বারা অনুমোদিত।",
-    ),
-    "g_face_match_key22": MessageLookupByLibrary.simpleMessage(
-      "কেন মুখ বাঁধাই প্রয়োজনীয়?",
-    ),
-    "g_face_match_key23": MessageLookupByLibrary.simpleMessage(
-      "আপনার মুখের ডেটা আবদ্ধ করার মাধ্যমে, আপনার পরিচয় সরাসরি লেনদেন কার্যক্রমের সাথে যুক্ত হয়, পরিচয় যাচাইকরণ প্রক্রিয়াকে সহজ করে এবং কার্যকারিতা উন্নত করে। সংবেদনশীল ক্রিয়াকলাপ যেমন সম্পদ স্থানান্তর বা চুক্তির সাথে ইন্টারঅ্যাক্ট করার সময় এই প্রযুক্তি দ্রুত এবং নিরাপদ পরিচয় যাচাইকরণ নিশ্চিত করে।",
-    ),
-    "g_face_match_key24": MessageLookupByLibrary.simpleMessage(
-      "আমার মুখের ডেটা কীভাবে সংরক্ষণ করা হয় এবং এটি কি নিরাপদ?",
-    ),
-    "g_face_match_key25": MessageLookupByLibrary.simpleMessage(
-      "Your face data is stored in an encrypted form on a public blockchain, not in any centralized database. এর অর্থ হল আপনার গোপনীয়তা এবং ডেটা নিরাপত্তা নিশ্চিত করে সিস্টেমটি শুধুমাত্র আপনার দ্বারা অনুমোদিত হলে পরিচয় যাচাইকরণের জন্য আপনার ডেটা ডিক্রিপ্ট এবং ব্যবহার করতে পারে।",
-    ),
-    "g_face_match_key26": MessageLookupByLibrary.simpleMessage(
-      "কীভাবে ফেস বাইন্ডিং আমার অ্যাকাউন্টের নিরাপত্তাকে প্রভাবিত করে?",
-    ),
-    "g_face_match_key27": MessageLookupByLibrary.simpleMessage(
-      "ফেস বাইন্ডিং সমস্ত সংবেদনশীল ক্রিয়াগুলি শুধুমাত্র আপনার সুস্পষ্ট অনুমোদনের সাথে সম্পাদিত হয় তা নিশ্চিত করে আপনার অ্যাকাউন্টের নিরাপত্তা বাড়ায়। আমরা আপনার বায়োমেট্রিক ডেটা সুরক্ষিত করতে, অননুমোদিত অ্যাক্সেস রোধ করতে শিল্প-নেতৃস্থানীয় এনক্রিপশন প্রযুক্তি ব্যবহার করি।",
-    ),
-    "g_face_match_key28": MessageLookupByLibrary.simpleMessage(
-      "আমার মুখের ডেটা কি নিরাপদ?",
-    ),
-    "g_face_match_key29": MessageLookupByLibrary.simpleMessage(
-      "একেবারে। সমস্ত বায়োমেট্রিক ডেটা কঠোর এনক্রিপশনের মধ্য দিয়ে যায় এবং ডেটা ট্রান্সমিশন এবং স্টোরেজের জন্য সর্বোচ্চ নিরাপত্তা মান অনুসরণ করা হয়। পরিচয় যাচাইকরণ সম্পূর্ণ করার প্রয়োজন হলে সিস্টেম শুধুমাত্র এই ডেটা ডিক্রিপ্ট করবে।",
-    ),
-    "g_face_match_key3": MessageLookupByLibrary.simpleMessage("ম্যাচ ব্যর্থ!"),
-    "g_face_match_key30": MessageLookupByLibrary.simpleMessage("বুঝেছি"),
-    "g_face_match_key31": MessageLookupByLibrary.simpleMessage(
-      "ওয়ালেট ঠিকানা নির্বাচন করুন",
-    ),
-    "g_face_match_key32": m10,
-    "g_face_match_key33": MessageLookupByLibrary.simpleMessage("আনবাইন্ডিং"),
-    "g_face_match_key34": MessageLookupByLibrary.simpleMessage(
-      "ফেসিয়াল ডেটা যাচাই করা যায়নি!",
-    ),
-    "g_face_match_key35": MessageLookupByLibrary.simpleMessage(
-      "ফেস ডেটা আনবাইন্ডিং ব্যর্থ হয়েছে!",
-    ),
-    "g_face_match_key4": m11,
-    "g_face_match_key5": MessageLookupByLibrary.simpleMessage("ঠিকানা ত্রুটি!"),
-    "g_face_match_key6": MessageLookupByLibrary.simpleMessage(
-      "ফেস ডেটা বাইন্ডিং",
-    ),
-    "g_face_match_key7": MessageLookupByLibrary.simpleMessage("ফেস ম্যাচিং"),
-    "g_face_match_key8": MessageLookupByLibrary.simpleMessage(
-      "পুনরায় নির্বাচন করুন",
-    ),
-    "g_face_match_key9": MessageLookupByLibrary.simpleMessage("ম্যাচ"),
-    "g_face_network_error": MessageLookupByLibrary.simpleMessage(
-      "নেটওয়ার্ক ত্রুটি। আপনার সংযোগ পরীক্ষা করুন এবং আবার চেষ্টা করুন.",
-    ),
-    "g_face_sdk_init_failed": MessageLookupByLibrary.simpleMessage(
-      "মুখ শনাক্তকরণ শুরু করতে ব্যর্থ হয়েছে৷ আবার চেষ্টা করুন.",
-    ),
     "g_home_key1": MessageLookupByLibrary.simpleMessage("প্রোফাইল"),
     "g_home_key2": MessageLookupByLibrary.simpleMessage("খবর"),
     "g_home_key3": MessageLookupByLibrary.simpleMessage("যাচাইকরণ"),
-    "g_home_key5": MessageLookupByLibrary.simpleMessage("বার্তা"),
-    "g_home_key6": MessageLookupByLibrary.simpleMessage("শিখুন"),
     "g_home_key9": MessageLookupByLibrary.simpleMessage(
       "একজন বন্ধুকে আমন্ত্রণ জানান",
     ),
@@ -739,13 +292,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_iap_check_network": MessageLookupByLibrary.simpleMessage(
       "নেটওয়ার্ক সংযোগ পরীক্ষা করুন এবং পুনরায় চেষ্টা করুন",
     ),
-    "g_iap_failed": m12,
+    "g_iap_failed": m4,
     "g_iap_no_products": MessageLookupByLibrary.simpleMessage("কোনো পণ্য নেই"),
-    "g_iap_purchased": m13,
+    "g_iap_purchased": m5,
     "g_iap_restore": MessageLookupByLibrary.simpleMessage(
       "ক্রয় পুনরুদ্ধার করুন",
     ),
-    "g_iap_restored": m14,
+    "g_iap_restored": m6,
     "g_iap_restoring": MessageLookupByLibrary.simpleMessage(
       "ক্রয় পুনরুদ্ধার হচ্ছে…",
     ),
@@ -755,7 +308,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_iap_title": MessageLookupByLibrary.simpleMessage("কিনুন"),
     "g_key_1": MessageLookupByLibrary.simpleMessage("সরাতে ব্যর্থ!"),
-    "g_key_100": MessageLookupByLibrary.simpleMessage("পাঠান"),
     "g_key_101": MessageLookupByLibrary.simpleMessage("গ্যাসের সীমা"),
     "g_key_105": MessageLookupByLibrary.simpleMessage("আর নেই"),
     "g_key_106": MessageLookupByLibrary.simpleMessage("লোড হচ্ছে "),
@@ -776,7 +328,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_13": MessageLookupByLibrary.simpleMessage("ওয়ালেট তালিকা"),
     "g_key_132": MessageLookupByLibrary.simpleMessage("কোন তথ্য নেই"),
     "g_key_134": MessageLookupByLibrary.simpleMessage("পরিমাণ বৈধ নয়"),
-    "g_key_135": m15,
+    "g_key_135": m7,
     "g_key_14": MessageLookupByLibrary.simpleMessage("প্রধান ওয়ালেট"),
     "g_key_140": MessageLookupByLibrary.simpleMessage("লেনদেন সফল"),
     "g_key_146": MessageLookupByLibrary.simpleMessage("ভুল পাসওয়ার্ড"),
@@ -786,7 +338,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_15": MessageLookupByLibrary.simpleMessage(
       "প্রধান ওয়ালেট হিসাবে সেট করুন",
     ),
-    "g_key_154": MessageLookupByLibrary.simpleMessage("জমা দিন"),
     "g_key_155": MessageLookupByLibrary.simpleMessage("ওয়ালেট ঠিকানা"),
     "g_key_156": MessageLookupByLibrary.simpleMessage(
       "ঠিকানা কপি করতে স্ক্যান করুন",
@@ -822,9 +373,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_203": MessageLookupByLibrary.simpleMessage(
       "লিঙ্ক ত্রুটি, আবার QR কোড স্ক্যান করুন.",
     ),
-    "g_key_205": MessageLookupByLibrary.simpleMessage(
-      "ফটো অ্যালবাম অ্যাক্সেস করার অনুমতি নেই.",
-    ),
     "g_key_206": MessageLookupByLibrary.simpleMessage(
       "পাসওয়ার্ড সম্পাদনা করুন",
     ),
@@ -837,10 +385,8 @@ class MessageLookup extends MessageLookupByLibrary {
       "ওয়ালেট পাসওয়ার্ড লিখুন",
     ),
     "g_key_210": MessageLookupByLibrary.simpleMessage("ব্যক্তিগত কী ত্রুটি৷"),
-    "g_key_211": MessageLookupByLibrary.simpleMessage("কিনুন"),
-    "g_key_212": MessageLookupByLibrary.simpleMessage("বিক্রয়"),
     "g_key_213": MessageLookupByLibrary.simpleMessage("বাজার তথ্য"),
-    "g_key_214": m16,
+    "g_key_214": m8,
     "g_key_25": MessageLookupByLibrary.simpleMessage("পাসওয়ার্ড মেলে না।"),
     "g_key_29": MessageLookupByLibrary.simpleMessage("ভারসাম্য"),
     "g_key_3": MessageLookupByLibrary.simpleMessage("যোগ করতে ব্যর্থ!"),
@@ -853,7 +399,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_43": MessageLookupByLibrary.simpleMessage("উপলভ্য ব্যালেন্স"),
     "g_key_44": MessageLookupByLibrary.simpleMessage("পরিমাণ"),
-    "g_key_46": m17,
+    "g_key_46": m9,
     "g_key_47": MessageLookupByLibrary.simpleMessage(
       "এই লেনদেন কভার করার জন্য অপর্যাপ্ত তহবিল উপলব্ধ।",
     ),
@@ -864,8 +410,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_75": MessageLookupByLibrary.simpleMessage("থেকে"),
     "g_key_78": MessageLookupByLibrary.simpleMessage("নিশ্চিত করুন"),
     "g_key_79": MessageLookupByLibrary.simpleMessage("বাতিল করুন"),
-    "g_key_8": MessageLookupByLibrary.simpleMessage("মন্তব্য"),
-    "g_key_85": MessageLookupByLibrary.simpleMessage("বীজ বাক্যাংশ"),
     "g_key_9": MessageLookupByLibrary.simpleMessage("সমস্ত টোকেন"),
     "g_key_94": MessageLookupByLibrary.simpleMessage("সেটিংস"),
     "g_key_aa_account_created": MessageLookupByLibrary.simpleMessage(
@@ -895,9 +439,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_aa_address_error": MessageLookupByLibrary.simpleMessage(
       "ঠিকানা গণনা করতে ব্যর্থ হয়েছে. আবার চেষ্টা করুন.",
-    ),
-    "g_key_aa_address_preview": MessageLookupByLibrary.simpleMessage(
-      "এই ঠিকানাটি প্রি-কম্পিউটেড এবং আপনি যখন আপনার প্রথম লেনদেন করবেন তখন এটি স্থাপন করা হবে।",
     ),
     "g_key_aa_approve": MessageLookupByLibrary.simpleMessage("অনুমোদন করুন"),
     "g_key_aa_batch": MessageLookupByLibrary.simpleMessage("ব্যাচ"),
@@ -946,9 +487,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_batch_templates": MessageLookupByLibrary.simpleMessage(
       "টেমপ্লেট",
     ),
-    "g_key_aa_batch_title": MessageLookupByLibrary.simpleMessage(
-      "ব্যাচ ট্রান্সফার",
-    ),
     "g_key_aa_batch_transaction": MessageLookupByLibrary.simpleMessage(
       "ব্যাচ লেনদেন",
     ),
@@ -970,9 +508,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_benefit_recovery_title": MessageLookupByLibrary.simpleMessage(
       "সামাজিক পুনরুদ্ধার",
     ),
-    "g_key_aa_biconomy_account": MessageLookupByLibrary.simpleMessage(
-      "বাইকনমি অ্যাকাউন্ট",
-    ),
     "g_key_aa_biconomy_desc": MessageLookupByLibrary.simpleMessage(
       "গ্যাসবিহীন লেনদেন সমর্থন সহ মডুলার ERC-7579 স্মার্ট অ্যাকাউন্ট",
     ),
@@ -983,13 +518,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_check_status": MessageLookupByLibrary.simpleMessage(
       "স্থিতি পরীক্ষা করুন",
     ),
-    "g_key_aa_clear_all": MessageLookupByLibrary.simpleMessage("সব সাফ করুন"),
     "g_key_aa_coming_soon": MessageLookupByLibrary.simpleMessage("শীঘ্রই আসছে"),
-    "g_key_aa_continue": MessageLookupByLibrary.simpleMessage("চালিয়ে যান"),
-    "g_key_aa_contract": MessageLookupByLibrary.simpleMessage("চুক্তি"),
-    "g_key_aa_counterfactual_address": MessageLookupByLibrary.simpleMessage(
-      "কাউন্টারফ্যাকচুয়াল ঠিকানা",
-    ),
     "g_key_aa_counterfactual_note": MessageLookupByLibrary.simpleMessage(
       "এটি একটি বিপরীত ঠিকানা. এটি আপনার প্রথম লেনদেনে স্থাপন করা হবে।",
     ),
@@ -999,42 +528,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_create_first": MessageLookupByLibrary.simpleMessage(
       "আপনার প্রথম স্মার্ট অ্যাকাউন্ট তৈরি করুন",
     ),
-    "g_key_aa_create_first_account": MessageLookupByLibrary.simpleMessage(
-      "শুরু করতে একটি স্মার্ট অ্যাকাউন্ট তৈরি করুন",
-    ),
     "g_key_aa_create_session": MessageLookupByLibrary.simpleMessage(
       "সেশন কী তৈরি করুন",
     ),
-    "g_key_aa_create_session_desc": MessageLookupByLibrary.simpleMessage(
-      "সেশন কীগুলি DApps-কে সীমিত অনুমতি এবং সময় সীমাবদ্ধতার সাথে আপনার পক্ষে লেনদেন সম্পাদন করতে দেয়।",
-    ),
-    "g_key_aa_create_smart_account": MessageLookupByLibrary.simpleMessage(
-      "স্মার্ট অ্যাকাউন্ট তৈরি করুন",
-    ),
     "g_key_aa_created": MessageLookupByLibrary.simpleMessage("তৈরি হয়েছে"),
     "g_key_aa_custom": MessageLookupByLibrary.simpleMessage("কাস্টম"),
-    "g_key_aa_deploy": MessageLookupByLibrary.simpleMessage("স্থাপন করুন"),
     "g_key_aa_deploy_auto_note": MessageLookupByLibrary.simpleMessage(
       "আপনার প্রথম লেনদেনে অ্যাকাউন্ট স্বয়ংক্রিয়ভাবে স্থাপন করা হবে",
     ),
-    "g_key_aa_deploy_failed": MessageLookupByLibrary.simpleMessage(
-      "স্থাপন করা ব্যর্থ হয়েছে৷",
-    ),
-    "g_key_aa_deploy_failed_desc": MessageLookupByLibrary.simpleMessage(
-      "স্থাপনা ব্যর্থ হয়েছে৷ আবার চেষ্টা করুন.",
-    ),
-    "g_key_aa_deploy_started": MessageLookupByLibrary.simpleMessage(
-      "স্থাপনা শুরু হয়েছে",
-    ),
     "g_key_aa_deployed": MessageLookupByLibrary.simpleMessage("মোতায়েন"),
-    "g_key_aa_deployed_desc": MessageLookupByLibrary.simpleMessage(
-      "অ্যাকাউন্ট ব্যবহারের জন্য প্রস্তুত",
-    ),
     "g_key_aa_deploying": MessageLookupByLibrary.simpleMessage(
       "স্থাপন করা হচ্ছে...",
-    ),
-    "g_key_aa_deploying_desc": MessageLookupByLibrary.simpleMessage(
-      "স্থাপনা লেনদেন প্রক্রিয়া করা হচ্ছে",
     ),
     "g_key_aa_deployment_note": MessageLookupByLibrary.simpleMessage(
       "আপনার প্রথম লেনদেনের সাথে স্বয়ংক্রিয়ভাবে স্থাপনা ঘটবে।",
@@ -1043,10 +547,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "উন্নত বৈশিষ্ট্য সহ পরবর্তী প্রজন্মের Ethereum অ্যাকাউন্টগুলির অভিজ্ঞতা নিন",
     ),
     "g_key_aa_details": MessageLookupByLibrary.simpleMessage("বিস্তারিত"),
-    "g_key_aa_eip7702_account": MessageLookupByLibrary.simpleMessage(
-      "EIP-7702 অ্যাকাউন্ট",
-    ),
-    "g_key_aa_eip7702_badge": MessageLookupByLibrary.simpleMessage("EIP-7702"),
     "g_key_aa_eip7702_desc": MessageLookupByLibrary.simpleMessage(
       "হাইব্রিড EOA/স্মার্ট অ্যাকাউন্ট - কোনো স্থাপনার প্রয়োজন নেই",
     ),
@@ -1054,31 +554,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_estimated_gas": MessageLookupByLibrary.simpleMessage(
       "আনুমানিক গ্যাস",
     ),
-    "g_key_aa_estimating": MessageLookupByLibrary.simpleMessage(
-      "অনুমান করা হচ্ছে...",
-    ),
     "g_key_aa_execute_batch": MessageLookupByLibrary.simpleMessage(
       "ব্যাচ চালান",
     ),
     "g_key_aa_expired": MessageLookupByLibrary.simpleMessage("মেয়াদ শেষ"),
     "g_key_aa_expires": MessageLookupByLibrary.simpleMessage("মেয়াদ শেষ"),
     "g_key_aa_factory": MessageLookupByLibrary.simpleMessage("কারখানা"),
-    "g_key_aa_feature_batch": MessageLookupByLibrary.simpleMessage(
-      "ব্যাচ একাধিক লেনদেন",
-    ),
-    "g_key_aa_feature_gas": MessageLookupByLibrary.simpleMessage(
-      "যেকোনো টোকেনে গ্যাস পেমেন্ট করুন",
-    ),
-    "g_key_aa_feature_security": MessageLookupByLibrary.simpleMessage(
-      "উন্নত নিরাপত্তা",
-    ),
     "g_key_aa_free": MessageLookupByLibrary.simpleMessage("বিনামূল্যে"),
-    "g_key_aa_full_access": MessageLookupByLibrary.simpleMessage(
-      "সম্পূর্ণ অ্যাক্সেস",
-    ),
-    "g_key_aa_gas_estimate": MessageLookupByLibrary.simpleMessage(
-      "গ্যাস অনুমান",
-    ),
     "g_key_aa_gas_estimate_failed": MessageLookupByLibrary.simpleMessage(
       "ডিফল্ট ব্যবহার করে গ্যাস অনুমান ব্যর্থ হয়েছে",
     ),
@@ -1088,48 +570,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_gas_payment_options": MessageLookupByLibrary.simpleMessage(
       "গ্যাস পেমেন্ট অপশন",
     ),
-    "g_key_aa_gas_savings": MessageLookupByLibrary.simpleMessage(
-      "গ্যাস সঞ্চয়",
-    ),
     "g_key_aa_gas_sponsored": MessageLookupByLibrary.simpleMessage(
       "গ্যাস স্পন্সর",
     ),
-    "g_key_aa_gas_warn_call_high": MessageLookupByLibrary.simpleMessage(
-      "এক্সিকিউশন গ্যাস উচ্চ",
-    ),
-    "g_key_aa_gas_warn_call_high_desc": m18,
-    "g_key_aa_gas_warn_deploy": MessageLookupByLibrary.simpleMessage(
-      "স্থাপনা গ্যাস ওভারহেড",
-    ),
-    "g_key_aa_gas_warn_deploy_desc": m19,
-    "g_key_aa_gas_warn_paymaster": MessageLookupByLibrary.simpleMessage(
-      "পেমাস্টার ওভারহেড হাই",
-    ),
-    "g_key_aa_gas_warn_paymaster_desc": m20,
-    "g_key_aa_gas_warn_total_high": MessageLookupByLibrary.simpleMessage(
-      "গ্যাসের সীমা খুব বেশি",
-    ),
-    "g_key_aa_gas_warn_total_high_desc": m21,
-    "g_key_aa_gas_warn_under_est": MessageLookupByLibrary.simpleMessage(
-      "সম্ভাব্য গ্যাস কম অনুমান",
-    ),
-    "g_key_aa_gas_warn_under_est_desc": MessageLookupByLibrary.simpleMessage(
-      "ব্যবহৃত প্রকৃত গ্যাস অনুমান অতিক্রম করতে পারে. একটি বড় বাফার যোগ করার কথা বিবেচনা করুন।",
-    ),
-    "g_key_aa_gas_warn_verify_high": MessageLookupByLibrary.simpleMessage(
-      "যাচাইকরণ গ্যাস উচ্চ",
-    ),
-    "g_key_aa_gas_warn_verify_high_desc": m22,
     "g_key_aa_gasless": MessageLookupByLibrary.simpleMessage("গ্যাসবিহীন"),
     "g_key_aa_gasless_transactions": MessageLookupByLibrary.simpleMessage(
       "গ্যাসবিহীন লেনদেন এবং ব্যাচ অপারেশন",
-    ),
-    "g_key_aa_home_title": MessageLookupByLibrary.simpleMessage(
-      "অ্যাকাউন্ট বিমূর্ততা",
-    ),
-    "g_key_aa_just_now": MessageLookupByLibrary.simpleMessage("এইমাত্র"),
-    "g_key_aa_kernel_account": MessageLookupByLibrary.simpleMessage(
-      "কার্নেল অ্যাকাউন্ট",
     ),
     "g_key_aa_kernel_desc": MessageLookupByLibrary.simpleMessage(
       "ZeroDev থেকে প্লাগইন সমর্থন সহ মডুলার অ্যাকাউন্ট",
@@ -1141,7 +587,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_my_accounts": MessageLookupByLibrary.simpleMessage(
       "আমার স্মার্ট অ্যাকাউন্ট",
     ),
-    "g_key_aa_never": MessageLookupByLibrary.simpleMessage("কখনই না"),
     "g_key_aa_no_accounts": MessageLookupByLibrary.simpleMessage(
       "এখনও কোন স্মার্ট অ্যাকাউন্ট নেই",
     ),
@@ -1156,9 +601,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_aa_not_deployed": MessageLookupByLibrary.simpleMessage(
       "স্থাপন করা হয়নি",
-    ),
-    "g_key_aa_not_deployed_desc": MessageLookupByLibrary.simpleMessage(
-      "প্রথম লেনদেনে অ্যাকাউন্ট স্থাপন করা হবে",
     ),
     "g_key_aa_onboard_step1": MessageLookupByLibrary.simpleMessage(
       "স্মার্ট অ্যাকাউন্ট তৈরি করুন (ফ্রি, কোনো ETH প্রয়োজন নেই)",
@@ -1181,9 +623,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_pay_with_eth": MessageLookupByLibrary.simpleMessage(
       "ETH দিয়ে পেমেন্ট করুন",
     ),
-    "g_key_aa_paymaster_balance": MessageLookupByLibrary.simpleMessage(
-      "ভারসাম্য",
-    ),
     "g_key_aa_paymaster_chains_supported": MessageLookupByLibrary.simpleMessage(
       "চেইন সমর্থিত",
     ),
@@ -1202,17 +641,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_paymaster_load_failed": MessageLookupByLibrary.simpleMessage(
       "গ্যাস বিকল্প লোড করতে ব্যর্থ হয়েছে",
     ),
-    "g_key_aa_paymaster_not_supported": MessageLookupByLibrary.simpleMessage(
-      "এই চেইনে উপলব্ধ নয়",
-    ),
-    "g_key_aa_paymaster_quote_expired": MessageLookupByLibrary.simpleMessage(
-      "উদ্ধৃতি মেয়াদ শেষ",
-    ),
     "g_key_aa_paymaster_retry": MessageLookupByLibrary.simpleMessage(
       "আবার চেষ্টা করুন",
     ),
-    "g_key_aa_paymaster_sponsored_unavailable":
-        MessageLookupByLibrary.simpleMessage("স্পনসরশিপ উপলব্ধ নেই"),
     "g_key_aa_pending": MessageLookupByLibrary.simpleMessage("মুলতুবি"),
     "g_key_aa_permission": MessageLookupByLibrary.simpleMessage("অনুমতি"),
     "g_key_aa_preview_address": MessageLookupByLibrary.simpleMessage(
@@ -1222,7 +653,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_receive_address": MessageLookupByLibrary.simpleMessage(
       "ঠিকানা গ্রহণ করুন",
     ),
-    "g_key_aa_recommended": MessageLookupByLibrary.simpleMessage("প্রস্তাবিত"),
     "g_key_aa_retry": MessageLookupByLibrary.simpleMessage("আবার চেষ্টা করুন"),
     "g_key_aa_revoke": MessageLookupByLibrary.simpleMessage("প্রত্যাহার করুন"),
     "g_key_aa_revoke_confirm": MessageLookupByLibrary.simpleMessage(
@@ -1240,15 +670,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_revoking": MessageLookupByLibrary.simpleMessage(
       "সেশন কী প্রত্যাহার করা হচ্ছে...",
     ),
-    "g_key_aa_safe_account": MessageLookupByLibrary.simpleMessage(
-      "নিরাপদ অ্যাকাউন্ট",
-    ),
     "g_key_aa_safe_desc": MessageLookupByLibrary.simpleMessage(
       "উন্নত নিরাপত্তা বৈশিষ্ট্য সহ বহু-স্বাক্ষর অ্যাকাউন্ট",
-    ),
-    "g_key_aa_safe_guardians": MessageLookupByLibrary.simpleMessage("অভিভাবক"),
-    "g_key_aa_safe_threshold": MessageLookupByLibrary.simpleMessage(
-      "থ্রেশহোল্ড",
     ),
     "g_key_aa_saved": MessageLookupByLibrary.simpleMessage("সংরক্ষিত"),
     "g_key_aa_select_chain": MessageLookupByLibrary.simpleMessage(
@@ -1257,30 +680,20 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_select_paymaster": MessageLookupByLibrary.simpleMessage(
       "Paymaster নির্বাচন করুন",
     ),
-    "g_key_aa_select_type": MessageLookupByLibrary.simpleMessage(
-      "অ্যাকাউন্টের ধরন নির্বাচন করুন",
-    ),
     "g_key_aa_selected": MessageLookupByLibrary.simpleMessage("নির্বাচিত"),
     "g_key_aa_send_desc": MessageLookupByLibrary.simpleMessage(
       "আপনার স্মার্ট অ্যাকাউন্ট ব্যবহার করে টোকেন পাঠান",
-    ),
-    "g_key_aa_send_title": MessageLookupByLibrary.simpleMessage(
-      "এএ ট্রান্সফার",
     ),
     "g_key_aa_session_1d": MessageLookupByLibrary.simpleMessage("1 দিন"),
     "g_key_aa_session_1h": MessageLookupByLibrary.simpleMessage("1 ঘন্টা"),
     "g_key_aa_session_30d": MessageLookupByLibrary.simpleMessage("30 দিন"),
     "g_key_aa_session_7d": MessageLookupByLibrary.simpleMessage("৭ দিন"),
-    "g_key_aa_session_allowed": MessageLookupByLibrary.simpleMessage(
-      "অনুমোদিত",
-    ),
     "g_key_aa_session_amount_hint": MessageLookupByLibrary.simpleMessage(
       "যেমন 100.00",
     ),
     "g_key_aa_session_amount_limit": MessageLookupByLibrary.simpleMessage(
       "সর্বোচ্চ পরিমাণ",
     ),
-    "g_key_aa_session_blocked": MessageLookupByLibrary.simpleMessage("অবরুদ্ধ"),
     "g_key_aa_session_confirm_risk": MessageLookupByLibrary.simpleMessage(
       "আমি এই কী এর অনুমতি বুঝি",
     ),
@@ -1339,14 +752,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_session_transfer_can": MessageLookupByLibrary.simpleMessage(
       "নির্ধারিত সীমার মধ্যে টোকেন স্থানান্তর করুন",
     ),
-    "g_key_aa_simple_account": MessageLookupByLibrary.simpleMessage(
-      "সহজ হিসাব",
-    ),
     "g_key_aa_simple_desc": MessageLookupByLibrary.simpleMessage(
       "একক মালিকের সাথে প্রাথমিক স্মার্ট অ্যাকাউন্ট - বেশিরভাগ ব্যবহারকারীর জন্য প্রস্তাবিত৷",
-    ),
-    "g_key_aa_smart_account": MessageLookupByLibrary.simpleMessage(
-      "স্মার্ট অ্যাকাউন্ট",
     ),
     "g_key_aa_smart_accounts": MessageLookupByLibrary.simpleMessage(
       "স্মার্ট অ্যাকাউন্ট",
@@ -1364,18 +771,8 @@ class MessageLookup extends MessageLookupByLibrary {
       "স্মার্ট অ্যাকাউন্ট",
     ),
     "g_key_aa_total_gas": MessageLookupByLibrary.simpleMessage("মোট গ্যাস"),
-    "g_key_aa_total_value": MessageLookupByLibrary.simpleMessage("মোট মান"),
     "g_key_aa_transactions": MessageLookupByLibrary.simpleMessage("লেনদেন"),
-    "g_key_aa_unavailable": MessageLookupByLibrary.simpleMessage("অনুপলব্ধ"),
-    "g_key_aa_version_v07": MessageLookupByLibrary.simpleMessage("v0.7"),
-    "g_key_aa_version_v08": MessageLookupByLibrary.simpleMessage("v0.8"),
     "g_key_aa_view_all": MessageLookupByLibrary.simpleMessage("সব দেখুন"),
-    "g_key_account_linked": MessageLookupByLibrary.simpleMessage(
-      "অ্যাকাউন্ট সফলভাবে লিঙ্ক করা হয়েছে৷",
-    ),
-    "g_key_account_unlinked": MessageLookupByLibrary.simpleMessage(
-      "অ্যাকাউন্টটি সফলভাবে আনলিঙ্ক করা হয়েছে৷",
-    ),
     "g_key_address": MessageLookupByLibrary.simpleMessage("ঠিকানা"),
     "g_key_address_1": MessageLookupByLibrary.simpleMessage("একটি নাম লিখুন"),
     "g_key_address_2": MessageLookupByLibrary.simpleMessage("ঠিকানা লিখুন"),
@@ -1397,59 +794,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_advanced_features": MessageLookupByLibrary.simpleMessage(
       "উন্নত বৈশিষ্ট্য",
     ),
-    "g_key_airdrop_active": MessageLookupByLibrary.simpleMessage("সক্রিয়"),
-    "g_key_airdrop_check_eligibility": MessageLookupByLibrary.simpleMessage(
-      "যোগ্যতা পরীক্ষা করুন",
-    ),
-    "g_key_airdrop_claim": MessageLookupByLibrary.simpleMessage("দাবি"),
-    "g_key_airdrop_claimed": MessageLookupByLibrary.simpleMessage("দাবি করেছে"),
-    "g_key_airdrop_days_left": m23,
-    "g_key_airdrop_deadline": MessageLookupByLibrary.simpleMessage("সময়সীমা"),
-    "g_key_airdrop_eligible": MessageLookupByLibrary.simpleMessage("যোগ্য"),
-    "g_key_airdrop_estimated_value": MessageLookupByLibrary.simpleMessage(
-      "আনুমানিক মান",
-    ),
-    "g_key_airdrop_expired": MessageLookupByLibrary.simpleMessage("মেয়াদ শেষ"),
-    "g_key_airdrop_filter": MessageLookupByLibrary.simpleMessage("ফিল্টার"),
-    "g_key_airdrop_no_airdrops": MessageLookupByLibrary.simpleMessage(
-      "কোনো এয়ারড্রপ পাওয়া যায় না",
-    ),
-    "g_key_airdrop_not_eligible": MessageLookupByLibrary.simpleMessage(
-      "যোগ্য নয়",
-    ),
-    "g_key_airdrop_pending": MessageLookupByLibrary.simpleMessage("মুলতুবি"),
-    "g_key_airdrop_priority_high": MessageLookupByLibrary.simpleMessage(
-      "উচ্চ অগ্রাধিকার",
-    ),
-    "g_key_airdrop_priority_low": MessageLookupByLibrary.simpleMessage(
-      "নিম্ন অগ্রাধিকার",
-    ),
-    "g_key_airdrop_priority_medium": MessageLookupByLibrary.simpleMessage(
-      "মাঝারি অগ্রাধিকার",
-    ),
-    "g_key_airdrop_requirement_met": MessageLookupByLibrary.simpleMessage(
-      "চাহিদা পূরণ",
-    ),
-    "g_key_airdrop_requirement_not_met": MessageLookupByLibrary.simpleMessage(
-      "দেখা হয়নি",
-    ),
-    "g_key_airdrop_requirements": MessageLookupByLibrary.simpleMessage(
-      "প্রয়োজনীয়তা",
-    ),
-    "g_key_airdrop_sort_by": MessageLookupByLibrary.simpleMessage(
-      "অনুসারে সাজান",
-    ),
-    "g_key_airdrop_title": MessageLookupByLibrary.simpleMessage(
-      "এয়ারড্রপ ট্র্যাকার",
-    ),
-    "g_key_airdrop_total_claimed": MessageLookupByLibrary.simpleMessage(
-      "মোট দাবি করা হয়েছে",
-    ),
-    "g_key_airdrop_upcoming": MessageLookupByLibrary.simpleMessage("আসন্ন"),
-    "g_key_apple_sign_in_cancelled": MessageLookupByLibrary.simpleMessage(
-      "অ্যাপল সাইন-ইন বাতিল করা হয়েছে",
-    ),
-    "g_key_apply": MessageLookupByLibrary.simpleMessage("আবেদন করুন"),
     "g_key_batch_add_recipient": MessageLookupByLibrary.simpleMessage(
       "প্রাপক যোগ করুন",
     ),
@@ -1467,19 +811,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "CSV বিন্যাস: ঠিকানা, পরিমাণ, লেবেল",
     ),
     "g_key_batch_done": MessageLookupByLibrary.simpleMessage("সম্পন্ন"),
-    "g_key_batch_duplicate_address": m24,
+    "g_key_batch_duplicate_address": m10,
     "g_key_batch_estimating_gas": MessageLookupByLibrary.simpleMessage(
       "গ্যাস অনুমান করা হচ্ছে...",
     ),
     "g_key_batch_evm_only": MessageLookupByLibrary.simpleMessage(
       "ব্যাচ ট্রান্সফার শুধুমাত্র ইভিএম চেইন সমর্থন করে",
     ),
-    "g_key_batch_execute": MessageLookupByLibrary.simpleMessage("ব্যাচ চালান"),
     "g_key_batch_export_csv": MessageLookupByLibrary.simpleMessage(
       "CSV রপ্তানি করুন",
-    ),
-    "g_key_batch_gas_savings": MessageLookupByLibrary.simpleMessage(
-      "গ্যাস সঞ্চয়",
     ),
     "g_key_batch_help_title": MessageLookupByLibrary.simpleMessage(
       "ব্যাচ স্থানান্তর সাহায্য",
@@ -1487,10 +827,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_batch_import_csv": MessageLookupByLibrary.simpleMessage(
       "CSV আমদানি করুন",
     ),
-    "g_key_batch_insufficient_balance": m25,
-    "g_key_batch_invalid_address": m26,
-    "g_key_batch_invalid_amount": m27,
-    "g_key_batch_max_recipients": m28,
+    "g_key_batch_insufficient_balance": m11,
+    "g_key_batch_invalid_address": m12,
+    "g_key_batch_invalid_amount": m13,
+    "g_key_batch_max_recipients": m14,
     "g_key_batch_memo_optional": MessageLookupByLibrary.simpleMessage(
       "মেমো ঐচ্ছিক",
     ),
@@ -1500,7 +840,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_batch_no_supported": MessageLookupByLibrary.simpleMessage(
       "কোনো সমর্থিত টোকেন নেই",
     ),
-    "g_key_batch_preview": MessageLookupByLibrary.simpleMessage("পূর্বরূপ"),
     "g_key_batch_recipients": MessageLookupByLibrary.simpleMessage("প্রাপক"),
     "g_key_batch_select_token": MessageLookupByLibrary.simpleMessage(
       "টোকেন নির্বাচন করুন",
@@ -1520,7 +859,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_batch_total_amount": MessageLookupByLibrary.simpleMessage(
       "মোট পরিমাণ",
     ),
-    "g_key_bridge_amount": MessageLookupByLibrary.simpleMessage("পরিমাণ"),
     "g_key_bridge_chain_not_supported": MessageLookupByLibrary.simpleMessage(
       "চেইন সমর্থিত নয়",
     ),
@@ -1531,10 +869,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "আপনি পাবেন (আনুমানিক)",
     ),
     "g_key_bridge_fastest": MessageLookupByLibrary.simpleMessage("দ্রুততম"),
-    "g_key_bridge_fee": MessageLookupByLibrary.simpleMessage("সেতু ফি"),
-    "g_key_bridge_from_chain": MessageLookupByLibrary.simpleMessage(
-      "চেইন থেকে",
-    ),
     "g_key_bridge_get_quote": MessageLookupByLibrary.simpleMessage(
       "উদ্ধৃতি পান",
     ),
@@ -1571,10 +905,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_bridge_status_pending": MessageLookupByLibrary.simpleMessage(
       "মুলতুবি",
     ),
-    "g_key_bridge_swap": MessageLookupByLibrary.simpleMessage("সেতু"),
-    "g_key_bridge_time": MessageLookupByLibrary.simpleMessage("আনুমানিক সময়"),
     "g_key_bridge_title": MessageLookupByLibrary.simpleMessage("সেতু"),
-    "g_key_bridge_to_chain": MessageLookupByLibrary.simpleMessage("চেইন করতে"),
     "g_key_bridge_tx_failed": MessageLookupByLibrary.simpleMessage(
       "সেতু ব্যর্থ হয়েছে",
     ),
@@ -1648,9 +979,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_btc_stake_step4_title": MessageLookupByLibrary.simpleMessage(
       "আনলক করার পর রিডিম করুন",
     ),
-    "g_key_btc_stake_subtitle": MessageLookupByLibrary.simpleMessage(
-      "মিন্ট vBTC-তে BTC লক করুন এবং পুরস্কার অর্জন করুন",
-    ),
     "g_key_btc_stake_title": MessageLookupByLibrary.simpleMessage(
       "বিটিসি সেলফ-কাস্টডি স্টেকিং",
     ),
@@ -1671,29 +999,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_burn_nft_tip": MessageLookupByLibrary.simpleMessage(
       "একটি NFT বার্ন করতে, অনুগ্রহ করে NFT বিশদ পৃষ্ঠায় যান এবং \"বার্ন\" বোতামটি আলতো চাপুন৷",
     ),
-    "g_key_burn_nft_title": MessageLookupByLibrary.simpleMessage(
-      "এনএফটি বার্ন করুন",
-    ),
     "g_key_chain_transfer_not_supported": MessageLookupByLibrary.simpleMessage(
       "এই চেইনটি এখনও স্থানান্তর সমর্থন করে না, সাথে থাকুন",
-    ),
-    "g_key_change_email": MessageLookupByLibrary.simpleMessage(
-      "ইমেইল পরিবর্তন করুন",
-    ),
-    "g_key_change_password": MessageLookupByLibrary.simpleMessage(
-      "পাসওয়ার্ড পরিবর্তন করুন",
-    ),
-    "g_key_change_password_desc": MessageLookupByLibrary.simpleMessage(
-      "আপনার বর্তমান পাসওয়ার্ড লিখুন এবং একটি নতুন পাসওয়ার্ড সেট করুন",
-    ),
-    "g_key_code_length": MessageLookupByLibrary.simpleMessage(
-      "অনুগ্রহ করে 6-সংখ্যার কোড লিখুন",
-    ),
-    "g_key_code_required": MessageLookupByLibrary.simpleMessage(
-      "যাচাইকরণ কোড প্রয়োজন",
-    ),
-    "g_key_code_sent": MessageLookupByLibrary.simpleMessage(
-      "যাচাইকরণ কোড পাঠানো হয়েছে",
     ),
     "g_key_coin_list_all_hidden": MessageLookupByLibrary.simpleMessage(
       "সমস্ত সম্পদ \$1 এর নিচে",
@@ -1707,25 +1014,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_coin_search_recent": MessageLookupByLibrary.simpleMessage(
       "সাম্প্রতিক",
     ),
-    "g_key_confirm_new_password": MessageLookupByLibrary.simpleMessage(
-      "নতুন পাসওয়ার্ড নিশ্চিত করুন",
-    ),
-    "g_key_continue_with_apple": MessageLookupByLibrary.simpleMessage(
-      "অ্যাপলের সাথে চালিয়ে যান",
-    ),
-    "g_key_continue_with_google": MessageLookupByLibrary.simpleMessage(
-      "Google এর সাথে চালিয়ে যান",
-    ),
-    "g_key_deadline_reminders": MessageLookupByLibrary.simpleMessage(
-      "সময়সীমা অনুস্মারক",
-    ),
     "g_key_dex_approval_success": MessageLookupByLibrary.simpleMessage(
       "অনুমোদিত ! চালিয়ে যেতে অদলবদল আলতো চাপুন।",
     ),
     "g_key_dex_approve_exact": MessageLookupByLibrary.simpleMessage(
       "সঠিক পরিমাণ",
     ),
-    "g_key_dex_approve_required": m29,
+    "g_key_dex_approve_required": m15,
     "g_key_dex_approve_unlimited": MessageLookupByLibrary.simpleMessage(
       "আনলিমিটেড",
     ),
@@ -1762,32 +1057,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_price_impact": MessageLookupByLibrary.simpleMessage(
       "দামের প্রভাব",
     ),
-    "g_key_dex_price_impact_high": m30,
-    "g_key_dex_quote_expires": m31,
+    "g_key_dex_price_impact_high": m16,
+    "g_key_dex_quote_expires": m17,
     "g_key_dex_quote_failed": MessageLookupByLibrary.simpleMessage(
       "উদ্ধৃতি ব্যর্থ হয়েছে",
     ),
-    "g_key_dex_quote_refreshed": MessageLookupByLibrary.simpleMessage(
-      "উদ্ধৃতি রিফ্রেশ",
-    ),
-    "g_key_dex_retry": MessageLookupByLibrary.simpleMessage("আবার চেষ্টা করুন"),
     "g_key_dex_search_hint": MessageLookupByLibrary.simpleMessage(
       "চিহ্ন / নাম / ঠিকানা অনুসন্ধান করুন",
     ),
     "g_key_dex_select_token": MessageLookupByLibrary.simpleMessage(
       "নির্বাচন করুন",
     ),
-    "g_key_dex_slippage": MessageLookupByLibrary.simpleMessage(
-      "স্লিপেজ সহনশীলতা",
-    ),
     "g_key_dex_slippage_label": MessageLookupByLibrary.simpleMessage(
       "সর্বোচ্চ স্লিপেজ",
-    ),
-    "g_key_dex_sol_note": MessageLookupByLibrary.simpleMessage(
-      "সোলানা অদলবদল: আপনার সোলানা ওয়ালেটে লেনদেনে স্বাক্ষর করুন।",
-    ),
-    "g_key_dex_sol_unsupported": MessageLookupByLibrary.simpleMessage(
-      "সোলানা ডেক্স অদলবদল এখনও অ্যাপের মধ্যে সমর্থিত নয়",
     ),
     "g_key_dex_status_confirmed": MessageLookupByLibrary.simpleMessage(
       "নিশ্চিত করা হয়েছে",
@@ -1801,26 +1083,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_swap_success": MessageLookupByLibrary.simpleMessage(
       "সোয়াপ সফলভাবে জমা দেওয়া হয়েছে",
     ),
-    "g_key_dex_tx_failed": MessageLookupByLibrary.simpleMessage(
-      "লেনদেন ব্যর্থ হয়েছে৷",
-    ),
     "g_key_dex_you_pay": MessageLookupByLibrary.simpleMessage("আপনি পে"),
     "g_key_dex_you_receive": MessageLookupByLibrary.simpleMessage("আপনি রিসিভ"),
-    "g_key_domain_resolve_hint": MessageLookupByLibrary.simpleMessage(
-      "ENS (.eth), Unstoppable Domains (.crypto/.wallet/…) এবং Solana SNS (.sol) সমর্থন করে",
-    ),
-    "g_key_domain_sns_name": MessageLookupByLibrary.simpleMessage(
-      "সোলানা নাম সেবা",
-    ),
-    "g_key_domain_sns_not_found": MessageLookupByLibrary.simpleMessage(
-      "সোলানা ডোমেইন পাওয়া যায়নি",
-    ),
-    "g_key_domain_ud_name": MessageLookupByLibrary.simpleMessage(
-      "অপ্রতিরোধ্য ডোমেন",
-    ),
-    "g_key_domain_ud_not_found": MessageLookupByLibrary.simpleMessage(
-      "এই চেইনের জন্য অপ্রতিরোধ্য ডোমেন খুঁজে পাওয়া যায়নি বা কোন ঠিকানা নেই",
-    ),
     "g_key_earn_active_products": MessageLookupByLibrary.simpleMessage(
       "সক্রিয় পণ্য",
     ),
@@ -1830,17 +1094,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_buy_n_desc": MessageLookupByLibrary.simpleMessage(
       "AST প্রোটোকল দিয়ে N কিনুন",
     ),
-    "g_key_earn_claim_free": MessageLookupByLibrary.simpleMessage(
-      "বিনামূল্যে টোকেন দাবি করুন",
-    ),
     "g_key_earn_cross_chain": MessageLookupByLibrary.simpleMessage(
       "ক্রস-চেইন স্থানান্তর",
-    ),
-    "g_key_earn_daily_bonus": MessageLookupByLibrary.simpleMessage(
-      "দৈনিক চেক ইন বোনাস",
-    ),
-    "g_key_earn_dex_desc": MessageLookupByLibrary.simpleMessage(
-      "Uniswap/1inch এর মাধ্যমে যেকোনো টোকেন অদলবদল করুন",
     ),
     "g_key_earn_dex_swap": MessageLookupByLibrary.simpleMessage("ডেক্স অদলবদল"),
     "g_key_earn_gas": MessageLookupByLibrary.simpleMessage("গ্যাস"),
@@ -1859,16 +1114,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_no_positions": MessageLookupByLibrary.simpleMessage(
       "সক্রিয় অবস্থান নেই",
     ),
-    "g_key_earn_node_mining": MessageLookupByLibrary.simpleMessage(
-      "নোড মাইনিং",
-    ),
     "g_key_earn_node_mining_desc": MessageLookupByLibrary.simpleMessage(
       "নোড মাইনিংয়ে অংশগ্রহণ করে পুরষ্কার অর্জন করুন",
     ),
-    "g_key_earn_points_daily": MessageLookupByLibrary.simpleMessage(
-      "প্রতিদিন পয়েন্ট অর্জন করুন",
-    ),
-    "g_key_earn_pts_day": m32,
     "g_key_earn_quick_tools": MessageLookupByLibrary.simpleMessage(
       "দ্রুত সরঞ্জাম",
     ),
@@ -1886,21 +1134,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_total_earnings": MessageLookupByLibrary.simpleMessage(
       "মোট আয়",
     ),
-    "g_key_earn_up_to_apy": m33,
+    "g_key_earn_up_to_apy": m18,
     "g_key_earn_view_all": MessageLookupByLibrary.simpleMessage("সব দেখুন"),
-    "g_key_eligibility_alerts": MessageLookupByLibrary.simpleMessage(
-      "যোগ্যতা সতর্কতা",
-    ),
-    "g_key_eligible_only": MessageLookupByLibrary.simpleMessage(
-      "শুধুমাত্র যোগ্য",
-    ),
-    "g_key_email": MessageLookupByLibrary.simpleMessage("ইমেইল"),
-    "g_key_email_invalid": MessageLookupByLibrary.simpleMessage(
-      "একটি বৈধ ইমেল ঠিকানা লিখুন",
-    ),
-    "g_key_email_required": MessageLookupByLibrary.simpleMessage(
-      "ইমেল প্রয়োজন",
-    ),
     "g_key_ens_address_updated": MessageLookupByLibrary.simpleMessage(
       "সমাধান করা ঠিকানা আপডেট করা হয়েছে",
     ),
@@ -1914,9 +1149,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_commit": MessageLookupByLibrary.simpleMessage("কমিট"),
     "g_key_ens_commit_failed": MessageLookupByLibrary.simpleMessage(
       "প্রতিশ্রুতি ব্যর্থ হয়েছে",
-    ),
-    "g_key_ens_commit_tx": MessageLookupByLibrary.simpleMessage(
-      "লেনদেন করা হচ্ছে...",
     ),
     "g_key_ens_commitment_expired_msg": MessageLookupByLibrary.simpleMessage(
       "নিবন্ধন প্রতিশ্রুতি মেয়াদ শেষ. অনুগ্রহ করে আবার নিবন্ধন প্রক্রিয়া শুরু করুন।",
@@ -1946,17 +1178,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_detected": MessageLookupByLibrary.simpleMessage(
       "ENS নাম সনাক্ত করা হয়েছে",
     ),
-    "g_key_ens_duration": MessageLookupByLibrary.simpleMessage(
-      "রেজিস্ট্রেশনের সময়কাল",
-    ),
-    "g_key_ens_edit_records": MessageLookupByLibrary.simpleMessage(
-      "রেকর্ড সম্পাদনা করুন",
-    ),
     "g_key_ens_expired": MessageLookupByLibrary.simpleMessage("মেয়াদ শেষ"),
     "g_key_ens_expires": MessageLookupByLibrary.simpleMessage("মেয়াদ শেষ"),
-    "g_key_ens_expiring_soon": MessageLookupByLibrary.simpleMessage(
-      "শীঘ্রই মেয়াদ শেষ হচ্ছে",
-    ),
     "g_key_ens_extend_period": MessageLookupByLibrary.simpleMessage(
       "রেজিস্ট্রেশনের মেয়াদ বাড়ান",
     ),
@@ -1969,9 +1192,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_ens_get_your_name": MessageLookupByLibrary.simpleMessage(
       "আপনার .eth নাম পান",
-    ),
-    "g_key_ens_home_title": MessageLookupByLibrary.simpleMessage(
-      "ENS ম্যানেজার",
     ),
     "g_key_ens_invalid_address": MessageLookupByLibrary.simpleMessage(
       "অবৈধ ঠিকানা (0x + 40 হেক্স অক্ষর হতে হবে)",
@@ -1986,9 +1206,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_manage_your_identity": MessageLookupByLibrary.simpleMessage(
       "আপনার Web3 পরিচয় পরিচালনা করুন",
     ),
-    "g_key_ens_management_title": MessageLookupByLibrary.simpleMessage(
-      "ENS পরিচালনা করুন",
-    ),
     "g_key_ens_min_length": MessageLookupByLibrary.simpleMessage(
       "সর্বনিম্ন 3 অক্ষর",
     ),
@@ -2001,12 +1218,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_no_domains": MessageLookupByLibrary.simpleMessage(
       "এখনো কোনো ডোমেইন নেই",
     ),
-    "g_key_ens_no_names": MessageLookupByLibrary.simpleMessage(
-      "আপনি এখনও কোনো ENS নামের মালিক নন",
-    ),
-    "g_key_ens_owned_names": MessageLookupByLibrary.simpleMessage(
-      "আমার ENS নাম",
-    ),
     "g_key_ens_owner": MessageLookupByLibrary.simpleMessage("মালিক"),
     "g_key_ens_please_wait": MessageLookupByLibrary.simpleMessage(
       "অনুগ্রহ করে অপেক্ষা করুন",
@@ -2016,9 +1227,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_ens_price_breakdown": MessageLookupByLibrary.simpleMessage(
       "মূল্য ভাঙ্গন",
-    ),
-    "g_key_ens_price_per_year": MessageLookupByLibrary.simpleMessage(
-      "প্রতি বছর",
     ),
     "g_key_ens_primary": MessageLookupByLibrary.simpleMessage("প্রাথমিক"),
     "g_key_ens_primary_set": MessageLookupByLibrary.simpleMessage(
@@ -2030,7 +1238,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_purchase_title": MessageLookupByLibrary.simpleMessage(
       "ENS নিবন্ধন করুন",
     ),
-    "g_key_ens_records": MessageLookupByLibrary.simpleMessage("রেকর্ড"),
     "g_key_ens_register": MessageLookupByLibrary.simpleMessage("নিবন্ধন করুন"),
     "g_key_ens_register_description": MessageLookupByLibrary.simpleMessage(
       "Ethereum-এ আপনার বিকেন্দ্রীকৃত পরিচয়",
@@ -2041,9 +1248,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_register_now": MessageLookupByLibrary.simpleMessage(
       "এখন নিবন্ধন করুন",
     ),
-    "g_key_ens_register_tx": MessageLookupByLibrary.simpleMessage(
-      "নাম নিবন্ধন করা হচ্ছে...",
-    ),
     "g_key_ens_registering": MessageLookupByLibrary.simpleMessage(
       "নিবন্ধন করা হচ্ছে...",
     ),
@@ -2053,31 +1257,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_registration_period": MessageLookupByLibrary.simpleMessage(
       "রেজিস্ট্রেশনের সময়কাল",
     ),
-    "g_key_ens_reminder_disabled": MessageLookupByLibrary.simpleMessage(
-      "মেয়াদোত্তীর্ণ অনুস্মারক বন্ধ আছে",
-    ),
     "g_key_ens_reminder_enable": MessageLookupByLibrary.simpleMessage(
       "মেয়াদ শেষ হওয়ার অনুস্মারক সক্ষম করুন",
-    ),
-    "g_key_ens_reminder_enabled": MessageLookupByLibrary.simpleMessage(
-      "মেয়াদোত্তীর্ণ অনুস্মারক চালু আছে",
     ),
     "g_key_ens_reminder_hint": MessageLookupByLibrary.simpleMessage(
       "মেয়াদ শেষ হওয়ার 30, 7 এবং 1 দিন আগে অবহিত করুন",
     ),
     "g_key_ens_renew": MessageLookupByLibrary.simpleMessage("নবায়ন করুন"),
-    "g_key_ens_renew_cost": MessageLookupByLibrary.simpleMessage("নবায়ন খরচ"),
     "g_key_ens_renew_desc": MessageLookupByLibrary.simpleMessage(
       "আপনার ডোমেন নিবন্ধন প্রসারিত করুন",
     ),
     "g_key_ens_renew_success": MessageLookupByLibrary.simpleMessage(
       "পুনর্নবীকরণ সফল",
-    ),
-    "g_key_ens_renew_title": MessageLookupByLibrary.simpleMessage(
-      "ENS পুনর্নবীকরণ করুন",
-    ),
-    "g_key_ens_resolution_failed": MessageLookupByLibrary.simpleMessage(
-      "ENS রেজোলিউশন ব্যর্থ হয়েছে৷",
     ),
     "g_key_ens_resolved_address": MessageLookupByLibrary.simpleMessage(
       "সমাধান করা ঠিকানা",
@@ -2119,12 +1310,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_step_1": MessageLookupByLibrary.simpleMessage("ধাপ 1"),
     "g_key_ens_step_2": MessageLookupByLibrary.simpleMessage("ধাপ 2"),
     "g_key_ens_step_3": MessageLookupByLibrary.simpleMessage("ধাপ 3"),
-    "g_key_ens_step_commit": MessageLookupByLibrary.simpleMessage("কমিট"),
-    "g_key_ens_step_register": MessageLookupByLibrary.simpleMessage(
-      "নিবন্ধন করুন",
-    ),
-    "g_key_ens_step_success": MessageLookupByLibrary.simpleMessage("সফলতা"),
-    "g_key_ens_step_wait": MessageLookupByLibrary.simpleMessage("অপেক্ষা করুন"),
     "g_key_ens_subdomain_create": MessageLookupByLibrary.simpleMessage(
       "সাবডোমেন তৈরি করুন",
     ),
@@ -2160,14 +1345,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_ens_subdomains": MessageLookupByLibrary.simpleMessage("সাবডোমেন"),
     "g_key_ens_success": MessageLookupByLibrary.simpleMessage("সফলতার !"),
-    "g_key_ens_success_message": m34,
     "g_key_ens_suggestions": MessageLookupByLibrary.simpleMessage("পরামর্শ"),
     "g_key_ens_text_records": MessageLookupByLibrary.simpleMessage(
       "টেক্সট রেকর্ডস",
     ),
     "g_key_ens_title": MessageLookupByLibrary.simpleMessage("ENS ম্যানেজার"),
     "g_key_ens_total": MessageLookupByLibrary.simpleMessage("মোট"),
-    "g_key_ens_total_cost": MessageLookupByLibrary.simpleMessage("মোট খরচ"),
     "g_key_ens_transfer": MessageLookupByLibrary.simpleMessage("স্থানান্তর"),
     "g_key_ens_transfer_desc": MessageLookupByLibrary.simpleMessage(
       "অন্য ঠিকানায় মালিকানা হস্তান্তর করুন",
@@ -2192,7 +1375,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_wait_time_info": MessageLookupByLibrary.simpleMessage(
       "একটি অপেক্ষার সময় সামনের দৌড়ে বাধা দেয়",
     ),
-    "g_key_ens_wait_timer": m35,
     "g_key_ens_waiting": MessageLookupByLibrary.simpleMessage(
       "অপেক্ষা করছে...",
     ),
@@ -2203,18 +1385,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_years": MessageLookupByLibrary.simpleMessage("বছর"),
     "g_key_ens_your_identity": MessageLookupByLibrary.simpleMessage(
       "আপনার পরিচয়",
-    ),
-    "g_key_enter_confirm_password": MessageLookupByLibrary.simpleMessage(
-      "নতুন পাসওয়ার্ড পুনরায় লিখুন",
-    ),
-    "g_key_enter_email": MessageLookupByLibrary.simpleMessage(
-      "আপনার ইমেইল ঠিকানা লিখুন",
-    ),
-    "g_key_enter_new_password": MessageLookupByLibrary.simpleMessage(
-      "নতুন পাসওয়ার্ড দিন",
-    ),
-    "g_key_enter_old_password": MessageLookupByLibrary.simpleMessage(
-      "বর্তমান পাসওয়ার্ড লিখুন",
     ),
     "g_key_error_1": MessageLookupByLibrary.simpleMessage(
       "পার্সিং প্রতিক্রিয়া ডেটা ত্রুটি!",
@@ -2229,13 +1399,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_error_13": MessageLookupByLibrary.simpleMessage(
       "অ্যাক্সেস অস্বীকার করা হয়েছে৷",
     ),
-    "g_key_error_1301": MessageLookupByLibrary.simpleMessage(
-      "ভুল অ্যাকাউন্ট বা পাসওয়ার্ড",
-    ),
     "g_key_error_14": MessageLookupByLibrary.simpleMessage("অনুরোধ ত্রুটি"),
-    "g_key_error_1403": MessageLookupByLibrary.simpleMessage(
-      "আপনি ইতিমধ্যেই অন্য ফোনে লগ ইন করেছেন এবং লগ আউট করতে বাধ্য হয়েছেন৷",
-    ),
     "g_key_error_15": MessageLookupByLibrary.simpleMessage("অনুরোধের সময় শেষ"),
     "g_key_error_16": MessageLookupByLibrary.simpleMessage(
       "সার্ভার অস্বাভাবিক",
@@ -2346,33 +1510,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ex_pk_pwd_title": MessageLookupByLibrary.simpleMessage(
       "ব্যক্তিগত কী দেখতে ওয়ালেট পাসওয়ার্ড লিখুন",
     ),
-    "g_key_feedback": MessageLookupByLibrary.simpleMessage("প্রতিক্রিয়া"),
-    "g_key_feedback_1": MessageLookupByLibrary.simpleMessage(
-      "প্রতিক্রিয়া তথ্য পূরণ করুন",
-    ),
-    "g_key_feedback_2": MessageLookupByLibrary.simpleMessage(
-      "আনআপলোড সংযুক্তি আছে",
-    ),
-    "g_key_feedback_3": MessageLookupByLibrary.simpleMessage(
-      "জমা দেওয়া ব্যর্থ হয়েছে৷",
-    ),
-    "g_key_feedback_4": MessageLookupByLibrary.simpleMessage(
-      "সফলভাবে জমা দেওয়া হয়েছে৷",
-    ),
-    "g_key_feedback_5": MessageLookupByLibrary.simpleMessage("সংযুক্তি"),
-    "g_key_feedback_6": MessageLookupByLibrary.simpleMessage(
-      "5টি পর্যন্ত সংযুক্তি আপলোড করুন, প্রতিটি সংযুক্তি 100MB এর থেকে বড় হতে পারে না৷",
-    ),
-    "g_key_feedback_7": MessageLookupByLibrary.simpleMessage("ব্যর্থ হয়েছে"),
-    "g_key_feedback_8": MessageLookupByLibrary.simpleMessage(
-      "চেষ্টা করুন ক্লিক করুন",
-    ),
-    "g_key_feedback_9": MessageLookupByLibrary.simpleMessage("লগ ইন করুন"),
     "g_key_filter": MessageLookupByLibrary.simpleMessage("ফিল্টার"),
-    "g_key_filter_type": MessageLookupByLibrary.simpleMessage("টাইপ"),
-    "g_key_forgot_password": MessageLookupByLibrary.simpleMessage(
-      "পাসওয়ার্ড ভুলে গেছেন?",
-    ),
     "g_key_gas_alert": MessageLookupByLibrary.simpleMessage("গ্যাস সতর্কতা"),
     "g_key_gas_alert_above": MessageLookupByLibrary.simpleMessage(
       "উপরে থাকলে সতর্ক করুন",
@@ -2386,12 +1524,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_gas_alert_threshold": MessageLookupByLibrary.simpleMessage(
       "প্রান্তিক (Gwei)",
     ),
-    "g_key_gas_auto_refresh": m36,
+    "g_key_gas_auto_refresh": m19,
     "g_key_gas_base_fee": MessageLookupByLibrary.simpleMessage("বেস ফি"),
     "g_key_gas_custom": MessageLookupByLibrary.simpleMessage("কাস্টম"),
-    "g_key_gas_estimated_time": MessageLookupByLibrary.simpleMessage(
-      "অনুমান। সময়",
-    ),
     "g_key_gas_fast": MessageLookupByLibrary.simpleMessage("দ্রুত"),
     "g_key_gas_footer": MessageLookupByLibrary.simpleMessage(
       "নেটওয়ার্ক চাহিদার উপর ভিত্তি করে গ্যাসের দাম ওঠানামা করে। নিম্ন গ্যাস = ধীর নিশ্চিতকরণ, উচ্চ গ্যাস = দ্রুত নিশ্চিতকরণ।",
@@ -2421,43 +1556,23 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_gas_tracker": MessageLookupByLibrary.simpleMessage(
       "গ্যাস ট্র্যাকার",
     ),
-    "g_key_gesture_medium": MessageLookupByLibrary.simpleMessage("মাঝারি"),
-    "g_key_gesture_strong": MessageLookupByLibrary.simpleMessage("শক্তিশালী"),
-    "g_key_gesture_too_simple": MessageLookupByLibrary.simpleMessage(
-      "প্যাটার্ন খুব সহজ, আরও নোড ব্যবহার করুন",
-    ),
-    "g_key_gesture_weak": MessageLookupByLibrary.simpleMessage("দুর্বল"),
-    "g_key_google_sign_in_cancelled": MessageLookupByLibrary.simpleMessage(
-      "Google সাইন-ইন বাতিল হয়েছে৷",
-    ),
-    "g_key_high_value_only": MessageLookupByLibrary.simpleMessage(
-      "শুধুমাত্র উচ্চ মান",
-    ),
-    "g_key_hw_account_added": m37,
+    "g_key_hw_account_added": m20,
     "g_key_hw_account_already_imported": MessageLookupByLibrary.simpleMessage(
       "অ্যাকাউন্ট ইতিমধ্যেই আমদানি করা হয়েছে৷",
     ),
-    "g_key_hw_accounts": MessageLookupByLibrary.simpleMessage("হিসাব"),
     "g_key_hw_add": MessageLookupByLibrary.simpleMessage("যোগ করুন"),
     "g_key_hw_add_account": MessageLookupByLibrary.simpleMessage(
       "অ্যাকাউন্ট যোগ করুন",
     ),
-    "g_key_hw_add_account_content": m38,
+    "g_key_hw_add_account_content": m21,
     "g_key_hw_address_copied": MessageLookupByLibrary.simpleMessage(
       "ঠিকানা কপি করা হয়েছে",
     ),
     "g_key_hw_ble_hint": MessageLookupByLibrary.simpleMessage(
       "সংযোগ করার আগে নিশ্চিত করুন যে আপনার ডিভাইসটি আনলক করা আছে এবং ব্লুটুথ সক্ষম করা আছে।",
     ),
-    "g_key_hw_cancel": MessageLookupByLibrary.simpleMessage("বাতিল করুন"),
     "g_key_hw_check_app": MessageLookupByLibrary.simpleMessage(
       "অ্যাপ চেক করুন",
-    ),
-    "g_key_hw_confirm_on_device": MessageLookupByLibrary.simpleMessage(
-      "আপনার ডিভাইসে নিশ্চিত করুন",
-    ),
-    "g_key_hw_connect": MessageLookupByLibrary.simpleMessage(
-      "হার্ডওয়্যার ওয়ালেট সংযুক্ত করুন",
     ),
     "g_key_hw_connect_new_device": MessageLookupByLibrary.simpleMessage(
       "নতুন ডিভাইস সংযুক্ত করুন",
@@ -2475,33 +1590,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_hw_connecting": MessageLookupByLibrary.simpleMessage(
       "সংযোগ করা হচ্ছে...",
     ),
-    "g_key_hw_current_app_label": m39,
-    "g_key_hw_days_ago": m40,
-    "g_key_hw_derivation_path": MessageLookupByLibrary.simpleMessage(
-      "ডেরিভেশন পাথ",
-    ),
+    "g_key_hw_current_app_label": m22,
+    "g_key_hw_days_ago": m23,
     "g_key_hw_disconnect": MessageLookupByLibrary.simpleMessage(
       "সংযোগ বিচ্ছিন্ন করুন",
     ),
-    "g_key_hw_disconnected": MessageLookupByLibrary.simpleMessage(
-      "সংযোগ বিচ্ছিন্ন",
-    ),
-    "g_key_hw_enable_bluetooth": MessageLookupByLibrary.simpleMessage(
-      "অনুগ্রহ করে ব্লুটুথ সক্ষম করুন৷",
-    ),
-    "g_key_hw_firmware": MessageLookupByLibrary.simpleMessage(
-      "ফার্মওয়্যার সংস্করণ",
-    ),
     "g_key_hw_go_back": MessageLookupByLibrary.simpleMessage("ফিরে যান"),
-    "g_key_hw_import_failed": m41,
+    "g_key_hw_import_failed": m24,
     "g_key_hw_keystone_connect_title": MessageLookupByLibrary.simpleMessage(
       "কীস্টোন সংযুক্ত করুন",
-    ),
-    "g_key_hw_keystone_invalid_response": MessageLookupByLibrary.simpleMessage(
-      "কীস্টোন ডিভাইস থেকে অবৈধ প্রতিক্রিয়া",
-    ),
-    "g_key_hw_keystone_scan_error": MessageLookupByLibrary.simpleMessage(
-      "QR কোড পার্স করতে ব্যর্থ হয়েছে৷ আবার চেষ্টা করুন.",
     ),
     "g_key_hw_keystone_scan_request_hint": MessageLookupByLibrary.simpleMessage(
       "লেনদেনে স্বাক্ষর করতে আপনার কীস্টোন ডিভাইস দিয়ে এই QR কোডটি স্ক্যান করুন",
@@ -2514,16 +1611,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_hw_keystone_scan_xpub_hint": MessageLookupByLibrary.simpleMessage(
       "অ্যাকাউন্ট আমদানি করতে আপনার কীস্টোন ডিভাইস থেকে QR কোড স্ক্যান করুন",
     ),
-    "g_key_hw_keystone_signature_received":
-        MessageLookupByLibrary.simpleMessage("স্বাক্ষর সফলভাবে গৃহীত হয়েছে"),
-    "g_key_hw_keystone_signing": MessageLookupByLibrary.simpleMessage(
-      "কীস্টোন স্বাক্ষরের জন্য অপেক্ষা করা হচ্ছে...",
-    ),
     "g_key_hw_keystone_tap_to_scan": MessageLookupByLibrary.simpleMessage(
       "কীস্টোন প্রতিক্রিয়া স্ক্যান করতে আলতো চাপুন",
     ),
-    "g_key_hw_last_connected": m42,
-    "g_key_hw_ledger": MessageLookupByLibrary.simpleMessage("খাতা"),
+    "g_key_hw_last_connected": m25,
     "g_key_hw_load_more": MessageLookupByLibrary.simpleMessage("আরো লোড"),
     "g_key_hw_loading_accounts": MessageLookupByLibrary.simpleMessage(
       "অ্যাকাউন্ট লোড হচ্ছে...",
@@ -2537,50 +1628,25 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_hw_no_app_open": MessageLookupByLibrary.simpleMessage(
       "বর্তমানে কোনো অ্যাপ খোলা নেই",
     ),
-    "g_key_hw_no_devices": MessageLookupByLibrary.simpleMessage(
-      "কোনো ডিভাইস পাওয়া যায়নি",
-    ),
     "g_key_hw_not_connected": MessageLookupByLibrary.simpleMessage(
       "ডিভাইস সংযুক্ত নয়",
     ),
     "g_key_hw_not_connected_label": MessageLookupByLibrary.simpleMessage(
       "সংযুক্ত নয়",
     ),
-    "g_key_hw_open_app": m43,
-    "g_key_hw_open_ledger_app_hint": m44,
-    "g_key_hw_rejected": MessageLookupByLibrary.simpleMessage(
-      "ডিভাইসে প্রত্যাখ্যান করা হয়েছে",
-    ),
+    "g_key_hw_open_ledger_app_hint": m26,
     "g_key_hw_remove": MessageLookupByLibrary.simpleMessage("সরান"),
     "g_key_hw_remove_device": MessageLookupByLibrary.simpleMessage(
       "ডিভাইস সরান",
     ),
-    "g_key_hw_remove_device_confirm": m45,
+    "g_key_hw_remove_device_confirm": m27,
     "g_key_hw_saved_devices": MessageLookupByLibrary.simpleMessage(
       "সংরক্ষিত ডিভাইস",
-    ),
-    "g_key_hw_scanning": MessageLookupByLibrary.simpleMessage(
-      "ডিভাইসের জন্য স্ক্যান করা হচ্ছে...",
-    ),
-    "g_key_hw_select_device": MessageLookupByLibrary.simpleMessage(
-      "ডিভাইস নির্বাচন করুন",
-    ),
-    "g_key_hw_sign_message": MessageLookupByLibrary.simpleMessage("সাইন মেসেজ"),
-    "g_key_hw_sign_tx": MessageLookupByLibrary.simpleMessage("সাইন লেনদেন"),
-    "g_key_hw_signal_strength": MessageLookupByLibrary.simpleMessage(
-      "সংকেত শক্তি",
     ),
     "g_key_hw_supported_devices": MessageLookupByLibrary.simpleMessage(
       "সমর্থিত ডিভাইস",
     ),
-    "g_key_hw_timeout": MessageLookupByLibrary.simpleMessage(
-      "সংযোগের সময়সীমা শেষ",
-    ),
-    "g_key_hw_title": MessageLookupByLibrary.simpleMessage(
-      "হার্ডওয়্যার ওয়ালেট",
-    ),
     "g_key_hw_today": MessageLookupByLibrary.simpleMessage("আজ"),
-    "g_key_hw_trezor": MessageLookupByLibrary.simpleMessage("ট্রেজার"),
     "g_key_hw_trezor_connect_failed": MessageLookupByLibrary.simpleMessage(
       "Trezor এর সাথে সংযোগ করতে ব্যর্থ হয়েছে. নিশ্চিত করুন যে USB সংযুক্ত আছে।",
     ),
@@ -2592,12 +1658,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_hw_trezor_connecting": MessageLookupByLibrary.simpleMessage(
       "Trezor এর সাথে সংযোগ করা হচ্ছে...",
-    ),
-    "g_key_hw_trezor_passphrase_required": MessageLookupByLibrary.simpleMessage(
-      "আপনার Trezor ডিভাইসে পাসফ্রেজ লিখুন",
-    ),
-    "g_key_hw_trezor_pin_required": MessageLookupByLibrary.simpleMessage(
-      "আপনার Trezor ডিভাইসে PIN লিখুন",
     ),
     "g_key_hw_trezor_usb_hint": MessageLookupByLibrary.simpleMessage(
       "USB তারের মাধ্যমে আপনার Trezor ডিভাইসটি সংযুক্ত করুন এবং এটি আনলক করুন৷",
@@ -2616,115 +1676,11 @@ class MessageLookup extends MessageLookupByLibrary {
       "কীস্টোর পড়তে পারিনি",
     ),
     "g_key_keystore_22": MessageLookupByLibrary.simpleMessage("কীস্টোর"),
-    "g_key_link_account": MessageLookupByLibrary.simpleMessage(
-      "অ্যাকাউন্ট লিঙ্ক করুন",
-    ),
-    "g_key_linked_accounts": MessageLookupByLibrary.simpleMessage(
-      "লিঙ্ক করা অ্যাকাউন্ট",
-    ),
     "g_key_login": MessageLookupByLibrary.simpleMessage("লগ ইন করুন"),
-    "g_key_login_success": MessageLookupByLibrary.simpleMessage(
-      "লগইন সফল হয়েছে",
-    ),
     "g_key_logout": MessageLookupByLibrary.simpleMessage("লগ আউট করুন"),
     "g_key_logout_sure": MessageLookupByLibrary.simpleMessage(
       "আপনি কি অ্যাপ থেকে প্রস্থান করার বিষয়ে নিশ্চিত?",
     ),
-    "g_key_loyalty_available_points": MessageLookupByLibrary.simpleMessage(
-      "উপলব্ধ পয়েন্ট",
-    ),
-    "g_key_loyalty_checked_today": MessageLookupByLibrary.simpleMessage(
-      "আজ চেক ইন!",
-    ),
-    "g_key_loyalty_checkin_btn": MessageLookupByLibrary.simpleMessage("চেক ইন"),
-    "g_key_loyalty_checkin_done": MessageLookupByLibrary.simpleMessage(
-      "সম্পন্ন",
-    ),
-    "g_key_loyalty_checkin_failed": MessageLookupByLibrary.simpleMessage(
-      "চেক ইন ব্যর্থ হয়েছে, আবার চেষ্টা করুন",
-    ),
-    "g_key_loyalty_checkin_success": MessageLookupByLibrary.simpleMessage(
-      "চেক-ইন সফল!",
-    ),
-    "g_key_loyalty_claim_points": MessageLookupByLibrary.simpleMessage(
-      "দাবি পয়েন্ট",
-    ),
-    "g_key_loyalty_complete_failed": MessageLookupByLibrary.simpleMessage(
-      "টাস্ক ব্যর্থ হয়েছে, আবার চেষ্টা করুন",
-    ),
-    "g_key_loyalty_complete_success": MessageLookupByLibrary.simpleMessage(
-      "টাস্ক সম্পন্ন!",
-    ),
-    "g_key_loyalty_copy": MessageLookupByLibrary.simpleMessage("কপি"),
-    "g_key_loyalty_daily_checkin": MessageLookupByLibrary.simpleMessage(
-      "দৈনিক চেক ইন",
-    ),
-    "g_key_loyalty_earn_points": m46,
-    "g_key_loyalty_earned": MessageLookupByLibrary.simpleMessage("অর্জিত"),
-    "g_key_loyalty_history": MessageLookupByLibrary.simpleMessage(
-      "পয়েন্ট ইতিহাস",
-    ),
-    "g_key_loyalty_invite": MessageLookupByLibrary.simpleMessage("আমন্ত্রণ"),
-    "g_key_loyalty_invite_bonus": m47,
-    "g_key_loyalty_invite_friends": MessageLookupByLibrary.simpleMessage(
-      "বন্ধুদের আমন্ত্রণ",
-    ),
-    "g_key_loyalty_invited_friends": MessageLookupByLibrary.simpleMessage(
-      "আমন্ত্রিত বন্ধুদের",
-    ),
-    "g_key_loyalty_max_level": MessageLookupByLibrary.simpleMessage(
-      "সর্বোচ্চ স্তর",
-    ),
-    "g_key_loyalty_next_prefix": MessageLookupByLibrary.simpleMessage(
-      "পরবর্তী",
-    ),
-    "g_key_loyalty_next_tier": MessageLookupByLibrary.simpleMessage(
-      "পরবর্তী স্তর",
-    ),
-    "g_key_loyalty_no_rewards": MessageLookupByLibrary.simpleMessage(
-      "কোন পুরস্কার উপলব্ধ নেই",
-    ),
-    "g_key_loyalty_no_tasks": MessageLookupByLibrary.simpleMessage(
-      "কোনো কাজ উপলব্ধ নেই৷",
-    ),
-    "g_key_loyalty_points": MessageLookupByLibrary.simpleMessage("পয়েন্ট"),
-    "g_key_loyalty_points_to_next": m48,
-    "g_key_loyalty_redeem": MessageLookupByLibrary.simpleMessage("খালাস"),
-    "g_key_loyalty_referral": MessageLookupByLibrary.simpleMessage("রেফারেল"),
-    "g_key_loyalty_referral_bonus": MessageLookupByLibrary.simpleMessage(
-      "রেফারেল বোনাস",
-    ),
-    "g_key_loyalty_referral_code": MessageLookupByLibrary.simpleMessage(
-      "আপনার রেফারেল কোড",
-    ),
-    "g_key_loyalty_referral_link": MessageLookupByLibrary.simpleMessage(
-      "রেফারেল লিঙ্ক",
-    ),
-    "g_key_loyalty_rewards": MessageLookupByLibrary.simpleMessage("পুরস্কার"),
-    "g_key_loyalty_share": MessageLookupByLibrary.simpleMessage("শেয়ার করুন"),
-    "g_key_loyalty_spent": MessageLookupByLibrary.simpleMessage("খরচ করেছে"),
-    "g_key_loyalty_task_complete": MessageLookupByLibrary.simpleMessage(
-      "টাস্ক সম্পূর্ণ",
-    ),
-    "g_key_loyalty_tasks": MessageLookupByLibrary.simpleMessage("কাজ"),
-    "g_key_loyalty_tier": MessageLookupByLibrary.simpleMessage("স্তর"),
-    "g_key_loyalty_tier_bronze": MessageLookupByLibrary.simpleMessage(
-      "ব্রোঞ্জ",
-    ),
-    "g_key_loyalty_tier_diamond": MessageLookupByLibrary.simpleMessage("হীরা"),
-    "g_key_loyalty_tier_gold": MessageLookupByLibrary.simpleMessage("সোনা"),
-    "g_key_loyalty_tier_platinum": MessageLookupByLibrary.simpleMessage(
-      "প্লাটিনাম",
-    ),
-    "g_key_loyalty_tier_silver": MessageLookupByLibrary.simpleMessage("সিলভার"),
-    "g_key_loyalty_title": MessageLookupByLibrary.simpleMessage("পয়েন্ট"),
-    "g_key_loyalty_total_earned": MessageLookupByLibrary.simpleMessage(
-      "মোট অর্জিত",
-    ),
-    "g_key_loyalty_total_points": MessageLookupByLibrary.simpleMessage(
-      "মোট পয়েন্ট",
-    ),
-    "g_key_loyalty_used": MessageLookupByLibrary.simpleMessage("ব্যবহৃত"),
     "g_key_m_10": MessageLookupByLibrary.simpleMessage("ফেসবুক"),
     "g_key_m_11": MessageLookupByLibrary.simpleMessage("টুইটার"),
     "g_key_m_14": MessageLookupByLibrary.simpleMessage("রেডডিট"),
@@ -2753,38 +1709,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_mnemonic": MessageLookupByLibrary.simpleMessage(
       "অনুগ্রহ করে বীজ বাক্যাংশ লিখুন",
     ),
-    "g_key_new_airdrops": MessageLookupByLibrary.simpleMessage(
-      "নতুন এয়ারড্রপ",
-    ),
-    "g_key_new_password": MessageLookupByLibrary.simpleMessage(
-      "নতুন পাসওয়ার্ড",
-    ),
-    "g_key_new_password_same_as_old": MessageLookupByLibrary.simpleMessage(
-      "নতুন পাসওয়ার্ড বর্তমান পাসওয়ার্ড থেকে আলাদা হতে হবে",
-    ),
-    "g_key_next": MessageLookupByLibrary.simpleMessage("পরবর্তী"),
     "g_key_nft_141": MessageLookupByLibrary.simpleMessage("মোট"),
-    "g_key_nft_16": MessageLookupByLibrary.simpleMessage("ক্যামেরা"),
-    "g_key_nft_17": MessageLookupByLibrary.simpleMessage("ছবি নির্বাচন করুন"),
-    "g_key_nft_18": MessageLookupByLibrary.simpleMessage("বিষয়বস্তু"),
     "g_key_nft_2": MessageLookupByLibrary.simpleMessage("নাম"),
     "g_key_nft_220": MessageLookupByLibrary.simpleMessage("ব্যাক"),
     "g_key_nft_41": MessageLookupByLibrary.simpleMessage(
       "লেনদেন জমা দেওয়া হয়েছে",
     ),
-    "g_key_nft_47": MessageLookupByLibrary.simpleMessage("ভিডিও নির্বাচন করুন"),
     "g_key_nft_address_invalid": MessageLookupByLibrary.simpleMessage(
       "অবৈধ ওয়ালেট ঠিকানা",
     ),
     "g_key_nft_balance": MessageLookupByLibrary.simpleMessage("ভারসাম্য"),
     "g_key_nft_burn_confirm": MessageLookupByLibrary.simpleMessage(
       "এই কর্ম অপরিবর্তনীয়. বার্ন ঠিকানায় NFT পাঠানো হবে।",
-    ),
-    "g_key_nft_burn_evm_only": MessageLookupByLibrary.simpleMessage(
-      "বার্ন শুধুমাত্র ইভিএম চেইনে সমর্থিত",
-    ),
-    "g_key_nft_burn_sol_unsupported": MessageLookupByLibrary.simpleMessage(
-      "সোলানা এনএফটি বার্ন শীঘ্রই আসছে",
     ),
     "g_key_nft_burn_title": MessageLookupByLibrary.simpleMessage(
       "এনএফটি বার্ন করুন",
@@ -2811,9 +1747,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_nft_no_video_support": MessageLookupByLibrary.simpleMessage(
       "ভিডিও প্লেব্যাক সমর্থিত নয়",
     ),
-    "g_key_nft_open_browser": MessageLookupByLibrary.simpleMessage(
-      "এক্সপ্লোরারে দেখুন",
-    ),
     "g_key_nft_ordinals": MessageLookupByLibrary.simpleMessage("অর্ডিনালস"),
     "g_key_nft_ordinals_unsupported": MessageLookupByLibrary.simpleMessage(
       "Ordinals স্থানান্তর এখনও সমর্থিত নয়",
@@ -2828,104 +1761,13 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_nft_token_id": MessageLookupByLibrary.simpleMessage("টোকেন আইডি"),
     "g_key_nft_type": MessageLookupByLibrary.simpleMessage("টাইপ"),
-    "g_key_no_linked_accounts": MessageLookupByLibrary.simpleMessage(
-      "কোনো লিঙ্ক করা অ্যাকাউন্ট নেই",
-    ),
-    "g_key_notification_settings": MessageLookupByLibrary.simpleMessage(
-      "বিজ্ঞপ্তি সেটিংস",
-    ),
-    "g_key_oidc_login": MessageLookupByLibrary.simpleMessage(
-      "এন্টারপ্রাইজ লগইন (SSO)",
-    ),
-    "g_key_oidc_not_configured": MessageLookupByLibrary.simpleMessage(
-      "এন্টারপ্রাইজ SSO কনফিগার করা হয়নি",
-    ),
-    "g_key_old_password": MessageLookupByLibrary.simpleMessage(
-      "বর্তমান পাসওয়ার্ড",
-    ),
-    "g_key_or": MessageLookupByLibrary.simpleMessage("বা"),
-    "g_key_password_changed_success": MessageLookupByLibrary.simpleMessage(
-      "পাসওয়ার্ড সফলভাবে পরিবর্তন করা হয়েছে",
-    ),
-    "g_key_password_min_length": MessageLookupByLibrary.simpleMessage(
-      "পাসওয়ার্ড কমপক্ষে 6 অক্ষরের হতে হবে",
-    ),
-    "g_key_password_req_different": MessageLookupByLibrary.simpleMessage(
-      "বর্তমান পাসওয়ার্ড থেকে আলাদা",
-    ),
-    "g_key_password_req_length": MessageLookupByLibrary.simpleMessage(
-      "কমপক্ষে ৬টি অক্ষর",
-    ),
-    "g_key_password_required": MessageLookupByLibrary.simpleMessage(
-      "পাসওয়ার্ড প্রয়োজন",
-    ),
-    "g_key_password_requirements": MessageLookupByLibrary.simpleMessage(
-      "পাসওয়ার্ডের প্রয়োজনীয়তা",
-    ),
-    "g_key_password_reset_success": MessageLookupByLibrary.simpleMessage(
-      "পাসওয়ার্ড সফলভাবে রিসেট করা হয়েছে",
-    ),
     "g_key_passwords_not_match": MessageLookupByLibrary.simpleMessage(
       "পাসওয়ার্ড মেলে না",
     ),
-    "g_key_payment_amount_invalid": MessageLookupByLibrary.simpleMessage(
-      "অবৈধ অর্থপ্রদানের পরিমাণ",
-    ),
-    "g_key_payment_approx_token": m49,
-    "g_key_payment_approx_usdt": m50,
-    "g_key_payment_code_title": MessageLookupByLibrary.simpleMessage(
-      "পেমেন্ট QR",
-    ),
-    "g_key_payment_confirm": MessageLookupByLibrary.simpleMessage(
-      "নিশ্চিত করুন",
-    ),
-    "g_key_payment_history": MessageLookupByLibrary.simpleMessage(
-      "পেমেন্ট ইতিহাস",
-    ),
-    "g_key_payment_history_btn": MessageLookupByLibrary.simpleMessage("ইতিহাস"),
-    "g_key_payment_incoming": MessageLookupByLibrary.simpleMessage("ইনকামিং"),
-    "g_key_payment_load_failed": MessageLookupByLibrary.simpleMessage(
-      "লোড ব্যর্থ হয়েছে",
-    ),
-    "g_key_payment_name_not_set": MessageLookupByLibrary.simpleMessage(
-      "সেট নয়",
-    ),
-    "g_key_payment_native_insufficient": MessageLookupByLibrary.simpleMessage(
-      "অপর্যাপ্ত দেশীয় ভারসাম্য!",
-    ),
-    "g_key_payment_native_not_found": MessageLookupByLibrary.simpleMessage(
-      "দেশীয় চেইন পাওয়া যায়নি!",
-    ),
-    "g_key_payment_outgoing": MessageLookupByLibrary.simpleMessage("বহির্মুখী"),
-    "g_key_payment_set_amount_title": MessageLookupByLibrary.simpleMessage(
-      "পেমেন্টের পরিমাণ সেট করুন",
-    ),
-    "g_key_payment_success": MessageLookupByLibrary.simpleMessage(
-      "পেমেন্ট সফল!",
-    ),
-    "g_key_payment_title": MessageLookupByLibrary.simpleMessage("পেমেন্ট"),
-    "g_key_payment_usdt_insufficient": MessageLookupByLibrary.simpleMessage(
-      "অপর্যাপ্ত USDT ব্যালেন্স!",
-    ),
-    "g_key_payment_usdt_not_found": MessageLookupByLibrary.simpleMessage(
-      "USDT টোকেন যোগ করুন!",
-    ),
-    "g_key_payment_wallet": MessageLookupByLibrary.simpleMessage("ওয়ালেট"),
     "g_key_personal_1": MessageLookupByLibrary.simpleMessage(
       "ফোন গ্যালারি থেকে নির্বাচন করুন",
     ),
-    "g_key_resend_code": MessageLookupByLibrary.simpleMessage("কোড আবার পাঠান"),
     "g_key_reset": MessageLookupByLibrary.simpleMessage("রিসেট করুন"),
-    "g_key_reset_password": MessageLookupByLibrary.simpleMessage(
-      "পাসওয়ার্ড রিসেট করুন",
-    ),
-    "g_key_reset_password_email_desc": MessageLookupByLibrary.simpleMessage(
-      "একটি যাচাইকরণ কোড পেতে আপনার ইমেল ঠিকানা লিখুন",
-    ),
-    "g_key_saml_login": MessageLookupByLibrary.simpleMessage("SAML লগইন"),
-    "g_key_saml_not_configured": MessageLookupByLibrary.simpleMessage(
-      "SAML কনফিগার করা হয়নি",
-    ),
     "g_key_security_goplus_caution": MessageLookupByLibrary.simpleMessage(
       "সাবধানতা ব্যবহার করুন",
     ),
@@ -2941,15 +1783,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_security_goplus_safe": MessageLookupByLibrary.simpleMessage(
       "চুক্তি যাচাই করা নিরাপদ",
     ),
-    "g_key_send_code": MessageLookupByLibrary.simpleMessage(
-      "যাচাইকরণ কোড পাঠান",
-    ),
     "g_key_send_memo_hint": MessageLookupByLibrary.simpleMessage("মেমো / নোট"),
     "g_key_send_memo_label": MessageLookupByLibrary.simpleMessage(
       "মেমো / নোট (ঐচ্ছিক)",
-    ),
-    "g_key_set_new_password_desc": MessageLookupByLibrary.simpleMessage(
-      "আপনার নতুন পাসওয়ার্ড সেট করুন",
     ),
     "g_key_share_code": MessageLookupByLibrary.simpleMessage(
       "QR কোড শেয়ার করুন",
@@ -2958,14 +1794,11 @@ class MessageLookup extends MessageLookupByLibrary {
       "লিঙ্ক শেয়ার করুন",
     ),
     "g_key_share_method": MessageLookupByLibrary.simpleMessage("শেয়ার পদ্ধতি"),
-    "g_key_sign_in_failed": MessageLookupByLibrary.simpleMessage(
-      "সাইন ইন ব্যর্থ হয়েছে৷",
-    ),
-    "g_key_sim_gas_estimate": m51,
+    "g_key_sim_gas_estimate": m28,
     "g_key_sim_reverted": MessageLookupByLibrary.simpleMessage(
       "লেনদেন সম্ভবত ব্যর্থ হবে",
     ),
-    "g_key_sim_reverted_reason": m52,
+    "g_key_sim_reverted_reason": m29,
     "g_key_sim_simulating": MessageLookupByLibrary.simpleMessage(
       "লেনদেন অনুকরণ করা হচ্ছে...",
     ),
@@ -2975,17 +1808,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_sim_unavailable": MessageLookupByLibrary.simpleMessage(
       "এই নেটওয়ার্কের জন্য সিমুলেশন অনুপলব্ধ৷",
     ),
-    "g_key_social_login": MessageLookupByLibrary.simpleMessage("সামাজিক লগইন"),
     "g_key_squad": MessageLookupByLibrary.simpleMessage("চ্যাট"),
-    "g_key_squad_k11": MessageLookupByLibrary.simpleMessage(
-      "ফাইলটি আপলোড করার জন্য খুব বড়",
-    ),
-    "g_key_squad_k15": m53,
-    "g_key_squad_k18": MessageLookupByLibrary.simpleMessage("যোগাযোগ যোগ করুন"),
-    "g_key_squad_k24": MessageLookupByLibrary.simpleMessage("যোগাযোগ"),
-    "g_key_squad_k25": MessageLookupByLibrary.simpleMessage(
-      "ইমেল দ্বারা অনুসন্ধান করুন",
-    ),
     "g_key_stake_active": MessageLookupByLibrary.simpleMessage("সক্রিয়"),
     "g_key_stake_active_positions": MessageLookupByLibrary.simpleMessage(
       "সক্রিয় অবস্থান",
@@ -2996,14 +1819,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_stake_apy": MessageLookupByLibrary.simpleMessage("এপিওয়াই"),
     "g_key_stake_avg_apy": MessageLookupByLibrary.simpleMessage("গড় APY"),
-    "g_key_stake_claim": MessageLookupByLibrary.simpleMessage(
-      "পুরস্কার দাবি করুন",
-    ),
     "g_key_stake_commission": MessageLookupByLibrary.simpleMessage("কমিশন"),
-    "g_key_stake_d_unbond": m54,
-    "g_key_stake_days_left": m55,
-    "g_key_stake_days_remaining": m56,
-    "g_key_stake_delegators": MessageLookupByLibrary.simpleMessage("প্রতিনিধি"),
+    "g_key_stake_d_unbond": m30,
+    "g_key_stake_days_remaining": m31,
     "g_key_stake_estimated_daily": MessageLookupByLibrary.simpleMessage(
       "অনুমান। দৈনিক পুরস্কার",
     ),
@@ -3013,7 +1831,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_stake_go_to_swap": MessageLookupByLibrary.simpleMessage(
       "Swap এ যান",
     ),
-    "g_key_stake_liquid": MessageLookupByLibrary.simpleMessage("তরল স্টেকিং"),
     "g_key_stake_liquid_staking_label": MessageLookupByLibrary.simpleMessage(
       "তরল স্টেকিং",
     ),
@@ -3028,9 +1845,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "কোন সক্রিয় অবস্থান unstake",
     ),
     "g_key_stake_no_lock": MessageLookupByLibrary.simpleMessage("তালা নেই"),
-    "g_key_stake_no_positions": MessageLookupByLibrary.simpleMessage(
-      "কোন staking অবস্থান",
-    ),
     "g_key_stake_no_positions_yet": MessageLookupByLibrary.simpleMessage(
       "এখনও কোন staking অবস্থান",
     ),
@@ -3043,15 +1857,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_stake_overview": MessageLookupByLibrary.simpleMessage(
       "টোটাল স্টেকিং ওভারভিউ",
     ),
-    "g_key_stake_pending_rewards": MessageLookupByLibrary.simpleMessage(
-      "মুলতুবি পুরস্কার",
-    ),
     "g_key_stake_positions": MessageLookupByLibrary.simpleMessage(
       "আমার অবস্থান",
     ),
-    "g_key_stake_protocol": MessageLookupByLibrary.simpleMessage("প্রোটোকল"),
     "g_key_stake_protocols": MessageLookupByLibrary.simpleMessage("প্রোটোকল"),
-    "g_key_stake_restake": MessageLookupByLibrary.simpleMessage("রিস্টেক"),
     "g_key_stake_rewards": MessageLookupByLibrary.simpleMessage("পুরস্কার"),
     "g_key_stake_search_validator": MessageLookupByLibrary.simpleMessage(
       "যাচাইকারী অনুসন্ধান করুন...",
@@ -3074,30 +1883,19 @@ class MessageLookup extends MessageLookupByLibrary {
       "স্টেকিং শুরু করুন",
     ),
     "g_key_stake_title": MessageLookupByLibrary.simpleMessage("স্টেকিং"),
-    "g_key_stake_total_staked": MessageLookupByLibrary.simpleMessage(
-      "টোটাল স্টেকড",
-    ),
     "g_key_stake_tx_prepared": MessageLookupByLibrary.simpleMessage(
       "লেনদেন সফলভাবে প্রস্তুত করা হয়েছে",
     ),
     "g_key_stake_unbonding": MessageLookupByLibrary.simpleMessage("বন্ধন"),
-    "g_key_stake_unbonding_period": MessageLookupByLibrary.simpleMessage(
-      "আনবন্ডিং পিরিয়ড",
-    ),
-    "g_key_stake_unbonding_warning": m57,
+    "g_key_stake_unbonding_warning": m32,
     "g_key_stake_unstake": MessageLookupByLibrary.simpleMessage("আনস্টেক"),
     "g_key_stake_updating": MessageLookupByLibrary.simpleMessage(
       "আপডেট হচ্ছে...",
     ),
-    "g_key_stake_uptime": MessageLookupByLibrary.simpleMessage("আপটাইম"),
     "g_key_stake_validator": MessageLookupByLibrary.simpleMessage("যাচাইকারী"),
-    "g_key_stake_validators": MessageLookupByLibrary.simpleMessage("যাচাইকারী"),
     "g_key_stake_you_receive": MessageLookupByLibrary.simpleMessage(
       "আপনি পাবেন",
     ),
-    "g_key_step_email": MessageLookupByLibrary.simpleMessage("ইমেইল"),
-    "g_key_step_password": MessageLookupByLibrary.simpleMessage("পাসওয়ার্ড"),
-    "g_key_step_verify": MessageLookupByLibrary.simpleMessage("যাচাই করুন"),
     "g_key_t_1": MessageLookupByLibrary.simpleMessage("সম্পূর্ণ"),
     "g_key_t_15": MessageLookupByLibrary.simpleMessage("গ্যাসের দাম"),
     "g_key_t_16": MessageLookupByLibrary.simpleMessage("সর্বোচ্চ গ্যাস ফি"),
@@ -3105,14 +1903,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "গ্যাস প্রতি সর্বোচ্চ ফি",
     ),
     "g_key_t_2": MessageLookupByLibrary.simpleMessage("মুলতুবি"),
-    "g_key_t_29": m58,
+    "g_key_t_29": m33,
     "g_key_t_3": MessageLookupByLibrary.simpleMessage("ব্যর্থতা"),
-    "g_key_t_30": MessageLookupByLibrary.simpleMessage("মাইনার ফি"),
     "g_key_t_31": MessageLookupByLibrary.simpleMessage("এগিয়ে যান"),
     "g_key_t_32": MessageLookupByLibrary.simpleMessage("ওয়ালেট পাসওয়ার্ড"),
-    "g_key_t_33": MessageLookupByLibrary.simpleMessage(
-      "ওয়ালেট পাসওয়ার্ড খালি হতে পারে না",
-    ),
     "g_key_t_34": MessageLookupByLibrary.simpleMessage(
       "ভুল ওয়ালেট পাসওয়ার্ড",
     ),
@@ -3128,7 +1922,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "0 এর থেকে বড় একটি পূর্ণ সংখ্যা লিখুন।",
     ),
     "g_key_t_44": MessageLookupByLibrary.simpleMessage("ডেটা পেতে ব্যর্থ"),
-    "g_key_t_45": m59,
+    "g_key_t_45": m34,
     "g_key_t_46": MessageLookupByLibrary.simpleMessage(
       "প্রাপ্তির ঠিকানা অ্যাকাউন্ট চেক করুন",
     ),
@@ -3139,7 +1933,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_t_51": MessageLookupByLibrary.simpleMessage(
       "অ্যাকাউন্ট যাচাইকরণ সফল হয়েছে৷",
     ),
-    "g_key_t_52": m60,
+    "g_key_t_52": m35,
     "g_key_t_54": MessageLookupByLibrary.simpleMessage(
       "প্রাপ্তির ঠিকানার একটি অ্যাকাউন্ট নেই এবং প্রথম স্থানান্তরটি কমপক্ষে 10XRP",
     ),
@@ -3147,18 +1941,14 @@ class MessageLookup extends MessageLookupByLibrary {
       "গ্যাস ব্যবহার করা হয়েছে",
     ),
     "g_key_t_7": MessageLookupByLibrary.simpleMessage("গ্যাস"),
-    "g_key_time_days_ago": m61,
-    "g_key_time_hours_ago": m62,
-    "g_key_time_just_now": MessageLookupByLibrary.simpleMessage("এইমাত্র"),
-    "g_key_time_minutes_ago": m63,
     "g_key_token_discovery_add": MessageLookupByLibrary.simpleMessage(
       "যোগ করুন",
     ),
-    "g_key_token_discovery_add_selected": m64,
+    "g_key_token_discovery_add_selected": m36,
     "g_key_token_discovery_added": MessageLookupByLibrary.simpleMessage(
       "টোকেন যোগ করা হয়েছে",
     ),
-    "g_key_token_discovery_banner": m65,
+    "g_key_token_discovery_banner": m37,
     "g_key_token_discovery_deselect_all": MessageLookupByLibrary.simpleMessage(
       "সব বাদ দিন",
     ),
@@ -3196,35 +1986,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_tx_no_results": MessageLookupByLibrary.simpleMessage(
       "কোনো লেনদেন আপনার ফিল্টার মেলে না",
     ),
-    "g_key_u_10": MessageLookupByLibrary.simpleMessage("NFT প্রকার"),
-    "g_key_u_11": MessageLookupByLibrary.simpleMessage("অনুসারী"),
-    "g_key_u_12": MessageLookupByLibrary.simpleMessage("ব্যবহারকারীর ধরন"),
-    "g_key_u_13": MessageLookupByLibrary.simpleMessage("ওয়েবসাইট"),
-    "g_key_u_14": MessageLookupByLibrary.simpleMessage("পণ্য লিঙ্ক"),
-    "g_key_u_15": MessageLookupByLibrary.simpleMessage("মিডিয়া প্ল্যাটফর্ম"),
-    "g_key_u_16": MessageLookupByLibrary.simpleMessage("ওয়ালেট ঠিকানা"),
-    "g_key_u_2": MessageLookupByLibrary.simpleMessage("ডাকনাম"),
-    "g_key_u_23": MessageLookupByLibrary.simpleMessage(
-      "অবতার আপলোড ব্যর্থ হয়েছে৷",
-    ),
-    "g_key_u_3": MessageLookupByLibrary.simpleMessage("বর্ণনা"),
-    "g_key_u_5": MessageLookupByLibrary.simpleMessage("শিল্পীর তথ্য"),
-    "g_key_u_6": MessageLookupByLibrary.simpleMessage("আপনি শিল্পী নন"),
-    "g_key_u_7": MessageLookupByLibrary.simpleMessage(
-      "শিল্পী হওয়ার আবেদন করতে এখানে ক্লিক করুন",
-    ),
-    "g_key_u_8": MessageLookupByLibrary.simpleMessage("নাম"),
-    "g_key_u_9": MessageLookupByLibrary.simpleMessage("রাজস্ব"),
-    "g_key_unlink_account": MessageLookupByLibrary.simpleMessage(
-      "অ্যাকাউন্ট আনলিঙ্ক করুন",
-    ),
-    "g_key_user_p1": MessageLookupByLibrary.simpleMessage(
-      "আমি পড়েছি এবং গ্রহণ করেছি ",
-    ),
-    "g_key_user_p2": MessageLookupByLibrary.simpleMessage("শর্তাবলী"),
-    "g_key_user_p3": MessageLookupByLibrary.simpleMessage(
-      "গোপনীয়তা নীতি এবং ব্যক্তিগত তথ্য সংগ্রহ বিবৃতি",
-    ),
     "g_key_uuid": MessageLookupByLibrary.simpleMessage("UUID"),
     "g_key_v_k1": MessageLookupByLibrary.simpleMessage(
       "সর্বশেষ সংস্করণ খুঁজুন",
@@ -3236,15 +1997,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_v_k4": MessageLookupByLibrary.simpleMessage(
       "ইতিমধ্যে সর্বশেষ সংস্করণ",
     ),
-    "g_key_verification_code": MessageLookupByLibrary.simpleMessage(
-      "যাচাইকরণ কোড",
-    ),
-    "g_key_verification_code_sent": m66,
     "g_key_wallet_c10": MessageLookupByLibrary.simpleMessage(
       "দেখুন বীজ বাক্যাংশ",
-    ),
-    "g_key_wallet_c11": MessageLookupByLibrary.simpleMessage(
-      "অনুগ্রহ করে নিশ্চিত করুন যে আপনি আপনার বীজ বাক্যাংশ রেকর্ড করুন এবং এটি নিরাপদে সংরক্ষণ করুন।",
     ),
     "g_key_wallet_c12": MessageLookupByLibrary.simpleMessage(
       "এখন আবার আপনার বীজ বাক্যাংশ স্থাপন করার চেষ্টা করুন.",
@@ -3371,17 +2125,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_wallet_k56": MessageLookupByLibrary.simpleMessage("ননস"),
     "g_key_wallet_k57": MessageLookupByLibrary.simpleMessage("ত্বরান্বিত করুন"),
     "g_key_wallet_k58": MessageLookupByLibrary.simpleMessage("দ্রষ্টব্য"),
-    "g_key_wallet_m1": m67,
-    "g_key_wallet_m11": MessageLookupByLibrary.simpleMessage(
-      "আপনি কি আপনার অ্যাকাউন্ট বাতিল করার বিষয়ে নিশ্চিত?",
-    ),
-    "g_key_wallet_m13": MessageLookupByLibrary.simpleMessage(
-      "লগআউট নিশ্চিত করুন",
-    ),
-    "g_key_wallet_m17": MessageLookupByLibrary.simpleMessage(
-      "অনুগ্রহ করে Google যাচাইকরণ কোড লিখুন।",
-    ),
-    "g_key_wallet_m19": m68,
+    "g_key_wallet_m1": m38,
+    "g_key_wallet_m19": m39,
     "g_key_wallet_m2": MessageLookupByLibrary.simpleMessage(
       "বর্তমান টোকেন যোগ করা হয়নি.",
     ),
@@ -3391,24 +2136,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_wallet_m22": MessageLookupByLibrary.simpleMessage(
       "ওয়ালেট আমদানি করুন",
     ),
-    "g_key_wallet_m3": m69,
+    "g_key_wallet_m3": m40,
     "g_key_wallet_m4": MessageLookupByLibrary.simpleMessage(
       "বর্তমান টোকেন ব্যালেন্স অপর্যাপ্ত।",
     ),
-    "g_key_wallet_m5": m70,
+    "g_key_wallet_m5": m41,
     "g_key_wallet_m6": MessageLookupByLibrary.simpleMessage("স্বাক্ষর ত্রুটি"),
-    "g_key_wallet_m8": MessageLookupByLibrary.simpleMessage("অ্যাকাউন্ট বাতিল"),
-    "g_key_wallet_m9": MessageLookupByLibrary.simpleMessage(
-      "ইমেল যাচাইকরণ কোড লিখুন।",
-    ),
     "g_key_wallet_manage": MessageLookupByLibrary.simpleMessage(
       "ওয়ালেট পরিচালনা করুন",
     ),
     "g_key_watch_address_hint": MessageLookupByLibrary.simpleMessage(
       "Ethereum ঠিকানা লিখুন (0x...)",
-    ),
-    "g_key_watch_only_banner": MessageLookupByLibrary.simpleMessage(
-      "শুধুমাত্র দেখার জন্য",
     ),
     "g_key_watch_only_cant_send": MessageLookupByLibrary.simpleMessage(
       "শুধুমাত্র ওয়াচ ওয়ালেট লেনদেন পাঠাতে বা স্বাক্ষর করতে পারে না",
@@ -3419,15 +2157,15 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_xml_0": MessageLookupByLibrary.simpleMessage("সংরক্ষিত"),
     "g_key_xml_1": MessageLookupByLibrary.simpleMessage("বেস রিজার্ভ"),
-    "g_key_xml_11": m71,
+    "g_key_xml_11": m42,
     "g_key_xml_2": MessageLookupByLibrary.simpleMessage(
       "ইনক্রিমেন্টাল রিজার্ভ",
     ),
-    "g_key_xml_22": m72,
+    "g_key_xml_22": m43,
     "g_key_xml_3": MessageLookupByLibrary.simpleMessage(
       "মালিকানাধীন বস্তুর সংখ্যা",
     ),
-    "g_key_xml_33": m73,
+    "g_key_xml_33": m44,
     "g_key_xml_4": MessageLookupByLibrary.simpleMessage(
       "মোট সংরক্ষিত পরিমাণ কীভাবে গণনা করবেন",
     ),
@@ -3437,51 +2175,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_lock_key1": MessageLookupByLibrary.simpleMessage(
       "টাচ আইডি এবং ফেস আইডি",
     ),
-    "g_lock_key10": MessageLookupByLibrary.simpleMessage("বর্তমান পাসওয়ার্ড"),
-    "g_lock_key11": MessageLookupByLibrary.simpleMessage("নতুন পাসওয়ার্ড"),
-    "g_lock_key12": MessageLookupByLibrary.simpleMessage(
-      "নতুন পাসওয়ার্ড নিশ্চিত করুন",
-    ),
-    "g_lock_key13": MessageLookupByLibrary.simpleMessage("6-সংখ্যার সংখ্যা"),
-    "g_lock_key15": MessageLookupByLibrary.simpleMessage(
-      "পাসওয়ার্ড এবং বায়োমেট্রিক্স",
-    ),
-    "g_lock_key16": MessageLookupByLibrary.simpleMessage(
-      "প্যাটার্ন পাসওয়ার্ড",
-    ),
-    "g_lock_key17": MessageLookupByLibrary.simpleMessage(
-      "প্যাটার্ন পাসকোড সেট করুন",
-    ),
-    "g_lock_key18": MessageLookupByLibrary.simpleMessage(
-      "আপনার অ্যাকাউন্ট নিরাপত্তার জন্য, একটি গ্রুপ পাসওয়ার্ড সেট করুন",
-    ),
-    "g_lock_key19": MessageLookupByLibrary.simpleMessage(
-      "সেকেন্ডারি অঙ্কন প্যাটার্ন পাসওয়ার্ড",
-    ),
-    "g_lock_key20": MessageLookupByLibrary.simpleMessage(
-      "প্যাটার্ন পাসওয়ার্ড আঁকুন",
-    ),
-    "g_lock_key21": m74,
-    "g_lock_key22": MessageLookupByLibrary.simpleMessage(
-      "প্যাটার্ন পাসওয়ার্ড রিসেট করুন",
-    ),
-    "g_lock_key23": MessageLookupByLibrary.simpleMessage(
-      "অনেকগুলি ভুল ইনপুট, অনুগ্রহ করে পাসওয়ার্ড রিসেট করুন৷",
-    ),
     "g_lock_key24": MessageLookupByLibrary.simpleMessage(
       "ওয়ালেট পাসওয়ার্ড যোগ করবেন?",
     ),
-    "g_lock_key25": m75,
     "g_lock_key26": MessageLookupByLibrary.simpleMessage(
       "Transfer Verification",
     ),
     "g_lock_key27": MessageLookupByLibrary.simpleMessage(
       "Require biometric authentication (Face ID / fingerprint) to confirm each wallet transfer.",
     ),
-    "g_lock_key3": MessageLookupByLibrary.simpleMessage(
-      "স্ক্রিন পৃষ্ঠা লক করুন",
-    ),
-    "g_lock_key4": MessageLookupByLibrary.simpleMessage("অটো-লক"),
     "g_lock_key5": MessageLookupByLibrary.simpleMessage("সফল হয়েছে"),
     "g_lock_key6": MessageLookupByLibrary.simpleMessage("ব্যর্থ হয়েছে"),
     "g_lock_key7": MessageLookupByLibrary.simpleMessage(
@@ -3490,9 +2192,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_lock_key8": MessageLookupByLibrary.simpleMessage(
       "বায়োমেট্রিক যাচাইকরণ যোগ করুন?",
     ),
-    "g_lock_key9": MessageLookupByLibrary.simpleMessage(
-      "পাসওয়ার্ড রিসেট করুন",
-    ),
     "g_market_30d_change": MessageLookupByLibrary.simpleMessage("30D পরিবর্তন"),
     "g_market_7d_change": MessageLookupByLibrary.simpleMessage("7D পরিবর্তন"),
     "g_market_ath": MessageLookupByLibrary.simpleMessage("ATH"),
@@ -3500,9 +2199,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_market_depth": MessageLookupByLibrary.simpleMessage("বাজারের গভীরতা"),
     "g_market_empty_watchlist": MessageLookupByLibrary.simpleMessage(
       "এখনো কোনো ওয়াচলিস্ট নেই",
-    ),
-    "g_market_empty_watchlist_hint": MessageLookupByLibrary.simpleMessage(
-      "যোগ করতে যেকোন কয়েনে ★ আলতো চাপুন",
     ),
     "g_market_fdv": MessageLookupByLibrary.simpleMessage("এফডিভি"),
     "g_market_high_24h": MessageLookupByLibrary.simpleMessage("উচ্চ 24H"),
@@ -3527,7 +2223,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_inactivity_warning": MessageLookupByLibrary.simpleMessage(
       "যাচাইকারী নিষ্ক্রিয়তার স্কোর বেশি। জরিমানা এড়াতে আপনার নোড স্থিতি পরীক্ষা করুন।",
     ),
-    "g_mining_key15": MessageLookupByLibrary.simpleMessage("টাস্ক বিস্তারিত"),
     "g_mining_key20": MessageLookupByLibrary.simpleMessage("আনলক এন?"),
     "g_mining_key31": MessageLookupByLibrary.simpleMessage(
       "ক্লাউড যাচাইকরণ কার্যকলাপ",
@@ -3552,13 +2247,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "বন্ধুদের শেয়ার করুন",
     ),
     "g_mining_key62": MessageLookupByLibrary.simpleMessage("চালিয়ে যান"),
-    "g_mining_key63": m76,
-    "g_mining_key7": MessageLookupByLibrary.simpleMessage("তারিখ আনলক করুন"),
-    "g_mining_key73": m77,
+    "g_mining_key63": m45,
+    "g_mining_key73": m46,
     "g_mining_key74": MessageLookupByLibrary.simpleMessage(
       "আমি শুধু @N42Wallet এ একটি নোড সেট আপ করেছি এবং মোবাইল ডিভাইসে যাচাইকরণ শুরু করেছি! আসুন এবং আমার সাথে যোগ দিন। বিকেন্দ্রীভূত ভবিষ্যৎ মোবাইল!",
     ),
-    "g_mining_key76": m78,
+    "g_mining_key76": m47,
     "g_mining_key82": MessageLookupByLibrary.simpleMessage("খনিজ"),
     "g_mining_key83": MessageLookupByLibrary.simpleMessage("নোড"),
     "g_mining_key84": MessageLookupByLibrary.simpleMessage("নেটওয়ার্ক"),
@@ -3578,9 +2272,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_mining_key_101": MessageLookupByLibrary.simpleMessage("ডেটা কপি করুন"),
     "g_mining_key_102": MessageLookupByLibrary.simpleMessage("নিষ্ক্রিয়"),
-    "g_mining_key_103": MessageLookupByLibrary.simpleMessage(
-      "যাচাইকারী তালিকা",
-    ),
     "g_mining_key_104": MessageLookupByLibrary.simpleMessage("আমদানি সফল"),
     "g_mining_key_105": MessageLookupByLibrary.simpleMessage(
       "এনক্রিপ্ট করা ডেটা খালি হতে পারে না!",
@@ -3594,7 +2285,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_108": MessageLookupByLibrary.simpleMessage(
       "অসমর্থিত এনক্রিপ্টেড ডেটা ফরম্যাট!",
     ),
-    "g_mining_key_109": m79,
+    "g_mining_key_109": m48,
     "g_mining_key_11": MessageLookupByLibrary.simpleMessage("গতকালের পুরস্কার"),
     "g_mining_key_110": MessageLookupByLibrary.simpleMessage(
       "এনক্রিপ্ট করা ডেটা",
@@ -3612,7 +2303,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_115": MessageLookupByLibrary.simpleMessage(
       "খালাস কিছু সময় লাগে, একটু অপেক্ষা করুন!",
     ),
-    "g_mining_key_116": m80,
+    "g_mining_key_116": m49,
     "g_mining_key_12": MessageLookupByLibrary.simpleMessage(
       "পুরস্কার প্রতিদিন জমা হয় এবং শুধুমাত্র আপনার N ওয়ালেটে পাঠানো হয় যখন এটি ~0.5 N-এ পৌঁছায়।",
     ),
@@ -3625,7 +2316,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_21": MessageLookupByLibrary.simpleMessage(
       "যাচাইকরণের পর থেকে",
     ),
-    "g_mining_key_22": MessageLookupByLibrary.simpleMessage("পুরস্কার বিতরণ"),
     "g_mining_key_23": MessageLookupByLibrary.simpleMessage("লাভের হিসাব"),
     "g_mining_key_24": MessageLookupByLibrary.simpleMessage("যাচাইকৃত মান"),
     "g_mining_key_31": MessageLookupByLibrary.simpleMessage(
@@ -3689,12 +2379,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_70": MessageLookupByLibrary.simpleMessage(
       "100 ব্লক/দিন~15 মিনিট",
     ),
-    "g_mining_key_71": m81,
+    "g_mining_key_71": m50,
     "g_mining_key_72": MessageLookupByLibrary.simpleMessage(
       "প্রতি চেক 128 সেকেন্ড",
-    ),
-    "g_mining_key_73": MessageLookupByLibrary.simpleMessage(
-      "ক্লাউড ভেরিফিকেশন শুরু হয়েছে",
     ),
     "g_mining_key_74": MessageLookupByLibrary.simpleMessage(
       "পরীক্ষার চেইন আপগ্রেড করা হচ্ছে এবং ব্লকগুলি সাময়িকভাবে যাচাই করা যাবে না।",
@@ -3752,7 +2439,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_97": MessageLookupByLibrary.simpleMessage(
       "দয়া করে এনক্রিপশন পাসওয়ার্ড লিখুন",
     ),
-    "g_mining_key_98": m82,
+    "g_mining_key_98": m51,
     "g_mining_key_99": MessageLookupByLibrary.simpleMessage(
       "আপনার পাসওয়ার্ডটি সঠিক কিনা তা নিশ্চিত করতে দয়া করে পুনরায় প্রবেশ করুন৷",
     ),
@@ -3775,8 +2462,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_news_empty": MessageLookupByLibrary.simpleMessage(
       "কোন খবর পাওয়া যায় না",
     ),
-    "g_news_source": MessageLookupByLibrary.simpleMessage("উৎস"),
-    "g_notification_key_1": MessageLookupByLibrary.simpleMessage("বিজ্ঞপ্তি"),
     "g_phishing_go_back": MessageLookupByLibrary.simpleMessage(
       "ফিরে যান (নিরাপদ)",
     ),
@@ -3797,11 +2482,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_pnl_buy_price_usd": MessageLookupByLibrary.simpleMessage(
       "দাম কিনুন (USD)",
     ),
-    "g_pnl_cancel": MessageLookupByLibrary.simpleMessage("বাতিল করুন"),
     "g_pnl_cost_basis": MessageLookupByLibrary.simpleMessage("খরচের ভিত্তি"),
-    "g_pnl_no_trades": MessageLookupByLibrary.simpleMessage(
-      "কোন ট্রেড রেকর্ড করা",
-    ),
     "g_pnl_quantity": MessageLookupByLibrary.simpleMessage("পরিমাণ"),
     "g_pnl_save": MessageLookupByLibrary.simpleMessage("সংরক্ষণ করুন"),
     "g_pnl_unrealized": MessageLookupByLibrary.simpleMessage("অবাস্তব P&L"),
@@ -3837,9 +2518,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_referral_invited": MessageLookupByLibrary.simpleMessage("আমন্ত্রিত"),
     "g_referral_mining": MessageLookupByLibrary.simpleMessage("মাইনিং নোড"),
     "g_referral_reward": MessageLookupByLibrary.simpleMessage("পুরস্কার (N)"),
-    "g_referral_stats_title": MessageLookupByLibrary.simpleMessage(
-      "রেফারেল পরিসংখ্যান",
-    ),
     "g_setting_mining_v1_label": MessageLookupByLibrary.simpleMessage(
       "ক্লাসিক মাইনিং (V1)",
     ),
@@ -3865,7 +2543,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("লিঙ্ক"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("কোড"),
-    "g_swap_key_14": m83,
+    "g_swap_key_14": m52,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "মুদ্রা মূল্য ত্রুটি পান.",
     ),
@@ -3877,7 +2555,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "আপনার অদলবদল শীঘ্রই বিতরণ করা হবে৷ দয়া করে ধৈর্য ধরুন৷",
     ),
-    "g_swap_key_20": m84,
+    "g_swap_key_20": m53,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "একটি নোড চালানোর খরচ: গ্রুপ যাচাইকরণ 1-49 N বেসিক নোড: 50 N প্রিমিয়াম নোড: 100 N প্রো নোড: 500 N।",
     ),
@@ -3891,7 +2569,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("নতুন ব্যালেন্স"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("তুমি টাকা দাও"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("তারিখ"),
-    "g_swap_key_31": m85,
+    "g_swap_key_31": m54,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "অদলবদলগুলি প্রাসঙ্গিক চেইন এক্সপ্লোরারগুলিতে দেখা যেতে পারে (ইথারস্ক্যান, বিএসসিস্ক্যান, ট্রনস্ক্যান এবং আমাদের নিজস্ব)।",
     ),
@@ -3906,7 +2584,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "ডিফল্টে রিসেট করুন",
     ),
-    "g_token_m_key_1": m86,
+    "g_token_m_key_1": m55,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "বিদ্যমান টোকেনগুলির জাল সংস্করণ তৈরি সহ যে কেউ একটি টোকেন তৈরি করতে পারে৷ এটি আমদানি করার আগে সর্বদা একটি টোকেন গবেষণা করুন।",
     ),
@@ -3919,16 +2597,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_15": MessageLookupByLibrary.simpleMessage("চেইন আইডি"),
     "g_token_m_key_16": MessageLookupByLibrary.simpleMessage("দশমিক"),
     "g_token_m_key_17": MessageLookupByLibrary.simpleMessage("আরপিসি"),
-    "g_token_m_key_18": MessageLookupByLibrary.simpleMessage("API"),
     "g_token_m_key_19": MessageLookupByLibrary.simpleMessage(
       "কাস্টম চেইন যোগ করুন",
     ),
     "g_token_m_key_2": MessageLookupByLibrary.simpleMessage("0~18 uint"),
     "g_token_m_key_20": MessageLookupByLibrary.simpleMessage("টোকেন যোগ করুন"),
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage("বিন্যাস ত্রুটি!"),
-    "g_token_m_key_22": m87,
-    "g_token_m_key_23": m88,
-    "g_token_m_key_24": m89,
+    "g_token_m_key_22": m56,
+    "g_token_m_key_23": m57,
+    "g_token_m_key_24": m58,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage(
       "টোকেন আমদানি করুন",
     ),
@@ -3941,21 +2618,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("সতর্কতা"),
     "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("উচ্চ ঝুঁকি"),
     "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("নিরাপদ"),
-    "g_unlock_key10": m90,
-    "g_unlock_key2": MessageLookupByLibrary.simpleMessage(
-      "আঙুলের ছাপ বা মুখ শনাক্তকরণ সক্ষম নয়?",
-    ),
-    "g_unlock_key3": MessageLookupByLibrary.simpleMessage(
-      "প্যাটার্ন পাসওয়ার্ড আঁকুন",
-    ),
-    "g_unlock_key4": m91,
-    "g_unlock_key5": MessageLookupByLibrary.simpleMessage("পাসওয়ার্ড লিখুন"),
-    "g_unlock_key6": m92,
-    "g_unlock_key7": MessageLookupByLibrary.simpleMessage(
-      "প্রমাণীকরণ ব্যর্থ হয়েছে৷",
-    ),
-    "g_unlock_key8": m93,
-    "g_unlock_key9": MessageLookupByLibrary.simpleMessage("আপনিও পারবেন "),
     "g_version_later": MessageLookupByLibrary.simpleMessage("পরে"),
     "g_wc_connection_lost": MessageLookupByLibrary.simpleMessage(
       "সংযোগ বিচ্ছিন্ন। অনুগ্রহ করে পুনরায় সংযোগ করুন।",
@@ -3972,7 +2634,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_wc_disconnect_confirm": MessageLookupByLibrary.simpleMessage(
       "এই DApp থেকে সংযোগ বিচ্ছিন্ন করবেন?",
     ),
-    "g_wc_new_connection": MessageLookupByLibrary.simpleMessage("নতুন সংযোগ"),
     "g_wc_no_sessions": MessageLookupByLibrary.simpleMessage(
       "কোনো সক্রিয় সংযোগ নেই",
     ),
@@ -3986,113 +2647,20 @@ class MessageLookup extends MessageLookupByLibrary {
       "সেশনের মেয়াদ শেষ হয়েছে",
     ),
     "g_wc_sessions": MessageLookupByLibrary.simpleMessage("সংযুক্ত DApps"),
-    "google_verification": MessageLookupByLibrary.simpleMessage(
-      "গুগল প্রমাণীকরণ",
-    ),
     "google_verification_message10": MessageLookupByLibrary.simpleMessage(
       "লিঙ্ক",
-    ),
-    "google_verification_message11": MessageLookupByLibrary.simpleMessage(
-      "Google প্রমাণীকরণ ডাউনলোড করুন",
-    ),
-    "google_verification_message12": MessageLookupByLibrary.simpleMessage(
-      "নির্দেশনা",
-    ),
-    "google_verification_message13": MessageLookupByLibrary.simpleMessage(
-      "Google Authenticator খুলুন।",
-    ),
-    "google_verification_message14": MessageLookupByLibrary.simpleMessage(
-      "আপনি স্ক্রিনে একটি 6-সংখ্যার যাচাইকরণ কোড দেখতে পাবেন।",
-    ),
-    "google_verification_message15": MessageLookupByLibrary.simpleMessage(
-      "6-সংখ্যার কোডটি কপি করুন এবং N42Wallet-এ পেস্ট করুন।",
-    ),
-    "google_verification_message16": MessageLookupByLibrary.simpleMessage(
-      "তারপর, আপনার প্রমাণীকরণকারী সফলভাবে লিঙ্ক করা হবে।",
-    ),
-    "google_verification_message17": MessageLookupByLibrary.simpleMessage(
-      "ব্যাকআপ কী",
-    ),
-    "google_verification_message18": MessageLookupByLibrary.simpleMessage(
-      "Google প্রমাণীকরণের কীটি অনুলিপি করুন",
-    ),
-    "google_verification_message19": MessageLookupByLibrary.simpleMessage(
-      "Google যাচাইকরণ কোড লিখুন",
-    ),
-    "google_verification_message20": MessageLookupByLibrary.simpleMessage(
-      "ই-মেইল যাচাইকরণ কোড লিখুন",
-    ),
-    "google_verification_message21": m94,
-    "google_verification_message3": MessageLookupByLibrary.simpleMessage(
-      "গুগল কী পেতে ব্যর্থ",
-    ),
-    "google_verification_message5": MessageLookupByLibrary.simpleMessage(
-      "দ্বি-ফ্যাক্টর প্রমাণীকরণ (2FA)",
-    ),
-    "google_verification_message6": MessageLookupByLibrary.simpleMessage(
-      "আপনার অ্যাকাউন্ট সুরক্ষিত করতে, কমপক্ষে একটি 2FA চালু করার পরামর্শ দেওয়া হচ্ছে।",
-    ),
-    "google_verification_message7": MessageLookupByLibrary.simpleMessage(
-      "Google Authenticator অ্যাপ আপনার তোলা এবং N42Wallet অ্যাকাউন্টকে সুরক্ষিত রাখে।",
-    ),
-    "google_verification_message8": MessageLookupByLibrary.simpleMessage(
-      "ডাউনলোড করুন এবং ইনস্টল করুন",
-    ),
-    "google_verification_message9": MessageLookupByLibrary.simpleMessage(
-      "দয়া করে Google প্রমাণীকরণকারী ডাউনলোড এবং ইনস্টল করুন৷ তারপর আপনার N42Wallet অ্যাকাউন্ট লিঙ্ক করতে \'লিঙ্ক\' টিপুন।",
     ),
     "importantNotice": MessageLookupByLibrary.simpleMessage(
       "গুরুত্বপূর্ণ বিজ্ঞপ্তি",
     ),
-    "login_button_text": MessageLookupByLibrary.simpleMessage("সাইন ইন করুন"),
     "login_email": MessageLookupByLibrary.simpleMessage("ইমেইল"),
-    "login_forgot_password": MessageLookupByLibrary.simpleMessage(
-      "পাসওয়ার্ড ভুলে গেছেন?",
-    ),
-    "login_invite_code": MessageLookupByLibrary.simpleMessage("রেফারেল কোড"),
-    "login_invite_code_title": MessageLookupByLibrary.simpleMessage(
-      "রেফারেল কোড",
-    ),
-    "login_message_1": MessageLookupByLibrary.simpleMessage(
-      "একটি অ্যাকাউন্ট নেই? ",
-    ),
-    "login_message_10": MessageLookupByLibrary.simpleMessage(
-      "সফলভাবে তৈরি করা হয়েছে",
-    ),
-    "login_message_11": MessageLookupByLibrary.simpleMessage(
-      "সফলভাবে রিসেট করুন",
-    ),
-    "login_message_2": MessageLookupByLibrary.simpleMessage(
-      "ইতিমধ্যে একটি অ্যাকাউন্ট আছে? ",
-    ),
-    "login_message_6": MessageLookupByLibrary.simpleMessage("কোড আবার পাঠান "),
-    "login_message_7": MessageLookupByLibrary.simpleMessage(
-      "কোড সফলভাবে পাঠানো হয়েছে",
-    ),
-    "login_message_8": MessageLookupByLibrary.simpleMessage(
-      "ই-মেইল নিবন্ধনহীন",
-    ),
-    "login_message_9": MessageLookupByLibrary.simpleMessage(
-      "কোড পাঠাতে ব্যর্থ হয়েছে",
-    ),
-    "login_need_login": MessageLookupByLibrary.simpleMessage(
-      "প্রথমে লগ ইন করুন",
-    ),
     "login_password": MessageLookupByLibrary.simpleMessage("পাসওয়ার্ড"),
     "next": MessageLookupByLibrary.simpleMessage("পরবর্তী"),
-    "nicknameMessage": m95,
-    "password_diff": MessageLookupByLibrary.simpleMessage("পাসওয়ার্ড মেলে না"),
+    "nicknameMessage": m59,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "প্রোফাইল সম্পাদনা করুন",
     ),
     "photograph": MessageLookupByLibrary.simpleMessage("ফটোগ্রাফ"),
-    "please_enter_code": MessageLookupByLibrary.simpleMessage(
-      "যাচাইকরণ কোড লিখুন",
-    ),
-    "please_enter_email": MessageLookupByLibrary.simpleMessage("ইমেল লিখুন"),
-    "please_enter_password": MessageLookupByLibrary.simpleMessage(
-      "পাসওয়ার্ড লিখুন",
-    ),
     "please_input_address": MessageLookupByLibrary.simpleMessage(
       "অনুগ্রহ করে ঠিকানা ইনপুট করুন",
     ),
@@ -4118,29 +2686,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "rest_Confirm_password": MessageLookupByLibrary.simpleMessage(
       "পাসওয়ার্ড নিশ্চিত করুন",
     ),
-    "rest_Enter_the_password_again": MessageLookupByLibrary.simpleMessage(
-      "আবার পাসওয়ার্ড দিন",
-    ),
-    "rest_Please_enter": MessageLookupByLibrary.simpleMessage("কোড লিখুন"),
-    "rest_Verification_code": MessageLookupByLibrary.simpleMessage("ওটিপি কোড"),
-    "rest_your_password": MessageLookupByLibrary.simpleMessage(
-      "আপনার পাসওয়ার্ড রিসেট করুন",
-    ),
-    "s_key_1": MessageLookupByLibrary.simpleMessage("ওয়ালেট পরিচালনা করুন"),
     "s_key_10": MessageLookupByLibrary.simpleMessage("অ্যাপ সম্পর্কে"),
     "s_key_11": MessageLookupByLibrary.simpleMessage("নিরাপত্তা"),
-    "s_key_12": MessageLookupByLibrary.simpleMessage("নতুন চ্যাট ব্যবহার করুন"),
-    "s_key_13": MessageLookupByLibrary.simpleMessage(
-      "উন্নত চ্যাট অভিজ্ঞতা সক্ষম করুন",
-    ),
-    "s_key_2": MessageLookupByLibrary.simpleMessage("ওয়ালেট ঠিকানা"),
     "s_key_3": MessageLookupByLibrary.simpleMessage("লেনদেন"),
     "s_key_4": MessageLookupByLibrary.simpleMessage("ভাষা"),
-    "s_key_5": MessageLookupByLibrary.simpleMessage("থিম"),
     "search": MessageLookupByLibrary.simpleMessage("অনুসন্ধান করুন"),
-    "selected_user_protocol": MessageLookupByLibrary.simpleMessage(
-      "চুক্তি পড়ুন এবং নিশ্চিত করুন",
-    ),
     "verification": MessageLookupByLibrary.simpleMessage("যাচাইকরণ"),
     "w_item_1": MessageLookupByLibrary.simpleMessage(
       "আমি যদি আমার গোপন বাক্যাংশ হারিয়ে ফেলি, আমার তহবিল চিরতরে হারিয়ে যাবে।",

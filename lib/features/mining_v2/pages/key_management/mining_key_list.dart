@@ -49,7 +49,7 @@ class _MiningKeyListState extends ConsumerState<MiningKeyList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
-        text:S.of(context).g_mining_key_103,
+        text:S.of(context).g_mining_key_81,
       ),
       body: ListView.builder(
         padding: EdgeInsets.all(

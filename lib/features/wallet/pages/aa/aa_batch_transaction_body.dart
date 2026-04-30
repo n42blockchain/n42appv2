@@ -239,7 +239,7 @@ class AABatchTransactionBody extends StatelessWidget {
             TextButton(
               onPressed: onClearAll,
               child: Text(
-                S.of(context).g_key_aa_clear_all,
+                S.of(context).g_key_batch_clear_all,
                 style: const TextStyle(color: Colors.red),
               ),
             ),

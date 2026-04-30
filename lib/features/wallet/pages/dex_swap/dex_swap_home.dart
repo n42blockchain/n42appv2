@@ -354,7 +354,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
     if (txRes.error) {
       setState(() {
         _approveLoad = Load.finish;
-        _errorMsg = txRes.data?.toString() ?? S.of(context).g_key_dex_tx_failed;
+        _errorMsg = txRes.data?.toString() ?? S.of(context).g_key_175;
       });
       return;
     }
@@ -404,7 +404,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
     if (txRes.error) {
       setState(() {
         _swapLoad = Load.finish;
-        _errorMsg = txRes.data?.toString() ?? S.of(context).g_key_dex_tx_failed;
+        _errorMsg = txRes.data?.toString() ?? S.of(context).g_key_175;
       });
       return;
     }

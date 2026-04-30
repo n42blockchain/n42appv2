@@ -273,8 +273,8 @@ class SmartAccountEntryCard extends StatelessWidget {
                       Flexible(
                         child: Text(
                           hasSmartAccount
-                              ? S.of(context).g_key_aa_smart_account
-                              : S.of(context).g_key_aa_create_smart_account,
+                              ? S.of(context).g_key_aa_title
+                              : S.of(context).g_key_aa_create_account,
                           style: TextStyle(
                             fontSize: su.setSp(28),
                             fontWeight: FontWeight.w600,
