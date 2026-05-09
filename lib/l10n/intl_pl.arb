@@ -1341,5 +1341,38 @@
   "g_iap_store_unavailable": "Sklep niedostępny",
   "g_iap_check_network": "Sprawdź połączenie sieciowe i spróbuj ponownie",
   "g_iap_no_products": "Brak dostępnych produktów",
-  "g_iap_retry": "Spróbuj ponownie"
+  "g_iap_retry": "Spróbuj ponownie",
+  "g_lock_key16": "Hasło gestowe",
+  "g_lock_key17": "Ustaw hasło gestowe",
+  "g_lock_key18": "Narysuj swój wzór gestowy",
+  "g_lock_key19": "Potwierdź swój wzór gestowy",
+  "g_lock_key20": "Narysuj aktualny gest",
+  "g_lock_key21": "Nieprawidłowy wzór, pozostało {value} prób",
+  "@g_lock_key21": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_lock_key22": "Zresetuj hasło gestowe",
+  "g_lock_key23": "Zbyt wiele nieudanych prób, spróbuj ponownie",
+  "g_lock_key25": "Nieprawidłowy wzór, pozostała {value} próba",
+  "@g_lock_key25": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_lock_key28": "Hasło gestowe nie jest ustawione",
+  "g_lock_key29": "Uwierzytelnienie gestowe wymagane do potwierdzenia każdego przelewu.",
+  "g_google_auth_key1": "Google Authenticator",
+  "g_google_auth_key2": "Zeskanuj kod QR aplikacją Google Authenticator",
+  "g_google_auth_key3": "Lub wprowadź klucz ręcznie:",
+  "g_google_auth_key4": "Wprowadź 6-cyfrowy kod weryfikacyjny",
+  "g_google_auth_key5": "Google Authenticator wymagany do potwierdzenia każdego przelewu.",
+  "g_google_auth_key6": "Nieprawidłowy kod, spróbuj ponownie",
+  "g_google_auth_key7": "Google Authenticator nie jest skonfigurowany",
+  "g_google_auth_key8": "Powiązanie zakończone sukcesem"
 }

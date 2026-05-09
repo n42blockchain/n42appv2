@@ -1334,5 +1334,38 @@
   "g_iap_store_unavailable": "Duka halipatikani",
   "g_iap_check_network": "Angalia muunganiko wako wa mtandao na ujaribu tena",
   "g_iap_no_products": "Hakuna bidhaa zinazopatikana",
-  "g_iap_retry": "Jaribu tena"
+  "g_iap_retry": "Jaribu tena",
+  "g_lock_key16": "Nenosiri la ishara",
+  "g_lock_key17": "Weka nenosiri la ishara",
+  "g_lock_key18": "Chora mchoro wako wa ishara",
+  "g_lock_key19": "Thibitisha mchoro wako wa ishara",
+  "g_lock_key20": "Chora ishara ya sasa",
+  "g_lock_key21": "Mchoro usio sahihi, {value} majaribio yaliyobaki",
+  "@g_lock_key21": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_lock_key22": "Weka upya nenosiri la ishara",
+  "g_lock_key23": "Majaribio mengi yameshindwa, jaribu tena",
+  "g_lock_key25": "Mchoro usio sahihi, {value} jaribio lililobaki",
+  "@g_lock_key25": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_lock_key28": "Nenosiri la ishara halijawekwa",
+  "g_lock_key29": "Uthibitishaji wa ishara unahitajika kuthibitisha kila uhamisho.",
+  "g_google_auth_key1": "Google Authenticator",
+  "g_google_auth_key2": "Changanua msimbo wa QR na programu ya Google Authenticator",
+  "g_google_auth_key3": "Au ingiza ufunguo kwa mkono:",
+  "g_google_auth_key4": "Ingiza nambari ya uthibitishaji ya tarakimu 6",
+  "g_google_auth_key5": "Google Authenticator inahitajika kuthibitisha kila uhamisho.",
+  "g_google_auth_key6": "Nambari si sahihi, jaribu tena",
+  "g_google_auth_key7": "Google Authenticator haijasanidiwa",
+  "g_google_auth_key8": "Uunganisho umefanikiwa"
 }

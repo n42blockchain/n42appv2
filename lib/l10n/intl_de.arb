@@ -1341,5 +1341,38 @@
   "g_iap_store_unavailable": "App Store nicht verfügbar",
   "g_iap_check_network": "Überprüfen Sie Ihre Netzwerkverbindung und versuchen Sie es erneut",
   "g_iap_no_products": "Keine Produkte verfügbar",
-  "g_iap_retry": "Wiederholen"
+  "g_iap_retry": "Wiederholen",
+  "g_lock_key16": "Gestenpasswort",
+  "g_lock_key17": "Gestenpasswort festlegen",
+  "g_lock_key18": "Zeichnen Sie Ihr Gestenmuster",
+  "g_lock_key19": "Bestätigen Sie Ihr Gestenmuster",
+  "g_lock_key20": "Aktuelles Gestenmuster zeichnen",
+  "g_lock_key21": "Falsches Muster, noch {value} Versuche übrig",
+  "@g_lock_key21": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_lock_key22": "Gestenpasswort zurücksetzen",
+  "g_lock_key23": "Zu viele Fehlversuche, bitte erneut versuchen",
+  "g_lock_key25": "Falsches Muster, noch {value} Versuch übrig",
+  "@g_lock_key25": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_lock_key28": "Gestenpasswort nicht festgelegt",
+  "g_lock_key29": "Gestenpasswort zur Bestätigung jeder Wallet-Übertragung erforderlich.",
+  "g_google_auth_key1": "Google Authenticator",
+  "g_google_auth_key2": "QR-Code mit der Google Authenticator-App scannen",
+  "g_google_auth_key3": "Oder Schlüssel manuell eingeben:",
+  "g_google_auth_key4": "6-stelligen Verifizierungscode eingeben",
+  "g_google_auth_key5": "Google Authenticator zur Bestätigung jeder Wallet-Übertragung erforderlich.",
+  "g_google_auth_key6": "Falscher Code, bitte erneut versuchen",
+  "g_google_auth_key7": "Google Authenticator nicht konfiguriert",
+  "g_google_auth_key8": "Bindung erfolgreich"
 }

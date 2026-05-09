@@ -159,6 +159,21 @@ extension _SecurityVerificationBuild on _WalletSecurityVerificationState {
         onVerify: faceVerification,
         onSetup: pushSetting,
       ),
+      _GestureSection(
+        enabled: securityMap['gesture'] == true,
+        gesturePwd: securityMap['gesturePwd'] as String? ?? '',
+        gestureCheck: gestureCheck,
+        gestureErrorMessage: gestureErrorMessage,
+        onComplete: gestureVerification,
+        onSetup: pushSetting,
+      ),
+      _GoogleAuthSection(
+        enabled: securityMap['google'] == true,
+        verified: googleAuthCheck == 1,
+        errorMessage: googleAuthErrorMessage,
+        onVerify: googleAuthVerify,
+        onSetup: pushSetting,
+      ),
       SizedBox(height: ScreenUtil().setWidth(50.0)),
     ];
   }

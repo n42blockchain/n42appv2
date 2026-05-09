@@ -3804,6 +3804,196 @@ class S {
     );
   }
 
+  /// `Gesture Password`
+  String get g_lock_key16 {
+    return Intl.message(
+      'Gesture Password',
+      name: 'g_lock_key16',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Set Gesture Password`
+  String get g_lock_key17 {
+    return Intl.message(
+      'Set Gesture Password',
+      name: 'g_lock_key17',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Draw your gesture pattern`
+  String get g_lock_key18 {
+    return Intl.message(
+      'Draw your gesture pattern',
+      name: 'g_lock_key18',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm your gesture pattern`
+  String get g_lock_key19 {
+    return Intl.message(
+      'Confirm your gesture pattern',
+      name: 'g_lock_key19',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Draw current gesture`
+  String get g_lock_key20 {
+    return Intl.message(
+      'Draw current gesture',
+      name: 'g_lock_key20',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Incorrect pattern, {value} attempts remaining`
+  String g_lock_key21(String value) {
+    return Intl.message(
+      'Incorrect pattern, $value attempts remaining',
+      name: 'g_lock_key21',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `Reset Gesture Password`
+  String get g_lock_key22 {
+    return Intl.message(
+      'Reset Gesture Password',
+      name: 'g_lock_key22',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Too many failed attempts, please retry`
+  String get g_lock_key23 {
+    return Intl.message(
+      'Too many failed attempts, please retry',
+      name: 'g_lock_key23',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Incorrect pattern, {value} attempt remaining`
+  String g_lock_key25(String value) {
+    return Intl.message(
+      'Incorrect pattern, $value attempt remaining',
+      name: 'g_lock_key25',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `Gesture password not set`
+  String get g_lock_key28 {
+    return Intl.message(
+      'Gesture password not set',
+      name: 'g_lock_key28',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Require gesture authentication to confirm each wallet transfer.`
+  String get g_lock_key29 {
+    return Intl.message(
+      'Require gesture authentication to confirm each wallet transfer.',
+      name: 'g_lock_key29',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Google Authenticator`
+  String get g_google_auth_key1 {
+    return Intl.message(
+      'Google Authenticator',
+      name: 'g_google_auth_key1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Scan the QR code with Google Authenticator app`
+  String get g_google_auth_key2 {
+    return Intl.message(
+      'Scan the QR code with Google Authenticator app',
+      name: 'g_google_auth_key2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Or enter the key manually:`
+  String get g_google_auth_key3 {
+    return Intl.message(
+      'Or enter the key manually:',
+      name: 'g_google_auth_key3',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter 6-digit verification code`
+  String get g_google_auth_key4 {
+    return Intl.message(
+      'Enter 6-digit verification code',
+      name: 'g_google_auth_key4',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Require Google Authenticator to confirm each wallet transfer.`
+  String get g_google_auth_key5 {
+    return Intl.message(
+      'Require Google Authenticator to confirm each wallet transfer.',
+      name: 'g_google_auth_key5',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Incorrect code, please try again`
+  String get g_google_auth_key6 {
+    return Intl.message(
+      'Incorrect code, please try again',
+      name: 'g_google_auth_key6',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Google Authenticator not configured`
+  String get g_google_auth_key7 {
+    return Intl.message(
+      'Google Authenticator not configured',
+      name: 'g_google_auth_key7',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Binding successful`
+  String get g_google_auth_key8 {
+    return Intl.message(
+      'Binding successful',
+      name: 'g_google_auth_key8',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Link`
   String get google_verification_message10 {
     return Intl.message(

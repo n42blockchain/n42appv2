@@ -1334,5 +1334,38 @@
   "g_iap_store_unavailable": "المتجر غير متاح",
   "g_iap_check_network": "يرجى التحقق من اتصال الإنترنت والمحاولة مجددًا",
   "g_iap_no_products": "لا توجد منتجات متاحة",
-  "g_iap_retry": "إعادة المحاولة"
+  "g_iap_retry": "إعادة المحاولة",
+  "g_lock_key16": "كلمة مرور الإيماءات",
+  "g_lock_key17": "تعيين كلمة مرور الإيماءات",
+  "g_lock_key18": "ارسم نمط الإيماءة الخاص بك",
+  "g_lock_key19": "أكد نمط الإيماءة الخاص بك",
+  "g_lock_key20": "ارسم الإيماءة الحالية",
+  "g_lock_key21": "نمط غير صحيح، {value} محاولات متبقية",
+  "@g_lock_key21": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_lock_key22": "إعادة تعيين كلمة مرور الإيماءات",
+  "g_lock_key23": "عدد كبير جداً من المحاولات الفاشلة، يرجى المحاولة مرة أخرى",
+  "g_lock_key25": "نمط غير صحيح، {value} محاولة متبقية",
+  "@g_lock_key25": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_lock_key28": "لم يتم تعيين كلمة مرور الإيماءات",
+  "g_lock_key29": "مطلوب مصادقة الإيماءات لتأكيد كل تحويل.",
+  "g_google_auth_key1": "Google Authenticator",
+  "g_google_auth_key2": "امسح رمز QR بتطبيق Google Authenticator",
+  "g_google_auth_key3": "أو أدخل المفتاح يدوياً:",
+  "g_google_auth_key4": "أدخل رمز التحقق المكون من 6 أرقام",
+  "g_google_auth_key5": "مطلوب Google Authenticator لتأكيد كل تحويل.",
+  "g_google_auth_key6": "رمز غير صحيح، يرجى المحاولة مرة أخرى",
+  "g_google_auth_key7": "لم يتم تكوين Google Authenticator",
+  "g_google_auth_key8": "تم الربط بنجاح"
 }

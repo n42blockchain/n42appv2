@@ -1341,5 +1341,38 @@
   "g_iap_store_unavailable": "Магазин недоступен",
   "g_iap_check_network": "Проверьте подключение к сети и попробуйте ещё раз",
   "g_iap_no_products": "Нет доступных товаров",
-  "g_iap_retry": "Повторить"
+  "g_iap_retry": "Повторить",
+  "g_lock_key16": "Графический пароль",
+  "g_lock_key17": "Установить графический пароль",
+  "g_lock_key18": "Нарисуйте графический ключ",
+  "g_lock_key19": "Подтвердите графический ключ",
+  "g_lock_key20": "Нарисуйте текущий графический ключ",
+  "g_lock_key21": "Неверный ключ, осталось попыток: {value}",
+  "@g_lock_key21": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_lock_key22": "Сбросить графический пароль",
+  "g_lock_key23": "Слишком много неверных попыток, повторите",
+  "g_lock_key25": "Неверный ключ, осталась попытка: {value}",
+  "@g_lock_key25": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_lock_key28": "Графический пароль не установлен",
+  "g_lock_key29": "Для подтверждения перевода требуется графический ключ.",
+  "g_google_auth_key1": "Google Authenticator",
+  "g_google_auth_key2": "Отсканируйте QR-код приложением Google Authenticator",
+  "g_google_auth_key3": "Или введите ключ вручную:",
+  "g_google_auth_key4": "Введите 6-значный код подтверждения",
+  "g_google_auth_key5": "Для подтверждения перевода требуется Google Authenticator.",
+  "g_google_auth_key6": "Неверный код, повторите попытку",
+  "g_google_auth_key7": "Google Authenticator не настроен",
+  "g_google_auth_key8": "Привязка выполнена успешно"
 }

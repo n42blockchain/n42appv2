@@ -124,42 +124,46 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m44(value, value1) =>
       "এই অ্যাকাউন্টটি ${value} বস্তুর মালিক, যার মানে একটি অতিরিক্ত ${value1} XRP সংরক্ষিত।";
 
-  static String m45(value) =>
+  static String m45(value) => "ভুল প্যাটার্ন, ${value}টি চেষ্টা বাকি";
+
+  static String m46(value) => "ভুল প্যাটার্ন, ${value}টি চেষ্টা বাকি";
+
+  static String m47(value) =>
       "আপনি সফলভাবে একটি ${value} সেট আপ করেছেন এবং N42Wallet দিয়ে যাচাইকরণ শুরু করবেন!";
 
-  static String m46(value) =>
+  static String m48(value) =>
       "লেয়ার 1 চেইনের প্রথম দিকের মাইনার হতে @N42Wallet-এ আমার ${value} গ্রুপে যোগ দিন এবং আপনার ফোনে ক্রিপ্টো পান!";
 
-  static String m47(value, value1) =>
+  static String m49(value, value1) =>
       "আপনি একটি নোড চালানোর জন্য ${value1} পর্যন্ত ${value} N লক করতে চান?";
 
-  static String m48(value) => "আমদানি ব্যর্থ হয়েছে:${value}৷";
+  static String m50(value) => "আমদানি ব্যর্থ হয়েছে:${value}৷";
 
-  static String m49(value) =>
+  static String m51(value) =>
       "পুরষ্কার জিততে কমপক্ষে ${value} এর একটি স্টেকিং ব্যালেন্স প্রয়োজন।";
 
-  static String m50(value, value1) =>
+  static String m52(value, value1) =>
       "${value} N প্রতি ${value1} ব্লক খনন করা হয়";
 
-  static String m51(value) => "${value} অক্ষর হতে হবে";
+  static String m53(value) => "${value} অক্ষর হতে হবে";
 
-  static String m52(value) => "${value} অপর্যাপ্ত ব্যালেন্স।";
+  static String m54(value) => "${value} অপর্যাপ্ত ব্যালেন্স।";
 
-  static String m53(value) => "${value} ইনকামিং...";
+  static String m55(value) => "${value} ইনকামিং...";
 
-  static String m54(value) =>
+  static String m56(value) =>
       "${value} সোয়াপড ইন-অ্যাপ শীঘ্রই আপনার ওয়ালেটে বিতরণ করা হবে এবং এই প্রক্রিয়ার মাধ্যমে বিক্রি করা যাবে না। এটি একটি নোড চালানোর জন্য ব্যবহার করা যেতে পারে।";
 
-  static String m55(value) => "সর্বাধিক ${value} অক্ষর";
+  static String m57(value) => "সর্বাধিক ${value} অক্ষর";
 
-  static String m56(value) => "${value} চেইন অ্যাপ ইতিমধ্যেই সমর্থিত!";
+  static String m58(value) => "${value} চেইন অ্যাপ ইতিমধ্যেই সমর্থিত!";
 
-  static String m57(value) =>
+  static String m59(value) =>
       "${value} চেইন APP ইতিমধ্যেই সমর্থিত, আপনি কি এটি যোগ করতে চান?";
 
-  static String m58(value) => "${value} ঠিকানা পরীক্ষার লিঙ্ক ব্যর্থ হয়েছে!";
+  static String m60(value) => "${value} ঠিকানা পরীক্ষার লিঙ্ক ব্যর্থ হয়েছে!";
 
-  static String m59(value) => "0~${value} অক্ষর";
+  static String m61(value) => "0~${value} অক্ষর";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -282,6 +286,28 @@ class MessageLookup extends MessageLookupByLibrary {
       "চালিয়ে যেতে আপনার মুখ বা আঙুলের ছাপ স্ক্যান করুন।",
     ),
     "g_face_8": MessageLookupByLibrary.simpleMessage("প্রত্যাবর্তন"),
+    "g_google_auth_key1": MessageLookupByLibrary.simpleMessage(
+      "Google Authenticator",
+    ),
+    "g_google_auth_key2": MessageLookupByLibrary.simpleMessage(
+      "Google Authenticator অ্যাপ দিয়ে QR কোড স্ক্যান করুন",
+    ),
+    "g_google_auth_key3": MessageLookupByLibrary.simpleMessage(
+      "অথবা কী ম্যানুয়ালি লিখুন:",
+    ),
+    "g_google_auth_key4": MessageLookupByLibrary.simpleMessage(
+      "৬ সংখ্যার যাচাইকরণ কোড লিখুন",
+    ),
+    "g_google_auth_key5": MessageLookupByLibrary.simpleMessage(
+      "প্রতিটি ট্রান্সফার নিশ্চিত করতে Google Authenticator প্রয়োজন।",
+    ),
+    "g_google_auth_key6": MessageLookupByLibrary.simpleMessage(
+      "ভুল কোড, আবার চেষ্টা করুন",
+    ),
+    "g_google_auth_key7": MessageLookupByLibrary.simpleMessage(
+      "Google Authenticator কনফিগার করা হয়নি",
+    ),
+    "g_google_auth_key8": MessageLookupByLibrary.simpleMessage("সংযোগ সফল"),
     "g_home_key1": MessageLookupByLibrary.simpleMessage("প্রোফাইল"),
     "g_home_key2": MessageLookupByLibrary.simpleMessage("খবর"),
     "g_home_key3": MessageLookupByLibrary.simpleMessage("যাচাইকরণ"),
@@ -2175,14 +2201,41 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_lock_key1": MessageLookupByLibrary.simpleMessage(
       "টাচ আইডি এবং ফেস আইডি",
     ),
+    "g_lock_key16": MessageLookupByLibrary.simpleMessage("জেসচার পাসওয়ার্ড"),
+    "g_lock_key17": MessageLookupByLibrary.simpleMessage(
+      "জেসচার পাসওয়ার্ড সেট করুন",
+    ),
+    "g_lock_key18": MessageLookupByLibrary.simpleMessage(
+      "আপনার জেসচার প্যাটার্ন আঁকুন",
+    ),
+    "g_lock_key19": MessageLookupByLibrary.simpleMessage(
+      "আপনার জেসচার প্যাটার্ন নিশ্চিত করুন",
+    ),
+    "g_lock_key20": MessageLookupByLibrary.simpleMessage(
+      "বর্তমান জেসচার আঁকুন",
+    ),
+    "g_lock_key21": m45,
+    "g_lock_key22": MessageLookupByLibrary.simpleMessage(
+      "জেসচার পাসওয়ার্ড রিসেট করুন",
+    ),
+    "g_lock_key23": MessageLookupByLibrary.simpleMessage(
+      "অনেক বেশি ব্যর্থ চেষ্টা, আবার চেষ্টা করুন",
+    ),
     "g_lock_key24": MessageLookupByLibrary.simpleMessage(
       "ওয়ালেট পাসওয়ার্ড যোগ করবেন?",
     ),
+    "g_lock_key25": m46,
     "g_lock_key26": MessageLookupByLibrary.simpleMessage(
       "Transfer Verification",
     ),
     "g_lock_key27": MessageLookupByLibrary.simpleMessage(
       "Require biometric authentication (Face ID / fingerprint) to confirm each wallet transfer.",
+    ),
+    "g_lock_key28": MessageLookupByLibrary.simpleMessage(
+      "জেসচার পাসওয়ার্ড সেট করা হয়নি",
+    ),
+    "g_lock_key29": MessageLookupByLibrary.simpleMessage(
+      "প্রতিটি ট্রান্সফার নিশ্চিত করতে জেসচার প্রমাণীকরণ প্রয়োজন।",
     ),
     "g_lock_key5": MessageLookupByLibrary.simpleMessage("সফল হয়েছে"),
     "g_lock_key6": MessageLookupByLibrary.simpleMessage("ব্যর্থ হয়েছে"),
@@ -2247,12 +2300,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "বন্ধুদের শেয়ার করুন",
     ),
     "g_mining_key62": MessageLookupByLibrary.simpleMessage("চালিয়ে যান"),
-    "g_mining_key63": m45,
-    "g_mining_key73": m46,
+    "g_mining_key63": m47,
+    "g_mining_key73": m48,
     "g_mining_key74": MessageLookupByLibrary.simpleMessage(
       "আমি শুধু @N42Wallet এ একটি নোড সেট আপ করেছি এবং মোবাইল ডিভাইসে যাচাইকরণ শুরু করেছি! আসুন এবং আমার সাথে যোগ দিন। বিকেন্দ্রীভূত ভবিষ্যৎ মোবাইল!",
     ),
-    "g_mining_key76": m47,
+    "g_mining_key76": m49,
     "g_mining_key82": MessageLookupByLibrary.simpleMessage("খনিজ"),
     "g_mining_key83": MessageLookupByLibrary.simpleMessage("নোড"),
     "g_mining_key84": MessageLookupByLibrary.simpleMessage("নেটওয়ার্ক"),
@@ -2285,7 +2338,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_108": MessageLookupByLibrary.simpleMessage(
       "অসমর্থিত এনক্রিপ্টেড ডেটা ফরম্যাট!",
     ),
-    "g_mining_key_109": m48,
+    "g_mining_key_109": m50,
     "g_mining_key_11": MessageLookupByLibrary.simpleMessage("গতকালের পুরস্কার"),
     "g_mining_key_110": MessageLookupByLibrary.simpleMessage(
       "এনক্রিপ্ট করা ডেটা",
@@ -2303,7 +2356,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_115": MessageLookupByLibrary.simpleMessage(
       "খালাস কিছু সময় লাগে, একটু অপেক্ষা করুন!",
     ),
-    "g_mining_key_116": m49,
+    "g_mining_key_116": m51,
     "g_mining_key_12": MessageLookupByLibrary.simpleMessage(
       "পুরস্কার প্রতিদিন জমা হয় এবং শুধুমাত্র আপনার N ওয়ালেটে পাঠানো হয় যখন এটি ~0.5 N-এ পৌঁছায়।",
     ),
@@ -2379,7 +2432,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_70": MessageLookupByLibrary.simpleMessage(
       "100 ব্লক/দিন~15 মিনিট",
     ),
-    "g_mining_key_71": m50,
+    "g_mining_key_71": m52,
     "g_mining_key_72": MessageLookupByLibrary.simpleMessage(
       "প্রতি চেক 128 সেকেন্ড",
     ),
@@ -2439,7 +2492,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_97": MessageLookupByLibrary.simpleMessage(
       "দয়া করে এনক্রিপশন পাসওয়ার্ড লিখুন",
     ),
-    "g_mining_key_98": m51,
+    "g_mining_key_98": m53,
     "g_mining_key_99": MessageLookupByLibrary.simpleMessage(
       "আপনার পাসওয়ার্ডটি সঠিক কিনা তা নিশ্চিত করতে দয়া করে পুনরায় প্রবেশ করুন৷",
     ),
@@ -2543,7 +2596,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("লিঙ্ক"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("কোড"),
-    "g_swap_key_14": m52,
+    "g_swap_key_14": m54,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "মুদ্রা মূল্য ত্রুটি পান.",
     ),
@@ -2555,7 +2608,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "আপনার অদলবদল শীঘ্রই বিতরণ করা হবে৷ দয়া করে ধৈর্য ধরুন৷",
     ),
-    "g_swap_key_20": m53,
+    "g_swap_key_20": m55,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "একটি নোড চালানোর খরচ: গ্রুপ যাচাইকরণ 1-49 N বেসিক নোড: 50 N প্রিমিয়াম নোড: 100 N প্রো নোড: 500 N।",
     ),
@@ -2569,7 +2622,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("নতুন ব্যালেন্স"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("তুমি টাকা দাও"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("তারিখ"),
-    "g_swap_key_31": m54,
+    "g_swap_key_31": m56,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "অদলবদলগুলি প্রাসঙ্গিক চেইন এক্সপ্লোরারগুলিতে দেখা যেতে পারে (ইথারস্ক্যান, বিএসসিস্ক্যান, ট্রনস্ক্যান এবং আমাদের নিজস্ব)।",
     ),
@@ -2584,7 +2637,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "ডিফল্টে রিসেট করুন",
     ),
-    "g_token_m_key_1": m55,
+    "g_token_m_key_1": m57,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "বিদ্যমান টোকেনগুলির জাল সংস্করণ তৈরি সহ যে কেউ একটি টোকেন তৈরি করতে পারে৷ এটি আমদানি করার আগে সর্বদা একটি টোকেন গবেষণা করুন।",
     ),
@@ -2603,9 +2656,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_2": MessageLookupByLibrary.simpleMessage("0~18 uint"),
     "g_token_m_key_20": MessageLookupByLibrary.simpleMessage("টোকেন যোগ করুন"),
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage("বিন্যাস ত্রুটি!"),
-    "g_token_m_key_22": m56,
-    "g_token_m_key_23": m57,
-    "g_token_m_key_24": m58,
+    "g_token_m_key_22": m58,
+    "g_token_m_key_23": m59,
+    "g_token_m_key_24": m60,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage(
       "টোকেন আমদানি করুন",
     ),
@@ -2656,7 +2709,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_email": MessageLookupByLibrary.simpleMessage("ইমেইল"),
     "login_password": MessageLookupByLibrary.simpleMessage("পাসওয়ার্ড"),
     "next": MessageLookupByLibrary.simpleMessage("পরবর্তী"),
-    "nicknameMessage": m59,
+    "nicknameMessage": m61,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "প্রোফাইল সম্পাদনা করুন",
     ),

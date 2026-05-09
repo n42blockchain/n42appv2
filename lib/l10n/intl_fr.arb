@@ -1341,5 +1341,38 @@
   "g_iap_store_unavailable": "Boutique indisponible",
   "g_iap_check_network": "Vérifiez votre connexion réseau et réessayez",
   "g_iap_no_products": "Aucun produit disponible",
-  "g_iap_retry": "Réessayer"
+  "g_iap_retry": "Réessayer",
+  "g_lock_key16": "Mot de passe gestuel",
+  "g_lock_key17": "Définir le mot de passe gestuel",
+  "g_lock_key18": "Dessinez votre schéma gestuel",
+  "g_lock_key19": "Confirmez votre schéma gestuel",
+  "g_lock_key20": "Dessinez le schéma gestuel actuel",
+  "g_lock_key21": "Schéma incorrect, {value} tentatives restantes",
+  "@g_lock_key21": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_lock_key22": "Réinitialiser le mot de passe gestuel",
+  "g_lock_key23": "Trop de tentatives échouées, veuillez réessayer",
+  "g_lock_key25": "Schéma incorrect, {value} tentative restante",
+  "@g_lock_key25": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_lock_key28": "Mot de passe gestuel non défini",
+  "g_lock_key29": "Authentification gestuelle requise pour confirmer chaque transfert.",
+  "g_google_auth_key1": "Google Authenticator",
+  "g_google_auth_key2": "Scannez le code QR avec l'application Google Authenticator",
+  "g_google_auth_key3": "Ou entrez la clé manuellement :",
+  "g_google_auth_key4": "Entrez le code de vérification à 6 chiffres",
+  "g_google_auth_key5": "Google Authenticator requis pour confirmer chaque transfert.",
+  "g_google_auth_key6": "Code incorrect, veuillez réessayer",
+  "g_google_auth_key7": "Google Authenticator non configuré",
+  "g_google_auth_key8": "Liaison réussie"
 }

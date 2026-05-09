@@ -1334,5 +1334,38 @@
   "g_iap_store_unavailable": "অ্যাপ স্টোর অনুপলব্ধ",
   "g_iap_check_network": "নেটওয়ার্ক সংযোগ পরীক্ষা করুন এবং পুনরায় চেষ্টা করুন",
   "g_iap_no_products": "কোনো পণ্য নেই",
-  "g_iap_retry": "পুনরায় চেষ্টা করুন"
+  "g_iap_retry": "পুনরায় চেষ্টা করুন",
+  "g_lock_key16": "জেসচার পাসওয়ার্ড",
+  "g_lock_key17": "জেসচার পাসওয়ার্ড সেট করুন",
+  "g_lock_key18": "আপনার জেসচার প্যাটার্ন আঁকুন",
+  "g_lock_key19": "আপনার জেসচার প্যাটার্ন নিশ্চিত করুন",
+  "g_lock_key20": "বর্তমান জেসচার আঁকুন",
+  "g_lock_key21": "ভুল প্যাটার্ন, {value}টি চেষ্টা বাকি",
+  "@g_lock_key21": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_lock_key22": "জেসচার পাসওয়ার্ড রিসেট করুন",
+  "g_lock_key23": "অনেক বেশি ব্যর্থ চেষ্টা, আবার চেষ্টা করুন",
+  "g_lock_key25": "ভুল প্যাটার্ন, {value}টি চেষ্টা বাকি",
+  "@g_lock_key25": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_lock_key28": "জেসচার পাসওয়ার্ড সেট করা হয়নি",
+  "g_lock_key29": "প্রতিটি ট্রান্সফার নিশ্চিত করতে জেসচার প্রমাণীকরণ প্রয়োজন।",
+  "g_google_auth_key1": "Google Authenticator",
+  "g_google_auth_key2": "Google Authenticator অ্যাপ দিয়ে QR কোড স্ক্যান করুন",
+  "g_google_auth_key3": "অথবা কী ম্যানুয়ালি লিখুন:",
+  "g_google_auth_key4": "৬ সংখ্যার যাচাইকরণ কোড লিখুন",
+  "g_google_auth_key5": "প্রতিটি ট্রান্সফার নিশ্চিত করতে Google Authenticator প্রয়োজন।",
+  "g_google_auth_key6": "ভুল কোড, আবার চেষ্টা করুন",
+  "g_google_auth_key7": "Google Authenticator কনফিগার করা হয়নি",
+  "g_google_auth_key8": "সংযোগ সফল"
 }

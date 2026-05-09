@@ -1341,5 +1341,38 @@
   "g_iap_store_unavailable": "Toko tidak tersedia",
   "g_iap_check_network": "Periksa koneksi jaringan Anda dan coba lagi",
   "g_iap_no_products": "Tidak ada produk tersedia",
-  "g_iap_retry": "Coba lagi"
+  "g_iap_retry": "Coba lagi",
+  "g_lock_key16": "Kata sandi gestur",
+  "g_lock_key17": "Atur kata sandi gestur",
+  "g_lock_key18": "Gambar pola gestur Anda",
+  "g_lock_key19": "Konfirmasi pola gestur Anda",
+  "g_lock_key20": "Gambar gestur saat ini",
+  "g_lock_key21": "Pola salah, tersisa {value} percobaan",
+  "@g_lock_key21": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_lock_key22": "Setel ulang kata sandi gestur",
+  "g_lock_key23": "Terlalu banyak percobaan gagal, coba lagi",
+  "g_lock_key25": "Pola salah, tersisa {value} percobaan",
+  "@g_lock_key25": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_lock_key28": "Kata sandi gestur belum diatur",
+  "g_lock_key29": "Autentikasi gestur diperlukan untuk mengonfirmasi setiap transfer.",
+  "g_google_auth_key1": "Google Authenticator",
+  "g_google_auth_key2": "Pindai kode QR dengan aplikasi Google Authenticator",
+  "g_google_auth_key3": "Atau masukkan kunci secara manual:",
+  "g_google_auth_key4": "Masukkan kode verifikasi 6 digit",
+  "g_google_auth_key5": "Google Authenticator diperlukan untuk mengonfirmasi setiap transfer.",
+  "g_google_auth_key6": "Kode salah, coba lagi",
+  "g_google_auth_key7": "Google Authenticator belum dikonfigurasi",
+  "g_google_auth_key8": "Pengikatan berhasil"
 }

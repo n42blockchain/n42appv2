@@ -1341,5 +1341,38 @@
   "g_iap_store_unavailable": "Loja indisponível",
   "g_iap_check_network": "Verifique a sua ligação de rede e tente novamente",
   "g_iap_no_products": "Sem produtos disponíveis",
-  "g_iap_retry": "Tentar novamente"
+  "g_iap_retry": "Tentar novamente",
+  "g_lock_key16": "Senha por gesto",
+  "g_lock_key17": "Definir senha por gesto",
+  "g_lock_key18": "Desenhe seu padrão de gesto",
+  "g_lock_key19": "Confirme seu padrão de gesto",
+  "g_lock_key20": "Desenhe o gesto atual",
+  "g_lock_key21": "Padrão incorreto, restam {value} tentativas",
+  "@g_lock_key21": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_lock_key22": "Redefinir senha por gesto",
+  "g_lock_key23": "Muitas tentativas incorretas, tente novamente",
+  "g_lock_key25": "Padrão incorreto, resta {value} tentativa",
+  "@g_lock_key25": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_lock_key28": "Senha por gesto não definida",
+  "g_lock_key29": "Autenticação por gesto necessária para confirmar cada transferência.",
+  "g_google_auth_key1": "Google Authenticator",
+  "g_google_auth_key2": "Escaneie o código QR com o app Google Authenticator",
+  "g_google_auth_key3": "Ou insira a chave manualmente:",
+  "g_google_auth_key4": "Insira o código de verificação de 6 dígitos",
+  "g_google_auth_key5": "Google Authenticator necessário para confirmar cada transferência.",
+  "g_google_auth_key6": "Código incorreto, tente novamente",
+  "g_google_auth_key7": "Google Authenticator não configurado",
+  "g_google_auth_key8": "Vinculação bem-sucedida"
 }

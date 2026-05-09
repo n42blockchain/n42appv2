@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gesture_password_widget/gesture_password_widget.dart';
+import 'package:n42_wallet/core/security/totp_util.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:local_auth_android/local_auth_android.dart' as auth_android;
 import 'package:local_auth_darwin/local_auth_darwin.dart' as auth_ios;
@@ -36,11 +38,21 @@ class _WalletSecurityVerificationState
   bool obscure = true;
   String pwdErrorMessage = '';
   String faceErrorMessage = '';
+  String gestureErrorMessage = '';
+  String googleAuthErrorMessage = '';
   int faceCheck = 0; // 0未验证，1验证成功，2验证失败
+  int gestureCheck = 0; // 0未验证，1验证成功，2验证失败
+  int googleAuthCheck = 0; // 0未验证，1验证成功，2验证失败
   Load load = Load.finish;
   bool showWalletPassword = false;
 
-  Map<String, dynamic> securityMap = {'face': false};
+  Map<String, dynamic> securityMap = {
+    'face': false,
+    'gesture': false,
+    'gesturePwd': '',
+    'google': false,
+    'googleSecret': '',
+  };
 
   @override
   void initState() {
@@ -59,6 +71,10 @@ class _WalletSecurityVerificationState
     final userMap = s?[AppGlobals.userInfo?.uuid ?? ''];
     if (userMap is Map<String, dynamic>) {
       securityMap['face'] = userMap['face'] ?? false;
+      securityMap['gesture'] = userMap['gesture'] ?? false;
+      securityMap['gesturePwd'] = userMap['gesturePwd'] ?? '';
+      securityMap['google'] = userMap['google'] ?? false;
+      securityMap['googleSecret'] = userMap['googleSecret'] ?? '';
     }
     if (!mounted) return;
     showWalletPassword = ref.read(wapBridgeProvider).walletInfo.password != '';
@@ -177,8 +193,41 @@ class _WalletSecurityVerificationState
   /// 重置 loading 状态
   void _finishLoading() => setState(() => load = Load.finish);
 
+  void gestureVerification(String value) {
+    final pwd = securityMap['gesturePwd'] as String;
+    if (value == pwd) {
+      setState(() {
+        gestureCheck = 1;
+        gestureErrorMessage = '';
+      });
+    } else {
+      setState(() {
+        gestureCheck = 2;
+        gestureErrorMessage = S.of(context).g_lock_key6;
+      });
+    }
+  }
+
+  void googleAuthVerify(String code) {
+    final secret = securityMap['googleSecret'] as String;
+    if (TotpUtil.verify(secret, code)) {
+      setState(() {
+        googleAuthCheck = 1;
+        googleAuthErrorMessage = '';
+      });
+    } else {
+      setState(() {
+        googleAuthCheck = 2;
+        googleAuthErrorMessage = S.of(context).g_google_auth_key6;
+      });
+    }
+  }
+
   bool get _anySecurityEnabled =>
-      showWalletPassword || securityMap['face'] == true;
+      showWalletPassword ||
+      securityMap['face'] == true ||
+      securityMap['gesture'] == true ||
+      securityMap['google'] == true;
 
   Future<void> _onConfirm() async {
     closeKeyboard();
@@ -190,6 +239,22 @@ class _WalletSecurityVerificationState
         return;
       }
       setState(() => faceErrorMessage = '');
+    }
+
+    if (securityMap['gesture'] == true) {
+      if (gestureCheck != 1) {
+        setState(() => gestureErrorMessage = S.of(context).verification);
+        return;
+      }
+      setState(() => gestureErrorMessage = '');
+    }
+
+    if (securityMap['google'] == true) {
+      if (googleAuthCheck != 1) {
+        setState(() => googleAuthErrorMessage = S.of(context).verification);
+        return;
+      }
+      setState(() => googleAuthErrorMessage = '');
     }
 
     setState(() => load = Load.loading);

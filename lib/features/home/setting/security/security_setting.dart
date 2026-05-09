@@ -1,4 +1,6 @@
 import 'package:n42_wallet/core/app/app_globals.dart';
+import 'package:n42_wallet/features/home/setting/security/gesture_password_page.dart';
+import 'package:n42_wallet/features/home/setting/security/google_auth_setup_page.dart';
 import 'package:n42_wallet/features/home/widgets/face_recognition_public.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
@@ -23,6 +25,9 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
     "email": false,
     "google": false,
     "face": false,
+    "gesture": false,
+    "gesturePwd": "",
+    "googleSecret": "",
   };
 
   bool checkBiometrics = true;
@@ -44,6 +49,10 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
           securityMap['email'] = userSecurityMap['email'];
           securityMap['google'] = userSecurityMap['google'];
           securityMap['face'] = userSecurityMap['face'] ?? false;
+          securityMap['gesture'] = userSecurityMap['gesture'] ?? false;
+          securityMap['gesturePwd'] = userSecurityMap['gesturePwd'] ?? '';
+          securityMap['google'] = userSecurityMap['google'] ?? false;
+          securityMap['googleSecret'] = userSecurityMap['googleSecret'] ?? '';
         });
       }
     }
@@ -180,6 +189,140 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                           ],
                         ),
                       ),
+                    Divider(
+                      height: 1,
+                      indent: ScreenUtil().setWidth(30.0),
+                      endIndent: ScreenUtil().setWidth(30.0),
+                    ),
+                    buildOpenWidget(
+                      S.of(context).g_lock_key16,
+                      securityMap['gesture'] as bool,
+                      (value) async {
+                        if (value) {
+                          final result = await Navigator.push<String?>(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const GesturePasswordPage(),
+                            ),
+                          );
+                          if (result != null && result.isNotEmpty) {
+                            securityMap['gesture'] = true;
+                            securityMap['gesturePwd'] = result;
+                            saveSecurity();
+                          }
+                        } else {
+                          securityMap['gesture'] = false;
+                          securityMap['gesturePwd'] = '';
+                          saveSecurity();
+                        }
+                        setState(() {});
+                      },
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        left: ScreenUtil().setWidth(30.0),
+                        right: ScreenUtil().setWidth(30.0),
+                        bottom: ScreenUtil().setWidth(20.0),
+                      ),
+                      child: Text(
+                        S.of(context).g_lock_key29,
+                        style: TextStyle(
+                          fontSize: ScreenUtil().setSp(24.0),
+                          color: AppThemeUtils.getColorByKey(
+                            context,
+                            AppThemeKeys.itemSubtitleTextColor.name,
+                          ),
+                        ),
+                      ),
+                    ),
+                    if (securityMap['gesture'] == true)
+                      Padding(
+                        padding: EdgeInsets.only(
+                          left: ScreenUtil().setWidth(30.0),
+                          right: ScreenUtil().setWidth(10.0),
+                          bottom: ScreenUtil().setWidth(16.0),
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(child: const SizedBox.shrink()),
+                            TextButton(
+                              onPressed: () async {
+                                final result = await Navigator.push<String?>(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => GesturePasswordPage(
+                                      oldPassword: securityMap['gesturePwd'] as String,
+                                    ),
+                                  ),
+                                );
+                                if (result != null && result.isNotEmpty) {
+                                  securityMap['gesturePwd'] = result;
+                                  saveSecurity();
+                                  setState(() {});
+                                }
+                              },
+                              child: Text(
+                                S.of(context).g_lock_key22,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: ScreenUtil().setSp(28),
+                                  color: AppThemeUtils.getColorByKey(
+                                    context,
+                                    AppThemeKeys.mainBlueColor.name,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    Divider(
+                      height: 1,
+                      indent: ScreenUtil().setWidth(30.0),
+                      endIndent: ScreenUtil().setWidth(30.0),
+                    ),
+                    buildOpenWidget(
+                      S.of(context).g_google_auth_key1,
+                      securityMap['google'] as bool,
+                      (value) async {
+                        if (value) {
+                          final result = await Navigator.push<String?>(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const GoogleAuthSetupPage(),
+                            ),
+                          );
+                          if (result != null && result.isNotEmpty) {
+                            securityMap['google'] = true;
+                            securityMap['googleSecret'] = result;
+                            saveSecurity();
+                          }
+                        } else {
+                          securityMap['google'] = false;
+                          securityMap['googleSecret'] = '';
+                          saveSecurity();
+                        }
+                        setState(() {});
+                      },
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        left: ScreenUtil().setWidth(30.0),
+                        right: ScreenUtil().setWidth(30.0),
+                        bottom: ScreenUtil().setWidth(20.0),
+                      ),
+                      child: Text(
+                        S.of(context).g_google_auth_key5,
+                        style: TextStyle(
+                          fontSize: ScreenUtil().setSp(24.0),
+                          color: AppThemeUtils.getColorByKey(
+                            context,
+                            AppThemeKeys.itemSubtitleTextColor.name,
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),

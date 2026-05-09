@@ -1334,5 +1334,38 @@
   "g_iap_store_unavailable": "स्टोर उपलब्ध नाही",
   "g_iap_check_network": "आपले नेटवर्क कनेक्शन तपासा आणि पुन्हा प्रयत्न करा",
   "g_iap_no_products": "कोणतीही उत्पादने उपलब्ध नाहीत",
-  "g_iap_retry": "पुन्हा प्रयत्न करा"
+  "g_iap_retry": "पुन्हा प्रयत्न करा",
+  "g_lock_key16": "जेश्चर पासवर्ड",
+  "g_lock_key17": "जेश्चर पासवर्ड सेट करा",
+  "g_lock_key18": "तुमचा जेश्चर नमुना काढा",
+  "g_lock_key19": "तुमचा जेश्चर नमुना पुष्टी करा",
+  "g_lock_key20": "सध्याचे जेश्चर काढा",
+  "g_lock_key21": "चुकीचा नमुना, {value} प्रयत्न शिल्लक",
+  "@g_lock_key21": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_lock_key22": "जेश्चर पासवर्ड रीसेट करा",
+  "g_lock_key23": "खूप जास्त अयशस्वी प्रयत्न, पुन्हा प्रयत्न करा",
+  "g_lock_key25": "चुकीचा नमुना, {value} प्रयत्न शिल्लक",
+  "@g_lock_key25": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_lock_key28": "जेश्चर पासवर्ड सेट केलेला नाही",
+  "g_lock_key29": "प्रत्येक हस्तांतरण पुष्टी करण्यासाठी जेश्चर प्रमाणीकरण आवश्यक आहे.",
+  "g_google_auth_key1": "Google Authenticator",
+  "g_google_auth_key2": "Google Authenticator अ‍ॅपने QR कोड स्कॅन करा",
+  "g_google_auth_key3": "किंवा की मॅन्युअली प्रविष्ट करा:",
+  "g_google_auth_key4": "6 अंकी सत्यापन कोड प्रविष्ट करा",
+  "g_google_auth_key5": "प्रत्येक हस्तांतरण पुष्टी करण्यासाठी Google Authenticator आवश्यक आहे.",
+  "g_google_auth_key6": "चुकीचा कोड, पुन्हा प्रयत्न करा",
+  "g_google_auth_key7": "Google Authenticator कॉन्फिगर केलेले नाही",
+  "g_google_auth_key8": "बाइंडिंग यशस्वी"
 }

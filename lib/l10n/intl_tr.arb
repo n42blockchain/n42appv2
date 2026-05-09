@@ -1341,5 +1341,38 @@
   "g_iap_store_unavailable": "Mağaza kullanılamıyor",
   "g_iap_check_network": "Ağ bağlantınızı kontrol edin ve yeniden deneyin",
   "g_iap_no_products": "Kullanılabilir ürün yok",
-  "g_iap_retry": "Yeniden dene"
+  "g_iap_retry": "Yeniden dene",
+  "g_lock_key16": "Desen şifresi",
+  "g_lock_key17": "Desen şifresi ayarla",
+  "g_lock_key18": "Desen şablonunuzu çizin",
+  "g_lock_key19": "Desen şablonunuzu onaylayın",
+  "g_lock_key20": "Mevcut deseni çizin",
+  "g_lock_key21": "Yanlış desen, {value} deneme kaldı",
+  "@g_lock_key21": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_lock_key22": "Desen şifresini sıfırla",
+  "g_lock_key23": "Çok fazla başarısız deneme, lütfen tekrar deneyin",
+  "g_lock_key25": "Yanlış desen, {value} deneme kaldı",
+  "@g_lock_key25": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_lock_key28": "Desen şifresi ayarlanmamış",
+  "g_lock_key29": "Her transferi onaylamak için desen kimlik doğrulaması gereklidir.",
+  "g_google_auth_key1": "Google Authenticator",
+  "g_google_auth_key2": "QR kodunu Google Authenticator uygulamasıyla tarayın",
+  "g_google_auth_key3": "Veya anahtarı manuel girin:",
+  "g_google_auth_key4": "6 haneli doğrulama kodunu girin",
+  "g_google_auth_key5": "Her transferi onaylamak için Google Authenticator gereklidir.",
+  "g_google_auth_key6": "Yanlış kod, lütfen tekrar deneyin",
+  "g_google_auth_key7": "Google Authenticator yapılandırılmamış",
+  "g_google_auth_key8": "Bağlama başarılı"
 }

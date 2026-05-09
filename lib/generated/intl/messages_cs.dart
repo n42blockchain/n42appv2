@@ -123,41 +123,45 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m44(value, value1) =>
       "Tento účet vlastní objekty ${value}, což znamená, že je vyhrazen další ${value1} XRP.";
 
-  static String m45(value) =>
+  static String m45(value) => "Nesprávný vzor, zbývá ${value} pokusů";
+
+  static String m46(value) => "Nesprávný vzor, zbývá ${value} pokus";
+
+  static String m47(value) =>
       "Úspěšně jste nastavili ${value} a zahájíte ověřování pomocí N42Wallet!";
 
-  static String m46(value) =>
+  static String m48(value) =>
       "Připojte se k mé skupině ${value} na @N42Wallet a staňte se prvním těžařem řetězce Layer 1 a získejte kryptoměny do svého telefonu!";
 
-  static String m47(value, value1) =>
+  static String m49(value, value1) =>
       "Opravdu chcete zamknout ${value} N do ${value1} pro spuštění uzlu?";
 
-  static String m48(value) => "Import se nezdařil: ${value}";
+  static String m50(value) => "Import se nezdařil: ${value}";
 
-  static String m49(value) =>
+  static String m51(value) =>
       "K získání odměn je nutný zůstatek v sázce alespoň ${value}.";
 
-  static String m50(value, value1) => "${value} N každý blok ${value1} vytěžen";
+  static String m52(value, value1) => "${value} N každý blok ${value1} vytěžen";
 
-  static String m51(value) => "Musí být ${value} znaků";
+  static String m53(value) => "Musí být ${value} znaků";
 
-  static String m52(value) => "${value} Nedostatečný zůstatek.";
+  static String m54(value) => "${value} Nedostatečný zůstatek.";
 
-  static String m53(value) => "${value} příchozí...";
+  static String m55(value) => "${value} příchozí...";
 
-  static String m54(value) =>
+  static String m56(value) =>
       "${value} vyměněné v aplikaci budou brzy distribuovány do vaší peněženky a nelze je tímto procesem prodávat. Lze jej použít ke spuštění uzlu.";
 
-  static String m55(value) => "Max. ${value} znaků";
+  static String m57(value) => "Max. ${value} znaků";
 
-  static String m56(value) => "Řetězová aplikace ${value} je již podporována!";
+  static String m58(value) => "Řetězová aplikace ${value} je již podporována!";
 
-  static String m57(value) =>
+  static String m59(value) =>
       "Řetězová aplikace ${value} je již podporována, chcete ji přidat?";
 
-  static String m58(value) => "Odkaz na test adresy ${value} se nezdařil!";
+  static String m60(value) => "Odkaz na test adresy ${value} se nezdařil!";
 
-  static String m59(value) => "0~${value} znaků";
+  static String m61(value) => "0~${value} znaků";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -280,6 +284,30 @@ class MessageLookup extends MessageLookupByLibrary {
       "Chcete-li pokračovat, naskenujte svůj obličej nebo otisk prstu.",
     ),
     "g_face_8": MessageLookupByLibrary.simpleMessage("Návrat"),
+    "g_google_auth_key1": MessageLookupByLibrary.simpleMessage(
+      "Google Authenticator",
+    ),
+    "g_google_auth_key2": MessageLookupByLibrary.simpleMessage(
+      "Naskenujte QR kód aplikací Google Authenticator",
+    ),
+    "g_google_auth_key3": MessageLookupByLibrary.simpleMessage(
+      "Nebo zadejte klíč ručně:",
+    ),
+    "g_google_auth_key4": MessageLookupByLibrary.simpleMessage(
+      "Zadejte 6místný ověřovací kód",
+    ),
+    "g_google_auth_key5": MessageLookupByLibrary.simpleMessage(
+      "Pro potvrzení každého převodu je vyžadován Google Authenticator.",
+    ),
+    "g_google_auth_key6": MessageLookupByLibrary.simpleMessage(
+      "Nesprávný kód, zkuste to znovu",
+    ),
+    "g_google_auth_key7": MessageLookupByLibrary.simpleMessage(
+      "Google Authenticator není nakonfigurován",
+    ),
+    "g_google_auth_key8": MessageLookupByLibrary.simpleMessage(
+      "Propojení úspěšné",
+    ),
     "g_home_key1": MessageLookupByLibrary.simpleMessage("Profil"),
     "g_home_key2": MessageLookupByLibrary.simpleMessage("Novinky"),
     "g_home_key3": MessageLookupByLibrary.simpleMessage("Ověření"),
@@ -2138,14 +2166,39 @@ class MessageLookup extends MessageLookupByLibrary {
       "Celková rezerva = základní rezerva + (počet vlastněných objektů × přírůstková rezerva)",
     ),
     "g_lock_key1": MessageLookupByLibrary.simpleMessage("Touch ID a Face ID"),
+    "g_lock_key16": MessageLookupByLibrary.simpleMessage("Vzorové heslo"),
+    "g_lock_key17": MessageLookupByLibrary.simpleMessage(
+      "Nastavit vzorové heslo",
+    ),
+    "g_lock_key18": MessageLookupByLibrary.simpleMessage(
+      "Nakreslete svůj vzor",
+    ),
+    "g_lock_key19": MessageLookupByLibrary.simpleMessage("Potvrďte svůj vzor"),
+    "g_lock_key20": MessageLookupByLibrary.simpleMessage(
+      "Nakreslete aktuální vzor",
+    ),
+    "g_lock_key21": m45,
+    "g_lock_key22": MessageLookupByLibrary.simpleMessage(
+      "Resetovat vzorové heslo",
+    ),
+    "g_lock_key23": MessageLookupByLibrary.simpleMessage(
+      "Příliš mnoho neúspěšných pokusů, zkuste to znovu",
+    ),
     "g_lock_key24": MessageLookupByLibrary.simpleMessage(
       "Přidat heslo k Peněžence?",
     ),
+    "g_lock_key25": m46,
     "g_lock_key26": MessageLookupByLibrary.simpleMessage(
       "Transfer Verification",
     ),
     "g_lock_key27": MessageLookupByLibrary.simpleMessage(
       "Require biometric authentication (Face ID / fingerprint) to confirm each wallet transfer.",
+    ),
+    "g_lock_key28": MessageLookupByLibrary.simpleMessage(
+      "Vzorové heslo není nastaveno",
+    ),
+    "g_lock_key29": MessageLookupByLibrary.simpleMessage(
+      "Pro potvrzení každého převodu je vyžadováno vzorové ověření.",
     ),
     "g_lock_key5": MessageLookupByLibrary.simpleMessage("Povedlo se"),
     "g_lock_key6": MessageLookupByLibrary.simpleMessage("Nepodařilo se"),
@@ -2212,12 +2265,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Sdílejte s přáteli",
     ),
     "g_mining_key62": MessageLookupByLibrary.simpleMessage("Pokračujte"),
-    "g_mining_key63": m45,
-    "g_mining_key73": m46,
+    "g_mining_key63": m47,
+    "g_mining_key73": m48,
     "g_mining_key74": MessageLookupByLibrary.simpleMessage(
       "Právě jsem nastavil uzel na @N42Wallet a zahájil ověřování na mobilních zařízeních! Pojď a přidej se ke mně. Decentralizovaná budoucnost je mobilní!",
     ),
-    "g_mining_key76": m47,
+    "g_mining_key76": m49,
     "g_mining_key82": MessageLookupByLibrary.simpleMessage("Minerální"),
     "g_mining_key83": MessageLookupByLibrary.simpleMessage("Uzel"),
     "g_mining_key84": MessageLookupByLibrary.simpleMessage("Síť"),
@@ -2252,7 +2305,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_108": MessageLookupByLibrary.simpleMessage(
       "Nepodporovaný formát šifrovaných dat!",
     ),
-    "g_mining_key_109": m48,
+    "g_mining_key_109": m50,
     "g_mining_key_11": MessageLookupByLibrary.simpleMessage("Včerejší odměny"),
     "g_mining_key_110": MessageLookupByLibrary.simpleMessage("Šifrovaná data"),
     "g_mining_key_111": MessageLookupByLibrary.simpleMessage(
@@ -2266,7 +2319,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_115": MessageLookupByLibrary.simpleMessage(
       "Vykoupení nějakou dobu trvá, chvíli prosím počkejte!",
     ),
-    "g_mining_key_116": m49,
+    "g_mining_key_116": m51,
     "g_mining_key_12": MessageLookupByLibrary.simpleMessage(
       "Odměna se hromadí denně a je odeslána do vaší peněženky N, až když dosáhne ~0,5 N.",
     ),
@@ -2338,7 +2391,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_70": MessageLookupByLibrary.simpleMessage(
       "100 bloků/den ~ 15 minut",
     ),
-    "g_mining_key_71": m50,
+    "g_mining_key_71": m52,
     "g_mining_key_72": MessageLookupByLibrary.simpleMessage(
       "128 sekund na kontrolu",
     ),
@@ -2404,7 +2457,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_97": MessageLookupByLibrary.simpleMessage(
       "Zadejte heslo pro šifrování",
     ),
-    "g_mining_key_98": m51,
+    "g_mining_key_98": m53,
     "g_mining_key_99": MessageLookupByLibrary.simpleMessage(
       "Zadejte prosím své heslo znovu, abyste se ujistili, že je správné",
     ),
@@ -2506,7 +2559,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_share_v3_key_6": MessageLookupByLibrary.simpleMessage("Odkazovat přes"),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("Odkaz"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("kód"),
-    "g_swap_key_14": m52,
+    "g_swap_key_14": m54,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "Získejte chybu ceny mince.",
     ),
@@ -2518,7 +2571,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "Váš swap bude brzy distribuován. Buďte prosím trpěliví.",
     ),
-    "g_swap_key_20": m53,
+    "g_swap_key_20": m55,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "Náklady na provoz uzlu: Ověření skupiny 1-49 N Základní uzel: 50 N Prémiový uzel: 100 N Pro uzel: 500 N.",
     ),
@@ -2530,7 +2583,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("Nová rovnováha"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("Vy platíte"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("Datum"),
-    "g_swap_key_31": m54,
+    "g_swap_key_31": m56,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "Swapy lze prohlížet na příslušných průzkumnících řetězců (Etherscan, BscScan, TRONSCAN a naše vlastní).",
     ),
@@ -2545,7 +2598,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "Obnovit výchozí",
     ),
-    "g_token_m_key_1": m55,
+    "g_token_m_key_1": m57,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "Každý může vytvořit token, včetně vytváření falešných verzí existujících tokenů. Před importem tokenu vždy prozkoumejte.",
     ),
@@ -2564,9 +2617,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_2": MessageLookupByLibrary.simpleMessage("0~18 uint"),
     "g_token_m_key_20": MessageLookupByLibrary.simpleMessage("Přidat tokeny"),
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage("Chyba formátu!"),
-    "g_token_m_key_22": m56,
-    "g_token_m_key_23": m57,
-    "g_token_m_key_24": m58,
+    "g_token_m_key_22": m58,
+    "g_token_m_key_23": m59,
+    "g_token_m_key_24": m60,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("Import tokenů"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("Všechny sítě"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage("Vlastní token"),
@@ -2615,7 +2668,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_email": MessageLookupByLibrary.simpleMessage("E-mail"),
     "login_password": MessageLookupByLibrary.simpleMessage("Heslo"),
     "next": MessageLookupByLibrary.simpleMessage("Další"),
-    "nicknameMessage": m59,
+    "nicknameMessage": m61,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "Upravit profil",
     ),

@@ -451,6 +451,39 @@
   "g_lock_key24": "新增錢包密碼？",
   "g_lock_key26": "轉帳驗證",
   "g_lock_key27": "開啟後，每次發起轉帳時需透過面容 ID 或指紋進行身份驗證。",
+  "g_lock_key16": "手勢密碼",
+  "g_lock_key17": "設置手勢密碼",
+  "g_lock_key18": "繪製您的手勢圖案",
+  "g_lock_key19": "再次繪製手勢圖案確認",
+  "g_lock_key20": "繪製當前手勢密碼",
+  "g_lock_key21": "手勢圖案輸入錯誤，還剩 {value} 次機會",
+  "@g_lock_key21": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_lock_key22": "重置手勢密碼",
+  "g_lock_key23": "輸入錯誤次數過多，請重新設置",
+  "g_lock_key25": "手勢圖案輸入錯誤，還剩 {value} 次機會",
+  "@g_lock_key25": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_lock_key28": "未設置手勢密碼",
+  "g_lock_key29": "開啟後，每次發起轉帳時需透過手勢密碼進行身份驗證。",
+  "g_google_auth_key1": "Google 身份驗證器",
+  "g_google_auth_key2": "使用 Google Authenticator App 掃描二維碼",
+  "g_google_auth_key3": "或手動輸入金鑰：",
+  "g_google_auth_key4": "輸入 6 位驗證碼",
+  "g_google_auth_key5": "開啟後，每次發起轉帳時需透過 Google 驗證器進行身份驗證。",
+  "g_google_auth_key6": "驗證碼錯誤，請重試",
+  "g_google_auth_key7": "尚未綁定 Google 驗證器",
+  "g_google_auth_key8": "綁定成功",
   "google_verification_message10": "關聯",
   "g_key_login": "登入",
   "g_key_logout": "退出",

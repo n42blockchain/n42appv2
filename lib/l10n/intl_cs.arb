@@ -1334,5 +1334,38 @@
   "g_iap_store_unavailable": "Obchod není dostupný",
   "g_iap_check_network": "Zkontrolujte připojení k síti a zkuste to znovu",
   "g_iap_no_products": "Žádné produkty k dispozici",
-  "g_iap_retry": "Zkusit znovu"
+  "g_iap_retry": "Zkusit znovu",
+  "g_lock_key16": "Vzorové heslo",
+  "g_lock_key17": "Nastavit vzorové heslo",
+  "g_lock_key18": "Nakreslete svůj vzor",
+  "g_lock_key19": "Potvrďte svůj vzor",
+  "g_lock_key20": "Nakreslete aktuální vzor",
+  "g_lock_key21": "Nesprávný vzor, zbývá {value} pokusů",
+  "@g_lock_key21": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_lock_key22": "Resetovat vzorové heslo",
+  "g_lock_key23": "Příliš mnoho neúspěšných pokusů, zkuste to znovu",
+  "g_lock_key25": "Nesprávný vzor, zbývá {value} pokus",
+  "@g_lock_key25": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_lock_key28": "Vzorové heslo není nastaveno",
+  "g_lock_key29": "Pro potvrzení každého převodu je vyžadováno vzorové ověření.",
+  "g_google_auth_key1": "Google Authenticator",
+  "g_google_auth_key2": "Naskenujte QR kód aplikací Google Authenticator",
+  "g_google_auth_key3": "Nebo zadejte klíč ručně:",
+  "g_google_auth_key4": "Zadejte 6místný ověřovací kód",
+  "g_google_auth_key5": "Pro potvrzení každého převodu je vyžadován Google Authenticator.",
+  "g_google_auth_key6": "Nesprávný kód, zkuste to znovu",
+  "g_google_auth_key7": "Google Authenticator není nakonfigurován",
+  "g_google_auth_key8": "Propojení úspěšné"
 }

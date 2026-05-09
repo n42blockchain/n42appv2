@@ -451,6 +451,39 @@
   "g_lock_key24": "Add Wallet Password?",
   "g_lock_key26": "Transfer Verification",
   "g_lock_key27": "Require biometric authentication (Face ID / fingerprint) to confirm each wallet transfer.",
+  "g_lock_key16": "Gesture Password",
+  "g_lock_key17": "Set Gesture Password",
+  "g_lock_key18": "Draw your gesture pattern",
+  "g_lock_key19": "Confirm your gesture pattern",
+  "g_lock_key20": "Draw current gesture",
+  "g_lock_key21": "Incorrect pattern, {value} attempts remaining",
+  "@g_lock_key21": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_lock_key22": "Reset Gesture Password",
+  "g_lock_key23": "Too many failed attempts, please retry",
+  "g_lock_key25": "Incorrect pattern, {value} attempt remaining",
+  "@g_lock_key25": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_lock_key28": "Gesture password not set",
+  "g_lock_key29": "Require gesture authentication to confirm each wallet transfer.",
+  "g_google_auth_key1": "Google Authenticator",
+  "g_google_auth_key2": "Scan the QR code with Google Authenticator app",
+  "g_google_auth_key3": "Or enter the key manually:",
+  "g_google_auth_key4": "Enter 6-digit verification code",
+  "g_google_auth_key5": "Require Google Authenticator to confirm each wallet transfer.",
+  "g_google_auth_key6": "Incorrect code, please try again",
+  "g_google_auth_key7": "Google Authenticator not configured",
+  "g_google_auth_key8": "Binding successful",
   "google_verification_message10": "Link",
   "g_key_login": "Log In",
   "g_key_logout": "Log Out",

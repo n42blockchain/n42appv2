@@ -124,41 +124,46 @@ class MessageLookup extends MessageLookupByLibrary {
       "ఈ ఖాతా ${value} ఆబ్జెక్ట్‌లను కలిగి ఉంది, అంటే అదనపు ${value1} XRP రిజర్వ్ చేయబడింది.";
 
   static String m45(value) =>
+      "తప్పు పేటర్న్, ${value} ప్రయత్నాలు మిగిలి ఉన్నాయి";
+
+  static String m46(value) => "తప్పు పేటర్న్, ${value} ప్రయత్నం మిగిలి ఉంది";
+
+  static String m47(value) =>
       "మీరు విజయవంతంగా ${value}ని సెటప్ చేసారు మరియు N42Walletతో ధృవీకరణను ప్రారంభిస్తారు!";
 
-  static String m46(value) =>
+  static String m48(value) =>
       "లేయర్ 1 చైన్ యొక్క ప్రారంభ మైనర్‌గా ఉండటానికి @N42Walletలోని నా ${value} సమూహంలో చేరండి మరియు మీ ఫోన్‌లో క్రిప్టోను పొందండి!";
 
-  static String m47(value, value1) =>
+  static String m49(value, value1) =>
       "నోడ్‌ని అమలు చేయడానికి మీరు ఖచ్చితంగా ${value} Nని ${value1} వరకు లాక్ చేయాలనుకుంటున్నారా?";
 
-  static String m48(value) => "దిగుమతి విఫలమైంది:${value}";
+  static String m50(value) => "దిగుమతి విఫలమైంది:${value}";
 
-  static String m49(value) =>
+  static String m51(value) =>
       "రివార్డ్‌లను సంపాదించడానికి కనీసం ${value} స్టాకింగ్ బ్యాలెన్స్ అవసరం.";
 
-  static String m50(value, value1) =>
+  static String m52(value, value1) =>
       "${value} N తవ్విన ప్రతి ${value1} బ్లాక్‌లు";
 
-  static String m51(value) => "తప్పనిసరిగా ${value} అక్షరాలు ఉండాలి";
+  static String m53(value) => "తప్పనిసరిగా ${value} అక్షరాలు ఉండాలి";
 
-  static String m52(value) => "${value} బ్యాలెన్స్ సరిపోలేదు.";
+  static String m54(value) => "${value} బ్యాలెన్స్ సరిపోలేదు.";
 
-  static String m53(value) => "${value} ఇన్‌కమింగ్...";
+  static String m55(value) => "${value} ఇన్‌కమింగ్...";
 
-  static String m54(value) =>
+  static String m56(value) =>
       "${value} స్వాప్డ్ ఇన్-యాప్ మీ వాలెట్‌కు త్వరలో పంపిణీ చేయబడుతుంది మరియు ఈ ప్రక్రియ ద్వారా విక్రయించబడదు. ఇది నోడ్‌ను అమలు చేయడానికి ఉపయోగించవచ్చు.";
 
-  static String m55(value) => "గరిష్ట ${value} అక్షరాలు";
+  static String m57(value) => "గరిష్ట ${value} అక్షరాలు";
 
-  static String m56(value) => "${value} చైన్ APPకి ఇప్పటికే మద్దతు ఉంది!";
+  static String m58(value) => "${value} చైన్ APPకి ఇప్పటికే మద్దతు ఉంది!";
 
-  static String m57(value) =>
+  static String m59(value) =>
       "${value} చైన్ APPకి ఇప్పటికే మద్దతు ఉంది, మీరు దీన్ని జోడించాలనుకుంటున్నారా?";
 
-  static String m58(value) => "${value} చిరునామా పరీక్ష లింక్ విఫలమైంది!";
+  static String m60(value) => "${value} చిరునామా పరీక్ష లింక్ విఫలమైంది!";
 
-  static String m59(value) => "0~${value} అక్షరాలు";
+  static String m61(value) => "0~${value} అక్షరాలు";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -299,6 +304,30 @@ class MessageLookup extends MessageLookupByLibrary {
       "కొనసాగించడానికి మీ ముఖం లేదా వేలిముద్రను స్కాన్ చేయండి.",
     ),
     "g_face_8": MessageLookupByLibrary.simpleMessage("తిరిగి"),
+    "g_google_auth_key1": MessageLookupByLibrary.simpleMessage(
+      "Google Authenticator",
+    ),
+    "g_google_auth_key2": MessageLookupByLibrary.simpleMessage(
+      "Google Authenticator యాప్‌తో QR కోడ్ స్కాన్ చేయండి",
+    ),
+    "g_google_auth_key3": MessageLookupByLibrary.simpleMessage(
+      "లేదా కీని మాన్యువల్‌గా నమోదు చేయండి:",
+    ),
+    "g_google_auth_key4": MessageLookupByLibrary.simpleMessage(
+      "6 అంకెల ధృవీకరణ కోడ్ నమోదు చేయండి",
+    ),
+    "g_google_auth_key5": MessageLookupByLibrary.simpleMessage(
+      "ప్రతి బదిలీని నిర్ధారించడానికి Google Authenticator అవసరం.",
+    ),
+    "g_google_auth_key6": MessageLookupByLibrary.simpleMessage(
+      "తప్పు కోడ్, మళ్లీ ప్రయత్నించండి",
+    ),
+    "g_google_auth_key7": MessageLookupByLibrary.simpleMessage(
+      "Google Authenticator కాన్ఫిగర్ చేయబడలేదు",
+    ),
+    "g_google_auth_key8": MessageLookupByLibrary.simpleMessage(
+      "బైండింగ్ విజయవంతమైంది",
+    ),
     "g_home_key1": MessageLookupByLibrary.simpleMessage("ప్రొఫైల్"),
     "g_home_key2": MessageLookupByLibrary.simpleMessage("వార్తలు"),
     "g_home_key3": MessageLookupByLibrary.simpleMessage("ధృవీకరణ"),
@@ -2234,14 +2263,41 @@ class MessageLookup extends MessageLookupByLibrary {
       "మొత్తం రిజర్వ్ = బేస్ రిజర్వ్ + (యాజమాన్య వస్తువులు కౌంట్ × ఇంక్రిమెంటల్ రిజర్వ్)",
     ),
     "g_lock_key1": MessageLookupByLibrary.simpleMessage("టచ్ ID మరియు ఫేస్ ID"),
+    "g_lock_key16": MessageLookupByLibrary.simpleMessage("జెస్చర్ పాస్‌వర్డ్"),
+    "g_lock_key17": MessageLookupByLibrary.simpleMessage(
+      "జెస్చర్ పాస్‌వర్డ్ సెట్ చేయండి",
+    ),
+    "g_lock_key18": MessageLookupByLibrary.simpleMessage(
+      "మీ జెస్చర్ పేటర్న్ గీయండి",
+    ),
+    "g_lock_key19": MessageLookupByLibrary.simpleMessage(
+      "మీ జెస్చర్ పేటర్న్ నిర్ధారించండి",
+    ),
+    "g_lock_key20": MessageLookupByLibrary.simpleMessage(
+      "ప్రస్తుత జెస్చర్ గీయండి",
+    ),
+    "g_lock_key21": m45,
+    "g_lock_key22": MessageLookupByLibrary.simpleMessage(
+      "జెస్చర్ పాస్‌వర్డ్ రీసెట్ చేయండి",
+    ),
+    "g_lock_key23": MessageLookupByLibrary.simpleMessage(
+      "చాలా ఎక్కువ విఫల ప్రయత్నాలు, మళ్లీ ప్రయత్నించండి",
+    ),
     "g_lock_key24": MessageLookupByLibrary.simpleMessage(
       "Wallet పాస్‌వర్డ్‌ని జోడించాలా?",
     ),
+    "g_lock_key25": m46,
     "g_lock_key26": MessageLookupByLibrary.simpleMessage(
       "Transfer Verification",
     ),
     "g_lock_key27": MessageLookupByLibrary.simpleMessage(
       "Require biometric authentication (Face ID / fingerprint) to confirm each wallet transfer.",
+    ),
+    "g_lock_key28": MessageLookupByLibrary.simpleMessage(
+      "జెస్చర్ పాస్‌వర్డ్ సెట్ చేయబడలేదు",
+    ),
+    "g_lock_key29": MessageLookupByLibrary.simpleMessage(
+      "ప్రతి బదిలీని నిర్ధారించడానికి జెస్చర్ ప్రమాణీకరణ అవసరం.",
     ),
     "g_lock_key5": MessageLookupByLibrary.simpleMessage("విజయం సాధించారు"),
     "g_lock_key6": MessageLookupByLibrary.simpleMessage("విఫలమైంది"),
@@ -2308,12 +2364,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "స్నేహితులకు షేర్ చేయండి",
     ),
     "g_mining_key62": MessageLookupByLibrary.simpleMessage("కొనసాగించు"),
-    "g_mining_key63": m45,
-    "g_mining_key73": m46,
+    "g_mining_key63": m47,
+    "g_mining_key73": m48,
     "g_mining_key74": MessageLookupByLibrary.simpleMessage(
       "నేను ఇప్పుడే @N42Walletలో నోడ్‌ని సెటప్ చేసాను మరియు మొబైల్ పరికరాలలో ధృవీకరణను ప్రారంభించాను! వచ్చి చేరండి. వికేంద్రీకృత భవిష్యత్తు మొబైల్!",
     ),
-    "g_mining_key76": m47,
+    "g_mining_key76": m49,
     "g_mining_key82": MessageLookupByLibrary.simpleMessage("మినరల్"),
     "g_mining_key83": MessageLookupByLibrary.simpleMessage("నోడ్"),
     "g_mining_key84": MessageLookupByLibrary.simpleMessage("నెట్‌వర్క్"),
@@ -2350,7 +2406,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_108": MessageLookupByLibrary.simpleMessage(
       "ఎన్‌క్రిప్టెడ్ డేటా ఫార్మాట్‌కి మద్దతు లేదు!",
     ),
-    "g_mining_key_109": m48,
+    "g_mining_key_109": m50,
     "g_mining_key_11": MessageLookupByLibrary.simpleMessage("నిన్నటి బహుమతులు"),
     "g_mining_key_110": MessageLookupByLibrary.simpleMessage(
       "గుప్తీకరించిన డేటా",
@@ -2368,7 +2424,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_115": MessageLookupByLibrary.simpleMessage(
       "విముక్తికి కొంత సమయం పడుతుంది, దయచేసి ఒక్క క్షణం ఆగండి!",
     ),
-    "g_mining_key_116": m49,
+    "g_mining_key_116": m51,
     "g_mining_key_12": MessageLookupByLibrary.simpleMessage(
       "రివార్డ్ ప్రతిరోజూ పేరుకుపోతుంది మరియు అది ~0.5 Nకి చేరుకున్నప్పుడు మాత్రమే మీ N వాలెట్‌కి పంపబడుతుంది.",
     ),
@@ -2458,7 +2514,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_70": MessageLookupByLibrary.simpleMessage(
       "100 బ్లాక్‌లు/రోజు~15 నిమిషాలు",
     ),
-    "g_mining_key_71": m50,
+    "g_mining_key_71": m52,
     "g_mining_key_72": MessageLookupByLibrary.simpleMessage(
       "ఒక్కో చెక్‌కు 128 సెకన్లు",
     ),
@@ -2522,7 +2578,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_97": MessageLookupByLibrary.simpleMessage(
       "దయచేసి ఎన్‌క్రిప్షన్ పాస్‌వర్డ్‌ను నమోదు చేయండి",
     ),
-    "g_mining_key_98": m51,
+    "g_mining_key_98": m53,
     "g_mining_key_99": MessageLookupByLibrary.simpleMessage(
       "దయచేసి మీ పాస్‌వర్డ్ సరైనదని నిర్ధారించుకోవడానికి మళ్లీ నమోదు చేయండి",
     ),
@@ -2630,7 +2686,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_share_v3_key_6": MessageLookupByLibrary.simpleMessage("ద్వారా చూడండి"),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("లింక్"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("కోడ్"),
-    "g_swap_key_14": m52,
+    "g_swap_key_14": m54,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "నాణెం ధర లోపం పొందండి.",
     ),
@@ -2644,7 +2700,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "మీ స్వాప్ త్వరలో పంపిణీ చేయబడుతుంది.దయచేసి ఓపికపట్టండి.",
     ),
-    "g_swap_key_20": m53,
+    "g_swap_key_20": m55,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "నోడ్‌ని అమలు చేయడానికి అయ్యే ఖర్చులు: గ్రూప్ వెరిఫికేషన్ 1-49 N ప్రాథమిక నోడ్: 50 N ప్రీమియం నోడ్: 100 N ప్రో నోడ్: 500 N.",
     ),
@@ -2658,7 +2714,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("కొత్త బ్యాలెన్స్"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("మీరు చెల్లించండి"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("తేదీ"),
-    "g_swap_key_31": m54,
+    "g_swap_key_31": m56,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "మార్పిడులను సంబంధిత చైన్ ఎక్స్‌ప్లోరర్‌లలో వీక్షించవచ్చు (ఈథర్‌స్కాన్, BscScan, TRONSCAN మరియు మా స్వంతం).",
     ),
@@ -2671,7 +2727,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "డిఫాల్ట్‌కి రీసెట్ చేయండి",
     ),
-    "g_token_m_key_1": m55,
+    "g_token_m_key_1": m57,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "ఇప్పటికే ఉన్న టోకెన్‌ల నకిలీ వెర్షన్‌లను సృష్టించడంతో పాటు ఎవరైనా టోకెన్‌ను సృష్టించవచ్చు. టోకెన్‌ను దిగుమతి చేసుకునే ముందు ఎల్లప్పుడూ పరిశోధించండి.",
     ),
@@ -2690,9 +2746,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "టోకెన్లను జోడించండి",
     ),
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage("ఫార్మాట్ లోపం!"),
-    "g_token_m_key_22": m56,
-    "g_token_m_key_23": m57,
-    "g_token_m_key_24": m58,
+    "g_token_m_key_22": m58,
+    "g_token_m_key_23": m59,
+    "g_token_m_key_24": m60,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage(
       "టోకెన్లను దిగుమతి చేయండి",
     ),
@@ -2745,7 +2801,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_email": MessageLookupByLibrary.simpleMessage("ఇమెయిల్"),
     "login_password": MessageLookupByLibrary.simpleMessage("పాస్వర్డ్"),
     "next": MessageLookupByLibrary.simpleMessage("తదుపరి"),
-    "nicknameMessage": m59,
+    "nicknameMessage": m61,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "ప్రొఫైల్‌ని సవరించండి",
     ),

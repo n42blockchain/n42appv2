@@ -122,42 +122,46 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m44(value, value1) =>
       "Akun ini memiliki ${value} objek, yang berarti tambahan ${value1} XRP dicadangkan.";
 
-  static String m45(value) =>
+  static String m45(value) => "Pola salah, tersisa ${value} percobaan";
+
+  static String m46(value) => "Pola salah, tersisa ${value} percobaan";
+
+  static String m47(value) =>
       "Anda telah berhasil menyiapkan ${value} dan akan memulai verifikasi dengan N42Wallet!";
 
-  static String m46(value) =>
+  static String m48(value) =>
       "Bergabung dengan grup ${value} saya di @N42Wallet untuk menjadi penambang awal dari blockchain Layer 1, dan dapatkan kripto di ponsel Anda!";
 
-  static String m47(value, value1) =>
+  static String m49(value, value1) =>
       "Apakah Anda yakin ingin mengunci ${value} N hingga ${value1} untuk menjalankan node?";
 
-  static String m48(value) => "Impor gagal:${value}";
+  static String m50(value) => "Impor gagal:${value}";
 
-  static String m49(value) =>
+  static String m51(value) =>
       "Dibutuhkan saldo staking minimal ${value} untuk mendapatkan hadiah.";
 
-  static String m50(value, value1) =>
+  static String m52(value, value1) =>
       "${value} N setiap ${value1} blok ditambang";
 
-  static String m51(value) => "Harus ${value} karakter";
+  static String m53(value) => "Harus ${value} karakter";
 
-  static String m52(value) => "Saldo ${value} Tidak Mencukupi.";
+  static String m54(value) => "Saldo ${value} Tidak Mencukupi.";
 
-  static String m53(value) => "${value} masuk...";
+  static String m55(value) => "${value} masuk...";
 
-  static String m54(value) =>
+  static String m56(value) =>
       "${value} yang di-swap dalam aplikasi akan segera didistribusikan ke dompet Anda dan tidak dapat dijual melalui proses ini. Dapat digunakan untuk menjalankan node.";
 
-  static String m55(value) => "Maksimal ${value} karakter";
+  static String m57(value) => "Maksimal ${value} karakter";
 
-  static String m56(value) => "Jaringan ${value} sudah didukung APP!";
+  static String m58(value) => "Jaringan ${value} sudah didukung APP!";
 
-  static String m57(value) =>
+  static String m59(value) =>
       "Jaringan ${value} sudah didukung APP, apakah Anda ingin menambahkannya?";
 
-  static String m58(value) => "Uji tautan alamat ${value} gagal!";
+  static String m60(value) => "Uji tautan alamat ${value} gagal!";
 
-  static String m59(value) => "0~${value} karakter";
+  static String m61(value) => "0~${value} karakter";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -288,6 +292,30 @@ class MessageLookup extends MessageLookupByLibrary {
       "Pindai wajah atau sidik jari Anda untuk melanjutkan.",
     ),
     "g_face_8": MessageLookupByLibrary.simpleMessage("Kembali"),
+    "g_google_auth_key1": MessageLookupByLibrary.simpleMessage(
+      "Google Authenticator",
+    ),
+    "g_google_auth_key2": MessageLookupByLibrary.simpleMessage(
+      "Pindai kode QR dengan aplikasi Google Authenticator",
+    ),
+    "g_google_auth_key3": MessageLookupByLibrary.simpleMessage(
+      "Atau masukkan kunci secara manual:",
+    ),
+    "g_google_auth_key4": MessageLookupByLibrary.simpleMessage(
+      "Masukkan kode verifikasi 6 digit",
+    ),
+    "g_google_auth_key5": MessageLookupByLibrary.simpleMessage(
+      "Google Authenticator diperlukan untuk mengonfirmasi setiap transfer.",
+    ),
+    "g_google_auth_key6": MessageLookupByLibrary.simpleMessage(
+      "Kode salah, coba lagi",
+    ),
+    "g_google_auth_key7": MessageLookupByLibrary.simpleMessage(
+      "Google Authenticator belum dikonfigurasi",
+    ),
+    "g_google_auth_key8": MessageLookupByLibrary.simpleMessage(
+      "Pengikatan berhasil",
+    ),
     "g_home_key1": MessageLookupByLibrary.simpleMessage("Profil"),
     "g_home_key2": MessageLookupByLibrary.simpleMessage("Berita"),
     "g_home_key3": MessageLookupByLibrary.simpleMessage("Verifikasi"),
@@ -2153,14 +2181,41 @@ class MessageLookup extends MessageLookupByLibrary {
       "Total Cadangan = Cadangan Dasar + (Jumlah Objek yang Dimiliki × Cadangan Tambahan)",
     ),
     "g_lock_key1": MessageLookupByLibrary.simpleMessage("Touch ID dan Face ID"),
+    "g_lock_key16": MessageLookupByLibrary.simpleMessage("Kata sandi gestur"),
+    "g_lock_key17": MessageLookupByLibrary.simpleMessage(
+      "Atur kata sandi gestur",
+    ),
+    "g_lock_key18": MessageLookupByLibrary.simpleMessage(
+      "Gambar pola gestur Anda",
+    ),
+    "g_lock_key19": MessageLookupByLibrary.simpleMessage(
+      "Konfirmasi pola gestur Anda",
+    ),
+    "g_lock_key20": MessageLookupByLibrary.simpleMessage(
+      "Gambar gestur saat ini",
+    ),
+    "g_lock_key21": m45,
+    "g_lock_key22": MessageLookupByLibrary.simpleMessage(
+      "Setel ulang kata sandi gestur",
+    ),
+    "g_lock_key23": MessageLookupByLibrary.simpleMessage(
+      "Terlalu banyak percobaan gagal, coba lagi",
+    ),
     "g_lock_key24": MessageLookupByLibrary.simpleMessage(
       "Tambahkan Kata Sandi Dompet?",
     ),
+    "g_lock_key25": m46,
     "g_lock_key26": MessageLookupByLibrary.simpleMessage(
       "Transfer Verification",
     ),
     "g_lock_key27": MessageLookupByLibrary.simpleMessage(
       "Require biometric authentication (Face ID / fingerprint) to confirm each wallet transfer.",
+    ),
+    "g_lock_key28": MessageLookupByLibrary.simpleMessage(
+      "Kata sandi gestur belum diatur",
+    ),
+    "g_lock_key29": MessageLookupByLibrary.simpleMessage(
+      "Autentikasi gestur diperlukan untuk mengonfirmasi setiap transfer.",
     ),
     "g_lock_key5": MessageLookupByLibrary.simpleMessage("Berhasil"),
     "g_lock_key6": MessageLookupByLibrary.simpleMessage("Gagal"),
@@ -2229,12 +2284,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_mining_key61": MessageLookupByLibrary.simpleMessage("Bagikan ke teman"),
     "g_mining_key62": MessageLookupByLibrary.simpleMessage("Lanjutkan"),
-    "g_mining_key63": m45,
-    "g_mining_key73": m46,
+    "g_mining_key63": m47,
+    "g_mining_key73": m48,
     "g_mining_key74": MessageLookupByLibrary.simpleMessage(
       "Saya baru saja menyiapkan node di @N42Wallet dan memulai verifikasi di perangkat seluler! Ayo bergabung dengan saya. Masa depan terdesentralisasi ada di seluler!",
     ),
-    "g_mining_key76": m47,
+    "g_mining_key76": m49,
     "g_mining_key82": MessageLookupByLibrary.simpleMessage("Mineral"),
     "g_mining_key83": MessageLookupByLibrary.simpleMessage("simpul"),
     "g_mining_key84": MessageLookupByLibrary.simpleMessage("Jaringan"),
@@ -2267,7 +2322,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_108": MessageLookupByLibrary.simpleMessage(
       "Format data terenkripsi tidak didukung!",
     ),
-    "g_mining_key_109": m48,
+    "g_mining_key_109": m50,
     "g_mining_key_11": MessageLookupByLibrary.simpleMessage("Hadiah Kemarin"),
     "g_mining_key_110": MessageLookupByLibrary.simpleMessage(
       "Data terenkripsi",
@@ -2281,7 +2336,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_115": MessageLookupByLibrary.simpleMessage(
       "Penukaran membutuhkan waktu, silakan tunggu sebentar!",
     ),
-    "g_mining_key_116": m49,
+    "g_mining_key_116": m51,
     "g_mining_key_12": MessageLookupByLibrary.simpleMessage(
       "Hadiah terakumulasi setiap hari dan hanya dikirim ke dompet N Anda ketika mencapai ~0,5 N.",
     ),
@@ -2367,7 +2422,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_70": MessageLookupByLibrary.simpleMessage(
       "100 blok/hari~15 menit",
     ),
-    "g_mining_key_71": m50,
+    "g_mining_key_71": m52,
     "g_mining_key_72": MessageLookupByLibrary.simpleMessage(
       "128 detik per pemeriksaan",
     ),
@@ -2431,7 +2486,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_97": MessageLookupByLibrary.simpleMessage(
       "Silakan masukkan kata sandi enkripsi",
     ),
-    "g_mining_key_98": m51,
+    "g_mining_key_98": m53,
     "g_mining_key_99": MessageLookupByLibrary.simpleMessage(
       "Silakan masukkan kembali kata sandi Anda untuk memastikan kebenaran",
     ),
@@ -2537,7 +2592,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_share_v3_key_6": MessageLookupByLibrary.simpleMessage("Ajak melalui"),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("Tautan"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("kode"),
-    "g_swap_key_14": m52,
+    "g_swap_key_14": m54,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "Kesalahan mendapatkan harga koin.",
     ),
@@ -2551,7 +2606,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "Swap Anda akan segera didistribusikan. Harap bersabar.",
     ),
-    "g_swap_key_20": m53,
+    "g_swap_key_20": m55,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "Biaya untuk menjalankan node: Verifikasi Grup 1-49 N Node Dasar: 50 N Node Premium: 100 N Node Pro: 500 N.",
     ),
@@ -2567,7 +2622,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("Saldo Baru"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("Anda bayar"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("Tanggal"),
-    "g_swap_key_31": m54,
+    "g_swap_key_31": m56,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "Swap dapat dilihat di penjelajah blockchain terkait (Etherscan, BscScan, TRONSCAN dan milik kami).",
     ),
@@ -2580,7 +2635,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "Atur ulang ke default",
     ),
-    "g_token_m_key_1": m55,
+    "g_token_m_key_1": m57,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "Siapa pun dapat membuat token, termasuk membuat versi palsu dari token yang ada. Selalu teliti token sebelum mengimpornya.",
     ),
@@ -2599,9 +2654,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage(
       "Kesalahan Format!",
     ),
-    "g_token_m_key_22": m56,
-    "g_token_m_key_23": m57,
-    "g_token_m_key_24": m58,
+    "g_token_m_key_22": m58,
+    "g_token_m_key_23": m59,
+    "g_token_m_key_24": m60,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("Impor token"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("Semua jaringan"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage("Token Kustom"),
@@ -2650,7 +2705,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_email": MessageLookupByLibrary.simpleMessage("Surel"),
     "login_password": MessageLookupByLibrary.simpleMessage("Kata Sandi"),
     "next": MessageLookupByLibrary.simpleMessage("Selanjutnya"),
-    "nicknameMessage": m59,
+    "nicknameMessage": m61,
     "personalInformation": MessageLookupByLibrary.simpleMessage("Edit Profil"),
     "photograph": MessageLookupByLibrary.simpleMessage("Foto"),
     "please_input_address": MessageLookupByLibrary.simpleMessage(

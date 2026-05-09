@@ -1334,5 +1334,38 @@
   "g_iap_store_unavailable": "اسٹور دستیاب نہیں",
   "g_iap_check_network": "اپنا نیٹ ورک کنکشن چیک کریں اور دوبارہ کوشش کریں",
   "g_iap_no_products": "کوئی مصنوعات دستیاب نہیں",
-  "g_iap_retry": "دوبارہ کوشش کریں"
+  "g_iap_retry": "دوبارہ کوشش کریں",
+  "g_lock_key16": "اشاری پاس ورڈ",
+  "g_lock_key17": "اشاری پاس ورڈ ترتیب دیں",
+  "g_lock_key18": "اپنا اشاری نمونہ بنائیں",
+  "g_lock_key19": "اپنے اشاری نمونے کی تصدیق کریں",
+  "g_lock_key20": "موجودہ اشارہ بنائیں",
+  "g_lock_key21": "غلط نمونہ، {value} کوششیں باقی ہیں",
+  "@g_lock_key21": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_lock_key22": "اشاری پاس ورڈ دوبارہ ترتیب دیں",
+  "g_lock_key23": "بہت زیادہ ناکام کوششیں، دوبارہ کوشش کریں",
+  "g_lock_key25": "غلط نمونہ، {value} کوشش باقی ہے",
+  "@g_lock_key25": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_lock_key28": "اشاری پاس ورڈ ترتیب نہیں دیا گیا",
+  "g_lock_key29": "ہر ٹرانسفر کی تصدیق کے لیے اشاری تصدیق ضروری ہے۔",
+  "g_google_auth_key1": "Google Authenticator",
+  "g_google_auth_key2": "Google Authenticator ایپ سے QR کوڈ اسکین کریں",
+  "g_google_auth_key3": "یا کلید دستی طور پر داخل کریں:",
+  "g_google_auth_key4": "6 ہندسوں کا تصدیقی کوڈ داخل کریں",
+  "g_google_auth_key5": "ہر ٹرانسفر کی تصدیق کے لیے Google Authenticator ضروری ہے۔",
+  "g_google_auth_key6": "غلط کوڈ، دوبارہ کوشش کریں",
+  "g_google_auth_key7": "Google Authenticator ترتیب نہیں دیا گیا",
+  "g_google_auth_key8": "لنک کامیاب"
 }

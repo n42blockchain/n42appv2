@@ -1341,5 +1341,38 @@
   "g_iap_store_unavailable": "ストアを利用できません",
   "g_iap_check_network": "ネットワーク接続を確認して再試行してください",
   "g_iap_no_products": "購入できる商品がありません",
-  "g_iap_retry": "再試行"
+  "g_iap_retry": "再試行",
+  "g_lock_key16": "ジェスチャーパスワード",
+  "g_lock_key17": "ジェスチャーパスワードを設定",
+  "g_lock_key18": "ジェスチャーパターンを描いてください",
+  "g_lock_key19": "ジェスチャーパターンを確認してください",
+  "g_lock_key20": "現在のジェスチャーを描いてください",
+  "g_lock_key21": "パターンが違います、残り{value}回",
+  "@g_lock_key21": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_lock_key22": "ジェスチャーパスワードをリセット",
+  "g_lock_key23": "試行回数が多すぎます、もう一度お試しください",
+  "g_lock_key25": "パターンが違います、残り{value}回",
+  "@g_lock_key25": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_lock_key28": "ジェスチャーパスワード未設定",
+  "g_lock_key29": "ウォレット送金の確認にジェスチャー認証が必要です。",
+  "g_google_auth_key1": "Google 認証システム",
+  "g_google_auth_key2": "Google Authenticator アプリで QR コードをスキャン",
+  "g_google_auth_key3": "またはキーを手動で入力:",
+  "g_google_auth_key4": "6桁の確認コードを入力",
+  "g_google_auth_key5": "ウォレット送金の確認に Google 認証が必要です。",
+  "g_google_auth_key6": "コードが違います、もう一度お試しください",
+  "g_google_auth_key7": "Google 認証システム未設定",
+  "g_google_auth_key8": "連携成功"
 }

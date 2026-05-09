@@ -1334,5 +1334,38 @@
   "g_iap_store_unavailable": "스토어를 사용할 수 없습니다",
   "g_iap_check_network": "네트워크 연결을 확인하고 다시 시도하세요",
   "g_iap_no_products": "구매 가능한 상품이 없습니다",
-  "g_iap_retry": "다시 시도"
+  "g_iap_retry": "다시 시도",
+  "g_lock_key16": "제스처 비밀번호",
+  "g_lock_key17": "제스처 비밀번호 설정",
+  "g_lock_key18": "제스처 패턴을 그려주세요",
+  "g_lock_key19": "제스처 패턴을 확인해주세요",
+  "g_lock_key20": "현재 제스처를 그려주세요",
+  "g_lock_key21": "잘못된 패턴, 남은 시도 횟수 {value}회",
+  "@g_lock_key21": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_lock_key22": "제스처 비밀번호 재설정",
+  "g_lock_key23": "시도 횟수 초과, 다시 시도해주세요",
+  "g_lock_key25": "잘못된 패턴, 남은 시도 횟수 {value}회",
+  "@g_lock_key25": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_lock_key28": "제스처 비밀번호 미설정",
+  "g_lock_key29": "지갑 이체 확인 시 제스처 인증이 필요합니다.",
+  "g_google_auth_key1": "Google OTP",
+  "g_google_auth_key2": "Google Authenticator 앱으로 QR 코드 스캔",
+  "g_google_auth_key3": "또는 키를 수동으로 입력:",
+  "g_google_auth_key4": "6자리 인증 코드 입력",
+  "g_google_auth_key5": "지갑 이체 확인 시 Google OTP 인증이 필요합니다.",
+  "g_google_auth_key6": "잘못된 코드, 다시 시도해주세요",
+  "g_google_auth_key7": "Google OTP 미설정",
+  "g_google_auth_key8": "연결 성공"
 }

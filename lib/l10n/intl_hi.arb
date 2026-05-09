@@ -1334,5 +1334,38 @@
   "g_iap_store_unavailable": "ऐप स्टोर अनुपलब्ध है",
   "g_iap_check_network": "अपना नेटवर्क कनेक्शन जांचें और पुनः प्रयास करें",
   "g_iap_no_products": "कोई उत्पाद उपलब्ध नहीं",
-  "g_iap_retry": "पुनः प्रयास करें"
+  "g_iap_retry": "पुनः प्रयास करें",
+  "g_lock_key16": "जेस्चर पासवर्ड",
+  "g_lock_key17": "जेस्चर पासवर्ड सेट करें",
+  "g_lock_key18": "अपना जेस्चर पैटर्न बनाएं",
+  "g_lock_key19": "अपना जेस्चर पैटर्न पुष्टि करें",
+  "g_lock_key20": "वर्तमान जेस्चर बनाएं",
+  "g_lock_key21": "गलत पैटर्न, {value} प्रयास शेष",
+  "@g_lock_key21": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_lock_key22": "जेस्चर पासवर्ड रीसेट करें",
+  "g_lock_key23": "बहुत अधिक असफल प्रयास, पुनः प्रयास करें",
+  "g_lock_key25": "गलत पैटर्न, {value} प्रयास शेष",
+  "@g_lock_key25": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_lock_key28": "जेस्चर पासवर्ड सेट नहीं है",
+  "g_lock_key29": "प्रत्येक ट्रांसफर की पुष्टि के लिए जेस्चर प्रमाणीकरण आवश्यक है।",
+  "g_google_auth_key1": "Google Authenticator",
+  "g_google_auth_key2": "Google Authenticator ऐप से QR कोड स्कैन करें",
+  "g_google_auth_key3": "या कुंजी मैन्युअली दर्ज करें:",
+  "g_google_auth_key4": "6 अंकों का सत्यापन कोड दर्ज करें",
+  "g_google_auth_key5": "प्रत्येक ट्रांसफर की पुष्टि के लिए Google Authenticator आवश्यक है।",
+  "g_google_auth_key6": "गलत कोड, पुनः प्रयास करें",
+  "g_google_auth_key7": "Google Authenticator कॉन्फ़िगर नहीं है",
+  "g_google_auth_key8": "बाइंडिंग सफल"
 }

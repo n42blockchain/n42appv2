@@ -116,37 +116,41 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m44(value, value1) =>
       "該帳戶擁有 ${value} 對象，這表示額外保留了 ${value1} XRP。";
 
-  static String m45(value) => "您已成功設定 ${value}，並將開始使用 N42Wallet 進行驗證！";
+  static String m45(value) => "手勢圖案輸入錯誤，還剩 ${value} 次機會";
 
-  static String m46(value) =>
+  static String m46(value) => "手勢圖案輸入錯誤，還剩 ${value} 次機會";
+
+  static String m47(value) => "您已成功設定 ${value}，並將開始使用 N42Wallet 進行驗證！";
+
+  static String m48(value) =>
       "加入我在 @N42Wallet 上的 ${value} 群組，成為第 1 層鏈的早期礦工，並在您的手機上獲取加密貨幣！";
 
-  static String m47(value, value1) => "您確定要鎖定 ${value} N 直到 ${value1} 來執行節點嗎？";
+  static String m49(value, value1) => "您確定要鎖定 ${value} N 直到 ${value1} 來執行節點嗎？";
 
-  static String m48(value) => "匯入失敗：${value}";
+  static String m50(value) => "匯入失敗：${value}";
 
-  static String m49(value) => "需要至少 ${value} 的質押餘額才能獲得獎勵。";
+  static String m51(value) => "需要至少 ${value} 的質押餘額才能獲得獎勵。";
 
-  static String m50(value, value1) => "${value} N / 每開採 ${value1} 個區塊";
+  static String m52(value, value1) => "${value} N / 每開採 ${value1} 個區塊";
 
-  static String m51(value) => "必須是 ${value} 個字符";
+  static String m53(value) => "必須是 ${value} 個字符";
 
-  static String m52(value) => "${value} 餘額不足。";
+  static String m54(value) => "${value} 餘額不足。";
 
-  static String m53(value) => "${value} 即將轉入...";
+  static String m55(value) => "${value} 即將轉入...";
 
-  static String m54(value) =>
+  static String m56(value) =>
       "在 App 內兌換的 ${value} 將很快發放到您的錢包，且無法透過此流程出售。它可用於運行節點。";
 
-  static String m55(value) => "最大 ${value} 個字符";
+  static String m57(value) => "最大 ${value} 個字符";
 
-  static String m56(value) => "已支援${value}鏈APP！";
+  static String m58(value) => "已支援${value}鏈APP！";
 
-  static String m57(value) => "已支援${value}鏈APP，是否要新增？";
+  static String m59(value) => "已支援${value}鏈APP，是否要新增？";
 
-  static String m58(value) => "${value}地址測試連結失敗！";
+  static String m60(value) => "${value}地址測試連結失敗！";
 
-  static String m59(value) => "0~${value} 個字符";
+  static String m61(value) => "0~${value} 個字符";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -229,6 +233,20 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_face_5": MessageLookupByLibrary.simpleMessage("設定"),
     "g_face_7": MessageLookupByLibrary.simpleMessage("掃描您的臉部或指紋以繼續。"),
     "g_face_8": MessageLookupByLibrary.simpleMessage("返回"),
+    "g_google_auth_key1": MessageLookupByLibrary.simpleMessage("Google 身份驗證器"),
+    "g_google_auth_key2": MessageLookupByLibrary.simpleMessage(
+      "使用 Google Authenticator App 掃描二維碼",
+    ),
+    "g_google_auth_key3": MessageLookupByLibrary.simpleMessage("或手動輸入金鑰："),
+    "g_google_auth_key4": MessageLookupByLibrary.simpleMessage("輸入 6 位驗證碼"),
+    "g_google_auth_key5": MessageLookupByLibrary.simpleMessage(
+      "開啟後，每次發起轉帳時需透過 Google 驗證器進行身份驗證。",
+    ),
+    "g_google_auth_key6": MessageLookupByLibrary.simpleMessage("驗證碼錯誤，請重試"),
+    "g_google_auth_key7": MessageLookupByLibrary.simpleMessage(
+      "尚未綁定 Google 驗證器",
+    ),
+    "g_google_auth_key8": MessageLookupByLibrary.simpleMessage("綁定成功"),
     "g_home_key1": MessageLookupByLibrary.simpleMessage("個人資料"),
     "g_home_key2": MessageLookupByLibrary.simpleMessage("訊息"),
     "g_home_key3": MessageLookupByLibrary.simpleMessage("確認"),
@@ -1481,10 +1499,23 @@ class MessageLookup extends MessageLookupByLibrary {
       "總儲備 = 基礎儲備 +（擁有物件數 × 增量儲備）",
     ),
     "g_lock_key1": MessageLookupByLibrary.simpleMessage("觸碰 ID 和麵容 ID"),
+    "g_lock_key16": MessageLookupByLibrary.simpleMessage("手勢密碼"),
+    "g_lock_key17": MessageLookupByLibrary.simpleMessage("設置手勢密碼"),
+    "g_lock_key18": MessageLookupByLibrary.simpleMessage("繪製您的手勢圖案"),
+    "g_lock_key19": MessageLookupByLibrary.simpleMessage("再次繪製手勢圖案確認"),
+    "g_lock_key20": MessageLookupByLibrary.simpleMessage("繪製當前手勢密碼"),
+    "g_lock_key21": m45,
+    "g_lock_key22": MessageLookupByLibrary.simpleMessage("重置手勢密碼"),
+    "g_lock_key23": MessageLookupByLibrary.simpleMessage("輸入錯誤次數過多，請重新設置"),
     "g_lock_key24": MessageLookupByLibrary.simpleMessage("新增錢包密碼？"),
+    "g_lock_key25": m46,
     "g_lock_key26": MessageLookupByLibrary.simpleMessage("轉帳驗證"),
     "g_lock_key27": MessageLookupByLibrary.simpleMessage(
       "開啟後，每次發起轉帳時需透過面容 ID 或指紋進行身份驗證。",
+    ),
+    "g_lock_key28": MessageLookupByLibrary.simpleMessage("未設置手勢密碼"),
+    "g_lock_key29": MessageLookupByLibrary.simpleMessage(
+      "開啟後，每次發起轉帳時需透過手勢密碼進行身份驗證。",
     ),
     "g_lock_key5": MessageLookupByLibrary.simpleMessage("成功了"),
     "g_lock_key6": MessageLookupByLibrary.simpleMessage("失敗的"),
@@ -1527,12 +1558,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_mining_key61": MessageLookupByLibrary.simpleMessage("分享給朋友"),
     "g_mining_key62": MessageLookupByLibrary.simpleMessage("繼續"),
-    "g_mining_key63": m45,
-    "g_mining_key73": m46,
+    "g_mining_key63": m47,
+    "g_mining_key73": m48,
     "g_mining_key74": MessageLookupByLibrary.simpleMessage(
       "我剛剛在@N42Wallet上設置了一個節點並開始在行動裝置上進行驗證！來加入我吧。去中心化的未來是移動的！",
     ),
-    "g_mining_key76": m47,
+    "g_mining_key76": m49,
     "g_mining_key82": MessageLookupByLibrary.simpleMessage("礦物"),
     "g_mining_key83": MessageLookupByLibrary.simpleMessage("節點"),
     "g_mining_key84": MessageLookupByLibrary.simpleMessage("網路"),
@@ -1553,7 +1584,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_106": MessageLookupByLibrary.simpleMessage("密碼不能為空！"),
     "g_mining_key_107": MessageLookupByLibrary.simpleMessage("解密失敗。請檢查密碼是否正確！"),
     "g_mining_key_108": MessageLookupByLibrary.simpleMessage("不支援的加密資料格式！"),
-    "g_mining_key_109": m48,
+    "g_mining_key_109": m50,
     "g_mining_key_11": MessageLookupByLibrary.simpleMessage("昨天的獎勵"),
     "g_mining_key_110": MessageLookupByLibrary.simpleMessage("加密數據"),
     "g_mining_key_111": MessageLookupByLibrary.simpleMessage("匯入檔案"),
@@ -1561,7 +1592,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_113": MessageLookupByLibrary.simpleMessage("輸入..."),
     "g_mining_key_114": MessageLookupByLibrary.simpleMessage("確認"),
     "g_mining_key_115": MessageLookupByLibrary.simpleMessage("兌換需要一定時間，請稍等！"),
-    "g_mining_key_116": m49,
+    "g_mining_key_116": m51,
     "g_mining_key_12": MessageLookupByLibrary.simpleMessage(
       "獎勵每天累積，只有達到 ~0.5 N 時才會發送到您的 N 錢包。",
     ),
@@ -1611,7 +1642,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_69": MessageLookupByLibrary.simpleMessage("500 個區塊/天~70 分鐘"),
     "g_mining_key_7": MessageLookupByLibrary.simpleMessage("解鎖日期"),
     "g_mining_key_70": MessageLookupByLibrary.simpleMessage("100 個區塊/天~15 分鐘"),
-    "g_mining_key_71": m50,
+    "g_mining_key_71": m52,
     "g_mining_key_72": MessageLookupByLibrary.simpleMessage("每次檢查 128 秒"),
     "g_mining_key_74": MessageLookupByLibrary.simpleMessage(
       "測試鏈正在升級，暫時無法驗證區塊。",
@@ -1653,7 +1684,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_95": MessageLookupByLibrary.simpleMessage("確認並保存"),
     "g_mining_key_96": MessageLookupByLibrary.simpleMessage("設定密碼並加密"),
     "g_mining_key_97": MessageLookupByLibrary.simpleMessage("請輸入加密密碼"),
-    "g_mining_key_98": m51,
+    "g_mining_key_98": m53,
     "g_mining_key_99": MessageLookupByLibrary.simpleMessage("請重新輸入您的密碼以確保其正確"),
     "g_mining_node_key1": MessageLookupByLibrary.simpleMessage("完整節點詳情"),
     "g_mining_node_key2": MessageLookupByLibrary.simpleMessage("節點 ID"),
@@ -1713,13 +1744,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_share_v3_key_6": MessageLookupByLibrary.simpleMessage("參考透過"),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("關聯"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("代碼"),
-    "g_swap_key_14": m52,
+    "g_swap_key_14": m54,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage("取得幣價錯誤。"),
     "g_swap_key_16": MessageLookupByLibrary.simpleMessage("繼續操作即表示您同意以下內容"),
     "g_swap_key_17": MessageLookupByLibrary.simpleMessage("條款與條件。"),
     "g_swap_key_18": MessageLookupByLibrary.simpleMessage("完成"),
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage("您的兌換將很快發放，請耐心等待。"),
-    "g_swap_key_20": m53,
+    "g_swap_key_20": m55,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "運行節點的成本：群組驗證 1-49 N 基本節點：50 N 高階節點：100 N 專業節點：500 N。",
     ),
@@ -1731,7 +1762,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("新餘額"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("你支付"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("日期"),
-    "g_swap_key_31": m54,
+    "g_swap_key_31": m56,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "兌換可在相應鏈的區塊瀏覽器（Etherscan、BscScan、TRONSCAN 及我們自己的瀏覽器）中查看。",
     ),
@@ -1742,7 +1773,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_6": MessageLookupByLibrary.simpleMessage("再試一次"),
     "g_theme_accent_color": MessageLookupByLibrary.simpleMessage("強調色"),
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage("重設為預設值"),
-    "g_token_m_key_1": m55,
+    "g_token_m_key_1": m57,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "任何人都可以建立代幣，包括冒充現有代幣的假代幣。匯入前請務必自行做好研究。",
     ),
@@ -1757,9 +1788,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_2": MessageLookupByLibrary.simpleMessage("0~18個單位"),
     "g_token_m_key_20": MessageLookupByLibrary.simpleMessage("添加代幣"),
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage("格式錯誤！"),
-    "g_token_m_key_22": m56,
-    "g_token_m_key_23": m57,
-    "g_token_m_key_24": m58,
+    "g_token_m_key_22": m58,
+    "g_token_m_key_23": m59,
+    "g_token_m_key_24": m60,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("匯入代幣"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("所有網路"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage("自訂代幣"),
@@ -1792,7 +1823,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_email": MessageLookupByLibrary.simpleMessage("電子郵件"),
     "login_password": MessageLookupByLibrary.simpleMessage("密碼"),
     "next": MessageLookupByLibrary.simpleMessage("下一個"),
-    "nicknameMessage": m59,
+    "nicknameMessage": m61,
     "personalInformation": MessageLookupByLibrary.simpleMessage("編輯個人資料"),
     "photograph": MessageLookupByLibrary.simpleMessage("照片"),
     "please_input_address": MessageLookupByLibrary.simpleMessage("請輸入地址"),

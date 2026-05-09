@@ -1334,5 +1334,38 @@
   "g_iap_store_unavailable": "స్టోర్ అందుబాటులో లేదు",
   "g_iap_check_network": "మీ నెట్‌వర్క్ కనెక్షన్ తనిఖీ చేసి మళ్ళీ ప్రయత్నించండి",
   "g_iap_no_products": "ఏ ఉత్పత్తులూ అందుబాటులో లేవు",
-  "g_iap_retry": "మళ్ళీ ప్రయత్నించు"
+  "g_iap_retry": "మళ్ళీ ప్రయత్నించు",
+  "g_lock_key16": "జెస్చర్ పాస్‌వర్డ్",
+  "g_lock_key17": "జెస్చర్ పాస్‌వర్డ్ సెట్ చేయండి",
+  "g_lock_key18": "మీ జెస్చర్ పేటర్న్ గీయండి",
+  "g_lock_key19": "మీ జెస్చర్ పేటర్న్ నిర్ధారించండి",
+  "g_lock_key20": "ప్రస్తుత జెస్చర్ గీయండి",
+  "g_lock_key21": "తప్పు పేటర్న్, {value} ప్రయత్నాలు మిగిలి ఉన్నాయి",
+  "@g_lock_key21": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_lock_key22": "జెస్చర్ పాస్‌వర్డ్ రీసెట్ చేయండి",
+  "g_lock_key23": "చాలా ఎక్కువ విఫల ప్రయత్నాలు, మళ్లీ ప్రయత్నించండి",
+  "g_lock_key25": "తప్పు పేటర్న్, {value} ప్రయత్నం మిగిలి ఉంది",
+  "@g_lock_key25": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_lock_key28": "జెస్చర్ పాస్‌వర్డ్ సెట్ చేయబడలేదు",
+  "g_lock_key29": "ప్రతి బదిలీని నిర్ధారించడానికి జెస్చర్ ప్రమాణీకరణ అవసరం.",
+  "g_google_auth_key1": "Google Authenticator",
+  "g_google_auth_key2": "Google Authenticator యాప్‌తో QR కోడ్ స్కాన్ చేయండి",
+  "g_google_auth_key3": "లేదా కీని మాన్యువల్‌గా నమోదు చేయండి:",
+  "g_google_auth_key4": "6 అంకెల ధృవీకరణ కోడ్ నమోదు చేయండి",
+  "g_google_auth_key5": "ప్రతి బదిలీని నిర్ధారించడానికి Google Authenticator అవసరం.",
+  "g_google_auth_key6": "తప్పు కోడ్, మళ్లీ ప్రయత్నించండి",
+  "g_google_auth_key7": "Google Authenticator కాన్ఫిగర్ చేయబడలేదు",
+  "g_google_auth_key8": "బైండింగ్ విజయవంతమైంది"
 }

@@ -124,44 +124,48 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m44(value, value1) =>
       "Ce compte possède ${value} objets, ce qui signifie qu\'un ${value1} XRP supplémentaire est réservé.";
 
-  static String m45(value) =>
+  static String m45(value) => "Schéma incorrect, ${value} tentatives restantes";
+
+  static String m46(value) => "Schéma incorrect, ${value} tentative restante";
+
+  static String m47(value) =>
       "Vous avez configuré avec succès un ${value} et commencerez la vérification avec N42Wallet !";
 
-  static String m46(value) =>
+  static String m48(value) =>
       "Rejoignez mon groupe ${value} sur @N42Wallet pour être l\'un des premiers mineurs d\'une chaîne Layer 1, et obtenez des cryptos sur votre téléphone !";
 
-  static String m47(value, value1) =>
+  static String m49(value, value1) =>
       "Êtes-vous sûr de vouloir verrouiller ${value} N jusqu\'à ${value1} pour faire fonctionner un nœud ?";
 
-  static String m48(value) => "Échec de l\'importation : ${value}";
+  static String m50(value) => "Échec de l\'importation : ${value}";
 
-  static String m49(value) =>
+  static String m51(value) =>
       "Un solde de staking d\'au moins ${value} est requis pour recevoir des récompenses.";
 
-  static String m50(value, value1) =>
+  static String m52(value, value1) =>
       "${value} N tous les ${value1} blocs minés";
 
-  static String m51(value) => "Doit contenir ${value} caractères";
+  static String m53(value) => "Doit contenir ${value} caractères";
 
-  static String m52(value) => "Solde insuffisant de ${value}.";
+  static String m54(value) => "Solde insuffisant de ${value}.";
 
-  static String m53(value) => "${value} en cours de réception...";
-
-  static String m54(value) =>
-      "Les ${value} échangés dans l\'application seront distribués sous peu dans votre portefeuille et ne peuvent pas être vendus via ce processus. Ils peuvent être utilisés pour faire fonctionner un nœud.";
-
-  static String m55(value) => "Maximum ${value} caractères";
+  static String m55(value) => "${value} en cours de réception...";
 
   static String m56(value) =>
-      "La chaîne ${value} est déjà supportée par l\'APP !";
+      "Les ${value} échangés dans l\'application seront distribués sous peu dans votre portefeuille et ne peuvent pas être vendus via ce processus. Ils peuvent être utilisés pour faire fonctionner un nœud.";
 
-  static String m57(value) =>
-      "La chaîne ${value} est déjà supportée par l\'APP, voulez-vous l\'ajouter ?";
+  static String m57(value) => "Maximum ${value} caractères";
 
   static String m58(value) =>
+      "La chaîne ${value} est déjà supportée par l\'APP !";
+
+  static String m59(value) =>
+      "La chaîne ${value} est déjà supportée par l\'APP, voulez-vous l\'ajouter ?";
+
+  static String m60(value) =>
       "Échec du test de connexion à l\'adresse ${value} !";
 
-  static String m59(value) => "0~${value} caractères";
+  static String m61(value) => "0~${value} caractères";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -298,6 +302,30 @@ class MessageLookup extends MessageLookupByLibrary {
       "Scannez votre visage ou empreinte digitale pour continuer.",
     ),
     "g_face_8": MessageLookupByLibrary.simpleMessage("Retour"),
+    "g_google_auth_key1": MessageLookupByLibrary.simpleMessage(
+      "Google Authenticator",
+    ),
+    "g_google_auth_key2": MessageLookupByLibrary.simpleMessage(
+      "Scannez le code QR avec l\'application Google Authenticator",
+    ),
+    "g_google_auth_key3": MessageLookupByLibrary.simpleMessage(
+      "Ou entrez la clé manuellement :",
+    ),
+    "g_google_auth_key4": MessageLookupByLibrary.simpleMessage(
+      "Entrez le code de vérification à 6 chiffres",
+    ),
+    "g_google_auth_key5": MessageLookupByLibrary.simpleMessage(
+      "Google Authenticator requis pour confirmer chaque transfert.",
+    ),
+    "g_google_auth_key6": MessageLookupByLibrary.simpleMessage(
+      "Code incorrect, veuillez réessayer",
+    ),
+    "g_google_auth_key7": MessageLookupByLibrary.simpleMessage(
+      "Google Authenticator non configuré",
+    ),
+    "g_google_auth_key8": MessageLookupByLibrary.simpleMessage(
+      "Liaison réussie",
+    ),
     "g_home_key1": MessageLookupByLibrary.simpleMessage("Profil"),
     "g_home_key2": MessageLookupByLibrary.simpleMessage("Actualités"),
     "g_home_key3": MessageLookupByLibrary.simpleMessage("Vérification"),
@@ -2243,14 +2271,43 @@ class MessageLookup extends MessageLookupByLibrary {
       "Réserve totale = Réserve de base + (Nombre d\'objets possédés × Réserve incrémentielle)",
     ),
     "g_lock_key1": MessageLookupByLibrary.simpleMessage("Touch ID et Face ID"),
+    "g_lock_key16": MessageLookupByLibrary.simpleMessage(
+      "Mot de passe gestuel",
+    ),
+    "g_lock_key17": MessageLookupByLibrary.simpleMessage(
+      "Définir le mot de passe gestuel",
+    ),
+    "g_lock_key18": MessageLookupByLibrary.simpleMessage(
+      "Dessinez votre schéma gestuel",
+    ),
+    "g_lock_key19": MessageLookupByLibrary.simpleMessage(
+      "Confirmez votre schéma gestuel",
+    ),
+    "g_lock_key20": MessageLookupByLibrary.simpleMessage(
+      "Dessinez le schéma gestuel actuel",
+    ),
+    "g_lock_key21": m45,
+    "g_lock_key22": MessageLookupByLibrary.simpleMessage(
+      "Réinitialiser le mot de passe gestuel",
+    ),
+    "g_lock_key23": MessageLookupByLibrary.simpleMessage(
+      "Trop de tentatives échouées, veuillez réessayer",
+    ),
     "g_lock_key24": MessageLookupByLibrary.simpleMessage(
       "Ajouter un mot de passe de portefeuille ?",
     ),
+    "g_lock_key25": m46,
     "g_lock_key26": MessageLookupByLibrary.simpleMessage(
       "Transfer Verification",
     ),
     "g_lock_key27": MessageLookupByLibrary.simpleMessage(
       "Require biometric authentication (Face ID / fingerprint) to confirm each wallet transfer.",
+    ),
+    "g_lock_key28": MessageLookupByLibrary.simpleMessage(
+      "Mot de passe gestuel non défini",
+    ),
+    "g_lock_key29": MessageLookupByLibrary.simpleMessage(
+      "Authentification gestuelle requise pour confirmer chaque transfert.",
     ),
     "g_lock_key5": MessageLookupByLibrary.simpleMessage("Réussi"),
     "g_lock_key6": MessageLookupByLibrary.simpleMessage("Échec"),
@@ -2323,12 +2380,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Partager avec des amis",
     ),
     "g_mining_key62": MessageLookupByLibrary.simpleMessage("Continuer"),
-    "g_mining_key63": m45,
-    "g_mining_key73": m46,
+    "g_mining_key63": m47,
+    "g_mining_key73": m48,
     "g_mining_key74": MessageLookupByLibrary.simpleMessage(
       "Je viens de configurer un nœud sur @N42Wallet et j\'ai commencé la vérification sur appareils mobiles ! Venez me rejoindre. L\'avenir décentralisé est mobile !",
     ),
-    "g_mining_key76": m47,
+    "g_mining_key76": m49,
     "g_mining_key82": MessageLookupByLibrary.simpleMessage("Minéral"),
     "g_mining_key83": MessageLookupByLibrary.simpleMessage("Nœud"),
     "g_mining_key84": MessageLookupByLibrary.simpleMessage("Réseau"),
@@ -2367,7 +2424,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_108": MessageLookupByLibrary.simpleMessage(
       "Format de données chiffrées non supporté !",
     ),
-    "g_mining_key_109": m48,
+    "g_mining_key_109": m50,
     "g_mining_key_11": MessageLookupByLibrary.simpleMessage(
       "Récompenses d\'hier",
     ),
@@ -2387,7 +2444,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_115": MessageLookupByLibrary.simpleMessage(
       "Le rachat prend du temps, veuillez patienter !",
     ),
-    "g_mining_key_116": m49,
+    "g_mining_key_116": m51,
     "g_mining_key_12": MessageLookupByLibrary.simpleMessage(
       "Les récompenses s\'accumulent quotidiennement et ne sont envoyées à votre portefeuille N que lorsqu\'elles atteignent ~0,5 N.",
     ),
@@ -2481,7 +2538,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_70": MessageLookupByLibrary.simpleMessage(
       "100 blocs/jour~15 mins",
     ),
-    "g_mining_key_71": m50,
+    "g_mining_key_71": m52,
     "g_mining_key_72": MessageLookupByLibrary.simpleMessage(
       "128 secondes par vérification",
     ),
@@ -2553,7 +2610,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_97": MessageLookupByLibrary.simpleMessage(
       "Veuillez entrer le mot de passe de chiffrement",
     ),
-    "g_mining_key_98": m51,
+    "g_mining_key_98": m53,
     "g_mining_key_99": MessageLookupByLibrary.simpleMessage(
       "Veuillez ressaisir votre mot de passe pour vous assurer qu\'il est correct",
     ),
@@ -2653,7 +2710,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_share_v3_key_6": MessageLookupByLibrary.simpleMessage("Parrainer via"),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("Lien"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("coder"),
-    "g_swap_key_14": m52,
+    "g_swap_key_14": m54,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "Erreur de récupération du prix du jeton.",
     ),
@@ -2667,7 +2724,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "Votre échange sera distribué sous peu. Veuillez patienter.",
     ),
-    "g_swap_key_20": m53,
+    "g_swap_key_20": m55,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "Coûts pour faire fonctionner un nœud : Vérification de groupe 1-49 N Nœud basique : 50 N Nœud premium : 100 N Nœud pro : 500 N.",
     ),
@@ -2683,7 +2740,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("Nouveau solde"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("Vous payez"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("Date"),
-    "g_swap_key_31": m54,
+    "g_swap_key_31": m56,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "Les échanges peuvent être consultés sur les explorateurs de chaîne concernés (Etherscan, BscScan, TRONSCAN et le nôtre).",
     ),
@@ -2700,7 +2757,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "Réinitialiser aux valeurs par défaut",
     ),
-    "g_token_m_key_1": m55,
+    "g_token_m_key_1": m57,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "N\'importe qui peut créer un jeton, y compris des versions contrefaites de jetons existants. Effectuez toujours des recherches sur un jeton avant de l\'importer.",
     ),
@@ -2727,9 +2784,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage(
       "Erreur de format !",
     ),
-    "g_token_m_key_22": m56,
-    "g_token_m_key_23": m57,
-    "g_token_m_key_24": m58,
+    "g_token_m_key_22": m58,
+    "g_token_m_key_23": m59,
+    "g_token_m_key_24": m60,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage(
       "Importer des jetons",
     ),
@@ -2782,7 +2839,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_email": MessageLookupByLibrary.simpleMessage("E-mail"),
     "login_password": MessageLookupByLibrary.simpleMessage("Mot de passe"),
     "next": MessageLookupByLibrary.simpleMessage("Suivant"),
-    "nicknameMessage": m59,
+    "nicknameMessage": m61,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "Modifier le profil",
     ),

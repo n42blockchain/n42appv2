@@ -1334,5 +1334,38 @@
   "g_iap_store_unavailable": "Магазин недоступний",
   "g_iap_check_network": "Перевірте підключення до мережі і спробуйте знову",
   "g_iap_no_products": "Немає доступних товарів",
-  "g_iap_retry": "Повторити"
+  "g_iap_retry": "Повторити",
+  "g_lock_key16": "Графічний пароль",
+  "g_lock_key17": "Встановити графічний пароль",
+  "g_lock_key18": "Намалюйте графічний ключ",
+  "g_lock_key19": "Підтвердіть графічний ключ",
+  "g_lock_key20": "Намалюйте поточний графічний ключ",
+  "g_lock_key21": "Невірний ключ, залишилось {value} спроб",
+  "@g_lock_key21": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_lock_key22": "Скинути графічний пароль",
+  "g_lock_key23": "Забагато невдалих спроб, повторіть",
+  "g_lock_key25": "Невірний ключ, залишилась {value} спроба",
+  "@g_lock_key25": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_lock_key28": "Графічний пароль не встановлено",
+  "g_lock_key29": "Для підтвердження переказу потрібна графічна автентифікація.",
+  "g_google_auth_key1": "Google Authenticator",
+  "g_google_auth_key2": "Відскануйте QR-код додатком Google Authenticator",
+  "g_google_auth_key3": "Або введіть ключ вручну:",
+  "g_google_auth_key4": "Введіть 6-значний код підтвердження",
+  "g_google_auth_key5": "Для підтвердження переказу потрібен Google Authenticator.",
+  "g_google_auth_key6": "Невірний код, спробуйте ще раз",
+  "g_google_auth_key7": "Google Authenticator не налаштовано",
+  "g_google_auth_key8": "Прив'язка успішна"
 }
