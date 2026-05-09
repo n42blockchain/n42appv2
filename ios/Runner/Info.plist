@@ -62,6 +62,7 @@
 	<array>
 		<string>weixin</string>
 		<string>weixinULAPI</string>
+		<string>weixinURLParamsAPI</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
@@ -79,6 +80,7 @@
 	<string>$(N42_CHAT_WECHAT_APP_ID)</string>
 	<key>N42ChatWeChatUniversalLink</key>
 	<string>$(N42_CHAT_WECHAT_UNIVERSAL_LINK)</string>
+	<!-- DApp browser requires loading arbitrary web content (HTTP/HTTPS) -->
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoadsInWebContent</key>
