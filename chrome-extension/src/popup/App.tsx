@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import type { ApprovalRequest, AccountInfo } from '../shared/types/rpc';
+import type { ApprovalRequest } from '../shared/types/rpc';
 import Unlock from './pages/Unlock';
 import Home from './pages/Home';
 import SignRequest from './pages/SignRequest';
@@ -9,6 +9,7 @@ type View = 'loading' | 'setup' | 'unlock' | 'home' | 'approval';
 
 interface WalletState {
   isUnlocked: boolean;
+  hasVault: boolean;
   accounts: string[];
   pendingApprovals: ApprovalRequest[];
 }
@@ -17,6 +18,7 @@ export default function App() {
   const [view, setView] = useState<View>('loading');
   const [state, setState] = useState<WalletState>({
     isUnlocked: false,
+    hasVault: false,
     accounts: [],
     pendingApprovals: [],
   });
@@ -37,7 +39,7 @@ export default function App() {
           setView('approval');
         } else if (response.isUnlocked) {
           setView('home');
-        } else if (response.accounts?.length > 0) {
+        } else if (response.hasVault || response.accounts?.length > 0) {
           setView('unlock');
         } else {
           setView('setup');
@@ -47,7 +49,7 @@ export default function App() {
   }, []);
 
   const handleUnlock = (accounts: string[]) => {
-    setState((s) => ({ ...s, isUnlocked: true, accounts }));
+    setState((s) => ({ ...s, isUnlocked: true, hasVault: true, accounts }));
     if (state.pendingApprovals.length > 0) {
       setView('approval');
     } else {
@@ -56,7 +58,7 @@ export default function App() {
   };
 
   const handleSetupComplete = (accounts: string[]) => {
-    setState((s) => ({ ...s, isUnlocked: true, accounts }));
+    setState((s) => ({ ...s, isUnlocked: true, hasVault: true, accounts }));
     setView('home');
   };
 

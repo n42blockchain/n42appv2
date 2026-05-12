@@ -56,23 +56,21 @@ class PasskeyPlatformAdapter {
     List<String> excludeCredentialIds = const [],
   }) async {
     try {
-      final result = await _channel.invokeMapMethod<String, dynamic>(
-        'register',
-        {
-          'rpId': PasskeyConfig.rpId,
-          'rpName': PasskeyConfig.rpName,
-          'userId': userId,
-          'userName': userName,
-          'challenge': challenge,
-          'timeout': PasskeyConfig.timeout,
-          'attestation': PasskeyConfig.attestation,
-          'authenticatorAttachment': PasskeyConfig.authenticatorAttachment,
-          'userVerification': PasskeyConfig.userVerification,
-          'requireResidentKey': PasskeyConfig.requireResidentKey,
-          'pubKeyCredParams': PasskeyConfig.pubKeyCredParams,
-          'excludeCredentialIds': excludeCredentialIds,
-        },
-      );
+      final result = await _channel
+          .invokeMapMethod<String, dynamic>('register', {
+            'rpId': PasskeyConfig.rpId,
+            'rpName': PasskeyConfig.rpName,
+            'userId': userId,
+            'userName': userName,
+            'challenge': challenge,
+            'timeout': PasskeyConfig.timeout,
+            'attestation': PasskeyConfig.attestation,
+            'authenticatorAttachment': PasskeyConfig.authenticatorAttachment,
+            'userVerification': PasskeyConfig.userVerification,
+            'requireResidentKey': PasskeyConfig.requireResidentKey,
+            'pubKeyCredParams': PasskeyConfig.pubKeyCredParams,
+            'excludeCredentialIds': excludeCredentialIds,
+          });
 
       if (result == null) {
         throw PasskeyException('Registration returned null');
@@ -85,8 +83,7 @@ class PasskeyPlatformAdapter {
         attestationObject: result['attestationObject'] != null
             ? base64Url.decode(result['attestationObject'] as String)
             : null,
-        clientDataJSON:
-            base64Url.decode(result['clientDataJSON'] as String),
+        clientDataJSON: base64Url.decode(result['clientDataJSON'] as String),
         backedUp: result['backedUp'] as bool? ?? false,
       );
     } on PlatformException catch (e) {
@@ -109,34 +106,33 @@ class PasskeyPlatformAdapter {
     List<String> allowCredentialIds = const [],
   }) async {
     try {
-      final result = await _channel.invokeMapMethod<String, dynamic>(
-        'authenticate',
-        {
-          'rpId': PasskeyConfig.rpId,
-          'challenge': challenge,
-          'timeout': PasskeyConfig.timeout,
-          'userVerification': PasskeyConfig.userVerification,
-          'allowCredentialIds': allowCredentialIds,
-        },
-      );
+      final result = await _channel
+          .invokeMapMethod<String, dynamic>('authenticate', {
+            'rpId': PasskeyConfig.rpId,
+            'challenge': challenge,
+            'timeout': PasskeyConfig.timeout,
+            'userVerification': PasskeyConfig.userVerification,
+            'allowCredentialIds': allowCredentialIds,
+          });
 
       if (result == null) {
         throw PasskeyException('Authentication returned null');
       }
 
-      final authenticatorData =
-          base64Url.decode(result['authenticatorData'] as String);
-      final clientDataJSON =
-          base64Url.decode(result['clientDataJSON'] as String);
+      final authenticatorData = base64Url.decode(
+        result['authenticatorData'] as String,
+      );
+      final clientDataJSON = base64Url.decode(
+        result['clientDataJSON'] as String,
+      );
 
       // Parse r, s from DER-encoded or raw signature
       final sigR = BigInt.parse(result['signatureR'] as String, radix: 16);
       final sigS = BigInt.parse(result['signatureS'] as String, radix: 16);
 
-      // Find challenge and type indices in clientDataJSON for on-chain parsing
-      final clientDataStr = utf8.decode(clientDataJSON);
-      final challengeIndex = clientDataStr.indexOf('"challenge"');
-      final typeIndex = clientDataStr.indexOf('"type"');
+      // Find value offsets in clientDataJSON for on-chain parsing.
+      final challengeIndex = _jsonStringValueStart(clientDataJSON, 'challenge');
+      final typeIndex = _jsonStringValueStart(clientDataJSON, 'type');
 
       return PasskeyAuthResult(
         credentialId: result['credentialId'] as String,
@@ -150,6 +146,42 @@ class PasskeyPlatformAdapter {
     } on PlatformException catch (e) {
       throw PasskeyException.fromPlatform(e);
     }
+  }
+
+  static int _jsonStringValueStart(Uint8List jsonBytes, String key) {
+    final keyBytes = utf8.encode('"$key"');
+    for (var i = 0; i <= jsonBytes.length - keyBytes.length; i++) {
+      var matched = true;
+      for (var j = 0; j < keyBytes.length; j++) {
+        if (jsonBytes[i + j] != keyBytes[j]) {
+          matched = false;
+          break;
+        }
+      }
+      if (!matched) continue;
+
+      var offset = i + keyBytes.length;
+      while (offset < jsonBytes.length &&
+          _isJsonWhitespace(jsonBytes[offset])) {
+        offset++;
+      }
+      if (offset >= jsonBytes.length || jsonBytes[offset] != 0x3A) {
+        continue;
+      }
+      offset++;
+      while (offset < jsonBytes.length &&
+          _isJsonWhitespace(jsonBytes[offset])) {
+        offset++;
+      }
+      if (offset < jsonBytes.length && jsonBytes[offset] == 0x22) {
+        return offset + 1;
+      }
+    }
+    return -1;
+  }
+
+  static bool _isJsonWhitespace(int byte) {
+    return byte == 0x20 || byte == 0x0A || byte == 0x0D || byte == 0x09;
   }
 }
 
@@ -223,8 +255,7 @@ class PasskeyException implements Exception {
       message.contains('cancel');
 
   /// No matching credential found on this device.
-  bool get isNotFound =>
-      code == 'NOT_FOUND' || code == 'ERROR_NO_CREDENTIALS';
+  bool get isNotFound => code == 'NOT_FOUND' || code == 'ERROR_NO_CREDENTIALS';
 
   /// Platform does not support Passkeys.
   bool get isNotSupported =>

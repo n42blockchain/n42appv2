@@ -32,6 +32,18 @@ func (f *fakeStore) UpdateTxHash(_, _ string) error                        { ret
 func (f *fakeStore) UpdateStatus(_ string, _ int) error                    { return nil }
 func (f *fakeStore) GetOrder(_ string) (*db.Order, error)                  { return f.order, nil }
 func (f *fakeStore) ListOrders(_ string, _, _ int) ([]*db.Order, error)    { return f.orders, nil }
+func (f *fakeStore) InsertLimitOrder(_, _, _, _, _, _, _, _, _ string, _ int64) error {
+	return nil
+}
+func (f *fakeStore) CancelLimitOrder(_, _ string) error { return nil }
+func (f *fakeStore) ListActiveLimitOrders() ([]*db.LimitOrder, error) {
+	return nil, nil
+}
+func (f *fakeStore) ListUserLimitOrders(_ string, _, _ int) ([]*db.LimitOrder, error) {
+	return nil, nil
+}
+func (f *fakeStore) UpdateLimitOrderStatus(_ string, _ int, _ string) error { return nil }
+func (f *fakeStore) ExpireStaleOrders() (int64, error)                      { return 0, nil }
 
 type stubAdapter struct {
 	chains []string

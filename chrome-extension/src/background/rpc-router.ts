@@ -28,6 +28,11 @@ export const NETWORKS: Record<number, NetworkConfig> = {
 };
 
 let currentChainId = 1;
+const ORIGIN_PERMISSIONS_KEY = 'n42_wallet_origin_permissions';
+
+interface OriginPermissions {
+  accounts: string[];
+}
 
 /** Pending approval requests waiting for user action in popup */
 const pendingApprovals = new Map<string, {
@@ -81,21 +86,26 @@ export async function handleRequest(
       return { result: String(currentChainId) };
 
     case 'eth_accounts':
+      return { result: await getAuthorizedAccounts(origin) };
+
     case 'eth_requestAccounts':
-      return { result: keyring.getAccounts() };
+      if (!keyring.isUnlocked()) {
+        return { error: { code: 4100, message: 'Wallet is locked' } };
+      }
+      return { result: await authorizeOriginAccounts(origin) };
 
     case 'eth_coinbase':
-      const accounts = keyring.getAccounts();
+      const accounts = await getAuthorizedAccounts(origin);
       return { result: accounts.length > 0 ? accounts[0] : null };
 
-    case 'wallet_requestPermissions':
     case 'wallet_getPermissions':
-      return {
-        result: [{
-          parentCapability: 'eth_accounts',
-          caveats: [{ type: 'restrictReturnedAccounts', value: keyring.getAccounts() }],
-        }],
-      };
+      return { result: buildAccountPermissions(await getAuthorizedAccounts(origin)) };
+
+    case 'wallet_requestPermissions':
+      if (!keyring.isUnlocked()) {
+        return { error: { code: 4100, message: 'Wallet is locked' } };
+      }
+      return { result: buildAccountPermissions(await authorizeOriginAccounts(origin)) };
 
     case 'web3_clientVersion':
       return { result: 'N42Wallet/1.0.0' };
@@ -131,20 +141,13 @@ export async function handleRequest(
       });
 
     case 'eth_sendTransaction':
-      return requestApproval({
-        type: 'sign_transaction',
-        origin,
-        method,
-        params,
-      });
-
     case 'eth_signTransaction':
-      return requestApproval({
-        type: 'sign_transaction',
-        origin,
-        method,
-        params,
-      });
+      return {
+        error: {
+          code: 4200,
+          message: `${method} is not supported by N42 Wallet extension yet`,
+        },
+      };
 
     // ── RPC passthrough ──
     case 'eth_call':
@@ -248,14 +251,9 @@ export async function approveRequest(id: string): Promise<void> {
     let result: unknown;
 
     if (request.type === 'sign_message') {
-      const accounts = keyring.getAccounts();
-      if (accounts.length === 0) throw new Error('No accounts');
-      // personal_sign params: [message, address]
-      const message = (request.params as string[])[0];
-      result = keyring.signPersonalMessage(0, message);
+      result = signApprovedMessage(request.method, request.params);
     } else if (request.type === 'sign_transaction') {
-      // For now, return placeholder — full tx signing requires nonce/gas estimation
-      result = '0x'; // TODO: implement full transaction signing
+      throw new Error(`${request.method} is not supported`);
     }
 
     pending.resolve(result);
@@ -263,6 +261,147 @@ export async function approveRequest(id: string): Promise<void> {
     pending.reject(e);
   } finally {
     pendingApprovals.delete(id);
+  }
+}
+
+function signApprovedMessage(method: string, params: unknown): string {
+  const values = Array.isArray(params) ? params : [];
+
+  switch (method) {
+    case 'personal_sign': {
+      const { address, message } = extractPersonalSignParams(values);
+      return keyring.signPersonalMessage(accountIndexForAddress(address), message);
+    }
+    case 'eth_sign': {
+      const address = stringParam(values[0], 'address');
+      const message = stringParam(values[1], 'message');
+      return keyring.signRawMessage(accountIndexForAddress(address), message);
+    }
+    case 'eth_signTypedData':
+    case 'eth_signTypedData_v3':
+    case 'eth_signTypedData_v4': {
+      const { address, typedData } = extractTypedDataParams(values);
+      return keyring.signTypedData(accountIndexForAddress(address), typedData);
+    }
+    default:
+      throw new Error(`Unsupported signing method: ${method}`);
+  }
+}
+
+function extractPersonalSignParams(params: unknown[]): { address: string; message: string } {
+  const first = stringParam(params[0], 'message');
+  const second = stringParam(params[1], 'address');
+  if (isOwnedAddress(second)) {
+    return { address: second, message: first };
+  }
+  if (isOwnedAddress(first)) {
+    return { address: first, message: second };
+  }
+  if (isAddress(second)) {
+    return { address: second, message: first };
+  }
+  if (isAddress(first)) {
+    return { address: first, message: second };
+  }
+  throw new Error('personal_sign request must include an account address');
+}
+
+function extractTypedDataParams(params: unknown[]): { address: string; typedData: unknown } {
+  const first = params[0];
+  const second = params[1];
+  if (typeof first === 'string' && isAddress(first)) {
+    return { address: first, typedData: parseTypedData(second) };
+  }
+  if (typeof second === 'string' && isAddress(second)) {
+    return { address: second, typedData: parseTypedData(first) };
+  }
+  throw new Error('Typed data request must include an account address');
+}
+
+function parseTypedData(value: unknown): unknown {
+  if (typeof value !== 'string') return value;
+  try {
+    return JSON.parse(value);
+  } catch {
+    throw new Error('Invalid typed data JSON');
+  }
+}
+
+function stringParam(value: unknown, label: string): string {
+  if (typeof value !== 'string' || value.length === 0) {
+    throw new Error(`Missing ${label}`);
+  }
+  return value;
+}
+
+function isAddress(value: string): boolean {
+  return /^0x[a-fA-F0-9]{40}$/.test(value);
+}
+
+function isOwnedAddress(value: string): boolean {
+  if (!isAddress(value)) return false;
+  return keyring.getAccounts().some(
+    (account) => account.toLowerCase() === value.toLowerCase(),
+  );
+}
+
+function accountIndexForAddress(address: string): number {
+  const accounts = keyring.getAccounts();
+  const index = accounts.findIndex(
+    (account) => account.toLowerCase() === address.toLowerCase(),
+  );
+  if (index < 0) {
+    throw new Error('Requested account is unavailable');
+  }
+  return index;
+}
+
+async function getAuthorizedAccounts(origin: string): Promise<string[]> {
+  if (!keyring.isUnlocked()) return [];
+  const permissions = await getOriginPermissions(origin);
+  if (!permissions) return [];
+  const availableAccounts = keyring.getAccounts();
+  const available = new Set(availableAccounts.map((account) => account.toLowerCase()));
+  return permissions.accounts.filter((account) => available.has(account.toLowerCase()));
+}
+
+async function authorizeOriginAccounts(origin: string): Promise<string[]> {
+  const accounts = keyring.getAccounts();
+  await setOriginPermissions(origin, { accounts });
+  return accounts;
+}
+
+function buildAccountPermissions(accounts: string[]) {
+  if (accounts.length === 0) return [];
+  return [{
+    parentCapability: 'eth_accounts',
+    caveats: [{ type: 'restrictReturnedAccounts', value: accounts }],
+  }];
+}
+
+async function getOriginPermissions(origin: string): Promise<OriginPermissions | null> {
+  const allPermissions = await getAllOriginPermissions();
+  return allPermissions[normalizeOrigin(origin)] ?? null;
+}
+
+async function setOriginPermissions(origin: string, permissions: OriginPermissions): Promise<void> {
+  const allPermissions = await getAllOriginPermissions();
+  allPermissions[normalizeOrigin(origin)] = permissions;
+  await chrome.storage.local.set({ [ORIGIN_PERMISSIONS_KEY]: allPermissions });
+}
+
+async function getAllOriginPermissions(): Promise<Record<string, OriginPermissions>> {
+  const stored = await chrome.storage.local.get(ORIGIN_PERMISSIONS_KEY);
+  const value = stored[ORIGIN_PERMISSIONS_KEY];
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return {};
+  return value as Record<string, OriginPermissions>;
+}
+
+function normalizeOrigin(origin: string): string {
+  try {
+    return new URL(origin).origin;
+  } catch {
+    return origin;
   }
 }
 

@@ -143,10 +143,10 @@ class PasskeyAuthResult {
   /// P-256 signature s component (32 bytes, big-endian).
   final BigInt s;
 
-  /// Index of "challenge" key in clientDataJSON (for on-chain parsing).
+  /// Byte offset where the challenge value starts in clientDataJSON.
   final int challengeIndex;
 
-  /// Index of "type" key in clientDataJSON (for on-chain parsing).
+  /// Byte offset where the type value starts in clientDataJSON.
   final int typeIndex;
 
   PasskeyAuthResult({

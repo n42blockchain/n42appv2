@@ -2,7 +2,7 @@ name: n42_wallet
 description: "N42 Wallet - Enterprise cryptocurrency wallet application"
 publish_to: 'none'
 
-version: 2.3.587+108
+version: 2.3.587+109
 
 environment:
   sdk: ">=3.9.2 <4.0.0"
@@ -146,7 +146,7 @@ dependencies:
   n42_chat:
     git:
       url: https://github.com/n42blockchain/n42_chat
-      ref: 8d0fa96
+      ref: cef4aa4380e77d3c96a44c442255085f6db6d2b1
     #path: /Users/jiangyiwei/Desktop/n42_chat
 
 # Override: flutter_secure_storage 10.x needed for compatibility with

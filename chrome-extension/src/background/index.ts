@@ -41,12 +41,15 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     const { action, payload } = message;
     switch (action) {
       case 'getState':
-        sendResponse({
-          isUnlocked: keyring.isUnlocked(),
-          accounts: keyring.getAccounts(),
-          pendingApprovals: getPendingApprovals(),
+        keyring.hasVault().then((hasVault) => {
+          sendResponse({
+            isUnlocked: keyring.isUnlocked(),
+            hasVault,
+            accounts: keyring.getAccounts(),
+            pendingApprovals: getPendingApprovals(),
+          });
         });
-        break;
+        return true;
 
       case 'unlock':
         keyring.unlock(payload.password).then((success) => {

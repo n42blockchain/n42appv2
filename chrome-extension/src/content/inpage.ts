@@ -36,6 +36,36 @@
     return err;
   }
 
+  function _sameAccounts(a: string[], b: string[]) {
+    return a.length === b.length && a.every((value, index) => value === b[index]);
+  }
+
+  function _setAccounts(accounts: unknown) {
+    const nextAccounts = Array.isArray(accounts)
+      ? accounts.filter((account): account is string => typeof account === 'string')
+      : [];
+    const changed = !_sameAccounts(_accounts, nextAccounts);
+    _accounts = nextAccounts;
+    if (changed) _emit('accountsChanged', _accounts.slice());
+    return _accounts.slice();
+  }
+
+  function _requestRemote(method: string, params: unknown[]): Promise<unknown> {
+    const id = _nextId++;
+    return new Promise((resolve, reject) => {
+      _cbs[id] = { resolve, reject };
+      try {
+        window.postMessage({
+          type: 'N42_RPC_REQUEST',
+          payload: { id, method, params },
+        }, '*');
+      } catch (e) {
+        delete _cbs[id];
+        reject(ProviderRpcError(-32603, 'Extension bridge unavailable'));
+      }
+    });
+  }
+
   // Listen for responses from content script
   window.addEventListener('message', (event) => {
     if (event.source !== window) return;
@@ -99,17 +129,19 @@
         case 'net_version':
           return Promise.resolve(String(parseInt(_chainId, 16)));
         case 'eth_accounts':
-          return Promise.resolve(_accounts.slice());
         case 'eth_requestAccounts':
-          return Promise.resolve(_accounts.slice());
+          return _requestRemote(method, params).then(_setAccounts);
         case 'eth_coinbase':
-          return Promise.resolve(_accounts.length > 0 ? _accounts[0] : null);
-        case 'wallet_requestPermissions':
+          return ethereum.request({ method: 'eth_accounts' })
+            .then((accounts) => (accounts as string[])[0] || null);
         case 'wallet_getPermissions':
-          return Promise.resolve([{
-            parentCapability: 'eth_accounts',
-            caveats: [{ type: 'restrictReturnedAccounts', value: _accounts.slice() }],
-          }]);
+          return _requestRemote(method, params);
+        case 'wallet_requestPermissions':
+          return _requestRemote(method, params).then((permissions) => {
+            const accounts = extractPermissionAccounts(permissions);
+            if (accounts) _setAccounts(accounts);
+            return permissions;
+          });
         case 'wallet_watchAsset':
           return Promise.resolve(true);
         case 'web3_clientVersion':
@@ -120,19 +152,7 @@
       }
 
       // Forward to service worker via content script bridge
-      const id = _nextId++;
-      return new Promise((resolve, reject) => {
-        _cbs[id] = { resolve, reject };
-        try {
-          window.postMessage({
-            type: 'N42_RPC_REQUEST',
-            payload: { id, method, params },
-          }, '*');
-        } catch (e) {
-          delete _cbs[id];
-          reject(ProviderRpcError(-32603, 'Extension bridge unavailable'));
-        }
-      });
+      return _requestRemote(method, params);
     },
 
     // Legacy API compatibility
@@ -215,6 +235,23 @@
     listenerCount(event: string) { return (_evts[event] || []).length; },
     listeners(event: string) { return (_evts[event] || []).slice(); },
   };
+
+  function extractPermissionAccounts(permissions: unknown): string[] | null {
+    if (!Array.isArray(permissions)) return null;
+    for (const permission of permissions) {
+      if (!permission || typeof permission !== 'object') continue;
+      const entry = permission as {
+        parentCapability?: unknown;
+        caveats?: Array<{ type?: unknown; value?: unknown }>;
+      };
+      if (entry.parentCapability !== 'eth_accounts' || !Array.isArray(entry.caveats)) continue;
+      const caveat = entry.caveats.find((item) => item.type === 'restrictReturnedAccounts');
+      if (Array.isArray(caveat?.value)) {
+        return caveat.value.filter((account): account is string => typeof account === 'string');
+      }
+    }
+    return null;
+  }
 
   // Install
   (window as any).ethereum = ethereum;

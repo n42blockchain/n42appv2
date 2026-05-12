@@ -70,13 +70,15 @@ class PasskeySignatureBuilder {
       authenticatorData: Uint8List.fromList(dummyAuthData),
       clientDataJSON: Uint8List.fromList(dummyClientData),
       challengeIndex: BigInt.from(36),
-      typeIndex: BigInt.from(1),
+      typeIndex: BigInt.from(9),
       r: BigInt.parse(
-          'FFFFFFFF00000000FFFFFFFFFFFFFFFFBCE6FAADA7179E84F3B9CAC2FC632550',
-          radix: 16),
+        'FFFFFFFF00000000FFFFFFFFFFFFFFFFBCE6FAADA7179E84F3B9CAC2FC632550',
+        radix: 16,
+      ),
       s: BigInt.parse(
-          '7FFFFFFF800000007FFFFFFFFFFFFFFFDE7375D6D53BCF4279DCE5617E3192A7',
-          radix: 16),
+        '7FFFFFFF800000007FFFFFFFFFFFFFFFDE7375D6D53BCF4279DCE5617E3192A7',
+        radix: 16,
+      ),
     );
   }
 

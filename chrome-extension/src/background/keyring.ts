@@ -19,6 +19,7 @@ import { HDKey } from '@scure/bip32';
 import { generateMnemonic, mnemonicToSeedSync, validateMnemonic } from '@scure/bip39';
 import { wordlist } from '@scure/bip39/wordlists/english';
 import { bytesToHex, hexToBytes } from '@noble/hashes/utils';
+import { hashTypedData } from 'viem';
 
 const STORAGE_KEY = 'n42_keyring_encrypted';
 const AUTO_LOCK_MS = 5 * 60 * 1000; // 5 minutes
@@ -148,6 +149,23 @@ export function signPersonalMessage(accountIndex: number, message: string): stri
 
   const hash = keccak_256(combined);
   const sig = signHash(accountIndex, hash);
+  return '0x' + bytesToHex(sig);
+}
+
+/** Sign an eth_sign payload without replacing it with the address parameter. */
+export function signRawMessage(accountIndex: number, message: string): string {
+  const messageBytes = message.startsWith('0x')
+    ? hexToBytes(message.slice(2))
+    : new TextEncoder().encode(message);
+  const hash = messageBytes.length === 32 ? messageBytes : keccak_256(messageBytes);
+  const sig = signHash(accountIndex, hash);
+  return '0x' + bytesToHex(sig);
+}
+
+/** Sign EIP-712 typed data. */
+export function signTypedData(accountIndex: number, typedData: unknown): string {
+  const hash = hashTypedData(typedData as Parameters<typeof hashTypedData>[0]);
+  const sig = signHash(accountIndex, hexToBytes(hash.slice(2)));
   return '0x' + bytesToHex(sig);
 }
 

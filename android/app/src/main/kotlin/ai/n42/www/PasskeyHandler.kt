@@ -20,9 +20,6 @@ import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
 import java.math.BigInteger
-import java.security.interfaces.ECPublicKey
-import java.security.KeyFactory
-import java.security.spec.X509EncodedKeySpec
 
 /**
  * Android Passkey handler using Credential Manager API.
@@ -215,17 +212,132 @@ class PasskeyHandler(private val activity: Activity) : MethodChannel.MethodCallH
      * Returns hex-encoded (x, y) pair.
      */
     private fun extractPublicKeyFromAttestation(attestationB64: String): Pair<String, String> {
-        // Simplified: In production, parse CBOR attestationObject to get
-        // authData -> attestedCredentialData -> COSE public key.
-        // For now, return placeholder that will be overridden by server-side
-        // extraction or the raw public key from the response.
-        //
-        // The actual extraction requires a CBOR parser. The server should
-        // independently validate and extract the public key.
-        return Pair(
-            "0".padStart(64, '0'),
-            "0".padStart(64, '0')
-        )
+        val attestation = CborReader(base64UrlDecode(attestationB64)).read()
+        val attestationMap = attestation as? Map<*, *>
+            ?: throw IllegalArgumentException("Invalid attestation object")
+        val authData = attestationMap["authData"] as? ByteArray
+            ?: throw IllegalArgumentException("attestationObject missing authData")
+
+        if (authData.size < 37) {
+            throw IllegalArgumentException("authData too short")
+        }
+
+        val flags = authData[32].toInt() and 0xFF
+        if ((flags and 0x40) == 0) {
+            throw IllegalArgumentException("authData missing attested credential data")
+        }
+
+        var offset = 37 // rpIdHash(32) + flags(1) + signCount(4)
+        offset += 16 // AAGUID
+        if (offset + 2 > authData.size) {
+            throw IllegalArgumentException("authData missing credential ID length")
+        }
+        val credentialIdLength = ((authData[offset].toInt() and 0xFF) shl 8) or
+            (authData[offset + 1].toInt() and 0xFF)
+        offset += 2
+        offset += credentialIdLength
+        if (offset >= authData.size) {
+            throw IllegalArgumentException("authData missing credential public key")
+        }
+
+        val coseKey = CborReader(authData.copyOfRange(offset, authData.size)).read() as? Map<*, *>
+            ?: throw IllegalArgumentException("Invalid COSE public key")
+        val x = coseKey[-2] as? ByteArray
+            ?: throw IllegalArgumentException("COSE public key missing x coordinate")
+        val y = coseKey[-3] as? ByteArray
+            ?: throw IllegalArgumentException("COSE public key missing y coordinate")
+        if (x.size != 32 || y.size != 32) {
+            throw IllegalArgumentException("Invalid P-256 public key coordinate length")
+        }
+
+        return Pair(x.toHex(), y.toHex())
+    }
+
+    private class CborReader(private val data: ByteArray) {
+        private var offset = 0
+
+        fun read(): Any? {
+            if (offset >= data.size) {
+                throw IllegalArgumentException("Unexpected end of CBOR data")
+            }
+            val initial = readByte()
+            val major = initial ushr 5
+            val additional = initial and 0x1F
+            return when (major) {
+                0 -> toNumber(readLength(additional))
+                1 -> toNumber(-1L - readLength(additional))
+                2 -> readBytes(readLength(additional).toInt())
+                3 -> String(readBytes(readLength(additional).toInt()), Charsets.UTF_8)
+                4 -> {
+                    val length = readLength(additional).toInt()
+                    List(length) { read() }
+                }
+                5 -> {
+                    val length = readLength(additional).toInt()
+                    val map = LinkedHashMap<Any?, Any?>()
+                    repeat(length) {
+                        val key = read()
+                        val value = read()
+                        map[key] = value
+                    }
+                    map
+                }
+                6 -> {
+                    readLength(additional)
+                    read()
+                }
+                7 -> readSimple(additional)
+                else -> throw IllegalArgumentException("Unsupported CBOR major type $major")
+            }
+        }
+
+        private fun readSimple(additional: Int): Any? {
+            return when (additional) {
+                20 -> false
+                21 -> true
+                22, 23 -> null
+                else -> throw IllegalArgumentException("Unsupported CBOR simple value $additional")
+            }
+        }
+
+        private fun readLength(additional: Int): Long {
+            return when (additional) {
+                in 0..23 -> additional.toLong()
+                24 -> readByte().toLong()
+                25 -> readUInt(2)
+                26 -> readUInt(4)
+                27 -> readUInt(8)
+                else -> throw IllegalArgumentException("Indefinite CBOR lengths are not supported")
+            }
+        }
+
+        private fun readUInt(byteCount: Int): Long {
+            var value = 0L
+            repeat(byteCount) {
+                value = (value shl 8) or readByte().toLong()
+            }
+            return value
+        }
+
+        private fun readBytes(length: Int): ByteArray {
+            if (length < 0 || offset + length > data.size) {
+                throw IllegalArgumentException("CBOR byte string exceeds data length")
+            }
+            val bytes = data.copyOfRange(offset, offset + length)
+            offset += length
+            return bytes
+        }
+
+        private fun readByte(): Int {
+            if (offset >= data.size) {
+                throw IllegalArgumentException("Unexpected end of CBOR data")
+            }
+            return data[offset++].toInt() and 0xFF
+        }
+
+        private fun toNumber(value: Long): Any {
+            return if (value >= Int.MIN_VALUE && value <= Int.MAX_VALUE) value.toInt() else value
+        }
     }
 
     /**
@@ -266,5 +378,9 @@ class PasskeyHandler(private val activity: Activity) : MethodChannel.MethodCallH
 
     private fun base64UrlDecode(data: String): ByteArray {
         return Base64.decode(data, Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING)
+    }
+
+    private fun ByteArray.toHex(): String {
+        return joinToString(separator = "") { "%02x".format(it) }
     }
 }
