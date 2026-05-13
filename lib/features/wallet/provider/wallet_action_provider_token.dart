@@ -121,6 +121,7 @@ extension WalletActionProviderToken on WalletActionProvider {
 
     calculateBalanceWidthCoinModel();
     saveCoinSort();
+    addCoinRefreshMap();
   }
 
   CoinModel buildTokenCoinModel(CoinModel mainChain,Map<String,dynamic> token){

@@ -47,11 +47,6 @@ final Map<String, Map<String, dynamic>> _requestUrlMain1 = {
     'browser': 'https://www.hecoinfo.com/',
     'rpc': 'https://http-mainnet.huobichain.com/',
   },
-  'XDAI': {
-    'api': 'https://blockscout.com/xdai/mainnet/api?',
-    'browser': 'https://blockscout.com/xdai/mainnet/',
-    'rpc': 'https://xdai-rpc.gateway.pokt.network/',
-  },
   'FTM': {
     'api': 'https://api.ftmscan.com/api?',
     'browser': 'https://ftmscan.com/',
@@ -88,7 +83,7 @@ final Map<String, Map<String, dynamic>> _requestUrlMain1 = {
     'rpc': 'https://rpc.gochain.io',
   },
   'WAN': {'api': '', 'browser': 'https://wanscan.org', 'rpc': ''},
-  'CRO': {'api': '', 'browser': 'https://cronoscan.com/', 'rpc': ''},
+  'CRO': {'api': '', 'browser': 'https://cronoscan.com/', 'rpc': 'https://evm.cronos.org'},
   'KAVA': {
     'api': '',
     'browser': 'https://www.mintscan.io/kava/',
@@ -119,7 +114,7 @@ final Map<String, Map<String, dynamic>> _requestUrlMain1 = {
     'browser': 'https://moonbase.subscan.io/',
     'rpc': '',
   },
-  'KLAY': {'api': '', 'browser': 'https://scope.klaytn.com/', 'rpc': ''},
+  'KLAY': {'api': '', 'browser': 'https://scope.klaytn.com/', 'rpc': 'https://rpc.ankr.com/klaytn'},
   'MTR': {
     'api': '',
     'browser': 'https://scan.meter.io/',
@@ -137,8 +132,33 @@ final Map<String, Map<String, dynamic>> _requestUrlMain1 = {
   },
   'ARB': {
     'api': '',
-    'browser': 'https://stylus-testnet-explorer.arbitrum.io/',
-    'rpc': 'https://stylus-testnet.arbitrum.io/rpc/',
+    'browser': 'https://arbiscan.io/',
+    'rpc': 'https://arb1.arbitrum.io/rpc',
+  },
+  'LINEA': {
+    'api': '',
+    'browser': 'https://lineascan.build/',
+    'rpc': 'https://rpc.linea.build',
+  },
+  'MNT': {
+    'api': '',
+    'browser': 'https://explorer.mantle.xyz/',
+    'rpc': 'https://rpc.mantle.xyz',
+  },
+  'NOVA': {
+    'api': '',
+    'browser': 'https://nova.arbiscan.io/',
+    'rpc': 'https://nova.arbitrum.io/rpc',
+  },
+  'SCROLL': {
+    'api': '',
+    'browser': 'https://scrollscan.com/',
+    'rpc': 'https://rpc.scroll.io',
+  },
+  'ZKSYNC': {
+    'api': '',
+    'browser': 'https://explorer.zksync.io/',
+    'rpc': 'https://mainnet.era.zksync.io',
   },
   'AURORA': {'api': '', 'browser': 'https://aurorascan.dev/', 'rpc': ''},
   'METIS': {
@@ -208,7 +228,7 @@ final Map<String, Map<String, dynamic>> _requestUrlMain1 = {
     'rpc': 'https://s2.ripple.com:51234/',
   },
   'ATOM': {
-    'api': 'https://lcd-cosmoshub.keplr.app/',
+    'api': 'https://rest.cosmos.directory/cosmoshub',
     'browser': 'https://atomscan.com/',
     'rpc': '',
   },
@@ -307,5 +327,20 @@ final Map<String, Map<String, dynamic>> _requestUrlMain1 = {
     'api': 'https://api.multiversx.com/',
     'browser': 'https://explorer.multiversx.com/',
     'rpc': 'https://gateway.multiversx.com',
+  },
+  'CFX': {
+    'api': '',
+    'browser': 'https://evm.confluxscan.io/',
+    'rpc': 'https://evm.confluxrpc.com',
+  },
+  'NEON': {
+    'api': '',
+    'browser': 'https://neonscan.org/',
+    'rpc': 'https://neon-proxy-mainnet.solana.p2p.org',
+  },
+  'ZEN': {
+    'api': 'https://explorer.horizen.io/api/',
+    'browser': 'https://explorer.horizen.io/',
+    'rpc': '',
   },
 };

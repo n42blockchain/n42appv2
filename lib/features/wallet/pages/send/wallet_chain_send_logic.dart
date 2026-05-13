@@ -130,8 +130,22 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
     setState(() => load = Load.finish);
   }
 
-  /// 解析当前 coinModel 的 RPC 地址（自定义链返回对应 service，否则 null）
+  /// 解析当前 coinModel 的 RPC 地址。
+  ///
+  /// 对所有 EVM 链（不限于 custom）优先返回链自身的 service URL，避免
+  /// 将 N42 API 不支持的 coinType（如 XDAI、PLUME 等）发送到后台而触发
+  /// 5xx 错误，进而积累 circuit breaker 计数导致后续请求报 "Dio Error"。
+  /// 合约代币无自身 service 时，回退到父链（chainModel）的 RPC。
   String? _resolveRpc() {
+    if (_blockchainType == BlockchainType.Ethereum.name) {
+      final source =
+          (_isContract && chainModel != null) ? chainModel!.coin : coinModel.coin;
+      final svc = (coinModel.isTest
+          ? source['service_test']
+          : source['service']) as String?;
+      if (svc != null && svc.isNotEmpty) return svc;
+    }
+    // 非 EVM 链 / service 为空时：自定义链返回配置 RPC，否则 null（走 N42 API）
     if (coinModel.coin['custom'] != true) return null;
     return coinModel.isTest
         ? coinModel.coin['service_test']

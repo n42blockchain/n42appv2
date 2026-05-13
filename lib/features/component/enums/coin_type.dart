@@ -133,6 +133,7 @@ enum CoinType {
   HBAR,
   BERA,
   SEI,
+  SEI2,
   GNOSIS,
   NOVA,
   ZKLINK,

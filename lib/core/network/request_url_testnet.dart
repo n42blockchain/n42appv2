@@ -47,11 +47,6 @@ final Map<String, Map<String, dynamic>> _requestUrlTest1 = {
     'browser': 'https://testnet.hecoinfo.com/',
     'rpc': 'https://http-testnet.hecochain.com',
   },
-  'XDAI': {
-    'api': 'https://blockscout.com/xdai/optimism/api?',
-    'browser': 'https://blockscout.com/xdai/optimism/',
-    'rpc': 'https://optimism.gnosischain.com',
-  },
   'FTM': {
     'api': 'https://api-testnet.ftmscan.com/api?',
     'browser': 'https://testnet.ftmscan.com/',
@@ -76,14 +71,14 @@ final Map<String, Map<String, dynamic>> _requestUrlTest1 = {
   'TT': {'api': '', 'browser': '', 'rpc': ''},
   'GO': {'api': '', 'browser': '', 'rpc': 'https://testnet-rpc.gochain.io'},
   'WAN': {'api': '', 'browser': '', 'rpc': ''},
-  'CRO': {'api': '', 'browser': '', 'rpc': ''},
+  'CRO': {'api': '', 'browser': '', 'rpc': 'https://evm-t3.cronos.org'},
   'KAVA': {'api': '', 'browser': '', 'rpc': ''},
   'KCS': {'api': '', 'browser': '', 'rpc': ''},
   'BOBA': {'api': '', 'browser': '', 'rpc': ''},
   'EVMOS': {'api': '', 'browser': '', 'rpc': ''},
   'MOVR': {'api': '', 'browser': '', 'rpc': ''},
   'GLMR': {'api': '', 'browser': '', 'rpc': ''},
-  'KLAY': {'api': '', 'browser': '', 'rpc': ''},
+  'KLAY': {'api': '', 'browser': '', 'rpc': 'https://rpc.ankr.com/klaytn_testnet'},
   'MTR': {'api': '', 'browser': '', 'rpc': ''},
   'OKT': {
     'api': '',
@@ -94,7 +89,27 @@ final Map<String, Map<String, dynamic>> _requestUrlTest1 = {
   'ARB': {
     'api': '',
     'browser': 'https://stylus-testnet-explorer.arbitrum.io/',
-    'rpc': 'https://stylus-testnet.arbitrum.io/rpc/',
+    'rpc': 'https://sepolia-rollup.arbitrum.io/rpc',
+  },
+  'LINEA': {
+    'api': '',
+    'browser': 'https://sepolia.lineascan.build/',
+    'rpc': 'https://rpc.sepolia.linea.build',
+  },
+  'MNT': {
+    'api': '',
+    'browser': 'https://sepolia.mantlescan.xyz/',
+    'rpc': 'https://rpc.sepolia.mantle.xyz',
+  },
+  'SCROLL': {
+    'api': '',
+    'browser': 'https://sepolia.scrollscan.com/',
+    'rpc': 'https://sepolia-rpc.scroll.io',
+  },
+  'ZKSYNC': {
+    'api': '',
+    'browser': 'https://sepolia.explorer.zksync.io/',
+    'rpc': 'https://sepolia.era.zksync.dev',
   },
   'AURORA': {'api': '', 'browser': '', 'rpc': ''},
   'METIS': {
@@ -296,5 +311,20 @@ final Map<String, Map<String, dynamic>> _requestUrlTest1 = {
     'api': 'https://devnet-api.multiversx.com/',
     'browser': 'https://devnet-explorer.multiversx.com/',
     'rpc': 'https://devnet-gateway.multiversx.com',
+  },
+  'CFX': {
+    'api': '',
+    'browser': 'https://evmtestnet.confluxscan.io/',
+    'rpc': 'https://evmtestnet.confluxrpc.com',
+  },
+  'NEON': {
+    'api': '',
+    'browser': 'https://devnet.neonscan.org/',
+    'rpc': 'https://devnet.neonevm.org',
+  },
+  'ZEN': {
+    'api': 'https://explorer-testnet.horizen.io/api/',
+    'browser': 'https://explorer-testnet.horizen.io/',
+    'rpc': '',
   },
 };

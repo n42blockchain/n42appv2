@@ -3,6 +3,8 @@ import 'package:decimal/decimal.dart';
 import 'package:wallet/wallet.dart';
 import 'configs/wallet_chain_configs_part1.dart';
 import 'configs/wallet_chain_configs_part2.dart';
+import 'configs/wallet_chain_configs_part3.dart';
+import 'configs/wallet_chain_configs_part4.dart';
 
 /// 默认钱包链配置
 /// 排序原则：N42主链放首位，其余按知名度和常用程度排列
@@ -10,6 +12,8 @@ import 'configs/wallet_chain_configs_part2.dart';
 Map<String,dynamic> chainUrlMap={
   ...walletChainConfigsPart1,
   ...walletChainConfigsPart2,
+  ...walletChainConfigsPart3,
+  ...walletChainConfigsPart4,
 };
 
 //根据 index和默认path 返回新path

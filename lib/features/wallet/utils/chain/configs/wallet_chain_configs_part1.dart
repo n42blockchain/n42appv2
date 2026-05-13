@@ -779,7 +779,7 @@ Map<String,dynamic> walletChainConfigsPart1={
       "path": {
         "legacy":"m/44'/118'/0'/0/0",
       },
-      "service": "https://cosmos-lcd.quickapi.com/",
+      "service": "https://rest.cosmos.directory/cosmoshub",
       "service_test": "",
       "chainId_test": 0,
       "contract": "",

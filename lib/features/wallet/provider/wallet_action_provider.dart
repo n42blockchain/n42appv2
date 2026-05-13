@@ -37,13 +37,17 @@ part 'wallet_action_provider_sort.dart';
 part 'wallet_action_provider_market.dart';
 
 String? resolveBalanceRpcOverride(CoinModel coinModel) {
-  final coinType = coinModel.coin['coinType']?.toString().toUpperCase();
-  if (coinType != CoinType.N.name || !coinModel.isTest) {
-    return null;
+  // For EVM chains with a configured RPC, bypass the N42 API to avoid
+  // 5xx errors for coin types it doesn't recognise (e.g. XDAI, PLUME).
+  if (coinModel.coin['blockchainType'] == 'Ethereum') {
+    final svc = (coinModel.isTest
+            ? coinModel.coin['service_test']
+            : coinModel.coin['service'])
+        ?.toString()
+        .trim();
+    if (svc != null && svc.isNotEmpty) return svc;
   }
-
-  final rpc = coinModel.coin['service_test']?.toString().trim() ?? '';
-  return rpc.isEmpty ? null : rpc;
+  return null;
 }
 
 class WalletActionProvider extends ChangeNotifier
