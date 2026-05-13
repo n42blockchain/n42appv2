@@ -13,6 +13,7 @@ import 'package:n42_wallet/core/platform/deep_link_service.dart';
 import 'package:n42_wallet/core/routing/deep_link_handler.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/app/chat_initialization.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/core/di/injection.dart';
 import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
@@ -108,8 +109,11 @@ void main() async {
 
   // SECURITY: Warn if SSL certificate pinning is not configured
   if (kReleaseMode && !SecurityConfig.isCertPinningConfigured) {
-    debugPrint('CRITICAL: SSL certificate pinning uses placeholder fingerprints. '
-        'Replace with real server certificate fingerprints before production.');
+    AppLogger.e(
+      'main',
+      'CRITICAL: SSL certificate pinning uses placeholder fingerprints. '
+      'Replace with real server certificate fingerprints before production.',
+    );
   }
 
   // SECURITY: Initialize and validate API keys / RPC / config
@@ -149,11 +153,11 @@ Future<void> _clearKeychainOnFreshInstall() async {
         ),
       );
       await storage.deleteAll();
-      if (kDebugMode) debugPrint('[main] Fresh install detected, Keychain cleared');
+      AppLogger.d('main', 'fresh install detected, Keychain cleared');
       await prefs.setBool(flagKey, true);
     }
   } catch (e) {
-    if (kDebugMode) debugPrint('[main] _clearKeychainOnFreshInstall error: $e');
+    AppLogger.w('main', '_clearKeychainOnFreshInstall error: $e');
   }
 }
 
@@ -199,7 +203,7 @@ class _N42AppV2State extends ConsumerState<N42AppV2>
       final prefs = await SharedPreferences.getInstance();
       await PhishingDetector.instance.initialize(prefs);
     } catch (e) {
-      if (kDebugMode) debugPrint('[Security] PhishingDetector init failed: $e');
+      AppLogger.w('Security', 'PhishingDetector init failed: $e');
     }
   }
 
@@ -211,14 +215,13 @@ class _N42AppV2State extends ConsumerState<N42AppV2>
       );
       if (await migration.needsMigration()) {
         final count = await migration.migrate();
-        if (kDebugMode) {
-          debugPrint(
-            '[Security] Wallet data migration completed: $count wallets migrated',
-          );
-        }
+        AppLogger.i(
+          'Security',
+          'wallet data migration completed: $count wallets migrated',
+        );
       }
     } catch (e) {
-      if (kDebugMode) debugPrint('[Security] Wallet data migration failed: $e');
+      AppLogger.w('Security', 'wallet data migration failed: $e');
     }
   }
 
@@ -231,7 +234,7 @@ class _N42AppV2State extends ConsumerState<N42AppV2>
     try {
       await AppPushUtils.init();
     } catch (e) {
-      if (kDebugMode) debugPrint('FCM推送初始化失败: $e');
+      AppLogger.w('main', 'FCM push init failed: $e');
     }
   }
 
@@ -245,7 +248,7 @@ class _N42AppV2State extends ConsumerState<N42AppV2>
       _deepLinkService = service;
       _deepLinkHandler = handler;
     } catch (e) {
-      if (kDebugMode) debugPrint('Deep link initialization failed: $e');
+      AppLogger.w('main', 'deep link initialization failed: $e');
     }
   }
 
@@ -272,10 +275,10 @@ class _N42AppV2State extends ConsumerState<N42AppV2>
         );
         break;
       case DeepLinkType.groupMining:
-        if (kDebugMode) debugPrint('Deep link: Group mining - ${data.params}');
+        AppLogger.d('DeepLink', 'group mining: ${data.params}');
         break;
       case DeepLinkType.fullNode:
-        if (kDebugMode) debugPrint('Deep link: Full node - ${data.params}');
+        AppLogger.d('DeepLink', 'full node: ${data.params}');
         break;
       case DeepLinkType.chat:
       case DeepLinkType.user:
@@ -283,7 +286,7 @@ class _N42AppV2State extends ConsumerState<N42AppV2>
       case DeepLinkType.friendCard:
       case DeepLinkType.chatSso:
       default:
-        if (kDebugMode) debugPrint('Deep link: Unhandled type ${data.type}');
+        AppLogger.w('DeepLink', 'unhandled type ${data.type}');
     }
   }
 

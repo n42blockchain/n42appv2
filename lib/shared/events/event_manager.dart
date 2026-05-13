@@ -6,7 +6,8 @@
 // Author: Jiang Yiwei
 
 import 'dart:async';
-import 'package:flutter/foundation.dart';
+
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/core/utils/event_bus.dart' as global_bus;
 import 'package:n42_wallet/shared/domain/entities/wallet_info.dart';
 import 'cross_feature_events.dart';
@@ -23,9 +24,7 @@ class EventManager {
   final List<StreamSubscription> _subscriptions = [];
 
   void emit<T extends CrossFeatureEvent>(T event) {
-    if (kDebugMode) {
-      debugPrint('[EventManager] Emitting: ${event.runtimeType}');
-    }
+    AppLogger.d('EventManager', 'emitting: ${event.runtimeType}');
     global_bus.eventBus.fire(event);
   }
 
