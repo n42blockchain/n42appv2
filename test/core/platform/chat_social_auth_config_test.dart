@@ -129,5 +129,277 @@ void main() {
       );
       expect(lines, contains('[ChatSocialAuth] WeChat: enabled'));
     });
+
+    test('empty native + empty env yields empty string slots', () {
+      final config = ChatSocialAuthConfig.resolve(
+        nativeConfig: const SocialAuthNativeConfig(),
+      );
+      expect(config.googleClientId, '');
+      expect(config.googleServerClientId, '');
+      expect(config.twitterApiKey, '');
+      expect(config.twitterApiSecret, '');
+      expect(config.weChatAppId, '');
+      expect(config.googleConfigured, isFalse);
+      expect(config.twitterConfigured, isFalse);
+      expect(config.weChatConfigured, isFalse);
+    });
+  });
+
+  // ─── Predicate contracts ──────────────────────────────────────────
+  // The *Configured getters feed directly into N42ChatConfig.enableXLogin
+  // flags. Each predicate gates a distinct SDK behaviour, so the truth
+  // tables below pin the contract independently of the .resolve() input.
+
+  group('googleConfigured', () {
+    ChatSocialAuthConfig makeGoogle({String client = '', String server = ''}) {
+      return ChatSocialAuthConfig(
+        googleClientId: client,
+        googleServerClientId: server,
+        twitterApiKey: '',
+        twitterApiSecret: '',
+        twitterRedirectUri: '',
+        weChatAppId: '',
+        weChatUniversalLink: '',
+      );
+    }
+
+    test('true when only clientId is set', () {
+      expect(makeGoogle(client: 'abc').googleConfigured, isTrue);
+    });
+
+    test('true when only serverClientId is set', () {
+      expect(makeGoogle(server: 'srv').googleConfigured, isTrue);
+    });
+
+    test('true when both are set', () {
+      expect(makeGoogle(client: 'a', server: 'b').googleConfigured, isTrue);
+    });
+
+    test('false when neither is set', () {
+      expect(makeGoogle().googleConfigured, isFalse);
+    });
+  });
+
+  group('twitterConfigured', () {
+    ChatSocialAuthConfig makeTw({String key = '', String secret = ''}) {
+      return ChatSocialAuthConfig(
+        googleClientId: '',
+        googleServerClientId: '',
+        twitterApiKey: key,
+        twitterApiSecret: secret,
+        twitterRedirectUri: '',
+        weChatAppId: '',
+        weChatUniversalLink: '',
+      );
+    }
+
+    test('true when both apiKey AND apiSecret are set', () {
+      expect(makeTw(key: 'k', secret: 's').twitterConfigured, isTrue);
+    });
+
+    test('false when only apiKey is set', () {
+      expect(makeTw(key: 'k').twitterConfigured, isFalse);
+    });
+
+    test('false when only apiSecret is set', () {
+      // Same as the existing "does not enable partial twitter config"
+      // but covers the OTHER half of the partial — apiSecret without
+      // apiKey would crash the Twitter OAuth flow exactly the same way.
+      expect(makeTw(secret: 's').twitterConfigured, isFalse);
+    });
+
+    test('false when neither is set', () {
+      expect(makeTw().twitterConfigured, isFalse);
+    });
+  });
+
+  group('weChatConfigured', () {
+    test('true when appId is set (universalLink not required)', () {
+      const cfg = ChatSocialAuthConfig(
+        googleClientId: '',
+        googleServerClientId: '',
+        twitterApiKey: '',
+        twitterApiSecret: '',
+        twitterRedirectUri: '',
+        weChatAppId: 'wx123',
+        weChatUniversalLink: '',
+      );
+      expect(cfg.weChatConfigured, isTrue);
+    });
+
+    test('false when appId is empty', () {
+      const cfg = ChatSocialAuthConfig(
+        googleClientId: '',
+        googleServerClientId: '',
+        twitterApiKey: '',
+        twitterApiSecret: '',
+        twitterRedirectUri: '',
+        weChatAppId: '',
+        weChatUniversalLink: 'https://x',
+      );
+      expect(cfg.weChatConfigured, isFalse);
+    });
+  });
+
+  // ─── Platform support gates ──────────────────────────────────────
+  // These directly drive the N42ChatConfig.enableGoogleLogin /
+  // enableAppleLogin flags handed to n42_chat at init.
+
+  group('supportsGoogleForCurrentPlatform', () {
+    const configured = ChatSocialAuthConfig(
+      googleClientId: 'abc',
+      googleServerClientId: '',
+      twitterApiKey: '',
+      twitterApiSecret: '',
+      twitterRedirectUri: '',
+      weChatAppId: '',
+      weChatUniversalLink: '',
+    );
+    const unconfigured = ChatSocialAuthConfig(
+      googleClientId: '',
+      googleServerClientId: '',
+      twitterApiKey: '',
+      twitterApiSecret: '',
+      twitterRedirectUri: '',
+      weChatAppId: '',
+      weChatUniversalLink: '',
+    );
+
+    test('false when not configured, regardless of platform', () {
+      expect(
+        unconfigured.supportsGoogleForCurrentPlatform(
+          isAndroid: true, isIOS: true, isMacOS: true,
+        ),
+        isFalse,
+      );
+    });
+
+    test('true on Android', () {
+      expect(
+        configured.supportsGoogleForCurrentPlatform(
+          isAndroid: true, isIOS: false, isMacOS: false,
+        ),
+        isTrue,
+      );
+    });
+
+    test('true on macOS', () {
+      expect(
+        configured.supportsGoogleForCurrentPlatform(
+          isAndroid: false, isIOS: false, isMacOS: true,
+        ),
+        isTrue,
+      );
+    });
+
+    test('false on web / windows / linux when configured', () {
+      // All three platform flags false → not on Android/iOS/macOS.
+      expect(
+        configured.supportsGoogleForCurrentPlatform(
+          isAndroid: false, isIOS: false, isMacOS: false,
+        ),
+        isFalse,
+      );
+    });
+  });
+
+  group('supportsAppleForCurrentPlatform', () {
+    const cfg = ChatSocialAuthConfig(
+      googleClientId: '',
+      googleServerClientId: '',
+      twitterApiKey: '',
+      twitterApiSecret: '',
+      twitterRedirectUri: '',
+      weChatAppId: '',
+      weChatUniversalLink: '',
+    );
+
+    test('true on iOS', () {
+      expect(
+        cfg.supportsAppleForCurrentPlatform(isIOS: true, isMacOS: false),
+        isTrue,
+      );
+    });
+
+    test('true on macOS', () {
+      expect(
+        cfg.supportsAppleForCurrentPlatform(isIOS: false, isMacOS: true),
+        isTrue,
+      );
+    });
+
+    test('false on android / web / others', () {
+      expect(
+        cfg.supportsAppleForCurrentPlatform(isIOS: false, isMacOS: false),
+        isFalse,
+      );
+    });
+  });
+
+  // ─── Diagnostics output shape ────────────────────────────────────
+
+  group('diagnostics', () {
+    const emptyCfg = ChatSocialAuthConfig(
+      googleClientId: '',
+      googleServerClientId: '',
+      twitterApiKey: '',
+      twitterApiSecret: '',
+      twitterRedirectUri: '',
+      weChatAppId: '',
+      weChatUniversalLink: '',
+    );
+
+    test('produces exactly 5 lines (one per provider)', () {
+      final lines = emptyCfg.diagnostics(
+        isAndroid: false, isIOS: false, isMacOS: false,
+      );
+      expect(lines.length, 5);
+    });
+
+    test('every line carries the [ChatSocialAuth] prefix', () {
+      final lines = emptyCfg.diagnostics(
+        isAndroid: false, isIOS: false, isMacOS: false,
+      );
+      for (final line in lines) {
+        expect(line, startsWith('[ChatSocialAuth] '));
+      }
+    });
+
+    test('Facebook line is enabled only on Android', () {
+      expect(
+        emptyCfg
+            .diagnostics(isAndroid: true, isIOS: false, isMacOS: false)
+            .any((l) => l.contains('Facebook: enabled')),
+        isTrue,
+      );
+      expect(
+        emptyCfg
+            .diagnostics(isAndroid: false, isIOS: true, isMacOS: false)
+            .any((l) => l.contains('Facebook: disabled')),
+        isTrue,
+      );
+      expect(
+        emptyCfg
+            .diagnostics(isAndroid: false, isIOS: false, isMacOS: true)
+            .any((l) => l.contains('Facebook: disabled')),
+        isTrue,
+      );
+    });
+
+    test('Apple line follows supportsAppleForCurrentPlatform', () {
+      // iOS / macOS → enabled, anything else → disabled.
+      expect(
+        emptyCfg
+            .diagnostics(isAndroid: false, isIOS: true, isMacOS: false)
+            .any((l) => l.contains('Apple: enabled')),
+        isTrue,
+      );
+      expect(
+        emptyCfg
+            .diagnostics(isAndroid: true, isIOS: false, isMacOS: false)
+            .any((l) => l.contains('Apple: disabled')),
+        isTrue,
+      );
+    });
   });
 }
