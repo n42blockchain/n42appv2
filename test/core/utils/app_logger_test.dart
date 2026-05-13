@@ -116,6 +116,26 @@ void main() {
         AppLogger.e('Boom', 'msg', report: false);
         expect(captured.length, 1);
       });
+
+      test('report:true does not throw when Crashlytics is unavailable', () {
+        // Firebase isn't initialized in unit tests; calling Crashlytics
+        // raw would normally throw. AppLogger must defensively swallow
+        // so a missing Crashlytics doesn't turn a recoverable error
+        // into an actual crash.
+        expect(
+          () => AppLogger.e('Boom', 'msg', report: true),
+          returnsNormally,
+        );
+      });
+    });
+
+    group('w with report:true', () {
+      test('does not throw when Crashlytics is unavailable', () {
+        expect(
+          () => AppLogger.w('Net', 'flaky', report: true),
+          returnsNormally,
+        );
+      });
     });
   });
 }

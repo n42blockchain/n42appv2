@@ -36,7 +36,9 @@ class AppLogger {
       debugPrint('[$tag] WARN: $message');
     }
     if (report && !kDebugMode) {
-      FirebaseCrashlytics.instance.log('[$tag] WARN: $message');
+      _safeCrashlyticsCall(
+        () => FirebaseCrashlytics.instance.log('[$tag] WARN: $message'),
+      );
     }
   }
 
@@ -53,12 +55,30 @@ class AppLogger {
       if (stackTrace != null) debugPrint(stackTrace.toString());
     }
     if (report) {
-      FirebaseCrashlytics.instance.recordError(
-        error ?? message,
-        stackTrace,
-        reason: '[$tag] $message',
-        fatal: false,
+      _safeCrashlyticsCall(
+        () => FirebaseCrashlytics.instance.recordError(
+          error ?? message,
+          stackTrace,
+          reason: '[$tag] $message',
+          fatal: false,
+        ),
       );
+    }
+  }
+
+  /// Run a Crashlytics call defensively.
+  ///
+  /// `FirebaseCrashlytics.instance` throws if Firebase isn't initialized
+  /// (e.g. during early startup before `Firebase.initializeApp()`, or in
+  /// background isolates where Firebase is initialized lazily). The
+  /// logger MUST NEVER kill the calling frame because crash reporting
+  /// failed — that would turn a recoverable warning into an actual crash.
+  static void _safeCrashlyticsCall(void Function() body) {
+    try {
+      body();
+    } catch (_) {
+      // Swallow. Crashlytics failures must never propagate from the
+      // logger. Intentionally not recursing into AppLogger here.
     }
   }
 }
