@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:convert/convert.dart';
 import 'package:flutter/foundation.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:web3dart/web3dart.dart';
 
 import 'btc_tx_crypto.dart';
@@ -111,12 +112,12 @@ class BtcTxBuilder {
     offset += 1;
     data.setUint8(offset, 0x01);
     offset += 1;
-    if (kDebugMode) debugPrint(bytesToHex(data.buffer.asUint8List(0, offset)));
+    AppLogger.d('BtcTxBuilder', bytesToHex(data.buffer.asUint8List(0, offset)));
 
     // 输入数量
     data.setUint8(offset, inputs.length);
     offset += 1;
-    if (kDebugMode) debugPrint(bytesToHex(data.buffer.asUint8List(0, offset)));
+    AppLogger.d('BtcTxBuilder', bytesToHex(data.buffer.asUint8List(0, offset)));
 
     // 输入列表
     for (var input in inputs) {
@@ -126,12 +127,12 @@ class BtcTxBuilder {
       data.setUint32(offset, 0xffffffff, Endian.little);
       offset += 4;
     }
-    if (kDebugMode) debugPrint(bytesToHex(data.buffer.asUint8List(0, offset)));
+    AppLogger.d('BtcTxBuilder', bytesToHex(data.buffer.asUint8List(0, offset)));
 
     // 输出数量
     data.setUint8(offset, changeAmount > 0 ? 2 : 1);
     offset += 1;
-    if (kDebugMode) debugPrint(bytesToHex(data.buffer.asUint8List(0, offset)));
+    AppLogger.d('BtcTxBuilder', bytesToHex(data.buffer.asUint8List(0, offset)));
 
     // 接收方输出
     data.setUint64(offset, sendAmount, Endian.little);
@@ -140,12 +141,12 @@ class BtcTxBuilder {
         .getScriptPubKey(Uint8List.fromList(hex.decode(recipientScriptPubkey)));
     data.setUint8(offset, scriptPubKey.length);
     offset += 1;
-    if (kDebugMode) debugPrint(bytesToHex(data.buffer.asUint8List(0, offset)));
+    AppLogger.d('BtcTxBuilder', bytesToHex(data.buffer.asUint8List(0, offset)));
     data.buffer
         .asUint8List()
         .setRange(offset, offset + scriptPubKey.length, scriptPubKey);
     offset += scriptPubKey.length;
-    if (kDebugMode) debugPrint(bytesToHex(data.buffer.asUint8List(0, offset)));
+    AppLogger.d('BtcTxBuilder', bytesToHex(data.buffer.asUint8List(0, offset)));
 
     // 找零输出
     if (changeAmount > 0) {
@@ -159,7 +160,7 @@ class BtcTxBuilder {
           .setRange(offset, offset + changeScript.length, changeScript);
       offset += changeScript.length;
     }
-    if (kDebugMode) debugPrint(bytesToHex(data.buffer.asUint8List(0, offset)));
+    AppLogger.d('BtcTxBuilder', bytesToHex(data.buffer.asUint8List(0, offset)));
 
     return data.buffer.asUint8List(0, offset);
   }

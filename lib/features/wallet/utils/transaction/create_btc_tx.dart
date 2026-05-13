@@ -1,4 +1,5 @@
 import 'package:n42_wallet/core/network/base_api.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:crypto/crypto.dart';
@@ -61,7 +62,7 @@ class CreateBTCTX {
       rawTx + data2.buffer.asUint8List(0, 4) + data1.buffer.asUint8List(0, 4),
     );
 
-    if (kDebugMode) debugPrint('原始交易: $txHashStr');
+    AppLogger.d('CreateBTCTX', 'raw tx: $txHashStr');
     final Uint8List txHash = signWithPrivateKey(rawTx2, privateKey);
     final String witness = '${bytesToHex(txHash)}${pubKeyStr}00000000';
     return txHashStr + witness;
@@ -119,7 +120,7 @@ class CreateBTCTX {
     offset += 1;
     data.setUint8(offset, 0x01);
     offset += 1;
-    if (kDebugMode) debugPrint(bytesToHex(data.buffer.asUint8List(0, offset)));
+    AppLogger.d('CreateBTCTX', bytesToHex(data.buffer.asUint8List(0, offset)));
 
     // 输入数量
     data.setUint8(offset, inputs.length);
@@ -166,7 +167,7 @@ class CreateBTCTX {
       offset += changeScript.length;
     }
 
-    if (kDebugMode) debugPrint(bytesToHex(data.buffer.asUint8List(0, offset)));
+    AppLogger.d('CreateBTCTX', bytesToHex(data.buffer.asUint8List(0, offset)));
     return data.buffer.asUint8List(0, offset);
   }
 

@@ -1,5 +1,5 @@
-import 'package:flutter/foundation.dart';
 import 'package:bitcoin_base/bitcoin_base.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:web3dart/web3dart.dart';
 
 class CreateBtcTX2 {
@@ -27,7 +27,7 @@ class CreateBtcTX2 {
     }
 
     tx = tx.copyWith(witnesses: signatures);
-    if (kDebugMode) debugPrint(tx.serialize());
+    AppLogger.d('CreateBtcTX2', 'tx serialize: ${tx.serialize()}');
     return tx.serialize();
   }
 
@@ -57,9 +57,9 @@ class CreateBtcTX2 {
 
   void createMessage(ECPrivate fromPriv2, String message, ECPublic pub) {
     final sign = fromPriv2.signMessage(message.codeUnits);
-    if (kDebugMode) debugPrint(sign);
+    AppLogger.d('CreateBtcTX2', 'sign: $sign');
     final v = pub.verify(message: message.codeUnits, signature: hexToBytes(sign));
-    if (kDebugMode) debugPrint(v.toString());
+    AppLogger.d('CreateBtcTX2', 'verify: $v');
   }
 
   String createSegwitV2(ECPrivate fromPriv2, P2wshAddress out1) {

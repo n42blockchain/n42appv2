@@ -2,6 +2,7 @@ import 'package:bitcoin_base/bitcoin_base.dart';
 import 'package:convert/convert.dart';
 import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/network/base_api.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/wallet/utils/bip340.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
@@ -42,7 +43,7 @@ class CreateBTCTXV1 {
         fromAddress, pubKey, pubKeyStr);
 
     String txHashStr = hex.encode(rawTx['txRow'] as Uint8List);
-    if (kDebugMode) debugPrint("原始交易: $txHashStr");
+    AppLogger.d('CreateBTCTXV1', 'raw tx: $txHashStr');
 
     // 逐输入签名：Taproot 地址用 Schnorr，其余用 ECDSA
     final List<Uint8List> signs = [];
@@ -101,7 +102,7 @@ class CreateBTCTXV1 {
         fromAddress, pubKey, pubKeyStr);
 
     String txHashStr = hex.encode(rawTx['txRow'] as Uint8List);
-    if (kDebugMode) debugPrint("原始交易: $txHashStr");
+    AppLogger.d('CreateBTCTXV1', 'raw tx: $txHashStr');
 
     final Uint8List signature =
         Bip340().schnorrSign(rawTx['txRowAll'] as Uint8List, privateKey);

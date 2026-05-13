@@ -1,5 +1,7 @@
+import 'dart:typed_data';
+
 import 'package:crypto/crypto.dart';
-import 'package:flutter/foundation.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:web3dart/web3dart.dart';
 
 class CreateP2WSH {
@@ -54,7 +56,7 @@ class CreateP2WSH {
   /// 生成 P2WSH 地址
   String createP2WSHAddress(Uint8List scriptHash) {
     final p2wshAddress = bech32Encode('bc', scriptHash);
-    if (kDebugMode) debugPrint('P2WSH Address: $p2wshAddress');
+    AppLogger.d('P2WSH', 'address: $p2wshAddress');
     return p2wshAddress;
   }
 
