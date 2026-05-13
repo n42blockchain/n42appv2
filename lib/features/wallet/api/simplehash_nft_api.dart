@@ -3,9 +3,9 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
-import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/config/proxy_config.dart';
 import 'package:n42_wallet/core/network/base_api.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/wallet/models/nft_model.dart';
 
 /// SimpleHash NFT API 封装
@@ -49,7 +49,7 @@ class SimpleHashNftApi {
   Future<List<NftModel>> fetchNfts(String address, String coinType) async {
     final chainSlug = chainMap[coinType.toUpperCase()];
     if (chainSlug == null) {
-      debugPrint('SimpleHashNftApi: unsupported coinType=$coinType');
+      AppLogger.w('SimpleHashNftApi', 'unsupported coinType=$coinType');
       return [];
     }
 
@@ -84,7 +84,7 @@ class SimpleHashNftApi {
           try {
             results.add(NftModel.fromSimpleHash(item));
           } catch (e) {
-            debugPrint('SimpleHashNftApi: parse error: $e');
+            AppLogger.w('SimpleHashNftApi', 'parse error: $e');
           }
         }
 
@@ -92,7 +92,7 @@ class SimpleHashNftApi {
         cursor = (next is String && next.isNotEmpty) ? next : null;
       } while (cursor != null && results.length < maxItems);
     } catch (e, st) {
-      debugPrint('SimpleHashNftApi.fetchNfts error: $e\n$st');
+      AppLogger.w('SimpleHashNftApi', 'fetchNfts error: $e\n$st');
     }
 
     return results;
@@ -117,7 +117,7 @@ class SimpleHashNftApi {
       if (raw == null || raw is! Map<String, dynamic>) return null;
       return NftModel.fromSimpleHash(raw);
     } catch (e, st) {
-      debugPrint('SimpleHashNftApi.fetchNftById error: $e\n$st');
+      AppLogger.w('SimpleHashNftApi', 'fetchNftById error: $e\n$st');
       return null;
     }
   }

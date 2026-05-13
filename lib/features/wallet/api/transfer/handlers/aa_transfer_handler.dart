@@ -3,7 +3,9 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
-import 'package:flutter/foundation.dart';
+import 'dart:typed_data';
+
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
@@ -124,7 +126,7 @@ class AATransferHandler extends BaseTransferHandler {
       final signedUserOp = await _signUserOperation(userOpWithGas, params, chainConfig);
       final userOpHash = await bundler.sendUserOperation(signedUserOp);
 
-      debugPrint('AATransferHandler: UserOp sent, hash: $userOpHash');
+      AppLogger.d('AATransferHandler', 'UserOp sent, hash: $userOpHash');
 
       // Wait for receipt (with timeout)
       final receipt = await bundler.waitForReceipt(
@@ -149,10 +151,10 @@ class AATransferHandler extends BaseTransferHandler {
         );
       }
     } on AAError catch (e) {
-      debugPrint('AATransferHandler error: $e');
+      AppLogger.w('AATransferHandler', 'error: $e');
       return createError(e.message, data: e.details);
     } catch (e) {
-      debugPrint('AATransferHandler unexpected error: $e');
+      AppLogger.w('AATransferHandler', 'unexpected error: $e');
       return createError(e.toString());
     }
   }
@@ -287,7 +289,7 @@ class AATransferHandler extends BaseTransferHandler {
       final hex = result.data.toString().replaceFirst('0x', '');
       return (hex.isNotEmpty && hex != '0') ? BigInt.parse(hex, radix: 16) : BigInt.zero;
     } catch (e) {
-      debugPrint('Error getting nonce: $e');
+      AppLogger.w('AATransferHandler', 'error getting nonce: $e');
       return BigInt.zero;
     }
   }
@@ -371,7 +373,7 @@ class AATransferHandler extends BaseTransferHandler {
       }
       return false;
     } catch (e) {
-      debugPrint('Error checking account deployment: $e');
+      AppLogger.w('AATransferHandler', 'error checking account deployment: $e');
       return false;
     }
   }

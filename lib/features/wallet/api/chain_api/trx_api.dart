@@ -1,7 +1,8 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
-import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/core/config/proxy_config.dart';
 import 'package:n42_wallet/core/utils/message_model_bridge.dart';
 import 'package:n42_wallet/core/utils/result.dart';
@@ -125,7 +126,7 @@ class TrxApi {
       }
     } catch (e) {
       // Fall back to direct TronGrid when proxy is unavailable.
-      debugPrint('[TrxApi] getBlockNowTrx proxy error: $e');
+      AppLogger.w('TrxApi', 'getBlockNowTrx proxy error: $e');
     }
 
     try {
@@ -179,7 +180,7 @@ class TrxApi {
       }
     } catch (e) {
       // Fall back to direct TronGrid when proxy is unavailable.
-      debugPrint('[TrxApi] createTransaction proxy error: $e');
+      AppLogger.w('TrxApi', 'createTransaction proxy error: $e');
     }
 
     try {
@@ -231,7 +232,7 @@ class TrxApi {
       }
     } catch (e) {
       // Fall back to direct TronGrid when proxy is unavailable.
-      debugPrint('[TrxApi] sendTxTrx proxy error: $e');
+      AppLogger.w('TrxApi', 'sendTxTrx proxy error: $e');
     }
 
     try {
@@ -285,7 +286,7 @@ class TrxApi {
       }
     } catch (e) {
       // Fall back to direct TronGrid when proxy is unavailable.
-      debugPrint('[TrxApi] baseRPCEth proxy error: $e');
+      AppLogger.w('TrxApi', 'baseRPCEth proxy error: $e');
     }
 
     try {

@@ -107,8 +107,9 @@ extension TransactionApiBtcSolTrx on TransactionApi {
     if (!proxyResult.error) {
       return proxyResult;
     }
-    debugPrint(
-      '[TransactionApi] SOL proxy txlist fallback: ${proxyResult.data}',
+    AppLogger.w(
+      'TransactionApi',
+      'SOL proxy txlist fallback: ${proxyResult.data}',
     );
     return _solTransactionListViaSolscan(address, page: page, offset: offset);
   }
@@ -131,8 +132,9 @@ extension TransactionApiBtcSolTrx on TransactionApi {
     if (!proxyResult.error) {
       return proxyResult;
     }
-    debugPrint(
-      '[TransactionApi] TRX proxy txlist fallback: ${proxyResult.data}',
+    AppLogger.w(
+      'TransactionApi',
+      'TRX proxy txlist fallback: ${proxyResult.data}',
     );
     return _trxTransactionListViaLegacy(
       address,
@@ -157,8 +159,9 @@ extension TransactionApiBtcSolTrx on TransactionApi {
     if (!proxyResult.error) {
       return proxyResult;
     }
-    debugPrint(
-      '[TransactionApi] TRX proxy tokentx fallback: ${proxyResult.data}',
+    AppLogger.w(
+      'TransactionApi',
+      'TRX proxy tokentx fallback: ${proxyResult.data}',
     );
     return _trxTransactionListViaLegacy(
       address,
@@ -189,7 +192,7 @@ extension TransactionApiBtcSolTrx on TransactionApi {
       }
     } catch (e) {
       // Fall back to legacy direct request when proxy is unavailable.
-      debugPrint('[TransactionApi] trxTransactionInfoHash proxy error: $e');
+      AppLogger.w('TransactionApi', 'trxTransactionInfoHash proxy error: $e');
     }
 
     try {

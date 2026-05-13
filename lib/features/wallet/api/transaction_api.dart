@@ -1,7 +1,7 @@
-import 'package:flutter/foundation.dart';
 // api_keys_config removed — API keys migrated to server proxy.
 import 'package:n42_wallet/core/config/proxy_config.dart';
 import 'package:n42_wallet/core/network/base_api.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/core/network/request_url.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/sqlite/app_database.dart';
@@ -97,7 +97,7 @@ class TransactionApi {
           return await tonTransactionList(address, isTest: isTest);
       }
     } catch (e) {
-      debugPrint('TransactionApi.getTransactionList: $e');
+      AppLogger.w('TransactionApi', 'getTransactionList: $e');
     }
     return MessageModel();
   }
@@ -156,7 +156,7 @@ class TransactionApi {
           break;
       }
     } catch (e) {
-      debugPrint('TransactionApi.getContractTransactionList: $e');
+      AppLogger.w('TransactionApi', 'getContractTransactionList: $e');
     }
     return MessageModel();
   }

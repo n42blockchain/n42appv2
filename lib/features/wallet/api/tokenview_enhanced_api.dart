@@ -1,8 +1,8 @@
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/config/proxy_config.dart';
 import 'package:n42_wallet/core/network/external_http.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/wallet/models/tokenview/chain_abstract.dart';
 import 'package:n42_wallet/features/wallet/models/tokenview/coin_market_info.dart';
 import 'package:n42_wallet/features/wallet/models/tokenview/stablecoin_event.dart';
@@ -27,7 +27,7 @@ class TokenViewEnhancedApi {
       if (data == null || data is! Map) return null;
       return GasNextBlockPrediction.fromJson(Map<String, dynamic>.from(data));
     } catch (e) {
-      if (kDebugMode) debugPrint('TokenViewEnhancedApi.getGasNextBlock error: $e');
+      AppLogger.w('TokenViewEnhanced', 'getGasNextBlock error: $e');
       return null;
     }
   }
@@ -45,7 +45,7 @@ class TokenViewEnhancedApi {
       if (data == null || data is! Map) return null;
       return MempoolCongestion.fromJson(Map<String, dynamic>.from(data));
     } catch (e) {
-      if (kDebugMode) debugPrint('TokenViewEnhancedApi.getPendingStat error: $e');
+      AppLogger.w('TokenViewEnhanced', 'getPendingStat error: $e');
       return null;
     }
   }
@@ -66,7 +66,7 @@ class TokenViewEnhancedApi {
           .map((e) => MempoolTxItem.fromJson(Map<String, dynamic>.from(e)))
           .toList();
     } catch (e) {
-      if (kDebugMode) debugPrint('TokenViewEnhancedApi.getPendingTxs error: $e');
+      AppLogger.w('TokenViewEnhanced', 'getPendingTxs error: $e');
       return [];
     }
   }
@@ -84,7 +84,7 @@ class TokenViewEnhancedApi {
       if (data == null || data is! Map) return null;
       return ContractCreatorInfo.fromJson(Map<String, dynamic>.from(data));
     } catch (e) {
-      if (kDebugMode) debugPrint('TokenViewEnhancedApi.getContractCreator error: $e');
+      AppLogger.w('TokenViewEnhanced', 'getContractCreator error: $e');
       return null;
     }
   }
@@ -104,7 +104,7 @@ class TokenViewEnhancedApi {
         (key, value) => MapEntry(key, toIntSafe(value) ?? 0),
       );
     } catch (e) {
-      if (kDebugMode) debugPrint('TokenViewEnhancedApi.getChainHeights error: $e');
+      AppLogger.w('TokenViewEnhanced', 'getChainHeights error: $e');
       return null;
     }
   }
@@ -122,7 +122,7 @@ class TokenViewEnhancedApi {
       if (data == null || data is! Map) return null;
       return ChainAbstract.fromJson(Map<String, dynamic>.from(data));
     } catch (e) {
-      if (kDebugMode) debugPrint('TokenViewEnhancedApi.getChainInfo error: $e');
+      AppLogger.w('TokenViewEnhanced', 'getChainInfo error: $e');
       return null;
     }
   }
@@ -140,7 +140,7 @@ class TokenViewEnhancedApi {
       if (data == null || data is! Map) return null;
       return TokenMetadata.fromJson(Map<String, dynamic>.from(data));
     } catch (e) {
-      if (kDebugMode) debugPrint('TokenViewEnhancedApi.getTokenInfo error: $e');
+      AppLogger.w('TokenViewEnhanced', 'getTokenInfo error: $e');
       return null;
     }
   }
@@ -158,7 +158,7 @@ class TokenViewEnhancedApi {
       if (data == null || data is! Map) return null;
       return TokenSupplyInfo.fromJson(Map<String, dynamic>.from(data));
     } catch (e) {
-      if (kDebugMode) debugPrint('TokenViewEnhancedApi.getTokenSupply error: $e');
+      AppLogger.w('TokenViewEnhanced', 'getTokenSupply error: $e');
       return null;
     }
   }
@@ -176,7 +176,7 @@ class TokenViewEnhancedApi {
       if (data == null || data is! Map) return null;
       return CoinMarketInfo.fromJson(Map<String, dynamic>.from(data));
     } catch (e) {
-      if (kDebugMode) debugPrint('TokenViewEnhancedApi.getMarketInfo error: $e');
+      AppLogger.w('TokenViewEnhanced', 'getMarketInfo error: $e');
       return null;
     }
   }
@@ -202,7 +202,7 @@ class TokenViewEnhancedApi {
           .map((e) => StablecoinEvent.fromJson(Map<String, dynamic>.from(e)))
           .toList();
     } catch (e) {
-      if (kDebugMode) debugPrint('TokenViewEnhancedApi.getStablecoinEvents error: $e');
+      AppLogger.w('TokenViewEnhanced', 'getStablecoinEvents error: $e');
       return [];
     }
   }

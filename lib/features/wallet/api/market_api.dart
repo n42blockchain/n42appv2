@@ -1,6 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/config/proxy_config.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/core/network/base_api.dart';
 import 'package:n42_wallet/core/network/external_http.dart';
 import 'package:n42_wallet/features/wallet/api/market_api_payload_utils.dart';
@@ -35,11 +35,11 @@ class MarketApi {
           .join(',');
 
       if (cleanedCoins.isEmpty) {
-        if (kDebugMode) debugPrint('MarketApi: No valid coins to query');
+        AppLogger.w('MarketApi', 'no valid coins to query');
         return {'error': true, 'data': 'No coins specified'};
       }
 
-      if (kDebugMode) debugPrint('MarketApi.getWalletCoinsInfo: $cleanedCoins');
+      AppLogger.d('MarketApi', 'getWalletCoinsInfo: $cleanedCoins');
 
       final data = await BaseApi.requestEmptyH.get<dynamic>(
         '$_url/r/targetCoinMarketsList?coin=$cleanedCoins',
@@ -50,7 +50,7 @@ class MarketApi {
       if (data == null) return {'error': true, 'data': 'Null response'};
       return {'error': false, 'data': data};
     } catch (e, st) {
-      if (kDebugMode) debugPrint('MarketApi.getWalletCoinsInfo error: $e\n$st');
+      AppLogger.w('MarketApi', 'getWalletCoinsInfo error: $e\n$st');
       return {'error': true, 'data': e.toString()};
     }
   }
@@ -65,9 +65,7 @@ class MarketApi {
     if (geckoId.isEmpty) return [];
     try {
       final encodedId = Uri.encodeComponent(geckoId);
-      if (kDebugMode) {
-        debugPrint('MarketApi.getOhlcvData: $encodedId days=$days');
-      }
+      AppLogger.d('MarketApi', 'getOhlcvData: $encodedId days=$days');
 
       final raw = await ExternalHttp.get(
         '${ProxyConfig.marketOhlcv}?coin_id=$encodedId&vs_currency=usd&days=$days',
@@ -90,7 +88,7 @@ class MarketApi {
           .where((p) => p.isValid)
           .toList();
     } catch (e, st) {
-      if (kDebugMode) debugPrint('MarketApi.getOhlcvData error: $e\n$st');
+      AppLogger.w('MarketApi', 'getOhlcvData error: $e\n$st');
       return [];
     }
   }
@@ -106,9 +104,7 @@ class MarketApi {
     if (geckoId.isEmpty) return empty;
     try {
       final encodedId = Uri.encodeComponent(geckoId);
-      if (kDebugMode) {
-        debugPrint('MarketApi.getMarketChart: $encodedId days=$days');
-      }
+      AppLogger.d('MarketApi', 'getMarketChart: $encodedId days=$days');
 
       final raw = await ExternalHttp.get(
         '${ProxyConfig.marketChart}?coin_id=$encodedId&vs_currency=usd&days=$days',
@@ -122,7 +118,7 @@ class MarketApi {
         'volumes': _extractDoubleValues(raw['total_volumes']),
       };
     } catch (e, st) {
-      if (kDebugMode) debugPrint('MarketApi.getMarketChart error: $e\n$st');
+      AppLogger.w('MarketApi', 'getMarketChart error: $e\n$st');
       return empty;
     }
   }
@@ -137,7 +133,7 @@ class MarketApi {
   /// 避免占用 Dio 的 60s + RetryInterceptor 的 3x 重试（总计 4 分钟）。
   Future<List<Map<String, dynamic>>> getTrendingCoins() async {
     try {
-      if (kDebugMode) debugPrint('MarketApi.getTrendingCoins');
+      AppLogger.d('MarketApi', 'getTrendingCoins');
 
       final raw = await ExternalHttp.get(
         ProxyConfig.marketTrending,
@@ -158,7 +154,7 @@ class MarketApi {
           .whereType<Map<String, dynamic>>()
           .toList();
     } catch (e, st) {
-      if (kDebugMode) debugPrint('MarketApi.getTrendingCoins error: $e\n$st');
+      AppLogger.w('MarketApi', 'getTrendingCoins error: $e\n$st');
       return [];
     }
   }
@@ -171,7 +167,7 @@ class MarketApi {
   Future<List<Map<String, dynamic>>> searchCoins(String query) async {
     if (query.trim().isEmpty) return [];
     try {
-      if (kDebugMode) debugPrint('MarketApi.searchCoins: $query');
+      AppLogger.d('MarketApi', 'searchCoins: $query');
 
       final raw = await ExternalHttp.get(
         '${ProxyConfig.marketSearch}?q=${Uri.encodeQueryComponent(query.trim())}',
@@ -187,7 +183,7 @@ class MarketApi {
           .map((c) => Map<String, dynamic>.from(c))
           .toList();
     } catch (e, st) {
-      if (kDebugMode) debugPrint('MarketApi.searchCoins error: $e\n$st');
+      AppLogger.w('MarketApi', 'searchCoins error: $e\n$st');
       return [];
     }
   }
@@ -208,16 +204,14 @@ class MarketApi {
   /// [_CoinSource.watchlist] 方式渲染。
   Future<List<Map<String, dynamic>>> getFallbackTrendingCoins() async {
     try {
-      if (kDebugMode) debugPrint('MarketApi.getFallbackTrendingCoins');
+      AppLogger.d('MarketApi', 'getFallbackTrendingCoins');
 
       final resp = await getWalletCoinsInfo(_fallbackTrendingSymbols);
       if (resp['error'] != false) return [];
 
       return extractMarketCoinItems(resp['data']);
     } catch (e, st) {
-      if (kDebugMode) {
-        debugPrint('MarketApi.getFallbackTrendingCoins error: $e\n$st');
-      }
+      AppLogger.w('MarketApi', 'getFallbackTrendingCoins error: $e\n$st');
       return [];
     }
   }
@@ -236,9 +230,7 @@ class MarketApi {
       if (d == null) return {'error': true, 'data': '未找到该币'};
       return {'error': false, 'data': d};
     } catch (e, st) {
-      if (kDebugMode) {
-        debugPrint('MarketApi.getWalletCoinsBaseInfo error: $e\n$st');
-      }
+      AppLogger.w('MarketApi', 'getWalletCoinsBaseInfo error: $e\n$st');
       return {'error': true, 'data': e.toString()};
     }
   }
