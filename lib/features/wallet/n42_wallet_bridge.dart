@@ -4,12 +4,13 @@
 // See LICENSE file in the project root for full license information.
 
 import 'dart:convert';
+import 'dart:typed_data';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:n42_chat/n42_chat.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/wallet/api/address_book_api.dart';
@@ -32,7 +33,7 @@ class N42WalletBridge implements IWalletBridge {
     try {
       return globalWapAdapter;
     } catch (e) {
-      if (kDebugMode) debugPrint('N42WalletBridge: Failed to get WalletActionProvider: $e');
+      AppLogger.w('N42WalletBridge', 'failed to get WalletActionProvider: $e');
       return null;
     }
   }
@@ -141,7 +142,7 @@ class N42WalletBridge implements IWalletBridge {
           : result.data?.toString() ?? '';
       return TransferResult.success(txHash);
     } catch (e) {
-      if (kDebugMode) debugPrint('N42WalletBridge: Transfer error: $e');
+      AppLogger.w('N42WalletBridge', 'transfer error: $e');
       return TransferResult.failure(e.toString());
     }
   }
@@ -208,7 +209,7 @@ class N42WalletBridge implements IWalletBridge {
         ),
       );
     } catch (e) {
-      if (kDebugMode) debugPrint('N42WalletBridge: showReceiveQRCode error: $e');
+      AppLogger.w('N42WalletBridge', 'showReceiveQRCode error: $e');
     }
   }
 
@@ -237,7 +238,7 @@ class N42WalletBridge implements IWalletBridge {
       }
       return null;
     } catch (e) {
-      if (kDebugMode) debugPrint('N42WalletBridge: getUserInfoByAddress error: $e');
+      AppLogger.w('N42WalletBridge', 'getUserInfoByAddress error: $e');
       return null;
     }
   }
@@ -254,7 +255,7 @@ class N42WalletBridge implements IWalletBridge {
       final result = await _ensService.resolveName(ensName);
       return result.success ? result.address : null;
     } catch (e) {
-      if (kDebugMode) debugPrint('N42WalletBridge: Failed to resolve ENS name: $e');
+      AppLogger.w('N42WalletBridge', 'failed to resolve ENS name: $e');
       return null;
     }
   }
@@ -264,7 +265,7 @@ class N42WalletBridge implements IWalletBridge {
     try {
       return await _ensService.resolveAddress(address);
     } catch (e) {
-      if (kDebugMode) debugPrint('N42WalletBridge: Failed to lookup ENS name: $e');
+      AppLogger.w('N42WalletBridge', 'failed to lookup ENS name: $e');
       return null;
     }
   }
@@ -274,7 +275,7 @@ class N42WalletBridge implements IWalletBridge {
     try {
       return await _ensService.getAvatar(ensName);
     } catch (e) {
-      if (kDebugMode) debugPrint('N42WalletBridge: Failed to get ENS avatar: $e');
+      AppLogger.w('N42WalletBridge', 'failed to get ENS avatar: $e');
       return null;
     }
   }
@@ -284,7 +285,7 @@ class N42WalletBridge implements IWalletBridge {
     try {
       return await _ensService.resolveAddresses(addresses);
     } catch (e) {
-      if (kDebugMode) debugPrint('N42WalletBridge: Failed to batch lookup ENS: $e');
+      AppLogger.w('N42WalletBridge', 'failed to batch lookup ENS: $e');
       return {for (final addr in addresses) addr: null};
     }
   }
@@ -315,7 +316,7 @@ class N42WalletBridge implements IWalletBridge {
       _zeroKey(ethKey);
       return result;
     } catch (e) {
-      if (kDebugMode) debugPrint('N42WalletBridge: signMessage error: $e');
+      AppLogger.w('N42WalletBridge', 'signMessage error: $e');
       return null;
     }
   }
@@ -330,7 +331,10 @@ class N42WalletBridge implements IWalletBridge {
       const requiredFields = ['types', 'primaryType', 'domain', 'message'];
       for (final field in requiredFields) {
         if (!typedData.containsKey(field)) {
-          if (kDebugMode) debugPrint('N42WalletBridge: Missing EIP-712 field "$field"');
+          AppLogger.w(
+            'N42WalletBridge',
+            'missing EIP-712 field "$field"',
+          );
           return null;
         }
       }
@@ -346,7 +350,7 @@ class N42WalletBridge implements IWalletBridge {
       _zeroKey(ethKey);
       return result;
     } catch (e) {
-      if (kDebugMode) debugPrint('N42WalletBridge: signTypedData error: $e');
+      AppLogger.w('N42WalletBridge', 'signTypedData error: $e');
       return null;
     }
   }
@@ -395,7 +399,7 @@ class N42WalletBridge implements IWalletBridge {
       decodedKey.fillRange(0, decodedKey.length, 0);
       return ethKey;
     } catch (e) {
-      if (kDebugMode) debugPrint('N42WalletBridge: _getEthPrivateKey error: $e');
+      AppLogger.w('N42WalletBridge', '_getEthPrivateKey error: $e');
       return null;
     }
   }
@@ -480,7 +484,10 @@ class N42WalletBridge implements IWalletBridge {
       }
       return '0';
     } catch (e) {
-      if (kDebugMode) debugPrint('N42WalletBridge: Failed to get $tokenStandard balance: $e');
+      AppLogger.w(
+        'N42WalletBridge',
+        'failed to get $tokenStandard balance: $e',
+      );
       return '0';
     }
   }

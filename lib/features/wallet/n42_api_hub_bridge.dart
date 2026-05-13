@@ -3,9 +3,9 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
-import 'package:flutter/foundation.dart';
 import 'package:n42_chat/n42_chat.dart';
 import 'package:n42_wallet/core/api_hub/api_hub.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 
 /// API Hub 桥接实现
 ///
@@ -16,7 +16,7 @@ class N42ApiHubBridge implements IApiHubBridge {
     try {
       return await MarketDataAggregator.getPriceMap(symbols);
     } catch (e) {
-      debugPrint('N42ApiHubBridge.getPrices error: $e');
+      AppLogger.w('N42ApiHubBridge', 'getPrices error: $e');
       return {};
     }
   }
@@ -30,7 +30,7 @@ class N42ApiHubBridge implements IApiHubBridge {
       );
       return result.isMalicious;
     } catch (e) {
-      debugPrint('N42ApiHubBridge.isUrlMalicious error: $e');
+      AppLogger.w('N42ApiHubBridge', 'isUrlMalicious error: $e');
       return false; // fail-open
     }
   }
@@ -48,7 +48,7 @@ class N42ApiHubBridge implements IApiHubBridge {
               ))
           .toList();
     } catch (e) {
-      debugPrint('N42ApiHubBridge.getLatestNews error: $e');
+      AppLogger.w('N42ApiHubBridge', 'getLatestNews error: $e');
       return [];
     }
   }

@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/main.dart' show globalProviderContainer;
 import 'package:n42_wallet/features/browser/pages/browser_page.dart';
 import 'package:n42_wallet/features/home/setting/about_app.dart';
@@ -131,39 +132,30 @@ class AppPushUtils {
           sound: true,
         );
     //android上不需要考虑权限的问题
-    if (kDebugMode) {
-      debugPrint('User granted permission: ${settings.authorizationStatus}');
-    }
+    AppLogger.d('AppPush', 'permission status: ${settings.authorizationStatus}');
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
     } else if (settings.authorizationStatus ==
         AuthorizationStatus.provisional) {
-      if (kDebugMode) debugPrint('User granted provisional permission');
+      AppLogger.d('AppPush', 'user granted provisional permission');
     } else {
       // 用户拒绝或者未接受许可
       // 在基于 Apple 的平台上，一旦用户处理了权限请求（授权或拒绝），就无法重新请求权限。用户必须改为通过设备设置 UI 更新权限：
       // 如果用户完全拒绝权限，他们必须完全启用应用权限。
       // 如果用户接受请求的权限（无声音），他们必须己专门启用声音选项。
-      if (kDebugMode) {
-        debugPrint('User declined or has not accepted permission');
-      }
+      AppLogger.d('AppPush', 'user declined or has not accepted permission');
       //首次安装应用 同意之后 也会执行这里的逻辑
     }
 
     ///前台消息
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-      if (kDebugMode) {
-        debugPrint('在前台收到消息！');
-        debugPrint('[PushData][Foreground] messageId=${message.messageId}');
-        debugPrint('[PushData][Foreground] messageType=${message.messageType}');
-        debugPrint('[PushData][Foreground] senderId=${message.senderId}');
-        debugPrint('[PushData][Foreground] from=${message.from}');
-        debugPrint('[PushData][Foreground] collapseKey=${message.collapseKey}');
-        debugPrint('[PushData][Foreground] ttl=${message.ttl}');
-        debugPrint('[PushData][Foreground] sentTime=${message.sentTime}');
-        debugPrint('[PushData][Foreground] category=${message.category}');
-        debugPrint('[PushData][Foreground] notification=${message.notification?.toMap()}');
-        debugPrint('[PushData][Foreground] data=${message.data}');
-      }
+      AppLogger.d(
+        'AppPush',
+        'foreground message: id=${message.messageId} type=${message.messageType} '
+        'senderId=${message.senderId} from=${message.from} '
+        'collapseKey=${message.collapseKey} ttl=${message.ttl} '
+        'sentTime=${message.sentTime} category=${message.category} '
+        'notification=${message.notification?.toMap()} data=${message.data}',
+      );
 
       try {
         // Matrix chat 推送（含 room_id 或 type 为 m.call.*）由 n42_chat 插件处理
@@ -171,9 +163,10 @@ class AppPushUtils {
         final roomId = message.data['room_id'] as String?;
         if (roomId != null ||
             (dataType != null && dataType.startsWith('m.call.'))) {
-          if (kDebugMode) {
-            debugPrint('Chat/Matrix notification - handled by n42_chat plugin');
-          }
+          AppLogger.d(
+            'AppPush',
+            'chat/Matrix notification — handled by n42_chat plugin',
+          );
           return;
         }
 
@@ -222,7 +215,7 @@ class AppPushUtils {
           }
         }
       } catch (err) {
-        if (kDebugMode) debugPrint("解析失败：${err.toString()}");
+        AppLogger.w('AppPush', 'foreground message parse failed: $err');
       }
     });
 
@@ -231,27 +224,27 @@ class AppPushUtils {
 
     ///点击后台消息打开App
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      if (kDebugMode) {
-        debugPrint('从后台打开应用，自动清除通知');
-        debugPrint('[PushData][Background] notification=${message.notification?.toMap()}');
-        debugPrint('[PushData][Background] data=${message.data}');
-      }
+      AppLogger.d(
+        'AppPush',
+        'opened from background: notification=${message.notification?.toMap()} '
+        'data=${message.data}',
+      );
 
       final dataType = message.data['type'] as String?;
       final roomId = message.data['room_id'] as String?;
       final isCallEvent = dataType != null && dataType.startsWith('m.call.');
       if (isCallEvent) {
-        if (kDebugMode) {
-          debugPrint(
-            'Call notification tap - letting CallKit/sync handle the call flow',
-          );
-        }
+        AppLogger.d(
+          'AppPush',
+          'call notification tap — letting CallKit/sync handle the call flow',
+        );
         return;
       }
       if (roomId != null) {
-        if (kDebugMode) {
-          debugPrint('Chat/Matrix notification tap - delegating to n42_chat');
-        }
+        AppLogger.d(
+          'AppPush',
+          'chat/Matrix notification tap — delegating to n42_chat',
+        );
         _queuePendingChatNotification(
           roomId: roomId,
           eventId: message.data['event_id'] as String?,
@@ -271,26 +264,26 @@ class AppPushUtils {
     ///应用从终止状态打开
     var m = await FirebaseMessaging.instance.getInitialMessage();
     if (m != null) {
-      if (kDebugMode) {
-        debugPrint('应用从终止状态打开:${m.notification?.title}');
-        debugPrint('[PushData][ColdStart] notification=${m.notification?.toMap()}');
-        debugPrint('[PushData][ColdStart] data=${m.data}');
-      }
+      AppLogger.d(
+        'AppPush',
+        'cold-start from notification: title=${m.notification?.title} '
+        'notification=${m.notification?.toMap()} data=${m.data}',
+      );
       final dataType = m.data['type'] as String?;
       final roomId = m.data['room_id'] as String?;
       final isCallEvent = dataType != null && dataType.startsWith('m.call.');
       if (isCallEvent) {
-        if (kDebugMode) {
-          debugPrint(
-            'Cold-start call notification - letting CallKit/sync handle the call flow',
-          );
-        }
+        AppLogger.d(
+          'AppPush',
+          'cold-start call notification — letting CallKit/sync handle the call flow',
+        );
         return;
       }
       if (roomId != null) {
-        if (kDebugMode) {
-          debugPrint('Cold-start chat notification - delegating to n42_chat');
-        }
+        AppLogger.d(
+          'AppPush',
+          'cold-start chat notification — delegating to n42_chat',
+        );
         if (roomId.isNotEmpty) {
           _queuePendingChatNotification(
             roomId: roomId,
@@ -304,7 +297,7 @@ class AppPushUtils {
 
     //token更新监听
     FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {
-      if (kDebugMode) debugPrint("firebase messaging token updated: $newToken");
+      AppLogger.d('AppPush', 'firebase messaging token updated: $newToken');
       bindUserPushToken(newToken);
       // Matrix Pusher 的 token 轮换由 n42_chat 插件内部的
       // FirebaseMessaging.onTokenRefresh 监听统一处理，宿主侧不重复注册。
@@ -318,18 +311,18 @@ class AppPushUtils {
   ///前台通知点击
   static void _onSelectNotification(String? payload) {
     try {
-      if (kDebugMode) debugPrint('前台通知点击: $payload');
+      AppLogger.d('AppPush', 'foreground notification tap: $payload');
 
       /// 打开对应的页面
       if (payload != null) {
         //逻辑处理
         final map = json.decode(payload);
-        if (kDebugMode) debugPrint("map : $map");
+        AppLogger.d('AppPush', 'parsed payload map: $map');
         //建议参数中携带type，区分不同的通知类型，
         _PushNavigation.handleMessage(map);
       }
     } catch (err) {
-      if (kDebugMode) debugPrint("点击前台通知消息err ：${err.toString()}");
+      AppLogger.w('AppPush', 'foreground tap handler error: $err');
     }
   }
 
@@ -343,9 +336,7 @@ class AppPushUtils {
       final notifyDeviceId = data['device_id'] as String? ?? '';
       // 如果是自己设备的通知，静默忽略
       if (notifyDeviceId.isNotEmpty && notifyDeviceId == currentDeviceId) {
-        if (kDebugMode) {
-          debugPrint('Device login notification from self, ignoring');
-        }
+        AppLogger.d('AppPush', 'device login notification from self, ignoring');
         return;
       }
       final info = DeviceLoginInfo.fromJson(data);
@@ -353,7 +344,7 @@ class AppPushUtils {
         EventPublic(EventPublicType.deviceLoginDetected, param: info),
       );
     } catch (e) {
-      if (kDebugMode) debugPrint('Handle device login notification error: $e');
+      AppLogger.w('AppPush', 'handle device login notification error: $e');
     }
   }
 
@@ -369,10 +360,11 @@ class AppPushUtils {
     // 后台 isolate 需要确保 Firebase 已初始化
     await Firebase.initializeApp();
 
-    if (kDebugMode) {
-      debugPrint('[PushData][BackgroundIsolate] notification=${message.notification?.toMap()}');
-      debugPrint('[PushData][BackgroundIsolate] data=${message.data}');
-    }
+    AppLogger.d(
+      'AppPush',
+      'background isolate: notification=${message.notification?.toMap()} '
+      'data=${message.data}',
+    );
 
     // Matrix/Chat 消息（含 room_id 或 type 为 m.call.*）委托给 n42_chat 插件处理
     // 包括后台来电 CallKit 触发、消息本地通知等
@@ -380,11 +372,10 @@ class AppPushUtils {
     final roomId = message.data['room_id'] as String?;
     if (roomId != null ||
         (dataType != null && dataType.startsWith('m.call.'))) {
-      if (kDebugMode) {
-        debugPrint(
-          'Background: Matrix/Chat message - delegating to FirebasePushService',
-        );
-      }
+      AppLogger.d(
+        'AppPush',
+        'background: Matrix/Chat message — delegating to FirebasePushService',
+      );
       await FirebasePushService.handleBackgroundMessage(message);
       return;
     }
@@ -420,7 +411,7 @@ class AppPushUtils {
     }
 
     _updateBadgeCountBackground();
-    if (kDebugMode) debugPrint('Background: app message ${message.messageId}');
+    AppLogger.d('AppPush', 'background: app message ${message.messageId}');
   }
 
   //更新未读消息数（主 isolate 调用，可访问 Riverpod）
@@ -513,18 +504,18 @@ class AppPushUtils {
       return;
     }
 
-    if (kDebugMode) {
-      debugPrint(
-        'Flushing pending chat notification: roomId=$roomId, eventId=$eventId',
-      );
-    }
+    AppLogger.d(
+      'AppPush',
+      'flushing pending chat notification: roomId=$roomId, eventId=$eventId',
+    );
     try {
       await N42Chat.openConversation(roomId);
       recordHandledChatNotificationTap(roomId: roomId, eventId: eventId);
     } catch (e) {
-      if (kDebugMode) {
-        debugPrint('flushPendingChatNotification openConversation error: $e');
-      }
+      AppLogger.w(
+        'AppPush',
+        'flushPendingChatNotification openConversation error: $e',
+      );
     } finally {
       _clearPendingChatNotification();
       _isFlushing = false;
@@ -655,7 +646,7 @@ class AppPushUtils {
         ),
       );
     } catch (e) {
-      if (kDebugMode) debugPrint('checkAndPromptPermission error: $e');
+      AppLogger.w('AppPush', 'checkAndPromptPermission error: $e');
     }
   }
 

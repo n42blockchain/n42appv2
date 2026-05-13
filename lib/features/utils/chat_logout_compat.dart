@@ -1,6 +1,7 @@
-import 'package:flutter/foundation.dart';
 import 'package:n42_chat/n42_chat.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:n42_wallet/core/utils/app_logger.dart';
 
 const String _chatDataPurgePendingKey = 'n42_chat_purge_pending';
 
@@ -17,15 +18,19 @@ Future<void> purgeCancelledChatSessionCompat() async {
 
     await logoutFromChatCompat();
   } catch (e) {
-    debugPrint('purgeCancelledChatSessionCompat logout fallback: $e');
+    AppLogger.w(
+      'ChatLogoutCompat',
+      'purgeCancelledChatSession logout fallback: $e',
+    );
   }
 
   try {
     await N42Chat.purgeLocalData();
     await clearPendingCancelledChatDataPurgeCompat();
   } catch (e) {
-    debugPrint(
-      'purgeCancelledChatSessionCompat secure storage cleanup failed: $e',
+    AppLogger.w(
+      'ChatLogoutCompat',
+      'purgeCancelledChatSession secure storage cleanup failed: $e',
     );
   }
 }
@@ -41,7 +46,10 @@ Future<void> purgePendingCancelledChatDataCompat() async {
     await N42Chat.purgeLocalData();
     await prefs.remove(_chatDataPurgePendingKey);
   } catch (e) {
-    debugPrint('purgePendingCancelledChatDataCompat failed: $e');
+    AppLogger.w(
+      'ChatLogoutCompat',
+      'purgePendingCancelledChatData failed: $e',
+    );
   }
 }
 
@@ -50,7 +58,10 @@ Future<void> clearPendingCancelledChatDataPurgeCompat() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_chatDataPurgePendingKey);
   } catch (e) {
-    debugPrint('clearPendingCancelledChatDataPurgeCompat failed: $e');
+    AppLogger.w(
+      'ChatLogoutCompat',
+      'clearPendingCancelledChatDataPurge failed: $e',
+    );
   }
 }
 
