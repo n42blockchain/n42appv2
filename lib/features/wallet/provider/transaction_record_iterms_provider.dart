@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
@@ -79,7 +80,7 @@ class TransactionRecordItemProvider with ChangeNotifier {
           await checkUndoneTr(trm);
         }
       } on Exception catch (e) {
-        if (kDebugMode) debugPrint('timerStart callback error: $e');
+        AppLogger.w('TxRecordItems', 'timerStart callback error: $e');
       }
     });
   }
@@ -98,7 +99,7 @@ class TransactionRecordItemProvider with ChangeNotifier {
           _timerBtc = null;
         }
       } on Exception catch (e) {
-        if (kDebugMode) debugPrint('timerStartBtc callback error: $e');
+        AppLogger.w('TxRecordItems', 'timerStartBtc callback error: $e');
       }
     });
   }

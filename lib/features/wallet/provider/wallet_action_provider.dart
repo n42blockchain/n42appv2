@@ -26,6 +26,7 @@ import 'package:n42_wallet/features/wallet/provider/watch_only_wallet_utils.dart
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:flutter/foundation.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:intl/intl.dart';
 import 'package:n42_wallet/core/utils/safe_change_notifier.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -132,8 +133,9 @@ class WalletActionProvider extends ChangeNotifier
   Map<String, dynamic> get walletMap {
     // 安全访问 coinInfo，如果为 null 返回空 Map
     if (walletInfo.coinInfo == null) {
-      debugPrint(
-        'WalletActionProvider: walletMap accessed but coinInfo is null',
+      AppLogger.w(
+        'WalletAction',
+        'walletMap accessed but coinInfo is null',
       );
       return {};
     }
@@ -172,8 +174,9 @@ class WalletActionProvider extends ChangeNotifier
         }
       }
     } catch (e) {
-      debugPrint(
-        'WalletActionProvider: Error updating walletMap for ${coinModel.coin['miniName']}: $e',
+      AppLogger.w(
+        'WalletAction',
+        'error updating walletMap for ${coinModel.coin['miniName']}: $e',
       );
     }
   }
@@ -399,8 +402,9 @@ class WalletActionProvider extends ChangeNotifier
     //获取coin 的地址
     // 如果地址为 null，说明该链的地址生成失败，跳过余额获取
     if (coinModel.address == null) {
-      debugPrint(
-        'WalletActionProvider: Skipping balance fetch for ${coinModel.coin['miniName']} - address is null',
+      AppLogger.d(
+        'WalletAction',
+        'skipping balance fetch for ${coinModel.coin['miniName']} — address is null',
       );
       coinModel.loadError = true;
       return true; // 返回 true 表示有错误
@@ -436,8 +440,9 @@ class WalletActionProvider extends ChangeNotifier
 
     if (mm.error) {
       // 网络请求失败，使用缓存的余额数据
-      debugPrint(
-        'WalletActionProvider: Balance fetch failed for ${coinModel.coin['miniName']}, using cached balance',
+      AppLogger.w(
+        'WalletAction',
+        'balance fetch failed for ${coinModel.coin['miniName']}, using cached balance',
       );
       _safeUpdateWalletMap(coinModel);
       coinModel.getBalanceDefault();
