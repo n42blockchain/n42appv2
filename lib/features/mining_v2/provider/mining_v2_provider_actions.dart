@@ -18,7 +18,7 @@ mixin _MiningActionsMixin on _MiningStateMixin {
             ),
       ];
     } catch (e) {
-      debugPrint('miningWalletList error: $e');
+      AppLogger.w('MiningActions', 'miningWalletList error: $e');
       return [];
     }
   }
@@ -82,7 +82,7 @@ mixin _MiningActionsMixin on _MiningStateMixin {
       await getWalletNBalance(address ?? "", cInfo);
     } catch (err) {
       setDepositsEnable(false);
-      debugPrint("checkAddressMiningStatus err：${err.toString()}");
+      AppLogger.w('MiningActions', 'checkAddressMiningStatus err: $err');
     } finally {
       notifyListeners();
     }
@@ -148,9 +148,9 @@ mixin _MiningActionsMixin on _MiningStateMixin {
       if (rmm.error == false) {
         walletNBalance = toEther(rmm.data.toString(), coinInfo['baseInfo']['decimals']).toDouble();
       }
-      debugPrint('MiningV2Provider: N coin not found in wallet');
+      AppLogger.d('MiningActions', 'N coin not found in wallet');
     } catch (e) {
-      debugPrint('MiningV2Provider: Error getting wallet N balance: $e');
+      AppLogger.w('MiningActions', 'error getting wallet N balance: $e');
     }
   }
 

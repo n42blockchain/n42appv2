@@ -92,7 +92,7 @@ mixin _MiningBeaconMixin on _MiningStateMixin {
       ).toDouble();
 
       final int rawScore = rmm.data?['inactivity_score'] ?? 0;
-      debugPrint('iscore:$rawScore');
+      AppLogger.d('MiningBeacon', 'iscore: $rawScore');
       final int iscore = rawScore.clamp(0, kMaxInactivityScore);
       double isp = ((iscore / kMaxInactivityScore) * 100);
       inactivityScorePercentage = isp.toStringAsFixed(2);
@@ -216,7 +216,7 @@ mixin _MiningBeaconMixin on _MiningStateMixin {
         miningTotalRevenue = toEther(rmms.data, 18).toDouble();
       }
     } catch (e, st) {
-      debugPrint('[Mining] getMiningWithdrawalsDaily: $e\n$st');
+      AppLogger.w('MiningBeacon', 'getMiningWithdrawalsDaily: $e\n$st');
     } finally {
       isLoading7DayData = false;
       notifyListeners();

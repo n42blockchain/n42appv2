@@ -10,6 +10,7 @@ import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 
 class MiningProvider extends ChangeNotifier {
   /// Whether the current wallet has an active deposit.
@@ -176,7 +177,7 @@ class MiningProvider extends ChangeNotifier {
       setDepositsEnable(finalResult);
     } catch (err) {
       setDepositsEnable(null);
-      debugPrint("checkAddressMiningStatus err: ${err.toString()}");
+      AppLogger.w('MiningProvider', 'checkAddressMiningStatus err: $err');
     } finally {
       setLoadingDeposits(false);
     }

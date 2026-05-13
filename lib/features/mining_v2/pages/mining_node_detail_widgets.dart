@@ -315,7 +315,7 @@ mixin _MiningNodeDetailWidgets
                   if (mpValue.exitDepositLoad == Load.loading) return;
                   await mpValue.createExitDepositUnsignedTx();
                 } catch (e) {
-                  debugPrint('unLockAstMining error: $e');
+                  AppLogger.w('MiningNodeDetail', 'unLockAstMining error: $e');
                 } finally {
                   if (dialogContext.mounted) {
                     Navigator.of(dialogContext).pop();

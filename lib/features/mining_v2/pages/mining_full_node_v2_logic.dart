@@ -71,13 +71,13 @@ mixin _MiningFullNodeV2LogicMixin on ConsumerState<MiningFullNodeV2> {
       if (mm.error) {
       } else {
         nBalance = toEther(mm.data.toString(), 18).toDouble();
-        debugPrint("ast mining token : $nBalance");
+        AppLogger.d('MiningFullNodeV2', 'ast mining token: $nBalance');
         if (mounted) {
           setState(() {});
         }
       }
     } catch (err) {
-      debugPrint("err:${err.toString()}");
+      AppLogger.w('MiningFullNodeV2', 'err: $err');
     } finally {
       if (mounted) {
         setState(() {
@@ -98,7 +98,7 @@ mixin _MiningFullNodeV2LogicMixin on ConsumerState<MiningFullNodeV2> {
       mp.createDepositUnsignedTx(widget.nNum, encrypteData!);
     } catch (err) {
       //RPCError: got code 3 with msg "execution reverted: 10 N Deposit Limit has been reached".
-      debugPrint("质押失败：${err.toString()}");
+      AppLogger.w('MiningFullNodeV2', 'stake failed: $err');
       if (err.toString().contains(S.of(context).g_mining_key_80)) {
         ToastUtils.show(S.of(context).g_mining_key_80);
       }

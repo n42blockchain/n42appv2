@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:n42_wallet/core/config/app_config.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/mining_v1/api/mining_api.dart';
 import 'package:n42_wallet/features/mining_v1/api/mining_config.dart';
 import 'package:n42_wallet/features/mining_v1/provider/mining_v1_providers.dart';
@@ -135,7 +136,7 @@ class _MiningSettingsState extends State<MiningSettings> {
               var connectivityResult = await (Connectivity()
                   .checkConnectivity());
               if (!mounted) return;
-              debugPrint("connectivityResult ：$connectivityResult");
+              AppLogger.d('MiningSettings', 'connectivityResult: $connectivityResult');
               setState(() {
                 isSwitched = !isSwitched;
                 SPUtil().setMiningOpen(isSwitched);

@@ -37,13 +37,13 @@ mixin _FullNodePageLogic on State<FullNodePage> {
       );
       if (mm != null && !mm.error) {
         _self.astBalance = toEther(mm.data.toString(), 18).toDouble();
-        debugPrint("ast mining token : ${_self.astBalance}");
+        AppLogger.d('FullNodePage', 'ast mining token: ${_self.astBalance}');
         if (mounted) {
           setState(() {});
         }
       }
     } catch (err) {
-      debugPrint("err:${err.toString()}");
+      AppLogger.w('FullNodePage', 'init err: $err');
     } finally {
       setState(() {
         _self.isLoadingAstBalance = false;
@@ -162,7 +162,7 @@ mixin _FullNodePageLogic on State<FullNodePage> {
             await waitChainData(data);
           }
         } catch (err) {
-          debugPrint("deposit error: ${err.toString()}");
+          AppLogger.w('FullNodePage', 'deposit error: $err');
           if (err.toString().contains('insufficient funds for transfer')) {
             ToastUtils.show("insufficient funds for transfer");
           }
@@ -175,7 +175,7 @@ mixin _FullNodePageLogic on State<FullNodePage> {
         }
       }
     } catch (err) {
-      debugPrint(err.toString());
+      AppLogger.w('FullNodePage', '$err');
     }
   }
 
@@ -206,7 +206,7 @@ mixin _FullNodePageLogic on State<FullNodePage> {
         await waitChainData(txHash, retries: retries - 1);
       }
     } catch (err) {
-      debugPrint("waitChainData err: ${err.toString()}");
+      AppLogger.w('FullNodePage', 'waitChainData err: $err');
     }
   }
 }

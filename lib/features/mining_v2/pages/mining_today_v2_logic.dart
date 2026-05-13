@@ -52,7 +52,7 @@ mixin _MiningTodayV2LogicMixin on ConsumerState<MiningTodayV2> {
                   if (mp.exitDepositLoad == Load.loading) return;
                   await mp.createExitDepositUnsignedTx();
                 } catch (err) {
-                  debugPrint("err:${err.toString()}");
+                  AppLogger.w('MiningTodayV2', 'err: $err');
                 } finally {
                   if (dialogContext.mounted) {
                     Navigator.of(dialogContext).pop();

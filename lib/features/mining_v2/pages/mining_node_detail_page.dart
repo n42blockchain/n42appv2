@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/mining/domain/entities/mining_entity.dart';
 import 'package:n42_wallet/features/mining/presentation/providers/mining_providers.dart';

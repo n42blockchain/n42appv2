@@ -1,3 +1,4 @@
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/mining_v1/api/mining_api.dart';
 import 'package:n42_wallet/features/mining_v1/pages/mining_task_list_utils.dart';
 import 'package:n42_wallet/features/mining_v1/pages/task_detail_page.dart';
@@ -106,7 +107,7 @@ class _MiningTaskListState extends State<MiningTaskList> {
                       fromBlockNum,
                       pageSize: pageSize,
                     );
-                    debugPrint("task list data:$data");
+                    AppLogger.d('MiningTaskList', 'task list data: $data');
                     if (data != null) {
                       //{blockNumber: 0x235, timestamp: 1671526039, reward: 0x1}
                       final taskList = data["result"]["minedBlocks"] ?? [];
@@ -121,7 +122,7 @@ class _MiningTaskListState extends State<MiningTaskList> {
                       }
                     }
                   } catch (err) {
-                    debugPrint('[MiningTaskList] getData error: $err');
+                    AppLogger.w('MiningTaskList', 'getData error: $err');
                   }
                   return [];
                 },

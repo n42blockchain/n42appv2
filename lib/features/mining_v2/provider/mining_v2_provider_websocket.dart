@@ -40,11 +40,11 @@ mixin _MiningWebSocketMixin on _MiningStateMixin {
       wsSubscription = wsBridge!.messages.listen(
         handleWebSocketMessage,
         onError: (e) {
-          debugPrint('WS stream error: $e');
+          AppLogger.w('MiningWS', 'stream error: $e');
           _handleConnectionLost();
         },
         onDone: () {
-          debugPrint('WS stream done');
+          AppLogger.d('MiningWS', 'stream done');
           _handleConnectionLost();
         },
       );
@@ -62,7 +62,7 @@ mixin _MiningWebSocketMixin on _MiningStateMixin {
       wsReconnectAttempts = 0;
       notifyListeners();
     } catch (e) {
-      debugPrint('WebSocket connect error: $e');
+      AppLogger.w('MiningWS', 'connect error: $e');
       _handleConnectionLost();
     }
   }
@@ -84,14 +84,14 @@ mixin _MiningWebSocketMixin on _MiningStateMixin {
     try {
       await mining.stopClient();
     } catch (e) {
-      debugPrint('MiningStopClient error: $e');
+      AppLogger.w('MiningWS', 'MiningStopClient error: $e');
     }
 
     // Also stop legacy WebSocket bridge if active
     try {
       await wsBridge?.disconnect();
     } catch (e) {
-      debugPrint('WebSocket disconnect error: $e');
+      AppLogger.w('MiningWS', 'disconnect error: $e');
     }
 
     wsSubscription?.cancel();
@@ -121,7 +121,7 @@ mixin _MiningWebSocketMixin on _MiningStateMixin {
 
     wsReconnectAttempts++;
     final delay = Duration(seconds: wsReconnectAttempts * 5);
-    debugPrint('WS: Scheduling reconnect attempt $wsReconnectAttempts in ${delay.inSeconds}s');
+    AppLogger.d('MiningWS', 'scheduling reconnect attempt $wsReconnectAttempts in ${delay.inSeconds}s');
 
     wsStateValue = WebSocketState.reconnecting;
     notifyListeners();
@@ -142,7 +142,7 @@ mixin _MiningWebSocketMixin on _MiningStateMixin {
 
   @override
   void handleWebSocketMessage(String message) {
-    debugPrint('Received WS: $message');
+    AppLogger.d('MiningWS', 'received: $message');
 
     switch (message) {
       case 'WebSocket connected':

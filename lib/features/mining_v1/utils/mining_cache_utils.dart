@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/mining_v1/api/mining_config.dart';
 import 'package:n42_wallet/features/mining_v1/utils/mining_utils.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
@@ -29,7 +30,7 @@ class MiningCacheUtils{
   static String? getCountryCode() {
     final List<Locale> systemLocales = WidgetsBinding.instance.platformDispatcher.locales;
     String? isoCountryCode = systemLocales.first.countryCode;
-    debugPrint("isoCountryCode: $isoCountryCode");
+    AppLogger.d('MiningCache', 'isoCountryCode: $isoCountryCode');
     return isoCountryCode;
   }
 
@@ -46,7 +47,7 @@ class MiningCacheUtils{
   /// 获取当前节点IP
   static Future<String> getCurrentMiningNodeIp() async {
     final ip = await _getNodeValue('ipAddress');
-    debugPrint("current mining node address ip: $ip");
+    AppLogger.d('MiningCache', 'current mining node address ip: $ip');
     return ip;
   }
 

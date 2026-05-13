@@ -2,6 +2,7 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/enums/load.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/mining_v2/api/mining_api.dart';
 import 'package:n42_wallet/features/mining_v2/pages/key_management/data_encryption.dart';
 import 'package:n42_wallet/features/mining_v2/pages/key_management/file_import.dart';
@@ -167,7 +168,7 @@ class _MiningImportState extends ConsumerState<MiningImport> {
         }
       }
     } catch (e) {
-      debugPrint("粘贴失败: $e");
+      AppLogger.w('MiningImport', 'paste failed: $e');
     }
   }
 

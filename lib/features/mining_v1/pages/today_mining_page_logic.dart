@@ -100,7 +100,7 @@ mixin _LogicMixin on State<TodayMiningPage> {
       final price = extractAstPriceFromMarketPayload(list['data']);
       if (price > 0) astPrice = price;
     } catch (err) {
-      if (kDebugMode) debugPrint("getAstPrice err: $err");
+      AppLogger.w('TodayMining', 'getAstPrice err: $err');
     }
   }
 
@@ -116,7 +116,7 @@ mixin _LogicMixin on State<TodayMiningPage> {
       }
       if (mounted) setState(() {});
     } catch (err) {
-      if (kDebugMode) debugPrint("get24hour err: $err");
+      AppLogger.w('TodayMining', 'get24hour err: $err');
     }
   }
 
@@ -135,7 +135,7 @@ mixin _LogicMixin on State<TodayMiningPage> {
       }
       if (mounted) setState(() {});
     } catch (err) {
-      if (kDebugMode) debugPrint("getCurrentMiningTime err: $err");
+      AppLogger.w('TodayMining', 'getCurrentMiningTime err: $err');
     }
   }
 
@@ -171,7 +171,7 @@ mixin _LogicMixin on State<TodayMiningPage> {
           ? formatElapsedTime(nums)
           : ["00", "00", "00"];
     } catch (err) {
-      if (kDebugMode) debugPrint("getLastCycleMiningTime err: $err");
+      AppLogger.w('TodayMining', 'getLastCycleMiningTime err: $err');
     }
   }
 
@@ -192,7 +192,7 @@ mixin _LogicMixin on State<TodayMiningPage> {
       }
       return Decimal.zero;
     } catch (err) {
-      if (kDebugMode) debugPrint("getTotalValue err: $err");
+      AppLogger.w('TodayMining', 'getTotalValue err: $err');
       return Decimal.zero;
     }
   }
@@ -205,7 +205,7 @@ mixin _LogicMixin on State<TodayMiningPage> {
       }
       return Decimal.zero;
     } catch (err) {
-      if (kDebugMode) debugPrint("getAccountRewardUnpaid err: $err");
+      AppLogger.w('TodayMining', 'getAccountRewardUnpaid err: $err');
       return Decimal.zero;
     }
   }
@@ -222,7 +222,7 @@ mixin _LogicMixin on State<TodayMiningPage> {
       );
       if (mounted) setState(() {});
     } catch (err) {
-      if (kDebugMode) debugPrint("getLockTime err: $err");
+      AppLogger.w('TodayMining', 'getLockTime err: $err');
     }
   }
 
@@ -233,9 +233,7 @@ mixin _LogicMixin on State<TodayMiningPage> {
       globalMiningV1.setMiningStatus(isRunning);
       if (!isRunning) MiningUtils.startMining();
     } catch (e) {
-      if (kDebugMode) {
-        debugPrint('[TodayMiningPage] getMiningStatus failed: $e');
-      }
+      AppLogger.w('TodayMining', 'getMiningStatus failed: $e');
     }
   }
 
@@ -259,7 +257,7 @@ mixin _LogicMixin on State<TodayMiningPage> {
       globalMiningV1.setDepositsNum(currDepositsOfValue);
       if (mounted) setState(() {});
     } catch (err) {
-      if (kDebugMode) debugPrint("computerMaxY err: $err");
+      AppLogger.w('TodayMining', 'computerMaxY err: $err');
     }
   }
 
@@ -281,7 +279,7 @@ mixin _LogicMixin on State<TodayMiningPage> {
       }
     } catch (err) {
       taskList = [];
-      if (kDebugMode) debugPrint("getMiningTaskList err: $err");
+      AppLogger.w('TodayMining', 'getMiningTaskList err: $err');
     } finally {
       isLoadingTaskList = false;
       if (mounted) setState(() {});
@@ -301,7 +299,7 @@ mixin _LogicMixin on State<TodayMiningPage> {
         }
       }
     } catch (err) {
-      if (kDebugMode) debugPrint("getCurrentMiningTimeByBlockApi err: $err");
+      AppLogger.w('TodayMining', 'getCurrentMiningTimeByBlockApi err: $err');
       getCurrentMiningTime(astAddress);
       getLastCycleMiningTime(astAddress);
     }

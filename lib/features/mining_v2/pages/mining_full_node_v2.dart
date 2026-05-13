@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/mining_v2/pages/key_management/mining_output_tip.dart';
