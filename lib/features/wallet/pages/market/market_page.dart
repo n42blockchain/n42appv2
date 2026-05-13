@@ -7,6 +7,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/market/crypto_news_service.dart';
 import 'package:n42_wallet/core/market/fear_greed_service.dart';
@@ -112,7 +113,7 @@ class _MarketPageState extends ConsumerState<MarketPage>
         setState(() => _fearGreed = data);
       }
     } catch (e) {
-      debugPrint('MarketPage: failed to load fear & greed: $e');
+      AppLogger.w('MarketPage', 'failed to load fear & greed: $e');
     }
   }
 
@@ -128,7 +129,7 @@ class _MarketPageState extends ConsumerState<MarketPage>
         });
       }
     } catch (e) {
-      debugPrint('MarketPage: failed to load news: $e');
+      AppLogger.w('MarketPage', 'failed to load news: $e');
       if (mounted) {
         setState(() => _newsLoading = false);
       }
@@ -145,7 +146,7 @@ class _MarketPageState extends ConsumerState<MarketPage>
         setState(() => _priceAlerts = alerts);
       }
     } catch (e) {
-      debugPrint('MarketPage: failed to load alerts: $e');
+      AppLogger.w('MarketPage', 'failed to load alerts: $e');
     }
   }
 
@@ -186,7 +187,7 @@ class _MarketPageState extends ConsumerState<MarketPage>
 
       await CoinPriceAlertService.checkAndNotify(prices);
     } catch (e) {
-      debugPrint('MarketPage: failed to check price alerts: $e');
+      AppLogger.w('MarketPage', 'failed to check price alerts: $e');
     }
   }
 
@@ -232,7 +233,7 @@ class _MarketPageState extends ConsumerState<MarketPage>
       var isFallback = false;
 
       if (result.isEmpty) {
-        debugPrint('MarketApi: CoinGecko trending empty, trying N42 fallback');
+        AppLogger.d('MarketPage', 'CoinGecko trending empty, trying N42 fallback');
         result = await api.getFallbackTrendingCoins();
         isFallback = result.isNotEmpty;
       }
@@ -245,7 +246,7 @@ class _MarketPageState extends ConsumerState<MarketPage>
         });
       }
     } catch (e) {
-      debugPrint('MarketPage: failed to load trending: $e');
+      AppLogger.w('MarketPage', 'failed to load trending: $e');
       if (mounted) {
         setState(() => _trendingLoading = false);
       }
@@ -290,7 +291,7 @@ class _MarketPageState extends ConsumerState<MarketPage>
           });
         }
       } catch (e) {
-        debugPrint('MarketPage: failed to search coins: $e');
+        AppLogger.w('MarketPage', 'failed to search coins: $e');
         if (mounted &&
             shouldApplyMarketSearchResponse(
               requestId: requestId,
@@ -326,7 +327,7 @@ class _MarketPageState extends ConsumerState<MarketPage>
         _watchlistLoading = false;
       });
     } catch (e) {
-      debugPrint('MarketPage: failed to load watchlist: $e');
+      AppLogger.w('MarketPage', 'failed to load watchlist: $e');
       if (!mounted || requestId != _watchlistGeneration) return;
       setState(() {
         _watchlistCoins = [];

@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/core/token_discovery/discovered_token.dart';
 import 'package:n42_wallet/core/token_discovery/token_discovery_service.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/core/enums/load.dart';
@@ -146,7 +147,7 @@ class _WalletPageState extends ConsumerState<WalletPage> {
         setState(() => _discoveredTokens = discovered);
       }
     } catch (e) {
-      debugPrint('[WalletPage] Token discovery error: $e');
+      AppLogger.w('WalletPage', 'token discovery error: $e');
     }
   }
 
@@ -171,7 +172,7 @@ class _WalletPageState extends ConsumerState<WalletPage> {
       if (!mounted || _lastCheckedAddress != normalizedAddress) return;
       setState(() => _ensName = ensName?.isNotEmpty == true ? ensName : null);
     } catch (e) {
-      debugPrint('ENS reverse resolve error: $e');
+      AppLogger.w('WalletPage', 'ENS reverse resolve error: $e');
       if (mounted && _lastCheckedAddress == normalizedAddress) {
         setState(() => _ensName = null);
       }

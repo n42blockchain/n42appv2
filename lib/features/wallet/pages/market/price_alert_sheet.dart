@@ -6,6 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/features/wallet/pages/market/market_price_format_utils.dart';
 import 'package:n42_wallet/features/wallet/pages/market/price_alert_sheet_utils.dart';
@@ -87,7 +88,7 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
         _loading = false;
       });
     } catch (err) {
-      debugPrint('PriceAlertSheet: failed to load existing config: $err');
+      AppLogger.w('PriceAlertSheet', 'failed to load existing config: $err');
       if (mounted) {
         setState(() => _loading = false);
       }

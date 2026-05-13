@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
@@ -317,9 +317,7 @@ class _ImportKeystoreState extends ConsumerState<ImportKeystore> {
         return;
       }
 
-      if (kDebugMode) {
-        debugPrint('ImportKeystore.createWallet address: $address');
-      }
+      AppLogger.d('ImportKeystore', 'createWallet address: $address');
       final name = cInfo['baseInfo']['coinType'];
       final info = WalletInfo(
         walletName: name,
@@ -337,7 +335,7 @@ class _ImportKeystoreState extends ConsumerState<ImportKeystore> {
         ToastUtils.show(S.of(context).g_key_keystore_19);
       }
     } catch (err) {
-      debugPrint("import keystore json err: ${err.toString()}");
+      AppLogger.w('ImportKeystore', 'json err: $err');
       ToastUtils.show(err.toString());
     } finally {
       if (mounted && !completedWithExit) {

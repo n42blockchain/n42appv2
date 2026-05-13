@@ -7,6 +7,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
@@ -118,7 +119,7 @@ class _AddressBookListState extends State<AddressBookList>
         _applyFilter(_searchCtrl.text);
       });
     } catch (e) {
-      debugPrint('AddressBookList._loadData error: $e');
+      AppLogger.w('AddressBookList', '_loadData error: $e');
     }
   }
 
@@ -198,7 +199,7 @@ class _AddressBookListState extends State<AddressBookList>
       await _api.deleteAddressBookItem(info);
       HapticFeedback.lightImpact();
     } catch (e) {
-      debugPrint('AddressBookList._deleteItem error: $e');
+      AppLogger.w('AddressBookList', '_deleteItem error: $e');
     }
     if (mounted) _loadData();
   }

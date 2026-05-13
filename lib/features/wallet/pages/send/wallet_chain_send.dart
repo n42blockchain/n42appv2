@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/component/pages/scan_page.dart';
@@ -143,8 +144,9 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
         }
         ensConfirmed = true;
       }
-      debugPrint(
-        'ENS resolved: ${result.ensName} -> '
+      AppLogger.d(
+        'WalletChainSend',
+        'ENS resolved: ${result.ensName} → '
         '${AddressValidator.getAddressPreview(result.resolvedAddress ?? "")}',
       );
     }

@@ -1,5 +1,6 @@
 import 'dart:async' show unawaited;
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
@@ -51,7 +52,7 @@ class _ImportOneState extends ConsumerState<ImportOne>
       setState(() {});
     } catch (e) {
       assert(() {
-        debugPrint('import_one: checkMnemonic failed: $e');
+        AppLogger.w('ImportOne', 'checkMnemonic failed: $e');
         return true;
       }());
     }

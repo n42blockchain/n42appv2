@@ -1,3 +1,4 @@
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
@@ -56,7 +57,7 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
         setState(() => _orderModel = SwapAstOrderModel.fromJson(rData.data));
       }
     } catch (e) {
-      debugPrint('SwapAstTransactionDetail._loadOrderDetail error: $e');
+      AppLogger.w('SwapAstTxDetail', '_loadOrderDetail error: $e');
     }
   }
 

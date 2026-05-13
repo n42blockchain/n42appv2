@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/features/wallet/pages/market/trade_entry_sheet_utils.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
@@ -90,7 +91,7 @@ class _TradeEntrySheetState extends State<_TradeEntrySheet> {
       final list = await PortfolioTradeService.getTradesForCoin(widget.coinId);
       if (mounted) setState(() => _trades = list);
     } catch (e) {
-      debugPrint('TradeEntrySheet: failed to load trades: $e');
+      AppLogger.w('TradeEntrySheet', 'failed to load trades: $e');
     }
   }
 

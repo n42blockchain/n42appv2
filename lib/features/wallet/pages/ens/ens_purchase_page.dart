@@ -7,6 +7,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/services/ens_registration_service.dart';
@@ -103,7 +104,7 @@ class _EnsPurchasePageState extends State<EnsPurchasePage> {
         _currentStep = -1;
         _errorMessage = S.of(context).g_key_ens_commit_failed;
       });
-      debugPrint('EnsPurchasePage: commit failed: $e');
+      AppLogger.w('EnsPurchase', 'commit failed: $e');
     }
   }
 
@@ -169,7 +170,7 @@ class _EnsPurchasePageState extends State<EnsPurchasePage> {
         _commitmentExpiredOnRegister = false;
         _errorMessage = S.of(context).g_key_ens_register_failed;
       });
-      debugPrint('EnsPurchasePage: register failed: $e');
+      AppLogger.w('EnsPurchase', 'register failed: $e');
     }
   }
 

@@ -77,7 +77,7 @@ mixin _TransactionHistoryLogicMixin on State<TransactionHistoryList> {
         });
       }
     } catch (e) {
-      debugPrint('[TxHistory] _loadAll error: $e');
+      AppLogger.w('TxHistory', '_loadAll error: $e');
       if (mounted) setState(() => isLoading = false);
     }
   }
@@ -97,7 +97,7 @@ mixin _TransactionHistoryLogicMixin on State<TransactionHistoryList> {
         });
       }
     } catch (e) {
-      debugPrint('[TxHistory] loadMore error: $e');
+      AppLogger.w('TxHistory', 'loadMore error: $e');
     } finally {
       if (mounted) setState(() => _isLoadingMore = false);
     }
@@ -224,7 +224,7 @@ mixin _TransactionHistoryLogicMixin on State<TransactionHistoryList> {
         ),
       );
     } catch (e) {
-      debugPrint('[TxHistory] exportCsv error: $e');
+      AppLogger.w('TxHistory', 'exportCsv error: $e');
     } finally {
       if (mounted) setState(() => isExporting = false);
     }

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
@@ -107,7 +108,7 @@ class _WalletManageState extends ConsumerState<WalletManage> {
         );
         builtCoinList.add(cm);
       } catch (err) {
-        debugPrint('WalletManage._buildCoinModels skip $key: $err');
+        AppLogger.w('WalletManage', '_buildCoinModels skip $key: $err');
       }
     }
     coinList = builtCoinList;

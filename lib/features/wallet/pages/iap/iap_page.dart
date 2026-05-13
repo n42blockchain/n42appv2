@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -70,7 +71,7 @@ class _IapPageState extends State<IapPage> {
   Future<void> _fetchProducts() async {
     setState(() => _loading = true);
     final response = await _iap.queryProductDetails(_kProductIds);
-    debugPrint('[IAP] 未找到商品 ID: $response');
+    AppLogger.w('IAP', 'product not found: $response');
     if (!mounted) return;
     setState(() {
       _products = response.productDetails
@@ -78,7 +79,7 @@ class _IapPageState extends State<IapPage> {
       _loading = false;
     });
     if (response.notFoundIDs.isNotEmpty) {
-      debugPrint('[IAP] 未找到商品 ID: ${response.notFoundIDs}');
+      AppLogger.w('IAP', 'product not found: ${response.notFoundIDs}');
     }
   }
 

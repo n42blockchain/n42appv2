@@ -3,8 +3,10 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
+import 'dart:typed_data';
+
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:web3dart/web3dart.dart' show hexToBytes;
 
 /// Aave V3 lending protocol integration.
@@ -199,7 +201,7 @@ class AaveService {
           .toList()
         ..sort((a, b) => b.totalLiquidityUsd.compareTo(a.totalLiquidityUsd));
     } catch (e) {
-      debugPrint('Aave reserves error: $e');
+      AppLogger.w('AaveService', 'reserves error: $e');
       return [];
     }
   }

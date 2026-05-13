@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
@@ -158,7 +159,7 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
           imported++;
         } catch (e) {
           skipped++;
-          debugPrint('ImportCloudBackup: skipping wallet payload: $e');
+          AppLogger.w('ImportCloudBackup', 'skipping wallet payload: $e');
         }
       }
 

@@ -6,7 +6,8 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
+
+import 'package:n42_wallet/core/utils/app_logger.dart';
 
 /// Hyperliquid perpetual DEX integration.
 ///
@@ -70,7 +71,7 @@ class HyperliquidService {
 
       return markets;
     } catch (e) {
-      debugPrint('Hyperliquid markets error: $e');
+      AppLogger.w('Hyperliquid', 'markets error: $e');
       return [];
     }
   }
@@ -115,7 +116,7 @@ class HyperliquidService {
 
       return ClearinghouseState(positions: positions, margin: margin);
     } catch (e) {
-      debugPrint('Hyperliquid clearinghouse error: $e');
+      AppLogger.w('Hyperliquid', 'clearinghouse error: $e');
       return ClearinghouseState.empty();
     }
   }
@@ -143,7 +144,7 @@ class HyperliquidService {
           .map((o) => PerpOrder.fromJson(o as Map<String, dynamic>))
           .toList();
     } catch (e) {
-      debugPrint('Hyperliquid orders error: $e');
+      AppLogger.w('Hyperliquid', 'orders error: $e');
       return [];
     }
   }
@@ -170,7 +171,7 @@ class HyperliquidService {
         asks: _parseLevels(levels[1] as List<dynamic>),
       );
     } catch (e) {
-      debugPrint('Hyperliquid orderbook error: $e');
+      AppLogger.w('Hyperliquid', 'orderbook error: $e');
       return null;
     }
   }

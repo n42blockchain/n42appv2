@@ -4,6 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
@@ -18,9 +19,9 @@ import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/utils/transaction/create_btc_tx_1.dart';
 import 'package:n42_wallet/features/wallet/utils/transaction/create_btc_tx_2.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -118,9 +119,7 @@ class _SelfCustody1State extends ConsumerState<SelfCustody1>
     // staking.n42.ai DNS unresolvable since 2026-04. Surface a toast so
     // users don't see a blank webview without context.
     if (!mounted || err.isForMainFrame == false) return;
-    if (kDebugMode) {
-      debugPrint('BTC staking webview error: ${err.errorCode} ${err.description}');
-    }
+    AppLogger.w('BTCStaking', 'webview error: ${err.errorCode} ${err.description}');
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('BTC staking service is temporarily unavailable.'),
@@ -202,7 +201,7 @@ class _SelfCustody1State extends ConsumerState<SelfCustody1>
         '"${JsEscapeUtils.escapeJs(widget.coinModel.address)}",'
         '$lockTimeInt,'
         '"${JsEscapeUtils.escapeJs(publicKey ?? "")}");';
-    if (kDebugMode) debugPrint(alertStr);
+    AppLogger.d('BTCStaking', alertStr);
     _controller.runJavaScript(alertStr);
   }
 

@@ -1,5 +1,6 @@
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/component/pages/scan_page.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
@@ -397,7 +398,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
         Navigator.of(context).pop(true);
       }
     } catch (e) {
-      debugPrint('[EditAddressPage] update failed: $e');
+      AppLogger.w('EditAddressPage', 'update failed: $e');
     }
   }
 

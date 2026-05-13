@@ -1,3 +1,4 @@
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/component/pages/scan_page.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
@@ -378,7 +379,7 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
         Navigator.of(context).pop(true);
       }
     } catch (e) {
-      debugPrint('[AddAddressPage] save failed: $e');
+      AppLogger.w('AddAddressPage', 'save failed: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Save failed. Please try again.')),

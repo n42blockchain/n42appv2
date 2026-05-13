@@ -5,6 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
@@ -192,7 +193,7 @@ class _WalletReceiveQrState extends ConsumerState<WalletReceiveQr> {
         ),
       );
     } catch (e) {
-      debugPrint('分享失败: $e');
+      AppLogger.w('WalletReceiveQr', 'share failed: $e');
     }
   }
 

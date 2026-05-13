@@ -1,6 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/browser/pages/browser_page.dart';
 import 'package:n42_wallet/core/enums/load.dart';
@@ -147,7 +147,7 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
       }
       setState(() => _alertConfig = all[coinId]);
     } catch (e) {
-      debugPrint('MarketCoinInfo: failed to load alert config: $e');
+      AppLogger.w('MarketCoinInfo', 'failed to load alert config: $e');
     }
   }
 
@@ -164,7 +164,7 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
       }
       setState(() => _trades = list);
     } catch (e) {
-      debugPrint('MarketCoinInfo: failed to load trades: $e');
+      AppLogger.w('MarketCoinInfo', 'failed to load trades: $e');
     }
   }
 
@@ -215,7 +215,7 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
         break;
       }
     } catch (e) {
-      debugPrint('MarketCoinInfo: failed to fetch coin price: $e');
+      AppLogger.w('MarketCoinInfo', 'failed to fetch coin price: $e');
     }
   }
 
@@ -245,7 +245,7 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
       setState(() => _infoLoad = Load.finish);
       _fetchChartData();
     } catch (e) {
-      debugPrint('MarketCoinInfo: failed to fetch base info: $e');
+      AppLogger.w('MarketCoinInfo', 'failed to fetch base info: $e');
       if (mounted) {
         setState(() => _infoLoad = Load.error);
       }
@@ -275,7 +275,7 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
         _chartLoading = false;
       });
     } catch (e) {
-      debugPrint('MarketCoinInfo: failed to fetch chart data: $e');
+      AppLogger.w('MarketCoinInfo', 'failed to fetch chart data: $e');
       if (!mounted || generation != _chartGeneration) return;
       setState(() => _chartLoading = false);
     }
@@ -347,7 +347,7 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
   }
 
   void _openUrl(BuildContext context, String url) {
-    if (kDebugMode) debugPrint('MarketCoinInfo: open $url');
+    AppLogger.d('MarketCoinInfo', 'open $url');
     Navigator.push(
       context,
       MaterialPageRoute(builder: (_) => BrowserPage(url)),

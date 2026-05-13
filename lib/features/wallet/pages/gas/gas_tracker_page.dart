@@ -8,6 +8,7 @@ import 'dart:convert';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
@@ -116,7 +117,7 @@ class _GasTrackerPageState extends State<GasTrackerPage> {
       final configs = await GasAlertService.loadAll();
       if (mounted) setState(() => _alertConfigs = configs);
     } catch (e) {
-      debugPrint('Failed to load gas alert configs: $e');
+      AppLogger.w('GasTracker', 'failed to load gas alert configs: $e');
     }
   }
 
@@ -150,7 +151,7 @@ class _GasTrackerPageState extends State<GasTrackerPage> {
         }
       });
     } catch (e) {
-      debugPrint('Failed to fetch TokenView data for $chain: $e');
+      AppLogger.w('GasTracker', 'failed to fetch TokenView data for $chain: $e');
     }
   }
 
@@ -203,7 +204,7 @@ class _GasTrackerPageState extends State<GasTrackerPage> {
         client.close();
       }
     } catch (e) {
-      debugPrint('Failed to fetch gas for ${network.symbol}: $e');
+      AppLogger.w('GasTracker', 'failed to fetch gas for ${network.symbol}: $e');
     }
   }
 

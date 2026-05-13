@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
@@ -108,7 +109,7 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
         address.toString(),
       );
     } catch (e) {
-      debugPrint('Private key verification failed: $e');
+      AppLogger.w('ImportPrivateKey', 'verification failed: $e');
       return false;
     }
   }

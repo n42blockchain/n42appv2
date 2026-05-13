@@ -5,8 +5,8 @@
 
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/btc_api.dart';
@@ -84,8 +84,8 @@ class _RedeemState extends ConsumerState<Redeem> {
       ..setBackgroundColor(const Color(0xFF121212))
       ..setNavigationDelegate(
         NavigationDelegate(
-          onProgress: (progress) => debugPrint('WebView loading: $progress%'),
-          onPageStarted: (url) => debugPrint('Page started: $url'),
+          onProgress: (progress) => AppLogger.d('BTCRedeem', 'WebView loading: $progress%'),
+          onPageStarted: (url) => AppLogger.d('BTCRedeem', 'page started: $url'),
           onNavigationRequest: (_) => NavigationDecision.navigate,
           onWebResourceError: _handleWebViewError,
         ),
@@ -100,7 +100,7 @@ class _RedeemState extends ConsumerState<Redeem> {
 
   void _handleWebViewError(WebResourceError err) {
     if (!mounted || err.isForMainFrame == false) return;
-    debugPrint('BTC redeem webview error: ${err.errorCode} ${err.description}');
+    AppLogger.w('BTCRedeem', 'webview error: ${err.errorCode} ${err.description}');
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('BTC staking service is temporarily unavailable.'),
@@ -181,7 +181,7 @@ class _RedeemState extends ConsumerState<Redeem> {
   Future<void> getGasFeeBtc() async {
     final gasFeeMM = await tokenViewApi.getGasFeeBtc(isTest: _coin.isTest);
     if (gasFeeMM.error) {
-      debugPrint('getGasFeeBtc error: ${gasFeeMM.data}');
+      AppLogger.w('BTCRedeem', 'getGasFeeBtc error: ${gasFeeMM.data}');
     } else {
       gasFeeRate = gasFeeMM.data;
     }
@@ -198,7 +198,7 @@ class _RedeemState extends ConsumerState<Redeem> {
       'change': 0,
       'max': true,
     };
-    if (kDebugMode) debugPrint(json.encode(btcTxMap));
+    AppLogger.d('BTCRedeem', 'btc tx map: ${json.encode(btcTxMap)}');
     return Trustdart().signTransactionBtcP2wsh(
       CoinType.BTC.name,
       "m/84'/4'/0'/0/0",

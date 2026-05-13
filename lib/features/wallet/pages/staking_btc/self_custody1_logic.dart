@@ -104,11 +104,9 @@ mixin _SelfCustody1LogicMixin on ConsumerState<SelfCustody1> {
       2,
       'OP_CHECKMULTISIG',
     ]);
-    if (kDebugMode) debugPrint(newScript.toHex());
+    AppLogger.d('BTCStaking', newScript.toHex());
     p2wshAddress = P2wshAddress.fromScript(script: newScript);
-    if (kDebugMode) {
-      debugPrint(p2wshAddress!.toAddress(BitcoinNetwork.testnet));
-    }
+    AppLogger.d('BTCStaking', p2wshAddress!.toAddress(BitcoinNetwork.testnet));
     return p2wshAddress!.toAddress(BitcoinNetwork.testnet);
   }
 
@@ -117,7 +115,7 @@ mixin _SelfCustody1LogicMixin on ConsumerState<SelfCustody1> {
 
     final txHash =
         CreateBtcTX2().createSegwitV2(privateKey!, p2wshAddress!);
-    if (kDebugMode) debugPrint(txHash);
+    AppLogger.d('BTCStaking', 'tx hash: $txHash');
   }
 
   Future<void> sendTrx2(Script scriptP2wsh) async {
@@ -150,7 +148,7 @@ mixin _SelfCustody1LogicMixin on ConsumerState<SelfCustody1> {
 
     final txHash = CreateBtcTX2()
         .createSegwit(privateKey!, selectedUTXOs, txAmount, txInputScript, txOutputs);
-    if (kDebugMode) debugPrint(txHash);
+    AppLogger.d('BTCStaking', 'tx hash: $txHash');
   }
 
   Future<void> sendTrx() async {
@@ -184,7 +182,7 @@ mixin _SelfCustody1LogicMixin on ConsumerState<SelfCustody1> {
         return MessageModel()..data = mm.data;
       }
     } catch (e) {
-      debugPrint('getUTXO2 error: $e');
+      AppLogger.w('BTCStaking', 'getUTXO2 error: $e');
       if (mounted) setState(() {});
     }
     return null;

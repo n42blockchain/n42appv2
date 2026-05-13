@@ -6,7 +6,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Service for managing custom EVM chains added by the user.
@@ -39,7 +39,7 @@ class CustomChainService {
           .map((e) => CustomChain.fromJson(e as Map<String, dynamic>))
           .toList();
     } catch (e) {
-      debugPrint('Failed to load custom chains: $e');
+      AppLogger.w('CustomChain', 'failed to load custom chains: $e');
       return [];
     }
   }
@@ -118,7 +118,7 @@ class CustomChainService {
 
       return returnedChainId == expectedChainId;
     } catch (e) {
-      debugPrint('RPC validation error: $e');
+      AppLogger.w('CustomChain', 'RPC validation error: $e');
       return false;
     }
   }
@@ -164,7 +164,7 @@ class CustomChainService {
         explorerUrl: _extractExplorerUrl(match),
       );
     } catch (e) {
-      debugPrint('Chainlist lookup error: $e');
+      AppLogger.w('CustomChain', 'Chainlist lookup error: $e');
       return null;
     }
   }

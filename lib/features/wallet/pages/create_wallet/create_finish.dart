@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
@@ -77,12 +78,12 @@ class _CreateFinishState extends ConsumerState<CreateFinish>
       if (code == 0) {
         await walletActionProvider.addWalletInfo(_wInfo!);
       } else {
-        debugPrint("create wallet err: ");
+        AppLogger.w('CreateFinish', 'create wallet err');
         ToastUtils.showFtToast(child: createWalletErrView('error'));
       }
     } catch (err) {
       ToastUtils.show(err.toString());
-      debugPrint("create wallet err: $err");
+      AppLogger.w('CreateFinish', 'create wallet err: $err');
     } finally {
       if (mounted) {
         setState(() => load = Load.finish);

@@ -5,6 +5,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/sqlite/app_database.dart';
@@ -67,7 +68,7 @@ class _SessionKeyManagePageState extends State<SessionKeyManagePage>
         _isLoading = false;
       });
     } catch (e) {
-      debugPrint('SessionKeyManagePage._loadSessionKeys error: $e');
+      AppLogger.w('SessionKeyManage', '_loadSessionKeys error: $e');
       if (mounted) {
         setState(() => _isLoading = false);
       }
