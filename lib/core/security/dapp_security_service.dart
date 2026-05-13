@@ -5,8 +5,8 @@
 
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/security/phishing_detector.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // ─── Security level enum ──────────────────────────────────────────────────
@@ -240,7 +240,7 @@ class DAppPermissionsTracker {
       _mem = map;
       await _save(map);
     } catch (e) {
-      if (kDebugMode) debugPrint('DAppPermissionsTracker.record error: $e');
+      AppLogger.w('DAppPermissions', 'record error: $e');
     }
   }
 
@@ -274,7 +274,7 @@ class DAppPermissionsTracker {
       final decoded = jsonDecode(raw) as Map<String, dynamic>;
       return decoded.map((k, v) => MapEntry(k, (v as List).cast<String>()));
     } catch (e) {
-      if (kDebugMode) debugPrint('DAppPermissionsTracker._load error: $e');
+      AppLogger.w('DAppPermissions', '_load error: $e');
       return {};
     }
   }
@@ -283,7 +283,7 @@ class DAppPermissionsTracker {
     try {
       await (await _prefs()).setString(_spKey, jsonEncode(map));
     } catch (e) {
-      if (kDebugMode) debugPrint('DAppPermissionsTracker._save error: $e');
+      AppLogger.w('DAppPermissions', '_save error: $e');
     }
   }
 }

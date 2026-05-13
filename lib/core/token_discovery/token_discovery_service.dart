@@ -2,7 +2,9 @@ import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+
 import 'package:n42_wallet/core/config/proxy_config.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/eth_api.dart';
 import 'package:n42_wallet/features/wallet/models/transaction/explorer_response_utils.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/sol_api.dart';
@@ -96,7 +98,7 @@ class TokenDiscoveryService {
         }
         results.addAll(chainResult);
       } catch (e) {
-        if (kDebugMode) debugPrint('[TokenDiscovery] $coinType scan error: $e');
+        AppLogger.w('TokenDiscovery', '$coinType scan error: $e');
       }
     }
 

@@ -1,6 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:n42_wallet/core/error/exceptions.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/core/wallet_sdk/models/wallet_sdk_models.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 
@@ -92,7 +92,7 @@ class WalletAddress {
     try {
       return await _trustdart.validateAddress(coin, address);
     } on PlatformException catch (e) {
-      if (kDebugMode) debugPrint('WalletAddress.validateAddress: $e');
+      AppLogger.w('WalletAddress', 'validateAddress: $e');
       return false;
     }
   }

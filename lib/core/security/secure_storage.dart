@@ -4,6 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
 
+import 'package:n42_wallet/core/utils/app_logger.dart';
+
 /// 安全存储服务
 ///
 /// 使用 flutter_secure_storage 进行加密存储
@@ -252,7 +254,7 @@ class SecureStorage {
     try {
       return jsonDecode(value) as T;
     } catch (e) {
-      if (kDebugMode) debugPrint('Failed to decode $label: $e');
+      AppLogger.w('SecureStorage', 'failed to decode $label: $e');
       return null;
     }
   }

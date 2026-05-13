@@ -9,6 +9,8 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 
+import 'package:n42_wallet/core/utils/app_logger.dart';
+
 /// 设备安全状态快照
 class DeviceSecurityStatus {
   final bool isRootedOrJailbroken;
@@ -147,7 +149,7 @@ class DeviceSecurityService {
       // platform channel here, we conservatively return false and rely on
       // root detection to catch most emulator-based attacks.
     } catch (e) {
-      if (kDebugMode) debugPrint('[DeviceSecurity] isEmulator check failed: $e');
+      AppLogger.w('DeviceSecurity', 'isEmulator check failed: $e');
     }
     return false;
   }

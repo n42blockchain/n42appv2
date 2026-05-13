@@ -11,6 +11,7 @@ import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 
 import 'package:n42_wallet/core/security/secure_storage.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 
 import 'passkey_credential.dart';
 import 'passkey_platform_adapter.dart';
@@ -179,7 +180,7 @@ class PasskeyService {
               PasskeyCredential.fromJson(e as Map<String, dynamic>))
           .toList();
     } catch (e) {
-      debugPrint('Failed to load passkey credentials: $e');
+      AppLogger.w('Passkey', 'failed to load credentials: $e');
       return [];
     }
   }

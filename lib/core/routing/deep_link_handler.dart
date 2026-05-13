@@ -1,8 +1,7 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
-
 import '../platform/deep_link_service.dart';
+import '../utils/app_logger.dart';
 
 /// Deep Link 路由处理器
 ///
@@ -40,16 +39,10 @@ class DeepLinkHandler {
   };
 
   void _handleDeepLink(DeepLinkData data) {
-    assert(() {
-      debugPrint('DeepLinkHandler: Handling deep link: $data');
-      return true;
-    }());
+    AppLogger.d('DeepLinkHandler', 'handling deep link: $data');
 
     if (data.type == DeepLinkType.unknown) {
-      assert(() {
-        debugPrint('DeepLinkHandler: Unhandled deep link type: ${data.type}');
-        return true;
-      }());
+      AppLogger.w('DeepLinkHandler', 'unhandled deep link type: ${data.type}');
       return;
     }
 
@@ -58,10 +51,10 @@ class DeepLinkHandler {
     if (requiredKey != null) {
       final value = data.params[requiredKey] ?? '';
       if (value.isEmpty) return;
-      assert(() {
-        debugPrint('DeepLinkHandler: Navigating to ${data.type.name} $value');
-        return true;
-      }());
+      AppLogger.d(
+        'DeepLinkHandler',
+        'navigating to ${data.type.name} $value',
+      );
     }
 
     // walletConnect: 需要 wcUri 参数或 URI scheme 为 wc:
@@ -81,11 +74,13 @@ class DeepLinkHandler {
 
     try {
       onNavigate?.call(data);
-    } catch (e) {
-      assert(() {
-        debugPrint('DeepLinkHandler: Navigation callback error: $e');
-        return true;
-      }());
+    } catch (e, s) {
+      AppLogger.e(
+        'DeepLinkHandler',
+        'navigation callback error',
+        error: e,
+        stackTrace: s,
+      );
     }
   }
 

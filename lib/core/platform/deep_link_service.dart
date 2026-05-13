@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:app_links/app_links.dart';
-import 'package:flutter/foundation.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/shared/utils/wallet_connect_uri.dart';
 
 /// Deep Link 类型
@@ -124,23 +124,23 @@ class DeepLinkService {
           .timeout(const Duration(seconds: 5), onTimeout: () => null);
       if (initialUri != null) _handleUri(initialUri);
     } catch (e) {
-      if (kDebugMode) debugPrint('Failed to get initial link: $e');
+      AppLogger.w('DeepLink', 'failed to get initial link: $e');
     }
 
     _subscription = _appLinks.uriLinkStream.listen(
       _handleUri,
       onError: (e) {
-        if (kDebugMode) debugPrint('Deep link stream error: $e');
+        AppLogger.w('DeepLink', 'stream error: $e');
       },
     );
   }
 
   void _handleUri(Uri uri) {
-    // Deep link 诊断日志只在 debug 下输出，且默认脱敏 query 参数。
-    assert(() {
-      debugPrint('Received deep link: ${DeepLinkData.redactUri(uri)}');
-      return true;
-    }());
+    // 诊断日志默认脱敏 query 参数。
+    AppLogger.d(
+      'DeepLink',
+      'received: ${DeepLinkData.redactUri(uri)}',
+    );
 
     final data = _parseUri(uri);
     _lastDeepLink = data;
@@ -153,10 +153,10 @@ class DeepLinkService {
     // Scheme whitelist: only process known safe schemes
     const allowedSchemes = {'n42', 'n42app', 'astraapp', 'https', 'http', 'wc', ''};
     if (!allowedSchemes.contains(uri.scheme.toLowerCase())) {
-      assert(() {
-        debugPrint('Rejected deep link with unknown scheme: ${uri.scheme}');
-        return true;
-      }());
+      AppLogger.w(
+        'DeepLink',
+        'rejected deep link with unknown scheme: ${uri.scheme}',
+      );
       return _unknownLink(uri, uri.queryParameters);
     }
 

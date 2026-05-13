@@ -1,7 +1,8 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+
+import 'package:n42_wallet/core/utils/app_logger.dart';
 
 class Trustdart {
   final MethodChannel _channel = const MethodChannel('trustdart');
@@ -14,7 +15,7 @@ class Trustdart {
         <String, dynamic>{'passphrase': passphrase, 'length': length},
       );
     } catch (e) {
-      if (kDebugMode) debugPrint('Trustdart.generateMnemonic: $e');
+      AppLogger.w('Trustdart', 'generateMnemonic: $e');
       return '';
     }
   }
@@ -26,7 +27,7 @@ class Trustdart {
         <String, String>{'mnemonic': mnemonic, 'passphrase': passphrase},
       );
     } catch (e) {
-      if (kDebugMode) debugPrint('Trustdart.checkMnemonic: $e');
+      AppLogger.w('Trustdart', 'checkMnemonic: $e');
       return false;
     }
   }
@@ -57,7 +58,7 @@ class Trustdart {
         },
       );
     } catch (e) {
-      if (kDebugMode) debugPrint('Trustdart.generateAddress: $e');
+      AppLogger.w('Trustdart', 'generateAddress: $e');
       return {'legacy': ''};
     }
   }
@@ -70,7 +71,7 @@ class Trustdart {
         <String, String>{'coin': coin, 'address': address},
       );
     } catch (e) {
-      if (kDebugMode) debugPrint('Trustdart.validateAddress: $e');
+      AppLogger.w('Trustdart', 'validateAddress: $e');
       return false;
     }
   }
@@ -95,7 +96,7 @@ class Trustdart {
         },
       );
     } catch (e) {
-      if (kDebugMode) debugPrint('Trustdart.getPublicKey: $e');
+      AppLogger.w('Trustdart', 'getPublicKey: $e');
       return '';
     }
   }
@@ -118,7 +119,7 @@ class Trustdart {
         },
       );
     } catch (e) {
-      if (kDebugMode) debugPrint('Trustdart.getPrivateKey: $e');
+      AppLogger.w('Trustdart', 'getPrivateKey: $e');
       return '';
     }
   }
@@ -142,7 +143,7 @@ class Trustdart {
         },
       );
     } catch (e) {
-      if (kDebugMode) debugPrint('Trustdart.getPrivateKeyAndPublicKeyPair: $e');
+      AppLogger.w('Trustdart', 'getPrivateKeyAndPublicKeyPair: $e');
       return '';
     }
   }
@@ -211,7 +212,7 @@ class Trustdart {
       );
       return json.decode(raw);
     } catch (e) {
-      if (kDebugMode) debugPrint('Trustdart.signTransactionByteArray: $e');
+      AppLogger.w('Trustdart', 'signTransactionByteArray: $e');
       return {'result': false, 'signHash': ''};
     }
   }
@@ -237,7 +238,7 @@ class Trustdart {
         },
       );
     } catch (e) {
-      if (kDebugMode) debugPrint('Trustdart.signMessage: $e');
+      AppLogger.w('Trustdart', 'signMessage: $e');
       return '';
     }
   }
@@ -266,7 +267,7 @@ class Trustdart {
       );
       return txHash;
     } catch (e) {
-      if (kDebugMode) debugPrint('Trustdart.$method: $e');
+      AppLogger.w('Trustdart', '$method: $e');
       return '';
     }
   }
@@ -295,7 +296,7 @@ class Trustdart {
         },
       );
     } catch (e) {
-      if (kDebugMode) debugPrint('Trustdart.signTonProof: $e');
+      AppLogger.w('Trustdart', 'signTonProof: $e');
       return null;
     }
   }
@@ -309,7 +310,7 @@ class Trustdart {
         <String, String>{'mnemonic': mnemonic, 'path': path},
       );
     } catch (e) {
-      if (kDebugMode) debugPrint('Trustdart.getTonWalletStateInit: $e');
+      AppLogger.w('Trustdart', 'getTonWalletStateInit: $e');
       return null;
     }
   }
@@ -336,7 +337,7 @@ class Trustdart {
         },
       );
     } catch (e) {
-      if (kDebugMode) debugPrint('Trustdart.getKeyStore: $e');
+      AppLogger.w('Trustdart', 'getKeyStore: $e');
       return '';
     }
   }
@@ -357,7 +358,7 @@ class Trustdart {
         },
       );
     } catch (e) {
-      if (kDebugMode) debugPrint('Trustdart.getWalletInfoWithKeyStore: $e');
+      AppLogger.w('Trustdart', 'getWalletInfoWithKeyStore: $e');
       return {'address': '', 'privateKey': ''};
     }
   }
@@ -370,7 +371,7 @@ class Trustdart {
         <String, dynamic>{'address': address, 'mintAddress': mintAddress},
       );
     } catch (e) {
-      if (kDebugMode) debugPrint('Trustdart.getPubKeySOL: $e');
+      AppLogger.w('Trustdart', 'getPubKeySOL: $e');
       return '';
     }
   }
@@ -383,7 +384,7 @@ class Trustdart {
         <String, dynamic>{'pName': pType},
       );
     } catch (e) {
-      if (kDebugMode) debugPrint('Trustdart.getPermissions: $e');
+      AppLogger.w('Trustdart', 'getPermissions: $e');
       return '';
     }
   }
@@ -394,7 +395,7 @@ class Trustdart {
       final String raw = await _channel.invokeMethod('EvmEmit', params);
       return jsonDecode(raw);
     } catch (e) {
-      if (kDebugMode) debugPrint('Trustdart.evmEmit: $e');
+      AppLogger.w('Trustdart', 'evmEmit: $e');
       return null;
     }
   }

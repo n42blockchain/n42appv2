@@ -3,9 +3,9 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
-import 'package:flutter/foundation.dart';
-import 'package:n42_wallet/core/security/goplus_security_result.dart';
 import 'package:n42_wallet/core/network/base_api.dart';
+import 'package:n42_wallet/core/security/goplus_security_result.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 
 /// GoPlus Security API 客户端
 ///
@@ -91,7 +91,7 @@ class GoplusSecurityService {
       _cache[cacheKey] = _CacheEntry(result);
       return result;
     } catch (e) {
-      debugPrint('GoplusSecurityService.checkToken error: $e');
+      AppLogger.w('GoplusSecurity', 'checkToken error: $e');
       return null;
     }
   }

@@ -7,6 +7,8 @@
 
 import 'package:flutter/foundation.dart';
 
+import 'package:n42_wallet/core/utils/app_logger.dart';
+
 /// Application Configuration
 ///
 /// Centralized configuration management for the N42 Wallet application.
@@ -186,10 +188,10 @@ class AppConfig {
     }
 
     if (warnings.isNotEmpty) {
-      debugPrint('⚠️ [AppConfig] Network security warnings:');
-      for (final w in warnings) {
-        debugPrint('   - $w');
-      }
+      AppLogger.w(
+        'AppConfig',
+        'network security warnings: ${warnings.join("; ")}',
+      );
     }
   }
 }

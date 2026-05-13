@@ -11,6 +11,7 @@ import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/core/security/secure_storage.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 // TODO(arch): Extract provider interfaces to shared/ to eliminate layer violation
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/features/wallet_connect/presentation/providers/wallet_connect_providers.dart';
@@ -111,10 +112,7 @@ class AppGlobals {
       globalWapAdapter.initWallet();
       globalWcpInstance.cleanDataLogout();
     } catch (err) {
-      assert(() {
-        debugPrint('Logout error: $err');
-        return true;
-      }());
+      AppLogger.w('AppGlobals', 'logout error: $err');
     }
   }
 

@@ -6,7 +6,8 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
+
+import 'package:n42_wallet/core/utils/app_logger.dart';
 
 /// MEV (Maximal Extractable Value) protection service.
 ///
@@ -217,7 +218,7 @@ class MevProtectionService {
 
       return FlashbotsStatus.fromJson(result['result']);
     } catch (e) {
-      debugPrint('Failed to get bundle status: $e');
+      AppLogger.w('MevProtection', 'failed to get bundle status: $e');
       return null;
     }
   }

@@ -6,8 +6,9 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+
+import 'package:n42_wallet/core/utils/app_logger.dart';
 
 import 'passkey_config.dart';
 import 'passkey_credential.dart';
@@ -32,7 +33,7 @@ class PasskeyPlatformAdapter {
     } on MissingPluginException {
       return false;
     } catch (e) {
-      debugPrint('Passkey support check failed: $e');
+      AppLogger.w('Passkey', 'support check failed: $e');
       return false;
     }
   }

@@ -1,5 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+
+import 'package:n42_wallet/core/utils/app_logger.dart';
 
 class SocialAuthNativeConfig {
   static const MethodChannel _channel = MethodChannel('ai.n42.www/app_config');
@@ -29,10 +30,7 @@ class SocialAuthNativeConfig {
       );
       return SocialAuthNativeConfig.fromMap(map ?? const <String, dynamic>{});
     } catch (e) {
-      assert(() {
-        debugPrint('SocialAuthNativeConfig.load: $e');
-        return true;
-      }());
+      AppLogger.w('SocialAuthNativeConfig', 'load: $e');
       return const SocialAuthNativeConfig();
     }
   }

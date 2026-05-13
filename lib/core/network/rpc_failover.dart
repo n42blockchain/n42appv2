@@ -1,5 +1,5 @@
-import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/config/rpc_config.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 
 /// RPC 端点故障转移管理
 ///
@@ -66,10 +66,10 @@ class RpcFailover {
     final current = _currentIndex[key] ?? 0;
     if (current + 1 < endpoints.length) {
       _currentIndex[key] = current + 1;
-      if (kDebugMode) {
-        debugPrint('[RpcFailover] $key switched to endpoint ${current + 1}: '
-            '${endpoints[current + 1]}');
-      }
+      AppLogger.i(
+        'RpcFailover',
+        '$key switched to endpoint ${current + 1}: ${endpoints[current + 1]}',
+      );
       return true;
     }
     return false;

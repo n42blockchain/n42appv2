@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 
 /// API proxy configuration
 ///
@@ -23,13 +23,12 @@ class ProxyConfig {
 
   /// Debug assertion: warns if auth token is empty (likely missing --dart-define).
   static bool _debugCheckToken() {
-    assert(() {
-      if (authToken.isEmpty) {
-        debugPrint('WARNING: PROXY_AUTH_TOKEN is empty. '
-            'Pass --dart-define=PROXY_AUTH_TOKEN=<token> for proxy auth.');
-      }
-      return true;
-    }());
+    if (authToken.isEmpty) {
+      AppLogger.w(
+        'ProxyConfig',
+        'PROXY_AUTH_TOKEN is empty — pass --dart-define=PROXY_AUTH_TOKEN=<token>',
+      );
+    }
     return true;
   }
 
