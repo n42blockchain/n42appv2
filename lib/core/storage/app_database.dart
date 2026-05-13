@@ -52,10 +52,15 @@ class AppDatabase {
   /// Database version for migrations
   static const int _dbVersion = 5; // v5: 添加复合索引（地址+时间），提升钱包历史查询 2-5 倍
 
-  /// Database file name
+  /// Legacy 非加密数据库文件名。
+  /// 注意：名字保留 `astranet.db` 是为了识别老版本（早期品牌）残留的数据库文件，
+  /// 用于 `_migrateFromUnencryptedDatabase` 一次性迁移。**不要重命名**，否则
+  /// 旧用户的数据将无法被识别和迁移。
   static const String _dbName = 'astranet.db';
 
-  /// 加密数据库文件名
+  /// 当前加密数据库文件名。
+  /// 注意：名字保留 `astranet_encrypted.db` 是为了向后兼容已发布版本上的现存数据。
+  /// **重命名等同于让所有现有用户的钱包数据丢失**，禁止修改。
   static const String _encryptedDbName = 'astranet_encrypted.db';
 
   /// Get database instance

@@ -50,6 +50,8 @@ class AppDatabase {
       };
   Future<Database> getDatabaseInstance() async {
     final directory = await getDatabasesPath();
+    // 文件名保留早期品牌字面量，向后兼容已发布版本上的用户数据；
+    // 重命名 = 老用户钱包/交易/浏览历史等全部丢失，禁止修改。
     final path = join(directory, "astranet.db");
     return await openDatabase(
       path,

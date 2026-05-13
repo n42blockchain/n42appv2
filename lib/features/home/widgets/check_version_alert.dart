@@ -43,7 +43,7 @@ class CheckVersionAlert extends StatelessWidget {
     }
     // 回退：App Store / Play Store
     RateUsOnStore(
-      androidPackageName: "com.walletamaze.nftwallet",
+      androidPackageName: "ai.n42.www",
       appstoreAppId: "1622941204",
     ).launch();
   }
