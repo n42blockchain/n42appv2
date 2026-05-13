@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/core/di/service_locator_setup.dart';
 import 'package:n42_wallet/core/security/secure_storage.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
@@ -65,8 +66,9 @@ mixin WalletConnectConnection on ChangeNotifier {
     // Exponential back-off: 2s, 4s, 8s, 16s, 30s
     final seconds = (reconnectAttempts < 4) ? (2 << reconnectAttempts) : 30;
     reconnectTimer = Timer(Duration(seconds: seconds), _tryReconnect);
-    debugPrint(
-      '[WalletConnect] Reconnect attempt ${reconnectAttempts + 1} in ${seconds}s',
+    AppLogger.d(
+      'WalletConnect',
+      'reconnect attempt ${reconnectAttempts + 1} in ${seconds}s',
     );
   }
 
@@ -76,9 +78,9 @@ mixin WalletConnectConnection on ChangeNotifier {
     try {
       await signClient!.core.relayClient.connect();
       reconnectAttempts = 0;
-      debugPrint('[WalletConnect] Relay reconnected');
+      AppLogger.d('WalletConnect', 'relay reconnected');
     } catch (e) {
-      debugPrint('[WalletConnect] Reconnect #$reconnectAttempts failed: $e');
+      AppLogger.w('WalletConnect', 'reconnect #$reconnectAttempts failed: $e');
       scheduleReconnect();
     }
   }
@@ -102,11 +104,11 @@ mixin WalletConnectConnection on ChangeNotifier {
             pingSession();
           })
           .catchError((e) {
-            debugPrint('[WalletConnect] Resume relay reconnect error: $e');
+            AppLogger.w('WalletConnect', 'resume relay reconnect error: $e');
             scheduleReconnect();
           });
     } catch (e) {
-      debugPrint('[WalletConnect] Resume relay reconnect: $e');
+      AppLogger.w('WalletConnect', 'resume relay reconnect: $e');
     }
   }
 
@@ -119,9 +121,9 @@ mixin WalletConnectConnection on ChangeNotifier {
       await signClient!.reOwnSign
           .ping(topic: topic)
           .timeout(const Duration(seconds: 10));
-      debugPrint('[WalletConnect] Session ping OK');
+      AppLogger.d('WalletConnect', 'session ping OK');
     } catch (e) {
-      debugPrint('[WalletConnect] Session ping failed: $e');
+      AppLogger.w('WalletConnect', 'session ping failed: $e');
       final s = wcL10n();
       ToastUtils.show(s?.g_wc_session_expired ?? 'Session has expired');
       viewStateDeal(WalletConnectState.disconnect);
@@ -188,7 +190,7 @@ mixin WalletConnectConnection on ChangeNotifier {
             );
 
         if (isMatchingPairing) {
-          debugPrint('[WalletConnect] pair: same URI retry, waiting for session_propose');
+          AppLogger.d('WalletConnect', 'pair: same URI retry, waiting for session_propose');
           notifyListeners();
           return true;
         }
@@ -198,7 +200,7 @@ mixin WalletConnectConnection on ChangeNotifier {
         ToastUtils.show(
           s?.g_wc_connection_lost ?? 'Please disconnect existing session first.',
         );
-        debugPrint('[WalletConnect] pair: pairing conflict with different DApp');
+        AppLogger.w('WalletConnect', 'pair: pairing conflict with different DApp');
         return false;
       }
       await viewStateDeal(WalletConnectState.error, params: e.toString());

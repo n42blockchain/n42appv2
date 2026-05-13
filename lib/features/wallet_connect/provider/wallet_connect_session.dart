@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/security/dapp_security_service.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
@@ -86,7 +87,7 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
     try {
       return signClient!.getActiveSessions();
     } catch (e) {
-      if (kDebugMode) debugPrint('[WalletConnect] getActiveSessions error: $e');
+      AppLogger.w('WalletConnect', 'getActiveSessions error: $e');
       return {};
     }
   }
@@ -100,7 +101,7 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
         reason: _userDisconnectReason,
       );
     } catch (e) {
-      if (kDebugMode) debugPrint('[WalletConnect] disconnectSession($topic) error: $e');
+      AppLogger.w('WalletConnect', 'disconnectSession($topic) error: $e');
     }
     if (dAppTopic == topic) {
       cleanData();
@@ -118,7 +119,7 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
           reason: _userDisconnectReason,
         );
       } catch (e) {
-        if (kDebugMode) debugPrint('[WalletConnect] disconnectAll($topic) error: $e');
+        AppLogger.w('WalletConnect', 'disconnectAll($topic) error: $e');
       }
     }
     cleanData();
@@ -153,23 +154,23 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
     try {
       // Log ALL raw incoming relay messages for debugging
       signClient!.core.relayClient.onRelayClientMessage.subscribe((args) {
-        debugPrint('[WC] relayMessage topic=${args.topic} message=${args.message}');
+        AppLogger.d('WalletConnect', 'relayMessage topic=${args.topic} message=${args.message}');
       });
       signClient!.core.relayClient.onRelayClientDisconnect.subscribe((_) {
-        debugPrint('[WalletConnect] Relay disconnected');
+        AppLogger.d('WalletConnect', 'relay disconnected');
         if (dAppTopic != null) scheduleReconnect();
       });
       signClient!.core.relayClient.onRelayClientConnect.subscribe((_) {
-        debugPrint('[WalletConnect] Relay connected');
+        AppLogger.d('WalletConnect', 'relay connected');
         reconnectAttempts = 0;
         cancelReconnectTimer();
       });
       signClient!.core.relayClient.onRelayClientError.subscribe((_) {
-        debugPrint('[WalletConnect] Relay error');
+        AppLogger.w('WalletConnect', 'relay error');
         if (dAppTopic != null) scheduleReconnect();
       });
     } catch (e) {
-      debugPrint('[WalletConnect] Relay event subscription unavailable: $e');
+      AppLogger.w('WalletConnect', 'relay event subscription unavailable: $e');
     }
   }
 
@@ -184,10 +185,10 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
       metadata = args.params.proposer.metadata;
 
       // Debug: log what the DApp is requesting
-      debugPrint('[WC] requiredNamespaces: ${args.params.requiredNamespaces}');
-      debugPrint('[WC] optionalNamespaces: ${args.params.optionalNamespaces}');
-      debugPrint('[WC] sessionProperties: ${args.params.sessionProperties}');
-      debugPrint('[WC] proposer metadata: ${args.params.proposer.metadata}');
+      AppLogger.d('WalletConnect', 'requiredNamespaces: ${args.params.requiredNamespaces}');
+      AppLogger.d('WalletConnect', 'optionalNamespaces: ${args.params.optionalNamespaces}');
+      AppLogger.d('WalletConnect', 'sessionProperties: ${args.params.sessionProperties}');
+      AppLogger.d('WalletConnect', 'proposer metadata: ${args.params.proposer.metadata}');
 
       final resolvedModels = _resolveChains(
         args.params.optionalNamespaces,
@@ -276,12 +277,12 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
     });
 
     signClient!.onSessionRequest.subscribe((wallet_connect.SessionRequestEvent? args) async {
-      debugPrint('[WC] onSessionRequest: method=${args?.method} chainId=${args?.chainId} params=${args?.params}');
+      AppLogger.d('WalletConnect', 'onSessionRequest: method=${args?.method} chainId=${args?.chainId} params=${args?.params}');
       if (args != null) setActionDataMap(args);
     });
 
     signClient!.onSessionDelete.subscribe((args) async {
-      debugPrint('[WC] onSessionDelete: topic=${args.topic} dAppTopic=$dAppTopic');
+      AppLogger.d('WalletConnect', 'onSessionDelete: topic=${args.topic} dAppTopic=$dAppTopic');
       if (disconnectingByUser) return;
       if (dAppTopic != null && dAppTopic == args.topic) {
         final s = wcL10n();
@@ -510,7 +511,7 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
         viewStateDeal(WalletConnectState.transactionOK);
 
       default:
-        debugPrint('[WalletConnect] Unsupported method: ${eventData.method}');
+        AppLogger.w('WalletConnect', 'unsupported method: ${eventData.method}');
         _rejectUnsupportedMethod(eventData);
     }
   }
@@ -644,7 +645,7 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
         ),
       );
     } catch (e) {
-      debugPrint('[WalletConnect] wallet_switchEthereumChain error: $e');
+      AppLogger.w('WalletConnect', 'wallet_switchEthereumChain error: $e');
       _rejectUnsupportedMethod(eventData);
     }
   }
@@ -663,7 +664,7 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
         ),
       );
     } catch (e) {
-      debugPrint('[WalletConnect] Error responding to ${eventData.method}: $e');
+      AppLogger.w('WalletConnect', 'error responding to ${eventData.method}: $e');
     }
   }
 
@@ -682,7 +683,7 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
         ),
       );
     } catch (e) {
-      debugPrint('[WalletConnect] Error rejecting unsupported method: $e');
+      AppLogger.w('WalletConnect', 'error rejecting unsupported method: $e');
     }
   }
 

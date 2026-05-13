@@ -1,6 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/core/utils/safe_change_notifier.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/core/enums/load.dart';
@@ -60,7 +60,7 @@ class WalletConnectProvider
       try {
         signClient!.core.relayClient.disconnect();
       } catch (e) {
-        if (kDebugMode) debugPrint('[WalletConnect] disconnect error: $e');
+        AppLogger.w('WalletConnect', 'disconnect error: $e');
       }
       signClient = null;
     }
@@ -103,7 +103,7 @@ class WalletConnectProvider
         }
         final args = actionData as wallet_connect.SessionProposalEvent;
         try {
-          debugPrint('[WC] approveSession namespace: $namespace');
+          AppLogger.d('WalletConnect', 'approveSession namespace: $namespace');
           signClient!
               .approveSession(
                 id: args.id,
@@ -111,12 +111,12 @@ class WalletConnectProvider
                 sessionProperties: args.params.sessionProperties,
               )
               .then((value) async {
-                debugPrint('[WC] approveSession OK topic=${value.topic}');
+                AppLogger.d('WalletConnect', 'approveSession OK topic=${value.topic}');
                 dAppTopic = value.topic;
                 viewStateDeal(WalletConnectState.connect);
               })
               .catchError((error) {
-                debugPrint('[WC] approveSession error: $error');
+                AppLogger.w('WalletConnect', 'approveSession error: $error');
                 ToastUtils.show(error.toString());
                 viewStateDeal(WalletConnectState.disconnect);
               });
@@ -147,7 +147,7 @@ class WalletConnectProvider
   void showAlertWidget() {
     final ctx = AppGlobals.navigatorKey.currentContext;
     if (ctx == null || metadata == null || actionDataMap == null) {
-      debugPrint('[WalletConnect] Cannot show alert: context or data is null');
+      AppLogger.w('WalletConnect', 'cannot show alert: context or data is null');
       return;
     }
     sheetBottom(ctx, "", WalletConnectAlertWidget(metadata!, actionDataMap!));
@@ -159,8 +159,9 @@ class WalletConnectProvider
     viewStateDeal(state);
     try {
       if (actionData is! wallet_connect.SessionRequestEvent) {
-        debugPrint(
-          '[WalletConnect] cancelTap: actionData is not SessionRequestEvent',
+        AppLogger.w(
+          'WalletConnect',
+          'cancelTap: actionData is not SessionRequestEvent',
         );
         viewStateDeal(WalletConnectState.connect);
         return;
@@ -177,7 +178,7 @@ class WalletConnectProvider
         ),
       );
     } catch (e) {
-      debugPrint('[WalletConnect] Cancel respond error: $e');
+      AppLogger.w('WalletConnect', 'cancel respond error: $e');
     }
     viewStateDeal(WalletConnectState.connect);
   }
@@ -199,7 +200,7 @@ class WalletConnectProvider
     } catch (e) {
       // Session may already be gone (e.g. network drop, DApp crashed).
       // We still want to clean up local state.
-      if (kDebugMode) debugPrint('[WalletConnect] Disconnect error: $e');
+      AppLogger.w('WalletConnect', 'disconnect error: $e');
     } finally {
       disconnectingByUser = false;
       viewStateDeal(WalletConnectState.disconnect);
