@@ -241,7 +241,7 @@ class _N42AppV2State extends ConsumerState<N42AppV2>
 
   Future<void> _initDeepLinks() async {
     try {
-      final service = globalProviderContainer.read(deepLinkServiceProvider);
+      final service = ref.read(deepLinkServiceProvider);
       await service.init();
       final handler = DeepLinkHandler(deepLinkService: service);
       handler.onNavigate = _handleDeepLinkNavigation;

@@ -21,9 +21,14 @@ final GetIt serviceLocator = GetIt.instance;
 /// They read from the same GetIt singleton this class manages, so the
 /// runtime behaviour is identical, but Riverpod gives you:
 ///   - `ProviderContainer.overrideWith(...)` for clean test isolation
-///   - Automatic invalidation if a service is re-registered
 ///   - Type-safe access via `ref.watch` in widgets / `ref.read` in
 ///     callbacks / `globalProviderContainer.read` in non-widget code
+///
+/// Note: the providers cache the registered instance on first read.
+/// If a service is re-registered (e.g. wallet reset), callers must
+/// invoke `container.invalidate(walletServiceProvider)` to pick up the
+/// new instance. Production currently registers each service exactly
+/// once in `configureDependencies`, so this is not exercised.
 ///
 /// This class remains the **registration entry point** (call
 /// `ServiceLocatorSetup.registerWalletService` from

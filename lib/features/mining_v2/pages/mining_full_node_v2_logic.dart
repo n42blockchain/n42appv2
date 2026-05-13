@@ -30,8 +30,7 @@ mixin _MiningFullNodeV2LogicMixin on ConsumerState<MiningFullNodeV2> {
         });
       }
 
-      // Use IWalletService instead of WalletActionProvider
-      final walletService = globalProviderContainer.read(walletServiceProvider);
+      final walletService = ref.read(walletServiceProvider);
       if (walletService == null) return;
 
       final miningIndex = walletService.miningWalletIndex;

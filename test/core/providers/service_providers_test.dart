@@ -155,5 +155,17 @@ void main() {
       final second = container.read(deepLinkServiceProvider);
       expect(identical(first, second), isTrue);
     });
+
+    test('disposing the container disposes the service', () async {
+      final container = ProviderContainer();
+      final service = container.read(deepLinkServiceProvider);
+
+      container.dispose();
+
+      // dispose() is idempotent — the host (_N42AppV2State.dispose)
+      // also calls service.dispose() on app teardown, so calling it
+      // again after the container already did must not throw.
+      await expectLater(service.dispose(), completes);
+    });
   });
 }

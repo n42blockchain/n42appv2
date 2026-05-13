@@ -278,9 +278,13 @@ class DeepLinkService {
     _lastDeepLink = null;
   }
 
-  /// 销毁服务
+  /// 销毁服务。允许重复调用——同一服务可能同时被 [deepLinkServiceProvider]
+  /// 的 onDispose 与 `_N42AppV2State.dispose` 持有引用，两者都会触发销毁。
   Future<void> dispose() async {
     await _subscription?.cancel();
-    await _deepLinkController.close();
+    _subscription = null;
+    if (!_deepLinkController.isClosed) {
+      await _deepLinkController.close();
+    }
   }
 }
