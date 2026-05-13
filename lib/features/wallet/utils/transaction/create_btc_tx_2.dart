@@ -93,11 +93,23 @@ class CreateBtcTX2 {
       enableRBF: true,
     );
 
+    // NOTE: This method's UTXO set is hardcoded above (testnet UTXO
+    // `47537040...`) so the callback can assume every input is signed by
+    // `examplePublicKey`. The `UnimplementedError` fallback exists only
+    // to catch programmer error if someone refactors the UTXO list to
+    // include other pubkeys without updating this callback.
+    //
+    // The whole `createSegwitV2` method is dev exploration code (see
+    // `sendTrx1` for context); the production BTC self-custody path uses
+    // `CreateBTCTXV1.createV2` from `create_btc_tx_1.dart`.
     final tr = b.buildTransaction((trDigest, utxo, publicKey, int sighash) {
       if (publicKey == examplePublicKey.toHex()) {
         return fromPriv2.signECDSA(trDigest, sighash: sighash);
       }
-      throw UnimplementedError();
+      throw UnimplementedError(
+        'createSegwitV2 only signs UTXOs owned by examplePublicKey; '
+        'extend this callback if the UTXO set grows.',
+      );
     });
 
     return tr.serialize();

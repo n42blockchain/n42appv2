@@ -110,6 +110,18 @@ mixin _SelfCustody1LogicMixin on ConsumerState<SelfCustody1> {
     return p2wshAddress!.toAddress(BitcoinNetwork.testnet);
   }
 
+  /// Historical exploration code from the early BTC self-custody staking
+  /// design. **Not wired to any UI path** as of 2026-05 — `sendTrx1` and
+  /// `sendTrx2` were left in the file when the flow shifted to `sendTrx()`
+  /// (which uses `CreateBTCTXV1.createV2` with a real UTXO set instead of
+  /// the hardcoded sample UTXO in `CreateBtcTX2.createSegwitV2`).
+  ///
+  /// Kept for reference until BTC self-custody staking ships and we can
+  /// confirm none of these branches are needed. Do NOT call from production
+  /// code — `CreateBtcTX2.createSegwitV2` uses a baked-in testnet UTXO
+  /// hash and the multisig signing callback throws `UnimplementedError`
+  /// for any pubkey other than the example one.
+  @Deprecated('Unused dev exploration code; pending product decision to delete')
   Future<void> sendTrx1(Script scriptP2wsh) async {
     if (privateKey == null || p2wshAddress == null || address == null) return;
 
@@ -118,6 +130,7 @@ mixin _SelfCustody1LogicMixin on ConsumerState<SelfCustody1> {
     AppLogger.d('BTCStaking', 'tx hash: $txHash');
   }
 
+  @Deprecated('Unused dev exploration code; pending product decision to delete')
   Future<void> sendTrx2(Script scriptP2wsh) async {
     if (privateKey == null || p2wshAddress == null || address == null) return;
     final sendAmount = ethToWeiString('0.0001', 8).toInt();
@@ -151,6 +164,7 @@ mixin _SelfCustody1LogicMixin on ConsumerState<SelfCustody1> {
     AppLogger.d('BTCStaking', 'tx hash: $txHash');
   }
 
+  @Deprecated('Unused dev exploration code; pending product decision to delete')
   Future<void> sendTrx() async {
     if (privateKey == null || address == null) return;
     final wifKey = privateKey!.toWif(network: BitcoinNetwork.testnet);
