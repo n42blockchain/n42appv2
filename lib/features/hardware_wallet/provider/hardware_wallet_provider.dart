@@ -7,6 +7,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/hardware_wallet/models/hardware_wallet_models.dart';
 import 'package:n42_wallet/features/hardware_wallet/service/keystone_service.dart';
 import 'package:n42_wallet/features/hardware_wallet/service/ledger_service.dart';
@@ -126,7 +127,7 @@ class HardwareWalletProvider extends ChangeNotifier
         notifyListeners();
       }
     } catch (e) {
-      debugPrint('Failed to load saved devices: $e');
+      AppLogger.w('HardwareWallet', 'failed to load saved devices: $e');
     }
   }
 
@@ -150,7 +151,7 @@ class HardwareWalletProvider extends ChangeNotifier
       final devicesJson = json.encode(_savedDevices.map((d) => d.toJson()).toList());
       await prefs.setString('hardware_wallet_devices', devicesJson);
     } catch (e) {
-      debugPrint('Failed to save devices: $e');
+      AppLogger.w('HardwareWallet', 'failed to save devices: $e');
     }
   }
 
@@ -195,7 +196,7 @@ class HardwareWalletProvider extends ChangeNotifier
       ]);
       return true;
     } catch (e) {
-      debugPrint('Failed to import hardware wallet account: $e');
+      AppLogger.w('HardwareWallet', 'failed to import account: $e');
       rethrow;
     }
   }

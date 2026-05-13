@@ -3,8 +3,9 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+
+import 'package:n42_wallet/core/utils/app_logger.dart';
 
 import '../models/hardware_wallet_models.dart';
 
@@ -49,7 +50,7 @@ class TrezorService {
     try {
       await _channel.invokeMethod<void>('trezor_disconnect');
     } on PlatformException catch (e) {
-      debugPrint('TrezorService.disconnect error: ${e.message}');
+      AppLogger.w('TrezorService', 'disconnect error: ${e.message}');
     }
   }
 

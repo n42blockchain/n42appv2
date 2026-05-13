@@ -3,7 +3,9 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
-import 'package:flutter/foundation.dart';
+import 'dart:typed_data';
+
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/hardware_wallet/models/hardware_wallet_models.dart';
 
 /// Ledger APDU 构建与工具方法
@@ -136,7 +138,7 @@ class LedgerApduUtils {
           message: 'Class not supported. Wrong app may be open',
         );
       default:
-        debugPrint('LedgerService: unrecognized SW 0x${sw.toRadixString(16).padLeft(4, '0')}');
+        AppLogger.w('LedgerAPDU', 'unrecognized SW 0x${sw.toRadixString(16).padLeft(4, '0')}');
         return result;
     }
   }

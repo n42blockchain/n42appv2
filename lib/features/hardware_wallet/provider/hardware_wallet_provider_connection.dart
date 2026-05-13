@@ -339,7 +339,7 @@ mixin _HardwareWalletConnectionMixin on ChangeNotifier {
           ));
         }
       } catch (e) {
-        debugPrint('Failed to load account $i for $coin: $e');
+        AppLogger.w('HardwareWallet', 'failed to load account $i for $coin: $e');
         break;
       }
     }
