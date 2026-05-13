@@ -5,9 +5,9 @@
 
 import 'dart:async';
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:n42_wallet/core/config/proxy_config.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 
 import '../core/aa_config.dart';
 import '../core/aa_constants.dart';
@@ -170,10 +170,7 @@ class BundlerClient {
       if (result == null) return null;
       return parse(result);
     } catch (e) {
-      assert(() {
-        debugPrint('$method error: $e');
-        return true;
-      }());
+      AppLogger.w('BundlerClient', '$method error: $e');
       return null;
     }
   }

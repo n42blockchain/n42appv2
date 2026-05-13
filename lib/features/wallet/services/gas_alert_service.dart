@@ -5,9 +5,10 @@
 
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:n42_wallet/core/utils/app_logger.dart';
 
 /// 单个网络的 Gas 价格提醒配置
 class GasAlertConfig {
@@ -93,7 +94,7 @@ class GasAlertService {
         (k, v) => MapEntry(k, GasAlertConfig.fromJson(v as Map<String, dynamic>)),
       );
     } catch (e) {
-      debugPrint('[GasAlertService] loadAll error: $e');
+      AppLogger.w('GasAlertService', 'loadAll error: $e');
       return {};
     }
   }
@@ -105,7 +106,7 @@ class GasAlertService {
       final map = configs.map((k, v) => MapEntry(k, v.toJson()));
       await prefs.setString(_prefKey, jsonEncode(map));
     } catch (e) {
-      debugPrint('[GasAlertService] saveAll error: $e');
+      AppLogger.w('GasAlertService', 'saveAll error: $e');
     }
   }
 
@@ -168,7 +169,7 @@ class GasAlertService {
         await saveAll(configs);
       }
     } catch (e) {
-      debugPrint('[GasAlertService] checkAndNotify error: $e');
+      AppLogger.w('GasAlertService', 'checkAndNotify error: $e');
     }
   }
 
@@ -212,7 +213,7 @@ class GasAlertService {
         notificationDetails: _notificationDetails,
       );
     } catch (e) {
-      debugPrint('[GasAlertService] _sendNotification error: $e');
+      AppLogger.w('GasAlertService', '_sendNotification error: $e');
     }
   }
 }

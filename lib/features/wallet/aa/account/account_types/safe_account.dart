@@ -9,6 +9,8 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:web3dart/web3dart.dart';
 
+import 'package:n42_wallet/core/utils/app_logger.dart';
+
 import '../../core/aa_config.dart';
 
 /// Helper for Safe (Gnosis Safe v1.4.1) account type.
@@ -94,7 +96,7 @@ class SafeAccountHelper {
       final addressHash = keccak256(data);
       return '0x${bytesToHex(addressHash.sublist(12))}';
     } catch (e) {
-      if (kDebugMode) debugPrint('[SafeAccount] computeAddress error: $e');
+      AppLogger.w('SafeAccount', 'computeAddress error: $e');
       return null;
     }
   }

@@ -6,6 +6,7 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/sqlite/app_database.dart';
 import 'package:n42_wallet/features/wallet/widgets/aa/batch_operation_item.dart';
 
@@ -95,10 +96,7 @@ class BatchTemplateProvider extends ChangeNotifier {
       );
       _templates = rows.map(BatchTemplate.fromDbMap).toList();
     } catch (e) {
-      assert(() {
-        debugPrint('[BatchTemplateProvider] loadTemplates error: $e');
-        return true;
-      }());
+      AppLogger.w('BatchTemplateProvider', 'loadTemplates error: $e');
       _templates = [];
     } finally {
       _isLoading = false;
@@ -133,10 +131,7 @@ class BatchTemplateProvider extends ChangeNotifier {
       notifyListeners();
       return saved;
     } catch (e) {
-      assert(() {
-        debugPrint('[BatchTemplateProvider] saveTemplate error: $e');
-        return true;
-      }());
+      AppLogger.w('BatchTemplateProvider', 'saveTemplate error: $e');
       return null;
     }
   }
@@ -157,10 +152,7 @@ class BatchTemplateProvider extends ChangeNotifier {
       }
       return false;
     } catch (e) {
-      assert(() {
-        debugPrint('[BatchTemplateProvider] deleteTemplate error: $e');
-        return true;
-      }());
+      AppLogger.w('BatchTemplateProvider', 'deleteTemplate error: $e');
       return false;
     }
   }
@@ -187,10 +179,7 @@ class BatchTemplateProvider extends ChangeNotifier {
       }
       return false;
     } catch (e) {
-      assert(() {
-        debugPrint('[BatchTemplateProvider] renameTemplate error: $e');
-        return true;
-      }());
+      AppLogger.w('BatchTemplateProvider', 'renameTemplate error: $e');
       return false;
     }
   }

@@ -8,6 +8,8 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:web3dart/web3dart.dart';
 
+import 'package:n42_wallet/core/utils/app_logger.dart';
+
 import '../core/aa_config.dart';
 import '../core/aa_errors.dart';
 import '../models/smart_account.dart';
@@ -223,7 +225,7 @@ class SmartAccountFactory {
       final result = json['result'];
       return result is String ? result : null;
     } catch (e) {
-      if (kDebugMode) debugPrint('[SmartAccountFactory] ethCall error: $e');
+      AppLogger.w('SmartAccountFactory', 'ethCall error: $e');
       return null;
     }
   }

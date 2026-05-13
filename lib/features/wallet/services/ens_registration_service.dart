@@ -9,6 +9,7 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/network/base_api.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/wallet/services/ens_models.dart';
 import 'package:web3dart/web3dart.dart';
@@ -105,7 +106,7 @@ class EnsRegistrationService {
         );
       }
     } catch (e) {
-      debugPrint('ENS availability check error: $e');
+      AppLogger.w('EnsRegistration', 'availability check error: $e');
       return EnsAvailabilityResult.error(normalizedName, e.toString());
     }
   }
@@ -132,7 +133,7 @@ class EnsRegistrationService {
         mm.error = true;
       }
     } catch (e) {
-      debugPrint('ENS price query error: $e');
+      AppLogger.w('EnsRegistration', 'price query error: $e');
       mm.error = true;
     }
 
@@ -168,7 +169,7 @@ class EnsRegistrationService {
         mm.data = <OwnedEns>[];
       }
     } catch (e) {
-      debugPrint('ENS owned names query error: $e');
+      AppLogger.w('EnsRegistration', 'owned names query error: $e');
       mm.error = true;
       mm.data = <OwnedEns>[];
     }
@@ -249,7 +250,7 @@ class EnsRegistrationService {
         mm.error = true;
       }
     } catch (e) {
-      debugPrint('ENS commit error: $e');
+      AppLogger.w('EnsRegistration', 'commit error: $e');
       mm.error = true;
     }
 
@@ -281,7 +282,7 @@ class EnsRegistrationService {
       );
     } catch (e) {
       // best-effort：服务端通知失败不影响本地状态
-      debugPrint('ENS rollback notify error: $e');
+      AppLogger.w('EnsRegistration', 'rollback notify error: $e');
     }
   }
 
@@ -325,7 +326,7 @@ class EnsRegistrationService {
         );
       }
     } catch (e) {
-      debugPrint('ENS register error: $e');
+      AppLogger.w('EnsRegistration', 'register error: $e');
       mm.error = true;
       mm.data = RegisterResult.failure(params.name, e.toString());
     }

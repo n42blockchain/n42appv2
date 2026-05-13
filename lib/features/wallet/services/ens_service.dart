@@ -4,7 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'dart:async';
-import 'package:flutter/foundation.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/features/wallet/services/ens_resolution_models.dart';
@@ -124,7 +124,7 @@ class EnsService {
       _addToCache(_forwardCache, cacheKey, result);
       return result;
     } catch (e) {
-      debugPrint('[DomainService] resolveName error: $e');
+      AppLogger.w('DomainService', 'resolveName error: $e');
       return EnsResolutionResult.failure('Resolution failed: $e');
     }
   }
@@ -167,7 +167,7 @@ class EnsService {
       _addToCache(_reverseCache, normalizedAddr, domainName);
       return domainName;
     } catch (e) {
-      debugPrint('[DomainService] resolveAddress error: $e');
+      AppLogger.w('DomainService', 'resolveAddress error: $e');
       return null;
     }
   }
@@ -197,7 +197,7 @@ class EnsService {
       _addToCache(_avatarCache, normalized, avatar);
       return avatar;
     } catch (e) {
-      debugPrint('[DomainService] getAvatar error: $e');
+      AppLogger.w('DomainService', 'getAvatar error: $e');
       return null;
     }
   }
@@ -222,7 +222,7 @@ class EnsService {
         );
       }
     } catch (e) {
-      debugPrint('[DomainService] getTextRecords error: $e');
+      AppLogger.w('DomainService', 'getTextRecords error: $e');
     }
     return null;
   }
@@ -285,7 +285,7 @@ class EnsService {
         );
       }
     } catch (e) {
-      debugPrint('[DomainService] $debugLabel failed: $e');
+      AppLogger.w('DomainService', '$debugLabel failed: $e');
     }
     return null;
   }
@@ -299,7 +299,7 @@ class EnsService {
       final result = await apiCall();
       if (!result.error && result.data != null) return result.data.toString();
     } catch (e) {
-      debugPrint('[DomainService] $debugLabel failed: $e');
+      AppLogger.w('DomainService', '$debugLabel failed: $e');
     }
     return null;
   }

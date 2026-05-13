@@ -5,9 +5,10 @@
 
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:n42_wallet/core/utils/app_logger.dart';
 
 /// 单个币种的价格到达提醒配置
 class CoinPriceAlertConfig {
@@ -109,7 +110,7 @@ class CoinPriceAlertService {
         ),
       );
     } catch (e) {
-      debugPrint('[CoinPriceAlertService] loadAll error: $e');
+      AppLogger.w('CoinPriceAlert', 'loadAll error: $e');
       return {};
     }
   }
@@ -122,7 +123,7 @@ class CoinPriceAlertService {
       final map = configs.map((k, v) => MapEntry(k, v.toJson()));
       await prefs.setString(_prefKey, jsonEncode(map));
     } catch (e) {
-      debugPrint('[CoinPriceAlertService] saveAll error: $e');
+      AppLogger.w('CoinPriceAlert', 'saveAll error: $e');
     }
   }
 
@@ -180,7 +181,7 @@ class CoinPriceAlertService {
 
       if (changed) await saveAll(configs);
     } catch (e) {
-      debugPrint('[CoinPriceAlertService] checkAndNotify error: $e');
+      AppLogger.w('CoinPriceAlert', 'checkAndNotify error: $e');
     }
   }
 
@@ -224,7 +225,7 @@ class CoinPriceAlertService {
         notificationDetails: _notificationDetails,
       );
     } catch (e) {
-      debugPrint('[CoinPriceAlertService] _sendNotification error: $e');
+      AppLogger.w('CoinPriceAlert', '_sendNotification error: $e');
     }
   }
 

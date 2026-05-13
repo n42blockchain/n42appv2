@@ -9,6 +9,8 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:web3dart/web3dart.dart';
 
+import 'package:n42_wallet/core/utils/app_logger.dart';
+
 import '../../core/aa_config.dart';
 
 /// Helper for Biconomy Nexus v1 (ERC-7579 modular) account type.
@@ -94,7 +96,7 @@ class BiconomyAccountHelper {
       // Address is right-aligned in 32-byte word (bytes[12:32])
       return '0x${bytesToHex(resultBytes.sublist(12, 32))}';
     } catch (e) {
-      if (kDebugMode) debugPrint('[BiconomyAccount] computeAddress error: $e');
+      AppLogger.w('BiconomyAccount', 'computeAddress error: $e');
       return null;
     }
   }

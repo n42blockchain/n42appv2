@@ -4,8 +4,9 @@
 // See LICENSE file in the project root for full license information.
 
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+
+import 'package:n42_wallet/core/utils/app_logger.dart';
 
 import '../core/aa_config.dart';
 import '../../widgets/aa/paymaster_option_card.dart';
@@ -137,10 +138,7 @@ class PaymasterService {
       return returnedChainId == chainId;
     } catch (e) {
       // Network error → optimistically allow, real error shown at submission
-      assert(() {
-        debugPrint('[PaymasterService] probe error: $e');
-        return true;
-      }());
+      AppLogger.w('PaymasterService', 'probe error: $e');
       return true;
     }
   }

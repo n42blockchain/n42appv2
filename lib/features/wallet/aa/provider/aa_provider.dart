@@ -4,6 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/foundation.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/wallet/aa/core/aa_config.dart';
 import 'package:n42_wallet/features/wallet/aa/core/aa_errors.dart';
 import 'package:n42_wallet/features/wallet/aa/models/smart_account.dart';
@@ -134,10 +135,10 @@ class AAProvider extends ChangeNotifier {
       _walletInfo.addSmartAccount(updatedAccount);
       await _saveWalletInfo();
 
-      assert(() {
-        debugPrint('AAProvider: Created smart account ${account.shortAddress} for chain $chainId');
-        return true;
-      }());
+      AppLogger.d(
+        'AAProvider',
+        'created smart account ${account.shortAddress} for chain $chainId',
+      );
       notifyListeners();
 
       return updatedAccount;
@@ -197,10 +198,7 @@ class AAProvider extends ChangeNotifier {
 
       return isDeployed;
     } catch (e) {
-      assert(() {
-        debugPrint('AAProvider: Error checking deployment: $e');
-        return true;
-      }());
+      AppLogger.w('AAProvider', 'error checking deployment: $e');
       return false;
     }
   }
@@ -313,10 +311,7 @@ class AAProvider extends ChangeNotifier {
       }
       return false;
     } catch (e) {
-      assert(() {
-        debugPrint('AAProvider: Error checking deployment status: $e');
-        return true;
-      }());
+      AppLogger.w('AAProvider', 'error checking deployment status: $e');
       return false;
     }
   }

@@ -3,8 +3,8 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
-import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/network/base_api.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/wallet/services/ens_registration_service.dart';
 
@@ -69,7 +69,7 @@ extension EnsManagementService on EnsRegistrationService {
         mm.data = response['msg']?.toString() ?? fallbackError;
       }
     } catch (e) {
-      debugPrint('$debugLabel error: $e');
+      AppLogger.w('EnsManagement', '$debugLabel error: $e');
       mm.error = true;
       mm.data = e.toString();
     }
@@ -112,7 +112,7 @@ extension EnsManagementService on EnsRegistrationService {
       }
       return mm;
     } catch (e) {
-      debugPrint('ENS renew error: $e');
+      AppLogger.w('EnsManagement', 'renew error: $e');
       return MessageModel()
         ..error = true
         ..data = RenewResult.failure(normalizedName, e.toString());
@@ -212,7 +212,7 @@ extension EnsManagementService on EnsRegistrationService {
         mm.data = <SubdomainInfo>[];
       }
     } catch (e) {
-      debugPrint('ENS get subdomains error: $e');
+      AppLogger.w('EnsManagement', 'get subdomains error: $e');
       mm.error = true;
       mm.data = <SubdomainInfo>[];
     }

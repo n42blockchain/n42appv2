@@ -5,9 +5,10 @@
 
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:n42_wallet/core/utils/app_logger.dart';
 
 int _ensReminderIntValue(dynamic value, {int fallback = 0}) {
   if (value is int) return value;
@@ -138,7 +139,7 @@ class EnsExpiryReminderService {
             ),
       );
     } catch (e) {
-      debugPrint('[EnsExpiryReminderService] loadAll error: $e');
+      AppLogger.w('EnsExpiryReminder', 'loadAll error: $e');
       return {};
     }
   }
@@ -151,7 +152,7 @@ class EnsExpiryReminderService {
       final map = configs.map((k, v) => MapEntry(k, v.toJson()));
       await prefs.setString(_prefKey, jsonEncode(map));
     } catch (e) {
-      debugPrint('[EnsExpiryReminderService] saveAll error: $e');
+      AppLogger.w('EnsExpiryReminder', 'saveAll error: $e');
     }
   }
 
@@ -251,7 +252,7 @@ class EnsExpiryReminderService {
         await saveAll(configs);
       }
     } catch (e) {
-      debugPrint('[EnsExpiryReminderService] checkAndNotify error: $e');
+      AppLogger.w('EnsExpiryReminder', 'checkAndNotify error: $e');
     }
   }
 
@@ -295,7 +296,7 @@ class EnsExpiryReminderService {
         notificationDetails: _notificationDetails,
       );
     } catch (e) {
-      debugPrint('[EnsExpiryReminderService] _sendExpiryNotification error: $e');
+      AppLogger.w('EnsExpiryReminder', '_sendExpiryNotification error: $e');
     }
   }
 
@@ -308,7 +309,7 @@ class EnsExpiryReminderService {
         notificationDetails: _notificationDetails,
       );
     } catch (e) {
-      debugPrint('[EnsExpiryReminderService] _sendExpiredNotification error: $e');
+      AppLogger.w('EnsExpiryReminder', '_sendExpiredNotification error: $e');
     }
   }
 

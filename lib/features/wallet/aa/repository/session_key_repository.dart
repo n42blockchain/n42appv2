@@ -3,8 +3,9 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
-import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart';
+
+import 'package:n42_wallet/core/utils/app_logger.dart';
 
 import '../../../sqlite/app_database.dart';
 import '../../pages/aa/session_key_models.dart';
@@ -32,10 +33,7 @@ class SessionKeyRepository {
       );
       return rows.map(SessionKeyData.fromDbMap).toList();
     } catch (e) {
-      assert(() {
-        debugPrint('[SessionKeyRepository] loadKeys error: $e');
-        return true;
-      }());
+      AppLogger.w('SessionKeyRepository', 'loadKeys error: $e');
       return [];
     }
   }
@@ -53,10 +51,7 @@ class SessionKeyRepository {
       );
       return true;
     } catch (e) {
-      assert(() {
-        debugPrint('[SessionKeyRepository] saveKey error: $e');
-        return true;
-      }());
+      AppLogger.w('SessionKeyRepository', 'saveKey error: $e');
       return false;
     }
   }
@@ -79,10 +74,7 @@ class SessionKeyRepository {
       );
       return count > 0;
     } catch (e) {
-      assert(() {
-        debugPrint('[SessionKeyRepository] revokeKey error: $e');
-        return true;
-      }());
+      AppLogger.w('SessionKeyRepository', 'revokeKey error: $e');
       return false;
     }
   }
@@ -121,10 +113,7 @@ class SessionKeyRepository {
       );
       return count > 0;
     } catch (e) {
-      assert(() {
-        debugPrint('[SessionKeyRepository] recordUsage error: $e');
-        return true;
-      }());
+      AppLogger.w('SessionKeyRepository', 'recordUsage error: $e');
       return false;
     }
   }
