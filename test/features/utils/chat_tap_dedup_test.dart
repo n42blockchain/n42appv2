@@ -1,13 +1,10 @@
 // Copyright 2021-2026 N42 Inc. All rights reserved.
 //
 // Contract tests for the chat notification tap dedup utilities. These
-// guard the multi-round push notification audit invariants:
-//   - chat 5c30eb0d: introduce dedup window
-//   - 1e12def9   : second-round fixes
-//   - 2fe4e5d8   : third-round fixes
-// Without these, the same physical tap can trigger duplicate
-// `N42Chat.openConversation` calls (cold-start + onMessageOpenedApp
-// firing for the same tap).
+// guard the invariants that came out of the chat-side push notification
+// audit: a single physical tap must not trigger duplicate
+// `N42Chat.openConversation` calls when both cold-start and
+// onMessageOpenedApp fire for it.
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/utils/chat_tap_dedup.dart';

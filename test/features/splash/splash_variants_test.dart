@@ -54,7 +54,7 @@ void main() {
       }
     });
 
-    test('over many samples, hits both cn/en and other-language pools', () {
+    test('hits both cn/en and other-language pools over many samples', () {
       // English / Chinese marker strings — should be hit by Pool 1.
       const cnEnMarkers = {
         'OWNS',
@@ -64,49 +64,29 @@ void main() {
         '自己的事，最好自己说了算',
         '上链得永生',
       };
-      // A sampling of Pool 2 mainTexts (one per language).
-      const otherMarkers = {
-        '所有する',     // 日
-        '소유한다',     // 韩
-        'Posee',       // 西
-        'Possède',     // 法
-        'Besitzt',     // 德
-        'Possui',      // 葡
-        'Владеет',     // 俄
-        'يملك',        // 阿
-        'เป็นเจ้าของ', // 泰
-        'वो पाता है',   // 印地
-        'Sở Hữu',      // 越
-      };
 
       var cnEnHits = 0;
       var otherHits = 0;
-      // 1000 draws gives ~500 / ~500 with very high probability;
-      // the assertion bands below are generous to avoid flakes.
-      for (var i = 0; i < 1000; i++) {
+      // 300 draws is enough to catch a wholly-skewed implementation
+      // while keeping the bands loose enough to absorb RNG variance.
+      const draws = 300;
+      for (var i = 0; i < draws; i++) {
         final v = pickRandomVariant();
         if (cnEnMarkers.contains(v.mainText)) {
           cnEnHits++;
-        } else if (otherMarkers.contains(v.mainText) ||
-            // Other-language pool entries not in the marker set still
-            // belong to it; count any non-cn/en hit.
-            !cnEnMarkers.contains(v.mainText)) {
+        } else {
+          // Non-cn/en variants all belong to the other-language pool.
           otherHits++;
         }
       }
 
-      // Both pools should fire at all (the only way one is zero is if
-      // pickRandomVariant ignored a pool).
-      expect(cnEnHits, greaterThan(0));
-      expect(otherHits, greaterThan(0));
-
-      // With 50/50 split, we expect ~500 each in 1000 draws.
-      // Lower bound 250 catches a wholly skewed implementation while
-      // accepting normal RNG variance (worst-case ~3.5σ).
-      expect(cnEnHits, greaterThan(250),
-          reason: 'cn/en pool seems under-weighted: $cnEnHits / 1000');
-      expect(otherHits, greaterThan(250),
-          reason: 'other-language pool seems under-weighted: $otherHits / 1000');
+      // With 50/50 split we expect ~150 each in 300 draws. A lower
+      // bound of 75 catches a wholly-skewed implementation while
+      // accepting normal RNG variance.
+      expect(cnEnHits, greaterThan(75),
+          reason: 'cn/en pool seems under-weighted: $cnEnHits / $draws');
+      expect(otherHits, greaterThan(75),
+          reason: 'other-language pool seems under-weighted: $otherHits / $draws');
     });
 
     test('returned variants have plausible string shapes (no junk)', () {

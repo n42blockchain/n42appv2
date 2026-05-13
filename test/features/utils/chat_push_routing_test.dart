@@ -119,6 +119,32 @@ void main() {
     });
   });
 
+  group('extractChatRoomId', () {
+    test('returns the value when room_id is a non-empty String', () {
+      expect(extractChatRoomId({'room_id': '!r:srv'}), '!r:srv');
+    });
+
+    test('returns null for empty / null / non-string room_id', () {
+      expect(extractChatRoomId({'room_id': ''}), isNull);
+      expect(extractChatRoomId({'room_id': null}), isNull);
+      expect(extractChatRoomId({'room_id': 42}), isNull);
+      expect(extractChatRoomId(<String, dynamic>{}), isNull);
+    });
+  });
+
+  group('extractChatEventId', () {
+    test('returns the value when event_id is a non-empty String', () {
+      expect(extractChatEventId({'event_id': r'$e:srv'}), r'$e:srv');
+    });
+
+    test('returns null for empty / null / non-string event_id', () {
+      expect(extractChatEventId({'event_id': ''}), isNull);
+      expect(extractChatEventId({'event_id': null}), isNull);
+      expect(extractChatEventId({'event_id': []}), isNull);
+      expect(extractChatEventId(<String, dynamic>{}), isNull);
+    });
+  });
+
   group('isMatrixCallPayload', () {
     test('returns true for m.call.invite', () {
       expect(isMatrixCallPayload({'type': 'm.call.invite'}), isTrue);

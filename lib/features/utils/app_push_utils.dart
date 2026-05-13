@@ -237,16 +237,15 @@ class AppPushUtils {
         );
         return;
       }
-      final roomId = message.data['room_id'];
-      if (roomId is String && roomId.isNotEmpty) {
+      final roomId = extractChatRoomId(message.data);
+      if (roomId != null) {
         AppLogger.d(
           'AppPush',
           'chat/Matrix notification tap — delegating to n42_chat',
         );
-        final eventIdRaw = message.data['event_id'];
         _queuePendingChatNotification(
           roomId: roomId,
-          eventId: eventIdRaw is String ? eventIdRaw : null,
+          eventId: extractChatEventId(message.data),
         );
         // 若 N42Chat 已初始化则立即跳转；否则等 initN42Chat 完成后会调用 flushPendingChatNotification
         if (N42Chat.isInitialized) {
@@ -275,16 +274,15 @@ class AppPushUtils {
         );
         return;
       }
-      final roomId = m.data['room_id'];
-      if (roomId is String && roomId.isNotEmpty) {
+      final roomId = extractChatRoomId(m.data);
+      if (roomId != null) {
         AppLogger.d(
           'AppPush',
           'cold-start chat notification — delegating to n42_chat',
         );
-        final eventIdRaw = m.data['event_id'];
         _queuePendingChatNotification(
           roomId: roomId,
-          eventId: eventIdRaw is String ? eventIdRaw : null,
+          eventId: extractChatEventId(m.data),
         );
         return;
       }

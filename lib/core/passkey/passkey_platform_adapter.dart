@@ -174,7 +174,9 @@ class PasskeyPlatformAdapter {
   ///   - We need the byte offset; decoding to a Dart String loses the byte
   ///     position when multi-byte UTF-8 characters are present.
   ///   - `String.indexOf('"challenge"')` would return the position of the
-  ///     FIELD NAME, not the value — that was the bug fixed in 3f4a2163.
+  ///     FIELD NAME, not the value — the latter is what the verifier
+  ///     contract reads; the former was a previous bug that let an
+  ///     attacker-controlled challenge pass on-chain verification.
   ///
   /// Returns `-1` if the key is not found.
   ///

@@ -8,10 +8,10 @@
 // in `package:n42_chat` (which has native transitive dependencies that
 // fail to resolve in pure-Dart unit tests).
 //
-// The dedup logic is the heart of the multi-round push notification audit
-// (chat commits 5c30eb0d → 1e12def9 → 2fe4e5d8): without it, opening
-// a chat notification can trigger duplicate `openConversation` calls when
-// the cold-start path and the OS tap path both fire for the same tap.
+// The dedup logic is what landed on the chat side after several rounds of
+// push notification audit: without it, opening a chat notification can
+// trigger duplicate `openConversation` calls when the cold-start path
+// and the OS tap path both fire for the same physical tap.
 
 /// Returns true when `(roomId, eventId)` should be treated as the **same**
 /// chat notification tap as `(otherRoomId, otherEventId)`.
