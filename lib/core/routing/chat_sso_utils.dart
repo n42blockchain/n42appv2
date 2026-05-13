@@ -26,13 +26,15 @@ String? _normalizeHomeserver(String value) {
   }
 
   final normalizedPath = parsed.path.replaceAll(_trailingSlashes, '');
-  return parsed
-      .replace(
-        scheme: scheme,
-        userInfo: '',
-        query: null,
-        fragment: null,
-        path: normalizedPath,
-      )
-      .toString();
+  // NOTE: Use `Uri.new` constructor (not `parsed.replace`) to drop userInfo,
+  // query, and fragment. `Uri.replace(query: null, fragment: null)` is a
+  // Dart API trap — passing `null` to `replace` PRESERVES the existing
+  // component (only an empty string clears it, and even then leaves a `?`
+  // for query). The `Uri.new` constructor below treats `null` as "omit".
+  return Uri(
+    scheme: scheme,
+    host: parsed.host,
+    port: parsed.hasPort ? parsed.port : null,
+    path: normalizedPath,
+  ).toString();
 }
