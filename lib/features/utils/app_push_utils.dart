@@ -6,6 +6,7 @@ import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
+import 'package:n42_wallet/features/utils/chat_push_routing.dart';
 import 'package:n42_wallet/features/utils/chat_tap_dedup.dart';
 import 'package:n42_wallet/main.dart' show globalProviderContainer;
 import 'package:n42_wallet/features/browser/pages/browser_page.dart';
@@ -160,10 +161,7 @@ class AppPushUtils {
 
       try {
         // Matrix chat 推送（含 room_id 或 type 为 m.call.*）由 n42_chat 插件处理
-        final dataType = message.data['type'] as String?;
-        final roomId = message.data['room_id'] as String?;
-        if (roomId != null ||
-            (dataType != null && dataType.startsWith('m.call.'))) {
+        if (isChatPushPayload(message.data)) {
           AppLogger.d(
             'AppPush',
             'chat/Matrix notification — handled by n42_chat plugin',
@@ -172,6 +170,7 @@ class AppPushUtils {
         }
 
         // 新设备登录通知 — 前台直接通过 EventBus 弹窗，不走通知栏
+        final dataType = message.data['type'];
         if (dataType == 'device_login') {
           await _handleDeviceLoginNotification(message.data);
           return;
@@ -231,24 +230,23 @@ class AppPushUtils {
         'data=${message.data}',
       );
 
-      final dataType = message.data['type'] as String?;
-      final roomId = message.data['room_id'] as String?;
-      final isCallEvent = dataType != null && dataType.startsWith('m.call.');
-      if (isCallEvent) {
+      if (isMatrixCallPayload(message.data)) {
         AppLogger.d(
           'AppPush',
           'call notification tap — letting CallKit/sync handle the call flow',
         );
         return;
       }
-      if (roomId != null) {
+      final roomId = message.data['room_id'];
+      if (roomId is String && roomId.isNotEmpty) {
         AppLogger.d(
           'AppPush',
           'chat/Matrix notification tap — delegating to n42_chat',
         );
+        final eventIdRaw = message.data['event_id'];
         _queuePendingChatNotification(
           roomId: roomId,
-          eventId: message.data['event_id'] as String?,
+          eventId: eventIdRaw is String ? eventIdRaw : null,
         );
         // 若 N42Chat 已初始化则立即跳转；否则等 initN42Chat 完成后会调用 flushPendingChatNotification
         if (N42Chat.isInitialized) {
@@ -270,27 +268,24 @@ class AppPushUtils {
         'cold-start from notification: title=${m.notification?.title} '
         'notification=${m.notification?.toMap()} data=${m.data}',
       );
-      final dataType = m.data['type'] as String?;
-      final roomId = m.data['room_id'] as String?;
-      final isCallEvent = dataType != null && dataType.startsWith('m.call.');
-      if (isCallEvent) {
+      if (isMatrixCallPayload(m.data)) {
         AppLogger.d(
           'AppPush',
           'cold-start call notification — letting CallKit/sync handle the call flow',
         );
         return;
       }
-      if (roomId != null) {
+      final roomId = m.data['room_id'];
+      if (roomId is String && roomId.isNotEmpty) {
         AppLogger.d(
           'AppPush',
           'cold-start chat notification — delegating to n42_chat',
         );
-        if (roomId.isNotEmpty) {
-          _queuePendingChatNotification(
-            roomId: roomId,
-            eventId: m.data['event_id'] as String?,
-          );
-        }
+        final eventIdRaw = m.data['event_id'];
+        _queuePendingChatNotification(
+          roomId: roomId,
+          eventId: eventIdRaw is String ? eventIdRaw : null,
+        );
         return;
       }
       _PushNavigation.handleMessage(m.data);
@@ -369,10 +364,7 @@ class AppPushUtils {
 
     // Matrix/Chat 消息（含 room_id 或 type 为 m.call.*）委托给 n42_chat 插件处理
     // 包括后台来电 CallKit 触发、消息本地通知等
-    final dataType = message.data['type'] as String?;
-    final roomId = message.data['room_id'] as String?;
-    if (roomId != null ||
-        (dataType != null && dataType.startsWith('m.call.'))) {
+    if (isChatPushPayload(message.data)) {
       AppLogger.d(
         'AppPush',
         'background: Matrix/Chat message — delegating to FirebasePushService',
@@ -382,6 +374,7 @@ class AppPushUtils {
     }
 
     // 新设备登录通知 — 后台显示系统本地通知
+    final dataType = message.data['type'];
     if (dataType == 'device_login') {
       final brand = message.data['device_brand'] ?? '';
       final os = message.data['device_os'] ?? '';
