@@ -10,9 +10,13 @@
 //   - calls don't throw on edge inputs (empty/very long messages,
 //     non-Error objects, null stackTrace)
 //
-// Release-mode behaviour (e/w Crashlytics upload, d/i/w noop) is NOT
-// covered here because Crashlytics requires Firebase initialization and
-// release-mode flags can't be flipped from a Dart unit test.
+// Release-mode behaviour is NOT directly observable here:
+//   - `kReleaseMode` can't be flipped from a Dart unit test, and
+//   - Crashlytics requires Firebase initialization (also not available
+//     in tests).
+// What we CAN test is that `_safeCrashlyticsCall` swallows the
+// FirebaseException raised when Crashlytics is unavailable — see the
+// "does not throw when Crashlytics is unavailable" cases below.
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
