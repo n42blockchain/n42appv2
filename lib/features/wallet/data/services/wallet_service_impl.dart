@@ -9,7 +9,6 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:injectable/injectable.dart';
 import 'package:n42_wallet/shared/domain/entities/wallet_info.dart';
-import 'package:n42_wallet/shared/di/service_locator.dart';
 import 'package:n42_wallet/shared/domain/services/wallet_service_interface.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
@@ -250,19 +249,3 @@ class WalletServiceImpl implements IWalletService {
     _walletStreamController.close();
   }
 }
-
-/// Provider for IWalletService
-final walletServiceProvider = Provider<IWalletService>((ref) {
-  final registered = ServiceLocatorSetup.walletService;
-  if (registered != null) {
-    return registered;
-  }
-
-  final container = ProviderContainer();
-  final service = WalletServiceImpl(container);
-  ref.onDispose(() {
-    service.dispose();
-    container.dispose();
-  });
-  return service;
-});

@@ -5,8 +5,9 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
-import 'package:n42_wallet/core/di/service_locator_setup.dart';
+import 'package:n42_wallet/core/providers/service_providers.dart';
 import 'package:n42_wallet/core/security/secure_storage.dart';
+import 'package:n42_wallet/main.dart' show globalProviderContainer;
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
@@ -216,7 +217,7 @@ mixin WalletConnectConnection on ChangeNotifier {
         Client(),
       );
 
-      final walletService = ServiceLocatorSetup.walletService;
+      final walletService = globalProviderContainer.read(walletServiceProvider);
       if (walletService == null) {
         viewStateDeal(
           WalletConnectState.error,
@@ -444,7 +445,7 @@ mixin WalletConnectConnection on ChangeNotifier {
 
   /// Fetch TRON wallet credentials from IWalletService.
   Future<({String mnemonic, String privateKey})> getTronCredentials() async {
-    final walletService = ServiceLocatorSetup.walletService;
+    final walletService = globalProviderContainer.read(walletServiceProvider);
     final currentIndex = walletService?.miningWalletIndex ?? 0;
     final mnemonic =
         await walletService?.getMnemonicForWallet(currentIndex) ?? "";
@@ -454,7 +455,7 @@ mixin WalletConnectConnection on ChangeNotifier {
 
   /// Fetch Solana wallet credentials from IWalletService.
   Future<({String mnemonic, String privateKey})> getSolanaCredentials() async {
-    final walletService = ServiceLocatorSetup.walletService;
+    final walletService = globalProviderContainer.read(walletServiceProvider);
     final currentIndex = walletService?.miningWalletIndex ?? 0;
     final mnemonic = await walletService?.getMnemonicForWallet(currentIndex) ?? "";
     final pk = await walletService?.getPrivateKeyForWallet(currentIndex) ?? "";
@@ -463,7 +464,7 @@ mixin WalletConnectConnection on ChangeNotifier {
 
   /// Fetch Aptos wallet credentials from IWalletService.
   Future<({String mnemonic, String privateKey})> getAptosCredentials() async {
-    final walletService = ServiceLocatorSetup.walletService;
+    final walletService = globalProviderContainer.read(walletServiceProvider);
     final currentIndex = walletService?.miningWalletIndex ?? 0;
     final mnemonic = await walletService?.getMnemonicForWallet(currentIndex) ?? "";
     final pk = await walletService?.getPrivateKeyForWallet(currentIndex) ?? "";
@@ -472,7 +473,7 @@ mixin WalletConnectConnection on ChangeNotifier {
 
   /// Fetch Sui wallet credentials from IWalletService.
   Future<({String mnemonic, String privateKey})> getSuiCredentials() async {
-    final walletService = ServiceLocatorSetup.walletService;
+    final walletService = globalProviderContainer.read(walletServiceProvider);
     final currentIndex = walletService?.miningWalletIndex ?? 0;
     final mnemonic = await walletService?.getMnemonicForWallet(currentIndex) ?? "";
     final pk = await walletService?.getPrivateKeyForWallet(currentIndex) ?? "";
@@ -481,7 +482,7 @@ mixin WalletConnectConnection on ChangeNotifier {
 
   /// Fetch NEAR wallet credentials from IWalletService.
   Future<({String mnemonic, String privateKey})> getNearCredentials() async {
-    final walletService = ServiceLocatorSetup.walletService;
+    final walletService = globalProviderContainer.read(walletServiceProvider);
     final currentIndex = walletService?.miningWalletIndex ?? 0;
     final mnemonic = await walletService?.getMnemonicForWallet(currentIndex) ?? "";
     final pk = await walletService?.getPrivateKeyForWallet(currentIndex) ?? "";

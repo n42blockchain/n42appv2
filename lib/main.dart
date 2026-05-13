@@ -15,6 +15,7 @@ import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/app/chat_initialization.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/core/di/injection.dart';
+import 'package:n42_wallet/core/providers/service_providers.dart';
 import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/home/home_page.dart';
@@ -240,7 +241,7 @@ class _N42AppV2State extends ConsumerState<N42AppV2>
 
   Future<void> _initDeepLinks() async {
     try {
-      final service = getIt<DeepLinkService>();
+      final service = globalProviderContainer.read(deepLinkServiceProvider);
       await service.init();
       final handler = DeepLinkHandler(deepLinkService: service);
       handler.onNavigate = _handleDeepLinkNavigation;

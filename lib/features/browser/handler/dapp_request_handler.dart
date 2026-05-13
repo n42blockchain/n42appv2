@@ -3,8 +3,9 @@ import 'dart:typed_data';
 
 import 'package:http/http.dart';
 import 'package:n42_wallet/core/config/proxy_config.dart';
-import 'package:n42_wallet/core/di/service_locator_setup.dart';
+import 'package:n42_wallet/core/providers/service_providers.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/main.dart' show globalProviderContainer;
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:eip712/eip712.dart';
@@ -318,7 +319,7 @@ class DAppRequestHandler {
   }
 
   Future<web3.EthPrivateKey> _getPrivateKey() async {
-    final walletService = ServiceLocatorSetup.walletService;
+    final walletService = globalProviderContainer.read(walletServiceProvider);
     if (walletService == null) throw 'Wallet service not available';
 
     final currentIndex = walletService.miningWalletIndex >= 0

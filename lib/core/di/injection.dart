@@ -7,13 +7,10 @@
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
-import 'package:n42_wallet/core/platform/deep_link_service.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/core/storage/app_database.dart';
 import 'package:n42_wallet/core/security/secure_storage.dart';
 import 'package:n42_wallet/shared/di/service_locator.dart';
-import 'package:n42_wallet/shared/domain/services/wallet_service_interface.dart';
-import 'package:n42_wallet/shared/domain/services/mining_service_interface.dart';
 import 'package:n42_wallet/features/wallet/data/services/wallet_service_impl.dart';
 import 'package:n42_wallet/features/mining/data/services/mining_service_impl.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
@@ -95,7 +92,6 @@ Future<void> configureDependencies(
 
   // Platform and security
   _registerIfAbsent<TokenViewApi>(() => TokenViewApi());
-  _registerIfAbsent<DeepLinkService>(() => DeepLinkService());
   _registerIfAbsent<SecureStorage>(() => SecureStorage());
   _registerIfAbsent<PasskeyService>(() => PasskeyService(getIt<SecureStorage>()));
 }
@@ -107,22 +103,11 @@ Future<void> resetDependencies() async {
   _providerContainer = null;
 }
 
-/// Convenience accessors - Core Services
+/// Convenience accessors — only the ones with actual consumers are
+/// exposed. Other services (AppDatabase / SecureStorage / DeepLinkService /
+/// WalletSdk / TokenViewApi / IWalletService / IMiningService) are
+/// consumed via their own Riverpod providers or instantiated inline at
+/// the call site. See lib/core/providers/service_providers.dart for the
+/// Riverpod surface preferred by new code.
 SPUtil get spUtil => getIt<SPUtil>();
-AppDatabase get appDatabase => getIt<AppDatabase>();
-SecureStorage get secureStorage => getIt<SecureStorage>();
-DeepLinkService get deepLinkService => getIt<DeepLinkService>();
-
-/// Convenience accessors - Feature Services
-WalletServiceImpl get walletServiceImpl => getIt<WalletServiceImpl>();
 MiningServiceImpl get miningServiceImpl => getIt<MiningServiceImpl>();
-
-/// Convenience accessors - Wallet SDK
-WalletSdk get walletSdk => getIt<WalletSdk>();
-
-/// Convenience accessors - Wallet APIs
-TokenViewApi get tokenViewApi => getIt<TokenViewApi>();
-
-/// Shared service accessors (through interface)
-IWalletService get walletService => serviceLocator<IWalletService>();
-IMiningService get miningService => serviceLocator<IMiningService>();

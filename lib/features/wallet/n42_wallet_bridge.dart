@@ -21,7 +21,8 @@ import 'package:n42_wallet/features/wallet/services/ens_service.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart'
     show getPathWithIndex;
-import 'package:n42_wallet/shared/di/service_locator.dart';
+import 'package:n42_wallet/main.dart' show globalProviderContainer;
+import 'package:n42_wallet/core/providers/service_providers.dart';
 import 'package:web3dart/web3dart.dart' as web3;
 import 'package:eip712/eip712.dart';
 
@@ -372,7 +373,7 @@ class N42WalletBridge implements IWalletBridge {
       }
       if (ethCoin == null) return null;
 
-      final walletService = ServiceLocatorSetup.walletService;
+      final walletService = globalProviderContainer.read(walletServiceProvider);
       if (walletService == null) return null;
 
       final walletIndex = provider.walletIndex;

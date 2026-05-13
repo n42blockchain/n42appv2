@@ -7,9 +7,10 @@
 
 import 'dart:async';
 import 'package:flutter/foundation.dart';
+import 'package:n42_wallet/core/providers/service_providers.dart';
+import 'package:n42_wallet/main.dart' show globalProviderContainer;
 import 'package:n42_wallet/shared/domain/services/mining_service_interface.dart';
 import 'package:n42_wallet/shared/domain/services/wallet_service_interface.dart';
-import 'package:n42_wallet/shared/di/service_locator.dart';
 import 'package:n42_wallet/shared/events/event_manager.dart';
 import 'package:n42_wallet/shared/events/cross_feature_events.dart';
 import 'package:n42_wallet/features/mining_v2/provider/mining_v2_provider.dart';
@@ -132,7 +133,8 @@ class MiningServiceImpl implements IMiningService {
   }
 
   /// Get wallet service (through shared interface, not direct dependency)
-  IWalletService? get _walletService => ServiceLocatorSetup.walletService;
+  IWalletService? get _walletService =>
+      globalProviderContainer.read(walletServiceProvider);
 
   /// Get current wallet balance for mining rewards
   Future<String?> getCurrentRewardBalance() async {

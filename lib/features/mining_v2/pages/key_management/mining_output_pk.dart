@@ -5,9 +5,10 @@ import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/mining_v2/api/mining_api.dart';
 import 'package:n42_wallet/features/mining_v2/pages/key_management/data_encryption.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/providers/service_providers.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
-import 'package:n42_wallet/shared/di/service_locator.dart';
 import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/main.dart' show globalProviderContainer;
 import 'package:n42_wallet/features/widgets/text_field_widget.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 
@@ -39,7 +40,7 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
     _localValue ??= widget.value ?? await MiningApi.init().generateBls12381Keypair();
     if (!mounted) return "";
 
-    final walletService = ServiceLocatorSetup.walletService;
+    final walletService = globalProviderContainer.read(walletServiceProvider);
     if (walletService == null) return "";
 
     final miningIndex = walletService.miningWalletIndex;
