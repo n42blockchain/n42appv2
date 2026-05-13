@@ -4,9 +4,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:n42_wallet/core/utils/app_logger.dart';
 
 /// Phishing URL Detection Service
 ///
@@ -121,7 +122,7 @@ class PhishingDetector {
     const legacyKey = 'phishing_blocklist_v1';
     if (prefs.containsKey(legacyKey)) {
       await prefs.remove(legacyKey);
-      debugPrint('[PhishingDetector] Removed legacy NSUserDefaults cache key');
+      AppLogger.d('PhishingDetector', 'removed legacy NSUserDefaults cache key');
     }
   }
 
@@ -212,18 +213,12 @@ class PhishingDetector {
           : <String>[];
       _blocklist.addAll(blacklist);
       _whitelist.addAll(whitelist);
-      assert(() {
-        debugPrint(
-          '[PhishingDetector] Cache loaded: ${blacklist.length} blocked, '
-          '${whitelist.length} whitelisted',
-        );
-        return true;
-      }());
+      AppLogger.d(
+        'PhishingDetector',
+        'cache loaded: ${blacklist.length} blocked, ${whitelist.length} whitelisted',
+      );
     } catch (e) {
-      assert(() {
-        debugPrint('[PhishingDetector] Cache parse error: $e');
-        return true;
-      }());
+      AppLogger.w('PhishingDetector', 'cache parse error: $e');
     }
   }
 
@@ -235,10 +230,7 @@ class PhishingDetector {
     final lastFetchMs = prefs.getInt(_spCacheTimeKey) ?? 0;
     final ageMs = DateTime.now().millisecondsSinceEpoch - lastFetchMs;
     if (lastFetchMs > 0 && ageMs < _cacheTtl.inMilliseconds) {
-      assert(() {
-        debugPrint('[PhishingDetector] Cache still fresh, skipping refresh');
-        return true;
-      }());
+      AppLogger.d('PhishingDetector', 'cache still fresh, skipping refresh');
       return;
     }
 
@@ -252,10 +244,10 @@ class PhishingDetector {
       if (response.statusCode != 200) {
         await response.drain<void>(); // consume body to free socket
         client.close();
-        assert(() {
-          debugPrint('[PhishingDetector] Remote returned ${response.statusCode}');
-          return true;
-        }());
+        AppLogger.w(
+          'PhishingDetector',
+          'remote returned ${response.statusCode}',
+        );
         return;
       }
 
@@ -282,19 +274,13 @@ class PhishingDetector {
       }
       await prefs.setInt(_spCacheTimeKey, DateTime.now().millisecondsSinceEpoch);
 
-      assert(() {
-        debugPrint(
-          '[PhishingDetector] Remote refresh done: '
-          '${blacklist.length} blocked, ${whitelist.length} whitelisted',
-        );
-        return true;
-      }());
+      AppLogger.d(
+        'PhishingDetector',
+        'remote refresh done: ${blacklist.length} blocked, ${whitelist.length} whitelisted',
+      );
     } catch (e) {
       // Non-fatal: seed list + cached list continue to protect the user
-      assert(() {
-        debugPrint('[PhishingDetector] Background refresh failed: $e');
-        return true;
-      }());
+      AppLogger.w('PhishingDetector', 'background refresh failed: $e');
     }
   }
 }

@@ -6,7 +6,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
@@ -17,6 +16,7 @@ import 'package:n42_wallet/core/platform/social_auth_native_config.dart';
 import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_wallet/core/platform/deep_link_service.dart';
 import 'package:n42_wallet/core/routing/chat_sso_utils.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/utils/app_push_utils.dart';
 import 'package:n42_wallet/features/utils/chat_logout_compat.dart';
 import 'package:n42_wallet/features/wallet/n42_api_hub_bridge.dart';
@@ -115,14 +115,12 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
       final directDebankApiKey = normalizedEnv(envDebankApiKey);
       final directAlchemyApiKey = normalizedEnv(envAlchemyApiKey);
 
-      if (kDebugMode) {
-        for (final line in chatSocialAuthConfig.diagnostics(
-          isAndroid: Platform.isAndroid,
-          isIOS: Platform.isIOS,
-          isMacOS: Platform.isMacOS,
-        )) {
-          debugPrint(line);
-        }
+      for (final line in chatSocialAuthConfig.diagnostics(
+        isAndroid: Platform.isAndroid,
+        isIOS: Platform.isIOS,
+        isMacOS: Platform.isMacOS,
+      )) {
+        AppLogger.d('N42Chat', line);
       }
 
       final String pushAppId;
@@ -140,11 +138,10 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
           roomId: roomId,
           eventId: eventId,
         );
-        if (kDebugMode) {
-          debugPrint(
-            'N42Chat notification tapped: roomId=$roomId, eventId=$eventId',
-          );
-        }
+        AppLogger.d(
+          'N42Chat',
+          'notification tapped: roomId=$roomId, eventId=$eventId',
+        );
       });
 
       await N42Chat.initialize(N42ChatConfig(
@@ -214,9 +211,7 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
           alchemyUseProxyEndpoint: false,
         ),
       ).timeout(const Duration(seconds: 15), onTimeout: () {
-        if (kDebugMode) {
-          debugPrint('[N42Chat] Initialization timed out after 15s');
-        }
+        AppLogger.w('N42Chat', 'Initialization timed out after 15s');
         throw TimeoutException('N42Chat.initialize', const Duration(seconds: 15));
       });
       await flushPendingChatDeepLink();
@@ -238,9 +233,7 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
           globalProviderContainer
               .read(localeProvider.notifier)
               .setLocale(languageCodeFromLocale(locale));
-          if (kDebugMode) {
-            debugPrint('Main app locale synced from N42Chat: $locale');
-          }
+          AppLogger.d('N42Chat', 'Main app locale synced: $locale');
         }
         });
       }
@@ -249,7 +242,7 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
         globalProviderContainer
             .read(unreadCountProvider.notifier)
             .setCount(count);
-        if (kDebugMode) debugPrint('N42Chat unread count updated: $count');
+        AppLogger.d('N42Chat', 'unread count updated: $count');
       });
       _chatUserSubscription?.cancel();
       _chatUserSubscription = N42Chat.userStream.listen((_) {
@@ -284,13 +277,9 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
         globalProviderContainer.read(homeTabIndexProvider.notifier).state = 0;
       });
 
-      if (kDebugMode) {
-        debugPrint(
-          'N42Chat initialized successfully with theme: $currentTheme',
-        );
-      }
-    } catch (e) {
-      if (kDebugMode) debugPrint('N42Chat initialization failed: $e');
+      AppLogger.i('N42Chat', 'initialized successfully with theme: $currentTheme');
+    } catch (e, s) {
+      AppLogger.e('N42Chat', 'initialization failed', error: e, stackTrace: s);
     }
   }
 
@@ -306,11 +295,7 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
   Future<void> routeChatSsoDeepLink(DeepLinkData data) async {
     if (!N42Chat.isInitialized) {
       _pendingChatSsoDeepLink = data;
-      if (kDebugMode) {
-        debugPrint(
-          'Queued chat SSO deep link until N42Chat initializes: $data',
-        );
-      }
+      AppLogger.d('ChatSso', 'queued deep link until N42Chat initializes: $data');
       return;
     }
 
@@ -320,11 +305,10 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
         data.params['token'] ??
         '';
     if (loginToken.isEmpty) {
-      if (kDebugMode) {
-        debugPrint(
-          'Deep link: SSO callback missing login token: ${data.sanitizedUri}',
-        );
-      }
+      AppLogger.w(
+        'ChatSso',
+        'callback missing login token: ${data.sanitizedUri}',
+      );
       return;
     }
 
@@ -333,12 +317,10 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
       fallbackHomeserver: N42Chat.config?.defaultHomeserver,
     );
     if (homeserver == null || homeserver.isEmpty) {
-      if (kDebugMode) {
-        debugPrint(
-          'Deep link: SSO callback missing or invalid homeserver: '
-          '${data.sanitizedUri}',
-        );
-      }
+      AppLogger.w(
+        'ChatSso',
+        'callback missing or invalid homeserver: ${data.sanitizedUri}',
+      );
       return;
     }
 
@@ -347,10 +329,8 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
         homeserver: homeserver,
         loginToken: loginToken,
       );
-    } catch (e) {
-      if (kDebugMode) {
-        debugPrint('Deep link: failed to complete chat SSO login: $e');
-      }
+    } catch (e, s) {
+      AppLogger.e('ChatSso', 'failed to complete login', error: e, stackTrace: s);
     }
   }
 
@@ -372,10 +352,13 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
 
     try {
       await N42Chat.openConversation(roomId, context: navContext);
-    } catch (e) {
-      if (kDebugMode) {
-        debugPrint('Deep link: failed to open conversation $roomId: $e');
-      }
+    } catch (e, s) {
+      AppLogger.e(
+        'ChatDeepLink',
+        'failed to open conversation $roomId',
+        error: e,
+        stackTrace: s,
+      );
       if (!mounted || !navContext.mounted) return;
       await openChatEntry(navContext);
     }
@@ -394,10 +377,13 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
       final roomId = await N42Chat.createDirectMessage(userId);
       if (!mounted || !navContext.mounted) return;
       await N42Chat.openConversation(roomId, context: navContext);
-    } catch (e) {
-      if (kDebugMode) {
-        debugPrint('Deep link: failed to open direct message for $userId: $e');
-      }
+    } catch (e, s) {
+      AppLogger.e(
+        'ChatDeepLink',
+        'failed to open direct message for $userId',
+        error: e,
+        stackTrace: s,
+      );
       if (!mounted || !navContext.mounted) return;
       await openChatEntry(navContext);
     }
@@ -414,10 +400,13 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
 
     try {
       await N42Chat.openUserProfile(userId, context: navContext);
-    } catch (e) {
-      if (kDebugMode) {
-        debugPrint('Deep link: failed to open user profile for $userId: $e');
-      }
+    } catch (e, s) {
+      AppLogger.e(
+        'ChatDeepLink',
+        'failed to open user profile for $userId',
+        error: e,
+        stackTrace: s,
+      );
       if (!mounted || !navContext.mounted) return;
       await openChatEntry(navContext);
     }
@@ -429,9 +418,7 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
   }) async {
     if (!N42Chat.isInitialized) {
       _pendingChatDeepLink = data;
-      if (kDebugMode) {
-        debugPrint('Queued chat deep link until N42Chat initializes: $data');
-      }
+      AppLogger.d('ChatDeepLink', 'queued until N42Chat initializes: $data');
       return;
     }
 

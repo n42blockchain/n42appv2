@@ -11,6 +11,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:n42_wallet/core/utils/app_logger.dart';
+
 abstract class SecureStore {
   Future<String?> read({required String key});
   Future<void> write({required String key, required String value});
@@ -107,14 +109,10 @@ class SecurePreferences {
             await _secureStorage.write(key: key, value: value);
           }
           await _prefs?.remove(key);
-          if (kDebugMode) {
-            debugPrint('[SecurePreferences] Migrated key: $key');
-          }
+          AppLogger.d('SecurePreferences', 'migrated key: $key');
         }
       } catch (e) {
-        if (kDebugMode) {
-          debugPrint('[SecurePreferences] Migration failed for key $key: $e');
-        }
+        AppLogger.w('SecurePreferences', 'migration failed for key $key: $e');
       }
     }
   }
@@ -126,9 +124,7 @@ class SecurePreferences {
     try {
       return jsonDecode(data) as Map<String, dynamic>;
     } catch (e) {
-      if (kDebugMode) {
-        debugPrint('[SecurePreferences] Failed to decode $key: $e');
-      }
+      AppLogger.w('SecurePreferences', 'failed to decode $key: $e');
       return null;
     }
   }

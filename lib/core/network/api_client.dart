@@ -4,8 +4,8 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/security/secure_storage.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 
 /// 应用通用 HTTP 客户端
 ///
@@ -54,17 +54,19 @@ class ApiClient {
           if (token != null && token.isNotEmpty) {
             options.headers['Authorization'] = 'Bearer $token';
           }
-          if (kDebugMode) {
-            final safeHeaders = Map<String, dynamic>.from(options.headers)
-              ..removeWhere((key, _) => _sensitiveHeaders.contains(key));
-            debugPrint('[ApiClient] → ${options.method} ${options.path} headers: $safeHeaders');
-          }
+          final safeHeaders = Map<String, dynamic>.from(options.headers)
+            ..removeWhere((key, _) => _sensitiveHeaders.contains(key));
+          AppLogger.d(
+            'ApiClient',
+            '→ ${options.method} ${options.path} headers: $safeHeaders',
+          );
           handler.next(options);
         },
         onResponse: (response, handler) {
-          if (kDebugMode) {
-            debugPrint('[ApiClient] ← ${response.statusCode} ${response.requestOptions.path}');
-          }
+          AppLogger.d(
+            'ApiClient',
+            '← ${response.statusCode} ${response.requestOptions.path}',
+          );
           handler.next(response);
         },
       ),
@@ -90,11 +92,11 @@ class ApiClient {
             }
           }
 
-          if (kDebugMode) {
-            debugPrint('[ApiClient] ${error.requestOptions.method} '
-                '${error.requestOptions.path} → '
-                '${error.response?.statusCode} ${error.message}');
-          }
+          AppLogger.w(
+            'ApiClient',
+            '${error.requestOptions.method} ${error.requestOptions.path} → '
+            '${error.response?.statusCode} ${error.message}',
+          );
           handler.next(error);
         },
       ),

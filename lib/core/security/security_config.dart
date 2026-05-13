@@ -10,6 +10,7 @@ import 'dart:io';
 
 import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 
 /// 安全配置
 ///
@@ -115,13 +116,20 @@ class SecurityConfig {
       //
       // This branch is only reached in release mode because the caller
       // (line 110) returns true early in debug mode.
-      debugPrint('⚠️ WARNING: SSL Pinning not configured for $host. '
-          'Rejecting untrusted certificate in release mode.');
+      AppLogger.w(
+        'SSLPinning',
+        'not configured for $host — rejecting untrusted cert in release',
+        report: true,
+      );
       return false;
     }
 
     if (allowedCertFingerprints.isEmpty && backupCertFingerprints.isEmpty) {
-      debugPrint('⚠️ WARNING: No certificate fingerprints configured for $host');
+      AppLogger.w(
+        'SSLPinning',
+        'no certificate fingerprints configured for $host',
+        report: true,
+      );
       return false;
     }
 
@@ -131,16 +139,23 @@ class SecurityConfig {
       if (allowedCertFingerprints.contains(fingerprint)) return true;
 
       if (backupCertFingerprints.contains(fingerprint)) {
-        debugPrint('ℹ️ INFO: Using backup certificate for $host');
+        AppLogger.i('SSLPinning', 'using backup certificate for $host');
         return true;
       }
 
-      debugPrint('❌ Certificate fingerprint mismatch for $host');
-      debugPrint('   Expected one of: ${allowedCertFingerprints.join(", ")}');
-      debugPrint('   Got: $fingerprint');
+      AppLogger.e(
+        'SSLPinning',
+        'certificate fingerprint mismatch for $host: '
+        'expected one of ${allowedCertFingerprints.join(", ")}, got $fingerprint',
+      );
       return false;
-    } catch (e) {
-      debugPrint('SSL certificate verification failed: $e');
+    } catch (e, s) {
+      AppLogger.e(
+        'SSLPinning',
+        'verification failed',
+        error: e,
+        stackTrace: s,
+      );
       return false;
     }
   }

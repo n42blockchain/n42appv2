@@ -7,7 +7,6 @@
 
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
@@ -16,6 +15,7 @@ import 'package:n42_wallet/core/security/secure_storage.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/constants/language_constants.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/core/utils/theme_mode_utils.dart';
 import 'package:n42_wallet/data/models/user_info.dart';
 import 'package:n42_wallet/shared/domain/entities/wallet_info.dart';
@@ -63,10 +63,7 @@ class CurrentUserNotifier extends StateNotifier<SharedUserInfo?> {
         state = SharedUserInfo.fromJson(userJson);
       }
     } catch (e) {
-      assert(() {
-        debugPrint('CurrentUserNotifier._loadFromStorage error: $e');
-        return true;
-      }());
+      AppLogger.w('CurrentUser', '_loadFromStorage error: $e');
     }
   }
 
@@ -153,13 +150,16 @@ final appInitProvider = FutureProvider<void>((ref) async {
         secureStorage: secureStorage,
         currentUserNotifier: currentUserNotifier,
       ).timeout(const Duration(seconds: 6), onTimeout: () {
-        if (kDebugMode) {
-          debugPrint('[appInit] _syncActiveUser timed out – continuing anyway');
-        }
+        AppLogger.w('appInit', '_syncActiveUser timed out – continuing anyway');
       });
     }
-  } catch (e) {
-    if (kDebugMode) debugPrint('appInitProvider._getUserInfo error: $e');
+  } catch (e, s) {
+    AppLogger.e(
+      'appInit',
+      '_getUserInfo error',
+      error: e,
+      stackTrace: s,
+    );
   }
 
   ref.read(appLoadStateProvider.notifier).state = Load.finish;

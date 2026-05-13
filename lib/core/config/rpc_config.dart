@@ -4,6 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/foundation.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 
 /// RPC 端点配置
@@ -89,11 +90,11 @@ class RpcConfig {
         .toList();
 
     if (insecureEntries.isNotEmpty) {
-      debugPrint('⚠️ [RpcConfig] WARNING: Insecure HTTP connections detected:');
-      for (final entry in insecureEntries) {
-        debugPrint('   - $entry');
-      }
-      debugPrint('   Consider upgrading to HTTPS or using VPN/proxy');
+      AppLogger.w(
+        'RpcConfig',
+        'insecure HTTP connections detected: ${insecureEntries.join(", ")} '
+        '— consider upgrading to HTTPS or using VPN/proxy',
+      );
     }
   }
 }

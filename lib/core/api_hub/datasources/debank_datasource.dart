@@ -4,7 +4,8 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
+
+import 'package:n42_wallet/core/utils/app_logger.dart';
 
 /// DeBank Open API datasource for DeFi position tracking.
 ///
@@ -55,7 +56,7 @@ class DeBankDatasource {
         response.data as List<dynamic>,
       );
     } catch (e) {
-      debugPrint('DeBank portfolio error: $e');
+      AppLogger.w('DeBank', 'portfolio error: $e');
       return DeFiPortfolio.empty();
     }
   }
@@ -79,7 +80,7 @@ class DeBankDatasource {
           .map((t) => TokenBalance.fromJson(t as Map<String, dynamic>))
           .toList();
     } catch (e) {
-      debugPrint('DeBank token balances error: $e');
+      AppLogger.w('DeBank', 'token balances error: $e');
       return [];
     }
   }
@@ -95,7 +96,7 @@ class DeBankDatasource {
       if (response.statusCode != 200) return 0;
       return (response.data['total_usd_value'] as num?)?.toDouble() ?? 0;
     } catch (e) {
-      debugPrint('DeBank total balance error: $e');
+      AppLogger.w('DeBank', 'total balance error: $e');
       return 0;
     }
   }
