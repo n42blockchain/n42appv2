@@ -149,6 +149,38 @@ class PasskeyPlatformAdapter {
     }
   }
 
+  /// Locate the byte offset where the **value** of a JSON string field starts
+  /// inside [jsonBytes].
+  ///
+  /// **AA on-chain verification contract:** EIP-7212 / P-256 WebAuthn verifier
+  /// contracts (used by Safe / Biconomy / Simple7702 smart accounts) take
+  /// `challengeIndex` and `typeIndex` as inputs and re-parse `clientDataJSON`
+  /// on-chain to assert:
+  ///   1. the "challenge" field's value matches the user-operation hash, and
+  ///   2. the "type" field's value equals `"webauthn.get"`.
+  ///
+  /// The contract reads `clientDataJSON[offset..offset+len]` starting from
+  /// these offsets, so the index must point to the **first byte of the value
+  /// string content** — i.e. the byte right after the opening `"` quote that
+  /// delimits the value, NOT the position of the field name.
+  ///
+  /// Concretely for a `clientDataJSON` like:
+  /// `{"type":"webauthn.get","challenge":"abc","origin":"..."}`
+  ///                  ^^                    ^^^
+  ///                  typeIndex             challengeIndex
+  ///
+  /// This method walks the bytes manually instead of decoding to a UTF-8
+  /// string + `indexOf`, because:
+  ///   - We need the byte offset; decoding to a Dart String loses the byte
+  ///     position when multi-byte UTF-8 characters are present.
+  ///   - `String.indexOf('"challenge"')` would return the position of the
+  ///     FIELD NAME, not the value — that was the bug fixed in 3f4a2163.
+  ///
+  /// Returns `-1` if the key is not found.
+  ///
+  /// **DO NOT** change this to use `String.indexOf` / `utf8.decode` — the
+  /// returned offset must agree byte-for-byte with the on-chain parser, or
+  /// signature verification will silently accept arbitrary challenges.
   static int _jsonStringValueStart(Uint8List jsonBytes, String key) {
     final keyBytes = utf8.encode('"$key"');
     for (var i = 0; i <= jsonBytes.length - keyBytes.length; i++) {

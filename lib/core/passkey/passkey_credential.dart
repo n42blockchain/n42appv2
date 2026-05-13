@@ -143,10 +143,23 @@ class PasskeyAuthResult {
   /// P-256 signature s component (32 bytes, big-endian).
   final BigInt s;
 
-  /// Byte offset where the challenge value starts in clientDataJSON.
+  /// Byte offset where the challenge value content starts in [clientDataJSON].
+  ///
+  /// Points to the byte **immediately after** the opening `"` of the
+  /// `"challenge"` field's value. Consumed by the EIP-7212 / P-256 WebAuthn
+  /// verifier contract to re-parse the user-operation hash on-chain.
+  ///
+  /// See [PasskeyPlatformAdapter._jsonStringValueStart] for the parsing
+  /// contract — the offset semantics must match the on-chain reader byte-for-
+  /// byte or AA signature verification will silently accept arbitrary
+  /// challenges.
   final int challengeIndex;
 
-  /// Byte offset where the type value starts in clientDataJSON.
+  /// Byte offset where the type value content starts in [clientDataJSON].
+  ///
+  /// Same semantics as [challengeIndex]: points to the first byte after the
+  /// opening `"` of the `"type"` field's value. The verifier contract uses
+  /// this to assert `type == "webauthn.get"`.
   final int typeIndex;
 
   PasskeyAuthResult({
