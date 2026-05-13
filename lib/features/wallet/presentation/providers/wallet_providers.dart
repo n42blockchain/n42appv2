@@ -5,8 +5,8 @@
 //
 // Author: Jiang Yiwei
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/providers/core_providers.dart' show spUtilProvider;
@@ -394,7 +394,7 @@ class CoinListNotifier extends AsyncNotifier<List<CoinBalanceData>> {
           (c.coin['coinType'] as String? ?? ''): c,
       };
     } catch (e) {
-      debugPrint('[CoinListNotifier] build modelMap error: $e');
+      AppLogger.w('CoinListNotifier', 'build modelMap error: $e');
     }
 
     return coinInfo.entries

@@ -1,5 +1,7 @@
 
-import 'package:flutter/foundation.dart';
+import 'dart:typed_data';
+
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:web3auth_flutter/enums.dart';
 import 'package:web3auth_flutter/input.dart';
 import 'package:web3auth_flutter/output.dart';
@@ -79,7 +81,7 @@ class Web3AuthMpcProvider implements MpcProvider {
     }
 
     _initialized = true;
-    debugPrint('Web3AuthMpcProvider: initialized, logged_in=$isLoggedIn');
+    AppLogger.d('Web3AuthMpc', 'initialized, logged_in=$isLoggedIn');
   }
 
   @override

@@ -8,6 +8,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
@@ -100,7 +101,7 @@ class _SettingShareState extends State<SettingShare> {
         ),
       );
     } catch (e) {
-      debugPrint("分享截图失败: $e");
+      AppLogger.w('SettingShare', 'share screenshot failed: $e');
     }
   }
 

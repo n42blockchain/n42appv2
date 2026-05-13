@@ -1,6 +1,6 @@
 // Copyright 2021-2026 N42 Inc. All rights reserved.
 
-import 'package:flutter/foundation.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 
 /// Signature validation result
 class SignatureValidationResult {
@@ -113,7 +113,7 @@ class SignatureValidator {
           if (firstByte < 0xc0) {
             // For EIP-1559 transactions, they start with 0x02
             if (firstByte != 0x02 && firstByte != 0x01) {
-              debugPrint('[SignatureValidator] Warning: Unusual RLP prefix: 0x${firstByte.toRadixString(16)}');
+              AppLogger.w('SignatureValidator', 'unusual RLP prefix: 0x${firstByte.toRadixString(16)}');
             }
           }
         }

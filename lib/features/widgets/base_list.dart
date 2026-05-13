@@ -1,4 +1,5 @@
-﻿import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+﻿import 'package:n42_wallet/core/utils/app_logger.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 
@@ -181,7 +182,7 @@ class BaseListState extends State<BaseList> {
       widget.requestCompleted?.call(true);
       setState(() {});
     } catch (err) {
-      debugPrint('baseList err :$err');
+      AppLogger.w('BaseList', 'err: $err');
       if (!mounted) return;
       if (reset) listData = [];
       widget.requestCompleted?.call(false);

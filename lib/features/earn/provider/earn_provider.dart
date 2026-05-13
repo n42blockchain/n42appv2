@@ -5,6 +5,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/legacy.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/staking/api/atom_staking_api.dart';
 import 'package:n42_wallet/features/staking/api/eth_staking_api.dart';
 import 'package:n42_wallet/features/staking/api/sol_staking_api.dart';
@@ -174,7 +175,7 @@ class EarnNotifier extends StateNotifier<EarnState> {
         return (result.data as double).clamp(0.1, 100.0);
       }
     } catch (e) {
-      if (kDebugMode) debugPrint('[EarnProvider] ETH APY error: $e');
+      AppLogger.w('EarnProvider', 'ETH APY error: $e');
     }
     return _kEthApyDefault;
   }
@@ -186,7 +187,7 @@ class EarnNotifier extends StateNotifier<EarnState> {
         return (result.data as double).clamp(0.1, 100.0);
       }
     } catch (e) {
-      if (kDebugMode) debugPrint('[EarnProvider] SOL APY error: $e');
+      AppLogger.w('EarnProvider', 'SOL APY error: $e');
     }
     return _kSolApyDefault;
   }
@@ -200,7 +201,7 @@ class EarnNotifier extends StateNotifier<EarnState> {
         if (apy is num) return apy.toDouble().clamp(0.1, 100.0);
       }
     } catch (e) {
-      if (kDebugMode) debugPrint('[EarnProvider] ATOM APY error: $e');
+      AppLogger.w('EarnProvider', 'ATOM APY error: $e');
     }
     return _kAtomApyDefault;
   }
@@ -285,9 +286,7 @@ class EarnNotifier extends StateNotifier<EarnState> {
       await provider.loadUserPositions(address, chainType);
       accumulator.addAll(provider.positions);
     } catch (e) {
-      if (kDebugMode) {
-        debugPrint('[EarnProvider] load ${chainType.name} positions error: $e');
-      }
+      AppLogger.w('EarnProvider', 'load ${chainType.name} positions error: $e');
     }
   }
 }

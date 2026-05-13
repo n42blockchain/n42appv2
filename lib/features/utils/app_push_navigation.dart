@@ -9,8 +9,9 @@ extension _PushNavigation on AppPushUtils {
   static void handleMessage(Map<String, dynamic> data) {
     final ctx = AppGlobals.navigatorKey.currentContext;
     if (ctx == null) {
-      debugPrint(
-        '[AppPushUtils] _handleMessage: navigator context unavailable, skipping',
+      AppLogger.w(
+        'AppPush',
+        '_handleMessage: navigator context unavailable, skipping',
       );
       return;
     }
@@ -59,7 +60,7 @@ extension _PushNavigation on AppPushUtils {
         }
 
       default:
-        debugPrint("未知消息类型，无法处理");
+        AppLogger.w('AppPush', 'unknown message type, cannot handle');
     }
   }
 
@@ -77,7 +78,7 @@ extension _PushNavigation on AppPushUtils {
       // 清理老 chat 体系遗留的本地通知 ID，避免重复点击。
       flutterLocalNotificationsPlugin.cancel(id: type);
     }
-    debugPrint('Legacy chat notification tapped - routing to n42_chat');
+    AppLogger.d('AppPush', 'legacy chat notification tapped — routing to n42_chat');
     Navigator.push(
       ctx,
       MaterialPageRoute(builder: (_) => N42Chat.chatWidget()),

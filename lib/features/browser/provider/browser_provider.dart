@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/core/security/phishing_detector.dart';
 import 'package:n42_wallet/features/browser/api/browser_api.dart';
 import 'package:n42_wallet/features/browser/pages/browser_collection.dart';
@@ -154,7 +155,7 @@ class BrowserProvider extends ChangeNotifier {
           onPageStarted: (String url) {
             final idx = _indexOfController(wvc);
             if (idx < 0) return;
-            debugPrint('Page started loading: $url');
+            AppLogger.d('Browser', 'page started loading: $url');
             wInfoList[idx]['load'] = true;
             // Re-inject on every navigation so SPAs don't lose the interceptor.
             _injectWcClipboardScript(wvc);
@@ -207,7 +208,7 @@ class BrowserProvider extends ChangeNotifier {
             _safeNotify();
           },
           onHttpError: (HttpResponseError error) {
-            debugPrint('HTTP error: ${error.response?.statusCode}');
+            AppLogger.w('Browser', 'HTTP error: ${error.response?.statusCode}');
           },
         ),
       )
@@ -218,7 +219,7 @@ class BrowserProvider extends ChangeNotifier {
             final preview = message.message.length > 80
                 ? '${message.message.substring(0, 80)}…'
                 : message.message;
-            debugPrint('[Browser] JS clipboard intercept: $preview');
+            AppLogger.d('Browser', 'JS clipboard intercept: $preview');
           }
           _tryHandleWalletConnect(message.message);
         },
@@ -232,9 +233,7 @@ class BrowserProvider extends ChangeNotifier {
         'Version/17.0 Safari/605.1.15',
       )
       ..setOnConsoleMessage((JavaScriptConsoleMessage msg) {
-        if (kDebugMode) {
-          debugPrint('[DApp][${msg.level.name}] ${msg.message}');
-        }
+        AppLogger.d('DApp', '[${msg.level.name}] ${msg.message}');
       });
 
     // Clear localStorage via the native WebKit data store BEFORE loading the
@@ -474,7 +473,7 @@ class BrowserProvider extends ChangeNotifier {
     try {
       await wvc.runJavaScript(_wcClipboardInterceptScript);
     } catch (e) {
-      if (kDebugMode) debugPrint('[Browser] WC clipboard script inject error: $e');
+      AppLogger.w('Browser', 'WC clipboard script inject error: $e');
     }
   }
 

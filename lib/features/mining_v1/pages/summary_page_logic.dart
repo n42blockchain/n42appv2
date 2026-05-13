@@ -189,7 +189,7 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
         setState(() {});
       }
     } catch (err) {
-      if (kDebugMode) debugPrint("err : ${err.toString()}");
+      AppLogger.w('SummaryPage', 'err: $err');
     }
   }
 

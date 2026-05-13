@@ -5,6 +5,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/services/ens_registration_service.dart';
@@ -50,7 +51,7 @@ class _EnsRenewSuccessCardState extends State<EnsRenewSuccessCard> {
         });
       }
     } catch (e) {
-      debugPrint('EnsRenewSuccessCard: failed to toggle reminder: $e');
+      AppLogger.w('EnsRenewSuccess', 'failed to toggle reminder: $e');
       if (mounted) {
         setState(() => _reminderSaving = false);
       }

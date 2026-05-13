@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:xml/xml.dart' as xml;
 
 /// Crypto news fetcher backed by public RSS feeds (no API key required).
@@ -50,7 +51,7 @@ class NewsApi {
       final end = (start + limit).clamp(0, all.length);
       return {'code': 200, 'data': all.sublist(start, end)};
     } catch (e) {
-      debugPrint('NewsApi.newsList error: $e');
+      AppLogger.w('NewsApi', 'newsList error: $e');
       return {'code': 200, 'data': <Map<String, dynamic>>[]};
     }
   }
@@ -86,7 +87,7 @@ class NewsApi {
       if (body == null || body.isEmpty) return const [];
       return _parseRss(body);
     } catch (e) {
-      debugPrint('NewsApi._fetchFeed($url) error: $e');
+      AppLogger.w('NewsApi', '_fetchFeed($url) error: $e');
       return const [];
     }
   }
@@ -114,7 +115,7 @@ class NewsApi {
       }
       return out;
     } catch (e) {
-      debugPrint('NewsApi._parseRss error: $e');
+      AppLogger.w('NewsApi', '_parseRss error: $e');
       return const [];
     }
   }

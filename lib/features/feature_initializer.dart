@@ -5,7 +5,7 @@
 //
 // Author: Jiang Yiwei
 
-import 'package:flutter/foundation.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/shared/contracts/feature_contracts.dart';
 
 /// Feature Initializer
@@ -23,8 +23,9 @@ class FeatureInitializer {
   /// Register a feature module
   void registerFeature(IFeatureModule feature) {
     if (_registeredFeatures.containsKey(feature.featureId)) {
-      debugPrint(
-        '[FeatureInitializer] Warning: Feature ${feature.featureId} already registered',
+      AppLogger.w(
+        'FeatureInitializer',
+        'feature ${feature.featureId} already registered',
       );
       return;
     }
@@ -37,7 +38,7 @@ class FeatureInitializer {
   /// after all its dependencies are initialized.
   Future<void> initializeAll() async {
     if (_isInitialized) {
-      debugPrint('[FeatureInitializer] Already initialized');
+      AppLogger.d('FeatureInitializer', 'already initialized');
       return;
     }
 
@@ -48,7 +49,7 @@ class FeatureInitializer {
     }
 
     _isInitialized = true;
-    debugPrint('[FeatureInitializer] All features initialized');
+    AppLogger.i('FeatureInitializer', 'all features initialized');
   }
 
   /// Initialize a specific feature
@@ -71,9 +72,9 @@ class FeatureInitializer {
     try {
       await feature.initialize();
       _initializedFeatures.add(featureId);
-      debugPrint('[FeatureInitializer] Initialized: ${feature.featureName}');
+      AppLogger.d('FeatureInitializer', 'initialized: ${feature.featureName}');
     } catch (e) {
-      debugPrint('[FeatureInitializer] Failed to initialize $featureId: $e');
+      AppLogger.w('FeatureInitializer', 'failed to initialize $featureId: $e');
       rethrow;
     }
   }
@@ -122,9 +123,9 @@ class FeatureInitializer {
       if (feature != null) {
         try {
           feature.dispose();
-          debugPrint('[FeatureInitializer] Disposed: ${feature.featureName}');
+          AppLogger.d('FeatureInitializer', 'disposed: ${feature.featureName}');
         } catch (e) {
-          debugPrint('[FeatureInitializer] Failed to dispose $featureId: $e');
+          AppLogger.w('FeatureInitializer', 'failed to dispose $featureId: $e');
         }
       }
     }

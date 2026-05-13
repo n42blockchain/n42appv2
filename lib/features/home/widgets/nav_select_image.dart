@@ -1,6 +1,7 @@
 ﻿import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/component/pages/image_crop_page.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:file_picker/file_picker.dart';
@@ -25,7 +26,7 @@ class NavSelectImage extends StatelessWidget {
             if(!context.mounted) return;
             if (result != null) {
               File file = File(result.path);
-              debugPrint("file path-->  ${file.path}");
+              AppLogger.d('NavSelectImage', 'file path: ${file.path}');
               Uint8List imageData=await file.readAsBytes();
               if(!context.mounted) return;
               Uint8List? rImageData=await navigator.push(
@@ -63,7 +64,7 @@ class NavSelectImage extends StatelessWidget {
             final path = result?.files.single.path;
             if (path != null) {
               File file = File(path);
-              debugPrint("file path-->  ${file.path}");
+              AppLogger.d('NavSelectImage', 'file path: ${file.path}');
               Uint8List imageData=await file.readAsBytes();
               if(!context.mounted) return;
               Uint8List? rImageData=await navigator.push(

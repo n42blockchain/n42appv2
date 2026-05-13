@@ -233,7 +233,7 @@ extension on _HomeDrawPageState {
                   if (!mounted) return;
                   Scaffold.of(context).closeDrawer();
                 } catch (err) {
-                  debugPrint("logout err: ${err.toString()}");
+                  AppLogger.w('HomeDraw', 'logout err: $err');
                 }
               }
             } else {

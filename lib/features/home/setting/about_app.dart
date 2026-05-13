@@ -1,4 +1,5 @@
 import 'package:n42_wallet/core/config/app_config.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/browser/pages/browser_page.dart';
 import 'package:n42_wallet/features/home/api/version_api.dart';
 import 'package:n42_wallet/features/home/models/version_info_model.dart';
@@ -42,7 +43,7 @@ class _AboutAppState extends State<AboutApp> {
         await _checkAppLastVersion(packageInfo);
       }
     } catch (e) {
-      debugPrint('AboutApp: failed to initialize version info: $e');
+      AppLogger.w('AboutApp', 'failed to initialize version info: $e');
     }
   }
 
@@ -58,7 +59,7 @@ class _AboutAppState extends State<AboutApp> {
         if (mounted) setState(() {});
       }
     } catch (e) {
-      debugPrint('AboutApp: failed to check app version: $e');
+      AppLogger.w('AboutApp', 'failed to check app version: $e');
     }
   }
 

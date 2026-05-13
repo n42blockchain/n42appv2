@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'package:n42_wallet/core/utils/app_logger.dart';
+
 import 'splash_variants.dart';
 
 /// 启动页面
@@ -82,7 +84,7 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
       if (!mounted) return;
       widget.onComplete();
     } catch (e) {
-      debugPrint('SplashPage: Initialize error: $e');
+      AppLogger.w('SplashPage', 'initialize error: $e');
       await Future.delayed(const Duration(milliseconds: 300));
       if (!mounted) return;
       widget.onComplete();

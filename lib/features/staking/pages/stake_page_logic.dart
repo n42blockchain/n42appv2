@@ -77,7 +77,7 @@ mixin _StakeLogicMixin on State<StakePage> {
         balance = BigInt.tryParse(cm.coin[key] ?? '0') ?? BigInt.zero;
       }
     } catch (e) {
-      debugPrint('[StakePage] _loadBalance error: $e');
+      AppLogger.w('StakePage', '_loadBalance error: $e');
     }
     setState(() => _balance = balance);
   }

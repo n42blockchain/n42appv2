@@ -1,6 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:n42_wallet/core/di/injection.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 
 /// Dedicated MethodChannel wrapper for mining operations.
@@ -77,7 +77,7 @@ class MiningChannel {
     try {
       return await _channel.invokeMethod(method, params);
     } catch (e) {
-      if (kDebugMode) debugPrint('MiningChannel.$method: $e');
+      AppLogger.w('MiningChannel', '$method: $e');
       return null;
     }
   }

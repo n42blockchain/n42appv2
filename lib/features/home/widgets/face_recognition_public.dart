@@ -2,8 +2,8 @@
 
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:local_auth_android/local_auth_android.dart' as auth_android;
@@ -80,10 +80,10 @@ class FaceRecognitionPublic {
           t == BiometricType.fingerprint ||
           t == BiometricType.strong);
     } on PlatformException catch (e) {
-      debugPrint('[Biometric] checkBiometrics error: ${e.code} – ${e.message}');
+      AppLogger.w('Biometric', 'checkBiometrics error: ${e.code} – ${e.message}');
       return false;
     } catch (e) {
-      debugPrint('[Biometric] checkBiometrics unexpected: $e');
+      AppLogger.w('Biometric', 'checkBiometrics unexpected: $e');
       return false;
     }
   }
@@ -126,7 +126,7 @@ class FaceRecognitionPublic {
     } on PlatformException catch (e) {
       return _mapPlatformException(e);
     } catch (e) {
-      debugPrint('[Biometric] authenticateWithBiometrics unexpected: $e');
+      AppLogger.w('Biometric', 'authenticateWithBiometrics unexpected: $e');
       return BiometricAuthResult.failed;
     }
   }
@@ -139,7 +139,7 @@ class FaceRecognitionPublic {
   /// iOS codes:      `NotEnrolled`, `LockedOut`, `NotAvailable`,
   ///                 `PasscodeNotSet`
   BiometricAuthResult _mapPlatformException(PlatformException e) {
-    debugPrint('[Biometric] PlatformException: ${e.code} – ${e.message}');
+    AppLogger.w('Biometric', 'PlatformException: ${e.code} – ${e.message}');
     switch (e.code) {
       case 'NotEnrolled':
         return BiometricAuthResult.notEnrolled;

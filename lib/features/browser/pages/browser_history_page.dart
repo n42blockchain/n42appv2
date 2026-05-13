@@ -1,3 +1,4 @@
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/browser/api/browser_api.dart';
 import 'package:n42_wallet/features/browser/models/browser_history_model.dart';
 import 'package:n42_wallet/core/enums/load.dart';
@@ -65,7 +66,7 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
       lastPage = list.length < pageSize;
       historyList.addAll(list);
     } catch (e) {
-      debugPrint('load browser history failed: $e');
+      AppLogger.w('BrowserHistory', 'load failed: $e');
     } finally {
       if (mounted) {
         loading = Load.finish;

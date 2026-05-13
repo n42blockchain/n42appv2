@@ -7,6 +7,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/services/ens_service.dart';
@@ -158,7 +159,7 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
         preferredChain: widget.coinType,
       );
     } catch (e) {
-      debugPrint('EnsAddressField: failed to resolve ENS: $e');
+      AppLogger.w('EnsAddressField', 'failed to resolve ENS: $e');
       if (!mounted ||
           requestId != _resolveRequestId ||
           widget.controller.text.trim() != ensName) {

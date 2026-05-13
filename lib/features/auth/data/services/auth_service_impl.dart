@@ -8,8 +8,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:injectable/injectable.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/core/security/secure_storage.dart';
@@ -49,10 +49,7 @@ class AuthServiceImpl implements IAuthService {
         _authStateController.add(true);
       }
     } catch (e) {
-      assert(() {
-        debugPrint('Auth init error: $e');
-        return true;
-      }());
+      AppLogger.w('AuthService', 'init error: $e');
       _authStateController.add(false);
     }
   }
@@ -85,10 +82,7 @@ class AuthServiceImpl implements IAuthService {
       }
       return result == 0;
     } catch (e) {
-      assert(() {
-        debugPrint('Password verification error: $e');
-        return true;
-      }());
+      AppLogger.w('AuthService', 'password verification error: $e');
       return false;
     }
   }
@@ -102,10 +96,7 @@ class AuthServiceImpl implements IAuthService {
       final result = await frp.authenticateWithBiometrics();
       return result == BiometricAuthResult.success;
     } catch (e) {
-      assert(() {
-        debugPrint('Biometric auth error: $e');
-        return true;
-      }());
+      AppLogger.w('AuthService', 'biometric auth error: $e');
       return false;
     }
   }
@@ -123,16 +114,10 @@ class AuthServiceImpl implements IAuthService {
       return true;
     } on PasskeyException catch (e) {
       if (e.isCancelled) return false;
-      assert(() {
-        debugPrint('Passkey auth error: $e');
-        return true;
-      }());
+      AppLogger.w('AuthService', 'passkey auth error: $e');
       return false;
     } catch (e) {
-      assert(() {
-        debugPrint('Passkey auth error: $e');
-        return true;
-      }());
+      AppLogger.w('AuthService', 'passkey auth error: $e');
       return false;
     }
   }

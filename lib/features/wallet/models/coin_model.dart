@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model_build_utils.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model_wallet_access.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
@@ -119,7 +119,7 @@ class CoinModel {
     if (address != null) return;
 
     if (walletAccess == null) {
-      debugPrint('CoinModel.buildWallet: walletAccess is required');
+      AppLogger.w('CoinModel', 'buildWallet: walletAccess is required');
       loadError = true;
       return;
     }
@@ -141,7 +141,7 @@ class CoinModel {
 
     final Map<String, dynamic>? pathMap = coin['path'];
     if (pathMap == null) {
-      debugPrint('CoinModel.buildWallet: path is null for $coinType');
+      AppLogger.w('CoinModel', 'buildWallet: path is null for $coinType');
       loadError = true;
       return;
     }
@@ -167,8 +167,9 @@ class CoinModel {
     // 安全检查：确保 rm[addrType] 不为 null 且不为空
     final generatedAddress = rm[addrType];
     if (generatedAddress == null || (generatedAddress as String).isEmpty) {
-      debugPrint(
-        'CoinModel.buildWallet: Failed to generate address for $coinType (addrType: $addrType)',
+      AppLogger.w(
+        'CoinModel',
+        'buildWallet: failed to generate address for $coinType (addrType: $addrType)',
       );
       loadError = true;
       walletAccess.refresh();
@@ -192,7 +193,7 @@ class CoinModel {
       coinPrice = (coin['coinPrice'] as num?)?.toDouble() ?? 0.0;
       value = balanceDoubleAll() * coinPrice;
     } catch (e) {
-      debugPrint('CoinModel.getBalanceDefault error: $e');
+      AppLogger.w('CoinModel', 'getBalanceDefault error: $e');
       balance = BigInt.zero;
       percentage = 0.0;
       coinPrice = 0.0;
@@ -207,7 +208,7 @@ class CoinModel {
   }) async {
     walletAccess ??= this.walletAccess;
     if (walletAccess == null) {
-      debugPrint('CoinModel.getBalance: walletAccess is required');
+      AppLogger.w('CoinModel', 'getBalance: walletAccess is required');
       return false;
     }
     try {
@@ -227,7 +228,7 @@ class CoinModel {
       walletAccess.calculateBalanceWidthCoinModel();
       return true;
     } catch (e) {
-      debugPrint('CoinModel.getBalance error: $e');
+      AppLogger.w('CoinModel', 'getBalance error: $e');
       loadError = true;
       isRefresh = false;
       walletAccess.refresh();

@@ -1,5 +1,7 @@
 
-import 'package:flutter/foundation.dart';
+import 'dart:typed_data';
+
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/wallet/api/transfer/transfer_handler.dart';
 import 'package:n42_wallet/features/wallet/api/transfer/handlers/base_transfer_handler.dart';
@@ -65,13 +67,13 @@ class MpcTransferHandler extends BaseTransferHandler {
       // The actual transaction building depends on the chain's RPC
       // For MPC, we sign the transaction hash and broadcast
 
-      debugPrint('MpcTransferHandler: signing tx for ${params.chainSymbol}');
+      AppLogger.d('MpcTransferHandler', 'signing tx for ${params.chainSymbol}');
 
       // Create a simple ETH/ERC-20 transfer transaction
       final txBytes = _buildUnsignedTx(params);
       final signResult = await provider.signTransaction(txBytes);
 
-      debugPrint('MpcTransferHandler: signed, broadcasting...');
+      AppLogger.d('MpcTransferHandler', 'signed, broadcasting...');
 
       // In a full implementation, broadcast the signed tx via RPC
       // For now, return the signature as proof of concept
@@ -83,7 +85,7 @@ class MpcTransferHandler extends BaseTransferHandler {
         'chain': params.chainSymbol,
       });
     } catch (e) {
-      debugPrint('MpcTransferHandler error: $e');
+      AppLogger.w('MpcTransferHandler', 'error: $e');
       return createError(e.toString());
     }
   }

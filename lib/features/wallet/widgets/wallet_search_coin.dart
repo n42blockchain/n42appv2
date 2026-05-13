@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:n42_wallet/core/storage/sp_util.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/utils/regular.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
@@ -80,7 +81,7 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
       final history = await SPUtil().getCoinSearchHistory();
       if (mounted) setState(() => _history = history);
     } catch (e) {
-      debugPrint('WalletSearchCoin._loadHistory error: $e');
+      AppLogger.w('WalletSearchCoin', '_loadHistory error: $e');
     }
   }
 
@@ -96,7 +97,7 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
     _saveHistoryDebounce?.cancel();
     _saveHistoryDebounce = Timer(_historyIoDuration, () {
       SPUtil().saveCoinSearchHistory(updated).catchError((e) {
-        debugPrint('WalletSearchCoin._saveToHistory error: $e');
+        AppLogger.w('WalletSearchCoin', '_saveToHistory error: $e');
       });
     });
   }
@@ -108,7 +109,7 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
     try {
       await SPUtil().saveCoinSearchHistory(updated);
     } catch (e) {
-      debugPrint('WalletSearchCoin._removeFromHistory error: $e');
+      AppLogger.w('WalletSearchCoin', '_removeFromHistory error: $e');
       if (mounted) {
         setState(() => _history = previous);
       }
@@ -121,7 +122,7 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
     try {
       await SPUtil().saveCoinSearchHistory([]);
     } catch (e) {
-      debugPrint('WalletSearchCoin._clearHistory error: $e');
+      AppLogger.w('WalletSearchCoin', '_clearHistory error: $e');
       if (mounted) {
         setState(() => _history = previous);
       }

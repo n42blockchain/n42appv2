@@ -1,3 +1,4 @@
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/browser/api/browser_api.dart';
 import 'package:n42_wallet/features/browser/models/browser_collection_model.dart';
 import 'package:n42_wallet/features/browser/pages/browser_collection_info.dart';
@@ -68,7 +69,7 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
       lastPage = cList.length < pageSize;
       collectionList.addAll(cList);
     } catch (e) {
-      debugPrint('load browser collection failed: $e');
+      AppLogger.w('BrowserCollection', 'load failed: $e');
     } finally {
       if (mounted) {
         loading = Load.finish;
