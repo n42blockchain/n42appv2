@@ -6,6 +6,7 @@ import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
+import 'package:n42_wallet/features/utils/chat_tap_dedup.dart';
 import 'package:n42_wallet/main.dart' show globalProviderContainer;
 import 'package:n42_wallet/features/browser/pages/browser_page.dart';
 import 'package:n42_wallet/features/home/setting/about_app.dart';
@@ -526,18 +527,14 @@ class AppPushUtils {
     required String roomId,
     String? eventId,
   }) {
-    final handledAt = _lastHandledChatTapAt;
-    if (handledAt == null ||
-        _lastHandledChatRoomId == null ||
-        DateTime.now().difference(handledAt) > _chatTapDedupWindow) {
-      return false;
-    }
-
-    return _matchesChatTap(
+    return wasChatNotificationHandledRecently(
       roomId: roomId,
       eventId: eventId,
-      otherRoomId: _lastHandledChatRoomId,
-      otherEventId: _lastHandledChatEventId,
+      handledRoomId: _lastHandledChatRoomId,
+      handledEventId: _lastHandledChatEventId,
+      handledAt: _lastHandledChatTapAt,
+      now: DateTime.now(),
+      dedupWindow: _chatTapDedupWindow,
     );
   }
 
@@ -547,17 +544,12 @@ class AppPushUtils {
     required String? otherRoomId,
     String? otherEventId,
   }) {
-    if (otherRoomId == null || roomId != otherRoomId) {
-      return false;
-    }
-
-    final normalizedEventId = eventId?.trim() ?? '';
-    final normalizedOtherEventId = otherEventId?.trim() ?? '';
-    if (normalizedEventId.isEmpty || normalizedOtherEventId.isEmpty) {
-      return true;
-    }
-
-    return normalizedEventId == normalizedOtherEventId;
+    return chatTapMatches(
+      roomId: roomId,
+      eventId: eventId,
+      otherRoomId: otherRoomId,
+      otherEventId: otherEventId,
+    );
   }
 
   static void _clearPendingChatNotification() {
