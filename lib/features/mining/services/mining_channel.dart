@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
-import 'package:n42_wallet/core/di/injection.dart';
+import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
+import 'package:n42_wallet/main.dart' show globalProviderContainer;
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 
 /// Dedicated MethodChannel wrapper for mining operations.
@@ -50,7 +51,10 @@ class MiningChannel {
 
   Future<MessageModel> liveActivityStart() async {
     try {
-      final int type = await spUtil.getBackgroundMiningMusic() ?? 0;
+      final int type = await globalProviderContainer
+              .read(spUtilProvider)
+              .getBackgroundMiningMusic() ??
+          0;
       final String rData = await _channel.invokeMethod(
         'LiveActivityStart',
         <String, dynamic>{'type': type},

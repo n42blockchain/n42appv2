@@ -6,8 +6,6 @@
 // Author: Jiang Yiwei
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:get_it/get_it.dart';
-import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/shared/di/service_locator.dart';
 import 'package:n42_wallet/features/wallet/data/services/wallet_service_impl.dart';
 import 'package:n42_wallet/features/mining/data/services/mining_service_impl.dart';
@@ -18,18 +16,33 @@ import 'package:n42_wallet/features/mining/data/services/mining_service_impl.dar
 /// implementations to wire them to shared interfaces. This is an accepted
 /// exception to the "core must not import features" rule.
 ///
-/// GetIt is being phased out — only services with active `getIt<T>()` callers
-/// remain registered here (SPUtil and MiningServiceImpl). Everything else is
-/// either exposed as a Riverpod provider (see
-/// `lib/core/providers/service_providers.dart`) or instantiated inline at the
-/// call site.
-final GetIt getIt = GetIt.instance;
+/// All cross-feature singletons are now exposed through Riverpod (see
+/// `lib/core/providers/service_providers.dart` and `core_providers.dart`).
+/// [ServiceLocatorSetup] still holds the canonical `IWalletService` /
+/// `IMiningService` instances internally (it remains a thin GetIt wrapper);
+/// the providers read through it.
 
 /// Environment Types
 enum Env { dev, staging, prod }
 
 /// Global ProviderContainer reference (set during initialization)
 ProviderContainer? _providerContainer;
+
+/// The [MiningServiceImpl] created during dependency configuration.
+///
+/// Exposed for [main.dart]'s post-init `attachToV2Provider` wiring — the
+/// adapter has to bind after both `globalMiningInstance` and the service
+/// exist, and that order is enforced by main.dart itself, not Riverpod.
+MiningServiceImpl? _miningServiceImpl;
+MiningServiceImpl get miningServiceImpl {
+  final svc = _miningServiceImpl;
+  if (svc == null) {
+    throw StateError(
+      'MiningServiceImpl not initialized. Call configureDependencies() first.',
+    );
+  }
+  return svc;
+}
 
 /// Get the global ProviderContainer
 ProviderContainer get providerContainer {
@@ -39,13 +52,6 @@ ProviderContainer get providerContainer {
     );
   }
   return _providerContainer!;
-}
-
-/// Register [T] with GetIt only if not already registered.
-void _registerIfAbsent<T extends Object>(T Function() factory) {
-  if (!getIt.isRegistered<T>()) {
-    getIt.registerLazySingleton<T>(factory);
-  }
 }
 
 /// Configure Dependencies
@@ -60,39 +66,24 @@ Future<void> configureDependencies(
 }) async {
   _providerContainer = container;
 
-  // Core storage: SPUtil is consumed via the [spUtil] getter (22+ call sites
-  // not yet migrated to [spUtilProvider]). AppDatabase, WalletSdk, TokenViewApi
-  // and SecureStorage are no longer registered — callers instantiate them
-  // directly (they are all stateless or platform-singletons).
-  _registerIfAbsent<SPUtil>(() => SPUtil());
-
-  // Shared service locator
+  // Shared service locator (initializes the GetIt singleton used internally
+  // by ServiceLocatorSetup).
   await ServiceLocatorSetup.initialize();
 
-  // Feature services. The local refs are kept for the duration of this call
-  // so they can be handed to [ServiceLocatorSetup]; GetIt only retains
-  // MiningServiceImpl because the [miningServiceImpl] getter still has one
-  // caller in main.dart for attachToV2Provider wiring.
   if (!ServiceLocatorSetup.hasWalletService) {
     ServiceLocatorSetup.registerWalletService(WalletServiceImpl(container));
   }
 
-  if (!getIt.isRegistered<MiningServiceImpl>()) {
+  if (!ServiceLocatorSetup.hasMiningService) {
     final miningService = MiningServiceImpl();
-    getIt.registerSingleton<MiningServiceImpl>(miningService);
+    _miningServiceImpl = miningService;
     ServiceLocatorSetup.registerMiningService(miningService);
   }
 }
 
 /// Reset dependencies (for testing)
 Future<void> resetDependencies() async {
-  await getIt.reset();
   await ServiceLocatorSetup.reset();
+  _miningServiceImpl = null;
   _providerContainer = null;
 }
-
-/// Convenience accessors. Other services are consumed via Riverpod providers
-/// or instantiated inline. See lib/core/providers/service_providers.dart for
-/// the Riverpod surface preferred by new code.
-SPUtil get spUtil => getIt<SPUtil>();
-MiningServiceImpl get miningServiceImpl => getIt<MiningServiceImpl>();
