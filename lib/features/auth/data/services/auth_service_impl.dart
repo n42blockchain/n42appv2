@@ -18,7 +18,15 @@ import 'package:n42_wallet/features/home/widgets/face_recognition_public.dart';
 import 'package:n42_wallet/core/passkey/passkey_service.dart';
 import 'package:n42_wallet/core/passkey/passkey_platform_adapter.dart';
 
-/// Implementation of IAuthService
+/// Implementation of [IAuthService].
+///
+/// **Not yet wired into production.** Kept as the canonical reference
+/// implementation of the designed auth surface; see the dartdoc on
+/// [IAuthService] for the gap between this and the live
+/// [AppGlobals]-backed path. The providers below ([authServiceProvider],
+/// [authStateProvider], [currentAuthUserProvider], [isLoggedInProvider])
+/// have no consumers yet — leaving them in place so a future migration
+/// has a stable entry point.
 class AuthServiceImpl implements IAuthService {
   final SPUtil _spUtil;
   final SecureStorage _secureStorage;
