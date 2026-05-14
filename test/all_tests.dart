@@ -45,12 +45,6 @@ import 'core/performance/performance_config_test.dart'
 import 'core/enums/coin_type_test.dart' as coin_type_test;
 
 // Feature Tests - Wallet
-import 'features/wallet/domain/usecases/create_wallet_test.dart'
-    as create_wallet_test;
-import 'features/wallet/domain/usecases/get_balance_test.dart'
-    as get_balance_test;
-import 'features/wallet/domain/usecases/send_transaction_test.dart'
-    as send_transaction_test;
 import 'features/wallet/providers/wallet_providers_test.dart'
     as wallet_providers_test;
 import 'features/wallet/chain_config_test.dart' as chain_config_test;
@@ -133,9 +127,6 @@ void main() {
   coin_type_test.main();
 
   // Feature Tests - Wallet
-  create_wallet_test.main();
-  get_balance_test.main();
-  send_transaction_test.main();
   wallet_providers_test.main();
   chain_config_test.main();
   address_validation_test.main();

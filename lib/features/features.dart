@@ -5,7 +5,6 @@
 //
 // Author: Jiang Yiwei
 
-export 'wallet/wallet.dart';
 export 'mining/mining.dart';
 export 'browser/browser.dart';
 export 'auth/auth.dart';
