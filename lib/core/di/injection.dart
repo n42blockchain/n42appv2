@@ -28,15 +28,16 @@ enum Env { dev, staging, prod }
 /// Global ProviderContainer reference (set during initialization)
 ProviderContainer? _providerContainer;
 
-/// The [MiningServiceImpl] created during dependency configuration.
+/// Concrete [MiningServiceImpl] view of the registered [IMiningService].
 ///
-/// Exposed for [main.dart]'s post-init `attachToV2Provider` wiring — the
-/// adapter has to bind after both `globalMiningInstance` and the service
-/// exist, and that order is enforced by main.dart itself, not Riverpod.
-MiningServiceImpl? _miningServiceImpl;
+/// Exposed for [main.dart]'s post-init `attachToV2Provider` wiring, which
+/// needs the concrete subclass (not on the [IMiningService] interface).
+/// Reads through [ServiceLocatorSetup] so there is a single source of
+/// truth — `configureDependencies` always registers a [MiningServiceImpl],
+/// so the cast is safe.
 MiningServiceImpl get miningServiceImpl {
-  final svc = _miningServiceImpl;
-  if (svc == null) {
+  final svc = ServiceLocatorSetup.miningService;
+  if (svc is! MiningServiceImpl) {
     throw StateError(
       'MiningServiceImpl not initialized. Call configureDependencies() first.',
     );
@@ -75,15 +76,12 @@ Future<void> configureDependencies(
   }
 
   if (!ServiceLocatorSetup.hasMiningService) {
-    final miningService = MiningServiceImpl();
-    _miningServiceImpl = miningService;
-    ServiceLocatorSetup.registerMiningService(miningService);
+    ServiceLocatorSetup.registerMiningService(MiningServiceImpl());
   }
 }
 
 /// Reset dependencies (for testing)
 Future<void> resetDependencies() async {
   await ServiceLocatorSetup.reset();
-  _miningServiceImpl = null;
   _providerContainer = null;
 }

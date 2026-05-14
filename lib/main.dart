@@ -287,10 +287,7 @@ class _N42AppV2State extends ConsumerState<N42AppV2>
   void dispose() {
     disposeChatSubscriptions();
     _deepLinkHandler?.dispose();
-    final service = _deepLinkService;
-    if (service != null) {
-      unawaited(service.dispose());
-    }
+    unawaited(_deepLinkService?.dispose());
     super.dispose();
   }
 
