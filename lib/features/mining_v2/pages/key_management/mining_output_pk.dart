@@ -43,14 +43,13 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
     final walletService = globalProviderContainer.read(walletServiceProvider);
     if (walletService == null) return "";
 
-    final miningIndex = walletService.miningWalletIndex;
-    final privateKey = await walletService.getPrivateKeyForWallet(miningIndex);
-    final mnemonic = await walletService.getMnemonicForWallet(miningIndex);
+    final credentials =
+        await walletService.getCredentials(walletService.miningWalletIndex);
 
     encrypteData = {
       'validator': _localValue,
-      "privateKey": privateKey ?? "",
-      "mnemonicWords": mnemonic ?? "",
+      "privateKey": credentials.privateKey,
+      "mnemonicWords": credentials.mnemonic,
     };
     return await encryptSecret(data: encrypteData!, password: password);
   }

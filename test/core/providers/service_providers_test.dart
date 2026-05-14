@@ -47,6 +47,11 @@ class _FakeWalletService implements IWalletService {
   @override
   Future<WalletBalanceInfo?> getBalance(String address, String coinType) async => null;
   @override
+  Future<({String mnemonic, String privateKey})> getCredentials(
+    int walletIndex,
+  ) async =>
+      (mnemonic: '', privateKey: '');
+  @override
   Future<void> refreshWallets() async {}
 }
 

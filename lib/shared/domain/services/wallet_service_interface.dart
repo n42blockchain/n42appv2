@@ -29,6 +29,14 @@ abstract class IWalletService {
   Future<String?> getMnemonicForWallet(int walletIndex);
   Future<WalletBalanceInfo?> getBalance(String address, String coinType);
 
+  /// Read the mnemonic and private key for [walletIndex] together.
+  ///
+  /// Missing fields are returned as empty strings, matching the long-
+  /// standing contract relied on by chains that derive their signatures
+  /// from the N-coin private key (see [getPrivateKeyForWallet] which
+  /// already falls back to mnemonic-derived N-coin keys).
+  Future<({String mnemonic, String privateKey})> getCredentials(int walletIndex);
+
   /// Refresh wallet list from storage after external modifications.
   Future<void> refreshWallets();
 }

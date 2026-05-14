@@ -190,6 +190,15 @@ class WalletServiceImpl implements IWalletService {
   }
 
   @override
+  Future<({String mnemonic, String privateKey})> getCredentials(
+    int walletIndex,
+  ) async {
+    final mnemonic = await getMnemonicForWallet(walletIndex) ?? '';
+    final privateKey = await getPrivateKeyForWallet(walletIndex) ?? '';
+    return (mnemonic: mnemonic, privateKey: privateKey);
+  }
+
+  @override
   Future<WalletBalanceInfo?> getBalance(String address, String coinType) async {
     try {
       final wallet = getWalletByAddress(address);

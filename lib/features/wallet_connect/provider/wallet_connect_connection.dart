@@ -456,11 +456,8 @@ mixin WalletConnectConnection on ChangeNotifier {
   Future<({String mnemonic, String privateKey})>
       getCurrentWalletCredentials() async {
     final walletService = globalProviderContainer.read(walletServiceProvider);
-    final currentIndex = walletService?.miningWalletIndex ?? 0;
-    final mnemonic =
-        await walletService?.getMnemonicForWallet(currentIndex) ?? "";
-    final pk = await walletService?.getPrivateKeyForWallet(currentIndex) ?? "";
-    return (mnemonic: mnemonic, privateKey: pk);
+    if (walletService == null) return (mnemonic: '', privateKey: '');
+    return walletService.getCredentials(walletService.miningWalletIndex);
   }
 
   // ── Abstract methods to be implemented by the concrete class ──────────────

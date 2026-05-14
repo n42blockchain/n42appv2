@@ -37,10 +37,7 @@ mixin _MiningFullNodeV2LogicMixin on ConsumerState<MiningFullNodeV2> {
       final coinInfo = walletService.getCoinInfoForWallet(miningIndex);
       if (coinInfo == null) return;
 
-      final mnemonic =
-          await walletService.getMnemonicForWallet(miningIndex);
-      final privateKey =
-          await walletService.getPrivateKeyForWallet(miningIndex);
+      final credentials = await walletService.getCredentials(miningIndex);
 
       final astMap = coinInfo[CoinType.N.name];
       if (astMap == null) return;
@@ -52,7 +49,7 @@ mixin _MiningFullNodeV2LogicMixin on ConsumerState<MiningFullNodeV2> {
       Trustdart trustdart = Trustdart();
       var addressMap = await trustdart.generateAddress(
           CoinType.N.name, path, 'legacy',
-          mnemonic: mnemonic ?? "", pk: privateKey ?? "");
+          mnemonic: credentials.mnemonic, pk: credentials.privateKey);
       final astAddress = addressMap['legacy'];
 
       final bool isTest = astMap['isTest'] == true;
