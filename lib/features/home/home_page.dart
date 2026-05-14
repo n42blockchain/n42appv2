@@ -15,7 +15,7 @@ import 'package:n42_wallet/features/mining_v2/pages/mining_today_v2.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_page.dart';
-import 'package:n42_wallet/features/wallet/pages/market/market_page.dart';
+import 'package:n42_wallet/features/news/news_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -59,8 +59,8 @@ class _HomePageState extends ConsumerState<HomePage>
     return [
       const WalletPage(),
       useV2 ? const MiningTodayV2() : const MiningHomePage(),
-      if(Platform.isAndroid)const EarnPage(),
-      const MarketPage(),
+      if (Platform.isAndroid) const EarnPage(),
+      const NewsPage(),
     ];
   }
 

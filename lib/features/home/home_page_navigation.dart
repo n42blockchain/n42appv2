@@ -5,15 +5,21 @@ part of 'home_page.dart';
 extension on _HomePageState {
   /// iPad 横屏侧边导航栏
   Widget buildNavigationRail(int currentIndex) {
-    final selectedColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
-    final unselectedColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+    final selectedColor = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.mainBlueColor.name,
+    );
+    final unselectedColor = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.mainTextColor.name,
+    );
 
     return NavigationRail(
       selectedIndex: currentIndex,
       onDestinationSelected: (index) {
-        int indexState=3;
-        if(Platform.isAndroid){
-          indexState=4;
+        int indexState = 3;
+        if (Platform.isAndroid) {
+          indexState = 4;
         }
         if (index < indexState) {
           ref.read(homeTabIndexProvider.notifier).state = index;
@@ -21,7 +27,10 @@ extension on _HomePageState {
           _navigateToChat();
         }
       },
-      backgroundColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+      backgroundColor: AppThemeUtils.getColorByKey(
+        context,
+        AppThemeKeys.itemBgColor.name,
+      ),
       selectedIconTheme: IconThemeData(color: selectedColor),
       unselectedIconTheme: IconThemeData(color: unselectedColor),
       labelType: NavigationRailLabelType.all,
@@ -38,29 +47,79 @@ extension on _HomePageState {
       ),
       destinations: [
         NavigationRailDestination(
-          icon: Image.asset("assets/home/tabbar/wallet.png", width: 22, height: 22, color: unselectedColor),
-          selectedIcon: Image.asset("assets/home/tabbar/wallet.png", width: 22, height: 22, color: selectedColor),
+          icon: Image.asset(
+            "assets/home/tabbar/wallet.png",
+            width: 22,
+            height: 22,
+            color: unselectedColor,
+          ),
+          selectedIcon: Image.asset(
+            "assets/home/tabbar/wallet.png",
+            width: 22,
+            height: 22,
+            color: selectedColor,
+          ),
           label: Text(S.of(context).g_key_6),
         ),
         NavigationRailDestination(
-          icon: Image.asset("assets/home/setting/mining.png", width: 22, height: 22, color: unselectedColor),
-          selectedIcon: Image.asset("assets/home/setting/mining.png", width: 22, height: 22, color: selectedColor),
+          icon: Image.asset(
+            "assets/home/setting/mining.png",
+            width: 22,
+            height: 22,
+            color: unselectedColor,
+          ),
+          selectedIcon: Image.asset(
+            "assets/home/setting/mining.png",
+            width: 22,
+            height: 22,
+            color: selectedColor,
+          ),
           label: Text(S.of(context).g_home_key3),
         ),
-        if(Platform.isAndroid)
+        if (Platform.isAndroid)
+          NavigationRailDestination(
+            icon: Image.asset(
+              "assets/home/tabbar/earn.png",
+              width: 22,
+              height: 22,
+              color: unselectedColor,
+            ),
+            selectedIcon: Image.asset(
+              "assets/home/tabbar/earn.png",
+              width: 22,
+              height: 22,
+              color: selectedColor,
+            ),
+            label: Text(S.of(context).g_key_earn_title),
+          ),
         NavigationRailDestination(
-          icon: Image.asset("assets/home/tabbar/earn.png", width: 22, height: 22, color: unselectedColor),
-          selectedIcon: Image.asset("assets/home/tabbar/earn.png", width: 22, height: 22, color: selectedColor),
-          label: const Text('Earn'),
+          icon: Image.asset(
+            "assets/home/tabbar/news.png",
+            width: 22,
+            height: 22,
+            color: unselectedColor,
+          ),
+          selectedIcon: Image.asset(
+            "assets/home/tabbar/news.png",
+            width: 22,
+            height: 22,
+            color: selectedColor,
+          ),
+          label: Text(S.of(context).g_home_key2),
         ),
         NavigationRailDestination(
-          icon: Image.asset("assets/home/tabbar/news.png", width: 22, height: 22, color: unselectedColor),
-          selectedIcon: Image.asset("assets/home/tabbar/news.png", width: 22, height: 22, color: selectedColor),
-          label: const Text('Market'),
-        ),
-        NavigationRailDestination(
-          icon: Image.asset("assets/home/tabbar/chat.png", width: 22, height: 22, color: unselectedColor),
-          selectedIcon: Image.asset("assets/home/tabbar/chat.png", width: 22, height: 22, color: selectedColor),
+          icon: Image.asset(
+            "assets/home/tabbar/chat.png",
+            width: 22,
+            height: 22,
+            color: unselectedColor,
+          ),
+          selectedIcon: Image.asset(
+            "assets/home/tabbar/chat.png",
+            width: 22,
+            height: 22,
+            color: selectedColor,
+          ),
           label: Text(S.of(context).g_key_squad),
         ),
       ],
@@ -76,59 +135,92 @@ extension on _HomePageState {
     final fontSize = isWide ? 11.0 : ScreenUtil().setSp(20.0);
     final borderWidth = isWide ? 0.5 : ScreenUtil().setWidth(0.8);
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    List<Widget> bottomItems=[];
-    if(Platform.isAndroid){
-      bottomItems=[
+    List<Widget> bottomItems = [];
+    if (Platform.isAndroid) {
+      bottomItems = [
         _buildBottomItem(
-            S.of(context).g_key_6, 0, "assets/home/tabbar/wallet.png",
-            _tabTwo, 5,
-            fixedIconSize: isWide ? iconSize : null,
-            fixedFontSize: isWide ? fontSize : null),
+          S.of(context).g_key_6,
+          0,
+          "assets/home/tabbar/wallet.png",
+          _tabTwo,
+          5,
+          fixedIconSize: isWide ? iconSize : null,
+          fixedFontSize: isWide ? fontSize : null,
+        ),
         _buildBottomItem(
-            S.of(context).g_home_key3, 1, "assets/home/setting/mining.png",
-            _tabThree, 5,
-            fixedIconSize: isWide ? iconSize : null,
-            fixedFontSize: isWide ? fontSize : null),
+          S.of(context).g_home_key3,
+          1,
+          "assets/home/setting/mining.png",
+          _tabThree,
+          5,
+          fixedIconSize: isWide ? iconSize : null,
+          fixedFontSize: isWide ? fontSize : null,
+        ),
         _buildBottomItem(
-            'Earn', 2, "assets/home/tabbar/earn.png",
-            _tabFour, 5,
-            fixedIconSize: isWide ? iconSize : null,
-            fixedFontSize: isWide ? fontSize : null),
+          S.of(context).g_key_earn_title,
+          2,
+          "assets/home/tabbar/earn.png",
+          _tabFour,
+          5,
+          fixedIconSize: isWide ? iconSize : null,
+          fixedFontSize: isWide ? fontSize : null,
+        ),
         _buildBottomItem(
-            'Market', 3, "assets/home/tabbar/news.png",
-            _tabSix, 5,
-            fixedIconSize: isWide ? iconSize : null,
-            fixedFontSize: isWide ? fontSize : null),
+          S.of(context).g_home_key2,
+          3,
+          "assets/home/tabbar/news.png",
+          _tabSix,
+          5,
+          fixedIconSize: isWide ? iconSize : null,
+          fixedFontSize: isWide ? fontSize : null,
+        ),
         _buildChatBottomItem(
-            S.of(context).g_key_squad, "assets/home/tabbar/chat.png",
-            _tabFive, 5,
-            fixedIconSize: isWide ? iconSize : null,
-            fixedFontSize: isWide ? fontSize : null),
+          S.of(context).g_key_squad,
+          "assets/home/tabbar/chat.png",
+          _tabFive,
+          5,
+          fixedIconSize: isWide ? iconSize : null,
+          fixedFontSize: isWide ? fontSize : null,
+        ),
       ];
-    }else{
-      bottomItems=[
+    } else {
+      bottomItems = [
         _buildBottomItem(
-            S.of(context).g_key_6, 0, "assets/home/tabbar/wallet.png",
-            _tabTwo, 4,
-            fixedIconSize: isWide ? iconSize : null,
-            fixedFontSize: isWide ? fontSize : null),
+          S.of(context).g_key_6,
+          0,
+          "assets/home/tabbar/wallet.png",
+          _tabTwo,
+          4,
+          fixedIconSize: isWide ? iconSize : null,
+          fixedFontSize: isWide ? fontSize : null,
+        ),
         _buildBottomItem(
-            S.of(context).g_home_key3, 1, "assets/home/setting/mining.png",
-            _tabThree, 4,
-            fixedIconSize: isWide ? iconSize : null,
-            fixedFontSize: isWide ? fontSize : null),
+          S.of(context).g_home_key3,
+          1,
+          "assets/home/setting/mining.png",
+          _tabThree,
+          4,
+          fixedIconSize: isWide ? iconSize : null,
+          fixedFontSize: isWide ? fontSize : null,
+        ),
         _buildBottomItem(
-            'Market', 2, "assets/home/tabbar/news.png",
-            _tabSix, 4,
-            fixedIconSize: isWide ? iconSize : null,
-            fixedFontSize: isWide ? fontSize : null),
+          S.of(context).g_home_key2,
+          2,
+          "assets/home/tabbar/news.png",
+          _tabSix,
+          4,
+          fixedIconSize: isWide ? iconSize : null,
+          fixedFontSize: isWide ? fontSize : null,
+        ),
         _buildChatBottomItem(
-            S.of(context).g_key_squad, "assets/home/tabbar/chat.png",
-            _tabFive, 4,
-            fixedIconSize: isWide ? iconSize : null,
-            fixedFontSize: isWide ? fontSize : null),
+          S.of(context).g_key_squad,
+          "assets/home/tabbar/chat.png",
+          _tabFive,
+          4,
+          fixedIconSize: isWide ? iconSize : null,
+          fixedFontSize: isWide ? fontSize : null,
+        ),
       ];
-
     }
 
     return Container(
@@ -138,10 +230,17 @@ extension on _HomePageState {
       decoration: BoxDecoration(
         border: Border(
           top: BorderSide(
-              width: borderWidth,
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name).withAlpha(80)),
+            width: borderWidth,
+            color: AppThemeUtils.getColorByKey(
+              context,
+              AppThemeKeys.dividerColor.name,
+            ).withAlpha(80),
+          ),
         ),
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: AppThemeUtils.getColorByKey(
+          context,
+          AppThemeKeys.itemBgColor.name,
+        ),
         boxShadow: [
           BoxShadow(
             color: isDark
@@ -161,13 +260,21 @@ extension on _HomePageState {
   }
 
   /// 构建聊天 Tab（点击跳转到独立页面）
-  Widget _buildChatBottomItem(String title, String imagePath, GlobalKey key, int pagesLength,
-      {double? fixedIconSize, double? fixedFontSize}) {
+  Widget _buildChatBottomItem(
+    String title,
+    String imagePath,
+    GlobalKey key,
+    int pagesLength, {
+    double? fixedIconSize,
+    double? fixedFontSize,
+  }) {
     final width = MediaQuery.of(context).size.width / pagesLength;
     final iSize = fixedIconSize ?? ScreenUtil().setWidth(40.0);
     final fSize = fixedFontSize ?? ScreenUtil().setSp(20.0);
     final unselectedColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainTextColor.name).withAlpha(100);
+      context,
+      AppThemeKeys.mainTextColor.name,
+    ).withAlpha(100);
 
     return InkWell(
       onTap: _navigateToChat,
@@ -210,17 +317,29 @@ extension on _HomePageState {
     );
   }
 
-  Widget _buildBottomItem(String title, int index, String imagePath, GlobalKey key, int pagesLength,
-      {double? fixedIconSize, double? fixedFontSize}) {
+  Widget _buildBottomItem(
+    String title,
+    int index,
+    String imagePath,
+    GlobalKey key,
+    int pagesLength, {
+    double? fixedIconSize,
+    double? fixedFontSize,
+  }) {
     final width = MediaQuery.of(context).size.width / pagesLength;
     final currentIndex = ref.watch(homeTabIndexProvider);
     final iSize = fixedIconSize ?? ScreenUtil().setWidth(40.0);
     final fSize = fixedFontSize ?? ScreenUtil().setSp(20.0);
     final isSelected = currentIndex == index;
 
-    final selectedColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+    final selectedColor = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.mainBlueColor.name,
+    );
     final unselectedColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainTextColor.name).withAlpha(100);
+      context,
+      AppThemeKeys.mainTextColor.name,
+    ).withAlpha(100);
 
     return InkWell(
       onTap: () {

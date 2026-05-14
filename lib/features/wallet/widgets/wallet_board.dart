@@ -6,8 +6,10 @@ import 'package:n42_wallet/generated/l10n.dart';
 class WalletBoard extends StatefulWidget {
   final double accountPrice;
   final String? walletName;
+
   /// 动态 USD→CNY 汇率（由 WalletActionProvider 提供，备用值 7.3）
   final double usdToCnyRate;
+
   /// 最后成功更新价格的时间（用于展示"更新于 X 分钟前"）
   final DateTime? priceLastUpdated;
   //swap
@@ -167,7 +169,9 @@ class _WalletBoardState extends State<WalletBoard> {
                         ),
                         decoration: BoxDecoration(
                           color: Colors.white.withValues(alpha: 0.08),
-                          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
+                          borderRadius: BorderRadius.circular(
+                            ScreenUtil().setWidth(10),
+                          ),
                         ),
                         child: Text(
                           _lastUpdatedLabel(),
@@ -198,16 +202,32 @@ class _WalletBoardState extends State<WalletBoard> {
 
   List<Widget> buttonList() {
     final buttons = <Widget>[
-      _buildActionBtn(S.of(context).g_key_48, 'assets/wallet/w_send.png', widget.sendTap),
+      _buildActionBtn(
+        S.of(context).g_key_48,
+        'assets/wallet/w_send.png',
+        widget.sendTap,
+      ),
       SizedBox(width: ScreenUtil().setWidth(32)),
-      _buildActionBtn(S.of(context).g_key_33, 'assets/wallet/w_receive.png', widget.receiveTap),
+      _buildActionBtn(
+        S.of(context).g_key_33,
+        'assets/wallet/w_receive.png',
+        widget.receiveTap,
+      ),
       SizedBox(width: ScreenUtil().setWidth(32)),
-      _buildActionBtn('购买', 'assets/wallet/w_buy.png', widget.buyTap),
+      _buildActionBtn(
+        S.of(context).g_iap_title,
+        'assets/wallet/w_buy.png',
+        widget.buyTap,
+      ),
     ];
     return buttons;
   }
 
-  Widget _buildActionBtn(String label, String imagePath, GestureTapCallback? onTap) {
+  Widget _buildActionBtn(
+    String label,
+    String imagePath,
+    GestureTapCallback? onTap,
+  ) {
     return GestureDetector(
       onTap: onTap,
       child: Column(
