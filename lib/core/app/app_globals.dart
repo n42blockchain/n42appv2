@@ -128,7 +128,3 @@ class AppGlobals {
   /// Get current user token
   static String? get currentUserToken => userInfo?.token;
 }
-
-// Legacy alias for backwards compatibility
-// ignore: camel_case_types
-typedef Application = AppGlobals;
