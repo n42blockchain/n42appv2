@@ -23,8 +23,6 @@ import 'package:n42_wallet/features/splash/splash_page.dart';
 import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/transaction_providers.dart';
 import 'package:n42_wallet/features/wallet_connect/presentation/providers/wallet_connect_providers.dart';
-import 'package:n42_wallet/features/mining/data/repositories/mining_repository_impl.dart';
-import 'package:n42_wallet/features/mining/domain/repositories/mining_repository.dart';
 import 'package:n42_wallet/features/mining/presentation/providers/mining_providers.dart';
 import 'package:n42_wallet/features/mining_v2/provider/mining_v2_provider.dart';
 import 'package:n42_wallet/features/mining_v1/provider/mining_v1_providers.dart';
@@ -101,12 +99,6 @@ void main() async {
   globalMiningInstance = MiningV2Provider();
   globalMiningV1 = MiningProvider();
   miningServiceImpl.attachToV2Provider(globalMiningInstance);
-
-  if (!getIt.isRegistered<MiningRepository>()) {
-    getIt.registerSingleton<MiningRepository>(
-      MiningRepositoryImpl(globalMiningInstance),
-    );
-  }
 
   // SECURITY: Warn if SSL certificate pinning is not configured
   if (kReleaseMode && !SecurityConfig.isCertPinningConfigured) {

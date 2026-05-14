@@ -52,7 +52,7 @@ mixin WalletConnectSigning on ChangeNotifier, WalletConnectConnection, WalletCon
       } else if (eventData.method == "tron_signMessage") {
         final requestParams = eventData.params! as Map;
         final dataToSign = requestParams["message"];
-        final cm = coinModels.where((c) => c.coin['coinType'] == CoinType.TRX.name).firstOrNull;
+        final cm = coinModelFor(CoinType.TRX);
         if (cm == null) {
           viewStateDeal(WalletConnectState.error, params: 'TRON chain not supported');
           return;
@@ -67,7 +67,7 @@ mixin WalletConnectSigning on ChangeNotifier, WalletConnectConnection, WalletCon
         final requestParams = eventData.params! as Map;
         final message = requestParams["message"] as String? ??
             (requestParams["fullMessage"] as String? ?? '');
-        final cm = coinModels.where((c) => c.coin['coinType'] == CoinType.APT.name).firstOrNull;
+        final cm = coinModelFor(CoinType.APT);
         if (cm == null) {
           viewStateDeal(WalletConnectState.error, params: 'Aptos chain not configured');
           return;
@@ -90,7 +90,7 @@ mixin WalletConnectSigning on ChangeNotifier, WalletConnectConnection, WalletCon
       } else if (eventData.method == "sui_signMessage") {
         final requestParams = eventData.params! as Map;
         final message = requestParams["message"] as String? ?? '';
-        final cm = coinModels.where((c) => c.coin['coinType'] == CoinType.SUI.name).firstOrNull;
+        final cm = coinModelFor(CoinType.SUI);
         if (cm == null) {
           viewStateDeal(WalletConnectState.error, params: 'Sui chain not configured');
           return;
@@ -114,7 +114,7 @@ mixin WalletConnectSigning on ChangeNotifier, WalletConnectConnection, WalletCon
         final requestParams = eventData.params! as Map;
         // DApp sends base64-encoded message bytes
         final dataToSign = requestParams["message"] as String? ?? '';
-        final cm = coinModels.where((c) => c.coin['coinType'] == CoinType.SOL.name).firstOrNull;
+        final cm = coinModelFor(CoinType.SOL);
         if (cm == null) {
           viewStateDeal(WalletConnectState.error, params: 'Solana chain not configured');
           return;
@@ -222,7 +222,7 @@ mixin WalletConnectSigning on ChangeNotifier, WalletConnectConnection, WalletCon
   Future<void> _handleTronTransaction(wallet_connect.SessionRequestEvent eventData) async {
     final requestParams = eventData.params! as Map;
     final dataToSign = requestParams["message"];
-    final cm = coinModels.where((c) => c.coin['coinType'] == CoinType.TRX.name).firstOrNull;
+    final cm = coinModelFor(CoinType.TRX);
     if (cm == null) {
       viewStateDeal(WalletConnectState.error, params: 'TRON chain not supported');
       return;
@@ -244,7 +244,7 @@ mixin WalletConnectSigning on ChangeNotifier, WalletConnectConnection, WalletCon
     final requestParams = eventData.params! as Map;
     // DApp sends a base64-encoded serialized transaction
     final rawTxBase64 = requestParams["transaction"] as String? ?? '';
-    final cm = coinModels.where((c) => c.coin['coinType'] == CoinType.SOL.name).firstOrNull;
+    final cm = coinModelFor(CoinType.SOL);
     if (cm == null) {
       viewStateDeal(WalletConnectState.error, params: 'Solana chain not configured');
       return;
@@ -378,7 +378,7 @@ mixin WalletConnectSigning on ChangeNotifier, WalletConnectConnection, WalletCon
     // DApp sends pre-built BCS-encoded raw transaction (base64 or hex)
     final rawTx = requestParams["encodedTransaction"] as String? ??
         (requestParams["transaction"] as String? ?? '');
-    final cm = coinModels.where((c) => c.coin['coinType'] == CoinType.APT.name).firstOrNull;
+    final cm = coinModelFor(CoinType.APT);
     if (cm == null) {
       viewStateDeal(WalletConnectState.error, params: 'Aptos chain not configured');
       return;
@@ -430,7 +430,7 @@ mixin WalletConnectSigning on ChangeNotifier, WalletConnectConnection, WalletCon
     // DApp sends base64-encoded transaction block
     final txBlock = requestParams["transactionBlock"] as String? ??
         (requestParams["transaction"] as String? ?? '');
-    final cm = coinModels.where((c) => c.coin['coinType'] == CoinType.SUI.name).firstOrNull;
+    final cm = coinModelFor(CoinType.SUI);
     if (cm == null) {
       viewStateDeal(WalletConnectState.error, params: 'Sui chain not configured');
       return;
@@ -478,7 +478,7 @@ mixin WalletConnectSigning on ChangeNotifier, WalletConnectConnection, WalletCon
       viewStateDeal(WalletConnectState.error, params: 'NEAR: no transaction provided');
       return;
     }
-    final cm = coinModels.where((c) => c.coin['coinType'] == CoinType.NEAR.name).firstOrNull;
+    final cm = coinModelFor(CoinType.NEAR);
     if (cm == null) {
       viewStateDeal(WalletConnectState.error, params: 'NEAR chain not configured');
       return;

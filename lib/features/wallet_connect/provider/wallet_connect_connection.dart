@@ -35,6 +35,11 @@ mixin WalletConnectConnection on ChangeNotifier {
   }
   int coinModelsIndex = -1;
   List<CoinModel> coinModels = [];
+
+  /// Look up the [CoinModel] for [type] from the loaded chain list.
+  /// Returns null when the chain is not configured for the current session.
+  CoinModel? coinModelFor(CoinType type) =>
+      coinModels.where((c) => c.coin['coinType'] == type.name).firstOrNull;
   WalletConnectState walletConnectState = WalletConnectState.loading;
 
   /// Guard: prevent duplicate WalletKit event subscriptions.
