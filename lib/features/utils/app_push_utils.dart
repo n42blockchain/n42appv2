@@ -1,5 +1,6 @@
 // android通知的通道
 
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:n42_wallet/core/app/app_globals.dart';
@@ -249,8 +250,7 @@ class AppPushUtils {
         );
         // 若 N42Chat 已初始化则立即跳转；否则等 initN42Chat 完成后会调用 flushPendingChatNotification
         if (N42Chat.isInitialized) {
-          // ignore: discarded_futures
-          flushPendingChatNotification();
+          unawaited(flushPendingChatNotification());
         }
         return;
       }
