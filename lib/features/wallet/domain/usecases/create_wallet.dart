@@ -7,7 +7,6 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:injectable/injectable.dart';
 
 import '../../../../core/error/failures.dart';
 import '../../../../core/usecase/usecase.dart';
@@ -18,7 +17,6 @@ import '../repositories/wallet_repository.dart';
 ///
 /// Creates a new HD wallet with the given parameters.
 /// Returns the created wallet entity or a failure.
-@injectable
 class CreateWallet implements UseCase<WalletEntity, CreateWalletParams> {
   final WalletRepository _repository;
 

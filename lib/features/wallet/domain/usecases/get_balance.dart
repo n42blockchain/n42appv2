@@ -7,7 +7,6 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:injectable/injectable.dart';
 
 import '../../../../core/error/failures.dart';
 import '../../../../core/usecase/usecase.dart';
@@ -19,7 +18,6 @@ export '../entities/wallet_entity.dart' show AssetEntity;
 /// Get Balance Use Case
 ///
 /// Retrieves the balance for all assets in a wallet.
-@injectable
 class GetBalance implements UseCase<List<AssetEntity>, GetBalanceParams> {
   final WalletRepository _repository;
 

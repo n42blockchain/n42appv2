@@ -10,7 +10,6 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
-import 'package:injectable/injectable.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/core/security/secure_storage.dart';
 import 'package:n42_wallet/shared/domain/entities/wallet_info.dart';
@@ -20,7 +19,6 @@ import 'package:n42_wallet/core/passkey/passkey_service.dart';
 import 'package:n42_wallet/core/passkey/passkey_platform_adapter.dart';
 
 /// Implementation of IAuthService
-@LazySingleton(as: IAuthService)
 class AuthServiceImpl implements IAuthService {
   final SPUtil _spUtil;
   final SecureStorage _secureStorage;

@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:injectable/injectable.dart';
 
 import 'package:n42_wallet/core/utils/app_logger.dart';
 
@@ -15,7 +14,6 @@ import 'package:n42_wallet/core/utils/app_logger.dart';
 /// 安全特性:
 /// - 敏感数据使用安全擦除机制
 /// - 提供内存中敏感数据的清除方法
-@singleton
 class SecureStorage {
   late final FlutterSecureStorage _storage;
 

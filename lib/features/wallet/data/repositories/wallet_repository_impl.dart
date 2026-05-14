@@ -6,7 +6,6 @@
 // Author: Jiang Yiwei
 
 import 'package:dartz/dartz.dart';
-import 'package:injectable/injectable.dart';
 import 'package:n42_wallet/core/error/failures.dart';
 import 'package:n42_wallet/core/error/exceptions.dart';
 import 'package:n42_wallet/features/wallet/domain/entities/wallet_entity.dart';
@@ -17,7 +16,6 @@ import 'package:n42_wallet/features/wallet/data/datasources/wallet_remote_dataso
 /// Wallet Repository Implementation
 ///
 /// Coordinates between local and remote data sources.
-@LazySingleton(as: WalletRepository)
 class WalletRepositoryImpl implements WalletRepository {
   final WalletLocalDataSource _localDataSource;
   final WalletRemoteDataSource _remoteDataSource;

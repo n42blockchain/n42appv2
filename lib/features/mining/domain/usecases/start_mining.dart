@@ -7,7 +7,6 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:injectable/injectable.dart';
 import 'package:n42_wallet/core/error/failures.dart';
 import 'package:n42_wallet/core/usecase/usecase.dart';
 import 'package:n42_wallet/features/mining/domain/entities/mining_entity.dart';
@@ -15,7 +14,6 @@ import 'package:n42_wallet/features/mining/domain/repositories/mining_repository
 import 'package:n42_wallet/shared/domain/services/wallet_service_interface.dart';
 
 /// Start Mining Use Case
-@injectable
 class StartMining implements UseCase<MiningSessionEntity, StartMiningParams> {
   final MiningRepository _miningRepository;
   final IWalletService _walletService;
@@ -53,7 +51,6 @@ class StartMiningParams extends Equatable {
 }
 
 /// Stop Mining Use Case
-@injectable
 class StopMining implements UseCase<void, String> {
   final MiningRepository _repository;
 
@@ -66,7 +63,6 @@ class StopMining implements UseCase<void, String> {
 }
 
 /// Get Mining Status Use Case
-@injectable
 class GetMiningStatus implements UseCase<MiningStatusEntity, NoParams> {
   final MiningRepository _repository;
 
@@ -79,7 +75,6 @@ class GetMiningStatus implements UseCase<MiningStatusEntity, NoParams> {
 }
 
 /// Get Mining Plans Use Case
-@injectable
 class GetMiningPlans implements UseCase<List<MiningPlanEntity>, NoParams> {
   final MiningRepository _repository;
 
@@ -92,7 +87,6 @@ class GetMiningPlans implements UseCase<List<MiningPlanEntity>, NoParams> {
 }
 
 /// Claim Mining Rewards Use Case
-@injectable
 class ClaimMiningRewards implements UseCase<String, ClaimRewardsParams> {
   final MiningRepository _repository;
 

@@ -7,7 +7,6 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:injectable/injectable.dart';
 import 'package:n42_wallet/core/error/failures.dart';
 import 'package:n42_wallet/core/usecase/usecase.dart';
 import 'package:n42_wallet/features/wallet/domain/entities/wallet_entity.dart';
@@ -45,7 +44,6 @@ abstract class TransactionRepository {
 }
 
 /// Send Transaction Use Case
-@injectable
 class SendTransaction
     implements UseCase<TransactionEntity, SendTransactionParams> {
   final TransactionRepository _repository;
@@ -126,7 +124,6 @@ class SendTransactionParams extends Equatable {
 }
 
 /// Estimate Gas Use Case
-@injectable
 class EstimateGas implements UseCase<BigInt, EstimateGasParams> {
   final TransactionRepository _repository;
 

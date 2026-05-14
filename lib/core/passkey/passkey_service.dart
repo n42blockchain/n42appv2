@@ -8,7 +8,6 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
-import 'package:injectable/injectable.dart';
 
 import 'package:n42_wallet/core/security/secure_storage.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
@@ -23,7 +22,6 @@ import 'passkey_platform_adapter.dart';
 /// - [PasskeyPlatformAdapter] for WebAuthn ceremonies
 /// - [SecureStorage] for credential metadata persistence
 /// - Backend API for server-side challenge/verification (when available)
-@lazySingleton
 class PasskeyService {
   final SecureStorage _secureStorage;
 

@@ -7,7 +7,6 @@
 
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:injectable/injectable.dart';
 import 'package:n42_wallet/shared/domain/entities/wallet_info.dart';
 import 'package:n42_wallet/shared/domain/services/wallet_service_interface.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
@@ -21,7 +20,6 @@ import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dar
 ///
 /// This implementation bridges the Riverpod state with the
 /// interface-based service layer for cross-feature communication.
-@LazySingleton(as: IWalletService)
 class WalletServiceImpl implements IWalletService {
   final ProviderContainer _container;
   final StreamController<SharedWalletInfo?> _walletStreamController =
