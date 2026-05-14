@@ -1,0 +1,116 @@
+import 'package:flutter/foundation.dart';
+import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
+import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/models/coin_model_build_utils.dart';
+import 'package:n42_wallet/features/wallet/models/coin_model_wallet_access.dart';
+import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
+
+/// Hydrates [coin]'s balance/price/value fields from cached data in the coin map.
+void applyCachedBalance(CoinModel coin) {
+  try {
+    if (coin.isTest) {
+      coin.balance = BigInt.parse(coin.coin['balance_test']?.toString() ?? '0');
+    } else {
+      coin.balance = BigInt.parse(coin.coin['balance']?.toString() ?? '0');
+    }
+    coin.percentage = (coin.coin['percentage'] as num?)?.toDouble() ?? 0.0;
+    coin.coinPrice = (coin.coin['coinPrice'] as num?)?.toDouble() ?? 0.0;
+    coin.value = coin.balanceDoubleAll() * coin.coinPrice;
+  } catch (e) {
+    debugPrint('applyCachedBalance error: $e');
+    coin.balance = BigInt.zero;
+    coin.percentage = 0.0;
+    coin.coinPrice = 0.0;
+    coin.value = 0.0;
+  }
+}
+
+Future<void> buildCoinWallet(
+  CoinModel coin,
+  ICoinModelWalletAccess walletAccess, {
+  String pk = "",
+  bool setAddress = true,
+  int? walletIndex,
+}) async {
+  if (coin.address != null) return;
+
+  final String coinType = coin.coin['coinType'];
+  final WalletInfo info = walletIndex == null
+      ? walletAccess.walletInfo
+      : walletAccess.walletInfoList[walletIndex];
+
+  if (info.watchOnly && info.watchAddress.isNotEmpty) {
+    coin.address = info.watchAddress;
+    coin.addressType[coin.addrType] = info.watchAddress;
+    if (walletIndex == null && setAddress) {
+      walletAccess.setAddress(coinType, coin.addressType);
+    }
+    return;
+  }
+
+  final Map<String, dynamic>? pathMap = coin.coin['path'];
+  if (pathMap == null) {
+    debugPrint('buildCoinWallet: path is null for $coinType');
+    coin.loadError = true;
+    return;
+  }
+
+  final derivation = resolveCoinModelDerivation(
+    coin: coin.coin,
+    addrType: coin.addrType,
+    pathIndex: coin.pathIndex,
+  );
+  final Map<Object?, Object?> rm = await Trustdart().generateAddress(
+    coinType,
+    derivation.path,
+    derivation.addressType,
+    mnemonic: info.mnemonic ?? "",
+    pk: coin.privateKey ?? "",
+    isTest: coin.isTest,
+  );
+
+  for (final key in rm.keys) {
+    coin.addressType[key as String] = rm[key];
+  }
+
+  final generatedAddress = rm[coin.addrType];
+  if (generatedAddress == null || (generatedAddress as String).isEmpty) {
+    debugPrint(
+      'buildCoinWallet: Failed to generate address for $coinType (addrType: ${coin.addrType})',
+    );
+    coin.loadError = true;
+    walletAccess.refresh();
+    return;
+  }
+
+  coin.address = generatedAddress;
+  if (walletIndex == null && setAddress) {
+    walletAccess.setAddress(coinType, coin.addressType);
+  }
+}
+
+Future<bool> fetchCoinBalance(
+  CoinModel coin,
+  ICoinModelWalletAccess walletAccess, {
+  bool getToken = true,
+}) async {
+  try {
+    if (coin.address == null) {
+      await buildCoinWallet(coin, walletAccess);
+    }
+    final bool hasError = await walletAccess.getBalanceWithCoinModel(coin);
+    coin.loadError = false;
+    if (hasError) {
+      walletAccess.refresh();
+      return false;
+    }
+    walletAccess.calculateBalanceWidthCoinModel();
+    return true;
+  } catch (e) {
+    debugPrint('fetchCoinBalance error: $e');
+    coin.loadError = true;
+    coin.isRefresh = false;
+    walletAccess.refresh();
+    return false;
+  }
+}

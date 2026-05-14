@@ -18,8 +18,17 @@ class SendParams {
   final String contractAddress; // empty = native transfer
   final int tokenDecimals;      // token decimals if contractAddress non-empty
   final String? memo;
+  final String? calldata;       // raw hex calldata (DEX approve/swap), bypasses memo encoding
   final String? privateKey;     // null = use wallet mnemonic
   final Map<String, dynamic>? chainConfig; // full chain config from chainUrlMap
+  final int? destinationTag;    // XRP destination tag (exchange deposits)
+  final String? nftTokenId;     // ERC721/1155 token ID
+  final String? nftStandard;    // 'ERC721' | 'ERC1155'
+  final int? nftQuantity;       // ERC1155 transfer quantity (default 1)
+  // BTC-family optimisation: when provided, BtcSender skips the corresponding
+  // network round-trips (fee-rate API / UTXO fetch) that the UI already made.
+  final int? btcFeeRate;        // sat/byte; skips fee-rate API query
+  final List<Map<String, dynamic>>? prebuiltUtxos; // skips UTXO fetch
 
   const SendParams({
     required this.coinType,
@@ -33,8 +42,15 @@ class SendParams {
     this.contractAddress = '',
     this.tokenDecimals = 0,
     this.memo,
+    this.calldata,
     this.privateKey,
     this.chainConfig,
+    this.destinationTag,
+    this.nftTokenId,
+    this.nftStandard,
+    this.nftQuantity,
+    this.btcFeeRate,
+    this.prebuiltUtxos,
   });
 }
 

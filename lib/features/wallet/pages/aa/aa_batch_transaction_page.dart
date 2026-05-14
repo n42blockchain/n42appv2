@@ -12,7 +12,7 @@ import 'package:n42_wallet/features/wallet/aa/builder/calldata_builder.dart';
 import 'package:n42_wallet/features/wallet/aa/core/aa_config.dart';
 import 'package:n42_wallet/features/wallet/aa/models/smart_account.dart';
 import 'package:n42_wallet/features/wallet/aa/provider/batch_template_provider.dart';
-import 'package:n42_wallet/features/wallet/api/transfer/handlers/aa_transfer_handler.dart';
+import 'package:n42_wallet/features/wallet/api/sender/aa_transfer_handler.dart';
 import 'package:n42_wallet/features/wallet/pages/aa/aa_batch_add_operation_sheet.dart';
 import 'package:n42_wallet/features/wallet/pages/aa/aa_batch_paymaster_sheet.dart';
 import 'package:n42_wallet/features/wallet/pages/aa/aa_batch_templates_sheet.dart';

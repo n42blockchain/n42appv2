@@ -13,6 +13,7 @@ import 'package:n42_wallet/core/security/secure_storage.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/shared/di/service_locator.dart';
 import 'package:n42_wallet/core/network/external_http.dart';
+import 'package:n42_wallet/features/wallet/api/coin_wallet_ops.dart';
 import 'package:n42_wallet/features/wallet/api/market_api.dart';
 import 'package:n42_wallet/features/wallet/api/market_api_payload_utils.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
@@ -39,14 +40,30 @@ part 'wallet_action_provider_market.dart';
 String? resolveBalanceRpcOverride(CoinModel coinModel) {
   // For EVM chains with a configured RPC, bypass the N42 API to avoid
   // 5xx errors for coin types it doesn't recognise (e.g. XDAI, PLUME).
-  if (coinModel.coin['blockchainType'] == 'Ethereum') {
-    final svc = (coinModel.isTest
+  if (coinModel.coin['blockchainType'] != 'Ethereum') return null;
+
+  final coinType = coinModel.coin['coinType']?.toString() ?? '';
+  final canonical = chainUrlMap[coinType];
+
+  final String? svc;
+  if (canonical != null) {
+    // 标准链：从 chainUrlMap 取规范 URL，避免存储数据因历史 bug 残留错误值
+    final baseInfo = canonical['baseInfo'];
+    svc = baseInfo is Map
+        ? (coinModel.isTest ? baseInfo['service_test'] : baseInfo['service'])
+            ?.toString()
+            .trim()
+        : null;
+  } else {
+    // 自定义链：从存储数据取
+    svc = (coinModel.isTest
             ? coinModel.coin['service_test']
             : coinModel.coin['service'])
         ?.toString()
         .trim();
-    if (svc != null && svc.isNotEmpty) return svc;
   }
+
+  if (svc != null && svc.isNotEmpty) return svc;
   return null;
 }
 
@@ -60,8 +77,7 @@ class WalletActionProvider extends ChangeNotifier
     notifyListeners();
   }
 
-  //刷新coin 余额
-  Map<int, dynamic> coinRefreshMap = {};
+  Map<int, List<CoinModel>> coinRefreshMap = {};
 
   // ── 置顶同步缓存（避免无变化时重复遍历）────────────────────────────────────
   /// 上次 _syncPinnedState 时的 fingerprint；格式：pinnedHash|coinListLength
@@ -400,34 +416,32 @@ class WalletActionProvider extends ChangeNotifier
 
   @override
   Future<bool> getBalanceWithCoinModel(CoinModel coinModel) async {
-    //获取coin 的地址
-    // 如果地址为 null，说明该链的地址生成失败，跳过余额获取
     if (coinModel.address == null) {
       debugPrint(
         'WalletActionProvider: Skipping balance fetch for ${coinModel.coin['miniName']} - address is null',
       );
       coinModel.loadError = true;
-      return true; // 返回 true 表示有错误
+      return true;
     }
-    String address = coinModel.address.toString();
-    if (coinModel.coin['coinType'] == CoinType.BCH.name) {
-      address = getAddress(coinModel.coin['coinType'], addrType: 'legacy');
-    }
-    //合约地址
-    String contract = "";
-    if (coinModel.coin['isContract'] == true) {
-      contract = coinModel.isTest
-          ? coinModel.coin['contract_test']
-          : coinModel.coin['contract'];
-    }
-    if (coinModel.coin['isContract'] &&
+
+    // ALGO tokens have a separate fetch path; exit early before address/contract resolution.
+    if (coinModel.coin['isContract'] == true &&
         coinModel.coin['coinType'] == CoinType.ALGO.name) {
       return await getBalanceTokenAlgoWithCoinModel(coinModel);
     }
 
-    //获取 coin 的余额
-    MessageModel mm =
-        await tokenViewApi.getBalance(
+    String address = coinModel.address.toString();
+    if (coinModel.coin['coinType'] == CoinType.BCH.name) {
+      address = getAddress(coinModel.coin['coinType'], addrType: 'legacy');
+    }
+
+    final String contract = coinModel.coin['isContract'] == true
+        ? (coinModel.isTest
+            ? coinModel.coin['contract_test']
+            : coinModel.coin['contract'])
+        : '';
+
+    final MessageModel mm = await tokenViewApi.getBalance(
           coinModel.coin['blockchainType'],
           coinModel.coin['coinType'],
           address,
@@ -436,37 +450,39 @@ class WalletActionProvider extends ChangeNotifier
           rpc: resolveBalanceRpcOverride(coinModel),
         ) ??
         MessageModel.error();
+
     _applyMarketPrice(coinModel);
 
     if (mm.error) {
-      // 网络请求失败，使用缓存的余额数据
       debugPrint(
         'WalletActionProvider: Balance fetch failed for ${coinModel.coin['miniName']}, using cached balance',
       );
       _safeUpdateWalletMap(coinModel);
-      coinModel.getBalanceDefault();
+      applyCachedBalance(coinModel);
       coinModel.loadError = false;
       return true;
     }
 
-    BigInt balance = BigInt.zero;
-    if (coinModel.coin['coinType'] == CoinType.ALGO.name) {
-      balance = mm.data['balance'];
+    final BigInt balance;
+    final String coinType = coinModel.coin['coinType'];
+    if (coinType == CoinType.ALGO.name) {
+      balance = mm.data['balance'] as BigInt;
       coinModel.other = AlgoModel.fromMinBalance(mm.data['minBalance']);
-    } else if (coinModel.coin['coinType'] == CoinType.XRP.name) {
-      balance = mm.data['balance'];
+    } else if (coinType == CoinType.XRP.name) {
+      balance = mm.data['balance'] as BigInt;
       coinModel.other = XrpModel(
         mm.data['sequence'],
         mm.data['account'],
         mm.data['ownerCount'],
       );
     } else {
-      balance = mm.data;
+      balance = mm.data as BigInt;
     }
+
     final balanceKey = coinModel.isTest ? 'balance_test' : 'balance';
     coinModel.coin[balanceKey] = balance.toString();
     _safeUpdateWalletMap(coinModel);
-    coinModel.getBalanceDefault();
+    applyCachedBalance(coinModel);
     return false;
   }
 

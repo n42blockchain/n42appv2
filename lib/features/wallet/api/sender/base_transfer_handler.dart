@@ -7,14 +7,13 @@ import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/utils/data_utils.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
-import 'package:n42_wallet/features/wallet/api/transfer_api.dart';
 import 'package:n42_wallet/features/wallet/models/btc_transaction_recode_model.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 
 import 'package:n42_wallet/features/wallet/utils/transaction/coin_gas.dart';
 
-import '../transfer_handler.dart';
+import 'transfer_handler.dart';
 
 /// Base class for all transfer handlers
 ///
@@ -22,7 +21,6 @@ import '../transfer_handler.dart';
 abstract class BaseTransferHandler implements TransferHandler {
   // Lazy-loaded services
   TokenViewApi? _tokenViewApi;
-  TransferApi? _transferApi;
   DataUtils? _dataUtils;
   Trustdart? _trustdart;
 
@@ -30,12 +28,6 @@ abstract class BaseTransferHandler implements TransferHandler {
   TokenViewApi get tokenViewApi {
     _tokenViewApi ??= TokenViewApi();
     return _tokenViewApi!;
-  }
-
-  /// Transfer API for chain-specific transfers
-  TransferApi get transferApi {
-    _transferApi ??= TransferApi();
-    return _transferApi!;
   }
 
   /// Data utilities

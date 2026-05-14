@@ -43,7 +43,7 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
       });
       if (idx >= 0) {
         chainModel = wap.coinModels[idx];
-        await chainModel!.getBalance();
+        await fetchCoinBalance(chainModel!, ref.read(wapBridgeProvider));
         if (!mounted) return;
         setState(() {});
       }
@@ -63,7 +63,7 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
 
   Future<void> loadBalance() async {
     setState(() => load = Load.loading);
-    final ok = await widget.coinModel.getBalance(getToken: false);
+    final ok = await fetchCoinBalance(widget.coinModel, ref.read(wapBridgeProvider), getToken: false);
     if (!mounted) return;
     if (!ok) {
       errorMessage = S.current.g_key_t_44;
@@ -207,36 +207,53 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
   Future<void> signTx(TransationRecordModel trModel) async {
     bool completedWithExit = false;
     try {
-      final MessageModel mm = await TransferApi().transferWallet(
-        trModel: trModel,
-        privateKey: widget.coinModel.privateKey,
-        pathIndex: widget.coinModel.pathIndex,
+      final coinType = widget.coinModel.coin['coinType'] as String? ?? '';
+      final addrType = widget.coinModel.addrType;
+      final baseInfo = widget.coinModel.coin['baseInfo'] as Map<String, dynamic>?;
+      final pathMap = baseInfo?['path'] as Map<String, dynamic>?;
+      final basePath = pathMap?[addrType]?.toString() ?? "m/44'/60'/0'/0/0";
+      final path = getPathWithIndex(basePath, widget.coinModel.pathIndex);
+      final decimals = (widget.coinModel.coin['decimals'] as num?)?.toInt() ?? 18;
+
+      final result = await SenderFactory.instance.getSender(coinType).send(
+        SendParams(
+          coinType: coinType,
+          fromAddress: trModel.from1,
+          toAddress: trModel.to1,
+          amount: toEther(trModel.price.toString(), decimals).toDouble(),
+          decimals: decimals,
+          path: path,
+          sendMax: false,
+          isTest: widget.coinModel.isTest,
+          contractAddress: trModel.contract,
+          tokenDecimals: 0,
+          memo: trModel.message,
+          privateKey: widget.coinModel.privateKey,
+          chainConfig: widget.coinModel.coin,
+        ),
       );
+
       if (!mounted) return;
-      if (mm.error) {
-        errorMessage = mm.data?.toString() ?? '';
-        ToastUtils.show(errorMessage);
-      } else {
-        trModel.txHash = mm.data?.toString() ?? '';
-        final db = AppDatabase();
-        trModel.trId = await db.insertTransationRecord(trModel);
+      if (result.success) {
+        trModel.txHash = result.txHash ?? '';
+        trModel.trId = await AppDatabase().insertTransationRecord(trModel);
         if (!mounted) return;
         ref.read(tripBridgeProvider).addUndoneTr(trModel, 1);
-        await RecentAddressService.save(
-          widget.coinModel.coin['coinType'] as String? ?? '',
-          toCtrl.text.trim(),
-        );
+        await RecentAddressService.save(coinType, toCtrl.text.trim());
         if (!mounted) return;
         ToastUtils.show(S.current.g_key_nft_41);
         completedWithExit = true;
         Navigator.pop(context);
+      } else {
+        errorMessage = result.error ?? '';
+        final friendly = _isFriendlyError(errorMessage)
+            ? S.current.g_key_chain_transfer_not_supported
+            : errorMessage;
+        ToastUtils.show(friendly);
       }
     } catch (e) {
       errorMessage = e.toString();
-      final friendly = _isFriendlyError(e.toString())
-          ? S.current.g_key_chain_transfer_not_supported
-          : e.toString();
-      ToastUtils.show(friendly);
+      ToastUtils.show(errorMessage);
     } finally {
       load = Load.finish;
       if (mounted && !completedWithExit) setState(() {});

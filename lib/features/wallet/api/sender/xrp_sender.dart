@@ -93,6 +93,7 @@ class XrpSender implements ChainSender {
       'txType': 'XRP',
       'issuer': '',
       'currency': '',
+      if (params.destinationTag != null) 'destinationTag': params.destinationTag,
     };
 
     final wi = globalWapAdapter.walletInfo;

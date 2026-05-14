@@ -175,8 +175,7 @@ extension _SwapAstHomeGasAndTx on _SwapAstHomeState {
   }
 
   Future<String?> web3Transaction() async {
-    final TransferApi transferApi = TransferApi();
-    if (_payCoinType.isEmpty) {
+    if (_payCoinType.isEmpty || payCoinModel == null) {
       errorMessage = "Invalid chain configuration";
       return null;
     }
@@ -192,21 +191,37 @@ extension _SwapAstHomeGasAndTx on _SwapAstHomeState {
       errorMessage = "Invalid recipient address";
       return null;
     }
-    final MessageModel rData = await transferApi.transfer(
-      _payCoinType,
-      payAddr,
-      payAmount,
-      fromAddress: payCoinModel!.address,
-      contractAddress: youPay?.payCoinContract ?? "",
-      isTest: false,
+
+    final cm = payCoinModel!;
+    final addrType = cm.addrType;
+    final baseInfo = cm.coin['baseInfo'] as Map<String, dynamic>?;
+    final pathMap = baseInfo?['path'] as Map<String, dynamic>?;
+    final basePath = pathMap?[addrType]?.toString() ?? "m/44'/60'/0'/0/0";
+    final path = getPathWithIndex(basePath, cm.pathIndex);
+    final decimals = (cm.coin['decimals'] as num?)?.toInt() ?? 18;
+    final contractAddress = youPay?.payCoinContract ?? '';
+
+    final result = await SenderFactory.instance.getSender(_payCoinType).send(
+      SendParams(
+        coinType: _payCoinType,
+        fromAddress: cm.address.toString(),
+        toAddress: payAddr,
+        amount: payAmount,
+        decimals: decimals,
+        path: path,
+        isTest: false,
+        contractAddress: contractAddress,
+        tokenDecimals: contractAddress.isNotEmpty ? decimals : 0,
+        chainConfig: cm.coin,
+      ),
     );
-    if (rData.error) {
-      errorMessage = _swapStringValue(rData.data, fallback: 'Error');
+
+    if (!result.success) {
+      errorMessage = _swapStringValue(result.error, fallback: 'Error');
       return null;
     }
     errorMessage = "";
-    final data = _swapMapValue(rData.data);
-    final txHash = data?['txHash']?.toString();
+    final txHash = result.txHash;
     return txHash != null && txHash.isNotEmpty ? txHash : null;
   }
 }

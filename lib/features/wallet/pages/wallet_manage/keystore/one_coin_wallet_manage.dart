@@ -3,6 +3,7 @@ import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/utils/regular.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
+import 'package:n42_wallet/features/wallet/api/coin_wallet_ops.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_manage/keystore/export_keystore_desc.dart';
@@ -164,7 +165,7 @@ class _OneCoinWalletManageState extends ConsumerState<OneCoinWalletManage>
             widget.model.addrType = key;
             addrType = key;
             widget.model.address = null;
-            await widget.model.buildWallet();
+            await buildCoinWallet(widget.model, ref.read(wapBridgeProvider));
             if (!mounted) return;
             coinPath = widget.model.coin['path'][widget.model.addrType];
             setState(() {});

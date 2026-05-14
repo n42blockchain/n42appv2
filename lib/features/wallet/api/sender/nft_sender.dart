@@ -3,9 +3,6 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
-import 'dart:io';
-
-import 'package:web3dart/web3dart.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
@@ -13,7 +10,6 @@ import 'package:n42_wallet/features/utils/data_utils.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/chain_eip1559.dart';
-import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/utils/transaction/coin_gas.dart';
 import 'package:n42_wallet/features/wallet/utils/validation/signature_validator.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
@@ -21,9 +17,12 @@ import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 
 import 'chain_sender.dart';
 
-/// EVM-compatible chain sender.
-/// Handles ETH, BNB, MATIC, AVAX, FTM, CELO, ONE, OP, ARB, BASE, etc.
-class EvmSender implements ChainSender {
+/// EVM NFT sender — handles ERC-721 and ERC-1155 transfers.
+///
+/// Requires [SendParams.contractAddress], [SendParams.nftTokenId],
+/// [SendParams.nftStandard] ('ERC721' or 'ERC1155'), and optionally
+/// [SendParams.nftQuantity] (defaults to 1 for ERC721).
+class NftSender implements ChainSender {
   final _tokenViewApi = TokenViewApi();
   final _trustdart = Trustdart();
   final _dataUtils = DataUtils();
@@ -31,29 +30,22 @@ class EvmSender implements ChainSender {
   @override
   Future<SendResult> send(SendParams params) async {
     final coinType = params.coinType;
-    final baseInfo = params.chainConfig?['baseInfo'] as Map<String, dynamic>?;
-    final chainId = (baseInfo?['chainId'] as int?) ?? 1;
-    final isContract = params.contractAddress.isNotEmpty;
-    final gas = getCoinGas(coinType, contract: isContract);
+    final tokenId = params.nftTokenId ?? '';
+    final nftStandard = params.nftStandard ?? 'ERC721';
+    final nftQuantity = params.nftQuantity ?? 1;
 
-    // Get token balance if contract transfer
-    BigInt balance = BigInt.zero;
-    if (isContract) {
-      final mm = await _tokenViewApi.getBalance(
-        BlockchainType.Ethereum.name,
-        coinType,
-        params.fromAddress,
-        contract: params.contractAddress,
-        isTest: params.isTest,
-      ) ?? _errMM();
-      if (mm.error) return SendResult.fail(mm.data?.toString());
-      balance = mm.data as BigInt;
-      if (balance == BigInt.zero) {
-        return SendResult.fail(S.current.g_key_wallet_m4);
-      }
+    if (tokenId.isEmpty) {
+      return SendResult.fail('NFT token ID is required');
+    }
+    if (params.contractAddress.isEmpty) {
+      return SendResult.fail('NFT contract address is required');
     }
 
-    // Get chain balance for gas
+    final baseInfo = params.chainConfig?['baseInfo'] as Map<String, dynamic>?;
+    final chainId = (baseInfo?['chainId'] as int?) ?? 1;
+    final gas = getCoinGas(coinType, contract: true);
+
+    // Chain balance for gas
     final mmchain = await _tokenViewApi.getBalance(
       BlockchainType.Ethereum.name,
       coinType,
@@ -67,7 +59,7 @@ class EvmSender implements ChainSender {
       return SendResult.fail(S.current.g_key_wallet_m5(coinType));
     }
 
-    // Get gas price
+    // Gas price
     final mmg = await _tokenViewApi.getGasPrice(
       BlockchainType.Ethereum.name,
       coinType,
@@ -80,72 +72,28 @@ class EvmSender implements ChainSender {
         ? baseFee * BigInt.from(2)
         : baseFee;
 
-    // Estimate gas
-    final effectiveDecimals = isContract ? params.tokenDecimals : params.decimals;
-    final estimateMm = await _tokenViewApi.getGasEstimateEthV2(
-      params.fromAddress,
-      params.toAddress,
-      gasPrice,
-      ethToWeiString(params.amount.toString(), effectiveDecimals),
-      BigInt.from(gas),
-      coinType,
-      contract: params.contractAddress,
-      isTest: params.isTest,
-    );
-    if (estimateMm.error) return SendResult.fail(estimateMm.data?.toString());
-
-    int gasLimit = (estimateMm.data as BigInt).toInt();
-    if (coinType == CoinType.OP.name || coinType == CoinType.BOBA.name) {
-      gasLimit = (gasLimit * 1.5).toInt();
-    }
-
-    final totalGasPrice = gasPrice * BigInt.from(gasLimit);
-
-    // Calculate value and validate
-    BigInt valuePrice;
-    double adjustedValue = params.amount;
-
-    if (!isContract) {
-      valuePrice = ethToWeiString(params.amount.toString(), params.decimals);
-      if (valuePrice == chainBalance && params.sendMax) {
-        valuePrice = valuePrice - totalGasPrice;
-        adjustedValue = toEther(valuePrice.toString(), params.decimals).toDouble();
-      }
-      if (adjustedValue < 0 || totalGasPrice + valuePrice > chainBalance) {
-        return SendResult.fail(S.current.g_key_wallet_m5(coinType));
-      }
-    } else {
-      valuePrice = ethToWeiString(params.amount.toString(), params.tokenDecimals);
-      if (valuePrice > balance) {
-        return SendResult.fail(S.current.g_key_wallet_m4);
-      }
-      if (totalGasPrice > chainBalance) {
-        return SendResult.fail(S.current.g_key_wallet_m5(coinType));
-      }
-    }
-
-    // Sign and broadcast
+    // Sign
     final signResult = await _sign(
       coinType: coinType,
       path: params.path,
       fromAddress: params.fromAddress,
       toAddress: params.toAddress,
-      valuePrice: valuePrice,
       gasPrice: gasPrice,
       gasPrice2: baseFee,
-      gasLimit: gasLimit,
+      gasLimit: gas,
       chainId: chainId,
       contractAddress: params.contractAddress,
       isTest: params.isTest,
       privateKey: params.privateKey,
-      message: params.memo,
-      calldata: params.calldata,
+      tokenId: tokenId,
+      nftStandard: nftStandard,
+      nftQuantity: nftQuantity,
     );
     if (signResult is SendResult) return signResult;
 
     final signStr = signResult as String;
 
-    // Validate signature
+    // Validate
     final sigResult = SignatureValidator.validateSignedTransaction(
       signedTx: signStr,
       coinType: coinType,
@@ -154,6 +102,7 @@ class EvmSender implements ChainSender {
       return SendResult.fail(sigResult.errorMessage ?? 'Signature validation failed');
     }
 
+    // Broadcast
     final sendMm = await _tokenViewApi.sendTx(
       BlockchainType.Ethereum.name,
       coinType,
@@ -162,7 +111,7 @@ class EvmSender implements ChainSender {
     ) ?? _errMM();
 
     if (sendMm.error) return SendResult.fail(sendMm.data?.toString());
-    return SendResult.ok(sendMm.data?.toString(), actualAmount: adjustedValue);
+    return SendResult.ok(sendMm.data?.toString());
   }
 
   Future<Object> _sign({
@@ -170,27 +119,26 @@ class EvmSender implements ChainSender {
     required String path,
     required String fromAddress,
     required String toAddress,
-    required BigInt valuePrice,
     required BigInt gasPrice,
     required BigInt gasPrice2,
     required int gasLimit,
     required int chainId,
-    String contractAddress = '',
+    required String contractAddress,
+    required String tokenId,
+    required String nftStandard,
+    required int nftQuantity,
     bool isTest = false,
     String? privateKey,
-    String? message,
-    String? calldata,
   }) async {
     final gasPriceHex = _dataUtils.bigIntToHex(gasPrice, need0x: false);
     final gasPrice2Hex = _dataUtils.bigIntToHex(gasPrice2, need0x: false);
-    final amountHex = _dataUtils.bigIntToHex(valuePrice, need0x: false);
     final chainIdHex = _dataUtils.bigIntToHex(BigInt.from(chainId), need0x: false);
-    final gasLimitHex = _dataUtils.bigIntToHex(
-      BigInt.from((gasLimit * 1.2).ceil()),
-      need0x: false,
-    );
+    final gasLimitHex = _dataUtils.bigIntToHex(BigInt.from(gasLimit), need0x: false);
+    final amountHex = _dataUtils.bigIntToHex(BigInt.zero, need0x: false);
+    final tokenIdHex = _dataUtils.bigIntToHex(BigInt.parse(tokenId), need0x: false);
+    final trValueHex = _dataUtils.bigIntToHex(BigInt.from(nftQuantity), need0x: false);
 
-    // Get nonce
+    // Nonce
     final mmn = await _tokenViewApi.getTransactionCountEth(
       coinType,
       fromAddress,
@@ -201,13 +149,6 @@ class EvmSender implements ChainSender {
 
     if (gasPrice == BigInt.zero) return SendResult.fail('Gas price error');
 
-    String messageHex = '';
-    if (calldata != null) {
-      messageHex = calldata; // raw hex ABI calldata — use as-is, no encoding
-    } else if (message != null) {
-      messageHex = Platform.isAndroid ? message : bytesToHex(message.codeUnits);
-    }
-
     final signMap = <String, String>{
       'chainId': chainIdHex,
       'gasPrice': gasPriceHex,
@@ -217,8 +158,9 @@ class EvmSender implements ChainSender {
       'nonce': nonceHex,
       'contract': contractAddress.toLowerCase(),
       'amount': amountHex,
-      'msgData': messageHex,
-      'erc721Or1155': '',
+      'erc721Or1155': nftStandard,
+      'tokenId': tokenIdHex,
+      'trValue': trValueHex,
       'is1559': get1559WithChainSymbol(coinType) ? 'true' : 'false',
     };
 

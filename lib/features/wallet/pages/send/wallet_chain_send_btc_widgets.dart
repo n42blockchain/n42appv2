@@ -91,7 +91,13 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
                   enabled: toTextFieldEnabel,
                   maxLines: 1,
                   onChanged: (value) {
-                    amountCheck(value: value);
+                    // Perf#5: debounce to avoid triggering UTXO/native calls
+                    // on every keystroke.
+                    _amountDebounce?.cancel();
+                    _amountDebounce = Timer(
+                      const Duration(milliseconds: 300),
+                      () => amountCheck(value: value),
+                    );
                   },
                   onEditingComplete: () {
                     amountCheck();
@@ -199,8 +205,8 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
   /// Compact fee display (replaces the old gasFeeWidgetPrice + gasFeeWidgetBtc).
   Widget buildBtcFeeCompact() {
     final coinType = widget.coinModel.coin['coinType']?.toString() ?? 'BTC';
-    final fees = gasFeeLevel['gasFees'] as int;
-    final feesBtc = gasFeeLevel['loading'] as bool
+    final fees = _fee.totalFees;
+    final feesBtc = _fee.loading
         ? '...'
         : '${flustars.NumUtil.divide(fees, 100000000)} $coinType';
 
@@ -232,7 +238,7 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
 
   // Total amount display (transfer + fee). Shown in red when balance is insufficient.
   Widget totalPriceWidgegt() {
-    final int gasFeesInt = (gasFeeLevel['gasFees'] as int) + price;
+    final int gasFeesInt = _fee.totalFees + price;
     final double gasFees = gasFeesInt / 100000000;
     final Color textColor = widget.coinModel.balanceDoubleAll() < gasFees
         ? AppThemeUtils.getColorByKey(
@@ -340,7 +346,7 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
                   ..coinMiniName = widget.coinModel.coin['coinType']
                   ..walletIndex = ref.read(wapBridgeProvider).walletIndex
                   ..price = price
-                  ..gasPrice = gasFeeLevel['gasFees'];
+                  ..gasPrice = _fee.totalFees;
 
                 final check = await Navigator.push<bool>(
                   context,
@@ -353,9 +359,7 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
                   ),
                 );
                 if (!mounted) return;
-                if (check == true) {
-                  signTx(trModel);
-                }
+                if (check == true) signTx(trModel);
               },
               load == Load.loading
                   ? '${S.of(context).g_key_106}...'

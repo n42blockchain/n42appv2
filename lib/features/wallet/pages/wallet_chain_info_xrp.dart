@@ -8,6 +8,7 @@ import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/sqlite/app_database.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/xrp_api.dart';
+import 'package:n42_wallet/features/wallet/api/coin_wallet_ops.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/pages/transactions/transaction_history_list.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_one.dart';
@@ -149,10 +150,10 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
       wap.walletMap[widget.coinModel.coin['coinType']]['isTest'] = isTest;
       widget.coinModel.isTest = isTest;
       await wap.saveWalletInfo(wap.walletInfo, wap.walletIndex);
-      await widget.coinModel.getBalance();
+      await fetchCoinBalance(widget.coinModel, wap);
       widget.coinModel.address = null;
-      await widget.coinModel.buildWallet();
-      await widget.coinModel.getBalance();
+      await buildCoinWallet(widget.coinModel, wap);
+      await fetchCoinBalance(widget.coinModel, wap);
       if (!mounted) return;
       setState(() {});
       _initData();
@@ -169,7 +170,7 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
     _eventBusFn = eventBus.on().listen((event) async {
       if (event is EventPublic && event.type == EventPublicType.transferOk) {
         _refreshTransactions(Load.refresh);
-        await widget.coinModel.getBalance();
+        await fetchCoinBalance(widget.coinModel, _walletProvider);
         if (!mounted) return;
         setState(() {});
       }
@@ -293,7 +294,7 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
         child: RefreshIndicator(
           onRefresh: () async {
             _refreshTransactions(Load.refresh);
-            await widget.coinModel.getBalance();
+            await fetchCoinBalance(widget.coinModel, _walletProvider);
           },
           backgroundColor: _tc(AppThemeKeys.mainButtonBgColor.name),
           color: _tc(AppThemeKeys.mainWhiteColor.name),

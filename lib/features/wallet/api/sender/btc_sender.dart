@@ -36,13 +36,11 @@ class BtcSender implements ChainSender {
       fromAddress = globalWapAdapter.getAddress(coinType, addrType: 'legacy');
     }
 
-    // Check last tx confirmation
-    final checkErr = await _checkLastTx(coinType, fromAddress, isTestNet);
-    if (checkErr != null) return SendResult.fail(checkErr);
-
-    // Get fee rate
-    int averageValue;
-    if (coinType == CoinType.BTC.name) {
+    // Get fee rate — use caller-provided value when available (skips API call)
+    final int averageValue;
+    if (params.btcFeeRate != null) {
+      averageValue = params.btcFeeRate!;
+    } else if (coinType == CoinType.BTC.name) {
       final gasFeeMM = await _tokenViewApi.getGasFeeBtc(isTest: isTestNet);
       if (gasFeeMM.error) return SendResult.fail(gasFeeMM.data?.toString());
       averageValue = gasFeeMM.data as int;
@@ -50,33 +48,38 @@ class BtcSender implements ChainSender {
       averageValue = getCoinGas(coinType);
     }
 
-    // Get balance
-    final mmb = await _tokenViewApi.getBalance(
-      BlockchainType.Bitcoin.name,
-      coinType,
-      fromAddress,
-      isTest: isTestNet,
-    ) ?? MessageModel.error();
-    if (mmb.error) return SendResult.fail(mmb.data?.toString());
-    final balance = mmb.data as BigInt;
+    final valuePrice = ethToWeiString(params.amount.toString(), 8);
+    final bool allValue;
+    final List<Map<String, dynamic>> collectedUtxos;
 
-    if (balance == BigInt.zero) {
-      return SendResult.fail(S.current.g_key_wallet_m5(coinType));
+    if (params.prebuiltUtxos != null && params.prebuiltUtxos!.isNotEmpty) {
+      // Use pre-fetched UTXOs from UI — skips balance + UTXO network calls
+      collectedUtxos = params.prebuiltUtxos!;
+      allValue = params.sendMax;
+    } else {
+      // Fetch balance and UTXOs from scratch
+      final mmb = await _tokenViewApi.getBalance(
+        BlockchainType.Bitcoin.name,
+        coinType,
+        fromAddress,
+        isTest: isTestNet,
+      ) ?? MessageModel.error();
+      if (mmb.error) return SendResult.fail(mmb.data?.toString());
+      final balance = mmb.data as BigInt;
+      if (balance == BigInt.zero) {
+        return SendResult.fail(S.current.g_key_wallet_m5(coinType));
+      }
+      allValue = balance == valuePrice && params.sendMax;
+      final List<Map<String, dynamic>> utxos = [];
+      final mmutxo = await _getUTXO(
+        coinType, params.amount, fromAddress, utxos, 0,
+        averageValue, 1000, 1, allValue, isTest: isTestNet,
+      );
+      if (mmutxo.error) return SendResult.fail(mmutxo.data?.toString());
+      collectedUtxos = List<Map<String, dynamic>>.from(mmutxo.data['utxo'] as List);
     }
 
-    final valuePrice = ethToWeiString(params.amount.toString(), 8);
-    final allValue = balance == valuePrice && params.sendMax;
-
-    // Collect UTXOs
-    final List<Map<String, dynamic>> utxos = [];
-    final mmutxo = await _getUTXO(
-      coinType, params.amount, fromAddress, utxos, 0,
-      averageValue, 1000, 1, allValue, isTest: isTestNet,
-    );
-    if (mmutxo.error) return SendResult.fail(mmutxo.data?.toString());
-    final collectedUtxos = List<Map<String, dynamic>>.from(mmutxo.data['utxo'] as List);
-
-    // Calculate byte size and fees
+    // Calculate byte size and fees (uses real toAddress for accuracy)
     final byteSize = await _getSignByteSize(
       coinType, params.path, collectedUtxos, valuePrice,
       averageValue, fromAddress, params.toAddress,
@@ -92,7 +95,10 @@ class BtcSender implements ChainSender {
       }
       adjustedAmount = params.amount - feeInBtc;
     } else {
-      if (BigInt.from(byteSizeFees) + valuePrice > balance) {
+      final totalUtxoValue = BigInt.from(
+        collectedUtxos.fold<int>(0, (s, u) => s + int.parse(u['value'] as String)),
+      );
+      if (BigInt.from(byteSizeFees) + valuePrice > totalUtxoValue) {
         return SendResult.fail(S.current.g_key_wallet_m5(coinType));
       }
     }
@@ -156,26 +162,6 @@ class BtcSender implements ChainSender {
 
     if (sendMm.error) return SendResult.fail(sendMm.data?.toString());
     return SendResult.ok(sendMm.data?.toString(), actualAmount: adjustedAmount);
-  }
-
-  /// Returns null if OK, error string if blocked.
-  Future<String?> _checkLastTx(String coinType, String address, bool isTest) async {
-    String lookupAddress = address;
-    if (coinType == CoinType.BCH.name) {
-      lookupAddress = globalWapAdapter.getAddress(coinType, addrType: 'legacy');
-    }
-    final txModel = await _tokenViewApi.getTxListBtc(
-      coinType, lookupAddress, pageNum: 1, pageSize: 1,
-    );
-    if (txModel.error) return txModel.data?.toString();
-    if ((txModel.data as List).isEmpty) return null;
-    final btcData = txModel.data[0] as Map<String, dynamic>;
-    if (btcData['txCount'] == 0) return null;
-    if ((btcData['txs'] as List).isNotEmpty) {
-      if (double.parse(btcData['txs'][0]['confirmations'].toString()) >= 6) return null;
-      return S.current.g_key_wallet_m19(coinType);
-    }
-    return 'error';
   }
 
   Future<MessageModel> _getUTXO(

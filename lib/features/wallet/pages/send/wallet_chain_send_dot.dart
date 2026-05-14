@@ -1,7 +1,6 @@
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/component/pages/scan_page.dart';
-import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/sqlite/app_database.dart';
 import 'package:n42_wallet/features/utils/data_utils.dart';
 import 'package:n42_wallet/features/utils/regular.dart';
@@ -9,7 +8,9 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/dot_api.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
-import 'package:n42_wallet/features/wallet/api/transfer_api.dart';
+import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
+import 'package:n42_wallet/features/wallet/api/sender/sender_factory.dart';
+import 'package:n42_wallet/features/wallet/api/coin_wallet_ops.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_base_send.dart';

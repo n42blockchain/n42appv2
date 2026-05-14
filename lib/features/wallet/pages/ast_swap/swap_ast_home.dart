@@ -8,8 +8,10 @@ import 'package:n42_wallet/features/wallet/api/market_api.dart';
 import 'package:n42_wallet/features/wallet/api/market_api_payload_utils.dart';
 import 'package:n42_wallet/features/wallet/api/swap_ast_api.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
-import 'package:n42_wallet/features/wallet/api/transfer_api.dart';
+import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
+import 'package:n42_wallet/features/wallet/api/sender/sender_factory.dart';
 import 'package:n42_wallet/features/wallet/models/ast_swap/swap_ast_model.dart';
+import 'package:n42_wallet/features/wallet/api/coin_wallet_ops.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/pages/ast_swap/swap_ast_price_utils.dart';
 import 'package:n42_wallet/features/wallet/pages/ast_swap/swap_ast_form_widgets.dart';
@@ -214,9 +216,9 @@ class _SwapAstHomeState extends ConsumerState<SwapAstHome> {
     cm.addrType = astModel['addrType'];
     cm.pathIndex = astModel['pathIndex'] ?? 0;
     getCoinModel = cm;
-    await getCoinModel!.buildWallet();
+    await buildCoinWallet(getCoinModel!, wa);
     if (!mounted) return;
-    getCoinModel!.getBalanceDefault();
+    applyCachedBalance(getCoinModel!);
     setState(() {});
     getBalanceGet();
   }

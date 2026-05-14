@@ -58,7 +58,7 @@ mixin _XrpSendLogicMixin on ConsumerState<WalletChainSendXrp> {
         return true;
       });
       chainModel = wap.coinModels[cIndex];
-      await chainModel?.getBalance();
+      if (chainModel != null) await fetchCoinBalance(chainModel!, ref.read(wapBridgeProvider));
       if (!mounted) return;
       setState(() {});
     }
@@ -81,7 +81,7 @@ mixin _XrpSendLogicMixin on ConsumerState<WalletChainSendXrp> {
     setState(() {
       load = Load.loading;
     });
-    final bool isOk = await widget.coinModel.getBalance(getToken: false);
+    final bool isOk = await fetchCoinBalance(widget.coinModel, ref.read(wapBridgeProvider), getToken: false);
     if (!mounted) return;
     if (!isOk) {
       load = Load.finish;
@@ -314,27 +314,48 @@ mixin _XrpSendLogicMixin on ConsumerState<WalletChainSendXrp> {
     if (!signTxCheck()) return;
     bool completedWithExit = false;
     try {
-      final TransferApi transferApi = TransferApi();
-      final MessageModel mm = await transferApi.transferWallet(
-        trModel: trModel,
-        privateKey: widget.coinModel.privateKey,
-        pathIndex: widget.coinModel.pathIndex,
+      const coinType = 'XRP';
+      final addrType = widget.coinModel.addrType;
+      final baseInfo = widget.coinModel.coin['baseInfo'] as Map<String, dynamic>?;
+      final pathMap = baseInfo?['path'] as Map<String, dynamic>?;
+      final basePath = pathMap?[addrType]?.toString() ?? "m/44'/144'/0'/0/0";
+      final path = getPathWithIndex(basePath, widget.coinModel.pathIndex);
+      final decimals = (widget.coinModel.coin['decimals'] as num?)?.toInt() ?? 6;
+      final destTag = (trModel.other as RippleTrModel?)?.destinationTag;
+
+      final result = await SenderFactory.instance.getSender(coinType).send(
+        SendParams(
+          coinType: coinType,
+          fromAddress: trModel.from1,
+          toAddress: trModel.to1,
+          amount: toEther(trModel.price.toString(), decimals).toDouble(),
+          decimals: decimals,
+          path: path,
+          sendMax: false,
+          isTest: widget.coinModel.isTest,
+          contractAddress: trModel.contract,
+          tokenDecimals: 0,
+          memo: trModel.message,
+          privateKey: widget.coinModel.privateKey,
+          chainConfig: widget.coinModel.coin,
+          destinationTag: destTag,
+        ),
       );
-      if (mm.error) {
-        errorMessage = mm.data;
-      } else {
-        trModel.txHash = mm.data;
+
+      if (!mounted) return;
+      if (result.success) {
+        trModel.txHash = result.txHash ?? '';
         trModel.trId = await AppDatabase().insertTransationRecord(trModel);
         if (!mounted) return;
         ref.read(tripBridgeProvider).addUndoneTr(trModel, 1);
-        await RecentAddressService.save(
-          widget.coinModel.coin['coinType'] ?? '',
-          toTextEditingController.text.trim(),
-        );
-        ToastUtils.show(S.current.g_key_nft_41);
+        await RecentAddressService.save(coinType, toTextEditingController.text.trim());
         if (!mounted) return;
+        ToastUtils.show(S.current.g_key_nft_41);
         completedWithExit = true;
         Navigator.pop(context);
+      } else {
+        errorMessage = result.error ?? '';
+        ToastUtils.show(errorMessage);
       }
     } catch (e) {
       errorMessage = e.toString();

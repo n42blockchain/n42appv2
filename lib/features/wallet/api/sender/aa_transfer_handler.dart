@@ -23,7 +23,7 @@ import 'package:n42_wallet/features/wallet/api/chain_api/eth_api.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:web3dart/web3dart.dart';
 
-import '../transfer_handler.dart';
+import 'transfer_handler.dart';
 import 'base_transfer_handler.dart';
 
 /// Transfer parameters specific to AA transactions

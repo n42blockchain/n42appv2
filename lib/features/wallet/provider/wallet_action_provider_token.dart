@@ -35,7 +35,6 @@ extension WalletActionProviderToken on WalletActionProvider {
       final tokens = _extractTokens(chain);
       if (tokens.isNotEmpty) cm.tokens = tokens;
       cm.privateKey=walletInfo.privateKey;
-      cm.walletAccess=this;
       _coinModels.add(cm);
     }
     _applyChainOrder();
@@ -95,8 +94,8 @@ extension WalletActionProviderToken on WalletActionProvider {
 
     for (int i = 0; i < _coinModels.length; i++) {
       CoinModel mm = _coinModels[i];
-      await mm.buildWallet(walletAccess: this);
-      mm.getBalanceDefault();
+      await buildCoinWallet(mm, this);
+      applyCachedBalance(mm);
       if(mm.showList){
         coinList.add(mm);
 
@@ -135,8 +134,7 @@ extension WalletActionProviderToken on WalletActionProvider {
     //ProviderUtil.walletActionProvider().getCoinPrice(cm);
     cm.address=mainChain.address;
     cm.addressType=mainChain.addressType;
-    cm.walletAccess=this;
-    cm.getBalanceDefault();
+    applyCachedBalance(cm);
     return cm;
   }
 
@@ -149,9 +147,9 @@ extension WalletActionProviderToken on WalletActionProvider {
     if(walletInfo.networkIndex==-1){
       for (int i = 0; i < _coinModels.length; i++) {
         CoinModel mm = _coinModels[i];
-        await mm.buildWallet(walletAccess: this);
+        await buildCoinWallet(mm, this);
         if(mm.showList){
-          mm.getBalanceDefault();
+          applyCachedBalance(mm);
           coinList.add(mm);
 
           // 记录 ETH 的位置
@@ -176,7 +174,7 @@ extension WalletActionProviderToken on WalletActionProvider {
     else{
       CoinModel mm = _coinModels[walletInfo.networkIndex];
       if(mm.showList){
-        mm.getBalanceDefault();
+        applyCachedBalance(mm);
         coinList.add(mm);
       }
       for(final token in mm.tokens.values){
@@ -226,8 +224,8 @@ extension WalletActionProviderToken on WalletActionProvider {
       e.coin['coinType'] == coinType && e.coin['isContract'] == false);
     if(clIndex !=-1){
       coinList[clIndex]=_coinModels[cIndex];
-      coinList[clIndex].buildWallet(walletAccess: this);
-      coinList[clIndex].getBalanceDefault();
+      buildCoinWallet(coinList[clIndex], this);
+      applyCachedBalance(coinList[clIndex]);
       if(coinList[clIndex].tokens.isNotEmpty){
         for(final token in coinList[clIndex].tokens.values){
           final tIndex = coinList.indexWhere((e) =>
@@ -253,7 +251,7 @@ extension WalletActionProviderToken on WalletActionProvider {
       _coinModels[index].showList=true;
       coinList.add(_coinModels[index]);
       getCoinPrice(coinList.last);
-      coinList.last.getBalanceDefault();
+      applyCachedBalance(coinList.last);
       cMap['showList']=chainMap['showList'];
       walletMap[mKey]=cMap;
     }
@@ -269,7 +267,7 @@ extension WalletActionProviderToken on WalletActionProvider {
       _coinModels.add(cm);
       coinList.add(cm);
       getCoinPrice(cm);
-      cm.getBalanceDefault();
+      applyCachedBalance(cm);
       walletMap[mKey]=chainMap;
     }
     refresh();

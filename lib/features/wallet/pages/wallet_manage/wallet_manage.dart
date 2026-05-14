@@ -4,6 +4,7 @@ import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
+import 'package:n42_wallet/features/wallet/api/coin_wallet_ops.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_flow_utils.dart';
@@ -101,7 +102,9 @@ class _WalletManageState extends ConsumerState<WalletManage> {
               ..addrType = info['addrType']
               ..pathIndex = info['pathIndex'] ?? 0
               ..privateKey = walletInfo?.privateKey;
-        await cm.buildWallet(
+        await buildCoinWallet(
+          cm,
+          ref.read(wapBridgeProvider),
           setAddress: false,
           walletIndex: widget.walletIndex,
         );

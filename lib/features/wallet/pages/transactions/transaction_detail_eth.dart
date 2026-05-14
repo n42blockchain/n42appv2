@@ -19,7 +19,6 @@ import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/features/widgets/empty.dart';
 import 'package:n42_wallet/features/widgets/prompt_widget.dart';
 import 'package:n42_wallet/features/wallet/widgets/ens_address_display.dart';
-import 'package:n42_wallet/features/wallet/pages/transactions/transaction_retry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:web3dart/web3dart.dart';
@@ -289,8 +288,6 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
               ],
             ),
           ),
-          if (resultStr == "Pending" && owner && load == Load.finish)
-            buildPendingActionBar(),
         ],
       ),
     );

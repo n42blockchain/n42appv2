@@ -8,7 +8,10 @@ import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/wallet/api/dex_swap_api.dart';
 import 'package:n42_wallet/features/wallet/api/market_api.dart';
-import 'package:n42_wallet/features/wallet/api/transfer_api.dart';
+import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
+import 'package:n42_wallet/features/wallet/api/sender/sender_factory.dart';
+import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart'
+    show getPathWithIndex;
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/dex/dex_quote_model.dart';
 import 'package:n42_wallet/features/wallet/models/dex/dex_token_model.dart';
@@ -23,8 +26,7 @@ import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_swap_token_card.da
 import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_token_select.dart';
 import 'package:n42_wallet/features/wallet/aa/core/aa_config.dart';
 import 'package:n42_wallet/features/wallet/aa/builder/calldata_builder.dart';
-import 'package:n42_wallet/features/wallet/api/transfer/handlers/aa_transfer_handler.dart';
-import 'package:n42_wallet/features/wallet/api/transfer/transfer_handler_factory.dart';
+import 'package:n42_wallet/features/wallet/api/sender/aa_transfer_handler.dart';
 import 'package:n42_wallet/features/wallet/aa/models/smart_account.dart';
 import 'package:web3dart/web3dart.dart' show hexToBytes;
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
@@ -41,7 +43,6 @@ class DexSwapHome extends ConsumerStatefulWidget {
 
 class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
   final DexSwapApi _dexApi = DexSwapApi();
-  final TransferApi _transferApi = TransferApi();
   final TextEditingController _amountCtrl = TextEditingController();
 
   Timer? _debounce;
@@ -142,6 +143,22 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
       }
       if (mounted) setState(() {});
     });
+  }
+
+  /// Builds the HD path for [chainCoinType] from the wallet's coin models.
+  /// Returns null if the coin model cannot be found.
+  String? _buildChainPath(String chainCoinType) {
+    final wa = ref.read(wapBridgeProvider);
+    for (final cm in wa.coinModels) {
+      if ((cm.coin['coinType'] as String? ?? '') == chainCoinType) {
+        final addrType = cm.addrType;
+        final baseInfo = cm.coin['baseInfo'] as Map<String, dynamic>?;
+        final pathMap = baseInfo?['path'] as Map<String, dynamic>?;
+        final basePath = pathMap?[addrType]?.toString() ?? "m/44'/60'/0'/0/0";
+        return getPathWithIndex(basePath, cm.pathIndex);
+      }
+    }
+    return null;
   }
 
   // ── Quote state helpers ───────────────────────────────────────────────────
@@ -337,24 +354,33 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
       if (wei > BigInt.zero) exactAmount = wei;
     }
 
-    final MessageModel txRes = await _transferApi.transfer(
-      _chain,
-      _tokenIn!.address, // approve on the token contract
-      0.0,
-      fromAddress: _userAddr,
-      contractAddress: '',
-      isTest: false,
-      message: DexSwapApi.buildApproveCalldata(
-        q.routerAddr,
-        amount: exactAmount,
+    final path = _buildChainPath(_chain);
+    if (path == null) {
+      setState(() {
+        _approveLoad = Load.finish;
+        _errorMsg = S.of(context).g_key_175;
+      });
+      return;
+    }
+
+    final approveResult = await SenderFactory.instance.getSender(_chain).send(
+      SendParams(
+        coinType: _chain,
+        fromAddress: _userAddr,
+        toAddress: _tokenIn!.address,
+        amount: 0.0,
+        decimals: 18,
+        path: path,
+        isTest: false,
+        calldata: DexSwapApi.buildApproveCalldata(q.routerAddr, amount: exactAmount),
       ),
     );
     if (!mounted) return;
 
-    if (txRes.error) {
+    if (!approveResult.success) {
       setState(() {
         _approveLoad = Load.finish;
-        _errorMsg = txRes.data?.toString() ?? S.of(context).g_key_175;
+        _errorMsg = approveResult.error ?? S.of(context).g_key_175;
       });
       return;
     }
@@ -383,33 +409,54 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
       _errorMsg = '';
     });
 
-    MessageModel txRes;
+    String txHash;
 
     // Gas-free path: route through AA handler with Paymaster
     if (_gasFreeEnabled && _smartAccount != null) {
-      txRes = await _executeAASwap(q);
+      final txRes = await _executeAASwap(q);
+      if (!mounted) return;
+      if (txRes.error) {
+        setState(() {
+          _swapLoad = Load.finish;
+          _errorMsg = txRes.data?.toString() ?? S.of(context).g_key_175;
+        });
+        return;
+      }
+      txHash = txRes.data['txHash'] as String? ?? '';
     } else {
-      txRes = await _transferApi.transfer(
-        _tokenIn?.chain ?? _chain,
-        q.routerAddr,
-        0.0, // ERC-20 swap: ETH value = 0
-        fromAddress: _userAddr,
-        contractAddress: '',
-        isTest: false,
-        message: q.calldata,
+      final swapChain = _tokenIn?.chain ?? _chain;
+      final path = _buildChainPath(swapChain);
+      if (path == null) {
+        setState(() {
+          _swapLoad = Load.finish;
+          _errorMsg = S.of(context).g_key_175;
+        });
+        return;
+      }
+      final swapResult = await SenderFactory.instance.getSender(swapChain).send(
+        SendParams(
+          coinType: swapChain,
+          fromAddress: _userAddr,
+          toAddress: q.routerAddr,
+          amount: 0.0,
+          decimals: 18,
+          path: path,
+          isTest: false,
+          calldata: q.calldata,
+        ),
       );
+      if (!mounted) return;
+      if (!swapResult.success) {
+        setState(() {
+          _swapLoad = Load.finish;
+          _errorMsg = swapResult.error ?? S.of(context).g_key_175;
+        });
+        return;
+      }
+      txHash = swapResult.txHash ?? '';
     }
     if (!mounted) return;
 
-    if (txRes.error) {
-      setState(() {
-        _swapLoad = Load.finish;
-        _errorMsg = txRes.data?.toString() ?? S.of(context).g_key_175;
-      });
-      return;
-    }
-
-    final String txHash = txRes.data['txHash'] as String? ?? '';
     await _dexApi.commit(AppGlobals.userInfo?.uuid ?? '', q.orderId, txHash);
     if (!mounted) return;
 
@@ -428,10 +475,16 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
       return MessageModel.error()..data = 'No smart account available';
     }
 
-    final handler = TransferHandlerFactory.instance.getAAHandler(_chain);
-    if (handler == null) {
+    final normalizedChain = switch (_chain.toUpperCase()) {
+      'BSC' => 'BNB',
+      'AVAXC' => 'AVAX',
+      'OPTIMISM' => 'OP',
+      final s => s,
+    };
+    if (!AAConfig.isChainSupported(normalizedChain)) {
       return MessageModel.error()..data = 'AA not supported for $_chain';
     }
+    final handler = AATransferHandler(normalizedChain);
 
     // Build batch calls: approve (if needed) + swap
     final batchCalls = <ExecuteCall>[];

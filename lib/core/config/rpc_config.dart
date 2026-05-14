@@ -39,7 +39,7 @@ class RpcConfig {
   /// Ethereum Mainnet RPC
   static const String ethMainnetRpc = String.fromEnvironment(
     'ETH_RPC_URL',
-    defaultValue: 'https://rpc.n42.world',
+    defaultValue: 'https://eth.llamarpc.com',
   );
 
   /// Ethereum Sepolia Testnet RPC
@@ -111,6 +111,9 @@ void _syncWalletChainRpcOverrides() {
   final baseInfo = eth['baseInfo'];
   if (baseInfo is! Map<String, dynamic>) return;
 
-  baseInfo['service'] = RpcConfig.ethMainnetRpc;
+  // 仅在 ETH_RPC_URL 编译变量非空时才覆盖，避免用 N42 的 RPC 错误替代 ETH 配置
+  if (RpcConfig.ethMainnetRpc.isNotEmpty) {
+    baseInfo['service'] = RpcConfig.ethMainnetRpc;
+  }
   baseInfo['service_test'] = RpcConfig.ethSepoliaRpc;
 }

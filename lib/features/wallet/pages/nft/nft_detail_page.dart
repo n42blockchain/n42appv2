@@ -8,7 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
-import 'package:n42_wallet/features/wallet/api/transfer_api.dart';
+import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
+import 'package:n42_wallet/features/wallet/api/sender/nft_sender.dart';
+import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart'
+    show getPathWithIndex;
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/nft_model.dart';
 import 'package:n42_wallet/features/wallet/pages/nft/nft_send_page.dart';
@@ -161,21 +164,33 @@ class _NftDetailPageState extends State<NftDetailPage> {
 
     try {
       final coinType = coinModel.coin['coinType'] as String? ?? 'ETH';
-      final mm = await TransferApi().transferEth721(
-        toAddress: '0x000000000000000000000000000000000000dEaD',
-        contractAddress: nft.contractAddress,
-        value: 0,
-        nftNum: nft.balance,
-        tokenId: nft.tokenId,
-        erc721Or1155: nft.nftType,
-        coinType: coinType,
-        isTest: coinModel.isTest,
+      final addrType = coinModel.addrType;
+      final baseInfo = coinModel.coin['baseInfo'] as Map<String, dynamic>?;
+      final pathMap = baseInfo?['path'] as Map<String, dynamic>?;
+      final basePath = pathMap?[addrType]?.toString() ?? "m/44'/60'/0'/0/0";
+      final path = getPathWithIndex(basePath, coinModel.pathIndex);
+
+      final result = await NftSender().send(
+        SendParams(
+          coinType: coinType,
+          fromAddress: coinModel.address.toString(),
+          toAddress: '0x000000000000000000000000000000000000dEaD',
+          amount: 0.0,
+          decimals: (coinModel.coin['decimals'] as num?)?.toInt() ?? 18,
+          path: path,
+          isTest: coinModel.isTest,
+          contractAddress: nft.contractAddress,
+          nftTokenId: nft.tokenId,
+          nftStandard: nft.nftType,
+          nftQuantity: nft.balance,
+          chainConfig: coinModel.coin,
+        ),
       );
 
       if (!mounted) return;
 
-      if (mm.error == true) {
-        ToastUtils.showWarning(mm.data?.toString() ?? 'Burn failed');
+      if (!result.success) {
+        ToastUtils.showWarning(result.error ?? 'Burn failed');
       } else {
         ToastUtils.showSuccess(S.of(context).g_key_nft_41);
         completedWithExit = true;

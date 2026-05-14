@@ -79,18 +79,19 @@ extension WalletActionProviderWallet on WalletActionProvider {
   }
 
   /// 同步新链到现有钱包
-  /// 检查 chainUrlMap 中是否有新链不在当前钱包中，如果有则自动添加
+  /// 检查 chainUrlMap 中是否有新链不在当前钱包中，如果有则自动添加。
+  /// 同时修复存储数据中错误的 service/service_test URL（如历史 bug 写入的 N42 RPC）。
   Future<void> _syncNewChains() async {
     if (_walletInfoLsit.isEmpty) return;
 
-    bool hasNewChains = false;
+    bool hasChanges = false;
 
     // 遍历所有钱包
     for (int walletIdx = 0; walletIdx < _walletInfoLsit.length; walletIdx++) {
       final wallet = _walletInfoLsit[walletIdx];
 
       if (normalizeWatchOnlyWallet(wallet, supportedChains: chainUrlMap)) {
-        hasNewChains = true;
+        hasChanges = true;
       }
       if (wallet.watchOnly) {
         continue;
@@ -99,30 +100,52 @@ extension WalletActionProviderWallet on WalletActionProvider {
 
       // 检查 chainUrlMap 中的每条链
       for (final chainKey in chainUrlMap.keys) {
-        // 如果钱包中没有这条链，添加它
+        final chainConfig = chainUrlMap[chainKey];
+        if (chainConfig == null) continue;
+
         if (!wallet.coinInfo!.containsKey(chainKey)) {
-          final chainConfig = chainUrlMap[chainKey];
-          if (chainConfig != null && chainConfig['showList'] == true) {
-            // 完全深拷贝链配置
+          // 新链：添加到钱包
+          if (chainConfig['showList'] == true) {
             wallet.coinInfo![chainKey] = _deepCopyChainConfig(chainConfig);
-            hasNewChains = true;
+            hasChanges = true;
             if (kDebugMode) {
               debugPrint(
                 'WalletActionProvider: Added new chain $chainKey to wallet ${wallet.walletName}',
               );
             }
           }
+        } else {
+          // 已有链：同步 service/service_test URL（修复历史 bug 写入的错误 RPC）
+          final canonicalBase = chainConfig['baseInfo'];
+          if (canonicalBase is! Map) continue;
+          final storedChain = wallet.coinInfo![chainKey];
+          if (storedChain is! Map) continue;
+          final storedBase = storedChain['baseInfo'];
+          if (storedBase is! Map) continue;
+
+          bool changed = false;
+          final canonicalService = canonicalBase['service'];
+          final canonicalServiceTest = canonicalBase['service_test'];
+          if (canonicalService != null && storedBase['service'] != canonicalService) {
+            storedBase['service'] = canonicalService;
+            changed = true;
+          }
+          if (canonicalServiceTest != null && storedBase['service_test'] != canonicalServiceTest) {
+            storedBase['service_test'] = canonicalServiceTest;
+            changed = true;
+          }
+          if (changed) hasChanges = true;
         }
       }
     }
 
-    // 如果有新链被添加，保存钱包信息
-    if (hasNewChains) {
+    // 如果有变更，保存钱包信息
+    if (hasChanges) {
       for (int i = 0; i < _walletInfoLsit.length; i++) {
         await saveWalletInfo(_walletInfoLsit[i], i);
       }
       if (kDebugMode) {
-        debugPrint('WalletActionProvider: Synced new chains to all wallets');
+        debugPrint('WalletActionProvider: Synced chains and service URLs to all wallets');
       }
     }
   }

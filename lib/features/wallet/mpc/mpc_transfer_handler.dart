@@ -1,8 +1,8 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
-import 'package:n42_wallet/features/wallet/api/transfer/transfer_handler.dart';
-import 'package:n42_wallet/features/wallet/api/transfer/handlers/base_transfer_handler.dart';
+import 'package:n42_wallet/features/wallet/api/sender/transfer_handler.dart';
+import 'package:n42_wallet/features/wallet/api/sender/base_transfer_handler.dart';
 import 'mpc_provider.dart';
 
 /// MPC 转账参数

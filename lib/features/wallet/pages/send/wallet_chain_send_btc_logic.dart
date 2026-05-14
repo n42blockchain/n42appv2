@@ -1,10 +1,25 @@
 part of 'wallet_chain_send_btc.dart';
 
+/// Fee state for a BTC-family send operation.
+class _BtcFee {
+  bool loading;
+  bool error;
+  int averageRate;  // API-fetched sat/byte
+  int selectedRate; // user-selected sat/byte
+  int totalFees;    // computed fee in satoshis
+  int maxPrice;     // satoshis in "send max" mode; 0 = not max
+
+  _BtcFee()
+      : loading = false,
+        error = false,
+        averageRate = 5,
+        selectedRate = 5,
+        totalFees = 0,
+        maxPrice = 0;
+}
+
 /// Business logic mixin for [_WalletChainSendBtcState].
 mixin _BtcSendLogicMixin on ConsumerState<WalletChainSendBtc> {
-  TransferApi? _logicTransferApi;
-  TransferApi get transferApi => _logicTransferApi ??= TransferApi();
-
   Regular? _logicRegular;
   Regular get regular => _logicRegular ??= Regular();
 
@@ -15,17 +30,14 @@ mixin _BtcSendLogicMixin on ConsumerState<WalletChainSendBtc> {
   TokenViewApi get tokenViewApi => _logicTokenViewApi ??= TokenViewApi();
 
   final TextEditingController toTextEditingController = TextEditingController();
-  final TextEditingController valueTextEditingController =
-      TextEditingController();
-  final TextEditingController byteFeeTextEditingController =
-      TextEditingController();
+  final TextEditingController valueTextEditingController = TextEditingController();
+  final TextEditingController byteFeeTextEditingController = TextEditingController();
   final FocusNode toNode = FocusNode();
   final FocusNode valueNode = FocusNode();
   final FocusNode byteFeeNode = FocusNode();
 
   String toErrorMessage = '';
   String amountErrorMessage = '';
-  String bytefeeErrorMessage = '';
   String errorMessage = '';
 
   Load utxoLoad = Load.finish;
@@ -47,72 +59,50 @@ mixin _BtcSendLogicMixin on ConsumerState<WalletChainSendBtc> {
   bool toTextFieldEnabel = true;
 
   NonEvmFeeModel? _btcFeeModel;
+  final _BtcFee _fee = _BtcFee();
 
-  Map<String, dynamic> gasFeeLevel = {
-    'error': false,
-    'averageValue': 5,
-    'loading': false,
-    'gasFeeRate': 5,
-    'gasFees': 0,
-    'signByteSize': 0,
-    'maxValue': 0,
-  };
+  // Debounce for amount input — avoids triggering UTXO/native calls per keystroke.
+  Timer? _amountDebounce;
 
+  // Perf#4: fetch fee rate and balance in parallel.
   Future<void> initData() async {
-    await checkLastTx();
-    await getGasFeeBtc();
-    await getBalance();
-  }
-
-  Future<void> checkLastTx() async {
-    final checkLastModel = await transferApi.checkLastTxBtc(
-      widget.coinModel.coin['coinType'],
-      widget.coinModel.address,
-    );
-    if (!mounted) return;
-    if (checkLastModel.error) {
-      errorMessage = checkLastModel.data;
-    }
-    setState(() {});
+    await Future.wait([getGasFeeBtc(), getBalance()]);
   }
 
   Future<void> getGasFeeBtc() async {
     if (widget.coinModel.coin['coinType'] == CoinType.BTC.name) {
-      if (gasFeeLevel['loading'] as bool) return;
-      gasFeeLevel['loading'] = true;
+      if (_fee.loading) return;
+      _fee.loading = true;
       setState(() {});
       final gasFeeMM = await tokenViewApi.getGasFeeBtc(
         isTest: widget.coinModel.isTest,
       );
       if (!mounted) return;
       if (gasFeeMM.error) {
-        gasFeeLevel['error'] = true;
+        _fee.error = true;
         errorMessage = S.current.g_key_t_44;
       } else {
-        gasFeeLevel['error'] = false;
-        gasFeeLevel['averageValue'] = gasFeeMM.data;
-        gasFeeLevel['gasFeeRate'] = gasFeeMM.data;
+        _fee.error = false;
+        _fee.averageRate = gasFeeMM.data as int;
+        _fee.selectedRate = gasFeeMM.data as int;
       }
-      gasFeeLevel['loading'] = false;
+      _fee.loading = false;
     } else {
       final averageValue = getCoinGas(widget.coinModel.coin['coinType']);
-      gasFeeLevel['averageValue'] = averageValue;
-      gasFeeLevel['gasFeeRate'] = averageValue;
+      _fee.averageRate = averageValue;
+      _fee.selectedRate = averageValue;
     }
-    byteFeeTextEditingController.text = gasFeeLevel['averageValue'].toString();
+    byteFeeTextEditingController.text = _fee.averageRate.toString();
     _buildBtcFeeModel();
     setState(() {});
   }
 
   void _buildBtcFeeModel() {
-    final avgRate = gasFeeLevel['averageValue'] as int;
     final coinType = widget.coinModel.coin['coinType']?.toString() ?? 'BTC';
-    final unit = (widget.coinModel.coin['unit'] ?? coinType)
-        .toString()
-        .toUpperCase();
+    final unit = (widget.coinModel.coin['unit'] ?? coinType).toString().toUpperCase();
     const estBytes = 250;
     _btcFeeModel = NonEvmFeeModel.forBtcLike(
-      averageRateSatPerByte: avgRate,
+      averageRateSatPerByte: _fee.averageRate,
       calcFeeByRate: (rate) => rate * estBytes,
       chainSymbol: coinType,
       unit: unit,
@@ -132,8 +122,8 @@ mixin _BtcSendLogicMixin on ConsumerState<WalletChainSendBtc> {
     final rate =
         result.effectiveFeeRate ??
         _btcFeeModel!.currentOption.feeRate ??
-        (gasFeeLevel['averageValue'] as int);
-    gasFeeLevel['gasFeeRate'] = rate;
+        _fee.averageRate;
+    _fee.selectedRate = rate;
     byteFeeTextEditingController.text = rate.toString();
     setState(() {});
     calculateGasFee();
@@ -147,7 +137,7 @@ mixin _BtcSendLogicMixin on ConsumerState<WalletChainSendBtc> {
 
   Future<void> getBalance() async {
     try {
-      final isOk = await widget.coinModel.getBalance();
+      final isOk = await fetchCoinBalance(widget.coinModel, ref.read(wapBridgeProvider));
       if (!mounted) return;
       if (isOk == false) {
         load = Load.finish;
@@ -192,8 +182,10 @@ mixin _BtcSendLogicMixin on ConsumerState<WalletChainSendBtc> {
     setState(() {});
   }
 
+  // Quality#9: fee used here is the last computed value — approximate but
+  // gives immediate feedback. calculateGasFee() corrects it afterward.
   void amountCheck({String value = ''}) {
-    if (gasFeeLevel['maxValue'] != 0) return;
+    if (_fee.maxPrice != 0) return;
     if (value.isEmpty) value = valueTextEditingController.text;
 
     if (value.isEmpty) {
@@ -210,11 +202,10 @@ mixin _BtcSendLogicMixin on ConsumerState<WalletChainSendBtc> {
       _setAmountError(S.of(context).g_key_46(0));
       return;
     }
+    // Quick balance check using last-known fee as estimate.
     final transactionTotal =
         dec.Decimal.parse(value) +
-        dec.Decimal.parse(
-          toEther(gasFeeLevel['gasFees'].toString(), 8).toString(),
-        );
+        dec.Decimal.parse(toEther(_fee.totalFees.toString(), 8).toString());
     if (transactionTotal.toDouble() > widget.coinModel.balanceDoubleAll()) {
       _setAmountError(S.of(context).g_key_47);
       return;
@@ -227,7 +218,7 @@ mixin _BtcSendLogicMixin on ConsumerState<WalletChainSendBtc> {
     }
     amountErrorMessage = '';
     price = ethToWeiString(value, 8).toInt();
-    gasFeeLevel['maxValue'] = 0;
+    _fee.maxPrice = 0;
     calculateGasFee();
     setState(() {});
   }
@@ -247,8 +238,8 @@ mixin _BtcSendLogicMixin on ConsumerState<WalletChainSendBtc> {
       _setAmountError(S.of(context).g_key_t_43);
       return;
     }
-    gasFeeLevel['gasFeeRate'] = valueInt;
-    if (gasFeeLevel['max'] != 0) {
+    _fee.selectedRate = valueInt;
+    if (_fee.maxPrice != 0) {
       maxTag();
     } else {
       calculateGasFee();

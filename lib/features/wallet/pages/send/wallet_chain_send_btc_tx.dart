@@ -1,5 +1,8 @@
 part of 'wallet_chain_send_btc.dart';
 
+// Dummy address used only for signing-byte-size estimation; never receives funds.
+const _kBtcFeeEstimationAddress = 'bc1q4q83qn0r4ndkpldfkypttncfrjxu4zdeeuz40s';
+
 mixin _BtcSendTxMixin on _BtcSendLogicMixin {
   Future<void> getUTXO({bool allUTXO = false}) async {
     if (utxoLoad == Load.loading || utxoLastPage) return;
@@ -38,9 +41,9 @@ mixin _BtcSendTxMixin on _BtcSendLogicMixin {
     }
   }
 
+  // Quality#8: only show inline error, not duplicate toast.
   void _showUtxoError(String msg) {
     errorMessage = msg;
-    ToastUtils.show(errorMessage);
     utxoLoad = Load.finish;
     setState(() {});
   }
@@ -71,10 +74,15 @@ mixin _BtcSendTxMixin on _BtcSendLogicMixin {
     return ethToWeiString(double.parse(unspent['value']).toString(), 8).toInt();
   }
 
+  // Bug#1 + Perf#3: use the standard byte-size formula to select UTXOs in the
+  // loop (no native call per iteration), then call getSignByteSize() exactly
+  // once at the end for accurate fee display.
+  // Formula: (n_inputs * 148 + 78) * sat_per_byte  (P2PKH conservative estimate;
+  // overestimates SegWit slightly, which is safe).
   @override
   Future<void> calculateGasFee() async {
     if (price == 0) {
-      gasFeeLevel['gasFees'] = 0;
+      _fee.totalFees = 0;
       setState(() {});
       return;
     }
@@ -82,6 +90,7 @@ mixin _BtcSendTxMixin on _BtcSendLogicMixin {
       getUTXO();
       return;
     }
+
     final List<Map<String, dynamic>> utxos = [];
     int input2Price = 0;
     bool inputValueOK = false;
@@ -97,30 +106,48 @@ mixin _BtcSendTxMixin on _BtcSendLogicMixin {
       input2Price += _utxoAmount(unspent);
       utxos.add(_buildUtxoEntry(unspent));
 
-      if (price < input2Price) {
-        final byteSize = await getSignByteSize(utxos);
-        if (byteSize != 0) {
-          gasFeeLevel['gasFees'] =
-              byteSize * (gasFeeLevel['gasFeeRate'] as int);
-          inputValueOK = true;
-          break;
-        }
+      // Formula-based check: price + estimated_fee <= available inputs.
+      final estimatedFee = (utxos.length * 148 + 78) * _fee.selectedRate;
+      if (price + estimatedFee <= input2Price) {
+        inputValueOK = true;
+        break;
       }
     }
+
     inputUTXO = utxos;
+
+    if (!inputValueOK) {
+      if (!mounted) return;
+      setState(() {});
+      getUTXO();
+      return;
+    }
+
+    // Single native call for accurate fee after UTXO set is finalised.
+    final byteSize = await getSignByteSize(utxos);
     if (!mounted) return;
+    if (byteSize != 0) {
+      _fee.totalFees = byteSize * _fee.selectedRate;
+      // If accurate fee exceeds available inputs, we need one more UTXO.
+      if (price + _fee.totalFees > input2Price) {
+        getUTXO();
+        return;
+      }
+    }
     setState(() {});
-    if (!inputValueOK) getUTXO();
   }
 
+  // Bug#2: reset load on early return so the send button is not stuck loading.
   Future<void> signTx(BtcTransactionRecodeModel trModel) async {
     load = Load.loading;
     setState(() {});
     if (unspents.isEmpty) {
+      load = Load.finish;
+      setState(() {});
       ToastUtils.show(S.current.g_key_2);
       return;
     }
-    trModel = await transatroinBuilder1To1(trModel, unspents);
+    trModel = await transactionBuilder1To1(trModel, unspents);
     if (!mounted) return;
     if (trModel.txHash == '') {
       ToastUtils.show(errorMessage);
@@ -140,40 +167,53 @@ mixin _BtcSendTxMixin on _BtcSendLogicMixin {
     Navigator.pop(context, toTextFieldEnabel ? null : trModel.txHash);
   }
 
-  Future<BtcTransactionRecodeModel> transatroinBuilder1To1(
+  // Quality#7: renamed from transatroinBuilder1To1.
+  Future<BtcTransactionRecodeModel> transactionBuilder1To1(
     BtcTransactionRecodeModel btcTransactionRecodeModel,
     List<dynamic> unspents,
   ) async {
     try {
-      btcTransactionRecodeModel.inputModels = [
-        for (final Map<String, dynamic> unspent in inputUTXO)
-          InputModel(
-            txid: unspent['txid'],
-            vout: unspent['vout'],
-            value: int.parse(unspent['value']),
-            script: unspent['script'],
-          )..address = [widget.coinModel.address.toString()],
-      ];
+      final coinType = widget.coinModel.coin['coinType'] as String? ?? 'BTC';
+      final addrType = widget.coinModel.addrType;
+      final pathKey = widget.coinModel.coin['path'] as Map<String, dynamic>?;
+      final basePath = pathKey?[addrType]?.toString() ?? "m/44'/0'/0'/0/0";
+      final path = getPathWithIndex(basePath, widget.coinModel.pathIndex);
+      final isMaxSend = _fee.maxPrice != 0;
+      final amount = toEther(btcTransactionRecodeModel.price.toString(), 8).toDouble();
 
-      btcTransactionRecodeModel
-        ..gas = gasFeeLevel['gasFeeRate']
-        ..gasPrice = gasFeeLevel['gasFees'] as int
-        ..addrType = widget.coinModel.addrType
-        ..max = gasFeeLevel['maxValue'] != 0
-        ..isTest = widget.coinModel.isTest ? 1 : 0;
-
-      final rmm = await transferApi.transferWallet(
-        trModelBtc: btcTransactionRecodeModel,
-        pathIndex: widget.coinModel.pathIndex,
-        privateKey: widget.coinModel.privateKey,
+      final result = await BtcSender().send(
+        SendParams(
+          coinType: coinType,
+          fromAddress: widget.coinModel.address.toString(),
+          toAddress: btcTransactionRecodeModel.to1,
+          amount: amount,
+          decimals: 8,
+          path: path,
+          sendMax: isMaxSend,
+          isTest: widget.coinModel.isTest,
+          contractAddress: '',
+          tokenDecimals: 0,
+          privateKey: widget.coinModel.privateKey,
+          chainConfig: widget.coinModel.coin,
+          btcFeeRate: _fee.selectedRate,
+          prebuiltUtxos: inputUTXO.isNotEmpty ? List.from(inputUTXO) : null,
+        ),
       );
-      if (rmm.error) {
-        errorMessage = rmm.data;
+
+      if (result.success) {
+        btcTransactionRecodeModel.txHash = result.txHash ?? '';
       } else {
-        btcTransactionRecodeModel.txHash = rmm.data;
+        errorMessage = result.error ?? '';
       }
+      btcTransactionRecodeModel
+        ..gas = _fee.selectedRate
+        ..gasPrice = _fee.totalFees
+        ..addrType = addrType
+        ..max = isMaxSend
+        ..isTest = widget.coinModel.isTest ? 1 : 0;
       return btcTransactionRecodeModel;
     } catch (e) {
+      errorMessage = e.toString();
       return btcTransactionRecodeModel;
     }
   }
@@ -190,10 +230,9 @@ mixin _BtcSendTxMixin on _BtcSendLogicMixin {
     inputUTXO = utxos;
     final byteSize = await getSignByteSize(utxos, max: true);
     if (!mounted) return;
-    final int gasFee = gasFeeLevel['gasFeeRate'];
-    gasFeeLevel['gasFees'] = byteSize * gasFee;
-    price = widget.coinModel.balance.toInt() - (byteSize * gasFee);
-    gasFeeLevel['maxValue'] = price;
+    _fee.totalFees = byteSize * _fee.selectedRate;
+    price = widget.coinModel.balance.toInt() - _fee.totalFees;
+    _fee.maxPrice = price;
     valueTextEditingController.text = toEther(price.toString(), 8).toString();
     amountErrorMessage = '';
     setState(() {});
@@ -203,26 +242,32 @@ mixin _BtcSendTxMixin on _BtcSendLogicMixin {
     List<Map<String, dynamic>> utxos, {
     bool max = false,
   }) async {
-    final btcTxMap = {
+    final coinType = (widget.coinModel.coin['coinType'] as String).toUpperCase();
+    final path = getPathWithIndex(
+      widget.coinModel.coin['path'][widget.coinModel.addrType] as String,
+      widget.coinModel.pathIndex,
+    );
+    final btcTxMap = <String, dynamic>{
       'utxo': utxos,
-      'toAddress': 'bc1q4q83qn0r4ndkpldfkypttncfrjxu4zdeeuz40s',
+      'toAddress': _kBtcFeeEstimationAddress,
       'amount': price,
-      'byteFee': gasFeeLevel['gasFeeRate'],
+      'byteFee': _fee.selectedRate,
       'changeAddress': widget.coinModel.address,
       'max': max,
     };
-    final signByteSize = await transferApi.transactionMaxValue(
-      widget.coinModel.coin['blockchainType'],
-      widget.coinModel.coin['coinType'],
-      btcTxMap,
-      getPathWithIndex(
-        widget.coinModel.coin['path'][widget.coinModel.addrType],
-        widget.coinModel.pathIndex,
-      ),
-      privateKey: widget.coinModel.privateKey,
-    );
-    if (signByteSize == '') return 0;
-    return int.parse(signByteSize);
+    final String result;
+    if (widget.coinModel.privateKey?.isNotEmpty ?? false) {
+      result = await Trustdart().signTransactionMaxValue(
+        coinType, '', btcTxMap, pk: widget.coinModel.privateKey!,
+      );
+    } else {
+      result = await Trustdart().signTransactionMaxValue(
+        coinType, path, btcTxMap,
+        mnemonic: globalWapAdapter.walletInfo.mnemonic ?? '',
+      );
+    }
+    if (result.isEmpty) return 0;
+    return int.parse(result);
   }
 
   Future<void> scanQR() async {
