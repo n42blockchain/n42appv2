@@ -2,35 +2,63 @@
 // Use of this source code is governed by a dual license:
 // Apache License 2.0 and MIT License.
 //
-// Riverpod-side facade for the cross-feature service interfaces that
-// historically lived behind [ServiceLocatorSetup] (which is a thin
-// GetIt wrapper).
+// Riverpod facade for cross-feature service singletons (IWalletService,
+// IMiningService, DeepLinkService).
 //
-// Why both layers coexist:
-//   - n42_wallet has a chunk of services (chat / mining / wallet) that
-//     need to call into each other. Doing this through Riverpod
-//     providers is the documented preference (see CLAUDE.md), and lets
-//     widget tests override individual services cleanly with
-//     `ProviderContainer.overrideWith(...)`.
-//   - But several consumers are NOT widgets: `n42_wallet_bridge` is
-//     a ChangeNotifier-mixin class, `wallet_connect_connection` is a
-//     mixin on top of one, `mining_service_impl` is a plain class. They
-//     have no BuildContext / WidgetRef, only `globalProviderContainer`.
+// Why this layer exists:
+//   - The wallet, mining, browser and walletconnect features need to call
+//     into each other through small typed interfaces. Exposing the
+//     concrete instances behind providers keeps widget tests trivially
+//     overridable via `ProviderContainer.overrideWith(...)`.
+//   - Non-widget consumers (`n42_wallet_bridge`, mining channel, mixin on
+//     ChangeNotifier, plain Dart classes) have no `WidgetRef`, so they
+//     resolve through `globalProviderContainer.read(...)`.
 //
-// This file gives both populations a single surface:
-//   - Widgets: `ref.watch(walletServiceProvider)` / `ref.read(...)`
-//   - Non-widgets: `globalProviderContainer.read(walletServiceProvider)`
-//
-// The provider returns whatever `ServiceLocatorSetup` currently has
-// registered (nullable to match the existing `.walletService` getter
-// shape). Once all call sites use the providers, ServiceLocatorSetup
-// itself can shrink to a private implementation detail.
+// Storage model:
+//   - [walletServiceProvider] / [miningServiceProvider] read from
+//     module-level `_walletService` / `_miningService` populated by
+//     [registerWalletService] / [registerMiningService] during
+//     `configureDependencies`. The provider caches the first read, which
+//     is fine because production registers each service exactly once at
+//     startup. Re-registration callers must `container.invalidate(...)`
+//     the provider to pick up a new instance.
+//   - [deepLinkServiceProvider] owns its own singleton.
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:n42_wallet/core/platform/deep_link_service.dart';
-import 'package:n42_wallet/shared/di/service_locator.dart';
 import 'package:n42_wallet/shared/domain/services/mining_service_interface.dart';
 import 'package:n42_wallet/shared/domain/services/wallet_service_interface.dart';
+
+IWalletService? _walletService;
+IMiningService? _miningService;
+
+/// The currently-registered [IWalletService], or null. Mainly for
+/// `configureDependencies` to gate idempotent registration; consumers
+/// should resolve through [walletServiceProvider] instead.
+IWalletService? get currentWalletService => _walletService;
+
+/// The currently-registered [IMiningService], or null. See
+/// [currentWalletService].
+IMiningService? get currentMiningService => _miningService;
+
+/// Register the live [IWalletService] for cross-feature consumers.
+/// Called from `configureDependencies`.
+void registerWalletService(IWalletService service) {
+  _walletService = service;
+}
+
+/// Register the live [IMiningService] for cross-feature consumers.
+/// Called from `configureDependencies`.
+void registerMiningService(IMiningService service) {
+  _miningService = service;
+}
+
+/// Clear both service registrations. Used by `resetDependencies` and by
+/// the contract tests to keep each case isolated.
+void resetCrossFeatureServices() {
+  _walletService = null;
+  _miningService = null;
+}
 
 /// Provides the currently-registered [IWalletService], or null when it
 /// has not been registered yet (very early startup, or test harness
@@ -48,20 +76,17 @@ import 'package:n42_wallet/shared/domain/services/wallet_service_interface.dart'
 /// ]);
 /// ```
 final walletServiceProvider = Provider<IWalletService?>((ref) {
-  return ServiceLocatorSetup.walletService;
+  return _walletService;
 });
 
 /// Provides the currently-registered [IMiningService], or null.
 /// Same shape and override semantics as [walletServiceProvider].
 final miningServiceProvider = Provider<IMiningService?>((ref) {
-  return ServiceLocatorSetup.miningService;
+  return _miningService;
 });
 
 /// Singleton [DeepLinkService] for the running app. Created once by the
 /// provider on first read, disposed when the container disposes.
-///
-/// Previously fetched from GetIt; the GetIt registration is no longer
-/// needed since the provider is the only consumer.
 final deepLinkServiceProvider = Provider<DeepLinkService>((ref) {
   final service = DeepLinkService();
   ref.onDispose(service.dispose);

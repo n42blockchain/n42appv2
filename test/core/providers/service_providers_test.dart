@@ -1,7 +1,7 @@
 // Copyright 2021-2026 N42 Inc. All rights reserved.
 //
-// Contract tests for the Riverpod service providers that wrap the
-// GetIt-backed cross-feature service registry. These guard:
+// Contract tests for the Riverpod service providers that hold the
+// cross-feature service singletons. These guard:
 //   - Providers return null when no service is registered (the
 //     mining_v2 / wallet_connect / browser DApp paths all check for
 //     null after reading and bail gracefully — that contract must hold).
@@ -10,9 +10,7 @@
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:get_it/get_it.dart';
 import 'package:n42_wallet/core/providers/service_providers.dart';
-import 'package:n42_wallet/shared/di/service_locator.dart';
 import 'package:n42_wallet/shared/domain/entities/wallet_info.dart';
 import 'package:n42_wallet/shared/domain/services/mining_service_interface.dart';
 import 'package:n42_wallet/shared/domain/services/wallet_service_interface.dart';
@@ -73,12 +71,7 @@ class _FakeMiningService implements IMiningService {
 
 void main() {
   group('walletServiceProvider', () {
-    tearDown(() async {
-      // Reset the GetIt singleton so each test starts clean. The
-      // providers themselves don't hold state, but ServiceLocatorSetup
-      // does.
-      await GetIt.instance.reset();
-    });
+    tearDown(resetCrossFeatureServices);
 
     test('returns null when no IWalletService is registered', () {
       final container = ProviderContainer();
@@ -88,7 +81,7 @@ void main() {
 
     test('returns the registered IWalletService', () {
       final fake = _FakeWalletService();
-      ServiceLocatorSetup.registerWalletService(fake);
+      registerWalletService(fake);
 
       final container = ProviderContainer();
       addTearDown(container.dispose);
@@ -98,7 +91,7 @@ void main() {
 
     test('honors overrideWithValue for test isolation', () {
       final realLikeFake = _FakeWalletService();
-      ServiceLocatorSetup.registerWalletService(realLikeFake);
+      registerWalletService(realLikeFake);
 
       final overrideFake = _FakeWalletService();
       final container = ProviderContainer(overrides: [
@@ -112,9 +105,7 @@ void main() {
   });
 
   group('miningServiceProvider', () {
-    tearDown(() async {
-      await GetIt.instance.reset();
-    });
+    tearDown(resetCrossFeatureServices);
 
     test('returns null when no IMiningService is registered', () {
       final container = ProviderContainer();
@@ -124,7 +115,7 @@ void main() {
 
     test('returns the registered IMiningService', () {
       final fake = _FakeMiningService();
-      ServiceLocatorSetup.registerMiningService(fake);
+      registerMiningService(fake);
 
       final container = ProviderContainer();
       addTearDown(container.dispose);

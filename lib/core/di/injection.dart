@@ -6,9 +6,9 @@
 // Author: Jiang Yiwei
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:n42_wallet/shared/di/service_locator.dart';
-import 'package:n42_wallet/features/wallet/data/services/wallet_service_impl.dart';
+import 'package:n42_wallet/core/providers/service_providers.dart';
 import 'package:n42_wallet/features/mining/data/services/mining_service_impl.dart';
+import 'package:n42_wallet/features/wallet/data/services/wallet_service_impl.dart';
 
 /// Dependency Injection Container (Composition Root)
 ///
@@ -16,11 +16,10 @@ import 'package:n42_wallet/features/mining/data/services/mining_service_impl.dar
 /// implementations to wire them to shared interfaces. This is an accepted
 /// exception to the "core must not import features" rule.
 ///
-/// All cross-feature singletons are now exposed through Riverpod (see
-/// `lib/core/providers/service_providers.dart` and `core_providers.dart`).
-/// [ServiceLocatorSetup] still holds the canonical `IWalletService` /
-/// `IMiningService` instances internally (it remains a thin GetIt wrapper);
-/// the providers read through it.
+/// All cross-feature singletons live behind Riverpod providers — see
+/// [walletServiceProvider] / [miningServiceProvider] in
+/// `lib/core/providers/service_providers.dart` for the read side, and
+/// [registerWalletService] / [registerMiningService] for the write side.
 
 /// Environment Types
 enum Env { dev, staging, prod }
@@ -31,12 +30,12 @@ ProviderContainer? _providerContainer;
 /// Concrete [MiningServiceImpl] view of the registered [IMiningService].
 ///
 /// Exposed for [main.dart]'s post-init `attachToV2Provider` wiring, which
-/// needs the concrete subclass (not on the [IMiningService] interface).
-/// Reads through [ServiceLocatorSetup] so there is a single source of
+/// needs the concrete subclass (not the [IMiningService] interface).
+/// Reads through [currentMiningService] so there is a single source of
 /// truth — `configureDependencies` always registers a [MiningServiceImpl],
 /// so the cast is safe.
 MiningServiceImpl get miningServiceImpl {
-  final svc = ServiceLocatorSetup.miningService;
+  final svc = currentMiningService;
   if (svc is! MiningServiceImpl) {
     throw StateError(
       'MiningServiceImpl not initialized. Call configureDependencies() first.',
@@ -67,21 +66,17 @@ Future<void> configureDependencies(
 }) async {
   _providerContainer = container;
 
-  // Shared service locator (initializes the GetIt singleton used internally
-  // by ServiceLocatorSetup).
-  await ServiceLocatorSetup.initialize();
-
-  if (!ServiceLocatorSetup.hasWalletService) {
-    ServiceLocatorSetup.registerWalletService(WalletServiceImpl(container));
+  if (currentWalletService == null) {
+    registerWalletService(WalletServiceImpl(container));
   }
 
-  if (!ServiceLocatorSetup.hasMiningService) {
-    ServiceLocatorSetup.registerMiningService(MiningServiceImpl());
+  if (currentMiningService == null) {
+    registerMiningService(MiningServiceImpl());
   }
 }
 
 /// Reset dependencies (for testing)
 Future<void> resetDependencies() async {
-  await ServiceLocatorSetup.reset();
+  resetCrossFeatureServices();
   _providerContainer = null;
 }
