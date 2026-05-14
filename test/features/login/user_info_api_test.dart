@@ -10,7 +10,7 @@
 //   - local param-validation logic extracted as pure functions
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42_wallet/data/models/device_login_info.dart';
+import 'package:n42_wallet/features/auth/data/models/device_login_info.dart';
 
 // ---------------------------------------------------------------------------
 // Pure-function mirrors of local validation logic in UserInfoApi

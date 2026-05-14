@@ -10,7 +10,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/storage/secure_preferences.dart';
-import 'package:n42_wallet/data/models/user_info.dart';
+import 'package:n42_wallet/features/auth/data/models/user_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 List<String> normalizeMarketWatchlistSymbols(Iterable<dynamic> symbols) {

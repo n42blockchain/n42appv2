@@ -3,7 +3,7 @@ import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/features/home/setting/setting_share.dart';
 import 'package:n42_wallet/features/wallet/services/ens_service.dart';
 
-import 'package:n42_wallet/data/models/user_info.dart';
+import 'package:n42_wallet/features/auth/data/models/user_info.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/core/security/secure_storage.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
-import 'package:n42_wallet/data/models/user_info.dart';
+import 'package:n42_wallet/features/auth/data/models/user_info.dart';
 import 'package:n42_wallet/features/auth/data/services/auth_service_impl.dart';
 
 class FakeAuthSpUtil extends SPUtil {
