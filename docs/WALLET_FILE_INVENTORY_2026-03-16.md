@@ -51,10 +51,9 @@
 - `core/constants/app_colors.dart`
 - `core/constants/language_constants.dart`
 
-### core/di (2)
+### core/di (1)
 
 - `core/di/injection.dart`
-- `core/di/service_locator_setup.dart`
 
 ### core/error (2)
 

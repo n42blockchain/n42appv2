@@ -57,7 +57,7 @@ mixin WalletConnectSigning on ChangeNotifier, WalletConnectConnection, WalletCon
           viewStateDeal(WalletConnectState.error, params: 'TRON chain not supported');
           return;
         }
-        final credentials = await getTronCredentials();
+        final credentials = await getCurrentWalletCredentials();
         final path = getPathWithIndex(cm.coin['path'][cm.addrType], cm.pathIndex);
         signedDataHex = await trustdart.signMessage(
           CoinType.TRX.name, path, dataToSign,
@@ -72,7 +72,7 @@ mixin WalletConnectSigning on ChangeNotifier, WalletConnectConnection, WalletCon
           viewStateDeal(WalletConnectState.error, params: 'Aptos chain not configured');
           return;
         }
-        final credentials = await getAptosCredentials();
+        final credentials = await getCurrentWalletCredentials();
         final path = getPathWithIndex(cm.coin['path'][cm.addrType], cm.pathIndex);
         final sig = await trustdart.signMessage(
           CoinType.APT.name, path, message,
@@ -95,7 +95,7 @@ mixin WalletConnectSigning on ChangeNotifier, WalletConnectConnection, WalletCon
           viewStateDeal(WalletConnectState.error, params: 'Sui chain not configured');
           return;
         }
-        final credentials = await getSuiCredentials();
+        final credentials = await getCurrentWalletCredentials();
         final path = getPathWithIndex(cm.coin['path'][cm.addrType], cm.pathIndex);
         final sig = await trustdart.signMessage(
           CoinType.SUI.name, path, message,
@@ -119,7 +119,7 @@ mixin WalletConnectSigning on ChangeNotifier, WalletConnectConnection, WalletCon
           viewStateDeal(WalletConnectState.error, params: 'Solana chain not configured');
           return;
         }
-        final credentials = await getSolanaCredentials();
+        final credentials = await getCurrentWalletCredentials();
         final path = getPathWithIndex(cm.coin['path'][cm.addrType], cm.pathIndex);
         // Native signMessage for SOL decodes base64 and returns base64 signature
         final sig = await trustdart.signMessage(
@@ -227,7 +227,7 @@ mixin WalletConnectSigning on ChangeNotifier, WalletConnectConnection, WalletCon
       viewStateDeal(WalletConnectState.error, params: 'TRON chain not supported');
       return;
     }
-    final credentials = await getTronCredentials();
+    final credentials = await getCurrentWalletCredentials();
     final path = getPathWithIndex(cm.coin['path'][cm.addrType], cm.pathIndex);
     final returnStr = await trustdart.signTransaction(
       CoinType.TRX.name, path, dataToSign,
@@ -249,7 +249,7 @@ mixin WalletConnectSigning on ChangeNotifier, WalletConnectConnection, WalletCon
       viewStateDeal(WalletConnectState.error, params: 'Solana chain not configured');
       return;
     }
-    final credentials = await getSolanaCredentials();
+    final credentials = await getCurrentWalletCredentials();
     final path = getPathWithIndex(cm.coin['path'][cm.addrType], cm.pathIndex);
 
     // trustdart signs the raw serialized transaction and returns base64 signed tx
@@ -383,7 +383,7 @@ mixin WalletConnectSigning on ChangeNotifier, WalletConnectConnection, WalletCon
       viewStateDeal(WalletConnectState.error, params: 'Aptos chain not configured');
       return;
     }
-    final credentials = await getAptosCredentials();
+    final credentials = await getCurrentWalletCredentials();
     final path = getPathWithIndex(cm.coin['path'][cm.addrType], cm.pathIndex);
     final txData = {
       "type": "WC_APT",
@@ -435,7 +435,7 @@ mixin WalletConnectSigning on ChangeNotifier, WalletConnectConnection, WalletCon
       viewStateDeal(WalletConnectState.error, params: 'Sui chain not configured');
       return;
     }
-    final credentials = await getSuiCredentials();
+    final credentials = await getCurrentWalletCredentials();
     final path = getPathWithIndex(cm.coin['path'][cm.addrType], cm.pathIndex);
     final txData = {
       "type": "WC_SUI",
@@ -483,7 +483,7 @@ mixin WalletConnectSigning on ChangeNotifier, WalletConnectConnection, WalletCon
       viewStateDeal(WalletConnectState.error, params: 'NEAR chain not configured');
       return;
     }
-    final credentials = await getNearCredentials();
+    final credentials = await getCurrentWalletCredentials();
     final path = getPathWithIndex(cm.coin['path'][cm.addrType], cm.pathIndex);
 
     final signedTxList = <String>[];

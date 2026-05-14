@@ -443,48 +443,17 @@ mixin WalletConnectConnection on ChangeNotifier {
   static const String _nearMainnetChainId = 'near:mainnet';
   static const String _nearTestnetChainId = 'near:testnet';
 
-  /// Fetch TRON wallet credentials from IWalletService.
-  Future<({String mnemonic, String privateKey})> getTronCredentials() async {
+  /// Fetch mnemonic + private key for the current mining wallet.
+  ///
+  /// All chains (TRON, Solana, Aptos, Sui, NEAR, …) derive their per-chain
+  /// addresses from the same mnemonic and HD path, so a single accessor
+  /// suffices. Returns empty strings if no wallet is registered.
+  Future<({String mnemonic, String privateKey})>
+      getCurrentWalletCredentials() async {
     final walletService = globalProviderContainer.read(walletServiceProvider);
     final currentIndex = walletService?.miningWalletIndex ?? 0;
     final mnemonic =
         await walletService?.getMnemonicForWallet(currentIndex) ?? "";
-    final pk = await walletService?.getPrivateKeyForWallet(currentIndex) ?? "";
-    return (mnemonic: mnemonic, privateKey: pk);
-  }
-
-  /// Fetch Solana wallet credentials from IWalletService.
-  Future<({String mnemonic, String privateKey})> getSolanaCredentials() async {
-    final walletService = globalProviderContainer.read(walletServiceProvider);
-    final currentIndex = walletService?.miningWalletIndex ?? 0;
-    final mnemonic = await walletService?.getMnemonicForWallet(currentIndex) ?? "";
-    final pk = await walletService?.getPrivateKeyForWallet(currentIndex) ?? "";
-    return (mnemonic: mnemonic, privateKey: pk);
-  }
-
-  /// Fetch Aptos wallet credentials from IWalletService.
-  Future<({String mnemonic, String privateKey})> getAptosCredentials() async {
-    final walletService = globalProviderContainer.read(walletServiceProvider);
-    final currentIndex = walletService?.miningWalletIndex ?? 0;
-    final mnemonic = await walletService?.getMnemonicForWallet(currentIndex) ?? "";
-    final pk = await walletService?.getPrivateKeyForWallet(currentIndex) ?? "";
-    return (mnemonic: mnemonic, privateKey: pk);
-  }
-
-  /// Fetch Sui wallet credentials from IWalletService.
-  Future<({String mnemonic, String privateKey})> getSuiCredentials() async {
-    final walletService = globalProviderContainer.read(walletServiceProvider);
-    final currentIndex = walletService?.miningWalletIndex ?? 0;
-    final mnemonic = await walletService?.getMnemonicForWallet(currentIndex) ?? "";
-    final pk = await walletService?.getPrivateKeyForWallet(currentIndex) ?? "";
-    return (mnemonic: mnemonic, privateKey: pk);
-  }
-
-  /// Fetch NEAR wallet credentials from IWalletService.
-  Future<({String mnemonic, String privateKey})> getNearCredentials() async {
-    final walletService = globalProviderContainer.read(walletServiceProvider);
-    final currentIndex = walletService?.miningWalletIndex ?? 0;
-    final mnemonic = await walletService?.getMnemonicForWallet(currentIndex) ?? "";
     final pk = await walletService?.getPrivateKeyForWallet(currentIndex) ?? "";
     return (mnemonic: mnemonic, privateKey: pk);
   }
