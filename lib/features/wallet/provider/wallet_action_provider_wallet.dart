@@ -438,7 +438,7 @@ extension WalletActionProviderWallet on WalletActionProvider {
   Future<void> refreshWalletListNotifier() async {
     // 刷新 WalletListNotifier 以同步数据
     try {
-      final walletService = ServiceLocatorSetup.walletService;
+      final walletService = globalProviderContainer.read(walletServiceProvider);
       if (walletService != null) {
         await walletService.refreshWallets();
         if (kDebugMode) {
