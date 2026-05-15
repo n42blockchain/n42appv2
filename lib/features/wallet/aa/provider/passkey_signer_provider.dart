@@ -16,7 +16,19 @@ import 'package:n42_wallet/features/wallet/aa/models/user_operation.dart';
 
 /// Provider for Passkey-based AA signing operations.
 ///
-/// Manages the flow of signing UserOperations with a Passkey (P-256):
+/// **Status: designed but not wired into the production AA path.** The
+/// live transfer signer in `aa_transfer_handler._signUserOperation`
+/// signs UserOperations through `trustdart.signMessage` (ECDSA with
+/// mnemonic/privateKey), never through this provider — `passkeySignerProvider`
+/// has zero consumers across `lib/` and `test/`.
+///
+/// Kept as the canonical reference for the on-chain P-256 signing path:
+/// the supporting infrastructure ([PasskeyService.signUserOperation],
+/// [PasskeySignatureBuilder.formatPasskeySignature],
+/// [SignatureBuilder.attachSignature]) is real and exercised by Passkey
+/// registration/auth — only the final attach-to-transfer step is unwired.
+///
+/// Migration flow when the production path adopts Passkey signing:
 /// 1. Build unsigned UserOperation
 /// 2. Compute userOpHash
 /// 3. Present WebAuthn assertion prompt with userOpHash as challenge
