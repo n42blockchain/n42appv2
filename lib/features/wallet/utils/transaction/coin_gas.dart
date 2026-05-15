@@ -10,7 +10,7 @@ int getCoinGas(String coinType, {bool contract = false}) {
     case CoinType.ETH:
     case CoinType.MATIC:
     case CoinType.HT:
-    case CoinType.XDAI:
+    case CoinType.GNOSIS:
     case CoinType.CELO:
     case CoinType.FTM:
     case CoinType.MOVE:

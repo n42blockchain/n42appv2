@@ -14,7 +14,8 @@ import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/wallet/api/address_book_api.dart';
-import 'package:n42_wallet/features/wallet/api/transfer_api.dart';
+import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
+import 'package:n42_wallet/features/wallet/api/sender/sender_factory.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_receive_qr.dart';
 import 'package:n42_wallet/features/wallet/services/ens_service.dart';
@@ -128,20 +129,55 @@ class N42WalletBridge implements IWalletBridge {
         return TransferResult.failure('Invalid transfer amount');
       }
 
-      // TransferApi.transfer() 内部自动从钱包查找链信息、地址、path 等
-      final api = TransferApi();
-      final result = await api.transfer(token, toAddress, value);
+      final provider = _provider;
+      if (provider == null) return TransferResult.failure('Wallet not connected');
 
-      if (result.error) {
-        return TransferResult.failure(
-          result.data?.toString() ?? 'Transfer failed',
-        );
+      // Find CoinModel matching the token symbol
+      CoinModel? coinModel;
+      for (final cm in provider.coinModels) {
+        final coinType = cm.coin['coinType'] as String? ?? '';
+        final miniName = cm.coin['miniName'] as String? ?? '';
+        if (coinType.toUpperCase() == token.toUpperCase() ||
+            miniName.toUpperCase() == token.toUpperCase()) {
+          coinModel = cm;
+          break;
+        }
+      }
+      if (coinModel == null) {
+        return TransferResult.failure('Token $token not found in wallet');
       }
 
-      final txHash = result.data is Map
-          ? (result.data['txHash'] ?? '').toString()
-          : result.data?.toString() ?? '';
-      return TransferResult.success(txHash);
+      final addrType = coinModel.addrType;
+      final baseInfo = coinModel.coin['baseInfo'] as Map<String, dynamic>?;
+      final pathMap = baseInfo?['path'] as Map<String, dynamic>?;
+      final basePath = pathMap?[addrType]?.toString() ?? "m/44'/60'/0'/0/0";
+      final path = getPathWithIndex(basePath, coinModel.pathIndex);
+      final decimals = (coinModel.coin['decimals'] as num?)?.toInt() ?? 18;
+      final coinType = coinModel.coin['coinType'] as String? ?? token;
+      final contractAddress = coinModel.coin['isContract'] == true
+          ? (coinModel.coin['contract'] as String? ?? '')
+          : '';
+
+      final result = await SenderFactory.instance.getSender(coinType).send(
+        SendParams(
+          coinType: coinType,
+          fromAddress: coinModel.address.toString(),
+          toAddress: toAddress,
+          amount: value,
+          decimals: decimals,
+          path: path,
+          isTest: false,
+          contractAddress: contractAddress,
+          tokenDecimals: contractAddress.isNotEmpty ? decimals : 0,
+          memo: memo,
+          chainConfig: coinModel.coin,
+        ),
+      );
+
+      if (!result.success) {
+        return TransferResult.failure(result.error ?? 'Transfer failed');
+      }
+      return TransferResult.success(result.txHash ?? '');
     } catch (e) {
       AppLogger.w('N42WalletBridge', 'transfer error: $e');
       return TransferResult.failure(e.toString());

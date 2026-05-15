@@ -13,7 +13,9 @@ import 'package:n42_wallet/features/wallet/api/chain_api/eth_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/trx_api.dart';
 import 'package:n42_wallet/features/wallet/api/gas_tracker_api.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
-import 'package:n42_wallet/features/wallet/api/transfer_api.dart';
+import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
+import 'package:n42_wallet/features/wallet/api/sender/sender_factory.dart';
+import 'package:n42_wallet/features/wallet/api/coin_wallet_ops.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/gas_estimate_model.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
@@ -107,7 +109,7 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
         return;
       }
       chainModel = wap.coinModels[idx];
-      await chainModel?.getBalance();
+      if (chainModel != null) await fetchCoinBalance(chainModel!, wap);
       if (!mounted) return;
       setState(() {});
     }
@@ -122,7 +124,7 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
 
   Future<void> getBalance() async {
     setState(() => load = Load.loading);
-    final isOk = await coinModel.getBalance(getToken: false);
+    final isOk = await fetchCoinBalance(coinModel, ref.read(wapBridgeProvider), getToken: false);
     if (!mounted) return;
     if (isOk != false) return;
     errorMessage = S.current.g_key_t_44;
@@ -130,8 +132,22 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
     setState(() => load = Load.finish);
   }
 
-  /// 解析当前 coinModel 的 RPC 地址（自定义链返回对应 service，否则 null）
+  /// 解析当前 coinModel 的 RPC 地址。
+  ///
+  /// 对所有 EVM 链（不限于 custom）优先返回链自身的 service URL，避免
+  /// 将 N42 API 不支持的 coinType（如 XDAI、PLUME 等）发送到后台而触发
+  /// 5xx 错误，进而积累 circuit breaker 计数导致后续请求报 "Dio Error"。
+  /// 合约代币无自身 service 时，回退到父链（chainModel）的 RPC。
   String? _resolveRpc() {
+    if (_blockchainType == BlockchainType.Ethereum.name) {
+      final source =
+          (_isContract && chainModel != null) ? chainModel!.coin : coinModel.coin;
+      final svc = (coinModel.isTest
+          ? source['service_test']
+          : source['service']) as String?;
+      if (svc != null && svc.isNotEmpty) return svc;
+    }
+    // 非 EVM 链 / service 为空时：自定义链返回配置 RPC，否则 null（走 N42 API）
     if (coinModel.coin['custom'] != true) return null;
     return coinModel.isTest
         ? coinModel.coin['service_test']
@@ -450,23 +466,44 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
 
   Future<void> signTx(TransationRecordModel trModel) async {
     if (!signTxCheck()) {
-      if (mounted) {
-        setState(() => load = Load.finish);
-      }
+      if (mounted) setState(() => load = Load.finish);
       return;
     }
     bool completedWithExit = false;
     try {
-      final mm = await TransferApi().transferWallet(
-        trModel: trModel,
-        privateKey: coinModel.privateKey,
-        pathIndex: coinModel.pathIndex,
+      final addrType = coinModel.addrType;
+      final chainConfig =
+          _isContract ? (chainModel?.coin ?? coinModel.coin) : coinModel.coin;
+      final baseInfo = chainConfig['baseInfo'] as Map<String, dynamic>?;
+      final pathMap = baseInfo?['path'] as Map<String, dynamic>?;
+      final basePath =
+          pathMap?[addrType]?.toString() ?? "m/44'/60'/0'/0/0";
+      final path = getPathWithIndex(basePath, coinModel.pathIndex);
+      final nativeDecimals = _isContract
+          ? ((chainModel?.coin['decimals'] as num?)?.toInt() ?? 18)
+          : _decimals;
+
+      final result = await SenderFactory.instance.getSender(_coinType).send(
+        SendParams(
+          coinType: _coinType,
+          fromAddress: trModel.from1,
+          toAddress: trModel.to1,
+          amount: toEther(trModel.price.toString(), _decimals).toDouble(),
+          decimals: nativeDecimals,
+          path: path,
+          sendMax: false,
+          isTest: coinModel.isTest,
+          contractAddress: trModel.contract,
+          tokenDecimals: _isContract ? _decimals : 0,
+          memo: trModel.message,
+          privateKey: coinModel.privateKey,
+          chainConfig: chainConfig,
+        ),
       );
+
       if (!mounted) return;
-      if (mm.error) {
-        errorMessage = mm.data;
-      } else {
-        trModel.txHash = mm.data;
+      if (result.success) {
+        trModel.txHash = result.txHash ?? '';
         trModel.trId = await AppDatabase().insertTransationRecord(trModel);
         if (!mounted) return;
         ref.read(tripBridgeProvider).addUndoneTr(trModel, 1);
@@ -478,6 +515,9 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
         ToastUtils.show(S.current.g_key_nft_41);
         completedWithExit = true;
         Navigator.pop(context);
+      } else {
+        errorMessage = result.error ?? '';
+        ToastUtils.show(errorMessage);
       }
     } catch (e) {
       errorMessage = e.toString();

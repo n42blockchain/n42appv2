@@ -146,7 +146,7 @@ Map<String,dynamic> walletChainConfigsPart1={
       "path": {
         "legacy":"m/44'/60'/0'/0/0",
       },
-      "service": "https://mainnet.infura.io/v3/", // Updated at runtime by RpcConfig.infuraApiKey
+      "service": "https://eth.llamarpc.com",
       "service_test": "https://eth-sepolia.public.blastapi.io",
       "chainId": 1,
       "chainId_test": 11155111,
@@ -181,7 +181,7 @@ Map<String,dynamic> walletChainConfigsPart1={
             "path": {
               "legacy":"m/44'/60'/0'/0/0",
             },
-            "service": const String.fromEnvironment('ETH_RPC_URL', defaultValue: 'https://rpc.n42.world'),
+            "service": "https://eth.llamarpc.com",
             "service_test": "https://eth-sepolia.public.blastapi.io",
             "chainId": 1,
             "chainId_test": 11155111,
@@ -779,7 +779,7 @@ Map<String,dynamic> walletChainConfigsPart1={
       "path": {
         "legacy":"m/44'/118'/0'/0/0",
       },
-      "service": "https://cosmos-lcd.quickapi.com/",
+      "service": "https://rest.cosmos.directory/cosmoshub",
       "service_test": "",
       "chainId_test": 0,
       "contract": "",

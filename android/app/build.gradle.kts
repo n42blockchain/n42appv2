@@ -158,7 +158,7 @@ android {
 dependencies {
     // ✅ 加入 desugar_jdk_libs，解决 flutter_local_notifications 的需求
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
-    implementation("com.trustwallet:wallet-core:4.6.0")
+    implementation("com.trustwallet:wallet-core:4.6.8")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.9.0")
     implementation("com.squareup.okhttp3:okhttp:4.11.0")

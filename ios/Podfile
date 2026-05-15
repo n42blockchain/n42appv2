@@ -31,7 +31,7 @@ target 'Runner' do
   use_frameworks!
   use_modular_headers!
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
-  pod  'TrustWalletCore', '4.6.0'
+  pod  'TrustWalletCore', '4.6.8'
   target 'RunnerTests' do
     inherit! :search_paths
   end

@@ -3,7 +3,7 @@
 // All are pure Dart data classes — no platform deps.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42_wallet/features/wallet/api/transfer/transfer_handler.dart';
+import 'package:n42_wallet/features/wallet/api/sender/transfer_handler.dart';
 
 void main() {
   // ─────────────────────────────────────────────────

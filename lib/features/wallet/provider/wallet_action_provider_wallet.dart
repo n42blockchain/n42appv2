@@ -49,7 +49,7 @@ extension WalletActionProviderWallet on WalletActionProvider {
       final mnemonic = await secureStorage.getMnemonic(walletId);
       if (mnemonic != null && mnemonic.isNotEmpty) {
         wallet.mnemonic = mnemonic;
-        AppLogger.d('WalletAction', 'restored mnemonic for wallet $walletId');
+        if (kDebugMode) debugPrint('WalletActionProvider: Restored mnemonic for wallet $walletId');
       }
     }
   }
@@ -79,18 +79,19 @@ extension WalletActionProviderWallet on WalletActionProvider {
   }
 
   /// 同步新链到现有钱包
-  /// 检查 chainUrlMap 中是否有新链不在当前钱包中，如果有则自动添加
+  /// 检查 chainUrlMap 中是否有新链不在当前钱包中，如果有则自动添加。
+  /// 同时修复存储数据中错误的 service/service_test URL（如历史 bug 写入的 N42 RPC）。
   Future<void> _syncNewChains() async {
     if (_walletInfoLsit.isEmpty) return;
 
-    bool hasNewChains = false;
+    bool hasChanges = false;
 
     // 遍历所有钱包
     for (int walletIdx = 0; walletIdx < _walletInfoLsit.length; walletIdx++) {
       final wallet = _walletInfoLsit[walletIdx];
 
       if (normalizeWatchOnlyWallet(wallet, supportedChains: chainUrlMap)) {
-        hasNewChains = true;
+        hasChanges = true;
       }
       if (wallet.watchOnly) {
         continue;
@@ -99,28 +100,53 @@ extension WalletActionProviderWallet on WalletActionProvider {
 
       // 检查 chainUrlMap 中的每条链
       for (final chainKey in chainUrlMap.keys) {
-        // 如果钱包中没有这条链，添加它
+        final chainConfig = chainUrlMap[chainKey];
+        if (chainConfig == null) continue;
+
         if (!wallet.coinInfo!.containsKey(chainKey)) {
-          final chainConfig = chainUrlMap[chainKey];
-          if (chainConfig != null && chainConfig['showList'] == true) {
-            // 完全深拷贝链配置
+          // 新链：添加到钱包
+          if (chainConfig['showList'] == true) {
             wallet.coinInfo![chainKey] = _deepCopyChainConfig(chainConfig);
-            hasNewChains = true;
-            AppLogger.d(
-              'WalletAction',
-              'added new chain $chainKey to wallet ${wallet.walletName}',
-            );
+            hasChanges = true;
+            if (kDebugMode) {
+              debugPrint(
+                'WalletActionProvider: Added new chain $chainKey to wallet ${wallet.walletName}',
+              );
+            }
           }
+        } else {
+          // 已有链：同步 service/service_test URL（修复历史 bug 写入的错误 RPC）
+          final canonicalBase = chainConfig['baseInfo'];
+          if (canonicalBase is! Map) continue;
+          final storedChain = wallet.coinInfo![chainKey];
+          if (storedChain is! Map) continue;
+          final storedBase = storedChain['baseInfo'];
+          if (storedBase is! Map) continue;
+
+          bool changed = false;
+          final canonicalService = canonicalBase['service'];
+          final canonicalServiceTest = canonicalBase['service_test'];
+          if (canonicalService != null && storedBase['service'] != canonicalService) {
+            storedBase['service'] = canonicalService;
+            changed = true;
+          }
+          if (canonicalServiceTest != null && storedBase['service_test'] != canonicalServiceTest) {
+            storedBase['service_test'] = canonicalServiceTest;
+            changed = true;
+          }
+          if (changed) hasChanges = true;
         }
       }
     }
 
-    // 如果有新链被添加，保存钱包信息
-    if (hasNewChains) {
+    // 如果有变更，保存钱包信息
+    if (hasChanges) {
       for (int i = 0; i < _walletInfoLsit.length; i++) {
         await saveWalletInfo(_walletInfoLsit[i], i);
       }
-      AppLogger.d('WalletAction', 'synced new chains to all wallets');
+      if (kDebugMode) {
+        debugPrint('WalletActionProvider: Synced chains and service URLs to all wallets');
+      }
     }
   }
 
@@ -259,29 +285,32 @@ extension WalletActionProviderWallet on WalletActionProvider {
       }
       // 检查 coinInfo 和 N 链配置是否存在
       if (wInfo.coinInfo == null || wInfo.coinInfo![CoinType.N.name] == null) {
-        AppLogger.d(
-          'WalletAction',
-          'skipping wallet ${wInfo.walletName} — coinInfo or N chain config is null',
-        );
+        if (kDebugMode) {
+          debugPrint(
+            'WalletActionProvider: Skipping wallet ${wInfo.walletName} - coinInfo or N chain config is null',
+          );
+        }
         continue;
       }
       final nChainConfig = wInfo.coinInfo![CoinType.N.name];
       if (nChainConfig['baseInfo'] == null ||
           nChainConfig['baseInfo']['path'] == null) {
-        AppLogger.d(
-          'WalletAction',
-          'skipping wallet ${wInfo.walletName} — N chain baseInfo or path is null',
-        );
+        if (kDebugMode) {
+          debugPrint(
+            'WalletActionProvider: Skipping wallet ${wInfo.walletName} - N chain baseInfo or path is null',
+          );
+        }
         continue;
       }
       // EDGE-M03: 验证路径配置完整性，防止 addrType 不存在时产生难以追踪的空指针
       final pathMap = nChainConfig['baseInfo']?['path'];
       final addrType = nChainConfig['addrType'] as String?;
       if (pathMap == null || addrType == null || pathMap[addrType] == null) {
-        AppLogger.w(
-          'WalletAction',
-          'invalid path config for ${wInfo.walletName}, addrType=$addrType',
-        );
+        if (kDebugMode) {
+          debugPrint(
+            'WalletActionProvider: Invalid path config for ${wInfo.walletName}, addrType=$addrType',
+          );
+        }
         continue;
       }
       try {
@@ -296,10 +325,11 @@ extension WalletActionProviderWallet on WalletActionProvider {
           pk: wInfo.privateKey ?? "",
         );
         if (privateKeyStr.isEmpty) {
-          AppLogger.w(
-            'WalletAction',
-            'empty key pair response for ${wInfo.walletName}',
-          );
+          if (kDebugMode) {
+            debugPrint(
+              'WalletActionProvider: Empty key pair response for ${wInfo.walletName}',
+            );
+          }
           continue;
         }
         Map<dynamic, dynamic> pkPair = json.decode(privateKeyStr);
@@ -309,10 +339,11 @@ extension WalletActionProviderWallet on WalletActionProvider {
         );
         _publicKeyAndPrivateKeyPair![pubKey] = privateKey;
       } catch (e) {
-        AppLogger.w(
-          'WalletAction',
-          'failed to load key pair for ${wInfo.walletName}: $e',
-        );
+        if (kDebugMode) {
+          debugPrint(
+            'WalletActionProvider: Failed to load key pair for ${wInfo.walletName}: $e',
+          );
+        }
       }
     }
   }
@@ -382,7 +413,9 @@ extension WalletActionProviderWallet on WalletActionProvider {
       }
       await refreshWalletListNotifier();
     } catch (e) {
-      AppLogger.w('WalletAction', 'saveWalletInfo error: $e');
+      if (kDebugMode) {
+        debugPrint("saveWalletInfo error: $e");
+      }
     }
   }
 
@@ -405,24 +438,27 @@ extension WalletActionProviderWallet on WalletActionProvider {
   Future<void> refreshWalletListNotifier() async {
     // 刷新 WalletListNotifier 以同步数据
     try {
-      final walletService = globalProviderContainer.read(walletServiceProvider);
+      final walletService = ServiceLocatorSetup.walletService;
       if (walletService != null) {
         await walletService.refreshWallets();
-        AppLogger.d(
-          'WalletAction',
-          'saveWalletInfo — WalletListNotifier refreshed successfully',
-        );
+        if (kDebugMode) {
+          debugPrint(
+            "saveWalletInfo: WalletListNotifier refreshed successfully",
+          );
+        }
       } else {
-        AppLogger.d(
-          'WalletAction',
-          'saveWalletInfo — WalletService not available, skipping refresh',
-        );
+        if (kDebugMode) {
+          debugPrint(
+            "saveWalletInfo: WalletService not available, skipping refresh",
+          );
+        }
       }
     } catch (refreshError) {
-      AppLogger.w(
-        'WalletAction',
-        'saveWalletInfo — error refreshing WalletListNotifier: $refreshError',
-      );
+      if (kDebugMode) {
+        debugPrint(
+          "saveWalletInfo: Error refreshing WalletListNotifier: $refreshError",
+        );
+      }
       // 不抛出异常，因为保存已经成功
     }
   }
@@ -431,19 +467,21 @@ extension WalletActionProviderWallet on WalletActionProvider {
   Future<bool> addImportWalletInfo(WalletInfo info) async {
     try {
       if (info.walletName == null || info.walletName!.isEmpty) {
-        AppLogger.w(
-          'WalletAction',
-          'cannot add import wallet — walletName is null or empty',
-        );
+        if (kDebugMode) {
+          debugPrint(
+            'WalletActionProvider: Cannot add import wallet - walletName is null or empty',
+          );
+        }
         return false;
       }
       final walletNameUpper = info.walletName!.toUpperCase();
       final chainMapWallet = walletMap[walletNameUpper];
       if (chainMapWallet == null) {
-        AppLogger.w(
-          'WalletAction',
-          'cannot add import wallet — chain config not found for $walletNameUpper',
-        );
+        if (kDebugMode) {
+          debugPrint(
+            'WalletActionProvider: Cannot add import wallet - chain config not found for $walletNameUpper',
+          );
+        }
         return false;
       }
       final chainMap = Map<String, dynamic>.from(chainMapWallet);

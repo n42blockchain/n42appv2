@@ -9,7 +9,9 @@ extension WalletActionProviderMarket on WalletActionProvider {
         DateTime.now().difference(_stablecoinPricesFetchTime!) <
             WalletActionProvider._stablecoinCacheDuration &&
         _stablecoinPrices.isNotEmpty) {
-      AppLogger.d('WalletAction', 'using cached stablecoin prices');
+      if (kDebugMode) {
+        debugPrint('WalletActionProvider: Using cached stablecoin prices');
+      }
       return;
     }
 
@@ -48,10 +50,11 @@ extension WalletActionProviderMarket on WalletActionProvider {
               newPrices[symbol] = {'price': price, 'change': change};
             } else {
               newPrices[symbol] = {'price': 1.0, 'change': 0.0};
-              AppLogger.w(
-                'WalletAction',
-                'stablecoin $symbol price out of range ($price), using default 1.0',
-              );
+              if (kDebugMode) {
+                debugPrint(
+                  'WalletActionProvider: Stablecoin $symbol price out of range ($price), using default 1.0',
+                );
+              }
             }
 
             // 利用 USDT 的 CNY 报价推导 USD→CNY 汇率
@@ -60,10 +63,11 @@ extension WalletActionProviderMarket on WalletActionProvider {
               final cnyPrice = parseMarketDouble(coinData['cny'], 0.0);
               if (cnyPrice > 5.0 && cnyPrice < 12.0 && price > 0) {
                 _usdToCnyRate = cnyPrice / price;
-                AppLogger.d(
-                  'WalletAction',
-                  'USD→CNY rate updated: $_usdToCnyRate',
-                );
+                if (kDebugMode) {
+                  debugPrint(
+                    'WalletActionProvider: USD→CNY rate updated: $_usdToCnyRate',
+                  );
+                }
               }
             }
           }
@@ -75,10 +79,12 @@ extension WalletActionProviderMarket on WalletActionProvider {
         }
       }
     } catch (e, stackTrace) {
-      AppLogger.w(
-        'WalletAction',
-        'failed to fetch stablecoin prices: $e\n$stackTrace',
-      );
+      if (kDebugMode) {
+        debugPrint(
+          'WalletActionProvider: Failed to fetch stablecoin prices: $e',
+        );
+        debugPrint('WalletActionProvider: Stack trace: $stackTrace');
+      }
       // 失败时保留之前的缓存和汇率，不重置
     }
   }
@@ -105,10 +111,11 @@ extension WalletActionProviderMarket on WalletActionProvider {
       //查询coins中的币种信息
       var list = await MarketApi().getWalletCoinsInfo(coinSelectPriceKeys);
       if (list['error'] == true) {
-        AppLogger.w(
-          'WalletAction',
-          'getCoinInfo failed: ${list['data']}',
-        );
+        if (kDebugMode) {
+          debugPrint(
+            'WalletActionProvider: getCoinInfo failed: ${list['data']}',
+          );
+        }
         // 静默失败：保留旧缓存价格，不打扰用户（仅首次无数据时才 Toast）
         if (_coinMarketInfo.isEmpty) {
           ToastUtils.show(S.current.g_key_5);
@@ -119,17 +126,19 @@ extension WalletActionProviderMarket on WalletActionProvider {
         if (marketItems.isNotEmpty) {
           _coinMarketInfo = marketItems;
           _coinMarketInfoFetchTime = now;
-          AppLogger.d(
-            'WalletAction',
-            'loaded ${_coinMarketInfo.length} coins market info',
-          );
+          if (kDebugMode) {
+            debugPrint(
+              'WalletActionProvider: Loaded ${_coinMarketInfo.length} coins market info',
+            );
+          }
         }
       }
     } else {
-      AppLogger.d(
-        'WalletAction',
-        'market data fresh (${now.difference(_coinMarketInfoFetchTime!).inSeconds}s old), skip fetch',
-      );
+      if (kDebugMode) {
+        debugPrint(
+          'WalletActionProvider: Market data fresh (${now.difference(_coinMarketInfoFetchTime!).inSeconds}s old), skip fetch',
+        );
+      }
     }
 
     // 无论是否重新拉取，都用最新缓存重算价格和总余额
@@ -209,20 +218,22 @@ extension WalletActionProviderMarket on WalletActionProvider {
         element['price_change_per_24h'],
         0.0,
       );
-      AppLogger.d(
-        'WalletAction',
-        'getCoinPriceWithUnit($unit) → price=\$$price, change=$percentage%',
-      );
+      if (kDebugMode) {
+        debugPrint(
+          'WalletActionProvider: getCoinPriceWithUnit($unit) -> price=\$$price, change=$percentage%',
+        );
+      }
       return {
         'icon': element['image'],
         'coinPrice': price,
         'percentage': percentage,
       };
     }
-    AppLogger.d(
-      'WalletAction',
-      'getCoinPriceWithUnit($unit) → NOT FOUND in ${_coinMarketInfo.length} items',
-    );
+    if (kDebugMode) {
+      debugPrint(
+        'WalletActionProvider: getCoinPriceWithUnit($unit) -> NOT FOUND in ${_coinMarketInfo.length} items',
+      );
+    }
     return null;
   }
 
@@ -265,32 +276,19 @@ extension WalletActionProviderMarket on WalletActionProvider {
     }
   }
 
-  //获取algo 链 代币
   Future<bool> getBalanceTokenAlgoWithCoinModel(CoinModel coinModel) async {
-    // 检查 address 是否为 null
-    if (coinModel.address == null) {
-      AppLogger.d(
-        'WalletAction',
-        'skipping ALGO token balance fetch for ${coinModel.coin['miniName']} — address is null',
-      );
-      coinModel.loadError = true;
-      return true;
-    }
-
-    //获取 合约地址
-    final contract = coinModel.isTest
-        ? coinModel.coin['contract_test']
-        : coinModel.coin['contract'];
-    final chainCoinModel = getCoinModelWithCoinType(coinModel.coin['coinType']);
-    if (chainCoinModel == null) {
-      coinModel.isRefresh = false;
+    // address is guaranteed non-null by getBalanceWithCoinModel
+    if (getCoinModelWithCoinType(coinModel.coin['coinType']) == null) {
       coinModel.loadError = true;
       refresh();
       return true;
     }
 
-    final rBalance =
-        await tokenViewApi.getBalance(
+    final contract = coinModel.isTest
+        ? coinModel.coin['contract_test']
+        : coinModel.coin['contract'];
+
+    final rBalance = await tokenViewApi.getBalance(
           BlockchainType.Algorand.name,
           coinModel.coin['coinType'],
           coinModel.address.toString(),
@@ -298,132 +296,87 @@ extension WalletActionProviderMarket on WalletActionProvider {
           isTest: coinModel.isTest,
         ) ??
         MessageModel.error();
+
     if (rBalance.error) {
-      coinModel.isRefresh = false;
       coinModel.loadError = true;
       refresh();
       return true;
     }
 
-    final balance = rBalance.data['balance'] as BigInt;
     coinModel.other = AlgoModel.fromCode(rBalance.data['code']);
-
-    final coinInfo = getCoinPriceWithUnit(coinModel.coin['unit'].toString());
-    if (coinInfo != null) {
-      coinModel.coin['percentage'] = coinInfo['percentage'];
-      coinModel.coin['coinPrice'] = coinModel.isTest
-          ? 0.0
-          : coinInfo['coinPrice'];
-      coinModel.coin['icon'] = coinInfo['icon'];
-    }
+    _applyMarketPrice(coinModel);
 
     final balanceKey = coinModel.isTest ? 'balance_test' : 'balance';
-    coinModel.coin[balanceKey] = balance.toString();
-
+    coinModel.coin[balanceKey] = (rBalance.data['balance'] as BigInt).toString();
     _safeUpdateWalletMap(coinModel);
-    coinModel.getBalanceDefault();
+    applyCachedBalance(coinModel);
     return false;
   }
 
   void addCoinRefreshMap() {
-    if (coinRefreshMap[walletIndex] != null) return;
+    if (coinRefreshMap.containsKey(walletIndex)) return;
 
-    // 标记不支持的代币为加载错误
     for (final cm in coinList) {
-      if (cm is! AggregatedCoinModel && cm.address == null) {
-        AppLogger.d(
-          'WalletAction',
-          'skipping ${cm.coin['miniName']} in refresh — address is null',
-        );
-        cm.loadError = true;
-      }
+      if (cm is! AggregatedCoinModel && cm.address == null) cm.loadError = true;
     }
 
-    final rList = coinList
+    coinRefreshMap[walletIndex] = coinList
         .where((cm) => cm is! AggregatedCoinModel && cm.address != null)
-        .toList();
+        .toList()
+        .cast<CoinModel>();
 
-    coinRefreshMap[walletIndex] = {"coinList": rList};
     loadBalance = Load.loading;
     refresh();
     coinRefresh(walletIndex);
   }
 
-  /// coinType:币类型，contract:合约地址，isTest:是否时测试
-  Future<void> refreshCoinBalance(
-    String coinType, {
-    String contract = "",
-  }) async {
-    int cmIndex = coinList.indexWhere((element) {
-      if (element.coin['coinType'] == coinType) {
-        if (contract == "") {
-          return true;
-        } else {
-          String eContract = element.isTest
-              ? element.coin['contract_test']
-              : element.coin['contract'];
-          if (eContract == contract) {
-            return true;
-          }
-          return false;
-        }
-      }
-      return false;
+  Future<void> refreshCoinBalance(String coinType, {String contract = ""}) async {
+    final idx = coinList.indexWhere((e) {
+      if (e.coin['coinType'] != coinType) return false;
+      if (contract.isEmpty) return true;
+      final c = e.isTest ? e.coin['contract_test'] : e.coin['contract'];
+      return c == contract;
     });
-    if (cmIndex != -1) {
-      await coinList[cmIndex].getBalance(walletAccess: this);
+    if (idx != -1) {
+      await fetchCoinBalance(coinList[idx], this);
       refresh();
     }
   }
 
   void removeConRefreshMap(int index) {
     loadBalance = Load.finish;
-    refresh();
     coinRefreshMap.remove(index);
+    refresh();
   }
 
   Future<void> coinRefresh(int index) async {
-    try {
-      if (coinRefreshMap[index] != null) {
-        if (coinRefreshMap[index]["coinList"] != null &&
-            coinRefreshMap[index]["coinList"].length != 0) {
-          final currentCoin = coinRefreshMap[index]["coinList"].first;
-          currentCoin.isRefresh = true;
-          refresh();
+    final queue = coinRefreshMap[index];
+    if (queue == null) return;
 
-          try {
-            await getBalanceWithCoinModel(currentCoin);
-          } catch (e) {
-            AppLogger.w(
-              'WalletAction',
-              'error refreshing ${currentCoin.coin['miniName']}: $e',
-            );
-          }
+    while (coinRefreshMap.containsKey(index) && queue.isNotEmpty) {
+      final coin = queue.removeAt(0);
+      coin.isRefresh = true;
+      refresh();
 
-          // 网络临时失败时不显示错误图标，因为已经使用了缓存数据
-          // 只有在完全无法获取数据时才显示错误
-          currentCoin.loadError = false;
-          currentCoin.isRefresh = false;
-          refresh();
-          coinRefreshMap[index]["coinList"].removeAt(0);
-          coinRefresh(index);
-        } else {
-          saveWalletInfo(walletInfo, walletIndex);
-          calculateBalanceWidthCoinModel();
-          removeConRefreshMap(index);
+      try {
+        await getBalanceWithCoinModel(coin);
+      } catch (e) {
+        if (kDebugMode) {
+          debugPrint('WalletActionProvider: Error refreshing ${coin.coin['miniName']}: $e');
         }
       }
-    } catch (e) {
-      AppLogger.e('WalletAction', 'critical error in coinRefresh', error: e);
-      // 继续处理下一个代币，避免整个刷新流程中断
-      if (coinRefreshMap[index] != null &&
-          coinRefreshMap[index]["coinList"] != null &&
-          coinRefreshMap[index]["coinList"].length > 0) {
-        coinRefreshMap[index]["coinList"].removeAt(0);
-        coinRefresh(index);
-      } else {
-        removeConRefreshMap(index);
-      }
+
+      // 网络临时失败时用缓存数据，不显示错误图标
+      coin.loadError = false;
+      coin.isRefresh = false;
+      refresh();
     }
+
+    if (coinRefreshMap.containsKey(index)) {
+      saveWalletInfo(walletInfo, walletIndex);
+      calculateBalanceWidthCoinModel();
+      removeConRefreshMap(index);
+    }
+    // 若 !containsKey，说明钱包已切换，由 setWalletIndex 负责清理
   }
 }

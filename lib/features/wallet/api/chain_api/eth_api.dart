@@ -39,15 +39,14 @@ class EthAPI {
 
   /// 获取余额（native 或 ERC-20 合约）
   Future<MessageModel> getBalance(String address, String contract, {bool isTest = false, String? coinType}) async {
-    final coin = _coin(coinType);
     if (contract.isEmpty) {
-      return _rpcWithHexParse('eth_getBalance', [address, 'latest'], coinType: coin, isTest: isTest);
+      return _rpcWithHexParse('eth_getBalance', [address, 'latest'], coinType: coinType, isTest: isTest);
     }
     final addr = strip0x(address);
     return _rpcWithHexParse(
       'eth_call',
       [{'from': address, 'to': contract, 'data': '0x70a08231000000000000000000000000$addr'}, 'latest'],
-      coinType: coin,
+      coinType: coinType,
       isTest: isTest,
     );
   }
@@ -94,12 +93,12 @@ class EthAPI {
         'to': contract,
         'gas': gasHex,
         'data': '0x${selector}000000000000000000000000$toAddress$valueHex',
-        'id': AppGlobals.nextId,
         gasPriceKey: gasPriceHex,
       };
     }
 
-    return _rpcWithHexParse('eth_estimateGas', [params, 'latest'], coinType: coin, isTest: isTest);
+    final rpcParams = addLatest ? [params, 'latest'] : [params];
+    return _rpcWithHexParse('eth_estimateGas', rpcParams, coinType: coin, isTest: isTest);
   }
 
   Future<MessageModel> getGasLimitByMap(Map<String, dynamic> map, {String? coinType, bool isTest = false, bool addLatest = true}) async {
@@ -294,10 +293,11 @@ class EthAPI {
               'size': '$offset',
               if (hasContract) 'contractAddress': contractAddress,
             };
+      final resolvedCoin = _coin(coinType);
       final apiUrl = proxyChain == null
-          ? (coinType == null
+          ? (resolvedCoin == null
               ? (api ?? '')
-              : RequestUrl().getUrl2(coinType, 'api', isTest: isTest))
+              : RequestUrl().getUrl2(resolvedCoin, 'api', isTest: isTest))
           : (hasContract
               ? ProxyConfig.explorerTokentx(proxyChain)
               : ProxyConfig.explorerTxlist(proxyChain));
@@ -309,7 +309,7 @@ class EthAPI {
       if (items.isEmpty && !hasExplorerItemContainer(data)) {
         return MessageModel()
           ..error = true
-          ..data = data['message'] ?? data['msg'] ?? data['error'];
+          ..data = data['message'] ?? data['msg'];
       }
       return MessageModel()..data = items;
     } catch (e) {

@@ -32,6 +32,10 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
 
   bool checkBiometrics = true;
 
+  /// Whether the user has passed the page-entry biometric gate.
+  /// Stays false (shows loader) until auth succeeds or face is not enabled.
+  bool _pageAccessGranted = false;
+
   @override
   void initState() {
     super.initState();
@@ -56,7 +60,22 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
         });
       }
     }
-    initFace();
+    await initFace();
+
+    // If face/biometric lock is enabled, require auth before showing page content.
+    if (securityMap['face'] == true) {
+      final result =
+          await FaceRecognitionPublic().authenticateWithBiometrics();
+      if (!mounted) return;
+      if (result == BiometricAuthResult.success) {
+        setState(() => _pageAccessGranted = true);
+      } else {
+        Navigator.of(context).pop();
+      }
+    } else {
+      if (!mounted) return;
+      setState(() => _pageAccessGranted = true);
+    }
   }
 
   Future<void> initFace() async {
@@ -78,6 +97,12 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
 
   @override
   Widget build(BuildContext context) {
+    if (!_pageAccessGranted) {
+      return Scaffold(
+        appBar: AppBarWidget(text: S.of(context).s_key_11),
+        body: const Center(child: CircularProgressIndicator()),
+      );
+    }
     return Scaffold(
       appBar: AppBarWidget(text: S.of(context).s_key_11),
       body: SafeArea(
@@ -122,6 +147,12 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                       S.of(context).g_lock_key1,
                       securityMap['face'],
                       (value) async {
+                        if (value) {
+                          // Must pass biometric auth before enabling face lock.
+                          final result = await FaceRecognitionPublic()
+                              .authenticateWithBiometrics();
+                          if (result != BiometricAuthResult.success) return;
+                        }
                         securityMap['face'] = value;
                         saveSecurity();
                         setState(() {});
@@ -217,6 +248,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                         }
                         setState(() {});
                       },
+                      enabled: securityMap['face'] == true,
                     ),
                     Padding(
                       padding: EdgeInsets.only(
@@ -305,6 +337,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                         }
                         setState(() {});
                       },
+                      enabled: securityMap['face'] == true,
                     ),
                     Padding(
                       padding: EdgeInsets.only(

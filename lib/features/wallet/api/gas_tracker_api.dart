@@ -3,7 +3,9 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
-import 'package:n42_wallet/core/network/base_api.dart';
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/wallet/models/gas_estimate_model.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/chain_eip1559.dart';
@@ -23,9 +25,15 @@ class GasTrackerApi {
     return _instance!;
   }
 
-  static const Map<String, String> _jsonHeader = {
-    'content-type': 'application/json',
-  };
+  // Dedicated Dio instance for direct RPC calls — isolated from the shared
+  // circuit breaker so ETH node failures don't trip api.n42.ai requests.
+  static final Dio _rpcDio = Dio(
+    BaseOptions(
+      connectTimeout: const Duration(seconds: 15),
+      receiveTimeout: const Duration(seconds: 15),
+      headers: {'content-type': 'application/json'},
+    ),
+  );
 
   /// 解析链配置并返回 RPC 端点和基础信息
   ///
@@ -221,13 +229,11 @@ class GasTrackerApi {
   /// 执行 RPC 调用并返回解析结果
   Future<MessageModel> _callRpc(String rpc, Map<String, dynamic> body) async {
     try {
-      final response = await BaseApi.requestEmptyH.post(
-        rpc,
-        params: body,
-        data: body,
-        header: _jsonHeader,
-      );
-      return _parseRpcResponse(response);
+      final response = await _rpcDio.post<dynamic>(rpc, data: body);
+      final data = response.data is Map
+          ? response.data as Map<String, dynamic>
+          : json.decode(response.data.toString()) as Map<String, dynamic>;
+      return _parseRpcResponse(data);
     } catch (e) {
       return MessageModel.error()..data = e.toString();
     }

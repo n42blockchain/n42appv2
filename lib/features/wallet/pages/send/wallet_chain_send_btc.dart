@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:decimal/decimal.dart' as dec;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,8 +18,11 @@ import 'package:n42_wallet/features/utils/regular.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/btc_api.dart';
 import 'package:n42_wallet/features/wallet/api/gas_tracker_api.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
-import 'package:n42_wallet/features/wallet/api/transfer_api.dart';
+import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
+import 'package:n42_wallet/features/wallet/api/sender/btc_sender.dart';
+import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
 import 'package:n42_wallet/features/wallet/models/btc_transaction_recode_model.dart';
+import 'package:n42_wallet/features/wallet/api/coin_wallet_ops.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/non_evm_fee_model.dart';
 import 'package:n42_wallet/features/wallet/pages/gas/non_evm_gas_settings_page.dart';
@@ -67,7 +72,7 @@ class _WalletChainSendBtcState extends ConsumerState<WalletChainSendBtc>
     valueTextEditingController.text = '0';
     if (widget.toAddress != null) {
       toTextEditingController.text = widget.toAddress!;
-      valueTextEditingController.text = widget.toAmount!;
+      valueTextEditingController.text = widget.toAmount ?? '0';
       toTextFieldEnabel = false;
     }
     initData();
@@ -75,6 +80,7 @@ class _WalletChainSendBtcState extends ConsumerState<WalletChainSendBtc>
 
   @override
   void dispose() {
+    _amountDebounce?.cancel();
     toTextEditingController.dispose();
     valueTextEditingController.dispose();
     byteFeeTextEditingController.dispose();
