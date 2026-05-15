@@ -1427,5 +1427,5 @@
 - `audit_results/n42_chat_architecture_and_dataflow_2026-03-13.md`
 - `audit_results/n42_chat_module_review_2026-03-14.md`
 - `docs/production-readiness-audit-2026-03-02.md`
-- `docs/CODE_AUDIT_REPORT.md`
-- `docs/SECURITY_AUDIT_REPORT.md`
+- `docs/archive/2026-02/CODE_AUDIT_REPORT.md`
+- `docs/archive/2025-12/SECURITY_AUDIT_REPORT.md`
