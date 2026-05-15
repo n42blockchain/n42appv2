@@ -170,7 +170,6 @@ class _N42AppV2State extends ConsumerState<N42AppV2>
   @override
   void initState() {
     super.initState();
-    // ignore: deprecated_member_use_from_same_package
     AppGlobals.appContext = context;
     unawaited(_initDeepLinks());
     FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(
