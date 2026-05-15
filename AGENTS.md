@@ -1,7 +1,7 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-`lib/` contains the Flutter app entrypoints (`main.dart`, `application.dart`) plus shared layers: `core/`, `data/`, `domain/`, `features/`, `presentation/`, and `shared/`. Keep new feature work under `lib/features/<feature>/` and mirror the same area in `test/features/<feature>/`. Local dependencies live in `packages/n42_jmt_verify/` and `plugins/flutter_mining/`; native platform code is under `android/`, `ios/`, `macos/`, `web/`, and `windows/`. Static assets and localized resources are in `assets/`, `lib/l10n/`, and generated output in `lib/generated/`.
+`lib/` contains the Flutter app entrypoint (`main.dart`) plus layered code: `core/`, `features/`, `presentation/`, `shared/`, with auto-generated localization under `generated/` and ARB files under `l10n/`. Keep new feature work under `lib/features/<feature>/` and mirror the same area in `test/features/<feature>/`. Local dependencies live in `packages/n42_jmt_verify/` and `plugins/flutter_mining/`; the `n42_chat` package is pulled from git (see `pubspec.yaml`) so `packages/n42_chat/` is a cache mirror only. Native platform code is under `android/`, `ios/`, `macos/`, `web/`, and `windows/`. Static assets and localized resources are in `assets/`, `lib/l10n/`, and generated output in `lib/generated/`.
 
 ## Build, Test, and Development Commands
 Run `flutter pub get` after dependency changes. Use `flutter run` for local development and `flutter analyze --no-fatal-infos` before opening a PR. Format with `dart format lib test`.

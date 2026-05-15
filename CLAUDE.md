@@ -54,73 +54,119 @@ make build-ipa              # iOS IPA via scripts/build_ipa.sh
 
 ### Layer Structure (`lib/`)
 
-The app follows a layered architecture with feature-based organization:
+The app follows a layered architecture with feature-based organization. Top
+level: `core/`, `features/`, `generated/`, `l10n/`, `main.dart`, `presentation/`,
+`shared/`.
 
 - **`core/`** — Framework-level infrastructure shared across all features:
-  - `di/` — GetIt + Riverpod dependency injection (`injection.dart` is the central DI config)
-  - `providers/` — Global Riverpod providers (user auth, theme, UI state); split into `core_providers.dart` + part files (`_ui`, `_security`, `_profile`)
-  - `network/` — Dio HTTP client, API base classes, retry/circuit-breaker interceptors, RPC URL configs (mainnet/testnet), MEV protection (Flashbots)
-  - `wallet_sdk/` — Low-level blockchain operations (key management, signing, address derivation)
-  - `passkey/` — WebAuthn Passkey support (config, credentials, platform adapter, service) for app auth and AA signing
-  - `security/` — Secure storage, device security, phishing detection, transaction risk analysis, DApp security, signature decoder (human-readable)
-  - `storage/` — SQLite (`app_database.dart`), SharedPreferences (`sp_util.dart`), encrypted preferences
-  - `config/` — App config, API keys, RPC config, proxy config
-  - `api_hub/` — Aggregated API layer with datasources and models
-  - `routing/` — Deep link handling, chat SSO utils
-  - `market/` — Crypto news, fear & greed index services
-  - `platform/` — Platform-specific services (deep links, social auth)
+  - `di/` — Composition root (`injection.dart`); registers wallet/mining service
+    impls into the cross-feature Riverpod registry. No longer uses GetIt — the
+    service registry is plain module-level state in `core/providers/service_providers.dart`.
+  - `providers/` — Global Riverpod providers split across `core_providers.dart`
+    (+ part files `_ui`, `_security`), `service_providers.dart` (cross-feature
+    service registry: `walletServiceProvider`, `miningServiceProvider`,
+    `deepLinkServiceProvider`), and `legacy_wallet_adapter.dart` (ChangeNotifier-to-Riverpod bridge).
+  - `network/` — Dio HTTP client, retry/circuit-breaker interceptors, RPC URL
+    configs (mainnet/testnet), MEV protection (Flashbots).
+  - `wallet_sdk/` — Low-level blockchain operations (key management, signing,
+    address derivation).
+  - `passkey/` — WebAuthn Passkey support (config, credentials, platform
+    adapter, service) for app auth. AA-side Passkey signing
+    (`features/wallet/aa/provider/passkey_signer_provider.dart`) is **designed
+    but not wired** — production AA signing currently goes through ECDSA via
+    `trustdart.signMessage` in `aa_transfer_handler`.
+  - `security/` — Secure storage, device security, phishing detection,
+    transaction risk analysis, DApp security, signature decoder.
+  - `storage/` — SQLite (`app_database.dart`), SharedPreferences (`sp_util.dart`),
+    encrypted preferences.
+  - `config/`, `api_hub/`, `routing/`, `market/`, `platform/` — see directory.
 
-- **`features/`** — Feature modules, each typically with `data/`, `domain/`, `presentation/`, `provider/`, `pages/`:
-  - `wallet/` — Core wallet: create/import, send/receive, token management, transaction history, account abstraction (`aa/` with Passkey signing + social recovery), lending (Aave V3), perpetuals (Hyperliquid), custom EVM chains
-  - `browser/` — DApp browser with JS bridge, WebView integration
-  - `mining/`, `mining_v1/`, `mining_v2/` — Mining functionality across protocol versions
-  - `wallet_connect/` — WalletConnect v2 (via `reown_walletkit`)
-  - `auth/` — Authentication flows
-  - `login/` — Login/signup pages
-  - `staking/`, `earn/`, `airdrop/`, `loyalty/` — DeFi features
-  - `bridge/` — Cross-chain bridge
-  - `pay/` — Payment feature (MoonPay buy/sell, Transak off-ramp)
-  - `home/` — Main tab container and settings
-  - `proto/` — Protocol Buffer definitions (`.proto` files + generated `.pb.dart`)
-  - `sqlite/` — Feature-level database operations
-  - `notification/` — Push notifications (Firebase)
+- **`features/`** — Feature modules. Each typically has its own
+  `data/`, `domain/`, `presentation/`, `provider/`, `pages/`:
+  - `wallet/` — Core wallet: create/import, send/receive, token management,
+    transaction history, account abstraction (`aa/` with Passkey + social
+    recovery), lending (Aave V3), perpetuals (Hyperliquid), custom EVM chains.
+  - `wallet_connect/` — WalletConnect v2 (`reown_walletkit`), via a 3-layer
+    mixin chain on `ChangeNotifier` (Connection + Session + Signing).
+  - `mining/`, `mining_v1/`, `mining_v2/` — Mining protocol versions. The
+    `features/mining/` layer is a Clean-Arch bridge wrapping
+    `MiningV2Provider` (exposed through `miningRepositoryProvider`).
+  - `browser/` — DApp browser with JS bridge, WebView integration.
+  - `auth/` — Authentication flows. `IAuthService` / `AuthServiceImpl` are
+    **designed but not wired** — production reads/writes login state through
+    `AppGlobals.userInfo` and `currentUserProvider`.
+  - `bridge/`, `staking/`, `earn/`, `hardware_wallet/` — DeFi & device features.
+  - `home/`, `splash/`, `news/`, `profile/` — top-level screens.
+  - `component/`, `widgets/`, `utils/` — shared UI / utility code.
+  - `proto/` — Protocol Buffer definitions (`.proto` + generated `.pb.dart`).
+  - `sqlite/` — Feature-level database ops.
 
 - **`shared/`** — Cross-feature abstractions:
-  - `contracts/` — Feature module interfaces (`IFeatureModule`, `INavigatable`, `IRefreshable`, etc.)
-  - `events/` — EventBus-based cross-feature events (`CrossFeatureEvent` subclasses)
-  - `di/` — Shared service locator for inter-feature communication
-  - `domain/entities/` — Shared domain entities (e.g., `WalletInfo`)
+  - `domain/entities/` — Shared entities (`SharedWalletInfo`, `MessageModel`).
+  - `domain/services/` — Service interfaces (`IWalletService`, `IMiningService`,
+    `IAuthService`).
+  - `events/` — EventBus-based `CrossFeatureEvent` subclasses + `EventManager`.
+  - `utils/` — `wallet_connect_uri.dart` and other cross-feature helpers.
+  - `widgets/` — Shared widgets (e.g., `tips_dialog_3`).
+  - `contracts/` — `IFeatureModule` / `INavigatable` / `IRefreshable` /
+    `IDisposable` / `IAuthenticatable` / `IDataProvider` / `IEventListener`
+    interfaces. **Designed but not adopted** (zero implementors); kept as
+    reference for a potential module-system bootstrap.
 
-- **`data/models/`** — Legacy shared data models (e.g., `UserInfo`)
-- **`presentation/themes/`** — Theme configuration and adapters
-- **`generated/`** — Auto-generated l10n code (do NOT edit manually)
-- **`l10n/`** — Localization ARB files (25+ languages)
+- **`presentation/themes/`** — Theme configuration and adapters.
+- **`generated/`** — Auto-generated l10n code (do NOT edit manually).
+- **`l10n/`** — Localization ARB files (25+ languages).
 
 ### State Management
 
-**Dual system (migration in progress)**:
-- **Riverpod** (primary, preferred) — Global `ProviderContainer` in `main.dart`; providers in `core/providers/` and per-feature `providers/` directories
-- **GetIt** (secondary) — Service locator for singleton services, configured in `core/di/injection.dart`
-- Legacy `Application` class (`application.dart`) bridges both systems — marked `@Deprecated`
+**Riverpod is the single source of truth**:
+- Global `ProviderContainer` is created in `main.dart` and exposed as
+  `globalProviderContainer` for non-widget consumers.
+- Cross-feature services (`IWalletService`, `IMiningService`, `DeepLinkService`)
+  are held by `core/providers/service_providers.dart` module-level state and
+  exposed via `Provider<T?>` wrappers.
+- Feature-internal state still uses `ChangeNotifier` in many places (e.g.,
+  `WalletActionProvider`, `MiningV2Provider`, `BrowserProvider`,
+  `WalletConnectProvider`) and is exposed through Riverpod
+  `ChangeNotifierProvider` bridges (`wapBridgeProvider`, `miningBridgeProvider`,
+  `browserNotifierProvider`, `wcpBridgeProvider`, etc.). This is intentional —
+  `ChangeNotifierProvider` is a supported Riverpod 3.x API, not transition scaffolding.
+- `AppGlobals` (in `core/app/app_globals.dart`) is a static façade for legacy
+  imperative paths (`AppGlobals.userInfo`, `AppGlobals.login()`,
+  `AppGlobals.logout()`); new code should prefer the Riverpod providers.
 
 ### Cross-Feature Communication
 
 Features communicate through:
-1. **EventBus** — `CrossFeatureEvent` subclasses in `shared/events/`
-2. **Shared service interfaces** — `IWalletService`, `IMiningService` in `shared/domain/services/`
-3. **Riverpod providers** — Shared state via global `ProviderContainer`
+1. **Riverpod providers** — `walletServiceProvider` / `miningServiceProvider` /
+   `deepLinkServiceProvider` / `miningRepositoryProvider` / feature `*BridgeProvider`s.
+2. **Shared service interfaces** — `IWalletService` / `IMiningService` in
+   `shared/domain/services/`.
+3. **EventBus** — `CrossFeatureEvent` subclasses in `shared/events/`.
 
 ### Local Dependencies
 
-- `packages/n42_jmt_verify/` — JMT verification package
-- `packages/n42_chat/` — Chat package (also available via git)
-- `plugins/flutter_mining/` — Native mining plugin (v1)
-- `packages/webview_flutter_wkwebview/` — Custom WebView fork
-- `chrome-extension/` — Chrome browser extension (Manifest V3, React/TypeScript, independent build with `npm run build`)
+- `packages/n42_jmt_verify/` — JMT verification package (path dependency).
+- `packages/webview_flutter_wkwebview/` — Custom WebView fork (path dependency).
+- `plugins/flutter_mining/` — Native mining plugin v1 (path dependency).
+- `packages/n42_chat/` — **Cache directory only**; the host actually resolves
+  `n42_chat` via the git ref in `pubspec.yaml`
+  (`github.com/n42blockchain/n42_chat`). Do not modify the cache.
+- `chrome-extension/` — Independent Chrome MV3 extension (React/TypeScript,
+  `npm run build`); not part of the Flutter build.
 
 ### Backend
 
-- `backend/swap/` — Go-based swap monitoring service (Dockerfile, REST API)
+- `backend/swap/` — Go-based swap monitoring service (Dockerfile, REST API);
+  independent subproject.
+
+### Strong-Typed Views
+
+- `lib/features/wallet/models/coin_config_view.dart` — `CoinConfigView` is a
+  typed overlay over the dynamic `CoinModel.coin` map (`coin['xxx']` accesses
+  appear ~770 times across the codebase against 38 keys). New code can use
+  `cm.config.coinType` / `.decimals` / `.pathForAddrType('legacy')` instead of
+  raw map indexing; old call sites are unchanged.
 
 ## Git Operations
 
