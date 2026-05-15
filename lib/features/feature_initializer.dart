@@ -10,7 +10,19 @@ import 'package:n42_wallet/shared/contracts/feature_contracts.dart';
 
 /// Feature Initializer
 ///
-/// Manages the initialization order and dependencies of all features.
+/// Manages the initialization order and dependencies of all features
+/// via topological sort over [IFeatureModule.dependencies].
+///
+/// **Status: designed but not wired.** [featureInitializer] (the global
+/// instance below) has zero call sites, and no class in the codebase
+/// implements [IFeatureModule]. The current bootstrap path runs
+/// initialisation directly from `main()` / `configureDependencies()` /
+/// per-feature Riverpod providers, which has so far been simpler than
+/// declaring a module graph here.
+///
+/// Kept as the canonical reference for the planned module-aware
+/// bootstrap; revive in tandem with [IFeatureModule] when there's a
+/// concrete need for declarative dependency ordering across features.
 class FeatureInitializer {
   static final FeatureInitializer _instance = FeatureInitializer._internal();
   factory FeatureInitializer() => _instance;

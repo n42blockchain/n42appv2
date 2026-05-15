@@ -4,6 +4,19 @@
 // See LICENSE file in the project root for full license information.
 //
 // Author: Jiang Yiwei
+//
+// **Status: designed but not adopted.** None of the seven contracts in
+// this file has an implementor in production code — they were drafted
+// as a feature-module surface (alongside [FeatureInitializer]) for a
+// dependency-aware bootstrap that was never wired up. The current
+// architecture instead leans on Riverpod's natural provider graph,
+// where cross-feature data and lifecycle are expressed through
+// `ref.watch` / `ref.read` and `ref.onDispose`.
+//
+// Kept in tree as the canonical reference for the originally intended
+// feature-module surface (in case the project ever revisits a Hilt /
+// module-system style bootstrap). Do not extend without first reviving
+// the FeatureInitializer integration.
 
 /// Contract for features that handle in-feature navigation.
 abstract class INavigatable {
