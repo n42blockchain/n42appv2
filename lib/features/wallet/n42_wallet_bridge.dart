@@ -200,8 +200,7 @@ class N42WalletBridge implements IWalletBridge {
         'address': address,
         'amount': amount,
         'token': token,
-        // ignore: use_null_aware_elements
-        if (memo != null) 'memo': memo,
+        'memo': ?memo,
       },
     );
 
