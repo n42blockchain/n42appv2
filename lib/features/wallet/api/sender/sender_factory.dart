@@ -3,6 +3,7 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/chain_url_registry.dart';
 
 import 'chain_sender.dart';
@@ -54,7 +55,8 @@ class SenderFactory {
   ChainSender _createSender(String coinType) {
     final chainConfig = allChainUrlMap[coinType] as Map<String, dynamic>?;
     final baseInfo = chainConfig?['baseInfo'] as Map<String, dynamic>?;
-    final blockchainType = baseInfo?['blockchainType']?.toString() ?? '';
+    final blockchainType =
+        baseInfo == null ? '' : CoinConfigView(baseInfo).blockchainType;
 
     return switch (blockchainType) {
       'Ethereum'       => EvmSender(),
