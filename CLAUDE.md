@@ -86,6 +86,13 @@ level: `core/`, `features/`, `generated/`, `l10n/`, `main.dart`, `presentation/`
   - `wallet/` — Core wallet: create/import, send/receive, token management,
     transaction history, account abstraction (`aa/` with Passkey + social
     recovery), lending (Aave V3), perpetuals (Hyperliquid), custom EVM chains.
+    Transfer is dispatched through `api/sender/sender_factory.dart` →
+    `ChainSender` implementations keyed by `blockchainType` (EVM / BTC /
+    Cosmos / Solana / TRON / Polkadot / Aptos / TON / NEAR / SUI / Ripple /
+    Algorand / Tezos / Zilliqa / Filecoin / Stellar / Cardano / VeChain /
+    MultiversX / Hedera / Starknet). Per-chain read APIs live under
+    `api/chain_api/` — 19 Cosmos-family chains share `CosmosChainApi` as a
+    LCD REST base, EVM/BTC/SOL/etc. have dedicated clients.
   - `wallet_connect/` — WalletConnect v2 (`reown_walletkit`), via a 3-layer
     mixin chain on `ChangeNotifier` (Connection + Session + Signing).
   - `mining/`, `mining_v1/`, `mining_v2/` — Mining protocol versions. The
