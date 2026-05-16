@@ -3,6 +3,14 @@ import 'package:equatable/equatable.dart';
 
 import '../error/failures.dart';
 
+// **Status: Clean-Arch base class, partially adopted.** The only current
+// consumer is `features/mining/domain/usecases/start_mining.dart`, whose
+// five use cases are themselves not yet wired into production. Kept as the
+// canonical base so any future use-case-based business surface (auth,
+// wallet, transfer) has a consistent contract to extend.
+//
+// See the dartdoc on `start_mining.dart` for the mining-side status.
+
 /// UseCase 基类
 /// 
 /// 所有业务用例都应该继承此类

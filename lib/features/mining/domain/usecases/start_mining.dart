@@ -13,6 +13,20 @@ import 'package:n42_wallet/features/mining/domain/entities/mining_entity.dart';
 import 'package:n42_wallet/features/mining/domain/repositories/mining_repository.dart';
 import 'package:n42_wallet/shared/domain/services/wallet_service_interface.dart';
 
+// **Status: designed but not wired into the production mining path.** The
+// five use cases below (StartMining / StopMining / GetMiningStatus /
+// GetMiningPlans / ClaimMiningRewards) build on top of [MiningRepository]
+// — which IS wired through `miningRepositoryProvider` (lib/features/mining/
+// presentation/providers/mining_providers.dart) — but no production widget
+// calls them. Production mining UI talks to [MiningV2Provider] directly via
+// `miningBridgeProvider`, and the staking flow does its own native-plugin
+// orchestration (see features/mining_v2/).
+//
+// These use cases are retained as the canonical Clean-Arch surface for
+// mining: if a future refactor moves the V2 imperative pages onto the
+// repository layer, this file is the contract to satisfy. Do not invent
+// new mining UseCases elsewhere; extend the set here.
+
 /// Start Mining Use Case
 class StartMining implements UseCase<MiningSessionEntity, StartMiningParams> {
   final MiningRepository _miningRepository;
