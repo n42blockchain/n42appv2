@@ -147,6 +147,12 @@ dependencies:
       ref: cef4aa4380e77d3c96a44c442255085f6db6d2b1
     #path: /Users/jiangyiwei/Desktop/n42_chat
 
+  # === Live Streaming (features/live, 复用 n42_chat 自部署 LiveKit) ===
+  # livekit_client / flutter_webrtc 原为 n42_chat 间接依赖，提升为直接依赖以显式使用
+  livekit_client: ^2.7.0
+  # get_it 用于从 n42_chat 注册的全局 GetIt.instance 取 Matrix 仓库（接口未导出）
+  get_it: ^9.2.1
+
 # Override: flutter_secure_storage 10.x needed for compatibility with
 # matrix_dart_sdk which pins an older version via vodozemac dependency chain
 dependency_overrides:
