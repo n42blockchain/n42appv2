@@ -93,14 +93,29 @@ class LiveVideoService {
     // 登录在 N42Chat.initialize 之后发生，需手动触发 LiveKit 配置发现。幂等。
     await N42Chat.initializeCallManager();
 
-    final cm = N42Chat.callManager;
+    var cm = N42Chat.callManager;
     if (cm == null) {
       throw StateError('CallManager 不可用');
     }
+
+    // n42_chat 的 LiveKitService 为单例，且 leaveMeeting 后状态停留在
+    // disconnected，而 joinMeeting 仅允许从 idle 进入——直接复用会导致
+    // “看完一个房间再进下一个房间”必然失败。切房前若上一场未复位，
+    // 重建 CallManager 以获得全新 idle 会话。
+    var svc = cm.liveKitService;
+    if (svc != null && svc.state != MeetingState.idle) {
+      await N42Chat.disposeCallManager();
+      await N42Chat.initializeCallManager();
+      cm = N42Chat.callManager;
+      if (cm == null) {
+        throw StateError('CallManager 不可用');
+      }
+      svc = cm.liveKitService;
+    }
+
     if (!cm.config.hasLiveKitConfig) {
       throw StateError('LiveKit 未配置（.well-known 发现失败）');
     }
-    final svc = cm.liveKitService;
     if (svc == null) {
       throw StateError('LiveKitService 不可用');
     }
