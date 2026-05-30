@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -42,19 +44,27 @@ class _TradeSheetState extends ConsumerState<TradeSheet> {
   TradeQuote? _quote;
   bool _busy = false;
   String? _error;
+  Timer? _debounce;
 
   @override
   void initState() {
     super.initState();
-    _amount.addListener(_refreshQuote);
+    _amount.addListener(_onAmountChanged);
     WidgetsBinding.instance.addPostFrameCallback((_) => _refreshQuote());
   }
 
   @override
   void dispose() {
-    _amount.removeListener(_refreshQuote);
+    _debounce?.cancel();
+    _amount.removeListener(_onAmountChanged);
     _amount.dispose();
     super.dispose();
+  }
+
+  /// 输入防抖：停止输入 250ms 后再请求报价，避免逐字符刷报价。
+  void _onAmountChanged() {
+    _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 250), _refreshQuote);
   }
 
   Future<void> _refreshQuote() async {
@@ -85,16 +95,19 @@ class _TradeSheetState extends ConsumerState<TradeSheet> {
       _error = null;
     });
     try {
-      final q = _quote;
-      await ref
-          .read(predictionRepositoryProvider)
-          .buy(
-            marketId: widget.marketId,
-            outcomeId: _outcomeId,
-            collateralIn: amount,
-            // 1% 滑点保护
-            minShares: q == null ? null : q.shares * 0.99,
-          );
+      final repo = ref.read(predictionRepositoryProvider);
+      // 买入前用最新报价，避免输入后立即下单时沿用过期 quote 的滑点保护。
+      final fresh = await repo.quoteBuy(
+        marketId: widget.marketId,
+        outcomeId: _outcomeId,
+        collateralIn: amount,
+      );
+      await repo.buy(
+        marketId: widget.marketId,
+        outcomeId: _outcomeId,
+        collateralIn: amount,
+        minShares: fresh.shares * 0.99, // 1% 滑点保护
+      );
       if (mounted) Navigator.of(context).pop();
     } catch (e) {
       if (mounted) setState(() => _error = '$e');

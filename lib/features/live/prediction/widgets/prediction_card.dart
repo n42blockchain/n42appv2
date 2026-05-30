@@ -37,10 +37,40 @@ class _CardState extends ConsumerState<_Card> {
   @override
   void initState() {
     super.initState();
-    // 仅在有截止时间的进行中市场需要每秒刷新倒计时/到点停盘。
-    _ticker = Timer.periodic(const Duration(seconds: 1), (_) {
-      if (mounted) setState(() {});
-    });
+    _maybeStartTicker();
+  }
+
+  @override
+  void didUpdateWidget(covariant _Card oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // 市场状态可能变化（新市场/开奖），重新评估是否需要倒计时表。
+    _maybeStartTicker();
+  }
+
+  /// 仅"进行中 + 有截止 + 未到点"才需要每秒刷新倒计时；到点后自停，
+  /// 避免对已开奖/无截止的卡片常驻 setState。
+  void _maybeStartTicker() {
+    final m = widget.market;
+    final need =
+        m.isOpen && m.closesAt != null && DateTime.now().isBefore(m.closesAt!);
+    if (need && _ticker == null) {
+      _ticker = Timer.periodic(const Duration(seconds: 1), (_) {
+        if (!mounted) return;
+        setState(() {});
+        final mm = widget.market;
+        final stillNeed =
+            mm.isOpen &&
+            mm.closesAt != null &&
+            DateTime.now().isBefore(mm.closesAt!);
+        if (!stillNeed) {
+          _ticker?.cancel();
+          _ticker = null;
+        }
+      });
+    } else if (!need && _ticker != null) {
+      _ticker?.cancel();
+      _ticker = null;
+    }
   }
 
   @override

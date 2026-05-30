@@ -15,13 +15,30 @@ class DanmuOverlay extends StatefulWidget {
 class _DanmuOverlayState extends State<DanmuOverlay> {
   final ScrollController _scroll = ScrollController();
 
+  /// 是否贴底：用户上滑查看历史时为 false，不再强制自动滚动。
+  bool _pinned = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _scroll.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    if (!_scroll.hasClients) return;
+    final pos = _scroll.position;
+    _pinned = pos.pixels >= pos.maxScrollExtent - 40;
+  }
+
   @override
   void dispose() {
+    _scroll.removeListener(_onScroll);
     _scroll.dispose();
     super.dispose();
   }
 
   void _jumpToBottom() {
+    if (!_pinned) return;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_scroll.hasClients) {
         _scroll.jumpTo(_scroll.position.maxScrollExtent);

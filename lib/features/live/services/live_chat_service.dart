@@ -63,7 +63,13 @@ class LiveChatService {
   /// 订阅房间弹幕流（仅文本，按时间升序，取最近 [maxDanmu] 条）。
   Stream<List<LiveDanmu>> watchDanmu(String roomId) {
     return _msg.watchMessages(roomId).map((messages) {
-      final texts = messages.where((m) => m.type == MessageType.text).toList()
+      // 仅对尾部窗口排序，避免每次更新都对完整历史做 O(N·logN) 排序
+      // （Matrix timeline 近似按时间升序，尾部即最新）。窗口取 maxDanmu*2
+      // 以容纳交杂的非文本消息。
+      final window = messages.length > maxDanmu * 2
+          ? messages.sublist(messages.length - maxDanmu * 2)
+          : messages;
+      final texts = window.where((m) => m.type == MessageType.text).toList()
         ..sort((a, b) => a.timestamp.compareTo(b.timestamp));
       final recent = texts.length > maxDanmu
           ? texts.sublist(texts.length - maxDanmu)

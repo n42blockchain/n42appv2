@@ -59,6 +59,12 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
     }
   }
 
+  /// 显式关闭：先离会再返回（dispose 的 leave 是异步未 await 的兜底）。
+  Future<void> _close() async {
+    await _video.leave();
+    if (mounted) context.pop();
+  }
+
   @override
   void dispose() {
     _likes.dispose();
@@ -86,7 +92,9 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
               builder: (context, _) => LiveTopBar(
                 title: widget.roomId,
                 onlineCount: _video.participantCount,
-                onClose: () => context.pop(),
+                onClose: () {
+                  _close();
+                },
               ),
             )
           else
