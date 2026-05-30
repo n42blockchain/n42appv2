@@ -98,6 +98,16 @@ class LiveChatService {
     await _msg.sendTextMessage(roomId, t);
   }
 
+  /// 离开房间（直播结束 / 开播中途失败回滚）。失败静默——清理是尽力而为，
+  /// 不应再向上层抛错覆盖原始失败原因。
+  Future<void> leave(String roomId) async {
+    try {
+      await _conv.leaveConversation(roomId);
+    } catch (_) {
+      // 已不在房内或网络问题；忽略。
+    }
+  }
+
   /// 进房列表（直播广场）：需先初始化 + 登录，返回已加入的房间。
   /// 直播客户端的匿名账户仅加入直播间，故这些会话即直播间。
   Future<Stream<List<LiveRoomSummary>>> watchRooms() async {

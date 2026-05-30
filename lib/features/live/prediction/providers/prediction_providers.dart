@@ -4,8 +4,12 @@ import '../data/mock_prediction_repository.dart';
 import '../domain/prediction_market.dart';
 import '../domain/prediction_repository.dart';
 
-/// 预测市场仓库。MVP 用内存 LMSR mock（单例，主播/观众共享态）；
-/// 接真实合约时改为返回 ChainPredictionRepository。
+/// 预测市场仓库。MVP 用内存 LMSR mock（单例，主播/观众共享态）。
+///
+/// 接真实合约时，按环境返回 `ChainPredictionRepository(config)`（见
+/// `data/chain_prediction_repository.dart` 与 CHAIN_INTEGRATION.md）：
+///   return ChainPredictionRepository(ChainPredictionConfig(...));
+/// 合约地址/ABI/测试网 RPC/测试 ERC20 由合约团队提供后填入。
 final predictionRepositoryProvider = Provider<PredictionRepository>((ref) {
   final repo = MockPredictionRepository();
   ref.onDispose(repo.dispose);

@@ -58,10 +58,16 @@ class _GoLivePageState extends State<GoLivePage> {
         name: '直播 ${DateTime.now().toIso8601String()}',
       );
 
-      // 3. 弹幕 + 以主播身份发布
-      await _chat.join(roomId);
-      _danmu = _chat.watchDanmu(roomId);
-      await _video.joinAsBroadcaster(roomId);
+      // 3. 弹幕 + 以主播身份发布。任一步失败则回滚（离开刚建的房间），
+      //    否则每次重试都会新建 Matrix room，遗留一堆空直播间。
+      try {
+        await _chat.join(roomId);
+        _danmu = _chat.watchDanmu(roomId);
+        await _video.joinAsBroadcaster(roomId);
+      } catch (_) {
+        await _chat.leave(roomId);
+        rethrow;
+      }
 
       if (mounted) {
         setState(() {

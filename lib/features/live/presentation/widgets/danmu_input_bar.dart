@@ -37,6 +37,15 @@ class _DanmuInputBarState extends State<DanmuInputBar> {
     final now = DateTime.now();
     if (_lastSentAt != null &&
         now.difference(_lastSentAt!) < widget.minInterval) {
+      // 命中节流：给出轻量提示而非静默吞掉，避免用户以为按钮失灵。
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          const SnackBar(
+            content: Text('发送太快了，稍后再试'),
+            duration: Duration(milliseconds: 700),
+          ),
+        );
       return;
     }
 
