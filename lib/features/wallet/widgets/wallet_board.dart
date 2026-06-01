@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 
 class WalletBoard extends StatefulWidget {
   final double accountPrice;
   final String? walletName;
+
   /// 动态 USD→CNY 汇率（由 WalletActionProvider 提供，备用值 7.3）
   final double usdToCnyRate;
+
   /// 最后成功更新价格的时间（用于展示"更新于 X 分钟前"）
   final DateTime? priceLastUpdated;
   //swap
@@ -65,10 +68,11 @@ class _WalletBoardState extends State<WalletBoard> {
 
     return Container(
       margin: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(24),
-        vertical: ScreenUtil().setWidth(16),
+        horizontal: AppSpacing.space6,
+        vertical: AppSpacing.space4,
       ),
       decoration: BoxDecoration(
+        // 资产卡专属品牌渐变（炫彩强调，豁免通用令牌）
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -77,7 +81,7 @@ class _WalletBoardState extends State<WalletBoard> {
               : [const Color(0xFF1565C0), const Color(0xFF7B1FA2)],
           stops: const [0.0, 1.0],
         ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(28)),
+        borderRadius: AppRadius.brXl,
         boxShadow: [
           BoxShadow(
             color: isDark
@@ -118,74 +122,65 @@ class _WalletBoardState extends State<WalletBoard> {
           ),
           // 主内容
           Padding(
-            padding: EdgeInsets.all(ScreenUtil().setWidth(28)),
+            padding: EdgeInsets.all(AppSpacing.space8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // 总资产标签
                 Text(
                   S.of(context).g_key_29,
-                  style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.63),
-                    fontSize: ScreenUtil().setSp(20),
+                  style: AppTypography.captionSm.copyWith(
+                    color: AppColorTokens.onOverlaySecondary,
                     fontWeight: FontWeight.w400,
                     letterSpacing: 0.5,
                   ),
                 ),
-                SizedBox(height: ScreenUtil().setWidth(8)),
+                SizedBox(height: AppSpacing.space2),
                 // USD 总额
                 Text(
                   _formatUsd(widget.accountPrice),
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: ScreenUtil().setSp(48),
-                    fontWeight: FontWeight.bold,
+                  style: AppTypography.displayLg.copyWith(
+                    color: AppColorTokens.onOverlayPrimary,
                     letterSpacing: -0.5,
                     height: 1.1,
                   ),
                 ),
-                SizedBox(height: ScreenUtil().setWidth(6)),
+                SizedBox(height: AppSpacing.space2),
                 // CNY + 更新时间行
                 Row(
                   children: [
                     if (widget.accountPrice > 0) ...[
                       Text(
                         '≈ ¥${oCcyCny.format(cny)}',
-                        style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.71),
-                          fontSize: ScreenUtil().setSp(22),
-                          fontWeight: FontWeight.w400,
+                        style: AppTypography.caption.copyWith(
+                          color: AppColorTokens.onOverlaySecondary,
                         ),
                       ),
-                      SizedBox(width: ScreenUtil().setWidth(12)),
+                      SizedBox(width: AppSpacing.space6),
                     ],
                     if (widget.priceLastUpdated != null)
                       Container(
                         padding: EdgeInsets.symmetric(
-                          horizontal: ScreenUtil().setWidth(10),
-                          vertical: ScreenUtil().setWidth(3),
+                          horizontal: AppSpacing.space4,
+                          vertical: AppSpacing.space2,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.08),
-                          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
+                          color: AppColorTokens.onOverlayBorder,
+                          borderRadius: AppRadius.brSm,
                         ),
                         child: Text(
                           _lastUpdatedLabel(),
-                          style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.71),
-                            fontSize: ScreenUtil().setSp(16),
+                          style: AppTypography.captionSm.copyWith(
+                            color: AppColorTokens.onOverlaySecondary,
                           ),
                         ),
                       ),
                   ],
                 ),
-                SizedBox(height: ScreenUtil().setWidth(28)),
+                SizedBox(height: AppSpacing.space8),
                 // 分割线
-                Container(
-                  height: 1,
-                  color: Colors.white.withValues(alpha: 0.12),
-                ),
-                SizedBox(height: ScreenUtil().setWidth(24)),
+                Container(height: 1, color: AppColorTokens.onOverlayBorder),
+                SizedBox(height: AppSpacing.space6),
                 // 操作按钮行
                 Row(children: buttonList()),
               ],
@@ -198,18 +193,31 @@ class _WalletBoardState extends State<WalletBoard> {
 
   List<Widget> buttonList() {
     final buttons = <Widget>[
-      _buildActionBtn(S.of(context).g_key_48, 'assets/wallet/w_send.png', widget.sendTap),
-      SizedBox(width: ScreenUtil().setWidth(32)),
-      _buildActionBtn(S.of(context).g_key_33, 'assets/wallet/w_receive.png', widget.receiveTap),
-      SizedBox(width: ScreenUtil().setWidth(32)),
+      _buildActionBtn(
+        S.of(context).g_key_48,
+        'assets/wallet/w_send.png',
+        widget.sendTap,
+      ),
+      SizedBox(width: AppSpacing.space8),
+      _buildActionBtn(
+        S.of(context).g_key_33,
+        'assets/wallet/w_receive.png',
+        widget.receiveTap,
+      ),
+      SizedBox(width: AppSpacing.space8),
       _buildActionBtn('购买', 'assets/wallet/w_buy.png', widget.buyTap),
     ];
     return buttons;
   }
 
-  Widget _buildActionBtn(String label, String imagePath, GestureTapCallback? onTap) {
-    return GestureDetector(
+  Widget _buildActionBtn(
+    String label,
+    String imagePath,
+    GestureTapCallback? onTap,
+  ) {
+    return InkWell(
       onTap: onTap,
+      borderRadius: AppRadius.brLg,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -218,7 +226,7 @@ class _WalletBoardState extends State<WalletBoard> {
             height: ScreenUtil().setWidth(96),
             decoration: BoxDecoration(
               color: Colors.white.withValues(alpha: 0.11),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24)),
+              borderRadius: AppRadius.brLg,
               border: Border.all(
                 color: Colors.white.withValues(alpha: 0.16),
                 width: 1,
@@ -233,12 +241,11 @@ class _WalletBoardState extends State<WalletBoard> {
               ),
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(8)),
+          SizedBox(height: AppSpacing.space2),
           Text(
             label,
-            style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.86),
-              fontSize: ScreenUtil().setSp(20),
+            style: AppTypography.captionSm.copyWith(
+              color: AppColorTokens.onOverlayPrimary,
               fontWeight: FontWeight.w500,
             ),
           ),

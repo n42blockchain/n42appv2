@@ -13,6 +13,7 @@ import 'package:n42_wallet/features/wallet/presentation/providers/wallet_provide
 import 'package:n42_wallet/features/widgets/image_network.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 
 class WalletCoinItem extends ConsumerWidget {
@@ -31,7 +32,9 @@ class WalletCoinItem extends ConsumerWidget {
 
   String _abbreviate(double value, {String? fallback}) {
     if (value >= 1000000000) return _regular.getMoneyAbbreviation(value);
-    if (value > 0 && value < 0.0000000009) return _regular.getMoneyAbbreviationDecimal(value);
+    if (value > 0 && value < 0.0000000009) {
+      return _regular.getMoneyAbbreviationDecimal(value);
+    }
     return fallback ?? _oCcy.format(value);
   }
 
@@ -66,13 +69,16 @@ class WalletCoinItem extends ConsumerWidget {
         : ImageNetWork(imageUrl: coinIcon, placeholder: defaultImg);
 
     final Widget? mainImage = coin['isContract'] == true
-        ? ImageNetWork(imageUrl: coinInfo.mainCoinIcon ?? '', placeholder: defaultImg)
+        ? ImageNetWork(
+            imageUrl: coinInfo.mainCoinIcon ?? '',
+            placeholder: defaultImg,
+          )
         : null;
 
     final canEdit = coin['canEdit'] == true;
     final deleteColor = canEdit
         ? AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name)
-        : const Color(0xFF6B6B6B);
+        : AppColorTokens.of(context).textTertiary;
 
     final Widget refreshWidget = coinInfo.loadError
         ? Container(
@@ -81,7 +87,10 @@ class WalletCoinItem extends ConsumerWidget {
             margin: EdgeInsets.only(right: su.setWidth(6.0)),
             child: Image.asset(
               'assets/img/error.png',
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.textColorOrange.name),
+              color: AppThemeUtils.getColorByKey(
+                context,
+                AppThemeKeys.textColorOrange.name,
+              ),
             ),
           )
         : const SizedBox();
@@ -118,13 +127,24 @@ class WalletCoinItem extends ConsumerWidget {
           ],
         ),
         child: Container(
-          margin: EdgeInsets.symmetric(horizontal: su.setWidth(24), vertical: su.setWidth(4)),
-          padding: EdgeInsets.symmetric(horizontal: su.setWidth(16), vertical: su.setWidth(14)),
+          margin: EdgeInsets.symmetric(
+            horizontal: AppSpacing.space6,
+            vertical: AppSpacing.space2,
+          ),
+          padding: EdgeInsets.symmetric(
+            horizontal: AppSpacing.space4,
+            vertical: AppSpacing.space6,
+          ),
           decoration: BoxDecoration(
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-            borderRadius: BorderRadius.circular(su.setWidth(16)),
+            color: AppThemeUtils.getColorByKey(
+              context,
+              AppThemeKeys.itemBgColor.name,
+            ),
+            borderRadius: AppRadius.brMd,
             border: Border.all(
-              color: isDark ? Colors.white.withAlpha(10) : Colors.black.withAlpha(6),
+              color: isDark
+                  ? Colors.white.withAlpha(10)
+                  : Colors.black.withAlpha(6),
               width: 0.8,
             ),
           ),
@@ -142,7 +162,8 @@ class WalletCoinItem extends ConsumerWidget {
               if (coin['isAggregated'] != true)
                 WalletPinIconButton(
                   isPinned: coinInfo.isPinned,
-                  onTap: () => ref.read(wapBridgeProvider).togglePinCoin(coinInfo),
+                  onTap: () =>
+                      ref.read(wapBridgeProvider).togglePinCoin(coinInfo),
                 ),
             ],
           ),
@@ -163,9 +184,9 @@ class _CoinIcon extends StatelessWidget {
     return Container(
       width: ScreenUtil().setWidth(48),
       height: ScreenUtil().setWidth(48),
-      margin: EdgeInsets.only(right: ScreenUtil().setWidth(14)),
+      margin: EdgeInsets.only(right: AppSpacing.space4),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24)),
+        borderRadius: AppRadius.brLg,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.08),
@@ -176,10 +197,7 @@ class _CoinIcon extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24)),
-            child: image,
-          ),
+          ClipRRect(borderRadius: AppRadius.brLg, child: image),
           if (mainImage != null)
             Positioned(
               top: -2,
@@ -188,17 +206,17 @@ class _CoinIcon extends StatelessWidget {
               width: ScreenUtil().setWidth(20),
               child: Container(
                 decoration: BoxDecoration(
-                  borderRadius:
-                      BorderRadius.circular(ScreenUtil().setWidth(10)),
+                  borderRadius: AppRadius.brSm,
                   border: Border.all(
                     color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.backGroundColor.name),
+                      context,
+                      AppThemeKeys.backGroundColor.name,
+                    ),
                     width: 1.5,
                   ),
                 ),
                 child: ClipRRect(
-                  borderRadius:
-                      BorderRadius.circular(ScreenUtil().setWidth(8)),
+                  borderRadius: AppRadius.brSm,
                   child: mainImage,
                 ),
               ),
@@ -223,8 +241,14 @@ class _CoinInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final su = ScreenUtil();
-    final mainText = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final subtitleText = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+    final mainText = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.mainTextColor.name,
+    );
+    final subtitleText = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.itemSubtitleTextColor.name,
+    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -235,36 +259,33 @@ class _CoinInfo extends StatelessWidget {
           children: [
             if (coinInfo.isPinned)
               Padding(
-                padding: EdgeInsets.only(right: su.setWidth(6)),
+                padding: EdgeInsets.only(right: AppSpacing.space2),
                 child: Icon(
                   Icons.push_pin,
                   size: su.setWidth(22),
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                  color: AppThemeUtils.getColorByKey(
+                    context,
+                    AppThemeKeys.mainBlueColor.name,
+                  ),
                 ),
               ),
             Expanded(
               child: Text(
                 coinInfo.coin['miniName'] ?? '',
-                style: TextStyle(
-                  fontSize: su.setSp(28),
+                style: AppTypography.bodyStrong.copyWith(
                   color: mainText,
-                  fontWeight: FontWeight.w600,
                   letterSpacing: 0.3,
                 ),
               ),
             ),
             Text(
               tokenBalanceStr,
-              style: TextStyle(
-                fontSize: su.setSp(28),
-                color: mainText,
-                fontWeight: FontWeight.w600,
-              ),
+              style: AppTypography.bodyStrong.copyWith(color: mainText),
               textAlign: TextAlign.right,
             ),
           ],
         ),
-        SizedBox(height: su.setWidth(6)),
+        SizedBox(height: AppSpacing.space2),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -273,15 +294,15 @@ class _CoinInfo extends StatelessWidget {
               children: [
                 Text(
                   "\$${coinInfo.coinPriceString()}",
-                  style: TextStyle(fontSize: su.setSp(22), color: subtitleText),
+                  style: AppTypography.caption.copyWith(color: subtitleText),
                 ),
-                SizedBox(width: su.setWidth(8)),
+                SizedBox(width: AppSpacing.space2),
                 CoinPercentageBadge(percentage: coinInfo.percentage),
               ],
             ),
             Text(
               "\$$balanceStr",
-              style: TextStyle(fontSize: su.setSp(22), color: subtitleText),
+              style: AppTypography.caption.copyWith(color: subtitleText),
             ),
           ],
         ),
@@ -297,24 +318,24 @@ class CoinPercentageBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final su = ScreenUtil();
     final isPositive = percentage >= 0;
-    final colorKey = isPositive ? AppThemeKeys.rightTextColor : AppThemeKeys.errorTextColor;
+    final colorKey = isPositive
+        ? AppThemeKeys.rightTextColor
+        : AppThemeKeys.errorTextColor;
     final color = AppThemeUtils.getColorByKey(context, colorKey.name);
 
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: su.setWidth(8),
-        vertical: su.setWidth(3),
+        horizontal: AppSpacing.space2,
+        vertical: AppSpacing.space2,
       ),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(su.setWidth(6)),
+        borderRadius: AppRadius.brSm,
       ),
       child: Text(
         "${isPositive ? '+' : ''}${percentage.toStringAsFixed(2)}%",
-        style: TextStyle(
-          fontSize: su.setSp(22),
+        style: AppTypography.caption.copyWith(
           color: color,
           fontWeight: FontWeight.w600,
         ),
