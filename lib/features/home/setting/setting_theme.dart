@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/constants/app_colors.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
@@ -68,7 +69,8 @@ class SettingTheme extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentMode = ref.watch(themeModeProvider);
     final currentAccent = ref.watch(accentColorProvider);
-    final isDefault = currentAccent.toARGB32() == ThemeAdapter.defaultAccent.toARGB32();
+    final isDefault =
+        currentAccent.toARGB32() == ThemeAdapter.defaultAccent.toARGB32();
 
     return Scaffold(
       appBar: AppBarWidget(text: S.of(context).g_key_126),
@@ -88,10 +90,11 @@ class SettingTheme extends ConsumerWidget {
           // ── Accent color section ──────────────────────────────────────
           Padding(
             padding: EdgeInsets.fromLTRB(
-                ScreenUtil().setWidth(30),
-                ScreenUtil().setWidth(28),
-                ScreenUtil().setWidth(30),
-                ScreenUtil().setWidth(8)),
+              AppSpacing.space8,
+              AppSpacing.space8,
+              AppSpacing.space8,
+              AppSpacing.space2,
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -99,25 +102,19 @@ class SettingTheme extends ConsumerWidget {
                   child: Text(
                     S.of(context).g_theme_accent_color,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(28),
-                      fontWeight: FontWeight.w600,
-                      color: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.color
-                          ?.withAlpha(180),
+                    style: AppTypography.headline.copyWith(
+                      color: Theme.of(
+                        context,
+                      ).textTheme.bodyMedium?.color?.withAlpha(180),
                     ),
                   ),
                 ),
                 if (!isDefault)
-                  GestureDetector(
-                    onTap: () =>
-                        ref.read(accentColorProvider.notifier).reset(),
+                  InkWell(
+                    onTap: () => ref.read(accentColorProvider.notifier).reset(),
                     child: Text(
                       S.of(context).g_theme_accent_reset,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(24),
+                      style: AppTypography.bodySm.copyWith(
                         color: currentAccent,
                       ),
                     ),
@@ -127,28 +124,26 @@ class SettingTheme extends ConsumerWidget {
           ),
           Padding(
             padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(30),
-                vertical: ScreenUtil().setWidth(8)),
+              horizontal: AppSpacing.space8,
+              vertical: AppSpacing.space2,
+            ),
             child: Wrap(
-              spacing: ScreenUtil().setWidth(18),
-              runSpacing: ScreenUtil().setWidth(18),
+              spacing: AppSpacing.space4,
+              runSpacing: AppSpacing.space4,
               children: _presetAccents.map((color) {
-                final selected =
-                    color.toARGB32() == currentAccent.toARGB32();
+                final selected = color.toARGB32() == currentAccent.toARGB32();
                 return GestureDetector(
                   onTap: () =>
                       ref.read(accentColorProvider.notifier).setAccent(color),
                   child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 150),
+                    duration: AppMotion.fast,
                     width: ScreenUtil().setWidth(60),
                     height: ScreenUtil().setWidth(60),
                     decoration: BoxDecoration(
                       color: color,
                       shape: BoxShape.circle,
                       border: Border.all(
-                        color: selected
-                            ? Colors.white
-                            : Colors.transparent,
+                        color: selected ? Colors.white : Colors.transparent,
                         width: 3,
                       ),
                       boxShadow: selected
@@ -157,20 +152,19 @@ class SettingTheme extends ConsumerWidget {
                                 color: color.withAlpha(120),
                                 blurRadius: 8,
                                 spreadRadius: 2,
-                              )
+                              ),
                             ]
                           : null,
                     ),
                     child: selected
-                        ? const Icon(Icons.check,
-                            color: Colors.white, size: 22)
+                        ? const Icon(Icons.check, color: Colors.white, size: 22)
                         : null,
                   ),
                 );
               }).toList(),
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(24)),
+          SizedBox(height: AppSpacing.space6),
         ],
       ),
     );
@@ -182,39 +176,57 @@ class _ThemeItem extends StatelessWidget {
   final bool isSelected;
   final VoidCallback onTap;
 
-  const _ThemeItem({required this.option, required this.isSelected, required this.onTap});
+  const _ThemeItem({
+    required this.option,
+    required this.isSelected,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        margin: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(30),
-          vertical: ScreenUtil().setWidth(10),
-        ),
-        padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(36),
-          vertical: ScreenUtil().setWidth(34),
-        ),
-        decoration: BoxDecoration(
-          color: option.bgColor,
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-        ),
-        child: Row(
-          children: [
-            Image.asset(option.icon, width: ScreenUtil().setWidth(32), color: option.textColor),
-            SizedBox(width: ScreenUtil().setWidth(30)),
-            Text(
-              option.labelBuilder(context),
-              style: TextStyle(color: option.textColor, fontSize: ScreenUtil().setSp(28)),
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space2,
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: AppRadius.brMd,
+          child: Ink(
+            padding: EdgeInsets.symmetric(
+              horizontal: AppSpacing.space8,
+              vertical: AppSpacing.space8,
             ),
-            const Spacer(),
-            if (isSelected)
-              Icon(Icons.check, size: ScreenUtil().setWidth(48), color: AppColors.primaryBlue)
-            else
-              SizedBox(width: ScreenUtil().setWidth(48)),
-          ],
+            decoration: BoxDecoration(
+              color: option.bgColor,
+              borderRadius: AppRadius.brMd,
+            ),
+            child: Row(
+              children: [
+                Image.asset(
+                  option.icon,
+                  width: ScreenUtil().setWidth(32),
+                  color: option.textColor,
+                ),
+                SizedBox(width: AppSpacing.space8),
+                Text(
+                  option.labelBuilder(context),
+                  style: AppTypography.body.copyWith(color: option.textColor),
+                ),
+                const Spacer(),
+                if (isSelected)
+                  Icon(
+                    Icons.check,
+                    size: ScreenUtil().setWidth(48),
+                    color: AppColorTokens.of(context).brand,
+                  )
+                else
+                  SizedBox(width: ScreenUtil().setWidth(48)),
+              ],
+            ),
+          ),
         ),
       ),
     );
