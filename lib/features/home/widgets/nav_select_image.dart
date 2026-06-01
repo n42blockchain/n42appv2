@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/component/pages/image_crop_page.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -17,7 +18,7 @@ class NavSelectImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        GestureDetector(
+        InkWell(
           onTap: () async {
             final navigator = Navigator.of(context);
             //拍照
@@ -39,14 +40,14 @@ class NavSelectImage extends StatelessWidget {
           child: Container(
               color: Colors.transparent,
               width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 20),
+              padding: EdgeInsets.symmetric(vertical: AppSpacing.space6),
               alignment: Alignment.center,
               child: Text(
                 S.of(context).photograph,
-                style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainTextColor.name),
-                    fontSize: 16),
+                style: AppTypography.headline.copyWith(
+                  color: AppThemeUtils.getColorByKey(
+                      context, AppThemeKeys.mainTextColor.name),
+                ),
               )),
         ),
         Divider(
@@ -54,7 +55,7 @@ class NavSelectImage extends StatelessWidget {
           color:
           AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name),
         ),
-        GestureDetector(
+        InkWell(
           onTap: () async {
             final navigator = Navigator.of(context);
             //从相册选择
@@ -78,13 +79,13 @@ class NavSelectImage extends StatelessWidget {
               color: Colors.transparent,
               width: double.infinity,
               alignment: Alignment.center,
-              padding: const EdgeInsets.symmetric(vertical: 20),
+              padding: EdgeInsets.symmetric(vertical: AppSpacing.space6),
               child: Text(
                 S.of(context).g_key_personal_1,
-                style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainTextColor.name),
-                    fontSize: 16),
+                style: AppTypography.headline.copyWith(
+                  color: AppThemeUtils.getColorByKey(
+                      context, AppThemeKeys.mainTextColor.name),
+                ),
               )),
         ),
         Divider(
@@ -92,7 +93,7 @@ class NavSelectImage extends StatelessWidget {
           color:
           AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name),
         ),
-        GestureDetector(
+        InkWell(
           onTap: () {
             Navigator.of(context).pop();
           },
@@ -100,10 +101,13 @@ class NavSelectImage extends StatelessWidget {
               color: Colors.transparent,
               width: double.infinity,
               alignment: Alignment.center,
-              padding: const EdgeInsets.symmetric(vertical: 20),
+              padding: EdgeInsets.symmetric(vertical: AppSpacing.space6),
               child: Text(
                 S.of(context).g_key_79,
-                style: const TextStyle(fontSize: 16),
+                style: AppTypography.headline.copyWith(
+                  color: AppThemeUtils.getColorByKey(
+                      context, AppThemeKeys.mainTextColor.name),
+                ),
               )),
         ),
       ],

@@ -1,4 +1,5 @@
 ﻿import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -20,11 +21,10 @@ class ShareList extends StatelessWidget {
                 child: Text(
                   S.of(context).g_key_share_method,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainBlueColor.name),
-                      fontSize: ScreenUtil().setSp(32),
-                      fontWeight: FontWeight.bold),
+                  style: AppTypography.headline.copyWith(
+                    color: AppThemeUtils.getColorByKey(
+                        context, AppThemeKeys.mainBlueColor.name),
+                  ),
                 ),
               ),
               IconButton(
@@ -39,9 +39,7 @@ class ShareList extends StatelessWidget {
                   ))
             ],
           ),
-          SizedBox(
-            height: ScreenUtil().setWidth(40),
-          ),
+          SizedBox(height: AppSpacing.space12),
           //Partager le code QR
           _buildItem(context, S.of(context).g_key_share_code, () {
             callBack(0);
@@ -56,30 +54,39 @@ class ShareList extends StatelessWidget {
   }
 
   Widget _buildItem(BuildContext context, String payTypeName, GestureTapCallback? onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(24), vertical: ScreenUtil().setWidth(28)),
-        margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(24)),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-            // color: Colors.transparent,
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-            border: Border.fromBorderSide(BorderSide(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemLineColor.name),
-                width: 1))),
-        child: Row(
-          children: [
-            Text(
-              payTypeName,
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
-                fontSize: ScreenUtil().setSp(30),
-              ),
-            )
-          ],
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space6),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: AppRadius.brMd,
+          child: Ink(
+            padding: EdgeInsets.symmetric(
+              horizontal: AppSpacing.space6,
+              vertical: AppSpacing.space8,
+            ),
+            decoration: BoxDecoration(
+              borderRadius: AppRadius.brMd,
+              color: AppThemeUtils.getColorByKey(
+                  context, AppThemeKeys.itemBgColor.name),
+              border: Border.fromBorderSide(BorderSide(
+                  color: AppThemeUtils.getColorByKey(
+                      context, AppThemeKeys.itemLineColor.name),
+                  width: 1)),
+            ),
+            child: Row(
+              children: [
+                Text(
+                  payTypeName,
+                  style: AppTypography.body.copyWith(
+                    color: AppThemeUtils.getColorByKey(
+                        context, AppThemeKeys.mainTextColor.name),
+                  ),
+                )
+              ],
+            ),
+          ),
         ),
       ),
     );

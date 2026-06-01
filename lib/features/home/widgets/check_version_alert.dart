@@ -1,4 +1,5 @@
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -65,15 +66,13 @@ class CheckVersionAlert extends StatelessWidget {
         // 强制更新时阻止返回键关闭弹窗
       },
       child: AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(28)),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: AppRadius.brLg),
         backgroundColor: dialogBg,
         contentPadding: EdgeInsets.fromLTRB(
-          ScreenUtil().setWidth(36),
-          ScreenUtil().setWidth(36),
-          ScreenUtil().setWidth(36),
-          ScreenUtil().setWidth(24),
+          AppSpacing.space8,
+          AppSpacing.space8,
+          AppSpacing.space8,
+          AppSpacing.space6,
         ),
         content: SingleChildScrollView(
           child: Column(
@@ -85,28 +84,21 @@ class CheckVersionAlert extends StatelessWidget {
                 width: ScreenUtil().setWidth(88),
                 fit: BoxFit.cover,
               ),
-              SizedBox(height: ScreenUtil().setWidth(20)),
+              SizedBox(height: AppSpacing.space6),
 
               // ── 标题 & 版本号 ─────────────────────────────────────────
               Text(
                 S.of(context).g_key_v_k1,
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: textColor,
-                  fontSize: ScreenUtil().setSp(28),
-                ),
+                style: AppTypography.body.copyWith(color: textColor),
               ),
-              SizedBox(height: ScreenUtil().setWidth(6)),
+              SizedBox(height: AppSpacing.space2),
               Text(
                 'V$newVersion',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: accentColor,
-                  fontSize: ScreenUtil().setSp(40),
-                  fontWeight: FontWeight.bold,
-                ),
+                style: AppTypography.titleLg.copyWith(color: accentColor),
               ),
-              SizedBox(height: ScreenUtil().setWidth(20)),
+              SizedBox(height: AppSpacing.space6),
 
               // ── 更新日志 ──────────────────────────────────────────────
               if (updateTitle.isNotEmpty) ...[
@@ -114,28 +106,26 @@ class CheckVersionAlert extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     updateTitle,
-                    style: TextStyle(
-                      color: textColor,
-                      fontSize: ScreenUtil().setSp(26),
+                    style: AppTypography.bodySm.copyWith(
                       fontWeight: FontWeight.w600,
+                      color: textColor,
                     ),
                   ),
                 ),
-                SizedBox(height: ScreenUtil().setWidth(6)),
+                SizedBox(height: AppSpacing.space2),
               ],
               if (introduction.isNotEmpty)
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
                     introduction,
-                    style: TextStyle(
+                    style: AppTypography.caption.copyWith(
                       height: 1.6,
-                      fontSize: ScreenUtil().setSp(24),
                       color: subtitleColor,
                     ),
                   ),
                 ),
-              SizedBox(height: ScreenUtil().setWidth(28)),
+              SizedBox(height: AppSpacing.space8),
 
               // ── 立即更新按钮 ──────────────────────────────────────────
               SizedBox(
@@ -146,8 +136,7 @@ class CheckVersionAlert extends StatelessWidget {
                     backgroundColor: accentColor,
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(ScreenUtil().setWidth(40)),
+                      borderRadius: AppRadius.brXl,
                     ),
                     elevation: 0,
                   ),
@@ -161,27 +150,21 @@ class CheckVersionAlert extends StatelessWidget {
                     S.of(context).g_key_v_k2,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(28),
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: AppTypography.bodyStrong,
                   ),
                 ),
               ),
 
               // ── 稍后提醒（非强制更新时显示） ──────────────────────────
               if (!_forced) ...[
-                SizedBox(height: ScreenUtil().setWidth(4)),
+                SizedBox(height: AppSpacing.space2),
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(),
                   child: Text(
                     S.of(context).g_version_later,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(24),
-                      color: subtitleColor,
-                    ),
+                    style: AppTypography.caption.copyWith(color: subtitleColor),
                   ),
                 ),
               ],
