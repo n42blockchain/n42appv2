@@ -24,11 +24,8 @@ class TradeSheet extends ConsumerStatefulWidget {
     required String marketId,
     required String outcomeId,
   }) {
-    return showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: AppColorTokens.of(context).bgElevated,
-      shape: RoundedRectangleBorder(borderRadius: AppRadius.brSheetTop),
+    return showAppSheet<void>(
+      context,
       builder: (_) => TradeSheet(marketId: marketId, outcomeId: outcomeId),
     );
   }

@@ -117,24 +117,6 @@ class _LiveHomePageState extends State<LiveHomePage> {
     );
   }
 
-  /// 居中空 / 提示态：图标 + 说明（规范 §2.5）。
-  Widget _hint(BuildContext context, IconData icon, String text) {
-    final c = AppColorTokens.of(context);
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 48, color: c.textTertiary),
-          SizedBox(height: AppSpacing.space4),
-          Text(
-            text,
-            style: AppTypography.bodySm.copyWith(color: c.textSecondary),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildRoomList(BuildContext context) {
     if (_roomsError != null) {
       return Center(
@@ -148,14 +130,21 @@ class _LiveHomePageState extends State<LiveHomePage> {
       );
     }
     if (_rooms == null) {
-      return _hint(context, Icons.live_tv, '点击"加载"查看直播间');
+      return const AppEmptyState(
+        icon: Icons.live_tv,
+        title: '查看直播间',
+        message: '点击右上角"加载"',
+      );
     }
     return StreamBuilder<List<LiveRoomSummary>>(
       stream: _rooms,
       builder: (context, snapshot) {
         final rooms = snapshot.data ?? const <LiveRoomSummary>[];
         if (rooms.isEmpty) {
-          return _hint(context, Icons.inbox_outlined, '暂无直播间');
+          return const AppEmptyState(
+            icon: Icons.inbox_outlined,
+            title: '暂无直播间',
+          );
         }
         return ListView.separated(
           itemCount: rooms.length,

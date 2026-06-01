@@ -6,6 +6,10 @@
 `lib/core/design_system/`：`AppColorTokens`（随主题语义色 + 固定叠层色两组）、`AppTypography`（9 级字阶）、`AppSpacing`（8pt 网格）、`AppRadius`、`AppMotion`。barrel `design_system.dart`。
 中性/语义色映射现有 `AppThemeKeys` 主题表，保证迁移零视觉断层。
 
+## 组件库（地基二）✅ 2026-06-01
+`lib/core/design_system/widgets/`：`AppButton`（primary/secondary/text/danger + loading/禁用）、`AppCard`、`AppTextField`、`AppDialog`（+ `confirm` 便捷，替代 7 个 `tips_dialog`）、`AppEmptyState`、`showAppSheet`。均随主题。后续模块整改直接复用；主程序替换 `button_widget`/`tips_dialog`/`text_field_widget` 调用点为高风险大改，逐模块推进。
+已在 live 接入验证：三个 sheet 改 `showAppSheet`、开奖二次确认改 `AppDialog.confirm`、直播广场空态改 `AppEmptyState`。
+
 ## 模块进度
 
 | 模块 | 状态 | 日期 | 改动 | 备注 |

@@ -11,3 +11,10 @@ export 'app_motion.dart';
 export 'app_radius.dart';
 export 'app_spacing.dart';
 export 'app_typography.dart';
+// 组件库（规范 §2）
+export 'widgets/app_bottom_sheet.dart';
+export 'widgets/app_button.dart';
+export 'widgets/app_card.dart';
+export 'widgets/app_dialog.dart';
+export 'widgets/app_empty_state.dart';
+export 'widgets/app_text_field.dart';

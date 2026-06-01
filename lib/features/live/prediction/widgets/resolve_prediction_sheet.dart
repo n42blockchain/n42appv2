@@ -12,11 +12,8 @@ class ResolvePredictionSheet extends ConsumerStatefulWidget {
   final String marketId;
 
   static Future<void> show(BuildContext context, {required String marketId}) {
-    return showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: AppColorTokens.of(context).bgElevated,
-      shape: RoundedRectangleBorder(borderRadius: AppRadius.brSheetTop),
+    return showAppSheet<void>(
+      context,
       builder: (_) => ResolvePredictionSheet(marketId: marketId),
     );
   }
@@ -143,24 +140,13 @@ class _ResolvePredictionSheetState
     PredictionMarket market,
     MarketOutcome outcome,
   ) async {
-    final ok = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('确认开奖'),
-        content: Text('判定「${outcome.label}」获胜并结算？此操作不可撤销。'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('取消'),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('确认开奖'),
-          ),
-        ],
-      ),
+    final ok = await AppDialog.confirm(
+      context,
+      title: '确认开奖',
+      message: '判定「${outcome.label}」获胜并结算？此操作不可撤销。',
+      confirmText: '确认开奖',
     );
-    if (ok != true) return;
+    if (!ok) return;
     final repo = ref.read(predictionRepositoryProvider);
     await _run(() async {
       if (market.isOpen) await repo.closeMarket(market.id);

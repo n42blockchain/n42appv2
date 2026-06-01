@@ -11,11 +11,8 @@ class CreatePredictionSheet extends ConsumerStatefulWidget {
   final String roomId;
 
   static Future<void> show(BuildContext context, {required String roomId}) {
-    return showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: AppColorTokens.of(context).bgElevated,
-      shape: RoundedRectangleBorder(borderRadius: AppRadius.brSheetTop),
+    return showAppSheet<void>(
+      context,
       builder: (_) => CreatePredictionSheet(roomId: roomId),
     );
   }
