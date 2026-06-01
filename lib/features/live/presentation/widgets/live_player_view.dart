@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:livekit_client/livekit_client.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 import '../../services/live_video_service.dart';
 
@@ -45,9 +46,14 @@ class _Placeholder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ColoredBox(
-      color: Colors.black,
+      color: Colors.black, // 视频底，深色专用
       child: Center(
-        child: Text(text, style: const TextStyle(color: Colors.white54)),
+        child: Text(
+          text,
+          style: AppTypography.body.copyWith(
+            color: AppColorTokens.onOverlaySecondary,
+          ),
+        ),
       ),
     );
   }

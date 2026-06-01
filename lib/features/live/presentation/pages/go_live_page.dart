@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:n42_chat/n42_chat.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../prediction/domain/prediction_market.dart';
@@ -112,7 +113,10 @@ class _GoLivePageState extends State<GoLivePage> {
           Align(
             alignment: Alignment.topLeft,
             child: IconButton(
-              icon: const Icon(Icons.close, color: Colors.white),
+              icon: const Icon(
+                Icons.close,
+                color: AppColorTokens.onOverlayPrimary,
+              ),
               onPressed: () => context.pop(),
             ),
           ),
@@ -120,18 +124,26 @@ class _GoLivePageState extends State<GoLivePage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.videocam, color: Colors.white70, size: 64),
-                const SizedBox(height: 24),
+                const Icon(
+                  Icons.videocam,
+                  color: AppColorTokens.onOverlaySecondary,
+                  size: 64,
+                ),
+                SizedBox(height: AppSpacing.space12),
                 if (_error != null) ...[
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 32),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: AppSpacing.space12,
+                    ),
                     child: Text(
                       _error!,
                       textAlign: TextAlign.center,
-                      style: const TextStyle(color: Colors.redAccent),
+                      style: AppTypography.body.copyWith(
+                        color: AppColorTokens.dangerOnOverlay,
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: AppSpacing.space8),
                 ],
                 FilledButton.icon(
                   onPressed: _starting ? null : _startLive,
@@ -162,7 +174,10 @@ class _GoLivePageState extends State<GoLivePage> {
         // 顶部：roomId（可分享）+ 在线人数 + 结束
         SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            padding: EdgeInsets.symmetric(
+              horizontal: AppSpacing.space4,
+              vertical: AppSpacing.space2,
+            ),
             child: Row(
               children: [
                 Expanded(child: _RoomIdChip(roomId: _roomId ?? '')),
@@ -173,7 +188,10 @@ class _GoLivePageState extends State<GoLivePage> {
                         _OnlineBadge(count: _video.participantCount),
                   ),
                 IconButton(
-                  icon: const Icon(Icons.stop_circle, color: Colors.redAccent),
+                  icon: const Icon(
+                    Icons.stop_circle,
+                    color: AppColorTokens.dangerOnOverlay,
+                  ),
                   onPressed: _endLive,
                 ),
               ],
@@ -230,32 +248,43 @@ class _RoomIdChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Clipboard.setData(ClipboardData(text: roomId));
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('已复制房间号')));
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-        decoration: BoxDecoration(
-          color: Colors.black54,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(Icons.copy, color: Colors.white70, size: 14),
-            const SizedBox(width: 4),
-            Flexible(
-              child: Text(
-                roomId,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(color: Colors.white, fontSize: 12),
-              ),
+    return Material(
+      color: AppColorTokens.overlay,
+      borderRadius: AppRadius.brLg,
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: () {
+          Clipboard.setData(ClipboardData(text: roomId));
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text('已复制房间号')));
+        },
+        child: ConstrainedBox(
+          // 抬高到可用触控高度（原 ≈26dp < 44dp）。
+          constraints: const BoxConstraints(minHeight: 44),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.copy,
+                  color: AppColorTokens.onOverlaySecondary,
+                  size: 14,
+                ),
+                SizedBox(width: AppSpacing.space2),
+                Flexible(
+                  child: Text(
+                    roomId,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTypography.caption.copyWith(
+                      color: AppColorTokens.onOverlayPrimary,
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -269,20 +298,29 @@ class _OnlineBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8),
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        color: Colors.black54,
-        borderRadius: BorderRadius.circular(12),
+      margin: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
+      padding: EdgeInsets.symmetric(
+        horizontal: AppSpacing.space6,
+        vertical: AppSpacing.space2,
+      ),
+      decoration: const BoxDecoration(
+        color: AppColorTokens.overlay,
+        borderRadius: BorderRadius.all(Radius.circular(AppRadius.pill)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.remove_red_eye, color: Colors.white70, size: 14),
-          const SizedBox(width: 4),
+          const Icon(
+            Icons.remove_red_eye,
+            color: AppColorTokens.onOverlaySecondary,
+            size: 14,
+          ),
+          SizedBox(width: AppSpacing.space2),
           Text(
             '$count',
-            style: const TextStyle(color: Colors.white, fontSize: 12),
+            style: AppTypography.caption.copyWith(
+              color: AppColorTokens.onOverlayPrimary,
+            ),
           ),
         ],
       ),
@@ -304,10 +342,10 @@ class _CircleButton extends StatelessWidget {
         width: 48,
         height: 48,
         decoration: const BoxDecoration(
-          color: Colors.black54,
+          color: AppColorTokens.overlay,
           shape: BoxShape.circle,
         ),
-        child: Icon(icon, color: Colors.white),
+        child: Icon(icon, color: AppColorTokens.onOverlayPrimary),
       ),
     );
   }
@@ -342,7 +380,10 @@ class _BroadcasterPredictionButton extends ConsumerWidget {
     }
     final hasActive = active != null;
     return FilledButton.icon(
-      style: FilledButton.styleFrom(backgroundColor: Colors.black54),
+      style: FilledButton.styleFrom(
+        backgroundColor: AppColorTokens.overlay,
+        foregroundColor: AppColorTokens.onOverlayPrimary,
+      ),
       onPressed: () {
         if (hasActive) {
           ResolvePredictionSheet.show(context, marketId: active!.id);

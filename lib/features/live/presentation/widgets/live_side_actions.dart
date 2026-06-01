@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// 直播间右侧竖排操作：点赞 / 分享 / 礼物（抖音式）。
 class LiveSideActions extends StatelessWidget {
@@ -19,13 +20,13 @@ class LiveSideActions extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         _ActionButton(icon: Icons.favorite, label: '点赞', onTap: onLike),
-        const SizedBox(height: 20),
+        SizedBox(height: AppSpacing.space8),
         _ActionButton(
           icon: Icons.card_giftcard,
           label: '礼物',
           onTap: onGift ?? () => _toast(context, '礼物功能开发中'),
         ),
-        const SizedBox(height: 20),
+        SizedBox(height: AppSpacing.space8),
         _ActionButton(
           icon: Icons.share,
           label: '分享',
@@ -53,25 +54,31 @@ class _ActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
       onTap: onTap,
-      child: Column(
-        children: [
-          Container(
-            width: 48,
-            height: 48,
-            decoration: const BoxDecoration(
-              color: Colors.black38,
-              shape: BoxShape.circle,
+      borderRadius: AppRadius.brXl,
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: AppSpacing.space2),
+        child: Column(
+          children: [
+            Container(
+              width: 48,
+              height: 48,
+              decoration: const BoxDecoration(
+                color: AppColorTokens.overlay,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: AppColorTokens.onOverlayPrimary),
             ),
-            child: Icon(icon, color: Colors.white),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: const TextStyle(color: Colors.white, fontSize: 11),
-          ),
-        ],
+            SizedBox(height: AppSpacing.space2),
+            Text(
+              label,
+              style: AppTypography.captionSm.copyWith(
+                color: AppColorTokens.onOverlayPrimary,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

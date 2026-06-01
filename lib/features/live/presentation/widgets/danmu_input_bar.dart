@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// 底部弹幕输入框（"说点什么…"）。内置发送节流，防止刷屏。
 class DanmuInputBar extends StatefulWidget {
@@ -70,24 +71,33 @@ class _DanmuInputBarState extends State<DanmuInputBar> {
     return SafeArea(
       top: false,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 6, 12, 8),
+        padding: EdgeInsets.fromLTRB(
+          AppSpacing.space6,
+          AppSpacing.space2,
+          AppSpacing.space6,
+          AppSpacing.space4,
+        ),
         child: Row(
           children: [
             Expanded(
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14),
+                padding: EdgeInsets.symmetric(horizontal: AppSpacing.space6),
                 decoration: BoxDecoration(
-                  color: Colors.black.withValues(alpha: 0.4),
-                  borderRadius: BorderRadius.circular(22),
+                  color: AppColorTokens.overlay,
+                  borderRadius: AppRadius.brPill,
                 ),
                 child: TextField(
                   controller: _controller,
                   textInputAction: TextInputAction.send,
-                  style: const TextStyle(color: Colors.white),
-                  cursorColor: Colors.white,
+                  style: AppTypography.body.copyWith(
+                    color: AppColorTokens.onOverlayPrimary,
+                  ),
+                  cursorColor: AppColorTokens.onOverlayPrimary,
                   decoration: const InputDecoration(
                     hintText: '说点什么…',
-                    hintStyle: TextStyle(color: Colors.white54),
+                    hintStyle: TextStyle(
+                      color: AppColorTokens.onOverlaySecondary,
+                    ),
                     border: InputBorder.none,
                     isDense: true,
                   ),
@@ -95,7 +105,7 @@ class _DanmuInputBarState extends State<DanmuInputBar> {
                 ),
               ),
             ),
-            const SizedBox(width: 8),
+            SizedBox(width: AppSpacing.space4),
             IconButton(
               onPressed: _sending ? null : _handleSend,
               icon: _sending
@@ -104,7 +114,10 @@ class _DanmuInputBarState extends State<DanmuInputBar> {
                       height: 18,
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
-                  : const Icon(Icons.send, color: Colors.white),
+                  : const Icon(
+                      Icons.send,
+                      color: AppColorTokens.onOverlayPrimary,
+                    ),
             ),
           ],
         ),

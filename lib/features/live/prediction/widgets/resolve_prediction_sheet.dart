@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 import '../domain/prediction_market.dart';
 import '../providers/prediction_providers.dart';
@@ -14,10 +15,8 @@ class ResolvePredictionSheet extends ConsumerStatefulWidget {
     return showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: const Color(0xFF1C1C22),
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-      ),
+      backgroundColor: AppColorTokens.of(context).bgElevated,
+      shape: RoundedRectangleBorder(borderRadius: AppRadius.brSheetTop),
       builder: (_) => ResolvePredictionSheet(marketId: marketId),
     );
   }
@@ -49,11 +48,17 @@ class _ResolvePredictionSheetState
 
   @override
   Widget build(BuildContext context) {
+    final c = AppColorTokens.of(context);
     final marketAsync = ref.watch(marketProvider(widget.marketId));
     final repo = ref.read(predictionRepositoryProvider);
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+      padding: EdgeInsets.fromLTRB(
+        AppSpacing.space8,
+        AppSpacing.space8,
+        AppSpacing.space8,
+        AppSpacing.space12,
+      ),
       child: marketAsync.when(
         loading: () => const SizedBox(
           height: 120,
@@ -67,22 +72,18 @@ class _ResolvePredictionSheetState
           children: [
             Text(
               market.question,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
+              style: AppTypography.title.copyWith(color: c.textPrimary),
             ),
-            const SizedBox(height: 4),
+            SizedBox(height: AppSpacing.space2),
             Text(
               market.isResolved ? '已开奖' : '选择获胜结果开奖（资金按结果结算）',
-              style: const TextStyle(color: Colors.white54, fontSize: 12),
+              style: AppTypography.caption.copyWith(color: c.textSecondary),
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: AppSpacing.space6),
             if (!market.isResolved)
               ...market.outcomes.map(
                 (o) => Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
+                  padding: EdgeInsets.only(bottom: AppSpacing.space4),
                   child: SizedBox(
                     width: double.infinity,
                     child: OutlinedButton(
@@ -99,13 +100,16 @@ class _ResolvePredictionSheetState
             else
               Text(
                 '结果：${market.outcomeById(market.resolvedOutcomeId ?? '')?.label ?? ''}',
-                style: const TextStyle(color: Color(0xFF41C36B)),
+                style: AppTypography.body.copyWith(color: c.success),
               ),
             if (_error != null) ...[
-              const SizedBox(height: 8),
-              Text(_error!, style: const TextStyle(color: Colors.redAccent)),
+              SizedBox(height: AppSpacing.space4),
+              Text(
+                _error!,
+                style: AppTypography.bodySm.copyWith(color: c.danger),
+              ),
             ],
-            const SizedBox(height: 8),
+            SizedBox(height: AppSpacing.space4),
             if (!market.isResolved)
               Row(
                 children: [
@@ -123,10 +127,7 @@ class _ResolvePredictionSheetState
                       onPressed: _busy
                           ? null
                           : () => _run(() => repo.cancelMarket(market.id)),
-                      child: const Text(
-                        '取消并退款',
-                        style: TextStyle(color: Colors.redAccent),
-                      ),
+                      child: Text('取消并退款', style: TextStyle(color: c.danger)),
                     ),
                   ),
                 ],

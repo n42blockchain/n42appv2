@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 import '../domain/prediction_market.dart';
 import '../providers/prediction_providers.dart';
@@ -93,11 +94,11 @@ class _CardState extends ConsumerState<_Card> {
     final symbol = market.collateral.symbol;
 
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: AppSpacing.cardInset,
       decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.55),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.white12),
+        color: AppColorTokens.overlay,
+        borderRadius: AppRadius.brLg,
+        border: Border.all(color: AppColorTokens.onOverlayBorder),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -105,17 +106,19 @@ class _CardState extends ConsumerState<_Card> {
         children: [
           Row(
             children: [
-              const Icon(Icons.insights, color: Color(0xFF8AB4FF), size: 16),
-              const SizedBox(width: 6),
+              const Icon(
+                Icons.insights,
+                color: AppColorTokens.brandOnOverlay,
+                size: 16,
+              ),
+              SizedBox(width: AppSpacing.space2),
               Expanded(
                 child: Text(
                   market.question,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
+                  style: AppTypography.bodyStrong.copyWith(
+                    color: AppColorTokens.onOverlayPrimary,
                   ),
                 ),
               ),
@@ -124,10 +127,10 @@ class _CardState extends ConsumerState<_Card> {
           ),
           if (_tradable && market.closesAt != null)
             Padding(
-              padding: const EdgeInsets.only(top: 4),
+              padding: EdgeInsets.only(top: AppSpacing.space2),
               child: _CountdownText(closesAt: market.closesAt!),
             ),
-          const SizedBox(height: 8),
+          SizedBox(height: AppSpacing.space4),
           ...market.outcomes.map(
             (o) => _OutcomeRow(
               market: market,
@@ -139,7 +142,7 @@ class _CardState extends ConsumerState<_Card> {
           ),
           if (market.isResolved && position != null && !position.isEmpty)
             Padding(
-              padding: const EdgeInsets.only(top: 8),
+              padding: EdgeInsets.only(top: AppSpacing.space4),
               child: SizedBox(
                 width: double.infinity,
                 child: FilledButton(
@@ -150,10 +153,12 @@ class _CardState extends ConsumerState<_Card> {
                 ),
               ),
             ),
-          const SizedBox(height: 4),
+          SizedBox(height: AppSpacing.space2),
           Text(
             '成交量 ${market.totalVolume.toStringAsFixed(0)} $symbol',
-            style: const TextStyle(color: Colors.white38, fontSize: 10),
+            style: AppTypography.captionSm.copyWith(
+              color: AppColorTokens.onOverlayTertiary,
+            ),
           ),
         ],
       ),
@@ -188,15 +193,18 @@ class _CountdownText extends StatelessWidget {
               '${(secs % 60).toString().padLeft(2, '0')} 后截止';
     return Row(
       children: [
-        const Icon(Icons.timer_outlined, color: Colors.white54, size: 12),
-        const SizedBox(width: 4),
+        const Icon(
+          Icons.timer_outlined,
+          color: AppColorTokens.onOverlaySecondary,
+          size: 12,
+        ),
+        SizedBox(width: AppSpacing.space2),
         Text(
           text,
-          style: TextStyle(
+          style: AppTypography.captionSm.copyWith(
             color: secs <= 10 && secs > 0
-                ? const Color(0xFFFFB020)
-                : Colors.white54,
-            fontSize: 11,
+                ? AppColorTokens.warningOnOverlay
+                : AppColorTokens.onOverlaySecondary,
           ),
         ),
       ],
@@ -223,7 +231,7 @@ class _OutcomeRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final pct = (outcome.price * 100).toStringAsFixed(0);
     return Padding(
-      padding: const EdgeInsets.only(bottom: 6),
+      padding: EdgeInsets.only(bottom: AppSpacing.space2),
       child: InkWell(
         onTap: tradable
             ? () => TradeSheet.show(
@@ -232,16 +240,19 @@ class _OutcomeRow extends StatelessWidget {
                 outcomeId: outcome.id,
               )
             : null,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: AppRadius.brMd,
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          padding: EdgeInsets.symmetric(
+            horizontal: AppSpacing.space4,
+            vertical: AppSpacing.space4,
+          ),
           decoration: BoxDecoration(
             color: isWinner
-                ? const Color(0x3341C36B)
-                : Colors.white.withValues(alpha: 0.06),
-            borderRadius: BorderRadius.circular(8),
+                ? AppColorTokens.successOnOverlay.withValues(alpha: 0.2)
+                : AppColorTokens.onOverlayBorder,
+            borderRadius: AppRadius.brMd,
             border: isWinner
-                ? Border.all(color: const Color(0xFF41C36B))
+                ? Border.all(color: AppColorTokens.successOnOverlay)
                 : null,
           ),
           child: Row(
@@ -249,34 +260,33 @@ class _OutcomeRow extends StatelessWidget {
               Expanded(
                 child: Text(
                   outcome.label,
-                  style: const TextStyle(color: Colors.white, fontSize: 13),
+                  style: AppTypography.body.copyWith(
+                    color: AppColorTokens.onOverlayPrimary,
+                  ),
                 ),
               ),
               if (heldShares > 0)
                 Padding(
-                  padding: const EdgeInsets.only(right: 8),
+                  padding: EdgeInsets.only(right: AppSpacing.space4),
                   child: Text(
                     '持 ${heldShares.toStringAsFixed(1)}',
-                    style: const TextStyle(
-                      color: Color(0xFFFFD24D),
-                      fontSize: 11,
+                    style: AppTypography.captionSm.copyWith(
+                      color: AppColorTokens.highlight,
                     ),
                   ),
                 ),
               Text(
                 '$pct%',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
+                style: AppTypography.bodyStrong.copyWith(
+                  color: AppColorTokens.onOverlayPrimary,
                 ),
               ),
               if (tradable)
-                const Padding(
-                  padding: EdgeInsets.only(left: 6),
-                  child: Icon(
+                Padding(
+                  padding: EdgeInsets.only(left: AppSpacing.space2),
+                  child: const Icon(
                     Icons.add_circle_outline,
-                    color: Colors.white54,
+                    color: AppColorTokens.onOverlaySecondary,
                     size: 16,
                   ),
                 ),
@@ -300,31 +310,34 @@ class _StatusTag extends StatelessWidget {
     // 本地到点优先显示"待开奖"，即便后端尚未推送停盘。
     if (market.isOpen && !tradable) {
       text = '待开奖';
-      color = const Color(0xFFFFB020);
+      color = AppColorTokens.warningOnOverlay;
     } else {
       switch (market.status) {
         case MarketStatus.open:
           text = '进行中';
-          color = const Color(0xFF41C36B);
+          color = AppColorTokens.successOnOverlay;
         case MarketStatus.closed:
           text = '待开奖';
-          color = const Color(0xFFFFB020);
+          color = AppColorTokens.warningOnOverlay;
         case MarketStatus.resolved:
           final w = market.outcomeById(market.resolvedOutcomeId ?? '');
           text = '已开奖：${w?.label ?? ''}';
-          color = const Color(0xFF8AB4FF);
+          color = AppColorTokens.brandOnOverlay;
         case MarketStatus.cancelled:
           text = '已取消';
-          color = Colors.white38;
+          color = AppColorTokens.onOverlayTertiary;
       }
     }
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      padding: EdgeInsets.symmetric(
+        horizontal: AppSpacing.space2,
+        vertical: AppSpacing.space2,
+      ),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.2),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: AppRadius.brSm,
       ),
-      child: Text(text, style: TextStyle(color: color, fontSize: 10)),
+      child: Text(text, style: AppTypography.captionSm.copyWith(color: color)),
     );
   }
 }

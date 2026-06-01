@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 import '../providers/prediction_providers.dart';
 
@@ -13,10 +14,8 @@ class CreatePredictionSheet extends ConsumerStatefulWidget {
     return showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: const Color(0xFF1C1C22),
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-      ),
+      backgroundColor: AppColorTokens.of(context).bgElevated,
+      shape: RoundedRectangleBorder(borderRadius: AppRadius.brSheetTop),
       builder: (_) => CreatePredictionSheet(roomId: roomId),
     );
   }
@@ -97,42 +96,42 @@ class _CreatePredictionSheetState extends ConsumerState<CreatePredictionSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final c = AppColorTokens.of(context);
     return Padding(
       padding: EdgeInsets.only(
-        left: 16,
-        right: 16,
-        top: 16,
-        bottom: 16 + MediaQuery.of(context).viewInsets.bottom,
+        left: AppSpacing.space8,
+        right: AppSpacing.space8,
+        top: AppSpacing.space8,
+        bottom: AppSpacing.space8 + MediaQuery.of(context).viewInsets.bottom,
       ),
       child: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               '开启预测',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
+              style: AppTypography.title.copyWith(color: c.textPrimary),
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: AppSpacing.space6),
             _field(_question, '预测问题，如：本局谁赢？'),
-            const SizedBox(height: 12),
-            const Text('结果选项', style: TextStyle(color: Colors.white70)),
-            const SizedBox(height: 6),
+            SizedBox(height: AppSpacing.space6),
+            Text(
+              '结果选项',
+              style: AppTypography.body.copyWith(color: c.textSecondary),
+            ),
+            SizedBox(height: AppSpacing.space2),
             for (var i = 0; i < _outcomes.length; i++)
               Padding(
-                padding: const EdgeInsets.only(bottom: 8),
+                padding: EdgeInsets.only(bottom: AppSpacing.space4),
                 child: Row(
                   children: [
                     Expanded(child: _field(_outcomes[i], '结果 ${i + 1}')),
                     if (_outcomes.length > 2)
                       IconButton(
-                        icon: const Icon(
+                        icon: Icon(
                           Icons.remove_circle_outline,
-                          color: Colors.white38,
+                          color: c.textTertiary,
                         ),
                         onPressed: () => _removeOutcome(i),
                       ),
@@ -145,15 +144,18 @@ class _CreatePredictionSheetState extends ConsumerState<CreatePredictionSheet> {
                 icon: const Icon(Icons.add),
                 label: const Text('添加结果'),
               ),
-            const SizedBox(height: 8),
+            SizedBox(height: AppSpacing.space4),
             Row(
               children: [
-                const Text('截止', style: TextStyle(color: Colors.white70)),
-                const SizedBox(width: 12),
+                Text(
+                  '截止',
+                  style: AppTypography.body.copyWith(color: c.textSecondary),
+                ),
+                SizedBox(width: AppSpacing.space6),
                 DropdownButton<int>(
                   value: _durationMin,
-                  dropdownColor: const Color(0xFF2A2A33),
-                  style: const TextStyle(color: Colors.white),
+                  dropdownColor: c.bgElevated,
+                  style: AppTypography.body.copyWith(color: c.textPrimary),
                   items: const [
                     DropdownMenuItem(value: 0, child: Text('不限（手动停盘）')),
                     DropdownMenuItem(value: 1, child: Text('1 分钟')),
@@ -165,10 +167,13 @@ class _CreatePredictionSheetState extends ConsumerState<CreatePredictionSheet> {
               ],
             ),
             if (_error != null) ...[
-              const SizedBox(height: 8),
-              Text(_error!, style: const TextStyle(color: Colors.redAccent)),
+              SizedBox(height: AppSpacing.space4),
+              Text(
+                _error!,
+                style: AppTypography.bodySm.copyWith(color: c.danger),
+              ),
             ],
-            const SizedBox(height: 12),
+            SizedBox(height: AppSpacing.space6),
             SizedBox(
               width: double.infinity,
               child: FilledButton(
@@ -182,19 +187,20 @@ class _CreatePredictionSheetState extends ConsumerState<CreatePredictionSheet> {
     );
   }
 
-  Widget _field(TextEditingController c, String hint) {
+  Widget _field(TextEditingController controller, String hint) {
+    final t = AppColorTokens.of(context);
     return TextField(
-      controller: c,
-      style: const TextStyle(color: Colors.white),
+      controller: controller,
+      style: AppTypography.body.copyWith(color: t.textPrimary),
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: const TextStyle(color: Colors.white38),
+        hintStyle: AppTypography.body.copyWith(color: t.textTertiary),
         isDense: true,
-        enabledBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white24),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: t.border),
         ),
-        focusedBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white54),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: t.brand),
         ),
       ),
     );

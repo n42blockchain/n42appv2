@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 import '../domain/prediction_market.dart';
 import '../providers/prediction_providers.dart';
@@ -26,10 +27,8 @@ class TradeSheet extends ConsumerStatefulWidget {
     return showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: const Color(0xFF1C1C22),
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-      ),
+      backgroundColor: AppColorTokens.of(context).bgElevated,
+      shape: RoundedRectangleBorder(borderRadius: AppRadius.brSheetTop),
       builder: (_) => TradeSheet(marketId: marketId, outcomeId: outcomeId),
     );
   }
@@ -145,10 +144,10 @@ class _TradeSheetState extends ConsumerState<TradeSheet> {
 
     return Padding(
       padding: EdgeInsets.only(
-        left: 16,
-        right: 16,
-        top: 16,
-        bottom: 16 + MediaQuery.of(context).viewInsets.bottom,
+        left: AppSpacing.space8,
+        right: AppSpacing.space8,
+        top: AppSpacing.space8,
+        bottom: AppSpacing.space8 + MediaQuery.of(context).viewInsets.bottom,
       ),
       child: marketAsync.when(
         loading: () => const SizedBox(
@@ -167,6 +166,7 @@ class _TradeSheetState extends ConsumerState<TradeSheet> {
     double balance,
     UserPosition? position,
   ) {
+    final c = AppColorTokens.of(context);
     final symbol = market.collateral.symbol;
     final tradable = market.isOpen;
     final held = position?.sharesOf(_outcomeId) ?? 0;
@@ -177,17 +177,13 @@ class _TradeSheetState extends ConsumerState<TradeSheet> {
       children: [
         Text(
           market.question,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
+          style: AppTypography.title.copyWith(color: c.textPrimary),
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: AppSpacing.space6),
         // 结果选择
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: AppSpacing.space4,
+          runSpacing: AppSpacing.space4,
           children: [
             for (final o in market.outcomes)
               ChoiceChip(
@@ -195,6 +191,7 @@ class _TradeSheetState extends ConsumerState<TradeSheet> {
                   '${o.label}  ${(o.price * 100).toStringAsFixed(0)}%',
                 ),
                 selected: o.id == _outcomeId,
+                selectedColor: c.brandSubtle,
                 onSelected: tradable
                     ? (_) {
                         setState(() => _outcomeId = o.id);
@@ -204,12 +201,12 @@ class _TradeSheetState extends ConsumerState<TradeSheet> {
               ),
           ],
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: AppSpacing.space6),
         Text(
           '余额：${balance.toStringAsFixed(2)} $symbol',
-          style: const TextStyle(color: Colors.white70, fontSize: 12),
+          style: AppTypography.caption.copyWith(color: c.textSecondary),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: AppSpacing.space4),
         if (tradable) ...[
           TextField(
             controller: _amount,
@@ -217,31 +214,31 @@ class _TradeSheetState extends ConsumerState<TradeSheet> {
             inputFormatters: [
               FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
             ],
-            style: const TextStyle(color: Colors.white),
+            style: AppTypography.body.copyWith(color: c.textPrimary),
             decoration: InputDecoration(
               labelText: '投入金额 ($symbol)',
-              labelStyle: const TextStyle(color: Colors.white54),
-              enabledBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.white24),
+              labelStyle: TextStyle(color: c.textSecondary),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: c.border),
               ),
-              focusedBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.white54),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: c.brand),
               ),
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: AppSpacing.space4),
           if (_quote != null)
             Text(
               '预计获得 ${_quote!.shares.toStringAsFixed(2)} 份额'
               ' · 均价 ${(_quote!.avgPrice * 100).toStringAsFixed(1)}%'
               ' · 成交后 ${(_quote!.priceAfter * 100).toStringAsFixed(0)}%',
-              style: const TextStyle(color: Colors.white70, fontSize: 12),
+              style: AppTypography.caption.copyWith(color: c.textSecondary),
             ),
           if (_error != null) ...[
-            const SizedBox(height: 6),
-            Text(_error!, style: const TextStyle(color: Colors.redAccent)),
+            SizedBox(height: AppSpacing.space2),
+            Text(_error!, style: TextStyle(color: c.danger)),
           ],
-          const SizedBox(height: 12),
+          SizedBox(height: AppSpacing.space6),
           Row(
             children: [
               Expanded(
@@ -251,7 +248,7 @@ class _TradeSheetState extends ConsumerState<TradeSheet> {
                 ),
               ),
               if (held > 0) ...[
-                const SizedBox(width: 8),
+                SizedBox(width: AppSpacing.space4),
                 OutlinedButton(
                   onPressed: _busy ? null : () => _sell(held),
                   child: Text('卖出 ${held.toStringAsFixed(1)}'),
@@ -260,7 +257,10 @@ class _TradeSheetState extends ConsumerState<TradeSheet> {
             ],
           ),
         ] else
-          const Text('已停盘，等待开奖', style: TextStyle(color: Colors.white54)),
+          Text(
+            '已停盘，等待开奖',
+            style: AppTypography.body.copyWith(color: c.textSecondary),
+          ),
       ],
     );
   }

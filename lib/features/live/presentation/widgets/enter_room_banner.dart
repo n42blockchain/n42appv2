@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// 进场横幅："xxx 来了"。监听进场事件流，逐条淡入淡出显示。
 class EnterRoomBanner extends StatefulWidget {
@@ -52,21 +53,30 @@ class _EnterRoomBannerState extends State<EnterRoomBanner> {
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 300),
+      duration: AppMotion.base,
       child: _text == null
           ? const SizedBox.shrink()
           : Container(
               key: ValueKey(_text),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              padding: EdgeInsets.symmetric(
+                horizontal: AppSpacing.space6,
+                vertical: AppSpacing.space2,
+              ),
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xCC7B5Cff), Color(0x667B5Cff)],
+                // 单一品牌强调：品牌蓝 → 半透，替换原紫色渐变。
+                gradient: LinearGradient(
+                  colors: [
+                    AppColorTokens.brandOnOverlay,
+                    AppColorTokens.brandOnOverlay.withValues(alpha: 0.4),
+                  ],
                 ),
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: AppRadius.brMd,
               ),
               child: Text(
                 _text!,
-                style: const TextStyle(color: Colors.white, fontSize: 12),
+                style: AppTypography.caption.copyWith(
+                  color: AppColorTokens.onOverlayPrimary,
+                ),
               ),
             ),
     );

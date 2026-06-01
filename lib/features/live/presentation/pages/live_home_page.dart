@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 import '../../services/live_chat_service.dart';
 
@@ -60,7 +61,7 @@ class _LiveHomePageState extends State<LiveHomePage> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(AppSpacing.space8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -78,17 +79,22 @@ class _LiveHomePageState extends State<LiveHomePage> {
                     onSubmitted: _enterRoom,
                   ),
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: AppSpacing.space4),
                 FilledButton(
                   onPressed: () => _enterRoom(_roomController.text),
                   child: const Text('进入'),
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: AppSpacing.space8),
             Row(
               children: [
-                const Text('直播列表', style: TextStyle(fontSize: 16)),
+                Text(
+                  '直播列表',
+                  style: AppTypography.headline.copyWith(
+                    color: AppColorTokens.of(context).textPrimary,
+                  ),
+                ),
                 const Spacer(),
                 TextButton.icon(
                   onPressed: _loadingRooms ? null : _loadRooms,
@@ -103,33 +109,53 @@ class _LiveHomePageState extends State<LiveHomePage> {
                 ),
               ],
             ),
-            const SizedBox(height: 8),
-            Expanded(child: _buildRoomList()),
+            SizedBox(height: AppSpacing.space4),
+            Expanded(child: _buildRoomList(context)),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildRoomList() {
+  /// 居中空 / 提示态：图标 + 说明（规范 §2.5）。
+  Widget _hint(BuildContext context, IconData icon, String text) {
+    final c = AppColorTokens.of(context);
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 48, color: c.textTertiary),
+          SizedBox(height: AppSpacing.space4),
+          Text(
+            text,
+            style: AppTypography.bodySm.copyWith(color: c.textSecondary),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRoomList(BuildContext context) {
     if (_roomsError != null) {
       return Center(
         child: Text(
           '加载失败：$_roomsError',
           textAlign: TextAlign.center,
-          style: const TextStyle(color: Colors.redAccent),
+          style: AppTypography.bodySm.copyWith(
+            color: AppColorTokens.of(context).danger,
+          ),
         ),
       );
     }
     if (_rooms == null) {
-      return const Center(child: Text('点击"加载"查看直播间'));
+      return _hint(context, Icons.live_tv, '点击"加载"查看直播间');
     }
     return StreamBuilder<List<LiveRoomSummary>>(
       stream: _rooms,
       builder: (context, snapshot) {
         final rooms = snapshot.data ?? const <LiveRoomSummary>[];
         if (rooms.isEmpty) {
-          return const Center(child: Text('暂无直播间'));
+          return _hint(context, Icons.inbox_outlined, '暂无直播间');
         }
         return ListView.separated(
           itemCount: rooms.length,

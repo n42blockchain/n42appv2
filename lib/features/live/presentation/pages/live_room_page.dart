@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 import '../../prediction/widgets/prediction_card.dart';
 import '../../services/live_chat_service.dart';
@@ -108,21 +109,21 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
           if (_enter != null)
             Positioned(
               top: 60,
-              left: 12,
+              left: AppSpacing.space6,
               child: EnterRoomBanner(enterStream: _enter!),
             ),
 
           // 预测市场卡片
           Positioned(
             top: 100,
-            left: 8,
-            right: 8,
+            left: AppSpacing.space4,
+            right: AppSpacing.space4,
             child: PredictionCard(roomId: widget.roomId),
           ),
 
           // 右侧操作栏
           Positioned(
-            right: 12,
+            right: AppSpacing.space6,
             bottom: 180,
             child: LiveSideActions(onLike: _likes.burst),
           ),
@@ -142,7 +143,10 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
                 children: [
                   if (_danmu != null)
                     Padding(
-                      padding: const EdgeInsets.only(left: 12, bottom: 4),
+                      padding: EdgeInsets.only(
+                        left: AppSpacing.space6,
+                        bottom: AppSpacing.space2,
+                      ),
                       child: DanmuOverlay(stream: _danmu!),
                     ),
                   DanmuInputBar(
@@ -179,11 +183,13 @@ class _ErrorView extends StatelessWidget {
       color: Colors.black,
       child: Center(
         child: Padding(
-          padding: const EdgeInsets.all(32),
+          padding: EdgeInsets.all(AppSpacing.space12),
           child: Text(
             '进入直播间失败\n$message',
             textAlign: TextAlign.center,
-            style: const TextStyle(color: Colors.white54),
+            style: AppTypography.body.copyWith(
+              color: AppColorTokens.onOverlaySecondary,
+            ),
           ),
         ),
       ),

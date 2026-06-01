@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 import '../../services/live_chat_service.dart';
 
@@ -77,29 +78,32 @@ class _DanmuBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 6, right: 60),
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      margin: EdgeInsets.only(bottom: AppSpacing.space2, right: 60),
+      padding: EdgeInsets.symmetric(
+        horizontal: AppSpacing.space4,
+        vertical: AppSpacing.space2,
+      ),
       decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.35),
-        borderRadius: BorderRadius.circular(16),
+        // overlay(0.55) 提高视频上弹幕对比度（原 0.35 偏弱）。
+        color: AppColorTokens.overlay,
+        borderRadius: AppRadius.brMd,
       ),
       child: RichText(
         text: TextSpan(
-          style: const TextStyle(fontSize: 13, height: 1.2),
+          style: AppTypography.bodySm.copyWith(
+            color: AppColorTokens.onOverlayPrimary,
+          ),
           children: [
             TextSpan(
               text: '${danmu.sender}：',
               style: TextStyle(
                 color: danmu.isMe
-                    ? const Color(0xFFFFD24D)
-                    : const Color(0xFF8AB4FF),
+                    ? AppColorTokens.highlight
+                    : AppColorTokens.brandOnOverlay,
                 fontWeight: FontWeight.w600,
               ),
             ),
-            TextSpan(
-              text: danmu.text,
-              style: const TextStyle(color: Colors.white),
-            ),
+            TextSpan(text: danmu.text),
           ],
         ),
       ),
