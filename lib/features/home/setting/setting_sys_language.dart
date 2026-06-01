@@ -118,8 +118,9 @@ class _LanguageItem extends StatelessWidget {
                         lang.name,
                         style: AppTypography.body.copyWith(
                           color: mainTextColor,
-                          fontWeight:
-                              isSelected ? FontWeight.w600 : FontWeight.normal,
+                          fontWeight: isSelected
+                              ? FontWeight.w600
+                              : FontWeight.normal,
                         ),
                       ),
                       SizedBox(height: AppSpacing.space2),

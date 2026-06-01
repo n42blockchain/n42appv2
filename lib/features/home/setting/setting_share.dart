@@ -90,11 +90,7 @@ class _SettingShareState extends State<SettingShare> {
       await SharePlus.instance.share(
         ShareParams(
           files: [
-            XFile.fromData(
-              pngBytes,
-              name: "invite.png",
-              mimeType: "image/png",
-            ),
+            XFile.fromData(pngBytes, name: "invite.png", mimeType: "image/png"),
           ],
           text:
               "${S.of(context).g_share_v3_key_3} ${S.of(context).g_share_v3_key_4} 25 ${S.of(context).g_share_v3_key_5}",
@@ -110,19 +106,21 @@ class _SettingShareState extends State<SettingShare> {
     sheetBottom(
       context,
       "",
-      ShareList(callBack: (int shareType) {
-        if (shareType == 0) {
-          _shareScreenshot();
-        } else {
-          SharePlus.instance.share(
-            ShareParams(
-              text:
-                  "${S.of(context).g_share_v3_key_3} ${S.of(context).g_share_v3_key_4} 25 ${S.of(context).g_share_v3_key_5} ${S.of(context).g_share_v3_key_7}: $linkStr",
-              subject: AppConfig.apiUrl['n42Browser'],
-            ),
-          );
-        }
-      }),
+      ShareList(
+        callBack: (int shareType) {
+          if (shareType == 0) {
+            _shareScreenshot();
+          } else {
+            SharePlus.instance.share(
+              ShareParams(
+                text:
+                    "${S.of(context).g_share_v3_key_3} ${S.of(context).g_share_v3_key_4} 25 ${S.of(context).g_share_v3_key_5} ${S.of(context).g_share_v3_key_7}: $linkStr",
+                subject: AppConfig.apiUrl['n42Browser'],
+              ),
+            );
+          }
+        },
+      ),
     );
   }
 
@@ -213,14 +211,26 @@ class _SettingShareState extends State<SettingShare> {
       ),
       child: Row(
         children: [
-          _buildStatsCell(context, S.of(context).g_referral_invited,
-              inviteeTotal.toString()),
-          _buildStatsCell(context, S.of(context).g_referral_downloaded,
-              inviteeTotalDown.toString()),
-          _buildStatsCell(context, S.of(context).g_referral_mining,
-              miningTotal.toString()),
-          _buildStatsCell(context, S.of(context).g_referral_reward,
-              rewardTotal.toStringAsFixed(2)),
+          _buildStatsCell(
+            context,
+            S.of(context).g_referral_invited,
+            inviteeTotal.toString(),
+          ),
+          _buildStatsCell(
+            context,
+            S.of(context).g_referral_downloaded,
+            inviteeTotalDown.toString(),
+          ),
+          _buildStatsCell(
+            context,
+            S.of(context).g_referral_mining,
+            miningTotal.toString(),
+          ),
+          _buildStatsCell(
+            context,
+            S.of(context).g_referral_reward,
+            rewardTotal.toStringAsFixed(2),
+          ),
         ],
       ),
     );
@@ -264,7 +274,9 @@ class _SettingShareState extends State<SettingShare> {
             label,
             style: AppTypography.bodySm.copyWith(
               color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemTextColor.name),
+                context,
+                AppThemeKeys.itemTextColor.name,
+              ),
             ),
           ),
           Expanded(
@@ -341,9 +353,7 @@ class _SettingShareState extends State<SettingShare> {
                 width: 240,
                 height: 240,
                 decoration: BoxDecoration(
-                  border: Border.all(
-                    color: _color(AppThemeKeys.itemLineColor),
-                  ),
+                  border: Border.all(color: _color(AppThemeKeys.itemLineColor)),
                   borderRadius: BorderRadius.circular(AppRadius.sheet),
                   color: _color(AppThemeKeys.mainWhiteColor),
                 ),
