@@ -15,7 +15,7 @@
 | 模块 | 状态 | 日期 | 改动 | 备注 |
 |---|---|---|---|---|
 | `features/live` | ✅ 完成 | 2026-06-01 | 13 文件 | 见下 |
-| `home` | ⬜ 待办 | | | |
+| `home` | 🔵 进行中 | 2026-06-01 | 1/26 | `feature_entry_card.dart` 已整改（首个主程序示范：令牌化字号/间距/圆角、状态色 green/orange/red→success/warning/danger、4 处 GestureDetector→InkWell 按压态、用 Ink+InkWell 保 splash）。剩余 25 文件待逐个 /ui-review |
 | `wallet`（首页/收发/资产） | ⬜ 待办 | | | 522 处硬编码色重灾区 |
 | `swap` / `market` | ⬜ 待办 | | | |
 | `mining` / `mining_v2` | ⬜ 待办 | | | |
