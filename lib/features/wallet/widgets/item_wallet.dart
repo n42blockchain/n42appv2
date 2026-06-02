@@ -1,4 +1,5 @@
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
 import 'package:flutter/material.dart';
@@ -10,11 +11,14 @@ class ItemWallet extends StatelessWidget {
   final String coinType;
   final String coinAddress;
   final GestureTapCallback? onTap;
-  const ItemWallet({required this.iconPath,
+  const ItemWallet({
+    required this.iconPath,
     required this.coinType,
     required this.coinAddress,
-    this.fullName="",
-    this.onTap,super.key});
+    this.fullName = "",
+    this.onTap,
+    super.key,
+  });
 
   Widget _buildImage() {
     if (coinType == CoinType.N.name) {
@@ -25,8 +29,8 @@ class ItemWallet extends StatelessWidget {
         fit: BoxFit.cover,
       );
     }
-    return ImageNetWork(imageUrl:
-      iconPath,
+    return ImageNetWork(
+      imageUrl: iconPath,
       width: ScreenUtil().setWidth(52.0),
       height: ScreenUtil().setWidth(52.0),
       placeholder: "assets/img/list_default.png",
@@ -35,30 +39,34 @@ class ItemWallet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-            color:
-            AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8.0))),
-        margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0), vertical: ScreenUtil().setWidth(10.0)),
-        padding: EdgeInsets.symmetric(
-            vertical: ScreenUtil().setWidth(20.0),
-            horizontal: ScreenUtil().setWidth(30.0)
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space2,
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: AppRadius.brSm,
+          child: Ink(
+            decoration: BoxDecoration(
+              color: AppThemeUtils.getColorByKey(
+                context,
+                AppThemeKeys.itemBgColor.name,
+              ),
+              borderRadius: AppRadius.brSm,
+            ),
+            padding: EdgeInsets.symmetric(
+              vertical: AppSpacing.space6,
+              horizontal: AppSpacing.space8,
+            ),
+            child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
                 _buildImage(),
-                SizedBox(
-                  width: ScreenUtil().setWidth(20.0),
-                ),
+                SizedBox(width: AppSpacing.space6),
                 Expanded(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -66,40 +74,40 @@ class ItemWallet extends StatelessWidget {
                     children: [
                       Text(
                         coinType,
-                        style: TextStyle(
+                        style: AppTypography.body.copyWith(
                           color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.itemSubtitleTextColor.name),
-                          fontSize: ScreenUtil().setSp(28.0),
+                            context,
+                            AppThemeKeys.itemSubtitleTextColor.name,
+                          ),
                         ),
                       ),
-                      SizedBox(
-                        width: ScreenUtil().setWidth(6.0),
-                      ),
+                      SizedBox(height: AppSpacing.space2),
                       Text(
                         coinAddress,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                            color: AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.mainTextColor.name,
-                            ),
-                            fontSize: ScreenUtil().setSp(28.0)),
+                        style: AppTypography.body.copyWith(
+                          color: AppThemeUtils.getColorByKey(
+                            context,
+                            AppThemeKeys.mainTextColor.name,
+                          ),
+                        ),
                       ),
                     ],
                   ),
                 ),
-                SizedBox(
-                  width: ScreenUtil().setWidth(20.0),
-                ),
+                SizedBox(width: AppSpacing.space6),
                 Icon(
                   Icons.arrow_forward_ios_sharp,
                   size: ScreenUtil().setWidth(30.0),
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                )
+                  color: AppThemeUtils.getColorByKey(
+                    context,
+                    AppThemeKeys.mainTextColor.name,
+                  ),
+                ),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );
