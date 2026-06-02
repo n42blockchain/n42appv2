@@ -16,7 +16,7 @@
 |---|---|---|---|---|
 | `features/live` | ✅ 完成 | 2026-06-01 | 13 文件 | 见下 |
 | `home` | 🔵 进行中 | 2026-06-01 | 9/26 | 已整改：`feature_entry_card`、widgets/（`nav_setting_item`/`nav_select_image`/`share_list`/`check_version_alert`）、setting/（`about_app`/`setting_sys_language`/`setting_share`/`setting_theme`）。模式：字号→AppTypography、间距/圆角→AppSpacing/AppRadius、GestureDetector→InkWell（列表项用 Ink+InkWell 保 splash）、裸状态色→语义色、accent 选中色随主题；颜色已用 getColorByKey 的保留（合规）。剩余 UI 文件 ~9：`personal_setting`/`personal_setting_fields`/`setting_home_page`/`change_email_ui_helpers`/`home_page`/`home_draw_page`(+widgets)/`home_page_navigation`/`face_recognition_public`（同模式，待逐个 /ui-review）|
-| `wallet`（首页/收发/资产） | 🔵 进行中 | 2026-06-01 | 核心页 | 已整改首页**资产卡 `wallet_board`**（前景白→固定叠层色、字号/间距/圆角令牌、按钮按压态、保留品牌渐变）+ **币种列表项 `wallet_coin_item`**（字号/间距/圆角令牌、裸灰→textTertiary、涨跌徽章）。这两个是首页最高可见度组件。剩余同模式：`wallet_page`/收发 `wallet_receive_qr`/币详情 `wallet_chain_info`/`item_wallet`/swap 等数十文件（522 处硬编码色，逐个 /ui-review）|
+| `wallet`（首页/收发/资产） | 🔵 进行中 | 2026-06-01 | 5 文件 | 已整改：首页**资产卡 `wallet_board`**（前景白→固定叠层色、保留品牌渐变）、**币种列表项 `wallet_coin_item`**（裸灰→textTertiary、涨跌徽章）、**账户项 `item_wallet`**、**收款页 `wallet_receive_qr`(+content)**（链选择 chip 按压态、QR 卡/按钮/金额框、裸边框 0xFFE4E4E4→border、越界 w700→w600）。覆盖钱包首页 + 收款全链路最高可见组件。剩余同模式：`wallet_page` 骨架/币详情 `wallet_chain_info`/发送/swap/market 等数十文件（522 处硬编码色，逐个 /ui-review）|
 | `swap` / `market` | ⬜ 待办 | | | |
 | `mining` / `mining_v2` | ⬜ 待办 | | | |
 | `profile` / 设置 | ⬜ 待办 | | | |
