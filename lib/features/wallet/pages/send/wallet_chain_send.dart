@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/core/enums/load.dart';
@@ -147,7 +148,7 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
       AppLogger.d(
         'WalletChainSend',
         'ENS resolved: ${result.ensName} → '
-        '${AddressValidator.getAddressPreview(result.resolvedAddress ?? "")}',
+            '${AddressValidator.getAddressPreview(result.resolvedAddress ?? "")}',
       );
     }
 
@@ -322,7 +323,7 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
         children: [
           Divider(height: sw(1), indent: 0, endIndent: 0),
           Container(
-            padding: EdgeInsets.all(sw(30.0)),
+            padding: EdgeInsets.all(AppSpacing.space8),
             height: sw(148.0),
             color: _themeColor(AppThemeKeys.backGroundColor),
             child: buttonStyle6(

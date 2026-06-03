@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_chain_send_ens.dart';
 import 'package:n42_wallet/features/wallet/services/ens_service.dart';
@@ -12,13 +13,11 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 
 // ── Shared helpers ───────────────────────────────────────────────────────────
 
-EdgeInsets _sectionMargin() => EdgeInsets.all(ScreenUtil().setWidth(30.0));
+EdgeInsets _sectionMargin() => EdgeInsets.all(AppSpacing.space8);
 
-TextStyle _labelStyle(BuildContext context) => TextStyle(
-      color: AppThemeUtils.getColorByKey(
-          context, AppThemeKeys.mainTextColor.name),
-      fontSize: ScreenUtil().setSp(28.0),
-    );
+TextStyle _labelStyle(BuildContext context) => AppTypography.body.copyWith(
+  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+);
 
 Color _itemBg(BuildContext context) =>
     AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name);
@@ -56,7 +55,7 @@ class SendToWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(S.of(context).g_key_38, style: _labelStyle(context)),
-          SizedBox(height: su.setWidth(20.0)),
+          SizedBox(height: AppSpacing.space4),
           textFieldStyle2(
             context,
             controller: controller,
@@ -77,7 +76,9 @@ class SendToWidget extends StatelessWidget {
                 Icons.add,
                 size: su.setWidth(50.0),
                 color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
+                  context,
+                  AppThemeKeys.mainBlueColor.name,
+                ),
               ),
             ),
             rightOnTap1: onSearchTap,
@@ -114,7 +115,7 @@ class SendNoteWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(S.of(context).g_key_wallet_k58, style: _labelStyle(context)),
-          SizedBox(height: ScreenUtil().setWidth(20.0)),
+          SizedBox(height: AppSpacing.space4),
           textFieldStyle2(
             context,
             controller: controller,
@@ -123,10 +124,11 @@ class SendNoteWidget extends StatelessWidget {
             errorMessage: noteErrorMessage,
             suffix: Text(
               '${controller.text.length}/100',
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(20.0),
+              style: AppTypography.captionSm.copyWith(
                 color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemSubtitleTextColor.name),
+                  context,
+                  AppThemeKeys.itemSubtitleTextColor.name,
+                ),
               ),
             ),
             onEditingComplete: () {
@@ -168,7 +170,7 @@ class SendAmountWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final su = ScreenUtil();
-    final r16 = Radius.circular(su.setWidth(16.0));
+    final r16 = Radius.circular(AppRadius.md);
 
     return containerStyle1(
       context,
@@ -177,34 +179,29 @@ class SendAmountWidget extends StatelessWidget {
         children: [
           Padding(
             padding: EdgeInsets.only(
-              left: su.setWidth(30.0),
-              right: su.setWidth(30.0),
-              top: su.setWidth(30.0),
+              left: AppSpacing.space8,
+              right: AppSpacing.space8,
+              top: AppSpacing.space8,
             ),
             child: Row(
               children: [
                 Flexible(
-                  child: Text(S.of(context).g_key_44, style: _labelStyle(context),
+                  child: Text(
+                    S.of(context).g_key_44,
+                    style: _labelStyle(context),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                SizedBox(width: su.setWidth(20.0)),
+                SizedBox(width: AppSpacing.space4),
                 Expanded(child: _BalanceLabel(coinModel: coinModel)),
               ],
             ),
           ),
           Container(
-            margin: EdgeInsets.only(top: su.setWidth(20.0)),
+            margin: EdgeInsets.only(top: AppSpacing.space4),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(r16),
               color: _itemBg(context),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xff101828).withAlpha(0),
-                  offset: const Offset(0, 1),
-                  blurRadius: su.setWidth(4.0),
-                ),
-              ],
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -214,37 +211,36 @@ class SendAmountWidget extends StatelessWidget {
                   controller: controller,
                   focusNode: focusNode,
                   hintText: S.of(context).g_key_44,
-                  hintStyle: TextStyle(
-                    fontSize: su.setSp(54.0),
+                  hintStyle: AppTypography.displayLg.copyWith(
                     color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.textFieldHintColor.name),
+                      context,
+                      AppThemeKeys.textFieldHintColor.name,
+                    ),
                   ),
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
                   onChanged: onChanged,
                   onEditingComplete: () {
                     onEditingComplete();
                     FocusScope.of(context).requestFocus(nextFocusNode);
                   },
-                  fontSize: su.setWidth(70.0),
+                  fontSize: AppTypography.displayLg.fontSize,
                   height: su.setWidth(120.0),
-                  boxShadow: BoxShadow(
-                    color: const Color(0xff101828).withAlpha(0),
-                    offset: const Offset(0, 0),
-                    blurRadius: su.setWidth(0),
-                  ),
+                  boxShadow: const BoxShadow(color: Colors.transparent),
                   borderRadius: BorderRadius.only(topLeft: r16, topRight: r16),
                   bgColor: _itemBg(context),
                   errorMessage: amountErrorMessage,
                   messageMargin: EdgeInsets.symmetric(
-                      horizontal: su.setWidth(30.0)),
+                    horizontal: AppSpacing.space8,
+                  ),
                   rightWidget1: const _MaxButton(),
                   rightOnTap1: onMaxTap,
                 ),
                 Divider(
                   height: su.setWidth(1.0),
-                  indent: su.setWidth(30.0),
-                  endIndent: su.setWidth(30.0),
+                  indent: AppSpacing.space8,
+                  endIndent: AppSpacing.space8,
                 ),
                 _OwnerAddressRow(coinModel: coinModel),
               ],
@@ -281,21 +277,24 @@ class _MaxButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final su = ScreenUtil();
     return Container(
-      margin: EdgeInsets.only(left: su.setWidth(10.0)),
+      margin: EdgeInsets.only(left: AppSpacing.space2),
       height: su.setWidth(60.0),
-      padding: EdgeInsets.symmetric(horizontal: su.setWidth(20.0)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
       decoration: BoxDecoration(
         color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainBlueColor.name),
-        borderRadius: BorderRadius.all(Radius.circular(su.setWidth(60.0))),
+          context,
+          AppThemeKeys.mainBlueColor.name,
+        ),
+        borderRadius: AppRadius.brPill,
       ),
       alignment: Alignment.center,
       child: Text(
         S.of(context).g_key_197,
-        style: TextStyle(
-          fontSize: su.setSp(26.0),
+        style: AppTypography.bodySm.copyWith(
           color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainWhiteColor.name),
+            context,
+            AppThemeKeys.mainWhiteColor.name,
+          ),
         ),
       ),
     );
@@ -312,15 +311,16 @@ class _OwnerAddressRow extends StatelessWidget {
     final addr = DataUtils().addressFarmat(coinModel.address.toString());
     return Container(
       padding: EdgeInsets.symmetric(
-        vertical: ScreenUtil().setWidth(20.0),
-        horizontal: ScreenUtil().setWidth(30.0),
+        vertical: AppSpacing.space4,
+        horizontal: AppSpacing.space8,
       ),
       child: Text(
         addr,
-        style: TextStyle(
+        style: AppTypography.body.copyWith(
           color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemSubtitleTextColor.name),
-          fontSize: ScreenUtil().setSp(30.0),
+            context,
+            AppThemeKeys.itemSubtitleTextColor.name,
+          ),
         ),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
