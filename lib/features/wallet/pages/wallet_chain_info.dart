@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:n42_wallet/features/browser/pages/browser_page.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/sqlite/app_database.dart';
@@ -282,18 +283,14 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
           children: [
             Text(
               '$_chainSymbol ($_chainName)',
-              style: TextStyle(
-                color: textColor,
-                fontSize: su.setSp(32.0),
-                fontWeight: FontWeight.bold,
-              ),
+              style: AppTypography.title.copyWith(color: textColor),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
             if (_tokenSymbol != null)
               Text(
                 '$_tokenSymbol($_tokenName)',
-                style: TextStyle(color: textColor, fontSize: su.setSp(24.0)),
+                style: AppTypography.caption.copyWith(color: textColor),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -306,8 +303,8 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
               width: su.setWidth(40.0),
               height: su.setWidth(40.0),
               margin: EdgeInsets.only(
-                right: su.setWidth(40.0),
-                left: su.setWidth(20.0),
+                right: AppSpacing.space8,
+                left: AppSpacing.space4,
               ),
               child: Image.asset(
                 'assets/wallet/w_actions.png',
@@ -379,16 +376,15 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
 
     return Container(
       alignment: Alignment.centerLeft,
-      padding: EdgeInsets.symmetric(vertical: su.setWidth(20.0)),
-      margin: EdgeInsets.symmetric(horizontal: su.setWidth(30.0)),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
+      margin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       child: Row(
         children: [
           Expanded(
             child: Text(
               S.of(context).g_coin_key_1,
-              style: TextStyle(
+              style: AppTypography.body.copyWith(
                 color: _themeColor(AppThemeKeys.mainTextColor.name),
-                fontSize: su.setSp(30.0),
               ),
             ),
           ),
@@ -430,7 +426,7 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      padding: EdgeInsets.symmetric(horizontal: su.setWidth(30.0)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       itemCount: transactionList.length + 1,
       itemBuilder: (context, int index) {
         if (index == transactionList.length) {
@@ -449,8 +445,7 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
               alignment: Alignment.center,
               child: Text(
                 S.of(context).g_mining_key_49,
-                style: TextStyle(
-                  fontSize: su.setSp(30.0),
+                style: AppTypography.body.copyWith(
                   color: _themeColor(AppThemeKeys.mainBlueColor.name),
                 ),
               ),
