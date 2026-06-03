@@ -1,3 +1,4 @@
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/utils/regular.dart';
 import 'package:n42_wallet/features/wallet/models/ast_swap/swap_ast_model.dart';
@@ -59,15 +60,15 @@ class SwapAstPayWidget extends ConsumerWidget {
 
     return Container(
       margin: EdgeInsets.fromLTRB(
-        ScreenUtil().setWidth(30),
-        ScreenUtil().setWidth(30),
-        ScreenUtil().setWidth(30),
-        ScreenUtil().setWidth(20),
+        AppSpacing.space8,
+        AppSpacing.space8,
+        AppSpacing.space8,
+        AppSpacing.space4,
       ),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       decoration: BoxDecoration(
         color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor4.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+        borderRadius: AppRadius.brSm,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -98,21 +99,19 @@ class SwapAstPayWidget extends ConsumerWidget {
           child: Text(
             S.of(context).g_swap_key_3,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
+            style: AppTypography.body.copyWith(
               color: AppThemeUtils.getColorByKey(
                   context, AppThemeKeys.itemTextColor.name),
-              fontSize: ScreenUtil().setSp(30),
             ),
           ),
         ),
-        const SizedBox(width: 10),
+        SizedBox(width: AppSpacing.space2),
         Expanded(
           child: Text(
             '${payCoinModel?.coin['name'] ?? ""}(${payCoinModel?.coin['miniName'] ?? ""})',
-            style: TextStyle(
+            style: AppTypography.body.copyWith(
               color: AppThemeUtils.getColorByKey(
                   context, AppThemeKeys.mainBlueColor.name),
-              fontSize: ScreenUtil().setSp(30),
             ),
             textAlign: TextAlign.right,
           ),
@@ -129,10 +128,9 @@ class SwapAstPayWidget extends ConsumerWidget {
         children: [
           Expanded(
             child: TextField(
-              style: TextStyle(
+              style: AppTypography.displayLg.copyWith(
                 color: AppThemeUtils.getColorByKey(
                     context, AppThemeKeys.itemTextColor.name),
-                fontSize: ScreenUtil().setWidth(50.0),
               ),
               controller: payController,
               focusNode: payNode,
@@ -140,8 +138,7 @@ class SwapAstPayWidget extends ConsumerWidget {
               keyboardType: const TextInputType.numberWithOptions(decimal: true),
               decoration: InputDecoration(
                 hintText: S.of(context).g_key_44,
-                hintStyle: TextStyle(
-                  fontSize: ScreenUtil().setWidth(50.0),
+                hintStyle: AppTypography.displayLg.copyWith(
                   color: AppThemeUtils.getColorByKey(
                       context, AppThemeKeys.textFieldHintColor.name),
                 ),
@@ -150,7 +147,7 @@ class SwapAstPayWidget extends ConsumerWidget {
                 focusedBorder: InputBorder.none,
                 isCollapsed: true,
                 contentPadding: EdgeInsets.symmetric(
-                    vertical: ScreenUtil().setWidth(10.0)),
+                    vertical: AppSpacing.space2),
               ),
               maxLines: 1,
               onChanged: onPayChanged,
@@ -178,7 +175,7 @@ class SwapAstPayWidget extends ConsumerWidget {
       },
       child: Container(
         width: ScreenUtil().setWidth(200),
-        margin: EdgeInsets.only(left: ScreenUtil().setWidth(20)),
+        margin: EdgeInsets.only(left: AppSpacing.space4),
         child: Row(
           children: [
             SizedBox(
@@ -192,10 +189,9 @@ class SwapAstPayWidget extends ConsumerWidget {
             Expanded(
               child: Text(
                 youPay?.payCoin ?? "",
-                style: TextStyle(
+                style: AppTypography.body.copyWith(
                   color: AppThemeUtils.getColorByKey(
                       context, AppThemeKeys.itemTextColor.name),
-                  fontSize: ScreenUtil().setSp(30),
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -232,7 +228,7 @@ class SwapAstPayWidget extends ConsumerWidget {
           child: Text(
             "${S.of(context).g_key_29}:$balanceText",
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(color: balanceColor, fontSize: ScreenUtil().setSp(26)),
+            style: AppTypography.bodySm.copyWith(color: balanceColor),
           ),
         ),
         if (youPay?.load == Load.loading)
@@ -255,10 +251,9 @@ class SwapAstPayWidget extends ConsumerWidget {
       children: [
         Text(
           label,
-          style: TextStyle(
+          style: AppTypography.bodySm.copyWith(
             color: AppThemeUtils.getColorByKey(
                 context, AppThemeKeys.errorTextColor.name),
-            fontSize: ScreenUtil().setSp(26),
           ),
         ),
         InkWell(
@@ -277,19 +272,18 @@ class SwapAstPayWidget extends ConsumerWidget {
           },
           child: Container(
             height: ScreenUtil().setWidth(50),
-            padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
+            padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: AppThemeUtils.getColorByKey(
                   context, AppThemeKeys.mainButtonBgColor.name),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(50)),
+              borderRadius: AppRadius.brPill,
             ),
             child: Text(
               S.of(context).g_key_wallet_k47,
-              style: TextStyle(
+              style: AppTypography.captionSm.copyWith(
                 color: AppThemeUtils.getColorByKey(
                     context, AppThemeKeys.mainButtonTextColor.name),
-                fontSize: ScreenUtil().setSp(22),
               ),
             ),
           ),

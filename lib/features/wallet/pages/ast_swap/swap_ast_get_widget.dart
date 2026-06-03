@@ -1,3 +1,4 @@
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
@@ -35,23 +36,23 @@ class SwapAstGetWidget extends StatelessWidget {
 
     return Container(
       margin: EdgeInsets.only(
-        top: su.setWidth(20),
-        bottom: su.setWidth(30),
-        left: su.setWidth(30),
-        right: su.setWidth(30),
+        top: AppSpacing.space4,
+        bottom: AppSpacing.space8,
+        left: AppSpacing.space8,
+        right: AppSpacing.space8,
       ),
-      padding: EdgeInsets.all(su.setWidth(30)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       decoration: BoxDecoration(
         color: AppThemeUtils.getColorByKey(
             context, AppThemeKeys.itemBgColor5.name),
-        borderRadius: BorderRadius.circular(su.setWidth(8)),
+        borderRadius: AppRadius.brSm,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             S.of(context).g_swap_key_4,
-            style: TextStyle(color: textColor, fontSize: su.setSp(30)),
+            style: AppTypography.body.copyWith(color: textColor),
           ),
           SizedBox(
             height: su.setWidth(100),
@@ -60,10 +61,7 @@ class SwapAstGetWidget extends StatelessWidget {
               children: [
                 Expanded(
                   child: TextField(
-                    style: TextStyle(
-                      color: textColor,
-                      fontSize: su.setWidth(50.0),
-                    ),
+                    style: AppTypography.displayLg.copyWith(color: textColor),
                     controller: getController,
                     focusNode: getNode,
                     textInputAction: TextInputAction.next,
@@ -71,8 +69,7 @@ class SwapAstGetWidget extends StatelessWidget {
                         const TextInputType.numberWithOptions(decimal: true),
                     decoration: InputDecoration(
                       hintText: S.of(context).g_key_44,
-                      hintStyle: TextStyle(
-                        fontSize: su.setWidth(50.0),
+                      hintStyle: AppTypography.displayLg.copyWith(
                         color: AppThemeUtils.getColorByKey(
                             context, AppThemeKeys.textFieldHintColor.name),
                       ),
@@ -81,7 +78,7 @@ class SwapAstGetWidget extends StatelessWidget {
                       focusedBorder: InputBorder.none,
                       isCollapsed: true,
                       contentPadding:
-                          EdgeInsets.symmetric(vertical: su.setWidth(10.0)),
+                          EdgeInsets.symmetric(vertical: AppSpacing.space2),
                     ),
                     maxLines: 1,
                     onChanged: onGetChanged,
@@ -106,7 +103,7 @@ class SwapAstGetWidget extends StatelessWidget {
     final iconSize = su.setWidth(52);
     return Container(
       width: su.setWidth(200),
-      margin: EdgeInsets.only(left: su.setWidth(20)),
+      margin: EdgeInsets.only(left: AppSpacing.space4),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -118,7 +115,7 @@ class SwapAstGetWidget extends StatelessWidget {
           Expanded(
             child: Text(
               CoinType.N.name,
-              style: TextStyle(color: textColor, fontSize: su.setSp(30)),
+              style: AppTypography.body.copyWith(color: textColor),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,
@@ -146,7 +143,7 @@ class SwapAstGetWidget extends StatelessWidget {
           child: Text(
             "${S.of(context).g_key_29}:${getCoinModel?.balanceDoubleAll()}",
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(color: textColor, fontSize: su.setSp(26)),
+            style: AppTypography.bodySm.copyWith(color: textColor),
           ),
         ),
         if (getLoad == Load.loading)

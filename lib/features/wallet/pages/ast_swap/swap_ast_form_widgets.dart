@@ -1,3 +1,4 @@
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/features/browser/pages/browser_page.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
@@ -41,14 +42,13 @@ class SwapAstPriceWidget extends StatelessWidget {
     return Container(
       height: ScreenUtil().setWidth(100),
       width: double.infinity,
-      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+      margin: AppSpacing.pageHorizontal,
       alignment: Alignment.center,
       child: Text(
         text,
-        style: TextStyle(
+        style: AppTypography.body.copyWith(
           color: AppThemeUtils.getColorByKey(
               context, AppThemeKeys.mainTextColor.name),
-          fontSize: ScreenUtil().setSp(30),
         ),
       ),
     );
@@ -71,7 +71,7 @@ class SwapAstPercentWidget extends StatelessWidget {
     return Container(
       height: ScreenUtil().setWidth(80),
       width: double.infinity,
-      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+      margin: AppSpacing.pageHorizontal,
       alignment: Alignment.center,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
@@ -87,10 +87,9 @@ class SwapAstPercentWidget extends StatelessWidget {
               alignment: Alignment.center,
               child: Text(
                 "$percent%",
-                style: TextStyle(
+                style: AppTypography.body.copyWith(
                   color: AppThemeUtils.getColorByKey(
                       context, AppThemeKeys.mainBlueColor.name),
-                  fontSize: ScreenUtil().setSp(30),
                 ),
               ),
             ),
@@ -115,7 +114,7 @@ class SwapAstCheckWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10)),
+      margin: EdgeInsets.symmetric(vertical: AppSpacing.space2),
       width: double.infinity,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -142,10 +141,9 @@ class SwapAstCheckWidget extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               text: TextSpan(
                 text: S.of(context).g_swap_key_16,
-                style: TextStyle(
+                style: AppTypography.caption.copyWith(
                   color: AppThemeUtils.getColorByKey(
                       context, AppThemeKeys.mainTextColor.name),
-                  fontSize: ScreenUtil().setSp(22),
                 ),
                 children: [
                   WidgetSpan(
@@ -164,11 +162,10 @@ class SwapAstCheckWidget extends StatelessWidget {
                       },
                       child: Text(
                         S.of(context).g_swap_key_17,
-                        style: TextStyle(
+                        style: AppTypography.caption.copyWith(
                           decoration: TextDecoration.underline,
                           color: AppThemeUtils.getColorByKey(
                               context, AppThemeKeys.mainBlueColor.name),
-                          fontSize: ScreenUtil().setSp(24),
                         ),
                       ),
                     ),
@@ -208,8 +205,7 @@ class SwapAstPreviewButton extends StatelessWidget {
       right: 0,
       bottom: ScreenUtil().setWidth(36.0),
       child: Container(
-        padding:
-            EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+        padding: AppSpacing.pageHorizontal,
         height: ScreenUtil().setWidth(88.0),
         child: load == Load.error
             ? buttonStyle2(context, onRetry, S.of(context).g_swap_key_6)

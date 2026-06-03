@@ -35,8 +35,8 @@ extension _SwapAstHomeBuild on _SwapAstHomeState {
                 width: ScreenUtil().setWidth(44),
                 alignment: Alignment.center,
                 margin: EdgeInsets.only(
-                  right: ScreenUtil().setWidth(30),
-                  left: ScreenUtil().setWidth(10),
+                  right: AppSpacing.space8,
+                  left: AppSpacing.space2,
                 ),
                 child: Image.asset(
                   'assets/wallet/swap/doubt.png',
@@ -128,19 +128,18 @@ extension _SwapAstHomeBuild on _SwapAstHomeState {
 
   Widget _errorWidget(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+      margin: EdgeInsets.all(AppSpacing.space8),
+      padding: EdgeInsets.all(AppSpacing.space8),
       decoration: BoxDecoration(
         color: AppThemeUtils.getColorByKey(
             context, AppThemeKeys.errorBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+        borderRadius: AppRadius.brSm,
       ),
       child: Text(
         errorMessage,
-        style: TextStyle(
+        style: AppTypography.body.copyWith(
           color: AppThemeUtils.getColorByKey(
               context, AppThemeKeys.errorTextColor.name),
-          fontSize: ScreenUtil().setSp(28),
         ),
         textAlign: TextAlign.center,
       ),
@@ -161,8 +160,7 @@ extension _SwapAstHomeBuild on _SwapAstHomeState {
         alignment: Alignment.center,
         child: Text(
           S.of(context).g_swap_key_21,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(28),
+          style: AppTypography.body.copyWith(
             color: AppThemeUtils.getColorByKey(
                 context, AppThemeKeys.mainTextColor.name),
           ),
