@@ -1,3 +1,4 @@
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
@@ -118,13 +119,13 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
         "${_orderModel.payCoin ?? 'USDT'}/${_orderModel.type == 1 ? "NFT" : CoinType.N.name}";
 
     return Padding(
-      padding: EdgeInsets.all(su.setWidth(30)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       child: Column(
         children: [
           Container(
             height: su.setWidth(80),
             width: double.infinity,
-            margin: EdgeInsets.only(bottom: su.setWidth(40)),
+            margin: EdgeInsets.only(bottom: AppSpacing.space12),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -132,14 +133,13 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
                   children: [
                     Text(
                       pair,
-                      style: TextStyle(color: mainText, fontSize: su.setSp(28)),
+                      style: AppTypography.body.copyWith(color: mainText),
                     ),
                     Expanded(
                       child: Text(
                         "+${_orderModel.orderNum}",
-                        style: TextStyle(
+                        style: AppTypography.body.copyWith(
                           color: mainText,
-                          fontSize: su.setSp(28),
                         ),
                         textAlign: TextAlign.right,
                       ),
@@ -150,7 +150,7 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
                   children: [
                     Text(
                       createStr,
-                      style: TextStyle(color: subtitle, fontSize: su.setSp(24)),
+                      style: AppTypography.caption.copyWith(color: subtitle),
                     ),
                     Expanded(
                       child: Row(
@@ -167,9 +167,8 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
                           ),
                           Text(
                             stateStr,
-                            style: TextStyle(
+                            style: AppTypography.caption.copyWith(
                               color: stateColor,
-                              fontSize: su.setSp(24),
                             ),
                             textAlign: TextAlign.right,
                           ),
@@ -195,21 +194,21 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
                       _stepIcon(state == 3 || state == 4, su, divider),
                       _stepDivider(su, divider),
                       Padding(
-                        padding: EdgeInsets.only(bottom: su.setWidth(20)),
+                        padding: EdgeInsets.only(bottom: AppSpacing.space4),
                         child: _stepIconRaw(state == 5, su, divider),
                       ),
                     ],
                   ),
                 ),
-                SizedBox(width: su.setWidth(30)),
+                SizedBox(width: AppSpacing.space8),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       pRowWidget(_orderModel.payCoin ?? 'USDT'),
-                      SizedBox(height: su.setWidth(60)),
+                      SizedBox(height: AppSpacing.space16),
                       pRowWidget("Swap"),
-                      SizedBox(height: su.setWidth(60)),
+                      SizedBox(height: AppSpacing.space16),
                       pRowWidget(S.of(context).g_key_191),
                     ],
                   ),
@@ -257,9 +256,8 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
         alignment: Alignment.centerLeft,
         child: Text(
           title,
-          style: TextStyle(
+          style: AppTypography.body.copyWith(
             color: _themeColor(AppThemeKeys.mainTextColor),
-            fontSize: ScreenUtil().setSp(28),
           ),
         ),
       ),
@@ -280,16 +278,15 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(vertical: su.setWidth(10)),
+                padding: EdgeInsets.symmetric(vertical: AppSpacing.space2),
                 child: RichText(
                   text: TextSpan(
                     text: '${_orderModel.orderPrice}',
-                    style: TextStyle(fontSize: su.setSp(40), color: mainText),
+                    style: AppTypography.titleLg.copyWith(color: mainText),
                     children: [
                       TextSpan(
                         text: CoinType.N.name,
-                        style: TextStyle(
-                          fontSize: su.setSp(24),
+                        style: AppTypography.caption.copyWith(
                           color: mainText,
                         ),
                       ),
@@ -298,12 +295,12 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(vertical: su.setWidth(10)),
+                padding: EdgeInsets.symmetric(vertical: AppSpacing.space2),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(right: su.setWidth(10)),
+                      padding: EdgeInsets.only(right: AppSpacing.space2),
                       child: Icon(
                         iconData,
                         color: stateColor,
@@ -312,9 +309,8 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
                     ),
                     Text(
                       stateStr,
-                      style: TextStyle(
+                      style: AppTypography.body.copyWith(
                         color: stateColor,
-                        fontSize: su.setSp(28),
                       ),
                     ),
                   ],
@@ -322,12 +318,12 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
               ),
               Padding(
                 padding: EdgeInsets.symmetric(
-                  vertical: su.setWidth(10),
+                  vertical: AppSpacing.space2,
                   horizontal: su.setWidth(200),
                 ),
                 child: Text(
                   s.g_key_tran_6,
-                  style: TextStyle(color: mainText, fontSize: su.setSp(24)),
+                  style: AppTypography.caption.copyWith(color: mainText),
                   textAlign: TextAlign.center,
                   maxLines: 2,
                 ),
@@ -336,11 +332,11 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
           ),
         ),
         Divider(
-          height: su.setWidth(60),
+          height: AppSpacing.space16,
           color: _themeColor(AppThemeKeys.dividerColor),
         ),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: su.setWidth(30)),
+          padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
           child: Column(
             children: [
               _rowWidget(
@@ -361,24 +357,21 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
   }
 
   Widget _rowWidget(String title, String value) {
-    final su = ScreenUtil();
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: su.setWidth(10)),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space2),
       child: Row(
         children: [
           Text(
             title,
-            style: TextStyle(
+            style: AppTypography.body.copyWith(
               color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
-              fontSize: su.setSp(30),
             ),
           ),
           Expanded(
             child: Text(
               value,
-              style: TextStyle(
+              style: AppTypography.body.copyWith(
                 color: _themeColor(AppThemeKeys.mainTextColor),
-                fontSize: su.setSp(30),
               ),
               textAlign: TextAlign.end,
             ),

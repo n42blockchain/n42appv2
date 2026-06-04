@@ -1,3 +1,4 @@
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_security_verification.dart';
@@ -27,23 +28,21 @@ class _SwapAstSummaryState extends State<SwapAstSummary> {
   Widget _summaryRow(String label, String value, {bool bottomPadding = true}) {
     return Padding(
       padding: bottomPadding
-          ? EdgeInsets.only(bottom: ScreenUtil().setHeight(60))
+          ? EdgeInsets.only(bottom: AppSpacing.space16)
           : EdgeInsets.zero,
       child: Row(
         children: [
           Text(
             label,
-            style: TextStyle(
+            style: AppTypography.body.copyWith(
               color: _color(AppThemeKeys.itemSubtitleTextColor),
-              fontSize: ScreenUtil().setSp(30),
             ),
           ),
           Expanded(
             child: Text(
               value,
-              style: TextStyle(
+              style: AppTypography.body.copyWith(
                 color: _color(AppThemeKeys.itemTextColor),
-                fontSize: ScreenUtil().setSp(30),
               ),
               textAlign: TextAlign.right,
               maxLines: 2,
@@ -58,26 +57,26 @@ class _SwapAstSummaryState extends State<SwapAstSummary> {
   Widget build(BuildContext context) {
     final s = S.of(context);
     final sw = ScreenUtil().setWidth;
-    final noteStyle = TextStyle(
+    final noteStyle = AppTypography.bodySm.copyWith(
       color: _color(AppThemeKeys.mainTextColor3),
-      fontSize: ScreenUtil().setSp(26),
     );
 
     return Scaffold(
       appBar: AppBarWidget(text: s.g_swap_key_28),
       body: Container(
-        padding: EdgeInsets.fromLTRB(sw(30), sw(30), sw(30), 0),
+        padding: EdgeInsets.fromLTRB(
+            AppSpacing.space8, AppSpacing.space8, AppSpacing.space8, 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
               padding: EdgeInsets.symmetric(
-                horizontal: sw(30),
-                vertical: ScreenUtil().setHeight(26),
+                horizontal: AppSpacing.space8,
+                vertical: AppSpacing.space6,
               ),
               decoration: BoxDecoration(
                 color: _color(AppThemeKeys.itemBgColor),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: AppRadius.brSm,
               ),
               child: Column(
                 children: [
@@ -93,7 +92,7 @@ class _SwapAstSummaryState extends State<SwapAstSummary> {
             ),
             SizedBox(height: ScreenUtil().setHeight(102)),
             Text(s.g_swap_key_31(CoinType.N.name), style: noteStyle),
-            SizedBox(height: ScreenUtil().setHeight(20)),
+            SizedBox(height: AppSpacing.space4),
             Text(s.g_swap_key_32, style: noteStyle),
             const Spacer(),
             Container(
@@ -110,7 +109,7 @@ class _SwapAstSummaryState extends State<SwapAstSummary> {
                       _color(AppThemeKeys.mainButtonTextColor3),
                     ),
                   ),
-                  SizedBox(width: sw(30)),
+                  SizedBox(width: AppSpacing.space8),
                   Expanded(
                     child: buttonStyle2(
                       context,

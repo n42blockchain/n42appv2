@@ -1,3 +1,4 @@
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
@@ -67,7 +68,7 @@ class _SwapAstTransactionsState extends State<SwapAstTransactions> {
     return Scaffold(
       appBar: AppBarWidget(text: S.of(context).g_key_tran_1),
       body: Padding(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+        padding: EdgeInsets.all(AppSpacing.space8),
         child: BaseList(
           firstRefresh: true,
           pageIndex: 1,
@@ -96,9 +97,8 @@ class _SwapAstTransactionsState extends State<SwapAstTransactions> {
               DateTime.fromMillisecondsSinceEpoch(order.created ?? 0),
               _dateFormat,
             );
-            final textStyle = TextStyle(
+            final textStyle = AppTypography.body.copyWith(
               color: mainTextColor,
-              fontSize: ScreenUtil().setSp(28),
             );
             return InkWell(
               onTap: () => Navigator.push(
@@ -108,7 +108,7 @@ class _SwapAstTransactionsState extends State<SwapAstTransactions> {
               child: Container(
                 height: ScreenUtil().setWidth(80),
                 width: double.infinity,
-                margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(40)),
+                margin: EdgeInsets.only(bottom: AppSpacing.space12),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -128,7 +128,7 @@ class _SwapAstTransactionsState extends State<SwapAstTransactions> {
                       children: [
                         Text(
                           timeStr,
-                          style: TextStyle(color: subtitleColor, fontSize: ScreenUtil().setSp(24)),
+                          style: AppTypography.caption.copyWith(color: subtitleColor),
                         ),
                         Expanded(
                           child: Row(
@@ -138,7 +138,7 @@ class _SwapAstTransactionsState extends State<SwapAstTransactions> {
                               SizedBox(width: ScreenUtil().setWidth(4)),
                               Text(
                                 state.label,
-                                style: TextStyle(color: state.color, fontSize: ScreenUtil().setSp(24)),
+                                style: AppTypography.caption.copyWith(color: state.color),
                               ),
                             ],
                           ),

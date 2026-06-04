@@ -1,3 +1,4 @@
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
@@ -5,7 +6,6 @@ import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:decimal/decimal.dart' as dec;
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 String _swapFeeString(dynamic value, {String fallback = ''}) {
   if (value == null) return fallback;
@@ -45,11 +45,10 @@ class SwapAstMinerFeeWidget extends StatelessWidget {
 
     return Container(
       alignment: Alignment.center,
-      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+      margin: AppSpacing.pageHorizontal,
+      padding: EdgeInsets.all(AppSpacing.space8),
       decoration: BoxDecoration(
-        borderRadius:
-            BorderRadius.all(Radius.circular(ScreenUtil().setWidth(20.0))),
+        borderRadius: AppRadius.brMd,
         color: AppThemeUtils.getColorByKey(
             context, AppThemeKeys.itemBgColor.name),
       ),
@@ -147,27 +146,25 @@ class SwapAstMinerFeeWidget extends StatelessWidget {
     return Container(
       alignment: Alignment.center,
       margin: topMargin
-          ? EdgeInsets.only(top: ScreenUtil().setWidth(32.0))
-          : EdgeInsets.only(bottom: ScreenUtil().setWidth(32.0)),
+          ? EdgeInsets.only(top: AppSpacing.space8)
+          : EdgeInsets.only(bottom: AppSpacing.space8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             label,
-            style: TextStyle(
+            style: AppTypography.body.copyWith(
               color: AppThemeUtils.getColorByKey(
                   context, AppThemeKeys.itemSubtitleTextColor.name),
-              fontSize: ScreenUtil().setSp(28.0),
             ),
           ),
           const Spacer(),
           Text(
             value,
-            style: TextStyle(
+            style: AppTypography.body.copyWith(
               color: valueColor ??
                   AppThemeUtils.getColorByKey(
                       context, AppThemeKeys.mainTextColor.name),
-              fontSize: ScreenUtil().setSp(28.0),
             ),
           ),
         ],

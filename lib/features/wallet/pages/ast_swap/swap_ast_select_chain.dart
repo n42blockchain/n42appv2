@@ -1,3 +1,4 @@
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/models/ast_swap/swap_ast_model.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
@@ -29,7 +30,7 @@ class _SwapAstSelectChainState extends State<SwapAstSelectChain> {
 
   Widget tokenListWidget() {
     return ListView.separated(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+      padding: AppSpacing.pageHorizontal,
       itemBuilder: (context,int index){
         SwapAstModel sm=widget.swapAsts[index];
         return InkWell(
@@ -45,7 +46,7 @@ class _SwapAstSelectChainState extends State<SwapAstSelectChain> {
                 Container(
                   height: ScreenUtil().setWidth(52),
                   width: ScreenUtil().setWidth(52),
-                  margin: EdgeInsets.only(right: ScreenUtil().setWidth(10)),
+                  margin: EdgeInsets.only(right: AppSpacing.space2),
                   child: ImageNetWork(imageUrl:
                       sm.uri??"",
                     placeholder: "assets/img/list_default.png",
@@ -55,17 +56,15 @@ class _SwapAstSelectChainState extends State<SwapAstSelectChain> {
                   flex: 1,
                   child: Text(
                     sm.payCoin??"",
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(30),
+                    style: AppTypography.body.copyWith(
                       color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemTextColor.name),
                     ),
                   ),
                 ),
-                SizedBox(width: ScreenUtil().setWidth(10),),
+                SizedBox(width: AppSpacing.space2,),
                 Text(
                   "${sm.payChain}",
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(30),
+                  style: AppTypography.body.copyWith(
                     color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
                   ),
                 ),
