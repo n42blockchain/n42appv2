@@ -6,7 +6,7 @@ import 'package:n42_wallet/features/wallet/models/mess_mnemonic_words_item.dart'
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/pages/create_wallet/create_password.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -147,26 +147,20 @@ class _CreateThreeState extends State<CreateThree> {
                     padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
                     width: double.infinity,
                     color: bgColor,
-                    child: buttonStyle6(
-                      context,
-                      () async {
+                    child: AppButton(
+                      label: S.of(context).g_key_wallet_c43,
+                      onPressed: () {
                         if (isCanClick) {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (_) =>
-                                    CreatePassword(widget.wInfo)),
+                              builder: (_) => CreatePassword(widget.wInfo),
+                            ),
                           );
                         } else {
                           ToastUtils.show(S.of(context).g_key_mnemonic);
                         }
                       },
-                      S.of(context).g_key_wallet_c43,
-                      _tc(isCanClick
-                          ? AppThemeKeys.mainButtonBgColor.name
-                          : AppThemeKeys.mainButtonBgColor3.name),
-                      _tc(AppThemeKeys.mainButtonTextColor.name),
-                      false,
                     ),
                   ),
                 ],

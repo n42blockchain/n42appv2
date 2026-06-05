@@ -91,7 +91,7 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
               padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
               width: double.infinity,
               color: _themeColor(AppThemeKeys.backGroundColor.name),
-              child: buttonStyle2(context, onPressed, buttonLabel),
+              child: AppButton(label: buttonLabel, onPressed: onPressed),
             ),
             ?linkButton,
           ],

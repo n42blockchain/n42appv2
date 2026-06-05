@@ -7,7 +7,7 @@ import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/pages/create_wallet/create_password.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -299,10 +299,9 @@ class _ImportOneState extends ConsumerState<ImportOne>
                       context,
                       AppThemeKeys.backGroundColor.name,
                     ),
-                    child: buttonStyle2(
-                      context,
-                      _onSubmit,
-                      S.of(context).g_key_11,
+                    child: AppButton(
+                      label: S.of(context).g_key_11,
+                      onPressed: _onSubmit,
                     ),
                   ),
                 ],

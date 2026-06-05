@@ -4,7 +4,7 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/pages/create_wallet/create/create_two.dart';
 import 'package:n42_wallet/features/wallet/pages/create_wallet/create_finish.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -176,19 +176,9 @@ class _CreateOneState extends ConsumerState<CreateOne> {
                           ),
                           color: AppThemeUtils.getColorByKey(
                               context, AppThemeKeys.backGroundColor.name),
-                          child: buttonStyle6(
-                            context,
-                            _onCreateTap,
-                            S.of(context).g_key_wallet_c10,
-                            AppThemeUtils.getColorByKey(
-                              context,
-                              allChecked
-                                  ? AppThemeKeys.mainButtonBgColor.name
-                                  : AppThemeKeys.mainButtonBgColor3.name,
-                            ),
-                            AppThemeUtils.getColorByKey(
-                                context, AppThemeKeys.mainButtonTextColor.name),
-                            false,
+                          child: AppButton(
+                            label: S.of(context).g_key_wallet_c10,
+                            onPressed: allChecked ? _onCreateTap : null,
                           ),
                         ),
                       ),
@@ -201,16 +191,10 @@ class _CreateOneState extends ConsumerState<CreateOne> {
                             top: ScreenUtil().setWidth(30.0),
                             bottom: ScreenUtil().setWidth(30.0),
                           ),
-                          child: buttonStyle5(
-                            context,
-                            _onWatchOnlyTap,
-                            S.of(context).g_key_wallet_c21,
-                            AppThemeUtils.getColorByKey(
-                                context, AppThemeKeys.backGroundColor.name),
-                            AppThemeUtils.getColorByKey(
-                                context, AppThemeKeys.mainBlueColor.name),
-                            borderColor: AppThemeUtils.getColorByKey(
-                                context, AppThemeKeys.mainBlueColor.name),
+                          child: AppButton(
+                            label: S.of(context).g_key_wallet_c21,
+                            variant: AppButtonVariant.secondary,
+                            onPressed: _onWatchOnlyTap,
                           ),
                         ),
                       ),

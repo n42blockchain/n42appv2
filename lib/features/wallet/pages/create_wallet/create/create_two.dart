@@ -3,7 +3,7 @@ import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/pages/create_wallet/create/create_three.dart';
 import 'package:n42_wallet/features/wallet/pages/create_wallet/create_finish.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/shared/widgets/tips_dialog_3.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -169,25 +169,12 @@ class _CreateTwoState extends State<CreateTwo> with _CreateTwoWidgetsMixin {
     return SizedBox(
       width: ScreenUtil().setWidth(164.0),
       height: ScreenUtil().setWidth(60.0),
-      child: buttonStyle5(
-        context,
-        () {
-          resetMnemonicWordsCount(value: count);
-        },
-        "$count",
-        AppThemeUtils.getColorByKey(
-          context,
-          isSelected
-              ? AppThemeKeys.mainButtonBgColor.name
-              : AppThemeKeys.itemBgColor8.name,
-        ),
-        AppThemeUtils.getColorByKey(
-          context,
-          isSelected
-              ? AppThemeKeys.mainButtonTextColor.name
-              : AppThemeKeys.mainTextColor4.name,
-        ),
-        circular: ScreenUtil().setWidth(24.0),
+      child: AppButton(
+        label: "$count",
+        variant:
+            isSelected ? AppButtonVariant.primary : AppButtonVariant.secondary,
+        expand: false,
+        onPressed: () => resetMnemonicWordsCount(value: count),
       ),
     );
   }
@@ -238,28 +225,19 @@ class _CreateTwoState extends State<CreateTwo> with _CreateTwoWidgetsMixin {
             width: double.infinity,
             color: AppThemeUtils.getColorByKey(
                 context, AppThemeKeys.backGroundColor.name),
-            child: buttonStyle6(
-              context,
-              () {
-                if (showMnemonic) {
-                  widget.wInfo.mnemonic = mnemonicWords;
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => CreateThree(widget.wInfo)),
-                  );
-                }
-              },
-              S.of(context).g_key_wallet_c43,
-              AppThemeUtils.getColorByKey(
-                context,
-                showMnemonic
-                    ? AppThemeKeys.mainButtonBgColor.name
-                    : AppThemeKeys.mainButtonBgColor3.name,
-              ),
-              AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainButtonTextColor.name),
-              false,
+            child: AppButton(
+              label: S.of(context).g_key_wallet_c43,
+              onPressed: showMnemonic
+                  ? () {
+                      widget.wInfo.mnemonic = mnemonicWords;
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CreateThree(widget.wInfo),
+                        ),
+                      );
+                    }
+                  : null,
             ),
           ),
           Container(

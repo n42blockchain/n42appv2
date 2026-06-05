@@ -134,24 +134,19 @@ mixin _CreateTwoWidgetsMixin on State<CreateTwo> {
             SizedBox(
               width: double.infinity,
               height: ScreenUtil().setWidth(80.0),
-              child: buttonStyle2(
-                context,
-                () => Navigator.pop(context, true),
-                S.of(context).g_mining_key62,
+              child: AppButton(
+                label: S.of(context).g_mining_key62,
+                onPressed: () => Navigator.pop(context, true),
               ),
             ),
             SizedBox(height: ScreenUtil().setWidth(30.0)),
             SizedBox(
               width: double.infinity,
               height: ScreenUtil().setWidth(80.0),
-              child: buttonStyle5(
-                context,
-                () => Navigator.pop(context, false),
-                S.of(context).g_key_79,
-                AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainButtonBgColor3.name),
-                AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainButtonTextColor.name),
+              child: AppButton(
+                label: S.of(context).g_key_79,
+                variant: AppButtonVariant.secondary,
+                onPressed: () => Navigator.pop(context, false),
               ),
             ),
           ],

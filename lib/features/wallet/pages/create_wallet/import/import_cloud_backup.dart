@@ -14,7 +14,7 @@ import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/utils/wallet_backup_crypto.dart';
 import 'package:n42_wallet/features/wallet/utils/wallet_backup_payload.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/comm_input.dart';
 import 'package:n42_wallet/features/widgets/container_widget.dart';
 
@@ -366,19 +366,10 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
           height: su.setWidth(148),
           width: double.infinity,
           color: _color(AppThemeKeys.backGroundColor),
-          child: buttonStyle6(
-            context,
-            () {
-              if (!isLoading) _import();
-            },
-            'Import Wallets',
-            _color(
-              isLoading
-                  ? AppThemeKeys.mainButtonBgColor3
-                  : AppThemeKeys.mainButtonBgColor,
-            ),
-            _color(AppThemeKeys.mainButtonTextColor),
-            isLoading,
+          child: AppButton(
+            label: 'Import Wallets',
+            onPressed: () => _import(),
+            loading: isLoading,
           ),
         ),
       ],
