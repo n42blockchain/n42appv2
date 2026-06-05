@@ -13,7 +13,8 @@ extension _SwapAstHomeBuild on _SwapAstHomeState {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => SwapAstTransactions()),
+                    builder: (context) => SwapAstTransactions(),
+                  ),
                 );
               },
               child: SizedBox(
@@ -22,7 +23,9 @@ extension _SwapAstHomeBuild on _SwapAstHomeState {
                 child: Image.asset(
                   'assets/wallet/swap/record.png',
                   color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainBlueColor.name),
+                    context,
+                    AppThemeKeys.mainBlueColor.name,
+                  ),
                 ),
               ),
             ),
@@ -41,7 +44,9 @@ extension _SwapAstHomeBuild on _SwapAstHomeState {
                 child: Image.asset(
                   'assets/wallet/swap/doubt.png',
                   color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainBlueColor.name),
+                    context,
+                    AppThemeKeys.mainBlueColor.name,
+                  ),
                 ),
               ),
             ),
@@ -59,9 +64,13 @@ extension _SwapAstHomeBuild on _SwapAstHomeState {
                   }
                 },
                 backgroundColor: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainButtonBgColor.name),
+                  context,
+                  AppThemeKeys.mainButtonBgColor.name,
+                ),
                 color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainButtonTextColor.name),
+                  context,
+                  AppThemeKeys.mainButtonTextColor.name,
+                ),
                 displacement: ScreenUtil().setWidth(72.0),
                 child: SingleChildScrollView(
                   physics: const AlwaysScrollableScrollPhysics(),
@@ -132,14 +141,18 @@ extension _SwapAstHomeBuild on _SwapAstHomeState {
       padding: EdgeInsets.all(AppSpacing.space8),
       decoration: BoxDecoration(
         color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.errorBgColor.name),
-        borderRadius: AppRadius.brSm,
+          context,
+          AppThemeKeys.errorBgColor.name,
+        ),
+        borderRadius: AppRadius.brMd,
       ),
       child: Text(
         errorMessage,
         style: AppTypography.body.copyWith(
           color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.errorTextColor.name),
+            context,
+            AppThemeKeys.errorTextColor.name,
+          ),
         ),
         textAlign: TextAlign.center,
       ),
@@ -162,7 +175,9 @@ extension _SwapAstHomeBuild on _SwapAstHomeState {
           S.of(context).g_swap_key_21,
           style: AppTypography.body.copyWith(
             color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainTextColor.name),
+              context,
+              AppThemeKeys.mainTextColor.name,
+            ),
           ),
           textAlign: TextAlign.center,
         ),
@@ -188,19 +203,30 @@ extension _SwapAstHomeBuild on _SwapAstHomeState {
     final String send = payTextEditingController.text;
     final String receive = getTextEditingController.text;
     final String balance = dec.Decimal.parse(
-            (getCoinModel!.balanceDoubleAll() + double.parse(receive))
-                .toString())
-        .toString();
+      (getCoinModel!.balanceDoubleAll() + double.parse(receive)).toString(),
+    ).toString();
     final String date = dformat.formatDate(DateTime.now(), [
-      dformat.yyyy, '/', dformat.mm, '/', dformat.dd,
-      ' ', dformat.am, ' ', dformat.hh, ':', dformat.nn,
+      dformat.yyyy,
+      '/',
+      dformat.mm,
+      '/',
+      dformat.dd,
+      ' ',
+      dformat.am,
+      ' ',
+      dformat.hh,
+      ':',
+      dformat.nn,
     ]);
 
     final bool? rData = await Navigator.push<bool>(
       context,
       MaterialPageRoute(
         builder: (context) => SwapAstSummary(
-          send, receive, balance, date,
+          send,
+          receive,
+          balance,
+          date,
           payCoin: youPay?.payCoin ?? 'USDT',
         ),
       ),

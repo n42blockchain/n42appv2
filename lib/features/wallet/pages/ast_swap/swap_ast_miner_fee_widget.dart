@@ -50,7 +50,9 @@ class SwapAstMinerFeeWidget extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: AppRadius.brMd,
         color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemBgColor.name),
+          context,
+          AppThemeKeys.itemBgColor.name,
+        ),
       ),
       child: Column(
         children: [
@@ -60,7 +62,9 @@ class SwapAstMinerFeeWidget extends StatelessWidget {
             value:
                 '${payCoinModel!.balanceStringAll()} ${payCoinModel!.coin['unit'] ?? ""}',
             valueColor: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainButtonBgColor.name),
+              context,
+              AppThemeKeys.mainButtonBgColor.name,
+            ),
           ),
           _buildFeeRow(
             context,
@@ -87,11 +91,17 @@ class SwapAstMinerFeeWidget extends StatelessWidget {
   }
 
   _FeeStrings _buildFeeStrings(BuildContext context, String title) {
-    final String blockchainType =
-        _swapFeeString(payCoinModel!.coin['blockchainType']);
-    final int decimals = _swapFeeInt(payCoinModel!.coin['decimals'], fallback: 18);
-    Color totalGasPriceColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+    final String blockchainType = _swapFeeString(
+      payCoinModel!.coin['blockchainType'],
+    );
+    final int decimals = _swapFeeInt(
+      payCoinModel!.coin['decimals'],
+      fallback: 18,
+    );
+    Color totalGasPriceColor = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.mainTextColor.name,
+    );
 
     if (blockchainType == BlockchainType.Ethereum.name) {
       final String unit = _swapFeeString(
@@ -100,7 +110,9 @@ class SwapAstMinerFeeWidget extends StatelessWidget {
       );
       if (totalGasPrice > payCoinModel!.balance) {
         totalGasPriceColor = AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.errorTextColor.name);
+          context,
+          AppThemeKeys.errorTextColor.name,
+        );
       }
       return _FeeStrings(
         totalGasPriceStr:
@@ -116,7 +128,9 @@ class SwapAstMinerFeeWidget extends StatelessWidget {
       if (toEther(totalGasPrice.toString(), decimals).toDouble() >
           payCoinModel!.balanceDoubleAll()) {
         totalGasPriceColor = AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.errorTextColor.name);
+          context,
+          AppThemeKeys.errorTextColor.name,
+        );
       }
       return _FeeStrings(
         totalGasPriceStr:
@@ -155,16 +169,21 @@ class SwapAstMinerFeeWidget extends StatelessWidget {
             label,
             style: AppTypography.body.copyWith(
               color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name),
+                context,
+                AppThemeKeys.itemSubtitleTextColor.name,
+              ),
             ),
           ),
           const Spacer(),
           Text(
             value,
-            style: AppTypography.body.copyWith(
-              color: valueColor ??
+            style: AppTypography.bodyStrong.copyWith(
+              color:
+                  valueColor ??
                   AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
+                    context,
+                    AppThemeKeys.mainTextColor.name,
+                  ),
             ),
           ),
         ],

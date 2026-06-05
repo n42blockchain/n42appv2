@@ -14,8 +14,14 @@ class SwapAstSummary extends StatefulWidget {
   final String balance;
   final String date;
   final String payCoin;
-  const SwapAstSummary(this.send, this.receive, this.balance, this.date,
-      {required this.payCoin, super.key});
+  const SwapAstSummary(
+    this.send,
+    this.receive,
+    this.balance,
+    this.date, {
+    required this.payCoin,
+    super.key,
+  });
 
   @override
   State<SwapAstSummary> createState() => _SwapAstSummaryState();
@@ -65,7 +71,11 @@ class _SwapAstSummaryState extends State<SwapAstSummary> {
       appBar: AppBarWidget(text: s.g_swap_key_28),
       body: Container(
         padding: EdgeInsets.fromLTRB(
-            AppSpacing.space8, AppSpacing.space8, AppSpacing.space8, 0),
+          AppSpacing.space8,
+          AppSpacing.space8,
+          AppSpacing.space8,
+          0,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -82,11 +92,18 @@ class _SwapAstSummaryState extends State<SwapAstSummary> {
                 children: [
                   _summaryRow(s.g_key_48, '${widget.send} ${widget.payCoin}'),
                   _summaryRow(
-                      s.g_key_33, '${widget.receive} ${CoinType.N.name}'),
+                    s.g_key_33,
+                    '${widget.receive} ${CoinType.N.name}',
+                  ),
                   _summaryRow(
-                      s.g_swap_key_29, '${widget.balance} ${CoinType.N.name}'),
-                  _summaryRow(s.g_swap_key_30, widget.date,
-                      bottomPadding: false),
+                    s.g_swap_key_29,
+                    '${widget.balance} ${CoinType.N.name}',
+                  ),
+                  _summaryRow(
+                    s.g_swap_key_30,
+                    widget.date,
+                    bottomPadding: false,
+                  ),
                 ],
               ),
             ),
@@ -97,7 +114,7 @@ class _SwapAstSummaryState extends State<SwapAstSummary> {
             const Spacer(),
             Container(
               height: sw(88),
-              margin: EdgeInsets.only(bottom: sw(36)),
+              margin: EdgeInsets.only(bottom: AppSpacing.space12),
               child: Row(
                 children: [
                   Expanded(
@@ -111,20 +128,16 @@ class _SwapAstSummaryState extends State<SwapAstSummary> {
                   ),
                   SizedBox(width: AppSpacing.space8),
                   Expanded(
-                    child: buttonStyle2(
-                      context,
-                      () async {
-                        final r = await Navigator.push<bool>(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => WalletSecurityVerification(),
-                          ),
-                        );
-                        if (!context.mounted) return;
-                        if (r == true) Navigator.pop(context, true);
-                      },
-                      s.g_key_78,
-                    ),
+                    child: buttonStyle2(context, () async {
+                      final r = await Navigator.push<bool>(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => WalletSecurityVerification(),
+                        ),
+                      );
+                      if (!context.mounted) return;
+                      if (r == true) Navigator.pop(context, true);
+                    }, s.g_key_78),
                   ),
                 ],
               ),
