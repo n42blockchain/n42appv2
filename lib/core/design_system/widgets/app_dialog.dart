@@ -44,9 +44,11 @@ class AppDialog extends StatelessWidget {
     String confirmText = '确定',
     String? cancelText,
     bool danger = false,
+    bool barrierDismissible = true,
   }) {
     return showDialog<bool>(
       context: context,
+      barrierDismissible: barrierDismissible,
       builder: (ctx) => AppDialog(
         title: title,
         message: message,
