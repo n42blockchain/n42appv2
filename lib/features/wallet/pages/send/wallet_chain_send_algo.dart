@@ -18,7 +18,7 @@ import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/utils/transaction/coin_gas.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -103,21 +103,27 @@ class _WalletChainSendAlgoState extends ConsumerState<WalletChainSendAlgo>
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8.0)),
         color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.errorBgColor2.name),
+          context,
+          AppThemeKeys.errorBgColor2.name,
+        ),
       ),
       child: Text(
         errorMessage,
         style: TextStyle(
           fontSize: ScreenUtil().setSp(28.0),
           color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.errorTextColor.name),
+            context,
+            AppThemeKeys.errorTextColor.name,
+          ),
         ),
       ),
     );
   }
 
   Widget sendButtonWidget() {
-    final title = algoTokenAdd ? S.of(context).g_key_48 : S.of(context).g_key_159;
+    final title = algoTokenAdd
+        ? S.of(context).g_key_48
+        : S.of(context).g_key_159;
     final isLoading = load == Load.loading;
     return Positioned(
       left: 0,
@@ -130,20 +136,15 @@ class _WalletChainSendAlgoState extends ConsumerState<WalletChainSendAlgo>
             padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
             height: ScreenUtil().setWidth(148.0),
             color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.backGroundColor.name),
-            child: buttonStyle6(
               context,
-              () => algoTokenAdd ? sendTransaction() : sendTransactionAlgoTokenEdit(true),
-              isLoading ? '${S.of(context).g_key_106}...' : title,
-              AppThemeUtils.getColorByKey(
-                context,
-                isLoading
-                    ? AppThemeKeys.mainButtonBgColor3.name
-                    : AppThemeKeys.mainButtonBgColor.name,
-              ),
-              AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainButtonTextColor.name),
-              isLoading,
+              AppThemeKeys.backGroundColor.name,
+            ),
+            child: AppButton(
+              label: title,
+              onPressed: () => algoTokenAdd
+                  ? sendTransaction()
+                  : sendTransactionAlgoTokenEdit(true),
+              loading: isLoading,
             ),
           ),
         ],
@@ -163,9 +164,7 @@ class _WalletChainSendAlgoState extends ConsumerState<WalletChainSendAlgo>
           child: Stack(
             children: [
               Positioned.fill(
-                child: SingleChildScrollView(
-                  child: coinTypeWidget(),
-                ),
+                child: SingleChildScrollView(child: coinTypeWidget()),
               ),
               sendButtonWidget(),
             ],

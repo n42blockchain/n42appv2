@@ -25,7 +25,6 @@ import 'package:n42_wallet/features/wallet/utils/validation/address_validator.da
 import 'package:n42_wallet/features/wallet/widgets/ens_address_field.dart';
 import 'package:n42_wallet/features/wallet/widgets/ens_confirm_dialog.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 
@@ -326,19 +325,10 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
             padding: EdgeInsets.all(AppSpacing.space8),
             height: sw(148.0),
             color: _themeColor(AppThemeKeys.backGroundColor),
-            child: buttonStyle6(
-              context,
-              sendTransaction,
-              isLoading
-                  ? '${S.of(context).g_key_106}...'
-                  : S.of(context).g_key_48,
-              _themeColor(
-                isLoading
-                    ? AppThemeKeys.mainButtonBgColor3
-                    : AppThemeKeys.mainButtonBgColor,
-              ),
-              _themeColor(AppThemeKeys.mainButtonTextColor),
-              isLoading,
+            child: AppButton(
+              label: S.of(context).g_key_48,
+              onPressed: sendTransaction,
+              loading: isLoading,
             ),
           ),
         ],

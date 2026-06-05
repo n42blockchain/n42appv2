@@ -27,7 +27,7 @@ import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dar
 import 'package:n42_wallet/features/wallet/utils/transaction/coin_gas.dart';
 import 'package:n42_wallet/features/wallet/widgets/non_evm_fee_selector.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/container_widget.dart';
 import 'package:n42_wallet/features/widgets/text_field_widget.dart';
 import 'package:web3dart/web3dart.dart';
@@ -105,21 +105,10 @@ class _WalletChainSendTonState extends ConsumerState<WalletChainSendTon>
               context,
               AppThemeKeys.backGroundColor.name,
             ),
-            child: buttonStyle6(
-              context,
-              sendTransaction,
-              isLoading ? '${S.of(context).g_key_106}...' : title,
-              AppThemeUtils.getColorByKey(
-                context,
-                isLoading
-                    ? AppThemeKeys.mainButtonBgColor3.name
-                    : AppThemeKeys.mainButtonBgColor.name,
-              ),
-              AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainButtonTextColor.name,
-              ),
-              isLoading,
+            child: AppButton(
+              label: title,
+              onPressed: sendTransaction,
+              loading: isLoading,
             ),
           ),
         ],
