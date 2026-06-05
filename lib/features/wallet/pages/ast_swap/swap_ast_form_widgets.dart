@@ -6,7 +6,6 @@ import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/utils/regular.dart';
 import 'package:n42_wallet/features/wallet/models/ast_swap/swap_ast_model.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:decimal/decimal.dart' as dec;
@@ -48,7 +47,9 @@ class SwapAstPriceWidget extends StatelessWidget {
         text,
         style: AppTypography.body.copyWith(
           color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainTextColor.name),
+            context,
+            AppThemeKeys.mainTextColor.name,
+          ),
         ),
       ),
     );
@@ -59,10 +60,7 @@ class SwapAstPriceWidget extends StatelessWidget {
 class SwapAstPercentWidget extends StatelessWidget {
   final void Function(int percent) onPercentTap;
 
-  const SwapAstPercentWidget({
-    super.key,
-    required this.onPercentTap,
-  });
+  const SwapAstPercentWidget({super.key, required this.onPercentTap});
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +87,9 @@ class SwapAstPercentWidget extends StatelessWidget {
                 "$percent%",
                 style: AppTypography.body.copyWith(
                   color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainBlueColor.name),
+                    context,
+                    AppThemeKeys.mainBlueColor.name,
+                  ),
                 ),
               ),
             ),
@@ -126,10 +126,14 @@ class SwapAstCheckWidget extends StatelessWidget {
               height: ScreenUtil().setWidth(60),
               width: ScreenUtil().setWidth(60),
               child: Icon(
-                readStatement ? Icons.check_box_outlined : Icons.check_box_outline_blank,
+                readStatement
+                    ? Icons.check_box_outlined
+                    : Icons.check_box_outline_blank,
                 color: AppThemeUtils.getColorByKey(
                   context,
-                  readStatement ? AppThemeKeys.mainBlueColor.name : AppThemeKeys.dividerColor.name,
+                  readStatement
+                      ? AppThemeKeys.mainBlueColor.name
+                      : AppThemeKeys.dividerColor.name,
                 ),
               ),
             ),
@@ -143,7 +147,9 @@ class SwapAstCheckWidget extends StatelessWidget {
                 text: S.of(context).g_swap_key_16,
                 style: AppTypography.caption.copyWith(
                   color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
+                    context,
+                    AppThemeKeys.mainTextColor.name,
+                  ),
                 ),
                 children: [
                   WidgetSpan(
@@ -165,7 +171,9 @@ class SwapAstCheckWidget extends StatelessWidget {
                         style: AppTypography.caption.copyWith(
                           decoration: TextDecoration.underline,
                           color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.mainBlueColor.name),
+                            context,
+                            AppThemeKeys.mainBlueColor.name,
+                          ),
                         ),
                       ),
                     ),
@@ -196,9 +204,6 @@ class SwapAstPreviewButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isLoading = load == Load.loading;
-    final bgColorKey = isLoading
-        ? AppThemeKeys.mainButtonBgColor3.name
-        : AppThemeKeys.mainButtonBgColor.name;
 
     return Positioned(
       left: 0,
@@ -208,15 +213,11 @@ class SwapAstPreviewButton extends StatelessWidget {
         padding: AppSpacing.pageHorizontal,
         height: ScreenUtil().setWidth(88.0),
         child: load == Load.error
-            ? buttonStyle2(context, onRetry, S.of(context).g_swap_key_6)
-            : buttonStyle6(
-                context,
-                onPreview,
-                S.of(context).g_swap_key_5,
-                AppThemeUtils.getColorByKey(context, bgColorKey),
-                AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainButtonTextColor.name),
-                isLoading,
+            ? AppButton(label: S.of(context).g_swap_key_6, onPressed: onRetry)
+            : AppButton(
+                label: S.of(context).g_swap_key_5,
+                onPressed: onPreview,
+                loading: isLoading,
               ),
       ),
     );

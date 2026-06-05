@@ -3,7 +3,6 @@ import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_security_verification.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -118,26 +117,27 @@ class _SwapAstSummaryState extends State<SwapAstSummary> {
               child: Row(
                 children: [
                   Expanded(
-                    child: buttonStyle5(
-                      context,
-                      () => Navigator.pop(context),
-                      s.g_key_79,
-                      _color(AppThemeKeys.mainWhiteColor),
-                      _color(AppThemeKeys.mainButtonTextColor3),
+                    child: AppButton(
+                      label: s.g_key_79,
+                      onPressed: () => Navigator.pop(context),
+                      variant: AppButtonVariant.secondary,
                     ),
                   ),
                   SizedBox(width: AppSpacing.space8),
                   Expanded(
-                    child: buttonStyle2(context, () async {
-                      final r = await Navigator.push<bool>(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => WalletSecurityVerification(),
-                        ),
-                      );
-                      if (!context.mounted) return;
-                      if (r == true) Navigator.pop(context, true);
-                    }, s.g_key_78),
+                    child: AppButton(
+                      label: s.g_key_78,
+                      onPressed: () async {
+                        final r = await Navigator.push<bool>(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => WalletSecurityVerification(),
+                          ),
+                        );
+                        if (!context.mounted) return;
+                        if (r == true) Navigator.pop(context, true);
+                      },
+                    ),
                   ),
                 ],
               ),
