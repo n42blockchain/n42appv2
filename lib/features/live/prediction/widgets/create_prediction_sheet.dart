@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 
+import 'package:n42_wallet/generated/l10n.dart';
+
 import '../providers/prediction_providers.dart';
 
 /// 主播"开预测"弹窗：填问题、结果项（≥2）、可选截止时长。
@@ -25,12 +27,23 @@ class CreatePredictionSheet extends ConsumerStatefulWidget {
 class _CreatePredictionSheetState extends ConsumerState<CreatePredictionSheet> {
   final TextEditingController _question = TextEditingController();
   final List<TextEditingController> _outcomes = [
-    TextEditingController(text: '是'),
-    TextEditingController(text: '否'),
+    TextEditingController(),
+    TextEditingController(),
   ];
+  bool _defaultsSet = false;
   int _durationMin = 0; // 0 = 不限
   bool _busy = false;
   String? _error;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_defaultsSet) {
+      _defaultsSet = true;
+      _outcomes[0].text = S.of(context).g_pred_yes;
+      _outcomes[1].text = S.of(context).g_pred_no;
+    }
+  }
 
   @override
   void dispose() {
@@ -60,11 +73,11 @@ class _CreatePredictionSheetState extends ConsumerState<CreatePredictionSheet> {
         .where((s) => s.isNotEmpty)
         .toList();
     if (question.isEmpty) {
-      setState(() => _error = '请填写预测问题');
+      setState(() => _error = S.of(context).g_pred_err_question);
       return;
     }
     if (labels.length < 2) {
-      setState(() => _error = '至少两个有效结果');
+      setState(() => _error = S.of(context).g_pred_err_outcomes);
       return;
     }
     setState(() {
@@ -107,14 +120,14 @@ class _CreatePredictionSheetState extends ConsumerState<CreatePredictionSheet> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '开启预测',
+              S.of(context).g_pred_create_title,
               style: AppTypography.title.copyWith(color: c.textPrimary),
             ),
             SizedBox(height: AppSpacing.space6),
-            _field(_question, '预测问题，如：本局谁赢？'),
+            _field(_question, S.of(context).g_pred_q_hint),
             SizedBox(height: AppSpacing.space6),
             Text(
-              '结果选项',
+              S.of(context).g_pred_outcomes,
               style: AppTypography.body.copyWith(color: c.textSecondary),
             ),
             SizedBox(height: AppSpacing.space2),
@@ -123,7 +136,12 @@ class _CreatePredictionSheetState extends ConsumerState<CreatePredictionSheet> {
                 padding: EdgeInsets.only(bottom: AppSpacing.space4),
                 child: Row(
                   children: [
-                    Expanded(child: _field(_outcomes[i], '结果 ${i + 1}')),
+                    Expanded(
+                      child: _field(
+                        _outcomes[i],
+                        S.of(context).g_pred_outcome_n(i + 1),
+                      ),
+                    ),
                     if (_outcomes.length > 2)
                       IconButton(
                         icon: Icon(
@@ -139,13 +157,13 @@ class _CreatePredictionSheetState extends ConsumerState<CreatePredictionSheet> {
               TextButton.icon(
                 onPressed: _addOutcome,
                 icon: const Icon(Icons.add),
-                label: const Text('添加结果'),
+                label: Text(S.of(context).g_pred_add_outcome),
               ),
             SizedBox(height: AppSpacing.space4),
             Row(
               children: [
                 Text(
-                  '截止',
+                  S.of(context).g_pred_deadline,
                   style: AppTypography.body.copyWith(color: c.textSecondary),
                 ),
                 SizedBox(width: AppSpacing.space6),
@@ -153,11 +171,23 @@ class _CreatePredictionSheetState extends ConsumerState<CreatePredictionSheet> {
                   value: _durationMin,
                   dropdownColor: c.bgElevated,
                   style: AppTypography.body.copyWith(color: c.textPrimary),
-                  items: const [
-                    DropdownMenuItem(value: 0, child: Text('不限（手动停盘）')),
-                    DropdownMenuItem(value: 1, child: Text('1 分钟')),
-                    DropdownMenuItem(value: 3, child: Text('3 分钟')),
-                    DropdownMenuItem(value: 5, child: Text('5 分钟')),
+                  items: [
+                    DropdownMenuItem(
+                      value: 0,
+                      child: Text(S.of(context).g_pred_unlimited),
+                    ),
+                    DropdownMenuItem(
+                      value: 1,
+                      child: Text(S.of(context).g_pred_minutes(1)),
+                    ),
+                    DropdownMenuItem(
+                      value: 3,
+                      child: Text(S.of(context).g_pred_minutes(3)),
+                    ),
+                    DropdownMenuItem(
+                      value: 5,
+                      child: Text(S.of(context).g_pred_minutes(5)),
+                    ),
                   ],
                   onChanged: (v) => setState(() => _durationMin = v ?? 0),
                 ),
@@ -175,7 +205,11 @@ class _CreatePredictionSheetState extends ConsumerState<CreatePredictionSheet> {
               width: double.infinity,
               child: FilledButton(
                 onPressed: _busy ? null : _create,
-                child: Text(_busy ? '创建中…' : '发布预测'),
+                child: Text(
+                  _busy
+                      ? S.of(context).g_pred_creating
+                      : S.of(context).g_pred_publish,
+                ),
               ),
             ),
           ],

@@ -145,23 +145,27 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m53(value) => "Harus ${value} karakter";
 
-  static String m54(value) => "Saldo ${value} Tidak Mencukupi.";
+  static String m54(n) => "${n} mnt";
 
-  static String m55(value) => "${value} masuk...";
+  static String m55(n) => "Hasil ${n}";
 
-  static String m56(value) =>
+  static String m56(value) => "Saldo ${value} Tidak Mencukupi.";
+
+  static String m57(value) => "${value} masuk...";
+
+  static String m58(value) =>
       "${value} yang di-swap dalam aplikasi akan segera didistribusikan ke dompet Anda dan tidak dapat dijual melalui proses ini. Dapat digunakan untuk menjalankan node.";
 
-  static String m57(value) => "Maksimal ${value} karakter";
+  static String m59(value) => "Maksimal ${value} karakter";
 
-  static String m58(value) => "Jaringan ${value} sudah didukung APP!";
+  static String m60(value) => "Jaringan ${value} sudah didukung APP!";
 
-  static String m59(value) =>
+  static String m61(value) =>
       "Jaringan ${value} sudah didukung APP, apakah Anda ingin menambahkannya?";
 
-  static String m60(value) => "Uji tautan alamat ${value} gagal!";
+  static String m62(value) => "Uji tautan alamat ${value} gagal!";
 
-  static String m61(value) => "0~${value} karakter";
+  static String m63(value) => "0~${value} karakter";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -2560,6 +2564,30 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_portfolio_pie_total": MessageLookupByLibrary.simpleMessage("Jumlah"),
     "g_portfolio_title": MessageLookupByLibrary.simpleMessage("Portofolio"),
     "g_portfolio_total": MessageLookupByLibrary.simpleMessage("Nilai Total"),
+    "g_pred_add_outcome": MessageLookupByLibrary.simpleMessage("Tambah hasil"),
+    "g_pred_create_title": MessageLookupByLibrary.simpleMessage(
+      "Mulai Prediksi",
+    ),
+    "g_pred_creating": MessageLookupByLibrary.simpleMessage("Membuat…"),
+    "g_pred_deadline": MessageLookupByLibrary.simpleMessage("Batas waktu"),
+    "g_pred_err_outcomes": MessageLookupByLibrary.simpleMessage(
+      "Minimal dua hasil valid",
+    ),
+    "g_pred_err_question": MessageLookupByLibrary.simpleMessage(
+      "Masukkan pertanyaan",
+    ),
+    "g_pred_minutes": m54,
+    "g_pred_no": MessageLookupByLibrary.simpleMessage("Tidak"),
+    "g_pred_outcome_n": m55,
+    "g_pred_outcomes": MessageLookupByLibrary.simpleMessage("Hasil"),
+    "g_pred_publish": MessageLookupByLibrary.simpleMessage("Terbitkan"),
+    "g_pred_q_hint": MessageLookupByLibrary.simpleMessage(
+      "Pertanyaan prediksi, mis.: Siapa menang ronde ini?",
+    ),
+    "g_pred_unlimited": MessageLookupByLibrary.simpleMessage(
+      "Tanpa batas (tutup manual)",
+    ),
+    "g_pred_yes": MessageLookupByLibrary.simpleMessage("Ya"),
     "g_referral_downloaded": MessageLookupByLibrary.simpleMessage("Diunduh"),
     "g_referral_invite_code": MessageLookupByLibrary.simpleMessage(
       "Kode undangan",
@@ -2592,7 +2620,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_share_v3_key_6": MessageLookupByLibrary.simpleMessage("Ajak melalui"),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("Tautan"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("kode"),
-    "g_swap_key_14": m54,
+    "g_swap_key_14": m56,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "Kesalahan mendapatkan harga koin.",
     ),
@@ -2606,7 +2634,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "Swap Anda akan segera didistribusikan. Harap bersabar.",
     ),
-    "g_swap_key_20": m55,
+    "g_swap_key_20": m57,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "Biaya untuk menjalankan node: Verifikasi Grup 1-49 N Node Dasar: 50 N Node Premium: 100 N Node Pro: 500 N.",
     ),
@@ -2622,7 +2650,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("Saldo Baru"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("Anda bayar"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("Tanggal"),
-    "g_swap_key_31": m56,
+    "g_swap_key_31": m58,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "Swap dapat dilihat di penjelajah blockchain terkait (Etherscan, BscScan, TRONSCAN dan milik kami).",
     ),
@@ -2635,7 +2663,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "Atur ulang ke default",
     ),
-    "g_token_m_key_1": m57,
+    "g_token_m_key_1": m59,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "Siapa pun dapat membuat token, termasuk membuat versi palsu dari token yang ada. Selalu teliti token sebelum mengimpornya.",
     ),
@@ -2654,9 +2682,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage(
       "Kesalahan Format!",
     ),
-    "g_token_m_key_22": m58,
-    "g_token_m_key_23": m59,
-    "g_token_m_key_24": m60,
+    "g_token_m_key_22": m60,
+    "g_token_m_key_23": m61,
+    "g_token_m_key_24": m62,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("Impor token"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("Semua jaringan"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage("Token Kustom"),
@@ -2705,7 +2733,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_email": MessageLookupByLibrary.simpleMessage("Surel"),
     "login_password": MessageLookupByLibrary.simpleMessage("Kata Sandi"),
     "next": MessageLookupByLibrary.simpleMessage("Selanjutnya"),
-    "nicknameMessage": m61,
+    "nicknameMessage": m63,
     "personalInformation": MessageLookupByLibrary.simpleMessage("Edit Profil"),
     "photograph": MessageLookupByLibrary.simpleMessage("Foto"),
     "please_input_address": MessageLookupByLibrary.simpleMessage(

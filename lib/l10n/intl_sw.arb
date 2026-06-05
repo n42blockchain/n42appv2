@@ -1367,5 +1367,19 @@
   "g_google_auth_key5": "Google Authenticator inahitajika kuthibitisha kila uhamisho.",
   "g_google_auth_key6": "Nambari si sahihi, jaribu tena",
   "g_google_auth_key7": "Google Authenticator haijasanidiwa",
-  "g_google_auth_key8": "Uunganisho umefanikiwa"
+  "g_google_auth_key8": "Uunganisho umefanikiwa",
+  "g_pred_create_title": "Anza Utabiri",
+  "g_pred_q_hint": "Swali la utabiri, mf.: Nani atashinda raundi hii?",
+  "g_pred_outcomes": "Matokeo",
+  "g_pred_outcome_n": "Tokeo {n}",
+  "g_pred_add_outcome": "Ongeza tokeo",
+  "g_pred_deadline": "Tarehe ya mwisho",
+  "g_pred_unlimited": "Bila kikomo (funga mwenyewe)",
+  "g_pred_minutes": "dakika {n}",
+  "g_pred_creating": "Inaunda…",
+  "g_pred_publish": "Chapisha",
+  "g_pred_err_question": "Tafadhali andika swali",
+  "g_pred_err_outcomes": "Angalau matokeo mawili sahihi",
+  "g_pred_yes": "Ndiyo",
+  "g_pred_no": "Hapana"
 }

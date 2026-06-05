@@ -145,24 +145,28 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m53(value) => "${value} karakter olmalı";
 
-  static String m54(value) => "${value} Yetersiz Bakiye.";
+  static String m54(n) => "${n} dk";
 
-  static String m55(value) => "${value} geliyor...";
+  static String m55(n) => "Sonuç ${n}";
 
-  static String m56(value) =>
-      "Uygulama içinde takas edilen ${value}, kısa süre içinde cüzdanınıza dağıtılacak ve bu işlemle satılamaz. Düğüm çalıştırmak için kullanılabilir.";
+  static String m56(value) => "${value} Yetersiz Bakiye.";
 
-  static String m57(value) => "Maksimum ${value} karakter";
+  static String m57(value) => "${value} geliyor...";
 
   static String m58(value) =>
+      "Uygulama içinde takas edilen ${value}, kısa süre içinde cüzdanınıza dağıtılacak ve bu işlemle satılamaz. Düğüm çalıştırmak için kullanılabilir.";
+
+  static String m59(value) => "Maksimum ${value} karakter";
+
+  static String m60(value) =>
       "${value} zinciri uygulama tarafından zaten destekleniyor!";
 
-  static String m59(value) =>
+  static String m61(value) =>
       "${value} zinciri uygulama tarafından zaten destekleniyor, eklemek istiyor musunuz?";
 
-  static String m60(value) => "${value} adres test bağlantısı başarısız!";
+  static String m62(value) => "${value} adres test bağlantısı başarısız!";
 
-  static String m61(value) => "0~${value} karakter";
+  static String m63(value) => "0~${value} karakter";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -2510,6 +2514,30 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_portfolio_pie_total": MessageLookupByLibrary.simpleMessage("Toplam"),
     "g_portfolio_title": MessageLookupByLibrary.simpleMessage("Portföy"),
     "g_portfolio_total": MessageLookupByLibrary.simpleMessage("Toplam Değer"),
+    "g_pred_add_outcome": MessageLookupByLibrary.simpleMessage("Sonuç ekle"),
+    "g_pred_create_title": MessageLookupByLibrary.simpleMessage(
+      "Tahmini Başlat",
+    ),
+    "g_pred_creating": MessageLookupByLibrary.simpleMessage("Oluşturuluyor…"),
+    "g_pred_deadline": MessageLookupByLibrary.simpleMessage("Son tarih"),
+    "g_pred_err_outcomes": MessageLookupByLibrary.simpleMessage(
+      "En az iki geçerli sonuç",
+    ),
+    "g_pred_err_question": MessageLookupByLibrary.simpleMessage(
+      "Lütfen bir soru girin",
+    ),
+    "g_pred_minutes": m54,
+    "g_pred_no": MessageLookupByLibrary.simpleMessage("Hayır"),
+    "g_pred_outcome_n": m55,
+    "g_pred_outcomes": MessageLookupByLibrary.simpleMessage("Sonuçlar"),
+    "g_pred_publish": MessageLookupByLibrary.simpleMessage("Yayınla"),
+    "g_pred_q_hint": MessageLookupByLibrary.simpleMessage(
+      "Tahmin sorusu, örn.: Bu turu kim kazanır?",
+    ),
+    "g_pred_unlimited": MessageLookupByLibrary.simpleMessage(
+      "Sınırsız (elle kapat)",
+    ),
+    "g_pred_yes": MessageLookupByLibrary.simpleMessage("Evet"),
     "g_referral_downloaded": MessageLookupByLibrary.simpleMessage("İndirildi"),
     "g_referral_invite_code": MessageLookupByLibrary.simpleMessage(
       "Davet kodu",
@@ -2544,7 +2572,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("Bağlantı"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("kod"),
-    "g_swap_key_14": m54,
+    "g_swap_key_14": m56,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "Coin fiyatı alınamadı.",
     ),
@@ -2558,7 +2586,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "Takasınız kısa süre içinde dağıtılacaktır. Lütfen sabırlı olun.",
     ),
-    "g_swap_key_20": m55,
+    "g_swap_key_20": m57,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "Düğüm çalıştırma maliyetleri: Grup Doğrulaması 1-49 N Temel Düğüm: 50 N Premium Düğüm: 100 N Pro Düğüm: 500 N.",
     ),
@@ -2570,7 +2598,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("Yeni Bakiye"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("Ödediğiniz"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("Tarih"),
-    "g_swap_key_31": m56,
+    "g_swap_key_31": m58,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "Takaslar ilgili zincir gezginlerinde (Etherscan, BscScan, TRONSCAN ve kendi gezginimiz) görüntülenebilir.",
     ),
@@ -2583,7 +2611,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "Varsayılana sıfırla",
     ),
-    "g_token_m_key_1": m57,
+    "g_token_m_key_1": m59,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "Herkes mevcut tokenlerin sahte sürümleri dahil token oluşturabilir. İçe aktarmadan önce her zaman bir tokeni araştırın.",
     ),
@@ -2600,9 +2628,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_2": MessageLookupByLibrary.simpleMessage("0~18 birim"),
     "g_token_m_key_20": MessageLookupByLibrary.simpleMessage("Token Ekle"),
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage("Biçim Hatası!"),
-    "g_token_m_key_22": m58,
-    "g_token_m_key_23": m59,
-    "g_token_m_key_24": m60,
+    "g_token_m_key_22": m60,
+    "g_token_m_key_23": m61,
+    "g_token_m_key_24": m62,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("Token içe aktar"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("Tüm ağlar"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage("Özel Token"),
@@ -2647,7 +2675,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_email": MessageLookupByLibrary.simpleMessage("E-posta"),
     "login_password": MessageLookupByLibrary.simpleMessage("Şifre"),
     "next": MessageLookupByLibrary.simpleMessage("Sonraki"),
-    "nicknameMessage": m61,
+    "nicknameMessage": m63,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "Profili Düzenle",
     ),

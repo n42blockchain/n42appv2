@@ -1374,5 +1374,19 @@
   "g_google_auth_key5": "Google Authenticator richiesto per confermare ogni trasferimento.",
   "g_google_auth_key6": "Codice errato, riprova",
   "g_google_auth_key7": "Google Authenticator non configurato",
-  "g_google_auth_key8": "Collegamento riuscito"
+  "g_google_auth_key8": "Collegamento riuscito",
+  "g_pred_create_title": "Avvia previsione",
+  "g_pred_q_hint": "Domanda di previsione, es.: Chi vince questo round?",
+  "g_pred_outcomes": "Esiti",
+  "g_pred_outcome_n": "Esito {n}",
+  "g_pred_add_outcome": "Aggiungi esito",
+  "g_pred_deadline": "Scadenza",
+  "g_pred_unlimited": "Illimitato (chiusura manuale)",
+  "g_pred_minutes": "{n} min",
+  "g_pred_creating": "Creazione…",
+  "g_pred_publish": "Pubblica",
+  "g_pred_err_question": "Inserisci una domanda",
+  "g_pred_err_outcomes": "Almeno due esiti validi",
+  "g_pred_yes": "Sì",
+  "g_pred_no": "No"
 }

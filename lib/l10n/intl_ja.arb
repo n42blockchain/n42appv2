@@ -1374,5 +1374,19 @@
   "g_google_auth_key5": "ウォレット送金の確認に Google 認証が必要です。",
   "g_google_auth_key6": "コードが違います、もう一度お試しください",
   "g_google_auth_key7": "Google 認証システム未設定",
-  "g_google_auth_key8": "連携成功"
+  "g_google_auth_key8": "連携成功",
+  "g_pred_create_title": "予測を開始",
+  "g_pred_q_hint": "予測の質問（例：今回は誰が勝つ？）",
+  "g_pred_outcomes": "結果の選択肢",
+  "g_pred_outcome_n": "結果 {n}",
+  "g_pred_add_outcome": "結果を追加",
+  "g_pred_deadline": "締切",
+  "g_pred_unlimited": "無制限（手動で締切）",
+  "g_pred_minutes": "{n} 分",
+  "g_pred_creating": "作成中…",
+  "g_pred_publish": "予測を公開",
+  "g_pred_err_question": "質問を入力してください",
+  "g_pred_err_outcomes": "有効な結果が2つ以上必要です",
+  "g_pred_yes": "はい",
+  "g_pred_no": "いいえ"
 }

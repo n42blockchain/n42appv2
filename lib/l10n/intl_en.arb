@@ -1367,5 +1367,21 @@
   "g_iap_store_unavailable": "Store Unavailable",
   "g_iap_check_network": "Check your network connection and try again",
   "g_iap_no_products": "No products available",
-  "g_iap_retry": "Retry"
+  "g_iap_retry": "Retry",
+  "g_pred_create_title": "Start Prediction",
+  "g_pred_q_hint": "Prediction question, e.g. Who wins this round?",
+  "g_pred_outcomes": "Outcomes",
+  "g_pred_outcome_n": "Outcome {n}",
+  "@g_pred_outcome_n": {"placeholders":{"n":{}}},
+  "g_pred_add_outcome": "Add outcome",
+  "g_pred_deadline": "Deadline",
+  "g_pred_unlimited": "Unlimited (manual close)",
+  "g_pred_minutes": "{n} min",
+  "@g_pred_minutes": {"placeholders":{"n":{}}},
+  "g_pred_creating": "Creating…",
+  "g_pred_publish": "Publish",
+  "g_pred_err_question": "Please enter a question",
+  "g_pred_err_outcomes": "At least two valid outcomes",
+  "g_pred_yes": "Yes",
+  "g_pred_no": "No"
 }

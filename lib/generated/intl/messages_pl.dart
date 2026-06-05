@@ -146,25 +146,29 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m53(value) => "Musi mieć ${value} znaków";
 
-  static String m54(value) => "Niewystarczające saldo ${value}.";
+  static String m54(n) => "${n} min";
 
-  static String m55(value) => "${value} w drodze...";
+  static String m55(n) => "Wynik ${n}";
 
-  static String m56(value) =>
-      "${value} wymienione w aplikacji zostanie wkrótce przekazane do Twojego portfela i nie może być sprzedane w tym procesie. Może być używane do uruchomienia węzła.";
+  static String m56(value) => "Niewystarczające saldo ${value}.";
 
-  static String m57(value) => "Maks. ${value} znaków";
+  static String m57(value) => "${value} w drodze...";
 
   static String m58(value) =>
-      "Sieć ${value} jest już obsługiwana przez aplikację!";
+      "${value} wymienione w aplikacji zostanie wkrótce przekazane do Twojego portfela i nie może być sprzedane w tym procesie. Może być używane do uruchomienia węzła.";
 
-  static String m59(value) =>
-      "Sieć ${value} jest już obsługiwana przez aplikację, czy chcesz ją dodać?";
+  static String m59(value) => "Maks. ${value} znaków";
 
   static String m60(value) =>
+      "Sieć ${value} jest już obsługiwana przez aplikację!";
+
+  static String m61(value) =>
+      "Sieć ${value} jest już obsługiwana przez aplikację, czy chcesz ją dodać?";
+
+  static String m62(value) =>
       "Test połączenia z adresem ${value} nie powiódł się!";
 
-  static String m61(value) => "0~${value} znaków";
+  static String m63(value) => "0~${value} znaków";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -2596,6 +2600,30 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_portfolio_total": MessageLookupByLibrary.simpleMessage(
       "Całkowita wartość",
     ),
+    "g_pred_add_outcome": MessageLookupByLibrary.simpleMessage("Dodaj wynik"),
+    "g_pred_create_title": MessageLookupByLibrary.simpleMessage(
+      "Rozpocznij prognozę",
+    ),
+    "g_pred_creating": MessageLookupByLibrary.simpleMessage("Tworzenie…"),
+    "g_pred_deadline": MessageLookupByLibrary.simpleMessage("Termin"),
+    "g_pred_err_outcomes": MessageLookupByLibrary.simpleMessage(
+      "Co najmniej dwa poprawne wyniki",
+    ),
+    "g_pred_err_question": MessageLookupByLibrary.simpleMessage(
+      "Wprowadź pytanie",
+    ),
+    "g_pred_minutes": m54,
+    "g_pred_no": MessageLookupByLibrary.simpleMessage("Nie"),
+    "g_pred_outcome_n": m55,
+    "g_pred_outcomes": MessageLookupByLibrary.simpleMessage("Wyniki"),
+    "g_pred_publish": MessageLookupByLibrary.simpleMessage("Opublikuj"),
+    "g_pred_q_hint": MessageLookupByLibrary.simpleMessage(
+      "Pytanie prognozy, np.: Kto wygra tę rundę?",
+    ),
+    "g_pred_unlimited": MessageLookupByLibrary.simpleMessage(
+      "Bez limitu (ręczne zamknięcie)",
+    ),
+    "g_pred_yes": MessageLookupByLibrary.simpleMessage("Tak"),
     "g_referral_downloaded": MessageLookupByLibrary.simpleMessage("Pobrane"),
     "g_referral_invite_code": MessageLookupByLibrary.simpleMessage(
       "Kod zaproszenia",
@@ -2624,7 +2652,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_share_v3_key_6": MessageLookupByLibrary.simpleMessage("Poleć przez"),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("Połączyć"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("kod"),
-    "g_swap_key_14": m54,
+    "g_swap_key_14": m56,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "Błąd pobierania ceny monety.",
     ),
@@ -2636,7 +2664,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "Twoja wymiana zostanie wkrótce zrealizowana. Prosimy o cierpliwość.",
     ),
-    "g_swap_key_20": m55,
+    "g_swap_key_20": m57,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "Koszty uruchomienia węzła: Weryfikacja grupowa 1-49 N Węzeł podstawowy: 50 N Węzeł premium: 100 N Węzeł pro: 500 N.",
     ),
@@ -2652,7 +2680,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("Nowe saldo"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("Płacisz"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("Data"),
-    "g_swap_key_31": m56,
+    "g_swap_key_31": m58,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "Wymiany można przeglądać w odpowiednich eksploratorach sieci (Etherscan, BscScan, TRONSCAN i naszym własnym).",
     ),
@@ -2667,7 +2695,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "Przywróć ustawienia domyślne",
     ),
-    "g_token_m_key_1": m57,
+    "g_token_m_key_1": m59,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "Każdy może utworzyć token, w tym fałszywe wersje istniejących tokenów. Zawsze sprawdź token przed jego importem.",
     ),
@@ -2686,9 +2714,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_2": MessageLookupByLibrary.simpleMessage("0~18 jednostek"),
     "g_token_m_key_20": MessageLookupByLibrary.simpleMessage("Dodaj tokeny"),
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage("Błąd formatu!"),
-    "g_token_m_key_22": m58,
-    "g_token_m_key_23": m59,
-    "g_token_m_key_24": m60,
+    "g_token_m_key_22": m60,
+    "g_token_m_key_23": m61,
+    "g_token_m_key_24": m62,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("Importuj tokeny"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("Wszystkie sieci"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage(
@@ -2739,7 +2767,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_email": MessageLookupByLibrary.simpleMessage("E-mail"),
     "login_password": MessageLookupByLibrary.simpleMessage("Hasło"),
     "next": MessageLookupByLibrary.simpleMessage("Dalej"),
-    "nicknameMessage": m61,
+    "nicknameMessage": m63,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "Edytuj profil",
     ),

@@ -1,0 +1,142 @@
+{
+  "g_pred_create_title": {
+    "en": "Start Prediction", "zh_TW": "開啟預測", "ja": "予測を開始", "ko": "예측 시작",
+    "es_ES": "Iniciar predicción", "fr": "Lancer la prédiction", "de": "Vorhersage starten",
+    "ru": "Начать прогноз", "pt": "Iniciar previsão", "pt_BR": "Iniciar previsão",
+    "it": "Avvia previsione", "tr": "Tahmini Başlat", "vi": "Bắt đầu dự đoán",
+    "id": "Mulai Prediksi", "pl": "Rozpocznij prognozę", "cs": "Spustit predikci",
+    "uk": "Почати прогноз", "ar": "بدء التوقع", "hi": "भविष्यवाणी शुरू करें",
+    "bn": "ভবিষ্যদ্বাণী শুরু করুন", "mr": "अंदाज सुरू करा", "ta": "கணிப்பைத் தொடங்கு",
+    "te": "అంచనా ప్రారంభించండి", "ur": "پیشگوئی شروع کریں", "sw": "Anza Utabiri"
+  },
+  "g_pred_q_hint": {
+    "en": "Prediction question, e.g. Who wins this round?", "zh_TW": "預測問題，例如：本局誰贏？",
+    "ja": "予測の質問（例：今回は誰が勝つ？）", "ko": "예측 질문, 예: 이번 판에서 누가 이길까요?",
+    "es_ES": "Pregunta de predicción, p. ej. ¿Quién gana esta ronda?",
+    "fr": "Question de prédiction, p. ex. Qui gagne cette manche ?",
+    "de": "Vorhersagefrage, z. B. Wer gewinnt diese Runde?",
+    "ru": "Вопрос прогноза, напр.: Кто победит в этом раунде?",
+    "pt": "Pergunta de previsão, ex.: Quem vence esta rodada?",
+    "pt_BR": "Pergunta de previsão, ex.: Quem vence esta rodada?",
+    "it": "Domanda di previsione, es.: Chi vince questo round?",
+    "tr": "Tahmin sorusu, örn.: Bu turu kim kazanır?",
+    "vi": "Câu hỏi dự đoán, ví dụ: Ai thắng ván này?",
+    "id": "Pertanyaan prediksi, mis.: Siapa menang ronde ini?",
+    "pl": "Pytanie prognozy, np.: Kto wygra tę rundę?",
+    "cs": "Otázka predikce, např.: Kdo vyhraje toto kolo?",
+    "uk": "Питання прогнозу, напр.: Хто виграє цей раунд?",
+    "ar": "سؤال التوقع، مثل: من يفوز بهذه الجولة؟",
+    "hi": "भविष्यवाणी प्रश्न, जैसे: इस दौर में कौन जीतेगा?",
+    "bn": "ভবিষ্যদ্বাণীর প্রশ্ন, যেমন: এই রাউন্ডে কে জিতবে?",
+    "mr": "अंदाज प्रश्न, उदा.: ही फेरी कोण जिंकेल?",
+    "ta": "கணிப்பு கேள்வி, எ.கா.: இந்த சுற்றில் யார் வெல்வார்?",
+    "te": "అంచనా ప్రశ్న, ఉదా.: ఈ రౌండ్‌లో ఎవరు గెలుస్తారు?",
+    "ur": "پیشگوئی سوال، مثلاً: یہ راؤنڈ کون جیتے گا؟",
+    "sw": "Swali la utabiri, mf.: Nani atashinda raundi hii?"
+  },
+  "g_pred_outcomes": {
+    "en": "Outcomes", "zh_TW": "結果選項", "ja": "結果の選択肢", "ko": "결과 옵션",
+    "es_ES": "Resultados", "fr": "Résultats", "de": "Ergebnisse", "ru": "Исходы",
+    "pt": "Resultados", "pt_BR": "Resultados", "it": "Esiti", "tr": "Sonuçlar",
+    "vi": "Kết quả", "id": "Hasil", "pl": "Wyniki", "cs": "Výsledky", "uk": "Результати",
+    "ar": "النتائج", "hi": "परिणाम", "bn": "ফলাফল", "mr": "निकाल", "ta": "முடிவுகள்",
+    "te": "ఫలితాలు", "ur": "نتائج", "sw": "Matokeo"
+  },
+  "g_pred_outcome_n": {
+    "en": "Outcome {n}", "zh_TW": "結果 {n}", "ja": "結果 {n}", "ko": "결과 {n}",
+    "es_ES": "Resultado {n}", "fr": "Résultat {n}", "de": "Ergebnis {n}", "ru": "Исход {n}",
+    "pt": "Resultado {n}", "pt_BR": "Resultado {n}", "it": "Esito {n}", "tr": "Sonuç {n}",
+    "vi": "Kết quả {n}", "id": "Hasil {n}", "pl": "Wynik {n}", "cs": "Výsledek {n}",
+    "uk": "Результат {n}", "ar": "النتيجة {n}", "hi": "परिणाम {n}", "bn": "ফলাফল {n}",
+    "mr": "निकाल {n}", "ta": "முடிவு {n}", "te": "ఫలితం {n}", "ur": "نتیجہ {n}", "sw": "Tokeo {n}"
+  },
+  "g_pred_add_outcome": {
+    "en": "Add outcome", "zh_TW": "新增結果", "ja": "結果を追加", "ko": "결과 추가",
+    "es_ES": "Añadir resultado", "fr": "Ajouter un résultat", "de": "Ergebnis hinzufügen",
+    "ru": "Добавить исход", "pt": "Adicionar resultado", "pt_BR": "Adicionar resultado",
+    "it": "Aggiungi esito", "tr": "Sonuç ekle", "vi": "Thêm kết quả", "id": "Tambah hasil",
+    "pl": "Dodaj wynik", "cs": "Přidat výsledek", "uk": "Додати результат", "ar": "إضافة نتيجة",
+    "hi": "परिणाम जोड़ें", "bn": "ফলাফল যোগ করুন", "mr": "निकाल जोडा", "ta": "முடிவைச் சேர்",
+    "te": "ఫలితం జోడించండి", "ur": "نتیجہ شامل کریں", "sw": "Ongeza tokeo"
+  },
+  "g_pred_deadline": {
+    "en": "Deadline", "zh_TW": "截止", "ja": "締切", "ko": "마감", "es_ES": "Plazo",
+    "fr": "Échéance", "de": "Frist", "ru": "Срок", "pt": "Prazo", "pt_BR": "Prazo",
+    "it": "Scadenza", "tr": "Son tarih", "vi": "Hạn chót", "id": "Batas waktu", "pl": "Termin",
+    "cs": "Termín", "uk": "Дедлайн", "ar": "الموعد النهائي", "hi": "समय सीमा", "bn": "সময়সীমা",
+    "mr": "अंतिम मुदत", "ta": "காலக்கெடு", "te": "గడువు", "ur": "آخری تاریخ", "sw": "Tarehe ya mwisho"
+  },
+  "g_pred_unlimited": {
+    "en": "Unlimited (manual close)", "zh_TW": "不限（手動停盤）", "ja": "無制限（手動で締切）",
+    "ko": "무제한 (수동 마감)", "es_ES": "Sin límite (cierre manual)", "fr": "Illimité (clôture manuelle)",
+    "de": "Unbegrenzt (manuell schließen)", "ru": "Без лимита (закрыть вручную)",
+    "pt": "Sem limite (fecho manual)", "pt_BR": "Sem limite (fechamento manual)",
+    "it": "Illimitato (chiusura manuale)", "tr": "Sınırsız (elle kapat)",
+    "vi": "Không giới hạn (đóng thủ công)", "id": "Tanpa batas (tutup manual)",
+    "pl": "Bez limitu (ręczne zamknięcie)", "cs": "Bez limitu (ruční uzavření)",
+    "uk": "Без обмежень (закрити вручну)", "ar": "غير محدود (إغلاق يدوي)",
+    "hi": "असीमित (मैनुअल बंद)", "bn": "সীমাহীন (ম্যানুয়াল বন্ধ)", "mr": "अमर्यादित (स्वहस्ते बंद)",
+    "ta": "வரம்பற்ற (கைமுறை மூடல்)", "te": "అపరిమితం (మాన్యువల్‌గా మూసివేత)",
+    "ur": "لامحدود (دستی بندش)", "sw": "Bila kikomo (funga mwenyewe)"
+  },
+  "g_pred_minutes": {
+    "en": "{n} min", "zh_TW": "{n} 分鐘", "ja": "{n} 分", "ko": "{n}분", "es_ES": "{n} min",
+    "fr": "{n} min", "de": "{n} Min.", "ru": "{n} мин", "pt": "{n} min", "pt_BR": "{n} min",
+    "it": "{n} min", "tr": "{n} dk", "vi": "{n} phút", "id": "{n} mnt", "pl": "{n} min",
+    "cs": "{n} min", "uk": "{n} хв", "ar": "{n} دقيقة", "hi": "{n} मिनट", "bn": "{n} মিনিট",
+    "mr": "{n} मिनिटे", "ta": "{n} நிமிடம்", "te": "{n} నిమి", "ur": "{n} منٹ", "sw": "dakika {n}"
+  },
+  "g_pred_creating": {
+    "en": "Creating…", "zh_TW": "建立中…", "ja": "作成中…", "ko": "생성 중…", "es_ES": "Creando…",
+    "fr": "Création…", "de": "Wird erstellt…", "ru": "Создание…", "pt": "Criando…",
+    "pt_BR": "Criando…", "it": "Creazione…", "tr": "Oluşturuluyor…", "vi": "Đang tạo…",
+    "id": "Membuat…", "pl": "Tworzenie…", "cs": "Vytváření…", "uk": "Створення…",
+    "ar": "جارٍ الإنشاء…", "hi": "बना रहे हैं…", "bn": "তৈরি হচ্ছে…", "mr": "तयार करत आहे…",
+    "ta": "உருவாக்குகிறது…", "te": "సృష్టిస్తోంది…", "ur": "بنایا جا رہا ہے…", "sw": "Inaunda…"
+  },
+  "g_pred_publish": {
+    "en": "Publish", "zh_TW": "發布預測", "ja": "予測を公開", "ko": "예측 게시", "es_ES": "Publicar",
+    "fr": "Publier", "de": "Veröffentlichen", "ru": "Опубликовать", "pt": "Publicar",
+    "pt_BR": "Publicar", "it": "Pubblica", "tr": "Yayınla", "vi": "Đăng", "id": "Terbitkan",
+    "pl": "Opublikuj", "cs": "Zveřejnit", "uk": "Опублікувати", "ar": "نشر", "hi": "प्रकाशित करें",
+    "bn": "প্রকাশ করুন", "mr": "प्रकाशित करा", "ta": "வெளியிடு", "te": "ప్రచురించు",
+    "ur": "شائع کریں", "sw": "Chapisha"
+  },
+  "g_pred_err_question": {
+    "en": "Please enter a question", "zh_TW": "請填寫預測問題", "ja": "質問を入力してください",
+    "ko": "질문을 입력하세요", "es_ES": "Introduce una pregunta", "fr": "Veuillez saisir une question",
+    "de": "Bitte eine Frage eingeben", "ru": "Введите вопрос", "pt": "Insira uma pergunta",
+    "pt_BR": "Insira uma pergunta", "it": "Inserisci una domanda", "tr": "Lütfen bir soru girin",
+    "vi": "Vui lòng nhập câu hỏi", "id": "Masukkan pertanyaan", "pl": "Wprowadź pytanie",
+    "cs": "Zadejte otázku", "uk": "Введіть запитання", "ar": "الرجاء إدخال سؤال",
+    "hi": "कृपया प्रश्न दर्ज करें", "bn": "একটি প্রশ্ন লিখুন", "mr": "कृपया प्रश्न प्रविष्ट करा",
+    "ta": "கேள்வியை உள்ளிடவும்", "te": "దయచేసి ప్రశ్న నమోదు చేయండి", "ur": "براہ کرم سوال درج کریں",
+    "sw": "Tafadhali andika swali"
+  },
+  "g_pred_err_outcomes": {
+    "en": "At least two valid outcomes", "zh_TW": "至少兩個有效結果", "ja": "有効な結果が2つ以上必要です",
+    "ko": "유효한 결과가 2개 이상 필요합니다", "es_ES": "Al menos dos resultados válidos",
+    "fr": "Au moins deux résultats valides", "de": "Mindestens zwei gültige Ergebnisse",
+    "ru": "Минимум два допустимых исхода", "pt": "Pelo menos dois resultados válidos",
+    "pt_BR": "Pelo menos dois resultados válidos", "it": "Almeno due esiti validi",
+    "tr": "En az iki geçerli sonuç", "vi": "Cần ít nhất hai kết quả hợp lệ",
+    "id": "Minimal dua hasil valid", "pl": "Co najmniej dwa poprawne wyniki",
+    "cs": "Alespoň dva platné výsledky", "uk": "Щонайменше два дійсні результати",
+    "ar": "نتيجتان صالحتان على الأقل", "hi": "कम से कम दो मान्य परिणाम",
+    "bn": "অন্তত দুটি বৈধ ফলাফল", "mr": "किमान दोन वैध निकाल",
+    "ta": "குறைந்தது இரண்டு செல்லுபடியான முடிவுகள்", "te": "కనీసం రెండు చెల్లుబాటు ఫలితాలు",
+    "ur": "کم از کم دو درست نتائج", "sw": "Angalau matokeo mawili sahihi"
+  },
+  "g_pred_yes": {
+    "en": "Yes", "zh_TW": "是", "ja": "はい", "ko": "예", "es_ES": "Sí", "fr": "Oui", "de": "Ja",
+    "ru": "Да", "pt": "Sim", "pt_BR": "Sim", "it": "Sì", "tr": "Evet", "vi": "Có", "id": "Ya",
+    "pl": "Tak", "cs": "Ano", "uk": "Так", "ar": "نعم", "hi": "हाँ", "bn": "হ্যাঁ", "mr": "होय",
+    "ta": "ஆம்", "te": "అవును", "ur": "ہاں", "sw": "Ndiyo"
+  },
+  "g_pred_no": {
+    "en": "No", "zh_TW": "否", "ja": "いいえ", "ko": "아니오", "es_ES": "No", "fr": "Non", "de": "Nein",
+    "ru": "Нет", "pt": "Não", "pt_BR": "Não", "it": "No", "tr": "Hayır", "vi": "Không", "id": "Tidak",
+    "pl": "Nie", "cs": "Ne", "uk": "Ні", "ar": "لا", "hi": "नहीं", "bn": "না", "mr": "नाही",
+    "ta": "இல்லை", "te": "కాదు", "ur": "نہیں", "sw": "Hapana"
+  }
+}

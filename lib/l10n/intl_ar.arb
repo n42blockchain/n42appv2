@@ -1367,5 +1367,19 @@
   "g_google_auth_key5": "مطلوب Google Authenticator لتأكيد كل تحويل.",
   "g_google_auth_key6": "رمز غير صحيح، يرجى المحاولة مرة أخرى",
   "g_google_auth_key7": "لم يتم تكوين Google Authenticator",
-  "g_google_auth_key8": "تم الربط بنجاح"
+  "g_google_auth_key8": "تم الربط بنجاح",
+  "g_pred_create_title": "بدء التوقع",
+  "g_pred_q_hint": "سؤال التوقع، مثل: من يفوز بهذه الجولة؟",
+  "g_pred_outcomes": "النتائج",
+  "g_pred_outcome_n": "النتيجة {n}",
+  "g_pred_add_outcome": "إضافة نتيجة",
+  "g_pred_deadline": "الموعد النهائي",
+  "g_pred_unlimited": "غير محدود (إغلاق يدوي)",
+  "g_pred_minutes": "{n} دقيقة",
+  "g_pred_creating": "جارٍ الإنشاء…",
+  "g_pred_publish": "نشر",
+  "g_pred_err_question": "الرجاء إدخال سؤال",
+  "g_pred_err_outcomes": "نتيجتان صالحتان على الأقل",
+  "g_pred_yes": "نعم",
+  "g_pred_no": "لا"
 }

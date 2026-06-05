@@ -1367,5 +1367,19 @@
   "g_google_auth_key5": "Для підтвердження переказу потрібен Google Authenticator.",
   "g_google_auth_key6": "Невірний код, спробуйте ще раз",
   "g_google_auth_key7": "Google Authenticator не налаштовано",
-  "g_google_auth_key8": "Прив'язка успішна"
+  "g_google_auth_key8": "Прив'язка успішна",
+  "g_pred_create_title": "Почати прогноз",
+  "g_pred_q_hint": "Питання прогнозу, напр.: Хто виграє цей раунд?",
+  "g_pred_outcomes": "Результати",
+  "g_pred_outcome_n": "Результат {n}",
+  "g_pred_add_outcome": "Додати результат",
+  "g_pred_deadline": "Дедлайн",
+  "g_pred_unlimited": "Без обмежень (закрити вручну)",
+  "g_pred_minutes": "{n} хв",
+  "g_pred_creating": "Створення…",
+  "g_pred_publish": "Опублікувати",
+  "g_pred_err_question": "Введіть запитання",
+  "g_pred_err_outcomes": "Щонайменше два дійсні результати",
+  "g_pred_yes": "Так",
+  "g_pred_no": "Ні"
 }

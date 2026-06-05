@@ -147,24 +147,28 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m53(value) => "Deve ter ${value} caracteres";
 
-  static String m54(value) => "Saldo insuficiente de ${value}.";
+  static String m54(n) => "${n} min";
 
-  static String m55(value) => "${value} a caminho...";
+  static String m55(n) => "Resultado ${n}";
 
-  static String m56(value) =>
+  static String m56(value) => "Saldo insuficiente de ${value}.";
+
+  static String m57(value) => "${value} a caminho...";
+
+  static String m58(value) =>
       "${value} trocados no app serão distribuídos em breve para sua carteira e não podem ser vendidos por este processo. Pode ser usado para executar um nó.";
 
-  static String m57(value) => "Máximo de ${value} caracteres";
+  static String m59(value) => "Máximo de ${value} caracteres";
 
-  static String m58(value) => "A rede ${value} já é suportada pelo APP!";
+  static String m60(value) => "A rede ${value} já é suportada pelo APP!";
 
-  static String m59(value) =>
+  static String m61(value) =>
       "A rede ${value} já é suportada pelo APP, deseja adicioná-la?";
 
-  static String m60(value) =>
+  static String m62(value) =>
       "Falha no teste de conexão do endereço da rede ${value}!";
 
-  static String m61(value) => "0~${value} caracteres";
+  static String m63(value) => "0~${value} caracteres";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -2625,6 +2629,32 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_portfolio_pie_total": MessageLookupByLibrary.simpleMessage("Total"),
     "g_portfolio_title": MessageLookupByLibrary.simpleMessage("Portfólio"),
     "g_portfolio_total": MessageLookupByLibrary.simpleMessage("Valor total"),
+    "g_pred_add_outcome": MessageLookupByLibrary.simpleMessage(
+      "Adicionar resultado",
+    ),
+    "g_pred_create_title": MessageLookupByLibrary.simpleMessage(
+      "Iniciar previsão",
+    ),
+    "g_pred_creating": MessageLookupByLibrary.simpleMessage("Criando…"),
+    "g_pred_deadline": MessageLookupByLibrary.simpleMessage("Prazo"),
+    "g_pred_err_outcomes": MessageLookupByLibrary.simpleMessage(
+      "Pelo menos dois resultados válidos",
+    ),
+    "g_pred_err_question": MessageLookupByLibrary.simpleMessage(
+      "Insira uma pergunta",
+    ),
+    "g_pred_minutes": m54,
+    "g_pred_no": MessageLookupByLibrary.simpleMessage("Não"),
+    "g_pred_outcome_n": m55,
+    "g_pred_outcomes": MessageLookupByLibrary.simpleMessage("Resultados"),
+    "g_pred_publish": MessageLookupByLibrary.simpleMessage("Publicar"),
+    "g_pred_q_hint": MessageLookupByLibrary.simpleMessage(
+      "Pergunta de previsão, ex.: Quem vence esta rodada?",
+    ),
+    "g_pred_unlimited": MessageLookupByLibrary.simpleMessage(
+      "Sem limite (fechamento manual)",
+    ),
+    "g_pred_yes": MessageLookupByLibrary.simpleMessage("Sim"),
     "g_referral_downloaded": MessageLookupByLibrary.simpleMessage("Baixado"),
     "g_referral_invite_code": MessageLookupByLibrary.simpleMessage(
       "Código de convite",
@@ -2655,7 +2685,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_share_v3_key_6": MessageLookupByLibrary.simpleMessage("Indicar via"),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("Ligação"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("código"),
-    "g_swap_key_14": m54,
+    "g_swap_key_14": m56,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "Erro ao obter preço da moeda.",
     ),
@@ -2669,7 +2699,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "Sua troca será distribuída em breve. Por favor, aguarde.",
     ),
-    "g_swap_key_20": m55,
+    "g_swap_key_20": m57,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "Custos para executar um nó: Verificação em Grupo 1-49 N Nó Básico: 50 N Nó Premium: 100 N Nó Pro: 500 N.",
     ),
@@ -2683,7 +2713,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("Novo Saldo"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("Você paga"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("Data"),
-    "g_swap_key_31": m56,
+    "g_swap_key_31": m58,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "Trocas podem ser visualizadas nos exploradores de blockchain relevantes (Etherscan, BscScan, TRONSCAN e o nosso próprio).",
     ),
@@ -2698,7 +2728,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "Redefinir para o padrão",
     ),
-    "g_token_m_key_1": m57,
+    "g_token_m_key_1": m59,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "Qualquer pessoa pode criar um token, incluindo versões falsas de tokens existentes. Sempre pesquise um token antes de importá-lo.",
     ),
@@ -2719,9 +2749,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage(
       "Erro de Formato!",
     ),
-    "g_token_m_key_22": m58,
-    "g_token_m_key_23": m59,
-    "g_token_m_key_24": m60,
+    "g_token_m_key_22": m60,
+    "g_token_m_key_23": m61,
+    "g_token_m_key_24": m62,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("Importar tokens"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("Todas as redes"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage(
@@ -2774,7 +2804,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_email": MessageLookupByLibrary.simpleMessage("E-mail"),
     "login_password": MessageLookupByLibrary.simpleMessage("Senha"),
     "next": MessageLookupByLibrary.simpleMessage("Próximo"),
-    "nicknameMessage": m61,
+    "nicknameMessage": m63,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "Editar Perfil",
     ),

@@ -1374,5 +1374,19 @@
   "g_google_auth_key5": "Yêu cầu Google Authenticator để xác nhận mỗi giao dịch.",
   "g_google_auth_key6": "Mã không đúng, vui lòng thử lại",
   "g_google_auth_key7": "Chưa cấu hình Google Authenticator",
-  "g_google_auth_key8": "Liên kết thành công"
+  "g_google_auth_key8": "Liên kết thành công",
+  "g_pred_create_title": "Bắt đầu dự đoán",
+  "g_pred_q_hint": "Câu hỏi dự đoán, ví dụ: Ai thắng ván này?",
+  "g_pred_outcomes": "Kết quả",
+  "g_pred_outcome_n": "Kết quả {n}",
+  "g_pred_add_outcome": "Thêm kết quả",
+  "g_pred_deadline": "Hạn chót",
+  "g_pred_unlimited": "Không giới hạn (đóng thủ công)",
+  "g_pred_minutes": "{n} phút",
+  "g_pred_creating": "Đang tạo…",
+  "g_pred_publish": "Đăng",
+  "g_pred_err_question": "Vui lòng nhập câu hỏi",
+  "g_pred_err_outcomes": "Cần ít nhất hai kết quả hợp lệ",
+  "g_pred_yes": "Có",
+  "g_pred_no": "Không"
 }

@@ -1367,5 +1367,19 @@
   "g_google_auth_key5": "ప్రతి బదిలీని నిర్ధారించడానికి Google Authenticator అవసరం.",
   "g_google_auth_key6": "తప్పు కోడ్, మళ్లీ ప్రయత్నించండి",
   "g_google_auth_key7": "Google Authenticator కాన్ఫిగర్ చేయబడలేదు",
-  "g_google_auth_key8": "బైండింగ్ విజయవంతమైంది"
+  "g_google_auth_key8": "బైండింగ్ విజయవంతమైంది",
+  "g_pred_create_title": "అంచనా ప్రారంభించండి",
+  "g_pred_q_hint": "అంచనా ప్రశ్న, ఉదా.: ఈ రౌండ్‌లో ఎవరు గెలుస్తారు?",
+  "g_pred_outcomes": "ఫలితాలు",
+  "g_pred_outcome_n": "ఫలితం {n}",
+  "g_pred_add_outcome": "ఫలితం జోడించండి",
+  "g_pred_deadline": "గడువు",
+  "g_pred_unlimited": "అపరిమితం (మాన్యువల్‌గా మూసివేత)",
+  "g_pred_minutes": "{n} నిమి",
+  "g_pred_creating": "సృష్టిస్తోంది…",
+  "g_pred_publish": "ప్రచురించు",
+  "g_pred_err_question": "దయచేసి ప్రశ్న నమోదు చేయండి",
+  "g_pred_err_outcomes": "కనీసం రెండు చెల్లుబాటు ఫలితాలు",
+  "g_pred_yes": "అవును",
+  "g_pred_no": "కాదు"
 }

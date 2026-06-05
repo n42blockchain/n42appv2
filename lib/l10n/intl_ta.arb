@@ -1367,5 +1367,19 @@
   "g_google_auth_key5": "ஒவ்வொரு பரிமாற்றத்தையும் உறுதிப்படுத்த Google Authenticator தேவை.",
   "g_google_auth_key6": "தவறான குறியீடு, மீண்டும் முயற்சிக்கவும்",
   "g_google_auth_key7": "Google Authenticator உள்ளமைக்கப்படவில்லை",
-  "g_google_auth_key8": "பிணைப்பு வெற்றிகரமாக முடிந்தது"
+  "g_google_auth_key8": "பிணைப்பு வெற்றிகரமாக முடிந்தது",
+  "g_pred_create_title": "கணிப்பைத் தொடங்கு",
+  "g_pred_q_hint": "கணிப்பு கேள்வி, எ.கா.: இந்த சுற்றில் யார் வெல்வார்?",
+  "g_pred_outcomes": "முடிவுகள்",
+  "g_pred_outcome_n": "முடிவு {n}",
+  "g_pred_add_outcome": "முடிவைச் சேர்",
+  "g_pred_deadline": "காலக்கெடு",
+  "g_pred_unlimited": "வரம்பற்ற (கைமுறை மூடல்)",
+  "g_pred_minutes": "{n} நிமிடம்",
+  "g_pred_creating": "உருவாக்குகிறது…",
+  "g_pred_publish": "வெளியிடு",
+  "g_pred_err_question": "கேள்வியை உள்ளிடவும்",
+  "g_pred_err_outcomes": "குறைந்தது இரண்டு செல்லுபடியான முடிவுகள்",
+  "g_pred_yes": "ஆம்",
+  "g_pred_no": "இல்லை"
 }

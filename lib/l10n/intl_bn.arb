@@ -1367,5 +1367,19 @@
   "g_google_auth_key5": "প্রতিটি ট্রান্সফার নিশ্চিত করতে Google Authenticator প্রয়োজন।",
   "g_google_auth_key6": "ভুল কোড, আবার চেষ্টা করুন",
   "g_google_auth_key7": "Google Authenticator কনফিগার করা হয়নি",
-  "g_google_auth_key8": "সংযোগ সফল"
+  "g_google_auth_key8": "সংযোগ সফল",
+  "g_pred_create_title": "ভবিষ্যদ্বাণী শুরু করুন",
+  "g_pred_q_hint": "ভবিষ্যদ্বাণীর প্রশ্ন, যেমন: এই রাউন্ডে কে জিতবে?",
+  "g_pred_outcomes": "ফলাফল",
+  "g_pred_outcome_n": "ফলাফল {n}",
+  "g_pred_add_outcome": "ফলাফল যোগ করুন",
+  "g_pred_deadline": "সময়সীমা",
+  "g_pred_unlimited": "সীমাহীন (ম্যানুয়াল বন্ধ)",
+  "g_pred_minutes": "{n} মিনিট",
+  "g_pred_creating": "তৈরি হচ্ছে…",
+  "g_pred_publish": "প্রকাশ করুন",
+  "g_pred_err_question": "একটি প্রশ্ন লিখুন",
+  "g_pred_err_outcomes": "অন্তত দুটি বৈধ ফলাফল",
+  "g_pred_yes": "হ্যাঁ",
+  "g_pred_no": "না"
 }

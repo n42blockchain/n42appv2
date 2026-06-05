@@ -1367,5 +1367,19 @@
   "g_google_auth_key5": "प्रत्येक ट्रांसफर की पुष्टि के लिए Google Authenticator आवश्यक है।",
   "g_google_auth_key6": "गलत कोड, पुनः प्रयास करें",
   "g_google_auth_key7": "Google Authenticator कॉन्फ़िगर नहीं है",
-  "g_google_auth_key8": "बाइंडिंग सफल"
+  "g_google_auth_key8": "बाइंडिंग सफल",
+  "g_pred_create_title": "भविष्यवाणी शुरू करें",
+  "g_pred_q_hint": "भविष्यवाणी प्रश्न, जैसे: इस दौर में कौन जीतेगा?",
+  "g_pred_outcomes": "परिणाम",
+  "g_pred_outcome_n": "परिणाम {n}",
+  "g_pred_add_outcome": "परिणाम जोड़ें",
+  "g_pred_deadline": "समय सीमा",
+  "g_pred_unlimited": "असीमित (मैनुअल बंद)",
+  "g_pred_minutes": "{n} मिनट",
+  "g_pred_creating": "बना रहे हैं…",
+  "g_pred_publish": "प्रकाशित करें",
+  "g_pred_err_question": "कृपया प्रश्न दर्ज करें",
+  "g_pred_err_outcomes": "कम से कम दो मान्य परिणाम",
+  "g_pred_yes": "हाँ",
+  "g_pred_no": "नहीं"
 }

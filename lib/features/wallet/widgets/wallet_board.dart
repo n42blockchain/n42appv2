@@ -205,7 +205,11 @@ class _WalletBoardState extends State<WalletBoard> {
         widget.receiveTap,
       ),
       SizedBox(width: AppSpacing.space8),
-      _buildActionBtn('购买', 'assets/wallet/w_buy.png', widget.buyTap),
+      _buildActionBtn(
+        S.of(context).g_iap_title,
+        'assets/wallet/w_buy.png',
+        widget.buyTap,
+      ),
     ];
     return buttons;
   }

@@ -144,23 +144,27 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m53(value) => "Phải có ${value} ký tự";
 
-  static String m54(value) => "${value} Số dư không đủ.";
+  static String m54(n) => "${n} phút";
 
-  static String m55(value) => "${value} đang đến...";
+  static String m55(n) => "Kết quả ${n}";
 
-  static String m56(value) =>
+  static String m56(value) => "${value} Số dư không đủ.";
+
+  static String m57(value) => "${value} đang đến...";
+
+  static String m58(value) =>
       "${value} hoán đổi trong ứng dụng sẽ được phân phối đến ví của bạn trong thời gian ngắn và không thể bán qua quy trình này. Có thể sử dụng để vận hành node.";
 
-  static String m57(value) => "Tối đa ${value} ký tự";
+  static String m59(value) => "Tối đa ${value} ký tự";
 
-  static String m58(value) => "Ứng dụng đã hỗ trợ chuỗi ${value}!";
+  static String m60(value) => "Ứng dụng đã hỗ trợ chuỗi ${value}!";
 
-  static String m59(value) =>
+  static String m61(value) =>
       "Ứng dụng đã hỗ trợ chuỗi ${value}, bạn có muốn thêm không?";
 
-  static String m60(value) => "Kết nối thử nghiệm địa chỉ ${value} thất bại!";
+  static String m62(value) => "Kết nối thử nghiệm địa chỉ ${value} thất bại!";
 
-  static String m61(value) => "0~${value} ký tự";
+  static String m63(value) => "0~${value} ký tự";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -2511,6 +2515,30 @@ class MessageLookup extends MessageLookupByLibrary {
       "danh mục đầu tư",
     ),
     "g_portfolio_total": MessageLookupByLibrary.simpleMessage("Tổng giá trị"),
+    "g_pred_add_outcome": MessageLookupByLibrary.simpleMessage("Thêm kết quả"),
+    "g_pred_create_title": MessageLookupByLibrary.simpleMessage(
+      "Bắt đầu dự đoán",
+    ),
+    "g_pred_creating": MessageLookupByLibrary.simpleMessage("Đang tạo…"),
+    "g_pred_deadline": MessageLookupByLibrary.simpleMessage("Hạn chót"),
+    "g_pred_err_outcomes": MessageLookupByLibrary.simpleMessage(
+      "Cần ít nhất hai kết quả hợp lệ",
+    ),
+    "g_pred_err_question": MessageLookupByLibrary.simpleMessage(
+      "Vui lòng nhập câu hỏi",
+    ),
+    "g_pred_minutes": m54,
+    "g_pred_no": MessageLookupByLibrary.simpleMessage("Không"),
+    "g_pred_outcome_n": m55,
+    "g_pred_outcomes": MessageLookupByLibrary.simpleMessage("Kết quả"),
+    "g_pred_publish": MessageLookupByLibrary.simpleMessage("Đăng"),
+    "g_pred_q_hint": MessageLookupByLibrary.simpleMessage(
+      "Câu hỏi dự đoán, ví dụ: Ai thắng ván này?",
+    ),
+    "g_pred_unlimited": MessageLookupByLibrary.simpleMessage(
+      "Không giới hạn (đóng thủ công)",
+    ),
+    "g_pred_yes": MessageLookupByLibrary.simpleMessage("Có"),
     "g_referral_downloaded": MessageLookupByLibrary.simpleMessage("Đã tải"),
     "g_referral_invite_code": MessageLookupByLibrary.simpleMessage("Mã mời"),
     "g_referral_invited": MessageLookupByLibrary.simpleMessage("Đã mời"),
@@ -2541,7 +2569,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_share_v3_key_6": MessageLookupByLibrary.simpleMessage("Giới thiệu qua"),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("Liên kết"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("mã"),
-    "g_swap_key_14": m54,
+    "g_swap_key_14": m56,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage("Lỗi lấy giá coin."),
     "g_swap_key_16": MessageLookupByLibrary.simpleMessage(
       "Bằng việc tiếp tục, bạn đồng ý với ",
@@ -2553,7 +2581,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "Giao dịch hoán đổi của bạn sẽ được phân phối trong thời gian ngắn. Vui lòng kiên nhẫn.",
     ),
-    "g_swap_key_20": m55,
+    "g_swap_key_20": m57,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "Chi phí vận hành node: Xác minh nhóm 1-49 N Node cơ bản: 50 N Node cao cấp: 100 N Node Pro: 500 N.",
     ),
@@ -2567,7 +2595,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("Số dư mới"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("Bạn trả"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("Ngày"),
-    "g_swap_key_31": m56,
+    "g_swap_key_31": m58,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "Các giao dịch hoán đổi có thể xem trên các trình duyệt chuỗi liên quan (Etherscan, BscScan, TRONSCAN và của chúng tôi).",
     ),
@@ -2580,7 +2608,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "Đặt lại về mặc định",
     ),
-    "g_token_m_key_1": m57,
+    "g_token_m_key_1": m59,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "Bất kỳ ai cũng có thể tạo token, bao gồm cả việc tạo phiên bản giả của token hiện có. Luôn nghiên cứu token trước khi nhập.",
     ),
@@ -2597,9 +2625,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_2": MessageLookupByLibrary.simpleMessage("0~18 đơn vị"),
     "g_token_m_key_20": MessageLookupByLibrary.simpleMessage("Thêm token"),
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage("Lỗi định dạng!"),
-    "g_token_m_key_22": m58,
-    "g_token_m_key_23": m59,
-    "g_token_m_key_24": m60,
+    "g_token_m_key_22": m60,
+    "g_token_m_key_23": m61,
+    "g_token_m_key_24": m62,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("Nhập token"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("Tất cả mạng"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage("Token tùy chỉnh"),
@@ -2648,7 +2676,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_email": MessageLookupByLibrary.simpleMessage("E-mail"),
     "login_password": MessageLookupByLibrary.simpleMessage("Mật khẩu"),
     "next": MessageLookupByLibrary.simpleMessage("Tiếp theo"),
-    "nicknameMessage": m61,
+    "nicknameMessage": m63,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "Chỉnh sửa hồ sơ",
     ),

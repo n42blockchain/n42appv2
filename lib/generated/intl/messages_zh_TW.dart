@@ -135,22 +135,26 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m53(value) => "必須是 ${value} 個字符";
 
-  static String m54(value) => "${value} 餘額不足。";
+  static String m54(n) => "${n} 分鐘";
 
-  static String m55(value) => "${value} 即將轉入...";
+  static String m55(n) => "結果 ${n}";
 
-  static String m56(value) =>
+  static String m56(value) => "${value} 餘額不足。";
+
+  static String m57(value) => "${value} 即將轉入...";
+
+  static String m58(value) =>
       "在 App 內兌換的 ${value} 將很快發放到您的錢包，且無法透過此流程出售。它可用於運行節點。";
 
-  static String m57(value) => "最大 ${value} 個字符";
+  static String m59(value) => "最大 ${value} 個字符";
 
-  static String m58(value) => "已支援${value}鏈APP！";
+  static String m60(value) => "已支援${value}鏈APP！";
 
-  static String m59(value) => "已支援${value}鏈APP，是否要新增？";
+  static String m61(value) => "已支援${value}鏈APP，是否要新增？";
 
-  static String m60(value) => "${value}地址測試連結失敗！";
+  static String m62(value) => "${value}地址測試連結失敗！";
 
-  static String m61(value) => "0~${value} 個字符";
+  static String m63(value) => "0~${value} 個字符";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -1726,6 +1730,20 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_portfolio_pie_total": MessageLookupByLibrary.simpleMessage("全部的"),
     "g_portfolio_title": MessageLookupByLibrary.simpleMessage("資料夾"),
     "g_portfolio_total": MessageLookupByLibrary.simpleMessage("總價值"),
+    "g_pred_add_outcome": MessageLookupByLibrary.simpleMessage("新增結果"),
+    "g_pred_create_title": MessageLookupByLibrary.simpleMessage("開啟預測"),
+    "g_pred_creating": MessageLookupByLibrary.simpleMessage("建立中…"),
+    "g_pred_deadline": MessageLookupByLibrary.simpleMessage("截止"),
+    "g_pred_err_outcomes": MessageLookupByLibrary.simpleMessage("至少兩個有效結果"),
+    "g_pred_err_question": MessageLookupByLibrary.simpleMessage("請填寫預測問題"),
+    "g_pred_minutes": m54,
+    "g_pred_no": MessageLookupByLibrary.simpleMessage("否"),
+    "g_pred_outcome_n": m55,
+    "g_pred_outcomes": MessageLookupByLibrary.simpleMessage("結果選項"),
+    "g_pred_publish": MessageLookupByLibrary.simpleMessage("發布預測"),
+    "g_pred_q_hint": MessageLookupByLibrary.simpleMessage("預測問題，例如：本局誰贏？"),
+    "g_pred_unlimited": MessageLookupByLibrary.simpleMessage("不限（手動停盤）"),
+    "g_pred_yes": MessageLookupByLibrary.simpleMessage("是"),
     "g_referral_downloaded": MessageLookupByLibrary.simpleMessage("已下載"),
     "g_referral_invite_code": MessageLookupByLibrary.simpleMessage("邀請碼"),
     "g_referral_invited": MessageLookupByLibrary.simpleMessage("受邀"),
@@ -1744,13 +1762,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_share_v3_key_6": MessageLookupByLibrary.simpleMessage("參考透過"),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("關聯"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("代碼"),
-    "g_swap_key_14": m54,
+    "g_swap_key_14": m56,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage("取得幣價錯誤。"),
     "g_swap_key_16": MessageLookupByLibrary.simpleMessage("繼續操作即表示您同意以下內容"),
     "g_swap_key_17": MessageLookupByLibrary.simpleMessage("條款與條件。"),
     "g_swap_key_18": MessageLookupByLibrary.simpleMessage("完成"),
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage("您的兌換將很快發放，請耐心等待。"),
-    "g_swap_key_20": m55,
+    "g_swap_key_20": m57,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "運行節點的成本：群組驗證 1-49 N 基本節點：50 N 高階節點：100 N 專業節點：500 N。",
     ),
@@ -1762,7 +1780,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("新餘額"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("你支付"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("日期"),
-    "g_swap_key_31": m56,
+    "g_swap_key_31": m58,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "兌換可在相應鏈的區塊瀏覽器（Etherscan、BscScan、TRONSCAN 及我們自己的瀏覽器）中查看。",
     ),
@@ -1773,7 +1791,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_6": MessageLookupByLibrary.simpleMessage("再試一次"),
     "g_theme_accent_color": MessageLookupByLibrary.simpleMessage("強調色"),
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage("重設為預設值"),
-    "g_token_m_key_1": m57,
+    "g_token_m_key_1": m59,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "任何人都可以建立代幣，包括冒充現有代幣的假代幣。匯入前請務必自行做好研究。",
     ),
@@ -1788,9 +1806,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_2": MessageLookupByLibrary.simpleMessage("0~18個單位"),
     "g_token_m_key_20": MessageLookupByLibrary.simpleMessage("添加代幣"),
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage("格式錯誤！"),
-    "g_token_m_key_22": m58,
-    "g_token_m_key_23": m59,
-    "g_token_m_key_24": m60,
+    "g_token_m_key_22": m60,
+    "g_token_m_key_23": m61,
+    "g_token_m_key_24": m62,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("匯入代幣"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("所有網路"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage("自訂代幣"),
@@ -1823,7 +1841,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_email": MessageLookupByLibrary.simpleMessage("電子郵件"),
     "login_password": MessageLookupByLibrary.simpleMessage("密碼"),
     "next": MessageLookupByLibrary.simpleMessage("下一個"),
-    "nicknameMessage": m61,
+    "nicknameMessage": m63,
     "personalInformation": MessageLookupByLibrary.simpleMessage("編輯個人資料"),
     "photograph": MessageLookupByLibrary.simpleMessage("照片"),
     "please_input_address": MessageLookupByLibrary.simpleMessage("請輸入地址"),

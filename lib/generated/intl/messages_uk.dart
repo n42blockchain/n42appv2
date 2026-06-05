@@ -147,23 +147,27 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m53(value) => "Має бути ${value} символів";
 
-  static String m54(value) => "${value} Недостатній баланс.";
+  static String m54(n) => "${n} хв";
 
-  static String m55(value) => "${value} вхідний...";
+  static String m55(n) => "Результат ${n}";
 
-  static String m56(value) =>
+  static String m56(value) => "${value} Недостатній баланс.";
+
+  static String m57(value) => "${value} вхідний...";
+
+  static String m58(value) =>
       "${value}, замінений у додатку, незабаром буде розповсюджений у ваш гаманець і не може бути проданий через цей процес. Його можна використовувати для запуску вузла.";
 
-  static String m57(value) => "Максимальна кількість символів: ${value}";
+  static String m59(value) => "Максимальна кількість символів: ${value}";
 
-  static String m58(value) => "${value} chain APP вже підтримується!";
+  static String m60(value) => "${value} chain APP вже підтримується!";
 
-  static String m59(value) =>
+  static String m61(value) =>
       "${value} chain APP уже підтримується, хочете додати?";
 
-  static String m60(value) => "Помилка перевірки адреси ${value}!";
+  static String m62(value) => "Помилка перевірки адреси ${value}!";
 
-  static String m61(value) => "0~${value} символів";
+  static String m63(value) => "0~${value} символів";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -2610,6 +2614,32 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_portfolio_total": MessageLookupByLibrary.simpleMessage(
       "Загальна вартість",
     ),
+    "g_pred_add_outcome": MessageLookupByLibrary.simpleMessage(
+      "Додати результат",
+    ),
+    "g_pred_create_title": MessageLookupByLibrary.simpleMessage(
+      "Почати прогноз",
+    ),
+    "g_pred_creating": MessageLookupByLibrary.simpleMessage("Створення…"),
+    "g_pred_deadline": MessageLookupByLibrary.simpleMessage("Дедлайн"),
+    "g_pred_err_outcomes": MessageLookupByLibrary.simpleMessage(
+      "Щонайменше два дійсні результати",
+    ),
+    "g_pred_err_question": MessageLookupByLibrary.simpleMessage(
+      "Введіть запитання",
+    ),
+    "g_pred_minutes": m54,
+    "g_pred_no": MessageLookupByLibrary.simpleMessage("Ні"),
+    "g_pred_outcome_n": m55,
+    "g_pred_outcomes": MessageLookupByLibrary.simpleMessage("Результати"),
+    "g_pred_publish": MessageLookupByLibrary.simpleMessage("Опублікувати"),
+    "g_pred_q_hint": MessageLookupByLibrary.simpleMessage(
+      "Питання прогнозу, напр.: Хто виграє цей раунд?",
+    ),
+    "g_pred_unlimited": MessageLookupByLibrary.simpleMessage(
+      "Без обмежень (закрити вручну)",
+    ),
+    "g_pred_yes": MessageLookupByLibrary.simpleMessage("Так"),
     "g_referral_downloaded": MessageLookupByLibrary.simpleMessage(
       "Завантажено",
     ),
@@ -2644,7 +2674,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("Посилання"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("код"),
-    "g_swap_key_14": m54,
+    "g_swap_key_14": m56,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "Отримати помилку ціни монети.",
     ),
@@ -2656,7 +2686,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "Ваш обмін буде розповсюджено незабаром. Будь ласка, будьте терплячі.",
     ),
-    "g_swap_key_20": m55,
+    "g_swap_key_20": m57,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "Витрати на запуск вузла: Групова перевірка 1-49 N Базовий вузол: 50 N Преміум-вузол: 100 N Професійний вузол: 500 N.",
     ),
@@ -2670,7 +2700,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("Новий баланс"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("Ви платите"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("Дата"),
-    "g_swap_key_31": m56,
+    "g_swap_key_31": m58,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "Свопи можна переглянути у відповідних дослідниках ланцюгів (Etherscan, BscScan, TRONSCAN і наш власний).",
     ),
@@ -2687,7 +2717,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "Скинути до замовчування",
     ),
-    "g_token_m_key_1": m57,
+    "g_token_m_key_1": m59,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "Будь-хто може створити маркер, у тому числі створити підроблені версії існуючих маркерів. Завжди досліджуйте токен перед його імпортом.",
     ),
@@ -2706,9 +2736,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage(
       "Помилка формату!",
     ),
-    "g_token_m_key_22": m58,
-    "g_token_m_key_23": m59,
-    "g_token_m_key_24": m60,
+    "g_token_m_key_22": m60,
+    "g_token_m_key_23": m61,
+    "g_token_m_key_24": m62,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("Імпорт жетонів"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("Всі мережі"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage(
@@ -2759,7 +2789,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_email": MessageLookupByLibrary.simpleMessage("Електронна пошта"),
     "login_password": MessageLookupByLibrary.simpleMessage("Пароль"),
     "next": MessageLookupByLibrary.simpleMessage("Далі"),
-    "nicknameMessage": m61,
+    "nicknameMessage": m63,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "Редагувати профіль",
     ),

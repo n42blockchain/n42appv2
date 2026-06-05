@@ -1374,5 +1374,19 @@
   "g_google_auth_key5": "Her transferi onaylamak için Google Authenticator gereklidir.",
   "g_google_auth_key6": "Yanlış kod, lütfen tekrar deneyin",
   "g_google_auth_key7": "Google Authenticator yapılandırılmamış",
-  "g_google_auth_key8": "Bağlama başarılı"
+  "g_google_auth_key8": "Bağlama başarılı",
+  "g_pred_create_title": "Tahmini Başlat",
+  "g_pred_q_hint": "Tahmin sorusu, örn.: Bu turu kim kazanır?",
+  "g_pred_outcomes": "Sonuçlar",
+  "g_pred_outcome_n": "Sonuç {n}",
+  "g_pred_add_outcome": "Sonuç ekle",
+  "g_pred_deadline": "Son tarih",
+  "g_pred_unlimited": "Sınırsız (elle kapat)",
+  "g_pred_minutes": "{n} dk",
+  "g_pred_creating": "Oluşturuluyor…",
+  "g_pred_publish": "Yayınla",
+  "g_pred_err_question": "Lütfen bir soru girin",
+  "g_pred_err_outcomes": "En az iki geçerli sonuç",
+  "g_pred_yes": "Evet",
+  "g_pred_no": "Hayır"
 }

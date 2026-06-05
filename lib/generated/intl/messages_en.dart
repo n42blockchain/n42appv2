@@ -144,23 +144,27 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m53(value) => "Must be ${value} characters";
 
-  static String m54(value) => "${value} Insufficient Balance.";
+  static String m54(n) => "${n} min";
 
-  static String m55(value) => "${value} incoming...";
+  static String m55(n) => "Outcome ${n}";
 
-  static String m56(value) =>
+  static String m56(value) => "${value} Insufficient Balance.";
+
+  static String m57(value) => "${value} incoming...";
+
+  static String m58(value) =>
       "${value} swapped in-app will be distributed shortly to your wallet and cannot be sold via this process. It can be used to run a node.";
 
-  static String m57(value) => "Max ${value} characters";
+  static String m59(value) => "Max ${value} characters";
 
-  static String m58(value) => "${value} chain APP is already supported!";
+  static String m60(value) => "${value} chain APP is already supported!";
 
-  static String m59(value) =>
+  static String m61(value) =>
       "${value} chain APP is already supported, do you want to add it?";
 
-  static String m60(value) => "${value} address test link failed!";
+  static String m62(value) => "${value} address test link failed!";
 
-  static String m61(value) => "0~${value} characters";
+  static String m63(value) => "0~${value} characters";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -2450,6 +2454,30 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_portfolio_pie_total": MessageLookupByLibrary.simpleMessage("Total"),
     "g_portfolio_title": MessageLookupByLibrary.simpleMessage("Portfolio"),
     "g_portfolio_total": MessageLookupByLibrary.simpleMessage("Total Value"),
+    "g_pred_add_outcome": MessageLookupByLibrary.simpleMessage("Add outcome"),
+    "g_pred_create_title": MessageLookupByLibrary.simpleMessage(
+      "Start Prediction",
+    ),
+    "g_pred_creating": MessageLookupByLibrary.simpleMessage("Creating…"),
+    "g_pred_deadline": MessageLookupByLibrary.simpleMessage("Deadline"),
+    "g_pred_err_outcomes": MessageLookupByLibrary.simpleMessage(
+      "At least two valid outcomes",
+    ),
+    "g_pred_err_question": MessageLookupByLibrary.simpleMessage(
+      "Please enter a question",
+    ),
+    "g_pred_minutes": m54,
+    "g_pred_no": MessageLookupByLibrary.simpleMessage("No"),
+    "g_pred_outcome_n": m55,
+    "g_pred_outcomes": MessageLookupByLibrary.simpleMessage("Outcomes"),
+    "g_pred_publish": MessageLookupByLibrary.simpleMessage("Publish"),
+    "g_pred_q_hint": MessageLookupByLibrary.simpleMessage(
+      "Prediction question, e.g. Who wins this round?",
+    ),
+    "g_pred_unlimited": MessageLookupByLibrary.simpleMessage(
+      "Unlimited (manual close)",
+    ),
+    "g_pred_yes": MessageLookupByLibrary.simpleMessage("Yes"),
     "g_referral_downloaded": MessageLookupByLibrary.simpleMessage("Downloaded"),
     "g_referral_invite_code": MessageLookupByLibrary.simpleMessage(
       "Invite Code",
@@ -2478,7 +2506,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_share_v3_key_6": MessageLookupByLibrary.simpleMessage("Refer via"),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("Link"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("code"),
-    "g_swap_key_14": m54,
+    "g_swap_key_14": m56,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "Get coin price error.",
     ),
@@ -2492,7 +2520,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "Your swap will be distributed shortly.Please be patient.",
     ),
-    "g_swap_key_20": m55,
+    "g_swap_key_20": m57,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "Costs to run a node: Group Verification 1-49 N Basic Node: 50 N Premium Node: 100 N Pro Node: 500 N.",
     ),
@@ -2504,7 +2532,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("New Balance"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("You pay"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("Date"),
-    "g_swap_key_31": m56,
+    "g_swap_key_31": m58,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "Swaps can be viewed on the relevant chain explorers (Etherscan, BscScan, TRONSCAN and our own).",
     ),
@@ -2519,7 +2547,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "Reset to default",
     ),
-    "g_token_m_key_1": m57,
+    "g_token_m_key_1": m59,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "Anyone can create a token, including creating fake versions of existing tokens. Always research a token before importing it.",
     ),
@@ -2536,9 +2564,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_2": MessageLookupByLibrary.simpleMessage("0~18 uint"),
     "g_token_m_key_20": MessageLookupByLibrary.simpleMessage("Add Tokens"),
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage("Format Error!"),
-    "g_token_m_key_22": m58,
-    "g_token_m_key_23": m59,
-    "g_token_m_key_24": m60,
+    "g_token_m_key_22": m60,
+    "g_token_m_key_23": m61,
+    "g_token_m_key_24": m62,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("Import tokens"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("All networks"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage("Custom Token"),
@@ -2585,7 +2613,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_email": MessageLookupByLibrary.simpleMessage("Email"),
     "login_password": MessageLookupByLibrary.simpleMessage("Password"),
     "next": MessageLookupByLibrary.simpleMessage("Next"),
-    "nicknameMessage": m61,
+    "nicknameMessage": m63,
     "personalInformation": MessageLookupByLibrary.simpleMessage("Edit Profile"),
     "photograph": MessageLookupByLibrary.simpleMessage("Photograph"),
     "please_input_address": MessageLookupByLibrary.simpleMessage(

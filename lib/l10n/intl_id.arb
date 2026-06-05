@@ -1374,5 +1374,19 @@
   "g_google_auth_key5": "Google Authenticator diperlukan untuk mengonfirmasi setiap transfer.",
   "g_google_auth_key6": "Kode salah, coba lagi",
   "g_google_auth_key7": "Google Authenticator belum dikonfigurasi",
-  "g_google_auth_key8": "Pengikatan berhasil"
+  "g_google_auth_key8": "Pengikatan berhasil",
+  "g_pred_create_title": "Mulai Prediksi",
+  "g_pred_q_hint": "Pertanyaan prediksi, mis.: Siapa menang ronde ini?",
+  "g_pred_outcomes": "Hasil",
+  "g_pred_outcome_n": "Hasil {n}",
+  "g_pred_add_outcome": "Tambah hasil",
+  "g_pred_deadline": "Batas waktu",
+  "g_pred_unlimited": "Tanpa batas (tutup manual)",
+  "g_pred_minutes": "{n} mnt",
+  "g_pred_creating": "Membuat…",
+  "g_pred_publish": "Terbitkan",
+  "g_pred_err_question": "Masukkan pertanyaan",
+  "g_pred_err_outcomes": "Minimal dua hasil valid",
+  "g_pred_yes": "Ya",
+  "g_pred_no": "Tidak"
 }

@@ -149,24 +149,28 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m53(value) => "Muss ${value} Zeichen sein";
 
-  static String m54(value) => "${value} Unzureichendes Guthaben.";
+  static String m54(n) => "${n} Min.";
 
-  static String m55(value) => "${value} eingehend...";
+  static String m55(n) => "Ergebnis ${n}";
 
-  static String m56(value) =>
-      "${value} in der App getauscht wird in Kuerze an Ihr Wallet verteilt und kann nicht ueber diesen Prozess verkauft werden. Es kann zum Betrieb eines Knotens verwendet werden.";
+  static String m56(value) => "${value} Unzureichendes Guthaben.";
 
-  static String m57(value) => "Max. ${value} Zeichen";
+  static String m57(value) => "${value} eingehend...";
 
   static String m58(value) =>
+      "${value} in der App getauscht wird in Kuerze an Ihr Wallet verteilt und kann nicht ueber diesen Prozess verkauft werden. Es kann zum Betrieb eines Knotens verwendet werden.";
+
+  static String m59(value) => "Max. ${value} Zeichen";
+
+  static String m60(value) =>
       "${value} Blockchain wird bereits von der App unterstuetzt!";
 
-  static String m59(value) =>
+  static String m61(value) =>
       "${value} Blockchain wird bereits von der App unterstuetzt, moechten Sie sie hinzufuegen?";
 
-  static String m60(value) => "${value} Adresstestverbindung fehlgeschlagen!";
+  static String m62(value) => "${value} Adresstestverbindung fehlgeschlagen!";
 
-  static String m61(value) => "0-${value} Zeichen";
+  static String m63(value) => "0-${value} Zeichen";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -2643,6 +2647,32 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_portfolio_pie_total": MessageLookupByLibrary.simpleMessage("Gesamt"),
     "g_portfolio_title": MessageLookupByLibrary.simpleMessage("Portfolio"),
     "g_portfolio_total": MessageLookupByLibrary.simpleMessage("Gesamtwert"),
+    "g_pred_add_outcome": MessageLookupByLibrary.simpleMessage(
+      "Ergebnis hinzufügen",
+    ),
+    "g_pred_create_title": MessageLookupByLibrary.simpleMessage(
+      "Vorhersage starten",
+    ),
+    "g_pred_creating": MessageLookupByLibrary.simpleMessage("Wird erstellt…"),
+    "g_pred_deadline": MessageLookupByLibrary.simpleMessage("Frist"),
+    "g_pred_err_outcomes": MessageLookupByLibrary.simpleMessage(
+      "Mindestens zwei gültige Ergebnisse",
+    ),
+    "g_pred_err_question": MessageLookupByLibrary.simpleMessage(
+      "Bitte eine Frage eingeben",
+    ),
+    "g_pred_minutes": m54,
+    "g_pred_no": MessageLookupByLibrary.simpleMessage("Nein"),
+    "g_pred_outcome_n": m55,
+    "g_pred_outcomes": MessageLookupByLibrary.simpleMessage("Ergebnisse"),
+    "g_pred_publish": MessageLookupByLibrary.simpleMessage("Veröffentlichen"),
+    "g_pred_q_hint": MessageLookupByLibrary.simpleMessage(
+      "Vorhersagefrage, z. B. Wer gewinnt diese Runde?",
+    ),
+    "g_pred_unlimited": MessageLookupByLibrary.simpleMessage(
+      "Unbegrenzt (manuell schließen)",
+    ),
+    "g_pred_yes": MessageLookupByLibrary.simpleMessage("Ja"),
     "g_referral_downloaded": MessageLookupByLibrary.simpleMessage(
       "Heruntergeladen",
     ),
@@ -2675,7 +2705,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_share_v3_key_6": MessageLookupByLibrary.simpleMessage("Werben ueber"),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("Link"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("Code"),
-    "g_swap_key_14": m54,
+    "g_swap_key_14": m56,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "Fehler beim Abrufen des Coin-Preises.",
     ),
@@ -2689,7 +2719,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "Ihr Swap wird in Kuerze verteilt. Bitte haben Sie Geduld.",
     ),
-    "g_swap_key_20": m55,
+    "g_swap_key_20": m57,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "Kosten fuer den Betrieb eines Knotens: Gruppenverifizierung 1-49 N Basis-Knoten: 50 N Premium-Knoten: 100 N Pro-Knoten: 500 N.",
     ),
@@ -2705,7 +2735,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("Neues Guthaben"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("Sie zahlen"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("Datum"),
-    "g_swap_key_31": m56,
+    "g_swap_key_31": m58,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "Swaps koennen auf den entsprechenden Blockchain-Explorern (Etherscan, BscScan, TRONSCAN und unserem eigenen) eingesehen werden.",
     ),
@@ -2718,7 +2748,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "Auf Standard zurücksetzen",
     ),
-    "g_token_m_key_1": m57,
+    "g_token_m_key_1": m59,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "Jeder kann Token erstellen, einschliesslich gefaelschter Versionen bestehender Token. Recherchieren Sie immer einen Token, bevor Sie ihn importieren.",
     ),
@@ -2739,9 +2769,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Token hinzufuegen",
     ),
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage("Formatfehler!"),
-    "g_token_m_key_22": m58,
-    "g_token_m_key_23": m59,
-    "g_token_m_key_24": m60,
+    "g_token_m_key_22": m60,
+    "g_token_m_key_23": m61,
+    "g_token_m_key_24": m62,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage(
       "Token importieren",
     ),
@@ -2794,7 +2824,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_email": MessageLookupByLibrary.simpleMessage("E-Mail"),
     "login_password": MessageLookupByLibrary.simpleMessage("Passwort"),
     "next": MessageLookupByLibrary.simpleMessage("Weiter"),
-    "nicknameMessage": m61,
+    "nicknameMessage": m63,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "Profil bearbeiten",
     ),

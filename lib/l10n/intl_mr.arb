@@ -1367,5 +1367,19 @@
   "g_google_auth_key5": "प्रत्येक हस्तांतरण पुष्टी करण्यासाठी Google Authenticator आवश्यक आहे.",
   "g_google_auth_key6": "चुकीचा कोड, पुन्हा प्रयत्न करा",
   "g_google_auth_key7": "Google Authenticator कॉन्फिगर केलेले नाही",
-  "g_google_auth_key8": "बाइंडिंग यशस्वी"
+  "g_google_auth_key8": "बाइंडिंग यशस्वी",
+  "g_pred_create_title": "अंदाज सुरू करा",
+  "g_pred_q_hint": "अंदाज प्रश्न, उदा.: ही फेरी कोण जिंकेल?",
+  "g_pred_outcomes": "निकाल",
+  "g_pred_outcome_n": "निकाल {n}",
+  "g_pred_add_outcome": "निकाल जोडा",
+  "g_pred_deadline": "अंतिम मुदत",
+  "g_pred_unlimited": "अमर्यादित (स्वहस्ते बंद)",
+  "g_pred_minutes": "{n} मिनिटे",
+  "g_pred_creating": "तयार करत आहे…",
+  "g_pred_publish": "प्रकाशित करा",
+  "g_pred_err_question": "कृपया प्रश्न प्रविष्ट करा",
+  "g_pred_err_outcomes": "किमान दोन वैध निकाल",
+  "g_pred_yes": "होय",
+  "g_pred_no": "नाही"
 }

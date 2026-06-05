@@ -1367,5 +1367,19 @@
   "g_iap_store_unavailable": "應用商店暫不可用",
   "g_iap_check_network": "請檢查網路連線後重試",
   "g_iap_no_products": "暫無可購買商品",
-  "g_iap_retry": "重試"
+  "g_iap_retry": "重試",
+  "g_pred_create_title": "開啟預測",
+  "g_pred_q_hint": "預測問題，例如：本局誰贏？",
+  "g_pred_outcomes": "結果選項",
+  "g_pred_outcome_n": "結果 {n}",
+  "g_pred_add_outcome": "新增結果",
+  "g_pred_deadline": "截止",
+  "g_pred_unlimited": "不限（手動停盤）",
+  "g_pred_minutes": "{n} 分鐘",
+  "g_pred_creating": "建立中…",
+  "g_pred_publish": "發布預測",
+  "g_pred_err_question": "請填寫預測問題",
+  "g_pred_err_outcomes": "至少兩個有效結果",
+  "g_pred_yes": "是",
+  "g_pred_no": "否"
 }

@@ -1374,5 +1374,19 @@
   "g_google_auth_key5": "Google Authenticator necessário para confirmar cada transferência.",
   "g_google_auth_key6": "Código incorreto, tente novamente",
   "g_google_auth_key7": "Google Authenticator não configurado",
-  "g_google_auth_key8": "Vinculação bem-sucedida"
+  "g_google_auth_key8": "Vinculação bem-sucedida",
+  "g_pred_create_title": "Iniciar previsão",
+  "g_pred_q_hint": "Pergunta de previsão, ex.: Quem vence esta rodada?",
+  "g_pred_outcomes": "Resultados",
+  "g_pred_outcome_n": "Resultado {n}",
+  "g_pred_add_outcome": "Adicionar resultado",
+  "g_pred_deadline": "Prazo",
+  "g_pred_unlimited": "Sem limite (fechamento manual)",
+  "g_pred_minutes": "{n} min",
+  "g_pred_creating": "Criando…",
+  "g_pred_publish": "Publicar",
+  "g_pred_err_question": "Insira uma pergunta",
+  "g_pred_err_outcomes": "Pelo menos dois resultados válidos",
+  "g_pred_yes": "Sim",
+  "g_pred_no": "Não"
 }

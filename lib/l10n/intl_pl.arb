@@ -1374,5 +1374,19 @@
   "g_google_auth_key5": "Google Authenticator wymagany do potwierdzenia każdego przelewu.",
   "g_google_auth_key6": "Nieprawidłowy kod, spróbuj ponownie",
   "g_google_auth_key7": "Google Authenticator nie jest skonfigurowany",
-  "g_google_auth_key8": "Powiązanie zakończone sukcesem"
+  "g_google_auth_key8": "Powiązanie zakończone sukcesem",
+  "g_pred_create_title": "Rozpocznij prognozę",
+  "g_pred_q_hint": "Pytanie prognozy, np.: Kto wygra tę rundę?",
+  "g_pred_outcomes": "Wyniki",
+  "g_pred_outcome_n": "Wynik {n}",
+  "g_pred_add_outcome": "Dodaj wynik",
+  "g_pred_deadline": "Termin",
+  "g_pred_unlimited": "Bez limitu (ręczne zamknięcie)",
+  "g_pred_minutes": "{n} min",
+  "g_pred_creating": "Tworzenie…",
+  "g_pred_publish": "Opublikuj",
+  "g_pred_err_question": "Wprowadź pytanie",
+  "g_pred_err_outcomes": "Co najmniej dwa poprawne wyniki",
+  "g_pred_yes": "Tak",
+  "g_pred_no": "Nie"
 }

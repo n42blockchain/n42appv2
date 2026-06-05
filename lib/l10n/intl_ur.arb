@@ -1367,5 +1367,19 @@
   "g_google_auth_key5": "ہر ٹرانسفر کی تصدیق کے لیے Google Authenticator ضروری ہے۔",
   "g_google_auth_key6": "غلط کوڈ، دوبارہ کوشش کریں",
   "g_google_auth_key7": "Google Authenticator ترتیب نہیں دیا گیا",
-  "g_google_auth_key8": "لنک کامیاب"
+  "g_google_auth_key8": "لنک کامیاب",
+  "g_pred_create_title": "پیشگوئی شروع کریں",
+  "g_pred_q_hint": "پیشگوئی سوال، مثلاً: یہ راؤنڈ کون جیتے گا؟",
+  "g_pred_outcomes": "نتائج",
+  "g_pred_outcome_n": "نتیجہ {n}",
+  "g_pred_add_outcome": "نتیجہ شامل کریں",
+  "g_pred_deadline": "آخری تاریخ",
+  "g_pred_unlimited": "لامحدود (دستی بندش)",
+  "g_pred_minutes": "{n} منٹ",
+  "g_pred_creating": "بنایا جا رہا ہے…",
+  "g_pred_publish": "شائع کریں",
+  "g_pred_err_question": "براہ کرم سوال درج کریں",
+  "g_pred_err_outcomes": "کم از کم دو درست نتائج",
+  "g_pred_yes": "ہاں",
+  "g_pred_no": "نہیں"
 }

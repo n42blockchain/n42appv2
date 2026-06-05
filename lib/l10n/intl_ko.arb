@@ -1367,5 +1367,19 @@
   "g_google_auth_key5": "지갑 이체 확인 시 Google OTP 인증이 필요합니다.",
   "g_google_auth_key6": "잘못된 코드, 다시 시도해주세요",
   "g_google_auth_key7": "Google OTP 미설정",
-  "g_google_auth_key8": "연결 성공"
+  "g_google_auth_key8": "연결 성공",
+  "g_pred_create_title": "예측 시작",
+  "g_pred_q_hint": "예측 질문, 예: 이번 판에서 누가 이길까요?",
+  "g_pred_outcomes": "결과 옵션",
+  "g_pred_outcome_n": "결과 {n}",
+  "g_pred_add_outcome": "결과 추가",
+  "g_pred_deadline": "마감",
+  "g_pred_unlimited": "무제한 (수동 마감)",
+  "g_pred_minutes": "{n}분",
+  "g_pred_creating": "생성 중…",
+  "g_pred_publish": "예측 게시",
+  "g_pred_err_question": "질문을 입력하세요",
+  "g_pred_err_outcomes": "유효한 결과가 2개 이상 필요합니다",
+  "g_pred_yes": "예",
+  "g_pred_no": "아니오"
 }

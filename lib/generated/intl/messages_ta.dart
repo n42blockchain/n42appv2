@@ -148,23 +148,27 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m53(value) => "${value} எழுத்துகள் இருக்க வேண்டும்";
 
-  static String m54(value) => "${value} போதிய இருப்பு இல்லை.";
+  static String m54(n) => "${n} நிமிடம்";
 
-  static String m55(value) => "${value} உள்வரும்...";
+  static String m55(n) => "முடிவு ${n}";
 
-  static String m56(value) =>
+  static String m56(value) => "${value} போதிய இருப்பு இல்லை.";
+
+  static String m57(value) => "${value} உள்வரும்...";
+
+  static String m58(value) =>
       "${value} மாற்றப்பட்ட பயன்பாட்டில் விரைவில் உங்கள் பணப்பையில் விநியோகிக்கப்படும் மற்றும் இந்த செயல்முறை மூலம் விற்க முடியாது. ஒரு முனையை இயக்க இது பயன்படுத்தப்படலாம்.";
 
-  static String m57(value) => "அதிகபட்ச ${value} எழுத்துகள்";
+  static String m59(value) => "அதிகபட்ச ${value} எழுத்துகள்";
 
-  static String m58(value) => "${value} சங்கிலி APP ஏற்கனவே ஆதரிக்கப்படுகிறது!";
+  static String m60(value) => "${value} சங்கிலி APP ஏற்கனவே ஆதரிக்கப்படுகிறது!";
 
-  static String m59(value) =>
+  static String m61(value) =>
       "${value} சங்கிலி APP ஏற்கனவே ஆதரிக்கப்படுகிறது, அதைச் சேர்க்க விரும்புகிறீர்களா?";
 
-  static String m60(value) => "${value} முகவரி சோதனை இணைப்பு தோல்வியடைந்தது!";
+  static String m62(value) => "${value} முகவரி சோதனை இணைப்பு தோல்வியடைந்தது!";
 
-  static String m61(value) => "0~${value} எழுத்துகள்";
+  static String m63(value) => "0~${value} எழுத்துகள்";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -2719,6 +2723,30 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_portfolio_pie_total": MessageLookupByLibrary.simpleMessage("மொத்தம்"),
     "g_portfolio_title": MessageLookupByLibrary.simpleMessage("போர்ட்ஃபோலியோ"),
     "g_portfolio_total": MessageLookupByLibrary.simpleMessage("மொத்த மதிப்பு"),
+    "g_pred_add_outcome": MessageLookupByLibrary.simpleMessage("முடிவைச் சேர்"),
+    "g_pred_create_title": MessageLookupByLibrary.simpleMessage(
+      "கணிப்பைத் தொடங்கு",
+    ),
+    "g_pred_creating": MessageLookupByLibrary.simpleMessage("உருவாக்குகிறது…"),
+    "g_pred_deadline": MessageLookupByLibrary.simpleMessage("காலக்கெடு"),
+    "g_pred_err_outcomes": MessageLookupByLibrary.simpleMessage(
+      "குறைந்தது இரண்டு செல்லுபடியான முடிவுகள்",
+    ),
+    "g_pred_err_question": MessageLookupByLibrary.simpleMessage(
+      "கேள்வியை உள்ளிடவும்",
+    ),
+    "g_pred_minutes": m54,
+    "g_pred_no": MessageLookupByLibrary.simpleMessage("இல்லை"),
+    "g_pred_outcome_n": m55,
+    "g_pred_outcomes": MessageLookupByLibrary.simpleMessage("முடிவுகள்"),
+    "g_pred_publish": MessageLookupByLibrary.simpleMessage("வெளியிடு"),
+    "g_pred_q_hint": MessageLookupByLibrary.simpleMessage(
+      "கணிப்பு கேள்வி, எ.கா.: இந்த சுற்றில் யார் வெல்வார்?",
+    ),
+    "g_pred_unlimited": MessageLookupByLibrary.simpleMessage(
+      "வரம்பற்ற (கைமுறை மூடல்)",
+    ),
+    "g_pred_yes": MessageLookupByLibrary.simpleMessage("ஆம்"),
     "g_referral_downloaded": MessageLookupByLibrary.simpleMessage(
       "பதிவிறக்கம் செய்யப்பட்டது",
     ),
@@ -2755,7 +2783,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("இணைப்பு"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("குறியீடு"),
-    "g_swap_key_14": m54,
+    "g_swap_key_14": m56,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "நாணய விலை பிழையைப் பெறுங்கள்.",
     ),
@@ -2769,7 +2797,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "உங்கள் ஸ்வாப் விரைவில் விநியோகிக்கப்படும். பொறுமையாக இருங்கள்.",
     ),
-    "g_swap_key_20": m55,
+    "g_swap_key_20": m57,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "ஒரு முனையை இயக்குவதற்கான செலவுகள்: குழு சரிபார்ப்பு 1-49 N அடிப்படை முனை: 50 N பிரீமியம் முனை: 100 N புரோ முனை: 500 N.",
     ),
@@ -2787,7 +2815,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "நீங்கள் செலுத்துங்கள்",
     ),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("தேதி"),
-    "g_swap_key_31": m56,
+    "g_swap_key_31": m58,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "இடமாற்றங்களை தொடர்புடைய செயின் எக்ஸ்ப்ளோரர்களில் (Etherscan, BscScan, TRONSCAN மற்றும் எங்கள் சொந்தம்) பார்க்கலாம்.",
     ),
@@ -2806,7 +2834,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "இயல்புநிலைக்கு மீட்டமைக்கவும்",
     ),
-    "g_token_m_key_1": m57,
+    "g_token_m_key_1": m59,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "ஏற்கனவே உள்ள டோக்கன்களின் போலி பதிப்புகளை உருவாக்குவது உட்பட, யார் வேண்டுமானாலும் டோக்கனை உருவாக்கலாம். டோக்கனை இறக்குமதி செய்வதற்கு முன் எப்போதும் ஆராய்ச்சி செய்யுங்கள்.",
     ),
@@ -2827,9 +2855,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage(
       "வடிவமைப்பு பிழை!",
     ),
-    "g_token_m_key_22": m58,
-    "g_token_m_key_23": m59,
-    "g_token_m_key_24": m60,
+    "g_token_m_key_22": m60,
+    "g_token_m_key_23": m61,
+    "g_token_m_key_24": m62,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage(
       "டோக்கன்களை இறக்குமதி செய்யவும்",
     ),
@@ -2884,7 +2912,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_email": MessageLookupByLibrary.simpleMessage("மின்னஞ்சல்"),
     "login_password": MessageLookupByLibrary.simpleMessage("கடவுச்சொல்"),
     "next": MessageLookupByLibrary.simpleMessage("அடுத்து"),
-    "nicknameMessage": m61,
+    "nicknameMessage": m63,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "சுயவிவரத்தைத் திருத்து",
     ),

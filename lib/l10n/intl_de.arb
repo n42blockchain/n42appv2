@@ -1374,5 +1374,19 @@
   "g_google_auth_key5": "Google Authenticator zur Bestätigung jeder Wallet-Übertragung erforderlich.",
   "g_google_auth_key6": "Falscher Code, bitte erneut versuchen",
   "g_google_auth_key7": "Google Authenticator nicht konfiguriert",
-  "g_google_auth_key8": "Bindung erfolgreich"
+  "g_google_auth_key8": "Bindung erfolgreich",
+  "g_pred_create_title": "Vorhersage starten",
+  "g_pred_q_hint": "Vorhersagefrage, z. B. Wer gewinnt diese Runde?",
+  "g_pred_outcomes": "Ergebnisse",
+  "g_pred_outcome_n": "Ergebnis {n}",
+  "g_pred_add_outcome": "Ergebnis hinzufügen",
+  "g_pred_deadline": "Frist",
+  "g_pred_unlimited": "Unbegrenzt (manuell schließen)",
+  "g_pred_minutes": "{n} Min.",
+  "g_pred_creating": "Wird erstellt…",
+  "g_pred_publish": "Veröffentlichen",
+  "g_pred_err_question": "Bitte eine Frage eingeben",
+  "g_pred_err_outcomes": "Mindestens zwei gültige Ergebnisse",
+  "g_pred_yes": "Ja",
+  "g_pred_no": "Nein"
 }

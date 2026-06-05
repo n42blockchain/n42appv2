@@ -156,25 +156,29 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m53(value) => "[# Ṁüšť ƀé ${value} çĥàŗàçťéŗš ~~~~~~~~~#]";
 
-  static String m54(value) => "[# ${value} Ìñšüƒƒìçìéñť Ɓàĺàñçé. ~~~~~~~~~~~#]";
+  static String m54(n) => "${n} min";
 
-  static String m55(value) => "[# ${value} ìñçöṁìñĝ... ~~~~~~#]";
+  static String m55(n) => "Outcome ${n}";
 
-  static String m56(value) =>
-      "[# ${value} šŵàƥƥéð ìñ-àƥƥ ŵìĺĺ ƀé ðìšťŗìƀüťéð šĥöŗťĺý ťö ýöüŗ ŵàĺĺéť àñð çàññöť ƀé šöĺð ṽìà ťĥìš ƥŗöçéšš. Ìť çàñ ƀé üšéð ťö ŗüñ à ñöðé. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]";
+  static String m56(value) => "[# ${value} Ìñšüƒƒìçìéñť Ɓàĺàñçé. ~~~~~~~~~~~#]";
 
-  static String m57(value) => "[# Ṁàẋ ${value} çĥàŗàçťéŗš ~~~~~~~#]";
+  static String m57(value) => "[# ${value} ìñçöṁìñĝ... ~~~~~~#]";
 
   static String m58(value) =>
-      "[# ${value} çĥàìñ ÀƤƤ ìš àĺŗéàðý šüƥƥöŗťéð! ~~~~~~~~~~~~~~~~#]";
+      "[# ${value} šŵàƥƥéð ìñ-àƥƥ ŵìĺĺ ƀé ðìšťŗìƀüťéð šĥöŗťĺý ťö ýöüŗ ŵàĺĺéť àñð çàññöť ƀé šöĺð ṽìà ťĥìš ƥŗöçéšš. Ìť çàñ ƀé üšéð ťö ŗüñ à ñöðé. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]";
 
-  static String m59(value) =>
-      "[# ${value} çĥàìñ ÀƤƤ ìš àĺŗéàðý šüƥƥöŗťéð, ðö ýöü ŵàñť ťö àðð ìť? ~~~~~~~~~~~~~~~~~~~~~~~~~~~#]";
+  static String m59(value) => "[# Ṁàẋ ${value} çĥàŗàçťéŗš ~~~~~~~#]";
 
   static String m60(value) =>
+      "[# ${value} çĥàìñ ÀƤƤ ìš àĺŗéàðý šüƥƥöŗťéð! ~~~~~~~~~~~~~~~~#]";
+
+  static String m61(value) =>
+      "[# ${value} çĥàìñ ÀƤƤ ìš àĺŗéàðý šüƥƥöŗťéð, ðö ýöü ŵàñť ťö àðð ìť? ~~~~~~~~~~~~~~~~~~~~~~~~~~~#]";
+
+  static String m62(value) =>
       "[# ${value} àððŗéšš ťéšť ĺìñķ ƒàìĺéð! ~~~~~~~~~~~~~#]";
 
-  static String m61(value) => "[# 0~${value} çĥàŗàçťéŗš ~~~~~~#]";
+  static String m63(value) => "[# 0~${value} çĥàŗàçťéŗš ~~~~~~#]";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -3059,6 +3063,30 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_portfolio_total": MessageLookupByLibrary.simpleMessage(
       "[# Ťöťàĺ Ṽàĺüé ~~~~~#]",
     ),
+    "g_pred_add_outcome": MessageLookupByLibrary.simpleMessage("Add outcome"),
+    "g_pred_create_title": MessageLookupByLibrary.simpleMessage(
+      "Start Prediction",
+    ),
+    "g_pred_creating": MessageLookupByLibrary.simpleMessage("Creating…"),
+    "g_pred_deadline": MessageLookupByLibrary.simpleMessage("Deadline"),
+    "g_pred_err_outcomes": MessageLookupByLibrary.simpleMessage(
+      "At least two valid outcomes",
+    ),
+    "g_pred_err_question": MessageLookupByLibrary.simpleMessage(
+      "Please enter a question",
+    ),
+    "g_pred_minutes": m54,
+    "g_pred_no": MessageLookupByLibrary.simpleMessage("No"),
+    "g_pred_outcome_n": m55,
+    "g_pred_outcomes": MessageLookupByLibrary.simpleMessage("Outcomes"),
+    "g_pred_publish": MessageLookupByLibrary.simpleMessage("Publish"),
+    "g_pred_q_hint": MessageLookupByLibrary.simpleMessage(
+      "Prediction question, e.g. Who wins this round?",
+    ),
+    "g_pred_unlimited": MessageLookupByLibrary.simpleMessage(
+      "Unlimited (manual close)",
+    ),
+    "g_pred_yes": MessageLookupByLibrary.simpleMessage("Yes"),
     "g_referral_downloaded": MessageLookupByLibrary.simpleMessage(
       "[# Ðöŵñĺöàðéð ~~~~~#]",
     ),
@@ -3101,7 +3129,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("[# Ĺìñķ ~~#]"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("[# çöðé ~~#]"),
-    "g_swap_key_14": m54,
+    "g_swap_key_14": m56,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "[# Ĝéť çöìñ ƥŗìçé éŗŗöŗ. ~~~~~~~~~~#]",
     ),
@@ -3115,7 +3143,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "[# Ýöüŗ šŵàƥ ŵìĺĺ ƀé ðìšťŗìƀüťéð šĥöŗťĺý.Ƥĺéàšé ƀé ƥàťìéñť. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
     ),
-    "g_swap_key_20": m55,
+    "g_swap_key_20": m57,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "[# Çöšťš ťö ŗüñ à ñöðé: Ĝŗöüƥ Ṽéŗìƒìçàťìöñ 1-49 Ñ Ɓàšìç Ñöðé: 50 Ñ Ƥŗéṁìüṁ Ñöðé: 100 Ñ Ƥŗö Ñöðé: 500 Ñ. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
     ),
@@ -3135,7 +3163,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("[# Ýöü ƥàý ~~~#]"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("[# Ðàťé ~~#]"),
-    "g_swap_key_31": m56,
+    "g_swap_key_31": m58,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "[# Šŵàƥš çàñ ƀé ṽìéŵéð öñ ťĥé ŗéĺéṽàñť çĥàìñ éẋƥĺöŗéŗš (Éťĥéŗšçàñ, ƁšçŠçàñ, ŤŖÖÑŠÇÀÑ àñð öüŗ öŵñ). ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
     ),
@@ -3154,7 +3182,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "[# Ŗéšéť ťö ðéƒàüĺť ~~~~~~~~#]",
     ),
-    "g_token_m_key_1": m57,
+    "g_token_m_key_1": m59,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "[# Àñýöñé çàñ çŗéàťé à ťöķéñ, ìñçĺüðìñĝ çŗéàťìñĝ ƒàķé ṽéŗšìöñš öƒ éẋìšťìñĝ ťöķéñš. Àĺŵàýš ŗéšéàŗçĥ à ťöķéñ ƀéƒöŗé ìṁƥöŗťìñĝ ìť. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
     ),
@@ -3187,9 +3215,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage(
       "[# Ƒöŗṁàť Éŗŗöŗ! ~~~~~~#]",
     ),
-    "g_token_m_key_22": m58,
-    "g_token_m_key_23": m59,
-    "g_token_m_key_24": m60,
+    "g_token_m_key_22": m60,
+    "g_token_m_key_23": m61,
+    "g_token_m_key_24": m62,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage(
       "[# Ìṁƥöŗť ťöķéñš ~~~~~~#]",
     ),
@@ -3258,7 +3286,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "[# Ƥàššŵöŗð ~~~~#]",
     ),
     "next": MessageLookupByLibrary.simpleMessage("[# Ñéẋť ~~#]"),
-    "nicknameMessage": m61,
+    "nicknameMessage": m63,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "[# Éðìť Ƥŗöƒìĺé ~~~~~~#]",
     ),

@@ -1374,5 +1374,19 @@
   "g_google_auth_key5": "Для подтверждения перевода требуется Google Authenticator.",
   "g_google_auth_key6": "Неверный код, повторите попытку",
   "g_google_auth_key7": "Google Authenticator не настроен",
-  "g_google_auth_key8": "Привязка выполнена успешно"
+  "g_google_auth_key8": "Привязка выполнена успешно",
+  "g_pred_create_title": "Начать прогноз",
+  "g_pred_q_hint": "Вопрос прогноза, напр.: Кто победит в этом раунде?",
+  "g_pred_outcomes": "Исходы",
+  "g_pred_outcome_n": "Исход {n}",
+  "g_pred_add_outcome": "Добавить исход",
+  "g_pred_deadline": "Срок",
+  "g_pred_unlimited": "Без лимита (закрыть вручную)",
+  "g_pred_minutes": "{n} мин",
+  "g_pred_creating": "Создание…",
+  "g_pred_publish": "Опубликовать",
+  "g_pred_err_question": "Введите вопрос",
+  "g_pred_err_outcomes": "Минимум два допустимых исхода",
+  "g_pred_yes": "Да",
+  "g_pred_no": "Нет"
 }

@@ -146,23 +146,27 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m53(value) => "${value} वर्ण असणे आवश्यक आहे";
 
-  static String m54(value) => "${value} अपुरी शिल्लक.";
+  static String m54(n) => "${n} मिनिटे";
 
-  static String m55(value) => "${value} इनकमिंग...";
+  static String m55(n) => "निकाल ${n}";
 
-  static String m56(value) =>
+  static String m56(value) => "${value} अपुरी शिल्लक.";
+
+  static String m57(value) => "${value} इनकमिंग...";
+
+  static String m58(value) =>
       "${value} स्वॅप इन-ॲप लवकरच तुमच्या वॉलेटमध्ये वितरित केले जाईल आणि या प्रक्रियेद्वारे विकले जाऊ शकत नाही. हे नोड चालविण्यासाठी वापरले जाऊ शकते.";
 
-  static String m57(value) => "कमाल ${value} वर्ण";
+  static String m59(value) => "कमाल ${value} वर्ण";
 
-  static String m58(value) => "${value} चेन APP आधीच समर्थित आहे!";
+  static String m60(value) => "${value} चेन APP आधीच समर्थित आहे!";
 
-  static String m59(value) =>
+  static String m61(value) =>
       "${value} चेन APP आधीच समर्थित आहे, तुम्हाला ते जोडायचे आहे का?";
 
-  static String m60(value) => "${value} पत्ता चाचणी लिंक अयशस्वी!";
+  static String m62(value) => "${value} पत्ता चाचणी लिंक अयशस्वी!";
 
-  static String m61(value) => "0~${value} वर्ण";
+  static String m63(value) => "0~${value} वर्ण";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -2467,6 +2471,30 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_portfolio_pie_total": MessageLookupByLibrary.simpleMessage("एकूण"),
     "g_portfolio_title": MessageLookupByLibrary.simpleMessage("पोर्टफोलिओ"),
     "g_portfolio_total": MessageLookupByLibrary.simpleMessage("एकूण मूल्य"),
+    "g_pred_add_outcome": MessageLookupByLibrary.simpleMessage("निकाल जोडा"),
+    "g_pred_create_title": MessageLookupByLibrary.simpleMessage(
+      "अंदाज सुरू करा",
+    ),
+    "g_pred_creating": MessageLookupByLibrary.simpleMessage("तयार करत आहे…"),
+    "g_pred_deadline": MessageLookupByLibrary.simpleMessage("अंतिम मुदत"),
+    "g_pred_err_outcomes": MessageLookupByLibrary.simpleMessage(
+      "किमान दोन वैध निकाल",
+    ),
+    "g_pred_err_question": MessageLookupByLibrary.simpleMessage(
+      "कृपया प्रश्न प्रविष्ट करा",
+    ),
+    "g_pred_minutes": m54,
+    "g_pred_no": MessageLookupByLibrary.simpleMessage("नाही"),
+    "g_pred_outcome_n": m55,
+    "g_pred_outcomes": MessageLookupByLibrary.simpleMessage("निकाल"),
+    "g_pred_publish": MessageLookupByLibrary.simpleMessage("प्रकाशित करा"),
+    "g_pred_q_hint": MessageLookupByLibrary.simpleMessage(
+      "अंदाज प्रश्न, उदा.: ही फेरी कोण जिंकेल?",
+    ),
+    "g_pred_unlimited": MessageLookupByLibrary.simpleMessage(
+      "अमर्यादित (स्वहस्ते बंद)",
+    ),
+    "g_pred_yes": MessageLookupByLibrary.simpleMessage("होय"),
     "g_referral_downloaded": MessageLookupByLibrary.simpleMessage(
       "डाउनलोड केले",
     ),
@@ -2501,7 +2529,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("दुवा"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("कोड"),
-    "g_swap_key_14": m54,
+    "g_swap_key_14": m56,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "नाणे किंमत त्रुटी मिळवा.",
     ),
@@ -2513,7 +2541,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "तुमचा स्वॅप लवकरच वितरित केला जाईल. कृपया धीर धरा.",
     ),
-    "g_swap_key_20": m55,
+    "g_swap_key_20": m57,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "नोड चालविण्यासाठी खर्च: गट पडताळणी 1-49 N मूलभूत नोड: 50 N प्रीमियम नोड: 100 N प्रो नोड: 500 N.",
     ),
@@ -2527,7 +2555,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("नवीन शिल्लक"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("तुम्ही पैसे द्या"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("तारीख"),
-    "g_swap_key_31": m56,
+    "g_swap_key_31": m58,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "संबंधित साखळी एक्सप्लोररवर (इथरस्कॅन, बीएसस्कॅन, ट्रॉनस्कॅन आणि आमचे स्वतःचे) स्वॅप्स पाहिले जाऊ शकतात.",
     ),
@@ -2542,7 +2570,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "डीफॉल्टवर रीसेट करा",
     ),
-    "g_token_m_key_1": m57,
+    "g_token_m_key_1": m59,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "विद्यमान टोकनच्या बनावट आवृत्त्या तयार करण्यासह, कोणीही टोकन तयार करू शकतो. टोकन आयात करण्यापूर्वी नेहमी त्याचे संशोधन करा.",
     ),
@@ -2559,9 +2587,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_2": MessageLookupByLibrary.simpleMessage("0~18 uint"),
     "g_token_m_key_20": MessageLookupByLibrary.simpleMessage("टोकन जोडा"),
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage("स्वरूप त्रुटी!"),
-    "g_token_m_key_22": m58,
-    "g_token_m_key_23": m59,
-    "g_token_m_key_24": m60,
+    "g_token_m_key_22": m60,
+    "g_token_m_key_23": m61,
+    "g_token_m_key_24": m62,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("टोकन आयात करा"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("सर्व नेटवर्क"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage("सानुकूल टोकन"),
@@ -2610,7 +2638,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_email": MessageLookupByLibrary.simpleMessage("ईमेल"),
     "login_password": MessageLookupByLibrary.simpleMessage("पासवर्ड"),
     "next": MessageLookupByLibrary.simpleMessage("पुढे"),
-    "nicknameMessage": m61,
+    "nicknameMessage": m63,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "प्रोफाइल संपादित करा",
     ),

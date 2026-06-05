@@ -1367,5 +1367,19 @@
   "g_google_auth_key5": "Pro potvrzení každého převodu je vyžadován Google Authenticator.",
   "g_google_auth_key6": "Nesprávný kód, zkuste to znovu",
   "g_google_auth_key7": "Google Authenticator není nakonfigurován",
-  "g_google_auth_key8": "Propojení úspěšné"
+  "g_google_auth_key8": "Propojení úspěšné",
+  "g_pred_create_title": "Spustit predikci",
+  "g_pred_q_hint": "Otázka predikce, např.: Kdo vyhraje toto kolo?",
+  "g_pred_outcomes": "Výsledky",
+  "g_pred_outcome_n": "Výsledek {n}",
+  "g_pred_add_outcome": "Přidat výsledek",
+  "g_pred_deadline": "Termín",
+  "g_pred_unlimited": "Bez limitu (ruční uzavření)",
+  "g_pred_minutes": "{n} min",
+  "g_pred_creating": "Vytváření…",
+  "g_pred_publish": "Zveřejnit",
+  "g_pred_err_question": "Zadejte otázku",
+  "g_pred_err_outcomes": "Alespoň dva platné výsledky",
+  "g_pred_yes": "Ano",
+  "g_pred_no": "Ne"
 }

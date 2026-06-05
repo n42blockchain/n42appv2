@@ -11168,6 +11168,126 @@ class S {
   String get g_iap_retry {
     return Intl.message('Retry', name: 'g_iap_retry', desc: '', args: []);
   }
+
+  /// `Start Prediction`
+  String get g_pred_create_title {
+    return Intl.message(
+      'Start Prediction',
+      name: 'g_pred_create_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Prediction question, e.g. Who wins this round?`
+  String get g_pred_q_hint {
+    return Intl.message(
+      'Prediction question, e.g. Who wins this round?',
+      name: 'g_pred_q_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Outcomes`
+  String get g_pred_outcomes {
+    return Intl.message(
+      'Outcomes',
+      name: 'g_pred_outcomes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Outcome {n}`
+  String g_pred_outcome_n(Object n) {
+    return Intl.message(
+      'Outcome $n',
+      name: 'g_pred_outcome_n',
+      desc: '',
+      args: [n],
+    );
+  }
+
+  /// `Add outcome`
+  String get g_pred_add_outcome {
+    return Intl.message(
+      'Add outcome',
+      name: 'g_pred_add_outcome',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Deadline`
+  String get g_pred_deadline {
+    return Intl.message(
+      'Deadline',
+      name: 'g_pred_deadline',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unlimited (manual close)`
+  String get g_pred_unlimited {
+    return Intl.message(
+      'Unlimited (manual close)',
+      name: 'g_pred_unlimited',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{n} min`
+  String g_pred_minutes(Object n) {
+    return Intl.message('$n min', name: 'g_pred_minutes', desc: '', args: [n]);
+  }
+
+  /// `Creating…`
+  String get g_pred_creating {
+    return Intl.message(
+      'Creating…',
+      name: 'g_pred_creating',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Publish`
+  String get g_pred_publish {
+    return Intl.message('Publish', name: 'g_pred_publish', desc: '', args: []);
+  }
+
+  /// `Please enter a question`
+  String get g_pred_err_question {
+    return Intl.message(
+      'Please enter a question',
+      name: 'g_pred_err_question',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `At least two valid outcomes`
+  String get g_pred_err_outcomes {
+    return Intl.message(
+      'At least two valid outcomes',
+      name: 'g_pred_err_outcomes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Yes`
+  String get g_pred_yes {
+    return Intl.message('Yes', name: 'g_pred_yes', desc: '', args: []);
+  }
+
+  /// `No`
+  String get g_pred_no {
+    return Intl.message('No', name: 'g_pred_no', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
