@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 
 import '../domain/prediction_market.dart';
 import '../providers/prediction_providers.dart';
@@ -73,7 +74,9 @@ class _ResolvePredictionSheetState
             ),
             SizedBox(height: AppSpacing.space2),
             Text(
-              market.isResolved ? '已开奖' : '选择获胜结果开奖（资金按结果结算）',
+              market.isResolved
+                  ? S.of(context).g_pred_resolved
+                  : S.of(context).g_pred_pick_winner,
               style: AppTypography.caption.copyWith(color: c.textSecondary),
             ),
             SizedBox(height: AppSpacing.space6),
@@ -88,7 +91,12 @@ class _ResolvePredictionSheetState
                           ? null
                           : () => _confirmResolve(context, market, o),
                       child: Text(
-                        '${o.label}  获胜  (${(o.price * 100).toStringAsFixed(0)}%)',
+                        S
+                            .of(context)
+                            .g_pred_outcome_win(
+                              o.label,
+                              (o.price * 100).toStringAsFixed(0),
+                            ),
                       ),
                     ),
                   ),
@@ -96,7 +104,14 @@ class _ResolvePredictionSheetState
               )
             else
               Text(
-                '结果：${market.outcomeById(market.resolvedOutcomeId ?? '')?.label ?? ''}',
+                S
+                    .of(context)
+                    .g_pred_result_label(
+                      market
+                              .outcomeById(market.resolvedOutcomeId ?? '')
+                              ?.label ??
+                          '',
+                    ),
                 style: AppTypography.body.copyWith(color: c.success),
               ),
             if (_error != null) ...[
@@ -116,7 +131,7 @@ class _ResolvePredictionSheetState
                         onPressed: _busy
                             ? null
                             : () => _run(() => repo.closeMarket(market.id)),
-                        child: const Text('仅停盘'),
+                        child: Text(S.of(context).g_pred_close_only),
                       ),
                     ),
                   Expanded(
@@ -124,7 +139,10 @@ class _ResolvePredictionSheetState
                       onPressed: _busy
                           ? null
                           : () => _run(() => repo.cancelMarket(market.id)),
-                      child: Text('取消并退款', style: TextStyle(color: c.danger)),
+                      child: Text(
+                        S.of(context).g_pred_cancel_refund,
+                        style: TextStyle(color: c.danger),
+                      ),
                     ),
                   ),
                 ],
@@ -142,9 +160,9 @@ class _ResolvePredictionSheetState
   ) async {
     final ok = await AppDialog.confirm(
       context,
-      title: '确认开奖',
-      message: '判定「${outcome.label}」获胜并结算？此操作不可撤销。',
-      confirmText: '确认开奖',
+      title: S.of(context).g_pred_confirm_resolve,
+      message: S.of(context).g_pred_confirm_resolve_msg(outcome.label),
+      confirmText: S.of(context).g_pred_confirm_resolve,
     );
     if (!ok) return;
     final repo = ref.read(predictionRepositoryProvider);

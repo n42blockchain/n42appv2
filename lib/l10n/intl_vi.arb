@@ -1388,5 +1388,20 @@
   "g_pred_err_question": "Vui lòng nhập câu hỏi",
   "g_pred_err_outcomes": "Cần ít nhất hai kết quả hợp lệ",
   "g_pred_yes": "Có",
-  "g_pred_no": "Không"
+  "g_pred_no": "Không",
+  "g_pred_balance": "Số dư: {amount} {symbol}",
+  "g_pred_amount_input": "Số tiền ({symbol})",
+  "g_pred_quote_info": "Ước tính {shares} phần · TB {avg}% · sau {after}%",
+  "g_pred_processing": "Đang xử lý…",
+  "g_pred_buy": "Mua",
+  "g_pred_sell_n": "Bán {n}",
+  "g_pred_closed_waiting": "Đã đóng, chờ kết quả",
+  "g_pred_resolved": "Đã giải quyết",
+  "g_pred_pick_winner": "Chọn kết quả thắng để thanh toán (tiền chi theo kết quả)",
+  "g_pred_outcome_win": "{label} thắng ({pct}%)",
+  "g_pred_result_label": "Kết quả: {label}",
+  "g_pred_close_only": "Chỉ đóng",
+  "g_pred_cancel_refund": "Hủy và hoàn tiền",
+  "g_pred_confirm_resolve": "Xác nhận kết quả",
+  "g_pred_confirm_resolve_msg": "Tuyên bố “{label}” thắng và thanh toán? Không thể hoàn tác."
 }

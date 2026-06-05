@@ -1381,5 +1381,20 @@
   "g_pred_err_question": "Tafadhali andika swali",
   "g_pred_err_outcomes": "Angalau matokeo mawili sahihi",
   "g_pred_yes": "Ndiyo",
-  "g_pred_no": "Hapana"
+  "g_pred_no": "Hapana",
+  "g_pred_balance": "Salio: {amount} {symbol}",
+  "g_pred_amount_input": "Kiasi ({symbol})",
+  "g_pred_quote_info": "Kadirio {shares} hisa · wastani {avg}% · baada {after}%",
+  "g_pred_processing": "Inachakata…",
+  "g_pred_buy": "Nunua",
+  "g_pred_sell_n": "Uza {n}",
+  "g_pred_closed_waiting": "Imefungwa, inasubiri matokeo",
+  "g_pred_resolved": "Imetatuliwa",
+  "g_pred_pick_winner": "Chagua matokeo yaliyoshinda kutatua (fedha kwa matokeo)",
+  "g_pred_outcome_win": "{label} inashinda ({pct}%)",
+  "g_pred_result_label": "Tokeo: {label}",
+  "g_pred_close_only": "Funga tu",
+  "g_pred_cancel_refund": "Ghairi & rejesha",
+  "g_pred_confirm_resolve": "Thibitisha utatuzi",
+  "g_pred_confirm_resolve_msg": "Tangaza “{label}” mshindi na utatue? Haiwezi kutenduliwa."
 }

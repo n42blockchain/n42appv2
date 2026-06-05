@@ -1381,5 +1381,20 @@
   "g_pred_err_question": "الرجاء إدخال سؤال",
   "g_pred_err_outcomes": "نتيجتان صالحتان على الأقل",
   "g_pred_yes": "نعم",
-  "g_pred_no": "لا"
+  "g_pred_no": "لا",
+  "g_pred_balance": "الرصيد: {amount} {symbol}",
+  "g_pred_amount_input": "المبلغ ({symbol})",
+  "g_pred_quote_info": "تقدير {shares} حصة · متوسط {avg}% · بعد {after}%",
+  "g_pred_processing": "جارٍ المعالجة…",
+  "g_pred_buy": "شراء",
+  "g_pred_sell_n": "بيع {n}",
+  "g_pred_closed_waiting": "مغلق، بانتظار التسوية",
+  "g_pred_resolved": "تمت التسوية",
+  "g_pred_pick_winner": "اختر النتيجة الفائزة للتسوية (تُدفع الأموال حسب النتيجة)",
+  "g_pred_outcome_win": "{label} يفوز ({pct}%)",
+  "g_pred_result_label": "النتيجة: {label}",
+  "g_pred_close_only": "إغلاق فقط",
+  "g_pred_cancel_refund": "إلغاء واسترداد",
+  "g_pred_confirm_resolve": "تأكيد التسوية",
+  "g_pred_confirm_resolve_msg": "إعلان «{label}» فائزًا والتسوية؟ لا يمكن التراجع."
 }

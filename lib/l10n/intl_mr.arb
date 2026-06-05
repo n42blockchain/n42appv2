@@ -1381,5 +1381,20 @@
   "g_pred_err_question": "कृपया प्रश्न प्रविष्ट करा",
   "g_pred_err_outcomes": "किमान दोन वैध निकाल",
   "g_pred_yes": "होय",
-  "g_pred_no": "नाही"
+  "g_pred_no": "नाही",
+  "g_pred_balance": "शिल्लक: {amount} {symbol}",
+  "g_pred_amount_input": "रक्कम ({symbol})",
+  "g_pred_quote_info": "अंदाजे {shares} हिस्से · सरासरी {avg}% · नंतर {after}%",
+  "g_pred_processing": "प्रक्रिया सुरू…",
+  "g_pred_buy": "खरेदी",
+  "g_pred_sell_n": "विक्री {n}",
+  "g_pred_closed_waiting": "बंद, निकालाची प्रतीक्षा",
+  "g_pred_resolved": "निकाली",
+  "g_pred_pick_winner": "सेटलमेंटसाठी विजयी निकाल निवडा (निधी निकालानुसार)",
+  "g_pred_outcome_win": "{label} जिंकतो ({pct}%)",
+  "g_pred_result_label": "निकाल: {label}",
+  "g_pred_close_only": "फक्त बंद",
+  "g_pred_cancel_refund": "रद्द व परतावा",
+  "g_pred_confirm_resolve": "निकाल निश्चित करा",
+  "g_pred_confirm_resolve_msg": "«{label}» विजेता घोषित करून निपटारा? हे पूर्ववत होणार नाही."
 }

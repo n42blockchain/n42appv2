@@ -147,27 +147,43 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m53(value) => "${value} অক্ষর হতে হবে";
 
-  static String m54(n) => "${n} মিনিট";
+  static String m54(symbol) => "পরিমাণ (${symbol})";
 
-  static String m55(n) => "ফলাফল ${n}";
+  static String m55(amount, symbol) => "ব্যালেন্স: ${amount} ${symbol}";
 
-  static String m56(value) => "${value} অপর্যাপ্ত ব্যালেন্স।";
+  static String m56(label) =>
+      "“${label}”-কে বিজয়ী ঘোষণা করে নিষ্পত্তি? এটি ফেরানো যাবে না।";
 
-  static String m57(value) => "${value} ইনকামিং...";
+  static String m57(n) => "${n} মিনিট";
 
-  static String m58(value) =>
+  static String m58(n) => "ফলাফল ${n}";
+
+  static String m59(label, pct) => "${label} জেতে (${pct}%)";
+
+  static String m60(shares, avg, after) =>
+      "আনু. ${shares} শেয়ার · গড় ${avg}% · পরে ${after}%";
+
+  static String m61(label) => "ফলাফল: ${label}";
+
+  static String m62(n) => "বিক্রি ${n}";
+
+  static String m63(value) => "${value} অপর্যাপ্ত ব্যালেন্স।";
+
+  static String m64(value) => "${value} ইনকামিং...";
+
+  static String m65(value) =>
       "${value} সোয়াপড ইন-অ্যাপ শীঘ্রই আপনার ওয়ালেটে বিতরণ করা হবে এবং এই প্রক্রিয়ার মাধ্যমে বিক্রি করা যাবে না। এটি একটি নোড চালানোর জন্য ব্যবহার করা যেতে পারে।";
 
-  static String m59(value) => "সর্বাধিক ${value} অক্ষর";
+  static String m66(value) => "সর্বাধিক ${value} অক্ষর";
 
-  static String m60(value) => "${value} চেইন অ্যাপ ইতিমধ্যেই সমর্থিত!";
+  static String m67(value) => "${value} চেইন অ্যাপ ইতিমধ্যেই সমর্থিত!";
 
-  static String m61(value) =>
+  static String m68(value) =>
       "${value} চেইন APP ইতিমধ্যেই সমর্থিত, আপনি কি এটি যোগ করতে চান?";
 
-  static String m62(value) => "${value} ঠিকানা পরীক্ষার লিঙ্ক ব্যর্থ হয়েছে!";
+  static String m69(value) => "${value} ঠিকানা পরীক্ষার লিঙ্ক ব্যর্থ হয়েছে!";
 
-  static String m63(value) => "0~${value} অক্ষর";
+  static String m70(value) => "0~${value} অক্ষর";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -2569,6 +2585,20 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_pred_add_outcome": MessageLookupByLibrary.simpleMessage(
       "ফলাফল যোগ করুন",
     ),
+    "g_pred_amount_input": m54,
+    "g_pred_balance": m55,
+    "g_pred_buy": MessageLookupByLibrary.simpleMessage("কিনুন"),
+    "g_pred_cancel_refund": MessageLookupByLibrary.simpleMessage(
+      "বাতিল ও ফেরত",
+    ),
+    "g_pred_close_only": MessageLookupByLibrary.simpleMessage("শুধু বন্ধ"),
+    "g_pred_closed_waiting": MessageLookupByLibrary.simpleMessage(
+      "বন্ধ, ফলাফলের অপেক্ষায়",
+    ),
+    "g_pred_confirm_resolve": MessageLookupByLibrary.simpleMessage(
+      "নিষ্পত্তি নিশ্চিত",
+    ),
+    "g_pred_confirm_resolve_msg": m56,
     "g_pred_create_title": MessageLookupByLibrary.simpleMessage(
       "ভবিষ্যদ্বাণী শুরু করুন",
     ),
@@ -2580,14 +2610,23 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_pred_err_question": MessageLookupByLibrary.simpleMessage(
       "একটি প্রশ্ন লিখুন",
     ),
-    "g_pred_minutes": m54,
+    "g_pred_minutes": m57,
     "g_pred_no": MessageLookupByLibrary.simpleMessage("না"),
-    "g_pred_outcome_n": m55,
+    "g_pred_outcome_n": m58,
+    "g_pred_outcome_win": m59,
     "g_pred_outcomes": MessageLookupByLibrary.simpleMessage("ফলাফল"),
+    "g_pred_pick_winner": MessageLookupByLibrary.simpleMessage(
+      "নিষ্পত্তির জন্য বিজয়ী ফলাফল বাছুন (ফল অনুযায়ী অর্থ)",
+    ),
+    "g_pred_processing": MessageLookupByLibrary.simpleMessage("প্রসেস হচ্ছে…"),
     "g_pred_publish": MessageLookupByLibrary.simpleMessage("প্রকাশ করুন"),
     "g_pred_q_hint": MessageLookupByLibrary.simpleMessage(
       "ভবিষ্যদ্বাণীর প্রশ্ন, যেমন: এই রাউন্ডে কে জিতবে?",
     ),
+    "g_pred_quote_info": m60,
+    "g_pred_resolved": MessageLookupByLibrary.simpleMessage("নিষ্পন্ন"),
+    "g_pred_result_label": m61,
+    "g_pred_sell_n": m62,
     "g_pred_unlimited": MessageLookupByLibrary.simpleMessage(
       "সীমাহীন (ম্যানুয়াল বন্ধ)",
     ),
@@ -2626,7 +2665,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("লিঙ্ক"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("কোড"),
-    "g_swap_key_14": m56,
+    "g_swap_key_14": m63,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "মুদ্রা মূল্য ত্রুটি পান.",
     ),
@@ -2638,7 +2677,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "আপনার অদলবদল শীঘ্রই বিতরণ করা হবে৷ দয়া করে ধৈর্য ধরুন৷",
     ),
-    "g_swap_key_20": m57,
+    "g_swap_key_20": m64,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "একটি নোড চালানোর খরচ: গ্রুপ যাচাইকরণ 1-49 N বেসিক নোড: 50 N প্রিমিয়াম নোড: 100 N প্রো নোড: 500 N।",
     ),
@@ -2652,7 +2691,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("নতুন ব্যালেন্স"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("তুমি টাকা দাও"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("তারিখ"),
-    "g_swap_key_31": m58,
+    "g_swap_key_31": m65,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "অদলবদলগুলি প্রাসঙ্গিক চেইন এক্সপ্লোরারগুলিতে দেখা যেতে পারে (ইথারস্ক্যান, বিএসসিস্ক্যান, ট্রনস্ক্যান এবং আমাদের নিজস্ব)।",
     ),
@@ -2667,7 +2706,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "ডিফল্টে রিসেট করুন",
     ),
-    "g_token_m_key_1": m59,
+    "g_token_m_key_1": m66,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "বিদ্যমান টোকেনগুলির জাল সংস্করণ তৈরি সহ যে কেউ একটি টোকেন তৈরি করতে পারে৷ এটি আমদানি করার আগে সর্বদা একটি টোকেন গবেষণা করুন।",
     ),
@@ -2686,9 +2725,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_2": MessageLookupByLibrary.simpleMessage("0~18 uint"),
     "g_token_m_key_20": MessageLookupByLibrary.simpleMessage("টোকেন যোগ করুন"),
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage("বিন্যাস ত্রুটি!"),
-    "g_token_m_key_22": m60,
-    "g_token_m_key_23": m61,
-    "g_token_m_key_24": m62,
+    "g_token_m_key_22": m67,
+    "g_token_m_key_23": m68,
+    "g_token_m_key_24": m69,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage(
       "টোকেন আমদানি করুন",
     ),
@@ -2739,7 +2778,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_email": MessageLookupByLibrary.simpleMessage("ইমেইল"),
     "login_password": MessageLookupByLibrary.simpleMessage("পাসওয়ার্ড"),
     "next": MessageLookupByLibrary.simpleMessage("পরবর্তী"),
-    "nicknameMessage": m63,
+    "nicknameMessage": m70,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "প্রোফাইল সম্পাদনা করুন",
     ),

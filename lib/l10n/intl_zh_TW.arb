@@ -1381,5 +1381,20 @@
   "g_pred_err_question": "請填寫預測問題",
   "g_pred_err_outcomes": "至少兩個有效結果",
   "g_pred_yes": "是",
-  "g_pred_no": "否"
+  "g_pred_no": "否",
+  "g_pred_balance": "餘額：{amount} {symbol}",
+  "g_pred_amount_input": "投入金額（{symbol}）",
+  "g_pred_quote_info": "預計獲得 {shares} 份額 · 均價 {avg}% · 成交後 {after}%",
+  "g_pred_processing": "處理中…",
+  "g_pred_buy": "買入",
+  "g_pred_sell_n": "賣出 {n}",
+  "g_pred_closed_waiting": "已停盤，等待開獎",
+  "g_pred_resolved": "已開獎",
+  "g_pred_pick_winner": "選擇獲勝結果開獎（資金按結果結算）",
+  "g_pred_outcome_win": "{label} 獲勝（{pct}%）",
+  "g_pred_result_label": "結果：{label}",
+  "g_pred_close_only": "僅停盤",
+  "g_pred_cancel_refund": "取消並退款",
+  "g_pred_confirm_resolve": "確認開獎",
+  "g_pred_confirm_resolve_msg": "判定「{label}」獲勝並結算？此操作不可撤銷。"
 }

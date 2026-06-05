@@ -1381,5 +1381,20 @@
   "g_pred_err_question": "Введіть запитання",
   "g_pred_err_outcomes": "Щонайменше два дійсні результати",
   "g_pred_yes": "Так",
-  "g_pred_no": "Ні"
+  "g_pred_no": "Ні",
+  "g_pred_balance": "Баланс: {amount} {symbol}",
+  "g_pred_amount_input": "Сума ({symbol})",
+  "g_pred_quote_info": "Очік. {shares} часток · сер. {avg}% · після {after}%",
+  "g_pred_processing": "Обробка…",
+  "g_pred_buy": "Купити",
+  "g_pred_sell_n": "Продати {n}",
+  "g_pred_closed_waiting": "Закрито, очікування результату",
+  "g_pred_resolved": "Вирішено",
+  "g_pred_pick_winner": "Виберіть переможний результат для розрахунку (виплата за результатом)",
+  "g_pred_outcome_win": "{label} перемагає ({pct}%)",
+  "g_pred_result_label": "Результат: {label}",
+  "g_pred_close_only": "Лише закрити",
+  "g_pred_cancel_refund": "Скасувати та повернути",
+  "g_pred_confirm_resolve": "Підтвердити розрахунок",
+  "g_pred_confirm_resolve_msg": "Оголосити «{label}» переможцем і розрахувати? Незворотно."
 }

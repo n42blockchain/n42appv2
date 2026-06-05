@@ -1388,5 +1388,20 @@
   "g_pred_err_question": "Bitte eine Frage eingeben",
   "g_pred_err_outcomes": "Mindestens zwei gültige Ergebnisse",
   "g_pred_yes": "Ja",
-  "g_pred_no": "Nein"
+  "g_pred_no": "Nein",
+  "g_pred_balance": "Guthaben: {amount} {symbol}",
+  "g_pred_amount_input": "Betrag ({symbol})",
+  "g_pred_quote_info": "Ca. {shares} Anteile · Ø {avg}% · danach {after}%",
+  "g_pred_processing": "Wird verarbeitet…",
+  "g_pred_buy": "Kaufen",
+  "g_pred_sell_n": "Verkaufen {n}",
+  "g_pred_closed_waiting": "Geschlossen, Auflösung ausstehend",
+  "g_pred_resolved": "Aufgelöst",
+  "g_pred_pick_winner": "Gewinnergebnis zum Abrechnen wählen (Auszahlung nach Ergebnis)",
+  "g_pred_outcome_win": "{label} gewinnt ({pct}%)",
+  "g_pred_result_label": "Ergebnis: {label}",
+  "g_pred_close_only": "Nur schließen",
+  "g_pred_cancel_refund": "Abbrechen & erstatten",
+  "g_pred_confirm_resolve": "Auflösung bestätigen",
+  "g_pred_confirm_resolve_msg": "„{label}“ zum Gewinner erklären und abrechnen? Nicht umkehrbar."
 }

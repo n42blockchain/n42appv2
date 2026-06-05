@@ -1388,5 +1388,20 @@
   "g_pred_err_question": "Введите вопрос",
   "g_pred_err_outcomes": "Минимум два допустимых исхода",
   "g_pred_yes": "Да",
-  "g_pred_no": "Нет"
+  "g_pred_no": "Нет",
+  "g_pred_balance": "Баланс: {amount} {symbol}",
+  "g_pred_amount_input": "Сумма ({symbol})",
+  "g_pred_quote_info": "Ожид. {shares} долей · средн. {avg}% · после {after}%",
+  "g_pred_processing": "Обработка…",
+  "g_pred_buy": "Купить",
+  "g_pred_sell_n": "Продать {n}",
+  "g_pred_closed_waiting": "Закрыто, ожидание расчёта",
+  "g_pred_resolved": "Рассчитано",
+  "g_pred_pick_winner": "Выберите победный исход для расчёта (выплата по результату)",
+  "g_pred_outcome_win": "{label} побеждает ({pct}%)",
+  "g_pred_result_label": "Результат: {label}",
+  "g_pred_close_only": "Только закрыть",
+  "g_pred_cancel_refund": "Отменить и вернуть",
+  "g_pred_confirm_resolve": "Подтвердить расчёт",
+  "g_pred_confirm_resolve_msg": "Объявить «{label}» победителем и рассчитать? Это необратимо."
 }

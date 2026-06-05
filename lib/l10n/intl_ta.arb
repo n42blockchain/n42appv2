@@ -1381,5 +1381,20 @@
   "g_pred_err_question": "கேள்வியை உள்ளிடவும்",
   "g_pred_err_outcomes": "குறைந்தது இரண்டு செல்லுபடியான முடிவுகள்",
   "g_pred_yes": "ஆம்",
-  "g_pred_no": "இல்லை"
+  "g_pred_no": "இல்லை",
+  "g_pred_balance": "இருப்பு: {amount} {symbol}",
+  "g_pred_amount_input": "தொகை ({symbol})",
+  "g_pred_quote_info": "மதிப்பு {shares} பங்கு · சராசரி {avg}% · பின் {after}%",
+  "g_pred_processing": "செயலாக்கம்…",
+  "g_pred_buy": "வாங்கு",
+  "g_pred_sell_n": "விற்க {n}",
+  "g_pred_closed_waiting": "மூடப்பட்டது, தீர்வுக்காகக் காத்திருக்கிறது",
+  "g_pred_resolved": "தீர்க்கப்பட்டது",
+  "g_pred_pick_winner": "தீர்வுக்கு வெற்றி முடிவைத் தேர்ந்தெடுக்கவும் (நிதி முடிவின்படி)",
+  "g_pred_outcome_win": "{label} வெல்கிறது ({pct}%)",
+  "g_pred_result_label": "முடிவு: {label}",
+  "g_pred_close_only": "மூடு மட்டும்",
+  "g_pred_cancel_refund": "ரத்து & பணம் திரும்ப",
+  "g_pred_confirm_resolve": "தீர்வை உறுதிப்படுத்து",
+  "g_pred_confirm_resolve_msg": "“{label}” வெற்றியாளராக அறிவித்துத் தீர்வா? மீட்க முடியாது."
 }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 
 import '../domain/prediction_market.dart';
 import '../providers/prediction_providers.dart';
@@ -200,7 +201,7 @@ class _TradeSheetState extends ConsumerState<TradeSheet> {
         ),
         SizedBox(height: AppSpacing.space6),
         Text(
-          '余额：${balance.toStringAsFixed(2)} $symbol',
+          S.of(context).g_pred_balance(balance.toStringAsFixed(2), symbol),
           style: AppTypography.caption.copyWith(color: c.textSecondary),
         ),
         SizedBox(height: AppSpacing.space4),
@@ -213,7 +214,7 @@ class _TradeSheetState extends ConsumerState<TradeSheet> {
             ],
             style: AppTypography.body.copyWith(color: c.textPrimary),
             decoration: InputDecoration(
-              labelText: '投入金额 ($symbol)',
+              labelText: S.of(context).g_pred_amount_input(symbol),
               labelStyle: TextStyle(color: c.textSecondary),
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: c.border),
@@ -226,9 +227,13 @@ class _TradeSheetState extends ConsumerState<TradeSheet> {
           SizedBox(height: AppSpacing.space4),
           if (_quote != null)
             Text(
-              '预计获得 ${_quote!.shares.toStringAsFixed(2)} 份额'
-              ' · 均价 ${(_quote!.avgPrice * 100).toStringAsFixed(1)}%'
-              ' · 成交后 ${(_quote!.priceAfter * 100).toStringAsFixed(0)}%',
+              S
+                  .of(context)
+                  .g_pred_quote_info(
+                    _quote!.shares.toStringAsFixed(2),
+                    (_quote!.avgPrice * 100).toStringAsFixed(1),
+                    (_quote!.priceAfter * 100).toStringAsFixed(0),
+                  ),
               style: AppTypography.caption.copyWith(color: c.textSecondary),
             ),
           if (_error != null) ...[
@@ -241,21 +246,27 @@ class _TradeSheetState extends ConsumerState<TradeSheet> {
               Expanded(
                 child: FilledButton(
                   onPressed: _busy ? null : _buy,
-                  child: Text(_busy ? '处理中…' : '买入'),
+                  child: Text(
+                    _busy
+                        ? S.of(context).g_pred_processing
+                        : S.of(context).g_pred_buy,
+                  ),
                 ),
               ),
               if (held > 0) ...[
                 SizedBox(width: AppSpacing.space4),
                 OutlinedButton(
                   onPressed: _busy ? null : () => _sell(held),
-                  child: Text('卖出 ${held.toStringAsFixed(1)}'),
+                  child: Text(
+                    S.of(context).g_pred_sell_n(held.toStringAsFixed(1)),
+                  ),
                 ),
               ],
             ],
           ),
         ] else
           Text(
-            '已停盘，等待开奖',
+            S.of(context).g_pred_closed_waiting,
             style: AppTypography.body.copyWith(color: c.textSecondary),
           ),
       ],

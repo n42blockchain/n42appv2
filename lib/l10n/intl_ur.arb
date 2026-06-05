@@ -1381,5 +1381,20 @@
   "g_pred_err_question": "براہ کرم سوال درج کریں",
   "g_pred_err_outcomes": "کم از کم دو درست نتائج",
   "g_pred_yes": "ہاں",
-  "g_pred_no": "نہیں"
+  "g_pred_no": "نہیں",
+  "g_pred_balance": "بیلنس: {amount} {symbol}",
+  "g_pred_amount_input": "رقم ({symbol})",
+  "g_pred_quote_info": "تخمینی {shares} حصص · اوسط {avg}% · بعد {after}%",
+  "g_pred_processing": "پروسیسنگ…",
+  "g_pred_buy": "خریدیں",
+  "g_pred_sell_n": "فروخت {n}",
+  "g_pred_closed_waiting": "بند، تصفیہ کے منتظر",
+  "g_pred_resolved": "طے شدہ",
+  "g_pred_pick_winner": "تصفیہ کے لیے جیتنے والا نتیجہ منتخب کریں (رقم نتیجہ کے مطابق)",
+  "g_pred_outcome_win": "{label} جیتتا ہے ({pct}%)",
+  "g_pred_result_label": "نتیجہ: {label}",
+  "g_pred_close_only": "صرف بند",
+  "g_pred_cancel_refund": "منسوخ اور رقم واپس",
+  "g_pred_confirm_resolve": "تصفیہ کی تصدیق",
+  "g_pred_confirm_resolve_msg": "«{label}» کو فاتح قرار دے کر تصفیہ کریں؟ یہ واپس نہیں ہو سکتا۔"
 }

@@ -1381,5 +1381,20 @@
   "g_pred_err_question": "Zadejte otázku",
   "g_pred_err_outcomes": "Alespoň dva platné výsledky",
   "g_pred_yes": "Ano",
-  "g_pred_no": "Ne"
+  "g_pred_no": "Ne",
+  "g_pred_balance": "Zůstatek: {amount} {symbol}",
+  "g_pred_amount_input": "Částka ({symbol})",
+  "g_pred_quote_info": "Odh. {shares} podílů · prům {avg}% · poté {after}%",
+  "g_pred_processing": "Zpracování…",
+  "g_pred_buy": "Koupit",
+  "g_pred_sell_n": "Prodat {n}",
+  "g_pred_closed_waiting": "Uzavřeno, čeká na vyhodnocení",
+  "g_pred_resolved": "Vyhodnoceno",
+  "g_pred_pick_winner": "Vyberte vítězný výsledek k vypořádání (prostředky dle výsledku)",
+  "g_pred_outcome_win": "{label} vyhrává ({pct}%)",
+  "g_pred_result_label": "Výsledek: {label}",
+  "g_pred_close_only": "Pouze uzavřít",
+  "g_pred_cancel_refund": "Zrušit a vrátit",
+  "g_pred_confirm_resolve": "Potvrdit vyhodnocení",
+  "g_pred_confirm_resolve_msg": "Prohlásit „{label}“ vítězem a vypořádat? Nelze vrátit."
 }

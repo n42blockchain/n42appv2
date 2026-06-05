@@ -144,27 +144,43 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m53(value) => "Must be ${value} characters";
 
-  static String m54(n) => "${n} min";
+  static String m54(symbol) => "Amount (${symbol})";
 
-  static String m55(n) => "Outcome ${n}";
+  static String m55(amount, symbol) => "Balance: ${amount} ${symbol}";
 
-  static String m56(value) => "${value} Insufficient Balance.";
+  static String m56(label) =>
+      "Declare “${label}” the winner and settle? This cannot be undone.";
 
-  static String m57(value) => "${value} incoming...";
+  static String m57(n) => "${n} min";
 
-  static String m58(value) =>
+  static String m58(n) => "Outcome ${n}";
+
+  static String m59(label, pct) => "${label} wins (${pct}%)";
+
+  static String m60(shares, avg, after) =>
+      "Est. ${shares} shares · avg ${avg}% · after ${after}%";
+
+  static String m61(label) => "Result: ${label}";
+
+  static String m62(n) => "Sell ${n}";
+
+  static String m63(value) => "${value} Insufficient Balance.";
+
+  static String m64(value) => "${value} incoming...";
+
+  static String m65(value) =>
       "${value} swapped in-app will be distributed shortly to your wallet and cannot be sold via this process. It can be used to run a node.";
 
-  static String m59(value) => "Max ${value} characters";
+  static String m66(value) => "Max ${value} characters";
 
-  static String m60(value) => "${value} chain APP is already supported!";
+  static String m67(value) => "${value} chain APP is already supported!";
 
-  static String m61(value) =>
+  static String m68(value) =>
       "${value} chain APP is already supported, do you want to add it?";
 
-  static String m62(value) => "${value} address test link failed!";
+  static String m69(value) => "${value} address test link failed!";
 
-  static String m63(value) => "0~${value} characters";
+  static String m70(value) => "0~${value} characters";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -2455,6 +2471,20 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_portfolio_title": MessageLookupByLibrary.simpleMessage("Portfolio"),
     "g_portfolio_total": MessageLookupByLibrary.simpleMessage("Total Value"),
     "g_pred_add_outcome": MessageLookupByLibrary.simpleMessage("Add outcome"),
+    "g_pred_amount_input": m54,
+    "g_pred_balance": m55,
+    "g_pred_buy": MessageLookupByLibrary.simpleMessage("Buy"),
+    "g_pred_cancel_refund": MessageLookupByLibrary.simpleMessage(
+      "Cancel & refund",
+    ),
+    "g_pred_close_only": MessageLookupByLibrary.simpleMessage("Close only"),
+    "g_pred_closed_waiting": MessageLookupByLibrary.simpleMessage(
+      "Closed, awaiting resolution",
+    ),
+    "g_pred_confirm_resolve": MessageLookupByLibrary.simpleMessage(
+      "Confirm resolution",
+    ),
+    "g_pred_confirm_resolve_msg": m56,
     "g_pred_create_title": MessageLookupByLibrary.simpleMessage(
       "Start Prediction",
     ),
@@ -2466,14 +2496,23 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_pred_err_question": MessageLookupByLibrary.simpleMessage(
       "Please enter a question",
     ),
-    "g_pred_minutes": m54,
+    "g_pred_minutes": m57,
     "g_pred_no": MessageLookupByLibrary.simpleMessage("No"),
-    "g_pred_outcome_n": m55,
+    "g_pred_outcome_n": m58,
+    "g_pred_outcome_win": m59,
     "g_pred_outcomes": MessageLookupByLibrary.simpleMessage("Outcomes"),
+    "g_pred_pick_winner": MessageLookupByLibrary.simpleMessage(
+      "Pick the winning outcome to settle (funds paid by result)",
+    ),
+    "g_pred_processing": MessageLookupByLibrary.simpleMessage("Processing…"),
     "g_pred_publish": MessageLookupByLibrary.simpleMessage("Publish"),
     "g_pred_q_hint": MessageLookupByLibrary.simpleMessage(
       "Prediction question, e.g. Who wins this round?",
     ),
+    "g_pred_quote_info": m60,
+    "g_pred_resolved": MessageLookupByLibrary.simpleMessage("Resolved"),
+    "g_pred_result_label": m61,
+    "g_pred_sell_n": m62,
     "g_pred_unlimited": MessageLookupByLibrary.simpleMessage(
       "Unlimited (manual close)",
     ),
@@ -2506,7 +2545,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_share_v3_key_6": MessageLookupByLibrary.simpleMessage("Refer via"),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("Link"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("code"),
-    "g_swap_key_14": m56,
+    "g_swap_key_14": m63,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "Get coin price error.",
     ),
@@ -2520,7 +2559,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "Your swap will be distributed shortly.Please be patient.",
     ),
-    "g_swap_key_20": m57,
+    "g_swap_key_20": m64,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "Costs to run a node: Group Verification 1-49 N Basic Node: 50 N Premium Node: 100 N Pro Node: 500 N.",
     ),
@@ -2532,7 +2571,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("New Balance"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("You pay"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("Date"),
-    "g_swap_key_31": m58,
+    "g_swap_key_31": m65,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "Swaps can be viewed on the relevant chain explorers (Etherscan, BscScan, TRONSCAN and our own).",
     ),
@@ -2547,7 +2586,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "Reset to default",
     ),
-    "g_token_m_key_1": m59,
+    "g_token_m_key_1": m66,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "Anyone can create a token, including creating fake versions of existing tokens. Always research a token before importing it.",
     ),
@@ -2564,9 +2603,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_2": MessageLookupByLibrary.simpleMessage("0~18 uint"),
     "g_token_m_key_20": MessageLookupByLibrary.simpleMessage("Add Tokens"),
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage("Format Error!"),
-    "g_token_m_key_22": m60,
-    "g_token_m_key_23": m61,
-    "g_token_m_key_24": m62,
+    "g_token_m_key_22": m67,
+    "g_token_m_key_23": m68,
+    "g_token_m_key_24": m69,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("Import tokens"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("All networks"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage("Custom Token"),
@@ -2613,7 +2652,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_email": MessageLookupByLibrary.simpleMessage("Email"),
     "login_password": MessageLookupByLibrary.simpleMessage("Password"),
     "next": MessageLookupByLibrary.simpleMessage("Next"),
-    "nicknameMessage": m63,
+    "nicknameMessage": m70,
     "personalInformation": MessageLookupByLibrary.simpleMessage("Edit Profile"),
     "photograph": MessageLookupByLibrary.simpleMessage("Photograph"),
     "please_input_address": MessageLookupByLibrary.simpleMessage(

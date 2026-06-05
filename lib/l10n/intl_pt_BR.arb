@@ -1388,5 +1388,20 @@
   "g_pred_err_question": "Insira uma pergunta",
   "g_pred_err_outcomes": "Pelo menos dois resultados válidos",
   "g_pred_yes": "Sim",
-  "g_pred_no": "Não"
+  "g_pred_no": "Não",
+  "g_pred_balance": "Saldo: {amount} {symbol}",
+  "g_pred_amount_input": "Valor ({symbol})",
+  "g_pred_quote_info": "Est. {shares} cotas · méd {avg}% · após {after}%",
+  "g_pred_processing": "Processando…",
+  "g_pred_buy": "Comprar",
+  "g_pred_sell_n": "Vender {n}",
+  "g_pred_closed_waiting": "Fechado, aguardando resolução",
+  "g_pred_resolved": "Resolvido",
+  "g_pred_pick_winner": "Escolha o resultado vencedor para liquidar (fundos pelo resultado)",
+  "g_pred_outcome_win": "{label} vence ({pct}%)",
+  "g_pred_result_label": "Resultado: {label}",
+  "g_pred_close_only": "Apenas fechar",
+  "g_pred_cancel_refund": "Cancelar e reembolsar",
+  "g_pred_confirm_resolve": "Confirmar resolução",
+  "g_pred_confirm_resolve_msg": "Declarar “{label}” vencedor e liquidar? Não pode ser desfeito."
 }

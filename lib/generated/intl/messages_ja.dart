@@ -136,26 +136,41 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m53(value) => "${value}文字である必要があります";
 
-  static String m54(n) => "${n} 分";
+  static String m54(symbol) => "投入額（${symbol}）";
 
-  static String m55(n) => "結果 ${n}";
+  static String m55(amount, symbol) => "残高：${amount} ${symbol}";
 
-  static String m56(value) => "${value}の残高が不足しています。";
+  static String m56(label) => "「${label}」を勝者として精算しますか？この操作は取り消せません。";
 
-  static String m57(value) => "${value}を受取中...";
+  static String m57(n) => "${n} 分";
 
-  static String m58(value) =>
+  static String m58(n) => "結果 ${n}";
+
+  static String m59(label, pct) => "${label} 勝利（${pct}%）";
+
+  static String m60(shares, avg, after) =>
+      "予想 ${shares} シェア · 平均 ${avg}% · 約定後 ${after}%";
+
+  static String m61(label) => "結果：${label}";
+
+  static String m62(n) => "売却 ${n}";
+
+  static String m63(value) => "${value}の残高が不足しています。";
+
+  static String m64(value) => "${value}を受取中...";
+
+  static String m65(value) =>
       "アプリ内でスワップされた${value}はまもなくウォレットに配布され、このプロセスでは売却できません。ノードの運用に使用できます。";
 
-  static String m59(value) => "最大${value}文字";
+  static String m66(value) => "最大${value}文字";
 
-  static String m60(value) => "${value}チェーンは既にアプリでサポートされています！";
+  static String m67(value) => "${value}チェーンは既にアプリでサポートされています！";
 
-  static String m61(value) => "${value}チェーンは既にアプリでサポートされています。追加しますか？";
+  static String m68(value) => "${value}チェーンは既にアプリでサポートされています。追加しますか？";
 
-  static String m62(value) => "${value}アドレスのテストリンクに失敗しました！";
+  static String m69(value) => "${value}アドレスのテストリンクに失敗しました！";
 
-  static String m63(value) => "0〜${value}文字";
+  static String m70(value) => "0〜${value}文字";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -2004,6 +2019,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_portfolio_title": MessageLookupByLibrary.simpleMessage("ポートフォリオ"),
     "g_portfolio_total": MessageLookupByLibrary.simpleMessage("合計値"),
     "g_pred_add_outcome": MessageLookupByLibrary.simpleMessage("結果を追加"),
+    "g_pred_amount_input": m54,
+    "g_pred_balance": m55,
+    "g_pred_buy": MessageLookupByLibrary.simpleMessage("購入"),
+    "g_pred_cancel_refund": MessageLookupByLibrary.simpleMessage("キャンセルして返金"),
+    "g_pred_close_only": MessageLookupByLibrary.simpleMessage("締切のみ"),
+    "g_pred_closed_waiting": MessageLookupByLibrary.simpleMessage("締切済み、結果待ち"),
+    "g_pred_confirm_resolve": MessageLookupByLibrary.simpleMessage("結果を確定"),
+    "g_pred_confirm_resolve_msg": m56,
     "g_pred_create_title": MessageLookupByLibrary.simpleMessage("予測を開始"),
     "g_pred_creating": MessageLookupByLibrary.simpleMessage("作成中…"),
     "g_pred_deadline": MessageLookupByLibrary.simpleMessage("締切"),
@@ -2011,12 +2034,21 @@ class MessageLookup extends MessageLookupByLibrary {
       "有効な結果が2つ以上必要です",
     ),
     "g_pred_err_question": MessageLookupByLibrary.simpleMessage("質問を入力してください"),
-    "g_pred_minutes": m54,
+    "g_pred_minutes": m57,
     "g_pred_no": MessageLookupByLibrary.simpleMessage("いいえ"),
-    "g_pred_outcome_n": m55,
+    "g_pred_outcome_n": m58,
+    "g_pred_outcome_win": m59,
     "g_pred_outcomes": MessageLookupByLibrary.simpleMessage("結果の選択肢"),
+    "g_pred_pick_winner": MessageLookupByLibrary.simpleMessage(
+      "勝利結果を選んで精算（資金は結果に従って支払われます）",
+    ),
+    "g_pred_processing": MessageLookupByLibrary.simpleMessage("処理中…"),
     "g_pred_publish": MessageLookupByLibrary.simpleMessage("予測を公開"),
     "g_pred_q_hint": MessageLookupByLibrary.simpleMessage("予測の質問（例：今回は誰が勝つ？）"),
+    "g_pred_quote_info": m60,
+    "g_pred_resolved": MessageLookupByLibrary.simpleMessage("結果確定"),
+    "g_pred_result_label": m61,
+    "g_pred_sell_n": m62,
     "g_pred_unlimited": MessageLookupByLibrary.simpleMessage("無制限（手動で締切）"),
     "g_pred_yes": MessageLookupByLibrary.simpleMessage("はい"),
     "g_referral_downloaded": MessageLookupByLibrary.simpleMessage("ダウンロード"),
@@ -2043,7 +2075,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_share_v3_key_6": MessageLookupByLibrary.simpleMessage("紹介方法"),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("リンク"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("コード"),
-    "g_swap_key_14": m56,
+    "g_swap_key_14": m63,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage("コイン価格の取得エラー。"),
     "g_swap_key_16": MessageLookupByLibrary.simpleMessage(
       "続行すると、以下に同意したことになります：",
@@ -2053,7 +2085,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "スワップはまもなく配布されます。しばらくお待ちください。",
     ),
-    "g_swap_key_20": m57,
+    "g_swap_key_20": m64,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "ノード運用コスト：グループ認証 1-49 N、ベーシックノード：50 N、プレミアムノード：100 N、プロノード：500 N。",
     ),
@@ -2065,7 +2097,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("新残高"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("支払い"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("日付"),
-    "g_swap_key_31": m58,
+    "g_swap_key_31": m65,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "スワップは関連するチェーンエクスプローラー（Etherscan、BscScan、TRONSCAN、および当社独自のエクスプローラー）で確認できます。",
     ),
@@ -2078,7 +2110,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "デフォルトにリセットする",
     ),
-    "g_token_m_key_1": m59,
+    "g_token_m_key_1": m66,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "誰でもトークンを作成できます。既存のトークンの偽バージョンを作成することも可能です。インポートする前に必ずトークンを調査してください。",
     ),
@@ -2093,9 +2125,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_2": MessageLookupByLibrary.simpleMessage("0〜18の整数"),
     "g_token_m_key_20": MessageLookupByLibrary.simpleMessage("トークンを追加"),
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage("フォーマットエラー！"),
-    "g_token_m_key_22": m60,
-    "g_token_m_key_23": m61,
-    "g_token_m_key_24": m62,
+    "g_token_m_key_22": m67,
+    "g_token_m_key_23": m68,
+    "g_token_m_key_24": m69,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("トークンをインポート"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("全てのネットワーク"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage("カスタムトークン"),
@@ -2138,7 +2170,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_email": MessageLookupByLibrary.simpleMessage("メールアドレス"),
     "login_password": MessageLookupByLibrary.simpleMessage("パスワード"),
     "next": MessageLookupByLibrary.simpleMessage("次へ"),
-    "nicknameMessage": m63,
+    "nicknameMessage": m70,
     "personalInformation": MessageLookupByLibrary.simpleMessage("プロフィール編集"),
     "photograph": MessageLookupByLibrary.simpleMessage("撮影"),
     "please_input_address": MessageLookupByLibrary.simpleMessage(

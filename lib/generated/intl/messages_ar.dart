@@ -145,27 +145,43 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m53(value) => "يجب أن يكون هناك أحرف ${value}";
 
-  static String m54(n) => "${n} دقيقة";
+  static String m54(symbol) => "المبلغ (${symbol})";
 
-  static String m55(n) => "النتيجة ${n}";
+  static String m55(amount, symbol) => "الرصيد: ${amount} ${symbol}";
 
-  static String m56(value) => "${value} رصيد غير كافي.";
+  static String m56(label) =>
+      "إعلان «${label}» فائزًا والتسوية؟ لا يمكن التراجع.";
 
-  static String m57(value) => "${value} واردة...";
+  static String m57(n) => "${n} دقيقة";
 
-  static String m58(value) =>
+  static String m58(n) => "النتيجة ${n}";
+
+  static String m59(label, pct) => "${label} يفوز (${pct}%)";
+
+  static String m60(shares, avg, after) =>
+      "تقدير ${shares} حصة · متوسط ${avg}% · بعد ${after}%";
+
+  static String m61(label) => "النتيجة: ${label}";
+
+  static String m62(n) => "بيع ${n}";
+
+  static String m63(value) => "${value} رصيد غير كافي.";
+
+  static String m64(value) => "${value} واردة...";
+
+  static String m65(value) =>
       "سيتم توزيع ${value} داخل التطبيق قريبًا على محفظتك ولا يمكن بيعه عبر هذه العملية. يمكن استخدامه لتشغيل العقدة.";
 
-  static String m59(value) => "الحد الأقصى لعدد الأحرف ${value}";
+  static String m66(value) => "الحد الأقصى لعدد الأحرف ${value}";
 
-  static String m60(value) => "تطبيق سلسلة ${value} مدعوم بالفعل!";
+  static String m67(value) => "تطبيق سلسلة ${value} مدعوم بالفعل!";
 
-  static String m61(value) =>
+  static String m68(value) =>
       "تطبيق سلسلة ${value} مدعوم بالفعل، هل تريد إضافته؟";
 
-  static String m62(value) => "فشل رابط اختبار العنوان ${value}!";
+  static String m69(value) => "فشل رابط اختبار العنوان ${value}!";
 
-  static String m63(value) => "0~${value} أحرف";
+  static String m70(value) => "0~${value} أحرف";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -2461,6 +2477,20 @@ class MessageLookup extends MessageLookupByLibrary {
       "القيمة الإجمالية",
     ),
     "g_pred_add_outcome": MessageLookupByLibrary.simpleMessage("إضافة نتيجة"),
+    "g_pred_amount_input": m54,
+    "g_pred_balance": m55,
+    "g_pred_buy": MessageLookupByLibrary.simpleMessage("شراء"),
+    "g_pred_cancel_refund": MessageLookupByLibrary.simpleMessage(
+      "إلغاء واسترداد",
+    ),
+    "g_pred_close_only": MessageLookupByLibrary.simpleMessage("إغلاق فقط"),
+    "g_pred_closed_waiting": MessageLookupByLibrary.simpleMessage(
+      "مغلق، بانتظار التسوية",
+    ),
+    "g_pred_confirm_resolve": MessageLookupByLibrary.simpleMessage(
+      "تأكيد التسوية",
+    ),
+    "g_pred_confirm_resolve_msg": m56,
     "g_pred_create_title": MessageLookupByLibrary.simpleMessage("بدء التوقع"),
     "g_pred_creating": MessageLookupByLibrary.simpleMessage("جارٍ الإنشاء…"),
     "g_pred_deadline": MessageLookupByLibrary.simpleMessage("الموعد النهائي"),
@@ -2470,14 +2500,23 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_pred_err_question": MessageLookupByLibrary.simpleMessage(
       "الرجاء إدخال سؤال",
     ),
-    "g_pred_minutes": m54,
+    "g_pred_minutes": m57,
     "g_pred_no": MessageLookupByLibrary.simpleMessage("لا"),
-    "g_pred_outcome_n": m55,
+    "g_pred_outcome_n": m58,
+    "g_pred_outcome_win": m59,
     "g_pred_outcomes": MessageLookupByLibrary.simpleMessage("النتائج"),
+    "g_pred_pick_winner": MessageLookupByLibrary.simpleMessage(
+      "اختر النتيجة الفائزة للتسوية (تُدفع الأموال حسب النتيجة)",
+    ),
+    "g_pred_processing": MessageLookupByLibrary.simpleMessage("جارٍ المعالجة…"),
     "g_pred_publish": MessageLookupByLibrary.simpleMessage("نشر"),
     "g_pred_q_hint": MessageLookupByLibrary.simpleMessage(
       "سؤال التوقع، مثل: من يفوز بهذه الجولة؟",
     ),
+    "g_pred_quote_info": m60,
+    "g_pred_resolved": MessageLookupByLibrary.simpleMessage("تمت التسوية"),
+    "g_pred_result_label": m61,
+    "g_pred_sell_n": m62,
     "g_pred_unlimited": MessageLookupByLibrary.simpleMessage(
       "غير محدود (إغلاق يدوي)",
     ),
@@ -2512,7 +2551,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_share_v3_key_6": MessageLookupByLibrary.simpleMessage("الرجوع عبر"),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("رابط"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("كود"),
-    "g_swap_key_14": m56,
+    "g_swap_key_14": m63,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "الحصول على خطأ في سعر العملة.",
     ),
@@ -2524,7 +2563,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "سيتم توزيع مبادلة الخاص بك قريبا. يرجى التحلي بالصبر.",
     ),
-    "g_swap_key_20": m57,
+    "g_swap_key_20": m64,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "تكاليف تشغيل العقدة: التحقق من المجموعة 1-49 N العقدة الأساسية: 50 N العقدة المميزة: 100 N العقدة الاحترافية: 500 N.",
     ),
@@ -2536,7 +2575,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("توازن جديد"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("أنت تدفع"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("التاريخ"),
-    "g_swap_key_31": m58,
+    "g_swap_key_31": m65,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "يمكن الاطلاع على المقايضات على مستكشفات السلسلة ذات الصلة (Etherscan، وBscScan، وTRONSCAN، ومستكشفاتنا).",
     ),
@@ -2549,7 +2588,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "إعادة التعيين إلى الوضع الافتراضي",
     ),
-    "g_token_m_key_1": m59,
+    "g_token_m_key_1": m66,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "يمكن لأي شخص إنشاء رمز مميز، بما في ذلك إنشاء إصدارات مزيفة من الرموز المميزة الموجودة. ابحث دائمًا عن الرمز المميز قبل استيراده.",
     ),
@@ -2566,9 +2605,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_2": MessageLookupByLibrary.simpleMessage("0 ~ 18 وحدة"),
     "g_token_m_key_20": MessageLookupByLibrary.simpleMessage("إضافة الرموز"),
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage("خطأ في التنسيق!"),
-    "g_token_m_key_22": m60,
-    "g_token_m_key_23": m61,
-    "g_token_m_key_24": m62,
+    "g_token_m_key_22": m67,
+    "g_token_m_key_23": m68,
+    "g_token_m_key_24": m69,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("رموز الاستيراد"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("جميع الشبكات"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage("رمز مخصص"),
@@ -2617,7 +2656,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_email": MessageLookupByLibrary.simpleMessage("البريد الإلكتروني"),
     "login_password": MessageLookupByLibrary.simpleMessage("كلمة المرور"),
     "next": MessageLookupByLibrary.simpleMessage("التالي"),
-    "nicknameMessage": m63,
+    "nicknameMessage": m70,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "تحرير الملف الشخصي",
     ),

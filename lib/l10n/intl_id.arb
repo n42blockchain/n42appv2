@@ -1388,5 +1388,20 @@
   "g_pred_err_question": "Masukkan pertanyaan",
   "g_pred_err_outcomes": "Minimal dua hasil valid",
   "g_pred_yes": "Ya",
-  "g_pred_no": "Tidak"
+  "g_pred_no": "Tidak",
+  "g_pred_balance": "Saldo: {amount} {symbol}",
+  "g_pred_amount_input": "Jumlah ({symbol})",
+  "g_pred_quote_info": "Est. {shares} bagian · rata {avg}% · setelah {after}%",
+  "g_pred_processing": "Memproses…",
+  "g_pred_buy": "Beli",
+  "g_pred_sell_n": "Jual {n}",
+  "g_pred_closed_waiting": "Ditutup, menunggu hasil",
+  "g_pred_resolved": "Selesai",
+  "g_pred_pick_winner": "Pilih hasil pemenang untuk menyelesaikan (dana sesuai hasil)",
+  "g_pred_outcome_win": "{label} menang ({pct}%)",
+  "g_pred_result_label": "Hasil: {label}",
+  "g_pred_close_only": "Hanya tutup",
+  "g_pred_cancel_refund": "Batal & kembalikan",
+  "g_pred_confirm_resolve": "Konfirmasi penyelesaian",
+  "g_pred_confirm_resolve_msg": "Nyatakan “{label}” menang dan selesaikan? Tidak bisa dibatalkan."
 }

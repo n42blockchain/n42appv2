@@ -144,27 +144,43 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m53(value) => "Phải có ${value} ký tự";
 
-  static String m54(n) => "${n} phút";
+  static String m54(symbol) => "Số tiền (${symbol})";
 
-  static String m55(n) => "Kết quả ${n}";
+  static String m55(amount, symbol) => "Số dư: ${amount} ${symbol}";
 
-  static String m56(value) => "${value} Số dư không đủ.";
+  static String m56(label) =>
+      "Tuyên bố “${label}” thắng và thanh toán? Không thể hoàn tác.";
 
-  static String m57(value) => "${value} đang đến...";
+  static String m57(n) => "${n} phút";
 
-  static String m58(value) =>
+  static String m58(n) => "Kết quả ${n}";
+
+  static String m59(label, pct) => "${label} thắng (${pct}%)";
+
+  static String m60(shares, avg, after) =>
+      "Ước tính ${shares} phần · TB ${avg}% · sau ${after}%";
+
+  static String m61(label) => "Kết quả: ${label}";
+
+  static String m62(n) => "Bán ${n}";
+
+  static String m63(value) => "${value} Số dư không đủ.";
+
+  static String m64(value) => "${value} đang đến...";
+
+  static String m65(value) =>
       "${value} hoán đổi trong ứng dụng sẽ được phân phối đến ví của bạn trong thời gian ngắn và không thể bán qua quy trình này. Có thể sử dụng để vận hành node.";
 
-  static String m59(value) => "Tối đa ${value} ký tự";
+  static String m66(value) => "Tối đa ${value} ký tự";
 
-  static String m60(value) => "Ứng dụng đã hỗ trợ chuỗi ${value}!";
+  static String m67(value) => "Ứng dụng đã hỗ trợ chuỗi ${value}!";
 
-  static String m61(value) =>
+  static String m68(value) =>
       "Ứng dụng đã hỗ trợ chuỗi ${value}, bạn có muốn thêm không?";
 
-  static String m62(value) => "Kết nối thử nghiệm địa chỉ ${value} thất bại!";
+  static String m69(value) => "Kết nối thử nghiệm địa chỉ ${value} thất bại!";
 
-  static String m63(value) => "0~${value} ký tự";
+  static String m70(value) => "0~${value} ký tự";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -2516,6 +2532,20 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_portfolio_total": MessageLookupByLibrary.simpleMessage("Tổng giá trị"),
     "g_pred_add_outcome": MessageLookupByLibrary.simpleMessage("Thêm kết quả"),
+    "g_pred_amount_input": m54,
+    "g_pred_balance": m55,
+    "g_pred_buy": MessageLookupByLibrary.simpleMessage("Mua"),
+    "g_pred_cancel_refund": MessageLookupByLibrary.simpleMessage(
+      "Hủy và hoàn tiền",
+    ),
+    "g_pred_close_only": MessageLookupByLibrary.simpleMessage("Chỉ đóng"),
+    "g_pred_closed_waiting": MessageLookupByLibrary.simpleMessage(
+      "Đã đóng, chờ kết quả",
+    ),
+    "g_pred_confirm_resolve": MessageLookupByLibrary.simpleMessage(
+      "Xác nhận kết quả",
+    ),
+    "g_pred_confirm_resolve_msg": m56,
     "g_pred_create_title": MessageLookupByLibrary.simpleMessage(
       "Bắt đầu dự đoán",
     ),
@@ -2527,14 +2557,23 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_pred_err_question": MessageLookupByLibrary.simpleMessage(
       "Vui lòng nhập câu hỏi",
     ),
-    "g_pred_minutes": m54,
+    "g_pred_minutes": m57,
     "g_pred_no": MessageLookupByLibrary.simpleMessage("Không"),
-    "g_pred_outcome_n": m55,
+    "g_pred_outcome_n": m58,
+    "g_pred_outcome_win": m59,
     "g_pred_outcomes": MessageLookupByLibrary.simpleMessage("Kết quả"),
+    "g_pred_pick_winner": MessageLookupByLibrary.simpleMessage(
+      "Chọn kết quả thắng để thanh toán (tiền chi theo kết quả)",
+    ),
+    "g_pred_processing": MessageLookupByLibrary.simpleMessage("Đang xử lý…"),
     "g_pred_publish": MessageLookupByLibrary.simpleMessage("Đăng"),
     "g_pred_q_hint": MessageLookupByLibrary.simpleMessage(
       "Câu hỏi dự đoán, ví dụ: Ai thắng ván này?",
     ),
+    "g_pred_quote_info": m60,
+    "g_pred_resolved": MessageLookupByLibrary.simpleMessage("Đã giải quyết"),
+    "g_pred_result_label": m61,
+    "g_pred_sell_n": m62,
     "g_pred_unlimited": MessageLookupByLibrary.simpleMessage(
       "Không giới hạn (đóng thủ công)",
     ),
@@ -2569,7 +2608,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_share_v3_key_6": MessageLookupByLibrary.simpleMessage("Giới thiệu qua"),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("Liên kết"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("mã"),
-    "g_swap_key_14": m56,
+    "g_swap_key_14": m63,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage("Lỗi lấy giá coin."),
     "g_swap_key_16": MessageLookupByLibrary.simpleMessage(
       "Bằng việc tiếp tục, bạn đồng ý với ",
@@ -2581,7 +2620,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "Giao dịch hoán đổi của bạn sẽ được phân phối trong thời gian ngắn. Vui lòng kiên nhẫn.",
     ),
-    "g_swap_key_20": m57,
+    "g_swap_key_20": m64,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "Chi phí vận hành node: Xác minh nhóm 1-49 N Node cơ bản: 50 N Node cao cấp: 100 N Node Pro: 500 N.",
     ),
@@ -2595,7 +2634,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("Số dư mới"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("Bạn trả"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("Ngày"),
-    "g_swap_key_31": m58,
+    "g_swap_key_31": m65,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "Các giao dịch hoán đổi có thể xem trên các trình duyệt chuỗi liên quan (Etherscan, BscScan, TRONSCAN và của chúng tôi).",
     ),
@@ -2608,7 +2647,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "Đặt lại về mặc định",
     ),
-    "g_token_m_key_1": m59,
+    "g_token_m_key_1": m66,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "Bất kỳ ai cũng có thể tạo token, bao gồm cả việc tạo phiên bản giả của token hiện có. Luôn nghiên cứu token trước khi nhập.",
     ),
@@ -2625,9 +2664,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_2": MessageLookupByLibrary.simpleMessage("0~18 đơn vị"),
     "g_token_m_key_20": MessageLookupByLibrary.simpleMessage("Thêm token"),
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage("Lỗi định dạng!"),
-    "g_token_m_key_22": m60,
-    "g_token_m_key_23": m61,
-    "g_token_m_key_24": m62,
+    "g_token_m_key_22": m67,
+    "g_token_m_key_23": m68,
+    "g_token_m_key_24": m69,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("Nhập token"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("Tất cả mạng"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage("Token tùy chỉnh"),
@@ -2676,7 +2715,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_email": MessageLookupByLibrary.simpleMessage("E-mail"),
     "login_password": MessageLookupByLibrary.simpleMessage("Mật khẩu"),
     "next": MessageLookupByLibrary.simpleMessage("Tiếp theo"),
-    "nicknameMessage": m63,
+    "nicknameMessage": m70,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "Chỉnh sửa hồ sơ",
     ),

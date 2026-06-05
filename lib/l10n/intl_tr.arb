@@ -1388,5 +1388,20 @@
   "g_pred_err_question": "Lütfen bir soru girin",
   "g_pred_err_outcomes": "En az iki geçerli sonuç",
   "g_pred_yes": "Evet",
-  "g_pred_no": "Hayır"
+  "g_pred_no": "Hayır",
+  "g_pred_balance": "Bakiye: {amount} {symbol}",
+  "g_pred_amount_input": "Tutar ({symbol})",
+  "g_pred_quote_info": "Tahmini {shares} pay · ort {avg}% · sonra {after}%",
+  "g_pred_processing": "İşleniyor…",
+  "g_pred_buy": "Al",
+  "g_pred_sell_n": "Sat {n}",
+  "g_pred_closed_waiting": "Kapandı, sonuç bekleniyor",
+  "g_pred_resolved": "Sonuçlandı",
+  "g_pred_pick_winner": "Ödemek için kazanan sonucu seçin (fonlar sonuca göre)",
+  "g_pred_outcome_win": "{label} kazanır ({pct}%)",
+  "g_pred_result_label": "Sonuç: {label}",
+  "g_pred_close_only": "Sadece kapat",
+  "g_pred_cancel_refund": "İptal et ve iade et",
+  "g_pred_confirm_resolve": "Sonucu onayla",
+  "g_pred_confirm_resolve_msg": "“{label}” kazanan ilan edilip ödensin mi? Geri alınamaz."
 }

@@ -1381,5 +1381,20 @@
   "g_pred_err_question": "దయచేసి ప్రశ్న నమోదు చేయండి",
   "g_pred_err_outcomes": "కనీసం రెండు చెల్లుబాటు ఫలితాలు",
   "g_pred_yes": "అవును",
-  "g_pred_no": "కాదు"
+  "g_pred_no": "కాదు",
+  "g_pred_balance": "నిల్వ: {amount} {symbol}",
+  "g_pred_amount_input": "మొత్తం ({symbol})",
+  "g_pred_quote_info": "అంచనా {shares} వాటాలు · సగటు {avg}% · తర్వాత {after}%",
+  "g_pred_processing": "ప్రాసెస్…",
+  "g_pred_buy": "కొనండి",
+  "g_pred_sell_n": "అమ్మండి {n}",
+  "g_pred_closed_waiting": "మూసివేయబడింది, పరిష్కారం కోసం వేచి",
+  "g_pred_resolved": "పరిష్కరించబడింది",
+  "g_pred_pick_winner": "సెటిల్‌మెంట్‌కు గెలిచిన ఫలితాన్ని ఎంచుకోండి (ఫలితం ప్రకారం నిధులు)",
+  "g_pred_outcome_win": "{label} గెలుస్తుంది ({pct}%)",
+  "g_pred_result_label": "ఫలితం: {label}",
+  "g_pred_close_only": "మూసివేత మాత్రమే",
+  "g_pred_cancel_refund": "రద్దు & వాపసు",
+  "g_pred_confirm_resolve": "పరిష్కారాన్ని నిర్ధారించండి",
+  "g_pred_confirm_resolve_msg": "“{label}” విజేతగా ప్రకటించి పరిష్కరించాలా? దీన్ని రద్దు చేయలేరు."
 }

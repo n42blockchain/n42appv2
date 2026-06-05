@@ -1381,5 +1381,20 @@
   "g_pred_err_question": "একটি প্রশ্ন লিখুন",
   "g_pred_err_outcomes": "অন্তত দুটি বৈধ ফলাফল",
   "g_pred_yes": "হ্যাঁ",
-  "g_pred_no": "না"
+  "g_pred_no": "না",
+  "g_pred_balance": "ব্যালেন্স: {amount} {symbol}",
+  "g_pred_amount_input": "পরিমাণ ({symbol})",
+  "g_pred_quote_info": "আনু. {shares} শেয়ার · গড় {avg}% · পরে {after}%",
+  "g_pred_processing": "প্রসেস হচ্ছে…",
+  "g_pred_buy": "কিনুন",
+  "g_pred_sell_n": "বিক্রি {n}",
+  "g_pred_closed_waiting": "বন্ধ, ফলাফলের অপেক্ষায়",
+  "g_pred_resolved": "নিষ্পন্ন",
+  "g_pred_pick_winner": "নিষ্পত্তির জন্য বিজয়ী ফলাফল বাছুন (ফল অনুযায়ী অর্থ)",
+  "g_pred_outcome_win": "{label} জেতে ({pct}%)",
+  "g_pred_result_label": "ফলাফল: {label}",
+  "g_pred_close_only": "শুধু বন্ধ",
+  "g_pred_cancel_refund": "বাতিল ও ফেরত",
+  "g_pred_confirm_resolve": "নিষ্পত্তি নিশ্চিত",
+  "g_pred_confirm_resolve_msg": "“{label}”-কে বিজয়ী ঘোষণা করে নিষ্পত্তি? এটি ফেরানো যাবে না।"
 }

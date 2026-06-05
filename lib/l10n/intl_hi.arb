@@ -1381,5 +1381,20 @@
   "g_pred_err_question": "कृपया प्रश्न दर्ज करें",
   "g_pred_err_outcomes": "कम से कम दो मान्य परिणाम",
   "g_pred_yes": "हाँ",
-  "g_pred_no": "नहीं"
+  "g_pred_no": "नहीं",
+  "g_pred_balance": "शेष: {amount} {symbol}",
+  "g_pred_amount_input": "राशि ({symbol})",
+  "g_pred_quote_info": "अनु. {shares} शेयर · औसत {avg}% · बाद {after}%",
+  "g_pred_processing": "प्रोसेस हो रहा है…",
+  "g_pred_buy": "खरीदें",
+  "g_pred_sell_n": "बेचें {n}",
+  "g_pred_closed_waiting": "बंद, परिणाम प्रतीक्षित",
+  "g_pred_resolved": "सुलझाया गया",
+  "g_pred_pick_winner": "निपटान हेतु विजेता परिणाम चुनें (धन परिणाम अनुसार)",
+  "g_pred_outcome_win": "{label} जीतता है ({pct}%)",
+  "g_pred_result_label": "परिणाम: {label}",
+  "g_pred_close_only": "केवल बंद करें",
+  "g_pred_cancel_refund": "रद्द करें और रिफंड",
+  "g_pred_confirm_resolve": "निपटान की पुष्टि करें",
+  "g_pred_confirm_resolve_msg": "«{label}» को विजेता घोषित कर निपटाएँ? यह पूर्ववत नहीं होगा।"
 }

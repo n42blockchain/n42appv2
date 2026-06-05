@@ -145,28 +145,44 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m53(value) => "${value} karakter olmalı";
 
-  static String m54(n) => "${n} dk";
+  static String m54(symbol) => "Tutar (${symbol})";
 
-  static String m55(n) => "Sonuç ${n}";
+  static String m55(amount, symbol) => "Bakiye: ${amount} ${symbol}";
 
-  static String m56(value) => "${value} Yetersiz Bakiye.";
+  static String m56(label) =>
+      "“${label}” kazanan ilan edilip ödensin mi? Geri alınamaz.";
 
-  static String m57(value) => "${value} geliyor...";
+  static String m57(n) => "${n} dk";
 
-  static String m58(value) =>
+  static String m58(n) => "Sonuç ${n}";
+
+  static String m59(label, pct) => "${label} kazanır (${pct}%)";
+
+  static String m60(shares, avg, after) =>
+      "Tahmini ${shares} pay · ort ${avg}% · sonra ${after}%";
+
+  static String m61(label) => "Sonuç: ${label}";
+
+  static String m62(n) => "Sat ${n}";
+
+  static String m63(value) => "${value} Yetersiz Bakiye.";
+
+  static String m64(value) => "${value} geliyor...";
+
+  static String m65(value) =>
       "Uygulama içinde takas edilen ${value}, kısa süre içinde cüzdanınıza dağıtılacak ve bu işlemle satılamaz. Düğüm çalıştırmak için kullanılabilir.";
 
-  static String m59(value) => "Maksimum ${value} karakter";
+  static String m66(value) => "Maksimum ${value} karakter";
 
-  static String m60(value) =>
+  static String m67(value) =>
       "${value} zinciri uygulama tarafından zaten destekleniyor!";
 
-  static String m61(value) =>
+  static String m68(value) =>
       "${value} zinciri uygulama tarafından zaten destekleniyor, eklemek istiyor musunuz?";
 
-  static String m62(value) => "${value} adres test bağlantısı başarısız!";
+  static String m69(value) => "${value} adres test bağlantısı başarısız!";
 
-  static String m63(value) => "0~${value} karakter";
+  static String m70(value) => "0~${value} karakter";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -2515,6 +2531,20 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_portfolio_title": MessageLookupByLibrary.simpleMessage("Portföy"),
     "g_portfolio_total": MessageLookupByLibrary.simpleMessage("Toplam Değer"),
     "g_pred_add_outcome": MessageLookupByLibrary.simpleMessage("Sonuç ekle"),
+    "g_pred_amount_input": m54,
+    "g_pred_balance": m55,
+    "g_pred_buy": MessageLookupByLibrary.simpleMessage("Al"),
+    "g_pred_cancel_refund": MessageLookupByLibrary.simpleMessage(
+      "İptal et ve iade et",
+    ),
+    "g_pred_close_only": MessageLookupByLibrary.simpleMessage("Sadece kapat"),
+    "g_pred_closed_waiting": MessageLookupByLibrary.simpleMessage(
+      "Kapandı, sonuç bekleniyor",
+    ),
+    "g_pred_confirm_resolve": MessageLookupByLibrary.simpleMessage(
+      "Sonucu onayla",
+    ),
+    "g_pred_confirm_resolve_msg": m56,
     "g_pred_create_title": MessageLookupByLibrary.simpleMessage(
       "Tahmini Başlat",
     ),
@@ -2526,14 +2556,23 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_pred_err_question": MessageLookupByLibrary.simpleMessage(
       "Lütfen bir soru girin",
     ),
-    "g_pred_minutes": m54,
+    "g_pred_minutes": m57,
     "g_pred_no": MessageLookupByLibrary.simpleMessage("Hayır"),
-    "g_pred_outcome_n": m55,
+    "g_pred_outcome_n": m58,
+    "g_pred_outcome_win": m59,
     "g_pred_outcomes": MessageLookupByLibrary.simpleMessage("Sonuçlar"),
+    "g_pred_pick_winner": MessageLookupByLibrary.simpleMessage(
+      "Ödemek için kazanan sonucu seçin (fonlar sonuca göre)",
+    ),
+    "g_pred_processing": MessageLookupByLibrary.simpleMessage("İşleniyor…"),
     "g_pred_publish": MessageLookupByLibrary.simpleMessage("Yayınla"),
     "g_pred_q_hint": MessageLookupByLibrary.simpleMessage(
       "Tahmin sorusu, örn.: Bu turu kim kazanır?",
     ),
+    "g_pred_quote_info": m60,
+    "g_pred_resolved": MessageLookupByLibrary.simpleMessage("Sonuçlandı"),
+    "g_pred_result_label": m61,
+    "g_pred_sell_n": m62,
     "g_pred_unlimited": MessageLookupByLibrary.simpleMessage(
       "Sınırsız (elle kapat)",
     ),
@@ -2572,7 +2611,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("Bağlantı"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("kod"),
-    "g_swap_key_14": m56,
+    "g_swap_key_14": m63,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "Coin fiyatı alınamadı.",
     ),
@@ -2586,7 +2625,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "Takasınız kısa süre içinde dağıtılacaktır. Lütfen sabırlı olun.",
     ),
-    "g_swap_key_20": m57,
+    "g_swap_key_20": m64,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "Düğüm çalıştırma maliyetleri: Grup Doğrulaması 1-49 N Temel Düğüm: 50 N Premium Düğüm: 100 N Pro Düğüm: 500 N.",
     ),
@@ -2598,7 +2637,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("Yeni Bakiye"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("Ödediğiniz"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("Tarih"),
-    "g_swap_key_31": m58,
+    "g_swap_key_31": m65,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "Takaslar ilgili zincir gezginlerinde (Etherscan, BscScan, TRONSCAN ve kendi gezginimiz) görüntülenebilir.",
     ),
@@ -2611,7 +2650,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "Varsayılana sıfırla",
     ),
-    "g_token_m_key_1": m59,
+    "g_token_m_key_1": m66,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "Herkes mevcut tokenlerin sahte sürümleri dahil token oluşturabilir. İçe aktarmadan önce her zaman bir tokeni araştırın.",
     ),
@@ -2628,9 +2667,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_2": MessageLookupByLibrary.simpleMessage("0~18 birim"),
     "g_token_m_key_20": MessageLookupByLibrary.simpleMessage("Token Ekle"),
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage("Biçim Hatası!"),
-    "g_token_m_key_22": m60,
-    "g_token_m_key_23": m61,
-    "g_token_m_key_24": m62,
+    "g_token_m_key_22": m67,
+    "g_token_m_key_23": m68,
+    "g_token_m_key_24": m69,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("Token içe aktar"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("Tüm ağlar"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage("Özel Token"),
@@ -2675,7 +2714,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_email": MessageLookupByLibrary.simpleMessage("E-posta"),
     "login_password": MessageLookupByLibrary.simpleMessage("Şifre"),
     "next": MessageLookupByLibrary.simpleMessage("Sonraki"),
-    "nicknameMessage": m63,
+    "nicknameMessage": m70,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "Profili Düzenle",
     ),

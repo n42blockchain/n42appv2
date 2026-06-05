@@ -11288,6 +11288,146 @@ class S {
   String get g_pred_no {
     return Intl.message('No', name: 'g_pred_no', desc: '', args: []);
   }
+
+  /// `Balance: {amount} {symbol}`
+  String g_pred_balance(Object amount, Object symbol) {
+    return Intl.message(
+      'Balance: $amount $symbol',
+      name: 'g_pred_balance',
+      desc: '',
+      args: [amount, symbol],
+    );
+  }
+
+  /// `Amount ({symbol})`
+  String g_pred_amount_input(Object symbol) {
+    return Intl.message(
+      'Amount ($symbol)',
+      name: 'g_pred_amount_input',
+      desc: '',
+      args: [symbol],
+    );
+  }
+
+  /// `Est. {shares} shares · avg {avg}% · after {after}%`
+  String g_pred_quote_info(Object shares, Object avg, Object after) {
+    return Intl.message(
+      'Est. $shares shares · avg $avg% · after $after%',
+      name: 'g_pred_quote_info',
+      desc: '',
+      args: [shares, avg, after],
+    );
+  }
+
+  /// `Processing…`
+  String get g_pred_processing {
+    return Intl.message(
+      'Processing…',
+      name: 'g_pred_processing',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Buy`
+  String get g_pred_buy {
+    return Intl.message('Buy', name: 'g_pred_buy', desc: '', args: []);
+  }
+
+  /// `Sell {n}`
+  String g_pred_sell_n(Object n) {
+    return Intl.message('Sell $n', name: 'g_pred_sell_n', desc: '', args: [n]);
+  }
+
+  /// `Closed, awaiting resolution`
+  String get g_pred_closed_waiting {
+    return Intl.message(
+      'Closed, awaiting resolution',
+      name: 'g_pred_closed_waiting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Resolved`
+  String get g_pred_resolved {
+    return Intl.message(
+      'Resolved',
+      name: 'g_pred_resolved',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pick the winning outcome to settle (funds paid by result)`
+  String get g_pred_pick_winner {
+    return Intl.message(
+      'Pick the winning outcome to settle (funds paid by result)',
+      name: 'g_pred_pick_winner',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{label} wins ({pct}%)`
+  String g_pred_outcome_win(Object label, Object pct) {
+    return Intl.message(
+      '$label wins ($pct%)',
+      name: 'g_pred_outcome_win',
+      desc: '',
+      args: [label, pct],
+    );
+  }
+
+  /// `Result: {label}`
+  String g_pred_result_label(Object label) {
+    return Intl.message(
+      'Result: $label',
+      name: 'g_pred_result_label',
+      desc: '',
+      args: [label],
+    );
+  }
+
+  /// `Close only`
+  String get g_pred_close_only {
+    return Intl.message(
+      'Close only',
+      name: 'g_pred_close_only',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel & refund`
+  String get g_pred_cancel_refund {
+    return Intl.message(
+      'Cancel & refund',
+      name: 'g_pred_cancel_refund',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm resolution`
+  String get g_pred_confirm_resolve {
+    return Intl.message(
+      'Confirm resolution',
+      name: 'g_pred_confirm_resolve',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Declare “{label}” the winner and settle? This cannot be undone.`
+  String g_pred_confirm_resolve_msg(Object label) {
+    return Intl.message(
+      'Declare “$label” the winner and settle? This cannot be undone.',
+      name: 'g_pred_confirm_resolve_msg',
+      desc: '',
+      args: [label],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

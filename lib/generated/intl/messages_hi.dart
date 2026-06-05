@@ -145,27 +145,43 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m53(value) => "${value} वर्ण होने चाहिए";
 
-  static String m54(n) => "${n} मिनट";
+  static String m54(symbol) => "राशि (${symbol})";
 
-  static String m55(n) => "परिणाम ${n}";
+  static String m55(amount, symbol) => "शेष: ${amount} ${symbol}";
 
-  static String m56(value) => "${value} अपर्याप्त शेष।";
+  static String m56(label) =>
+      "«${label}» को विजेता घोषित कर निपटाएँ? यह पूर्ववत नहीं होगा।";
 
-  static String m57(value) => "${value} इनकमिंग...";
+  static String m57(n) => "${n} मिनट";
 
-  static String m58(value) =>
+  static String m58(n) => "परिणाम ${n}";
+
+  static String m59(label, pct) => "${label} जीतता है (${pct}%)";
+
+  static String m60(shares, avg, after) =>
+      "अनु. ${shares} शेयर · औसत ${avg}% · बाद ${after}%";
+
+  static String m61(label) => "परिणाम: ${label}";
+
+  static String m62(n) => "बेचें ${n}";
+
+  static String m63(value) => "${value} अपर्याप्त शेष।";
+
+  static String m64(value) => "${value} इनकमिंग...";
+
+  static String m65(value) =>
       "${value} स्वैप-इन-ऐप शीघ्र ही आपके वॉलेट में वितरित किया जाएगा और इस प्रक्रिया के माध्यम से बेचा नहीं जा सकता है। इसका उपयोग नोड को चलाने के लिए किया जा सकता है।";
 
-  static String m59(value) => "अधिकतम ${value} वर्ण";
+  static String m66(value) => "अधिकतम ${value} वर्ण";
 
-  static String m60(value) => "${value} श्रृंखला एपीपी पहले से ही समर्थित है!";
+  static String m67(value) => "${value} श्रृंखला एपीपी पहले से ही समर्थित है!";
 
-  static String m61(value) =>
+  static String m68(value) =>
       "${value} श्रृंखला एपीपी पहले से ही समर्थित है, क्या आप इसे जोड़ना चाहते हैं?";
 
-  static String m62(value) => "${value} पता परीक्षण लिंक विफल!";
+  static String m69(value) => "${value} पता परीक्षण लिंक विफल!";
 
-  static String m63(value) => "0~${value} अक्षर";
+  static String m70(value) => "0~${value} अक्षर";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -2523,6 +2539,20 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_portfolio_title": MessageLookupByLibrary.simpleMessage("पोर्टफोलियो"),
     "g_portfolio_total": MessageLookupByLibrary.simpleMessage("कुल मूल्य"),
     "g_pred_add_outcome": MessageLookupByLibrary.simpleMessage("परिणाम जोड़ें"),
+    "g_pred_amount_input": m54,
+    "g_pred_balance": m55,
+    "g_pred_buy": MessageLookupByLibrary.simpleMessage("खरीदें"),
+    "g_pred_cancel_refund": MessageLookupByLibrary.simpleMessage(
+      "रद्द करें और रिफंड",
+    ),
+    "g_pred_close_only": MessageLookupByLibrary.simpleMessage("केवल बंद करें"),
+    "g_pred_closed_waiting": MessageLookupByLibrary.simpleMessage(
+      "बंद, परिणाम प्रतीक्षित",
+    ),
+    "g_pred_confirm_resolve": MessageLookupByLibrary.simpleMessage(
+      "निपटान की पुष्टि करें",
+    ),
+    "g_pred_confirm_resolve_msg": m56,
     "g_pred_create_title": MessageLookupByLibrary.simpleMessage(
       "भविष्यवाणी शुरू करें",
     ),
@@ -2534,14 +2564,25 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_pred_err_question": MessageLookupByLibrary.simpleMessage(
       "कृपया प्रश्न दर्ज करें",
     ),
-    "g_pred_minutes": m54,
+    "g_pred_minutes": m57,
     "g_pred_no": MessageLookupByLibrary.simpleMessage("नहीं"),
-    "g_pred_outcome_n": m55,
+    "g_pred_outcome_n": m58,
+    "g_pred_outcome_win": m59,
     "g_pred_outcomes": MessageLookupByLibrary.simpleMessage("परिणाम"),
+    "g_pred_pick_winner": MessageLookupByLibrary.simpleMessage(
+      "निपटान हेतु विजेता परिणाम चुनें (धन परिणाम अनुसार)",
+    ),
+    "g_pred_processing": MessageLookupByLibrary.simpleMessage(
+      "प्रोसेस हो रहा है…",
+    ),
     "g_pred_publish": MessageLookupByLibrary.simpleMessage("प्रकाशित करें"),
     "g_pred_q_hint": MessageLookupByLibrary.simpleMessage(
       "भविष्यवाणी प्रश्न, जैसे: इस दौर में कौन जीतेगा?",
     ),
+    "g_pred_quote_info": m60,
+    "g_pred_resolved": MessageLookupByLibrary.simpleMessage("सुलझाया गया"),
+    "g_pred_result_label": m61,
+    "g_pred_sell_n": m62,
     "g_pred_unlimited": MessageLookupByLibrary.simpleMessage(
       "असीमित (मैनुअल बंद)",
     ),
@@ -2578,7 +2619,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("लिंक"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("कोड"),
-    "g_swap_key_14": m56,
+    "g_swap_key_14": m63,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "सिक्का मूल्य त्रुटि प्राप्त करें.",
     ),
@@ -2590,7 +2631,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "आपका स्वैप शीघ्र ही वितरित किया जाएगा। कृपया धैर्य रखें।",
     ),
-    "g_swap_key_20": m57,
+    "g_swap_key_20": m64,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "एक नोड चलाने की लागत: समूह सत्यापन 1-49 एन मूल नोड: 50 एन प्रीमियम नोड: 100 एन प्रो नोड: 500 एन।",
     ),
@@ -2604,7 +2645,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("नया संतुलन"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("आप भुगतान करें"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("दिनांक"),
-    "g_swap_key_31": m58,
+    "g_swap_key_31": m65,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "स्वैप को संबंधित श्रृंखला खोजकर्ताओं (इथरस्कैन, बीएससीस्कैन, ट्रॉनस्कैन और हमारे अपने) पर देखा जा सकता है।",
     ),
@@ -2617,7 +2658,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "डिफ़ॉल्ट पर रीसेट करें",
     ),
-    "g_token_m_key_1": m59,
+    "g_token_m_key_1": m66,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "कोई भी टोकन बना सकता है, जिसमें मौजूदा टोकन के नकली संस्करण बनाना भी शामिल है। किसी टोकन को आयात करने से पहले हमेशा उस पर शोध करें।",
     ),
@@ -2634,9 +2675,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_2": MessageLookupByLibrary.simpleMessage("0~18 यूइंट"),
     "g_token_m_key_20": MessageLookupByLibrary.simpleMessage("टोकन जोड़ें"),
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage("प्रारूप त्रुटि!"),
-    "g_token_m_key_22": m60,
-    "g_token_m_key_23": m61,
-    "g_token_m_key_24": m62,
+    "g_token_m_key_22": m67,
+    "g_token_m_key_23": m68,
+    "g_token_m_key_24": m69,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("टोकन आयात करें"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("सभी नेटवर्क"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage("कस्टम टोकन"),
@@ -2683,7 +2724,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_email": MessageLookupByLibrary.simpleMessage("ईमेल"),
     "login_password": MessageLookupByLibrary.simpleMessage("पासवर्ड"),
     "next": MessageLookupByLibrary.simpleMessage("अगला"),
-    "nicknameMessage": m63,
+    "nicknameMessage": m70,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "प्रोफ़ाइल संपादित करें",
     ),

@@ -1388,5 +1388,20 @@
   "g_pred_err_question": "質問を入力してください",
   "g_pred_err_outcomes": "有効な結果が2つ以上必要です",
   "g_pred_yes": "はい",
-  "g_pred_no": "いいえ"
+  "g_pred_no": "いいえ",
+  "g_pred_balance": "残高：{amount} {symbol}",
+  "g_pred_amount_input": "投入額（{symbol}）",
+  "g_pred_quote_info": "予想 {shares} シェア · 平均 {avg}% · 約定後 {after}%",
+  "g_pred_processing": "処理中…",
+  "g_pred_buy": "購入",
+  "g_pred_sell_n": "売却 {n}",
+  "g_pred_closed_waiting": "締切済み、結果待ち",
+  "g_pred_resolved": "結果確定",
+  "g_pred_pick_winner": "勝利結果を選んで精算（資金は結果に従って支払われます）",
+  "g_pred_outcome_win": "{label} 勝利（{pct}%）",
+  "g_pred_result_label": "結果：{label}",
+  "g_pred_close_only": "締切のみ",
+  "g_pred_cancel_refund": "キャンセルして返金",
+  "g_pred_confirm_resolve": "結果を確定",
+  "g_pred_confirm_resolve_msg": "「{label}」を勝者として精算しますか？この操作は取り消せません。"
 }

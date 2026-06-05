@@ -1381,5 +1381,20 @@
   "g_pred_err_question": "질문을 입력하세요",
   "g_pred_err_outcomes": "유효한 결과가 2개 이상 필요합니다",
   "g_pred_yes": "예",
-  "g_pred_no": "아니오"
+  "g_pred_no": "아니오",
+  "g_pred_balance": "잔액: {amount} {symbol}",
+  "g_pred_amount_input": "투입 금액 ({symbol})",
+  "g_pred_quote_info": "예상 {shares} 지분 · 평균 {avg}% · 체결 후 {after}%",
+  "g_pred_processing": "처리 중…",
+  "g_pred_buy": "매수",
+  "g_pred_sell_n": "매도 {n}",
+  "g_pred_closed_waiting": "마감됨, 정산 대기",
+  "g_pred_resolved": "정산 완료",
+  "g_pred_pick_winner": "승리 결과를 선택해 정산 (자금은 결과에 따라 지급)",
+  "g_pred_outcome_win": "{label} 승리 ({pct}%)",
+  "g_pred_result_label": "결과: {label}",
+  "g_pred_close_only": "마감만",
+  "g_pred_cancel_refund": "취소 및 환불",
+  "g_pred_confirm_resolve": "정산 확인",
+  "g_pred_confirm_resolve_msg": "「{label}」을(를) 승자로 정산하시겠습니까? 되돌릴 수 없습니다."
 }
