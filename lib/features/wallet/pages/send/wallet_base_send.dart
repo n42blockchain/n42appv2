@@ -13,7 +13,7 @@ import 'package:n42_wallet/features/wallet/pages/send/wallet_security_verificati
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/widgets/ens_address_display.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/prompt_widget.dart';
 import 'package:n42_wallet/features/widgets/contract_security_card.dart';
 import 'package:n42_wallet/features/widgets/tx_simulation_card.dart';
@@ -298,13 +298,10 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
                               child: SizedBox(
                                 width: double.infinity,
                                 height: ScreenUtil().setWidth(88.0),
-                                child: buttonStyle5(
-                                  context,
-                                  () => Navigator.pop(context, false),
-                                  S.of(context).g_key_79,
-                                  _themeColor(AppThemeKeys.mainButtonTextColor),
-                                  _themeColor(AppThemeKeys.mainButtonBgColor),
-                                  borderColor: _themeColor(AppThemeKeys.mainButtonBgColor),
+                                child: AppButton(
+                                  label: S.of(context).g_key_79,
+                                  variant: AppButtonVariant.secondary,
+                                  onPressed: () => Navigator.pop(context, false),
                                 ),
                               ),
                             ),
@@ -313,14 +310,20 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
                               child: SizedBox(
                                 width: double.infinity,
                                 height: ScreenUtil().setWidth(88.0),
-                                child: buttonStyle2(context, () async {
-                                  final r = await Navigator.push<bool>(
-                                    context,
-                                    MaterialPageRoute(builder: (_) => WalletSecurityVerification()),
-                                  );
-                                  if (!context.mounted) return;
-                                  if (r == true) Navigator.pop(context, true);
-                                }, S.of(context).g_key_t_31),
+                                child: AppButton(
+                                  label: S.of(context).g_key_t_31,
+                                  onPressed: () async {
+                                    final r = await Navigator.push<bool>(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) =>
+                                            WalletSecurityVerification(),
+                                      ),
+                                    );
+                                    if (!context.mounted) return;
+                                    if (r == true) Navigator.pop(context, true);
+                                  },
+                                ),
                               ),
                             ),
                           ],

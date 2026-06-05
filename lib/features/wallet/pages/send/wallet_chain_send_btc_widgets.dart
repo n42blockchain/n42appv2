@@ -326,10 +326,10 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
             height: ScreenUtil().setWidth(148.0),
             color: AppThemeUtils.getColorByKey(
                 context, AppThemeKeys.backGroundColor.name),
-            child: buttonStyle6(
-              context,
-              () async {
-                if (load == Load.loading) return;
+            child: AppButton(
+              label: S.of(context).g_key_48,
+              loading: load == Load.loading,
+              onPressed: () async {
                 closeKeyboard();
                 amountCheck();
                 if (amountErrorMessage != '') return;
@@ -361,18 +361,6 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
                 if (!mounted) return;
                 if (check == true) signTx(trModel);
               },
-              load == Load.loading
-                  ? '${S.of(context).g_key_106}...'
-                  : S.of(context).g_key_48,
-              AppThemeUtils.getColorByKey(
-                context,
-                load == Load.loading
-                    ? AppThemeKeys.mainButtonBgColor3.name
-                    : AppThemeKeys.mainButtonBgColor.name,
-              ),
-              AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainButtonTextColor.name),
-              load == Load.loading,
             ),
           ),
         ],

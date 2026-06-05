@@ -197,24 +197,15 @@ extension _SecurityVerificationBuild on _WalletSecurityVerificationState {
               Expanded(
                 child: SizedBox(
                   height: h88,
-                  child: buttonStyle5(
-                    context,
-                    () {
-                      closeKeyboard();
-                      if (load == Load.loading) return;
-                      Navigator.pop(context, false);
-                    },
-                    S.of(context).g_key_79,
-                    themeColor(
-                      (load == Load.finish
-                              ? AppThemeKeys.mainButtonTextColor
-                              : AppThemeKeys.mainButtonBgColor3)
-                          .name,
-                    ),
-                    themeColor(AppThemeKeys.mainButtonBgColor.name),
-                    borderColor: themeColor(
-                      AppThemeKeys.mainButtonBgColor.name,
-                    ),
+                  child: AppButton(
+                    label: S.of(context).g_key_79,
+                    variant: AppButtonVariant.secondary,
+                    onPressed: load == Load.loading
+                        ? null
+                        : () {
+                            closeKeyboard();
+                            Navigator.pop(context, false);
+                          },
                   ),
                 ),
               ),
@@ -222,18 +213,12 @@ extension _SecurityVerificationBuild on _WalletSecurityVerificationState {
               Expanded(
                 child: SizedBox(
                   height: h88,
-                  child: buttonStyle6(
-                    context,
-                    _onConfirm,
-                    S.of(context).g_key_78,
-                    themeColor(
-                      ((load == Load.finish && anyEnabled)
-                              ? AppThemeKeys.mainButtonBgColor
-                              : AppThemeKeys.mainButtonBgColor3)
-                          .name,
-                    ),
-                    themeColor(AppThemeKeys.mainButtonTextColor.name),
-                    load == Load.loading,
+                  child: AppButton(
+                    label: S.of(context).g_key_78,
+                    onPressed: (load == Load.finish && anyEnabled)
+                        ? _onConfirm
+                        : null,
+                    loading: load == Load.loading,
                   ),
                 ),
               ),

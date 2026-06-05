@@ -289,19 +289,10 @@ mixin _AptSendWidgetsMixin on _AptSendLogicMixin {
             height: ScreenUtil().setWidth(148.0),
             color: AppThemeUtils.getColorByKey(
                 context, AppThemeKeys.backGroundColor.name),
-            child: buttonStyle6(
-              context,
-              sendTransaction,
-              isLoading ? '${S.of(context).g_key_106}...' : S.of(context).g_key_48,
-              AppThemeUtils.getColorByKey(
-                context,
-                isLoading
-                    ? AppThemeKeys.mainButtonBgColor3.name
-                    : AppThemeKeys.mainButtonBgColor.name,
-              ),
-              AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainButtonTextColor.name),
-              isLoading,
+            child: AppButton(
+              label: S.of(context).g_key_48,
+              onPressed: sendTransaction,
+              loading: isLoading,
             ),
           ),
         ],

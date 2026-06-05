@@ -315,19 +315,10 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
             padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
             height: ScreenUtil().setWidth(148.0),
             color: _tc(AppThemeKeys.backGroundColor.name),
-            child: buttonStyle6(
-              context,
-              sendTransaction,
-              isLoading
-                  ? '${S.of(context).g_key_106}...'
-                  : S.of(context).g_key_48,
-              _tc(
-                isLoading
-                    ? AppThemeKeys.mainButtonBgColor3.name
-                    : AppThemeKeys.mainButtonBgColor.name,
-              ),
-              _tc(AppThemeKeys.mainButtonTextColor.name),
-              isLoading,
+            child: AppButton(
+              label: S.of(context).g_key_48,
+              onPressed: sendTransaction,
+              loading: isLoading,
             ),
           ),
         ],
