@@ -1410,5 +1410,14 @@
   "g_wallet_group_hd": "HD-Wallet · Mnemonik",
   "g_wallet_group_single": "Single-Chain · Importiert",
   "g_xrp_optional": "(Optional)",
-  "g_xrp_dest_tag_hint": "Bei Sendungen an eine Börse meist erforderlich"
+  "g_xrp_dest_tag_hint": "Bei Sendungen an eine Börse meist erforderlich",
+  "g_pred_err_invalid_outcome": "Ungültiges Ergebnis",
+  "g_pred_err_market_closed": "Markt geschlossen, kein Handel",
+  "g_pred_err_amount_low": "Betrag muss größer als 0 sein",
+  "g_pred_err_insufficient_balance": "Unzureichendes Guthaben",
+  "g_pred_err_slippage": "Slippage überschritten, bitte erneut versuchen",
+  "g_pred_err_insufficient_shares": "Unzureichende Anteile",
+  "g_pred_err_not_resolved": "Markt nicht aufgelöst, keine Einlösung",
+  "g_pred_err_market_not_found": "Markt nicht gefunden",
+  "g_pred_redeem_failed": "Einlösung fehlgeschlagen: {reason}"
 }

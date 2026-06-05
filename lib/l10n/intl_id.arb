@@ -1410,5 +1410,14 @@
   "g_wallet_group_hd": "Dompet HD · Mnemonik",
   "g_wallet_group_single": "Rantai Tunggal · Diimpor",
   "g_xrp_optional": "(Opsional)",
-  "g_xrp_dest_tag_hint": "Biasanya wajib saat mengirim ke bursa"
+  "g_xrp_dest_tag_hint": "Biasanya wajib saat mengirim ke bursa",
+  "g_pred_err_invalid_outcome": "Hasil tidak valid",
+  "g_pred_err_market_closed": "Pasar ditutup, tidak bisa transaksi",
+  "g_pred_err_amount_low": "Jumlah harus lebih dari 0",
+  "g_pred_err_insufficient_balance": "Saldo tidak cukup",
+  "g_pred_err_slippage": "Slippage terlampaui, coba lagi",
+  "g_pred_err_insufficient_shares": "Bagian tidak cukup",
+  "g_pred_err_not_resolved": "Pasar belum selesai, tidak bisa ditebus",
+  "g_pred_err_market_not_found": "Pasar tidak ditemukan",
+  "g_pred_redeem_failed": "Penebusan gagal: {reason}"
 }

@@ -163,28 +163,30 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m61(shares, avg, after) =>
       "Tahmini ${shares} pay · ort ${avg}% · sonra ${after}%";
 
-  static String m62(label) => "Sonuç: ${label}";
+  static String m62(reason) => "Kullanım başarısız: ${reason}";
 
-  static String m63(n) => "Sat ${n}";
+  static String m63(label) => "Sonuç: ${label}";
 
-  static String m64(value) => "${value} Yetersiz Bakiye.";
+  static String m64(n) => "Sat ${n}";
 
-  static String m65(value) => "${value} geliyor...";
+  static String m65(value) => "${value} Yetersiz Bakiye.";
 
-  static String m66(value) =>
+  static String m66(value) => "${value} geliyor...";
+
+  static String m67(value) =>
       "Uygulama içinde takas edilen ${value}, kısa süre içinde cüzdanınıza dağıtılacak ve bu işlemle satılamaz. Düğüm çalıştırmak için kullanılabilir.";
 
-  static String m67(value) => "Maksimum ${value} karakter";
-
-  static String m68(value) =>
-      "${value} zinciri uygulama tarafından zaten destekleniyor!";
+  static String m68(value) => "Maksimum ${value} karakter";
 
   static String m69(value) =>
+      "${value} zinciri uygulama tarafından zaten destekleniyor!";
+
+  static String m70(value) =>
       "${value} zinciri uygulama tarafından zaten destekleniyor, eklemek istiyor musunuz?";
 
-  static String m70(value) => "${value} adres test bağlantısı başarısız!";
+  static String m71(value) => "${value} adres test bağlantısı başarısız!";
 
-  static String m71(value) => "0~${value} karakter";
+  static String m72(value) => "0~${value} karakter";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -2557,11 +2559,35 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_pred_creating": MessageLookupByLibrary.simpleMessage("Oluşturuluyor…"),
     "g_pred_deadline": MessageLookupByLibrary.simpleMessage("Son tarih"),
+    "g_pred_err_amount_low": MessageLookupByLibrary.simpleMessage(
+      "Tutar 0\'dan büyük olmalı",
+    ),
+    "g_pred_err_insufficient_balance": MessageLookupByLibrary.simpleMessage(
+      "Yetersiz bakiye",
+    ),
+    "g_pred_err_insufficient_shares": MessageLookupByLibrary.simpleMessage(
+      "Yetersiz pay",
+    ),
+    "g_pred_err_invalid_outcome": MessageLookupByLibrary.simpleMessage(
+      "Geçersiz sonuç",
+    ),
+    "g_pred_err_market_closed": MessageLookupByLibrary.simpleMessage(
+      "Piyasa kapalı, işlem yapılamaz",
+    ),
+    "g_pred_err_market_not_found": MessageLookupByLibrary.simpleMessage(
+      "Piyasa bulunamadı",
+    ),
+    "g_pred_err_not_resolved": MessageLookupByLibrary.simpleMessage(
+      "Piyasa sonuçlanmadı, kullanılamaz",
+    ),
     "g_pred_err_outcomes": MessageLookupByLibrary.simpleMessage(
       "En az iki geçerli sonuç",
     ),
     "g_pred_err_question": MessageLookupByLibrary.simpleMessage(
       "Lütfen bir soru girin",
+    ),
+    "g_pred_err_slippage": MessageLookupByLibrary.simpleMessage(
+      "Kayma aşıldı, tekrar deneyin",
     ),
     "g_pred_minutes": m58,
     "g_pred_no": MessageLookupByLibrary.simpleMessage("Hayır"),
@@ -2577,9 +2603,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Tahmin sorusu, örn.: Bu turu kim kazanır?",
     ),
     "g_pred_quote_info": m61,
+    "g_pred_redeem_failed": m62,
     "g_pred_resolved": MessageLookupByLibrary.simpleMessage("Sonuçlandı"),
-    "g_pred_result_label": m62,
-    "g_pred_sell_n": m63,
+    "g_pred_result_label": m63,
+    "g_pred_sell_n": m64,
     "g_pred_unlimited": MessageLookupByLibrary.simpleMessage(
       "Sınırsız (elle kapat)",
     ),
@@ -2618,7 +2645,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("Bağlantı"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("kod"),
-    "g_swap_key_14": m64,
+    "g_swap_key_14": m65,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "Coin fiyatı alınamadı.",
     ),
@@ -2632,7 +2659,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "Takasınız kısa süre içinde dağıtılacaktır. Lütfen sabırlı olun.",
     ),
-    "g_swap_key_20": m65,
+    "g_swap_key_20": m66,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "Düğüm çalıştırma maliyetleri: Grup Doğrulaması 1-49 N Temel Düğüm: 50 N Premium Düğüm: 100 N Pro Düğüm: 500 N.",
     ),
@@ -2644,7 +2671,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("Yeni Bakiye"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("Ödediğiniz"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("Tarih"),
-    "g_swap_key_31": m66,
+    "g_swap_key_31": m67,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "Takaslar ilgili zincir gezginlerinde (Etherscan, BscScan, TRONSCAN ve kendi gezginimiz) görüntülenebilir.",
     ),
@@ -2657,7 +2684,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "Varsayılana sıfırla",
     ),
-    "g_token_m_key_1": m67,
+    "g_token_m_key_1": m68,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "Herkes mevcut tokenlerin sahte sürümleri dahil token oluşturabilir. İçe aktarmadan önce her zaman bir tokeni araştırın.",
     ),
@@ -2674,9 +2701,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_2": MessageLookupByLibrary.simpleMessage("0~18 birim"),
     "g_token_m_key_20": MessageLookupByLibrary.simpleMessage("Token Ekle"),
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage("Biçim Hatası!"),
-    "g_token_m_key_22": m68,
-    "g_token_m_key_23": m69,
-    "g_token_m_key_24": m70,
+    "g_token_m_key_22": m69,
+    "g_token_m_key_23": m70,
+    "g_token_m_key_24": m71,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("Token içe aktar"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("Tüm ağlar"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage("Özel Token"),
@@ -2731,7 +2758,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_email": MessageLookupByLibrary.simpleMessage("E-posta"),
     "login_password": MessageLookupByLibrary.simpleMessage("Şifre"),
     "next": MessageLookupByLibrary.simpleMessage("Sonraki"),
-    "nicknameMessage": m71,
+    "nicknameMessage": m72,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "Profili Düzenle",
     ),

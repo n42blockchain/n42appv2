@@ -164,27 +164,29 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m61(shares, avg, after) =>
       "Odh. ${shares} podílů · prům ${avg}% · poté ${after}%";
 
-  static String m62(label) => "Výsledek: ${label}";
+  static String m62(reason) => "Výplata selhala: ${reason}";
 
-  static String m63(n) => "Prodat ${n}";
+  static String m63(label) => "Výsledek: ${label}";
 
-  static String m64(value) => "${value} Nedostatečný zůstatek.";
+  static String m64(n) => "Prodat ${n}";
 
-  static String m65(value) => "${value} příchozí...";
+  static String m65(value) => "${value} Nedostatečný zůstatek.";
 
-  static String m66(value) =>
+  static String m66(value) => "${value} příchozí...";
+
+  static String m67(value) =>
       "${value} vyměněné v aplikaci budou brzy distribuovány do vaší peněženky a nelze je tímto procesem prodávat. Lze jej použít ke spuštění uzlu.";
 
-  static String m67(value) => "Max. ${value} znaků";
+  static String m68(value) => "Max. ${value} znaků";
 
-  static String m68(value) => "Řetězová aplikace ${value} je již podporována!";
+  static String m69(value) => "Řetězová aplikace ${value} je již podporována!";
 
-  static String m69(value) =>
+  static String m70(value) =>
       "Řetězová aplikace ${value} je již podporována, chcete ji přidat?";
 
-  static String m70(value) => "Odkaz na test adresy ${value} se nezdařil!";
+  static String m71(value) => "Odkaz na test adresy ${value} se nezdařil!";
 
-  static String m71(value) => "0~${value} znaků";
+  static String m72(value) => "0~${value} znaků";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -2581,11 +2583,35 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_pred_creating": MessageLookupByLibrary.simpleMessage("Vytváření…"),
     "g_pred_deadline": MessageLookupByLibrary.simpleMessage("Termín"),
+    "g_pred_err_amount_low": MessageLookupByLibrary.simpleMessage(
+      "Částka musí být větší než 0",
+    ),
+    "g_pred_err_insufficient_balance": MessageLookupByLibrary.simpleMessage(
+      "Nedostatečný zůstatek",
+    ),
+    "g_pred_err_insufficient_shares": MessageLookupByLibrary.simpleMessage(
+      "Nedostatek podílů",
+    ),
+    "g_pred_err_invalid_outcome": MessageLookupByLibrary.simpleMessage(
+      "Neplatný výsledek",
+    ),
+    "g_pred_err_market_closed": MessageLookupByLibrary.simpleMessage(
+      "Trh uzavřen, obchodování nedostupné",
+    ),
+    "g_pred_err_market_not_found": MessageLookupByLibrary.simpleMessage(
+      "Trh nenalezen",
+    ),
+    "g_pred_err_not_resolved": MessageLookupByLibrary.simpleMessage(
+      "Trh nevyhodnocen, nelze vyplatit",
+    ),
     "g_pred_err_outcomes": MessageLookupByLibrary.simpleMessage(
       "Alespoň dva platné výsledky",
     ),
     "g_pred_err_question": MessageLookupByLibrary.simpleMessage(
       "Zadejte otázku",
+    ),
+    "g_pred_err_slippage": MessageLookupByLibrary.simpleMessage(
+      "Překročen skluz, zkuste znovu",
     ),
     "g_pred_minutes": m58,
     "g_pred_no": MessageLookupByLibrary.simpleMessage("Ne"),
@@ -2601,9 +2627,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Otázka predikce, např.: Kdo vyhraje toto kolo?",
     ),
     "g_pred_quote_info": m61,
+    "g_pred_redeem_failed": m62,
     "g_pred_resolved": MessageLookupByLibrary.simpleMessage("Vyhodnoceno"),
-    "g_pred_result_label": m62,
-    "g_pred_sell_n": m63,
+    "g_pred_result_label": m63,
+    "g_pred_sell_n": m64,
     "g_pred_unlimited": MessageLookupByLibrary.simpleMessage(
       "Bez limitu (ruční uzavření)",
     ),
@@ -2636,7 +2663,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_share_v3_key_6": MessageLookupByLibrary.simpleMessage("Odkazovat přes"),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("Odkaz"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("kód"),
-    "g_swap_key_14": m64,
+    "g_swap_key_14": m65,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "Získejte chybu ceny mince.",
     ),
@@ -2648,7 +2675,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "Váš swap bude brzy distribuován. Buďte prosím trpěliví.",
     ),
-    "g_swap_key_20": m65,
+    "g_swap_key_20": m66,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "Náklady na provoz uzlu: Ověření skupiny 1-49 N Základní uzel: 50 N Prémiový uzel: 100 N Pro uzel: 500 N.",
     ),
@@ -2660,7 +2687,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("Nová rovnováha"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("Vy platíte"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("Datum"),
-    "g_swap_key_31": m66,
+    "g_swap_key_31": m67,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "Swapy lze prohlížet na příslušných průzkumnících řetězců (Etherscan, BscScan, TRONSCAN a naše vlastní).",
     ),
@@ -2675,7 +2702,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "Obnovit výchozí",
     ),
-    "g_token_m_key_1": m67,
+    "g_token_m_key_1": m68,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "Každý může vytvořit token, včetně vytváření falešných verzí existujících tokenů. Před importem tokenu vždy prozkoumejte.",
     ),
@@ -2694,9 +2721,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_2": MessageLookupByLibrary.simpleMessage("0~18 uint"),
     "g_token_m_key_20": MessageLookupByLibrary.simpleMessage("Přidat tokeny"),
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage("Chyba formátu!"),
-    "g_token_m_key_22": m68,
-    "g_token_m_key_23": m69,
-    "g_token_m_key_24": m70,
+    "g_token_m_key_22": m69,
+    "g_token_m_key_23": m70,
+    "g_token_m_key_24": m71,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("Import tokenů"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("Všechny sítě"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage("Vlastní token"),
@@ -2755,7 +2782,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_email": MessageLookupByLibrary.simpleMessage("E-mail"),
     "login_password": MessageLookupByLibrary.simpleMessage("Heslo"),
     "next": MessageLookupByLibrary.simpleMessage("Další"),
-    "nicknameMessage": m71,
+    "nicknameMessage": m72,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "Upravit profil",
     ),

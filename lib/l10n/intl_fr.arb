@@ -1410,5 +1410,14 @@
   "g_wallet_group_hd": "Portefeuille HD · Mnémonique",
   "g_wallet_group_single": "Chaîne unique · Importé",
   "g_xrp_optional": "(Facultatif)",
-  "g_xrp_dest_tag_hint": "Généralement requis pour un envoi vers une plateforme"
+  "g_xrp_dest_tag_hint": "Généralement requis pour un envoi vers une plateforme",
+  "g_pred_err_invalid_outcome": "Résultat invalide",
+  "g_pred_err_market_closed": "Marché fermé, trading indisponible",
+  "g_pred_err_amount_low": "Le montant doit être supérieur à 0",
+  "g_pred_err_insufficient_balance": "Solde insuffisant",
+  "g_pred_err_slippage": "Slippage dépassé, réessayez",
+  "g_pred_err_insufficient_shares": "Parts insuffisantes",
+  "g_pred_err_not_resolved": "Marché non résolu, échange impossible",
+  "g_pred_err_market_not_found": "Marché introuvable",
+  "g_pred_redeem_failed": "Échec du rachat : {reason}"
 }

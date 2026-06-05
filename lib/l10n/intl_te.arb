@@ -1403,5 +1403,14 @@
   "g_wallet_group_hd": "HD వాలెట్ · మెమోనిక్",
   "g_wallet_group_single": "సింగిల్-చెయిన్ · దిగుమతి",
   "g_xrp_optional": "(ఐచ్ఛికం)",
-  "g_xrp_dest_tag_hint": "ఎక్స్ఛేంజ్‌కు పంపేటప్పుడు సాధారణంగా అవసరం"
+  "g_xrp_dest_tag_hint": "ఎక్స్ఛేంజ్‌కు పంపేటప్పుడు సాధారణంగా అవసరం",
+  "g_pred_err_invalid_outcome": "చెల్లని ఫలితం",
+  "g_pred_err_market_closed": "మార్కెట్ మూసివేయబడింది, ట్రేడింగ్ లేదు",
+  "g_pred_err_amount_low": "మొత్తం 0 కంటే ఎక్కువ ఉండాలి",
+  "g_pred_err_insufficient_balance": "తగినంత నిల్వ లేదు",
+  "g_pred_err_slippage": "స్లిప్పేజ్ మించింది, మళ్లీ ప్రయత్నించండి",
+  "g_pred_err_insufficient_shares": "తగినంత వాటాలు లేవు",
+  "g_pred_err_not_resolved": "మార్కెట్ పరిష్కరించబడలేదు, రిడీమ్ చేయలేరు",
+  "g_pred_err_market_not_found": "మార్కెట్ కనుగొనబడలేదు",
+  "g_pred_redeem_failed": "రిడీమ్ విఫలమైంది: {reason}"
 }

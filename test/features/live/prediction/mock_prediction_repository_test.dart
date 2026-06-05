@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/live/prediction/data/mock_prediction_repository.dart';
 import 'package:n42_wallet/features/live/prediction/domain/prediction_market.dart';
+import 'package:n42_wallet/features/live/prediction/domain/prediction_repository.dart';
 
 void main() {
   late MockPredictionRepository repo;
@@ -105,7 +106,7 @@ void main() {
     await repo.closeMarket(m.id);
     expect(
       () => repo.buy(marketId: m.id, outcomeId: o0, collateralIn: 10),
-      throwsStateError,
+      throwsA(isA<PredictionException>()),
     );
   });
 
@@ -114,7 +115,7 @@ void main() {
     final o0 = m.outcomes[0].id;
     expect(
       () => repo.buy(marketId: m.id, outcomeId: o0, collateralIn: 5000),
-      throwsStateError,
+      throwsA(isA<PredictionException>()),
     );
   });
 
@@ -128,7 +129,7 @@ void main() {
     expect((await market(m.id)).status, MarketStatus.closed);
     expect(
       () => repo.buy(marketId: m.id, outcomeId: m.outcomes[0].id, collateralIn: 10),
-      throwsStateError,
+      throwsA(isA<PredictionException>()),
     );
   });
 

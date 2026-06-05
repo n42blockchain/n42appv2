@@ -1410,5 +1410,14 @@
   "g_wallet_group_hd": "Wallet HD · Mnemonico",
   "g_wallet_group_single": "Singola catena · Importato",
   "g_xrp_optional": "(Facoltativo)",
-  "g_xrp_dest_tag_hint": "Di solito richiesto per l’invio a un exchange"
+  "g_xrp_dest_tag_hint": "Di solito richiesto per l’invio a un exchange",
+  "g_pred_err_invalid_outcome": "Esito non valido",
+  "g_pred_err_market_closed": "Mercato chiuso, trading non disponibile",
+  "g_pred_err_amount_low": "L’importo deve essere maggiore di 0",
+  "g_pred_err_insufficient_balance": "Saldo insufficiente",
+  "g_pred_err_slippage": "Slippage superato, riprova",
+  "g_pred_err_insufficient_shares": "Quote insufficienti",
+  "g_pred_err_not_resolved": "Mercato non risolto, non riscattabile",
+  "g_pred_err_market_not_found": "Mercato non trovato",
+  "g_pred_redeem_failed": "Riscatto non riuscito: {reason}"
 }

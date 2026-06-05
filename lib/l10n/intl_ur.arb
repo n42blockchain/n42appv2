@@ -1403,5 +1403,14 @@
   "g_wallet_group_hd": "HD والیٹ · نیمونک",
   "g_wallet_group_single": "سنگل چین · درآمد شدہ",
   "g_xrp_optional": "(اختیاری)",
-  "g_xrp_dest_tag_hint": "ایکسچینج کو بھیجتے وقت عموماً ضروری"
+  "g_xrp_dest_tag_hint": "ایکسچینج کو بھیجتے وقت عموماً ضروری",
+  "g_pred_err_invalid_outcome": "غلط نتیجہ",
+  "g_pred_err_market_closed": "مارکیٹ بند، ٹریڈنگ دستیاب نہیں",
+  "g_pred_err_amount_low": "رقم 0 سے زیادہ ہونی چاہیے",
+  "g_pred_err_insufficient_balance": "ناکافی بیلنس",
+  "g_pred_err_slippage": "سلپیج سے تجاوز، دوبارہ کوشش کریں",
+  "g_pred_err_insufficient_shares": "ناکافی حصص",
+  "g_pred_err_not_resolved": "مارکیٹ طے نہیں، ریڈیم نہیں ہو سکتا",
+  "g_pred_err_market_not_found": "مارکیٹ نہیں ملی",
+  "g_pred_redeem_failed": "ریڈیم ناکام: {reason}"
 }

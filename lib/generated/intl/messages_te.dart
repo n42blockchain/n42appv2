@@ -165,27 +165,29 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m61(shares, avg, after) =>
       "అంచనా ${shares} వాటాలు · సగటు ${avg}% · తర్వాత ${after}%";
 
-  static String m62(label) => "ఫలితం: ${label}";
+  static String m62(reason) => "రిడీమ్ విఫలమైంది: ${reason}";
 
-  static String m63(n) => "అమ్మండి ${n}";
+  static String m63(label) => "ఫలితం: ${label}";
 
-  static String m64(value) => "${value} బ్యాలెన్స్ సరిపోలేదు.";
+  static String m64(n) => "అమ్మండి ${n}";
 
-  static String m65(value) => "${value} ఇన్‌కమింగ్...";
+  static String m65(value) => "${value} బ్యాలెన్స్ సరిపోలేదు.";
 
-  static String m66(value) =>
+  static String m66(value) => "${value} ఇన్‌కమింగ్...";
+
+  static String m67(value) =>
       "${value} స్వాప్డ్ ఇన్-యాప్ మీ వాలెట్‌కు త్వరలో పంపిణీ చేయబడుతుంది మరియు ఈ ప్రక్రియ ద్వారా విక్రయించబడదు. ఇది నోడ్‌ను అమలు చేయడానికి ఉపయోగించవచ్చు.";
 
-  static String m67(value) => "గరిష్ట ${value} అక్షరాలు";
+  static String m68(value) => "గరిష్ట ${value} అక్షరాలు";
 
-  static String m68(value) => "${value} చైన్ APPకి ఇప్పటికే మద్దతు ఉంది!";
+  static String m69(value) => "${value} చైన్ APPకి ఇప్పటికే మద్దతు ఉంది!";
 
-  static String m69(value) =>
+  static String m70(value) =>
       "${value} చైన్ APPకి ఇప్పటికే మద్దతు ఉంది, మీరు దీన్ని జోడించాలనుకుంటున్నారా?";
 
-  static String m70(value) => "${value} చిరునామా పరీక్ష లింక్ విఫలమైంది!";
+  static String m71(value) => "${value} చిరునామా పరీక్ష లింక్ విఫలమైంది!";
 
-  static String m71(value) => "0~${value} అక్షరాలు";
+  static String m72(value) => "0~${value} అక్షరాలు";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -2705,11 +2707,35 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_pred_creating": MessageLookupByLibrary.simpleMessage("సృష్టిస్తోంది…"),
     "g_pred_deadline": MessageLookupByLibrary.simpleMessage("గడువు"),
+    "g_pred_err_amount_low": MessageLookupByLibrary.simpleMessage(
+      "మొత్తం 0 కంటే ఎక్కువ ఉండాలి",
+    ),
+    "g_pred_err_insufficient_balance": MessageLookupByLibrary.simpleMessage(
+      "తగినంత నిల్వ లేదు",
+    ),
+    "g_pred_err_insufficient_shares": MessageLookupByLibrary.simpleMessage(
+      "తగినంత వాటాలు లేవు",
+    ),
+    "g_pred_err_invalid_outcome": MessageLookupByLibrary.simpleMessage(
+      "చెల్లని ఫలితం",
+    ),
+    "g_pred_err_market_closed": MessageLookupByLibrary.simpleMessage(
+      "మార్కెట్ మూసివేయబడింది, ట్రేడింగ్ లేదు",
+    ),
+    "g_pred_err_market_not_found": MessageLookupByLibrary.simpleMessage(
+      "మార్కెట్ కనుగొనబడలేదు",
+    ),
+    "g_pred_err_not_resolved": MessageLookupByLibrary.simpleMessage(
+      "మార్కెట్ పరిష్కరించబడలేదు, రిడీమ్ చేయలేరు",
+    ),
     "g_pred_err_outcomes": MessageLookupByLibrary.simpleMessage(
       "కనీసం రెండు చెల్లుబాటు ఫలితాలు",
     ),
     "g_pred_err_question": MessageLookupByLibrary.simpleMessage(
       "దయచేసి ప్రశ్న నమోదు చేయండి",
+    ),
+    "g_pred_err_slippage": MessageLookupByLibrary.simpleMessage(
+      "స్లిప్పేజ్ మించింది, మళ్లీ ప్రయత్నించండి",
     ),
     "g_pred_minutes": m58,
     "g_pred_no": MessageLookupByLibrary.simpleMessage("కాదు"),
@@ -2725,9 +2751,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "అంచనా ప్రశ్న, ఉదా.: ఈ రౌండ్‌లో ఎవరు గెలుస్తారు?",
     ),
     "g_pred_quote_info": m61,
+    "g_pred_redeem_failed": m62,
     "g_pred_resolved": MessageLookupByLibrary.simpleMessage("పరిష్కరించబడింది"),
-    "g_pred_result_label": m62,
-    "g_pred_sell_n": m63,
+    "g_pred_result_label": m63,
+    "g_pred_sell_n": m64,
     "g_pred_unlimited": MessageLookupByLibrary.simpleMessage(
       "అపరిమితం (మాన్యువల్‌గా మూసివేత)",
     ),
@@ -2764,7 +2791,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_share_v3_key_6": MessageLookupByLibrary.simpleMessage("ద్వారా చూడండి"),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("లింక్"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("కోడ్"),
-    "g_swap_key_14": m64,
+    "g_swap_key_14": m65,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "నాణెం ధర లోపం పొందండి.",
     ),
@@ -2778,7 +2805,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "మీ స్వాప్ త్వరలో పంపిణీ చేయబడుతుంది.దయచేసి ఓపికపట్టండి.",
     ),
-    "g_swap_key_20": m65,
+    "g_swap_key_20": m66,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "నోడ్‌ని అమలు చేయడానికి అయ్యే ఖర్చులు: గ్రూప్ వెరిఫికేషన్ 1-49 N ప్రాథమిక నోడ్: 50 N ప్రీమియం నోడ్: 100 N ప్రో నోడ్: 500 N.",
     ),
@@ -2792,7 +2819,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("కొత్త బ్యాలెన్స్"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("మీరు చెల్లించండి"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("తేదీ"),
-    "g_swap_key_31": m66,
+    "g_swap_key_31": m67,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "మార్పిడులను సంబంధిత చైన్ ఎక్స్‌ప్లోరర్‌లలో వీక్షించవచ్చు (ఈథర్‌స్కాన్, BscScan, TRONSCAN మరియు మా స్వంతం).",
     ),
@@ -2805,7 +2832,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "డిఫాల్ట్‌కి రీసెట్ చేయండి",
     ),
-    "g_token_m_key_1": m67,
+    "g_token_m_key_1": m68,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "ఇప్పటికే ఉన్న టోకెన్‌ల నకిలీ వెర్షన్‌లను సృష్టించడంతో పాటు ఎవరైనా టోకెన్‌ను సృష్టించవచ్చు. టోకెన్‌ను దిగుమతి చేసుకునే ముందు ఎల్లప్పుడూ పరిశోధించండి.",
     ),
@@ -2824,9 +2851,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "టోకెన్లను జోడించండి",
     ),
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage("ఫార్మాట్ లోపం!"),
-    "g_token_m_key_22": m68,
-    "g_token_m_key_23": m69,
-    "g_token_m_key_24": m70,
+    "g_token_m_key_22": m69,
+    "g_token_m_key_23": m70,
+    "g_token_m_key_24": m71,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage(
       "టోకెన్లను దిగుమతి చేయండి",
     ),
@@ -2889,7 +2916,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_email": MessageLookupByLibrary.simpleMessage("ఇమెయిల్"),
     "login_password": MessageLookupByLibrary.simpleMessage("పాస్వర్డ్"),
     "next": MessageLookupByLibrary.simpleMessage("తదుపరి"),
-    "nicknameMessage": m71,
+    "nicknameMessage": m72,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "ప్రొఫైల్‌ని సవరించండి",
     ),

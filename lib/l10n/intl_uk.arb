@@ -1403,5 +1403,14 @@
   "g_wallet_group_hd": "HD-гаманець · Мнемоніка",
   "g_wallet_group_single": "Один ланцюг · Імпортовано",
   "g_xrp_optional": "(Необов’язково)",
-  "g_xrp_dest_tag_hint": "Зазвичай потрібно при надсиланні на біржу"
+  "g_xrp_dest_tag_hint": "Зазвичай потрібно при надсиланні на біржу",
+  "g_pred_err_invalid_outcome": "Недійсний результат",
+  "g_pred_err_market_closed": "Ринок закрито, торгівля недоступна",
+  "g_pred_err_amount_low": "Сума має бути більше 0",
+  "g_pred_err_insufficient_balance": "Недостатньо коштів",
+  "g_pred_err_slippage": "Перевищено прослизання, повторіть",
+  "g_pred_err_insufficient_shares": "Недостатньо часток",
+  "g_pred_err_not_resolved": "Ринок не розраховано, погашення неможливе",
+  "g_pred_err_market_not_found": "Ринок не знайдено",
+  "g_pred_redeem_failed": "Помилка погашення: {reason}"
 }

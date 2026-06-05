@@ -165,28 +165,30 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m61(shares, avg, after) =>
       "Ожид. ${shares} долей · средн. ${avg}% · после ${after}%";
 
-  static String m62(label) => "Результат: ${label}";
+  static String m62(reason) => "Ошибка погашения: ${reason}";
 
-  static String m63(n) => "Продать ${n}";
+  static String m63(label) => "Результат: ${label}";
 
-  static String m64(value) => "Недостаточный баланс ${value}.";
+  static String m64(n) => "Продать ${n}";
 
-  static String m65(value) => "${value} поступает...";
+  static String m65(value) => "Недостаточный баланс ${value}.";
 
-  static String m66(value) =>
+  static String m66(value) => "${value} поступает...";
+
+  static String m67(value) =>
       "${value} обменянные в приложении будут в ближайшее время распределены на ваш кошелёк и не могут быть проданы через этот процесс. Их можно использовать для запуска ноды.";
 
-  static String m67(value) => "Максимум ${value} символов";
+  static String m68(value) => "Максимум ${value} символов";
 
-  static String m68(value) => "Сеть ${value} уже поддерживается приложением!";
-
-  static String m69(value) =>
-      "Сеть ${value} уже поддерживается приложением, хотите её добавить?";
+  static String m69(value) => "Сеть ${value} уже поддерживается приложением!";
 
   static String m70(value) =>
+      "Сеть ${value} уже поддерживается приложением, хотите её добавить?";
+
+  static String m71(value) =>
       "Тестовое подключение к адресу ${value} не удалось!";
 
-  static String m71(value) => "0~${value} символов";
+  static String m72(value) => "0~${value} символов";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -2674,11 +2676,35 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_pred_creating": MessageLookupByLibrary.simpleMessage("Создание…"),
     "g_pred_deadline": MessageLookupByLibrary.simpleMessage("Срок"),
+    "g_pred_err_amount_low": MessageLookupByLibrary.simpleMessage(
+      "Сумма должна быть больше 0",
+    ),
+    "g_pred_err_insufficient_balance": MessageLookupByLibrary.simpleMessage(
+      "Недостаточно средств",
+    ),
+    "g_pred_err_insufficient_shares": MessageLookupByLibrary.simpleMessage(
+      "Недостаточно долей",
+    ),
+    "g_pred_err_invalid_outcome": MessageLookupByLibrary.simpleMessage(
+      "Недопустимый исход",
+    ),
+    "g_pred_err_market_closed": MessageLookupByLibrary.simpleMessage(
+      "Рынок закрыт, торговля недоступна",
+    ),
+    "g_pred_err_market_not_found": MessageLookupByLibrary.simpleMessage(
+      "Рынок не найден",
+    ),
+    "g_pred_err_not_resolved": MessageLookupByLibrary.simpleMessage(
+      "Рынок не рассчитан, погашение невозможно",
+    ),
     "g_pred_err_outcomes": MessageLookupByLibrary.simpleMessage(
       "Минимум два допустимых исхода",
     ),
     "g_pred_err_question": MessageLookupByLibrary.simpleMessage(
       "Введите вопрос",
+    ),
+    "g_pred_err_slippage": MessageLookupByLibrary.simpleMessage(
+      "Превышено проскальзывание, повторите",
     ),
     "g_pred_minutes": m58,
     "g_pred_no": MessageLookupByLibrary.simpleMessage("Нет"),
@@ -2694,9 +2720,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Вопрос прогноза, напр.: Кто победит в этом раунде?",
     ),
     "g_pred_quote_info": m61,
+    "g_pred_redeem_failed": m62,
     "g_pred_resolved": MessageLookupByLibrary.simpleMessage("Рассчитано"),
-    "g_pred_result_label": m62,
-    "g_pred_sell_n": m63,
+    "g_pred_result_label": m63,
+    "g_pred_sell_n": m64,
     "g_pred_unlimited": MessageLookupByLibrary.simpleMessage(
       "Без лимита (закрыть вручную)",
     ),
@@ -2733,7 +2760,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("Ссылка"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("код"),
-    "g_swap_key_14": m64,
+    "g_swap_key_14": m65,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "Ошибка получения цены монеты.",
     ),
@@ -2747,7 +2774,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "Ваш обмен будет распределён в ближайшее время. Пожалуйста, подождите.",
     ),
-    "g_swap_key_20": m65,
+    "g_swap_key_20": m66,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "Стоимость запуска ноды: Групповая верификация 1-49 N Базовая нода: 50 N Премиум нода: 100 N Про нода: 500 N.",
     ),
@@ -2761,7 +2788,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("Новый баланс"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("Вы платите"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("Дата"),
-    "g_swap_key_31": m66,
+    "g_swap_key_31": m67,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "Обмены можно просмотреть в соответствующих обозревателях блокчейна (Etherscan, BscScan, TRONSCAN и наш собственный).",
     ),
@@ -2776,7 +2803,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "Сбросить настройки по умолчанию",
     ),
-    "g_token_m_key_1": m67,
+    "g_token_m_key_1": m68,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "Любой может создать токен, включая поддельные версии существующих токенов. Всегда изучайте токен перед импортом.",
     ),
@@ -2795,9 +2822,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_2": MessageLookupByLibrary.simpleMessage("0~18 ед."),
     "g_token_m_key_20": MessageLookupByLibrary.simpleMessage("Добавить токены"),
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage("Ошибка формата!"),
-    "g_token_m_key_22": m68,
-    "g_token_m_key_23": m69,
-    "g_token_m_key_24": m70,
+    "g_token_m_key_22": m69,
+    "g_token_m_key_23": m70,
+    "g_token_m_key_24": m71,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("Импорт токенов"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("Все сети"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage(
@@ -2860,7 +2887,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_email": MessageLookupByLibrary.simpleMessage("Электронная почта"),
     "login_password": MessageLookupByLibrary.simpleMessage("Пароль"),
     "next": MessageLookupByLibrary.simpleMessage("Далее"),
-    "nicknameMessage": m71,
+    "nicknameMessage": m72,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "Редактировать профиль",
     ),

@@ -165,27 +165,29 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m61(shares, avg, after) =>
       "Очік. ${shares} часток · сер. ${avg}% · після ${after}%";
 
-  static String m62(label) => "Результат: ${label}";
+  static String m62(reason) => "Помилка погашення: ${reason}";
 
-  static String m63(n) => "Продати ${n}";
+  static String m63(label) => "Результат: ${label}";
 
-  static String m64(value) => "${value} Недостатній баланс.";
+  static String m64(n) => "Продати ${n}";
 
-  static String m65(value) => "${value} вхідний...";
+  static String m65(value) => "${value} Недостатній баланс.";
 
-  static String m66(value) =>
+  static String m66(value) => "${value} вхідний...";
+
+  static String m67(value) =>
       "${value}, замінений у додатку, незабаром буде розповсюджений у ваш гаманець і не може бути проданий через цей процес. Його можна використовувати для запуску вузла.";
 
-  static String m67(value) => "Максимальна кількість символів: ${value}";
+  static String m68(value) => "Максимальна кількість символів: ${value}";
 
-  static String m68(value) => "${value} chain APP вже підтримується!";
+  static String m69(value) => "${value} chain APP вже підтримується!";
 
-  static String m69(value) =>
+  static String m70(value) =>
       "${value} chain APP уже підтримується, хочете додати?";
 
-  static String m70(value) => "Помилка перевірки адреси ${value}!";
+  static String m71(value) => "Помилка перевірки адреси ${value}!";
 
-  static String m71(value) => "0~${value} символів";
+  static String m72(value) => "0~${value} символів";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -2659,11 +2661,35 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_pred_creating": MessageLookupByLibrary.simpleMessage("Створення…"),
     "g_pred_deadline": MessageLookupByLibrary.simpleMessage("Дедлайн"),
+    "g_pred_err_amount_low": MessageLookupByLibrary.simpleMessage(
+      "Сума має бути більше 0",
+    ),
+    "g_pred_err_insufficient_balance": MessageLookupByLibrary.simpleMessage(
+      "Недостатньо коштів",
+    ),
+    "g_pred_err_insufficient_shares": MessageLookupByLibrary.simpleMessage(
+      "Недостатньо часток",
+    ),
+    "g_pred_err_invalid_outcome": MessageLookupByLibrary.simpleMessage(
+      "Недійсний результат",
+    ),
+    "g_pred_err_market_closed": MessageLookupByLibrary.simpleMessage(
+      "Ринок закрито, торгівля недоступна",
+    ),
+    "g_pred_err_market_not_found": MessageLookupByLibrary.simpleMessage(
+      "Ринок не знайдено",
+    ),
+    "g_pred_err_not_resolved": MessageLookupByLibrary.simpleMessage(
+      "Ринок не розраховано, погашення неможливе",
+    ),
     "g_pred_err_outcomes": MessageLookupByLibrary.simpleMessage(
       "Щонайменше два дійсні результати",
     ),
     "g_pred_err_question": MessageLookupByLibrary.simpleMessage(
       "Введіть запитання",
+    ),
+    "g_pred_err_slippage": MessageLookupByLibrary.simpleMessage(
+      "Перевищено прослизання, повторіть",
     ),
     "g_pred_minutes": m58,
     "g_pred_no": MessageLookupByLibrary.simpleMessage("Ні"),
@@ -2679,9 +2705,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Питання прогнозу, напр.: Хто виграє цей раунд?",
     ),
     "g_pred_quote_info": m61,
+    "g_pred_redeem_failed": m62,
     "g_pred_resolved": MessageLookupByLibrary.simpleMessage("Вирішено"),
-    "g_pred_result_label": m62,
-    "g_pred_sell_n": m63,
+    "g_pred_result_label": m63,
+    "g_pred_sell_n": m64,
     "g_pred_unlimited": MessageLookupByLibrary.simpleMessage(
       "Без обмежень (закрити вручну)",
     ),
@@ -2720,7 +2747,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("Посилання"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("код"),
-    "g_swap_key_14": m64,
+    "g_swap_key_14": m65,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "Отримати помилку ціни монети.",
     ),
@@ -2732,7 +2759,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "Ваш обмін буде розповсюджено незабаром. Будь ласка, будьте терплячі.",
     ),
-    "g_swap_key_20": m65,
+    "g_swap_key_20": m66,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "Витрати на запуск вузла: Групова перевірка 1-49 N Базовий вузол: 50 N Преміум-вузол: 100 N Професійний вузол: 500 N.",
     ),
@@ -2746,7 +2773,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("Новий баланс"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("Ви платите"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("Дата"),
-    "g_swap_key_31": m66,
+    "g_swap_key_31": m67,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "Свопи можна переглянути у відповідних дослідниках ланцюгів (Etherscan, BscScan, TRONSCAN і наш власний).",
     ),
@@ -2763,7 +2790,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "Скинути до замовчування",
     ),
-    "g_token_m_key_1": m67,
+    "g_token_m_key_1": m68,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "Будь-хто може створити маркер, у тому числі створити підроблені версії існуючих маркерів. Завжди досліджуйте токен перед його імпортом.",
     ),
@@ -2782,9 +2809,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage(
       "Помилка формату!",
     ),
-    "g_token_m_key_22": m68,
-    "g_token_m_key_23": m69,
-    "g_token_m_key_24": m70,
+    "g_token_m_key_22": m69,
+    "g_token_m_key_23": m70,
+    "g_token_m_key_24": m71,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("Імпорт жетонів"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("Всі мережі"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage(
@@ -2845,7 +2872,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_email": MessageLookupByLibrary.simpleMessage("Електронна пошта"),
     "login_password": MessageLookupByLibrary.simpleMessage("Пароль"),
     "next": MessageLookupByLibrary.simpleMessage("Далі"),
-    "nicknameMessage": m71,
+    "nicknameMessage": m72,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "Редагувати профіль",
     ),

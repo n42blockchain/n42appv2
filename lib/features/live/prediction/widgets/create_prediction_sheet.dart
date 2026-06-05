@@ -5,6 +5,7 @@ import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 
 import '../providers/prediction_providers.dart';
+import 'prediction_error_text.dart';
 
 /// 主播"开预测"弹窗：填问题、结果项（≥2）、可选截止时长。
 class CreatePredictionSheet extends ConsumerStatefulWidget {
@@ -98,7 +99,7 @@ class _CreatePredictionSheetState extends ConsumerState<CreatePredictionSheet> {
           );
       if (mounted) Navigator.of(context).pop();
     } catch (e) {
-      if (mounted) setState(() => _error = '$e');
+      if (mounted) setState(() => _error = predictionErrorText(context, e));
     } finally {
       if (mounted) setState(() => _busy = false);
     }

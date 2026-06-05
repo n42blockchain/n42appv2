@@ -1403,5 +1403,14 @@
   "g_wallet_group_hd": "محفظة HD · عبارة استرجاع",
   "g_wallet_group_single": "سلسلة واحدة · مستورد",
   "g_xrp_optional": "(اختياري)",
-  "g_xrp_dest_tag_hint": "مطلوب عادة عند الإرسال إلى منصة تداول"
+  "g_xrp_dest_tag_hint": "مطلوب عادة عند الإرسال إلى منصة تداول",
+  "g_pred_err_invalid_outcome": "نتيجة غير صالحة",
+  "g_pred_err_market_closed": "السوق مغلق، التداول غير متاح",
+  "g_pred_err_amount_low": "يجب أن يكون المبلغ أكبر من 0",
+  "g_pred_err_insufficient_balance": "الرصيد غير كافٍ",
+  "g_pred_err_slippage": "تجاوز الانزلاق، حاول مجددًا",
+  "g_pred_err_insufficient_shares": "حصص غير كافية",
+  "g_pred_err_not_resolved": "السوق لم يُسوَّ، لا يمكن الاسترداد",
+  "g_pred_err_market_not_found": "السوق غير موجود",
+  "g_pred_redeem_failed": "فشل الاسترداد: {reason}"
 }

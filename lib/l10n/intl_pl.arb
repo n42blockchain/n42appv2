@@ -1410,5 +1410,14 @@
   "g_wallet_group_hd": "Portfel HD · Mnemonik",
   "g_wallet_group_single": "Pojedynczy łańcuch · Zaimportowano",
   "g_xrp_optional": "(Opcjonalne)",
-  "g_xrp_dest_tag_hint": "Zwykle wymagane przy wysyłce na giełdę"
+  "g_xrp_dest_tag_hint": "Zwykle wymagane przy wysyłce na giełdę",
+  "g_pred_err_invalid_outcome": "Nieprawidłowy wynik",
+  "g_pred_err_market_closed": "Rynek zamknięty, handel niedostępny",
+  "g_pred_err_amount_low": "Kwota musi być większa niż 0",
+  "g_pred_err_insufficient_balance": "Niewystarczające saldo",
+  "g_pred_err_slippage": "Przekroczono poślizg, spróbuj ponownie",
+  "g_pred_err_insufficient_shares": "Niewystarczające udziały",
+  "g_pred_err_not_resolved": "Rynek nierozstrzygnięty, brak wykupu",
+  "g_pred_err_market_not_found": "Nie znaleziono rynku",
+  "g_pred_redeem_failed": "Wykup nieudany: {reason}"
 }

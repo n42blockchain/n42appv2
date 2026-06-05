@@ -1410,5 +1410,14 @@
   "g_wallet_group_hd": "Ví HD · Cụm từ ghi nhớ",
   "g_wallet_group_single": "Chuỗi đơn · Đã nhập",
   "g_xrp_optional": "(Tùy chọn)",
-  "g_xrp_dest_tag_hint": "Thường bắt buộc khi gửi đến sàn giao dịch"
+  "g_xrp_dest_tag_hint": "Thường bắt buộc khi gửi đến sàn giao dịch",
+  "g_pred_err_invalid_outcome": "Kết quả không hợp lệ",
+  "g_pred_err_market_closed": "Thị trường đã đóng, không thể giao dịch",
+  "g_pred_err_amount_low": "Số tiền phải lớn hơn 0",
+  "g_pred_err_insufficient_balance": "Số dư không đủ",
+  "g_pred_err_slippage": "Vượt trượt giá, vui lòng thử lại",
+  "g_pred_err_insufficient_shares": "Không đủ phần",
+  "g_pred_err_not_resolved": "Thị trường chưa giải quyết, không thể đổi",
+  "g_pred_err_market_not_found": "Không tìm thấy thị trường",
+  "g_pred_redeem_failed": "Đổi thưởng thất bại: {reason}"
 }

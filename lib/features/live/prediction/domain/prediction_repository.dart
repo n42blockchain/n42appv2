@@ -70,3 +70,27 @@ abstract class PredictionRepository {
   /// 赎回：开奖后赢家份额按 1:1 兑回结算代币（取消的市场退本金）。
   Future<void> redeem(String marketId);
 }
+
+/// 预测市场操作可能抛出的语义错误码。data 层只抛码、不含文案；
+/// UI 层经 `predictionErrorText` 映射到本地化文案。
+enum PredictionError {
+  tooFewOutcomes,
+  invalidOutcome,
+  marketClosed,
+  amountTooLow,
+  insufficientBalance,
+  slippage,
+  insufficientShares,
+  notResolved,
+  marketNotFound,
+}
+
+/// 预测市场业务异常：data 层抛语义 [error] 码，UI 层据此本地化。
+class PredictionException implements Exception {
+  const PredictionException(this.error);
+
+  final PredictionError error;
+
+  @override
+  String toString() => 'PredictionException(${error.name})';
+}

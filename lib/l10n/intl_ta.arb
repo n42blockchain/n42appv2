@@ -1403,5 +1403,14 @@
   "g_wallet_group_hd": "HD வாலட் · நினைவூட்டு",
   "g_wallet_group_single": "ஒற்றை-சங்கிலி · இறக்குமதி",
   "g_xrp_optional": "(விருப்பம்)",
-  "g_xrp_dest_tag_hint": "பரிமாற்றத்திற்கு அனுப்பும்போது பொதுவாகத் தேவை"
+  "g_xrp_dest_tag_hint": "பரிமாற்றத்திற்கு அனுப்பும்போது பொதுவாகத் தேவை",
+  "g_pred_err_invalid_outcome": "செல்லாத முடிவு",
+  "g_pred_err_market_closed": "சந்தை மூடப்பட்டது, வர்த்தகம் இல்லை",
+  "g_pred_err_amount_low": "தொகை 0 ஐ விட அதிகமாக இருக்க வேண்டும்",
+  "g_pred_err_insufficient_balance": "போதிய இருப்பு இல்லை",
+  "g_pred_err_slippage": "சறுக்கல் மீறியது, மீண்டும் முயற்சிக்கவும்",
+  "g_pred_err_insufficient_shares": "போதிய பங்குகள் இல்லை",
+  "g_pred_err_not_resolved": "சந்தை தீர்க்கப்படவில்லை, மீட்க முடியாது",
+  "g_pred_err_market_not_found": "சந்தை கிடைக்கவில்லை",
+  "g_pred_redeem_failed": "மீட்பு தோல்வி: {reason}"
 }

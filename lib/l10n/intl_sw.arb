@@ -1403,5 +1403,14 @@
   "g_wallet_group_hd": "Wallet ya HD · Mnemonic",
   "g_wallet_group_single": "Mnyororo Mmoja · Imeingizwa",
   "g_xrp_optional": "(Si lazima)",
-  "g_xrp_dest_tag_hint": "Kawaida inahitajika unapotuma kwa exchange"
+  "g_xrp_dest_tag_hint": "Kawaida inahitajika unapotuma kwa exchange",
+  "g_pred_err_invalid_outcome": "Tokeo batili",
+  "g_pred_err_market_closed": "Soko limefungwa, biashara haipatikani",
+  "g_pred_err_amount_low": "Kiasi lazima kiwe zaidi ya 0",
+  "g_pred_err_insufficient_balance": "Salio halitoshi",
+  "g_pred_err_slippage": "Mteremko umezidi, jaribu tena",
+  "g_pred_err_insufficient_shares": "Hisa hazitoshi",
+  "g_pred_err_not_resolved": "Soko halijatatuliwa, haiwezi kukombolewa",
+  "g_pred_err_market_not_found": "Soko halikupatikana",
+  "g_pred_redeem_failed": "Ukombozi umeshindwa: {reason}"
 }

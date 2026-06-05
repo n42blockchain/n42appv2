@@ -165,29 +165,31 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m61(shares, avg, after) =>
       "Est. ${shares} parts · moy ${avg}% · après ${after}%";
 
-  static String m62(label) => "Résultat : ${label}";
+  static String m62(reason) => "Échec du rachat : ${reason}";
 
-  static String m63(n) => "Vendre ${n}";
+  static String m63(label) => "Résultat : ${label}";
 
-  static String m64(value) => "Solde insuffisant de ${value}.";
+  static String m64(n) => "Vendre ${n}";
 
-  static String m65(value) => "${value} en cours de réception...";
+  static String m65(value) => "Solde insuffisant de ${value}.";
 
-  static String m66(value) =>
+  static String m66(value) => "${value} en cours de réception...";
+
+  static String m67(value) =>
       "Les ${value} échangés dans l\'application seront distribués sous peu dans votre portefeuille et ne peuvent pas être vendus via ce processus. Ils peuvent être utilisés pour faire fonctionner un nœud.";
 
-  static String m67(value) => "Maximum ${value} caractères";
-
-  static String m68(value) =>
-      "La chaîne ${value} est déjà supportée par l\'APP !";
+  static String m68(value) => "Maximum ${value} caractères";
 
   static String m69(value) =>
-      "La chaîne ${value} est déjà supportée par l\'APP, voulez-vous l\'ajouter ?";
+      "La chaîne ${value} est déjà supportée par l\'APP !";
 
   static String m70(value) =>
+      "La chaîne ${value} est déjà supportée par l\'APP, voulez-vous l\'ajouter ?";
+
+  static String m71(value) =>
       "Échec du test de connexion à l\'adresse ${value} !";
 
-  static String m71(value) => "0~${value} caractères";
+  static String m72(value) => "0~${value} caractères";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -2731,11 +2733,35 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_pred_creating": MessageLookupByLibrary.simpleMessage("Création…"),
     "g_pred_deadline": MessageLookupByLibrary.simpleMessage("Échéance"),
+    "g_pred_err_amount_low": MessageLookupByLibrary.simpleMessage(
+      "Le montant doit être supérieur à 0",
+    ),
+    "g_pred_err_insufficient_balance": MessageLookupByLibrary.simpleMessage(
+      "Solde insuffisant",
+    ),
+    "g_pred_err_insufficient_shares": MessageLookupByLibrary.simpleMessage(
+      "Parts insuffisantes",
+    ),
+    "g_pred_err_invalid_outcome": MessageLookupByLibrary.simpleMessage(
+      "Résultat invalide",
+    ),
+    "g_pred_err_market_closed": MessageLookupByLibrary.simpleMessage(
+      "Marché fermé, trading indisponible",
+    ),
+    "g_pred_err_market_not_found": MessageLookupByLibrary.simpleMessage(
+      "Marché introuvable",
+    ),
+    "g_pred_err_not_resolved": MessageLookupByLibrary.simpleMessage(
+      "Marché non résolu, échange impossible",
+    ),
     "g_pred_err_outcomes": MessageLookupByLibrary.simpleMessage(
       "Au moins deux résultats valides",
     ),
     "g_pred_err_question": MessageLookupByLibrary.simpleMessage(
       "Veuillez saisir une question",
+    ),
+    "g_pred_err_slippage": MessageLookupByLibrary.simpleMessage(
+      "Slippage dépassé, réessayez",
     ),
     "g_pred_minutes": m58,
     "g_pred_no": MessageLookupByLibrary.simpleMessage("Non"),
@@ -2751,9 +2777,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Question de prédiction, p. ex. Qui gagne cette manche ?",
     ),
     "g_pred_quote_info": m61,
+    "g_pred_redeem_failed": m62,
     "g_pred_resolved": MessageLookupByLibrary.simpleMessage("Résolu"),
-    "g_pred_result_label": m62,
-    "g_pred_sell_n": m63,
+    "g_pred_result_label": m63,
+    "g_pred_sell_n": m64,
     "g_pred_unlimited": MessageLookupByLibrary.simpleMessage(
       "Illimité (clôture manuelle)",
     ),
@@ -2788,7 +2815,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_share_v3_key_6": MessageLookupByLibrary.simpleMessage("Parrainer via"),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("Lien"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("coder"),
-    "g_swap_key_14": m64,
+    "g_swap_key_14": m65,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "Erreur de récupération du prix du jeton.",
     ),
@@ -2802,7 +2829,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "Votre échange sera distribué sous peu. Veuillez patienter.",
     ),
-    "g_swap_key_20": m65,
+    "g_swap_key_20": m66,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "Coûts pour faire fonctionner un nœud : Vérification de groupe 1-49 N Nœud basique : 50 N Nœud premium : 100 N Nœud pro : 500 N.",
     ),
@@ -2818,7 +2845,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("Nouveau solde"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("Vous payez"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("Date"),
-    "g_swap_key_31": m66,
+    "g_swap_key_31": m67,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "Les échanges peuvent être consultés sur les explorateurs de chaîne concernés (Etherscan, BscScan, TRONSCAN et le nôtre).",
     ),
@@ -2835,7 +2862,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "Réinitialiser aux valeurs par défaut",
     ),
-    "g_token_m_key_1": m67,
+    "g_token_m_key_1": m68,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "N\'importe qui peut créer un jeton, y compris des versions contrefaites de jetons existants. Effectuez toujours des recherches sur un jeton avant de l\'importer.",
     ),
@@ -2862,9 +2889,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage(
       "Erreur de format !",
     ),
-    "g_token_m_key_22": m68,
-    "g_token_m_key_23": m69,
-    "g_token_m_key_24": m70,
+    "g_token_m_key_22": m69,
+    "g_token_m_key_23": m70,
+    "g_token_m_key_24": m71,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage(
       "Importer des jetons",
     ),
@@ -2927,7 +2954,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_email": MessageLookupByLibrary.simpleMessage("E-mail"),
     "login_password": MessageLookupByLibrary.simpleMessage("Mot de passe"),
     "next": MessageLookupByLibrary.simpleMessage("Suivant"),
-    "nicknameMessage": m71,
+    "nicknameMessage": m72,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "Modifier le profil",
     ),

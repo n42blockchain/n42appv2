@@ -5,6 +5,7 @@ import 'package:n42_wallet/generated/l10n.dart';
 
 import '../domain/prediction_market.dart';
 import '../providers/prediction_providers.dart';
+import 'prediction_error_text.dart';
 
 /// 主播"开奖/管理"弹窗：停盘、选定赢家开奖、或取消市场。
 class ResolvePredictionSheet extends ConsumerStatefulWidget {
@@ -38,7 +39,7 @@ class _ResolvePredictionSheetState
       await action();
       if (mounted) Navigator.of(context).pop();
     } catch (e) {
-      if (mounted) setState(() => _error = '$e');
+      if (mounted) setState(() => _error = predictionErrorText(context, e));
     } finally {
       if (mounted) setState(() => _busy = false);
     }

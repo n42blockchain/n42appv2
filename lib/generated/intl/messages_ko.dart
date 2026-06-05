@@ -153,26 +153,28 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m61(shares, avg, after) =>
       "예상 ${shares} 지분 · 평균 ${avg}% · 체결 후 ${after}%";
 
-  static String m62(label) => "결과: ${label}";
+  static String m62(reason) => "환급 실패: ${reason}";
 
-  static String m63(n) => "매도 ${n}";
+  static String m63(label) => "결과: ${label}";
 
-  static String m64(value) => "${value} 잔액이 부족합니다.";
+  static String m64(n) => "매도 ${n}";
 
-  static String m65(value) => "${value} 입금 중...";
+  static String m65(value) => "${value} 잔액이 부족합니다.";
 
-  static String m66(value) =>
+  static String m66(value) => "${value} 입금 중...";
+
+  static String m67(value) =>
       "앱 내에서 스왑된 ${value}은(는) 곧 지갑으로 분배되며 이 프로세스를 통해 판매할 수 없습니다. 노드 운영에 사용할 수 있습니다.";
 
-  static String m67(value) => "최대 ${value}자";
+  static String m68(value) => "최대 ${value}자";
 
-  static String m68(value) => "${value} 체인은 앱에서 이미 지원됩니다!";
+  static String m69(value) => "${value} 체인은 앱에서 이미 지원됩니다!";
 
-  static String m69(value) => "${value} 체인은 앱에서 이미 지원됩니다. 추가하시겠습니까?";
+  static String m70(value) => "${value} 체인은 앱에서 이미 지원됩니다. 추가하시겠습니까?";
 
-  static String m70(value) => "${value} 주소 테스트 링크 실패!";
+  static String m71(value) => "${value} 주소 테스트 링크 실패!";
 
-  static String m71(value) => "0~${value}자";
+  static String m72(value) => "0~${value}자";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -1965,10 +1967,34 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_pred_create_title": MessageLookupByLibrary.simpleMessage("예측 시작"),
     "g_pred_creating": MessageLookupByLibrary.simpleMessage("생성 중…"),
     "g_pred_deadline": MessageLookupByLibrary.simpleMessage("마감"),
+    "g_pred_err_amount_low": MessageLookupByLibrary.simpleMessage(
+      "금액은 0보다 커야 합니다",
+    ),
+    "g_pred_err_insufficient_balance": MessageLookupByLibrary.simpleMessage(
+      "잔액 부족",
+    ),
+    "g_pred_err_insufficient_shares": MessageLookupByLibrary.simpleMessage(
+      "보유 지분 부족",
+    ),
+    "g_pred_err_invalid_outcome": MessageLookupByLibrary.simpleMessage(
+      "잘못된 결과",
+    ),
+    "g_pred_err_market_closed": MessageLookupByLibrary.simpleMessage(
+      "마켓이 마감되어 거래할 수 없습니다",
+    ),
+    "g_pred_err_market_not_found": MessageLookupByLibrary.simpleMessage(
+      "마켓을 찾을 수 없습니다",
+    ),
+    "g_pred_err_not_resolved": MessageLookupByLibrary.simpleMessage(
+      "마켓 미정산, 환급 불가",
+    ),
     "g_pred_err_outcomes": MessageLookupByLibrary.simpleMessage(
       "유효한 결과가 2개 이상 필요합니다",
     ),
     "g_pred_err_question": MessageLookupByLibrary.simpleMessage("질문을 입력하세요"),
+    "g_pred_err_slippage": MessageLookupByLibrary.simpleMessage(
+      "슬리피지 초과, 다시 시도하세요",
+    ),
     "g_pred_minutes": m58,
     "g_pred_no": MessageLookupByLibrary.simpleMessage("아니오"),
     "g_pred_outcome_n": m59,
@@ -1983,9 +2009,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "예측 질문, 예: 이번 판에서 누가 이길까요?",
     ),
     "g_pred_quote_info": m61,
+    "g_pred_redeem_failed": m62,
     "g_pred_resolved": MessageLookupByLibrary.simpleMessage("정산 완료"),
-    "g_pred_result_label": m62,
-    "g_pred_sell_n": m63,
+    "g_pred_result_label": m63,
+    "g_pred_sell_n": m64,
     "g_pred_unlimited": MessageLookupByLibrary.simpleMessage("무제한 (수동 마감)"),
     "g_pred_yes": MessageLookupByLibrary.simpleMessage("예"),
     "g_referral_downloaded": MessageLookupByLibrary.simpleMessage("다운로드"),
@@ -2014,7 +2041,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_share_v3_key_6": MessageLookupByLibrary.simpleMessage("추천 방법"),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("링크"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("코드"),
-    "g_swap_key_14": m64,
+    "g_swap_key_14": m65,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage("코인 가격 조회 오류."),
     "g_swap_key_16": MessageLookupByLibrary.simpleMessage("진행 시 다음에 동의하게 됩니다 "),
     "g_swap_key_17": MessageLookupByLibrary.simpleMessage("이용약관."),
@@ -2022,7 +2049,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "스왑이 곧 분배됩니다. 잠시만 기다려 주세요.",
     ),
-    "g_swap_key_20": m65,
+    "g_swap_key_20": m66,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "노드 운영 비용: 그룹 검증 1-49 N 기본 노드: 50 N 프리미엄 노드: 100 N 프로 노드: 500 N.",
     ),
@@ -2034,7 +2061,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("새 잔액"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("지불 금액"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("날짜"),
-    "g_swap_key_31": m66,
+    "g_swap_key_31": m67,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "스왑은 관련 체인 탐색기(Etherscan, BscScan, TRONSCAN 및 자체 탐색기)에서 확인할 수 있습니다.",
     ),
@@ -2045,7 +2072,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_6": MessageLookupByLibrary.simpleMessage("다시 시도"),
     "g_theme_accent_color": MessageLookupByLibrary.simpleMessage("악센트 색상"),
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage("기본값으로 재설정"),
-    "g_token_m_key_1": m67,
+    "g_token_m_key_1": m68,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "누구나 기존 토큰의 가짜 버전을 포함하여 토큰을 만들 수 있습니다. 가져오기 전에 항상 토큰을 조사하세요.",
     ),
@@ -2060,9 +2087,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_2": MessageLookupByLibrary.simpleMessage("0~18 정수"),
     "g_token_m_key_20": MessageLookupByLibrary.simpleMessage("토큰 추가"),
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage("형식 오류!"),
-    "g_token_m_key_22": m68,
-    "g_token_m_key_23": m69,
-    "g_token_m_key_24": m70,
+    "g_token_m_key_22": m69,
+    "g_token_m_key_23": m70,
+    "g_token_m_key_24": m71,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("토큰 가져오기"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("모든 네트워크"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage("커스텀 토큰"),
@@ -2109,7 +2136,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_email": MessageLookupByLibrary.simpleMessage("이메일"),
     "login_password": MessageLookupByLibrary.simpleMessage("비밀번호"),
     "next": MessageLookupByLibrary.simpleMessage("다음"),
-    "nicknameMessage": m71,
+    "nicknameMessage": m72,
     "personalInformation": MessageLookupByLibrary.simpleMessage("프로필 편집"),
     "photograph": MessageLookupByLibrary.simpleMessage("사진 촬영"),
     "please_input_address": MessageLookupByLibrary.simpleMessage("주소를 입력하세요"),

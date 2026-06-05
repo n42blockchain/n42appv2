@@ -1410,5 +1410,14 @@
   "g_wallet_group_hd": "HD-кошелёк · Мнемоника",
   "g_wallet_group_single": "Одна сеть · Импорт",
   "g_xrp_optional": "(Необязательно)",
-  "g_xrp_dest_tag_hint": "Обычно требуется при отправке на биржу"
+  "g_xrp_dest_tag_hint": "Обычно требуется при отправке на биржу",
+  "g_pred_err_invalid_outcome": "Недопустимый исход",
+  "g_pred_err_market_closed": "Рынок закрыт, торговля недоступна",
+  "g_pred_err_amount_low": "Сумма должна быть больше 0",
+  "g_pred_err_insufficient_balance": "Недостаточно средств",
+  "g_pred_err_slippage": "Превышено проскальзывание, повторите",
+  "g_pred_err_insufficient_shares": "Недостаточно долей",
+  "g_pred_err_not_resolved": "Рынок не рассчитан, погашение невозможно",
+  "g_pred_err_market_not_found": "Рынок не найден",
+  "g_pred_redeem_failed": "Ошибка погашения: {reason}"
 }

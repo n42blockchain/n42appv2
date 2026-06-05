@@ -3,6 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
+import 'package:n42_wallet/generated/l10n.dart';
+
+import 'prediction_error_text.dart';
 
 import '../domain/prediction_market.dart';
 import '../providers/prediction_providers.dart';
@@ -170,9 +173,15 @@ class _CardState extends ConsumerState<_Card> {
       await ref.read(predictionRepositoryProvider).redeem(widget.market.id);
     } catch (e) {
       if (context.mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('赎回失败：$e')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              S
+                  .of(context)
+                  .g_pred_redeem_failed(predictionErrorText(context, e)),
+            ),
+          ),
+        );
       }
     }
   }

@@ -8,6 +8,7 @@ import 'package:n42_wallet/generated/l10n.dart';
 
 import '../domain/prediction_market.dart';
 import '../providers/prediction_providers.dart';
+import 'prediction_error_text.dart';
 
 /// 观众下注/卖出弹窗（Polymarket 式份额交易）。
 class TradeSheet extends ConsumerStatefulWidget {
@@ -107,7 +108,7 @@ class _TradeSheetState extends ConsumerState<TradeSheet> {
       );
       if (mounted) Navigator.of(context).pop();
     } catch (e) {
-      if (mounted) setState(() => _error = '$e');
+      if (mounted) setState(() => _error = predictionErrorText(context, e));
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -128,7 +129,7 @@ class _TradeSheetState extends ConsumerState<TradeSheet> {
           );
       if (mounted) Navigator.of(context).pop();
     } catch (e) {
-      if (mounted) setState(() => _error = '$e');
+      if (mounted) setState(() => _error = predictionErrorText(context, e));
     } finally {
       if (mounted) setState(() => _busy = false);
     }

@@ -174,29 +174,31 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m61(shares, avg, after) =>
       "Est. ${shares} shares · avg ${avg}% · after ${after}%";
 
-  static String m62(label) => "Result: ${label}";
+  static String m62(reason) => "Redeem failed: ${reason}";
 
-  static String m63(n) => "Sell ${n}";
+  static String m63(label) => "Result: ${label}";
 
-  static String m64(value) => "[# ${value} Ìñšüƒƒìçìéñť Ɓàĺàñçé. ~~~~~~~~~~~#]";
+  static String m64(n) => "Sell ${n}";
 
-  static String m65(value) => "[# ${value} ìñçöṁìñĝ... ~~~~~~#]";
+  static String m65(value) => "[# ${value} Ìñšüƒƒìçìéñť Ɓàĺàñçé. ~~~~~~~~~~~#]";
 
-  static String m66(value) =>
+  static String m66(value) => "[# ${value} ìñçöṁìñĝ... ~~~~~~#]";
+
+  static String m67(value) =>
       "[# ${value} šŵàƥƥéð ìñ-àƥƥ ŵìĺĺ ƀé ðìšťŗìƀüťéð šĥöŗťĺý ťö ýöüŗ ŵàĺĺéť àñð çàññöť ƀé šöĺð ṽìà ťĥìš ƥŗöçéšš. Ìť çàñ ƀé üšéð ťö ŗüñ à ñöðé. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]";
 
-  static String m67(value) => "[# Ṁàẋ ${value} çĥàŗàçťéŗš ~~~~~~~#]";
-
-  static String m68(value) =>
-      "[# ${value} çĥàìñ ÀƤƤ ìš àĺŗéàðý šüƥƥöŗťéð! ~~~~~~~~~~~~~~~~#]";
+  static String m68(value) => "[# Ṁàẋ ${value} çĥàŗàçťéŗš ~~~~~~~#]";
 
   static String m69(value) =>
-      "[# ${value} çĥàìñ ÀƤƤ ìš àĺŗéàðý šüƥƥöŗťéð, ðö ýöü ŵàñť ťö àðð ìť? ~~~~~~~~~~~~~~~~~~~~~~~~~~~#]";
+      "[# ${value} çĥàìñ ÀƤƤ ìš àĺŗéàðý šüƥƥöŗťéð! ~~~~~~~~~~~~~~~~#]";
 
   static String m70(value) =>
+      "[# ${value} çĥàìñ ÀƤƤ ìš àĺŗéàðý šüƥƥöŗťéð, ðö ýöü ŵàñť ťö àðð ìť? ~~~~~~~~~~~~~~~~~~~~~~~~~~~#]";
+
+  static String m71(value) =>
       "[# ${value} àððŗéšš ťéšť ĺìñķ ƒàìĺéð! ~~~~~~~~~~~~~#]";
 
-  static String m71(value) => "[# 0~${value} çĥàŗàçťéŗš ~~~~~~#]";
+  static String m72(value) => "[# 0~${value} çĥàŗàçťéŗš ~~~~~~#]";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -3106,11 +3108,35 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_pred_creating": MessageLookupByLibrary.simpleMessage("Creating…"),
     "g_pred_deadline": MessageLookupByLibrary.simpleMessage("Deadline"),
+    "g_pred_err_amount_low": MessageLookupByLibrary.simpleMessage(
+      "Amount must be greater than 0",
+    ),
+    "g_pred_err_insufficient_balance": MessageLookupByLibrary.simpleMessage(
+      "Insufficient balance",
+    ),
+    "g_pred_err_insufficient_shares": MessageLookupByLibrary.simpleMessage(
+      "Insufficient shares",
+    ),
+    "g_pred_err_invalid_outcome": MessageLookupByLibrary.simpleMessage(
+      "Invalid outcome",
+    ),
+    "g_pred_err_market_closed": MessageLookupByLibrary.simpleMessage(
+      "Market closed, trading unavailable",
+    ),
+    "g_pred_err_market_not_found": MessageLookupByLibrary.simpleMessage(
+      "Market not found",
+    ),
+    "g_pred_err_not_resolved": MessageLookupByLibrary.simpleMessage(
+      "Market not resolved, cannot redeem",
+    ),
     "g_pred_err_outcomes": MessageLookupByLibrary.simpleMessage(
       "At least two valid outcomes",
     ),
     "g_pred_err_question": MessageLookupByLibrary.simpleMessage(
       "Please enter a question",
+    ),
+    "g_pred_err_slippage": MessageLookupByLibrary.simpleMessage(
+      "Slippage exceeded, please retry",
     ),
     "g_pred_minutes": m58,
     "g_pred_no": MessageLookupByLibrary.simpleMessage("No"),
@@ -3126,9 +3152,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Prediction question, e.g. Who wins this round?",
     ),
     "g_pred_quote_info": m61,
+    "g_pred_redeem_failed": m62,
     "g_pred_resolved": MessageLookupByLibrary.simpleMessage("Resolved"),
-    "g_pred_result_label": m62,
-    "g_pred_sell_n": m63,
+    "g_pred_result_label": m63,
+    "g_pred_sell_n": m64,
     "g_pred_unlimited": MessageLookupByLibrary.simpleMessage(
       "Unlimited (manual close)",
     ),
@@ -3175,7 +3202,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("[# Ĺìñķ ~~#]"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("[# çöðé ~~#]"),
-    "g_swap_key_14": m64,
+    "g_swap_key_14": m65,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "[# Ĝéť çöìñ ƥŗìçé éŗŗöŗ. ~~~~~~~~~~#]",
     ),
@@ -3189,7 +3216,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "[# Ýöüŗ šŵàƥ ŵìĺĺ ƀé ðìšťŗìƀüťéð šĥöŗťĺý.Ƥĺéàšé ƀé ƥàťìéñť. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
     ),
-    "g_swap_key_20": m65,
+    "g_swap_key_20": m66,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "[# Çöšťš ťö ŗüñ à ñöðé: Ĝŗöüƥ Ṽéŗìƒìçàťìöñ 1-49 Ñ Ɓàšìç Ñöðé: 50 Ñ Ƥŗéṁìüṁ Ñöðé: 100 Ñ Ƥŗö Ñöðé: 500 Ñ. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
     ),
@@ -3209,7 +3236,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("[# Ýöü ƥàý ~~~#]"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("[# Ðàťé ~~#]"),
-    "g_swap_key_31": m66,
+    "g_swap_key_31": m67,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "[# Šŵàƥš çàñ ƀé ṽìéŵéð öñ ťĥé ŗéĺéṽàñť çĥàìñ éẋƥĺöŗéŗš (Éťĥéŗšçàñ, ƁšçŠçàñ, ŤŖÖÑŠÇÀÑ àñð öüŗ öŵñ). ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
     ),
@@ -3228,7 +3255,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "[# Ŗéšéť ťö ðéƒàüĺť ~~~~~~~~#]",
     ),
-    "g_token_m_key_1": m67,
+    "g_token_m_key_1": m68,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "[# Àñýöñé çàñ çŗéàťé à ťöķéñ, ìñçĺüðìñĝ çŗéàťìñĝ ƒàķé ṽéŗšìöñš öƒ éẋìšťìñĝ ťöķéñš. Àĺŵàýš ŗéšéàŗçĥ à ťöķéñ ƀéƒöŗé ìṁƥöŗťìñĝ ìť. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
     ),
@@ -3261,9 +3288,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage(
       "[# Ƒöŗṁàť Éŗŗöŗ! ~~~~~~#]",
     ),
-    "g_token_m_key_22": m68,
-    "g_token_m_key_23": m69,
-    "g_token_m_key_24": m70,
+    "g_token_m_key_22": m69,
+    "g_token_m_key_23": m70,
+    "g_token_m_key_24": m71,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage(
       "[# Ìṁƥöŗť ťöķéñš ~~~~~~#]",
     ),
@@ -3342,7 +3369,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "[# Ƥàššŵöŗð ~~~~#]",
     ),
     "next": MessageLookupByLibrary.simpleMessage("[# Ñéẋť ~~#]"),
-    "nicknameMessage": m71,
+    "nicknameMessage": m72,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "[# Éðìť Ƥŗöƒìĺé ~~~~~~#]",
     ),

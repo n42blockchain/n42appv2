@@ -1410,5 +1410,14 @@
   "g_wallet_group_hd": "HD Cüzdan · Anımsatıcı",
   "g_wallet_group_single": "Tek Zincir · İçe aktarıldı",
   "g_xrp_optional": "(İsteğe bağlı)",
-  "g_xrp_dest_tag_hint": "Borsaya gönderirken genellikle gereklidir"
+  "g_xrp_dest_tag_hint": "Borsaya gönderirken genellikle gereklidir",
+  "g_pred_err_invalid_outcome": "Geçersiz sonuç",
+  "g_pred_err_market_closed": "Piyasa kapalı, işlem yapılamaz",
+  "g_pred_err_amount_low": "Tutar 0'dan büyük olmalı",
+  "g_pred_err_insufficient_balance": "Yetersiz bakiye",
+  "g_pred_err_slippage": "Kayma aşıldı, tekrar deneyin",
+  "g_pred_err_insufficient_shares": "Yetersiz pay",
+  "g_pred_err_not_resolved": "Piyasa sonuçlanmadı, kullanılamaz",
+  "g_pred_err_market_not_found": "Piyasa bulunamadı",
+  "g_pred_redeem_failed": "Kullanım başarısız: {reason}"
 }

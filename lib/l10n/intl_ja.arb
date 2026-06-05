@@ -1410,5 +1410,14 @@
   "g_wallet_group_hd": "HDウォレット · ニーモニック",
   "g_wallet_group_single": "シングルチェーン · インポート",
   "g_xrp_optional": "（任意）",
-  "g_xrp_dest_tag_hint": "取引所への送金時は通常必須"
+  "g_xrp_dest_tag_hint": "取引所への送金時は通常必須",
+  "g_pred_err_invalid_outcome": "無効な結果",
+  "g_pred_err_market_closed": "市場は締切済みで取引できません",
+  "g_pred_err_amount_low": "金額は0より大きくしてください",
+  "g_pred_err_insufficient_balance": "残高不足",
+  "g_pred_err_slippage": "スリッページ超過、再試行してください",
+  "g_pred_err_insufficient_shares": "保有数量が不足",
+  "g_pred_err_not_resolved": "市場が未確定で償還できません",
+  "g_pred_err_market_not_found": "市場が見つかりません",
+  "g_pred_redeem_failed": "償還に失敗：{reason}"
 }

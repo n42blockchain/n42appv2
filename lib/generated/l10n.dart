@@ -11493,6 +11493,96 @@ class S {
       args: [],
     );
   }
+
+  /// `Invalid outcome`
+  String get g_pred_err_invalid_outcome {
+    return Intl.message(
+      'Invalid outcome',
+      name: 'g_pred_err_invalid_outcome',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Market closed, trading unavailable`
+  String get g_pred_err_market_closed {
+    return Intl.message(
+      'Market closed, trading unavailable',
+      name: 'g_pred_err_market_closed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Amount must be greater than 0`
+  String get g_pred_err_amount_low {
+    return Intl.message(
+      'Amount must be greater than 0',
+      name: 'g_pred_err_amount_low',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Insufficient balance`
+  String get g_pred_err_insufficient_balance {
+    return Intl.message(
+      'Insufficient balance',
+      name: 'g_pred_err_insufficient_balance',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Slippage exceeded, please retry`
+  String get g_pred_err_slippage {
+    return Intl.message(
+      'Slippage exceeded, please retry',
+      name: 'g_pred_err_slippage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Insufficient shares`
+  String get g_pred_err_insufficient_shares {
+    return Intl.message(
+      'Insufficient shares',
+      name: 'g_pred_err_insufficient_shares',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Market not resolved, cannot redeem`
+  String get g_pred_err_not_resolved {
+    return Intl.message(
+      'Market not resolved, cannot redeem',
+      name: 'g_pred_err_not_resolved',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Market not found`
+  String get g_pred_err_market_not_found {
+    return Intl.message(
+      'Market not found',
+      name: 'g_pred_err_market_not_found',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Redeem failed: {reason}`
+  String g_pred_redeem_failed(Object reason) {
+    return Intl.message(
+      'Redeem failed: $reason',
+      name: 'g_pred_redeem_failed',
+      desc: '',
+      args: [reason],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

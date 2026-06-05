@@ -1403,5 +1403,14 @@
   "g_wallet_group_hd": "Cartera HD · Mnemónico",
   "g_wallet_group_single": "Cadena única · Importado",
   "g_xrp_optional": "(Opcional)",
-  "g_xrp_dest_tag_hint": "Suele ser obligatorio al enviar a un exchange"
+  "g_xrp_dest_tag_hint": "Suele ser obligatorio al enviar a un exchange",
+  "g_pred_err_invalid_outcome": "Resultado no válido",
+  "g_pred_err_market_closed": "Mercado cerrado, sin operaciones",
+  "g_pred_err_amount_low": "El importe debe ser mayor que 0",
+  "g_pred_err_insufficient_balance": "Saldo insuficiente",
+  "g_pred_err_slippage": "Slippage excedido, reinténtalo",
+  "g_pred_err_insufficient_shares": "Participaciones insuficientes",
+  "g_pred_err_not_resolved": "Mercado sin resolver, no se puede canjear",
+  "g_pred_err_market_not_found": "Mercado no encontrado",
+  "g_pred_redeem_failed": "Error al canjear: {reason}"
 }

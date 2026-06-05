@@ -163,27 +163,29 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m61(shares, avg, after) =>
       "تخمینی ${shares} حصص · اوسط ${avg}% · بعد ${after}%";
 
-  static String m62(label) => "نتیجہ: ${label}";
+  static String m62(reason) => "ریڈیم ناکام: ${reason}";
 
-  static String m63(n) => "فروخت ${n}";
+  static String m63(label) => "نتیجہ: ${label}";
 
-  static String m64(value) => "${value} ناکافی بیلنس۔";
+  static String m64(n) => "فروخت ${n}";
 
-  static String m65(value) => "${value} آنے والی...";
+  static String m65(value) => "${value} ناکافی بیلنس۔";
 
-  static String m66(value) =>
+  static String m66(value) => "${value} آنے والی...";
+
+  static String m67(value) =>
       "${value} تبدیل شدہ ایپ آپ کے بٹوے میں جلد ہی تقسیم کر دی جائے گی اور اس عمل کے ذریعے فروخت نہیں کی جا سکتی۔ اسے نوڈ چلانے کے لیے استعمال کیا جا سکتا ہے۔";
 
-  static String m67(value) => "زیادہ سے زیادہ ${value} حروف";
+  static String m68(value) => "زیادہ سے زیادہ ${value} حروف";
 
-  static String m68(value) => "${value} چین اے پی پی پہلے ہی تعاون یافتہ ہے!";
+  static String m69(value) => "${value} چین اے پی پی پہلے ہی تعاون یافتہ ہے!";
 
-  static String m69(value) =>
+  static String m70(value) =>
       "${value} چین ایپ پہلے سے ہی تعاون یافتہ ہے، کیا آپ اسے شامل کرنا چاہتے ہیں؟";
 
-  static String m70(value) => "${value} ایڈریس ٹیسٹ لنک ناکام ہوگیا!";
+  static String m71(value) => "${value} ایڈریس ٹیسٹ لنک ناکام ہوگیا!";
 
-  static String m71(value) => "0~${value} حروف";
+  static String m72(value) => "0~${value} حروف";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -2593,11 +2595,35 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_pred_creating": MessageLookupByLibrary.simpleMessage("بنایا جا رہا ہے…"),
     "g_pred_deadline": MessageLookupByLibrary.simpleMessage("آخری تاریخ"),
+    "g_pred_err_amount_low": MessageLookupByLibrary.simpleMessage(
+      "رقم 0 سے زیادہ ہونی چاہیے",
+    ),
+    "g_pred_err_insufficient_balance": MessageLookupByLibrary.simpleMessage(
+      "ناکافی بیلنس",
+    ),
+    "g_pred_err_insufficient_shares": MessageLookupByLibrary.simpleMessage(
+      "ناکافی حصص",
+    ),
+    "g_pred_err_invalid_outcome": MessageLookupByLibrary.simpleMessage(
+      "غلط نتیجہ",
+    ),
+    "g_pred_err_market_closed": MessageLookupByLibrary.simpleMessage(
+      "مارکیٹ بند، ٹریڈنگ دستیاب نہیں",
+    ),
+    "g_pred_err_market_not_found": MessageLookupByLibrary.simpleMessage(
+      "مارکیٹ نہیں ملی",
+    ),
+    "g_pred_err_not_resolved": MessageLookupByLibrary.simpleMessage(
+      "مارکیٹ طے نہیں، ریڈیم نہیں ہو سکتا",
+    ),
     "g_pred_err_outcomes": MessageLookupByLibrary.simpleMessage(
       "کم از کم دو درست نتائج",
     ),
     "g_pred_err_question": MessageLookupByLibrary.simpleMessage(
       "براہ کرم سوال درج کریں",
+    ),
+    "g_pred_err_slippage": MessageLookupByLibrary.simpleMessage(
+      "سلپیج سے تجاوز، دوبارہ کوشش کریں",
     ),
     "g_pred_minutes": m58,
     "g_pred_no": MessageLookupByLibrary.simpleMessage("نہیں"),
@@ -2613,9 +2639,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "پیشگوئی سوال، مثلاً: یہ راؤنڈ کون جیتے گا؟",
     ),
     "g_pred_quote_info": m61,
+    "g_pred_redeem_failed": m62,
     "g_pred_resolved": MessageLookupByLibrary.simpleMessage("طے شدہ"),
-    "g_pred_result_label": m62,
-    "g_pred_sell_n": m63,
+    "g_pred_result_label": m63,
+    "g_pred_sell_n": m64,
     "g_pred_unlimited": MessageLookupByLibrary.simpleMessage(
       "لامحدود (دستی بندش)",
     ),
@@ -2652,7 +2679,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("لنک"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("کوڈ"),
-    "g_swap_key_14": m64,
+    "g_swap_key_14": m65,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "سکے کی قیمت کی خرابی حاصل کریں۔",
     ),
@@ -2664,7 +2691,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "آپ کا تبادلہ جلد ہی کیا جائے گا۔ براہ کرم صبر کریں۔",
     ),
-    "g_swap_key_20": m65,
+    "g_swap_key_20": m66,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "نوڈ چلانے کے اخراجات: گروپ تصدیق 1-49 N بنیادی نوڈ: 50 N پریمیم نوڈ: 100 N پرو نوڈ: 500 N۔",
     ),
@@ -2676,7 +2703,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("نیا بیلنس"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("تم ادا کرو"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("تاریخ"),
-    "g_swap_key_31": m66,
+    "g_swap_key_31": m67,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "تبدیلیاں متعلقہ چین ایکسپلوررز (ایتھرسکین، بی ایس سی اسکین، ٹرونسکین اور ہمارے اپنے) پر دیکھی جا سکتی ہیں۔",
     ),
@@ -2689,7 +2716,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "ڈیفالٹ پر ری سیٹ کریں۔",
     ),
-    "g_token_m_key_1": m67,
+    "g_token_m_key_1": m68,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "موجودہ ٹوکن کے جعلی ورژن بنانے سمیت کوئی بھی ٹوکن بنا سکتا ہے۔ اسے درآمد کرنے سے پہلے ہمیشہ ایک ٹوکن کی تحقیق کریں۔",
     ),
@@ -2710,9 +2737,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage(
       "فارمیٹ کی خرابی!",
     ),
-    "g_token_m_key_22": m68,
-    "g_token_m_key_23": m69,
-    "g_token_m_key_24": m70,
+    "g_token_m_key_22": m69,
+    "g_token_m_key_23": m70,
+    "g_token_m_key_24": m71,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("ٹوکن درآمد کریں۔"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("تمام نیٹ ورکس"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage("حسب ضرورت ٹوکن"),
@@ -2769,7 +2796,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_email": MessageLookupByLibrary.simpleMessage("ای میل"),
     "login_password": MessageLookupByLibrary.simpleMessage("پاس ورڈ"),
     "next": MessageLookupByLibrary.simpleMessage("اگلا"),
-    "nicknameMessage": m71,
+    "nicknameMessage": m72,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "پروفائل میں ترمیم کریں۔",
     ),

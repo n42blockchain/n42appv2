@@ -1403,5 +1403,14 @@
   "g_wallet_group_hd": "HD ওয়ালেট · নেমোনিক",
   "g_wallet_group_single": "সিঙ্গেল-চেইন · ইমপোর্টেড",
   "g_xrp_optional": "(ঐচ্ছিক)",
-  "g_xrp_dest_tag_hint": "এক্সচেঞ্জে পাঠানোর সময় সাধারণত আবশ্যক"
+  "g_xrp_dest_tag_hint": "এক্সচেঞ্জে পাঠানোর সময় সাধারণত আবশ্যক",
+  "g_pred_err_invalid_outcome": "অবৈধ ফলাফল",
+  "g_pred_err_market_closed": "মার্কেট বন্ধ, ট্রেডিং সম্ভব নয়",
+  "g_pred_err_amount_low": "পরিমাণ 0-এর বেশি হতে হবে",
+  "g_pred_err_insufficient_balance": "অপর্যাপ্ত ব্যালেন্স",
+  "g_pred_err_slippage": "স্লিপেজ অতিক্রান্ত, আবার চেষ্টা করুন",
+  "g_pred_err_insufficient_shares": "অপর্যাপ্ত শেয়ার",
+  "g_pred_err_not_resolved": "মার্কেট নিষ্পন্ন নয়, রিডিম করা যাবে না",
+  "g_pred_err_market_not_found": "মার্কেট পাওয়া যায়নি",
+  "g_pred_redeem_failed": "রিডিম ব্যর্থ: {reason}"
 }

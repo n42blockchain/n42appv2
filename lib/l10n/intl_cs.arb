@@ -1403,5 +1403,14 @@
   "g_wallet_group_hd": "Peněženka HD · Mnemonika",
   "g_wallet_group_single": "Jeden řetězec · Importováno",
   "g_xrp_optional": "(Volitelné)",
-  "g_xrp_dest_tag_hint": "Obvykle vyžadováno při odeslání na burzu"
+  "g_xrp_dest_tag_hint": "Obvykle vyžadováno při odeslání na burzu",
+  "g_pred_err_invalid_outcome": "Neplatný výsledek",
+  "g_pred_err_market_closed": "Trh uzavřen, obchodování nedostupné",
+  "g_pred_err_amount_low": "Částka musí být větší než 0",
+  "g_pred_err_insufficient_balance": "Nedostatečný zůstatek",
+  "g_pred_err_slippage": "Překročen skluz, zkuste znovu",
+  "g_pred_err_insufficient_shares": "Nedostatek podílů",
+  "g_pred_err_not_resolved": "Trh nevyhodnocen, nelze vyplatit",
+  "g_pred_err_market_not_found": "Trh nenalezen",
+  "g_pred_redeem_failed": "Výplata selhala: {reason}"
 }

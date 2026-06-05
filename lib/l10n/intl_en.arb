@@ -1413,5 +1413,15 @@
   "g_wallet_group_hd": "HD Wallet · Mnemonic",
   "g_wallet_group_single": "Single-Chain · Imported",
   "g_xrp_optional": "(Optional)",
-  "g_xrp_dest_tag_hint": "Usually required when sending to an exchange"
+  "g_xrp_dest_tag_hint": "Usually required when sending to an exchange",
+  "g_pred_err_invalid_outcome": "Invalid outcome",
+  "g_pred_err_market_closed": "Market closed, trading unavailable",
+  "g_pred_err_amount_low": "Amount must be greater than 0",
+  "g_pred_err_insufficient_balance": "Insufficient balance",
+  "g_pred_err_slippage": "Slippage exceeded, please retry",
+  "g_pred_err_insufficient_shares": "Insufficient shares",
+  "g_pred_err_not_resolved": "Market not resolved, cannot redeem",
+  "g_pred_err_market_not_found": "Market not found",
+  "g_pred_redeem_failed": "Redeem failed: {reason}",
+  "@g_pred_redeem_failed": {"placeholders":{"reason":{}}}
 }

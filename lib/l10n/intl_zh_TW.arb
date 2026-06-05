@@ -1403,5 +1403,14 @@
   "g_wallet_group_hd": "HD 錢包 · 助記詞",
   "g_wallet_group_single": "單鏈 · 單鏈導入",
   "g_xrp_optional": "（可選）",
-  "g_xrp_dest_tag_hint": "轉帳到交易所時通常必填"
+  "g_xrp_dest_tag_hint": "轉帳到交易所時通常必填",
+  "g_pred_err_invalid_outcome": "無效的結果",
+  "g_pred_err_market_closed": "市場已停盤，無法交易",
+  "g_pred_err_amount_low": "金額必須大於 0",
+  "g_pred_err_insufficient_balance": "餘額不足",
+  "g_pred_err_slippage": "滑點超限，請重試",
+  "g_pred_err_insufficient_shares": "持倉不足",
+  "g_pred_err_not_resolved": "市場未開獎，無法贖回",
+  "g_pred_err_market_not_found": "市場不存在",
+  "g_pred_redeem_failed": "贖回失敗：{reason}"
 }

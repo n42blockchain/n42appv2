@@ -1403,5 +1403,14 @@
   "g_wallet_group_hd": "HD 지갑 · 니모닉",
   "g_wallet_group_single": "단일 체인 · 가져오기",
   "g_xrp_optional": "(선택)",
-  "g_xrp_dest_tag_hint": "거래소로 보낼 때 보통 필수"
+  "g_xrp_dest_tag_hint": "거래소로 보낼 때 보통 필수",
+  "g_pred_err_invalid_outcome": "잘못된 결과",
+  "g_pred_err_market_closed": "마켓이 마감되어 거래할 수 없습니다",
+  "g_pred_err_amount_low": "금액은 0보다 커야 합니다",
+  "g_pred_err_insufficient_balance": "잔액 부족",
+  "g_pred_err_slippage": "슬리피지 초과, 다시 시도하세요",
+  "g_pred_err_insufficient_shares": "보유 지분 부족",
+  "g_pred_err_not_resolved": "마켓 미정산, 환급 불가",
+  "g_pred_err_market_not_found": "마켓을 찾을 수 없습니다",
+  "g_pred_redeem_failed": "환급 실패: {reason}"
 }

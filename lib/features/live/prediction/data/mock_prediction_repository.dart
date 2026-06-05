@@ -99,7 +99,7 @@ class MockPredictionRepository implements PredictionRepository {
     DateTime? closesAt,
   }) async {
     if (outcomeLabels.length < 2) {
-      throw StateError('至少需要两个结果');
+      throw PredictionException(PredictionError.tooFewOutcomes);
     }
     final id = 'mkt_${DateTime.now().millisecondsSinceEpoch}_${_seq++}';
     final outcomes = <_OutcomeState>[];
@@ -133,7 +133,7 @@ class MockPredictionRepository implements PredictionRepository {
     final m = _require(marketId);
     if (m.status == MarketStatus.resolved) return;
     if (m.outcomes.every((o) => o.id != winningOutcomeId)) {
-      throw StateError('无效的结果');
+      throw PredictionException(PredictionError.invalidOutcome);
     }
     m.status = MarketStatus.resolved;
     m.resolvedOutcomeId = winningOutcomeId;
@@ -176,14 +176,20 @@ class MockPredictionRepository implements PredictionRepository {
     double? minShares,
   }) async {
     final m = _require(marketId);
-    if (!m.tradable) throw StateError('已停盘，无法下注');
-    if (collateralIn <= 0) throw StateError('金额必须大于 0');
-    if (collateralIn > _balance) throw StateError('余额不足');
+    if (!m.tradable) {
+      throw const PredictionException(PredictionError.marketClosed);
+    }
+    if (collateralIn <= 0) {
+      throw const PredictionException(PredictionError.amountTooLow);
+    }
+    if (collateralIn > _balance) {
+      throw const PredictionException(PredictionError.insufficientBalance);
+    }
 
     final i = m.indexOf(outcomeId);
     final delta = m.solveSharesForCollateral(i, collateralIn);
     if (minShares != null && delta < minShares) {
-      throw StateError('滑点超限：预计份额 ${delta.toStringAsFixed(2)} < $minShares');
+      throw const PredictionException(PredictionError.slippage);
     }
     m.q[i] += delta;
     _balance -= collateralIn;
@@ -201,14 +207,18 @@ class MockPredictionRepository implements PredictionRepository {
     double? minCollateral,
   }) async {
     final m = _require(marketId);
-    if (!m.tradable) throw StateError('已停盘，无法卖出');
+    if (!m.tradable) {
+      throw const PredictionException(PredictionError.marketClosed);
+    }
     final held = m.positions[currentUserId]?[outcomeId] ?? 0;
-    if (shares <= 0 || shares > held) throw StateError('持仓不足');
+    if (shares <= 0 || shares > held) {
+      throw const PredictionException(PredictionError.insufficientShares);
+    }
 
     final i = m.indexOf(outcomeId);
     final proceeds = m.proceedsForSell(i, shares);
     if (minCollateral != null && proceeds < minCollateral) {
-      throw StateError('滑点超限');
+      throw const PredictionException(PredictionError.slippage);
     }
     m.q[i] -= shares;
     _balance += proceeds;
@@ -230,7 +240,7 @@ class MockPredictionRepository implements PredictionRepository {
     } else if (m.status == MarketStatus.cancelled) {
       payout = (m.netPaid[currentUserId] ?? 0).clamp(0, double.infinity);
     } else {
-      throw StateError('市场未开奖，无法赎回');
+      throw PredictionException(PredictionError.notResolved);
     }
 
     _balance += payout;
@@ -241,7 +251,7 @@ class MockPredictionRepository implements PredictionRepository {
 
   _MarketState _require(String marketId) {
     final m = _markets[marketId];
-    if (m == null) throw StateError('市场不存在');
+    if (m == null) throw PredictionException(PredictionError.marketNotFound);
     return m;
   }
 }
@@ -289,7 +299,7 @@ class _MarketState {
 
   int indexOf(String outcomeId) {
     final i = outcomes.indexWhere((o) => o.id == outcomeId);
-    if (i < 0) throw StateError('无效的结果');
+    if (i < 0) throw PredictionException(PredictionError.invalidOutcome);
     return i;
   }
 

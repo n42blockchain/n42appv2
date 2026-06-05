@@ -164,27 +164,29 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m61(shares, avg, after) =>
       "अंदाजे ${shares} हिस्से · सरासरी ${avg}% · नंतर ${after}%";
 
-  static String m62(label) => "निकाल: ${label}";
+  static String m62(reason) => "रिडीम अयशस्वी: ${reason}";
 
-  static String m63(n) => "विक्री ${n}";
+  static String m63(label) => "निकाल: ${label}";
 
-  static String m64(value) => "${value} अपुरी शिल्लक.";
+  static String m64(n) => "विक्री ${n}";
 
-  static String m65(value) => "${value} इनकमिंग...";
+  static String m65(value) => "${value} अपुरी शिल्लक.";
 
-  static String m66(value) =>
+  static String m66(value) => "${value} इनकमिंग...";
+
+  static String m67(value) =>
       "${value} स्वॅप इन-ॲप लवकरच तुमच्या वॉलेटमध्ये वितरित केले जाईल आणि या प्रक्रियेद्वारे विकले जाऊ शकत नाही. हे नोड चालविण्यासाठी वापरले जाऊ शकते.";
 
-  static String m67(value) => "कमाल ${value} वर्ण";
+  static String m68(value) => "कमाल ${value} वर्ण";
 
-  static String m68(value) => "${value} चेन APP आधीच समर्थित आहे!";
+  static String m69(value) => "${value} चेन APP आधीच समर्थित आहे!";
 
-  static String m69(value) =>
+  static String m70(value) =>
       "${value} चेन APP आधीच समर्थित आहे, तुम्हाला ते जोडायचे आहे का?";
 
-  static String m70(value) => "${value} पत्ता चाचणी लिंक अयशस्वी!";
+  static String m71(value) => "${value} पत्ता चाचणी लिंक अयशस्वी!";
 
-  static String m71(value) => "0~${value} वर्ण";
+  static String m72(value) => "0~${value} वर्ण";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -2514,11 +2516,35 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_pred_creating": MessageLookupByLibrary.simpleMessage("तयार करत आहे…"),
     "g_pred_deadline": MessageLookupByLibrary.simpleMessage("अंतिम मुदत"),
+    "g_pred_err_amount_low": MessageLookupByLibrary.simpleMessage(
+      "रक्कम 0 पेक्षा जास्त असावी",
+    ),
+    "g_pred_err_insufficient_balance": MessageLookupByLibrary.simpleMessage(
+      "अपुरी शिल्लक",
+    ),
+    "g_pred_err_insufficient_shares": MessageLookupByLibrary.simpleMessage(
+      "अपुरे हिस्से",
+    ),
+    "g_pred_err_invalid_outcome": MessageLookupByLibrary.simpleMessage(
+      "अवैध निकाल",
+    ),
+    "g_pred_err_market_closed": MessageLookupByLibrary.simpleMessage(
+      "मार्केट बंद, व्यवहार अशक्य",
+    ),
+    "g_pred_err_market_not_found": MessageLookupByLibrary.simpleMessage(
+      "मार्केट सापडले नाही",
+    ),
+    "g_pred_err_not_resolved": MessageLookupByLibrary.simpleMessage(
+      "मार्केट निकाली नाही, रिडीम अशक्य",
+    ),
     "g_pred_err_outcomes": MessageLookupByLibrary.simpleMessage(
       "किमान दोन वैध निकाल",
     ),
     "g_pred_err_question": MessageLookupByLibrary.simpleMessage(
       "कृपया प्रश्न प्रविष्ट करा",
+    ),
+    "g_pred_err_slippage": MessageLookupByLibrary.simpleMessage(
+      "स्लिपेज ओलांडले, पुन्हा प्रयत्न करा",
     ),
     "g_pred_minutes": m58,
     "g_pred_no": MessageLookupByLibrary.simpleMessage("नाही"),
@@ -2536,9 +2562,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "अंदाज प्रश्न, उदा.: ही फेरी कोण जिंकेल?",
     ),
     "g_pred_quote_info": m61,
+    "g_pred_redeem_failed": m62,
     "g_pred_resolved": MessageLookupByLibrary.simpleMessage("निकाली"),
-    "g_pred_result_label": m62,
-    "g_pred_sell_n": m63,
+    "g_pred_result_label": m63,
+    "g_pred_sell_n": m64,
     "g_pred_unlimited": MessageLookupByLibrary.simpleMessage(
       "अमर्यादित (स्वहस्ते बंद)",
     ),
@@ -2577,7 +2604,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("दुवा"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("कोड"),
-    "g_swap_key_14": m64,
+    "g_swap_key_14": m65,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "नाणे किंमत त्रुटी मिळवा.",
     ),
@@ -2589,7 +2616,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "तुमचा स्वॅप लवकरच वितरित केला जाईल. कृपया धीर धरा.",
     ),
-    "g_swap_key_20": m65,
+    "g_swap_key_20": m66,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "नोड चालविण्यासाठी खर्च: गट पडताळणी 1-49 N मूलभूत नोड: 50 N प्रीमियम नोड: 100 N प्रो नोड: 500 N.",
     ),
@@ -2603,7 +2630,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("नवीन शिल्लक"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("तुम्ही पैसे द्या"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("तारीख"),
-    "g_swap_key_31": m66,
+    "g_swap_key_31": m67,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "संबंधित साखळी एक्सप्लोररवर (इथरस्कॅन, बीएसस्कॅन, ट्रॉनस्कॅन आणि आमचे स्वतःचे) स्वॅप्स पाहिले जाऊ शकतात.",
     ),
@@ -2618,7 +2645,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "डीफॉल्टवर रीसेट करा",
     ),
-    "g_token_m_key_1": m67,
+    "g_token_m_key_1": m68,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "विद्यमान टोकनच्या बनावट आवृत्त्या तयार करण्यासह, कोणीही टोकन तयार करू शकतो. टोकन आयात करण्यापूर्वी नेहमी त्याचे संशोधन करा.",
     ),
@@ -2635,9 +2662,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_2": MessageLookupByLibrary.simpleMessage("0~18 uint"),
     "g_token_m_key_20": MessageLookupByLibrary.simpleMessage("टोकन जोडा"),
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage("स्वरूप त्रुटी!"),
-    "g_token_m_key_22": m68,
-    "g_token_m_key_23": m69,
-    "g_token_m_key_24": m70,
+    "g_token_m_key_22": m69,
+    "g_token_m_key_23": m70,
+    "g_token_m_key_24": m71,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("टोकन आयात करा"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("सर्व नेटवर्क"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage("सानुकूल टोकन"),
@@ -2696,7 +2723,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_email": MessageLookupByLibrary.simpleMessage("ईमेल"),
     "login_password": MessageLookupByLibrary.simpleMessage("पासवर्ड"),
     "next": MessageLookupByLibrary.simpleMessage("पुढे"),
-    "nicknameMessage": m71,
+    "nicknameMessage": m72,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "प्रोफाइल संपादित करा",
     ),

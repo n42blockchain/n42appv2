@@ -1403,5 +1403,14 @@
   "g_wallet_group_hd": "HD वॉलेट · निमॉनिक",
   "g_wallet_group_single": "सिंगल-चेन · आयात",
   "g_xrp_optional": "(पर्यायी)",
-  "g_xrp_dest_tag_hint": "एक्सचेंजला पाठवताना सहसा आवश्यक"
+  "g_xrp_dest_tag_hint": "एक्सचेंजला पाठवताना सहसा आवश्यक",
+  "g_pred_err_invalid_outcome": "अवैध निकाल",
+  "g_pred_err_market_closed": "मार्केट बंद, व्यवहार अशक्य",
+  "g_pred_err_amount_low": "रक्कम 0 पेक्षा जास्त असावी",
+  "g_pred_err_insufficient_balance": "अपुरी शिल्लक",
+  "g_pred_err_slippage": "स्लिपेज ओलांडले, पुन्हा प्रयत्न करा",
+  "g_pred_err_insufficient_shares": "अपुरे हिस्से",
+  "g_pred_err_not_resolved": "मार्केट निकाली नाही, रिडीम अशक्य",
+  "g_pred_err_market_not_found": "मार्केट सापडले नाही",
+  "g_pred_redeem_failed": "रिडीम अयशस्वी: {reason}"
 }
