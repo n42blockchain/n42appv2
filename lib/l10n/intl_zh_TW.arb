@@ -1396,5 +1396,12 @@
   "g_pred_close_only": "僅停盤",
   "g_pred_cancel_refund": "取消並退款",
   "g_pred_confirm_resolve": "確認開獎",
-  "g_pred_confirm_resolve_msg": "判定「{label}」獲勝並結算？此操作不可撤銷。"
+  "g_pred_confirm_resolve_msg": "判定「{label}」獲勝並結算？此操作不可撤銷。",
+  "g_live_follow": "關注",
+  "g_live_follow_wip": "關注功能開發中",
+  "g_live_enter_room_failed": "進入直播間失敗\n{message}",
+  "g_wallet_group_hd": "HD 錢包 · 助記詞",
+  "g_wallet_group_single": "單鏈 · 單鏈導入",
+  "g_xrp_optional": "（可選）",
+  "g_xrp_dest_tag_hint": "轉帳到交易所時通常必填"
 }

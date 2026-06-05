@@ -1403,5 +1403,12 @@
   "g_pred_close_only": "Solo chiudi",
   "g_pred_cancel_refund": "Annulla e rimborsa",
   "g_pred_confirm_resolve": "Conferma esito",
-  "g_pred_confirm_resolve_msg": "Dichiarare “{label}” vincitore e liquidare? Irreversibile."
+  "g_pred_confirm_resolve_msg": "Dichiarare “{label}” vincitore e liquidare? Irreversibile.",
+  "g_live_follow": "Segui",
+  "g_live_follow_wip": "Funzione segui in arrivo",
+  "g_live_enter_room_failed": "Accesso alla stanza non riuscito\n{message}",
+  "g_wallet_group_hd": "Wallet HD · Mnemonico",
+  "g_wallet_group_single": "Singola catena · Importato",
+  "g_xrp_optional": "(Facoltativo)",
+  "g_xrp_dest_tag_hint": "Di solito richiesto per l’invio a un exchange"
 }

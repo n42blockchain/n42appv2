@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// 直播间顶部栏：主播头像 + 标题 + 关注 + 在线人数 + 关闭。
@@ -99,16 +100,16 @@ class _FollowButton extends StatelessWidget {
       child: InkWell(
         onTap:
             onFollow ??
-            () => ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(const SnackBar(content: Text('关注功能开发中'))),
+            () => ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(S.of(context).g_live_follow_wip)),
+            ),
         child: Padding(
           padding: EdgeInsets.symmetric(
             horizontal: AppSpacing.space4,
             vertical: AppSpacing.space2,
           ),
           child: Text(
-            '关注',
+            S.of(context).g_live_follow,
             style: AppTypography.captionSm.copyWith(
               color: AppColorTokens.onOverlayPrimary,
             ),

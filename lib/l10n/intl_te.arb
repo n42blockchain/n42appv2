@@ -1396,5 +1396,12 @@
   "g_pred_close_only": "మూసివేత మాత్రమే",
   "g_pred_cancel_refund": "రద్దు & వాపసు",
   "g_pred_confirm_resolve": "పరిష్కారాన్ని నిర్ధారించండి",
-  "g_pred_confirm_resolve_msg": "“{label}” విజేతగా ప్రకటించి పరిష్కరించాలా? దీన్ని రద్దు చేయలేరు."
+  "g_pred_confirm_resolve_msg": "“{label}” విజేతగా ప్రకటించి పరిష్కరించాలా? దీన్ని రద్దు చేయలేరు.",
+  "g_live_follow": "ఫాలో",
+  "g_live_follow_wip": "ఫాలో ఫీచర్ త్వరలో",
+  "g_live_enter_room_failed": "గదిలోకి ప్రవేశం విఫలమైంది\n{message}",
+  "g_wallet_group_hd": "HD వాలెట్ · మెమోనిక్",
+  "g_wallet_group_single": "సింగిల్-చెయిన్ · దిగుమతి",
+  "g_xrp_optional": "(ఐచ్ఛికం)",
+  "g_xrp_dest_tag_hint": "ఎక్స్ఛేంజ్‌కు పంపేటప్పుడు సాధారణంగా అవసరం"
 }

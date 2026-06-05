@@ -1396,5 +1396,12 @@
   "g_pred_close_only": "केवल बंद करें",
   "g_pred_cancel_refund": "रद्द करें और रिफंड",
   "g_pred_confirm_resolve": "निपटान की पुष्टि करें",
-  "g_pred_confirm_resolve_msg": "«{label}» को विजेता घोषित कर निपटाएँ? यह पूर्ववत नहीं होगा।"
+  "g_pred_confirm_resolve_msg": "«{label}» को विजेता घोषित कर निपटाएँ? यह पूर्ववत नहीं होगा।",
+  "g_live_follow": "फ़ॉलो",
+  "g_live_follow_wip": "फ़ॉलो सुविधा जल्द आ रही है",
+  "g_live_enter_room_failed": "रूम में प्रवेश विफल\n{message}",
+  "g_wallet_group_hd": "HD वॉलेट · निमॉनिक",
+  "g_wallet_group_single": "सिंगल-चेन · आयातित",
+  "g_xrp_optional": "(वैकल्पिक)",
+  "g_xrp_dest_tag_hint": "एक्सचेंज पर भेजते समय आमतौर पर आवश्यक"
 }

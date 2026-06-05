@@ -1396,5 +1396,12 @@
   "g_pred_close_only": "Pouze uzavřít",
   "g_pred_cancel_refund": "Zrušit a vrátit",
   "g_pred_confirm_resolve": "Potvrdit vyhodnocení",
-  "g_pred_confirm_resolve_msg": "Prohlásit „{label}“ vítězem a vypořádat? Nelze vrátit."
+  "g_pred_confirm_resolve_msg": "Prohlásit „{label}“ vítězem a vypořádat? Nelze vrátit.",
+  "g_live_follow": "Sledovat",
+  "g_live_follow_wip": "Funkce sledování již brzy",
+  "g_live_enter_room_failed": "Nepodařilo se vstoupit do místnosti\n{message}",
+  "g_wallet_group_hd": "Peněženka HD · Mnemonika",
+  "g_wallet_group_single": "Jeden řetězec · Importováno",
+  "g_xrp_optional": "(Volitelné)",
+  "g_xrp_dest_tag_hint": "Obvykle vyžadováno při odeslání na burzu"
 }

@@ -29,7 +29,7 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
               ),
               SizedBox(width: ScreenUtil().setWidth(8)),
               Text(
-                '（可选）',
+                S.of(context).g_xrp_optional,
                 style: TextStyle(
                   color: subtitleText,
                   fontSize: ScreenUtil().setSp(24.0),
@@ -48,7 +48,7 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
               fontSize: ScreenUtil().setSp(28.0),
             ),
             decoration: InputDecoration(
-              hintText: '转账到交易所时通常必填',
+              hintText: S.of(context).g_xrp_dest_tag_hint,
               hintStyle: TextStyle(
                 color: subtitleText,
                 fontSize: ScreenUtil().setSp(24.0),
@@ -60,8 +60,9 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
                 vertical: ScreenUtil().setWidth(16.0),
               ),
               border: OutlineInputBorder(
-                borderRadius:
-                    BorderRadius.circular(ScreenUtil().setWidth(10.0)),
+                borderRadius: BorderRadius.circular(
+                  ScreenUtil().setWidth(10.0),
+                ),
                 borderSide: BorderSide.none,
               ),
             ),
@@ -148,7 +149,8 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
             margin: EdgeInsets.only(top: ScreenUtil().setWidth(20.0)),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(
-                  Radius.circular(ScreenUtil().setWidth(16.0))),
+                Radius.circular(ScreenUtil().setWidth(16.0)),
+              ),
               color: itemBgColor,
             ),
             child: Column(
@@ -163,8 +165,7 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
                     fontSize: ScreenUtil().setSp(54.0),
                     color: _themeColor(AppThemeKeys.textFieldHintColor.name),
                   ),
-                  keyboardType:
-                      TextInputType.numberWithOptions(decimal: true),
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
                   onChanged: (value) {
                     amountCheck(value: value);
                   },
@@ -182,17 +183,19 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
                   bgColor: itemBgColor,
                   errorMessage: amountErrorMessage,
                   messageMargin: EdgeInsets.symmetric(
-                      horizontal: ScreenUtil().setWidth(30.0)),
+                    horizontal: ScreenUtil().setWidth(30.0),
+                  ),
                   rightWidget1: Container(
-                    margin:
-                        EdgeInsets.only(left: ScreenUtil().setWidth(10.0)),
+                    margin: EdgeInsets.only(left: ScreenUtil().setWidth(10.0)),
                     height: ScreenUtil().setWidth(60.0),
                     padding: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(20.0)),
+                      horizontal: ScreenUtil().setWidth(20.0),
+                    ),
                     decoration: BoxDecoration(
                       color: _themeColor(AppThemeKeys.mainBlueColor.name),
                       borderRadius: BorderRadius.all(
-                          Radius.circular(ScreenUtil().setWidth(60.0))),
+                        Radius.circular(ScreenUtil().setWidth(60.0)),
+                      ),
                     ),
                     alignment: Alignment.center,
                     child: Text(
@@ -233,8 +236,7 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
 
   Widget amountBalanceWidget() {
     final String unit = widget.coinModel.coin['unit'];
-    if (widget.coinModel.coin['blockchainType'] !=
-        BlockchainType.Ripple.name) {
+    if (widget.coinModel.coin['blockchainType'] != BlockchainType.Ripple.name) {
       return Text(
         '${widget.coinModel.balanceStringAll()} $unit',
         style: TextStyle(
@@ -255,14 +257,21 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        _balanceLine(S.of(context).g_key_29,
-            '${dec.Decimal.parse(tBalance.toString())} $unit',
-            AppThemeKeys.mainBlueColor.name),
-        _balanceLine(S.of(context).g_key_xml_0,
-            '$lockValue $unit', AppThemeKeys.errorTextColor.name),
-        _balanceLine(S.of(context).g_key_43,
-            '${dec.Decimal.parse(uBalance.toString())} $unit',
-            AppThemeKeys.rightTextColor.name),
+        _balanceLine(
+          S.of(context).g_key_29,
+          '${dec.Decimal.parse(tBalance.toString())} $unit',
+          AppThemeKeys.mainBlueColor.name,
+        ),
+        _balanceLine(
+          S.of(context).g_key_xml_0,
+          '$lockValue $unit',
+          AppThemeKeys.errorTextColor.name,
+        ),
+        _balanceLine(
+          S.of(context).g_key_43,
+          '${dec.Decimal.parse(uBalance.toString())} $unit',
+          AppThemeKeys.rightTextColor.name,
+        ),
       ],
     );
   }
@@ -313,7 +322,9 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
                     S.of(context).g_key_29,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: _themeColor(AppThemeKeys.itemSubtitleTextColor.name),
+                      color: _themeColor(
+                        AppThemeKeys.itemSubtitleTextColor.name,
+                      ),
                       fontSize: ScreenUtil().setSp(28.0),
                     ),
                   ),
@@ -328,10 +339,7 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
               ],
             ),
           ),
-        NonEvmFeeCompact(
-          feeText: feeText,
-          onTap: null,
-        ),
+        NonEvmFeeCompact(feeText: feeText, onTap: null),
       ],
     );
   }
@@ -349,8 +357,9 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
       ),
       padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
       decoration: BoxDecoration(
-        borderRadius:
-            BorderRadius.all(Radius.circular(ScreenUtil().setWidth(8.0))),
+        borderRadius: BorderRadius.all(
+          Radius.circular(ScreenUtil().setWidth(8.0)),
+        ),
         color: _themeColor(AppThemeKeys.itemBgColor.name),
       ),
       child: Column(
@@ -379,8 +388,7 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
                   ),
                   decoration: BoxDecoration(
                     color: buttonColor,
-                    borderRadius:
-                        const BorderRadius.all(Radius.circular(10.0)),
+                    borderRadius: const BorderRadius.all(Radius.circular(10.0)),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -415,8 +423,9 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
             ),
           ),
           Padding(
-            padding:
-                EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0)),
+            padding: EdgeInsets.symmetric(
+              vertical: ScreenUtil().setWidth(20.0),
+            ),
             child: Text(
               accountXrp['account'],
               style: TextStyle(
@@ -436,5 +445,4 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
       ),
     );
   }
-
 }

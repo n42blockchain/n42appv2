@@ -1396,5 +1396,12 @@
   "g_pred_close_only": "마감만",
   "g_pred_cancel_refund": "취소 및 환불",
   "g_pred_confirm_resolve": "정산 확인",
-  "g_pred_confirm_resolve_msg": "「{label}」을(를) 승자로 정산하시겠습니까? 되돌릴 수 없습니다."
+  "g_pred_confirm_resolve_msg": "「{label}」을(를) 승자로 정산하시겠습니까? 되돌릴 수 없습니다.",
+  "g_live_follow": "팔로우",
+  "g_live_follow_wip": "팔로우 기능 준비 중",
+  "g_live_enter_room_failed": "라이브룸 입장 실패\n{message}",
+  "g_wallet_group_hd": "HD 지갑 · 니모닉",
+  "g_wallet_group_single": "단일 체인 · 가져오기",
+  "g_xrp_optional": "(선택)",
+  "g_xrp_dest_tag_hint": "거래소로 보낼 때 보통 필수"
 }

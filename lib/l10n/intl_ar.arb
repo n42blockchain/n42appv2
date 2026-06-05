@@ -1396,5 +1396,12 @@
   "g_pred_close_only": "إغلاق فقط",
   "g_pred_cancel_refund": "إلغاء واسترداد",
   "g_pred_confirm_resolve": "تأكيد التسوية",
-  "g_pred_confirm_resolve_msg": "إعلان «{label}» فائزًا والتسوية؟ لا يمكن التراجع."
+  "g_pred_confirm_resolve_msg": "إعلان «{label}» فائزًا والتسوية؟ لا يمكن التراجع.",
+  "g_live_follow": "متابعة",
+  "g_live_follow_wip": "ميزة المتابعة قريبًا",
+  "g_live_enter_room_failed": "فشل الدخول إلى الغرفة\n{message}",
+  "g_wallet_group_hd": "محفظة HD · عبارة استرجاع",
+  "g_wallet_group_single": "سلسلة واحدة · مستورد",
+  "g_xrp_optional": "(اختياري)",
+  "g_xrp_dest_tag_hint": "مطلوب عادة عند الإرسال إلى منصة تداول"
 }

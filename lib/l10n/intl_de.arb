@@ -1403,5 +1403,12 @@
   "g_pred_close_only": "Nur schließen",
   "g_pred_cancel_refund": "Abbrechen & erstatten",
   "g_pred_confirm_resolve": "Auflösung bestätigen",
-  "g_pred_confirm_resolve_msg": "„{label}“ zum Gewinner erklären und abrechnen? Nicht umkehrbar."
+  "g_pred_confirm_resolve_msg": "„{label}“ zum Gewinner erklären und abrechnen? Nicht umkehrbar.",
+  "g_live_follow": "Folgen",
+  "g_live_follow_wip": "Folgen-Funktion in Kürze",
+  "g_live_enter_room_failed": "Betreten des Raums fehlgeschlagen\n{message}",
+  "g_wallet_group_hd": "HD-Wallet · Mnemonik",
+  "g_wallet_group_single": "Single-Chain · Importiert",
+  "g_xrp_optional": "(Optional)",
+  "g_xrp_dest_tag_hint": "Bei Sendungen an eine Börse meist erforderlich"
 }

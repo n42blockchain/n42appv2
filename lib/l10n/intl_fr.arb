@@ -1403,5 +1403,12 @@
   "g_pred_close_only": "Clôturer seulement",
   "g_pred_cancel_refund": "Annuler et rembourser",
   "g_pred_confirm_resolve": "Confirmer la résolution",
-  "g_pred_confirm_resolve_msg": "Déclarer « {label} » gagnant et régler ? Action irréversible."
+  "g_pred_confirm_resolve_msg": "Déclarer « {label} » gagnant et régler ? Action irréversible.",
+  "g_live_follow": "Suivre",
+  "g_live_follow_wip": "Fonction de suivi bientôt disponible",
+  "g_live_enter_room_failed": "Échec de l’entrée dans le salon\n{message}",
+  "g_wallet_group_hd": "Portefeuille HD · Mnémonique",
+  "g_wallet_group_single": "Chaîne unique · Importé",
+  "g_xrp_optional": "(Facultatif)",
+  "g_xrp_dest_tag_hint": "Généralement requis pour un envoi vers une plateforme"
 }

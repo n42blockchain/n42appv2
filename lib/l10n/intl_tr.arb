@@ -1403,5 +1403,12 @@
   "g_pred_close_only": "Sadece kapat",
   "g_pred_cancel_refund": "İptal et ve iade et",
   "g_pred_confirm_resolve": "Sonucu onayla",
-  "g_pred_confirm_resolve_msg": "“{label}” kazanan ilan edilip ödensin mi? Geri alınamaz."
+  "g_pred_confirm_resolve_msg": "“{label}” kazanan ilan edilip ödensin mi? Geri alınamaz.",
+  "g_live_follow": "Takip et",
+  "g_live_follow_wip": "Takip özelliği yakında",
+  "g_live_enter_room_failed": "Odaya girilemedi\n{message}",
+  "g_wallet_group_hd": "HD Cüzdan · Anımsatıcı",
+  "g_wallet_group_single": "Tek Zincir · İçe aktarıldı",
+  "g_xrp_optional": "(İsteğe bağlı)",
+  "g_xrp_dest_tag_hint": "Borsaya gönderirken genellikle gereklidir"
 }

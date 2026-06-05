@@ -1403,5 +1403,12 @@
   "g_pred_close_only": "Hanya tutup",
   "g_pred_cancel_refund": "Batal & kembalikan",
   "g_pred_confirm_resolve": "Konfirmasi penyelesaian",
-  "g_pred_confirm_resolve_msg": "Nyatakan “{label}” menang dan selesaikan? Tidak bisa dibatalkan."
+  "g_pred_confirm_resolve_msg": "Nyatakan “{label}” menang dan selesaikan? Tidak bisa dibatalkan.",
+  "g_live_follow": "Ikuti",
+  "g_live_follow_wip": "Fitur ikuti segera hadir",
+  "g_live_enter_room_failed": "Gagal masuk ruang\n{message}",
+  "g_wallet_group_hd": "Dompet HD · Mnemonik",
+  "g_wallet_group_single": "Rantai Tunggal · Diimpor",
+  "g_xrp_optional": "(Opsional)",
+  "g_xrp_dest_tag_hint": "Biasanya wajib saat mengirim ke bursa"
 }

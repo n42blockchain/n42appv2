@@ -1396,5 +1396,12 @@
   "g_pred_close_only": "Close only",
   "g_pred_cancel_refund": "Cancel & refund",
   "g_pred_confirm_resolve": "Confirm resolution",
-  "g_pred_confirm_resolve_msg": "Declare “{label}” the winner and settle? This cannot be undone."
+  "g_pred_confirm_resolve_msg": "Declare “{label}” the winner and settle? This cannot be undone.",
+  "g_live_follow": "Follow",
+  "g_live_follow_wip": "Follow coming soon",
+  "g_live_enter_room_failed": "Failed to enter room\n{message}",
+  "g_wallet_group_hd": "HD Wallet · Mnemonic",
+  "g_wallet_group_single": "Single-Chain · Imported",
+  "g_xrp_optional": "(Optional)",
+  "g_xrp_dest_tag_hint": "Usually required when sending to an exchange"
 }

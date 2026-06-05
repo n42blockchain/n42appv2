@@ -1403,5 +1403,12 @@
   "g_pred_close_only": "Tylko zamknij",
   "g_pred_cancel_refund": "Anuluj i zwróć",
   "g_pred_confirm_resolve": "Potwierdź rozstrzygnięcie",
-  "g_pred_confirm_resolve_msg": "Ogłosić „{label}” zwycięzcą i rozliczyć? Nieodwracalne."
+  "g_pred_confirm_resolve_msg": "Ogłosić „{label}” zwycięzcą i rozliczyć? Nieodwracalne.",
+  "g_live_follow": "Obserwuj",
+  "g_live_follow_wip": "Funkcja obserwowania wkrótce",
+  "g_live_enter_room_failed": "Nie udało się wejść do pokoju\n{message}",
+  "g_wallet_group_hd": "Portfel HD · Mnemonik",
+  "g_wallet_group_single": "Pojedynczy łańcuch · Zaimportowano",
+  "g_xrp_optional": "(Opcjonalne)",
+  "g_xrp_dest_tag_hint": "Zwykle wymagane przy wysyłce na giełdę"
 }

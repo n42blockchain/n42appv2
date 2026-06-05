@@ -1396,5 +1396,12 @@
   "g_pred_close_only": "শুধু বন্ধ",
   "g_pred_cancel_refund": "বাতিল ও ফেরত",
   "g_pred_confirm_resolve": "নিষ্পত্তি নিশ্চিত",
-  "g_pred_confirm_resolve_msg": "“{label}”-কে বিজয়ী ঘোষণা করে নিষ্পত্তি? এটি ফেরানো যাবে না।"
+  "g_pred_confirm_resolve_msg": "“{label}”-কে বিজয়ী ঘোষণা করে নিষ্পত্তি? এটি ফেরানো যাবে না।",
+  "g_live_follow": "ফলো",
+  "g_live_follow_wip": "ফলো ফিচার শীঘ্রই আসছে",
+  "g_live_enter_room_failed": "রুমে প্রবেশ ব্যর্থ\n{message}",
+  "g_wallet_group_hd": "HD ওয়ালেট · নেমোনিক",
+  "g_wallet_group_single": "সিঙ্গেল-চেইন · ইমপোর্টেড",
+  "g_xrp_optional": "(ঐচ্ছিক)",
+  "g_xrp_dest_tag_hint": "এক্সচেঞ্জে পাঠানোর সময় সাধারণত আবশ্যক"
 }

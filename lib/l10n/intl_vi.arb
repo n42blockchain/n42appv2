@@ -1403,5 +1403,12 @@
   "g_pred_close_only": "Chỉ đóng",
   "g_pred_cancel_refund": "Hủy và hoàn tiền",
   "g_pred_confirm_resolve": "Xác nhận kết quả",
-  "g_pred_confirm_resolve_msg": "Tuyên bố “{label}” thắng và thanh toán? Không thể hoàn tác."
+  "g_pred_confirm_resolve_msg": "Tuyên bố “{label}” thắng và thanh toán? Không thể hoàn tác.",
+  "g_live_follow": "Theo dõi",
+  "g_live_follow_wip": "Tính năng theo dõi sắp ra mắt",
+  "g_live_enter_room_failed": "Không vào được phòng\n{message}",
+  "g_wallet_group_hd": "Ví HD · Cụm từ ghi nhớ",
+  "g_wallet_group_single": "Chuỗi đơn · Đã nhập",
+  "g_xrp_optional": "(Tùy chọn)",
+  "g_xrp_dest_tag_hint": "Thường bắt buộc khi gửi đến sàn giao dịch"
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 import 'package:go_router/go_router.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 
@@ -185,7 +186,7 @@ class _ErrorView extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.all(AppSpacing.space12),
           child: Text(
-            '进入直播间失败\n$message',
+            S.of(context).g_live_enter_room_failed(message),
             textAlign: TextAlign.center,
             style: AppTypography.body.copyWith(
               color: AppColorTokens.onOverlaySecondary,

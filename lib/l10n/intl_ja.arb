@@ -1403,5 +1403,12 @@
   "g_pred_close_only": "締切のみ",
   "g_pred_cancel_refund": "キャンセルして返金",
   "g_pred_confirm_resolve": "結果を確定",
-  "g_pred_confirm_resolve_msg": "「{label}」を勝者として精算しますか？この操作は取り消せません。"
+  "g_pred_confirm_resolve_msg": "「{label}」を勝者として精算しますか？この操作は取り消せません。",
+  "g_live_follow": "フォロー",
+  "g_live_follow_wip": "フォロー機能は開発中",
+  "g_live_enter_room_failed": "配信ルームへの入室に失敗\n{message}",
+  "g_wallet_group_hd": "HDウォレット · ニーモニック",
+  "g_wallet_group_single": "シングルチェーン · インポート",
+  "g_xrp_optional": "（任意）",
+  "g_xrp_dest_tag_hint": "取引所への送金時は通常必須"
 }

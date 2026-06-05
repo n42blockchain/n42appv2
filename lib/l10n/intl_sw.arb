@@ -1396,5 +1396,12 @@
   "g_pred_close_only": "Funga tu",
   "g_pred_cancel_refund": "Ghairi & rejesha",
   "g_pred_confirm_resolve": "Thibitisha utatuzi",
-  "g_pred_confirm_resolve_msg": "Tangaza “{label}” mshindi na utatue? Haiwezi kutenduliwa."
+  "g_pred_confirm_resolve_msg": "Tangaza “{label}” mshindi na utatue? Haiwezi kutenduliwa.",
+  "g_live_follow": "Fuata",
+  "g_live_follow_wip": "Kipengele cha kufuata kinakuja",
+  "g_live_enter_room_failed": "Imeshindwa kuingia chumbani\n{message}",
+  "g_wallet_group_hd": "Wallet ya HD · Mnemonic",
+  "g_wallet_group_single": "Mnyororo Mmoja · Imeingizwa",
+  "g_xrp_optional": "(Si lazima)",
+  "g_xrp_dest_tag_hint": "Kawaida inahitajika unapotuma kwa exchange"
 }

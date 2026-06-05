@@ -11428,6 +11428,71 @@ class S {
       args: [label],
     );
   }
+
+  /// `Follow`
+  String get g_live_follow {
+    return Intl.message('Follow', name: 'g_live_follow', desc: '', args: []);
+  }
+
+  /// `Follow coming soon`
+  String get g_live_follow_wip {
+    return Intl.message(
+      'Follow coming soon',
+      name: 'g_live_follow_wip',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to enter room\n{message}`
+  String g_live_enter_room_failed(Object message) {
+    return Intl.message(
+      'Failed to enter room\n$message',
+      name: 'g_live_enter_room_failed',
+      desc: '',
+      args: [message],
+    );
+  }
+
+  /// `HD Wallet · Mnemonic`
+  String get g_wallet_group_hd {
+    return Intl.message(
+      'HD Wallet · Mnemonic',
+      name: 'g_wallet_group_hd',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Single-Chain · Imported`
+  String get g_wallet_group_single {
+    return Intl.message(
+      'Single-Chain · Imported',
+      name: 'g_wallet_group_single',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `(Optional)`
+  String get g_xrp_optional {
+    return Intl.message(
+      '(Optional)',
+      name: 'g_xrp_optional',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Usually required when sending to an exchange`
+  String get g_xrp_dest_tag_hint {
+    return Intl.message(
+      'Usually required when sending to an exchange',
+      name: 'g_xrp_dest_tag_hint',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

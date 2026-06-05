@@ -1396,5 +1396,12 @@
   "g_pred_close_only": "Solo cerrar",
   "g_pred_cancel_refund": "Cancelar y reembolsar",
   "g_pred_confirm_resolve": "Confirmar resolución",
-  "g_pred_confirm_resolve_msg": "¿Declarar “{label}” ganador y liquidar? No se puede deshacer."
+  "g_pred_confirm_resolve_msg": "¿Declarar “{label}” ganador y liquidar? No se puede deshacer.",
+  "g_live_follow": "Seguir",
+  "g_live_follow_wip": "Función de seguir próximamente",
+  "g_live_enter_room_failed": "Error al entrar a la sala\n{message}",
+  "g_wallet_group_hd": "Cartera HD · Mnemónico",
+  "g_wallet_group_single": "Cadena única · Importado",
+  "g_xrp_optional": "(Opcional)",
+  "g_xrp_dest_tag_hint": "Suele ser obligatorio al enviar a un exchange"
 }

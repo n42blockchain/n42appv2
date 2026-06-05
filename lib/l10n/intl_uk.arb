@@ -1396,5 +1396,12 @@
   "g_pred_close_only": "Лише закрити",
   "g_pred_cancel_refund": "Скасувати та повернути",
   "g_pred_confirm_resolve": "Підтвердити розрахунок",
-  "g_pred_confirm_resolve_msg": "Оголосити «{label}» переможцем і розрахувати? Незворотно."
+  "g_pred_confirm_resolve_msg": "Оголосити «{label}» переможцем і розрахувати? Незворотно.",
+  "g_live_follow": "Стежити",
+  "g_live_follow_wip": "Функція стеження незабаром",
+  "g_live_enter_room_failed": "Не вдалося увійти до кімнати\n{message}",
+  "g_wallet_group_hd": "HD-гаманець · Мнемоніка",
+  "g_wallet_group_single": "Один ланцюг · Імпортовано",
+  "g_xrp_optional": "(Необов’язково)",
+  "g_xrp_dest_tag_hint": "Зазвичай потрібно при надсиланні на біржу"
 }

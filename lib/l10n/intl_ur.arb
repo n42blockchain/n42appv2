@@ -1396,5 +1396,12 @@
   "g_pred_close_only": "صرف بند",
   "g_pred_cancel_refund": "منسوخ اور رقم واپس",
   "g_pred_confirm_resolve": "تصفیہ کی تصدیق",
-  "g_pred_confirm_resolve_msg": "«{label}» کو فاتح قرار دے کر تصفیہ کریں؟ یہ واپس نہیں ہو سکتا۔"
+  "g_pred_confirm_resolve_msg": "«{label}» کو فاتح قرار دے کر تصفیہ کریں؟ یہ واپس نہیں ہو سکتا۔",
+  "g_live_follow": "فالو",
+  "g_live_follow_wip": "فالو فیچر جلد آ رہا ہے",
+  "g_live_enter_room_failed": "روم میں داخلہ ناکام\n{message}",
+  "g_wallet_group_hd": "HD والیٹ · نیمونک",
+  "g_wallet_group_single": "سنگل چین · درآمد شدہ",
+  "g_xrp_optional": "(اختیاری)",
+  "g_xrp_dest_tag_hint": "ایکسچینج کو بھیجتے وقت عموماً ضروری"
 }

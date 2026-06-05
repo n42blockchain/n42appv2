@@ -1403,5 +1403,12 @@
   "g_pred_close_only": "Только закрыть",
   "g_pred_cancel_refund": "Отменить и вернуть",
   "g_pred_confirm_resolve": "Подтвердить расчёт",
-  "g_pred_confirm_resolve_msg": "Объявить «{label}» победителем и рассчитать? Это необратимо."
+  "g_pred_confirm_resolve_msg": "Объявить «{label}» победителем и рассчитать? Это необратимо.",
+  "g_live_follow": "Подписаться",
+  "g_live_follow_wip": "Функция подписки скоро",
+  "g_live_enter_room_failed": "Не удалось войти в комнату\n{message}",
+  "g_wallet_group_hd": "HD-кошелёк · Мнемоника",
+  "g_wallet_group_single": "Одна сеть · Импорт",
+  "g_xrp_optional": "(Необязательно)",
+  "g_xrp_dest_tag_hint": "Обычно требуется при отправке на биржу"
 }

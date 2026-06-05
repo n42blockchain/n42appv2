@@ -1396,5 +1396,12 @@
   "g_pred_close_only": "மூடு மட்டும்",
   "g_pred_cancel_refund": "ரத்து & பணம் திரும்ப",
   "g_pred_confirm_resolve": "தீர்வை உறுதிப்படுத்து",
-  "g_pred_confirm_resolve_msg": "“{label}” வெற்றியாளராக அறிவித்துத் தீர்வா? மீட்க முடியாது."
+  "g_pred_confirm_resolve_msg": "“{label}” வெற்றியாளராக அறிவித்துத் தீர்வா? மீட்க முடியாது.",
+  "g_live_follow": "பின்தொடர்",
+  "g_live_follow_wip": "பின்தொடர் வசதி விரைவில்",
+  "g_live_enter_room_failed": "அறையில் நுழைய முடியவில்லை\n{message}",
+  "g_wallet_group_hd": "HD வாலட் · நினைவூட்டு",
+  "g_wallet_group_single": "ஒற்றை-சங்கிலி · இறக்குமதி",
+  "g_xrp_optional": "(விருப்பம்)",
+  "g_xrp_dest_tag_hint": "பரிமாற்றத்திற்கு அனுப்பும்போது பொதுவாகத் தேவை"
 }

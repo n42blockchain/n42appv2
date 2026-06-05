@@ -1403,5 +1403,12 @@
   "g_pred_close_only": "Apenas fechar",
   "g_pred_cancel_refund": "Cancelar e reembolsar",
   "g_pred_confirm_resolve": "Confirmar resolução",
-  "g_pred_confirm_resolve_msg": "Declarar “{label}” vencedor e liquidar? Não pode ser desfeito."
+  "g_pred_confirm_resolve_msg": "Declarar “{label}” vencedor e liquidar? Não pode ser desfeito.",
+  "g_live_follow": "Seguir",
+  "g_live_follow_wip": "Seguir em breve",
+  "g_live_enter_room_failed": "Falha ao entrar na sala\n{message}",
+  "g_wallet_group_hd": "Carteira HD · Mnemónica",
+  "g_wallet_group_single": "Cadeia única · Importado",
+  "g_xrp_optional": "(Opcional)",
+  "g_xrp_dest_tag_hint": "Normalmente obrigatório ao enviar para uma corretora"
 }

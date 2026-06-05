@@ -1,0 +1,87 @@
+{
+  "g_live_follow": {
+    "en": "Follow", "zh_TW": "關注", "ja": "フォロー", "ko": "팔로우", "es_ES": "Seguir",
+    "fr": "Suivre", "de": "Folgen", "ru": "Подписаться", "pt": "Seguir", "pt_BR": "Seguir",
+    "it": "Segui", "tr": "Takip et", "vi": "Theo dõi", "id": "Ikuti", "pl": "Obserwuj",
+    "cs": "Sledovat", "uk": "Стежити", "ar": "متابعة", "hi": "फ़ॉलो", "bn": "ফলো",
+    "mr": "फॉलो", "ta": "பின்தொடர்", "te": "ఫాలో", "ur": "فالو", "sw": "Fuata"
+  },
+  "g_live_follow_wip": {
+    "en": "Follow coming soon", "zh_TW": "關注功能開發中", "ja": "フォロー機能は開発中",
+    "ko": "팔로우 기능 준비 중", "es_ES": "Función de seguir próximamente",
+    "fr": "Fonction de suivi bientôt disponible", "de": "Folgen-Funktion in Kürze",
+    "ru": "Функция подписки скоро", "pt": "Seguir em breve", "pt_BR": "Seguir em breve",
+    "it": "Funzione segui in arrivo", "tr": "Takip özelliği yakında",
+    "vi": "Tính năng theo dõi sắp ra mắt", "id": "Fitur ikuti segera hadir",
+    "pl": "Funkcja obserwowania wkrótce", "cs": "Funkce sledování již brzy",
+    "uk": "Функція стеження незабаром", "ar": "ميزة المتابعة قريبًا",
+    "hi": "फ़ॉलो सुविधा जल्द आ रही है", "bn": "ফলো ফিচার শীঘ্রই আসছে",
+    "mr": "फॉलो वैशिष्ट्य लवकरच", "ta": "பின்தொடர் வசதி விரைவில்",
+    "te": "ఫాలో ఫీచర్ త్వరలో", "ur": "فالو فیچر جلد آ رہا ہے", "sw": "Kipengele cha kufuata kinakuja"
+  },
+  "g_live_enter_room_failed": {
+    "en": "Failed to enter room\n{message}", "zh_TW": "進入直播間失敗\n{message}",
+    "ja": "配信ルームへの入室に失敗\n{message}", "ko": "라이브룸 입장 실패\n{message}",
+    "es_ES": "Error al entrar a la sala\n{message}", "fr": "Échec de l’entrée dans le salon\n{message}",
+    "de": "Betreten des Raums fehlgeschlagen\n{message}", "ru": "Не удалось войти в комнату\n{message}",
+    "pt": "Falha ao entrar na sala\n{message}", "pt_BR": "Falha ao entrar na sala\n{message}",
+    "it": "Accesso alla stanza non riuscito\n{message}", "tr": "Odaya girilemedi\n{message}",
+    "vi": "Không vào được phòng\n{message}", "id": "Gagal masuk ruang\n{message}",
+    "pl": "Nie udało się wejść do pokoju\n{message}", "cs": "Nepodařilo se vstoupit do místnosti\n{message}",
+    "uk": "Не вдалося увійти до кімнати\n{message}", "ar": "فشل الدخول إلى الغرفة\n{message}",
+    "hi": "रूम में प्रवेश विफल\n{message}", "bn": "রুমে প্রবেশ ব্যর্থ\n{message}",
+    "mr": "रूममध्ये प्रवेश अयशस्वी\n{message}", "ta": "அறையில் நுழைய முடியவில்லை\n{message}",
+    "te": "గదిలోకి ప్రవేశం విఫలమైంది\n{message}", "ur": "روم میں داخلہ ناکام\n{message}",
+    "sw": "Imeshindwa kuingia chumbani\n{message}"
+  },
+  "g_wallet_group_hd": {
+    "en": "HD Wallet · Mnemonic", "zh_TW": "HD 錢包 · 助記詞", "ja": "HDウォレット · ニーモニック",
+    "ko": "HD 지갑 · 니모닉", "es_ES": "Cartera HD · Mnemónico", "fr": "Portefeuille HD · Mnémonique",
+    "de": "HD-Wallet · Mnemonik", "ru": "HD-кошелёк · Мнемоника", "pt": "Carteira HD · Mnemónica",
+    "pt_BR": "Carteira HD · Mnemônico", "it": "Wallet HD · Mnemonico", "tr": "HD Cüzdan · Anımsatıcı",
+    "vi": "Ví HD · Cụm từ ghi nhớ", "id": "Dompet HD · Mnemonik", "pl": "Portfel HD · Mnemonik",
+    "cs": "Peněženka HD · Mnemonika", "uk": "HD-гаманець · Мнемоніка", "ar": "محفظة HD · عبارة استرجاع",
+    "hi": "HD वॉलेट · निमॉनिक", "bn": "HD ওয়ালেট · নেমোনিক", "mr": "HD वॉलेट · निमॉनिक",
+    "ta": "HD வாலட் · நினைவூட்டு", "te": "HD వాలెట్ · మెమోనిక్", "ur": "HD والیٹ · نیمونک",
+    "sw": "Wallet ya HD · Mnemonic"
+  },
+  "g_wallet_group_single": {
+    "en": "Single-Chain · Imported", "zh_TW": "單鏈 · 單鏈導入", "ja": "シングルチェーン · インポート",
+    "ko": "단일 체인 · 가져오기", "es_ES": "Cadena única · Importado", "fr": "Chaîne unique · Importé",
+    "de": "Single-Chain · Importiert", "ru": "Одна сеть · Импорт", "pt": "Cadeia única · Importado",
+    "pt_BR": "Cadeia única · Importado", "it": "Singola catena · Importato",
+    "tr": "Tek Zincir · İçe aktarıldı", "vi": "Chuỗi đơn · Đã nhập", "id": "Rantai Tunggal · Diimpor",
+    "pl": "Pojedynczy łańcuch · Zaimportowano", "cs": "Jeden řetězec · Importováno",
+    "uk": "Один ланцюг · Імпортовано", "ar": "سلسلة واحدة · مستورد", "hi": "सिंगल-चेन · आयातित",
+    "bn": "সিঙ্গেল-চেইন · ইমপোর্টেড", "mr": "सिंगल-चेन · आयात", "ta": "ஒற்றை-சங்கிலி · இறக்குமதி",
+    "te": "సింగిల్-చెయిన్ · దిగుమతి", "ur": "سنگل چین · درآمد شدہ", "sw": "Mnyororo Mmoja · Imeingizwa"
+  },
+  "g_xrp_optional": {
+    "en": "(Optional)", "zh_TW": "（可選）", "ja": "（任意）", "ko": "(선택)", "es_ES": "(Opcional)",
+    "fr": "(Facultatif)", "de": "(Optional)", "ru": "(Необязательно)", "pt": "(Opcional)",
+    "pt_BR": "(Opcional)", "it": "(Facoltativo)", "tr": "(İsteğe bağlı)", "vi": "(Tùy chọn)",
+    "id": "(Opsional)", "pl": "(Opcjonalne)", "cs": "(Volitelné)", "uk": "(Необов’язково)",
+    "ar": "(اختياري)", "hi": "(वैकल्पिक)", "bn": "(ঐচ্ছিক)", "mr": "(पर्यायी)", "ta": "(விருப்பம்)",
+    "te": "(ఐచ్ఛికం)", "ur": "(اختیاری)", "sw": "(Si lazima)"
+  },
+  "g_xrp_dest_tag_hint": {
+    "en": "Usually required when sending to an exchange", "zh_TW": "轉帳到交易所時通常必填",
+    "ja": "取引所への送金時は通常必須", "ko": "거래소로 보낼 때 보통 필수",
+    "es_ES": "Suele ser obligatorio al enviar a un exchange",
+    "fr": "Généralement requis pour un envoi vers une plateforme",
+    "de": "Bei Sendungen an eine Börse meist erforderlich",
+    "ru": "Обычно требуется при отправке на биржу",
+    "pt": "Normalmente obrigatório ao enviar para uma corretora",
+    "pt_BR": "Geralmente obrigatório ao enviar para uma corretora",
+    "it": "Di solito richiesto per l’invio a un exchange",
+    "tr": "Borsaya gönderirken genellikle gereklidir",
+    "vi": "Thường bắt buộc khi gửi đến sàn giao dịch", "id": "Biasanya wajib saat mengirim ke bursa",
+    "pl": "Zwykle wymagane przy wysyłce na giełdę", "cs": "Obvykle vyžadováno při odeslání na burzu",
+    "uk": "Зазвичай потрібно при надсиланні на біржу",
+    "ar": "مطلوب عادة عند الإرسال إلى منصة تداول", "hi": "एक्सचेंज पर भेजते समय आमतौर पर आवश्यक",
+    "bn": "এক্সচেঞ্জে পাঠানোর সময় সাধারণত আবশ্যক", "mr": "एक्सचेंजला पाठवताना सहसा आवश्यक",
+    "ta": "பரிமாற்றத்திற்கு அனுப்பும்போது பொதுவாகத் தேவை",
+    "te": "ఎక్స్ఛేంజ్‌కు పంపేటప్పుడు సాధారణంగా అవసరం", "ur": "ایکسچینج کو بھیجتے وقت عموماً ضروری",
+    "sw": "Kawaida inahitajika unapotuma kwa exchange"
+  }
+}
