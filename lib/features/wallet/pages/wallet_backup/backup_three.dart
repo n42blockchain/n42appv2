@@ -5,7 +5,7 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
@@ -198,13 +198,10 @@ class _BackupThreeState extends ConsumerState<BackupThree> {
                     height: ScreenUtil().setWidth(148.0),
                     padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
                     width: double.infinity,
-                    child: buttonStyle6(
-                      context,
-                      _onSubmit,
-                      S.of(context).g_key_115,
-                      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
-                      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
-                      _submitting,
+                    child: AppButton(
+                      label: S.of(context).g_key_115,
+                      onPressed: _onSubmit,
+                      loading: _submitting,
                     ),
                   ),
                 ],

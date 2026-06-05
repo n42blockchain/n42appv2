@@ -6,7 +6,7 @@ import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_flow_utils.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_three.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -132,21 +132,9 @@ class _BackupTwoState extends State<BackupTwo> {
                       AppThemeKeys.backGroundColor.name,
                     ),
                     height: ScreenUtil().setWidth(148),
-                    child: buttonStyle6(
-                      context,
-                      _onConfirmTap,
-                      S.of(context).g_key_wallet_c43,
-                      AppThemeUtils.getColorByKey(
-                        context,
-                        isCanClick
-                            ? AppThemeKeys.mainButtonBgColor.name
-                            : AppThemeKeys.mainButtonBgColor3.name,
-                      ),
-                      AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainButtonTextColor.name,
-                      ),
-                      false,
+                    child: AppButton(
+                      label: S.of(context).g_key_wallet_c43,
+                      onPressed: _onConfirmTap,
                     ),
                   ),
                 ],

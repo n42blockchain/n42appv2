@@ -3,7 +3,7 @@ import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_flow_utils.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_two.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -99,35 +99,21 @@ class _BackupOneState extends State<BackupOne> {
                       AppThemeKeys.backGroundColor.name,
                     ),
                     height: ScreenUtil().setWidth(148),
-                    child: buttonStyle6(
-                      context,
-                      () {
-                        if (showMnemonic && mnemonicWordsList.isNotEmpty) {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => BackupTwo(
-                                widget.walletInfo,
-                                widget.walletIndex,
-                              ),
-                            ),
-                          );
-                        }
-                      },
-                      S.of(context).g_key_wallet_c43,
-                      AppThemeUtils.getColorByKey(
-                        context,
-                        showMnemonic
-                            ? AppThemeKeys.mainButtonBgColor.name
-                            : AppThemeKeys.mainButtonBgColor3.name,
-                      ),
-                      AppThemeUtils.getColorByKey(
-                        context,
-                        showMnemonic
-                            ? AppThemeKeys.mainButtonTextColor.name
-                            : AppThemeKeys.mainButtonTextColor3.name,
-                      ),
-                      false,
+                    child: AppButton(
+                      label: S.of(context).g_key_wallet_c43,
+                      onPressed: (showMnemonic && mnemonicWordsList.isNotEmpty)
+                          ? () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => BackupTwo(
+                                    widget.walletInfo,
+                                    widget.walletIndex,
+                                  ),
+                                ),
+                              );
+                            }
+                          : null,
                     ),
                   ),
                 ],

@@ -12,7 +12,7 @@ import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/utils/wallet_backup_crypto.dart';
 import 'package:n42_wallet/features/wallet/utils/wallet_backup_payload.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/comm_input.dart';
 import 'package:n42_wallet/features/widgets/container_widget.dart';
 import 'package:share_plus/share_plus.dart';
@@ -370,23 +370,10 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
           context,
           AppThemeKeys.backGroundColor.name,
         ),
-        child: buttonStyle6(
-          context,
-          () {
-            if (_load != Load.loading) _export();
-          },
-          'Create & Save Backup',
-          AppThemeUtils.getColorByKey(
-            context,
-            _load == Load.loading
-                ? AppThemeKeys.mainButtonBgColor3.name
-                : AppThemeKeys.mainButtonBgColor.name,
-          ),
-          AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.mainButtonTextColor.name,
-          ),
-          _load == Load.loading,
+        child: AppButton(
+          label: 'Create & Save Backup',
+          onPressed: () => _export(),
+          loading: _load == Load.loading,
         ),
       ),
     ],
