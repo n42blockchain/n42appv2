@@ -6,7 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/bridge/models/bridge_models.dart';
 import 'package:n42_wallet/features/bridge/pages/bridge_history_page.dart';
 import 'package:n42_wallet/features/bridge/provider/bridge_provider.dart';
@@ -138,11 +138,12 @@ mixin BridgeHomeLogicMixin on ConsumerState<BridgeHomePage> {
         return null;
       }
 
-      final pathMap =
-          coinInfo['baseInfo']['path'] as Map<String, dynamic>;
+      final pathMap = coinInfo['baseInfo']['path'] as Map<String, dynamic>;
       final pathIndex = coinInfo['pathIndex'] ?? 0;
       final path = getPathWithIndex(
-          pathMap['legacy'] ?? "m/44'/60'/0'/0/0", pathIndex);
+        pathMap['legacy'] ?? "m/44'/60'/0'/0/0",
+        pathIndex,
+      );
 
       final trustdart = Trustdart();
       final signedTx = await trustdart.signTransaction(
@@ -169,9 +170,9 @@ mixin BridgeHomeLogicMixin on ConsumerState<BridgeHomePage> {
 
   void _showSnack(BuildContext context, String message) {
     if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
     }
   }
 
@@ -195,13 +196,11 @@ mixin BridgeHomeLogicMixin on ConsumerState<BridgeHomePage> {
       final value = BigInt.parse(amount);
       final divisor = BigInt.from(10).pow(decimals);
       final whole = value ~/ divisor;
-      final fraction =
-          (value % divisor).toString().padLeft(decimals, '0');
+      final fraction = (value % divisor).toString().padLeft(decimals, '0');
 
       if (decimals == 0) return whole.toString();
 
-      String trimmedFraction =
-          fraction.replaceAll(trailingZeroRegex, '');
+      String trimmedFraction = fraction.replaceAll(trailingZeroRegex, '');
       if (trimmedFraction.isEmpty) return whole.toString();
 
       if (trimmedFraction.length > 6) {
@@ -224,11 +223,11 @@ mixin BridgeHomeLogicMixin on ConsumerState<BridgeHomePage> {
     return showModalBottomSheet<BridgeToken>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppThemeUtils.getColorByKey(
-          context, AppThemeKeys.backGroundColor.name),
+      backgroundColor: AppColorTokens.of(context).bgBase,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
-            top: Radius.circular(ScreenUtil().setWidth(20))),
+          top: Radius.circular(ScreenUtil().setWidth(20)),
+        ),
       ),
       builder: (context) {
         return DraggableScrollableSheet(
@@ -246,8 +245,7 @@ mixin BridgeHomeLogicMixin on ConsumerState<BridgeHomePage> {
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(32),
                       fontWeight: FontWeight.bold,
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainTextColor.name),
+                      color: AppColorTokens.of(context).textPrimary,
                     ),
                   ),
                 ),
@@ -257,13 +255,13 @@ mixin BridgeHomeLogicMixin on ConsumerState<BridgeHomePage> {
                     itemCount: tokens.length,
                     itemBuilder: (context, index) {
                       final token = tokens[index];
-                      final isSelected =
-                          selected?.address == token.address;
+                      final isSelected = selected?.address == token.address;
                       return ListTile(
                         leading: token.logoUri.isNotEmpty
                             ? ClipRRect(
                                 borderRadius: BorderRadius.circular(
-                                    ScreenUtil().setWidth(20)),
+                                  ScreenUtil().setWidth(20),
+                                ),
                                 child: Image.network(
                                   token.logoUri,
                                   width: ScreenUtil().setWidth(48),

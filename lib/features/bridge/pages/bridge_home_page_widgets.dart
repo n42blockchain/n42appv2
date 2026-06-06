@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/bridge/models/bridge_models.dart';
 import 'package:n42_wallet/features/bridge/pages/bridge_select_chain_page.dart';
 import 'package:n42_wallet/features/bridge/provider/bridge_provider.dart';
@@ -15,8 +16,8 @@ import 'package:n42_wallet/features/bridge/pages/bridge_home_page_logic.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// UI 组件 mixin：链卡片、交换按钮、滑点选择器
-mixin BridgeHomeWidgetsMixin on ConsumerState<BridgeHomePage>,
-    BridgeHomeLogicMixin {
+mixin BridgeHomeWidgetsMixin
+    on ConsumerState<BridgeHomePage>, BridgeHomeLogicMixin {
   // ─── 源/目标链卡片 ──────────────────────────────────────────────────────────
 
   Widget buildChainCard(
@@ -30,8 +31,7 @@ mixin BridgeHomeWidgetsMixin on ConsumerState<BridgeHomePage>,
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemBgColor.name),
+        color: AppColorTokens.of(context).bgSurface,
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
       ),
       child: Column(
@@ -43,14 +43,11 @@ mixin BridgeHomeWidgetsMixin on ConsumerState<BridgeHomePage>,
             children: [
               Flexible(
                 child: Text(
-                  isFrom
-                      ? S.of(context).g_key_75
-                      : S.of(context).g_key_38,
+                  isFrom ? S.of(context).g_key_75 : S.of(context).g_key_38,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(26),
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.itemSubtitleTextColor.name),
+                    color: AppColorTokens.of(context).textSubtitle,
                   ),
                 ),
               ),
@@ -69,23 +66,23 @@ mixin BridgeHomeWidgetsMixin on ConsumerState<BridgeHomePage>,
                 child: isFrom
                     ? TextField(
                         controller: amountController,
-                        keyboardType:
-                            const TextInputType.numberWithOptions(
-                                decimal: true),
+                        keyboardType: const TextInputType.numberWithOptions(
+                          decimal: true,
+                        ),
                         textAlign: TextAlign.right,
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(40),
                           fontWeight: FontWeight.bold,
-                          color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.mainTextColor.name),
+                          color: AppColorTokens.of(context).textPrimary,
                         ),
                         decoration: InputDecoration(
                           hintText: '0.0',
                           hintStyle: TextStyle(
                             fontSize: ScreenUtil().setSp(40),
                             color: AppThemeUtils.getColorByKey(
-                                context,
-                                AppThemeKeys.textFieldHintColor.name),
+                              context,
+                              AppThemeKeys.textFieldHintColor.name,
+                            ),
                           ),
                           border: InputBorder.none,
                         ),
@@ -102,8 +99,7 @@ mixin BridgeHomeWidgetsMixin on ConsumerState<BridgeHomePage>,
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(40),
                           fontWeight: FontWeight.bold,
-                          color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.mainTextColor.name),
+                          color: AppColorTokens.of(context).textPrimary,
                         ),
                       ),
               ),
@@ -129,8 +125,7 @@ mixin BridgeHomeWidgetsMixin on ConsumerState<BridgeHomePage>,
             builder: (_) => BridgeSelectChainPage(
               chains: provider.chains,
               selectedChain: chain,
-              excludeChain:
-                  isFrom ? provider.toChain : provider.fromChain,
+              excludeChain: isFrom ? provider.toChain : provider.fromChain,
             ),
           ),
         );
@@ -148,18 +143,15 @@ mixin BridgeHomeWidgetsMixin on ConsumerState<BridgeHomePage>,
           vertical: ScreenUtil().setWidth(10),
         ),
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.backGroundColor.name),
-          borderRadius:
-              BorderRadius.circular(ScreenUtil().setWidth(12)),
+          color: AppColorTokens.of(context).bgBase,
+          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             if (chain?.logoUri.isNotEmpty == true)
               ClipRRect(
-                borderRadius:
-                    BorderRadius.circular(ScreenUtil().setWidth(16)),
+                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
                 child: Image.network(
                   chain!.logoUri,
                   width: ScreenUtil().setWidth(32),
@@ -176,8 +168,7 @@ mixin BridgeHomeWidgetsMixin on ConsumerState<BridgeHomePage>,
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(28),
                   fontWeight: FontWeight.bold,
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
+                  color: AppColorTokens.of(context).textPrimary,
                 ),
               ),
             ),
@@ -185,8 +176,7 @@ mixin BridgeHomeWidgetsMixin on ConsumerState<BridgeHomePage>,
             Icon(
               Icons.keyboard_arrow_down,
               size: ScreenUtil().setWidth(32),
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
+              color: AppColorTokens.of(context).textPrimary,
             ),
           ],
         ),
@@ -207,8 +197,7 @@ mixin BridgeHomeWidgetsMixin on ConsumerState<BridgeHomePage>,
         if (chain == null) return;
         final tokens = provider.getTokensForChain(chain.chainId);
         if (tokens.isEmpty) return;
-        final selected =
-            await showTokenSelector(context, tokens, token);
+        final selected = await showTokenSelector(context, tokens, token);
         if (selected != null) {
           if (isFrom) {
             provider.setFromToken(selected);
@@ -223,18 +212,15 @@ mixin BridgeHomeWidgetsMixin on ConsumerState<BridgeHomePage>,
           vertical: ScreenUtil().setWidth(12),
         ),
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.backGroundColor.name),
-          borderRadius:
-              BorderRadius.circular(ScreenUtil().setWidth(12)),
+          color: AppColorTokens.of(context).bgBase,
+          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             if (token?.logoUri.isNotEmpty == true)
               ClipRRect(
-                borderRadius:
-                    BorderRadius.circular(ScreenUtil().setWidth(16)),
+                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
                 child: Image.network(
                   token!.logoUri,
                   width: ScreenUtil().setWidth(40),
@@ -251,16 +237,14 @@ mixin BridgeHomeWidgetsMixin on ConsumerState<BridgeHomePage>,
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(30),
                   fontWeight: FontWeight.bold,
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
+                  color: AppColorTokens.of(context).textPrimary,
                 ),
               ),
             ),
             Icon(
               Icons.keyboard_arrow_down,
               size: ScreenUtil().setWidth(28),
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
+              color: AppColorTokens.of(context).textPrimary,
             ),
           ],
         ),
@@ -273,8 +257,7 @@ mixin BridgeHomeWidgetsMixin on ConsumerState<BridgeHomePage>,
   Widget buildSwapButton(BuildContext context, BridgeProvider provider) {
     return Center(
       child: Padding(
-        padding:
-            EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
+        padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
         child: IconButton(
           onPressed: provider.state == BridgeState.idle
               ? () {
@@ -285,8 +268,7 @@ mixin BridgeHomeWidgetsMixin on ConsumerState<BridgeHomePage>,
           icon: Container(
             padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
             decoration: BoxDecoration(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainBlueColor.name),
+              color: AppColorTokens.of(context).brand,
               shape: BoxShape.circle,
             ),
             child: Icon(
@@ -302,8 +284,7 @@ mixin BridgeHomeWidgetsMixin on ConsumerState<BridgeHomePage>,
 
   // ─── 滑点选择器 ──────────────────────────────────────────────────────────────
 
-  Widget buildSlippageSelector(
-      BuildContext context, BridgeProvider provider) {
+  Widget buildSlippageSelector(BuildContext context, BridgeProvider provider) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -311,38 +292,39 @@ mixin BridgeHomeWidgetsMixin on ConsumerState<BridgeHomePage>,
           S.of(context).g_key_bridge_slippage,
           style: TextStyle(
             fontSize: ScreenUtil().setSp(26),
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.itemSubtitleTextColor.name),
+            color: AppColorTokens.of(context).textSubtitle,
           ),
         ),
         SizedBox(height: ScreenUtil().setWidth(12)),
         Row(
           children: BridgeHomeLogicMixin.slippageOptions.map((pct) {
-            final selected =
-                (provider.slippage - pct).abs() < 0.001;
+            final selected = (provider.slippage - pct).abs() < 0.001;
             return Expanded(
               child: Padding(
-                padding:
-                    EdgeInsets.only(right: ScreenUtil().setWidth(10)),
+                padding: EdgeInsets.only(right: ScreenUtil().setWidth(10)),
                 child: GestureDetector(
                   onTap: () => provider.setSlippage(pct),
                   child: Container(
                     padding: EdgeInsets.symmetric(
-                        vertical: ScreenUtil().setWidth(14)),
+                      vertical: ScreenUtil().setWidth(14),
+                    ),
                     decoration: BoxDecoration(
                       color: selected
-                          ? AppThemeUtils.getColorByKey(context,
-                              AppThemeKeys.mainButtonBgColor.name)
-                          : AppThemeUtils.getColorByKey(context,
-                              AppThemeKeys.itemBgColor.name),
+                          ? AppThemeUtils.getColorByKey(
+                              context,
+                              AppThemeKeys.mainButtonBgColor.name,
+                            )
+                          : AppColorTokens.of(context).bgSurface,
                       borderRadius: BorderRadius.circular(
-                          ScreenUtil().setWidth(8)),
+                        ScreenUtil().setWidth(8),
+                      ),
                       border: Border.all(
                         color: selected
-                            ? AppThemeUtils.getColorByKey(context,
-                                AppThemeKeys.mainButtonBgColor.name)
-                            : AppThemeUtils.getColorByKey(context,
-                                AppThemeKeys.dividerColor.name),
+                            ? AppThemeUtils.getColorByKey(
+                                context,
+                                AppThemeKeys.mainButtonBgColor.name,
+                              )
+                            : AppColorTokens.of(context).border,
                       ),
                     ),
                     alignment: Alignment.center,
@@ -354,10 +336,11 @@ mixin BridgeHomeWidgetsMixin on ConsumerState<BridgeHomePage>,
                             ? FontWeight.bold
                             : FontWeight.normal,
                         color: selected
-                            ? AppThemeUtils.getColorByKey(context,
-                                AppThemeKeys.mainButtonTextColor.name)
-                            : AppThemeUtils.getColorByKey(context,
-                                AppThemeKeys.mainTextColor.name),
+                            ? AppThemeUtils.getColorByKey(
+                                context,
+                                AppThemeKeys.mainButtonTextColor.name,
+                              )
+                            : AppColorTokens.of(context).textPrimary,
                       ),
                     ),
                   ),

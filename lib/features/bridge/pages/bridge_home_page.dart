@@ -47,10 +47,7 @@ class _BridgeHomePageState extends ConsumerState<BridgeHomePage>
       appBar: AppBarWidget(
         text: S.of(context).g_key_bridge_title,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.history),
-            onPressed: openHistory,
-          ),
+          IconButton(icon: const Icon(Icons.history), onPressed: openHistory),
         ],
       ),
       body: ListenableBuilder(
@@ -62,31 +59,25 @@ class _BridgeHomePageState extends ConsumerState<BridgeHomePage>
               children: [
                 Expanded(
                   child: SingleChildScrollView(
-                    padding:
-                        EdgeInsets.all(ScreenUtil().setWidth(30)),
+                    padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // 源链选择卡
-                        buildChainCard(context, provider,
-                            isFrom: true),
+                        buildChainCard(context, provider, isFrom: true),
 
                         // 交换方向按钮
                         buildSwapButton(context, provider),
 
                         // 目标链选择卡
-                        buildChainCard(context, provider,
-                            isFrom: false),
+                        buildChainCard(context, provider, isFrom: false),
 
-                        SizedBox(
-                            height: ScreenUtil().setWidth(24)),
+                        SizedBox(height: ScreenUtil().setWidth(24)),
 
                         // 滑点选择器（有报价后显示）
-                        if (provider.quoteResponse?.hasRoutes ==
-                            true) ...[
+                        if (provider.quoteResponse?.hasRoutes == true) ...[
                           buildSlippageSelector(context, provider),
-                          SizedBox(
-                              height: ScreenUtil().setWidth(24)),
+                          SizedBox(height: ScreenUtil().setWidth(24)),
                         ],
 
                         // 全部路由对比卡（有报价时显示）

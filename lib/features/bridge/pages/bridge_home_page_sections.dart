@@ -26,21 +26,13 @@ mixin BridgeHomeSectionsMixin
       return Container(
         padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.itemBgColor.name,
-          ),
+          color: AppColorTokens.of(context).bgSurface,
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
         ),
         child: Center(
           child: Text(
             S.of(context).g_key_bridge_no_routes,
-            style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ),
-            ),
+            style: TextStyle(color: AppColorTokens.of(context).textSubtitle),
           ),
         ),
       );
@@ -54,10 +46,7 @@ mixin BridgeHomeSectionsMixin
           style: TextStyle(
             fontSize: ScreenUtil().setSp(28),
             fontWeight: FontWeight.bold,
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainTextColor.name,
-            ),
+            color: AppColorTokens.of(context).textPrimary,
           ),
         ),
         SizedBox(height: ScreenUtil().setWidth(12)),
@@ -73,10 +62,7 @@ mixin BridgeHomeSectionsMixin
     BridgeRoute route,
   ) {
     final isSelected = provider.selectedRoute?.id == route.id;
-    final selectedColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainBlueColor.name,
-    );
+    final selectedColor = AppColorTokens.of(context).brand;
 
     // 标签优先级：RECOMMENDED > FASTEST > CHEAPEST
     String? tagLabel;
@@ -110,10 +96,7 @@ mixin BridgeHomeSectionsMixin
         margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
         padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.itemBgColor.name,
-          ),
+          color: AppColorTokens.of(context).bgSurface,
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
           border: Border.all(
             color: isSelected ? selectedColor : Colors.transparent,
@@ -148,10 +131,7 @@ mixin BridgeHomeSectionsMixin
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(28),
                       fontWeight: FontWeight.w600,
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainTextColor.name,
-                      ),
+                      color: AppColorTokens.of(context).textPrimary,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -203,10 +183,7 @@ mixin BridgeHomeSectionsMixin
                         S.of(context).g_key_bridge_estimated_receive,
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(22),
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.itemSubtitleTextColor.name,
-                          ),
+                          color: AppColorTokens.of(context).textSubtitle,
                         ),
                       ),
                       SizedBox(height: ScreenUtil().setWidth(4)),
@@ -215,20 +192,14 @@ mixin BridgeHomeSectionsMixin
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(30),
                           fontWeight: FontWeight.bold,
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.mainTextColor.name,
-                          ),
+                          color: AppColorTokens.of(context).textPrimary,
                         ),
                       ),
                       Text(
                         'Min: $minReceive ${provider.toToken?.symbol ?? ''}',
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(22),
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.itemSubtitleTextColor.name,
-                          ),
+                          color: AppColorTokens.of(context).textSubtitle,
                         ),
                       ),
                     ],
@@ -262,10 +233,7 @@ mixin BridgeHomeSectionsMixin
                       vertical: ScreenUtil().setWidth(4),
                     ),
                     decoration: BoxDecoration(
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.backGroundColor.name,
-                      ),
+                      color: AppColorTokens.of(context).bgBase,
                       borderRadius: BorderRadius.circular(
                         ScreenUtil().setWidth(6),
                       ),
@@ -274,10 +242,7 @@ mixin BridgeHomeSectionsMixin
                       '${step.fromToken.symbol} → ${step.toToken.symbol} via ${step.toolName}',
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(20),
-                        color: AppThemeUtils.getColorByKey(
-                          context,
-                          AppThemeKeys.itemSubtitleTextColor.name,
-                        ),
+                        color: AppColorTokens.of(context).textSubtitle,
                       ),
                     ),
                   );
@@ -297,20 +262,14 @@ mixin BridgeHomeSectionsMixin
         Icon(
           icon,
           size: ScreenUtil().setWidth(26),
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.itemSubtitleTextColor.name,
-          ),
+          color: AppColorTokens.of(context).textSubtitle,
         ),
         SizedBox(width: ScreenUtil().setWidth(4)),
         Text(
           text,
           style: TextStyle(
             fontSize: ScreenUtil().setSp(24),
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.itemSubtitleTextColor.name,
-            ),
+            color: AppColorTokens.of(context).textSubtitle,
           ),
         ),
       ],
@@ -334,10 +293,7 @@ mixin BridgeHomeSectionsMixin
         children: [
           Icon(
             Icons.error_outline,
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.errorTextColor.name,
-            ),
+            color: AppColorTokens.of(context).danger,
             size: ScreenUtil().setWidth(40),
           ),
           SizedBox(width: ScreenUtil().setWidth(12)),
@@ -346,10 +302,7 @@ mixin BridgeHomeSectionsMixin
               provider.errorMessage!,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(26),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.errorTextColor.name,
-                ),
+                color: AppColorTokens.of(context).danger,
               ),
             ),
           ),
@@ -377,17 +330,9 @@ mixin BridgeHomeSectionsMixin
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.backGroundColor.name,
-        ),
+        color: AppColorTokens.of(context).bgBase,
         border: Border(
-          top: BorderSide(
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.dividerColor.name,
-            ),
-          ),
+          top: BorderSide(color: AppColorTokens.of(context).border),
         ),
       ),
       child: SizedBox(

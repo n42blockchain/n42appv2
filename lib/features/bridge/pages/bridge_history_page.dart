@@ -6,7 +6,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/bridge/models/bridge_models.dart';
 import 'package:n42_wallet/features/bridge/provider/bridge_provider.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
@@ -69,10 +68,7 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
   }
 
   Widget _buildEmpty(BuildContext context) {
-    final subtitleColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.itemSubtitleTextColor.name,
-    );
+    final subtitleColor = AppColorTokens.of(context).textSubtitle;
     return RefreshIndicator(
       onRefresh: _onRefresh,
       child: ListView(
@@ -105,14 +101,8 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
   }
 
   Widget _buildTransactionCard(BuildContext context, BridgeTransaction tx) {
-    final subtitleColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.itemSubtitleTextColor.name,
-    );
-    final blueColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainBlueColor.name,
-    );
+    final subtitleColor = AppColorTokens.of(context).textSubtitle;
+    final blueColor = AppColorTokens.of(context).brand;
     final hasBridgeTool = tx.bridgeTool?.isNotEmpty == true;
     final hasDestTx = tx.destinationTxHash?.isNotEmpty == true;
     final isPending =
@@ -123,10 +113,7 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20)),
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.itemBgColor.name,
-        ),
+        color: AppColorTokens.of(context).bgSurface,
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
       ),
       child: Column(
@@ -248,10 +235,7 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
           padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(16)),
           child: Icon(
             Icons.arrow_forward,
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainBlueColor.name,
-            ),
+            color: AppColorTokens.of(context).brand,
             size: ScreenUtil().setWidth(32),
           ),
         ),
@@ -276,14 +260,8 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
     required String amountText,
     required CrossAxisAlignment alignment,
   }) {
-    final subtitleColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.itemSubtitleTextColor.name,
-    );
-    final mainColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainTextColor.name,
-    );
+    final subtitleColor = AppColorTokens.of(context).textSubtitle;
+    final mainColor = AppColorTokens.of(context).textPrimary;
     return Column(
       crossAxisAlignment: alignment,
       children: [
@@ -314,14 +292,8 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
     required String hash,
     required int chainId,
   }) {
-    final subtitleColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.itemSubtitleTextColor.name,
-    );
-    final blueColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainBlueColor.name,
-    );
+    final subtitleColor = AppColorTokens.of(context).textSubtitle;
+    final blueColor = AppColorTokens.of(context).brand;
     return GestureDetector(
       onTap: () => _openExplorer(chainId, hash),
       child: Row(
