@@ -13,7 +13,7 @@ import 'package:n42_wallet/features/wallet/models/gas_estimate_model.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/widgets/gas_selector_widget.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// Gas 设置页面
 ///
@@ -392,7 +392,10 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
           SizedBox(
             width: double.infinity,
             height: su.setWidth(88),
-            child: buttonStyle2(context, _onConfirm, S.of(context).g_key_78),
+            child: AppButton(
+              label: S.of(context).g_key_78,
+              onPressed: _onConfirm,
+            ),
           ),
         ],
       ),

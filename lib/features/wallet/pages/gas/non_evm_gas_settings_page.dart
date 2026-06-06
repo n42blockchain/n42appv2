@@ -11,7 +11,7 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/models/non_evm_fee_model.dart';
 import 'package:n42_wallet/features/wallet/widgets/non_evm_fee_selector.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// Non-EVM chain Gas settings page.
 ///
@@ -147,10 +147,9 @@ class _NonEvmGasSettingsPageState extends State<NonEvmGasSettingsPage> {
             child: SizedBox(
               width: double.infinity,
               height: ScreenUtil().setWidth(88),
-              child: buttonStyle2(
-                context,
-                _confirm,
-                S.of(context).g_key_78,
+              child: AppButton(
+                label: S.of(context).g_key_78,
+                onPressed: _confirm,
               ),
             ),
           ),

@@ -7,7 +7,7 @@ import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/eth_api.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/chain_url_registry.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/dialog_widget/tips_dialog_2.dart';
 import 'package:n42_wallet/features/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
@@ -323,13 +323,9 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
                     Container(
                       margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
                       height: ScreenUtil().setWidth(88),
-                      child: buttonStyle6(
-                        context,
-                        addChain,
-                        s.g_key_159,
-                        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
-                        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
-                        false,
+                      child: AppButton(
+                        label: s.g_key_159,
+                        onPressed: addChain,
                       ),
                     ),
                   ],

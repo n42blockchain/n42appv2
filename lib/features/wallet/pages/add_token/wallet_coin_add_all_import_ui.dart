@@ -10,18 +10,6 @@ part of 'wallet_coin_add_all.dart';
 /// Form-field widgets (addressWidget, symbolWidget, decimalWidget,
 /// _buildContractStateWidget) are in wallet_coin_add_all_import_form_ui.dart.
 extension _WalletCoinAddAllImportUI on _WalletCoinAddAllState {
-  Color _btnBgColor() => AppThemeUtils.getColorByKey(
-        context,
-        load == Load.loading
-            ? AppThemeKeys.mainButtonBgColor3.name
-            : AppThemeKeys.mainButtonBgColor.name,
-      );
-
-  Color _btnTextColor() => AppThemeUtils.getColorByKey(
-        context,
-        AppThemeKeys.mainButtonTextColor.name,
-      );
-
   Widget coinListTokenWidget() {
     if (coinlistToken.isEmpty || showImportWidget) {
       return importTokenWidget();
@@ -135,13 +123,10 @@ extension _WalletCoinAddAllImportUI on _WalletCoinAddAllState {
     return SizedBox(
       height: ScreenUtil().setWidth(88.0),
       width: double.infinity,
-      child: buttonStyle6(
-        context,
-        () => updateView(() => showImportWidget = true),
-        S.of(context).g_key_159,
-        _btnBgColor(),
-        _btnTextColor(),
-        load == Load.loading,
+      child: AppButton(
+        label: S.of(context).g_key_159,
+        onPressed: () => updateView(() => showImportWidget = true),
+        loading: load == Load.loading,
       ),
     );
   }
@@ -158,12 +143,10 @@ extension _WalletCoinAddAllImportUI on _WalletCoinAddAllState {
             Expanded(
               child: SizedBox(
                 height: btnH,
-                child: buttonStyle5(
-                  context,
-                  () => updateView(() => showImportWidget = false),
-                  S.of(context).g_key_79,
-                  _btnBgColor(),
-                  _btnTextColor(),
+                child: AppButton(
+                  label: S.of(context).g_key_79,
+                  variant: AppButtonVariant.secondary,
+                  onPressed: () => updateView(() => showImportWidget = false),
                 ),
               ),
             ),
@@ -172,13 +155,10 @@ extension _WalletCoinAddAllImportUI on _WalletCoinAddAllState {
           Expanded(
             child: SizedBox(
               height: btnH,
-              child: buttonStyle6(
-                context,
-                importButton,
-                S.of(context).g_token_m_key_9,
-                _btnBgColor(),
-                _btnTextColor(),
-                isLoading,
+              child: AppButton(
+                label: S.of(context).g_token_m_key_9,
+                onPressed: importButton,
+                loading: isLoading,
               ),
             ),
           ),

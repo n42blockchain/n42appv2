@@ -3,7 +3,7 @@ import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -334,10 +334,9 @@ class _TokenDiscoveryPageState extends ConsumerState<TokenDiscoveryPage> {
           const Spacer(),
           SizedBox(
             height: su.setWidth(80),
-            child: buttonStyle2(
-              context,
-              selectedCount > 0 ? _addSelected : null,
-              s.g_key_token_discovery_add_selected(selectedCount),
+            child: AppButton(
+              label: s.g_key_token_discovery_add_selected(selectedCount),
+              onPressed: selectedCount > 0 ? _addSelected : null,
             ),
           ),
         ],

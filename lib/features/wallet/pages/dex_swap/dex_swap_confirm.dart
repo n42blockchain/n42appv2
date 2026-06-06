@@ -2,7 +2,7 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/models/dex/dex_quote_model.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_security_verification.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -134,21 +134,17 @@ class _DexSwapConfirmState extends State<DexSwapConfirm> {
       child: Row(
         children: [
           Expanded(
-            child: buttonStyle5(
-              context,
-              () => Navigator.pop(context, null),
-              S.of(context).g_key_79,
-              AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainWhiteColor.name),
-              AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainButtonTextColor3.name),
+            child: AppButton(
+              label: S.of(context).g_key_79,
+              variant: AppButtonVariant.secondary,
+              onPressed: () => Navigator.pop(context, null),
             ),
           ),
           SizedBox(width: ScreenUtil().setWidth(30)),
           Expanded(
-            child: buttonStyle2(
-              context,
-              () async {
+            child: AppButton(
+              label: S.of(context).g_key_78,
+              onPressed: () async {
                 final nav = Navigator.of(context);
                 final bool? verified = await nav.push(
                   MaterialPageRoute(
@@ -158,7 +154,6 @@ class _DexSwapConfirmState extends State<DexSwapConfirm> {
                   nav.pop(true);
                 }
               },
-              S.of(context).g_key_78,
             ),
           ),
         ],
