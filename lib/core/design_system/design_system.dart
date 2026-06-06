@@ -12,6 +12,7 @@ export 'app_radius.dart';
 export 'app_spacing.dart';
 export 'app_typography.dart';
 // 组件库（规范 §2）
+export 'widgets/app_badge.dart';
 export 'widgets/app_bottom_sheet.dart';
 export 'widgets/app_button.dart';
 export 'widgets/app_card.dart';

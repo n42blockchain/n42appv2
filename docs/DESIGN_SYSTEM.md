@@ -151,6 +151,12 @@
 - 不靠颜色单独传达状态（涨跌/成败需配图标或文字）。
 - 支持系统字号放大不溢出（`minTextAdapt` 已开，关键页验证 130%）。
 
+### 2.7 徽章 / 状态药丸
+- 统一 `AppBadge`：胶囊形（`radiusPill`），色调底（语义色 12% alpha）+ 同色文字（`captionSm`），可选前导**圆点** / **图标** / **自定义 leading**（承接「处理中」动画 spinner）。
+- 色调 `AppBadgeTone`：`neutral`/`brand`/`success`/`warning`/`danger`/`info`，全部走 `AppColorTokens` 语义色，**禁止**裸 `Colors.green/orange/red`（§2.6 配图标，不靠颜色单独传达）。
+- **仅用于显示态状态指示**（交易状态、节点/计划状态、在线数等），非交互。各 feature 散落的 `_buildStatusBadge`/`_buildStatusChip`/`buttonStyle3(onTap:null)` 逐步收敛至此（§2.2 禁重复）。
+- **边界**：① **可点**的筛选 chip / tonal 小按钮不是 Badge（属按钮线）；② 贴在**品牌彩色卡 / 直播叠层**上的白底标签用固定叠层色或卡内反色，**不**用随主题的 `AppBadge`（否则亮色主题对比失效）。
+
 ---
 
 ## 3. 主题与跨 repo 一致性
