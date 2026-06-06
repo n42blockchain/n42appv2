@@ -3,7 +3,7 @@
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_manage/keystore/export_keystore_page.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -115,9 +115,9 @@ class _ExportKeystoreDescState extends State<ExportKeystoreDesc> {
                     padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
                     color: AppThemeUtils.getColorByKey(
                         context, AppThemeKeys.backGroundColor.name),
-                    child: buttonStyle2(
-                      context,
-                      _riskAcknowledged
+                    child: AppButton(
+                      label: s.next,
+                      onPressed: _riskAcknowledged
                           ? () => Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -127,7 +127,6 @@ class _ExportKeystoreDescState extends State<ExportKeystoreDesc> {
                                 ),
                               )
                           : null,
-                      s.next,
                     ),
                   ),
                 ],

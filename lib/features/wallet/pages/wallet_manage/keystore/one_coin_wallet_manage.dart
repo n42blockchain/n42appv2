@@ -11,7 +11,7 @@ import 'package:n42_wallet/features/wallet/pages/wallet_manage/keystore/keystore
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/comm_input.dart';
 import 'package:n42_wallet/shared/widgets/tips_dialog_3.dart';
 import 'package:n42_wallet/features/widgets/dialog_widget/tips_dialog_4.dart';
@@ -224,10 +224,9 @@ class _OneCoinWalletManageState extends ConsumerState<OneCoinWalletManage>
                       context,
                       AppThemeKeys.backGroundColor.name,
                     ),
-                    child: buttonStyle2(
-                      context,
-                      saveCoin,
-                      S.of(context).g_key_115,
+                    child: AppButton(
+                      label: S.of(context).g_key_115,
+                      onPressed: saveCoin,
                     ),
                   ),
                 ],

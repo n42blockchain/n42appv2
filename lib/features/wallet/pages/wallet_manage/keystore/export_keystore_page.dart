@@ -4,7 +4,7 @@ import 'dart:async';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -125,9 +125,14 @@ class _ExportKeystorePageState extends State<ExportKeystorePage> {
                     color: AppThemeUtils.getColorByKey(
                         context, AppThemeKeys.backGroundColor.name),
                     child: _isCopied
-                        ? buttonStyle2(context, _clearClipboard,
-                            '${s.g_key_ex_keystore_12} (${_countdown}s)')
-                        : buttonStyle2(context, _copyToClipboard, s.g_key_119),
+                        ? AppButton(
+                            label: '${s.g_key_ex_keystore_12} (${_countdown}s)',
+                            onPressed: _clearClipboard,
+                          )
+                        : AppButton(
+                            label: s.g_key_119,
+                            onPressed: _copyToClipboard,
+                          ),
                   ),
                 ],
               ),

@@ -2,7 +2,7 @@ import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/comm_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
@@ -101,19 +101,22 @@ class _EditWalletState extends ConsumerState<EditWallet> {
                 height: ScreenUtil().setWidth(148),
                 width: double.infinity,
                 padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-                child: buttonStyle2(context, () async {
-                  widget.walletInfo.walletName = resolveEditedWalletName(
-                    input: _controller.text,
-                    existingName: widget.walletInfo.walletName ?? '',
-                    walletIndex: widget.walletIndex,
-                  );
-                  widget.walletInfo.tags = _tags;
-                  await ref
-                      .read(wapBridgeProvider)
-                      .saveWalletInfo(widget.walletInfo, widget.walletIndex);
-                  if (!context.mounted) return;
-                  Navigator.of(context).pop(widget.walletInfo);
-                }, S.of(context).g_key_115),
+                child: AppButton(
+                  label: S.of(context).g_key_115,
+                  onPressed: () async {
+                    widget.walletInfo.walletName = resolveEditedWalletName(
+                      input: _controller.text,
+                      existingName: widget.walletInfo.walletName ?? '',
+                      walletIndex: widget.walletIndex,
+                    );
+                    widget.walletInfo.tags = _tags;
+                    await ref
+                        .read(wapBridgeProvider)
+                        .saveWalletInfo(widget.walletInfo, widget.walletIndex);
+                    if (!context.mounted) return;
+                    Navigator.of(context).pop(widget.walletInfo);
+                  },
+                ),
               ),
             ],
           ),

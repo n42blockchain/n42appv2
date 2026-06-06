@@ -9,7 +9,7 @@ import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/chain_url_registry.dart';
 import 'package:n42_wallet/features/wallet/widgets/choose_import_coin.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/comm_input.dart';
 import 'package:n42_wallet/features/widgets/container_widget.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
@@ -255,10 +255,10 @@ class _ImportKeystoreState extends ConsumerState<ImportKeystore> {
               context,
               AppThemeKeys.backGroundColor.name,
             ),
-            child: buttonStyle6(
-              context,
-              () async {
-                if (load == Load.loading) return;
+            child: AppButton(
+              label: S.of(context).g_key_78,
+              loading: load == Load.loading,
+              onPressed: () async {
                 FocusScope.of(context).unfocus();
                 final keystoreJson = _keystoreController.text.trim();
                 if (keystoreJson.isEmpty) {
@@ -271,18 +271,6 @@ class _ImportKeystoreState extends ConsumerState<ImportKeystore> {
                   _passwordController.text,
                 );
               },
-              S.of(context).g_key_78,
-              AppThemeUtils.getColorByKey(
-                context,
-                load == Load.loading
-                    ? AppThemeKeys.mainButtonBgColor3.name
-                    : AppThemeKeys.mainButtonBgColor.name,
-              ),
-              AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainButtonTextColor.name,
-              ),
-              load == Load.loading,
             ),
           ),
         ],

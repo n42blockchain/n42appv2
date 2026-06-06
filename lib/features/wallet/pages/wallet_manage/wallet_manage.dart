@@ -16,7 +16,7 @@ import 'package:n42_wallet/features/wallet/pages/wallet_manage/keystore/one_coin
 import 'package:n42_wallet/features/wallet/pages/wallet_manage/wallet_manage_flags_utils.dart';
 import 'package:n42_wallet/features/wallet/widgets/item_wallet.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/empty.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
@@ -276,17 +276,20 @@ class _WalletManageState extends ConsumerState<WalletManage> {
                         context,
                         AppThemeKeys.backGroundColor.name,
                       ),
-                      child: buttonStyle2(context, () async {
-                        final mm = ref
-                            .read(wapBridgeProvider)
-                            .setMainWallet(widget.walletIndex);
-                        if (!context.mounted) return;
-                        if (mm.error) {
-                          ToastUtils.show(mm.data);
-                        } else {
-                          Navigator.pop(context, true);
-                        }
-                      }, S.of(context).g_key_15),
+                      child: AppButton(
+                        label: S.of(context).g_key_15,
+                        onPressed: () async {
+                          final mm = ref
+                              .read(wapBridgeProvider)
+                              .setMainWallet(widget.walletIndex);
+                          if (!context.mounted) return;
+                          if (mm.error) {
+                            ToastUtils.show(mm.data);
+                          } else {
+                            Navigator.pop(context, true);
+                          }
+                        },
+                      ),
                     ),
                   ),
               ],
