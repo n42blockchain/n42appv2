@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -46,7 +46,9 @@ class DAppSigningSheet extends StatelessWidget {
                   fontSize: ScreenUtil().setSp(32),
                   fontWeight: FontWeight.w600,
                   color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
+                    context,
+                    AppThemeKeys.mainTextColor.name,
+                  ),
                 ),
               ),
               SizedBox(height: ScreenUtil().setWidth(8)),
@@ -55,7 +57,9 @@ class DAppSigningSheet extends StatelessWidget {
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(24),
                   color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemSubtitleTextColor.name),
+                    context,
+                    AppThemeKeys.itemSubtitleTextColor.name,
+                  ),
                 ),
               ),
             ],
@@ -65,7 +69,9 @@ class DAppSigningSheet extends StatelessWidget {
         Divider(
           height: 1,
           color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.dividerColor.name),
+            context,
+            AppThemeKeys.dividerColor.name,
+          ),
         ),
 
         // Scrollable content
@@ -87,14 +93,13 @@ class DAppSigningSheet extends StatelessWidget {
                   if (details['value'] != null && details['value'] != '0x0')
                     _itemWidget(context, 'Value', details['value'].toString()),
                   if (details['data'] != null && details['data'] != '0x')
-                    _itemWidget(context, 'Data',
-                        _truncate(details['data'].toString(), 200)),
+                    _itemWidget(
+                      context,
+                      'Data',
+                      _truncate(details['data'].toString(), 200),
+                    ),
                 ] else ...[
-                  _itemWidget(
-                    context,
-                    'Data',
-                    _formatSignData(details),
-                  ),
+                  _itemWidget(context, 'Data', _formatSignData(details)),
                 ],
               ],
             ),
@@ -112,11 +117,15 @@ class DAppSigningSheet extends StatelessWidget {
           ),
           decoration: BoxDecoration(
             color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.backGroundColor.name),
+              context,
+              AppThemeKeys.backGroundColor.name,
+            ),
             border: Border(
               top: BorderSide(
                 color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.dividerColor.name),
+                  context,
+                  AppThemeKeys.dividerColor.name,
+                ),
                 width: 1,
               ),
             ),
@@ -126,18 +135,21 @@ class DAppSigningSheet extends StatelessWidget {
               Expanded(
                 child: SizedBox(
                   height: ScreenUtil().setWidth(88),
-                  child: buttonStyle2(context, () {
-                    Navigator.pop(context, false);
-                  }, s.g_key_79),
+                  child: AppButton(
+                    label: s.g_key_79,
+                    variant: AppButtonVariant.secondary,
+                    onPressed: () => Navigator.pop(context, false),
+                  ),
                 ),
               ),
               SizedBox(width: ScreenUtil().setWidth(20)),
               Expanded(
                 child: SizedBox(
                   height: ScreenUtil().setWidth(88),
-                  child: buttonStyle2(context, () {
-                    Navigator.pop(context, true);
-                  }, s.g_key_78),
+                  child: AppButton(
+                    label: s.g_key_78,
+                    onPressed: () => Navigator.pop(context, true),
+                  ),
                 ),
               ),
             ],
@@ -158,7 +170,9 @@ class DAppSigningSheet extends StatelessWidget {
             style: TextStyle(
               fontSize: ScreenUtil().setSp(24),
               color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.ff888888.name),
+                context,
+                AppThemeKeys.ff888888.name,
+              ),
             ),
           ),
           SizedBox(height: ScreenUtil().setWidth(6)),
@@ -167,7 +181,9 @@ class DAppSigningSheet extends StatelessWidget {
             style: TextStyle(
               fontSize: ScreenUtil().setSp(26),
               color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
+                context,
+                AppThemeKeys.mainTextColor.name,
+              ),
             ),
             maxLines: 10,
             overflow: TextOverflow.ellipsis,

@@ -3,7 +3,7 @@ import 'package:n42_wallet/features/browser/models/browser_collection_model.dart
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -277,7 +277,7 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
         AppThemeKeys.backGroundColor.name,
       ),
       padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
-      child: buttonStyle2(context, _saveUrl, S.of(context).g_key_115),
+      child: AppButton(label: S.of(context).g_key_115, onPressed: _saveUrl),
     );
   }
 }

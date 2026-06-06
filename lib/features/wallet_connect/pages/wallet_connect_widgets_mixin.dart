@@ -5,7 +5,7 @@ import 'package:n42_wallet/core/security/dapp_security_service.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_provider.dart';
 import 'package:n42_wallet/shared/utils/wallet_connect_uri.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/dapp_security_badge.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
 import 'package:n42_wallet/features/widgets/loading_page.dart';
@@ -345,7 +345,7 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
     return SizedBox(
       width: double.infinity,
       height: ScreenUtil().setWidth(88.0),
-      child: buttonStyle2(context, onTap, title),
+      child: AppButton(label: title, onPressed: onTap),
     );
   }
 
@@ -502,7 +502,9 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
           if (dAppDesc != "")
             Container(
               width: double.infinity,
-              padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
+              padding: EdgeInsets.symmetric(
+                vertical: ScreenUtil().setWidth(20),
+              ),
               alignment: Alignment.center,
               child: Text(
                 dAppDesc,
@@ -518,9 +520,10 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
           if (dAppWebUrl != "")
             InkWell(
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(
-                  builder: (_) => BrowserPage(dAppWebUrl),
-                ));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => BrowserPage(dAppWebUrl)),
+                );
               },
               child: SizedBox(
                 height: ScreenUtil().setWidth(60),
