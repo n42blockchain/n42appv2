@@ -1,7 +1,6 @@
 import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:flutter/material.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -148,10 +147,9 @@ class _ShareMiningState extends State<ShareMining>
                                         fit: BoxFit.contain,
                                         color: isDark
                                             ? Colors.white
-                                            : AppThemeUtils.getColorByKey(
+                                            : AppColorTokens.of(
                                                 context,
-                                                AppThemeKeys.mainTextColor.name,
-                                              ),
+                                              ).textPrimary,
                                       ),
                                     ),
                                   ),
@@ -165,10 +163,7 @@ class _ShareMiningState extends State<ShareMining>
                             child: Text(
                               "Congratulations!",
                               style: TextStyle(
-                                color: AppThemeUtils.getColorByKey(
-                                  context,
-                                  AppThemeKeys.mainTextColor.name,
-                                ),
+                                color: AppColorTokens.of(context).textPrimary,
                                 fontSize: ScreenUtil().setSp(44),
                                 fontWeight: FontWeight.w600,
                                 letterSpacing: 0.5,
@@ -193,10 +188,9 @@ class _ShareMiningState extends State<ShareMining>
                                 _generateTipsContent(),
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                  color: AppThemeUtils.getColorByKey(
+                                  color: AppColorTokens.of(
                                     context,
-                                    AppThemeKeys.itemSubtitleTextColor.name,
-                                  ),
+                                  ).textSubtitle,
                                   height: 1.5,
                                   fontSize: ScreenUtil().setSp(28),
                                 ),
@@ -221,16 +215,14 @@ class _ShareMiningState extends State<ShareMining>
                                   vertical: ScreenUtil().setWidth(20),
                                 ),
                                 decoration: BoxDecoration(
-                                  color: AppThemeUtils.getColorByKey(
+                                  color: AppColorTokens.of(
                                     context,
-                                    AppThemeKeys.mainBlueColor.name,
-                                  ).withValues(alpha: 0.1),
+                                  ).brand.withValues(alpha: 0.1),
                                   borderRadius: AppRadius.brXl,
                                   border: Border.all(
-                                    color: AppThemeUtils.getColorByKey(
+                                    color: AppColorTokens.of(
                                       context,
-                                      AppThemeKeys.mainBlueColor.name,
-                                    ).withValues(alpha: 0.3),
+                                    ).brand.withValues(alpha: 0.3),
                                     width: 1,
                                   ),
                                 ),
@@ -239,10 +231,7 @@ class _ShareMiningState extends State<ShareMining>
                                   children: [
                                     Icon(
                                       Icons.share_outlined,
-                                      color: AppThemeUtils.getColorByKey(
-                                        context,
-                                        AppThemeKeys.mainBlueColor.name,
-                                      ),
+                                      color: AppColorTokens.of(context).brand,
                                       size: ScreenUtil().setWidth(36),
                                     ),
                                     SizedBox(width: ScreenUtil().setWidth(12)),
@@ -251,10 +240,9 @@ class _ShareMiningState extends State<ShareMining>
                                         S.of(context).g_mining_key61,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
-                                          color: AppThemeUtils.getColorByKey(
+                                          color: AppColorTokens.of(
                                             context,
-                                            AppThemeKeys.mainBlueColor.name,
-                                          ),
+                                          ).brand,
                                           fontSize: ScreenUtil().setSp(28),
                                           fontWeight: FontWeight.w600,
                                         ),

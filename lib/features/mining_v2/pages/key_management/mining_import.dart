@@ -234,10 +234,7 @@ class _MiningImportState extends ConsumerState<MiningImport> {
               title,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(32),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainTextColor.name,
-                ),
+                color: AppColorTokens.of(context).textPrimary,
               ),
             ),
           ),
@@ -277,10 +274,7 @@ class _MiningImportState extends ConsumerState<MiningImport> {
           text,
           style: TextStyle(
             fontSize: ScreenUtil().setSp(32),
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainBlueColor.name,
-            ),
+            color: AppColorTokens.of(context).brand,
           ),
         ),
       ),
@@ -327,10 +321,7 @@ class _MiningImportState extends ConsumerState<MiningImport> {
         child: Image.asset(
           'assets/login/${obscure ? "icon_denglu_yincang" : "icon_denglu_xianshi"}.png',
           width: ScreenUtil().setWidth(34.0),
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.mainBlueColor.name,
-          ),
+          color: AppColorTokens.of(context).brand,
         ),
       ),
       rightOnTap1: () => setState(() => obscure = !obscure),
@@ -355,10 +346,7 @@ class _MiningImportState extends ConsumerState<MiningImport> {
       child: Text(
         _errorMessage,
         style: TextStyle(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.errorTextColor.name,
-          ),
+          color: AppColorTokens.of(context).danger,
           fontSize: ScreenUtil().setSp(28),
         ),
       ),

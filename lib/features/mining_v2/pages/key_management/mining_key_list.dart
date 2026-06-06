@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/mining_v2/pages/key_management/mining_output_tip.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/features/widgets/container_widget.dart';
@@ -71,10 +72,7 @@ class _MiningKeyListState extends ConsumerState<MiningKeyList> {
                           Text(
                             miningKeyList[index],
                             style: TextStyle(
-                              color: AppThemeUtils.getColorByKey(
-                                context,
-                                AppThemeKeys.itemTextColor.name,
-                              ),
+                              color: AppColorTokens.of(context).textItem,
                               fontSize: ScreenUtil().setSp(32),
                             ),
                           ),
@@ -101,10 +99,7 @@ class _MiningKeyListState extends ConsumerState<MiningKeyList> {
                         onTap: () => removeKey(index),
                         child: Icon(
                           Icons.delete_forever_outlined,
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.errorTextColor.name,
-                          ),
+                          color: AppColorTokens.of(context).danger,
                           size: ScreenUtil().setWidth(40),
                         ),
                       ),
@@ -119,10 +114,7 @@ class _MiningKeyListState extends ConsumerState<MiningKeyList> {
                         ),
                         child: Icon(
                           Icons.output_outlined,
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.mainBlueColor.name,
-                          ),
+                          color: AppColorTokens.of(context).brand,
                           size: ScreenUtil().setWidth(40),
                         ),
                       ),
@@ -130,10 +122,7 @@ class _MiningKeyListState extends ConsumerState<MiningKeyList> {
                 ),
                 Divider(
                   height: ScreenUtil().setWidth(20),
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.dividerColor.name,
-                  ),
+                  color: AppColorTokens.of(context).border,
                   indent: 0,
                   endIndent: 0,
                 ),
@@ -143,10 +132,7 @@ class _MiningKeyListState extends ConsumerState<MiningKeyList> {
                       child: Text(
                         'PublicKey:${keyValue['keypart']['publicKey']}',
                         style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.itemTextColor.name,
-                          ),
+                          color: AppColorTokens.of(context).textItem,
                           fontSize: ScreenUtil().setSp(32),
                         ),
                       ),
@@ -161,10 +147,7 @@ class _MiningKeyListState extends ConsumerState<MiningKeyList> {
                       },
                       child: Icon(
                         Icons.copy,
-                        color: AppThemeUtils.getColorByKey(
-                          context,
-                          AppThemeKeys.mainBlueColor.name,
-                        ),
+                        color: AppColorTokens.of(context).brand,
                         size: ScreenUtil().setWidth(40),
                       ),
                     ),

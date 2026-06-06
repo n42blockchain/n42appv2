@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 
@@ -16,10 +15,7 @@ class NLevelWidget extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.itemBgColor.name,
-        ),
+        color: AppColorTokens.of(context).bgSurface,
         borderRadius: AppRadius.brMd,
         boxShadow: isDark
             ? null
@@ -45,14 +41,8 @@ class NLevelWidget extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainBlueColor.name,
-                  ),
-                  AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainBlueColor.name,
-                  ).withValues(alpha: 0.6),
+                  AppColorTokens.of(context).brand,
+                  AppColorTokens.of(context).brand.withValues(alpha: 0.6),
                 ],
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
@@ -109,10 +99,7 @@ class NLevelWidget extends StatelessWidget {
                   Text(
                     "$nNum",
                     style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainTextColor.name,
-                      ),
+                      color: AppColorTokens.of(context).textPrimary,
                       fontSize: ScreenUtil().setSp(72),
                       fontWeight: FontWeight.w600,
                       height: 1.0,
@@ -124,10 +111,7 @@ class NLevelWidget extends StatelessWidget {
                     child: Text(
                       CoinType.N.name,
                       style: TextStyle(
-                        color: AppThemeUtils.getColorByKey(
-                          context,
-                          AppThemeKeys.mainTextColor.name,
-                        ),
+                        color: AppColorTokens.of(context).textPrimary,
                         fontWeight: FontWeight.w600,
                         fontSize: ScreenUtil().setSp(24),
                       ),
@@ -144,10 +128,9 @@ class NLevelWidget extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: isDark
                       ? Colors.white.withValues(alpha: 0.06)
-                      : AppThemeUtils.getColorByKey(
+                      : AppColorTokens.of(
                           context,
-                          AppThemeKeys.mainBlueColor.name,
-                        ).withValues(alpha: 0.06),
+                        ).brand.withValues(alpha: 0.06),
                   borderRadius: AppRadius.brSm,
                 ),
                 child: Row(
@@ -157,10 +140,7 @@ class NLevelWidget extends StatelessWidget {
                       width: ScreenUtil().setWidth(26),
                       height: ScreenUtil().setWidth(26),
                       decoration: BoxDecoration(
-                        color: AppThemeUtils.getColorByKey(
-                          context,
-                          AppThemeKeys.mainBlueColor.name,
-                        ),
+                        color: AppColorTokens.of(context).brand,
                         borderRadius: AppRadius.brSm,
                       ),
                       child: Center(
@@ -179,20 +159,14 @@ class NLevelWidget extends StatelessWidget {
                           Text(
                             S.of(context).g_mining_unlock_period,
                             style: TextStyle(
-                              color: AppThemeUtils.getColorByKey(
-                                context,
-                                AppThemeKeys.itemSubtitleTextColor.name,
-                              ),
+                              color: AppColorTokens.of(context).textSubtitle,
                               fontSize: ScreenUtil().setSp(18),
                             ),
                           ),
                           Text(
                             S.of(context).g_mining_unlockable_anytime,
                             style: TextStyle(
-                              color: AppThemeUtils.getColorByKey(
-                                context,
-                                AppThemeKeys.mainTextColor.name,
-                              ),
+                              color: AppColorTokens.of(context).textPrimary,
                               fontSize: ScreenUtil().setSp(20),
                               fontWeight: FontWeight.w500,
                             ),

@@ -47,6 +47,9 @@ class AppColorTokens {
   Color get warning => _key(AppThemeKeys.textColorOrange); // #FF6F16
   Color get info => _tone(const Color(0xFF2E90FA), const Color(0xFF52A6FF));
 
+  /// 危险态背景填充（errorBgColor）——错误提示卡 / 横幅底。
+  Color get dangerBg => _key(AppThemeKeys.errorBgColor);
+
   // ── 中性分层 ──
   Color get bgBase => _key(AppThemeKeys.backGroundColor);
   Color get bgSurface => _key(AppThemeKeys.itemBgColor);
@@ -57,6 +60,12 @@ class AppColorTokens {
   Color get textSecondary =>
       _key(AppThemeKeys.mainTextColor6); // light #5C616D / dark #BEBEBE
   Color get textTertiary => _key(AppThemeKeys.mainTextColor4); // #8A8A8E
+
+  /// 列表项标题文字（itemTextColor）。
+  Color get textItem => _key(AppThemeKeys.itemTextColor);
+
+  /// 列表项副标题 / 说明文字（itemSubtitleTextColor）——全 app 高频（341 处）。
+  Color get textSubtitle => _key(AppThemeKeys.itemSubtitleTextColor);
 
   // ── 聊天专用（勿外溢到钱包 / 直播）──
   Color get chatBubbleSelf =>

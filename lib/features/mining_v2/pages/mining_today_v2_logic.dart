@@ -32,12 +32,7 @@ mixin _MiningTodayV2LogicMixin on ConsumerState<MiningTodayV2> {
           content: SingleChildScrollView(
             child: Text(
               S.current.g_mining_key20,
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainTextColor.name,
-                ),
-              ),
+              style: TextStyle(color: AppColorTokens.of(context).textPrimary),
             ),
           ),
           actions: <Widget>[
@@ -86,10 +81,7 @@ mixin _MiningTodayV2LogicMixin on ConsumerState<MiningTodayV2> {
             child: Text(
               S.of(context).g_key_16,
               style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainTextColor.name,
-                ),
+                color: AppColorTokens.of(context).textPrimary,
                 fontSize: ScreenUtil().setSp(36.0),
                 fontWeight: FontWeight.w600,
               ),
@@ -99,10 +91,7 @@ mixin _MiningTodayV2LogicMixin on ConsumerState<MiningTodayV2> {
             height: ScreenUtil().setWidth(1),
             indent: 0,
             endIndent: 0,
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.dividerColor.name,
-            ),
+            color: AppColorTokens.of(context).border,
           ),
           Container(
             constraints: BoxConstraints(

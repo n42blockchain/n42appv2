@@ -1,4 +1,3 @@
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -20,10 +19,7 @@ Future<bool?> showGroupConfirmDialog(
       content: Container(
         decoration: BoxDecoration(
           borderRadius: AppRadius.brLg,
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.backGroundColor.name,
-          ),
+          color: AppColorTokens.of(context).bgBase,
         ),
         child: GroupConfirm(num: num, lockDate: lockDate, sureCall: sureCall),
       ),
@@ -63,10 +59,7 @@ class GroupConfirm extends StatelessWidget {
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainTextColor.name,
-                ),
+                color: AppColorTokens.of(context).textPrimary,
                 fontSize: ScreenUtil().setSp(44),
               ),
             ),
@@ -81,10 +74,7 @@ class GroupConfirm extends StatelessWidget {
                   text,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.mainTextColor.name,
-                    ),
+                    color: AppColorTokens.of(context).textPrimary,
                     fontSize: ScreenUtil().setSp(28),
                   ),
                 ),
@@ -104,20 +94,14 @@ class GroupConfirm extends StatelessWidget {
                       },
                       child: Container(
                         decoration: BoxDecoration(
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.itemBgColor.name,
-                          ),
+                          color: AppColorTokens.of(context).bgSurface,
                           borderRadius: AppRadius.brSm,
                         ),
                         child: Center(
                           child: Text(
                             S.of(context).g_key_79,
                             style: TextStyle(
-                              color: AppThemeUtils.getColorByKey(
-                                context,
-                                AppThemeKeys.mainBlueColor.name,
-                              ),
+                              color: AppColorTokens.of(context).brand,
                               fontWeight: FontWeight.w600,
                               fontSize: ScreenUtil().setSp(30),
                             ),
@@ -139,10 +123,7 @@ class GroupConfirm extends StatelessWidget {
                       },
                       child: Container(
                         decoration: BoxDecoration(
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.mainBlueColor.name,
-                          ),
+                          color: AppColorTokens.of(context).brand,
                           borderRadius: AppRadius.brSm,
                         ),
                         child: Center(

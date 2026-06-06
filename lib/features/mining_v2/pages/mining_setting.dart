@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/mining_v2/pages/key_management/mining_import.dart';
 import 'package:n42_wallet/features/mining_v2/pages/key_management/mining_key_list.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
@@ -54,20 +53,14 @@ class _MiningSettingState extends State<MiningSetting> {
                       //"验证者列表",
                       S.of(context).g_mining_key_81,
                       style: TextStyle(
-                        color: AppThemeUtils.getColorByKey(
-                          context,
-                          AppThemeKeys.itemTextColor.name,
-                        ),
+                        color: AppColorTokens.of(context).textItem,
                         fontSize: ScreenUtil().setSp(32),
                       ),
                     ),
                   ),
                   Icon(
                     Icons.arrow_forward_ios,
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.itemSubtitleTextColor.name,
-                    ),
+                    color: AppColorTokens.of(context).textSubtitle,
                     size: ScreenUtil().setWidth(40),
                   ),
                 ],

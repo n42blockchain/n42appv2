@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/mining_v2/pages/mining_node_detail_page.dart';
@@ -58,12 +57,7 @@ class MiningStatusWidget extends StatelessWidget {
                     : [const Color(0xFFE8F5E9), const Color(0xFFF1F8E9)],
               )
             : null,
-        color: isActive
-            ? null
-            : AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemBgColor.name,
-              ),
+        color: isActive ? null : AppColorTokens.of(context).bgSurface,
         borderRadius: AppRadius.brMd,
         border: Border.all(
           color: isActive
@@ -104,10 +98,7 @@ class MiningStatusWidget extends StatelessWidget {
                 child: Text(
                   S.of(context).g_mining_key_5,
                   style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.itemSubtitleTextColor.name,
-                    ),
+                    color: AppColorTokens.of(context).textSubtitle,
                     fontSize: ScreenUtil().setSp(22),
                     fontWeight: FontWeight.w500,
                   ),
@@ -149,10 +140,7 @@ class MiningStatusWidget extends StatelessWidget {
                     child: Icon(
                       Icons.arrow_forward_ios,
                       size: ScreenUtil().setWidth(24),
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.itemSubtitleTextColor.name,
-                      ),
+                      color: AppColorTokens.of(context).textSubtitle,
                     ),
                   ),
                 ),
@@ -211,10 +199,7 @@ class MiningStatusWidget extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.itemBgColor.name,
-        ),
+        color: AppColorTokens.of(context).bgSurface,
         borderRadius: AppRadius.brMd,
         border: Border.all(
           color: isDark
@@ -230,17 +215,11 @@ class MiningStatusWidget extends StatelessWidget {
             children: [
               _buildIconBox(
                 ScreenUtil().setWidth(36),
-                AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainBlueColor.name,
-                ).withValues(alpha: 0.15),
+                AppColorTokens.of(context).brand.withValues(alpha: 0.15),
                 Icon(
                   Icons.account_balance_wallet_outlined,
                   size: ScreenUtil().setWidth(20),
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainBlueColor.name,
-                  ),
+                  color: AppColorTokens.of(context).brand,
                 ),
               ),
               SizedBox(width: ScreenUtil().setWidth(10)),
@@ -248,10 +227,7 @@ class MiningStatusWidget extends StatelessWidget {
                 child: Text(
                   S.of(context).g_key_29,
                   style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.itemSubtitleTextColor.name,
-                    ),
+                    color: AppColorTokens.of(context).textSubtitle,
                     fontSize: ScreenUtil().setSp(22),
                     fontWeight: FontWeight.w500,
                   ),
@@ -272,10 +248,7 @@ class MiningStatusWidget extends StatelessWidget {
                       ? '${mpValue.balanceInBeacon}'
                       : mpValue.walletNBalance.toStringAsFixed(2),
                   style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.mainTextColor.name,
-                    ),
+                    color: AppColorTokens.of(context).textPrimary,
                     fontSize: ScreenUtil().setSp(30),
                     fontWeight: FontWeight.w600,
                   ),
@@ -286,10 +259,7 @@ class MiningStatusWidget extends StatelessWidget {
               Text(
                 CoinType.N.name,
                 style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainTextColor.name,
-                  ),
+                  color: AppColorTokens.of(context).textPrimary,
                   fontSize: ScreenUtil().setSp(22),
                   fontWeight: FontWeight.w600,
                 ),

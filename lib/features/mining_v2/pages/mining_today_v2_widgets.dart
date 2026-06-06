@@ -13,10 +13,7 @@ mixin _MiningTodayV2WidgetsMixin
           final walletName = ref.watch(
             miningBridgeProvider.select((p) => p.walletName),
           );
-          final blueColor = AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.mainBlueColor.name,
-          );
+          final blueColor = AppColorTokens.of(context).brand;
           return InkWell(
             onTap: showChangeAddress,
             child: Container(
@@ -77,10 +74,7 @@ mixin _MiningTodayV2WidgetsMixin
           child: Image.asset(
             "assets/mining/set.png",
             width: ScreenUtil().setWidth(40),
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainBlueColor.name,
-            ),
+            color: AppColorTokens.of(context).brand,
           ),
         ),
       ],
@@ -94,19 +88,13 @@ mixin _MiningTodayV2WidgetsMixin
       padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
       margin: EdgeInsets.only(top: ScreenUtil().setWidth(30)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.errorBgColor.name,
-        ),
+        color: AppColorTokens.of(context).dangerBg,
         borderRadius: AppRadius.brSm,
       ),
       child: Text(
         S.of(context).g_mining_key_74,
         style: TextStyle(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.errorTextColor.name,
-          ),
+          color: AppColorTokens.of(context).danger,
           fontSize: ScreenUtil().setSp(26),
         ),
         textAlign: TextAlign.center,
@@ -268,17 +256,11 @@ mixin _MiningTodayV2WidgetsMixin
             : mpValue.barChartTitle,
         style: TextStyle(
           fontSize: ScreenUtil().setSp(18),
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.itemSubtitleTextColor.name,
-          ),
+          color: AppColorTokens.of(context).textSubtitle,
         ),
         specialStyle: TextStyle(
           fontSize: ScreenUtil().setSp(20),
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.itemTextColor.name,
-          ),
+          color: AppColorTokens.of(context).textItem,
           fontWeight: FontWeight.w600,
         ),
         space: ScreenUtil().setWidth(30),
@@ -373,10 +355,7 @@ mixin _MiningTodayV2WidgetsMixin
         text,
         style: TextStyle(
           fontSize: ScreenUtil().setSp(24),
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.textColorOrange.name,
-          ),
+          color: AppColorTokens.of(context).warning,
         ),
       ),
     );

@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/mining_v2/provider/mining_v2_provider.dart';
 
@@ -26,10 +25,7 @@ class MiningRiskCard extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.itemBgColor.name,
-        ),
+        color: AppColorTokens.of(context).bgSurface,
         borderRadius: AppRadius.brMd,
         boxShadow: isDark
             ? null
@@ -97,10 +93,7 @@ class MiningRiskCard extends StatelessWidget {
                     Text(
                       mpValue.inactivityTitle,
                       style: TextStyle(
-                        color: AppThemeUtils.getColorByKey(
-                          context,
-                          AppThemeKeys.mainTextColor.name,
-                        ),
+                        color: AppColorTokens.of(context).textPrimary,
                         fontSize: ScreenUtil().setSp(30),
                         fontWeight: FontWeight.w600,
                       ),
@@ -120,10 +113,7 @@ class MiningRiskCard extends StatelessWidget {
                 Text(
                   S.of(context).g_mining_key_75,
                   style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.itemSubtitleTextColor.name,
-                    ),
+                    color: AppColorTokens.of(context).textSubtitle,
                     fontSize: ScreenUtil().setSp(22),
                     height: 1.4,
                   ),
@@ -221,10 +211,7 @@ class MiningRiskCard extends StatelessWidget {
                   S.of(context).g_mining_key_76,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.mainTextColor.name,
-                    ),
+                    color: AppColorTokens.of(context).textPrimary,
                     fontSize: ScreenUtil().setSp(26),
                     fontWeight: FontWeight.w500,
                   ),
@@ -268,10 +255,7 @@ class MiningRiskCard extends StatelessWidget {
         vertical: ScreenUtil().setWidth(26),
       ),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.textColorOrange.name,
-        ).withValues(alpha: 0.2),
+        color: AppColorTokens.of(context).warning.withValues(alpha: 0.2),
         borderRadius: AppRadius.brMd,
       ),
       child: Row(
@@ -279,20 +263,14 @@ class MiningRiskCard extends StatelessWidget {
           Icon(
             Icons.warning_rounded,
             size: ScreenUtil().setWidth(28),
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.textColorOrange.name,
-            ),
+            color: AppColorTokens.of(context).warning,
           ),
           SizedBox(width: ScreenUtil().setWidth(10)),
           Expanded(
             child: Text(
               S.of(context).g_mining_key_116(32),
               style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.textColorOrange.name,
-                ),
+                color: AppColorTokens.of(context).warning,
                 fontSize: ScreenUtil().setSp(26),
                 fontWeight: FontWeight.w500,
               ),

@@ -12,10 +12,7 @@ mixin _MiningFullNodeV2WidgetsMixin
           width: ScreenUtil().setWidth(6),
           height: ScreenUtil().setWidth(28),
           decoration: BoxDecoration(
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainBlueColor.name,
-            ),
+            color: AppColorTokens.of(context).brand,
             borderRadius: AppRadius.brSm,
           ),
         ),
@@ -23,10 +20,7 @@ mixin _MiningFullNodeV2WidgetsMixin
         Text(
           title,
           style: TextStyle(
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainTextColor.name,
-            ),
+            color: AppColorTokens.of(context).textPrimary,
             fontSize: ScreenUtil().setSp(30),
             fontWeight: FontWeight.w600,
           ),
@@ -43,10 +37,7 @@ mixin _MiningFullNodeV2WidgetsMixin
     GestureTapCallback? onTap,
   }) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final blueColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainBlueColor.name,
-    );
+    final blueColor = AppColorTokens.of(context).brand;
     final idleBorder = isDark
         ? Colors.white.withValues(alpha: 0.08)
         : Colors.black.withValues(alpha: 0.06);
@@ -56,10 +47,7 @@ mixin _MiningFullNodeV2WidgetsMixin
       child: Container(
         padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.itemBgColor.name,
-          ),
+          color: AppColorTokens.of(context).bgSurface,
           borderRadius: AppRadius.brMd,
           border: Border.all(
             color: isSelected ? blueColor : idleBorder,
@@ -95,10 +83,7 @@ mixin _MiningFullNodeV2WidgetsMixin
               child: Text(
                 payType,
                 style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainTextColor.name,
-                  ),
+                  color: AppColorTokens.of(context).textPrimary,
                   fontSize: ScreenUtil().setSp(28),
                   fontWeight: FontWeight.w500,
                 ),
@@ -113,10 +98,7 @@ mixin _MiningFullNodeV2WidgetsMixin
 
   /// 提示信息卡片
   Widget buildInfoTip(BuildContext context) {
-    final blueColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainBlueColor.name,
-    );
+    final blueColor = AppColorTokens.of(context).brand;
 
     return Container(
       padding: EdgeInsets.symmetric(
@@ -140,10 +122,7 @@ mixin _MiningFullNodeV2WidgetsMixin
             child: Text(
               S.of(context).g_mining_key46,
               style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemSubtitleTextColor.name,
-                ),
+                color: AppColorTokens.of(context).textSubtitle,
                 fontSize: ScreenUtil().setSp(24),
                 height: 1.4,
               ),
@@ -161,10 +140,7 @@ mixin _MiningFullNodeV2WidgetsMixin
 
     return Container(
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.itemBgColor.name,
-        ),
+        color: AppColorTokens.of(context).bgSurface,
         borderRadius: AppRadius.brMd,
         border: Border.all(
           color: isDark
@@ -202,10 +178,7 @@ mixin _MiningFullNodeV2WidgetsMixin
     String? errTips,
     bool isEnough = true,
   }) {
-    final blueColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainBlueColor.name,
-    );
+    final blueColor = AppColorTokens.of(context).brand;
 
     return GestureDetector(
       onTap: onTap,
@@ -238,10 +211,7 @@ mixin _MiningFullNodeV2WidgetsMixin
                   Text(
                     payType,
                     style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainTextColor.name,
-                      ),
+                      color: AppColorTokens.of(context).textPrimary,
                       fontSize: ScreenUtil().setSp(28),
                       fontWeight: FontWeight.w500,
                     ),
@@ -460,10 +430,7 @@ mixin _MiningFullNodeV2WidgetsMixin
     return _buildSelectionCircle(
       isSelected: isSelected,
       fillColor: const Color(0xff32D74B),
-      borderColor: AppThemeUtils.getColorByKey(
-        context,
-        AppThemeKeys.itemSubtitleTextColor.name,
-      ),
+      borderColor: AppColorTokens.of(context).textSubtitle,
       checkColor: Colors.white,
     );
   }

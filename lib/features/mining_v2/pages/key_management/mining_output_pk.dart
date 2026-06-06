@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/mining_v2/api/mining_api.dart';
 import 'package:n42_wallet/features/mining_v2/pages/key_management/data_encryption.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/providers/service_providers.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
@@ -109,10 +108,7 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
       child: Image.asset(
         'assets/login/${obscure ? "icon_denglu_yincang" : "icon_denglu_xianshi"}.png',
         width: ScreenUtil().setWidth(34.0),
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.mainBlueColor.name,
-        ),
+        color: AppColorTokens.of(context).brand,
       ),
     );
   }
@@ -154,10 +150,7 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
                   S.of(context).g_mining_key_97,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(32),
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.mainTextColor.name,
-                    ),
+                    color: AppColorTokens.of(context).textPrimary,
                   ),
                 ),
                 SizedBox(height: ScreenUtil().setWidth(10)),
@@ -180,10 +173,7 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
                   S.of(context).g_mining_key_99,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(32),
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.mainTextColor.name,
-                    ),
+                    color: AppColorTokens.of(context).textPrimary,
                   ),
                 ),
                 SizedBox(height: ScreenUtil().setWidth(10)),
@@ -208,20 +198,14 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
                   S.of(context).g_mining_key_100,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(36),
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.mainTextColor.name,
-                    ),
+                    color: AppColorTokens.of(context).textPrimary,
                   ),
                 ),
                 SizedBox(height: ScreenUtil().setWidth(40)),
                 Container(
                   padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
                   decoration: BoxDecoration(
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.itemBgColor.name,
-                    ),
+                    color: AppColorTokens.of(context).bgSurface,
                     borderRadius: AppRadius.brMd,
                   ),
                   width: double.infinity,
@@ -229,10 +213,7 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
                     _encryptedData,
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(32),
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.itemTextColor.name,
-                      ),
+                      color: AppColorTokens.of(context).textItem,
                     ),
                   ),
                 ),

@@ -125,10 +125,7 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
               Text(
                 node.name,
                 style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.itemSubtitleTextColor.name,
-                  ),
+                  color: AppColorTokens.of(context).textSubtitle,
                   fontSize: ScreenUtil().setSp(22),
                 ),
               ),
@@ -142,10 +139,7 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
                 child: Text(
                   '${S.of(context).g_mining_node_key2}: ',
                   style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.itemSubtitleTextColor.name,
-                    ),
+                    color: AppColorTokens.of(context).textSubtitle,
                     fontSize: ScreenUtil().setSp(24),
                   ),
                   overflow: TextOverflow.ellipsis,
@@ -156,10 +150,7 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
                 child: Text(
                   shortKey,
                   style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.mainTextColor.name,
-                    ),
+                    color: AppColorTokens.of(context).textPrimary,
                     fontSize: ScreenUtil().setSp(24),
                     fontWeight: FontWeight.w500,
                   ),
@@ -177,10 +168,7 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
                   child: Icon(
                     Icons.copy_outlined,
                     size: ScreenUtil().setWidth(32),
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.mainBlueColor.name,
-                    ),
+                    color: AppColorTokens.of(context).brand,
                   ),
                 ),
               ),
@@ -192,10 +180,7 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
   }
 
   Widget _buildEmpty(BuildContext context) {
-    final subColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.itemSubtitleTextColor.name,
-    );
+    final subColor = AppColorTokens.of(context).textSubtitle;
     return SizedBox(
       height: ScreenUtil().setWidth(400),
       child: Center(

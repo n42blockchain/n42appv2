@@ -1,5 +1,4 @@
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -22,10 +21,7 @@ class MiningBoardWidget extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.itemBgColor.name,
-        ),
+        color: AppColorTokens.of(context).bgSurface,
         borderRadius: AppRadius.brMd,
         boxShadow: isDark
             ? null
@@ -49,14 +45,8 @@ class MiningBoardWidget extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainBlueColor.name,
-                  ),
-                  AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainBlueColor.name,
-                  ).withValues(alpha: 0.8),
+                  AppColorTokens.of(context).brand,
+                  AppColorTokens.of(context).brand.withValues(alpha: 0.8),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -126,10 +116,7 @@ class MiningBoardWidget extends StatelessWidget {
                   Text(
                     "$nNum",
                     style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainTextColor.name,
-                      ),
+                      color: AppColorTokens.of(context).textPrimary,
                       fontSize: ScreenUtil().setSp(80),
                       fontWeight: FontWeight.w600,
                       height: 1.0,
@@ -139,10 +126,7 @@ class MiningBoardWidget extends StatelessWidget {
                   Text(
                     CoinType.N.name,
                     style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainTextColor.name,
-                      ),
+                      color: AppColorTokens.of(context).textPrimary,
                       fontWeight: FontWeight.w600,
                       fontSize: ScreenUtil().setSp(28),
                     ),
@@ -158,10 +142,9 @@ class MiningBoardWidget extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: isDark
                       ? Colors.white.withValues(alpha: 0.08)
-                      : AppThemeUtils.getColorByKey(
+                      : AppColorTokens.of(
                           context,
-                          AppThemeKeys.mainBlueColor.name,
-                        ).withValues(alpha: 0.08),
+                        ).brand.withValues(alpha: 0.08),
                   borderRadius: AppRadius.brMd,
                 ),
                 child: Row(
@@ -171,10 +154,7 @@ class MiningBoardWidget extends StatelessWidget {
                       width: ScreenUtil().setWidth(28),
                       height: ScreenUtil().setWidth(28),
                       decoration: BoxDecoration(
-                        color: AppThemeUtils.getColorByKey(
-                          context,
-                          AppThemeKeys.mainBlueColor.name,
-                        ),
+                        color: AppColorTokens.of(context).brand,
                         borderRadius: AppRadius.brSm,
                       ),
                       child: Center(
@@ -193,20 +173,14 @@ class MiningBoardWidget extends StatelessWidget {
                           Text(
                             S.of(context).g_mining_unlock_period,
                             style: TextStyle(
-                              color: AppThemeUtils.getColorByKey(
-                                context,
-                                AppThemeKeys.itemSubtitleTextColor.name,
-                              ),
+                              color: AppColorTokens.of(context).textSubtitle,
                               fontSize: ScreenUtil().setSp(20),
                             ),
                           ),
                           Text(
                             S.of(context).g_mining_unlockable_anytime,
                             style: TextStyle(
-                              color: AppThemeUtils.getColorByKey(
-                                context,
-                                AppThemeKeys.mainTextColor.name,
-                              ),
+                              color: AppColorTokens.of(context).textPrimary,
                               fontSize: ScreenUtil().setSp(22),
                               fontWeight: FontWeight.w500,
                             ),
@@ -267,10 +241,7 @@ class MiningBoardWidget extends StatelessWidget {
 
   Widget _buildDivider(BuildContext context) {
     return Divider(
-      color: AppThemeUtils.getColorByKey(
-        context,
-        AppThemeKeys.itemLineColor.name,
-      ).withValues(alpha: 0.5),
+      color: AppColorTokens.of(context).border.withValues(alpha: 0.5),
       height: 1,
       indent: ScreenUtil().setWidth(70),
       endIndent: ScreenUtil().setWidth(16),
@@ -314,10 +285,7 @@ class MiningBoardWidget extends StatelessWidget {
             child: Text(
               action,
               style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemSubtitleTextColor.name,
-                ),
+                color: AppColorTokens.of(context).textSubtitle,
                 fontSize: ScreenUtil().setSp(24),
               ),
             ),
@@ -331,10 +299,7 @@ class MiningBoardWidget extends StatelessWidget {
                   child: Text(
                     desc,
                     style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainTextColor.name,
-                      ),
+                      color: AppColorTokens.of(context).textPrimary,
                       fontSize: ScreenUtil().setSp(24),
                       fontWeight: FontWeight.w500,
                     ),
