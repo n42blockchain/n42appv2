@@ -13,29 +13,32 @@ import 'package:n42_wallet/features/mining_v2/provider/mining_v2_provider.dart';
 class MiningRiskCard extends StatelessWidget {
   final MiningV2Provider mpValue;
 
-  const MiningRiskCard({
-    super.key,
-    required this.mpValue,
-  });
+  const MiningRiskCard({super.key, required this.mpValue});
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final scoreValue = double.tryParse(mpValue.inactivityScorePercentage) ?? 0.0;
+    final scoreValue =
+        double.tryParse(mpValue.inactivityScorePercentage) ?? 0.0;
     final riskColor = _getRiskColor(scoreValue);
 
     return Container(
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: AppThemeUtils.getColorByKey(
+          context,
+          AppThemeKeys.itemBgColor.name,
+        ),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
-        boxShadow: isDark ? null : [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        boxShadow: isDark
+            ? null
+            : [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.04),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                ),
+              ],
       ),
       child: Column(
         children: [
@@ -43,8 +46,7 @@ class MiningRiskCard extends StatelessWidget {
           _buildProgressBars(context, riskColor),
           SizedBox(height: ScreenUtil().setWidth(20)),
           _buildScoreSection(context, isDark, riskColor),
-          if (mpValue.balanceInBeacon < 32)
-            _buildWarningBanner(context),
+          if (mpValue.balanceInBeacon < 32) _buildWarningBanner(context),
         ],
       ),
     );
@@ -93,7 +95,10 @@ class MiningRiskCard extends StatelessWidget {
                     Text(
                       mpValue.inactivityTitle,
                       style: TextStyle(
-                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                        color: AppThemeUtils.getColorByKey(
+                          context,
+                          AppThemeKeys.mainTextColor.name,
+                        ),
                         fontSize: ScreenUtil().setSp(30),
                         fontWeight: FontWeight.w700,
                       ),
@@ -113,7 +118,10 @@ class MiningRiskCard extends StatelessWidget {
                 Text(
                   S.of(context).g_mining_key_75,
                   style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                    color: AppThemeUtils.getColorByKey(
+                      context,
+                      AppThemeKeys.itemSubtitleTextColor.name,
+                    ),
                     fontSize: ScreenUtil().setSp(22),
                     height: 1.4,
                   ),
@@ -135,8 +143,13 @@ class MiningRiskCard extends StatelessWidget {
         children: List.generate(3, (index) {
           return Expanded(
             child: Container(
-              margin: EdgeInsets.only(right: index < 2 ? ScreenUtil().setWidth(8) : 0),
-              child: _buildProgressBar(mpValue.inactivityScore[index], riskColor),
+              margin: EdgeInsets.only(
+                right: index < 2 ? ScreenUtil().setWidth(8) : 0,
+              ),
+              child: _buildProgressBar(
+                mpValue.inactivityScore[index],
+                riskColor,
+              ),
             ),
           );
         }),
@@ -168,7 +181,11 @@ class MiningRiskCard extends StatelessWidget {
     );
   }
 
-  Widget _buildScoreSection(BuildContext context, bool isDark, Color riskColor) {
+  Widget _buildScoreSection(
+    BuildContext context,
+    bool isDark,
+    Color riskColor,
+  ) {
     return Container(
       margin: EdgeInsets.fromLTRB(
         ScreenUtil().setWidth(24),
@@ -202,7 +219,10 @@ class MiningRiskCard extends StatelessWidget {
                   S.of(context).g_mining_key_76,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                    color: AppThemeUtils.getColorByKey(
+                      context,
+                      AppThemeKeys.mainTextColor.name,
+                    ),
                     fontSize: ScreenUtil().setSp(26),
                     fontWeight: FontWeight.w500,
                   ),
@@ -246,7 +266,10 @@ class MiningRiskCard extends StatelessWidget {
         vertical: ScreenUtil().setWidth(26),
       ),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.textColorOrange.name).withValues(alpha: 0.2),
+        color: AppThemeUtils.getColorByKey(
+          context,
+          AppThemeKeys.textColorOrange.name,
+        ).withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
       ),
       child: Row(
@@ -254,14 +277,20 @@ class MiningRiskCard extends StatelessWidget {
           Icon(
             Icons.warning_rounded,
             size: ScreenUtil().setWidth(28),
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.textColorOrange.name),
+            color: AppThemeUtils.getColorByKey(
+              context,
+              AppThemeKeys.textColorOrange.name,
+            ),
           ),
           SizedBox(width: ScreenUtil().setWidth(10)),
           Expanded(
             child: Text(
               S.of(context).g_mining_key_116(32),
               style: TextStyle(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.textColorOrange.name),
+                color: AppThemeUtils.getColorByKey(
+                  context,
+                  AppThemeKeys.textColorOrange.name,
+                ),
                 fontSize: ScreenUtil().setSp(26),
                 fontWeight: FontWeight.w500,
               ),

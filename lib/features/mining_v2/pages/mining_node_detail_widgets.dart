@@ -3,9 +3,7 @@
 part of 'mining_node_detail_page.dart';
 
 /// Extracted widget builders and helpers for [MiningNodeDetailPage].
-mixin _MiningNodeDetailWidgets
-    on ConsumerState<MiningNodeDetailPage> {
-
+mixin _MiningNodeDetailWidgets on ConsumerState<MiningNodeDetailPage> {
   Color _themeColor(BuildContext context, AppThemeKeys key) {
     return AppThemeUtils.getColorByKey(context, key.name);
   }
@@ -68,7 +66,10 @@ mixin _MiningNodeDetailWidgets
                 child: Text(
                   label,
                   style: TextStyle(
-                    color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
+                    color: _themeColor(
+                      context,
+                      AppThemeKeys.itemSubtitleTextColor,
+                    ),
                     fontSize: ScreenUtil().setSp(22),
                   ),
                   maxLines: 1,
@@ -81,7 +82,8 @@ mixin _MiningNodeDetailWidgets
           Text(
             value,
             style: TextStyle(
-              color: valueColor ??
+              color:
+                  valueColor ??
                   _themeColor(context, AppThemeKeys.mainTextColor),
               fontSize: ScreenUtil().setSp(28),
               fontWeight: FontWeight.w700,
@@ -144,8 +146,8 @@ mixin _MiningNodeDetailWidgets
         child: Text(
           value,
           style: TextStyle(
-            color: valueColor ??
-                _themeColor(context, AppThemeKeys.mainTextColor),
+            color:
+                valueColor ?? _themeColor(context, AppThemeKeys.mainTextColor),
             fontSize: ScreenUtil().setSp(24),
             fontWeight: FontWeight.w500,
           ),
@@ -187,22 +189,32 @@ mixin _MiningNodeDetailWidgets
     );
   }
 
-  Widget _buildWsStatus(BuildContext context, WebSocketState state) => switch (state) {
-    WebSocketState.connected => _wsDot(
-        context, const Color(0xff32D74B), S.of(context).g_mining_node_key3),
-    WebSocketState.reconnecting => _wsDot(
-        context, const Color(0xFFFF9500), S.of(context).g_mining_node_key5),
-    WebSocketState.connecting => SizedBox(
-        width: ScreenUtil().setWidth(20),
-        height: ScreenUtil().setWidth(20),
-        child: CircularProgressIndicator(
-          strokeWidth: 2,
-          color: _themeColor(context, AppThemeKeys.mainBlueColor),
+  Widget _buildWsStatus(BuildContext context, WebSocketState state) =>
+      switch (state) {
+        WebSocketState.connected => _wsDot(
+          context,
+          const Color(0xff32D74B),
+          S.of(context).g_mining_node_key3,
         ),
-      ),
-    WebSocketState.disconnected => _wsDot(
-        context, const Color(0xffEB5851), S.of(context).g_mining_node_key4),
-  };
+        WebSocketState.reconnecting => _wsDot(
+          context,
+          const Color(0xFFFF9500),
+          S.of(context).g_mining_node_key5,
+        ),
+        WebSocketState.connecting => SizedBox(
+          width: ScreenUtil().setWidth(20),
+          height: ScreenUtil().setWidth(20),
+          child: CircularProgressIndicator(
+            strokeWidth: 2,
+            color: _themeColor(context, AppThemeKeys.mainBlueColor),
+          ),
+        ),
+        WebSocketState.disconnected => _wsDot(
+          context,
+          const Color(0xffEB5851),
+          S.of(context).g_mining_node_key4,
+        ),
+      };
 
   Widget _wsDot(BuildContext context, Color color, String label) {
     return Row(
@@ -236,31 +248,20 @@ mixin _MiningNodeDetailWidgets
   }
 
   Widget _buildRedemptionSection(
-      BuildContext context, MiningV2Provider mpValue) {
+    BuildContext context,
+    MiningV2Provider mpValue,
+  ) {
     // Redemption button: show when activated and not yet requested
     if (mpValue.showRedemption == true && mpValue.redeem == false) {
       final isLoading = mpValue.exitDepositLoad == Load.loading;
       return SizedBox(
         height: ScreenUtil().setWidth(88),
-        child: buttonStyle6(
-          context,
-          () {
+        child: AppButton(
+          label: S.of(context).g_mining_key_77,
+          loading: isLoading,
+          onPressed: () {
             if (!isLoading) _showUnlockDialog(context, mpValue);
           },
-          S.of(context).g_mining_key_77,
-          _themeColor(
-            context,
-            isLoading
-                ? AppThemeKeys.mainButtonBgColor3
-                : AppThemeKeys.mainButtonBgColor,
-          ),
-          _themeColor(
-            context,
-            isLoading
-                ? AppThemeKeys.mainButtonTextColor3
-                : AppThemeKeys.mainButtonTextColor,
-          ),
-          isLoading,
         ),
       );
     }
@@ -352,16 +353,17 @@ mixin _MiningNodeDetailWidgets
   }
 
   Color _statusColor(NodeStatus status) => switch (status) {
-    NodeStatus.online  => const Color(0xff32D74B),
+    NodeStatus.online => const Color(0xff32D74B),
     NodeStatus.offline || NodeStatus.error => const Color(0xffEB5851),
     NodeStatus.syncing => const Color(0xFFFF9500),
   };
 
-  String _statusLabel(BuildContext context, NodeStatus status) => switch (status) {
-    NodeStatus.online  => S.of(context).g_key_193,
-    NodeStatus.offline || NodeStatus.error => S.of(context).g_mining_key_47,
-    NodeStatus.syncing => S.of(context).g_mining_key_102,
-  };
+  String _statusLabel(BuildContext context, NodeStatus status) =>
+      switch (status) {
+        NodeStatus.online => S.of(context).g_key_193,
+        NodeStatus.offline || NodeStatus.error => S.of(context).g_mining_key_47,
+        NodeStatus.syncing => S.of(context).g_mining_key_102,
+      };
 
   Color _uptimeColor(double pct) {
     if (pct >= 90) return const Color(0xff32D74B);

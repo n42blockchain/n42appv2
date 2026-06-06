@@ -15,7 +15,7 @@ import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/mining_v2/provider/mining_v2_provider.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/detail_refresh_widget.dart';
 
 part 'mining_node_detail_widgets.dart';
@@ -37,9 +37,7 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      appBar: AppBarWidget(
-        text: S.of(context).g_mining_node_key1,
-      ),
+      appBar: AppBarWidget(text: S.of(context).g_mining_node_key1),
       body: SafeArea(
         child: DetailRefreshWidget(
           callback: () async {
@@ -98,7 +96,9 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
                 ),
                 decoration: BoxDecoration(
                   color: badgeColor.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+                  borderRadius: BorderRadius.circular(
+                    ScreenUtil().setWidth(20),
+                  ),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -128,7 +128,9 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
                 node.name,
                 style: TextStyle(
                   color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemSubtitleTextColor.name),
+                    context,
+                    AppThemeKeys.itemSubtitleTextColor.name,
+                  ),
                   fontSize: ScreenUtil().setSp(22),
                 ),
               ),
@@ -143,7 +145,9 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
                   '${S.of(context).g_mining_node_key2}: ',
                   style: TextStyle(
                     color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.itemSubtitleTextColor.name),
+                      context,
+                      AppThemeKeys.itemSubtitleTextColor.name,
+                    ),
                     fontSize: ScreenUtil().setSp(24),
                   ),
                   overflow: TextOverflow.ellipsis,
@@ -155,7 +159,9 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
                   shortKey,
                   style: TextStyle(
                     color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainTextColor.name),
+                      context,
+                      AppThemeKeys.mainTextColor.name,
+                    ),
                     fontSize: ScreenUtil().setSp(24),
                     fontWeight: FontWeight.w500,
                   ),
@@ -174,7 +180,9 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
                     Icons.copy_outlined,
                     size: ScreenUtil().setWidth(32),
                     color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainBlueColor.name),
+                      context,
+                      AppThemeKeys.mainBlueColor.name,
+                    ),
                   ),
                 ),
               ),
@@ -187,7 +195,9 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
 
   Widget _buildEmpty(BuildContext context) {
     final subColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
+      context,
+      AppThemeKeys.itemSubtitleTextColor.name,
+    );
     return SizedBox(
       height: ScreenUtil().setWidth(400),
       child: Center(

@@ -2,8 +2,8 @@ part of 'mining_today_v2.dart';
 
 /// Widget builder mixin for MiningTodayV2.
 /// Provides extracted widget builder methods used in the build tree.
-mixin _MiningTodayV2WidgetsMixin on ConsumerState<MiningTodayV2>, _MiningTodayV2LogicMixin {
-
+mixin _MiningTodayV2WidgetsMixin
+    on ConsumerState<MiningTodayV2>, _MiningTodayV2LogicMixin {
   /// 顶部导航栏
   Widget buildTopBar(BuildContext context) {
     return AppHomeTopBar(
@@ -11,9 +11,12 @@ mixin _MiningTodayV2WidgetsMixin on ConsumerState<MiningTodayV2>, _MiningTodayV2
       titleChild: Builder(
         builder: (context) {
           final walletName = ref.watch(
-              miningBridgeProvider.select((p) => p.walletName));
+            miningBridgeProvider.select((p) => p.walletName),
+          );
           final blueColor = AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainBlueColor.name);
+            context,
+            AppThemeKeys.mainBlueColor.name,
+          );
           return InkWell(
             onTap: showChangeAddress,
             child: Container(
@@ -64,21 +67,22 @@ mixin _MiningTodayV2WidgetsMixin on ConsumerState<MiningTodayV2>, _MiningTodayV2
       },
       onLeftImageUri: "assets/wallet/menu.png",
       actions: [
-        SizedBox(
-          width: ScreenUtil().setWidth(10),
-        ),
+        SizedBox(width: ScreenUtil().setWidth(10)),
         InkWell(
           onTap: () {
-            Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const MiningSetting()));
+            Navigator.of(
+              context,
+            ).push(MaterialPageRoute(builder: (_) => const MiningSetting()));
           },
           child: Image.asset(
             "assets/mining/set.png",
             width: ScreenUtil().setWidth(40),
             color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainBlueColor.name),
+              context,
+              AppThemeKeys.mainBlueColor.name,
+            ),
           ),
-        )
+        ),
       ],
     );
   }
@@ -91,16 +95,20 @@ mixin _MiningTodayV2WidgetsMixin on ConsumerState<MiningTodayV2>, _MiningTodayV2
       margin: EdgeInsets.only(top: ScreenUtil().setWidth(30)),
       decoration: BoxDecoration(
         color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.errorBgColor.name),
-        borderRadius:
-            BorderRadius.circular(ScreenUtil().setWidth(8)),
+          context,
+          AppThemeKeys.errorBgColor.name,
+        ),
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
       ),
       child: Text(
         S.of(context).g_mining_key_74,
         style: TextStyle(
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.errorTextColor.name),
-            fontSize: ScreenUtil().setSp(26)),
+          color: AppThemeUtils.getColorByKey(
+            context,
+            AppThemeKeys.errorTextColor.name,
+          ),
+          fontSize: ScreenUtil().setSp(26),
+        ),
         textAlign: TextAlign.center,
       ),
     );
@@ -110,8 +118,9 @@ mixin _MiningTodayV2WidgetsMixin on ConsumerState<MiningTodayV2>, _MiningTodayV2
   Widget buildMiningBanner(BuildContext context, MiningV2Provider mpValue) {
     final isActive = mpValue.miningStatus == true;
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final statusColor =
-        isActive ? const Color(0xFF32D74B) : const Color(0xFFFF9500);
+    final statusColor = isActive
+        ? const Color(0xFF32D74B)
+        : const Color(0xFFFF9500);
 
     return Container(
       margin: EdgeInsets.symmetric(
@@ -130,12 +139,10 @@ mixin _MiningTodayV2WidgetsMixin on ConsumerState<MiningTodayV2>, _MiningTodayV2
               ? [const Color(0xFF0F1D38), const Color(0xFF1A0B3B)]
               : [const Color(0xFF1565C0), const Color(0xFF5E35B1)],
         ),
-        borderRadius:
-            BorderRadius.circular(ScreenUtil().setWidth(24)),
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24)),
         boxShadow: [
           BoxShadow(
-            color:
-                const Color(0xFF1565C0).withAlpha(isDark ? 50 : 70),
+            color: const Color(0xFF1565C0).withAlpha(isDark ? 50 : 70),
             blurRadius: 20,
             offset: const Offset(0, 6),
           ),
@@ -148,8 +155,7 @@ mixin _MiningTodayV2WidgetsMixin on ConsumerState<MiningTodayV2>, _MiningTodayV2
             height: ScreenUtil().setWidth(72),
             decoration: BoxDecoration(
               color: Colors.white.withAlpha(18),
-              borderRadius:
-                  BorderRadius.circular(ScreenUtil().setWidth(20)),
+              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
             ),
             child: Icon(
               Icons.developer_board_rounded,
@@ -176,8 +182,7 @@ mixin _MiningTodayV2WidgetsMixin on ConsumerState<MiningTodayV2>, _MiningTodayV2
                     Container(
                       width: ScreenUtil().setWidth(10),
                       height: ScreenUtil().setWidth(10),
-                      margin: EdgeInsets.only(
-                          right: ScreenUtil().setWidth(8)),
+                      margin: EdgeInsets.only(right: ScreenUtil().setWidth(8)),
                       decoration: BoxDecoration(
                         color: statusColor,
                         shape: BoxShape.circle,
@@ -265,12 +270,16 @@ mixin _MiningTodayV2WidgetsMixin on ConsumerState<MiningTodayV2>, _MiningTodayV2
         style: TextStyle(
           fontSize: ScreenUtil().setSp(18),
           color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemSubtitleTextColor.name),
+            context,
+            AppThemeKeys.itemSubtitleTextColor.name,
+          ),
         ),
         specialStyle: TextStyle(
           fontSize: ScreenUtil().setSp(20),
           color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemTextColor.name),
+            context,
+            AppThemeKeys.itemTextColor.name,
+          ),
           fontWeight: FontWeight.w600,
         ),
         space: ScreenUtil().setWidth(30),
@@ -327,7 +336,10 @@ mixin _MiningTodayV2WidgetsMixin on ConsumerState<MiningTodayV2>, _MiningTodayV2
   }
 
   /// 赎回按钮和提示区域
-  Widget buildRedemptionSection(BuildContext context, MiningV2Provider mpValue) {
+  Widget buildRedemptionSection(
+    BuildContext context,
+    MiningV2Provider mpValue,
+  ) {
     final isLoading = mpValue.exitDepositLoad == Load.loading;
     return Column(
       children: [
@@ -335,30 +347,16 @@ mixin _MiningTodayV2WidgetsMixin on ConsumerState<MiningTodayV2>, _MiningTodayV2
           Container(
             height: ScreenUtil().setWidth(88),
             width: double.infinity,
-            margin: EdgeInsets.symmetric(
-              vertical: ScreenUtil().setWidth(20),
-            ),
-            child: buttonStyle6(
-              context,
-              () {
+            margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
+            child: AppButton(
+              label: S.of(context).g_mining_key_77,
+              loading: isLoading,
+              onPressed: () {
                 if (!isLoading) unLockAstMining();
               },
-              S.of(context).g_mining_key_77,
-              AppThemeUtils.getColorByKey(
-                  context,
-                  isLoading
-                      ? AppThemeKeys.mainButtonBgColor3.name
-                      : AppThemeKeys.mainButtonBgColor.name),
-              AppThemeUtils.getColorByKey(
-                  context,
-                  isLoading
-                      ? AppThemeKeys.mainButtonTextColor3.name
-                      : AppThemeKeys.mainButtonTextColor.name),
-              isLoading,
             ),
           ),
-        if (mpValue.depositsEnable == true &&
-            mpValue.showRedemption == false)
+        if (mpValue.depositsEnable == true && mpValue.showRedemption == false)
           _buildOrangeTip(S.of(context).g_mining_key_88),
         if (mpValue.depositsEnable == true &&
             mpValue.redeem == true &&
@@ -377,7 +375,9 @@ mixin _MiningTodayV2WidgetsMixin on ConsumerState<MiningTodayV2>, _MiningTodayV2
         style: TextStyle(
           fontSize: ScreenUtil().setSp(24),
           color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.textColorOrange.name),
+            context,
+            AppThemeKeys.textColorOrange.name,
+          ),
         ),
       ),
     );

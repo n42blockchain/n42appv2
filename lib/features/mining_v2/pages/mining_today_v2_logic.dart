@@ -33,8 +33,11 @@ mixin _MiningTodayV2LogicMixin on ConsumerState<MiningTodayV2> {
             child: Text(
               S.current.g_mining_key20,
               style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name)),
+                color: AppThemeUtils.getColorByKey(
+                  context,
+                  AppThemeKeys.mainTextColor.name,
+                ),
+              ),
             ),
           ),
           actions: <Widget>[
@@ -84,7 +87,9 @@ mixin _MiningTodayV2LogicMixin on ConsumerState<MiningTodayV2> {
               S.of(context).g_key_16,
               style: TextStyle(
                 color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
+                  context,
+                  AppThemeKeys.mainTextColor.name,
+                ),
                 fontSize: ScreenUtil().setSp(36.0),
                 fontWeight: FontWeight.bold,
               ),
@@ -95,7 +100,9 @@ mixin _MiningTodayV2LogicMixin on ConsumerState<MiningTodayV2> {
             indent: 0,
             endIndent: 0,
             color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.dividerColor.name),
+              context,
+              AppThemeKeys.dividerColor.name,
+            ),
           ),
           Container(
             constraints: BoxConstraints(

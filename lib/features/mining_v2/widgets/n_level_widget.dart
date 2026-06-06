@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
@@ -12,22 +12,27 @@ class NLevelWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return Container(
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: AppThemeUtils.getColorByKey(
+          context,
+          AppThemeKeys.itemBgColor.name,
+        ),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
-        boxShadow: isDark ? null : [
-          BoxShadow(
-            color: Colors.black.withValues(alpha:0.04),
-            blurRadius: 16,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        boxShadow: isDark
+            ? null
+            : [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.04),
+                  blurRadius: 16,
+                  offset: const Offset(0, 4),
+                ),
+              ],
         border: Border.all(
-          color: isDark 
-              ? Colors.white.withValues(alpha:0.06) 
-              : Colors.black.withValues(alpha:0.04),
+          color: isDark
+              ? Colors.white.withValues(alpha: 0.06)
+              : Colors.black.withValues(alpha: 0.04),
           width: 1,
         ),
       ),
@@ -39,8 +44,14 @@ class NLevelWidget extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                  AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha:0.6),
+                  AppThemeUtils.getColorByKey(
+                    context,
+                    AppThemeKeys.mainBlueColor.name,
+                  ),
+                  AppThemeUtils.getColorByKey(
+                    context,
+                    AppThemeKeys.mainBlueColor.name,
+                  ).withValues(alpha: 0.6),
                 ],
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
@@ -63,7 +74,7 @@ class NLevelWidget extends StatelessWidget {
   Widget _buildBoard(BuildContext context) {
     const String bigImage = "assets/mining/ast_50.png";
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -73,8 +84,8 @@ class NLevelWidget extends StatelessWidget {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                const Color(0xFF4FACFE).withValues(alpha:0.12),
-                const Color(0xFF00F2FE).withValues(alpha:0.08),
+                const Color(0xFF4FACFE).withValues(alpha: 0.12),
+                const Color(0xFF00F2FE).withValues(alpha: 0.08),
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -82,10 +93,7 @@ class NLevelWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
           ),
           padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
-          child: Image.asset(
-            bigImage,
-            fit: BoxFit.contain,
-          ),
+          child: Image.asset(bigImage, fit: BoxFit.contain),
         ),
         SizedBox(width: ScreenUtil().setWidth(24)),
         Expanded(
@@ -100,7 +108,10 @@ class NLevelWidget extends StatelessWidget {
                   Text(
                     "$nNum",
                     style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                      color: AppThemeUtils.getColorByKey(
+                        context,
+                        AppThemeKeys.mainTextColor.name,
+                      ),
                       fontSize: ScreenUtil().setSp(72),
                       fontWeight: FontWeight.w700,
                       height: 1.0,
@@ -112,7 +123,10 @@ class NLevelWidget extends StatelessWidget {
                     child: Text(
                       CoinType.N.name,
                       style: TextStyle(
-                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                        color: AppThemeUtils.getColorByKey(
+                          context,
+                          AppThemeKeys.mainTextColor.name,
+                        ),
                         fontWeight: FontWeight.w600,
                         fontSize: ScreenUtil().setSp(24),
                       ),
@@ -127,10 +141,15 @@ class NLevelWidget extends StatelessWidget {
                   vertical: ScreenUtil().setWidth(10),
                 ),
                 decoration: BoxDecoration(
-                  color: isDark 
-                      ? Colors.white.withValues(alpha:0.06)
-                      : AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha:0.06),
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
+                  color: isDark
+                      ? Colors.white.withValues(alpha: 0.06)
+                      : AppThemeUtils.getColorByKey(
+                          context,
+                          AppThemeKeys.mainBlueColor.name,
+                        ).withValues(alpha: 0.06),
+                  borderRadius: BorderRadius.circular(
+                    ScreenUtil().setWidth(10),
+                  ),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -139,8 +158,13 @@ class NLevelWidget extends StatelessWidget {
                       width: ScreenUtil().setWidth(26),
                       height: ScreenUtil().setWidth(26),
                       decoration: BoxDecoration(
-                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
+                        color: AppThemeUtils.getColorByKey(
+                          context,
+                          AppThemeKeys.mainBlueColor.name,
+                        ),
+                        borderRadius: BorderRadius.circular(
+                          ScreenUtil().setWidth(6),
+                        ),
                       ),
                       child: Center(
                         child: Image.asset(
@@ -158,14 +182,20 @@ class NLevelWidget extends StatelessWidget {
                           Text(
                             S.of(context).g_mining_unlock_period,
                             style: TextStyle(
-                              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                              color: AppThemeUtils.getColorByKey(
+                                context,
+                                AppThemeKeys.itemSubtitleTextColor.name,
+                              ),
                               fontSize: ScreenUtil().setSp(18),
                             ),
                           ),
                           Text(
                             S.of(context).g_mining_unlockable_anytime,
                             style: TextStyle(
-                              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                              color: AppThemeUtils.getColorByKey(
+                                context,
+                                AppThemeKeys.mainTextColor.name,
+                              ),
                               fontSize: ScreenUtil().setSp(20),
                               fontWeight: FontWeight.w500,
                             ),

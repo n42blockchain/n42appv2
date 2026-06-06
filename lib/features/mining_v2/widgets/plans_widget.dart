@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/mining_v2/pages/mining_plans_v2.dart';
@@ -15,11 +15,14 @@ class PlansWidget extends StatelessWidget {
     String title1 = S.of(context).g_mining_key_6;
     String buttonTitle = S.of(context).g_mining_key_7;
     return GestureDetector(
-      onTap: onTap ?? () {
-        Navigator.push(context,MaterialPageRoute(
-          builder: (_) => const MiningPlansV2(),
-        ));
-      },
+      onTap:
+          onTap ??
+          () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const MiningPlansV2()),
+            );
+          },
       child: Container(
         height: ScreenUtil().setWidth(290),
         decoration: BoxDecoration(
@@ -57,7 +60,9 @@ class PlansWidget extends StatelessWidget {
                       title1,
                       style: TextStyle(
                         color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.mainWhiteColor.name),
+                          context,
+                          AppThemeKeys.mainWhiteColor.name,
+                        ),
                         fontSize: ScreenUtil().setSp(30),
                         fontWeight: FontWeight.bold,
                       ),
@@ -70,22 +75,27 @@ class PlansWidget extends StatelessWidget {
                     //margin: EdgeInsets.only(top: scr.setWidth(16)),
                     height: ScreenUtil().setWidth(56),
                     child: buttonStyle3(
-                      context, null,
+                      context,
+                      null,
                       buttonTitle,
                       AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainWhiteColor.name),
+                        context,
+                        AppThemeKeys.mainWhiteColor.name,
+                      ),
                       AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainButtonTextColor3.name),
+                        context,
+                        AppThemeKeys.mainButtonTextColor3.name,
+                      ),
                       fontSize: ScreenUtil().setSp(22),
                       borderRadius: ScreenUtil().setWidth(56),
                       height: ScreenUtil().setWidth(56),
-                      paddingV:ScreenUtil().setWidth(12.0),
+                      paddingV: ScreenUtil().setWidth(12.0),
                       paddingH: ScreenUtil().setWidth(32.0),
                     ),
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),

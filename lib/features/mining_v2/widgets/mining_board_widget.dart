@@ -1,4 +1,3 @@
-﻿
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:flutter/material.dart';
@@ -22,15 +21,20 @@ class MiningBoardWidget extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: AppThemeUtils.getColorByKey(
+          context,
+          AppThemeKeys.itemBgColor.name,
+        ),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
-        boxShadow: isDark ? null : [
-          BoxShadow(
-            color: Colors.black.withValues(alpha:0.05),
-            blurRadius: 20,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        boxShadow: isDark
+            ? null
+            : [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 20,
+                  offset: const Offset(0, 4),
+                ),
+              ],
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -44,8 +48,14 @@ class MiningBoardWidget extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                  AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha:0.8),
+                  AppThemeUtils.getColorByKey(
+                    context,
+                    AppThemeKeys.mainBlueColor.name,
+                  ),
+                  AppThemeUtils.getColorByKey(
+                    context,
+                    AppThemeKeys.mainBlueColor.name,
+                  ).withValues(alpha: 0.8),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -91,8 +101,8 @@ class MiningBoardWidget extends StatelessWidget {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                const Color(0xFF4FACFE).withValues(alpha:0.15),
-                const Color(0xFF00F2FE).withValues(alpha:0.1),
+                const Color(0xFF4FACFE).withValues(alpha: 0.15),
+                const Color(0xFF00F2FE).withValues(alpha: 0.1),
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -100,10 +110,7 @@ class MiningBoardWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
           ),
           padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
-          child: Image.asset(
-            "assets/mining/ast_50.png",
-            fit: BoxFit.contain,
-          ),
+          child: Image.asset("assets/mining/ast_50.png", fit: BoxFit.contain),
         ),
         SizedBox(width: ScreenUtil().setWidth(30)),
         Expanded(
@@ -118,7 +125,10 @@ class MiningBoardWidget extends StatelessWidget {
                   Text(
                     "$nNum",
                     style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                      color: AppThemeUtils.getColorByKey(
+                        context,
+                        AppThemeKeys.mainTextColor.name,
+                      ),
                       fontSize: ScreenUtil().setSp(80),
                       fontWeight: FontWeight.w700,
                       height: 1.0,
@@ -128,7 +138,10 @@ class MiningBoardWidget extends StatelessWidget {
                   Text(
                     CoinType.N.name,
                     style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                      color: AppThemeUtils.getColorByKey(
+                        context,
+                        AppThemeKeys.mainTextColor.name,
+                      ),
                       fontWeight: FontWeight.w600,
                       fontSize: ScreenUtil().setSp(28),
                     ),
@@ -142,10 +155,15 @@ class MiningBoardWidget extends StatelessWidget {
                   vertical: ScreenUtil().setWidth(10),
                 ),
                 decoration: BoxDecoration(
-                  color: isDark 
-                      ? Colors.white.withValues(alpha:0.08)
-                      : AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha:0.08),
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+                  color: isDark
+                      ? Colors.white.withValues(alpha: 0.08)
+                      : AppThemeUtils.getColorByKey(
+                          context,
+                          AppThemeKeys.mainBlueColor.name,
+                        ).withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(
+                    ScreenUtil().setWidth(12),
+                  ),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -154,8 +172,13 @@ class MiningBoardWidget extends StatelessWidget {
                       width: ScreenUtil().setWidth(28),
                       height: ScreenUtil().setWidth(28),
                       decoration: BoxDecoration(
-                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
+                        color: AppThemeUtils.getColorByKey(
+                          context,
+                          AppThemeKeys.mainBlueColor.name,
+                        ),
+                        borderRadius: BorderRadius.circular(
+                          ScreenUtil().setWidth(6),
+                        ),
                       ),
                       child: Center(
                         child: Image.asset(
@@ -173,14 +196,20 @@ class MiningBoardWidget extends StatelessWidget {
                           Text(
                             S.of(context).g_mining_unlock_period,
                             style: TextStyle(
-                              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                              color: AppThemeUtils.getColorByKey(
+                                context,
+                                AppThemeKeys.itemSubtitleTextColor.name,
+                              ),
                               fontSize: ScreenUtil().setSp(20),
                             ),
                           ),
                           Text(
                             S.of(context).g_mining_unlockable_anytime,
                             style: TextStyle(
-                              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                              color: AppThemeUtils.getColorByKey(
+                                context,
+                                AppThemeKeys.mainTextColor.name,
+                              ),
                               fontSize: ScreenUtil().setSp(22),
                               fontWeight: FontWeight.w500,
                             ),
@@ -200,18 +229,19 @@ class MiningBoardWidget extends StatelessWidget {
 
   Widget _buildItems(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final rewardPerVerification = "${toEther('$cReward', 9)} ${CoinType.N.name}";
+    final rewardPerVerification =
+        "${toEther('$cReward', 9)} ${CoinType.N.name}";
 
     return Container(
       decoration: BoxDecoration(
-        color: (isDark ? Colors.white : Colors.grey).withValues(alpha:0.03),
+        color: (isDark ? Colors.white : Colors.grey).withValues(alpha: 0.03),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           _buildItem(
-            context, 
+            context,
             "assets/mining/medal-star.png",
             S.current.g_mining_key_33,
             rewardPerVerification,
@@ -240,7 +270,10 @@ class MiningBoardWidget extends StatelessWidget {
 
   Widget _buildDivider(BuildContext context) {
     return Divider(
-      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemLineColor.name).withValues(alpha:0.5),
+      color: AppThemeUtils.getColorByKey(
+        context,
+        AppThemeKeys.itemLineColor.name,
+      ).withValues(alpha: 0.5),
       height: 1,
       indent: ScreenUtil().setWidth(70),
       endIndent: ScreenUtil().setWidth(16),
@@ -248,7 +281,12 @@ class MiningBoardWidget extends StatelessWidget {
   }
 
   Widget _buildItem(
-      BuildContext context, String iconPath, String action, String desc, Color iconBgColor) {
+    BuildContext context,
+    String iconPath,
+    String action,
+    String desc,
+    Color iconBgColor,
+  ) {
     return Padding(
       padding: EdgeInsets.symmetric(
         vertical: ScreenUtil().setWidth(24),
@@ -260,7 +298,7 @@ class MiningBoardWidget extends StatelessWidget {
             width: ScreenUtil().setWidth(48),
             height: ScreenUtil().setWidth(48),
             decoration: BoxDecoration(
-              color: iconBgColor.withValues(alpha:0.15),
+              color: iconBgColor.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
             ),
             child: Center(
@@ -279,7 +317,10 @@ class MiningBoardWidget extends StatelessWidget {
             child: Text(
               action,
               style: TextStyle(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                color: AppThemeUtils.getColorByKey(
+                  context,
+                  AppThemeKeys.itemSubtitleTextColor.name,
+                ),
                 fontSize: ScreenUtil().setSp(24),
               ),
             ),
@@ -293,7 +334,10 @@ class MiningBoardWidget extends StatelessWidget {
                   child: Text(
                     desc,
                     style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                      color: AppThemeUtils.getColorByKey(
+                        context,
+                        AppThemeKeys.mainTextColor.name,
+                      ),
                       fontSize: ScreenUtil().setSp(24),
                       fontWeight: FontWeight.w500,
                     ),
@@ -306,7 +350,7 @@ class MiningBoardWidget extends StatelessWidget {
                   width: ScreenUtil().setWidth(24),
                   height: ScreenUtil().setWidth(24),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF4CAF50).withValues(alpha:0.15),
+                    color: const Color(0xFF4CAF50).withValues(alpha: 0.15),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(

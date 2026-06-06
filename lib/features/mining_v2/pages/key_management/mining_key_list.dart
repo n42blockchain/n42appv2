@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/mining_v2/pages/key_management/mining_output_tip.dart';
@@ -19,10 +19,9 @@ class MiningKeyList extends ConsumerStatefulWidget {
 }
 
 class _MiningKeyListState extends ConsumerState<MiningKeyList> {
-
-  Map<String,dynamic>? miningData;
-  List<dynamic> miningList=[];
-  List<String> miningKeyList=[];
+  Map<String, dynamic>? miningData;
+  List<dynamic> miningList = [];
+  List<String> miningKeyList = [];
   @override
   void initState() {
     super.initState();
@@ -30,14 +29,15 @@ class _MiningKeyListState extends ConsumerState<MiningKeyList> {
   }
 
   Future<void> getMiningData() async {
-    miningData=await SPUtil().getMiningData();
-    if(miningData !=null){
-      miningList=miningData!.values.toList();
-      miningKeyList=miningData!.keys.toList();
+    miningData = await SPUtil().getMiningData();
+    if (miningData != null) {
+      miningList = miningData!.values.toList();
+      miningKeyList = miningData!.keys.toList();
     }
     if (!mounted) return;
     setState(() {});
   }
+
   Future<void> removeKey(int index) async {
     miningData!.remove(miningKeyList[index]);
     await SPUtil().setMiningData(miningData!);
@@ -45,24 +45,22 @@ class _MiningKeyListState extends ConsumerState<MiningKeyList> {
     if (!mounted) return;
     ref.read(miningBridgeProvider).getMiningData();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(
-        text:S.of(context).g_mining_key_81,
-      ),
+      appBar: AppBarWidget(text: S.of(context).g_mining_key_81),
       body: ListView.builder(
-        padding: EdgeInsets.all(
-            ScreenUtil().setWidth(30)
-        ),
-        itemBuilder: (BuildContext context,index){
-          Map<String,dynamic> keyValue=miningList[index] as Map<String,dynamic>;
-          bool isMining=keyValue['isMining']??false;
+        padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+        itemBuilder: (BuildContext context, index) {
+          Map<String, dynamic> keyValue =
+              miningList[index] as Map<String, dynamic>;
+          bool isMining = keyValue['isMining'] ?? false;
           return containerStyle1(
             context,
             padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
             margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
-            child:Column(
+            child: Column(
               children: [
                 Row(
                   children: [
@@ -70,18 +68,27 @@ class _MiningKeyListState extends ConsumerState<MiningKeyList> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(miningKeyList[index],
+                          Text(
+                            miningKeyList[index],
                             style: TextStyle(
-                              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemTextColor.name),
+                              color: AppThemeUtils.getColorByKey(
+                                context,
+                                AppThemeKeys.itemTextColor.name,
+                              ),
                               fontSize: ScreenUtil().setSp(32),
                             ),
                           ),
                           Text(
-                            isMining?
-                            S.of(context).g_key_193:
-                            S.of(context).g_mining_key_102,
+                            isMining
+                                ? S.of(context).g_key_193
+                                : S.of(context).g_mining_key_102,
                             style: TextStyle(
-                              color: AppThemeUtils.getColorByKey(context, isMining?AppThemeKeys.rightTextColor.name:AppThemeKeys.errorTextColor.name),
+                              color: AppThemeUtils.getColorByKey(
+                                context,
+                                isMining
+                                    ? AppThemeKeys.rightTextColor.name
+                                    : AppThemeKeys.errorTextColor.name,
+                              ),
                               fontSize: ScreenUtil().setSp(30),
                             ),
                           ),
@@ -89,21 +96,33 @@ class _MiningKeyListState extends ConsumerState<MiningKeyList> {
                       ),
                     ),
                     const SizedBox(width: 10),
-                    if(!isMining)
+                    if (!isMining)
                       InkWell(
                         onTap: () => removeKey(index),
                         child: Icon(
                           Icons.delete_forever_outlined,
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
+                          color: AppThemeUtils.getColorByKey(
+                            context,
+                            AppThemeKeys.errorTextColor.name,
+                          ),
                           size: ScreenUtil().setWidth(40),
                         ),
                       ),
-                    if(isMining)
+                    if (isMining)
                       InkWell(
-                        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => MiningOutputTip(value: keyValue['keypart']))),
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) =>
+                                MiningOutputTip(value: keyValue['keypart']),
+                          ),
+                        ),
                         child: Icon(
                           Icons.output_outlined,
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                          color: AppThemeUtils.getColorByKey(
+                            context,
+                            AppThemeKeys.mainBlueColor.name,
+                          ),
                           size: ScreenUtil().setWidth(40),
                         ),
                       ),
@@ -111,28 +130,41 @@ class _MiningKeyListState extends ConsumerState<MiningKeyList> {
                 ),
                 Divider(
                   height: ScreenUtil().setWidth(20),
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name),
+                  color: AppThemeUtils.getColorByKey(
+                    context,
+                    AppThemeKeys.dividerColor.name,
+                  ),
                   indent: 0,
                   endIndent: 0,
                 ),
                 Row(
                   children: [
                     Expanded(
-                      child: Text('PublicKey:${keyValue['keypart']['publicKey']}',
-                      style: TextStyle(
-                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemTextColor.name),
-                        fontSize: ScreenUtil().setSp(32),
+                      child: Text(
+                        'PublicKey:${keyValue['keypart']['publicKey']}',
+                        style: TextStyle(
+                          color: AppThemeUtils.getColorByKey(
+                            context,
+                            AppThemeKeys.itemTextColor.name,
+                          ),
+                          fontSize: ScreenUtil().setSp(32),
+                        ),
                       ),
-                    ),),
+                    ),
                     const SizedBox(width: 10),
                     InkWell(
                       onTap: () {
-                        Clipboard.setData(ClipboardData(text: keyValue['keypart']['publicKey']));
+                        Clipboard.setData(
+                          ClipboardData(text: keyValue['keypart']['publicKey']),
+                        );
                         ToastUtils.show(S.of(context).copy);
                       },
                       child: Icon(
                         Icons.copy,
-                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                        color: AppThemeUtils.getColorByKey(
+                          context,
+                          AppThemeKeys.mainBlueColor.name,
+                        ),
                         size: ScreenUtil().setWidth(40),
                       ),
                     ),

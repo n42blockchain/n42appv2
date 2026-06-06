@@ -14,10 +14,7 @@ import 'package:n42_wallet/features/mining_v2/provider/mining_v2_provider.dart';
 class BackgroundMiningWidget extends StatelessWidget {
   final MiningV2Provider mpValue;
 
-  const BackgroundMiningWidget({
-    super.key,
-    required this.mpValue,
-  });
+  const BackgroundMiningWidget({super.key, required this.mpValue});
 
   @override
   Widget build(BuildContext context) {
@@ -35,19 +32,35 @@ class BackgroundMiningWidget extends StatelessWidget {
         gradient: isEnabled
             ? LinearGradient(
                 colors: [
-                  AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha: 0.08),
-                  AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha: 0.02),
+                  AppThemeUtils.getColorByKey(
+                    context,
+                    AppThemeKeys.mainBlueColor.name,
+                  ).withValues(alpha: 0.08),
+                  AppThemeUtils.getColorByKey(
+                    context,
+                    AppThemeKeys.mainBlueColor.name,
+                  ).withValues(alpha: 0.02),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               )
             : null,
-        color: isEnabled ? null : AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: isEnabled
+            ? null
+            : AppThemeUtils.getColorByKey(
+                context,
+                AppThemeKeys.itemBgColor.name,
+              ),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
         border: Border.all(
           color: isEnabled
-              ? AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha: 0.2)
-              : (isDark ? Colors.white.withValues(alpha: 0.06) : Colors.black.withValues(alpha: 0.04)),
+              ? AppThemeUtils.getColorByKey(
+                  context,
+                  AppThemeKeys.mainBlueColor.name,
+                ).withValues(alpha: 0.2)
+              : (isDark
+                    ? Colors.white.withValues(alpha: 0.06)
+                    : Colors.black.withValues(alpha: 0.04)),
           width: 1,
         ),
       ),
@@ -67,7 +80,10 @@ class BackgroundMiningWidget extends StatelessWidget {
       width: ScreenUtil().setWidth(72),
       height: ScreenUtil().setWidth(72),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha: 0.12),
+        color: AppThemeUtils.getColorByKey(
+          context,
+          AppThemeKeys.mainBlueColor.name,
+        ).withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(18)),
       ),
       child: Center(
@@ -89,7 +105,10 @@ class BackgroundMiningWidget extends StatelessWidget {
             S.of(context).g_mining_key_9,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(28),
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+              color: AppThemeUtils.getColorByKey(
+                context,
+                AppThemeKeys.mainTextColor.name,
+              ),
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -101,8 +120,14 @@ class BackgroundMiningWidget extends StatelessWidget {
             style: TextStyle(
               fontSize: ScreenUtil().setSp(22),
               color: isEnabled
-                  ? AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
-                  : AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                  ? AppThemeUtils.getColorByKey(
+                      context,
+                      AppThemeKeys.mainBlueColor.name,
+                    )
+                  : AppThemeUtils.getColorByKey(
+                      context,
+                      AppThemeKeys.itemSubtitleTextColor.name,
+                    ),
             ),
           ),
         ],
@@ -132,8 +157,14 @@ class BackgroundMiningWidget extends StatelessWidget {
             gradient: isEnabled
                 ? LinearGradient(
                     colors: [
-                      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha: 0.85),
+                      AppThemeUtils.getColorByKey(
+                        context,
+                        AppThemeKeys.mainBlueColor.name,
+                      ),
+                      AppThemeUtils.getColorByKey(
+                        context,
+                        AppThemeKeys.mainBlueColor.name,
+                      ).withValues(alpha: 0.85),
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
@@ -141,13 +172,18 @@ class BackgroundMiningWidget extends StatelessWidget {
                 : null,
             color: isEnabled ? null : disabledBgColor,
             borderRadius: BorderRadius.circular(ScreenUtil().setWidth(30)),
-            boxShadow: isEnabled ? [
-              BoxShadow(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha: 0.3),
-                blurRadius: 8,
-                offset: const Offset(0, 4),
-              ),
-            ] : null,
+            boxShadow: isEnabled
+                ? [
+                    BoxShadow(
+                      color: AppThemeUtils.getColorByKey(
+                        context,
+                        AppThemeKeys.mainBlueColor.name,
+                      ).withValues(alpha: 0.3),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    ),
+                  ]
+                : null,
           ),
           child: Text(
             S.of(context).g_key_wallet_c4,

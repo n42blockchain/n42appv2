@@ -33,7 +33,10 @@ class MiningDataBroad extends StatelessWidget {
     return Expanded(
       child: Container(
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+          color: AppThemeUtils.getColorByKey(
+            context,
+            AppThemeKeys.itemBgColor.name,
+          ),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
           border: Border.all(
             color: accentColor.withValues(alpha: isDark ? 0.12 : 0.08),
@@ -63,13 +66,29 @@ class MiningDataBroad extends StatelessWidget {
 
   (Color, IconData) _getAccentColorAndIcon(BuildContext context) {
     if (titleText.contains('Today') || titleText.toLowerCase().contains('今日')) {
-      return (const Color(0xFF4CAF50), Icons.today_outlined); // Green - today rewards
-    } else if (titleText.contains('Yesterday') || titleText.contains('Last') || titleText.toLowerCase().contains('昨日')) {
-      return (const Color(0xFFFF9800), Icons.history_outlined); // Orange - yesterday rewards
-    } else if (titleText.contains('Total') || titleText.toLowerCase().contains('总')) {
-      return (const Color(0xFF2196F3), Icons.account_balance_outlined); // Blue - total rewards
-    } else if (titleText.contains('Value') || titleText.toLowerCase().contains('价值')) {
-      return (const Color(0xFF9C27B0), Icons.attach_money_outlined); // Purple - value
+      return (
+        const Color(0xFF4CAF50),
+        Icons.today_outlined,
+      ); // Green - today rewards
+    } else if (titleText.contains('Yesterday') ||
+        titleText.contains('Last') ||
+        titleText.toLowerCase().contains('昨日')) {
+      return (
+        const Color(0xFFFF9800),
+        Icons.history_outlined,
+      ); // Orange - yesterday rewards
+    } else if (titleText.contains('Total') ||
+        titleText.toLowerCase().contains('总')) {
+      return (
+        const Color(0xFF2196F3),
+        Icons.account_balance_outlined,
+      ); // Blue - total rewards
+    } else if (titleText.contains('Value') ||
+        titleText.toLowerCase().contains('价值')) {
+      return (
+        const Color(0xFF9C27B0),
+        Icons.attach_money_outlined,
+      ); // Purple - value
     } else {
       return (
         AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
@@ -78,7 +97,11 @@ class MiningDataBroad extends StatelessWidget {
     }
   }
 
-  Widget _buildTitleRow(BuildContext context, Color accentColor, IconData iconData) {
+  Widget _buildTitleRow(
+    BuildContext context,
+    Color accentColor,
+    IconData iconData,
+  ) {
     return Row(
       children: [
         Container(
@@ -101,7 +124,10 @@ class MiningDataBroad extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+              color: AppThemeUtils.getColorByKey(
+                context,
+                AppThemeKeys.itemSubtitleTextColor.name,
+              ),
               fontSize: ScreenUtil().setSp(20),
               fontWeight: FontWeight.w500,
             ),
@@ -116,13 +142,19 @@ class MiningDataBroad extends StatelessWidget {
               child: Icon(
                 Icons.info_outline_rounded,
                 size: ScreenUtil().setWidth(18),
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                color: AppThemeUtils.getColorByKey(
+                  context,
+                  AppThemeKeys.itemSubtitleTextColor.name,
+                ),
               ),
             ),
             menuItemView: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+                color: AppThemeUtils.getColorByKey(
+                  context,
+                  AppThemeKeys.itemBgColor.name,
+                ),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.12),
@@ -131,12 +163,17 @@ class MiningDataBroad extends StatelessWidget {
                   ),
                 ],
               ),
-              margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(50)),
+              margin: EdgeInsets.symmetric(
+                horizontal: ScreenUtil().setWidth(50),
+              ),
               padding: EdgeInsets.all(ScreenUtil().setWidth(18)),
               child: Text(
                 tipsText ?? '',
                 style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                  color: AppThemeUtils.getColorByKey(
+                    context,
+                    AppThemeKeys.mainTextColor.name,
+                  ),
                   fontSize: ScreenUtil().setSp(24),
                   height: 1.4,
                 ),
@@ -151,7 +188,10 @@ class MiningDataBroad extends StatelessWidget {
     return Text(
       value,
       style: TextStyle(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+        color: AppThemeUtils.getColorByKey(
+          context,
+          AppThemeKeys.mainTextColor.name,
+        ),
         fontSize: ScreenUtil().setSp(28),
         fontWeight: FontWeight.w700,
       ),
