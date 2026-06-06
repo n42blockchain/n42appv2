@@ -67,20 +67,24 @@ class FaceRecognitionPublic {
       if (!canCheck) return false;
 
       // Step 3: at least one credential of acceptable security level
-      final List<BiometricType> available =
-          await auth.getAvailableBiometrics();
+      final List<BiometricType> available = await auth.getAvailableBiometrics();
       if (available.isEmpty) return false;
 
       // Accept face, fingerprint, and hardware-backed "strong" biometrics.
       // BiometricType.weak covers software-only face unlock on some Android
       // OEMs — insufficient security for a crypto wallet; intentionally
       // excluded here.
-      return available.any((t) =>
-          t == BiometricType.face ||
-          t == BiometricType.fingerprint ||
-          t == BiometricType.strong);
+      return available.any(
+        (t) =>
+            t == BiometricType.face ||
+            t == BiometricType.fingerprint ||
+            t == BiometricType.strong,
+      );
     } on PlatformException catch (e) {
-      AppLogger.w('Biometric', 'checkBiometrics error: ${e.code} – ${e.message}');
+      AppLogger.w(
+        'Biometric',
+        'checkBiometrics error: ${e.code} – ${e.message}',
+      );
       return false;
     } catch (e) {
       AppLogger.w('Biometric', 'checkBiometrics unexpected: $e');

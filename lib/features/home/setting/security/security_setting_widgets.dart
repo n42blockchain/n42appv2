@@ -24,7 +24,10 @@ extension on _SecuritySettingState {
           Expanded(
             child: Text(
               title,
-              style: TextStyle(color: titleColor, fontSize: ScreenUtil().setSp(28)),
+              style: TextStyle(
+                color: titleColor,
+                fontSize: ScreenUtil().setSp(28),
+              ),
             ),
           ),
           Switch(

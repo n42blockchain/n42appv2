@@ -4,7 +4,7 @@ import 'package:n42_wallet/features/home/setting/setting_share.dart';
 import 'package:n42_wallet/features/wallet/services/ens_service.dart';
 
 import 'package:n42_wallet/features/auth/data/models/user_info.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
@@ -54,10 +54,7 @@ class _PersonalSettingState extends State<PersonalSetting> {
     border: Border(
       bottom: BorderSide(
         width: ScreenUtil().setWidth(1.0),
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.itemLineColor.name,
-        ),
+        color: AppColorTokens.of(context).border,
       ),
     ),
   );
@@ -68,10 +65,7 @@ class _PersonalSettingState extends State<PersonalSetting> {
       child: Text(
         text,
         style: TextStyle(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.mainBlueColor.name,
-          ),
+          color: AppColorTokens.of(context).brand,
           fontSize: ScreenUtil().setSp(30.0),
         ),
       ),

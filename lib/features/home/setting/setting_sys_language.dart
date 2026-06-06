@@ -52,14 +52,8 @@ class _LanguageItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final itemBgColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.itemBgColor.name,
-    );
-    final mainTextColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainTextColor.name,
-    );
+    final itemBgColor = AppColorTokens.of(context).bgSurface;
+    final mainTextColor = AppColorTokens.of(context).textPrimary;
     final subTextColor = AppThemeUtils.getColorByKey(
       context,
       AppThemeKeys.ff888888.name,

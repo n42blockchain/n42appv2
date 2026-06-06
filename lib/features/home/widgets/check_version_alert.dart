@@ -1,4 +1,3 @@
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -51,14 +50,10 @@ class CheckVersionAlert extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final accentColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
-    final textColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final subtitleColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
-    final dialogBg =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name);
+    final accentColor = AppColorTokens.of(context).brand;
+    final textColor = AppColorTokens.of(context).textPrimary;
+    final subtitleColor = AppColorTokens.of(context).textSubtitle;
+    final dialogBg = AppColorTokens.of(context).bgSurface;
 
     return PopScope(
       canPop: !_forced,
@@ -135,9 +130,7 @@ class CheckVersionAlert extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: accentColor,
                     foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: AppRadius.brXl,
-                    ),
+                    shape: RoundedRectangleBorder(borderRadius: AppRadius.brXl),
                     elevation: 0,
                   ),
                   onPressed: () async {

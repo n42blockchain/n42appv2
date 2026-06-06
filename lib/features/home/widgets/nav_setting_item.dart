@@ -1,4 +1,4 @@
-﻿import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,10 +8,13 @@ class NavSettingItem extends StatelessWidget {
   final String action;
   final VoidCallback callback;
   final Color? imgColor;
-  const NavSettingItem({required this.path,
+  const NavSettingItem({
+    required this.path,
     required this.action,
-    required this.callback, this.imgColor,
-    super.key});
+    required this.callback,
+    this.imgColor,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -33,16 +36,11 @@ class NavSettingItem extends StatelessWidget {
             ),
             Expanded(
               child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: AppSpacing.space6,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: AppSpacing.space6),
                 child: Text(
                   action,
                   style: AppTypography.body.copyWith(
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.mainTextColor.name,
-                    ),
+                    color: AppColorTokens.of(context).textPrimary,
                   ),
                 ),
               ),
@@ -50,7 +48,10 @@ class NavSettingItem extends StatelessWidget {
             Icon(
               Icons.arrow_forward_ios_sharp,
               size: ScreenUtil().setWidth(24),
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.ff888888.name),
+              color: AppThemeUtils.getColorByKey(
+                context,
+                AppThemeKeys.ff888888.name,
+              ),
             ),
           ],
         ),

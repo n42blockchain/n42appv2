@@ -6,6 +6,7 @@ import 'package:n42_wallet/core/security/totp_util.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 /// Google Authenticator 绑定页面
@@ -29,7 +30,8 @@ class _GoogleAuthSetupPageState extends State<GoogleAuthSetupPage> {
   void initState() {
     super.initState();
     _secret = TotpUtil.generateSecret();
-    final account = AppGlobals.currentUserEmail ?? AppGlobals.userInfo?.uuid ?? 'user';
+    final account =
+        AppGlobals.currentUserEmail ?? AppGlobals.userInfo?.uuid ?? 'user';
     _otpAuthUri = TotpUtil.buildOtpAuthUri(secret: _secret, account: account);
   }
 
@@ -50,16 +52,11 @@ class _GoogleAuthSetupPageState extends State<GoogleAuthSetupPage> {
 
   @override
   Widget build(BuildContext context) {
-    final Color mainText =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final Color subtitleColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
-    final Color itemBg =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name);
-    final Color mainBlue =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
-    final Color errorColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name);
+    final Color mainText = AppColorTokens.of(context).textPrimary;
+    final Color subtitleColor = AppColorTokens.of(context).textSubtitle;
+    final Color itemBg = AppColorTokens.of(context).bgSurface;
+    final Color mainBlue = AppColorTokens.of(context).brand;
+    final Color errorColor = AppColorTokens.of(context).danger;
 
     return Scaffold(
       appBar: AppBarWidget(text: S.of(context).g_google_auth_key1),
@@ -84,8 +81,9 @@ class _GoogleAuthSetupPageState extends State<GoogleAuthSetupPage> {
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius:
-                        BorderRadius.circular(ScreenUtil().setWidth(12.0)),
+                    borderRadius: BorderRadius.circular(
+                      ScreenUtil().setWidth(12.0),
+                    ),
                   ),
                   padding: EdgeInsets.all(ScreenUtil().setWidth(16.0)),
                   child: QrImageView(
@@ -139,8 +137,9 @@ class _GoogleAuthSetupPageState extends State<GoogleAuthSetupPage> {
                     ),
                     decoration: BoxDecoration(
                       color: itemBg,
-                      borderRadius:
-                          BorderRadius.circular(ScreenUtil().setWidth(8.0)),
+                      borderRadius: BorderRadius.circular(
+                        ScreenUtil().setWidth(8.0),
+                      ),
                     ),
                     child: Row(
                       children: [
@@ -155,9 +154,11 @@ class _GoogleAuthSetupPageState extends State<GoogleAuthSetupPage> {
                             ),
                           ),
                         ),
-                        Icon(Icons.copy,
-                            color: subtitleColor,
-                            size: ScreenUtil().setWidth(36.0)),
+                        Icon(
+                          Icons.copy,
+                          color: subtitleColor,
+                          size: ScreenUtil().setWidth(36.0),
+                        ),
                       ],
                     ),
                   ),
@@ -176,11 +177,13 @@ class _GoogleAuthSetupPageState extends State<GoogleAuthSetupPage> {
               Container(
                 decoration: BoxDecoration(
                   color: itemBg,
-                  borderRadius:
-                      BorderRadius.circular(ScreenUtil().setWidth(8.0)),
+                  borderRadius: BorderRadius.circular(
+                    ScreenUtil().setWidth(8.0),
+                  ),
                 ),
                 padding: EdgeInsets.symmetric(
-                    horizontal: ScreenUtil().setWidth(24.0)),
+                  horizontal: ScreenUtil().setWidth(24.0),
+                ),
                 child: TextField(
                   controller: _codeController,
                   keyboardType: TextInputType.number,
@@ -229,15 +232,18 @@ class _GoogleAuthSetupPageState extends State<GoogleAuthSetupPage> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: mainBlue,
                     shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(ScreenUtil().setWidth(44.0)),
+                      borderRadius: BorderRadius.circular(
+                        ScreenUtil().setWidth(44.0),
+                      ),
                     ),
                   ),
                   child: Text(
                     S.of(context).g_key_78,
                     style: TextStyle(
                       color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainButtonTextColor.name),
+                        context,
+                        AppThemeKeys.mainButtonTextColor.name,
+                      ),
                       fontSize: ScreenUtil().setSp(30.0),
                     ),
                   ),

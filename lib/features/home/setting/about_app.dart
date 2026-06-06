@@ -99,10 +99,7 @@ class _AboutAppState extends State<AboutApp> {
       margin: EdgeInsets.symmetric(vertical: AppSpacing.space2),
       decoration: BoxDecoration(
         borderRadius: AppRadius.brMd,
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.itemBgColor.name,
-        ),
+        color: AppColorTokens.of(context).bgSurface,
       ),
       child: Column(children: children),
     );
@@ -121,10 +118,7 @@ class _AboutAppState extends State<AboutApp> {
   }
 
   Widget _buildSocialSection() {
-    final blueColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainBlueColor.name,
-    );
+    final blueColor = AppColorTokens.of(context).brand;
     final s = S.of(context);
 
     final socialLinks = [
@@ -184,10 +178,7 @@ class _AboutAppState extends State<AboutApp> {
               Text(
                 AppConfig.apiUrl['n42Browser'],
                 style: AppTypography.headline.copyWith(
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainTextColor.name,
-                  ),
+                  color: AppColorTokens.of(context).textPrimary,
                 ),
               ),
               SizedBox(height: AppSpacing.space2),
@@ -239,10 +230,7 @@ class _AboutAppState extends State<AboutApp> {
       child: Text(
         "${S.of(context).g_key_v_k3}(v${versionInfo!.versionName})",
         style: AppTypography.bodySm.copyWith(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.mainBlueColor.name,
-          ),
+          color: AppColorTokens.of(context).brand,
         ),
       ),
     );

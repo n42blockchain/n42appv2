@@ -32,11 +32,11 @@ class VersionInfoModel {
   }
 
   Map<String, dynamic> toJson() => {
-        "versionName": versionName,
-        "versionCode": versionCode,
-        "updateTitle": updateTitle,
-        "updateContent": updateContent,
-        "isForce": isForce,
-        "downloadUrl": downloadUrl,
-      };
+    "versionName": versionName,
+    "versionCode": versionCode,
+    "updateTitle": updateTitle,
+    "updateContent": updateContent,
+    "isForce": isForce,
+    "downloadUrl": downloadUrl,
+  };
 }

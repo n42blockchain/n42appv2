@@ -3,15 +3,11 @@ part of 'personal_setting.dart';
 
 extension on _PersonalSettingState {
   // ── 主题色快捷访问 ──────────────────────────────────────────────────────────
-  Color get _blueColor =>
-      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
-  Color get _subtitleColor =>
-      AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+  Color get _blueColor => AppColorTokens.of(context).brand;
+  Color get _subtitleColor => AppColorTokens.of(context).textSubtitle;
 
-  TextStyle get _subtitleStyle => TextStyle(
-        color: _subtitleColor,
-        fontSize: ScreenUtil().setSp(30.0),
-      );
+  TextStyle get _subtitleStyle =>
+      TextStyle(color: _subtitleColor, fontSize: ScreenUtil().setSp(30.0));
 
   // ── Avatar (只读) ──────────────────────────────────────────────────────────
 
@@ -58,15 +54,22 @@ extension on _PersonalSettingState {
             GestureDetector(
               onTap: () {
                 Clipboard.setData(
-                    ClipboardData(text: userInfo?.inviteCode ?? ''));
+                  ClipboardData(text: userInfo?.inviteCode ?? ''),
+                );
                 ToastUtils.showSuccess(S.of(context).copy);
               },
-              child: Icon(Icons.copy, color: _blueColor,
-                  size: ScreenUtil().setSp(32.0)),
+              child: Icon(
+                Icons.copy,
+                color: _blueColor,
+                size: ScreenUtil().setSp(32.0),
+              ),
             ),
             SizedBox(width: ScreenUtil().setWidth(8.0)),
-            Icon(Icons.chevron_right, color: _subtitleColor,
-                size: ScreenUtil().setSp(36.0)),
+            Icon(
+              Icons.chevron_right,
+              color: _subtitleColor,
+              size: ScreenUtil().setSp(36.0),
+            ),
           ],
         ),
       ),
@@ -109,5 +112,4 @@ extension on _PersonalSettingState {
       child: child,
     );
   }
-
 }

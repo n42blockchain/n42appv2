@@ -31,24 +31,15 @@ extension on _HomeDrawPageState {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainBlueColor.name,
-            ).withValues(alpha: 0.1),
-            AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainBlueColor.name,
-            ).withValues(alpha: 0.05),
+            AppColorTokens.of(context).brand.withValues(alpha: 0.1),
+            AppColorTokens.of(context).brand.withValues(alpha: 0.05),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
         border: Border.all(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.mainBlueColor.name,
-          ).withValues(alpha: 0.1),
+          color: AppColorTokens.of(context).brand.withValues(alpha: 0.1),
           width: 1,
         ),
       ),
@@ -68,10 +59,9 @@ extension on _HomeDrawPageState {
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: AppThemeUtils.getColorByKey(
+                        color: AppColorTokens.of(
                           context,
-                          AppThemeKeys.mainBlueColor.name,
-                        ).withValues(alpha: 0.2),
+                        ).brand.withValues(alpha: 0.2),
                         blurRadius: 8,
                         offset: const Offset(0, 2),
                       ),
@@ -101,10 +91,7 @@ extension on _HomeDrawPageState {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                color: AppThemeUtils.getColorByKey(
-                                  context,
-                                  AppThemeKeys.mainTextColor.name,
-                                ),
+                                color: AppColorTokens.of(context).textPrimary,
                                 fontWeight: FontWeight.w600,
                                 fontSize: ScreenUtil().setSp(32),
                                 letterSpacing: 0.3,
@@ -119,10 +106,9 @@ extension on _HomeDrawPageState {
                                 vertical: ScreenUtil().setWidth(4),
                               ),
                               decoration: BoxDecoration(
-                                color: AppThemeUtils.getColorByKey(
+                                color: AppColorTokens.of(
                                   context,
-                                  AppThemeKeys.mainBlueColor.name,
-                                ).withValues(alpha: 0.12),
+                                ).brand.withValues(alpha: 0.12),
                                 borderRadius: BorderRadius.circular(
                                   ScreenUtil().setWidth(999),
                                 ),
@@ -130,10 +116,7 @@ extension on _HomeDrawPageState {
                               child: Text(
                                 S.of(context).g_key_squad,
                                 style: TextStyle(
-                                  color: AppThemeUtils.getColorByKey(
-                                    context,
-                                    AppThemeKeys.mainBlueColor.name,
-                                  ),
+                                  color: AppColorTokens.of(context).brand,
                                   fontSize: ScreenUtil().setSp(18),
                                   fontWeight: FontWeight.w600,
                                 ),
@@ -149,10 +132,7 @@ extension on _HomeDrawPageState {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            color: AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.itemSubtitleTextColor.name,
-                            ),
+                            color: AppColorTokens.of(context).textSubtitle,
                             fontSize: ScreenUtil().setSp(24),
                           ),
                         ),
@@ -172,10 +152,7 @@ extension on _HomeDrawPageState {
                 vertical: ScreenUtil().setWidth(12),
               ),
               decoration: BoxDecoration(
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainBlueColor.name,
-                ),
+                color: AppColorTokens.of(context).brand,
                 borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24)),
               ),
               child: Row(
@@ -252,25 +229,13 @@ extension on _HomeDrawPageState {
             ),
             decoration: BoxDecoration(
               color: showWalletLogout
-                  ? AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.errorTextColor.name,
-                    ).withValues(alpha: 0.1)
-                  : AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.mainBlueColor.name,
-                    ).withValues(alpha: 0.1),
+                  ? AppColorTokens.of(context).danger.withValues(alpha: 0.1)
+                  : AppColorTokens.of(context).brand.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
               border: Border.all(
                 color: showWalletLogout
-                    ? AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.errorTextColor.name,
-                      ).withValues(alpha: 0.3)
-                    : AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainBlueColor.name,
-                      ).withValues(alpha: 0.3),
+                    ? AppColorTokens.of(context).danger.withValues(alpha: 0.3)
+                    : AppColorTokens.of(context).brand.withValues(alpha: 0.3),
                 width: 1,
               ),
             ),
@@ -281,14 +246,8 @@ extension on _HomeDrawPageState {
                   showWalletLogout ? Icons.logout_rounded : Icons.chat_rounded,
                   size: ScreenUtil().setWidth(24),
                   color: showWalletLogout
-                      ? AppThemeUtils.getColorByKey(
-                          context,
-                          AppThemeKeys.errorTextColor.name,
-                        )
-                      : AppThemeUtils.getColorByKey(
-                          context,
-                          AppThemeKeys.mainBlueColor.name,
-                        ),
+                      ? AppColorTokens.of(context).danger
+                      : AppColorTokens.of(context).brand,
                 ),
                 SizedBox(width: ScreenUtil().setWidth(12)),
                 Flexible(
@@ -300,14 +259,8 @@ extension on _HomeDrawPageState {
                         : S.of(context).g_key_login,
                     style: TextStyle(
                       color: showWalletLogout
-                          ? AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.errorTextColor.name,
-                            )
-                          : AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.mainBlueColor.name,
-                            ),
+                          ? AppColorTokens.of(context).danger
+                          : AppColorTokens.of(context).brand,
                       fontSize: ScreenUtil().setSp(28),
                       fontWeight: FontWeight.w600,
                     ),

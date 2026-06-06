@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gesture_password_widget/gesture_password_widget.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// 手势密码设置 / 重置页面
 ///
@@ -30,7 +30,9 @@ class _GesturePasswordPageState extends State<GesturePasswordPage> {
 
   String get _title {
     if (_isResetMode) {
-      return _stage == 0 ? S.of(context).g_lock_key20 : S.of(context).g_lock_key22;
+      return _stage == 0
+          ? S.of(context).g_lock_key20
+          : S.of(context).g_lock_key22;
     }
     return S.of(context).g_lock_key17;
   }
@@ -44,7 +46,9 @@ class _GesturePasswordPageState extends State<GesturePasswordPage> {
     }
     if (_isResetMode && _stage == 0) return '';
     final isFirstDraw = _isResetMode ? _stage == 1 : _stage == 0;
-    return isFirstDraw ? S.of(context).g_lock_key18 : S.of(context).g_lock_key19;
+    return isFirstDraw
+        ? S.of(context).g_lock_key18
+        : S.of(context).g_lock_key19;
   }
 
   List<int>? get _answer {
@@ -56,8 +60,7 @@ class _GesturePasswordPageState extends State<GesturePasswordPage> {
     return _stage == 0 ? null : _toIntList(_firstInput);
   }
 
-  List<int> _toIntList(String s) =>
-      s.split(',').map(int.parse).toList();
+  List<int> _toIntList(String s) => s.split(',').map(int.parse).toList();
 
   Future<void> _onComplete(String value) async {
     if (_isResetMode) {
@@ -116,7 +119,10 @@ class _GesturePasswordPageState extends State<GesturePasswordPage> {
     }
   }
 
-  Future<void> _showTooManyDialog({bool popPage = false, int? resetToStage}) async {
+  Future<void> _showTooManyDialog({
+    bool popPage = false,
+    int? resetToStage,
+  }) async {
     if (!mounted) return;
     await showDialog<void>(
       context: context,
@@ -151,16 +157,11 @@ class _GesturePasswordPageState extends State<GesturePasswordPage> {
     final double bigWidth = identifySize / 2;
     final double miniWidth = identifySize / 4;
 
-    final Color mainBlue =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
-    final Color errorColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name);
-    final Color subtitleColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
-    final Color bgColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name);
-    final Color mainTextColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+    final Color mainBlue = AppColorTokens.of(context).brand;
+    final Color errorColor = AppColorTokens.of(context).danger;
+    final Color subtitleColor = AppColorTokens.of(context).textSubtitle;
+    final Color bgColor = AppColorTokens.of(context).bgBase;
+    final Color mainTextColor = AppColorTokens.of(context).textPrimary;
 
     return Scaffold(
       appBar: AppBarWidget(text: S.of(context).g_lock_key16),
@@ -170,7 +171,8 @@ class _GesturePasswordPageState extends State<GesturePasswordPage> {
             SizedBox(height: ScreenUtil().setWidth(80.0)),
             Padding(
               padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(60.0)),
+                horizontal: ScreenUtil().setWidth(60.0),
+              ),
               child: Column(
                 children: [
                   Text(
@@ -202,73 +204,79 @@ class _GesturePasswordPageState extends State<GesturePasswordPage> {
                 child: KeyedSubtree(
                   key: ValueKey('$_stage-$_errorCount'),
                   child: GesturePasswordWidget(
-                  size: gridSize,
-                  lineColor: mainBlue,
-                  errorLineColor: errorColor,
-                  singleLineCount: 3,
-                  identifySize: identifySize,
-                  minLength: 4,
-                  hitShowMilliseconds: 40,
-                  answer: _answer,
-                  color: bgColor,
-                  normalItem: Container(
-                    height: miniWidth,
-                    width: miniWidth,
-                    decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.all(Radius.circular(miniWidth)),
-                      color: subtitleColor,
-                    ),
-                  ),
-                  selectedItem: Container(
-                    width: bigWidth,
-                    height: bigWidth,
-                    decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.all(Radius.circular(bigWidth)),
-                      color: mainBlue.withAlpha((0.5 * 255).round()),
-                    ),
-                    alignment: Alignment.center,
-                    child: Container(
-                      width: miniWidth,
+                    size: gridSize,
+                    lineColor: mainBlue,
+                    errorLineColor: errorColor,
+                    singleLineCount: 3,
+                    identifySize: identifySize,
+                    minLength: 4,
+                    hitShowMilliseconds: 40,
+                    answer: _answer,
+                    color: bgColor,
+                    normalItem: Container(
                       height: miniWidth,
+                      width: miniWidth,
                       decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.all(Radius.circular(miniWidth)),
-                        color: mainBlue,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(miniWidth),
+                        ),
+                        color: subtitleColor,
                       ),
                     ),
-                  ),
-                  hitItem: Container(
-                    width: bigWidth,
-                    height: bigWidth,
-                    decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.all(Radius.circular(bigWidth)),
-                      color: mainBlue.withAlpha((0.5 * 255).round()),
-                    ),
-                  ),
-                  errorItem: Container(
-                    width: bigWidth,
-                    height: bigWidth,
-                    decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.all(Radius.circular(bigWidth)),
-                      color: errorColor.withAlpha((0.5 * 255).round()),
-                    ),
-                    alignment: Alignment.center,
-                    child: Container(
-                      width: miniWidth,
-                      height: miniWidth,
+                    selectedItem: Container(
+                      width: bigWidth,
+                      height: bigWidth,
                       decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.all(Radius.circular(miniWidth)),
-                        color: errorColor,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(bigWidth),
+                        ),
+                        color: mainBlue.withAlpha((0.5 * 255).round()),
+                      ),
+                      alignment: Alignment.center,
+                      child: Container(
+                        width: miniWidth,
+                        height: miniWidth,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(miniWidth),
+                          ),
+                          color: mainBlue,
+                        ),
                       ),
                     ),
+                    hitItem: Container(
+                      width: bigWidth,
+                      height: bigWidth,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(bigWidth),
+                        ),
+                        color: mainBlue.withAlpha((0.5 * 255).round()),
+                      ),
+                    ),
+                    errorItem: Container(
+                      width: bigWidth,
+                      height: bigWidth,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(bigWidth),
+                        ),
+                        color: errorColor.withAlpha((0.5 * 255).round()),
+                      ),
+                      alignment: Alignment.center,
+                      child: Container(
+                        width: miniWidth,
+                        height: miniWidth,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(miniWidth),
+                          ),
+                          color: errorColor,
+                        ),
+                      ),
+                    ),
+                    onComplete: (data) => _onComplete(data.join(',')),
                   ),
-                  onComplete: (data) => _onComplete(data.join(',')),
-                ),
                 ),
               ),
             ),

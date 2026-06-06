@@ -271,10 +271,7 @@ class _SettingShareState extends State<SettingShare> {
           Text(
             label,
             style: AppTypography.bodySm.copyWith(
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemTextColor.name,
-              ),
+              color: AppColorTokens.of(context).textItem,
             ),
           ),
           Expanded(
