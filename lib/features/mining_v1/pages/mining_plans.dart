@@ -3,7 +3,7 @@ import 'package:n42_wallet/features/mining_v1/widgets/ast_mining_board.dart';
 import 'package:n42_wallet/features/mining_v1/widgets/show_skip_confirm_dialog.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/widgets/app_home_top_bar.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -141,12 +141,19 @@ class _MiningPlansState extends State<MiningPlans> {
                         width: double.infinity,
                         height: ScreenUtil().setWidth(148),
                         padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-                        child: buttonStyle2(context, () async {
-                          Navigator.pushReplacement(context,MaterialPageRoute(
-                              builder: (_) => FullNodePage(
-                                astNum: depositsList[currentPage],
-                              )));
-                        }, S.of(context).g_key_78),
+                        child: AppButton(
+                          label: S.of(context).g_key_78,
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => FullNodePage(
+                                  astNum: depositsList[currentPage],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                       ),
 
                     ],

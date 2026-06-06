@@ -24,7 +24,7 @@ import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/dialog_widget/tips_dialog_7.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -157,23 +157,10 @@ class _FullNodePageState extends State<FullNodePage>
                     width: double.infinity,
                     height: ScreenUtil().setWidth(148),
                     padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-                    child: buttonStyle6(
-                      context,
-                      () async {
-                        await _handleConfirmTap();
-                      },
-                      S.of(context).g_key_78,
-                      AppThemeUtils.getColorByKey(
-                        context,
-                        load == Load.loading
-                            ? AppThemeKeys.mainButtonBgColor3.name
-                            : AppThemeKeys.mainButtonBgColor.name,
-                      ),
-                      AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainButtonTextColor.name,
-                      ),
-                      load == Load.loading,
+                    child: AppButton(
+                      label: S.of(context).g_key_78,
+                      onPressed: () => _handleConfirmTap(),
+                      loading: load == Load.loading,
                     ),
                   ),
                 ],

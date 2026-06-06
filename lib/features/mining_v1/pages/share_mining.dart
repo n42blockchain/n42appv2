@@ -3,7 +3,7 @@ import 'package:n42_wallet/features/mining_v1/models/mining_type.dart';
 import 'package:n42_wallet/features/mining_v1/provider/mining_v1_providers.dart';
 import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -141,15 +141,21 @@ class _ShareMiningState extends State<ShareMining> {
                     height: ScreenUtil().setWidth(88),
                     width: double.infinity,
                     margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(30),),
-                    child: buttonStyle2(context, () async {
-                      if (widget.fromType == 2) {
-                        globalMiningV1.setMiningType(MiningType.N);
-                      }
-                      globalMiningV1.setDepositsEnable(true);
-                      eventBus.fire(EventPublic(EventPublicType.refreshMiningData));
-                      eventBus.fire(EventPublic(EventPublicType.selectMiningplansPop));
-                      Navigator.pop(context, true);
-                    }, S.of(context).g_mining_key62,
+                    child: AppButton(
+                      label: S.of(context).g_mining_key62,
+                      onPressed: () {
+                        if (widget.fromType == 2) {
+                          globalMiningV1.setMiningType(MiningType.N);
+                        }
+                        globalMiningV1.setDepositsEnable(true);
+                        eventBus.fire(
+                          EventPublic(EventPublicType.refreshMiningData),
+                        );
+                        eventBus.fire(
+                          EventPublic(EventPublicType.selectMiningplansPop),
+                        );
+                        Navigator.pop(context, true);
+                      },
                     ),
                   ),
                 ),
