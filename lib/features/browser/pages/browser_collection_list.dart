@@ -4,6 +4,7 @@ import 'package:n42_wallet/features/browser/models/browser_collection_model.dart
 import 'package:n42_wallet/features/browser/pages/browser_collection_info.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/features/widgets/empty.dart';
@@ -107,10 +108,7 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
 
   TextStyle _subtitleStyle(BuildContext context) {
     return TextStyle(
-      color: AppThemeUtils.getColorByKey(
-        context,
-        AppThemeKeys.itemSubtitleTextColor.name,
-      ),
+      color: AppColorTokens.of(context).textSubtitle,
       fontSize: ScreenUtil().setSp(26.0),
     );
   }
@@ -207,10 +205,7 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
                 borderRadius: BorderRadius.all(
                   Radius.circular(ScreenUtil().setWidth(20.0)),
                 ),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemBgColor.name,
-                ),
+                color: AppColorTokens.of(context).bgSurface,
               ),
               child: Row(
                 children: [
@@ -227,10 +222,7 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
                           child: Text(
                             bcm.name ?? "",
                             style: TextStyle(
-                              color: AppThemeUtils.getColorByKey(
-                                context,
-                                AppThemeKeys.mainTextColor.name,
-                              ),
+                              color: AppColorTokens.of(context).textPrimary,
                               fontSize: ScreenUtil().setSp(28.0),
                             ),
                             maxLines: 1,

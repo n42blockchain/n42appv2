@@ -1,5 +1,5 @@
 import 'package:n42_wallet/core/storage/sp_util.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -57,10 +57,7 @@ class _BrowserSettingState extends State<BrowserSetting> {
                       child: Text(
                         S.of(context).g_browser_key13,
                         style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.mainTextColor.name,
-                          ),
+                          color: AppColorTokens.of(context).textPrimary,
                           fontSize: ScreenUtil().setSp(30),
                         ),
                         textAlign: TextAlign.left,
@@ -68,10 +65,7 @@ class _BrowserSettingState extends State<BrowserSetting> {
                     ),
                     Switch(
                       value: browser['connectDApp'] == true,
-                      activeTrackColor: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainBlueColor.name,
-                      ),
+                      activeTrackColor: AppColorTokens.of(context).brand,
                       onChanged: (value) {
                         setBrowserConnectDApp(value);
                       },
@@ -83,10 +77,7 @@ class _BrowserSettingState extends State<BrowserSetting> {
                 height: ScreenUtil().setWidth(1),
                 indent: 0,
                 endIndent: 0,
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.dividerColor.name,
-                ),
+                color: AppColorTokens.of(context).border,
               ),
               if (widget.webViewController != null)
                 InkWell(
@@ -101,10 +92,7 @@ class _BrowserSettingState extends State<BrowserSetting> {
                           child: Text(
                             S.of(context).g_browser_key12,
                             style: TextStyle(
-                              color: AppThemeUtils.getColorByKey(
-                                context,
-                                AppThemeKeys.mainTextColor.name,
-                              ),
+                              color: AppColorTokens.of(context).textPrimary,
                               fontSize: ScreenUtil().setSp(30),
                             ),
                             textAlign: TextAlign.left,
@@ -118,10 +106,7 @@ class _BrowserSettingState extends State<BrowserSetting> {
                           ),
                           child: Icon(
                             Icons.cleaning_services_sharp,
-                            color: AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.mainTextColor.name,
-                            ),
+                            color: AppColorTokens.of(context).textPrimary,
                           ),
                         ),
                       ],

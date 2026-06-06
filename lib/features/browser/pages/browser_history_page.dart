@@ -3,6 +3,7 @@ import 'package:n42_wallet/features/browser/api/browser_api.dart';
 import 'package:n42_wallet/features/browser/models/browser_history_model.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/features/widgets/empty.dart';
@@ -150,10 +151,7 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
   @override
   Widget build(BuildContext context) {
     final s = S.of(context);
-    final mainText = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainTextColor.name,
-    );
+    final mainText = AppColorTokens.of(context).textPrimary;
 
     return Scaffold(
       appBar: AppBarWidget(
@@ -185,18 +183,9 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
   Widget _listWidget() {
     final s = S.of(context);
     final su = ScreenUtil();
-    final mainText = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainTextColor.name,
-    );
-    final subtitleColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.itemSubtitleTextColor.name,
-    );
-    final itemBg = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.itemBgColor.name,
-    );
+    final mainText = AppColorTokens.of(context).textPrimary;
+    final subtitleColor = AppColorTokens.of(context).textSubtitle;
+    final itemBg = AppColorTokens.of(context).bgSurface;
 
     return NotificationListener<ScrollNotification>(
       onNotification: (notification) {

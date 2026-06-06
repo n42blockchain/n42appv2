@@ -15,7 +15,14 @@ class DAppCategory {
   static const bridge = DAppCategory._('bridge', 'Bridge');
   static const tools = DAppCategory._('tools', 'Tools');
 
-  static const List<DAppCategory> all = [popular, dex, defi, nft, bridge, tools];
+  static const List<DAppCategory> all = [
+    popular,
+    dex,
+    defi,
+    nft,
+    bridge,
+    tools,
+  ];
 }
 
 class RecommendedDApp {

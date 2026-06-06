@@ -5,26 +5,22 @@ class BrowserHistoryModel {
   String? title;
 
   BrowserHistoryModel(String urlStr, {String? titleStr})
-      : url = urlStr,
-        title = titleStr,
-        time = (DateTime.now().millisecondsSinceEpoch ~/ 1000).toString();
+    : url = urlStr,
+      title = titleStr,
+      time = (DateTime.now().millisecondsSinceEpoch ~/ 1000).toString();
 
   BrowserHistoryModel.fromJson(Map<String, dynamic> map)
-      : id = map["id"],
-        url = map["url"],
-        time = map["time"],
-        title = map["title"];
+    : id = map["id"],
+      url = map["url"],
+      time = map["time"],
+      title = map["title"];
 
-  Map<String, dynamic> getMapDb() => {
-        "url": url,
-        "time": time,
-        "title": title,
-      };
+  Map<String, dynamic> getMapDb() => {"url": url, "time": time, "title": title};
 
   Map<String, dynamic> getMap() => {
-        "id": id,
-        "url": url,
-        "time": time,
-        "title": title,
-      };
+    "id": id,
+    "url": url,
+    "time": time,
+    "title": title,
+  };
 }

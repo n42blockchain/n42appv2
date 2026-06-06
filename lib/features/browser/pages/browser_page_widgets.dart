@@ -2,8 +2,7 @@ part of 'browser_page.dart';
 
 /// UI widget builders for BrowserPage.
 extension _BrowserPageWidgets on _BrowserPageState {
-  Color _mainTextColor() =>
-      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+  Color _mainTextColor() => AppColorTokens.of(context).textPrimary;
 
   Widget _buildBrowserContent() {
     final bValue = ref.watch(browserNotifierProvider);
@@ -225,8 +224,7 @@ extension _BrowserPageWidgets on _BrowserPageState {
           if (Platform.isAndroid)
             _toolbarIconButton(
               Icons.explore,
-              onTap: () =>
-                  _navigateAndLoad(bValue, const DAppDirectoryPage()),
+              onTap: () => _navigateAndLoad(bValue, const DAppDirectoryPage()),
             ),
           _toolbarAssetButton(
             "setting",
@@ -242,7 +240,8 @@ extension _BrowserPageWidgets on _BrowserPageState {
               bValue.getBrowserSetting();
             },
           ),
-          if (ref.watch(wcpBridgeProvider).walletConnectState == WalletConnectState.connect)
+          if (ref.watch(wcpBridgeProvider).walletConnectState ==
+              WalletConnectState.connect)
             _buildWalletConnectButton(),
         ],
       ),

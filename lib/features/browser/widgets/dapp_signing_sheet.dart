@@ -45,10 +45,7 @@ class DAppSigningSheet extends StatelessWidget {
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(32),
                   fontWeight: FontWeight.w600,
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainTextColor.name,
-                  ),
+                  color: AppColorTokens.of(context).textPrimary,
                 ),
               ),
               SizedBox(height: ScreenUtil().setWidth(8)),
@@ -56,23 +53,14 @@ class DAppSigningSheet extends StatelessWidget {
                 origin,
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(24),
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.itemSubtitleTextColor.name,
-                  ),
+                  color: AppColorTokens.of(context).textSubtitle,
                 ),
               ),
             ],
           ),
         ),
 
-        Divider(
-          height: 1,
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.dividerColor.name,
-          ),
-        ),
+        Divider(height: 1, color: AppColorTokens.of(context).border),
 
         // Scrollable content
         Flexible(
@@ -116,16 +104,10 @@ class DAppSigningSheet extends StatelessWidget {
             right: ScreenUtil().setWidth(30),
           ),
           decoration: BoxDecoration(
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.backGroundColor.name,
-            ),
+            color: AppColorTokens.of(context).bgBase,
             border: Border(
               top: BorderSide(
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.dividerColor.name,
-                ),
+                color: AppColorTokens.of(context).border,
                 width: 1,
               ),
             ),
@@ -180,10 +162,7 @@ class DAppSigningSheet extends StatelessWidget {
             value,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(26),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainTextColor.name,
-              ),
+              color: AppColorTokens.of(context).textPrimary,
             ),
             maxLines: 10,
             overflow: TextOverflow.ellipsis,

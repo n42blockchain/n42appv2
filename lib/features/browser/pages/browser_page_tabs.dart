@@ -33,18 +33,21 @@ extension _BrowserPageTabs on _BrowserPageState {
     return Dismissible(
       key: ValueKey('tab_${bValue.wvcList[index].hashCode}'),
       direction: DismissDirection.up,
-      onDismissed: (_) { bValue.wListDelete(index); },
+      onDismissed: (_) {
+        bValue.wListDelete(index);
+      },
       background: Container(
         alignment: Alignment.center,
         child: Icon(
           Icons.close,
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemSubtitleTextColor.name),
+          color: AppColorTokens.of(context).textSubtitle,
           size: ScreenUtil().setWidth(50),
         ),
       ),
       child: GestureDetector(
-        onTap: () { bValue.wListShow(index); },
+        onTap: () {
+          bValue.wListShow(index);
+        },
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           decoration: BoxDecoration(
@@ -54,22 +57,23 @@ extension _BrowserPageTabs on _BrowserPageState {
                   ? ScreenUtil().setWidth(3.0)
                   : ScreenUtil().setWidth(1.5),
               color: AppThemeUtils.getColorByKey(
-                  context,
-                  isActive
-                      ? AppThemeKeys.mainBlueColor.name
-                      : AppThemeKeys.itemLineColor.name),
+                context,
+                isActive
+                    ? AppThemeKeys.mainBlueColor.name
+                    : AppThemeKeys.itemLineColor.name,
+              ),
             ),
           ),
           clipBehavior: Clip.hardEdge,
           child: Stack(
             children: [
-              Positioned.fill(
-                child: _buildTabPreview(bValue, index),
-              ),
+              Positioned.fill(child: _buildTabPreview(bValue, index)),
               Positioned.fill(
                 child: Container(
                   color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.transparentBgColor.name),
+                    context,
+                    AppThemeKeys.transparentBgColor.name,
+                  ),
                 ),
               ),
               _buildTabCardHeader(bValue, index, isActive, title, host, letter),
@@ -87,20 +91,11 @@ extension _BrowserPageTabs on _BrowserPageState {
     final host = Uri.tryParse(openUrl)?.host ?? '';
     final progress = (info['progress'] as num?)?.toDouble() ?? 0;
     final isLoading = info['load'] == true;
-    final subtitleColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.itemSubtitleTextColor.name,
-    );
-    final accentColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainBlueColor.name,
-    );
+    final subtitleColor = AppColorTokens.of(context).textSubtitle;
+    final accentColor = AppColorTokens.of(context).brand;
 
     return Container(
-      color: AppThemeUtils.getColorByKey(
-        context,
-        AppThemeKeys.itemBgColor.name,
-      ),
+      color: AppColorTokens.of(context).bgSurface,
       padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -113,10 +108,7 @@ extension _BrowserPageTabs on _BrowserPageState {
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [
-                  accentColor.withAlpha(28),
-                  accentColor.withAlpha(10),
-                ],
+                colors: [accentColor.withAlpha(28), accentColor.withAlpha(10)],
               ),
             ),
             alignment: Alignment.center,
@@ -132,10 +124,7 @@ extension _BrowserPageTabs on _BrowserPageState {
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainTextColor.name,
-              ),
+              color: AppColorTokens.of(context).textPrimary,
               fontSize: ScreenUtil().setSp(22),
               fontWeight: FontWeight.w600,
             ),
@@ -179,8 +168,7 @@ extension _BrowserPageTabs on _BrowserPageState {
       left: 0,
       right: 0,
       child: Container(
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.backGroundColor.name),
+        color: AppColorTokens.of(context).bgBase,
         padding: EdgeInsets.symmetric(
           vertical: ScreenUtil().setWidth(8.0),
           horizontal: ScreenUtil().setWidth(12.0),
@@ -192,12 +180,9 @@ extension _BrowserPageTabs on _BrowserPageState {
               height: ScreenUtil().setWidth(32),
               decoration: BoxDecoration(
                 color: isActive
-                    ? AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainBlueColor.name)
-                    : AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.itemSubtitleTextColor.name),
-                borderRadius:
-                    BorderRadius.circular(ScreenUtil().setWidth(8)),
+                    ? AppColorTokens.of(context).brand
+                    : AppColorTokens.of(context).textSubtitle,
+                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
               ),
               alignment: Alignment.center,
               child: Text(
@@ -218,11 +203,11 @@ extension _BrowserPageTabs on _BrowserPageState {
                   Text(
                     title.isNotEmpty ? title : host,
                     style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainTextColor.name),
+                      color: AppColorTokens.of(context).textPrimary,
                       fontSize: ScreenUtil().setSp(20.0),
-                      fontWeight:
-                          isActive ? FontWeight.w600 : FontWeight.normal,
+                      fontWeight: isActive
+                          ? FontWeight.w600
+                          : FontWeight.normal,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -231,8 +216,7 @@ extension _BrowserPageTabs on _BrowserPageState {
                     Text(
                       host,
                       style: TextStyle(
-                        color: AppThemeUtils.getColorByKey(context,
-                            AppThemeKeys.itemSubtitleTextColor.name),
+                        color: AppColorTokens.of(context).textSubtitle,
                         fontSize: ScreenUtil().setSp(16.0),
                       ),
                       maxLines: 1,
@@ -242,15 +226,16 @@ extension _BrowserPageTabs on _BrowserPageState {
               ),
             ),
             GestureDetector(
-              onTap: () { bValue.wListDelete(index); },
+              onTap: () {
+                bValue.wListDelete(index);
+              },
               child: Container(
                 width: ScreenUtil().setWidth(36.0),
                 height: ScreenUtil().setWidth(36.0),
                 padding: EdgeInsets.all(ScreenUtil().setWidth(4.0)),
                 child: Image.asset(
                   "assets/browser/close.png",
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
+                  color: AppColorTokens.of(context).textPrimary,
                   width: ScreenUtil().setWidth(28.0),
                   height: ScreenUtil().setWidth(28.0),
                 ),

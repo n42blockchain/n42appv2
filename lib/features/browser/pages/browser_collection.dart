@@ -88,10 +88,7 @@ class BrowserCollectionState extends State<BrowserCollection> {
         title: Text(
           S.of(context).g_browser_key5,
           style: TextStyle(
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainTextColor.name,
-            ),
+            color: AppColorTokens.of(context).textPrimary,
             fontSize: ScreenUtil().setSp(36.0),
           ),
         ),
@@ -170,10 +167,7 @@ class BrowserCollectionState extends State<BrowserCollection> {
               label,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(28.0),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemSubtitleTextColor.name,
-                ),
+                color: AppColorTokens.of(context).textSubtitle,
               ),
             ),
           ),
@@ -185,18 +179,10 @@ class BrowserCollectionState extends State<BrowserCollection> {
               borderRadius: BorderRadius.all(
                 Radius.circular(ScreenUtil().setWidth(20.0)),
               ),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemBgColor.name,
-              ),
+              color: AppColorTokens.of(context).bgSurface,
             ),
             child: TextField(
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainTextColor.name,
-                ),
-              ),
+              style: TextStyle(color: AppColorTokens.of(context).textPrimary),
               controller: controller,
               focusNode: focusNode,
               textInputAction: TextInputAction.next,
@@ -217,10 +203,7 @@ class BrowserCollectionState extends State<BrowserCollection> {
             Text(
               errorMessage,
               style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.errorTextColor.name,
-                ),
+                color: AppColorTokens.of(context).danger,
                 fontSize: ScreenUtil().setSp(24.0),
               ),
             ),
@@ -261,10 +244,7 @@ class BrowserCollectionState extends State<BrowserCollection> {
     return Container(
       height: ScreenUtil().setWidth(148.0),
       width: double.infinity,
-      color: AppThemeUtils.getColorByKey(
-        context,
-        AppThemeKeys.backGroundColor.name,
-      ),
+      color: AppColorTokens.of(context).bgBase,
       padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
       child: AppButton(label: S.of(context).g_key_115, onPressed: _saveUrl),
     );
