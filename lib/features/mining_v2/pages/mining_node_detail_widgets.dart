@@ -191,15 +191,15 @@ mixin _MiningNodeDetailWidgets on ConsumerState<MiningNodeDetailPage> {
 
   Widget _buildWsStatus(BuildContext context, WebSocketState state) =>
       switch (state) {
-        WebSocketState.connected => _wsDot(
-          context,
-          const Color(0xff32D74B),
-          S.of(context).g_mining_node_key3,
+        WebSocketState.connected => AppBadge(
+          label: S.of(context).g_mining_node_key3,
+          tone: AppBadgeTone.success,
+          dot: true,
         ),
-        WebSocketState.reconnecting => _wsDot(
-          context,
-          const Color(0xFFFF9500),
-          S.of(context).g_mining_node_key5,
+        WebSocketState.reconnecting => AppBadge(
+          label: S.of(context).g_mining_node_key5,
+          tone: AppBadgeTone.warning,
+          dot: true,
         ),
         WebSocketState.connecting => SizedBox(
           width: ScreenUtil().setWidth(20),
@@ -209,34 +209,12 @@ mixin _MiningNodeDetailWidgets on ConsumerState<MiningNodeDetailPage> {
             color: _themeColor(context, AppThemeKeys.mainBlueColor),
           ),
         ),
-        WebSocketState.disconnected => _wsDot(
-          context,
-          const Color(0xffEB5851),
-          S.of(context).g_mining_node_key4,
+        WebSocketState.disconnected => AppBadge(
+          label: S.of(context).g_mining_node_key4,
+          tone: AppBadgeTone.danger,
+          dot: true,
         ),
       };
-
-  Widget _wsDot(BuildContext context, Color color, String label) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: ScreenUtil().setWidth(10),
-          height: ScreenUtil().setWidth(10),
-          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
-        ),
-        SizedBox(width: ScreenUtil().setWidth(6)),
-        Text(
-          label,
-          style: TextStyle(
-            color: color,
-            fontSize: ScreenUtil().setSp(24),
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ],
-    );
-  }
 
   Widget _divider(BuildContext context) {
     return Divider(

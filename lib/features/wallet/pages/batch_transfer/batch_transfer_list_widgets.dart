@@ -9,6 +9,7 @@ import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/models/batch_transfer_model.dart';
 import 'package:n42_wallet/features/wallet/provider/batch_transfer_provider.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// 转账列表（含空状态提示）
 class BatchTransferList extends StatelessWidget {
@@ -55,14 +56,20 @@ class BatchTransferList extends StatelessWidget {
           Icon(
             Icons.list_alt,
             size: ScreenUtil().setWidth(80),
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+            color: AppThemeUtils.getColorByKey(
+              context,
+              AppThemeKeys.itemSubtitleTextColor.name,
+            ),
           ),
           SizedBox(height: ScreenUtil().setWidth(16)),
           Text(
             S.of(context).g_key_batch_recipients,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(28),
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+              color: AppThemeUtils.getColorByKey(
+                context,
+                AppThemeKeys.itemSubtitleTextColor.name,
+              ),
             ),
           ),
           SizedBox(height: ScreenUtil().setWidth(8)),
@@ -110,7 +117,10 @@ class BatchTransferListItem extends StatelessWidget {
         margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(8)),
         padding: EdgeInsets.all(ScreenUtil().setWidth(12)),
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+          color: AppThemeUtils.getColorByKey(
+            context,
+            AppThemeKeys.itemBgColor.name,
+          ),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
           border: Border.all(
             color: batchStatusColor(item.status).withAlpha(50),
@@ -134,7 +144,10 @@ class BatchTransferListItem extends StatelessWidget {
       width: ScreenUtil().setWidth(32),
       height: ScreenUtil().setWidth(32),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withAlpha(30),
+        color: AppThemeUtils.getColorByKey(
+          context,
+          AppThemeKeys.mainBlueColor.name,
+        ).withAlpha(30),
         shape: BoxShape.circle,
       ),
       child: Center(
@@ -143,7 +156,10 @@ class BatchTransferListItem extends StatelessWidget {
           style: TextStyle(
             fontSize: ScreenUtil().setSp(22),
             fontWeight: FontWeight.w600,
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+            color: AppThemeUtils.getColorByKey(
+              context,
+              AppThemeKeys.mainBlueColor.name,
+            ),
           ),
         ),
       ),
@@ -160,7 +176,10 @@ class BatchTransferListItem extends StatelessWidget {
             style: TextStyle(
               fontSize: ScreenUtil().setSp(26),
               fontWeight: FontWeight.w500,
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+              color: AppThemeUtils.getColorByKey(
+                context,
+                AppThemeKeys.mainTextColor.name,
+              ),
             ),
           ),
           if (item.memo != null && item.memo!.isNotEmpty)
@@ -168,7 +187,10 @@ class BatchTransferListItem extends StatelessWidget {
               item.memo!,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(22),
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                color: AppThemeUtils.getColorByKey(
+                  context,
+                  AppThemeKeys.itemSubtitleTextColor.name,
+                ),
               ),
             ),
         ],
@@ -185,7 +207,10 @@ class BatchTransferListItem extends StatelessWidget {
           style: TextStyle(
             fontSize: ScreenUtil().setSp(26),
             fontWeight: FontWeight.w600,
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+            color: AppThemeUtils.getColorByKey(
+              context,
+              AppThemeKeys.mainTextColor.name,
+            ),
           ),
         ),
         BatchStatusBadge(status: item.status),
@@ -202,20 +227,14 @@ class BatchStatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = batchStatusColor(status);
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(6),
-        vertical: ScreenUtil().setWidth(2),
-      ),
-      decoration: BoxDecoration(
-        color: color.withAlpha(30),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(4)),
-      ),
-      child: Text(
-        batchStatusText(context, status),
-        style: TextStyle(fontSize: ScreenUtil().setSp(18), color: color),
-      ),
+    return AppBadge(
+      label: batchStatusText(context, status),
+      tone: switch (status) {
+        BatchTransferStatus.pending => AppBadgeTone.neutral,
+        BatchTransferStatus.processing => AppBadgeTone.info,
+        BatchTransferStatus.success => AppBadgeTone.success,
+        BatchTransferStatus.failed => AppBadgeTone.danger,
+      },
     );
   }
 }
