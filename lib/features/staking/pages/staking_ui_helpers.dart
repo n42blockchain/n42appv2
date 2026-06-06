@@ -8,7 +8,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/staking/models/staking_models.dart';
 import 'package:n42_wallet/features/staking/provider/staking_provider.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// Stateless UI helpers shared across staking home page views.
@@ -18,10 +17,7 @@ Widget stakingDefaultLogo(BuildContext context, StakingProtocol protocol) {
     width: ScreenUtil().setWidth(56),
     height: ScreenUtil().setWidth(56),
     decoration: BoxDecoration(
-      color: AppThemeUtils.getColorByKey(
-        context,
-        AppThemeKeys.mainBlueColor.name,
-      ),
+      color: AppColorTokens.of(context).brand,
       shape: BoxShape.circle,
     ),
     child: Center(
@@ -66,11 +62,8 @@ Widget stakingStatsCard(BuildContext context, StakingProvider provider) {
     decoration: BoxDecoration(
       gradient: LinearGradient(
         colors: [
-          AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-          AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.mainBlueColor.name,
-          ).withAlpha(180),
+          AppColorTokens.of(context).brand,
+          AppColorTokens.of(context).brand.withAlpha(180),
         ],
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
@@ -140,20 +133,14 @@ Widget stakingEmptyPositions(
         Icon(
           Icons.savings_outlined,
           size: ScreenUtil().setWidth(80),
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.itemSubtitleTextColor.name,
-          ),
+          color: AppColorTokens.of(context).textSubtitle,
         ),
         SizedBox(height: ScreenUtil().setWidth(20)),
         Text(
           S.of(context).g_key_stake_no_positions_yet,
           style: TextStyle(
             fontSize: ScreenUtil().setSp(30),
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.itemSubtitleTextColor.name,
-            ),
+            color: AppColorTokens.of(context).textSubtitle,
           ),
         ),
         SizedBox(height: ScreenUtil().setWidth(16)),
@@ -175,10 +162,7 @@ Widget stakingSectionHeader(BuildContext context, String title) {
       style: TextStyle(
         fontSize: ScreenUtil().setSp(28),
         fontWeight: FontWeight.bold,
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.mainTextColor.name,
-        ),
+        color: AppColorTokens.of(context).textPrimary,
       ),
     ),
   );

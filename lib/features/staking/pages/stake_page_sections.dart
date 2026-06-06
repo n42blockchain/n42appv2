@@ -15,10 +15,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.itemBgColor.name,
-        ),
+        color: AppColorTokens.of(context).bgSurface,
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
       ),
       child: Center(
@@ -26,10 +23,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
           S.of(context).g_key_stake_no_wallet,
           style: TextStyle(
             fontSize: ScreenUtil().setSp(26),
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.itemSubtitleTextColor.name,
-            ),
+            color: AppColorTokens.of(context).textSubtitle,
           ),
         ),
       ),
@@ -48,10 +42,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
             Icon(
               Icons.swap_horiz,
               size: ScreenUtil().setWidth(80),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainBlueColor.name,
-              ),
+              color: AppColorTokens.of(context).brand,
             ),
             SizedBox(height: ScreenUtil().setWidth(20)),
             Text(
@@ -59,10 +50,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(32),
                 fontWeight: FontWeight.bold,
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainTextColor.name,
-                ),
+                color: AppColorTokens.of(context).textPrimary,
               ),
             ),
             SizedBox(height: ScreenUtil().setWidth(12)),
@@ -71,20 +59,14 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
               text: TextSpan(
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(26),
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.itemSubtitleTextColor.name,
-                  ),
+                  color: AppColorTokens.of(context).textSubtitle,
                 ),
                 children: [
                   TextSpan(
                     text: widget.protocol.liquidTokenSymbol,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainBlueColor.name,
-                      ),
+                      color: AppColorTokens.of(context).brand,
                     ),
                   ),
                   const TextSpan(text: ' — '),
@@ -165,10 +147,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
       return Container(
         padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.itemBgColor.name,
-          ),
+          color: AppColorTokens.of(context).bgSurface,
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
         ),
         child: Center(
@@ -176,10 +155,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
             S.of(context).g_key_stake_no_active_positions,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(26),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ),
+              color: AppColorTokens.of(context).textSubtitle,
             ),
           ),
         ),
@@ -211,10 +187,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
             margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
             padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
             decoration: BoxDecoration(
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemBgColor.name,
-              ),
+              color: AppColorTokens.of(context).bgSurface,
               borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
               border: isSelected
                   ? Border.all(color: Colors.orange, width: 2)
@@ -231,10 +204,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(28),
                           fontWeight: FontWeight.w600,
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.mainTextColor.name,
-                          ),
+                          color: AppColorTokens.of(context).textPrimary,
                         ),
                       ),
                       SizedBox(height: ScreenUtil().setWidth(4)),
@@ -242,10 +212,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
                         '${S.of(context).g_key_stake_staked}: ${_formatBigInt(pos.stakedAmount)} ${widget.protocol.chainSymbol}',
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(24),
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.itemSubtitleTextColor.name,
-                          ),
+                          color: AppColorTokens.of(context).textSubtitle,
                         ),
                       ),
                     ],
@@ -271,10 +238,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.itemBgColor.name,
-        ),
+        color: AppColorTokens.of(context).bgSurface,
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
       ),
       child: Row(
@@ -291,18 +255,12 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(32),
                 fontWeight: FontWeight.w600,
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainTextColor.name,
-                ),
+                color: AppColorTokens.of(context).textPrimary,
               ),
               decoration: InputDecoration(
                 hintText: '0.0',
                 hintStyle: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.itemSubtitleTextColor.name,
-                  ),
+                  color: AppColorTokens.of(context).textSubtitle,
                 ),
                 border: InputBorder.none,
               ),
@@ -314,10 +272,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
             style: TextStyle(
               fontSize: ScreenUtil().setSp(28),
               fontWeight: FontWeight.w600,
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainTextColor.name,
-              ),
+              color: AppColorTokens.of(context).textPrimary,
             ),
           ),
         ],
@@ -365,10 +320,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
                 ),
                 margin: EdgeInsets.only(right: ScreenUtil().setWidth(8)),
                 decoration: BoxDecoration(
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.itemBgColor.name,
-                  ),
+                  color: AppColorTokens.of(context).bgSurface,
                   borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
                 ),
                 child: Center(

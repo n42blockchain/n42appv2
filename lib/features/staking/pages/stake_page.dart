@@ -9,7 +9,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/staking/models/staking_models.dart';
 import 'package:n42_wallet/features/staking/pages/validator_list_page.dart';
 import 'package:n42_wallet/features/staking/provider/staking_provider.dart';

@@ -16,8 +16,8 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 /// Widgets mixin for [StakingHomePage].
 ///
 /// Contains all UI builder methods for tabs, cards, and list items.
-mixin StakingHomePageWidgetsMixin on State<StakingHomePage>,
-    StakingHomePageLogicMixin {
+mixin StakingHomePageWidgetsMixin
+    on State<StakingHomePage>, StakingHomePageLogicMixin {
   // ── Theme helpers ──────────────────────────────────────────────────────────
 
   Color _themeColor(AppThemeKeys key) =>
@@ -51,7 +51,9 @@ mixin StakingHomePageWidgetsMixin on State<StakingHomePage>,
           fontSize: ScreenUtil().setSp(26),
           fontWeight: FontWeight.normal,
         ),
-        labelPadding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(8)),
+        labelPadding: EdgeInsets.symmetric(
+          horizontal: ScreenUtil().setWidth(8),
+        ),
         tabs: [
           _fittedTab(S.of(context).g_key_stake_protocols),
           _fittedTab(S.of(context).g_key_stake_positions),
@@ -80,8 +82,8 @@ mixin StakingHomePageWidgetsMixin on State<StakingHomePage>,
     final protocols = StakingHomePageLogicMixin.dotStakingEnabled
         ? StakingProtocols.all
         : StakingProtocols.all
-            .where((p) => p.chainType != StakingChainType.polkadot)
-            .toList();
+              .where((p) => p.chainType != StakingChainType.polkadot)
+              .toList();
 
     return ListView.builder(
       padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
@@ -216,8 +218,11 @@ mixin StakingHomePageWidgetsMixin on State<StakingHomePage>,
         SizedBox(height: ScreenUtil().setWidth(8)),
         Text(
           protocol.unbondingPeriodDays > 0
-              ? S.of(context).g_key_stake_d_unbond(
-                  protocol.unbondingPeriodDays.toString())
+              ? S
+                    .of(context)
+                    .g_key_stake_d_unbond(
+                      protocol.unbondingPeriodDays.toString(),
+                    )
               : S.of(context).g_key_stake_no_lock,
           style: TextStyle(
             fontSize: ScreenUtil().setSp(22),
@@ -259,7 +264,9 @@ mixin StakingHomePageWidgetsMixin on State<StakingHomePage>,
               SizedBox(height: ScreenUtil().setWidth(24)),
               if (provider.activePositions.isNotEmpty) ...[
                 stakingSectionHeader(
-                    context, S.of(context).g_key_stake_active_positions),
+                  context,
+                  S.of(context).g_key_stake_active_positions,
+                ),
                 ...provider.activePositions.map(
                   (p) => _buildPositionCard(context, p),
                 ),
@@ -267,7 +274,9 @@ mixin StakingHomePageWidgetsMixin on State<StakingHomePage>,
               if (provider.unbondingPositions.isNotEmpty) ...[
                 SizedBox(height: ScreenUtil().setWidth(16)),
                 stakingSectionHeader(
-                    context, S.of(context).g_key_stake_unbonding),
+                  context,
+                  S.of(context).g_key_stake_unbonding,
+                ),
                 ...provider.unbondingPositions.map(
                   (p) => _buildPositionCard(context, p),
                 ),
@@ -318,7 +327,10 @@ mixin StakingHomePageWidgetsMixin on State<StakingHomePage>,
   }
 
   Widget _buildPositionHeader(
-      BuildContext context, StakingPosition position, bool isUnbonding) {
+    BuildContext context,
+    StakingPosition position,
+    bool isUnbonding,
+  ) {
     return Row(
       children: [
         Text(
@@ -352,8 +364,7 @@ mixin StakingHomePageWidgetsMixin on State<StakingHomePage>,
     );
   }
 
-  Widget _buildPositionAmounts(
-      BuildContext context, StakingPosition position) {
+  Widget _buildPositionAmounts(BuildContext context, StakingPosition position) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -369,7 +380,9 @@ mixin StakingHomePageWidgetsMixin on State<StakingHomePage>,
             ),
             Text(
               formatAmount(
-                  position.stakedAmount, position.protocol.chainSymbol),
+                position.stakedAmount,
+                position.protocol.chainSymbol,
+              ),
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(28),
                 fontWeight: FontWeight.w600,
@@ -390,8 +403,10 @@ mixin StakingHomePageWidgetsMixin on State<StakingHomePage>,
                 ),
               ),
               Text(
-                formatAmount(position.pendingRewards,
-                    position.protocol.chainSymbol),
+                formatAmount(
+                  position.pendingRewards,
+                  position.protocol.chainSymbol,
+                ),
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(28),
                   fontWeight: FontWeight.w600,
@@ -404,8 +419,7 @@ mixin StakingHomePageWidgetsMixin on State<StakingHomePage>,
     );
   }
 
-  Widget _buildUnbondingBadge(
-      BuildContext context, StakingPosition position) {
+  Widget _buildUnbondingBadge(BuildContext context, StakingPosition position) {
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: ScreenUtil().setWidth(12),
@@ -426,8 +440,11 @@ mixin StakingHomePageWidgetsMixin on State<StakingHomePage>,
           SizedBox(width: ScreenUtil().setWidth(8)),
           Flexible(
             child: Text(
-              S.of(context).g_key_stake_days_remaining(
-                  position.unbondingDaysLeft.toString()),
+              S
+                  .of(context)
+                  .g_key_stake_days_remaining(
+                    position.unbondingDaysLeft.toString(),
+                  ),
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(24),

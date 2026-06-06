@@ -8,7 +8,8 @@
 part of 'stake_page.dart';
 
 /// View mixin: top-level page structure (protocol card, tab bar, tab entries).
-mixin _StakeViewsMixin on _StakeLogicMixin, _StakeFormsMixin, _StakeSectionsMixin {
+mixin _StakeViewsMixin
+    on _StakeLogicMixin, _StakeFormsMixin, _StakeSectionsMixin {
   TabController get _tabController;
 
   // ── Protocol info card ──────────────────────────────────────────────────
@@ -24,9 +25,8 @@ mixin _StakeViewsMixin on _StakeLogicMixin, _StakeFormsMixin, _StakeSectionsMixi
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
-                    .withAlpha(180),
+                AppColorTokens.of(context).brand,
+                AppColorTokens.of(context).brand.withAlpha(180),
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -43,7 +43,8 @@ mixin _StakeViewsMixin on _StakeLogicMixin, _StakeFormsMixin, _StakeSectionsMixi
                         widget.protocol.logoUri,
                         width: ScreenUtil().setWidth(56),
                         height: ScreenUtil().setWidth(56),
-                        errorBuilder: (context, error, stackTrace) => _buildDefaultLogo(),
+                        errorBuilder: (context, error, stackTrace) =>
+                            _buildDefaultLogo(),
                       )
                     : _buildDefaultLogo(),
               ),
@@ -73,7 +74,9 @@ mixin _StakeViewsMixin on _StakeLogicMixin, _StakeFormsMixin, _StakeSectionsMixi
                             ),
                             decoration: BoxDecoration(
                               color: Colors.white24,
-                              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
+                              borderRadius: BorderRadius.circular(
+                                ScreenUtil().setWidth(6),
+                              ),
                             ),
                             child: Text(
                               S.of(context).g_key_stake_liquid_tag,
@@ -90,7 +93,12 @@ mixin _StakeViewsMixin on _StakeLogicMixin, _StakeFormsMixin, _StakeSectionsMixi
                     Text(
                       widget.protocol.isLiquid
                           ? S.of(context).g_key_stake_liquid_staking_label
-                          : S.of(context).g_key_stake_d_unbond(widget.protocol.unbondingPeriodDays.toString()),
+                          : S
+                                .of(context)
+                                .g_key_stake_d_unbond(
+                                  widget.protocol.unbondingPeriodDays
+                                      .toString(),
+                                ),
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(24),
                         color: Colors.white70,
@@ -155,20 +163,17 @@ mixin _StakeViewsMixin on _StakeLogicMixin, _StakeFormsMixin, _StakeSectionsMixi
     return Container(
       margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: AppColorTokens.of(context).bgSurface,
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
       ),
       child: TabBar(
         controller: _tabController,
         indicator: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+          color: AppColorTokens.of(context).brand,
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
         ),
         labelColor: Colors.white,
-        unselectedLabelColor: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.itemSubtitleTextColor.name,
-        ),
+        unselectedLabelColor: AppColorTokens.of(context).textSubtitle,
         labelStyle: TextStyle(
           fontSize: ScreenUtil().setSp(28),
           fontWeight: FontWeight.w600,
@@ -178,7 +183,9 @@ mixin _StakeViewsMixin on _StakeLogicMixin, _StakeFormsMixin, _StakeSectionsMixi
             child: FittedBox(
               fit: BoxFit.scaleDown,
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(24)),
+                padding: EdgeInsets.symmetric(
+                  horizontal: ScreenUtil().setWidth(24),
+                ),
                 child: Text(S.of(context).g_key_stake_stake),
               ),
             ),
@@ -187,7 +194,9 @@ mixin _StakeViewsMixin on _StakeLogicMixin, _StakeFormsMixin, _StakeSectionsMixi
             child: FittedBox(
               fit: BoxFit.scaleDown,
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(24)),
+                padding: EdgeInsets.symmetric(
+                  horizontal: ScreenUtil().setWidth(24),
+                ),
                 child: Text(S.of(context).g_key_stake_unstake),
               ),
             ),
@@ -211,7 +220,10 @@ mixin _StakeViewsMixin on _StakeLogicMixin, _StakeFormsMixin, _StakeSectionsMixi
             children: [
               // Validator selector (if needed)
               if (_needsValidator()) ...[
-                _buildSectionTitle(context, S.of(context).g_key_stake_select_validator),
+                _buildSectionTitle(
+                  context,
+                  S.of(context).g_key_stake_select_validator,
+                ),
                 SizedBox(height: ScreenUtil().setWidth(12)),
                 _buildValidatorSelector(context, provider),
                 SizedBox(height: ScreenUtil().setWidth(24)),
@@ -269,14 +281,21 @@ mixin _StakeViewsMixin on _StakeLogicMixin, _StakeFormsMixin, _StakeSectionsMixi
               SizedBox(height: ScreenUtil().setWidth(24)),
 
               // Active positions list
-              _buildSectionTitle(context, S.of(context).g_key_stake_select_position),
+              _buildSectionTitle(
+                context,
+                S.of(context).g_key_stake_select_position,
+              ),
               SizedBox(height: ScreenUtil().setWidth(12)),
               _buildPositionSelector(context),
 
               // Partial unbond amount input (ATOM only)
-              if (_selectedPosition != null && widget.protocol.chainType == StakingChainType.cosmos) ...[
+              if (_selectedPosition != null &&
+                  widget.protocol.chainType == StakingChainType.cosmos) ...[
                 SizedBox(height: ScreenUtil().setWidth(24)),
-                _buildSectionTitle(context, S.of(context).g_key_stake_amount_unstake),
+                _buildSectionTitle(
+                  context,
+                  S.of(context).g_key_stake_amount_unstake,
+                ),
                 SizedBox(height: ScreenUtil().setWidth(12)),
                 _buildUnstakeAmountInput(context),
                 SizedBox(height: ScreenUtil().setWidth(12)),
@@ -311,12 +330,19 @@ mixin _StakeViewsMixin on _StakeLogicMixin, _StakeFormsMixin, _StakeSectionsMixi
       ),
       child: Row(
         children: [
-          Icon(Icons.error_outline, color: Colors.red, size: ScreenUtil().setWidth(32)),
+          Icon(
+            Icons.error_outline,
+            color: Colors.red,
+            size: ScreenUtil().setWidth(32),
+          ),
           SizedBox(width: ScreenUtil().setWidth(8)),
           Expanded(
             child: Text(
               _errorMessage,
-              style: TextStyle(color: Colors.red, fontSize: ScreenUtil().setSp(24)),
+              style: TextStyle(
+                color: Colors.red,
+                fontSize: ScreenUtil().setSp(24),
+              ),
             ),
           ),
         ],
@@ -330,9 +356,8 @@ mixin _StakeViewsMixin on _StakeLogicMixin, _StakeFormsMixin, _StakeSectionsMixi
       style: TextStyle(
         fontSize: ScreenUtil().setSp(28),
         fontWeight: FontWeight.w600,
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+        color: AppColorTokens.of(context).textPrimary,
       ),
     );
   }
-
 }
