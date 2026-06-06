@@ -8,15 +8,17 @@ import 'package:n42_wallet/core/security/security_config.dart';
 class EsoImageCacheManager extends CacheManager {
   static const key = 'EsoImageCacheManager';
 
-  static  EsoImageCacheManager? _instance;
+  static EsoImageCacheManager? _instance;
   factory EsoImageCacheManager() {
     _instance ??= EsoImageCacheManager._();
     return _instance!;
   }
   static final HttpClient _httpClient = HttpClient();
 
-
-  EsoImageCacheManager._() : super(Config(key, fileService: EsoHttpFileService(httpClient: _httpClient)));
+  EsoImageCacheManager._()
+    : super(
+        Config(key, fileService: EsoHttpFileService(httpClient: _httpClient)),
+      );
 }
 
 class EsoHttpFileService extends FileService {
@@ -27,7 +29,10 @@ class EsoHttpFileService extends FileService {
   }
 
   @override
-  Future<FileServiceResponse> get(String url, {Map<String, String>? headers=const {}}) async{
+  Future<FileServiceResponse> get(
+    String url, {
+    Map<String, String>? headers = const {},
+  }) async {
     final Uri resolved = Uri.base.resolve(url);
     final HttpClientRequest req = await _httpClient.getUrl(resolved);
     headers?.forEach((key, value) {
@@ -37,12 +42,12 @@ class EsoHttpFileService extends FileService {
     //print("httpResponse statusCode ${httpResponse.statusCode}");
     //print("httpResponse contentLength ${httpResponse.contentLength}");
     final http.StreamedResponse response = http.StreamedResponse(
-      httpResponse.timeout(const Duration(seconds: 60)), httpResponse.statusCode,
+      httpResponse.timeout(const Duration(seconds: 60)),
+      httpResponse.statusCode,
       //contentLength: httpResponse.contentLength,
       //reasonPhrase: httpResponse.reasonPhrase,
       //isRedirect: httpResponse.isRedirect,
     );
     return HttpGetResponse(response);
   }
-
 }

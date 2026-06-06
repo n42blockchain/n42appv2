@@ -1,6 +1,6 @@
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ShowImage extends StatelessWidget {
@@ -8,8 +8,13 @@ class ShowImage extends StatelessWidget {
   final dynamic img;
   final String type;
   final String watermark;
-  const ShowImage(this.title, this.img,
-      {this.watermark = "AstraWallet", this.type = "network", super.key});
+  const ShowImage(
+    this.title,
+    this.img, {
+    this.watermark = "AstraWallet",
+    this.type = "network",
+    super.key,
+  });
 
   GestureConfig _gestureConfig(ExtendedImageState state) {
     return GestureConfig(
@@ -64,17 +69,14 @@ class ShowImage extends StatelessWidget {
         title: Text(
           title,
           style: TextStyle(
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainTextColor.name),
+            color: AppColorTokens.of(context).textPrimary,
             fontSize: ScreenUtil().setSp(40),
           ),
         ),
       ),
       body: Stack(
         children: [
-          Positioned.fill(
-            child: Center(child: _buildImage()),
-          ),
+          Positioned.fill(child: Center(child: _buildImage())),
           Positioned.fill(
             child: IgnorePointer(
               ignoring: true,

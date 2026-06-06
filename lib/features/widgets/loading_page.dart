@@ -7,16 +7,15 @@ class LoadingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: Container(
-          width: ScreenUtil().setWidth(200.0),
-          alignment: Alignment.center,
-          child: SizedBox(
-            width: ScreenUtil().setWidth(60.0),
-            height: ScreenUtil().setWidth(60.0),
-            child: CircularProgressIndicator(),
-          ),
-        )
-
+      child: Container(
+        width: ScreenUtil().setWidth(200.0),
+        alignment: Alignment.center,
+        child: SizedBox(
+          width: ScreenUtil().setWidth(60.0),
+          height: ScreenUtil().setWidth(60.0),
+          child: CircularProgressIndicator(),
+        ),
+      ),
     );
   }
 }

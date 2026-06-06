@@ -49,8 +49,9 @@ class ToastUtils {
             title,
             style: TextStyle(
               color: AppThemeUtils.getColorByKey(
-                  AppGlobals.navigatorKey.currentContext,
-                  AppThemeKeys.mainTextColor.name),
+                AppGlobals.navigatorKey.currentContext,
+                AppThemeKeys.mainTextColor.name,
+              ),
             ),
           ),
         ],

@@ -12,10 +12,7 @@ class ImageCropPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(
-        text: title,
-        actions: const [],
-      ),
+      appBar: AppBarWidget(text: title, actions: const []),
       body: ProImageEditor.memory(
         imageData,
         callbacks: ProImageEditorCallbacks(

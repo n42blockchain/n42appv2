@@ -1,4 +1,4 @@
-﻿import 'package:n42_wallet/core/utils/app_logger.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 ///@description: 通用列表组件（可刷新 加载更多）
 
 /// 列表item布局
-typedef BuildItem = Function(
-    BuildContext context, List<dynamic> results, int index);
+typedef BuildItem =
+    Function(BuildContext context, List<dynamic> results, int index);
 
 /// 列表数据源
 typedef GetData = Future<List<dynamic>?> Function(int page, int pageSize);
@@ -54,23 +54,24 @@ class BaseList extends StatefulWidget {
   final int pageIndex;
   final int pageSize;
 
-  const BaseList(
-      {super.key,
-        required this.buildItem,
-        required this.getData,
-        this.refreshController,
-        this.requestBegin,
-        this.requestCompleted,
-        this.canLoadMore = true,
-        this.firstRefresh = false,
-        this.isGridview = false,
-        this.childAspectRatio = 1,
-        this.crossAxisCount = 2,
-        this.mainAxisSpacing = 10,
-        this.crossAxisSpacing = 10,
-        this.pageIndex = 1,
-        this.pageSize = 10,
-        this.emptyView});
+  const BaseList({
+    super.key,
+    required this.buildItem,
+    required this.getData,
+    this.refreshController,
+    this.requestBegin,
+    this.requestCompleted,
+    this.canLoadMore = true,
+    this.firstRefresh = false,
+    this.isGridview = false,
+    this.childAspectRatio = 1,
+    this.crossAxisCount = 2,
+    this.mainAxisSpacing = 10,
+    this.crossAxisSpacing = 10,
+    this.pageIndex = 1,
+    this.pageSize = 10,
+    this.emptyView,
+  });
 
   @override
   State<BaseList> createState() => BaseListState();
@@ -93,7 +94,12 @@ class BaseListState extends State<BaseList> {
     pageIndex = widget.pageIndex;
     pageSize = widget.pageSize;
 
-    _refreshController = widget.refreshController ?? EasyRefreshController(controlFinishRefresh: true,controlFinishLoad: true);
+    _refreshController =
+        widget.refreshController ??
+        EasyRefreshController(
+          controlFinishRefresh: true,
+          controlFinishLoad: true,
+        );
   }
 
   @override
@@ -105,22 +111,36 @@ class BaseListState extends State<BaseList> {
   @override
   Widget build(BuildContext context) {
     final Header header = MaterialHeader(
-        backgroundColor: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.refreshBGColor.name),
-        valueColor: AlwaysStoppedAnimation(AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.refreshValueColor.name)));
+      backgroundColor: AppThemeUtils.getColorByKey(
+        context,
+        AppThemeKeys.refreshBGColor.name,
+      ),
+      valueColor: AlwaysStoppedAnimation(
+        AppThemeUtils.getColorByKey(
+          context,
+          AppThemeKeys.refreshValueColor.name,
+        ),
+      ),
+    );
 
     final Footer footer = MaterialFooter(
-        backgroundColor: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.refreshBGColor.name),
-        valueColor: AlwaysStoppedAnimation(AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.refreshValueColor.name)));
+      backgroundColor: AppThemeUtils.getColorByKey(
+        context,
+        AppThemeKeys.refreshBGColor.name,
+      ),
+      valueColor: AlwaysStoppedAnimation(
+        AppThemeUtils.getColorByKey(
+          context,
+          AppThemeKeys.refreshValueColor.name,
+        ),
+      ),
+    );
 
     return EasyRefresh(
       header: header,
       footer: footer,
       controller: _refreshController,
-      refreshOnStart: widget.firstRefresh??true,
+      refreshOnStart: widget.firstRefresh ?? true,
       onRefresh: () async {
         handlerRefresh();
       },
@@ -193,7 +213,9 @@ class BaseListState extends State<BaseList> {
           isFirst = false;
           if (_refreshController == null) return;
           if (reset) _refreshController?.finishRefresh();
-          final loadResult = _isNoMore() ? IndicatorResult.noMore : IndicatorResult.success;
+          final loadResult = _isNoMore()
+              ? IndicatorResult.noMore
+              : IndicatorResult.success;
           _refreshController?.finishLoad(loadResult);
         });
       }

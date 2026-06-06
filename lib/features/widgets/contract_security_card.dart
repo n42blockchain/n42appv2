@@ -4,10 +4,10 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/security/goplus_security_result.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 
 /// GoPlus 合约安全评分卡片
 ///
@@ -20,18 +20,18 @@ class ContractSecurityCard extends StatelessWidget {
   final GoplusSecurityResult? _result;
 
   const ContractSecurityCard.loading({super.key})
-      : _state = _State.loading,
-        _result = null;
+    : _state = _State.loading,
+      _result = null;
 
   const ContractSecurityCard.result({
     super.key,
     required GoplusSecurityResult result,
-  })  : _state = _State.result,
-        _result = result;
+  }) : _state = _State.result,
+       _result = result;
 
   const ContractSecurityCard.unavailable({super.key})
-      : _state = _State.unavailable,
-        _result = null;
+    : _state = _State.unavailable,
+      _result = null;
 
   @override
   Widget build(BuildContext context) {
@@ -53,8 +53,7 @@ class ContractSecurityCard extends StatelessWidget {
         vertical: ScreenUtil().setWidth(12),
       ),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemBgColor.name),
+        color: AppColorTokens.of(context).bgSurface,
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
       ),
       child: Row(
@@ -64,8 +63,7 @@ class ContractSecurityCard extends StatelessWidget {
             height: ScreenUtil().setWidth(18),
             child: CircularProgressIndicator(
               strokeWidth: 2,
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name),
+              color: AppColorTokens.of(context).textSubtitle,
             ),
           ),
           SizedBox(width: ScreenUtil().setWidth(10)),
@@ -75,8 +73,7 @@ class ContractSecurityCard extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(24),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemSubtitleTextColor.name),
+                color: AppColorTokens.of(context).textSubtitle,
               ),
             ),
           ),
@@ -145,8 +142,7 @@ class ContractSecurityCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(20),
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.itemSubtitleTextColor.name),
+                    color: AppColorTokens.of(context).textSubtitle,
                   ),
                 ),
               ),

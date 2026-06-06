@@ -1,5 +1,5 @@
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LoginTitle extends StatelessWidget {
@@ -7,12 +7,17 @@ class LoginTitle extends StatelessWidget {
   final Color? color;
   final bool must;
 
-  const LoginTitle({super.key, required this.title, this.color, this.must = false});
+  const LoginTitle({
+    super.key,
+    required this.title,
+    this.color,
+    this.must = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     final titleStyle = TextStyle(
-      color: color ?? AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+      color: color ?? AppColorTokens.of(context).brand,
       fontSize: ScreenUtil().setSp(32.0),
     );
 
@@ -25,7 +30,7 @@ class LoginTitle extends StatelessWidget {
         Text(
           "*",
           style: TextStyle(
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
+            color: AppColorTokens.of(context).danger,
             fontSize: ScreenUtil().setSp(20.0),
           ),
         ),

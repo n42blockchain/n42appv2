@@ -1,5 +1,6 @@
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// Resolves border and text colors based on error state and focus.
@@ -10,17 +11,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
   required FocusNode? focusNode,
 }) {
   if (errorMessage != "") {
-    final errorColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name);
+    final errorColor = AppColorTokens.of(context).danger;
     return (borderColor: errorColor, textColor: errorColor);
   }
 
-  final defaultBorder = borderColorOverride ??
+  final defaultBorder =
+      borderColorOverride ??
       AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBorderColor.name);
-  final textColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemTextColor.name);
+  final textColor = AppColorTokens.of(context).textItem;
 
   if (focusNode != null && focusNode.hasFocus) {
-    final focusBorder = borderColorOverride ??
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+    final focusBorder = borderColorOverride ?? AppColorTokens.of(context).brand;
     return (borderColor: focusBorder, textColor: textColor);
   }
 
@@ -42,7 +43,7 @@ Widget? _buildMessageWidget(
       child: Text(
         errorMessage,
         style: TextStyle(
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
+          color: AppColorTokens.of(context).danger,
           fontSize: ScreenUtil().setSp(28.0),
         ),
       ),
@@ -56,7 +57,7 @@ Widget? _buildMessageWidget(
       child: Text(
         message,
         style: TextStyle(
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+          color: AppColorTokens.of(context).brand,
           fontSize: ScreenUtil().setSp(28.0),
         ),
       ),
@@ -73,7 +74,8 @@ InputDecoration _buildInputDecoration({
   required Widget? suffix,
 }) {
   return InputDecoration(
-    contentPadding: contentPadding ??
+    contentPadding:
+        contentPadding ??
         EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10.0)),
     isCollapsed: true,
     hintText: hintText,
@@ -86,66 +88,78 @@ InputDecoration _buildInputDecoration({
 }
 
 Widget textFieldStyle2(
-    BuildContext context,
-    {
-      ValueChanged<String>? onChanged,
-      VoidCallback? onEditingComplete,
-      ValueChanged<String>? onSubmitted,
-      TextEditingController? controller,
-      FocusNode? focusNode,
-      bool enabled=true,
-      String hintText="",
-      Widget? suffix,
-      EdgeInsets? contentPadding,
-      TextStyle? style,
-      TextStyle? hintStyle,
-      TextInputAction? textInputAction,
-      TextInputType? keyboardType,
-      double? height,
-      EdgeInsets? padding,
-      BorderRadius? borderRadius,
-      Color? bgColor,
-      BoxShadow? boxShadow,
-      double? fontSize,
-      int? maxLines,
-      String message="",
-      String errorMessage="",
-      EdgeInsetsGeometry? messageMargin,
-      double borderWidth=0,
-      Color? borderColor,
-      Widget? rightWidget1,
-      VoidCallback? rightOnTap1,
-      Widget? rightWidget2,
-      VoidCallback? rightOnTap2,
-      Widget? rightWidget3,
-      VoidCallback? rightOnTap3,
-      Widget? leftWidget,
-      VoidCallback? leftOnTap,
-    }) {
-  final colors = _resolveColors(context,
-      errorMessage: errorMessage, borderColorOverride: borderColor, focusNode: focusNode);
+  BuildContext context, {
+  ValueChanged<String>? onChanged,
+  VoidCallback? onEditingComplete,
+  ValueChanged<String>? onSubmitted,
+  TextEditingController? controller,
+  FocusNode? focusNode,
+  bool enabled = true,
+  String hintText = "",
+  Widget? suffix,
+  EdgeInsets? contentPadding,
+  TextStyle? style,
+  TextStyle? hintStyle,
+  TextInputAction? textInputAction,
+  TextInputType? keyboardType,
+  double? height,
+  EdgeInsets? padding,
+  BorderRadius? borderRadius,
+  Color? bgColor,
+  BoxShadow? boxShadow,
+  double? fontSize,
+  int? maxLines,
+  String message = "",
+  String errorMessage = "",
+  EdgeInsetsGeometry? messageMargin,
+  double borderWidth = 0,
+  Color? borderColor,
+  Widget? rightWidget1,
+  VoidCallback? rightOnTap1,
+  Widget? rightWidget2,
+  VoidCallback? rightOnTap2,
+  Widget? rightWidget3,
+  VoidCallback? rightOnTap3,
+  Widget? leftWidget,
+  VoidCallback? leftOnTap,
+}) {
+  final colors = _resolveColors(
+    context,
+    errorMessage: errorMessage,
+    borderColorOverride: borderColor,
+    focusNode: focusNode,
+  );
   final defaultHeight = ScreenUtil().setWidth(88.0);
 
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Container(
-        padding: padding ?? EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+        padding:
+            padding ??
+            EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
         decoration: BoxDecoration(
-          borderRadius: borderRadius ?? BorderRadius.all(Radius.circular(ScreenUtil().setWidth(16.0))),
-          color: bgColor ?? AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor2.name),
+          borderRadius:
+              borderRadius ??
+              BorderRadius.all(Radius.circular(ScreenUtil().setWidth(16.0))),
+          color:
+              bgColor ??
+              AppThemeUtils.getColorByKey(
+                context,
+                AppThemeKeys.itemBgColor2.name,
+              ),
           boxShadow: [
-            boxShadow ?? BoxShadow(
-              color: Color(0xff101828).withAlpha((0.05 * 255).round()),
-              offset: Offset(0, 1),
-              blurRadius: ScreenUtil().setWidth(4.0),
-              spreadRadius: 0,
-            )
+            boxShadow ??
+                BoxShadow(
+                  color: Color(0xff101828).withAlpha((0.05 * 255).round()),
+                  offset: Offset(0, 1),
+                  blurRadius: ScreenUtil().setWidth(4.0),
+                  spreadRadius: 0,
+                ),
           ],
-          border: borderWidth == 0 ? null : Border.all(
-            width: borderWidth,
-            color: colors.borderColor,
-          ),
+          border: borderWidth == 0
+              ? null
+              : Border.all(width: borderWidth, color: colors.borderColor),
         ),
         constraints: BoxConstraints(
           maxHeight: height ?? defaultHeight,
@@ -161,10 +175,12 @@ Widget textFieldStyle2(
                 controller: controller,
                 focusNode: focusNode,
                 enabled: enabled,
-                style: style ?? TextStyle(
-                  color: colors.textColor,
-                  fontSize: fontSize ?? ScreenUtil().setSp(32.0),
-                ),
+                style:
+                    style ??
+                    TextStyle(
+                      color: colors.textColor,
+                      fontSize: fontSize ?? ScreenUtil().setSp(32.0),
+                    ),
                 textInputAction: textInputAction ?? TextInputAction.next,
                 keyboardType: keyboardType ?? TextInputType.text,
                 decoration: _buildInputDecoration(
@@ -188,63 +204,79 @@ Widget textFieldStyle2(
           ],
         ),
       ),
-      ?_buildMessageWidget(context, message: message, errorMessage: errorMessage, messageMargin: messageMargin),
+      ?_buildMessageWidget(
+        context,
+        message: message,
+        errorMessage: errorMessage,
+        messageMargin: messageMargin,
+      ),
     ],
   );
 }
 
 Widget textFieldStyle3(
-    BuildContext context,
-    {
-      ValueChanged<String>? onChanged,
-      VoidCallback? onEditingComplete,
-      ValueChanged<String>? onSubmitted,
-      TextEditingController? controller,
-      FocusNode? focusNode,
-      bool enabled=true,
-      String hintText="",
-      Widget? suffix,
-      EdgeInsets? contentPadding,
-      TextStyle? style,
-      TextStyle? hintStyle,
-      TextInputAction? textInputAction,
-      TextInputType? keyboardType,
-      double? height,
-      EdgeInsets? padding,
-      BorderRadius? borderRadius,
-      Color? bgColor,
-      double? fontSize,
-      int? maxLines,
-      int? maxLengths,
-      String message="",
-      String errorMessage="",
-      EdgeInsetsGeometry? messageMargin,
-      double borderWidth=0,
-      Color? borderColor,
-      bool obscure=false,
-      Widget? rightWidget1,
-      VoidCallback? rightOnTap1,
-      Widget? rightWidget2,
-      VoidCallback? rightOnTap2,
-      Widget? leftWidget,
-      VoidCallback? leftOnTap,
-    }) {
-  final colors = _resolveColors(context,
-      errorMessage: errorMessage, borderColorOverride: borderColor, focusNode: focusNode);
+  BuildContext context, {
+  ValueChanged<String>? onChanged,
+  VoidCallback? onEditingComplete,
+  ValueChanged<String>? onSubmitted,
+  TextEditingController? controller,
+  FocusNode? focusNode,
+  bool enabled = true,
+  String hintText = "",
+  Widget? suffix,
+  EdgeInsets? contentPadding,
+  TextStyle? style,
+  TextStyle? hintStyle,
+  TextInputAction? textInputAction,
+  TextInputType? keyboardType,
+  double? height,
+  EdgeInsets? padding,
+  BorderRadius? borderRadius,
+  Color? bgColor,
+  double? fontSize,
+  int? maxLines,
+  int? maxLengths,
+  String message = "",
+  String errorMessage = "",
+  EdgeInsetsGeometry? messageMargin,
+  double borderWidth = 0,
+  Color? borderColor,
+  bool obscure = false,
+  Widget? rightWidget1,
+  VoidCallback? rightOnTap1,
+  Widget? rightWidget2,
+  VoidCallback? rightOnTap2,
+  Widget? leftWidget,
+  VoidCallback? leftOnTap,
+}) {
+  final colors = _resolveColors(
+    context,
+    errorMessage: errorMessage,
+    borderColorOverride: borderColor,
+    focusNode: focusNode,
+  );
   final defaultHeight = ScreenUtil().setWidth(88.0);
 
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Container(
-        padding: padding ?? EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+        padding:
+            padding ??
+            EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
         decoration: BoxDecoration(
-          borderRadius: borderRadius ?? BorderRadius.all(Radius.circular(ScreenUtil().setWidth(16.0))),
-          color: bgColor ?? AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor2.name),
-          border: borderWidth == 0 ? null : Border.all(
-            width: borderWidth,
-            color: colors.borderColor,
-          ),
+          borderRadius:
+              borderRadius ??
+              BorderRadius.all(Radius.circular(ScreenUtil().setWidth(16.0))),
+          color:
+              bgColor ??
+              AppThemeUtils.getColorByKey(
+                context,
+                AppThemeKeys.itemBgColor2.name,
+              ),
+          border: borderWidth == 0
+              ? null
+              : Border.all(width: borderWidth, color: colors.borderColor),
         ),
         constraints: BoxConstraints(
           maxHeight: height ?? defaultHeight,
@@ -260,10 +292,12 @@ Widget textFieldStyle3(
                 controller: controller,
                 focusNode: focusNode,
                 enabled: enabled,
-                style: style ?? TextStyle(
-                  color: colors.textColor,
-                  fontSize: fontSize ?? ScreenUtil().setSp(32.0),
-                ),
+                style:
+                    style ??
+                    TextStyle(
+                      color: colors.textColor,
+                      fontSize: fontSize ?? ScreenUtil().setSp(32.0),
+                    ),
                 textInputAction: textInputAction ?? TextInputAction.next,
                 keyboardType: keyboardType ?? TextInputType.text,
                 obscureText: obscure,
@@ -289,7 +323,12 @@ Widget textFieldStyle3(
       ),
       // Style3 uses a Row with icon for error messages
       if (message != "" && errorMessage == "")
-        _buildMessageWidget(context, message: message, errorMessage: "", messageMargin: messageMargin)!,
+        _buildMessageWidget(
+          context,
+          message: message,
+          errorMessage: "",
+          messageMargin: messageMargin,
+        )!,
       if (errorMessage != "")
         Container(
           padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10.0)),
@@ -301,14 +340,14 @@ Widget textFieldStyle3(
                 "assets/img/details.png",
                 width: ScreenUtil().setWidth(30.0),
                 height: ScreenUtil().setWidth(30.0),
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
+                color: AppColorTokens.of(context).danger,
               ),
               SizedBox(width: 5),
               Expanded(
                 child: Text(
                   errorMessage,
                   style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
+                    color: AppColorTokens.of(context).danger,
                     fontSize: ScreenUtil().setSp(28.0),
                   ),
                 ),

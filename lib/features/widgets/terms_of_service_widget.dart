@@ -1,4 +1,3 @@
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -83,10 +82,7 @@ class _TermsOfServiceWidgetState extends State<TermsOfServiceWidget> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
-      color: AppThemeUtils.getColorByKey(
-        context,
-        AppThemeKeys.backGroundColor.name,
-      ),
+      color: AppColorTokens.of(context).bgBase,
       child: Stack(
         children: [
           Column(
@@ -148,10 +144,7 @@ class _TermsOfServiceWidgetState extends State<TermsOfServiceWidget> {
         child: Icon(
           icon,
           size: ScreenUtil().setWidth(64),
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.mainBlueColor.name,
-          ),
+          color: AppColorTokens.of(context).brand,
         ),
       ),
     );

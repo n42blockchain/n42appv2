@@ -22,7 +22,9 @@ class Loading extends StatelessWidget {
               text ?? "${S.of(context).g_key_106}...",
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                  color: textColor ?? const Color(0xff666666), fontSize: 16),
+                color: textColor ?? const Color(0xff666666),
+                fontSize: 16,
+              ),
             ),
           ),
         ],

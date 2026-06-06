@@ -21,7 +21,9 @@ class _ViewPwdIconState extends State<ViewPwdIcon> {
   Widget build(BuildContext context) {
     final Widget xianshi = Image.asset(
       'assets/login/icon_denglu_xianshi.png',
-      color: Theme.of(context).brightness == Brightness.light ? Colors.grey : Colors.white,
+      color: Theme.of(context).brightness == Brightness.light
+          ? Colors.grey
+          : Colors.white,
       width: ScreenUtil().setWidth(34),
     );
     return GestureDetector(

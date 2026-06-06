@@ -39,7 +39,7 @@ class AppPushUtils {
   static FlutterLocalNotificationsPlugin? _bgLocalNotifications;
 
   static Future<FlutterLocalNotificationsPlugin>
-      _initBgLocalNotifications() async {
+  _initBgLocalNotifications() async {
     final plugin = FlutterLocalNotificationsPlugin();
     const android = AndroidInitializationSettings('push_small_icon');
     const ios = DarwinInitializationSettings();
@@ -135,7 +135,10 @@ class AppPushUtils {
           sound: true,
         );
     //android上不需要考虑权限的问题
-    AppLogger.d('AppPush', 'permission status: ${settings.authorizationStatus}');
+    AppLogger.d(
+      'AppPush',
+      'permission status: ${settings.authorizationStatus}',
+    );
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
     } else if (settings.authorizationStatus ==
         AuthorizationStatus.provisional) {
@@ -154,10 +157,10 @@ class AppPushUtils {
       AppLogger.d(
         'AppPush',
         'foreground message: id=${message.messageId} type=${message.messageType} '
-        'senderId=${message.senderId} from=${message.from} '
-        'collapseKey=${message.collapseKey} ttl=${message.ttl} '
-        'sentTime=${message.sentTime} category=${message.category} '
-        'notification=${message.notification?.toMap()} data=${message.data}',
+            'senderId=${message.senderId} from=${message.from} '
+            'collapseKey=${message.collapseKey} ttl=${message.ttl} '
+            'sentTime=${message.sentTime} category=${message.category} '
+            'notification=${message.notification?.toMap()} data=${message.data}',
       );
 
       try {
@@ -228,7 +231,7 @@ class AppPushUtils {
       AppLogger.d(
         'AppPush',
         'opened from background: notification=${message.notification?.toMap()} '
-        'data=${message.data}',
+            'data=${message.data}',
       );
 
       if (isMatrixCallPayload(message.data)) {
@@ -265,7 +268,7 @@ class AppPushUtils {
       AppLogger.d(
         'AppPush',
         'cold-start from notification: title=${m.notification?.title} '
-        'notification=${m.notification?.toMap()} data=${m.data}',
+            'notification=${m.notification?.toMap()} data=${m.data}',
       );
       if (isMatrixCallPayload(m.data)) {
         AppLogger.d(
@@ -296,7 +299,6 @@ class AppPushUtils {
       // Matrix Pusher 的 token 轮换由 n42_chat 插件内部的
       // FirebaseMessaging.onTokenRefresh 监听统一处理，宿主侧不重复注册。
     });
-
   }
 
   //绑定用户推送的token
@@ -357,7 +359,7 @@ class AppPushUtils {
     AppLogger.d(
       'AppPush',
       'background isolate: notification=${message.notification?.toMap()} '
-      'data=${message.data}',
+          'data=${message.data}',
     );
 
     // Matrix/Chat 消息（含 room_id 或 type 为 m.call.*）委托给 n42_chat 插件处理
@@ -560,8 +562,7 @@ class AppPushUtils {
       await Future<void>.delayed(const Duration(milliseconds: 800));
 
       // 先检查当前状态
-      var settings =
-          await FirebaseMessaging.instance.getNotificationSettings();
+      var settings = await FirebaseMessaging.instance.getNotificationSettings();
 
       var enabled =
           settings.authorizationStatus == AuthorizationStatus.authorized ||

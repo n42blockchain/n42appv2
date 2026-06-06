@@ -78,7 +78,10 @@ extension _PushNavigation on AppPushUtils {
       // 清理老 chat 体系遗留的本地通知 ID，避免重复点击。
       flutterLocalNotificationsPlugin.cancel(id: type);
     }
-    AppLogger.d('AppPush', 'legacy chat notification tapped — routing to n42_chat');
+    AppLogger.d(
+      'AppPush',
+      'legacy chat notification tapped — routing to n42_chat',
+    );
     Navigator.push(
       ctx,
       MaterialPageRoute(builder: (_) => N42Chat.chatWidget()),
@@ -109,5 +112,4 @@ extension _PushNavigation on AppPushUtils {
     if (bUri.isEmpty) return;
     Navigator.push(ctx, MaterialPageRoute(builder: (_) => BrowserPage(bUri)));
   }
-
 }

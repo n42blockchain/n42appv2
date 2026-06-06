@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
@@ -73,10 +73,7 @@ class _ScanPageState extends State<ScanPage> {
             },
             icon: Icon(
               flash ? Icons.flash_on : Icons.flash_off,
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainBlueColor.name,
-              ),
+              color: AppColorTokens.of(context).brand,
             ),
           ),
         ],
@@ -96,10 +93,7 @@ class _ScanPageState extends State<ScanPage> {
             S.of(context).g_key_195,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(30.0),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainTextColor.name,
-              ),
+              color: AppColorTokens.of(context).textPrimary,
             ),
           ),
           SizedBox(height: ScreenUtil().setWidth(36.0)),
@@ -113,10 +107,7 @@ class _ScanPageState extends State<ScanPage> {
               S.of(context).g_face_5,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(32.0),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainBlueColor.name,
-                ),
+                color: AppColorTokens.of(context).brand,
               ),
             ),
           ),

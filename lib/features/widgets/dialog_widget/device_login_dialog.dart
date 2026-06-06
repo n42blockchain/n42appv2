@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/auth/data/models/device_login_info.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/shared/widgets/tips_dialog_3.dart';
 
 /// 新设备登录通知弹窗
@@ -16,8 +16,7 @@ Future<bool?> deviceLoginDialog(
     Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemBgColor.name),
+        color: AppColorTokens.of(context).bgSurface,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -33,8 +32,7 @@ Future<bool?> deviceLoginDialog(
                   Icon(
                     Icons.phone_android,
                     size: ScreenUtil().setWidth(60),
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainBlueColor.name),
+                    color: AppColorTokens.of(context).brand,
                   ),
                   SizedBox(height: ScreenUtil().setWidth(16)),
                   // 标题
@@ -43,8 +41,7 @@ Future<bool?> deviceLoginDialog(
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(32),
                       fontWeight: FontWeight.bold,
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.itemTextColor.name),
+                      color: AppColorTokens.of(context).textItem,
                     ),
                   ),
                   // 消息内容
@@ -56,14 +53,15 @@ Future<bool?> deviceLoginDialog(
                       right: ScreenUtil().setWidth(30),
                     ),
                     child: Text(
-                      S.of(context).device_login_message(
-                        info.displayName,
-                        info.deviceOs,
-                      ),
+                      S
+                          .of(context)
+                          .device_login_message(
+                            info.displayName,
+                            info.deviceOs,
+                          ),
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.itemTextColor.name),
+                        color: AppColorTokens.of(context).textItem,
                         fontSize: ScreenUtil().setSp(28),
                       ),
                     ),
@@ -72,11 +70,7 @@ Future<bool?> deviceLoginDialog(
               ),
             ),
           ),
-          Divider(
-            height: ScreenUtil().setWidth(1),
-            indent: 0,
-            endIndent: 0,
-          ),
+          Divider(height: ScreenUtil().setWidth(1), indent: 0, endIndent: 0),
           // 双按钮: "知道了" + "修改密码"
           SizedBox(
             height: ScreenUtil().setWidth(80),
@@ -93,20 +87,14 @@ Future<bool?> deviceLoginDialog(
                       child: Text(
                         S.of(context).device_login_dismiss,
                         style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.itemSubtitleTextColor.name),
+                          color: AppColorTokens.of(context).textSubtitle,
                           fontSize: ScreenUtil().setSp(30),
                         ),
                       ),
                     ),
                   ),
                 ),
-                Container(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.dividerColor.name),
-                  width: 1,
-                ),
+                Container(color: AppColorTokens.of(context).border, width: 1),
                 Expanded(
                   child: InkWell(
                     onTap: () {
@@ -118,8 +106,7 @@ Future<bool?> deviceLoginDialog(
                       child: Text(
                         S.of(context).device_login_change_password,
                         style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.mainBlueColor.name),
+                          color: AppColorTokens.of(context).brand,
                           fontSize: ScreenUtil().setSp(30),
                         ),
                       ),
