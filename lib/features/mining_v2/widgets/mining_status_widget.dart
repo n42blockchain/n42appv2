@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/mining_v2/pages/mining_node_detail_page.dart';
 import 'package:n42_wallet/features/mining_v2/provider/mining_v2_provider.dart';
@@ -20,9 +21,8 @@ class MiningStatusWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isActive = mpValue.miningStatus;
-    final statusColor = isActive
-        ? const Color(0xff32D74B)
-        : const Color(0xffEB5851);
+    final c = AppColorTokens.of(context);
+    final statusColor = isActive ? c.success : c.danger;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
@@ -45,6 +45,7 @@ class MiningStatusWidget extends StatelessWidget {
     Color statusColor,
     bool isDark,
   ) {
+    final c = AppColorTokens.of(context);
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
@@ -131,9 +132,7 @@ class MiningStatusWidget extends StatelessWidget {
                           ? Icons.pause_circle_outline
                           : Icons.play_circle_outline,
                       size: ScreenUtil().setWidth(36),
-                      color: isActive
-                          ? const Color(0xffEB5851)
-                          : const Color(0xff32D74B),
+                      color: isActive ? c.danger : c.success,
                     ),
                   ),
                 ),
@@ -169,7 +168,7 @@ class MiningStatusWidget extends StatelessWidget {
                   style: TextStyle(
                     color: statusColor,
                     fontSize: ScreenUtil().setSp(28),
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -180,8 +179,8 @@ class MiningStatusWidget extends StatelessWidget {
                   width: ScreenUtil().setWidth(8),
                   height: ScreenUtil().setWidth(8),
                   margin: EdgeInsets.only(right: ScreenUtil().setWidth(6)),
-                  decoration: const BoxDecoration(
-                    color: Color(0xff32D74B),
+                  decoration: BoxDecoration(
+                    color: c.success,
                     shape: BoxShape.circle,
                   ),
                 ),
@@ -278,7 +277,7 @@ class MiningStatusWidget extends StatelessWidget {
                       AppThemeKeys.mainTextColor.name,
                     ),
                     fontSize: ScreenUtil().setSp(30),
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,

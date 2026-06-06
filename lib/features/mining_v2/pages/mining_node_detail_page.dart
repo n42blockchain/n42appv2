@@ -75,7 +75,7 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
     FullNodeEntity node,
     bool isDark,
   ) {
-    final badgeColor = _statusColor(node.status);
+    final badgeColor = _statusColor(context, node.status);
     final pubKey = node.id;
     final shortKey = pubKey.length > 12
         ? '${pubKey.substring(0, 8)}...${pubKey.substring(pubKey.length - 6)}'

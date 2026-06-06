@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/mining_v2/provider/mining_v2_provider.dart';
 
 /// Mining Risk Card Widget
@@ -20,7 +21,7 @@ class MiningRiskCard extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final scoreValue =
         double.tryParse(mpValue.inactivityScorePercentage) ?? 0.0;
-    final riskColor = _getRiskColor(scoreValue);
+    final riskColor = _getRiskColor(context, scoreValue);
 
     return Container(
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20)),
@@ -52,10 +53,11 @@ class MiningRiskCard extends StatelessWidget {
     );
   }
 
-  Color _getRiskColor(double scoreValue) {
-    if (scoreValue <= kLowRiskThreshold) return const Color(0xFF4CAF50);
-    if (scoreValue <= kModerateRiskThreshold) return const Color(0xFFFF9800);
-    return const Color(0xFFF44336);
+  Color _getRiskColor(BuildContext context, double scoreValue) {
+    final c = AppColorTokens.of(context);
+    if (scoreValue <= kLowRiskThreshold) return c.success;
+    if (scoreValue <= kModerateRiskThreshold) return c.warning;
+    return c.danger;
   }
 
   Widget _buildHeader(BuildContext context, Color riskColor) {
@@ -100,7 +102,7 @@ class MiningRiskCard extends StatelessWidget {
                           AppThemeKeys.mainTextColor.name,
                         ),
                         fontSize: ScreenUtil().setSp(30),
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     SizedBox(width: ScreenUtil().setWidth(8)),
@@ -244,7 +246,7 @@ class MiningRiskCard extends StatelessWidget {
               style: TextStyle(
                 color: riskColor,
                 fontSize: ScreenUtil().setSp(26),
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),

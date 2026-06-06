@@ -33,7 +33,7 @@ mixin _MiningNodeDetailWidgets on ConsumerState<MiningNodeDetailPage> {
             icon: Icons.timer_outlined,
             label: 'Uptime',
             value: '${node.uptimePercentage.toStringAsFixed(1)}%',
-            valueColor: _uptimeColor(node.uptimePercentage),
+            valueColor: _uptimeColor(context, node.uptimePercentage),
           ),
         ),
       ],
@@ -86,7 +86,7 @@ mixin _MiningNodeDetailWidgets on ConsumerState<MiningNodeDetailPage> {
                   valueColor ??
                   _themeColor(context, AppThemeKeys.mainTextColor),
               fontSize: ScreenUtil().setSp(28),
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -125,7 +125,7 @@ mixin _MiningNodeDetailWidgets on ConsumerState<MiningNodeDetailPage> {
               context,
               label: S.of(context).g_mining_node_key6,
               value: dateFormat.format(node.expiresAt!),
-              valueColor: const Color(0xFFEB5851),
+              valueColor: AppColorTokens.of(context).danger,
             ),
           ],
         ],
@@ -330,11 +330,14 @@ mixin _MiningNodeDetailWidgets on ConsumerState<MiningNodeDetailPage> {
     );
   }
 
-  Color _statusColor(NodeStatus status) => switch (status) {
-    NodeStatus.online => const Color(0xff32D74B),
-    NodeStatus.offline || NodeStatus.error => const Color(0xffEB5851),
-    NodeStatus.syncing => const Color(0xFFFF9500),
-  };
+  Color _statusColor(BuildContext context, NodeStatus status) {
+    final c = AppColorTokens.of(context);
+    return switch (status) {
+      NodeStatus.online => c.success,
+      NodeStatus.offline || NodeStatus.error => c.danger,
+      NodeStatus.syncing => c.warning,
+    };
+  }
 
   String _statusLabel(BuildContext context, NodeStatus status) =>
       switch (status) {
@@ -343,9 +346,10 @@ mixin _MiningNodeDetailWidgets on ConsumerState<MiningNodeDetailPage> {
         NodeStatus.syncing => S.of(context).g_mining_key_102,
       };
 
-  Color _uptimeColor(double pct) {
-    if (pct >= 90) return const Color(0xff32D74B);
-    if (pct >= 60) return const Color(0xFFFF9500);
-    return const Color(0xffEB5851);
+  Color _uptimeColor(BuildContext context, double pct) {
+    final c = AppColorTokens.of(context);
+    if (pct >= 90) return c.success;
+    if (pct >= 60) return c.warning;
+    return c.danger;
   }
 }
