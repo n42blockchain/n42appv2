@@ -5,6 +5,7 @@ import 'package:n42_wallet/features/wallet/utils/browser/browser_txhash.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/sqlite/app_database.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/features/wallet/api/transaction_api.dart';
@@ -242,13 +243,7 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
             height: ScreenUtil().setWidth(80),
             width: ScreenUtil().setWidth(80),
             padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
-            child: Icon(
-              Icons.refresh,
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainBlueColor.name,
-              ),
-            ),
+            child: Icon(Icons.refresh, color: AppColorTokens.of(context).brand),
           ),
         ),
         errorMessageWidget(),
@@ -298,10 +293,7 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
       margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
       padding: EdgeInsets.only(left: ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.itemBgColor.name,
-        ),
+        color: AppColorTokens.of(context).bgSurface,
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8.0)),
       ),
       height: ScreenUtil().setWidth(72.0),
@@ -310,10 +302,7 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
           Expanded(
             child: TextField(
               style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainTextColor.name,
-                ),
+                color: AppColorTokens.of(context).textPrimary,
                 fontSize: ScreenUtil().setSp(26.0),
               ),
               controller: searchEditingController,
@@ -340,10 +329,7 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
               height: ScreenUtil().setWidth(60.0),
               child: Icon(
                 Icons.search,
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainBlueColor.name,
-                ),
+                color: AppColorTokens.of(context).brand,
                 size: ScreenUtil().setWidth(30.0),
               ),
             ),
@@ -375,10 +361,7 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
         errorMessage,
         style: TextStyle(
           fontSize: ScreenUtil().setSp(28.0),
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.errorTextColor.name,
-          ),
+          color: AppColorTokens.of(context).danger,
         ),
         textAlign: TextAlign.center,
       ),
@@ -386,10 +369,7 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
   }
 
   Widget itemWidget(String title, String value, {bool copy = false}) {
-    final blueColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainBlueColor.name,
-    );
+    final blueColor = AppColorTokens.of(context).brand;
     return Container(
       margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
       padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10)),
@@ -400,10 +380,7 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
           Text(
             title,
             style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainTextColor.name,
-              ),
+              color: AppColorTokens.of(context).textPrimary,
               fontSize: ScreenUtil().setSp(28),
             ),
           ),
@@ -455,10 +432,7 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
           Text(
             title,
             style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainTextColor.name,
-              ),
+              color: AppColorTokens.of(context).textPrimary,
               fontSize: ScreenUtil().setSp(28),
             ),
           ),

@@ -33,8 +33,7 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
           Text(
             S.of(context).g_key_38,
             style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
+              color: AppColorTokens.of(context).textPrimary,
               fontSize: ScreenUtil().setSp(28.0),
             ),
           ),
@@ -51,8 +50,7 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
             maxLines: 3,
             height: ScreenUtil().setWidth(170.0),
             errorMessage: toError,
-            bgColor: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.itemBgColor.name),
+            bgColor: AppColorTokens.of(context).bgSurface,
             rightWidget3: buildSendIconBtn(context, Icons.qr_code_scanner),
             rightOnTap3: scanQR,
             rightWidget1: buildSendIconBtn(context, Icons.paste_outlined),
@@ -69,8 +67,8 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
     final su = ScreenUtil();
     final unit = (widget.coinModel.coin['unit'] as String? ?? '').toUpperCase();
     final balance = '${widget.coinModel.balanceStringAll()} $unit';
-    final mainText = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final itemBg = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name);
+    final mainText = AppColorTokens.of(context).textPrimary;
+    final itemBg = AppColorTokens.of(context).bgSurface;
 
     return Container(
       margin: EdgeInsets.all(su.setWidth(30.0)),
@@ -100,7 +98,9 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
           Container(
             margin: EdgeInsets.only(top: su.setWidth(20.0)),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(su.setWidth(16.0))),
+              borderRadius: BorderRadius.all(
+                Radius.circular(su.setWidth(16.0)),
+              ),
               color: itemBg,
               boxShadow: [
                 BoxShadow(
@@ -121,9 +121,13 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
                   hintStyle: TextStyle(
                     fontSize: su.setSp(54.0),
                     color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.textFieldHintColor.name),
+                      context,
+                      AppThemeKeys.textFieldHintColor.name,
+                    ),
                   ),
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
                   onChanged: (v) => amountCheck(value: v),
                   onEditingComplete: () {
                     amountCheck();
@@ -138,15 +142,20 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
                   ),
                   bgColor: itemBg,
                   errorMessage: amountError,
-                  messageMargin: EdgeInsets.symmetric(horizontal: su.setWidth(30.0)),
+                  messageMargin: EdgeInsets.symmetric(
+                    horizontal: su.setWidth(30.0),
+                  ),
                   rightWidget1: Container(
                     margin: EdgeInsets.only(left: su.setWidth(10.0)),
                     height: su.setWidth(60.0),
-                    padding: EdgeInsets.symmetric(horizontal: su.setWidth(20.0)),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: su.setWidth(20.0),
+                    ),
                     decoration: BoxDecoration(
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainBlueColor.name),
-                      borderRadius: BorderRadius.all(Radius.circular(su.setWidth(60.0))),
+                      color: AppColorTokens.of(context).brand,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(su.setWidth(60.0)),
+                      ),
                     ),
                     alignment: Alignment.center,
                     child: Text(
@@ -154,7 +163,9 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
                       style: TextStyle(
                         fontSize: su.setSp(26.0),
                         color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.mainWhiteColor.name),
+                          context,
+                          AppThemeKeys.mainWhiteColor.name,
+                        ),
                       ),
                     ),
                   ),
@@ -166,7 +177,11 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
                   endIndent: su.setWidth(20.0),
                 ),
                 buildOwnerAddress(),
-                buildUsdEquivalent(context, valueCtrl.text, widget.coinModel.coinPrice),
+                buildUsdEquivalent(
+                  context,
+                  valueCtrl.text,
+                  widget.coinModel.coinPrice,
+                ),
               ],
             ),
           ),
@@ -186,8 +201,7 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
       child: Text(
         addr,
         style: TextStyle(
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemSubtitleTextColor.name),
+          color: AppColorTokens.of(context).textSubtitle,
           fontSize: su.setSp(30.0),
         ),
         maxLines: 1,
@@ -208,8 +222,7 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
           Text(
             S.of(context).g_key_send_memo_label,
             style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
+              color: AppColorTokens.of(context).textPrimary,
               fontSize: ScreenUtil().setSp(28.0),
             ),
           ),
@@ -219,12 +232,10 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
             controller: memoCtrl,
             focusNode: memoNode,
             hintText: S.of(context).g_key_send_memo_hint,
-            onEditingComplete: () =>
-                FocusScope.of(context).unfocus(),
+            onEditingComplete: () => FocusScope.of(context).unfocus(),
             maxLines: 2,
             height: ScreenUtil().setWidth(120.0),
-            bgColor: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.itemBgColor.name),
+            bgColor: AppColorTokens.of(context).bgSurface,
           ),
         ],
       ),
@@ -232,14 +243,12 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
   }
 
   Widget buildFeeRow() {
-    final coinType =
-        widget.coinModel.coin['coinType']?.toString() ?? '';
+    final coinType = widget.coinModel.coin['coinType']?.toString() ?? '';
     final isContract = widget.coinModel.coin['isContract'] == true;
     final int decimals = isContract
         ? (chainModel?.coin['decimals'] as int? ?? 0)
         : (widget.coinModel.coin['decimals'] as int? ?? 0);
-    final feeText =
-        '${toEther(totalGasPrice.toString(), decimals)} $coinType';
+    final feeText = '${toEther(totalGasPrice.toString(), decimals)} $coinType';
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -258,8 +267,7 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
                     S.of(context).g_key_29,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.itemSubtitleTextColor.name),
+                      color: AppColorTokens.of(context).textSubtitle,
                       fontSize: ScreenUtil().setSp(28.0),
                     ),
                   ),
@@ -269,17 +277,16 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
                   '${(chainModel?.coin['unit'] ?? '').toString().toUpperCase()}',
                   style: TextStyle(
                     color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainButtonBgColor.name),
+                      context,
+                      AppThemeKeys.mainButtonBgColor.name,
+                    ),
                     fontSize: ScreenUtil().setSp(28.0),
                   ),
                 ),
               ],
             ),
           ),
-        NonEvmFeeCompact(
-          feeText: feeText,
-          onTap: null,
-        ),
+        NonEvmFeeCompact(feeText: feeText, onTap: null),
       ],
     );
   }
@@ -298,17 +305,19 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
       ),
       width: double.infinity,
       decoration: BoxDecoration(
-        borderRadius:
-            BorderRadius.all(Radius.circular(ScreenUtil().setWidth(16.0))),
+        borderRadius: BorderRadius.all(
+          Radius.circular(ScreenUtil().setWidth(16.0)),
+        ),
         color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.errorBgColor2.name),
+          context,
+          AppThemeKeys.errorBgColor2.name,
+        ),
       ),
       child: Text(
         errorMessage,
         style: TextStyle(
           fontSize: ScreenUtil().setSp(28.0),
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.errorTextColor.name),
+          color: AppColorTokens.of(context).danger,
         ),
       ),
     );
@@ -326,8 +335,7 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
           Container(
             padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
             height: ScreenUtil().setWidth(148.0),
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.backGroundColor.name),
+            color: AppColorTokens.of(context).bgBase,
             child: AppButton(
               label: S.of(context).g_key_48,
               onPressed: () => sendTransaction(),

@@ -25,8 +25,8 @@ class TokenMetadata {
       decimals: toIntSafe(json['decimals'] ?? json['tokenDecimal']) ?? 18,
       totalSupply: (json['totalSupply'] ?? json['total_supply'])?.toString(),
       logoUrl: (json['logoUrl'] ?? json['logo'])?.toString(),
-      contractAddress:
-          (json['contractAddress'] ?? json['contract'])?.toString(),
+      contractAddress: (json['contractAddress'] ?? json['contract'])
+          ?.toString(),
     );
   }
 }

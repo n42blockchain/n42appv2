@@ -20,9 +20,7 @@ export 'package:n42_wallet/features/wallet/services/ens_models.dart';
 Map<String, dynamic>? _ensMapValue(dynamic value) {
   if (value is Map<String, dynamic>) return value;
   if (value is Map) {
-    return value.map(
-      (key, entry) => MapEntry(key.toString(), entry),
-    );
+    return value.map((key, entry) => MapEntry(key.toString(), entry));
   }
   return null;
 }
@@ -66,8 +64,8 @@ class EnsRegistrationService {
   final Map<String, CommitResult> _pendingCommitments = {};
 
   EnsRegistrationService()
-      : _baseUrl = AppConfig.getApiUrlOnline('tokenViewUri'),
-        _headers = {'content-type': 'application/json'};
+    : _baseUrl = AppConfig.getApiUrlOnline('tokenViewUri'),
+      _headers = {'content-type': 'application/json'};
 
   /// 去除 .eth 后缀的基础名称
   String _baseName(String name) => normalizeName(name).replaceAll('.eth', '');
@@ -95,8 +93,9 @@ class EnsRegistrationService {
           return EnsAvailabilityResult.unavailable(
             normalizedName,
             expiresAt: _ensDateTimeValue(data?['expiresAt']),
-            ownerAddress:
-                data?['owner'] == null ? null : _ensStringValue(data?['owner']),
+            ownerAddress: data?['owner'] == null
+                ? null
+                : _ensStringValue(data?['owner']),
           );
         }
       } else {
@@ -192,7 +191,9 @@ class EnsRegistrationService {
   /// 实际实现需要与 ENS 合约的 makeCommitment 函数一致
   String _calculateCommitment(String name, String owner, String secret) {
     final nameBytes = utf8.encode(name);
-    final ownerBytes = hexToBytes(owner.replaceFirst('0x', '').padLeft(64, '0'));
+    final ownerBytes = hexToBytes(
+      owner.replaceFirst('0x', '').padLeft(64, '0'),
+    );
     final secretBytes = hexToBytes(secret.replaceFirst('0x', ''));
 
     final combined = Uint8List(nameBytes.length + 32 + 32);
@@ -218,7 +219,11 @@ class EnsRegistrationService {
     final secretValue = secret ?? _generateSecret();
 
     try {
-      final commitment = _calculateCommitment(normalizedName, owner, secretValue);
+      final commitment = _calculateCommitment(
+        normalizedName,
+        owner,
+        secretValue,
+      );
       final body = {
         'name': normalizedName,
         'owner': owner,
@@ -237,8 +242,9 @@ class EnsRegistrationService {
         final result = CommitResult(
           commitmentHash: commitment,
           secret: secretValue,
-          txHash:
-              data['txHash'] == null ? null : _ensStringValue(data['txHash']),
+          txHash: data['txHash'] == null
+              ? null
+              : _ensStringValue(data['txHash']),
           commitTime: DateTime.now(),
           minWaitTime: _ensIntValue(data['minWaitTime'], fallback: 60),
           maxWaitTime: _ensIntValue(data['maxWaitTime'], fallback: 86400),

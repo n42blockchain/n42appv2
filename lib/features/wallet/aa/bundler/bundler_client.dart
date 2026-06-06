@@ -42,12 +42,14 @@ class BundlerClient {
     http.Client? httpClient,
     Duration? timeout,
     EntryPointVersion? version,
-  })  : _bundlerUrl = bundlerUrl,
-        _entryPoint = entryPoint,
-        _apiKey = apiKey,
-        _httpClient = httpClient ?? http.Client(),
-        _timeout = timeout ?? const Duration(milliseconds: AAConstants.bundlerRpcTimeout),
-        _version = version ?? AAConfig.defaultVersion;
+  }) : _bundlerUrl = bundlerUrl,
+       _entryPoint = entryPoint,
+       _apiKey = apiKey,
+       _httpClient = httpClient ?? http.Client(),
+       _timeout =
+           timeout ??
+           const Duration(milliseconds: AAConstants.bundlerRpcTimeout),
+       _version = version ?? AAConfig.defaultVersion;
 
   /// Create a BundlerClient for a specific chain
   factory BundlerClient.forChain(
@@ -101,10 +103,10 @@ class BundlerClient {
   ///
   /// Returns the UserOperation hash if successful.
   Future<String> sendUserOperation(UserOperation userOp) async {
-    final result = await _rpcCall(
-      'eth_sendUserOperation',
-      [userOp.toJson(version: _version), _entryPoint],
-    );
+    final result = await _rpcCall('eth_sendUserOperation', [
+      userOp.toJson(version: _version),
+      _entryPoint,
+    ]);
 
     if (result is String) {
       return result;
@@ -120,11 +122,13 @@ class BundlerClient {
   /// Estimate gas for a UserOperation
   ///
   /// Returns gas estimates for verification, call, and pre-verification.
-  Future<GasEstimateResult> estimateUserOperationGas(UserOperation userOp) async {
-    final result = await _rpcCall(
-      'eth_estimateUserOperationGas',
-      [userOp.toJson(version: _version), _entryPoint],
-    );
+  Future<GasEstimateResult> estimateUserOperationGas(
+    UserOperation userOp,
+  ) async {
+    final result = await _rpcCall('eth_estimateUserOperationGas', [
+      userOp.toJson(version: _version),
+      _entryPoint,
+    ]);
 
     if (result is Map<String, dynamic>) {
       return GasEstimateResult.fromJson(result);
@@ -150,7 +154,9 @@ class BundlerClient {
   }
 
   /// Get the receipt for a UserOperation
-  Future<UserOperationReceipt?> getUserOperationReceipt(String userOpHash) async {
+  Future<UserOperationReceipt?> getUserOperationReceipt(
+    String userOpHash,
+  ) async {
     return _safeRpcQuery('eth_getUserOperationReceipt', [userOpHash], (result) {
       if (result is Map<String, dynamic>) {
         return UserOperationReceipt.fromJson(result);
@@ -205,8 +211,12 @@ class BundlerClient {
     Duration? timeout,
     Duration? pollingInterval,
   }) async {
-    final waitTimeout = timeout ?? const Duration(milliseconds: AAConstants.confirmationTimeout);
-    final interval = pollingInterval ?? const Duration(milliseconds: AAConstants.receiptPollingInterval);
+    final waitTimeout =
+        timeout ??
+        const Duration(milliseconds: AAConstants.confirmationTimeout);
+    final interval =
+        pollingInterval ??
+        const Duration(milliseconds: AAConstants.receiptPollingInterval);
 
     final startTime = DateTime.now();
 
@@ -262,16 +272,10 @@ class BundlerClient {
 
       return json['result'];
     } on TimeoutException {
-      throw BundlerRpcError(
-        'Request timeout',
-        method: method,
-      );
+      throw BundlerRpcError('Request timeout', method: method);
     } catch (e) {
       if (e is AAError) rethrow;
-      throw BundlerRpcError(
-        e.toString(),
-        method: method,
-      );
+      throw BundlerRpcError(e.toString(), method: method);
     }
   }
 
@@ -311,7 +315,8 @@ class GasEstimateResult {
       verificationGasLimit: _parseBigInt(json['verificationGasLimit']),
       callGasLimit: _parseBigInt(json['callGasLimit']),
       preVerificationGas: _parseBigInt(json['preVerificationGas']),
-      paymasterVerificationGasLimit: json['paymasterVerificationGasLimit'] != null
+      paymasterVerificationGasLimit:
+          json['paymasterVerificationGasLimit'] != null
           ? _parseBigInt(json['paymasterVerificationGasLimit'])
           : null,
       paymasterPostOpGasLimit: json['paymasterPostOpGasLimit'] != null
@@ -342,7 +347,9 @@ class GasEstimateResult {
       verificationGasLimit: applyBuffer(verificationGasLimit),
       callGasLimit: applyBuffer(callGasLimit),
       preVerificationGas: applyBuffer(preVerificationGas),
-      paymasterVerificationGasLimit: applyOptional(paymasterVerificationGasLimit),
+      paymasterVerificationGasLimit: applyOptional(
+        paymasterVerificationGasLimit,
+      ),
       paymasterPostOpGasLimit: applyOptional(paymasterPostOpGasLimit),
     );
   }
@@ -359,7 +366,10 @@ class GasEstimateResult {
   /// Apply estimates to a UserOperation
   UserOperation applyTo(UserOperation userOp) {
     return userOp.copyWith(
-      accountGasLimits: PackedGasLimits.pack(verificationGasLimit, callGasLimit),
+      accountGasLimits: PackedGasLimits.pack(
+        verificationGasLimit,
+        callGasLimit,
+      ),
       preVerificationGas: preVerificationGas,
     );
   }
@@ -370,9 +380,11 @@ class GasEstimateResult {
       'callGasLimit': '0x${callGasLimit.toRadixString(16)}',
       'preVerificationGas': '0x${preVerificationGas.toRadixString(16)}',
       if (paymasterVerificationGasLimit != null)
-        'paymasterVerificationGasLimit': '0x${paymasterVerificationGasLimit!.toRadixString(16)}',
+        'paymasterVerificationGasLimit':
+            '0x${paymasterVerificationGasLimit!.toRadixString(16)}',
       if (paymasterPostOpGasLimit != null)
-        'paymasterPostOpGasLimit': '0x${paymasterPostOpGasLimit!.toRadixString(16)}',
+        'paymasterPostOpGasLimit':
+            '0x${paymasterPostOpGasLimit!.toRadixString(16)}',
     };
   }
 
@@ -444,7 +456,9 @@ class BundlerClientBuilder {
     // Chain-based configuration
     final symbol = _chainSymbol;
     if (symbol == null) {
-      throw AAConfigurationError('Either chain symbol or bundler URL must be provided');
+      throw AAConfigurationError(
+        'Either chain symbol or bundler URL must be provided',
+      );
     }
 
     final config = AAConfig.getChainConfig(symbol, version: version);

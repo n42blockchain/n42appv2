@@ -56,8 +56,9 @@ mixin _TrxSendWidgetsMixin on _TrxSendLogicMixin {
 
   Widget noteWidget() {
     final isEthNonContract =
-        widget.coinModel.coin['blockchainType'] == BlockchainType.Ethereum.name &&
-            widget.coinModel.coin['isContract'] == false;
+        widget.coinModel.coin['blockchainType'] ==
+            BlockchainType.Ethereum.name &&
+        widget.coinModel.coin['isContract'] == false;
     if (!isEthNonContract) return const SizedBox();
 
     final sw = ScreenUtil().setWidth;
@@ -91,8 +92,9 @@ mixin _TrxSendWidgetsMixin on _TrxSendLogicMixin {
               FocusScope.of(context).requestFocus(toNode);
             },
             onChanged: (String value) {
-              noteErrorMessage =
-                  value.length > 100 ? S.of(context).nicknameMessage(100) : "";
+              noteErrorMessage = value.length > 100
+                  ? S.of(context).nicknameMessage(100)
+                  : "";
               setState(() {});
             },
             maxLines: 2,
@@ -152,8 +154,9 @@ mixin _TrxSendWidgetsMixin on _TrxSendLogicMixin {
                     fontSize: ScreenUtil().setSp(54.0),
                     color: _themeColor(AppThemeKeys.textFieldHintColor),
                   ),
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
                   onChanged: (value) => amountCheck(value: value),
                   onEditingComplete: () {
                     amountCheck();
@@ -162,12 +165,13 @@ mixin _TrxSendWidgetsMixin on _TrxSendLogicMixin {
                   fontSize: sw(70.0),
                   height: sw(120.0),
                   boxShadow: const BoxShadow(color: Color(0x00000000)),
-                  borderRadius:
-                      BorderRadius.only(topLeft: radius16, topRight: radius16),
+                  borderRadius: BorderRadius.only(
+                    topLeft: radius16,
+                    topRight: radius16,
+                  ),
                   bgColor: _themeColor(AppThemeKeys.itemBgColor),
                   errorMessage: amountErrorMessage,
-                  messageMargin:
-                      EdgeInsets.symmetric(horizontal: sw(30.0)),
+                  messageMargin: EdgeInsets.symmetric(horizontal: sw(30.0)),
                   rightWidget1: Container(
                     margin: EdgeInsets.only(left: sw(10.0)),
                     height: sw(60.0),
@@ -187,11 +191,7 @@ mixin _TrxSendWidgetsMixin on _TrxSendLogicMixin {
                   ),
                   rightOnTap1: maxTag,
                 ),
-                Divider(
-                  height: sw(1.0),
-                  indent: sw(20.0),
-                  endIndent: sw(20.0),
-                ),
+                Divider(height: sw(1.0), indent: sw(20.0), endIndent: sw(20.0)),
                 ownerAddress(),
               ],
             ),
@@ -246,7 +246,10 @@ mixin _TrxSendWidgetsMixin on _TrxSendLogicMixin {
       children: [
         if (isContract)
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: sw(30.0), vertical: sw(8.0)),
+            padding: EdgeInsets.symmetric(
+              horizontal: sw(30.0),
+              vertical: sw(8.0),
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

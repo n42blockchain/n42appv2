@@ -303,49 +303,49 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
             controller: _scrollController,
             padding: EdgeInsets.zero,
             children: [
-                    WalletChainInfoBoard(
-                      address: widget.coinModel.address,
-                      coinType: widget.coinModel.coin['coinType'],
-                      balanceStr:
-                          '${widget.coinModel.balanceStringAll()} ${widget.coinModel.coin['unit'].toString().toUpperCase()}',
-                      balanceDollarStr: '\$${widget.coinModel.valueString()}',
-                      marketValueStr: '\$${widget.coinModel.coinPriceString()}',
-                      lockAmountStr:
-                          '${toEther((widget.coinModel.other?.getLockAmount ?? 0).toString(), widget.coinModel.coin['decimals'])} ${CoinType.XRP.name}',
-                      xmlLockInfoTap: showXMLLockAmountWidget,
-                      sendTap: () async => handleSend(),
-                      receiveTap: () async => handleReceive(),
-                      browserTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => BrowserPage(browserUrl),
-                          ),
-                        );
-                      },
+              WalletChainInfoBoard(
+                address: widget.coinModel.address,
+                coinType: widget.coinModel.coin['coinType'],
+                balanceStr:
+                    '${widget.coinModel.balanceStringAll()} ${widget.coinModel.coin['unit'].toString().toUpperCase()}',
+                balanceDollarStr: '\$${widget.coinModel.valueString()}',
+                marketValueStr: '\$${widget.coinModel.coinPriceString()}',
+                lockAmountStr:
+                    '${toEther((widget.coinModel.other?.getLockAmount ?? 0).toString(), widget.coinModel.coin['decimals'])} ${CoinType.XRP.name}',
+                xmlLockInfoTap: showXMLLockAmountWidget,
+                sendTap: () async => handleSend(),
+                receiveTap: () async => handleReceive(),
+                browserTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BrowserPage(browserUrl),
                     ),
-                    Divider(
-                      height: ScreenUtil().setWidth(1),
-                      endIndent: 0,
-                      indent: 0,
-                    ),
-                    Container(
-                      alignment: Alignment.centerLeft,
-                      padding: EdgeInsets.symmetric(
-                        vertical: ScreenUtil().setWidth(20.0),
-                      ),
-                      margin: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(30.0),
-                      ),
-                      child: Text(
-                        S.of(context).g_coin_key_1,
-                        style: TextStyle(
-                          color: _tc(AppThemeKeys.mainTextColor.name),
-                          fontSize: ScreenUtil().setSp(30.0),
-                        ),
-                      ),
-                    ),
-                    _transactionsWidget(),
+                  );
+                },
+              ),
+              Divider(
+                height: ScreenUtil().setWidth(1),
+                endIndent: 0,
+                indent: 0,
+              ),
+              Container(
+                alignment: Alignment.centerLeft,
+                padding: EdgeInsets.symmetric(
+                  vertical: ScreenUtil().setWidth(20.0),
+                ),
+                margin: EdgeInsets.symmetric(
+                  horizontal: ScreenUtil().setWidth(30.0),
+                ),
+                child: Text(
+                  S.of(context).g_coin_key_1,
+                  style: TextStyle(
+                    color: _tc(AppThemeKeys.mainTextColor.name),
+                    fontSize: ScreenUtil().setSp(30.0),
+                  ),
+                ),
+              ),
+              _transactionsWidget(),
             ],
           ),
         ),

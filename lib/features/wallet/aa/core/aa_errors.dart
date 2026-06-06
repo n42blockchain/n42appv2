@@ -29,7 +29,7 @@ class AAUnsupportedChainError extends AAError {
   final String chainSymbol;
 
   const AAUnsupportedChainError(this.chainSymbol)
-      : super('Chain $chainSymbol is not supported for Account Abstraction');
+    : super('Chain $chainSymbol is not supported for Account Abstraction');
 }
 
 /// Error thrown when UserOperation building fails
@@ -99,11 +99,7 @@ class GasEstimationError extends AAError {
 class SmartAccountError extends AAError {
   final SmartAccountErrorType type;
 
-  const SmartAccountError(
-    super.message, {
-    required this.type,
-    super.details,
-  });
+  const SmartAccountError(super.message, {required this.type, super.details});
 
   @override
   String toString() {
@@ -181,7 +177,7 @@ class ReceiptTimeoutError extends AAError {
   final String userOpHash;
 
   const ReceiptTimeoutError(this.userOpHash)
-      : super('Timeout waiting for UserOperation receipt');
+    : super('Timeout waiting for UserOperation receipt');
 
   @override
   String toString() {

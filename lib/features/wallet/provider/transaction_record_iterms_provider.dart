@@ -117,7 +117,10 @@ class TransactionRecordItemProvider with ChangeNotifier {
     if (resolved == 1) {
       ToastUtils.show(S.current.g_key_140);
       if (!AppGlobals.appContext.mounted) return;
-      globalWapAdapter.refreshCoinBalance(trm.coin['coinType'], contract: trm.contract);
+      globalWapAdapter.refreshCoinBalance(
+        trm.coin['coinType'],
+        contract: trm.contract,
+      );
       eventBus.fire(EventPublic(EventPublicType.transferOk));
     } else if (resolved == 2) {
       ToastUtils.show(S.current.g_key_175);
@@ -128,7 +131,9 @@ class TransactionRecordItemProvider with ChangeNotifier {
   }
 
   // 检查未完成的交易并返回更新后的对象（无 Toast/事件副作用）
-  Future<TransationRecordModel?> checkUndoneTrReturn(TransationRecordModel trm) async {
+  Future<TransationRecordModel?> checkUndoneTrReturn(
+    TransationRecordModel trm,
+  ) async {
     final int resolved = await _resolver.resolveState(trm);
 
     // -1 = RPC 错误，无法判断状态
@@ -164,7 +169,10 @@ class TransactionRecordItemProvider with ChangeNotifier {
 
     if (trm.state == 1) {
       if (!AppGlobals.appContext.mounted) return;
-      await globalWapAdapter.refreshCoinBalance(trm.coin['coinType'], contract: '');
+      await globalWapAdapter.refreshCoinBalance(
+        trm.coin['coinType'],
+        contract: '',
+      );
       eventBus.fire(EventPublic(EventPublicType.transferOk));
       _trUndoneList.remove(trm);
       checkUndoneList();

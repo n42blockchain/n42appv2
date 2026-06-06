@@ -104,12 +104,12 @@ class SafeAccountHelper {
   /// Build the initCode for inclusion in a UserOperation.
   ///
   /// Format: factory address (20 bytes) ++ createProxyWithNonce calldata
-  Uint8List getInitCode({
-    required String owner,
-    required BigInt saltNonce,
-  }) {
+  Uint8List getInitCode({required String owner, required BigInt saltNonce}) {
     final factoryBytes = _parseAddressBytes(factoryAddress);
-    final calldata = _buildCreateProxyWithNonce(owner: owner, saltNonce: saltNonce);
+    final calldata = _buildCreateProxyWithNonce(
+      owner: owner,
+      saltNonce: saltNonce,
+    );
     final result = Uint8List(20 + calldata.length);
     result.setAll(0, factoryBytes);
     result.setAll(20, calldata);
@@ -172,26 +172,38 @@ class SafeAccountHelper {
     _setUint256(ownersData, 0, BigInt.one); // length = 1
     _setAddress(ownersData, 32, owner); // owners[0]
 
-    final dataOffset = _uint256ToBytes32(BigInt.from(headSize + ownersData.length)); // 0x140
+    final dataOffset = _uint256ToBytes32(
+      BigInt.from(headSize + ownersData.length),
+    ); // 0x140
     final emptyBytes = _uint256ToBytes32(BigInt.zero); // length=0
 
     // Build head:
     final calldata = Uint8List(4 + headSize + ownersData.length + 32);
     var pos = 0;
 
-    calldata.setAll(pos, hexToBytes(selector)); pos += 4; // selector
-    calldata.setAll(pos, ownersOffset); pos += 32;         // offset to owners
-    calldata.setAll(pos, _uint256ToBytes32(BigInt.one)); pos += 32; // threshold=1
-    calldata.setAll(pos, _addressToBytes32(zeroAddress)); pos += 32; // to=0x0
-    calldata.setAll(pos, dataOffset); pos += 32;            // offset to data
-    calldata.setAll(pos, _addressToBytes32(fallbackHandlerAddress)); pos += 32;
-    calldata.setAll(pos, _addressToBytes32(zeroAddress)); pos += 32; // paymentToken
-    calldata.setAll(pos, _uint256ToBytes32(BigInt.zero)); pos += 32; // payment
-    calldata.setAll(pos, _addressToBytes32(zeroAddress)); pos += 32; // paymentReceiver
+    calldata.setAll(pos, hexToBytes(selector));
+    pos += 4; // selector
+    calldata.setAll(pos, ownersOffset);
+    pos += 32; // offset to owners
+    calldata.setAll(pos, _uint256ToBytes32(BigInt.one));
+    pos += 32; // threshold=1
+    calldata.setAll(pos, _addressToBytes32(zeroAddress));
+    pos += 32; // to=0x0
+    calldata.setAll(pos, dataOffset);
+    pos += 32; // offset to data
+    calldata.setAll(pos, _addressToBytes32(fallbackHandlerAddress));
+    pos += 32;
+    calldata.setAll(pos, _addressToBytes32(zeroAddress));
+    pos += 32; // paymentToken
+    calldata.setAll(pos, _uint256ToBytes32(BigInt.zero));
+    pos += 32; // payment
+    calldata.setAll(pos, _addressToBytes32(zeroAddress));
+    pos += 32; // paymentReceiver
 
     // Tail:
-    calldata.setAll(pos, ownersData); pos += 64; // owners array
-    calldata.setAll(pos, emptyBytes);             // data length = 0
+    calldata.setAll(pos, ownersData);
+    pos += 64; // owners array
+    calldata.setAll(pos, emptyBytes); // data length = 0
 
     return calldata;
   }
@@ -210,7 +222,9 @@ class SafeAccountHelper {
     //   Head: 3 * 32 = 96 bytes
     //   initializer offset = 96
     final initializerOffset = _uint256ToBytes32(BigInt.from(3 * 32));
-    final initializerLength = _uint256ToBytes32(BigInt.from(initializer.length));
+    final initializerLength = _uint256ToBytes32(
+      BigInt.from(initializer.length),
+    );
     // Pad initializer to 32-byte boundary
     final padding = (32 - initializer.length % 32) % 32;
     final initializerPadded = Uint8List(initializer.length + padding);
@@ -219,11 +233,16 @@ class SafeAccountHelper {
     final calldata = Uint8List(4 + 96 + 32 + initializerPadded.length);
     var pos = 0;
 
-    calldata.setAll(pos, hexToBytes(selector)); pos += 4;
-    calldata.setAll(pos, _addressToBytes32(singletonAddress)); pos += 32; // _singleton
-    calldata.setAll(pos, initializerOffset); pos += 32; // offset to initializer
-    calldata.setAll(pos, _uint256ToBytes32(saltNonce)); pos += 32; // saltNonce
-    calldata.setAll(pos, initializerLength); pos += 32; // initializer.length
+    calldata.setAll(pos, hexToBytes(selector));
+    pos += 4;
+    calldata.setAll(pos, _addressToBytes32(singletonAddress));
+    pos += 32; // _singleton
+    calldata.setAll(pos, initializerOffset);
+    pos += 32; // offset to initializer
+    calldata.setAll(pos, _uint256ToBytes32(saltNonce));
+    pos += 32; // saltNonce
+    calldata.setAll(pos, initializerLength);
+    pos += 32; // initializer.length
     calldata.setAll(pos, initializerPadded); // initializer data
 
     return calldata;
@@ -231,7 +250,8 @@ class SafeAccountHelper {
 
   // ── Private: low-level ABI encoding ────────────────────────────────────────
 
-  static const String zeroAddress = '0x0000000000000000000000000000000000000000';
+  static const String zeroAddress =
+      '0x0000000000000000000000000000000000000000';
 
   Uint8List _addressToBytes32(String addr) {
     final out = Uint8List(32);

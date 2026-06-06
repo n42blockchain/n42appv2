@@ -32,17 +32,16 @@ class _CoinTile extends StatelessWidget {
   };
 
   String get _symbol => switch (source) {
-    _CoinSource.trending || _CoinSource.search =>
-      (coin['symbol'] ?? '').toString().toLowerCase(),
-    _CoinSource.watchlist =>
-      (coin['coin'] ?? '').toString().toLowerCase(),
+    _CoinSource.trending ||
+    _CoinSource.search => (coin['symbol'] ?? '').toString().toLowerCase(),
+    _CoinSource.watchlist => (coin['coin'] ?? '').toString().toLowerCase(),
   };
 
   String get _name => (coin['name'] ?? '').toString();
 
   String get _imageUrl => switch (source) {
-    _CoinSource.trending || _CoinSource.search =>
-      coin['large'] ?? coin['thumb'] ?? '',
+    _CoinSource.trending ||
+    _CoinSource.search => coin['large'] ?? coin['thumb'] ?? '',
     _CoinSource.watchlist => coin['image'] ?? '',
   };
 
@@ -55,19 +54,22 @@ class _CoinTile extends StatelessWidget {
   }
 
   double get _price => switch (source) {
-    _CoinSource.trending => double.tryParse(
-      (coin['data']?['price'] ?? '')
-          .toString()
-          .replaceAll(r'$', '')
-          .replaceAll(',', ''),
-    ) ?? 0.0,
+    _CoinSource.trending =>
+      double.tryParse(
+            (coin['data']?['price'] ?? '')
+                .toString()
+                .replaceAll(r'$', '')
+                .replaceAll(',', ''),
+          ) ??
+          0.0,
     _CoinSource.search => 0.0,
     _CoinSource.watchlist => _toDouble(coin['price']),
   };
 
   double get _pct24h => switch (source) {
-    _CoinSource.trending =>
-      _toDouble(coin['data']?['price_change_percentage_24h']?['usd']),
+    _CoinSource.trending => _toDouble(
+      coin['data']?['price_change_percentage_24h']?['usd'],
+    ),
     _CoinSource.search => 0.0,
     _CoinSource.watchlist => _toDouble(coin['price_change_per_24h']),
   };
@@ -79,22 +81,19 @@ class _CoinTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+    final textColor = AppColorTokens.of(context).textPrimary;
     final subColor = textColor.withAlpha(153);
-    final dividerColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name);
+    final dividerColor = AppColorTokens.of(context).border;
     final isPositive = _pct24h >= 0;
-    final pctColor =
-        isPositive ? const Color(0xFF22C55E) : const Color(0xFFEF4444);
+    final pctColor = isPositive
+        ? const Color(0xFF22C55E)
+        : const Color(0xFFEF4444);
     final showPrice = source != _CoinSource.search;
 
     return InkWell(
       onTap: onTap,
       splashColor: Colors.transparent,
-      highlightColor: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainBlueColor.name)
-          .withAlpha(8),
+      highlightColor: AppColorTokens.of(context).brand.withAlpha(8),
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
         child: Row(
@@ -126,7 +125,9 @@ class _CoinTile extends StatelessWidget {
                       if (_rank != null) ...[
                         Container(
                           padding: EdgeInsets.symmetric(
-                              horizontal: 5.w, vertical: 1.h),
+                            horizontal: 5.w,
+                            vertical: 1.h,
+                          ),
                           decoration: BoxDecoration(
                             color: dividerColor.withAlpha(80),
                             borderRadius: BorderRadius.circular(4.r),
@@ -134,9 +135,10 @@ class _CoinTile extends StatelessWidget {
                           child: Text(
                             '#$_rank',
                             style: TextStyle(
-                                fontSize: 16.sp,
-                                color: subColor,
-                                fontWeight: FontWeight.w500),
+                              fontSize: 16.sp,
+                              color: subColor,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
                         SizedBox(width: 6.w),
@@ -145,10 +147,11 @@ class _CoinTile extends StatelessWidget {
                         child: Text(
                           _name,
                           style: TextStyle(
-                              fontSize: 24.sp,
-                              fontWeight: FontWeight.w600,
-                              color: textColor,
-                              letterSpacing: -0.2),
+                            fontSize: 24.sp,
+                            fontWeight: FontWeight.w600,
+                            color: textColor,
+                            letterSpacing: -0.2,
+                          ),
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
@@ -158,9 +161,10 @@ class _CoinTile extends StatelessWidget {
                   Text(
                     _symbol.toUpperCase(),
                     style: TextStyle(
-                        fontSize: 20.sp,
-                        color: subColor,
-                        letterSpacing: 0.3),
+                      fontSize: 20.sp,
+                      color: subColor,
+                      letterSpacing: 0.3,
+                    ),
                   ),
                 ],
               ),
@@ -173,14 +177,17 @@ class _CoinTile extends StatelessWidget {
                   Text(
                     _price > 0 ? '\$${_formatPrice(_price)}' : '--',
                     style: TextStyle(
-                        fontSize: 24.sp,
-                        fontWeight: FontWeight.w600,
-                        color: textColor),
+                      fontSize: 24.sp,
+                      fontWeight: FontWeight.w600,
+                      color: textColor,
+                    ),
                   ),
                   SizedBox(height: 3.h),
                   Container(
                     padding: EdgeInsets.symmetric(
-                        horizontal: 6.w, vertical: 2.h),
+                      horizontal: 6.w,
+                      vertical: 2.h,
+                    ),
                     decoration: BoxDecoration(
                       color: pctColor.withAlpha(22),
                       borderRadius: BorderRadius.circular(6.r),
@@ -188,9 +195,10 @@ class _CoinTile extends StatelessWidget {
                     child: Text(
                       '${isPositive ? '+' : ''}${_pct24h.toStringAsFixed(2)}%',
                       style: TextStyle(
-                          fontSize: 20.sp,
-                          color: pctColor,
-                          fontWeight: FontWeight.w600),
+                        fontSize: 20.sp,
+                        color: pctColor,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ],
@@ -207,8 +215,7 @@ class _CoinTile extends StatelessWidget {
                         ? Icons.notifications_active_rounded
                         : Icons.notifications_none_rounded,
                     color: alertActive
-                        ? AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.mainBlueColor.name)
+                        ? AppColorTokens.of(context).brand
                         : subColor,
                     size: 26.sp,
                   ),
@@ -218,12 +225,8 @@ class _CoinTile extends StatelessWidget {
             GestureDetector(
               onTap: () => onToggleWatchlist(_symbol),
               child: Icon(
-                inWatchlist
-                    ? Icons.star_rounded
-                    : Icons.star_outline_rounded,
-                color: inWatchlist
-                    ? const Color(0xFFFACC15)
-                    : subColor,
+                inWatchlist ? Icons.star_rounded : Icons.star_outline_rounded,
+                color: inWatchlist ? const Color(0xFFFACC15) : subColor,
                 size: 28.sp,
               ),
             ),
@@ -253,9 +256,7 @@ class _EmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final subColor = AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainTextColor.name)
-        .withAlpha(128);
+    final subColor = AppColorTokens.of(context).textPrimary.withAlpha(128);
 
     Widget body = Center(
       child: Column(
@@ -356,9 +357,7 @@ class _FearGreedBadge extends StatelessWidget {
           'Fear & Greed',
           style: TextStyle(
             fontSize: 16.sp,
-            color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name)
-                .withAlpha(90),
+            color: AppColorTokens.of(context).textPrimary.withAlpha(90),
           ),
         ),
       ],

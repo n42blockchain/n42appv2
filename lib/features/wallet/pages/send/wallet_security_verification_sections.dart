@@ -2,26 +2,29 @@ part of 'wallet_security_verification.dart';
 
 /// Common input text style used across all verification sections.
 TextStyle _inputTextStyle(BuildContext context) => TextStyle(
-      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-      fontSize: ScreenUtil().setSp(28.0),
-    );
+  color: AppColorTokens.of(context).textPrimary,
+  fontSize: ScreenUtil().setSp(28.0),
+);
 
 /// Common hint text style used across all verification sections.
 TextStyle _hintTextStyle(BuildContext context) => TextStyle(
-      fontSize: ScreenUtil().setSp(28.0),
-      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-    );
+  fontSize: ScreenUtil().setSp(28.0),
+  color: AppColorTokens.of(context).textSubtitle,
+);
 
 /// Common InputDecoration with no borders.
-InputDecoration _noBorderDecoration(BuildContext context, String hintText, {String? counterText}) =>
-    InputDecoration(
-      hintText: hintText,
-      hintStyle: _hintTextStyle(context),
-      border: InputBorder.none,
-      errorBorder: InputBorder.none,
-      focusedBorder: InputBorder.none,
-      counterText: counterText,
-    );
+InputDecoration _noBorderDecoration(
+  BuildContext context,
+  String hintText, {
+  String? counterText,
+}) => InputDecoration(
+  hintText: hintText,
+  hintStyle: _hintTextStyle(context),
+  border: InputBorder.none,
+  errorBorder: InputBorder.none,
+  focusedBorder: InputBorder.none,
+  counterText: counterText,
+);
 
 class _WalletPasswordSection extends StatelessWidget {
   const _WalletPasswordSection({
@@ -78,7 +81,10 @@ class _WalletPasswordSection extends StatelessWidget {
               obscureText: obscure,
               controller: pwdController,
               textInputAction: TextInputAction.done,
-              decoration: _noBorderDecoration(context, S.of(context).g_key_t_35),
+              decoration: _noBorderDecoration(
+                context,
+                S.of(context).g_key_t_35,
+              ),
               maxLines: 1,
               onEditingComplete: onEditingComplete,
             ),
@@ -155,9 +161,9 @@ class _FaceSection extends StatelessWidget {
           Expanded(
             child: Text(
               statusText,
-              style: _inputTextStyle(context).copyWith(
-                fontSize: ScreenUtil().setSp(24.0),
-              ),
+              style: _inputTextStyle(
+                context,
+              ).copyWith(fontSize: ScreenUtil().setSp(24.0)),
             ),
           ),
           _PillButton(label: S.of(context).Verification, onTap: onVerify),
@@ -222,12 +228,9 @@ class _GoogleAuthSectionState extends State<_GoogleAuthSection> {
   }
 
   Widget _buildInput(BuildContext context) {
-    final Color mainText =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final Color subtitleColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
-    final Color mainBlue =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+    final Color mainText = AppColorTokens.of(context).textPrimary;
+    final Color subtitleColor = AppColorTokens.of(context).textSubtitle;
+    final Color mainBlue = AppColorTokens.of(context).brand;
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(32.0)),
@@ -239,14 +242,17 @@ class _GoogleAuthSectionState extends State<_GoogleAuthSection> {
             child: widget.verified
                 ? Row(
                     children: [
-                      Icon(Icons.check_circle,
-                          color: mainBlue,
-                          size: ScreenUtil().setWidth(36.0)),
+                      Icon(
+                        Icons.check_circle,
+                        color: mainBlue,
+                        size: ScreenUtil().setWidth(36.0),
+                      ),
                       SizedBox(width: ScreenUtil().setWidth(10.0)),
                       Text(
                         S.of(context).g_lock_key5,
-                        style:
-                            _inputTextStyle(context).copyWith(fontSize: ScreenUtil().setSp(26.0)),
+                        style: _inputTextStyle(
+                          context,
+                        ).copyWith(fontSize: ScreenUtil().setSp(26.0)),
                       ),
                     ],
                   )
@@ -332,20 +338,16 @@ class _GestureSection extends StatelessWidget {
     final double bigWidth = identifySize / 2;
     final double miniWidth = identifySize / 4;
 
-    final Color mainBlue =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
-    final Color errorColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name);
-    final Color subtitleColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
-    final Color bgColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name);
+    final Color mainBlue = AppColorTokens.of(context).brand;
+    final Color errorColor = AppColorTokens.of(context).danger;
+    final Color subtitleColor = AppColorTokens.of(context).textSubtitle;
+    final Color bgColor = AppColorTokens.of(context).bgSurface;
 
     final List<int>? answer = gestureCheck == 1
         ? null
         : gesturePwd.isNotEmpty
-            ? gesturePwd.split(',').map(int.parse).toList()
-            : null;
+        ? gesturePwd.split(',').map(int.parse).toList()
+        : null;
 
     return Container(
       decoration: _inputBoxDecoration(context),
@@ -357,14 +359,17 @@ class _GestureSection extends StatelessWidget {
               height: ScreenUtil().setWidth(60.0),
               child: Row(
                 children: [
-                  Icon(Icons.check_circle,
-                      color: mainBlue,
-                      size: ScreenUtil().setWidth(40.0)),
+                  Icon(
+                    Icons.check_circle,
+                    color: mainBlue,
+                    size: ScreenUtil().setWidth(40.0),
+                  ),
                   SizedBox(width: ScreenUtil().setWidth(10.0)),
                   Text(
                     S.of(context).g_lock_key5,
-                    style: _inputTextStyle(context)
-                        .copyWith(fontSize: ScreenUtil().setSp(26.0)),
+                    style: _inputTextStyle(
+                      context,
+                    ).copyWith(fontSize: ScreenUtil().setSp(26.0)),
                   ),
                 ],
               ),
@@ -377,72 +382,79 @@ class _GestureSection extends StatelessWidget {
                 child: KeyedSubtree(
                   key: ValueKey(gestureCheck),
                   child: GesturePasswordWidget(
-                  size: gridSize,
-                  lineColor: mainBlue,
-                  errorLineColor: errorColor,
-                  singleLineCount: 3,
-                  identifySize: identifySize,
-                  minLength: 4,
-                  hitShowMilliseconds: 40,
-                  answer: answer,
-                  color: bgColor,
-                  normalItem: Container(
-                    height: miniWidth,
-                    width: miniWidth,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(miniWidth)),
-                      color: subtitleColor,
-                    ),
-                  ),
-                  selectedItem: Container(
-                    width: bigWidth,
-                    height: bigWidth,
-                    decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.all(Radius.circular(bigWidth)),
-                      color: mainBlue.withAlpha((0.5 * 255).round()),
-                    ),
-                    alignment: Alignment.center,
-                    child: Container(
-                      width: miniWidth,
+                    size: gridSize,
+                    lineColor: mainBlue,
+                    errorLineColor: errorColor,
+                    singleLineCount: 3,
+                    identifySize: identifySize,
+                    minLength: 4,
+                    hitShowMilliseconds: 40,
+                    answer: answer,
+                    color: bgColor,
+                    normalItem: Container(
                       height: miniWidth,
+                      width: miniWidth,
                       decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.all(Radius.circular(miniWidth)),
-                        color: mainBlue,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(miniWidth),
+                        ),
+                        color: subtitleColor,
                       ),
                     ),
-                  ),
-                  hitItem: Container(
-                    width: bigWidth,
-                    height: bigWidth,
-                    decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.all(Radius.circular(bigWidth)),
-                      color: mainBlue.withAlpha((0.5 * 255).round()),
-                    ),
-                  ),
-                  errorItem: Container(
-                    width: bigWidth,
-                    height: bigWidth,
-                    decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.all(Radius.circular(bigWidth)),
-                      color: errorColor.withAlpha((0.5 * 255).round()),
-                    ),
-                    alignment: Alignment.center,
-                    child: Container(
-                      width: miniWidth,
-                      height: miniWidth,
+                    selectedItem: Container(
+                      width: bigWidth,
+                      height: bigWidth,
                       decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.all(Radius.circular(miniWidth)),
-                        color: errorColor,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(bigWidth),
+                        ),
+                        color: mainBlue.withAlpha((0.5 * 255).round()),
+                      ),
+                      alignment: Alignment.center,
+                      child: Container(
+                        width: miniWidth,
+                        height: miniWidth,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(miniWidth),
+                          ),
+                          color: mainBlue,
+                        ),
                       ),
                     ),
+                    hitItem: Container(
+                      width: bigWidth,
+                      height: bigWidth,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(bigWidth),
+                        ),
+                        color: mainBlue.withAlpha((0.5 * 255).round()),
+                      ),
+                    ),
+                    errorItem: Container(
+                      width: bigWidth,
+                      height: bigWidth,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(bigWidth),
+                        ),
+                        color: errorColor.withAlpha((0.5 * 255).round()),
+                      ),
+                      alignment: Alignment.center,
+                      child: Container(
+                        width: miniWidth,
+                        height: miniWidth,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(miniWidth),
+                          ),
+                          color: errorColor,
+                        ),
+                      ),
+                    ),
+                    onComplete: (data) => onComplete(data.join(',')),
                   ),
-                  onComplete: (data) => onComplete(data.join(',')),
-                ),
                 ),
               ),
             ),

@@ -95,7 +95,8 @@ class _CreateThreeState extends State<CreateThree> {
             Positioned.fill(
               child: SingleChildScrollView(
                 padding: EdgeInsets.symmetric(
-                    horizontal: ScreenUtil().setWidth(30.0)),
+                  horizontal: ScreenUtil().setWidth(30.0),
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -221,13 +222,15 @@ class _CreateThreeState extends State<CreateThree> {
                 right: 0,
                 child: Transform.translate(
                   offset: Offset(
-                      ScreenUtil().setWidth(10.0),
-                      ScreenUtil().setWidth(10.0) * -1),
+                    ScreenUtil().setWidth(10.0),
+                    ScreenUtil().setWidth(10.0) * -1,
+                  ),
                   child: GestureDetector(
                     onTap: () {
                       messMnemonicWordsList
-                          .firstWhere((e) => e.index == item.index)
-                          .isSelected = false;
+                              .firstWhere((e) => e.index == item.index)
+                              .isSelected =
+                          false;
                       userHandList.removeAt(index);
                       setState(() {});
                     },
@@ -236,7 +239,8 @@ class _CreateThreeState extends State<CreateThree> {
                       height: ScreenUtil().setWidth(36.0),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(
-                            ScreenUtil().setWidth(18.0)),
+                          ScreenUtil().setWidth(18.0),
+                        ),
                         color: Colors.white,
                       ),
                       child: Icon(
@@ -289,8 +293,7 @@ class _CreateThreeState extends State<CreateThree> {
           child: Container(
             decoration: BoxDecoration(
               border: Border.all(color: borderColor, width: 1),
-              borderRadius:
-                  BorderRadius.circular(ScreenUtil().setWidth(8.0)),
+              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8.0)),
             ),
             child: Center(
               child: Text(

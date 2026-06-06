@@ -16,8 +16,8 @@ import 'package:n42_wallet/features/wallet/pages/wallet_manage/edit_wallet_passw
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
-import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 
 part 'wallet_security_verification_widgets.dart';
 part 'wallet_security_verification_sections.dart';
@@ -289,10 +289,7 @@ class _WalletSecurityVerificationState
                 ),
                 child: Image.asset(
                   'assets/img/Setting.png',
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainTextColor.name,
-                  ),
+                  color: AppColorTokens.of(context).textPrimary,
                   width: ScreenUtil().setWidth(40.0),
                   height: ScreenUtil().setWidth(40.0),
                 ),

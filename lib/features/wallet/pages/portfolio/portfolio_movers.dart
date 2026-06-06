@@ -6,7 +6,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/wallet/pages/portfolio/portfolio_models.dart';
-import 'package:n42_wallet/features/widgets/image_network.dart' show ImageNetWork;
+import 'package:n42_wallet/features/widgets/image_network.dart'
+    show ImageNetWork;
 
 // ─── Mover row ────────────────────────────────────────────────────────────────
 
@@ -29,8 +30,9 @@ class MoverRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isGainer = records.isNotEmpty && records.first.percentage >= 0;
-    final labelColor =
-        isGainer ? const Color(0xFF22C55E) : const Color(0xFFEF4444);
+    final labelColor = isGainer
+        ? const Color(0xFF22C55E)
+        : const Color(0xFFEF4444);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,9 +50,10 @@ class MoverRow extends StatelessWidget {
             Text(
               label,
               style: TextStyle(
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w600,
-                  color: labelColor),
+                fontSize: 12.sp,
+                fontWeight: FontWeight.w600,
+                color: labelColor,
+              ),
             ),
           ],
         ),
@@ -72,17 +75,21 @@ class MoverRow extends StatelessWidget {
                           width: 24.w,
                           height: 24.w,
                           color: textColor.withAlpha(30),
-                          child: Icon(Icons.currency_bitcoin,
-                              size: 14.sp, color: textColor.withAlpha(100)),
+                          child: Icon(
+                            Icons.currency_bitcoin,
+                            size: 14.sp,
+                            color: textColor.withAlpha(100),
+                          ),
                         ),
                 ),
                 SizedBox(width: 8.w),
                 Text(
                   r.symbol.toUpperCase(),
                   style: TextStyle(
-                      fontSize: 13.sp,
-                      fontWeight: FontWeight.w600,
-                      color: textColor),
+                    fontSize: 13.sp,
+                    fontWeight: FontWeight.w600,
+                    color: textColor,
+                  ),
                 ),
                 const Spacer(),
                 Column(
@@ -91,14 +98,17 @@ class MoverRow extends StatelessWidget {
                     Text(
                       '${r.percentage >= 0 ? '+' : ''}${r.percentage.toStringAsFixed(2)}%',
                       style: TextStyle(
-                          fontSize: 13.sp,
-                          fontWeight: FontWeight.w600,
-                          color: labelColor),
+                        fontSize: 13.sp,
+                        fontWeight: FontWeight.w600,
+                        color: labelColor,
+                      ),
                     ),
                     Text(
                       fmtUsd(pnlFn(r.value, r.percentage)),
                       style: TextStyle(
-                          fontSize: 11.sp, color: labelColor.withAlpha(200)),
+                        fontSize: 11.sp,
+                        color: labelColor.withAlpha(200),
+                      ),
                     ),
                   ],
                 ),

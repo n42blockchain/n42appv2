@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:n42_wallet/core/enums/load.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
@@ -75,11 +76,13 @@ class _WalletListState extends ConsumerState<WalletList>
             Padding(
               padding: const EdgeInsets.only(right: 8),
               child: ChoiceChip(
-                label: Text('All', style: TextStyle(fontSize: ScreenUtil().setSp(24))),
+                label: Text(
+                  'All',
+                  style: TextStyle(fontSize: ScreenUtil().setSp(24)),
+                ),
                 selected: _selectedTag == null,
                 onSelected: (_) => setState(() => _selectedTag = null),
-                selectedColor: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
+                selectedColor: AppColorTokens.of(context).brand,
                 labelStyle: TextStyle(
                   color: _selectedTag == null ? Colors.white : null,
                   fontSize: ScreenUtil().setSp(24),
@@ -89,23 +92,27 @@ class _WalletListState extends ConsumerState<WalletList>
                 visualDensity: VisualDensity.compact,
               ),
             ),
-            ...tags.map((tag) => Padding(
-              padding: const EdgeInsets.only(right: 8),
-              child: ChoiceChip(
-                label: Text(tag, style: TextStyle(fontSize: ScreenUtil().setSp(24))),
-                selected: _selectedTag == tag,
-                onSelected: (_) => setState(() => _selectedTag = tag),
-                selectedColor: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
-                labelStyle: TextStyle(
-                  color: _selectedTag == tag ? Colors.white : null,
-                  fontSize: ScreenUtil().setSp(24),
+            ...tags.map(
+              (tag) => Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: ChoiceChip(
+                  label: Text(
+                    tag,
+                    style: TextStyle(fontSize: ScreenUtil().setSp(24)),
+                  ),
+                  selected: _selectedTag == tag,
+                  onSelected: (_) => setState(() => _selectedTag = tag),
+                  selectedColor: AppColorTokens.of(context).brand,
+                  labelStyle: TextStyle(
+                    color: _selectedTag == tag ? Colors.white : null,
+                    fontSize: ScreenUtil().setSp(24),
+                  ),
+                  side: BorderSide.none,
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  visualDensity: VisualDensity.compact,
                 ),
-                side: BorderSide.none,
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                visualDensity: VisualDensity.compact,
               ),
-            )),
+            ),
           ],
         ),
       ),
@@ -132,10 +139,7 @@ class _WalletListState extends ConsumerState<WalletList>
             },
             icon: Icon(
               Icons.add_circle_outline,
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainBlueColor.name,
-              ),
+              color: AppColorTokens.of(context).brand,
             ),
           ),
         ],
@@ -148,8 +152,7 @@ class _WalletListState extends ConsumerState<WalletList>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (_cachedTags.isNotEmpty)
-                      _buildTagFilter(),
+                    if (_cachedTags.isNotEmpty) _buildTagFilter(),
                     Padding(
                       padding: EdgeInsets.only(
                         top: ScreenUtil().setWidth(20.0),
@@ -159,10 +162,7 @@ class _WalletListState extends ConsumerState<WalletList>
                       child: Text(
                         S.of(context).g_key_ex_keystore_13,
                         style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.mainTextColor.name,
-                          ),
+                          color: AppColorTokens.of(context).textPrimary,
                           fontSize: ScreenUtil().setSp(32.0),
                         ),
                       ),

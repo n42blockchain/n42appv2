@@ -9,6 +9,7 @@ import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// App Store / Google Play 内购商品 ID，按需在 App Store Connect 中配置
 const Set<String> _kProductIds = {
@@ -19,7 +20,7 @@ const Set<String> _kProductIds = {
   'ai.n42.www.n.120',
   'ai.n42.www.n.280',
   'ai.n42.www.n.700',
-  'ai.n42.www.n.1600'
+  'ai.n42.www.n.1600',
 };
 
 class IapPage extends StatefulWidget {
@@ -41,10 +42,7 @@ class _IapPageState extends State<IapPage> {
   @override
   void initState() {
     super.initState();
-    _sub = _iap.purchaseStream.listen(
-      _onPurchaseUpdate,
-      onError: (_) {},
-    );
+    _sub = _iap.purchaseStream.listen(_onPurchaseUpdate, onError: (_) {});
     _init();
   }
 
@@ -91,12 +89,17 @@ class _IapPageState extends State<IapPage> {
           p.status == PurchaseStatus.restored) {
         _iap.completePurchase(p);
         if (mounted) {
-          ToastUtils.show(p.status == PurchaseStatus.restored
-              ? S.of(context).g_iap_restored(p.productID)
-              : S.of(context).g_iap_purchased(p.productID));
+          ToastUtils.show(
+            p.status == PurchaseStatus.restored
+                ? S.of(context).g_iap_restored(p.productID)
+                : S.of(context).g_iap_purchased(p.productID),
+          );
         }
       } else if (p.status == PurchaseStatus.error) {
-        if (mounted) ToastUtils.showError(S.of(context).g_iap_failed(p.error?.message ?? ''));
+        if (mounted)
+          ToastUtils.showError(
+            S.of(context).g_iap_failed(p.error?.message ?? ''),
+          );
       } else if (p.status == PurchaseStatus.canceled) {
         if (mounted) ToastUtils.show(S.of(context).g_iap_cancelled);
       }
@@ -136,14 +139,8 @@ class _IapPageState extends State<IapPage> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final bg = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.backGroundColor.name,
-    );
-    final textPrimary = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainTextColor.name,
-    );
+    final bg = AppColorTokens.of(context).bgBase;
+    final textPrimary = AppColorTokens.of(context).textPrimary;
     final textSecondary = AppThemeUtils.getColorByKey(
       context,
       AppThemeKeys.mainTextColor3.name,
@@ -208,7 +205,8 @@ class _IapPageState extends State<IapPage> {
           vertical: ScreenUtil().setWidth(24),
         ),
         itemCount: _products.length,
-        separatorBuilder: (context, index) => SizedBox(height: ScreenUtil().setWidth(20)),
+        separatorBuilder: (context, index) =>
+            SizedBox(height: ScreenUtil().setWidth(20)),
         itemBuilder: (context, index) => _buildProductCard(
           _products[index],
           isDark,
@@ -304,9 +302,7 @@ class _IapPageState extends State<IapPage> {
     Color textSecondary,
   ) {
     final isPending = _pending.contains(product.id);
-    final cardBg = isDark
-        ? const Color(0xFF1A2236)
-        : Colors.white;
+    final cardBg = isDark ? const Color(0xFF1A2236) : Colors.white;
     final borderColor = isDark
         ? Colors.white.withValues(alpha: 0.08)
         : Colors.grey.withValues(alpha: 0.15);

@@ -213,7 +213,6 @@ class _WalletPageState extends ConsumerState<WalletPage> {
       await _pushAndRefreshWc(WalletConnectPage(normalizedWcUri), wcp);
       return;
     }
-
   }
 
   Future<void> _pushAndRefreshWc(Widget page, dynamic wcp) async {
@@ -353,7 +352,7 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                                     sendTap: () => _onSendTap(waValue),
                                     receiveTap: () => _onReceiveTap(waValue),
                                     swapTap: () => _onSwapTap(waValue),
-                                                    buyTap: () => Navigator.push(
+                                    buyTap: () => Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         builder: (_) => const IapPage(),

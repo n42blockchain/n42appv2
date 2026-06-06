@@ -4,12 +4,12 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/aa/aa.dart';
 import 'package:n42_wallet/features/wallet/pages/aa/aa_send_page.dart';
 import 'package:n42_wallet/features/wallet/widgets/aa/deployment_status_indicator.dart';
@@ -30,7 +30,8 @@ class AAAccountDetailPage extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<AAAccountDetailPage> createState() => _AAAccountDetailPageState();
+  ConsumerState<AAAccountDetailPage> createState() =>
+      _AAAccountDetailPageState();
 }
 
 class _AAAccountDetailPageState extends ConsumerState<AAAccountDetailPage>
@@ -53,7 +54,9 @@ class _AAAccountDetailPageState extends ConsumerState<AAAccountDetailPage>
     try {
       final wap = ref.read(wapBridgeProvider);
       final aaProvider = AAProvider(wap);
-      final isDeployed = await aaProvider.checkAccountDeployment(widget.account);
+      final isDeployed = await aaProvider.checkAccountDeployment(
+        widget.account,
+      );
       if (!mounted) return;
       final msg = isDeployed
           ? S.of(context).g_key_aa_deployed
@@ -66,9 +69,9 @@ class _AAAccountDetailPageState extends ConsumerState<AAAccountDetailPage>
       );
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.of(context).g_key_aa_retry)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(S.of(context).g_key_aa_retry)));
     } finally {
       if (mounted) setState(() => _isDeploying = false);
     }
@@ -123,9 +126,7 @@ class _AAAccountDetailPageState extends ConsumerState<AAAccountDetailPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(
-        text: widget.account.displayName,
-      ),
+      appBar: AppBarWidget(text: widget.account.displayName),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
         child: Column(

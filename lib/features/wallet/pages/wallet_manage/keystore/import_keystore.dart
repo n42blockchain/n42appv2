@@ -43,10 +43,7 @@ class _ImportKeystoreState extends ConsumerState<ImportKeystore> {
   }
 
   TextStyle _sectionLabelStyle() => TextStyle(
-    color: AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainTextColor.name,
-    ),
+    color: AppColorTokens.of(context).textPrimary,
     fontWeight: FontWeight.bold,
     fontSize: ScreenUtil().setSp(32),
   );
@@ -92,10 +89,7 @@ class _ImportKeystoreState extends ConsumerState<ImportKeystore> {
                             height: ScreenUtil().setWidth(60.0),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                              color: AppThemeUtils.getColorByKey(
-                                context,
-                                AppThemeKeys.mainBlueColor.name,
-                              ),
+                              color: AppColorTokens.of(context).brand,
                               borderRadius: BorderRadius.all(
                                 Radius.circular(ScreenUtil().setWidth(20.0)),
                               ),
@@ -197,20 +191,14 @@ class _ImportKeystoreState extends ConsumerState<ImportKeystore> {
                   selectChain['baseInfo']['name'],
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(30),
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.itemTextColor.name,
-                    ),
+                    color: AppColorTokens.of(context).textItem,
                   ),
                 ),
                 Text(
                   selectChain['baseInfo']['miniName'],
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(30),
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.itemTextColor.name,
-                    ),
+                    color: AppColorTokens.of(context).textItem,
                   ),
                 ),
               ],
@@ -218,10 +206,7 @@ class _ImportKeystoreState extends ConsumerState<ImportKeystore> {
           ),
           Icon(
             Icons.arrow_forward_ios,
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.itemSubtitleTextColor.name,
-            ),
+            color: AppColorTokens.of(context).textSubtitle,
             size: ScreenUtil().setWidth(30),
           ),
         ],
@@ -251,10 +236,7 @@ class _ImportKeystoreState extends ConsumerState<ImportKeystore> {
             padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
             height: ScreenUtil().setWidth(148),
             width: double.infinity,
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.backGroundColor.name,
-            ),
+            color: AppColorTokens.of(context).bgBase,
             child: AppButton(
               label: S.of(context).g_key_78,
               loading: load == Load.loading,

@@ -71,45 +71,48 @@ class TransationRecordModel {
 
   // 公共字段（toMapDb 与 toMap 共享）
   Map<String, dynamic> _baseMap() => {
-        'address': address,
-        'coinId': coinId,
-        'from1': from1.toLowerCase(),
-        'to1': to1.toLowerCase(),
-        'state': state,
-        'txHash': txHash,
-        'price': price.toString(),
-        'txTime': txTime,
-        'errorMessage': errorMessage,
-        'coinMiniName': coinMiniName,
-        'contract': contract.toLowerCase(),
-        'coin': json.encode(coin),
-        'isTest': isTest,
-        'testnetUri': testnetUri,
-        'userUuid': userUuid,
-        'walletIndex': walletIndex,
-        'message': message,
-      };
+    'address': address,
+    'coinId': coinId,
+    'from1': from1.toLowerCase(),
+    'to1': to1.toLowerCase(),
+    'state': state,
+    'txHash': txHash,
+    'price': price.toString(),
+    'txTime': txTime,
+    'errorMessage': errorMessage,
+    'coinMiniName': coinMiniName,
+    'contract': contract.toLowerCase(),
+    'coin': json.encode(coin),
+    'isTest': isTest,
+    'testnetUri': testnetUri,
+    'userUuid': userUuid,
+    'walletIndex': walletIndex,
+    'message': message,
+  };
 
   // 转为数据库需要的 map（不含 trId，由数据库自动生成）
   Map<String, dynamic> toMapDb() => _baseMap();
 
   // 转为完整 map（含 trId）
-  Map<String, dynamic> toMap() => {
-        'trId': trId,
-        ..._baseMap(),
-      };
+  Map<String, dynamic> toMap() => {'trId': trId, ..._baseMap()};
 
   String getTxTimeStr() {
     if (txTimeStr == null) {
       final raw = int.parse(txTime);
       final ms = txTime.length == 13 ? raw : raw * 1000;
-      txTimeStr = dformat.formatDate(
-        DateTime.fromMillisecondsSinceEpoch(ms),
-        [
-          dformat.yyyy, '/', dformat.mm, '/', dformat.dd,
-          ' ', dformat.am, ' ', dformat.hh, ':', dformat.nn,
-        ],
-      );
+      txTimeStr = dformat.formatDate(DateTime.fromMillisecondsSinceEpoch(ms), [
+        dformat.yyyy,
+        '/',
+        dformat.mm,
+        '/',
+        dformat.dd,
+        ' ',
+        dformat.am,
+        ' ',
+        dformat.hh,
+        ':',
+        dformat.nn,
+      ]);
     }
     return txTimeStr!;
   }

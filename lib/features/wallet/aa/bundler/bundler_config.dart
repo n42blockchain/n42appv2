@@ -173,7 +173,9 @@ class MultiBundlerConfig {
 
     return MultiBundlerConfig(
       primaryUrl: config.bundlerUrl,
-      backupUrls: [if (config.backupBundlerUrl != null) config.backupBundlerUrl!],
+      backupUrls: [
+        if (config.backupBundlerUrl != null) config.backupBundlerUrl!,
+      ],
       strategy: strategy,
       entryPoint: config.entryPoint,
       apiKeys: apiKeys,

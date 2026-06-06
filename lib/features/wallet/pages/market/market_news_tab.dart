@@ -43,17 +43,14 @@ class _NewsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainTextColor.name);
+    final textColor = AppColorTokens.of(context).textPrimary;
     final subColor = textColor.withAlpha(153);
-    final dividerColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.dividerColor.name);
+    final dividerColor = AppColorTokens.of(context).border;
 
     return InkWell(
       onTap: () async {
         final uri = Uri.tryParse(article.url);
-        if (uri != null &&
-            (uri.isScheme('https') || uri.isScheme('http'))) {
+        if (uri != null && (uri.isScheme('https') || uri.isScheme('http'))) {
           await launchUrl(uri, mode: LaunchMode.externalApplication);
         }
       },
@@ -61,8 +58,7 @@ class _NewsCard extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
-            padding:
-                EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -79,8 +75,11 @@ class _NewsCard extends StatelessWidget {
                           width: 72.w,
                           height: 72.w,
                           color: dividerColor,
-                          child: Icon(Icons.article_outlined,
-                              color: subColor, size: 32.sp),
+                          child: Icon(
+                            Icons.article_outlined,
+                            color: subColor,
+                            size: 32.sp,
+                          ),
                         ),
                 ),
                 SizedBox(width: 12.w),
@@ -108,20 +107,24 @@ class _NewsCard extends StatelessWidget {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                  fontSize: 18.sp, color: subColor),
+                                fontSize: 18.sp,
+                                color: subColor,
+                              ),
                             ),
                           ),
                           Padding(
-                            padding:
-                                EdgeInsets.symmetric(horizontal: 6.w),
-                            child: Text('·',
-                                style: TextStyle(
-                                    fontSize: 18.sp, color: subColor)),
+                            padding: EdgeInsets.symmetric(horizontal: 6.w),
+                            child: Text(
+                              '·',
+                              style: TextStyle(
+                                fontSize: 18.sp,
+                                color: subColor,
+                              ),
+                            ),
                           ),
                           Text(
                             article.timeAgo(),
-                            style: TextStyle(
-                                fontSize: 18.sp, color: subColor),
+                            style: TextStyle(fontSize: 18.sp, color: subColor),
                           ),
                         ],
                       ),
@@ -129,17 +132,21 @@ class _NewsCard extends StatelessWidget {
                   ),
                 ),
                 SizedBox(width: 8.w),
-                Icon(Icons.arrow_forward_ios,
-                    size: 16.sp, color: subColor.withAlpha(128)),
+                Icon(
+                  Icons.arrow_forward_ios,
+                  size: 16.sp,
+                  color: subColor.withAlpha(128),
+                ),
               ],
             ),
           ),
           Divider(
-              height: 1,
-              thickness: 0.5,
-              color: dividerColor,
-              indent: 16.w,
-              endIndent: 0),
+            height: 1,
+            thickness: 0.5,
+            color: dividerColor,
+            indent: 16.w,
+            endIndent: 0,
+          ),
         ],
       ),
     );

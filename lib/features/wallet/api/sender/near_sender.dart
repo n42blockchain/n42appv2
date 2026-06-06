@@ -33,10 +33,15 @@ class NearSender implements ChainSender {
     final mmg = await nearApi.getGasPrice();
     if (mmg.error) return SendResult.fail(mmg.data?.toString());
     final gasPrice = mmg.data as BigInt;
-    final gasUnits = BigInt.from(300000000000000); // 30 TGas for simple transfer
+    final gasUnits = BigInt.from(
+      300000000000000,
+    ); // 30 TGas for simple transfer
     final totalGas = gasPrice * gasUnits;
 
-    BigInt valuePrice = ethToWeiString(params.amount.toString(), params.decimals);
+    BigInt valuePrice = ethToWeiString(
+      params.amount.toString(),
+      params.decimals,
+    );
     double adjustedAmount = params.amount;
 
     if (valuePrice == chainBalance && params.sendMax) {
@@ -44,7 +49,10 @@ class NearSender implements ChainSender {
         return SendResult.fail(S.current.g_key_wallet_m5('NEAR'));
       }
       valuePrice = valuePrice - totalGas;
-      adjustedAmount = toEther(valuePrice.toString(), params.decimals).toDouble();
+      adjustedAmount = toEther(
+        valuePrice.toString(),
+        params.decimals,
+      ).toDouble();
     }
     if (valuePrice <= BigInt.zero || totalGas + valuePrice > chainBalance) {
       return SendResult.fail(S.current.g_key_wallet_m5('NEAR'));
@@ -66,13 +74,20 @@ class NearSender implements ChainSender {
       mnemonic: wi.mnemonic ?? '',
       pk: wi.privateKey ?? '',
     );
-    final publicKey = pubKeyMm['publicKey']?.toString() ?? pubKeyMm['legacy']?.toString() ?? '';
+    final publicKey =
+        pubKeyMm['publicKey']?.toString() ??
+        pubKeyMm['legacy']?.toString() ??
+        '';
 
     int nonce = 0;
     if (publicKey.isNotEmpty) {
-      final mmKey = await nearApi.getAccessKey(params.fromAddress, 'ed25519:$publicKey');
+      final mmKey = await nearApi.getAccessKey(
+        params.fromAddress,
+        'ed25519:$publicKey',
+      );
       if (!mmKey.error) {
-        nonce = ((mmKey.data as Map<String, dynamic>)['nonce'] as int? ?? 0) + 1;
+        nonce =
+            ((mmKey.data as Map<String, dynamic>)['nonce'] as int? ?? 0) + 1;
       }
     }
 
@@ -97,7 +112,10 @@ class NearSender implements ChainSender {
       );
     } else {
       signStr = await _trustdart.signTransaction(
-        CoinType.NEAR.name, params.path, signMap, pk: params.privateKey!,
+        CoinType.NEAR.name,
+        params.path,
+        signMap,
+        pk: params.privateKey!,
       );
     }
 

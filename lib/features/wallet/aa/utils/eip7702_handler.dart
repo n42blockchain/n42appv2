@@ -160,7 +160,8 @@ class EIP7702Handler {
       chainSymbol,
       version: EntryPointVersion.v08,
     );
-    return config?.simple7702AccountFactory ?? AAConfig.simple7702AccountFactory;
+    return config?.simple7702AccountFactory ??
+        AAConfig.simple7702AccountFactory;
   }
 
   // RLP encoding helpers
@@ -239,7 +240,11 @@ class EIP7702Handler {
     } else if (length < 65536) {
       return Uint8List.fromList([length >> 8, length & 0xff]);
     } else if (length < 16777216) {
-      return Uint8List.fromList([length >> 16, (length >> 8) & 0xff, length & 0xff]);
+      return Uint8List.fromList([
+        length >> 16,
+        (length >> 8) & 0xff,
+        length & 0xff,
+      ]);
     } else {
       return Uint8List.fromList([
         length >> 24,
@@ -260,11 +265,7 @@ class EIP7702Handler {
 
     try {
       // Use web3dart's ecRecover to recover public key
-      final msgSig = MsgSignature(
-        bytesToInt(r),
-        bytesToInt(s),
-        adjustedV,
-      );
+      final msgSig = MsgSignature(bytesToInt(r), bytesToInt(s), adjustedV);
 
       // ecRecover returns Uint8List (public key bytes)
       final Uint8List pubKeyBytes = ecRecover(hash, msgSig);
@@ -320,9 +321,7 @@ class EntryPointVersionAdapter {
     required UserOperation userOp,
     required EIP7702Authorization authorization,
   }) {
-    return userOp.copyWith(
-      eip7702Auth: authorization.encode(),
-    );
+    return userOp.copyWith(eip7702Auth: authorization.encode());
   }
 
   /// Get gas penalty threshold for v0.8
@@ -354,11 +353,14 @@ class EntryPointVersionAdapter {
     // Net = 200 000 − 25 000 = +175 000 gas saved (positive savings).
     if (userOp.hasEIP7702Auth && isFirstTransaction) {
       savings += BigInt.from(200000); // Deployment gas avoided
-      savings -= BigInt.from(Simple7702GasConstants.authorizationGas); // Auth overhead
+      savings -= BigInt.from(
+        Simple7702GasConstants.authorizationGas,
+      ); // Auth overhead
     }
 
     // v0.8 penalty reduction: unused gas under 40k is not penalised (v0.7 penalises all)
-    final unusedGas = userOp.verificationGasLimit - BigInt.from(20000); // Estimate
+    final unusedGas =
+        userOp.verificationGasLimit - BigInt.from(20000); // Estimate
     if (unusedGas > BigInt.zero && unusedGas < BigInt.from(40000)) {
       savings += unusedGas * BigInt.from(10) ~/ BigInt.from(100); // 10% saved
     }
@@ -407,7 +409,9 @@ class V08MigrationHelper {
     }
 
     if (!hasDeployedAccount && EIP7702Handler.isChainSupported(chainSymbol)) {
-      recommendations.add('Consider EIP-7702 account to avoid deployment costs');
+      recommendations.add(
+        'Consider EIP-7702 account to avoid deployment costs',
+      );
     }
 
     if (currentVersion == EntryPointVersion.v08) {

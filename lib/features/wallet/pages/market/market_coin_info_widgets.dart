@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 import 'market_coin_info_helpers.dart';
 
@@ -21,8 +22,7 @@ Widget coinInfoCard(
       vertical: ScreenUtil().setWidth(10),
     ),
     decoration: BoxDecoration(
-      color: AppThemeUtils.getColorByKey(
-          context, AppThemeKeys.itemBgColor.name),
+      color: AppColorTokens.of(context).bgSurface,
       borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
     ),
     child: title != null
@@ -44,20 +44,21 @@ Widget coinInfoCard(
 }
 
 Widget coinInfoSectionTitle(BuildContext context, String title) => Text(
-      title,
-      style: TextStyle(
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainButtonBgColor.name),
-        fontSize: ScreenUtil().setSp(30),
-        fontWeight: FontWeight.w600,
-      ),
-    );
+  title,
+  style: TextStyle(
+    color: AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.mainButtonBgColor.name,
+    ),
+    fontSize: ScreenUtil().setSp(30),
+    fontWeight: FontWeight.w600,
+  ),
+);
 
 TextStyle _labelStyle(BuildContext context) => TextStyle(
-      color: AppThemeUtils.getColorByKey(
-          context, AppThemeKeys.mainTextColor.name),
-      fontSize: ScreenUtil().setSp(28),
-    );
+  color: AppColorTokens.of(context).textPrimary,
+  fontSize: ScreenUtil().setSp(28),
+);
 
 /// A label-value row with accent-colored value text.
 Widget coinInfoStatRow(BuildContext context, String label, String value) {
@@ -74,7 +75,9 @@ Widget coinInfoStatRow(BuildContext context, String label, String value) {
             maxLines: 2,
             style: TextStyle(
               color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainButtonBgColor.name),
+                context,
+                AppThemeKeys.mainButtonBgColor.name,
+              ),
               fontSize: ScreenUtil().setSp(28),
             ),
           ),
@@ -85,8 +88,7 @@ Widget coinInfoStatRow(BuildContext context, String label, String value) {
 }
 
 /// A label-percentage row where value color reflects positive/negative trend.
-Widget coinInfoStatRowColored(
-    BuildContext context, String label, double pct) {
+Widget coinInfoStatRowColored(BuildContext context, String label, double pct) {
   return SizedBox(
     height: ScreenUtil().setWidth(80),
     child: Row(
@@ -107,8 +109,7 @@ Widget coinInfoStatRowColored(
 }
 
 /// A vertically stacked label/value cell used inside the P&L card.
-Widget pnlStat(
-    String label, String value, Color valueColor, Color labelColor) {
+Widget pnlStat(String label, String value, Color valueColor, Color labelColor) {
   return Expanded(
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,

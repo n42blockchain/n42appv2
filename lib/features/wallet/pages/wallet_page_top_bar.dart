@@ -6,7 +6,7 @@ import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_provi
 import 'package:n42_wallet/features/widgets/app_home_top_bar.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// 钱包页顶部导航栏
 ///
@@ -42,10 +42,7 @@ class WalletTopBar extends ConsumerWidget {
       onLeftImageClick: onMenuTap,
       onLeftImageUri: "assets/img/menu.png",
       actions: [
-        _QrCodeMenu(
-          onScanTap: onScanTap,
-          onReceiveTap: onReceiveTap,
-        ),
+        _QrCodeMenu(onScanTap: onScanTap, onReceiveTap: onReceiveTap),
         _WalletConnectButton(onTap: onWalletConnectTap),
       ],
     );
@@ -67,8 +64,7 @@ class _WalletTitleButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final blueColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainBlueColor.name);
+    final blueColor = AppColorTokens.of(context).brand;
     final su = ScreenUtil();
     return InkWell(
       onTap: onTap,
@@ -113,10 +109,7 @@ class _WalletTitleButton extends StatelessWidget {
 // ── 二维码下拉菜单 ──────────────────────────────────────────────────────────
 
 class _QrCodeMenu extends StatelessWidget {
-  const _QrCodeMenu({
-    required this.onScanTap,
-    required this.onReceiveTap,
-  });
+  const _QrCodeMenu({required this.onScanTap, required this.onReceiveTap});
 
   final VoidCallback onScanTap;
   final VoidCallback onReceiveTap;
@@ -128,23 +121,31 @@ class _QrCodeMenu extends StatelessWidget {
       icon: Icon(
         Icons.qr_code_rounded,
         size: su.setWidth(52.0),
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainBlueColor.name),
+        color: AppColorTokens.of(context).brand,
       ),
       offset: Offset(0, su.setWidth(80)),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(su.setWidth(16)),
       ),
-      color: AppThemeUtils.getColorByKey(
-          context, AppThemeKeys.itemBgColor.name),
+      color: AppColorTokens.of(context).bgSurface,
       onSelected: (value) => switch (value) {
         0 => onScanTap(),
         1 => onReceiveTap(),
         _ => null,
       },
       itemBuilder: (context) => [
-        _buildMenuItem(context, value: 0, icon: Icons.qr_code_scanner, label: S.of(context).g_key_4),
-        _buildMenuItem(context, value: 1, icon: Icons.qr_code, label: S.of(context).g_key_33),
+        _buildMenuItem(
+          context,
+          value: 0,
+          icon: Icons.qr_code_scanner,
+          label: S.of(context).g_key_4,
+        ),
+        _buildMenuItem(
+          context,
+          value: 1,
+          icon: Icons.qr_code,
+          label: S.of(context).g_key_33,
+        ),
       ],
     );
   }
@@ -155,8 +156,7 @@ class _QrCodeMenu extends StatelessWidget {
     required IconData icon,
     required String label,
   }) {
-    final textColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+    final textColor = AppColorTokens.of(context).textPrimary;
     return PopupMenuItem<int>(
       value: value,
       child: Row(
@@ -187,7 +187,8 @@ class _WalletConnectButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final wc = ref.watch(wcpBridgeProvider);
     final sessionCount = wc.getActiveSessions().length;
-    final isConnected = wc.walletConnectState != WalletConnectState.disconnect &&
+    final isConnected =
+        wc.walletConnectState != WalletConnectState.disconnect &&
         wc.dAppTopic != null &&
         wc.metadata != null;
     final iconUrl = wc.metadata?.icons.firstOrNull ?? "";
@@ -208,8 +209,7 @@ class _WalletConnectButton extends ConsumerWidget {
                     )
                   : Image.asset(
                       "assets/wallet/WalletConnect.png",
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainBlueColor.name),
+                      color: AppColorTokens.of(context).brand,
                     ),
             ),
             if (sessionCount > 0)
@@ -219,8 +219,7 @@ class _WalletConnectButton extends ConsumerWidget {
                 child: Container(
                   padding: EdgeInsets.all(ScreenUtil().setWidth(6)),
                   decoration: BoxDecoration(
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainBlueColor.name),
+                    color: AppColorTokens.of(context).brand,
                     shape: BoxShape.circle,
                   ),
                   constraints: BoxConstraints(
@@ -244,4 +243,3 @@ class _WalletConnectButton extends ConsumerWidget {
     );
   }
 }
-

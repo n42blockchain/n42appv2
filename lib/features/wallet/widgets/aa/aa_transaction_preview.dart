@@ -107,7 +107,8 @@ class AATransactionPreview extends StatelessWidget {
           _buildGasSection(context),
 
           // 批量操作列表
-          if (data.batchOperations != null && data.batchOperations!.isNotEmpty) ...[
+          if (data.batchOperations != null &&
+              data.batchOperations!.isNotEmpty) ...[
             SizedBox(height: 20.w),
             _buildBatchOperationsSection(context),
           ],
@@ -242,15 +243,19 @@ class AATransactionPreview extends StatelessWidget {
   Widget _buildGasSection(BuildContext context) {
     final sponsored = data.isGasSponsored;
     final subtitleColor = _color(context, AppThemeKeys.itemSubtitleTextColor);
-    final bgFallback =
-        _color(context, AppThemeKeys.backGroundColor).withAlpha(100);
+    final bgFallback = _color(
+      context,
+      AppThemeKeys.backGroundColor,
+    ).withAlpha(100);
 
     return Container(
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
         color: sponsored ? Colors.green.withAlpha(20) : bgFallback,
         borderRadius: BorderRadius.circular(12.w),
-        border: sponsored ? Border.all(color: Colors.green.withAlpha(40)) : null,
+        border: sponsored
+            ? Border.all(color: Colors.green.withAlpha(40))
+            : null,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -365,7 +370,10 @@ class AATransactionPreview extends StatelessWidget {
                       op,
                       style: TextStyle(
                         fontSize: 22.sp,
-                        color: _color(context, AppThemeKeys.itemSubtitleTextColor),
+                        color: _color(
+                          context,
+                          AppThemeKeys.itemSubtitleTextColor,
+                        ),
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -381,7 +389,10 @@ class AATransactionPreview extends StatelessWidget {
   Widget _buildActionButtons(BuildContext context) {
     final buttonRadius = BorderRadius.circular(14.w);
     final buttonPadding = EdgeInsets.symmetric(vertical: 16.w);
-    final buttonTextStyle = TextStyle(fontSize: 28.sp, fontWeight: FontWeight.w600);
+    final buttonTextStyle = TextStyle(
+      fontSize: 28.sp,
+      fontWeight: FontWeight.w600,
+    );
 
     return Row(
       children: [

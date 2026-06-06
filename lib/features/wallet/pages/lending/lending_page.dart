@@ -6,7 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/wallet/pages/lending/aave_service.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// Lending page — in-wallet Aave V3 supply and borrow interface.
 ///
@@ -65,35 +65,23 @@ class _LendingPageState extends State<LendingPage>
           style: TextStyle(
             fontSize: ScreenUtil().setSp(34),
             fontWeight: FontWeight.w600,
-            color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainTextColor.name,
-            ),
+            color: AppColorTokens.of(context).textPrimary,
           ),
         ),
-        backgroundColor: AppThemeUtils.getColorByKey(
-          context, AppThemeKeys.backGroundColor.name,
-        ),
+        backgroundColor: AppColorTokens.of(context).bgBase,
         elevation: 0,
         bottom: TabBar(
           controller: _tabController,
-          indicatorColor: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainBlueColor.name,
-          ),
-          labelColor: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainTextColor.name,
-          ),
-          unselectedLabelColor: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemSubtitleTextColor.name,
-          ),
+          indicatorColor: AppColorTokens.of(context).brand,
+          labelColor: AppColorTokens.of(context).textPrimary,
+          unselectedLabelColor: AppColorTokens.of(context).textSubtitle,
           tabs: const [
             Tab(text: 'Supply'),
             Tab(text: 'Borrow'),
           ],
         ),
       ),
-      backgroundColor: AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.backGroundColor.name,
-      ),
+      backgroundColor: AppColorTokens.of(context).bgBase,
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : TabBarView(
@@ -118,11 +106,7 @@ class _LendingPageState extends State<LendingPage>
               AaveService.isAvailable(widget.chainId)
                   ? 'No markets available'
                   : 'Aave V3 not available on this chain',
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name,
-                ),
-              ),
+              style: TextStyle(color: AppColorTokens.of(context).textSubtitle),
             ),
           ],
         ),
@@ -151,9 +135,7 @@ class _LendingPageState extends State<LendingPage>
     return Container(
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-          context, AppThemeKeys.itemBgColor.name,
-        ),
+        color: AppColorTokens.of(context).bgSurface,
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
       ),
       child: ListTile(
@@ -162,9 +144,9 @@ class _LendingPageState extends State<LendingPage>
           vertical: ScreenUtil().setWidth(8),
         ),
         leading: CircleAvatar(
-          backgroundColor: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainBlueColor.name,
-          ).withValues(alpha: 0.1),
+          backgroundColor: AppColorTokens.of(
+            context,
+          ).brand.withValues(alpha: 0.1),
           child: Text(
             reserve.symbol.length > 3
                 ? reserve.symbol.substring(0, 3)
@@ -172,9 +154,7 @@ class _LendingPageState extends State<LendingPage>
             style: TextStyle(
               fontSize: ScreenUtil().setSp(22),
               fontWeight: FontWeight.w600,
-              color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainBlueColor.name,
-              ),
+              color: AppColorTokens.of(context).brand,
             ),
           ),
         ),
@@ -183,18 +163,14 @@ class _LendingPageState extends State<LendingPage>
           style: TextStyle(
             fontSize: ScreenUtil().setSp(28),
             fontWeight: FontWeight.w600,
-            color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainTextColor.name,
-            ),
+            color: AppColorTokens.of(context).textPrimary,
           ),
         ),
         subtitle: Text(
           reserve.name,
           style: TextStyle(
             fontSize: ScreenUtil().setSp(22),
-            color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemSubtitleTextColor.name,
-            ),
+            color: AppColorTokens.of(context).textSubtitle,
           ),
         ),
         trailing: Column(
@@ -213,9 +189,7 @@ class _LendingPageState extends State<LendingPage>
               isSupply ? 'Supply APY' : 'Borrow APR',
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(20),
-                color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name,
-                ),
+                color: AppColorTokens.of(context).textSubtitle,
               ),
             ),
           ],

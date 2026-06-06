@@ -26,17 +26,17 @@ class BatchTemplate {
     required this.operations,
     DateTime? createdAt,
     DateTime? updatedAt,
-  })  : createdAt = createdAt ?? DateTime.now(),
-        updatedAt = updatedAt ?? DateTime.now();
+  }) : createdAt = createdAt ?? DateTime.now(),
+       updatedAt = updatedAt ?? DateTime.now();
 
   Map<String, dynamic> toDbMap() => {
-        if (id != null) 'id': id,
-        'name': name,
-        'chain_symbol': chainSymbol,
-        'operations': jsonEncode(operations.map((o) => o.toJson()).toList()),
-        'created_at': createdAt.millisecondsSinceEpoch,
-        'updated_at': updatedAt.millisecondsSinceEpoch,
-      };
+    if (id != null) 'id': id,
+    'name': name,
+    'chain_symbol': chainSymbol,
+    'operations': jsonEncode(operations.map((o) => o.toJson()).toList()),
+    'created_at': createdAt.millisecondsSinceEpoch,
+    'updated_at': updatedAt.millisecondsSinceEpoch,
+  };
 
   factory BatchTemplate.fromDbMap(Map<String, dynamic> map) {
     final opsJson = jsonDecode(map['operations'] as String) as List<dynamic>;
@@ -58,15 +58,14 @@ class BatchTemplate {
     String? chainSymbol,
     List<BatchOperation>? operations,
     DateTime? updatedAt,
-  }) =>
-      BatchTemplate(
-        id: id ?? this.id,
-        name: name ?? this.name,
-        chainSymbol: chainSymbol ?? this.chainSymbol,
-        operations: operations ?? this.operations,
-        createdAt: createdAt,
-        updatedAt: updatedAt ?? DateTime.now(),
-      );
+  }) => BatchTemplate(
+    id: id ?? this.id,
+    name: name ?? this.name,
+    chainSymbol: chainSymbol ?? this.chainSymbol,
+    operations: operations ?? this.operations,
+    createdAt: createdAt,
+    updatedAt: updatedAt ?? DateTime.now(),
+  );
 }
 
 /// AA 批量交易模板 CRUD Provider

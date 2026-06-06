@@ -23,10 +23,7 @@ BoxDecoration _cardDecoration({
       ],
     ),
     borderRadius: BorderRadius.circular(borderRadius),
-    border: Border.all(
-      color: primaryColor.withValues(alpha: 0.25),
-      width: 1,
-    ),
+    border: Border.all(color: primaryColor.withValues(alpha: 0.25), width: 1),
     boxShadow: [
       BoxShadow(
         color: primaryColor.withValues(alpha: 0.08),
@@ -102,8 +99,8 @@ class EnsEntryCard extends StatelessWidget {
     const ensBlue = Color(0xFF5B8DEF);
     const ensPurple = Color(0xFF8B5CF6);
     final su = ScreenUtil();
-    final mainText = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final subtitleColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+    final mainText = AppColorTokens.of(context).textPrimary;
+    final subtitleColor = AppColorTokens.of(context).textSubtitle;
     final circleSize = su.setWidth(80);
 
     return GestureDetector(
@@ -212,10 +209,12 @@ class SmartAccountEntryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     const cardRed = Color(0xFFFF6B6B);
     const cardYellow = Color(0xFFFFE66D);
-    final statusColor = isDeployed ? const Color(0xFF4CAF50) : const Color(0xFFFF9800);
+    final statusColor = isDeployed
+        ? const Color(0xFF4CAF50)
+        : const Color(0xFFFF9800);
     final su = ScreenUtil();
-    final mainText = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final subtitleColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+    final mainText = AppColorTokens.of(context).textPrimary;
+    final subtitleColor = AppColorTokens.of(context).textSubtitle;
     final circleSize = su.setWidth(80);
 
     return GestureDetector(
@@ -327,7 +326,9 @@ class SmartAccountEntryCard extends StatelessWidget {
             _trailingAction(
               size: su.setWidth(56),
               color: cardRed,
-              icon: hasSmartAccount ? Icons.arrow_forward_ios_rounded : Icons.add_rounded,
+              icon: hasSmartAccount
+                  ? Icons.arrow_forward_ios_rounded
+                  : Icons.add_rounded,
               iconSize: su.setWidth(28),
             ),
           ],

@@ -124,7 +124,11 @@ class AABatchTransactionBody extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(Icons.layers, size: ScreenUtil().setWidth(28), color: const Color(0xFFFF9800)),
+              Icon(
+                Icons.layers,
+                size: ScreenUtil().setWidth(28),
+                color: const Color(0xFFFF9800),
+              ),
               SizedBox(width: ScreenUtil().setWidth(12)),
               Flexible(
                 child: Text(
@@ -148,8 +152,16 @@ class AABatchTransactionBody extends StatelessWidget {
             ),
           ),
           SizedBox(height: ScreenUtil().setWidth(12)),
-          _buildFeatureRow(context, Icons.savings, S.of(context).g_key_aa_batch_save_gas),
-          _buildFeatureRow(context, Icons.bolt, S.of(context).g_key_aa_batch_atomic),
+          _buildFeatureRow(
+            context,
+            Icons.savings,
+            S.of(context).g_key_aa_batch_save_gas,
+          ),
+          _buildFeatureRow(
+            context,
+            Icons.bolt,
+            S.of(context).g_key_aa_batch_atomic,
+          ),
         ],
       ),
     );
@@ -160,7 +172,11 @@ class AABatchTransactionBody extends StatelessWidget {
       padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(6)),
       child: Row(
         children: [
-          Icon(icon, size: ScreenUtil().setWidth(18), color: const Color(0xFFFF9800)),
+          Icon(
+            icon,
+            size: ScreenUtil().setWidth(18),
+            color: const Color(0xFFFF9800),
+          ),
           SizedBox(width: ScreenUtil().setWidth(8)),
           Flexible(
             child: Text(
@@ -185,8 +201,10 @@ class AABatchTransactionBody extends StatelessWidget {
           color: _themeColor(context, AppThemeKeys.itemBgColor),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
           border: Border.all(
-            color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor)
-                .withAlpha(30),
+            color: _themeColor(
+              context,
+              AppThemeKeys.itemSubtitleTextColor,
+            ).withAlpha(30),
           ),
         ),
         child: Column(
@@ -194,8 +212,10 @@ class AABatchTransactionBody extends StatelessWidget {
             Icon(
               Icons.add_circle_outline,
               size: ScreenUtil().setWidth(56),
-              color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor)
-                  .withAlpha(100),
+              color: _themeColor(
+                context,
+                AppThemeKeys.itemSubtitleTextColor,
+              ).withAlpha(100),
             ),
             SizedBox(height: ScreenUtil().setWidth(12)),
             Text(
@@ -210,8 +230,10 @@ class AABatchTransactionBody extends StatelessWidget {
               S.of(context).g_key_aa_add_first_operation,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(22),
-                color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor)
-                    .withAlpha(150),
+                color: _themeColor(
+                  context,
+                  AppThemeKeys.itemSubtitleTextColor,
+                ).withAlpha(150),
               ),
             ),
           ],
@@ -285,10 +307,7 @@ class AABatchTransactionBody extends StatelessWidget {
   Widget _buildPaymasterSection(BuildContext context) {
     return GestureDetector(
       onTap: onShowPaymaster,
-      child: PaymasterOptionCard(
-        option: selectedPaymaster,
-        isSelected: true,
-      ),
+      child: PaymasterOptionCard(option: selectedPaymaster, isSelected: true),
     );
   }
 
@@ -302,7 +321,9 @@ class AABatchTransactionBody extends StatelessWidget {
             ? Colors.green.withAlpha(15)
             : _themeColor(context, AppThemeKeys.itemBgColor),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-        border: isSponsored ? Border.all(color: Colors.green.withAlpha(30)) : null,
+        border: isSponsored
+            ? Border.all(color: Colors.green.withAlpha(30))
+            : null,
       ),
       child: Column(
         children: [
@@ -315,7 +336,10 @@ class AABatchTransactionBody extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(24),
-                    color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
+                    color: _themeColor(
+                      context,
+                      AppThemeKeys.itemSubtitleTextColor,
+                    ),
                   ),
                 ),
               ),
@@ -324,7 +348,10 @@ class AABatchTransactionBody extends StatelessWidget {
           ),
           if (isSponsored && estimatedTotalGas != null) ...[
             SizedBox(height: ScreenUtil().setWidth(8)),
-            GasSponsorshipBadge(isSponsored: true, savedAmount: formatGasCost()),
+            GasSponsorshipBadge(
+              isSponsored: true,
+              savedAmount: formatGasCost(),
+            ),
           ],
         ],
       ),

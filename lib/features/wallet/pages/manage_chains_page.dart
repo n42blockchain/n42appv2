@@ -1,5 +1,5 @@
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:flutter/material.dart';
@@ -26,9 +26,7 @@ class ManageChainsPage extends ConsumerWidget {
         centerTitle: true,
       ),
       body: ReorderableListView.builder(
-        padding: EdgeInsets.symmetric(
-          vertical: ScreenUtil().setWidth(12),
-        ),
+        padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(12)),
         itemCount: wap.coinModels.length,
         onReorder: (oldIndex, newIndex) {
           wap.reorderChain(oldIndex, newIndex);
@@ -77,13 +75,14 @@ class ManageChainsPage extends ConsumerWidget {
                     child: Icon(
                       Icons.drag_handle_rounded,
                       size: ScreenUtil().setWidth(36),
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.itemSubtitleTextColor.name),
+                      color: AppColorTokens.of(context).textSubtitle,
                     ),
                   ),
                 ),
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+                  borderRadius: BorderRadius.circular(
+                    ScreenUtil().setWidth(20),
+                  ),
                   child: image,
                 ),
               ],
@@ -93,22 +92,19 @@ class ManageChainsPage extends ConsumerWidget {
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(28),
                 fontWeight: FontWeight.w600,
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
+                color: AppColorTokens.of(context).textPrimary,
               ),
             ),
             subtitle: Text(
               name,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(24),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemSubtitleTextColor.name),
+                color: AppColorTokens.of(context).textSubtitle,
               ),
             ),
             trailing: Switch(
               value: cm.showList,
-              activeThumbColor: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainBlueColor.name),
+              activeThumbColor: AppColorTokens.of(context).brand,
               onChanged: (_) => wap.toggleChainVisibility(cm),
             ),
           );

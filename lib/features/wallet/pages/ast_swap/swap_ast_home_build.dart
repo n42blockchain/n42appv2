@@ -22,10 +22,7 @@ extension _SwapAstHomeBuild on _SwapAstHomeState {
                 width: ScreenUtil().setWidth(44),
                 child: Image.asset(
                   'assets/wallet/swap/record.png',
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainBlueColor.name,
-                  ),
+                  color: AppColorTokens.of(context).brand,
                 ),
               ),
             ),
@@ -43,10 +40,7 @@ extension _SwapAstHomeBuild on _SwapAstHomeState {
                 ),
                 child: Image.asset(
                   'assets/wallet/swap/doubt.png',
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainBlueColor.name,
-                  ),
+                  color: AppColorTokens.of(context).brand,
                 ),
               ),
             ),
@@ -140,19 +134,13 @@ extension _SwapAstHomeBuild on _SwapAstHomeState {
       margin: EdgeInsets.all(AppSpacing.space8),
       padding: EdgeInsets.all(AppSpacing.space8),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.errorBgColor.name,
-        ),
+        color: AppColorTokens.of(context).dangerBg,
         borderRadius: AppRadius.brMd,
       ),
       child: Text(
         errorMessage,
         style: AppTypography.body.copyWith(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.errorTextColor.name,
-          ),
+          color: AppColorTokens.of(context).danger,
         ),
         textAlign: TextAlign.center,
       ),
@@ -174,10 +162,7 @@ extension _SwapAstHomeBuild on _SwapAstHomeState {
         child: Text(
           S.of(context).g_swap_key_21,
           style: AppTypography.body.copyWith(
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainTextColor.name,
-            ),
+            color: AppColorTokens.of(context).textPrimary,
           ),
           textAlign: TextAlign.center,
         ),

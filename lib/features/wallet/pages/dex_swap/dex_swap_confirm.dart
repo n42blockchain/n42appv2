@@ -1,4 +1,3 @@
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/models/dex/dex_quote_model.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_security_verification.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
@@ -44,18 +43,23 @@ class _DexSwapConfirmState extends State<DexSwapConfirm> {
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
       decoration: BoxDecoration(
-        color:
-            AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: AppColorTokens.of(context).bgSurface,
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
       ),
       child: Column(
         children: [
-          _row(S.of(context).g_key_dex_you_pay,
-              '${q.amountIn} ${q.tokenInSymbol}'),
-          _row(S.of(context).g_key_dex_you_receive,
-              '${q.amountOut} ${q.tokenOutSymbol}'),
-          _row(S.of(context).g_key_dex_min_received,
-              '${q.minAmountOut} ${q.tokenOutSymbol}'),
+          _row(
+            S.of(context).g_key_dex_you_pay,
+            '${q.amountIn} ${q.tokenInSymbol}',
+          ),
+          _row(
+            S.of(context).g_key_dex_you_receive,
+            '${q.amountOut} ${q.tokenOutSymbol}',
+          ),
+          _row(
+            S.of(context).g_key_dex_min_received,
+            '${q.minAmountOut} ${q.tokenOutSymbol}',
+          ),
           _priceImpactRow(q),
           _row(S.of(context).g_key_dex_gas_estimate, q.gasEstimate),
           _row(S.of(context).g_key_dex_best_source, q.source),
@@ -73,8 +77,7 @@ class _DexSwapConfirmState extends State<DexSwapConfirm> {
           Text(
             label,
             style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name),
+              color: AppColorTokens.of(context).textSubtitle,
               fontSize: ScreenUtil().setSp(28),
             ),
           ),
@@ -82,8 +85,7 @@ class _DexSwapConfirmState extends State<DexSwapConfirm> {
           Text(
             value,
             style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
+              color: AppColorTokens.of(context).textPrimary,
               fontSize: ScreenUtil().setSp(28),
             ),
           ),
@@ -97,7 +99,7 @@ class _DexSwapConfirmState extends State<DexSwapConfirm> {
     final valueColor = switch (impact) {
       >= 3.0 => Colors.red,
       >= 1.0 => Colors.orange,
-      _ => AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+      _ => AppColorTokens.of(context).textPrimary,
     };
     return Padding(
       padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(14)),
@@ -108,8 +110,7 @@ class _DexSwapConfirmState extends State<DexSwapConfirm> {
               S.of(context).g_key_dex_price_impact,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemSubtitleTextColor.name),
+                color: AppColorTokens.of(context).textSubtitle,
                 fontSize: ScreenUtil().setSp(28),
               ),
             ),
@@ -148,7 +149,8 @@ class _DexSwapConfirmState extends State<DexSwapConfirm> {
                 final nav = Navigator.of(context);
                 final bool? verified = await nav.push(
                   MaterialPageRoute(
-                      builder: (_) => WalletSecurityVerification()),
+                    builder: (_) => WalletSecurityVerification(),
+                  ),
                 );
                 if (verified == true) {
                   nav.pop(true);

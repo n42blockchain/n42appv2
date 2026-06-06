@@ -15,7 +15,7 @@ import 'package:n42_wallet/features/wallet/pages/portfolio/portfolio_widgets.dar
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 // ─── Entry point ─────────────────────────────────────────────────────────────
 
@@ -34,22 +34,10 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
   @override
   Widget build(BuildContext context) {
     final waValue = ref.watch(wapBridgeProvider);
-    final bgColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.backGroundColor.name,
-    );
-    final itemBg = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.itemBgColor.name,
-    );
-    final textColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainTextColor.name,
-    );
-    final accentColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainBlueColor.name,
-    );
+    final bgColor = AppColorTokens.of(context).bgBase;
+    final itemBg = AppColorTokens.of(context).bgSurface;
+    final textColor = AppColorTokens.of(context).textPrimary;
+    final accentColor = AppColorTokens.of(context).brand;
 
     final records = sortPortfolioRecordsByValue(
       waValue.coinList

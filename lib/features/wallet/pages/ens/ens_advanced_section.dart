@@ -6,7 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// 高级操作区块（转移所有权等）
 class EnsAdvancedSection extends StatelessWidget {
@@ -19,7 +19,7 @@ class EnsAdvancedSection extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: AppColorTokens.of(context).bgSurface,
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
       ),
       child: Column(
@@ -30,10 +30,7 @@ class EnsAdvancedSection extends StatelessWidget {
             style: TextStyle(
               fontSize: ScreenUtil().setSp(28),
               fontWeight: FontWeight.w600,
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainTextColor.name,
-              ),
+              color: AppColorTokens.of(context).textPrimary,
             ),
           ),
           SizedBox(height: ScreenUtil().setWidth(16)),

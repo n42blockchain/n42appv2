@@ -67,7 +67,10 @@ class SwapAstPayWidget extends ConsumerWidget {
       ),
       padding: EdgeInsets.all(AppSpacing.space8),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor4.name),
+        color: AppThemeUtils.getColorByKey(
+          context,
+          AppThemeKeys.itemBgColor4.name,
+        ),
         borderRadius: AppRadius.brSm,
       ),
       child: Column(
@@ -76,14 +79,17 @@ class SwapAstPayWidget extends ConsumerWidget {
           _buildHeader(context),
           _buildInputRow(context),
           if (payCoinModel == null && youPay != null)
-            _buildAddRow(context, ref,
+            _buildAddRow(
+              context,
+              ref,
               label: S.of(context).g_swap_key_14(youPay?.payChain ?? ""),
               coinName: youPay?.payChain ?? "",
             ),
-          if (payCoinModel != null)
-            _buildBalanceRow(context, balanceColor),
+          if (payCoinModel != null) _buildBalanceRow(context, balanceColor),
           if (payCoinModel != null && token == null)
-            _buildAddRow(context, ref,
+            _buildAddRow(
+              context,
+              ref,
               label: S.of(context).g_swap_key_14(youPay?.payCoin ?? ""),
               coinName: youPay?.payCoin ?? "",
             ),
@@ -100,8 +106,7 @@ class SwapAstPayWidget extends ConsumerWidget {
             S.of(context).g_swap_key_3,
             overflow: TextOverflow.ellipsis,
             style: AppTypography.body.copyWith(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemTextColor.name),
+              color: AppColorTokens.of(context).textItem,
             ),
           ),
         ),
@@ -110,8 +115,7 @@ class SwapAstPayWidget extends ConsumerWidget {
           child: Text(
             '${payCoinModel?.coin['name'] ?? ""}(${payCoinModel?.coin['miniName'] ?? ""})',
             style: AppTypography.body.copyWith(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainBlueColor.name),
+              color: AppColorTokens.of(context).brand,
             ),
             textAlign: TextAlign.right,
           ),
@@ -129,25 +133,29 @@ class SwapAstPayWidget extends ConsumerWidget {
           Expanded(
             child: TextField(
               style: AppTypography.displayLg.copyWith(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemTextColor.name),
+                color: AppColorTokens.of(context).textItem,
               ),
               controller: payController,
               focusNode: payNode,
               textInputAction: TextInputAction.next,
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
               decoration: InputDecoration(
                 hintText: S.of(context).g_key_44,
                 hintStyle: AppTypography.displayLg.copyWith(
                   color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.textFieldHintColor.name),
+                    context,
+                    AppThemeKeys.textFieldHintColor.name,
+                  ),
                 ),
                 border: InputBorder.none,
                 errorBorder: InputBorder.none,
                 focusedBorder: InputBorder.none,
                 isCollapsed: true,
                 contentPadding: EdgeInsets.symmetric(
-                    vertical: AppSpacing.space2),
+                  vertical: AppSpacing.space2,
+                ),
               ),
               maxLines: 1,
               onChanged: onPayChanged,
@@ -190,8 +198,7 @@ class SwapAstPayWidget extends ConsumerWidget {
               child: Text(
                 youPay?.payCoin ?? "",
                 style: AppTypography.body.copyWith(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemTextColor.name),
+                  color: AppColorTokens.of(context).textItem,
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -203,7 +210,9 @@ class SwapAstPayWidget extends ConsumerWidget {
               child: Icon(
                 Icons.arrow_forward_ios,
                 color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemBorderColor.name),
+                  context,
+                  AppThemeKeys.itemBorderColor.name,
+                ),
                 size: ScreenUtil().setWidth(40),
               ),
             ),
@@ -215,12 +224,14 @@ class SwapAstPayWidget extends ConsumerWidget {
 
   Widget _buildBalanceRow(BuildContext context, Color balanceColor) {
     final double balance = youPay?.balance ?? 0;
-    final String balanceText = regular.formartNumDouble(
-      dec.Decimal.parse(balance.toString()).toDouble(),
-      14,
-      isCrop: true,
-      isFill0: false,
-    ).toString();
+    final String balanceText = regular
+        .formartNumDouble(
+          dec.Decimal.parse(balance.toString()).toDouble(),
+          14,
+          isCrop: true,
+          isFill0: false,
+        )
+        .toString();
 
     return Row(
       children: [
@@ -252,21 +263,23 @@ class SwapAstPayWidget extends ConsumerWidget {
         Text(
           label,
           style: AppTypography.bodySm.copyWith(
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.errorTextColor.name),
+            color: AppColorTokens.of(context).danger,
           ),
         ),
         InkWell(
           onTap: () async {
             onCloseKeyboard();
-            final r = await Navigator.push<bool>(
+            final r =
+                await Navigator.push<bool>(
                   context,
                   MaterialPageRoute(builder: (_) => WalletCoinAddAll(coinName)),
                 ) ??
                 false;
             if (!context.mounted) return;
             if (r) {
-              await ref.read(wapBridgeProvider).initWallet(shouldInitCoinInfo: true);
+              await ref
+                  .read(wapBridgeProvider)
+                  .initWallet(shouldInitCoinInfo: true);
               onAddToken();
             }
           },
@@ -276,14 +289,18 @@ class SwapAstPayWidget extends ConsumerWidget {
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainButtonBgColor.name),
+                context,
+                AppThemeKeys.mainButtonBgColor.name,
+              ),
               borderRadius: AppRadius.brPill,
             ),
             child: Text(
               S.of(context).g_key_wallet_k47,
               style: AppTypography.captionSm.copyWith(
                 color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainButtonTextColor.name),
+                  context,
+                  AppThemeKeys.mainButtonTextColor.name,
+                ),
               ),
             ),
           ),

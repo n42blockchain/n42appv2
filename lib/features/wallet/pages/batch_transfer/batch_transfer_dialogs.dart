@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/provider/batch_transfer_provider.dart';
 import 'package:n42_wallet/features/wallet/pages/batch_transfer/batch_transfer_list_widgets.dart';
 
@@ -82,15 +82,13 @@ class BatchConfirmDialog extends StatelessWidget {
           onPressed: () => Navigator.pop(context, false),
           child: Text(
             S.of(context).g_key_79,
-            style: TextStyle(
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-            ),
+            style: TextStyle(color: AppColorTokens.of(context).textSubtitle),
           ),
         ),
         ElevatedButton(
           onPressed: () => Navigator.pop(context, true),
           style: ElevatedButton.styleFrom(
-            backgroundColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+            backgroundColor: AppColorTokens.of(context).brand,
           ),
           child: Text(
             S.of(context).g_key_78,
@@ -117,9 +115,9 @@ class BatchResultSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mainText = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final subText = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
-    final blue = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+    final mainText = AppColorTokens.of(context).textPrimary;
+    final subText = AppColorTokens.of(context).textSubtitle;
+    final blue = AppColorTokens.of(context).brand;
     final txHash = provider.txHash ?? '';
 
     return SafeArea(
@@ -137,7 +135,11 @@ class BatchResultSheet extends StatelessWidget {
                 borderRadius: BorderRadius.circular(ScreenUtil().setWidth(3)),
               ),
             ),
-            Icon(Icons.check_circle_rounded, color: Colors.green, size: ScreenUtil().setWidth(72)),
+            Icon(
+              Icons.check_circle_rounded,
+              color: Colors.green,
+              size: ScreenUtil().setWidth(72),
+            ),
             SizedBox(height: ScreenUtil().setWidth(12)),
             Text(
               S.of(context).g_key_140,
@@ -151,7 +153,7 @@ class BatchResultSheet extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
               decoration: BoxDecoration(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
+                color: AppColorTokens.of(context).bgBase,
                 borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
               ),
               child: Column(
@@ -165,7 +167,8 @@ class BatchResultSheet extends StatelessWidget {
                   SizedBox(height: ScreenUtil().setWidth(8)),
                   _ResultRow(
                     label: S.of(context).g_key_batch_total_amount,
-                    value: '${provider.formatAmount(provider.totalAmount)} $tokenSymbol',
+                    value:
+                        '${provider.formatAmount(provider.totalAmount)} $tokenSymbol',
                     labelColor: subText,
                     valueColor: mainText,
                   ),
@@ -204,18 +207,25 @@ class BatchResultSheet extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton.icon(
                 onPressed: () => onExport(context),
-                icon: Icon(Icons.file_download_outlined, size: ScreenUtil().setWidth(36)),
+                icon: Icon(
+                  Icons.file_download_outlined,
+                  size: ScreenUtil().setWidth(36),
+                ),
                 label: Text(S.of(context).g_key_batch_export_csv),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: blue,
                   foregroundColor: Colors.white,
-                  padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
+                  padding: EdgeInsets.symmetric(
+                    vertical: ScreenUtil().setWidth(20),
+                  ),
                   textStyle: TextStyle(
                     fontSize: ScreenUtil().setSp(30),
                     fontWeight: FontWeight.w600,
                   ),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
+                    borderRadius: BorderRadius.circular(
+                      ScreenUtil().setWidth(14),
+                    ),
                   ),
                 ),
               ),
@@ -226,9 +236,13 @@ class BatchResultSheet extends StatelessWidget {
               child: OutlinedButton(
                 onPressed: () => Navigator.pop(context),
                 style: OutlinedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
+                  padding: EdgeInsets.symmetric(
+                    vertical: ScreenUtil().setWidth(16),
+                  ),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
+                    borderRadius: BorderRadius.circular(
+                      ScreenUtil().setWidth(14),
+                    ),
                   ),
                 ),
                 child: Text(S.of(context).g_key_batch_done),
@@ -292,9 +306,18 @@ class BatchHelpDialog extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.bold, color: textColor),
             ),
             const SizedBox(height: 8),
-            Text('• ${S.of(context).g_key_batch_swipe_remove}', style: TextStyle(color: textColor)),
-            Text('• ${S.of(context).g_key_batch_memo_optional}', style: TextStyle(color: textColor)),
-            Text('• ${S.of(context).g_key_batch_multicall_tip}', style: TextStyle(color: textColor)),
+            Text(
+              '• ${S.of(context).g_key_batch_swipe_remove}',
+              style: TextStyle(color: textColor),
+            ),
+            Text(
+              '• ${S.of(context).g_key_batch_memo_optional}',
+              style: TextStyle(color: textColor),
+            ),
+            Text(
+              '• ${S.of(context).g_key_batch_multicall_tip}',
+              style: TextStyle(color: textColor),
+            ),
           ],
         ),
       ),
@@ -303,9 +326,7 @@ class BatchHelpDialog extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
           child: Text(
             S.of(context).g_key_burn_got_it,
-            style: TextStyle(
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-            ),
+            style: TextStyle(color: AppColorTokens.of(context).brand),
           ),
         ),
       ],

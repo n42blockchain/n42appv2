@@ -18,7 +18,7 @@ import 'package:n42_wallet/features/wallet/api/tokenview_enhanced_api.dart';
 import 'package:n42_wallet/features/wallet/services/gas_alert_service.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 part 'gas_tracker_models.dart';
 part 'gas_tracker_card.dart';
@@ -151,7 +151,10 @@ class _GasTrackerPageState extends State<GasTrackerPage> {
         }
       });
     } catch (e) {
-      AppLogger.w('GasTracker', 'failed to fetch TokenView data for $chain: $e');
+      AppLogger.w(
+        'GasTracker',
+        'failed to fetch TokenView data for $chain: $e',
+      );
     }
   }
 
@@ -204,7 +207,10 @@ class _GasTrackerPageState extends State<GasTrackerPage> {
         client.close();
       }
     } catch (e) {
-      AppLogger.w('GasTracker', 'failed to fetch gas for ${network.symbol}: $e');
+      AppLogger.w(
+        'GasTracker',
+        'failed to fetch gas for ${network.symbol}: $e',
+      );
     }
   }
 
@@ -357,10 +363,7 @@ class _GasTrackerPageState extends State<GasTrackerPage> {
           IconButton(
             icon: Icon(
               Icons.notifications_outlined,
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainTextColor.name,
-              ),
+              color: AppColorTokens.of(context).textPrimary,
               size: ScreenUtil().setWidth(44),
             ),
             tooltip: S.of(context).g_key_gas_alert,

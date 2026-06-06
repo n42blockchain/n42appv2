@@ -31,12 +31,14 @@ class TonSender implements ChainSender {
     final tonApi = TonApi(isTest: params.isTest);
 
     // Get balance
-    final mmb = await _tokenViewApi.getBalance(
-      BlockchainType.TheOpenNetwork.name,
-      CoinType.TON.name,
-      params.fromAddress,
-      isTest: false,
-    ) ?? MessageModel.error();
+    final mmb =
+        await _tokenViewApi.getBalance(
+          BlockchainType.TheOpenNetwork.name,
+          CoinType.TON.name,
+          params.fromAddress,
+          isTest: false,
+        ) ??
+        MessageModel.error();
     if (mmb.error) return SendResult.fail(mmb.data?.toString());
     final chainBalance = mmb.data as BigInt;
     if (chainBalance == BigInt.zero) {
@@ -44,16 +46,21 @@ class TonSender implements ChainSender {
     }
 
     // Get gas price
-    final mmg = await _tokenViewApi.getGasPrice(
-      BlockchainType.TheOpenNetwork.name,
-      CoinType.TON.name,
-      isTest: false,
-    ) ?? MessageModel.error();
+    final mmg =
+        await _tokenViewApi.getGasPrice(
+          BlockchainType.TheOpenNetwork.name,
+          CoinType.TON.name,
+          isTest: false,
+        ) ??
+        MessageModel.error();
     if (mmg.error) return SendResult.fail(mmg.data?.toString());
     final gasPrice = mmg.data as BigInt;
     final totalGasPrice = gasPrice * BigInt.from(gas);
 
-    BigInt valuePrice = ethToWeiString(params.amount.toString(), params.decimals);
+    BigInt valuePrice = ethToWeiString(
+      params.amount.toString(),
+      params.decimals,
+    );
     double adjustedAmount = params.amount;
 
     if (valuePrice == chainBalance && params.sendMax) {
@@ -61,17 +68,26 @@ class TonSender implements ChainSender {
         return SendResult.fail(S.current.g_key_wallet_m5(coinType));
       }
       valuePrice = valuePrice - totalGasPrice;
-      adjustedAmount = toEther(valuePrice.toString(), params.decimals).toDouble();
+      adjustedAmount = toEther(
+        valuePrice.toString(),
+        params.decimals,
+      ).toDouble();
     }
-    if (valuePrice <= BigInt.zero || totalGasPrice + valuePrice > chainBalance) {
+    if (valuePrice <= BigInt.zero ||
+        totalGasPrice + valuePrice > chainBalance) {
       return SendResult.fail(S.current.g_key_wallet_m5(coinType));
     }
 
     // Get seqno
     final sequenceNumber = await tonApi.getSeqnoTon(params.fromAddress);
-    if (sequenceNumber.error) return SendResult.fail(sequenceNumber.data?.toString());
+    if (sequenceNumber.error)
+      return SendResult.fail(sequenceNumber.data?.toString());
 
-    final expireAt = DateTime.now().add(const Duration(seconds: 60)).millisecondsSinceEpoch ~/ 1000;
+    final expireAt =
+        DateTime.now()
+            .add(const Duration(seconds: 60))
+            .millisecondsSinceEpoch ~/
+        1000;
     final signMap = <String, dynamic>{
       'amount': _dataUtils.bigIntToHex(valuePrice, need0x: false),
       'toAddress': params.toAddress,
@@ -95,7 +111,10 @@ class TonSender implements ChainSender {
       );
     } else {
       signStr = await _trustdart.signTransaction(
-        coinType, params.path, signMap, pk: params.privateKey!,
+        coinType,
+        params.path,
+        signMap,
+        pk: params.privateKey!,
       );
     }
 

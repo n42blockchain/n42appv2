@@ -13,8 +13,7 @@ mixin _SuiSendWidgetsMixin on _SuiSendLogicMixin {
           Text(
             S.of(context).g_key_38,
             style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
+              color: AppColorTokens.of(context).textPrimary,
               fontSize: ScreenUtil().setSp(28.0),
             ),
           ),
@@ -38,13 +37,11 @@ mixin _SuiSendWidgetsMixin on _SuiSendLogicMixin {
               child: Icon(
                 Icons.add,
                 size: ScreenUtil().setWidth(50.0),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
+                color: AppColorTokens.of(context).brand,
               ),
             ),
             rightOnTap1: searchToAddressWidget,
-            bgColor: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.itemBgColor.name),
+            bgColor: AppColorTokens.of(context).bgSurface,
           ),
         ],
       ),
@@ -63,8 +60,7 @@ mixin _SuiSendWidgetsMixin on _SuiSendLogicMixin {
             Text(
               S.of(context).g_key_wallet_k58,
               style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
+                color: AppColorTokens.of(context).textPrimary,
                 fontSize: ScreenUtil().setSp(28.0),
               ),
             ),
@@ -79,8 +75,7 @@ mixin _SuiSendWidgetsMixin on _SuiSendLogicMixin {
                 "${noteTextEditingController.text.length}/100",
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(20.0),
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemSubtitleTextColor.name),
+                  color: AppColorTokens.of(context).textSubtitle,
                 ),
               ),
               onEditingComplete: () {
@@ -96,8 +91,7 @@ mixin _SuiSendWidgetsMixin on _SuiSendLogicMixin {
               },
               maxLines: 2,
               height: ScreenUtil().setWidth(108.0),
-              bgColor: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemBgColor.name),
+              bgColor: AppColorTokens.of(context).bgSurface,
             ),
           ],
         ),
@@ -124,8 +118,7 @@ mixin _SuiSendWidgetsMixin on _SuiSendLogicMixin {
                   child: Text(
                     S.of(context).g_key_44,
                     style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainTextColor.name),
+                      color: AppColorTokens.of(context).textPrimary,
                       fontSize: ScreenUtil().setSp(28.0),
                     ),
                     overflow: TextOverflow.ellipsis,
@@ -140,9 +133,9 @@ mixin _SuiSendWidgetsMixin on _SuiSendLogicMixin {
             margin: EdgeInsets.only(top: ScreenUtil().setWidth(20.0)),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(
-                  Radius.circular(ScreenUtil().setWidth(16.0))),
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemBgColor.name),
+                Radius.circular(ScreenUtil().setWidth(16.0)),
+              ),
+              color: AppColorTokens.of(context).bgSurface,
               boxShadow: [
                 BoxShadow(
                   color: const Color(0xff101828).withAlpha(0),
@@ -163,10 +156,13 @@ mixin _SuiSendWidgetsMixin on _SuiSendLogicMixin {
                   hintStyle: TextStyle(
                     fontSize: ScreenUtil().setSp(54.0),
                     color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.textFieldHintColor.name),
+                      context,
+                      AppThemeKeys.textFieldHintColor.name,
+                    ),
                   ),
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
                   onChanged: (value) {
                     amountCheck(value: value);
                   },
@@ -186,22 +182,22 @@ mixin _SuiSendWidgetsMixin on _SuiSendLogicMixin {
                     topLeft: Radius.circular(ScreenUtil().setWidth(16.0)),
                     topRight: Radius.circular(ScreenUtil().setWidth(16.0)),
                   ),
-                  bgColor: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemBgColor.name),
+                  bgColor: AppColorTokens.of(context).bgSurface,
                   errorMessage: amountErrorMessage,
                   messageMargin: EdgeInsets.symmetric(
-                      horizontal: ScreenUtil().setWidth(30.0)),
+                    horizontal: ScreenUtil().setWidth(30.0),
+                  ),
                   rightWidget1: Container(
-                    margin:
-                        EdgeInsets.only(left: ScreenUtil().setWidth(10.0)),
+                    margin: EdgeInsets.only(left: ScreenUtil().setWidth(10.0)),
                     height: ScreenUtil().setWidth(60.0),
                     padding: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(20.0)),
+                      horizontal: ScreenUtil().setWidth(20.0),
+                    ),
                     decoration: BoxDecoration(
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainBlueColor.name),
+                      color: AppColorTokens.of(context).brand,
                       borderRadius: BorderRadius.all(
-                          Radius.circular(ScreenUtil().setWidth(60.0))),
+                        Radius.circular(ScreenUtil().setWidth(60.0)),
+                      ),
                     ),
                     alignment: Alignment.center,
                     child: Text(
@@ -209,7 +205,9 @@ mixin _SuiSendWidgetsMixin on _SuiSendLogicMixin {
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(26.0),
                         color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.mainWhiteColor.name),
+                          context,
+                          AppThemeKeys.mainWhiteColor.name,
+                        ),
                       ),
                     ),
                   ),
@@ -234,8 +232,7 @@ mixin _SuiSendWidgetsMixin on _SuiSendLogicMixin {
     return Text(
       '${widget.coinModel.balanceStringAll()} $unit',
       style: TextStyle(
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainTextColor.name),
+        color: AppColorTokens.of(context).textPrimary,
         fontSize: ScreenUtil().setSp(28.0),
       ),
       maxLines: 1,
@@ -245,8 +242,9 @@ mixin _SuiSendWidgetsMixin on _SuiSendLogicMixin {
   }
 
   Widget ownerAddress() {
-    final String addr =
-        dataUtils.addressFarmat(widget.coinModel.address.toString());
+    final String addr = dataUtils.addressFarmat(
+      widget.coinModel.address.toString(),
+    );
     return Padding(
       padding: EdgeInsets.symmetric(
         vertical: ScreenUtil().setWidth(20.0),
@@ -255,8 +253,7 @@ mixin _SuiSendWidgetsMixin on _SuiSendLogicMixin {
       child: Text(
         addr,
         style: TextStyle(
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemSubtitleTextColor.name),
+          color: AppColorTokens.of(context).textSubtitle,
           fontSize: ScreenUtil().setSp(30.0),
         ),
         maxLines: 1,
@@ -291,8 +288,7 @@ mixin _SuiSendWidgetsMixin on _SuiSendLogicMixin {
                     S.of(context).g_key_29,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.itemSubtitleTextColor.name),
+                      color: AppColorTokens.of(context).textSubtitle,
                       fontSize: ScreenUtil().setSp(28.0),
                     ),
                   ),
@@ -301,19 +297,17 @@ mixin _SuiSendWidgetsMixin on _SuiSendLogicMixin {
                   '${chainModel?.balanceDoubleAll() ?? 0} ${(chainModel?.coin['unit'] ?? '').toString().toUpperCase()}',
                   style: TextStyle(
                     color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainButtonBgColor.name),
+                      context,
+                      AppThemeKeys.mainButtonBgColor.name,
+                    ),
                     fontSize: ScreenUtil().setSp(28.0),
                   ),
                 ),
               ],
             ),
           ),
-        NonEvmFeeCompact(
-          feeText: feeText,
-          onTap: null,
-        ),
+        NonEvmFeeCompact(feeText: feeText, onTap: null),
       ],
     );
   }
-
 }

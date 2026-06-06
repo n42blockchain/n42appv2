@@ -77,7 +77,7 @@ class WalletCoinItem extends ConsumerWidget {
 
     final canEdit = coin['canEdit'] == true;
     final deleteColor = canEdit
-        ? AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name)
+        ? AppColorTokens.of(context).danger
         : AppColorTokens.of(context).textTertiary;
 
     final Widget refreshWidget = coinInfo.loadError
@@ -87,10 +87,7 @@ class WalletCoinItem extends ConsumerWidget {
             margin: EdgeInsets.only(right: su.setWidth(6.0)),
             child: Image.asset(
               'assets/img/error.png',
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.textColorOrange.name,
-              ),
+              color: AppColorTokens.of(context).warning,
             ),
           )
         : const SizedBox();
@@ -136,10 +133,7 @@ class WalletCoinItem extends ConsumerWidget {
             vertical: AppSpacing.space6,
           ),
           decoration: BoxDecoration(
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.itemBgColor.name,
-            ),
+            color: AppColorTokens.of(context).bgSurface,
             borderRadius: AppRadius.brMd,
             border: Border.all(
               color: isDark
@@ -208,10 +202,7 @@ class _CoinIcon extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: AppRadius.brSm,
                   border: Border.all(
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.backGroundColor.name,
-                    ),
+                    color: AppColorTokens.of(context).bgBase,
                     width: 1.5,
                   ),
                 ),
@@ -241,14 +232,8 @@ class _CoinInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final su = ScreenUtil();
-    final mainText = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainTextColor.name,
-    );
-    final subtitleText = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.itemSubtitleTextColor.name,
-    );
+    final mainText = AppColorTokens.of(context).textPrimary;
+    final subtitleText = AppColorTokens.of(context).textSubtitle;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -263,10 +248,7 @@ class _CoinInfo extends StatelessWidget {
                 child: Icon(
                   Icons.push_pin,
                   size: su.setWidth(22),
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainBlueColor.name,
-                  ),
+                  color: AppColorTokens.of(context).brand,
                 ),
               ),
             Expanded(

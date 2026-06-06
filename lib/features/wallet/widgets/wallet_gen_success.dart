@@ -1,4 +1,3 @@
-
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:flutter/material.dart';
@@ -40,10 +39,14 @@ Widget _statusView({
         Text(
           title,
           style: TextStyle(
-              color: ctx != null
-                  ? AppThemeUtils.getColorByKey(ctx, AppThemeKeys.mainTextColor.name)
-                  : const Color(0xFF000000),
-              fontSize: 15),
+            color: ctx != null
+                ? AppThemeUtils.getColorByKey(
+                    ctx,
+                    AppThemeKeys.mainTextColor.name,
+                  )
+                : const Color(0xFF000000),
+            fontSize: 15,
+          ),
         ),
       ],
     ),

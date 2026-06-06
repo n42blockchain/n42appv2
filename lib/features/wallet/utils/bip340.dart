@@ -21,7 +21,9 @@ class Bip340 {
   BigInt generatePrivateKey() {
     final random = FortunaRandom();
     final secureRandom = Random.secure();
-    final seed = Uint8List.fromList(List.generate(32, (_) => secureRandom.nextInt(256)));
+    final seed = Uint8List.fromList(
+      List.generate(32, (_) => secureRandom.nextInt(256)),
+    );
     random.seed(KeyParameter(seed));
 
     BigInt key;
@@ -50,7 +52,9 @@ class Bip340 {
     final BigInt k = generatePrivateKey();
     final ECPoint R = (G * k)!;
     final ECPoint P = getPublicKey(privateKey);
-    final e = hashMessage(Uint8List.fromList([...R.getEncoded(), ...P.getEncoded(), ...message]));
+    final e = hashMessage(
+      Uint8List.fromList([...R.getEncoded(), ...P.getEncoded(), ...message]),
+    );
     final BigInt s = (k + e * privateKey) % n;
     return getWitnessSignature(hex.encode(R.getEncoded()), s.toRadixString(16));
   }
@@ -60,12 +64,19 @@ class Bip340 {
     final Uint8List rBytes = Uint8List.fromList(hex.decode(rHex));
     final Uint8List rX = rBytes.sublist(1, 33); // x 坐标（去掉前缀字节）
     // Pad sHex to 64 hex chars (32 bytes) to ensure fixed-length signature
-    final Uint8List sBytes = Uint8List.fromList(hex.decode(sHex.padLeft(64, '0')));
+    final Uint8List sBytes = Uint8List.fromList(
+      hex.decode(sHex.padLeft(64, '0')),
+    );
     return Uint8List.fromList([...rX, ...sBytes]);
   }
 
   /// Schnorr 验证
-  bool schnorrVerify(ECPoint publicKey, Uint8List message, String rHex, String sHex) {
+  bool schnorrVerify(
+    ECPoint publicKey,
+    Uint8List message,
+    String rHex,
+    String sHex,
+  ) {
     final List<int> rDecoded;
     try {
       rDecoded = hex.decode(rHex);
@@ -83,7 +94,13 @@ class Bip340 {
     }
     if (s < BigInt.zero || s >= n) return false;
 
-    final e = hashMessage(Uint8List.fromList([...r.getEncoded(), ...publicKey.getEncoded(), ...message]));
+    final e = hashMessage(
+      Uint8List.fromList([
+        ...r.getEncoded(),
+        ...publicKey.getEncoded(),
+        ...message,
+      ]),
+    );
     final ECPoint? gsResult = G * s;
     final ECPoint? peResult = publicKey * e;
     if (gsResult == null || peResult == null) return false;

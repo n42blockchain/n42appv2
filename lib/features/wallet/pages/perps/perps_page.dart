@@ -6,7 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/wallet/pages/perps/hyperliquid_service.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// Perpetual futures trading page — Hyperliquid integration.
 ///
@@ -75,14 +75,10 @@ class _PerpsPageState extends State<PerpsPage>
           style: TextStyle(
             fontSize: ScreenUtil().setSp(34),
             fontWeight: FontWeight.w600,
-            color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainTextColor.name,
-            ),
+            color: AppColorTokens.of(context).textPrimary,
           ),
         ),
-        backgroundColor: AppThemeUtils.getColorByKey(
-          context, AppThemeKeys.backGroundColor.name,
-        ),
+        backgroundColor: AppColorTokens.of(context).bgBase,
         elevation: 0,
         actions: [
           IconButton(
@@ -92,15 +88,9 @@ class _PerpsPageState extends State<PerpsPage>
         ],
         bottom: TabBar(
           controller: _tabController,
-          indicatorColor: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainBlueColor.name,
-          ),
-          labelColor: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainTextColor.name,
-          ),
-          unselectedLabelColor: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemSubtitleTextColor.name,
-          ),
+          indicatorColor: AppColorTokens.of(context).brand,
+          labelColor: AppColorTokens.of(context).textPrimary,
+          unselectedLabelColor: AppColorTokens.of(context).textSubtitle,
           tabs: [
             Tab(text: 'Markets (${_markets.length})'),
             Tab(text: 'Positions (${_positions.length})'),
@@ -108,9 +98,7 @@ class _PerpsPageState extends State<PerpsPage>
           ],
         ),
       ),
-      backgroundColor: AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.backGroundColor.name,
-      ),
+      backgroundColor: AppColorTokens.of(context).bgBase,
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : Column(
@@ -140,16 +128,23 @@ class _PerpsPageState extends State<PerpsPage>
         horizontal: ScreenUtil().setWidth(24),
         vertical: ScreenUtil().setWidth(12),
       ),
-      color: AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemBgColor.name,
-      ),
+      color: AppColorTokens.of(context).bgSurface,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildMarginItem('Account', '\$${margin.accountValue.toStringAsFixed(2)}'),
-          _buildMarginItem('Used', '\$${margin.totalMarginUsed.toStringAsFixed(2)}'),
+          _buildMarginItem(
+            'Account',
+            '\$${margin.accountValue.toStringAsFixed(2)}',
+          ),
+          _buildMarginItem(
+            'Used',
+            '\$${margin.totalMarginUsed.toStringAsFixed(2)}',
+          ),
           _buildMarginItem('Free', '\$${margin.freeMargin.toStringAsFixed(2)}'),
-          _buildMarginItem('Util', '${margin.marginUtilization.toStringAsFixed(1)}%'),
+          _buildMarginItem(
+            'Util',
+            '${margin.marginUtilization.toStringAsFixed(1)}%',
+          ),
         ],
       ),
     );
@@ -162,9 +157,7 @@ class _PerpsPageState extends State<PerpsPage>
           label,
           style: TextStyle(
             fontSize: ScreenUtil().setSp(20),
-            color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemSubtitleTextColor.name,
-            ),
+            color: AppColorTokens.of(context).textSubtitle,
           ),
         ),
         Text(
@@ -172,9 +165,7 @@ class _PerpsPageState extends State<PerpsPage>
           style: TextStyle(
             fontSize: ScreenUtil().setSp(24),
             fontWeight: FontWeight.w600,
-            color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainTextColor.name,
-            ),
+            color: AppColorTokens.of(context).textPrimary,
           ),
         ),
       ],
@@ -195,18 +186,14 @@ class _PerpsPageState extends State<PerpsPage>
             style: TextStyle(
               fontSize: ScreenUtil().setSp(26),
               fontWeight: FontWeight.w600,
-              color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainTextColor.name,
-              ),
+              color: AppColorTokens.of(context).textPrimary,
             ),
           ),
           subtitle: Text(
             'Vol: \$${_formatCompact(m.volume24h)} · OI: \$${_formatCompact(m.openInterest)}',
             style: TextStyle(
               fontSize: ScreenUtil().setSp(20),
-              color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.itemSubtitleTextColor.name,
-              ),
+              color: AppColorTokens.of(context).textSubtitle,
             ),
           ),
           trailing: Column(
@@ -218,9 +205,7 @@ class _PerpsPageState extends State<PerpsPage>
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(26),
                   fontWeight: FontWeight.w600,
-                  color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name,
-                  ),
+                  color: AppColorTokens.of(context).textPrimary,
                 ),
               ),
               Text(
@@ -228,7 +213,9 @@ class _PerpsPageState extends State<PerpsPage>
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(22),
                   fontWeight: FontWeight.w500,
-                  color: isPositive ? const Color(0xFF22C55E) : const Color(0xFFEF4444),
+                  color: isPositive
+                      ? const Color(0xFF22C55E)
+                      : const Color(0xFFEF4444),
                 ),
               ),
             ],
@@ -246,11 +233,7 @@ class _PerpsPageState extends State<PerpsPage>
       return Center(
         child: Text(
           'No open positions',
-          style: TextStyle(
-            color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemSubtitleTextColor.name,
-            ),
-          ),
+          style: TextStyle(color: AppColorTokens.of(context).textSubtitle),
         ),
       );
     }
@@ -265,7 +248,7 @@ class _PerpsPageState extends State<PerpsPage>
           margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(8)),
           padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
           decoration: BoxDecoration(
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+            color: AppColorTokens.of(context).bgSurface,
             borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
           ),
           child: Column(
@@ -278,8 +261,11 @@ class _PerpsPageState extends State<PerpsPage>
                       vertical: ScreenUtil().setWidth(4),
                     ),
                     decoration: BoxDecoration(
-                      color: (p.isLong ? const Color(0xFF22C55E) : const Color(0xFFEF4444))
-                          .withValues(alpha: 0.15),
+                      color:
+                          (p.isLong
+                                  ? const Color(0xFF22C55E)
+                                  : const Color(0xFFEF4444))
+                              .withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Text(
@@ -287,7 +273,9 @@ class _PerpsPageState extends State<PerpsPage>
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(22),
                         fontWeight: FontWeight.w600,
-                        color: p.isLong ? const Color(0xFF22C55E) : const Color(0xFFEF4444),
+                        color: p.isLong
+                            ? const Color(0xFF22C55E)
+                            : const Color(0xFFEF4444),
                       ),
                     ),
                   ),
@@ -297,9 +285,7 @@ class _PerpsPageState extends State<PerpsPage>
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(28),
                       fontWeight: FontWeight.w600,
-                      color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainTextColor.name,
-                      ),
+                      color: AppColorTokens.of(context).textPrimary,
                     ),
                   ),
                   const Spacer(),
@@ -334,8 +320,14 @@ class _PerpsPageState extends State<PerpsPage>
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   _buildPosDetail('Size', p.size.abs().toStringAsFixed(4)),
-                  _buildPosDetail('Entry', '\$${p.entryPrice.toStringAsFixed(2)}'),
-                  _buildPosDetail('Liq', '\$${p.liquidationPrice.toStringAsFixed(2)}'),
+                  _buildPosDetail(
+                    'Entry',
+                    '\$${p.entryPrice.toStringAsFixed(2)}',
+                  ),
+                  _buildPosDetail(
+                    'Liq',
+                    '\$${p.liquidationPrice.toStringAsFixed(2)}',
+                  ),
                 ],
               ),
             ],
@@ -352,18 +344,14 @@ class _PerpsPageState extends State<PerpsPage>
           label,
           style: TextStyle(
             fontSize: ScreenUtil().setSp(20),
-            color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemSubtitleTextColor.name,
-            ),
+            color: AppColorTokens.of(context).textSubtitle,
           ),
         ),
         Text(
           value,
           style: TextStyle(
             fontSize: ScreenUtil().setSp(22),
-            color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainTextColor.name,
-            ),
+            color: AppColorTokens.of(context).textPrimary,
           ),
         ),
       ],
@@ -375,11 +363,7 @@ class _PerpsPageState extends State<PerpsPage>
       return Center(
         child: Text(
           'No open orders',
-          style: TextStyle(
-            color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemSubtitleTextColor.name,
-            ),
-          ),
+          style: TextStyle(color: AppColorTokens.of(context).textSubtitle),
         ),
       );
     }
@@ -400,18 +384,14 @@ class _PerpsPageState extends State<PerpsPage>
             '${o.sideLabel} ${o.symbol} × ${o.size}',
             style: TextStyle(
               fontSize: ScreenUtil().setSp(24),
-              color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainTextColor.name,
-              ),
+              color: AppColorTokens.of(context).textPrimary,
             ),
           ),
           subtitle: Text(
             'Limit \$${o.price.toStringAsFixed(2)}',
             style: TextStyle(
               fontSize: ScreenUtil().setSp(20),
-              color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.itemSubtitleTextColor.name,
-              ),
+              color: AppColorTokens.of(context).textSubtitle,
             ),
           ),
           trailing: IconButton(

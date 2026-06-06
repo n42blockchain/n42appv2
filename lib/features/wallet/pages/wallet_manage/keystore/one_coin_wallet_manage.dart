@@ -220,10 +220,7 @@ class _OneCoinWalletManageState extends ConsumerState<OneCoinWalletManage>
                     height: ScreenUtil().setWidth(148),
                     width: double.infinity,
                     padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.backGroundColor.name,
-                    ),
+                    color: AppColorTokens.of(context).bgBase,
                     child: AppButton(
                       label: S.of(context).g_key_115,
                       onPressed: saveCoin,

@@ -99,7 +99,9 @@ class UserOperation {
     EntryPointVersion version = EntryPointVersion.v08,
   }) {
     final packedHash = keccak256(_packUserOp(version: version));
-    final entryPointBytes = hexToBytes(entryPoint.replaceFirst('0x', '').padLeft(64, '0'));
+    final entryPointBytes = hexToBytes(
+      entryPoint.replaceFirst('0x', '').padLeft(64, '0'),
+    );
     final chainIdBytes = _bigIntToBytes32(chainId);
 
     final combined = Uint8List(32 + 32 + 32);
@@ -145,7 +147,9 @@ class UserOperation {
     var offset = 0;
 
     // Sender (padded to 32 bytes)
-    final senderBytes = hexToBytes(sender.replaceFirst('0x', '').padLeft(64, '0'));
+    final senderBytes = hexToBytes(
+      sender.replaceFirst('0x', '').padLeft(64, '0'),
+    );
     packed.setAll(offset, senderBytes);
     offset += 32;
 
@@ -186,7 +190,9 @@ class UserOperation {
   }
 
   /// Convert to JSON format for RPC calls
-  Map<String, String> toJson({EntryPointVersion version = EntryPointVersion.v08}) {
+  Map<String, String> toJson({
+    EntryPointVersion version = EntryPointVersion.v08,
+  }) {
     final json = {
       'sender': sender,
       'nonce': '0x${nonce.toRadixString(16)}',
@@ -214,7 +220,8 @@ class UserOperation {
       nonce: BigInt.parse(json['nonce'] as String),
       initCode: _parseHexBytes(json['initCode'] as String?),
       callData: _parseHexBytes(json['callData'] as String) ?? Uint8List(0),
-      accountGasLimits: _parseHexBytes(json['accountGasLimits'] as String) ?? Uint8List(32),
+      accountGasLimits:
+          _parseHexBytes(json['accountGasLimits'] as String) ?? Uint8List(32),
       preVerificationGas: BigInt.parse(json['preVerificationGas'] as String),
       gasFees: _parseHexBytes(json['gasFees'] as String) ?? Uint8List(32),
       paymasterAndData: _parseHexBytes(json['paymasterAndData'] as String?),
@@ -255,7 +262,8 @@ class UserOperation {
 
   /// Calculate estimated total gas cost
   BigInt get estimatedGasCost {
-    return (verificationGasLimit + callGasLimit + preVerificationGas) * maxFeePerGas;
+    return (verificationGasLimit + callGasLimit + preVerificationGas) *
+        maxFeePerGas;
   }
 
   @override

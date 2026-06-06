@@ -5,11 +5,13 @@ extension _WalletCoinAddAllSearchUI on _WalletCoinAddAllState {
   bool _shouldShowRow(Map<String, dynamic> row) {
     final unit = row['unit']?.toString() ?? '';
     if (unit.isEmpty) return true;
-    return unit.toUpperCase() == (row['coin_name']?.toString() ?? '').toUpperCase();
+    return unit.toUpperCase() ==
+        (row['coin_name']?.toString() ?? '').toUpperCase();
   }
 
   Widget coinListWidget() {
-    final bool isDefaultView = inputEditingController.text == "" && networkIndex == -1;
+    final bool isDefaultView =
+        inputEditingController.text == "" && networkIndex == -1;
 
     if (!isDefaultView) {
       if (coinlistSeach.isEmpty) return const EmptyView();
@@ -17,7 +19,9 @@ extension _WalletCoinAddAllSearchUI on _WalletCoinAddAllState {
         itemCount: coinlistSeach.length,
         itemBuilder: (context, int index) {
           final rowValue = coinlistSeach[index];
-          return _shouldShowRow(rowValue) ? coinItem(rowValue) : const SizedBox.shrink();
+          return _shouldShowRow(rowValue)
+              ? coinItem(rowValue)
+              : const SizedBox.shrink();
         },
       );
     }
@@ -27,22 +31,25 @@ extension _WalletCoinAddAllSearchUI on _WalletCoinAddAllState {
         if (load == Load.finish) await getChainList();
       },
       backgroundColor: AppThemeUtils.getColorByKey(
-          context, AppThemeKeys.mainButtonBgColor.name),
+        context,
+        AppThemeKeys.mainButtonBgColor.name,
+      ),
       color: AppThemeUtils.getColorByKey(
-          context, AppThemeKeys.mainButtonTextColor.name),
+        context,
+        AppThemeKeys.mainButtonTextColor.name,
+      ),
       displacement: ScreenUtil().setWidth(72.0),
       child: CustomScrollView(
         slivers: [
           if (_popularTokens.isNotEmpty)
             SliverToBoxAdapter(child: _buildPopularSection()),
           SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                final rowValue = coinlist[index] as Map<String, dynamic>;
-                return _shouldShowRow(rowValue) ? coinItem(rowValue) : const SizedBox.shrink();
-              },
-              childCount: coinlist.length,
-            ),
+            delegate: SliverChildBuilderDelegate((context, index) {
+              final rowValue = coinlist[index] as Map<String, dynamic>;
+              return _shouldShowRow(rowValue)
+                  ? coinItem(rowValue)
+                  : const SizedBox.shrink();
+            }, childCount: coinlist.length),
           ),
         ],
       ),
@@ -51,8 +58,7 @@ extension _WalletCoinAddAllSearchUI on _WalletCoinAddAllState {
 
   Widget _buildPopularSection() {
     final su = ScreenUtil();
-    final Color subtitleColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
+    final Color subtitleColor = AppColorTokens.of(context).textSubtitle;
     final TextStyle sectionTitle = TextStyle(
       fontSize: su.setSp(26),
       fontWeight: FontWeight.w600,
@@ -64,7 +70,10 @@ extension _WalletCoinAddAllSearchUI on _WalletCoinAddAllState {
       children: [
         Padding(
           padding: EdgeInsets.fromLTRB(
-            su.setWidth(4), su.setWidth(16), 0, su.setWidth(8),
+            su.setWidth(4),
+            su.setWidth(16),
+            0,
+            su.setWidth(8),
           ),
           child: Text('Popular Tokens', style: sectionTitle),
         ),
@@ -73,13 +82,13 @@ extension _WalletCoinAddAllSearchUI on _WalletCoinAddAllState {
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: _popularTokens.length,
-            itemBuilder: (context, index) => _popularChip(_popularTokens[index]),
+            itemBuilder: (context, index) =>
+                _popularChip(_popularTokens[index]),
           ),
         ),
         Divider(
           height: su.setWidth(32),
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemLineColor.name),
+          color: AppColorTokens.of(context).border,
         ),
         Padding(
           padding: EdgeInsets.only(
@@ -101,12 +110,9 @@ extension _WalletCoinAddAllSearchUI on _WalletCoinAddAllState {
     final String iconUrl =
         'https://api.n42.ai/market/v1/r/coinImage/$fullname.png';
 
-    final Color blueColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainBlueColor.name);
-    final Color mainText = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainTextColor.name);
-    final Color subtitleColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
+    final Color blueColor = AppColorTokens.of(context).brand;
+    final Color mainText = AppColorTokens.of(context).textPrimary;
+    final Color subtitleColor = AppColorTokens.of(context).textSubtitle;
 
     return GestureDetector(
       onTap: isAdded
@@ -124,14 +130,15 @@ extension _WalletCoinAddAllSearchUI on _WalletCoinAddAllState {
         decoration: BoxDecoration(
           color: isAdded
               ? blueColor.withValues(alpha: 0.08)
-              : AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemBgColor.name),
+              : AppColorTokens.of(context).bgSurface,
           borderRadius: BorderRadius.circular(su.setWidth(40)),
           border: Border.all(
             color: isAdded
                 ? blueColor.withValues(alpha: 0.3)
                 : AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemBorderColor.name),
+                    context,
+                    AppThemeKeys.itemBorderColor.name,
+                  ),
           ),
         ),
         child: Row(
@@ -195,7 +202,9 @@ extension _WalletCoinAddAllSearchUI on _WalletCoinAddAllState {
       Icons.add,
       size: su.setWidth(28),
       color: AppThemeUtils.getColorByKey(
-          context, AppThemeKeys.mainButtonBgColor.name),
+        context,
+        AppThemeKeys.mainButtonBgColor.name,
+      ),
     );
   }
 
@@ -204,17 +213,17 @@ extension _WalletCoinAddAllSearchUI on _WalletCoinAddAllState {
     final String fullname =
         (rowValue['fullname'] ?? rowValue['coin_name'] ?? '--').toString();
     final String symbol = (rowValue['coin_name'] ?? '').toString();
-    final Color mainText = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainTextColor.name);
+    final Color mainText = AppColorTokens.of(context).textPrimary;
     final Color buttonBg = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainButtonBgColor.name);
+      context,
+      AppThemeKeys.mainButtonBgColor.name,
+    );
 
     final String icon = switch (fullname) {
       'LoveCoin' => rowValue['icon']?.toString() ?? '',
       'Base' =>
         "${AppConfig.apiUrl['n42Browser']}/static/${rowValue['coin_name']}.png",
-      _ =>
-        'https://api.n42.ai/market/v1/r/coinImage/$fullname.png',
+      _ => 'https://api.n42.ai/market/v1/r/coinImage/$fullname.png',
     };
 
     return Container(
@@ -222,8 +231,7 @@ extension _WalletCoinAddAllSearchUI on _WalletCoinAddAllState {
         border: Border(
           bottom: BorderSide(
             width: su.setWidth(1.0),
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.itemLineColor.name),
+            color: AppColorTokens.of(context).border,
           ),
         ),
       ),
@@ -262,14 +270,14 @@ extension _WalletCoinAddAllSearchUI on _WalletCoinAddAllState {
                     text: '$symbol  ',
                     style: TextStyle(
                       fontSize: su.setWidth(26.0),
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.itemSubtitleTextColor.name),
+                      color: AppColorTokens.of(context).textSubtitle,
                       height: 1.3,
                     ),
                     children: [
                       if (rowValue['contract'].toString().isNotEmpty)
                         TextSpan(
-                          text: '${rowValue['chain_name']}(${rowValue['rules']})',
+                          text:
+                              '${rowValue['chain_name']}(${rowValue['rules']})',
                           style: TextStyle(
                             fontSize: su.setWidth(26.0),
                             color: buttonBg,

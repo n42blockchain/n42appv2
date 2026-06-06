@@ -186,19 +186,13 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
             Container(
               padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
               decoration: BoxDecoration(
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.errorBgColor.name,
-                ),
+                color: AppColorTokens.of(context).dangerBg,
                 borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
               ),
               child: Text(
                 _error,
                 style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.errorTextColor.name,
-                  ),
+                  color: AppColorTokens.of(context).danger,
                   fontSize: ScreenUtil().setSp(26),
                 ),
               ),
@@ -268,19 +262,13 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
             width: ScreenUtil().setWidth(48),
             height: ScreenUtil().setWidth(48),
             decoration: BoxDecoration(
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainBlueColor.name,
-              ).withValues(alpha: 0.1),
+              color: AppColorTokens.of(context).brand.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: Icon(
               wallet.hasMnemonic ? Icons.vpn_key : Icons.key,
               size: ScreenUtil().setWidth(24),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainBlueColor.name,
-              ),
+              color: AppColorTokens.of(context).brand,
             ),
           ),
           SizedBox(width: ScreenUtil().setWidth(16)),
@@ -291,10 +279,7 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
                 Text(
                   wallet.walletName ?? 'Wallet ${index + 1}',
                   style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.mainTextColor.name,
-                    ),
+                    color: AppColorTokens.of(context).textPrimary,
                     fontSize: ScreenUtil().setSp(30),
                     fontWeight: FontWeight.w600,
                   ),
@@ -302,10 +287,7 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
                 Text(
                   wallet.hasMnemonic ? 'Mnemonic wallet' : 'Private key wallet',
                   style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.itemSubtitleTextColor.name,
-                    ),
+                    color: AppColorTokens.of(context).textSubtitle,
                     fontSize: ScreenUtil().setSp(24),
                   ),
                 ),
@@ -314,10 +296,7 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
           ),
           Checkbox(
             value: isSelected,
-            activeColor: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainBlueColor.name,
-            ),
+            activeColor: AppColorTokens.of(context).brand,
             onChanged: (_) => _toggleSelection(index),
           ),
         ],
@@ -349,10 +328,7 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
   Widget _label(String text) => Text(
     text,
     style: TextStyle(
-      color: AppThemeUtils.getColorByKey(
-        context,
-        AppThemeKeys.mainTextColor.name,
-      ),
+      color: AppColorTokens.of(context).textPrimary,
       fontWeight: FontWeight.bold,
       fontSize: ScreenUtil().setSp(32),
     ),
@@ -366,10 +342,7 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
         padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
         height: ScreenUtil().setWidth(148),
         width: double.infinity,
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.backGroundColor.name,
-        ),
+        color: AppColorTokens.of(context).bgBase,
         child: AppButton(
           label: 'Create & Save Backup',
           onPressed: () => _export(),

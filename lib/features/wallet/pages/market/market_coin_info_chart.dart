@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/widgets/candlestick_chart.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 import 'market_coin_info_helpers.dart';
 
@@ -23,8 +23,7 @@ Widget buildChartSection(
     child: Container(
       height: chartH,
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemBgColor.name),
+        color: AppColorTokens.of(context).bgSurface,
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
       ),
       child: ClipRRect(
@@ -65,7 +64,10 @@ Widget _resolveChartChild(
 }
 
 Widget _buildFallbackChart(
-    BuildContext context, Map<String, dynamic> coin, double height) {
+  BuildContext context,
+  Map<String, dynamic> coin,
+  double height,
+) {
   final prices = _fallbackPrices(coin);
   if (prices.isEmpty) return _noChartData(context);
 
@@ -84,26 +86,21 @@ Widget _buildFallbackChart(
   }
   if (ohlc.isEmpty) return _noChartData(context);
 
-  return CandlestickChart(
-      ohlcData: ohlc, height: height, volumeHeightRatio: 0);
+  return CandlestickChart(ohlcData: ohlc, height: height, volumeHeightRatio: 0);
 }
 
 List<double> _fallbackPrices(Map<String, dynamic> coin) {
   final raw = coin['kline_default'];
   if (raw is! List) return const [];
-  return raw
-      .map((v) => toDouble(v))
-      .where((v) => v.isFinite && v > 0)
-      .toList();
+  return raw.map((v) => toDouble(v)).where((v) => v.isFinite && v > 0).toList();
 }
 
 Widget _noChartData(BuildContext context) => Center(
-      child: Text(
-        S.of(context).g_market_no_chart,
-        style: TextStyle(
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemSubtitleTextColor.name),
-          fontSize: ScreenUtil().setSp(24),
-        ),
-      ),
-    );
+  child: Text(
+    S.of(context).g_market_no_chart,
+    style: TextStyle(
+      color: AppColorTokens.of(context).textSubtitle,
+      fontSize: ScreenUtil().setSp(24),
+    ),
+  ),
+);

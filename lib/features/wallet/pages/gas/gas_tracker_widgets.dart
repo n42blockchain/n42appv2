@@ -22,18 +22,9 @@ class _AlertsOverviewSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.backGroundColor.name,
-    );
-    final mainText = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainTextColor.name,
-    );
-    final subtitleText = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.itemSubtitleTextColor.name,
-    );
+    final bgColor = AppColorTokens.of(context).bgBase;
+    final mainText = AppColorTokens.of(context).textPrimary;
+    final subtitleText = AppColorTokens.of(context).textSubtitle;
 
     return Container(
       decoration: BoxDecoration(
@@ -217,26 +208,11 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.backGroundColor.name,
-    );
-    final itemBg = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.itemBgColor.name,
-    );
-    final mainText = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainTextColor.name,
-    );
-    final subtitleText = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.itemSubtitleTextColor.name,
-    );
-    final blueColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainBlueColor.name,
-    );
+    final bgColor = AppColorTokens.of(context).bgBase;
+    final itemBg = AppColorTokens.of(context).bgSurface;
+    final mainText = AppColorTokens.of(context).textPrimary;
+    final subtitleText = AppColorTokens.of(context).textSubtitle;
+    final blueColor = AppColorTokens.of(context).brand;
 
     return PopScope(
       canPop: canDismissGasAlertSheet(_saving),
@@ -327,7 +303,10 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
             child: Text(
               S.of(context).g_key_gas_alert,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: ScreenUtil().setSp(28), color: mainText),
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(28),
+                color: mainText,
+              ),
             ),
           ),
           Switch(
@@ -401,10 +380,7 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
               _error,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(22),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.errorTextColor.name,
-                ),
+                color: AppColorTokens.of(context).danger,
               ),
             ),
           ],
@@ -420,8 +396,8 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
     Color bgColor,
   ) {
     final borderColor = _error.isNotEmpty
-        ? AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name)
-        : AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name);
+        ? AppColorTokens.of(context).danger
+        : AppColorTokens.of(context).border;
 
     return Container(
       padding: EdgeInsets.symmetric(
@@ -548,10 +524,7 @@ class _DirectionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final idleColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.itemSubtitleTextColor.name,
-    );
+    final idleColor = AppColorTokens.of(context).textSubtitle;
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
@@ -560,12 +533,7 @@ class _DirectionButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: selected ? color.withAlpha(30) : Colors.transparent,
           border: Border.all(
-            color: selected
-                ? color
-                : AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.dividerColor.name,
-                  ),
+            color: selected ? color : AppColorTokens.of(context).border,
             width: selected ? 1.5 : 1,
           ),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),

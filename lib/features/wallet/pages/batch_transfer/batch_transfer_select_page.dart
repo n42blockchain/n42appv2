@@ -8,7 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/pages/batch_transfer/batch_transfer_page.dart';
 import 'package:n42_wallet/features/wallet/provider/batch_transfer_provider.dart';
@@ -20,7 +20,15 @@ class BatchTransferSelectPage extends ConsumerWidget {
   const BatchTransferSelectPage({super.key});
 
   static const _evmChains = {
-    'ETH', 'BNB', 'MATIC', 'ARB', 'OP', 'AVAX', 'FTM', 'CRO', 'CELO',
+    'ETH',
+    'BNB',
+    'MATIC',
+    'ARB',
+    'OP',
+    'AVAX',
+    'FTM',
+    'CRO',
+    'CELO',
   };
 
   static const _chainColors = {
@@ -62,8 +70,7 @@ class BatchTransferSelectPage extends ConsumerWidget {
           style: TextStyle(
             fontSize: ScreenUtil().setSp(28),
             fontWeight: FontWeight.bold,
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainTextColor.name),
+            color: AppColorTokens.of(context).textPrimary,
           ),
         ),
         SizedBox(height: ScreenUtil().setWidth(16)),
@@ -73,25 +80,34 @@ class BatchTransferSelectPage extends ConsumerWidget {
   }
 
   Widget _buildEmptyState(BuildContext context) {
-    final subtitleText = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
+    final subtitleText = AppColorTokens.of(context).textSubtitle;
     return Center(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(32)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.send_rounded, size: ScreenUtil().setWidth(80), color: subtitleText),
+            Icon(
+              Icons.send_rounded,
+              size: ScreenUtil().setWidth(80),
+              color: subtitleText,
+            ),
             SizedBox(height: ScreenUtil().setWidth(16)),
             Text(
               S.of(context).g_key_batch_no_supported,
-              style: TextStyle(fontSize: ScreenUtil().setSp(28), color: subtitleText),
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(28),
+                color: subtitleText,
+              ),
               textAlign: TextAlign.center,
             ),
             SizedBox(height: ScreenUtil().setWidth(8)),
             Text(
               S.of(context).g_key_batch_evm_only,
-              style: TextStyle(fontSize: ScreenUtil().setSp(24), color: subtitleText),
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(24),
+                color: subtitleText,
+              ),
               textAlign: TextAlign.center,
             ),
           ],
@@ -116,7 +132,11 @@ class BatchTransferSelectPage extends ConsumerWidget {
       ),
       child: Row(
         children: [
-          Icon(Icons.send_rounded, size: ScreenUtil().setWidth(48), color: const Color(0xFF00BCD4)),
+          Icon(
+            Icons.send_rounded,
+            size: ScreenUtil().setWidth(48),
+            color: const Color(0xFF00BCD4),
+          ),
           SizedBox(width: ScreenUtil().setWidth(16)),
           Expanded(
             child: Column(
@@ -127,8 +147,7 @@ class BatchTransferSelectPage extends ConsumerWidget {
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(28),
                     fontWeight: FontWeight.bold,
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainTextColor.name),
+                    color: AppColorTokens.of(context).textPrimary,
                   ),
                 ),
                 SizedBox(height: ScreenUtil().setWidth(4)),
@@ -136,8 +155,7 @@ class BatchTransferSelectPage extends ConsumerWidget {
                   S.of(context).g_key_batch_send_multiple,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(24),
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.itemSubtitleTextColor.name),
+                    color: AppColorTokens.of(context).textSubtitle,
                   ),
                 ),
               ],
@@ -154,10 +172,8 @@ class BatchTransferSelectPage extends ConsumerWidget {
     final decimals = (coin.coin['decimals'] ?? 18) as int;
     final chainColor =
         _chainColors[chainSymbol.toUpperCase()] ?? const Color(0xFF607D8B);
-    final mainText = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainTextColor.name);
-    final subtitleText = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
+    final mainText = AppColorTokens.of(context).textPrimary;
+    final subtitleText = AppColorTokens.of(context).textSubtitle;
 
     return GestureDetector(
       onTap: () => _navigateToBatchTransfer(context, coin),
@@ -165,8 +181,7 @@ class BatchTransferSelectPage extends ConsumerWidget {
         margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
         padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemBgColor.name),
+          color: AppColorTokens.of(context).bgSurface,
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
         ),
         child: Row(
@@ -206,7 +221,10 @@ class BatchTransferSelectPage extends ConsumerWidget {
                   ),
                   Text(
                     chainSymbol,
-                    style: TextStyle(fontSize: ScreenUtil().setSp(22), color: subtitleText),
+                    style: TextStyle(
+                      fontSize: ScreenUtil().setSp(22),
+                      color: subtitleText,
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -226,7 +244,10 @@ class BatchTransferSelectPage extends ConsumerWidget {
                 ),
                 Text(
                   chainSymbol,
-                  style: TextStyle(fontSize: ScreenUtil().setSp(22), color: subtitleText),
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(22),
+                    color: subtitleText,
+                  ),
                 ),
               ],
             ),
@@ -244,7 +265,10 @@ class BatchTransferSelectPage extends ConsumerWidget {
       final intPart = balance ~/ divisor;
       final fracPart = balance.remainder(divisor);
       final fracLen = decimals > 4 ? 4 : decimals;
-      final fracStr = fracPart.toString().padLeft(decimals, '0').substring(0, fracLen);
+      final fracStr = fracPart
+          .toString()
+          .padLeft(decimals, '0')
+          .substring(0, fracLen);
       return '$intPart.$fracStr';
     } catch (_) {
       return '0.0000';

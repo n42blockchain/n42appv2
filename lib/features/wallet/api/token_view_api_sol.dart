@@ -102,10 +102,7 @@ extension TokenViewApiSolana on TokenViewApi {
     bool isTest = false,
   }) async {
     try {
-      final params = {
-        'net_mode': isTest ? 'test' : 'main',
-        'pubkey': address,
-      };
+      final params = {'net_mode': isTest ? 'test' : 'main', 'pubkey': address};
       final a = await BaseApi.requestEmptyH.post(
         '${url}v1/sol/account/info',
         params: params,

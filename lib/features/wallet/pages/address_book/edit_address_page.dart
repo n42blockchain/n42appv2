@@ -3,6 +3,7 @@ import 'package:n42_wallet/features/component/pages/scan_page.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/api/address_book_api.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
@@ -118,10 +119,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
                 child: Text(
                   editStatus ? S.of(context).g_key_115 : S.of(context).Edit,
                   style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.mainTextColor.name,
-                    ),
+                    color: AppColorTokens.of(context).textPrimary,
                     fontSize: ScreenUtil().setSp(32.0),
                   ),
                 ),
@@ -224,10 +222,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
             Text(
               coinName,
               style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainTextColor.name,
-                ),
+                color: AppColorTokens.of(context).textPrimary,
                 fontSize: ScreenUtil().setSp(28.0),
               ),
             ),
@@ -235,10 +230,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
             Icon(
               Icons.arrow_forward_ios,
               size: ScreenUtil().setWidth(40.0),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ),
+              color: AppColorTokens.of(context).textSubtitle,
             ),
           ],
         ),
@@ -286,10 +278,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
       ),
       rightWidget1: Image.asset(
         "assets/wallet/scan.png",
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.mainTextColor.name,
-        ),
+        color: AppColorTokens.of(context).textPrimary,
         width: ScreenUtil().setWidth(50.0),
         height: ScreenUtil().setWidth(50.0),
       ),
@@ -311,10 +300,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
         height: ScreenUtil().setWidth(60.0),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.mainBlueColor.name,
-          ),
+          color: AppColorTokens.of(context).brand,
           borderRadius: BorderRadius.all(Radius.circular(60.0)),
         ),
         child: Text(
@@ -417,10 +403,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
         height: ScreenUtil().setWidth(80.0),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.errorTextColor.name,
-          ),
+          color: AppColorTokens.of(context).danger,
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16.0)),
         ),
         child: Text(

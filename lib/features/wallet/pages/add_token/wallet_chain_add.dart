@@ -2,7 +2,6 @@ import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/widgets/login_title.dart';
 import 'package:n42_wallet/features/utils/regular.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/eth_api.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/chain_url_registry.dart';
@@ -79,7 +78,12 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
     "testnetChainID": 3,
     "testnetIndex": 0,
     "testnets": [
-      {"testnetWS": "", "testnetRPC": "", "testnetChainID": 3, "testnetContract": {}},
+      {
+        "testnetWS": "",
+        "testnetRPC": "",
+        "testnetChainID": 3,
+        "testnetContract": {},
+      },
     ],
     "mainnets": {},
   };
@@ -105,19 +109,35 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
     return false;
   }
 
-  bool _validateInputs(String name, String mKey, String chainIdStr, String decimalStr, String rpcStr) {
+  bool _validateInputs(
+    String name,
+    String mKey,
+    String chainIdStr,
+    String decimalStr,
+    String rpcStr,
+  ) {
     final reg = Regular();
     final s = S.of(context);
 
-    if (name.isEmpty || name.length > 30) return _setFieldError((v) => nameErrorMessage = v, s.g_token_m_key_1(30));
-    if (mKey.isEmpty || mKey.length > 10) return _setFieldError((v) => symbolErrorMessage = v, s.g_token_m_key_1(10));
-    if (!reg.regularNums(chainIdStr) || chainIdStr.length > 10 || int.parse(chainIdStr) <= 0) {
+    if (name.isEmpty || name.length > 30)
+      return _setFieldError((v) => nameErrorMessage = v, s.g_token_m_key_1(30));
+    if (mKey.isEmpty || mKey.length > 10)
+      return _setFieldError(
+        (v) => symbolErrorMessage = v,
+        s.g_token_m_key_1(10),
+      );
+    if (!reg.regularNums(chainIdStr) ||
+        chainIdStr.length > 10 ||
+        int.parse(chainIdStr) <= 0) {
       return _setFieldError((v) => chainIdErrorMessage = v, s.g_token_m_key_21);
     }
-    if (!reg.regularNums(decimalStr)) return _setFieldError((v) => decimalErrorMessage = v, s.g_token_m_key_21);
+    if (!reg.regularNums(decimalStr))
+      return _setFieldError((v) => decimalErrorMessage = v, s.g_token_m_key_21);
     final decimal = int.parse(decimalStr);
-    if (decimal < 0 || decimal > 18) return _setFieldError((v) => decimalErrorMessage = v, s.g_token_m_key_2);
-    if (!isURL(rpcStr)) return _setFieldError((v) => rpcErrorMessage = v, s.g_token_m_key_21);
+    if (decimal < 0 || decimal > 18)
+      return _setFieldError((v) => decimalErrorMessage = v, s.g_token_m_key_2);
+    if (!isURL(rpcStr))
+      return _setFieldError((v) => rpcErrorMessage = v, s.g_token_m_key_21);
     return true;
   }
 
@@ -135,7 +155,10 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
 
     if (allChainUrlMap[mKey] != null) {
       errorMessage = S.of(context).g_token_m_key_22(name);
-      final r = await tipsDialog2(context, S.of(context).g_token_m_key_23(name));
+      final r = await tipsDialog2(
+        context,
+        S.of(context).g_token_m_key_23(name),
+      );
       if (!mounted) return;
       if (r == true) {
         await ref.read(wapBridgeProvider).addWalletChain(allChainUrlMap[mKey]);
@@ -151,7 +174,9 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
     if (!mounted) return;
     if (rmm.error) {
       setState(() {
-        errorMessage = S.of(context).g_token_m_key_24(S.of(context).g_token_m_key_17);
+        errorMessage = S
+            .of(context)
+            .g_token_m_key_24(S.of(context).g_token_m_key_17);
         load = Load.finish;
       });
       ToastUtils.show(errorMessage);
@@ -175,6 +200,7 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
     setState(() => load = Load.finish);
     Navigator.pop(context, true);
   }
+
   Widget _buildField({
     required String title,
     required TextEditingController controller,
@@ -233,7 +259,7 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
   @override
   Widget build(BuildContext context) {
     final s = S.of(context);
-    final bgColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name);
+    final bgColor = AppColorTokens.of(context).bgBase;
 
     return Scaffold(
       backgroundColor: bgColor,
@@ -297,11 +323,11 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
                       Container(
                         padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
                         alignment: Alignment.center,
-                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorBgColor.name),
+                        color: AppColorTokens.of(context).dangerBg,
                         child: Text(
                           errorMessage,
                           style: TextStyle(
-                            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
+                            color: AppColorTokens.of(context).danger,
                             fontSize: ScreenUtil().setSp(30),
                           ),
                         ),
@@ -319,14 +345,15 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
                 color: bgColor,
                 child: Column(
                   children: [
-                    Divider(height: ScreenUtil().setWidth(1), endIndent: 0, indent: 0),
+                    Divider(
+                      height: ScreenUtil().setWidth(1),
+                      endIndent: 0,
+                      indent: 0,
+                    ),
                     Container(
                       margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
                       height: ScreenUtil().setWidth(88),
-                      child: AppButton(
-                        label: s.g_key_159,
-                        onPressed: addChain,
-                      ),
+                      child: AppButton(label: s.g_key_159, onPressed: addChain),
                     ),
                   ],
                 ),

@@ -10,7 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/features/wallet/pages/market/trade_entry_sheet_utils.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/models/portfolio_trade.dart';
 import 'package:n42_wallet/features/wallet/services/portfolio_trade_service.dart';
 
@@ -148,19 +148,10 @@ class _TradeEntrySheetState extends State<_TradeEntrySheet> {
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.itemBgColor.name,
-    );
-    final textColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainTextColor.name,
-    );
+    final bgColor = AppColorTokens.of(context).bgSurface;
+    final textColor = AppColorTokens.of(context).textPrimary;
     final subColor = textColor.withAlpha(153);
-    final accentColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainBlueColor.name,
-    );
+    final accentColor = AppColorTokens.of(context).brand;
     final s = S.of(context);
 
     return PopScope(

@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/utils/validation/address_validator.dart';
 
 /// ENS 确认对话框
@@ -54,14 +54,10 @@ class EnsConfirmDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final mainTextColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final subtitleColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
-    final bgColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name);
-    final blueColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+    final mainTextColor = AppColorTokens.of(context).textPrimary;
+    final subtitleColor = AppColorTokens.of(context).textSubtitle;
+    final bgColor = AppColorTokens.of(context).bgSurface;
+    final blueColor = AppColorTokens.of(context).brand;
     const successGreen = Color(0xFF4CAF50);
 
     return AlertDialog(
@@ -107,9 +103,7 @@ class EnsConfirmDialog extends StatelessWidget {
               decoration: BoxDecoration(
                 color: successGreen.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-                border: Border.all(
-                  color: successGreen.withValues(alpha: 0.3),
-                ),
+                border: Border.all(color: successGreen.withValues(alpha: 0.3)),
               ),
               child: Row(
                 children: [
@@ -182,9 +176,7 @@ class EnsConfirmDialog extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.orange.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-                border: Border.all(
-                  color: Colors.orange.withValues(alpha: 0.3),
-                ),
+                border: Border.all(color: Colors.orange.withValues(alpha: 0.3)),
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -273,24 +265,16 @@ class EnsConfirmDialog extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(14)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.backGroundColor.name)
-            .withValues(alpha: 0.5),
+        color: AppColorTokens.of(context).bgBase.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-        border: Border.all(
-          color: subtitleColor.withValues(alpha: 0.2),
-        ),
+        border: Border.all(color: subtitleColor.withValues(alpha: 0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(
-                icon,
-                color: iconColor,
-                size: ScreenUtil().setWidth(24),
-              ),
+              Icon(icon, color: iconColor, size: ScreenUtil().setWidth(24)),
               SizedBox(width: ScreenUtil().setWidth(8)),
               Text(
                 label,
@@ -354,10 +338,7 @@ class EnsConfirmDialog extends StatelessWidget {
 class EnsResolvingDialog extends StatelessWidget {
   final String ensName;
 
-  const EnsResolvingDialog({
-    super.key,
-    required this.ensName,
-  });
+  const EnsResolvingDialog({super.key, required this.ensName});
 
   /// 显示 ENS 解析加载对话框
   static void show(BuildContext context, String ensName) {
@@ -375,12 +356,9 @@ class EnsResolvingDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bgColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name);
-    final mainTextColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final blueColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+    final bgColor = AppColorTokens.of(context).bgSurface;
+    final mainTextColor = AppColorTokens.of(context).textPrimary;
+    final blueColor = AppColorTokens.of(context).brand;
 
     return AlertDialog(
       backgroundColor: bgColor,

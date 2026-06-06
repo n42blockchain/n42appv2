@@ -24,7 +24,8 @@ class BackupThree extends ConsumerStatefulWidget {
 
 class _BackupThreeState extends ConsumerState<BackupThree> {
   final TextEditingController _uPasswordController = TextEditingController();
-  final TextEditingController _uPasswordConfirmController = TextEditingController();
+  final TextEditingController _uPasswordConfirmController =
+      TextEditingController();
   final FocusNode _uPasswordFocusNode = FocusNode();
   final FocusNode _uPasswordConfirmFocusNode = FocusNode();
   bool _submitting = false;
@@ -55,10 +56,12 @@ class _BackupThreeState extends ConsumerState<BackupThree> {
   }) {
     return Container(
       constraints: BoxConstraints(minHeight: ScreenUtil().setWidth(108.0)),
-      margin: margin ?? EdgeInsets.only(
-        top: ScreenUtil().setWidth(10),
-        bottom: ScreenUtil().setWidth(20),
-      ),
+      margin:
+          margin ??
+          EdgeInsets.only(
+            top: ScreenUtil().setWidth(10),
+            bottom: ScreenUtil().setWidth(20),
+          ),
       width: double.infinity,
       child: textFieldStyle3(
         context,
@@ -71,7 +74,10 @@ class _BackupThreeState extends ConsumerState<BackupThree> {
         textInputAction: textInputAction,
         errorMessage: errorMessage,
         hintStyle: TextStyle(
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.hintTextColor.name),
+          color: AppThemeUtils.getColorByKey(
+            context,
+            AppThemeKeys.hintTextColor.name,
+          ),
           fontSize: ScreenUtil().setSp(30.0),
         ),
         obscure: obscure,
@@ -82,7 +88,7 @@ class _BackupThreeState extends ConsumerState<BackupThree> {
           child: Image.asset(
             'assets/login/${obscure ? "icon_denglu_yincang" : "icon_denglu_xianshi"}.png',
             width: ScreenUtil().setWidth(34.0),
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+            color: AppColorTokens.of(context).brand,
           ),
         ),
         rightOnTap1: onToggleObscure,
@@ -127,7 +133,9 @@ class _BackupThreeState extends ConsumerState<BackupThree> {
         ref.read(wapBridgeProvider).initWallet();
       }
       ToastUtils.show(S.of(context).g_key_185);
-      eventBus.fire(EventPublic(EventPublicType.backup, param: widget.walletInfo));
+      eventBus.fire(
+        EventPublic(EventPublicType.backup, param: widget.walletInfo),
+      );
       completedWithExit = true;
       Navigator.pop(context);
     } catch (e) {
@@ -154,7 +162,10 @@ class _BackupThreeState extends ConsumerState<BackupThree> {
                   children: [
                     LoginTitle(
                       title: S.of(context).login_password,
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor10.name),
+                      color: AppThemeUtils.getColorByKey(
+                        context,
+                        AppThemeKeys.mainTextColor10.name,
+                      ),
                       must: true,
                     ),
                     _buildPasswordField(
@@ -163,12 +174,18 @@ class _BackupThreeState extends ConsumerState<BackupThree> {
                       hintText: S.of(context).rest_Choose_password,
                       errorMessage: uPasswordErrorMessage,
                       obscure: showPwd1,
-                      onToggleObscure: () => setState(() => showPwd1 = !showPwd1),
-                      onEditingComplete: () => FocusScope.of(context).requestFocus(_uPasswordConfirmFocusNode),
+                      onToggleObscure: () =>
+                          setState(() => showPwd1 = !showPwd1),
+                      onEditingComplete: () => FocusScope.of(
+                        context,
+                      ).requestFocus(_uPasswordConfirmFocusNode),
                     ),
                     LoginTitle(
                       title: S.of(context).rest_Confirm_password,
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor10.name),
+                      color: AppThemeUtils.getColorByKey(
+                        context,
+                        AppThemeKeys.mainTextColor10.name,
+                      ),
                       must: true,
                     ),
                     _buildPasswordField(
@@ -178,7 +195,8 @@ class _BackupThreeState extends ConsumerState<BackupThree> {
                       errorMessage: uPasswordConfirmErrorMessage,
                       obscure: showPwd2,
                       textInputAction: TextInputAction.done,
-                      onToggleObscure: () => setState(() => showPwd2 = !showPwd2),
+                      onToggleObscure: () =>
+                          setState(() => showPwd2 = !showPwd2),
                       onEditingComplete: () => FocusScope.of(context).unfocus(),
                       margin: EdgeInsets.only(top: ScreenUtil().setWidth(10)),
                     ),

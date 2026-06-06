@@ -49,13 +49,17 @@ class AAGasEstimator {
     final raw = await _bundlerClient.estimateUserOperationGas(userOp);
 
     // Per-type deployment overhead (Safe needs extra setup gas).
-    final int extraDeployGas = account.type == SmartAccountType.safe ? 50000 : 0;
+    final int extraDeployGas = account.type == SmartAccountType.safe
+        ? 50000
+        : 0;
 
     final withDeploy = GasEstimateResult(
-      verificationGasLimit: raw.verificationGasLimit +
+      verificationGasLimit:
+          raw.verificationGasLimit +
           BigInt.from(AAConstants.accountDeploymentGas + extraDeployGas),
       callGasLimit: raw.callGasLimit,
-      preVerificationGas: raw.preVerificationGas +
+      preVerificationGas:
+          raw.preVerificationGas +
           BigInt.from(10000), // Extra for init code processing
       paymasterVerificationGasLimit: raw.paymasterVerificationGasLimit,
       paymasterPostOpGasLimit: raw.paymasterPostOpGasLimit,
@@ -220,14 +224,26 @@ class GasDeviationDetector {
   // ── Cached BigInt constants ──────────────────────────────────────────────
   // These are computed once per isolate lifetime; BigInt.from() is not free.
   static final BigInt _b100 = BigInt.from(100);
-  static final BigInt _bTotal = BigInt.from(AAConstants.gasTotalWarningThreshold);
-  static final BigInt _bTotalCrit = BigInt.from(AAConstants.gasTotalCriticalThreshold);
-  static final BigInt _bVerify = BigInt.from(AAConstants.gasVerificationWarningThreshold);
+  static final BigInt _bTotal = BigInt.from(
+    AAConstants.gasTotalWarningThreshold,
+  );
+  static final BigInt _bTotalCrit = BigInt.from(
+    AAConstants.gasTotalCriticalThreshold,
+  );
+  static final BigInt _bVerify = BigInt.from(
+    AAConstants.gasVerificationWarningThreshold,
+  );
   static final BigInt _bCall = BigInt.from(AAConstants.gasCallWarningThreshold);
-  static final BigInt _bPmWarnPct = BigInt.from(20);   // 20 % → paymaster warning
-  static final BigInt _bPmCritPct = BigInt.from(75);   // 75 % → paymaster critical
-  static final BigInt _bDevWarnPct = BigInt.from(AAConstants.gasDeviationWarningPct.toInt());
-  static final BigInt _bDevCritPct = BigInt.from(AAConstants.gasDeviationCriticalPct.toInt());
+  static final BigInt _bPmWarnPct = BigInt.from(20); // 20 % → paymaster warning
+  static final BigInt _bPmCritPct = BigInt.from(
+    75,
+  ); // 75 % → paymaster critical
+  static final BigInt _bDevWarnPct = BigInt.from(
+    AAConstants.gasDeviationWarningPct.toInt(),
+  );
+  static final BigInt _bDevCritPct = BigInt.from(
+    AAConstants.gasDeviationCriticalPct.toInt(),
+  );
 
   /// Analyse [estimate] and return all applicable warnings, ordered by
   /// severity (critical first, then warning, then info).
@@ -252,20 +268,34 @@ class GasDeviationDetector {
 
     void add(GasDeviationSeverity s, GasDeviationWarning w) {
       switch (s) {
-        case GasDeviationSeverity.critical: critical.add(w);
-        case GasDeviationSeverity.warning:  warning.add(w);
-        case GasDeviationSeverity.info:     info.add(w);
+        case GasDeviationSeverity.critical:
+          critical.add(w);
+        case GasDeviationSeverity.warning:
+          warning.add(w);
+        case GasDeviationSeverity.info:
+          info.add(w);
       }
     }
 
     /// Create and bucket a gas warning with a formatted gas placeholder.
-    void addGasWarn(GasDeviationWarningType type, GasDeviationSeverity severity,
-        String titleKey, String descKey, BigInt gas) {
-      add(severity, GasDeviationWarning(
-        type: type, severity: severity,
-        titleKey: titleKey, descKey: descKey,
-        hasGasPlaceholder: true, gasValue: _formatGas(gas),
-      ));
+    void addGasWarn(
+      GasDeviationWarningType type,
+      GasDeviationSeverity severity,
+      String titleKey,
+      String descKey,
+      BigInt gas,
+    ) {
+      add(
+        severity,
+        GasDeviationWarning(
+          type: type,
+          severity: severity,
+          titleKey: titleKey,
+          descKey: descKey,
+          hasGasPlaceholder: true,
+          gasValue: _formatGas(gas),
+        ),
+      );
     }
 
     final total = estimate.totalGas;
@@ -274,53 +304,81 @@ class GasDeviationDetector {
 
     // ── 1. Total gas checks ──────────────────────────────────────────────
     if (total >= _bTotalCrit) {
-      addGasWarn(GasDeviationWarningType.totalGasVeryHigh,
-          GasDeviationSeverity.critical,
-          'g_key_aa_gas_warn_total_high', 'g_key_aa_gas_warn_total_high_desc', total);
+      addGasWarn(
+        GasDeviationWarningType.totalGasVeryHigh,
+        GasDeviationSeverity.critical,
+        'g_key_aa_gas_warn_total_high',
+        'g_key_aa_gas_warn_total_high_desc',
+        total,
+      );
     } else if (total >= _bTotal) {
-      addGasWarn(GasDeviationWarningType.totalGasVeryHigh,
-          GasDeviationSeverity.warning,
-          'g_key_aa_gas_warn_total_high', 'g_key_aa_gas_warn_total_high_desc', total);
+      addGasWarn(
+        GasDeviationWarningType.totalGasVeryHigh,
+        GasDeviationSeverity.warning,
+        'g_key_aa_gas_warn_total_high',
+        'g_key_aa_gas_warn_total_high_desc',
+        total,
+      );
     }
 
     // ── 2. Verification gas check ────────────────────────────────────────
     if (verify >= _bVerify) {
-      addGasWarn(GasDeviationWarningType.verificationGasHigh,
-          GasDeviationSeverity.warning,
-          'g_key_aa_gas_warn_verify_high', 'g_key_aa_gas_warn_verify_high_desc', verify);
+      addGasWarn(
+        GasDeviationWarningType.verificationGasHigh,
+        GasDeviationSeverity.warning,
+        'g_key_aa_gas_warn_verify_high',
+        'g_key_aa_gas_warn_verify_high_desc',
+        verify,
+      );
     }
 
     // ── 3. Call gas check ────────────────────────────────────────────────
     if (call >= _bCall) {
-      addGasWarn(GasDeviationWarningType.callGasHigh,
-          GasDeviationSeverity.warning,
-          'g_key_aa_gas_warn_call_high', 'g_key_aa_gas_warn_call_high_desc', call);
+      addGasWarn(
+        GasDeviationWarningType.callGasHigh,
+        GasDeviationSeverity.warning,
+        'g_key_aa_gas_warn_call_high',
+        'g_key_aa_gas_warn_call_high_desc',
+        call,
+      );
     }
 
     // ── 4. Paymaster overhead check ──────────────────────────────────────
     // Check both warning (>20 %) and critical (>75 %) levels.
     // A paymaster consuming >75 % of total gas is almost certainly misconfigured.
-    final pmTotal = (estimate.paymasterVerificationGasLimit ?? BigInt.zero) +
+    final pmTotal =
+        (estimate.paymasterVerificationGasLimit ?? BigInt.zero) +
         (estimate.paymasterPostOpGasLimit ?? BigInt.zero);
     if (pmTotal > BigInt.zero && total > BigInt.zero) {
       final pct = (pmTotal * _b100) ~/ total;
       if (pct >= _bPmCritPct) {
-        addGasWarn(GasDeviationWarningType.paymasterOverhead,
-            GasDeviationSeverity.critical,
-            'g_key_aa_gas_warn_paymaster', 'g_key_aa_gas_warn_paymaster_desc', pmTotal);
+        addGasWarn(
+          GasDeviationWarningType.paymasterOverhead,
+          GasDeviationSeverity.critical,
+          'g_key_aa_gas_warn_paymaster',
+          'g_key_aa_gas_warn_paymaster_desc',
+          pmTotal,
+        );
       } else if (pct >= _bPmWarnPct) {
-        addGasWarn(GasDeviationWarningType.paymasterOverhead,
-            GasDeviationSeverity.info,
-            'g_key_aa_gas_warn_paymaster', 'g_key_aa_gas_warn_paymaster_desc', pmTotal);
+        addGasWarn(
+          GasDeviationWarningType.paymasterOverhead,
+          GasDeviationSeverity.info,
+          'g_key_aa_gas_warn_paymaster',
+          'g_key_aa_gas_warn_paymaster_desc',
+          pmTotal,
+        );
       }
     }
 
     // ── 5. Deployment overhead info ──────────────────────────────────────
     if (isFirstTransaction) {
-      addGasWarn(GasDeviationWarningType.deploymentOverhead,
-          GasDeviationSeverity.info,
-          'g_key_aa_gas_warn_deploy', 'g_key_aa_gas_warn_deploy_desc',
-          BigInt.from(AAConstants.accountDeploymentGas));
+      addGasWarn(
+        GasDeviationWarningType.deploymentOverhead,
+        GasDeviationSeverity.info,
+        'g_key_aa_gas_warn_deploy',
+        'g_key_aa_gas_warn_deploy_desc',
+        BigInt.from(AAConstants.accountDeploymentGas),
+      );
     }
 
     // ── 6. Client vs bundler deviation check ─────────────────────────────
@@ -336,15 +394,18 @@ class GasDeviationDetector {
         final GasDeviationSeverity? severity = pct >= _bDevCritPct
             ? GasDeviationSeverity.critical
             : pct >= _bDevWarnPct
-                ? GasDeviationSeverity.warning
-                : null;
+            ? GasDeviationSeverity.warning
+            : null;
         if (severity != null) {
-          add(severity, GasDeviationWarning(
-            type: GasDeviationWarningType.possibleUnderEstimate,
-            severity: severity,
-            titleKey: 'g_key_aa_gas_warn_under_est',
-            descKey: 'g_key_aa_gas_warn_under_est_desc',
-          ));
+          add(
+            severity,
+            GasDeviationWarning(
+              type: GasDeviationWarningType.possibleUnderEstimate,
+              severity: severity,
+              titleKey: 'g_key_aa_gas_warn_under_est',
+              descKey: 'g_key_aa_gas_warn_under_est_desc',
+            ),
+          );
         }
       }
     }
@@ -376,7 +437,8 @@ class AAGasPriceProvider {
     required BigInt priorityFee,
     required GasSpeed speed,
   }) {
-    final adjustedPriorityFee = priorityFee *
+    final adjustedPriorityFee =
+        priorityFee *
         BigInt.from((speed.multiplier * 100).round()) ~/
         BigInt.from(100);
     return GasPriceRecommendation(
@@ -396,7 +458,10 @@ class AAGasPriceProvider {
     GasSpeed speed = GasSpeed.standard,
   }) async {
     return _buildRecommendation(
-        baseFee: baseFee, priorityFee: priorityFee, speed: speed);
+      baseFee: baseFee,
+      priorityFee: priorityFee,
+      speed: speed,
+    );
   }
 
   /// Get gas prices for all speed tiers
@@ -405,8 +470,13 @@ class AAGasPriceProvider {
     required BigInt priorityFee,
   }) {
     return GasSpeed.values
-        .map((speed) => _buildRecommendation(
-            baseFee: baseFee, priorityFee: priorityFee, speed: speed))
+        .map(
+          (speed) => _buildRecommendation(
+            baseFee: baseFee,
+            priorityFee: priorityFee,
+            speed: speed,
+          ),
+        )
         .toList();
   }
 }

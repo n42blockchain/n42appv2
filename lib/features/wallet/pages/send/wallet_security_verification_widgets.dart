@@ -17,10 +17,7 @@ class _SectionLabel extends StatelessWidget {
     return Text(
       text,
       style: TextStyle(
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.itemSubtitleTextColor.name,
-        ),
+        color: AppColorTokens.of(context).textSubtitle,
         fontSize: ScreenUtil().setSp(28.0),
       ),
     );
@@ -40,10 +37,7 @@ class _ErrorMessage extends StatelessWidget {
       child: Text(
         message,
         style: TextStyle(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.errorTextColor.name,
-          ),
+          color: AppColorTokens.of(context).danger,
           fontSize: ScreenUtil().setSp(26.0),
         ),
         textAlign: TextAlign.end,
@@ -95,7 +89,7 @@ class _PillButton extends StatelessWidget {
 BoxDecoration _inputBoxDecoration(BuildContext context) {
   return BoxDecoration(
     borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(8.0))),
-    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+    color: AppColorTokens.of(context).bgSurface,
   );
 }
 

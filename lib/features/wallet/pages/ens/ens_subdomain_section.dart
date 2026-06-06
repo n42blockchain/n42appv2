@@ -6,7 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/pages/ens/ens_chain_config.dart';
 import 'package:n42_wallet/features/wallet/services/ens_registration_service.dart';
 
@@ -47,8 +47,8 @@ class EnsSubdomainSection extends StatelessWidget {
   }
 
   Widget _buildTitleRow(BuildContext context) {
-    final subtitleColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
-    final mainTextColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+    final subtitleColor = AppColorTokens.of(context).textSubtitle;
+    final mainTextColor = AppColorTokens.of(context).textPrimary;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -108,8 +108,7 @@ class EnsSubdomainSection extends StatelessWidget {
   }
 
   Widget _buildEmptyState(BuildContext context, ScreenUtil scr) {
-    final subtitleColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
+    final subtitleColor = AppColorTokens.of(context).textSubtitle;
     return Padding(
       padding: EdgeInsets.symmetric(vertical: scr.setWidth(20)),
       child: Center(
@@ -123,10 +122,7 @@ class EnsSubdomainSection extends StatelessWidget {
             SizedBox(height: scr.setWidth(8)),
             Text(
               S.of(context).g_key_ens_subdomain_empty,
-              style: TextStyle(
-                fontSize: scr.setSp(24),
-                color: subtitleColor,
-              ),
+              style: TextStyle(fontSize: scr.setSp(24), color: subtitleColor),
             ),
           ],
         ),
@@ -173,8 +169,8 @@ class _SubdomainItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scr = ScreenUtil();
-    final subtitleColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
-    final mainTextColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+    final subtitleColor = AppColorTokens.of(context).textSubtitle;
+    final mainTextColor = AppColorTokens.of(context).textPrimary;
     final iconSize = scr.setWidth(40);
 
     return Padding(
@@ -245,7 +241,7 @@ class _SectionCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: AppColorTokens.of(context).bgSurface,
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
       ),
       child: child,

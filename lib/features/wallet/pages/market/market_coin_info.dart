@@ -15,7 +15,7 @@ import 'package:n42_wallet/features/wallet/services/coin_price_alert_service.dar
 import 'package:n42_wallet/features/wallet/services/portfolio_trade_service.dart';
 import 'package:n42_wallet/features/widgets/candlestick_chart.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'market_coin_info_chart.dart';
 import 'market_coin_info_helpers.dart';
 import 'market_coin_info_links.dart';
@@ -91,9 +91,7 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
     final oldGeckoId = (oldWidget.coin['coin_gecko_id'] ?? '')
         .toString()
         .trim();
-    final newGeckoId = (widget.coin['coin_gecko_id'] ?? '')
-        .toString()
-        .trim();
+    final newGeckoId = (widget.coin['coin_gecko_id'] ?? '').toString().trim();
     final oldSymbol = (oldWidget.coin['coin'] ?? '').toString().trim();
     final newSymbol = (widget.coin['coin'] ?? '').toString().trim();
     if (oldGeckoId == newGeckoId && oldSymbol == newSymbol) return;
@@ -140,9 +138,7 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
     if (coinId.isEmpty) return;
     try {
       final all = await CoinPriceAlertService.loadAll();
-      if (!mounted ||
-          requestId != _alertGeneration ||
-          _coinId != coinId) {
+      if (!mounted || requestId != _alertGeneration || _coinId != coinId) {
         return;
       }
       setState(() => _alertConfig = all[coinId]);
@@ -157,9 +153,7 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
     if (coinId.isEmpty) return;
     try {
       final list = await PortfolioTradeService.getTradesForCoin(coinId);
-      if (!mounted ||
-          requestId != _tradesGeneration ||
-          _coinId != coinId) {
+      if (!mounted || requestId != _tradesGeneration || _coinId != coinId) {
         return;
       }
       setState(() => _trades = list);
@@ -228,9 +222,7 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
     }
     try {
       final info = await ref.read(wapBridgeProvider).getCoinsBaseInfo(geckoId);
-      if (!mounted ||
-          requestId != _infoGeneration ||
-          _coinId != geckoId) {
+      if (!mounted || requestId != _infoGeneration || _coinId != geckoId) {
         return;
       }
 
@@ -442,10 +434,7 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
           ? FloatingActionButton.small(
               onPressed: _openTradeSheet,
               tooltip: S.of(context).g_pnl_add_trade,
-              backgroundColor: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainBlueColor.name,
-              ),
+              backgroundColor: AppColorTokens.of(context).brand,
               child: const Icon(Icons.add, color: Colors.white),
             )
           : null,

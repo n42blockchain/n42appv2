@@ -33,25 +33,33 @@ class CreateBTCTXV1 {
     final int sendAmount = ethToWeiString('$sendValue', 8).toInt();
     const int fee = 10000;
 
-    final (selectedUTXOs, totalInput) =
-        await _selectUTXOs(inputs, sendAmount, fee);
+    final (selectedUTXOs, totalInput) = await _selectUTXOs(
+      inputs,
+      sendAmount,
+      fee,
+    );
     if (totalInput < sendAmount + fee) throw Exception("余额不足！");
 
     final int changeAmount = totalInput - sendAmount - fee;
     final Map<String, dynamic> rawTx = _builder.createRawTransactionSegwit(
-        selectedUTXOs, recipientAddress, sendAmount, changeAmount,
-        fromAddress, pubKey, pubKeyStr);
+      selectedUTXOs,
+      recipientAddress,
+      sendAmount,
+      changeAmount,
+      fromAddress,
+      pubKey,
+      pubKeyStr,
+    );
 
     String txHashStr = hex.encode(rawTx['txRow'] as Uint8List);
     AppLogger.d('CreateBTCTXV1', 'raw tx: $txHashStr');
 
     // 逐输入签名：Taproot 地址用 Schnorr，其余用 ECDSA
     final List<Uint8List> signs = [];
-    final List<Uint8List> txRowAll =
-        (rawTx['txRowAll'] as List).cast<Uint8List>();
+    final List<Uint8List> txRowAll = (rawTx['txRowAll'] as List)
+        .cast<Uint8List>();
     for (int i = 0; i < txRowAll.length; i++) {
-      final String addr =
-          selectedUTXOs[i]['scriptpubkey_address'].toString();
+      final String addr = selectedUTXOs[i]['scriptpubkey_address'].toString();
       if (addr.length >= 4 && addr.substring(0, 4) == "tb1p") {
         signs.add(Bip340().schnorrSign(txRowAll[i], privateKey));
       } else {
@@ -92,20 +100,31 @@ class CreateBTCTXV1 {
     final int sendAmount = ethToWeiString('$sendValue', 8).toInt();
     const int fee = 10000;
 
-    final (selectedUTXOs, totalInput) =
-        await _selectUTXOs(inputs, sendAmount, fee);
+    final (selectedUTXOs, totalInput) = await _selectUTXOs(
+      inputs,
+      sendAmount,
+      fee,
+    );
     if (totalInput < sendAmount + fee) throw Exception("余额不足！");
 
     final int changeAmount = totalInput - sendAmount - fee;
     final Map<String, dynamic> rawTx = _builder.createRawTransactionSegwitV2(
-        selectedUTXOs, recipientAddress, sendAmount, changeAmount,
-        fromAddress, pubKey, pubKeyStr);
+      selectedUTXOs,
+      recipientAddress,
+      sendAmount,
+      changeAmount,
+      fromAddress,
+      pubKey,
+      pubKeyStr,
+    );
 
     String txHashStr = hex.encode(rawTx['txRow'] as Uint8List);
     AppLogger.d('CreateBTCTXV1', 'raw tx: $txHashStr');
 
-    final Uint8List signature =
-        Bip340().schnorrSign(rawTx['txRowAll'] as Uint8List, privateKey);
+    final Uint8List signature = Bip340().schnorrSign(
+      rawTx['txRowAll'] as Uint8List,
+      privateKey,
+    );
 
     final ByteData data = ByteData(180);
     int offset = 0;
@@ -113,8 +132,11 @@ class CreateBTCTXV1 {
     offset++;
     data.setUint8(offset, signature.length);
     offset++;
-    data.buffer.asUint8List()
-        .setRange(offset, offset + signature.length, signature);
+    data.buffer.asUint8List().setRange(
+      offset,
+      offset + signature.length,
+      signature,
+    );
     offset += signature.length;
 
     txHashStr += hex.encode(data.buffer.asUint8List(0, offset));
@@ -145,7 +167,7 @@ class CreateBTCTXV1 {
             "scriptPubKey": scriptpk,
             "scriptpubkey_address":
                 utxoTx.data['vout']?[utxo['vout']]?['scriptpubkey_address'] ??
-                    "",
+                "",
           });
         }
       }
@@ -158,8 +180,7 @@ class CreateBTCTXV1 {
   /// 通过 mempool.space 查询 UTXO 所在交易的详情
   Future<MessageModel> getUTXOTxid(String txid) async {
     try {
-      final String uri =
-          "https://mempool.space/testnet4/api/tx/$txid";
+      final String uri = "https://mempool.space/testnet4/api/tx/$txid";
       final data = await BaseApi.requestEmptyH.get(
         uri,
         params: {},

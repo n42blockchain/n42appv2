@@ -124,7 +124,11 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
 
   Future<void> getBalance() async {
     setState(() => load = Load.loading);
-    final isOk = await fetchCoinBalance(coinModel, ref.read(wapBridgeProvider), getToken: false);
+    final isOk = await fetchCoinBalance(
+      coinModel,
+      ref.read(wapBridgeProvider),
+      getToken: false,
+    );
     if (!mounted) return;
     if (isOk != false) return;
     errorMessage = S.current.g_key_t_44;
@@ -140,11 +144,12 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
   /// 合约代币无自身 service 时，回退到父链（chainModel）的 RPC。
   String? _resolveRpc() {
     if (_blockchainType == BlockchainType.Ethereum.name) {
-      final source =
-          (_isContract && chainModel != null) ? chainModel!.coin : coinModel.coin;
-      final svc = (coinModel.isTest
-          ? source['service_test']
-          : source['service']) as String?;
+      final source = (_isContract && chainModel != null)
+          ? chainModel!.coin
+          : coinModel.coin;
+      final svc =
+          (coinModel.isTest ? source['service_test'] : source['service'])
+              as String?;
       if (svc != null && svc.isNotEmpty) return svc;
     }
     // 非 EVM 链 / service 为空时：自定义链返回配置 RPC，否则 null（走 N42 API）
@@ -472,34 +477,36 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
     bool completedWithExit = false;
     try {
       final addrType = coinModel.addrType;
-      final chainConfig =
-          _isContract ? (chainModel?.coin ?? coinModel.coin) : coinModel.coin;
+      final chainConfig = _isContract
+          ? (chainModel?.coin ?? coinModel.coin)
+          : coinModel.coin;
       final baseInfo = chainConfig['baseInfo'] as Map<String, dynamic>?;
       final pathMap = baseInfo?['path'] as Map<String, dynamic>?;
-      final basePath =
-          pathMap?[addrType]?.toString() ?? "m/44'/60'/0'/0/0";
+      final basePath = pathMap?[addrType]?.toString() ?? "m/44'/60'/0'/0/0";
       final path = getPathWithIndex(basePath, coinModel.pathIndex);
       final nativeDecimals = _isContract
           ? ((chainModel?.coin['decimals'] as num?)?.toInt() ?? 18)
           : _decimals;
 
-      final result = await SenderFactory.instance.getSender(_coinType).send(
-        SendParams(
-          coinType: _coinType,
-          fromAddress: trModel.from1,
-          toAddress: trModel.to1,
-          amount: toEther(trModel.price.toString(), _decimals).toDouble(),
-          decimals: nativeDecimals,
-          path: path,
-          sendMax: false,
-          isTest: coinModel.isTest,
-          contractAddress: trModel.contract,
-          tokenDecimals: _isContract ? _decimals : 0,
-          memo: trModel.message,
-          privateKey: coinModel.privateKey,
-          chainConfig: chainConfig,
-        ),
-      );
+      final result = await SenderFactory.instance
+          .getSender(_coinType)
+          .send(
+            SendParams(
+              coinType: _coinType,
+              fromAddress: trModel.from1,
+              toAddress: trModel.to1,
+              amount: toEther(trModel.price.toString(), _decimals).toDouble(),
+              decimals: nativeDecimals,
+              path: path,
+              sendMax: false,
+              isTest: coinModel.isTest,
+              contractAddress: trModel.contract,
+              tokenDecimals: _isContract ? _decimals : 0,
+              memo: trModel.message,
+              privateKey: coinModel.privateKey,
+              chainConfig: chainConfig,
+            ),
+          );
 
       if (!mounted) return;
       if (result.success) {

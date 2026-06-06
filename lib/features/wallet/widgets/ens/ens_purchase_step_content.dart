@@ -6,7 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/services/ens_registration_service.dart';
 
 /// ENS 购买页各注册步骤的内容区域
@@ -32,38 +32,40 @@ class EnsPurchaseStepContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => switch (currentStep) {
-        0 => _buildInitialContent(context),
-        1 => _buildProgressContent(
-            context,
-            title: S.of(context).g_key_ens_committing,
-            subtitle: S.of(context).g_key_ens_please_wait,
-          ),
-        2 => _buildWaitingContent(context),
-        3 => _buildProgressContent(
-            context,
-            title: S.of(context).g_key_ens_registering,
-            subtitle: S.of(context).g_key_ens_finalizing,
-          ),
-        4 => _buildSuccessContent(context),
-        -1 => _buildErrorContent(context),
-        _ => const SizedBox.shrink(),
-      };
+    0 => _buildInitialContent(context),
+    1 => _buildProgressContent(
+      context,
+      title: S.of(context).g_key_ens_committing,
+      subtitle: S.of(context).g_key_ens_please_wait,
+    ),
+    2 => _buildWaitingContent(context),
+    3 => _buildProgressContent(
+      context,
+      title: S.of(context).g_key_ens_registering,
+      subtitle: S.of(context).g_key_ens_finalizing,
+    ),
+    4 => _buildSuccessContent(context),
+    -1 => _buildErrorContent(context),
+    _ => const SizedBox.shrink(),
+  };
 
   // ── Theme helpers ──────────────────────────────────────────────────────
   Color _mainText(BuildContext context) =>
-      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+      AppColorTokens.of(context).textPrimary;
   Color _subtitle(BuildContext context) =>
-      AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
-  Color _blue(BuildContext context) =>
-      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+      AppColorTokens.of(context).textSubtitle;
+  Color _blue(BuildContext context) => AppColorTokens.of(context).brand;
 
   /// Shared container decoration used by most step content builders.
-  BoxDecoration _stepDecoration(BuildContext context, {Color? color, Color? borderColor}) =>
-      BoxDecoration(
-        color: color ?? AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-        border: borderColor != null ? Border.all(color: borderColor) : null,
-      );
+  BoxDecoration _stepDecoration(
+    BuildContext context, {
+    Color? color,
+    Color? borderColor,
+  }) => BoxDecoration(
+    color: color ?? AppColorTokens.of(context).bgSurface,
+    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+    border: borderColor != null ? Border.all(color: borderColor) : null,
+  );
 
   // ── Step 0: Initial ────────────────────────────────────────────────────
   Widget _buildInitialContent(BuildContext context) {
@@ -82,9 +84,21 @@ class EnsPurchaseStepContent extends StatelessWidget {
             ),
           ),
           SizedBox(height: ScreenUtil().setWidth(12)),
-          _buildInfoRow(context, Icons.security, S.of(context).g_key_ens_two_step_process),
-          _buildInfoRow(context, Icons.timer, S.of(context).g_key_ens_wait_time_info),
-          _buildInfoRow(context, Icons.warning_amber_rounded, S.of(context).g_key_ens_keep_app_open),
+          _buildInfoRow(
+            context,
+            Icons.security,
+            S.of(context).g_key_ens_two_step_process,
+          ),
+          _buildInfoRow(
+            context,
+            Icons.timer,
+            S.of(context).g_key_ens_wait_time_info,
+          ),
+          _buildInfoRow(
+            context,
+            Icons.warning_amber_rounded,
+            S.of(context).g_key_ens_keep_app_open,
+          ),
         ],
       ),
     );
@@ -101,7 +115,10 @@ class EnsPurchaseStepContent extends StatelessWidget {
           Expanded(
             child: Text(
               text,
-              style: TextStyle(fontSize: ScreenUtil().setSp(24), color: _subtitle(context)),
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(24),
+                color: _subtitle(context),
+              ),
             ),
           ),
         ],
@@ -133,7 +150,10 @@ class EnsPurchaseStepContent extends StatelessWidget {
           SizedBox(height: ScreenUtil().setWidth(8)),
           Text(
             subtitle,
-            style: TextStyle(fontSize: ScreenUtil().setSp(24), color: _subtitle(context)),
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(24),
+              color: _subtitle(context),
+            ),
           ),
         ],
       ),
@@ -193,7 +213,10 @@ class EnsPurchaseStepContent extends StatelessWidget {
           SizedBox(height: ScreenUtil().setWidth(8)),
           Text(
             S.of(context).g_key_ens_wait_explanation,
-            style: TextStyle(fontSize: ScreenUtil().setSp(24), color: _subtitle(context)),
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(24),
+              color: _subtitle(context),
+            ),
             textAlign: TextAlign.center,
           ),
         ],
@@ -212,7 +235,11 @@ class EnsPurchaseStepContent extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Icon(Icons.check_circle, size: ScreenUtil().setWidth(80), color: Colors.green),
+          Icon(
+            Icons.check_circle,
+            size: ScreenUtil().setWidth(80),
+            color: Colors.green,
+          ),
           SizedBox(height: ScreenUtil().setWidth(20)),
           Text(
             S.of(context).g_key_ens_success,
@@ -225,7 +252,10 @@ class EnsPurchaseStepContent extends StatelessWidget {
           SizedBox(height: ScreenUtil().setWidth(8)),
           Text(
             '$domainName.eth ${S.of(context).g_key_ens_is_yours}',
-            style: TextStyle(fontSize: ScreenUtil().setSp(26), color: _mainText(context)),
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(26),
+              color: _mainText(context),
+            ),
           ),
           if (registerResult?.txHash != null) ...[
             SizedBox(height: ScreenUtil().setWidth(16)),
@@ -277,7 +307,10 @@ class EnsPurchaseStepContent extends StatelessWidget {
           SizedBox(height: ScreenUtil().setWidth(8)),
           Text(
             errorMessage ?? S.of(context).g_key_error_3,
-            style: TextStyle(fontSize: ScreenUtil().setSp(24), color: _subtitle(context)),
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(24),
+              color: _subtitle(context),
+            ),
             textAlign: TextAlign.center,
           ),
         ],
@@ -314,7 +347,7 @@ class EnsPurchaseActionButton extends StatelessWidget {
           context,
           label: S.of(context).g_key_ens_start_registration,
           onPressed: onStart,
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+          color: AppColorTokens.of(context).brand,
         );
 
       case 1:
@@ -340,7 +373,7 @@ class EnsPurchaseActionButton extends StatelessWidget {
           context,
           label: S.of(context).g_swap_key_6,
           onPressed: onRetry,
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+          color: AppColorTokens.of(context).brand,
         );
 
       default:

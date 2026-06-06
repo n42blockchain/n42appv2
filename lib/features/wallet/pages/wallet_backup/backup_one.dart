@@ -1,4 +1,3 @@
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_flow_utils.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_two.dart';
@@ -49,10 +48,7 @@ class _BackupOneState extends State<BackupOne> {
                         S.of(context).g_key_wallet_c39,
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(50),
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.mainTextColor.name,
-                          ),
+                          color: AppColorTokens.of(context).textPrimary,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -65,10 +61,7 @@ class _BackupOneState extends State<BackupOne> {
                         S.of(context).g_key_wallet_c40,
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(28),
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.mainTextColor.name,
-                          ),
+                          color: AppColorTokens.of(context).textPrimary,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -94,10 +87,7 @@ class _BackupOneState extends State<BackupOne> {
                   const Divider(height: 1),
                   Container(
                     padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.backGroundColor.name,
-                    ),
+                    color: AppColorTokens.of(context).bgBase,
                     height: ScreenUtil().setWidth(148),
                     child: AppButton(
                       label: S.of(context).g_key_wallet_c43,
@@ -141,10 +131,7 @@ class _BackupOneState extends State<BackupOne> {
         children: [
           Icon(
             Icons.warning_amber,
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainTextColor.name,
-            ),
+            color: AppColorTokens.of(context).textPrimary,
             size: ScreenUtil().setWidth(40),
           ),
           SizedBox(width: ScreenUtil().setWidth(10)),
@@ -153,10 +140,7 @@ class _BackupOneState extends State<BackupOne> {
               text,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(28),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainTextColor.name,
-                ),
+                color: AppColorTokens.of(context).textPrimary,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -182,10 +166,7 @@ class _BackupOneState extends State<BackupOne> {
         itemBuilder: (context, index) {
           return Container(
             decoration: BoxDecoration(
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemBgColor.name,
-              ),
+              color: AppColorTokens.of(context).bgSurface,
               borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8.0)),
             ),
             child: Center(
@@ -193,10 +174,7 @@ class _BackupOneState extends State<BackupOne> {
                 mnemonicWordsList[index],
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.itemTextColor.name,
-                  ),
+                  color: AppColorTokens.of(context).textItem,
                   fontSize: ScreenUtil().setSp(28.0),
                 ),
               ),
@@ -206,10 +184,7 @@ class _BackupOneState extends State<BackupOne> {
       );
     }
 
-    final itemTextColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.itemTextColor.name,
-    );
+    final itemTextColor = AppColorTokens.of(context).textItem;
     return InkWell(
       onTap: mnemonicWordsList.isEmpty
           ? null
@@ -219,10 +194,7 @@ class _BackupOneState extends State<BackupOne> {
         height: ScreenUtil().setWidth(400),
         padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.itemBgColor.name,
-          ),
+          color: AppColorTokens.of(context).bgSurface,
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16.0)),
         ),
         child: Column(

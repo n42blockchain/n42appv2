@@ -96,10 +96,7 @@ class _WalletChainSendXrpState extends ConsumerState<WalletChainSendXrp>
         errorMessage,
         style: TextStyle(
           fontSize: ScreenUtil().setSp(28.0),
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.errorTextColor.name,
-          ),
+          color: AppColorTokens.of(context).danger,
         ),
       ),
     );
@@ -139,10 +136,7 @@ class _WalletChainSendXrpState extends ConsumerState<WalletChainSendXrp>
           Container(
             padding: EdgeInsets.all(sw(30.0)),
             height: sw(148.0),
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.backGroundColor.name,
-            ),
+            color: AppColorTokens.of(context).bgBase,
             child: AppButton(
               label: S.of(context).g_key_48,
               onPressed: sendTransaction,
@@ -184,10 +178,7 @@ class _WalletChainSendXrpState extends ConsumerState<WalletChainSendXrp>
               ),
               child: Image.asset(
                 'assets/wallet/addressBook.png',
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainBlueColor.name,
-                ),
+                color: AppColorTokens.of(context).brand,
               ),
             ),
           ),

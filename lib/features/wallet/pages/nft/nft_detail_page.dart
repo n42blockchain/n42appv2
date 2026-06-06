@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
 import 'package:n42_wallet/features/wallet/api/sender/nft_sender.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart'
@@ -140,7 +141,9 @@ class _NftDetailPageState extends State<NftDetailPage> {
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(S.of(ctx).g_key_nft_burn_title),
-        content: SingleChildScrollView(child: Text(S.of(ctx).g_key_nft_burn_confirm)),
+        content: SingleChildScrollView(
+          child: Text(S.of(ctx).g_key_nft_burn_confirm),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
@@ -297,10 +300,7 @@ class _NftDetailPageState extends State<NftDetailPage> {
               color: Colors.black.withAlpha(80),
               child: Center(
                 child: CircularProgressIndicator(
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainBlueColor.name,
-                  ),
+                  color: AppColorTokens.of(context).brand,
                 ),
               ),
             ),

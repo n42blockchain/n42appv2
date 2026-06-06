@@ -1,6 +1,5 @@
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -51,10 +50,7 @@ class ItemWallet extends StatelessWidget {
           borderRadius: AppRadius.brSm,
           child: Ink(
             decoration: BoxDecoration(
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemBgColor.name,
-              ),
+              color: AppColorTokens.of(context).bgSurface,
               borderRadius: AppRadius.brSm,
             ),
             padding: EdgeInsets.symmetric(
@@ -75,10 +71,7 @@ class ItemWallet extends StatelessWidget {
                       Text(
                         coinType,
                         style: AppTypography.body.copyWith(
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.itemSubtitleTextColor.name,
-                          ),
+                          color: AppColorTokens.of(context).textSubtitle,
                         ),
                       ),
                       SizedBox(height: AppSpacing.space2),
@@ -87,10 +80,7 @@ class ItemWallet extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: AppTypography.body.copyWith(
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.mainTextColor.name,
-                          ),
+                          color: AppColorTokens.of(context).textPrimary,
                         ),
                       ),
                     ],
@@ -100,10 +90,7 @@ class ItemWallet extends StatelessWidget {
                 Icon(
                   Icons.arrow_forward_ios_sharp,
                   size: ScreenUtil().setWidth(30.0),
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainTextColor.name,
-                  ),
+                  color: AppColorTokens.of(context).textPrimary,
                 ),
               ],
             ),

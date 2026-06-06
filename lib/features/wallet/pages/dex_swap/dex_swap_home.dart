@@ -29,7 +29,7 @@ import 'package:n42_wallet/features/wallet/aa/builder/calldata_builder.dart';
 import 'package:n42_wallet/features/wallet/api/sender/aa_transfer_handler.dart';
 import 'package:n42_wallet/features/wallet/aa/models/smart_account.dart';
 import 'package:web3dart/web3dart.dart' show hexToBytes;
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -363,18 +363,23 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
       return;
     }
 
-    final approveResult = await SenderFactory.instance.getSender(_chain).send(
-      SendParams(
-        coinType: _chain,
-        fromAddress: _userAddr,
-        toAddress: _tokenIn!.address,
-        amount: 0.0,
-        decimals: 18,
-        path: path,
-        isTest: false,
-        calldata: DexSwapApi.buildApproveCalldata(q.routerAddr, amount: exactAmount),
-      ),
-    );
+    final approveResult = await SenderFactory.instance
+        .getSender(_chain)
+        .send(
+          SendParams(
+            coinType: _chain,
+            fromAddress: _userAddr,
+            toAddress: _tokenIn!.address,
+            amount: 0.0,
+            decimals: 18,
+            path: path,
+            isTest: false,
+            calldata: DexSwapApi.buildApproveCalldata(
+              q.routerAddr,
+              amount: exactAmount,
+            ),
+          ),
+        );
     if (!mounted) return;
 
     if (!approveResult.success) {
@@ -433,18 +438,20 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
         });
         return;
       }
-      final swapResult = await SenderFactory.instance.getSender(swapChain).send(
-        SendParams(
-          coinType: swapChain,
-          fromAddress: _userAddr,
-          toAddress: q.routerAddr,
-          amount: 0.0,
-          decimals: 18,
-          path: path,
-          isTest: false,
-          calldata: q.calldata,
-        ),
-      );
+      final swapResult = await SenderFactory.instance
+          .getSender(swapChain)
+          .send(
+            SendParams(
+              coinType: swapChain,
+              fromAddress: _userAddr,
+              toAddress: q.routerAddr,
+              amount: 0.0,
+              decimals: 18,
+              path: path,
+              isTest: false,
+              calldata: q.calldata,
+            ),
+          );
       if (!mounted) return;
       if (!swapResult.success) {
         setState(() {
@@ -491,19 +498,23 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
 
     // Add approve call if needed (max uint256)
     if (_needsApproval && _tokenIn != null) {
-      batchCalls.add(ExecuteCall.erc20Approve(
-        token: _tokenIn!.address,
-        spender: quote.routerAddr,
-        amount: _maxUint256,
-      ));
+      batchCalls.add(
+        ExecuteCall.erc20Approve(
+          token: _tokenIn!.address,
+          spender: quote.routerAddr,
+          amount: _maxUint256,
+        ),
+      );
     }
 
     // Add swap call with the DEX calldata
-    batchCalls.add(ExecuteCall(
-      target: quote.routerAddr,
-      value: BigInt.zero,
-      data: hexToBytes(quote.calldata.replaceFirst('0x', '')),
-    ));
+    batchCalls.add(
+      ExecuteCall(
+        target: quote.routerAddr,
+        value: BigInt.zero,
+        data: hexToBytes(quote.calldata.replaceFirst('0x', '')),
+      ),
+    );
 
     final params = AATransferParams(
       chainSymbol: _chain,
@@ -564,8 +575,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
   // ── Mode tab widget ────────────────────────────────────────────────────────
 
   Widget _modeTab(String label, bool active) {
-    final blueColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainBlueColor.name);
+    final blueColor = AppColorTokens.of(context).brand;
     return GestureDetector(
       onTap: () {
         final newMode = label == 'Limit';
@@ -581,7 +591,9 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
         decoration: BoxDecoration(
           color: active ? blueColor : Colors.transparent,
           borderRadius: BorderRadius.circular(8),
-          border: active ? null : Border.all(color: blueColor.withValues(alpha: 0.3)),
+          border: active
+              ? null
+              : Border.all(color: blueColor.withValues(alpha: 0.3)),
         ),
         child: Text(
           label,
@@ -602,8 +614,11 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
       padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(4)),
       child: Row(
         children: [
-          Icon(Icons.local_gas_station_outlined,
-              size: 18, color: _gasFreeEnabled ? const Color(0xFF4CAF50) : Colors.grey),
+          Icon(
+            Icons.local_gas_station_outlined,
+            size: 18,
+            color: _gasFreeEnabled ? const Color(0xFF4CAF50) : Colors.grey,
+          ),
           SizedBox(width: ScreenUtil().setWidth(8)),
           Text(
             'Gas-free Swap',
@@ -644,9 +659,11 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
             },
             onOpenHistory: () => Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => _isLimitMode
-                  ? const DexLimitOrdersPage()
-                  : const DexSwapHistory()),
+              MaterialPageRoute(
+                builder: (_) => _isLimitMode
+                    ? const DexLimitOrdersPage()
+                    : const DexSwapHistory(),
+              ),
             ),
           ),
         ],
@@ -674,75 +691,75 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
               if (_isLimitMode)
                 DexLimitOrderForm(chain: _chain)
               else ...[
-              if (_showChart) ...[
+                if (_showChart) ...[
+                  SizedBox(height: ScreenUtil().setWidth(16)),
+                  DexPriceChart(
+                    tokenInSymbol: _tokenIn?.symbol,
+                    chartPrices: _chartPrices,
+                    chartLoading: _chartLoading,
+                    selectedPeriodDays: _chartPeriodDays,
+                    onPeriodChanged: (days) {
+                      setState(() => _chartPeriodDays = days);
+                      _fetchPriceChart();
+                    },
+                  ),
+                ],
                 SizedBox(height: ScreenUtil().setWidth(16)),
-                DexPriceChart(
-                  tokenInSymbol: _tokenIn?.symbol,
-                  chartPrices: _chartPrices,
-                  chartLoading: _chartLoading,
-                  selectedPeriodDays: _chartPeriodDays,
-                  onPeriodChanged: (days) {
-                    setState(() => _chartPeriodDays = days);
-                    _fetchPriceChart();
-                  },
+                DexSlippageRow(
+                  slippageOptions: _slippageOptions,
+                  selectedBps: _slippageBps,
+                  onChanged: _onSlippageChanged,
                 ),
-              ],
-              SizedBox(height: ScreenUtil().setWidth(16)),
-              DexSlippageRow(
-                slippageOptions: _slippageOptions,
-                selectedBps: _slippageBps,
-                onChanged: _onSlippageChanged,
-              ),
-              if (_canUseGasFree) ...[
-                SizedBox(height: ScreenUtil().setWidth(12)),
-                _buildGasFreeToggle(),
-              ],
-              SizedBox(height: ScreenUtil().setWidth(24)),
-              DexTokenCard(
-                label: s.g_swap_key_3,
-                token: _tokenIn,
-                controller: _amountCtrl,
-                onTokenTap: _selectTokenIn,
-              ),
-              SizedBox(height: ScreenUtil().setWidth(16)),
-              DexSwapArrow(onTap: _swapTokenDirection),
-              SizedBox(height: ScreenUtil().setWidth(16)),
-              DexTokenCard(
-                label: s.g_swap_key_4,
-                token: _tokenOut,
-                amountReadOnly: _quote?.amountOut,
-                onTokenTap: _selectTokenOut,
-              ),
-              if (_errorMsg.isNotEmpty) ...[
+                if (_canUseGasFree) ...[
+                  SizedBox(height: ScreenUtil().setWidth(12)),
+                  _buildGasFreeToggle(),
+                ],
+                SizedBox(height: ScreenUtil().setWidth(24)),
+                DexTokenCard(
+                  label: s.g_swap_key_3,
+                  token: _tokenIn,
+                  controller: _amountCtrl,
+                  onTokenTap: _selectTokenIn,
+                ),
                 SizedBox(height: ScreenUtil().setWidth(16)),
-                DexErrorBanner(message: _errorMsg),
-              ],
-              if (_quoteLoad == Load.loading) ...[
-                SizedBox(height: ScreenUtil().setWidth(24)),
-                const Center(child: CircularProgressIndicator()),
-              ],
-              if (_quote != null) ...[
-                SizedBox(height: ScreenUtil().setWidth(24)),
-                DexQuoteCard(
-                  quote: _quote!,
-                  secsLeft: _quoteSecsLeft,
+                DexSwapArrow(onTap: _swapTokenDirection),
+                SizedBox(height: ScreenUtil().setWidth(16)),
+                DexTokenCard(
+                  label: s.g_swap_key_4,
+                  token: _tokenOut,
+                  amountReadOnly: _quote?.amountOut,
+                  onTokenTap: _selectTokenOut,
+                ),
+                if (_errorMsg.isNotEmpty) ...[
+                  SizedBox(height: ScreenUtil().setWidth(16)),
+                  DexErrorBanner(message: _errorMsg),
+                ],
+                if (_quoteLoad == Load.loading) ...[
+                  SizedBox(height: ScreenUtil().setWidth(24)),
+                  const Center(child: CircularProgressIndicator()),
+                ],
+                if (_quote != null) ...[
+                  SizedBox(height: ScreenUtil().setWidth(24)),
+                  DexQuoteCard(
+                    quote: _quote!,
+                    secsLeft: _quoteSecsLeft,
+                    needsApproval: _needsApproval,
+                    exactApprove: _exactApprove,
+                    tokenInSymbol: _tokenIn?.symbol ?? '',
+                    onExactApproveChanged: (exact) =>
+                        setState(() => _exactApprove = exact),
+                  ),
+                ],
+                SizedBox(height: ScreenUtil().setWidth(40)),
+                DexActionButtons(
+                  quote: _quote,
                   needsApproval: _needsApproval,
-                  exactApprove: _exactApprove,
+                  approveLoad: _approveLoad,
+                  swapLoad: _swapLoad,
                   tokenInSymbol: _tokenIn?.symbol ?? '',
-                  onExactApproveChanged: (exact) =>
-                      setState(() => _exactApprove = exact),
+                  onApprove: _executeApprove,
+                  onSwapConfirmed: _executeSwap,
                 ),
-              ],
-              SizedBox(height: ScreenUtil().setWidth(40)),
-              DexActionButtons(
-                quote: _quote,
-                needsApproval: _needsApproval,
-                approveLoad: _approveLoad,
-                swapLoad: _swapLoad,
-                tokenInSymbol: _tokenIn?.symbol ?? '',
-                onApprove: _executeApprove,
-                onSwapConfirmed: _executeSwap,
-              ),
               ], // end else (market mode)
             ],
           ),

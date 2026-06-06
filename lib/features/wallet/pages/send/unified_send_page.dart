@@ -38,14 +38,14 @@ class UnifiedSendPage extends StatelessWidget {
   }
 
   Widget _buildMemoPage(String bt) => switch (bt) {
-        'Solana' => WalletChainSendSol(coinModel),
-        'Tron' => WalletChainSendTrx(coinModel),
-        'Algorand' => WalletChainSendAlgo(coinModel),
-        'Filecoin' => WalletChainSendFil(coinModel),
-        'Polkadot' => WalletChainSendDot(coinModel),
-        'Sui' => WalletChainSendSui(coinModel),
-        'TheOpenNetwork' => WalletChainSendTon(coinModel),
-        'Zilliqa' => WalletChainSendZil(coinModel),
-        _ => WalletChainSendMemo(coinModel),
-      };
+    'Solana' => WalletChainSendSol(coinModel),
+    'Tron' => WalletChainSendTrx(coinModel),
+    'Algorand' => WalletChainSendAlgo(coinModel),
+    'Filecoin' => WalletChainSendFil(coinModel),
+    'Polkadot' => WalletChainSendDot(coinModel),
+    'Sui' => WalletChainSendSui(coinModel),
+    'TheOpenNetwork' => WalletChainSendTon(coinModel),
+    'Zilliqa' => WalletChainSendZil(coinModel),
+    _ => WalletChainSendMemo(coinModel),
+  };
 }

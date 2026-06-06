@@ -11,10 +11,10 @@ class RedeemToken extends GeneratedContract {
     required Web3Client client,
     int? chainId,
   }) : super(
-          DeployedContract(ContractAbi.fromJson(redeemAbi, 'Token'), address),
-          client,
-          chainId,
-        );
+         DeployedContract(ContractAbi.fromJson(redeemAbi, 'Token'), address),
+         client,
+         chainId,
+       );
 
   /// 质押 deposit
   Future getDepositAmount(String lockAddress) async {
@@ -29,32 +29,22 @@ class RedeemToken extends GeneratedContract {
 
   /// depositsOf — 获取当前地址质押数量
   Future depositsOf(String address) async {
-    return await read(
-      self.function('depositsOf'),
-      [EthereumAddress.fromHex(address)],
-      null,
-    );
+    return await read(self.function('depositsOf'), [
+      EthereumAddress.fromHex(address),
+    ], null);
   }
 
   /// 获取质押之后锁仓时间
   Future lockTime(String address) async {
-    return await read(
-      self.function('depositUnlockingTimestamp'),
-      [EthereumAddress.fromHex(address)],
-      null,
-    );
+    return await read(self.function('depositUnlockingTimestamp'), [
+      EthereumAddress.fromHex(address),
+    ], null);
   }
 
   /// 解质押
-  Future reedem(
-    String p2wshAddress, {
-    required Credentials credentials,
-  }) async {
-    return await write(
-      credentials,
-      null,
-      self.function('reedem'),
-      [p2wshAddress],
-    );
+  Future reedem(String p2wshAddress, {required Credentials credentials}) async {
+    return await write(credentials, null, self.function('reedem'), [
+      p2wshAddress,
+    ]);
   }
 }

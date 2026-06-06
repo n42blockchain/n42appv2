@@ -96,10 +96,7 @@ class _EditWalletPasswordState extends ConsumerState<EditWalletPassword> {
           child: Image.asset(
             'assets/login/${obscure ? "icon_denglu_yincang" : "icon_denglu_xianshi"}.png',
             width: ScreenUtil().setWidth(34.0),
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainBlueColor.name,
-            ),
+            color: AppColorTokens.of(context).brand,
           ),
         ),
         rightOnTap1: onToggleObscure,

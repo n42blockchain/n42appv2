@@ -52,10 +52,7 @@ class WalletChainInfoBoard extends StatelessWidget {
           Text(
             balanceStr ?? "",
             style: AppTypography.titleLg.copyWith(
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainTextColor.name,
-              ),
+              color: AppColorTokens.of(context).textPrimary,
             ),
             maxLines: 2,
           ),
@@ -64,10 +61,7 @@ class WalletChainInfoBoard extends StatelessWidget {
             child: Text(
               marketValueStr ?? "",
               style: AppTypography.body.copyWith(
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainTextColor.name,
-                ),
+                color: AppColorTokens.of(context).textPrimary,
               ),
               maxLines: 2,
             ),
@@ -77,10 +71,7 @@ class WalletChainInfoBoard extends StatelessWidget {
             child: Text(
               balanceDollarStr ?? "",
               style: AppTypography.body.copyWith(
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainTextColor.name,
-                ),
+                color: AppColorTokens.of(context).textPrimary,
               ),
               maxLines: 2,
             ),
@@ -99,10 +90,7 @@ class WalletChainInfoBoard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                         style: AppTypography.body.copyWith(
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.mainTextColor.name,
-                          ),
+                          color: AppColorTokens.of(context).textPrimary,
                         ),
                       ),
                     ),
@@ -115,10 +103,7 @@ class WalletChainInfoBoard extends StatelessWidget {
                       height: ScreenUtil().setWidth(40.0),
                       child: Icon(
                         Icons.info_outline,
-                        color: AppThemeUtils.getColorByKey(
-                          context,
-                          AppThemeKeys.mainBlueColor.name,
-                        ),
+                        color: AppColorTokens.of(context).brand,
                         size: ScreenUtil().setWidth(40.0),
                       ),
                     ),

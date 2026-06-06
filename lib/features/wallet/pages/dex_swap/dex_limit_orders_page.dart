@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/features/wallet/api/dex_swap_api.dart';
 import 'package:n42_wallet/features/wallet/models/dex/dex_limit_order_model.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 
 /// 限价单列表页面
@@ -53,9 +53,9 @@ class _DexLimitOrdersPageState extends State<DexLimitOrdersPage> {
 
     if (!result.error) {
       _loadOrders();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Order cancelled')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Order cancelled')));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(result.data?.toString() ?? 'Cancel failed')),
@@ -70,27 +70,32 @@ class _DexLimitOrdersPageState extends State<DexLimitOrdersPage> {
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : _orders.isEmpty
-              ? Center(
-                  child: Text('No limit orders',
-                      style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.itemSubtitleTextColor.name))))
-              : RefreshIndicator(
-                  onRefresh: _loadOrders,
-                  child: ListView.separated(
-                    padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
-                    itemCount: _orders.length,
-                    separatorBuilder: (_, _) => SizedBox(height: ScreenUtil().setWidth(12)),
-                    itemBuilder: (context, index) => _buildOrderCard(_orders[index]),
-                  ),
+          ? Center(
+              child: Text(
+                'No limit orders',
+                style: TextStyle(
+                  color: AppColorTokens.of(context).textSubtitle,
                 ),
+              ),
+            )
+          : RefreshIndicator(
+              onRefresh: _loadOrders,
+              child: ListView.separated(
+                padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+                itemCount: _orders.length,
+                separatorBuilder: (_, _) =>
+                    SizedBox(height: ScreenUtil().setWidth(12)),
+                itemBuilder: (context, index) =>
+                    _buildOrderCard(_orders[index]),
+              ),
+            ),
     );
   }
 
   Widget _buildOrderCard(DexLimitOrderModel order) {
-    final textColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final subColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
-    final blueColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+    final textColor = AppColorTokens.of(context).textPrimary;
+    final subColor = AppColorTokens.of(context).textSubtitle;
+    final blueColor = AppColorTokens.of(context).brand;
 
     final statusColor = switch (order.status) {
       0 => blueColor,
@@ -101,13 +106,17 @@ class _DexLimitOrdersPageState extends State<DexLimitOrdersPage> {
       _ => Colors.grey,
     };
 
-    final expiryDate = DateTime.fromMillisecondsSinceEpoch(order.expiresAt * 1000);
-    final createdDate = DateTime.fromMillisecondsSinceEpoch(order.createdAt * 1000);
+    final expiryDate = DateTime.fromMillisecondsSinceEpoch(
+      order.expiresAt * 1000,
+    );
+    final createdDate = DateTime.fromMillisecondsSinceEpoch(
+      order.createdAt * 1000,
+    );
 
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: AppColorTokens.of(context).bgSurface,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -133,7 +142,11 @@ class _DexLimitOrdersPageState extends State<DexLimitOrdersPage> {
                 ),
                 child: Text(
                   order.statusLabel,
-                  style: TextStyle(fontSize: 12, color: statusColor, fontWeight: FontWeight.w600),
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: statusColor,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ],
@@ -141,14 +154,29 @@ class _DexLimitOrdersPageState extends State<DexLimitOrdersPage> {
           SizedBox(height: ScreenUtil().setWidth(10)),
 
           // Details
-          _detailRow('Amount', '${order.amountIn} ${order.symbolIn}', textColor, subColor),
-          _detailRow('Limit Price', '${order.limitPrice} ${order.symbolOut}/${order.symbolIn}', textColor, subColor),
+          _detailRow(
+            'Amount',
+            '${order.amountIn} ${order.symbolIn}',
+            textColor,
+            subColor,
+          ),
+          _detailRow(
+            'Limit Price',
+            '${order.limitPrice} ${order.symbolOut}/${order.symbolIn}',
+            textColor,
+            subColor,
+          ),
           _detailRow('Chain', order.chain, textColor, subColor),
           _detailRow('Created', _formatDate(createdDate), textColor, subColor),
           if (order.isActive)
             _detailRow('Expires', _formatDate(expiryDate), textColor, subColor),
           if (order.txHash.isNotEmpty)
-            _detailRow('Tx', '${order.txHash.substring(0, 10)}...', textColor, subColor),
+            _detailRow(
+              'Tx',
+              '${order.txHash.substring(0, 10)}...',
+              textColor,
+              subColor,
+            ),
 
           // Cancel button for active orders
           if (order.isActive) ...[
@@ -163,13 +191,20 @@ class _DexLimitOrdersPageState extends State<DexLimitOrdersPage> {
                 style: OutlinedButton.styleFrom(
                   foregroundColor: Colors.redAccent,
                   side: const BorderSide(color: Colors.redAccent),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                 ),
                 child: _cancelling.contains(order.orderId)
                     ? const SizedBox(
-                        width: 16, height: 16,
-                        child: CircularProgressIndicator(strokeWidth: 2))
-                    : const Text('Cancel Order', style: TextStyle(fontSize: 13)),
+                        width: 16,
+                        height: 16,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : const Text(
+                        'Cancel Order',
+                        style: TextStyle(fontSize: 13),
+                      ),
               ),
             ),
           ],
@@ -178,7 +213,12 @@ class _DexLimitOrdersPageState extends State<DexLimitOrdersPage> {
     );
   }
 
-  Widget _detailRow(String label, String value, Color textColor, Color subColor) {
+  Widget _detailRow(
+    String label,
+    String value,
+    Color textColor,
+    Color subColor,
+  ) {
     return Padding(
       padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(4)),
       child: Row(

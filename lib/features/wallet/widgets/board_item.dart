@@ -7,11 +7,7 @@ class BoardItem extends StatelessWidget {
   final GestureTapCallback? onTap;
   final Color? color;
 
-  const BoardItem(
-      {super.key,
-        required this.action,
-        this.onTap,
-        this.color});
+  const BoardItem({super.key, required this.action, this.onTap, this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -19,11 +15,14 @@ class BoardItem extends StatelessWidget {
       onTap: onTap,
       child: Container(
         height: ScreenUtil().setWidth(80),
-        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(16),),
+        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(16)),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(30),),
+          color: AppThemeUtils.getColorByKey(
+            context,
+            AppThemeKeys.mainButtonBgColor.name,
+          ),
+          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(30)),
         ),
         child: FittedBox(
           fit: BoxFit.scaleDown,
@@ -31,7 +30,10 @@ class BoardItem extends StatelessWidget {
             action,
             maxLines: 1,
             style: TextStyle(
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
+              color: AppThemeUtils.getColorByKey(
+                context,
+                AppThemeKeys.mainButtonTextColor.name,
+              ),
               fontSize: ScreenUtil().setSp(28),
             ),
           ),

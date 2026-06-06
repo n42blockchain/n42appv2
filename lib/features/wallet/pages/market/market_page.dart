@@ -13,7 +13,7 @@ import 'package:n42_wallet/core/market/crypto_news_service.dart';
 import 'package:n42_wallet/core/market/fear_greed_service.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/features/widgets/app_home_top_bar.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/api/market_api.dart';
 import 'package:n42_wallet/features/wallet/api/market_api_payload_utils.dart';
 import 'package:n42_wallet/features/wallet/pages/market/market_coin_info.dart';
@@ -233,7 +233,10 @@ class _MarketPageState extends ConsumerState<MarketPage>
       var isFallback = false;
 
       if (result.isEmpty) {
-        AppLogger.d('MarketPage', 'CoinGecko trending empty, trying N42 fallback');
+        AppLogger.d(
+          'MarketPage',
+          'CoinGecko trending empty, trying N42 fallback',
+        );
         result = await api.getFallbackTrendingCoins();
         isFallback = result.isNotEmpty;
       }
@@ -406,18 +409,9 @@ class _MarketPageState extends ConsumerState<MarketPage>
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.backGroundColor.name,
-    );
-    final textColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainTextColor.name,
-    );
-    final accentColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainBlueColor.name,
-    );
+    final bgColor = AppColorTokens.of(context).bgBase;
+    final textColor = AppColorTokens.of(context).textPrimary;
+    final accentColor = AppColorTokens.of(context).brand;
 
     return Scaffold(
       backgroundColor: bgColor,
@@ -509,10 +503,7 @@ class _MarketPageState extends ConsumerState<MarketPage>
     Color textColor,
     Color accentColor,
   ) {
-    final dividerColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.dividerColor.name,
-    );
+    final dividerColor = AppColorTokens.of(context).border;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [

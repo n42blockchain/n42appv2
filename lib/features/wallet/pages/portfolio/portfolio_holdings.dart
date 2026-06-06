@@ -6,7 +6,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/wallet/pages/portfolio/portfolio_models.dart';
-import 'package:n42_wallet/features/widgets/image_network.dart' show ImageNetWork;
+import 'package:n42_wallet/features/widgets/image_network.dart'
+    show ImageNetWork;
 
 class HoldingRow extends StatelessWidget {
   final CoinRecord record;
@@ -52,9 +53,10 @@ class HoldingRow extends StatelessWidget {
               child: Text(
                 '$rank',
                 style: TextStyle(
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.bold,
-                    color: sliceColor),
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.bold,
+                  color: sliceColor,
+                ),
               ),
             ),
           ),
@@ -62,11 +64,7 @@ class HoldingRow extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(14.r),
             child: record.icon.isNotEmpty
-                ? ImageNetWork(
-                    imageUrl: record.icon,
-                    width: 28.w,
-                    height: 28.w,
-                  )
+                ? ImageNetWork(imageUrl: record.icon, width: 28.w, height: 28.w)
                 : Container(
                     width: 28.w,
                     height: 28.w,
@@ -81,9 +79,10 @@ class HoldingRow extends StatelessWidget {
                 Text(
                   record.symbol.toUpperCase(),
                   style: TextStyle(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w600,
-                      color: textColor),
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w600,
+                    color: textColor,
+                  ),
                 ),
                 SizedBox(height: 3.h),
                 Row(
@@ -103,7 +102,9 @@ class HoldingRow extends StatelessWidget {
                     Text(
                       '${pct.toStringAsFixed(1)}%',
                       style: TextStyle(
-                          fontSize: 10.sp, color: textColor.withAlpha(128)),
+                        fontSize: 10.sp,
+                        color: textColor.withAlpha(128),
+                      ),
                     ),
                   ],
                 ),
@@ -117,9 +118,10 @@ class HoldingRow extends StatelessWidget {
               Text(
                 fmtUsd(record.value),
                 style: TextStyle(
-                    fontSize: 13.sp,
-                    fontWeight: FontWeight.w600,
-                    color: textColor),
+                  fontSize: 13.sp,
+                  fontWeight: FontWeight.w600,
+                  color: textColor,
+                ),
               ),
               SizedBox(height: 2.h),
               Row(
@@ -133,7 +135,9 @@ class HoldingRow extends StatelessWidget {
                   Text(
                     '(${pnl >= 0 ? '+' : ''}\$${pnl.abs() < 1 ? pnl.toStringAsFixed(4) : pnl.toStringAsFixed(2)})',
                     style: TextStyle(
-                        fontSize: 10.sp, color: pctColor.withAlpha(180)),
+                      fontSize: 10.sp,
+                      color: pctColor.withAlpha(180),
+                    ),
                   ),
                 ],
               ),

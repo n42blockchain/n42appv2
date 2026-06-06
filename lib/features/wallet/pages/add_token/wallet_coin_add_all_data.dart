@@ -7,7 +7,11 @@ part of 'wallet_coin_add_all.dart';
 /// Contains: setChainsToken, setChainsTokenWithNetwork, checkSymbol,
 /// dealChain, coinDeal, getChainList, _extractPopularTokens.
 extension _WalletCoinAddAllData on _WalletCoinAddAllState {
-  String _mapString(Map<String, dynamic> map, String key, {String fallback = ''}) {
+  String _mapString(
+    Map<String, dynamic> map,
+    String key, {
+    String fallback = '',
+  }) {
     final value = map[key];
     if (value == null) return fallback;
     final text = value.toString().trim();
@@ -27,7 +31,8 @@ extension _WalletCoinAddAllData on _WalletCoinAddAllState {
     if (chains != null) {
       for (final entry in chains!.entries) {
         final baseInfo =
-            (entry.value['baseInfo'] as Map?)?.cast<String, dynamic>() ?? const {};
+            (entry.value['baseInfo'] as Map?)?.cast<String, dynamic>() ??
+            const {};
         final blockchainType = _mapString(baseInfo, 'blockchainType');
         final coinType = _mapString(baseInfo, 'coinType');
         if (blockchainType != BlockchainType.Bitcoin.name &&
@@ -48,13 +53,16 @@ extension _WalletCoinAddAllData on _WalletCoinAddAllState {
     }
 
     final currentChain =
-        (chainsToken[cKeys[networkIndexToken]] as Map?)?.cast<String, dynamic>() ?? const {};
+        (chainsToken[cKeys[networkIndexToken]] as Map?)
+            ?.cast<String, dynamic>() ??
+        const {};
     final baseInfo =
         (currentChain['baseInfo'] as Map?)?.cast<String, dynamic>() ?? const {};
     networkNameToken = _mapString(baseInfo, 'name');
     final isTest = currentChain['isTest'] == true;
     final testnets = currentChain['testnets'];
-    final mainnets = isTest &&
+    final mainnets =
+        isTest &&
             testnets is List &&
             testnets.isNotEmpty &&
             testnets.first is Map
@@ -80,14 +88,13 @@ extension _WalletCoinAddAllData on _WalletCoinAddAllState {
     return mainnets is Map && mainnets[contract] != null;
   }
 
-  Map<String, dynamic>? dealChain(
-    Map<String, dynamic> chainMap,
-  ) {
+  Map<String, dynamic>? dealChain(Map<String, dynamic> chainMap) {
     final symbol = _mapString(chainMap, 'coin_name');
     if (symbol.isEmpty) return null;
     final unit = _mapString(chainMap, 'unit');
     final ctIndex = CoinType.values.indexWhere(
-        (e) => e.name.toLowerCase() == symbol.toLowerCase());
+      (e) => e.name.toLowerCase() == symbol.toLowerCase(),
+    );
     if (ctIndex == -1) return null;
     final ct = CoinType.values[ctIndex];
     final coinType = ct.name;
@@ -147,7 +154,8 @@ extension _WalletCoinAddAllData on _WalletCoinAddAllState {
     final fullname = _mapString(chainMap, 'fullname', fallback: symbol);
     final icon = switch (fullname) {
       'LoveCoin' => _mapString(chainMap, 'icon'),
-      'Base' => "${AppConfig.apiUrl['n42Browser']}/static/${chainMap['coin_name']}.png",
+      'Base' =>
+        "${AppConfig.apiUrl['n42Browser']}/static/${chainMap['coin_name']}.png",
       _ => "https://api.n42.ai/market/v1/r/coinImage/$fullname.png",
     };
     Map<String, dynamic> chainInfoMap = {
@@ -188,12 +196,12 @@ extension _WalletCoinAddAllData on _WalletCoinAddAllState {
           "testnetWS": "",
           "testnetRPC": testNetUrl,
           "testnetChainID": testChainId,
-          "testnetContract": {}
+          "testnetContract": {},
         },
       ],
       "mainnets": {},
       "mainnetContract": {},
-      "testnetContract": {}
+      "testnetContract": {},
     };
     return chainInfoMap;
   }
@@ -234,8 +242,13 @@ extension _WalletCoinAddAllData on _WalletCoinAddAllState {
     }).toList();
   }
 
-  void coinDeal(List<dynamic> returnData, Map<String, dynamic> chains,
-      {String rules = "", String chainName = "", String symbol = ""}) {
+  void coinDeal(
+    List<dynamic> returnData,
+    Map<String, dynamic> chains, {
+    String rules = "",
+    String chainName = "",
+    String symbol = "",
+  }) {
     for (final item in returnData) {
       if (item is! Map) continue;
       final r = item.cast<String, dynamic>();
@@ -256,14 +269,18 @@ extension _WalletCoinAddAllData on _WalletCoinAddAllState {
       if (symbol != "") r['symbol'] = symbol;
 
       final checkStr = chainName == "" ? r['coin_name'].toString() : symbol;
-      final isAdd = checkSymbol(r['contract'].toString().toUpperCase(), checkStr);
+      final isAdd = checkSymbol(
+        r['contract'].toString().toUpperCase(),
+        checkStr,
+      );
       r['isAdd'] = isAdd;
       r['edit'] = false;
 
       if (isAdd) {
         final chainMap = chains[checkStr.toUpperCase()];
         final baseInfo =
-            (chainMap?['baseInfo'] as Map?)?.cast<String, dynamic>() ?? const {};
+            (chainMap?['baseInfo'] as Map?)?.cast<String, dynamic>() ??
+            const {};
         r['canEdit'] = chainMap == null
             ? false
             : (chainName != "" || baseInfo['canEdit'] == true);
@@ -275,10 +292,13 @@ extension _WalletCoinAddAllData on _WalletCoinAddAllState {
 
       final coins = r['coins'] as List<dynamic>?;
       if (coins != null) {
-        coinDeal(coins, chains,
-            rules: r['rules'],
-            chainName: r['chain_name'],
-            symbol: r['coin_name']);
+        coinDeal(
+          coins,
+          chains,
+          rules: r['rules'],
+          chainName: r['chain_name'],
+          symbol: r['coin_name'],
+        );
       }
     }
   }

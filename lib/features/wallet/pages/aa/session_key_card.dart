@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 import 'session_key_models.dart';
 import 'session_key_sheets.dart';
@@ -42,8 +42,7 @@ class SessionKeyCard extends StatelessWidget {
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(16)),
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemBgColor.name),
+        color: AppColorTokens.of(context).bgSurface,
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
         border: Border.all(
           color: sessionKeyStatusColor(keyData.status).withAlpha(40),
@@ -86,10 +85,7 @@ class SessionKeyCard extends StatelessWidget {
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(28),
                   fontWeight: FontWeight.w600,
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainTextColor.name,
-                  ),
+                  color: AppColorTokens.of(context).textPrimary,
                 ),
               ),
               if (keyData.dappName != null)
@@ -97,10 +93,7 @@ class SessionKeyCard extends StatelessWidget {
                   keyData.dappName!,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(22),
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.itemSubtitleTextColor.name,
-                    ),
+                    color: AppColorTokens.of(context).textSubtitle,
                   ),
                 ),
             ],
@@ -121,8 +114,7 @@ class SessionKeyCard extends StatelessWidget {
       ),
       child: keyData.dappIcon != null
           ? ClipRRect(
-              borderRadius:
-                  BorderRadius.circular(ScreenUtil().setWidth(14)),
+              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
               child: Image.network(
                 keyData.dappIcon!,
                 fit: BoxFit.cover,
@@ -165,8 +157,7 @@ class SessionKeyCard extends StatelessWidget {
   }
 
   Widget _buildAddressRow(BuildContext context) {
-    final subtitleColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
+    final subtitleColor = AppColorTokens.of(context).textSubtitle;
     return GestureDetector(
       onTap: () {
         Clipboard.setData(ClipboardData(text: keyData.keyAddress));
@@ -183,10 +174,7 @@ class SessionKeyCard extends StatelessWidget {
           vertical: ScreenUtil().setWidth(8),
         ),
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.backGroundColor.name,
-          ).withAlpha(100),
+          color: AppColorTokens.of(context).bgBase.withAlpha(100),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
         ),
         child: Row(
@@ -203,10 +191,7 @@ class SessionKeyCard extends StatelessWidget {
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(22),
                 fontFamily: 'monospace',
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainTextColor.name,
-                ),
+                color: AppColorTokens.of(context).textPrimary,
               ),
             ),
             SizedBox(width: ScreenUtil().setWidth(6)),
@@ -257,12 +242,12 @@ class SessionKeyCard extends StatelessWidget {
   }
 
   Widget _buildChip(
-      BuildContext context, IconData icon, String label, Color? color) {
-    final chipColor = color ??
-        AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.itemSubtitleTextColor.name,
-        );
+    BuildContext context,
+    IconData icon,
+    String label,
+    Color? color,
+  ) {
+    final chipColor = color ?? AppColorTokens.of(context).textSubtitle;
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: ScreenUtil().setWidth(10),
@@ -304,10 +289,7 @@ class SessionKeyCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(22),
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.itemSubtitleTextColor.name,
-                  ),
+                  color: AppColorTokens.of(context).textSubtitle,
                 ),
               ),
             ),
@@ -349,13 +331,9 @@ class SessionKeyCard extends StatelessWidget {
             icon: const Icon(Icons.info_outline, size: 18),
             label: Text(S.of(context).g_key_aa_details),
             style: OutlinedButton.styleFrom(
-              foregroundColor: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainBlueColor.name,
-              ),
+              foregroundColor: AppColorTokens.of(context).brand,
               shape: RoundedRectangleBorder(
-                borderRadius:
-                    BorderRadius.circular(ScreenUtil().setWidth(10)),
+                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
               ),
             ),
           ),
@@ -370,8 +348,7 @@ class SessionKeyCard extends StatelessWidget {
               foregroundColor: Colors.red,
               side: const BorderSide(color: Colors.red),
               shape: RoundedRectangleBorder(
-                borderRadius:
-                    BorderRadius.circular(ScreenUtil().setWidth(10)),
+                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
               ),
             ),
           ),
@@ -385,7 +362,9 @@ class SessionKeyCard extends StatelessWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(S.of(ctx).g_key_aa_revoke_session),
-        content: SingleChildScrollView(child: Text(S.of(ctx).g_key_aa_revoke_confirm)),
+        content: SingleChildScrollView(
+          child: Text(S.of(ctx).g_key_aa_revoke_confirm),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
@@ -411,10 +390,10 @@ class SessionKeyCard extends StatelessWidget {
 
 /// Maps [SessionKeyStatus] to a display colour.
 Color sessionKeyStatusColor(SessionKeyStatus status) => switch (status) {
-      SessionKeyStatus.active => Colors.green,
-      SessionKeyStatus.expired => Colors.orange,
-      SessionKeyStatus.revoked => Colors.red,
-    };
+  SessionKeyStatus.active => Colors.green,
+  SessionKeyStatus.expired => Colors.orange,
+  SessionKeyStatus.revoked => Colors.red,
+};
 
 /// Returns a localised label for [status].
 String sessionKeyStatusLabel(BuildContext context, SessionKeyStatus status) =>
@@ -426,16 +405,16 @@ String sessionKeyStatusLabel(BuildContext context, SessionKeyStatus status) =>
 
 /// Returns a localised label for [permission].
 String sessionKeyPermissionLabel(
-        BuildContext context, SessionKeyPermission permission) =>
-    switch (permission) {
-      SessionKeyPermission.transfer =>
-        S.of(context).g_key_aa_session_preset_transfer,
-      SessionKeyPermission.approve => S.of(context).g_key_aa_approve,
-      SessionKeyPermission.contractCall =>
-        S.of(context).g_key_aa_session_preset_contract,
-      SessionKeyPermission.full =>
-        S.of(context).g_key_aa_session_preset_full,
-    };
+  BuildContext context,
+  SessionKeyPermission permission,
+) => switch (permission) {
+  SessionKeyPermission.transfer =>
+    S.of(context).g_key_aa_session_preset_transfer,
+  SessionKeyPermission.approve => S.of(context).g_key_aa_approve,
+  SessionKeyPermission.contractCall =>
+    S.of(context).g_key_aa_session_preset_contract,
+  SessionKeyPermission.full => S.of(context).g_key_aa_session_preset_full,
+};
 
 /// Returns a compact human-readable string for [d] (e.g. "3d", "5h", "12m").
 String sessionKeyFormatRemainingTime(Duration d) {

@@ -138,9 +138,7 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
                     Expanded(
                       child: Text(
                         "+${_orderModel.orderNum}",
-                        style: AppTypography.body.copyWith(
-                          color: mainText,
-                        ),
+                        style: AppTypography.body.copyWith(color: mainText),
                         textAlign: TextAlign.right,
                       ),
                     ),
@@ -286,9 +284,7 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
                     children: [
                       TextSpan(
                         text: CoinType.N.name,
-                        style: AppTypography.caption.copyWith(
-                          color: mainText,
-                        ),
+                        style: AppTypography.caption.copyWith(color: mainText),
                       ),
                     ],
                   ),
@@ -309,9 +305,7 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
                     ),
                     Text(
                       stateStr,
-                      style: AppTypography.body.copyWith(
-                        color: stateColor,
-                      ),
+                      style: AppTypography.body.copyWith(color: stateColor),
                     ),
                   ],
                 ),

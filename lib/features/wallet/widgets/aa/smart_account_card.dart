@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/aa/models/smart_account.dart';
 import 'package:n42_wallet/features/wallet/widgets/aa/deployment_status_indicator.dart';
 
@@ -39,17 +39,12 @@ class SmartAccountCard extends StatelessWidget {
         padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [
-              typeColor.withAlpha(30),
-              typeColor.withAlpha(10),
-            ],
+            colors: [typeColor.withAlpha(30), typeColor.withAlpha(10)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
-          border: Border.all(
-            color: typeColor.withAlpha(40),
-          ),
+          border: Border.all(color: typeColor.withAlpha(40)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -68,20 +63,14 @@ class SmartAccountCard extends StatelessWidget {
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(28),
                           fontWeight: FontWeight.w600,
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.mainTextColor.name,
-                          ),
+                          color: AppColorTokens.of(context).textPrimary,
                         ),
                       ),
                       Text(
                         account.type.displayName,
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(22),
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.itemSubtitleTextColor.name,
-                          ),
+                          color: AppColorTokens.of(context).textSubtitle,
                         ),
                       ),
                     ],
@@ -132,10 +121,7 @@ class SmartAccountCard extends StatelessWidget {
         vertical: ScreenUtil().setWidth(12),
       ),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.backGroundColor.name,
-        ).withAlpha(100),
+        color: AppColorTokens.of(context).bgBase.withAlpha(100),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
       ),
       child: Row(
@@ -146,10 +132,7 @@ class SmartAccountCard extends StatelessWidget {
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(26),
                 fontFamily: 'monospace',
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainTextColor.name,
-                ),
+                color: AppColorTokens.of(context).textPrimary,
               ),
             ),
           ),
@@ -166,10 +149,7 @@ class SmartAccountCard extends StatelessWidget {
             child: Icon(
               Icons.copy,
               size: ScreenUtil().setWidth(22),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainBlueColor.name,
-              ),
+              color: AppColorTokens.of(context).brand,
             ),
           ),
         ],
@@ -181,10 +161,7 @@ class SmartAccountCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(14)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.backGroundColor.name,
-        ).withAlpha(80),
+        color: AppColorTokens.of(context).bgBase.withAlpha(80),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
       ),
       child: Column(
@@ -221,10 +198,7 @@ class SmartAccountCard extends StatelessWidget {
           label,
           style: TextStyle(
             fontSize: ScreenUtil().setSp(22),
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.itemSubtitleTextColor.name,
-            ),
+            color: AppColorTokens.of(context).textSubtitle,
           ),
         ),
         Text(
@@ -232,10 +206,7 @@ class SmartAccountCard extends StatelessWidget {
           style: TextStyle(
             fontSize: ScreenUtil().setSp(22),
             fontWeight: FontWeight.w500,
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainTextColor.name,
-            ),
+            color: AppColorTokens.of(context).textPrimary,
           ),
         ),
       ],

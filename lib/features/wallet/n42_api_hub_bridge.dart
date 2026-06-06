@@ -40,12 +40,14 @@ class N42ApiHubBridge implements IApiHubBridge {
     try {
       final articles = await NewsAggregator.fetchLatest(limit: limit);
       return articles
-          .map((a) => BridgeNewsItem(
-                title: a.title,
-                url: a.url,
-                sourceName: a.sourceName,
-                publishedAt: a.publishedAt,
-              ))
+          .map(
+            (a) => BridgeNewsItem(
+              title: a.title,
+              url: a.url,
+              sourceName: a.sourceName,
+              publishedAt: a.publishedAt,
+            ),
+          )
           .toList();
     } catch (e) {
       AppLogger.w('N42ApiHubBridge', 'getLatestNews error: $e');

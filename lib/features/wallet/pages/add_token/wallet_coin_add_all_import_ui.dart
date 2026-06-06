@@ -19,12 +19,13 @@ extension _WalletCoinAddAllImportUI on _WalletCoinAddAllState {
         Expanded(
           child: ListView.separated(
             itemCount: coinlistToken.length,
-            itemBuilder: (context, int index) => coinItemToken(coinlistToken[index]),
+            itemBuilder: (context, int index) =>
+                coinItemToken(coinlistToken[index]),
             separatorBuilder: (context, int index) => Divider(
               height: 1,
               indent: 0,
               endIndent: 0,
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemLineColor.name),
+              color: AppColorTokens.of(context).border,
             ),
           ),
         ),
@@ -49,7 +50,7 @@ extension _WalletCoinAddAllImportUI on _WalletCoinAddAllState {
               symbol,
               style: TextStyle(
                 fontSize: ScreenUtil().setWidth(30.0),
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                color: AppColorTokens.of(context).textPrimary,
                 height: 1.3,
               ),
             ),
@@ -70,7 +71,10 @@ extension _WalletCoinAddAllImportUI on _WalletCoinAddAllState {
                 height: ScreenUtil().setWidth(80.0),
                 child: Icon(
                   Icons.remove,
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
+                  color: AppThemeUtils.getColorByKey(
+                    context,
+                    AppThemeKeys.mainButtonBgColor.name,
+                  ),
                 ),
               ),
             ),
@@ -89,13 +93,18 @@ extension _WalletCoinAddAllImportUI on _WalletCoinAddAllState {
                 Container(
                   padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
                   decoration: BoxDecoration(
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorBgColor2.name),
-                    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8.0)),
+                    color: AppThemeUtils.getColorByKey(
+                      context,
+                      AppThemeKeys.errorBgColor2.name,
+                    ),
+                    borderRadius: BorderRadius.circular(
+                      ScreenUtil().setWidth(8.0),
+                    ),
                   ),
                   child: Text(
                     S.of(context).g_token_m_key_10,
                     style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                      color: AppColorTokens.of(context).textPrimary,
                       fontSize: ScreenUtil().setSp(24.0),
                     ),
                     textAlign: TextAlign.center,
@@ -109,12 +118,7 @@ extension _WalletCoinAddAllImportUI on _WalletCoinAddAllState {
             ),
           ),
         ),
-        Positioned(
-          left: 0,
-          right: 0,
-          bottom: 0,
-          child: importButtonWidget(),
-        ),
+        Positioned(left: 0, right: 0, bottom: 0, child: importButtonWidget()),
       ],
     );
   }

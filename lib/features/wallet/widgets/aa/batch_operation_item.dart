@@ -6,21 +6,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// 批量操作类型
-enum BatchOperationType {
-  transfer,
-  approve,
-  swap,
-  custom,
-}
+enum BatchOperationType { transfer, approve, swap, custom }
 
 /// 批量操作数据
 class BatchOperation {
   final BatchOperationType type;
   final String targetAddress;
   final String? tokenSymbol;
+
   /// ERC-20 合约地址；ETH 转账时为 null
   final String? tokenAddress;
   final BigInt? amount;
@@ -41,15 +37,15 @@ class BatchOperation {
 
   /// 序列化为 JSON（用于模板持久化）
   Map<String, dynamic> toJson() => {
-        'type': type.name,
-        'targetAddress': targetAddress,
-        if (tokenSymbol != null) 'tokenSymbol': tokenSymbol,
-        if (tokenAddress != null) 'tokenAddress': tokenAddress,
-        if (amount != null) 'amount': amount!.toString(),
-        if (decimals != null) 'decimals': decimals,
-        if (customData != null) 'customData': customData,
-        if (description != null) 'description': description,
-      };
+    'type': type.name,
+    'targetAddress': targetAddress,
+    if (tokenSymbol != null) 'tokenSymbol': tokenSymbol,
+    if (tokenAddress != null) 'tokenAddress': tokenAddress,
+    if (amount != null) 'amount': amount!.toString(),
+    if (decimals != null) 'decimals': decimals,
+    if (customData != null) 'customData': customData,
+    if (description != null) 'description': description,
+  };
 
   /// 从 JSON 反序列化（用于模板加载）
   factory BatchOperation.fromJson(Map<String, dynamic> json) {
@@ -61,7 +57,9 @@ class BatchOperation {
       targetAddress: json['targetAddress'] as String,
       tokenSymbol: json['tokenSymbol'] as String?,
       tokenAddress: json['tokenAddress'] as String?,
-      amount: json['amount'] != null ? BigInt.tryParse(json['amount'] as String) : null,
+      amount: json['amount'] != null
+          ? BigInt.tryParse(json['amount'] as String)
+          : null,
       decimals: json['decimals'] as int?,
       customData: json['customData'] as String?,
       description: json['description'] as String?,
@@ -74,13 +72,16 @@ class BatchOperation {
   bool isValid() {
     if (!_evmAddressRegExp.hasMatch(targetAddress)) return false;
     // transfer/approve 需要金额 > 0
-    if (type == BatchOperationType.transfer || type == BatchOperationType.approve) {
+    if (type == BatchOperationType.transfer ||
+        type == BatchOperationType.approve) {
       if (amount == null || amount! <= BigInt.zero) return false;
     }
     // ERC-20 操作需要合约地址
-    if (type == BatchOperationType.approve && tokenAddress == null) return false;
+    if (type == BatchOperationType.approve && tokenAddress == null)
+      return false;
     // custom 操作需要 calldata
-    if (type == BatchOperationType.custom && (customData == null || customData!.isEmpty)) {
+    if (type == BatchOperationType.custom &&
+        (customData == null || customData!.isEmpty)) {
       return false;
     }
     return true;
@@ -120,16 +121,13 @@ class BatchOperationItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final opColor = _getOperationColor();
-    final subtitleColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.itemSubtitleTextColor.name,
-    );
+    final subtitleColor = AppColorTokens.of(context).textSubtitle;
 
     return Container(
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
       padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: AppColorTokens.of(context).bgSurface,
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
         border: Border.all(color: opColor.withAlpha(30)),
       ),
@@ -172,13 +170,11 @@ class BatchOperationItem extends StatelessWidget {
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(26),
                         fontWeight: FontWeight.w600,
-                        color: AppThemeUtils.getColorByKey(
-                          context,
-                          AppThemeKeys.mainTextColor.name,
-                        ),
+                        color: AppColorTokens.of(context).textPrimary,
                       ),
                     ),
-                    if (operation.amount != null && operation.tokenSymbol != null) ...[
+                    if (operation.amount != null &&
+                        operation.tokenSymbol != null) ...[
                       SizedBox(width: ScreenUtil().setWidth(8)),
                       Container(
                         padding: EdgeInsets.symmetric(
@@ -187,7 +183,9 @@ class BatchOperationItem extends StatelessWidget {
                         ),
                         decoration: BoxDecoration(
                           color: opColor.withAlpha(20),
-                          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                          borderRadius: BorderRadius.circular(
+                            ScreenUtil().setWidth(8),
+                          ),
                         ),
                         child: Text(
                           '${operation.formattedAmount} ${operation.tokenSymbol}',
@@ -232,7 +230,7 @@ class BatchOperationItem extends StatelessWidget {
               _buildActionButton(
                 onPressed: onEdit!,
                 icon: Icons.edit,
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                color: AppColorTokens.of(context).brand,
               ),
             if (onRemove != null)
               _buildActionButton(
@@ -279,25 +277,25 @@ class BatchOperationItem extends StatelessWidget {
   }
 
   IconData _getOperationIcon() => switch (operation.type) {
-        BatchOperationType.transfer => Icons.send,
-        BatchOperationType.approve => Icons.check_circle_outline,
-        BatchOperationType.swap => Icons.swap_horiz,
-        BatchOperationType.custom => Icons.code,
-      };
+    BatchOperationType.transfer => Icons.send,
+    BatchOperationType.approve => Icons.check_circle_outline,
+    BatchOperationType.swap => Icons.swap_horiz,
+    BatchOperationType.custom => Icons.code,
+  };
 
   Color _getOperationColor() => switch (operation.type) {
-        BatchOperationType.transfer => const Color(0xFF5E97F6),
-        BatchOperationType.approve => const Color(0xFF66BB6A),
-        BatchOperationType.swap => const Color(0xFFFF9800),
-        BatchOperationType.custom => const Color(0xFF9C27B0),
-      };
+    BatchOperationType.transfer => const Color(0xFF5E97F6),
+    BatchOperationType.approve => const Color(0xFF66BB6A),
+    BatchOperationType.swap => const Color(0xFFFF9800),
+    BatchOperationType.custom => const Color(0xFF9C27B0),
+  };
 
   String _getOperationTitle(BuildContext context) => switch (operation.type) {
-        BatchOperationType.transfer => S.of(context).g_key_37,
-        BatchOperationType.approve => S.of(context).g_key_aa_approve,
-        BatchOperationType.swap => S.of(context).g_swap_key_35,
-        BatchOperationType.custom => S.of(context).g_key_aa_custom,
-      };
+    BatchOperationType.transfer => S.of(context).g_key_37,
+    BatchOperationType.approve => S.of(context).g_key_aa_approve,
+    BatchOperationType.swap => S.of(context).g_swap_key_35,
+    BatchOperationType.custom => S.of(context).g_key_aa_custom,
+  };
 
   String _shortenAddress(String address) {
     if (address.length <= 12) return address;

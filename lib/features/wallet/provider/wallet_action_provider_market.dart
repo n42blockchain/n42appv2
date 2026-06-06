@@ -288,7 +288,8 @@ extension WalletActionProviderMarket on WalletActionProvider {
         ? coinModel.coin['contract_test']
         : coinModel.coin['contract'];
 
-    final rBalance = await tokenViewApi.getBalance(
+    final rBalance =
+        await tokenViewApi.getBalance(
           BlockchainType.Algorand.name,
           coinModel.coin['coinType'],
           coinModel.address.toString(),
@@ -307,7 +308,8 @@ extension WalletActionProviderMarket on WalletActionProvider {
     _applyMarketPrice(coinModel);
 
     final balanceKey = coinModel.isTest ? 'balance_test' : 'balance';
-    coinModel.coin[balanceKey] = (rBalance.data['balance'] as BigInt).toString();
+    coinModel.coin[balanceKey] = (rBalance.data['balance'] as BigInt)
+        .toString();
     _safeUpdateWalletMap(coinModel);
     applyCachedBalance(coinModel);
     return false;
@@ -330,7 +332,10 @@ extension WalletActionProviderMarket on WalletActionProvider {
     coinRefresh(walletIndex);
   }
 
-  Future<void> refreshCoinBalance(String coinType, {String contract = ""}) async {
+  Future<void> refreshCoinBalance(
+    String coinType, {
+    String contract = "",
+  }) async {
     final idx = coinList.indexWhere((e) {
       if (e.coin['coinType'] != coinType) return false;
       if (contract.isEmpty) return true;
@@ -362,7 +367,9 @@ extension WalletActionProviderMarket on WalletActionProvider {
         await getBalanceWithCoinModel(coin);
       } catch (e) {
         if (kDebugMode) {
-          debugPrint('WalletActionProvider: Error refreshing ${coin.coin['miniName']}: $e');
+          debugPrint(
+            'WalletActionProvider: Error refreshing ${coin.coin['miniName']}: $e',
+          );
         }
       }
 

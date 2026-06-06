@@ -2,9 +2,14 @@ part of 'wallet_action_provider.dart';
 
 /// Coin list sorting, priority ordering, pinning, and aggregated token insertion.
 extension WalletActionProviderSort on WalletActionProvider {
-
   /// 优先级币种列表（按显示顺序）
-  static const List<String> _priorityCoins = ['N', 'BTC', 'ETH', 'USDT', 'USDC'];
+  static const List<String> _priorityCoins = [
+    'N',
+    'BTC',
+    'ETH',
+    'USDT',
+    'USDC',
+  ];
 
   /// 应用优先级排序，确保 N, BTC, ETH, USDT, USDC 在列表最前面
   void _applyPriorityOrder() {
@@ -58,14 +63,16 @@ extension WalletActionProviderSort on WalletActionProvider {
         .toSet();
 
     // 已存在的聚合代币符号
-    final existingAggregatedSymbols =
-        _aggregatedCoins.map((c) => c.tokenConfig.symbol).toSet();
+    final existingAggregatedSymbols = _aggregatedCoins
+        .map((c) => c.tokenConfig.symbol)
+        .toSet();
 
     // 创建聚合代币（跳过已存在的）
     final toAdd = <AggregatedCoinModel>[];
     for (final tokenConfig in AggregatedTokens.all) {
       if (existingAggregatedSymbols.contains(tokenConfig.symbol)) continue;
-      if (existingTokenSymbols.contains(tokenConfig.symbol.toUpperCase())) continue;
+      if (existingTokenSymbols.contains(tokenConfig.symbol.toUpperCase()))
+        continue;
 
       final aggregatedCoin = AggregatedCoinModel(tokenConfig: tokenConfig);
       _aggregatedCoins.add(aggregatedCoin);
@@ -123,10 +130,10 @@ extension WalletActionProviderSort on WalletActionProvider {
     final nameSort = sort['name'] ?? -1;
     if (nameSort == 0 || nameSort == 1) {
       coinList.sort((a, b) {
-        final aName =
-            (a.coin['miniName'] ?? a.coin['coinType'] ?? '').toString();
-        final bName =
-            (b.coin['miniName'] ?? b.coin['coinType'] ?? '').toString();
+        final aName = (a.coin['miniName'] ?? a.coin['coinType'] ?? '')
+            .toString();
+        final bName = (b.coin['miniName'] ?? b.coin['coinType'] ?? '')
+            .toString();
         return nameSort == 0 ? aName.compareTo(bName) : bName.compareTo(aName);
       });
     }
@@ -134,9 +141,13 @@ extension WalletActionProviderSort on WalletActionProvider {
     // 按 24h 涨跌幅排序（0=降序, 1=升序）
     final changeSort = sort['change'] ?? -1;
     if (changeSort == 0) {
-      coinList.sort((a, b) => (b.percentage as double).compareTo(a.percentage as double));
+      coinList.sort(
+        (a, b) => (b.percentage as double).compareTo(a.percentage as double),
+      );
     } else if (changeSort == 1) {
-      coinList.sort((a, b) => (a.percentage as double).compareTo(b.percentage as double));
+      coinList.sort(
+        (a, b) => (a.percentage as double).compareTo(b.percentage as double),
+      );
     }
 
     // 任何排序后，置顶代币始终在最前面
@@ -213,7 +224,9 @@ extension WalletActionProviderSort on WalletActionProvider {
       cm.isPinned = true;
     }
     // 重新排序（保持当前排序策略），coinSortAssets 内部已调用 _elevatePinnedToTop
-    final isDefaultSort = walletInfo.coinSort['assets'] == -1 && walletInfo.coinSort['name'] == -1;
+    final isDefaultSort =
+        walletInfo.coinSort['assets'] == -1 &&
+        walletInfo.coinSort['name'] == -1;
     if (isDefaultSort) {
       _applyPriorityOrder();
       _elevatePinnedToTop();

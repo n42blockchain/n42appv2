@@ -6,7 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/services/ens_registration_service.dart';
 
 /// ENS 搜索输入栏
@@ -33,7 +33,7 @@ class EnsSearchBar extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: AppColorTokens.of(context).bgSurface,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withAlpha(10),
@@ -65,17 +65,11 @@ class EnsSearchBar extends StatelessWidget {
   Widget _buildInputRow(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.backGroundColor.name,
-        ),
+        color: AppColorTokens.of(context).bgBase,
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
         border: Border.all(
           color: focusNode.hasFocus
-              ? AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainBlueColor.name,
-                )
+              ? AppColorTokens.of(context).brand
               : Colors.transparent,
           width: 2,
         ),
@@ -85,10 +79,7 @@ class EnsSearchBar extends StatelessWidget {
           SizedBox(width: ScreenUtil().setWidth(16)),
           Icon(
             Icons.search,
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.itemSubtitleTextColor.name,
-            ),
+            color: AppColorTokens.of(context).textSubtitle,
             size: ScreenUtil().setWidth(28),
           ),
           SizedBox(width: ScreenUtil().setWidth(12)),
@@ -99,19 +90,13 @@ class EnsSearchBar extends StatelessWidget {
               onChanged: onChanged,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(28),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainTextColor.name,
-                ),
+                color: AppColorTokens.of(context).textPrimary,
               ),
               decoration: InputDecoration(
                 hintText: S.of(context).g_key_ens_search_hint,
                 hintStyle: TextStyle(
                   fontSize: ScreenUtil().setSp(28),
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.itemSubtitleTextColor.name,
-                  ),
+                  color: AppColorTokens.of(context).textSubtitle,
                 ),
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.symmetric(
@@ -127,10 +112,7 @@ class EnsSearchBar extends StatelessWidget {
               vertical: ScreenUtil().setWidth(8),
             ),
             decoration: BoxDecoration(
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainBlueColor.name,
-              ).withAlpha(20),
+              color: AppColorTokens.of(context).brand.withAlpha(20),
               borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
             ),
             child: Text(
@@ -138,10 +120,7 @@ class EnsSearchBar extends StatelessWidget {
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(26),
                 fontWeight: FontWeight.w600,
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainBlueColor.name,
-                ),
+                color: AppColorTokens.of(context).brand,
               ),
             ),
           ),

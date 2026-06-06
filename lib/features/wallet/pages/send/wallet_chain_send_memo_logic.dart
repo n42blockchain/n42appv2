@@ -63,7 +63,11 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
 
   Future<void> loadBalance() async {
     setState(() => load = Load.loading);
-    final ok = await fetchCoinBalance(widget.coinModel, ref.read(wapBridgeProvider), getToken: false);
+    final ok = await fetchCoinBalance(
+      widget.coinModel,
+      ref.read(wapBridgeProvider),
+      getToken: false,
+    );
     if (!mounted) return;
     if (!ok) {
       errorMessage = S.current.g_key_t_44;
@@ -209,29 +213,33 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
     try {
       final coinType = widget.coinModel.coin['coinType'] as String? ?? '';
       final addrType = widget.coinModel.addrType;
-      final baseInfo = widget.coinModel.coin['baseInfo'] as Map<String, dynamic>?;
+      final baseInfo =
+          widget.coinModel.coin['baseInfo'] as Map<String, dynamic>?;
       final pathMap = baseInfo?['path'] as Map<String, dynamic>?;
       final basePath = pathMap?[addrType]?.toString() ?? "m/44'/60'/0'/0/0";
       final path = getPathWithIndex(basePath, widget.coinModel.pathIndex);
-      final decimals = (widget.coinModel.coin['decimals'] as num?)?.toInt() ?? 18;
+      final decimals =
+          (widget.coinModel.coin['decimals'] as num?)?.toInt() ?? 18;
 
-      final result = await SenderFactory.instance.getSender(coinType).send(
-        SendParams(
-          coinType: coinType,
-          fromAddress: trModel.from1,
-          toAddress: trModel.to1,
-          amount: toEther(trModel.price.toString(), decimals).toDouble(),
-          decimals: decimals,
-          path: path,
-          sendMax: false,
-          isTest: widget.coinModel.isTest,
-          contractAddress: trModel.contract,
-          tokenDecimals: 0,
-          memo: trModel.message,
-          privateKey: widget.coinModel.privateKey,
-          chainConfig: widget.coinModel.coin,
-        ),
-      );
+      final result = await SenderFactory.instance
+          .getSender(coinType)
+          .send(
+            SendParams(
+              coinType: coinType,
+              fromAddress: trModel.from1,
+              toAddress: trModel.to1,
+              amount: toEther(trModel.price.toString(), decimals).toDouble(),
+              decimals: decimals,
+              path: path,
+              sendMax: false,
+              isTest: widget.coinModel.isTest,
+              contractAddress: trModel.contract,
+              tokenDecimals: 0,
+              memo: trModel.message,
+              privateKey: widget.coinModel.privateKey,
+              chainConfig: widget.coinModel.coin,
+            ),
+          );
 
       if (!mounted) return;
       if (result.success) {

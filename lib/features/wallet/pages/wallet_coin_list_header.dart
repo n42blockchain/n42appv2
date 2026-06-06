@@ -4,7 +4,7 @@ import 'package:n42_wallet/features/wallet/pages/portfolio/portfolio_page.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_page_helpers.dart';
 import 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// 固定在顶部的代币列表标题栏：包含网络选择、排序、小额过滤。
 class WalletCoinListHeader extends StatelessWidget {
@@ -27,7 +27,8 @@ class WalletCoinListHeader extends StatelessWidget {
     if (waValue.walletInfo.networkIndex == -1) {
       return S.of(context).g_token_m_key_4;
     }
-    return waValue.coinModels[waValue.walletInfo.networkIndex].coin['name'] ?? '';
+    return waValue.coinModels[waValue.walletInfo.networkIndex].coin['name'] ??
+        '';
   }
 
   @override
@@ -45,8 +46,7 @@ class WalletCoinListHeader extends StatelessWidget {
             vertical: ScreenUtil().setWidth(18),
           ),
           decoration: BoxDecoration(
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.backGroundColor.name),
+            color: AppColorTokens.of(context).bgBase,
             borderRadius: BorderRadius.only(
               topRight: Radius.circular(ScreenUtil().setWidth(28)),
               topLeft: Radius.circular(ScreenUtil().setWidth(28)),
@@ -97,8 +97,7 @@ class _TopRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final su = ScreenUtil();
-    final blueColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainBlueColor.name);
+    final blueColor = AppColorTokens.of(context).brand;
 
     return Row(
       children: [
@@ -109,8 +108,7 @@ class _TopRow extends StatelessWidget {
             style: TextStyle(
               fontSize: su.setSp(32),
               fontWeight: FontWeight.w600,
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
+              color: AppColorTokens.of(context).textPrimary,
             ),
           ),
         ),
@@ -152,8 +150,7 @@ class _TopRow extends StatelessWidget {
               child: Icon(
                 Icons.donut_large_rounded,
                 size: su.setWidth(36),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemSubtitleTextColor.name),
+                color: AppColorTokens.of(context).textSubtitle,
               ),
             ),
           ),
@@ -273,8 +270,7 @@ class _SortButton extends StatelessWidget {
               Text(
                 label,
                 style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemSubtitleTextColor.name),
+                  color: AppColorTokens.of(context).textSubtitle,
                   fontSize: ScreenUtil().setSp(24),
                   fontWeight: FontWeight.w500,
                 ),
@@ -285,8 +281,7 @@ class _SortButton extends StatelessWidget {
                 height: ScreenUtil().setWidth(16),
                 child: Image.asset(
                   "assets/wallet/assets$sortValue.png",
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemSubtitleTextColor.name),
+                  color: AppColorTokens.of(context).textSubtitle,
                 ),
               ),
             ],
@@ -312,10 +307,8 @@ class _ThresholdButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final active = threshold > 0;
     final label = active ? '< \$${threshold.toInt()}' : '< \$';
-    final blueColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
-    final subColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
+    final blueColor = AppColorTokens.of(context).brand;
+    final subColor = AppColorTokens.of(context).textSubtitle;
 
     return GestureDetector(
       onTap: () {
@@ -329,7 +322,9 @@ class _ThresholdButton extends StatelessWidget {
           vertical: ScreenUtil().setWidth(6),
         ),
         decoration: BoxDecoration(
-          color: active ? blueColor.withValues(alpha: 0.12) : Colors.transparent,
+          color: active
+              ? blueColor.withValues(alpha: 0.12)
+              : Colors.transparent,
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
           border: active
               ? Border.all(color: blueColor.withValues(alpha: 0.25), width: 1)

@@ -30,7 +30,10 @@ class AptSender implements ChainSender {
     final aptApi = AptApi(isTest: params.isTest);
 
     // Get balance
-    final mm = await aptApi.getBalance(params.fromAddress, contract: params.contractAddress);
+    final mm = await aptApi.getBalance(
+      params.fromAddress,
+      contract: params.contractAddress,
+    );
     if (mm.error) return SendResult.fail(mm.data?.toString());
     final chainBalance = mm.data as BigInt;
     if (chainBalance == BigInt.zero) {
@@ -38,16 +41,21 @@ class AptSender implements ChainSender {
     }
 
     // Get gas price
-    final mmg = await _tokenViewApi.getGasPrice(
-      BlockchainType.Aptos.name,
-      coinType,
-      isTest: false,
-    ) ?? MessageModel.error();
+    final mmg =
+        await _tokenViewApi.getGasPrice(
+          BlockchainType.Aptos.name,
+          coinType,
+          isTest: false,
+        ) ??
+        MessageModel.error();
     if (mmg.error) return SendResult.fail(mmg.data?.toString());
     final gasPrice = mmg.data as BigInt;
     final totalGasPrice = gasPrice * BigInt.from(gas);
 
-    BigInt valuePrice = ethToWeiString(params.amount.toString(), params.decimals);
+    BigInt valuePrice = ethToWeiString(
+      params.amount.toString(),
+      params.decimals,
+    );
     double adjustedAmount = params.amount;
 
     if (!isContract) {
@@ -56,19 +64,25 @@ class AptSender implements ChainSender {
           return SendResult.fail(S.current.g_key_wallet_m5(coinType));
         }
         valuePrice = valuePrice - totalGasPrice;
-        adjustedAmount = toEther(valuePrice.toString(), params.decimals).toDouble();
+        adjustedAmount = toEther(
+          valuePrice.toString(),
+          params.decimals,
+        ).toDouble();
       }
-      if (valuePrice <= BigInt.zero || totalGasPrice + valuePrice > chainBalance) {
+      if (valuePrice <= BigInt.zero ||
+          totalGasPrice + valuePrice > chainBalance) {
         return SendResult.fail(S.current.g_key_wallet_m5(coinType));
       }
     }
 
     // Get account sequence and ledger timestamp
     final sequenceNumber = await aptApi.getAccountInfo(params.fromAddress);
-    if (sequenceNumber.error) return SendResult.fail(sequenceNumber.data?.toString());
+    if (sequenceNumber.error)
+      return SendResult.fail(sequenceNumber.data?.toString());
 
     final ledgerTimestamp = await aptApi.getServiceInfo();
-    if (ledgerTimestamp.error) return SendResult.fail(ledgerTimestamp.data?.toString());
+    if (ledgerTimestamp.error)
+      return SendResult.fail(ledgerTimestamp.data?.toString());
     final lt = (ledgerTimestamp.data as int) ~/ 1000000 + 60;
 
     final chainId = params.chainConfig?['baseInfo']?['chainId'] as int? ?? 1;
@@ -100,7 +114,10 @@ class AptSender implements ChainSender {
       );
     } else {
       signStr = await _trustdart.signTransaction(
-        coinType, params.path, signMap, pk: params.privateKey!,
+        coinType,
+        params.path,
+        signMap,
+        pk: params.privateKey!,
       );
     }
 
@@ -112,7 +129,9 @@ class AptSender implements ChainSender {
       coinType: coinType,
     );
     if (!sigResult.isValid) {
-      return SendResult.fail(sigResult.errorMessage ?? 'Signature validation failed');
+      return SendResult.fail(
+        sigResult.errorMessage ?? 'Signature validation failed',
+      );
     }
 
     final sendMm = await aptApi.sendTxHash(signStr);

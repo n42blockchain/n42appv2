@@ -60,12 +60,12 @@ class GasAlertConfig {
   }
 
   Map<String, dynamic> toJson() => {
-        'symbol': symbol,
-        'threshold': threshold,
-        'alertBelow': alertBelow,
-        'enabled': enabled,
-        'lastNotifiedMs': lastNotifiedMs,
-      };
+    'symbol': symbol,
+    'threshold': threshold,
+    'alertBelow': alertBelow,
+    'enabled': enabled,
+    'lastNotifiedMs': lastNotifiedMs,
+  };
 }
 
 /// Gas 价格提醒服务
@@ -91,7 +91,8 @@ class GasAlertService {
       if (raw == null || raw.isEmpty) return {};
       final map = jsonDecode(raw) as Map<String, dynamic>;
       return map.map(
-        (k, v) => MapEntry(k, GasAlertConfig.fromJson(v as Map<String, dynamic>)),
+        (k, v) =>
+            MapEntry(k, GasAlertConfig.fromJson(v as Map<String, dynamic>)),
       );
     } catch (e) {
       AppLogger.w('GasAlertService', 'loadAll error: $e');
@@ -154,8 +155,9 @@ class GasAlertService {
         }
 
         // 阈值触发检查
-        final triggered =
-            config.alertBelow ? price < config.threshold : price > config.threshold;
+        final triggered = config.alertBelow
+            ? price < config.threshold
+            : price > config.threshold;
         if (!triggered) continue;
 
         final networkName = networkNames[symbol] ?? symbol;

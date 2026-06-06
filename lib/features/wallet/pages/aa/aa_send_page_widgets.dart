@@ -8,18 +8,17 @@ part of 'aa_send_page.dart';
 mixin _AASendWidgetsMixin on _AASendLogicMixin {
   // ─── Theme helpers ──────────────────────────────────────────────────
 
-  Color _themeColor(String key) =>
-      AppThemeUtils.getColorByKey(context, key);
+  Color _themeColor(String key) => AppThemeUtils.getColorByKey(context, key);
 
   Color get _mainText => _themeColor(AppThemeKeys.mainTextColor.name);
   Color get _subText => _themeColor(AppThemeKeys.itemSubtitleTextColor.name);
   Color get _itemBg => _themeColor(AppThemeKeys.itemBgColor.name);
 
   TextStyle _sectionTitleStyle() => TextStyle(
-        fontSize: ScreenUtil().setSp(26),
-        fontWeight: FontWeight.w600,
-        color: _mainText,
-      );
+    fontSize: ScreenUtil().setSp(26),
+    fontWeight: FontWeight.w600,
+    color: _mainText,
+  );
 
   // ─── From Section ───────────────────────────────────────────────────
 
@@ -35,10 +34,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
         children: [
           Text(
             S.of(context).g_key_75,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
-              color: _subText,
-            ),
+            style: TextStyle(fontSize: ScreenUtil().setSp(24), color: _subText),
           ),
           SizedBox(height: ScreenUtil().setWidth(10)),
           Row(
@@ -48,8 +44,9 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
                 height: ScreenUtil().setWidth(44),
                 decoration: BoxDecoration(
                   color: const Color(0xFF5E97F6).withAlpha(25),
-                  borderRadius:
-                      BorderRadius.circular(ScreenUtil().setWidth(12)),
+                  borderRadius: BorderRadius.circular(
+                    ScreenUtil().setWidth(12),
+                  ),
                 ),
                 child: Icon(
                   Icons.account_balance_wallet,
@@ -88,8 +85,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
                 ),
                 decoration: BoxDecoration(
                   color: Colors.green.withAlpha(20),
-                  borderRadius:
-                      BorderRadius.circular(ScreenUtil().setWidth(8)),
+                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
                 ),
                 child: Text(
                   'AA',
@@ -140,8 +136,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
               ],
             ),
             border: OutlineInputBorder(
-              borderRadius:
-                  BorderRadius.circular(ScreenUtil().setWidth(12)),
+              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
             ),
           ),
         ),
@@ -159,7 +154,11 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Flexible(
-              child: Text(S.of(context).g_key_44, overflow: TextOverflow.ellipsis, style: _sectionTitleStyle()),
+              child: Text(
+                S.of(context).g_key_44,
+                overflow: TextOverflow.ellipsis,
+                style: _sectionTitleStyle(),
+              ),
             ),
             Flexible(
               child: Row(
@@ -193,14 +192,16 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
               child: TextField(
                 controller: amountController,
                 focusNode: amountFocusNode,
-                keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
                 onChanged: (_) => estimateGas(),
                 decoration: InputDecoration(
                   hintText: '0.0',
                   border: OutlineInputBorder(
-                    borderRadius:
-                        BorderRadius.circular(ScreenUtil().setWidth(12)),
+                    borderRadius: BorderRadius.circular(
+                      ScreenUtil().setWidth(12),
+                    ),
                   ),
                 ),
                 style: TextStyle(
@@ -217,8 +218,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
               ),
               decoration: BoxDecoration(
                 color: _itemBg,
-                borderRadius:
-                    BorderRadius.circular(ScreenUtil().setWidth(12)),
+                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
                 border: Border.all(color: _subText.withAlpha(30)),
               ),
               child: Row(
@@ -351,17 +351,15 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
     }
     return Text(
       '-',
-      style: TextStyle(
-        fontSize: ScreenUtil().setSp(26),
-        color: _subText,
-      ),
+      style: TextStyle(fontSize: ScreenUtil().setSp(26), color: _subText),
     );
   }
 
   // ─── Send Button ────────────────────────────────────────────────────
 
   Widget buildSendButton() {
-    final canSend = toController.text.isNotEmpty &&
+    final canSend =
+        toController.text.isNotEmpty &&
         amountController.text.isNotEmpty &&
         estimatedGas != null &&
         !isEstimating &&
@@ -372,11 +370,9 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
       style: ElevatedButton.styleFrom(
         backgroundColor: _themeColor(AppThemeKeys.mainBlueColor.name),
         foregroundColor: Colors.white,
-        padding:
-            EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(18)),
+        padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(18)),
         shape: RoundedRectangleBorder(
-          borderRadius:
-              BorderRadius.circular(ScreenUtil().setWidth(16)),
+          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
         ),
         disabledBackgroundColor: Colors.grey,
       ),

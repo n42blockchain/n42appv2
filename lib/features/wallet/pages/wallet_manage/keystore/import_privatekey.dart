@@ -184,10 +184,7 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                           child: Text(
                             S.of(context).g_key_209,
                             style: TextStyle(
-                              color: AppThemeUtils.getColorByKey(
-                                context,
-                                AppThemeKeys.mainTextColor.name,
-                              ),
+                              color: AppColorTokens.of(context).textPrimary,
                               fontWeight: FontWeight.bold,
                               fontSize: ScreenUtil().setSp(32),
                             ),
@@ -211,10 +208,7 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                             height: ScreenUtil().setWidth(60.0),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                              color: AppThemeUtils.getColorByKey(
-                                context,
-                                AppThemeKeys.mainBlueColor.name,
-                              ),
+                              color: AppColorTokens.of(context).brand,
                               borderRadius: BorderRadius.all(
                                 Radius.circular(ScreenUtil().setWidth(20.0)),
                               ),
@@ -257,10 +251,7 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                     Text(
                       S.of(context).g_key_17,
                       style: TextStyle(
-                        color: AppThemeUtils.getColorByKey(
-                          context,
-                          AppThemeKeys.mainTextColor.name,
-                        ),
+                        color: AppColorTokens.of(context).textPrimary,
                         fontWeight: FontWeight.bold,
                         fontSize: ScreenUtil().setSp(32),
                       ),
@@ -291,20 +282,14 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                                   selectChain['baseInfo']['name'],
                                   style: TextStyle(
                                     fontSize: ScreenUtil().setSp(30),
-                                    color: AppThemeUtils.getColorByKey(
-                                      context,
-                                      AppThemeKeys.itemTextColor.name,
-                                    ),
+                                    color: AppColorTokens.of(context).textItem,
                                   ),
                                 ),
                                 Text(
                                   selectChain['baseInfo']['miniName'],
                                   style: TextStyle(
                                     fontSize: ScreenUtil().setSp(30),
-                                    color: AppThemeUtils.getColorByKey(
-                                      context,
-                                      AppThemeKeys.itemTextColor.name,
-                                    ),
+                                    color: AppColorTokens.of(context).textItem,
                                   ),
                                 ),
                               ],
@@ -318,10 +303,7 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                             ),
                             child: Icon(
                               Icons.arrow_forward_ios,
-                              color: AppThemeUtils.getColorByKey(
-                                context,
-                                AppThemeKeys.itemSubtitleTextColor.name,
-                              ),
+                              color: AppColorTokens.of(context).textSubtitle,
                               size: ScreenUtil().setWidth(30),
                             ),
                           ),
@@ -346,10 +328,7 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                         padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
                         margin: EdgeInsets.only(top: ScreenUtil().setWidth(30)),
                         decoration: BoxDecoration(
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.errorBgColor.name,
-                          ),
+                          color: AppColorTokens.of(context).dangerBg,
                           borderRadius: BorderRadius.circular(
                             ScreenUtil().setWidth(8),
                           ),
@@ -357,10 +336,7 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                         child: Text(
                           errorMessage,
                           style: TextStyle(
-                            color: AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.errorTextColor.name,
-                            ),
+                            color: AppColorTokens.of(context).danger,
                             fontSize: ScreenUtil().setSp(26),
                           ),
                           textAlign: TextAlign.center,
@@ -386,10 +362,7 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                     padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
                     height: ScreenUtil().setWidth(148),
                     width: double.infinity,
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.backGroundColor.name,
-                    ),
+                    color: AppColorTokens.of(context).bgBase,
                     child: AppButton(
                       label: S.of(context).g_key_78,
                       loading: load == Load.loading,

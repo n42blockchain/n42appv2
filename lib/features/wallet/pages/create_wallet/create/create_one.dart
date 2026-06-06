@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/pages/create_wallet/create/create_two.dart';
 import 'package:n42_wallet/features/wallet/pages/create_wallet/create_finish.dart';
@@ -62,16 +61,13 @@ class _CreateOneState extends ConsumerState<CreateOne> {
 
   @override
   Widget build(BuildContext context) {
-    final activeColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
-    final inactiveColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name);
+    final activeColor = AppColorTokens.of(context).brand;
+    final inactiveColor = AppColorTokens.of(context).border;
     final spacing = SizedBox(width: ScreenUtil().setWidth(20.0));
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.backGroundColor.name),
+        backgroundColor: AppColorTokens.of(context).bgBase,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -93,7 +89,8 @@ class _CreateOneState extends ConsumerState<CreateOne> {
             Positioned.fill(
               child: SingleChildScrollView(
                 padding: EdgeInsets.symmetric(
-                    horizontal: ScreenUtil().setWidth(30.0)),
+                  horizontal: ScreenUtil().setWidth(30.0),
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -104,8 +101,7 @@ class _CreateOneState extends ConsumerState<CreateOne> {
                         S.of(context).g_key_wallet_c8,
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(40.0),
-                          color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.mainTextColor.name),
+                          color: AppColorTokens.of(context).textPrimary,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -125,13 +121,13 @@ class _CreateOneState extends ConsumerState<CreateOne> {
                       alignment: Alignment.center,
                       width: double.infinity,
                       margin: EdgeInsets.symmetric(
-                          horizontal: ScreenUtil().setWidth(60.0)),
+                        horizontal: ScreenUtil().setWidth(60.0),
+                      ),
                       child: Text(
                         S.of(context).g_key_wallet_c9,
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(32.0),
-                          color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.mainTextColor.name),
+                          color: AppColorTokens.of(context).textPrimary,
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -174,8 +170,7 @@ class _CreateOneState extends ConsumerState<CreateOne> {
                             top: ScreenUtil().setWidth(30.0),
                             bottom: ScreenUtil().setWidth(30.0),
                           ),
-                          color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.backGroundColor.name),
+                          color: AppColorTokens.of(context).bgBase,
                           child: AppButton(
                             label: S.of(context).g_key_wallet_c10,
                             onPressed: allChecked ? _onCreateTap : null,
@@ -225,8 +220,7 @@ class _CreateOneState extends ConsumerState<CreateOne> {
                 color: Colors.white,
               ),
             ),
-            checkedColor: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainBlueColor.name),
+            checkedColor: AppColorTokens.of(context).brand,
             animationDuration: const Duration(milliseconds: 50),
           ),
           SizedBox(width: ScreenUtil().setWidth(20.0)),
@@ -235,8 +229,7 @@ class _CreateOneState extends ConsumerState<CreateOne> {
               value,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(24.0),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemSubtitleTextColor.name),
+                color: AppColorTokens.of(context).textSubtitle,
               ),
             ),
           ),

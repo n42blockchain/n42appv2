@@ -12,7 +12,8 @@ extension _SwapAstHomeGasAndTx on _SwapAstHomeState {
     }
     gas = BigInt.from(getCoinGas(_payCoinType, contract: true));
 
-    final MessageModel mm = await _tokenViewApi.getGasPrice(
+    final MessageModel mm =
+        await _tokenViewApi.getGasPrice(
           _payBlockchainType,
           _payCoinType,
           isTest: false,
@@ -55,13 +56,11 @@ extension _SwapAstHomeGasAndTx on _SwapAstHomeState {
     }
 
     try {
-      final MessageModel ethMessage =
-          await _tokenViewApi.getGasEstimateEthV2(
+      final MessageModel ethMessage = await _tokenViewApi.getGasEstimateEthV2(
         payCoinModel!.address,
         youPay?.payCoinContract ?? "",
         gasPrice,
-        ethToWeiString(
-            payTextEditingController.text, youPay!.payCoinDecimal!),
+        ethToWeiString(payTextEditingController.text, youPay!.payCoinDecimal!),
         gas,
         _payCoinType,
         contract: youPay!.payCoinContract!,
@@ -95,8 +94,13 @@ extension _SwapAstHomeGasAndTx on _SwapAstHomeState {
   Future<bool> newOrder() async {
     if (load != Load.finish) return false;
     // Validate order amount before parsing
-    final double? orderAmount = double.tryParse(getTextEditingController.text.trim());
-    if (orderAmount == null || orderAmount <= 0 || orderAmount.isNaN || orderAmount.isInfinite) {
+    final double? orderAmount = double.tryParse(
+      getTextEditingController.text.trim(),
+    );
+    if (orderAmount == null ||
+        orderAmount <= 0 ||
+        orderAmount.isNaN ||
+        orderAmount.isInfinite) {
       errorMessage = "Invalid order amount";
       return false;
     }
@@ -132,8 +136,7 @@ extension _SwapAstHomeGasAndTx on _SwapAstHomeState {
     if (load != Load.finish) return;
     rebuild(() => load = Load.loading);
 
-    final MessageModel rOrderData =
-        await _swapAstApi.postNftOrAstCancelOrder(
+    final MessageModel rOrderData = await _swapAstApi.postNftOrAstCancelOrder(
       AppGlobals.userInfo?.uuid ?? "",
       orderId ?? 0,
     );
@@ -165,7 +168,10 @@ extension _SwapAstHomeGasAndTx on _SwapAstHomeState {
 
   Future<bool> postOrderTxHash(int oid, String txHash) async {
     final MessageModel rData = await _swapAstApi.postNftOrAstCommitPay(
-        AppGlobals.userInfo?.uuid ?? "", oid, txHash);
+      AppGlobals.userInfo?.uuid ?? "",
+      oid,
+      txHash,
+    );
     if (rData.error) {
       errorMessage = _swapStringValue(rData.data, fallback: 'Error');
       return false;
@@ -182,7 +188,10 @@ extension _SwapAstHomeGasAndTx on _SwapAstHomeState {
     // Validate pay amount before parsing
     final payText = payTextEditingController.text.trim();
     final double? payAmount = double.tryParse(payText);
-    if (payAmount == null || payAmount <= 0 || payAmount.isNaN || payAmount.isInfinite) {
+    if (payAmount == null ||
+        payAmount <= 0 ||
+        payAmount.isNaN ||
+        payAmount.isInfinite) {
       errorMessage = "Invalid payment amount";
       return null;
     }
@@ -201,20 +210,22 @@ extension _SwapAstHomeGasAndTx on _SwapAstHomeState {
     final decimals = (cm.coin['decimals'] as num?)?.toInt() ?? 18;
     final contractAddress = youPay?.payCoinContract ?? '';
 
-    final result = await SenderFactory.instance.getSender(_payCoinType).send(
-      SendParams(
-        coinType: _payCoinType,
-        fromAddress: cm.address.toString(),
-        toAddress: payAddr,
-        amount: payAmount,
-        decimals: decimals,
-        path: path,
-        isTest: false,
-        contractAddress: contractAddress,
-        tokenDecimals: contractAddress.isNotEmpty ? decimals : 0,
-        chainConfig: cm.coin,
-      ),
-    );
+    final result = await SenderFactory.instance
+        .getSender(_payCoinType)
+        .send(
+          SendParams(
+            coinType: _payCoinType,
+            fromAddress: cm.address.toString(),
+            toAddress: payAddr,
+            amount: payAmount,
+            decimals: decimals,
+            path: path,
+            isTest: false,
+            contractAddress: contractAddress,
+            tokenDecimals: contractAddress.isNotEmpty ? decimals : 0,
+            chainConfig: cm.coin,
+          ),
+        );
 
     if (!result.success) {
       errorMessage = _swapStringValue(result.error, fallback: 'Error');

@@ -1,5 +1,6 @@
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/wallet/api/dex_swap_api.dart';
 import 'package:n42_wallet/features/wallet/models/dex/dex_history_model.dart';
@@ -42,16 +43,17 @@ class _DexSwapHistoryState extends State<DexSwapHistory> {
           pageSize: 20,
           getData: (int page, int pageSize) async {
             final String uuid = AppGlobals.userInfo?.uuid ?? '';
-            final MessageModel res =
-                await _api.getHistory(uuid, page: page, size: pageSize);
+            final MessageModel res = await _api.getHistory(
+              uuid,
+              page: page,
+              size: pageSize,
+            );
             if (res.error) return [];
             return ((res.data as List?) ?? [])
-                .map((e) =>
-                    DexHistoryModel.fromJson(e as Map<String, dynamic>))
+                .map((e) => DexHistoryModel.fromJson(e as Map<String, dynamic>))
                 .toList();
           },
-          buildItem:
-              (BuildContext context, List<dynamic> results, int index) {
+          buildItem: (BuildContext context, List<dynamic> results, int index) {
             final DexHistoryModel item = results[index] as DexHistoryModel;
             final String timeStr = dformat.formatDate(
               DateTime.fromMillisecondsSinceEpoch(item.createdAt * 1000),
@@ -79,8 +81,7 @@ class _DexSwapHistoryState extends State<DexSwapHistory> {
 
             return Container(
               height: ScreenUtil().setWidth(100),
-              margin:
-                  EdgeInsets.only(bottom: ScreenUtil().setWidth(24)),
+              margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(24)),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -89,8 +90,7 @@ class _DexSwapHistoryState extends State<DexSwapHistory> {
                       Text(
                         '${item.tokenInSymbol} → ${item.tokenOutSymbol}',
                         style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(context,
-                              AppThemeKeys.mainTextColor.name),
+                          color: AppColorTokens.of(context).textPrimary,
                           fontSize: ScreenUtil().setSp(28),
                           fontWeight: FontWeight.w600,
                         ),
@@ -99,8 +99,7 @@ class _DexSwapHistoryState extends State<DexSwapHistory> {
                       Text(
                         '+${item.amountOut} ${item.tokenOutSymbol}',
                         style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(context,
-                              AppThemeKeys.mainTextColor.name),
+                          color: AppColorTokens.of(context).textPrimary,
                           fontSize: ScreenUtil().setSp(28),
                         ),
                       ),
@@ -111,8 +110,7 @@ class _DexSwapHistoryState extends State<DexSwapHistory> {
                       Text(
                         timeStr,
                         style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(context,
-                              AppThemeKeys.itemSubtitleTextColor.name),
+                          color: AppColorTokens.of(context).textSubtitle,
                           fontSize: ScreenUtil().setSp(24),
                         ),
                       ),
@@ -125,13 +123,13 @@ class _DexSwapHistoryState extends State<DexSwapHistory> {
                         decoration: BoxDecoration(
                           color: statusColor.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(
-                              ScreenUtil().setWidth(4)),
+                            ScreenUtil().setWidth(4),
+                          ),
                         ),
                         child: Text(
                           item.source,
                           style: TextStyle(
-                            color: AppThemeUtils.getColorByKey(context,
-                                AppThemeKeys.itemSubtitleTextColor.name),
+                            color: AppColorTokens.of(context).textSubtitle,
                             fontSize: ScreenUtil().setSp(20),
                           ),
                         ),

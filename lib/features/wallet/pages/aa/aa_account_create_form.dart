@@ -88,9 +88,7 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
                   color: isSelected ? blueColor : itemBg,
                   borderRadius: BorderRadius.circular(12.w),
                   border: Border.all(
-                    color: isSelected
-                        ? blueColor
-                        : subtitleColor.withAlpha(30),
+                    color: isSelected ? blueColor : subtitleColor.withAlpha(30),
                   ),
                 ),
                 child: Text(
@@ -129,7 +127,8 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
 
   Widget _buildTypeOption(SmartAccountType type) {
     final isSelected = selectedType == type;
-    final isAvailable = type == SmartAccountType.simpleAccount ||
+    final isAvailable =
+        type == SmartAccountType.simpleAccount ||
         type == SmartAccountType.safe ||
         type == SmartAccountType.biconomy;
     final typeColor = _getTypeColor(type);
@@ -139,8 +138,7 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
 
     return GestureDetector(
       onTap: isAvailable
-          ? () =>
-              (this as _AAAccountCreatePageState)._onTypeChanged(type)
+          ? () => (this as _AAAccountCreatePageState)._onTypeChanged(type)
           : null,
       child: Container(
         margin: EdgeInsets.only(bottom: 12.w),
@@ -164,11 +162,7 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
                   color: typeColor.withAlpha(25),
                   borderRadius: BorderRadius.circular(12.w),
                 ),
-                child: Icon(
-                  _getTypeIcon(type),
-                  size: 24.w,
-                  color: typeColor,
-                ),
+                child: Icon(_getTypeIcon(type), size: 24.w, color: typeColor),
               ),
               SizedBox(width: 14.w),
               Expanded(
@@ -210,10 +204,7 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
                     SizedBox(height: 4.w),
                     Text(
                       _getTypeDescription(type),
-                      style: TextStyle(
-                        fontSize: 22.sp,
-                        color: subtitleColor,
-                      ),
+                      style: TextStyle(fontSize: 22.sp, color: subtitleColor),
                     ),
                   ],
                 ),
@@ -298,8 +289,8 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
             ),
           ),
           TextButton(
-            onPressed: (this as _AAAccountCreatePageState)
-                ._calculatePreviewAddress,
+            onPressed:
+                (this as _AAAccountCreatePageState)._calculatePreviewAddress,
             child: Text(S.of(context).g_key_aa_retry),
           ),
         ],

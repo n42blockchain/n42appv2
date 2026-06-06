@@ -22,7 +22,11 @@ class CreateBtcTX2 {
         amounts: txInputAmount,
         sighash: signHash,
       );
-      final signature = fromPriv2.signBip340(txDigit, sighash: signHash, tweak: false);
+      final signature = fromPriv2.signBip340(
+        txDigit,
+        sighash: signHash,
+        tweak: false,
+      );
       signatures.add(TxWitnessInput(stack: [signature]));
     }
 
@@ -48,7 +52,9 @@ class CreateBtcTX2 {
         amount: txInputAmount[i],
       );
       final signature = fromPriv2.signECDSA(txDigit);
-      signatures.add(TxWitnessInput(stack: [signature, fromPriv2.getPublic().toHex()]));
+      signatures.add(
+        TxWitnessInput(stack: [signature, fromPriv2.getPublic().toHex()]),
+      );
     }
 
     tx = tx.copyWith(witnesses: signatures);
@@ -58,7 +64,10 @@ class CreateBtcTX2 {
   void createMessage(ECPrivate fromPriv2, String message, ECPublic pub) {
     final sign = fromPriv2.signMessage(message.codeUnits);
     AppLogger.d('CreateBtcTX2', 'sign: $sign');
-    final v = pub.verify(message: message.codeUnits, signature: hexToBytes(sign));
+    final v = pub.verify(
+      message: message.codeUnits,
+      signature: hexToBytes(sign),
+    );
     AppLogger.d('CreateBtcTX2', 'verify: $v');
   }
 
@@ -77,7 +86,8 @@ class CreateBtcTX2 {
       utxos: [
         UtxoWithAddress(
           utxo: BitcoinUtxo(
-            txHash: '47537040763fcc505821a1198656c1aa4053d8dd0edac84e6b9efe86e2673f17',
+            txHash:
+                '47537040763fcc505821a1198656c1aa4053d8dd0edac84e6b9efe86e2673f17',
             value: BtcUtils.toSatoshi('0.005'),
             vout: 1,
             scriptType: examplePublicKey.toAddress().type,

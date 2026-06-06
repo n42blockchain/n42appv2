@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 import 'market_coin_info_helpers.dart';
 import 'market_coin_info_widgets.dart';
@@ -19,13 +19,29 @@ Widget buildLinksSection(
 }) {
   final links = <LinkItem>[
     if (website.isNotEmpty)
-      (icon: 'assets/img/webshit1.png', label: S.of(context).g_key_m_9,  url: website),
+      (
+        icon: 'assets/img/webshit1.png',
+        label: S.of(context).g_key_m_9,
+        url: website,
+      ),
     if (facebook != null)
-      (icon: 'assets/img/facebook.png', label: S.of(context).g_key_m_10, url: facebook),
+      (
+        icon: 'assets/img/facebook.png',
+        label: S.of(context).g_key_m_10,
+        url: facebook,
+      ),
     if (twitter != null)
-      (icon: 'assets/img/twitter.png',  label: S.of(context).g_key_m_11, url: twitter),
+      (
+        icon: 'assets/img/twitter.png',
+        label: S.of(context).g_key_m_11,
+        url: twitter,
+      ),
     if (reddit != null)
-      (icon: 'assets/img/reddit.png',   label: S.of(context).g_key_m_14, url: reddit),
+      (
+        icon: 'assets/img/reddit.png',
+        label: S.of(context).g_key_m_14,
+        url: reddit,
+      ),
   ];
 
   if (links.isEmpty && browsers.isEmpty) return const SizedBox.shrink();
@@ -47,10 +63,8 @@ Widget buildLinksSection(
             vertical: ScreenUtil().setWidth(10),
           ),
           decoration: BoxDecoration(
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.itemBgColor.name),
-            borderRadius:
-                BorderRadius.circular(ScreenUtil().setWidth(16)),
+            color: AppColorTokens.of(context).bgSurface,
+            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
           ),
           child: Column(
             children: [
@@ -67,8 +81,10 @@ Widget buildLinksSection(
 }
 
 Widget _buildLinkRow(
-    BuildContext context, LinkItem item,
-    void Function(BuildContext, String) openUrl) {
+  BuildContext context,
+  LinkItem item,
+  void Function(BuildContext, String) openUrl,
+) {
   return InkWell(
     onTap: () => openUrl(context, item.url),
     child: SizedBox(
@@ -78,16 +94,14 @@ Widget _buildLinkRow(
           Image.asset(
             item.icon,
             width: ScreenUtil().setWidth(40),
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.itemSubtitleTextColor.name),
+            color: AppColorTokens.of(context).textSubtitle,
           ),
           SizedBox(width: ScreenUtil().setWidth(30)),
           Expanded(
             child: Text(
               item.label,
               style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
+                color: AppColorTokens.of(context).textPrimary,
                 fontSize: ScreenUtil().setSp(30),
               ),
             ),
@@ -95,8 +109,7 @@ Widget _buildLinkRow(
           Icon(
             Icons.arrow_forward_ios_sharp,
             size: ScreenUtil().setWidth(30),
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.itemSubtitleTextColor.name),
+            color: AppColorTokens.of(context).textSubtitle,
           ),
         ],
       ),
@@ -105,8 +118,10 @@ Widget _buildLinkRow(
 }
 
 Widget _buildBrowserRows(
-    BuildContext context, List<String> browsers,
-    void Function(BuildContext, String) openUrl) {
+  BuildContext context,
+  List<String> browsers,
+  void Function(BuildContext, String) openUrl,
+) {
   if (browsers.isEmpty) return const SizedBox.shrink();
   return Column(
     children: [
@@ -117,16 +132,14 @@ Widget _buildBrowserRows(
             Image.asset(
               'assets/img/website.png',
               width: ScreenUtil().setWidth(40),
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name),
+              color: AppColorTokens.of(context).textSubtitle,
             ),
             SizedBox(width: ScreenUtil().setWidth(30)),
             Expanded(
               child: Text(
                 S.of(context).g_key_m_15,
                 style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
+                  color: AppColorTokens.of(context).textPrimary,
                   fontSize: ScreenUtil().setSp(30),
                 ),
               ),
@@ -146,8 +159,7 @@ Widget _buildBrowserRows(
                   child: Text(
                     url,
                     style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainTextColor.name),
+                      color: AppColorTokens.of(context).textPrimary,
                       fontSize: ScreenUtil().setSp(26),
                     ),
                     maxLines: 2,
@@ -157,8 +169,7 @@ Widget _buildBrowserRows(
                 Icon(
                   Icons.arrow_forward_ios_sharp,
                   size: ScreenUtil().setWidth(30),
-                  color: AppThemeUtils.getColorByKey(context,
-                      AppThemeKeys.itemSubtitleTextColor.name),
+                  color: AppColorTokens.of(context).textSubtitle,
                 ),
               ],
             ),

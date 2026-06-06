@@ -42,14 +42,8 @@ class StandardMinerFeeWidget extends StatelessWidget {
         ? (chainModel?.coin['decimals'] ?? 0)
         : (coinModel.coin['decimals'] as num?)?.toInt() ?? 18;
 
-    var totalGasPriceColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainTextColor.name,
-    );
-    final errorColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.errorTextColor.name,
-    );
+    var totalGasPriceColor = AppColorTokens.of(context).textPrimary;
+    final errorColor = AppColorTokens.of(context).danger;
 
     String totalGasPriceStr;
     String gasPriceStr;
@@ -103,10 +97,7 @@ class StandardMinerFeeWidget extends StatelessWidget {
           _FeeRow(
             label: S.of(context).g_key_t_17,
             value: gasPriceStr,
-            valueColor: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainTextColor.name,
-            ),
+            valueColor: AppColorTokens.of(context).textPrimary,
           ),
           gasLimitWidget,
           _FeeRow(
@@ -163,10 +154,7 @@ class AdvancedMinerFeeWidget extends StatelessWidget {
                     S.of(context).g_key_29,
                     overflow: TextOverflow.ellipsis,
                     style: AppTypography.body.copyWith(
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.itemSubtitleTextColor.name,
-                      ),
+                      color: AppColorTokens.of(context).textSubtitle,
                     ),
                   ),
                 ),
@@ -207,10 +195,7 @@ class AdvancedMinerFeeWidget extends StatelessWidget {
                 Icon(
                   Icons.warning_amber,
                   size: ScreenUtil().setWidth(32.0),
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.errorTextColor.name,
-                  ),
+                  color: AppColorTokens.of(context).danger,
                 ),
                 SizedBox(width: AppSpacing.space2),
                 Expanded(
@@ -219,10 +204,7 @@ class AdvancedMinerFeeWidget extends StatelessWidget {
                         .of(context)
                         .g_key_t_29(chainModel?.coin['coinType'] ?? ''),
                     style: AppTypography.caption.copyWith(
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.errorTextColor.name,
-                      ),
+                      color: AppColorTokens.of(context).danger,
                     ),
                   ),
                 ),
@@ -264,10 +246,7 @@ class SendErrorWidget extends StatelessWidget {
       child: Text(
         message,
         style: AppTypography.body.copyWith(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.errorTextColor.name,
-          ),
+          color: AppColorTokens.of(context).danger,
         ),
       ),
     );
@@ -294,10 +273,7 @@ class _ChainBalanceRow extends StatelessWidget {
               S.of(context).g_key_29,
               overflow: TextOverflow.ellipsis,
               style: AppTypography.body.copyWith(
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemSubtitleTextColor.name,
-                ),
+                color: AppColorTokens.of(context).textSubtitle,
               ),
             ),
           ),
@@ -346,10 +322,7 @@ class _FeeRow extends StatelessWidget {
               label,
               overflow: TextOverflow.ellipsis,
               style: AppTypography.body.copyWith(
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemSubtitleTextColor.name,
-                ),
+                color: AppColorTokens.of(context).textSubtitle,
               ),
             ),
           ),
@@ -375,14 +348,8 @@ class _GasLimitRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final labelColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.itemSubtitleTextColor.name,
-    );
-    final valueColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainTextColor.name,
-    );
+    final labelColor = AppColorTokens.of(context).textSubtitle;
+    final valueColor = AppColorTokens.of(context).textPrimary;
 
     return Container(
       margin: EdgeInsets.only(top: AppSpacing.space8),

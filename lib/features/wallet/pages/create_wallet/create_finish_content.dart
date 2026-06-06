@@ -1,7 +1,6 @@
 part of 'create_finish.dart';
 
 mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
-
   // 以下字段由 _CreateFinishState 声明，mixin 通过 abstract getter 访问
   Load get load;
   bool get exportKeystore;
@@ -11,8 +10,7 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
   bool get _isImport =>
       widget.createMetod == "Import" || widget.createMetod == "PrivateKey";
 
-  Color _themeColor(String key) =>
-      AppThemeUtils.getColorByKey(context, key);
+  Color _themeColor(String key) => AppThemeUtils.getColorByKey(context, key);
   Widget _titleText(String text, {TextAlign? textAlign}) {
     return Container(
       alignment: Alignment.center,
@@ -146,7 +144,9 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
   }
 
   Widget _visibleLayer(bool visible, Widget child) {
-    return Positioned.fill(child: Visibility(visible: visible, child: child));
+    return Positioned.fill(
+      child: Visibility(visible: visible, child: child),
+    );
   }
 
   Widget _buildMainContent() {
@@ -204,10 +204,8 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
           ),
         _bottomButtonBar(
           buttonLabel: S.of(context).g_key_wallet_c17,
-          onPressed: () => Navigator.popUntil(
-            context,
-            ModalRoute.withName(pageName),
-          ),
+          onPressed: () =>
+              Navigator.popUntil(context, ModalRoute.withName(pageName)),
           linkButton: widget.createMetod == "Create"
               ? _bottomLinkButton(
                   S.of(context).g_key_wallet_c24,
@@ -332,13 +330,20 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [s.g_key_wallet_c27, s.g_key_wallet_c28, s.g_key_wallet_c29]
-                      .map((text) => Text(
-                            text,
-                            style: hintStyle,
-                            textAlign: TextAlign.center,
-                          ))
-                      .toList(),
+                  children:
+                      [
+                            s.g_key_wallet_c27,
+                            s.g_key_wallet_c28,
+                            s.g_key_wallet_c29,
+                          ]
+                          .map(
+                            (text) => Text(
+                              text,
+                              style: hintStyle,
+                              textAlign: TextAlign.center,
+                            ),
+                          )
+                          .toList(),
                 ),
               ),
               SizedBox(height: ScreenUtil().setWidth(248)),

@@ -1,4 +1,4 @@
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/browser/pages/browser_page.dart';
 import 'package:n42_wallet/features/wallet/utils/browser/browser_txhash.dart';
@@ -43,27 +43,26 @@ class TransactionDetailPage extends StatefulWidget {
 
 class _TransactionDetailPageState extends State<TransactionDetailPage> {
   TextStyle _labelStyle() => TextStyle(
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemSubtitleTextColor.name),
-        fontSize: ScreenUtil().setSp(30),
-      );
+    color: AppColorTokens.of(context).textSubtitle,
+    fontSize: ScreenUtil().setSp(30),
+  );
 
   EdgeInsets get _itemPadding => EdgeInsets.symmetric(
-        vertical: ScreenUtil().setWidth(16),
-        horizontal: ScreenUtil().setWidth(24),
-      );
+    vertical: ScreenUtil().setWidth(16),
+    horizontal: ScreenUtil().setWidth(24),
+  );
 
-  Widget _divider() => Divider(
-        height: ScreenUtil().setWidth(1),
-        endIndent: 0,
-        indent: 0,
-      );
+  Widget _divider() =>
+      Divider(height: ScreenUtil().setWidth(1), endIndent: 0, indent: 0);
 
   @override
   Widget build(BuildContext context) {
     final explorerUrl = (widget.coinType != null && widget.txHash != null)
-        ? getBrowserTxHash(widget.coinType!, widget.txHash!,
-            isTest: widget.isTest)
+        ? getBrowserTxHash(
+            widget.coinType!,
+            widget.txHash!,
+            isTest: widget.isTest,
+          )
         : '';
     final s = S.of(context);
     return Scaffold(
@@ -143,8 +142,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainTextColor.name),
+                    color: AppColorTokens.of(context).textPrimary,
                     fontSize: ScreenUtil().setSp(28),
                   ),
                 ),
@@ -161,8 +159,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                     height: ScreenUtil().setWidth(50),
                     child: Icon(
                       Icons.copy,
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainBlueColor.name),
+                      color: AppColorTokens.of(context).brand,
                     ),
                   ),
                 ),

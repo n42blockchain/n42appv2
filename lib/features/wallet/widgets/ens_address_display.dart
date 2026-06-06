@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/services/ens_service.dart';
 import 'package:n42_wallet/features/wallet/utils/validation/address_validator.dart';
 
@@ -152,7 +152,8 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
         return;
       }
       _markResolved(ensName: knownName);
-      if (widget.showAvatar) _fetchAvatar(knownName, requestId, address, coinType);
+      if (widget.showAvatar)
+        _fetchAvatar(knownName, requestId, address, coinType);
       return;
     }
 
@@ -229,21 +230,30 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
 
   @override
   Widget build(BuildContext context) {
-    final mainTextColor = widget.textColor ??
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final subtitleColor = widget.subtitleColor ??
-        AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemSubtitleTextColor.name);
+    final mainTextColor =
+        widget.textColor ?? AppColorTokens.of(context).textPrimary;
+    final subtitleColor =
+        widget.subtitleColor ?? AppColorTokens.of(context).textSubtitle;
     final fontSize = widget.fontSize ?? ScreenUtil().setSp(26);
     final avatarSize = widget.avatarSize ?? ScreenUtil().setWidth(36);
 
     switch (widget.style) {
       case EnsDisplayStyle.compact:
-        return _buildCompact(mainTextColor, subtitleColor, fontSize, avatarSize);
+        return _buildCompact(
+          mainTextColor,
+          subtitleColor,
+          fontSize,
+          avatarSize,
+        );
       case EnsDisplayStyle.full:
         return _buildFull(mainTextColor, subtitleColor, fontSize, avatarSize);
       case EnsDisplayStyle.detailed:
-        return _buildDetailed(mainTextColor, subtitleColor, fontSize, avatarSize);
+        return _buildDetailed(
+          mainTextColor,
+          subtitleColor,
+          fontSize,
+          avatarSize,
+        );
       case EnsDisplayStyle.addressOnly:
         return _buildAddressOnly(mainTextColor, fontSize);
     }
@@ -284,8 +294,9 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
                     style: TextStyle(
                       fontSize: fontSize,
                       color: _ensName != null ? textColor : subtitleColor,
-                      fontWeight:
-                          _ensName != null ? FontWeight.w600 : FontWeight.normal,
+                      fontWeight: _ensName != null
+                          ? FontWeight.w600
+                          : FontWeight.normal,
                     ),
                     maxLines: widget.maxLines,
                     overflow: TextOverflow.ellipsis,
@@ -377,13 +388,9 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
       child: Container(
         padding: EdgeInsets.all(ScreenUtil().setWidth(12)),
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemBgColor.name)
-              .withValues(alpha: 0.5),
+          color: AppColorTokens.of(context).bgSurface.withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-          border: Border.all(
-            color: subtitleColor.withValues(alpha: 0.2),
-          ),
+          border: Border.all(color: subtitleColor.withValues(alpha: 0.2)),
         ),
         child: Row(
           children: [
@@ -476,31 +483,30 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
   }
 
   Widget _buildAvatar(double size) {
-    final blueColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+    final blueColor = AppColorTokens.of(context).brand;
     final initial = _ensName?.isNotEmpty == true
         ? _ensName![0].toUpperCase()
         : (widget.address.length > 2 ? widget.address[2].toUpperCase() : '?');
     final radius = BorderRadius.circular(size / 2);
 
     Widget defaultAvatar() => Container(
-          width: size,
-          height: size,
-          decoration: BoxDecoration(
-            color: blueColor.withValues(alpha: 0.2),
-            borderRadius: radius,
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: blueColor.withValues(alpha: 0.2),
+        borderRadius: radius,
+      ),
+      child: Center(
+        child: Text(
+          initial,
+          style: TextStyle(
+            fontSize: size * 0.5,
+            fontWeight: FontWeight.bold,
+            color: blueColor,
           ),
-          child: Center(
-            child: Text(
-              initial,
-              style: TextStyle(
-                fontSize: size * 0.5,
-                fontWeight: FontWeight.bold,
-                color: blueColor,
-              ),
-            ),
-          ),
-        );
+        ),
+      ),
+    );
 
     if (_avatarUrl == null) return defaultAvatar();
 
@@ -523,7 +529,7 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
       child: CircularProgressIndicator(
         strokeWidth: 2,
         valueColor: AlwaysStoppedAnimation<Color>(
-          AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+          AppColorTokens.of(context).brand,
         ),
       ),
     );

@@ -29,9 +29,7 @@ class DeploymentStatusIndicator extends StatelessWidget {
       decoration: BoxDecoration(
         color: _getStatusColor().withAlpha(20),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
-        border: Border.all(
-          color: _getStatusColor().withAlpha(40),
-        ),
+        border: Border.all(color: _getStatusColor().withAlpha(40)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

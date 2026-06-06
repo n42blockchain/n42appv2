@@ -5,7 +5,6 @@ import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/transaction_providers.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/sqlite/app_database.dart';
@@ -26,6 +25,7 @@ import 'package:n42_wallet/features/wallet/utils/transaction/coin_gas.dart';
 import 'package:n42_wallet/features/wallet/widgets/non_evm_fee_selector.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/widgets/text_field_widget.dart';
 
 part 'wallet_chain_send_sol_logic.dart';

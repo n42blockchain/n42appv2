@@ -22,11 +22,18 @@ class DotSender implements ChainSender {
   @override
   Future<SendResult> send(SendParams params) async {
     final coinType = params.coinType.toUpperCase();
-    final gas = getCoinGas(coinType, contract: params.contractAddress.isNotEmpty);
+    final gas = getCoinGas(
+      coinType,
+      contract: params.contractAddress.isNotEmpty,
+    );
     final dotApi = DotApi();
 
     // Get balance
-    final mm = await dotApi.getTokens(params.fromAddress, coinType, isTest: false);
+    final mm = await dotApi.getTokens(
+      params.fromAddress,
+      coinType,
+      isTest: false,
+    );
     if (mm.error) return SendResult.fail(mm.data?.toString());
     final chainBalance = mm.data as BigInt;
     if (chainBalance == BigInt.zero) {
@@ -37,7 +44,10 @@ class DotSender implements ChainSender {
     final gasPrice = BigInt.from(10000000); // 0.01 DOT in planck
     final totalGasPrice = gasPrice * BigInt.from(gas);
 
-    BigInt valuePrice = ethToWeiString(params.amount.toString(), params.decimals);
+    BigInt valuePrice = ethToWeiString(
+      params.amount.toString(),
+      params.decimals,
+    );
     double adjustedAmount = params.amount;
 
     if (valuePrice == chainBalance && params.sendMax) {
@@ -45,21 +55,34 @@ class DotSender implements ChainSender {
         return SendResult.fail(S.current.g_key_wallet_m5(coinType));
       }
       valuePrice = valuePrice - totalGasPrice;
-      adjustedAmount = toEther(valuePrice.toString(), params.decimals).toDouble();
+      adjustedAmount = toEther(
+        valuePrice.toString(),
+        params.decimals,
+      ).toDouble();
     }
-    if (valuePrice <= BigInt.zero || totalGasPrice + valuePrice > chainBalance) {
+    if (valuePrice <= BigInt.zero ||
+        totalGasPrice + valuePrice > chainBalance) {
       return SendResult.fail(S.current.g_key_wallet_m5(coinType));
     }
 
     // Get chain data
-    final genesisHash = await dotApi.getGenesisHash(index: 0, isTest: params.isTest);
+    final genesisHash = await dotApi.getGenesisHash(
+      index: 0,
+      isTest: params.isTest,
+    );
     if (genesisHash.error) return SendResult.fail(genesisHash.data?.toString());
 
-    final nonce = await dotApi.getNonce(params.fromAddress, isTest: params.isTest);
+    final nonce = await dotApi.getNonce(
+      params.fromAddress,
+      isTest: params.isTest,
+    );
     if (nonce.error) return SendResult.fail(nonce.data?.toString());
 
-    final runtimeVersion = await dotApi.getRuntimeVersion(isTest: params.isTest);
-    if (runtimeVersion.error) return SendResult.fail(runtimeVersion.data?.toString());
+    final runtimeVersion = await dotApi.getRuntimeVersion(
+      isTest: params.isTest,
+    );
+    if (runtimeVersion.error)
+      return SendResult.fail(runtimeVersion.data?.toString());
 
     final blockHash = await dotApi.getGenesisHash(isTest: params.isTest);
     if (blockHash.error) return SendResult.fail(blockHash.data?.toString());
@@ -73,9 +96,13 @@ class DotSender implements ChainSender {
       'genesisHash': genesisHash.data,
       'blockHash': blockHash.data,
       'nonce': nonce.data,
-      'specVersion': (runtimeVersion.data as Map<String, dynamic>)['specVersion'],
-      'transactionVersion': (runtimeVersion.data as Map<String, dynamic>)['transactionVersion'],
-      'blockNumber': _dataUtils.hexToBigInt((blockNumber.data as Map<String, dynamic>)['number']).toInt(),
+      'specVersion':
+          (runtimeVersion.data as Map<String, dynamic>)['specVersion'],
+      'transactionVersion':
+          (runtimeVersion.data as Map<String, dynamic>)['transactionVersion'],
+      'blockNumber': _dataUtils
+          .hexToBigInt((blockNumber.data as Map<String, dynamic>)['number'])
+          .toInt(),
     };
 
     String signStr;
@@ -91,7 +118,10 @@ class DotSender implements ChainSender {
       );
     } else {
       signStr = await _trustdart.signTransaction(
-        coinType, params.path, signMap, pk: params.privateKey!,
+        coinType,
+        params.path,
+        signMap,
+        pk: params.privateKey!,
       );
     }
 

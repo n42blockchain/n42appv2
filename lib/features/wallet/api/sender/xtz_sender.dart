@@ -27,12 +27,14 @@ class XtzSender implements ChainSender {
     final xtzApi = XtzApi();
 
     // Get balance
-    final mmb = await _tokenViewApi.getBalance(
-      BlockchainType.Tezos.name,
-      CoinType.XTZ.name,
-      params.fromAddress,
-      isTest: false,
-    ) ?? MessageModel.error();
+    final mmb =
+        await _tokenViewApi.getBalance(
+          BlockchainType.Tezos.name,
+          CoinType.XTZ.name,
+          params.fromAddress,
+          isTest: false,
+        ) ??
+        MessageModel.error();
     if (mmb.error) return SendResult.fail(mmb.data?.toString());
     final chainBalance = mmb.data as BigInt;
     if (chainBalance == BigInt.zero) {
@@ -40,17 +42,22 @@ class XtzSender implements ChainSender {
     }
 
     // Get gas price
-    final mmg = await _tokenViewApi.getGasPrice(
-      BlockchainType.Tezos.name,
-      CoinType.XTZ.name,
-      isTest: false,
-    ) ?? MessageModel.error();
+    final mmg =
+        await _tokenViewApi.getGasPrice(
+          BlockchainType.Tezos.name,
+          CoinType.XTZ.name,
+          isTest: false,
+        ) ??
+        MessageModel.error();
     if (mmg.error) return SendResult.fail(mmg.data?.toString());
     final gasPrice = mmg.data as BigInt;
     final gas = getCoinGas(CoinType.XTZ.name, contract: false);
     final totalGasPrice = gasPrice * BigInt.from(gas);
 
-    BigInt valuePrice = ethToWeiString(params.amount.toString(), params.decimals);
+    BigInt valuePrice = ethToWeiString(
+      params.amount.toString(),
+      params.decimals,
+    );
     double adjustedAmount = params.amount;
 
     if (valuePrice == chainBalance && params.sendMax) {
@@ -58,20 +65,32 @@ class XtzSender implements ChainSender {
         return SendResult.fail(S.current.g_key_wallet_m5('XTZ'));
       }
       valuePrice = valuePrice - totalGasPrice;
-      adjustedAmount = toEther(valuePrice.toString(), params.decimals).toDouble();
+      adjustedAmount = toEther(
+        valuePrice.toString(),
+        params.decimals,
+      ).toDouble();
     }
-    if (valuePrice <= BigInt.zero || totalGasPrice + valuePrice > chainBalance) {
+    if (valuePrice <= BigInt.zero ||
+        totalGasPrice + valuePrice > chainBalance) {
       return SendResult.fail(S.current.g_key_wallet_m5('XTZ'));
     }
 
     // Get counter and branch
-    final mmCounter = await xtzApi.getCounterXtz(params.fromAddress, params.isTest);
+    final mmCounter = await xtzApi.getCounterXtz(
+      params.fromAddress,
+      params.isTest,
+    );
     if (mmCounter.error) return SendResult.fail(mmCounter.data?.toString());
 
     final mmBranch = await xtzApi.getBranchXgz(params.isTest);
     if (mmBranch.error) return SendResult.fail(mmBranch.data?.toString());
 
-    final mmReveal = await xtzApi.getBalanceXtz(params.fromAddress, '', 'revealed', params.isTest);
+    final mmReveal = await xtzApi.getBalanceXtz(
+      params.fromAddress,
+      '',
+      'revealed',
+      params.isTest,
+    );
     if (mmReveal.error) return SendResult.fail(mmReveal.data?.toString());
 
     final signMap = <String, dynamic>{
@@ -107,7 +126,9 @@ class XtzSender implements ChainSender {
       coinType: CoinType.XTZ.name,
     );
     if (!sigResult.isValid) {
-      return SendResult.fail(sigResult.errorMessage ?? 'Signature validation failed');
+      return SendResult.fail(
+        sigResult.errorMessage ?? 'Signature validation failed',
+      );
     }
 
     final sendMm = await xtzApi.sendTxXtz(signStr, params.isTest);

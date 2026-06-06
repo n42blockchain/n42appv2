@@ -15,6 +15,7 @@ import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/widgets/sheet_bottom.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 export 'wallet_network_sheet.dart' show showNetworkSheet;
 
@@ -34,10 +35,7 @@ void showAddressSheet(
         _AddressSheetHeader(),
         Divider(
           height: ScreenUtil().setWidth(1),
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.dividerColor.name,
-          ),
+          color: AppColorTokens.of(context).border,
         ),
         _WalletAddressList(walletValue: walletValue, ref: ref),
         CreateWalletButton(),
@@ -61,10 +59,7 @@ class _AddressSheetHeader extends StatelessWidget {
             child: Text(
               S.of(context).g_key_13,
               style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainTextColor.name,
-                ),
+                color: AppColorTokens.of(context).textPrimary,
                 fontSize: ScreenUtil().setSp(36.0),
                 fontWeight: FontWeight.bold,
               ),
@@ -82,10 +77,7 @@ class _AddressSheetHeader extends StatelessWidget {
             },
             child: Icon(
               Icons.settings,
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainBlueColor.name,
-              ),
+              color: AppColorTokens.of(context).brand,
             ),
           ),
         ],
@@ -285,10 +277,7 @@ class _AddTokenMenuItem extends StatelessWidget {
         child: Text(
           label,
           style: TextStyle(
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainBlueColor.name,
-            ),
+            color: AppColorTokens.of(context).brand,
             fontSize: ScreenUtil().setSp(32),
           ),
         ),
@@ -349,10 +338,7 @@ class BackupReminderBanner extends StatelessWidget {
         horizontal: ScreenUtil().setWidth(30.0),
       ),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.itemBgColor.name,
-        ),
+        color: AppColorTokens.of(context).bgSurface,
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16.0)),
       ),
       child: Column(
@@ -365,10 +351,7 @@ class BackupReminderBanner extends StatelessWidget {
             child: Text(
               S.of(context).g_key_wallet_c35,
               style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.errorTextColor.name,
-                ),
+                color: AppColorTokens.of(context).danger,
                 fontSize: ScreenUtil().setSp(28),
               ),
             ),
@@ -396,15 +379,9 @@ class BackupReminderBanner extends StatelessWidget {
                 S.of(context).g_key_wallet_c36,
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(30),
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainBlueColor.name,
-                  ),
+                  color: AppColorTokens.of(context).brand,
                   decoration: TextDecoration.underline,
-                  decorationColor: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainBlueColor.name,
-                  ),
+                  decorationColor: AppColorTokens.of(context).brand,
                 ),
               ),
             ),
@@ -427,20 +404,12 @@ class AddTokenFloatingIcon extends StatelessWidget {
         borderRadius: BorderRadius.all(
           Radius.circular(ScreenUtil().setWidth(50.0)),
         ),
-        border: Border.all(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.mainBlueColor.name,
-          ),
-        ),
+        border: Border.all(color: AppColorTokens.of(context).brand),
       ),
       alignment: Alignment.center,
       child: Icon(
         Icons.add,
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.mainBlueColor.name,
-        ),
+        color: AppColorTokens.of(context).brand,
         size: ScreenUtil().setWidth(38.0),
       ),
     );

@@ -45,10 +45,7 @@ class SimpleAccountHelper {
   /// Calculate the counterfactual address for a SimpleAccount
   ///
   /// This uses the CREATE2 formula with the factory's init code.
-  String calculateAddress({
-    required String owner,
-    required BigInt salt,
-  }) {
+  String calculateAddress({required String owner, required BigInt salt}) {
     // The address is calculated as:
     // CREATE2(factory, salt, keccak256(initCode))
     // where initCode = proxy creation code + implementation address + owner
@@ -83,10 +80,7 @@ class SimpleAccountHelper {
   }
 
   /// Get the init code for first-time deployment
-  Uint8List getInitCode({
-    required String owner,
-    required BigInt salt,
-  }) {
+  Uint8List getInitCode({required String owner, required BigInt salt}) {
     return CalldataBuilder.buildSimpleAccountInitCode(
       factoryAddress: factoryAddress,
       owner: owner,
@@ -167,7 +161,9 @@ class SimpleAccountHelper {
 
   Uint8List _addressToBytes32(String address) {
     final bytes = Uint8List(32);
-    final addrBytes = hexToBytes(address.replaceFirst('0x', '').padLeft(40, '0'));
+    final addrBytes = hexToBytes(
+      address.replaceFirst('0x', '').padLeft(40, '0'),
+    );
     bytes.setAll(12, addrBytes);
     return bytes;
   }

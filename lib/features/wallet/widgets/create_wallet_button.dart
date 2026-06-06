@@ -6,7 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/pages/create_wallet/create_mpc_wallet.dart';
 import 'package:n42_wallet/features/wallet/pages/create_wallet/import/import_cloud_backup.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_manage/add_watch_wallet_page.dart';
@@ -33,10 +33,10 @@ class _CreateWalletButtonState extends State<CreateWalletButton> {
 
   @override
   Widget build(BuildContext context) {
-    final blueColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
-    final mainText = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final subtitleText = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
-    final dividerColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name);
+    final blueColor = AppColorTokens.of(context).brand;
+    final mainText = AppColorTokens.of(context).textPrimary;
+    final subtitleText = AppColorTokens.of(context).textSubtitle;
+    final dividerColor = AppColorTokens.of(context).border;
     final s = S.of(context);
 
     final fullDivider = Divider(
@@ -78,9 +78,8 @@ class _CreateWalletButtonState extends State<CreateWalletButton> {
           subtitle: s.g_key_wallet_c33,
           blueColor: blueColor,
           subtitleColor: subtitleText,
-          onTap: () => _navigateAndCallback(
-            Navigator.pushNamed(context, '/CreateOne'),
-          ),
+          onTap: () =>
+              _navigateAndCallback(Navigator.pushNamed(context, '/CreateOne')),
         ),
         indentedDivider,
 
@@ -92,9 +91,9 @@ class _CreateWalletButtonState extends State<CreateWalletButton> {
           blueColor: blueColor,
           subtitleColor: subtitleText,
           onTap: () => _navigateAndCallback(
-            Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const CreateMpcWallet()),
-            ),
+            Navigator.of(
+              context,
+            ).push(MaterialPageRoute(builder: (_) => const CreateMpcWallet())),
           ),
         ),
         indentedDivider,
@@ -106,9 +105,8 @@ class _CreateWalletButtonState extends State<CreateWalletButton> {
           subtitle: s.w_key_8,
           blueColor: blueColor,
           subtitleColor: subtitleText,
-          onTap: () => _navigateAndCallback(
-            Navigator.pushNamed(context, '/ImportOne'),
-          ),
+          onTap: () =>
+              _navigateAndCallback(Navigator.pushNamed(context, '/ImportOne')),
         ),
         indentedDivider,
 
@@ -120,9 +118,9 @@ class _CreateWalletButtonState extends State<CreateWalletButton> {
           blueColor: blueColor,
           subtitleColor: subtitleText,
           onTap: () => _navigateAndCallback(
-            Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => ImportKeystore()),
-            ),
+            Navigator.of(
+              context,
+            ).push(MaterialPageRoute(builder: (_) => ImportKeystore())),
           ),
         ),
         indentedDivider,
@@ -190,11 +188,7 @@ class _CreateWalletButtonState extends State<CreateWalletButton> {
         ),
         child: Row(
           children: [
-            Icon(
-              icon,
-              color: blueColor,
-              size: ScreenUtil().setWidth(50),
-            ),
+            Icon(icon, color: blueColor, size: ScreenUtil().setWidth(50)),
             SizedBox(width: ScreenUtil().setWidth(20)),
             Expanded(
               child: Column(

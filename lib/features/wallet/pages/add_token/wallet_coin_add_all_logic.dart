@@ -39,7 +39,10 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
   }
 
   /// 添加主链币。[showList] 控制是否显示在列表中。
-  Future<void> addCoin(Map<String, dynamic> chainMap, {bool showList = true}) async {
+  Future<void> addCoin(
+    Map<String, dynamic> chainMap, {
+    bool showList = true,
+  }) async {
     try {
       updateView(() => chainMap['edit'] = true);
       Map<String, dynamic>? chainInfoMap =
@@ -51,7 +54,8 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
       } else {
         final wap = ref.read(wapBridgeProvider);
         chainInfoMap['showList'] = showList;
-        addSymbol = '$addSymbol,${chainMap['coin_name'].toString().toLowerCase()}';
+        addSymbol =
+            '$addSymbol,${chainMap['coin_name'].toString().toLowerCase()}';
         await wap.addWalletChain(chainInfoMap);
         if (!mounted) return;
         chains = wap.walletMap;
@@ -76,7 +80,9 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
       Map<String, dynamic>? chain = chains![symbolStr];
       if (chain == null) {
         final cIndex = coinlist.firstWhere(
-          (e) => e['contract'] == "" && e['coin_name'].toString().toUpperCase() == symbolStr,
+          (e) =>
+              e['contract'] == "" &&
+              e['coin_name'].toString().toUpperCase() == symbolStr,
           orElse: () => null,
         );
         if (cIndex != null) await addCoin(cIndex, showList: false);
@@ -119,13 +125,18 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
       final wap = ref.read(wapBridgeProvider);
       final walletMapKeys = wap.walletMap.keys.toList();
       final removeKey = chainMap['coin_name'].toString().toUpperCase();
-      final keyIndex = walletMapKeys.indexWhere((k) => k.toUpperCase() == removeKey);
+      final keyIndex = walletMapKeys.indexWhere(
+        (k) => k.toUpperCase() == removeKey,
+      );
 
       if (keyIndex != -1) {
         final unit = (chainMap['unit'] != "")
             ? chainMap['unit'].toString().toLowerCase()
             : chainMap['coin_name'].toString().toLowerCase();
-        addSymbol = addSymbol.replaceFirst(',${chainMap['coin_name'].toString()}', '');
+        addSymbol = addSymbol.replaceFirst(
+          ',${chainMap['coin_name'].toString()}',
+          '',
+        );
         wap.removeWalletChain(walletMapKeys[keyIndex], unit);
         chainMap['isAdd'] = false;
       } else {
@@ -205,7 +216,9 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
 
   void scanQR() async {
     String? scanValue = await Navigator.push(
-        context, MaterialPageRoute(builder: (context) => ScanPage()));
+      context,
+      MaterialPageRoute(builder: (context) => ScanPage()),
+    );
     if (!mounted || scanValue == null) return;
     if (scanValue.isNotEmpty) {
       tokenEditingController.text = scanValue;
@@ -326,11 +339,12 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
       updateView(() => load = Load.finish);
       return;
     }
-    final chain =
-        (chainsToken[cKeys[networkIndexToken]] as Map?)?.cast<String, dynamic>();
+    final chain = (chainsToken[cKeys[networkIndexToken]] as Map?)
+        ?.cast<String, dynamic>();
     final baseInfo = (chain?['baseInfo'] as Map?)?.cast<String, dynamic>();
-    final symbolStr =
-        (baseInfo?['miniName'] ?? baseInfo?['coinType'] ?? '').toString().toUpperCase();
+    final symbolStr = (baseInfo?['miniName'] ?? baseInfo?['coinType'] ?? '')
+        .toString()
+        .toUpperCase();
     if (chain == null || baseInfo == null || symbolStr.isEmpty) {
       ToastUtils.show('Invalid chain configuration');
       updateView(() => load = Load.finish);
@@ -338,10 +352,12 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
     }
 
     // 检查 coinlist 中是否已存在
-    final cIndex = coinlist.indexWhere((e) =>
-        e['contract'] != "" &&
-        e['coin_name'].toString().toUpperCase() == symbolStr &&
-        e['contract'].toString().toLowerCase() == tokenAddress.toLowerCase());
+    final cIndex = coinlist.indexWhere(
+      (e) =>
+          e['contract'] != "" &&
+          e['coin_name'].toString().toUpperCase() == symbolStr &&
+          e['contract'].toString().toLowerCase() == tokenAddress.toLowerCase(),
+    );
     if (cIndex != -1) {
       if (coinlist[cIndex]['isAdd']) {
         ToastUtils.show("Already exists");
@@ -397,8 +413,11 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
         return;
       }
       addSymbol = addSymbol.replaceFirst(',${coinMap['miniName']}', '');
-      wap.removeWalletChainToken(coinMap,
-          symbol: coinMap['coinType'], miniName: coinMap['miniName']);
+      wap.removeWalletChainToken(
+        coinMap,
+        symbol: coinMap['coinType'],
+        miniName: coinMap['miniName'],
+      );
       updateView(() => coinMap['edit'] = false);
       init();
     } catch (e) {
@@ -412,14 +431,29 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
   Future<bool> checkTokenInput() async {
     if (!await addressCheck(tokenEditingController.text)) return false;
     final symbol = symbolEditingController.text;
-    if (symbol.isEmpty) { symbolErrorMessage = S.current.g_key_41; return false; }
-    if (symbol.length > 10) { symbolErrorMessage = S.current.g_token_m_key_1(10); return false; }
+    if (symbol.isEmpty) {
+      symbolErrorMessage = S.current.g_key_41;
+      return false;
+    }
+    if (symbol.length > 10) {
+      symbolErrorMessage = S.current.g_token_m_key_1(10);
+      return false;
+    }
     symbolErrorMessage = "";
     final decimals = decimalEditingController.text;
-    if (decimals.isEmpty) { decimalErrorMessage = S.current.g_key_41; return false; }
-    if (!regular.regularNums(decimals)) { decimalErrorMessage = S.current.g_token_m_key_2; return false; }
+    if (decimals.isEmpty) {
+      decimalErrorMessage = S.current.g_key_41;
+      return false;
+    }
+    if (!regular.regularNums(decimals)) {
+      decimalErrorMessage = S.current.g_token_m_key_2;
+      return false;
+    }
     final decimalsInt = int.parse(decimals);
-    if (decimalsInt < 0 || decimalsInt > 18) { decimalErrorMessage = S.current.g_token_m_key_2; return false; }
+    if (decimalsInt < 0 || decimalsInt > 18) {
+      decimalErrorMessage = S.current.g_token_m_key_2;
+      return false;
+    }
     decimalErrorMessage = "";
     return true;
   }
@@ -439,8 +473,10 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
 
   /// 深拷贝 chain baseInfo 并设置 token 公共默认值。
   Map<String, dynamic> _cloneBaseInfo(Map<String, dynamic> chain) {
-    final baseInfo = (chain['baseInfo'] as Map?)?.cast<String, dynamic>() ?? const {};
-    final baseToken = json.decode(json.encode(baseInfo)) as Map<String, dynamic>;
+    final baseInfo =
+        (chain['baseInfo'] as Map?)?.cast<String, dynamic>() ?? const {};
+    final baseToken =
+        json.decode(json.encode(baseInfo)) as Map<String, dynamic>;
     baseToken['isContract'] = true;
     baseToken['contract_test'] = "";
     baseToken['balance'] = "0";

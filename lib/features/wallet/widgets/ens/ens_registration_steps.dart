@@ -6,7 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// ENS 注册步骤指示器
 ///
@@ -18,17 +18,14 @@ class EnsRegistrationSteps extends StatelessWidget {
   /// 当前步骤: 0=初始, 1=提交中, 2=等待中, 3=注册中, 4=完成, -1=失败
   final int currentStep;
 
-  const EnsRegistrationSteps({
-    super.key,
-    required this.currentStep,
-  });
+  const EnsRegistrationSteps({super.key, required this.currentStep});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: AppColorTokens.of(context).bgSurface,
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
       ),
       child: Column(
@@ -53,7 +50,9 @@ class EnsRegistrationSteps extends StatelessWidget {
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(22),
                     color: _getStepColor(context, 1),
-                    fontWeight: currentStep == 1 ? FontWeight.w600 : FontWeight.normal,
+                    fontWeight: currentStep == 1
+                        ? FontWeight.w600
+                        : FontWeight.normal,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -64,7 +63,9 @@ class EnsRegistrationSteps extends StatelessWidget {
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(22),
                     color: _getStepColor(context, 2),
-                    fontWeight: currentStep == 2 ? FontWeight.w600 : FontWeight.normal,
+                    fontWeight: currentStep == 2
+                        ? FontWeight.w600
+                        : FontWeight.normal,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -75,7 +76,9 @@ class EnsRegistrationSteps extends StatelessWidget {
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(22),
                     color: _getStepColor(context, 3),
-                    fontWeight: currentStep == 3 ? FontWeight.w600 : FontWeight.normal,
+                    fontWeight: currentStep == 3
+                        ? FontWeight.w600
+                        : FontWeight.normal,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -105,20 +108,11 @@ class EnsRegistrationSteps extends StatelessWidget {
       fgColor = Colors.white;
       icon = Icons.check;
     } else if (isActive) {
-      bgColor = AppThemeUtils.getColorByKey(
-        context,
-        AppThemeKeys.mainBlueColor.name,
-      );
+      bgColor = AppColorTokens.of(context).brand;
       fgColor = Colors.white;
     } else {
-      bgColor = AppThemeUtils.getColorByKey(
-        context,
-        AppThemeKeys.itemSubtitleTextColor.name,
-      ).withAlpha(30);
-      fgColor = AppThemeUtils.getColorByKey(
-        context,
-        AppThemeKeys.itemSubtitleTextColor.name,
-      );
+      bgColor = AppColorTokens.of(context).textSubtitle.withAlpha(30);
+      fgColor = AppColorTokens.of(context).textSubtitle;
     }
 
     return Expanded(
@@ -164,10 +158,7 @@ class EnsRegistrationSteps extends StatelessWidget {
         decoration: BoxDecoration(
           color: isActive
               ? Colors.green
-              : AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemSubtitleTextColor.name,
-                ).withAlpha(30),
+              : AppColorTokens.of(context).textSubtitle.withAlpha(30),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(2)),
         ),
       ),
@@ -213,17 +204,11 @@ class EnsRegistrationSteps extends StatelessWidget {
       return Colors.green;
     }
     if (_isStepActive(step)) {
-      return AppThemeUtils.getColorByKey(
-        context,
-        AppThemeKeys.mainBlueColor.name,
-      );
+      return AppColorTokens.of(context).brand;
     }
     if (currentStep == -1 && step == _getFailedStep()) {
       return Colors.red;
     }
-    return AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.itemSubtitleTextColor.name,
-    );
+    return AppColorTokens.of(context).textSubtitle;
   }
 }

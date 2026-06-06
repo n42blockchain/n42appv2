@@ -1,4 +1,5 @@
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/api/dex_swap_api.dart';
 import 'package:n42_wallet/features/wallet/models/dex/dex_token_model.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
@@ -98,10 +99,14 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
 
     final local = q.isEmpty
         ? _all
-        : _all.where((t) =>
-            t.symbol.toLowerCase().contains(q) ||
-            t.name.toLowerCase().contains(q) ||
-            t.address.toLowerCase().contains(q)).toList();
+        : _all
+              .where(
+                (t) =>
+                    t.symbol.toLowerCase().contains(q) ||
+                    t.name.toLowerCase().contains(q) ||
+                    t.address.toLowerCase().contains(q),
+              )
+              .toList();
 
     setState(() {
       _remoteResults = [];
@@ -158,33 +163,33 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
         children: [
           Padding(
             padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(30),
-                vertical: ScreenUtil().setWidth(16)),
+              horizontal: ScreenUtil().setWidth(30),
+              vertical: ScreenUtil().setWidth(16),
+            ),
             child: TextField(
               controller: _searchCtrl,
               style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
+                color: AppColorTokens.of(context).textPrimary,
                 fontSize: ScreenUtil().setSp(28),
               ),
               decoration: InputDecoration(
                 hintText: S.of(context).g_key_dex_search_hint,
                 hintStyle: TextStyle(
                   color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.textFieldHintColor.name),
+                    context,
+                    AppThemeKeys.textFieldHintColor.name,
+                  ),
                   fontSize: ScreenUtil().setSp(28),
                 ),
                 prefixIcon: Icon(
                   Icons.search,
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemSubtitleTextColor.name),
+                  color: AppColorTokens.of(context).textSubtitle,
                 ),
                 suffixIcon: _searchCtrl.text.isNotEmpty
                     ? IconButton(
                         icon: Icon(
                           Icons.clear,
-                          color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.itemSubtitleTextColor.name),
+                          color: AppColorTokens.of(context).textSubtitle,
                         ),
                         onPressed: () {
                           _searchCtrl.clear();
@@ -193,15 +198,14 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
                       )
                     : null,
                 filled: true,
-                fillColor: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemBgColor.name),
+                fillColor: AppColorTokens.of(context).bgSurface,
                 border: OutlineInputBorder(
-                  borderRadius:
-                      BorderRadius.circular(ScreenUtil().setWidth(8)),
+                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
                   borderSide: BorderSide.none,
                 ),
                 contentPadding: EdgeInsets.symmetric(
-                    vertical: ScreenUtil().setWidth(20)),
+                  vertical: ScreenUtil().setWidth(20),
+                ),
               ),
             ),
           ),
@@ -220,12 +224,15 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(_error,
-                style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.errorTextColor.name))),
+            Text(
+              _error,
+              style: TextStyle(color: AppColorTokens.of(context).danger),
+            ),
             SizedBox(height: ScreenUtil().setWidth(20)),
-            TextButton(onPressed: _loadTokens, child: Text(S.of(context).g_key_aa_retry)),
+            TextButton(
+              onPressed: _loadTokens,
+              child: Text(S.of(context).g_key_aa_retry),
+            ),
           ],
         ),
       );
@@ -233,31 +240,27 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
     if (_filtered.isNotEmpty) return _buildList(_filtered);
     if (_remoteResults.isNotEmpty) return _buildList(_remoteResults);
 
-    final subtitleColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
+    final subtitleColor = AppColorTokens.of(context).textSubtitle;
     final message = _remoteError.isNotEmpty
         ? _remoteError
         : _searchCtrl.text.isEmpty
-            ? S.of(context).g_key_dex_no_tokens
-            : S.of(context).g_key_dex_no_tokens_found;
+        ? S.of(context).g_key_dex_no_tokens
+        : S.of(context).g_key_dex_no_tokens_found;
     return Center(
       child: Text(message, style: TextStyle(color: subtitleColor)),
     );
   }
 
   Widget _buildList(List<DexTokenModel> tokens) {
-    final mainText = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainTextColor.name);
-    final subtitleText = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
+    final mainText = AppColorTokens.of(context).textPrimary;
+    final subtitleText = AppColorTokens.of(context).textSubtitle;
 
     return ListView.separated(
       padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
       itemCount: tokens.length,
       separatorBuilder: (_, _) => Divider(
         height: ScreenUtil().setWidth(1),
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.dividerColor.name),
+        color: AppColorTokens.of(context).border,
       ),
       itemBuilder: (context, index) {
         final token = tokens[index];

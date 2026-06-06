@@ -11,20 +11,11 @@ extension _AAHomePageWidgets on _AAHomePageState {
   static const _kOrange = Color(0xFFFF9800);
   static const _kGreen = Color(0xFF4CAF50);
 
-  Color _mainTextColor() => AppThemeUtils.getColorByKey(
-        context,
-        AppThemeKeys.mainTextColor.name,
-      );
+  Color _mainTextColor() => AppColorTokens.of(context).textPrimary;
 
-  Color _subtitleTextColor() => AppThemeUtils.getColorByKey(
-        context,
-        AppThemeKeys.itemSubtitleTextColor.name,
-      );
+  Color _subtitleTextColor() => AppColorTokens.of(context).textSubtitle;
 
-  Color _itemBgColor() => AppThemeUtils.getColorByKey(
-        context,
-        AppThemeKeys.itemBgColor.name,
-      );
+  Color _itemBgColor() => AppColorTokens.of(context).bgSurface;
 
   Widget buildHeaderCard() {
     final sw = ScreenUtil().setWidth;
@@ -113,7 +104,12 @@ extension _AAHomePageWidgets on _AAHomePageState {
     );
   }
 
-  Widget buildBenefitCard(IconData icon, String title, String desc, Color color) {
+  Widget buildBenefitCard(
+    IconData icon,
+    String title,
+    String desc,
+    Color color,
+  ) {
     final sw = ScreenUtil().setWidth;
     final sp = ScreenUtil().setSp;
 
@@ -122,7 +118,12 @@ extension _AAHomePageWidgets on _AAHomePageState {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _iconBox(sw(40), sw(10), color, Icon(icon, size: sw(22), color: color)),
+          _iconBox(
+            sw(40),
+            sw(10),
+            color,
+            Icon(icon, size: sw(22), color: color),
+          ),
           SizedBox(width: sw(12)),
           Expanded(
             child: Column(
@@ -262,7 +263,12 @@ extension _AAHomePageWidgets on _AAHomePageState {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _iconBox(sw(44), sw(12), color, Icon(icon, size: sw(24), color: color)),
+              _iconBox(
+                sw(44),
+                sw(12),
+                color,
+                Icon(icon, size: sw(24), color: color),
+              ),
               SizedBox(height: sw(12)),
               Text(
                 title,
@@ -275,10 +281,7 @@ extension _AAHomePageWidgets on _AAHomePageState {
               SizedBox(height: sw(4)),
               Text(
                 subtitle,
-                style: TextStyle(
-                  fontSize: sp(22),
-                  color: _subtitleTextColor(),
-                ),
+                style: TextStyle(fontSize: sp(22), color: _subtitleTextColor()),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -350,10 +353,7 @@ extension _AAHomePageWidgets on _AAHomePageState {
           Expanded(
             child: Text(
               S.of(context).g_key_bridge_chain_not_supported,
-              style: TextStyle(
-                fontSize: sp(24),
-                color: _subtitleTextColor(),
-              ),
+              style: TextStyle(fontSize: sp(24), color: _subtitleTextColor()),
             ),
           ),
         ],

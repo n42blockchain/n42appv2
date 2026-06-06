@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 
 part 'feature_entry_cards_items.dart';
@@ -61,7 +61,9 @@ class FeatureEntrySection extends StatelessWidget {
                       end: Alignment.bottomCenter,
                       colors: [Color(0xFF5B8DEF), Color(0xFF8B5CF6)],
                     ),
-                    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(3)),
+                    borderRadius: BorderRadius.circular(
+                      ScreenUtil().setWidth(3),
+                    ),
                   ),
                 ),
                 SizedBox(width: ScreenUtil().setWidth(12)),
@@ -71,7 +73,7 @@ class FeatureEntrySection extends StatelessWidget {
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(28),
                       fontWeight: FontWeight.w600,
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                      color: AppColorTokens.of(context).textPrimary,
                     ),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
@@ -157,14 +159,16 @@ class FeatureEntryHorizontal extends StatelessWidget {
             title: S.of(context).g_key_aa_smart_wallet,
             subtitle: hasSmartAccount
                 ? (isSmartAccountDeployed
-                    ? S.of(context).g_key_aa_ready
-                    : S.of(context).g_key_aa_pending)
+                      ? S.of(context).g_key_aa_ready
+                      : S.of(context).g_key_aa_pending)
                 : S.of(context).g_key_aa_gasless,
             gradientColors: const [Color(0xFFFF6B6B), Color(0xFFFFE66D)],
             onTap: onSmartAccountTap,
             enabled: smartAccountEnabled,
             showBadge: hasSmartAccount,
-            badgeColor: isSmartAccountDeployed ? const Color(0xFF4CAF50) : const Color(0xFFFF9800),
+            badgeColor: isSmartAccountDeployed
+                ? const Color(0xFF4CAF50)
+                : const Color(0xFFFF9800),
           ),
         ],
       ),
@@ -191,7 +195,9 @@ class FeatureEntryHorizontal extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: gradientColors.map((c) => c.withValues(alpha: 0.12)).toList(),
+            colors: gradientColors
+                .map((c) => c.withValues(alpha: 0.12))
+                .toList(),
           ),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
           border: Border.all(
@@ -221,7 +227,9 @@ class FeatureEntryHorizontal extends StatelessWidget {
                         end: Alignment.bottomRight,
                         colors: gradientColors,
                       ),
-                      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(32)),
+                      borderRadius: BorderRadius.circular(
+                        ScreenUtil().setWidth(32),
+                      ),
                     ),
                     child: Icon(
                       icon,
@@ -238,7 +246,9 @@ class FeatureEntryHorizontal extends StatelessWidget {
                         height: ScreenUtil().setWidth(20),
                         decoration: BoxDecoration(
                           color: badgeColor,
-                          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
+                          borderRadius: BorderRadius.circular(
+                            ScreenUtil().setWidth(10),
+                          ),
                           border: Border.all(color: Colors.white, width: 2),
                         ),
                       ),
@@ -259,7 +269,7 @@ class FeatureEntryHorizontal extends StatelessWidget {
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(24),
                           fontWeight: FontWeight.w600,
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                          color: AppColorTokens.of(context).textPrimary,
                         ),
                       ),
                     ),
@@ -271,7 +281,7 @@ class FeatureEntryHorizontal extends StatelessWidget {
                         subtitle,
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(20),
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                          color: AppColorTokens.of(context).textSubtitle,
                         ),
                       ),
                     ),

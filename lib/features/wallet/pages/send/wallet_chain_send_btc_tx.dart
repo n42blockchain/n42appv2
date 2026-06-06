@@ -179,7 +179,10 @@ mixin _BtcSendTxMixin on _BtcSendLogicMixin {
       final basePath = pathKey?[addrType]?.toString() ?? "m/44'/0'/0'/0/0";
       final path = getPathWithIndex(basePath, widget.coinModel.pathIndex);
       final isMaxSend = _fee.maxPrice != 0;
-      final amount = toEther(btcTransactionRecodeModel.price.toString(), 8).toDouble();
+      final amount = toEther(
+        btcTransactionRecodeModel.price.toString(),
+        8,
+      ).toDouble();
 
       final result = await BtcSender().send(
         SendParams(
@@ -242,7 +245,8 @@ mixin _BtcSendTxMixin on _BtcSendLogicMixin {
     List<Map<String, dynamic>> utxos, {
     bool max = false,
   }) async {
-    final coinType = (widget.coinModel.coin['coinType'] as String).toUpperCase();
+    final coinType = (widget.coinModel.coin['coinType'] as String)
+        .toUpperCase();
     final path = getPathWithIndex(
       widget.coinModel.coin['path'][widget.coinModel.addrType] as String,
       widget.coinModel.pathIndex,
@@ -258,11 +262,16 @@ mixin _BtcSendTxMixin on _BtcSendLogicMixin {
     final String result;
     if (widget.coinModel.privateKey?.isNotEmpty ?? false) {
       result = await Trustdart().signTransactionMaxValue(
-        coinType, '', btcTxMap, pk: widget.coinModel.privateKey!,
+        coinType,
+        '',
+        btcTxMap,
+        pk: widget.coinModel.privateKey!,
       );
     } else {
       result = await Trustdart().signTransactionMaxValue(
-        coinType, path, btcTxMap,
+        coinType,
+        path,
+        btcTxMap,
         mnemonic: globalWapAdapter.walletInfo.mnemonic ?? '',
       );
     }

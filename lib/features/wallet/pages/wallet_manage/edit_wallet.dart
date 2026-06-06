@@ -1,5 +1,4 @@
 import 'package:n42_wallet/core/config/app_config.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
@@ -66,9 +65,7 @@ class _EditWalletState extends ConsumerState<EditWallet> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(
-        text: S.of(context).g_key_wallet_edit,
-      ),
+      appBar: AppBarWidget(text: S.of(context).g_key_wallet_edit),
       body: SafeArea(
         child: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
@@ -76,10 +73,7 @@ class _EditWalletState extends ConsumerState<EditWallet> {
             children: [
               Container(
                 margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemBgColor.name,
-                ),
+                color: AppColorTokens.of(context).bgSurface,
                 child: CommInput(
                   type: InputFieldType.account,
                   controller: _controller,
@@ -126,18 +120,9 @@ class _EditWalletState extends ConsumerState<EditWallet> {
   }
 
   Widget _buildTagSection() {
-    final textColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainTextColor.name,
-    );
-    final subColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.itemSubtitleTextColor.name,
-    );
-    final blueColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainBlueColor.name,
-    );
+    final textColor = AppColorTokens.of(context).textPrimary;
+    final subColor = AppColorTokens.of(context).textSubtitle;
+    final blueColor = AppColorTokens.of(context).brand;
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
@@ -161,15 +146,20 @@ class _EditWalletState extends ConsumerState<EditWallet> {
               spacing: 8,
               runSpacing: 6,
               children: _tags
-                  .map((tag) => Chip(
-                        label: Text(tag, style: TextStyle(fontSize: ScreenUtil().setSp(24))),
-                        deleteIcon: Icon(Icons.close, size: 16, color: subColor),
-                        onDeleted: () => _removeTag(tag),
-                        backgroundColor: blueColor.withValues(alpha: 0.1),
-                        side: BorderSide.none,
-                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        visualDensity: VisualDensity.compact,
-                      ))
+                  .map(
+                    (tag) => Chip(
+                      label: Text(
+                        tag,
+                        style: TextStyle(fontSize: ScreenUtil().setSp(24)),
+                      ),
+                      deleteIcon: Icon(Icons.close, size: 16, color: subColor),
+                      onDeleted: () => _removeTag(tag),
+                      backgroundColor: blueColor.withValues(alpha: 0.1),
+                      side: BorderSide.none,
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      visualDensity: VisualDensity.compact,
+                    ),
+                  )
                   .toList(),
             ),
 
@@ -181,20 +171,22 @@ class _EditWalletState extends ConsumerState<EditWallet> {
             runSpacing: 6,
             children: _presetTags
                 .where((t) => !_tags.contains(t))
-                .map((tag) => ActionChip(
-                      label: Text(
-                        '+ $tag',
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(22),
-                          color: subColor,
-                        ),
+                .map(
+                  (tag) => ActionChip(
+                    label: Text(
+                      '+ $tag',
+                      style: TextStyle(
+                        fontSize: ScreenUtil().setSp(22),
+                        color: subColor,
                       ),
-                      onPressed: _tags.length < 5 ? () => _addTag(tag) : null,
-                      backgroundColor: Colors.transparent,
-                      side: BorderSide(color: subColor.withValues(alpha: 0.3)),
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      visualDensity: VisualDensity.compact,
-                    ))
+                    ),
+                    onPressed: _tags.length < 5 ? () => _addTag(tag) : null,
+                    backgroundColor: Colors.transparent,
+                    side: BorderSide(color: subColor.withValues(alpha: 0.3)),
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    visualDensity: VisualDensity.compact,
+                  ),
+                )
                 .toList(),
           ),
 

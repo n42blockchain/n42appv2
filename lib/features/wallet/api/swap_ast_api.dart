@@ -7,8 +7,8 @@ class SwapAstApi {
   final Map<String, String> _header;
 
   SwapAstApi()
-      : _url = AppConfig.getApiUrlOnline('nftHost'),
-        _header = const {'content-type': 'application/json'};
+    : _url = AppConfig.getApiUrlOnline('nftHost'),
+      _header = const {'content-type': 'application/json'};
 
   // ── 私有辅助 ──────────────────────────────────────────────────────────────
 
@@ -55,7 +55,12 @@ class SwapAstApi {
     try {
       final data = await BaseApi.requestEmptyH.get(
         '$_url/v1/nft-amt/order/list',
-        params: {'type': type, 'uuid': uuid, 'page': page, 'page_size': pageSize},
+        params: {
+          'type': type,
+          'uuid': uuid,
+          'page': page,
+          'page_size': pageSize,
+        },
         header: _header,
       );
       return _ok(data['data']['list']);
@@ -94,7 +99,9 @@ class SwapAstApi {
 
   // 取消订单
   Future<MessageModel> postNftOrAstCancelOrder(
-      String bUuid, int orderId) async {
+    String bUuid,
+    int orderId,
+  ) async {
     try {
       await BaseApi.requestEmptyH.post(
         '$_url/v1/nft-amt/cancel/order',

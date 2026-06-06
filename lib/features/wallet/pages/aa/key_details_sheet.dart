@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 import 'session_key_models.dart';
 
@@ -17,8 +17,7 @@ class KeyDetailsSheet extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
       decoration: BoxDecoration(
-        color:
-            AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: AppColorTokens.of(context).bgSurface,
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(ScreenUtil().setWidth(24)),
         ),
@@ -43,22 +42,31 @@ class KeyDetailsSheet extends StatelessWidget {
             style: TextStyle(
               fontSize: ScreenUtil().setSp(32),
               fontWeight: FontWeight.bold,
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainTextColor.name,
-              ),
+              color: AppColorTokens.of(context).textPrimary,
             ),
           ),
           SizedBox(height: ScreenUtil().setWidth(20)),
           _row(context, S.of(context).g_key_aa_label, keyData.label),
-          _row(context, S.of(context).g_key_aa_permission,
-              _permLabel(context, keyData.permission)),
-          _row(context, S.of(context).g_key_aa_created,
-              _date(keyData.createdAt)),
-          _row(context, S.of(context).g_key_aa_expires,
-              _date(keyData.expiresAt)),
-          _row(context, S.of(context).g_key_aa_transactions,
-              '${keyData.transactionCount ?? 0}'),
+          _row(
+            context,
+            S.of(context).g_key_aa_permission,
+            _permLabel(context, keyData.permission),
+          ),
+          _row(
+            context,
+            S.of(context).g_key_aa_created,
+            _date(keyData.createdAt),
+          ),
+          _row(
+            context,
+            S.of(context).g_key_aa_expires,
+            _date(keyData.expiresAt),
+          ),
+          _row(
+            context,
+            S.of(context).g_key_aa_transactions,
+            '${keyData.transactionCount ?? 0}',
+          ),
           if (keyData.spendingToken != null && keyData.spendingLimit != null)
             _row(
               context,
@@ -81,10 +89,7 @@ class KeyDetailsSheet extends StatelessWidget {
             label,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(24),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ),
+              color: AppColorTokens.of(context).textSubtitle,
             ),
           ),
           Flexible(
@@ -93,10 +98,7 @@ class KeyDetailsSheet extends StatelessWidget {
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(24),
                 fontWeight: FontWeight.w500,
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainTextColor.name,
-                ),
+                color: AppColorTokens.of(context).textPrimary,
               ),
               textAlign: TextAlign.end,
             ),
@@ -113,8 +115,7 @@ class KeyDetailsSheet extends StatelessWidget {
         SessionKeyPermission.approve => S.of(context).g_key_aa_approve,
         SessionKeyPermission.contractCall =>
           S.of(context).g_key_aa_session_preset_contract,
-        SessionKeyPermission.full =>
-          S.of(context).g_key_aa_session_preset_full,
+        SessionKeyPermission.full => S.of(context).g_key_aa_session_preset_full,
       };
 
   static String _date(DateTime d) =>

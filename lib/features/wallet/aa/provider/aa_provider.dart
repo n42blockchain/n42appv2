@@ -116,9 +116,9 @@ class AAProvider extends ChangeNotifier {
       );
 
       // Calculate salt (use existing accounts count if not provided)
-      final accountSalt = salt ?? BigInt.from(
-        _walletInfo.getSmartAccountsForChain(chainId).length,
-      );
+      final accountSalt =
+          salt ??
+          BigInt.from(_walletInfo.getSmartAccountsForChain(chainId).length);
 
       // Create account model
       final account = factory.createAccount(
@@ -161,9 +161,16 @@ class AAProvider extends ChangeNotifier {
       for (final entry in aaAccountInfo!.smartAccounts.entries) {
         final chainId = entry.key;
         for (final account in entry.value) {
-          final newState = await _resolveDeploymentState(account.address, chainId);
+          final newState = await _resolveDeploymentState(
+            account.address,
+            chainId,
+          );
           if (account.state != newState) {
-            _walletInfo.updateSmartAccountState(account.address, chainId, newState);
+            _walletInfo.updateSmartAccountState(
+              account.address,
+              chainId,
+              newState,
+            );
           }
         }
       }
@@ -214,7 +221,11 @@ class AAProvider extends ChangeNotifier {
   }
 
   /// Update account label
-  Future<void> updateAccountLabel(String address, int chainId, String label) async {
+  Future<void> updateAccountLabel(
+    String address,
+    int chainId,
+    String label,
+  ) async {
     final accounts = aaAccountInfo?.smartAccounts[chainId];
     if (accounts == null) return;
 
@@ -250,7 +261,8 @@ class AAProvider extends ChangeNotifier {
   }
 
   /// Get pending transactions
-  Map<String, String> get pendingTransactions => Map.unmodifiable(_pendingTransactions);
+  Map<String, String> get pendingTransactions =>
+      Map.unmodifiable(_pendingTransactions);
 
   /// Wait for a transaction receipt
   Future<UserOperationReceipt> waitForReceipt(
@@ -290,9 +302,14 @@ class AAProvider extends ChangeNotifier {
   }
 
   /// Maps deployment check to a [SmartAccountState].
-  Future<SmartAccountState> _resolveDeploymentState(String address, int chainId) async {
+  Future<SmartAccountState> _resolveDeploymentState(
+    String address,
+    int chainId,
+  ) async {
     final isDeployed = await _checkDeploymentStatus(address, chainId);
-    return isDeployed ? SmartAccountState.deployed : SmartAccountState.notDeployed;
+    return isDeployed
+        ? SmartAccountState.deployed
+        : SmartAccountState.notDeployed;
   }
 
   Future<bool> _checkDeploymentStatus(String address, int chainId) async {

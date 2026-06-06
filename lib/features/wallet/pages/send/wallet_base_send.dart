@@ -28,10 +28,12 @@ class WalletBaseSend extends StatefulWidget {
   final String mainCoinUnit;
   final bool isNft;
   const WalletBaseSend(
-      this.transationRecordModel,
-      this.btcTransactionRecodeModel,
-      this.mainCoinUnit,
-      {this.isNft=false,super.key});
+    this.transationRecordModel,
+    this.btcTransactionRecodeModel,
+    this.mainCoinUnit, {
+    this.isNft = false,
+    super.key,
+  });
 
   @override
   State<WalletBaseSend> createState() => _WalletBaseSendState();
@@ -48,21 +50,20 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
   GoplusSecurityResult? _goplResult;
   bool _goplLoading = false;
 
-  Map<String, dynamic> securityMap = {
-    "email": false,
-    "face": false,
-  };
+  Map<String, dynamic> securityMap = {"email": false, "face": false};
   @override
   void initState() {
     super.initState();
-    coinInfo = widget.transationRecordModel?.coin
-        ?? widget.btcTransactionRecodeModel?.coin
-        ?? {};
+    coinInfo =
+        widget.transationRecordModel?.coin ??
+        widget.btcTransactionRecodeModel?.coin ??
+        {};
     init();
     initSecurity();
     _runSimulation();
     _runGoplusCheck();
   }
+
   static const Map<BlockchainType, int?> _gasDecimals = {
     BlockchainType.Bitcoin: 8,
     BlockchainType.Ethereum: 18,
@@ -87,22 +88,24 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
     BlockchainType.Cardano: 6,
     BlockchainType.MultiversX: 18,
     BlockchainType.Starknet: 18,
-    BlockchainType.EOSIO: null,   // EOS uses resource model
+    BlockchainType.EOSIO: null, // EOS uses resource model
     BlockchainType.Waves: 8,
     BlockchainType.Neo: 8,
     BlockchainType.Ontology: 9,
     BlockchainType.NEM: 6,
-    BlockchainType.Nano: null,    // Nano is feeless
+    BlockchainType.Nano: null, // Nano is feeless
     BlockchainType.Decred: 8,
     BlockchainType.ICON: 18,
     BlockchainType.IOST: 8,
     BlockchainType.Ark: 8,
     BlockchainType.Qtum: 8,
-    BlockchainType.Hive: null,    // Hive uses resource credits
+    BlockchainType.Hive: null, // Hive uses resource credits
   };
 
   void init() {
-    final bt = BlockchainType.values.firstWhere((e) => e.name == coinInfo['blockchainType']);
+    final bt = BlockchainType.values.firstWhere(
+      (e) => e.name == coinInfo['blockchainType'],
+    );
     final int? decimals = _gasDecimals[bt];
     if (decimals == null) {
       gasPrice = '0';
@@ -113,6 +116,7 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
         : widget.transationRecordModel!.gasPrice.toString();
     gasPrice = '${toEther(rawGas, decimals)} ${widget.mainCoinUnit}';
   }
+
   Future<void> initSecurity() async {
     final s = await SPUtil().getSecurity();
     if (s == null) return;
@@ -128,7 +132,8 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
     final m = widget.transationRecordModel;
     // Only EVM chains with a valid model support eth_call simulation
     if (bt != 'Ethereum' || m == null) {
-      if (mounted) setState(() => _simResult = TxSimulationResult.unavailable());
+      if (mounted)
+        setState(() => _simResult = TxSimulationResult.unavailable());
       return;
     }
 
@@ -137,8 +142,9 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
     final data = _buildCalldata(m);
     // Native transfer: forward value (m.price is already BigInt).
     // Token transfer: value stays null — amount is encoded in calldata.
-    final BigInt? value =
-        (m.contract.isEmpty && m.price > BigInt.zero) ? m.price : null;
+    final BigInt? value = (m.contract.isEmpty && m.price > BigInt.zero)
+        ? m.price
+        : null;
 
     final result = await TxSimulationService.simulate(
       coinType: coinType,
@@ -163,8 +169,7 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
 
     if (mounted) setState(() => _goplLoading = true);
 
-    final result =
-        await GoplusSecurityService.checkToken(coinType, m.contract);
+    final result = await GoplusSecurityService.checkToken(coinType, m.contract);
     if (mounted) {
       setState(() {
         _goplResult = result;
@@ -177,7 +182,10 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
     if (m.contract.isEmpty || widget.isNft) return '0x';
 
     final raw = m.to1.toLowerCase();
-    final toAddress = (raw.startsWith('0x') ? raw.substring(2) : raw).padLeft(64, '0');
+    final toAddress = (raw.startsWith('0x') ? raw.substring(2) : raw).padLeft(
+      64,
+      '0',
+    );
     final paddedAmount = m.price.toRadixString(16).padLeft(64, '0');
     return '0xa9059cbb$toAddress$paddedAmount';
   }
@@ -192,6 +200,7 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
     }
     return Future.value(false);
   }
+
   @override
   Widget build(BuildContext context) {
     final String from;
@@ -220,10 +229,8 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
         if (didPop) return;
         _pageBack();
       },
-      child:Scaffold(
-        appBar: AppBarWidget(
-          text: S.of(context).s_key_3,
-        ),
+      child: Scaffold(
+        appBar: AppBarWidget(text: S.of(context).s_key_3),
         body: SafeArea(
           child: GestureDetector(
             onTap: closeKeyboard,
@@ -258,9 +265,14 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
                           ),
                         ),
                         Container(
-                          padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16.0),horizontal: ScreenUtil().setWidth(30.0)),
+                          padding: EdgeInsets.symmetric(
+                            vertical: ScreenUtil().setWidth(16.0),
+                            horizontal: ScreenUtil().setWidth(30.0),
+                          ),
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(20.0))),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(ScreenUtil().setWidth(20.0)),
+                            ),
                             color: _themeColor(AppThemeKeys.itemBgColor),
                           ),
                           child: Column(
@@ -268,8 +280,11 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
                             children: [
                               _buildAddressLabel(S.of(context).g_key_75, from),
                               _buildAddressLabel(S.of(context).g_key_38, to),
-                              tapLabelWidget(S.of(context).g_key_44,price,),
-                              tapLabelWidget(S.of(context).g_key_t_16,gasPrice,),
+                              tapLabelWidget(S.of(context).g_key_44, price),
+                              tapLabelWidget(
+                                S.of(context).g_key_t_16,
+                                gasPrice,
+                              ),
                             ],
                           ),
                         ),
@@ -301,7 +316,8 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
                                 child: AppButton(
                                   label: S.of(context).g_key_79,
                                   variant: AppButtonVariant.secondary,
-                                  onPressed: () => Navigator.pop(context, false),
+                                  onPressed: () =>
+                                      Navigator.pop(context, false),
                                 ),
                               ),
                             ),
@@ -399,7 +415,10 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
                   onTap: () {
                     ToastUtils.init(context);
                     Clipboard.setData(ClipboardData(text: value));
-                    ToastUtils.showFtToast(child: successViewV1(S.of(context).copy), duration: 3);
+                    ToastUtils.showFtToast(
+                      child: successViewV1(S.of(context).copy),
+                      duration: 3,
+                    );
                   },
                   child: Container(
                     margin: EdgeInsets.only(left: su.setWidth(20.0)),
@@ -415,11 +434,7 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
             ],
           ),
           SizedBox(height: su.setWidth(10.0)),
-          Divider(
-            height: su.setWidth(1.0),
-            indent: 0,
-            endIndent: 0,
-          ),
+          Divider(height: su.setWidth(1.0), indent: 0, endIndent: 0),
         ],
       ),
     );

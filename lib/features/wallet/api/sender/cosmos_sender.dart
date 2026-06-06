@@ -27,12 +27,12 @@ class CosmosSender implements ChainSender {
   // Known Cosmos chain metadata: chainId + denom
   static const Map<String, _CosmosChainMeta> _knownChains = {
     'ATOM': _CosmosChainMeta('cosmoshub-4', 'uatom', 6),
-    'INJ':  _CosmosChainMeta('injective-1', 'inj', 18),
+    'INJ': _CosmosChainMeta('injective-1', 'inj', 18),
     'OSMO': _CosmosChainMeta('osmosis-1', 'uosmo', 6),
-    'TIA':  _CosmosChainMeta('celestia', 'utia', 6),
+    'TIA': _CosmosChainMeta('celestia', 'utia', 6),
     'DYDX': _CosmosChainMeta('dydx-mainnet-1', 'adydx', 18),
     'NTRN': _CosmosChainMeta('neutron-1', 'untrn', 6),
-    'AKT':  _CosmosChainMeta('akashnet-2', 'uakt', 6),
+    'AKT': _CosmosChainMeta('akashnet-2', 'uakt', 6),
     'SCRT': _CosmosChainMeta('secret-4', 'uscrt', 6),
     'JUNO': _CosmosChainMeta('juno-1', 'ujuno', 6),
     'KUJI': _CosmosChainMeta('kaiyo-1', 'ukuji', 6),
@@ -41,22 +41,22 @@ class CosmosSender implements ChainSender {
     'RUNE': _CosmosChainMeta('thorchain-1', 'rune', 8),
     'KAVA2': _CosmosChainMeta('kava_2222-10', 'ukava', 6),
     'SEI2': _CosmosChainMeta('pacific-1', 'usei', 6),
-    'CRE':  _CosmosChainMeta('crescent-1', 'ucre', 6),
+    'CRE': _CosmosChainMeta('crescent-1', 'ucre', 6),
     'SOMM': _CosmosChainMeta('sommelier-3', 'usomm', 6),
     'MARS': _CosmosChainMeta('mars-1', 'umars', 6),
     'CMDX': _CosmosChainMeta('comdex-1', 'ucmdx', 6),
     'BAND': _CosmosChainMeta('laozi-mainnet', 'uband', 6),
-    'BLD':  _CosmosChainMeta('agoric-3', 'ubld', 6),
-    'BLZ':  _CosmosChainMeta('bluzelle-9', 'ubnt', 6),
-    'FET':  _CosmosChainMeta('fetchhub-4', 'afet', 18),
+    'BLD': _CosmosChainMeta('agoric-3', 'ubld', 6),
+    'BLZ': _CosmosChainMeta('bluzelle-9', 'ubnt', 6),
+    'FET': _CosmosChainMeta('fetchhub-4', 'afet', 18),
     'UMEE': _CosmosChainMeta('umee-1', 'uumee', 6),
-    'AXL':  _CosmosChainMeta('axelar-dojo-1', 'uaxl', 6),
+    'AXL': _CosmosChainMeta('axelar-dojo-1', 'uaxl', 6),
     'CANTO': _CosmosChainMeta('canto_7700-1', 'acanto', 18),
     'LUNA': _CosmosChainMeta('phoenix-1', 'uluna', 6),
     'LUNC': _CosmosChainMeta('columbus-5', 'uluna', 6),
     'NOBLE': _CosmosChainMeta('noble-1', 'uusdc', 6),
     'STARS': _CosmosChainMeta('stargaze-1', 'ustars', 6),
-    'QSR':  _CosmosChainMeta('quasar-1', 'uqsr', 6),
+    'QSR': _CosmosChainMeta('quasar-1', 'uqsr', 6),
     'COREUM': _CosmosChainMeta('coreum-mainnet-1', 'ucore', 6),
   };
 
@@ -67,12 +67,14 @@ class CosmosSender implements ChainSender {
     final denomDecimals = meta?.decimals ?? params.decimals;
 
     // Get balance
-    final mmb = await _tokenViewApi.getBalance(
-      BlockchainType.Cosmos.name,
-      CoinType.ATOM.name,
-      params.fromAddress,
-      isTest: false,
-    ) ?? MessageModel.error();
+    final mmb =
+        await _tokenViewApi.getBalance(
+          BlockchainType.Cosmos.name,
+          CoinType.ATOM.name,
+          params.fromAddress,
+          isTest: false,
+        ) ??
+        MessageModel.error();
     if (mmb.error) return SendResult.fail(mmb.data?.toString());
     final chainBalance = mmb.data as BigInt;
     if (chainBalance == BigInt.zero) {
@@ -80,15 +82,20 @@ class CosmosSender implements ChainSender {
     }
 
     // Get gas price
-    final mmg = await _tokenViewApi.getGasPrice(
-      BlockchainType.Cosmos.name,
-      CoinType.ATOM.name,
-      isTest: false,
-    ) ?? MessageModel.error();
+    final mmg =
+        await _tokenViewApi.getGasPrice(
+          BlockchainType.Cosmos.name,
+          CoinType.ATOM.name,
+          isTest: false,
+        ) ??
+        MessageModel.error();
     if (mmg.error) return SendResult.fail(mmg.data?.toString());
     final gasPrice = mmg.data as BigInt;
 
-    final gas = getCoinGas(CoinType.ATOM.name, contract: params.contractAddress.isNotEmpty);
+    final gas = getCoinGas(
+      CoinType.ATOM.name,
+      contract: params.contractAddress.isNotEmpty,
+    );
     final totalGasPrice = gasPrice * BigInt.from(gas);
 
     BigInt valuePrice = ethToWeiString(params.amount.toString(), denomDecimals);
@@ -100,9 +107,13 @@ class CosmosSender implements ChainSender {
           return SendResult.fail(S.current.g_key_wallet_m5(coinType));
         }
         valuePrice = valuePrice - totalGasPrice;
-        adjustedAmount = toEther(valuePrice.toString(), denomDecimals).toDouble();
+        adjustedAmount = toEther(
+          valuePrice.toString(),
+          denomDecimals,
+        ).toDouble();
       }
-      if (valuePrice <= BigInt.zero || totalGasPrice + valuePrice > chainBalance) {
+      if (valuePrice <= BigInt.zero ||
+          totalGasPrice + valuePrice > chainBalance) {
         return SendResult.fail(S.current.g_key_wallet_m5(coinType));
       }
     } else {
@@ -112,13 +123,17 @@ class CosmosSender implements ChainSender {
     }
 
     // Get account info
-    final serviceUrl = params.chainConfig?['baseInfo']?['service'] as String? ?? '';
+    final serviceUrl =
+        params.chainConfig?['baseInfo']?['service'] as String? ?? '';
 
     MessageModel amm;
     if (coinType == 'ATOM') {
       amm = await AtomApi().getAccounts(params.fromAddress);
     } else if (serviceUrl.isNotEmpty) {
-      final api = CosmosChainApi(serviceUrl, meta?.denom ?? 'u${coinType.toLowerCase()}');
+      final api = CosmosChainApi(
+        serviceUrl,
+        meta?.denom ?? 'u${coinType.toLowerCase()}',
+      );
       amm = await api.getAccount(params.fromAddress);
     } else {
       amm = await AtomApi().getAccounts(params.fromAddress);
@@ -142,10 +157,7 @@ class CosmosSender implements ChainSender {
         'amount': '5000',
         'denom': denom,
       },
-      'amount': {
-        'amount': valuePrice.toString(),
-        'denom': denom,
-      },
+      'amount': {'amount': valuePrice.toString(), 'denom': denom},
     };
 
     // Sign using ATOM coin type for all Cosmos chains
@@ -177,7 +189,9 @@ class CosmosSender implements ChainSender {
       coinType: CoinType.ATOM.name,
     );
     if (!sigResult.isValid) {
-      return SendResult.fail(sigResult.errorMessage ?? 'Signature validation failed');
+      return SendResult.fail(
+        sigResult.errorMessage ?? 'Signature validation failed',
+      );
     }
 
     // Broadcast

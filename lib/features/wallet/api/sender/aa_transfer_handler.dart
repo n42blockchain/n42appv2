@@ -76,7 +76,7 @@ class AATransferHandler extends BaseTransferHandler {
   String? _bundlerApiKey;
 
   AATransferHandler(this._chainSymbol, {String? bundlerApiKey})
-      : _bundlerApiKey = bundlerApiKey;
+    : _bundlerApiKey = bundlerApiKey;
 
   @override
   String get chainSymbol => _chainSymbol;
@@ -121,9 +121,15 @@ class AATransferHandler extends BaseTransferHandler {
 
       final bundler = _getBundlerClient();
       final gasEstimate = await bundler.estimateUserOperationGas(userOp);
-      final userOpWithGas = gasEstimate.withBuffer(AAConstants.gasBufferMultiplier).applyTo(userOp);
+      final userOpWithGas = gasEstimate
+          .withBuffer(AAConstants.gasBufferMultiplier)
+          .applyTo(userOp);
 
-      final signedUserOp = await _signUserOperation(userOpWithGas, params, chainConfig);
+      final signedUserOp = await _signUserOperation(
+        userOpWithGas,
+        params,
+        chainConfig,
+      );
       final userOpHash = await bundler.sendUserOperation(signedUserOp);
 
       AppLogger.d('AATransferHandler', 'UserOp sent, hash: $userOpHash');
@@ -135,12 +141,14 @@ class AATransferHandler extends BaseTransferHandler {
       );
 
       if (receipt.success) {
-        return createSuccess(data: {
-          'userOpHash': userOpHash,
-          'txHash': receipt.receipt.transactionHash,
-          'value': params.value,
-          'success': true,
-        });
+        return createSuccess(
+          data: {
+            'userOpHash': userOpHash,
+            'txHash': receipt.receipt.transactionHash,
+            'value': params.value,
+            'success': true,
+          },
+        );
       } else {
         return createError(
           'Transaction failed',
@@ -255,8 +263,18 @@ class AATransferHandler extends BaseTransferHandler {
 
     // Sign using trustdart (prefer private key, fallback to mnemonic)
     final signatureHex = params.privateKey != null
-        ? await trustdart.signMessage(params.chainSymbol, path, hashHex, pk: params.privateKey!)
-        : await trustdart.signMessage(params.chainSymbol, path, hashHex, mnemonic: walletProvider.walletInfo.mnemonic ?? '');
+        ? await trustdart.signMessage(
+            params.chainSymbol,
+            path,
+            hashHex,
+            pk: params.privateKey!,
+          )
+        : await trustdart.signMessage(
+            params.chainSymbol,
+            path,
+            hashHex,
+            mnemonic: walletProvider.walletInfo.mnemonic ?? '',
+          );
 
     if (signatureHex.isEmpty) {
       throw SignatureError('Failed to sign UserOperation');
@@ -276,18 +294,21 @@ class AATransferHandler extends BaseTransferHandler {
 
       // getNonce(address sender, uint192 key)
       // Function selector: 0x35567e1a
-      final senderPadded = sender.replaceFirst('0x', '').toLowerCase().padLeft(64, '0');
-      const keyPadded = '0000000000000000000000000000000000000000000000000000000000000000';
+      final senderPadded = sender
+          .replaceFirst('0x', '')
+          .toLowerCase()
+          .padLeft(64, '0');
+      const keyPadded =
+          '0000000000000000000000000000000000000000000000000000000000000000';
       final data = '0x35567e1a$senderPadded$keyPadded';
 
-      final result = await ethApi.ethCallRaw(
-        chainConfig.entryPoint,
-        data,
-      );
+      final result = await ethApi.ethCallRaw(chainConfig.entryPoint, data);
 
       if (result.error || result.data == null) return BigInt.zero;
       final hex = result.data.toString().replaceFirst('0x', '');
-      return (hex.isNotEmpty && hex != '0') ? BigInt.parse(hex, radix: 16) : BigInt.zero;
+      return (hex.isNotEmpty && hex != '0')
+          ? BigInt.parse(hex, radix: 16)
+          : BigInt.zero;
     } catch (e) {
       AppLogger.w('AATransferHandler', 'error getting nonce: $e');
       return BigInt.zero;
@@ -296,9 +317,9 @@ class AATransferHandler extends BaseTransferHandler {
 
   /// Get RPC URL for the chain
   String _getRpcUrl() {
-    return getChainMap(_chainSymbol)?['service'] as String?
-        ?? chainUrlMap[_chainSymbol]?['baseInfo']?['service'] as String?
-        ?? '';
+    return getChainMap(_chainSymbol)?['service'] as String? ??
+        chainUrlMap[_chainSymbol]?['baseInfo']?['service'] as String? ??
+        '';
   }
 
   /// Get gas prices
@@ -332,11 +353,11 @@ class AATransferHandler extends BaseTransferHandler {
   }
 
   static GasEstimation _gasError(String message) => GasEstimation(
-        gasLimit: BigInt.zero,
-        gasPrice: BigInt.zero,
-        totalFee: BigInt.zero,
-        errorMessage: message,
-      );
+    gasLimit: BigInt.zero,
+    gasPrice: BigInt.zero,
+    totalFee: BigInt.zero,
+    errorMessage: message,
+  );
 
   @override
   Future<GasEstimation> estimateGas(TransferParams params) async {

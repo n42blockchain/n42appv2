@@ -6,7 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/pages/ens/ens_chain_config.dart';
 import 'package:n42_wallet/features/wallet/services/ens_registration_service.dart';
 
@@ -29,10 +29,7 @@ class EnsQuickActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final blueColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainBlueColor.name,
-    );
+    final blueColor = AppColorTokens.of(context).brand;
     return Row(
       children: [
         Expanded(
@@ -108,10 +105,7 @@ class _ActionButton extends StatelessWidget {
                 fontWeight: FontWeight.w500,
                 color: isDisabled
                     ? Colors.grey
-                    : AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainTextColor.name,
-                      ),
+                    : AppColorTokens.of(context).textPrimary,
               ),
             ),
           ],

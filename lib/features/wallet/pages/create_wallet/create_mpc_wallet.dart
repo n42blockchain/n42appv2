@@ -6,7 +6,7 @@ import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/mpc/mpc_provider.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// MPC 无助记词钱包创建页面
 ///
@@ -25,12 +25,42 @@ class _CreateMpcWalletState extends ConsumerState<CreateMpcWallet> {
   MpcLoginType? _selectedType;
 
   static const _loginOptions = [
-    (type: MpcLoginType.google, icon: Icons.g_mobiledata, label: 'Google', color: Color(0xFF4285F4)),
-    (type: MpcLoginType.apple, icon: Icons.apple, label: 'Apple', color: Color(0xFF333333)),
-    (type: MpcLoginType.email, icon: Icons.email_outlined, label: 'Email', color: Color(0xFF6C63FF)),
-    (type: MpcLoginType.phone, icon: Icons.phone_outlined, label: 'Phone', color: Color(0xFF00BFA5)),
-    (type: MpcLoginType.twitter, icon: Icons.close, label: 'X (Twitter)', color: Color(0xFF1DA1F2)),
-    (type: MpcLoginType.discord, icon: Icons.discord, label: 'Discord', color: Color(0xFF5865F2)),
+    (
+      type: MpcLoginType.google,
+      icon: Icons.g_mobiledata,
+      label: 'Google',
+      color: Color(0xFF4285F4),
+    ),
+    (
+      type: MpcLoginType.apple,
+      icon: Icons.apple,
+      label: 'Apple',
+      color: Color(0xFF333333),
+    ),
+    (
+      type: MpcLoginType.email,
+      icon: Icons.email_outlined,
+      label: 'Email',
+      color: Color(0xFF6C63FF),
+    ),
+    (
+      type: MpcLoginType.phone,
+      icon: Icons.phone_outlined,
+      label: 'Phone',
+      color: Color(0xFF00BFA5),
+    ),
+    (
+      type: MpcLoginType.twitter,
+      icon: Icons.close,
+      label: 'X (Twitter)',
+      color: Color(0xFF1DA1F2),
+    ),
+    (
+      type: MpcLoginType.discord,
+      icon: Icons.discord,
+      label: 'Discord',
+      color: Color(0xFF5865F2),
+    ),
   ];
 
   Future<void> _loginWith(MpcLoginType type) async {
@@ -71,7 +101,9 @@ class _CreateMpcWalletState extends ConsumerState<CreateMpcWallet> {
       // not in local storage. Signing goes through the MpcProvider.
       // We store the EVM address as watchAddress for balance tracking,
       // and mark isMpc=true so the signing layer knows to use MpcProvider.
-      walletInfo.coinInfo = {'ETH': {'address': result.address}};
+      walletInfo.coinInfo = {
+        'ETH': {'address': result.address},
+      };
 
       await wap.addWalletInfo(walletInfo);
 
@@ -92,12 +124,9 @@ class _CreateMpcWalletState extends ConsumerState<CreateMpcWallet> {
 
   @override
   Widget build(BuildContext context) {
-    final blueColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainBlueColor.name);
-    final textColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainTextColor.name);
-    final subColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
+    final blueColor = AppColorTokens.of(context).brand;
+    final textColor = AppColorTokens.of(context).textPrimary;
+    final subColor = AppColorTokens.of(context).textSubtitle;
 
     return Scaffold(
       appBar: AppBarWidget(text: 'Create Wallet'),
@@ -133,16 +162,18 @@ class _CreateMpcWalletState extends ConsumerState<CreateMpcWallet> {
               SizedBox(height: ScreenUtil().setWidth(40)),
 
               // Login options
-              ...(_loginOptions.map((opt) => Padding(
-                padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(16)),
-                child: _buildLoginButton(
-                  type: opt.type,
-                  icon: opt.icon,
-                  label: opt.label,
-                  color: opt.color,
-                  textColor: textColor,
+              ...(_loginOptions.map(
+                (opt) => Padding(
+                  padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(16)),
+                  child: _buildLoginButton(
+                    type: opt.type,
+                    icon: opt.icon,
+                    label: opt.label,
+                    color: opt.color,
+                    textColor: textColor,
+                  ),
                 ),
-              ))),
+              )),
 
               // Error
               if (_errorMsg.isNotEmpty) ...[
@@ -215,7 +246,8 @@ class _CreateMpcWalletState extends ConsumerState<CreateMpcWallet> {
             ? SizedBox(
                 width: 20,
                 height: 20,
-                child: CircularProgressIndicator(strokeWidth: 2, color: color))
+                child: CircularProgressIndicator(strokeWidth: 2, color: color),
+              )
             : Icon(icon, color: color, size: 24),
         label: Text(
           label,
@@ -227,9 +259,13 @@ class _CreateMpcWalletState extends ConsumerState<CreateMpcWallet> {
         ),
         style: OutlinedButton.styleFrom(
           side: BorderSide(
-            color: isDisabled ? Colors.grey.shade300 : color.withValues(alpha: 0.4),
+            color: isDisabled
+                ? Colors.grey.shade300
+                : color.withValues(alpha: 0.4),
           ),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
           alignment: Alignment.centerLeft,
           padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(24)),
         ),

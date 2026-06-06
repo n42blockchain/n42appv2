@@ -112,10 +112,7 @@ class _WalletChainSendDotState extends ConsumerState<WalletChainSendDot>
         errorMessage,
         style: TextStyle(
           fontSize: ScreenUtil().setSp(28.0),
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.errorTextColor.name,
-          ),
+          color: AppColorTokens.of(context).danger,
         ),
       ),
     );
@@ -134,10 +131,7 @@ class _WalletChainSendDotState extends ConsumerState<WalletChainSendDot>
           Container(
             padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
             height: ScreenUtil().setWidth(148.0),
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.backGroundColor.name,
-            ),
+            color: AppColorTokens.of(context).bgBase,
             child: AppButton(
               label: title,
               onPressed: sendTransaction,

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/wallet/pages/network/custom_chain_service.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// Page to add a custom EVM chain.
 ///
@@ -125,19 +126,13 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
           style: TextStyle(
             fontSize: ScreenUtil().setSp(34),
             fontWeight: FontWeight.w600,
-            color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainTextColor.name,
-            ),
+            color: AppColorTokens.of(context).textPrimary,
           ),
         ),
-        backgroundColor: AppThemeUtils.getColorByKey(
-          context, AppThemeKeys.backGroundColor.name,
-        ),
+        backgroundColor: AppColorTokens.of(context).bgBase,
         elevation: 0,
       ),
-      backgroundColor: AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.backGroundColor.name,
-      ),
+      backgroundColor: AppColorTokens.of(context).bgBase,
       body: SingleChildScrollView(
         padding: EdgeInsets.all(ScreenUtil().setWidth(32)),
         child: Form(
@@ -167,11 +162,11 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
                     child: ElevatedButton(
                       onPressed: _lookingUp ? null : _lookupChain,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainBlueColor.name,
-                        ),
+                        backgroundColor: AppColorTokens.of(context).brand,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+                          borderRadius: BorderRadius.circular(
+                            ScreenUtil().setWidth(12),
+                          ),
                         ),
                       ),
                       child: _lookingUp
@@ -179,7 +174,8 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
                               width: ScreenUtil().setWidth(32),
                               height: ScreenUtil().setWidth(32),
                               child: const CircularProgressIndicator(
-                                strokeWidth: 2, color: Colors.white,
+                                strokeWidth: 2,
+                                color: Colors.white,
                               ),
                             )
                           : Text(
@@ -230,20 +226,20 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
                         backgroundColor: _rpcStatus == 'valid'
                             ? Colors.green
                             : _rpcStatus == 'invalid'
-                                ? Colors.red
-                                : AppThemeUtils.getColorByKey(
-                                    context, AppThemeKeys.itemBgColor.name,
-                                  ),
+                            ? Colors.red
+                            : AppColorTokens.of(context).bgSurface,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+                          borderRadius: BorderRadius.circular(
+                            ScreenUtil().setWidth(12),
+                          ),
                         ),
                       ),
                       child: Icon(
                         _rpcStatus == 'valid'
                             ? Icons.check
                             : _rpcStatus == 'invalid'
-                                ? Icons.close
-                                : Icons.wifi,
+                            ? Icons.close
+                            : Icons.wifi,
                         color: _rpcStatus != null ? Colors.white : null,
                         size: ScreenUtil().setWidth(36),
                       ),
@@ -280,7 +276,9 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
                   padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
                   decoration: BoxDecoration(
                     color: Colors.red.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                    borderRadius: BorderRadius.circular(
+                      ScreenUtil().setWidth(8),
+                    ),
                   ),
                   child: Text(
                     _error!,
@@ -300,11 +298,11 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
                 child: ElevatedButton(
                   onPressed: _loading ? null : _submit,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainBlueColor.name,
-                    ),
+                    backgroundColor: AppColorTokens.of(context).brand,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+                      borderRadius: BorderRadius.circular(
+                        ScreenUtil().setWidth(16),
+                      ),
                     ),
                   ),
                   child: _loading
@@ -334,9 +332,7 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
         style: TextStyle(
           fontSize: ScreenUtil().setSp(26),
           fontWeight: FontWeight.w500,
-          color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainTextColor.name,
-          ),
+          color: AppColorTokens.of(context).textPrimary,
         ),
       ),
     );
@@ -354,26 +350,19 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
       validator: validator,
       style: TextStyle(
         fontSize: ScreenUtil().setSp(28),
-        color: AppThemeUtils.getColorByKey(
-          context, AppThemeKeys.mainTextColor.name,
-        ),
+        color: AppColorTokens.of(context).textPrimary,
       ),
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: TextStyle(
-          color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemSubtitleTextColor.name,
-          ),
-        ),
+        hintStyle: TextStyle(color: AppColorTokens.of(context).textSubtitle),
         filled: true,
-        fillColor: AppThemeUtils.getColorByKey(
-          context, AppThemeKeys.itemBgColor.name,
-        ),
+        fillColor: AppColorTokens.of(context).bgSurface,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
           borderSide: BorderSide(
             color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemBorderColor.name,
+              context,
+              AppThemeKeys.itemBorderColor.name,
             ),
           ),
         ),
@@ -381,7 +370,8 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
           borderSide: BorderSide(
             color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemBorderColor.name,
+              context,
+              AppThemeKeys.itemBorderColor.name,
             ),
           ),
         ),

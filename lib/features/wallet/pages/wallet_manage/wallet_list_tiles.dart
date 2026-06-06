@@ -48,10 +48,7 @@ mixin _WalletListTilesMixin on _WalletListActionsMixin {
     child: Text(
       label,
       style: TextStyle(
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.itemSubtitleTextColor.name,
-        ),
+        color: AppColorTokens.of(context).textSubtitle,
         fontSize: ScreenUtil().setSp(24),
         letterSpacing: 0.4,
       ),
@@ -75,10 +72,7 @@ mixin _WalletListTilesMixin on _WalletListActionsMixin {
           children: [
             SlidableAction(
               onPressed: (_) => _onManage(info, index),
-              backgroundColor: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainBlueColor.name,
-              ),
+              backgroundColor: AppColorTokens.of(context).brand,
               foregroundColor: Colors.white,
               icon: Icons.edit_outlined,
               label: S.of(context).g_key_wallet_manage,
@@ -119,23 +113,11 @@ mixin _WalletListTilesMixin on _WalletListActionsMixin {
         ),
         decoration: BoxDecoration(
           color: isActive
-              ? AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainBlueColor.name,
-                ).withValues(alpha: 0.08)
-              : AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemBgColor.name,
-                ),
+              ? AppColorTokens.of(context).brand.withValues(alpha: 0.08)
+              : AppColorTokens.of(context).bgSurface,
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
           border: isActive
-              ? Border.all(
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainBlueColor.name,
-                  ),
-                  width: 1.5,
-                )
+              ? Border.all(color: AppColorTokens.of(context).brand, width: 1.5)
               : Border.all(color: Colors.transparent),
           boxShadow: [
             BoxShadow(
@@ -162,10 +144,7 @@ mixin _WalletListTilesMixin on _WalletListActionsMixin {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainTextColor.name,
-                      ),
+                      color: AppColorTokens.of(context).textPrimary,
                       fontSize: ScreenUtil().setSp(32),
                       fontWeight: FontWeight.w600,
                     ),
@@ -175,10 +154,7 @@ mixin _WalletListTilesMixin on _WalletListActionsMixin {
                     coinKeys.take(3).join(' · ') +
                         (coinKeys.length > 3 ? ' +${coinKeys.length - 3}' : ''),
                     style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.itemSubtitleTextColor.name,
-                      ),
+                      color: AppColorTokens.of(context).textSubtitle,
                       fontSize: ScreenUtil().setSp(24),
                     ),
                   ),
@@ -194,19 +170,15 @@ mixin _WalletListTilesMixin on _WalletListActionsMixin {
                                 vertical: ScreenUtil().setWidth(2),
                               ),
                               decoration: BoxDecoration(
-                                color: AppThemeUtils.getColorByKey(
+                                color: AppColorTokens.of(
                                   context,
-                                  AppThemeKeys.mainBlueColor.name,
-                                ).withValues(alpha: 0.12),
+                                ).brand.withValues(alpha: 0.12),
                                 borderRadius: BorderRadius.circular(4),
                               ),
                               child: Text(
                                 tag,
                                 style: TextStyle(
-                                  color: AppThemeUtils.getColorByKey(
-                                    context,
-                                    AppThemeKeys.mainBlueColor.name,
-                                  ),
+                                  color: AppColorTokens.of(context).brand,
                                   fontSize: ScreenUtil().setSp(20),
                                 ),
                               ),
@@ -222,19 +194,13 @@ mixin _WalletListTilesMixin on _WalletListActionsMixin {
             if (isActive)
               Icon(
                 Icons.check_circle,
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainBlueColor.name,
-                ),
+                color: AppColorTokens.of(context).brand,
                 size: ScreenUtil().setWidth(40),
               )
             else
               Icon(
                 Icons.radio_button_unchecked,
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemSubtitleTextColor.name,
-                ),
+                color: AppColorTokens.of(context).textSubtitle,
                 size: ScreenUtil().setWidth(36),
               ),
           ],

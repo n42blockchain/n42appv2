@@ -11,6 +11,7 @@ import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/features/wallet/pages/market/market_price_format_utils.dart';
 import 'package:n42_wallet/features/wallet/pages/market/price_alert_sheet_utils.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/services/coin_price_alert_service.dart';
 
 /// 价格到达提醒配置底部弹窗
@@ -151,23 +152,11 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.itemBgColor.name,
-    );
-    final textColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainTextColor.name,
-    );
+    final bgColor = AppColorTokens.of(context).bgSurface;
+    final textColor = AppColorTokens.of(context).textPrimary;
     final subColor = textColor.withAlpha(153);
-    final accentColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainBlueColor.name,
-    );
-    final dividerColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.dividerColor.name,
-    );
+    final accentColor = AppColorTokens.of(context).brand;
+    final dividerColor = AppColorTokens.of(context).border;
     final bottomPad = MediaQuery.of(context).viewInsets.bottom;
 
     return PopScope(

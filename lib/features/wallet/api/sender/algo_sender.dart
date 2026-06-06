@@ -29,12 +29,14 @@ class AlgoSender implements ChainSender {
     final algoApi = AlgoApi();
 
     // Get balance
-    final mmb = await _tokenViewApi.getBalance(
-      BlockchainType.Algorand.name,
-      CoinType.ALGO.name,
-      params.fromAddress,
-      isTest: false,
-    ) ?? MessageModel.error();
+    final mmb =
+        await _tokenViewApi.getBalance(
+          BlockchainType.Algorand.name,
+          CoinType.ALGO.name,
+          params.fromAddress,
+          isTest: false,
+        ) ??
+        MessageModel.error();
     if (mmb.error) return SendResult.fail(mmb.data?.toString());
     final chainBalance = mmb.data as BigInt;
     if (chainBalance == BigInt.zero) {
@@ -49,7 +51,10 @@ class AlgoSender implements ChainSender {
     final gas = getCoinGas(CoinType.ALGO.name, contract: false);
     final totalGasPrice = minFee * BigInt.from(gas);
 
-    BigInt valuePrice = ethToWeiString(params.amount.toString(), params.decimals);
+    BigInt valuePrice = ethToWeiString(
+      params.amount.toString(),
+      params.decimals,
+    );
     double adjustedAmount = params.amount;
 
     if (valuePrice == chainBalance && params.sendMax) {
@@ -57,9 +62,13 @@ class AlgoSender implements ChainSender {
         return SendResult.fail(S.current.g_key_wallet_m5('ALGO'));
       }
       valuePrice = valuePrice - totalGasPrice;
-      adjustedAmount = toEther(valuePrice.toString(), params.decimals).toDouble();
+      adjustedAmount = toEther(
+        valuePrice.toString(),
+        params.decimals,
+      ).toDouble();
     }
-    if (valuePrice <= BigInt.zero || totalGasPrice + valuePrice > chainBalance) {
+    if (valuePrice <= BigInt.zero ||
+        totalGasPrice + valuePrice > chainBalance) {
       return SendResult.fail(S.current.g_key_wallet_m5('ALGO'));
     }
 
@@ -77,7 +86,10 @@ class AlgoSender implements ChainSender {
     Map<dynamic, dynamic> rValue;
     if (params.privateKey != null) {
       rValue = await _trustdart.signTransactionByteArray(
-        CoinType.ALGO.name, params.path, txData, pk: params.privateKey!,
+        CoinType.ALGO.name,
+        params.path,
+        txData,
+        pk: params.privateKey!,
       );
     } else {
       if (!AppGlobals.appContext.mounted) {
@@ -91,15 +103,18 @@ class AlgoSender implements ChainSender {
       );
     }
 
-    if (rValue['result'] != true) return SendResult.fail(S.current.g_key_wallet_m6);
+    if (rValue['result'] != true)
+      return SendResult.fail(S.current.g_key_wallet_m6);
     final Uint8List signBytes = hexToBytes(rValue['signHash'] as String);
 
-    final sendMm = await _tokenViewApi.sendTx(
-      BlockchainType.Algorand.name,
-      CoinType.ALGO.name,
-      signBytes,
-      netMode: params.isTest ? 'test' : 'main',
-    ) ?? MessageModel.error();
+    final sendMm =
+        await _tokenViewApi.sendTx(
+          BlockchainType.Algorand.name,
+          CoinType.ALGO.name,
+          signBytes,
+          netMode: params.isTest ? 'test' : 'main',
+        ) ??
+        MessageModel.error();
 
     if (sendMm.error) return SendResult.fail(sendMm.data?.toString());
     return SendResult.ok(sendMm.data?.toString(), actualAmount: adjustedAmount);

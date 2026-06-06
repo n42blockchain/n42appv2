@@ -33,17 +33,12 @@ class GasSponsorshipBadge extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [
-            Colors.green.withAlpha(30),
-            Colors.green.withAlpha(10),
-          ],
+          colors: [Colors.green.withAlpha(30), Colors.green.withAlpha(10)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-        border: Border.all(
-          color: Colors.green.withAlpha(40),
-        ),
+        border: Border.all(color: Colors.green.withAlpha(40)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

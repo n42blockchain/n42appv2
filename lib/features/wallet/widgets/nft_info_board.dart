@@ -8,7 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/widgets/ens_address_display.dart';
 import 'package:n42_wallet/features/widgets/prompt_widget.dart';
 
@@ -57,13 +57,12 @@ class NftInfoBoard extends StatelessWidget {
 
   // ── 主题色辅助方法 ─────────────────────────────────────────────────────
   Color _mainTextColor(BuildContext context) =>
-      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+      AppColorTokens.of(context).textPrimary;
 
   Color _subtitleColor(BuildContext context) =>
-      AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+      AppColorTokens.of(context).textSubtitle;
 
-  Color _blueColor(BuildContext context) =>
-      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+  Color _blueColor(BuildContext context) => AppColorTokens.of(context).brand;
 
   @override
   Widget build(BuildContext context) {
@@ -100,22 +99,26 @@ class NftInfoBoard extends StatelessWidget {
           // Collection 名称
           if (collectionName != null && collectionName!.isNotEmpty)
             _buildInfoRow(
-                context, S.of(context).g_key_nft_collection, collectionName!),
+              context,
+              S.of(context).g_key_nft_collection,
+              collectionName!,
+            ),
 
           // Token ID
           if (tokenId != null && tokenId!.isNotEmpty)
-            _buildInfoRow(context, S.of(context).g_key_nft_token_id,
-                '#$tokenId'),
+            _buildInfoRow(
+              context,
+              S.of(context).g_key_nft_token_id,
+              '#$tokenId',
+            ),
 
           // NFT 类型
           if (nftType != null && nftType!.isNotEmpty)
-            _buildInfoRow(
-                context, S.of(context).g_key_nft_type, nftType!),
+            _buildInfoRow(context, S.of(context).g_key_nft_type, nftType!),
 
           // ERC1155 数量
           if (nftType == 'ERC1155' && balance != null)
-            _buildInfoRow(
-                context, S.of(context).g_key_nft_balance, balance!),
+            _buildInfoRow(context, S.of(context).g_key_nft_balance, balance!),
 
           // Ordinals 铭文编号
           if (inscriptionNumber != null)
@@ -338,7 +341,7 @@ class NftInfoBoard extends StatelessWidget {
   Widget _buildActionButtons(BuildContext context) {
     final blueColor = _blueColor(context);
     final actions = [
-      (S.of(context).g_key_48, Icons.send, sendTap),       // Send
+      (S.of(context).g_key_48, Icons.send, sendTap), // Send
       (S.of(context).g_key_33, Icons.qr_code, receiveTap), // Receive
       (S.of(context).g_key_196, Icons.open_in_browser, browserTap), // Browser
     ];
@@ -352,7 +355,11 @@ class NftInfoBoard extends StatelessWidget {
               if (i > 0) SizedBox(width: ScreenUtil().setWidth(12)),
               Expanded(
                 child: _buildActionButton(
-                  context, actions[i].$1, actions[i].$2, blueColor, actions[i].$3,
+                  context,
+                  actions[i].$1,
+                  actions[i].$2,
+                  blueColor,
+                  actions[i].$3,
                 ),
               ),
             ],
@@ -361,10 +368,7 @@ class NftInfoBoard extends StatelessWidget {
         SizedBox(height: ScreenUtil().setWidth(16)),
         // 销毁按钮（独立一行，红色警告风格）
         if (burnTap != null)
-          SizedBox(
-            width: double.infinity,
-            child: _buildBurnButton(context),
-          ),
+          SizedBox(width: double.infinity, child: _buildBurnButton(context)),
       ],
     );
   }
@@ -390,11 +394,7 @@ class NftInfoBoard extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Icon(
-              icon,
-              color: color,
-              size: ScreenUtil().setWidth(36),
-            ),
+            Icon(icon, color: color, size: ScreenUtil().setWidth(36)),
             SizedBox(height: ScreenUtil().setWidth(8)),
             Text(
               label,
@@ -422,10 +422,7 @@ class NftInfoBoard extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.red.withAlpha(15),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-          border: Border.all(
-            color: Colors.red.withAlpha(50),
-            width: 1,
-          ),
+          border: Border.all(color: Colors.red.withAlpha(50), width: 1),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -457,7 +454,9 @@ class NftInfoBoard extends StatelessWidget {
     ToastUtils.init(context);
     Clipboard.setData(ClipboardData(text: text));
     ToastUtils.showFtToast(
-        child: successViewV1(S.of(context).copy), duration: 3);
+      child: successViewV1(S.of(context).copy),
+      duration: 3,
+    );
   }
 
   String _shortenAddress(String address) {

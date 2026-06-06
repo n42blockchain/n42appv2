@@ -63,7 +63,7 @@ class EnsAddressField extends StatefulWidget {
 
   /// ENS 解析状态变化回调
   final void Function(EnsResolveStatus status, EnsResolutionResult? result)?
-      onEnsStatusChanged;
+  onEnsStatusChanged;
 
   const EnsAddressField({
     super.key,
@@ -141,7 +141,10 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
     // 检查是否是 ENS 名称
     if (EnsService.isEnsName(text)) {
       _updateStatus(EnsResolveStatus.resolving, null);
-      _debounceTimer = Timer(_debounceDelay, () => _resolveEns(text, requestId));
+      _debounceTimer = Timer(
+        _debounceDelay,
+        () => _resolveEns(text, requestId),
+      );
     } else {
       _updateStatus(EnsResolveStatus.idle, null);
       // 验证普通地址
@@ -181,8 +184,7 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
 
     if (result.success && result.address != null) {
       // 检查是否自转
-      if (result.address!.toLowerCase() ==
-          widget.senderAddress.toLowerCase()) {
+      if (result.address!.toLowerCase() == widget.senderAddress.toLowerCase()) {
         _updateStatus(
           EnsResolveStatus.failed,
           EnsResolutionResult.failure(S.current.g_key_ens_self_transfer),
@@ -242,8 +244,7 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
     widget.onEnsStatusChanged?.call(status, result);
   }
 
-  Color _themeColor(String key) =>
-      AppThemeUtils.getColorByKey(context, key);
+  Color _themeColor(String key) => AppThemeUtils.getColorByKey(context, key);
 
   @override
   Widget build(BuildContext context) {
@@ -268,10 +269,7 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
           child: TextField(
             controller: widget.controller,
             focusNode: widget.focusNode,
-            style: TextStyle(
-              fontSize: su.setSp(28),
-              color: mainTextColor,
-            ),
+            style: TextStyle(fontSize: su.setSp(28), color: mainTextColor),
             decoration: InputDecoration(
               labelText: widget.labelText,
               hintText: widget.hintText ?? 'Address or ENS name',
@@ -341,23 +339,23 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
     final iconSize = su.setWidth(28);
     final Widget indicator = switch (_status) {
       EnsResolveStatus.resolving => SizedBox(
-          width: su.setWidth(24),
-          height: su.setWidth(24),
-          child: CircularProgressIndicator(
-            strokeWidth: 2,
-            valueColor: AlwaysStoppedAnimation<Color>(blueColor),
-          ),
+        width: su.setWidth(24),
+        height: su.setWidth(24),
+        child: CircularProgressIndicator(
+          strokeWidth: 2,
+          valueColor: AlwaysStoppedAnimation<Color>(blueColor),
         ),
+      ),
       EnsResolveStatus.resolved => Icon(
-          Icons.check_circle,
-          color: _successColor,
-          size: iconSize,
-        ),
+        Icons.check_circle,
+        color: _successColor,
+        size: iconSize,
+      ),
       EnsResolveStatus.failed => Icon(
-          Icons.warning_amber_rounded,
-          color: Colors.orange,
-          size: iconSize,
-        ),
+        Icons.warning_amber_rounded,
+        color: Colors.orange,
+        size: iconSize,
+      ),
       EnsResolveStatus.idle => const SizedBox.shrink(),
     };
 
@@ -393,9 +391,7 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
         decoration: BoxDecoration(
           color: _successColor.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(su.setWidth(8)),
-          border: Border.all(
-            color: _successColor.withValues(alpha: 0.3),
-          ),
+          border: Border.all(color: _successColor.withValues(alpha: 0.3)),
         ),
         child: Row(
           children: [
@@ -481,10 +477,10 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
   }
 
   Widget _verifiedIcon() => Icon(
-        Icons.verified,
-        color: _successColor,
-        size: ScreenUtil().setWidth(24),
-      );
+    Icons.verified,
+    color: _successColor,
+    size: ScreenUtil().setWidth(24),
+  );
 
   void _copyAddress(String address) {
     Clipboard.setData(ClipboardData(text: address));

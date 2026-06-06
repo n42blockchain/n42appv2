@@ -6,7 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// Paymaster 类型
 enum PaymasterType {
@@ -25,6 +25,7 @@ class PaymasterOption {
   final PaymasterType type;
   final String? tokenSymbol;
   final String? tokenAddress;
+
   /// Token decimals for ERC-20 paymaster (e.g. 6 for USDC/USDT, 18 for DAI)
   final int? decimals;
   final double? exchangeRate; // 1 ETH = X token
@@ -72,20 +73,14 @@ class PaymasterOptionCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: isSelected
               ? _getOptionColor().withAlpha(20)
-              : AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemBgColor.name,
-                ),
+              : AppColorTokens.of(context).bgSurface,
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
           border: Border.all(
             color: isSelected
                 ? _getOptionColor()
                 : isDisabled
-                    ? Colors.grey.withAlpha(30)
-                    : AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.itemSubtitleTextColor.name,
-                      ).withAlpha(30),
+                ? Colors.grey.withAlpha(30)
+                : AppColorTokens.of(context).textSubtitle.withAlpha(30),
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -111,10 +106,7 @@ class PaymasterOptionCard extends StatelessWidget {
                             fontWeight: FontWeight.w600,
                             color: isDisabled
                                 ? Colors.grey
-                                : AppThemeUtils.getColorByKey(
-                                    context,
-                                    AppThemeKeys.mainTextColor.name,
-                                  ),
+                                : AppColorTokens.of(context).textPrimary,
                           ),
                         ),
                         if (option.type == PaymasterType.sponsored) ...[
@@ -126,7 +118,9 @@ class PaymasterOptionCard extends StatelessWidget {
                             ),
                             decoration: BoxDecoration(
                               color: Colors.green.withAlpha(30),
-                              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                              borderRadius: BorderRadius.circular(
+                                ScreenUtil().setWidth(8),
+                              ),
                             ),
                             child: Text(
                               S.of(context).g_key_aa_free,
@@ -149,10 +143,7 @@ class PaymasterOptionCard extends StatelessWidget {
                         fontSize: ScreenUtil().setSp(22),
                         color: isDisabled
                             ? Colors.grey
-                            : AppThemeUtils.getColorByKey(
-                                context,
-                                AppThemeKeys.itemSubtitleTextColor.name,
-                              ),
+                            : AppColorTokens.of(context).textSubtitle,
                       ),
                     ),
                   ],
@@ -180,10 +171,7 @@ class PaymasterOptionCard extends StatelessWidget {
     switch (option.type) {
       case PaymasterType.none:
         icon = Icons.account_balance_wallet;
-        color = AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.mainBlueColor.name,
-        );
+        color = AppColorTokens.of(context).brand;
         break;
       case PaymasterType.sponsored:
         icon = Icons.card_giftcard;
@@ -202,11 +190,7 @@ class PaymasterOptionCard extends StatelessWidget {
         color: color.withAlpha(20),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
       ),
-      child: Icon(
-        icon,
-        size: ScreenUtil().setWidth(28),
-        color: color,
-      ),
+      child: Icon(icon, size: ScreenUtil().setWidth(28), color: color),
     );
   }
 

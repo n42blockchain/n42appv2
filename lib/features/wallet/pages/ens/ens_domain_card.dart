@@ -6,7 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/pages/ens/ens_chain_config.dart';
 import 'package:n42_wallet/features/wallet/services/ens_registration_service.dart';
 
@@ -25,10 +25,7 @@ class EnsDomainCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final isExpiringSoon = ownedEns.isExpiringSoon;
     final isExpired = ownedEns.isExpired;
-    final themeBlue = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainBlueColor.name,
-    );
+    final themeBlue = AppColorTokens.of(context).brand;
 
     final Color gradientBase;
     if (isExpired) {
@@ -58,10 +55,7 @@ class EnsDomainCard extends StatelessWidget {
             style: TextStyle(
               fontSize: ScreenUtil().setSp(36),
               fontWeight: FontWeight.bold,
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainTextColor.name,
-              ),
+              color: AppColorTokens.of(context).textPrimary,
             ),
           ),
           SizedBox(height: ScreenUtil().setWidth(8)),
@@ -77,10 +71,7 @@ class EnsDomainCard extends StatelessWidget {
               '${ownedEns.daysUntilExpiry} ${S.of(context).g_key_ens_days_left}',
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(22),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemSubtitleTextColor.name,
-                ).withAlpha(150),
+                color: AppColorTokens.of(context).textSubtitle.withAlpha(150),
               ),
             ),
         ],
@@ -97,7 +88,10 @@ class _EnsAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final defaultAvatar = _DefaultAvatar(ownedEns: ownedEns, domainChain: domainChain);
+    final defaultAvatar = _DefaultAvatar(
+      ownedEns: ownedEns,
+      domainChain: domainChain,
+    );
     if (ownedEns.avatar == null) return defaultAvatar;
     return ClipRRect(
       borderRadius: BorderRadius.circular(ScreenUtil().setWidth(40)),
@@ -197,10 +191,7 @@ class _ExpiryRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final subtitleColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.itemSubtitleTextColor.name,
-    );
+    final subtitleColor = AppColorTokens.of(context).textSubtitle;
 
     IconData icon;
     Color color;
@@ -213,11 +204,13 @@ class _ExpiryRow extends StatelessWidget {
     } else if (isExpiringSoon) {
       icon = Icons.warning;
       color = Colors.orange;
-      label = '${S.of(context).g_key_ens_expires}: ${ownedEns.formattedExpiresAt}';
+      label =
+          '${S.of(context).g_key_ens_expires}: ${ownedEns.formattedExpiresAt}';
     } else {
       icon = Icons.access_time;
       color = subtitleColor;
-      label = '${S.of(context).g_key_ens_expires}: ${ownedEns.formattedExpiresAt}';
+      label =
+          '${S.of(context).g_key_ens_expires}: ${ownedEns.formattedExpiresAt}';
     }
 
     return Row(

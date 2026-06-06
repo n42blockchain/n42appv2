@@ -6,7 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/provider/batch_transfer_provider.dart';
 
 // ─── BottomBar ────────────────────────────────────────────────────────────────
@@ -33,7 +33,7 @@ class BatchBottomBar extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: AppColorTokens.of(context).bgSurface,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withAlpha(10),
@@ -56,7 +56,8 @@ class BatchBottomBar extends StatelessWidget {
               _summaryRow(
                 context,
                 label: '${S.of(context).g_key_batch_total_amount}:',
-                value: '${provider.formatAmount(provider.totalAmount)} $tokenSymbol',
+                value:
+                    '${provider.formatAmount(provider.totalAmount)} $tokenSymbol',
               ),
               if (provider.gasEstimate != null) ...[
                 SizedBox(height: ScreenUtil().setWidth(8)),
@@ -79,7 +80,10 @@ class BatchBottomBar extends StatelessWidget {
                 ),
                 child: Text(
                   provider.errorMessage!,
-                  style: TextStyle(fontSize: ScreenUtil().setSp(22), color: Colors.red),
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(22),
+                    color: Colors.red,
+                  ),
                 ),
               ),
               SizedBox(height: ScreenUtil().setWidth(12)),
@@ -101,9 +105,11 @@ class BatchBottomBar extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: provider.items.isEmpty ? null : onProceed,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                      backgroundColor: AppColorTokens.of(context).brand,
                       foregroundColor: Colors.white,
-                      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
+                      padding: EdgeInsets.symmetric(
+                        vertical: ScreenUtil().setWidth(16),
+                      ),
                     ),
                     child: BatchButtonContent(provider: provider),
                   ),
@@ -116,7 +122,11 @@ class BatchBottomBar extends StatelessWidget {
     );
   }
 
-  Widget _summaryRow(BuildContext context, {required String label, required String value}) {
+  Widget _summaryRow(
+    BuildContext context, {
+    required String label,
+    required String value,
+  }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -124,7 +134,7 @@ class BatchBottomBar extends StatelessWidget {
           label,
           style: TextStyle(
             fontSize: ScreenUtil().setSp(24),
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+            color: AppColorTokens.of(context).textSubtitle,
           ),
         ),
         Text(
@@ -132,7 +142,7 @@ class BatchBottomBar extends StatelessWidget {
           style: TextStyle(
             fontSize: ScreenUtil().setSp(24),
             fontWeight: FontWeight.w600,
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+            color: AppColorTokens.of(context).textPrimary,
           ),
         ),
       ],
@@ -152,17 +162,21 @@ class BatchButtonContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final s = S.of(context);
     return switch (provider.state) {
-      BatchTransferState.estimatingGas => _loadingRow(s.g_key_batch_estimating_gas),
+      BatchTransferState.estimatingGas => _loadingRow(
+        s.g_key_batch_estimating_gas,
+      ),
       BatchTransferState.signing => _loadingRow(s.g_key_batch_signing),
-      BatchTransferState.broadcasting => _loadingRow(s.g_key_batch_broadcasting),
+      BatchTransferState.broadcasting => _loadingRow(
+        s.g_key_batch_broadcasting,
+      ),
       BatchTransferState.success => Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.check_circle, size: ScreenUtil().setWidth(24)),
-            SizedBox(width: ScreenUtil().setWidth(8)),
-            Text(s.g_key_batch_done),
-          ],
-        ),
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.check_circle, size: ScreenUtil().setWidth(24)),
+          SizedBox(width: ScreenUtil().setWidth(8)),
+          Text(s.g_key_batch_done),
+        ],
+      ),
       _ => Text(s.g_key_batch_continue),
     };
   }
@@ -174,7 +188,10 @@ class BatchButtonContent extends StatelessWidget {
         SizedBox(
           width: ScreenUtil().setWidth(24),
           height: ScreenUtil().setWidth(24),
-          child: const CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+          child: const CircularProgressIndicator(
+            strokeWidth: 2,
+            color: Colors.white,
+          ),
         ),
         SizedBox(width: ScreenUtil().setWidth(8)),
         Text(label),

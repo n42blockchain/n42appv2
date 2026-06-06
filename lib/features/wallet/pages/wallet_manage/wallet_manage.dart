@@ -200,10 +200,7 @@ class _WalletManageState extends ConsumerState<WalletManage> {
                 child: Text(
                   S.of(context).g_key_113,
                   style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.mainTextColor.name,
-                    ),
+                    color: AppColorTokens.of(context).textPrimary,
                     fontSize: ScreenUtil().setSp(30.0),
                   ),
                 ),
@@ -272,10 +269,7 @@ class _WalletManageState extends ConsumerState<WalletManage> {
                       height: ScreenUtil().setWidth(148.0),
                       width: double.infinity,
                       padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.backGroundColor.name,
-                      ),
+                      color: AppColorTokens.of(context).bgBase,
                       child: AppButton(
                         label: S.of(context).g_key_15,
                         onPressed: () async {
@@ -298,7 +292,7 @@ class _WalletManageState extends ConsumerState<WalletManage> {
   }
 
   BoxDecoration get _tileDecoration => BoxDecoration(
-    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+    color: AppColorTokens.of(context).bgSurface,
     borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8.0)),
   );
 
@@ -313,10 +307,7 @@ class _WalletManageState extends ConsumerState<WalletManage> {
   );
 
   Widget _walletName(BuildContext context, String title, String value) {
-    final mainText = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainTextColor.name,
-    );
+    final mainText = AppColorTokens.of(context).textPrimary;
 
     return InkWell(
       onTap: () async {
@@ -371,10 +362,7 @@ class _WalletManageState extends ConsumerState<WalletManage> {
   }
 
   Widget _itemWidget(String title, VoidCallback onTap) {
-    final mainText = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainTextColor.name,
-    );
+    final mainText = AppColorTokens.of(context).textPrimary;
 
     return InkWell(
       onTap: onTap,

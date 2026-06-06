@@ -7,23 +7,34 @@ import 'package:web3dart/web3dart.dart';
 class CreateP2WSH {
   String? p2wsh(int lockTime, {String? uPubKey, String? cPubKey}) {
     // 示例：用户公钥和 Canister 公钥
-    uPubKey ??= '02a50eb66887d03fe186b608f477d99bc7631f56e34e3a4843565c55f1aa0c043a';
-    cPubKey ??= '03cc9054981c2c0c891db4d99818dde7e4a7d0b272b4464a48e5c03de8652fc721';
+    uPubKey ??=
+        '02a50eb66887d03fe186b608f477d99bc7631f56e34e3a4843565c55f1aa0c043a';
+    cPubKey ??=
+        '03cc9054981c2c0c891db4d99818dde7e4a7d0b272b4464a48e5c03de8652fc721';
 
     final userPubKey = Uint8List.fromList(hexToBytes(uPubKey));
     final canisterPubKey = Uint8List.fromList(hexToBytes(cPubKey));
 
-    final redeemScript = buildRedeemScript(userPubKey, canisterPubKey, lockTime);
+    final redeemScript = buildRedeemScript(
+      userPubKey,
+      canisterPubKey,
+      lockTime,
+    );
     final scriptHash = sha256a(redeemScript);
     return createP2WSHAddress(scriptHash);
   }
 
   /// 构建锁定脚本
-  Uint8List buildRedeemScript(Uint8List userPubKey, Uint8List canisterPubKey, int lockTime) {
+  Uint8List buildRedeemScript(
+    Uint8List userPubKey,
+    Uint8List canisterPubKey,
+    int lockTime,
+  ) {
     return Uint8List.fromList([
       0x63,
       ...encodeNumber(lockTime),
-      0xb1, 0x75,
+      0xb1,
+      0x75,
       ...userPubKey,
       0xac,
       0x67,
@@ -129,7 +140,13 @@ class CreateP2WSH {
 
   /// 计算 polymod
   int _polymod(List<int> values) {
-    const generator = [0x3b6a57b2, 0x26508e6d, 0x1ea119fa, 0x3d4233dd, 0x2a1462b3];
+    const generator = [
+      0x3b6a57b2,
+      0x26508e6d,
+      0x1ea119fa,
+      0x3d4233dd,
+      0x2a1462b3,
+    ];
     var chk = 1;
     for (final value in values) {
       final top = chk >> 25;

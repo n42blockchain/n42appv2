@@ -231,13 +231,15 @@ class DexPriceChart extends StatelessWidget {
                 ),
               ),
               const Spacer(),
-              ..._periods.map((p) => _periodChip(
-                    context,
-                    label: p['label'] as String,
-                    days: p['days'] as int,
-                    blueColor: blueColor,
-                    subText: subText,
-                  )),
+              ..._periods.map(
+                (p) => _periodChip(
+                  context,
+                  label: p['label'] as String,
+                  days: p['days'] as int,
+                  blueColor: blueColor,
+                  subText: subText,
+                ),
+              ),
             ],
           ),
           SizedBox(height: ScreenUtil().setWidth(12)),
@@ -295,11 +297,8 @@ class DexPriceChart extends StatelessWidget {
         height: ScreenUtil().setWidth(100),
         child: Center(
           child: Text(
-            tokenInSymbol == null
-                ? s.g_key_dex_select_token
-                : 'No chart data',
-            style:
-                TextStyle(color: subText, fontSize: ScreenUtil().setSp(24)),
+            tokenInSymbol == null ? s.g_key_dex_select_token : 'No chart data',
+            style: TextStyle(color: subText, fontSize: ScreenUtil().setSp(24)),
           ),
         ),
       );
@@ -319,12 +318,16 @@ class DexPriceChart extends StatelessWidget {
             Text(
               '\$${chartPrices.reduce((a, b) => a < b ? a : b).toStringAsFixed(2)}',
               style: TextStyle(
-                  color: subText, fontSize: ScreenUtil().setSp(20)),
+                color: subText,
+                fontSize: ScreenUtil().setSp(20),
+              ),
             ),
             Text(
               '\$${chartPrices.reduce((a, b) => a > b ? a : b).toStringAsFixed(2)}',
               style: TextStyle(
-                  color: subText, fontSize: ScreenUtil().setSp(20)),
+                color: subText,
+                fontSize: ScreenUtil().setSp(20),
+              ),
             ),
           ],
         ),

@@ -103,10 +103,7 @@ class _BackupTwoState extends State<BackupTwo> {
                         S.of(context).g_key_wallet_c12,
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(50.0),
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.mainTextColor.name,
-                          ),
+                          color: AppColorTokens.of(context).textPrimary,
                         ),
                       ),
                     ),
@@ -127,10 +124,7 @@ class _BackupTwoState extends State<BackupTwo> {
                   const Divider(height: 1),
                   Container(
                     padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.backGroundColor.name,
-                    ),
+                    color: AppColorTokens.of(context).bgBase,
                     height: ScreenUtil().setWidth(148),
                     child: AppButton(
                       label: S.of(context).g_key_wallet_c43,

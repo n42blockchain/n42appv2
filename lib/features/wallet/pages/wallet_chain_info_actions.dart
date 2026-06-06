@@ -17,6 +17,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// Action sheet mixin for WalletChainInfo.
 /// Provides the bottom sheet with Send / Receive / Explorer / Buy / Sell /
@@ -288,8 +289,7 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
     );
   }
 
-  Color get _blue =>
-      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+  Color get _blue => AppColorTokens.of(context).brand;
 
   Divider _divider() =>
       Divider(height: ScreenUtil().setWidth(1), indent: 0, endIndent: 0);

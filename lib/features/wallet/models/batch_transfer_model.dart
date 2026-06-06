@@ -4,12 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 /// 批量转账状态
-enum BatchTransferStatus {
-  pending,
-  processing,
-  success,
-  failed,
-}
+enum BatchTransferStatus { pending, processing, success, failed }
 
 /// 单笔转账项
 class BatchTransferItem {
@@ -154,7 +149,11 @@ class BatchTransferResult {
     this.totalGasUsed,
   });
 
-  factory BatchTransferResult.success(String txHash, List<BatchTransferItem> items, BigInt gasUsed) {
+  factory BatchTransferResult.success(
+    String txHash,
+    List<BatchTransferItem> items,
+    BigInt gasUsed,
+  ) {
     return BatchTransferResult(
       success: true,
       txHash: txHash,
@@ -163,12 +162,11 @@ class BatchTransferResult {
     );
   }
 
-  factory BatchTransferResult.failure(String error, List<BatchTransferItem> items) {
-    return BatchTransferResult(
-      success: false,
-      error: error,
-      items: items,
-    );
+  factory BatchTransferResult.failure(
+    String error,
+    List<BatchTransferItem> items,
+  ) {
+    return BatchTransferResult(success: false, error: error, items: items);
   }
 }
 
@@ -207,7 +205,10 @@ class CsvParseResult {
     required this.validLines,
   });
 
-  factory CsvParseResult.success(List<BatchTransferItem> items, int totalLines) {
+  factory CsvParseResult.success(
+    List<BatchTransferItem> items,
+    int totalLines,
+  ) {
     return CsvParseResult(
       success: true,
       items: items,
@@ -217,7 +218,11 @@ class CsvParseResult {
     );
   }
 
-  factory CsvParseResult.partial(List<BatchTransferItem> items, List<String> errors, int totalLines) {
+  factory CsvParseResult.partial(
+    List<BatchTransferItem> items,
+    List<String> errors,
+    int totalLines,
+  ) {
     return CsvParseResult(
       success: items.isNotEmpty,
       items: items,

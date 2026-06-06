@@ -6,9 +6,9 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/aa/aa.dart' hide PaymasterType;
 import 'package:n42_wallet/features/wallet/pages/aa/paymaster_select_page.dart';
 import 'package:n42_wallet/features/wallet/widgets/aa/aa_transaction_preview.dart';
@@ -45,9 +45,7 @@ class _AASendPageState extends State<AASendPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(
-        text: S.of(context).g_key_48,
-      ),
+      appBar: AppBarWidget(text: S.of(context).g_key_48),
       body: Stack(
         children: [
           SingleChildScrollView(
@@ -83,9 +81,7 @@ class _AASendPageState extends State<AASendPage>
           if (isSending)
             Container(
               color: Colors.black.withAlpha(50),
-              child: const Center(
-                child: CircularProgressIndicator(),
-              ),
+              child: const Center(child: CircularProgressIndicator()),
             ),
         ],
       ),

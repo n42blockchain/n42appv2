@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 import 'session_key_models.dart';
 
@@ -21,25 +21,26 @@ class SessionKeyPresetCards extends StatelessWidget {
   });
 
   static ({String label, Color riskColor}) _presetInfo(
-      BuildContext context, SessionKeyPermission preset) =>
-      switch (preset) {
-        SessionKeyPermission.transfer => (
-          label: S.of(context).g_key_aa_session_preset_transfer,
-          riskColor: Colors.green,
-        ),
-        SessionKeyPermission.contractCall => (
-          label: S.of(context).g_key_aa_session_preset_contract,
-          riskColor: Colors.orange,
-        ),
-        SessionKeyPermission.full => (
-          label: S.of(context).g_key_aa_session_preset_full,
-          riskColor: Colors.red,
-        ),
-        SessionKeyPermission.approve => (
-          label: S.of(context).g_key_aa_approve,
-          riskColor: Colors.orange,
-        ),
-      };
+    BuildContext context,
+    SessionKeyPermission preset,
+  ) => switch (preset) {
+    SessionKeyPermission.transfer => (
+      label: S.of(context).g_key_aa_session_preset_transfer,
+      riskColor: Colors.green,
+    ),
+    SessionKeyPermission.contractCall => (
+      label: S.of(context).g_key_aa_session_preset_contract,
+      riskColor: Colors.orange,
+    ),
+    SessionKeyPermission.full => (
+      label: S.of(context).g_key_aa_session_preset_full,
+      riskColor: Colors.red,
+    ),
+    SessionKeyPermission.approve => (
+      label: S.of(context).g_key_aa_approve,
+      riskColor: Colors.orange,
+    ),
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -117,8 +118,7 @@ class _PresetCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: isSelected
               ? cardColor.withAlpha(18)
-              : AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.backGroundColor.name),
+              : AppColorTokens.of(context).bgBase,
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
           border: Border.all(
             color: isSelected ? cardColor : Colors.grey.withAlpha(30),
@@ -130,8 +130,14 @@ class _PresetCard extends StatelessWidget {
           children: [
             _buildHeader(context, cardColor, isSelected),
             SizedBox(height: ScreenUtil().setWidth(12)),
-            ...can.map((c) => _bullet(context, c, Icons.check_circle_outline, Colors.green)),
-            ...cannot.map((c) => _bullet(context, c, Icons.remove_circle_outline, Colors.red)),
+            ...can.map(
+              (c) =>
+                  _bullet(context, c, Icons.check_circle_outline, Colors.green),
+            ),
+            ...cannot.map(
+              (c) =>
+                  _bullet(context, c, Icons.remove_circle_outline, Colors.red),
+            ),
             if (isHighRisk) _buildHighRiskWarning(context),
           ],
         ),
@@ -162,10 +168,7 @@ class _PresetCard extends StatelessWidget {
             style: TextStyle(
               fontSize: ScreenUtil().setSp(26),
               fontWeight: FontWeight.w700,
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainTextColor.name,
-              ),
+              color: AppColorTokens.of(context).textPrimary,
             ),
           ),
         ),
@@ -189,8 +192,11 @@ class _PresetCard extends StatelessWidget {
         ),
         SizedBox(width: ScreenUtil().setWidth(8)),
         if (isSelected)
-          Icon(Icons.check_circle,
-              size: ScreenUtil().setWidth(22), color: cardColor),
+          Icon(
+            Icons.check_circle,
+            size: ScreenUtil().setWidth(22),
+            color: cardColor,
+          ),
       ],
     );
   }
@@ -206,8 +212,11 @@ class _PresetCard extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(Icons.warning_amber,
-                size: ScreenUtil().setWidth(18), color: Colors.red),
+            Icon(
+              Icons.warning_amber,
+              size: ScreenUtil().setWidth(18),
+              color: Colors.red,
+            ),
             SizedBox(width: ScreenUtil().setWidth(8)),
             Expanded(
               child: Text(
@@ -225,7 +234,11 @@ class _PresetCard extends StatelessWidget {
   }
 
   Widget _bullet(
-      BuildContext context, String text, IconData icon, Color color) {
+    BuildContext context,
+    String text,
+    IconData icon,
+    Color color,
+  ) {
     return Padding(
       padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(6)),
       child: Row(
@@ -238,10 +251,7 @@ class _PresetCard extends StatelessWidget {
               text,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(22),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemSubtitleTextColor.name,
-                ),
+                color: AppColorTokens.of(context).textSubtitle,
               ),
             ),
           ),

@@ -4,6 +4,7 @@ import 'package:n42_wallet/features/wallet/models/dex/dex_token_model.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// A card that shows a token selector and an amount input / read-only display.
 ///
@@ -36,7 +37,9 @@ class DexTokenCard extends StatelessWidget {
       padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
       decoration: BoxDecoration(
         color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemBgColor4.name),
+          context,
+          AppThemeKeys.itemBgColor4.name,
+        ),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
       ),
       child: Column(
@@ -45,8 +48,7 @@ class DexTokenCard extends StatelessWidget {
           Text(
             label,
             style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name),
+              color: AppColorTokens.of(context).textSubtitle,
               fontSize: ScreenUtil().setSp(26),
             ),
           ),
@@ -67,17 +69,17 @@ class DexTokenCard extends StatelessWidget {
       return TextField(
         controller: controller,
         style: TextStyle(
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemTextColor.name),
+          color: AppColorTokens.of(context).textItem,
           fontSize: ScreenUtil().setSp(44),
         ),
-        keyboardType:
-            const TextInputType.numberWithOptions(decimal: true),
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
         decoration: InputDecoration(
           hintText: '0.00',
           hintStyle: TextStyle(
             color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.textFieldHintColor.name),
+              context,
+              AppThemeKeys.textFieldHintColor.name,
+            ),
             fontSize: ScreenUtil().setSp(44),
           ),
           border: InputBorder.none,
@@ -89,8 +91,7 @@ class DexTokenCard extends StatelessWidget {
     return Text(
       amountReadOnly ?? '—',
       style: TextStyle(
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemTextColor.name),
+        color: AppColorTokens.of(context).textItem,
         fontSize: ScreenUtil().setSp(44),
       ),
     );
@@ -105,8 +106,7 @@ class DexTokenCard extends StatelessWidget {
           vertical: ScreenUtil().setWidth(12),
         ),
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemBgColor.name),
+          color: AppColorTokens.of(context).bgSurface,
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
         ),
         child: Row(
@@ -128,8 +128,7 @@ class DexTokenCard extends StatelessWidget {
                 token?.symbol ?? S.of(context).g_key_dex_select_token,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainBlueColor.name),
+                  color: AppColorTokens.of(context).brand,
                   fontSize: ScreenUtil().setSp(28),
                   fontWeight: FontWeight.w600,
                 ),
@@ -138,8 +137,7 @@ class DexTokenCard extends StatelessWidget {
             SizedBox(width: ScreenUtil().setWidth(4)),
             Icon(
               Icons.arrow_drop_down,
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainBlueColor.name),
+              color: AppColorTokens.of(context).brand,
               size: ScreenUtil().setWidth(36),
             ),
           ],

@@ -31,12 +31,14 @@ class TrxSender implements ChainSender {
     final isTestnet = params.isTest;
 
     // Get native TRX balance
-    final mmChain = await _tokenViewApi.getBalance(
-      BlockchainType.Tron.name,
-      CoinType.TRX.name,
-      params.fromAddress,
-      isTest: false,
-    ) ?? MessageModel.error();
+    final mmChain =
+        await _tokenViewApi.getBalance(
+          BlockchainType.Tron.name,
+          CoinType.TRX.name,
+          params.fromAddress,
+          isTest: false,
+        ) ??
+        MessageModel.error();
     if (mmChain.error) return SendResult.fail(mmChain.data?.toString());
     final rawChainData = mmChain.data;
     BigInt chainBalance = _extractTrxBalance(rawChainData, '');
@@ -54,11 +56,13 @@ class TrxSender implements ChainSender {
     }
 
     // Get gas price
-    MessageModel mmg = await _tokenViewApi.getGasPrice(
-      BlockchainType.Tron.name,
-      CoinType.TRX.name,
-      isTest: false,
-    ) ?? MessageModel.error();
+    MessageModel mmg =
+        await _tokenViewApi.getGasPrice(
+          BlockchainType.Tron.name,
+          CoinType.TRX.name,
+          isTest: false,
+        ) ??
+        MessageModel.error();
     if (mmg.error) {
       mmg = await TrxApi().getGasPriceTrx(isTest: false);
     }
@@ -76,13 +80,20 @@ class TrxSender implements ChainSender {
           return SendResult.fail(S.current.g_key_wallet_m5('TRX'));
         }
         valuePrice = valuePrice - totalGasPrice;
-        adjustedAmount = toEther(valuePrice.toString(), params.decimals).toDouble();
+        adjustedAmount = toEther(
+          valuePrice.toString(),
+          params.decimals,
+        ).toDouble();
       }
-      if (valuePrice <= BigInt.zero || totalGasPrice + valuePrice > chainBalance) {
+      if (valuePrice <= BigInt.zero ||
+          totalGasPrice + valuePrice > chainBalance) {
         return SendResult.fail(S.current.g_key_wallet_m5('TRX'));
       }
     } else {
-      valuePrice = ethToWeiString(params.amount.toString(), params.tokenDecimals);
+      valuePrice = ethToWeiString(
+        params.amount.toString(),
+        params.tokenDecimals,
+      );
       if (valuePrice > tokenBalance) {
         return SendResult.fail(S.current.g_key_wallet_m4);
       }
@@ -93,13 +104,17 @@ class TrxSender implements ChainSender {
 
     // Get latest block
     final trxApi = TrxApi();
-    MessageModel mmlbn = await _tokenViewApi.getLatestBlockNumberTrx(isTest: isTestnet);
+    MessageModel mmlbn = await _tokenViewApi.getLatestBlockNumberTrx(
+      isTest: isTestnet,
+    );
     if (mmlbn.error || !_hasUsableTrxBlockData(mmlbn.data)) {
       mmlbn = await trxApi.getBlockNowTrx(isTest: isTestnet);
     }
     if (mmlbn.error) return SendResult.fail(mmlbn.data?.toString());
 
-    final blockInfo = (mmlbn.data as Map<String, dynamic>)['raw_data'] as Map<String, dynamic>;
+    final blockInfo =
+        (mmlbn.data as Map<String, dynamic>)['raw_data']
+            as Map<String, dynamic>;
     final txData = <String, dynamic>{
       'ownerAddress': params.fromAddress,
       'toAddress': params.toAddress,
@@ -135,7 +150,10 @@ class TrxSender implements ChainSender {
       );
     } else {
       signStr = await _trustdart.signTransaction(
-        CoinType.TRX.name, params.path, txData, pk: params.privateKey!,
+        CoinType.TRX.name,
+        params.path,
+        txData,
+        pk: params.privateKey!,
       );
     }
 
@@ -147,7 +165,9 @@ class TrxSender implements ChainSender {
       coinType: CoinType.TRX.name,
     );
     if (!sigResult.isValid) {
-      return SendResult.fail(sigResult.errorMessage ?? 'Signature validation failed');
+      return SendResult.fail(
+        sigResult.errorMessage ?? 'Signature validation failed',
+      );
     }
 
     // Broadcast

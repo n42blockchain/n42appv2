@@ -29,10 +29,10 @@ class RecentAddressEntry {
   }
 
   Map<String, dynamic> toJson() => {
-        'address': address,
-        if (name != null) 'name': name,
-        'time': time.toUtc().toIso8601String(),
-      };
+    'address': address,
+    if (name != null) 'name': name,
+    'time': time.toUtc().toIso8601String(),
+  };
 }
 
 /// 最近转账地址服务
@@ -57,8 +57,7 @@ class RecentAddressService {
       final decoded = json.decode(raw) as Map<String, dynamic>;
       return decoded.map((coinType, listRaw) {
         final entries = (listRaw as List<dynamic>)
-            .map((e) =>
-                RecentAddressEntry.fromJson(e as Map<String, dynamic>))
+            .map((e) => RecentAddressEntry.fromJson(e as Map<String, dynamic>))
             .toList();
         return MapEntry(coinType, entries);
       });
@@ -69,7 +68,8 @@ class RecentAddressService {
 
   /// 写入底层存储
   static Future<void> _writeAll(
-      Map<String, List<RecentAddressEntry>> data) async {
+    Map<String, List<RecentAddressEntry>> data,
+  ) async {
     final prefs = await SharedPreferences.getInstance();
     final encoded = json.encode(
       data.map((k, v) => MapEntry(k, v.map((e) => e.toJson()).toList())),
@@ -91,8 +91,7 @@ class RecentAddressService {
     final list = List<RecentAddressEntry>.from(all[coinType] ?? []);
 
     // 去重：移除旧条目（不区分大小写比对）
-    list.removeWhere(
-        (e) => e.address.toLowerCase() == address.toLowerCase());
+    list.removeWhere((e) => e.address.toLowerCase() == address.toLowerCase());
 
     // 插到头部
     list.insert(

@@ -9,7 +9,6 @@ import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/widgets/ens_address_display.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
@@ -223,18 +222,9 @@ class _WalletReceiveQrState extends ConsumerState<WalletReceiveQr> {
     final waValue = ref.watch(wapBridgeProvider);
     final su = ScreenUtil();
 
-    final bgColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.backGroundColor.name,
-    );
-    final mainText = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainTextColor.name,
-    );
-    final blueColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainBlueColor.name,
-    );
+    final bgColor = AppColorTokens.of(context).bgBase;
+    final mainText = AppColorTokens.of(context).textPrimary;
+    final blueColor = AppColorTokens.of(context).brand;
     final w40 = su.setWidth(40.0);
 
     return Scaffold(

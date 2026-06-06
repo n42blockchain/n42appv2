@@ -15,6 +15,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// Action sheet mixin for WalletChainInfoXRP.
 /// Provides Send / Receive / Explorer / Buy / Sell / Token / Network-switch
@@ -60,35 +61,44 @@ mixin WalletChainInfoXrpActionsMixin<T extends ConsumerStatefulWidget>
       ),
     ];
 
-    final bool showAddToken = coinModel.privateKey != null &&
+    final bool showAddToken =
+        coinModel.privateKey != null &&
         coinModel.coin['blockchainType'] != BlockchainType.Bitcoin.name &&
         coinModel.coin['isContract'] != true;
     if (showAddToken) {
-      items.add(_buildSheetItem(
-        icon: Image.asset('assets/wallet/addToken.png', color: _blue),
-        label: s.g_token_m_key_11,
-        onTap: () async {
-          final bool r = await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => WalletCoinTokenAdd2(coinModel)),
-          );
-          if (!mounted) return;
-          if (r) ref.read(wapBridgeProvider).initWallet(shouldInitCoinInfo: true);
-          Navigator.pop(context);
-        },
-      ));
+      items.add(
+        _buildSheetItem(
+          icon: Image.asset('assets/wallet/addToken.png', color: _blue),
+          label: s.g_token_m_key_11,
+          onTap: () async {
+            final bool r = await Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => WalletCoinTokenAdd2(coinModel)),
+            );
+            if (!mounted) return;
+            if (r)
+              ref.read(wapBridgeProvider).initWallet(shouldInitCoinInfo: true);
+            Navigator.pop(context);
+          },
+        ),
+      );
     }
 
-    final subtitleColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
+    final subtitleColor = AppColorTokens.of(context).textSubtitle;
     final activeColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainButtonBgColor.name);
-    final blueColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainBlueColor.name);
+      context,
+      AppThemeKeys.mainButtonBgColor.name,
+    );
+    final blueColor = AppColorTokens.of(context).brand;
     final mainColor = isTest ? subtitleColor : activeColor;
     final testColor = isTest ? blueColor : subtitleColor;
 
-    Widget networkButton(String asset, String label, Color color, VoidCallback onTap) {
+    Widget networkButton(
+      String asset,
+      String label,
+      Color color,
+      VoidCallback onTap,
+    ) {
       return Expanded(
         child: InkWell(
           onTap: onTap,
@@ -103,7 +113,10 @@ mixin WalletChainInfoXrpActionsMixin<T extends ConsumerStatefulWidget>
                   child: Image.asset(asset, color: color),
                 ),
                 SizedBox(width: su.setWidth(20.0)),
-                Text(label, style: TextStyle(color: color, fontSize: su.setSp(30.0))),
+                Text(
+                  label,
+                  style: TextStyle(color: color, fontSize: su.setSp(30.0)),
+                ),
               ],
             ),
           ),
@@ -111,16 +124,18 @@ mixin WalletChainInfoXrpActionsMixin<T extends ConsumerStatefulWidget>
       );
     }
 
-    final networkRow = Row(children: [
-      networkButton('assets/wallet/mainnet.png', s.g_key_148, mainColor, () {
-        if (isTest) changeNet(false, Load.refresh);
-        Navigator.pop(context);
-      }),
-      networkButton('assets/wallet/testnet.png', s.g_key_147, testColor, () {
-        if (!isTest) changeNet(true, Load.refresh);
-        Navigator.pop(context);
-      }),
-    ]);
+    final networkRow = Row(
+      children: [
+        networkButton('assets/wallet/mainnet.png', s.g_key_148, mainColor, () {
+          if (isTest) changeNet(false, Load.refresh);
+          Navigator.pop(context);
+        }),
+        networkButton('assets/wallet/testnet.png', s.g_key_147, testColor, () {
+          if (!isTest) changeNet(true, Load.refresh);
+          Navigator.pop(context);
+        }),
+      ],
+    );
 
     final childs = <Widget>[];
     for (int i = 0; i < items.length; i++) {
@@ -131,11 +146,13 @@ mixin WalletChainInfoXrpActionsMixin<T extends ConsumerStatefulWidget>
 
     if (marketInfo != null && marketInfo!['coin_gecko_id'] != '') {
       childs.add(_divider());
-      childs.add(_buildSheetItem(
-        icon: Image.asset('assets/wallet/marketInfo.png', color: _blue),
-        label: s.g_key_213,
-        onTap: () => pushThenPop(MarketCoinInfo(marketInfo ?? {})),
-      ));
+      childs.add(
+        _buildSheetItem(
+          icon: Image.asset('assets/wallet/marketInfo.png', color: _blue),
+          label: s.g_key_213,
+          onTap: () => pushThenPop(MarketCoinInfo(marketInfo ?? {})),
+        ),
+      );
     }
 
     sheetBottom(context, '', Column(children: childs));
@@ -150,33 +167,37 @@ mixin WalletChainInfoXrpActionsMixin<T extends ConsumerStatefulWidget>
       _xmlInfoWidget(
         S.of(context).g_key_xml_1,
         '${toEther(other.reserveBase.toString(), decimals)} ${CoinType.XRP.name}'
-            ' (${oCcy.format(other.reserveBase)} drops)',
-        S.of(context).g_key_xml_11(
-            toEther(other.reserveBase.toString(), decimals),
-            oCcy.format(other.reserveBase)),
+        ' (${oCcy.format(other.reserveBase)} drops)',
+        S
+            .of(context)
+            .g_key_xml_11(
+              toEther(other.reserveBase.toString(), decimals),
+              oCcy.format(other.reserveBase),
+            ),
       ),
       _xmlInfoWidget(
         S.of(context).g_key_xml_2,
         '${toEther(other.reserveInc.toString(), decimals)} ${CoinType.XRP.name}'
-            ' (${oCcy.format(other.reserveInc)} drops)',
-        S.of(context).g_key_xml_22(
-            toEther(other.reserveInc.toString(), decimals),
-            oCcy.format(other.reserveInc)),
+        ' (${oCcy.format(other.reserveInc)} drops)',
+        S
+            .of(context)
+            .g_key_xml_22(
+              toEther(other.reserveInc.toString(), decimals),
+              oCcy.format(other.reserveInc),
+            ),
       ),
       _xmlInfoWidget(
         S.of(context).g_key_xml_3,
         other.ownerCount.toString(),
-        S.of(context).g_key_xml_33(
-          other.ownerCount,
-          toEther(other.reserveInc.toString(), decimals).toDouble() *
+        S
+            .of(context)
+            .g_key_xml_33(
               other.ownerCount,
-        ),
+              toEther(other.reserveInc.toString(), decimals).toDouble() *
+                  other.ownerCount,
+            ),
       ),
-      _xmlInfoWidget(
-        S.of(context).g_key_xml_4,
-        '',
-        S.of(context).g_key_xml_44,
-      ),
+      _xmlInfoWidget(S.of(context).g_key_xml_4, '', S.of(context).g_key_xml_44),
     ];
 
     sheetBottom(context, '', Column(children: childs));
@@ -194,14 +215,10 @@ mixin WalletChainInfoXrpActionsMixin<T extends ConsumerStatefulWidget>
     );
   }
 
-  Color get _blue =>
-      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+  Color get _blue => AppColorTokens.of(context).brand;
 
-  Divider _divider() => Divider(
-        height: ScreenUtil().setWidth(1),
-        indent: 0,
-        endIndent: 0,
-      );
+  Divider _divider() =>
+      Divider(height: ScreenUtil().setWidth(1), indent: 0, endIndent: 0);
 
   Widget _buildSheetItem({
     required Widget icon,
@@ -244,16 +261,14 @@ mixin WalletChainInfoXrpActionsMixin<T extends ConsumerStatefulWidget>
               Text(
                 '$title:',
                 style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemSubtitleTextColor.name),
+                  color: AppColorTokens.of(context).textSubtitle,
                   fontSize: ScreenUtil().setSp(28),
                 ),
               ),
               Text(
                 value,
                 style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemTextColor.name),
+                  color: AppColorTokens.of(context).textItem,
                   fontSize: ScreenUtil().setSp(28),
                 ),
               ),
@@ -263,8 +278,7 @@ mixin WalletChainInfoXrpActionsMixin<T extends ConsumerStatefulWidget>
           Text(
             description,
             style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name),
+              color: AppColorTokens.of(context).textSubtitle,
               fontSize: ScreenUtil().setSp(28),
             ),
           ),
@@ -277,9 +291,7 @@ mixin WalletChainInfoXrpActionsMixin<T extends ConsumerStatefulWidget>
   Future<void> navigateToXrpSend() async {
     await Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => WalletChainSendXrp(coinModel),
-      ),
+      MaterialPageRoute(builder: (context) => WalletChainSendXrp(coinModel)),
     );
   }
 }

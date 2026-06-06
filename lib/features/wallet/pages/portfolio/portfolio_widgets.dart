@@ -45,7 +45,10 @@ class SummaryCard extends StatelessWidget {
               SizedBox(width: 5.w),
               Text(
                 label,
-                style: TextStyle(fontSize: 12.sp, color: textColor.withAlpha(153)),
+                style: TextStyle(
+                  fontSize: 12.sp,
+                  color: textColor.withAlpha(153),
+                ),
               ),
             ],
           ),
@@ -53,14 +56,20 @@ class SummaryCard extends StatelessWidget {
           Text(
             value,
             style: TextStyle(
-                fontSize: 17.sp, fontWeight: FontWeight.bold, color: valueColor),
+              fontSize: 17.sp,
+              fontWeight: FontWeight.bold,
+              color: valueColor,
+            ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
           if (subValue != null)
             Text(
               subValue!,
-              style: TextStyle(fontSize: 12.sp, color: valueColor.withAlpha(200)),
+              style: TextStyle(
+                fontSize: 12.sp,
+                color: valueColor.withAlpha(200),
+              ),
             ),
         ],
       ),
@@ -112,8 +121,9 @@ class LegendItem extends StatelessWidget {
           Text(
             '${pct.toStringAsFixed(1)}%',
             style: TextStyle(
-                fontSize: 11.sp,
-                color: isActive ? textColor : textColor.withAlpha(128)),
+              fontSize: 11.sp,
+              color: isActive ? textColor : textColor.withAlpha(128),
+            ),
           ),
         ],
       ),

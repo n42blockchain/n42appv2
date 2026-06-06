@@ -1,5 +1,5 @@
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/widgets/empty.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
@@ -54,14 +54,12 @@ class _ChooseCoinsPageState extends ConsumerState<ChooseCoinsPage> {
             : Text(
                 S.of(context).g_key_address_6,
                 style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
+                  color: AppColorTokens.of(context).textPrimary,
                   fontSize: scr.setSp(32.0),
                 ),
               ),
         centerTitle: true,
-        backgroundColor:
-            AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
+        backgroundColor: AppColorTokens.of(context).bgBase,
         actions: [
           IconButton(
             onPressed: () {
@@ -72,7 +70,7 @@ class _ChooseCoinsPageState extends ConsumerState<ChooseCoinsPage> {
               }
             },
             icon: Icon(Icons.search, size: scr.setWidth(48.0)),
-          )
+          ),
         ],
       ),
       body: mList.isEmpty
@@ -87,7 +85,7 @@ class _ChooseCoinsPageState extends ConsumerState<ChooseCoinsPage> {
   Widget _buildSearchField(ScreenUtil scr) {
     return CupertinoTextField(
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: AppColorTokens.of(context).bgSurface,
         borderRadius: BorderRadius.circular(scr.setWidth(30.0)),
       ),
       padding: EdgeInsets.symmetric(
@@ -95,7 +93,7 @@ class _ChooseCoinsPageState extends ConsumerState<ChooseCoinsPage> {
         horizontal: scr.setWidth(24.0),
       ),
       style: TextStyle(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+        color: AppColorTokens.of(context).textPrimary,
         fontSize: scr.setSp(32.0),
       ),
       placeholder: S.of(context).g_key_address_7,
@@ -145,8 +143,7 @@ class _ChooseCoinsPageState extends ConsumerState<ChooseCoinsPage> {
                     Text(
                       coin['name'] ?? '',
                       style: TextStyle(
-                        color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.mainTextColor.name),
+                        color: AppColorTokens.of(context).textPrimary,
                         fontSize: scr.setSp(32.0),
                       ),
                     ),
@@ -154,8 +151,7 @@ class _ChooseCoinsPageState extends ConsumerState<ChooseCoinsPage> {
                     Text(
                       miniName,
                       style: TextStyle(
-                        color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.itemSubtitleTextColor.name),
+                        color: AppColorTokens.of(context).textSubtitle,
                         fontSize: scr.setWidth(32.0),
                       ),
                     ),
@@ -166,8 +162,7 @@ class _ChooseCoinsPageState extends ConsumerState<ChooseCoinsPage> {
                   Icon(
                     Icons.check,
                     size: scr.setWidth(48.0),
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainBlueColor.name),
+                    color: AppColorTokens.of(context).brand,
                   )
                 else
                   SizedBox(width: scr.setWidth(48.0)),
@@ -177,8 +172,7 @@ class _ChooseCoinsPageState extends ConsumerState<ChooseCoinsPage> {
             SizedBox(height: scr.setWidth(26.0)),
             Divider(
               height: scr.setWidth(1.0),
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.dividerColor.name),
+              color: AppColorTokens.of(context).border,
             ),
           ],
         ),
@@ -189,15 +183,13 @@ class _ChooseCoinsPageState extends ConsumerState<ChooseCoinsPage> {
   void _searchData(String text) {
     if (text.isEmpty) return;
     final keyword = text.toLowerCase();
-    final results = allList
-        .where((e) {
-          final name = (e.coin['name'] ?? '').toString().toLowerCase();
-          final symbol = (e.coin['miniName'] ?? e.coin['coinType'] ?? '')
-              .toString()
-              .toLowerCase();
-          return name.contains(keyword) || symbol.contains(keyword);
-        })
-        .toList();
+    final results = allList.where((e) {
+      final name = (e.coin['name'] ?? '').toString().toLowerCase();
+      final symbol = (e.coin['miniName'] ?? e.coin['coinType'] ?? '')
+          .toString()
+          .toLowerCase();
+      return name.contains(keyword) || symbol.contains(keyword);
+    }).toList();
     if (results.isNotEmpty) {
       setState(() {
         mList = results;

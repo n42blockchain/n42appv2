@@ -1,5 +1,4 @@
 import 'package:n42_wallet/core/design_system/design_system.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -37,10 +36,7 @@ class WalletChainInfoTitle extends StatelessWidget {
               height: ScreenUtil().setWidth(50.0),
               child: Icon(
                 Icons.arrow_back_ios,
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainTextColor.name,
-                ),
+                color: AppColorTokens.of(context).textPrimary,
                 size: ScreenUtil().setWidth(40.0),
               ),
             ),
@@ -69,10 +65,7 @@ class WalletChainInfoTitle extends StatelessWidget {
           padding: EdgeInsets.all(ScreenUtil().setWidth(5.0)),
           child: Image.asset(
             rightImgUrl!,
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainBlueColor.name,
-            ),
+            color: AppColorTokens.of(context).brand,
           ),
         ),
       );

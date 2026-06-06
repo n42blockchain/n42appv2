@@ -49,10 +49,7 @@ class SwapAstMinerFeeWidget extends StatelessWidget {
       padding: EdgeInsets.all(AppSpacing.space8),
       decoration: BoxDecoration(
         borderRadius: AppRadius.brMd,
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.itemBgColor.name,
-        ),
+        color: AppColorTokens.of(context).bgSurface,
       ),
       child: Column(
         children: [
@@ -98,10 +95,7 @@ class SwapAstMinerFeeWidget extends StatelessWidget {
       payCoinModel!.coin['decimals'],
       fallback: 18,
     );
-    Color totalGasPriceColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainTextColor.name,
-    );
+    Color totalGasPriceColor = AppColorTokens.of(context).textPrimary;
 
     if (blockchainType == BlockchainType.Ethereum.name) {
       final String unit = _swapFeeString(
@@ -109,10 +103,7 @@ class SwapAstMinerFeeWidget extends StatelessWidget {
         fallback: title,
       );
       if (totalGasPrice > payCoinModel!.balance) {
-        totalGasPriceColor = AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.errorTextColor.name,
-        );
+        totalGasPriceColor = AppColorTokens.of(context).danger;
       }
       return _FeeStrings(
         totalGasPriceStr:
@@ -127,10 +118,7 @@ class SwapAstMinerFeeWidget extends StatelessWidget {
     if (blockchainType == BlockchainType.Tron.name) {
       if (toEther(totalGasPrice.toString(), decimals).toDouble() >
           payCoinModel!.balanceDoubleAll()) {
-        totalGasPriceColor = AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.errorTextColor.name,
-        );
+        totalGasPriceColor = AppColorTokens.of(context).danger;
       }
       return _FeeStrings(
         totalGasPriceStr:
@@ -168,22 +156,14 @@ class SwapAstMinerFeeWidget extends StatelessWidget {
           Text(
             label,
             style: AppTypography.body.copyWith(
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ),
+              color: AppColorTokens.of(context).textSubtitle,
             ),
           ),
           const Spacer(),
           Text(
             value,
             style: AppTypography.bodyStrong.copyWith(
-              color:
-                  valueColor ??
-                  AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainTextColor.name,
-                  ),
+              color: valueColor ?? AppColorTokens.of(context).textPrimary,
             ),
           ),
         ],

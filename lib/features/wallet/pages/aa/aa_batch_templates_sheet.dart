@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/aa/provider/batch_template_provider.dart';
 
 /// 批量模板列表底部弹层
@@ -40,8 +41,10 @@ class _BatchTemplatesSheetState extends State<BatchTemplatesSheet> {
           ),
           padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
           decoration: BoxDecoration(
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-            borderRadius: BorderRadius.vertical(top: Radius.circular(ScreenUtil().setWidth(24))),
+            color: AppColorTokens.of(context).bgSurface,
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(ScreenUtil().setWidth(24)),
+            ),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -57,7 +60,7 @@ class _BatchTemplatesSheetState extends State<BatchTemplatesSheet> {
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(32),
                         fontWeight: FontWeight.bold,
-                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                        color: AppColorTokens.of(context).textPrimary,
                       ),
                     ),
                   ),
@@ -70,25 +73,23 @@ class _BatchTemplatesSheetState extends State<BatchTemplatesSheet> {
               SizedBox(height: ScreenUtil().setWidth(16)),
               if (templates.isEmpty)
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(32)),
+                  padding: EdgeInsets.symmetric(
+                    vertical: ScreenUtil().setWidth(32),
+                  ),
                   child: Column(
                     children: [
                       Icon(
                         Icons.bookmarks_outlined,
                         size: ScreenUtil().setWidth(48),
-                        color: AppThemeUtils.getColorByKey(
+                        color: AppColorTokens.of(
                           context,
-                          AppThemeKeys.itemSubtitleTextColor.name,
-                        ).withAlpha(80),
+                        ).textSubtitle.withAlpha(80),
                       ),
                       SizedBox(height: ScreenUtil().setWidth(12)),
                       Text(
                         S.of(context).g_key_aa_batch_no_templates,
                         style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.itemSubtitleTextColor.name,
-                          ),
+                          color: AppColorTokens.of(context).textSubtitle,
                         ),
                       ),
                     ],
@@ -141,7 +142,10 @@ class _TemplateItem extends StatelessWidget {
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
       padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor2.name),
+        color: AppThemeUtils.getColorByKey(
+          context,
+          AppThemeKeys.itemBgColor2.name,
+        ),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
       ),
       child: Row(
@@ -155,7 +159,7 @@ class _TemplateItem extends StatelessWidget {
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(26),
                     fontWeight: FontWeight.w600,
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                    color: AppColorTokens.of(context).textPrimary,
                   ),
                 ),
                 SizedBox(height: ScreenUtil().setWidth(4)),
@@ -163,10 +167,7 @@ class _TemplateItem extends StatelessWidget {
                   '${template.operations.length} operations · ${template.chainSymbol}',
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(22),
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.itemSubtitleTextColor.name,
-                    ),
+                    color: AppColorTokens.of(context).textSubtitle,
                   ),
                 ),
               ],
@@ -176,9 +177,7 @@ class _TemplateItem extends StatelessWidget {
             onPressed: onLoad,
             child: Text(
               S.of(context).g_key_aa_batch_template_load,
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-              ),
+              style: TextStyle(color: AppColorTokens.of(context).brand),
             ),
           ),
           IconButton(

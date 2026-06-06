@@ -102,7 +102,9 @@ class _ExportKeystorePageState extends State<ExportKeystorePage> {
                       _ClipboardCountdownHint(
                         seconds: _countdown,
                         textColor: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.ff888888.name),
+                          context,
+                          AppThemeKeys.ff888888.name,
+                        ),
                       ),
                     ],
                     SizedBox(height: bottomBarHeight),
@@ -122,8 +124,7 @@ class _ExportKeystorePageState extends State<ExportKeystorePage> {
                     height: bottomBarHeight,
                     width: double.infinity,
                     padding: EdgeInsets.all(pad30),
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.backGroundColor.name),
+                    color: AppColorTokens.of(context).bgBase,
                     child: _isCopied
                         ? AppButton(
                             label: '${s.g_key_ex_keystore_12} (${_countdown}s)',
@@ -148,8 +149,7 @@ class _ExportKeystorePageState extends State<ExportKeystorePage> {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(scr.setWidth(16)),
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemBgColor.name),
+        color: AppColorTokens.of(context).bgSurface,
       ),
       padding: EdgeInsets.symmetric(
         horizontal: scr.setWidth(30),
@@ -159,8 +159,7 @@ class _ExportKeystorePageState extends State<ExportKeystorePage> {
       child: Text(
         widget.keystoreJson,
         style: TextStyle(
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemTextColor.name),
+          color: AppColorTokens.of(context).textItem,
           fontSize: scr.setSp(28),
         ),
       ),
@@ -168,8 +167,7 @@ class _ExportKeystorePageState extends State<ExportKeystorePage> {
   }
 
   Widget _buildItem(String title, String action) {
-    final mainTextColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainTextColor.name);
+    final mainTextColor = AppColorTokens.of(context).textPrimary;
     final scr = ScreenUtil();
 
     return Padding(
@@ -188,10 +186,7 @@ class _ExportKeystorePageState extends State<ExportKeystorePage> {
           SizedBox(height: scr.setWidth(12)),
           Text(
             action,
-            style: TextStyle(
-              color: mainTextColor,
-              fontSize: scr.setSp(28),
-            ),
+            style: TextStyle(color: mainTextColor, fontSize: scr.setSp(28)),
           ),
         ],
       ),
@@ -221,10 +216,7 @@ class _ClipboardCountdownHint extends StatelessWidget {
         SizedBox(width: ScreenUtil().setWidth(8)),
         Text(
           'Clipboard auto-clears in ${seconds}s',
-          style: TextStyle(
-            color: textColor,
-            fontSize: ScreenUtil().setSp(24),
-          ),
+          style: TextStyle(color: textColor, fontSize: ScreenUtil().setSp(24)),
         ),
       ],
     );

@@ -7,7 +7,7 @@ import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/api/gas_tracker_api.dart';
 import 'package:n42_wallet/features/wallet/models/gas_estimate_model.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
@@ -76,7 +76,7 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: AppColorTokens.of(context).bgSurface,
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
       ),
       child: Column(
@@ -91,12 +91,14 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
   }
 
   Widget _buildHeader(BuildContext context) {
-    final blueColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
-    final mainText = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final subtitleText = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+    final blueColor = AppColorTokens.of(context).brand;
+    final mainText = AppColorTokens.of(context).textPrimary;
+    final subtitleText = AppColorTokens.of(context).textSubtitle;
 
     return InkWell(
-      onTap: widget.expandable ? () => setState(() => _isExpanded = !_isExpanded) : null,
+      onTap: widget.expandable
+          ? () => setState(() => _isExpanded = !_isExpanded)
+          : null,
       child: Padding(
         padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
         child: Row(
@@ -137,7 +139,9 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
                 if (widget.expandable) ...[
                   SizedBox(width: ScreenUtil().setWidth(8)),
                   Icon(
-                    _isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                    _isExpanded
+                        ? Icons.keyboard_arrow_up
+                        : Icons.keyboard_arrow_down,
                     size: ScreenUtil().setWidth(40),
                     color: subtitleText,
                   ),
@@ -155,25 +159,47 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
       padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
       child: Row(
         children: [
-          _buildSpeedOption(context, GasSpeed.slow, S.of(context).g_key_gas_slow, Icons.snooze),
+          _buildSpeedOption(
+            context,
+            GasSpeed.slow,
+            S.of(context).g_key_gas_slow,
+            Icons.snooze,
+          ),
           SizedBox(width: ScreenUtil().setWidth(16)),
-          _buildSpeedOption(context, GasSpeed.standard, S.of(context).g_key_gas_standard, Icons.speed),
+          _buildSpeedOption(
+            context,
+            GasSpeed.standard,
+            S.of(context).g_key_gas_standard,
+            Icons.speed,
+          ),
           SizedBox(width: ScreenUtil().setWidth(16)),
-          _buildSpeedOption(context, GasSpeed.fast, S.of(context).g_key_gas_fast, Icons.flash_on),
+          _buildSpeedOption(
+            context,
+            GasSpeed.fast,
+            S.of(context).g_key_gas_fast,
+            Icons.flash_on,
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildSpeedOption(BuildContext context, GasSpeed speed, String label, IconData icon) {
+  Widget _buildSpeedOption(
+    BuildContext context,
+    GasSpeed speed,
+    String label,
+    IconData icon,
+  ) {
     final isSelected = _selectedSpeed == speed;
     final option = _getOption(speed);
-    final estimatedTime = GasTrackerApi.formatEstimatedTime(option.estimatedSeconds);
+    final estimatedTime = GasTrackerApi.formatEstimatedTime(
+      option.estimatedSeconds,
+    );
 
-    final blueColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
-    final mainText = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final subtitleText = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
-    final dividerColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name);
+    final blueColor = AppColorTokens.of(context).brand;
+    final mainText = AppColorTokens.of(context).textPrimary;
+    final subtitleText = AppColorTokens.of(context).textSubtitle;
+    final dividerColor = AppColorTokens.of(context).border;
 
     return Expanded(
       child: GestureDetector(
@@ -232,40 +258,63 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
       margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
+        color: AppColorTokens.of(context).bgBase,
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
       ),
       child: Column(
         children: [
           _buildDetailRow(context, s.g_key_101, gasLimit.toString()),
           spacing,
-          if (widget.gasEstimate.supportsEIP1559 && currentOption.eip1559 != null) ...[
-            _buildDetailRow(context, s.g_key_gas_base_fee,
-                '${_formatGwei(widget.gasEstimate.baseFee ?? BigInt.zero)} Gwei'),
+          if (widget.gasEstimate.supportsEIP1559 &&
+              currentOption.eip1559 != null) ...[
+            _buildDetailRow(
+              context,
+              s.g_key_gas_base_fee,
+              '${_formatGwei(widget.gasEstimate.baseFee ?? BigInt.zero)} Gwei',
+            ),
             spacing,
-            _buildDetailRow(context, s.g_key_gas_priority_fee,
-                '${_formatGwei(currentOption.maxPriorityFeePerGas)} Gwei'),
+            _buildDetailRow(
+              context,
+              s.g_key_gas_priority_fee,
+              '${_formatGwei(currentOption.maxPriorityFeePerGas)} Gwei',
+            ),
             spacing,
-            _buildDetailRow(context, s.g_key_gas_max_fee,
-                '${_formatGwei(currentOption.effectiveGasPrice)} Gwei'),
+            _buildDetailRow(
+              context,
+              s.g_key_gas_max_fee,
+              '${_formatGwei(currentOption.effectiveGasPrice)} Gwei',
+            ),
           ] else ...[
-            _buildDetailRow(context, s.g_key_t_17,
-                '${_formatGwei(currentOption.effectiveGasPrice)} Gwei'),
+            _buildDetailRow(
+              context,
+              s.g_key_t_17,
+              '${_formatGwei(currentOption.effectiveGasPrice)} Gwei',
+            ),
           ],
           spacing,
           const Divider(height: 1),
           spacing,
-          _buildDetailRow(context, s.g_key_t_16, _formatTotalFee(), isTotal: true),
+          _buildDetailRow(
+            context,
+            s.g_key_t_16,
+            _formatTotalFee(),
+            isTotal: true,
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildDetailRow(BuildContext context, String label, String value, {bool isTotal = false}) {
-    final subtitleText = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+  Widget _buildDetailRow(
+    BuildContext context,
+    String label,
+    String value, {
+    bool isTotal = false,
+  }) {
+    final subtitleText = AppColorTokens.of(context).textSubtitle;
     final valueColor = isTotal
-        ? AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
-        : AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+        ? AppColorTokens.of(context).brand
+        : AppColorTokens.of(context).textPrimary;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -321,11 +370,7 @@ class GasSelectorCompact extends StatelessWidget {
   final GasEstimateModel gasEstimate;
   final VoidCallback? onTap;
 
-  const GasSelectorCompact({
-    super.key,
-    required this.gasEstimate,
-    this.onTap,
-  });
+  const GasSelectorCompact({super.key, required this.gasEstimate, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -333,12 +378,16 @@ class GasSelectorCompact extends StatelessWidget {
     final totalFee = gasEstimate.currentTotalFee;
     final decimals = gasEstimate.decimals;
     final unit = gasEstimate.unit;
-    final formatted = Decimal.parse(toEther(totalFee.toString(), decimals).toString());
-    final estimatedTime = GasTrackerApi.formatEstimatedTime(currentOption.estimatedSeconds);
+    final formatted = Decimal.parse(
+      toEther(totalFee.toString(), decimals).toString(),
+    );
+    final estimatedTime = GasTrackerApi.formatEstimatedTime(
+      currentOption.estimatedSeconds,
+    );
 
-    final blueColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
-    final mainText = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final subtitleText = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+    final blueColor = AppColorTokens.of(context).brand;
+    final mainText = AppColorTokens.of(context).textPrimary;
+    final subtitleText = AppColorTokens.of(context).textSubtitle;
 
     return InkWell(
       onTap: onTap,
@@ -347,11 +396,9 @@ class GasSelectorCompact extends StatelessWidget {
           horizontal: ScreenUtil().setWidth(30),
           vertical: ScreenUtil().setWidth(20),
         ),
-        margin: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(30),
-        ),
+        margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+          color: AppColorTokens.of(context).bgSurface,
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
         ),
         child: Row(

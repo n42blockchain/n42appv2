@@ -52,16 +52,17 @@ String? resolveBalanceRpcOverride(CoinModel coinModel) {
     final baseInfo = canonical['baseInfo'];
     svc = baseInfo is Map
         ? (coinModel.isTest ? baseInfo['service_test'] : baseInfo['service'])
-            ?.toString()
-            .trim()
+              ?.toString()
+              .trim()
         : null;
   } else {
     // 自定义链：从存储数据取
-    svc = (coinModel.isTest
-            ? coinModel.coin['service_test']
-            : coinModel.coin['service'])
-        ?.toString()
-        .trim();
+    svc =
+        (coinModel.isTest
+                ? coinModel.coin['service_test']
+                : coinModel.coin['service'])
+            ?.toString()
+            .trim();
   }
 
   if (svc != null && svc.isNotEmpty) return svc;
@@ -71,7 +72,6 @@ String? resolveBalanceRpcOverride(CoinModel coinModel) {
 class WalletActionProvider extends ChangeNotifier
     with SafeChangeNotifierMixin
     implements ICoinModelWalletAccess {
-
   /// 公开的刷新方法，用于通知监听者数据已更新
   @override
   void refresh() {
@@ -331,10 +331,7 @@ class WalletActionProvider extends ChangeNotifier
     String symbols = "ETH,BNB,TRX,OKT",
   }) {
     final symbolList = symbols.split(",");
-    return [
-      for (final symbol in symbolList)
-        ?getCoinModelWithCoinType(symbol),
-    ];
+    return [for (final symbol in symbolList) ?getCoinModelWithCoinType(symbol)];
   }
 
   /// 聚合代币列表 (USDT, USDC)
@@ -438,11 +435,12 @@ class WalletActionProvider extends ChangeNotifier
 
     final String contract = coinModel.coin['isContract'] == true
         ? (coinModel.isTest
-            ? coinModel.coin['contract_test']
-            : coinModel.coin['contract'])
+              ? coinModel.coin['contract_test']
+              : coinModel.coin['contract'])
         : '';
 
-    final MessageModel mm = await tokenViewApi.getBalance(
+    final MessageModel mm =
+        await tokenViewApi.getBalance(
           coinModel.coin['blockchainType'],
           coinModel.coin['coinType'],
           address,

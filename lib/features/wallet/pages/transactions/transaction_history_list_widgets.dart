@@ -25,16 +25,18 @@ mixin _TransactionHistoryWidgetsMixin on _TransactionHistoryLogicMixin {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildFilterHeader(ctx, setSS, () => temp = temp.clear(),
-                        (t) => temp = t),
+                    _buildFilterHeader(
+                      ctx,
+                      setSS,
+                      () => temp = temp.clear(),
+                      (t) => temp = t,
+                    ),
                     SizedBox(height: 12.h),
-                    _buildDirectionSection(
-                        ctx, setSS, temp, (t) => temp = t),
+                    _buildDirectionSection(ctx, setSS, temp, (t) => temp = t),
                     SizedBox(height: 12.h),
                     _buildStatusSection(ctx, setSS, temp, (t) => temp = t),
                     SizedBox(height: 12.h),
-                    _buildDateRangeSection(
-                        ctx, setSS, temp, (t) => temp = t),
+                    _buildDateRangeSection(ctx, setSS, temp, (t) => temp = t),
                     SizedBox(height: 16.h),
                     SizedBox(
                       width: double.infinity,
@@ -175,8 +177,8 @@ mixin _TransactionHistoryWidgetsMixin on _TransactionHistoryLogicMixin {
     final hasDateFilter = temp.dateFrom != null || temp.dateTo != null;
     final dateText = hasDateFilter
         ? '${temp.dateFrom != null ? DateFormat('yyyy-MM-dd').format(temp.dateFrom!) : S.of(ctx).g_key_tx_filter_date_from}'
-            ' → '
-            '${temp.dateTo != null ? DateFormat('yyyy-MM-dd').format(temp.dateTo!) : S.of(ctx).g_key_tx_filter_date_to}'
+              ' → '
+              '${temp.dateTo != null ? DateFormat('yyyy-MM-dd').format(temp.dateTo!) : S.of(ctx).g_key_tx_filter_date_to}'
         : '${S.of(ctx).g_key_tx_filter_date_from} → ${S.of(ctx).g_key_tx_filter_date_to}';
 
     return Column(
@@ -201,10 +203,11 @@ mixin _TransactionHistoryWidgetsMixin on _TransactionHistoryLogicMixin {
                   : null,
             );
             if (range != null) {
-              setSS(() => onUpdate(temp.copyWith(
-                    dateFrom: range.start,
-                    dateTo: range.end,
-                  )));
+              setSS(
+                () => onUpdate(
+                  temp.copyWith(dateFrom: range.start, dateTo: range.end),
+                ),
+              );
             }
           },
         ),

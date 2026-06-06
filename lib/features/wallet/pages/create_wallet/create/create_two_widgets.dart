@@ -11,11 +11,9 @@ mixin _CreateTwoWidgetsMixin on State<CreateTwo> {
   List get mnemonicWordsList;
   String get mnemonicWords;
 
-  Color _itemBgColor() =>
-      AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name);
+  Color _itemBgColor() => AppColorTokens.of(context).bgSurface;
 
-  Color _itemTextColor() =>
-      AppThemeUtils.getColorByKey(context, AppThemeKeys.itemTextColor.name);
+  Color _itemTextColor() => AppColorTokens.of(context).textItem;
 
   Widget buildGridView() {
     return showMnemonic ? _buildMnemonicGrid() : _buildRevealPlaceholder();
@@ -93,8 +91,7 @@ mixin _CreateTwoWidgetsMixin on State<CreateTwo> {
   }
 
   Future<void> showSkipWidget() async {
-    final mainTextColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainTextColor.name);
+    final mainTextColor = AppColorTokens.of(context).textPrimary;
     final child = Center(
       child: Container(
         padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
@@ -159,7 +156,9 @@ mixin _CreateTwoWidgetsMixin on State<CreateTwo> {
       widget.wInfo.mnemonic = mnemonicWords;
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => CreateFinish(wInfo: widget.wInfo)),
+        MaterialPageRoute(
+          builder: (context) => CreateFinish(wInfo: widget.wInfo),
+        ),
       );
     }
   }

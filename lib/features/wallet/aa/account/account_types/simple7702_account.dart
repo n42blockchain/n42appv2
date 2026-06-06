@@ -52,7 +52,8 @@ class Simple7702AccountHelper {
       throw ArgumentError('Chain $chainSymbol does not support EIP-7702');
     }
     return Simple7702AccountHelper(
-      implementationAddress: config.simple7702AccountFactory ?? AAConfig.simple7702AccountFactory,
+      implementationAddress:
+          config.simple7702AccountFactory ?? AAConfig.simple7702AccountFactory,
       entryPointAddress: config.entryPoint,
       chainId: config.chainId,
     );
@@ -75,9 +76,7 @@ class Simple7702AccountHelper {
   /// - chainId: Target chain
   /// - address: Implementation contract address
   /// - nonce: EOA nonce to prevent replay
-  Uint8List buildAuthorization({
-    required BigInt nonce,
-  }) {
+  Uint8List buildAuthorization({required BigInt nonce}) {
     // EIP-7702 authorization encoding:
     // rlp([chainId, address, nonce])
     final chainIdBytes = _encodeRlpBigInt(BigInt.from(chainId));
@@ -92,9 +91,7 @@ class Simple7702AccountHelper {
   /// Create the authorization hash for signing
   ///
   /// The EOA must sign this hash to authorize delegation.
-  Uint8List getAuthorizationHash({
-    required BigInt nonce,
-  }) {
+  Uint8List getAuthorizationHash({required BigInt nonce}) {
     // EIP-7702 magic prefix: 0x05
     final authData = buildAuthorization(nonce: nonce);
 
@@ -142,10 +139,7 @@ class Simple7702AccountHelper {
   }
 
   /// Create a SmartAccount model for EIP-7702 account
-  SmartAccount createAccount({
-    required String eoaAddress,
-    String? label,
-  }) {
+  SmartAccount createAccount({required String eoaAddress, String? label}) {
     return SmartAccount(
       address: eoaAddress,
       type: SmartAccountType.simple7702Account,
@@ -227,7 +221,11 @@ class Simple7702AccountHelper {
     } else if (length < 65536) {
       return Uint8List.fromList([length >> 8, length & 0xff]);
     } else if (length < 16777216) {
-      return Uint8List.fromList([length >> 16, (length >> 8) & 0xff, length & 0xff]);
+      return Uint8List.fromList([
+        length >> 16,
+        (length >> 8) & 0xff,
+        length & 0xff,
+      ]);
     } else {
       return Uint8List.fromList([
         length >> 24,
@@ -294,12 +292,12 @@ class EIP7702Authorization {
   /// Layout: chainId(32) + address(20) + nonce(32) + v(1) + r(32) + s(32) = 149 bytes
   Uint8List encode() {
     final result = Uint8List(149);
-    result.setAll(0, _bigIntToBytes32(BigInt.from(chainId)));          // chainId
-    result.setAll(32, hexToBytes(address.replaceFirst('0x', '')));     // address
-    result.setAll(52, _bigIntToBytes32(nonce));                        // nonce
-    result[84] = v;                                                     // v
-    result.setAll(85, r);                                               // r
-    result.setAll(117, s);                                              // s
+    result.setAll(0, _bigIntToBytes32(BigInt.from(chainId))); // chainId
+    result.setAll(32, hexToBytes(address.replaceFirst('0x', ''))); // address
+    result.setAll(52, _bigIntToBytes32(nonce)); // nonce
+    result[84] = v; // v
+    result.setAll(85, r); // r
+    result.setAll(117, s); // s
     return result;
   }
 
@@ -393,7 +391,10 @@ class Simple7702GasConstants {
   /// Estimate total gas for single execute
   static BigInt estimateExecuteGas(int callDataLength) {
     return BigInt.from(
-      authorizationGas + signatureValidation + executeOverhead + (callDataLength ~/ 16) * 68,
+      authorizationGas +
+          signatureValidation +
+          executeOverhead +
+          (callDataLength ~/ 16) * 68,
     );
   }
 

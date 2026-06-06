@@ -32,7 +32,7 @@ part 'wallet_coin_add_all_network_dialog.dart';
 class WalletCoinAddAll extends ConsumerStatefulWidget {
   final String? coinType;
   final String seachStr;
-  const WalletCoinAddAll(this.seachStr,{this.coinType,super.key});
+  const WalletCoinAddAll(this.seachStr, {this.coinType, super.key});
 
   @override
   ConsumerState<WalletCoinAddAll> createState() => _WalletCoinAddAllState();
@@ -65,9 +65,19 @@ class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
   String networkNameToken = "";
 
   static const _popularSymbolSet = {
-    'USDT', 'USDC', 'DAI', 'WBTC', 'WETH',
-    'UNI', 'LINK', 'AAVE', 'SHIB', 'PEPE',
-    'ARB', 'OP', 'MATIC',
+    'USDT',
+    'USDC',
+    'DAI',
+    'WBTC',
+    'WETH',
+    'UNI',
+    'LINK',
+    'AAVE',
+    'SHIB',
+    'PEPE',
+    'ARB',
+    'OP',
+    'MATIC',
   };
   List<dynamic> _popularTokens = [];
 
@@ -169,7 +179,7 @@ class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
                     ? CircularProgressIndicator()
                     : SizedBox(),
               ),
-            )
+            ),
           ],
         ),
         body: SafeArea(
@@ -247,8 +257,9 @@ class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
               textInputAction: TextInputAction.search,
               keyboardType: TextInputType.text,
               decoration: InputDecoration(
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: su.setWidth(26.0)),
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: su.setWidth(26.0),
+                ),
                 isCollapsed: true,
                 hintText: S.of(context).g_key_163,
                 hintStyle: TextStyle(
@@ -324,18 +335,22 @@ class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
             border: Border(
               bottom: BorderSide(
                 width: su.setWidth(2.0),
-                color: _color(selected
-                    ? AppThemeKeys.mainBlueColor
-                    : AppThemeKeys.itemLineColor),
+                color: _color(
+                  selected
+                      ? AppThemeKeys.mainBlueColor
+                      : AppThemeKeys.itemLineColor,
+                ),
               ),
             ),
           ),
           child: Text(
             label,
             style: TextStyle(
-              color: _color(selected
-                  ? AppThemeKeys.mainBlueColor
-                  : AppThemeKeys.mainTextColor),
+              color: _color(
+                selected
+                    ? AppThemeKeys.mainBlueColor
+                    : AppThemeKeys.mainTextColor,
+              ),
               fontSize: su.setWidth(30.0),
               fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
             ),

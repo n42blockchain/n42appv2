@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/services/ens_registration_service.dart';
 import 'package:n42_wallet/features/wallet/widgets/ens/ens_price_card.dart';
 import 'package:n42_wallet/features/wallet/widgets/ens/ens_purchase_step_content.dart';
@@ -261,14 +261,8 @@ class _EnsPurchasePageState extends State<EnsPurchasePage> {
   Widget _buildDomainCard() {
     final s = S.of(context);
     final su = ScreenUtil();
-    final blueColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainBlueColor.name,
-    );
-    final subtitleColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.itemSubtitleTextColor.name,
-    );
+    final blueColor = AppColorTokens.of(context).brand;
+    final subtitleColor = AppColorTokens.of(context).textSubtitle;
     final yearLabel = widget.years == 1 ? s.g_key_ens_year : s.g_key_ens_years;
 
     return Container(
@@ -288,10 +282,7 @@ class _EnsPurchasePageState extends State<EnsPurchasePage> {
             style: TextStyle(
               fontSize: su.setSp(40),
               fontWeight: FontWeight.bold,
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainTextColor.name,
-              ),
+              color: AppColorTokens.of(context).textPrimary,
             ),
           ),
           SizedBox(height: su.setWidth(8)),

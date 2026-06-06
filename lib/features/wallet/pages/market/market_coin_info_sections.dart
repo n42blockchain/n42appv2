@@ -38,7 +38,11 @@ Widget buildCoinInfoHeader(
             child: SizedBox(
               width: touchSize,
               height: touchSize,
-              child: Icon(Icons.arrow_back_ios, color: textColor, size: iconSize),
+              child: Icon(
+                Icons.arrow_back_ios,
+                color: textColor,
+                size: iconSize,
+              ),
             ),
           ),
           SizedBox(
@@ -102,9 +106,9 @@ Widget buildCoinPriceSection(
   required double priceChange24h,
   required Regular regular,
 }) {
-  final isUp    = priceChange24h >= 0;
-  final price   = toDouble(coin['price']);
-  final pctKey  = isUp
+  final isUp = priceChange24h >= 0;
+  final price = toDouble(coin['price']);
+  final pctKey = isUp
       ? AppThemeKeys.rightTextColor.name
       : AppThemeKeys.errorTextColor.name;
   final pctColor = _tc(context, pctKey);
@@ -156,25 +160,24 @@ Widget buildPnlCard(
   required Map<String, dynamic> coin,
   required VoidCallback onAddTrade,
 }) {
-  final textColor   = _tc(context, AppThemeKeys.mainTextColor.name);
-  final subColor    = textColor.withAlpha(153);
-  final cardBg      = _tc(context, AppThemeKeys.itemBgColor.name);
+  final textColor = _tc(context, AppThemeKeys.mainTextColor.name);
+  final subColor = textColor.withAlpha(153);
+  final cardBg = _tc(context, AppThemeKeys.itemBgColor.name);
   final accentColor = _tc(context, AppThemeKeys.mainBlueColor.name);
   final s = S.of(context);
 
-  final summary      = CoinPnlSummary(trades);
+  final summary = CoinPnlSummary(trades);
   final currentPrice = toDouble(coin['price']);
-  final pnlUsd       = summary.pnlUsd(currentPrice);
-  final pnlPct       = summary.pnlPct(currentPrice);
-  final isProfit     = pnlUsd >= 0;
-  final pnlColor     = isProfit
-      ? const Color(0xFF22C55E)
-      : const Color(0xFFEF4444);
+  final pnlUsd = summary.pnlUsd(currentPrice);
+  final pnlPct = summary.pnlPct(currentPrice);
+  final isProfit = pnlUsd >= 0;
+  final pnlColor = isProfit ? const Color(0xFF22C55E) : const Color(0xFFEF4444);
 
   return Padding(
     padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30),
-        vertical: ScreenUtil().setWidth(8)),
+      horizontal: ScreenUtil().setWidth(30),
+      vertical: ScreenUtil().setWidth(8),
+    ),
     child: Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
       decoration: BoxDecoration(
@@ -197,19 +200,30 @@ Widget buildPnlCard(
               const Spacer(),
               GestureDetector(
                 onTap: onAddTrade,
-                child: Icon(Icons.add_circle_outline,
-                    color: accentColor, size: ScreenUtil().setSp(30)),
+                child: Icon(
+                  Icons.add_circle_outline,
+                  color: accentColor,
+                  size: ScreenUtil().setSp(30),
+                ),
               ),
             ],
           ),
           SizedBox(height: ScreenUtil().setWidth(12)),
           Row(
             children: [
-              pnlStat(s.g_pnl_avg_cost,
-                  '\$${fmtPrice(summary.avgCost)}', textColor, subColor),
+              pnlStat(
+                s.g_pnl_avg_cost,
+                '\$${fmtPrice(summary.avgCost)}',
+                textColor,
+                subColor,
+              ),
               SizedBox(width: ScreenUtil().setWidth(20)),
-              pnlStat(s.g_pnl_quantity,
-                  fmtQty(summary.totalQty), textColor, subColor),
+              pnlStat(
+                s.g_pnl_quantity,
+                fmtQty(summary.totalQty),
+                textColor,
+                subColor,
+              ),
               SizedBox(width: ScreenUtil().setWidth(20)),
               pnlStat(
                 s.g_pnl_unrealized,
@@ -246,9 +260,11 @@ Widget buildPeriodSelector(
             onTap: () => onChanged(i),
             child: Container(
               margin: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(4)),
+                horizontal: ScreenUtil().setWidth(4),
+              ),
               padding: EdgeInsets.symmetric(
-                  vertical: ScreenUtil().setWidth(12)),
+                vertical: ScreenUtil().setWidth(12),
+              ),
               decoration: BoxDecoration(
                 color: _tc(
                   context,
@@ -256,16 +272,14 @@ Widget buildPeriodSelector(
                       ? AppThemeKeys.mainButtonBgColor.name
                       : AppThemeKeys.itemBgColor.name,
                 ),
-                borderRadius:
-                    BorderRadius.circular(ScreenUtil().setWidth(8)),
+                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
               ),
               child: Text(
                 periodLabels[i],
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(24),
-                  fontWeight:
-                      selected ? FontWeight.w600 : FontWeight.w400,
+                  fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
                   color: selected
                       ? Colors.white
                       : _tc(context, AppThemeKeys.itemSubtitleTextColor.name),
@@ -290,33 +304,54 @@ Widget buildMarketStatsCard(
   required int rank,
   required Regular regular,
 }) {
-  final symbol    = (coin['coin'] ?? '').toString().toUpperCase();
+  final symbol = (coin['coin'] ?? '').toString().toUpperCase();
   final marketCap = toDouble(coin['market_cap']);
   final volume24h = toDouble(coin['volume_24h']);
-  final totalSup  = toDouble(coin['total_supply']);
-  final circSup   = toDouble(coin['circulating_supply']);
+  final totalSup = toDouble(coin['total_supply']);
+  final circSup = toDouble(coin['circulating_supply']);
 
   return coinInfoCard(
     context,
     child: Column(
       children: withDividers(context, [
-        coinInfoStatRow(context, S.of(context).g_key_m_2,
-            '\$${regular.getMoneyAbbreviation(marketCap)}'),
-        coinInfoStatRow(context, S.of(context).g_key_m_3,
-            '\$${regular.getMoneyAbbreviation(volume24h)}'),
-        coinInfoStatRow(context, S.of(context).g_key_m_4,
-            '${regular.getMoneyAbbreviation(totalSup)} $symbol'),
-        coinInfoStatRow(context, S.of(context).g_key_m_5,
-            '${regular.getMoneyAbbreviation(circSup)} $symbol'),
+        coinInfoStatRow(
+          context,
+          S.of(context).g_key_m_2,
+          '\$${regular.getMoneyAbbreviation(marketCap)}',
+        ),
+        coinInfoStatRow(
+          context,
+          S.of(context).g_key_m_3,
+          '\$${regular.getMoneyAbbreviation(volume24h)}',
+        ),
+        coinInfoStatRow(
+          context,
+          S.of(context).g_key_m_4,
+          '${regular.getMoneyAbbreviation(totalSup)} $symbol',
+        ),
+        coinInfoStatRow(
+          context,
+          S.of(context).g_key_m_5,
+          '${regular.getMoneyAbbreviation(circSup)} $symbol',
+        ),
         if (high24h > 0)
-          coinInfoStatRow(context, S.of(context).g_market_high_24h,
-              '\$${regular.formartNum(high24h, 6, isCrop: true)}'),
+          coinInfoStatRow(
+            context,
+            S.of(context).g_market_high_24h,
+            '\$${regular.formartNum(high24h, 6, isCrop: true)}',
+          ),
         if (low24h > 0)
-          coinInfoStatRow(context, S.of(context).g_market_low_24h,
-              '\$${regular.formartNum(low24h, 6, isCrop: true)}'),
+          coinInfoStatRow(
+            context,
+            S.of(context).g_market_low_24h,
+            '\$${regular.formartNum(low24h, 6, isCrop: true)}',
+          ),
         if (fdv > 0)
-          coinInfoStatRow(context, S.of(context).g_market_fdv,
-              '\$${regular.getMoneyAbbreviation(fdv)}'),
+          coinInfoStatRow(
+            context,
+            S.of(context).g_market_fdv,
+            '\$${regular.getMoneyAbbreviation(fdv)}',
+          ),
         if (rank > 0)
           coinInfoStatRow(context, S.of(context).g_market_rank, '#$rank'),
       ]),
@@ -338,14 +373,23 @@ Widget buildDepthDataCard(
   final s = S.of(context);
   final rows = <Widget>[
     if (ath > 0)
-      coinInfoStatRow(context, s.g_market_ath,
-          '\$${regular.formartNum(ath, 6, isCrop: true)}'),
+      coinInfoStatRow(
+        context,
+        s.g_market_ath,
+        '\$${regular.formartNum(ath, 6, isCrop: true)}',
+      ),
     if (atl > 0)
-      coinInfoStatRow(context, s.g_market_atl,
-          '\$${regular.formartNum(atl, 6, isCrop: true)}'),
+      coinInfoStatRow(
+        context,
+        s.g_market_atl,
+        '\$${regular.formartNum(atl, 6, isCrop: true)}',
+      ),
     if (liquidityScore > 0)
-      coinInfoStatRow(context, s.g_market_liquidity_score,
-          liquidityScore.toStringAsFixed(1)),
+      coinInfoStatRow(
+        context,
+        s.g_market_liquidity_score,
+        liquidityScore.toStringAsFixed(1),
+      ),
     if (pct7d != 0)
       coinInfoStatRowColored(context, s.g_market_7d_change, pct7d),
     if (pct30d != 0)
@@ -372,7 +416,7 @@ Widget buildAboutSection(
   required String lang,
 }) {
   final descMap = coinInfo?['description'];
-  final desc    = (descMap is Map ? descMap[lang]?.toString() : null) ?? '';
+  final desc = (descMap is Map ? descMap[lang]?.toString() : null) ?? '';
   if (desc.isEmpty) return const SizedBox.shrink();
 
   final s = S.of(context);
@@ -421,11 +465,15 @@ Widget buildAboutSection(
                       horizontal: hPad,
                     ),
                     margin: EdgeInsets.symmetric(
-                        vertical: ScreenUtil().setWidth(10)),
+                      vertical: ScreenUtil().setWidth(10),
+                    ),
                     child: Text(
                       s.g_key_m_7,
                       style: TextStyle(
-                        color: _tc(context, AppThemeKeys.mainButtonBgColor.name),
+                        color: _tc(
+                          context,
+                          AppThemeKeys.mainButtonBgColor.name,
+                        ),
                         fontSize: ScreenUtil().setSp(28),
                       ),
                     ),

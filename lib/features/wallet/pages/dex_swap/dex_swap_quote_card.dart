@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/wallet/models/dex/dex_quote_model.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// Displays a fetched DEX quote with route, price-impact, gas, min-received,
 /// a countdown until the quote expires, optional high-impact warning, and an
@@ -41,7 +42,7 @@ class DexQuoteCard extends StatelessWidget {
   Color _impactColor(BuildContext context) => switch (quote.priceImpactNum) {
     >= 3.0 => _colorRed,
     >= 1.0 => _colorOrange,
-    _      => AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+    _ => AppColorTokens.of(context).textPrimary,
   };
 
   // ── Build ───────────────────────────────────────────────────────────────
@@ -54,8 +55,7 @@ class DexQuoteCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemBgColor.name),
+        color: AppColorTokens.of(context).bgSurface,
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
       ),
       child: Column(
@@ -73,8 +73,11 @@ class DexQuoteCard extends StatelessWidget {
             valueColor: impactColor,
           ),
           _rowWidget(context, s.g_key_dex_gas_estimate, quote.gasEstimate),
-          _rowWidget(context, s.g_key_dex_min_received,
-              '${quote.minAmountOut} ${quote.tokenOutSymbol}'),
+          _rowWidget(
+            context,
+            s.g_key_dex_min_received,
+            '${quote.minAmountOut} ${quote.tokenOutSymbol}',
+          ),
           if (quote.priceImpactNum >= 3.0) ...[
             SizedBox(height: ScreenUtil().setWidth(8)),
             _highImpactBanner(context, s),
@@ -96,8 +99,7 @@ class DexQuoteCard extends StatelessWidget {
       style: TextStyle(
         color: secsLeft <= 10
             ? _colorRed
-            : AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.ff888888.name),
+            : AppThemeUtils.getColorByKey(context, AppThemeKeys.ff888888.name),
         fontSize: ScreenUtil().setSp(22),
       ),
     );
@@ -115,9 +117,11 @@ class DexQuoteCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(Icons.warning_amber_rounded,
-              color: _colorRed,
-              size: ScreenUtil().setWidth(28)),
+          Icon(
+            Icons.warning_amber_rounded,
+            color: _colorRed,
+            size: ScreenUtil().setWidth(28),
+          ),
           SizedBox(width: ScreenUtil().setWidth(8)),
           Expanded(
             child: Text(
@@ -148,9 +152,11 @@ class DexQuoteCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(Icons.lock_outline,
-                  color: _colorOrange,
-                  size: ScreenUtil().setWidth(28)),
+              Icon(
+                Icons.lock_outline,
+                color: _colorOrange,
+                size: ScreenUtil().setWidth(28),
+              ),
               SizedBox(width: ScreenUtil().setWidth(8)),
               Expanded(
                 child: Text(
@@ -202,8 +208,7 @@ class DexQuoteCard extends StatelessWidget {
     required bool selected,
     required VoidCallback onTap,
   }) {
-    final mainText =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+    final mainText = AppColorTokens.of(context).textPrimary;
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -216,9 +221,7 @@ class DexQuoteCard extends StatelessWidget {
               ? _colorOrange.withValues(alpha: 0.2)
               : Colors.transparent,
           border: Border.all(
-            color: selected
-                ? _colorOrange
-                : mainText.withValues(alpha: 0.25),
+            color: selected ? _colorOrange : mainText.withValues(alpha: 0.25),
             width: 1.0,
           ),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
@@ -249,8 +252,7 @@ class DexQuoteCard extends StatelessWidget {
           Text(
             label,
             style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name),
+              color: AppColorTokens.of(context).textSubtitle,
               fontSize: ScreenUtil().setSp(26),
             ),
           ),
@@ -262,17 +264,15 @@ class DexQuoteCard extends StatelessWidget {
           Text(
             value,
             style: TextStyle(
-              color: valueColor ??
-                  AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
+              color: valueColor ?? AppColorTokens.of(context).textPrimary,
               fontSize: ScreenUtil().setSp(26),
-              fontWeight:
-                  valueColor != null ? FontWeight.w600 : FontWeight.normal,
+              fontWeight: valueColor != null
+                  ? FontWeight.w600
+                  : FontWeight.normal,
             ),
           ),
         ],
       ),
     );
   }
-
 }

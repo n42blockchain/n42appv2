@@ -8,7 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
 import 'package:n42_wallet/features/wallet/api/sender/nft_sender.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart'
@@ -120,18 +120,9 @@ class _NftSendPageState extends State<NftSendPage> {
 
   @override
   Widget build(BuildContext context) {
-    final blueColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainBlueColor.name,
-    );
-    final textColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainTextColor.name,
-    );
-    final subtitleColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.itemSubtitleTextColor.name,
-    );
+    final blueColor = AppColorTokens.of(context).brand;
+    final textColor = AppColorTokens.of(context).textPrimary;
+    final subtitleColor = AppColorTokens.of(context).textSubtitle;
 
     return Scaffold(
       appBar: AppBarWidget(text: S.of(context).g_key_nft_send),
@@ -277,10 +268,7 @@ class _NftSendPageState extends State<NftSendPage> {
     Color textColor,
     Color subtitleColor,
   ) {
-    final blueColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainBlueColor.name,
-    );
+    final blueColor = AppColorTokens.of(context).brand;
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(

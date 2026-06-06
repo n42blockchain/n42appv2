@@ -22,10 +22,7 @@ class SignatureValidationResult {
   }
 
   factory SignatureValidationResult.invalid(String error) {
-    return SignatureValidationResult(
-      isValid: false,
-      errorMessage: error,
-    );
+    return SignatureValidationResult(isValid: false, errorMessage: error);
   }
 }
 
@@ -99,11 +96,15 @@ class SignatureValidator {
       // Ethereum signed transactions should be reasonably long
       // Minimum: ~200 characters for a simple transfer
       if (signedTx.length < 100) {
-        return SignatureValidationResult.invalid('Transaction too short for Ethereum');
+        return SignatureValidationResult.invalid(
+          'Transaction too short for Ethereum',
+        );
       }
 
       // Check for 0x prefix (common but not always present)
-      final cleanTx = signedTx.startsWith('0x') ? signedTx.substring(2) : signedTx;
+      final cleanTx = signedTx.startsWith('0x')
+          ? signedTx.substring(2)
+          : signedTx;
 
       // Validate RLP structure basics (should start with f8 or f9 for list)
       if (cleanTx.length >= 2) {
@@ -113,7 +114,10 @@ class SignatureValidator {
           if (firstByte < 0xc0) {
             // For EIP-1559 transactions, they start with 0x02
             if (firstByte != 0x02 && firstByte != 0x01) {
-              AppLogger.w('SignatureValidator', 'unusual RLP prefix: 0x${firstByte.toRadixString(16)}');
+              AppLogger.w(
+                'SignatureValidator',
+                'unusual RLP prefix: 0x${firstByte.toRadixString(16)}',
+              );
             }
           }
         }
@@ -134,7 +138,9 @@ class SignatureValidator {
 
       // Bitcoin transactions have minimum size
       if (signedTx.length < 100) {
-        return SignatureValidationResult.invalid('Transaction too short for Bitcoin');
+        return SignatureValidationResult.invalid(
+          'Transaction too short for Bitcoin',
+        );
       }
 
       return SignatureValidationResult.valid();
@@ -150,10 +156,14 @@ class SignatureValidator {
       if (signedTx.startsWith('{')) {
         // JSON format - basic validation
         if (!signedTx.contains('signature') && !signedTx.contains('raw_data')) {
-          return SignatureValidationResult.invalid('Missing signature or raw_data in Tron transaction');
+          return SignatureValidationResult.invalid(
+            'Missing signature or raw_data in Tron transaction',
+          );
         }
       } else if (!_isValidHex(signedTx)) {
-        return SignatureValidationResult.invalid('Invalid format for Tron transaction');
+        return SignatureValidationResult.invalid(
+          'Invalid format for Tron transaction',
+        );
       }
 
       return SignatureValidationResult.valid();
@@ -172,7 +182,9 @@ class SignatureValidator {
 
       // Basic length check (Solana signatures are 64 bytes, transactions vary)
       if (signedTx.length < 80) {
-        return SignatureValidationResult.invalid('Transaction too short for Solana');
+        return SignatureValidationResult.invalid(
+          'Transaction too short for Solana',
+        );
       }
 
       return SignatureValidationResult.valid();
@@ -217,7 +229,10 @@ extension SignedTransactionValidation on String {
   static final RegExp _base64Re = RegExp(r'^[A-Za-z0-9+/=]+$');
 
   /// Validate this string as a signed transaction
-  SignatureValidationResult validateAsSignedTx(String coinType, {String? expectedAddress}) {
+  SignatureValidationResult validateAsSignedTx(
+    String coinType, {
+    String? expectedAddress,
+  }) {
     return SignatureValidator.validateSignedTransaction(
       signedTx: this,
       coinType: coinType,

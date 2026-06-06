@@ -36,7 +36,9 @@ class GasSettingsPage extends StatefulWidget {
 }
 
 class _GasSettingsPageState extends State<GasSettingsPage> {
-  static final _numericFilter = FilteringTextInputFormatter.allow(RegExp(r'[\d.]'));
+  static final _numericFilter = FilteringTextInputFormatter.allow(
+    RegExp(r'[\d.]'),
+  );
 
   late GasEstimateModel _gasEstimate;
   late GasSpeed _selectedSpeed;
@@ -63,7 +65,9 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
 
     final currentOption = _gasEstimate.currentOption;
     if (_gasEstimate.supportsEIP1559 && currentOption.eip1559 != null) {
-      _maxPriorityFeeController.text = _formatGwei(currentOption.maxPriorityFeePerGas);
+      _maxPriorityFeeController.text = _formatGwei(
+        currentOption.maxPriorityFeePerGas,
+      );
       _maxFeeController.text = _formatGwei(currentOption.effectiveGasPrice);
     } else {
       _gasPriceController.text = _formatGwei(currentOption.effectiveGasPrice);
@@ -94,7 +98,8 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
   }
 
   void _applyCustomValues() {
-    final gasLimit = BigInt.tryParse(_gasLimitController.text) ?? _gasEstimate.gasLimit;
+    final gasLimit =
+        BigInt.tryParse(_gasLimitController.text) ?? _gasEstimate.gasLimit;
 
     final GasOption customOption;
     if (_gasEstimate.supportsEIP1559) {
@@ -114,7 +119,9 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
     _gasEstimate = GasEstimateModel(
       supportsEIP1559: _gasEstimate.supportsEIP1559,
       slow: _selectedSpeed == GasSpeed.slow ? customOption : _gasEstimate.slow,
-      standard: _selectedSpeed == GasSpeed.standard ? customOption : _gasEstimate.standard,
+      standard: _selectedSpeed == GasSpeed.standard
+          ? customOption
+          : _gasEstimate.standard,
       fast: _selectedSpeed == GasSpeed.fast ? customOption : _gasEstimate.fast,
       baseFee: _gasEstimate.baseFee,
       gasLimit: gasLimit,
@@ -143,15 +150,15 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(
-        text: S.of(context).g_key_gas_settings,
-      ),
+      appBar: AppBarWidget(text: S.of(context).g_key_gas_settings),
       body: SafeArea(
         child: Column(
           children: [
             Expanded(
               child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
+                padding: EdgeInsets.symmetric(
+                  vertical: ScreenUtil().setWidth(20),
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -186,20 +193,38 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
     );
   }
 
-  ({String text, Color color, IconData icon}) _resolveNetworkStatus(BuildContext context) {
+  ({String text, Color color, IconData icon}) _resolveNetworkStatus(
+    BuildContext context,
+  ) {
     final baseFee = _gasEstimate.baseFee;
     final l10n = S.of(context);
     if (baseFee == null) {
-      return (text: l10n.g_key_gas_network_normal, color: Colors.green, icon: Icons.check_circle);
+      return (
+        text: l10n.g_key_gas_network_normal,
+        color: Colors.green,
+        icon: Icons.check_circle,
+      );
     }
     final baseFeeGwei = baseFee ~/ GasConstants.gweiInWei;
     if (baseFeeGwei < BigInt.from(GasConstants.networkIdleThresholdGwei)) {
-      return (text: l10n.g_key_gas_network_idle, color: Colors.green, icon: Icons.check_circle);
+      return (
+        text: l10n.g_key_gas_network_idle,
+        color: Colors.green,
+        icon: Icons.check_circle,
+      );
     }
     if (baseFeeGwei < BigInt.from(GasConstants.networkBusyThresholdGwei)) {
-      return (text: l10n.g_key_gas_network_normal, color: Colors.orange, icon: Icons.info);
+      return (
+        text: l10n.g_key_gas_network_normal,
+        color: Colors.orange,
+        icon: Icons.info,
+      );
     }
-    return (text: l10n.g_key_gas_network_busy, color: Colors.red, icon: Icons.warning);
+    return (
+      text: l10n.g_key_gas_network_busy,
+      color: Colors.red,
+      icon: Icons.warning,
+    );
   }
 
   Widget _buildNetworkStatus(BuildContext context) {
@@ -236,7 +261,10 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
                     'Base Fee: ${_formatGwei(baseFee)} Gwei',
                     style: TextStyle(
                       fontSize: su.setSp(24),
-                      color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
+                      color: _themeColor(
+                        context,
+                        AppThemeKeys.itemSubtitleTextColor,
+                      ),
                     ),
                   ),
               ],
@@ -290,14 +318,34 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
       ),
       child: Column(
         children: [
-          _buildInputField(context, label: l10n.g_key_101, controller: _gasLimitController, suffix: ''),
+          _buildInputField(
+            context,
+            label: l10n.g_key_101,
+            controller: _gasLimitController,
+            suffix: '',
+          ),
           gap,
           if (_gasEstimate.supportsEIP1559) ...[
-            _buildInputField(context, label: l10n.g_key_gas_priority_fee, controller: _maxPriorityFeeController, suffix: 'Gwei'),
+            _buildInputField(
+              context,
+              label: l10n.g_key_gas_priority_fee,
+              controller: _maxPriorityFeeController,
+              suffix: 'Gwei',
+            ),
             gap,
-            _buildInputField(context, label: l10n.g_key_gas_max_fee, controller: _maxFeeController, suffix: 'Gwei'),
+            _buildInputField(
+              context,
+              label: l10n.g_key_gas_max_fee,
+              controller: _maxFeeController,
+              suffix: 'Gwei',
+            ),
           ] else
-            _buildInputField(context, label: l10n.g_key_t_17, controller: _gasPriceController, suffix: 'Gwei'),
+            _buildInputField(
+              context,
+              label: l10n.g_key_t_17,
+              controller: _gasPriceController,
+              suffix: 'Gwei',
+            ),
         ],
       ),
     );
@@ -310,7 +358,10 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
     required String suffix,
   }) {
     final su = ScreenUtil();
-    final subtitleColor = _themeColor(context, AppThemeKeys.itemSubtitleTextColor);
+    final subtitleColor = _themeColor(
+      context,
+      AppThemeKeys.itemSubtitleTextColor,
+    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -336,7 +387,10 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
               borderSide: BorderSide.none,
             ),
             suffixText: suffix,
-            suffixStyle: TextStyle(fontSize: su.setSp(26), color: subtitleColor),
+            suffixStyle: TextStyle(
+              fontSize: su.setSp(26),
+              color: subtitleColor,
+            ),
           ),
           style: TextStyle(
             fontSize: su.setSp(28),
@@ -374,7 +428,10 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: su.setSp(28),
-                    color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
+                    color: _themeColor(
+                      context,
+                      AppThemeKeys.itemSubtitleTextColor,
+                    ),
                   ),
                 ),
               ),
@@ -405,8 +462,11 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
   BigInt _calculateTotalFee() {
     if (!_isCustomMode) return _gasEstimate.currentTotalFee;
 
-    final gasLimit = BigInt.tryParse(_gasLimitController.text) ?? _gasEstimate.gasLimit;
-    final controller = _gasEstimate.supportsEIP1559 ? _maxFeeController : _gasPriceController;
+    final gasLimit =
+        BigInt.tryParse(_gasLimitController.text) ?? _gasEstimate.gasLimit;
+    final controller = _gasEstimate.supportsEIP1559
+        ? _maxFeeController
+        : _gasPriceController;
     return gasLimit * _gweiToWei(controller.text);
   }
 }

@@ -46,10 +46,7 @@ class SwapAstPriceWidget extends StatelessWidget {
       child: Text(
         text,
         style: AppTypography.body.copyWith(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.mainTextColor.name,
-          ),
+          color: AppColorTokens.of(context).textPrimary,
         ),
       ),
     );
@@ -86,10 +83,7 @@ class SwapAstPercentWidget extends StatelessWidget {
               child: Text(
                 "$percent%",
                 style: AppTypography.body.copyWith(
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainBlueColor.name,
-                  ),
+                  color: AppColorTokens.of(context).brand,
                 ),
               ),
             ),
@@ -146,10 +140,7 @@ class SwapAstCheckWidget extends StatelessWidget {
               text: TextSpan(
                 text: S.of(context).g_swap_key_16,
                 style: AppTypography.caption.copyWith(
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainTextColor.name,
-                  ),
+                  color: AppColorTokens.of(context).textPrimary,
                 ),
                 children: [
                   WidgetSpan(
@@ -170,10 +161,7 @@ class SwapAstCheckWidget extends StatelessWidget {
                         S.of(context).g_swap_key_17,
                         style: AppTypography.caption.copyWith(
                           decoration: TextDecoration.underline,
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.mainBlueColor.name,
-                          ),
+                          color: AppColorTokens.of(context).brand,
                         ),
                       ),
                     ),

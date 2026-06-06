@@ -1,4 +1,3 @@
-
 import 'dart:typed_data';
 
 import 'package:n42_wallet/core/utils/app_logger.dart';
@@ -45,8 +44,19 @@ class MpcTransferHandler extends BaseTransferHandler {
   bool supports(String chainSymbol) {
     // MPC supports all EVM chains
     const evmChains = {
-      'ETH', 'BNB', 'MATIC', 'AVAX', 'FTM', 'OP', 'ARB',
-      'BASE', 'LINEA', 'SCROLL', 'ZKSYNC', 'BLAST', 'N',
+      'ETH',
+      'BNB',
+      'MATIC',
+      'AVAX',
+      'FTM',
+      'OP',
+      'ARB',
+      'BASE',
+      'LINEA',
+      'SCROLL',
+      'ZKSYNC',
+      'BLAST',
+      'N',
     };
     return evmChains.contains(normalizeSymbol(chainSymbol));
   }
@@ -77,13 +87,15 @@ class MpcTransferHandler extends BaseTransferHandler {
 
       // In a full implementation, broadcast the signed tx via RPC
       // For now, return the signature as proof of concept
-      return createSuccess(data: {
-        'signature': signResult.signatureHex,
-        'from': params.fromAddress,
-        'to': params.toAddress,
-        'value': params.value,
-        'chain': params.chainSymbol,
-      });
+      return createSuccess(
+        data: {
+          'signature': signResult.signatureHex,
+          'from': params.fromAddress,
+          'to': params.toAddress,
+          'value': params.value,
+          'chain': params.chainSymbol,
+        },
+      );
     } catch (e) {
       AppLogger.w('MpcTransferHandler', 'error: $e');
       return createError(e.toString());
@@ -107,7 +119,8 @@ class MpcTransferHandler extends BaseTransferHandler {
     // Simplified: encode the transfer intent as bytes for signing
     // In production, this should build a proper RLP-encoded EVM transaction
     // using nonce, gas price, gas limit from the chain's RPC
-    final data = '${params.chainSymbol}:${params.fromAddress}:${params.toAddress}:${params.value}';
+    final data =
+        '${params.chainSymbol}:${params.fromAddress}:${params.toAddress}:${params.value}';
     return Uint8List.fromList(data.codeUnits);
   }
 }

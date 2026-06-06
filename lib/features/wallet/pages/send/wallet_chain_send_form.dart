@@ -15,12 +15,10 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 
 EdgeInsets _sectionMargin() => EdgeInsets.all(AppSpacing.space8);
 
-TextStyle _labelStyle(BuildContext context) => AppTypography.body.copyWith(
-  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-);
+TextStyle _labelStyle(BuildContext context) =>
+    AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary);
 
-Color _itemBg(BuildContext context) =>
-    AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name);
+Color _itemBg(BuildContext context) => AppColorTokens.of(context).bgSurface;
 
 // ── SendToWidget ─────────────────────────────────────────────────────────────
 
@@ -75,10 +73,7 @@ class SendToWidget extends StatelessWidget {
               child: Icon(
                 Icons.add,
                 size: su.setWidth(50.0),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainBlueColor.name,
-                ),
+                color: AppColorTokens.of(context).brand,
               ),
             ),
             rightOnTap1: onSearchTap,
@@ -125,10 +120,7 @@ class SendNoteWidget extends StatelessWidget {
             suffix: Text(
               '${controller.text.length}/100',
               style: AppTypography.captionSm.copyWith(
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemSubtitleTextColor.name,
-                ),
+                color: AppColorTokens.of(context).textSubtitle,
               ),
             ),
             onEditingComplete: () {
@@ -281,10 +273,7 @@ class _MaxButton extends StatelessWidget {
       height: su.setWidth(60.0),
       padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.mainBlueColor.name,
-        ),
+        color: AppColorTokens.of(context).brand,
         borderRadius: AppRadius.brPill,
       ),
       alignment: Alignment.center,
@@ -317,10 +306,7 @@ class _OwnerAddressRow extends StatelessWidget {
       child: Text(
         addr,
         style: AppTypography.body.copyWith(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.itemSubtitleTextColor.name,
-          ),
+          color: AppColorTokens.of(context).textSubtitle,
         ),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,

@@ -30,8 +30,7 @@ mixin _AddressBookListItemMixin on State<AddressBookList> {
       onDismissed: (_) => deleteItem(info),
       background: Container(
         alignment: Alignment.centerRight,
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.errorTextColor.name),
+        color: AppColorTokens.of(context).danger,
         padding: EdgeInsets.only(right: ScreenUtil().setWidth(48)),
         child: Icon(
           Icons.delete_outline,
@@ -39,22 +38,18 @@ mixin _AddressBookListItemMixin on State<AddressBookList> {
           size: ScreenUtil().setWidth(52),
         ),
       ),
-      child: GestureDetector(
-        onTap: () => navigateToEdit(info),
-        child: content,
-      ),
+      child: GestureDetector(onTap: () => navigateToEdit(info), child: content),
     );
   }
 
   Widget _buildItemContent(BuildContext context, AddressBookModel info) {
-    final mainText =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final subtitleText = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
-    final itemBg =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name);
-    final mutedText =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.ff888888.name);
+    final mainText = AppColorTokens.of(context).textPrimary;
+    final subtitleText = AppColorTokens.of(context).textSubtitle;
+    final itemBg = AppColorTokens.of(context).bgSurface;
+    final mutedText = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.ff888888.name,
+    );
 
     return Container(
       margin: EdgeInsets.symmetric(
@@ -100,8 +95,9 @@ mixin _AddressBookListItemMixin on State<AddressBookList> {
                       ),
                       decoration: BoxDecoration(
                         color: subtitleText.withValues(alpha: 0.1),
-                        borderRadius:
-                            BorderRadius.circular(ScreenUtil().setWidth(20)),
+                        borderRadius: BorderRadius.circular(
+                          ScreenUtil().setWidth(20),
+                        ),
                       ),
                       child: Text(
                         info.coinName ?? '',
@@ -164,10 +160,7 @@ mixin _AddressBookListItemMixin on State<AddressBookList> {
         Container(
           width: avatarSize,
           height: avatarSize,
-          decoration: BoxDecoration(
-            color: bgColor,
-            shape: BoxShape.circle,
-          ),
+          decoration: BoxDecoration(color: bgColor, shape: BoxShape.circle),
           alignment: Alignment.center,
           child: Text(
             initial,

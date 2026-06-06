@@ -9,6 +9,7 @@ import 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart'
 import 'package:n42_wallet/features/widgets/empty.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 class WalletCoinListSliver extends StatelessWidget {
   const WalletCoinListSliver({
@@ -30,7 +31,8 @@ class WalletCoinListSliver extends StatelessWidget {
   final VoidCallback onShowAllTap;
 
   /// 由 State 提供，负责构建单个代币行 Widget
-  final Widget Function(CoinModel coin, String key, String group) coinItemBuilder;
+  final Widget Function(CoinModel coin, String key, String group)
+  coinItemBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -68,15 +70,17 @@ class _CoinListBody extends StatelessWidget {
   final VoidCallback onDiscoveryDismiss;
   final VoidCallback onDiscoveryAdded;
   final VoidCallback onShowAllTap;
-  final Widget Function(CoinModel coin, String key, String group) coinItemBuilder;
+  final Widget Function(CoinModel coin, String key, String group)
+  coinItemBuilder;
 
   @override
   Widget build(BuildContext context) {
     final su = ScreenUtil();
-    final bgColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.backGroundColor.name);
+    final bgColor = AppColorTokens.of(context).bgBase;
     final displayList = smallAssetsThreshold > 0
-        ? waValue.coinList.where((c) => c.value >= smallAssetsThreshold).toList()
+        ? waValue.coinList
+              .where((c) => c.value >= smallAssetsThreshold)
+              .toList()
         : waValue.coinList;
     final showSkeleton = waValue.coinList.isEmpty && waValue.buildwallet;
 
@@ -99,8 +103,7 @@ class _CoinListBody extends StatelessWidget {
               onDismiss: onDiscoveryDismiss,
               onAdded: onDiscoveryAdded,
             ),
-          if (waValue.loadBalance == Load.loading)
-            _LoadingBanner(su: su),
+          if (waValue.loadBalance == Load.loading) _LoadingBanner(su: su),
           if (showSkeleton) const WalletCoinListSkeleton(),
           if (!showSkeleton && displayList.isEmpty)
             Container(
@@ -130,8 +133,7 @@ class _LoadingBanner extends StatelessWidget {
       height: su.setWidth(60.0),
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.textColorOrange.name),
+        color: AppColorTokens.of(context).warning,
         borderRadius: BorderRadius.circular(su.setWidth(8)),
       ),
       child: Text(
@@ -139,7 +141,9 @@ class _LoadingBanner extends StatelessWidget {
         style: TextStyle(
           fontSize: su.setSp(24),
           color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainWhiteColor.name),
+            context,
+            AppThemeKeys.mainWhiteColor.name,
+          ),
         ),
       ),
     );
@@ -161,8 +165,7 @@ class _DiscoveryBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final blueColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+    final blueColor = AppColorTokens.of(context).brand;
     return GestureDetector(
       onTap: () async {
         final added = await Navigator.push<bool>(
@@ -186,8 +189,11 @@ class _DiscoveryBanner extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(Icons.manage_search_rounded,
-                color: blueColor, size: ScreenUtil().setWidth(36)),
+            Icon(
+              Icons.manage_search_rounded,
+              color: blueColor,
+              size: ScreenUtil().setWidth(36),
+            ),
             SizedBox(width: ScreenUtil().setWidth(12)),
             Expanded(
               child: Text(
@@ -219,17 +225,18 @@ class _DiscoveryBanner extends StatelessWidget {
 }
 
 class _CoinListView extends StatelessWidget {
-  const _CoinListView({
-    required this.list,
-    required this.coinItemBuilder,
-  });
+  const _CoinListView({required this.list, required this.coinItemBuilder});
 
   final List<dynamic> list;
-  final Widget Function(CoinModel coin, String key, String group) coinItemBuilder;
+  final Widget Function(CoinModel coin, String key, String group)
+  coinItemBuilder;
 
   @override
   Widget build(BuildContext context) {
-    final pinnedCount = list.cast<CoinModel>().takeWhile((c) => c.isPinned).length;
+    final pinnedCount = list
+        .cast<CoinModel>()
+        .takeWhile((c) => c.isPinned)
+        .length;
 
     final needsDivider = pinnedCount > 0 && pinnedCount < list.length;
     final itemCount = list.length + (needsDivider ? 1 : 0);
@@ -243,10 +250,14 @@ class _CoinListView extends StatelessWidget {
         if (needsDivider && index == pinnedCount) {
           return const _PinnedDivider();
         }
-        final coinIndex =
-            (needsDivider && index > pinnedCount) ? index - 1 : index;
+        final coinIndex = (needsDivider && index > pinnedCount)
+            ? index - 1
+            : index;
         return coinItemBuilder(
-            list[coinIndex] as CoinModel, "c$coinIndex", "coin_list");
+          list[coinIndex] as CoinModel,
+          "c$coinIndex",
+          "coin_list",
+        );
       },
     );
   }
@@ -257,23 +268,23 @@ class _PinnedDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name);
+    final color = AppColorTokens.of(context).border;
     return Padding(
       padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(4)),
       child: Row(
         children: [
           Expanded(child: Divider(height: 1, color: color)),
           Padding(
-            padding:
-                EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(12)),
+            padding: EdgeInsets.symmetric(
+              horizontal: ScreenUtil().setWidth(12),
+            ),
             child: Text(
               S.of(context).g_key_coin_list_separator,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(20),
-                color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.itemSubtitleTextColor.name)
-                    .withValues(alpha: 0.6),
+                color: AppColorTokens.of(
+                  context,
+                ).textSubtitle.withValues(alpha: 0.6),
               ),
             ),
           ),
@@ -298,15 +309,13 @@ class _AllHiddenHint extends StatelessWidget {
           Icon(
             Icons.visibility_off_outlined,
             size: ScreenUtil().setWidth(60),
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.itemSubtitleTextColor.name),
+            color: AppColorTokens.of(context).textSubtitle,
           ),
           SizedBox(height: ScreenUtil().setWidth(16)),
           Text(
             S.of(context).g_key_coin_list_all_hidden,
             style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name),
+              color: AppColorTokens.of(context).textSubtitle,
               fontSize: ScreenUtil().setSp(28),
             ),
           ),
@@ -316,8 +325,7 @@ class _AllHiddenHint extends StatelessWidget {
             child: Text(
               S.of(context).g_key_coin_list_show_all,
               style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
+                color: AppColorTokens.of(context).brand,
                 fontSize: ScreenUtil().setSp(26),
               ),
             ),

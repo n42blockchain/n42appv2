@@ -25,10 +25,9 @@ class ChainAbstract {
   factory ChainAbstract.fromJson(Map<String, dynamic> json) {
     return ChainAbstract(
       coinFullName: (json['coinFullName'] ?? json['name'] ?? '').toString(),
-      coinShortName:
-          (json['coinShortName'] ?? json['symbol'] ?? '').toString(),
-      consensusMethod:
-          (json['consensusMethod'] ?? json['consensus'])?.toString(),
+      coinShortName: (json['coinShortName'] ?? json['symbol'] ?? '').toString(),
+      consensusMethod: (json['consensusMethod'] ?? json['consensus'])
+          ?.toString(),
       algorithm: (json['algorithm'] ?? json['hashAlgorithm'])?.toString(),
       supply: (json['supply'] ?? json['totalSupply'])?.toString(),
       circulationAmount:

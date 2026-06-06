@@ -6,30 +6,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/services/ens_registration_service.dart';
 
 /// ENS 价格显示卡片
 class EnsPriceCard extends StatelessWidget {
   final EnsPrice price;
 
-  const EnsPriceCard({
-    super.key,
-    required this.price,
-  });
+  const EnsPriceCard({super.key, required this.price});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: AppColorTokens.of(context).bgSurface,
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
         border: Border.all(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.mainBlueColor.name,
-          ).withAlpha(30),
+          color: AppColorTokens.of(context).brand.withAlpha(30),
         ),
       ),
       child: Column(
@@ -40,10 +34,7 @@ class EnsPriceCard extends StatelessWidget {
             style: TextStyle(
               fontSize: ScreenUtil().setSp(26),
               fontWeight: FontWeight.w600,
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainTextColor.name,
-              ),
+              color: AppColorTokens.of(context).textPrimary,
             ),
           ),
           SizedBox(height: ScreenUtil().setWidth(16)),
@@ -66,10 +57,7 @@ class EnsPriceCard extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(12)),
             child: Divider(
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ).withAlpha(30),
+              color: AppColorTokens.of(context).textSubtitle.withAlpha(30),
             ),
           ),
 
@@ -84,10 +72,7 @@ class EnsPriceCard extends StatelessWidget {
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(28),
                     fontWeight: FontWeight.bold,
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.mainTextColor.name,
-                    ),
+                    color: AppColorTokens.of(context).textPrimary,
                   ),
                 ),
               ),
@@ -99,10 +84,7 @@ class EnsPriceCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(30),
                       fontWeight: FontWeight.bold,
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainBlueColor.name,
-                      ),
+                      color: AppColorTokens.of(context).brand,
                     ),
                   ),
                   if (price.usdPrice != null)
@@ -110,10 +92,7 @@ class EnsPriceCard extends StatelessWidget {
                       '≈ \$${price.usdPrice!.toStringAsFixed(2)}',
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(22),
-                        color: AppThemeUtils.getColorByKey(
-                          context,
-                          AppThemeKeys.itemSubtitleTextColor.name,
-                        ),
+                        color: AppColorTokens.of(context).textSubtitle,
                       ),
                     ),
                 ],
@@ -166,20 +145,14 @@ class EnsPriceCard extends StatelessWidget {
           label,
           style: TextStyle(
             fontSize: ScreenUtil().setSp(24),
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.itemSubtitleTextColor.name,
-            ),
+            color: AppColorTokens.of(context).textSubtitle,
           ),
         ),
         Text(
           value,
           style: TextStyle(
             fontSize: ScreenUtil().setSp(24),
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainTextColor.name,
-            ),
+            color: AppColorTokens.of(context).textPrimary,
           ),
         ),
       ],

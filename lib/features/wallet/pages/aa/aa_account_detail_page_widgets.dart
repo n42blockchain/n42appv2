@@ -11,17 +11,16 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
 
   // ─── Theme helpers ──────────────────────────────────────────────────
 
-  Color _themeColor(String key) =>
-      AppThemeUtils.getColorByKey(context, key);
+  Color _themeColor(String key) => AppThemeUtils.getColorByKey(context, key);
 
   Color get _mainText => _themeColor(AppThemeKeys.mainTextColor.name);
   Color get _subText => _themeColor(AppThemeKeys.itemSubtitleTextColor.name);
   Color get _itemBg => _themeColor(AppThemeKeys.itemBgColor.name);
 
   BoxDecoration _sectionDecoration() => BoxDecoration(
-        color: _itemBg,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-      );
+    color: _itemBg,
+    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+  );
 
   // ─── Account Card ─────────────────────────────────────────────────────
 
@@ -74,10 +73,10 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
           Container(
             padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
             decoration: BoxDecoration(
-              color: _themeColor(AppThemeKeys.backGroundColor.name)
-                  .withAlpha(100),
-              borderRadius:
-                  BorderRadius.circular(ScreenUtil().setWidth(12)),
+              color: _themeColor(
+                AppThemeKeys.backGroundColor.name,
+              ).withAlpha(100),
+              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
             ),
             child: Row(
               children: [
@@ -194,9 +193,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(
-          vertical: ScreenUtil().setWidth(16),
-        ),
+        padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
         decoration: BoxDecoration(
           color: effectiveColor.withAlpha(20),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
@@ -254,10 +251,22 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
             ),
           ),
           SizedBox(height: ScreenUtil().setWidth(16)),
-          _buildDetailRow(S.of(context).g_key_aa_chain_id, widget.account.chainId.toString()),
-          _buildDetailRow(S.of(context).g_key_aa_factory, _shortenAddress(widget.account.factoryAddress)),
-          _buildDetailRow(S.of(context).g_key_aa_owner, _shortenAddress(widget.account.ownerAddress)),
-          _buildDetailRow(S.of(context).g_key_aa_created, _formatDate(widget.account.createdAt)),
+          _buildDetailRow(
+            S.of(context).g_key_aa_chain_id,
+            widget.account.chainId.toString(),
+          ),
+          _buildDetailRow(
+            S.of(context).g_key_aa_factory,
+            _shortenAddress(widget.account.factoryAddress),
+          ),
+          _buildDetailRow(
+            S.of(context).g_key_aa_owner,
+            _shortenAddress(widget.account.ownerAddress),
+          ),
+          _buildDetailRow(
+            S.of(context).g_key_aa_created,
+            _formatDate(widget.account.createdAt),
+          ),
           if (widget.account.lastActivityAt != null)
             _buildDetailRow(
               S.of(context).g_key_aa_last_activity,
@@ -276,10 +285,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
         children: [
           Text(
             label,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
-              color: _subText,
-            ),
+            style: TextStyle(fontSize: ScreenUtil().setSp(24), color: _subText),
           ),
           Text(
             value,
@@ -326,7 +332,9 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
           SizedBox(height: ScreenUtil().setWidth(16)),
           Center(
             child: Padding(
-              padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(24)),
+              padding: EdgeInsets.symmetric(
+                vertical: ScreenUtil().setWidth(24),
+              ),
               child: Column(
                 children: [
                   Icon(

@@ -20,25 +20,24 @@ class _ExportKeystoreDescState extends State<ExportKeystoreDesc> {
   bool _riskAcknowledged = false;
 
   Widget _descItem(String text, Color color) => Text(
-        text,
-        style: TextStyle(
-          color: color,
-          fontSize: ScreenUtil().setSp(30),
-          height: 1.5,
-        ),
-      );
+    text,
+    style: TextStyle(
+      color: color,
+      fontSize: ScreenUtil().setSp(30),
+      height: 1.5,
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
     final s = S.of(context);
     final subtitleColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.ff888888.name);
-    final errorBg = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.errorBgColor.name);
-    final errorText = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.errorTextColor.name);
-    final mainText = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainTextColor.name);
+      context,
+      AppThemeKeys.ff888888.name,
+    );
+    final errorBg = AppColorTokens.of(context).dangerBg;
+    final errorText = AppColorTokens.of(context).danger;
+    final mainText = AppColorTokens.of(context).textPrimary;
 
     return Scaffold(
       appBar: AppBarWidget(text: s.g_key_ex_keystore),
@@ -66,8 +65,9 @@ class _ExportKeystoreDescState extends State<ExportKeystoreDesc> {
                       padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
                       decoration: BoxDecoration(
                         color: errorBg,
-                        borderRadius:
-                            BorderRadius.circular(ScreenUtil().setWidth(12)),
+                        borderRadius: BorderRadius.circular(
+                          ScreenUtil().setWidth(12),
+                        ),
                       ),
                       child: Text(
                         s.g_key_ex_keystore_2,
@@ -113,19 +113,18 @@ class _ExportKeystoreDescState extends State<ExportKeystoreDesc> {
                     width: double.infinity,
                     height: ScreenUtil().setWidth(148),
                     padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.backGroundColor.name),
+                    color: AppColorTokens.of(context).bgBase,
                     child: AppButton(
                       label: s.next,
                       onPressed: _riskAcknowledged
                           ? () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => ExportKeystorePage(
-                                    keystoreJson: widget.keystoreJson,
-                                  ),
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => ExportKeystorePage(
+                                  keystoreJson: widget.keystoreJson,
                                 ),
-                              )
+                              ),
+                            )
                           : null,
                     ),
                   ),
@@ -164,8 +163,7 @@ class _RiskCheckbox extends StatelessWidget {
             child: Checkbox(
               value: value,
               onChanged: onChanged,
-              activeColor: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainBlueColor.name),
+              activeColor: AppColorTokens.of(context).brand,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(4),
               ),
@@ -179,8 +177,7 @@ class _RiskCheckbox extends StatelessWidget {
               child: Text(
                 label,
                 style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
+                  color: AppColorTokens.of(context).textPrimary,
                   fontSize: ScreenUtil().setSp(28),
                   height: 1.5,
                 ),

@@ -80,13 +80,15 @@ class N42WalletBridge implements IWalletBridge {
       final icon = coinModel.coin['icon'] as String?;
 
       if (coinType != null) {
-        tokens.add(TokenInfo(
-          symbol: miniName ?? coinType,
-          name: coinModel.coin['name'] as String? ?? coinType,
-          decimals: decimals,
-          iconUrl: icon,
-          isNative: coinModel.coin['isContract'] != true,
-        ));
+        tokens.add(
+          TokenInfo(
+            symbol: miniName ?? coinType,
+            name: coinModel.coin['name'] as String? ?? coinType,
+            decimals: decimals,
+            iconUrl: icon,
+            isNative: coinModel.coin['isContract'] != true,
+          ),
+        );
       }
     }
 
@@ -130,7 +132,8 @@ class N42WalletBridge implements IWalletBridge {
       }
 
       final provider = _provider;
-      if (provider == null) return TransferResult.failure('Wallet not connected');
+      if (provider == null)
+        return TransferResult.failure('Wallet not connected');
 
       // Find CoinModel matching the token symbol
       CoinModel? coinModel;
@@ -158,21 +161,23 @@ class N42WalletBridge implements IWalletBridge {
           ? (coinModel.coin['contract'] as String? ?? '')
           : '';
 
-      final result = await SenderFactory.instance.getSender(coinType).send(
-        SendParams(
-          coinType: coinType,
-          fromAddress: coinModel.address.toString(),
-          toAddress: toAddress,
-          amount: value,
-          decimals: decimals,
-          path: path,
-          isTest: false,
-          contractAddress: contractAddress,
-          tokenDecimals: contractAddress.isNotEmpty ? decimals : 0,
-          memo: memo,
-          chainConfig: coinModel.coin,
-        ),
-      );
+      final result = await SenderFactory.instance
+          .getSender(coinType)
+          .send(
+            SendParams(
+              coinType: coinType,
+              fromAddress: coinModel.address.toString(),
+              toAddress: toAddress,
+              amount: value,
+              decimals: decimals,
+              path: path,
+              isTest: false,
+              contractAddress: contractAddress,
+              tokenDecimals: contractAddress.isNotEmpty ? decimals : 0,
+              memo: memo,
+              chainConfig: coinModel.coin,
+            ),
+          );
 
       if (!result.success) {
         return TransferResult.failure(result.error ?? 'Transfer failed');
@@ -239,11 +244,9 @@ class N42WalletBridge implements IWalletBridge {
       final context = AppGlobals.navigatorKey.currentContext;
       if (context == null || !context.mounted) return;
 
-      await Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (_) => WalletReceiveQr(chainCoin!),
-        ),
-      );
+      await Navigator.of(
+        context,
+      ).push(MaterialPageRoute(builder: (_) => WalletReceiveQr(chainCoin!)));
     } catch (e) {
       AppLogger.w('N42WalletBridge', 'showReceiveQRCode error: $e');
     }
@@ -255,7 +258,9 @@ class N42WalletBridge implements IWalletBridge {
   bool isValidAddress(String address) {
     // ETH address: 0x + 40 hex chars, or N chain address (30-50 chars)
     return _ethAddressRegExp.hasMatch(address) ||
-        (address.startsWith('N') && address.length >= 30 && address.length <= 50);
+        (address.startsWith('N') &&
+            address.length >= 30 &&
+            address.length <= 50);
   }
 
   final AddressBookApi _addressBookApi = AddressBookApi();
@@ -266,10 +271,7 @@ class N42WalletBridge implements IWalletBridge {
       final results = await _addressBookApi.searchAddressBook(address);
       for (final item in results) {
         if (item.address?.toLowerCase() == address.toLowerCase()) {
-          return WalletUserInfo(
-            address: address,
-            username: item.name,
-          );
+          return WalletUserInfo(address: address, username: item.name);
         }
       }
       return null;
@@ -317,7 +319,9 @@ class N42WalletBridge implements IWalletBridge {
   }
 
   @override
-  Future<Map<String, String?>> batchLookupEnsNames(List<String> addresses) async {
+  Future<Map<String, String?>> batchLookupEnsNames(
+    List<String> addresses,
+  ) async {
     try {
       return await _ensService.resolveAddresses(addresses);
     } catch (e) {
@@ -367,16 +371,16 @@ class N42WalletBridge implements IWalletBridge {
       const requiredFields = ['types', 'primaryType', 'domain', 'message'];
       for (final field in requiredFields) {
         if (!typedData.containsKey(field)) {
-          AppLogger.w(
-            'N42WalletBridge',
-            'missing EIP-712 field "$field"',
-          );
+          AppLogger.w('N42WalletBridge', 'missing EIP-712 field "$field"');
           return null;
         }
       }
 
       final typedMessage = TypedMessage.fromJson(typedData);
-      final hash = hashTypedData(typedData: typedMessage, version: TypedDataVersion.v4);
+      final hash = hashTypedData(
+        typedData: typedMessage,
+        version: TypedDataVersion.v4,
+      );
       final signature = web3.sign(hash, ethKey.privateKey);
 
       final r = signature.r.toRadixString(16).padLeft(64, '0');
@@ -421,7 +425,11 @@ class N42WalletBridge implements IWalletBridge {
             ethCoin.coin['path']?['legacy'] ?? "m/44'/60'/0'/0/0",
             ethCoin.pathIndex,
           );
-          pKey = await Trustdart().getPrivateKey(mnemonic, CoinType.ETH.name, path);
+          pKey = await Trustdart().getPrivateKey(
+            mnemonic,
+            CoinType.ETH.name,
+            path,
+          );
         }
       }
 
@@ -467,7 +475,11 @@ class N42WalletBridge implements IWalletBridge {
     required int chainId,
     String? ownerAddress,
   }) async {
-    final raw = await _queryTokenBalance(contractAddress, ownerAddress, 'ERC-20');
+    final raw = await _queryTokenBalance(
+      contractAddress,
+      ownerAddress,
+      'ERC-20',
+    );
     return BigInt.tryParse(raw) ?? BigInt.zero;
   }
 
@@ -478,7 +490,11 @@ class N42WalletBridge implements IWalletBridge {
     String? ownerAddress,
   }) async {
     // Use ERC-20 balance query as proxy - NFT balance returns count
-    final raw = await _queryTokenBalance(contractAddress, ownerAddress, 'ERC-721');
+    final raw = await _queryTokenBalance(
+      contractAddress,
+      ownerAddress,
+      'ERC-721',
+    );
     return int.tryParse(raw) ?? 0;
   }
 
@@ -490,7 +506,11 @@ class N42WalletBridge implements IWalletBridge {
     String? ownerAddress,
   }) async {
     // ERC-1155 balanceOf(address, tokenId) - query via token API
-    final raw = await _queryTokenBalance(contractAddress, ownerAddress, 'ERC-1155');
+    final raw = await _queryTokenBalance(
+      contractAddress,
+      ownerAddress,
+      'ERC-1155',
+    );
     return BigInt.tryParse(raw) ?? BigInt.zero;
   }
 
@@ -514,7 +534,11 @@ class N42WalletBridge implements IWalletBridge {
       final address = ownerAddress ?? walletAddress;
       if (address == null) return '0';
 
-      final result = await _tokenViewApi.getBalanceEth('ETH', address, contractAddress);
+      final result = await _tokenViewApi.getBalanceEth(
+        'ETH',
+        address,
+        contractAddress,
+      );
       if (!result.error && result.data != null) {
         return result.data.toString();
       }

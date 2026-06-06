@@ -8,14 +8,22 @@ import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:dio/dio.dart';
 
 class AlgoApi {
-  String _uri(bool isTest) => RequestUrl().getUrl2(CoinType.ALGO.name, 'api', isTest: isTest);
+  String _uri(bool isTest) =>
+      RequestUrl().getUrl2(CoinType.ALGO.name, 'api', isTest: isTest);
 
   /// 获取余额（native 或 ASA）
-  Future<MessageModel> getBalance(String address, {String assetId = '', bool isTest = false}) async {
+  Future<MessageModel> getBalance(
+    String address, {
+    String assetId = '',
+    bool isTest = false,
+  }) async {
     try {
       final uri = _uri(isTest);
       if (assetId != '') {
-        MessageModel data = await BaseApi.requestEmptyH.get('${uri}v2/accounts/$address/assets/$assetId', params: {});
+        MessageModel data = await BaseApi.requestEmptyH.get(
+          '${uri}v2/accounts/$address/assets/$assetId',
+          params: {},
+        );
         Response rData = data.data;
         if (rData.statusCode == 200 || rData.statusCode == 201) {
           Map<String, dynamic> rDataMap = jsonDecode(rData.data);
@@ -28,7 +36,10 @@ class AlgoApi {
         }
         return data;
       } else {
-        final data = await BaseApi.requestEmptyH.get('${uri}v2/accounts/$address', params: {});
+        final data = await BaseApi.requestEmptyH.get(
+          '${uri}v2/accounts/$address',
+          params: {},
+        );
         final mm = MessageModel();
         mm.data = {
           'balance': BigInt.from(data['amount']),
@@ -44,7 +55,10 @@ class AlgoApi {
   /// 获取签名用的链上参数
   Future<MessageModel> getTransactionsParams({bool isTest = false}) async {
     try {
-      final data = await BaseApi.requestEmptyH.get('${_uri(isTest)}v2/transactions/params', params: {});
+      final data = await BaseApi.requestEmptyH.get(
+        '${_uri(isTest)}v2/transactions/params',
+        params: {},
+      );
       return MessageModel()..data = data;
     } catch (e) {
       return MessageModel.error()..data = e;
@@ -68,9 +82,15 @@ class AlgoApi {
   }
 
   /// 根据 txid 获取交易信息
-  Future<MessageModel> getTransactionsInfo(String txId, {bool isTest = false}) async {
+  Future<MessageModel> getTransactionsInfo(
+    String txId, {
+    bool isTest = false,
+  }) async {
     try {
-      final data = await BaseApi.requestEmptyH.get('${_uri(isTest)}v2/transactions/pending/$txId', params: {});
+      final data = await BaseApi.requestEmptyH.get(
+        '${_uri(isTest)}v2/transactions/pending/$txId',
+        params: {},
+      );
       return MessageModel()..data = data;
     } catch (e) {
       return MessageModel.error()..data = e;

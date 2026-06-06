@@ -109,10 +109,7 @@ class _WalletChainSendSuiState extends ConsumerState<WalletChainSendSui>
         errorMessage,
         style: TextStyle(
           fontSize: ScreenUtil().setSp(28.0),
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.errorTextColor.name,
-          ),
+          color: AppColorTokens.of(context).danger,
         ),
       ),
     );
@@ -130,10 +127,7 @@ class _WalletChainSendSuiState extends ConsumerState<WalletChainSendSui>
           Container(
             padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
             height: ScreenUtil().setWidth(148.0),
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.backGroundColor.name,
-            ),
+            color: AppColorTokens.of(context).bgBase,
             child: AppButton(
               label: S.of(context).g_key_48,
               onPressed: sendTransaction,

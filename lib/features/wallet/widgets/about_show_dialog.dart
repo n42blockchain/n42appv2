@@ -1,9 +1,10 @@
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:simple_html_css/simple_html_css.dart';
 
-void aboutShowDialog(BuildContext context,String aboutStr,String title){
+void aboutShowDialog(BuildContext context, String aboutStr, String title) {
   showModalBottomSheet(
     isScrollControlled: true,
     shape: RoundedRectangleBorder(
@@ -13,7 +14,7 @@ void aboutShowDialog(BuildContext context,String aboutStr,String title){
       ),
     ),
     context: context,
-    builder: (BuildContext context){
+    builder: (BuildContext context) {
       return Container(
         padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
         constraints: BoxConstraints(
@@ -28,12 +29,15 @@ void aboutShowDialog(BuildContext context,String aboutStr,String title){
                 Text(
                   title,
                   style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
+                    color: AppThemeUtils.getColorByKey(
+                      context,
+                      AppThemeKeys.mainButtonBgColor.name,
+                    ),
                     fontSize: ScreenUtil().setSp(30.0),
                   ),
                 ),
                 InkWell(
-                  onTap: (){
+                  onTap: () {
                     Navigator.pop(context);
                   },
                   child: Container(
@@ -45,7 +49,7 @@ void aboutShowDialog(BuildContext context,String aboutStr,String title){
                 ),
               ],
             ),
-            SizedBox(height: ScreenUtil().setWidth(30.0),),
+            SizedBox(height: ScreenUtil().setWidth(30.0)),
             Expanded(
               flex: 1,
               child: SingleChildScrollView(
@@ -54,14 +58,14 @@ void aboutShowDialog(BuildContext context,String aboutStr,String title){
                     context,
                     aboutStr,
                     defaultTextStyle: TextStyle(
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                      color: AppColorTokens.of(context).textPrimary,
                       fontSize: ScreenUtil().setSp(26.0),
                       // etc etc
                     ),
                   ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       );

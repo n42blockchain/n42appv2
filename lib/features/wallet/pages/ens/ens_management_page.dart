@@ -65,7 +65,6 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
     'description',
   ];
 
-
   @override
   void initState() {
     super.initState();
@@ -94,7 +93,8 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
     super.dispose();
   }
 
-  bool _isValidAddress(String addr) => FeatureAddressUtils.isValidEvmAddress(addr);
+  bool _isValidAddress(String addr) =>
+      FeatureAddressUtils.isValidEvmAddress(addr);
 
   void _copyToClipboard(String text) {
     Clipboard.setData(ClipboardData(text: text));
@@ -226,7 +226,9 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(S.of(ctx).g_key_ens_subdomain_delete),
-        content: SingleChildScrollView(child: Text(S.of(ctx).g_key_ens_subdomain_delete_confirm)),
+        content: SingleChildScrollView(
+          child: Text(S.of(ctx).g_key_ens_subdomain_delete_confirm),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
@@ -277,7 +279,8 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
                   SizedBox(height: ScreenUtil().setWidth(16)),
                   TextField(
                     controller: controller,
-                    onChanged: (_) => setDialogState(() => validationError = null),
+                    onChanged: (_) =>
+                        setDialogState(() => validationError = null),
                     decoration: InputDecoration(
                       labelText: S.of(ctx).g_key_ens_new_owner,
                       hintText: '0x...',
@@ -298,7 +301,8 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
                   final addr = controller.text.trim();
                   if (!_isValidAddress(addr)) {
                     setDialogState(
-                      () => validationError = S.of(ctx).g_key_ens_invalid_address,
+                      () =>
+                          validationError = S.of(ctx).g_key_ens_invalid_address,
                     );
                     return;
                   }

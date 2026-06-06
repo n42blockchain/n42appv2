@@ -7,7 +7,7 @@ import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/api/gas_tracker_api.dart';
 import 'package:n42_wallet/features/wallet/models/non_evm_fee_model.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
@@ -53,16 +53,11 @@ class NonEvmFeeCompact extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final blueColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
-    final mainText =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final subtitleText = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
-    final itemBg =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name);
-    final errorColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name);
+    final blueColor = AppColorTokens.of(context).brand;
+    final mainText = AppColorTokens.of(context).textPrimary;
+    final subtitleText = AppColorTokens.of(context).textSubtitle;
+    final itemBg = AppColorTokens.of(context).bgSurface;
+    final errorColor = AppColorTokens.of(context).danger;
 
     final feeColor = hasError ? errorColor : mainText;
 
@@ -74,9 +69,7 @@ class NonEvmFeeCompact extends StatelessWidget {
           horizontal: ScreenUtil().setWidth(30),
           vertical: ScreenUtil().setWidth(20),
         ),
-        margin: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(30),
-        ),
+        margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
         decoration: BoxDecoration(
           color: itemBg,
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
@@ -107,9 +100,7 @@ class NonEvmFeeCompact extends StatelessWidget {
                   ),
                   if (estimatedTime != null || rateText != null)
                     Text(
-                      [estimatedTime, rateText]
-                          .whereType<String>()
-                          .join('  '),
+                      [estimatedTime, rateText].whereType<String>().join('  '),
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(23),
                         color: subtitleText,
@@ -199,7 +190,7 @@ class _NonEvmFeeSelectorState extends State<NonEvmFeeSelector> {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: AppColorTokens.of(context).bgSurface,
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
       ),
       child: Column(
@@ -217,21 +208,19 @@ class _NonEvmFeeSelectorState extends State<NonEvmFeeSelector> {
   }
 
   Widget _buildHeader(BuildContext context) {
-    final mainText =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final blueColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+    final mainText = AppColorTokens.of(context).textPrimary;
+    final blueColor = AppColorTokens.of(context).brand;
 
     final fee = widget.feeModel.currentOption.fee;
     final decimals = widget.feeModel.decimals;
     final unit = widget.feeModel.unit;
-    final formatted = Decimal.parse(toEther(fee.toString(), decimals).toString());
+    final formatted = Decimal.parse(
+      toEther(fee.toString(), decimals).toString(),
+    );
 
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-      margin: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30),
-      ),
+      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -258,10 +247,7 @@ class _NonEvmFeeSelectorState extends State<NonEvmFeeSelector> {
           ),
           Text(
             '$formatted $unit',
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
-              color: mainText,
-            ),
+            style: TextStyle(fontSize: ScreenUtil().setSp(28), color: mainText),
           ),
         ],
       ),
@@ -273,34 +259,47 @@ class _NonEvmFeeSelectorState extends State<NonEvmFeeSelector> {
       padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
       child: Row(
         children: [
-          _buildOption(context, NonEvmFeeSpeed.slow,
-              S.of(context).g_key_gas_slow, Icons.snooze),
+          _buildOption(
+            context,
+            NonEvmFeeSpeed.slow,
+            S.of(context).g_key_gas_slow,
+            Icons.snooze,
+          ),
           SizedBox(width: ScreenUtil().setWidth(16)),
-          _buildOption(context, NonEvmFeeSpeed.standard,
-              S.of(context).g_key_gas_standard, Icons.speed),
+          _buildOption(
+            context,
+            NonEvmFeeSpeed.standard,
+            S.of(context).g_key_gas_standard,
+            Icons.speed,
+          ),
           SizedBox(width: ScreenUtil().setWidth(16)),
-          _buildOption(context, NonEvmFeeSpeed.fast,
-              S.of(context).g_key_gas_fast, Icons.flash_on),
+          _buildOption(
+            context,
+            NonEvmFeeSpeed.fast,
+            S.of(context).g_key_gas_fast,
+            Icons.flash_on,
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildOption(BuildContext context, NonEvmFeeSpeed speed,
-      String label, IconData icon) {
+  Widget _buildOption(
+    BuildContext context,
+    NonEvmFeeSpeed speed,
+    String label,
+    IconData icon,
+  ) {
     final isSelected = _selected == speed;
-    final blueColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
-    final mainText =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final subtitleText = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
-    final dividerColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name);
+    final blueColor = AppColorTokens.of(context).brand;
+    final mainText = AppColorTokens.of(context).textPrimary;
+    final subtitleText = AppColorTokens.of(context).textSubtitle;
+    final dividerColor = AppColorTokens.of(context).border;
 
     final option = _getOption(speed);
-    final estimatedTime =
-        GasTrackerApi.formatEstimatedTime(option.estimatedSeconds);
+    final estimatedTime = GasTrackerApi.formatEstimatedTime(
+      option.estimatedSeconds,
+    );
 
     return Expanded(
       child: GestureDetector(
@@ -332,8 +331,7 @@ class _NonEvmFeeSelectorState extends State<NonEvmFeeSelector> {
                 label,
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(24),
-                  fontWeight:
-                      isSelected ? FontWeight.bold : FontWeight.normal,
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                   color: isSelected ? blueColor : mainText,
                 ),
               ),
@@ -365,17 +363,14 @@ class _NonEvmFeeSelectorState extends State<NonEvmFeeSelector> {
     final option = widget.feeModel.currentOption;
     final decimals = widget.feeModel.decimals;
     final unit = widget.feeModel.unit;
-    final subtitleText = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
-    final mainText =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final blueColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
-    final bgColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.backGroundColor.name);
+    final subtitleText = AppColorTokens.of(context).textSubtitle;
+    final mainText = AppColorTokens.of(context).textPrimary;
+    final blueColor = AppColorTokens.of(context).brand;
+    final bgColor = AppColorTokens.of(context).bgBase;
 
-    final feeFormatted =
-        Decimal.parse(toEther(option.fee.toString(), decimals).toString());
+    final feeFormatted = Decimal.parse(
+      toEther(option.fee.toString(), decimals).toString(),
+    );
 
     return Container(
       margin: EdgeInsets.all(ScreenUtil().setWidth(30)),

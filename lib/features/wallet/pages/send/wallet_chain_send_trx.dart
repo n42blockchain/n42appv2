@@ -100,10 +100,7 @@ class _WalletChainSendTrxState extends ConsumerState<WalletChainSendTrx>
         errorMessage,
         style: TextStyle(
           fontSize: ScreenUtil().setSp(28.0),
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.errorTextColor.name,
-          ),
+          color: AppColorTokens.of(context).danger,
         ),
       ),
     );
@@ -122,10 +119,7 @@ class _WalletChainSendTrxState extends ConsumerState<WalletChainSendTrx>
           Container(
             padding: EdgeInsets.all(sw(30.0)),
             height: sw(148.0),
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.backGroundColor.name,
-            ),
+            color: AppColorTokens.of(context).bgBase,
             child: AppButton(
               label: S.of(context).g_key_48,
               onPressed: sendTransaction,

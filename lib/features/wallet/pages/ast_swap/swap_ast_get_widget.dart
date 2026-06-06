@@ -31,8 +31,7 @@ class SwapAstGetWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final su = ScreenUtil();
-    final textColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemTextColor.name);
+    final textColor = AppColorTokens.of(context).textItem;
 
     return Container(
       margin: EdgeInsets.only(
@@ -44,7 +43,9 @@ class SwapAstGetWidget extends StatelessWidget {
       padding: EdgeInsets.all(AppSpacing.space8),
       decoration: BoxDecoration(
         color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemBgColor5.name),
+          context,
+          AppThemeKeys.itemBgColor5.name,
+        ),
         borderRadius: AppRadius.brSm,
       ),
       child: Column(
@@ -65,20 +66,24 @@ class SwapAstGetWidget extends StatelessWidget {
                     controller: getController,
                     focusNode: getNode,
                     textInputAction: TextInputAction.next,
-                    keyboardType:
-                        const TextInputType.numberWithOptions(decimal: true),
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
                     decoration: InputDecoration(
                       hintText: S.of(context).g_key_44,
                       hintStyle: AppTypography.displayLg.copyWith(
                         color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.textFieldHintColor.name),
+                          context,
+                          AppThemeKeys.textFieldHintColor.name,
+                        ),
                       ),
                       border: InputBorder.none,
                       errorBorder: InputBorder.none,
                       focusedBorder: InputBorder.none,
                       isCollapsed: true,
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: AppSpacing.space2),
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: AppSpacing.space2,
+                      ),
                     ),
                     maxLines: 1,
                     onChanged: onGetChanged,
@@ -99,7 +104,10 @@ class SwapAstGetWidget extends StatelessWidget {
   }
 
   Widget _buildTokenBadge(
-      BuildContext context, ScreenUtil su, Color textColor) {
+    BuildContext context,
+    ScreenUtil su,
+    Color textColor,
+  ) {
     final iconSize = su.setWidth(52);
     return Container(
       width: su.setWidth(200),
@@ -126,7 +134,9 @@ class SwapAstGetWidget extends StatelessWidget {
             child: Icon(
               Icons.arrow_forward_ios,
               color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemBorderColor.name),
+                context,
+                AppThemeKeys.itemBorderColor.name,
+              ),
               size: su.setWidth(40),
             ),
           ),
@@ -136,7 +146,10 @@ class SwapAstGetWidget extends StatelessWidget {
   }
 
   Widget _buildBalanceRow(
-      BuildContext context, ScreenUtil su, Color textColor) {
+    BuildContext context,
+    ScreenUtil su,
+    Color textColor,
+  ) {
     return Row(
       children: [
         Flexible(

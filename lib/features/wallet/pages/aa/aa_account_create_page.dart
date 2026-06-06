@@ -4,10 +4,10 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/aa/account/smart_account_factory.dart';
 import 'package:n42_wallet/features/wallet/aa/core/aa_config.dart';
 import 'package:n42_wallet/features/wallet/aa/models/smart_account.dart';

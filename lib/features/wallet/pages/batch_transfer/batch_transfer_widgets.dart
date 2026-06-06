@@ -6,7 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 // ─── InfoCard ────────────────────────────────────────────────────────────────
 
@@ -29,7 +29,7 @@ class BatchInfoCard extends StatelessWidget {
       margin: EdgeInsets.all(ScreenUtil().setWidth(16)),
       padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: AppColorTokens.of(context).bgSurface,
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
       ),
       child: Row(
@@ -43,7 +43,7 @@ class BatchInfoCard extends StatelessWidget {
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(28),
                     fontWeight: FontWeight.w600,
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                    color: AppColorTokens.of(context).textPrimary,
                   ),
                 ),
                 SizedBox(height: ScreenUtil().setWidth(4)),
@@ -51,7 +51,7 @@ class BatchInfoCard extends StatelessWidget {
                   '${S.of(context).g_key_batch_evm_only.split(' ').take(3).join(' ')} · $chainSymbol',
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(24),
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                    color: AppColorTokens.of(context).textSubtitle,
                   ),
                 ),
               ],
@@ -70,7 +70,11 @@ class BatchInfoCard extends StatelessWidget {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.flash_on, color: Colors.green, size: ScreenUtil().setWidth(20)),
+                  Icon(
+                    Icons.flash_on,
+                    color: Colors.green,
+                    size: ScreenUtil().setWidth(20),
+                  ),
                   SizedBox(width: ScreenUtil().setWidth(4)),
                   Text(
                     'Multicall',
@@ -116,7 +120,7 @@ class BatchAddItemForm extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(16)),
       padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: AppColorTokens.of(context).bgSurface,
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
       ),
       child: Column(
@@ -127,7 +131,7 @@ class BatchAddItemForm extends StatelessWidget {
             style: TextStyle(
               fontSize: ScreenUtil().setSp(26),
               fontWeight: FontWeight.w600,
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+              color: AppColorTokens.of(context).textPrimary,
             ),
           ),
           SizedBox(height: ScreenUtil().setWidth(12)),
@@ -150,7 +154,9 @@ class BatchAddItemForm extends StatelessWidget {
               Expanded(
                 child: TextField(
                   controller: amountController,
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
                   decoration: InputDecoration(
                     hintText: '0.0',
                     labelText: 'Amount',

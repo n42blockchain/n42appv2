@@ -148,7 +148,8 @@ class SmartAccount {
       'lastActivityAt': lastActivityAt?.toIso8601String(),
       'label': label,
       'signerType': signerType.name,
-      if (passkeyCredentialId != null) 'passkeyCredentialId': passkeyCredentialId,
+      if (passkeyCredentialId != null)
+        'passkeyCredentialId': passkeyCredentialId,
       if (passkeyPublicKeyX != null) 'passkeyPublicKeyX': passkeyPublicKeyX,
       if (passkeyPublicKeyY != null) 'passkeyPublicKeyY': passkeyPublicKeyY,
     };
@@ -350,14 +351,16 @@ class AAAccountInfo {
 
   factory AAAccountInfo.fromJson(Map<String, dynamic> json) {
     final rawAccounts = json['smartAccounts'] as Map<String, dynamic>?;
-    final accountsMap = rawAccounts?.map(
-      (key, value) => MapEntry(
-        int.parse(key),
-        (value as List<dynamic>)
-            .map((e) => SmartAccount.fromJson(e as Map<String, dynamic>))
-            .toList(),
-      ),
-    ) ?? {};
+    final accountsMap =
+        rawAccounts?.map(
+          (key, value) => MapEntry(
+            int.parse(key),
+            (value as List<dynamic>)
+                .map((e) => SmartAccount.fromJson(e as Map<String, dynamic>))
+                .toList(),
+          ),
+        ) ??
+        {};
 
     final rawPaymasters = json['defaultPaymasters'] as Map<String, dynamic>?;
     final paymasters = rawPaymasters?.map(
@@ -374,12 +377,15 @@ class AAAccountInfo {
   Map<String, dynamic> toJson() {
     return {
       'smartAccounts': smartAccounts.map(
-        (key, value) => MapEntry(key.toString(), value.map((a) => a.toJson()).toList()),
+        (key, value) =>
+            MapEntry(key.toString(), value.map((a) => a.toJson()).toList()),
       ),
       'preferAA': preferAA,
-      'defaultPaymasters': defaultPaymasters?.map(
-        (key, value) => MapEntry(key.toString(), value),
-      ) ?? <String, String>{},
+      'defaultPaymasters':
+          defaultPaymasters?.map(
+            (key, value) => MapEntry(key.toString(), value),
+          ) ??
+          <String, String>{},
     };
   }
 
