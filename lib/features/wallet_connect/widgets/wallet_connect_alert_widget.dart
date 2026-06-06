@@ -213,10 +213,7 @@ class _WalletConnectAlertWidgetState
           Text(
             widget.metadata.name,
             style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainTextColor.name,
-              ),
+              color: AppColorTokens.of(context).textPrimary,
               fontSize: ScreenUtil().setSp(28),
             ),
           ),
@@ -239,10 +236,7 @@ class _WalletConnectAlertWidgetState
         style: TextStyle(
           fontSize: ScreenUtil().setSp(28),
           fontWeight: FontWeight.w600,
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.mainTextColor.name,
-          ),
+          color: AppColorTokens.of(context).textPrimary,
         ),
       ),
     );
@@ -320,18 +314,9 @@ class _WalletConnectAlertWidgetState
         right: ScreenUtil().setWidth(30),
       ),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.backGroundColor.name,
-        ),
+        color: AppColorTokens.of(context).bgBase,
         border: Border(
-          top: BorderSide(
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.dividerColor.name,
-            ),
-            width: 1,
-          ),
+          top: BorderSide(color: AppColorTokens.of(context).border, width: 1),
         ),
       ),
       child: Row(
@@ -364,7 +349,7 @@ class _WalletConnectAlertWidgetState
     height: ScreenUtil().setWidth(1),
     indent: ScreenUtil().setWidth(30),
     endIndent: ScreenUtil().setWidth(30),
-    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name),
+    color: AppColorTokens.of(context).border,
   );
 
   Widget _itemWidget(BuildContext context, String title, String value) {
@@ -392,10 +377,7 @@ class _WalletConnectAlertWidgetState
               value,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(28),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainTextColor.name,
-                ),
+                color: AppColorTokens.of(context).textPrimary,
               ),
               maxLines: 5,
               overflow: TextOverflow.ellipsis,
@@ -507,10 +489,7 @@ class _WalletConnectAlertWidgetState
                     style: TextStyle(
                       fontSize: su.setSp(24),
                       fontWeight: FontWeight.w600,
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainTextColor.name,
-                      ),
+                      color: AppColorTokens.of(context).textPrimary,
                     ),
                   ),
                 ],
@@ -521,10 +500,7 @@ class _WalletConnectAlertWidgetState
                   'Creator: ${creatorAddr.length > 16 ? '${creatorAddr.substring(0, 8)}...${creatorAddr.substring(creatorAddr.length - 8)}' : creatorAddr}',
                   style: TextStyle(
                     fontSize: su.setSp(22),
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.itemSubtitleTextColor.name,
-                    ),
+                    color: AppColorTokens.of(context).textSubtitle,
                   ),
                 ),
               if (ageDays != null)
@@ -536,10 +512,7 @@ class _WalletConnectAlertWidgetState
                       : '$ageDays days'}',
                   style: TextStyle(
                     fontSize: su.setSp(22),
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.itemSubtitleTextColor.name,
-                    ),
+                    color: AppColorTokens.of(context).textSubtitle,
                   ),
                 ),
               if (isNew)

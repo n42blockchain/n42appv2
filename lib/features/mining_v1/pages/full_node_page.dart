@@ -14,7 +14,6 @@ import 'package:n42_wallet/features/mining_v1/widgets/group_confrim.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/utils/data_utils.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
@@ -82,7 +81,8 @@ class _FullNodePageState extends State<FullNodePage>
             Positioned.fill(
               child: Container(
                 padding: EdgeInsets.symmetric(
-                    horizontal: ScreenUtil().setWidth(30)),
+                  horizontal: ScreenUtil().setWidth(30),
+                ),
                 child: Column(
                   children: [
                     Expanded(
@@ -93,10 +93,9 @@ class _FullNodePageState extends State<FullNodePage>
                           Text(
                             S.current.g_mining_key_38,
                             style: TextStyle(
-                                color: AppThemeUtils.getColorByKey(
-                                    context,
-                                    AppThemeKeys.mainTextColor.name),
-                                fontSize: ScreenUtil().setSp(30)),
+                              color: AppColorTokens.of(context).textPrimary,
+                              fontSize: ScreenUtil().setSp(30),
+                            ),
                           ),
                           SizedBox(height: ScreenUtil().setWidth(30)),
                           _buildPayMethod(
@@ -110,27 +109,23 @@ class _FullNodePageState extends State<FullNodePage>
                             },
                           ),
                           SizedBox(height: ScreenUtil().setWidth(24)),
-                          Divider(
-                            color: AppThemeUtils.getColorByKey(
-                                context, AppThemeKeys.itemLineColor.name),
-                          ),
+                          Divider(color: AppColorTokens.of(context).border),
                           SizedBox(height: ScreenUtil().setWidth(24)),
                           Text(
                             S.of(context).g_mining_key46,
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                                color: AppThemeUtils.getColorByKey(
-                                    context, AppThemeKeys.mainTextColor.name),
-                                fontSize: ScreenUtil().setSp(26)),
+                              color: AppColorTokens.of(context).textPrimary,
+                              fontSize: ScreenUtil().setSp(26),
+                            ),
                           ),
                           SizedBox(height: ScreenUtil().setWidth(90)),
                           Text(
                             S.current.g_mining_key_39,
                             style: TextStyle(
-                                color: AppThemeUtils.getColorByKey(
-                                    context,
-                                    AppThemeKeys.mainTextColor.name),
-                                fontSize: ScreenUtil().setSp(30)),
+                              color: AppColorTokens.of(context).textPrimary,
+                              fontSize: ScreenUtil().setSp(30),
+                            ),
                           ),
                           SizedBox(height: ScreenUtil().setWidth(24)),
                           _buildPayMethods(),
@@ -174,9 +169,9 @@ class _FullNodePageState extends State<FullNodePage>
 
   String _resolveAppBarTitle(BuildContext context) {
     final levelLabel = switch (widget.astNum) {
-      50  => S.of(context).g_mining_key_62,
+      50 => S.of(context).g_mining_key_62,
       100 => S.of(context).g_mining_key_61,
-      _   => S.of(context).g_mining_key_63,
+      _ => S.of(context).g_mining_key_63,
     };
     return '${S.current.g_mining_key_37}:$levelLabel';
   }

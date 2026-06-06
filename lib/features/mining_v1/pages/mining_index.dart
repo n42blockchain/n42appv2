@@ -1,4 +1,3 @@
-
 import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/mining_v1/pages/mining_settings.dart';
@@ -6,6 +5,7 @@ import 'package:n42_wallet/features/mining_v1/pages/summary_page.dart';
 import 'package:n42_wallet/features/mining_v1/pages/today_mining_page.dart';
 import 'package:n42_wallet/features/mining_v1/provider/mining_v1_providers.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/features/widgets/app_home_top_bar.dart';
 import 'package:n42_wallet/features/widgets/keep_state_widget.dart';
@@ -21,14 +21,12 @@ class MiningIndex extends StatefulWidget {
   State<MiningIndex> createState() => _MiningIndexState();
 }
 
-class _MiningIndexState extends State<MiningIndex> with SingleTickerProviderStateMixin {
+class _MiningIndexState extends State<MiningIndex>
+    with SingleTickerProviderStateMixin {
   int selectIndex = 0;
   late TabController _tabController;
 
-  List<String> get tabs => [
-    S.current.g_mining_key_1,
-    S.current.g_mining_key_2,
-  ];
+  List<String> get tabs => [S.current.g_mining_key_1, S.current.g_mining_key_2];
 
   final pages = const [
     KeepStateWidget(wantKeepAlive: true, child: TodayMiningPage()),
@@ -75,7 +73,7 @@ class _MiningIndexState extends State<MiningIndex> with SingleTickerProviderStat
                           Text(
                             globalMiningV1.walletName,
                             style: TextStyle(
-                              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                              color: AppColorTokens.of(context).brand,
                               fontSize: ScreenUtil().setSp(30),
                               fontWeight: FontWeight.bold,
                             ),
@@ -84,7 +82,7 @@ class _MiningIndexState extends State<MiningIndex> with SingleTickerProviderStat
                             Text(
                               S.of(context).g_key_147,
                               style: TextStyle(
-                                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                                color: AppColorTokens.of(context).brand,
                                 fontSize: ScreenUtil().setSp(20),
                               ),
                             ),
@@ -92,7 +90,7 @@ class _MiningIndexState extends State<MiningIndex> with SingleTickerProviderStat
                       ),
                       Icon(
                         Icons.arrow_drop_down,
-                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                        color: AppColorTokens.of(context).brand,
                         size: ScreenUtil().setWidth(40),
                       ),
                     ],
@@ -105,14 +103,14 @@ class _MiningIndexState extends State<MiningIndex> with SingleTickerProviderStat
                 SizedBox(width: ScreenUtil().setWidth(10)),
                 InkWell(
                   onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (_) => const MiningSettings()));
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const MiningSettings()),
+                    );
                   },
                   child: Image.asset(
                     "assets/mining/set.png",
                     width: ScreenUtil().setWidth(40),
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainBlueColor.name),
+                    color: AppColorTokens.of(context).brand,
                   ),
                 ),
               ],
@@ -123,14 +121,14 @@ class _MiningIndexState extends State<MiningIndex> with SingleTickerProviderStat
                 padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
                 margin: EdgeInsets.only(top: ScreenUtil().setWidth(30)),
                 decoration: BoxDecoration(
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorBgColor.name),
+                  color: AppColorTokens.of(context).dangerBg,
                   borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
                 ),
                 child: Text(
                   "The test chain is being upgraded and blocks cannot be verified temporarily.",
                   style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
-                      fontSize: ScreenUtil().setSp(26)
+                    color: AppColorTokens.of(context).danger,
+                    fontSize: ScreenUtil().setSp(26),
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -142,11 +140,18 @@ class _MiningIndexState extends State<MiningIndex> with SingleTickerProviderStat
               indicatorSize: TabBarIndicatorSize.label,
               labelPadding: EdgeInsets.zero,
               tabAlignment: TabAlignment.start,
-              padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(15)),
-              labelStyle: TextStyle(fontSize: ScreenUtil().setSp(26.0), fontWeight: FontWeight.w500),
-              unselectedLabelStyle: TextStyle(fontSize: ScreenUtil().setSp(26.0)),
-              labelColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-              unselectedLabelColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+              padding: EdgeInsets.symmetric(
+                horizontal: ScreenUtil().setWidth(15),
+              ),
+              labelStyle: TextStyle(
+                fontSize: ScreenUtil().setSp(26.0),
+                fontWeight: FontWeight.w500,
+              ),
+              unselectedLabelStyle: TextStyle(
+                fontSize: ScreenUtil().setSp(26.0),
+              ),
+              labelColor: AppColorTokens.of(context).textPrimary,
+              unselectedLabelColor: AppColorTokens.of(context).textSubtitle,
               tabs: List.generate(tabs.length, (i) {
                 final isSelected = selectIndex == i;
                 return Container(
@@ -159,33 +164,36 @@ class _MiningIndexState extends State<MiningIndex> with SingleTickerProviderStat
                     vertical: ScreenUtil().setWidth(24),
                   ),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(30)),
+                    borderRadius: BorderRadius.circular(
+                      ScreenUtil().setWidth(30),
+                    ),
                     color: isSelected
-                        ? AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
-                        : AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+                        ? AppColorTokens.of(context).brand
+                        : AppColorTokens.of(context).bgSurface,
                   ),
                   child: Text(
                     tabs[i],
                     style: TextStyle(
                       color: isSelected
-                          ? AppThemeUtils.getColorByKey(context, AppThemeKeys.mainWhiteColor.name)
-                          : AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                          ? AppThemeUtils.getColorByKey(
+                              context,
+                              AppThemeKeys.mainWhiteColor.name,
+                            )
+                          : AppColorTokens.of(context).textSubtitle,
                     ),
                   ),
                 );
               }),
             ),
             Expanded(
-              child: TabBarView(
-                controller: _tabController,
-                children: pages,
-              ),
+              child: TabBarView(controller: _tabController, children: pages),
             ),
           ],
         ),
       ),
     );
   }
+
   void showChangeAddress() {
     final walletValue = globalWapAdapter;
     final miningValue = globalMiningV1;
@@ -202,7 +210,7 @@ class _MiningIndexState extends State<MiningIndex> with SingleTickerProviderStat
             child: Text(
               S.of(context).g_key_16,
               style: TextStyle(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                color: AppColorTokens.of(context).textPrimary,
                 fontSize: ScreenUtil().setSp(36.0),
                 fontWeight: FontWeight.bold,
               ),
@@ -210,11 +218,15 @@ class _MiningIndexState extends State<MiningIndex> with SingleTickerProviderStat
           ),
           Divider(
             height: ScreenUtil().setWidth(1),
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name),
+            color: AppColorTokens.of(context).border,
           ),
           Container(
-            constraints: BoxConstraints(maxHeight: ScreenUtil().setWidth(500.0)),
-            padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+            constraints: BoxConstraints(
+              maxHeight: ScreenUtil().setWidth(500.0),
+            ),
+            padding: EdgeInsets.symmetric(
+              horizontal: ScreenUtil().setWidth(30.0),
+            ),
             child: ListView.builder(
               itemCount: walletValue.walletInfoLsit.length,
               itemBuilder: (context, int index) {
@@ -224,8 +236,8 @@ class _MiningIndexState extends State<MiningIndex> with SingleTickerProviderStat
                 }
                 final isSelected = index == miningValue.walletIndex;
                 final walletColor = isSelected
-                    ? AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
-                    : AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+                    ? AppColorTokens.of(context).brand
+                    : AppColorTokens.of(context).textSubtitle;
                 return Column(
                   children: [
                     InkWell(
@@ -241,15 +253,23 @@ class _MiningIndexState extends State<MiningIndex> with SingleTickerProviderStat
                         child: Row(
                           children: [
                             Text(
-                              wInfo.mainWallet ? S.of(context).g_key_14 : S.of(context).g_key_6,
-                              style: TextStyle(color: walletColor, fontSize: ScreenUtil().setSp(36.0)),
+                              wInfo.mainWallet
+                                  ? S.of(context).g_key_14
+                                  : S.of(context).g_key_6,
+                              style: TextStyle(
+                                color: walletColor,
+                                fontSize: ScreenUtil().setSp(36.0),
+                              ),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                             ),
                             SizedBox(width: ScreenUtil().setWidth(20.0)),
                             Text(
                               wInfo.walletName ?? "",
-                              style: TextStyle(color: walletColor, fontSize: ScreenUtil().setSp(36.0)),
+                              style: TextStyle(
+                                color: walletColor,
+                                fontSize: ScreenUtil().setSp(36.0),
+                              ),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                             ),
@@ -267,5 +287,4 @@ class _MiningIndexState extends State<MiningIndex> with SingleTickerProviderStat
       ),
     );
   }
-
 }

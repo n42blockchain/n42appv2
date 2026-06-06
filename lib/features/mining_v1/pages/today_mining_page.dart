@@ -19,6 +19,7 @@ import 'package:n42_wallet/features/utils/data_utils.dart';
 import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/api/market_api.dart';
 import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';

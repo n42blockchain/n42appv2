@@ -17,7 +17,7 @@ mixin _SectionsMixin on _WidgetsMixin {
       ),
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: AppColorTokens.of(context).bgSurface,
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
       ),
       child: Row(
@@ -37,8 +37,7 @@ mixin _SectionsMixin on _WidgetsMixin {
                 S.of(context).g_mining_key_9,
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(26),
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemTextColor.name),
+                  color: AppColorTokens.of(context).textItem,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -82,8 +81,7 @@ mixin _SectionsMixin on _WidgetsMixin {
               S.of(context).g_mining_key31,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(30),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
+                color: AppColorTokens.of(context).textPrimary,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -94,8 +92,7 @@ mixin _SectionsMixin on _WidgetsMixin {
                   topLeft: Radius.circular(ScreenUtil().setWidth(16)),
                   topRight: Radius.circular(ScreenUtil().setWidth(16)),
                 ),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemBgColor.name),
+                color: AppColorTokens.of(context).bgSurface,
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -104,123 +101,124 @@ mixin _SectionsMixin on _WidgetsMixin {
                   isLoadingTaskList
                       ? Center(
                           child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: ScreenUtil().setWidth(60)),
-                          child: Loading(),
-                        ))
+                            padding: EdgeInsets.symmetric(
+                              vertical: ScreenUtil().setWidth(60),
+                            ),
+                            child: Loading(),
+                          ),
+                        )
                       : taskList.isEmpty
-                          ? Center(
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: ScreenUtil().setWidth(60)),
-                                    child: EmptyView(),
-                                  ),
-                                  SizedBox(
-                                    height: ScreenUtil().setWidth(120),
-                                  )
-                                ],
+                      ? Center(
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: ScreenUtil().setWidth(60),
+                                ),
+                                child: EmptyView(),
                               ),
-                            )
-                          : Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                ListView.builder(
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 0),
-                                  itemBuilder: (context, index) {
-                                    var item = taskList[index];
-                                    if (item == null) {
-                                      return GestureDetector(
-                                        onTap: () async {
-                                          Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                  builder: (_) =>
-                                                      MiningTaskList(
-                                                        address: astAddress,
-                                                      )));
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                              color:
-                                                  AppThemeUtils.getColorByKey(
-                                                      context,
-                                                      AppThemeKeys
-                                                          .itemBgColor.name)),
-                                          child: Center(
-                                            child: Text(
-                                              "${S.of(context).g_mining_key_49}...",
-                                              style: TextStyle(
-                                                  color: AppThemeUtils
-                                                      .getColorByKey(
-                                                          context,
-                                                          AppThemeKeys
-                                                              .mainBlueColor.name),
-                                                  fontSize:
-                                                      ScreenUtil().setSp(30)),
-                                            ),
+                              SizedBox(height: ScreenUtil().setWidth(120)),
+                            ],
+                          ),
+                        )
+                      : Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 0,
+                              ),
+                              itemBuilder: (context, index) {
+                                var item = taskList[index];
+                                if (item == null) {
+                                  return GestureDetector(
+                                    onTap: () async {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (_) => MiningTaskList(
+                                            address: astAddress,
                                           ),
                                         ),
                                       );
-                                    }
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: AppThemeUtils.getColorByKey(
+                                          context,
+                                          AppThemeKeys.itemBgColor.name,
+                                        ),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          "${S.of(context).g_mining_key_49}...",
+                                          style: TextStyle(
+                                            color: AppThemeUtils.getColorByKey(
+                                              context,
+                                              AppThemeKeys.mainBlueColor.name,
+                                            ),
+                                            fontSize: ScreenUtil().setSp(30),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }
 
-                                    return GestureDetector(
-                                      onTap: () async {
-                                        Navigator.of(context)
-                                            .push(MaterialPageRoute(
-                                                builder: (_) => TaskDetailPage(
-                                                      blockNumber:
-                                                          "${item["blockNumber"]}",
-                                                      astValue:
-                                                          dataUtils.formatNum(
-                                                              toEther(
-                                                                      "${BigInt.tryParse(item["reward"])}",
-                                                                      18)
-                                                                  .toDouble(),
-                                                              8),
-                                                    )));
-                                      },
-                                      child: Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal:
-                                                ScreenUtil().setWidth(20)),
-                                        child: TaskItem(
-                                          taskId:
-                                              "${BigInt.tryParse(item["blockNumber"])}",
+                                return GestureDetector(
+                                  onTap: () async {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (_) => TaskDetailPage(
+                                          blockNumber: "${item["blockNumber"]}",
                                           astValue: dataUtils.formatNum(
-                                              toEther(
-                                                      "${BigInt.tryParse(item["reward"])}",
-                                                      18)
-                                                  .toDouble(),
-                                              8),
-                                          time: dataUtils.getTimeByTimeStamp(
-                                              "${item["timestamp"]}",
-                                              format: "dd/MM HH:mm"),
-                                          status: "success",
+                                            toEther(
+                                              "${BigInt.tryParse(item["reward"])}",
+                                              18,
+                                            ).toDouble(),
+                                            8,
+                                          ),
                                         ),
                                       ),
                                     );
                                   },
-                                  itemCount: taskList.length,
-                                ),
-                                SizedBox(
-                                  height: ScreenUtil().setWidth(120),
-                                )
-                              ],
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: ScreenUtil().setWidth(20),
+                                    ),
+                                    child: TaskItem(
+                                      taskId:
+                                          "${BigInt.tryParse(item["blockNumber"])}",
+                                      astValue: dataUtils.formatNum(
+                                        toEther(
+                                          "${BigInt.tryParse(item["reward"])}",
+                                          18,
+                                        ).toDouble(),
+                                        8,
+                                      ),
+                                      time: dataUtils.getTimeByTimeStamp(
+                                        "${item["timestamp"]}",
+                                        format: "dd/MM HH:mm",
+                                      ),
+                                      status: "success",
+                                    ),
+                                  ),
+                                );
+                              },
+                              itemCount: taskList.length,
                             ),
+                            SizedBox(height: ScreenUtil().setWidth(120)),
+                          ],
+                        ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       );
     }
-    return SizedBox(
-      height: ScreenUtil().setWidth(120),
-    );
+    return SizedBox(height: ScreenUtil().setWidth(120));
   }
 
   Widget yourTierWidget() {
@@ -233,7 +231,8 @@ mixin _SectionsMixin on _WidgetsMixin {
         SizedBox(width: ScreenUtil().setWidth(24)),
         _tierCard(
           title: "Tier Value",
-          value: "\$${NumberFormat("#,##0.0#", "en_US").format(astPrice * currDepositsOfValue)}",
+          value:
+              "\$${NumberFormat("#,##0.0#", "en_US").format(astPrice * currDepositsOfValue)}",
         ),
       ],
     );
@@ -248,8 +247,7 @@ mixin _SectionsMixin on _WidgetsMixin {
           vertical: ScreenUtil().setWidth(26),
         ),
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemBgColor.name),
+          color: AppColorTokens.of(context).bgSurface,
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(30)),
         ),
         child: Column(
@@ -259,8 +257,7 @@ mixin _SectionsMixin on _WidgetsMixin {
             Text(
               title,
               style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemSubtitleTextColor.name),
+                color: AppColorTokens.of(context).textSubtitle,
                 fontSize: ScreenUtil().setSp(24),
               ),
             ),
@@ -268,8 +265,7 @@ mixin _SectionsMixin on _WidgetsMixin {
             Text(
               value,
               style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemTextColor.name),
+                color: AppColorTokens.of(context).textItem,
                 fontSize: ScreenUtil().setSp(32),
               ),
             ),
@@ -286,7 +282,7 @@ mixin _SectionsMixin on _WidgetsMixin {
         horizontal: ScreenUtil().setWidth(30),
       ),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: AppColorTokens.of(context).bgSurface,
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
       ),
       child: Row(
@@ -306,8 +302,7 @@ mixin _SectionsMixin on _WidgetsMixin {
                 '24H Reward',
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(30),
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemTextColor.name),
+                  color: AppColorTokens.of(context).textItem,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -316,10 +311,10 @@ mixin _SectionsMixin on _WidgetsMixin {
           Text(
             "${dataUtils.doubleFixed(last24HValue, 3)}${CoinType.N.name}",
             style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
-                fontSize: ScreenUtil().setSp(26)),
-          )
+              color: AppColorTokens.of(context).textPrimary,
+              fontSize: ScreenUtil().setSp(26),
+            ),
+          ),
         ],
       ),
     );

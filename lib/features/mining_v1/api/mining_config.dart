@@ -10,7 +10,8 @@ const miningNodeMap = {
 
   //FUJI NFT Mining
   "fujiMiningHandlerContract": "0x8018c0ba6717FE077cB37Db5D6187B400ee76Eeb",
-  "fujiMiningHandlerContract_test": "0x5b0E8c62c04B4a2fE9353AeB1a703025eC9D21Ea",
+  "fujiMiningHandlerContract_test":
+      "0x5b0E8c62c04B4a2fE9353AeB1a703025eC9D21Ea",
 
   "test": [
     // {
@@ -18,13 +19,11 @@ const miningNodeMap = {
     //   "ipAddress": "http://54.243.83.152:20012",
     //   "socket": "ws://54.243.83.152:20013"
     // },
-
     {
       "name": "USA",
       "ipAddress": "https://testrpc.n42.world",
-      "socket": "wss://testws.n42.world"
+      "socket": "wss://testws.n42.world",
     },
-
   ],
   "main": [
     // {
@@ -32,12 +31,10 @@ const miningNodeMap = {
     //   "ipAddress": "http://18.170.108.78:20012",
     //   "socket": "ws://18.170.108.78:20013"
     // },
-
     {
       "name": "USA",
-      "ipAddress": "https://rpc.n42.world",//"https://rpc.amazechain.com",
-      "socket": "wss://ws.n42.world",//"wss://ws.amazechain.com"
+      "ipAddress": "https://rpc.n42.world", //"https://rpc.amazechain.com",
+      "socket": "wss://ws.n42.world", //"wss://ws.amazechain.com"
     },
-
   ],
 };

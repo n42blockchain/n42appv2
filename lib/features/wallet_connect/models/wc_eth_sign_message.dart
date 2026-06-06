@@ -3,7 +3,7 @@ enum WCSignType {
   PERSONAL_MESSAGE,
   TYPED_MESSAGE_V1,
   TYPED_MESSAGE_V3,
-  TYPED_MESSAGE_V4
+  TYPED_MESSAGE_V4,
 }
 
 class WCEthSignMessage {

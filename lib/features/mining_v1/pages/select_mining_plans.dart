@@ -39,6 +39,7 @@ class _SelectMiningPlansState extends State<SelectMiningPlans> {
     eventBusFn.cancel();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +52,8 @@ class _SelectMiningPlansState extends State<SelectMiningPlans> {
           Positioned.fill(
             child: Container(
               padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(30)),
+                horizontal: ScreenUtil().setWidth(30),
+              ),
               child: Column(
                 children: [
                   Expanded(
@@ -63,23 +65,25 @@ class _SelectMiningPlansState extends State<SelectMiningPlans> {
                         });
                       },
                       children: depositsList
-                          .map((e) => ASTMiningBoard(
-                        astNum: e,
-                      ))
+                          .map((e) => ASTMiningBoard(astNum: e))
                           .toList(),
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(30)),
+                    padding: EdgeInsets.symmetric(
+                      vertical: ScreenUtil().setWidth(30),
+                    ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         GestureDetector(
                           onTap: () {
                             if (currentPage > 0) {
-                              _controller.animateToPage(currentPage - 1,
-                                  duration: const Duration(milliseconds: 500),
-                                  curve: Curves.easeInOut);
+                              _controller.animateToPage(
+                                currentPage - 1,
+                                duration: const Duration(milliseconds: 500),
+                                curve: Curves.easeInOut,
+                              );
                             }
                           },
                           child: Image.asset(
@@ -87,21 +91,22 @@ class _SelectMiningPlansState extends State<SelectMiningPlans> {
                             width: ScreenUtil().setWidth(44),
                             fit: BoxFit.cover,
                             color: currentPage > 0
-                                ? AppThemeUtils.getColorByKey(
-                                context, AppThemeKeys.mainTextColor.name)
+                                ? AppColorTokens.of(context).textPrimary
                                 : AppThemeUtils.getColorByKey(
-                                context, AppThemeKeys.ff888888.name),
+                                    context,
+                                    AppThemeKeys.ff888888.name,
+                                  ),
                           ),
                         ),
-                        SizedBox(
-                          width: ScreenUtil().setWidth(40),
-                        ),
+                        SizedBox(width: ScreenUtil().setWidth(40)),
                         GestureDetector(
                           onTap: () {
                             if (currentPage < depositsList.length - 1) {
-                              _controller.animateToPage(currentPage + 1,
-                                  duration: const Duration(milliseconds: 500),
-                                  curve: Curves.easeInOut);
+                              _controller.animateToPage(
+                                currentPage + 1,
+                                duration: const Duration(milliseconds: 500),
+                                curve: Curves.easeInOut,
+                              );
                             }
                           },
                           child: Image.asset(
@@ -109,10 +114,11 @@ class _SelectMiningPlansState extends State<SelectMiningPlans> {
                             width: ScreenUtil().setWidth(44),
                             fit: BoxFit.cover,
                             color: currentPage < depositsList.length - 1
-                                ? AppThemeUtils.getColorByKey(
-                                context, AppThemeKeys.mainTextColor.name)
+                                ? AppColorTokens.of(context).textPrimary
                                 : AppThemeUtils.getColorByKey(
-                                context, AppThemeKeys.ff888888.name),
+                                    context,
+                                    AppThemeKeys.ff888888.name,
+                                  ),
                           ),
                         ),
                       ],
@@ -137,16 +143,15 @@ class _SelectMiningPlansState extends State<SelectMiningPlans> {
                 Container(
                   width: double.infinity,
                   height: ScreenUtil().setWidth(148),
-                  padding: EdgeInsets.all( ScreenUtil().setWidth(30)),
+                  padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
                   child: AppButton(
                     label: S.of(context).g_key_78,
                     onPressed: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => FullNodePage(
-                            astNum: depositsList[currentPage],
-                          ),
+                          builder: (_) =>
+                              FullNodePage(astNum: depositsList[currentPage]),
                         ),
                       );
                     },

@@ -16,7 +16,8 @@ import 'package:web3dart/web3dart.dart' show bytesToHex;
 import 'package:wallet/wallet.dart' as wallet_types;
 
 /// Mixin: WalletConnect signing handlers for messages and transactions.
-mixin WalletConnectSigning on ChangeNotifier, WalletConnectConnection, WalletConnectSession {
+mixin WalletConnectSigning
+    on ChangeNotifier, WalletConnectConnection, WalletConnectSession {
   /// Map method name to EIP-712 typed data version.
   static const _typedDataVersions = {
     "eth_signTypedData": TypedDataVersion.v4,
@@ -40,7 +41,9 @@ mixin WalletConnectSigning on ChangeNotifier, WalletConnectConnection, WalletCon
         final encodedMessage = _isValidHex(stripped)
             ? web3.hexToBytes(stripped)
             : Uint8List.fromList(utf8.encode(rawData));
-        final signedData = privateKey.signPersonalMessageToUint8List(encodedMessage);
+        final signedData = privateKey.signPersonalMessageToUint8List(
+          encodedMessage,
+        );
         signedDataHex = bytesToHex(signedData, include0x: true);
       } else if (_typedDataVersions.containsKey(eventData.method)) {
         final requestParams = (eventData.params! as List).cast<String>();
@@ -54,29 +57,48 @@ mixin WalletConnectSigning on ChangeNotifier, WalletConnectConnection, WalletCon
         final dataToSign = requestParams["message"];
         final cm = coinModelFor(CoinType.TRX);
         if (cm == null) {
-          viewStateDeal(WalletConnectState.error, params: 'TRON chain not supported');
+          viewStateDeal(
+            WalletConnectState.error,
+            params: 'TRON chain not supported',
+          );
           return;
         }
         final credentials = await getCurrentWalletCredentials();
-        final path = getPathWithIndex(cm.coin['path'][cm.addrType], cm.pathIndex);
+        final path = getPathWithIndex(
+          cm.coin['path'][cm.addrType],
+          cm.pathIndex,
+        );
         signedDataHex = await trustdart.signMessage(
-          CoinType.TRX.name, path, dataToSign,
-          mnemonic: credentials.mnemonic, pk: credentials.privateKey,
+          CoinType.TRX.name,
+          path,
+          dataToSign,
+          mnemonic: credentials.mnemonic,
+          pk: credentials.privateKey,
         );
       } else if (eventData.method == "aptos_signMessage") {
         final requestParams = eventData.params! as Map;
-        final message = requestParams["message"] as String? ??
+        final message =
+            requestParams["message"] as String? ??
             (requestParams["fullMessage"] as String? ?? '');
         final cm = coinModelFor(CoinType.APT);
         if (cm == null) {
-          viewStateDeal(WalletConnectState.error, params: 'Aptos chain not configured');
+          viewStateDeal(
+            WalletConnectState.error,
+            params: 'Aptos chain not configured',
+          );
           return;
         }
         final credentials = await getCurrentWalletCredentials();
-        final path = getPathWithIndex(cm.coin['path'][cm.addrType], cm.pathIndex);
+        final path = getPathWithIndex(
+          cm.coin['path'][cm.addrType],
+          cm.pathIndex,
+        );
         final sig = await trustdart.signMessage(
-          CoinType.APT.name, path, message,
-          mnemonic: credentials.mnemonic, pk: credentials.privateKey,
+          CoinType.APT.name,
+          path,
+          message,
+          mnemonic: credentials.mnemonic,
+          pk: credentials.privateKey,
         );
         signClient!.respondSessionRequest(
           topic: eventData.topic,
@@ -92,14 +114,23 @@ mixin WalletConnectSigning on ChangeNotifier, WalletConnectConnection, WalletCon
         final message = requestParams["message"] as String? ?? '';
         final cm = coinModelFor(CoinType.SUI);
         if (cm == null) {
-          viewStateDeal(WalletConnectState.error, params: 'Sui chain not configured');
+          viewStateDeal(
+            WalletConnectState.error,
+            params: 'Sui chain not configured',
+          );
           return;
         }
         final credentials = await getCurrentWalletCredentials();
-        final path = getPathWithIndex(cm.coin['path'][cm.addrType], cm.pathIndex);
+        final path = getPathWithIndex(
+          cm.coin['path'][cm.addrType],
+          cm.pathIndex,
+        );
         final sig = await trustdart.signMessage(
-          CoinType.SUI.name, path, message,
-          mnemonic: credentials.mnemonic, pk: credentials.privateKey,
+          CoinType.SUI.name,
+          path,
+          message,
+          mnemonic: credentials.mnemonic,
+          pk: credentials.privateKey,
         );
         signClient!.respondSessionRequest(
           topic: eventData.topic,
@@ -116,15 +147,24 @@ mixin WalletConnectSigning on ChangeNotifier, WalletConnectConnection, WalletCon
         final dataToSign = requestParams["message"] as String? ?? '';
         final cm = coinModelFor(CoinType.SOL);
         if (cm == null) {
-          viewStateDeal(WalletConnectState.error, params: 'Solana chain not configured');
+          viewStateDeal(
+            WalletConnectState.error,
+            params: 'Solana chain not configured',
+          );
           return;
         }
         final credentials = await getCurrentWalletCredentials();
-        final path = getPathWithIndex(cm.coin['path'][cm.addrType], cm.pathIndex);
+        final path = getPathWithIndex(
+          cm.coin['path'][cm.addrType],
+          cm.pathIndex,
+        );
         // Native signMessage for SOL decodes base64 and returns base64 signature
         final sig = await trustdart.signMessage(
-          CoinType.SOL.name, path, dataToSign,
-          mnemonic: credentials.mnemonic, pk: credentials.privateKey,
+          CoinType.SOL.name,
+          path,
+          dataToSign,
+          mnemonic: credentials.mnemonic,
+          pk: credentials.privateKey,
         );
         signClient!.respondSessionRequest(
           topic: eventData.topic,
@@ -144,7 +184,8 @@ mixin WalletConnectSigning on ChangeNotifier, WalletConnectConnection, WalletCon
             id: eventData.id,
             error: wallet_connect.JsonRpcError(
               code: 4200,
-              message: 'eth_sign is disabled for security reasons. Use personal_sign instead.',
+              message:
+                  'eth_sign is disabled for security reasons. Use personal_sign instead.',
             ),
           ),
         );
@@ -155,20 +196,27 @@ mixin WalletConnectSigning on ChangeNotifier, WalletConnectConnection, WalletCon
         final dataToSign = web3.strip0x(requestParams[1]);
         if (coinModels[coinModelsIndex].coin['coinType'] == CoinType.N.name) {
           signedDataHex = await trustdart.signMessage(
-            CoinType.N.name, "", dataToSign,
+            CoinType.N.name,
+            "",
+            dataToSign,
             pk: base64Encode(privateKey.privateKey),
           );
           signedDataHex = "0x$signedDataHex";
         } else {
           final encodedMessage = web3.hexToBytes(dataToSign);
-          final signedData = privateKey.signPersonalMessageToUint8List(encodedMessage);
+          final signedData = privateKey.signPersonalMessageToUint8List(
+            encodedMessage,
+          );
           signedDataHex = bytesToHex(signedData, include0x: true);
         }
       }
 
       signClient!.respondSessionRequest(
         topic: eventData.topic,
-        response: wallet_connect.JsonRpcResponse(id: eventData.id, result: signedDataHex),
+        response: wallet_connect.JsonRpcResponse(
+          id: eventData.id,
+          result: signedDataHex,
+        ),
       );
       viewStateDeal(WalletConnectState.connect);
     } catch (e) {
@@ -219,34 +267,50 @@ mixin WalletConnectSigning on ChangeNotifier, WalletConnectConnection, WalletCon
     }
   }
 
-  Future<void> _handleTronTransaction(wallet_connect.SessionRequestEvent eventData) async {
+  Future<void> _handleTronTransaction(
+    wallet_connect.SessionRequestEvent eventData,
+  ) async {
     final requestParams = eventData.params! as Map;
     final dataToSign = requestParams["message"];
     final cm = coinModelFor(CoinType.TRX);
     if (cm == null) {
-      viewStateDeal(WalletConnectState.error, params: 'TRON chain not supported');
+      viewStateDeal(
+        WalletConnectState.error,
+        params: 'TRON chain not supported',
+      );
       return;
     }
     final credentials = await getCurrentWalletCredentials();
     final path = getPathWithIndex(cm.coin['path'][cm.addrType], cm.pathIndex);
     final returnStr = await trustdart.signTransaction(
-      CoinType.TRX.name, path, dataToSign,
-      mnemonic: credentials.mnemonic, pk: credentials.privateKey,
+      CoinType.TRX.name,
+      path,
+      dataToSign,
+      mnemonic: credentials.mnemonic,
+      pk: credentials.privateKey,
     );
     signClient!.respondSessionRequest(
       topic: eventData.topic,
-      response: wallet_connect.JsonRpcResponse(id: eventData.id, result: returnStr),
+      response: wallet_connect.JsonRpcResponse(
+        id: eventData.id,
+        result: returnStr,
+      ),
     );
     viewStateDeal(WalletConnectState.connect);
   }
 
-  Future<void> _handleSolanaTransaction(wallet_connect.SessionRequestEvent eventData) async {
+  Future<void> _handleSolanaTransaction(
+    wallet_connect.SessionRequestEvent eventData,
+  ) async {
     final requestParams = eventData.params! as Map;
     // DApp sends a base64-encoded serialized transaction
     final rawTxBase64 = requestParams["transaction"] as String? ?? '';
     final cm = coinModelFor(CoinType.SOL);
     if (cm == null) {
-      viewStateDeal(WalletConnectState.error, params: 'Solana chain not configured');
+      viewStateDeal(
+        WalletConnectState.error,
+        params: 'Solana chain not configured',
+      );
       return;
     }
     final credentials = await getCurrentWalletCredentials();
@@ -259,12 +323,18 @@ mixin WalletConnectSigning on ChangeNotifier, WalletConnectConnection, WalletCon
       "encodeType": "base64",
     };
     final signedTxBase64 = await trustdart.signTransaction(
-      CoinType.SOL.name, path, txData,
-      mnemonic: credentials.mnemonic, pk: credentials.privateKey,
+      CoinType.SOL.name,
+      path,
+      txData,
+      mnemonic: credentials.mnemonic,
+      pk: credentials.privateKey,
     );
 
     if (signedTxBase64.isEmpty) {
-      viewStateDeal(WalletConnectState.error, params: 'Solana transaction signing failed');
+      viewStateDeal(
+        WalletConnectState.error,
+        params: 'Solana transaction signing failed',
+      );
       return;
     }
 
@@ -273,7 +343,10 @@ mixin WalletConnectSigning on ChangeNotifier, WalletConnectConnection, WalletCon
       final solApi = SolApi();
       final result = await solApi.sendTransaction(signedTxBase64);
       if (result.error) {
-        viewStateDeal(WalletConnectState.error, params: result.data?.toString() ?? 'Broadcast failed');
+        viewStateDeal(
+          WalletConnectState.error,
+          params: result.data?.toString() ?? 'Broadcast failed',
+        );
         return;
       }
       signClient!.respondSessionRequest(
@@ -296,7 +369,9 @@ mixin WalletConnectSigning on ChangeNotifier, WalletConnectConnection, WalletCon
     viewStateDeal(WalletConnectState.connect);
   }
 
-  Future<void> _handleEthTransaction(wallet_connect.SessionRequestEvent eventData) async {
+  Future<void> _handleEthTransaction(
+    wallet_connect.SessionRequestEvent eventData,
+  ) async {
     final parameters = eventData.params.first as Map<String, dynamic>;
     final from = parameters['from'] as String;
     final to = parameters['to'] as String?;
@@ -319,15 +394,21 @@ mixin WalletConnectSigning on ChangeNotifier, WalletConnectConnection, WalletCon
       // Must use EtherUnit.wei, NOT gwei, to avoid 10^9x overcharge.
       gasPrice: gasPrice != null
           ? wallet_types.EtherAmount.fromBigInt(
-              wallet_types.EtherUnit.wei, _parseHexOrDecBigInt(gasPrice))
+              wallet_types.EtherUnit.wei,
+              _parseHexOrDecBigInt(gasPrice),
+            )
           : null,
       maxFeePerGas: maxFeePerGas != null
           ? wallet_types.EtherAmount.fromBigInt(
-              wallet_types.EtherUnit.wei, _parseHexOrDecBigInt(maxFeePerGas))
+              wallet_types.EtherUnit.wei,
+              _parseHexOrDecBigInt(maxFeePerGas),
+            )
           : null,
       maxPriorityFeePerGas: maxPriorityFeePerGas != null
           ? wallet_types.EtherAmount.fromBigInt(
-              wallet_types.EtherUnit.wei, _parseHexOrDecBigInt(maxPriorityFeePerGas))
+              wallet_types.EtherUnit.wei,
+              _parseHexOrDecBigInt(maxPriorityFeePerGas),
+            )
           : null,
       maxGas: gasLimit != null ? _parseHexOrDecInt(gasLimit) : null,
       nonce: nonce != null ? _parseHexOrDecInt(nonce) : null,
@@ -349,7 +430,10 @@ mixin WalletConnectSigning on ChangeNotifier, WalletConnectConnection, WalletCon
 
     signClient!.respondSessionRequest(
       topic: eventData.topic,
-      response: wallet_connect.JsonRpcResponse(id: eventData.id, result: returnStr),
+      response: wallet_connect.JsonRpcResponse(
+        id: eventData.id,
+        result: returnStr,
+      ),
     );
     viewStateDeal(WalletConnectState.connect);
   }
@@ -373,28 +457,37 @@ mixin WalletConnectSigning on ChangeNotifier, WalletConnectConnection, WalletCon
 
   static final RegExp _hexRegExp = RegExp(r'^[0-9a-fA-F]+$');
 
-  Future<void> _handleAptosTransaction(wallet_connect.SessionRequestEvent eventData) async {
+  Future<void> _handleAptosTransaction(
+    wallet_connect.SessionRequestEvent eventData,
+  ) async {
     final requestParams = eventData.params! as Map;
     // DApp sends pre-built BCS-encoded raw transaction (base64 or hex)
-    final rawTx = requestParams["encodedTransaction"] as String? ??
+    final rawTx =
+        requestParams["encodedTransaction"] as String? ??
         (requestParams["transaction"] as String? ?? '');
     final cm = coinModelFor(CoinType.APT);
     if (cm == null) {
-      viewStateDeal(WalletConnectState.error, params: 'Aptos chain not configured');
+      viewStateDeal(
+        WalletConnectState.error,
+        params: 'Aptos chain not configured',
+      );
       return;
     }
     final credentials = await getCurrentWalletCredentials();
     final path = getPathWithIndex(cm.coin['path'][cm.addrType], cm.pathIndex);
-    final txData = {
-      "type": "WC_APT",
-      "encodedTransaction": rawTx,
-    };
+    final txData = {"type": "WC_APT", "encodedTransaction": rawTx};
     final signedHex = await trustdart.signTransaction(
-      CoinType.APT.name, path, txData,
-      mnemonic: credentials.mnemonic, pk: credentials.privateKey,
+      CoinType.APT.name,
+      path,
+      txData,
+      mnemonic: credentials.mnemonic,
+      pk: credentials.privateKey,
     );
     if (signedHex.isEmpty) {
-      viewStateDeal(WalletConnectState.error, params: 'Aptos transaction signing failed');
+      viewStateDeal(
+        WalletConnectState.error,
+        params: 'Aptos transaction signing failed',
+      );
       return;
     }
 
@@ -402,7 +495,10 @@ mixin WalletConnectSigning on ChangeNotifier, WalletConnectConnection, WalletCon
       final aptApi = AptApi(isTest: cm.isTest);
       final result = await aptApi.sendTxHash(signedHex);
       if (result.error) {
-        viewStateDeal(WalletConnectState.error, params: result.data?.toString() ?? 'Broadcast failed');
+        viewStateDeal(
+          WalletConnectState.error,
+          params: result.data?.toString() ?? 'Broadcast failed',
+        );
         return;
       }
       signClient!.respondSessionRequest(
@@ -425,28 +521,37 @@ mixin WalletConnectSigning on ChangeNotifier, WalletConnectConnection, WalletCon
     viewStateDeal(WalletConnectState.connect);
   }
 
-  Future<void> _handleSuiTransaction(wallet_connect.SessionRequestEvent eventData) async {
+  Future<void> _handleSuiTransaction(
+    wallet_connect.SessionRequestEvent eventData,
+  ) async {
     final requestParams = eventData.params! as Map;
     // DApp sends base64-encoded transaction block
-    final txBlock = requestParams["transactionBlock"] as String? ??
+    final txBlock =
+        requestParams["transactionBlock"] as String? ??
         (requestParams["transaction"] as String? ?? '');
     final cm = coinModelFor(CoinType.SUI);
     if (cm == null) {
-      viewStateDeal(WalletConnectState.error, params: 'Sui chain not configured');
+      viewStateDeal(
+        WalletConnectState.error,
+        params: 'Sui chain not configured',
+      );
       return;
     }
     final credentials = await getCurrentWalletCredentials();
     final path = getPathWithIndex(cm.coin['path'][cm.addrType], cm.pathIndex);
-    final txData = {
-      "type": "WC_SUI",
-      "transaction": txBlock,
-    };
+    final txData = {"type": "WC_SUI", "transaction": txBlock};
     final signedResult = await trustdart.signTransaction(
-      CoinType.SUI.name, path, txData,
-      mnemonic: credentials.mnemonic, pk: credentials.privateKey,
+      CoinType.SUI.name,
+      path,
+      txData,
+      mnemonic: credentials.mnemonic,
+      pk: credentials.privateKey,
     );
     if (signedResult.isEmpty) {
-      viewStateDeal(WalletConnectState.error, params: 'Sui transaction signing failed');
+      viewStateDeal(
+        WalletConnectState.error,
+        params: 'Sui transaction signing failed',
+      );
       return;
     }
     // signedResult is base64(flag+sig+pubkey) as returned by native code
@@ -454,16 +559,15 @@ mixin WalletConnectSigning on ChangeNotifier, WalletConnectConnection, WalletCon
       topic: eventData.topic,
       response: wallet_connect.JsonRpcResponse(
         id: eventData.id,
-        result: {
-          "signature": signedResult,
-          "transactionBlock": txBlock,
-        },
+        result: {"signature": signedResult, "transactionBlock": txBlock},
       ),
     );
     viewStateDeal(WalletConnectState.connect);
   }
 
-  Future<void> _handleNearTransaction(wallet_connect.SessionRequestEvent eventData) async {
+  Future<void> _handleNearTransaction(
+    wallet_connect.SessionRequestEvent eventData,
+  ) async {
     final requestParams = eventData.params! as Map;
     // DApp sends either a list of base64-encoded borsh transactions or a single one
     final txList = requestParams["transactions"];
@@ -475,12 +579,18 @@ mixin WalletConnectSigning on ChangeNotifier, WalletConnectConnection, WalletCon
       rawTxList = single.isNotEmpty ? [single] : [];
     }
     if (rawTxList.isEmpty) {
-      viewStateDeal(WalletConnectState.error, params: 'NEAR: no transaction provided');
+      viewStateDeal(
+        WalletConnectState.error,
+        params: 'NEAR: no transaction provided',
+      );
       return;
     }
     final cm = coinModelFor(CoinType.NEAR);
     if (cm == null) {
-      viewStateDeal(WalletConnectState.error, params: 'NEAR chain not configured');
+      viewStateDeal(
+        WalletConnectState.error,
+        params: 'NEAR chain not configured',
+      );
       return;
     }
     final credentials = await getCurrentWalletCredentials();
@@ -490,11 +600,17 @@ mixin WalletConnectSigning on ChangeNotifier, WalletConnectConnection, WalletCon
     for (final rawTx in rawTxList) {
       final txData = {"type": "WC_NEAR", "transaction": rawTx};
       final signed = await trustdart.signTransaction(
-        CoinType.NEAR.name, path, txData,
-        mnemonic: credentials.mnemonic, pk: credentials.privateKey,
+        CoinType.NEAR.name,
+        path,
+        txData,
+        mnemonic: credentials.mnemonic,
+        pk: credentials.privateKey,
       );
       if (signed.isEmpty) {
-        viewStateDeal(WalletConnectState.error, params: 'NEAR transaction signing failed');
+        viewStateDeal(
+          WalletConnectState.error,
+          params: 'NEAR transaction signing failed',
+        );
         return;
       }
       signedTxList.add(signed);
@@ -505,7 +621,10 @@ mixin WalletConnectSigning on ChangeNotifier, WalletConnectConnection, WalletCon
       // Broadcast first transaction
       final result = await nearApi.sendTransaction(signedTxList[0]);
       if (result.error) {
-        viewStateDeal(WalletConnectState.error, params: result.data?.toString() ?? 'Broadcast failed');
+        viewStateDeal(
+          WalletConnectState.error,
+          params: result.data?.toString() ?? 'Broadcast failed',
+        );
         return;
       }
       signClient!.respondSessionRequest(
@@ -548,7 +667,9 @@ mixin WalletConnectSigning on ChangeNotifier, WalletConnectConnection, WalletCon
     const requiredFields = ['types', 'primaryType', 'domain', 'message'];
     for (final field in requiredFields) {
       if (!typedData.containsKey(field)) {
-        throw FormatException('Invalid EIP-712 data: missing required field "$field"');
+        throw FormatException(
+          'Invalid EIP-712 data: missing required field "$field"',
+        );
       }
     }
 

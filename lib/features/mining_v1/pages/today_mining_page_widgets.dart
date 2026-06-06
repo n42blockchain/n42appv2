@@ -20,10 +20,7 @@ mixin _WidgetsMixin on _LogicMixin {
                 vertical: ScreenUtil().setWidth(26),
               ),
               decoration: BoxDecoration(
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemBgColor.name,
-                ),
+                color: AppColorTokens.of(context).bgSurface,
                 borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
               ),
               child: Column(
@@ -36,10 +33,7 @@ mixin _WidgetsMixin on _LogicMixin {
                           S.of(context).g_mining_key_5,
                           maxLines: 2,
                           style: TextStyle(
-                            color: AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.itemSubtitleTextColor.name,
-                            ),
+                            color: AppColorTokens.of(context).textSubtitle,
                             fontSize: ScreenUtil().setSp(24),
                           ),
                         ),
@@ -85,10 +79,7 @@ mixin _WidgetsMixin on _LogicMixin {
                               : S.current.g_mining_key_47,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            color: AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.itemTextColor.name,
-                            ),
+                            color: AppColorTokens.of(context).textItem,
                             fontSize: ScreenUtil().setSp(32),
                           ),
                         ),
@@ -145,10 +136,7 @@ mixin _WidgetsMixin on _LogicMixin {
                 vertical: ScreenUtil().setWidth(26),
               ),
               decoration: BoxDecoration(
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemBgColor.name,
-                ),
+                color: AppColorTokens.of(context).bgSurface,
                 borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
               ),
               child: Column(
@@ -158,10 +146,7 @@ mixin _WidgetsMixin on _LogicMixin {
                   Text(
                     S.of(context).g_mining_key38,
                     style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.itemSubtitleTextColor.name,
-                      ),
+                      color: AppColorTokens.of(context).textSubtitle,
                       fontSize: ScreenUtil().setSp(24),
                     ),
                   ),
@@ -171,10 +156,7 @@ mixin _WidgetsMixin on _LogicMixin {
                         ? "0 ${CoinType.N.name}"
                         : '$currDepositsOfValue ${CoinType.N.name}',
                     style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.itemTextColor.name,
-                      ),
+                      color: AppColorTokens.of(context).textItem,
                       fontSize: ScreenUtil().setSp(32),
                     ),
                   ),
@@ -194,10 +176,7 @@ mixin _WidgetsMixin on _LogicMixin {
         horizontal: ScreenUtil().setWidth(30),
       ),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.itemBgColor.name,
-        ),
+        color: AppColorTokens.of(context).bgSurface,
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
       ),
       child: Row(
@@ -217,10 +196,7 @@ mixin _WidgetsMixin on _LogicMixin {
                 S.of(context).g_mining_key_8,
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(26),
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.itemTextColor.name,
-                  ),
+                  color: AppColorTokens.of(context).textItem,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -237,10 +213,7 @@ mixin _WidgetsMixin on _LogicMixin {
   }
 
   Widget showTimeWidget(String hh, String mm, String ss) {
-    final blueColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainBlueColor.name,
-    );
+    final blueColor = AppColorTokens.of(context).brand;
     final borderColor = AppThemeUtils.getColorByKey(
       context,
       AppThemeKeys.timeBorderColor.name,
@@ -290,10 +263,7 @@ mixin _WidgetsMixin on _LogicMixin {
     return Expanded(
       child: Container(
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.itemBgColor.name,
-          ),
+          color: AppColorTokens.of(context).bgSurface,
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
         ),
         padding: EdgeInsets.fromLTRB(
@@ -342,10 +312,7 @@ mixin _WidgetsMixin on _LogicMixin {
                           borderRadius: BorderRadius.circular(
                             ScreenUtil().setWidth(50),
                           ),
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.itemBgColor.name,
-                          ),
+                          color: AppColorTokens.of(context).bgSurface,
                         ),
                         margin: EdgeInsets.symmetric(
                           horizontal: ScreenUtil().setWidth(100),
@@ -357,10 +324,7 @@ mixin _WidgetsMixin on _LogicMixin {
                         child: Text(
                           tipsText ?? '',
                           style: TextStyle(
-                            color: AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.mainTextColor.name,
-                            ),
+                            color: AppColorTokens.of(context).textPrimary,
                             fontSize: ScreenUtil().setSp(24),
                           ),
                         ),
@@ -375,10 +339,7 @@ mixin _WidgetsMixin on _LogicMixin {
                 Text(
                   value,
                   style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.mainTextColor.name,
-                    ),
+                    color: AppColorTokens.of(context).textPrimary,
                     fontSize: ScreenUtil().setSp(30),
                   ),
                 ),

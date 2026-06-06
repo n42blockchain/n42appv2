@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/wallet_connect/presentation/providers/wallet_connect_providers.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/component/pages/scan_page.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet_connect/pages/wallet_connect_page.dart';
@@ -76,12 +76,7 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
             onPressed: () => Navigator.pop(ctx, true),
             child: Text(
               s.g_key_78,
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.errorTextColor.name,
-                ),
-              ),
+              style: TextStyle(color: AppColorTokens.of(context).danger),
             ),
           ),
         ],
@@ -132,10 +127,7 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
                   onPressed: _confirmDisconnectAll,
                   icon: Icon(
                     Icons.link_off,
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.errorTextColor.name,
-                    ),
+                    color: AppColorTokens.of(context).danger,
                     size: ScreenUtil().setWidth(44),
                   ),
                   tooltip: S.of(context).g_wc_disconnect_all,
@@ -146,10 +138,7 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
       body: entries.isEmpty ? _buildEmptyState() : _buildSessionList(entries),
       floatingActionButton: FloatingActionButton(
         onPressed: _scanNewConnection,
-        backgroundColor: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.mainBlueColor.name,
-        ),
+        backgroundColor: AppColorTokens.of(context).brand,
         child: const Icon(Icons.qr_code_scanner, color: Colors.white),
       ),
     );
@@ -163,10 +152,7 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
           Icon(
             Icons.link_off,
             size: ScreenUtil().setWidth(120),
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.itemSubtitleTextColor.name,
-            ),
+            color: AppColorTokens.of(context).textSubtitle,
           ),
           SizedBox(height: ScreenUtil().setWidth(24)),
           Text(
@@ -174,10 +160,7 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
             style: TextStyle(
               fontSize: ScreenUtil().setSp(32),
               fontWeight: FontWeight.w600,
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainTextColor.name,
-              ),
+              color: AppColorTokens.of(context).textPrimary,
             ),
           ),
           SizedBox(height: ScreenUtil().setWidth(12)),
@@ -185,10 +168,7 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
             S.of(context).g_wc_no_sessions_desc,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(26),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ),
+              color: AppColorTokens.of(context).textSubtitle,
             ),
           ),
         ],
@@ -228,16 +208,10 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
       child: Container(
         padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.itemBgColor.name,
-          ),
+          color: AppColorTokens.of(context).bgSurface,
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
           border: Border.all(
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.dividerColor.name,
-            ),
+            color: AppColorTokens.of(context).border,
             width: 0.5,
           ),
         ),
@@ -270,10 +244,7 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(30),
                       fontWeight: FontWeight.w600,
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainTextColor.name,
-                      ),
+                      color: AppColorTokens.of(context).textPrimary,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -285,10 +256,7 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
                       meta.url,
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(24),
-                        color: AppThemeUtils.getColorByKey(
-                          context,
-                          AppThemeKeys.itemSubtitleTextColor.name,
-                        ),
+                        color: AppColorTokens.of(context).textSubtitle,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -306,10 +274,9 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
                             vertical: ScreenUtil().setWidth(4),
                           ),
                           decoration: BoxDecoration(
-                            color: AppThemeUtils.getColorByKey(
+                            color: AppColorTokens.of(
                               context,
-                              AppThemeKeys.mainBlueColor.name,
-                            ).withValues(alpha: 0.1),
+                            ).brand.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(
                               ScreenUtil().setWidth(8),
                             ),
@@ -318,10 +285,7 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
                             chain,
                             style: TextStyle(
                               fontSize: ScreenUtil().setSp(20),
-                              color: AppThemeUtils.getColorByKey(
-                                context,
-                                AppThemeKeys.mainBlueColor.name,
-                              ),
+                              color: AppColorTokens.of(context).brand,
                             ),
                           ),
                         );
@@ -353,14 +317,8 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(22),
                       color: isExpired
-                          ? AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.errorTextColor.name,
-                            )
-                          : AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.itemSubtitleTextColor.name,
-                            ),
+                          ? AppColorTokens.of(context).danger
+                          : AppColorTokens.of(context).textSubtitle,
                     ),
                   ),
                 ],
@@ -371,10 +329,7 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
               onPressed: () => _confirmDisconnect(session.topic, meta.name),
               icon: Icon(
                 Icons.link_off,
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.errorTextColor.name,
-                ),
+                color: AppColorTokens.of(context).danger,
                 size: ScreenUtil().setWidth(40),
               ),
               tooltip: S.of(context).g_connect_key2,

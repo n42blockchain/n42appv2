@@ -48,9 +48,9 @@ class _MiningPlansState extends State<MiningPlans> {
               child: Text(
                 S.of(context).g_mining_key_52,
                 style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainBlueColor.name),
-                    fontSize: ScreenUtil().setSp(30)),
+                  color: AppColorTokens.of(context).brand,
+                  fontSize: ScreenUtil().setSp(30),
+                ),
               ),
               onTap: () async {
                 showSKipConfirmDialog(context, () async {});
@@ -62,7 +62,7 @@ class _MiningPlansState extends State<MiningPlans> {
           child: Stack(
             children: [
               Positioned(
-                left:ScreenUtil().setWidth(30),
+                left: ScreenUtil().setWidth(30),
                 right: ScreenUtil().setWidth(30),
                 bottom: 0,
                 top: 0,
@@ -73,7 +73,9 @@ class _MiningPlansState extends State<MiningPlans> {
                       currentPage = index;
                     });
                   },
-                  children: depositsList.map((e) => ASTMiningBoard(astNum: e)).toList(),
+                  children: depositsList
+                      .map((e) => ASTMiningBoard(astNum: e))
+                      .toList(),
                 ),
               ),
               Positioned(
@@ -81,7 +83,7 @@ class _MiningPlansState extends State<MiningPlans> {
                 left: 0,
                 right: 0,
                 child: Container(
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
+                  color: AppColorTokens.of(context).bgBase,
                   width: double.infinity,
                   child: Column(
                     children: [
@@ -93,9 +95,11 @@ class _MiningPlansState extends State<MiningPlans> {
                             GestureDetector(
                               onTap: () {
                                 if (currentPage > 0) {
-                                  _controller.animateToPage(currentPage - 1,
-                                      duration: const Duration(milliseconds: 500),
-                                      curve: Curves.easeInOut);
+                                  _controller.animateToPage(
+                                    currentPage - 1,
+                                    duration: const Duration(milliseconds: 500),
+                                    curve: Curves.easeInOut,
+                                  );
                                 }
                               },
                               child: Image.asset(
@@ -103,19 +107,22 @@ class _MiningPlansState extends State<MiningPlans> {
                                 width: ScreenUtil().setWidth(44),
                                 fit: BoxFit.cover,
                                 color: currentPage > 0
-                                    ? AppThemeUtils.getColorByKey(
-                                    context, AppThemeKeys.mainTextColor.name)
+                                    ? AppColorTokens.of(context).textPrimary
                                     : AppThemeUtils.getColorByKey(
-                                    context, AppThemeKeys.ff888888.name),
+                                        context,
+                                        AppThemeKeys.ff888888.name,
+                                      ),
                               ),
                             ),
                             SizedBox(width: ScreenUtil().setWidth(40)),
                             GestureDetector(
                               onTap: () {
                                 if (currentPage < lastPage) {
-                                  _controller.animateToPage(currentPage + 1,
-                                      duration: const Duration(milliseconds: 500),
-                                      curve: Curves.easeInOut);
+                                  _controller.animateToPage(
+                                    currentPage + 1,
+                                    duration: const Duration(milliseconds: 500),
+                                    curve: Curves.easeInOut,
+                                  );
                                 }
                               },
                               child: Image.asset(
@@ -123,10 +130,11 @@ class _MiningPlansState extends State<MiningPlans> {
                                 width: ScreenUtil().setWidth(44),
                                 fit: BoxFit.cover,
                                 color: currentPage < lastPage
-                                    ? AppThemeUtils.getColorByKey(
-                                    context, AppThemeKeys.mainTextColor.name)
+                                    ? AppColorTokens.of(context).textPrimary
                                     : AppThemeUtils.getColorByKey(
-                                    context, AppThemeKeys.ff888888.name),
+                                        context,
+                                        AppThemeKeys.ff888888.name,
+                                      ),
                               ),
                             ),
                           ],
@@ -155,17 +163,14 @@ class _MiningPlansState extends State<MiningPlans> {
                           },
                         ),
                       ),
-
                     ],
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),
-        SizedBox(
-          height: ScreenUtil().setWidth(120),
-        )
+        SizedBox(height: ScreenUtil().setWidth(120)),
       ],
     );
   }

@@ -11,6 +11,7 @@ import 'package:n42_wallet/features/mining_v1/widgets/item_mining_node.dart';
 import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/features/widgets/sheet_bottom.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -109,8 +110,7 @@ class _MiningSettingsState extends State<MiningSettings> {
     );
   }
 
-  Color _mainTextColor() =>
-      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+  Color _mainTextColor() => AppColorTokens.of(context).textPrimary;
 
   Color _greyColor() =>
       AppThemeUtils.getColorByKey(context, AppThemeKeys.mainGreyColor.name);
@@ -136,7 +136,10 @@ class _MiningSettingsState extends State<MiningSettings> {
               var connectivityResult = await (Connectivity()
                   .checkConnectivity());
               if (!mounted) return;
-              AppLogger.d('MiningSettings', 'connectivityResult: $connectivityResult');
+              AppLogger.d(
+                'MiningSettings',
+                'connectivityResult: $connectivityResult',
+              );
               setState(() {
                 isSwitched = !isSwitched;
                 SPUtil().setMiningOpen(isSwitched);
@@ -319,10 +322,7 @@ class _MiningSettingsState extends State<MiningSettings> {
                           subtitle,
                           style: TextStyle(
                             fontSize: ScreenUtil().setSp(26),
-                            color: AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.itemSubtitleTextColor.name,
-                            ),
+                            color: AppColorTokens.of(context).textSubtitle,
                           ),
                         ),
                       ],
@@ -333,10 +333,7 @@ class _MiningSettingsState extends State<MiningSettings> {
               Icon(
                 Icons.check,
                 size: ScreenUtil().setWidth(48),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainBlueColor.name,
-                ),
+                color: AppColorTokens.of(context).brand,
               ),
           ],
         ),
@@ -417,10 +414,7 @@ class _MiningSettingsState extends State<MiningSettings> {
         vertical: ScreenUtil().setWidth(24),
       ),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.itemBgColor.name,
-        ),
+        color: AppColorTokens.of(context).bgSurface,
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
       ),
       child: child,

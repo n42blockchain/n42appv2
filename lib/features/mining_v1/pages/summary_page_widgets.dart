@@ -3,7 +3,6 @@ part of 'summary_page.dart';
 /// Widget builder mixin for SummaryPage.
 /// Provides extracted widget builder methods used in the build tree.
 mixin _SummaryPageWidgetsMixin on State<SummaryPage>, _SummaryPageLogicMixin {
-
   Widget buildBarChart(BuildContext context) {
     const defaultBlue = Color.fromRGBO(25, 118, 249, 0.1);
     final barWidth = ScreenUtil().setWidth(20);
@@ -32,13 +31,11 @@ mixin _SummaryPageWidgetsMixin on State<SummaryPage>, _SummaryPageLogicMixin {
         titles: getPast7DaysDate(),
         style: TextStyle(
           fontSize: ScreenUtil().setSp(22),
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemSubtitleTextColor.name),
+          color: AppColorTokens.of(context).textSubtitle,
         ),
         specialStyle: TextStyle(
           fontSize: ScreenUtil().setSp(24),
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemTextColor.name),
+          color: AppColorTokens.of(context).textItem,
           fontWeight: FontWeight.w600,
         ),
         space: ScreenUtil().setWidth(36),
@@ -50,13 +47,13 @@ mixin _SummaryPageWidgetsMixin on State<SummaryPage>, _SummaryPageLogicMixin {
   Widget buildSummaryCard(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemBgColor.name),
-          borderRadius:
-              BorderRadius.circular(ScreenUtil().setWidth(16))),
+        color: AppColorTokens.of(context).bgSurface,
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+      ),
       padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(30),
-          vertical: ScreenUtil().setWidth(44)),
+        horizontal: ScreenUtil().setWidth(30),
+        vertical: ScreenUtil().setWidth(44),
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -98,8 +95,7 @@ mixin _SummaryPageWidgetsMixin on State<SummaryPage>, _SummaryPageLogicMixin {
     );
   }
 
-  Widget _buildSummaryRow(
-      BuildContext context, String label, String value) {
+  Widget _buildSummaryRow(BuildContext context, String label, String value) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -107,17 +103,19 @@ mixin _SummaryPageWidgetsMixin on State<SummaryPage>, _SummaryPageLogicMixin {
           label,
           style: TextStyle(
             color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.ff888888.name),
+              context,
+              AppThemeKeys.ff888888.name,
+            ),
             fontSize: ScreenUtil().setSp(26),
           ),
         ),
         Text(
           value,
           style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
-              fontSize: ScreenUtil().setSp(26),
-              fontWeight: FontWeight.bold),
+            color: AppColorTokens.of(context).textPrimary,
+            fontSize: ScreenUtil().setSp(26),
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ],
     );
@@ -133,7 +131,9 @@ mixin _SummaryPageWidgetsMixin on State<SummaryPage>, _SummaryPageLogicMixin {
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
               color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.ff888888.name),
+                context,
+                AppThemeKeys.ff888888.name,
+              ),
               fontSize: ScreenUtil().setSp(26),
             ),
           ),
@@ -153,8 +153,7 @@ mixin _SummaryPageWidgetsMixin on State<SummaryPage>, _SummaryPageLogicMixin {
               child: Text(
                 S.of(context).g_mining_key_50,
                 style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainBlueColor.name),
+                  color: AppColorTokens.of(context).brand,
                   fontSize: ScreenUtil().setSp(22),
                   fontWeight: FontWeight.bold,
                 ),
@@ -165,8 +164,7 @@ mixin _SummaryPageWidgetsMixin on State<SummaryPage>, _SummaryPageLogicMixin {
           Text(
             lockTimeStr ?? "00/00/00",
             style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
+              color: AppColorTokens.of(context).textPrimary,
               fontSize: ScreenUtil().setSp(26),
               fontWeight: FontWeight.bold,
             ),
@@ -178,11 +176,8 @@ mixin _SummaryPageWidgetsMixin on State<SummaryPage>, _SummaryPageLogicMixin {
   Widget buildRewardHistory(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(
-          ScreenUtil().setWidth(16),
-        ),
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemBgColor.name),
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        color: AppColorTokens.of(context).bgSurface,
       ),
       child: Column(
         children: [
@@ -192,13 +187,9 @@ mixin _SummaryPageWidgetsMixin on State<SummaryPage>, _SummaryPageLogicMixin {
               if (rewardsList.isEmpty)
                 Column(
                   children: [
-                    SizedBox(
-                      height: ScreenUtil().setWidth(180),
-                    ),
+                    SizedBox(height: ScreenUtil().setWidth(180)),
                     EmptyView(),
-                    SizedBox(
-                      height: ScreenUtil().setWidth(180),
-                    )
+                    SizedBox(height: ScreenUtil().setWidth(180)),
                   ],
                 ),
               ListView.builder(
@@ -210,14 +201,16 @@ mixin _SummaryPageWidgetsMixin on State<SummaryPage>, _SummaryPageLogicMixin {
                   final item = rewardsList[index];
                   return Padding(
                     padding: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(20)),
+                      horizontal: ScreenUtil().setWidth(20),
+                    ),
                     child: TaskItem(
                       taskId: "${BigInt.tryParse(item["blockNumber"])}",
                       astValue:
                           "${dataUtils.formatNum(toEther("${BigInt.tryParse(item["value"])}", 18).toDouble(), 2)} ${CoinType.N.name}",
                       time: dataUtils.getTimeByTimeStamp(
-                          "${hexToInt(item["timestamp"])}",
-                          format: "dd/MM/yyyy"),
+                        "${hexToInt(item["timestamp"])}",
+                        format: "dd/MM/yyyy",
+                      ),
                       status: "success",
                     ),
                   );
@@ -234,7 +227,9 @@ mixin _SummaryPageWidgetsMixin on State<SummaryPage>, _SummaryPageLogicMixin {
   Widget _buildRewardHistoryHeader(BuildContext context) {
     final headerStyle = TextStyle(
       color: AppThemeUtils.getColorByKey(
-          context, AppThemeKeys.mainWhiteColor.name),
+        context,
+        AppThemeKeys.mainWhiteColor.name,
+      ),
       fontSize: ScreenUtil().setSp(30),
     );
 

@@ -2,10 +2,15 @@ import 'dart:convert';
 import 'package:flutter_mining/flutter_mining.dart';
 
 final _flutterMiningPlugin = FlutterMining();
-class MiningPluginUtils{
+
+class MiningPluginUtils {
   ///设置插件初始化数据
   static Future<Map<String, dynamic>?> initSetting(
-      String astAddress, String appBasePath,String privateKey,String server) async {
+    String astAddress,
+    String appBasePath,
+    String privateKey,
+    String server,
+  ) async {
     final params = <String, dynamic>{
       "type": "setting",
       "val": {
@@ -13,14 +18,17 @@ class MiningPluginUtils{
         "account": astAddress,
         "priv_key": privateKey,
         "server_uri": server,
-        "log_level": ""
+        "log_level": "",
       },
     };
     final evmRes = await _flutterMiningPlugin.emit(json.encode(params));
     return evmRes;
   }
 
-  static Future<Map<String, dynamic>?> _emit(String type, {Map<String, dynamic>? val}) async {
+  static Future<Map<String, dynamic>?> _emit(
+    String type, {
+    Map<String, dynamic>? val,
+  }) async {
     final params = <String, dynamic>{"type": type};
     if (val != null) params["val"] = val;
     return await _flutterMiningPlugin.emit(json.encode(params));
@@ -37,8 +45,7 @@ class MiningPluginUtils{
 
   ///bls sign
   ///sdk 根据private key 推出公钥 进行加密
-  static Future<Map<String, dynamic>?> blsSign(
-      String privateKey, String msg) =>
+  static Future<Map<String, dynamic>?> blsSign(String privateKey, String msg) =>
       _emit("blssign", val: {"priv_key": privateKey, "msg": msg});
 
   ///bls pubKey

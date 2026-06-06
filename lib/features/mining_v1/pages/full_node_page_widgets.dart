@@ -50,9 +50,9 @@ mixin _FullNodePageWidgets on State<FullNodePage> {
               child: Text(
                 payType,
                 style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainTextColor.name),
-                    fontSize: ScreenUtil().setSp(30)),
+                  color: AppColorTokens.of(context).textPrimary,
+                  fontSize: ScreenUtil().setSp(30),
+                ),
               ),
             ),
             _buildRadioDot(isSelected),
@@ -93,9 +93,9 @@ mixin _FullNodePageWidgets on State<FullNodePage> {
                   Text(
                     payType,
                     style: TextStyle(
-                        color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.mainTextColor.name),
-                        fontSize: ScreenUtil().setSp(30)),
+                      color: AppColorTokens.of(context).textPrimary,
+                      fontSize: ScreenUtil().setSp(30),
+                    ),
                   ),
                   if (!isEnough)
                     Text(
@@ -126,8 +126,7 @@ mixin _FullNodePageWidgets on State<FullNodePage> {
         border: Border.all(
           color: isSelected
               ? Colors.transparent
-              : AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
+              : AppColorTokens.of(context).textPrimary,
           width: 1.0,
         ),
       ),

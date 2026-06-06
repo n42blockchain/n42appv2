@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/security/tx_risk_analyzer.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// Displays a compact risk summary banner for a pending transaction.
 ///
@@ -31,10 +32,7 @@ class TxRiskBannerWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: bannerBg,
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-        border: Border.all(
-          color: badgeColor.withAlpha(60),
-          width: 1,
-        ),
+        border: Border.all(color: badgeColor.withAlpha(60), width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,7 +54,9 @@ class TxRiskBannerWidget extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     color: badgeColor,
-                    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
+                    borderRadius: BorderRadius.circular(
+                      ScreenUtil().setWidth(6),
+                    ),
                   ),
                   child: Text(
                     badgeText,
@@ -75,8 +75,7 @@ class TxRiskBannerWidget extends StatelessWidget {
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(26),
                       fontWeight: FontWeight.w600,
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainTextColor.name),
+                      color: AppColorTokens.of(context).textPrimary,
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -130,8 +129,7 @@ class TxRiskBannerWidget extends StatelessWidget {
               height: ScreenUtil().setWidth(1),
               indent: ScreenUtil().setWidth(20),
               endIndent: ScreenUtil().setWidth(20),
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.dividerColor.name),
+              color: AppColorTokens.of(context).border,
             ),
             for (final field in analysis.fields)
               _FieldRow(field: field, badgeColor: badgeColor),
@@ -149,19 +147,19 @@ class TxRiskBannerWidget extends StatelessWidget {
         return (
           const Color(0xFF4CAF50), // green
           s.g_tx_risk_safe,
-          AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+          AppColorTokens.of(context).bgSurface,
         );
       case TxRiskLevel.caution:
         return (
           const Color(0xFFFF9800), // orange
           s.g_tx_risk_caution,
-          AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+          AppColorTokens.of(context).bgSurface,
         );
       case TxRiskLevel.danger:
         return (
           const Color(0xFFF44336), // red
           s.g_tx_risk_danger,
-          AppThemeUtils.getColorByKey(context, AppThemeKeys.errorBgColor.name),
+          AppColorTokens.of(context).dangerBg,
         );
     }
   }
@@ -191,7 +189,9 @@ class _FieldRow extends StatelessWidget {
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(22),
                 color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.ff888888.name),
+                  context,
+                  AppThemeKeys.ff888888.name,
+                ),
               ),
             ),
           ),
@@ -202,10 +202,10 @@ class _FieldRow extends StatelessWidget {
                 fontSize: ScreenUtil().setSp(22),
                 color: field.isHighlighted
                     ? badgeColor
-                    : AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainTextColor.name),
-                fontWeight:
-                    field.isHighlighted ? FontWeight.bold : FontWeight.normal,
+                    : AppColorTokens.of(context).textPrimary,
+                fontWeight: field.isHighlighted
+                    ? FontWeight.bold
+                    : FontWeight.normal,
               ),
               textAlign: TextAlign.right,
               maxLines: 2,
