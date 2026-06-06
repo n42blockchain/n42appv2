@@ -7,8 +7,8 @@
 中性/语义色映射现有 `AppThemeKeys` 主题表，保证迁移零视觉断层。
 
 ## 组件库（地基二）✅ 2026-06-01
-`lib/core/design_system/widgets/`：`AppButton`（primary/secondary/text/danger + loading/禁用）、`AppCard`、`AppTextField`、`AppDialog`（+ `confirm` 便捷，替代 7 个 `tips_dialog`）、`AppEmptyState`、`showAppSheet`。均随主题。后续模块整改直接复用；主程序替换 `button_widget`/`tips_dialog`/`text_field_widget` 调用点为高风险大改，逐模块推进。
-已在 live 接入验证：三个 sheet 改 `showAppSheet`、开奖二次确认改 `AppDialog.confirm`、直播广场空态改 `AppEmptyState`。
+`lib/core/design_system/widgets/`：`AppButton`（primary/secondary/text/danger + loading/禁用）、`AppCard`、`AppTextField`、`AppDialog`（+ `confirm` 便捷，替代 7 个 `tips_dialog`）、`AppEmptyState`、`showAppSheet`、**`AppBadge`**（2026-06-06 新增；胶囊状态徽章，6 色调 tone + dot/icon/leading，承接「处理中」spinner；规范 §2.7）。均随主题。后续模块整改直接复用；主程序替换 `button_widget`/`tips_dialog`/`text_field_widget` 调用点为高风险大改，逐模块推进。
+已在 live 接入验证：三个 sheet 改 `showAppSheet`、开奖二次确认改 `AppDialog.confirm`、直播广场空态改 `AppEmptyState`。**`AppBadge` 验证站点**：`bridge_history_page` 状态徽章（裸 `Colors.orange/blue/green/red`→`warning/info/success/danger` tone）。**AppBadge 边界**：可点筛选 chip / tonal 小按钮属按钮线；贴品牌彩卡 / 直播叠层的白底标签用固定叠层色，**不**用随主题 AppBadge。**待收割的重复徽章**（后续）：`home/feature_entry_card`、`wallet/batch_transfer.BatchStatusBadge`、`wallet/aa` 状态、`mining_v2/node_detail` WS 圆点等。
 
 ## 模块进度
 
