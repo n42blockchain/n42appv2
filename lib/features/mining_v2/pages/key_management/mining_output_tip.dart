@@ -74,9 +74,7 @@ class MiningOutputTip extends StatelessWidget {
                   color: isDark
                       ? Colors.white.withValues(alpha: 0.04)
                       : Colors.grey.withValues(alpha: 0.04),
-                  borderRadius: BorderRadius.circular(
-                    ScreenUtil().setWidth(20),
-                  ),
+                  borderRadius: AppRadius.brMd,
                   border: Border.all(
                     color: isDark
                         ? Colors.white.withValues(alpha: 0.08)
@@ -157,7 +155,7 @@ class MiningOutputTip extends StatelessWidget {
           height: ScreenUtil().setWidth(44),
           decoration: BoxDecoration(
             color: color.withValues(alpha: 0.12),
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
+            borderRadius: AppRadius.brSm,
           ),
           child: Center(
             child: Icon(icon, size: ScreenUtil().setWidth(24), color: color),

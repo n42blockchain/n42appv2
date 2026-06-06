@@ -96,9 +96,7 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
                 ),
                 decoration: BoxDecoration(
                   color: badgeColor.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(
-                    ScreenUtil().setWidth(20),
-                  ),
+                  borderRadius: AppRadius.brMd,
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,

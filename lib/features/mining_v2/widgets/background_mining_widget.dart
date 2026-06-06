@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/mining_v2/pages/mining_background.dart';
 import 'package:n42_wallet/features/mining_v2/provider/mining_v2_provider.dart';
 
@@ -51,7 +52,7 @@ class BackgroundMiningWidget extends StatelessWidget {
                 context,
                 AppThemeKeys.itemBgColor.name,
               ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+        borderRadius: AppRadius.brMd,
         border: Border.all(
           color: isEnabled
               ? AppThemeUtils.getColorByKey(
@@ -84,7 +85,7 @@ class BackgroundMiningWidget extends StatelessWidget {
           context,
           AppThemeKeys.mainBlueColor.name,
         ).withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(18)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Center(
         child: Image.asset(
@@ -147,7 +148,7 @@ class BackgroundMiningWidget extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: isEnabled ? () => MiningBackground().backgroundStart() : null,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(30)),
+        borderRadius: AppRadius.brXl,
         child: Container(
           padding: EdgeInsets.symmetric(
             horizontal: ScreenUtil().setWidth(28),
@@ -171,7 +172,7 @@ class BackgroundMiningWidget extends StatelessWidget {
                   )
                 : null,
             color: isEnabled ? null : disabledBgColor,
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(30)),
+            borderRadius: AppRadius.brXl,
             boxShadow: isEnabled
                 ? [
                     BoxShadow(

@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/custom_popup_menu_wrap.dart';
 
 /// Mining Data Broad Widget
@@ -37,7 +38,7 @@ class MiningDataBroad extends StatelessWidget {
             context,
             AppThemeKeys.itemBgColor.name,
           ),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+          borderRadius: AppRadius.brMd,
           border: Border.all(
             color: accentColor.withValues(alpha: isDark ? 0.12 : 0.08),
             width: 1,
@@ -109,7 +110,7 @@ class MiningDataBroad extends StatelessWidget {
           height: ScreenUtil().setWidth(32),
           decoration: BoxDecoration(
             color: accentColor.withValues(alpha: 0.12),
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+            borderRadius: AppRadius.brSm,
           ),
           child: Icon(
             iconData,
@@ -150,7 +151,7 @@ class MiningDataBroad extends StatelessWidget {
             ),
             menuItemView: Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
+                borderRadius: AppRadius.brMd,
                 color: AppThemeUtils.getColorByKey(
                   context,
                   AppThemeKeys.itemBgColor.name,

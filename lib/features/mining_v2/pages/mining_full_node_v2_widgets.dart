@@ -16,7 +16,7 @@ mixin _MiningFullNodeV2WidgetsMixin
               context,
               AppThemeKeys.mainBlueColor.name,
             ),
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(3)),
+            borderRadius: AppRadius.brSm,
           ),
         ),
         SizedBox(width: ScreenUtil().setWidth(12)),
@@ -60,7 +60,7 @@ mixin _MiningFullNodeV2WidgetsMixin
             context,
             AppThemeKeys.itemBgColor.name,
           ),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+          borderRadius: AppRadius.brMd,
           border: Border.all(
             color: isSelected ? blueColor : idleBorder,
             width: isSelected ? 2 : 1,
@@ -80,7 +80,7 @@ mixin _MiningFullNodeV2WidgetsMixin
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
+                borderRadius: AppRadius.brMd,
               ),
               child: Center(
                 child: Image.asset(
@@ -125,7 +125,7 @@ mixin _MiningFullNodeV2WidgetsMixin
       ),
       decoration: BoxDecoration(
         color: blueColor.withValues(alpha: 0.06),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
         border: Border.all(color: blueColor.withValues(alpha: 0.15), width: 1),
       ),
       child: Row(
@@ -165,7 +165,7 @@ mixin _MiningFullNodeV2WidgetsMixin
           context,
           AppThemeKeys.itemBgColor.name,
         ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
         border: Border.all(
           color: isDark
               ? Colors.white.withValues(alpha: 0.06)
@@ -218,7 +218,7 @@ mixin _MiningFullNodeV2WidgetsMixin
               height: ScreenUtil().setWidth(52),
               decoration: BoxDecoration(
                 color: blueColor.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+                borderRadius: AppRadius.brMd,
               ),
               child: Center(
                 child: Image.asset(
@@ -290,7 +290,7 @@ mixin _MiningFullNodeV2WidgetsMixin
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+        borderRadius: AppRadius.brMd,
         boxShadow: [
           BoxShadow(
             color: const Color(0xFFFF6B35).withValues(alpha: 0.3),
@@ -312,9 +312,7 @@ mixin _MiningFullNodeV2WidgetsMixin
                   height: ScreenUtil().setWidth(44),
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.2),
-                    borderRadius: BorderRadius.circular(
-                      ScreenUtil().setWidth(12),
-                    ),
+                    borderRadius: AppRadius.brMd,
                   ),
                   child: Icon(
                     Icons.vpn_key_outlined,
@@ -367,11 +365,7 @@ mixin _MiningFullNodeV2WidgetsMixin
                 padding: EdgeInsets.symmetric(
                   vertical: ScreenUtil().setWidth(16),
                 ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(
-                    ScreenUtil().setWidth(12),
-                  ),
-                ),
+                shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
               ),
               child: Text(
                 S.of(context).g_mining_key_79,

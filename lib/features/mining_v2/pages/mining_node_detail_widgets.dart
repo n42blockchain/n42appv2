@@ -311,7 +311,7 @@ mixin _MiningNodeDetailWidgets on ConsumerState<MiningNodeDetailPage> {
   BoxDecoration _cardDecoration(BuildContext context, bool isDark) {
     return BoxDecoration(
       color: _themeColor(context, AppThemeKeys.itemBgColor),
-      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+      borderRadius: AppRadius.brMd,
       border: Border.all(
         color: isDark
             ? Colors.white.withValues(alpha: 0.06)

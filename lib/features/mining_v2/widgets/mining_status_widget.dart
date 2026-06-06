@@ -64,7 +64,7 @@ class MiningStatusWidget extends StatelessWidget {
                 context,
                 AppThemeKeys.itemBgColor.name,
               ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+        borderRadius: AppRadius.brMd,
         border: Border.all(
           color: isActive
               ? statusColor.withValues(alpha: 0.25)
@@ -215,7 +215,7 @@ class MiningStatusWidget extends StatelessWidget {
           context,
           AppThemeKeys.itemBgColor.name,
         ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+        borderRadius: AppRadius.brMd,
         border: Border.all(
           color: isDark
               ? Colors.white.withValues(alpha: 0.06)
@@ -305,10 +305,7 @@ class MiningStatusWidget extends StatelessWidget {
     return Container(
       width: size,
       height: size,
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
-      ),
+      decoration: BoxDecoration(color: bgColor, borderRadius: AppRadius.brSm),
       child: icon,
     );
   }

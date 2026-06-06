@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 
 class NLevelWidget extends StatelessWidget {
@@ -19,7 +20,7 @@ class NLevelWidget extends StatelessWidget {
           context,
           AppThemeKeys.itemBgColor.name,
         ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+        borderRadius: AppRadius.brMd,
         boxShadow: isDark
             ? null
             : [
@@ -90,7 +91,7 @@ class NLevelWidget extends StatelessWidget {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+            borderRadius: AppRadius.brMd,
           ),
           padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
           child: Image.asset(bigImage, fit: BoxFit.contain),
@@ -147,9 +148,7 @@ class NLevelWidget extends StatelessWidget {
                           context,
                           AppThemeKeys.mainBlueColor.name,
                         ).withValues(alpha: 0.06),
-                  borderRadius: BorderRadius.circular(
-                    ScreenUtil().setWidth(10),
-                  ),
+                  borderRadius: AppRadius.brSm,
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -162,9 +161,7 @@ class NLevelWidget extends StatelessWidget {
                           context,
                           AppThemeKeys.mainBlueColor.name,
                         ),
-                        borderRadius: BorderRadius.circular(
-                          ScreenUtil().setWidth(6),
-                        ),
+                        borderRadius: AppRadius.brSm,
                       ),
                       child: Center(
                         child: Image.asset(

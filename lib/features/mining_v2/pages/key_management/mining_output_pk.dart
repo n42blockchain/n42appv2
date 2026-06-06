@@ -222,9 +222,7 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
                       context,
                       AppThemeKeys.itemBgColor.name,
                     ),
-                    borderRadius: BorderRadius.circular(
-                      ScreenUtil().setWidth(16),
-                    ),
+                    borderRadius: AppRadius.brMd,
                   ),
                   width: double.infinity,
                   child: Text(

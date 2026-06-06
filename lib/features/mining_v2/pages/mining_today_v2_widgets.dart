@@ -98,7 +98,7 @@ mixin _MiningTodayV2WidgetsMixin
           context,
           AppThemeKeys.errorBgColor.name,
         ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+        borderRadius: AppRadius.brSm,
       ),
       child: Text(
         S.of(context).g_mining_key_74,
@@ -138,7 +138,7 @@ mixin _MiningTodayV2WidgetsMixin
               ? [const Color(0xFF0F1D38), const Color(0xFF1A0B3B)]
               : [const Color(0xFF1565C0), const Color(0xFF5E35B1)],
         ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24)),
+        borderRadius: AppRadius.brLg,
         boxShadow: [
           BoxShadow(
             color: const Color(0xFF1565C0).withAlpha(isDark ? 50 : 70),
@@ -154,7 +154,7 @@ mixin _MiningTodayV2WidgetsMixin
             height: ScreenUtil().setWidth(72),
             decoration: BoxDecoration(
               color: Colors.white.withAlpha(18),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+              borderRadius: AppRadius.brMd,
             ),
             child: Icon(
               Icons.developer_board_rounded,

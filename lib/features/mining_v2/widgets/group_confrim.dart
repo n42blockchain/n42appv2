@@ -1,4 +1,5 @@
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -15,12 +16,10 @@ Future<bool?> showGroupConfirmDialog(
     builder: (_) => AlertDialog(
       contentPadding: const EdgeInsets.all(0),
       insetPadding: EdgeInsets.all(ScreenUtil().setWidth(28)),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24)),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: AppRadius.brLg),
       content: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24)),
+          borderRadius: AppRadius.brLg,
           color: AppThemeUtils.getColorByKey(
             context,
             AppThemeKeys.backGroundColor.name,
@@ -109,9 +108,7 @@ class GroupConfirm extends StatelessWidget {
                             context,
                             AppThemeKeys.itemBgColor.name,
                           ),
-                          borderRadius: BorderRadius.circular(
-                            ScreenUtil().setWidth(8),
-                          ),
+                          borderRadius: AppRadius.brSm,
                         ),
                         child: Center(
                           child: Text(
@@ -146,9 +143,7 @@ class GroupConfirm extends StatelessWidget {
                             context,
                             AppThemeKeys.mainBlueColor.name,
                           ),
-                          borderRadius: BorderRadius.circular(
-                            ScreenUtil().setWidth(8),
-                          ),
+                          borderRadius: AppRadius.brSm,
                         ),
                         child: Center(
                           child: Text(

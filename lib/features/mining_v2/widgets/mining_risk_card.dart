@@ -30,7 +30,7 @@ class MiningRiskCard extends StatelessWidget {
           context,
           AppThemeKeys.itemBgColor.name,
         ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+        borderRadius: AppRadius.brMd,
         boxShadow: isDark
             ? null
             : [
@@ -77,7 +77,7 @@ class MiningRiskCard extends StatelessWidget {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+              borderRadius: AppRadius.brMd,
             ),
             child: Center(
               child: Image.asset(
@@ -164,7 +164,7 @@ class MiningRiskCard extends StatelessWidget {
       height: ScreenUtil().setWidth(12),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
+        borderRadius: AppRadius.brSm,
       ),
       child: FractionallySizedBox(
         alignment: Alignment.centerLeft,
@@ -176,7 +176,7 @@ class MiningRiskCard extends StatelessWidget {
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
             ),
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
+            borderRadius: AppRadius.brSm,
           ),
         ),
       ),
@@ -203,7 +203,7 @@ class MiningRiskCard extends StatelessWidget {
         color: isDark
             ? Colors.white.withValues(alpha: 0.04)
             : riskColor.withValues(alpha: 0.06),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -239,7 +239,7 @@ class MiningRiskCard extends StatelessWidget {
             ),
             decoration: BoxDecoration(
               color: riskColor.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+              borderRadius: AppRadius.brMd,
             ),
             child: Text(
               "${mpValue.inactivityScorePercentage}%",
@@ -272,7 +272,7 @@ class MiningRiskCard extends StatelessWidget {
           context,
           AppThemeKeys.textColorOrange.name,
         ).withValues(alpha: 0.2),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Row(
         children: [

@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/mining_v2/pages/mining_plans_v2.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 class PlansWidget extends StatelessWidget {
   final VoidCallback? onTap;
@@ -35,7 +36,7 @@ class PlansWidget extends StatelessWidget {
             begin: Alignment.bottomLeft,
             end: Alignment.topRight,
           ),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+          borderRadius: AppRadius.brMd,
         ),
         child: Stack(
           children: [

@@ -187,9 +187,7 @@ class _ShareMiningState extends State<ShareMining>
                                 color: isDark
                                     ? Colors.white.withValues(alpha: 0.06)
                                     : Colors.black.withValues(alpha: 0.03),
-                                borderRadius: BorderRadius.circular(
-                                  ScreenUtil().setWidth(16),
-                                ),
+                                borderRadius: AppRadius.brMd,
                               ),
                               child: Text(
                                 _generateTipsContent(),
@@ -227,9 +225,7 @@ class _ShareMiningState extends State<ShareMining>
                                     context,
                                     AppThemeKeys.mainBlueColor.name,
                                   ).withValues(alpha: 0.1),
-                                  borderRadius: BorderRadius.circular(
-                                    ScreenUtil().setWidth(30),
-                                  ),
+                                  borderRadius: AppRadius.brXl,
                                   border: Border.all(
                                     color: AppThemeUtils.getColorByKey(
                                       context,

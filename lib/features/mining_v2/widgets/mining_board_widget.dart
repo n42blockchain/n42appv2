@@ -1,5 +1,6 @@
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -25,7 +26,7 @@ class MiningBoardWidget extends StatelessWidget {
           context,
           AppThemeKeys.itemBgColor.name,
         ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+        borderRadius: AppRadius.brMd,
         boxShadow: isDark
             ? null
             : [
@@ -107,7 +108,7 @@ class MiningBoardWidget extends StatelessWidget {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+            borderRadius: AppRadius.brMd,
           ),
           padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
           child: Image.asset("assets/mining/ast_50.png", fit: BoxFit.contain),
@@ -161,9 +162,7 @@ class MiningBoardWidget extends StatelessWidget {
                           context,
                           AppThemeKeys.mainBlueColor.name,
                         ).withValues(alpha: 0.08),
-                  borderRadius: BorderRadius.circular(
-                    ScreenUtil().setWidth(12),
-                  ),
+                  borderRadius: AppRadius.brMd,
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -176,9 +175,7 @@ class MiningBoardWidget extends StatelessWidget {
                           context,
                           AppThemeKeys.mainBlueColor.name,
                         ),
-                        borderRadius: BorderRadius.circular(
-                          ScreenUtil().setWidth(6),
-                        ),
+                        borderRadius: AppRadius.brSm,
                       ),
                       child: Center(
                         child: Image.asset(
@@ -235,7 +232,7 @@ class MiningBoardWidget extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: (isDark ? Colors.white : Colors.grey).withValues(alpha: 0.03),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -299,7 +296,7 @@ class MiningBoardWidget extends StatelessWidget {
             height: ScreenUtil().setWidth(48),
             decoration: BoxDecoration(
               color: iconBgColor.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+              borderRadius: AppRadius.brMd,
             ),
             child: Center(
               child: Image.asset(

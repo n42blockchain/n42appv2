@@ -350,7 +350,7 @@ class _MiningImportState extends ConsumerState<MiningImport> {
           context,
           AppThemeKeys.errorBgColor2.name,
         ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Text(
         _errorMessage,
