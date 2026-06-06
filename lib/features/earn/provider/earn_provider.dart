@@ -89,19 +89,27 @@ class EarnState {
   static double tokenAmount(BigInt raw, StakingChainType chainType) {
     if (raw == BigInt.zero) return 0.0;
     switch (chainType) {
-      case StakingChainType.ethereum: return raw.toDouble() / 1e18;
-      case StakingChainType.solana:   return raw.toDouble() / 1e9;
-      case StakingChainType.cosmos:   return raw.toDouble() / 1e6;
-      case StakingChainType.polkadot: return raw.toDouble() / 1e10;
+      case StakingChainType.ethereum:
+        return raw.toDouble() / 1e18;
+      case StakingChainType.solana:
+        return raw.toDouble() / 1e9;
+      case StakingChainType.cosmos:
+        return raw.toDouble() / 1e6;
+      case StakingChainType.polkadot:
+        return raw.toDouble() / 1e10;
     }
   }
 
   double _chainPrice(StakingChainType chainType) {
     switch (chainType) {
-      case StakingChainType.ethereum: return ethPriceUsd;
-      case StakingChainType.solana:   return solPriceUsd;
-      case StakingChainType.cosmos:   return atomPriceUsd;
-      case StakingChainType.polkadot: return 0.0;
+      case StakingChainType.ethereum:
+        return ethPriceUsd;
+      case StakingChainType.solana:
+        return solPriceUsd;
+      case StakingChainType.cosmos:
+        return atomPriceUsd;
+      case StakingChainType.polkadot:
+        return 0.0;
     }
   }
 
@@ -125,15 +133,18 @@ class EarnState {
   });
 
   /// 所有推荐中最高 APY
-  double get maxApy => [ethApy, solApy, atomApy].reduce((a, b) => a > b ? a : b);
+  double get maxApy =>
+      [ethApy, solApy, atomApy].reduce((a, b) => a > b ? a : b);
 
   /// 活跃中仓位（不含解绑）
-  List<StakingPosition> get onlyActive =>
-      activePositions.where((p) => p.status == StakingPositionStatus.active).toList();
+  List<StakingPosition> get onlyActive => activePositions
+      .where((p) => p.status == StakingPositionStatus.active)
+      .toList();
 
   /// 解绑中仓位
-  List<StakingPosition> get unbondingPositions =>
-      activePositions.where((p) => p.status == StakingPositionStatus.unbonding).toList();
+  List<StakingPosition> get unbondingPositions => activePositions
+      .where((p) => p.status == StakingPositionStatus.unbonding)
+      .toList();
 }
 
 // ─── Notifier ────────────────────────────────────────────────────────────────
@@ -267,9 +278,11 @@ class EarnNotifier extends StateNotifier<EarnState> {
     // 保留 active + unbonding 仓位，让用户看到正在解绑的资产
     state = state.copyWith(
       activePositions: allPositions
-          .where((p) =>
-              p.status == StakingPositionStatus.active ||
-              p.status == StakingPositionStatus.unbonding)
+          .where(
+            (p) =>
+                p.status == StakingPositionStatus.active ||
+                p.status == StakingPositionStatus.unbonding,
+          )
           .toList(),
       positionsLoading: false,
     );

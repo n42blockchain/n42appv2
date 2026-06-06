@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/hardware_wallet/service/keystone_service.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -149,22 +149,18 @@ class _KeystoneSignPageState extends State<KeystoneSignPage> {
           style: TextStyle(
             fontSize: ScreenUtil().setSp(30),
             fontWeight: FontWeight.bold,
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainTextColor.name),
+            color: AppColorTokens.of(context).textPrimary,
           ),
         ),
-        backgroundColor: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.backGroundColor.name),
+        backgroundColor: AppColorTokens.of(context).bgBase,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainTextColor.name),
+          color: AppColorTokens.of(context).textPrimary,
         ),
         elevation: 0,
       ),
-      backgroundColor: AppThemeUtils.getColorByKey(
-          context, AppThemeKeys.backGroundColor.name),
+      backgroundColor: AppColorTokens.of(context).bgBase,
       body: SafeArea(
         child: _step == _SignStep.showRequest
             ? _buildRequestStep(context, s)
@@ -186,20 +182,16 @@ class _KeystoneSignPageState extends State<KeystoneSignPage> {
             message: s.g_key_hw_keystone_scan_request_hint,
           ),
           SizedBox(height: ScreenUtil().setWidth(24)),
-          Expanded(
-            child: Center(
-              child: _buildQrCode(),
-            ),
-          ),
+          Expanded(child: Center(child: _buildQrCode())),
           SizedBox(height: ScreenUtil().setWidth(24)),
           ElevatedButton(
             onPressed: _proceedToScan,
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainBlueColor.name),
+              backgroundColor: AppColorTokens.of(context).brand,
               foregroundColor: Colors.white,
-              padding:
-                  EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
+              padding: EdgeInsets.symmetric(
+                vertical: ScreenUtil().setWidth(20),
+              ),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
               ),

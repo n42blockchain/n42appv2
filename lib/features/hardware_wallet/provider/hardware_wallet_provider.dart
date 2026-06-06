@@ -41,7 +41,8 @@ class HardwareWalletProvider extends ChangeNotifier
 
   // 状态
   @override
-  HardwareWalletConnectionState _connectionState = HardwareWalletConnectionState.disconnected;
+  HardwareWalletConnectionState _connectionState =
+      HardwareWalletConnectionState.disconnected;
   @override
   String? _errorMessage;
   @override
@@ -74,7 +75,8 @@ class HardwareWalletProvider extends ChangeNotifier
   String? get errorMessage => _errorMessage;
   bool get isScanning => _isScanning;
   @override
-  bool get isConnected => _connectionState == HardwareWalletConnectionState.connected;
+  bool get isConnected =>
+      _connectionState == HardwareWalletConnectionState.connected;
   List<BluetoothDeviceInfo> get discoveredDevices => _discoveredDevices;
   List<HardwareWalletDevice> get savedDevices => _savedDevices;
   HardwareWalletDevice? get currentDevice => _currentDevice;
@@ -148,7 +150,9 @@ class HardwareWalletProvider extends ChangeNotifier
   Future<void> _persistSavedDevices() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final devicesJson = json.encode(_savedDevices.map((d) => d.toJson()).toList());
+      final devicesJson = json.encode(
+        _savedDevices.map((d) => d.toJson()).toList(),
+      );
       await prefs.setString('hardware_wallet_devices', devicesJson);
     } catch (e) {
       AppLogger.w('HardwareWallet', 'failed to save devices: $e');
@@ -205,10 +209,9 @@ class HardwareWalletProvider extends ChangeNotifier
   Future<List<Map<String, dynamic>>> getImportedAccounts() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final raw = prefs.getStringList('hardware_wallet_imported_accounts') ?? [];
-      return raw
-          .map((e) => json.decode(e) as Map<String, dynamic>)
-          .toList();
+      final raw =
+          prefs.getStringList('hardware_wallet_imported_accounts') ?? [];
+      return raw.map((e) => json.decode(e) as Map<String, dynamic>).toList();
     } catch (e) {
       return [];
     }

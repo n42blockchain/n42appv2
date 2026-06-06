@@ -72,10 +72,7 @@ class _KeystonePairPageState extends State<KeystonePairPage> {
             Expanded(
               child: Stack(
                 children: [
-                  MobileScanner(
-                    controller: _controller,
-                    onDetect: _onDetected,
-                  ),
+                  MobileScanner(controller: _controller, onDetect: _onDetected),
                   if (_error != null)
                     Positioned(
                       bottom: ScreenUtil().setWidth(40),
@@ -85,8 +82,9 @@ class _KeystonePairPageState extends State<KeystonePairPage> {
                         padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
                         decoration: BoxDecoration(
                           color: Colors.red.shade900.withAlpha(220),
-                          borderRadius:
-                              BorderRadius.circular(ScreenUtil().setWidth(12)),
+                          borderRadius: BorderRadius.circular(
+                            ScreenUtil().setWidth(12),
+                          ),
                         ),
                         child: Text(
                           _error!,
@@ -100,7 +98,8 @@ class _KeystonePairPageState extends State<KeystonePairPage> {
                     ),
                   if (_isProcessing)
                     const Center(
-                        child: CircularProgressIndicator(color: Colors.white)),
+                      child: CircularProgressIndicator(color: Colors.white),
+                    ),
                 ],
               ),
             ),

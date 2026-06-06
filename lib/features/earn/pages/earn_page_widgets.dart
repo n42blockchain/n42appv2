@@ -6,7 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/earn/provider/earn_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:n42_wallet/features/earn/pages/earn_page.dart';
@@ -66,8 +66,9 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
                 ),
                 decoration: BoxDecoration(
                   color: Colors.white.withAlpha(30),
-                  borderRadius:
-                      BorderRadius.circular(ScreenUtil().setWidth(20)),
+                  borderRadius: BorderRadius.circular(
+                    ScreenUtil().setWidth(20),
+                  ),
                 ),
                 child: earnState.apyLoading
                     ? SizedBox(
@@ -81,9 +82,11 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
                     : Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.trending_up,
-                              color: Colors.greenAccent,
-                              size: ScreenUtil().setWidth(20)),
+                          Icon(
+                            Icons.trending_up,
+                            color: Colors.greenAccent,
+                            size: ScreenUtil().setWidth(20),
+                          ),
                           SizedBox(width: ScreenUtil().setWidth(4)),
                           Text(
                             apyLabel,
@@ -138,9 +141,11 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
     return Expanded(
       child: Row(
         children: [
-          Icon(icon,
-              color: Colors.white.withAlpha(180),
-              size: ScreenUtil().setWidth(28)),
+          Icon(
+            icon,
+            color: Colors.white.withAlpha(180),
+            size: ScreenUtil().setWidth(28),
+          ),
           SizedBox(width: ScreenUtil().setWidth(8)),
           Flexible(
             child: Column(
@@ -251,11 +256,14 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
                           decoration: BoxDecoration(
                             color: Colors.white.withAlpha(50),
                             borderRadius: BorderRadius.circular(
-                                ScreenUtil().setWidth(12)),
+                              ScreenUtil().setWidth(12),
+                            ),
                           ),
-                          child: Icon(icon,
-                              color: Colors.white,
-                              size: ScreenUtil().setWidth(28)),
+                          child: Icon(
+                            icon,
+                            color: Colors.white,
+                            size: ScreenUtil().setWidth(28),
+                          ),
                         ),
                         if (badge != null)
                           Container(
@@ -266,7 +274,8 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
                             decoration: BoxDecoration(
                               color: Colors.white.withAlpha(50),
                               borderRadius: BorderRadius.circular(
-                                  ScreenUtil().setWidth(20)),
+                                ScreenUtil().setWidth(20),
+                              ),
                             ),
                             child: Text(
                               badge,
@@ -337,15 +346,10 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
               height: ScreenUtil().setWidth(72),
               decoration: BoxDecoration(
                 color: color.withAlpha(20),
-                borderRadius:
-                    BorderRadius.circular(ScreenUtil().setWidth(20)),
-                border: Border.all(
-                  color: color.withAlpha(40),
-                  width: 1,
-                ),
+                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+                border: Border.all(color: color.withAlpha(40), width: 1),
               ),
-              child:
-                  Icon(icon, color: color, size: ScreenUtil().setWidth(34)),
+              child: Icon(icon, color: color, size: ScreenUtil().setWidth(34)),
             ),
             SizedBox(height: ScreenUtil().setWidth(10)),
             Text(
@@ -353,8 +357,7 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(20),
                 fontWeight: FontWeight.w500,
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
+                color: AppColorTokens.of(context).textPrimary,
               ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,

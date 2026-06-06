@@ -6,7 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/hardware_wallet/models/hardware_wallet_models.dart';
 import 'package:n42_wallet/features/hardware_wallet/provider/hardware_wallet_provider.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
@@ -75,7 +75,8 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
     } else {
       setState(() {
         _isConnecting = false;
-        _errorMessage = widget.provider.errorMessage ??
+        _errorMessage =
+            widget.provider.errorMessage ??
             S.of(context).g_key_hw_trezor_connect_failed;
         _statusMessage = null;
       });
@@ -94,11 +95,7 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // 设备图标区域
-              Expanded(
-                child: Center(
-                  child: _buildDeviceIcon(),
-                ),
-              ),
+              Expanded(child: Center(child: _buildDeviceIcon())),
 
               // 步骤说明
               _buildStepsCard(context, s),
@@ -125,12 +122,9 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
   }
 
   Widget _buildDeviceIcon() {
-    final blueColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainBlueColor.name);
-    final itemBg = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemBgColor.name);
-    final mainText = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainTextColor.name);
+    final blueColor = AppColorTokens.of(context).brand;
+    final itemBg = AppColorTokens.of(context).bgSurface;
+    final mainText = AppColorTokens.of(context).textPrimary;
     final size = ScreenUtil().setWidth(160);
 
     return ScaleTransition(
@@ -175,10 +169,8 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
   }
 
   Widget _buildStepsCard(BuildContext context, S s) {
-    final itemBg = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemBgColor.name);
-    final mainText = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainTextColor.name);
+    final itemBg = AppColorTokens.of(context).bgSurface;
+    final mainText = AppColorTokens.of(context).textPrimary;
 
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
@@ -191,14 +183,12 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
         children: [
           Text(
             s.g_key_hw_trezor_usb_hint,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(26),
-              color: mainText,
-            ),
+            style: TextStyle(fontSize: ScreenUtil().setSp(26), color: mainText),
           ),
           SizedBox(height: ScreenUtil().setWidth(16)),
-          ..._stepTexts.indexed.map((e) =>
-              _buildStep(context, '${e.$1 + 1}', e.$2)),
+          ..._stepTexts.indexed.map(
+            (e) => _buildStep(context, '${e.$1 + 1}', e.$2),
+          ),
         ],
       ),
     );
@@ -213,8 +203,7 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
   ];
 
   Widget _buildStep(BuildContext context, String number, String text) {
-    final blueColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainBlueColor.name);
+    final blueColor = AppColorTokens.of(context).brand;
     final circleSize = ScreenUtil().setWidth(32);
 
     return Padding(
@@ -248,8 +237,7 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
                 text,
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(24),
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemSubtitleTextColor.name),
+                  color: AppColorTokens.of(context).textSubtitle,
                 ),
               ),
             ),
@@ -273,10 +261,7 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
             SizedBox(
               width: ScreenUtil().setWidth(20),
               height: ScreenUtil().setWidth(20),
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                color: color,
-              ),
+              child: CircularProgressIndicator(strokeWidth: 2, color: color),
             )
           else
             Icon(
@@ -288,10 +273,7 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
           Expanded(
             child: Text(
               message,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(24),
-                color: color,
-              ),
+              style: TextStyle(fontSize: ScreenUtil().setSp(24), color: color),
             ),
           ),
         ],
@@ -300,8 +282,7 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
   }
 
   Widget _buildConnectButton(BuildContext context, S s) {
-    final blueColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainBlueColor.name);
+    final blueColor = AppColorTokens.of(context).brand;
     final spinnerSize = ScreenUtil().setWidth(24);
 
     return ElevatedButton(

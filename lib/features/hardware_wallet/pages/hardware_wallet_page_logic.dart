@@ -158,7 +158,9 @@ extension _HardwareWalletPageLogic on _HardwareWalletPageState {
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(s.g_key_hw_remove_device),
-        content: SingleChildScrollView(child: Text(s.g_key_hw_remove_device_confirm(device.name))),
+        content: SingleChildScrollView(
+          child: Text(s.g_key_hw_remove_device_confirm(device.name)),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
@@ -185,8 +187,7 @@ extension _HardwareWalletPageLogic on _HardwareWalletPageState {
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
-        color:
-            AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: AppColorTokens.of(context).bgSurface,
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
       ),
       child: Column(
@@ -197,8 +198,7 @@ extension _HardwareWalletPageLogic on _HardwareWalletPageState {
             style: TextStyle(
               fontSize: ScreenUtil().setSp(28),
               fontWeight: FontWeight.w600,
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
+              color: AppColorTokens.of(context).textPrimary,
             ),
           ),
           SizedBox(height: ScreenUtil().setWidth(16)),
@@ -220,8 +220,7 @@ extension _HardwareWalletPageLogic on _HardwareWalletPageState {
             children: [
               Icon(
                 Icons.info_outline,
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemSubtitleTextColor.name),
+                color: AppColorTokens.of(context).textSubtitle,
                 size: ScreenUtil().setWidth(28),
               ),
               SizedBox(width: ScreenUtil().setWidth(8)),
@@ -230,8 +229,7 @@ extension _HardwareWalletPageLogic on _HardwareWalletPageState {
                   s.g_key_hw_ble_hint,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(24),
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.itemSubtitleTextColor.name),
+                    color: AppColorTokens.of(context).textSubtitle,
                   ),
                 ),
               ),
@@ -243,7 +241,10 @@ extension _HardwareWalletPageLogic on _HardwareWalletPageState {
   }
 
   Widget _buildDeviceInfoRow(
-      BuildContext context, String name, String connection) {
+    BuildContext context,
+    String name,
+    String connection,
+  ) {
     return Padding(
       padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(8)),
       child: Row(
@@ -258,8 +259,7 @@ extension _HardwareWalletPageLogic on _HardwareWalletPageState {
             name,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(26),
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
+              color: AppColorTokens.of(context).textPrimary,
             ),
           ),
           const Spacer(),
@@ -269,17 +269,14 @@ extension _HardwareWalletPageLogic on _HardwareWalletPageState {
               vertical: ScreenUtil().setWidth(4),
             ),
             decoration: BoxDecoration(
-              color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainBlueColor.name)
-                  .withAlpha(30),
+              color: AppColorTokens.of(context).brand.withAlpha(30),
               borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
             ),
             child: Text(
               connection,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(22),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
+                color: AppColorTokens.of(context).brand,
               ),
             ),
           ),

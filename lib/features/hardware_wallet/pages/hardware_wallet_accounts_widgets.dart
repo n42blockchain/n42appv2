@@ -7,13 +7,12 @@ part of 'hardware_wallet_accounts_page.dart';
 
 /// 常用主题色快捷方法
 Color _hwSubtitleColor(BuildContext context) =>
-    AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+    AppColorTokens.of(context).textSubtitle;
 
-Color _hwBlueColor(BuildContext context) =>
-    AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+Color _hwBlueColor(BuildContext context) => AppColorTokens.of(context).brand;
 
 Color _hwTextColor(BuildContext context) =>
-    AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+    AppColorTokens.of(context).textPrimary;
 
 /// 未连接状态视图
 class _HWNotConnectedView extends StatelessWidget {
@@ -38,16 +37,10 @@ class _HWNotConnectedView extends StatelessWidget {
           SizedBox(height: su.setWidth(20)),
           Text(
             s.g_key_hw_not_connected,
-            style: TextStyle(
-              fontSize: su.setSp(30),
-              color: subtitle,
-            ),
+            style: TextStyle(fontSize: su.setSp(30), color: subtitle),
           ),
           SizedBox(height: su.setWidth(20)),
-          ElevatedButton(
-            onPressed: onGoBack,
-            child: Text(s.g_key_hw_go_back),
-          ),
+          ElevatedButton(onPressed: onGoBack, child: Text(s.g_key_hw_go_back)),
         ],
       ),
     );
@@ -67,7 +60,7 @@ class _HWDeviceInfoCard extends StatelessWidget {
       margin: EdgeInsets.all(su.setWidth(30)),
       padding: EdgeInsets.all(su.setWidth(20)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: AppColorTokens.of(context).bgSurface,
         borderRadius: BorderRadius.circular(su.setWidth(12)),
       ),
       child: Row(
@@ -100,10 +93,7 @@ class _HWDeviceInfoCard extends StatelessWidget {
                 ),
                 Text(
                   S.of(context).g_key_hw_connected,
-                  style: TextStyle(
-                    fontSize: su.setSp(24),
-                    color: Colors.green,
-                  ),
+                  style: TextStyle(fontSize: su.setSp(24), color: Colors.green),
                 ),
               ],
             ),
@@ -154,7 +144,7 @@ class _HWCoinSelector extends StatelessWidget {
               decoration: BoxDecoration(
                 color: isSelected
                     ? blueColor
-                    : AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+                    : AppColorTokens.of(context).bgSurface,
                 borderRadius: BorderRadius.circular(su.setWidth(20)),
               ),
               child: Row(
@@ -204,19 +194,13 @@ class _HWLoadingView extends StatelessWidget {
           Text(
             s.g_key_hw_loading_accounts,
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: su.setSp(26),
-              color: subtitle,
-            ),
+            style: TextStyle(fontSize: su.setSp(26), color: subtitle),
           ),
           SizedBox(height: su.setWidth(8)),
           Text(
             s.g_key_hw_loading_hint,
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: su.setSp(22),
-              color: subtitle,
-            ),
+            style: TextStyle(fontSize: su.setSp(22), color: subtitle),
           ),
         ],
       ),
@@ -229,10 +213,7 @@ class _HWEmptyAccountsView extends StatelessWidget {
   final String appName;
   final VoidCallback onRetry;
 
-  const _HWEmptyAccountsView({
-    required this.appName,
-    required this.onRetry,
-  });
+  const _HWEmptyAccountsView({required this.appName, required this.onRetry});
 
   @override
   Widget build(BuildContext context) {
@@ -250,19 +231,13 @@ class _HWEmptyAccountsView extends StatelessWidget {
           SizedBox(height: su.setWidth(16)),
           Text(
             S.of(context).g_key_hw_no_accounts_found,
-            style: TextStyle(
-              fontSize: su.setSp(28),
-              color: subtitle,
-            ),
+            style: TextStyle(fontSize: su.setSp(28), color: subtitle),
           ),
           SizedBox(height: su.setWidth(8)),
           Text(
             S.of(context).g_key_hw_open_ledger_app_hint(appName),
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: su.setSp(24),
-              color: subtitle,
-            ),
+            style: TextStyle(fontSize: su.setSp(24), color: subtitle),
           ),
           SizedBox(height: su.setWidth(20)),
           ElevatedButton(
@@ -280,10 +255,7 @@ class _HWLoadMoreButton extends StatelessWidget {
   final bool isLoading;
   final VoidCallback onLoadMore;
 
-  const _HWLoadMoreButton({
-    required this.isLoading,
-    required this.onLoadMore,
-  });
+  const _HWLoadMoreButton({required this.isLoading, required this.onLoadMore});
 
   @override
   Widget build(BuildContext context) {
@@ -328,7 +300,7 @@ class _HWAccountItem extends StatelessWidget {
       margin: EdgeInsets.only(bottom: su.setWidth(12)),
       padding: EdgeInsets.all(su.setWidth(20)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: AppColorTokens.of(context).bgSurface,
         borderRadius: BorderRadius.circular(su.setWidth(12)),
       ),
       child: Column(
@@ -380,11 +352,7 @@ class _HWAccountItem extends StatelessWidget {
               ),
               IconButton(
                 onPressed: () => onCopy(account.address),
-                icon: Icon(
-                  Icons.copy,
-                  color: blueColor,
-                  size: su.setWidth(28),
-                ),
+                icon: Icon(Icons.copy, color: blueColor, size: su.setWidth(28)),
               ),
               IconButton(
                 onPressed: () => onUse(account),

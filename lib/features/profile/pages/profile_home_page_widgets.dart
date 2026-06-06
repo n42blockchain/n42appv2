@@ -7,7 +7,11 @@ part of 'profile_home_page.dart';
 
 /// Widget builder methods and navigation for [ProfileHomePage].
 extension _ProfileHomePageWidgets on ProfileHomePage {
-  Widget _buildSection(BuildContext context, String title, List<Widget> children) {
+  Widget _buildSection(
+    BuildContext context,
+    String title,
+    List<Widget> children,
+  ) {
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: ScreenUtil().setWidth(30),
@@ -21,17 +25,13 @@ extension _ProfileHomePageWidgets on ProfileHomePage {
             style: TextStyle(
               fontSize: ScreenUtil().setSp(28),
               fontWeight: FontWeight.bold,
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ),
+              color: AppColorTokens.of(context).textSubtitle,
             ),
           ),
           SizedBox(height: ScreenUtil().setWidth(12)),
           Container(
             decoration: BoxDecoration(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemBgColor.name),
+              color: AppColorTokens.of(context).bgSurface,
               borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
             ),
             child: Column(children: children),
@@ -82,10 +82,7 @@ extension _ProfileHomePageWidgets on ProfileHomePage {
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(28),
                           fontWeight: FontWeight.w500,
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.mainTextColor.name,
-                          ),
+                          color: AppColorTokens.of(context).textPrimary,
                         ),
                       ),
                       if (isNew) ...[
@@ -97,8 +94,9 @@ extension _ProfileHomePageWidgets on ProfileHomePage {
                           ),
                           decoration: BoxDecoration(
                             color: Colors.green,
-                            borderRadius:
-                                BorderRadius.circular(ScreenUtil().setWidth(6)),
+                            borderRadius: BorderRadius.circular(
+                              ScreenUtil().setWidth(6),
+                            ),
                           ),
                           child: Text(
                             'NEW',
@@ -117,10 +115,7 @@ extension _ProfileHomePageWidgets on ProfileHomePage {
                     subtitle,
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(24),
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.itemSubtitleTextColor.name,
-                      ),
+                      color: AppColorTokens.of(context).textSubtitle,
                     ),
                   ),
                 ],
@@ -134,10 +129,7 @@ extension _ProfileHomePageWidgets on ProfileHomePage {
             ],
             Icon(
               Icons.chevron_right,
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ),
+              color: AppColorTokens.of(context).textSubtitle,
               size: ScreenUtil().setWidth(28),
             ),
           ],

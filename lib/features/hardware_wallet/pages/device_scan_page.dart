@@ -5,7 +5,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/hardware_wallet/models/hardware_wallet_models.dart';
 import 'package:n42_wallet/features/hardware_wallet/provider/hardware_wallet_provider.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
@@ -24,16 +24,13 @@ class _DeviceScanPageState extends State<DeviceScanPage>
   late AnimationController _animationController;
 
   /// 常用主题色快捷方法
-  Color _blueColor(BuildContext context) =>
-      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+  Color _blueColor(BuildContext context) => AppColorTokens.of(context).brand;
 
-  Color _subtitleColor(BuildContext context) => AppThemeUtils.getColorByKey(
-    context,
-    AppThemeKeys.itemSubtitleTextColor.name,
-  );
+  Color _subtitleColor(BuildContext context) =>
+      AppColorTokens.of(context).textSubtitle;
 
   Color _textColor(BuildContext context) =>
-      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+      AppColorTokens.of(context).textPrimary;
 
   @override
   void initState() {
@@ -253,10 +250,7 @@ class _DeviceScanPageState extends State<DeviceScanPage>
         margin: EdgeInsets.only(bottom: su.setWidth(12)),
         padding: EdgeInsets.all(su.setWidth(20)),
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.itemBgColor.name,
-          ),
+          color: AppColorTokens.of(context).bgSurface,
           borderRadius: BorderRadius.circular(su.setWidth(12)),
         ),
         child: Row(

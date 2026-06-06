@@ -33,10 +33,12 @@ mixin _HardwareWalletSigningMixin on ChangeNotifier {
     required String derivationPath,
     required Uint8List rawTx,
   }) {
-    return _guardedSign(() => _ledgerService.signEthereumTransaction(
-          derivationPath: derivationPath,
-          rawTx: rawTx,
-        ));
+    return _guardedSign(
+      () => _ledgerService.signEthereumTransaction(
+        derivationPath: derivationPath,
+        rawTx: rawTx,
+      ),
+    );
   }
 
   /// 签名以太坊消息
@@ -44,10 +46,12 @@ mixin _HardwareWalletSigningMixin on ChangeNotifier {
     required String derivationPath,
     required String message,
   }) {
-    return _guardedSign(() => _ledgerService.signEthereumMessage(
-          derivationPath: derivationPath,
-          message: message,
-        ));
+    return _guardedSign(
+      () => _ledgerService.signEthereumMessage(
+        derivationPath: derivationPath,
+        message: message,
+      ),
+    );
   }
 
   /// 签名比特币交易
@@ -55,10 +59,12 @@ mixin _HardwareWalletSigningMixin on ChangeNotifier {
     required String derivationPath,
     required Map<String, dynamic> txData,
   }) {
-    return _guardedSign(() => _ledgerService.signBitcoinTransaction(
-          derivationPath: derivationPath,
-          txData: txData,
-        ));
+    return _guardedSign(
+      () => _ledgerService.signBitcoinTransaction(
+        derivationPath: derivationPath,
+        txData: txData,
+      ),
+    );
   }
 
   /// 通用签名方法
@@ -157,9 +163,7 @@ mixin _HardwareWalletSigningMixin on ChangeNotifier {
       if (request.signType == HardwareWalletSignType.message) {
         return _trezorService.signMessage(
           derivationPath: request.derivationPath,
-          messageBytes: Uint8List.fromList(
-            (request.message ?? '').codeUnits,
-          ),
+          messageBytes: Uint8List.fromList((request.message ?? '').codeUnits),
         );
       }
       if (request.signType == HardwareWalletSignType.typedData) {
@@ -195,7 +199,8 @@ mixin _HardwareWalletSigningMixin on ChangeNotifier {
   /// 序列化以太坊交易为 RLP 编码字节
   Uint8List _serializeEthTransaction(Map<String, dynamic> txData) {
     final isEip1559 =
-        txData.containsKey('maxFeePerGas') || txData.containsKey('maxPriorityFeePerGas');
+        txData.containsKey('maxFeePerGas') ||
+        txData.containsKey('maxPriorityFeePerGas');
 
     if (isEip1559) {
       return _serializeEip1559Transaction(txData);

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/hardware_wallet/models/hardware_wallet_models.dart';
 import 'package:n42_wallet/features/hardware_wallet/pages/device_scan_page.dart';
 import 'package:n42_wallet/features/hardware_wallet/pages/hardware_wallet_accounts_page.dart';
@@ -102,8 +103,7 @@ class _HardwareWalletPageState extends State<HardwareWalletPage> {
       style: TextStyle(
         fontSize: ScreenUtil().setSp(30),
         fontWeight: FontWeight.bold,
-        color:
-            AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+        color: AppColorTokens.of(context).textPrimary,
       ),
     );
   }

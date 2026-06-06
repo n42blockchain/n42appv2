@@ -6,7 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/bridge/pages/bridge_home_page.dart';
 import 'package:n42_wallet/features/earn/provider/earn_provider.dart';
 import 'package:n42_wallet/features/staking/pages/staking_home_page.dart';
@@ -20,9 +20,8 @@ import 'package:n42_wallet/features/earn/pages/earn_page_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 
 /// 页面区域 mixin：主要功能区、快捷工具
-mixin EarnPageSectionsMixin on ConsumerState<EarnPage>,
-    EarnPageLogicMixin,
-    EarnPageWidgetsMixin {
+mixin EarnPageSectionsMixin
+    on ConsumerState<EarnPage>, EarnPageLogicMixin, EarnPageWidgetsMixin {
   // ──────────────────────────────────────────────────────────────────────────
   //  主要功能区（含 Mining + Swap）
   // ──────────────────────────────────────────────────────────────────────────
@@ -42,8 +41,7 @@ mixin EarnPageSectionsMixin on ConsumerState<EarnPage>,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(30),
               fontWeight: FontWeight.bold,
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
+              color: AppColorTokens.of(context).textPrimary,
             ),
           ),
           SizedBox(height: ScreenUtil().setWidth(16)),
@@ -58,15 +56,11 @@ mixin EarnPageSectionsMixin on ConsumerState<EarnPage>,
                   title: S.of(context).g_key_stake_stake,
                   subtitle: S.of(context).g_key_earn_up_to_apy(maxApyStr),
                   icon: Icons.account_balance_rounded,
-                  gradientColors: const [
-                    Color(0xFF11998e),
-                    Color(0xFF38ef7d)
-                  ],
+                  gradientColors: const [Color(0xFF11998e), Color(0xFF38ef7d)],
                   badge: 'HOT',
                   onTap: () => Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (_) => const StakingHomePage()),
+                    MaterialPageRoute(builder: (_) => const StakingHomePage()),
                   ),
                 ),
                 SizedBox(width: ScreenUtil().setWidth(16)),
@@ -75,15 +69,11 @@ mixin EarnPageSectionsMixin on ConsumerState<EarnPage>,
                   title: S.of(context).g_key_earn_mining,
                   subtitle: S.of(context).g_key_earn_node_mining_desc,
                   icon: Icons.developer_board_rounded,
-                  gradientColors: const [
-                    Color(0xFFf7971e),
-                    Color(0xFFffd200)
-                  ],
+                  gradientColors: const [Color(0xFFf7971e), Color(0xFFffd200)],
                   badge: 'N42',
                   onTap: () => Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (_) => const MiningTodayV2()),
+                    MaterialPageRoute(builder: (_) => const MiningTodayV2()),
                   ),
                 ),
                 SizedBox(width: ScreenUtil().setWidth(16)),
@@ -92,10 +82,7 @@ mixin EarnPageSectionsMixin on ConsumerState<EarnPage>,
                   title: S.of(context).g_key_earn_swap,
                   subtitle: S.of(context).g_key_earn_buy_n_desc,
                   icon: Icons.currency_exchange_rounded,
-                  gradientColors: const [
-                    Color(0xFF4776E6),
-                    Color(0xFF8E54E9)
-                  ],
+                  gradientColors: const [Color(0xFF4776E6), Color(0xFF8E54E9)],
                   onTap: () => navigateToSwap(context),
                 ),
                 SizedBox(width: ScreenUtil().setWidth(16)),
@@ -104,14 +91,10 @@ mixin EarnPageSectionsMixin on ConsumerState<EarnPage>,
                   title: S.of(context).g_key_bridge_title,
                   subtitle: S.of(context).g_key_earn_cross_chain,
                   icon: Icons.swap_horiz_rounded,
-                  gradientColors: const [
-                    Color(0xFF8E2DE2),
-                    Color(0xFF4A00E0)
-                  ],
+                  gradientColors: const [Color(0xFF8E2DE2), Color(0xFF4A00E0)],
                   onTap: () => Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (_) => const BridgeHomePage()),
+                    MaterialPageRoute(builder: (_) => const BridgeHomePage()),
                   ),
                 ),
                 SizedBox(width: ScreenUtil().setWidth(16)),
@@ -139,8 +122,7 @@ mixin EarnPageSectionsMixin on ConsumerState<EarnPage>,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(30),
               fontWeight: FontWeight.bold,
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
+              color: AppColorTokens.of(context).textPrimary,
             ),
           ),
           SizedBox(height: ScreenUtil().setWidth(16)),
@@ -150,14 +132,10 @@ mixin EarnPageSectionsMixin on ConsumerState<EarnPage>,
               vertical: ScreenUtil().setWidth(16),
             ),
             decoration: BoxDecoration(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemBgColor.name),
-              borderRadius:
-                  BorderRadius.circular(ScreenUtil().setWidth(24)),
+              color: AppColorTokens.of(context).bgSurface,
+              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24)),
               border: Border.all(
-                color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.dividerColor.name)
-                    .withAlpha(60),
+                color: AppColorTokens.of(context).border.withAlpha(60),
                 width: 1,
               ),
             ),
@@ -171,7 +149,8 @@ mixin EarnPageSectionsMixin on ConsumerState<EarnPage>,
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (_) => const HardwareWalletPage()),
+                      builder: (_) => const HardwareWalletPage(),
+                    ),
                   ),
                 ),
                 buildToolItem(
@@ -181,8 +160,7 @@ mixin EarnPageSectionsMixin on ConsumerState<EarnPage>,
                   color: const Color(0xFFE91E63),
                   onTap: () => Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (_) => const GasTrackerPage()),
+                    MaterialPageRoute(builder: (_) => const GasTrackerPage()),
                   ),
                 ),
                 buildToolItem(
@@ -193,8 +171,8 @@ mixin EarnPageSectionsMixin on ConsumerState<EarnPage>,
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (_) =>
-                            const BatchTransferSelectPage()),
+                      builder: (_) => const BatchTransferSelectPage(),
+                    ),
                   ),
                 ),
                 buildToolItem(

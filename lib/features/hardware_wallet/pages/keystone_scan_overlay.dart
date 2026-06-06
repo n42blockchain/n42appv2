@@ -18,8 +18,7 @@ class _ScanOverlayPainter extends CustomPainter {
     return CustomPaint(
       painter: _ScanOverlayPainter(
         scanBoxSize: scanBoxSize,
-        borderColor: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainBlueColor.name),
+        borderColor: AppColorTokens.of(context).brand,
       ),
       child: const SizedBox.expand(),
     );
@@ -63,19 +62,37 @@ class _ScanOverlayPainter extends CustomPainter {
     canvas.drawLine(r.topLeft, r.topLeft.translate(0, cornerLen), bracketPaint);
     // Top-right
     canvas.drawLine(
-        r.topRight, r.topRight.translate(-cornerLen, 0), bracketPaint);
+      r.topRight,
+      r.topRight.translate(-cornerLen, 0),
+      bracketPaint,
+    );
     canvas.drawLine(
-        r.topRight, r.topRight.translate(0, cornerLen), bracketPaint);
+      r.topRight,
+      r.topRight.translate(0, cornerLen),
+      bracketPaint,
+    );
     // Bottom-left
     canvas.drawLine(
-        r.bottomLeft, r.bottomLeft.translate(cornerLen, 0), bracketPaint);
+      r.bottomLeft,
+      r.bottomLeft.translate(cornerLen, 0),
+      bracketPaint,
+    );
     canvas.drawLine(
-        r.bottomLeft, r.bottomLeft.translate(0, -cornerLen), bracketPaint);
+      r.bottomLeft,
+      r.bottomLeft.translate(0, -cornerLen),
+      bracketPaint,
+    );
     // Bottom-right
     canvas.drawLine(
-        r.bottomRight, r.bottomRight.translate(-cornerLen, 0), bracketPaint);
+      r.bottomRight,
+      r.bottomRight.translate(-cornerLen, 0),
+      bracketPaint,
+    );
     canvas.drawLine(
-        r.bottomRight, r.bottomRight.translate(0, -cornerLen), bracketPaint);
+      r.bottomRight,
+      r.bottomRight.translate(0, -cornerLen),
+      bracketPaint,
+    );
   }
 
   @override
@@ -88,26 +105,21 @@ class _KeystoneInfoCard extends StatelessWidget {
   final IconData icon;
   final String message;
 
-  const _KeystoneInfoCard({
-    required this.icon,
-    required this.message,
-  });
+  const _KeystoneInfoCard({required this.icon, required this.message});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
-        color:
-            AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: AppColorTokens.of(context).bgSurface,
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
       ),
       child: Row(
         children: [
           Icon(
             icon,
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainBlueColor.name),
+            color: AppColorTokens.of(context).brand,
             size: ScreenUtil().setWidth(36),
           ),
           SizedBox(width: ScreenUtil().setWidth(16)),
@@ -116,8 +128,7 @@ class _KeystoneInfoCard extends StatelessWidget {
               message,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(24),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
+                color: AppColorTokens.of(context).textPrimary,
               ),
             ),
           ),
@@ -132,10 +143,7 @@ class _KeystoneScanErrorCard extends StatelessWidget {
   final String error;
   final VoidCallback onRetry;
 
-  const _KeystoneScanErrorCard({
-    required this.error,
-    required this.onRetry,
-  });
+  const _KeystoneScanErrorCard({required this.error, required this.onRetry});
 
   @override
   Widget build(BuildContext context) {

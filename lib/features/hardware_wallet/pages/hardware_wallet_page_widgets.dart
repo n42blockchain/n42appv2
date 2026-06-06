@@ -19,7 +19,10 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
     final isConnected = provider.isConnected;
     final device = provider.currentDevice;
     final itemBgColor = _themeColor(context, AppThemeKeys.itemBgColor);
-    final subtitleColor = _themeColor(context, AppThemeKeys.itemSubtitleTextColor);
+    final subtitleColor = _themeColor(
+      context,
+      AppThemeKeys.itemSubtitleTextColor,
+    );
     final mainTextColor = _themeColor(context, AppThemeKeys.mainTextColor);
 
     return Container(
@@ -83,8 +86,9 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
                       vertical: ScreenUtil().setWidth(12),
                     ),
                     shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(ScreenUtil().setWidth(8)),
+                      borderRadius: BorderRadius.circular(
+                        ScreenUtil().setWidth(8),
+                      ),
                     ),
                   ),
                   child: Text(s.g_key_hw_disconnect),
@@ -183,7 +187,10 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
     final isConnected = isCurrentDevice && provider.isConnected;
     final blueColor = _themeColor(context, AppThemeKeys.mainBlueColor);
     final mainTextColor = _themeColor(context, AppThemeKeys.mainTextColor);
-    final subtitleColor = _themeColor(context, AppThemeKeys.itemSubtitleTextColor);
+    final subtitleColor = _themeColor(
+      context,
+      AppThemeKeys.itemSubtitleTextColor,
+    );
 
     return Container(
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
@@ -239,8 +246,9 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
                         ),
                         decoration: BoxDecoration(
                           color: Colors.green.withAlpha(30),
-                          borderRadius:
-                              BorderRadius.circular(ScreenUtil().setWidth(6)),
+                          borderRadius: BorderRadius.circular(
+                            ScreenUtil().setWidth(6),
+                          ),
                         ),
                         child: Text(
                           s.g_key_hw_connected,
@@ -282,14 +290,10 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
             IconButton(
               onPressed: () =>
                   _connectSavedDevice(context, s, provider, device),
-              icon: Icon(
-                _connectionIcon(device.type),
-                color: blueColor,
-              ),
+              icon: Icon(_connectionIcon(device.type), color: blueColor),
             ),
             IconButton(
-              onPressed: () =>
-                  _showDeleteDialog(context, s, provider, device),
+              onPressed: () => _showDeleteDialog(context, s, provider, device),
               icon: const Icon(Icons.delete_outline, color: Colors.red),
             ),
           ],
@@ -377,11 +381,7 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
         ),
         child: Row(
           children: [
-            Icon(
-              icon,
-              color: blueColor,
-              size: ScreenUtil().setWidth(32),
-            ),
+            Icon(icon, color: blueColor, size: ScreenUtil().setWidth(32)),
             SizedBox(width: ScreenUtil().setWidth(16)),
             Expanded(
               child: Text(

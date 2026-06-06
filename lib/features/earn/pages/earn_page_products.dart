@@ -6,7 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/earn/provider/earn_provider.dart';
 import 'package:n42_wallet/features/staking/models/staking_models.dart';
 import 'package:n42_wallet/features/staking/pages/staking_home_page.dart';
@@ -15,11 +15,12 @@ import 'package:n42_wallet/features/earn/pages/earn_page_logic.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 
 /// 产品区域 mixin：活跃产品列表、推荐产品列表
-mixin EarnPageProductsMixin on ConsumerState<EarnPage>,
-    EarnPageLogicMixin {
-
+mixin EarnPageProductsMixin on ConsumerState<EarnPage>, EarnPageLogicMixin {
   void _pushStaking(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (_) => const StakingHomePage()));
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const StakingHomePage()),
+    );
   }
 
   // ──────────────────────────────────────────────────────────────────────────
@@ -28,9 +29,9 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>,
 
   Widget buildActiveProducts(BuildContext context, EarnState earnState) {
     final su = ScreenUtil();
-    final mainText = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final subtitle = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
-    final blue = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+    final mainText = AppColorTokens.of(context).textPrimary;
+    final subtitle = AppColorTokens.of(context).textSubtitle;
+    final blue = AppColorTokens.of(context).brand;
     final loading = earnState.positionsLoading;
     final active = earnState.onlyActive;
     final unbonding = earnState.unbondingPositions;
@@ -58,10 +59,7 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>,
                 onPressed: () => _pushStaking(context),
                 child: Text(
                   S.of(context).g_key_earn_view_all,
-                  style: TextStyle(
-                    fontSize: su.setSp(26),
-                    color: blue,
-                  ),
+                  style: TextStyle(fontSize: su.setSp(26), color: blue),
                 ),
               ),
             ],
@@ -73,7 +71,8 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>,
             _buildNoPositions(context)
           else ...[
             ...active.map(
-                (p) => _buildActivePositionItem(context, earnState, p)),
+              (p) => _buildActivePositionItem(context, earnState, p),
+            ),
             if (unbonding.isNotEmpty) ...[
               SizedBox(height: su.setWidth(8)),
               Text(
@@ -86,7 +85,8 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>,
               ),
               SizedBox(height: su.setWidth(8)),
               ...unbonding.map(
-                  (p) => _buildActivePositionItem(context, earnState, p)),
+                (p) => _buildActivePositionItem(context, earnState, p),
+              ),
             ],
           ],
         ],
@@ -109,8 +109,8 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>,
 
   Widget _buildNoPositions(BuildContext context) {
     final su = ScreenUtil();
-    final subtitle = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
-    final blue = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+    final subtitle = AppColorTokens.of(context).textSubtitle;
+    final blue = AppColorTokens.of(context).brand;
 
     return Container(
       width: double.infinity,
@@ -142,12 +142,15 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>,
   }
 
   Widget _buildActivePositionItem(
-      BuildContext context, EarnState earnState, StakingPosition position) {
+    BuildContext context,
+    EarnState earnState,
+    StakingPosition position,
+  ) {
     final su = ScreenUtil();
-    final mainText = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final subtitle = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
-    final itemBg = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name);
-    final blue = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+    final mainText = AppColorTokens.of(context).textPrimary;
+    final subtitle = AppColorTokens.of(context).textSubtitle;
+    final itemBg = AppColorTokens.of(context).bgSurface;
+    final blue = AppColorTokens.of(context).brand;
 
     final protocol = position.protocol;
     final isUnbonding = position.status == StakingPositionStatus.unbonding;
@@ -224,7 +227,10 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>,
                         ),
                         child: Text(
                           'Unbonding',
-                          style: TextStyle(fontSize: su.setSp(18), color: Colors.orange),
+                          style: TextStyle(
+                            fontSize: su.setSp(18),
+                            color: Colors.orange,
+                          ),
                         ),
                       ),
                     ],
@@ -237,7 +243,10 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>,
                 if (hasPendingRewards)
                   Text(
                     '+${formatBigIntForChain(position.pendingRewards, protocol.chainType, protocol.chainSymbol)}',
-                    style: TextStyle(fontSize: su.setSp(20), color: Colors.green),
+                    style: TextStyle(
+                      fontSize: su.setSp(20),
+                      color: Colors.green,
+                    ),
                   ),
               ],
             ),
@@ -246,8 +255,11 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                formatBigIntForChain(position.stakedAmount,
-                    protocol.chainType, protocol.chainSymbol),
+                formatBigIntForChain(
+                  position.stakedAmount,
+                  protocol.chainType,
+                  protocol.chainSymbol,
+                ),
                 style: TextStyle(
                   fontSize: su.setSp(28),
                   fontWeight: FontWeight.w600,
@@ -270,10 +282,9 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>,
   //  推荐产品（使用实时 APY）
   // ──────────────────────────────────────────────────────────────────────────
 
-  Widget buildRecommendedProducts(
-      BuildContext context, EarnState earnState) {
+  Widget buildRecommendedProducts(BuildContext context, EarnState earnState) {
     final su = ScreenUtil();
-    final mainText = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+    final mainText = AppColorTokens.of(context).textPrimary;
     final s = S.of(context);
 
     String apyStr(double value) => earnState.apyLoading
@@ -325,9 +336,9 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>,
     VoidCallback? onTap,
   }) {
     final su = ScreenUtil();
-    final mainText = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final subtitle = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
-    final itemBg = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name);
+    final mainText = AppColorTokens.of(context).textPrimary;
+    final subtitle = AppColorTokens.of(context).textSubtitle;
+    final itemBg = AppColorTokens.of(context).bgSurface;
 
     return GestureDetector(
       onTap: onTap,
@@ -346,8 +357,11 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>,
                 color: color.withAlpha(30),
                 borderRadius: BorderRadius.circular(su.setWidth(14)),
               ),
-              child: Icon(Icons.account_balance,
-                  color: color, size: su.setWidth(28)),
+              child: Icon(
+                Icons.account_balance,
+                color: color,
+                size: su.setWidth(28),
+              ),
             ),
             SizedBox(width: su.setWidth(12)),
             Expanded(

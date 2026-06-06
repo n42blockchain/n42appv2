@@ -105,7 +105,8 @@ class HardwareWalletDevice {
       lastConnectedAt: json['lastConnectedAt'] != null
           ? DateTime.parse(json['lastConnectedAt'])
           : null,
-      accounts: (json['accounts'] as List<dynamic>?)
+      accounts:
+          (json['accounts'] as List<dynamic>?)
               ?.map((a) => HardwareWalletAccount.fromJson(a))
               .toList() ??
           [],
@@ -240,11 +241,7 @@ class HardwareWalletSignRequest {
 }
 
 /// 签名类型
-enum HardwareWalletSignType {
-  transaction,
-  message,
-  typedData,
-}
+enum HardwareWalletSignType { transaction, message, typedData }
 
 /// 硬件钱包签名响应
 class HardwareWalletSignResponse {
@@ -280,10 +277,7 @@ class HardwareWalletSignResponse {
   }
 
   factory HardwareWalletSignResponse.error(String error) {
-    return HardwareWalletSignResponse(
-      success: false,
-      error: error,
-    );
+    return HardwareWalletSignResponse(success: false, error: error);
   }
 }
 
@@ -318,10 +312,18 @@ class LedgerApps {
   static const String tron = 'Tron';
 
   static const _coinToApp = {
-    'ETH': ethereum, 'BNB': ethereum, 'MATIC': ethereum,
-    'AVAX': ethereum, 'FTM': ethereum, 'OP': ethereum,
-    'ARB': ethereum, 'BASE': ethereum,
-    'BTC': bitcoin, 'LTC': bitcoin, 'DOGE': bitcoin, 'BCH': bitcoin,
+    'ETH': ethereum,
+    'BNB': ethereum,
+    'MATIC': ethereum,
+    'AVAX': ethereum,
+    'FTM': ethereum,
+    'OP': ethereum,
+    'ARB': ethereum,
+    'BASE': ethereum,
+    'BTC': bitcoin,
+    'LTC': bitcoin,
+    'DOGE': bitcoin,
+    'BCH': bitcoin,
     'SOL': solana,
     'ATOM': cosmos,
     'DOT': polkadot,
@@ -329,7 +331,8 @@ class LedgerApps {
   };
 
   /// 根据 coinType 获取对应的 Ledger 应用名称
-  static String? getAppName(String coinType) => _coinToApp[coinType.toUpperCase()];
+  static String? getAppName(String coinType) =>
+      _coinToApp[coinType.toUpperCase()];
 }
 
 /// 硬件钱包操作错误
@@ -363,7 +366,8 @@ class HardwareWalletError {
 
   static const _friendlyMessages = {
     bluetoothDisabled: 'Please enable Bluetooth on your device',
-    deviceNotFound: 'Hardware wallet not found. Make sure it is turned on and nearby',
+    deviceNotFound:
+        'Hardware wallet not found. Make sure it is turned on and nearby',
     connectionFailed: 'Failed to connect to hardware wallet. Please try again',
     connectionTimeout: 'Connection timed out. Please try again',
     appNotOpen: 'Please open the corresponding app on your hardware wallet',

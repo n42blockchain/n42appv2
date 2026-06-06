@@ -30,15 +30,18 @@ class LedgerService {
 
   static const MethodChannel _channel = MethodChannel('hardware_wallet');
   static const EventChannel _scanChannel = EventChannel('hardware_wallet/scan');
-  static const String _ledgerServiceUUID = '13d63400-2c97-0004-0000-4c6564676572';
+  static const String _ledgerServiceUUID =
+      '13d63400-2c97-0004-0000-4c6564676572';
   static const int _maxConnectRetries = 3;
   static const Duration _keepaliveInterval = Duration(seconds: 30);
 
   HardwareWalletDevice? _connectedDevice;
-  HardwareWalletConnectionState _connectionState = HardwareWalletConnectionState.disconnected;
+  HardwareWalletConnectionState _connectionState =
+      HardwareWalletConnectionState.disconnected;
   final StreamController<List<BluetoothDeviceInfo>> _scanResultsController =
       StreamController<List<BluetoothDeviceInfo>>.broadcast();
-  final StreamController<HardwareWalletConnectionState> _connectionStateController =
+  final StreamController<HardwareWalletConnectionState>
+  _connectionStateController =
       StreamController<HardwareWalletConnectionState>.broadcast();
   final List<BluetoothDeviceInfo> _discoveredDevices = [];
   StreamSubscription? _scanStreamSubscription;
@@ -46,9 +49,12 @@ class LedgerService {
 
   HardwareWalletDevice? get connectedDevice => _connectedDevice;
   HardwareWalletConnectionState get connectionState => _connectionState;
-  Stream<List<BluetoothDeviceInfo>> get scanResults => _scanResultsController.stream;
-  Stream<HardwareWalletConnectionState> get connectionStateStream => _connectionStateController.stream;
-  List<BluetoothDeviceInfo> get discoveredDevices => List.unmodifiable(_discoveredDevices);
+  Stream<List<BluetoothDeviceInfo>> get scanResults =>
+      _scanResultsController.stream;
+  Stream<HardwareWalletConnectionState> get connectionStateStream =>
+      _connectionStateController.stream;
+  List<BluetoothDeviceInfo> get discoveredDevices =>
+      List.unmodifiable(_discoveredDevices);
 
   /// 检查蓝牙是否可用
   Future<bool> isBluetoothAvailable() async {
@@ -64,16 +70,23 @@ class LedgerService {
   /// 请求蓝牙权限
   Future<bool> requestBluetoothPermissions() async {
     try {
-      final result = await _channel.invokeMethod<bool>('requestBluetoothPermissions');
+      final result = await _channel.invokeMethod<bool>(
+        'requestBluetoothPermissions',
+      );
       return result ?? false;
     } on PlatformException catch (e) {
-      AppLogger.w('LedgerService', 'failed to request permissions: ${e.message}');
+      AppLogger.w(
+        'LedgerService',
+        'failed to request permissions: ${e.message}',
+      );
       return false;
     }
   }
 
   /// 开始扫描 Ledger 设备
-  Future<void> startScan({Duration timeout = const Duration(seconds: 15)}) async {
+  Future<void> startScan({
+    Duration timeout = const Duration(seconds: 15),
+  }) async {
     _discoveredDevices.clear();
     _updateConnectionState(HardwareWalletConnectionState.scanning);
 
@@ -88,8 +101,11 @@ class LedgerService {
       _scanStreamSubscription = _scanChannel.receiveBroadcastStream().listen(
         (event) {
           if (event is Map) {
-            final device = BluetoothDeviceInfo.fromJson(Map<String, dynamic>.from(event));
-            if (device.isLedger && !_discoveredDevices.any((d) => d.id == device.id)) {
+            final device = BluetoothDeviceInfo.fromJson(
+              Map<String, dynamic>.from(event),
+            );
+            if (device.isLedger &&
+                !_discoveredDevices.any((d) => d.id == device.id)) {
               _discoveredDevices.add(device);
               _scanResultsController.add(List.from(_discoveredDevices));
             }
@@ -175,7 +191,10 @@ class LedgerService {
           message: e.message ?? 'Connection failed',
           details: e.details?.toString(),
         );
-        AppLogger.w('LedgerService', 'connect attempt $attempt/$_maxConnectRetries failed: ${e.message}');
+        AppLogger.w(
+          'LedgerService',
+          'connect attempt $attempt/$_maxConnectRetries failed: ${e.message}',
+        );
       } on HardwareWalletError catch (e) {
         lastError = e;
       }
@@ -224,13 +243,18 @@ class LedgerService {
     bool display = false,
   }) async {
     _assertConnected();
-    final apdu = LedgerApduUtils.buildEthGetAddressApdu(derivationPath, display);
+    final apdu = LedgerApduUtils.buildEthGetAddressApdu(
+      derivationPath,
+      display,
+    );
     final result = await _sendApdu(apdu);
     if (result != null && result.length >= 42) {
       final pubKeyLen = result[0];
       final addressLen = result[1 + pubKeyLen];
       final addressStart = 2 + pubKeyLen;
-      return String.fromCharCodes(result.sublist(addressStart, addressStart + addressLen));
+      return String.fromCharCodes(
+        result.sublist(addressStart, addressStart + addressLen),
+      );
     }
     return null;
   }
@@ -265,7 +289,10 @@ class LedgerService {
         'display': display,
       });
     } on PlatformException catch (e) {
-      _throwPlatformError(e, fallbackMessage: 'Failed to get $coinType address');
+      _throwPlatformError(
+        e,
+        fallbackMessage: 'Failed to get $coinType address',
+      );
     }
   }
 
@@ -365,7 +392,9 @@ class LedgerService {
       return HardwareWalletSignResponse.error('Signing failed');
     } on PlatformException catch (e) {
       if (e.code == 'USER_REJECTED') {
-        return HardwareWalletSignResponse.error('Transaction rejected on device');
+        return HardwareWalletSignResponse.error(
+          'Transaction rejected on device',
+        );
       }
       return HardwareWalletSignResponse.error(e.message ?? 'Signing failed');
     }
@@ -381,7 +410,10 @@ class LedgerService {
   }
 
   /// 将 PlatformException 转换为 HardwareWalletError 并抛出（Never 返回）
-  Never _throwPlatformError(PlatformException e, {required String fallbackMessage}) {
+  Never _throwPlatformError(
+    PlatformException e, {
+    required String fallbackMessage,
+  }) {
     LedgerApduUtils.handlePlatformExceptionCode(e.code);
     throw HardwareWalletError(
       code: HardwareWalletError.signingFailed,
@@ -425,7 +457,8 @@ class LedgerService {
   static HardwareWalletType _determineDeviceType(String name) {
     final n = name.toLowerCase();
     if (n.contains('nano x')) return HardwareWalletType.ledgerNanoX;
-    if (n.contains('nano s plus') || n.contains('nano s+')) return HardwareWalletType.ledgerNanoSPlus;
+    if (n.contains('nano s plus') || n.contains('nano s+'))
+      return HardwareWalletType.ledgerNanoSPlus;
     if (n.contains('stax')) return HardwareWalletType.ledgerStax;
     return HardwareWalletType.ledgerNanoX;
   }

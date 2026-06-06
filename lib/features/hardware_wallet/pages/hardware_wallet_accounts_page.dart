@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/hardware_wallet/models/hardware_wallet_models.dart';
 import 'package:n42_wallet/features/hardware_wallet/provider/hardware_wallet_provider.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
