@@ -95,7 +95,7 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
             child: actionButton(S.of(context).g_key_79, () {
               connectV2.cleanData();
               Navigator.pop(context, false);
-            }),
+            }, variant: AppButtonVariant.secondary),
           ),
           SizedBox(width: ScreenUtil().setWidth(30)),
           Expanded(
@@ -167,7 +167,7 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
                 child: actionButton(S.of(context).g_key_79, () {
                   connectV2.cleanData();
                   Navigator.pop(context, false);
-                }),
+                }, variant: AppButtonVariant.secondary),
               ),
               SizedBox(width: ScreenUtil().setWidth(30)),
               Expanded(
@@ -324,7 +324,13 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
     final s = S.of(context);
     return Row(
       children: [
-        Expanded(child: actionButton(s.g_connect_key3, onCancel)),
+        Expanded(
+          child: actionButton(
+            s.g_connect_key3,
+            onCancel,
+            variant: AppButtonVariant.secondary,
+          ),
+        ),
         SizedBox(width: ScreenUtil().setWidth(30)),
         Expanded(child: actionButton(s.g_key_78, onConfirm)),
       ],
@@ -341,11 +347,15 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
     );
   }
 
-  Widget actionButton(String title, VoidCallback onTap) {
+  Widget actionButton(
+    String title,
+    VoidCallback onTap, {
+    AppButtonVariant variant = AppButtonVariant.primary,
+  }) {
     return SizedBox(
       width: double.infinity,
       height: ScreenUtil().setWidth(88.0),
-      child: AppButton(label: title, onPressed: onTap),
+      child: AppButton(label: title, onPressed: onTap, variant: variant),
     );
   }
 
