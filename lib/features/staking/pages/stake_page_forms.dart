@@ -12,10 +12,22 @@ part of 'stake_page.dart';
 mixin _StakeFormsMixin on _StakeLogicMixin {
   // ── Validator selector ──────────────────────────────────────────────────
 
-  Widget _buildValidatorSelector(BuildContext context, StakingProvider provider) {
-    final itemBg = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name);
-    final subtitleColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
-    final mainText = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+  Widget _buildValidatorSelector(
+    BuildContext context,
+    StakingProvider provider,
+  ) {
+    final itemBg = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.itemBgColor.name,
+    );
+    final subtitleColor = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.itemSubtitleTextColor.name,
+    );
+    final mainText = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.mainTextColor.name,
+    );
     final su = ScreenUtil();
 
     return GestureDetector(
@@ -70,10 +82,7 @@ mixin _StakeFormsMixin on _StakeLogicMixin {
                 ),
               ),
             ],
-            Icon(
-              Icons.chevron_right,
-              color: subtitleColor,
-            ),
+            Icon(Icons.chevron_right, color: subtitleColor),
           ],
         ),
       ),
@@ -83,13 +92,19 @@ mixin _StakeFormsMixin on _StakeLogicMixin {
   // ── Amount input ────────────────────────────────────────────────────────
 
   Widget _buildAmountInput(BuildContext context) {
-    final mainText = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+    final mainText = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.mainTextColor.name,
+    );
     final su = ScreenUtil();
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: su.setWidth(20)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: AppThemeUtils.getColorByKey(
+          context,
+          AppThemeKeys.itemBgColor.name,
+        ),
         borderRadius: BorderRadius.circular(su.setWidth(12)),
       ),
       child: Row(
@@ -97,7 +112,9 @@ mixin _StakeFormsMixin on _StakeLogicMixin {
           Expanded(
             child: TextField(
               controller: _amountController,
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
               ],
@@ -151,7 +168,11 @@ mixin _StakeFormsMixin on _StakeLogicMixin {
     );
   }
 
-  Widget _buildQuickAmountButton(BuildContext context, String label, double percentage) {
+  Widget _buildQuickAmountButton(
+    BuildContext context,
+    String label,
+    double percentage,
+  ) {
     final su = ScreenUtil();
 
     return Expanded(
@@ -160,7 +181,10 @@ mixin _StakeFormsMixin on _StakeLogicMixin {
         child: Container(
           padding: EdgeInsets.symmetric(vertical: su.setWidth(12)),
           decoration: BoxDecoration(
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+            color: AppThemeUtils.getColorByKey(
+              context,
+              AppThemeKeys.itemBgColor.name,
+            ),
             borderRadius: BorderRadius.circular(su.setWidth(8)),
           ),
           child: Center(
@@ -169,7 +193,10 @@ mixin _StakeFormsMixin on _StakeLogicMixin {
               style: TextStyle(
                 fontSize: su.setSp(24),
                 fontWeight: FontWeight.w600,
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                color: AppThemeUtils.getColorByKey(
+                  context,
+                  AppThemeKeys.mainBlueColor.name,
+                ),
               ),
             ),
           ),
@@ -181,7 +208,10 @@ mixin _StakeFormsMixin on _StakeLogicMixin {
   /// Sets the amount controller to the given percentage of the balance.
   void _setQuickAmount(double percentage) {
     final decimals = _getDecimals();
-    final scaledAmount = _balance * BigInt.from((percentage * 1000).round()) ~/ BigInt.from(1000);
+    final scaledAmount =
+        _balance *
+        BigInt.from((percentage * 1000).round()) ~/
+        BigInt.from(1000);
     final divisor = BigInt.from(10).pow(decimals);
     final intPart = scaledAmount ~/ divisor;
     final fracPart = scaledAmount.remainder(divisor).abs();
@@ -203,7 +233,10 @@ mixin _StakeFormsMixin on _StakeLogicMixin {
     return Container(
       padding: EdgeInsets.all(su.setWidth(20)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: AppThemeUtils.getColorByKey(
+          context,
+          AppThemeKeys.itemBgColor.name,
+        ),
         borderRadius: BorderRadius.circular(su.setWidth(12)),
       ),
       child: Column(
@@ -228,7 +261,8 @@ mixin _StakeFormsMixin on _StakeLogicMixin {
               label: S.of(context).g_key_stake_you_receive,
               value: '~$amountText ${widget.protocol.liquidTokenSymbol}',
               valueColor: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainTextColor.name,
+                context,
+                AppThemeKeys.mainTextColor.name,
               ),
             ),
           ],
@@ -252,7 +286,8 @@ mixin _StakeFormsMixin on _StakeLogicMixin {
           style: TextStyle(
             fontSize: su.setSp(26),
             color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemSubtitleTextColor.name,
+              context,
+              AppThemeKeys.itemSubtitleTextColor.name,
             ),
           ),
         ),
@@ -271,47 +306,18 @@ mixin _StakeFormsMixin on _StakeLogicMixin {
   // ── Stake button ────────────────────────────────────────────────────────
 
   Widget _buildStakeButton(BuildContext context, StakingProvider provider) {
-    final isValidatorRequired = _needsValidator() && provider.selectedValidator == null;
+    final isValidatorRequired =
+        _needsValidator() && provider.selectedValidator == null;
     final amount = double.tryParse(_amountController.text) ?? 0;
     final isAmountValid = amount >= widget.protocol.minStakeAmount;
     final isEnabled = !isValidatorRequired && isAmountValid && !_isLoading;
-    final su = ScreenUtil();
 
     return SizedBox(
       width: double.infinity,
-      child: ElevatedButton(
+      child: AppButton(
+        label: _stakeButtonLabel(context, isValidatorRequired, isAmountValid),
+        loading: _isLoading,
         onPressed: isEnabled ? () => _performStake(context, provider) : null,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: isEnabled
-              ? AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
-              : AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-          padding: EdgeInsets.symmetric(vertical: su.setWidth(20)),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(su.setWidth(12)),
-          ),
-        ),
-        child: _isLoading
-            ? SizedBox(
-                width: su.setWidth(32),
-                height: su.setWidth(32),
-                child: const CircularProgressIndicator(
-                  strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                ),
-              )
-            : Text(
-                _stakeButtonLabel(context, isValidatorRequired, isAmountValid),
-                style: TextStyle(
-                  fontSize: su.setSp(32),
-                  fontWeight: FontWeight.bold,
-                  color: isEnabled
-                      ? Colors.white
-                      : AppThemeUtils.getColorByKey(
-                          context,
-                          AppThemeKeys.itemSubtitleTextColor.name,
-                        ),
-                ),
-              ),
       ),
     );
   }

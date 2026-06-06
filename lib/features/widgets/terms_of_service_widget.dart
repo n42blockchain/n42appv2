@@ -1,6 +1,5 @@
-
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -10,10 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 class TermsOfServiceWidget extends StatefulWidget {
   final GestureTapCallback? agreeCallBack;
   final String url;
-  const TermsOfServiceWidget(this.url,{
-    super.key,
-    this.agreeCallBack,
-  });
+  const TermsOfServiceWidget(this.url, {super.key, this.agreeCallBack});
 
   @override
   State<TermsOfServiceWidget> createState() => _TermsOfServiceWidgetState();
@@ -35,7 +31,6 @@ class _TermsOfServiceWidgetState extends State<TermsOfServiceWidget> {
     }
   }
 
-
   void initController() {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final initialHost = Uri.parse(widget.url).host;
@@ -50,7 +45,10 @@ class _TermsOfServiceWidgetState extends State<TermsOfServiceWidget> {
             final requestHost = Uri.parse(request.url).host;
             // If the link is to an external domain, open in browser
             if (requestHost != initialHost && request.url != widget.url) {
-              launchUrl(Uri.parse(request.url), mode: LaunchMode.externalApplication);
+              launchUrl(
+                Uri.parse(request.url),
+                mode: LaunchMode.externalApplication,
+              );
               return NavigationDecision.prevent;
             }
             return NavigationDecision.navigate;
@@ -71,7 +69,9 @@ class _TermsOfServiceWidgetState extends State<TermsOfServiceWidget> {
   }
 
   void _scrollToBottom() {
-    _webViewController.runJavaScript('window.scrollTo(0, document.body.scrollHeight);');
+    _webViewController.runJavaScript(
+      'window.scrollTo(0, document.body.scrollHeight);',
+    );
   }
 
   void _scrollToTop() {
@@ -83,7 +83,10 @@ class _TermsOfServiceWidgetState extends State<TermsOfServiceWidget> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
-      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
+      color: AppThemeUtils.getColorByKey(
+        context,
+        AppThemeKeys.backGroundColor.name,
+      ),
       child: Stack(
         children: [
           Column(
@@ -94,7 +97,10 @@ class _TermsOfServiceWidgetState extends State<TermsOfServiceWidget> {
                 height: ScreenUtil().setWidth(88),
                 margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
                 width: double.infinity,
-                child: buttonStyle2(context, _isBottom ? widget.agreeCallBack : null, S.of(context).g_chat_key_50),
+                child: AppButton(
+                  label: S.of(context).g_chat_key_50,
+                  onPressed: _isBottom ? widget.agreeCallBack : null,
+                ),
               ),
             ],
           ),
@@ -103,9 +109,17 @@ class _TermsOfServiceWidgetState extends State<TermsOfServiceWidget> {
             bottom: ScreenUtil().setWidth(180),
             child: Column(
               children: [
-                _buildScrollButton(isDark, Icons.keyboard_arrow_up, _scrollToTop),
+                _buildScrollButton(
+                  isDark,
+                  Icons.keyboard_arrow_up,
+                  _scrollToTop,
+                ),
                 SizedBox(height: ScreenUtil().setWidth(16)),
-                _buildScrollButton(isDark, Icons.keyboard_arrow_down, _scrollToBottom),
+                _buildScrollButton(
+                  isDark,
+                  Icons.keyboard_arrow_down,
+                  _scrollToBottom,
+                ),
               ],
             ),
           ),
@@ -134,7 +148,10 @@ class _TermsOfServiceWidgetState extends State<TermsOfServiceWidget> {
         child: Icon(
           icon,
           size: ScreenUtil().setWidth(64),
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+          color: AppThemeUtils.getColorByKey(
+            context,
+            AppThemeKeys.mainBlueColor.name,
+          ),
         ),
       ),
     );

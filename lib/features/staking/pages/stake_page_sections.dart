@@ -93,36 +93,16 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
               ),
             ),
             SizedBox(height: ScreenUtil().setWidth(30)),
-            ElevatedButton.icon(
+            AppButton(
+              label: S.of(context).g_key_stake_go_to_swap,
+              icon: Icons.swap_horizontal_circle_outlined,
               onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (_) => const DexSwapHome()),
                 );
               },
-              icon: const Icon(Icons.swap_horizontal_circle_outlined, color: Colors.white),
-              label: Text(
-                S.of(context).g_key_stake_go_to_swap,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(28),
-                  color: Colors.white,
-                ),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainBlueColor.name,
-                ),
-                padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(40),
-                  vertical: ScreenUtil().setWidth(16),
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-                ),
-              ),
+              expand: false,
             ),
           ],
         ),
@@ -149,9 +129,11 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
           SizedBox(width: ScreenUtil().setWidth(12)),
           Expanded(
             child: Text(
-              S.of(context).g_key_stake_unbonding_warning(
-                widget.protocol.unbondingPeriodDays.toString(),
-              ),
+              S
+                  .of(context)
+                  .g_key_stake_unbonding_warning(
+                    widget.protocol.unbondingPeriodDays.toString(),
+                  ),
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(24),
                 color: Colors.orange[800],
@@ -183,7 +165,10 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
       return Container(
         padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+          color: AppThemeUtils.getColorByKey(
+            context,
+            AppThemeKeys.itemBgColor.name,
+          ),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
         ),
         child: Center(
@@ -192,7 +177,9 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
             style: TextStyle(
               fontSize: ScreenUtil().setSp(26),
               color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name),
+                context,
+                AppThemeKeys.itemSubtitleTextColor.name,
+              ),
             ),
           ),
         ),
@@ -209,7 +196,9 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
               // SOL 解质押是全额解绑；ATOM 可部分解绑，预填最大值
               if (!isSelected) {
                 if (widget.protocol.chainType == StakingChainType.cosmos) {
-                  _unstakeAmountController.text = _formatBigInt(pos.stakedAmount);
+                  _unstakeAmountController.text = _formatBigInt(
+                    pos.stakedAmount,
+                  );
                 }
                 // 更新 provider 中的 selectedValidator（ATOM 需要）
                 if (pos.validator != null) {
@@ -222,13 +211,13 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
             margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
             padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
             decoration: BoxDecoration(
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+              color: AppThemeUtils.getColorByKey(
+                context,
+                AppThemeKeys.itemBgColor.name,
+              ),
               borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
               border: isSelected
-                  ? Border.all(
-                      color: Colors.orange,
-                      width: 2,
-                    )
+                  ? Border.all(color: Colors.orange, width: 2)
                   : null,
             ),
             child: Row(
@@ -243,7 +232,9 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
                           fontSize: ScreenUtil().setSp(28),
                           fontWeight: FontWeight.w600,
                           color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.mainTextColor.name),
+                            context,
+                            AppThemeKeys.mainTextColor.name,
+                          ),
                         ),
                       ),
                       SizedBox(height: ScreenUtil().setWidth(4)),
@@ -252,14 +243,20 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(24),
                           color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.itemSubtitleTextColor.name),
+                            context,
+                            AppThemeKeys.itemSubtitleTextColor.name,
+                          ),
                         ),
                       ),
                     ],
                   ),
                 ),
                 if (isSelected)
-                  Icon(Icons.check_circle, color: Colors.orange, size: ScreenUtil().setWidth(36)),
+                  Icon(
+                    Icons.check_circle,
+                    color: Colors.orange,
+                    size: ScreenUtil().setWidth(36),
+                  ),
               ],
             ),
           ),
@@ -274,7 +271,10 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: AppThemeUtils.getColorByKey(
+          context,
+          AppThemeKeys.itemBgColor.name,
+        ),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
       ),
       child: Row(
@@ -282,20 +282,27 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
           Expanded(
             child: TextField(
               controller: _unstakeAmountController,
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
               ],
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(32),
                 fontWeight: FontWeight.w600,
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                color: AppThemeUtils.getColorByKey(
+                  context,
+                  AppThemeKeys.mainTextColor.name,
+                ),
               ),
               decoration: InputDecoration(
                 hintText: '0.0',
                 hintStyle: TextStyle(
                   color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemSubtitleTextColor.name),
+                    context,
+                    AppThemeKeys.itemSubtitleTextColor.name,
+                  ),
                 ),
                 border: InputBorder.none,
               ),
@@ -307,7 +314,10 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
             style: TextStyle(
               fontSize: ScreenUtil().setSp(28),
               fontWeight: FontWeight.w600,
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+              color: AppThemeUtils.getColorByKey(
+                context,
+                AppThemeKeys.mainTextColor.name,
+              ),
             ),
           ),
         ],
@@ -333,22 +343,32 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
             child: GestureDetector(
               onTap: () {
                 final decimals = _getDecimals();
-                final scaled = stakedAmount *
+                final scaled =
+                    stakedAmount *
                     BigInt.from((pct.$2 * 1000).round()) ~/
                     BigInt.from(1000);
                 final divisor = BigInt.from(10).pow(decimals);
                 final intPart = scaled ~/ divisor;
-                final fracStr =
-                    scaled.remainder(divisor).abs().toString().padLeft(decimals, '0');
-                final dispFrac =
-                    fracStr.length > 6 ? fracStr.substring(0, 6) : fracStr;
+                final fracStr = scaled
+                    .remainder(divisor)
+                    .abs()
+                    .toString()
+                    .padLeft(decimals, '0');
+                final dispFrac = fracStr.length > 6
+                    ? fracStr.substring(0, 6)
+                    : fracStr;
                 _unstakeAmountController.text = '$intPart.$dispFrac';
               },
               child: Container(
-                padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(12)),
+                padding: EdgeInsets.symmetric(
+                  vertical: ScreenUtil().setWidth(12),
+                ),
                 margin: EdgeInsets.only(right: ScreenUtil().setWidth(8)),
                 decoration: BoxDecoration(
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+                  color: AppThemeUtils.getColorByKey(
+                    context,
+                    AppThemeKeys.itemBgColor.name,
+                  ),
                   borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
                 ),
                 child: Center(
@@ -374,41 +394,15 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
   Widget _buildUnstakeButton(BuildContext context, StakingProvider provider) {
     return SizedBox(
       width: double.infinity,
-      child: ElevatedButton(
+      child: AppButton(
+        label: _selectedPosition == null
+            ? S.of(context).g_key_stake_select_position
+            : S.of(context).g_key_stake_unstake,
+        variant: AppButtonVariant.warning,
+        loading: _isLoading,
         onPressed: (_isLoading || _selectedPosition == null)
             ? null
             : () => _performUnstake(context, provider),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: _selectedPosition != null ? Colors.orange : null,
-          padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-          ),
-        ),
-        child: _isLoading
-            ? SizedBox(
-                width: ScreenUtil().setWidth(32),
-                height: ScreenUtil().setWidth(32),
-                child: const CircularProgressIndicator(
-                  strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                ),
-              )
-            : Text(
-                _selectedPosition == null
-                    ? S.of(context).g_key_stake_select_position
-                    : S.of(context).g_key_stake_unstake,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(32),
-                  fontWeight: FontWeight.bold,
-                  color: _selectedPosition != null
-                      ? Colors.white
-                      : AppThemeUtils.getColorByKey(
-                          context,
-                          AppThemeKeys.itemSubtitleTextColor.name,
-                        ),
-                ),
-              ),
       ),
     );
   }

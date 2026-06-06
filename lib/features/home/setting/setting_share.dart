@@ -14,7 +14,6 @@ import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/home/widgets/share_list.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
 import 'package:n42_wallet/features/widgets/prompt_widget.dart';
 import 'package:n42_wallet/features/widgets/sheet_bottom.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -180,10 +179,9 @@ class _SettingShareState extends State<SettingShare> {
                   Container(
                     padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
                     height: ScreenUtil().setWidth(148.0),
-                    child: buttonStyle2(
-                      context,
-                      _share,
-                      S.of(context).g_share_v2_key_5,
+                    child: AppButton(
+                      label: S.of(context).g_share_v2_key_5,
+                      onPressed: _share,
                     ),
                   ),
                 ],

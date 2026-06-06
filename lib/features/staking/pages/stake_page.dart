@@ -15,6 +15,7 @@ import 'package:n42_wallet/features/staking/pages/validator_list_page.dart';
 import 'package:n42_wallet/features/staking/provider/staking_provider.dart';
 import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_swap_home.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 part 'stake_page_logic.dart';
 part 'stake_page_forms.dart';
@@ -28,18 +29,19 @@ class StakePage extends StatefulWidget {
   final StakingProtocol protocol;
   final String? userAddress;
 
-  const StakePage({
-    super.key,
-    required this.protocol,
-    this.userAddress,
-  });
+  const StakePage({super.key, required this.protocol, this.userAddress});
 
   @override
   State<StakePage> createState() => _StakePageState();
 }
 
 class _StakePageState extends State<StakePage>
-    with SingleTickerProviderStateMixin, _StakeLogicMixin, _StakeFormsMixin, _StakeSectionsMixin, _StakeViewsMixin {
+    with
+        SingleTickerProviderStateMixin,
+        _StakeLogicMixin,
+        _StakeFormsMixin,
+        _StakeSectionsMixin,
+        _StakeViewsMixin {
   @override
   late final TabController _tabController;
   @override
@@ -49,7 +51,8 @@ class _StakePageState extends State<StakePage>
 
   // 解质押专用控制器（与 stake 用的 _amountController 分开）
   @override
-  final TextEditingController _unstakeAmountController = TextEditingController();
+  final TextEditingController _unstakeAmountController =
+      TextEditingController();
 
   @override
   bool _isLoading = false;
@@ -96,9 +99,7 @@ class _StakePageState extends State<StakePage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(
-        text: widget.protocol.name,
-      ),
+      appBar: AppBarWidget(text: widget.protocol.name),
       body: SafeArea(
         child: Column(
           children: [
@@ -112,10 +113,7 @@ class _StakePageState extends State<StakePage>
             Expanded(
               child: TabBarView(
                 controller: _tabController,
-                children: [
-                  _buildStakeTab(context),
-                  _buildUnstakeTab(context),
-                ],
+                children: [_buildStakeTab(context), _buildUnstakeTab(context)],
               ),
             ),
           ],

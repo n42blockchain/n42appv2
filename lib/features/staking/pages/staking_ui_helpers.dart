@@ -9,6 +9,7 @@ import 'package:n42_wallet/features/staking/models/staking_models.dart';
 import 'package:n42_wallet/features/staking/provider/staking_provider.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// Stateless UI helpers shared across staking home page views.
 
@@ -18,7 +19,9 @@ Widget stakingDefaultLogo(BuildContext context, StakingProtocol protocol) {
     height: ScreenUtil().setWidth(56),
     decoration: BoxDecoration(
       color: AppThemeUtils.getColorByKey(
-          context, AppThemeKeys.mainBlueColor.name),
+        context,
+        AppThemeKeys.mainBlueColor.name,
+      ),
       shape: BoxShape.circle,
     ),
     child: Center(
@@ -50,10 +53,7 @@ Widget stakingTag({
     ),
     child: Text(
       label,
-      style: TextStyle(
-        fontSize: ScreenUtil().setSp(22),
-        color: color,
-      ),
+      style: TextStyle(fontSize: ScreenUtil().setSp(22), color: color),
     ),
   );
 }
@@ -66,11 +66,11 @@ Widget stakingStatsCard(BuildContext context, StakingProvider provider) {
     decoration: BoxDecoration(
       gradient: LinearGradient(
         colors: [
+          AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
           AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainBlueColor.name),
-          AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainBlueColor.name)
-              .withAlpha(180),
+            context,
+            AppThemeKeys.mainBlueColor.name,
+          ).withAlpha(180),
         ],
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
@@ -157,31 +157,10 @@ Widget stakingEmptyPositions(
           ),
         ),
         SizedBox(height: ScreenUtil().setWidth(16)),
-        ElevatedButton(
+        AppButton(
+          label: S.of(context).g_key_stake_start_staking,
           onPressed: onStartStaking,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainBlueColor.name,
-            ),
-            padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(40),
-              vertical: ScreenUtil().setWidth(16),
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius:
-                  BorderRadius.circular(ScreenUtil().setWidth(12)),
-            ),
-          ),
-          child: Text(
-            S.of(context).g_key_stake_start_staking,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
-              color: Colors.white,
-            ),
-          ),
+          expand: false,
         ),
       ],
     ),

@@ -17,6 +17,9 @@ enum AppButtonVariant {
 
   /// 危险填充（删除 / 不可逆）。
   danger,
+
+  /// 警示填充（需谨慎确认：approve / unstake 等）。
+  warning,
 }
 
 /// 统一按钮：三类 + 危险态，内置按压 / loading / 禁用态、统一圆角与高度。
@@ -73,6 +76,16 @@ class AppButton extends StatelessWidget {
           shape: shape,
           minimumSize: minSize,
           backgroundColor: c.danger,
+          foregroundColor: Colors.white,
+        ),
+        child: child,
+      ),
+      AppButtonVariant.warning => FilledButton(
+        onPressed: onTap,
+        style: FilledButton.styleFrom(
+          shape: shape,
+          minimumSize: minSize,
+          backgroundColor: c.warning,
           foregroundColor: Colors.white,
         ),
         child: child,

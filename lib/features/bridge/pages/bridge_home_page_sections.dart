@@ -11,16 +11,15 @@ import 'package:n42_wallet/features/bridge/models/bridge_models.dart';
 import 'package:n42_wallet/features/bridge/provider/bridge_provider.dart';
 import 'package:n42_wallet/features/bridge/pages/bridge_home_page.dart';
 import 'package:n42_wallet/features/bridge/pages/bridge_home_page_logic.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// 路由展示区 + 底部操作按钮 mixin
-mixin BridgeHomeSectionsMixin on ConsumerState<BridgeHomePage>,
-    BridgeHomeLogicMixin {
+mixin BridgeHomeSectionsMixin
+    on ConsumerState<BridgeHomePage>, BridgeHomeLogicMixin {
   // ─── 路由对比区（全部路由）──────────────────────────────────────────────────
 
-  Widget buildAllRoutesSection(
-      BuildContext context, BridgeProvider provider) {
+  Widget buildAllRoutesSection(BuildContext context, BridgeProvider provider) {
     final response = provider.quoteResponse!;
 
     if (!response.hasRoutes) {
@@ -28,16 +27,19 @@ mixin BridgeHomeSectionsMixin on ConsumerState<BridgeHomePage>,
         padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
         decoration: BoxDecoration(
           color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemBgColor.name),
-          borderRadius:
-              BorderRadius.circular(ScreenUtil().setWidth(16)),
+            context,
+            AppThemeKeys.itemBgColor.name,
+          ),
+          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
         ),
         child: Center(
           child: Text(
             S.of(context).g_key_bridge_no_routes,
             style: TextStyle(
               color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name),
+                context,
+                AppThemeKeys.itemSubtitleTextColor.name,
+              ),
             ),
           ),
         ),
@@ -53,12 +55,13 @@ mixin BridgeHomeSectionsMixin on ConsumerState<BridgeHomePage>,
             fontSize: ScreenUtil().setSp(28),
             fontWeight: FontWeight.bold,
             color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainTextColor.name),
+              context,
+              AppThemeKeys.mainTextColor.name,
+            ),
           ),
         ),
         SizedBox(height: ScreenUtil().setWidth(12)),
-        ...response.routes
-            .map((r) => _buildRouteCard(context, provider, r)),
+        ...response.routes.map((r) => _buildRouteCard(context, provider, r)),
       ],
     );
   }
@@ -71,7 +74,9 @@ mixin BridgeHomeSectionsMixin on ConsumerState<BridgeHomePage>,
   ) {
     final isSelected = provider.selectedRoute?.id == route.id;
     final selectedColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainBlueColor.name);
+      context,
+      AppThemeKeys.mainBlueColor.name,
+    );
 
     // 标签优先级：RECOMMENDED > FASTEST > CHEAPEST
     String? tagLabel;
@@ -88,8 +93,7 @@ mixin BridgeHomeSectionsMixin on ConsumerState<BridgeHomePage>,
     }
 
     // 路由使用的协议名称（step 聚合）
-    final protocols =
-        route.steps.map((s) => s.toolName).toSet().join(' + ');
+    final protocols = route.steps.map((s) => s.toolName).toSet().join(' + ');
 
     final toDecimals = provider.toToken?.decimals ?? 18;
     final receiveAmt = formatAmount(route.toAmount, toDecimals);
@@ -107,12 +111,12 @@ mixin BridgeHomeSectionsMixin on ConsumerState<BridgeHomePage>,
         padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
         decoration: BoxDecoration(
           color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemBgColor.name),
-          borderRadius:
-              BorderRadius.circular(ScreenUtil().setWidth(16)),
+            context,
+            AppThemeKeys.itemBgColor.name,
+          ),
+          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
           border: Border.all(
-            color:
-                isSelected ? selectedColor : Colors.transparent,
+            color: isSelected ? selectedColor : Colors.transparent,
             width: 2,
           ),
         ),
@@ -125,14 +129,14 @@ mixin BridgeHomeSectionsMixin on ConsumerState<BridgeHomePage>,
                     route.steps.first.toolLogoUri.isNotEmpty)
                   ClipRRect(
                     borderRadius: BorderRadius.circular(
-                        ScreenUtil().setWidth(10)),
+                      ScreenUtil().setWidth(10),
+                    ),
                     child: Image.network(
                       route.steps.first.toolLogoUri,
                       width: ScreenUtil().setWidth(32),
                       height: ScreenUtil().setWidth(32),
-                      errorBuilder: (ctx, err, stack) => Icon(
-                          Icons.link,
-                          size: ScreenUtil().setWidth(32)),
+                      errorBuilder: (ctx, err, stack) =>
+                          Icon(Icons.link, size: ScreenUtil().setWidth(32)),
                     ),
                   )
                 else
@@ -145,7 +149,9 @@ mixin BridgeHomeSectionsMixin on ConsumerState<BridgeHomePage>,
                       fontSize: ScreenUtil().setSp(28),
                       fontWeight: FontWeight.w600,
                       color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainTextColor.name),
+                        context,
+                        AppThemeKeys.mainTextColor.name,
+                      ),
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -160,7 +166,8 @@ mixin BridgeHomeSectionsMixin on ConsumerState<BridgeHomePage>,
                     decoration: BoxDecoration(
                       color: tagColor.withAlpha(30),
                       borderRadius: BorderRadius.circular(
-                          ScreenUtil().setWidth(6)),
+                        ScreenUtil().setWidth(6),
+                      ),
                       border: Border.all(color: tagColor),
                     ),
                     child: Text(
@@ -174,8 +181,7 @@ mixin BridgeHomeSectionsMixin on ConsumerState<BridgeHomePage>,
                   ),
                 if (isSelected)
                   Padding(
-                    padding: EdgeInsets.only(
-                        left: ScreenUtil().setWidth(8)),
+                    padding: EdgeInsets.only(left: ScreenUtil().setWidth(8)),
                     child: Icon(
                       Icons.check_circle,
                       color: selectedColor,
@@ -198,9 +204,9 @@ mixin BridgeHomeSectionsMixin on ConsumerState<BridgeHomePage>,
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(22),
                           color: AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys
-                                  .itemSubtitleTextColor.name),
+                            context,
+                            AppThemeKeys.itemSubtitleTextColor.name,
+                          ),
                         ),
                       ),
                       SizedBox(height: ScreenUtil().setWidth(4)),
@@ -210,8 +216,9 @@ mixin BridgeHomeSectionsMixin on ConsumerState<BridgeHomePage>,
                           fontSize: ScreenUtil().setSp(30),
                           fontWeight: FontWeight.bold,
                           color: AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.mainTextColor.name),
+                            context,
+                            AppThemeKeys.mainTextColor.name,
+                          ),
                         ),
                       ),
                       Text(
@@ -219,9 +226,9 @@ mixin BridgeHomeSectionsMixin on ConsumerState<BridgeHomePage>,
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(22),
                           color: AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys
-                                  .itemSubtitleTextColor.name),
+                            context,
+                            AppThemeKeys.itemSubtitleTextColor.name,
+                          ),
                         ),
                       ),
                     ],
@@ -237,11 +244,7 @@ mixin BridgeHomeSectionsMixin on ConsumerState<BridgeHomePage>,
                       gasCost,
                     ),
                     SizedBox(height: ScreenUtil().setWidth(8)),
-                    _infoChip(
-                      context,
-                      Icons.access_time,
-                      '~$minutes min',
-                    ),
+                    _infoChip(context, Icons.access_time, '~$minutes min'),
                   ],
                 ),
               ],
@@ -259,19 +262,22 @@ mixin BridgeHomeSectionsMixin on ConsumerState<BridgeHomePage>,
                       vertical: ScreenUtil().setWidth(4),
                     ),
                     decoration: BoxDecoration(
-                      color: AppThemeUtils.getColorByKey(context,
-                          AppThemeKeys.backGroundColor.name),
+                      color: AppThemeUtils.getColorByKey(
+                        context,
+                        AppThemeKeys.backGroundColor.name,
+                      ),
                       borderRadius: BorderRadius.circular(
-                          ScreenUtil().setWidth(6)),
+                        ScreenUtil().setWidth(6),
+                      ),
                     ),
                     child: Text(
                       '${step.fromToken.symbol} → ${step.toToken.symbol} via ${step.toolName}',
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(20),
                         color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys
-                                .itemSubtitleTextColor.name),
+                          context,
+                          AppThemeKeys.itemSubtitleTextColor.name,
+                        ),
                       ),
                     ),
                   );
@@ -292,7 +298,9 @@ mixin BridgeHomeSectionsMixin on ConsumerState<BridgeHomePage>,
           icon,
           size: ScreenUtil().setWidth(26),
           color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemSubtitleTextColor.name),
+            context,
+            AppThemeKeys.itemSubtitleTextColor.name,
+          ),
         ),
         SizedBox(width: ScreenUtil().setWidth(4)),
         Text(
@@ -300,7 +308,9 @@ mixin BridgeHomeSectionsMixin on ConsumerState<BridgeHomePage>,
           style: TextStyle(
             fontSize: ScreenUtil().setSp(24),
             color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.itemSubtitleTextColor.name),
+              context,
+              AppThemeKeys.itemSubtitleTextColor.name,
+            ),
           ),
         ),
       ],
@@ -309,23 +319,25 @@ mixin BridgeHomeSectionsMixin on ConsumerState<BridgeHomePage>,
 
   // ─── 错误信息 ────────────────────────────────────────────────────────────────
 
-  Widget buildErrorMessage(
-      BuildContext context, BridgeProvider provider) {
+  Widget buildErrorMessage(BuildContext context, BridgeProvider provider) {
     return Container(
       margin: EdgeInsets.only(top: ScreenUtil().setWidth(20)),
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
         color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.errorBgColor2.name),
-        borderRadius:
-            BorderRadius.circular(ScreenUtil().setWidth(12)),
+          context,
+          AppThemeKeys.errorBgColor2.name,
+        ),
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
       ),
       child: Row(
         children: [
           Icon(
             Icons.error_outline,
             color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.errorTextColor.name),
+              context,
+              AppThemeKeys.errorTextColor.name,
+            ),
             size: ScreenUtil().setWidth(40),
           ),
           SizedBox(width: ScreenUtil().setWidth(12)),
@@ -335,7 +347,9 @@ mixin BridgeHomeSectionsMixin on ConsumerState<BridgeHomePage>,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(26),
                 color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.errorTextColor.name),
+                  context,
+                  AppThemeKeys.errorTextColor.name,
+                ),
               ),
             ),
           ),
@@ -346,12 +360,13 @@ mixin BridgeHomeSectionsMixin on ConsumerState<BridgeHomePage>,
 
   // ─── 底部按钮 ────────────────────────────────────────────────────────────────
 
-  Widget buildBottomButton(
-      BuildContext context, BridgeProvider provider) {
-    final isLoading = provider.state == BridgeState.loadingQuotes ||
+  Widget buildBottomButton(BuildContext context, BridgeProvider provider) {
+    final isLoading =
+        provider.state == BridgeState.loadingQuotes ||
         provider.state == BridgeState.executing;
 
-    final canGetQuote = provider.fromChain != null &&
+    final canGetQuote =
+        provider.fromChain != null &&
         provider.toChain != null &&
         provider.fromToken != null &&
         provider.toToken != null &&
@@ -363,37 +378,32 @@ mixin BridgeHomeSectionsMixin on ConsumerState<BridgeHomePage>,
       padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
       decoration: BoxDecoration(
         color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.backGroundColor.name),
+          context,
+          AppThemeKeys.backGroundColor.name,
+        ),
         border: Border(
           top: BorderSide(
             color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.dividerColor.name),
+              context,
+              AppThemeKeys.dividerColor.name,
+            ),
           ),
         ),
       ),
       child: SizedBox(
         width: double.infinity,
         height: ScreenUtil().setWidth(88),
-        child: buttonStyle6(
-          context,
-          isLoading
-              ? () {}
-              : () => onButtonPressed(
-                  context, provider, canGetQuote, canExecute),
-          isLoading
+        child: AppButton(
+          label: isLoading
               ? '${S.of(context).g_key_106}...'
               : canExecute
-                  ? S.of(context).g_key_bridge_title
-                  : S.of(context).g_key_bridge_get_quote,
-          AppThemeUtils.getColorByKey(
-            context,
-            isLoading || !canGetQuote
-                ? AppThemeKeys.mainButtonBgColor3.name
-                : AppThemeKeys.mainButtonBgColor.name,
-          ),
-          AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainButtonTextColor.name),
-          isLoading,
+              ? S.of(context).g_key_bridge_title
+              : S.of(context).g_key_bridge_get_quote,
+          loading: isLoading,
+          onPressed: isLoading
+              ? null
+              : () =>
+                    onButtonPressed(context, provider, canGetQuote, canExecute),
         ),
       ),
     );
