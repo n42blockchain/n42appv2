@@ -58,7 +58,7 @@ class MiningOutputTip extends StatelessWidget {
                 S.of(context).g_mining_key_90,
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(40),
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   color: AppThemeUtils.getColorByKey(
                     context,
                     AppThemeKeys.mainTextColor.name,

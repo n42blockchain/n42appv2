@@ -64,7 +64,7 @@ class PlansWidget extends StatelessWidget {
                           AppThemeKeys.mainWhiteColor.name,
                         ),
                         fontSize: ScreenUtil().setSp(30),
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                       ),
                       maxLines: 4,
                       overflow: TextOverflow.ellipsis,

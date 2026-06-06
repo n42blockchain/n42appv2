@@ -130,7 +130,7 @@ class MiningBoardWidget extends StatelessWidget {
                         AppThemeKeys.mainTextColor.name,
                       ),
                       fontSize: ScreenUtil().setSp(80),
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                       height: 1.0,
                     ),
                   ),

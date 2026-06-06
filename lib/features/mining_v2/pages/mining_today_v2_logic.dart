@@ -91,7 +91,7 @@ mixin _MiningTodayV2LogicMixin on ConsumerState<MiningTodayV2> {
                   AppThemeKeys.mainTextColor.name,
                 ),
                 fontSize: ScreenUtil().setSp(36.0),
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),

@@ -170,7 +170,7 @@ class _ShareMiningState extends State<ShareMining>
                                   AppThemeKeys.mainTextColor.name,
                                 ),
                                 fontSize: ScreenUtil().setSp(44),
-                                fontWeight: FontWeight.w700,
+                                fontWeight: FontWeight.w600,
                                 letterSpacing: 0.5,
                               ),
                             ),

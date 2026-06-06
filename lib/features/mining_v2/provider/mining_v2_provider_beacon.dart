@@ -272,7 +272,7 @@ mixin _MiningBeaconMixin on _MiningStateMixin {
     final boldStyle = TextStyle(
       fontSize: ScreenUtil().setSp(22),
       color: whiteColor,
-      fontWeight: FontWeight.bold,
+      fontWeight: FontWeight.w600,
     );
 
     barChartAlertMessageList = [];

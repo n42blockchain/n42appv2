@@ -193,7 +193,7 @@ class MiningDataBroad extends StatelessWidget {
           AppThemeKeys.mainTextColor.name,
         ),
         fontSize: ScreenUtil().setSp(28),
-        fontWeight: FontWeight.w700,
+        fontWeight: FontWeight.w600,
       ),
       overflow: TextOverflow.ellipsis,
       maxLines: 1,

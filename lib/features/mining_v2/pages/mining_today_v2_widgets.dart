@@ -34,7 +34,7 @@ mixin _MiningTodayV2WidgetsMixin
                         style: TextStyle(
                           color: blueColor,
                           fontSize: ScreenUtil().setSp(28),
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                       if (!AppConfig.isMainChainMining)
@@ -118,9 +118,8 @@ mixin _MiningTodayV2WidgetsMixin
   Widget buildMiningBanner(BuildContext context, MiningV2Provider mpValue) {
     final isActive = mpValue.miningStatus == true;
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final statusColor = isActive
-        ? const Color(0xFF32D74B)
-        : const Color(0xFFFF9500);
+    final c = AppColorTokens.of(context);
+    final statusColor = isActive ? c.success : c.warning;
 
     return Container(
       margin: EdgeInsets.symmetric(
@@ -204,7 +203,7 @@ mixin _MiningTodayV2WidgetsMixin
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: ScreenUtil().setSp(28),
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
@@ -231,7 +230,7 @@ mixin _MiningTodayV2WidgetsMixin
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: ScreenUtil().setSp(26),
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ],
