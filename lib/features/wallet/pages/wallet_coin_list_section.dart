@@ -179,8 +179,8 @@ class _DiscoveryBanner extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(16)),
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(24),
-          vertical: ScreenUtil().setWidth(14),
+          horizontal: AppSpacing.space6,
+          vertical: AppSpacing.space4,
         ),
         decoration: BoxDecoration(
           color: blueColor.withValues(alpha: 0.10),
@@ -194,7 +194,7 @@ class _DiscoveryBanner extends StatelessWidget {
               color: blueColor,
               size: ScreenUtil().setWidth(36),
             ),
-            SizedBox(width: ScreenUtil().setWidth(12)),
+            SizedBox(width: AppSpacing.space4),
             Expanded(
               child: Text(
                 S.of(context).g_key_token_discovery_banner(count),
@@ -208,7 +208,7 @@ class _DiscoveryBanner extends StatelessWidget {
               behavior: HitTestBehavior.opaque,
               onTap: onDismiss,
               child: Padding(
-                padding: EdgeInsets.all(ScreenUtil().setWidth(8)),
+                padding: EdgeInsets.all(AppSpacing.space2),
                 child: Icon(
                   Icons.close_rounded,
                   color: blueColor.withValues(alpha: 0.70),
@@ -269,13 +269,13 @@ class _PinnedDivider extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = AppColorTokens.of(context).border;
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(4)),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space2),
       child: Row(
         children: [
           Expanded(child: Divider(height: 1, color: color)),
           Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(12),
+              horizontal: AppSpacing.space4,
             ),
             child: Text(
               S.of(context).g_key_coin_list_separator,
@@ -309,14 +309,14 @@ class _AllHiddenHint extends StatelessWidget {
             size: ScreenUtil().setWidth(60),
             color: AppColorTokens.of(context).textSubtitle,
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           Text(
             S.of(context).g_key_coin_list_all_hidden,
             style: AppTypography.body.copyWith(
               color: AppColorTokens.of(context).textSubtitle,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(8)),
+          SizedBox(height: AppSpacing.space2),
           GestureDetector(
             onTap: onShowAll,
             child: Text(

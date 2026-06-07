@@ -44,7 +44,7 @@ class _EmptyViewState extends State<EmptyView> {
                 color: AppColorTokens.of(context).brand,
               ),
             ),
-          SizedBox(height: ScreenUtil().setWidth(24)),
+          SizedBox(height: AppSpacing.space6),
           // 替换资源
           Image.asset(
             widget.type == EmptyType.noData
@@ -56,7 +56,7 @@ class _EmptyViewState extends State<EmptyView> {
                 ? null
                 : AppColorTokens.of(context).textPrimary,
           ),
-          SizedBox(height: ScreenUtil().setWidth(28)),
+          SizedBox(height: AppSpacing.space8),
           Text(
             widget.title ?? S.of(context).g_key_132,
             style: AppTypography.titleLg.copyWith(color: AppColorTokens.of(context).textPrimary),

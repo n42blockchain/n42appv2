@@ -4,7 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/features/bridge/provider/bridge_provider.dart';
 import 'package:n42_wallet/features/bridge/pages/bridge_home_page_logic.dart';
@@ -59,7 +59,7 @@ class _BridgeHomePageState extends ConsumerState<BridgeHomePage>
               children: [
                 Expanded(
                   child: SingleChildScrollView(
-                    padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                    padding: EdgeInsets.all(AppSpacing.space8),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -72,12 +72,12 @@ class _BridgeHomePageState extends ConsumerState<BridgeHomePage>
                         // 目标链选择卡
                         buildChainCard(context, provider, isFrom: false),
 
-                        SizedBox(height: ScreenUtil().setWidth(24)),
+                        SizedBox(height: AppSpacing.space6),
 
                         // 滑点选择器（有报价后显示）
                         if (provider.quoteResponse?.hasRoutes == true) ...[
                           buildSlippageSelector(context, provider),
-                          SizedBox(height: ScreenUtil().setWidth(24)),
+                          SizedBox(height: AppSpacing.space6),
                         ],
 
                         // 全部路由对比卡（有报价时显示）

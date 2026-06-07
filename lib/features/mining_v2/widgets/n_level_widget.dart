@@ -54,7 +54,7 @@ class NLevelWidget extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+            padding: EdgeInsets.all(AppSpacing.space8),
             child: _buildBoard(context),
           ),
         ],
@@ -83,10 +83,10 @@ class NLevelWidget extends StatelessWidget {
             ),
             borderRadius: AppRadius.brMd,
           ),
-          padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+          padding: EdgeInsets.all(AppSpacing.space4),
           child: Image.asset(bigImage, fit: BoxFit.contain),
         ),
-        SizedBox(width: ScreenUtil().setWidth(24)),
+        SizedBox(width: AppSpacing.space6),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -105,7 +105,7 @@ class NLevelWidget extends StatelessWidget {
                       height: 1.0,
                     ),
                   ),
-                  SizedBox(width: ScreenUtil().setWidth(6)),
+                  SizedBox(width: AppSpacing.space2),
                   Padding(
                     padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(4)),
                     child: Text(
@@ -119,11 +119,11 @@ class NLevelWidget extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: ScreenUtil().setWidth(20)),
+              SizedBox(height: AppSpacing.space4),
               Container(
                 padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(14),
-                  vertical: ScreenUtil().setWidth(10),
+                  horizontal: AppSpacing.space4,
+                  vertical: AppSpacing.space2,
                 ),
                 decoration: BoxDecoration(
                   color: isDark
@@ -151,7 +151,7 @@ class NLevelWidget extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(width: ScreenUtil().setWidth(10)),
+                    SizedBox(width: AppSpacing.space2),
                     Flexible(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

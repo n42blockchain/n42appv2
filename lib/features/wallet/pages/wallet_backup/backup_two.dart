@@ -89,7 +89,7 @@ class _BackupTwoState extends State<BackupTwo> {
           children: [
             Positioned.fill(
               child: SingleChildScrollView(
-                padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                padding: EdgeInsets.all(AppSpacing.space8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -97,7 +97,7 @@ class _BackupTwoState extends State<BackupTwo> {
                       alignment: Alignment.center,
                       width: double.infinity,
                       margin: EdgeInsets.symmetric(
-                        vertical: ScreenUtil().setWidth(30),
+                        vertical: AppSpacing.space8,
                       ),
                       child: Text(
                         S.of(context).g_key_wallet_c12,
@@ -123,7 +123,7 @@ class _BackupTwoState extends State<BackupTwo> {
                 children: [
                   const Divider(height: 1),
                   Container(
-                    padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                    padding: EdgeInsets.all(AppSpacing.space8),
                     color: AppColorTokens.of(context).bgBase,
                     height: ScreenUtil().setWidth(148),
                     child: AppButton(
@@ -227,7 +227,7 @@ class _BackupTwoState extends State<BackupTwo> {
 
   Widget _buildGridView() {
     return GridView.builder(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       itemCount: messMnemonicWordsList.length,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),

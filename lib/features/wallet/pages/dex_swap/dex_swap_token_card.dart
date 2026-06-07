@@ -34,7 +34,7 @@ class DexTokenCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       decoration: BoxDecoration(
         color: AppThemeUtils.getColorByKey(
           context,
@@ -51,7 +51,7 @@ class DexTokenCard extends StatelessWidget {
               color: AppColorTokens.of(context).textSubtitle,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
           Row(
             children: [
               Expanded(child: _amountWidget(context)),
@@ -101,8 +101,8 @@ class DexTokenCard extends StatelessWidget {
       onTap: onTokenTap,
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(16),
-          vertical: ScreenUtil().setWidth(12),
+          horizontal: AppSpacing.space4,
+          vertical: AppSpacing.space4,
         ),
         decoration: BoxDecoration(
           color: AppColorTokens.of(context).bgSurface,
@@ -120,7 +120,7 @@ class DexTokenCard extends StatelessWidget {
                   placeholder: 'assets/img/list_default.png',
                 ),
               ),
-              SizedBox(width: ScreenUtil().setWidth(8)),
+              SizedBox(width: AppSpacing.space2),
             ],
             Flexible(
               child: Text(
@@ -132,7 +132,7 @@ class DexTokenCard extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(width: ScreenUtil().setWidth(4)),
+            SizedBox(width: AppSpacing.space2),
             Icon(
               Icons.arrow_drop_down,
               color: AppColorTokens.of(context).brand,

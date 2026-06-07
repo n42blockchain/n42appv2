@@ -29,7 +29,7 @@ mixin BridgeHomeWidgetsMixin
     final token = isFrom ? provider.fromToken : provider.toToken;
 
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
         borderRadius: AppRadius.brMd,
@@ -54,13 +54,13 @@ mixin BridgeHomeWidgetsMixin
             ],
           ),
 
-          SizedBox(height: ScreenUtil().setWidth(20)),
+          SizedBox(height: AppSpacing.space4),
 
           // 代币选择 + 金额
           Row(
             children: [
               _buildTokenPicker(context, provider, chain, token, isFrom),
-              SizedBox(width: ScreenUtil().setWidth(20)),
+              SizedBox(width: AppSpacing.space4),
               Expanded(
                 child: isFrom
                     ? TextField(
@@ -135,8 +135,8 @@ mixin BridgeHomeWidgetsMixin
       },
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(20),
-          vertical: ScreenUtil().setWidth(10),
+          horizontal: AppSpacing.space4,
+          vertical: AppSpacing.space2,
         ),
         decoration: BoxDecoration(
           color: AppColorTokens.of(context).bgBase,
@@ -156,7 +156,7 @@ mixin BridgeHomeWidgetsMixin
                       Icon(Icons.circle, size: ScreenUtil().setWidth(32)),
                 ),
               ),
-            SizedBox(width: ScreenUtil().setWidth(10)),
+            SizedBox(width: AppSpacing.space2),
             Flexible(
               child: Text(
                 chain?.name ?? S.of(context).g_key_17,
@@ -167,7 +167,7 @@ mixin BridgeHomeWidgetsMixin
                 ),
               ),
             ),
-            SizedBox(width: ScreenUtil().setWidth(4)),
+            SizedBox(width: AppSpacing.space2),
             Icon(
               Icons.keyboard_arrow_down,
               size: ScreenUtil().setWidth(32),
@@ -203,8 +203,8 @@ mixin BridgeHomeWidgetsMixin
       },
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(16),
-          vertical: ScreenUtil().setWidth(12),
+          horizontal: AppSpacing.space4,
+          vertical: AppSpacing.space4,
         ),
         decoration: BoxDecoration(
           color: AppColorTokens.of(context).bgBase,
@@ -224,7 +224,7 @@ mixin BridgeHomeWidgetsMixin
                       Icon(Icons.token, size: ScreenUtil().setWidth(40)),
                 ),
               ),
-            SizedBox(width: ScreenUtil().setWidth(10)),
+            SizedBox(width: AppSpacing.space2),
             Flexible(
               child: Text(
                 token?.symbol ?? S.of(context).g_key_bridge_select,
@@ -251,7 +251,7 @@ mixin BridgeHomeWidgetsMixin
   Widget buildSwapButton(BuildContext context, BridgeProvider provider) {
     return Center(
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
+        padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
         child: IconButton(
           onPressed: provider.state == BridgeState.idle
               ? () {
@@ -260,7 +260,7 @@ mixin BridgeHomeWidgetsMixin
                 }
               : null,
           icon: Container(
-            padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+            padding: EdgeInsets.all(AppSpacing.space4),
             decoration: BoxDecoration(
               color: AppColorTokens.of(context).brand,
               shape: BoxShape.circle,
@@ -288,7 +288,7 @@ mixin BridgeHomeWidgetsMixin
             color: AppColorTokens.of(context).textSubtitle,
           ),
         ),
-        SizedBox(height: ScreenUtil().setWidth(12)),
+        SizedBox(height: AppSpacing.space4),
         Row(
           children: BridgeHomeLogicMixin.slippageOptions.map((pct) {
             final selected = (provider.slippage - pct).abs() < 0.001;
@@ -299,7 +299,7 @@ mixin BridgeHomeWidgetsMixin
                   onTap: () => provider.setSlippage(pct),
                   child: Container(
                     padding: EdgeInsets.symmetric(
-                      vertical: ScreenUtil().setWidth(14),
+                      vertical: AppSpacing.space4,
                     ),
                     decoration: BoxDecoration(
                       color: selected

@@ -72,7 +72,7 @@ class _EditWalletState extends ConsumerState<EditWallet> {
           child: Column(
             children: [
               Container(
-                margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                margin: EdgeInsets.all(AppSpacing.space8),
                 color: AppColorTokens.of(context).bgSurface,
                 child: CommInput(
                   type: InputFieldType.account,
@@ -94,7 +94,7 @@ class _EditWalletState extends ConsumerState<EditWallet> {
               Container(
                 height: ScreenUtil().setWidth(148),
                 width: double.infinity,
-                padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                padding: EdgeInsets.all(AppSpacing.space8),
                 child: AppButton(
                   label: S.of(context).g_key_115,
                   onPressed: () async {
@@ -125,11 +125,11 @@ class _EditWalletState extends ConsumerState<EditWallet> {
     final blueColor = AppColorTokens.of(context).brand;
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           Text(
             'Tags',
             style: AppTypography.body.copyWith(
@@ -137,7 +137,7 @@ class _EditWalletState extends ConsumerState<EditWallet> {
               fontWeight: FontWeight.w600,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
 
           // Current tags
           if (_tags.isNotEmpty)
@@ -162,7 +162,7 @@ class _EditWalletState extends ConsumerState<EditWallet> {
                   .toList(),
             ),
 
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
 
           // Preset tags (only show unselected ones)
           Wrap(
@@ -188,7 +188,7 @@ class _EditWalletState extends ConsumerState<EditWallet> {
 
           // Custom tag input
           if (_tags.length < 5) ...[
-            SizedBox(height: ScreenUtil().setWidth(12)),
+            SizedBox(height: AppSpacing.space4),
             Row(
               children: [
                 Expanded(

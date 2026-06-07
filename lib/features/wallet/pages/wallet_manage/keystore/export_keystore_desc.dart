@@ -46,7 +46,7 @@ class _ExportKeystoreDescState extends State<ExportKeystoreDesc> {
           children: [
             Positioned.fill(
               child: SingleChildScrollView(
-                padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                padding: EdgeInsets.all(AppSpacing.space8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -57,11 +57,11 @@ class _ExportKeystoreDescState extends State<ExportKeystoreDesc> {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    SizedBox(height: ScreenUtil().setWidth(16)),
+                    SizedBox(height: AppSpacing.space4),
 
                     Container(
                       width: double.infinity,
-                      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+                      padding: EdgeInsets.all(AppSpacing.space6),
                       decoration: BoxDecoration(
                         color: errorBg,
                         borderRadius: AppRadius.brMd,
@@ -75,15 +75,15 @@ class _ExportKeystoreDescState extends State<ExportKeystoreDesc> {
                         ),
                       ),
                     ),
-                    SizedBox(height: ScreenUtil().setWidth(24)),
+                    SizedBox(height: AppSpacing.space6),
 
                     Divider(height: ScreenUtil().setWidth(1)),
-                    SizedBox(height: ScreenUtil().setWidth(24)),
+                    SizedBox(height: AppSpacing.space6),
 
                     _descItem('1. ${s.g_key_ex_keystore_3}', subtitleColor),
-                    SizedBox(height: ScreenUtil().setWidth(20)),
+                    SizedBox(height: AppSpacing.space4),
                     _descItem('2. ${s.g_key_ex_keystore_4}', subtitleColor),
-                    SizedBox(height: ScreenUtil().setWidth(40)),
+                    SizedBox(height: AppSpacing.space12),
 
                     _RiskCheckbox(
                       label: s.g_key_ex_keystore_confirm_risk,
@@ -109,7 +109,7 @@ class _ExportKeystoreDescState extends State<ExportKeystoreDesc> {
                   Container(
                     width: double.infinity,
                     height: ScreenUtil().setWidth(148),
-                    padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                    padding: EdgeInsets.all(AppSpacing.space8),
                     color: AppColorTokens.of(context).bgBase,
                     child: AppButton(
                       label: s.next,
@@ -167,7 +167,7 @@ class _RiskCheckbox extends StatelessWidget {
               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(12)),
+          SizedBox(width: AppSpacing.space4),
           Expanded(
             child: Padding(
               padding: EdgeInsets.only(top: ScreenUtil().setWidth(4)),

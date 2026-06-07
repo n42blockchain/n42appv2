@@ -182,7 +182,7 @@ class _EditWalletPasswordState extends ConsumerState<EditWalletPassword> {
               Positioned.fill(
                 child: SingleChildScrollView(
                   padding: EdgeInsets.symmetric(
-                    horizontal: ScreenUtil().setWidth(30.0),
+                    horizontal: AppSpacing.space8,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -262,7 +262,7 @@ class _EditWalletPasswordState extends ConsumerState<EditWalletPassword> {
                     Divider(height: 1),
                     Container(
                       height: ScreenUtil().setWidth(148.0),
-                      padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+                      padding: EdgeInsets.all(AppSpacing.space8),
                       width: double.infinity,
                       child: AppButton(
                         label: S.of(context).g_key_115,

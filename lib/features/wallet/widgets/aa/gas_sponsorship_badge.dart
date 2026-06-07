@@ -29,8 +29,8 @@ class GasSponsorshipBadge extends StatelessWidget {
 
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(14),
-        vertical: ScreenUtil().setWidth(10),
+        horizontal: AppSpacing.space4,
+        vertical: AppSpacing.space2,
       ),
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -49,7 +49,7 @@ class GasSponsorshipBadge extends StatelessWidget {
             size: ScreenUtil().setWidth(22),
             color: Colors.green,
           ),
-          SizedBox(width: ScreenUtil().setWidth(8)),
+          SizedBox(width: AppSpacing.space2),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -95,7 +95,7 @@ class GasSponsoredIcon extends StatelessWidget {
     if (!isSponsored) return const SizedBox.shrink();
 
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(4)),
+      padding: EdgeInsets.all(AppSpacing.space2),
       decoration: BoxDecoration(
         color: Colors.green.withAlpha(30),
         shape: BoxShape.circle,

@@ -249,9 +249,9 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         LoginTitle(title: title, must: true),
-        SizedBox(height: ScreenUtil().setWidth(10)),
+        SizedBox(height: AppSpacing.space2),
         field,
-        SizedBox(height: ScreenUtil().setWidth(20)),
+        SizedBox(height: AppSpacing.space4),
       ],
     );
   }
@@ -269,7 +269,7 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
           children: [
             Positioned.fill(
               child: SingleChildScrollView(
-                padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                padding: EdgeInsets.all(AppSpacing.space8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -318,10 +318,10 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
                       nextFocus: null,
                       useStyle3: false,
                     ),
-                    SizedBox(height: ScreenUtil().setWidth(10)),
+                    SizedBox(height: AppSpacing.space2),
                     if (errorMessage.isNotEmpty)
                       Container(
-                        padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                        padding: EdgeInsets.all(AppSpacing.space8),
                         alignment: Alignment.center,
                         color: AppColorTokens.of(context).dangerBg,
                         child: Text(
@@ -348,7 +348,7 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
                       indent: 0,
                     ),
                     Container(
-                      margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                      margin: EdgeInsets.all(AppSpacing.space8),
                       height: ScreenUtil().setWidth(88),
                       child: AppButton(label: s.g_key_159, onPressed: addChain),
                     ),

@@ -12,8 +12,8 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
     final subtitleText = _themeColor(AppThemeKeys.itemSubtitleTextColor.name);
     return Container(
       margin: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30.0),
-        vertical: ScreenUtil().setWidth(8.0),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space2,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -24,14 +24,14 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
                 'Destination Tag',
                 style: AppTypography.body.copyWith(color: mainText),
               ),
-              SizedBox(width: ScreenUtil().setWidth(8)),
+              SizedBox(width: AppSpacing.space2),
               Text(
                 S.of(context).g_xrp_optional,
                 style: AppTypography.caption.copyWith(color: subtitleText),
               ),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(12.0)),
+          SizedBox(height: AppSpacing.space4),
           TextField(
             controller: destTagCtrl,
             focusNode: destTagNode,
@@ -44,8 +44,8 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
               filled: true,
               fillColor: _themeColor(AppThemeKeys.itemBgColor.name),
               contentPadding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(20.0),
-                vertical: ScreenUtil().setWidth(16.0),
+                horizontal: AppSpacing.space4,
+                vertical: AppSpacing.space4,
               ),
               border: OutlineInputBorder(
                 borderRadius: AppRadius.brSm,
@@ -60,7 +60,7 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
 
   Widget toWidget() {
     return Container(
-      margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+      margin: EdgeInsets.all(AppSpacing.space8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -104,7 +104,7 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
     final itemBgColor = _themeColor(AppThemeKeys.itemBgColor.name);
     return containerStyle1(
       context,
-      margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+      margin: EdgeInsets.all(AppSpacing.space8),
       child: Column(
         children: [
           Padding(
@@ -124,7 +124,7 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                SizedBox(width: ScreenUtil().setWidth(20.0)),
+                SizedBox(width: AppSpacing.space4),
                 Expanded(child: amountBalanceWidget()),
               ],
             ),
@@ -165,13 +165,13 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
                   bgColor: itemBgColor,
                   errorMessage: amountErrorMessage,
                   messageMargin: EdgeInsets.symmetric(
-                    horizontal: ScreenUtil().setWidth(30.0),
+                    horizontal: AppSpacing.space8,
                   ),
                   rightWidget1: Container(
                     margin: EdgeInsets.only(left: ScreenUtil().setWidth(10.0)),
                     height: ScreenUtil().setWidth(60.0),
                     padding: EdgeInsets.symmetric(
-                      horizontal: ScreenUtil().setWidth(20.0),
+                      horizontal: AppSpacing.space4,
                     ),
                     decoration: BoxDecoration(
                       color: _themeColor(AppThemeKeys.mainBlueColor.name),
@@ -257,8 +257,8 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
   Widget ownerAddress() {
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30.0),
-        vertical: ScreenUtil().setWidth(20.0),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space4,
       ),
       child: Text(
         widget.coinModel.address.toString(),
@@ -287,8 +287,8 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
         if (isContract)
           Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(30.0),
-              vertical: ScreenUtil().setWidth(8.0),
+              horizontal: AppSpacing.space8,
+              vertical: AppSpacing.space2,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -329,7 +329,7 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
         left: ScreenUtil().setWidth(30.0),
         right: ScreenUtil().setWidth(30.0),
       ),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       decoration: BoxDecoration(
         borderRadius: AppRadius.brSm,
         color: _themeColor(AppThemeKeys.itemBgColor.name),
@@ -352,8 +352,8 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
                 },
                 child: Container(
                   padding: EdgeInsets.symmetric(
-                    vertical: ScreenUtil().setWidth(10.0),
-                    horizontal: ScreenUtil().setWidth(20.0),
+                    vertical: AppSpacing.space2,
+                    horizontal: AppSpacing.space4,
                   ),
                   decoration: BoxDecoration(
                     color: buttonColor,
@@ -391,7 +391,7 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
           ),
           Padding(
             padding: EdgeInsets.symmetric(
-              vertical: ScreenUtil().setWidth(20.0),
+              vertical: AppSpacing.space4,
             ),
             child: Text(
               accountXrp['account'],

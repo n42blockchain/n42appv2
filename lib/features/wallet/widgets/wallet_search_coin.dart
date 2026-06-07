@@ -287,8 +287,8 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
   Widget _buildSearchBar(WalletActionProvider waValue) {
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20.0)),
-      margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16.0)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
+      margin: EdgeInsets.symmetric(vertical: AppSpacing.space4),
       constraints: BoxConstraints(
         minHeight: ScreenUtil().setWidth(100.0),
         maxHeight: ScreenUtil().setWidth(100.0),
@@ -304,7 +304,7 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
             size: ScreenUtil().setWidth(36.0),
             color: AppColorTokens.of(context).textSubtitle,
           ),
-          SizedBox(width: ScreenUtil().setWidth(8.0)),
+          SizedBox(width: AppSpacing.space2),
           Expanded(
             child: TextField(
               controller: _inputCtrl,
@@ -348,7 +348,7 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
               },
               child: Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(8.0),
+                  horizontal: AppSpacing.space2,
                 ),
                 child: Icon(
                   Icons.cancel,
@@ -365,7 +365,7 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
               },
               child: Container(
                 padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(20.0),
+                  horizontal: AppSpacing.space4,
                 ),
                 height: ScreenUtil().setWidth(60.0),
                 decoration: BoxDecoration(

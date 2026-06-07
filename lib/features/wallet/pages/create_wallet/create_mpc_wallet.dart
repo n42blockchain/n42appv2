@@ -132,15 +132,15 @@ class _CreateMpcWalletState extends ConsumerState<CreateMpcWallet> {
       appBar: AppBarWidget(text: 'Create Wallet'),
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+          padding: EdgeInsets.all(AppSpacing.space8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: ScreenUtil().setWidth(20)),
+              SizedBox(height: AppSpacing.space4),
 
               // Header
               Icon(Icons.shield_outlined, size: 48, color: blueColor),
-              SizedBox(height: ScreenUtil().setWidth(20)),
+              SizedBox(height: AppSpacing.space4),
               Text(
                 'No Seed Phrase Needed',
                 style: AppTypography.titleLg.copyWith(
@@ -148,7 +148,7 @@ class _CreateMpcWalletState extends ConsumerState<CreateMpcWallet> {
                   color: textColor,
                 ),
               ),
-              SizedBox(height: ScreenUtil().setWidth(12)),
+              SizedBox(height: AppSpacing.space4),
               Text(
                 'Sign in with your social account to create a secure MPC wallet. '
                 'Your private key is split into encrypted shares — no seed phrase to lose.',
@@ -158,7 +158,7 @@ class _CreateMpcWalletState extends ConsumerState<CreateMpcWallet> {
                   height: 1.5,
                 ),
               ),
-              SizedBox(height: ScreenUtil().setWidth(40)),
+              SizedBox(height: AppSpacing.space12),
 
               // Login options
               ...(_loginOptions.map(
@@ -176,9 +176,9 @@ class _CreateMpcWalletState extends ConsumerState<CreateMpcWallet> {
 
               // Error
               if (_errorMsg.isNotEmpty) ...[
-                SizedBox(height: ScreenUtil().setWidth(16)),
+                SizedBox(height: AppSpacing.space4),
                 Container(
-                  padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+                  padding: EdgeInsets.all(AppSpacing.space4),
                   decoration: BoxDecoration(
                     color: Colors.red.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
@@ -194,7 +194,7 @@ class _CreateMpcWalletState extends ConsumerState<CreateMpcWallet> {
 
               // Security note
               Container(
-                padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+                padding: EdgeInsets.all(AppSpacing.space4),
                 decoration: BoxDecoration(
                   color: blueColor.withValues(alpha: 0.08),
                   borderRadius: BorderRadius.circular(12),
@@ -202,7 +202,7 @@ class _CreateMpcWalletState extends ConsumerState<CreateMpcWallet> {
                 child: Row(
                   children: [
                     Icon(Icons.info_outline, size: 18, color: blueColor),
-                    SizedBox(width: ScreenUtil().setWidth(12)),
+                    SizedBox(width: AppSpacing.space4),
                     Expanded(
                       child: Text(
                         'Powered by MPC-TSS. Your key is split into 3 encrypted shares across your device, our servers, and a recovery backup.',
@@ -262,7 +262,7 @@ class _CreateMpcWalletState extends ConsumerState<CreateMpcWallet> {
             borderRadius: BorderRadius.circular(12),
           ),
           alignment: Alignment.centerLeft,
-          padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(24)),
+          padding: EdgeInsets.symmetric(horizontal: AppSpacing.space6),
         ),
       ),
     );

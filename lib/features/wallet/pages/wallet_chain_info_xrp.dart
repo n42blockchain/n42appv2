@@ -331,10 +331,10 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
               Container(
                 alignment: Alignment.centerLeft,
                 padding: EdgeInsets.symmetric(
-                  vertical: ScreenUtil().setWidth(20.0),
+                  vertical: AppSpacing.space4,
                 ),
                 margin: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(30.0),
+                  horizontal: AppSpacing.space8,
                 ),
                 child: Text(
                   S.of(context).g_coin_key_1,
@@ -359,7 +359,7 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       itemCount: transactionList.length + 1,
       itemBuilder: (context, int index) {
         if (index == transactionList.length) {

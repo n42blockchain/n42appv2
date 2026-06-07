@@ -116,7 +116,7 @@ class _AAAccountListPageState extends State<AAAccountListPage> {
 
   Widget _buildFilters() {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
         boxShadow: [
@@ -143,7 +143,7 @@ class _AAAccountListPageState extends State<AAAccountListPage> {
               ],
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -217,8 +217,8 @@ class _AAAccountListPageState extends State<AAAccountListPage> {
       child: Container(
         margin: EdgeInsets.only(right: ScreenUtil().setWidth(10)),
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(16),
-          vertical: ScreenUtil().setWidth(8),
+          horizontal: AppSpacing.space4,
+          vertical: AppSpacing.space2,
         ),
         decoration: BoxDecoration(
           color: isSelected ? selectedBgColor : Colors.transparent,
@@ -248,7 +248,7 @@ class _AAAccountListPageState extends State<AAAccountListPage> {
             size: ScreenUtil().setWidth(80),
             color: AppColorTokens.of(context).textSubtitle.withAlpha(100),
           ),
-          SizedBox(height: ScreenUtil().setWidth(20)),
+          SizedBox(height: AppSpacing.space4),
           Text(
             S.of(context).g_key_aa_no_accounts_filter,
             style: AppTypography.body.copyWith(
@@ -262,7 +262,7 @@ class _AAAccountListPageState extends State<AAAccountListPage> {
 
   Widget _buildAccountList() {
     return ListView.builder(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       itemCount: _filteredAccounts.length,
       itemBuilder: (context, index) {
         final account = _filteredAccounts[index];

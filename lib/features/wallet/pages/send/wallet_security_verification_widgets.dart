@@ -56,8 +56,8 @@ class _PillButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(
-          vertical: ScreenUtil().setWidth(10.0),
-          horizontal: ScreenUtil().setWidth(20.0),
+          vertical: AppSpacing.space2,
+          horizontal: AppSpacing.space4,
         ),
         decoration: BoxDecoration(
           color: AppThemeUtils.getColorByKey(

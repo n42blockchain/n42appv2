@@ -24,7 +24,7 @@ mixin BridgeHomeSectionsMixin
 
     if (!response.hasRoutes) {
       return Container(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+        padding: EdgeInsets.all(AppSpacing.space4),
         decoration: BoxDecoration(
           color: AppColorTokens.of(context).bgSurface,
           borderRadius: AppRadius.brMd,
@@ -48,7 +48,7 @@ mixin BridgeHomeSectionsMixin
             color: AppColorTokens.of(context).textPrimary,
           ),
         ),
-        SizedBox(height: ScreenUtil().setWidth(12)),
+        SizedBox(height: AppSpacing.space4),
         ...response.routes.map((r) => _buildRouteCard(context, provider, r)),
       ],
     );
@@ -93,7 +93,7 @@ mixin BridgeHomeSectionsMixin
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
-        padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+        padding: EdgeInsets.all(AppSpacing.space4),
         decoration: BoxDecoration(
           color: AppColorTokens.of(context).bgSurface,
           borderRadius: AppRadius.brMd,
@@ -121,7 +121,7 @@ mixin BridgeHomeSectionsMixin
                   )
                 else
                   Icon(Icons.link, size: ScreenUtil().setWidth(32)),
-                SizedBox(width: ScreenUtil().setWidth(10)),
+                SizedBox(width: AppSpacing.space2),
                 Expanded(
                   child: Text(
                     protocols.isNotEmpty ? protocols : route.id,
@@ -136,8 +136,8 @@ mixin BridgeHomeSectionsMixin
                 if (tagLabel != null)
                   Container(
                     padding: EdgeInsets.symmetric(
-                      horizontal: ScreenUtil().setWidth(10),
-                      vertical: ScreenUtil().setWidth(4),
+                      horizontal: AppSpacing.space2,
+                      vertical: AppSpacing.space2,
                     ),
                     decoration: BoxDecoration(
                       color: tagColor.withAlpha(30),
@@ -164,7 +164,7 @@ mixin BridgeHomeSectionsMixin
               ],
             ),
 
-            SizedBox(height: ScreenUtil().setWidth(16)),
+            SizedBox(height: AppSpacing.space4),
 
             Row(
               children: [
@@ -178,7 +178,7 @@ mixin BridgeHomeSectionsMixin
                           color: AppColorTokens.of(context).textSubtitle,
                         ),
                       ),
-                      SizedBox(height: ScreenUtil().setWidth(4)),
+                      SizedBox(height: AppSpacing.space2),
                       Text(
                         '$receiveAmt ${provider.toToken?.symbol ?? ''}',
                         style: AppTypography.body.copyWith(
@@ -204,7 +204,7 @@ mixin BridgeHomeSectionsMixin
                       Icons.local_gas_station_outlined,
                       gasCost,
                     ),
-                    SizedBox(height: ScreenUtil().setWidth(8)),
+                    SizedBox(height: AppSpacing.space2),
                     _infoChip(context, Icons.access_time, '~$minutes min'),
                   ],
                 ),
@@ -212,15 +212,15 @@ mixin BridgeHomeSectionsMixin
             ),
 
             if (route.steps.length > 1) ...[
-              SizedBox(height: ScreenUtil().setWidth(12)),
+              SizedBox(height: AppSpacing.space4),
               Wrap(
                 spacing: ScreenUtil().setWidth(8),
                 runSpacing: ScreenUtil().setWidth(4),
                 children: route.steps.map((step) {
                   return Container(
                     padding: EdgeInsets.symmetric(
-                      horizontal: ScreenUtil().setWidth(10),
-                      vertical: ScreenUtil().setWidth(4),
+                      horizontal: AppSpacing.space2,
+                      vertical: AppSpacing.space2,
                     ),
                     decoration: BoxDecoration(
                       color: AppColorTokens.of(context).bgBase,
@@ -251,7 +251,7 @@ mixin BridgeHomeSectionsMixin
           size: ScreenUtil().setWidth(26),
           color: AppColorTokens.of(context).textSubtitle,
         ),
-        SizedBox(width: ScreenUtil().setWidth(4)),
+        SizedBox(width: AppSpacing.space2),
         Text(
           text,
           style: AppTypography.caption.copyWith(
@@ -267,7 +267,7 @@ mixin BridgeHomeSectionsMixin
   Widget buildErrorMessage(BuildContext context, BridgeProvider provider) {
     return Container(
       margin: EdgeInsets.only(top: ScreenUtil().setWidth(20)),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: AppThemeUtils.getColorByKey(
           context,
@@ -282,7 +282,7 @@ mixin BridgeHomeSectionsMixin
             color: AppColorTokens.of(context).danger,
             size: ScreenUtil().setWidth(40),
           ),
-          SizedBox(width: ScreenUtil().setWidth(12)),
+          SizedBox(width: AppSpacing.space4),
           Expanded(
             child: Text(
               provider.errorMessage!,
@@ -313,7 +313,7 @@ mixin BridgeHomeSectionsMixin
     final canExecute = provider.selectedRoute != null;
 
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgBase,
         border: Border(

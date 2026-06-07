@@ -97,9 +97,9 @@ class _MiningTodayV2State extends ConsumerState<MiningTodayV2>
                             Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                SizedBox(height: ScreenUtil().setWidth(18)),
+                                SizedBox(height: AppSpacing.space4),
                                 PlansWidget(onTap: null),
-                                SizedBox(height: ScreenUtil().setWidth(10)),
+                                SizedBox(height: AppSpacing.space2),
                               ],
                             ),
                           MiningStatusWidget(mpValue: mpValue),
@@ -108,7 +108,7 @@ class _MiningTodayV2State extends ConsumerState<MiningTodayV2>
                           if (mpValue.depositsEnable == true)
                             buildBarChart(context, mpValue),
                           if (mpValue.depositsEnable == true)
-                            SizedBox(height: ScreenUtil().setWidth(20)),
+                            SizedBox(height: AppSpacing.space4),
                           BackgroundMiningWidget(mpValue: mpValue),
                           buildDataBroadRows(context, mpValue),
                           buildRedemptionSection(context, mpValue),

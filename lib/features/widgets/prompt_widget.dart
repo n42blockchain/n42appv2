@@ -7,8 +7,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 Widget successViewV1(String title) {
   return Container(
     padding: EdgeInsets.symmetric(
-      horizontal: ScreenUtil().setWidth(24.0),
-      vertical: ScreenUtil().setWidth(48.0),
+      horizontal: AppSpacing.space6,
+      vertical: AppSpacing.space12,
     ),
     decoration: BoxDecoration(
       borderRadius: AppRadius.brLg,

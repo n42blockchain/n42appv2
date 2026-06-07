@@ -39,7 +39,7 @@ class EnsSubdomainSection extends StatelessWidget {
         children: [
           _buildTitleRow(context),
           _buildBody(context),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
           _buildCreateButton(context),
         ],
       ),
@@ -236,7 +236,7 @@ class _SectionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
         borderRadius: AppRadius.brMd,

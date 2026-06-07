@@ -24,8 +24,8 @@ class DeploymentStatusIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(12),
-        vertical: ScreenUtil().setWidth(6),
+        horizontal: AppSpacing.space4,
+        vertical: AppSpacing.space2,
       ),
       decoration: BoxDecoration(
         color: _getStatusColor().withAlpha(20),
@@ -37,7 +37,7 @@ class DeploymentStatusIndicator extends StatelessWidget {
         children: [
           _buildStatusIcon(),
           if (showLabel) ...[
-            SizedBox(width: ScreenUtil().setWidth(6)),
+            SizedBox(width: AppSpacing.space2),
             Text(
               _getStatusText(context),
               style: AppTypography.caption.copyWith(

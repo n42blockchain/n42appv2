@@ -74,28 +74,28 @@ class AABatchTransactionBody extends StatelessWidget {
         children: [
           Expanded(
             child: SingleChildScrollView(
-              padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+              padding: EdgeInsets.all(AppSpacing.space6),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   _buildInfoCard(context),
-                  SizedBox(height: ScreenUtil().setWidth(24)),
+                  SizedBox(height: AppSpacing.space6),
                   _buildOperationsList(context),
-                  SizedBox(height: ScreenUtil().setWidth(16)),
+                  SizedBox(height: AppSpacing.space4),
                   _buildAddButton(context),
                   if (operations.isNotEmpty) ...[
-                    SizedBox(height: ScreenUtil().setWidth(16)),
+                    SizedBox(height: AppSpacing.space4),
                     _buildSaveTemplateButton(context),
-                    SizedBox(height: ScreenUtil().setWidth(24)),
+                    SizedBox(height: AppSpacing.space6),
                     _buildPaymasterSection(context),
-                    SizedBox(height: ScreenUtil().setWidth(24)),
+                    SizedBox(height: AppSpacing.space6),
                     _buildGasSection(context),
                     if (estimateError != null) ...[
-                      SizedBox(height: ScreenUtil().setWidth(8)),
+                      SizedBox(height: AppSpacing.space2),
                       _buildEstimateErrorRow(context),
                     ],
                   ],
-                  SizedBox(height: ScreenUtil().setWidth(24)),
+                  SizedBox(height: AppSpacing.space6),
                 ],
               ),
             ),
@@ -108,7 +108,7 @@ class AABatchTransactionBody extends StatelessWidget {
 
   Widget _buildInfoCard(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
@@ -130,7 +130,7 @@ class AABatchTransactionBody extends StatelessWidget {
                 size: ScreenUtil().setWidth(28),
                 color: const Color(0xFFFF9800),
               ),
-              SizedBox(width: ScreenUtil().setWidth(12)),
+              SizedBox(width: AppSpacing.space4),
               Flexible(
                 child: Text(
                   S.of(context).g_key_aa_batch_transaction,
@@ -143,14 +143,14 @@ class AABatchTransactionBody extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
           Text(
             S.of(context).g_key_aa_batch_description,
             style: AppTypography.caption.copyWith(
               color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
           _buildFeatureRow(
             context,
             Icons.savings,
@@ -176,7 +176,7 @@ class AABatchTransactionBody extends StatelessWidget {
             size: ScreenUtil().setWidth(18),
             color: const Color(0xFFFF9800),
           ),
-          SizedBox(width: ScreenUtil().setWidth(8)),
+          SizedBox(width: AppSpacing.space2),
           Flexible(
             child: Text(
               text,
@@ -194,7 +194,7 @@ class AABatchTransactionBody extends StatelessWidget {
   Widget _buildOperationsList(BuildContext context) {
     if (operations.isEmpty) {
       return Container(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(32)),
+        padding: EdgeInsets.all(AppSpacing.space8),
         decoration: BoxDecoration(
           color: _themeColor(context, AppThemeKeys.itemBgColor),
           borderRadius: AppRadius.brMd,
@@ -215,14 +215,14 @@ class AABatchTransactionBody extends StatelessWidget {
                 AppThemeKeys.itemSubtitleTextColor,
               ).withAlpha(100),
             ),
-            SizedBox(height: ScreenUtil().setWidth(12)),
+            SizedBox(height: AppSpacing.space4),
             Text(
               S.of(context).g_key_aa_no_operations,
               style: AppTypography.bodySm.copyWith(
                 color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
               ),
             ),
-            SizedBox(height: ScreenUtil().setWidth(4)),
+            SizedBox(height: AppSpacing.space2),
             Text(
               S.of(context).g_key_aa_add_first_operation,
               style: TextStyle(
@@ -263,7 +263,7 @@ class AABatchTransactionBody extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(height: ScreenUtil().setWidth(12)),
+        SizedBox(height: AppSpacing.space4),
         for (int i = 0; i < operations.length; i++)
           BatchOperationItem(
             operation: operations[i],
@@ -280,7 +280,7 @@ class AABatchTransactionBody extends StatelessWidget {
       icon: const Icon(Icons.add),
       label: Text(S.of(context).g_key_aa_add_operation),
       style: OutlinedButton.styleFrom(
-        padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
+        padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
         shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
       ),
     );
@@ -309,7 +309,7 @@ class AABatchTransactionBody extends StatelessWidget {
     final isSponsored = selectedPaymaster.type == PaymasterType.sponsored;
 
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: isSponsored
             ? Colors.green.withAlpha(15)
@@ -340,7 +340,7 @@ class AABatchTransactionBody extends StatelessWidget {
             ],
           ),
           if (isSponsored && estimatedTotalGas != null) ...[
-            SizedBox(height: ScreenUtil().setWidth(8)),
+            SizedBox(height: AppSpacing.space2),
             GasSponsorshipBadge(
               isSponsored: true,
               savedAmount: formatGasCost(),
@@ -384,7 +384,7 @@ class AABatchTransactionBody extends StatelessWidget {
     return Row(
       children: [
         const Icon(Icons.warning_amber_rounded, color: Colors.orange, size: 16),
-        SizedBox(width: ScreenUtil().setWidth(6)),
+        SizedBox(width: AppSpacing.space2),
         Expanded(
           child: Text(
             estimateError!,
@@ -401,7 +401,7 @@ class AABatchTransactionBody extends StatelessWidget {
     final canSend = operations.isNotEmpty && !isEstimating && !isSending;
 
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       decoration: BoxDecoration(
         color: _themeColor(context, AppThemeKeys.itemBgColor),
         boxShadow: [
@@ -418,7 +418,7 @@ class AABatchTransactionBody extends StatelessWidget {
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFFFF9800),
             foregroundColor: Colors.white,
-            padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(18)),
+            padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
             shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
             disabledBackgroundColor: Colors.grey,
           ),
@@ -434,7 +434,7 @@ class AABatchTransactionBody extends StatelessWidget {
                         valueColor: AlwaysStoppedAnimation(Colors.white),
                       ),
                     ),
-                    SizedBox(width: ScreenUtil().setWidth(10)),
+                    SizedBox(width: AppSpacing.space2),
                     Flexible(
                       child: Text(
                         S.of(context).g_key_aa_batch_submitting,

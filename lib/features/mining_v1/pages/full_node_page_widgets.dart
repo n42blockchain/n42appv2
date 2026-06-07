@@ -35,8 +35,8 @@ mixin _FullNodePageWidgets on State<FullNodePage> {
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(30),
-          vertical: ScreenUtil().setWidth(24),
+          horizontal: AppSpacing.space8,
+          vertical: AppSpacing.space6,
         ),
         child: Row(
           children: [
@@ -71,8 +71,8 @@ mixin _FullNodePageWidgets on State<FullNodePage> {
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(30),
-          vertical: ScreenUtil().setWidth(24),
+          horizontal: AppSpacing.space8,
+          vertical: AppSpacing.space6,
         ),
         child: Row(
           children: [

@@ -44,7 +44,7 @@ class _BrowserSettingState extends State<BrowserSetting> {
       appBar: AppBarWidget(text: S.of(context).g_browser_key11),
       body: SafeArea(
         child: Container(
-          padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+          padding: EdgeInsets.all(AppSpacing.space8),
           child: Column(
             children: [
               SizedBox(

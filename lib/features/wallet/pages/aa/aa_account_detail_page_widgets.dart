@@ -26,7 +26,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
     final typeColor = _getAccountTypeColor();
 
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [typeColor.withAlpha(30), typeColor.withAlpha(10)],
@@ -40,7 +40,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
           Row(
             children: [
               _buildAccountIcon(),
-              SizedBox(width: ScreenUtil().setWidth(16)),
+              SizedBox(width: AppSpacing.space4),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,7 +52,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
                         color: _mainText,
                       ),
                     ),
-                    SizedBox(height: ScreenUtil().setWidth(4)),
+                    SizedBox(height: AppSpacing.space2),
                     Text(
                       widget.account.type.displayName,
                       style: AppTypography.caption.copyWith(color: _subText),
@@ -63,9 +63,9 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
               DeploymentStatusIndicator(state: widget.account.state),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(20)),
+          SizedBox(height: AppSpacing.space4),
           Container(
-            padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+            padding: EdgeInsets.all(AppSpacing.space4),
             decoration: BoxDecoration(
               color: _themeColor(
                 AppThemeKeys.backGroundColor.name,
@@ -84,7 +84,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
                           color: _subText,
                         ),
                       ),
-                      SizedBox(height: ScreenUtil().setWidth(4)),
+                      SizedBox(height: AppSpacing.space2),
                       Text(
                         widget.account.address,
                         style: TextStyle(
@@ -150,7 +150,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
             onTap: onSend,
           ),
         ),
-        SizedBox(width: ScreenUtil().setWidth(12)),
+        SizedBox(width: AppSpacing.space4),
         Expanded(
           child: _buildActionButton(
             icon: Icons.qr_code,
@@ -159,7 +159,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
             onTap: onReceive,
           ),
         ),
-        SizedBox(width: ScreenUtil().setWidth(12)),
+        SizedBox(width: AppSpacing.space4),
         Expanded(
           child: _buildActionButton(
             icon: Icons.radar,
@@ -186,7 +186,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
+        padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
         decoration: BoxDecoration(
           color: effectiveColor.withAlpha(20),
           borderRadius: AppRadius.brMd,
@@ -211,7 +211,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
                 size: ScreenUtil().setWidth(28),
                 color: effectiveColor,
               ),
-            SizedBox(height: ScreenUtil().setWidth(6)),
+            SizedBox(height: AppSpacing.space2),
             Text(
               label,
               style: AppTypography.caption.copyWith(
@@ -229,7 +229,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
 
   Widget buildDetailsSection() {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: _sectionDecoration(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -241,7 +241,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
               color: _mainText,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           _buildDetailRow(
             S.of(context).g_key_aa_chain_id,
             widget.account.chainId.toString(),
@@ -291,7 +291,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
 
   Widget buildTransactionHistory() {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: _sectionDecoration(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -315,11 +315,11 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
               ),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           Center(
             child: Padding(
               padding: EdgeInsets.symmetric(
-                vertical: ScreenUtil().setWidth(24),
+                vertical: AppSpacing.space6,
               ),
               child: Column(
                 children: [
@@ -328,7 +328,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
                     size: ScreenUtil().setWidth(48),
                     color: _subText.withAlpha(100),
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(12)),
+                  SizedBox(height: AppSpacing.space4),
                   Text(
                     S.of(context).g_key_132,
                     style: AppTypography.caption.copyWith(color: _subText),

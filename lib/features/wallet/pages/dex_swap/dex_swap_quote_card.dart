@@ -53,7 +53,7 @@ class DexQuoteCard extends StatelessWidget {
     final impactColor = _impactColor(context);
 
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
         borderRadius: AppRadius.brMd,
@@ -79,11 +79,11 @@ class DexQuoteCard extends StatelessWidget {
             '${quote.minAmountOut} ${quote.tokenOutSymbol}',
           ),
           if (quote.priceImpactNum >= 3.0) ...[
-            SizedBox(height: ScreenUtil().setWidth(8)),
+            SizedBox(height: AppSpacing.space2),
             _highImpactBanner(context, s),
           ],
           if (needsApproval) ...[
-            SizedBox(height: ScreenUtil().setWidth(8)),
+            SizedBox(height: AppSpacing.space2),
             _approvalBanner(context, s),
           ],
         ],
@@ -108,8 +108,8 @@ class DexQuoteCard extends StatelessWidget {
   Widget _highImpactBanner(BuildContext context, S s) {
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(12),
-        vertical: ScreenUtil().setWidth(8),
+        horizontal: AppSpacing.space4,
+        vertical: AppSpacing.space2,
       ),
       decoration: BoxDecoration(
         color: _colorRed.withAlpha(20),
@@ -122,7 +122,7 @@ class DexQuoteCard extends StatelessWidget {
             color: _colorRed,
             size: ScreenUtil().setWidth(28),
           ),
-          SizedBox(width: ScreenUtil().setWidth(8)),
+          SizedBox(width: AppSpacing.space2),
           Expanded(
             child: Text(
               s.g_key_dex_price_impact_high(quote.priceImpact),
@@ -137,8 +137,8 @@ class DexQuoteCard extends StatelessWidget {
   Widget _approvalBanner(BuildContext context, S s) {
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(12),
-        vertical: ScreenUtil().setWidth(10),
+        horizontal: AppSpacing.space4,
+        vertical: AppSpacing.space2,
       ),
       decoration: BoxDecoration(
         color: _colorOrange.withAlpha(20),
@@ -154,7 +154,7 @@ class DexQuoteCard extends StatelessWidget {
                 color: _colorOrange,
                 size: ScreenUtil().setWidth(28),
               ),
-              SizedBox(width: ScreenUtil().setWidth(8)),
+              SizedBox(width: AppSpacing.space2),
               Expanded(
                 child: Text(
                   s.g_key_dex_approve_required(tokenInSymbol),
@@ -163,7 +163,7 @@ class DexQuoteCard extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(10)),
+          SizedBox(height: AppSpacing.space2),
           Row(
             children: [
               _approveChip(
@@ -172,7 +172,7 @@ class DexQuoteCard extends StatelessWidget {
                 selected: !exactApprove,
                 onTap: () => onExactApproveChanged(false),
               ),
-              SizedBox(width: ScreenUtil().setWidth(8)),
+              SizedBox(width: AppSpacing.space2),
               _approveChip(
                 context,
                 label: s.g_key_dex_approve_exact,
@@ -182,7 +182,7 @@ class DexQuoteCard extends StatelessWidget {
             ],
           ),
           if (!exactApprove) ...[
-            SizedBox(height: ScreenUtil().setWidth(8)),
+            SizedBox(height: AppSpacing.space2),
             Text(
               s.g_key_dex_approve_unlimited_info,
               style: AppTypography.captionSm.copyWith(
@@ -206,8 +206,8 @@ class DexQuoteCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(16),
-          vertical: ScreenUtil().setWidth(6),
+          horizontal: AppSpacing.space4,
+          vertical: AppSpacing.space2,
         ),
         decoration: BoxDecoration(
           color: selected
@@ -238,7 +238,7 @@ class DexQuoteCard extends StatelessWidget {
     Widget? trailing,
   }) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10)),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space2),
       child: Row(
         children: [
           Text(
@@ -248,7 +248,7 @@ class DexQuoteCard extends StatelessWidget {
             ),
           ),
           if (trailing != null) ...[
-            SizedBox(width: ScreenUtil().setWidth(8)),
+            SizedBox(width: AppSpacing.space2),
             trailing,
           ],
           const Spacer(),

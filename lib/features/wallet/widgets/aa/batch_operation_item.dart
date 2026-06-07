@@ -125,7 +125,7 @@ class BatchOperationItem extends StatelessWidget {
 
     return Container(
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
         borderRadius: AppRadius.brMd,
@@ -151,11 +151,11 @@ class BatchOperationItem extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(12)),
+          SizedBox(width: AppSpacing.space4),
 
           // 操作类型图标
           _buildOperationIcon(opColor),
-          SizedBox(width: ScreenUtil().setWidth(12)),
+          SizedBox(width: AppSpacing.space4),
 
           // 操作详情
           Expanded(
@@ -173,11 +173,11 @@ class BatchOperationItem extends StatelessWidget {
                     ),
                     if (operation.amount != null &&
                         operation.tokenSymbol != null) ...[
-                      SizedBox(width: ScreenUtil().setWidth(8)),
+                      SizedBox(width: AppSpacing.space2),
                       Container(
                         padding: EdgeInsets.symmetric(
-                          horizontal: ScreenUtil().setWidth(8),
-                          vertical: ScreenUtil().setWidth(2),
+                          horizontal: AppSpacing.space2,
+                          vertical: AppSpacing.space2,
                         ),
                         decoration: BoxDecoration(
                           color: opColor.withAlpha(20),
@@ -194,7 +194,7 @@ class BatchOperationItem extends StatelessWidget {
                     ],
                   ],
                 ),
-                SizedBox(height: ScreenUtil().setWidth(4)),
+                SizedBox(height: AppSpacing.space2),
                 Text(
                   _shortenAddress(operation.targetAddress),
                   style: TextStyle(
@@ -204,7 +204,7 @@ class BatchOperationItem extends StatelessWidget {
                   ),
                 ),
                 if (operation.description != null) ...[
-                  SizedBox(height: ScreenUtil().setWidth(4)),
+                  SizedBox(height: AppSpacing.space2),
                   Text(
                     operation.description!,
                     style: AppTypography.captionSm.copyWith(

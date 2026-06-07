@@ -59,30 +59,30 @@ class _HardwareWalletPageState extends State<HardwareWalletPage> {
           builder: (context, _) {
             final provider = _provider;
             return SingleChildScrollView(
-              padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+              padding: EdgeInsets.all(AppSpacing.space8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // 连接状态卡片
                   _buildConnectionStatusCard(context, s, provider),
 
-                  SizedBox(height: ScreenUtil().setWidth(24)),
+                  SizedBox(height: AppSpacing.space6),
 
                   // 已保存的设备
                   if (provider.savedDevices.isNotEmpty) ...[
                     _buildSectionTitle(context, s.g_key_hw_saved_devices),
-                    SizedBox(height: ScreenUtil().setWidth(12)),
+                    SizedBox(height: AppSpacing.space4),
                     ...provider.savedDevices.map(
                       (device) =>
                           _buildSavedDeviceCard(context, s, provider, device),
                     ),
-                    SizedBox(height: ScreenUtil().setWidth(24)),
+                    SizedBox(height: AppSpacing.space6),
                   ],
 
                   // 添加新设备按钮
                   _buildAddDeviceSection(context, s),
 
-                  SizedBox(height: ScreenUtil().setWidth(24)),
+                  SizedBox(height: AppSpacing.space6),
 
                   // 支持的设备说明
                   _buildSupportedDevicesInfo(context, s),

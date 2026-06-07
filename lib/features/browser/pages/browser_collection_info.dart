@@ -108,7 +108,7 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
             onTap: _deleting ? null : deleteCollection,
             child: Container(
               padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(30.0),
+                horizontal: AppSpacing.space8,
               ),
               height: ScreenUtil().setWidth(40.0),
               child: _deleting
@@ -160,8 +160,8 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
   }) {
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30.0),
-        vertical: ScreenUtil().setWidth(30.0),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space8,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -241,7 +241,7 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
       height: ScreenUtil().setWidth(148.0),
       width: double.infinity,
       color: AppColorTokens.of(context).bgBase,
-      padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       child: AppButton(label: S.of(context).g_key_115, onPressed: _saveUrl),
     );
   }

@@ -130,16 +130,16 @@ class _AAHomePageState extends State<AAHomePage> {
     return Scaffold(
       appBar: AppBarWidget(text: S.of(context).g_key_aa_title),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+        padding: EdgeInsets.all(AppSpacing.space6),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             buildHeaderCard(),
-            SizedBox(height: ScreenUtil().setWidth(24)),
+            SizedBox(height: AppSpacing.space6),
             buildFeatureCards(),
-            SizedBox(height: ScreenUtil().setWidth(24)),
+            SizedBox(height: AppSpacing.space6),
             buildAdvancedFeatures(),
-            SizedBox(height: ScreenUtil().setWidth(24)),
+            SizedBox(height: AppSpacing.space6),
             buildAccountsSection(),
           ],
         ),

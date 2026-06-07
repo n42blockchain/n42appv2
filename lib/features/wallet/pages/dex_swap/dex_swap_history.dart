@@ -36,7 +36,7 @@ class _DexSwapHistoryState extends State<DexSwapHistory> {
     return Scaffold(
       appBar: AppBarWidget(text: S.of(context).g_key_dex_history_title),
       body: Padding(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+        padding: EdgeInsets.all(AppSpacing.space8),
         child: BaseList(
           firstRefresh: true,
           pageIndex: 1,
@@ -111,11 +111,11 @@ class _DexSwapHistoryState extends State<DexSwapHistory> {
                           color: AppColorTokens.of(context).textSubtitle,
                         ),
                       ),
-                      SizedBox(width: ScreenUtil().setWidth(12)),
+                      SizedBox(width: AppSpacing.space4),
                       Container(
                         padding: EdgeInsets.symmetric(
-                          horizontal: ScreenUtil().setWidth(12),
-                          vertical: ScreenUtil().setWidth(4),
+                          horizontal: AppSpacing.space4,
+                          vertical: AppSpacing.space2,
                         ),
                         decoration: BoxDecoration(
                           color: statusColor.withValues(alpha: 0.12),

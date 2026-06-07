@@ -44,7 +44,7 @@ mixin BridgeHomeLogicMixin on ConsumerState<BridgeHomePage> {
               isSuccess ? Icons.check_circle : Icons.error_outline,
               color: Colors.white,
             ),
-            SizedBox(width: ScreenUtil().setWidth(12)),
+            SizedBox(width: AppSpacing.space4),
             Expanded(
               child: Text(
                 isSuccess
@@ -239,7 +239,7 @@ mixin BridgeHomeLogicMixin on ConsumerState<BridgeHomePage> {
             return Column(
               children: [
                 Padding(
-                  padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                  padding: EdgeInsets.all(AppSpacing.space8),
                   child: Text(
                     S.of(context).g_key_bridge_select_token,
                     style: AppTypography.headline.copyWith(

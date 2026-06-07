@@ -186,7 +186,7 @@ class _WalletManageState extends ConsumerState<WalletManage> {
                 alignment: Alignment.center,
                 height: ScreenUtil().setWidth(100.0),
                 padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(30.0),
+                  horizontal: AppSpacing.space8,
                 ),
                 child: Text(
                   S.of(context).g_key_113,
@@ -256,7 +256,7 @@ class _WalletManageState extends ConsumerState<WalletManage> {
                     child: Container(
                       height: ScreenUtil().setWidth(148.0),
                       width: double.infinity,
-                      padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+                      padding: EdgeInsets.all(AppSpacing.space8),
                       color: AppColorTokens.of(context).bgBase,
                       child: AppButton(
                         label: S.of(context).g_key_15,
@@ -285,13 +285,13 @@ class _WalletManageState extends ConsumerState<WalletManage> {
   );
 
   EdgeInsets get _tileMargin => EdgeInsets.symmetric(
-    horizontal: ScreenUtil().setWidth(30.0),
-    vertical: ScreenUtil().setWidth(10.0),
+    horizontal: AppSpacing.space8,
+    vertical: AppSpacing.space2,
   );
 
   EdgeInsets get _tilePadding => EdgeInsets.symmetric(
-    vertical: ScreenUtil().setWidth(20.0),
-    horizontal: ScreenUtil().setWidth(30.0),
+    vertical: AppSpacing.space4,
+    horizontal: AppSpacing.space8,
   );
 
   Widget _walletName(BuildContext context, String title, String value) {
@@ -331,7 +331,7 @@ class _WalletManageState extends ConsumerState<WalletManage> {
                 textAlign: TextAlign.right,
               ),
             ),
-            SizedBox(width: ScreenUtil().setWidth(20.0)),
+            SizedBox(width: AppSpacing.space4),
             Icon(
               Icons.arrow_forward_ios_sharp,
               size: ScreenUtil().setWidth(30.0),
@@ -360,7 +360,7 @@ class _WalletManageState extends ConsumerState<WalletManage> {
                 style: AppTypography.headline.copyWith(color: mainText),
               ),
             ),
-            SizedBox(width: ScreenUtil().setWidth(10.0)),
+            SizedBox(width: AppSpacing.space2),
             Icon(
               Icons.arrow_forward_ios_sharp,
               size: ScreenUtil().setWidth(30.0),

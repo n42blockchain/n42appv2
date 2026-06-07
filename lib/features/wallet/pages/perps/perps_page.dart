@@ -125,8 +125,8 @@ class _PerpsPageState extends State<PerpsPage>
   Widget _buildMarginBar(MarginSummary margin) {
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(24),
-        vertical: ScreenUtil().setWidth(12),
+        horizontal: AppSpacing.space6,
+        vertical: AppSpacing.space4,
       ),
       color: AppColorTokens.of(context).bgSurface,
       child: Row(
@@ -172,7 +172,7 @@ class _PerpsPageState extends State<PerpsPage>
 
   Widget _buildMarketsList() {
     return ListView.builder(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(8)),
+      padding: EdgeInsets.all(AppSpacing.space2),
       itemCount: _markets.length,
       itemBuilder: (context, index) {
         final m = _markets[index];
@@ -233,14 +233,14 @@ class _PerpsPageState extends State<PerpsPage>
     }
 
     return ListView.builder(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(8)),
+      padding: EdgeInsets.all(AppSpacing.space2),
       itemCount: _positions.length,
       itemBuilder: (context, index) {
         final p = _positions[index];
         final isProfitable = p.unrealizedPnl >= 0;
         return Container(
           margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(8)),
-          padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+          padding: EdgeInsets.all(AppSpacing.space4),
           decoration: BoxDecoration(
             color: AppColorTokens.of(context).bgSurface,
             borderRadius: AppRadius.brMd,
@@ -251,8 +251,8 @@ class _PerpsPageState extends State<PerpsPage>
                 children: [
                   Container(
                     padding: EdgeInsets.symmetric(
-                      horizontal: ScreenUtil().setWidth(12),
-                      vertical: ScreenUtil().setWidth(4),
+                      horizontal: AppSpacing.space4,
+                      vertical: AppSpacing.space2,
                     ),
                     decoration: BoxDecoration(
                       color:
@@ -272,7 +272,7 @@ class _PerpsPageState extends State<PerpsPage>
                       ),
                     ),
                   ),
-                  SizedBox(width: ScreenUtil().setWidth(8)),
+                  SizedBox(width: AppSpacing.space2),
                   Text(
                     p.symbol,
                     style: AppTypography.body.copyWith(
@@ -305,7 +305,7 @@ class _PerpsPageState extends State<PerpsPage>
                   ),
                 ],
               ),
-              SizedBox(height: ScreenUtil().setWidth(8)),
+              SizedBox(height: AppSpacing.space2),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -357,7 +357,7 @@ class _PerpsPageState extends State<PerpsPage>
     }
 
     return ListView.builder(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(8)),
+      padding: EdgeInsets.all(AppSpacing.space2),
       itemCount: _orders.length,
       itemBuilder: (context, index) {
         final o = _orders[index];

@@ -12,8 +12,8 @@ mixin _SectionsMixin on _WidgetsMixin {
     }
     return Container(
       padding: EdgeInsets.symmetric(
-        vertical: ScreenUtil().setWidth(18),
-        horizontal: ScreenUtil().setWidth(30),
+        vertical: AppSpacing.space4,
+        horizontal: AppSpacing.space8,
       ),
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
@@ -31,7 +31,7 @@ mixin _SectionsMixin on _WidgetsMixin {
             flex: 1,
             child: Padding(
               padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(16),
+                horizontal: AppSpacing.space4,
               ),
               child: Text(
                 S.of(context).g_mining_key_9,
@@ -83,7 +83,7 @@ mixin _SectionsMixin on _WidgetsMixin {
                 fontWeight: FontWeight.w600,
               ),
             ),
-            SizedBox(height: ScreenUtil().setWidth(40)),
+            SizedBox(height: AppSpacing.space12),
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
@@ -100,7 +100,7 @@ mixin _SectionsMixin on _WidgetsMixin {
                       ? Center(
                           child: Padding(
                             padding: EdgeInsets.symmetric(
-                              vertical: ScreenUtil().setWidth(60),
+                              vertical: AppSpacing.space16,
                             ),
                             child: Loading(),
                           ),
@@ -111,7 +111,7 @@ mixin _SectionsMixin on _WidgetsMixin {
                             children: [
                               Padding(
                                 padding: EdgeInsets.symmetric(
-                                  vertical: ScreenUtil().setWidth(60),
+                                  vertical: AppSpacing.space16,
                                 ),
                                 child: EmptyView(),
                               ),
@@ -182,7 +182,7 @@ mixin _SectionsMixin on _WidgetsMixin {
                                   },
                                   child: Padding(
                                     padding: EdgeInsets.symmetric(
-                                      horizontal: ScreenUtil().setWidth(20),
+                                      horizontal: AppSpacing.space4,
                                     ),
                                     child: TaskItem(
                                       taskId:
@@ -225,7 +225,7 @@ mixin _SectionsMixin on _WidgetsMixin {
           title: S.of(context).g_mining_key38,
           value: '$currDepositsOfValue ${CoinType.N.name}',
         ),
-        SizedBox(width: ScreenUtil().setWidth(24)),
+        SizedBox(width: AppSpacing.space6),
         _tierCard(
           title: "Tier Value",
           value:
@@ -240,7 +240,7 @@ mixin _SectionsMixin on _WidgetsMixin {
       child: Container(
         width: double.infinity,
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(30),
+          horizontal: AppSpacing.space8,
           vertical: ScreenUtil().setWidth(26),
         ),
         decoration: BoxDecoration(
@@ -257,7 +257,7 @@ mixin _SectionsMixin on _WidgetsMixin {
                 color: AppColorTokens.of(context).textSubtitle,
               ),
             ),
-            SizedBox(height: ScreenUtil().setWidth(30)),
+            SizedBox(height: AppSpacing.space8),
             Text(
               value,
               style: AppTypography.headline.copyWith(
@@ -273,8 +273,8 @@ mixin _SectionsMixin on _WidgetsMixin {
   Widget nextRewardInWidget() {
     return Container(
       padding: EdgeInsets.symmetric(
-        vertical: ScreenUtil().setWidth(18),
-        horizontal: ScreenUtil().setWidth(30),
+        vertical: AppSpacing.space4,
+        horizontal: AppSpacing.space8,
       ),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
@@ -291,7 +291,7 @@ mixin _SectionsMixin on _WidgetsMixin {
             flex: 1,
             child: Padding(
               padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(20),
+                horizontal: AppSpacing.space4,
               ),
               child: Text(
                 '24H Reward',

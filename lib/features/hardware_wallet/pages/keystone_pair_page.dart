@@ -63,7 +63,7 @@ class _KeystonePairPageState extends State<KeystonePairPage> {
         child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+              padding: EdgeInsets.all(AppSpacing.space4),
               child: _KeystoneInfoCard(
                 icon: Icons.qr_code_scanner,
                 message: s.g_key_hw_keystone_scan_xpub_hint,
@@ -79,7 +79,7 @@ class _KeystonePairPageState extends State<KeystonePairPage> {
                       left: ScreenUtil().setWidth(30),
                       right: ScreenUtil().setWidth(30),
                       child: Container(
-                        padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+                        padding: EdgeInsets.all(AppSpacing.space4),
                         decoration: BoxDecoration(
                           color: Colors.red.shade900.withAlpha(220),
                           borderRadius: AppRadius.brMd,

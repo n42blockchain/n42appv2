@@ -26,7 +26,7 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
 
   Widget buildToField() {
     return Container(
-      margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+      margin: EdgeInsets.all(AppSpacing.space8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -36,7 +36,7 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
               color: AppColorTokens.of(context).textPrimary,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(20.0)),
+          SizedBox(height: AppSpacing.space4),
           textFieldStyle2(
             context,
             controller: toCtrl,
@@ -212,8 +212,8 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
   Widget buildMemoField() {
     return Container(
       margin: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30.0),
-        vertical: ScreenUtil().setWidth(10.0),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space2,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -224,7 +224,7 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
               color: AppColorTokens.of(context).textPrimary,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(20.0)),
+          SizedBox(height: AppSpacing.space4),
           textFieldStyle2(
             context,
             controller: memoCtrl,
@@ -254,8 +254,8 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
         if (isContract)
           Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(30.0),
-              vertical: ScreenUtil().setWidth(8.0),
+              horizontal: AppSpacing.space8,
+              vertical: AppSpacing.space2,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -296,8 +296,8 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
         right: ScreenUtil().setWidth(30),
       ),
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30.0),
-        vertical: ScreenUtil().setWidth(30.0),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space8,
       ),
       width: double.infinity,
       decoration: BoxDecoration(
@@ -326,7 +326,7 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
         children: [
           const Divider(height: 1, indent: 0, endIndent: 0),
           Container(
-            padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+            padding: EdgeInsets.all(AppSpacing.space8),
             height: ScreenUtil().setWidth(148.0),
             color: AppColorTokens.of(context).bgBase,
             child: AppButton(

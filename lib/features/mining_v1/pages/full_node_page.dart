@@ -81,7 +81,7 @@ class _FullNodePageState extends State<FullNodePage>
             Positioned.fill(
               child: Container(
                 padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(30),
+                  horizontal: AppSpacing.space8,
                 ),
                 child: Column(
                   children: [
@@ -94,7 +94,7 @@ class _FullNodePageState extends State<FullNodePage>
                             S.current.g_mining_key_38,
                             style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
                           ),
-                          SizedBox(height: ScreenUtil().setWidth(30)),
+                          SizedBox(height: AppSpacing.space8),
                           _buildPayMethod(
                             "assets/mining/pay_ast.png",
                             S.of(context).g_mining_key_40,
@@ -105,9 +105,9 @@ class _FullNodePageState extends State<FullNodePage>
                               });
                             },
                           ),
-                          SizedBox(height: ScreenUtil().setWidth(24)),
+                          SizedBox(height: AppSpacing.space6),
                           Divider(color: AppColorTokens.of(context).border),
-                          SizedBox(height: ScreenUtil().setWidth(24)),
+                          SizedBox(height: AppSpacing.space6),
                           Text(
                             S.of(context).g_mining_key46,
                             textAlign: TextAlign.center,
@@ -118,7 +118,7 @@ class _FullNodePageState extends State<FullNodePage>
                             S.current.g_mining_key_39,
                             style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
                           ),
-                          SizedBox(height: ScreenUtil().setWidth(24)),
+                          SizedBox(height: AppSpacing.space6),
                           _buildPayMethods(),
                         ],
                       ),
@@ -142,7 +142,7 @@ class _FullNodePageState extends State<FullNodePage>
                   Container(
                     width: double.infinity,
                     height: ScreenUtil().setWidth(148),
-                    padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                    padding: EdgeInsets.all(AppSpacing.space8),
                     child: AppButton(
                       label: S.of(context).g_key_78,
                       onPressed: () => _handleConfirmTap(),

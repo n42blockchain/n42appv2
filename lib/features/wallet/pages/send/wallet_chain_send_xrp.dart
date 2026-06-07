@@ -79,8 +79,8 @@ class _WalletChainSendXrpState extends ConsumerState<WalletChainSendXrp>
         right: ScreenUtil().setWidth(30),
       ),
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30.0),
-        vertical: ScreenUtil().setWidth(30.0),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space8,
       ),
       width: double.infinity,
       decoration: BoxDecoration(

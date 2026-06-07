@@ -200,12 +200,12 @@ class _IapPageState extends State<IapPage> {
       scrollable = ListView.separated(
         physics: const AlwaysScrollableScrollPhysics(),
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(32),
-          vertical: ScreenUtil().setWidth(24),
+          horizontal: AppSpacing.space8,
+          vertical: AppSpacing.space6,
         ),
         itemCount: _products.length,
         separatorBuilder: (context, index) =>
-            SizedBox(height: ScreenUtil().setWidth(20)),
+            SizedBox(height: AppSpacing.space4),
         itemBuilder: (context, index) => _buildProductCard(
           _products[index],
           isDark,
@@ -232,7 +232,7 @@ class _IapPageState extends State<IapPage> {
   Widget _buildUnavailable(Color textPrimary, Color textSecondary) {
     return Center(
       child: Padding(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(60)),
+        padding: EdgeInsets.all(AppSpacing.space16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -241,7 +241,7 @@ class _IapPageState extends State<IapPage> {
               size: ScreenUtil().setWidth(120),
               color: textSecondary,
             ),
-            SizedBox(height: ScreenUtil().setWidth(24)),
+            SizedBox(height: AppSpacing.space6),
             Text(
               S.of(context).g_iap_store_unavailable,
               style: AppTypography.body.copyWith(
@@ -249,12 +249,12 @@ class _IapPageState extends State<IapPage> {
                 fontWeight: FontWeight.w600,
               ),
             ),
-            SizedBox(height: ScreenUtil().setWidth(12)),
+            SizedBox(height: AppSpacing.space4),
             Text(
               S.of(context).g_iap_check_network,
               style: AppTypography.caption.copyWith(color: textSecondary),
             ),
-            SizedBox(height: ScreenUtil().setWidth(40)),
+            SizedBox(height: AppSpacing.space12),
             _RetryButton(onTap: _init),
           ],
         ),
@@ -265,7 +265,7 @@ class _IapPageState extends State<IapPage> {
   Widget _buildEmpty(Color textSecondary) {
     return Center(
       child: Padding(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(60)),
+        padding: EdgeInsets.all(AppSpacing.space16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -274,12 +274,12 @@ class _IapPageState extends State<IapPage> {
               size: ScreenUtil().setWidth(120),
               color: textSecondary,
             ),
-            SizedBox(height: ScreenUtil().setWidth(24)),
+            SizedBox(height: AppSpacing.space6),
             Text(
               S.of(context).g_iap_no_products,
               style: AppTypography.body.copyWith(color: textSecondary),
             ),
-            SizedBox(height: ScreenUtil().setWidth(40)),
+            SizedBox(height: AppSpacing.space12),
             _RetryButton(onTap: _fetchProducts),
           ],
         ),
@@ -300,7 +300,7 @@ class _IapPageState extends State<IapPage> {
         : Colors.grey.withValues(alpha: 0.15);
 
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(32)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       decoration: BoxDecoration(
         color: cardBg,
         borderRadius: AppRadius.brMd,
@@ -333,7 +333,7 @@ class _IapPageState extends State<IapPage> {
               size: ScreenUtil().setWidth(44),
             ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(24)),
+          SizedBox(width: AppSpacing.space6),
           // 商品信息
           Expanded(
             child: Column(
@@ -349,7 +349,7 @@ class _IapPageState extends State<IapPage> {
                   overflow: TextOverflow.ellipsis,
                 ),
                 if (product.description.isNotEmpty) ...[
-                  SizedBox(height: ScreenUtil().setWidth(6)),
+                  SizedBox(height: AppSpacing.space2),
                   Text(
                     product.description,
                     style: AppTypography.caption.copyWith(color: textSecondary),
@@ -360,14 +360,14 @@ class _IapPageState extends State<IapPage> {
               ],
             ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(16)),
+          SizedBox(width: AppSpacing.space4),
           // 价格 + 购买
           GestureDetector(
             onTap: isPending ? null : () => _buy(product),
             child: Container(
               padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(24),
-                vertical: ScreenUtil().setWidth(14),
+                horizontal: AppSpacing.space6,
+                vertical: AppSpacing.space4,
               ),
               decoration: BoxDecoration(
                 gradient: isPending
@@ -425,7 +425,7 @@ class _RetryButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(60),
+          horizontal: AppSpacing.space16,
           vertical: ScreenUtil().setWidth(22),
         ),
         decoration: BoxDecoration(

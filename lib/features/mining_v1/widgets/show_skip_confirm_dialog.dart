@@ -13,7 +13,7 @@ Future<bool?> showSKipConfirmDialog(
     builder: (_) => AlertDialog(
       contentPadding: const EdgeInsets.all(0),
       //这是宽度沾满宽度
-      insetPadding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      insetPadding: EdgeInsets.all(AppSpacing.space6),
       //设置圆角
       shape: RoundedRectangleBorder(borderRadius: AppRadius.brLg),
       content: Container(
@@ -36,7 +36,7 @@ class SkipDialogView extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(44)),
+        padding: EdgeInsets.symmetric(horizontal: AppSpacing.space12),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -52,13 +52,13 @@ class SkipDialogView extends StatelessWidget {
                 fontSize: ScreenUtil().setSp(44),
               ),
             ),
-            SizedBox(height: ScreenUtil().setWidth(44)),
+            SizedBox(height: AppSpacing.space12),
             Image.asset(
               "assets/mining/big_tip.png",
               width: ScreenUtil().setWidth(130),
               fit: BoxFit.cover,
             ),
-            SizedBox(height: ScreenUtil().setWidth(44)),
+            SizedBox(height: AppSpacing.space12),
             Text(
               // "You will not receive any mining rewards until you choose 1 of the plans.",
               S.current.g_mining_key_46,
@@ -67,7 +67,7 @@ class SkipDialogView extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
             ),
-            SizedBox(height: ScreenUtil().setWidth(44)),
+            SizedBox(height: AppSpacing.space12),
             SizedBox(
               height: ScreenUtil().setWidth(88),
               child: Row(
@@ -96,7 +96,7 @@ class SkipDialogView extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(width: ScreenUtil().setWidth(30)),
+                  SizedBox(width: AppSpacing.space8),
                   Expanded(
                     child: InkWell(
                       onTap: () {
@@ -124,7 +124,7 @@ class SkipDialogView extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: ScreenUtil().setWidth(48)),
+            SizedBox(height: AppSpacing.space12),
           ],
         ),
       ),

@@ -213,7 +213,7 @@ class _ClipboardCountdownHint extends StatelessWidget {
           size: ScreenUtil().setWidth(32),
           color: textColor,
         ),
-        SizedBox(width: ScreenUtil().setWidth(8)),
+        SizedBox(width: AppSpacing.space2),
         Text(
           'Clipboard auto-clears in ${seconds}s',
           style: TextStyle(color: textColor, fontSize: ScreenUtil().setSp(24)),

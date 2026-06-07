@@ -133,13 +133,13 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
     return Scaffold(
       appBar: AppBarWidget(text: S.of(context).g_key_ens_renew),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+        padding: EdgeInsets.all(AppSpacing.space6),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // 域名信息卡片
             _buildDomainCard(),
-            SizedBox(height: ScreenUtil().setWidth(24)),
+            SizedBox(height: AppSpacing.space6),
 
             // 续费成功后显示结果
             if (_renewResult?.success == true) ...[
@@ -147,24 +147,24 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
                 ensName: widget.ownedEns.name,
                 renewResult: _renewResult!,
               ),
-              SizedBox(height: ScreenUtil().setWidth(24)),
+              SizedBox(height: AppSpacing.space6),
             ],
 
             // 续费期限选择
             if (_renewResult?.success != true) ...[
               _buildYearsSelector(),
-              SizedBox(height: ScreenUtil().setWidth(24)),
+              SizedBox(height: AppSpacing.space6),
 
               // 价格信息
               if (_isLoadingPrice)
                 const Center(child: CircularProgressIndicator())
               else if (_priceInfo != null)
                 EnsPriceCard(price: _priceInfo!),
-              SizedBox(height: ScreenUtil().setWidth(24)),
+              SizedBox(height: AppSpacing.space6),
 
               // 新到期时间预览
               if (_priceInfo != null) _buildExpiryPreview(),
-              SizedBox(height: ScreenUtil().setWidth(32)),
+              SizedBox(height: AppSpacing.space8),
             ],
 
             // 操作按钮
@@ -191,7 +191,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
     };
 
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [baseColor.withAlpha(30), baseColor.withAlpha(10)],
@@ -209,7 +209,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
               color: _color(AppThemeKeys.mainTextColor),
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -218,7 +218,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
                 size: ScreenUtil().setWidth(20),
                 color: statusColor,
               ),
-              SizedBox(width: ScreenUtil().setWidth(6)),
+              SizedBox(width: AppSpacing.space2),
               Flexible(
                 child: Text(
                   ens.isExpired
@@ -246,7 +246,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
             color: _color(AppThemeKeys.mainTextColor),
           ),
         ),
-        SizedBox(height: ScreenUtil().setWidth(16)),
+        SizedBox(height: AppSpacing.space4),
         Row(
           children: [1, 2, 3, 5].map((years) {
             final isSelected = _selectedYears == years;
@@ -258,7 +258,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
                     right: years != 5 ? ScreenUtil().setWidth(12) : 0,
                   ),
                   padding: EdgeInsets.symmetric(
-                    vertical: ScreenUtil().setWidth(16),
+                    vertical: AppSpacing.space4,
                   ),
                   decoration: BoxDecoration(
                     color: _color(
@@ -299,7 +299,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
     final newExpiry = currentExpiry.add(Duration(days: _selectedYears * 365));
 
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: Colors.green.withAlpha(20),
         borderRadius: AppRadius.brMd,
@@ -328,7 +328,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
             ],
           ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(8)),
+            padding: EdgeInsets.symmetric(vertical: AppSpacing.space2),
             child: Icon(
               Icons.arrow_downward,
               size: ScreenUtil().setWidth(24),
@@ -369,7 +369,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.green,
           foregroundColor: Colors.white,
-          padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(18)),
+          padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
           shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
         ),
         child: Text(
@@ -384,7 +384,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
       style: ElevatedButton.styleFrom(
         backgroundColor: _color(AppThemeKeys.mainBlueColor),
         foregroundColor: Colors.white,
-        padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(18)),
+        padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
         shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
         disabledBackgroundColor: Colors.grey,
       ),

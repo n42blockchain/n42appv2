@@ -122,7 +122,7 @@ class BatchResultSheet extends StatelessWidget {
 
     return SafeArea(
       child: Padding(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+        padding: EdgeInsets.all(AppSpacing.space6),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -140,7 +140,7 @@ class BatchResultSheet extends StatelessWidget {
               color: Colors.green,
               size: ScreenUtil().setWidth(72),
             ),
-            SizedBox(height: ScreenUtil().setWidth(12)),
+            SizedBox(height: AppSpacing.space4),
             Text(
               S.of(context).g_key_140,
               style: AppTypography.title.copyWith(
@@ -148,9 +148,9 @@ class BatchResultSheet extends StatelessWidget {
                 color: Colors.green,
               ),
             ),
-            SizedBox(height: ScreenUtil().setWidth(24)),
+            SizedBox(height: AppSpacing.space6),
             Container(
-              padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+              padding: EdgeInsets.all(AppSpacing.space4),
               decoration: BoxDecoration(
                 color: AppColorTokens.of(context).bgBase,
                 borderRadius: AppRadius.brMd,
@@ -163,7 +163,7 @@ class BatchResultSheet extends StatelessWidget {
                     labelColor: subText,
                     valueColor: mainText,
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(8)),
+                  SizedBox(height: AppSpacing.space2),
                   _ResultRow(
                     label: S.of(context).g_key_batch_total_amount,
                     value:
@@ -172,7 +172,7 @@ class BatchResultSheet extends StatelessWidget {
                     valueColor: mainText,
                   ),
                   if (txHash.isNotEmpty) ...[
-                    SizedBox(height: ScreenUtil().setWidth(8)),
+                    SizedBox(height: AppSpacing.space2),
                     _ResultRow(
                       label: 'TxHash',
                       value: shortenAddress(txHash),
@@ -201,7 +201,7 @@ class BatchResultSheet extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: ScreenUtil().setWidth(24)),
+            SizedBox(height: AppSpacing.space6),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
@@ -215,7 +215,7 @@ class BatchResultSheet extends StatelessWidget {
                   backgroundColor: blue,
                   foregroundColor: Colors.white,
                   padding: EdgeInsets.symmetric(
-                    vertical: ScreenUtil().setWidth(20),
+                    vertical: AppSpacing.space4,
                   ),
                   textStyle: AppTypography.body.copyWith(
                     fontWeight: FontWeight.w600,
@@ -224,14 +224,14 @@ class BatchResultSheet extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: ScreenUtil().setWidth(12)),
+            SizedBox(height: AppSpacing.space4),
             SizedBox(
               width: double.infinity,
               child: OutlinedButton(
                 onPressed: () => Navigator.pop(context),
                 style: OutlinedButton.styleFrom(
                   padding: EdgeInsets.symmetric(
-                    vertical: ScreenUtil().setWidth(16),
+                    vertical: AppSpacing.space4,
                   ),
                   shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
                 ),

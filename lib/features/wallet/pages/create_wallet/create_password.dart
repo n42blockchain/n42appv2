@@ -66,7 +66,7 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
     );
   }
 
-  Widget _stepGap() => SizedBox(width: ScreenUtil().setWidth(20.0));
+  Widget _stepGap() => SizedBox(width: AppSpacing.space4);
 
   TextStyle _hintStyle() => AppTypography.body.copyWith(
     color: AppThemeUtils.getColorByKey(
@@ -130,13 +130,13 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
             Positioned.fill(
               child: SingleChildScrollView(
                 padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(30.0),
+                  horizontal: AppSpacing.space8,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+                      margin: EdgeInsets.all(AppSpacing.space8),
                       alignment: Alignment.center,
                       child: Text(
                         S.of(context).g_key_wallet_c47,
@@ -252,7 +252,7 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
                   const Divider(height: 1, indent: 0, endIndent: 0),
                   Container(
                     height: ScreenUtil().setWidth(148.0),
-                    padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+                    padding: EdgeInsets.all(AppSpacing.space8),
                     width: double.infinity,
                     color: AppColorTokens.of(context).bgBase,
                     child: AppButton(

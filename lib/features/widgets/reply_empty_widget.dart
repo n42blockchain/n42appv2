@@ -41,8 +41,8 @@ class ReplyEmptyWidget extends StatelessWidget {
                     Expanded(
                       child: Padding(
                         padding: EdgeInsets.symmetric(
-                          horizontal: ScreenUtil().setWidth(14),
-                          vertical: ScreenUtil().setWidth(14),
+                          horizontal: AppSpacing.space4,
+                          vertical: AppSpacing.space4,
                         ),
                         child: _buildMessageView(context),
                       ),

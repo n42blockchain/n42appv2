@@ -392,7 +392,7 @@ class _GasTrackerPageState extends State<GasTrackerPage> {
           SizedBox(height: spacing),
         ],
         ..._networks.map(buildNetworkCard),
-        SizedBox(height: ScreenUtil().setWidth(16)),
+        SizedBox(height: AppSpacing.space4),
         buildFooter(),
       ],
     );

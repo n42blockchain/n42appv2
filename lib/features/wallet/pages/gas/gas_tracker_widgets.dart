@@ -46,7 +46,7 @@ class _AlertsOverviewSheet extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _SheetDragHandle(subtitleText: subtitleText),
-          SizedBox(height: ScreenUtil().setWidth(20)),
+          SizedBox(height: AppSpacing.space4),
           Text(
             S.of(context).g_key_gas_alert,
             style: AppTypography.headline.copyWith(
@@ -54,7 +54,7 @@ class _AlertsOverviewSheet extends StatelessWidget {
               color: mainText,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           ...networks.map(
             (n) => _buildNetworkTile(context, n, mainText, subtitleText),
           ),
@@ -227,11 +227,11 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _SheetDragHandle(subtitleText: subtitleText),
-              SizedBox(height: ScreenUtil().setWidth(20)),
+              SizedBox(height: AppSpacing.space4),
               _buildTitleRow(context, mainText),
-              SizedBox(height: ScreenUtil().setWidth(24)),
+              SizedBox(height: AppSpacing.space6),
               _buildEnabledToggle(context, itemBg, mainText, blueColor),
-              SizedBox(height: ScreenUtil().setWidth(16)),
+              SizedBox(height: AppSpacing.space4),
               _buildThresholdSection(
                 context,
                 itemBg,
@@ -239,10 +239,10 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
                 mainText,
                 bgColor,
               ),
-              SizedBox(height: ScreenUtil().setWidth(24)),
+              SizedBox(height: AppSpacing.space6),
               _buildSaveButton(context, blueColor),
               if (widget.existing != null) ...[
-                SizedBox(height: ScreenUtil().setWidth(12)),
+                SizedBox(height: AppSpacing.space4),
                 _buildRemoveButton(context),
               ],
             ],
@@ -256,7 +256,7 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
     return Row(
       children: [
         _NetworkIcon(network: widget.network, size: 44, iconSize: 24),
-        SizedBox(width: ScreenUtil().setWidth(12)),
+        SizedBox(width: AppSpacing.space4),
         Expanded(
           child: Text(
             '${widget.network.name} — ${S.of(context).g_key_gas_alert}',
@@ -278,8 +278,8 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
   ) {
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(20),
-        vertical: ScreenUtil().setWidth(12),
+        horizontal: AppSpacing.space4,
+        vertical: AppSpacing.space4,
       ),
       decoration: BoxDecoration(color: itemBg, borderRadius: AppRadius.brMd),
       child: Row(
@@ -310,7 +310,7 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
     Color bgColor,
   ) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(color: itemBg, borderRadius: AppRadius.brMd),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -319,7 +319,7 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
             S.of(context).g_key_gas_alert_threshold,
             style: AppTypography.caption.copyWith(color: subtitleText),
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
           Row(
             children: [
               Expanded(
@@ -334,7 +334,7 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
                   },
                 ),
               ),
-              SizedBox(width: ScreenUtil().setWidth(12)),
+              SizedBox(width: AppSpacing.space4),
               Expanded(
                 child: _DirectionButton(
                   label: S.of(context).g_key_gas_alert_above,
@@ -349,10 +349,10 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
               ),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           _buildThresholdInput(context, subtitleText, mainText, bgColor),
           if (_error.isNotEmpty) ...[
-            SizedBox(height: ScreenUtil().setWidth(6)),
+            SizedBox(height: AppSpacing.space2),
             Text(
               _error,
               style: AppTypography.caption.copyWith(
@@ -377,8 +377,8 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
 
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(16),
-        vertical: ScreenUtil().setWidth(10),
+        horizontal: AppSpacing.space4,
+        vertical: AppSpacing.space2,
       ),
       decoration: BoxDecoration(
         color: bgColor,
@@ -489,7 +489,7 @@ class _DirectionButton extends StatelessWidget {
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
-        padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(14)),
+        padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
         decoration: BoxDecoration(
           color: selected ? color.withAlpha(30) : Colors.transparent,
           border: Border.all(
@@ -506,7 +506,7 @@ class _DirectionButton extends StatelessWidget {
               size: ScreenUtil().setWidth(28),
               color: selected ? color : idleColor,
             ),
-            SizedBox(width: ScreenUtil().setWidth(6)),
+            SizedBox(width: AppSpacing.space2),
             Flexible(
               child: Text(
                 label,

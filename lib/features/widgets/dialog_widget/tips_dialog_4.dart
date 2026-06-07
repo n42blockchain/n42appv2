@@ -29,7 +29,7 @@ Future<bool?> tipsDialog4(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                    padding: EdgeInsets.all(AppSpacing.space8),
                     child: Text(
                       title ?? S.of(context).g_key_21,
                       style: AppTypography.body.copyWith(
@@ -46,7 +46,7 @@ Future<bool?> tipsDialog4(
                       borderRadius: AppRadius.brMd,
                     ),
                     padding: EdgeInsets.symmetric(
-                      horizontal: ScreenUtil().setWidth(20),
+                      horizontal: AppSpacing.space4,
                     ),
                     margin: EdgeInsets.only(
                       left: ScreenUtil().setWidth(30),

@@ -134,7 +134,7 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
       ),
       backgroundColor: AppColorTokens.of(context).bgBase,
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(32)),
+        padding: EdgeInsets.all(AppSpacing.space8),
         child: Form(
           key: _formKey,
           child: Column(
@@ -156,7 +156,7 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
                       },
                     ),
                   ),
-                  SizedBox(width: ScreenUtil().setWidth(12)),
+                  SizedBox(width: AppSpacing.space4),
                   SizedBox(
                     height: ScreenUtil().setWidth(88),
                     child: ElevatedButton(
@@ -187,7 +187,7 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
                 ],
               ),
 
-              SizedBox(height: ScreenUtil().setWidth(20)),
+              SizedBox(height: AppSpacing.space4),
 
               // Network Name
               _buildLabel('Network Name'),
@@ -197,7 +197,7 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
                 validator: (v) => (v == null || v.isEmpty) ? 'Required' : null,
               ),
 
-              SizedBox(height: ScreenUtil().setWidth(20)),
+              SizedBox(height: AppSpacing.space4),
 
               // RPC URL + validate
               _buildLabel('RPC URL'),
@@ -214,7 +214,7 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
                       },
                     ),
                   ),
-                  SizedBox(width: ScreenUtil().setWidth(12)),
+                  SizedBox(width: AppSpacing.space4),
                   SizedBox(
                     height: ScreenUtil().setWidth(88),
                     child: ElevatedButton(
@@ -243,7 +243,7 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
                 ],
               ),
 
-              SizedBox(height: ScreenUtil().setWidth(20)),
+              SizedBox(height: AppSpacing.space4),
 
               // Currency Symbol
               _buildLabel('Currency Symbol'),
@@ -253,7 +253,7 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
                 validator: (v) => (v == null || v.isEmpty) ? 'Required' : null,
               ),
 
-              SizedBox(height: ScreenUtil().setWidth(20)),
+              SizedBox(height: AppSpacing.space4),
 
               // Block Explorer (optional)
               _buildLabel('Block Explorer URL (optional)'),
@@ -262,13 +262,13 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
                 hint: 'https://explorer.celo.org',
               ),
 
-              SizedBox(height: ScreenUtil().setWidth(20)),
+              SizedBox(height: AppSpacing.space4),
 
               // Error
               if (_error != null)
                 Container(
                   width: double.infinity,
-                  padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+                  padding: EdgeInsets.all(AppSpacing.space4),
                   decoration: BoxDecoration(
                     color: Colors.red.withValues(alpha: 0.1),
                     borderRadius: AppRadius.brSm,
@@ -279,7 +279,7 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
                   ),
                 ),
 
-              SizedBox(height: ScreenUtil().setWidth(32)),
+              SizedBox(height: AppSpacing.space8),
 
               // Submit
               SizedBox(
@@ -359,8 +359,8 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
           ),
         ),
         contentPadding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(20),
-          vertical: ScreenUtil().setWidth(16),
+          horizontal: AppSpacing.space4,
+          vertical: AppSpacing.space4,
         ),
       ),
     );

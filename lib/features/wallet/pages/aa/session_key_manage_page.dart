@@ -4,6 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -349,7 +350,7 @@ class _SessionKeyManagePageState extends State<SessionKeyManagePage>
   Widget _buildKeyList(List<SessionKeyData> keys, {required bool showActions}) {
     if (keys.isEmpty) return _buildEmptyState();
     return ListView.builder(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       itemCount: keys.length,
       itemBuilder: (context, index) => SessionKeyCard(
         keyData: keys[index],

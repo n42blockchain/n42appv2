@@ -29,7 +29,7 @@ mixin _WalletListTilesMixin on _WalletListActionsMixin {
         if (hdWallets.isNotEmpty) ...[
           _groupHeader(S.of(state.context).g_wallet_group_hd),
           ...hdWallets.map((w) => _walletTile(w.info, w.index)),
-          SizedBox(height: ScreenUtil().setWidth(10)),
+          SizedBox(height: AppSpacing.space2),
         ],
         if (singleWallets.isNotEmpty) ...[
           _groupHeader(S.of(state.context).g_wallet_group_single),
@@ -61,8 +61,8 @@ mixin _WalletListTilesMixin on _WalletListActionsMixin {
 
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30),
-        vertical: ScreenUtil().setWidth(8),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space2,
       ),
       child: Slidable(
         key: ValueKey('wallet_$index'),
@@ -108,8 +108,8 @@ mixin _WalletListTilesMixin on _WalletListActionsMixin {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(20),
-          vertical: ScreenUtil().setWidth(18),
+          horizontal: AppSpacing.space4,
+          vertical: AppSpacing.space4,
         ),
         decoration: BoxDecoration(
           color: isActive
@@ -133,7 +133,7 @@ mixin _WalletListTilesMixin on _WalletListActionsMixin {
               'assets/img/${isActive ? "ast" : "ast_h"}.png',
               width: ScreenUtil().setWidth(56),
             ),
-            SizedBox(width: ScreenUtil().setWidth(16)),
+            SizedBox(width: AppSpacing.space4),
 
             Expanded(
               child: Column(
@@ -148,7 +148,7 @@ mixin _WalletListTilesMixin on _WalletListActionsMixin {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(4)),
+                  SizedBox(height: AppSpacing.space2),
                   Text(
                     coinKeys.take(3).join(' · ') +
                         (coinKeys.length > 3 ? ' +${coinKeys.length - 3}' : ''),
@@ -157,15 +157,15 @@ mixin _WalletListTilesMixin on _WalletListActionsMixin {
                     ),
                   ),
                   if (info.tags.isNotEmpty) ...[
-                    SizedBox(height: ScreenUtil().setWidth(6)),
+                    SizedBox(height: AppSpacing.space2),
                     Wrap(
                       spacing: 4,
                       children: info.tags
                           .map(
                             (tag) => Container(
                               padding: EdgeInsets.symmetric(
-                                horizontal: ScreenUtil().setWidth(8),
-                                vertical: ScreenUtil().setWidth(2),
+                                horizontal: AppSpacing.space2,
+                                vertical: AppSpacing.space2,
                               ),
                               decoration: BoxDecoration(
                                 color: AppColorTokens.of(

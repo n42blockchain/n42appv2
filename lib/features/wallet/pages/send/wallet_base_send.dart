@@ -238,19 +238,19 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
               children: [
                 Positioned.fill(
                   child: SingleChildScrollView(
-                    padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+                    padding: EdgeInsets.all(AppSpacing.space8),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TxSimulationCard(result: _simResult),
                         if (_goplLoading) ...[
-                          SizedBox(height: ScreenUtil().setWidth(8)),
+                          SizedBox(height: AppSpacing.space2),
                           const ContractSecurityCard.loading(),
                         ] else if (_goplResult != null) ...[
-                          SizedBox(height: ScreenUtil().setWidth(8)),
+                          SizedBox(height: AppSpacing.space2),
                           ContractSecurityCard.result(result: _goplResult!),
                         ],
-                        SizedBox(height: ScreenUtil().setWidth(16)),
+                        SizedBox(height: AppSpacing.space4),
                         Padding(
                           padding: EdgeInsets.only(
                             bottom: ScreenUtil().setWidth(30.0),
@@ -266,8 +266,8 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
                         ),
                         Container(
                           padding: EdgeInsets.symmetric(
-                            vertical: ScreenUtil().setWidth(16.0),
-                            horizontal: ScreenUtil().setWidth(30.0),
+                            vertical: AppSpacing.space4,
+                            horizontal: AppSpacing.space8,
                           ),
                           decoration: BoxDecoration(
                             borderRadius: AppRadius.brMd,
@@ -302,7 +302,7 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
                         endIndent: 0,
                       ),
                       Container(
-                        padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+                        padding: EdgeInsets.all(AppSpacing.space8),
                         color: _themeColor(AppThemeKeys.backGroundColor),
                         height: ScreenUtil().setWidth(148),
                         child: Row(
@@ -319,7 +319,7 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
                                 ),
                               ),
                             ),
-                            SizedBox(width: ScreenUtil().setWidth(30.0)),
+                            SizedBox(width: AppSpacing.space8),
                             Expanded(
                               child: SizedBox(
                                 width: double.infinity,

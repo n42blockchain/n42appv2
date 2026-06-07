@@ -118,7 +118,7 @@ class _DexLimitOrderFormState extends State<DexLimitOrderForm> {
     final s = S.of(context);
 
     return SingleChildScrollView(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -128,7 +128,7 @@ class _DexLimitOrderFormState extends State<DexLimitOrderForm> {
             token: _tokenIn,
             onTap: _selectTokenIn,
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
 
           // Amount input
           _buildInput(
@@ -137,7 +137,7 @@ class _DexLimitOrderFormState extends State<DexLimitOrderForm> {
             hint: '0.0',
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
 
           // Token Out
           _buildTokenRow(
@@ -145,7 +145,7 @@ class _DexLimitOrderFormState extends State<DexLimitOrderForm> {
             token: _tokenOut,
             onTap: _selectTokenOut,
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
 
           // Limit price input
           _buildInput(
@@ -155,16 +155,16 @@ class _DexLimitOrderFormState extends State<DexLimitOrderForm> {
             hint: '0.0',
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
 
           // Expiry selector
           _buildExpiryRow(),
-          SizedBox(height: ScreenUtil().setWidth(24)),
+          SizedBox(height: AppSpacing.space6),
 
           // Error
           if (_errorMsg.isNotEmpty) ...[
             DexErrorBanner(message: _errorMsg),
-            SizedBox(height: ScreenUtil().setWidth(16)),
+            SizedBox(height: AppSpacing.space4),
           ],
 
           // Submit button
@@ -211,8 +211,8 @@ class _DexLimitOrderFormState extends State<DexLimitOrderForm> {
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(16),
-          vertical: ScreenUtil().setWidth(14),
+          horizontal: AppSpacing.space4,
+          vertical: AppSpacing.space4,
         ),
         decoration: BoxDecoration(
           color: AppColorTokens.of(context).bgSurface,
@@ -267,7 +267,7 @@ class _DexLimitOrderFormState extends State<DexLimitOrderForm> {
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         contentPadding: EdgeInsets.symmetric(
           horizontal: 14,
-          vertical: ScreenUtil().setWidth(14),
+          vertical: AppSpacing.space4,
         ),
       ),
     );

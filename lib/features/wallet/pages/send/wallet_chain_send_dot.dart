@@ -95,8 +95,8 @@ class _WalletChainSendDotState extends ConsumerState<WalletChainSendDot>
         right: ScreenUtil().setWidth(30),
       ),
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30.0),
-        vertical: ScreenUtil().setWidth(30.0),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space8,
       ),
       width: double.infinity,
       decoration: BoxDecoration(
@@ -124,7 +124,7 @@ class _WalletChainSendDotState extends ConsumerState<WalletChainSendDot>
         children: [
           Divider(height: ScreenUtil().setWidth(1), indent: 0, endIndent: 0),
           Container(
-            padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+            padding: EdgeInsets.all(AppSpacing.space8),
             height: ScreenUtil().setWidth(148.0),
             color: AppColorTokens.of(context).bgBase,
             child: AppButton(

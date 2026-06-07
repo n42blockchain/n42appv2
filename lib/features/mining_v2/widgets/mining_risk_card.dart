@@ -41,7 +41,7 @@ class MiningRiskCard extends StatelessWidget {
         children: [
           _buildHeader(context, riskColor),
           _buildProgressBars(context, riskColor),
-          SizedBox(height: ScreenUtil().setWidth(20)),
+          SizedBox(height: AppSpacing.space4),
           _buildScoreSection(context, isDark, riskColor),
           if (mpValue.balanceInBeacon < 32) _buildWarningBanner(context),
         ],
@@ -58,7 +58,7 @@ class MiningRiskCard extends StatelessWidget {
 
   Widget _buildHeader(BuildContext context, Color riskColor) {
     return Padding(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       child: Row(
         children: [
           Container(
@@ -83,7 +83,7 @@ class MiningRiskCard extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(20)),
+          SizedBox(width: AppSpacing.space4),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -97,7 +97,7 @@ class MiningRiskCard extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    SizedBox(width: ScreenUtil().setWidth(8)),
+                    SizedBox(width: AppSpacing.space2),
                     Container(
                       width: ScreenUtil().setWidth(12),
                       height: ScreenUtil().setWidth(12),
@@ -108,7 +108,7 @@ class MiningRiskCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: ScreenUtil().setWidth(8)),
+                SizedBox(height: AppSpacing.space2),
                 Text(
                   S.of(context).g_mining_key_75,
                   style: TextStyle(
@@ -129,7 +129,7 @@ class MiningRiskCard extends StatelessWidget {
 
   Widget _buildProgressBars(BuildContext context, Color riskColor) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space6),
       child: Row(
         children: List.generate(3, (index) {
           return Expanded(
@@ -185,8 +185,8 @@ class MiningRiskCard extends StatelessWidget {
         ScreenUtil().setWidth(24),
       ),
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(20),
-        vertical: ScreenUtil().setWidth(16),
+        horizontal: AppSpacing.space4,
+        vertical: AppSpacing.space4,
       ),
       decoration: BoxDecoration(
         color: isDark
@@ -204,7 +204,7 @@ class MiningRiskCard extends StatelessWidget {
                 size: ScreenUtil().setWidth(28),
                 color: riskColor,
               ),
-              SizedBox(width: ScreenUtil().setWidth(10)),
+              SizedBox(width: AppSpacing.space2),
               Flexible(
                 child: Text(
                   S.of(context).g_mining_key_76,
@@ -219,8 +219,8 @@ class MiningRiskCard extends StatelessWidget {
           ),
           Container(
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(16),
-              vertical: ScreenUtil().setWidth(8),
+              horizontal: AppSpacing.space4,
+              vertical: AppSpacing.space2,
             ),
             decoration: BoxDecoration(
               color: riskColor.withValues(alpha: 0.15),
@@ -248,7 +248,7 @@ class MiningRiskCard extends StatelessWidget {
         ScreenUtil().setWidth(24),
       ),
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(20),
+        horizontal: AppSpacing.space4,
         vertical: ScreenUtil().setWidth(26),
       ),
       decoration: BoxDecoration(
@@ -262,7 +262,7 @@ class MiningRiskCard extends StatelessWidget {
             size: ScreenUtil().setWidth(28),
             color: AppColorTokens.of(context).warning,
           ),
-          SizedBox(width: ScreenUtil().setWidth(10)),
+          SizedBox(width: AppSpacing.space2),
           Expanded(
             child: Text(
               S.of(context).g_mining_key_116(32),

@@ -18,7 +18,7 @@ class EnsPriceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
         borderRadius: AppRadius.brMd,
@@ -36,7 +36,7 @@ class EnsPriceCard extends StatelessWidget {
               color: AppColorTokens.of(context).textPrimary,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
 
           // 基础价格
           _buildPriceRow(
@@ -44,7 +44,7 @@ class EnsPriceCard extends StatelessWidget {
             S.of(context).g_key_ens_base_price,
             '${price.basePrice.toStringAsFixed(4)} ETH',
           ),
-          SizedBox(height: ScreenUtil().setWidth(10)),
+          SizedBox(height: AppSpacing.space2),
 
           // 年费
           _buildPriceRow(
@@ -54,7 +54,7 @@ class EnsPriceCard extends StatelessWidget {
           ),
 
           Padding(
-            padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(12)),
+            padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
             child: Divider(
               color: AppColorTokens.of(context).textSubtitle.withAlpha(30),
             ),
@@ -98,9 +98,9 @@ class EnsPriceCard extends StatelessWidget {
 
           // 名称长度定价提示
           if (price.nameLength <= 4) ...[
-            SizedBox(height: ScreenUtil().setWidth(12)),
+            SizedBox(height: AppSpacing.space4),
             Container(
-              padding: EdgeInsets.all(ScreenUtil().setWidth(12)),
+              padding: EdgeInsets.all(AppSpacing.space4),
               decoration: BoxDecoration(
                 color: Colors.orange.withAlpha(20),
                 borderRadius: AppRadius.brSm,
@@ -112,7 +112,7 @@ class EnsPriceCard extends StatelessWidget {
                     size: ScreenUtil().setWidth(20),
                     color: Colors.orange,
                   ),
-                  SizedBox(width: ScreenUtil().setWidth(8)),
+                  SizedBox(width: AppSpacing.space2),
                   Expanded(
                     child: Text(
                       price.nameLength == 3

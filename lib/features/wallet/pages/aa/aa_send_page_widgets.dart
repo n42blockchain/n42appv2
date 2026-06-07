@@ -23,7 +23,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
 
   Widget buildFromSection() {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(color: _itemBg, borderRadius: AppRadius.brMd),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -32,7 +32,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
             S.of(context).g_key_75,
             style: AppTypography.caption.copyWith(color: _subText),
           ),
-          SizedBox(height: ScreenUtil().setWidth(10)),
+          SizedBox(height: AppSpacing.space2),
           Row(
             children: [
               Container(
@@ -48,7 +48,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
                   color: const Color(0xFF5E97F6),
                 ),
               ),
-              SizedBox(width: ScreenUtil().setWidth(12)),
+              SizedBox(width: AppSpacing.space4),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,8 +73,8 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
               ),
               Container(
                 padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(10),
-                  vertical: ScreenUtil().setWidth(4),
+                  horizontal: AppSpacing.space2,
+                  vertical: AppSpacing.space2,
                 ),
                 decoration: BoxDecoration(
                   color: Colors.green.withAlpha(20),
@@ -102,7 +102,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(S.of(context).g_key_38, style: _sectionTitleStyle()),
-        SizedBox(height: ScreenUtil().setWidth(12)),
+        SizedBox(height: AppSpacing.space4),
         TextField(
           controller: toController,
           focusNode: toFocusNode,
@@ -172,7 +172,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
             ),
           ],
         ),
-        SizedBox(height: ScreenUtil().setWidth(12)),
+        SizedBox(height: AppSpacing.space4),
         Row(
           children: [
             Expanded(
@@ -192,11 +192,11 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
                 ),
               ),
             ),
-            SizedBox(width: ScreenUtil().setWidth(12)),
+            SizedBox(width: AppSpacing.space4),
             Container(
               padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(16),
-                vertical: ScreenUtil().setWidth(14),
+                horizontal: AppSpacing.space4,
+                vertical: AppSpacing.space4,
               ),
               decoration: BoxDecoration(
                 color: _itemBg,
@@ -244,7 +244,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
             ),
           ],
         ),
-        SizedBox(height: ScreenUtil().setWidth(12)),
+        SizedBox(height: AppSpacing.space4),
         GestureDetector(
           onTap: selectPaymaster,
           child: PaymasterOptionCard(
@@ -262,7 +262,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
     final isSponsored = selectedPaymaster.type == PaymasterType.sponsored;
 
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: isSponsored ? Colors.green.withAlpha(15) : _itemBg,
         borderRadius: AppRadius.brMd,
@@ -283,7 +283,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
                       size: ScreenUtil().setWidth(22),
                       color: _subText,
                     ),
-                    SizedBox(width: ScreenUtil().setWidth(8)),
+                    SizedBox(width: AppSpacing.space2),
                     Flexible(
                       child: Text(
                         S.of(context).g_key_aa_estimated_gas,
@@ -298,7 +298,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
             ],
           ),
           if (isSponsored && estimatedGas != null) ...[
-            SizedBox(height: ScreenUtil().setWidth(8)),
+            SizedBox(height: AppSpacing.space2),
             GasSponsorshipBadge(
               isSponsored: true,
               savedAmount: formatGasCost(),
@@ -344,7 +344,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
       style: ElevatedButton.styleFrom(
         backgroundColor: _themeColor(AppThemeKeys.mainBlueColor.name),
         foregroundColor: Colors.white,
-        padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(18)),
+        padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
         shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
         disabledBackgroundColor: Colors.grey,
       ),

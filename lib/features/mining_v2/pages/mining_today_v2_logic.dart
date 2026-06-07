@@ -97,7 +97,7 @@ mixin _MiningTodayV2LogicMixin on ConsumerState<MiningTodayV2> {
               maxHeight: ScreenUtil().setWidth(500.0),
             ),
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(30.0),
+              horizontal: AppSpacing.space8,
             ),
             child: ListView.builder(
               itemCount: walletList.length,
@@ -138,7 +138,7 @@ mixin _MiningTodayV2LogicMixin on ConsumerState<MiningTodayV2> {
                                 maxLines: 1,
                               ),
                             ),
-                            SizedBox(width: ScreenUtil().setWidth(20.0)),
+                            SizedBox(width: AppSpacing.space4),
                             Flexible(
                               child: Text(
                                 wInfo.name,

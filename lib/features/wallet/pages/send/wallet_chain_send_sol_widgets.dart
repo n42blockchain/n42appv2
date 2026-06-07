@@ -6,7 +6,7 @@ part of 'wallet_chain_send_sol.dart';
 mixin _SolSendWidgetsMixin on _SolSendLogicMixin {
   Widget toWidget() {
     return Container(
-      margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+      margin: EdgeInsets.all(AppSpacing.space8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -16,7 +16,7 @@ mixin _SolSendWidgetsMixin on _SolSendLogicMixin {
               color: AppColorTokens.of(context).textPrimary,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(20.0)),
+          SizedBox(height: AppSpacing.space4),
           textFieldStyle2(
             context,
             controller: toTextEditingController,
@@ -44,7 +44,7 @@ mixin _SolSendWidgetsMixin on _SolSendLogicMixin {
 
   Widget amountWidget() {
     return Container(
-      margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+      margin: EdgeInsets.all(AppSpacing.space8),
       child: Column(
         children: [
           Row(
@@ -58,7 +58,7 @@ mixin _SolSendWidgetsMixin on _SolSendLogicMixin {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              SizedBox(width: ScreenUtil().setWidth(20.0)),
+              SizedBox(width: AppSpacing.space4),
               Expanded(child: amountBalanceWidget()),
             ],
           ),
@@ -108,13 +108,13 @@ mixin _SolSendWidgetsMixin on _SolSendLogicMixin {
                   bgColor: AppColorTokens.of(context).bgSurface,
                   errorMessage: amountErrorMessage,
                   messageMargin: EdgeInsets.symmetric(
-                    horizontal: ScreenUtil().setWidth(30.0),
+                    horizontal: AppSpacing.space8,
                   ),
                   rightWidget1: Container(
                     margin: EdgeInsets.only(left: ScreenUtil().setWidth(10.0)),
                     height: ScreenUtil().setWidth(60.0),
                     padding: EdgeInsets.symmetric(
-                      horizontal: ScreenUtil().setWidth(20.0),
+                      horizontal: AppSpacing.space4,
                     ),
                     decoration: BoxDecoration(
                       color: AppColorTokens.of(context).brand,
@@ -173,8 +173,8 @@ mixin _SolSendWidgetsMixin on _SolSendLogicMixin {
     );
     return Padding(
       padding: EdgeInsets.symmetric(
-        vertical: ScreenUtil().setWidth(20.0),
-        horizontal: ScreenUtil().setWidth(30.0),
+        vertical: AppSpacing.space4,
+        horizontal: AppSpacing.space8,
       ),
       child: Text(
         addr,
@@ -202,8 +202,8 @@ mixin _SolSendWidgetsMixin on _SolSendLogicMixin {
         if (isContract)
           Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(30.0),
-              vertical: ScreenUtil().setWidth(8.0),
+              horizontal: AppSpacing.space8,
+              vertical: AppSpacing.space2,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -242,7 +242,7 @@ mixin _SolSendWidgetsMixin on _SolSendLogicMixin {
         left: ScreenUtil().setWidth(30),
         right: ScreenUtil().setWidth(30),
       ),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: AppRadius.brMd,
@@ -270,7 +270,7 @@ mixin _SolSendWidgetsMixin on _SolSendLogicMixin {
         children: [
           Divider(height: ScreenUtil().setWidth(1), indent: 0, endIndent: 0),
           Container(
-            padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+            padding: EdgeInsets.all(AppSpacing.space8),
             height: ScreenUtil().setWidth(148.0),
             color: AppColorTokens.of(context).bgBase,
             child: AppButton(

@@ -96,7 +96,7 @@ class _WalletChainSendSuiState extends ConsumerState<WalletChainSendSui>
         left: ScreenUtil().setWidth(30),
         right: ScreenUtil().setWidth(30),
       ),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: AppRadius.brMd,
@@ -122,7 +122,7 @@ class _WalletChainSendSuiState extends ConsumerState<WalletChainSendSui>
         children: [
           Divider(height: ScreenUtil().setWidth(1), indent: 0, endIndent: 0),
           Container(
-            padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+            padding: EdgeInsets.all(AppSpacing.space8),
             height: ScreenUtil().setWidth(148.0),
             color: AppColorTokens.of(context).bgBase,
             child: AppButton(

@@ -91,7 +91,7 @@ class _TermsOfServiceWidgetState extends State<TermsOfServiceWidget> {
               Expanded(child: WebViewWidget(controller: _webViewController)),
               Container(
                 height: ScreenUtil().setWidth(88),
-                margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                margin: EdgeInsets.all(AppSpacing.space8),
                 width: double.infinity,
                 child: AppButton(
                   label: S.of(context).g_chat_key_50,
@@ -110,7 +110,7 @@ class _TermsOfServiceWidgetState extends State<TermsOfServiceWidget> {
                   Icons.keyboard_arrow_up,
                   _scrollToTop,
                 ),
-                SizedBox(height: ScreenUtil().setWidth(16)),
+                SizedBox(height: AppSpacing.space4),
                 _buildScrollButton(
                   isDark,
                   Icons.keyboard_arrow_down,

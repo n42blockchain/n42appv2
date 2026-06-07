@@ -23,7 +23,7 @@ class ManageChainsPage extends ConsumerWidget {
         centerTitle: true,
       ),
       body: ReorderableListView.builder(
-        padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(12)),
+        padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
         itemCount: wap.coinModels.length,
         onReorder: (oldIndex, newIndex) {
           wap.reorderChain(oldIndex, newIndex);
@@ -59,8 +59,8 @@ class ManageChainsPage extends ConsumerWidget {
           return ListTile(
             key: ValueKey(coinType),
             contentPadding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(24),
-              vertical: ScreenUtil().setWidth(4),
+              horizontal: AppSpacing.space6,
+              vertical: AppSpacing.space2,
             ),
             leading: Row(
               mainAxisSize: MainAxisSize.min,

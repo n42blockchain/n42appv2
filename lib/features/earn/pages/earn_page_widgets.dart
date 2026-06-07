@@ -24,7 +24,7 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
         : 'up to ${maxApy.toStringAsFixed(1)}% APY';
 
     return Container(
-      margin: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      margin: EdgeInsets.all(AppSpacing.space6),
       padding: EdgeInsets.all(ScreenUtil().setWidth(26)),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
@@ -60,8 +60,8 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
               ),
               Container(
                 padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(12),
-                  vertical: ScreenUtil().setWidth(6),
+                  horizontal: AppSpacing.space4,
+                  vertical: AppSpacing.space2,
                 ),
                 decoration: BoxDecoration(
                   color: Colors.white.withAlpha(30),
@@ -84,7 +84,7 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
                             color: Colors.greenAccent,
                             size: ScreenUtil().setWidth(20),
                           ),
-                          SizedBox(width: ScreenUtil().setWidth(4)),
+                          SizedBox(width: AppSpacing.space2),
                           Text(
                             apyLabel,
                             style: AppTypography.captionSm.copyWith(
@@ -97,7 +97,7 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
               ),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
           Text(
             earnState.positionsLoading
                 ? '...'
@@ -107,7 +107,7 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
               color: Colors.white,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(20)),
+          SizedBox(height: AppSpacing.space4),
           Row(
             children: [
               _buildEarningsStat(
@@ -117,7 +117,7 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
                     : '\$${earnState.totalStakedUsd.toStringAsFixed(2)}',
                 Icons.account_balance,
               ),
-              SizedBox(width: ScreenUtil().setWidth(32)),
+              SizedBox(width: AppSpacing.space8),
               _buildEarningsStat(
                 S.of(context).g_key_stake_rewards,
                 earnState.positionsLoading
@@ -141,7 +141,7 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
             color: Colors.white.withAlpha(180),
             size: ScreenUtil().setWidth(28),
           ),
-          SizedBox(width: ScreenUtil().setWidth(8)),
+          SizedBox(width: AppSpacing.space2),
           Flexible(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -236,7 +236,7 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
               ),
               // 主内容
               Padding(
-                padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+                padding: EdgeInsets.all(AppSpacing.space4),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -260,8 +260,8 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
                         if (badge != null)
                           Container(
                             padding: EdgeInsets.symmetric(
-                              horizontal: ScreenUtil().setWidth(10),
-                              vertical: ScreenUtil().setWidth(4),
+                              horizontal: AppSpacing.space2,
+                              vertical: AppSpacing.space2,
                             ),
                             decoration: BoxDecoration(
                               color: Colors.white.withAlpha(50),
@@ -291,7 +291,7 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        SizedBox(height: ScreenUtil().setWidth(4)),
+                        SizedBox(height: AppSpacing.space2),
                         Text(
                           subtitle,
                           style: AppTypography.captionSm.copyWith(
@@ -339,7 +339,7 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
               ),
               child: Icon(icon, color: color, size: ScreenUtil().setWidth(34)),
             ),
-            SizedBox(height: ScreenUtil().setWidth(10)),
+            SizedBox(height: AppSpacing.space2),
             Text(
               label,
               style: AppTypography.captionSm.copyWith(

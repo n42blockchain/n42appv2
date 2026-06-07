@@ -144,7 +144,7 @@ class _HardwareWalletAccountsPageState
     }
 
     return ListView.builder(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       // +1 for the "Load More" button at the end
       itemCount: accounts.length + 1,
       itemBuilder: (context, index) {

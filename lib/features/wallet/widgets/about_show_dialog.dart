@@ -16,7 +16,7 @@ void aboutShowDialog(BuildContext context, String aboutStr, String title) {
     context: context,
     builder: (BuildContext context) {
       return Container(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+        padding: EdgeInsets.all(AppSpacing.space8),
         constraints: BoxConstraints(
           maxHeight: MediaQuery.of(context).size.height / 1.2,
         ),
@@ -42,13 +42,13 @@ void aboutShowDialog(BuildContext context, String aboutStr, String title) {
                   child: Container(
                     width: ScreenUtil().setWidth(50.0),
                     height: ScreenUtil().setWidth(50.0),
-                    padding: EdgeInsets.all(ScreenUtil().setWidth(10.0)),
+                    padding: EdgeInsets.all(AppSpacing.space2),
                     child: Icon(Icons.close),
                   ),
                 ),
               ],
             ),
-            SizedBox(height: ScreenUtil().setWidth(30.0)),
+            SizedBox(height: AppSpacing.space8),
             Expanded(
               flex: 1,
               child: SingleChildScrollView(

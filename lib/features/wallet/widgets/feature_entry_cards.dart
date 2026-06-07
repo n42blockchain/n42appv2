@@ -38,8 +38,8 @@ class FeatureEntrySection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30),
-        vertical: ScreenUtil().setWidth(20),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space4,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,7 +64,7 @@ class FeatureEntrySection extends StatelessWidget {
                     borderRadius: AppRadius.brSm,
                   ),
                 ),
-                SizedBox(width: ScreenUtil().setWidth(12)),
+                SizedBox(width: AppSpacing.space4),
                 Flexible(
                   child: Text(
                     S.of(context).g_key_advanced_features,
@@ -86,7 +86,7 @@ class FeatureEntrySection extends StatelessWidget {
             onTap: onEnsTap,
             onRegisterTap: onEnsRegisterTap,
           ),
-          SizedBox(height: ScreenUtil().setWidth(20)),
+          SizedBox(height: AppSpacing.space4),
           // Smart Account Card
           SmartAccountEntryCard(
             hasSmartAccount: hasSmartAccount,
@@ -130,10 +130,10 @@ class FeatureEntryHorizontal extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: ScreenUtil().setWidth(160),
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
       child: ListView(
         scrollDirection: Axis.horizontal,
-        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+        padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
         children: [
           // ENS 小卡片
           _buildMiniCard(
@@ -148,7 +148,7 @@ class FeatureEntryHorizontal extends StatelessWidget {
             enabled: ensEnabled,
             showBadge: ensName != null,
           ),
-          SizedBox(width: ScreenUtil().setWidth(20)),
+          SizedBox(width: AppSpacing.space4),
           // AA 小卡片
           _buildMiniCard(
             context: context,
@@ -187,7 +187,7 @@ class FeatureEntryHorizontal extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: ScreenUtil().setWidth(320),
-        padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+        padding: EdgeInsets.all(AppSpacing.space4),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
@@ -250,7 +250,7 @@ class FeatureEntryHorizontal extends StatelessWidget {
                     ),
                 ],
               ),
-              SizedBox(width: ScreenUtil().setWidth(16)),
+              SizedBox(width: AppSpacing.space4),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -267,7 +267,7 @@ class FeatureEntryHorizontal extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(height: ScreenUtil().setWidth(4)),
+                    SizedBox(height: AppSpacing.space2),
                     FittedBox(
                       fit: BoxFit.scaleDown,
                       alignment: Alignment.centerLeft,

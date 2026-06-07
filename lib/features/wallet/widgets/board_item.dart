@@ -16,7 +16,7 @@ class BoardItem extends StatelessWidget {
       onTap: onTap,
       child: Container(
         height: ScreenUtil().setWidth(80),
-        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(16)),
+        padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: AppThemeUtils.getColorByKey(

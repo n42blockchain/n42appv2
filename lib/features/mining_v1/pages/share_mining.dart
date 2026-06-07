@@ -68,7 +68,7 @@ class _ShareMiningState extends State<ShareMining> {
           ),
           child: Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(30),
+              horizontal: AppSpacing.space8,
             ),
             child: Column(
               children: [
@@ -88,10 +88,10 @@ class _ShareMiningState extends State<ShareMining> {
                   "Congratulations!",
                   style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
                 ),
-                SizedBox(height: ScreenUtil().setWidth(40)),
+                SizedBox(height: AppSpacing.space12),
                 Padding(
                   padding: EdgeInsets.symmetric(
-                    horizontal: ScreenUtil().setWidth(44),
+                    horizontal: AppSpacing.space12,
                   ),
                   child: Text(
                     _generateTipsContent(),
@@ -121,7 +121,7 @@ class _ShareMiningState extends State<ShareMining> {
                             Icons.share,
                             color: AppColorTokens.of(context).brand,
                           ),
-                          SizedBox(height: ScreenUtil().setWidth(24)),
+                          SizedBox(height: AppSpacing.space6),
                           Text(
                             S.of(context).g_mining_key61,
                             style: AppTypography.body.copyWith(color: AppColorTokens.of(context).brand),
@@ -141,7 +141,7 @@ class _ShareMiningState extends State<ShareMining> {
                     height: ScreenUtil().setWidth(88),
                     width: double.infinity,
                     margin: EdgeInsets.symmetric(
-                      vertical: ScreenUtil().setWidth(30),
+                      vertical: AppSpacing.space8,
                     ),
                     child: AppButton(
                       label: S.of(context).g_mining_key62,

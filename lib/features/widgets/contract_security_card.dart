@@ -49,8 +49,8 @@ class ContractSecurityCard extends StatelessWidget {
   Widget _buildLoading(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(16),
-        vertical: ScreenUtil().setWidth(12),
+        horizontal: AppSpacing.space4,
+        vertical: AppSpacing.space4,
       ),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
@@ -66,7 +66,7 @@ class ContractSecurityCard extends StatelessWidget {
               color: AppColorTokens.of(context).textSubtitle,
             ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(10)),
+          SizedBox(width: AppSpacing.space2),
           Flexible(
             child: Text(
               S.of(context).g_key_security_goplus_checking,
@@ -109,8 +109,8 @@ class ContractSecurityCard extends StatelessWidget {
 
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(16),
-        vertical: ScreenUtil().setWidth(12),
+        horizontal: AppSpacing.space4,
+        vertical: AppSpacing.space4,
       ),
       decoration: BoxDecoration(
         color: color.withAlpha(20),
@@ -123,7 +123,7 @@ class ContractSecurityCard extends StatelessWidget {
           Row(
             children: [
               Icon(icon, size: ScreenUtil().setWidth(20), color: color),
-              SizedBox(width: ScreenUtil().setWidth(8)),
+              SizedBox(width: AppSpacing.space2),
               Flexible(
                 child: Text(
                   title,
@@ -146,7 +146,7 @@ class ContractSecurityCard extends StatelessWidget {
             ],
           ),
           if (result.risks.isNotEmpty) ...[
-            SizedBox(height: ScreenUtil().setWidth(8)),
+            SizedBox(height: AppSpacing.space2),
             Wrap(
               spacing: ScreenUtil().setWidth(6),
               runSpacing: ScreenUtil().setWidth(4),
@@ -167,7 +167,7 @@ class ContractSecurityCard extends StatelessWidget {
         : const Color(0xFFFFA726);
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(8),
+        horizontal: AppSpacing.space2,
         vertical: ScreenUtil().setWidth(3),
       ),
       decoration: BoxDecoration(

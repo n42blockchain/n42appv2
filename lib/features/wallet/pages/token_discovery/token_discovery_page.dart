@@ -126,8 +126,8 @@ class _TokenDiscoveryPageState extends ConsumerState<TokenDiscoveryPage> {
 
     return ListView.builder(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(24),
-        vertical: ScreenUtil().setWidth(16),
+        horizontal: AppSpacing.space6,
+        vertical: AppSpacing.space4,
       ),
       itemCount: grouped.length,
       itemBuilder: (context, index) {

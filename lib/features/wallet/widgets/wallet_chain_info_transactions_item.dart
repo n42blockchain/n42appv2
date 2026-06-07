@@ -314,7 +314,7 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(
           horizontal: AppSpacing.space2,
-          vertical: ScreenUtil().setWidth(2),
+          vertical: AppSpacing.space2,
         ),
         decoration: BoxDecoration(
           color: tagColor.withAlpha(20),
@@ -360,7 +360,7 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.symmetric(
                     horizontal: AppSpacing.space2,
-                    vertical: ScreenUtil().setWidth(4),
+                    vertical: AppSpacing.space2,
                   ),
                   decoration: BoxDecoration(
                     color: warn.withAlpha(30),

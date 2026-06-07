@@ -73,7 +73,7 @@ class _SummaryPageState extends State<SummaryPage>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: ScreenUtil().setWidth(18)),
+                SizedBox(height: AppSpacing.space4),
                 Text(
                   S.of(context).g_mining_key_58,
                   style: AppTypography.body.copyWith(
@@ -81,10 +81,10 @@ class _SummaryPageState extends State<SummaryPage>
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                SizedBox(height: ScreenUtil().setWidth(44)),
+                SizedBox(height: AppSpacing.space12),
                 // 柱状图展示历史7天挖矿数据
                 buildBarChart(context),
-                SizedBox(height: ScreenUtil().setWidth(44)),
+                SizedBox(height: AppSpacing.space12),
                 Text(
                   // "Summary"
                   S.current.g_mining_key_19,
@@ -93,9 +93,9 @@ class _SummaryPageState extends State<SummaryPage>
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                SizedBox(height: ScreenUtil().setWidth(44)),
+                SizedBox(height: AppSpacing.space12),
                 buildSummaryCard(context),
-                SizedBox(height: ScreenUtil().setWidth(44)),
+                SizedBox(height: AppSpacing.space12),
                 Text(
                   // "Reward History"
                   S.current.g_mining_key_34,
@@ -104,7 +104,7 @@ class _SummaryPageState extends State<SummaryPage>
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                SizedBox(height: ScreenUtil().setWidth(44)),
+                SizedBox(height: AppSpacing.space12),
                 buildRewardHistory(context),
                 SizedBox(height: ScreenUtil().setWidth(120)),
               ],

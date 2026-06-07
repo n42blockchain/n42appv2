@@ -25,7 +25,7 @@ mixin _MiningNodeDetailWidgets on ConsumerState<MiningNodeDetailPage> {
             value: '${mpValue.balanceInBeacon} ${CoinType.N.name}',
           ),
         ),
-        SizedBox(width: ScreenUtil().setWidth(16)),
+        SizedBox(width: AppSpacing.space4),
         Expanded(
           child: _buildInfoCard(
             context,
@@ -49,7 +49,7 @@ mixin _MiningNodeDetailWidgets on ConsumerState<MiningNodeDetailPage> {
     Color? valueColor,
   }) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: _cardDecoration(context, isDark),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,7 +61,7 @@ mixin _MiningNodeDetailWidgets on ConsumerState<MiningNodeDetailPage> {
                 size: ScreenUtil().setWidth(28),
                 color: _themeColor(context, AppThemeKeys.mainBlueColor),
               ),
-              SizedBox(width: ScreenUtil().setWidth(8)),
+              SizedBox(width: AppSpacing.space2),
               Expanded(
                 child: Text(
                   label,
@@ -77,7 +77,7 @@ mixin _MiningNodeDetailWidgets on ConsumerState<MiningNodeDetailPage> {
               ),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
           Text(
             value,
             style: TextStyle(
@@ -165,8 +165,8 @@ mixin _MiningNodeDetailWidgets on ConsumerState<MiningNodeDetailPage> {
   }) {
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(20),
-        vertical: ScreenUtil().setWidth(18),
+        horizontal: AppSpacing.space4,
+        vertical: AppSpacing.space4,
       ),
       child: Row(
         children: [

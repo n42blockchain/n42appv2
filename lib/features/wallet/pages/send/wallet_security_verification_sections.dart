@@ -42,12 +42,12 @@ class _WalletPasswordSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(8.0)),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space2),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _SectionLabel(S.of(context).g_key_t_32),
-          SizedBox(height: ScreenUtil().setWidth(10.0)),
+          SizedBox(height: AppSpacing.space2),
           if (showPasswordInput) ...[
             _buildInput(context),
             _ErrorMessage(pwdErrorMessage),
@@ -57,7 +57,7 @@ class _WalletPasswordSection extends StatelessWidget {
               buttonLabel: S.of(context).google_verification_message10,
               onSetup: onSetupPassword,
             ),
-          SizedBox(height: ScreenUtil().setWidth(40.0)),
+          SizedBox(height: AppSpacing.space12),
         ],
       ),
     );
@@ -65,7 +65,7 @@ class _WalletPasswordSection extends StatelessWidget {
 
   Widget _buildInput(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(32.0)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       decoration: _inputBoxDecoration(context),
       child: Row(
         children: [
@@ -118,12 +118,12 @@ class _FaceSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(8.0)),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space2),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _SectionLabel(S.of(context).g_lock_key1),
-          SizedBox(height: ScreenUtil().setWidth(10.0)),
+          SizedBox(height: AppSpacing.space2),
           if (enabled) ...[
             _buildFaceRow(context),
             _ErrorMessage(faceErrorMessage),
@@ -133,7 +133,7 @@ class _FaceSection extends StatelessWidget {
               buttonLabel: S.of(context).google_verification_message10,
               onSetup: onSetup,
             ),
-          SizedBox(height: ScreenUtil().setWidth(40.0)),
+          SizedBox(height: AppSpacing.space12),
         ],
       ),
     );
@@ -147,7 +147,7 @@ class _FaceSection extends StatelessWidget {
     };
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(32.0)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       decoration: _inputBoxDecoration(context),
       height: ScreenUtil().setWidth(100.0),
       child: Row(
@@ -200,12 +200,12 @@ class _GoogleAuthSectionState extends State<_GoogleAuthSection> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(8.0)),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space2),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _SectionLabel(S.of(context).g_google_auth_key1),
-          SizedBox(height: ScreenUtil().setWidth(10.0)),
+          SizedBox(height: AppSpacing.space2),
           if (widget.enabled) ...[
             _buildInput(context),
             _ErrorMessage(widget.errorMessage),
@@ -215,7 +215,7 @@ class _GoogleAuthSectionState extends State<_GoogleAuthSection> {
               buttonLabel: S.of(context).google_verification_message10,
               onSetup: widget.onSetup,
             ),
-          SizedBox(height: ScreenUtil().setWidth(40.0)),
+          SizedBox(height: AppSpacing.space12),
         ],
       ),
     );
@@ -227,7 +227,7 @@ class _GoogleAuthSectionState extends State<_GoogleAuthSection> {
     final Color mainBlue = AppColorTokens.of(context).brand;
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(32.0)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       decoration: _inputBoxDecoration(context),
       height: ScreenUtil().setWidth(100.0),
       child: Row(
@@ -241,7 +241,7 @@ class _GoogleAuthSectionState extends State<_GoogleAuthSection> {
                         color: mainBlue,
                         size: ScreenUtil().setWidth(36.0),
                       ),
-                      SizedBox(width: ScreenUtil().setWidth(10.0)),
+                      SizedBox(width: AppSpacing.space2),
                       Text(
                         S.of(context).g_lock_key5,
                         style: _inputTextStyle(
@@ -302,12 +302,12 @@ class _GestureSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(8.0)),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space2),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _SectionLabel(S.of(context).g_lock_key16),
-          SizedBox(height: ScreenUtil().setWidth(10.0)),
+          SizedBox(height: AppSpacing.space2),
           if (enabled) ...[
             _buildGestureArea(context),
             _ErrorMessage(gestureErrorMessage),
@@ -317,7 +317,7 @@ class _GestureSection extends StatelessWidget {
               buttonLabel: S.of(context).google_verification_message10,
               onSetup: onSetup,
             ),
-          SizedBox(height: ScreenUtil().setWidth(40.0)),
+          SizedBox(height: AppSpacing.space12),
         ],
       ),
     );
@@ -342,7 +342,7 @@ class _GestureSection extends StatelessWidget {
 
     return Container(
       decoration: _inputBoxDecoration(context),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16.0)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       child: Column(
         children: [
           if (gestureCheck == 1)
@@ -355,7 +355,7 @@ class _GestureSection extends StatelessWidget {
                     color: mainBlue,
                     size: ScreenUtil().setWidth(40.0),
                   ),
-                  SizedBox(width: ScreenUtil().setWidth(10.0)),
+                  SizedBox(width: AppSpacing.space2),
                   Text(
                     S.of(context).g_lock_key5,
                     style: _inputTextStyle(

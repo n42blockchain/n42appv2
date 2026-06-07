@@ -114,7 +114,7 @@ class _NewsPageState extends State<NewsPage> {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(12.0)),
+                  SizedBox(height: AppSpacing.space4),
                   Text(
                     time,
                     overflow: TextOverflow.ellipsis,

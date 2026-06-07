@@ -30,8 +30,8 @@ class BatchTransferList extends StatelessWidget {
     }
     return ListView.builder(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(16),
-        vertical: ScreenUtil().setWidth(8),
+        horizontal: AppSpacing.space4,
+        vertical: AppSpacing.space2,
       ),
       itemCount: provider.items.length,
       itemBuilder: (context, index) {
@@ -57,14 +57,14 @@ class BatchTransferList extends StatelessWidget {
             size: ScreenUtil().setWidth(80),
             color: AppColorTokens.of(context).textSubtitle,
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           Text(
             S.of(context).g_key_batch_recipients,
             style: AppTypography.body.copyWith(
               color: AppColorTokens.of(context).textSubtitle,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(8)),
+          SizedBox(height: AppSpacing.space2),
           TextButton.icon(
             onPressed: onImportCsv,
             icon: const Icon(Icons.upload_file),
@@ -107,7 +107,7 @@ class BatchTransferListItem extends StatelessWidget {
       onDismissed: (_) => onDismiss(),
       child: Container(
         margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(8)),
-        padding: EdgeInsets.all(ScreenUtil().setWidth(12)),
+        padding: EdgeInsets.all(AppSpacing.space4),
         decoration: BoxDecoration(
           color: AppColorTokens.of(context).bgSurface,
           borderRadius: AppRadius.brSm,
@@ -119,7 +119,7 @@ class BatchTransferListItem extends StatelessWidget {
         child: Row(
           children: [
             _buildIndexBadge(context),
-            SizedBox(width: ScreenUtil().setWidth(12)),
+            SizedBox(width: AppSpacing.space4),
             _buildAddressColumn(context),
             _buildAmountColumn(context),
           ],

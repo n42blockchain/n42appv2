@@ -135,7 +135,7 @@ class _ImportOneState extends ConsumerState<ImportOne>
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _buildStepIndicator(activeColor),
-            SizedBox(width: ScreenUtil().setWidth(20.0)),
+            SizedBox(width: AppSpacing.space4),
             _buildStepIndicator(inactiveColor),
           ],
         ),
@@ -150,7 +150,7 @@ class _ImportOneState extends ConsumerState<ImportOne>
                 child: Column(
                   children: [
                     Container(
-                      margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+                      margin: EdgeInsets.all(AppSpacing.space8),
                       alignment: Alignment.center,
                       child: Text(
                         S.of(context).g_key_wallet_c6,
@@ -162,8 +162,8 @@ class _ImportOneState extends ConsumerState<ImportOne>
                     ),
                     Container(
                       margin: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(60.0),
-                        vertical: ScreenUtil().setWidth(60.0),
+                        horizontal: AppSpacing.space16,
+                        vertical: AppSpacing.space16,
                       ),
                       alignment: Alignment.center,
                       child: Text(
@@ -177,11 +177,11 @@ class _ImportOneState extends ConsumerState<ImportOne>
                     Container(
                       width: double.infinity,
                       padding: EdgeInsets.symmetric(
-                        vertical: ScreenUtil().setWidth(20),
-                        horizontal: ScreenUtil().setWidth(20),
+                        vertical: AppSpacing.space4,
+                        horizontal: AppSpacing.space4,
                       ),
                       margin: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(30.0),
+                        horizontal: AppSpacing.space8,
                       ),
                       decoration: BoxDecoration(
                         color: AppColorTokens.of(context).bgSurface,
@@ -201,7 +201,7 @@ class _ImportOneState extends ConsumerState<ImportOne>
                           focusedBorder: InputBorder.none,
                           isCollapsed: true,
                           contentPadding: EdgeInsets.symmetric(
-                            vertical: ScreenUtil().setWidth(10.0),
+                            vertical: AppSpacing.space2,
                           ),
                         ),
                         maxLines: 8,
@@ -212,7 +212,7 @@ class _ImportOneState extends ConsumerState<ImportOne>
                     ),
                     Container(
                       alignment: Alignment.centerLeft,
-                      padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                      padding: EdgeInsets.all(AppSpacing.space8),
                       child: Text(
                         inputMW,
                         style: AppTypography.headline.copyWith(
@@ -223,7 +223,7 @@ class _ImportOneState extends ConsumerState<ImportOne>
                     if (errorMessage.isNotEmpty)
                       Container(
                         alignment: Alignment.center,
-                        padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                        padding: EdgeInsets.all(AppSpacing.space8),
                         margin: EdgeInsets.only(top: ScreenUtil().setWidth(30)),
                         decoration: BoxDecoration(
                           color: AppColorTokens.of(context).dangerBg,
@@ -250,7 +250,7 @@ class _ImportOneState extends ConsumerState<ImportOne>
                   const Divider(height: 1),
                   Container(
                     height: ScreenUtil().setWidth(148.0),
-                    padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+                    padding: EdgeInsets.all(AppSpacing.space8),
                     width: double.infinity,
                     color: AppColorTokens.of(context).bgBase,
                     child: AppButton(

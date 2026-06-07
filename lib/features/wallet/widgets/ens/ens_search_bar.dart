@@ -31,7 +31,7 @@ class EnsSearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
         boxShadow: [
@@ -73,13 +73,13 @@ class EnsSearchBar extends StatelessWidget {
       ),
       child: Row(
         children: [
-          SizedBox(width: ScreenUtil().setWidth(16)),
+          SizedBox(width: AppSpacing.space4),
           Icon(
             Icons.search,
             color: AppColorTokens.of(context).textSubtitle,
             size: ScreenUtil().setWidth(28),
           ),
-          SizedBox(width: ScreenUtil().setWidth(12)),
+          SizedBox(width: AppSpacing.space4),
           Expanded(
             child: TextField(
               controller: controller,
@@ -95,7 +95,7 @@ class EnsSearchBar extends StatelessWidget {
                 ),
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.symmetric(
-                  vertical: ScreenUtil().setWidth(16),
+                  vertical: AppSpacing.space4,
                 ),
               ),
             ),
@@ -103,8 +103,8 @@ class EnsSearchBar extends StatelessWidget {
           // .eth 后缀标签
           Container(
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(12),
-              vertical: ScreenUtil().setWidth(8),
+              horizontal: AppSpacing.space4,
+              vertical: AppSpacing.space2,
             ),
             decoration: BoxDecoration(
               color: AppColorTokens.of(context).brand.withAlpha(20),
@@ -118,7 +118,7 @@ class EnsSearchBar extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(16)),
+          SizedBox(width: AppSpacing.space4),
         ],
       ),
     );

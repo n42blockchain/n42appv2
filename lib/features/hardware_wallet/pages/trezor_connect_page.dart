@@ -90,7 +90,7 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
       appBar: AppBarWidget(text: s.g_key_hw_trezor_connect_title),
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+          padding: EdgeInsets.all(AppSpacing.space8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -99,21 +99,21 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
 
               // 步骤说明
               _buildStepsCard(context, s),
-              SizedBox(height: ScreenUtil().setWidth(24)),
+              SizedBox(height: AppSpacing.space6),
 
               // 状态信息
               if (_statusMessage != null) ...[
                 _buildStatusRow(context, _statusMessage!, Colors.blue),
-                SizedBox(height: ScreenUtil().setWidth(16)),
+                SizedBox(height: AppSpacing.space4),
               ],
               if (_errorMessage != null) ...[
                 _buildStatusRow(context, _errorMessage!, Colors.red),
-                SizedBox(height: ScreenUtil().setWidth(16)),
+                SizedBox(height: AppSpacing.space4),
               ],
 
               // 连接按钮
               _buildConnectButton(context, s),
-              SizedBox(height: ScreenUtil().setWidth(24)),
+              SizedBox(height: AppSpacing.space6),
             ],
           ),
         ),
@@ -153,7 +153,7 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(Icons.usb, size: ScreenUtil().setWidth(64), color: blueColor),
-            SizedBox(height: ScreenUtil().setWidth(12)),
+            SizedBox(height: AppSpacing.space4),
             Text(
               'Trezor',
               style: AppTypography.body.copyWith(
@@ -172,7 +172,7 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
     final mainText = AppColorTokens.of(context).textPrimary;
 
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       decoration: BoxDecoration(color: itemBg, borderRadius: AppRadius.brMd),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -181,7 +181,7 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
             s.g_key_hw_trezor_usb_hint,
             style: AppTypography.bodySm.copyWith(color: mainText),
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           ..._stepTexts.indexed.map(
             (e) => _buildStep(context, '${e.$1 + 1}', e.$2),
           ),
@@ -224,7 +224,7 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
               ),
             ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(12)),
+          SizedBox(width: AppSpacing.space4),
           Expanded(
             child: Padding(
               padding: EdgeInsets.only(top: ScreenUtil().setWidth(6)),
@@ -243,7 +243,7 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
 
   Widget _buildStatusRow(BuildContext context, String message, Color color) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: color.withAlpha(20),
         borderRadius: AppRadius.brSm,
@@ -263,7 +263,7 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
               color: color,
               size: ScreenUtil().setWidth(24),
             ),
-          SizedBox(width: ScreenUtil().setWidth(12)),
+          SizedBox(width: AppSpacing.space4),
           Expanded(
             child: Text(
               message,
@@ -285,7 +285,7 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
         backgroundColor: blueColor,
         foregroundColor: Colors.white,
         disabledBackgroundColor: blueColor.withAlpha(100),
-        padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
+        padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
         shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
       ),
       child: _isConnecting
@@ -300,7 +300,7 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
                     color: Colors.white,
                   ),
                 ),
-                SizedBox(width: ScreenUtil().setWidth(12)),
+                SizedBox(width: AppSpacing.space4),
                 Text(
                   s.g_key_hw_trezor_connecting,
                   style: TextStyle(fontSize: ScreenUtil().setSp(28)),

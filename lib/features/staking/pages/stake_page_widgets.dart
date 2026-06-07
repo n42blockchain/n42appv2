@@ -20,8 +20,8 @@ mixin _StakeViewsMixin
       builder: (context, _) {
         final provider = _provider;
         return Container(
-          margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
-          padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+          margin: EdgeInsets.all(AppSpacing.space8),
+          padding: EdgeInsets.all(AppSpacing.space6),
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
@@ -48,7 +48,7 @@ mixin _StakeViewsMixin
                       )
                     : _buildDefaultLogo(),
               ),
-              SizedBox(width: ScreenUtil().setWidth(20)),
+              SizedBox(width: AppSpacing.space4),
 
               // Protocol info
               Expanded(
@@ -65,11 +65,11 @@ mixin _StakeViewsMixin
                           ),
                         ),
                         if (widget.protocol.isLiquid) ...[
-                          SizedBox(width: ScreenUtil().setWidth(8)),
+                          SizedBox(width: AppSpacing.space2),
                           Container(
                             padding: EdgeInsets.symmetric(
-                              horizontal: ScreenUtil().setWidth(8),
-                              vertical: ScreenUtil().setWidth(4),
+                              horizontal: AppSpacing.space2,
+                              vertical: AppSpacing.space2,
                             ),
                             decoration: BoxDecoration(
                               color: Colors.white24,
@@ -85,7 +85,7 @@ mixin _StakeViewsMixin
                         ],
                       ],
                     ),
-                    SizedBox(height: ScreenUtil().setWidth(8)),
+                    SizedBox(height: AppSpacing.space2),
                     Text(
                       widget.protocol.isLiquid
                           ? S.of(context).g_key_stake_liquid_staking_label
@@ -154,7 +154,7 @@ mixin _StakeViewsMixin
 
   Widget _buildTabBar(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+      margin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
         borderRadius: AppRadius.brMd,
@@ -174,7 +174,7 @@ mixin _StakeViewsMixin
               fit: BoxFit.scaleDown,
               child: Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(24),
+                  horizontal: AppSpacing.space6,
                 ),
                 child: Text(S.of(context).g_key_stake_stake),
               ),
@@ -185,7 +185,7 @@ mixin _StakeViewsMixin
               fit: BoxFit.scaleDown,
               child: Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(24),
+                  horizontal: AppSpacing.space6,
                 ),
                 child: Text(S.of(context).g_key_stake_unstake),
               ),
@@ -204,7 +204,7 @@ mixin _StakeViewsMixin
       builder: (context, _) {
         final provider = _provider;
         return SingleChildScrollView(
-          padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+          padding: EdgeInsets.all(AppSpacing.space8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -214,27 +214,27 @@ mixin _StakeViewsMixin
                   context,
                   S.of(context).g_key_stake_select_validator,
                 ),
-                SizedBox(height: ScreenUtil().setWidth(12)),
+                SizedBox(height: AppSpacing.space4),
                 _buildValidatorSelector(context, provider),
-                SizedBox(height: ScreenUtil().setWidth(24)),
+                SizedBox(height: AppSpacing.space6),
               ],
 
               // Amount input
               _buildSectionTitle(context, S.of(context).g_key_stake_amount),
-              SizedBox(height: ScreenUtil().setWidth(12)),
+              SizedBox(height: AppSpacing.space4),
               _buildAmountInput(context),
-              SizedBox(height: ScreenUtil().setWidth(12)),
+              SizedBox(height: AppSpacing.space4),
               _buildQuickAmountButtons(context),
-              SizedBox(height: ScreenUtil().setWidth(24)),
+              SizedBox(height: AppSpacing.space6),
 
               // Stake estimate
               _buildStakeEstimate(context, provider),
-              SizedBox(height: ScreenUtil().setWidth(24)),
+              SizedBox(height: AppSpacing.space6),
 
               // Error message
               if (_errorMessage.isNotEmpty) ...[
                 _buildErrorBanner(context),
-                SizedBox(height: ScreenUtil().setWidth(24)),
+                SizedBox(height: AppSpacing.space6),
               ],
 
               // Stake button
@@ -261,43 +261,43 @@ mixin _StakeViewsMixin
 
         // Non-liquid staking (SOL / ATOM): show positions + unstake actions
         return SingleChildScrollView(
-          padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+          padding: EdgeInsets.all(AppSpacing.space8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Unbonding warning
               _buildUnbondingWarning(context),
 
-              SizedBox(height: ScreenUtil().setWidth(24)),
+              SizedBox(height: AppSpacing.space6),
 
               // Active positions list
               _buildSectionTitle(
                 context,
                 S.of(context).g_key_stake_select_position,
               ),
-              SizedBox(height: ScreenUtil().setWidth(12)),
+              SizedBox(height: AppSpacing.space4),
               _buildPositionSelector(context),
 
               // Partial unbond amount input (ATOM only)
               if (_selectedPosition != null &&
                   widget.protocol.chainType == StakingChainType.cosmos) ...[
-                SizedBox(height: ScreenUtil().setWidth(24)),
+                SizedBox(height: AppSpacing.space6),
                 _buildSectionTitle(
                   context,
                   S.of(context).g_key_stake_amount_unstake,
                 ),
-                SizedBox(height: ScreenUtil().setWidth(12)),
+                SizedBox(height: AppSpacing.space4),
                 _buildUnstakeAmountInput(context),
-                SizedBox(height: ScreenUtil().setWidth(12)),
+                SizedBox(height: AppSpacing.space4),
                 _buildQuickUnstakeButtons(context),
               ],
 
-              SizedBox(height: ScreenUtil().setWidth(24)),
+              SizedBox(height: AppSpacing.space6),
 
               // Error message
               if (_errorMessage.isNotEmpty) ...[
                 _buildErrorBanner(context),
-                SizedBox(height: ScreenUtil().setWidth(24)),
+                SizedBox(height: AppSpacing.space6),
               ],
 
               // Unstake button
@@ -313,7 +313,7 @@ mixin _StakeViewsMixin
 
   Widget _buildErrorBanner(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(12)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: Colors.red.withAlpha(20),
         borderRadius: AppRadius.brSm,
@@ -325,7 +325,7 @@ mixin _StakeViewsMixin
             color: Colors.red,
             size: ScreenUtil().setWidth(32),
           ),
-          SizedBox(width: ScreenUtil().setWidth(8)),
+          SizedBox(width: AppSpacing.space2),
           Expanded(
             child: Text(
               _errorMessage,

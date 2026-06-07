@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
@@ -585,8 +584,8 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
       },
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(24),
-          vertical: ScreenUtil().setWidth(10),
+          horizontal: AppSpacing.space6,
+          vertical: AppSpacing.space2,
         ),
         decoration: BoxDecoration(
           color: active ? blueColor : Colors.transparent,
@@ -610,7 +609,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
 
   Widget _buildGasFreeToggle() {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(4)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space2),
       child: Row(
         children: [
           Icon(
@@ -618,7 +617,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
             size: 18,
             color: _gasFreeEnabled ? const Color(0xFF4CAF50) : Colors.grey,
           ),
-          SizedBox(width: ScreenUtil().setWidth(8)),
+          SizedBox(width: AppSpacing.space2),
           Text(
             'Gas-free Swap',
             style: AppTypography.bodySm.copyWith(
@@ -668,7 +667,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+          padding: EdgeInsets.all(AppSpacing.space8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -676,21 +675,21 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
                 selectedChain: _chain,
                 onChainChanged: _onChainChanged,
               ),
-              SizedBox(height: ScreenUtil().setWidth(12)),
+              SizedBox(height: AppSpacing.space4),
               // Market / Limit mode toggle
               Row(
                 children: [
                   _modeTab('Market', !_isLimitMode),
-                  SizedBox(width: ScreenUtil().setWidth(12)),
+                  SizedBox(width: AppSpacing.space4),
                   _modeTab('Limit', _isLimitMode),
                 ],
               ),
-              SizedBox(height: ScreenUtil().setWidth(16)),
+              SizedBox(height: AppSpacing.space4),
               if (_isLimitMode)
                 DexLimitOrderForm(chain: _chain)
               else ...[
                 if (_showChart) ...[
-                  SizedBox(height: ScreenUtil().setWidth(16)),
+                  SizedBox(height: AppSpacing.space4),
                   DexPriceChart(
                     tokenInSymbol: _tokenIn?.symbol,
                     chartPrices: _chartPrices,
@@ -702,26 +701,26 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
                     },
                   ),
                 ],
-                SizedBox(height: ScreenUtil().setWidth(16)),
+                SizedBox(height: AppSpacing.space4),
                 DexSlippageRow(
                   slippageOptions: _slippageOptions,
                   selectedBps: _slippageBps,
                   onChanged: _onSlippageChanged,
                 ),
                 if (_canUseGasFree) ...[
-                  SizedBox(height: ScreenUtil().setWidth(12)),
+                  SizedBox(height: AppSpacing.space4),
                   _buildGasFreeToggle(),
                 ],
-                SizedBox(height: ScreenUtil().setWidth(24)),
+                SizedBox(height: AppSpacing.space6),
                 DexTokenCard(
                   label: s.g_swap_key_3,
                   token: _tokenIn,
                   controller: _amountCtrl,
                   onTokenTap: _selectTokenIn,
                 ),
-                SizedBox(height: ScreenUtil().setWidth(16)),
+                SizedBox(height: AppSpacing.space4),
                 DexSwapArrow(onTap: _swapTokenDirection),
-                SizedBox(height: ScreenUtil().setWidth(16)),
+                SizedBox(height: AppSpacing.space4),
                 DexTokenCard(
                   label: s.g_swap_key_4,
                   token: _tokenOut,
@@ -729,15 +728,15 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
                   onTokenTap: _selectTokenOut,
                 ),
                 if (_errorMsg.isNotEmpty) ...[
-                  SizedBox(height: ScreenUtil().setWidth(16)),
+                  SizedBox(height: AppSpacing.space4),
                   DexErrorBanner(message: _errorMsg),
                 ],
                 if (_quoteLoad == Load.loading) ...[
-                  SizedBox(height: ScreenUtil().setWidth(24)),
+                  SizedBox(height: AppSpacing.space6),
                   const Center(child: CircularProgressIndicator()),
                 ],
                 if (_quote != null) ...[
-                  SizedBox(height: ScreenUtil().setWidth(24)),
+                  SizedBox(height: AppSpacing.space6),
                   DexQuoteCard(
                     quote: _quote!,
                     secsLeft: _quoteSecsLeft,
@@ -748,7 +747,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
                         setState(() => _exactApprove = exact),
                   ),
                 ],
-                SizedBox(height: ScreenUtil().setWidth(40)),
+                SizedBox(height: AppSpacing.space12),
                 DexActionButtons(
                   quote: _quote,
                   needsApproval: _needsApproval,

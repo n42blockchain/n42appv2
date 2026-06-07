@@ -47,13 +47,13 @@ class MiningDataBroad extends StatelessWidget {
             ),
           ],
         ),
-        padding: EdgeInsets.all(ScreenUtil().setWidth(18)),
+        padding: EdgeInsets.all(AppSpacing.space4),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
             _buildTitleRow(context, accentColor, iconData),
-            SizedBox(height: ScreenUtil().setWidth(14)),
+            SizedBox(height: AppSpacing.space4),
             _buildValueRow(context),
           ],
         ),
@@ -111,7 +111,7 @@ class MiningDataBroad extends StatelessWidget {
             color: accentColor,
           ),
         ),
-        SizedBox(width: ScreenUtil().setWidth(8)),
+        SizedBox(width: AppSpacing.space2),
         Expanded(
           child: Text(
             titleText,
@@ -128,7 +128,7 @@ class MiningDataBroad extends StatelessWidget {
             key: ValueKey(titleText),
             verticalMargin: ScreenUtil().setWidth(24),
             defView: Container(
-              padding: EdgeInsets.all(ScreenUtil().setWidth(4)),
+              padding: EdgeInsets.all(AppSpacing.space2),
               child: Icon(
                 Icons.info_outline_rounded,
                 size: ScreenUtil().setWidth(18),
@@ -150,7 +150,7 @@ class MiningDataBroad extends StatelessWidget {
               margin: EdgeInsets.symmetric(
                 horizontal: ScreenUtil().setWidth(50),
               ),
-              padding: EdgeInsets.all(ScreenUtil().setWidth(18)),
+              padding: EdgeInsets.all(AppSpacing.space4),
               child: Text(
                 tipsText ?? '',
                 style: TextStyle(

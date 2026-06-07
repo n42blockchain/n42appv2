@@ -284,7 +284,7 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
         children: [
           if (widget.showAvatar && _ensName != null) ...[
             _buildAvatar(avatarSize),
-            SizedBox(width: ScreenUtil().setWidth(8)),
+            SizedBox(width: AppSpacing.space2),
           ],
           Flexible(
             child: _isLoading
@@ -321,7 +321,7 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
         children: [
           if (widget.showAvatar) ...[
             _buildAvatar(avatarSize),
-            SizedBox(width: ScreenUtil().setWidth(12)),
+            SizedBox(width: AppSpacing.space4),
           ],
           Expanded(
             child: Column(
@@ -341,7 +341,7 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(2)),
+                  SizedBox(height: AppSpacing.space2),
                   Text(
                     AddressValidator.getAddressPreview(widget.address),
                     style: TextStyle(
@@ -386,7 +386,7 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
     return GestureDetector(
       onTap: widget.onTap,
       child: Container(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(12)),
+        padding: EdgeInsets.all(AppSpacing.space4),
         decoration: BoxDecoration(
           color: AppColorTokens.of(context).bgSurface.withValues(alpha: 0.5),
           borderRadius: AppRadius.brMd,
@@ -395,7 +395,7 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
         child: Row(
           children: [
             _buildAvatar(avatarSize * 1.2),
-            SizedBox(width: ScreenUtil().setWidth(12)),
+            SizedBox(width: AppSpacing.space4),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -410,7 +410,7 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
                           size: fontSize,
                           color: const Color(0xFF4CAF50),
                         ),
-                        SizedBox(width: ScreenUtil().setWidth(4)),
+                        SizedBox(width: AppSpacing.space2),
                         Expanded(
                           child: Text(
                             _ensName!,
@@ -425,7 +425,7 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
                         ),
                       ],
                     ),
-                    SizedBox(height: ScreenUtil().setWidth(4)),
+                    SizedBox(height: AppSpacing.space2),
                   ],
                   SelectableText(
                     widget.address,

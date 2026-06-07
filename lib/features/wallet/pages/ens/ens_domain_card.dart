@@ -37,7 +37,7 @@ class EnsDomainCard extends StatelessWidget {
     }
 
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [gradientBase.withAlpha(30), gradientBase.withAlpha(10)],
@@ -49,7 +49,7 @@ class EnsDomainCard extends StatelessWidget {
       child: Column(
         children: [
           _EnsAvatar(ownedEns: ownedEns, domainChain: domainChain),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           Text(
             ownedEns.name,
             style: AppTypography.title.copyWith(
@@ -57,9 +57,9 @@ class EnsDomainCard extends StatelessWidget {
               color: AppColorTokens.of(context).textPrimary,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(8)),
+          SizedBox(height: AppSpacing.space2),
           _ChainBadgeRow(ownedEns: ownedEns, domainChain: domainChain),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           _ExpiryRow(
             ownedEns: ownedEns,
             isExpired: isExpired,
@@ -145,7 +145,7 @@ class _ChainBadgeRow extends StatelessWidget {
       children: [
         _badge(label: domainChain.name, color: domainChain.color),
         if (ownedEns.isPrimary) ...[
-          SizedBox(width: ScreenUtil().setWidth(8)),
+          SizedBox(width: AppSpacing.space2),
           _badge(label: S.of(context).g_key_ens_primary, color: Colors.green),
         ],
       ],
@@ -155,8 +155,8 @@ class _ChainBadgeRow extends StatelessWidget {
   Widget _badge({required String label, required Color color}) {
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(12),
-        vertical: ScreenUtil().setWidth(4),
+        horizontal: AppSpacing.space4,
+        vertical: AppSpacing.space2,
       ),
       decoration: BoxDecoration(
         color: color.withAlpha(25),
@@ -213,7 +213,7 @@ class _ExpiryRow extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Icon(icon, size: ScreenUtil().setWidth(20), color: color),
-        SizedBox(width: ScreenUtil().setWidth(6)),
+        SizedBox(width: AppSpacing.space2),
         Text(label, style: AppTypography.caption.copyWith(color: color)),
       ],
     );

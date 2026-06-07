@@ -129,21 +129,21 @@ class _AAAccountDetailPageState extends ConsumerState<AAAccountDetailPage>
     return Scaffold(
       appBar: AppBarWidget(text: widget.account.displayName),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+        padding: EdgeInsets.all(AppSpacing.space6),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             buildAccountCard(),
-            SizedBox(height: ScreenUtil().setWidth(24)),
+            SizedBox(height: AppSpacing.space6),
             buildQuickActions(
               onSend: widget.account.state.canExecute ? _navigateToSend : null,
               onReceive: _showReceiveDialog,
               onCheckStatus: _checkAccountStatus,
               isDeploying: _isDeploying,
             ),
-            SizedBox(height: ScreenUtil().setWidth(24)),
+            SizedBox(height: AppSpacing.space6),
             buildDetailsSection(),
-            SizedBox(height: ScreenUtil().setWidth(24)),
+            SizedBox(height: AppSpacing.space6),
             buildTransactionHistory(),
           ],
         ),

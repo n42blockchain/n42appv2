@@ -44,17 +44,17 @@ class SessionKeyAmountLimit extends StatelessWidget {
                   hintText: S.of(context).g_key_aa_session_amount_hint,
                   border: OutlineInputBorder(borderRadius: AppRadius.brMd),
                   contentPadding: EdgeInsets.symmetric(
-                    horizontal: ScreenUtil().setWidth(16),
-                    vertical: ScreenUtil().setWidth(14),
+                    horizontal: AppSpacing.space4,
+                    vertical: AppSpacing.space4,
                   ),
                 ),
               ),
             ),
-            SizedBox(width: ScreenUtil().setWidth(12)),
+            SizedBox(width: AppSpacing.space4),
             _TokenChips(selected: selectedToken, onChanged: onTokenChanged),
           ],
         ),
-        SizedBox(height: ScreenUtil().setWidth(10)),
+        SizedBox(height: AppSpacing.space2),
         Row(
           children: [
             Checkbox(value: noLimit, onChanged: onNoLimitChanged),
@@ -91,8 +91,8 @@ class _TokenChips extends StatelessWidget {
           child: Container(
             margin: EdgeInsets.only(left: ScreenUtil().setWidth(6)),
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(12),
-              vertical: ScreenUtil().setWidth(8),
+              horizontal: AppSpacing.space4,
+              vertical: AppSpacing.space2,
             ),
             decoration: BoxDecoration(
               color: isSelected
@@ -148,7 +148,7 @@ class SessionKeyRiskSummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: riskColor.withAlpha(10),
         borderRadius: AppRadius.brMd,
@@ -164,7 +164,7 @@ class SessionKeyRiskSummary extends StatelessWidget {
                 size: ScreenUtil().setWidth(20),
                 color: riskColor,
               ),
-              SizedBox(width: ScreenUtil().setWidth(8)),
+              SizedBox(width: AppSpacing.space2),
               Expanded(
                 child: Text(
                   S.of(context).g_key_aa_permission,
@@ -177,7 +177,7 @@ class SessionKeyRiskSummary extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
           _row(
             context,
             '🏷️',
@@ -200,7 +200,7 @@ class SessionKeyRiskSummary extends StatelessWidget {
               '${S.of(context).g_key_aa_session_amount_limit}: $spendingLimitLine',
             ),
           if (preset == SessionKeyPermission.full) ...[
-            SizedBox(height: ScreenUtil().setWidth(8)),
+            SizedBox(height: AppSpacing.space2),
             Row(
               children: [
                 Icon(
@@ -208,7 +208,7 @@ class SessionKeyRiskSummary extends StatelessWidget {
                   size: ScreenUtil().setWidth(18),
                   color: Colors.red,
                 ),
-                SizedBox(width: ScreenUtil().setWidth(6)),
+                SizedBox(width: AppSpacing.space2),
                 Expanded(
                   child: Text(
                     S.of(context).g_key_aa_session_risk_warning,
@@ -233,7 +233,7 @@ class SessionKeyRiskSummary extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(icon, style: TextStyle(fontSize: ScreenUtil().setSp(20))),
-          SizedBox(width: ScreenUtil().setWidth(8)),
+          SizedBox(width: AppSpacing.space2),
           Expanded(
             child: Text(
               text,

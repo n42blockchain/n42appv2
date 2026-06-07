@@ -199,7 +199,7 @@ class _MiningImportState extends ConsumerState<MiningImport> {
     return Scaffold(
       appBar: AppBarWidget(text: S.of(context).g_mining_key_82),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+        padding: EdgeInsets.all(AppSpacing.space8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -226,7 +226,7 @@ class _MiningImportState extends ConsumerState<MiningImport> {
   Widget _buildTitleWidget(String title, {Widget? rightWidget}) {
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
       child: Row(
         children: [
           Expanded(
@@ -249,7 +249,7 @@ class _MiningImportState extends ConsumerState<MiningImport> {
           text: S.of(context).g_key_166,
           onTap: _pasteFromClipboard,
         ),
-        SizedBox(width: ScreenUtil().setWidth(20)),
+        SizedBox(width: AppSpacing.space4),
         _buildActionButton(
           text: S.of(context).g_mining_key_111,
           onTap: _importFromFile,
@@ -266,7 +266,7 @@ class _MiningImportState extends ConsumerState<MiningImport> {
     return InkWell(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(10)),
+        padding: EdgeInsets.symmetric(horizontal: AppSpacing.space2),
         child: Text(
           text,
           style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).brand),
@@ -328,7 +328,7 @@ class _MiningImportState extends ConsumerState<MiningImport> {
       margin: EdgeInsets.symmetric(
         vertical: ScreenUtil().setWidth(_fieldSpacing),
       ),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       width: double.infinity,
       decoration: BoxDecoration(
         color: AppThemeUtils.getColorByKey(
@@ -351,7 +351,7 @@ class _MiningImportState extends ConsumerState<MiningImport> {
       child: Container(
         height: ScreenUtil().setWidth(88),
         width: double.infinity,
-        margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
+        margin: EdgeInsets.all(AppSpacing.space8),
         child: AppButton(
           label: isLoading
               ? S.of(context).g_mining_key_113

@@ -15,7 +15,7 @@ class KeyDetailsSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
         borderRadius: BorderRadius.vertical(
@@ -36,7 +36,7 @@ class KeyDetailsSheet extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(20)),
+          SizedBox(height: AppSpacing.space4),
           Text(
             S.of(context).g_key_aa_session_details,
             style: AppTypography.headline.copyWith(
@@ -44,7 +44,7 @@ class KeyDetailsSheet extends StatelessWidget {
               color: AppColorTokens.of(context).textPrimary,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(20)),
+          SizedBox(height: AppSpacing.space4),
           _row(context, S.of(context).g_key_aa_label, keyData.label),
           _row(
             context,
@@ -72,7 +72,7 @@ class KeyDetailsSheet extends StatelessWidget {
               S.of(context).g_key_aa_spending_limit,
               '${_formatBigInt(keyData.spendingLimit!, 18)} ${keyData.spendingToken}',
             ),
-          SizedBox(height: ScreenUtil().setWidth(24)),
+          SizedBox(height: AppSpacing.space6),
         ],
       ),
     );
@@ -80,7 +80,7 @@ class KeyDetailsSheet extends StatelessWidget {
 
   Widget _row(BuildContext context, String label, String value) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10)),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space2),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

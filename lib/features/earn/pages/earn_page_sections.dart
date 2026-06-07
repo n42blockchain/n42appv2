@@ -32,7 +32,7 @@ mixin EarnPageSectionsMixin
         : earnState.maxApy.toStringAsFixed(1);
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space6),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -43,7 +43,7 @@ mixin EarnPageSectionsMixin
               color: AppColorTokens.of(context).textPrimary,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           // 大功能卡片 — 横向滚动
           SizedBox(
             height: ScreenUtil().setWidth(230),
@@ -62,7 +62,7 @@ mixin EarnPageSectionsMixin
                     MaterialPageRoute(builder: (_) => const StakingHomePage()),
                   ),
                 ),
-                SizedBox(width: ScreenUtil().setWidth(16)),
+                SizedBox(width: AppSpacing.space4),
                 buildFeatureCard(
                   context,
                   title: S.of(context).g_key_earn_mining,
@@ -75,7 +75,7 @@ mixin EarnPageSectionsMixin
                     MaterialPageRoute(builder: (_) => const MiningTodayV2()),
                   ),
                 ),
-                SizedBox(width: ScreenUtil().setWidth(16)),
+                SizedBox(width: AppSpacing.space4),
                 buildFeatureCard(
                   context,
                   title: S.of(context).g_key_earn_swap,
@@ -84,7 +84,7 @@ mixin EarnPageSectionsMixin
                   gradientColors: const [Color(0xFF4776E6), Color(0xFF8E54E9)],
                   onTap: () => navigateToSwap(context),
                 ),
-                SizedBox(width: ScreenUtil().setWidth(16)),
+                SizedBox(width: AppSpacing.space4),
                 buildFeatureCard(
                   context,
                   title: S.of(context).g_key_bridge_title,
@@ -96,7 +96,7 @@ mixin EarnPageSectionsMixin
                     MaterialPageRoute(builder: (_) => const BridgeHomePage()),
                   ),
                 ),
-                SizedBox(width: ScreenUtil().setWidth(16)),
+                SizedBox(width: AppSpacing.space4),
               ],
             ),
           ),
@@ -112,7 +112,7 @@ mixin EarnPageSectionsMixin
   Widget buildQuickTools(BuildContext context) {
     final s = S.of(context);
     return Padding(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -123,11 +123,11 @@ mixin EarnPageSectionsMixin
               color: AppColorTokens.of(context).textPrimary,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           Container(
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(8),
-              vertical: ScreenUtil().setWidth(16),
+              horizontal: AppSpacing.space2,
+              vertical: AppSpacing.space4,
             ),
             decoration: BoxDecoration(
               color: AppColorTokens.of(context).bgSurface,

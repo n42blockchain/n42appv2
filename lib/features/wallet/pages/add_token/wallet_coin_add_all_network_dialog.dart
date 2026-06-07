@@ -109,7 +109,7 @@ extension _WalletCoinAddAllNetworkDialog on _WalletCoinAddAllState {
             height: ScreenUtil().setWidth(52.0),
             child: image,
           ),
-          SizedBox(width: ScreenUtil().setWidth(10.0)),
+          SizedBox(width: AppSpacing.space2),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -145,8 +145,8 @@ extension _WalletCoinAddAllNetworkDialog on _WalletCoinAddAllState {
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(
-          vertical: ScreenUtil().setWidth(30.0),
-          horizontal: ScreenUtil().setWidth(20.0),
+          vertical: AppSpacing.space8,
+          horizontal: AppSpacing.space4,
         ),
         decoration: BoxDecoration(
           border: Border(

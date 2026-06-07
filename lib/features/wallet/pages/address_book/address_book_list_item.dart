@@ -53,18 +53,18 @@ mixin _AddressBookListItemMixin on State<AddressBookList> {
 
     return Container(
       margin: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30),
-        vertical: ScreenUtil().setWidth(8),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space2,
       ),
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30),
-        vertical: ScreenUtil().setWidth(20),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space4,
       ),
       decoration: BoxDecoration(color: itemBg, borderRadius: AppRadius.brMd),
       child: Row(
         children: [
           _buildAvatar(info),
-          SizedBox(width: ScreenUtil().setWidth(20)),
+          SizedBox(width: AppSpacing.space4),
 
           Expanded(
             child: Column(
@@ -83,11 +83,11 @@ mixin _AddressBookListItemMixin on State<AddressBookList> {
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    SizedBox(width: ScreenUtil().setWidth(12)),
+                    SizedBox(width: AppSpacing.space4),
                     Container(
                       padding: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(14),
-                        vertical: ScreenUtil().setWidth(4),
+                        horizontal: AppSpacing.space4,
+                        vertical: AppSpacing.space2,
                       ),
                       decoration: BoxDecoration(
                         color: subtitleText.withValues(alpha: 0.1),
@@ -102,7 +102,7 @@ mixin _AddressBookListItemMixin on State<AddressBookList> {
                     ),
                   ],
                 ),
-                SizedBox(height: ScreenUtil().setWidth(8)),
+                SizedBox(height: AppSpacing.space2),
 
                 EnsAddressText(
                   address: info.address ?? '',
@@ -111,7 +111,7 @@ mixin _AddressBookListItemMixin on State<AddressBookList> {
                 ),
 
                 if (info.desc != null && info.desc!.isNotEmpty) ...[
-                  SizedBox(height: ScreenUtil().setWidth(6)),
+                  SizedBox(height: AppSpacing.space2),
                   Text(
                     info.desc!,
                     maxLines: 1,

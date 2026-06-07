@@ -128,25 +128,25 @@ class _NftSendPageState extends State<NftSendPage> {
       appBar: AppBarWidget(text: S.of(context).g_key_nft_send),
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+          padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: ScreenUtil().setWidth(30)),
+                SizedBox(height: AppSpacing.space8),
 
                 // NFT 简要信息
                 _buildNftInfo(context, textColor, subtitleColor),
 
-                SizedBox(height: ScreenUtil().setWidth(30)),
+                SizedBox(height: AppSpacing.space8),
 
                 // 收款地址
                 Text(
                   S.of(context).g_key_38, // To
                   style: AppTypography.body.copyWith(color: subtitleColor),
                 ),
-                SizedBox(height: ScreenUtil().setWidth(10)),
+                SizedBox(height: AppSpacing.space2),
                 TextFormField(
                   controller: _addressCtrl,
                   decoration: InputDecoration(
@@ -177,12 +177,12 @@ class _NftSendPageState extends State<NftSendPage> {
 
                 // ERC1155 数量字段
                 if (nft.isErc1155) ...[
-                  SizedBox(height: ScreenUtil().setWidth(24)),
+                  SizedBox(height: AppSpacing.space6),
                   Text(
                     S.of(context).g_key_nft_quantity,
                     style: AppTypography.body.copyWith(color: subtitleColor),
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(10)),
+                  SizedBox(height: AppSpacing.space2),
                   TextFormField(
                     controller: _quantityCtrl,
                     keyboardType: TextInputType.number,
@@ -229,7 +229,7 @@ class _NftSendPageState extends State<NftSendPage> {
                           ),
                   ),
                 ),
-                SizedBox(height: ScreenUtil().setWidth(30)),
+                SizedBox(height: AppSpacing.space8),
               ],
             ),
           ),
@@ -245,7 +245,7 @@ class _NftSendPageState extends State<NftSendPage> {
   ) {
     final blueColor = AppColorTokens.of(context).brand;
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: blueColor.withAlpha(15),
         borderRadius: AppRadius.brMd,
@@ -266,7 +266,7 @@ class _NftSendPageState extends State<NftSendPage> {
                   )
                 : _imgPlaceholder(blueColor),
           ),
-          SizedBox(width: ScreenUtil().setWidth(16)),
+          SizedBox(width: AppSpacing.space4),
           // 名称 + Token ID
           Expanded(
             child: Column(
@@ -281,7 +281,7 @@ class _NftSendPageState extends State<NftSendPage> {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
-                SizedBox(height: ScreenUtil().setWidth(4)),
+                SizedBox(height: AppSpacing.space2),
                 Text(
                   '${S.of(context).g_key_nft_token_id}: #${nft.tokenId}',
                   overflow: TextOverflow.ellipsis,

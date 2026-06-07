@@ -27,14 +27,14 @@ Future<bool?> deviceLoginDialog(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  SizedBox(height: ScreenUtil().setWidth(30)),
+                  SizedBox(height: AppSpacing.space8),
                   // 设备图标
                   Icon(
                     Icons.phone_android,
                     size: ScreenUtil().setWidth(60),
                     color: AppColorTokens.of(context).brand,
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(16)),
+                  SizedBox(height: AppSpacing.space4),
                   // 标题
                   Text(
                     S.of(context).device_login_title,

@@ -172,7 +172,7 @@ class _KeystoneSignPageState extends State<KeystoneSignPage> {
 
   Widget _buildRequestStep(BuildContext context, S s) {
     return Padding(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -180,16 +180,16 @@ class _KeystoneSignPageState extends State<KeystoneSignPage> {
             icon: Icons.qr_code_scanner,
             message: s.g_key_hw_keystone_scan_request_hint,
           ),
-          SizedBox(height: ScreenUtil().setWidth(24)),
+          SizedBox(height: AppSpacing.space6),
           Expanded(child: Center(child: _buildQrCode())),
-          SizedBox(height: ScreenUtil().setWidth(24)),
+          SizedBox(height: AppSpacing.space6),
           ElevatedButton(
             onPressed: _proceedToScan,
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColorTokens.of(context).brand,
               foregroundColor: Colors.white,
               padding: EdgeInsets.symmetric(
-                vertical: ScreenUtil().setWidth(20),
+                vertical: AppSpacing.space4,
               ),
               shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
             ),
@@ -198,7 +198,7 @@ class _KeystoneSignPageState extends State<KeystoneSignPage> {
               style: AppTypography.body.copyWith(fontWeight: FontWeight.w600),
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(24)),
+          SizedBox(height: AppSpacing.space6),
         ],
       ),
     );
@@ -206,7 +206,7 @@ class _KeystoneSignPageState extends State<KeystoneSignPage> {
 
   Widget _buildQrCode() {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: AppRadius.brMd,
@@ -242,7 +242,7 @@ class _KeystoneSignPageState extends State<KeystoneSignPage> {
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+          padding: EdgeInsets.all(AppSpacing.space4),
           child: _KeystoneInfoCard(
             icon: Icons.camera_alt,
             message: s.g_key_hw_keystone_scan_response_hint,

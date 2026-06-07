@@ -6,7 +6,7 @@ part of 'wallet_chain_send_btc.dart';
 mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
   Widget toWidget() {
     return Container(
-      margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+      margin: EdgeInsets.all(AppSpacing.space8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -16,7 +16,7 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
               color: AppColorTokens.of(context).textPrimary,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(20.0)),
+          SizedBox(height: AppSpacing.space4),
           textFieldStyle2(
             context,
             controller: toTextEditingController,
@@ -49,7 +49,7 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
 
   Widget amountWidget() {
     return Container(
-      margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+      margin: EdgeInsets.all(AppSpacing.space8),
       child: Column(
         children: [
           Row(
@@ -63,7 +63,7 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              SizedBox(width: ScreenUtil().setWidth(20.0)),
+              SizedBox(width: AppSpacing.space4),
               Expanded(child: amountBalanceWidget()),
             ],
           ),
@@ -115,7 +115,7 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
                   bgColor: AppColorTokens.of(context).bgSurface,
                   errorMessage: amountErrorMessage,
                   messageMargin: EdgeInsets.symmetric(
-                    horizontal: ScreenUtil().setWidth(30.0),
+                    horizontal: AppSpacing.space8,
                   ),
                   rightWidget1: toTextFieldEnabel
                       ? Container(
@@ -124,7 +124,7 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
                           ),
                           height: ScreenUtil().setWidth(60.0),
                           padding: EdgeInsets.symmetric(
-                            horizontal: ScreenUtil().setWidth(20.0),
+                            horizontal: AppSpacing.space4,
                           ),
                           decoration: BoxDecoration(
                             color: AppColorTokens.of(context).brand,
@@ -188,8 +188,8 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
     );
     return Padding(
       padding: EdgeInsets.symmetric(
-        vertical: ScreenUtil().setWidth(20.0),
-        horizontal: ScreenUtil().setWidth(30.0),
+        vertical: AppSpacing.space4,
+        horizontal: AppSpacing.space8,
       ),
       child: Text(
         addr,
@@ -244,8 +244,8 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
           );
 
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(10.0)),
-      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+      padding: EdgeInsets.all(AppSpacing.space2),
+      margin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -284,8 +284,8 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
         right: ScreenUtil().setWidth(30.0),
       ),
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(32.0),
-        vertical: ScreenUtil().setWidth(32.0),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space8,
       ),
       width: double.infinity,
       decoration: BoxDecoration(
@@ -313,7 +313,7 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
         children: [
           Divider(height: ScreenUtil().setWidth(1), indent: 0, endIndent: 0),
           Container(
-            padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+            padding: EdgeInsets.all(AppSpacing.space8),
             height: ScreenUtil().setWidth(148.0),
             color: AppColorTokens.of(context).bgBase,
             child: AppButton(

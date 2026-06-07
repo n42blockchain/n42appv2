@@ -217,17 +217,17 @@ class _EnsPurchasePageState extends State<EnsPurchasePage> {
     return Scaffold(
       appBar: AppBarWidget(text: S.of(context).g_key_ens_purchase_title),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+        padding: EdgeInsets.all(AppSpacing.space6),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // 域名信息卡片
             _buildDomainCard(),
-            SizedBox(height: ScreenUtil().setWidth(24)),
+            SizedBox(height: AppSpacing.space6),
 
             // 注册步骤指示器
             EnsRegistrationSteps(currentStep: _currentStep),
-            SizedBox(height: ScreenUtil().setWidth(24)),
+            SizedBox(height: AppSpacing.space6),
 
             // 步骤内容
             EnsPurchaseStepContent(
@@ -238,12 +238,12 @@ class _EnsPurchasePageState extends State<EnsPurchasePage> {
               errorMessage: _errorMessage,
               domainName: widget.name,
             ),
-            SizedBox(height: ScreenUtil().setWidth(24)),
+            SizedBox(height: AppSpacing.space6),
 
             // 价格信息
             if (_currentStep >= 0 && _currentStep < 4)
               EnsPriceCard(price: widget.price),
-            SizedBox(height: ScreenUtil().setWidth(32)),
+            SizedBox(height: AppSpacing.space8),
 
             // 操作按钮
             EnsPurchaseActionButton(

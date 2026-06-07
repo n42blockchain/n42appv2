@@ -81,10 +81,10 @@ class _DexLimitOrdersPageState extends State<DexLimitOrdersPage> {
           : RefreshIndicator(
               onRefresh: _loadOrders,
               child: ListView.separated(
-                padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+                padding: EdgeInsets.all(AppSpacing.space6),
                 itemCount: _orders.length,
                 separatorBuilder: (_, _) =>
-                    SizedBox(height: ScreenUtil().setWidth(12)),
+                    SizedBox(height: AppSpacing.space4),
                 itemBuilder: (context, index) =>
                     _buildOrderCard(_orders[index]),
               ),
@@ -114,7 +114,7 @@ class _DexLimitOrdersPageState extends State<DexLimitOrdersPage> {
     );
 
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
         borderRadius: BorderRadius.circular(12),
@@ -151,7 +151,7 @@ class _DexLimitOrdersPageState extends State<DexLimitOrdersPage> {
               ),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(10)),
+          SizedBox(height: AppSpacing.space2),
 
           // Details
           _detailRow(
@@ -180,7 +180,7 @@ class _DexLimitOrdersPageState extends State<DexLimitOrdersPage> {
 
           // Cancel button for active orders
           if (order.isActive) ...[
-            SizedBox(height: ScreenUtil().setWidth(12)),
+            SizedBox(height: AppSpacing.space4),
             SizedBox(
               width: double.infinity,
               height: 36,

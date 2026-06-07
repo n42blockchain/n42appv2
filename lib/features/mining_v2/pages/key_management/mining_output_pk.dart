@@ -141,7 +141,7 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
       child: Scaffold(
         appBar: AppBar(title: Text(S.of(context).g_mining_key_96)),
         body: SingleChildScrollView(
-          padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+          padding: EdgeInsets.all(AppSpacing.space8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -150,7 +150,7 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
                   S.of(context).g_mining_key_97,
                   style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).textPrimary),
                 ),
-                SizedBox(height: ScreenUtil().setWidth(10)),
+                SizedBox(height: AppSpacing.space2),
                 textFieldStyle3(
                   context,
                   controller: _pwdController,
@@ -165,12 +165,12 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
                   rightWidget1: _buildObscureToggle(),
                   rightOnTap1: _toggleObscure,
                 ),
-                SizedBox(height: ScreenUtil().setWidth(40)),
+                SizedBox(height: AppSpacing.space12),
                 Text(
                   S.of(context).g_mining_key_99,
                   style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).textPrimary),
                 ),
-                SizedBox(height: ScreenUtil().setWidth(10)),
+                SizedBox(height: AppSpacing.space2),
                 textFieldStyle3(
                   context,
                   controller: _confirmController,
@@ -192,9 +192,9 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
                   S.of(context).g_mining_key_100,
                   style: AppTypography.title.copyWith(color: AppColorTokens.of(context).textPrimary),
                 ),
-                SizedBox(height: ScreenUtil().setWidth(40)),
+                SizedBox(height: AppSpacing.space12),
                 Container(
-                  padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                  padding: EdgeInsets.all(AppSpacing.space8),
                   decoration: BoxDecoration(
                     color: AppColorTokens.of(context).bgSurface,
                     borderRadius: AppRadius.brMd,
@@ -212,7 +212,7 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
 
         bottomNavigationBar: SafeArea(
           child: Container(
-            margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
+            margin: EdgeInsets.all(AppSpacing.space8),
             width: double.infinity,
             height: ScreenUtil().setWidth(88),
             child: AppButton(

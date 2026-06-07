@@ -21,7 +21,7 @@ mixin _CreateTwoWidgetsMixin on State<CreateTwo> {
 
   Widget _buildMnemonicGrid() {
     return GridView.builder(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       itemCount: mnemonicWordsList.length,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -56,7 +56,7 @@ mixin _CreateTwoWidgetsMixin on State<CreateTwo> {
       child: Container(
         width: double.infinity,
         height: ScreenUtil().setWidth(400),
-        padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+        padding: EdgeInsets.all(AppSpacing.space8),
         decoration: BoxDecoration(
           color: _itemBgColor(),
           borderRadius: AppRadius.brMd,
@@ -88,7 +88,7 @@ mixin _CreateTwoWidgetsMixin on State<CreateTwo> {
     final mainTextColor = AppColorTokens.of(context).textPrimary;
     final child = Center(
       child: Container(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+        padding: EdgeInsets.all(AppSpacing.space8),
         decoration: BoxDecoration(
           color: _itemBgColor(),
           borderRadius: AppRadius.brMd,
@@ -126,7 +126,7 @@ mixin _CreateTwoWidgetsMixin on State<CreateTwo> {
                 onPressed: () => Navigator.pop(context, true),
               ),
             ),
-            SizedBox(height: ScreenUtil().setWidth(30.0)),
+            SizedBox(height: AppSpacing.space8),
             SizedBox(
               width: double.infinity,
               height: ScreenUtil().setWidth(80.0),

@@ -29,8 +29,8 @@ mixin StakingHomePageWidgetsMixin
   Widget buildTabBar(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30),
-        vertical: ScreenUtil().setWidth(16),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space4,
       ),
       decoration: BoxDecoration(
         color: _themeColor(AppThemeKeys.itemBgColor),
@@ -49,7 +49,7 @@ mixin StakingHomePageWidgetsMixin
           fontWeight: FontWeight.normal,
         ),
         labelPadding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(8),
+          horizontal: AppSpacing.space2,
         ),
         tabs: [
           _fittedTab(S.of(context).g_key_stake_protocols),
@@ -64,7 +64,7 @@ mixin StakingHomePageWidgetsMixin
       child: FittedBox(
         fit: BoxFit.scaleDown,
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(24)),
+          padding: EdgeInsets.symmetric(horizontal: AppSpacing.space6),
           child: Text(label),
         ),
       ),
@@ -83,7 +83,7 @@ mixin StakingHomePageWidgetsMixin
               .toList();
 
     return ListView.builder(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       itemCount: protocols.length,
       itemBuilder: (context, index) {
         final protocol = protocols[index];
@@ -97,7 +97,7 @@ mixin StakingHomePageWidgetsMixin
       onTap: () => navigateToStakePage(context, protocol),
       child: Container(
         margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(16)),
-        padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+        padding: EdgeInsets.all(AppSpacing.space6),
         decoration: BoxDecoration(
           color: _themeColor(AppThemeKeys.itemBgColor),
           borderRadius: AppRadius.brMd,
@@ -117,14 +117,14 @@ mixin StakingHomePageWidgetsMixin
                     )
                   : stakingDefaultLogo(context, protocol),
             ),
-            SizedBox(width: ScreenUtil().setWidth(20)),
+            SizedBox(width: AppSpacing.space4),
             // 协议信息
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _buildProtocolTags(context, protocol),
-                  SizedBox(height: ScreenUtil().setWidth(8)),
+                  SizedBox(height: AppSpacing.space2),
                   Text(
                     protocol.description,
                     style: AppTypography.bodySm.copyWith(
@@ -136,10 +136,10 @@ mixin StakingHomePageWidgetsMixin
                 ],
               ),
             ),
-            SizedBox(width: ScreenUtil().setWidth(16)),
+            SizedBox(width: AppSpacing.space4),
             // APY 和解绑期
             _buildApyColumn(context, protocol),
-            SizedBox(width: ScreenUtil().setWidth(8)),
+            SizedBox(width: AppSpacing.space2),
             Icon(
               Icons.chevron_right,
               color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
@@ -208,7 +208,7 @@ mixin StakingHomePageWidgetsMixin
             color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
           ),
         ),
-        SizedBox(height: ScreenUtil().setWidth(8)),
+        SizedBox(height: AppSpacing.space2),
         Text(
           protocol.unbondingPeriodDays > 0
               ? S
@@ -250,10 +250,10 @@ mixin StakingHomePageWidgetsMixin
             }
           },
           child: ListView(
-            padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+            padding: EdgeInsets.all(AppSpacing.space8),
             children: [
               stakingStatsCard(context, provider),
-              SizedBox(height: ScreenUtil().setWidth(24)),
+              SizedBox(height: AppSpacing.space6),
               if (provider.activePositions.isNotEmpty) ...[
                 stakingSectionHeader(
                   context,
@@ -264,7 +264,7 @@ mixin StakingHomePageWidgetsMixin
                 ),
               ],
               if (provider.unbondingPositions.isNotEmpty) ...[
-                SizedBox(height: ScreenUtil().setWidth(16)),
+                SizedBox(height: AppSpacing.space4),
                 stakingSectionHeader(
                   context,
                   S.of(context).g_key_stake_unbonding,
@@ -285,7 +285,7 @@ mixin StakingHomePageWidgetsMixin
 
     return Container(
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: _themeColor(AppThemeKeys.itemBgColor),
         borderRadius: AppRadius.brMd,
@@ -298,7 +298,7 @@ mixin StakingHomePageWidgetsMixin
         children: [
           _buildPositionHeader(context, position, isUnbonding),
           if (position.validator != null) ...[
-            SizedBox(height: ScreenUtil().setWidth(8)),
+            SizedBox(height: AppSpacing.space2),
             Text(
               '${S.of(context).g_key_stake_validator}: ${position.validator!.name}',
               style: AppTypography.caption.copyWith(
@@ -306,10 +306,10 @@ mixin StakingHomePageWidgetsMixin
               ),
             ),
           ],
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
           _buildPositionAmounts(context, position),
           if (isUnbonding && position.unbondingDaysLeft != null) ...[
-            SizedBox(height: ScreenUtil().setWidth(12)),
+            SizedBox(height: AppSpacing.space4),
             _buildUnbondingBadge(context, position),
           ],
         ],
@@ -331,7 +331,7 @@ mixin StakingHomePageWidgetsMixin
             color: _themeColor(AppThemeKeys.mainTextColor),
           ),
         ),
-        SizedBox(width: ScreenUtil().setWidth(8)),
+        SizedBox(width: AppSpacing.space2),
         stakingTag(
           context: context,
           label: isUnbonding
@@ -405,8 +405,8 @@ mixin StakingHomePageWidgetsMixin
   Widget _buildUnbondingBadge(BuildContext context, StakingPosition position) {
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(12),
-        vertical: ScreenUtil().setWidth(8),
+        horizontal: AppSpacing.space4,
+        vertical: AppSpacing.space2,
       ),
       decoration: BoxDecoration(
         color: Colors.orange.withAlpha(20),
@@ -420,7 +420,7 @@ mixin StakingHomePageWidgetsMixin
             size: ScreenUtil().setWidth(28),
             color: Colors.orange,
           ),
-          SizedBox(width: ScreenUtil().setWidth(8)),
+          SizedBox(width: AppSpacing.space2),
           Flexible(
             child: Text(
               S

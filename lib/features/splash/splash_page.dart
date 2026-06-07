@@ -125,9 +125,9 @@ class _SplashPageState extends State<SplashPage>
               children: [
                 const Spacer(flex: 2),
                 _buildLogo(),
-                SizedBox(height: ScreenUtil().setWidth(40)),
+                SizedBox(height: AppSpacing.space12),
                 _buildTitle(),
-                SizedBox(height: ScreenUtil().setWidth(20)),
+                SizedBox(height: AppSpacing.space4),
                 _SplashTagline(variant: _variant),
                 const Spacer(flex: 2),
                 _buildLoadingIndicator(),
@@ -211,7 +211,7 @@ class _SplashPageState extends State<SplashPage>
             valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF4FC3F7)),
           ),
         ),
-        SizedBox(height: ScreenUtil().setWidth(20)),
+        SizedBox(height: AppSpacing.space4),
       ],
     );
   }
@@ -224,12 +224,12 @@ class _SplashPageState extends State<SplashPage>
           _loadingText,
           style: AppTypography.caption.copyWith(color: Colors.white.withValues(alpha: 0.6)),
         ),
-        SizedBox(height: ScreenUtil().setWidth(60)),
+        SizedBox(height: AppSpacing.space16),
         Text(
           '\u00a9 2021-2026 N42 Inc.',
           style: AppTypography.caption.copyWith(color: Colors.white.withValues(alpha: 0.4)),
         ),
-        SizedBox(height: ScreenUtil().setWidth(40)),
+        SizedBox(height: AppSpacing.space12),
       ],
     );
   }
@@ -262,7 +262,7 @@ class _SplashTagline extends StatelessWidget {
     ];
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(40)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space12),
       child: Text.rich(
         TextSpan(children: labelSpans),
         textAlign: TextAlign.center,

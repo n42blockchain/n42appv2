@@ -154,7 +154,7 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
             size: ScreenUtil().setWidth(120),
             color: AppColorTokens.of(context).textSubtitle,
           ),
-          SizedBox(height: ScreenUtil().setWidth(24)),
+          SizedBox(height: AppSpacing.space6),
           Text(
             S.of(context).g_wc_no_sessions,
             style: AppTypography.headline.copyWith(
@@ -162,7 +162,7 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
               color: AppColorTokens.of(context).textPrimary,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
           Text(
             S.of(context).g_wc_no_sessions_desc,
             style: AppTypography.bodySm.copyWith(
@@ -179,11 +179,11 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
   ) {
     return ListView.separated(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(24),
-        vertical: ScreenUtil().setWidth(16),
+        horizontal: AppSpacing.space6,
+        vertical: AppSpacing.space4,
       ),
       itemCount: entries.length,
-      separatorBuilder: (_, _) => SizedBox(height: ScreenUtil().setWidth(16)),
+      separatorBuilder: (_, _) => SizedBox(height: AppSpacing.space4),
       itemBuilder: (context, index) {
         final session = entries[index].value;
         return _buildSessionCard(session);
@@ -204,7 +204,7 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
       onTap: () => _onSessionTap(session),
       borderRadius: AppRadius.brMd,
       child: Container(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+        padding: EdgeInsets.all(AppSpacing.space6),
         decoration: BoxDecoration(
           color: AppColorTokens.of(context).bgSurface,
           borderRadius: AppRadius.brMd,
@@ -246,7 +246,7 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(6)),
+                  SizedBox(height: AppSpacing.space2),
                   // URL
                   if (meta.url.isNotEmpty)
                     Text(
@@ -257,7 +257,7 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                  SizedBox(height: ScreenUtil().setWidth(10)),
+                  SizedBox(height: AppSpacing.space2),
                   // Chain tags
                   if (chains.isNotEmpty)
                     Wrap(
@@ -266,8 +266,8 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
                       children: chains.map((chain) {
                         return Container(
                           padding: EdgeInsets.symmetric(
-                            horizontal: ScreenUtil().setWidth(12),
-                            vertical: ScreenUtil().setWidth(4),
+                            horizontal: AppSpacing.space4,
+                            vertical: AppSpacing.space2,
                           ),
                           decoration: BoxDecoration(
                             color: AppColorTokens.of(
@@ -301,7 +301,7 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
                       );
                     },
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(8)),
+                  SizedBox(height: AppSpacing.space2),
                   // Expiry
                   Text(
                     isExpired

@@ -110,7 +110,7 @@ class _KeystoneInfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
         borderRadius: AppRadius.brMd,
@@ -122,7 +122,7 @@ class _KeystoneInfoCard extends StatelessWidget {
             color: AppColorTokens.of(context).brand,
             size: ScreenUtil().setWidth(36),
           ),
-          SizedBox(width: ScreenUtil().setWidth(16)),
+          SizedBox(width: AppSpacing.space4),
           Expanded(
             child: Text(
               message,
@@ -146,7 +146,7 @@ class _KeystoneScanErrorCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final s = S.of(context);
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: Colors.red.shade900.withAlpha(230),
         borderRadius: AppRadius.brMd,
@@ -159,13 +159,13 @@ class _KeystoneScanErrorCard extends StatelessWidget {
             style: AppTypography.caption.copyWith(color: Colors.white),
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
           GestureDetector(
             onTap: onRetry,
             child: Container(
               padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(24),
-                vertical: ScreenUtil().setWidth(10),
+                horizontal: AppSpacing.space6,
+                vertical: AppSpacing.space2,
               ),
               decoration: BoxDecoration(
                 color: Colors.white24,

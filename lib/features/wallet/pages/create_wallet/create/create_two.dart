@@ -62,11 +62,11 @@ class _CreateTwoState extends State<CreateTwo> with _CreateTwoWidgetsMixin {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _buildProgressDot(active: true),
-            SizedBox(width: ScreenUtil().setWidth(20.0)),
+            SizedBox(width: AppSpacing.space4),
             _buildProgressDot(active: true),
-            SizedBox(width: ScreenUtil().setWidth(20.0)),
+            SizedBox(width: AppSpacing.space4),
             _buildProgressDot(active: false),
-            SizedBox(width: ScreenUtil().setWidth(20.0)),
+            SizedBox(width: AppSpacing.space4),
             _buildProgressDot(active: false),
           ],
         ),
@@ -79,7 +79,7 @@ class _CreateTwoState extends State<CreateTwo> with _CreateTwoWidgetsMixin {
             Positioned.fill(
               child: SingleChildScrollView(
                 padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(30.0),
+                  horizontal: AppSpacing.space8,
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -127,7 +127,7 @@ class _CreateTwoState extends State<CreateTwo> with _CreateTwoWidgetsMixin {
 
   Widget _buildTitle() {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(30)),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space8),
       child: Text(
         S.of(context).g_key_wallet_c39,
         style: TextStyle(
@@ -157,7 +157,7 @@ class _CreateTwoState extends State<CreateTwo> with _CreateTwoWidgetsMixin {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _buildWordCountButton(12),
-        SizedBox(width: ScreenUtil().setWidth(40.0)),
+        SizedBox(width: AppSpacing.space12),
         _buildWordCountButton(24),
       ],
     );
@@ -182,7 +182,7 @@ class _CreateTwoState extends State<CreateTwo> with _CreateTwoWidgetsMixin {
   Widget _buildWarningRow(String text, {double topMargin = 0}) {
     return Container(
       margin: EdgeInsets.only(top: topMargin),
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -191,7 +191,7 @@ class _CreateTwoState extends State<CreateTwo> with _CreateTwoWidgetsMixin {
             color: AppColorTokens.of(context).textPrimary,
             size: ScreenUtil().setWidth(40),
           ),
-          SizedBox(width: ScreenUtil().setWidth(10)),
+          SizedBox(width: AppSpacing.space2),
           Expanded(
             child: Text(
               text,
@@ -216,7 +216,7 @@ class _CreateTwoState extends State<CreateTwo> with _CreateTwoWidgetsMixin {
           const Divider(height: 1, indent: 0, endIndent: 0),
           Container(
             height: ScreenUtil().setWidth(148.0),
-            padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+            padding: EdgeInsets.all(AppSpacing.space8),
             width: double.infinity,
             color: AppColorTokens.of(context).bgBase,
             child: AppButton(

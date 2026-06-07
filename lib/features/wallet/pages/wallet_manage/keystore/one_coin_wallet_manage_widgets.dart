@@ -28,13 +28,13 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
   );
 
   EdgeInsets get _sectionPadding => EdgeInsets.symmetric(
-    vertical: ScreenUtil().setWidth(30.0),
-    horizontal: ScreenUtil().setWidth(30.0),
+    vertical: AppSpacing.space8,
+    horizontal: AppSpacing.space8,
   );
 
   EdgeInsets get _sectionMargin => EdgeInsets.symmetric(
-    horizontal: ScreenUtil().setWidth(30.0),
-    vertical: ScreenUtil().setWidth(20.0),
+    horizontal: AppSpacing.space8,
+    vertical: AppSpacing.space4,
   );
 
   bool get _hasMnemonic => widget.walletInfo.privateKey == null;
@@ -59,7 +59,7 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
           _buildCoinNameRow(),
           Divider(height: ScreenUtil().setWidth(48.0)),
           _buildAddressLabelRow(pathCount),
-          SizedBox(height: ScreenUtil().setWidth(20.0)),
+          SizedBox(height: AppSpacing.space4),
           EnsAddressDisplay(
             address: widget.model.address ?? "",
             coinType: widget.model.coin['coinType'] ?? 'ETH',
@@ -267,7 +267,7 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
     return InkWell(
       onTap: _onExportKeystoreTap,
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0)),
+        padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -472,7 +472,7 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
     return InkWell(
       onTap: _onExportPrivateKeyTap,
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0)),
+        padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

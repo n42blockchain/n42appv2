@@ -70,29 +70,29 @@ class EnsSearchResultView extends StatelessWidget {
       AppThemeKeys.itemSubtitleTextColor.name,
     );
     return SingleChildScrollView(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       child: Column(
         children: [
-          SizedBox(height: ScreenUtil().setWidth(60)),
+          SizedBox(height: AppSpacing.space16),
           Icon(
             Icons.search_rounded,
             size: ScreenUtil().setWidth(80),
             color: subtitleColor.withAlpha(80),
           ),
-          SizedBox(height: ScreenUtil().setWidth(24)),
+          SizedBox(height: AppSpacing.space6),
           Text(
             S.of(context).g_key_ens_search_prompt,
             style: AppTypography.body.copyWith(color: subtitleColor),
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           Text(
             S.of(context).g_key_ens_min_length,
             style: AppTypography.caption.copyWith(
               color: subtitleColor.withAlpha(150),
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(40)),
+          SizedBox(height: AppSpacing.space12),
           _buildSuggestions(context),
         ],
       ),
@@ -121,7 +121,7 @@ class EnsSearchResultView extends StatelessWidget {
             color: _themeColor(context, AppThemeKeys.mainTextColor.name),
           ),
         ),
-        SizedBox(height: ScreenUtil().setWidth(12)),
+        SizedBox(height: AppSpacing.space4),
         Wrap(
           spacing: ScreenUtil().setWidth(12),
           runSpacing: ScreenUtil().setWidth(12),
@@ -130,8 +130,8 @@ class EnsSearchResultView extends StatelessWidget {
               onTap: () => onSuggestionTap(name),
               child: Container(
                 padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(16),
-                  vertical: ScreenUtil().setWidth(10),
+                  horizontal: AppSpacing.space4,
+                  vertical: AppSpacing.space2,
                 ),
                 decoration: BoxDecoration(
                   color: _themeColor(context, AppThemeKeys.itemBgColor.name),
@@ -156,7 +156,7 @@ class EnsSearchResultView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const CircularProgressIndicator(),
-          SizedBox(height: ScreenUtil().setWidth(24)),
+          SizedBox(height: AppSpacing.space6),
           Text(
             S.of(context).g_key_ens_checking,
             style: AppTypography.bodySm.copyWith(
@@ -181,7 +181,7 @@ class EnsSearchResultView extends StatelessWidget {
             size: ScreenUtil().setWidth(64),
             color: Colors.red,
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           Text(
             availabilityResult!.error!,
             style: AppTypography.bodySm.copyWith(
@@ -192,7 +192,7 @@ class EnsSearchResultView extends StatelessWidget {
             ),
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: ScreenUtil().setWidth(24)),
+          SizedBox(height: AppSpacing.space6),
           ElevatedButton(
             onPressed: onRetry,
             child: Text(S.of(context).g_swap_key_6),
@@ -204,19 +204,19 @@ class EnsSearchResultView extends StatelessWidget {
 
   Widget _buildAvailableState(BuildContext context) {
     return SingleChildScrollView(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           _buildAvailabilityCard(context, isAvailable: true),
-          SizedBox(height: ScreenUtil().setWidth(24)),
+          SizedBox(height: AppSpacing.space6),
           _buildYearsSelector(context),
-          SizedBox(height: ScreenUtil().setWidth(24)),
+          SizedBox(height: AppSpacing.space6),
           if (isLoadingPrice)
             const Center(child: CircularProgressIndicator())
           else if (priceInfo != null)
             EnsPriceCard(price: priceInfo!),
-          SizedBox(height: ScreenUtil().setWidth(32)),
+          SizedBox(height: AppSpacing.space8),
           ElevatedButton(
             onPressed: onRegisterTap,
             style: ElevatedButton.styleFrom(
@@ -226,7 +226,7 @@ class EnsSearchResultView extends StatelessWidget {
               ),
               foregroundColor: Colors.white,
               padding: EdgeInsets.symmetric(
-                vertical: ScreenUtil().setWidth(18),
+                vertical: AppSpacing.space4,
               ),
               shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
             ),
@@ -242,16 +242,16 @@ class EnsSearchResultView extends StatelessWidget {
 
   Widget _buildUnavailableState(BuildContext context) {
     return SingleChildScrollView(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           _buildAvailabilityCard(context, isAvailable: false),
-          SizedBox(height: ScreenUtil().setWidth(24)),
+          SizedBox(height: AppSpacing.space6),
           if (availabilityResult!.ownerAddress != null ||
               availabilityResult!.expiresAt != null)
             _buildUnavailableDetails(context),
-          SizedBox(height: ScreenUtil().setWidth(24)),
+          SizedBox(height: AppSpacing.space6),
           Text(
             S.of(context).g_key_ens_try_another,
             style: AppTypography.bodySm.copyWith(
@@ -273,7 +273,7 @@ class EnsSearchResultView extends StatelessWidget {
   }) {
     final statusColor = isAvailable ? Colors.green : Colors.red;
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       decoration: BoxDecoration(
         color: statusColor.withAlpha(20),
         borderRadius: AppRadius.brMd,
@@ -286,7 +286,7 @@ class EnsSearchResultView extends StatelessWidget {
             size: ScreenUtil().setWidth(48),
             color: statusColor,
           ),
-          SizedBox(width: ScreenUtil().setWidth(16)),
+          SizedBox(width: AppSpacing.space4),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -301,7 +301,7 @@ class EnsSearchResultView extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(height: ScreenUtil().setWidth(4)),
+                SizedBox(height: AppSpacing.space2),
                 Text(
                   isAvailable
                       ? S.of(context).g_key_ens_available
@@ -321,7 +321,7 @@ class EnsSearchResultView extends StatelessWidget {
 
   Widget _buildUnavailableDetails(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: _themeColor(context, AppThemeKeys.itemBgColor.name),
         borderRadius: AppRadius.brMd,
@@ -387,7 +387,7 @@ class EnsSearchResultView extends StatelessWidget {
             color: mainTextColor,
           ),
         ),
-        SizedBox(height: ScreenUtil().setWidth(12)),
+        SizedBox(height: AppSpacing.space4),
         Row(
           children: [
             for (var i = 0; i < yearOptions.length; i++) ...[
@@ -425,7 +425,7 @@ class EnsSearchResultView extends StatelessWidget {
       onTap: () => onYearsChanged(years),
       child: Container(
         margin: EdgeInsets.only(right: isLast ? 0 : ScreenUtil().setWidth(12)),
-        padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(14)),
+        padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
         decoration: BoxDecoration(
           color: isSelected ? blueColor : itemBgColor,
           borderRadius: AppRadius.brMd,

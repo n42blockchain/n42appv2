@@ -61,7 +61,7 @@ class _EnsRenewSuccessCardState extends State<EnsRenewSuccessCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(32)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       decoration: BoxDecoration(
         color: Colors.green.withAlpha(20),
         borderRadius: AppRadius.brMd,
@@ -74,7 +74,7 @@ class _EnsRenewSuccessCardState extends State<EnsRenewSuccessCard> {
             size: ScreenUtil().setWidth(64),
             color: Colors.green,
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           Text(
             S.of(context).g_key_ens_renew_success,
             style: AppTypography.body.copyWith(
@@ -83,7 +83,7 @@ class _EnsRenewSuccessCardState extends State<EnsRenewSuccessCard> {
             ),
           ),
           if (widget.renewResult.newExpiresAt != null) ...[
-            SizedBox(height: ScreenUtil().setWidth(8)),
+            SizedBox(height: AppSpacing.space2),
             Text(
               '${S.of(context).g_key_ens_new_expiry}: ${_formatDate(widget.renewResult.newExpiresAt!)}',
               style: AppTypography.caption.copyWith(
@@ -92,11 +92,11 @@ class _EnsRenewSuccessCardState extends State<EnsRenewSuccessCard> {
             ),
           ],
           if (widget.renewResult.txHash != null) ...[
-            SizedBox(height: ScreenUtil().setWidth(12)),
+            SizedBox(height: AppSpacing.space4),
             Container(
               padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(12),
-                vertical: ScreenUtil().setWidth(8),
+                horizontal: AppSpacing.space4,
+                vertical: AppSpacing.space2,
               ),
               decoration: BoxDecoration(
                 color: Colors.green.withAlpha(20),
@@ -114,9 +114,9 @@ class _EnsRenewSuccessCardState extends State<EnsRenewSuccessCard> {
           ],
           // 到期提醒开关
           if (widget.renewResult.newExpiresAt != null) ...[
-            SizedBox(height: ScreenUtil().setWidth(20)),
+            SizedBox(height: AppSpacing.space4),
             Divider(color: Colors.green.withAlpha(50)),
-            SizedBox(height: ScreenUtil().setWidth(8)),
+            SizedBox(height: AppSpacing.space2),
             Row(
               children: [
                 Expanded(
@@ -130,7 +130,7 @@ class _EnsRenewSuccessCardState extends State<EnsRenewSuccessCard> {
                           color: AppColorTokens.of(context).textPrimary,
                         ),
                       ),
-                      SizedBox(height: ScreenUtil().setWidth(4)),
+                      SizedBox(height: AppSpacing.space2),
                       Text(
                         S.of(context).g_key_ens_reminder_hint,
                         style: AppTypography.caption.copyWith(

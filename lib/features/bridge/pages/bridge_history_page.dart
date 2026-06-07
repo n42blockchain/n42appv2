@@ -55,7 +55,7 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
             onRefresh: _onRefresh,
             child: ListView.builder(
               physics: const AlwaysScrollableScrollPhysics(),
-              padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+              padding: EdgeInsets.all(AppSpacing.space8),
               itemCount: transactions.length,
               itemBuilder: (context, index) {
                 return _buildTransactionCard(context, transactions[index]);
@@ -84,7 +84,7 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
                   size: ScreenUtil().setWidth(80),
                   color: subtitleColor,
                 ),
-                SizedBox(height: ScreenUtil().setWidth(20)),
+                SizedBox(height: AppSpacing.space4),
                 Text(
                   S.of(context).g_key_132,
                   style: AppTypography.body.copyWith(color: subtitleColor),
@@ -108,7 +108,7 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
 
     return Container(
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20)),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
         borderRadius: AppRadius.brMd,
@@ -128,12 +128,12 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
             ],
           ),
 
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
 
           // 源 → 目标
           _buildTransferRow(context, tx),
 
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
 
           // 桥接协议
           if (hasBridgeTool) ...[
@@ -144,14 +144,14 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
                   size: ScreenUtil().setWidth(28),
                   color: subtitleColor,
                 ),
-                SizedBox(width: ScreenUtil().setWidth(6)),
+                SizedBox(width: AppSpacing.space2),
                 Text(
                   tx.bridgeTool!,
                   style: AppTypography.caption.copyWith(color: subtitleColor),
                 ),
               ],
             ),
-            SizedBox(height: ScreenUtil().setWidth(10)),
+            SizedBox(height: AppSpacing.space2),
           ],
 
           // 源链 tx hash（可点击跳转浏览器）
@@ -164,7 +164,7 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
 
           // 目标链 tx hash（完成后才有）
           if (hasDestTx) ...[
-            SizedBox(height: ScreenUtil().setWidth(8)),
+            SizedBox(height: AppSpacing.space2),
             _buildTxHashRow(
               context,
               label: 'Dest',
@@ -175,7 +175,7 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
 
           // 进行中时显示手动刷新按钮
           if (isPending) ...[
-            SizedBox(height: ScreenUtil().setWidth(12)),
+            SizedBox(height: AppSpacing.space4),
             Align(
               alignment: Alignment.centerRight,
               child: InkWell(
@@ -183,8 +183,8 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
                 borderRadius: AppRadius.brSm,
                 child: Container(
                   padding: EdgeInsets.symmetric(
-                    horizontal: ScreenUtil().setWidth(16),
-                    vertical: ScreenUtil().setWidth(8),
+                    horizontal: AppSpacing.space4,
+                    vertical: AppSpacing.space2,
                   ),
                   decoration: BoxDecoration(
                     color: blueColor,
@@ -218,7 +218,7 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
 
         // 箭头
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(16)),
+          padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
           child: Icon(
             Icons.arrow_forward,
             color: AppColorTokens.of(context).brand,
@@ -255,7 +255,7 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
           chainName,
           style: AppTypography.caption.copyWith(color: subtitleColor),
         ),
-        SizedBox(height: ScreenUtil().setWidth(4)),
+        SizedBox(height: AppSpacing.space2),
         Text(
           amountText,
           style: AppTypography.body.copyWith(

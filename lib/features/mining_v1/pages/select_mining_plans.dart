@@ -52,7 +52,7 @@ class _SelectMiningPlansState extends State<SelectMiningPlans> {
           Positioned.fill(
             child: Container(
               padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(30),
+                horizontal: AppSpacing.space8,
               ),
               child: Column(
                 children: [
@@ -71,7 +71,7 @@ class _SelectMiningPlansState extends State<SelectMiningPlans> {
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(
-                      vertical: ScreenUtil().setWidth(30),
+                      vertical: AppSpacing.space8,
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -98,7 +98,7 @@ class _SelectMiningPlansState extends State<SelectMiningPlans> {
                                   ),
                           ),
                         ),
-                        SizedBox(width: ScreenUtil().setWidth(40)),
+                        SizedBox(width: AppSpacing.space12),
                         GestureDetector(
                           onTap: () {
                             if (currentPage < depositsList.length - 1) {
@@ -143,7 +143,7 @@ class _SelectMiningPlansState extends State<SelectMiningPlans> {
                 Container(
                   width: double.infinity,
                   height: ScreenUtil().setWidth(148),
-                  padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                  padding: EdgeInsets.all(AppSpacing.space8),
                   child: AppButton(
                     label: S.of(context).g_key_78,
                     onPressed: () {

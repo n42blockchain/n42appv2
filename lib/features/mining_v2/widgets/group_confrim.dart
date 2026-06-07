@@ -14,7 +14,7 @@ Future<bool?> showGroupConfirmDialog(
     barrierDismissible: false,
     builder: (_) => AlertDialog(
       contentPadding: const EdgeInsets.all(0),
-      insetPadding: EdgeInsets.all(ScreenUtil().setWidth(28)),
+      insetPadding: EdgeInsets.all(AppSpacing.space8),
       shape: RoundedRectangleBorder(borderRadius: AppRadius.brLg),
       content: Container(
         decoration: BoxDecoration(
@@ -43,7 +43,7 @@ class GroupConfirm extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(44)),
+        padding: EdgeInsets.symmetric(horizontal: AppSpacing.space12),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -75,7 +75,7 @@ class GroupConfirm extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
                 ),
-                SizedBox(height: ScreenUtil().setWidth(10)),
+                SizedBox(height: AppSpacing.space2),
               ],
             ),
             SizedBox(height: ScreenUtil().setWidth(90)),
@@ -107,7 +107,7 @@ class GroupConfirm extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(width: ScreenUtil().setWidth(30)),
+                  SizedBox(width: AppSpacing.space8),
                   Expanded(
                     child: InkWell(
                       onTap: () async {

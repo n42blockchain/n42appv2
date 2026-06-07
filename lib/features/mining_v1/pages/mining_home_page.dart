@@ -11,7 +11,7 @@ import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/features/widgets/empty.dart';
 import 'package:n42_wallet/features/widgets/loading.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 class MiningHomePage extends StatefulWidget {
   const MiningHomePage({super.key});
@@ -80,7 +80,7 @@ class _MiningHomePageState extends State<MiningHomePage>
             !miningModel.isLoadingMiningDeposits) {
           return Center(
             child: Padding(
-              padding: EdgeInsets.all(ScreenUtil().setWidth(40)),
+              padding: EdgeInsets.all(AppSpacing.space12),
               child: EmptyView(
                 canRefresh: true,
                 onPressed: () async {

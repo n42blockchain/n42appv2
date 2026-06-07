@@ -66,7 +66,7 @@ class _CreateThreeState extends State<CreateThree> {
     final inactiveColor = _tc(AppThemeKeys.dividerColor.name);
     final bgColor = _tc(AppThemeKeys.backGroundColor.name);
     final mainText = _tc(AppThemeKeys.mainTextColor.name);
-    final gap = SizedBox(width: ScreenUtil().setWidth(20.0));
+    final gap = SizedBox(width: AppSpacing.space4);
 
     return Scaffold(
       appBar: AppBar(
@@ -92,13 +92,13 @@ class _CreateThreeState extends State<CreateThree> {
             Positioned.fill(
               child: SingleChildScrollView(
                 padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(30.0),
+                  horizontal: AppSpacing.space8,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+                      margin: EdgeInsets.all(AppSpacing.space8),
                       alignment: Alignment.center,
                       child: Text(
                         S.of(context).g_key_wallet_c8,
@@ -112,7 +112,7 @@ class _CreateThreeState extends State<CreateThree> {
                       alignment: Alignment.center,
                       width: double.infinity,
                       margin: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(60.0),
+                        horizontal: AppSpacing.space16,
                         vertical: ScreenUtil().setWidth(50.0),
                       ),
                       child: Text(
@@ -138,7 +138,7 @@ class _CreateThreeState extends State<CreateThree> {
                   const Divider(height: 1, indent: 0, endIndent: 0),
                   Container(
                     height: ScreenUtil().setWidth(148.0),
-                    padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+                    padding: EdgeInsets.all(AppSpacing.space8),
                     width: double.infinity,
                     color: bgColor,
                     child: AppButton(
@@ -250,7 +250,7 @@ class _CreateThreeState extends State<CreateThree> {
 
   Widget _buildGridView() {
     return GridView.builder(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       itemCount: messMnemonicWordsList.length,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),

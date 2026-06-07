@@ -162,7 +162,7 @@ class _QrCodeMenu extends StatelessWidget {
       child: Row(
         children: [
           Icon(icon, size: ScreenUtil().setWidth(40), color: textColor),
-          SizedBox(width: ScreenUtil().setWidth(20)),
+          SizedBox(width: AppSpacing.space4),
           Text(
             label,
             style: AppTypography.body.copyWith(color: textColor),
@@ -214,7 +214,7 @@ class _WalletConnectButton extends ConsumerWidget {
                 right: -ScreenUtil().setWidth(8),
                 top: -ScreenUtil().setWidth(8),
                 child: Container(
-                  padding: EdgeInsets.all(ScreenUtil().setWidth(6)),
+                  padding: EdgeInsets.all(AppSpacing.space2),
                   decoration: BoxDecoration(
                     color: AppColorTokens.of(context).brand,
                     shape: BoxShape.circle,

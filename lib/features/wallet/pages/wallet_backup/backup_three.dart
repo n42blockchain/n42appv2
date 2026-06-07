@@ -155,7 +155,7 @@ class _BackupThreeState extends ConsumerState<BackupThree> {
           children: [
             Positioned.fill(
               child: SingleChildScrollView(
-                padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+                padding: EdgeInsets.all(AppSpacing.space8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -213,7 +213,7 @@ class _BackupThreeState extends ConsumerState<BackupThree> {
                   const Divider(height: 1, indent: 0, endIndent: 0),
                   Container(
                     height: ScreenUtil().setWidth(148.0),
-                    padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+                    padding: EdgeInsets.all(AppSpacing.space8),
                     width: double.infinity,
                     child: AppButton(
                       label: S.of(context).g_key_115,

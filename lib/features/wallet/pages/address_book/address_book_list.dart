@@ -258,8 +258,8 @@ class _AddressBookListState extends State<AddressBookList>
 
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30),
-        vertical: ScreenUtil().setWidth(16),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space4,
       ),
       child: TextField(
         controller: _searchCtrl,
@@ -286,8 +286,8 @@ class _AddressBookListState extends State<AddressBookList>
                 )
               : null,
           contentPadding: EdgeInsets.symmetric(
-            horizontal: ScreenUtil().setWidth(24),
-            vertical: ScreenUtil().setWidth(18),
+            horizontal: AppSpacing.space6,
+            vertical: AppSpacing.space4,
           ),
           border: OutlineInputBorder(
             borderRadius: radius,

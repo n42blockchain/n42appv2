@@ -172,7 +172,7 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
             Positioned.fill(
               child: SingleChildScrollView(
                 padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(30),
+                  horizontal: AppSpacing.space8,
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -203,7 +203,7 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                           },
                           child: Container(
                             padding: EdgeInsets.symmetric(
-                              horizontal: ScreenUtil().setWidth(20.0),
+                              horizontal: AppSpacing.space4,
                             ),
                             height: ScreenUtil().setWidth(60.0),
                             alignment: Alignment.center,
@@ -227,9 +227,9 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                     containerStyle1(
                       context,
                       height: ScreenUtil().setWidth(440),
-                      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+                      padding: EdgeInsets.all(AppSpacing.space6),
                       margin: EdgeInsets.symmetric(
-                        vertical: ScreenUtil().setWidth(20),
+                        vertical: AppSpacing.space4,
                       ),
                       child: CommInput(
                         type: InputFieldType.account,
@@ -254,9 +254,9 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                     ),
                     containerStyle1(
                       context,
-                      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+                      padding: EdgeInsets.all(AppSpacing.space4),
                       margin: EdgeInsets.symmetric(
-                        vertical: ScreenUtil().setWidth(20),
+                        vertical: AppSpacing.space4,
                       ),
                       child: Row(
                         children: [
@@ -319,7 +319,7 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                     if (errorMessage != "")
                       Container(
                         alignment: Alignment.center,
-                        padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                        padding: EdgeInsets.all(AppSpacing.space8),
                         margin: EdgeInsets.only(top: ScreenUtil().setWidth(30)),
                         decoration: BoxDecoration(
                           color: AppColorTokens.of(context).dangerBg,
@@ -350,7 +350,7 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                     endIndent: 0,
                   ),
                   Container(
-                    padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                    padding: EdgeInsets.all(AppSpacing.space8),
                     height: ScreenUtil().setWidth(148),
                     width: double.infinity,
                     color: AppColorTokens.of(context).bgBase,

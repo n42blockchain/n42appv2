@@ -81,7 +81,7 @@ class _MiningFullNodeV2State extends ConsumerState<MiningFullNodeV2>
                 Positioned.fill(
                   child: Container(
                     padding: EdgeInsets.symmetric(
-                      horizontal: ScreenUtil().setWidth(30),
+                      horizontal: AppSpacing.space8,
                     ),
                     child: Column(
                       children: [
@@ -95,7 +95,7 @@ class _MiningFullNodeV2State extends ConsumerState<MiningFullNodeV2>
                                 context,
                                 S.current.g_mining_key_38,
                               ),
-                              SizedBox(height: ScreenUtil().setWidth(20)),
+                              SizedBox(height: AppSpacing.space4),
                               // 支付方式选择
                               buildPayMethod(
                                 "assets/mining/pay_ast.png",
@@ -107,7 +107,7 @@ class _MiningFullNodeV2State extends ConsumerState<MiningFullNodeV2>
                                   });
                                 },
                               ),
-                              SizedBox(height: ScreenUtil().setWidth(20)),
+                              SizedBox(height: AppSpacing.space4),
                               // 提示文字
                               buildInfoTip(context),
                               SizedBox(height: ScreenUtil().setWidth(50)),
@@ -116,7 +116,7 @@ class _MiningFullNodeV2State extends ConsumerState<MiningFullNodeV2>
                                 context,
                                 S.current.g_mining_key_39,
                               ),
-                              SizedBox(height: ScreenUtil().setWidth(20)),
+                              SizedBox(height: AppSpacing.space4),
                               buildPayMethods(),
                               if (nBalance != null && nBalance! > widget.nNum)
                                 buildPrivateKeyCard(context),

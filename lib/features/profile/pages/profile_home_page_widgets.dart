@@ -14,8 +14,8 @@ extension _ProfileHomePageWidgets on ProfileHomePage {
   ) {
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30),
-        vertical: ScreenUtil().setWidth(12),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space4,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -27,7 +27,7 @@ extension _ProfileHomePageWidgets on ProfileHomePage {
               color: AppColorTokens.of(context).textSubtitle,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
           Container(
             decoration: BoxDecoration(
               color: AppColorTokens.of(context).bgSurface,
@@ -54,7 +54,7 @@ extension _ProfileHomePageWidgets on ProfileHomePage {
       onTap: onTap,
       borderRadius: AppRadius.brMd,
       child: Padding(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+        padding: EdgeInsets.all(AppSpacing.space4),
         child: Row(
           children: [
             // 图标
@@ -67,7 +67,7 @@ extension _ProfileHomePageWidgets on ProfileHomePage {
               ),
               child: Icon(icon, color: color, size: ScreenUtil().setWidth(28)),
             ),
-            SizedBox(width: ScreenUtil().setWidth(16)),
+            SizedBox(width: AppSpacing.space4),
 
             // 内容
             Expanded(
@@ -84,11 +84,11 @@ extension _ProfileHomePageWidgets on ProfileHomePage {
                         ),
                       ),
                       if (isNew) ...[
-                        SizedBox(width: ScreenUtil().setWidth(8)),
+                        SizedBox(width: AppSpacing.space2),
                         Container(
                           padding: EdgeInsets.symmetric(
-                            horizontal: ScreenUtil().setWidth(8),
-                            vertical: ScreenUtil().setWidth(2),
+                            horizontal: AppSpacing.space2,
+                            vertical: AppSpacing.space2,
                           ),
                           decoration: BoxDecoration(
                             color: Colors.green,
@@ -106,7 +106,7 @@ extension _ProfileHomePageWidgets on ProfileHomePage {
                       ],
                     ],
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(2)),
+                  SizedBox(height: AppSpacing.space2),
                   Text(
                     subtitle,
                     style: AppTypography.caption.copyWith(
@@ -120,7 +120,7 @@ extension _ProfileHomePageWidgets on ProfileHomePage {
             // 尾部
             if (trailing != null) ...[
               trailing,
-              SizedBox(width: ScreenUtil().setWidth(4)),
+              SizedBox(width: AppSpacing.space2),
             ],
             Icon(
               Icons.chevron_right,

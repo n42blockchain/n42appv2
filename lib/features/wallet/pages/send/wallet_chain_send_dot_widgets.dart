@@ -6,7 +6,7 @@ part of 'wallet_chain_send_dot.dart';
 mixin _DotSendWidgetsMixin on _DotSendLogicMixin {
   Widget toWidget() {
     return Container(
-      margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+      margin: EdgeInsets.all(AppSpacing.space8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -16,7 +16,7 @@ mixin _DotSendWidgetsMixin on _DotSendLogicMixin {
               color: AppColorTokens.of(context).textPrimary,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(20.0)),
+          SizedBox(height: AppSpacing.space4),
           textFieldStyle2(
             context,
             controller: toTextEditingController,
@@ -52,7 +52,7 @@ mixin _DotSendWidgetsMixin on _DotSendLogicMixin {
             BlockchainType.Ethereum.name &&
         widget.coinModel.coin['isContract'] == false) {
       return Container(
-        margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+        margin: EdgeInsets.all(AppSpacing.space8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -62,7 +62,7 @@ mixin _DotSendWidgetsMixin on _DotSendLogicMixin {
                 color: AppColorTokens.of(context).textPrimary,
               ),
             ),
-            SizedBox(height: ScreenUtil().setWidth(20.0)),
+            SizedBox(height: AppSpacing.space4),
             textFieldStyle2(
               context,
               controller: noteTextEditingController,
@@ -260,8 +260,8 @@ mixin _DotSendWidgetsMixin on _DotSendLogicMixin {
         if (isContract)
           Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(30.0),
-              vertical: ScreenUtil().setWidth(8.0),
+              horizontal: AppSpacing.space8,
+              vertical: AppSpacing.space2,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

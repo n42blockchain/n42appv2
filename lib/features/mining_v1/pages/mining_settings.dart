@@ -92,15 +92,15 @@ class _MiningSettingsState extends State<MiningSettings> {
         listenable: globalMiningV1,
         builder: (context, _) {
           return Padding(
-            padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+            padding: EdgeInsets.all(AppSpacing.space8),
             child: Column(
               children: [
                 _buildSwitchItem(),
-                SizedBox(height: ScreenUtil().setWidth(40)),
+                SizedBox(height: AppSpacing.space12),
                 _buildNodeSelector(),
-                SizedBox(height: ScreenUtil().setWidth(40)),
+                SizedBox(height: AppSpacing.space12),
                 if (Platform.isIOS) _buildBgmSelector(),
-                if (Platform.isIOS) SizedBox(height: ScreenUtil().setWidth(40)),
+                if (Platform.isIOS) SizedBox(height: AppSpacing.space12),
                 _buildNetworkSelector(),
               ],
             ),
@@ -162,11 +162,11 @@ class _MiningSettingsState extends State<MiningSettings> {
     final textColor = _mainTextColor();
     return wrapItem(
       Padding(
-        padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
+        padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
         child: Row(
           children: [
             Expanded(child: label),
-            SizedBox(width: ScreenUtil().setWidth(60)),
+            SizedBox(width: AppSpacing.space16),
             Flexible(
               child: GestureDetector(
                 onTap: onTap,
@@ -277,7 +277,7 @@ class _MiningSettingsState extends State<MiningSettings> {
       onTap: onTap,
       child: Container(
         width: double.infinity,
-        padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+        padding: EdgeInsets.all(AppSpacing.space6),
         decoration: BoxDecoration(
           borderRadius: AppRadius.brMd,
           border: Border.all(
@@ -298,7 +298,7 @@ class _MiningSettingsState extends State<MiningSettings> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         labelText,
-                        SizedBox(height: ScreenUtil().setWidth(10)),
+                        SizedBox(height: AppSpacing.space2),
                         Text(
                           subtitle,
                           style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).textSubtitle),
@@ -342,7 +342,7 @@ class _MiningSettingsState extends State<MiningSettings> {
               isSelected: backgroundMiningMusic == 0,
               onTap: () => _selectBgmOption(0),
             ),
-            SizedBox(height: ScreenUtil().setWidth(24)),
+            SizedBox(height: AppSpacing.space6),
             _buildOptionItem(
               label: bgmMusicOptions[1],
               isSelected: backgroundMiningMusic == 1,
@@ -370,7 +370,7 @@ class _MiningSettingsState extends State<MiningSettings> {
                 Navigator.pop(context);
               },
             ),
-            SizedBox(height: ScreenUtil().setWidth(24)),
+            SizedBox(height: AppSpacing.space6),
             _buildOptionItem(
               label: networkOptions[1],
               isSelected: !AppConfig.isMainChainMining,
@@ -388,8 +388,8 @@ class _MiningSettingsState extends State<MiningSettings> {
   Widget wrapItem(Widget child) {
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(24),
-        vertical: ScreenUtil().setWidth(24),
+        horizontal: AppSpacing.space6,
+        vertical: AppSpacing.space6,
       ),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,

@@ -31,7 +31,7 @@ class BatchBottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
         boxShadow: [
@@ -52,7 +52,7 @@ class BatchBottomBar extends StatelessWidget {
                 label: '${S.of(context).g_key_batch_recipients}:',
                 value: '${provider.recipientCount}',
               ),
-              SizedBox(height: ScreenUtil().setWidth(8)),
+              SizedBox(height: AppSpacing.space2),
               _summaryRow(
                 context,
                 label: '${S.of(context).g_key_batch_total_amount}:',
@@ -60,20 +60,20 @@ class BatchBottomBar extends StatelessWidget {
                     '${provider.formatAmount(provider.totalAmount)} $tokenSymbol',
               ),
               if (provider.gasEstimate != null) ...[
-                SizedBox(height: ScreenUtil().setWidth(8)),
+                SizedBox(height: AppSpacing.space2),
                 _summaryRow(
                   context,
                   label: 'Estimated Gas:',
                   value: formatGasFee(provider.gasEstimate!.totalFee),
                 ),
               ],
-              SizedBox(height: ScreenUtil().setWidth(16)),
+              SizedBox(height: AppSpacing.space4),
             ],
 
             if (provider.errorMessage != null) ...[
               Container(
                 width: double.infinity,
-                padding: EdgeInsets.all(ScreenUtil().setWidth(12)),
+                padding: EdgeInsets.all(AppSpacing.space4),
                 decoration: BoxDecoration(
                   color: Colors.red.withAlpha(20),
                   borderRadius: AppRadius.brSm,
@@ -83,7 +83,7 @@ class BatchBottomBar extends StatelessWidget {
                   style: AppTypography.caption.copyWith(color: Colors.red),
                 ),
               ),
-              SizedBox(height: ScreenUtil().setWidth(12)),
+              SizedBox(height: AppSpacing.space4),
             ],
 
             Row(
@@ -95,7 +95,7 @@ class BatchBottomBar extends StatelessWidget {
                       child: Text(S.of(context).g_key_batch_clear_all),
                     ),
                   ),
-                  SizedBox(width: ScreenUtil().setWidth(12)),
+                  SizedBox(width: AppSpacing.space4),
                 ],
                 Expanded(
                   flex: 2,
@@ -105,7 +105,7 @@ class BatchBottomBar extends StatelessWidget {
                       backgroundColor: AppColorTokens.of(context).brand,
                       foregroundColor: Colors.white,
                       padding: EdgeInsets.symmetric(
-                        vertical: ScreenUtil().setWidth(16),
+                        vertical: AppSpacing.space4,
                       ),
                     ),
                     child: BatchButtonContent(provider: provider),
@@ -168,7 +168,7 @@ class BatchButtonContent extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(Icons.check_circle, size: ScreenUtil().setWidth(24)),
-          SizedBox(width: ScreenUtil().setWidth(8)),
+          SizedBox(width: AppSpacing.space2),
           Text(s.g_key_batch_done),
         ],
       ),
@@ -188,7 +188,7 @@ class BatchButtonContent extends StatelessWidget {
             color: Colors.white,
           ),
         ),
-        SizedBox(width: ScreenUtil().setWidth(8)),
+        SizedBox(width: AppSpacing.space2),
         Text(label),
       ],
     );

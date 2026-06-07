@@ -23,7 +23,7 @@ class _MiningSettingState extends State<MiningSetting> {
         child: Container(
           width: double.infinity,
           height: ScreenUtil().setWidth(88),
-          margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
+          margin: EdgeInsets.all(AppSpacing.space8),
           child: AppButton(
             label: S.of(context).g_mining_key_82,
             onPressed: () {
@@ -44,7 +44,7 @@ class _MiningSettingState extends State<MiningSetting> {
           children: [
             containerStyle1(
               context,
-              padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+              padding: EdgeInsets.all(AppSpacing.space8),
               child: Row(
                 children: [
                   Expanded(

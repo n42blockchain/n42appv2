@@ -40,7 +40,7 @@ class EnsQuickActions extends StatelessWidget {
             onTap: onRenew,
           ),
         ),
-        SizedBox(width: ScreenUtil().setWidth(12)),
+        SizedBox(width: AppSpacing.space4),
         Expanded(
           child: _ActionButton(
             icon: Icons.star,
@@ -49,7 +49,7 @@ class EnsQuickActions extends StatelessWidget {
             onTap: onSetPrimary,
           ),
         ),
-        SizedBox(width: ScreenUtil().setWidth(12)),
+        SizedBox(width: AppSpacing.space4),
         Expanded(
           child: _ActionButton(
             icon: Icons.content_copy,
@@ -82,7 +82,7 @@ class _ActionButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
+        padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
         decoration: BoxDecoration(
           color: isDisabled ? Colors.grey.withAlpha(20) : color.withAlpha(20),
           borderRadius: AppRadius.brMd,
@@ -97,7 +97,7 @@ class _ActionButton extends StatelessWidget {
               size: ScreenUtil().setWidth(28),
               color: isDisabled ? Colors.grey : color,
             ),
-            SizedBox(height: ScreenUtil().setWidth(6)),
+            SizedBox(height: AppSpacing.space2),
             Text(
               label,
               style: AppTypography.caption.copyWith(

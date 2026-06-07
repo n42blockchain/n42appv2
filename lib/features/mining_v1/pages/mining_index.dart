@@ -98,7 +98,7 @@ class _MiningIndexState extends State<MiningIndex>
               onLeftImageClick: () => Scaffold.of(context).openDrawer(),
               onLeftImageUri: "assets/wallet/menu.png",
               actions: [
-                SizedBox(width: ScreenUtil().setWidth(10)),
+                SizedBox(width: AppSpacing.space2),
                 InkWell(
                   onTap: () {
                     Navigator.of(context).push(
@@ -116,7 +116,7 @@ class _MiningIndexState extends State<MiningIndex>
             if (!AppConfig.isMainChainMining)
               Container(
                 alignment: Alignment.center,
-                padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                padding: EdgeInsets.all(AppSpacing.space8),
                 margin: EdgeInsets.only(top: ScreenUtil().setWidth(30)),
                 decoration: BoxDecoration(
                   color: AppColorTokens.of(context).dangerBg,
@@ -152,12 +152,12 @@ class _MiningIndexState extends State<MiningIndex>
                 final isSelected = selectIndex == i;
                 return Container(
                   margin: EdgeInsets.symmetric(
-                    vertical: ScreenUtil().setWidth(24),
+                    vertical: AppSpacing.space6,
                     horizontal: ScreenUtil().setWidth(15),
                   ),
                   padding: EdgeInsets.symmetric(
-                    horizontal: ScreenUtil().setWidth(24),
-                    vertical: ScreenUtil().setWidth(24),
+                    horizontal: AppSpacing.space6,
+                    vertical: AppSpacing.space6,
                   ),
                   decoration: BoxDecoration(
                     borderRadius: AppRadius.brXl,
@@ -218,7 +218,7 @@ class _MiningIndexState extends State<MiningIndex>
               maxHeight: ScreenUtil().setWidth(500.0),
             ),
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(30.0),
+              horizontal: AppSpacing.space8,
             ),
             child: ListView.builder(
               itemCount: walletValue.walletInfoLsit.length,
@@ -255,7 +255,7 @@ class _MiningIndexState extends State<MiningIndex>
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                             ),
-                            SizedBox(width: ScreenUtil().setWidth(20.0)),
+                            SizedBox(width: AppSpacing.space4),
                             Text(
                               wInfo.walletName ?? "",
                               style: AppTypography.title.copyWith(

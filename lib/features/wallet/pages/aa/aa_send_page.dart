@@ -50,29 +50,29 @@ class _AASendPageState extends State<AASendPage>
       body: Stack(
         children: [
           SingleChildScrollView(
-            padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+            padding: EdgeInsets.all(AppSpacing.space6),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 // 发送方信息
                 buildFromSection(),
-                SizedBox(height: ScreenUtil().setWidth(24)),
+                SizedBox(height: AppSpacing.space6),
 
                 // 接收方地址
                 buildToSection(),
-                SizedBox(height: ScreenUtil().setWidth(24)),
+                SizedBox(height: AppSpacing.space6),
 
                 // 金额输入
                 buildAmountSection(),
-                SizedBox(height: ScreenUtil().setWidth(24)),
+                SizedBox(height: AppSpacing.space6),
 
                 // Paymaster 选择
                 buildPaymasterSection(),
-                SizedBox(height: ScreenUtil().setWidth(24)),
+                SizedBox(height: AppSpacing.space6),
 
                 // Gas 估算
                 buildGasSection(),
-                SizedBox(height: ScreenUtil().setWidth(32)),
+                SizedBox(height: AppSpacing.space8),
 
                 // 发送按钮
                 buildSendButton(),

@@ -77,9 +77,9 @@ class _BridgeSelectChainPageState extends State<BridgeSelectChainPage> {
           children: [
             // 搜索框
             Container(
-              margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
+              margin: EdgeInsets.all(AppSpacing.space8),
               padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(20),
+                horizontal: AppSpacing.space4,
               ),
               decoration: BoxDecoration(
                 color: AppColorTokens.of(context).bgSurface,
@@ -172,10 +172,10 @@ class _BridgeSelectChainPageState extends State<BridgeSelectChainPage> {
       onTap: () => Navigator.pop(context, chain),
       child: Container(
         margin: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(30),
-          vertical: ScreenUtil().setWidth(8),
+          horizontal: AppSpacing.space8,
+          vertical: AppSpacing.space2,
         ),
-        padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+        padding: EdgeInsets.all(AppSpacing.space4),
         decoration: BoxDecoration(
           color: isSelected
               ? blueColor.withAlpha(30)
@@ -198,7 +198,7 @@ class _BridgeSelectChainPageState extends State<BridgeSelectChainPage> {
                   : _buildChainInitial(context, chain),
             ),
 
-            SizedBox(width: ScreenUtil().setWidth(20)),
+            SizedBox(width: AppSpacing.space4),
 
             Expanded(
               child: Column(
@@ -211,7 +211,7 @@ class _BridgeSelectChainPageState extends State<BridgeSelectChainPage> {
                       color: AppColorTokens.of(context).textPrimary,
                     ),
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(4)),
+                  SizedBox(height: AppSpacing.space2),
                   Text(
                     chain.nativeToken,
                     style: AppTypography.bodySm.copyWith(

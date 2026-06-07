@@ -20,17 +20,17 @@ class NavImportWallet extends StatelessWidget {
             fontSize: ScreenUtil().setSp(36.0),
           ),
         ),
-        SizedBox(height: ScreenUtil().setWidth(20.0)),
+        SizedBox(height: AppSpacing.space4),
         InkWell(
           onTap: () {
             onTap?.call(1);
           },
           child: Container(
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(20.0),
-              vertical: ScreenUtil().setWidth(30.0),
+              horizontal: AppSpacing.space4,
+              vertical: AppSpacing.space8,
             ),
-            margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0)),
+            margin: EdgeInsets.symmetric(vertical: AppSpacing.space4),
             decoration: BoxDecoration(
               borderRadius: AppRadius.brMd,
               color: Colors.transparent,
@@ -61,7 +61,7 @@ class NavImportWallet extends StatelessWidget {
                         S.of(context).g_key_12,
                         style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
                       ),
-                      SizedBox(height: ScreenUtil().setWidth(12)),
+                      SizedBox(height: AppSpacing.space4),
                       Text(
                         S.of(context).w_key_8,
                         style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).textSubtitle),
@@ -79,10 +79,10 @@ class NavImportWallet extends StatelessWidget {
           },
           child: Container(
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(20.0),
-              vertical: ScreenUtil().setWidth(30.0),
+              horizontal: AppSpacing.space4,
+              vertical: AppSpacing.space8,
             ),
-            margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0)),
+            margin: EdgeInsets.symmetric(vertical: AppSpacing.space4),
             decoration: BoxDecoration(
               borderRadius: AppRadius.brMd,
               color: Colors.transparent,

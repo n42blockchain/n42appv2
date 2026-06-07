@@ -74,7 +74,7 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+      margin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
         borderRadius: AppRadius.brMd,
@@ -100,7 +100,7 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
           ? () => setState(() => _isExpanded = !_isExpanded)
           : null,
       child: Padding(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+        padding: EdgeInsets.all(AppSpacing.space8),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -112,7 +112,7 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
                     size: ScreenUtil().setWidth(40),
                     color: blueColor,
                   ),
-                  SizedBox(width: ScreenUtil().setWidth(16)),
+                  SizedBox(width: AppSpacing.space4),
                   Flexible(
                     child: Text(
                       S.of(context).g_key_t_16, // Gas Fee
@@ -133,7 +133,7 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
                   style: AppTypography.body.copyWith(color: mainText),
                 ),
                 if (widget.expandable) ...[
-                  SizedBox(width: ScreenUtil().setWidth(8)),
+                  SizedBox(width: AppSpacing.space2),
                   Icon(
                     _isExpanded
                         ? Icons.keyboard_arrow_up
@@ -152,7 +152,7 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
 
   Widget _buildSpeedSelector(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       child: Row(
         children: [
           _buildSpeedOption(
@@ -161,14 +161,14 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
             S.of(context).g_key_gas_slow,
             Icons.snooze,
           ),
-          SizedBox(width: ScreenUtil().setWidth(16)),
+          SizedBox(width: AppSpacing.space4),
           _buildSpeedOption(
             context,
             GasSpeed.standard,
             S.of(context).g_key_gas_standard,
             Icons.speed,
           ),
-          SizedBox(width: ScreenUtil().setWidth(16)),
+          SizedBox(width: AppSpacing.space4),
           _buildSpeedOption(
             context,
             GasSpeed.fast,
@@ -202,8 +202,8 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
         onTap: () => _onSpeedSelected(speed),
         child: Container(
           padding: EdgeInsets.symmetric(
-            vertical: ScreenUtil().setWidth(20),
-            horizontal: ScreenUtil().setWidth(16),
+            vertical: AppSpacing.space4,
+            horizontal: AppSpacing.space4,
           ),
           decoration: BoxDecoration(
             color: isSelected ? blueColor.withAlpha(25) : Colors.transparent,
@@ -220,7 +220,7 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
                 size: ScreenUtil().setWidth(36),
                 color: isSelected ? blueColor : subtitleText,
               ),
-              SizedBox(height: ScreenUtil().setWidth(8)),
+              SizedBox(height: AppSpacing.space2),
               Text(
                 label,
                 style: AppTypography.caption.copyWith(
@@ -228,7 +228,7 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
                   color: isSelected ? blueColor : mainText,
                 ),
               ),
-              SizedBox(height: ScreenUtil().setWidth(4)),
+              SizedBox(height: AppSpacing.space2),
               Text(
                 estimatedTime,
                 style: AppTypography.caption.copyWith(color: subtitleText),
@@ -244,11 +244,11 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
     final currentOption = widget.gasEstimate.currentOption;
     final gasLimit = widget.gasEstimate.gasLimit;
     final s = S.of(context);
-    final spacing = SizedBox(height: ScreenUtil().setWidth(16));
+    final spacing = SizedBox(height: AppSpacing.space4);
 
     return Container(
-      margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      margin: EdgeInsets.all(AppSpacing.space8),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgBase,
         borderRadius: AppRadius.brMd,
@@ -381,10 +381,10 @@ class GasSelectorCompact extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(30),
-          vertical: ScreenUtil().setWidth(20),
+          horizontal: AppSpacing.space8,
+          vertical: AppSpacing.space4,
         ),
-        margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+        margin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
         decoration: BoxDecoration(
           color: AppColorTokens.of(context).bgSurface,
           borderRadius: AppRadius.brMd,
@@ -399,7 +399,7 @@ class GasSelectorCompact extends StatelessWidget {
                   size: ScreenUtil().setWidth(36),
                   color: blueColor,
                 ),
-                SizedBox(width: ScreenUtil().setWidth(12)),
+                SizedBox(width: AppSpacing.space4),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -427,7 +427,7 @@ class GasSelectorCompact extends StatelessWidget {
                   style: AppTypography.body.copyWith(color: mainText),
                 ),
                 if (onTap != null) ...[
-                  SizedBox(width: ScreenUtil().setWidth(8)),
+                  SizedBox(width: AppSpacing.space2),
                   Icon(
                     Icons.edit,
                     size: ScreenUtil().setWidth(32),

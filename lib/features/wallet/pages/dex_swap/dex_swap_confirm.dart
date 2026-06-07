@@ -41,7 +41,7 @@ class _DexSwapConfirmState extends State<DexSwapConfirm> {
   Widget _summaryCard() {
     final q = widget.quote;
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
         borderRadius: AppRadius.brMd,
@@ -71,7 +71,7 @@ class _DexSwapConfirmState extends State<DexSwapConfirm> {
 
   Widget _row(String label, String value) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(14)),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
       child: Row(
         children: [
           Text(
@@ -100,7 +100,7 @@ class _DexSwapConfirmState extends State<DexSwapConfirm> {
       _ => AppColorTokens.of(context).textPrimary,
     };
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(14)),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
       child: Row(
         children: [
           Flexible(
@@ -137,7 +137,7 @@ class _DexSwapConfirmState extends State<DexSwapConfirm> {
               onPressed: () => Navigator.pop(context, null),
             ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(30)),
+          SizedBox(width: AppSpacing.space8),
           Expanded(
             child: AppButton(
               label: S.of(context).g_key_78,

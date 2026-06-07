@@ -157,7 +157,7 @@ class _SwapAstTransactionsState extends State<SwapAstTransactions> {
                                 size: ScreenUtil().setWidth(30),
                                 fill: 0,
                               ),
-                              SizedBox(width: ScreenUtil().setWidth(4)),
+                              SizedBox(width: AppSpacing.space2),
                               Text(
                                 state.label,
                                 style: AppTypography.caption.copyWith(

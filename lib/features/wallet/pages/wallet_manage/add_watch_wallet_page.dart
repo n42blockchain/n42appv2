@@ -85,7 +85,7 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
             color: hintColor,
           ),
         ),
-        SizedBox(height: ScreenUtil().setWidth(12)),
+        SizedBox(height: AppSpacing.space4),
         Container(
           decoration: BoxDecoration(
             color: bgColor,
@@ -106,8 +106,8 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
               ),
               border: InputBorder.none,
               contentPadding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(24),
-                vertical: ScreenUtil().setWidth(20),
+                horizontal: AppSpacing.space6,
+                vertical: AppSpacing.space4,
               ),
             ),
           ),
@@ -134,14 +134,14 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(32),
-          vertical: ScreenUtil().setWidth(24),
+          horizontal: AppSpacing.space8,
+          vertical: AppSpacing.space6,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+              padding: EdgeInsets.all(AppSpacing.space6),
               decoration: BoxDecoration(
                 color: blueColor.withAlpha(20),
                 borderRadius: AppRadius.brMd,
@@ -153,7 +153,7 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
                     color: blueColor,
                     size: ScreenUtil().setWidth(40),
                   ),
-                  SizedBox(width: ScreenUtil().setWidth(16)),
+                  SizedBox(width: AppSpacing.space4),
                   Expanded(
                     child: Text(
                       s.g_key_watch_wallet_desc,
@@ -163,7 +163,7 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
                 ],
               ),
             ),
-            SizedBox(height: ScreenUtil().setWidth(32)),
+            SizedBox(height: AppSpacing.space8),
             _buildTextField(
               label: 'Name',
               controller: _nameCtrl,
@@ -173,7 +173,7 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
               hintColor: subText,
               bgColor: itemBg,
             ),
-            SizedBox(height: ScreenUtil().setWidth(24)),
+            SizedBox(height: AppSpacing.space6),
             _buildTextField(
               label: 'Address',
               controller: _addressCtrl,
@@ -184,7 +184,7 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
               bgColor: itemBg,
               maxLines: 2,
             ),
-            SizedBox(height: ScreenUtil().setWidth(48)),
+            SizedBox(height: AppSpacing.space12),
             SizedBox(
               width: double.infinity,
               height: ScreenUtil().setWidth(88),

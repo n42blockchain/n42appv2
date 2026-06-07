@@ -163,8 +163,8 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
         children: [
           Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(30),
-              vertical: ScreenUtil().setWidth(16),
+              horizontal: AppSpacing.space8,
+              vertical: AppSpacing.space4,
             ),
             child: TextField(
               controller: _searchCtrl,
@@ -202,7 +202,7 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
                   borderSide: BorderSide.none,
                 ),
                 contentPadding: EdgeInsets.symmetric(
-                  vertical: ScreenUtil().setWidth(20),
+                  vertical: AppSpacing.space4,
                 ),
               ),
             ),
@@ -226,7 +226,7 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
               _error,
               style: TextStyle(color: AppColorTokens.of(context).danger),
             ),
-            SizedBox(height: ScreenUtil().setWidth(20)),
+            SizedBox(height: AppSpacing.space4),
             TextButton(
               onPressed: _loadTokens,
               child: Text(S.of(context).g_key_aa_retry),
@@ -254,7 +254,7 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
     final subtitleText = AppColorTokens.of(context).textSubtitle;
 
     return ListView.separated(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       itemCount: tokens.length,
       separatorBuilder: (_, _) => Divider(
         height: ScreenUtil().setWidth(1),
@@ -276,7 +276,7 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
                     placeholder: 'assets/img/list_default.png',
                   ),
                 ),
-                SizedBox(width: ScreenUtil().setWidth(16)),
+                SizedBox(width: AppSpacing.space4),
                 Expanded(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,

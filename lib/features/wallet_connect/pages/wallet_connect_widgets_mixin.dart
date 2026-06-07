@@ -97,7 +97,7 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
               Navigator.pop(context, false);
             }, variant: AppButtonVariant.secondary),
           ),
-          SizedBox(width: ScreenUtil().setWidth(30)),
+          SizedBox(width: AppSpacing.space8),
           Expanded(
             child: actionButton(S.of(context).g_connect_key1, () {
               connectV2.viewStateDeal(WalletConnectState.connectOK);
@@ -147,7 +147,7 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
                     color: subtitleColor,
                   ),
                 ),
-                SizedBox(height: ScreenUtil().setWidth(24)),
+                SizedBox(height: AppSpacing.space6),
                 Text(
                   S.of(context).g_wc_dapp_disconnected,
                   style: AppTypography.body.copyWith(color: subtitleColor),
@@ -166,7 +166,7 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
                   Navigator.pop(context, false);
                 }, variant: AppButtonVariant.secondary),
               ),
-              SizedBox(width: ScreenUtil().setWidth(30)),
+              SizedBox(width: AppSpacing.space8),
               Expanded(
                 child: actionButton(S.of(context).g_key_4, () async {
                   final scanStr = await scan();
@@ -328,7 +328,7 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
             variant: AppButtonVariant.secondary,
           ),
         ),
-        SizedBox(width: ScreenUtil().setWidth(30)),
+        SizedBox(width: AppSpacing.space8),
         Expanded(child: actionButton(s.g_key_78, onConfirm)),
       ],
     );
@@ -475,8 +475,8 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
 
     return Container(
       width: double.infinity,
-      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+      margin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
+      padding: EdgeInsets.all(AppSpacing.space8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -508,7 +508,7 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
             Container(
               width: double.infinity,
               padding: EdgeInsets.symmetric(
-                vertical: ScreenUtil().setWidth(20),
+                vertical: AppSpacing.space4,
               ),
               alignment: Alignment.center,
               child: Text(
@@ -561,7 +561,7 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
   Widget buildTitleWidget(String title) {
     return Container(
       height: ScreenUtil().setWidth(100),
-      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+      margin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       width: double.infinity,
       alignment: Alignment.centerLeft,
       child: Text(

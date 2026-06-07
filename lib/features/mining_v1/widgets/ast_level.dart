@@ -17,8 +17,8 @@ class AstLevel extends StatelessWidget {
         borderRadius: AppRadius.brMd,
       ),
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30),
-        vertical: ScreenUtil().setWidth(40),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space12,
       ),
       child: _buildBoard(context),
     );
@@ -50,7 +50,7 @@ class AstLevel extends StatelessWidget {
                     levelText,
                     style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).textPrimary),
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(40)),
+                  SizedBox(height: AppSpacing.space12),
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -72,7 +72,7 @@ class AstLevel extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(40)),
+                  SizedBox(height: AppSpacing.space12),
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -87,7 +87,7 @@ class AstLevel extends StatelessWidget {
                           width: ScreenUtil().setWidth(20),
                         ),
                       ),
-                      SizedBox(width: ScreenUtil().setWidth(12)),
+                      SizedBox(width: AppSpacing.space4),
                       Expanded(
                         child: Text(
                           S.current.g_mining_key_32,
@@ -110,7 +110,7 @@ class AstLevel extends StatelessWidget {
               "assets/mining/icon_full_node.png",
               S.of(context).g_mining_key_64,
             ),
-            SizedBox(width: ScreenUtil().setWidth(32)),
+            SizedBox(width: AppSpacing.space8),
             _buildTag(
               context,
               "assets/mining/lock_time.png",
@@ -130,8 +130,8 @@ class AstLevel extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(color: tagBg, borderRadius: AppRadius.brXl),
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(12),
-        vertical: ScreenUtil().setWidth(6),
+        horizontal: AppSpacing.space4,
+        vertical: AppSpacing.space2,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -142,7 +142,7 @@ class AstLevel extends StatelessWidget {
             fit: BoxFit.cover,
             color: textColor,
           ),
-          SizedBox(width: ScreenUtil().setWidth(12)),
+          SizedBox(width: AppSpacing.space4),
           Text(
             label,
             style: AppTypography.caption.copyWith(color: textColor),

@@ -26,7 +26,7 @@ class PaymasterSelectionSheet extends StatelessWidget {
     final options = [PaymasterOption.none, PaymasterOption.sponsored];
 
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
         borderRadius: BorderRadius.vertical(
@@ -45,7 +45,7 @@ class PaymasterSelectionSheet extends StatelessWidget {
                 color: AppColorTokens.of(context).textPrimary,
               ),
             ),
-            SizedBox(height: ScreenUtil().setWidth(16)),
+            SizedBox(height: AppSpacing.space4),
             ...options.map((option) {
               final isSelected = option.type == selected.type;
               return GestureDetector(
@@ -68,7 +68,7 @@ class PaymasterSelectionSheet extends StatelessWidget {
                 ),
               );
             }),
-            SizedBox(height: ScreenUtil().setWidth(8)),
+            SizedBox(height: AppSpacing.space2),
           ],
         ),
       ),

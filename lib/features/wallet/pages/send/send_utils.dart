@@ -32,7 +32,7 @@ Widget buildSendIconBtn(BuildContext context, IconData icon) {
   return Container(
     width: ScreenUtil().setWidth(50.0),
     height: ScreenUtil().setWidth(50.0),
-    padding: EdgeInsets.all(ScreenUtil().setWidth(6.0)),
+    padding: EdgeInsets.all(AppSpacing.space2),
     child: Icon(
       icon,
       size: ScreenUtil().setWidth(38.0),

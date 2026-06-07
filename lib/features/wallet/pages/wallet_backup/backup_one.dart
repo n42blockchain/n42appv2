@@ -35,7 +35,7 @@ class _BackupOneState extends State<BackupOne> {
           children: [
             Positioned.fill(
               child: SingleChildScrollView(
-                padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                padding: EdgeInsets.all(AppSpacing.space8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -85,7 +85,7 @@ class _BackupOneState extends State<BackupOne> {
                 children: [
                   const Divider(height: 1),
                   Container(
-                    padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                    padding: EdgeInsets.all(AppSpacing.space8),
                     color: AppColorTokens.of(context).bgBase,
                     height: ScreenUtil().setWidth(148),
                     child: AppButton(
@@ -133,7 +133,7 @@ class _BackupOneState extends State<BackupOne> {
             color: AppColorTokens.of(context).textPrimary,
             size: ScreenUtil().setWidth(40),
           ),
-          SizedBox(width: ScreenUtil().setWidth(10)),
+          SizedBox(width: AppSpacing.space2),
           Expanded(
             child: Text(
               text,
@@ -151,7 +151,7 @@ class _BackupOneState extends State<BackupOne> {
   Widget _buildGridView() {
     if (showMnemonic) {
       return GridView.builder(
-        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+        padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
         itemCount: mnemonicWordsList.length,
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
@@ -189,7 +189,7 @@ class _BackupOneState extends State<BackupOne> {
       child: Container(
         width: double.infinity,
         height: ScreenUtil().setWidth(400),
-        padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+        padding: EdgeInsets.all(AppSpacing.space8),
         decoration: BoxDecoration(
           color: AppColorTokens.of(context).bgSurface,
           borderRadius: AppRadius.brMd,

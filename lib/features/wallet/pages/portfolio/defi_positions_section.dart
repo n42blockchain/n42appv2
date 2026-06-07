@@ -83,8 +83,8 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
         // Section header
         Padding(
           padding: EdgeInsets.symmetric(
-            horizontal: ScreenUtil().setWidth(32),
-            vertical: ScreenUtil().setWidth(16),
+            horizontal: AppSpacing.space8,
+            vertical: AppSpacing.space4,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -110,7 +110,7 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
         // Category summary chips
         _buildCategorySummary(portfolio),
 
-        SizedBox(height: ScreenUtil().setWidth(8)),
+        SizedBox(height: AppSpacing.space2),
 
         // Protocol list
         ...portfolio.protocols.take(10).map((p) => _buildProtocolCard(p)),
@@ -172,15 +172,15 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
     if (categories.isEmpty) return const SizedBox.shrink();
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(32)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       child: Wrap(
         spacing: ScreenUtil().setWidth(12),
         runSpacing: ScreenUtil().setWidth(8),
         children: categories.map((c) {
           return Container(
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(16),
-              vertical: ScreenUtil().setWidth(8),
+              horizontal: AppSpacing.space4,
+              vertical: AppSpacing.space2,
             ),
             decoration: BoxDecoration(
               color: c.color.withValues(alpha: 0.1),
@@ -202,10 +202,10 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
   Widget _buildProtocolCard(ProtocolPosition protocol) {
     return Container(
       margin: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(32),
-        vertical: ScreenUtil().setWidth(6),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space2,
       ),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
         borderRadius: AppRadius.brMd,
@@ -229,7 +229,7 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
                     ),
                   ),
                 ),
-              SizedBox(width: ScreenUtil().setWidth(12)),
+              SizedBox(width: AppSpacing.space4),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -316,7 +316,7 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
 
   Widget _buildLoadingState() {
     return Padding(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(32)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       child: Center(
         child: Column(
           children: [
@@ -325,7 +325,7 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
               height: ScreenUtil().setWidth(40),
               child: const CircularProgressIndicator(strokeWidth: 2),
             ),
-            SizedBox(height: ScreenUtil().setWidth(12)),
+            SizedBox(height: AppSpacing.space4),
             Text(
               'Loading DeFi positions...',
               style: AppTypography.caption.copyWith(
@@ -340,7 +340,7 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
 
   Widget _buildErrorState() {
     return Padding(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(32)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       child: Center(
         child: TextButton.icon(
           onPressed: _loadPositions,

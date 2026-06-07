@@ -26,8 +26,8 @@ class BatchInfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(ScreenUtil().setWidth(16)),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      margin: EdgeInsets.all(AppSpacing.space4),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
         borderRadius: AppRadius.brMd,
@@ -45,7 +45,7 @@ class BatchInfoCard extends StatelessWidget {
                     color: AppColorTokens.of(context).textPrimary,
                   ),
                 ),
-                SizedBox(height: ScreenUtil().setWidth(4)),
+                SizedBox(height: AppSpacing.space2),
                 Text(
                   '${S.of(context).g_key_batch_evm_only.split(' ').take(3).join(' ')} · $chainSymbol',
                   style: AppTypography.caption.copyWith(
@@ -58,8 +58,8 @@ class BatchInfoCard extends StatelessWidget {
           if (supportsMulticall)
             Container(
               padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(10),
-                vertical: ScreenUtil().setWidth(4),
+                horizontal: AppSpacing.space2,
+                vertical: AppSpacing.space2,
               ),
               decoration: BoxDecoration(
                 color: Colors.green.withAlpha(30),
@@ -73,7 +73,7 @@ class BatchInfoCard extends StatelessWidget {
                     color: Colors.green,
                     size: ScreenUtil().setWidth(20),
                   ),
-                  SizedBox(width: ScreenUtil().setWidth(4)),
+                  SizedBox(width: AppSpacing.space2),
                   Text(
                     'Multicall',
                     style: AppTypography.captionSm.copyWith(
@@ -114,8 +114,8 @@ class BatchAddItemForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(16)),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      margin: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
         borderRadius: AppRadius.brMd,
@@ -130,7 +130,7 @@ class BatchAddItemForm extends StatelessWidget {
               color: AppColorTokens.of(context).textPrimary,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
 
           TextField(
             controller: addressController,
@@ -143,7 +143,7 @@ class BatchAddItemForm extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
 
           Row(
             children: [
@@ -160,7 +160,7 @@ class BatchAddItemForm extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(width: ScreenUtil().setWidth(12)),
+              SizedBox(width: AppSpacing.space4),
               Expanded(
                 child: TextField(
                   controller: memoController,
@@ -172,7 +172,7 @@ class BatchAddItemForm extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
 
           SizedBox(
             width: double.infinity,

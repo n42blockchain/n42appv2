@@ -45,8 +45,8 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
           },
           childWidget: SingleChildScrollView(
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(30),
-              vertical: ScreenUtil().setWidth(20),
+              horizontal: AppSpacing.space8,
+              vertical: AppSpacing.space4,
             ),
             child: node == null
                 ? _buildEmpty(context)
@@ -54,13 +54,13 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       _buildStatusHeader(context, mpValue, node, isDark),
-                      SizedBox(height: ScreenUtil().setWidth(20)),
+                      SizedBox(height: AppSpacing.space4),
                       _buildTwoColumnCards(context, mpValue, node, isDark),
-                      SizedBox(height: ScreenUtil().setWidth(20)),
+                      SizedBox(height: AppSpacing.space4),
                       _buildInfoList(context, mpValue, node, isDark),
-                      SizedBox(height: ScreenUtil().setWidth(24)),
+                      SizedBox(height: AppSpacing.space6),
                       _buildRedemptionSection(context, mpValue),
-                      SizedBox(height: ScreenUtil().setWidth(60)),
+                      SizedBox(height: AppSpacing.space16),
                     ],
                   ),
           ),
@@ -82,7 +82,7 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
         : pubKey;
 
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       decoration: _cardDecoration(context, isDark),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,8 +91,8 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
             children: [
               Container(
                 padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(16),
-                  vertical: ScreenUtil().setWidth(6),
+                  horizontal: AppSpacing.space4,
+                  vertical: AppSpacing.space2,
                 ),
                 decoration: BoxDecoration(
                   color: badgeColor.withValues(alpha: 0.15),
@@ -109,7 +109,7 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
                         shape: BoxShape.circle,
                       ),
                     ),
-                    SizedBox(width: ScreenUtil().setWidth(8)),
+                    SizedBox(width: AppSpacing.space2),
                     Text(
                       _statusLabel(context, node.status),
                       style: AppTypography.caption.copyWith(
@@ -129,7 +129,7 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
               ),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           Row(
             children: [
               Flexible(
@@ -196,7 +196,7 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
                 color: subColor.withValues(alpha: 0.5),
               ),
             ),
-            SizedBox(height: ScreenUtil().setWidth(20)),
+            SizedBox(height: AppSpacing.space4),
             Text(
               S.of(context).g_mining_key_47,
               overflow: TextOverflow.ellipsis,

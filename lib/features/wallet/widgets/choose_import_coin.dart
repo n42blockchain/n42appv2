@@ -48,7 +48,7 @@ class _ChooseImportCoinState extends State<ChooseImportCoin> {
       return const Center(child: EmptyView());
     }
     return ListView.separated(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       itemCount: mMap.length,
       itemBuilder: (BuildContext context, int index) {
         return _buildItem(context, mMap[keyList[index]], index);
@@ -93,7 +93,7 @@ class _ChooseImportCoinState extends State<ChooseImportCoin> {
       onTap: callback,
       child: Container(
         color: Colors.transparent,
-        padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
+        padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
         child: Column(
           children: [
             Row(
@@ -109,7 +109,7 @@ class _ChooseImportCoinState extends State<ChooseImportCoin> {
                         ),
                 ),
                 // NftImageNetWork(imageUrl: path,width: 28,height: 28,),
-                SizedBox(width: ScreenUtil().setWidth(30)),
+                SizedBox(width: AppSpacing.space8),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -130,7 +130,7 @@ class _ChooseImportCoinState extends State<ChooseImportCoin> {
                         size: ScreenUtil().setWidth(48),
                         color: Color(0xFF448BDF),
                       )
-                    : SizedBox(width: ScreenUtil().setWidth(28)),
+                    : SizedBox(width: AppSpacing.space8),
               ],
             ),
           ],

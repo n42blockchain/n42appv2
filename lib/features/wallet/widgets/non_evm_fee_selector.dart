@@ -66,10 +66,10 @@ class NonEvmFeeCompact extends StatelessWidget {
       borderRadius: AppRadius.brMd,
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(30),
-          vertical: ScreenUtil().setWidth(20),
+          horizontal: AppSpacing.space8,
+          vertical: AppSpacing.space4,
         ),
-        margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+        margin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
         decoration: BoxDecoration(color: itemBg, borderRadius: AppRadius.brMd),
         child: Row(
           children: [
@@ -79,7 +79,7 @@ class NonEvmFeeCompact extends StatelessWidget {
               size: ScreenUtil().setWidth(40),
               color: blueColor,
             ),
-            SizedBox(width: ScreenUtil().setWidth(16)),
+            SizedBox(width: AppSpacing.space4),
 
             // 左侧：标签 + 时间/速度
             Expanded(
@@ -121,7 +121,7 @@ class NonEvmFeeCompact extends StatelessWidget {
               ],
             ),
             if (onTap != null) ...[
-              SizedBox(width: ScreenUtil().setWidth(8)),
+              SizedBox(width: AppSpacing.space2),
               Icon(
                 Icons.edit_outlined,
                 size: ScreenUtil().setWidth(32),
@@ -183,7 +183,7 @@ class _NonEvmFeeSelectorState extends State<NonEvmFeeSelector> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+      margin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
         borderRadius: AppRadius.brMd,
@@ -196,7 +196,7 @@ class _NonEvmFeeSelectorState extends State<NonEvmFeeSelector> {
           // 速度按钮
           _buildSpeedRow(context),
           if (widget.showDetails) _buildDetails(context),
-          SizedBox(height: ScreenUtil().setWidth(20)),
+          SizedBox(height: AppSpacing.space4),
         ],
       ),
     );
@@ -214,8 +214,8 @@ class _NonEvmFeeSelectorState extends State<NonEvmFeeSelector> {
     );
 
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+      padding: EdgeInsets.all(AppSpacing.space8),
+      margin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -226,7 +226,7 @@ class _NonEvmFeeSelectorState extends State<NonEvmFeeSelector> {
                 size: ScreenUtil().setWidth(40),
                 color: blueColor,
               ),
-              SizedBox(width: ScreenUtil().setWidth(16)),
+              SizedBox(width: AppSpacing.space4),
               Flexible(
                 child: Text(
                   S.of(context).g_key_t_16,
@@ -250,7 +250,7 @@ class _NonEvmFeeSelectorState extends State<NonEvmFeeSelector> {
 
   Widget _buildSpeedRow(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       child: Row(
         children: [
           _buildOption(
@@ -259,14 +259,14 @@ class _NonEvmFeeSelectorState extends State<NonEvmFeeSelector> {
             S.of(context).g_key_gas_slow,
             Icons.snooze,
           ),
-          SizedBox(width: ScreenUtil().setWidth(16)),
+          SizedBox(width: AppSpacing.space4),
           _buildOption(
             context,
             NonEvmFeeSpeed.standard,
             S.of(context).g_key_gas_standard,
             Icons.speed,
           ),
-          SizedBox(width: ScreenUtil().setWidth(16)),
+          SizedBox(width: AppSpacing.space4),
           _buildOption(
             context,
             NonEvmFeeSpeed.fast,
@@ -300,8 +300,8 @@ class _NonEvmFeeSelectorState extends State<NonEvmFeeSelector> {
         onTap: () => _onTap(speed),
         child: Container(
           padding: EdgeInsets.symmetric(
-            vertical: ScreenUtil().setWidth(20),
-            horizontal: ScreenUtil().setWidth(16),
+            vertical: AppSpacing.space4,
+            horizontal: AppSpacing.space4,
           ),
           decoration: BoxDecoration(
             color: isSelected
@@ -320,7 +320,7 @@ class _NonEvmFeeSelectorState extends State<NonEvmFeeSelector> {
                 size: ScreenUtil().setWidth(36),
                 color: isSelected ? blueColor : subtitleText,
               ),
-              SizedBox(height: ScreenUtil().setWidth(8)),
+              SizedBox(height: AppSpacing.space2),
               Text(
                 label,
                 style: AppTypography.caption.copyWith(
@@ -328,7 +328,7 @@ class _NonEvmFeeSelectorState extends State<NonEvmFeeSelector> {
                   color: isSelected ? blueColor : mainText,
                 ),
               ),
-              SizedBox(height: ScreenUtil().setWidth(4)),
+              SizedBox(height: AppSpacing.space2),
               Text(
                 estimatedTime,
                 style: AppTypography.caption.copyWith(color: subtitleText),
@@ -360,8 +360,8 @@ class _NonEvmFeeSelectorState extends State<NonEvmFeeSelector> {
     );
 
     return Container(
-      margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      margin: EdgeInsets.all(AppSpacing.space8),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(color: bgColor, borderRadius: AppRadius.brMd),
       child: Column(
         children: [
@@ -374,10 +374,10 @@ class _NonEvmFeeSelectorState extends State<NonEvmFeeSelector> {
               mainText: mainText,
               subtitleText: subtitleText,
             ),
-            SizedBox(height: ScreenUtil().setWidth(16)),
+            SizedBox(height: AppSpacing.space4),
           ],
           const Divider(height: 1),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           _detailRow(
             context,
             S.of(context).g_key_t_16, // "Max gas fee"

@@ -15,8 +15,8 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
     return Container(
       alignment: Alignment.center,
       margin: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30.0),
-        vertical: ScreenUtil().setWidth(30.0),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space8,
       ),
       child: Text(
         text,
@@ -34,8 +34,8 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
     return Container(
       alignment: Alignment.center,
       margin: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30.0),
-        vertical: ScreenUtil().setWidth(20.0),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space4,
       ),
       child: Text(
         text,
@@ -85,7 +85,7 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
             Divider(height: 1, indent: 0, endIndent: 0),
             Container(
               height: ScreenUtil().setWidth(148.0),
-              padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+              padding: EdgeInsets.all(AppSpacing.space8),
               width: double.infinity,
               color: _themeColor(AppThemeKeys.backGroundColor.name),
               child: AppButton(label: buttonLabel, onPressed: onPressed),
@@ -117,7 +117,7 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
 
     final dotCount = _isImport ? 2 : 4;
     final dotWidth = _isImport ? 144.0 : 88.0;
-    final gap = SizedBox(width: ScreenUtil().setWidth(20.0));
+    final gap = SizedBox(width: AppSpacing.space4);
 
     return Container(
       alignment: Alignment.center,
@@ -156,7 +156,7 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
           Column(
             children: [
               Container(
-                margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+                margin: EdgeInsets.all(AppSpacing.space8),
                 alignment: Alignment.center,
                 child: Text(
                   _isImport
@@ -223,7 +223,7 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
         Container(
           height: ScreenUtil().setWidth(160.0),
           width: ScreenUtil().setWidth(160.0),
-          padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+          padding: EdgeInsets.all(AppSpacing.space8),
           decoration: BoxDecoration(
             color: _themeColor(AppThemeKeys.mainButtonBgColor3.name),
             borderRadius: BorderRadius.circular(ScreenUtil().setWidth(80.0)),
@@ -320,8 +320,8 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
               Container(
                 alignment: Alignment.center,
                 margin: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(30.0),
-                  vertical: ScreenUtil().setWidth(20.0),
+                  horizontal: AppSpacing.space8,
+                  vertical: AppSpacing.space4,
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,

@@ -60,7 +60,7 @@ class _CreateOneState extends ConsumerState<CreateOne> {
   Widget build(BuildContext context) {
     final activeColor = AppColorTokens.of(context).brand;
     final inactiveColor = AppColorTokens.of(context).border;
-    final spacing = SizedBox(width: ScreenUtil().setWidth(20.0));
+    final spacing = SizedBox(width: AppSpacing.space4);
 
     return Scaffold(
       appBar: AppBar(
@@ -86,13 +86,13 @@ class _CreateOneState extends ConsumerState<CreateOne> {
             Positioned.fill(
               child: SingleChildScrollView(
                 padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(30.0),
+                  horizontal: AppSpacing.space8,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+                      margin: EdgeInsets.all(AppSpacing.space8),
                       alignment: Alignment.center,
                       child: Text(
                         S.of(context).g_key_wallet_c8,
@@ -117,7 +117,7 @@ class _CreateOneState extends ConsumerState<CreateOne> {
                       alignment: Alignment.center,
                       width: double.infinity,
                       margin: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(60.0),
+                        horizontal: AppSpacing.space16,
                       ),
                       child: Text(
                         S.of(context).g_key_wallet_c9,
@@ -172,7 +172,7 @@ class _CreateOneState extends ConsumerState<CreateOne> {
                           ),
                         ),
                       ),
-                      SizedBox(width: ScreenUtil().setWidth(30.0)),
+                      SizedBox(width: AppSpacing.space8),
                       Expanded(
                         child: Container(
                           height: ScreenUtil().setWidth(148.0),
@@ -201,7 +201,7 @@ class _CreateOneState extends ConsumerState<CreateOne> {
 
   Widget _checkWidget(String value, bool check, void Function(bool?) onTap) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0)),
+      margin: EdgeInsets.symmetric(vertical: AppSpacing.space4),
       child: Row(
         children: [
           RoundCheckBox(
@@ -218,7 +218,7 @@ class _CreateOneState extends ConsumerState<CreateOne> {
             checkedColor: AppColorTokens.of(context).brand,
             animationDuration: const Duration(milliseconds: 50),
           ),
-          SizedBox(width: ScreenUtil().setWidth(20.0)),
+          SizedBox(width: AppSpacing.space4),
           Expanded(
             child: Text(
               value,

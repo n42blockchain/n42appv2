@@ -26,10 +26,10 @@ class ItemMiningNode extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(24),
-          vertical: ScreenUtil().setWidth(24),
+          horizontal: AppSpacing.space6,
+          vertical: AppSpacing.space6,
         ),
-        margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(12)),
+        margin: EdgeInsets.symmetric(vertical: AppSpacing.space4),
         decoration: BoxDecoration(
           borderRadius: AppRadius.brMd,
           color: Colors.transparent,
@@ -50,7 +50,7 @@ class ItemMiningNode extends StatelessWidget {
                     color: AppColorTokens.of(context).textPrimary,
                   ),
                 ),
-                SizedBox(height: ScreenUtil().setWidth(12)),
+                SizedBox(height: AppSpacing.space4),
                 Text(
                   nodeAddress,
                   style: AppTypography.body.copyWith(
@@ -60,7 +60,7 @@ class ItemMiningNode extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(height: ScreenUtil().setWidth(12)),
+                SizedBox(height: AppSpacing.space4),
                 Text(
                   socketUrl,
                   style: AppTypography.body.copyWith(
@@ -78,7 +78,7 @@ class ItemMiningNode extends StatelessWidget {
                     size: ScreenUtil().setWidth(48),
                     color: AppColorTokens.of(context).brand,
                   )
-                : SizedBox(width: ScreenUtil().setWidth(48)),
+                : SizedBox(width: AppSpacing.space12),
           ],
         ),
       ),

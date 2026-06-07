@@ -209,7 +209,7 @@ class _WalletConnectAlertWidgetState
             width: ScreenUtil().setWidth(60),
             placeholder: 'assets/img/list_default.png',
           ),
-          SizedBox(width: ScreenUtil().setWidth(10)),
+          SizedBox(width: AppSpacing.space2),
           Text(
             widget.metadata.name,
             style: AppTypography.body.copyWith(
@@ -229,7 +229,7 @@ class _WalletConnectAlertWidgetState
       height: ScreenUtil().setWidth(60),
       width: double.infinity,
       alignment: Alignment.centerLeft,
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       child: Text(
         isTransaction ? s.s_key_3 : s.g_connect_key12,
         style: AppTypography.body.copyWith(
@@ -329,7 +329,7 @@ class _WalletConnectAlertWidgetState
               ),
             ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(20)),
+          SizedBox(width: AppSpacing.space4),
           Expanded(
             child: SizedBox(
               height: ScreenUtil().setWidth(88),
@@ -353,8 +353,8 @@ class _WalletConnectAlertWidgetState
   Widget _itemWidget(BuildContext context, String title, String value) {
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30),
-        vertical: ScreenUtil().setWidth(16),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space4,
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -368,7 +368,7 @@ class _WalletConnectAlertWidgetState
               ),
             ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(20)),
+          SizedBox(width: AppSpacing.space4),
           Expanded(
             child: Text(
               value,

@@ -112,7 +112,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
           GestureDetector(
             child: Container(
               padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(30.0),
+                horizontal: AppSpacing.space8,
               ),
               color: Colors.transparent,
               child: Center(
@@ -163,7 +163,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
               ),
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(20.0)),
+          SizedBox(height: AppSpacing.space4),
           _buildAddressView(context),
           const Spacer(),
           delete(),
@@ -195,7 +195,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
           : null,
       child: containerStyle1(
         context,
-        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20.0)),
+        padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
         height: ScreenUtil().setWidth(88.0),
         child: Row(
           children: [
@@ -216,7 +216,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
                       placeholder: "assets/img/list_default.png",
                     ),
             ),
-            SizedBox(width: ScreenUtil().setWidth(24.0)),
+            SizedBox(width: AppSpacing.space6),
             Text(
               coinName,
               style: AppTypography.body.copyWith(
@@ -238,7 +238,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
   Widget _buildAddressView(BuildContext context) {
     return containerStyle1(
       context,
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0)),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
       child: Column(
         children: [
           scanItem(),
@@ -271,7 +271,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
       },
       boxShadow: _noShadow,
       messageMargin: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30.0),
+        horizontal: AppSpacing.space8,
       ),
       rightWidget1: Image.asset(
         "assets/wallet/scan.png",

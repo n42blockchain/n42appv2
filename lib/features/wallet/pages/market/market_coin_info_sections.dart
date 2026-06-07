@@ -31,7 +31,7 @@ Widget buildCoinInfoHeader(
   return SizedBox(
     height: ScreenUtil().setWidth(100),
     child: Padding(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       child: Row(
         children: [
           InkWell(
@@ -50,7 +50,7 @@ Widget buildCoinInfoHeader(
             width: touchSize,
             height: touchSize,
             child: Padding(
-              padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
+              padding: EdgeInsets.all(AppSpacing.space2),
               child: ImageNetWork(
                 imageUrl: coin['image']?.toString() ?? '',
                 placeholder: 'assets/img/list.default.png',
@@ -64,7 +64,7 @@ Widget buildCoinInfoHeader(
               fontWeight: FontWeight.w600,
             ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(8)),
+          SizedBox(width: AppSpacing.space2),
           Expanded(
             child: Text(
               '(${coin['name'] ?? ''})',
@@ -80,7 +80,7 @@ Widget buildCoinInfoHeader(
             onTap: onAlertTap,
             borderRadius: BorderRadius.circular(20),
             child: Padding(
-              padding: EdgeInsets.all(ScreenUtil().setWidth(12)),
+              padding: EdgeInsets.all(AppSpacing.space4),
               child: Icon(
                 alertActive
                     ? Icons.notifications_active_rounded
@@ -114,7 +114,7 @@ Widget buildCoinPriceSection(
   final pctColor = _tc(context, pctKey);
 
   return Padding(
-    padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+    padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
     child: Row(
       children: [
         Expanded(
@@ -128,11 +128,11 @@ Widget buildCoinPriceSection(
             maxLines: 2,
           ),
         ),
-        SizedBox(width: ScreenUtil().setWidth(16)),
+        SizedBox(width: AppSpacing.space4),
         Container(
           padding: EdgeInsets.symmetric(
-            horizontal: ScreenUtil().setWidth(16),
-            vertical: ScreenUtil().setWidth(6),
+            horizontal: AppSpacing.space4,
+            vertical: AppSpacing.space2,
           ),
           decoration: BoxDecoration(
             color: pctColor.withValues(alpha: 0.12),
@@ -174,11 +174,11 @@ Widget buildPnlCard(
 
   return Padding(
     padding: EdgeInsets.symmetric(
-      horizontal: ScreenUtil().setWidth(30),
-      vertical: ScreenUtil().setWidth(8),
+      horizontal: AppSpacing.space8,
+      vertical: AppSpacing.space2,
     ),
     child: Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       decoration: BoxDecoration(color: cardBg, borderRadius: AppRadius.brMd),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -203,7 +203,7 @@ Widget buildPnlCard(
               ),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
           Row(
             children: [
               pnlStat(
@@ -212,14 +212,14 @@ Widget buildPnlCard(
                 textColor,
                 subColor,
               ),
-              SizedBox(width: ScreenUtil().setWidth(20)),
+              SizedBox(width: AppSpacing.space4),
               pnlStat(
                 s.g_pnl_quantity,
                 fmtQty(summary.totalQty),
                 textColor,
                 subColor,
               ),
-              SizedBox(width: ScreenUtil().setWidth(20)),
+              SizedBox(width: AppSpacing.space4),
               pnlStat(
                 s.g_pnl_unrealized,
                 '${isProfit ? '+' : ''}\$${fmtPrice(pnlUsd.abs())}  '
@@ -244,8 +244,8 @@ Widget buildPeriodSelector(
 }) {
   return Padding(
     padding: EdgeInsets.symmetric(
-      horizontal: ScreenUtil().setWidth(30),
-      vertical: ScreenUtil().setWidth(16),
+      horizontal: AppSpacing.space8,
+      vertical: AppSpacing.space4,
     ),
     child: Row(
       children: List.generate(periodLabels.length, (i) {
@@ -255,10 +255,10 @@ Widget buildPeriodSelector(
             onTap: () => onChanged(i),
             child: Container(
               margin: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(4),
+                horizontal: AppSpacing.space2,
               ),
               padding: EdgeInsets.symmetric(
-                vertical: ScreenUtil().setWidth(12),
+                vertical: AppSpacing.space4,
               ),
               decoration: BoxDecoration(
                 color: _tc(
@@ -428,7 +428,7 @@ Widget buildAboutSection(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         coinInfoSectionTitle(context, s.g_key_m_6),
-        SizedBox(height: ScreenUtil().setWidth(16)),
+        SizedBox(height: AppSpacing.space4),
         Container(
           padding: EdgeInsets.only(
             left: hPad,
@@ -460,7 +460,7 @@ Widget buildAboutSection(
                       horizontal: hPad,
                     ),
                     margin: EdgeInsets.symmetric(
-                      vertical: ScreenUtil().setWidth(10),
+                      vertical: AppSpacing.space2,
                     ),
                     child: Text(
                       s.g_key_m_7,

@@ -5,8 +5,8 @@ extension _BrowserPageTabs on _BrowserPageState {
   Widget _buildTabGridView(BrowserProvider bValue) {
     return GridView.builder(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30.0),
-        vertical: ScreenUtil().setWidth(16.0),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space4,
       ),
       itemCount: bValue.wvcList.length,
       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
@@ -96,11 +96,11 @@ extension _BrowserPageTabs on _BrowserPageState {
 
     return Container(
       color: AppColorTokens.of(context).bgSurface,
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: ScreenUtil().setWidth(48)),
+          SizedBox(height: AppSpacing.space12),
           Container(
             height: ScreenUtil().setWidth(90),
             decoration: BoxDecoration(
@@ -118,7 +118,7 @@ extension _BrowserPageTabs on _BrowserPageState {
               color: accentColor,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           Text(
             title.isNotEmpty ? title : host,
             maxLines: 2,
@@ -128,7 +128,7 @@ extension _BrowserPageTabs on _BrowserPageState {
               fontWeight: FontWeight.w600,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(8)),
+          SizedBox(height: AppSpacing.space2),
           Text(
             openUrl,
             maxLines: 2,
@@ -169,8 +169,8 @@ extension _BrowserPageTabs on _BrowserPageState {
       child: Container(
         color: AppColorTokens.of(context).bgBase,
         padding: EdgeInsets.symmetric(
-          vertical: ScreenUtil().setWidth(8.0),
-          horizontal: ScreenUtil().setWidth(12.0),
+          vertical: AppSpacing.space2,
+          horizontal: AppSpacing.space4,
         ),
         child: Row(
           children: [
@@ -193,7 +193,7 @@ extension _BrowserPageTabs on _BrowserPageState {
                 ),
               ),
             ),
-            SizedBox(width: ScreenUtil().setWidth(8)),
+            SizedBox(width: AppSpacing.space2),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -230,7 +230,7 @@ extension _BrowserPageTabs on _BrowserPageState {
               child: Container(
                 width: ScreenUtil().setWidth(36.0),
                 height: ScreenUtil().setWidth(36.0),
-                padding: EdgeInsets.all(ScreenUtil().setWidth(4.0)),
+                padding: EdgeInsets.all(AppSpacing.space2),
                 child: Image.asset(
                   "assets/browser/close.png",
                   color: AppColorTokens.of(context).textPrimary,

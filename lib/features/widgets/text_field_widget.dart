@@ -37,7 +37,7 @@ Widget? _buildMessageWidget(
 }) {
   if (errorMessage != "") {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10.0)),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space2),
       margin: messageMargin,
       width: double.infinity,
       child: Text(
@@ -48,7 +48,7 @@ Widget? _buildMessageWidget(
   }
   if (message != "") {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10.0)),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space2),
       margin: messageMargin,
       width: double.infinity,
       child: Text(
@@ -70,7 +70,7 @@ InputDecoration _buildInputDecoration({
   return InputDecoration(
     contentPadding:
         contentPadding ??
-        EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10.0)),
+        EdgeInsets.symmetric(vertical: AppSpacing.space2),
     isCollapsed: true,
     hintText: hintText,
     hintStyle: hintStyle,
@@ -131,7 +131,7 @@ Widget textFieldStyle2(
       Container(
         padding:
             padding ??
-            EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+            EdgeInsets.symmetric(horizontal: AppSpacing.space8),
         decoration: BoxDecoration(
           borderRadius: borderRadius ?? AppRadius.brMd,
           color:
@@ -255,7 +255,7 @@ Widget textFieldStyle3(
       Container(
         padding:
             padding ??
-            EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+            EdgeInsets.symmetric(horizontal: AppSpacing.space8),
         decoration: BoxDecoration(
           borderRadius: borderRadius ?? AppRadius.brMd,
           color:
@@ -321,7 +321,7 @@ Widget textFieldStyle3(
         )!,
       if (errorMessage != "")
         Container(
-          padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10.0)),
+          padding: EdgeInsets.symmetric(vertical: AppSpacing.space2),
           margin: messageMargin,
           width: double.infinity,
           child: Row(

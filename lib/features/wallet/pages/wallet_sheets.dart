@@ -95,7 +95,7 @@ class _WalletAddressList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       constraints: BoxConstraints(maxHeight: ScreenUtil().setWidth(500.0)),
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       child: ListView.separated(
         itemCount: walletValue.walletInfoLsit.length,
         separatorBuilder: (context, index) => Divider(
@@ -147,7 +147,7 @@ class _WalletAddressList extends StatelessWidget {
                         maxLines: 1,
                       ),
                     ),
-                  SizedBox(width: ScreenUtil().setWidth(20.0)),
+                  SizedBox(width: AppSpacing.space4),
                   Expanded(
                     child: Text(
                       wInfo.walletName!,
@@ -326,8 +326,8 @@ class BackupReminderBanner extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(
-        vertical: ScreenUtil().setWidth(20.0),
-        horizontal: ScreenUtil().setWidth(30.0),
+        vertical: AppSpacing.space4,
+        horizontal: AppSpacing.space8,
       ),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
@@ -364,7 +364,7 @@ class BackupReminderBanner extends StatelessWidget {
             },
             child: Padding(
               padding: EdgeInsets.symmetric(
-                vertical: ScreenUtil().setWidth(20),
+                vertical: AppSpacing.space4,
               ),
               child: Text(
                 S.of(context).g_key_wallet_c36,

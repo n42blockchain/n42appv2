@@ -23,7 +23,7 @@ Widget buttonStyle1(BuildContext context, VoidCallback onTap, String title) {
       alignment: Alignment.center,
     ),
     child: Padding(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(8.0)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space2),
       child: Text(
         title,
         style: AppTypography.headline.copyWith(
@@ -54,7 +54,7 @@ Widget buttonStyle2(BuildContext context, VoidCallback? onTap, String title) {
       alignment: Alignment.center,
     ),
     child: Padding(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(8.0)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space2),
       child: Text(
         title,
         style: AppTypography.headline.copyWith(
@@ -141,7 +141,7 @@ Widget buttonStyle5(
       alignment: Alignment.center,
     ),
     child: Padding(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(8.0)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space2),
       child: Text(
         title,
         style: TextStyle(fontSize: ScreenUtil().setSp(28.0), color: textColor),
@@ -179,7 +179,7 @@ Widget buttonStyle6(
       alignment: Alignment.center,
     ),
     child: Padding(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(8.0)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space2),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

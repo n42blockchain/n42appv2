@@ -49,8 +49,8 @@ mixin _SummaryPageWidgetsMixin on State<SummaryPage>, _SummaryPageLogicMixin {
         borderRadius: AppRadius.brMd,
       ),
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30),
-        vertical: ScreenUtil().setWidth(44),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space12,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -60,25 +60,25 @@ mixin _SummaryPageWidgetsMixin on State<SummaryPage>, _SummaryPageLogicMixin {
             S.current.g_mining_key_13,
             '${dataUtils.doubleFixed(totalValue, 4)} ${CoinType.N.name}',
           ),
-          SizedBox(height: ScreenUtil().setWidth(32)),
+          SizedBox(height: AppSpacing.space8),
           _buildSummaryRow(
             context,
             S.current.g_mining_key_20,
             "\$${NumberFormat("#,##0.0#", "en_US").format((astPrice * totalValue))}",
           ),
-          SizedBox(height: ScreenUtil().setWidth(32)),
+          SizedBox(height: AppSpacing.space8),
           _buildSummaryRow(
             context,
             S.current.g_mining_key_59,
             '${dataUtils.doubleFixed(accumulatedRewards, 4)} ${CoinType.N.name}',
           ),
-          SizedBox(height: ScreenUtil().setWidth(32)),
+          SizedBox(height: AppSpacing.space8),
           _buildSummaryRow(
             context,
             S.current.g_mining_key_60,
             '${dataUtils.doubleFixed(rewardsReceived, 4)} ${CoinType.N.name}',
           ),
-          SizedBox(height: ScreenUtil().setWidth(32)),
+          SizedBox(height: AppSpacing.space8),
           _buildSummaryRow(
             context,
             S.current.g_mining_key_21,
@@ -86,7 +86,7 @@ mixin _SummaryPageWidgetsMixin on State<SummaryPage>, _SummaryPageLogicMixin {
                 ? "00/00/00"
                 : getYearAgoTime(lockTimeStr ?? ''),
           ),
-          SizedBox(height: ScreenUtil().setWidth(32)),
+          SizedBox(height: AppSpacing.space8),
           _buildUnlockRow(context),
         ],
       ),
@@ -142,8 +142,8 @@ mixin _SummaryPageWidgetsMixin on State<SummaryPage>, _SummaryPageLogicMixin {
                 borderRadius: BorderRadius.circular(ScreenUtil().setWidth(86)),
               ),
               padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(20),
-                vertical: ScreenUtil().setWidth(14),
+                horizontal: AppSpacing.space4,
+                vertical: AppSpacing.space4,
               ),
               child: Text(
                 S.of(context).g_mining_key_50,
@@ -194,7 +194,7 @@ mixin _SummaryPageWidgetsMixin on State<SummaryPage>, _SummaryPageLogicMixin {
                   final item = rewardsList[index];
                   return Padding(
                     padding: EdgeInsets.symmetric(
-                      horizontal: ScreenUtil().setWidth(20),
+                      horizontal: AppSpacing.space4,
                     ),
                     child: TaskItem(
                       taskId: "${BigInt.tryParse(item["blockNumber"])}",

@@ -16,7 +16,7 @@ mixin _WidgetsMixin on _LogicMixin {
             child: Container(
               width: double.infinity,
               padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(30),
+                horizontal: AppSpacing.space8,
                 vertical: ScreenUtil().setWidth(26),
               ),
               decoration: BoxDecoration(
@@ -43,7 +43,7 @@ mixin _WidgetsMixin on _LogicMixin {
                         margin: EdgeInsets.only(
                           left: ScreenUtil().setWidth(10),
                         ),
-                        padding: EdgeInsets.all(ScreenUtil().setWidth(8)),
+                        padding: EdgeInsets.all(AppSpacing.space2),
                         decoration: BoxDecoration(
                           color: isActive
                               ? const Color.fromRGBO(50, 215, 75, 0.2)
@@ -63,7 +63,7 @@ mixin _WidgetsMixin on _LogicMixin {
                       ),
                     ],
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(30)),
+                  SizedBox(height: AppSpacing.space8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -126,7 +126,7 @@ mixin _WidgetsMixin on _LogicMixin {
             child: Container(
               width: double.infinity,
               padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(30),
+                horizontal: AppSpacing.space8,
                 vertical: ScreenUtil().setWidth(26),
               ),
               decoration: BoxDecoration(
@@ -143,7 +143,7 @@ mixin _WidgetsMixin on _LogicMixin {
                       color: AppColorTokens.of(context).textSubtitle,
                     ),
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(30)),
+                  SizedBox(height: AppSpacing.space8),
                   Text(
                     mpValue.miningType == null
                         ? "0 ${CoinType.N.name}"
@@ -164,8 +164,8 @@ mixin _WidgetsMixin on _LogicMixin {
   Widget dayMiningTimeWidget(MiningProvider mpValue) {
     return Container(
       padding: EdgeInsets.symmetric(
-        vertical: ScreenUtil().setWidth(18),
-        horizontal: ScreenUtil().setWidth(30),
+        vertical: AppSpacing.space4,
+        horizontal: AppSpacing.space8,
       ),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
@@ -182,7 +182,7 @@ mixin _WidgetsMixin on _LogicMixin {
             flex: 1,
             child: Padding(
               padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(16),
+                horizontal: AppSpacing.space4,
               ),
               child: Text(
                 S.of(context).g_mining_key_8,
@@ -217,14 +217,14 @@ mixin _WidgetsMixin on _LogicMixin {
           borderRadius: BorderRadius.circular(8),
           border: Border.all(color: borderColor),
         ),
-        padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
+        padding: EdgeInsets.all(AppSpacing.space2),
         child: Text(value, style: textStyle),
       );
     }
 
     Widget separator() {
       return Padding(
-        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(12)),
+        padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
         child: Text(":", style: textStyle),
       );
     }
@@ -305,8 +305,8 @@ mixin _WidgetsMixin on _LogicMixin {
                           horizontal: ScreenUtil().setWidth(100),
                         ),
                         padding: EdgeInsets.symmetric(
-                          horizontal: ScreenUtil().setWidth(28),
-                          vertical: ScreenUtil().setWidth(30),
+                          horizontal: AppSpacing.space8,
+                          vertical: AppSpacing.space8,
                         ),
                         child: Text(
                           tipsText ?? '',

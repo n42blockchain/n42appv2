@@ -76,7 +76,7 @@ class AddressEdit extends StatelessWidget {
           ),
         ),
 
-        SizedBox(height: ScreenUtil().setWidth(20.0)),
+        SizedBox(height: AppSpacing.space4),
         GestureDetector(
           onTap: () {
             Navigator.of(context).pop();

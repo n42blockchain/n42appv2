@@ -182,13 +182,13 @@ class _CreateWalletButtonState extends State<CreateWalletButton> {
       child: Container(
         width: double.infinity,
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(30),
-          vertical: ScreenUtil().setWidth(20),
+          horizontal: AppSpacing.space8,
+          vertical: AppSpacing.space4,
         ),
         child: Row(
           children: [
             Icon(icon, color: blueColor, size: ScreenUtil().setWidth(50)),
-            SizedBox(width: ScreenUtil().setWidth(20)),
+            SizedBox(width: AppSpacing.space4),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

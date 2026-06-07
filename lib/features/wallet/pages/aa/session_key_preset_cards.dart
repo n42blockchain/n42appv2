@@ -44,7 +44,7 @@ class SessionKeyPresetCards extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final gap = SizedBox(height: ScreenUtil().setWidth(12));
+    final gap = SizedBox(height: AppSpacing.space4);
     final s = S.of(context);
 
     return Column(
@@ -114,7 +114,7 @@ class _PresetCard extends StatelessWidget {
       onTap: () => onChanged(preset),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+        padding: EdgeInsets.all(AppSpacing.space4),
         decoration: BoxDecoration(
           color: isSelected
               ? cardColor.withAlpha(18)
@@ -129,7 +129,7 @@ class _PresetCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildHeader(context, cardColor, isSelected),
-            SizedBox(height: ScreenUtil().setWidth(12)),
+            SizedBox(height: AppSpacing.space4),
             ...can.map(
               (c) =>
                   _bullet(context, c, Icons.check_circle_outline, Colors.green),
@@ -161,7 +161,7 @@ class _PresetCard extends StatelessWidget {
             color: cardColor,
           ),
         ),
-        SizedBox(width: ScreenUtil().setWidth(12)),
+        SizedBox(width: AppSpacing.space4),
         Expanded(
           child: Text(
             presetInfo.label,
@@ -173,7 +173,7 @@ class _PresetCard extends StatelessWidget {
         ),
         Container(
           padding: EdgeInsets.symmetric(
-            horizontal: ScreenUtil().setWidth(8),
+            horizontal: AppSpacing.space2,
             vertical: ScreenUtil().setWidth(3),
           ),
           decoration: BoxDecoration(
@@ -189,7 +189,7 @@ class _PresetCard extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(width: ScreenUtil().setWidth(8)),
+        SizedBox(width: AppSpacing.space2),
         if (isSelected)
           Icon(
             Icons.check_circle,
@@ -204,7 +204,7 @@ class _PresetCard extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(top: ScreenUtil().setWidth(8)),
       child: Container(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
+        padding: EdgeInsets.all(AppSpacing.space2),
         decoration: BoxDecoration(
           color: Colors.red.withAlpha(15),
           borderRadius: AppRadius.brSm,
@@ -216,7 +216,7 @@ class _PresetCard extends StatelessWidget {
               size: ScreenUtil().setWidth(18),
               color: Colors.red,
             ),
-            SizedBox(width: ScreenUtil().setWidth(8)),
+            SizedBox(width: AppSpacing.space2),
             Expanded(
               child: Text(
                 S.of(context).g_key_aa_session_risk_warning,
@@ -241,7 +241,7 @@ class _PresetCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(icon, size: ScreenUtil().setWidth(16), color: color),
-          SizedBox(width: ScreenUtil().setWidth(8)),
+          SizedBox(width: AppSpacing.space2),
           Expanded(
             child: Text(
               text,

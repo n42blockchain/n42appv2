@@ -34,8 +34,8 @@ class DAppSigningSheet extends StatelessWidget {
         Container(
           width: double.infinity,
           padding: EdgeInsets.symmetric(
-            horizontal: ScreenUtil().setWidth(30),
-            vertical: ScreenUtil().setWidth(16),
+            horizontal: AppSpacing.space8,
+            vertical: AppSpacing.space4,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -47,7 +47,7 @@ class DAppSigningSheet extends StatelessWidget {
                   color: AppColorTokens.of(context).textPrimary,
                 ),
               ),
-              SizedBox(height: ScreenUtil().setWidth(8)),
+              SizedBox(height: AppSpacing.space2),
               Text(
                 origin,
                 style: AppTypography.caption.copyWith(
@@ -64,8 +64,8 @@ class DAppSigningSheet extends StatelessWidget {
         Flexible(
           child: SingleChildScrollView(
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(30),
-              vertical: ScreenUtil().setWidth(16),
+              horizontal: AppSpacing.space8,
+              vertical: AppSpacing.space4,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -122,7 +122,7 @@ class DAppSigningSheet extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(width: ScreenUtil().setWidth(20)),
+              SizedBox(width: AppSpacing.space4),
               Expanded(
                 child: SizedBox(
                   height: ScreenUtil().setWidth(88),
@@ -141,7 +141,7 @@ class DAppSigningSheet extends StatelessWidget {
 
   Widget _itemWidget(BuildContext context, String label, String value) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10)),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space2),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -154,7 +154,7 @@ class DAppSigningSheet extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(6)),
+          SizedBox(height: AppSpacing.space2),
           Text(
             value,
             style: AppTypography.bodySm.copyWith(

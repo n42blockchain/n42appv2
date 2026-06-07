@@ -242,7 +242,7 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
           child: Container(
             height: ScreenUtil().setWidth(80),
             width: ScreenUtil().setWidth(80),
-            padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
+            padding: EdgeInsets.all(AppSpacing.space2),
             child: Icon(Icons.refresh, color: AppColorTokens.of(context).brand),
           ),
         ),
@@ -290,7 +290,7 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
 
   Widget searchWidget() {
     return Container(
-      margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
+      margin: EdgeInsets.all(AppSpacing.space8),
       padding: EdgeInsets.only(left: ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
@@ -307,7 +307,7 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
               keyboardType: TextInputType.text,
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.symmetric(
-                  vertical: ScreenUtil().setWidth(10.0),
+                  vertical: AppSpacing.space2,
                 ),
                 hintText: S.of(context).search,
                 border: InputBorder.none,
@@ -344,7 +344,7 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
         left: ScreenUtil().setWidth(30),
         right: ScreenUtil().setWidth(30),
       ),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       width: double.infinity,
       alignment: Alignment.center,
       decoration: BoxDecoration(
@@ -365,8 +365,8 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
   Widget itemWidget(String title, String value, {bool copy = false}) {
     final blueColor = AppColorTokens.of(context).brand;
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10)),
+      margin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space2),
       alignment: Alignment.centerLeft,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -375,7 +375,7 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
             title,
             style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
           ),
-          SizedBox(height: ScreenUtil().setWidth(20)),
+          SizedBox(height: AppSpacing.space4),
           Row(
             children: [
               Expanded(
@@ -411,8 +411,8 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
   Widget addressItemWidget(String title, String address) {
     if (address.isEmpty) return const SizedBox.shrink();
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10)),
+      margin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space2),
       alignment: Alignment.centerLeft,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -421,7 +421,7 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
             title,
             style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
           ),
-          SizedBox(height: ScreenUtil().setWidth(20)),
+          SizedBox(height: AppSpacing.space4),
           EnsAddressDisplay(
             address: address,
             coinType: widget.coinModel.coin['coinType'] ?? 'TRX',

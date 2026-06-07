@@ -88,7 +88,7 @@ class _CsvImportPageState extends State<CsvImportPage>
     final mainText = AppColorTokens.of(context).textPrimary;
 
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(16)),
+      margin: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
       decoration: BoxDecoration(
         color: itemBg,
         borderRadius: AppRadius.brMd,
@@ -117,7 +117,7 @@ class _CsvImportPageState extends State<CsvImportPage>
             height: 1.6,
           ),
           border: InputBorder.none,
-          contentPadding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+          contentPadding: EdgeInsets.all(AppSpacing.space4),
         ),
       ),
     );
@@ -129,7 +129,7 @@ class _CsvImportPageState extends State<CsvImportPage>
     final blue = AppColorTokens.of(context).brand;
 
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: itemBg,
         boxShadow: [
@@ -157,7 +157,7 @@ class _CsvImportPageState extends State<CsvImportPage>
                 ),
               ],
             ),
-            SizedBox(height: ScreenUtil().setWidth(12)),
+            SizedBox(height: AppSpacing.space4),
 
             Row(
               children: [
@@ -167,7 +167,7 @@ class _CsvImportPageState extends State<CsvImportPage>
                     child: Text(S.of(context).g_key_batch_clear_all),
                   ),
                 ),
-                SizedBox(width: ScreenUtil().setWidth(12)),
+                SizedBox(width: AppSpacing.space4),
                 Expanded(
                   flex: 2,
                   child: ElevatedButton(
@@ -178,7 +178,7 @@ class _CsvImportPageState extends State<CsvImportPage>
                       backgroundColor: blue,
                       foregroundColor: Colors.white,
                       padding: EdgeInsets.symmetric(
-                        vertical: ScreenUtil().setWidth(16),
+                        vertical: AppSpacing.space4,
                       ),
                     ),
                     child: Text(

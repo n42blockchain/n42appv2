@@ -285,7 +285,7 @@ class _WalletSecurityVerificationState
               onTap: pushSetting,
               child: Container(
                 padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(30.0),
+                  horizontal: AppSpacing.space8,
                 ),
                 child: Image.asset(
                   'assets/img/Setting.png',
@@ -302,7 +302,7 @@ class _WalletSecurityVerificationState
             children: [
               Positioned.fill(
                 child: SingleChildScrollView(
-                  padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+                  padding: EdgeInsets.all(AppSpacing.space8),
                   child: Column(children: _buildVerificationWidgets()),
                 ),
               ),

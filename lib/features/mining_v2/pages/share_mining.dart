@@ -100,12 +100,12 @@ class _ShareMiningState extends State<ShareMining>
                   child: Center(
                     child: SingleChildScrollView(
                       padding: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(40),
+                        horizontal: AppSpacing.space12,
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SizedBox(height: ScreenUtil().setWidth(40)),
+                          SizedBox(height: AppSpacing.space12),
                           AnimatedBuilder(
                             animation: _animationController,
                             builder: (context, child) {
@@ -170,13 +170,13 @@ class _ShareMiningState extends State<ShareMining>
                               ),
                             ),
                           ),
-                          SizedBox(height: ScreenUtil().setWidth(30)),
+                          SizedBox(height: AppSpacing.space8),
                           FadeTransition(
                             opacity: _fadeAnimation,
                             child: Container(
                               padding: EdgeInsets.symmetric(
-                                horizontal: ScreenUtil().setWidth(30),
-                                vertical: ScreenUtil().setWidth(20),
+                                horizontal: AppSpacing.space8,
+                                vertical: AppSpacing.space4,
                               ),
                               decoration: BoxDecoration(
                                 color: isDark
@@ -197,7 +197,7 @@ class _ShareMiningState extends State<ShareMining>
                               ),
                             ),
                           ),
-                          SizedBox(height: ScreenUtil().setWidth(60)),
+                          SizedBox(height: AppSpacing.space16),
                           FadeTransition(
                             opacity: _fadeAnimation,
                             child: GestureDetector(
@@ -211,8 +211,8 @@ class _ShareMiningState extends State<ShareMining>
                               },
                               child: Container(
                                 padding: EdgeInsets.symmetric(
-                                  horizontal: ScreenUtil().setWidth(40),
-                                  vertical: ScreenUtil().setWidth(20),
+                                  horizontal: AppSpacing.space12,
+                                  vertical: AppSpacing.space4,
                                 ),
                                 decoration: BoxDecoration(
                                   color: AppColorTokens.of(
@@ -234,7 +234,7 @@ class _ShareMiningState extends State<ShareMining>
                                       color: AppColorTokens.of(context).brand,
                                       size: ScreenUtil().setWidth(36),
                                     ),
-                                    SizedBox(width: ScreenUtil().setWidth(12)),
+                                    SizedBox(width: AppSpacing.space4),
                                     Flexible(
                                       child: Text(
                                         S.of(context).g_mining_key61,
@@ -265,7 +265,7 @@ class _ShareMiningState extends State<ShareMining>
                       : Colors.black.withValues(alpha: 0.06),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                  padding: EdgeInsets.all(AppSpacing.space8),
                   child: SizedBox(
                     width: double.infinity,
                     child: AppButton(

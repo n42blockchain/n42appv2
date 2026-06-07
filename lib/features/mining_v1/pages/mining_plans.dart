@@ -85,7 +85,7 @@ class _MiningPlansState extends State<MiningPlans> {
                   child: Column(
                     children: [
                       Padding(
-                        padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                        padding: EdgeInsets.all(AppSpacing.space8),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -111,7 +111,7 @@ class _MiningPlansState extends State<MiningPlans> {
                                       ),
                               ),
                             ),
-                            SizedBox(width: ScreenUtil().setWidth(40)),
+                            SizedBox(width: AppSpacing.space12),
                             GestureDetector(
                               onTap: () {
                                 if (currentPage < lastPage) {
@@ -145,7 +145,7 @@ class _MiningPlansState extends State<MiningPlans> {
                       Container(
                         width: double.infinity,
                         height: ScreenUtil().setWidth(148),
-                        padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                        padding: EdgeInsets.all(AppSpacing.space8),
                         child: AppButton(
                           label: S.of(context).g_key_78,
                           onPressed: () {

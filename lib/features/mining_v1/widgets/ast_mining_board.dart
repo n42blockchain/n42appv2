@@ -16,15 +16,15 @@ class ASTMiningBoard extends StatelessWidget {
         color: AppColorTokens.of(context).bgSurface,
         borderRadius: AppRadius.brMd,
       ),
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(height: ScreenUtil().setWidth(44)),
+          SizedBox(height: AppSpacing.space12),
           _buildBoard(context),
           SizedBox(height: ScreenUtil().setWidth(72)),
           _buildItems(context),
-          SizedBox(height: ScreenUtil().setWidth(20)),
+          SizedBox(height: AppSpacing.space4),
         ],
       ),
     );
@@ -60,7 +60,7 @@ class ASTMiningBoard extends StatelessWidget {
                     levelText,
                     style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).textPrimary),
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(40)),
+                  SizedBox(height: AppSpacing.space12),
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -82,7 +82,7 @@ class ASTMiningBoard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(40)),
+                  SizedBox(height: AppSpacing.space12),
                   Row(
                     children: [
                       Container(
@@ -90,13 +90,13 @@ class ASTMiningBoard extends StatelessWidget {
                           color: AppColorTokens.of(context).brand,
                           borderRadius: AppRadius.brSm,
                         ),
-                        padding: EdgeInsets.all(ScreenUtil().setWidth(8)),
+                        padding: EdgeInsets.all(AppSpacing.space2),
                         child: Image.asset(
                           "assets/mining/lock.png",
                           width: ScreenUtil().setWidth(20),
                         ),
                       ),
-                      SizedBox(width: ScreenUtil().setWidth(12)),
+                      SizedBox(width: AppSpacing.space4),
                       Expanded(
                         child: Text(
                           S.current.g_mining_key_32,
@@ -119,7 +119,7 @@ class ASTMiningBoard extends StatelessWidget {
               "assets/mining/icon_full_node.png",
               S.of(context).g_mining_key_64,
             ),
-            SizedBox(width: ScreenUtil().setWidth(32)),
+            SizedBox(width: AppSpacing.space8),
             _buildTag(
               context,
               "assets/mining/lock_time.png",
@@ -199,7 +199,7 @@ class ASTMiningBoard extends StatelessWidget {
     final textStyle = AppTypography.caption.copyWith(color: AppColorTokens.of(context).textPrimary);
 
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(28)),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space8),
       child: Row(
         children: [
           Container(
@@ -218,7 +218,7 @@ class ASTMiningBoard extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(12)),
+          SizedBox(width: AppSpacing.space4),
           Expanded(child: Text(action, style: textStyle)),
           Expanded(child: Text(desc, style: textStyle, maxLines: 2)),
           Image.asset(
@@ -239,8 +239,8 @@ class ASTMiningBoard extends StatelessWidget {
         borderRadius: AppRadius.brXl,
       ),
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(12),
-        vertical: ScreenUtil().setWidth(6),
+        horizontal: AppSpacing.space4,
+        vertical: AppSpacing.space2,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -251,7 +251,7 @@ class ASTMiningBoard extends StatelessWidget {
             fit: BoxFit.cover,
             color: AppColorTokens.of(context).textPrimary,
           ),
-          SizedBox(width: ScreenUtil().setWidth(12)),
+          SizedBox(width: AppSpacing.space4),
           Text(
             text,
             style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textPrimary),

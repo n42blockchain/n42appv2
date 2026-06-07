@@ -42,8 +42,8 @@ class WalletCoinListHeader extends StatelessWidget {
         child: Container(
           width: double.infinity,
           padding: EdgeInsets.symmetric(
-            horizontal: ScreenUtil().setWidth(24),
-            vertical: ScreenUtil().setWidth(18),
+            horizontal: AppSpacing.space6,
+            vertical: AppSpacing.space4,
           ),
           decoration: BoxDecoration(
             color: AppColorTokens.of(context).bgBase,
@@ -218,13 +218,13 @@ class _BottomRow extends StatelessWidget {
           sortValue: waValue.walletInfo.coinSort['name'] ?? -1,
           onTap: () => waValue.setCoinSortAssets("name"),
         ),
-        SizedBox(width: ScreenUtil().setWidth(12)),
+        SizedBox(width: AppSpacing.space4),
         _SortButton(
           label: S.of(context).g_key_198,
           sortValue: waValue.walletInfo.coinSort['assets'] ?? -1,
           onTap: () => waValue.setCoinSortAssets("assets"),
         ),
-        SizedBox(width: ScreenUtil().setWidth(12)),
+        SizedBox(width: AppSpacing.space4),
         _SortButton(
           label: '24h%',
           sortValue: waValue.walletInfo.coinSort['change'] ?? -1,
@@ -261,8 +261,8 @@ class _SortButton extends StatelessWidget {
         borderRadius: AppRadius.brSm,
         child: Padding(
           padding: EdgeInsets.symmetric(
-            horizontal: ScreenUtil().setWidth(8),
-            vertical: ScreenUtil().setWidth(6),
+            horizontal: AppSpacing.space2,
+            vertical: AppSpacing.space2,
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -274,7 +274,7 @@ class _SortButton extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              SizedBox(width: ScreenUtil().setWidth(4)),
+              SizedBox(width: AppSpacing.space2),
               SizedBox(
                 width: ScreenUtil().setWidth(16),
                 height: ScreenUtil().setWidth(16),
@@ -317,8 +317,8 @@ class _ThresholdButton extends StatelessWidget {
       },
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(14),
-          vertical: ScreenUtil().setWidth(6),
+          horizontal: AppSpacing.space4,
+          vertical: AppSpacing.space2,
         ),
         decoration: BoxDecoration(
           color: active

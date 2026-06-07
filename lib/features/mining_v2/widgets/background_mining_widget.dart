@@ -26,7 +26,7 @@ class BackgroundMiningWidget extends StatelessWidget {
     final isEnabled = mpValue.depositsEnable == true;
 
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
         gradient: isEnabled
@@ -53,7 +53,7 @@ class BackgroundMiningWidget extends StatelessWidget {
       child: Row(
         children: [
           _buildIcon(context),
-          SizedBox(width: ScreenUtil().setWidth(16)),
+          SizedBox(width: AppSpacing.space4),
           _buildTitleSection(context, isEnabled),
           _buildLaunchButton(context, isEnabled, isDark),
         ],
@@ -91,7 +91,7 @@ class BackgroundMiningWidget extends StatelessWidget {
               fontWeight: FontWeight.w600,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(6)),
+          SizedBox(height: AppSpacing.space2),
           Text(
             isEnabled
                 ? S.of(context).g_key_mining_available
@@ -122,8 +122,8 @@ class BackgroundMiningWidget extends StatelessWidget {
         borderRadius: AppRadius.brXl,
         child: Container(
           padding: EdgeInsets.symmetric(
-            horizontal: ScreenUtil().setWidth(28),
-            vertical: ScreenUtil().setWidth(14),
+            horizontal: AppSpacing.space8,
+            vertical: AppSpacing.space4,
           ),
           decoration: BoxDecoration(
             gradient: isEnabled

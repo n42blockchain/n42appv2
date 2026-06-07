@@ -16,7 +16,7 @@ mixin _MiningFullNodeV2WidgetsMixin
             borderRadius: AppRadius.brSm,
           ),
         ),
-        SizedBox(width: ScreenUtil().setWidth(12)),
+        SizedBox(width: AppSpacing.space4),
         Text(
           title,
           style: AppTypography.body.copyWith(
@@ -44,7 +44,7 @@ mixin _MiningFullNodeV2WidgetsMixin
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+        padding: EdgeInsets.all(AppSpacing.space4),
         decoration: BoxDecoration(
           color: AppColorTokens.of(context).bgSurface,
           borderRadius: AppRadius.brMd,
@@ -77,7 +77,7 @@ mixin _MiningFullNodeV2WidgetsMixin
                 ),
               ),
             ),
-            SizedBox(width: ScreenUtil().setWidth(20)),
+            SizedBox(width: AppSpacing.space4),
             Expanded(
               child: Text(
                 payType,
@@ -100,8 +100,8 @@ mixin _MiningFullNodeV2WidgetsMixin
 
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(20),
-        vertical: ScreenUtil().setWidth(16),
+        horizontal: AppSpacing.space4,
+        vertical: AppSpacing.space4,
       ),
       decoration: BoxDecoration(
         color: blueColor.withValues(alpha: 0.06),
@@ -115,7 +115,7 @@ mixin _MiningFullNodeV2WidgetsMixin
             size: ScreenUtil().setWidth(32),
             color: blueColor,
           ),
-          SizedBox(width: ScreenUtil().setWidth(12)),
+          SizedBox(width: AppSpacing.space4),
           Expanded(
             child: Text(
               S.of(context).g_mining_key46,
@@ -181,7 +181,7 @@ mixin _MiningFullNodeV2WidgetsMixin
     return GestureDetector(
       onTap: onTap,
       child: Padding(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+        padding: EdgeInsets.all(AppSpacing.space4),
         child: Row(
           children: [
             Container(
@@ -200,7 +200,7 @@ mixin _MiningFullNodeV2WidgetsMixin
                 ),
               ),
             ),
-            SizedBox(width: ScreenUtil().setWidth(16)),
+            SizedBox(width: AppSpacing.space4),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -223,7 +223,7 @@ mixin _MiningFullNodeV2WidgetsMixin
                             size: ScreenUtil().setWidth(20),
                             color: const Color(0xFFEB5851),
                           ),
-                          SizedBox(width: ScreenUtil().setWidth(6)),
+                          SizedBox(width: AppSpacing.space2),
                           Flexible(
                             child: Text(
                               errTips ?? '',
@@ -269,7 +269,7 @@ mixin _MiningFullNodeV2WidgetsMixin
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
-            padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+            padding: EdgeInsets.all(AppSpacing.space6),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -286,7 +286,7 @@ mixin _MiningFullNodeV2WidgetsMixin
                     size: ScreenUtil().setWidth(24),
                   ),
                 ),
-                SizedBox(width: ScreenUtil().setWidth(16)),
+                SizedBox(width: AppSpacing.space4),
                 Expanded(
                   child: Text(
                     S.of(context).g_mining_key_78,
@@ -298,7 +298,7 @@ mixin _MiningFullNodeV2WidgetsMixin
                     ),
                   ),
                 ),
-                SizedBox(width: ScreenUtil().setWidth(12)),
+                SizedBox(width: AppSpacing.space4),
                 _buildCheckCircle(),
               ],
             ),
@@ -329,7 +329,7 @@ mixin _MiningFullNodeV2WidgetsMixin
                 foregroundColor: const Color(0xFFFF6B35),
                 elevation: 0,
                 padding: EdgeInsets.symmetric(
-                  vertical: ScreenUtil().setWidth(16),
+                  vertical: AppSpacing.space4,
                 ),
                 shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
               ),
@@ -360,7 +360,7 @@ mixin _MiningFullNodeV2WidgetsMixin
           Container(
             width: double.infinity,
             height: ScreenUtil().setWidth(148),
-            padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+            padding: EdgeInsets.all(AppSpacing.space8),
             child: AppButton(
               label: S.of(context).g_key_78,
               loading: isLoading,

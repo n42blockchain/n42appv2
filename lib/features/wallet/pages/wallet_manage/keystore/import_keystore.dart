@@ -67,7 +67,7 @@ class _ImportKeystoreState extends ConsumerState<ImportKeystore> {
             Positioned.fill(
               child: SingleChildScrollView(
                 padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(30),
+                  horizontal: AppSpacing.space8,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,7 +84,7 @@ class _ImportKeystoreState extends ConsumerState<ImportKeystore> {
                           onTap: _pasteFromClipboard,
                           child: Container(
                             padding: EdgeInsets.symmetric(
-                              horizontal: ScreenUtil().setWidth(20.0),
+                              horizontal: AppSpacing.space4,
                             ),
                             height: ScreenUtil().setWidth(60.0),
                             alignment: Alignment.center,
@@ -108,9 +108,9 @@ class _ImportKeystoreState extends ConsumerState<ImportKeystore> {
                     containerStyle1(
                       context,
                       height: ScreenUtil().setWidth(440),
-                      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+                      padding: EdgeInsets.all(AppSpacing.space4),
                       margin: EdgeInsets.symmetric(
-                        vertical: ScreenUtil().setWidth(20),
+                        vertical: AppSpacing.space4,
                       ),
                       child: CommInput(
                         type: InputFieldType.account,
@@ -133,10 +133,10 @@ class _ImportKeystoreState extends ConsumerState<ImportKeystore> {
                       context,
                       height: ScreenUtil().setWidth(120),
                       padding: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(20),
+                        horizontal: AppSpacing.space4,
                       ),
                       margin: EdgeInsets.symmetric(
-                        vertical: ScreenUtil().setWidth(20),
+                        vertical: AppSpacing.space4,
                       ),
                       child: CommInput(
                         type: InputFieldType.password,
@@ -168,8 +168,8 @@ class _ImportKeystoreState extends ConsumerState<ImportKeystore> {
   Widget _buildChainSelector() {
     return containerStyle1(
       context,
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
-      margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
+      margin: EdgeInsets.symmetric(vertical: AppSpacing.space4),
       child: Row(
         children: [
           Container(
@@ -226,7 +226,7 @@ class _ImportKeystoreState extends ConsumerState<ImportKeystore> {
         children: [
           Divider(height: ScreenUtil().setWidth(1), indent: 0, endIndent: 0),
           Container(
-            padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+            padding: EdgeInsets.all(AppSpacing.space8),
             height: ScreenUtil().setWidth(148),
             width: double.infinity,
             color: AppColorTokens.of(context).bgBase,

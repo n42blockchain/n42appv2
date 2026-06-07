@@ -228,7 +228,7 @@ mixin WalletChainInfoXrpActionsMixin<T extends ConsumerStatefulWidget>
     return InkWell(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+        padding: EdgeInsets.all(AppSpacing.space8),
         alignment: Alignment.centerLeft,
         child: Row(
           children: [
@@ -237,7 +237,7 @@ mixin WalletChainInfoXrpActionsMixin<T extends ConsumerStatefulWidget>
               height: ScreenUtil().setWidth(40.0),
               child: icon,
             ),
-            SizedBox(width: ScreenUtil().setWidth(20.0)),
+            SizedBox(width: AppSpacing.space4),
             Text(
               label,
               style: AppTypography.body.copyWith(color: _blue),
@@ -250,7 +250,7 @@ mixin WalletChainInfoXrpActionsMixin<T extends ConsumerStatefulWidget>
 
   Widget _xmlInfoWidget(String title, String value, String description) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
+      margin: EdgeInsets.symmetric(vertical: AppSpacing.space4),
       child: Column(
         children: [
           Row(
@@ -265,7 +265,7 @@ mixin WalletChainInfoXrpActionsMixin<T extends ConsumerStatefulWidget>
               ),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(10)),
+          SizedBox(height: AppSpacing.space2),
           Text(
             description,
             style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle),

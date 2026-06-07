@@ -18,8 +18,8 @@ Widget coinInfoCard(
       right: ScreenUtil().setWidth(30),
     ),
     padding: EdgeInsets.symmetric(
-      horizontal: ScreenUtil().setWidth(30),
-      vertical: ScreenUtil().setWidth(10),
+      horizontal: AppSpacing.space8,
+      vertical: AppSpacing.space2,
     ),
     decoration: BoxDecoration(
       color: AppColorTokens.of(context).bgSurface,
@@ -111,7 +111,7 @@ Widget pnlStat(String label, String value, Color valueColor, Color labelColor) {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(label, style: AppTypography.captionSm.copyWith(color: labelColor)),
-        SizedBox(height: ScreenUtil().setWidth(4)),
+        SizedBox(height: AppSpacing.space2),
         Text(
           value,
           style: AppTypography.caption.copyWith(

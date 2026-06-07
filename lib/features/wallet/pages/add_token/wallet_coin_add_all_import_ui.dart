@@ -66,7 +66,7 @@ extension _WalletCoinAddAllImportUI on _WalletCoinAddAllState {
             InkWell(
               onTap: () => removeCustomerCoinToken(rowValue),
               child: Container(
-                padding: EdgeInsets.all(ScreenUtil().setWidth(20.0)),
+                padding: EdgeInsets.all(AppSpacing.space4),
                 width: ScreenUtil().setWidth(80.0),
                 height: ScreenUtil().setWidth(80.0),
                 child: Icon(
@@ -91,7 +91,7 @@ extension _WalletCoinAddAllImportUI on _WalletCoinAddAllState {
             child: Column(
               children: [
                 Container(
-                  padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+                  padding: EdgeInsets.all(AppSpacing.space8),
                   decoration: BoxDecoration(
                     color: AppThemeUtils.getColorByKey(
                       context,
@@ -149,7 +149,7 @@ extension _WalletCoinAddAllImportUI on _WalletCoinAddAllState {
                 ),
               ),
             ),
-            SizedBox(width: ScreenUtil().setWidth(30.0)),
+            SizedBox(width: AppSpacing.space8),
           ],
           Expanded(
             child: SizedBox(

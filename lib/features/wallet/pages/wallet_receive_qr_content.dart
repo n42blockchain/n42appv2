@@ -142,7 +142,7 @@ extension _WalletReceiveQrContent on _WalletReceiveQrState {
                 borderRadius: AppRadius.brXl,
               ),
               child: QrImageView(
-                padding: EdgeInsets.all(ScreenUtil().setWidth(20.0)),
+                padding: EdgeInsets.all(AppSpacing.space4),
                 data: qrData,
                 version: QrVersions.auto,
               ),

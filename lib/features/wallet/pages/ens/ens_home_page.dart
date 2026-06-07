@@ -71,19 +71,19 @@ class _EnsHomePageState extends State<EnsHomePage>
 
   Widget _buildContent() {
     return ListView(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       children: [
         // 链选择器
         buildChainSelector(),
-        SizedBox(height: ScreenUtil().setWidth(20)),
+        SizedBox(height: AppSpacing.space4),
 
         // 顶部说明卡片
         buildHeaderCard(),
-        SizedBox(height: ScreenUtil().setWidth(24)),
+        SizedBox(height: AppSpacing.space6),
 
         // 功能快捷入口
         buildQuickActions(),
-        SizedBox(height: ScreenUtil().setWidth(24)),
+        SizedBox(height: AppSpacing.space6),
 
         // 已拥有的域名列表
         buildOwnedNamesSection(),

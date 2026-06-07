@@ -173,7 +173,7 @@ class _OneCoinWalletManageState extends ConsumerState<OneCoinWalletManage>
           Navigator.pop(context);
         },
         child: Container(
-          padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0)),
+          padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
           alignment: Alignment.center,
           child: Text(
             key,
@@ -216,7 +216,7 @@ class _OneCoinWalletManageState extends ConsumerState<OneCoinWalletManage>
                   Container(
                     height: ScreenUtil().setWidth(148),
                     width: double.infinity,
-                    padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                    padding: EdgeInsets.all(AppSpacing.space8),
                     color: AppColorTokens.of(context).bgBase,
                     child: AppButton(
                       label: S.of(context).g_key_115,

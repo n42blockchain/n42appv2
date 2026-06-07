@@ -7,7 +7,7 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
   /// Theme color shortcut
   Color _tc(String key) => AppThemeUtils.getColorByKey(context, key);
 
-  EdgeInsets get _pageMargin => EdgeInsets.all(ScreenUtil().setWidth(30.0));
+  EdgeInsets get _pageMargin => EdgeInsets.all(AppSpacing.space8);
 
   /// Pill-shaped action button (blue bg, white text, fully rounded)
   Widget _pillButton({required String label, required VoidCallback onTap}) {
@@ -16,7 +16,7 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
       child: Container(
         margin: EdgeInsets.only(left: ScreenUtil().setWidth(10.0)),
         height: ScreenUtil().setWidth(60.0),
-        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20.0)),
+        padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
         decoration: BoxDecoration(
           color: _tc(AppThemeKeys.mainBlueColor.name),
           borderRadius: BorderRadius.all(
@@ -89,7 +89,7 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
                       focusedBorder: InputBorder.none,
                       isCollapsed: true,
                       contentPadding: EdgeInsets.symmetric(
-                        vertical: ScreenUtil().setWidth(10.0),
+                        vertical: AppSpacing.space2,
                       ),
                     ),
                     maxLines: 1,
@@ -104,7 +104,7 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
                   child: Container(
                     width: ScreenUtil().setWidth(60.0),
                     height: ScreenUtil().setWidth(60.0),
-                    padding: EdgeInsets.all(ScreenUtil().setWidth(8.0)),
+                    padding: EdgeInsets.all(AppSpacing.space2),
                     child: Image.asset(
                       "assets/wallet/scan.png",
                       color: _tc(AppThemeKeys.mainBlueColor.name),
@@ -150,7 +150,7 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              SizedBox(width: ScreenUtil().setWidth(20.0)),
+              SizedBox(width: AppSpacing.space4),
               Expanded(child: amountBalanceWidget()),
             ],
           ),
@@ -160,7 +160,7 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
               left: ScreenUtil().setWidth(30.0),
               right: ScreenUtil().setWidth(10.0),
             ),
-            margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0)),
+            margin: EdgeInsets.symmetric(vertical: AppSpacing.space4),
             decoration: BoxDecoration(
               borderRadius: AppRadius.brSm,
               color: itemBg,
@@ -262,7 +262,7 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
         left: ScreenUtil().setWidth(30),
         right: ScreenUtil().setWidth(30),
       ),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: AppRadius.brSm,
@@ -285,7 +285,7 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
         children: [
           Divider(height: ScreenUtil().setWidth(1), indent: 0, endIndent: 0),
           Container(
-            padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+            padding: EdgeInsets.all(AppSpacing.space8),
             height: ScreenUtil().setWidth(148.0),
             color: _tc(AppThemeKeys.backGroundColor.name),
             child: AppButton(

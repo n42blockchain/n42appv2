@@ -4,7 +4,6 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 
@@ -17,7 +16,7 @@ class EnsAdvancedSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
         borderRadius: AppRadius.brMd,
@@ -32,7 +31,7 @@ class EnsAdvancedSection extends StatelessWidget {
               color: AppColorTokens.of(context).textPrimary,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           ListTile(
             contentPadding: EdgeInsets.zero,
             leading: const Icon(Icons.swap_horiz, color: Colors.red),

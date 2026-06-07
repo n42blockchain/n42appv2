@@ -15,7 +15,7 @@ Future<bool?> showGroupConfirmDialog(
     builder: (_) => AlertDialog(
       contentPadding: const EdgeInsets.all(0),
       //这是宽度沾满宽度
-      insetPadding: EdgeInsets.all(ScreenUtil().setWidth(28)),
+      insetPadding: EdgeInsets.all(AppSpacing.space8),
       //设置圆角
       shape: RoundedRectangleBorder(borderRadius: AppRadius.brLg),
       content: Container(
@@ -45,7 +45,7 @@ class GroupConfirm extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(44)),
+        padding: EdgeInsets.symmetric(horizontal: AppSpacing.space12),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -100,7 +100,7 @@ class GroupConfirm extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(width: ScreenUtil().setWidth(30)),
+                  SizedBox(width: AppSpacing.space8),
                   Expanded(
                     child: InkWell(
                       onTap: () {

@@ -8,7 +8,7 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
   Color _tc(String key) => AppThemeUtils.getColorByKey(context, key);
 
   /// Standard page margin
-  EdgeInsets get _pageMargin => EdgeInsets.all(ScreenUtil().setWidth(30.0));
+  EdgeInsets get _pageMargin => EdgeInsets.all(AppSpacing.space8);
 
   /// Builds a pill-shaped action button (blue bg, white text, fully rounded)
   Widget _pillButton({required String label, required VoidCallback onTap}) {
@@ -17,7 +17,7 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
       child: Container(
         margin: EdgeInsets.only(left: ScreenUtil().setWidth(10.0)),
         height: ScreenUtil().setWidth(60.0),
-        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20.0)),
+        padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
         decoration: BoxDecoration(
           color: _tc(AppThemeKeys.mainBlueColor.name),
           borderRadius: BorderRadius.all(
@@ -60,7 +60,7 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
             style: AppTypography.bodySm.copyWith(color: _tc(AppThemeKeys.textColorOrange.name)),
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: ScreenUtil().setWidth(30)),
+          SizedBox(height: AppSpacing.space8),
           Text(
             'Adding will consume some absenteeism fees. Click the "Add" button to add.',
             style: AppTypography.bodySm.copyWith(color: _tc(AppThemeKeys.mainTextColor.name)),
@@ -116,7 +116,7 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
                       focusedBorder: InputBorder.none,
                       isCollapsed: true,
                       contentPadding: EdgeInsets.symmetric(
-                        vertical: ScreenUtil().setWidth(10.0),
+                        vertical: AppSpacing.space2,
                       ),
                     ),
                     maxLines: 1,
@@ -131,7 +131,7 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
                   child: Container(
                     width: ScreenUtil().setWidth(60.0),
                     height: ScreenUtil().setWidth(60.0),
-                    padding: EdgeInsets.all(ScreenUtil().setWidth(8.0)),
+                    padding: EdgeInsets.all(AppSpacing.space2),
                     child: Image.asset(
                       "assets/wallet/scan.png",
                       color: _tc(AppThemeKeys.mainBlueColor.name),
@@ -177,7 +177,7 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              SizedBox(width: ScreenUtil().setWidth(20.0)),
+              SizedBox(width: AppSpacing.space4),
               Expanded(child: amountBalanceWidget()),
             ],
           ),
@@ -187,7 +187,7 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
               left: ScreenUtil().setWidth(30.0),
               right: ScreenUtil().setWidth(10.0),
             ),
-            margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0)),
+            margin: EdgeInsets.symmetric(vertical: AppSpacing.space4),
             decoration: BoxDecoration(
               borderRadius: AppRadius.brSm,
               color: itemBg,

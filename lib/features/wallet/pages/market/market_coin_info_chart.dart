@@ -19,7 +19,7 @@ Widget buildChartSection(
 }) {
   final chartH = ScreenUtil().setWidth(360);
   return Padding(
-    padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+    padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
     child: Container(
       height: chartH,
       decoration: BoxDecoration(

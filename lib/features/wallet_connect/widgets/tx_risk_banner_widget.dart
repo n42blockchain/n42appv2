@@ -26,8 +26,8 @@ class TxRiskBannerWidget extends StatelessWidget {
 
     return Container(
       margin: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30),
-        vertical: ScreenUtil().setWidth(12),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space4,
       ),
       decoration: BoxDecoration(
         color: bannerBg,
@@ -41,16 +41,16 @@ class TxRiskBannerWidget extends StatelessWidget {
           // ── Header row: badge + function name ────────────────────────────
           Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(20),
-              vertical: ScreenUtil().setWidth(14),
+              horizontal: AppSpacing.space4,
+              vertical: AppSpacing.space4,
             ),
             child: Row(
               children: [
                 // Risk level badge
                 Container(
                   padding: EdgeInsets.symmetric(
-                    horizontal: ScreenUtil().setWidth(12),
-                    vertical: ScreenUtil().setWidth(4),
+                    horizontal: AppSpacing.space4,
+                    vertical: AppSpacing.space2,
                   ),
                   decoration: BoxDecoration(
                     color: badgeColor,
@@ -64,7 +64,7 @@ class TxRiskBannerWidget extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(width: ScreenUtil().setWidth(10)),
+                SizedBox(width: AppSpacing.space2),
                 // Function name
                 Expanded(
                   child: Text(
@@ -92,8 +92,8 @@ class TxRiskBannerWidget extends StatelessWidget {
             for (final warn in analysis.warnings)
               Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(20),
-                  vertical: ScreenUtil().setWidth(8),
+                  horizontal: AppSpacing.space4,
+                  vertical: AppSpacing.space2,
                 ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,7 +103,7 @@ class TxRiskBannerWidget extends StatelessWidget {
                       size: ScreenUtil().setWidth(28),
                       color: badgeColor,
                     ),
-                    SizedBox(width: ScreenUtil().setWidth(8)),
+                    SizedBox(width: AppSpacing.space2),
                     Expanded(
                       child: Text(
                         warn,
@@ -131,7 +131,7 @@ class TxRiskBannerWidget extends StatelessWidget {
               _FieldRow(field: field, badgeColor: badgeColor),
           ],
 
-          SizedBox(height: ScreenUtil().setWidth(8)),
+          SizedBox(height: AppSpacing.space2),
         ],
       ),
     );
@@ -172,8 +172,8 @@ class _FieldRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(20),
-        vertical: ScreenUtil().setWidth(6),
+        horizontal: AppSpacing.space4,
+        vertical: AppSpacing.space2,
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,

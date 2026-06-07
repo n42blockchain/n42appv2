@@ -24,7 +24,7 @@ class MiningOutputTip extends StatelessWidget {
       child: Scaffold(
         appBar: AppBarWidget(text: S.of(context).g_mining_key_89),
         body: SingleChildScrollView(
-          padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+          padding: EdgeInsets.all(AppSpacing.space8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -52,7 +52,7 @@ class MiningOutputTip extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: ScreenUtil().setWidth(40)),
+              SizedBox(height: AppSpacing.space12),
               Text(
                 S.of(context).g_mining_key_90,
                 style: TextStyle(
@@ -65,7 +65,7 @@ class MiningOutputTip extends StatelessWidget {
               SizedBox(height: ScreenUtil().setWidth(36)),
               Container(
                 width: double.infinity,
-                padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+                padding: EdgeInsets.all(AppSpacing.space6),
                 decoration: BoxDecoration(
                   color: isDark
                       ? Colors.white.withValues(alpha: 0.04)
@@ -87,21 +87,21 @@ class MiningOutputTip extends StatelessWidget {
                       S.of(context).g_mining_key_91,
                       const Color(0xFF5C6BC0),
                     ),
-                    SizedBox(height: ScreenUtil().setWidth(20)),
+                    SizedBox(height: AppSpacing.space4),
                     _buildTipItem(
                       context,
                       Icons.folder_special_outlined,
                       S.of(context).g_mining_key_92,
                       const Color(0xFF26A69A),
                     ),
-                    SizedBox(height: ScreenUtil().setWidth(20)),
+                    SizedBox(height: AppSpacing.space4),
                     _buildTipItem(
                       context,
                       Icons.no_photography_outlined,
                       S.of(context).g_mining_key_93,
                       const Color(0xFFFF7043),
                     ),
-                    SizedBox(height: ScreenUtil().setWidth(20)),
+                    SizedBox(height: AppSpacing.space4),
                     _buildTipItem(
                       context,
                       Icons.warning_amber_rounded,
@@ -116,7 +116,7 @@ class MiningOutputTip extends StatelessWidget {
         ),
         bottomNavigationBar: SafeArea(
           child: Container(
-            margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
+            margin: EdgeInsets.all(AppSpacing.space8),
             child: AppButton(
               label: S.of(context).g_mining_key_95,
               onPressed: () async {
@@ -157,7 +157,7 @@ class MiningOutputTip extends StatelessWidget {
             child: Icon(icon, size: ScreenUtil().setWidth(24), color: color),
           ),
         ),
-        SizedBox(width: ScreenUtil().setWidth(16)),
+        SizedBox(width: AppSpacing.space4),
         Expanded(
           child: Text(
             text,

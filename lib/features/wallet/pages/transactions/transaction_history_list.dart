@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
@@ -137,9 +138,9 @@ class _TransactionHistoryListState extends State<TransactionHistoryList>
         return false;
       },
       child: ListView.separated(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+        padding: EdgeInsets.all(AppSpacing.space8),
         itemCount: itemCount,
-        separatorBuilder: (_, _) => SizedBox(height: ScreenUtil().setWidth(30)),
+        separatorBuilder: (_, _) => SizedBox(height: AppSpacing.space8),
         itemBuilder: (ctx, i) {
           if (i >= items.length) {
             return const Padding(

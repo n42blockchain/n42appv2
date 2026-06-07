@@ -6,7 +6,6 @@
 import 'package:flutter/material.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/features/wallet/pages/ens/ens_chain_config.dart';
@@ -274,7 +273,7 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
                     S.of(ctx).g_key_ens_transfer_warning,
                     style: AppTypography.caption.copyWith(color: Colors.orange),
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(16)),
+                  SizedBox(height: AppSpacing.space4),
                   TextField(
                     controller: controller,
                     onChanged: (_) =>
@@ -340,7 +339,7 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
       body: Stack(
         children: [
           SingleChildScrollView(
-            padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+            padding: EdgeInsets.all(AppSpacing.space6),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -348,7 +347,7 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
                   ownedEns: widget.ownedEns,
                   domainChain: _domainChain,
                 ),
-                SizedBox(height: ScreenUtil().setWidth(20)),
+                SizedBox(height: AppSpacing.space4),
                 EnsQuickActions(
                   ownedEns: widget.ownedEns,
                   domainChain: _domainChain,
@@ -358,19 +357,19 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
                       : _setPrimaryName,
                   onCopy: () => _copyToClipboard(widget.ownedEns.name),
                 ),
-                SizedBox(height: ScreenUtil().setWidth(24)),
+                SizedBox(height: AppSpacing.space6),
                 EnsAddressSection(
                   controller: _resolvedAddressController,
                   onSave: _saveResolvedAddress,
                   onChanged: () => setState(() {}),
                 ),
-                SizedBox(height: ScreenUtil().setWidth(24)),
+                SizedBox(height: AppSpacing.space6),
                 EnsTextRecordsSection(
                   controllers: _recordControllers,
                   recordKeys: _commonRecordKeys,
                   onSave: _saveTextRecords,
                 ),
-                SizedBox(height: ScreenUtil().setWidth(24)),
+                SizedBox(height: AppSpacing.space6),
                 EnsSubdomainSection(
                   subdomains: _subdomains,
                   isLoading: _subdomainsLoading,
@@ -380,9 +379,9 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
                   onCopy: (sub) => _copyToClipboard(sub.fullName),
                   onDelete: _deleteSubdomain,
                 ),
-                SizedBox(height: ScreenUtil().setWidth(24)),
+                SizedBox(height: AppSpacing.space6),
                 EnsAdvancedSection(onTransfer: _showTransferDialog),
-                SizedBox(height: ScreenUtil().setWidth(40)),
+                SizedBox(height: AppSpacing.space12),
               ],
             ),
           ),

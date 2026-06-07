@@ -59,8 +59,8 @@ class _NFTSheet extends StatelessWidget {
                     children: [
                       Container(
                         padding: EdgeInsets.symmetric(
-                          horizontal: ScreenUtil().setWidth(30),
-                          vertical: ScreenUtil().setWidth(30),
+                          horizontal: AppSpacing.space8,
+                          vertical: AppSpacing.space8,
                         ),
                         decoration: BoxDecoration(
                           border: Border(
@@ -90,8 +90,8 @@ class _NFTSheet extends StatelessWidget {
             Flexible(
               child: SingleChildScrollView(
                 padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(30),
-                  vertical: ScreenUtil().setWidth(30),
+                  horizontal: AppSpacing.space8,
+                  vertical: AppSpacing.space8,
                 ),
                 child: child,
               ),

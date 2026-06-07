@@ -62,7 +62,7 @@ mixin _MiningTodayV2WidgetsMixin
       },
       onLeftImageUri: "assets/wallet/menu.png",
       actions: [
-        SizedBox(width: ScreenUtil().setWidth(10)),
+        SizedBox(width: AppSpacing.space2),
         InkWell(
           onTap: () {
             Navigator.of(
@@ -83,7 +83,7 @@ mixin _MiningTodayV2WidgetsMixin
   Widget buildTestnetWarning(BuildContext context) {
     return Container(
       alignment: Alignment.center,
-      padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       margin: EdgeInsets.only(top: ScreenUtil().setWidth(30)),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).dangerBg,
@@ -108,12 +108,12 @@ mixin _MiningTodayV2WidgetsMixin
 
     return Container(
       margin: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30),
-        vertical: ScreenUtil().setWidth(12),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space4,
       ),
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(24),
-        vertical: ScreenUtil().setWidth(20),
+        horizontal: AppSpacing.space6,
+        vertical: AppSpacing.space4,
       ),
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -147,7 +147,7 @@ mixin _MiningTodayV2WidgetsMixin
               size: ScreenUtil().setWidth(38),
             ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(20)),
+          SizedBox(width: AppSpacing.space4),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -159,7 +159,7 @@ mixin _MiningTodayV2WidgetsMixin
                     fontWeight: FontWeight.w400,
                   ),
                 ),
-                SizedBox(height: ScreenUtil().setWidth(4)),
+                SizedBox(height: AppSpacing.space2),
                 Row(
                   children: [
                     Container(
@@ -204,7 +204,7 @@ mixin _MiningTodayV2WidgetsMixin
                   color: Colors.white.withAlpha(140),
                 ),
               ),
-              SizedBox(height: ScreenUtil().setWidth(4)),
+              SizedBox(height: AppSpacing.space2),
               Text(
                 mpValue.depositsEnable ?? false
                     ? '${mpValue.balanceInBeacon} N'
@@ -273,7 +273,7 @@ mixin _MiningTodayV2WidgetsMixin
                   "${dataUtils.formatNum(mpValue.todayCycleRewardsValue, 6)} ${CoinType.N.name}",
               imagePath: "assets/mining/broad_bg_4.png",
             ),
-            SizedBox(width: ScreenUtil().setWidth(20)),
+            SizedBox(width: AppSpacing.space4),
             MiningDataBroad(
               titleText: S.of(context).g_mining_key_11,
               value:
@@ -284,7 +284,7 @@ mixin _MiningTodayV2WidgetsMixin
             ),
           ],
         ),
-        SizedBox(height: ScreenUtil().setWidth(20)),
+        SizedBox(height: AppSpacing.space4),
         Row(
           children: [
             MiningDataBroad(
@@ -293,7 +293,7 @@ mixin _MiningTodayV2WidgetsMixin
                   '${dataUtils.formatNum(mpValue.miningTotalRevenue, 6)} ${CoinType.N.name}',
               imagePath: "assets/mining/broad_bg_1.png",
             ),
-            SizedBox(width: ScreenUtil().setWidth(20)),
+            SizedBox(width: AppSpacing.space4),
             MiningDataBroad(
               titleText: S.of(context).g_mining_key_14,
               value:
@@ -320,7 +320,7 @@ mixin _MiningTodayV2WidgetsMixin
           Container(
             height: ScreenUtil().setWidth(88),
             width: double.infinity,
-            margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
+            margin: EdgeInsets.symmetric(vertical: AppSpacing.space4),
             child: AppButton(
               label: S.of(context).g_mining_key_77,
               loading: isLoading,
@@ -341,7 +341,7 @@ mixin _MiningTodayV2WidgetsMixin
 
   Widget _buildOrangeTip(String text) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       width: double.infinity,
       child: Text(
         text,

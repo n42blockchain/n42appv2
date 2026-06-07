@@ -119,8 +119,8 @@ class _DAppDirectoryPageState extends State<DAppDirectoryPage>
     }
     return ListView.builder(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30),
-        vertical: ScreenUtil().setWidth(16),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space4,
       ),
       itemCount: dapps.length,
       itemBuilder: (context, index) {
@@ -139,10 +139,10 @@ class _DAppDirectoryPageState extends State<DAppDirectoryPage>
       onTap: () => Navigator.pop(context, dapp.url),
       borderRadius: BorderRadius.circular(radius),
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(8)),
+        margin: EdgeInsets.symmetric(vertical: AppSpacing.space2),
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(24),
-          vertical: ScreenUtil().setWidth(20),
+          horizontal: AppSpacing.space6,
+          vertical: AppSpacing.space4,
         ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(radius),
@@ -151,7 +151,7 @@ class _DAppDirectoryPageState extends State<DAppDirectoryPage>
         child: Row(
           children: [
             _buildAvatar(letter),
-            SizedBox(width: ScreenUtil().setWidth(20)),
+            SizedBox(width: AppSpacing.space4),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -162,13 +162,13 @@ class _DAppDirectoryPageState extends State<DAppDirectoryPage>
                     fontWeight: FontWeight.w600,
                     color: AppColorTokens.of(context).textPrimary,
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(4)),
+                  SizedBox(height: AppSpacing.space2),
                   _singleLineText(
                     dapp.description,
                     fontSize: ScreenUtil().setSp(24),
                     color: subtitleColor,
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(4)),
+                  SizedBox(height: AppSpacing.space2),
                   _singleLineText(
                     host,
                     fontSize: ScreenUtil().setSp(22),

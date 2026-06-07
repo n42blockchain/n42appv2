@@ -25,13 +25,13 @@ class MiningStatusWidget extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
-      margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
+      margin: EdgeInsets.symmetric(vertical: AppSpacing.space4),
       child: Row(
         children: [
           Expanded(
             child: _buildStatusCard(context, isActive, statusColor, isDark),
           ),
-          SizedBox(width: ScreenUtil().setWidth(16)),
+          SizedBox(width: AppSpacing.space4),
           Expanded(child: _buildBalanceCard(context, isDark)),
         ],
       ),
@@ -46,7 +46,7 @@ class MiningStatusWidget extends StatelessWidget {
   ) {
     final c = AppColorTokens.of(context);
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         gradient: isActive
             ? LinearGradient(
@@ -93,7 +93,7 @@ class MiningStatusWidget extends StatelessWidget {
                   color: statusColor,
                 ),
               ),
-              SizedBox(width: ScreenUtil().setWidth(10)),
+              SizedBox(width: AppSpacing.space2),
               Expanded(
                 child: Text(
                   S.of(context).g_mining_key_5,
@@ -146,7 +146,7 @@ class MiningStatusWidget extends StatelessWidget {
               ],
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           Row(
             children: [
               Expanded(
@@ -195,7 +195,7 @@ class MiningStatusWidget extends StatelessWidget {
 
   Widget _buildBalanceCard(BuildContext context, bool isDark) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
         borderRadius: AppRadius.brMd,
@@ -220,7 +220,7 @@ class MiningStatusWidget extends StatelessWidget {
                   color: AppColorTokens.of(context).brand,
                 ),
               ),
-              SizedBox(width: ScreenUtil().setWidth(10)),
+              SizedBox(width: AppSpacing.space2),
               Expanded(
                 child: Text(
                   S.of(context).g_key_29,
@@ -234,7 +234,7 @@ class MiningStatusWidget extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           Row(
             crossAxisAlignment: CrossAxisAlignment.baseline,
             textBaseline: TextBaseline.alphabetic,

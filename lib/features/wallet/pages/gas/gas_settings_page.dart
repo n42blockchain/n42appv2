@@ -157,13 +157,13 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
             Expanded(
               child: SingleChildScrollView(
                 padding: EdgeInsets.symmetric(
-                  vertical: ScreenUtil().setWidth(20),
+                  vertical: AppSpacing.space4,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildNetworkStatus(context),
-                    SizedBox(height: ScreenUtil().setWidth(30)),
+                    SizedBox(height: AppSpacing.space8),
                     GasSelectorWidget(
                       gasEstimate: _gasEstimate,
                       onSpeedChanged: _onSpeedChanged,
@@ -172,12 +172,12 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
                       initialExpanded: true,
                     ),
 
-                    SizedBox(height: ScreenUtil().setWidth(30)),
+                    SizedBox(height: AppSpacing.space8),
 
                     if (widget.allowCustom) ...[
                       _buildCustomToggle(context),
                       if (_isCustomMode) ...[
-                        SizedBox(height: ScreenUtil().setWidth(20)),
+                        SizedBox(height: AppSpacing.space4),
                         _buildCustomInputs(context),
                       ],
                     ],
@@ -278,7 +278,7 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
   Widget _buildCustomToggle(BuildContext context) {
     final blueColor = _themeColor(context, AppThemeKeys.mainBlueColor);
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+      margin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

@@ -40,8 +40,8 @@ Widget stakingTag({
 }) {
   return Container(
     padding: EdgeInsets.symmetric(
-      horizontal: ScreenUtil().setWidth(8),
-      vertical: ScreenUtil().setWidth(4),
+      horizontal: AppSpacing.space2,
+      vertical: AppSpacing.space2,
     ),
     decoration: BoxDecoration(
       color: color.withAlpha(30),
@@ -55,7 +55,7 @@ Widget stakingStatsCard(BuildContext context, StakingProvider provider) {
   final stats = provider.getStats();
 
   return Container(
-    padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+    padding: EdgeInsets.all(AppSpacing.space6),
     decoration: BoxDecoration(
       gradient: LinearGradient(
         colors: [
@@ -74,7 +74,7 @@ Widget stakingStatsCard(BuildContext context, StakingProvider provider) {
           S.of(context).g_key_stake_overview,
           style: AppTypography.bodySm.copyWith(color: Colors.white70),
         ),
-        SizedBox(height: ScreenUtil().setWidth(16)),
+        SizedBox(height: AppSpacing.space4),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -122,14 +122,14 @@ Widget stakingEmptyPositions(
           size: ScreenUtil().setWidth(80),
           color: AppColorTokens.of(context).textSubtitle,
         ),
-        SizedBox(height: ScreenUtil().setWidth(20)),
+        SizedBox(height: AppSpacing.space4),
         Text(
           S.of(context).g_key_stake_no_positions_yet,
           style: AppTypography.body.copyWith(
             color: AppColorTokens.of(context).textSubtitle,
           ),
         ),
-        SizedBox(height: ScreenUtil().setWidth(16)),
+        SizedBox(height: AppSpacing.space4),
         AppButton(
           label: S.of(context).g_key_stake_start_staking,
           onPressed: onStartStaking,

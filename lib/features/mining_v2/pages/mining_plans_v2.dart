@@ -67,7 +67,7 @@ class _MiningPlansV2State extends State<MiningPlansV2> {
             Positioned.fill(
               child: Container(
                 padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(30),
+                  horizontal: AppSpacing.space8,
                 ),
                 child: Column(
                   children: [
@@ -92,7 +92,7 @@ class _MiningPlansV2State extends State<MiningPlansV2> {
                   Container(
                     width: double.infinity,
                     height: ScreenUtil().setWidth(148),
-                    padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                    padding: EdgeInsets.all(AppSpacing.space8),
                     child: AppButton(
                       label: S.of(context).g_key_78,
                       onPressed: () {

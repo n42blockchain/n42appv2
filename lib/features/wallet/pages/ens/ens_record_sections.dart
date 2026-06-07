@@ -31,7 +31,7 @@ class EnsAddressSection extends StatelessWidget {
             title: S.of(context).g_key_ens_resolved_address,
             onSave: onSave,
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
           TextField(
             controller: controller,
             decoration: InputDecoration(
@@ -42,8 +42,8 @@ class EnsAddressSection extends StatelessWidget {
               ),
               border: OutlineInputBorder(borderRadius: AppRadius.brMd),
               contentPadding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(16),
-                vertical: ScreenUtil().setWidth(14),
+                horizontal: AppSpacing.space4,
+                vertical: AppSpacing.space4,
               ),
               suffixIcon: controller.text.isNotEmpty
                   ? IconButton(
@@ -90,7 +90,7 @@ class EnsTextRecordsSection extends StatelessWidget {
             title: S.of(context).g_key_ens_text_records,
             onSave: onSave,
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           ...recordKeys.map(
             (key) =>
                 _RecordField(recordKey: key, controller: controllers[key]!),
@@ -118,8 +118,8 @@ class _RecordField extends StatelessWidget {
           prefixIcon: Icon(_iconFor(recordKey), size: 20),
           border: OutlineInputBorder(borderRadius: AppRadius.brMd),
           contentPadding: EdgeInsets.symmetric(
-            horizontal: ScreenUtil().setWidth(16),
-            vertical: ScreenUtil().setWidth(14),
+            horizontal: AppSpacing.space4,
+            vertical: AppSpacing.space4,
           ),
         ),
         style: TextStyle(fontSize: ScreenUtil().setSp(26)),
@@ -158,7 +158,7 @@ class _SectionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
         borderRadius: AppRadius.brMd,

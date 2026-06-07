@@ -13,7 +13,7 @@ part of 'stake_page.dart';
 mixin _StakeSectionsMixin on _StakeLogicMixin {
   Widget _buildNoWalletHint(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
         borderRadius: AppRadius.brMd,
@@ -34,7 +34,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
   Widget _buildLiquidUnstakeView(BuildContext context) {
     return Center(
       child: Padding(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(40)),
+        padding: EdgeInsets.all(AppSpacing.space12),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -43,7 +43,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
               size: ScreenUtil().setWidth(80),
               color: AppColorTokens.of(context).brand,
             ),
-            SizedBox(height: ScreenUtil().setWidth(20)),
+            SizedBox(height: AppSpacing.space4),
             Text(
               S.of(context).g_key_stake_liquid_staking_label,
               style: AppTypography.headline.copyWith(
@@ -51,7 +51,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
                 color: AppColorTokens.of(context).textPrimary,
               ),
             ),
-            SizedBox(height: ScreenUtil().setWidth(12)),
+            SizedBox(height: AppSpacing.space4),
             RichText(
               textAlign: TextAlign.center,
               text: TextSpan(
@@ -71,7 +71,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
                 ],
               ),
             ),
-            SizedBox(height: ScreenUtil().setWidth(30)),
+            SizedBox(height: AppSpacing.space8),
             AppButton(
               label: S.of(context).g_key_stake_go_to_swap,
               icon: Icons.swap_horizontal_circle_outlined,
@@ -93,7 +93,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
 
   Widget _buildUnbondingWarning(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: Colors.orange.withAlpha(20),
         borderRadius: AppRadius.brMd,
@@ -105,7 +105,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
             color: Colors.orange,
             size: ScreenUtil().setWidth(36),
           ),
-          SizedBox(width: ScreenUtil().setWidth(12)),
+          SizedBox(width: AppSpacing.space4),
           Expanded(
             child: Text(
               S
@@ -127,7 +127,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
     if (_loadingPositions) {
       return Center(
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
+          padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
           child: const CircularProgressIndicator(strokeWidth: 2),
         ),
       );
@@ -139,7 +139,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
 
     if (_activePositions.isEmpty) {
       return Container(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+        padding: EdgeInsets.all(AppSpacing.space4),
         decoration: BoxDecoration(
           color: AppColorTokens.of(context).bgSurface,
           borderRadius: AppRadius.brMd,
@@ -178,7 +178,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
           },
           child: Container(
             margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
-            padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+            padding: EdgeInsets.all(AppSpacing.space4),
             decoration: BoxDecoration(
               color: AppColorTokens.of(context).bgSurface,
               borderRadius: AppRadius.brMd,
@@ -199,7 +199,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
                           color: AppColorTokens.of(context).textPrimary,
                         ),
                       ),
-                      SizedBox(height: ScreenUtil().setWidth(4)),
+                      SizedBox(height: AppSpacing.space2),
                       Text(
                         '${S.of(context).g_key_stake_staked}: ${_formatBigInt(pos.stakedAmount)} ${widget.protocol.chainSymbol}',
                         style: AppTypography.caption.copyWith(
@@ -227,7 +227,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
 
   Widget _buildUnstakeAmountInput(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
         borderRadius: AppRadius.brMd,
@@ -305,7 +305,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
               },
               child: Container(
                 padding: EdgeInsets.symmetric(
-                  vertical: ScreenUtil().setWidth(12),
+                  vertical: AppSpacing.space4,
                 ),
                 margin: EdgeInsets.only(right: ScreenUtil().setWidth(8)),
                 decoration: BoxDecoration(

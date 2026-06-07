@@ -61,10 +61,10 @@ class BatchTransferSelectPage extends ConsumerWidget {
     if (supportedCoins.isEmpty) return _buildEmptyState(context);
 
     return ListView(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       children: [
         _buildInfoCard(context),
-        SizedBox(height: ScreenUtil().setWidth(24)),
+        SizedBox(height: AppSpacing.space6),
         Text(
           S.of(context).g_key_batch_select_token,
           style: AppTypography.body.copyWith(
@@ -72,7 +72,7 @@ class BatchTransferSelectPage extends ConsumerWidget {
             color: AppColorTokens.of(context).textPrimary,
           ),
         ),
-        SizedBox(height: ScreenUtil().setWidth(16)),
+        SizedBox(height: AppSpacing.space4),
         ...supportedCoins.map((coin) => _buildCoinItem(context, coin)),
       ],
     );
@@ -82,7 +82,7 @@ class BatchTransferSelectPage extends ConsumerWidget {
     final subtitleText = AppColorTokens.of(context).textSubtitle;
     return Center(
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(32)),
+        padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -91,13 +91,13 @@ class BatchTransferSelectPage extends ConsumerWidget {
               size: ScreenUtil().setWidth(80),
               color: subtitleText,
             ),
-            SizedBox(height: ScreenUtil().setWidth(16)),
+            SizedBox(height: AppSpacing.space4),
             Text(
               S.of(context).g_key_batch_no_supported,
               style: AppTypography.body.copyWith(color: subtitleText),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: ScreenUtil().setWidth(8)),
+            SizedBox(height: AppSpacing.space2),
             Text(
               S.of(context).g_key_batch_evm_only,
               style: AppTypography.caption.copyWith(color: subtitleText),
@@ -111,7 +111,7 @@ class BatchTransferSelectPage extends ConsumerWidget {
 
   Widget _buildInfoCard(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
@@ -130,7 +130,7 @@ class BatchTransferSelectPage extends ConsumerWidget {
             size: ScreenUtil().setWidth(48),
             color: const Color(0xFF00BCD4),
           ),
-          SizedBox(width: ScreenUtil().setWidth(16)),
+          SizedBox(width: AppSpacing.space4),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -142,7 +142,7 @@ class BatchTransferSelectPage extends ConsumerWidget {
                     color: AppColorTokens.of(context).textPrimary,
                   ),
                 ),
-                SizedBox(height: ScreenUtil().setWidth(4)),
+                SizedBox(height: AppSpacing.space2),
                 Text(
                   S.of(context).g_key_batch_send_multiple,
                   style: AppTypography.caption.copyWith(
@@ -170,7 +170,7 @@ class BatchTransferSelectPage extends ConsumerWidget {
       onTap: () => _navigateToBatchTransfer(context, coin),
       child: Container(
         margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
-        padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+        padding: EdgeInsets.all(AppSpacing.space4),
         decoration: BoxDecoration(
           color: AppColorTokens.of(context).bgSurface,
           borderRadius: AppRadius.brMd,
@@ -194,7 +194,7 @@ class BatchTransferSelectPage extends ConsumerWidget {
                 ),
               ),
             ),
-            SizedBox(width: ScreenUtil().setWidth(12)),
+            SizedBox(width: AppSpacing.space4),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -233,7 +233,7 @@ class BatchTransferSelectPage extends ConsumerWidget {
                 ),
               ],
             ),
-            SizedBox(width: ScreenUtil().setWidth(8)),
+            SizedBox(width: AppSpacing.space2),
             Icon(Icons.chevron_right, color: subtitleText),
           ],
         ),

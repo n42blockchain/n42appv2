@@ -77,9 +77,9 @@ extension _NftListPageWidgets on _NftListPageState {
       height: ScreenUtil().setWidth(52),
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(16)),
+        padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
         itemCount: filters.length,
-        separatorBuilder: (ctx, i) => SizedBox(width: ScreenUtil().setWidth(8)),
+        separatorBuilder: (ctx, i) => SizedBox(width: AppSpacing.space2),
         itemBuilder: (context, i) {
           final (type, label) = filters[i];
           final selected = _filter == type;
@@ -88,8 +88,8 @@ extension _NftListPageWidgets on _NftListPageState {
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 150),
               padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(16),
-                vertical: ScreenUtil().setWidth(8),
+                horizontal: AppSpacing.space4,
+                vertical: AppSpacing.space2,
               ),
               decoration: BoxDecoration(
                 color: selected ? accentColor : accentColor.withAlpha(20),
@@ -163,7 +163,7 @@ extension _NftListPageWidgets on _NftListPageState {
 
   Widget buildGrid(BuildContext context, List<NftModel> nfts) {
     return GridView.builder(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         crossAxisSpacing: ScreenUtil().setWidth(12),

@@ -58,7 +58,7 @@ class ProfileHomePage extends ConsumerWidget {
 
   Widget _buildUserHeader(BuildContext context, WidgetRef ref) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       child: Row(
         children: [
           // 用户头像
@@ -82,7 +82,7 @@ class ProfileHomePage extends ConsumerWidget {
               size: ScreenUtil().setWidth(48),
             ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(20)),
+          SizedBox(width: AppSpacing.space4),
 
           // 用户信息
           Expanded(
@@ -96,7 +96,7 @@ class ProfileHomePage extends ConsumerWidget {
                     color: AppColorTokens.of(context).textPrimary,
                   ),
                 ),
-                SizedBox(height: ScreenUtil().setWidth(4)),
+                SizedBox(height: AppSpacing.space2),
                 Text(
                   'Manage your settings',
                   style: AppTypography.bodySm.copyWith(

@@ -111,14 +111,14 @@ class _NonEvmGasSettingsPageState extends State<NonEvmGasSettingsPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  SizedBox(height: ScreenUtil().setWidth(20)),
+                  SizedBox(height: AppSpacing.space4),
                   NonEvmFeeSelector(
                     feeModel: _feeModel,
                     onSpeedChanged: _onSpeedChanged,
                     showDetails: true,
                   ),
                   if (_feeModel.isEditable) ...[
-                    SizedBox(height: ScreenUtil().setWidth(20)),
+                    SizedBox(height: AppSpacing.space4),
                     _buildCustomRateSection(
                       context,
                       blueColor: blueColor,
@@ -127,15 +127,15 @@ class _NonEvmGasSettingsPageState extends State<NonEvmGasSettingsPage> {
                       itemBg: itemBg,
                     ),
                   ],
-                  SizedBox(height: ScreenUtil().setWidth(30)),
+                  SizedBox(height: AppSpacing.space8),
                 ],
               ),
             ),
           ),
           Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(30),
-              vertical: ScreenUtil().setWidth(30),
+              horizontal: AppSpacing.space8,
+              vertical: AppSpacing.space8,
             ),
             child: SizedBox(
               width: double.infinity,
@@ -164,8 +164,8 @@ class _NonEvmGasSettingsPageState extends State<NonEvmGasSettingsPage> {
         : AppColorTokens.of(context).border;
 
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+      margin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
+      padding: EdgeInsets.all(AppSpacing.space8),
       decoration: BoxDecoration(color: itemBg, borderRadius: AppRadius.brMd),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -177,7 +177,7 @@ class _NonEvmGasSettingsPageState extends State<NonEvmGasSettingsPage> {
                 size: ScreenUtil().setWidth(36),
                 color: blueColor,
               ),
-              SizedBox(width: ScreenUtil().setWidth(12)),
+              SizedBox(width: AppSpacing.space4),
               Flexible(
                 child: Text(
                   S.of(context).g_key_gas_custom,
@@ -190,11 +190,11 @@ class _NonEvmGasSettingsPageState extends State<NonEvmGasSettingsPage> {
               ),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(20)),
+          SizedBox(height: AppSpacing.space4),
           Container(
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(20),
-              vertical: ScreenUtil().setWidth(12),
+              horizontal: AppSpacing.space4,
+              vertical: AppSpacing.space4,
             ),
             decoration: BoxDecoration(
               color: AppColorTokens.of(context).bgBase,
@@ -232,7 +232,7 @@ class _NonEvmGasSettingsPageState extends State<NonEvmGasSettingsPage> {
             ),
           ),
           if (_customRateError.isNotEmpty) ...[
-            SizedBox(height: ScreenUtil().setWidth(8)),
+            SizedBox(height: AppSpacing.space2),
             Text(
               _customRateError,
               style: AppTypography.caption.copyWith(
@@ -240,7 +240,7 @@ class _NonEvmGasSettingsPageState extends State<NonEvmGasSettingsPage> {
               ),
             ),
           ],
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
           Text(
             '${S.of(context).g_key_t_37}: '
             '${_feeModel.standard.feeRate ?? '-'} $feeRateUnit',

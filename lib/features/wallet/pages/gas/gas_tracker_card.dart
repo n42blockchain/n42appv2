@@ -9,7 +9,7 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
   Widget buildHeader() {
     final blueColor = AppColorTokens.of(context).brand;
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [blueColor.withAlpha(30), blueColor.withAlpha(10)],
@@ -25,7 +25,7 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
             size: ScreenUtil().setWidth(48),
             color: blueColor,
           ),
-          SizedBox(width: ScreenUtil().setWidth(16)),
+          SizedBox(width: AppSpacing.space4),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -37,7 +37,7 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
                     color: AppColorTokens.of(context).textPrimary,
                   ),
                 ),
-                SizedBox(height: ScreenUtil().setWidth(4)),
+                SizedBox(height: AppSpacing.space2),
                 Text(
                   S.of(context).g_key_gas_auto_refresh('15'),
                   style: AppTypography.caption.copyWith(
@@ -60,7 +60,7 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
 
     return Container(
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(16)),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
         borderRadius: AppRadius.brMd,
@@ -72,7 +72,7 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
           Row(
             children: [
               _NetworkIcon(network: network, size: 44, iconSize: 24),
-              SizedBox(width: ScreenUtil().setWidth(12)),
+              SizedBox(width: AppSpacing.space4),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,11 +103,11 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
                   color: hasAlert ? network.color : subtitleColor,
                 ),
               ),
-              SizedBox(width: ScreenUtil().setWidth(8)),
+              SizedBox(width: AppSpacing.space2),
               buildNetworkStatus(data?.gasPrice),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           if (data != null) ...[
             buildGasRow(
               S.of(context).g_key_t_17,
@@ -130,7 +130,7 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
             Center(
               child: Padding(
                 padding: EdgeInsets.symmetric(
-                  vertical: ScreenUtil().setWidth(8),
+                  vertical: AppSpacing.space2,
                 ),
                 child: Text(
                   S.of(context).g_key_106,
@@ -139,7 +139,7 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
               ),
             ),
           if (history.length >= 3) ...[
-            SizedBox(height: ScreenUtil().setWidth(12)),
+            SizedBox(height: AppSpacing.space4),
             buildSparkline(history, network),
           ],
           buildMempoolIndicator(network.symbol),
@@ -164,7 +164,7 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
               size: ScreenUtil().setWidth(28),
               color: subtitleColor,
             ),
-            SizedBox(width: ScreenUtil().setWidth(6)),
+            SizedBox(width: AppSpacing.space2),
             Flexible(
               child: Text(
                 S.of(context).g_key_gas_price_trend,
@@ -182,7 +182,7 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
             ),
           ],
         ),
-        SizedBox(height: ScreenUtil().setWidth(8)),
+        SizedBox(height: AppSpacing.space2),
         SizedBox(
           height: ScreenUtil().setWidth(80),
           child: LineChart(
@@ -232,8 +232,8 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
           ),
           Container(
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(12),
-              vertical: ScreenUtil().setWidth(4),
+              horizontal: AppSpacing.space4,
+              vertical: AppSpacing.space2,
             ),
             decoration: BoxDecoration(
               color: color.withAlpha(20),
@@ -263,8 +263,8 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
     return Container(
       constraints: BoxConstraints(maxWidth: ScreenUtil().setWidth(140)),
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(12),
-        vertical: ScreenUtil().setWidth(6),
+        horizontal: AppSpacing.space4,
+        vertical: AppSpacing.space2,
       ),
       decoration: BoxDecoration(
         color: statusColor.withAlpha(20),
@@ -443,7 +443,7 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
 
   Widget buildFooter() {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(8)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space2),
       child: Text(
         S.of(context).g_key_gas_footer,
         style: AppTypography.caption.copyWith(

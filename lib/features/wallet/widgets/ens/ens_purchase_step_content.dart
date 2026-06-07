@@ -70,7 +70,7 @@ class EnsPurchaseStepContent extends StatelessWidget {
   // ── Step 0: Initial ────────────────────────────────────────────────────
   Widget _buildInitialContent(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: _stepDecoration(context),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -82,7 +82,7 @@ class EnsPurchaseStepContent extends StatelessWidget {
               color: _mainText(context),
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
           _buildInfoRow(
             context,
             Icons.security,
@@ -105,12 +105,12 @@ class EnsPurchaseStepContent extends StatelessWidget {
 
   Widget _buildInfoRow(BuildContext context, IconData icon, String text) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(8)),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space2),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(icon, size: ScreenUtil().setWidth(24), color: _blue(context)),
-          SizedBox(width: ScreenUtil().setWidth(12)),
+          SizedBox(width: AppSpacing.space4),
           Expanded(
             child: Text(
               text,
@@ -129,12 +129,12 @@ class EnsPurchaseStepContent extends StatelessWidget {
     required String subtitle,
   }) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(32)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       decoration: _stepDecoration(context),
       child: Column(
         children: [
           const CircularProgressIndicator(),
-          SizedBox(height: ScreenUtil().setWidth(20)),
+          SizedBox(height: AppSpacing.space4),
           Text(
             title,
             style: AppTypography.body.copyWith(
@@ -142,7 +142,7 @@ class EnsPurchaseStepContent extends StatelessWidget {
               color: _mainText(context),
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(8)),
+          SizedBox(height: AppSpacing.space2),
           Text(
             subtitle,
             style: AppTypography.caption.copyWith(color: _subtitle(context)),
@@ -164,7 +164,7 @@ class EnsPurchaseStepContent extends StatelessWidget {
     final textColor = _mainText(context);
 
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(32)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       decoration: _stepDecoration(context),
       child: Column(
         children: [
@@ -192,7 +192,7 @@ class EnsPurchaseStepContent extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(24)),
+          SizedBox(height: AppSpacing.space6),
           Text(
             S.of(context).g_key_ens_waiting,
             style: AppTypography.body.copyWith(
@@ -200,7 +200,7 @@ class EnsPurchaseStepContent extends StatelessWidget {
               color: textColor,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(8)),
+          SizedBox(height: AppSpacing.space2),
           Text(
             S.of(context).g_key_ens_wait_explanation,
             style: AppTypography.caption.copyWith(color: _subtitle(context)),
@@ -214,7 +214,7 @@ class EnsPurchaseStepContent extends StatelessWidget {
   // ── Step 4: Success ────────────────────────────────────────────────────
   Widget _buildSuccessContent(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(32)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       decoration: _stepDecoration(
         context,
         color: Colors.green.withAlpha(20),
@@ -227,7 +227,7 @@ class EnsPurchaseStepContent extends StatelessWidget {
             size: ScreenUtil().setWidth(80),
             color: Colors.green,
           ),
-          SizedBox(height: ScreenUtil().setWidth(20)),
+          SizedBox(height: AppSpacing.space4),
           Text(
             S.of(context).g_key_ens_success,
             style: AppTypography.headline.copyWith(
@@ -235,17 +235,17 @@ class EnsPurchaseStepContent extends StatelessWidget {
               color: Colors.green,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(8)),
+          SizedBox(height: AppSpacing.space2),
           Text(
             '$domainName.eth ${S.of(context).g_key_ens_is_yours}',
             style: AppTypography.bodySm.copyWith(color: _mainText(context)),
           ),
           if (registerResult?.txHash != null) ...[
-            SizedBox(height: ScreenUtil().setWidth(16)),
+            SizedBox(height: AppSpacing.space4),
             Container(
               padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(12),
-                vertical: ScreenUtil().setWidth(8),
+                horizontal: AppSpacing.space4,
+                vertical: AppSpacing.space2,
               ),
               decoration: BoxDecoration(
                 color: Colors.green.withAlpha(20),
@@ -269,7 +269,7 @@ class EnsPurchaseStepContent extends StatelessWidget {
   // ── Step -1: Error ─────────────────────────────────────────────────────
   Widget _buildErrorContent(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(32)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       decoration: _stepDecoration(
         context,
         color: Colors.red.withAlpha(20),
@@ -278,7 +278,7 @@ class EnsPurchaseStepContent extends StatelessWidget {
       child: Column(
         children: [
           Icon(Icons.error, size: ScreenUtil().setWidth(64), color: Colors.red),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           Text(
             S.of(context).g_key_ens_failed,
             style: AppTypography.body.copyWith(
@@ -286,7 +286,7 @@ class EnsPurchaseStepContent extends StatelessWidget {
               color: Colors.red,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(8)),
+          SizedBox(height: AppSpacing.space2),
           Text(
             errorMessage ?? S.of(context).g_key_error_3,
             style: AppTypography.caption.copyWith(color: _subtitle(context)),
@@ -371,7 +371,7 @@ class EnsPurchaseActionButton extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         backgroundColor: color,
         foregroundColor: Colors.white,
-        padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(18)),
+        padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
         shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
       ),
       child: Text(

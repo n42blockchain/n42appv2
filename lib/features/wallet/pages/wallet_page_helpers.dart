@@ -138,7 +138,7 @@ class WalletSkeletonCoinRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final radius = ScreenUtil().setWidth(8);
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -162,7 +162,7 @@ class WalletSkeletonCoinRow extends StatelessWidget {
                     _shimmerBox(60, 22, radius),
                   ],
                 ),
-                SizedBox(height: ScreenUtil().setWidth(10)),
+                SizedBox(height: AppSpacing.space2),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

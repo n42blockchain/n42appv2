@@ -39,7 +39,7 @@ class _BatchTemplatesSheetState extends State<BatchTemplatesSheet> {
           constraints: BoxConstraints(
             maxHeight: MediaQuery.of(context).size.height * 0.7,
           ),
-          padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+          padding: EdgeInsets.all(AppSpacing.space6),
           decoration: BoxDecoration(
             color: AppColorTokens.of(context).bgSurface,
             borderRadius: BorderRadius.vertical(
@@ -69,11 +69,11 @@ class _BatchTemplatesSheetState extends State<BatchTemplatesSheet> {
                   ),
                 ],
               ),
-              SizedBox(height: ScreenUtil().setWidth(16)),
+              SizedBox(height: AppSpacing.space4),
               if (templates.isEmpty)
                 Padding(
                   padding: EdgeInsets.symmetric(
-                    vertical: ScreenUtil().setWidth(32),
+                    vertical: AppSpacing.space8,
                   ),
                   child: Column(
                     children: [
@@ -84,7 +84,7 @@ class _BatchTemplatesSheetState extends State<BatchTemplatesSheet> {
                           context,
                         ).textSubtitle.withAlpha(80),
                       ),
-                      SizedBox(height: ScreenUtil().setWidth(12)),
+                      SizedBox(height: AppSpacing.space4),
                       Text(
                         S.of(context).g_key_aa_batch_no_templates,
                         style: TextStyle(
@@ -139,7 +139,7 @@ class _TemplateItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: AppThemeUtils.getColorByKey(
           context,
@@ -160,7 +160,7 @@ class _TemplateItem extends StatelessWidget {
                     color: AppColorTokens.of(context).textPrimary,
                   ),
                 ),
-                SizedBox(height: ScreenUtil().setWidth(4)),
+                SizedBox(height: AppSpacing.space2),
                 Text(
                   '${template.operations.length} operations · ${template.chainSymbol}',
                   style: AppTypography.caption.copyWith(

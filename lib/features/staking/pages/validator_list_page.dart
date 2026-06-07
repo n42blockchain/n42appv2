@@ -117,7 +117,7 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
                   ? _buildEmptyState(context)
                   : ListView.builder(
                       padding: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(30),
+                        horizontal: AppSpacing.space8,
                       ),
                       itemCount: _filteredValidators.length,
                       itemBuilder: (context, index) {
@@ -142,8 +142,8 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
 
   Widget _buildSearchBar(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
+      margin: EdgeInsets.all(AppSpacing.space8),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
       decoration: BoxDecoration(
         color: _itemBgColor(),
         borderRadius: AppRadius.brMd,
@@ -177,7 +177,7 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
 
   Widget _buildSortBar(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+      margin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       child: Wrap(
         spacing: ScreenUtil().setWidth(8),
         runSpacing: ScreenUtil().setWidth(8),
@@ -218,8 +218,8 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
       onTap: () => _changeSortBy(sortBy),
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(16),
-          vertical: ScreenUtil().setWidth(8),
+          horizontal: AppSpacing.space4,
+          vertical: AppSpacing.space2,
         ),
         decoration: BoxDecoration(
           color: isSelected ? _blueColor() : _itemBgColor(),
@@ -235,7 +235,7 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
               ),
             ),
             if (isSelected) ...[
-              SizedBox(width: ScreenUtil().setWidth(4)),
+              SizedBox(width: AppSpacing.space2),
               Icon(
                 _sortAscending ? Icons.arrow_upward : Icons.arrow_downward,
                 size: ScreenUtil().setWidth(20),
@@ -255,7 +255,7 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.search_off, size: ScreenUtil().setWidth(80), color: color),
-          SizedBox(height: ScreenUtil().setWidth(20)),
+          SizedBox(height: AppSpacing.space4),
           Text(
             S.of(context).g_key_stake_no_validators,
             style: AppTypography.body.copyWith(color: color),
@@ -279,7 +279,7 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
       onTap: () => Navigator.pop(context, validator),
       child: Container(
         margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
-        padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+        padding: EdgeInsets.all(AppSpacing.space4),
         decoration: BoxDecoration(
           color: _itemBgColor(),
           borderRadius: AppRadius.brMd,
@@ -306,7 +306,7 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
               ),
             ),
 
-            SizedBox(width: ScreenUtil().setWidth(16)),
+            SizedBox(width: AppSpacing.space4),
 
             // 验证者 Logo
             ClipRRect(
@@ -322,7 +322,7 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
                   : _buildDefaultValidatorLogo(context, validator),
             ),
 
-            SizedBox(width: ScreenUtil().setWidth(16)),
+            SizedBox(width: AppSpacing.space4),
 
             // 验证者信息
             Expanded(
@@ -353,14 +353,14 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
                         ),
                     ],
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(4)),
+                  SizedBox(height: AppSpacing.space2),
                   Text(
                     shortenStakingAddress(validator.address),
                     style: AppTypography.caption.copyWith(
                       color: _subtitleColor(),
                     ),
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(8)),
+                  SizedBox(height: AppSpacing.space2),
                   Row(
                     children: [
                       _buildInfoChip(
@@ -369,7 +369,7 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
                         '${validator.apy.toStringAsFixed(1)}%',
                         Colors.green,
                       ),
-                      SizedBox(width: ScreenUtil().setWidth(8)),
+                      SizedBox(width: AppSpacing.space2),
                       _buildInfoChip(
                         context,
                         'Fee',
@@ -423,8 +423,8 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
     final sp20 = ScreenUtil().setSp(20);
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(10),
-        vertical: ScreenUtil().setWidth(4),
+        horizontal: AppSpacing.space2,
+        vertical: AppSpacing.space2,
       ),
       decoration: BoxDecoration(
         color: color.withAlpha(20),
@@ -437,7 +437,7 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
             label,
             style: TextStyle(fontSize: sp20, color: _subtitleColor()),
           ),
-          SizedBox(width: ScreenUtil().setWidth(4)),
+          SizedBox(width: AppSpacing.space2),
           Text(
             value,
             style: TextStyle(

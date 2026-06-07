@@ -36,7 +36,7 @@ class SmartAccountCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+        padding: EdgeInsets.all(AppSpacing.space4),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [typeColor.withAlpha(30), typeColor.withAlpha(10)],
@@ -53,7 +53,7 @@ class SmartAccountCard extends StatelessWidget {
             Row(
               children: [
                 _buildAccountTypeIcon(context),
-                SizedBox(width: ScreenUtil().setWidth(12)),
+                SizedBox(width: AppSpacing.space4),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,14 +77,14 @@ class SmartAccountCard extends StatelessWidget {
                 DeploymentStatusIndicator(state: account.state),
               ],
             ),
-            SizedBox(height: ScreenUtil().setWidth(16)),
+            SizedBox(height: AppSpacing.space4),
 
             // 地址
             _buildAddressRow(context),
 
             // 详细信息
             if (showDetails) ...[
-              SizedBox(height: ScreenUtil().setWidth(16)),
+              SizedBox(height: AppSpacing.space4),
               _buildDetailsSection(context),
             ],
           ],
@@ -115,8 +115,8 @@ class SmartAccountCard extends StatelessWidget {
   Widget _buildAddressRow(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(14),
-        vertical: ScreenUtil().setWidth(12),
+        horizontal: AppSpacing.space4,
+        vertical: AppSpacing.space4,
       ),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgBase.withAlpha(100),
@@ -157,7 +157,7 @@ class SmartAccountCard extends StatelessWidget {
 
   Widget _buildDetailsSection(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(14)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgBase.withAlpha(80),
         borderRadius: AppRadius.brMd,

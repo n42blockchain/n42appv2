@@ -84,7 +84,7 @@ class DexSlippageRow extends StatelessWidget {
             style: TextStyle(color: subText, fontSize: ScreenUtil().setSp(24)),
           ),
         ),
-        SizedBox(width: ScreenUtil().setWidth(16)),
+        SizedBox(width: AppSpacing.space4),
         ...slippageOptions.map((bps) {
           final selected = selectedBps == bps;
           return GestureDetector(
@@ -92,8 +92,8 @@ class DexSlippageRow extends StatelessWidget {
             child: Container(
               margin: EdgeInsets.only(right: ScreenUtil().setWidth(8)),
               padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(16),
-                vertical: ScreenUtil().setWidth(6),
+                horizontal: AppSpacing.space4,
+                vertical: AppSpacing.space2,
               ),
               decoration: BoxDecoration(
                 color: selected ? btnBg : itemBg,
@@ -129,7 +129,7 @@ class DexSwapArrow extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          padding: EdgeInsets.all(ScreenUtil().setWidth(12)),
+          padding: EdgeInsets.all(AppSpacing.space4),
           decoration: BoxDecoration(
             color: _dexColor(context, AppThemeKeys.mainButtonBgColor),
             shape: BoxShape.circle,
@@ -156,7 +156,7 @@ class DexErrorBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       decoration: BoxDecoration(
         color: _dexColor(context, AppThemeKeys.errorBgColor),
         borderRadius: AppRadius.brSm,
@@ -206,7 +206,7 @@ class DexPriceChart extends StatelessWidget {
     final mainText = _dexColor(context, AppThemeKeys.mainTextColor);
 
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: _dexColor(context, AppThemeKeys.itemBgColor4),
         borderRadius: AppRadius.brMd,
@@ -240,7 +240,7 @@ class DexPriceChart extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
           _chartBody(context, s, subText),
         ],
       ),
@@ -262,8 +262,8 @@ class DexPriceChart extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.only(left: ScreenUtil().setWidth(8)),
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(14),
-          vertical: ScreenUtil().setWidth(6),
+          horizontal: AppSpacing.space4,
+          vertical: AppSpacing.space2,
         ),
         decoration: BoxDecoration(
           color: isSelected
@@ -308,7 +308,7 @@ class DexPriceChart extends StatelessWidget {
           ScreenUtil().setWidth(160),
           0,
         ),
-        SizedBox(height: ScreenUtil().setWidth(4)),
+        SizedBox(height: AppSpacing.space2),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

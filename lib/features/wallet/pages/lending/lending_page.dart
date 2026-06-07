@@ -101,7 +101,7 @@ class _LendingPageState extends State<LendingPage>
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(Icons.info_outline, size: 48, color: Colors.grey),
-            SizedBox(height: ScreenUtil().setWidth(16)),
+            SizedBox(height: AppSpacing.space4),
             Text(
               AaveService.isAvailable(widget.chainId)
                   ? 'No markets available'
@@ -116,7 +116,7 @@ class _LendingPageState extends State<LendingPage>
     return RefreshIndicator(
       onRefresh: _loadReserves,
       child: ListView.builder(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+        padding: EdgeInsets.all(AppSpacing.space4),
         itemCount: _reserves.length,
         itemBuilder: (context, index) {
           final reserve = _reserves[index];
@@ -140,8 +140,8 @@ class _LendingPageState extends State<LendingPage>
       ),
       child: ListTile(
         contentPadding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(20),
-          vertical: ScreenUtil().setWidth(8),
+          horizontal: AppSpacing.space4,
+          vertical: AppSpacing.space2,
         ),
         leading: CircleAvatar(
           backgroundColor: AppColorTokens.of(

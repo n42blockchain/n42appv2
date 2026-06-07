@@ -106,7 +106,7 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
       child: Container(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+        padding: EdgeInsets.all(AppSpacing.space6),
         decoration: BoxDecoration(
           color: AppColorTokens.of(context).bgSurface,
           borderRadius: BorderRadius.vertical(
@@ -125,9 +125,9 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
                   color: AppColorTokens.of(context).textPrimary,
                 ),
               ),
-              SizedBox(height: ScreenUtil().setWidth(20)),
+              SizedBox(height: AppSpacing.space4),
               _buildTypeSelector(context),
-              SizedBox(height: ScreenUtil().setWidth(16)),
+              SizedBox(height: AppSpacing.space4),
               TextField(
                 controller: _toController,
                 decoration: InputDecoration(
@@ -138,10 +138,10 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
                 ),
                 onChanged: (_) => setState(() => _toError = null),
               ),
-              SizedBox(height: ScreenUtil().setWidth(16)),
+              SizedBox(height: AppSpacing.space4),
               if (_selectedType != BatchOperationType.custom) ...[
                 _buildTokenSelector(context),
-                SizedBox(height: ScreenUtil().setWidth(16)),
+                SizedBox(height: AppSpacing.space4),
                 if (!_ethLikeTokens.contains(_selectedToken) ||
                     _selectedType == BatchOperationType.approve) ...[
                   TextField(
@@ -152,7 +152,7 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
                       border: OutlineInputBorder(),
                     ),
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(16)),
+                  SizedBox(height: AppSpacing.space4),
                 ],
                 TextField(
                   controller: _amountController,
@@ -180,19 +180,19 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
                   ),
                 ),
               ],
-              SizedBox(height: ScreenUtil().setWidth(24)),
+              SizedBox(height: AppSpacing.space6),
               ElevatedButton(
                 onPressed: _add,
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(
-                    vertical: ScreenUtil().setWidth(16),
+                    vertical: AppSpacing.space4,
                   ),
                   backgroundColor: const Color(0xFFFF9800),
                   foregroundColor: Colors.white,
                 ),
                 child: Text(S.of(context).g_key_159),
               ),
-              SizedBox(height: ScreenUtil().setWidth(16)),
+              SizedBox(height: AppSpacing.space4),
             ],
           ),
         ),
@@ -210,7 +210,7 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
             color: AppColorTokens.of(context).textSubtitle,
           ),
         ),
-        SizedBox(height: ScreenUtil().setWidth(8)),
+        SizedBox(height: AppSpacing.space2),
         Wrap(
           spacing: ScreenUtil().setWidth(8),
           children: BatchOperationType.values.map((type) {

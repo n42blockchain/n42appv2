@@ -39,8 +39,8 @@ class MiningBoardWidget extends StatelessWidget {
           Container(
             width: double.infinity,
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(30),
-              vertical: ScreenUtil().setWidth(24),
+              horizontal: AppSpacing.space8,
+              vertical: AppSpacing.space6,
             ),
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -67,11 +67,11 @@ class MiningBoardWidget extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+            padding: EdgeInsets.all(AppSpacing.space8),
             child: Column(
               children: [
                 _buildBoard(context),
-                SizedBox(height: ScreenUtil().setWidth(40)),
+                SizedBox(height: AppSpacing.space12),
                 _buildItems(context),
               ],
             ),
@@ -100,10 +100,10 @@ class MiningBoardWidget extends StatelessWidget {
             ),
             borderRadius: AppRadius.brMd,
           ),
-          padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+          padding: EdgeInsets.all(AppSpacing.space4),
           child: Image.asset("assets/mining/ast_50.png", fit: BoxFit.contain),
         ),
-        SizedBox(width: ScreenUtil().setWidth(30)),
+        SizedBox(width: AppSpacing.space8),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -122,7 +122,7 @@ class MiningBoardWidget extends StatelessWidget {
                       height: 1.0,
                     ),
                   ),
-                  SizedBox(width: ScreenUtil().setWidth(6)),
+                  SizedBox(width: AppSpacing.space2),
                   Text(
                     CoinType.N.name,
                     style: TextStyle(
@@ -133,11 +133,11 @@ class MiningBoardWidget extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: ScreenUtil().setWidth(24)),
+              SizedBox(height: AppSpacing.space6),
               Container(
                 padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(16),
-                  vertical: ScreenUtil().setWidth(10),
+                  horizontal: AppSpacing.space4,
+                  vertical: AppSpacing.space2,
                 ),
                 decoration: BoxDecoration(
                   color: isDark
@@ -165,7 +165,7 @@ class MiningBoardWidget extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(width: ScreenUtil().setWidth(10)),
+                    SizedBox(width: AppSpacing.space2),
                     Flexible(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -255,8 +255,8 @@ class MiningBoardWidget extends StatelessWidget {
   ) {
     return Padding(
       padding: EdgeInsets.symmetric(
-        vertical: ScreenUtil().setWidth(24),
-        horizontal: ScreenUtil().setWidth(16),
+        vertical: AppSpacing.space6,
+        horizontal: AppSpacing.space4,
       ),
       child: Row(
         children: [
@@ -277,7 +277,7 @@ class MiningBoardWidget extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(16)),
+          SizedBox(width: AppSpacing.space4),
           Expanded(
             flex: 2,
             child: Text(
@@ -303,7 +303,7 @@ class MiningBoardWidget extends StatelessWidget {
                     maxLines: 2,
                   ),
                 ),
-                SizedBox(width: ScreenUtil().setWidth(10)),
+                SizedBox(width: AppSpacing.space2),
                 Container(
                   width: ScreenUtil().setWidth(24),
                   height: ScreenUtil().setWidth(24),

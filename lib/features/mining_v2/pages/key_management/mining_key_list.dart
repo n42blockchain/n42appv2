@@ -52,15 +52,15 @@ class _MiningKeyListState extends ConsumerState<MiningKeyList> {
     return Scaffold(
       appBar: AppBarWidget(text: S.of(context).g_mining_key_81),
       body: ListView.builder(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+        padding: EdgeInsets.all(AppSpacing.space8),
         itemBuilder: (BuildContext context, index) {
           Map<String, dynamic> keyValue =
               miningList[index] as Map<String, dynamic>;
           bool isMining = keyValue['isMining'] ?? false;
           return containerStyle1(
             context,
-            padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-            margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
+            padding: EdgeInsets.all(AppSpacing.space8),
+            margin: EdgeInsets.symmetric(vertical: AppSpacing.space4),
             child: Column(
               children: [
                 Row(

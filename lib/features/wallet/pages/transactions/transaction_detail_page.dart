@@ -45,8 +45,8 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
   TextStyle _labelStyle() => AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle);
 
   EdgeInsets get _itemPadding => EdgeInsets.symmetric(
-    vertical: ScreenUtil().setWidth(16),
-    horizontal: ScreenUtil().setWidth(24),
+    vertical: AppSpacing.space4,
+    horizontal: AppSpacing.space6,
   );
 
   Widget _divider() =>
@@ -79,7 +79,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
             : null,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+        padding: EdgeInsets.all(AppSpacing.space8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -106,7 +106,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(title ?? "", style: _labelStyle()),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
           EnsAddressDisplay(
             address: address,
             coinType: widget.coinType ?? 'ETH',
@@ -115,7 +115,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
             showCopy: true,
             fontSize: ScreenUtil().setSp(28),
           ),
-          SizedBox(height: ScreenUtil().setWidth(24)),
+          SizedBox(height: AppSpacing.space6),
           _divider(),
         ],
       ),
@@ -130,7 +130,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(title ?? "", style: _labelStyle()),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
           Row(
             children: [
               Expanded(
@@ -159,7 +159,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                 ),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(24)),
+          SizedBox(height: AppSpacing.space6),
           _divider(),
         ],
       ),

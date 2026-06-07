@@ -63,7 +63,7 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
           Row(
             children: [
               RoundRefreshIcon(refreshData: () => initData()),
-              SizedBox(width: ScreenUtil().setWidth(24)),
+              SizedBox(width: AppSpacing.space6),
             ],
           ),
         ],
@@ -84,7 +84,7 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
                         widget.astValue,
                         style: AppTypography.title.copyWith(color: AppColorTokens.of(context).textPrimary),
                       ),
-                      SizedBox(width: ScreenUtil().setWidth(12)),
+                      SizedBox(width: AppSpacing.space4),
                       Text(
                         CoinType.N.name,
                         style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
@@ -92,7 +92,7 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
                     ],
                   ),
 
-                  SizedBox(height: ScreenUtil().setWidth(40)),
+                  SizedBox(height: AppSpacing.space12),
                   Divider(
                     height: 1,
                     endIndent: 1,

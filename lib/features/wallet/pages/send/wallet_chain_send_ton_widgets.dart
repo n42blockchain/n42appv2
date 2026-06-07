@@ -6,7 +6,7 @@ part of 'wallet_chain_send_ton.dart';
 mixin _TonSendWidgetsMixin on _TonSendLogicMixin {
   Widget toWidget() {
     return Container(
-      margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+      margin: EdgeInsets.all(AppSpacing.space8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -16,7 +16,7 @@ mixin _TonSendWidgetsMixin on _TonSendLogicMixin {
               color: AppColorTokens.of(context).textPrimary,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(20.0)),
+          SizedBox(height: AppSpacing.space4),
           textFieldStyle2(
             context,
             controller: toTextEditingController,
@@ -49,7 +49,7 @@ mixin _TonSendWidgetsMixin on _TonSendLogicMixin {
       return const SizedBox.shrink();
     }
     return Container(
-      margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+      margin: EdgeInsets.all(AppSpacing.space8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -59,7 +59,7 @@ mixin _TonSendWidgetsMixin on _TonSendLogicMixin {
               color: AppColorTokens.of(context).textPrimary,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(20.0)),
+          SizedBox(height: AppSpacing.space4),
           textFieldStyle2(
             context,
             controller: noteTextEditingController,
@@ -93,7 +93,7 @@ mixin _TonSendWidgetsMixin on _TonSendLogicMixin {
   Widget amountWidget() {
     return containerStyle1(
       context,
-      margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+      margin: EdgeInsets.all(AppSpacing.space8),
       child: Column(
         children: [
           Padding(
@@ -113,7 +113,7 @@ mixin _TonSendWidgetsMixin on _TonSendLogicMixin {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                SizedBox(width: ScreenUtil().setWidth(20.0)),
+                SizedBox(width: AppSpacing.space4),
                 Expanded(child: amountBalanceWidget()),
               ],
             ),
@@ -170,13 +170,13 @@ mixin _TonSendWidgetsMixin on _TonSendLogicMixin {
                   bgColor: AppColorTokens.of(context).bgSurface,
                   errorMessage: amountErrorMessage,
                   messageMargin: EdgeInsets.symmetric(
-                    horizontal: ScreenUtil().setWidth(30.0),
+                    horizontal: AppSpacing.space8,
                   ),
                   rightWidget1: Container(
                     margin: EdgeInsets.only(left: ScreenUtil().setWidth(10.0)),
                     height: ScreenUtil().setWidth(60.0),
                     padding: EdgeInsets.symmetric(
-                      horizontal: ScreenUtil().setWidth(20.0),
+                      horizontal: AppSpacing.space4,
                     ),
                     decoration: BoxDecoration(
                       color: AppColorTokens.of(context).brand,
@@ -233,8 +233,8 @@ mixin _TonSendWidgetsMixin on _TonSendLogicMixin {
     final addr = dataUtils.addressFarmat(widget.coinModel.address.toString());
     return Container(
       padding: EdgeInsets.symmetric(
-        vertical: ScreenUtil().setWidth(20.0),
-        horizontal: ScreenUtil().setWidth(30.0),
+        vertical: AppSpacing.space4,
+        horizontal: AppSpacing.space8,
       ),
       child: Text(
         addr,
@@ -263,8 +263,8 @@ mixin _TonSendWidgetsMixin on _TonSendLogicMixin {
         if (isContract)
           Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(30.0),
-              vertical: ScreenUtil().setWidth(8.0),
+              horizontal: AppSpacing.space8,
+              vertical: AppSpacing.space2,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

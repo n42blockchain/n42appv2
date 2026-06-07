@@ -23,7 +23,7 @@ class EnsRegistrationSteps extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
         borderRadius: AppRadius.brMd,
@@ -40,7 +40,7 @@ class EnsRegistrationSteps extends StatelessWidget {
               _buildStepCircle(context, 3, S.of(context).g_key_ens_step_3),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           // 步骤标签
           Row(
             children: [
@@ -153,7 +153,7 @@ class EnsRegistrationSteps extends StatelessWidget {
     return Expanded(
       child: Container(
         height: ScreenUtil().setWidth(4),
-        margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(4)),
+        margin: EdgeInsets.symmetric(horizontal: AppSpacing.space2),
         decoration: BoxDecoration(
           color: isActive
               ? Colors.green

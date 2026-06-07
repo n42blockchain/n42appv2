@@ -185,7 +185,7 @@ extension _HardwareWalletPageLogic on _HardwareWalletPageState {
 
   Widget _buildSupportedDevicesInfo(BuildContext context, S s) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
         borderRadius: AppRadius.brMd,
@@ -200,20 +200,20 @@ extension _HardwareWalletPageLogic on _HardwareWalletPageState {
               color: AppColorTokens.of(context).textPrimary,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           // Ledger 设备
           _buildDeviceInfoRow(context, 'Ledger Nano X', 'Bluetooth'),
           _buildDeviceInfoRow(context, 'Ledger Nano S Plus', 'Bluetooth'),
           _buildDeviceInfoRow(context, 'Ledger Stax', 'Bluetooth'),
-          SizedBox(height: ScreenUtil().setWidth(8)),
+          SizedBox(height: AppSpacing.space2),
           // Trezor 设备
           _buildDeviceInfoRow(context, 'Trezor Model T', 'USB'),
           _buildDeviceInfoRow(context, 'Trezor One', 'USB'),
-          SizedBox(height: ScreenUtil().setWidth(8)),
+          SizedBox(height: AppSpacing.space2),
           // Keystone 设备
           _buildDeviceInfoRow(context, 'Keystone Essential', 'QR (Air-gap)'),
           _buildDeviceInfoRow(context, 'Keystone Pro', 'QR (Air-gap)'),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -222,7 +222,7 @@ extension _HardwareWalletPageLogic on _HardwareWalletPageState {
                 color: AppColorTokens.of(context).textSubtitle,
                 size: ScreenUtil().setWidth(28),
               ),
-              SizedBox(width: ScreenUtil().setWidth(8)),
+              SizedBox(width: AppSpacing.space2),
               Expanded(
                 child: Text(
                   s.g_key_hw_ble_hint,
@@ -252,7 +252,7 @@ extension _HardwareWalletPageLogic on _HardwareWalletPageState {
             color: Colors.green,
             size: ScreenUtil().setWidth(24),
           ),
-          SizedBox(width: ScreenUtil().setWidth(8)),
+          SizedBox(width: AppSpacing.space2),
           Text(
             name,
             style: AppTypography.bodySm.copyWith(
@@ -262,8 +262,8 @@ extension _HardwareWalletPageLogic on _HardwareWalletPageState {
           const Spacer(),
           Container(
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(10),
-              vertical: ScreenUtil().setWidth(4),
+              horizontal: AppSpacing.space2,
+              vertical: AppSpacing.space2,
             ),
             decoration: BoxDecoration(
               color: AppColorTokens.of(context).brand.withAlpha(30),

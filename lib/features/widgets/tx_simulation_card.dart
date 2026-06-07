@@ -78,8 +78,8 @@ class _SimulatingCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30),
-        vertical: ScreenUtil().setWidth(10),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space2,
       ),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
@@ -100,8 +100,8 @@ class _SimulatingCard extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(20),
-              vertical: ScreenUtil().setWidth(12),
+              horizontal: AppSpacing.space4,
+              vertical: AppSpacing.space4,
             ),
             child: Row(
               children: [
@@ -115,7 +115,7 @@ class _SimulatingCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(width: ScreenUtil().setWidth(12)),
+                SizedBox(width: AppSpacing.space4),
                 Expanded(
                   child: Text(
                     label,
@@ -158,8 +158,8 @@ class _StatusCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30),
-        vertical: ScreenUtil().setWidth(10),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space2,
       ),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
@@ -168,8 +168,8 @@ class _StatusCard extends StatelessWidget {
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(20),
-          vertical: ScreenUtil().setWidth(14),
+          horizontal: AppSpacing.space4,
+          vertical: AppSpacing.space4,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -179,7 +179,7 @@ class _StatusCard extends StatelessWidget {
             Row(
               children: [
                 Icon(icon, size: ScreenUtil().setWidth(32), color: color),
-                SizedBox(width: ScreenUtil().setWidth(10)),
+                SizedBox(width: AppSpacing.space2),
                 Expanded(
                   child: Text(
                     label,
@@ -194,7 +194,7 @@ class _StatusCard extends StatelessWidget {
 
             // ── Detail row (gas estimate / revert reason) ─────────────────
             if (detail != null) ...[
-              SizedBox(height: ScreenUtil().setWidth(8)),
+              SizedBox(height: AppSpacing.space2),
               Padding(
                 padding: EdgeInsets.only(left: ScreenUtil().setWidth(42)),
                 child: detailSelectable

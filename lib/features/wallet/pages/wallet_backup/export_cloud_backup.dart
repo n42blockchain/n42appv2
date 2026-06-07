@@ -151,21 +151,21 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
   Widget _buildBody(List<WalletInfo> wallets) {
     return SingleChildScrollView(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30),
-        vertical: ScreenUtil().setWidth(20),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space4,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // 警告
           _buildWarningBanner(),
-          SizedBox(height: ScreenUtil().setWidth(30)),
+          SizedBox(height: AppSpacing.space8),
 
           // 钱包列表选择
           _label('Select Wallets to Backup'),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           ...List.generate(wallets.length, (i) => _walletTile(wallets[i], i)),
-          SizedBox(height: ScreenUtil().setWidth(30)),
+          SizedBox(height: AppSpacing.space8),
 
           // 密码
           _label('Backup Password'),
@@ -184,7 +184,7 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
           // 错误
           if (_error.isNotEmpty) ...[
             Container(
-              padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+              padding: EdgeInsets.all(AppSpacing.space4),
               decoration: BoxDecoration(
                 color: AppColorTokens.of(context).dangerBg,
                 borderRadius: AppRadius.brSm,
@@ -196,7 +196,7 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
                 ),
               ),
             ),
-            SizedBox(height: ScreenUtil().setWidth(16)),
+            SizedBox(height: AppSpacing.space4),
           ],
 
           SizedBox(height: ScreenUtil().setWidth(160)),
@@ -206,7 +206,7 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
   }
 
   Widget _buildWarningBanner() => Container(
-    padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+    padding: EdgeInsets.all(AppSpacing.space6),
     decoration: BoxDecoration(
       color: const Color(0xFFFFF3CD),
       borderRadius: AppRadius.brMd,
@@ -220,7 +220,7 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
           color: Color(0xFFD4A017),
           size: 20,
         ),
-        SizedBox(width: ScreenUtil().setWidth(12)),
+        SizedBox(width: AppSpacing.space4),
         Expanded(
           child: Text(
             'This backup contains your private keys / mnemonics. '
@@ -250,8 +250,8 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
       context,
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(16)),
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(20),
-        vertical: ScreenUtil().setWidth(16),
+        horizontal: AppSpacing.space4,
+        vertical: AppSpacing.space4,
       ),
       child: Row(
         children: [
@@ -269,7 +269,7 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
               color: AppColorTokens.of(context).brand,
             ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(16)),
+          SizedBox(width: AppSpacing.space4),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -307,8 +307,8 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
   }) => containerStyle1(
     context,
     height: ScreenUtil().setWidth(120),
-    padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
-    margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
+    padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
+    margin: EdgeInsets.symmetric(vertical: AppSpacing.space4),
     child: CommInput(
       type: InputFieldType.password,
       hintText: hintText,
@@ -334,7 +334,7 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
     children: [
       Divider(height: ScreenUtil().setWidth(1)),
       Container(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+        padding: EdgeInsets.all(AppSpacing.space8),
         height: ScreenUtil().setWidth(148),
         width: double.infinity,
         color: AppColorTokens.of(context).bgBase,

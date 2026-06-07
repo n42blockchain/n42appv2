@@ -65,8 +65,8 @@ class _WalletListState extends ConsumerState<WalletList>
     final tags = _cachedTags;
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30),
-        vertical: ScreenUtil().setWidth(8),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space2,
       ),
       child: SizedBox(
         height: 34,

@@ -251,7 +251,7 @@ extension _WalletCoinAddAllImportFormUI on _WalletCoinAddAllState {
 
   Widget decimalWidget() {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(30.0)),
+      margin: EdgeInsets.symmetric(vertical: AppSpacing.space8),
       child: _formField(
         label: S.of(context).g_token_m_key_8,
         controller: decimalEditingController,

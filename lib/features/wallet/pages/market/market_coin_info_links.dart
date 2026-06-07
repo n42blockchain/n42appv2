@@ -56,11 +56,11 @@ Widget buildLinksSection(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         coinInfoSectionTitle(context, S.of(context).g_key_m_8),
-        SizedBox(height: ScreenUtil().setWidth(16)),
+        SizedBox(height: AppSpacing.space4),
         Container(
           padding: EdgeInsets.symmetric(
-            horizontal: ScreenUtil().setWidth(30),
-            vertical: ScreenUtil().setWidth(10),
+            horizontal: AppSpacing.space8,
+            vertical: AppSpacing.space2,
           ),
           decoration: BoxDecoration(
             color: AppColorTokens.of(context).bgSurface,
@@ -96,7 +96,7 @@ Widget _buildLinkRow(
             width: ScreenUtil().setWidth(40),
             color: AppColorTokens.of(context).textSubtitle,
           ),
-          SizedBox(width: ScreenUtil().setWidth(30)),
+          SizedBox(width: AppSpacing.space8),
           Expanded(
             child: Text(
               item.label,
@@ -131,7 +131,7 @@ Widget _buildBrowserRows(
               width: ScreenUtil().setWidth(40),
               color: AppColorTokens.of(context).textSubtitle,
             ),
-            SizedBox(width: ScreenUtil().setWidth(30)),
+            SizedBox(width: AppSpacing.space8),
             Expanded(
               child: Text(
                 S.of(context).g_key_m_15,

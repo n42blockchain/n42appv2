@@ -1,6 +1,5 @@
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TaskItem extends StatelessWidget {
   final String? taskId;
@@ -19,8 +18,8 @@ class TaskItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final textStyle = AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).textPrimary);
     return Container(
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(24)),
-      margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(8)),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space6),
+      margin: EdgeInsets.symmetric(vertical: AppSpacing.space2),
       child: Row(
         children: [
           Expanded(

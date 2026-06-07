@@ -3,7 +3,6 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:flutter/material.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// 账号输入 密码输入
 enum InputFieldType { account, password }
@@ -86,7 +85,7 @@ class _CommInputState extends State<CommInput> {
               ),
               contentPadding:
                   widget.contentPadding ??
-                  EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(24)),
+                  EdgeInsets.symmetric(horizontal: AppSpacing.space6),
             ),
             style:
                 widget.style ??

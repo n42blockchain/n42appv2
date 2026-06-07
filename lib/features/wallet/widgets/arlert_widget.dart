@@ -24,8 +24,8 @@ Future<void> alertWidget(BuildContext context) async {
               ),
               Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(60),
-                  vertical: ScreenUtil().setWidth(40),
+                  horizontal: AppSpacing.space16,
+                  vertical: AppSpacing.space12,
                 ),
                 child: Image.asset(
                   "assets/home/swap/medal.png",
@@ -42,7 +42,7 @@ Future<void> alertWidget(BuildContext context) async {
                 maxLines: 2,
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: ScreenUtil().setWidth(40)),
+              SizedBox(height: AppSpacing.space12),
               InkWell(
                 onTap: () {
                   Navigator.pop(context);
@@ -56,7 +56,7 @@ Future<void> alertWidget(BuildContext context) async {
                     borderRadius: AppRadius.brSm,
                   ),
                   margin: EdgeInsets.symmetric(
-                    horizontal: ScreenUtil().setWidth(30),
+                    horizontal: AppSpacing.space8,
                   ),
                   height: ScreenUtil().setWidth(88),
                   width: double.infinity,

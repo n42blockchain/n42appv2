@@ -40,7 +40,7 @@ class SessionKeyCard extends StatelessWidget {
 
     return Container(
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(16)),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
         borderRadius: AppRadius.brMd,
@@ -52,16 +52,16 @@ class SessionKeyCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildHeader(context, permColor),
-          SizedBox(height: ScreenUtil().setWidth(14)),
+          SizedBox(height: AppSpacing.space4),
           _buildAddressRow(context),
-          SizedBox(height: ScreenUtil().setWidth(14)),
+          SizedBox(height: AppSpacing.space4),
           _buildChipsRow(context, permColor),
           if (keyData.spendingLimit != null && keyData.isActive) ...[
-            SizedBox(height: ScreenUtil().setWidth(14)),
+            SizedBox(height: AppSpacing.space4),
             _buildSpendingProgress(context),
           ],
           if (showActions && keyData.isActive) ...[
-            SizedBox(height: ScreenUtil().setWidth(14)),
+            SizedBox(height: AppSpacing.space4),
             _buildActionButtons(context),
           ],
         ],
@@ -75,7 +75,7 @@ class SessionKeyCard extends StatelessWidget {
     return Row(
       children: [
         _buildDappIcon(permColor),
-        SizedBox(width: ScreenUtil().setWidth(14)),
+        SizedBox(width: AppSpacing.space4),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -135,8 +135,8 @@ class SessionKeyCard extends StatelessWidget {
     final color = sessionKeyStatusColor(keyData.status);
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(12),
-        vertical: ScreenUtil().setWidth(6),
+        horizontal: AppSpacing.space4,
+        vertical: AppSpacing.space2,
       ),
       decoration: BoxDecoration(
         color: color.withAlpha(20),
@@ -167,8 +167,8 @@ class SessionKeyCard extends StatelessWidget {
       },
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(12),
-          vertical: ScreenUtil().setWidth(8),
+          horizontal: AppSpacing.space4,
+          vertical: AppSpacing.space2,
         ),
         decoration: BoxDecoration(
           color: AppColorTokens.of(context).bgBase.withAlpha(100),
@@ -182,7 +182,7 @@ class SessionKeyCard extends StatelessWidget {
               size: ScreenUtil().setWidth(16),
               color: subtitleColor,
             ),
-            SizedBox(width: ScreenUtil().setWidth(8)),
+            SizedBox(width: AppSpacing.space2),
             Text(
               keyData.shortAddress,
               style: TextStyle(
@@ -191,7 +191,7 @@ class SessionKeyCard extends StatelessWidget {
                 color: AppColorTokens.of(context).textPrimary,
               ),
             ),
-            SizedBox(width: ScreenUtil().setWidth(6)),
+            SizedBox(width: AppSpacing.space2),
             Icon(
               Icons.copy,
               size: ScreenUtil().setWidth(14),
@@ -247,8 +247,8 @@ class SessionKeyCard extends StatelessWidget {
     final chipColor = color ?? AppColorTokens.of(context).textSubtitle;
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(10),
-        vertical: ScreenUtil().setWidth(4),
+        horizontal: AppSpacing.space2,
+        vertical: AppSpacing.space2,
       ),
       decoration: BoxDecoration(
         color: chipColor.withAlpha(15),
@@ -258,7 +258,7 @@ class SessionKeyCard extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, size: ScreenUtil().setWidth(14), color: chipColor),
-          SizedBox(width: ScreenUtil().setWidth(4)),
+          SizedBox(width: AppSpacing.space2),
           Text(
             label,
             style: AppTypography.captionSm.copyWith(color: chipColor),
@@ -295,7 +295,7 @@ class SessionKeyCard extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(height: ScreenUtil().setWidth(8)),
+        SizedBox(height: AppSpacing.space2),
         ClipRRect(
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(4)),
           child: LinearProgressIndicator(
@@ -328,7 +328,7 @@ class SessionKeyCard extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(width: ScreenUtil().setWidth(12)),
+        SizedBox(width: AppSpacing.space4),
         Expanded(
           child: OutlinedButton.icon(
             onPressed: () => _confirmRevoke(context),
