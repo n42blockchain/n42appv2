@@ -47,8 +47,7 @@ class EnsRegistrationSteps extends StatelessWidget {
               Expanded(
                 child: Text(
                   S.of(context).g_key_ens_commit,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(22),
+                  style: AppTypography.caption.copyWith(
                     color: _getStepColor(context, 1),
                     fontWeight: currentStep == 1
                         ? FontWeight.w600
@@ -60,8 +59,7 @@ class EnsRegistrationSteps extends StatelessWidget {
               Expanded(
                 child: Text(
                   S.of(context).g_key_ens_wait,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(22),
+                  style: AppTypography.caption.copyWith(
                     color: _getStepColor(context, 2),
                     fontWeight: currentStep == 2
                         ? FontWeight.w600
@@ -73,8 +71,7 @@ class EnsRegistrationSteps extends StatelessWidget {
               Expanded(
                 child: Text(
                   S.of(context).g_key_ens_register,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(22),
+                  style: AppTypography.caption.copyWith(
                     color: _getStepColor(context, 3),
                     fontWeight: currentStep == 3
                         ? FontWeight.w600

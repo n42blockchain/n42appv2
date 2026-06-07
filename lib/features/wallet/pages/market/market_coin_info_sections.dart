@@ -68,9 +68,8 @@ Widget buildCoinInfoHeader(
           Expanded(
             child: Text(
               '(${coin['name'] ?? ''})',
-              style: TextStyle(
+              style: AppTypography.captionSm.copyWith(
                 color: _tc(context, AppThemeKeys.itemSubtitleTextColor.name),
-                fontSize: ScreenUtil().setSp(20),
               ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
@@ -120,8 +119,7 @@ Widget buildCoinPriceSection(
         Expanded(
           child: Text(
             '\$${fmtPrice(price)}',
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(44),
+            style: AppTypography.displayLg.copyWith(
               fontWeight: FontWeight.w600,
               color: _tc(context, AppThemeKeys.mainTextColor.name),
             ),
@@ -254,12 +252,8 @@ Widget buildPeriodSelector(
           child: GestureDetector(
             onTap: () => onChanged(i),
             child: Container(
-              margin: EdgeInsets.symmetric(
-                horizontal: AppSpacing.space2,
-              ),
-              padding: EdgeInsets.symmetric(
-                vertical: AppSpacing.space4,
-              ),
+              margin: EdgeInsets.symmetric(horizontal: AppSpacing.space2),
+              padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
               decoration: BoxDecoration(
                 color: _tc(
                   context,
@@ -459,9 +453,7 @@ Widget buildAboutSection(
                       vertical: ScreenUtil().setWidth(15),
                       horizontal: hPad,
                     ),
-                    margin: EdgeInsets.symmetric(
-                      vertical: AppSpacing.space2,
-                    ),
+                    margin: EdgeInsets.symmetric(vertical: AppSpacing.space2),
                     child: Text(
                       s.g_key_m_7,
                       style: TextStyle(

@@ -163,9 +163,8 @@ class DexErrorBanner extends StatelessWidget {
       ),
       child: Text(
         message,
-        style: TextStyle(
+        style: AppTypography.bodySm.copyWith(
           color: _dexColor(context, AppThemeKeys.errorTextColor),
-          fontSize: ScreenUtil().setSp(26),
         ),
         textAlign: TextAlign.center,
       ),
