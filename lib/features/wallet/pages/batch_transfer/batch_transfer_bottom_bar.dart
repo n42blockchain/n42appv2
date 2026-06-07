@@ -80,10 +80,7 @@ class BatchBottomBar extends StatelessWidget {
                 ),
                 child: Text(
                   provider.errorMessage!,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(22),
-                    color: Colors.red,
-                  ),
+                  style: AppTypography.caption.copyWith(color: Colors.red),
                 ),
               ),
               SizedBox(height: ScreenUtil().setWidth(12)),
@@ -132,10 +129,7 @@ class BatchBottomBar extends StatelessWidget {
       children: [
         Text(
           label,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(24),
-            color: AppColorTokens.of(context).textSubtitle,
-          ),
+          style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
         ),
         Text(
           value,

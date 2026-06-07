@@ -207,10 +207,7 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
       children: [
         Text(
           'Type',
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(22),
-            color: AppColorTokens.of(context).textSubtitle,
-          ),
+          style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
         ),
         SizedBox(height: ScreenUtil().setWidth(8)),
         Wrap(
@@ -222,10 +219,7 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
               selected: isSelected,
               onSelected: (_) => setState(() => _selectedType = type),
               selectedColor: const Color(0xFFFF9800),
-              labelStyle: TextStyle(
-                color: isSelected ? Colors.white : null,
-                fontSize: ScreenUtil().setSp(22),
-              ),
+              labelStyle: AppTypography.caption.copyWith(color: isSelected ? Colors.white : null),
             );
           }).toList(),
         ),

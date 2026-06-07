@@ -76,18 +76,12 @@ class _DexSwapConfirmState extends State<DexSwapConfirm> {
         children: [
           Text(
             label,
-            style: TextStyle(
-              color: AppColorTokens.of(context).textSubtitle,
-              fontSize: ScreenUtil().setSp(28),
-            ),
+            style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle),
           ),
           const Spacer(),
           Text(
             value,
-            style: TextStyle(
-              color: AppColorTokens.of(context).textPrimary,
-              fontSize: ScreenUtil().setSp(28),
-            ),
+            style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
           ),
         ],
       ),
@@ -109,10 +103,7 @@ class _DexSwapConfirmState extends State<DexSwapConfirm> {
             child: Text(
               S.of(context).g_key_dex_price_impact,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                color: AppColorTokens.of(context).textSubtitle,
-                fontSize: ScreenUtil().setSp(28),
-              ),
+              style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle),
             ),
           ),
           const Spacer(),

@@ -15,6 +15,7 @@ import 'package:n42_wallet/features/widgets/container_widget.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
 import 'package:n42_wallet/features/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -128,10 +129,7 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
               child: Center(
                 child: Text(
                   S.of(context).g_key_115,
-                  style: TextStyle(
-                    color: _themeColor(AppThemeKeys.mainBlueColor),
-                    fontSize: ScreenUtil().setSp(30.0),
-                  ),
+                  style: AppTypography.body.copyWith(color: _themeColor(AppThemeKeys.mainBlueColor)),
                 ),
               ),
             ),
@@ -155,10 +153,7 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
           const SizedBox(height: 18),
           Text(
             S.of(context).address_Information,
-            style: TextStyle(
-              color: _themeColor(AppThemeKeys.mainTextColor),
-              fontSize: ScreenUtil().setSp(28.0),
-            ),
+            style: AppTypography.body.copyWith(color: _themeColor(AppThemeKeys.mainTextColor)),
           ),
           const SizedBox(height: 10),
           _buildAddressView(context),
@@ -303,10 +298,7 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
         ),
         child: Text(
           S.of(context).g_key_166,
-          style: TextStyle(
-            color: _themeColor(AppThemeKeys.mainWhiteColor),
-            fontSize: ScreenUtil().setSp(26.0),
-          ),
+          style: AppTypography.bodySm.copyWith(color: _themeColor(AppThemeKeys.mainWhiteColor)),
         ),
       ),
       rightOnTap2: () async {

@@ -221,10 +221,7 @@ class _PresetCard extends StatelessWidget {
             Expanded(
               child: Text(
                 S.of(context).g_key_aa_session_risk_warning,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(20),
-                  color: Colors.red,
-                ),
+                style: AppTypography.captionSm.copyWith(color: Colors.red),
               ),
             ),
           ],
@@ -249,10 +246,7 @@ class _PresetCard extends StatelessWidget {
           Expanded(
             child: Text(
               text,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
-                color: AppColorTokens.of(context).textSubtitle,
-              ),
+              style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
             ),
           ),
         ],

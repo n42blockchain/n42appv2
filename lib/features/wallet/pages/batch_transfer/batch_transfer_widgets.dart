@@ -49,10 +49,7 @@ class BatchInfoCard extends StatelessWidget {
                 SizedBox(height: ScreenUtil().setWidth(4)),
                 Text(
                   '${S.of(context).g_key_batch_evm_only.split(' ').take(3).join(' ')} · $chainSymbol',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24),
-                    color: AppColorTokens.of(context).textSubtitle,
-                  ),
+                  style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
                 ),
               ],
             ),

@@ -230,10 +230,7 @@ mixin _MiningFullNodeV2WidgetsMixin
                           Flexible(
                             child: Text(
                               errTips ?? '',
-                              style: TextStyle(
-                                color: const Color(0xFFEB5851),
-                                fontSize: ScreenUtil().setSp(22),
-                              ),
+                              style: AppTypography.caption.copyWith(color: const Color(0xFFEB5851)),
                             ),
                           ),
                         ],

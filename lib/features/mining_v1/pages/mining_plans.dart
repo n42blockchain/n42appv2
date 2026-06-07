@@ -47,10 +47,7 @@ class _MiningPlansState extends State<MiningPlans> {
             GestureDetector(
               child: Text(
                 S.of(context).g_mining_key_52,
-                style: TextStyle(
-                  color: AppColorTokens.of(context).brand,
-                  fontSize: ScreenUtil().setSp(30),
-                ),
+                style: AppTypography.body.copyWith(color: AppColorTokens.of(context).brand),
               ),
               onTap: () async {
                 showSKipConfirmDialog(context, () async {});

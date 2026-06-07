@@ -253,10 +253,7 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
                 SizedBox(width: sw(20.0)),
                 Text(
                   label,
-                  style: TextStyle(
-                    color: color,
-                    fontSize: ScreenUtil().setSp(30.0),
-                  ),
+                  style: AppTypography.body.copyWith(color: color),
                 ),
               ],
             ),
@@ -312,10 +309,7 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
             SizedBox(width: sw(20.0)),
             Text(
               label,
-              style: TextStyle(
-                color: _blue,
-                fontSize: ScreenUtil().setSp(30.0),
-              ),
+              style: AppTypography.body.copyWith(color: _blue),
             ),
             if (trailing != null) ...[SizedBox(width: sw(10.0)), trailing],
           ],

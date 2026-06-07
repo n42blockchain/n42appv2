@@ -92,10 +92,7 @@ class _FullNodePageState extends State<FullNodePage>
                           SizedBox(height: ScreenUtil().setWidth(90)),
                           Text(
                             S.current.g_mining_key_38,
-                            style: TextStyle(
-                              color: AppColorTokens.of(context).textPrimary,
-                              fontSize: ScreenUtil().setSp(30),
-                            ),
+                            style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
                           ),
                           SizedBox(height: ScreenUtil().setWidth(30)),
                           _buildPayMethod(
@@ -114,18 +111,12 @@ class _FullNodePageState extends State<FullNodePage>
                           Text(
                             S.of(context).g_mining_key46,
                             textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: AppColorTokens.of(context).textPrimary,
-                              fontSize: ScreenUtil().setSp(26),
-                            ),
+                            style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).textPrimary),
                           ),
                           SizedBox(height: ScreenUtil().setWidth(90)),
                           Text(
                             S.current.g_mining_key_39,
-                            style: TextStyle(
-                              color: AppColorTokens.of(context).textPrimary,
-                              fontSize: ScreenUtil().setSp(30),
-                            ),
+                            style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
                           ),
                           SizedBox(height: ScreenUtil().setWidth(24)),
                           _buildPayMethods(),

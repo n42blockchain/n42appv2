@@ -165,10 +165,7 @@ class _TemplateItem extends StatelessWidget {
                 SizedBox(height: ScreenUtil().setWidth(4)),
                 Text(
                   '${template.operations.length} operations · ${template.chainSymbol}',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(22),
-                    color: AppColorTokens.of(context).textSubtitle,
-                  ),
+                  style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
                 ),
               ],
             ),

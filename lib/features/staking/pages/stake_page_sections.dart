@@ -21,10 +21,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
       child: Center(
         child: Text(
           S.of(context).g_key_stake_no_wallet,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(26),
-            color: AppColorTokens.of(context).textSubtitle,
-          ),
+          style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).textSubtitle),
         ),
       ),
     );
@@ -57,10 +54,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
             RichText(
               textAlign: TextAlign.center,
               text: TextSpan(
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(26),
-                  color: AppColorTokens.of(context).textSubtitle,
-                ),
+                style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).textSubtitle),
                 children: [
                   TextSpan(
                     text: widget.protocol.liquidTokenSymbol,
@@ -116,10 +110,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
                   .g_key_stake_unbonding_warning(
                     widget.protocol.unbondingPeriodDays.toString(),
                   ),
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(24),
-                color: Colors.orange[800],
-              ),
+              style: AppTypography.caption.copyWith(color: Colors.orange[800]),
             ),
           ),
         ],
@@ -153,10 +144,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
         child: Center(
           child: Text(
             S.of(context).g_key_stake_no_active_positions,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(26),
-              color: AppColorTokens.of(context).textSubtitle,
-            ),
+            style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).textSubtitle),
           ),
         ),
       );
@@ -210,10 +198,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
                       SizedBox(height: ScreenUtil().setWidth(4)),
                       Text(
                         '${S.of(context).g_key_stake_staked}: ${_formatBigInt(pos.stakedAmount)} ${widget.protocol.chainSymbol}',
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(24),
-                          color: AppColorTokens.of(context).textSubtitle,
-                        ),
+                        style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
                       ),
                     ],
                   ),

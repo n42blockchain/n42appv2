@@ -41,10 +41,7 @@ class DexChainChips extends StatelessWidget {
           selected: selected,
           selectedColor: btnBg,
           backgroundColor: itemBg,
-          labelStyle: TextStyle(
-            color: selected ? btnText : mainText,
-            fontSize: ScreenUtil().setSp(24),
-          ),
+          labelStyle: AppTypography.caption.copyWith(color: selected ? btnText : mainText),
           onSelected: (_) => onChainChanged(c['value']!),
         );
       }).toList(),
@@ -318,17 +315,11 @@ class DexPriceChart extends StatelessWidget {
           children: [
             Text(
               '\$${chartPrices.reduce((a, b) => a < b ? a : b).toStringAsFixed(2)}',
-              style: TextStyle(
-                color: subText,
-                fontSize: ScreenUtil().setSp(20),
-              ),
+              style: AppTypography.captionSm.copyWith(color: subText),
             ),
             Text(
               '\$${chartPrices.reduce((a, b) => a > b ? a : b).toStringAsFixed(2)}',
-              style: TextStyle(
-                color: subText,
-                fontSize: ScreenUtil().setSp(20),
-              ),
+              style: AppTypography.captionSm.copyWith(color: subText),
             ),
           ],
         ),

@@ -55,10 +55,7 @@ Widget coinInfoSectionTitle(BuildContext context, String title) => Text(
   ),
 );
 
-TextStyle _labelStyle(BuildContext context) => TextStyle(
-  color: AppColorTokens.of(context).textPrimary,
-  fontSize: ScreenUtil().setSp(28),
-);
+TextStyle _labelStyle(BuildContext context) => AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary);
 
 /// A label-value row with accent-colored value text.
 Widget coinInfoStatRow(BuildContext context, String label, String value) {
@@ -116,8 +113,7 @@ Widget pnlStat(String label, String value, Color valueColor, Color labelColor) {
       children: [
         Text(
           label,
-          style: TextStyle(fontSize: ScreenUtil().setSp(20), color: labelColor),
-        ),
+          style: AppTypography.captionSm.copyWith(color: labelColor)),
         SizedBox(height: ScreenUtil().setWidth(4)),
         Text(
           value,

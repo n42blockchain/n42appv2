@@ -27,10 +27,7 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
         alignment: Alignment.center,
         child: Text(
           label,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(26.0),
-            color: _tc(AppThemeKeys.mainWhiteColor.name),
-          ),
+          style: AppTypography.bodySm.copyWith(color: _tc(AppThemeKeys.mainWhiteColor.name)),
         ),
       ),
     );
@@ -43,10 +40,7 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
       alignment: Alignment.centerLeft,
       child: Text(
         message,
-        style: TextStyle(
-          color: _tc(AppThemeKeys.errorTextColor.name),
-          fontSize: ScreenUtil().setSp(24.0),
-        ),
+        style: AppTypography.caption.copyWith(color: _tc(AppThemeKeys.errorTextColor.name)),
       ),
     );
   }
@@ -63,19 +57,13 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
         children: [
           Text(
             'There is no "${widget.coinModel.coin['miniName']}($contract)" added under your account "${widget.coinModel.address}"',
-            style: TextStyle(
-              color: _tc(AppThemeKeys.textColorOrange.name),
-              fontSize: ScreenUtil().setSp(26),
-            ),
+            style: AppTypography.bodySm.copyWith(color: _tc(AppThemeKeys.textColorOrange.name)),
             textAlign: TextAlign.center,
           ),
           SizedBox(height: ScreenUtil().setWidth(30)),
           Text(
             'Adding will consume some absenteeism fees. Click the "Add" button to add.',
-            style: TextStyle(
-              color: _tc(AppThemeKeys.mainTextColor.name),
-              fontSize: ScreenUtil().setSp(26),
-            ),
+            style: AppTypography.bodySm.copyWith(color: _tc(AppThemeKeys.mainTextColor.name)),
             textAlign: TextAlign.center,
           ),
         ],
@@ -94,10 +82,7 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
         children: [
           Text(
             S.of(context).g_key_38,
-            style: TextStyle(
-              color: mainText,
-              fontSize: ScreenUtil().setSp(28.0),
-            ),
+            style: AppTypography.body.copyWith(color: mainText),
           ),
           Container(
             alignment: Alignment.center,
@@ -188,10 +173,7 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
               Flexible(
                 child: Text(
                   S.of(context).g_key_44,
-                  style: TextStyle(
-                    color: mainText,
-                    fontSize: ScreenUtil().setSp(28.0),
-                  ),
+                  style: AppTypography.body.copyWith(color: mainText),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -321,10 +303,7 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
       padding: EdgeInsets.only(top: vPad, bottom: vPad, right: vPad),
       child: Text(
         widget.coinModel.address.toString(),
-        style: TextStyle(
-          color: _tc(AppThemeKeys.itemSubtitleTextColor.name),
-          fontSize: ScreenUtil().setSp(30.0),
-        ),
+        style: AppTypography.body.copyWith(color: _tc(AppThemeKeys.itemSubtitleTextColor.name)),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),
@@ -358,10 +337,7 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
     final double availableBalance =
         (chainModel?.balanceDoubleAll() ?? 0) - minBalance;
 
-    final labelStyle = TextStyle(
-      color: _tc(AppThemeKeys.itemSubtitleTextColor.name),
-      fontSize: ScreenUtil().setSp(28.0),
-    );
+    final labelStyle = AppTypography.body.copyWith(color: _tc(AppThemeKeys.itemSubtitleTextColor.name));
 
     Widget balanceRow(String label, String value, Color valueColor) {
       return Row(

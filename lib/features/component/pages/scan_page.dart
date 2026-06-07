@@ -91,10 +91,7 @@ class _ScanPageState extends State<ScanPage> {
         children: [
           Text(
             S.of(context).g_key_195,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(30.0),
-              color: AppColorTokens.of(context).textPrimary,
-            ),
+            style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
           ),
           SizedBox(height: ScreenUtil().setWidth(36.0)),
           TextButton(
@@ -105,10 +102,7 @@ class _ScanPageState extends State<ScanPage> {
             },
             child: Text(
               S.of(context).g_face_5,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(32.0),
-                color: AppColorTokens.of(context).brand,
-              ),
+              style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).brand),
             ),
           ),
         ],

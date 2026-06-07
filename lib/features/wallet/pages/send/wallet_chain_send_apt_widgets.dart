@@ -15,10 +15,7 @@ mixin _AptSendWidgetsMixin on _AptSendLogicMixin {
         children: [
           Text(
             S.of(context).g_key_38,
-            style: TextStyle(
-              color: AppColorTokens.of(context).textPrimary,
-              fontSize: ScreenUtil().setSp(28.0),
-            ),
+            style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
           ),
           SizedBox(height: ScreenUtil().setWidth(20.0)),
           textFieldStyle2(
@@ -61,10 +58,7 @@ mixin _AptSendWidgetsMixin on _AptSendLogicMixin {
               Flexible(
                 child: Text(
                   S.of(context).g_key_44,
-                  style: TextStyle(
-                    color: AppColorTokens.of(context).textPrimary,
-                    fontSize: ScreenUtil().setSp(28.0),
-                  ),
+                  style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -164,10 +158,7 @@ mixin _AptSendWidgetsMixin on _AptSendLogicMixin {
     final String unit = widget.coinModel.coin['unit'].toString().toUpperCase();
     return Text(
       '${widget.coinModel.balanceStringAll()} $unit',
-      style: TextStyle(
-        color: AppColorTokens.of(context).textPrimary,
-        fontSize: ScreenUtil().setSp(28.0),
-      ),
+      style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
       textAlign: TextAlign.right,
@@ -185,10 +176,7 @@ mixin _AptSendWidgetsMixin on _AptSendLogicMixin {
       ),
       child: Text(
         addr,
-        style: TextStyle(
-          color: AppColorTokens.of(context).textSubtitle,
-          fontSize: ScreenUtil().setSp(30.0),
-        ),
+        style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),
@@ -219,10 +207,7 @@ mixin _AptSendWidgetsMixin on _AptSendLogicMixin {
                   child: Text(
                     S.of(context).g_key_29,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: AppColorTokens.of(context).textSubtitle,
-                      fontSize: ScreenUtil().setSp(28.0),
-                    ),
+                    style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle),
                   ),
                 ),
                 Text(
@@ -262,10 +247,7 @@ mixin _AptSendWidgetsMixin on _AptSendLogicMixin {
       ),
       child: Text(
         errorMessage,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(28.0),
-          color: AppColorTokens.of(context).danger,
-        ),
+        style: AppTypography.body.copyWith(color: AppColorTokens.of(context).danger),
       ),
     );
   }

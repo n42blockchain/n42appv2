@@ -118,10 +118,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
               child: Center(
                 child: Text(
                   editStatus ? S.of(context).g_key_115 : S.of(context).Edit,
-                  style: TextStyle(
-                    color: AppColorTokens.of(context).textPrimary,
-                    fontSize: ScreenUtil().setSp(32.0),
-                  ),
+                  style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).textPrimary),
                 ),
               ),
             ),
@@ -221,10 +218,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
             SizedBox(width: ScreenUtil().setWidth(24.0)),
             Text(
               coinName,
-              style: TextStyle(
-                color: AppColorTokens.of(context).textPrimary,
-                fontSize: ScreenUtil().setSp(28.0),
-              ),
+              style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
             ),
             const Spacer(),
             Icon(

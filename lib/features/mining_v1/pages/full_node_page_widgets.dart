@@ -49,10 +49,7 @@ mixin _FullNodePageWidgets on State<FullNodePage> {
             Expanded(
               child: Text(
                 payType,
-                style: TextStyle(
-                  color: AppColorTokens.of(context).textPrimary,
-                  fontSize: ScreenUtil().setSp(30),
-                ),
+                style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
               ),
             ),
             _buildRadioDot(isSelected),
@@ -92,18 +89,12 @@ mixin _FullNodePageWidgets on State<FullNodePage> {
                 children: [
                   Text(
                     payType,
-                    style: TextStyle(
-                      color: AppColorTokens.of(context).textPrimary,
-                      fontSize: ScreenUtil().setSp(30),
-                    ),
+                    style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
                   ),
                   if (!isEnough)
                     Text(
                       errTips ?? '',
-                      style: TextStyle(
-                        color: const Color(0xffEB5851),
-                        fontSize: ScreenUtil().setSp(20),
-                      ),
+                      style: AppTypography.captionSm.copyWith(color: const Color(0xffEB5851)),
                     ),
                 ],
               ),

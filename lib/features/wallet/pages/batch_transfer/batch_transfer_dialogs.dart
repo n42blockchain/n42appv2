@@ -347,8 +347,7 @@ class _ResultRow extends StatelessWidget {
       children: [
         Text(
           '$label:',
-          style: TextStyle(fontSize: ScreenUtil().setSp(24), color: labelColor),
-        ),
+          style: AppTypography.caption.copyWith(color: labelColor)),
         const Spacer(),
         Flexible(
           child: Text(

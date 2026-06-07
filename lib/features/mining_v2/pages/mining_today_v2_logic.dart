@@ -132,10 +132,7 @@ mixin _MiningTodayV2LogicMixin on ConsumerState<MiningTodayV2> {
                                 wInfo.isMainWallet
                                     ? S.of(context).g_key_14
                                     : S.of(context).g_key_6,
-                                style: TextStyle(
-                                  color: walletColor,
-                                  fontSize: ScreenUtil().setSp(36.0),
-                                ),
+                                style: AppTypography.title.copyWith(color: walletColor),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                               ),
@@ -144,10 +141,7 @@ mixin _MiningTodayV2LogicMixin on ConsumerState<MiningTodayV2> {
                             Flexible(
                               child: Text(
                                 wInfo.name,
-                                style: TextStyle(
-                                  color: walletColor,
-                                  fontSize: ScreenUtil().setSp(36.0),
-                                ),
+                                style: AppTypography.title.copyWith(color: walletColor),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                               ),

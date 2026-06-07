@@ -31,8 +31,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
         children: [
           Text(
             S.of(context).g_key_75,
-            style: TextStyle(fontSize: ScreenUtil().setSp(24), color: _subText),
-          ),
+            style: AppTypography.caption.copyWith(color: _subText)),
           SizedBox(height: ScreenUtil().setWidth(10)),
           Row(
             children: [
@@ -160,10 +159,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
                     child: Text(
                       '${S.of(context).g_key_43}: 1.5 $selectedToken',
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(22),
-                        color: _subText,
-                      ),
+                      style: AppTypography.caption.copyWith(color: _subText),
                     ),
                   ),
                   TextButton(
@@ -295,10 +291,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
                     Flexible(
                       child: Text(
                         S.of(context).g_key_aa_estimated_gas,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(24),
-                          color: _subText,
-                        ),
+                        style: AppTypography.caption.copyWith(color: _subText),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
@@ -340,8 +333,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
     }
     return Text(
       '-',
-      style: TextStyle(fontSize: ScreenUtil().setSp(26), color: _subText),
-    );
+      style: AppTypography.bodySm.copyWith(color: _subText));
   }
 
   // ─── Send Button ────────────────────────────────────────────────────

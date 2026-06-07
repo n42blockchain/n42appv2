@@ -37,10 +37,7 @@ mixin _MiningTodayV2WidgetsMixin
                       if (!AppConfig.isMainChainMining)
                         Text(
                           S.of(context).g_key_147,
-                          style: TextStyle(
-                            color: blueColor,
-                            fontSize: ScreenUtil().setSp(20),
-                          ),
+                          style: AppTypography.captionSm.copyWith(color: blueColor),
                         ),
                     ],
                   ),
@@ -93,10 +90,7 @@ mixin _MiningTodayV2WidgetsMixin
       ),
       child: Text(
         S.of(context).g_mining_key_74,
-        style: TextStyle(
-          color: AppColorTokens.of(context).danger,
-          fontSize: ScreenUtil().setSp(26),
-        ),
+        style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).danger),
         textAlign: TextAlign.center,
       ),
     );
@@ -205,10 +199,7 @@ mixin _MiningTodayV2WidgetsMixin
             children: [
               Text(
                 S.of(context).g_key_29,
-                style: TextStyle(
-                  color: Colors.white.withAlpha(140),
-                  fontSize: ScreenUtil().setSp(20),
-                ),
+                style: AppTypography.captionSm.copyWith(color: Colors.white.withAlpha(140)),
               ),
               SizedBox(height: ScreenUtil().setWidth(4)),
               Text(
@@ -353,10 +344,7 @@ mixin _MiningTodayV2WidgetsMixin
       width: double.infinity,
       child: Text(
         text,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(24),
-          color: AppColorTokens.of(context).warning,
-        ),
+        style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).warning),
       ),
     );
   }

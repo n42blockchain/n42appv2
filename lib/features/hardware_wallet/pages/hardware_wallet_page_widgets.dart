@@ -66,10 +66,7 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
                       SizedBox(height: ScreenUtil().setWidth(4)),
                       Text(
                         device.typeDisplayName,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(26),
-                          color: Colors.white70,
-                        ),
+                        style: AppTypography.bodySm.copyWith(color: Colors.white70),
                       ),
                     ],
                   ],
@@ -157,10 +154,7 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
             Flexible(
               child: Text(
                 label,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(22),
-                  color: Colors.white,
-                ),
+                style: AppTypography.caption.copyWith(color: Colors.white),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -258,10 +252,7 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
                 SizedBox(height: ScreenUtil().setWidth(4)),
                 Text(
                   device.typeDisplayName,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24),
-                    color: subtitleColor,
-                  ),
+                  style: AppTypography.caption.copyWith(color: subtitleColor),
                 ),
                 if (device.lastConnectedAt != null) ...[
                   SizedBox(height: ScreenUtil().setWidth(4)),
@@ -269,10 +260,7 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
                     s.g_key_hw_last_connected(
                       _formatDate(context, s, device.lastConnectedAt!),
                     ),
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(22),
-                      color: subtitleColor,
-                    ),
+                    style: AppTypography.caption.copyWith(color: subtitleColor),
                   ),
                 ],
               ],

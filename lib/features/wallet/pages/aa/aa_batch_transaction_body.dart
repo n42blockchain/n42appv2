@@ -395,10 +395,7 @@ class AABatchTransactionBody extends StatelessWidget {
         Expanded(
           child: Text(
             estimateError!,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(20),
-              color: Colors.orange,
-            ),
+            style: AppTypography.captionSm.copyWith(color: Colors.orange),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),

@@ -71,10 +71,7 @@ class ContractSecurityCard extends StatelessWidget {
             child: Text(
               S.of(context).g_key_security_goplus_checking,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(24),
-                color: AppColorTokens.of(context).textSubtitle,
-              ),
+              style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
             ),
           ),
         ],
@@ -140,10 +137,7 @@ class ContractSecurityCard extends StatelessWidget {
                 child: Text(
                   S.of(context).g_key_security_goplus_powered_by,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(20),
-                    color: AppColorTokens.of(context).textSubtitle,
-                  ),
+                  style: AppTypography.captionSm.copyWith(color: AppColorTokens.of(context).textSubtitle),
                 ),
               ),
             ],

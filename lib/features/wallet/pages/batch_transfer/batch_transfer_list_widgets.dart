@@ -60,10 +60,7 @@ class BatchTransferList extends StatelessWidget {
           SizedBox(height: ScreenUtil().setWidth(16)),
           Text(
             S.of(context).g_key_batch_recipients,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
-              color: AppColorTokens.of(context).textSubtitle,
-            ),
+            style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle),
           ),
           SizedBox(height: ScreenUtil().setWidth(8)),
           TextButton.icon(
@@ -166,10 +163,7 @@ class BatchTransferListItem extends StatelessWidget {
           if (item.memo != null && item.memo!.isNotEmpty)
             Text(
               item.memo!,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
-                color: AppColorTokens.of(context).textSubtitle,
-              ),
+              style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
             ),
         ],
       ),

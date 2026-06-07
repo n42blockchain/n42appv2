@@ -256,7 +256,6 @@ extension _CoinItemWidgets on _WalletSearchCoinState {
         : AppColorTokens.of(context).danger;
     return Text(
       '${percentage.toStringAsFixed(2)}%',
-      style: TextStyle(fontSize: ScreenUtil().setSp(24.0), color: color),
-    );
+      style: AppTypography.caption.copyWith(color: color));
   }
 }

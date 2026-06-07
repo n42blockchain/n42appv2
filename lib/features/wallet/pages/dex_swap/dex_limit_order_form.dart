@@ -295,10 +295,7 @@ class _DexLimitOrderFormState extends State<DexLimitOrderForm> {
               selected: _expiresIn == e.value,
               onSelected: (_) => setState(() => _expiresIn = e.value),
               selectedColor: AppColorTokens.of(context).brand,
-              labelStyle: TextStyle(
-                color: _expiresIn == e.value ? Colors.white : null,
-                fontSize: ScreenUtil().setSp(24),
-              ),
+              labelStyle: AppTypography.caption.copyWith(color: _expiresIn == e.value ? Colors.white : null),
               side: BorderSide.none,
               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               visualDensity: VisualDensity.compact,

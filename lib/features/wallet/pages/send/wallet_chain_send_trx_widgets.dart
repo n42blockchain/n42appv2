@@ -83,10 +83,7 @@ mixin _TrxSendWidgetsMixin on _TrxSendLogicMixin {
             errorMessage: noteErrorMessage,
             suffix: Text(
               "${noteTextEditingController.text.length}/100",
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(20.0),
-                color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
-              ),
+              style: AppTypography.captionSm.copyWith(color: _themeColor(AppThemeKeys.itemSubtitleTextColor)),
             ),
             onEditingComplete: () {
               FocusScope.of(context).requestFocus(toNode);
@@ -183,10 +180,7 @@ mixin _TrxSendWidgetsMixin on _TrxSendLogicMixin {
                     alignment: Alignment.center,
                     child: Text(
                       S.of(context).g_key_197,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(26.0),
-                        color: _themeColor(AppThemeKeys.mainWhiteColor),
-                      ),
+                      style: AppTypography.bodySm.copyWith(color: _themeColor(AppThemeKeys.mainWhiteColor)),
                     ),
                   ),
                   rightOnTap1: maxTag,
@@ -222,10 +216,7 @@ mixin _TrxSendWidgetsMixin on _TrxSendLogicMixin {
       padding: EdgeInsets.symmetric(vertical: sw(20.0), horizontal: sw(30.0)),
       child: Text(
         addr,
-        style: TextStyle(
-          color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
-          fontSize: ScreenUtil().setSp(30.0),
-        ),
+        style: AppTypography.body.copyWith(color: _themeColor(AppThemeKeys.itemSubtitleTextColor)),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),

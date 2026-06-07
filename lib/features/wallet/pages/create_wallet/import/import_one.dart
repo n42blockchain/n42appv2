@@ -169,10 +169,7 @@ class _ImportOneState extends ConsumerState<ImportOne>
                       alignment: Alignment.center,
                       child: Text(
                         S.of(context).g_key_wallet_c7,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(32.0),
-                          color: AppColorTokens.of(context).textPrimary,
-                        ),
+                        style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).textPrimary),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -190,10 +187,7 @@ class _ImportOneState extends ConsumerState<ImportOne>
                         borderRadius: AppRadius.brSm,
                       ),
                       child: TextField(
-                        style: TextStyle(
-                          color: AppColorTokens.of(context).brand,
-                          fontSize: ScreenUtil().setSp(32.0),
-                        ),
+                        style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).brand),
                         controller: inputEditingController,
                         textInputAction: TextInputAction.done,
                         keyboardType: TextInputType.text,
@@ -218,10 +212,7 @@ class _ImportOneState extends ConsumerState<ImportOne>
                       padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
                       child: Text(
                         inputMW,
-                        style: TextStyle(
-                          color: AppColorTokens.of(context).brand,
-                          fontSize: ScreenUtil().setSp(32),
-                        ),
+                        style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).brand),
                       ),
                     ),
                     if (errorMessage.isNotEmpty)
@@ -235,10 +226,7 @@ class _ImportOneState extends ConsumerState<ImportOne>
                         ),
                         child: Text(
                           errorMessage,
-                          style: TextStyle(
-                            color: AppColorTokens.of(context).danger,
-                            fontSize: ScreenUtil().setSp(26),
-                          ),
+                          style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).danger),
                           textAlign: TextAlign.center,
                         ),
                       ),

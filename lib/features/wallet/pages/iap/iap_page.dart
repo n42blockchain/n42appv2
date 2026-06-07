@@ -254,10 +254,7 @@ class _IapPageState extends State<IapPage> {
             SizedBox(height: ScreenUtil().setWidth(12)),
             Text(
               S.of(context).g_iap_check_network,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(24),
-                color: textSecondary,
-              ),
+              style: AppTypography.caption.copyWith(color: textSecondary),
             ),
             SizedBox(height: ScreenUtil().setWidth(40)),
             _RetryButton(onTap: _init),
@@ -282,10 +279,7 @@ class _IapPageState extends State<IapPage> {
             SizedBox(height: ScreenUtil().setWidth(24)),
             Text(
               S.of(context).g_iap_no_products,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(30),
-                color: textSecondary,
-              ),
+              style: AppTypography.body.copyWith(color: textSecondary),
             ),
             SizedBox(height: ScreenUtil().setWidth(40)),
             _RetryButton(onTap: _fetchProducts),
@@ -361,10 +355,7 @@ class _IapPageState extends State<IapPage> {
                   SizedBox(height: ScreenUtil().setWidth(6)),
                   Text(
                     product.description,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(22),
-                      color: textSecondary,
-                    ),
+                    style: AppTypography.caption.copyWith(color: textSecondary),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -414,10 +405,7 @@ class _IapPageState extends State<IapPage> {
                         ),
                         Text(
                           S.of(context).g_iap_title,
-                          style: TextStyle(
-                            fontSize: ScreenUtil().setSp(20),
-                            color: Colors.white.withValues(alpha: 0.85),
-                          ),
+                          style: AppTypography.captionSm.copyWith(color: Colors.white.withValues(alpha: 0.85)),
                         ),
                       ],
                     ),

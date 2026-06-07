@@ -8,6 +8,7 @@ import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/widgets/empty.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -185,10 +186,7 @@ class _WalletCoinTokenAdd2State extends ConsumerState<WalletCoinTokenAdd2> {
         appBar: AppBar(
           title: Text(
             S.of(context).g_key_9,
-            style: TextStyle(
-              color: _themeColor(AppThemeKeys.mainTextColor),
-              fontSize: ScreenUtil().setSp(32.0),
-            ),
+            style: AppTypography.headline.copyWith(color: _themeColor(AppThemeKeys.mainTextColor)),
           ),
           actions: [
             if (load == Load.loading)
@@ -273,10 +271,7 @@ class _WalletCoinTokenAdd2State extends ConsumerState<WalletCoinTokenAdd2> {
               alignment: Alignment.center,
               child: Text(
                 S.of(context).search,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(26.0),
-                  color: _themeColor(AppThemeKeys.mainButtonTextColor),
-                ),
+                style: AppTypography.bodySm.copyWith(color: _themeColor(AppThemeKeys.mainButtonTextColor)),
               ),
             ),
           ),

@@ -82,19 +82,13 @@ class EnsSearchResultView extends StatelessWidget {
           SizedBox(height: ScreenUtil().setWidth(24)),
           Text(
             S.of(context).g_key_ens_search_prompt,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
-              color: subtitleColor,
-            ),
+            style: AppTypography.body.copyWith(color: subtitleColor),
             textAlign: TextAlign.center,
           ),
           SizedBox(height: ScreenUtil().setWidth(16)),
           Text(
             S.of(context).g_key_ens_min_length,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
-              color: subtitleColor.withAlpha(150),
-            ),
+            style: AppTypography.caption.copyWith(color: subtitleColor.withAlpha(150)),
           ),
           SizedBox(height: ScreenUtil().setWidth(40)),
           _buildSuggestions(context),
@@ -145,10 +139,7 @@ class EnsSearchResultView extends StatelessWidget {
                 ),
                 child: Text(
                   '$name.eth',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24),
-                    color: blueColor,
-                  ),
+                  style: AppTypography.caption.copyWith(color: blueColor),
                 ),
               ),
             );

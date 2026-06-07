@@ -119,10 +119,7 @@ class _NewsPageState extends State<NewsPage> {
                   Text(
                     time,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: AppColorTokens.of(context).textSubtitle,
-                      fontSize: ScreenUtil().setSp(20.0),
-                    ),
+                    style: AppTypography.captionSm.copyWith(color: AppColorTokens.of(context).textSubtitle),
                   ),
                 ],
               ),

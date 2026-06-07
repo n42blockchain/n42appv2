@@ -52,10 +52,7 @@ class _MiningSettingState extends State<MiningSetting> {
                     child: Text(
                       //"验证者列表",
                       S.of(context).g_mining_key_81,
-                      style: TextStyle(
-                        color: AppColorTokens.of(context).textItem,
-                        fontSize: ScreenUtil().setSp(32),
-                      ),
+                      style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).textItem),
                     ),
                   ),
                   Icon(

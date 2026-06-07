@@ -60,10 +60,7 @@ Widget buildUsdEquivalent(
     ),
     child: Text(
       '≈ $usdStr',
-      style: TextStyle(
-        fontSize: ScreenUtil().setSp(24),
-        color: AppColorTokens.of(context).textSubtitle,
-      ),
+      style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
     ),
   );
 }
@@ -147,10 +144,7 @@ Future<void> showAddressPickerSheet(
             Expanded(
               child: Text(
                 label,
-                style: TextStyle(
-                  color: blueColor,
-                  fontSize: ScreenUtil().setSp(30),
-                ),
+                style: AppTypography.body.copyWith(color: blueColor),
               ),
             ),
           ],

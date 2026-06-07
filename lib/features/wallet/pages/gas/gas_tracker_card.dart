@@ -41,10 +41,7 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
                 SizedBox(height: ScreenUtil().setWidth(4)),
                 Text(
                   S.of(context).g_key_gas_auto_refresh('15'),
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24),
-                    color: AppColorTokens.of(context).textSubtitle,
-                  ),
+                  style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
                 ),
               ],
             ),
@@ -89,10 +86,7 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
                     ),
                     Text(
                       network.symbol,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(22),
-                        color: subtitleColor,
-                      ),
+                      style: AppTypography.caption.copyWith(color: subtitleColor),
                     ),
                   ],
                 ),
@@ -138,10 +132,7 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
                 ),
                 child: Text(
                   S.of(context).g_key_106,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24),
-                    color: subtitleColor,
-                  ),
+                  style: AppTypography.caption.copyWith(color: subtitleColor),
                 ),
               ),
             ),
@@ -176,10 +167,7 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
               child: Text(
                 S.of(context).g_key_gas_price_trend,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(22),
-                  color: subtitleColor,
-                ),
+                style: AppTypography.caption.copyWith(color: subtitleColor),
               ),
             ),
             const Spacer(),
@@ -237,10 +225,7 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
         children: [
           Text(
             label,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
-              color: AppColorTokens.of(context).textSubtitle,
-            ),
+            style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
           ),
           Container(
             padding: EdgeInsets.symmetric(
@@ -460,10 +445,7 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
       padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(8)),
       child: Text(
         S.of(context).g_key_gas_footer,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(22),
-          color: AppColorTokens.of(context).textSubtitle,
-        ),
+        style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
         textAlign: TextAlign.center,
       ),
     );

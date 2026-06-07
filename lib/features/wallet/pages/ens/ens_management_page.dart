@@ -4,6 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
@@ -271,10 +272,7 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
                 children: [
                   Text(
                     S.of(ctx).g_key_ens_transfer_warning,
-                    style: TextStyle(
-                      color: Colors.orange,
-                      fontSize: ScreenUtil().setSp(24),
-                    ),
+                    style: AppTypography.caption.copyWith(color: Colors.orange),
                   ),
                   SizedBox(height: ScreenUtil().setWidth(16)),
                   TextField(

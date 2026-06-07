@@ -275,10 +275,7 @@ class FeatureEntryHorizontal extends StatelessWidget {
                       alignment: Alignment.centerLeft,
                       child: Text(
                         subtitle,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(20),
-                          color: AppColorTokens.of(context).textSubtitle,
-                        ),
+                        style: AppTypography.captionSm.copyWith(color: AppColorTokens.of(context).textSubtitle),
                       ),
                     ),
                   ],

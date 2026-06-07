@@ -186,10 +186,7 @@ class _CreateMpcWalletState extends ConsumerState<CreateMpcWallet> {
                   ),
                   child: Text(
                     _errorMsg,
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontSize: ScreenUtil().setSp(24),
-                    ),
+                    style: AppTypography.caption.copyWith(color: Colors.red),
                   ),
                 ),
               ],

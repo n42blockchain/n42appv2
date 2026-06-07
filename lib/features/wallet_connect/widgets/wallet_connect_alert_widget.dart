@@ -212,10 +212,7 @@ class _WalletConnectAlertWidgetState
           SizedBox(width: ScreenUtil().setWidth(10)),
           Text(
             widget.metadata.name,
-            style: TextStyle(
-              color: AppColorTokens.of(context).textPrimary,
-              fontSize: ScreenUtil().setSp(28),
-            ),
+            style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
           ),
         ],
       ),
@@ -375,10 +372,7 @@ class _WalletConnectAlertWidgetState
           Expanded(
             child: Text(
               value,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(28),
-                color: AppColorTokens.of(context).textPrimary,
-              ),
+              style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
               maxLines: 5,
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.right,

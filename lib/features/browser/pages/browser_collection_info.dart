@@ -170,10 +170,7 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
             height: ScreenUtil().setWidth(40.0),
             child: Text(
               label,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(28.0),
-                color: AppColorTokens.of(context).textSubtitle,
-              ),
+              style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle),
             ),
           ),
           Container(
@@ -205,10 +202,7 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
           if (errorMessage.isNotEmpty)
             Text(
               errorMessage,
-              style: TextStyle(
-                color: AppColorTokens.of(context).danger,
-                fontSize: ScreenUtil().setSp(24.0),
-              ),
+              style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).danger),
             ),
         ],
       ),

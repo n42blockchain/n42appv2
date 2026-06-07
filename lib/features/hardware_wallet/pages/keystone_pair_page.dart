@@ -86,10 +86,7 @@ class _KeystonePairPageState extends State<KeystonePairPage> {
                         ),
                         child: Text(
                           _error!,
-                          style: TextStyle(
-                            fontSize: ScreenUtil().setSp(24),
-                            color: Colors.white,
-                          ),
+                          style: AppTypography.caption.copyWith(color: Colors.white),
                           textAlign: TextAlign.center,
                         ),
                       ),

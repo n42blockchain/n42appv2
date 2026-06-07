@@ -125,10 +125,7 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
               },
               child: Text(
                 'View all ${portfolio.protocolCount} protocols',
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
-                  color: AppColorTokens.of(context).brand,
-                ),
+                style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).brand),
               ),
             ),
           ),
@@ -248,10 +245,7 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
                     ),
                     Text(
                       protocol.chain.toUpperCase(),
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(20),
-                        color: AppColorTokens.of(context).textSubtitle,
-                      ),
+                      style: AppTypography.captionSm.copyWith(color: AppColorTokens.of(context).textSubtitle),
                     ),
                   ],
                 ),
@@ -303,20 +297,14 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
         children: [
           Text(
             '$prefix ${token.amount.toStringAsFixed(4)} ${token.symbol}',
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(22),
-              color: prefix == '-'
+            style: AppTypography.caption.copyWith(color: prefix == '-'
                   ? const Color(0xFFEF4444)
-                  : AppColorTokens.of(context).textSubtitle,
-            ),
+                  : AppColorTokens.of(context).textSubtitle),
           ),
           const Spacer(),
           Text(
             fmtUsd(token.usdValue),
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(22),
-              color: AppColorTokens.of(context).textSubtitle,
-            ),
+            style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
           ),
         ],
       ),
@@ -337,10 +325,7 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
             SizedBox(height: ScreenUtil().setWidth(12)),
             Text(
               'Loading DeFi positions...',
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(24),
-                color: AppColorTokens.of(context).textSubtitle,
-              ),
+              style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
             ),
           ],
         ),

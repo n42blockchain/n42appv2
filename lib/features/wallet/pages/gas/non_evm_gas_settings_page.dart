@@ -209,16 +209,10 @@ class _NonEvmGasSettingsPageState extends State<NonEvmGasSettingsPage> {
                     controller: _customRateCtrl,
                     keyboardType: TextInputType.number,
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(28),
-                      color: mainText,
-                    ),
+                    style: AppTypography.body.copyWith(color: mainText),
                     decoration: InputDecoration(
                       hintText: S.of(context).g_key_t_43,
-                      hintStyle: TextStyle(
-                        fontSize: ScreenUtil().setSp(26),
-                        color: subtitleText,
-                      ),
+                      hintStyle: AppTypography.bodySm.copyWith(color: subtitleText),
                       border: InputBorder.none,
                       isDense: true,
                       contentPadding: EdgeInsets.zero,
@@ -231,10 +225,7 @@ class _NonEvmGasSettingsPageState extends State<NonEvmGasSettingsPage> {
                 ),
                 Text(
                   feeRateUnit,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24),
-                    color: subtitleText,
-                  ),
+                  style: AppTypography.caption.copyWith(color: subtitleText),
                 ),
               ],
             ),
@@ -243,20 +234,14 @@ class _NonEvmGasSettingsPageState extends State<NonEvmGasSettingsPage> {
             SizedBox(height: ScreenUtil().setWidth(8)),
             Text(
               _customRateError,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(24),
-                color: AppColorTokens.of(context).danger,
-              ),
+              style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).danger),
             ),
           ],
           SizedBox(height: ScreenUtil().setWidth(12)),
           Text(
             '${S.of(context).g_key_t_37}: '
             '${_feeModel.standard.feeRate ?? '-'} $feeRateUnit',
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
-              color: subtitleText,
-            ),
+            style: AppTypography.caption.copyWith(color: subtitleText),
           ),
         ],
       ),

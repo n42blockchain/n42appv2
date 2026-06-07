@@ -126,10 +126,7 @@ extension _WalletCoinAddAllNetworkDialog on _WalletCoinAddAllState {
                 ),
                 Text(
                   nameStr,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(30.0),
-                    color: AppColorTokens.of(context).textSubtitle,
-                  ),
+                  style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle),
                 ),
               ],
             ),

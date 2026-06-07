@@ -165,10 +165,7 @@ class _QrCodeMenu extends StatelessWidget {
           SizedBox(width: ScreenUtil().setWidth(20)),
           Text(
             label,
-            style: TextStyle(
-              color: textColor,
-              fontSize: ScreenUtil().setSp(28),
-            ),
+            style: AppTypography.body.copyWith(color: textColor),
           ),
         ],
       ),

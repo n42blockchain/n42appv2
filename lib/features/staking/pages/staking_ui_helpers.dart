@@ -49,8 +49,7 @@ Widget stakingTag({
     ),
     child: Text(
       label,
-      style: TextStyle(fontSize: ScreenUtil().setSp(22), color: color),
-    ),
+      style: AppTypography.caption.copyWith(color: color)),
   );
 }
 
@@ -75,10 +74,7 @@ Widget stakingStatsCard(BuildContext context, StakingProvider provider) {
       children: [
         Text(
           S.of(context).g_key_stake_overview,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(26),
-            color: Colors.white70,
-          ),
+          style: AppTypography.bodySm.copyWith(color: Colors.white70),
         ),
         SizedBox(height: ScreenUtil().setWidth(16)),
         Row(
@@ -113,10 +109,7 @@ Widget _stakingStatItem(String label, String value) {
       ),
       Text(
         label,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(24),
-          color: Colors.white70,
-        ),
+        style: AppTypography.caption.copyWith(color: Colors.white70),
       ),
     ],
   );
@@ -138,10 +131,7 @@ Widget stakingEmptyPositions(
         SizedBox(height: ScreenUtil().setWidth(20)),
         Text(
           S.of(context).g_key_stake_no_positions_yet,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(30),
-            color: AppColorTokens.of(context).textSubtitle,
-          ),
+          style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle),
         ),
         SizedBox(height: ScreenUtil().setWidth(16)),
         AppButton(

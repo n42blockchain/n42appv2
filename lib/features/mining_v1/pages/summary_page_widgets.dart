@@ -29,10 +29,7 @@ mixin _SummaryPageWidgetsMixin on State<SummaryPage>, _SummaryPageLogicMixin {
             ),
       bottomTitle: BottomTitle(
         titles: getPast7DaysDate(),
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(22),
-          color: AppColorTokens.of(context).textSubtitle,
-        ),
+        style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
         specialStyle: TextStyle(
           fontSize: ScreenUtil().setSp(24),
           color: AppColorTokens.of(context).textItem,

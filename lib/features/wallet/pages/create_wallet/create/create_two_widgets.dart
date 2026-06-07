@@ -41,10 +41,7 @@ mixin _CreateTwoWidgetsMixin on State<CreateTwo> {
             child: Text(
               mnemonicWordsList[index],
               textAlign: TextAlign.center,
-              style: TextStyle(
-                color: _itemTextColor(),
-                fontSize: ScreenUtil().setSp(28.0),
-              ),
+              style: AppTypography.body.copyWith(color: _itemTextColor()),
             ),
           ),
         );
@@ -53,10 +50,7 @@ mixin _CreateTwoWidgetsMixin on State<CreateTwo> {
   }
 
   Widget _buildRevealPlaceholder() {
-    final textStyle = TextStyle(
-      color: _itemTextColor(),
-      fontSize: ScreenUtil().setSp(30),
-    );
+    final textStyle = AppTypography.body.copyWith(color: _itemTextColor());
     return InkWell(
       onTap: () => setState(() => showMnemonic = true),
       child: Container(
@@ -121,10 +115,7 @@ mixin _CreateTwoWidgetsMixin on State<CreateTwo> {
               alignment: Alignment.center,
               child: Text(
                 S.of(context).g_key_wallet_c19,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(26.0),
-                  color: mainTextColor,
-                ),
+                style: AppTypography.bodySm.copyWith(color: mainTextColor),
                 textAlign: TextAlign.center,
               ),
             ),

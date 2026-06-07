@@ -32,10 +32,7 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
         children: [
           Text(
             S.of(context).g_key_38,
-            style: TextStyle(
-              color: AppColorTokens.of(context).textPrimary,
-              fontSize: ScreenUtil().setSp(28.0),
-            ),
+            style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
           ),
           SizedBox(height: ScreenUtil().setWidth(20.0)),
           textFieldStyle2(
@@ -221,10 +218,7 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
         children: [
           Text(
             S.of(context).g_key_send_memo_label,
-            style: TextStyle(
-              color: AppColorTokens.of(context).textPrimary,
-              fontSize: ScreenUtil().setSp(28.0),
-            ),
+            style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
           ),
           SizedBox(height: ScreenUtil().setWidth(20.0)),
           textFieldStyle2(
@@ -266,10 +260,7 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
                   child: Text(
                     S.of(context).g_key_29,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: AppColorTokens.of(context).textSubtitle,
-                      fontSize: ScreenUtil().setSp(28.0),
-                    ),
+                    style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle),
                   ),
                 ),
                 Text(
@@ -313,10 +304,7 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
       ),
       child: Text(
         errorMessage,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(28.0),
-          color: AppColorTokens.of(context).danger,
-        ),
+        style: AppTypography.body.copyWith(color: AppColorTokens.of(context).danger),
       ),
     );
   }

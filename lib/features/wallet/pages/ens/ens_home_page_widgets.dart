@@ -34,10 +34,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
                 child: Text(
                   S.of(context).g_key_aa_chain,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(22),
-                    color: subtitleColor,
-                  ),
+                  style: AppTypography.caption.copyWith(color: subtitleColor),
                 ),
               ),
               const Spacer(),
@@ -192,10 +189,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
                 SizedBox(height: ScreenUtil().setWidth(4)),
                 Text(
                   S.of(context).g_key_ens_description,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24),
-                    color: _themeColor(AppThemeKeys.itemSubtitleTextColor.name),
-                  ),
+                  style: AppTypography.caption.copyWith(color: _themeColor(AppThemeKeys.itemSubtitleTextColor.name)),
                 ),
               ],
             ),
@@ -285,10 +279,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
             SizedBox(height: ScreenUtil().setWidth(4)),
             Text(
               subtitle,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
-                color: _themeColor(AppThemeKeys.itemSubtitleTextColor.name),
-              ),
+              style: AppTypography.caption.copyWith(color: _themeColor(AppThemeKeys.itemSubtitleTextColor.name)),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
@@ -364,10 +355,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
           SizedBox(height: ScreenUtil().setWidth(12)),
           Text(
             errorMessage!,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(26),
-              color: _themeColor(AppThemeKeys.itemSubtitleTextColor.name),
-            ),
+            style: AppTypography.bodySm.copyWith(color: _themeColor(AppThemeKeys.itemSubtitleTextColor.name)),
             textAlign: TextAlign.center,
           ),
           SizedBox(height: ScreenUtil().setWidth(16)),
@@ -412,10 +400,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
             canManageEns
                 ? S.of(context).g_key_ens_get_started
                 : S.of(context).g_key_bridge_chain_not_supported,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
-              color: subtitleColor,
-            ),
+            style: AppTypography.caption.copyWith(color: subtitleColor),
             textAlign: TextAlign.center,
           ),
           SizedBox(height: ScreenUtil().setWidth(20)),

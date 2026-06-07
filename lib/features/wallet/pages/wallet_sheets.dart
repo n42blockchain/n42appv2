@@ -143,10 +143,7 @@ class _WalletAddressList extends StatelessWidget {
                         wInfo.mainWallet
                             ? S.of(context).g_key_14
                             : S.of(context).g_key_6,
-                        style: TextStyle(
-                          color: walletColor,
-                          fontSize: ScreenUtil().setSp(36.0),
-                        ),
+                        style: AppTypography.title.copyWith(color: walletColor),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                       ),
@@ -155,10 +152,7 @@ class _WalletAddressList extends StatelessWidget {
                   Expanded(
                     child: Text(
                       wInfo.walletName!,
-                      style: TextStyle(
-                        color: walletColor,
-                        fontSize: ScreenUtil().setSp(36.0),
-                      ),
+                      style: AppTypography.title.copyWith(color: walletColor),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                     ),
@@ -276,10 +270,7 @@ class _AddTokenMenuItem extends StatelessWidget {
         alignment: Alignment.center,
         child: Text(
           label,
-          style: TextStyle(
-            color: AppColorTokens.of(context).brand,
-            fontSize: ScreenUtil().setSp(32),
-          ),
+          style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).brand),
         ),
       ),
     );
@@ -350,10 +341,7 @@ class BackupReminderBanner extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: Text(
               S.of(context).g_key_wallet_c35,
-              style: TextStyle(
-                color: AppColorTokens.of(context).danger,
-                fontSize: ScreenUtil().setSp(28),
-              ),
+              style: AppTypography.body.copyWith(color: AppColorTokens.of(context).danger),
             ),
           ),
           InkWell(

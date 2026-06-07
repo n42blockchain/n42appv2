@@ -240,10 +240,7 @@ mixin WalletChainInfoXrpActionsMixin<T extends ConsumerStatefulWidget>
             SizedBox(width: ScreenUtil().setWidth(20.0)),
             Text(
               label,
-              style: TextStyle(
-                color: _blue,
-                fontSize: ScreenUtil().setSp(30.0),
-              ),
+              style: AppTypography.body.copyWith(color: _blue),
             ),
           ],
         ),
@@ -260,27 +257,18 @@ mixin WalletChainInfoXrpActionsMixin<T extends ConsumerStatefulWidget>
             children: [
               Text(
                 '$title:',
-                style: TextStyle(
-                  color: AppColorTokens.of(context).textSubtitle,
-                  fontSize: ScreenUtil().setSp(28),
-                ),
+                style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle),
               ),
               Text(
                 value,
-                style: TextStyle(
-                  color: AppColorTokens.of(context).textItem,
-                  fontSize: ScreenUtil().setSp(28),
-                ),
+                style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textItem),
               ),
             ],
           ),
           SizedBox(height: ScreenUtil().setWidth(10)),
           Text(
             description,
-            style: TextStyle(
-              color: AppColorTokens.of(context).textSubtitle,
-              fontSize: ScreenUtil().setSp(28),
-            ),
+            style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle),
           ),
         ],
       ),

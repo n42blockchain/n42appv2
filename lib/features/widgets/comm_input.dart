@@ -91,10 +91,7 @@ class _CommInputState extends State<CommInput> {
             ),
             style:
                 widget.style ??
-                TextStyle(
-                  color: AppColorTokens.of(context).textPrimary,
-                  fontSize: ScreenUtil().setSp(32),
-                ),
+                AppTypography.headline.copyWith(color: AppColorTokens.of(context).textPrimary),
             controller: widget.controller,
             obscureText: obscure,
             keyboardType:

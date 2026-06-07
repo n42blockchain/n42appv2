@@ -252,10 +252,7 @@ class _AAAccountListPageState extends State<AAAccountListPage> {
           SizedBox(height: ScreenUtil().setWidth(20)),
           Text(
             S.of(context).g_key_aa_no_accounts_filter,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
-              color: AppColorTokens.of(context).textSubtitle,
-            ),
+            style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle),
           ),
         ],
       ),

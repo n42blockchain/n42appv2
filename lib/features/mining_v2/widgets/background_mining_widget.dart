@@ -97,12 +97,9 @@ class BackgroundMiningWidget extends StatelessWidget {
             isEnabled
                 ? S.of(context).g_key_mining_available
                 : S.of(context).g_key_mining_requires_staking,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(22),
-              color: isEnabled
+            style: AppTypography.caption.copyWith(color: isEnabled
                   ? AppColorTokens.of(context).brand
-                  : AppColorTokens.of(context).textSubtitle,
-            ),
+                  : AppColorTokens.of(context).textSubtitle),
           ),
         ],
       ),

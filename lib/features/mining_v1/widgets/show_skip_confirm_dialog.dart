@@ -65,10 +65,7 @@ class SkipDialogView extends StatelessWidget {
               textAlign: TextAlign.center,
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                color: AppColorTokens.of(context).textPrimary,
-                fontSize: ScreenUtil().setSp(30),
-              ),
+              style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
             ),
             SizedBox(height: ScreenUtil().setWidth(44)),
             SizedBox(

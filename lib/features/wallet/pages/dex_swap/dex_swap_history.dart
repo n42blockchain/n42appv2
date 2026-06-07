@@ -98,10 +98,7 @@ class _DexSwapHistoryState extends State<DexSwapHistory> {
                       const Spacer(),
                       Text(
                         '+${item.amountOut} ${item.tokenOutSymbol}',
-                        style: TextStyle(
-                          color: AppColorTokens.of(context).textPrimary,
-                          fontSize: ScreenUtil().setSp(28),
-                        ),
+                        style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
                       ),
                     ],
                   ),
@@ -109,10 +106,7 @@ class _DexSwapHistoryState extends State<DexSwapHistory> {
                     children: [
                       Text(
                         timeStr,
-                        style: TextStyle(
-                          color: AppColorTokens.of(context).textSubtitle,
-                          fontSize: ScreenUtil().setSp(24),
-                        ),
+                        style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
                       ),
                       SizedBox(width: ScreenUtil().setWidth(12)),
                       Container(
@@ -128,19 +122,13 @@ class _DexSwapHistoryState extends State<DexSwapHistory> {
                         ),
                         child: Text(
                           item.source,
-                          style: TextStyle(
-                            color: AppColorTokens.of(context).textSubtitle,
-                            fontSize: ScreenUtil().setSp(20),
-                          ),
+                          style: AppTypography.captionSm.copyWith(color: AppColorTokens.of(context).textSubtitle),
                         ),
                       ),
                       const Spacer(),
                       Text(
                         _statusText(context, item.status),
-                        style: TextStyle(
-                          color: statusColor,
-                          fontSize: ScreenUtil().setSp(24),
-                        ),
+                        style: AppTypography.caption.copyWith(color: statusColor),
                       ),
                     ],
                   ),

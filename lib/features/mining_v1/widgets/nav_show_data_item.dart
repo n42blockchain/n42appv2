@@ -35,10 +35,7 @@ class NavShowDataItem extends StatelessWidget {
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.end,
-              style: TextStyle(
-                color: AppColorTokens.of(context).textPrimary,
-                fontSize: ScreenUtil().setSp(30),
-              ),
+              style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
             ),
           ),
         ],

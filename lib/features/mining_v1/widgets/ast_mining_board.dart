@@ -58,10 +58,7 @@ class ASTMiningBoard extends StatelessWidget {
                 children: [
                   Text(
                     levelText,
-                    style: TextStyle(
-                      color: AppColorTokens.of(context).textPrimary,
-                      fontSize: ScreenUtil().setSp(32),
-                    ),
+                    style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).textPrimary),
                   ),
                   SizedBox(height: ScreenUtil().setWidth(40)),
                   Row(
@@ -103,10 +100,7 @@ class ASTMiningBoard extends StatelessWidget {
                       Expanded(
                         child: Text(
                           S.current.g_mining_key_32,
-                          style: TextStyle(
-                            color: AppColorTokens.of(context).textPrimary,
-                            fontSize: ScreenUtil().setSp(24),
-                          ),
+                          style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textPrimary),
                         ),
                       ),
                     ],
@@ -202,10 +196,7 @@ class ASTMiningBoard extends StatelessWidget {
     String action,
     String desc,
   ) {
-    final textStyle = TextStyle(
-      color: AppColorTokens.of(context).textPrimary,
-      fontSize: ScreenUtil().setSp(24),
-    );
+    final textStyle = AppTypography.caption.copyWith(color: AppColorTokens.of(context).textPrimary);
 
     return Padding(
       padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(28)),
@@ -263,10 +254,7 @@ class ASTMiningBoard extends StatelessWidget {
           SizedBox(width: ScreenUtil().setWidth(12)),
           Text(
             text,
-            style: TextStyle(
-              color: AppColorTokens.of(context).textPrimary,
-              fontSize: ScreenUtil().setSp(24),
-            ),
+            style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textPrimary),
           ),
         ],
       ),

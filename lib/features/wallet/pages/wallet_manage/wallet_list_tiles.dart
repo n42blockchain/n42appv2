@@ -153,10 +153,7 @@ mixin _WalletListTilesMixin on _WalletListActionsMixin {
                   Text(
                     coinKeys.take(3).join(' · ') +
                         (coinKeys.length > 3 ? ' +${coinKeys.length - 3}' : ''),
-                    style: TextStyle(
-                      color: AppColorTokens.of(context).textSubtitle,
-                      fontSize: ScreenUtil().setSp(24),
-                    ),
+                    style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
                   ),
                   if (info.tags.isNotEmpty) ...[
                     SizedBox(height: ScreenUtil().setWidth(6)),
@@ -177,10 +174,7 @@ mixin _WalletListTilesMixin on _WalletListActionsMixin {
                               ),
                               child: Text(
                                 tag,
-                                style: TextStyle(
-                                  color: AppColorTokens.of(context).brand,
-                                  fontSize: ScreenUtil().setSp(20),
-                                ),
+                                style: AppTypography.captionSm.copyWith(color: AppColorTokens.of(context).brand),
                               ),
                             ),
                           )

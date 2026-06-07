@@ -18,10 +18,7 @@ Future<void> alertWidget(BuildContext context) async {
             children: [
               Text(
                 S.of(context).g_swap_key_20(CoinType.N.name),
-                style: TextStyle(
-                  color: AppColorTokens.of(context).textPrimary,
-                  fontSize: ScreenUtil().setSp(40),
-                ),
+                style: AppTypography.titleLg.copyWith(color: AppColorTokens.of(context).textPrimary),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(
@@ -37,10 +34,7 @@ Future<void> alertWidget(BuildContext context) async {
               ),
               Text(
                 S.of(context).g_swap_key_19,
-                style: TextStyle(
-                  color: AppColorTokens.of(context).textPrimary,
-                  fontSize: ScreenUtil().setSp(24),
-                ),
+                style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textPrimary),
                 maxLines: 2,
                 textAlign: TextAlign.center,
               ),

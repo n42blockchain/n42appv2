@@ -178,10 +178,7 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
                             )
                           : Text(
                               'Lookup',
-                              style: TextStyle(
-                                fontSize: ScreenUtil().setSp(26),
-                                color: Colors.white,
-                              ),
+                              style: AppTypography.bodySm.copyWith(color: Colors.white),
                             ),
                     ),
                   ),
@@ -276,10 +273,7 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
                   ),
                   child: Text(
                     _error!,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(24),
-                      color: Colors.red,
-                    ),
+                    style: AppTypography.caption.copyWith(color: Colors.red),
                   ),
                 ),
 
@@ -338,10 +332,7 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
       controller: controller,
       keyboardType: keyboardType,
       validator: validator,
-      style: TextStyle(
-        fontSize: ScreenUtil().setSp(28),
-        color: AppColorTokens.of(context).textPrimary,
-      ),
+      style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
       decoration: InputDecoration(
         hintText: hint,
         hintStyle: TextStyle(color: AppColorTokens.of(context).textSubtitle),

@@ -68,10 +68,7 @@ class SmartAccountCard extends StatelessWidget {
                       ),
                       Text(
                         account.type.displayName,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(22),
-                          color: AppColorTokens.of(context).textSubtitle,
-                        ),
+                        style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
                       ),
                     ],
                   ),
@@ -196,10 +193,7 @@ class SmartAccountCard extends StatelessWidget {
       children: [
         Text(
           label,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(22),
-            color: AppColorTokens.of(context).textSubtitle,
-          ),
+          style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
         ),
         Text(
           value,

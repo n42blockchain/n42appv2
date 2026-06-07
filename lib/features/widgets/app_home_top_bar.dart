@@ -51,10 +51,7 @@ class _AppHomeTopBarState extends ConsumerState<AppHomeTopBar> {
                 (widget.isText
                     ? Text(
                         widget.title ?? '',
-                        style: TextStyle(
-                          color: AppColorTokens.of(context).textPrimary,
-                          fontSize: ScreenUtil().setSp(32.0),
-                        ),
+                        style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).textPrimary),
                       )
                     : Image.asset(
                         'assets/images/ast_nft.png',

@@ -12,10 +12,7 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
         children: [
           Text(
             S.of(context).g_key_38,
-            style: TextStyle(
-              color: AppColorTokens.of(context).textPrimary,
-              fontSize: ScreenUtil().setSp(28.0),
-            ),
+            style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
           ),
           SizedBox(height: ScreenUtil().setWidth(20.0)),
           textFieldStyle2(
@@ -58,10 +55,7 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
               Flexible(
                 child: Text(
                   S.of(context).g_key_44,
-                  style: TextStyle(
-                    color: AppColorTokens.of(context).textPrimary,
-                    fontSize: ScreenUtil().setSp(28.0),
-                  ),
+                  style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -176,10 +170,7 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
     final String unit = widget.coinModel.coin['unit'];
     return Text(
       '${dec.Decimal.parse(widget.coinModel.balanceDoubleAll().toString())} $unit',
-      style: TextStyle(
-        color: AppColorTokens.of(context).textPrimary,
-        fontSize: ScreenUtil().setSp(28.0),
-      ),
+      style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
       textAlign: TextAlign.right,
@@ -197,10 +188,7 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
       ),
       child: Text(
         addr,
-        style: TextStyle(
-          color: AppColorTokens.of(context).textSubtitle,
-          fontSize: ScreenUtil().setSp(30.0),
-        ),
+        style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),
@@ -258,19 +246,13 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
             child: Text(
               S.of(context).g_key_nft_141,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                color: AppColorTokens.of(context).textPrimary,
-                fontSize: ScreenUtil().setSp(30.0),
-              ),
+              style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
             ),
           ),
           const Spacer(),
           Text(
             '$gasFees ${widget.coinModel.coin['unit']}',
-            style: TextStyle(
-              color: textColor,
-              fontSize: ScreenUtil().setSp(30.0),
-            ),
+            style: AppTypography.body.copyWith(color: textColor),
           ),
           if (utxoLoad == Load.loading)
             Container(
@@ -306,10 +288,7 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
       ),
       child: Text(
         errorMessage,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(28.0),
-          color: AppColorTokens.of(context).danger,
-        ),
+        style: AppTypography.body.copyWith(color: AppColorTokens.of(context).danger),
       ),
     );
   }

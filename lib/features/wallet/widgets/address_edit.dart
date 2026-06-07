@@ -40,10 +40,7 @@ class AddressEdit extends StatelessWidget {
                   child: Center(
                     child: Text(
                       S.of(context).copyAddress,
-                      style: TextStyle(
-                        color: Color(0xFF448BDF),
-                        fontSize: ScreenUtil().setSp(30.0),
-                      ),
+                      style: AppTypography.body.copyWith(color: Color(0xFF448BDF)),
                     ),
                   ),
                 ),
@@ -70,10 +67,7 @@ class AddressEdit extends StatelessWidget {
                   child: Center(
                     child: Text(
                       S.of(context).Edit,
-                      style: TextStyle(
-                        color: Color(0xFF448BDF),
-                        fontSize: ScreenUtil().setSp(30.0),
-                      ),
+                      style: AppTypography.body.copyWith(color: Color(0xFF448BDF)),
                     ),
                   ),
                 ),
@@ -95,10 +89,7 @@ class AddressEdit extends StatelessWidget {
             child: Center(
               child: Text(
                 S.of(context).g_key_79,
-                style: TextStyle(
-                  color: AppColorTokens.of(context).textPrimary,
-                  fontSize: ScreenUtil().setSp(30.0),
-                ),
+                style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
               ),
             ),
           ),

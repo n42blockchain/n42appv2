@@ -26,10 +26,7 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
         alignment: Alignment.center,
         child: Text(
           label,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(26.0),
-            color: _tc(AppThemeKeys.mainWhiteColor.name),
-          ),
+          style: AppTypography.bodySm.copyWith(color: _tc(AppThemeKeys.mainWhiteColor.name)),
         ),
       ),
     );
@@ -42,10 +39,7 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
       alignment: Alignment.centerLeft,
       child: Text(
         message,
-        style: TextStyle(
-          color: _tc(AppThemeKeys.errorTextColor.name),
-          fontSize: ScreenUtil().setSp(24.0),
-        ),
+        style: AppTypography.caption.copyWith(color: _tc(AppThemeKeys.errorTextColor.name)),
       ),
     );
   }
@@ -61,10 +55,7 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
         children: [
           Text(
             S.of(context).g_key_38,
-            style: TextStyle(
-              color: mainText,
-              fontSize: ScreenUtil().setSp(28.0),
-            ),
+            style: AppTypography.body.copyWith(color: mainText),
           ),
           Container(
             alignment: Alignment.center,
@@ -155,10 +146,7 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
               Flexible(
                 child: Text(
                   S.of(context).g_key_44,
-                  style: TextStyle(
-                    color: mainText,
-                    fontSize: ScreenUtil().setSp(28.0),
-                  ),
+                  style: AppTypography.body.copyWith(color: mainText),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -237,10 +225,7 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
     final String unit = widget.coinModel.coin['unit'];
     return Text(
       '${widget.coinModel.balanceStringAll()} $unit',
-      style: TextStyle(
-        color: _tc(AppThemeKeys.mainTextColor.name),
-        fontSize: ScreenUtil().setSp(28.0),
-      ),
+      style: AppTypography.body.copyWith(color: _tc(AppThemeKeys.mainTextColor.name)),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
       textAlign: TextAlign.right,
@@ -253,10 +238,7 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
       padding: EdgeInsets.only(top: vPad, bottom: vPad, right: vPad),
       child: Text(
         widget.coinModel.address.toString(),
-        style: TextStyle(
-          color: _tc(AppThemeKeys.itemSubtitleTextColor.name),
-          fontSize: ScreenUtil().setSp(30.0),
-        ),
+        style: AppTypography.body.copyWith(color: _tc(AppThemeKeys.itemSubtitleTextColor.name)),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),
@@ -288,10 +270,7 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
       ),
       child: Text(
         errorMessage,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(28.0),
-          color: _tc(AppThemeKeys.errorTextColor.name),
-        ),
+        style: AppTypography.body.copyWith(color: _tc(AppThemeKeys.errorTextColor.name)),
       ),
     );
   }

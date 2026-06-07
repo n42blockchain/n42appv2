@@ -301,10 +301,7 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
         children: [
           Expanded(
             child: TextField(
-              style: TextStyle(
-                color: AppColorTokens.of(context).textPrimary,
-                fontSize: ScreenUtil().setSp(26.0),
-              ),
+              style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).textPrimary),
               controller: searchEditingController,
               textInputAction: TextInputAction.search,
               keyboardType: TextInputType.text,
@@ -359,10 +356,7 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
       ),
       child: Text(
         errorMessage,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(28.0),
-          color: AppColorTokens.of(context).danger,
-        ),
+        style: AppTypography.body.copyWith(color: AppColorTokens.of(context).danger),
         textAlign: TextAlign.center,
       ),
     );
@@ -379,10 +373,7 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
         children: [
           Text(
             title,
-            style: TextStyle(
-              color: AppColorTokens.of(context).textPrimary,
-              fontSize: ScreenUtil().setSp(28),
-            ),
+            style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
           ),
           SizedBox(height: ScreenUtil().setWidth(20)),
           Row(
@@ -390,10 +381,7 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
               Expanded(
                 child: Text(
                   value,
-                  style: TextStyle(
-                    color: blueColor,
-                    fontSize: ScreenUtil().setSp(28),
-                  ),
+                  style: AppTypography.body.copyWith(color: blueColor),
                 ),
               ),
               if (copy)
@@ -431,10 +419,7 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
         children: [
           Text(
             title,
-            style: TextStyle(
-              color: AppColorTokens.of(context).textPrimary,
-              fontSize: ScreenUtil().setSp(28),
-            ),
+            style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
           ),
           SizedBox(height: ScreenUtil().setWidth(20)),
           EnsAddressDisplay(

@@ -150,10 +150,7 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
                 SizedBox(height: ScreenUtil().setWidth(24)),
                 Text(
                   S.of(context).g_wc_dapp_disconnected,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(28),
-                    color: subtitleColor,
-                  ),
+                  style: AppTypography.body.copyWith(color: subtitleColor),
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -456,10 +453,7 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
           alignment: Alignment.center,
           child: Text(
             S.of(context).g_connect_key14,
-            style: TextStyle(
-              color: _themeColor(AppThemeKeys.mainTextColor),
-              fontSize: ScreenUtil().setSp(32.0),
-            ),
+            style: AppTypography.headline.copyWith(color: _themeColor(AppThemeKeys.mainTextColor)),
             textAlign: TextAlign.center,
           ),
         ),
@@ -518,10 +512,7 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
               alignment: Alignment.center,
               child: Text(
                 dAppDesc,
-                style: TextStyle(
-                  color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
-                  fontSize: ScreenUtil().setSp(26),
-                ),
+                style: AppTypography.bodySm.copyWith(color: _themeColor(AppThemeKeys.itemSubtitleTextColor)),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,

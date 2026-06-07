@@ -196,17 +196,11 @@ class _CreateWalletButtonState extends State<CreateWalletButton> {
                 children: [
                   Text(
                     title,
-                    style: TextStyle(
-                      color: blueColor,
-                      fontSize: ScreenUtil().setSp(36),
-                    ),
+                    style: AppTypography.title.copyWith(color: blueColor),
                   ),
                   Text(
                     subtitle,
-                    style: TextStyle(
-                      color: subtitleColor,
-                      fontSize: ScreenUtil().setSp(26),
-                    ),
+                    style: AppTypography.bodySm.copyWith(color: subtitleColor),
                   ),
                 ],
               ),

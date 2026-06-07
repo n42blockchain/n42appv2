@@ -69,10 +69,7 @@ class EnsDomainCard extends StatelessWidget {
           if (!isExpired)
             Text(
               '${ownedEns.daysUntilExpiry} ${S.of(context).g_key_ens_days_left}',
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
-                color: AppColorTokens.of(context).textSubtitle.withAlpha(150),
-              ),
+              style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle.withAlpha(150)),
             ),
         ],
       ),
@@ -220,8 +217,7 @@ class _ExpiryRow extends StatelessWidget {
         SizedBox(width: ScreenUtil().setWidth(6)),
         Text(
           label,
-          style: TextStyle(fontSize: ScreenUtil().setSp(24), color: color),
-        ),
+          style: AppTypography.caption.copyWith(color: color)),
       ],
     );
   }

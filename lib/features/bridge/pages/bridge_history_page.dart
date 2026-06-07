@@ -87,10 +87,7 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
                 SizedBox(height: ScreenUtil().setWidth(20)),
                 Text(
                   S.of(context).g_key_132,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(30),
-                    color: subtitleColor,
-                  ),
+                  style: AppTypography.body.copyWith(color: subtitleColor),
                 ),
               ],
             ),
@@ -126,10 +123,7 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
               _buildStatusBadge(context, tx.status),
               Text(
                 _dateFormat.format(tx.createdAt),
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
-                  color: subtitleColor,
-                ),
+                style: AppTypography.caption.copyWith(color: subtitleColor),
               ),
             ],
           ),
@@ -153,10 +147,7 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
                 SizedBox(width: ScreenUtil().setWidth(6)),
                 Text(
                   tx.bridgeTool!,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24),
-                    color: subtitleColor,
-                  ),
+                  style: AppTypography.caption.copyWith(color: subtitleColor),
                 ),
               ],
             ),
@@ -201,10 +192,7 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
                   ),
                   child: Text(
                     S.of(context).g_key_bridge_refresh,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(22),
-                      color: Colors.white,
-                    ),
+                    style: AppTypography.caption.copyWith(color: Colors.white),
                   ),
                 ),
               ),
@@ -265,10 +253,7 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
       children: [
         Text(
           chainName,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(24),
-            color: subtitleColor,
-          ),
+          style: AppTypography.caption.copyWith(color: subtitleColor),
         ),
         SizedBox(height: ScreenUtil().setWidth(4)),
         Text(
@@ -298,10 +283,7 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
         children: [
           Text(
             '$label: ',
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
-              color: subtitleColor,
-            ),
+            style: AppTypography.caption.copyWith(color: subtitleColor),
           ),
           Expanded(
             child: Text(

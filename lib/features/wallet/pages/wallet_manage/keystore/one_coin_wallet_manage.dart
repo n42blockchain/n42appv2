@@ -177,10 +177,7 @@ class _OneCoinWalletManageState extends ConsumerState<OneCoinWalletManage>
           alignment: Alignment.center,
           child: Text(
             key,
-            style: TextStyle(
-              color: textColor,
-              fontSize: ScreenUtil().setSp(32.0),
-            ),
+            style: AppTypography.headline.copyWith(color: textColor),
           ),
         ),
       );

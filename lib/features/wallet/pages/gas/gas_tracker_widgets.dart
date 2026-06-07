@@ -77,22 +77,15 @@ class _AlertsOverviewSheet extends StatelessWidget {
       leading: _NetworkIcon(network: n, size: 40, iconSize: 22),
       title: Text(
         n.name,
-        style: TextStyle(fontSize: ScreenUtil().setSp(28), color: mainText),
-      ),
+        style: AppTypography.body.copyWith(color: mainText)),
       subtitle: hasAlert
           ? Text(
               '${config.alertBelow ? S.of(context).g_key_gas_alert_below : S.of(context).g_key_gas_alert_above} ${config.threshold.toStringAsFixed(0)} Gwei',
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
-                color: n.color,
-              ),
+              style: AppTypography.caption.copyWith(color: n.color),
             )
           : Text(
               '—',
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
-                color: subtitleText,
-              ),
+              style: AppTypography.caption.copyWith(color: subtitleText),
             ),
       trailing: Icon(
         hasAlert ? Icons.notifications_active : Icons.notifications_none,
@@ -300,10 +293,7 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
             child: Text(
               S.of(context).g_key_gas_alert,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(28),
-                color: mainText,
-              ),
+              style: AppTypography.body.copyWith(color: mainText),
             ),
           ),
           Switch(
@@ -331,10 +321,7 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
         children: [
           Text(
             S.of(context).g_key_gas_alert_threshold,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
-              color: subtitleText,
-            ),
+            style: AppTypography.caption.copyWith(color: subtitleText),
           ),
           SizedBox(height: ScreenUtil().setWidth(12)),
           Row(
@@ -372,10 +359,7 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
             SizedBox(height: ScreenUtil().setWidth(6)),
             Text(
               _error,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
-                color: AppColorTokens.of(context).danger,
-              ),
+              style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).danger),
             ),
           ],
         ],
@@ -415,16 +399,10 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
               ],
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(28),
-                color: mainText,
-              ),
+              style: AppTypography.body.copyWith(color: mainText),
               decoration: InputDecoration(
                 hintText: '0',
-                hintStyle: TextStyle(
-                  fontSize: ScreenUtil().setSp(28),
-                  color: subtitleText,
-                ),
+                hintStyle: AppTypography.body.copyWith(color: subtitleText),
                 border: InputBorder.none,
                 isDense: true,
                 contentPadding: EdgeInsets.zero,
@@ -434,10 +412,7 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
           ),
           Text(
             'Gwei',
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
-              color: subtitleText,
-            ),
+            style: AppTypography.caption.copyWith(color: subtitleText),
           ),
         ],
       ),

@@ -61,10 +61,7 @@ class SessionKeyAmountLimit extends StatelessWidget {
             Expanded(
               child: Text(
                 S.of(context).g_key_aa_session_amount_limit,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
-                  color: AppColorTokens.of(context).textSubtitle,
-                ),
+                style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
                 overflow: TextOverflow.ellipsis,
               ),
             ),
@@ -241,10 +238,7 @@ class SessionKeyRiskSummary extends StatelessWidget {
           Expanded(
             child: Text(
               text,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
-                color: AppColorTokens.of(context).textSubtitle,
-              ),
+              style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
             ),
           ),
         ],
@@ -283,10 +277,7 @@ class SessionKeyConfirmCheckbox extends StatelessWidget {
               padding: EdgeInsets.only(top: ScreenUtil().setWidth(12)),
               child: Text(
                 S.of(context).g_key_aa_session_confirm_risk,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
-                  color: AppColorTokens.of(context).textPrimary,
-                ),
+                style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textPrimary),
               ),
             ),
           ),

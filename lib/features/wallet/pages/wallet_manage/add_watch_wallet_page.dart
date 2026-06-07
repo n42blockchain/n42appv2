@@ -161,10 +161,7 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
                   Expanded(
                     child: Text(
                       s.g_key_watch_wallet_desc,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(24),
-                        color: subText,
-                      ),
+                      style: AppTypography.caption.copyWith(color: subText),
                     ),
                   ),
                 ],

@@ -186,10 +186,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
           SizedBox(height: ScreenUtil().setWidth(10)),
           Text(
             S.of(context).g_key_aa_paymaster_description,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
-              color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
-            ),
+            style: AppTypography.caption.copyWith(color: _themeColor(AppThemeKeys.itemSubtitleTextColor)),
           ),
           SizedBox(height: ScreenUtil().setWidth(12)),
           // Chain coverage row
@@ -205,10 +202,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
                 child: Text(
                   '${S.of(context).g_key_aa_paymaster_coverage}: '
                   '${supportedChains.length} ${S.of(context).g_key_aa_paymaster_chains_supported}',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(22),
-                    color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
-                  ),
+                  style: AppTypography.caption.copyWith(color: _themeColor(AppThemeKeys.itemSubtitleTextColor)),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -269,10 +263,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
           SizedBox(height: ScreenUtil().setWidth(16)),
           Text(
             S.of(context).g_key_aa_paymaster_checking,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
-              color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
-            ),
+            style: AppTypography.caption.copyWith(color: _themeColor(AppThemeKeys.itemSubtitleTextColor)),
           ),
         ],
       ),
@@ -401,10 +392,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
               children: [
                 Text(
                   S.of(context).g_key_aa_selected,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(20),
-                    color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
-                  ),
+                  style: AppTypography.captionSm.copyWith(color: _themeColor(AppThemeKeys.itemSubtitleTextColor)),
                 ),
                 Text(
                   _getSelectedTitle(),

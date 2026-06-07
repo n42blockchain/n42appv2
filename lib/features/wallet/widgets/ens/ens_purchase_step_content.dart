@@ -115,10 +115,7 @@ class EnsPurchaseStepContent extends StatelessWidget {
           Expanded(
             child: Text(
               text,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(24),
-                color: _subtitle(context),
-              ),
+              style: AppTypography.caption.copyWith(color: _subtitle(context)),
             ),
           ),
         ],
@@ -150,10 +147,7 @@ class EnsPurchaseStepContent extends StatelessWidget {
           SizedBox(height: ScreenUtil().setWidth(8)),
           Text(
             subtitle,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
-              color: _subtitle(context),
-            ),
+            style: AppTypography.caption.copyWith(color: _subtitle(context)),
           ),
         ],
       ),
@@ -213,10 +207,7 @@ class EnsPurchaseStepContent extends StatelessWidget {
           SizedBox(height: ScreenUtil().setWidth(8)),
           Text(
             S.of(context).g_key_ens_wait_explanation,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
-              color: _subtitle(context),
-            ),
+            style: AppTypography.caption.copyWith(color: _subtitle(context)),
             textAlign: TextAlign.center,
           ),
         ],
@@ -252,10 +243,7 @@ class EnsPurchaseStepContent extends StatelessWidget {
           SizedBox(height: ScreenUtil().setWidth(8)),
           Text(
             '$domainName.eth ${S.of(context).g_key_ens_is_yours}',
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(26),
-              color: _mainText(context),
-            ),
+            style: AppTypography.bodySm.copyWith(color: _mainText(context)),
           ),
           if (registerResult?.txHash != null) ...[
             SizedBox(height: ScreenUtil().setWidth(16)),
@@ -307,10 +295,7 @@ class EnsPurchaseStepContent extends StatelessWidget {
           SizedBox(height: ScreenUtil().setWidth(8)),
           Text(
             errorMessage ?? S.of(context).g_key_error_3,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
-              color: _subtitle(context),
-            ),
+            style: AppTypography.caption.copyWith(color: _subtitle(context)),
             textAlign: TextAlign.center,
           ),
         ],

@@ -122,10 +122,7 @@ class _CreateOneState extends ConsumerState<CreateOne> {
                       ),
                       child: Text(
                         S.of(context).g_key_wallet_c9,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(32.0),
-                          color: AppColorTokens.of(context).textPrimary,
-                        ),
+                        style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).textPrimary),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -224,10 +221,7 @@ class _CreateOneState extends ConsumerState<CreateOne> {
           Expanded(
             child: Text(
               value,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(24.0),
-                color: AppColorTokens.of(context).textSubtitle,
-              ),
+              style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
             ),
           ),
         ],

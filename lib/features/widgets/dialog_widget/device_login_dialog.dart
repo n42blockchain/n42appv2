@@ -60,10 +60,7 @@ Future<bool?> deviceLoginDialog(
                             info.deviceOs,
                           ),
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: AppColorTokens.of(context).textItem,
-                        fontSize: ScreenUtil().setSp(28),
-                      ),
+                      style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textItem),
                     ),
                   ),
                 ],
@@ -86,10 +83,7 @@ Future<bool?> deviceLoginDialog(
                       alignment: Alignment.center,
                       child: Text(
                         S.of(context).device_login_dismiss,
-                        style: TextStyle(
-                          color: AppColorTokens.of(context).textSubtitle,
-                          fontSize: ScreenUtil().setSp(30),
-                        ),
+                        style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle),
                       ),
                     ),
                   ),
@@ -105,10 +99,7 @@ Future<bool?> deviceLoginDialog(
                       alignment: Alignment.center,
                       child: Text(
                         S.of(context).device_login_change_password,
-                        style: TextStyle(
-                          color: AppColorTokens.of(context).brand,
-                          fontSize: ScreenUtil().setSp(30),
-                        ),
+                        style: AppTypography.body.copyWith(color: AppColorTokens.of(context).brand),
                       ),
                     ),
                   ),

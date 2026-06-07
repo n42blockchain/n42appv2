@@ -148,10 +148,7 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
               if (!_showEncryptResult) ...[
                 Text(
                   S.of(context).g_mining_key_97,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(32),
-                    color: AppColorTokens.of(context).textPrimary,
-                  ),
+                  style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).textPrimary),
                 ),
                 SizedBox(height: ScreenUtil().setWidth(10)),
                 textFieldStyle3(
@@ -171,10 +168,7 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
                 SizedBox(height: ScreenUtil().setWidth(40)),
                 Text(
                   S.of(context).g_mining_key_99,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(32),
-                    color: AppColorTokens.of(context).textPrimary,
-                  ),
+                  style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).textPrimary),
                 ),
                 SizedBox(height: ScreenUtil().setWidth(10)),
                 textFieldStyle3(
@@ -196,10 +190,7 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
               if (_showEncryptResult) ...[
                 Text(
                   S.of(context).g_mining_key_100,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(36),
-                    color: AppColorTokens.of(context).textPrimary,
-                  ),
+                  style: AppTypography.title.copyWith(color: AppColorTokens.of(context).textPrimary),
                 ),
                 SizedBox(height: ScreenUtil().setWidth(40)),
                 Container(
@@ -211,10 +202,7 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
                   width: double.infinity,
                   child: Text(
                     _encryptedData,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(32),
-                      color: AppColorTokens.of(context).textItem,
-                    ),
+                    style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).textItem),
                   ),
                 ),
               ],

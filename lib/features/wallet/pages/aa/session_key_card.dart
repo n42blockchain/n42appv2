@@ -91,10 +91,7 @@ class SessionKeyCard extends StatelessWidget {
               if (keyData.dappName != null)
                 Text(
                   keyData.dappName!,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(22),
-                    color: AppColorTokens.of(context).textSubtitle,
-                  ),
+                  style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
                 ),
             ],
           ),
@@ -264,10 +261,7 @@ class SessionKeyCard extends StatelessWidget {
           SizedBox(width: ScreenUtil().setWidth(4)),
           Text(
             label,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(20),
-              color: chipColor,
-            ),
+            style: AppTypography.captionSm.copyWith(color: chipColor),
           ),
         ],
       ),
@@ -287,10 +281,7 @@ class SessionKeyCard extends StatelessWidget {
               child: Text(
                 S.of(context).g_key_aa_spending_limit,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(22),
-                  color: AppColorTokens.of(context).textSubtitle,
-                ),
+                style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
               ),
             ),
             Text(

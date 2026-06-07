@@ -123,10 +123,7 @@ class _MiningSettingsState extends State<MiningSettings> {
           Flexible(
             child: Text(
               S.of(context).g_mining_key82,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(32),
-                color: _mainTextColor(),
-              ),
+              style: AppTypography.headline.copyWith(color: _mainTextColor()),
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
             ),
@@ -179,10 +176,7 @@ class _MiningSettingsState extends State<MiningSettings> {
                     Flexible(
                       child: Text(
                         value,
-                        style: TextStyle(
-                          color: textColor,
-                          fontSize: ScreenUtil().setSp(32),
-                        ),
+                        style: AppTypography.headline.copyWith(color: textColor),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                       ),
@@ -202,10 +196,7 @@ class _MiningSettingsState extends State<MiningSettings> {
     return _buildDropdownRow(
       label: Text(
         S.of(context).g_mining_key83,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(32),
-          color: _mainTextColor(),
-        ),
+        style: AppTypography.headline.copyWith(color: _mainTextColor()),
       ),
       value: currentNode?["name"] ?? '',
       onTap: () => sheetBottom(context, "", _buildNodeList(context)),
@@ -216,10 +207,7 @@ class _MiningSettingsState extends State<MiningSettings> {
     return _buildDropdownRow(
       label: Text(
         S.of(context).g_mining_key34,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(32),
-          color: _mainTextColor(),
-        ),
+        style: AppTypography.headline.copyWith(color: _mainTextColor()),
       ),
       value: bgmMusicOptions[backgroundMiningMusic],
       onTap: _showMusicSheet,
@@ -233,17 +221,11 @@ class _MiningSettingsState extends State<MiningSettings> {
         children: [
           Text(
             S.of(context).g_mining_key84,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(32),
-              color: _mainTextColor(),
-            ),
+            style: AppTypography.headline.copyWith(color: _mainTextColor()),
           ),
           Text(
             S.of(context).g_mining_key85,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
-              color: _greyColor(),
-            ),
+            style: AppTypography.body.copyWith(color: _greyColor()),
           ),
         ],
       ),
@@ -289,8 +271,7 @@ class _MiningSettingsState extends State<MiningSettings> {
     final textColor = _mainTextColor();
     final labelText = Text(
       label,
-      style: TextStyle(fontSize: ScreenUtil().setSp(30), color: textColor),
-    );
+      style: AppTypography.body.copyWith(color: textColor));
 
     return InkWell(
       onTap: onTap,
@@ -320,10 +301,7 @@ class _MiningSettingsState extends State<MiningSettings> {
                         SizedBox(height: ScreenUtil().setWidth(10)),
                         Text(
                           subtitle,
-                          style: TextStyle(
-                            fontSize: ScreenUtil().setSp(26),
-                            color: AppColorTokens.of(context).textSubtitle,
-                          ),
+                          style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).textSubtitle),
                         ),
                       ],
                     )

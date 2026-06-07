@@ -177,10 +177,7 @@ mixin BridgeHomeSectionsMixin
                     children: [
                       Text(
                         S.of(context).g_key_bridge_estimated_receive,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(22),
-                          color: AppColorTokens.of(context).textSubtitle,
-                        ),
+                        style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
                       ),
                       SizedBox(height: ScreenUtil().setWidth(4)),
                       Text(
@@ -193,10 +190,7 @@ mixin BridgeHomeSectionsMixin
                       ),
                       Text(
                         'Min: $minReceive ${provider.toToken?.symbol ?? ''}',
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(22),
-                          color: AppColorTokens.of(context).textSubtitle,
-                        ),
+                        style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
                       ),
                     ],
                   ),
@@ -234,10 +228,7 @@ mixin BridgeHomeSectionsMixin
                     ),
                     child: Text(
                       '${step.fromToken.symbol} → ${step.toToken.symbol} via ${step.toolName}',
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(20),
-                        color: AppColorTokens.of(context).textSubtitle,
-                      ),
+                      style: AppTypography.captionSm.copyWith(color: AppColorTokens.of(context).textSubtitle),
                     ),
                   );
                 }).toList(),
@@ -261,10 +252,7 @@ mixin BridgeHomeSectionsMixin
         SizedBox(width: ScreenUtil().setWidth(4)),
         Text(
           text,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(24),
-            color: AppColorTokens.of(context).textSubtitle,
-          ),
+          style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
         ),
       ],
     );
@@ -294,10 +282,7 @@ mixin BridgeHomeSectionsMixin
           Expanded(
             child: Text(
               provider.errorMessage!,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(26),
-                color: AppColorTokens.of(context).danger,
-              ),
+              style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).danger),
             ),
           ),
         ],

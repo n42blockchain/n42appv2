@@ -137,12 +137,9 @@ class PaymasterOptionCard extends StatelessWidget {
                       isDisabled && option.unavailableReason != null
                           ? option.unavailableReason!
                           : _getSubtitle(context),
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(22),
-                        color: isDisabled
+                      style: AppTypography.caption.copyWith(color: isDisabled
                             ? Colors.grey
-                            : AppColorTokens.of(context).textSubtitle,
-                      ),
+                            : AppColorTokens.of(context).textSubtitle),
                     ),
                   ],
                 ),

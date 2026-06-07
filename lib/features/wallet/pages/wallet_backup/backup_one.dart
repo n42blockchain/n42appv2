@@ -173,10 +173,7 @@ class _BackupOneState extends State<BackupOne> {
               child: Text(
                 mnemonicWordsList[index],
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: AppColorTokens.of(context).textItem,
-                  fontSize: ScreenUtil().setSp(28.0),
-                ),
+                style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textItem),
               ),
             ),
           );
@@ -214,19 +211,13 @@ class _BackupOneState extends State<BackupOne> {
               mnemonicWordsList.isEmpty
                   ? walletBackupPhraseUnavailableMessage
                   : S.of(context).g_key_wallet_c44,
-              style: TextStyle(
-                color: itemTextColor,
-                fontSize: ScreenUtil().setSp(30),
-              ),
+              style: AppTypography.body.copyWith(color: itemTextColor),
               textAlign: TextAlign.center,
             ),
             if (mnemonicWordsList.isNotEmpty)
               Text(
                 S.of(context).g_key_wallet_c45,
-                style: TextStyle(
-                  color: itemTextColor,
-                  fontSize: ScreenUtil().setSp(30),
-                ),
+                style: AppTypography.body.copyWith(color: itemTextColor),
                 textAlign: TextAlign.center,
               ),
           ],

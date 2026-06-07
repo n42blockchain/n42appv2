@@ -59,18 +59,12 @@ class NavImportWallet extends StatelessWidget {
                     children: [
                       Text(
                         S.of(context).g_key_12,
-                        style: TextStyle(
-                          color: AppColorTokens.of(context).textPrimary,
-                          fontSize: ScreenUtil().setSp(28.0),
-                        ),
+                        style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
                       ),
                       SizedBox(height: ScreenUtil().setWidth(12)),
                       Text(
                         S.of(context).w_key_8,
-                        style: TextStyle(
-                          color: AppColorTokens.of(context).textSubtitle,
-                          fontSize: ScreenUtil().setSp(26.0),
-                        ),
+                        style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).textSubtitle),
                       ),
                     ],
                   ),
@@ -117,18 +111,12 @@ class NavImportWallet extends StatelessWidget {
                     children: [
                       Text(
                         "Keystore",
-                        style: TextStyle(
-                          color: AppColorTokens.of(context).textPrimary,
-                          fontSize: ScreenUtil().setSp(28.0),
-                        ),
+                        style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
                       ),
                       const SizedBox(height: 6),
                       Text(
                         S.of(context).g_key_ex_keystore_15,
-                        style: TextStyle(
-                          color: AppColorTokens.of(context).textSubtitle,
-                          fontSize: ScreenUtil().setSp(26.0),
-                        ),
+                        style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).textSubtitle),
                       ),
                     ],
                   ),

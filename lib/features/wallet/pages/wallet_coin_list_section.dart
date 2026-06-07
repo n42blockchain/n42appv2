@@ -280,11 +280,8 @@ class _PinnedDivider extends StatelessWidget {
             ),
             child: Text(
               S.of(context).g_key_coin_list_separator,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(20),
-                color: AppColorTokens.of(
-                  context,
-                ).textSubtitle.withValues(alpha: 0.6),
+              style: AppTypography.captionSm.copyWith(color: AppColorTokens.of(
+                  context).textSubtitle.withValues(alpha: 0.6),
               ),
             ),
           ),
@@ -314,20 +311,14 @@ class _AllHiddenHint extends StatelessWidget {
           SizedBox(height: ScreenUtil().setWidth(16)),
           Text(
             S.of(context).g_key_coin_list_all_hidden,
-            style: TextStyle(
-              color: AppColorTokens.of(context).textSubtitle,
-              fontSize: ScreenUtil().setSp(28),
-            ),
+            style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle),
           ),
           SizedBox(height: ScreenUtil().setWidth(8)),
           GestureDetector(
             onTap: onShowAll,
             child: Text(
               S.of(context).g_key_coin_list_show_all,
-              style: TextStyle(
-                color: AppColorTokens.of(context).brand,
-                fontSize: ScreenUtil().setSp(26),
-              ),
+              style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).brand),
             ),
           ),
         ],

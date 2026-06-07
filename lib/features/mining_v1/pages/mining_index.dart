@@ -81,10 +81,7 @@ class _MiningIndexState extends State<MiningIndex>
                           if (!AppConfig.isMainChainMining)
                             Text(
                               S.of(context).g_key_147,
-                              style: TextStyle(
-                                color: AppColorTokens.of(context).brand,
-                                fontSize: ScreenUtil().setSp(20),
-                              ),
+                              style: AppTypography.captionSm.copyWith(color: AppColorTokens.of(context).brand),
                             ),
                         ],
                       ),
@@ -126,10 +123,7 @@ class _MiningIndexState extends State<MiningIndex>
                 ),
                 child: Text(
                   "The test chain is being upgraded and blocks cannot be verified temporarily.",
-                  style: TextStyle(
-                    color: AppColorTokens.of(context).danger,
-                    fontSize: ScreenUtil().setSp(26),
-                  ),
+                  style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).danger),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -254,20 +248,14 @@ class _MiningIndexState extends State<MiningIndex>
                               wInfo.mainWallet
                                   ? S.of(context).g_key_14
                                   : S.of(context).g_key_6,
-                              style: TextStyle(
-                                color: walletColor,
-                                fontSize: ScreenUtil().setSp(36.0),
-                              ),
+                              style: AppTypography.title.copyWith(color: walletColor),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                             ),
                             SizedBox(width: ScreenUtil().setWidth(20.0)),
                             Text(
                               wInfo.walletName ?? "",
-                              style: TextStyle(
-                                color: walletColor,
-                                fontSize: ScreenUtil().setSp(36.0),
-                              ),
+                              style: AppTypography.title.copyWith(color: walletColor),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                             ),

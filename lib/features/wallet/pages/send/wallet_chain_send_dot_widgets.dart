@@ -12,10 +12,7 @@ mixin _DotSendWidgetsMixin on _DotSendLogicMixin {
         children: [
           Text(
             S.of(context).g_key_38,
-            style: TextStyle(
-              color: AppColorTokens.of(context).textPrimary,
-              fontSize: ScreenUtil().setSp(28.0),
-            ),
+            style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
           ),
           SizedBox(height: ScreenUtil().setWidth(20.0)),
           textFieldStyle2(
@@ -59,10 +56,7 @@ mixin _DotSendWidgetsMixin on _DotSendLogicMixin {
           children: [
             Text(
               S.of(context).g_key_wallet_k58,
-              style: TextStyle(
-                color: AppColorTokens.of(context).textPrimary,
-                fontSize: ScreenUtil().setSp(28.0),
-              ),
+              style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
             ),
             SizedBox(height: ScreenUtil().setWidth(20.0)),
             textFieldStyle2(
@@ -73,10 +67,7 @@ mixin _DotSendWidgetsMixin on _DotSendLogicMixin {
               errorMessage: noteErrorMessage,
               suffix: Text(
                 "${noteTextEditingController.text.length}/100",
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(20.0),
-                  color: AppColorTokens.of(context).textSubtitle,
-                ),
+                style: AppTypography.captionSm.copyWith(color: AppColorTokens.of(context).textSubtitle),
               ),
               onEditingComplete: () {
                 FocusScope.of(context).requestFocus(toNode);
@@ -219,10 +210,7 @@ mixin _DotSendWidgetsMixin on _DotSendLogicMixin {
     final String unit = widget.coinModel.coin['unit'].toString().toUpperCase();
     return Text(
       '${widget.coinModel.balanceStringAll()} $unit',
-      style: TextStyle(
-        color: AppColorTokens.of(context).textPrimary,
-        fontSize: ScreenUtil().setSp(28.0),
-      ),
+      style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
       textAlign: TextAlign.right,
@@ -274,10 +262,7 @@ mixin _DotSendWidgetsMixin on _DotSendLogicMixin {
                   child: Text(
                     S.of(context).g_key_29,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: AppColorTokens.of(context).textSubtitle,
-                      fontSize: ScreenUtil().setSp(28.0),
-                    ),
+                    style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle),
                   ),
                 ),
                 Text(

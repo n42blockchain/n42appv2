@@ -53,10 +53,7 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
                 child: Text(
                   S.of(context).g_key_earn_total_earnings,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(22),
-                    color: Colors.white.withAlpha(200),
-                  ),
+                  style: AppTypography.caption.copyWith(color: Colors.white.withAlpha(200)),
                 ),
               ),
               Container(
@@ -299,10 +296,7 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
                         SizedBox(height: ScreenUtil().setWidth(4)),
                         Text(
                           subtitle,
-                          style: TextStyle(
-                            fontSize: ScreenUtil().setSp(20),
-                            color: Colors.white.withAlpha(200),
-                          ),
+                          style: AppTypography.captionSm.copyWith(color: Colors.white.withAlpha(200)),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),

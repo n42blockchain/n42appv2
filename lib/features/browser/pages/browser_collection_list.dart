@@ -107,10 +107,7 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
   }
 
   TextStyle _subtitleStyle(BuildContext context) {
-    return TextStyle(
-      color: AppColorTokens.of(context).textSubtitle,
-      fontSize: ScreenUtil().setSp(26.0),
-    );
+    return AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).textSubtitle);
   }
 
   @override
@@ -219,10 +216,7 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
                           ),
                           child: Text(
                             bcm.name ?? "",
-                            style: TextStyle(
-                              color: AppColorTokens.of(context).textPrimary,
-                              fontSize: ScreenUtil().setSp(28.0),
-                            ),
+                            style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),

@@ -168,10 +168,7 @@ class _LendingPageState extends State<LendingPage>
         ),
         subtitle: Text(
           reserve.name,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(22),
-            color: AppColorTokens.of(context).textSubtitle,
-          ),
+          style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
         ),
         trailing: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -187,10 +184,7 @@ class _LendingPageState extends State<LendingPage>
             ),
             Text(
               isSupply ? 'Supply APY' : 'Borrow APR',
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(20),
-                color: AppColorTokens.of(context).textSubtitle,
-              ),
+              style: AppTypography.captionSm.copyWith(color: AppColorTokens.of(context).textSubtitle),
             ),
           ],
         ),

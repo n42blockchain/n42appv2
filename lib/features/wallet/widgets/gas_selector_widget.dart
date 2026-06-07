@@ -131,10 +131,7 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
               children: [
                 Text(
                   _formatTotalFee(),
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(28),
-                    color: mainText,
-                  ),
+                  style: AppTypography.body.copyWith(color: mainText),
                 ),
                 if (widget.expandable) ...[
                   SizedBox(width: ScreenUtil().setWidth(8)),
@@ -236,10 +233,7 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
               SizedBox(height: ScreenUtil().setWidth(4)),
               Text(
                 estimatedTime,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(22),
-                  color: subtitleText,
-                ),
+                style: AppTypography.caption.copyWith(color: subtitleText),
               ),
             ],
           ),
@@ -323,10 +317,7 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
           child: Text(
             label,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(26),
-              color: subtitleText,
-            ),
+            style: AppTypography.bodySm.copyWith(color: subtitleText),
           ),
         ),
         Text(
@@ -425,10 +416,7 @@ class GasSelectorCompact extends StatelessWidget {
                     ),
                     Text(
                       estimatedTime,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(24),
-                        color: subtitleText,
-                      ),
+                      style: AppTypography.caption.copyWith(color: subtitleText),
                     ),
                   ],
                 ),
@@ -438,10 +426,7 @@ class GasSelectorCompact extends StatelessWidget {
               children: [
                 Text(
                   '$formatted $unit',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(28),
-                    color: mainText,
-                  ),
+                  style: AppTypography.body.copyWith(color: mainText),
                 ),
                 if (onTap != null) ...[
                   SizedBox(width: ScreenUtil().setWidth(8)),

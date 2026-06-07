@@ -83,17 +83,11 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
       children: [
         Text(
           widget.model.coin['name'] ?? '',
-          style: TextStyle(
-            color: _color(AppThemeKeys.mainTextColor),
-            fontSize: ScreenUtil().setSp(36.0),
-          ),
+          style: AppTypography.title.copyWith(color: _color(AppThemeKeys.mainTextColor)),
         ),
         Text(
           " (${widget.model.coin['miniName'] ?? ''})",
-          style: TextStyle(
-            color: _color(AppThemeKeys.itemSubtitleTextColor),
-            fontSize: ScreenUtil().setSp(28.0),
-          ),
+          style: AppTypography.body.copyWith(color: _color(AppThemeKeys.itemSubtitleTextColor)),
         ),
       ],
     );
@@ -105,10 +99,7 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
         Expanded(
           child: Text(
             "${S.of(context).g_key_address}: ",
-            style: TextStyle(
-              color: _color(AppThemeKeys.mainTextColor),
-              fontSize: ScreenUtil().setSp(32.0),
-            ),
+            style: AppTypography.headline.copyWith(color: _color(AppThemeKeys.mainTextColor)),
           ),
         ),
         if (pathCount > 1)
@@ -120,10 +111,7 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
                 children: [
                   Text(
                     widget.model.addrType,
-                    style: TextStyle(
-                      color: _color(AppThemeKeys.mainBlueColor),
-                      fontSize: ScreenUtil().setSp(30.0),
-                    ),
+                    style: AppTypography.body.copyWith(color: _color(AppThemeKeys.mainBlueColor)),
                   ),
                   Icon(
                     Icons.keyboard_arrow_down_outlined,
@@ -150,19 +138,13 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
           child: Text(
             "${S.of(context).g_key_wallet_k53}:",
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              color: _color(AppThemeKeys.mainTextColor),
-              fontSize: ScreenUtil().setSp(32.0),
-            ),
+            style: AppTypography.headline.copyWith(color: _color(AppThemeKeys.mainTextColor)),
           ),
         ),
         Expanded(
           child: Text(
             "($displayPath)",
-            style: TextStyle(
-              color: _color(AppThemeKeys.mainTextColor),
-              fontSize: ScreenUtil().setSp(28.0),
-            ),
+            style: AppTypography.body.copyWith(color: _color(AppThemeKeys.mainTextColor)),
           ),
         ),
         InkWell(
@@ -270,10 +252,7 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
         children: [
           Text(
             S.of(context).g_key_181,
-            style: TextStyle(
-              color: _color(AppThemeKeys.mainTextColor),
-              fontSize: ScreenUtil().setSp(32.0),
-            ),
+            style: AppTypography.headline.copyWith(color: _color(AppThemeKeys.mainTextColor)),
           ),
           Divider(height: ScreenUtil().setWidth(48.0)),
           _buildExportKeystoreRow(),
@@ -302,10 +281,7 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
               child: Text(
                 S.of(context).g_key_ex_keystore,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  color: _color(AppThemeKeys.mainTextColor),
-                  fontSize: ScreenUtil().setSp(28.0),
-                ),
+                style: AppTypography.body.copyWith(color: _color(AppThemeKeys.mainTextColor)),
               ),
             ),
             Icon(
@@ -504,10 +480,7 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
               child: Text(
                 S.of(context).g_key_ex_keystore_19,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  color: _color(AppThemeKeys.mainTextColor),
-                  fontSize: ScreenUtil().setSp(28.0),
-                ),
+                style: AppTypography.body.copyWith(color: _color(AppThemeKeys.mainTextColor)),
               ),
             ),
           ],

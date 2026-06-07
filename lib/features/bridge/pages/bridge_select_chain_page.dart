@@ -120,10 +120,7 @@ class _BridgeSelectChainPageState extends State<BridgeSelectChainPage> {
                   ? Center(
                       child: Text(
                         S.of(context).g_key_132, // No data
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(28),
-                          color: AppColorTokens.of(context).textSubtitle,
-                        ),
+                        style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle),
                       ),
                     )
                   : ListView.builder(
@@ -216,10 +213,7 @@ class _BridgeSelectChainPageState extends State<BridgeSelectChainPage> {
                   SizedBox(height: ScreenUtil().setWidth(4)),
                   Text(
                     chain.nativeToken,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(26),
-                      color: AppColorTokens.of(context).textSubtitle,
-                    ),
+                    style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).textSubtitle),
                   ),
                 ],
               ),

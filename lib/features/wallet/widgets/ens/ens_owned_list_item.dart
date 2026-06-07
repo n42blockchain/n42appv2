@@ -105,14 +105,11 @@ class EnsOwnedListItem extends StatelessWidget {
                               ? '${ownedEns.daysUntilExpiry} ${S.of(context).g_key_ens_days_left}'
                               : ownedEns.formattedExpiresAt,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: ScreenUtil().setSp(22),
-                            color: isExpired
+                          style: AppTypography.caption.copyWith(color: isExpired
                                 ? Colors.red
                                 : isExpiringSoon
                                 ? Colors.orange
-                                : AppColorTokens.of(context).textSubtitle,
-                          ),
+                                : AppColorTokens.of(context).textSubtitle),
                         ),
                       ),
                     ],

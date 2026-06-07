@@ -96,10 +96,7 @@ mixin _AddressBookListItemMixin on State<AddressBookList> {
                       ),
                       child: Text(
                         info.coinName ?? '',
-                        style: TextStyle(
-                          color: subtitleText,
-                          fontSize: ScreenUtil().setSp(20),
-                        ),
+                        style: AppTypography.captionSm.copyWith(color: subtitleText),
                       ),
                     ),
                   ],
@@ -109,10 +106,7 @@ mixin _AddressBookListItemMixin on State<AddressBookList> {
                 EnsAddressText(
                   address: info.address ?? '',
                   coinType: info.coinName ?? 'ETH',
-                  style: TextStyle(
-                    color: subtitleText,
-                    fontSize: ScreenUtil().setSp(24),
-                  ),
+                  style: AppTypography.caption.copyWith(color: subtitleText),
                 ),
 
                 if (info.desc != null && info.desc!.isNotEmpty) ...[
@@ -121,10 +115,7 @@ mixin _AddressBookListItemMixin on State<AddressBookList> {
                     info.desc!,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: mutedText,
-                      fontSize: ScreenUtil().setSp(24),
-                    ),
+                    style: AppTypography.caption.copyWith(color: mutedText),
                   ),
                 ],
               ],

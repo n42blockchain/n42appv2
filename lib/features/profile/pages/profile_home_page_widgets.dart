@@ -111,10 +111,7 @@ extension _ProfileHomePageWidgets on ProfileHomePage {
                   SizedBox(height: ScreenUtil().setWidth(2)),
                   Text(
                     subtitle,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(24),
-                      color: AppColorTokens.of(context).textSubtitle,
-                    ),
+                    style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
                   ),
                 ],
               ),

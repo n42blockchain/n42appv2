@@ -166,10 +166,7 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
           SizedBox(height: ScreenUtil().setWidth(12)),
           Text(
             S.of(context).g_wc_no_sessions_desc,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(26),
-              color: AppColorTokens.of(context).textSubtitle,
-            ),
+            style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).textSubtitle),
           ),
         ],
       ),
@@ -254,10 +251,7 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
                   if (meta.url.isNotEmpty)
                     Text(
                       meta.url,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(24),
-                        color: AppColorTokens.of(context).textSubtitle,
-                      ),
+                      style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -281,10 +275,7 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
                           ),
                           child: Text(
                             chain,
-                            style: TextStyle(
-                              fontSize: ScreenUtil().setSp(20),
-                              color: AppColorTokens.of(context).brand,
-                            ),
+                            style: AppTypography.captionSm.copyWith(color: AppColorTokens.of(context).brand),
                           ),
                         );
                       }).toList(),
@@ -312,12 +303,9 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
                     isExpired
                         ? 'Expired'
                         : 'Expires: ${_formatDate(expiryDate)}',
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(22),
-                      color: isExpired
+                    style: AppTypography.caption.copyWith(color: isExpired
                           ? AppColorTokens.of(context).danger
-                          : AppColorTokens.of(context).textSubtitle,
-                    ),
+                          : AppColorTokens.of(context).textSubtitle),
                   ),
                 ],
               ),

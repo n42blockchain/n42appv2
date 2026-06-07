@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LoginTitle extends StatelessWidget {
   final String title;
@@ -16,10 +15,7 @@ class LoginTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final titleStyle = TextStyle(
-      color: color ?? AppColorTokens.of(context).brand,
-      fontSize: ScreenUtil().setSp(32.0),
-    );
+    final titleStyle = AppTypography.headline.copyWith(color: color ?? AppColorTokens.of(context).brand);
 
     if (!must) return Text(title, style: titleStyle);
 
@@ -29,10 +25,7 @@ class LoginTitle extends StatelessWidget {
         Text(title, style: titleStyle),
         Text(
           "*",
-          style: TextStyle(
-            color: AppColorTokens.of(context).danger,
-            fontSize: ScreenUtil().setSp(20.0),
-          ),
+          style: AppTypography.captionSm.copyWith(color: AppColorTokens.of(context).danger),
         ),
       ],
     );

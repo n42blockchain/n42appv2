@@ -210,10 +210,7 @@ class BatchOperationItem extends StatelessWidget {
                   SizedBox(height: ScreenUtil().setWidth(4)),
                   Text(
                     operation.description!,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(20),
-                      color: subtitleColor.withAlpha(150),
-                    ),
+                    style: AppTypography.captionSm.copyWith(color: subtitleColor.withAlpha(150)),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),

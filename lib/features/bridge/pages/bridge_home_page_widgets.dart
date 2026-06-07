@@ -45,10 +45,7 @@ mixin BridgeHomeWidgetsMixin
                 child: Text(
                   isFrom ? S.of(context).g_key_75 : S.of(context).g_key_38,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(26),
-                    color: AppColorTokens.of(context).textSubtitle,
-                  ),
+                  style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).textSubtitle),
                 ),
               ),
               _buildChainPicker(context, provider, chain, isFrom),
@@ -290,10 +287,7 @@ mixin BridgeHomeWidgetsMixin
       children: [
         Text(
           S.of(context).g_key_bridge_slippage,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(26),
-            color: AppColorTokens.of(context).textSubtitle,
-          ),
+          style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).textSubtitle),
         ),
         SizedBox(height: ScreenUtil().setWidth(12)),
         Row(

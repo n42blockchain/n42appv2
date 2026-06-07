@@ -101,10 +101,7 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
   void generateBarTipData() {
     if (barValues.length != 7) return;
 
-    final subtitleStyle = TextStyle(
-      fontSize: ScreenUtil().setSp(20),
-      color: AppColorTokens.of(context).textSubtitle,
-    );
+    final subtitleStyle = AppTypography.captionSm.copyWith(color: AppColorTokens.of(context).textSubtitle);
     final boldStyle = TextStyle(
       fontSize: ScreenUtil().setSp(22),
       color: AppColorTokens.of(context).textPrimary,

@@ -326,10 +326,7 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
                         color: AppColorTokens.of(context).dangerBg,
                         child: Text(
                           errorMessage,
-                          style: TextStyle(
-                            color: AppColorTokens.of(context).danger,
-                            fontSize: ScreenUtil().setSp(30),
-                          ),
+                          style: AppTypography.body.copyWith(color: AppColorTokens.of(context).danger),
                         ),
                       ),
                     SizedBox(height: ScreenUtil().setWidth(148)),

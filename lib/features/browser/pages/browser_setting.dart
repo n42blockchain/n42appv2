@@ -56,10 +56,7 @@ class _BrowserSettingState extends State<BrowserSetting> {
                       flex: 1,
                       child: Text(
                         S.of(context).g_browser_key13,
-                        style: TextStyle(
-                          color: AppColorTokens.of(context).textPrimary,
-                          fontSize: ScreenUtil().setSp(30),
-                        ),
+                        style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
                         textAlign: TextAlign.left,
                       ),
                     ),
@@ -91,10 +88,7 @@ class _BrowserSettingState extends State<BrowserSetting> {
                           flex: 1,
                           child: Text(
                             S.of(context).g_browser_key12,
-                            style: TextStyle(
-                              color: AppColorTokens.of(context).textPrimary,
-                              fontSize: ScreenUtil().setSp(30),
-                            ),
+                            style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
                             textAlign: TextAlign.left,
                           ),
                         ),

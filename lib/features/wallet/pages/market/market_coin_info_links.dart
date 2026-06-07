@@ -100,10 +100,7 @@ Widget _buildLinkRow(
           Expanded(
             child: Text(
               item.label,
-              style: TextStyle(
-                color: AppColorTokens.of(context).textPrimary,
-                fontSize: ScreenUtil().setSp(30),
-              ),
+              style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
             ),
           ),
           Icon(
@@ -138,10 +135,7 @@ Widget _buildBrowserRows(
             Expanded(
               child: Text(
                 S.of(context).g_key_m_15,
-                style: TextStyle(
-                  color: AppColorTokens.of(context).textPrimary,
-                  fontSize: ScreenUtil().setSp(30),
-                ),
+                style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
               ),
             ),
           ],
@@ -158,10 +152,7 @@ Widget _buildBrowserRows(
                 Expanded(
                   child: Text(
                     url,
-                    style: TextStyle(
-                      color: AppColorTokens.of(context).textPrimary,
-                      fontSize: ScreenUtil().setSp(26),
-                    ),
+                    style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).textPrimary),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),

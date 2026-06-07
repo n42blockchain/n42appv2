@@ -42,10 +42,7 @@ Widget? _buildMessageWidget(
       width: double.infinity,
       child: Text(
         errorMessage,
-        style: TextStyle(
-          color: AppColorTokens.of(context).danger,
-          fontSize: ScreenUtil().setSp(28.0),
-        ),
+        style: AppTypography.body.copyWith(color: AppColorTokens.of(context).danger),
       ),
     );
   }
@@ -56,10 +53,7 @@ Widget? _buildMessageWidget(
       width: double.infinity,
       child: Text(
         message,
-        style: TextStyle(
-          color: AppColorTokens.of(context).brand,
-          fontSize: ScreenUtil().setSp(28.0),
-        ),
+        style: AppTypography.body.copyWith(color: AppColorTokens.of(context).brand),
       ),
     );
   }
@@ -342,10 +336,7 @@ Widget textFieldStyle3(
               Expanded(
                 child: Text(
                   errorMessage,
-                  style: TextStyle(
-                    color: AppColorTokens.of(context).danger,
-                    fontSize: ScreenUtil().setSp(28.0),
-                  ),
+                  style: AppTypography.body.copyWith(color: AppColorTokens.of(context).danger),
                 ),
               ),
             ],

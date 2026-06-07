@@ -78,10 +78,7 @@ mixin _StakeViewsMixin
                             ),
                             child: Text(
                               S.of(context).g_key_stake_liquid_tag,
-                              style: TextStyle(
-                                fontSize: ScreenUtil().setSp(20),
-                                color: Colors.white,
-                              ),
+                              style: AppTypography.captionSm.copyWith(color: Colors.white),
                             ),
                           ),
                         ],
@@ -97,10 +94,7 @@ mixin _StakeViewsMixin
                                   widget.protocol.unbondingPeriodDays
                                       .toString(),
                                 ),
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(24),
-                        color: Colors.white70,
-                      ),
+                      style: AppTypography.caption.copyWith(color: Colors.white70),
                     ),
                   ],
                 ),
@@ -120,10 +114,7 @@ mixin _StakeViewsMixin
                   ),
                   Text(
                     'APY',
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(22),
-                      color: Colors.white70,
-                    ),
+                    style: AppTypography.caption.copyWith(color: Colors.white70),
                   ),
                 ],
               ),
@@ -337,10 +328,7 @@ mixin _StakeViewsMixin
           Expanded(
             child: Text(
               _errorMessage,
-              style: TextStyle(
-                color: Colors.red,
-                fontSize: ScreenUtil().setSp(24),
-              ),
+              style: AppTypography.caption.copyWith(color: Colors.red),
             ),
           ),
         ],

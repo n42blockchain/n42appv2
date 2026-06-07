@@ -100,10 +100,7 @@ class ProfileHomePage extends ConsumerWidget {
                 SizedBox(height: ScreenUtil().setWidth(4)),
                 Text(
                   'Manage your settings',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(26),
-                    color: AppColorTokens.of(context).textSubtitle,
-                  ),
+                  style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).textSubtitle),
                 ),
               ],
             ),
@@ -191,10 +188,7 @@ class ProfileHomePage extends ConsumerWidget {
         () => _navigateToLanguageSettings(context),
         trailing: Text(
           'English',
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(26),
-            color: AppColorTokens.of(context).textSubtitle,
-          ),
+          style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).textSubtitle),
         ),
       ),
       _buildMenuItem(
@@ -206,10 +200,7 @@ class ProfileHomePage extends ConsumerWidget {
         () => _navigateToCurrencySettings(context),
         trailing: Text(
           'USD',
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(26),
-            color: AppColorTokens.of(context).textSubtitle,
-          ),
+          style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).textSubtitle),
         ),
       ),
       _buildMenuItem(

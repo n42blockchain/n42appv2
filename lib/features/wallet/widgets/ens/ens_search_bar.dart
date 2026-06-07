@@ -51,10 +51,7 @@ class EnsSearchBar extends StatelessWidget {
               padding: EdgeInsets.only(top: ScreenUtil().setWidth(8)),
               child: Text(
                 S.of(context).g_key_ens_invalid_name,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(22),
-                  color: Colors.red,
-                ),
+                style: AppTypography.caption.copyWith(color: Colors.red),
               ),
             ),
         ],
@@ -88,16 +85,10 @@ class EnsSearchBar extends StatelessWidget {
               controller: controller,
               focusNode: focusNode,
               onChanged: onChanged,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(28),
-                color: AppColorTokens.of(context).textPrimary,
-              ),
+              style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
               decoration: InputDecoration(
                 hintText: S.of(context).g_key_ens_search_hint,
-                hintStyle: TextStyle(
-                  fontSize: ScreenUtil().setSp(28),
-                  color: AppColorTokens.of(context).textSubtitle,
-                ),
+                hintStyle: AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle),
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.symmetric(
                   vertical: ScreenUtil().setWidth(16),

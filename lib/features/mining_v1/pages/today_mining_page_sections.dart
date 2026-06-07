@@ -256,18 +256,12 @@ mixin _SectionsMixin on _WidgetsMixin {
           children: [
             Text(
               title,
-              style: TextStyle(
-                color: AppColorTokens.of(context).textSubtitle,
-                fontSize: ScreenUtil().setSp(24),
-              ),
+              style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
             ),
             SizedBox(height: ScreenUtil().setWidth(30)),
             Text(
               value,
-              style: TextStyle(
-                color: AppColorTokens.of(context).textItem,
-                fontSize: ScreenUtil().setSp(32),
-              ),
+              style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).textItem),
             ),
           ],
         ),
@@ -310,10 +304,7 @@ mixin _SectionsMixin on _WidgetsMixin {
           ),
           Text(
             "${dataUtils.doubleFixed(last24HValue, 3)}${CoinType.N.name}",
-            style: TextStyle(
-              color: AppColorTokens.of(context).textPrimary,
-              fontSize: ScreenUtil().setSp(26),
-            ),
+            style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).textPrimary),
           ),
         ],
       ),

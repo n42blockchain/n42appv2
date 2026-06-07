@@ -185,10 +185,7 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
         children: [
           Text(
             S.of(context).g_key_stake_sort_by,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
-              color: _subtitleColor(),
-            ),
+            style: AppTypography.caption.copyWith(color: _subtitleColor()),
           ),
           _buildSortChip(
             context,
@@ -233,10 +230,7 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
           children: [
             Text(
               label,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(24),
-                color: isSelected ? Colors.white : _mainTextColor(),
-              ),
+              style: AppTypography.caption.copyWith(color: isSelected ? Colors.white : _mainTextColor()),
             ),
             if (isSelected) ...[
               SizedBox(width: ScreenUtil().setWidth(4)),
@@ -262,8 +256,7 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
           SizedBox(height: ScreenUtil().setWidth(20)),
           Text(
             S.of(context).g_key_stake_no_validators,
-            style: TextStyle(fontSize: ScreenUtil().setSp(30), color: color),
-          ),
+            style: AppTypography.body.copyWith(color: color)),
         ],
       ),
     );
@@ -362,10 +355,7 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
                   SizedBox(height: ScreenUtil().setWidth(4)),
                   Text(
                     shortenStakingAddress(validator.address),
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(22),
-                      color: _subtitleColor(),
-                    ),
+                    style: AppTypography.caption.copyWith(color: _subtitleColor()),
                   ),
                   SizedBox(height: ScreenUtil().setWidth(8)),
                   Row(

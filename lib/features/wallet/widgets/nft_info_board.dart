@@ -200,10 +200,7 @@ class NftInfoBoard extends StatelessWidget {
                 Flexible(
                   child: Text(
                     '${S.of(context).g_key_nft_contract}: ${_shortenAddress(contractAddress!)}',
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(24),
-                      color: _subtitleColor(context),
-                    ),
+                    style: AppTypography.caption.copyWith(color: _subtitleColor(context)),
                   ),
                 ),
                 SizedBox(width: ScreenUtil().setWidth(8)),
@@ -254,10 +251,7 @@ class NftInfoBoard extends StatelessWidget {
         children: [
           Text(
             '$label: ',
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(26),
-              color: _subtitleColor(context),
-            ),
+            style: AppTypography.bodySm.copyWith(color: _subtitleColor(context)),
           ),
           Expanded(
             child: Text(

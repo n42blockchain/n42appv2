@@ -26,10 +26,7 @@ Widget buttonStyle1(BuildContext context, VoidCallback onTap, String title) {
       padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(8.0)),
       child: Text(
         title,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(32.0),
-          color: AppColorTokens.of(context).textPrimary,
-        ),
+        style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).textPrimary),
         textAlign: TextAlign.center,
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
@@ -195,10 +192,7 @@ Widget buttonStyle6(
           Flexible(
             child: Text(
               title,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(28.0),
-                color: textColor,
-              ),
+              style: AppTypography.body.copyWith(color: textColor),
               textAlign: TextAlign.center,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,

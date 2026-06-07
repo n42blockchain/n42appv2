@@ -56,10 +56,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
                     SizedBox(height: ScreenUtil().setWidth(4)),
                     Text(
                       widget.account.type.displayName,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(24),
-                        color: _subText,
-                      ),
+                      style: AppTypography.caption.copyWith(color: _subText),
                     ),
                   ],
                 ),
@@ -84,10 +81,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
                     children: [
                       Text(
                         S.of(context).g_key_155,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(20),
-                          color: _subText,
-                        ),
+                        style: AppTypography.captionSm.copyWith(color: _subText),
                       ),
                       SizedBox(height: ScreenUtil().setWidth(4)),
                       Text(
@@ -283,8 +277,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
         children: [
           Text(
             label,
-            style: TextStyle(fontSize: ScreenUtil().setSp(24), color: _subText),
-          ),
+            style: AppTypography.caption.copyWith(color: _subText)),
           Text(
             value,
             style: TextStyle(
@@ -343,10 +336,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
                   SizedBox(height: ScreenUtil().setWidth(12)),
                   Text(
                     S.of(context).g_key_132,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(24),
-                      color: _subText,
-                    ),
+                    style: AppTypography.caption.copyWith(color: _subText),
                   ),
                 ],
               ),

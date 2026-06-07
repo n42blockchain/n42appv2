@@ -126,10 +126,7 @@ class _KeystoneInfoCard extends StatelessWidget {
           Expanded(
             child: Text(
               message,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(24),
-                color: AppColorTokens.of(context).textPrimary,
-              ),
+              style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textPrimary),
             ),
           ),
         ],
@@ -159,10 +156,7 @@ class _KeystoneScanErrorCard extends StatelessWidget {
         children: [
           Text(
             error,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
-              color: Colors.white,
-            ),
+            style: AppTypography.caption.copyWith(color: Colors.white),
             textAlign: TextAlign.center,
           ),
           SizedBox(height: ScreenUtil().setWidth(12)),
@@ -179,10 +173,7 @@ class _KeystoneScanErrorCard extends StatelessWidget {
               ),
               child: Text(
                 s.g_key_hw_load_more,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
-                  color: Colors.white,
-                ),
+                style: AppTypography.caption.copyWith(color: Colors.white),
               ),
             ),
           ),

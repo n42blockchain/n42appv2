@@ -24,6 +24,7 @@ import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/features/widgets/dialog_widget/tips_dialog_7.dart';
 import 'package:n42_wallet/features/widgets/empty.dart';
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
@@ -263,10 +264,7 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
             if (_tokenSymbol != null)
               Text(
                 '$_tokenSymbol($_tokenName)',
-                style: TextStyle(
-                  color: _tc(AppThemeKeys.mainTextColor.name),
-                  fontSize: ScreenUtil().setSp(24.0),
-                ),
+                style: AppTypography.caption.copyWith(color: _tc(AppThemeKeys.mainTextColor.name)),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -339,10 +337,7 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
                 ),
                 child: Text(
                   S.of(context).g_coin_key_1,
-                  style: TextStyle(
-                    color: _tc(AppThemeKeys.mainTextColor.name),
-                    fontSize: ScreenUtil().setSp(30.0),
-                  ),
+                  style: AppTypography.body.copyWith(color: _tc(AppThemeKeys.mainTextColor.name)),
                 ),
               ),
               _transactionsWidget(),
@@ -381,10 +376,7 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
               alignment: Alignment.center,
               child: Text(
                 S.of(context).g_mining_key_49,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(30.0),
-                  color: _tc(AppThemeKeys.mainBlueColor.name),
-                ),
+                style: AppTypography.body.copyWith(color: _tc(AppThemeKeys.mainBlueColor.name)),
               ),
             ),
           );

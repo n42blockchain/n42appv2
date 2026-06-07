@@ -112,10 +112,7 @@ class _TokenDiscoveryPageState extends ConsumerState<TokenDiscoveryPage> {
     return Center(
       child: Text(
         S.of(context).g_key_token_discovery_empty,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(30),
-          color: _color(AppThemeKeys.itemSubtitleTextColor),
-        ),
+        style: AppTypography.body.copyWith(color: _color(AppThemeKeys.itemSubtitleTextColor)),
       ),
     );
   }

@@ -124,10 +124,7 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
               const Spacer(),
               Text(
                 node.name,
-                style: TextStyle(
-                  color: AppColorTokens.of(context).textSubtitle,
-                  fontSize: ScreenUtil().setSp(22),
-                ),
+                style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
               ),
             ],
           ),
@@ -138,10 +135,7 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
                 flex: 0,
                 child: Text(
                   '${S.of(context).g_mining_node_key2}: ',
-                  style: TextStyle(
-                    color: AppColorTokens.of(context).textSubtitle,
-                    fontSize: ScreenUtil().setSp(24),
-                  ),
+                  style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
@@ -206,10 +200,7 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
               overflow: TextOverflow.ellipsis,
               maxLines: 2,
               textAlign: TextAlign.center,
-              style: TextStyle(
-                color: subColor,
-                fontSize: ScreenUtil().setSp(24),
-              ),
+              style: AppTypography.caption.copyWith(color: subColor),
             ),
           ],
         ),

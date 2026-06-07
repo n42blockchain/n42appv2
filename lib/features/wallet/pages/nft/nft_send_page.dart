@@ -144,20 +144,14 @@ class _NftSendPageState extends State<NftSendPage> {
                 // 收款地址
                 Text(
                   S.of(context).g_key_38, // To
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(28),
-                    color: subtitleColor,
-                  ),
+                  style: AppTypography.body.copyWith(color: subtitleColor),
                 ),
                 SizedBox(height: ScreenUtil().setWidth(10)),
                 TextFormField(
                   controller: _addressCtrl,
                   decoration: InputDecoration(
                     hintText: S.of(context).g_key_41,
-                    hintStyle: TextStyle(
-                      color: subtitleColor,
-                      fontSize: ScreenUtil().setSp(26),
-                    ),
+                    hintStyle: AppTypography.bodySm.copyWith(color: subtitleColor),
                     suffixIcon: IconButton(
                       icon: Icon(Icons.paste, color: blueColor),
                       onPressed: () async {
@@ -170,10 +164,7 @@ class _NftSendPageState extends State<NftSendPage> {
                     ),
                     border: OutlineInputBorder(borderRadius: AppRadius.brSm),
                   ),
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(26),
-                    color: textColor,
-                  ),
+                  style: AppTypography.bodySm.copyWith(color: textColor),
                   validator: (v) {
                     if (v == null || v.trim().isEmpty) {
                       return S.of(context).g_key_41;
@@ -187,10 +178,7 @@ class _NftSendPageState extends State<NftSendPage> {
                   SizedBox(height: ScreenUtil().setWidth(24)),
                   Text(
                     S.of(context).g_key_nft_quantity,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(28),
-                      color: subtitleColor,
-                    ),
+                    style: AppTypography.body.copyWith(color: subtitleColor),
                   ),
                   SizedBox(height: ScreenUtil().setWidth(10)),
                   TextFormField(
@@ -199,16 +187,10 @@ class _NftSendPageState extends State<NftSendPage> {
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     decoration: InputDecoration(
                       hintText: '1 ~ ${nft.balance}',
-                      hintStyle: TextStyle(
-                        color: subtitleColor,
-                        fontSize: ScreenUtil().setSp(26),
-                      ),
+                      hintStyle: AppTypography.bodySm.copyWith(color: subtitleColor),
                       border: OutlineInputBorder(borderRadius: AppRadius.brSm),
                     ),
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(26),
-                      color: textColor,
-                    ),
+                    style: AppTypography.bodySm.copyWith(color: textColor),
                     validator: (v) {
                       final n = int.tryParse(v ?? '');
                       if (n == null || n <= 0) return S.of(context).g_key_t_43;
@@ -302,10 +284,7 @@ class _NftSendPageState extends State<NftSendPage> {
                   '${S.of(context).g_key_nft_token_id}: #${nft.tokenId}',
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24),
-                    color: subtitleColor,
-                  ),
+                  style: AppTypography.caption.copyWith(color: subtitleColor),
                 ),
               ],
             ),

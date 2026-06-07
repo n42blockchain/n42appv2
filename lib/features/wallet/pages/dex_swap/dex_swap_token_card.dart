@@ -47,10 +47,7 @@ class DexTokenCard extends StatelessWidget {
         children: [
           Text(
             label,
-            style: TextStyle(
-              color: AppColorTokens.of(context).textSubtitle,
-              fontSize: ScreenUtil().setSp(26),
-            ),
+            style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).textSubtitle),
           ),
           SizedBox(height: ScreenUtil().setWidth(12)),
           Row(

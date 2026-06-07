@@ -115,17 +115,11 @@ class _ChooseImportCoinState extends State<ChooseImportCoin> {
                   children: [
                     Text(
                       l,
-                      style: TextStyle(
-                        color: AppColorTokens.of(context).textPrimary,
-                        fontSize: ScreenUtil().setSp(32),
-                      ),
+                      style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).textPrimary),
                     ),
                     Text(
                       coinPath ?? '',
-                      style: TextStyle(
-                        color: AppColorTokens.of(context).textPrimary,
-                        fontSize: ScreenUtil().setSp(30),
-                      ),
+                      style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
                     ),
                   ],
                 ),

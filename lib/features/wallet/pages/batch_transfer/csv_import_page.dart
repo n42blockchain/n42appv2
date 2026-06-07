@@ -149,17 +149,11 @@ class _CsvImportPageState extends State<CsvImportPage>
               children: [
                 Text(
                   'Recipients: $_validLineCount',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24),
-                    color: subText,
-                  ),
+                  style: AppTypography.caption.copyWith(color: subText),
                 ),
                 Text(
                   'Token: ${widget.tokenSymbol}',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24),
-                    color: subText,
-                  ),
+                  style: AppTypography.caption.copyWith(color: subText),
                 ),
               ],
             ),

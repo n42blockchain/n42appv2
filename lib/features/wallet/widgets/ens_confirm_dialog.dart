@@ -215,10 +215,7 @@ class EnsConfirmDialog extends StatelessWidget {
           ),
           child: Text(
             S.of(context).g_key_79, // Cancel
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
-              color: subtitleColor,
-            ),
+            style: AppTypography.body.copyWith(color: subtitleColor),
           ),
         ),
         // 确认按钮
@@ -274,10 +271,7 @@ class EnsConfirmDialog extends StatelessWidget {
               SizedBox(width: ScreenUtil().setWidth(8)),
               Text(
                 label,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(22),
-                  color: subtitleColor,
-                ),
+                style: AppTypography.caption.copyWith(color: subtitleColor),
               ),
               const Spacer(),
               GestureDetector(

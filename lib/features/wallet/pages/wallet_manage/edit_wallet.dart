@@ -175,10 +175,7 @@ class _EditWalletState extends ConsumerState<EditWallet> {
                   (tag) => ActionChip(
                     label: Text(
                       '+ $tag',
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(22),
-                        color: subColor,
-                      ),
+                      style: AppTypography.caption.copyWith(color: subColor),
                     ),
                     onPressed: _tags.length < 5 ? () => _addTag(tag) : null,
                     backgroundColor: Colors.transparent,
@@ -203,10 +200,7 @@ class _EditWalletState extends ConsumerState<EditWallet> {
                       style: TextStyle(fontSize: ScreenUtil().setSp(24)),
                       decoration: InputDecoration(
                         hintText: 'Custom tag...',
-                        hintStyle: TextStyle(
-                          fontSize: ScreenUtil().setSp(24),
-                          color: subColor,
-                        ),
+                        hintStyle: AppTypography.caption.copyWith(color: subColor),
                         contentPadding: const EdgeInsets.symmetric(
                           horizontal: 12,
                           vertical: 8,

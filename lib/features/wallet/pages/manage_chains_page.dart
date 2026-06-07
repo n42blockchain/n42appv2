@@ -92,10 +92,7 @@ class ManageChainsPage extends ConsumerWidget {
             ),
             subtitle: Text(
               name,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(24),
-                color: AppColorTokens.of(context).textSubtitle,
-              ),
+              style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
             ),
             trailing: Switch(
               value: cm.showList,

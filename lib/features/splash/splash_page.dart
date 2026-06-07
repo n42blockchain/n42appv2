@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:n42_wallet/core/utils/app_logger.dart';
@@ -221,18 +222,12 @@ class _SplashPageState extends State<SplashPage>
       children: [
         Text(
           _loadingText,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(24),
-            color: Colors.white.withValues(alpha: 0.6),
-          ),
+          style: AppTypography.caption.copyWith(color: Colors.white.withValues(alpha: 0.6)),
         ),
         SizedBox(height: ScreenUtil().setWidth(60)),
         Text(
           '\u00a9 2021-2026 N42 Inc.',
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(22),
-            color: Colors.white.withValues(alpha: 0.4),
-          ),
+          style: AppTypography.caption.copyWith(color: Colors.white.withValues(alpha: 0.4)),
         ),
         SizedBox(height: ScreenUtil().setWidth(40)),
       ],

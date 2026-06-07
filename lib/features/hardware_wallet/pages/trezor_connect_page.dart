@@ -180,8 +180,7 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
         children: [
           Text(
             s.g_key_hw_trezor_usb_hint,
-            style: TextStyle(fontSize: ScreenUtil().setSp(26), color: mainText),
-          ),
+            style: AppTypography.bodySm.copyWith(color: mainText)),
           SizedBox(height: ScreenUtil().setWidth(16)),
           ..._stepTexts.indexed.map(
             (e) => _buildStep(context, '${e.$1 + 1}', e.$2),
@@ -232,10 +231,7 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
               padding: EdgeInsets.only(top: ScreenUtil().setWidth(6)),
               child: Text(
                 text,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
-                  color: AppColorTokens.of(context).textSubtitle,
-                ),
+                style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
               ),
             ),
           ),
@@ -270,8 +266,7 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
           Expanded(
             child: Text(
               message,
-              style: TextStyle(fontSize: ScreenUtil().setSp(24), color: color),
-            ),
+              style: AppTypography.caption.copyWith(color: color)),
           ),
         ],
       ),

@@ -131,10 +131,7 @@ mixin StakingHomePageWidgetsMixin
                   SizedBox(height: ScreenUtil().setWidth(8)),
                   Text(
                     protocol.description,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(26),
-                      color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
-                    ),
+                    style: AppTypography.bodySm.copyWith(color: _themeColor(AppThemeKeys.itemSubtitleTextColor)),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -211,10 +208,7 @@ mixin StakingHomePageWidgetsMixin
           isApyLoading
               ? S.of(context).g_key_stake_updating
               : S.of(context).g_key_stake_apy,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(22),
-            color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
-          ),
+          style: AppTypography.caption.copyWith(color: _themeColor(AppThemeKeys.itemSubtitleTextColor)),
         ),
         SizedBox(height: ScreenUtil().setWidth(8)),
         Text(
@@ -225,10 +219,7 @@ mixin StakingHomePageWidgetsMixin
                       protocol.unbondingPeriodDays.toString(),
                     )
               : S.of(context).g_key_stake_no_lock,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(22),
-            color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
-          ),
+          style: AppTypography.caption.copyWith(color: _themeColor(AppThemeKeys.itemSubtitleTextColor)),
         ),
       ],
     );
@@ -310,10 +301,7 @@ mixin StakingHomePageWidgetsMixin
             SizedBox(height: ScreenUtil().setWidth(8)),
             Text(
               '${S.of(context).g_key_stake_validator}: ${position.validator!.name}',
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(24),
-                color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
-              ),
+              style: AppTypography.caption.copyWith(color: _themeColor(AppThemeKeys.itemSubtitleTextColor)),
             ),
           ],
           SizedBox(height: ScreenUtil().setWidth(12)),
@@ -355,10 +343,7 @@ mixin StakingHomePageWidgetsMixin
           child: Text(
             '${(liveApys[position.protocol.id] ?? position.protocol.apy).toStringAsFixed(1)}% ${S.of(context).g_key_stake_apy}',
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(26),
-              color: Colors.green,
-            ),
+            style: AppTypography.bodySm.copyWith(color: Colors.green),
           ),
         ),
       ],
@@ -374,10 +359,7 @@ mixin StakingHomePageWidgetsMixin
           children: [
             Text(
               S.of(context).g_key_stake_staked,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
-                color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
-              ),
+              style: AppTypography.caption.copyWith(color: _themeColor(AppThemeKeys.itemSubtitleTextColor)),
             ),
             Text(
               formatAmount(
@@ -398,10 +380,7 @@ mixin StakingHomePageWidgetsMixin
             children: [
               Text(
                 S.of(context).g_key_stake_rewards,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(22),
-                  color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
-                ),
+                style: AppTypography.caption.copyWith(color: _themeColor(AppThemeKeys.itemSubtitleTextColor)),
               ),
               Text(
                 formatAmount(
@@ -447,10 +426,7 @@ mixin StakingHomePageWidgetsMixin
                     position.unbondingDaysLeft.toString(),
                   ),
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(24),
-                color: Colors.orange,
-              ),
+              style: AppTypography.caption.copyWith(color: Colors.orange),
             ),
           ),
         ],

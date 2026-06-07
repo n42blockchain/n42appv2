@@ -226,10 +226,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
                       ? S.of(context).g_key_ens_expired
                       : '${S.of(context).g_key_ens_expires}: ${ens.formattedExpiresAt}',
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24),
-                    color: statusColor,
-                  ),
+                  style: AppTypography.caption.copyWith(color: statusColor),
                 ),
               ),
             ],
@@ -320,18 +317,12 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
                 child: Text(
                   S.of(context).g_key_ens_current_expiry,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24),
-                    color: _color(AppThemeKeys.itemSubtitleTextColor),
-                  ),
+                  style: AppTypography.caption.copyWith(color: _color(AppThemeKeys.itemSubtitleTextColor)),
                 ),
               ),
               Text(
                 _formatDate(currentExpiry),
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
-                  color: _color(AppThemeKeys.mainTextColor),
-                ),
+                style: AppTypography.caption.copyWith(color: _color(AppThemeKeys.mainTextColor)),
               ),
             ],
           ),

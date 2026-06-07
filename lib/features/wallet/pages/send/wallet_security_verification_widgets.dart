@@ -16,10 +16,7 @@ class _SectionLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: TextStyle(
-        color: AppColorTokens.of(context).textSubtitle,
-        fontSize: ScreenUtil().setSp(28.0),
-      ),
+      style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle),
     );
   }
 }
@@ -36,10 +33,7 @@ class _ErrorMessage extends StatelessWidget {
       alignment: Alignment.centerRight,
       child: Text(
         message,
-        style: TextStyle(
-          color: AppColorTokens.of(context).danger,
-          fontSize: ScreenUtil().setSp(26.0),
-        ),
+        style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).danger),
         textAlign: TextAlign.end,
       ),
     );

@@ -95,19 +95,13 @@ class BatchTransferSelectPage extends ConsumerWidget {
             SizedBox(height: ScreenUtil().setWidth(16)),
             Text(
               S.of(context).g_key_batch_no_supported,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(28),
-                color: subtitleText,
-              ),
+              style: AppTypography.body.copyWith(color: subtitleText),
               textAlign: TextAlign.center,
             ),
             SizedBox(height: ScreenUtil().setWidth(8)),
             Text(
               S.of(context).g_key_batch_evm_only,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(24),
-                color: subtitleText,
-              ),
+              style: AppTypography.caption.copyWith(color: subtitleText),
               textAlign: TextAlign.center,
             ),
           ],
@@ -153,10 +147,7 @@ class BatchTransferSelectPage extends ConsumerWidget {
                 SizedBox(height: ScreenUtil().setWidth(4)),
                 Text(
                   S.of(context).g_key_batch_send_multiple,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24),
-                    color: AppColorTokens.of(context).textSubtitle,
-                  ),
+                  style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
                 ),
               ],
             ),
@@ -221,10 +212,7 @@ class BatchTransferSelectPage extends ConsumerWidget {
                   ),
                   Text(
                     chainSymbol,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(22),
-                      color: subtitleText,
-                    ),
+                    style: AppTypography.caption.copyWith(color: subtitleText),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -244,10 +232,7 @@ class BatchTransferSelectPage extends ConsumerWidget {
                 ),
                 Text(
                   chainSymbol,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(22),
-                    color: subtitleText,
-                  ),
+                  style: AppTypography.caption.copyWith(color: subtitleText),
                 ),
               ],
             ),

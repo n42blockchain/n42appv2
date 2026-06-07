@@ -32,10 +32,7 @@ mixin _WidgetsMixin on _LogicMixin {
                         child: Text(
                           S.of(context).g_mining_key_5,
                           maxLines: 2,
-                          style: TextStyle(
-                            color: AppColorTokens.of(context).textSubtitle,
-                            fontSize: ScreenUtil().setSp(24),
-                          ),
+                          style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
                         ),
                       ),
                       Container(
@@ -74,10 +71,7 @@ mixin _WidgetsMixin on _LogicMixin {
                               ? S.current.g_key_193
                               : S.current.g_mining_key_47,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: AppColorTokens.of(context).textItem,
-                            fontSize: ScreenUtil().setSp(32),
-                          ),
+                          style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).textItem),
                         ),
                       ),
                       GestureDetector(
@@ -141,20 +135,14 @@ mixin _WidgetsMixin on _LogicMixin {
                 children: [
                   Text(
                     S.of(context).g_mining_key38,
-                    style: TextStyle(
-                      color: AppColorTokens.of(context).textSubtitle,
-                      fontSize: ScreenUtil().setSp(24),
-                    ),
+                    style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
                   ),
                   SizedBox(height: ScreenUtil().setWidth(30)),
                   Text(
                     mpValue.miningType == null
                         ? "0 ${CoinType.N.name}"
                         : '$currDepositsOfValue ${CoinType.N.name}',
-                    style: TextStyle(
-                      color: AppColorTokens.of(context).textItem,
-                      fontSize: ScreenUtil().setSp(32),
-                    ),
+                    style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).textItem),
                   ),
                 ],
               ),
@@ -214,10 +202,7 @@ mixin _WidgetsMixin on _LogicMixin {
       context,
       AppThemeKeys.timeBorderColor.name,
     );
-    final textStyle = TextStyle(
-      color: blueColor,
-      fontSize: ScreenUtil().setSp(26),
-    );
+    final textStyle = AppTypography.bodySm.copyWith(color: blueColor);
 
     Widget timeBox(String value) {
       return Container(
@@ -319,10 +304,7 @@ mixin _WidgetsMixin on _LogicMixin {
                         ),
                         child: Text(
                           tipsText ?? '',
-                          style: TextStyle(
-                            color: AppColorTokens.of(context).textPrimary,
-                            fontSize: ScreenUtil().setSp(24),
-                          ),
+                          style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textPrimary),
                         ),
                       ),
                     ),
@@ -334,10 +316,7 @@ mixin _WidgetsMixin on _LogicMixin {
               children: [
                 Text(
                   value,
-                  style: TextStyle(
-                    color: AppColorTokens.of(context).textPrimary,
-                    fontSize: ScreenUtil().setSp(30),
-                  ),
+                  style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
                 ),
                 Image.asset(
                   imagePath ?? '',

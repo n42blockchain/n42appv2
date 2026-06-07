@@ -244,8 +244,7 @@ class _NonEvmFeeSelectorState extends State<NonEvmFeeSelector> {
           ),
           Text(
             '$formatted $unit',
-            style: TextStyle(fontSize: ScreenUtil().setSp(28), color: mainText),
-          ),
+            style: AppTypography.body.copyWith(color: mainText)),
         ],
       ),
     );
@@ -335,19 +334,13 @@ class _NonEvmFeeSelectorState extends State<NonEvmFeeSelector> {
               SizedBox(height: ScreenUtil().setWidth(4)),
               Text(
                 estimatedTime,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(22),
-                  color: subtitleText,
-                ),
+                style: AppTypography.caption.copyWith(color: subtitleText),
               ),
               // 费率（BTC 专有）
               if (option.feeRate != null)
                 Text(
                   '${option.feeRate} ${option.feeRateUnit ?? ''}',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(20),
-                    color: subtitleText,
-                  ),
+                  style: AppTypography.captionSm.copyWith(color: subtitleText),
                 ),
             ],
           ),
@@ -414,10 +407,7 @@ class _NonEvmFeeSelectorState extends State<NonEvmFeeSelector> {
       children: [
         Text(
           label,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(26),
-            color: subtitleText,
-          ),
+          style: AppTypography.bodySm.copyWith(color: subtitleText),
         ),
         Text(
           value,

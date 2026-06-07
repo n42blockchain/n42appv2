@@ -278,17 +278,11 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                               children: [
                                 Text(
                                   selectChain['baseInfo']['name'],
-                                  style: TextStyle(
-                                    fontSize: ScreenUtil().setSp(30),
-                                    color: AppColorTokens.of(context).textItem,
-                                  ),
+                                  style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textItem),
                                 ),
                                 Text(
                                   selectChain['baseInfo']['miniName'],
-                                  style: TextStyle(
-                                    fontSize: ScreenUtil().setSp(30),
-                                    color: AppColorTokens.of(context).textItem,
-                                  ),
+                                  style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textItem),
                                 ),
                               ],
                             ),
@@ -331,10 +325,7 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                         ),
                         child: Text(
                           errorMessage,
-                          style: TextStyle(
-                            color: AppColorTokens.of(context).danger,
-                            fontSize: ScreenUtil().setSp(26),
-                          ),
+                          style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).danger),
                           textAlign: TextAlign.center,
                         ),
                       ),

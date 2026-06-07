@@ -86,10 +86,7 @@ class _ShareMiningState extends State<ShareMining> {
                 SizedBox(height: ScreenUtil().setWidth(100)),
                 Text(
                   "Congratulations!",
-                  style: TextStyle(
-                    color: AppColorTokens.of(context).textPrimary,
-                    fontSize: ScreenUtil().setSp(30),
-                  ),
+                  style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
                 ),
                 SizedBox(height: ScreenUtil().setWidth(40)),
                 Padding(
@@ -127,10 +124,7 @@ class _ShareMiningState extends State<ShareMining> {
                           SizedBox(height: ScreenUtil().setWidth(24)),
                           Text(
                             S.of(context).g_mining_key61,
-                            style: TextStyle(
-                              color: AppColorTokens.of(context).brand,
-                              fontSize: ScreenUtil().setSp(30),
-                            ),
+                            style: AppTypography.body.copyWith(color: AppColorTokens.of(context).brand),
                           ),
                         ],
                       ),

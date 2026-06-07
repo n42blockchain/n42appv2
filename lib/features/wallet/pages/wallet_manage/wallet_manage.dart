@@ -130,26 +130,17 @@ class _WalletManageState extends ConsumerState<WalletManage> {
           ctx,
           AppThemeKeys.mainBlueColor.name,
         );
-        final actionStyle = TextStyle(
-          color: blueColor,
-          fontSize: ScreenUtil().setSp(28.0),
-        );
+        final actionStyle = AppTypography.body.copyWith(color: blueColor);
 
         return AlertDialog(
           title: Text(
             s.g_face_3,
-            style: TextStyle(
-              color: mainText,
-              fontSize: ScreenUtil().setSp(32.0),
-            ),
+            style: AppTypography.headline.copyWith(color: mainText),
           ),
           content: SingleChildScrollView(
             child: Text(
               s.g_key_192,
-              style: TextStyle(
-                color: mainText,
-                fontSize: ScreenUtil().setSp(28.0),
-              ),
+              style: AppTypography.body.copyWith(color: mainText),
             ),
           ),
           actions: [
@@ -199,10 +190,7 @@ class _WalletManageState extends ConsumerState<WalletManage> {
                 ),
                 child: Text(
                   S.of(context).g_key_113,
-                  style: TextStyle(
-                    color: AppColorTokens.of(context).textPrimary,
-                    fontSize: ScreenUtil().setSp(30.0),
-                  ),
+                  style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
                 ),
               ),
             ),
@@ -332,20 +320,14 @@ class _WalletManageState extends ConsumerState<WalletManage> {
           children: [
             Text(
               title,
-              style: TextStyle(
-                color: mainText,
-                fontSize: ScreenUtil().setSp(32.0),
-              ),
+              style: AppTypography.headline.copyWith(color: mainText),
             ),
             Expanded(
               child: Text(
                 value,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  color: mainText,
-                  fontSize: ScreenUtil().setSp(28.0),
-                ),
+                style: AppTypography.body.copyWith(color: mainText),
                 textAlign: TextAlign.right,
               ),
             ),
@@ -375,10 +357,7 @@ class _WalletManageState extends ConsumerState<WalletManage> {
             Expanded(
               child: Text(
                 title,
-                style: TextStyle(
-                  color: mainText,
-                  fontSize: ScreenUtil().setSp(32.0),
-                ),
+                style: AppTypography.headline.copyWith(color: mainText),
               ),
             ),
             SizedBox(width: ScreenUtil().setWidth(10.0)),

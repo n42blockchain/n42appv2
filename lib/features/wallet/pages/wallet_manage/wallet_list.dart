@@ -83,10 +83,7 @@ class _WalletListState extends ConsumerState<WalletList>
                 selected: _selectedTag == null,
                 onSelected: (_) => setState(() => _selectedTag = null),
                 selectedColor: AppColorTokens.of(context).brand,
-                labelStyle: TextStyle(
-                  color: _selectedTag == null ? Colors.white : null,
-                  fontSize: ScreenUtil().setSp(24),
-                ),
+                labelStyle: AppTypography.caption.copyWith(color: _selectedTag == null ? Colors.white : null),
                 side: BorderSide.none,
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 visualDensity: VisualDensity.compact,
@@ -103,10 +100,7 @@ class _WalletListState extends ConsumerState<WalletList>
                   selected: _selectedTag == tag,
                   onSelected: (_) => setState(() => _selectedTag = tag),
                   selectedColor: AppColorTokens.of(context).brand,
-                  labelStyle: TextStyle(
-                    color: _selectedTag == tag ? Colors.white : null,
-                    fontSize: ScreenUtil().setSp(24),
-                  ),
+                  labelStyle: AppTypography.caption.copyWith(color: _selectedTag == tag ? Colors.white : null),
                   side: BorderSide.none,
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   visualDensity: VisualDensity.compact,
@@ -161,10 +155,7 @@ class _WalletListState extends ConsumerState<WalletList>
                       ),
                       child: Text(
                         S.of(context).g_key_ex_keystore_13,
-                        style: TextStyle(
-                          color: AppColorTokens.of(context).textPrimary,
-                          fontSize: ScreenUtil().setSp(32.0),
-                        ),
+                        style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).textPrimary),
                       ),
                     ),
                     _buildList(),

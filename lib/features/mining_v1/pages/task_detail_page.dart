@@ -82,18 +82,12 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
                     children: [
                       Text(
                         widget.astValue,
-                        style: TextStyle(
-                          color: AppColorTokens.of(context).textPrimary,
-                          fontSize: ScreenUtil().setSp(36),
-                        ),
+                        style: AppTypography.title.copyWith(color: AppColorTokens.of(context).textPrimary),
                       ),
                       SizedBox(width: ScreenUtil().setWidth(12)),
                       Text(
                         CoinType.N.name,
-                        style: TextStyle(
-                          color: AppColorTokens.of(context).textPrimary,
-                          fontSize: ScreenUtil().setSp(28),
-                        ),
+                        style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
                       ),
                     ],
                   ),
