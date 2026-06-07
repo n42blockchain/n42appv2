@@ -156,8 +156,7 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
             SizedBox(height: ScreenUtil().setWidth(12)),
             Text(
               'Trezor',
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(28),
+              style: AppTypography.body.copyWith(
                 fontWeight: FontWeight.w600,
                 color: mainText,
               ),
@@ -180,7 +179,8 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
         children: [
           Text(
             s.g_key_hw_trezor_usb_hint,
-            style: AppTypography.bodySm.copyWith(color: mainText)),
+            style: AppTypography.bodySm.copyWith(color: mainText),
+          ),
           SizedBox(height: ScreenUtil().setWidth(16)),
           ..._stepTexts.indexed.map(
             (e) => _buildStep(context, '${e.$1 + 1}', e.$2),
@@ -217,8 +217,7 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
             child: Center(
               child: Text(
                 number,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(22),
+                style: AppTypography.caption.copyWith(
                   fontWeight: FontWeight.w600,
                   color: blueColor,
                 ),
@@ -231,7 +230,9 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
               padding: EdgeInsets.only(top: ScreenUtil().setWidth(6)),
               child: Text(
                 text,
-                style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
+                style: AppTypography.caption.copyWith(
+                  color: AppColorTokens.of(context).textSubtitle,
+                ),
               ),
             ),
           ),
@@ -266,7 +267,8 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
           Expanded(
             child: Text(
               message,
-              style: AppTypography.caption.copyWith(color: color)),
+              style: AppTypography.caption.copyWith(color: color),
+            ),
           ),
         ],
       ),
@@ -307,10 +309,7 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
             )
           : Text(
               s.g_key_hw_connect_new_trezor,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(30),
-                fontWeight: FontWeight.w600,
-              ),
+              style: AppTypography.body.copyWith(fontWeight: FontWeight.w600),
             ),
     );
   }

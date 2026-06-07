@@ -72,16 +72,17 @@ class _MiningIndexState extends State<MiningIndex>
                         children: [
                           Text(
                             globalMiningV1.walletName,
-                            style: TextStyle(
+                            style: AppTypography.body.copyWith(
                               color: AppColorTokens.of(context).brand,
-                              fontSize: ScreenUtil().setSp(30),
                               fontWeight: FontWeight.w600,
                             ),
                           ),
                           if (!AppConfig.isMainChainMining)
                             Text(
                               S.of(context).g_key_147,
-                              style: AppTypography.captionSm.copyWith(color: AppColorTokens.of(context).brand),
+                              style: AppTypography.captionSm.copyWith(
+                                color: AppColorTokens.of(context).brand,
+                              ),
                             ),
                         ],
                       ),
@@ -123,7 +124,9 @@ class _MiningIndexState extends State<MiningIndex>
                 ),
                 child: Text(
                   "The test chain is being upgraded and blocks cannot be verified temporarily.",
-                  style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).danger),
+                  style: AppTypography.bodySm.copyWith(
+                    color: AppColorTokens.of(context).danger,
+                  ),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -137,8 +140,7 @@ class _MiningIndexState extends State<MiningIndex>
               padding: EdgeInsets.symmetric(
                 horizontal: ScreenUtil().setWidth(15),
               ),
-              labelStyle: TextStyle(
-                fontSize: ScreenUtil().setSp(26.0),
+              labelStyle: AppTypography.bodySm.copyWith(
                 fontWeight: FontWeight.w500,
               ),
               unselectedLabelStyle: TextStyle(
@@ -201,9 +203,8 @@ class _MiningIndexState extends State<MiningIndex>
             alignment: Alignment.centerLeft,
             child: Text(
               S.of(context).g_key_16,
-              style: TextStyle(
+              style: AppTypography.title.copyWith(
                 color: AppColorTokens.of(context).textPrimary,
-                fontSize: ScreenUtil().setSp(36.0),
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -248,14 +249,18 @@ class _MiningIndexState extends State<MiningIndex>
                               wInfo.mainWallet
                                   ? S.of(context).g_key_14
                                   : S.of(context).g_key_6,
-                              style: AppTypography.title.copyWith(color: walletColor),
+                              style: AppTypography.title.copyWith(
+                                color: walletColor,
+                              ),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                             ),
                             SizedBox(width: ScreenUtil().setWidth(20.0)),
                             Text(
                               wInfo.walletName ?? "",
-                              style: AppTypography.title.copyWith(color: walletColor),
+                              style: AppTypography.title.copyWith(
+                                color: walletColor,
+                              ),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                             ),

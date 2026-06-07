@@ -100,8 +100,7 @@ class _HardwareWalletPageState extends State<HardwareWalletPage> {
   Widget _buildSectionTitle(BuildContext context, String title) {
     return Text(
       title,
-      style: TextStyle(
-        fontSize: ScreenUtil().setSp(30),
+      style: AppTypography.body.copyWith(
         fontWeight: FontWeight.w600,
         color: AppColorTokens.of(context).textPrimary,
       ),

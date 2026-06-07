@@ -58,9 +58,8 @@ class _AddressSheetHeader extends StatelessWidget {
           Flexible(
             child: Text(
               S.of(context).g_key_13,
-              style: TextStyle(
+              style: AppTypography.title.copyWith(
                 color: AppColorTokens.of(context).textPrimary,
-                fontSize: ScreenUtil().setSp(36.0),
                 fontWeight: FontWeight.w600,
               ),
               overflow: TextOverflow.ellipsis,
@@ -270,7 +269,9 @@ class _AddTokenMenuItem extends StatelessWidget {
         alignment: Alignment.center,
         child: Text(
           label,
-          style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).brand),
+          style: AppTypography.headline.copyWith(
+            color: AppColorTokens.of(context).brand,
+          ),
         ),
       ),
     );
@@ -341,7 +342,9 @@ class BackupReminderBanner extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: Text(
               S.of(context).g_key_wallet_c35,
-              style: AppTypography.body.copyWith(color: AppColorTokens.of(context).danger),
+              style: AppTypography.body.copyWith(
+                color: AppColorTokens.of(context).danger,
+              ),
             ),
           ),
           InkWell(

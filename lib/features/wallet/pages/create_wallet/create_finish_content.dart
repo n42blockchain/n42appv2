@@ -39,8 +39,7 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
       ),
       child: Text(
         text,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(32.0),
+        style: AppTypography.headline.copyWith(
           color: _themeColor(colorKey ?? AppThemeKeys.mainTextColor6.name),
           fontWeight: FontWeight.w600,
         ),
@@ -163,8 +162,7 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
                   _isImport
                       ? S.of(context).g_key_wallet_c13
                       : S.of(context).g_key_wallet_c14,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(40.0),
+                  style: AppTypography.titleLg.copyWith(
                     color: _themeColor(AppThemeKeys.mainTextColor.name),
                     fontWeight: FontWeight.w600,
                   ),
@@ -303,8 +301,7 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
   }
 
   Widget _buildExportKeystoreContent() {
-    final hintStyle = TextStyle(
-      fontSize: ScreenUtil().setSp(32.0),
+    final hintStyle = AppTypography.headline.copyWith(
       color: _themeColor(AppThemeKeys.mainTextColor7.name),
       fontWeight: FontWeight.w600,
     );

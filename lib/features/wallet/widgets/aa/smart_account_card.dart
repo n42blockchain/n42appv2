@@ -60,15 +60,16 @@ class SmartAccountCard extends StatelessWidget {
                     children: [
                       Text(
                         account.displayName,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(28),
+                        style: AppTypography.body.copyWith(
                           fontWeight: FontWeight.w600,
                           color: AppColorTokens.of(context).textPrimary,
                         ),
                       ),
                       Text(
                         account.type.displayName,
-                        style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
+                        style: AppTypography.caption.copyWith(
+                          color: AppColorTokens.of(context).textSubtitle,
+                        ),
                       ),
                     ],
                   ),
@@ -193,12 +194,13 @@ class SmartAccountCard extends StatelessWidget {
       children: [
         Text(
           label,
-          style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
+          style: AppTypography.caption.copyWith(
+            color: AppColorTokens.of(context).textSubtitle,
+          ),
         ),
         Text(
           value,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(22),
+          style: AppTypography.caption.copyWith(
             fontWeight: FontWeight.w500,
             color: AppColorTokens.of(context).textPrimary,
           ),

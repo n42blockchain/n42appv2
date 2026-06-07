@@ -27,8 +27,7 @@ class EnsAdvancedSection extends StatelessWidget {
         children: [
           Text(
             S.of(context).g_key_ens_advanced,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
+            style: AppTypography.body.copyWith(
               fontWeight: FontWeight.w600,
               color: AppColorTokens.of(context).textPrimary,
             ),

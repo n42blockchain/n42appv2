@@ -76,9 +76,8 @@ class _NFTSheet extends StatelessWidget {
                         child: Center(
                           child: Text(
                             title ?? '',
-                            style: TextStyle(
+                            style: AppTypography.headline.copyWith(
                               color: AppColorTokens.of(context).textPrimary,
-                              fontSize: ScreenUtil().setSp(32),
                               fontWeight: FontWeight.w600,
                             ),
                             maxLines: 1,

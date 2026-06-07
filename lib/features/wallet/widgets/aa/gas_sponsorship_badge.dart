@@ -56,8 +56,7 @@ class GasSponsorshipBadge extends StatelessWidget {
             children: [
               Text(
                 S.of(context).g_key_aa_gas_sponsored,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(22),
+                style: AppTypography.caption.copyWith(
                   fontWeight: FontWeight.w600,
                   color: Colors.green,
                 ),

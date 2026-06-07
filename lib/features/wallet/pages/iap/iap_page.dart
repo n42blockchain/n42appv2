@@ -245,8 +245,7 @@ class _IapPageState extends State<IapPage> {
             SizedBox(height: ScreenUtil().setWidth(24)),
             Text(
               S.of(context).g_iap_store_unavailable,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(30),
+              style: AppTypography.body.copyWith(
                 color: textPrimary,
                 fontWeight: FontWeight.w600,
               ),
@@ -343,8 +342,7 @@ class _IapPageState extends State<IapPage> {
               children: [
                 Text(
                   product.title,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(28),
+                  style: AppTypography.body.copyWith(
                     fontWeight: FontWeight.w600,
                     color: textPrimary,
                   ),
@@ -397,15 +395,16 @@ class _IapPageState extends State<IapPage> {
                       children: [
                         Text(
                           product.price,
-                          style: TextStyle(
-                            fontSize: ScreenUtil().setSp(24),
+                          style: AppTypography.caption.copyWith(
                             fontWeight: FontWeight.w600,
                             color: Colors.white,
                           ),
                         ),
                         Text(
                           S.of(context).g_iap_title,
-                          style: AppTypography.captionSm.copyWith(color: Colors.white.withValues(alpha: 0.85)),
+                          style: AppTypography.captionSm.copyWith(
+                            color: Colors.white.withValues(alpha: 0.85),
+                          ),
                         ),
                       ],
                     ),
@@ -440,9 +439,8 @@ class _RetryButton extends StatelessWidget {
         ),
         child: Text(
           S.of(context).g_iap_retry,
-          style: TextStyle(
+          style: AppTypography.bodySm.copyWith(
             color: Colors.white,
-            fontSize: ScreenUtil().setSp(26),
             fontWeight: FontWeight.w600,
           ),
         ),

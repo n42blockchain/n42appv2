@@ -91,16 +91,14 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
             children: [
               Text(
                 'DeFi Positions',
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(30),
+                style: AppTypography.body.copyWith(
                   fontWeight: FontWeight.w600,
                   color: AppColorTokens.of(context).textPrimary,
                 ),
               ),
               Text(
                 fmtUsd(portfolio.totalUsdValue),
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(28),
+                style: AppTypography.body.copyWith(
                   fontWeight: FontWeight.w600,
                   color: AppColorTokens.of(context).brand,
                 ),
@@ -125,7 +123,9 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
               },
               child: Text(
                 'View all ${portfolio.protocolCount} protocols',
-                style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).brand),
+                style: AppTypography.caption.copyWith(
+                  color: AppColorTokens.of(context).brand,
+                ),
               ),
             ),
           ),
@@ -188,8 +188,7 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
             ),
             child: Text(
               '${c.label}: ${fmtUsd(c.value)}',
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
+              style: AppTypography.caption.copyWith(
                 color: c.color,
                 fontWeight: FontWeight.w500,
               ),
@@ -237,23 +236,23 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
                   children: [
                     Text(
                       protocol.name,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(26),
+                      style: AppTypography.bodySm.copyWith(
                         fontWeight: FontWeight.w600,
                         color: AppColorTokens.of(context).textPrimary,
                       ),
                     ),
                     Text(
                       protocol.chain.toUpperCase(),
-                      style: AppTypography.captionSm.copyWith(color: AppColorTokens.of(context).textSubtitle),
+                      style: AppTypography.captionSm.copyWith(
+                        color: AppColorTokens.of(context).textSubtitle,
+                      ),
                     ),
                   ],
                 ),
               ),
               Text(
                 fmtUsd(protocol.totalUsdValue),
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(26),
+                style: AppTypography.bodySm.copyWith(
                   fontWeight: FontWeight.w600,
                   color: AppColorTokens.of(context).textPrimary,
                 ),
@@ -297,14 +296,18 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
         children: [
           Text(
             '$prefix ${token.amount.toStringAsFixed(4)} ${token.symbol}',
-            style: AppTypography.caption.copyWith(color: prefix == '-'
+            style: AppTypography.caption.copyWith(
+              color: prefix == '-'
                   ? const Color(0xFFEF4444)
-                  : AppColorTokens.of(context).textSubtitle),
+                  : AppColorTokens.of(context).textSubtitle,
+            ),
           ),
           const Spacer(),
           Text(
             fmtUsd(token.usdValue),
-            style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
+            style: AppTypography.caption.copyWith(
+              color: AppColorTokens.of(context).textSubtitle,
+            ),
           ),
         ],
       ),
@@ -325,7 +328,9 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
             SizedBox(height: ScreenUtil().setWidth(12)),
             Text(
               'Loading DeFi positions...',
-              style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
+              style: AppTypography.caption.copyWith(
+                color: AppColorTokens.of(context).textSubtitle,
+              ),
             ),
           ],
         ),

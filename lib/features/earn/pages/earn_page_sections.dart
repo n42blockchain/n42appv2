@@ -38,8 +38,7 @@ mixin EarnPageSectionsMixin
         children: [
           Text(
             S.of(context).g_key_earn_more,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(30),
+            style: AppTypography.body.copyWith(
               fontWeight: FontWeight.w600,
               color: AppColorTokens.of(context).textPrimary,
             ),
@@ -119,8 +118,7 @@ mixin EarnPageSectionsMixin
         children: [
           Text(
             s.g_key_earn_quick_tools,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(30),
+            style: AppTypography.body.copyWith(
               fontWeight: FontWeight.w600,
               color: AppColorTokens.of(context).textPrimary,
             ),

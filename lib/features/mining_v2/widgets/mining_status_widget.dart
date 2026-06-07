@@ -97,9 +97,8 @@ class MiningStatusWidget extends StatelessWidget {
               Expanded(
                 child: Text(
                   S.of(context).g_mining_key_5,
-                  style: TextStyle(
+                  style: AppTypography.caption.copyWith(
                     color: AppColorTokens.of(context).textSubtitle,
-                    fontSize: ScreenUtil().setSp(22),
                     fontWeight: FontWeight.w500,
                   ),
                   maxLines: 1,
@@ -153,9 +152,8 @@ class MiningStatusWidget extends StatelessWidget {
               Expanded(
                 child: Text(
                   isActive ? S.current.g_key_193 : S.current.g_mining_key_47,
-                  style: TextStyle(
+                  style: AppTypography.body.copyWith(
                     color: statusColor,
-                    fontSize: ScreenUtil().setSp(28),
                     fontWeight: FontWeight.w600,
                   ),
                   maxLines: 1,
@@ -226,9 +224,8 @@ class MiningStatusWidget extends StatelessWidget {
               Expanded(
                 child: Text(
                   S.of(context).g_key_29,
-                  style: TextStyle(
+                  style: AppTypography.caption.copyWith(
                     color: AppColorTokens.of(context).textSubtitle,
-                    fontSize: ScreenUtil().setSp(22),
                     fontWeight: FontWeight.w500,
                   ),
                   maxLines: 1,
@@ -247,9 +244,8 @@ class MiningStatusWidget extends StatelessWidget {
                   mpValue.depositsEnable ?? false
                       ? '${mpValue.balanceInBeacon}'
                       : mpValue.walletNBalance.toStringAsFixed(2),
-                  style: TextStyle(
+                  style: AppTypography.body.copyWith(
                     color: AppColorTokens.of(context).textPrimary,
-                    fontSize: ScreenUtil().setSp(30),
                     fontWeight: FontWeight.w600,
                   ),
                   maxLines: 1,
@@ -258,9 +254,8 @@ class MiningStatusWidget extends StatelessWidget {
               ),
               Text(
                 CoinType.N.name,
-                style: TextStyle(
+                style: AppTypography.caption.copyWith(
                   color: AppColorTokens.of(context).textPrimary,
-                  fontSize: ScreenUtil().setSp(22),
                   fontWeight: FontWeight.w600,
                 ),
               ),

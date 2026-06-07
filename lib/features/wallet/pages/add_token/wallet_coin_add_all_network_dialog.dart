@@ -51,8 +51,7 @@ extension _WalletCoinAddAllNetworkDialog on _WalletCoinAddAllState {
             child: Text(
               S.of(context).g_token_m_key_4,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(30.0),
+              style: AppTypography.body.copyWith(
                 color: AppColorTokens.of(context).textPrimary,
                 fontWeight: FontWeight.w600,
               ),
@@ -118,15 +117,16 @@ extension _WalletCoinAddAllNetworkDialog on _WalletCoinAddAllState {
               children: [
                 Text(
                   symbolStr,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(30.0),
+                  style: AppTypography.body.copyWith(
                     color: AppColorTokens.of(context).textPrimary,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 Text(
                   nameStr,
-                  style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle),
+                  style: AppTypography.body.copyWith(
+                    color: AppColorTokens.of(context).textSubtitle,
+                  ),
                 ),
               ],
             ),

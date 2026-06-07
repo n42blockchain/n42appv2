@@ -39,8 +39,7 @@ class KeyDetailsSheet extends StatelessWidget {
           SizedBox(height: ScreenUtil().setWidth(20)),
           Text(
             S.of(context).g_key_aa_session_details,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(32),
+            style: AppTypography.headline.copyWith(
               fontWeight: FontWeight.w600,
               color: AppColorTokens.of(context).textPrimary,
             ),
@@ -87,13 +86,14 @@ class KeyDetailsSheet extends StatelessWidget {
         children: [
           Text(
             label,
-            style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
+            style: AppTypography.caption.copyWith(
+              color: AppColorTokens.of(context).textSubtitle,
+            ),
           ),
           Flexible(
             child: Text(
               value,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(24),
+              style: AppTypography.caption.copyWith(
                 fontWeight: FontWeight.w500,
                 color: AppColorTokens.of(context).textPrimary,
               ),

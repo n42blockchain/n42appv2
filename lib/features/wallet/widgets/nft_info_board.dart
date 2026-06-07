@@ -183,8 +183,7 @@ class NftInfoBoard extends StatelessWidget {
       children: [
         Text(
           tokenName ?? 'NFT #${tokenId ?? "Unknown"}',
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(36),
+          style: AppTypography.title.copyWith(
             fontWeight: FontWeight.w600,
             color: _mainTextColor(context),
           ),
@@ -200,7 +199,9 @@ class NftInfoBoard extends StatelessWidget {
                 Flexible(
                   child: Text(
                     '${S.of(context).g_key_nft_contract}: ${_shortenAddress(contractAddress!)}',
-                    style: AppTypography.caption.copyWith(color: _subtitleColor(context)),
+                    style: AppTypography.caption.copyWith(
+                      color: _subtitleColor(context),
+                    ),
                   ),
                 ),
                 SizedBox(width: ScreenUtil().setWidth(8)),
@@ -251,13 +252,14 @@ class NftInfoBoard extends StatelessWidget {
         children: [
           Text(
             '$label: ',
-            style: AppTypography.bodySm.copyWith(color: _subtitleColor(context)),
+            style: AppTypography.bodySm.copyWith(
+              color: _subtitleColor(context),
+            ),
           ),
           Expanded(
             child: Text(
               value,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(26),
+              style: AppTypography.bodySm.copyWith(
                 fontWeight: FontWeight.w500,
                 color: _mainTextColor(context),
               ),
@@ -293,8 +295,7 @@ class NftInfoBoard extends StatelessWidget {
             child: Text(
               '${S.of(context).g_key_nft_floor_price}: $floorPriceDisplay',
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(24),
+              style: AppTypography.caption.copyWith(
                 fontWeight: FontWeight.w600,
                 color: blueColor,
               ),
@@ -311,8 +312,7 @@ class NftInfoBoard extends StatelessWidget {
       children: [
         Text(
           S.of(context).g_key_nft_description,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(26),
+          style: AppTypography.bodySm.copyWith(
             fontWeight: FontWeight.w600,
             color: _mainTextColor(context),
           ),
@@ -392,8 +392,7 @@ class NftInfoBoard extends StatelessWidget {
             SizedBox(height: ScreenUtil().setWidth(8)),
             Text(
               label,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(24),
+              style: AppTypography.caption.copyWith(
                 fontWeight: FontWeight.w500,
                 color: color,
               ),
@@ -431,8 +430,7 @@ class NftInfoBoard extends StatelessWidget {
               child: Text(
                 S.of(context).g_key_nft_burn_title,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(28),
+                style: AppTypography.body.copyWith(
                   fontWeight: FontWeight.w600,
                   color: Colors.red,
                 ),

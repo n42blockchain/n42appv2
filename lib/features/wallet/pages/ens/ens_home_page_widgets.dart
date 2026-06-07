@@ -49,8 +49,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
                 ),
                 child: Text(
                   selectedChain.suffix,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(20),
+                  style: AppTypography.captionSm.copyWith(
                     color: selectedChain.color,
                     fontWeight: FontWeight.w500,
                   ),
@@ -120,8 +119,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
           SizedBox(width: ScreenUtil().setWidth(8)),
           Text(
             chain.name,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
+            style: AppTypography.caption.copyWith(
               fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
               color: isSelected
                   ? chain.color
@@ -165,8 +163,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
             child: Center(
               child: Text(
                 'ENS',
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
+                style: AppTypography.caption.copyWith(
                   fontWeight: FontWeight.w600,
                   color: blueColor,
                 ),
@@ -180,8 +177,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
               children: [
                 Text(
                   S.of(context).g_key_ens_service,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(32),
+                  style: AppTypography.headline.copyWith(
                     fontWeight: FontWeight.w600,
                     color: _themeColor(AppThemeKeys.mainTextColor.name),
                   ),
@@ -189,7 +185,9 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
                 SizedBox(height: ScreenUtil().setWidth(4)),
                 Text(
                   S.of(context).g_key_ens_description,
-                  style: AppTypography.caption.copyWith(color: _themeColor(AppThemeKeys.itemSubtitleTextColor.name)),
+                  style: AppTypography.caption.copyWith(
+                    color: _themeColor(AppThemeKeys.itemSubtitleTextColor.name),
+                  ),
                 ),
               ],
             ),
@@ -270,8 +268,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
             SizedBox(height: ScreenUtil().setWidth(12)),
             Text(
               title,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(28),
+              style: AppTypography.body.copyWith(
                 fontWeight: FontWeight.w600,
                 color: _themeColor(AppThemeKeys.mainTextColor.name),
               ),
@@ -279,7 +276,9 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
             SizedBox(height: ScreenUtil().setWidth(4)),
             Text(
               subtitle,
-              style: AppTypography.caption.copyWith(color: _themeColor(AppThemeKeys.itemSubtitleTextColor.name)),
+              style: AppTypography.caption.copyWith(
+                color: _themeColor(AppThemeKeys.itemSubtitleTextColor.name),
+              ),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
@@ -300,8 +299,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
               child: Text(
                 S.of(context).g_key_ens_my_domains,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(30),
+                style: AppTypography.body.copyWith(
                   fontWeight: FontWeight.w600,
                   color: _themeColor(AppThemeKeys.mainTextColor.name),
                 ),
@@ -310,8 +308,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
             if (ownedNames.isNotEmpty)
               Text(
                 '${ownedNames.length}',
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(26),
+                style: AppTypography.bodySm.copyWith(
                   fontWeight: FontWeight.w600,
                   color: _themeColor(AppThemeKeys.mainBlueColor.name),
                 ),
@@ -355,7 +352,9 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
           SizedBox(height: ScreenUtil().setWidth(12)),
           Text(
             errorMessage!,
-            style: AppTypography.bodySm.copyWith(color: _themeColor(AppThemeKeys.itemSubtitleTextColor.name)),
+            style: AppTypography.bodySm.copyWith(
+              color: _themeColor(AppThemeKeys.itemSubtitleTextColor.name),
+            ),
             textAlign: TextAlign.center,
           ),
           SizedBox(height: ScreenUtil().setWidth(16)),
@@ -389,8 +388,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
           SizedBox(height: ScreenUtil().setWidth(16)),
           Text(
             S.of(context).g_key_ens_no_domains,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
+            style: AppTypography.body.copyWith(
               fontWeight: FontWeight.w500,
               color: _themeColor(AppThemeKeys.mainTextColor.name),
             ),

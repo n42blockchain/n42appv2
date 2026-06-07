@@ -18,10 +18,7 @@ class ManageChainsPage extends ConsumerWidget {
       appBar: AppBar(
         title: Text(
           S.of(context).g_key_manage_chains,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(32),
-            fontWeight: FontWeight.w600,
-          ),
+          style: AppTypography.headline.copyWith(fontWeight: FontWeight.w600),
         ),
         centerTitle: true,
       ),
@@ -84,15 +81,16 @@ class ManageChainsPage extends ConsumerWidget {
             ),
             title: Text(
               coinType,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(28),
+              style: AppTypography.body.copyWith(
                 fontWeight: FontWeight.w600,
                 color: AppColorTokens.of(context).textPrimary,
               ),
             ),
             subtitle: Text(
               name,
-              style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
+              style: AppTypography.caption.copyWith(
+                color: AppColorTokens.of(context).textSubtitle,
+              ),
             ),
             trailing: Switch(
               value: cm.showList,

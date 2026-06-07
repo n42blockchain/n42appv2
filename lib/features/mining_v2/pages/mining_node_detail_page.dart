@@ -112,9 +112,8 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
                     SizedBox(width: ScreenUtil().setWidth(8)),
                     Text(
                       _statusLabel(context, node.status),
-                      style: TextStyle(
+                      style: AppTypography.caption.copyWith(
                         color: badgeColor,
-                        fontSize: ScreenUtil().setSp(22),
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -124,7 +123,9 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
               const Spacer(),
               Text(
                 node.name,
-                style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
+                style: AppTypography.caption.copyWith(
+                  color: AppColorTokens.of(context).textSubtitle,
+                ),
               ),
             ],
           ),
@@ -135,7 +136,9 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
                 flex: 0,
                 child: Text(
                   '${S.of(context).g_mining_node_key2}: ',
-                  style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
+                  style: AppTypography.caption.copyWith(
+                    color: AppColorTokens.of(context).textSubtitle,
+                  ),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
@@ -143,9 +146,8 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
               Expanded(
                 child: Text(
                   shortKey,
-                  style: TextStyle(
+                  style: AppTypography.caption.copyWith(
                     color: AppColorTokens.of(context).textPrimary,
-                    fontSize: ScreenUtil().setSp(24),
                     fontWeight: FontWeight.w500,
                   ),
                   maxLines: 1,

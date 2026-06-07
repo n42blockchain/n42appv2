@@ -51,8 +51,7 @@ class EnsOwnedListItem extends StatelessWidget {
                     children: [
                       Text(
                         ownedEns.name,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(28),
+                        style: AppTypography.body.copyWith(
                           fontWeight: FontWeight.w600,
                           color: AppColorTokens.of(context).textPrimary,
                         ),
@@ -105,11 +104,13 @@ class EnsOwnedListItem extends StatelessWidget {
                               ? '${ownedEns.daysUntilExpiry} ${S.of(context).g_key_ens_days_left}'
                               : ownedEns.formattedExpiresAt,
                           overflow: TextOverflow.ellipsis,
-                          style: AppTypography.caption.copyWith(color: isExpired
+                          style: AppTypography.caption.copyWith(
+                            color: isExpired
                                 ? Colors.red
                                 : isExpiringSoon
                                 ? Colors.orange
-                                : AppColorTokens.of(context).textSubtitle),
+                                : AppColorTokens.of(context).textSubtitle,
+                          ),
                         ),
                       ),
                     ],
@@ -157,8 +158,7 @@ class EnsOwnedListItem extends StatelessWidget {
       child: Center(
         child: Text(
           ownedEns.name.isNotEmpty ? ownedEns.name[0].toUpperCase() : 'E',
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(24),
+          style: AppTypography.caption.copyWith(
             fontWeight: FontWeight.w600,
             color: AppColorTokens.of(context).brand,
           ),

@@ -165,8 +165,7 @@ class _PresetCard extends StatelessWidget {
         Expanded(
           child: Text(
             presetInfo.label,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(26),
+            style: AppTypography.bodySm.copyWith(
               fontWeight: FontWeight.w600,
               color: AppColorTokens.of(context).textPrimary,
             ),
@@ -246,7 +245,9 @@ class _PresetCard extends StatelessWidget {
           Expanded(
             child: Text(
               text,
-              style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
+              style: AppTypography.caption.copyWith(
+                color: AppColorTokens.of(context).textSubtitle,
+              ),
             ),
           ),
         ],

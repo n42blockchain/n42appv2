@@ -41,7 +41,9 @@ class DexChainChips extends StatelessWidget {
           selected: selected,
           selectedColor: btnBg,
           backgroundColor: itemBg,
-          labelStyle: AppTypography.caption.copyWith(color: selected ? btnText : mainText),
+          labelStyle: AppTypography.caption.copyWith(
+            color: selected ? btnText : mainText,
+          ),
           onSelected: (_) => onChainChanged(c['value']!),
         );
       }).toList(),
@@ -100,9 +102,8 @@ class DexSlippageRow extends StatelessWidget {
               ),
               child: Text(
                 '${(bps / 100).toStringAsFixed(bps % 100 == 0 ? 0 : 1)}%',
-                style: TextStyle(
+                style: AppTypography.caption.copyWith(
                   color: selected ? btnText : mainText,
-                  fontSize: ScreenUtil().setSp(22),
                   fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
                 ),
               ),
@@ -221,9 +222,8 @@ class DexPriceChart extends StatelessWidget {
                       ? '$tokenInSymbol · ${s.g_key_dex_price_chart}'
                       : s.g_key_dex_price_chart,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
+                  style: AppTypography.bodySm.copyWith(
                     color: mainText,
-                    fontSize: ScreenUtil().setSp(26),
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -273,9 +273,8 @@ class DexPriceChart extends StatelessWidget {
         ),
         child: Text(
           label,
-          style: TextStyle(
+          style: AppTypography.caption.copyWith(
             color: isSelected ? blueColor : subText,
-            fontSize: ScreenUtil().setSp(22),
             fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
           ),
         ),

@@ -67,8 +67,7 @@ class BatchTransferSelectPage extends ConsumerWidget {
         SizedBox(height: ScreenUtil().setWidth(24)),
         Text(
           S.of(context).g_key_batch_select_token,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(28),
+          style: AppTypography.body.copyWith(
             fontWeight: FontWeight.w600,
             color: AppColorTokens.of(context).textPrimary,
           ),
@@ -138,8 +137,7 @@ class BatchTransferSelectPage extends ConsumerWidget {
               children: [
                 Text(
                   S.of(context).g_key_batch_title,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(28),
+                  style: AppTypography.body.copyWith(
                     fontWeight: FontWeight.w600,
                     color: AppColorTokens.of(context).textPrimary,
                   ),
@@ -147,7 +145,9 @@ class BatchTransferSelectPage extends ConsumerWidget {
                 SizedBox(height: ScreenUtil().setWidth(4)),
                 Text(
                   S.of(context).g_key_batch_send_multiple,
-                  style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
+                  style: AppTypography.caption.copyWith(
+                    color: AppColorTokens.of(context).textSubtitle,
+                  ),
                 ),
               ],
             ),
@@ -187,8 +187,7 @@ class BatchTransferSelectPage extends ConsumerWidget {
               child: Center(
                 child: Text(
                   chainSymbol.isNotEmpty ? chainSymbol[0] : '?',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24),
+                  style: AppTypography.caption.copyWith(
                     fontWeight: FontWeight.w600,
                     color: chainColor,
                   ),
@@ -202,8 +201,7 @@ class BatchTransferSelectPage extends ConsumerWidget {
                 children: [
                   Text(
                     name,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(28),
+                    style: AppTypography.body.copyWith(
                       fontWeight: FontWeight.w600,
                       color: mainText,
                     ),
@@ -224,8 +222,7 @@ class BatchTransferSelectPage extends ConsumerWidget {
               children: [
                 Text(
                   _formatBalance(coin.balance, decimals),
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(26),
+                  style: AppTypography.bodySm.copyWith(
                     fontWeight: FontWeight.w500,
                     color: mainText,
                   ),

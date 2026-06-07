@@ -56,8 +56,7 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
                       isConnected
                           ? s.g_key_hw_connected
                           : s.g_key_hw_not_connected_label,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(32),
+                      style: AppTypography.headline.copyWith(
                         fontWeight: FontWeight.w600,
                         color: isConnected ? Colors.white : mainTextColor,
                       ),
@@ -66,7 +65,9 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
                       SizedBox(height: ScreenUtil().setWidth(4)),
                       Text(
                         device.typeDisplayName,
-                        style: AppTypography.bodySm.copyWith(color: Colors.white70),
+                        style: AppTypography.bodySm.copyWith(
+                          color: Colors.white70,
+                        ),
                       ),
                     ],
                   ],
@@ -221,8 +222,7 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
                     Expanded(
                       child: Text(
                         device.name,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(28),
+                        style: AppTypography.body.copyWith(
                           fontWeight: FontWeight.w600,
                           color: mainTextColor,
                         ),
@@ -240,8 +240,7 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
                         ),
                         child: Text(
                           s.g_key_hw_connected,
-                          style: TextStyle(
-                            fontSize: ScreenUtil().setSp(20),
+                          style: AppTypography.captionSm.copyWith(
                             color: Colors.green,
                             fontWeight: FontWeight.w600,
                           ),

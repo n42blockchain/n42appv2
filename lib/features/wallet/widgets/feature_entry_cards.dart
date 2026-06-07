@@ -68,8 +68,7 @@ class FeatureEntrySection extends StatelessWidget {
                 Flexible(
                   child: Text(
                     S.of(context).g_key_advanced_features,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(28),
+                    style: AppTypography.body.copyWith(
                       fontWeight: FontWeight.w600,
                       color: AppColorTokens.of(context).textPrimary,
                     ),
@@ -262,8 +261,7 @@ class FeatureEntryHorizontal extends StatelessWidget {
                       alignment: Alignment.centerLeft,
                       child: Text(
                         title,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(24),
+                        style: AppTypography.caption.copyWith(
                           fontWeight: FontWeight.w600,
                           color: AppColorTokens.of(context).textPrimary,
                         ),
@@ -275,7 +273,9 @@ class FeatureEntryHorizontal extends StatelessWidget {
                       alignment: Alignment.centerLeft,
                       child: Text(
                         subtitle,
-                        style: AppTypography.captionSm.copyWith(color: AppColorTokens.of(context).textSubtitle),
+                        style: AppTypography.captionSm.copyWith(
+                          color: AppColorTokens.of(context).textSubtitle,
+                        ),
                       ),
                     ),
                   ],

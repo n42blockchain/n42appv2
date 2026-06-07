@@ -168,7 +168,9 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
             ),
             child: TextField(
               controller: _searchCtrl,
-              style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
+              style: AppTypography.body.copyWith(
+                color: AppColorTokens.of(context).textPrimary,
+              ),
               decoration: InputDecoration(
                 hintText: S.of(context).g_key_dex_search_hint,
                 hintStyle: TextStyle(
@@ -283,15 +285,16 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
                     children: [
                       Text(
                         token.symbol,
-                        style: TextStyle(
+                        style: AppTypography.body.copyWith(
                           color: mainText,
-                          fontSize: ScreenUtil().setSp(28),
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                       Text(
                         token.name,
-                        style: AppTypography.caption.copyWith(color: subtitleText),
+                        style: AppTypography.caption.copyWith(
+                          color: subtitleText,
+                        ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),

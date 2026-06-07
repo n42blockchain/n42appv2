@@ -132,9 +132,8 @@ class _EditWalletState extends ConsumerState<EditWallet> {
           SizedBox(height: ScreenUtil().setWidth(16)),
           Text(
             'Tags',
-            style: TextStyle(
+            style: AppTypography.body.copyWith(
               color: textColor,
-              fontSize: ScreenUtil().setSp(28),
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -200,7 +199,9 @@ class _EditWalletState extends ConsumerState<EditWallet> {
                       style: TextStyle(fontSize: ScreenUtil().setSp(24)),
                       decoration: InputDecoration(
                         hintText: 'Custom tag...',
-                        hintStyle: AppTypography.caption.copyWith(color: subColor),
+                        hintStyle: AppTypography.caption.copyWith(
+                          color: subColor,
+                        ),
                         contentPadding: const EdgeInsets.symmetric(
                           horizontal: 12,
                           vertical: 8,

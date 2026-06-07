@@ -29,9 +29,10 @@ mixin _SummaryPageWidgetsMixin on State<SummaryPage>, _SummaryPageLogicMixin {
             ),
       bottomTitle: BottomTitle(
         titles: getPast7DaysDate(),
-        style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
-        specialStyle: TextStyle(
-          fontSize: ScreenUtil().setSp(24),
+        style: AppTypography.caption.copyWith(
+          color: AppColorTokens.of(context).textSubtitle,
+        ),
+        specialStyle: AppTypography.caption.copyWith(
           color: AppColorTokens.of(context).textItem,
           fontWeight: FontWeight.w600,
         ),
@@ -108,9 +109,8 @@ mixin _SummaryPageWidgetsMixin on State<SummaryPage>, _SummaryPageLogicMixin {
         ),
         Text(
           value,
-          style: TextStyle(
+          style: AppTypography.bodySm.copyWith(
             color: AppColorTokens.of(context).textPrimary,
-            fontSize: ScreenUtil().setSp(26),
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -149,9 +149,8 @@ mixin _SummaryPageWidgetsMixin on State<SummaryPage>, _SummaryPageLogicMixin {
               ),
               child: Text(
                 S.of(context).g_mining_key_50,
-                style: TextStyle(
+                style: AppTypography.caption.copyWith(
                   color: AppColorTokens.of(context).brand,
-                  fontSize: ScreenUtil().setSp(22),
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -160,9 +159,8 @@ mixin _SummaryPageWidgetsMixin on State<SummaryPage>, _SummaryPageLogicMixin {
         else
           Text(
             lockTimeStr ?? "00/00/00",
-            style: TextStyle(
+            style: AppTypography.bodySm.copyWith(
               color: AppColorTokens.of(context).textPrimary,
-              fontSize: ScreenUtil().setSp(26),
               fontWeight: FontWeight.w600,
             ),
           ),

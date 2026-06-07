@@ -100,8 +100,7 @@ class _ActionButton extends StatelessWidget {
             SizedBox(height: ScreenUtil().setWidth(6)),
             Text(
               label,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
+              style: AppTypography.caption.copyWith(
                 fontWeight: FontWeight.w500,
                 color: isDisabled
                     ? Colors.grey

@@ -242,8 +242,7 @@ mixin BridgeHomeLogicMixin on ConsumerState<BridgeHomePage> {
                   padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
                   child: Text(
                     S.of(context).g_key_bridge_select_token,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(32),
+                    style: AppTypography.headline.copyWith(
                       fontWeight: FontWeight.w600,
                       color: AppColorTokens.of(context).textPrimary,
                     ),

@@ -92,9 +92,8 @@ class MiningRiskCard extends StatelessWidget {
                   children: [
                     Text(
                       mpValue.inactivityTitle,
-                      style: TextStyle(
+                      style: AppTypography.body.copyWith(
                         color: AppColorTokens.of(context).textPrimary,
-                        fontSize: ScreenUtil().setSp(30),
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -210,9 +209,8 @@ class MiningRiskCard extends StatelessWidget {
                 child: Text(
                   S.of(context).g_mining_key_76,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
+                  style: AppTypography.bodySm.copyWith(
                     color: AppColorTokens.of(context).textPrimary,
-                    fontSize: ScreenUtil().setSp(26),
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -230,9 +228,8 @@ class MiningRiskCard extends StatelessWidget {
             ),
             child: Text(
               "${mpValue.inactivityScorePercentage}%",
-              style: TextStyle(
+              style: AppTypography.bodySm.copyWith(
                 color: riskColor,
-                fontSize: ScreenUtil().setSp(26),
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -269,9 +266,8 @@ class MiningRiskCard extends StatelessWidget {
           Expanded(
             child: Text(
               S.of(context).g_mining_key_116(32),
-              style: TextStyle(
+              style: AppTypography.bodySm.copyWith(
                 color: AppColorTokens.of(context).warning,
-                fontSize: ScreenUtil().setSp(26),
                 fontWeight: FontWeight.w500,
               ),
             ),

@@ -141,8 +141,7 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
                       alignment: Alignment.center,
                       child: Text(
                         S.of(context).g_key_wallet_c47,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(40.0),
+                        style: AppTypography.titleLg.copyWith(
                           color: AppColorTokens.of(context).textPrimary,
                           fontWeight: FontWeight.w600,
                         ),

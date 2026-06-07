@@ -229,8 +229,7 @@ class _AAAccountListPageState extends State<AAAccountListPage> {
         ),
         child: Text(
           label,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(24),
+          style: AppTypography.caption.copyWith(
             fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
             color: isSelected ? selectedTextColor : mainTextColor,
           ),
@@ -252,7 +251,9 @@ class _AAAccountListPageState extends State<AAAccountListPage> {
           SizedBox(height: ScreenUtil().setWidth(20)),
           Text(
             S.of(context).g_key_aa_no_accounts_filter,
-            style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle),
+            style: AppTypography.body.copyWith(
+              color: AppColorTokens.of(context).textSubtitle,
+            ),
           ),
         ],
       ),

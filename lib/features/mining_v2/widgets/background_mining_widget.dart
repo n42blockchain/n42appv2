@@ -86,8 +86,7 @@ class BackgroundMiningWidget extends StatelessWidget {
         children: [
           Text(
             S.of(context).g_mining_key_9,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
+            style: AppTypography.body.copyWith(
               color: AppColorTokens.of(context).textPrimary,
               fontWeight: FontWeight.w600,
             ),
@@ -97,9 +96,11 @@ class BackgroundMiningWidget extends StatelessWidget {
             isEnabled
                 ? S.of(context).g_key_mining_available
                 : S.of(context).g_key_mining_requires_staking,
-            style: AppTypography.caption.copyWith(color: isEnabled
+            style: AppTypography.caption.copyWith(
+              color: isEnabled
                   ? AppColorTokens.of(context).brand
-                  : AppColorTokens.of(context).textSubtitle),
+                  : AppColorTokens.of(context).textSubtitle,
+            ),
           ),
         ],
       ),
@@ -151,8 +152,7 @@ class BackgroundMiningWidget extends StatelessWidget {
           ),
           child: Text(
             S.of(context).g_key_wallet_c4,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
+            style: AppTypography.caption.copyWith(
               fontWeight: FontWeight.w600,
               color: isEnabled ? Colors.white : disabledTextColor,
             ),

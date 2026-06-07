@@ -185,7 +185,9 @@ class DexQuoteCard extends StatelessWidget {
             SizedBox(height: ScreenUtil().setWidth(8)),
             Text(
               s.g_key_dex_approve_unlimited_info,
-              style: AppTypography.captionSm.copyWith(color: _colorOrange.withValues(alpha: 0.75)),
+              style: AppTypography.captionSm.copyWith(
+                color: _colorOrange.withValues(alpha: 0.75),
+              ),
             ),
           ],
         ],
@@ -219,9 +221,8 @@ class DexQuoteCard extends StatelessWidget {
         ),
         child: Text(
           label,
-          style: TextStyle(
+          style: AppTypography.caption.copyWith(
             color: selected ? _colorOrange : mainText,
-            fontSize: ScreenUtil().setSp(22),
             fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
           ),
         ),
@@ -242,7 +243,9 @@ class DexQuoteCard extends StatelessWidget {
         children: [
           Text(
             label,
-            style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).textSubtitle),
+            style: AppTypography.bodySm.copyWith(
+              color: AppColorTokens.of(context).textSubtitle,
+            ),
           ),
           if (trailing != null) ...[
             SizedBox(width: ScreenUtil().setWidth(8)),
@@ -251,9 +254,8 @@ class DexQuoteCard extends StatelessWidget {
           const Spacer(),
           Text(
             value,
-            style: TextStyle(
+            style: AppTypography.bodySm.copyWith(
               color: valueColor ?? AppColorTokens.of(context).textPrimary,
-              fontSize: ScreenUtil().setSp(26),
               fontWeight: valueColor != null
                   ? FontWeight.w600
                   : FontWeight.normal,

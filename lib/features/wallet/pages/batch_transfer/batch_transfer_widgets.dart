@@ -40,8 +40,7 @@ class BatchInfoCard extends StatelessWidget {
               children: [
                 Text(
                   'Token: $tokenSymbol',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(28),
+                  style: AppTypography.body.copyWith(
                     fontWeight: FontWeight.w600,
                     color: AppColorTokens.of(context).textPrimary,
                   ),
@@ -49,7 +48,9 @@ class BatchInfoCard extends StatelessWidget {
                 SizedBox(height: ScreenUtil().setWidth(4)),
                 Text(
                   '${S.of(context).g_key_batch_evm_only.split(' ').take(3).join(' ')} · $chainSymbol',
-                  style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
+                  style: AppTypography.caption.copyWith(
+                    color: AppColorTokens.of(context).textSubtitle,
+                  ),
                 ),
               ],
             ),
@@ -75,8 +76,7 @@ class BatchInfoCard extends StatelessWidget {
                   SizedBox(width: ScreenUtil().setWidth(4)),
                   Text(
                     'Multicall',
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(20),
+                    style: AppTypography.captionSm.copyWith(
                       color: Colors.green,
                       fontWeight: FontWeight.w600,
                     ),
@@ -125,8 +125,7 @@ class BatchAddItemForm extends StatelessWidget {
         children: [
           Text(
             S.of(context).g_key_batch_add_recipient,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(26),
+            style: AppTypography.bodySm.copyWith(
               fontWeight: FontWeight.w600,
               color: AppColorTokens.of(context).textPrimary,
             ),

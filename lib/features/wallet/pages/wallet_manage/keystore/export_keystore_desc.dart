@@ -52,9 +52,8 @@ class _ExportKeystoreDescState extends State<ExportKeystoreDesc> {
                   children: [
                     Text(
                       s.g_key_ex_keystore_1,
-                      style: TextStyle(
+                      style: AppTypography.title.copyWith(
                         color: mainText,
-                        fontSize: ScreenUtil().setSp(36),
                         fontWeight: FontWeight.w600,
                       ),
                     ),

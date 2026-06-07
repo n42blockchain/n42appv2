@@ -597,8 +597,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
         ),
         child: Text(
           label,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(28),
+          style: AppTypography.body.copyWith(
             fontWeight: FontWeight.w600,
             color: active ? Colors.white : blueColor,
           ),
@@ -622,8 +621,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
           SizedBox(width: ScreenUtil().setWidth(8)),
           Text(
             'Gas-free Swap',
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(26),
+            style: AppTypography.bodySm.copyWith(
               fontWeight: FontWeight.w500,
               color: _gasFreeEnabled ? const Color(0xFF4CAF50) : Colors.grey,
             ),

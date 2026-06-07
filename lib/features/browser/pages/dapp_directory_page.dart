@@ -202,8 +202,7 @@ class _DAppDirectoryPageState extends State<DAppDirectoryPage>
       alignment: Alignment.center,
       child: Text(
         letter,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(32),
+        style: AppTypography.headline.copyWith(
           fontWeight: FontWeight.w600,
           color: Colors.white,
         ),

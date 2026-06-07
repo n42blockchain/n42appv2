@@ -40,8 +40,7 @@ class PaymasterSelectionSheet extends StatelessWidget {
           children: [
             Text(
               'Paymaster',
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(32),
+              style: AppTypography.headline.copyWith(
                 fontWeight: FontWeight.w600,
                 color: AppColorTokens.of(context).textPrimary,
               ),

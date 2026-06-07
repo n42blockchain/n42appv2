@@ -182,8 +182,7 @@ class _NonEvmGasSettingsPageState extends State<NonEvmGasSettingsPage> {
                 child: Text(
                   S.of(context).g_key_gas_custom,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(28),
+                  style: AppTypography.body.copyWith(
                     fontWeight: FontWeight.w600,
                     color: mainText,
                   ),
@@ -212,7 +211,9 @@ class _NonEvmGasSettingsPageState extends State<NonEvmGasSettingsPage> {
                     style: AppTypography.body.copyWith(color: mainText),
                     decoration: InputDecoration(
                       hintText: S.of(context).g_key_t_43,
-                      hintStyle: AppTypography.bodySm.copyWith(color: subtitleText),
+                      hintStyle: AppTypography.bodySm.copyWith(
+                        color: subtitleText,
+                      ),
                       border: InputBorder.none,
                       isDense: true,
                       contentPadding: EdgeInsets.zero,
@@ -234,7 +235,9 @@ class _NonEvmGasSettingsPageState extends State<NonEvmGasSettingsPage> {
             SizedBox(height: ScreenUtil().setWidth(8)),
             Text(
               _customRateError,
-              style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).danger),
+              style: AppTypography.caption.copyWith(
+                color: AppColorTokens.of(context).danger,
+              ),
             ),
           ],
           SizedBox(height: ScreenUtil().setWidth(12)),

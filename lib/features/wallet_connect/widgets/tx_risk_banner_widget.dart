@@ -58,9 +58,8 @@ class TxRiskBannerWidget extends StatelessWidget {
                   ),
                   child: Text(
                     badgeText,
-                    style: TextStyle(
+                    style: AppTypography.captionSm.copyWith(
                       color: Colors.white,
-                      fontSize: ScreenUtil().setSp(20),
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -70,8 +69,7 @@ class TxRiskBannerWidget extends StatelessWidget {
                 Expanded(
                   child: Text(
                     analysis.functionName,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(26),
+                    style: AppTypography.bodySm.copyWith(
                       fontWeight: FontWeight.w600,
                       color: AppColorTokens.of(context).textPrimary,
                     ),
@@ -196,8 +194,7 @@ class _FieldRow extends StatelessWidget {
           Expanded(
             child: Text(
               field.value,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
+              style: AppTypography.caption.copyWith(
                 color: field.isHighlighted
                     ? badgeColor
                     : AppColorTokens.of(context).textPrimary,

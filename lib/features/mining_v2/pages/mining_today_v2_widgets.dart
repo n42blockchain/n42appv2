@@ -28,16 +28,17 @@ mixin _MiningTodayV2WidgetsMixin
                     children: [
                       Text(
                         walletName,
-                        style: TextStyle(
+                        style: AppTypography.body.copyWith(
                           color: blueColor,
-                          fontSize: ScreenUtil().setSp(28),
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                       if (!AppConfig.isMainChainMining)
                         Text(
                           S.of(context).g_key_147,
-                          style: AppTypography.captionSm.copyWith(color: blueColor),
+                          style: AppTypography.captionSm.copyWith(
+                            color: blueColor,
+                          ),
                         ),
                     ],
                   ),
@@ -90,7 +91,9 @@ mixin _MiningTodayV2WidgetsMixin
       ),
       child: Text(
         S.of(context).g_mining_key_74,
-        style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).danger),
+        style: AppTypography.bodySm.copyWith(
+          color: AppColorTokens.of(context).danger,
+        ),
         textAlign: TextAlign.center,
       ),
     );
@@ -151,9 +154,8 @@ mixin _MiningTodayV2WidgetsMixin
               children: [
                 Text(
                   S.of(context).g_home_key3,
-                  style: TextStyle(
+                  style: AppTypography.caption.copyWith(
                     color: Colors.white.withAlpha(160),
-                    fontSize: ScreenUtil().setSp(22),
                     fontWeight: FontWeight.w400,
                   ),
                 ),
@@ -182,9 +184,8 @@ mixin _MiningTodayV2WidgetsMixin
                             ? S.current.g_key_193
                             : S.current.g_mining_key_47,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
+                        style: AppTypography.body.copyWith(
                           color: Colors.white,
-                          fontSize: ScreenUtil().setSp(28),
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -199,16 +200,17 @@ mixin _MiningTodayV2WidgetsMixin
             children: [
               Text(
                 S.of(context).g_key_29,
-                style: AppTypography.captionSm.copyWith(color: Colors.white.withAlpha(140)),
+                style: AppTypography.captionSm.copyWith(
+                  color: Colors.white.withAlpha(140),
+                ),
               ),
               SizedBox(height: ScreenUtil().setWidth(4)),
               Text(
                 mpValue.depositsEnable ?? false
                     ? '${mpValue.balanceInBeacon} N'
                     : '${mpValue.walletNBalance.toStringAsFixed(2)} N',
-                style: TextStyle(
+                style: AppTypography.bodySm.copyWith(
                   color: Colors.white,
-                  fontSize: ScreenUtil().setSp(26),
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -249,8 +251,7 @@ mixin _MiningTodayV2WidgetsMixin
           fontSize: ScreenUtil().setSp(18),
           color: AppColorTokens.of(context).textSubtitle,
         ),
-        specialStyle: TextStyle(
-          fontSize: ScreenUtil().setSp(20),
+        specialStyle: AppTypography.captionSm.copyWith(
           color: AppColorTokens.of(context).textItem,
           fontWeight: FontWeight.w600,
         ),
@@ -344,7 +345,9 @@ mixin _MiningTodayV2WidgetsMixin
       width: double.infinity,
       child: Text(
         text,
-        style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).warning),
+        style: AppTypography.caption.copyWith(
+          color: AppColorTokens.of(context).warning,
+        ),
       ),
     );
   }

@@ -445,8 +445,7 @@ class AABatchTransactionBody extends StatelessWidget {
                     Flexible(
                       child: Text(
                         S.of(context).g_key_aa_batch_submitting,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(28),
+                        style: AppTypography.body.copyWith(
                           fontWeight: FontWeight.w600,
                         ),
                         overflow: TextOverflow.ellipsis,
@@ -456,8 +455,7 @@ class AABatchTransactionBody extends StatelessWidget {
                 )
               : Text(
                   '${S.of(context).g_key_aa_execute_batch} (${operations.length})',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(30),
+                  style: AppTypography.body.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
                 ),

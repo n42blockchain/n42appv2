@@ -62,9 +62,8 @@ class _CreateWalletButtonState extends State<CreateWalletButton> {
           alignment: Alignment.centerLeft,
           child: Text(
             s.g_key_wallet_c32,
-            style: TextStyle(
+            style: AppTypography.title.copyWith(
               color: mainText,
-              fontSize: ScreenUtil().setSp(36.0),
               fontWeight: FontWeight.w600,
             ),
           ),

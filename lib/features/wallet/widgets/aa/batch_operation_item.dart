@@ -144,8 +144,7 @@ class BatchOperationItem extends StatelessWidget {
             child: Center(
               child: Text(
                 '${index + 1}',
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(20),
+                style: AppTypography.captionSm.copyWith(
                   fontWeight: FontWeight.w600,
                   color: opColor,
                 ),
@@ -167,8 +166,7 @@ class BatchOperationItem extends StatelessWidget {
                   children: [
                     Text(
                       _getOperationTitle(context),
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(26),
+                      style: AppTypography.bodySm.copyWith(
                         fontWeight: FontWeight.w600,
                         color: AppColorTokens.of(context).textPrimary,
                       ),
@@ -187,8 +185,7 @@ class BatchOperationItem extends StatelessWidget {
                         ),
                         child: Text(
                           '${operation.formattedAmount} ${operation.tokenSymbol}',
-                          style: TextStyle(
-                            fontSize: ScreenUtil().setSp(20),
+                          style: AppTypography.captionSm.copyWith(
                             fontWeight: FontWeight.w600,
                             color: opColor,
                           ),
@@ -210,7 +207,9 @@ class BatchOperationItem extends StatelessWidget {
                   SizedBox(height: ScreenUtil().setWidth(4)),
                   Text(
                     operation.description!,
-                    style: AppTypography.captionSm.copyWith(color: subtitleColor.withAlpha(150)),
+                    style: AppTypography.captionSm.copyWith(
+                      color: subtitleColor.withAlpha(150),
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),

@@ -178,7 +178,9 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
                             )
                           : Text(
                               'Lookup',
-                              style: AppTypography.bodySm.copyWith(color: Colors.white),
+                              style: AppTypography.bodySm.copyWith(
+                                color: Colors.white,
+                              ),
                             ),
                     ),
                   ),
@@ -293,8 +295,7 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
                       ? const CircularProgressIndicator(color: Colors.white)
                       : Text(
                           'Add Network',
-                          style: TextStyle(
-                            fontSize: ScreenUtil().setSp(30),
+                          style: AppTypography.body.copyWith(
                             fontWeight: FontWeight.w600,
                             color: Colors.white,
                           ),
@@ -313,8 +314,7 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
       padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(8)),
       child: Text(
         text,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(26),
+        style: AppTypography.bodySm.copyWith(
           fontWeight: FontWeight.w500,
           color: AppColorTokens.of(context).textPrimary,
         ),
@@ -332,7 +332,9 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
       controller: controller,
       keyboardType: keyboardType,
       validator: validator,
-      style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
+      style: AppTypography.body.copyWith(
+        color: AppColorTokens.of(context).textPrimary,
+      ),
       decoration: InputDecoration(
         hintText: hint,
         hintStyle: TextStyle(color: AppColorTokens.of(context).textSubtitle),

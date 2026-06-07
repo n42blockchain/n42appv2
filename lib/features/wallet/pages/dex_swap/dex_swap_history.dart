@@ -89,16 +89,17 @@ class _DexSwapHistoryState extends State<DexSwapHistory> {
                     children: [
                       Text(
                         '${item.tokenInSymbol} → ${item.tokenOutSymbol}',
-                        style: TextStyle(
+                        style: AppTypography.body.copyWith(
                           color: AppColorTokens.of(context).textPrimary,
-                          fontSize: ScreenUtil().setSp(28),
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                       const Spacer(),
                       Text(
                         '+${item.amountOut} ${item.tokenOutSymbol}',
-                        style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
+                        style: AppTypography.body.copyWith(
+                          color: AppColorTokens.of(context).textPrimary,
+                        ),
                       ),
                     ],
                   ),
@@ -106,7 +107,9 @@ class _DexSwapHistoryState extends State<DexSwapHistory> {
                     children: [
                       Text(
                         timeStr,
-                        style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
+                        style: AppTypography.caption.copyWith(
+                          color: AppColorTokens.of(context).textSubtitle,
+                        ),
                       ),
                       SizedBox(width: ScreenUtil().setWidth(12)),
                       Container(
@@ -122,13 +125,17 @@ class _DexSwapHistoryState extends State<DexSwapHistory> {
                         ),
                         child: Text(
                           item.source,
-                          style: AppTypography.captionSm.copyWith(color: AppColorTokens.of(context).textSubtitle),
+                          style: AppTypography.captionSm.copyWith(
+                            color: AppColorTokens.of(context).textSubtitle,
+                          ),
                         ),
                       ),
                       const Spacer(),
                       Text(
                         _statusText(context, item.status),
-                        style: AppTypography.caption.copyWith(color: statusColor),
+                        style: AppTypography.caption.copyWith(
+                          color: statusColor,
+                        ),
                       ),
                     ],
                   ),

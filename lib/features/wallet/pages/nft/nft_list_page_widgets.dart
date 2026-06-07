@@ -97,8 +97,7 @@ extension _NftListPageWidgets on _NftListPageState {
               ),
               child: Text(
                 label,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
+                style: AppTypography.caption.copyWith(
                   fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
                   color: selected
                       ? Colors.white

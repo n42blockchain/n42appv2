@@ -76,9 +76,8 @@ mixin _AddressBookListItemMixin on State<AddressBookList> {
                     Flexible(
                       child: Text(
                         info.name ?? '',
-                        style: TextStyle(
+                        style: AppTypography.body.copyWith(
                           color: mainText,
-                          fontSize: ScreenUtil().setSp(30),
                           fontWeight: FontWeight.w500,
                         ),
                         overflow: TextOverflow.ellipsis,
@@ -96,7 +95,9 @@ mixin _AddressBookListItemMixin on State<AddressBookList> {
                       ),
                       child: Text(
                         info.coinName ?? '',
-                        style: AppTypography.captionSm.copyWith(color: subtitleText),
+                        style: AppTypography.captionSm.copyWith(
+                          color: subtitleText,
+                        ),
                       ),
                     ),
                   ],
@@ -150,9 +151,8 @@ mixin _AddressBookListItemMixin on State<AddressBookList> {
           alignment: Alignment.center,
           child: Text(
             initial,
-            style: TextStyle(
+            style: AppTypography.body.copyWith(
               color: Colors.white,
-              fontSize: ScreenUtil().setSp(30),
               fontWeight: FontWeight.w600,
             ),
           ),

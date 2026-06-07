@@ -57,8 +57,7 @@ class _BatchTemplatesSheetState extends State<BatchTemplatesSheet> {
                     child: Text(
                       S.of(context).g_key_aa_batch_templates,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(32),
+                      style: AppTypography.headline.copyWith(
                         fontWeight: FontWeight.w600,
                         color: AppColorTokens.of(context).textPrimary,
                       ),
@@ -156,8 +155,7 @@ class _TemplateItem extends StatelessWidget {
               children: [
                 Text(
                   template.name,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(26),
+                  style: AppTypography.bodySm.copyWith(
                     fontWeight: FontWeight.w600,
                     color: AppColorTokens.of(context).textPrimary,
                   ),
@@ -165,7 +163,9 @@ class _TemplateItem extends StatelessWidget {
                 SizedBox(height: ScreenUtil().setWidth(4)),
                 Text(
                   '${template.operations.length} operations · ${template.chainSymbol}',
-                  style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
+                  style: AppTypography.caption.copyWith(
+                    color: AppColorTokens.of(context).textSubtitle,
+                  ),
                 ),
               ],
             ),

@@ -184,8 +184,7 @@ class _StatusCard extends StatelessWidget {
                 Expanded(
                   child: Text(
                     label,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(24),
+                    style: AppTypography.caption.copyWith(
                       fontWeight: FontWeight.w600,
                       color: color,
                     ),

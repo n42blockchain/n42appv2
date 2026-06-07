@@ -35,8 +35,7 @@ mixin _SectionsMixin on _WidgetsMixin {
               ),
               child: Text(
                 S.of(context).g_mining_key_9,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(26),
+                style: AppTypography.bodySm.copyWith(
                   color: AppColorTokens.of(context).textItem,
                   fontWeight: FontWeight.w600,
                 ),
@@ -79,8 +78,7 @@ mixin _SectionsMixin on _WidgetsMixin {
           children: [
             Text(
               S.of(context).g_mining_key31,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(30),
+              style: AppTypography.body.copyWith(
                 color: AppColorTokens.of(context).textPrimary,
                 fontWeight: FontWeight.w600,
               ),
@@ -256,12 +254,16 @@ mixin _SectionsMixin on _WidgetsMixin {
           children: [
             Text(
               title,
-              style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
+              style: AppTypography.caption.copyWith(
+                color: AppColorTokens.of(context).textSubtitle,
+              ),
             ),
             SizedBox(height: ScreenUtil().setWidth(30)),
             Text(
               value,
-              style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).textItem),
+              style: AppTypography.headline.copyWith(
+                color: AppColorTokens.of(context).textItem,
+              ),
             ),
           ],
         ),
@@ -294,8 +296,7 @@ mixin _SectionsMixin on _WidgetsMixin {
               ),
               child: Text(
                 '24H Reward',
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(30),
+                style: AppTypography.body.copyWith(
                   color: AppColorTokens.of(context).textItem,
                   fontWeight: FontWeight.w600,
                 ),
@@ -304,7 +305,9 @@ mixin _SectionsMixin on _WidgetsMixin {
           ),
           Text(
             "${dataUtils.doubleFixed(last24HValue, 3)}${CoinType.N.name}",
-            style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).textPrimary),
+            style: AppTypography.bodySm.copyWith(
+              color: AppColorTokens.of(context).textPrimary,
+            ),
           ),
         ],
       ),

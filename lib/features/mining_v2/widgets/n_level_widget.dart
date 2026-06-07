@@ -165,9 +165,8 @@ class NLevelWidget extends StatelessWidget {
                           ),
                           Text(
                             S.of(context).g_mining_unlockable_anytime,
-                            style: TextStyle(
+                            style: AppTypography.captionSm.copyWith(
                               color: AppColorTokens.of(context).textPrimary,
-                              fontSize: ScreenUtil().setSp(20),
                               fontWeight: FontWeight.w500,
                             ),
                           ),

@@ -143,8 +143,7 @@ class BatchResultSheet extends StatelessWidget {
             SizedBox(height: ScreenUtil().setWidth(12)),
             Text(
               S.of(context).g_key_140,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(36),
+              style: AppTypography.title.copyWith(
                 fontWeight: FontWeight.w600,
                 color: Colors.green,
               ),
@@ -218,8 +217,7 @@ class BatchResultSheet extends StatelessWidget {
                   padding: EdgeInsets.symmetric(
                     vertical: ScreenUtil().setWidth(20),
                   ),
-                  textStyle: TextStyle(
-                    fontSize: ScreenUtil().setSp(30),
+                  textStyle: AppTypography.body.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
                   shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
@@ -347,13 +345,13 @@ class _ResultRow extends StatelessWidget {
       children: [
         Text(
           '$label:',
-          style: AppTypography.caption.copyWith(color: labelColor)),
+          style: AppTypography.caption.copyWith(color: labelColor),
+        ),
         const Spacer(),
         Flexible(
           child: Text(
             value,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
+            style: AppTypography.caption.copyWith(
               fontWeight: FontWeight.w600,
               color: valueColor,
             ),

@@ -253,9 +253,8 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
           children: [
             Text(
               '$_chainSymbol ($_chainName)',
-              style: TextStyle(
+              style: AppTypography.headline.copyWith(
                 color: _tc(AppThemeKeys.mainTextColor.name),
-                fontSize: ScreenUtil().setSp(32.0),
                 fontWeight: FontWeight.w600,
               ),
               maxLines: 1,
@@ -264,7 +263,9 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
             if (_tokenSymbol != null)
               Text(
                 '$_tokenSymbol($_tokenName)',
-                style: AppTypography.caption.copyWith(color: _tc(AppThemeKeys.mainTextColor.name)),
+                style: AppTypography.caption.copyWith(
+                  color: _tc(AppThemeKeys.mainTextColor.name),
+                ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -337,7 +338,9 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
                 ),
                 child: Text(
                   S.of(context).g_coin_key_1,
-                  style: AppTypography.body.copyWith(color: _tc(AppThemeKeys.mainTextColor.name)),
+                  style: AppTypography.body.copyWith(
+                    color: _tc(AppThemeKeys.mainTextColor.name),
+                  ),
                 ),
               ),
               _transactionsWidget(),
@@ -376,7 +379,9 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
               alignment: Alignment.center,
               child: Text(
                 S.of(context).g_mining_key_49,
-                style: AppTypography.body.copyWith(color: _tc(AppThemeKeys.mainBlueColor.name)),
+                style: AppTypography.body.copyWith(
+                  color: _tc(AppThemeKeys.mainBlueColor.name),
+                ),
               ),
             ),
           );

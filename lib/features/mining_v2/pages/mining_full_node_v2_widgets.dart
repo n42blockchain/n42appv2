@@ -19,9 +19,8 @@ mixin _MiningFullNodeV2WidgetsMixin
         SizedBox(width: ScreenUtil().setWidth(12)),
         Text(
           title,
-          style: TextStyle(
+          style: AppTypography.body.copyWith(
             color: AppColorTokens.of(context).textPrimary,
-            fontSize: ScreenUtil().setSp(30),
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -82,9 +81,8 @@ mixin _MiningFullNodeV2WidgetsMixin
             Expanded(
               child: Text(
                 payType,
-                style: TextStyle(
+                style: AppTypography.body.copyWith(
                   color: AppColorTokens.of(context).textPrimary,
-                  fontSize: ScreenUtil().setSp(28),
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -210,9 +208,8 @@ mixin _MiningFullNodeV2WidgetsMixin
                 children: [
                   Text(
                     payType,
-                    style: TextStyle(
+                    style: AppTypography.body.copyWith(
                       color: AppColorTokens.of(context).textPrimary,
-                      fontSize: ScreenUtil().setSp(28),
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -230,7 +227,9 @@ mixin _MiningFullNodeV2WidgetsMixin
                           Flexible(
                             child: Text(
                               errTips ?? '',
-                              style: AppTypography.caption.copyWith(color: const Color(0xFFEB5851)),
+                              style: AppTypography.caption.copyWith(
+                                color: const Color(0xFFEB5851),
+                              ),
                             ),
                           ),
                         ],
@@ -338,10 +337,7 @@ mixin _MiningFullNodeV2WidgetsMixin
                 S.of(context).g_mining_key_79,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(28),
-                  fontWeight: FontWeight.w600,
-                ),
+                style: AppTypography.body.copyWith(fontWeight: FontWeight.w600),
               ),
             ),
           ),

@@ -102,8 +102,7 @@ class _CreateThreeState extends State<CreateThree> {
                       alignment: Alignment.center,
                       child: Text(
                         S.of(context).g_key_wallet_c8,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(40.0),
+                        style: AppTypography.titleLg.copyWith(
                           color: mainText,
                           fontWeight: FontWeight.w600,
                         ),
@@ -203,7 +202,9 @@ class _CreateThreeState extends State<CreateThree> {
                 child: Text(
                   item.word,
                   textAlign: TextAlign.center,
-                  style: AppTypography.headline.copyWith(color: _tc(AppThemeKeys.mainButtonTextColor.name)),
+                  style: AppTypography.headline.copyWith(
+                    color: _tc(AppThemeKeys.mainButtonTextColor.name),
+                  ),
                 ),
               ),
             ),

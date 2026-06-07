@@ -76,9 +76,8 @@ class _SummaryPageState extends State<SummaryPage>
                 SizedBox(height: ScreenUtil().setWidth(18)),
                 Text(
                   S.of(context).g_mining_key_58,
-                  style: TextStyle(
+                  style: AppTypography.body.copyWith(
                     color: AppColorTokens.of(context).textPrimary,
-                    fontSize: ScreenUtil().setSp(30),
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -89,9 +88,8 @@ class _SummaryPageState extends State<SummaryPage>
                 Text(
                   // "Summary"
                   S.current.g_mining_key_19,
-                  style: TextStyle(
+                  style: AppTypography.body.copyWith(
                     color: AppColorTokens.of(context).textPrimary,
-                    fontSize: ScreenUtil().setSp(30),
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -101,9 +99,8 @@ class _SummaryPageState extends State<SummaryPage>
                 Text(
                   // "Reward History"
                   S.current.g_mining_key_34,
-                  style: TextStyle(
+                  style: AppTypography.body.copyWith(
                     color: AppColorTokens.of(context).textPrimary,
-                    fontSize: ScreenUtil().setSp(30),
                     fontWeight: FontWeight.w600,
                   ),
                 ),

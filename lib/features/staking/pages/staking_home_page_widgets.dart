@@ -44,12 +44,8 @@ mixin StakingHomePageWidgetsMixin
         ),
         labelColor: Colors.white,
         unselectedLabelColor: _themeColor(AppThemeKeys.itemSubtitleTextColor),
-        labelStyle: TextStyle(
-          fontSize: ScreenUtil().setSp(26),
-          fontWeight: FontWeight.w600,
-        ),
-        unselectedLabelStyle: TextStyle(
-          fontSize: ScreenUtil().setSp(26),
+        labelStyle: AppTypography.bodySm.copyWith(fontWeight: FontWeight.w600),
+        unselectedLabelStyle: AppTypography.bodySm.copyWith(
           fontWeight: FontWeight.normal,
         ),
         labelPadding: EdgeInsets.symmetric(
@@ -131,7 +127,9 @@ mixin StakingHomePageWidgetsMixin
                   SizedBox(height: ScreenUtil().setWidth(8)),
                   Text(
                     protocol.description,
-                    style: AppTypography.bodySm.copyWith(color: _themeColor(AppThemeKeys.itemSubtitleTextColor)),
+                    style: AppTypography.bodySm.copyWith(
+                      color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
+                    ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -160,8 +158,7 @@ mixin StakingHomePageWidgetsMixin
       children: [
         Text(
           protocol.name,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(32),
+          style: AppTypography.headline.copyWith(
             fontWeight: FontWeight.w600,
             color: _themeColor(AppThemeKeys.mainTextColor),
           ),
@@ -198,8 +195,7 @@ mixin StakingHomePageWidgetsMixin
               )
             : Text(
                 '${(liveApys[protocol.id] ?? protocol.apy).toStringAsFixed(1)}%',
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(32),
+                style: AppTypography.headline.copyWith(
                   fontWeight: FontWeight.w600,
                   color: Colors.green,
                 ),
@@ -208,7 +204,9 @@ mixin StakingHomePageWidgetsMixin
           isApyLoading
               ? S.of(context).g_key_stake_updating
               : S.of(context).g_key_stake_apy,
-          style: AppTypography.caption.copyWith(color: _themeColor(AppThemeKeys.itemSubtitleTextColor)),
+          style: AppTypography.caption.copyWith(
+            color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
+          ),
         ),
         SizedBox(height: ScreenUtil().setWidth(8)),
         Text(
@@ -219,7 +217,9 @@ mixin StakingHomePageWidgetsMixin
                       protocol.unbondingPeriodDays.toString(),
                     )
               : S.of(context).g_key_stake_no_lock,
-          style: AppTypography.caption.copyWith(color: _themeColor(AppThemeKeys.itemSubtitleTextColor)),
+          style: AppTypography.caption.copyWith(
+            color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
+          ),
         ),
       ],
     );
@@ -301,7 +301,9 @@ mixin StakingHomePageWidgetsMixin
             SizedBox(height: ScreenUtil().setWidth(8)),
             Text(
               '${S.of(context).g_key_stake_validator}: ${position.validator!.name}',
-              style: AppTypography.caption.copyWith(color: _themeColor(AppThemeKeys.itemSubtitleTextColor)),
+              style: AppTypography.caption.copyWith(
+                color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
+              ),
             ),
           ],
           SizedBox(height: ScreenUtil().setWidth(12)),
@@ -324,8 +326,7 @@ mixin StakingHomePageWidgetsMixin
       children: [
         Text(
           position.protocol.name,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(30),
+          style: AppTypography.body.copyWith(
             fontWeight: FontWeight.w600,
             color: _themeColor(AppThemeKeys.mainTextColor),
           ),
@@ -359,15 +360,16 @@ mixin StakingHomePageWidgetsMixin
           children: [
             Text(
               S.of(context).g_key_stake_staked,
-              style: AppTypography.caption.copyWith(color: _themeColor(AppThemeKeys.itemSubtitleTextColor)),
+              style: AppTypography.caption.copyWith(
+                color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
+              ),
             ),
             Text(
               formatAmount(
                 position.stakedAmount,
                 position.protocol.chainSymbol,
               ),
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(28),
+              style: AppTypography.body.copyWith(
                 fontWeight: FontWeight.w600,
                 color: _themeColor(AppThemeKeys.mainTextColor),
               ),
@@ -380,15 +382,16 @@ mixin StakingHomePageWidgetsMixin
             children: [
               Text(
                 S.of(context).g_key_stake_rewards,
-                style: AppTypography.caption.copyWith(color: _themeColor(AppThemeKeys.itemSubtitleTextColor)),
+                style: AppTypography.caption.copyWith(
+                  color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
+                ),
               ),
               Text(
                 formatAmount(
                   position.pendingRewards,
                   position.protocol.chainSymbol,
                 ),
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(28),
+                style: AppTypography.body.copyWith(
                   fontWeight: FontWeight.w600,
                   color: Colors.green,
                 ),

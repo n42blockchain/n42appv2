@@ -82,8 +82,7 @@ class SessionKeyCard extends StatelessWidget {
             children: [
               Text(
                 keyData.label,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(28),
+                style: AppTypography.body.copyWith(
                   fontWeight: FontWeight.w600,
                   color: AppColorTokens.of(context).textPrimary,
                 ),
@@ -91,7 +90,9 @@ class SessionKeyCard extends StatelessWidget {
               if (keyData.dappName != null)
                 Text(
                   keyData.dappName!,
-                  style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
+                  style: AppTypography.caption.copyWith(
+                    color: AppColorTokens.of(context).textSubtitle,
+                  ),
                 ),
             ],
           ),
@@ -144,8 +145,7 @@ class SessionKeyCard extends StatelessWidget {
       ),
       child: Text(
         sessionKeyStatusLabel(context, keyData.status),
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(20),
+        style: AppTypography.captionSm.copyWith(
           fontWeight: FontWeight.w600,
           color: color,
         ),
@@ -281,13 +281,14 @@ class SessionKeyCard extends StatelessWidget {
               child: Text(
                 S.of(context).g_key_aa_spending_limit,
                 overflow: TextOverflow.ellipsis,
-                style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
+                style: AppTypography.caption.copyWith(
+                  color: AppColorTokens.of(context).textSubtitle,
+                ),
               ),
             ),
             Text(
               '${(pct * 100).toStringAsFixed(1)}%',
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
+              style: AppTypography.caption.copyWith(
                 fontWeight: FontWeight.w600,
                 color: color,
               ),

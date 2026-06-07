@@ -174,8 +174,7 @@ class EnsEntryCard extends StatelessWidget {
     return Center(
       child: Text(
         'ENS',
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(24),
+        style: AppTypography.caption.copyWith(
           fontWeight: FontWeight.w600,
           color: Colors.white,
         ),

@@ -89,8 +89,7 @@ class NonEvmFeeCompact extends StatelessWidget {
                 children: [
                   Text(
                     speedLabel ?? label ?? S.of(context).g_key_t_16,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(28),
+                    style: AppTypography.body.copyWith(
                       fontWeight: FontWeight.w500,
                       color: mainText,
                     ),
@@ -114,8 +113,7 @@ class NonEvmFeeCompact extends StatelessWidget {
               children: [
                 Text(
                   feeText,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(28),
+                  style: AppTypography.body.copyWith(
                     fontWeight: FontWeight.w600,
                     color: feeColor,
                   ),
@@ -233,8 +231,7 @@ class _NonEvmFeeSelectorState extends State<NonEvmFeeSelector> {
                 child: Text(
                   S.of(context).g_key_t_16,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(30),
+                  style: AppTypography.body.copyWith(
                     fontWeight: FontWeight.w600,
                     color: mainText,
                   ),
@@ -244,7 +241,8 @@ class _NonEvmFeeSelectorState extends State<NonEvmFeeSelector> {
           ),
           Text(
             '$formatted $unit',
-            style: AppTypography.body.copyWith(color: mainText)),
+            style: AppTypography.body.copyWith(color: mainText),
+          ),
         ],
       ),
     );
@@ -325,8 +323,7 @@ class _NonEvmFeeSelectorState extends State<NonEvmFeeSelector> {
               SizedBox(height: ScreenUtil().setWidth(8)),
               Text(
                 label,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
+                style: AppTypography.caption.copyWith(
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
                   color: isSelected ? blueColor : mainText,
                 ),
@@ -405,14 +402,10 @@ class _NonEvmFeeSelectorState extends State<NonEvmFeeSelector> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          label,
-          style: AppTypography.bodySm.copyWith(color: subtitleText),
-        ),
+        Text(label, style: AppTypography.bodySm.copyWith(color: subtitleText)),
         Text(
           value,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(26),
+          style: AppTypography.bodySm.copyWith(
             fontWeight: isTotal ? FontWeight.w600 : FontWeight.normal,
             color: mainText,
           ),

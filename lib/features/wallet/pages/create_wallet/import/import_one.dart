@@ -154,8 +154,7 @@ class _ImportOneState extends ConsumerState<ImportOne>
                       alignment: Alignment.center,
                       child: Text(
                         S.of(context).g_key_wallet_c6,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(40.0),
+                        style: AppTypography.titleLg.copyWith(
                           color: AppColorTokens.of(context).textPrimary,
                           fontWeight: FontWeight.w600,
                         ),
@@ -169,7 +168,9 @@ class _ImportOneState extends ConsumerState<ImportOne>
                       alignment: Alignment.center,
                       child: Text(
                         S.of(context).g_key_wallet_c7,
-                        style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).textPrimary),
+                        style: AppTypography.headline.copyWith(
+                          color: AppColorTokens.of(context).textPrimary,
+                        ),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -187,7 +188,9 @@ class _ImportOneState extends ConsumerState<ImportOne>
                         borderRadius: AppRadius.brSm,
                       ),
                       child: TextField(
-                        style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).brand),
+                        style: AppTypography.headline.copyWith(
+                          color: AppColorTokens.of(context).brand,
+                        ),
                         controller: inputEditingController,
                         textInputAction: TextInputAction.done,
                         keyboardType: TextInputType.text,
@@ -212,7 +215,9 @@ class _ImportOneState extends ConsumerState<ImportOne>
                       padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
                       child: Text(
                         inputMW,
-                        style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).brand),
+                        style: AppTypography.headline.copyWith(
+                          color: AppColorTokens.of(context).brand,
+                        ),
                       ),
                     ),
                     if (errorMessage.isNotEmpty)
@@ -226,7 +231,9 @@ class _ImportOneState extends ConsumerState<ImportOne>
                         ),
                         child: Text(
                           errorMessage,
-                          style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).danger),
+                          style: AppTypography.bodySm.copyWith(
+                            color: AppColorTokens.of(context).danger,
+                          ),
                           textAlign: TextAlign.center,
                         ),
                       ),

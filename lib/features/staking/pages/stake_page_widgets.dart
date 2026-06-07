@@ -59,8 +59,7 @@ mixin _StakeViewsMixin
                       children: [
                         Text(
                           widget.protocol.name,
-                          style: TextStyle(
-                            fontSize: ScreenUtil().setSp(32),
+                          style: AppTypography.headline.copyWith(
                             fontWeight: FontWeight.w600,
                             color: Colors.white,
                           ),
@@ -78,7 +77,9 @@ mixin _StakeViewsMixin
                             ),
                             child: Text(
                               S.of(context).g_key_stake_liquid_tag,
-                              style: AppTypography.captionSm.copyWith(color: Colors.white),
+                              style: AppTypography.captionSm.copyWith(
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ],
@@ -94,7 +95,9 @@ mixin _StakeViewsMixin
                                   widget.protocol.unbondingPeriodDays
                                       .toString(),
                                 ),
-                      style: AppTypography.caption.copyWith(color: Colors.white70),
+                      style: AppTypography.caption.copyWith(
+                        color: Colors.white70,
+                      ),
                     ),
                   ],
                 ),
@@ -106,15 +109,16 @@ mixin _StakeViewsMixin
                 children: [
                   Text(
                     '${provider.currentApy.toStringAsFixed(1)}%',
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(36),
+                    style: AppTypography.title.copyWith(
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
                     ),
                   ),
                   Text(
                     'APY',
-                    style: AppTypography.caption.copyWith(color: Colors.white70),
+                    style: AppTypography.caption.copyWith(
+                      color: Colors.white70,
+                    ),
                   ),
                 ],
               ),
@@ -163,10 +167,7 @@ mixin _StakeViewsMixin
         ),
         labelColor: Colors.white,
         unselectedLabelColor: AppColorTokens.of(context).textSubtitle,
-        labelStyle: TextStyle(
-          fontSize: ScreenUtil().setSp(28),
-          fontWeight: FontWeight.w600,
-        ),
+        labelStyle: AppTypography.body.copyWith(fontWeight: FontWeight.w600),
         tabs: [
           Tab(
             child: FittedBox(
@@ -339,8 +340,7 @@ mixin _StakeViewsMixin
   Widget _buildSectionTitle(BuildContext context, String title) {
     return Text(
       title,
-      style: TextStyle(
-        fontSize: ScreenUtil().setSp(28),
+      style: AppTypography.body.copyWith(
         fontWeight: FontWeight.w600,
         color: AppColorTokens.of(context).textPrimary,
       ),

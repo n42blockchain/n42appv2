@@ -49,8 +49,7 @@ class _AlertsOverviewSheet extends StatelessWidget {
           SizedBox(height: ScreenUtil().setWidth(20)),
           Text(
             S.of(context).g_key_gas_alert,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(32),
+            style: AppTypography.headline.copyWith(
               fontWeight: FontWeight.w600,
               color: mainText,
             ),
@@ -75,9 +74,7 @@ class _AlertsOverviewSheet extends StatelessWidget {
     return ListTile(
       contentPadding: EdgeInsets.zero,
       leading: _NetworkIcon(network: n, size: 40, iconSize: 22),
-      title: Text(
-        n.name,
-        style: AppTypography.body.copyWith(color: mainText)),
+      title: Text(n.name, style: AppTypography.body.copyWith(color: mainText)),
       subtitle: hasAlert
           ? Text(
               '${config.alertBelow ? S.of(context).g_key_gas_alert_below : S.of(context).g_key_gas_alert_above} ${config.threshold.toStringAsFixed(0)} Gwei',
@@ -263,8 +260,7 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
         Expanded(
           child: Text(
             '${widget.network.name} — ${S.of(context).g_key_gas_alert}',
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(30),
+            style: AppTypography.body.copyWith(
               fontWeight: FontWeight.w600,
               color: mainText,
             ),
@@ -359,7 +355,9 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
             SizedBox(height: ScreenUtil().setWidth(6)),
             Text(
               _error,
-              style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).danger),
+              style: AppTypography.caption.copyWith(
+                color: AppColorTokens.of(context).danger,
+              ),
             ),
           ],
         ],
@@ -442,10 +440,7 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
               )
             : Text(
                 S.of(context).g_key_gas_alert_save,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(30),
-                  fontWeight: FontWeight.w600,
-                ),
+                style: AppTypography.body.copyWith(fontWeight: FontWeight.w600),
               ),
       ),
     );
@@ -515,8 +510,7 @@ class _DirectionButton extends StatelessWidget {
             Flexible(
               child: Text(
                 label,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
+                style: AppTypography.caption.copyWith(
                   fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
                   color: selected ? color : idleColor,
                 ),

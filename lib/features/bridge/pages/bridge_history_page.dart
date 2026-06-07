@@ -258,8 +258,7 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
         SizedBox(height: ScreenUtil().setWidth(4)),
         Text(
           amountText,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(28),
+          style: AppTypography.body.copyWith(
             fontWeight: FontWeight.w600,
             color: mainColor,
           ),

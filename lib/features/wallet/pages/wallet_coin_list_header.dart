@@ -269,9 +269,8 @@ class _SortButton extends StatelessWidget {
             children: [
               Text(
                 label,
-                style: TextStyle(
+                style: AppTypography.caption.copyWith(
                   color: AppColorTokens.of(context).textSubtitle,
-                  fontSize: ScreenUtil().setSp(24),
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -343,9 +342,8 @@ class _ThresholdButton extends StatelessWidget {
             SizedBox(width: ScreenUtil().setWidth(5)),
             Text(
               label,
-              style: TextStyle(
+              style: AppTypography.caption.copyWith(
                 color: active ? blueColor : subColor,
-                fontSize: ScreenUtil().setSp(22),
                 fontWeight: active ? FontWeight.w600 : FontWeight.normal,
               ),
             ),

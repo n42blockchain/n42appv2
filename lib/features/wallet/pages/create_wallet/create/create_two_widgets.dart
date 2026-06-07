@@ -102,8 +102,7 @@ mixin _CreateTwoWidgetsMixin on State<CreateTwo> {
           children: [
             Text(
               "${S.of(context).g_key_wallet_c18}?",
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(32.0),
+              style: AppTypography.headline.copyWith(
                 color: mainTextColor,
                 fontWeight: FontWeight.w600,
               ),

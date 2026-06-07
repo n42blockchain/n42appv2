@@ -123,9 +123,8 @@ extension _BrowserPageTabs on _BrowserPageState {
             title.isNotEmpty ? title : host,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
+            style: AppTypography.caption.copyWith(
               color: AppColorTokens.of(context).textPrimary,
-              fontSize: ScreenUtil().setSp(22),
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -202,9 +201,8 @@ extension _BrowserPageTabs on _BrowserPageState {
                 children: [
                   Text(
                     title.isNotEmpty ? title : host,
-                    style: TextStyle(
+                    style: AppTypography.captionSm.copyWith(
                       color: AppColorTokens.of(context).textPrimary,
-                      fontSize: ScreenUtil().setSp(20.0),
                       fontWeight: isActive
                           ? FontWeight.w600
                           : FontWeight.normal,

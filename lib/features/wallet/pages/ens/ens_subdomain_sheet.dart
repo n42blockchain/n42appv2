@@ -188,10 +188,7 @@ class _EnsCreateSubdomainSheetState extends State<EnsCreateSubdomainSheet> {
           child: Text(
             S.of(context).g_key_ens_subdomain_create,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(32),
-              fontWeight: FontWeight.w600,
-            ),
+            style: AppTypography.headline.copyWith(fontWeight: FontWeight.w600),
           ),
         ),
         IconButton(

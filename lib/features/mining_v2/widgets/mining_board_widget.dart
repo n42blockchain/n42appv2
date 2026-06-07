@@ -172,13 +172,14 @@ class MiningBoardWidget extends StatelessWidget {
                         children: [
                           Text(
                             S.of(context).g_mining_unlock_period,
-                            style: AppTypography.captionSm.copyWith(color: AppColorTokens.of(context).textSubtitle),
+                            style: AppTypography.captionSm.copyWith(
+                              color: AppColorTokens.of(context).textSubtitle,
+                            ),
                           ),
                           Text(
                             S.of(context).g_mining_unlockable_anytime,
-                            style: TextStyle(
+                            style: AppTypography.caption.copyWith(
                               color: AppColorTokens.of(context).textPrimary,
-                              fontSize: ScreenUtil().setSp(22),
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -281,7 +282,9 @@ class MiningBoardWidget extends StatelessWidget {
             flex: 2,
             child: Text(
               action,
-              style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
+              style: AppTypography.caption.copyWith(
+                color: AppColorTokens.of(context).textSubtitle,
+              ),
             ),
           ),
           Expanded(
@@ -292,9 +295,8 @@ class MiningBoardWidget extends StatelessWidget {
                 Flexible(
                   child: Text(
                     desc,
-                    style: TextStyle(
+                    style: AppTypography.caption.copyWith(
                       color: AppColorTokens.of(context).textPrimary,
-                      fontSize: ScreenUtil().setSp(24),
                       fontWeight: FontWeight.w500,
                     ),
                     textAlign: TextAlign.right,

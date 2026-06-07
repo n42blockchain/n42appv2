@@ -191,7 +191,9 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
               ),
               child: Text(
                 _error,
-                style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).danger),
+                style: AppTypography.bodySm.copyWith(
+                  color: AppColorTokens.of(context).danger,
+                ),
               ),
             ),
             SizedBox(height: ScreenUtil().setWidth(16)),
@@ -225,7 +227,9 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
             'wallet passwords and wallet settings. '
             'Keep the backup file and password safe. '
             'Never share them with anyone.',
-            style: AppTypography.caption.copyWith(color: const Color(0xFF856404)),
+            style: AppTypography.caption.copyWith(
+              color: const Color(0xFF856404),
+            ),
           ),
         ),
       ],
@@ -272,15 +276,16 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
               children: [
                 Text(
                   wallet.walletName ?? 'Wallet ${index + 1}',
-                  style: TextStyle(
+                  style: AppTypography.body.copyWith(
                     color: AppColorTokens.of(context).textPrimary,
-                    fontSize: ScreenUtil().setSp(30),
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 Text(
                   wallet.hasMnemonic ? 'Mnemonic wallet' : 'Private key wallet',
-                  style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
+                  style: AppTypography.caption.copyWith(
+                    color: AppColorTokens.of(context).textSubtitle,
+                  ),
                 ),
               ],
             ),

@@ -88,7 +88,9 @@ class EnsSearchResultView extends StatelessWidget {
           SizedBox(height: ScreenUtil().setWidth(16)),
           Text(
             S.of(context).g_key_ens_min_length,
-            style: AppTypography.caption.copyWith(color: subtitleColor.withAlpha(150)),
+            style: AppTypography.caption.copyWith(
+              color: subtitleColor.withAlpha(150),
+            ),
           ),
           SizedBox(height: ScreenUtil().setWidth(40)),
           _buildSuggestions(context),
@@ -233,10 +235,7 @@ class EnsSearchResultView extends StatelessWidget {
             ),
             child: Text(
               S.of(context).g_key_ens_register_now,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(30),
-                fontWeight: FontWeight.w600,
-              ),
+              style: AppTypography.body.copyWith(fontWeight: FontWeight.w600),
             ),
           ),
         ],
@@ -312,8 +311,7 @@ class EnsSearchResultView extends StatelessWidget {
                   isAvailable
                       ? S.of(context).g_key_ens_available
                       : S.of(context).g_key_ens_unavailable,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(26),
+                  style: AppTypography.bodySm.copyWith(
                     color: statusColor,
                     fontWeight: FontWeight.w500,
                   ),
@@ -391,8 +389,7 @@ class EnsSearchResultView extends StatelessWidget {
       children: [
         Text(
           S.of(context).g_key_ens_registration_period,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(26),
+          style: AppTypography.bodySm.copyWith(
             fontWeight: FontWeight.w600,
             color: mainTextColor,
           ),
@@ -445,8 +442,7 @@ class EnsSearchResultView extends StatelessWidget {
         ),
         child: Text(
           '$years ${years == 1 ? S.of(context).g_key_ens_year : S.of(context).g_key_ens_years}',
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(24),
+          style: AppTypography.caption.copyWith(
             fontWeight: FontWeight.w600,
             color: isSelected ? Colors.white : mainTextColor,
           ),

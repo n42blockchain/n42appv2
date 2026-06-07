@@ -47,8 +47,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
                   children: [
                     Text(
                       widget.account.displayName,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(32),
+                      style: AppTypography.headline.copyWith(
                         fontWeight: FontWeight.w600,
                         color: _mainText,
                       ),
@@ -81,7 +80,9 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
                     children: [
                       Text(
                         S.of(context).g_key_155,
-                        style: AppTypography.captionSm.copyWith(color: _subText),
+                        style: AppTypography.captionSm.copyWith(
+                          color: _subText,
+                        ),
                       ),
                       SizedBox(height: ScreenUtil().setWidth(4)),
                       Text(
@@ -213,8 +214,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
             SizedBox(height: ScreenUtil().setWidth(6)),
             Text(
               label,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
+              style: AppTypography.caption.copyWith(
                 fontWeight: FontWeight.w500,
                 color: isDisabled ? Colors.grey : _mainText,
               ),
@@ -236,8 +236,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
         children: [
           Text(
             S.of(context).g_key_aa_account_details,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
+            style: AppTypography.body.copyWith(
               fontWeight: FontWeight.w600,
               color: _mainText,
             ),
@@ -275,13 +274,10 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            label,
-            style: AppTypography.caption.copyWith(color: _subText)),
+          Text(label, style: AppTypography.caption.copyWith(color: _subText)),
           Text(
             value,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
+            style: AppTypography.caption.copyWith(
               fontWeight: FontWeight.w500,
               color: _mainText,
             ),
@@ -307,8 +303,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
                 child: Text(
                   S.of(context).g_key_tran_1,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(28),
+                  style: AppTypography.body.copyWith(
                     fontWeight: FontWeight.w600,
                     color: _mainText,
                   ),

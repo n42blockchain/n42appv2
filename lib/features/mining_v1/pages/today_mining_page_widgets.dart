@@ -32,7 +32,9 @@ mixin _WidgetsMixin on _LogicMixin {
                         child: Text(
                           S.of(context).g_mining_key_5,
                           maxLines: 2,
-                          style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
+                          style: AppTypography.caption.copyWith(
+                            color: AppColorTokens.of(context).textSubtitle,
+                          ),
                         ),
                       ),
                       Container(
@@ -71,7 +73,9 @@ mixin _WidgetsMixin on _LogicMixin {
                               ? S.current.g_key_193
                               : S.current.g_mining_key_47,
                           overflow: TextOverflow.ellipsis,
-                          style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).textItem),
+                          style: AppTypography.headline.copyWith(
+                            color: AppColorTokens.of(context).textItem,
+                          ),
                         ),
                       ),
                       GestureDetector(
@@ -135,14 +139,18 @@ mixin _WidgetsMixin on _LogicMixin {
                 children: [
                   Text(
                     S.of(context).g_mining_key38,
-                    style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
+                    style: AppTypography.caption.copyWith(
+                      color: AppColorTokens.of(context).textSubtitle,
+                    ),
                   ),
                   SizedBox(height: ScreenUtil().setWidth(30)),
                   Text(
                     mpValue.miningType == null
                         ? "0 ${CoinType.N.name}"
                         : '$currDepositsOfValue ${CoinType.N.name}',
-                    style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).textItem),
+                    style: AppTypography.headline.copyWith(
+                      color: AppColorTokens.of(context).textItem,
+                    ),
                   ),
                 ],
               ),
@@ -178,8 +186,7 @@ mixin _WidgetsMixin on _LogicMixin {
               ),
               child: Text(
                 S.of(context).g_mining_key_8,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(26),
+                style: AppTypography.bodySm.copyWith(
                   color: AppColorTokens.of(context).textItem,
                   fontWeight: FontWeight.w600,
                 ),
@@ -304,7 +311,9 @@ mixin _WidgetsMixin on _LogicMixin {
                         ),
                         child: Text(
                           tipsText ?? '',
-                          style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textPrimary),
+                          style: AppTypography.caption.copyWith(
+                            color: AppColorTokens.of(context).textPrimary,
+                          ),
                         ),
                       ),
                     ),
@@ -316,7 +325,9 @@ mixin _WidgetsMixin on _LogicMixin {
               children: [
                 Text(
                   value,
-                  style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
+                  style: AppTypography.body.copyWith(
+                    color: AppColorTokens.of(context).textPrimary,
+                  ),
                 ),
                 Image.asset(
                   imagePath ?? '',

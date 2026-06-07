@@ -117,9 +117,8 @@ class MiningDataBroad extends StatelessWidget {
             titleText,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
+            style: AppTypography.captionSm.copyWith(
               color: AppColorTokens.of(context).textSubtitle,
-              fontSize: ScreenUtil().setSp(20),
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -169,9 +168,8 @@ class MiningDataBroad extends StatelessWidget {
   Widget _buildValueRow(BuildContext context) {
     return Text(
       value,
-      style: TextStyle(
+      style: AppTypography.body.copyWith(
         color: AppColorTokens.of(context).textPrimary,
-        fontSize: ScreenUtil().setSp(28),
         fontWeight: FontWeight.w600,
       ),
       overflow: TextOverflow.ellipsis,

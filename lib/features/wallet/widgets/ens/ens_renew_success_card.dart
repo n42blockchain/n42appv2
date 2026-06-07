@@ -77,8 +77,7 @@ class _EnsRenewSuccessCardState extends State<EnsRenewSuccessCard> {
           SizedBox(height: ScreenUtil().setWidth(16)),
           Text(
             S.of(context).g_key_ens_renew_success,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
+            style: AppTypography.body.copyWith(
               fontWeight: FontWeight.w600,
               color: Colors.green,
             ),
@@ -87,7 +86,9 @@ class _EnsRenewSuccessCardState extends State<EnsRenewSuccessCard> {
             SizedBox(height: ScreenUtil().setWidth(8)),
             Text(
               '${S.of(context).g_key_ens_new_expiry}: ${_formatDate(widget.renewResult.newExpiresAt!)}',
-              style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textPrimary),
+              style: AppTypography.caption.copyWith(
+                color: AppColorTokens.of(context).textPrimary,
+              ),
             ),
           ],
           if (widget.renewResult.txHash != null) ...[
@@ -124,8 +125,7 @@ class _EnsRenewSuccessCardState extends State<EnsRenewSuccessCard> {
                     children: [
                       Text(
                         S.of(context).g_key_ens_reminder_enable,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(26),
+                        style: AppTypography.bodySm.copyWith(
                           fontWeight: FontWeight.w600,
                           color: AppColorTokens.of(context).textPrimary,
                         ),
@@ -133,7 +133,9 @@ class _EnsRenewSuccessCardState extends State<EnsRenewSuccessCard> {
                       SizedBox(height: ScreenUtil().setWidth(4)),
                       Text(
                         S.of(context).g_key_ens_reminder_hint,
-                        style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
+                        style: AppTypography.caption.copyWith(
+                          color: AppColorTokens.of(context).textSubtitle,
+                        ),
                       ),
                     ],
                   ),

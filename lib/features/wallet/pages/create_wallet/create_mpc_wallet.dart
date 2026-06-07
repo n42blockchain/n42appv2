@@ -143,8 +143,7 @@ class _CreateMpcWalletState extends ConsumerState<CreateMpcWallet> {
               SizedBox(height: ScreenUtil().setWidth(20)),
               Text(
                 'No Seed Phrase Needed',
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(40),
+                style: AppTypography.titleLg.copyWith(
                   fontWeight: FontWeight.w600,
                   color: textColor,
                 ),
@@ -248,8 +247,7 @@ class _CreateMpcWalletState extends ConsumerState<CreateMpcWallet> {
             : Icon(icon, color: color, size: 24),
         label: Text(
           label,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(28),
+          style: AppTypography.body.copyWith(
             fontWeight: FontWeight.w600,
             color: isDisabled ? Colors.grey : textColor,
           ),

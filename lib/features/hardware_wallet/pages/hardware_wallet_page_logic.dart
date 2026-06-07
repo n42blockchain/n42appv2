@@ -195,8 +195,7 @@ extension _HardwareWalletPageLogic on _HardwareWalletPageState {
         children: [
           Text(
             s.g_key_hw_supported_devices,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
+            style: AppTypography.body.copyWith(
               fontWeight: FontWeight.w600,
               color: AppColorTokens.of(context).textPrimary,
             ),
@@ -227,7 +226,9 @@ extension _HardwareWalletPageLogic on _HardwareWalletPageState {
               Expanded(
                 child: Text(
                   s.g_key_hw_ble_hint,
-                  style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
+                  style: AppTypography.caption.copyWith(
+                    color: AppColorTokens.of(context).textSubtitle,
+                  ),
                 ),
               ),
             ],
@@ -254,7 +255,9 @@ extension _HardwareWalletPageLogic on _HardwareWalletPageState {
           SizedBox(width: ScreenUtil().setWidth(8)),
           Text(
             name,
-            style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).textPrimary),
+            style: AppTypography.bodySm.copyWith(
+              color: AppColorTokens.of(context).textPrimary,
+            ),
           ),
           const Spacer(),
           Container(
@@ -268,7 +271,9 @@ extension _HardwareWalletPageLogic on _HardwareWalletPageState {
             ),
             child: Text(
               connection,
-              style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).brand),
+              style: AppTypography.caption.copyWith(
+                color: AppColorTokens.of(context).brand,
+              ),
             ),
           ),
         ],

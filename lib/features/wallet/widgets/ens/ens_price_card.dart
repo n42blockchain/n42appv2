@@ -31,8 +31,7 @@ class EnsPriceCard extends StatelessWidget {
         children: [
           Text(
             S.of(context).g_key_ens_price_breakdown,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(26),
+            style: AppTypography.bodySm.copyWith(
               fontWeight: FontWeight.w600,
               color: AppColorTokens.of(context).textPrimary,
             ),
@@ -69,8 +68,7 @@ class EnsPriceCard extends StatelessWidget {
                 child: Text(
                   S.of(context).g_key_ens_total,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(28),
+                  style: AppTypography.body.copyWith(
                     fontWeight: FontWeight.w600,
                     color: AppColorTokens.of(context).textPrimary,
                   ),
@@ -81,8 +79,7 @@ class EnsPriceCard extends StatelessWidget {
                 children: [
                   Text(
                     price.formattedTotalPrice,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(30),
+                    style: AppTypography.body.copyWith(
                       fontWeight: FontWeight.w600,
                       color: AppColorTokens.of(context).brand,
                     ),
@@ -90,7 +87,9 @@ class EnsPriceCard extends StatelessWidget {
                   if (price.usdPrice != null)
                     Text(
                       '≈ \$${price.usdPrice!.toStringAsFixed(2)}',
-                      style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
+                      style: AppTypography.caption.copyWith(
+                        color: AppColorTokens.of(context).textSubtitle,
+                      ),
                     ),
                 ],
               ),
@@ -119,7 +118,9 @@ class EnsPriceCard extends StatelessWidget {
                       price.nameLength == 3
                           ? S.of(context).g_key_ens_premium_name
                           : S.of(context).g_key_ens_standard_name,
-                      style: AppTypography.caption.copyWith(color: Colors.orange),
+                      style: AppTypography.caption.copyWith(
+                        color: Colors.orange,
+                      ),
                     ),
                   ),
                 ],
@@ -137,11 +138,15 @@ class EnsPriceCard extends StatelessWidget {
       children: [
         Text(
           label,
-          style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
+          style: AppTypography.caption.copyWith(
+            color: AppColorTokens.of(context).textSubtitle,
+          ),
         ),
         Text(
           value,
-          style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textPrimary),
+          style: AppTypography.caption.copyWith(
+            color: AppColorTokens.of(context).textPrimary,
+          ),
         ),
       ],
     );

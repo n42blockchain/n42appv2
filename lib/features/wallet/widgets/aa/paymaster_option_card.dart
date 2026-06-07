@@ -101,8 +101,7 @@ class PaymasterOptionCard extends StatelessWidget {
                       children: [
                         Text(
                           _getTitle(context),
-                          style: TextStyle(
-                            fontSize: ScreenUtil().setSp(26),
+                          style: AppTypography.bodySm.copyWith(
                             fontWeight: FontWeight.w600,
                             color: isDisabled
                                 ? Colors.grey
@@ -137,9 +136,11 @@ class PaymasterOptionCard extends StatelessWidget {
                       isDisabled && option.unavailableReason != null
                           ? option.unavailableReason!
                           : _getSubtitle(context),
-                      style: AppTypography.caption.copyWith(color: isDisabled
+                      style: AppTypography.caption.copyWith(
+                        color: isDisabled
                             ? Colors.grey
-                            : AppColorTokens.of(context).textSubtitle),
+                            : AppColorTokens.of(context).textSubtitle,
+                      ),
                     ),
                   ],
                 ),

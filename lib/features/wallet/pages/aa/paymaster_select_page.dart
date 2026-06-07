@@ -173,8 +173,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
               Flexible(
                 child: Text(
                   S.of(context).g_key_aa_gas_payment_options,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(28),
+                  style: AppTypography.body.copyWith(
                     fontWeight: FontWeight.w600,
                     color: _themeColor(AppThemeKeys.mainTextColor),
                   ),
@@ -186,7 +185,9 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
           SizedBox(height: ScreenUtil().setWidth(10)),
           Text(
             S.of(context).g_key_aa_paymaster_description,
-            style: AppTypography.caption.copyWith(color: _themeColor(AppThemeKeys.itemSubtitleTextColor)),
+            style: AppTypography.caption.copyWith(
+              color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
+            ),
           ),
           SizedBox(height: ScreenUtil().setWidth(12)),
           // Chain coverage row
@@ -202,7 +203,9 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
                 child: Text(
                   '${S.of(context).g_key_aa_paymaster_coverage}: '
                   '${supportedChains.length} ${S.of(context).g_key_aa_paymaster_chains_supported}',
-                  style: AppTypography.caption.copyWith(color: _themeColor(AppThemeKeys.itemSubtitleTextColor)),
+                  style: AppTypography.caption.copyWith(
+                    color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
+                  ),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -263,7 +266,9 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
           SizedBox(height: ScreenUtil().setWidth(16)),
           Text(
             S.of(context).g_key_aa_paymaster_checking,
-            style: AppTypography.caption.copyWith(color: _themeColor(AppThemeKeys.itemSubtitleTextColor)),
+            style: AppTypography.caption.copyWith(
+              color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
+            ),
           ),
         ],
       ),
@@ -285,8 +290,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
             SizedBox(height: ScreenUtil().setWidth(16)),
             Text(
               S.of(context).g_key_aa_paymaster_load_failed,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(28),
+              style: AppTypography.body.copyWith(
                 fontWeight: FontWeight.w600,
                 color: _themeColor(AppThemeKeys.mainTextColor),
               ),
@@ -356,8 +360,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
                 ),
                 child: Text(
                   S.of(context).g_key_78,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(28),
+                  style: AppTypography.body.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -392,12 +395,13 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
               children: [
                 Text(
                   S.of(context).g_key_aa_selected,
-                  style: AppTypography.captionSm.copyWith(color: _themeColor(AppThemeKeys.itemSubtitleTextColor)),
+                  style: AppTypography.captionSm.copyWith(
+                    color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
+                  ),
                 ),
                 Text(
                   _getSelectedTitle(),
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(26),
+                  style: AppTypography.bodySm.copyWith(
                     fontWeight: FontWeight.w600,
                     color: _themeColor(AppThemeKeys.mainTextColor),
                   ),
@@ -424,8 +428,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
       ),
       child: Text(
         S.of(context).g_key_aa_free,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(20),
+        style: AppTypography.captionSm.copyWith(
           fontWeight: FontWeight.w600,
           color: Colors.green,
         ),

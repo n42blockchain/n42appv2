@@ -14,8 +14,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
   Color get _subText => _themeColor(AppThemeKeys.itemSubtitleTextColor.name);
   Color get _itemBg => _themeColor(AppThemeKeys.itemBgColor.name);
 
-  TextStyle _sectionTitleStyle() => TextStyle(
-    fontSize: ScreenUtil().setSp(26),
+  TextStyle _sectionTitleStyle() => AppTypography.bodySm.copyWith(
     fontWeight: FontWeight.w600,
     color: _mainText,
   );
@@ -31,7 +30,8 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
         children: [
           Text(
             S.of(context).g_key_75,
-            style: AppTypography.caption.copyWith(color: _subText)),
+            style: AppTypography.caption.copyWith(color: _subText),
+          ),
           SizedBox(height: ScreenUtil().setWidth(10)),
           Row(
             children: [
@@ -55,8 +55,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
                   children: [
                     Text(
                       widget.account.displayName,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(26),
+                      style: AppTypography.bodySm.copyWith(
                         fontWeight: FontWeight.w600,
                         color: _mainText,
                       ),
@@ -83,8 +82,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
                 ),
                 child: Text(
                   'AA',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(20),
+                  style: AppTypography.captionSm.copyWith(
                     fontWeight: FontWeight.w600,
                     color: Colors.green,
                   ),
@@ -189,8 +187,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
                   hintText: '0.0',
                   border: OutlineInputBorder(borderRadius: AppRadius.brMd),
                 ),
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(32),
+                style: AppTypography.headline.copyWith(
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -210,8 +207,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
                 children: [
                   Text(
                     selectedToken,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(28),
+                    style: AppTypography.body.copyWith(
                       fontWeight: FontWeight.w600,
                       color: _mainText,
                     ),
@@ -324,16 +320,13 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
     if (estimatedGas != null) {
       return Text(
         isSponsored ? S.of(context).g_key_aa_free : formatGasCost(),
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(26),
+        style: AppTypography.bodySm.copyWith(
           fontWeight: FontWeight.w600,
           color: isSponsored ? Colors.green : _mainText,
         ),
       );
     }
-    return Text(
-      '-',
-      style: AppTypography.bodySm.copyWith(color: _subText));
+    return Text('-', style: AppTypography.bodySm.copyWith(color: _subText));
   }
 
   // ─── Send Button ────────────────────────────────────────────────────
@@ -357,10 +350,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
       ),
       child: Text(
         S.of(context).g_key_48,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(30),
-          fontWeight: FontWeight.w600,
-        ),
+        style: AppTypography.body.copyWith(fontWeight: FontWeight.w600),
       ),
     );
   }

@@ -181,8 +181,7 @@ class _SectionHeader extends StatelessWidget {
       children: [
         Text(
           title,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(28),
+          style: AppTypography.body.copyWith(
             fontWeight: FontWeight.w600,
             color: AppColorTokens.of(context).textPrimary,
           ),

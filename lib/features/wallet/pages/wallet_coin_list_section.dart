@@ -198,9 +198,8 @@ class _DiscoveryBanner extends StatelessWidget {
             Expanded(
               child: Text(
                 S.of(context).g_key_token_discovery_banner(count),
-                style: TextStyle(
+                style: AppTypography.bodySm.copyWith(
                   color: blueColor,
-                  fontSize: ScreenUtil().setSp(26),
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -280,8 +279,10 @@ class _PinnedDivider extends StatelessWidget {
             ),
             child: Text(
               S.of(context).g_key_coin_list_separator,
-              style: AppTypography.captionSm.copyWith(color: AppColorTokens.of(
-                  context).textSubtitle.withValues(alpha: 0.6),
+              style: AppTypography.captionSm.copyWith(
+                color: AppColorTokens.of(
+                  context,
+                ).textSubtitle.withValues(alpha: 0.6),
               ),
             ),
           ),
@@ -311,14 +312,18 @@ class _AllHiddenHint extends StatelessWidget {
           SizedBox(height: ScreenUtil().setWidth(16)),
           Text(
             S.of(context).g_key_coin_list_all_hidden,
-            style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle),
+            style: AppTypography.body.copyWith(
+              color: AppColorTokens.of(context).textSubtitle,
+            ),
           ),
           SizedBox(height: ScreenUtil().setWidth(8)),
           GestureDetector(
             onTap: onShowAll,
             child: Text(
               S.of(context).g_key_coin_list_show_all,
-              style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).brand),
+              style: AppTypography.bodySm.copyWith(
+                color: AppColorTokens.of(context).brand,
+              ),
             ),
           ),
         ],

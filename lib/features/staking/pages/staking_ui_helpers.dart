@@ -47,9 +47,7 @@ Widget stakingTag({
       color: color.withAlpha(30),
       borderRadius: AppRadius.brSm,
     ),
-    child: Text(
-      label,
-      style: AppTypography.caption.copyWith(color: color)),
+    child: Text(label, style: AppTypography.caption.copyWith(color: color)),
   );
 }
 
@@ -101,16 +99,12 @@ Widget _stakingStatItem(String label, String value) {
     children: [
       Text(
         value,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(36),
+        style: AppTypography.title.copyWith(
           fontWeight: FontWeight.w600,
           color: Colors.white,
         ),
       ),
-      Text(
-        label,
-        style: AppTypography.caption.copyWith(color: Colors.white70),
-      ),
+      Text(label, style: AppTypography.caption.copyWith(color: Colors.white70)),
     ],
   );
 }
@@ -131,7 +125,9 @@ Widget stakingEmptyPositions(
         SizedBox(height: ScreenUtil().setWidth(20)),
         Text(
           S.of(context).g_key_stake_no_positions_yet,
-          style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle),
+          style: AppTypography.body.copyWith(
+            color: AppColorTokens.of(context).textSubtitle,
+          ),
         ),
         SizedBox(height: ScreenUtil().setWidth(16)),
         AppButton(
@@ -149,8 +145,7 @@ Widget stakingSectionHeader(BuildContext context, String title) {
     padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
     child: Text(
       title,
-      style: TextStyle(
-        fontSize: ScreenUtil().setSp(28),
+      style: AppTypography.body.copyWith(
         fontWeight: FontWeight.w600,
         color: AppColorTokens.of(context).textPrimary,
       ),

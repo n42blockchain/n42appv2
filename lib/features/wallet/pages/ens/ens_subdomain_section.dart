@@ -57,8 +57,7 @@ class EnsSubdomainSection extends StatelessWidget {
           child: Text(
             S.of(context).g_key_ens_subdomains,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
+            style: AppTypography.body.copyWith(
               fontWeight: FontWeight.w600,
               color: mainTextColor,
             ),

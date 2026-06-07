@@ -231,8 +231,7 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
           Expanded(
             child: Text(
               S.of(context).g_key_aa_create_session,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(32),
+              style: AppTypography.headline.copyWith(
                 fontWeight: FontWeight.w600,
                 color: _themeColor(AppThemeKeys.mainTextColor.name),
               ),
@@ -250,8 +249,7 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
   Widget _buildSectionHeader(String title) {
     return Text(
       title,
-      style: TextStyle(
-        fontSize: ScreenUtil().setSp(26),
+      style: AppTypography.bodySm.copyWith(
         fontWeight: FontWeight.w600,
         color: _themeColor(AppThemeKeys.mainTextColor.name),
       ),
@@ -302,8 +300,7 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
             ),
             child: Text(
               _expiryI18n(opt.duration),
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(24),
+              style: AppTypography.caption.copyWith(
                 fontWeight: FontWeight.w600,
                 color: isSelected
                     ? blueColor
@@ -345,8 +342,7 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
                   )
                 : Text(
                     S.of(context).g_key_aa_create_session,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(28),
+                    style: AppTypography.body.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
                   ),

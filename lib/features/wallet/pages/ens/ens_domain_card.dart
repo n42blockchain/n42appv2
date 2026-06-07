@@ -52,8 +52,7 @@ class EnsDomainCard extends StatelessWidget {
           SizedBox(height: ScreenUtil().setWidth(16)),
           Text(
             ownedEns.name,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(36),
+            style: AppTypography.title.copyWith(
               fontWeight: FontWeight.w600,
               color: AppColorTokens.of(context).textPrimary,
             ),
@@ -69,7 +68,9 @@ class EnsDomainCard extends StatelessWidget {
           if (!isExpired)
             Text(
               '${ownedEns.daysUntilExpiry} ${S.of(context).g_key_ens_days_left}',
-              style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle.withAlpha(150)),
+              style: AppTypography.caption.copyWith(
+                color: AppColorTokens.of(context).textSubtitle.withAlpha(150),
+              ),
             ),
         ],
       ),
@@ -121,8 +122,7 @@ class _DefaultAvatar extends StatelessWidget {
       child: Center(
         child: Text(
           ownedEns.name.substring(0, 1).toUpperCase(),
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(36),
+          style: AppTypography.title.copyWith(
             fontWeight: FontWeight.w600,
             color: domainChain.color,
           ),
@@ -165,8 +165,7 @@ class _ChainBadgeRow extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(20),
+        style: AppTypography.captionSm.copyWith(
           color: color,
           fontWeight: FontWeight.w600,
         ),
@@ -215,9 +214,7 @@ class _ExpiryRow extends StatelessWidget {
       children: [
         Icon(icon, size: ScreenUtil().setWidth(20), color: color),
         SizedBox(width: ScreenUtil().setWidth(6)),
-        Text(
-          label,
-          style: AppTypography.caption.copyWith(color: color)),
+        Text(label, style: AppTypography.caption.copyWith(color: color)),
       ],
     );
   }

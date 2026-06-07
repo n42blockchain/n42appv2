@@ -77,8 +77,7 @@ class EnsPurchaseStepContent extends StatelessWidget {
         children: [
           Text(
             S.of(context).g_key_ens_registration_info,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
+            style: AppTypography.body.copyWith(
               fontWeight: FontWeight.w600,
               color: _mainText(context),
             ),
@@ -138,8 +137,7 @@ class EnsPurchaseStepContent extends StatelessWidget {
           SizedBox(height: ScreenUtil().setWidth(20)),
           Text(
             title,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
+            style: AppTypography.body.copyWith(
               fontWeight: FontWeight.w600,
               color: _mainText(context),
             ),
@@ -185,8 +183,7 @@ class EnsPurchaseStepContent extends StatelessWidget {
                 Center(
                   child: Text(
                     '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}',
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(32),
+                    style: AppTypography.headline.copyWith(
                       fontWeight: FontWeight.w600,
                       color: textColor,
                     ),
@@ -198,8 +195,7 @@ class EnsPurchaseStepContent extends StatelessWidget {
           SizedBox(height: ScreenUtil().setWidth(24)),
           Text(
             S.of(context).g_key_ens_waiting,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
+            style: AppTypography.body.copyWith(
               fontWeight: FontWeight.w600,
               color: textColor,
             ),
@@ -234,8 +230,7 @@ class EnsPurchaseStepContent extends StatelessWidget {
           SizedBox(height: ScreenUtil().setWidth(20)),
           Text(
             S.of(context).g_key_ens_success,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(32),
+            style: AppTypography.headline.copyWith(
               fontWeight: FontWeight.w600,
               color: Colors.green,
             ),
@@ -286,8 +281,7 @@ class EnsPurchaseStepContent extends StatelessWidget {
           SizedBox(height: ScreenUtil().setWidth(16)),
           Text(
             S.of(context).g_key_ens_failed,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
+            style: AppTypography.body.copyWith(
               fontWeight: FontWeight.w600,
               color: Colors.red,
             ),
@@ -382,10 +376,7 @@ class EnsPurchaseActionButton extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(30),
-          fontWeight: FontWeight.w600,
-        ),
+        style: AppTypography.body.copyWith(fontWeight: FontWeight.w600),
       ),
     );
   }

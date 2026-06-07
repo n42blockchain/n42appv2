@@ -42,8 +42,7 @@ class DAppSigningSheet extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(32),
+                style: AppTypography.headline.copyWith(
                   fontWeight: FontWeight.w600,
                   color: AppColorTokens.of(context).textPrimary,
                 ),
@@ -51,7 +50,9 @@ class DAppSigningSheet extends StatelessWidget {
               SizedBox(height: ScreenUtil().setWidth(8)),
               Text(
                 origin,
-                style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
+                style: AppTypography.caption.copyWith(
+                  color: AppColorTokens.of(context).textSubtitle,
+                ),
               ),
             ],
           ),
@@ -157,7 +158,9 @@ class DAppSigningSheet extends StatelessWidget {
           SizedBox(height: ScreenUtil().setWidth(6)),
           Text(
             value,
-            style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).textPrimary),
+            style: AppTypography.bodySm.copyWith(
+              color: AppColorTokens.of(context).textPrimary,
+            ),
             maxLines: 10,
             overflow: TextOverflow.ellipsis,
           ),

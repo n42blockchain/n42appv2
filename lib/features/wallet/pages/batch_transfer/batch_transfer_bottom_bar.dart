@@ -129,12 +129,13 @@ class BatchBottomBar extends StatelessWidget {
       children: [
         Text(
           label,
-          style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
+          style: AppTypography.caption.copyWith(
+            color: AppColorTokens.of(context).textSubtitle,
+          ),
         ),
         Text(
           value,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(24),
+          style: AppTypography.caption.copyWith(
             fontWeight: FontWeight.w600,
             color: AppColorTokens.of(context).textPrimary,
           ),

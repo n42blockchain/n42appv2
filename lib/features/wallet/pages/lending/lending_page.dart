@@ -151,8 +151,7 @@ class _LendingPageState extends State<LendingPage>
             reserve.symbol.length > 3
                 ? reserve.symbol.substring(0, 3)
                 : reserve.symbol,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(22),
+            style: AppTypography.caption.copyWith(
               fontWeight: FontWeight.w600,
               color: AppColorTokens.of(context).brand,
             ),
@@ -160,15 +159,16 @@ class _LendingPageState extends State<LendingPage>
         ),
         title: Text(
           reserve.symbol,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(28),
+          style: AppTypography.body.copyWith(
             fontWeight: FontWeight.w600,
             color: AppColorTokens.of(context).textPrimary,
           ),
         ),
         subtitle: Text(
           reserve.name,
-          style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
+          style: AppTypography.caption.copyWith(
+            color: AppColorTokens.of(context).textSubtitle,
+          ),
         ),
         trailing: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -176,15 +176,16 @@ class _LendingPageState extends State<LendingPage>
           children: [
             Text(
               '${apy.toStringAsFixed(2)}%',
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(28),
+              style: AppTypography.body.copyWith(
                 fontWeight: FontWeight.w600,
                 color: apyColor,
               ),
             ),
             Text(
               isSupply ? 'Supply APY' : 'Borrow APR',
-              style: AppTypography.captionSm.copyWith(color: AppColorTokens.of(context).textSubtitle),
+              style: AppTypography.captionSm.copyWith(
+                color: AppColorTokens.of(context).textSubtitle,
+              ),
             ),
           ],
         ),

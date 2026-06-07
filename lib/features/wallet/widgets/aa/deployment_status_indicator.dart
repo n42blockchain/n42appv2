@@ -40,8 +40,7 @@ class DeploymentStatusIndicator extends StatelessWidget {
             SizedBox(width: ScreenUtil().setWidth(6)),
             Text(
               _getStatusText(context),
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
+              style: AppTypography.caption.copyWith(
                 fontWeight: FontWeight.w500,
                 color: _getStatusColor(),
               ),

@@ -47,9 +47,8 @@ class _ChartHistogramState extends State<ChartHistogram> {
             ),
             child: Text(
               S.of(context).g_mining_key_86,
-              style: TextStyle(
+              style: AppTypography.headline.copyWith(
                 color: AppColorTokens.of(context).textItem,
-                fontSize: ScreenUtil().setSp(32),
                 fontWeight: FontWeight.w600,
               ),
             ),

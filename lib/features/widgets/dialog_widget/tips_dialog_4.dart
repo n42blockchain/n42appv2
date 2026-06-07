@@ -32,9 +32,8 @@ Future<bool?> tipsDialog4(
                     padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
                     child: Text(
                       title ?? S.of(context).g_key_21,
-                      style: TextStyle(
+                      style: AppTypography.body.copyWith(
                         color: AppColorTokens.of(context).textPrimary,
-                        fontSize: ScreenUtil().setSp(30),
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -81,7 +80,9 @@ Future<bool?> tipsDialog4(
                     child: Center(
                       child: Text(
                         S.of(context).g_key_79,
-                        style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle),
+                        style: AppTypography.body.copyWith(
+                          color: AppColorTokens.of(context).textSubtitle,
+                        ),
                       ),
                     ),
                   ),

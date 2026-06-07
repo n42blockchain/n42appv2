@@ -32,8 +32,7 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
               children: [
                 Text(
                   S.of(context).g_key_gas_realtime_prices,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(30),
+                  style: AppTypography.body.copyWith(
                     fontWeight: FontWeight.w600,
                     color: AppColorTokens.of(context).textPrimary,
                   ),
@@ -41,7 +40,9 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
                 SizedBox(height: ScreenUtil().setWidth(4)),
                 Text(
                   S.of(context).g_key_gas_auto_refresh('15'),
-                  style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
+                  style: AppTypography.caption.copyWith(
+                    color: AppColorTokens.of(context).textSubtitle,
+                  ),
                 ),
               ],
             ),
@@ -78,15 +79,16 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
                   children: [
                     Text(
                       network.name,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(28),
+                      style: AppTypography.body.copyWith(
                         fontWeight: FontWeight.w600,
                         color: AppColorTokens.of(context).textPrimary,
                       ),
                     ),
                     Text(
                       network.symbol,
-                      style: AppTypography.caption.copyWith(color: subtitleColor),
+                      style: AppTypography.caption.copyWith(
+                        color: subtitleColor,
+                      ),
                     ),
                   ],
                 ),
@@ -173,8 +175,7 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
             const Spacer(),
             Text(
               '${history.last.toStringAsFixed(1)} Gwei',
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
+              style: AppTypography.caption.copyWith(
                 fontWeight: FontWeight.w600,
                 color: network.color,
               ),
@@ -225,7 +226,9 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
         children: [
           Text(
             label,
-            style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
+            style: AppTypography.caption.copyWith(
+              color: AppColorTokens.of(context).textSubtitle,
+            ),
           ),
           Container(
             padding: EdgeInsets.symmetric(
@@ -238,8 +241,7 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
             ),
             child: Text(
               value,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(24),
+              style: AppTypography.caption.copyWith(
                 fontWeight: FontWeight.w600,
                 color: color,
               ),
@@ -270,8 +272,7 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
       ),
       child: Text(
         statusText,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(22),
+        style: AppTypography.caption.copyWith(
           fontWeight: FontWeight.w600,
           color: statusColor,
         ),
@@ -445,7 +446,9 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
       padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(8)),
       child: Text(
         S.of(context).g_key_gas_footer,
-        style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
+        style: AppTypography.caption.copyWith(
+          color: AppColorTokens.of(context).textSubtitle,
+        ),
         textAlign: TextAlign.center,
       ),
     );

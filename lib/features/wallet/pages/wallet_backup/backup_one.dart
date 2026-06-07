@@ -59,8 +59,7 @@ class _BackupOneState extends State<BackupOne> {
                       ),
                       child: Text(
                         S.of(context).g_key_wallet_c40,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(28),
+                        style: AppTypography.body.copyWith(
                           color: AppColorTokens.of(context).textPrimary,
                           fontWeight: FontWeight.w600,
                         ),
@@ -138,8 +137,7 @@ class _BackupOneState extends State<BackupOne> {
           Expanded(
             child: Text(
               text,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(28),
+              style: AppTypography.body.copyWith(
                 color: AppColorTokens.of(context).textPrimary,
                 fontWeight: FontWeight.w600,
               ),
@@ -173,7 +171,9 @@ class _BackupOneState extends State<BackupOne> {
               child: Text(
                 mnemonicWordsList[index],
                 textAlign: TextAlign.center,
-                style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textItem),
+                style: AppTypography.body.copyWith(
+                  color: AppColorTokens.of(context).textItem,
+                ),
               ),
             ),
           );

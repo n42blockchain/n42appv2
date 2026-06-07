@@ -114,15 +114,16 @@ mixin EarnPageLogicMixin on ConsumerState<EarnPage> {
       ),
       title: Text(
         title,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(28),
+        style: AppTypography.body.copyWith(
           fontWeight: FontWeight.w600,
           color: AppColorTokens.of(context).textPrimary,
         ),
       ),
       subtitle: Text(
         subtitle,
-        style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
+        style: AppTypography.caption.copyWith(
+          color: AppColorTokens.of(context).textSubtitle,
+        ),
       ),
       trailing: Icon(
         Icons.chevron_right,

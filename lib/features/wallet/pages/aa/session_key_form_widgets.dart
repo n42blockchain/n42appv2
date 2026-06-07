@@ -61,7 +61,9 @@ class SessionKeyAmountLimit extends StatelessWidget {
             Expanded(
               child: Text(
                 S.of(context).g_key_aa_session_amount_limit,
-                style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
+                style: AppTypography.caption.copyWith(
+                  color: AppColorTokens.of(context).textSubtitle,
+                ),
                 overflow: TextOverflow.ellipsis,
               ),
             ),
@@ -105,8 +107,7 @@ class _TokenChips extends StatelessWidget {
             ),
             child: Text(
               t,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
+              style: AppTypography.caption.copyWith(
                 fontWeight: FontWeight.w600,
                 color: isSelected
                     ? const Color(0xFF8B5CF6)
@@ -167,8 +168,7 @@ class SessionKeyRiskSummary extends StatelessWidget {
               Expanded(
                 child: Text(
                   S.of(context).g_key_aa_permission,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24),
+                  style: AppTypography.caption.copyWith(
                     fontWeight: FontWeight.w600,
                     color: AppColorTokens.of(context).textPrimary,
                   ),
@@ -212,8 +212,7 @@ class SessionKeyRiskSummary extends StatelessWidget {
                 Expanded(
                   child: Text(
                     S.of(context).g_key_aa_session_risk_warning,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(20),
+                    style: AppTypography.captionSm.copyWith(
                       color: Colors.red,
                       fontWeight: FontWeight.w600,
                     ),
@@ -238,7 +237,9 @@ class SessionKeyRiskSummary extends StatelessWidget {
           Expanded(
             child: Text(
               text,
-              style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
+              style: AppTypography.caption.copyWith(
+                color: AppColorTokens.of(context).textSubtitle,
+              ),
             ),
           ),
         ],
@@ -277,7 +278,9 @@ class SessionKeyConfirmCheckbox extends StatelessWidget {
               padding: EdgeInsets.only(top: ScreenUtil().setWidth(12)),
               child: Text(
                 S.of(context).g_key_aa_session_confirm_risk,
-                style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textPrimary),
+                style: AppTypography.caption.copyWith(
+                  color: AppColorTokens.of(context).textPrimary,
+                ),
               ),
             ),
           ),

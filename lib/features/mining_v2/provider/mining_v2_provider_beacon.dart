@@ -266,8 +266,7 @@ mixin _MiningBeaconMixin on _MiningStateMixin {
       AppThemeKeys.mainWhiteColor.name,
     );
     final normalStyle = AppTypography.captionSm.copyWith(color: whiteColor);
-    final boldStyle = TextStyle(
-      fontSize: ScreenUtil().setSp(22),
+    final boldStyle = AppTypography.caption.copyWith(
       color: whiteColor,
       fontWeight: FontWeight.w600,
     );

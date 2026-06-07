@@ -151,7 +151,9 @@ class _NftSendPageState extends State<NftSendPage> {
                   controller: _addressCtrl,
                   decoration: InputDecoration(
                     hintText: S.of(context).g_key_41,
-                    hintStyle: AppTypography.bodySm.copyWith(color: subtitleColor),
+                    hintStyle: AppTypography.bodySm.copyWith(
+                      color: subtitleColor,
+                    ),
                     suffixIcon: IconButton(
                       icon: Icon(Icons.paste, color: blueColor),
                       onPressed: () async {
@@ -187,7 +189,9 @@ class _NftSendPageState extends State<NftSendPage> {
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     decoration: InputDecoration(
                       hintText: '1 ~ ${nft.balance}',
-                      hintStyle: AppTypography.bodySm.copyWith(color: subtitleColor),
+                      hintStyle: AppTypography.bodySm.copyWith(
+                        color: subtitleColor,
+                      ),
                       border: OutlineInputBorder(borderRadius: AppRadius.brSm),
                     ),
                     style: AppTypography.bodySm.copyWith(color: textColor),
@@ -218,8 +222,7 @@ class _NftSendPageState extends State<NftSendPage> {
                         ? const CircularProgressIndicator(color: Colors.white)
                         : Text(
                             S.of(context).g_key_48, // Send
-                            style: TextStyle(
-                              fontSize: ScreenUtil().setSp(30),
+                            style: AppTypography.body.copyWith(
                               color: Colors.white,
                               fontWeight: FontWeight.w600,
                             ),
@@ -271,8 +274,7 @@ class _NftSendPageState extends State<NftSendPage> {
               children: [
                 Text(
                   nft.name,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(28),
+                  style: AppTypography.body.copyWith(
                     fontWeight: FontWeight.w600,
                     color: textColor,
                   ),

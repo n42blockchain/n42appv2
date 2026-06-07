@@ -204,8 +204,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
         children: [
           Text(
             ens.name,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(36),
+            style: AppTypography.title.copyWith(
               fontWeight: FontWeight.w600,
               color: _color(AppThemeKeys.mainTextColor),
             ),
@@ -242,8 +241,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
       children: [
         Text(
           S.of(context).g_key_ens_extend_period,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(28),
+          style: AppTypography.body.copyWith(
             fontWeight: FontWeight.w600,
             color: _color(AppThemeKeys.mainTextColor),
           ),
@@ -279,8 +277,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
                   ),
                   child: Text(
                     '+$years ${years == 1 ? S.of(context).g_key_ens_year : S.of(context).g_key_ens_years}',
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(26),
+                    style: AppTypography.bodySm.copyWith(
                       fontWeight: FontWeight.w600,
                       color: isSelected
                           ? Colors.white
@@ -317,12 +314,16 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
                 child: Text(
                   S.of(context).g_key_ens_current_expiry,
                   overflow: TextOverflow.ellipsis,
-                  style: AppTypography.caption.copyWith(color: _color(AppThemeKeys.itemSubtitleTextColor)),
+                  style: AppTypography.caption.copyWith(
+                    color: _color(AppThemeKeys.itemSubtitleTextColor),
+                  ),
                 ),
               ),
               Text(
                 _formatDate(currentExpiry),
-                style: AppTypography.caption.copyWith(color: _color(AppThemeKeys.mainTextColor)),
+                style: AppTypography.caption.copyWith(
+                  color: _color(AppThemeKeys.mainTextColor),
+                ),
               ),
             ],
           ),
@@ -341,8 +342,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
                 child: Text(
                   S.of(context).g_key_ens_new_expiry,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24),
+                  style: AppTypography.caption.copyWith(
                     fontWeight: FontWeight.w600,
                     color: Colors.green,
                   ),
@@ -350,8 +350,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
               ),
               Text(
                 _formatDate(newExpiry),
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(26),
+                style: AppTypography.bodySm.copyWith(
                   fontWeight: FontWeight.w600,
                   color: Colors.green,
                 ),
@@ -375,10 +374,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
         ),
         child: Text(
           S.of(context).g_swap_key_18,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(30),
-            fontWeight: FontWeight.w600,
-          ),
+          style: AppTypography.body.copyWith(fontWeight: FontWeight.w600),
         ),
       );
     }
@@ -403,10 +399,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
             )
           : Text(
               S.of(context).g_key_ens_confirm_renew,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(30),
-                fontWeight: FontWeight.w600,
-              ),
+              style: AppTypography.body.copyWith(fontWeight: FontWeight.w600),
             ),
     );
   }

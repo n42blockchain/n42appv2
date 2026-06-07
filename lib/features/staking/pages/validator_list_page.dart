@@ -230,7 +230,9 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
           children: [
             Text(
               label,
-              style: AppTypography.caption.copyWith(color: isSelected ? Colors.white : _mainTextColor()),
+              style: AppTypography.caption.copyWith(
+                color: isSelected ? Colors.white : _mainTextColor(),
+              ),
             ),
             if (isSelected) ...[
               SizedBox(width: ScreenUtil().setWidth(4)),
@@ -256,7 +258,8 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
           SizedBox(height: ScreenUtil().setWidth(20)),
           Text(
             S.of(context).g_key_stake_no_validators,
-            style: AppTypography.body.copyWith(color: color)),
+            style: AppTypography.body.copyWith(color: color),
+          ),
         ],
       ),
     );
@@ -295,8 +298,7 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
               child: Center(
                 child: Text(
                   '$rank',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(22),
+                  style: AppTypography.caption.copyWith(
                     fontWeight: FontWeight.w600,
                     color: rank <= 3 ? Colors.white : textColor,
                   ),
@@ -332,8 +334,7 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
                       Expanded(
                         child: Text(
                           validator.name,
-                          style: TextStyle(
-                            fontSize: ScreenUtil().setSp(28),
+                          style: AppTypography.body.copyWith(
                             fontWeight: FontWeight.w600,
                             color: textColor,
                           ),
@@ -355,7 +356,9 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
                   SizedBox(height: ScreenUtil().setWidth(4)),
                   Text(
                     shortenStakingAddress(validator.address),
-                    style: AppTypography.caption.copyWith(color: _subtitleColor()),
+                    style: AppTypography.caption.copyWith(
+                      color: _subtitleColor(),
+                    ),
                   ),
                   SizedBox(height: ScreenUtil().setWidth(8)),
                   Row(

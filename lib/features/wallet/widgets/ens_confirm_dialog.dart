@@ -81,8 +81,7 @@ class EnsConfirmDialog extends StatelessWidget {
           Expanded(
             child: Text(
               S.of(context).g_key_ens_confirm_title,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(32),
+              style: AppTypography.headline.copyWith(
                 fontWeight: FontWeight.w600,
                 color: mainTextColor,
               ),
@@ -114,8 +113,7 @@ class EnsConfirmDialog extends StatelessWidget {
                   Expanded(
                     child: Text(
                       S.of(context).g_key_ens_detected,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(26),
+                      style: AppTypography.bodySm.copyWith(
                         fontWeight: FontWeight.w600,
                         color: successGreen,
                       ),
@@ -232,10 +230,7 @@ class EnsConfirmDialog extends StatelessWidget {
           ),
           child: Text(
             S.of(context).g_key_ens_confirm_send,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
-              fontWeight: FontWeight.w600,
-            ),
+            style: AppTypography.body.copyWith(fontWeight: FontWeight.w600),
           ),
         ),
       ],
@@ -370,8 +365,7 @@ class EnsResolvingDialog extends StatelessWidget {
               SizedBox(height: ScreenUtil().setWidth(24)),
               Text(
                 S.of(context).g_key_ens_resolving,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(28),
+                style: AppTypography.body.copyWith(
                   fontWeight: FontWeight.w600,
                   color: mainTextColor,
                 ),

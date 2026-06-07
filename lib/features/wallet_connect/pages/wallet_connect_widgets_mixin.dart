@@ -453,7 +453,9 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
           alignment: Alignment.center,
           child: Text(
             S.of(context).g_connect_key14,
-            style: AppTypography.headline.copyWith(color: _themeColor(AppThemeKeys.mainTextColor)),
+            style: AppTypography.headline.copyWith(
+              color: _themeColor(AppThemeKeys.mainTextColor),
+            ),
             textAlign: TextAlign.center,
           ),
         ),
@@ -493,9 +495,8 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
               width: double.infinity,
               child: Text(
                 dAppName,
-                style: TextStyle(
+                style: AppTypography.title.copyWith(
                   color: _themeColor(AppThemeKeys.mainTextColor),
-                  fontSize: ScreenUtil().setSp(36),
                   fontWeight: FontWeight.w600,
                 ),
                 maxLines: 1,
@@ -512,7 +513,9 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
               alignment: Alignment.center,
               child: Text(
                 dAppDesc,
-                style: AppTypography.bodySm.copyWith(color: _themeColor(AppThemeKeys.itemSubtitleTextColor)),
+                style: AppTypography.bodySm.copyWith(
+                  color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
+                ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
@@ -563,9 +566,8 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
       alignment: Alignment.centerLeft,
       child: Text(
         title,
-        style: TextStyle(
+        style: AppTypography.title.copyWith(
           color: _themeColor(AppThemeKeys.mainTextColor),
-          fontSize: ScreenUtil().setSp(36),
           fontWeight: FontWeight.w600,
         ),
       ),

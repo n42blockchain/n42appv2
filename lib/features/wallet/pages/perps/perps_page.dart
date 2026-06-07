@@ -155,12 +155,13 @@ class _PerpsPageState extends State<PerpsPage>
       children: [
         Text(
           label,
-          style: AppTypography.captionSm.copyWith(color: AppColorTokens.of(context).textSubtitle),
+          style: AppTypography.captionSm.copyWith(
+            color: AppColorTokens.of(context).textSubtitle,
+          ),
         ),
         Text(
           value,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(24),
+          style: AppTypography.caption.copyWith(
             fontWeight: FontWeight.w600,
             color: AppColorTokens.of(context).textPrimary,
           ),
@@ -180,15 +181,16 @@ class _PerpsPageState extends State<PerpsPage>
           dense: true,
           title: Text(
             '${m.symbol}-PERP',
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(26),
+            style: AppTypography.bodySm.copyWith(
               fontWeight: FontWeight.w600,
               color: AppColorTokens.of(context).textPrimary,
             ),
           ),
           subtitle: Text(
             'Vol: \$${_formatCompact(m.volume24h)} · OI: \$${_formatCompact(m.openInterest)}',
-            style: AppTypography.captionSm.copyWith(color: AppColorTokens.of(context).textSubtitle),
+            style: AppTypography.captionSm.copyWith(
+              color: AppColorTokens.of(context).textSubtitle,
+            ),
           ),
           trailing: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -196,16 +198,14 @@ class _PerpsPageState extends State<PerpsPage>
             children: [
               Text(
                 '\$${m.markPrice.toStringAsFixed(2)}',
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(26),
+                style: AppTypography.bodySm.copyWith(
                   fontWeight: FontWeight.w600,
                   color: AppColorTokens.of(context).textPrimary,
                 ),
               ),
               Text(
                 '${isPositive ? '+' : ''}${m.priceChangePct.toStringAsFixed(2)}%',
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(22),
+                style: AppTypography.caption.copyWith(
                   fontWeight: FontWeight.w500,
                   color: isPositive
                       ? const Color(0xFF22C55E)
@@ -264,8 +264,7 @@ class _PerpsPageState extends State<PerpsPage>
                     ),
                     child: Text(
                       '${p.sideLabel} ${p.leverage.toStringAsFixed(1)}x',
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(22),
+                      style: AppTypography.caption.copyWith(
                         fontWeight: FontWeight.w600,
                         color: p.isLong
                             ? const Color(0xFF22C55E)
@@ -276,8 +275,7 @@ class _PerpsPageState extends State<PerpsPage>
                   SizedBox(width: ScreenUtil().setWidth(8)),
                   Text(
                     p.symbol,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(28),
+                    style: AppTypography.body.copyWith(
                       fontWeight: FontWeight.w600,
                       color: AppColorTokens.of(context).textPrimary,
                     ),
@@ -288,8 +286,7 @@ class _PerpsPageState extends State<PerpsPage>
                     children: [
                       Text(
                         '${isProfitable ? '+' : ''}\$${p.unrealizedPnl.toStringAsFixed(2)}',
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(26),
+                        style: AppTypography.bodySm.copyWith(
                           fontWeight: FontWeight.w600,
                           color: isProfitable
                               ? const Color(0xFF22C55E)
@@ -298,9 +295,11 @@ class _PerpsPageState extends State<PerpsPage>
                       ),
                       Text(
                         '${isProfitable ? '+' : ''}${p.pnlPercentage.toStringAsFixed(2)}%',
-                        style: AppTypography.caption.copyWith(color: isProfitable
+                        style: AppTypography.caption.copyWith(
+                          color: isProfitable
                               ? const Color(0xFF22C55E)
-                              : const Color(0xFFEF4444)),
+                              : const Color(0xFFEF4444),
+                        ),
                       ),
                     ],
                   ),
@@ -333,11 +332,15 @@ class _PerpsPageState extends State<PerpsPage>
       children: [
         Text(
           label,
-          style: AppTypography.captionSm.copyWith(color: AppColorTokens.of(context).textSubtitle),
+          style: AppTypography.captionSm.copyWith(
+            color: AppColorTokens.of(context).textSubtitle,
+          ),
         ),
         Text(
           value,
-          style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textPrimary),
+          style: AppTypography.caption.copyWith(
+            color: AppColorTokens.of(context).textPrimary,
+          ),
         ),
       ],
     );
@@ -367,11 +370,15 @@ class _PerpsPageState extends State<PerpsPage>
           ),
           title: Text(
             '${o.sideLabel} ${o.symbol} × ${o.size}',
-            style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textPrimary),
+            style: AppTypography.caption.copyWith(
+              color: AppColorTokens.of(context).textPrimary,
+            ),
           ),
           subtitle: Text(
             'Limit \$${o.price.toStringAsFixed(2)}',
-            style: AppTypography.captionSm.copyWith(color: AppColorTokens.of(context).textSubtitle),
+            style: AppTypography.captionSm.copyWith(
+              color: AppColorTokens.of(context).textSubtitle,
+            ),
           ),
           trailing: IconButton(
             icon: const Icon(Icons.close, size: 18, color: Colors.red),

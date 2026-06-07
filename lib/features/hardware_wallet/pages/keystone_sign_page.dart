@@ -146,8 +146,7 @@ class _KeystoneSignPageState extends State<KeystoneSignPage> {
           _step == _SignStep.showRequest
               ? s.g_key_hw_keystone_connect_title
               : s.g_key_hw_keystone_scan_response_title,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(30),
+          style: AppTypography.body.copyWith(
             fontWeight: FontWeight.w600,
             color: AppColorTokens.of(context).textPrimary,
           ),
@@ -196,10 +195,7 @@ class _KeystoneSignPageState extends State<KeystoneSignPage> {
             ),
             child: Text(
               s.g_key_hw_keystone_tap_to_scan,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(28),
-                fontWeight: FontWeight.w600,
-              ),
+              style: AppTypography.body.copyWith(fontWeight: FontWeight.w600),
             ),
           ),
           SizedBox(height: ScreenUtil().setWidth(24)),

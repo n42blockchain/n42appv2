@@ -143,9 +143,8 @@ mixin _WalletListTilesMixin on _WalletListActionsMixin {
                     info.walletName ?? '-',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
+                    style: AppTypography.headline.copyWith(
                       color: AppColorTokens.of(context).textPrimary,
-                      fontSize: ScreenUtil().setSp(32),
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -153,7 +152,9 @@ mixin _WalletListTilesMixin on _WalletListActionsMixin {
                   Text(
                     coinKeys.take(3).join(' · ') +
                         (coinKeys.length > 3 ? ' +${coinKeys.length - 3}' : ''),
-                    style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
+                    style: AppTypography.caption.copyWith(
+                      color: AppColorTokens.of(context).textSubtitle,
+                    ),
                   ),
                   if (info.tags.isNotEmpty) ...[
                     SizedBox(height: ScreenUtil().setWidth(6)),
@@ -174,7 +175,9 @@ mixin _WalletListTilesMixin on _WalletListActionsMixin {
                               ),
                               child: Text(
                                 tag,
-                                style: AppTypography.captionSm.copyWith(color: AppColorTokens.of(context).brand),
+                                style: AppTypography.captionSm.copyWith(
+                                  color: AppColorTokens.of(context).brand,
+                                ),
                               ),
                             ),
                           )

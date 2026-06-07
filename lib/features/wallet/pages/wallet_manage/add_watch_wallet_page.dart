@@ -80,8 +80,7 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
       children: [
         Text(
           label,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(26),
+          style: AppTypography.bodySm.copyWith(
             fontWeight: FontWeight.w500,
             color: hintColor,
           ),
@@ -129,10 +128,7 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
       appBar: AppBar(
         title: Text(
           s.g_key_watch_wallet,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(32),
-            fontWeight: FontWeight.w600,
-          ),
+          style: AppTypography.headline.copyWith(fontWeight: FontWeight.w600),
         ),
         centerTitle: true,
       ),
@@ -209,8 +205,7 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
                       )
                     : Text(
                         s.g_key_watch_wallet,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(30),
+                        style: AppTypography.body.copyWith(
                           fontWeight: FontWeight.w600,
                           color: Colors.white,
                         ),

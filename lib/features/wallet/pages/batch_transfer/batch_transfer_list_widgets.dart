@@ -60,7 +60,9 @@ class BatchTransferList extends StatelessWidget {
           SizedBox(height: ScreenUtil().setWidth(16)),
           Text(
             S.of(context).g_key_batch_recipients,
-            style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle),
+            style: AppTypography.body.copyWith(
+              color: AppColorTokens.of(context).textSubtitle,
+            ),
           ),
           SizedBox(height: ScreenUtil().setWidth(8)),
           TextButton.icon(
@@ -137,8 +139,7 @@ class BatchTransferListItem extends StatelessWidget {
       child: Center(
         child: Text(
           '${index + 1}',
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(22),
+          style: AppTypography.caption.copyWith(
             fontWeight: FontWeight.w600,
             color: AppColorTokens.of(context).brand,
           ),
@@ -154,8 +155,7 @@ class BatchTransferListItem extends StatelessWidget {
         children: [
           Text(
             shortenAddress(item.toAddress),
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(26),
+            style: AppTypography.bodySm.copyWith(
               fontWeight: FontWeight.w500,
               color: AppColorTokens.of(context).textPrimary,
             ),
@@ -163,7 +163,9 @@ class BatchTransferListItem extends StatelessWidget {
           if (item.memo != null && item.memo!.isNotEmpty)
             Text(
               item.memo!,
-              style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
+              style: AppTypography.caption.copyWith(
+                color: AppColorTokens.of(context).textSubtitle,
+              ),
             ),
         ],
       ),
@@ -176,8 +178,7 @@ class BatchTransferListItem extends StatelessWidget {
       children: [
         Text(
           '${formatAmount(item.amount)} $tokenSymbol',
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(26),
+          style: AppTypography.bodySm.copyWith(
             fontWeight: FontWeight.w600,
             color: AppColorTokens.of(context).textPrimary,
           ),

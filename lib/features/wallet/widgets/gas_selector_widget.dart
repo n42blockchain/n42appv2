@@ -117,8 +117,7 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
                     child: Text(
                       S.of(context).g_key_t_16, // Gas Fee
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(30),
+                      style: AppTypography.body.copyWith(
                         fontWeight: FontWeight.w600,
                         color: mainText,
                       ),
@@ -224,8 +223,7 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
               SizedBox(height: ScreenUtil().setWidth(8)),
               Text(
                 label,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
+                style: AppTypography.caption.copyWith(
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
                   color: isSelected ? blueColor : mainText,
                 ),
@@ -322,8 +320,7 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
         ),
         Text(
           value,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(26),
+          style: AppTypography.bodySm.copyWith(
             fontWeight: isTotal ? FontWeight.w600 : FontWeight.normal,
             color: valueColor,
           ),
@@ -408,15 +405,16 @@ class GasSelectorCompact extends StatelessWidget {
                   children: [
                     Text(
                       _getSpeedLabel(context, gasEstimate.selectedSpeed),
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(28),
+                      style: AppTypography.body.copyWith(
                         fontWeight: FontWeight.w600,
                         color: mainText,
                       ),
                     ),
                     Text(
                       estimatedTime,
-                      style: AppTypography.caption.copyWith(color: subtitleText),
+                      style: AppTypography.caption.copyWith(
+                        color: subtitleText,
+                      ),
                     ),
                   ],
                 ),

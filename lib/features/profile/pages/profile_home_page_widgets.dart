@@ -22,8 +22,7 @@ extension _ProfileHomePageWidgets on ProfileHomePage {
         children: [
           Text(
             title,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
+            style: AppTypography.body.copyWith(
               fontWeight: FontWeight.w600,
               color: AppColorTokens.of(context).textSubtitle,
             ),
@@ -79,8 +78,7 @@ extension _ProfileHomePageWidgets on ProfileHomePage {
                     children: [
                       Text(
                         title,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(28),
+                        style: AppTypography.body.copyWith(
                           fontWeight: FontWeight.w500,
                           color: AppColorTokens.of(context).textPrimary,
                         ),
@@ -111,7 +109,9 @@ extension _ProfileHomePageWidgets on ProfileHomePage {
                   SizedBox(height: ScreenUtil().setWidth(2)),
                   Text(
                     subtitle,
-                    style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
+                    style: AppTypography.caption.copyWith(
+                      color: AppColorTokens.of(context).textSubtitle,
+                    ),
                   ),
                 ],
               ),

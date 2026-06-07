@@ -138,8 +138,7 @@ class EnsRegistrationSteps extends StatelessWidget {
                 ? Icon(icon, size: ScreenUtil().setWidth(24), color: fgColor)
                 : Text(
                     number,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(24),
+                    style: AppTypography.caption.copyWith(
                       fontWeight: FontWeight.w600,
                       color: fgColor,
                     ),

@@ -21,7 +21,9 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
       child: Center(
         child: Text(
           S.of(context).g_key_stake_no_wallet,
-          style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).textSubtitle),
+          style: AppTypography.bodySm.copyWith(
+            color: AppColorTokens.of(context).textSubtitle,
+          ),
         ),
       ),
     );
@@ -44,8 +46,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
             SizedBox(height: ScreenUtil().setWidth(20)),
             Text(
               S.of(context).g_key_stake_liquid_staking_label,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(32),
+              style: AppTypography.headline.copyWith(
                 fontWeight: FontWeight.w600,
                 color: AppColorTokens.of(context).textPrimary,
               ),
@@ -54,7 +55,9 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
             RichText(
               textAlign: TextAlign.center,
               text: TextSpan(
-                style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).textSubtitle),
+                style: AppTypography.bodySm.copyWith(
+                  color: AppColorTokens.of(context).textSubtitle,
+                ),
                 children: [
                   TextSpan(
                     text: widget.protocol.liquidTokenSymbol,
@@ -144,7 +147,9 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
         child: Center(
           child: Text(
             S.of(context).g_key_stake_no_active_positions,
-            style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).textSubtitle),
+            style: AppTypography.bodySm.copyWith(
+              color: AppColorTokens.of(context).textSubtitle,
+            ),
           ),
         ),
       );
@@ -189,8 +194,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
                     children: [
                       Text(
                         pos.validator?.name ?? widget.protocol.name,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(28),
+                        style: AppTypography.body.copyWith(
                           fontWeight: FontWeight.w600,
                           color: AppColorTokens.of(context).textPrimary,
                         ),
@@ -198,7 +202,9 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
                       SizedBox(height: ScreenUtil().setWidth(4)),
                       Text(
                         '${S.of(context).g_key_stake_staked}: ${_formatBigInt(pos.stakedAmount)} ${widget.protocol.chainSymbol}',
-                        style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
+                        style: AppTypography.caption.copyWith(
+                          color: AppColorTokens.of(context).textSubtitle,
+                        ),
                       ),
                     ],
                   ),
@@ -237,8 +243,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
               ],
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(32),
+              style: AppTypography.headline.copyWith(
                 fontWeight: FontWeight.w600,
                 color: AppColorTokens.of(context).textPrimary,
               ),
@@ -254,8 +259,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
           ),
           Text(
             widget.protocol.chainSymbol,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
+            style: AppTypography.body.copyWith(
               fontWeight: FontWeight.w600,
               color: AppColorTokens.of(context).textPrimary,
             ),
@@ -311,8 +315,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
                 child: Center(
                   child: Text(
                     pct.$1,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(24),
+                    style: AppTypography.caption.copyWith(
                       fontWeight: FontWeight.w600,
                       color: Colors.orange,
                     ),

@@ -38,8 +38,7 @@ Future<bool?> deviceLoginDialog(
                   // 标题
                   Text(
                     S.of(context).device_login_title,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(32),
+                    style: AppTypography.headline.copyWith(
                       fontWeight: FontWeight.w600,
                       color: AppColorTokens.of(context).textItem,
                     ),
@@ -60,7 +59,9 @@ Future<bool?> deviceLoginDialog(
                             info.deviceOs,
                           ),
                       textAlign: TextAlign.center,
-                      style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textItem),
+                      style: AppTypography.body.copyWith(
+                        color: AppColorTokens.of(context).textItem,
+                      ),
                     ),
                   ),
                 ],
@@ -83,7 +84,9 @@ Future<bool?> deviceLoginDialog(
                       alignment: Alignment.center,
                       child: Text(
                         S.of(context).device_login_dismiss,
-                        style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle),
+                        style: AppTypography.body.copyWith(
+                          color: AppColorTokens.of(context).textSubtitle,
+                        ),
                       ),
                     ),
                   ),
@@ -99,7 +102,9 @@ Future<bool?> deviceLoginDialog(
                       alignment: Alignment.center,
                       child: Text(
                         S.of(context).device_login_change_password,
-                        style: AppTypography.body.copyWith(color: AppColorTokens.of(context).brand),
+                        style: AppTypography.body.copyWith(
+                          color: AppColorTokens.of(context).brand,
+                        ),
                       ),
                     ),
                   ),

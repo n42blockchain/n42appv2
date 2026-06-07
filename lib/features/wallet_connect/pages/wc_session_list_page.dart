@@ -157,8 +157,7 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
           SizedBox(height: ScreenUtil().setWidth(24)),
           Text(
             S.of(context).g_wc_no_sessions,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(32),
+            style: AppTypography.headline.copyWith(
               fontWeight: FontWeight.w600,
               color: AppColorTokens.of(context).textPrimary,
             ),
@@ -166,7 +165,9 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
           SizedBox(height: ScreenUtil().setWidth(12)),
           Text(
             S.of(context).g_wc_no_sessions_desc,
-            style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).textSubtitle),
+            style: AppTypography.bodySm.copyWith(
+              color: AppColorTokens.of(context).textSubtitle,
+            ),
           ),
         ],
       ),
@@ -238,8 +239,7 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
                   // Name
                   Text(
                     meta.name,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(30),
+                    style: AppTypography.body.copyWith(
                       fontWeight: FontWeight.w600,
                       color: AppColorTokens.of(context).textPrimary,
                     ),
@@ -251,7 +251,9 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
                   if (meta.url.isNotEmpty)
                     Text(
                       meta.url,
-                      style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
+                      style: AppTypography.caption.copyWith(
+                        color: AppColorTokens.of(context).textSubtitle,
+                      ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -275,7 +277,9 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
                           ),
                           child: Text(
                             chain,
-                            style: AppTypography.captionSm.copyWith(color: AppColorTokens.of(context).brand),
+                            style: AppTypography.captionSm.copyWith(
+                              color: AppColorTokens.of(context).brand,
+                            ),
                           ),
                         );
                       }).toList(),
@@ -303,9 +307,11 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
                     isExpired
                         ? 'Expired'
                         : 'Expires: ${_formatDate(expiryDate)}',
-                    style: AppTypography.caption.copyWith(color: isExpired
+                    style: AppTypography.caption.copyWith(
+                      color: isExpired
                           ? AppColorTokens.of(context).danger
-                          : AppColorTokens.of(context).textSubtitle),
+                          : AppColorTokens.of(context).textSubtitle,
+                    ),
                   ),
                 ],
               ),

@@ -59,9 +59,8 @@ Widget buildCoinInfoHeader(
           ),
           Text(
             (coin['coin'] ?? '').toString().toUpperCase(),
-            style: TextStyle(
+            style: AppTypography.title.copyWith(
               color: textColor,
-              fontSize: ScreenUtil().setSp(36),
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -141,8 +140,7 @@ Widget buildCoinPriceSection(
           ),
           child: Text(
             '${isUp ? '+' : ''}${regular.formartNum(priceChange24h, 2, isCrop: true)}%',
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(26),
+            style: AppTypography.bodySm.copyWith(
               fontWeight: FontWeight.w600,
               color: pctColor,
             ),
@@ -189,8 +187,7 @@ Widget buildPnlCard(
             children: [
               Text(
                 s.g_pnl_cost_basis,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(26),
+                style: AppTypography.bodySm.copyWith(
                   fontWeight: FontWeight.w600,
                   color: textColor,
                 ),
