@@ -133,10 +133,7 @@ extension _BrowserPageTabs on _BrowserPageState {
             openUrl,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              color: subtitleColor,
-              fontSize: ScreenUtil().setSp(18),
-            ),
+            style: AppTypography.captionSm.copyWith(color: subtitleColor),
           ),
           const Spacer(),
           if (isLoading)
@@ -186,9 +183,8 @@ extension _BrowserPageTabs on _BrowserPageState {
               alignment: Alignment.center,
               child: Text(
                 letter,
-                style: TextStyle(
+                style: AppTypography.captionSm.copyWith(
                   color: Colors.white,
-                  fontSize: ScreenUtil().setSp(16),
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -213,9 +209,8 @@ extension _BrowserPageTabs on _BrowserPageState {
                   if (title.isNotEmpty && host.isNotEmpty)
                     Text(
                       host,
-                      style: TextStyle(
+                      style: AppTypography.captionSm.copyWith(
                         color: AppColorTokens.of(context).textSubtitle,
-                        fontSize: ScreenUtil().setSp(16.0),
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,

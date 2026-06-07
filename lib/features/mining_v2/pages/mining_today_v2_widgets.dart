@@ -247,8 +247,7 @@ mixin _MiningTodayV2WidgetsMixin
         titles: mpValue.isShowDefaultBar
             ? ['/', '/', '/', '/', '/', '/', '/']
             : mpValue.barChartTitle,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(18),
+        style: AppTypography.captionSm.copyWith(
           color: AppColorTokens.of(context).textSubtitle,
         ),
         specialStyle: AppTypography.captionSm.copyWith(

@@ -163,10 +163,7 @@ class _QrCodeMenu extends StatelessWidget {
         children: [
           Icon(icon, size: ScreenUtil().setWidth(40), color: textColor),
           SizedBox(width: AppSpacing.space4),
-          Text(
-            label,
-            style: AppTypography.body.copyWith(color: textColor),
-          ),
+          Text(label, style: AppTypography.body.copyWith(color: textColor)),
         ],
       ),
     );
@@ -225,9 +222,8 @@ class _WalletConnectButton extends ConsumerWidget {
                   ),
                   child: Text(
                     '$sessionCount',
-                    style: TextStyle(
+                    style: AppTypography.captionSm.copyWith(
                       color: Colors.white,
-                      fontSize: ScreenUtil().setSp(18),
                       fontWeight: FontWeight.w600,
                     ),
                     textAlign: TextAlign.center,

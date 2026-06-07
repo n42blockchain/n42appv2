@@ -158,9 +158,8 @@ class NLevelWidget extends StatelessWidget {
                         children: [
                           Text(
                             S.of(context).g_mining_unlock_period,
-                            style: TextStyle(
+                            style: AppTypography.captionSm.copyWith(
                               color: AppColorTokens.of(context).textSubtitle,
-                              fontSize: ScreenUtil().setSp(18),
                             ),
                           ),
                           Text(

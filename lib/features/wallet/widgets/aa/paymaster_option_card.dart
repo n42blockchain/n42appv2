@@ -121,8 +121,7 @@ class PaymasterOptionCard extends StatelessWidget {
                             ),
                             child: Text(
                               S.of(context).g_key_aa_free,
-                              style: TextStyle(
-                                fontSize: ScreenUtil().setSp(18),
+                              style: AppTypography.captionSm.copyWith(
                                 color: Colors.green,
                                 fontWeight: FontWeight.w600,
                               ),

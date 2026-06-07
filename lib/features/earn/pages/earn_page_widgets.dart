@@ -148,8 +148,7 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
               children: [
                 Text(
                   label,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(18),
+                  style: AppTypography.captionSm.copyWith(
                     color: Colors.white.withAlpha(150),
                   ),
                   maxLines: 1,

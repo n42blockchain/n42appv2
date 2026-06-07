@@ -242,8 +242,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
           ),
           child: Text(
             sym,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(18),
+            style: AppTypography.captionSm.copyWith(
               fontWeight: isCurrent ? FontWeight.w600 : FontWeight.normal,
               color: isCurrent
                   ? blueColor
@@ -353,9 +352,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: _themeColor(AppThemeKeys.mainBlueColor),
                   foregroundColor: Colors.white,
-                  padding: EdgeInsets.symmetric(
-                    vertical: AppSpacing.space4,
-                  ),
+                  padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
                   shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
                 ),
                 child: Text(

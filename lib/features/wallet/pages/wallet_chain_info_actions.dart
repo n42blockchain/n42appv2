@@ -145,8 +145,7 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
             ),
             child: Text(
               'NEW',
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(18),
+              style: AppTypography.captionSm.copyWith(
                 fontWeight: FontWeight.w600,
                 color: Colors.white,
               ),
@@ -251,10 +250,7 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
                   child: Image.asset(asset, color: color),
                 ),
                 SizedBox(width: sw(20.0)),
-                Text(
-                  label,
-                  style: AppTypography.body.copyWith(color: color),
-                ),
+                Text(label, style: AppTypography.body.copyWith(color: color)),
               ],
             ),
           ),
@@ -307,10 +303,7 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
           children: [
             SizedBox(width: sw(40.0), height: sw(40.0), child: icon),
             SizedBox(width: sw(20.0)),
-            Text(
-              label,
-              style: AppTypography.body.copyWith(color: _blue),
-            ),
+            Text(label, style: AppTypography.body.copyWith(color: _blue)),
             if (trailing != null) ...[SizedBox(width: sw(10.0)), trailing],
           ],
         ),

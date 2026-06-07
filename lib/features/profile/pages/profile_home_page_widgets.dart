@@ -96,8 +96,7 @@ extension _ProfileHomePageWidgets on ProfileHomePage {
                           ),
                           child: Text(
                             'NEW',
-                            style: TextStyle(
-                              fontSize: ScreenUtil().setSp(18),
+                            style: AppTypography.captionSm.copyWith(
                               fontWeight: FontWeight.w600,
                               color: Colors.white,
                             ),

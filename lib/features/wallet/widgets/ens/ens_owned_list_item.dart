@@ -69,8 +69,7 @@ class EnsOwnedListItem extends StatelessWidget {
                           ),
                           child: Text(
                             S.of(context).g_key_ens_primary,
-                            style: TextStyle(
-                              fontSize: ScreenUtil().setSp(18),
+                            style: AppTypography.captionSm.copyWith(
                               color: Colors.green,
                               fontWeight: FontWeight.w500,
                             ),

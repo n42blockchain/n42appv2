@@ -108,8 +108,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
             child: Center(
               child: Text(
                 chain.symbol.substring(0, 1),
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(16),
+                style: AppTypography.captionSm.copyWith(
                   fontWeight: FontWeight.w600,
                   color: chain.color,
                 ),

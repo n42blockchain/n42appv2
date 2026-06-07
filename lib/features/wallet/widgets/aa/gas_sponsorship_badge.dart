@@ -66,8 +66,7 @@ class GasSponsorshipBadge extends StatelessWidget {
                   sponsorName != null
                       ? '${S.of(context).g_key_aa_by} $sponsorName'
                       : '${S.of(context).g_key_aa_saved} $savedAmount',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(18),
+                  style: AppTypography.captionSm.copyWith(
                     color: Colors.green.withAlpha(180),
                   ),
                 ),

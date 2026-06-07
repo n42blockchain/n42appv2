@@ -182,8 +182,7 @@ class _PresetCard extends StatelessWidget {
           ),
           child: Text(
             riskLabel,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(18),
+            style: AppTypography.captionSm.copyWith(
               fontWeight: FontWeight.w600,
               color: presetInfo.riskColor,
             ),
