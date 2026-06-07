@@ -30,8 +30,8 @@ class SettingHomePage extends ConsumerWidget {
       appBar: AppBarWidget(text: S.of(context).g_key_94),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(30.0),
-          vertical: ScreenUtil().setWidth(30.0),
+          horizontal: AppSpacing.space8,
+          vertical: AppSpacing.space8,
         ),
         child: Column(children: [_buildNavEnter(context, ref, localeCode)]),
       ),
@@ -46,11 +46,9 @@ class SettingHomePage extends ConsumerWidget {
   Widget _settingCard(BuildContext context, {required Widget child}) {
     return Container(
       alignment: Alignment.centerLeft,
-      margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10.0)),
+      margin: EdgeInsets.symmetric(vertical: AppSpacing.space2),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(
-          Radius.circular(ScreenUtil().setWidth(16.0)),
-        ),
+        borderRadius: AppRadius.brMd,
         color: AppColorTokens.of(context).bgSurface,
       ),
       child: child,
@@ -69,7 +67,7 @@ class SettingHomePage extends ConsumerWidget {
           child: NavSettingItem(
             path: "assets/home/setting/language.png",
             action: S.of(context).s_key_4,
-            imgColor: Colors.blueAccent,
+            imgColor: AppColorTokens.of(context).brand,
             callback: () async {
               final returnStr = await Navigator.push(
                 context,
@@ -89,7 +87,7 @@ class SettingHomePage extends ConsumerWidget {
           child: NavSettingItem(
             path: "assets/home/setting/nav_img_7.png",
             action: S.of(context).g_key_126,
-            imgColor: Colors.blueAccent,
+            imgColor: AppColorTokens.of(context).brand,
             callback: () {
               Navigator.of(
                 context,
@@ -102,7 +100,7 @@ class SettingHomePage extends ConsumerWidget {
           child: NavSettingItem(
             path: "assets/home/setting/nav_img_2.png",
             action: S.of(context).g_browser_key11,
-            imgColor: Colors.blueAccent,
+            imgColor: AppColorTokens.of(context).brand,
             callback: () {
               Navigator.of(
                 context,
@@ -119,17 +117,17 @@ class SettingHomePage extends ConsumerWidget {
     final useV2 = ref.watch(miningUseV2Provider);
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30.0),
-        vertical: ScreenUtil().setWidth(20.0),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space4,
       ),
       child: Row(
         children: [
           Image.asset(
             'assets/home/setting/mining.png',
             width: ScreenUtil().setWidth(40),
-            color: Colors.blueAccent,
+            color: AppColorTokens.of(context).brand,
           ),
-          SizedBox(width: ScreenUtil().setWidth(20.0)),
+          SizedBox(width: AppSpacing.space4),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -137,8 +135,7 @@ class SettingHomePage extends ConsumerWidget {
               children: [
                 Text(
                   S.of(context).g_setting_mining_version,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(30.0),
+                  style: AppTypography.body.copyWith(
                     color: AppColorTokens.of(context).textPrimary,
                   ),
                 ),
@@ -146,8 +143,7 @@ class SettingHomePage extends ConsumerWidget {
                   useV2
                       ? S.of(context).g_setting_mining_v2_label
                       : S.of(context).g_setting_mining_v1_label,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24.0),
+                  style: AppTypography.caption.copyWith(
                     color: AppColorTokens.of(context).textSubtitle,
                   ),
                 ),

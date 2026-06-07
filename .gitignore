@@ -109,3 +109,4 @@ __pycache__/
 
 # Entitlements backup (created by release scripts)
 *.entitlements.backup
+test/screenshots/out/
