@@ -177,7 +177,7 @@ class _SettingShareState extends State<SettingShare> {
                 children: [
                   Divider(height: ScreenUtil().setWidth(1)),
                   Container(
-                    padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+                    padding: EdgeInsets.all(AppSpacing.space8),
                     height: ScreenUtil().setWidth(148.0),
                     child: AppButton(
                       label: S.of(context).g_share_v2_key_5,

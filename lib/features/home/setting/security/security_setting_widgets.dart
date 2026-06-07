@@ -18,7 +18,7 @@ extension on _SecuritySettingState {
     );
     return Container(
       height: ScreenUtil().setWidth(88.0),
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       child: Row(
         children: [
           Expanded(

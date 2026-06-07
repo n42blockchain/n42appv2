@@ -82,9 +82,7 @@ class _PersonalSettingState extends State<PersonalSetting> {
         children: [
           Positioned.fill(
             child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(30.0),
-              ),
+              padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

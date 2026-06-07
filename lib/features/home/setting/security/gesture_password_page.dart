@@ -170,9 +170,7 @@ class _GesturePasswordPageState extends State<GesturePasswordPage> {
           children: [
             SizedBox(height: ScreenUtil().setWidth(80.0)),
             Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(60.0),
-              ),
+              padding: EdgeInsets.symmetric(horizontal: AppSpacing.space16),
               child: Column(
                 children: [
                   Text(
@@ -183,7 +181,7 @@ class _GesturePasswordPageState extends State<GesturePasswordPage> {
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(20.0)),
+                  SizedBox(height: AppSpacing.space4),
                   Text(
                     _subtitle,
                     style: AppTypography.body.copyWith(
@@ -194,7 +192,7 @@ class _GesturePasswordPageState extends State<GesturePasswordPage> {
                 ],
               ),
             ),
-            SizedBox(height: ScreenUtil().setWidth(60.0)),
+            SizedBox(height: AppSpacing.space16),
             Center(
               child: SizedBox(
                 width: gridSize,

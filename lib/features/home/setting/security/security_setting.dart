@@ -107,7 +107,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
       appBar: AppBarWidget(text: S.of(context).s_key_11),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+          padding: EdgeInsets.all(AppSpacing.space8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

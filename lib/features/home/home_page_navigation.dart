@@ -274,8 +274,8 @@ extension on _HomePageState {
           children: [
             Padding(
               padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(18),
-                vertical: ScreenUtil().setWidth(6),
+                horizontal: AppSpacing.space4,
+                vertical: AppSpacing.space2,
               ),
               child: Image.asset(
                 imagePath,
@@ -340,8 +340,8 @@ extension on _HomePageState {
               duration: const Duration(milliseconds: 200),
               curve: Curves.easeInOut,
               padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(18),
-                vertical: ScreenUtil().setWidth(6),
+                horizontal: AppSpacing.space4,
+                vertical: AppSpacing.space2,
               ),
               decoration: BoxDecoration(
                 color: isSelected

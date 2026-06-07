@@ -223,7 +223,7 @@ class _ThemeItem extends StatelessWidget {
                     color: AppColorTokens.of(context).brand,
                   )
                 else
-                  SizedBox(width: ScreenUtil().setWidth(48)),
+                  SizedBox(width: AppSpacing.space12),
               ],
             ),
           ),

@@ -64,7 +64,7 @@ extension on _PersonalSettingState {
                 size: ScreenUtil().setSp(32.0),
               ),
             ),
-            SizedBox(width: ScreenUtil().setWidth(8.0)),
+            SizedBox(width: AppSpacing.space2),
             Icon(
               Icons.chevron_right,
               color: _subtitleColor,
@@ -106,7 +106,7 @@ extension on _PersonalSettingState {
     return Container(
       width: double.infinity,
       alignment: Alignment.centerLeft,
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0)),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
       decoration: _bottomBorder,
       child: child,
     );

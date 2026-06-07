@@ -72,8 +72,8 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
               // 顶部操作栏
               Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(16),
-                  vertical: ScreenUtil().setWidth(8),
+                  horizontal: AppSpacing.space4,
+                  vertical: AppSpacing.space2,
                 ),
                 child: Row(
                   children: [
@@ -102,9 +102,9 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
                   ],
                 ),
               ),
-              SizedBox(height: ScreenUtil().setWidth(16)),
+              SizedBox(height: AppSpacing.space4),
               buildUserAccount(currentUser),
-              SizedBox(height: ScreenUtil().setWidth(16)),
+              SizedBox(height: AppSpacing.space4),
               Expanded(
                 child: ListView(
                   padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(20)),
@@ -143,7 +143,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
                       },
                     ),
 
-                    SizedBox(height: ScreenUtil().setWidth(12)),
+                    SizedBox(height: AppSpacing.space4),
                     // 安全与设置分组
                     _sectionTitle(S.of(context).g_key_94),
                     _menuItem(
@@ -166,7 +166,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
                       },
                     ),
 
-                    SizedBox(height: ScreenUtil().setWidth(12)),
+                    SizedBox(height: AppSpacing.space4),
                     // 其他分组
                     _sectionTitle(S.of(context).s_key_10),
                     _menuItem(
@@ -196,7 +196,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
                       },
                     ),
 
-                    SizedBox(height: ScreenUtil().setWidth(20)),
+                    SizedBox(height: AppSpacing.space4),
                     // 登录/退出按钮
                     buildLoginLogoutButton(currentUser),
                   ],
@@ -222,12 +222,12 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
         borderRadius: AppRadius.brMd,
         child: Container(
           margin: EdgeInsets.symmetric(
-            horizontal: ScreenUtil().setWidth(16),
-            vertical: ScreenUtil().setWidth(4),
+            horizontal: AppSpacing.space4,
+            vertical: AppSpacing.space2,
           ),
           padding: EdgeInsets.symmetric(
-            horizontal: ScreenUtil().setWidth(16),
-            vertical: ScreenUtil().setWidth(16),
+            horizontal: AppSpacing.space4,
+            vertical: AppSpacing.space4,
           ),
           decoration: BoxDecoration(borderRadius: AppRadius.brMd),
           child: Row(
@@ -250,7 +250,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
                   color: AppColorTokens.of(context).brand,
                 ),
               ),
-              SizedBox(width: ScreenUtil().setWidth(16)),
+              SizedBox(width: AppSpacing.space4),
               Expanded(
                 child: Text(
                   actionName,

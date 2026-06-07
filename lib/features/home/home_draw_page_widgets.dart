@@ -26,8 +26,8 @@ extension on _HomeDrawPageState {
     final isLoggedIn = isChatLoggedIn || isWalletLoggedIn;
 
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(24)),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      margin: EdgeInsets.symmetric(horizontal: AppSpacing.space6),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
@@ -74,7 +74,7 @@ extension on _HomeDrawPageState {
                   ),
                 ),
               ),
-              SizedBox(width: ScreenUtil().setWidth(16)),
+              SizedBox(width: AppSpacing.space4),
               Expanded(
                 child: GestureDetector(
                   onTap: _openChat,
@@ -97,11 +97,11 @@ extension on _HomeDrawPageState {
                             ),
                           ),
                           if (isChatOnlySession) ...[
-                            SizedBox(width: ScreenUtil().setWidth(8)),
+                            SizedBox(width: AppSpacing.space2),
                             Container(
                               padding: EdgeInsets.symmetric(
-                                horizontal: ScreenUtil().setWidth(10),
-                                vertical: ScreenUtil().setWidth(4),
+                                horizontal: AppSpacing.space2,
+                                vertical: AppSpacing.space2,
                               ),
                               decoration: BoxDecoration(
                                 color: AppColorTokens.of(
@@ -121,7 +121,7 @@ extension on _HomeDrawPageState {
                         ],
                       ),
                       if (isLoggedIn) ...[
-                        SizedBox(height: ScreenUtil().setWidth(6)),
+                        SizedBox(height: AppSpacing.space2),
                         Text(
                           displayEmail,
                           maxLines: 1,
@@ -137,13 +137,13 @@ extension on _HomeDrawPageState {
               ),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           GestureDetector(
             onTap: _openChat,
             child: Container(
               padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(20),
-                vertical: ScreenUtil().setWidth(12),
+                horizontal: AppSpacing.space4,
+                vertical: AppSpacing.space4,
               ),
               decoration: BoxDecoration(
                 color: AppColorTokens.of(context).brand,
@@ -157,7 +157,7 @@ extension on _HomeDrawPageState {
                     size: ScreenUtil().setWidth(20),
                     color: Colors.white,
                   ),
-                  SizedBox(width: ScreenUtil().setWidth(8)),
+                  SizedBox(width: AppSpacing.space2),
                   Flexible(
                     child: Text(
                       S.of(context).g_home_key9,
@@ -186,7 +186,7 @@ extension on _HomeDrawPageState {
     final showChatEntry = !showWalletLogout && isChatLoggedIn;
 
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(24)),
+      margin: EdgeInsets.symmetric(horizontal: AppSpacing.space6),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
@@ -217,8 +217,8 @@ extension on _HomeDrawPageState {
           borderRadius: AppRadius.brMd,
           child: Container(
             padding: EdgeInsets.symmetric(
-              vertical: ScreenUtil().setWidth(16),
-              horizontal: ScreenUtil().setWidth(20),
+              vertical: AppSpacing.space4,
+              horizontal: AppSpacing.space4,
             ),
             decoration: BoxDecoration(
               color: showWalletLogout
@@ -242,7 +242,7 @@ extension on _HomeDrawPageState {
                       ? AppColorTokens.of(context).danger
                       : AppColorTokens.of(context).brand,
                 ),
-                SizedBox(width: ScreenUtil().setWidth(12)),
+                SizedBox(width: AppSpacing.space4),
                 Flexible(
                   child: Text(
                     showWalletLogout

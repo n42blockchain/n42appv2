@@ -62,17 +62,17 @@ class _GoogleAuthSetupPageState extends State<GoogleAuthSetupPage> {
       appBar: AppBarWidget(text: S.of(context).g_google_auth_key1),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+          padding: EdgeInsets.all(AppSpacing.space8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: ScreenUtil().setWidth(20.0)),
+              SizedBox(height: AppSpacing.space4),
               // 说明文字
               Text(
                 S.of(context).g_google_auth_key2,
                 style: AppTypography.body.copyWith(color: mainText),
               ),
-              SizedBox(height: ScreenUtil().setWidth(30.0)),
+              SizedBox(height: AppSpacing.space8),
               // QR 码
               Center(
                 child: Container(
@@ -80,7 +80,7 @@ class _GoogleAuthSetupPageState extends State<GoogleAuthSetupPage> {
                     color: Colors.white,
                     borderRadius: AppRadius.brMd,
                   ),
-                  padding: EdgeInsets.all(ScreenUtil().setWidth(16.0)),
+                  padding: EdgeInsets.all(AppSpacing.space4),
                   child: QrImageView(
                     data: _otpAuthUri,
                     version: QrVersions.auto,
@@ -89,7 +89,7 @@ class _GoogleAuthSetupPageState extends State<GoogleAuthSetupPage> {
                   ),
                 ),
               ),
-              SizedBox(height: ScreenUtil().setWidth(20.0)),
+              SizedBox(height: AppSpacing.space4),
               // 手动输入密钥折叠区
               GestureDetector(
                 onTap: () => setState(() => _showManualKey = !_showManualKey),
@@ -110,7 +110,7 @@ class _GoogleAuthSetupPageState extends State<GoogleAuthSetupPage> {
                 ),
               ),
               if (_showManualKey) ...[
-                SizedBox(height: ScreenUtil().setWidth(12.0)),
+                SizedBox(height: AppSpacing.space4),
                 GestureDetector(
                   onTap: () {
                     Clipboard.setData(ClipboardData(text: _secret));
@@ -124,8 +124,8 @@ class _GoogleAuthSetupPageState extends State<GoogleAuthSetupPage> {
                   child: Container(
                     width: double.infinity,
                     padding: EdgeInsets.symmetric(
-                      horizontal: ScreenUtil().setWidth(24.0),
-                      vertical: ScreenUtil().setWidth(18.0),
+                      horizontal: AppSpacing.space6,
+                      vertical: AppSpacing.space4,
                     ),
                     decoration: BoxDecoration(
                       color: itemBg,
@@ -153,21 +153,19 @@ class _GoogleAuthSetupPageState extends State<GoogleAuthSetupPage> {
                   ),
                 ),
               ],
-              SizedBox(height: ScreenUtil().setWidth(40.0)),
+              SizedBox(height: AppSpacing.space12),
               // 验证码输入
               Text(
                 S.of(context).g_google_auth_key4,
                 style: AppTypography.bodySm.copyWith(color: subtitleColor),
               ),
-              SizedBox(height: ScreenUtil().setWidth(12.0)),
+              SizedBox(height: AppSpacing.space4),
               Container(
                 decoration: BoxDecoration(
                   color: itemBg,
                   borderRadius: AppRadius.brSm,
                 ),
-                padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(24.0),
-                ),
+                padding: EdgeInsets.symmetric(horizontal: AppSpacing.space6),
                 child: TextField(
                   controller: _codeController,
                   keyboardType: TextInputType.number,
@@ -197,13 +195,13 @@ class _GoogleAuthSetupPageState extends State<GoogleAuthSetupPage> {
                 ),
               ),
               if (_errorMessage.isNotEmpty) ...[
-                SizedBox(height: ScreenUtil().setWidth(8.0)),
+                SizedBox(height: AppSpacing.space2),
                 Text(
                   _errorMessage,
                   style: AppTypography.caption.copyWith(color: errorColor),
                 ),
               ],
-              SizedBox(height: ScreenUtil().setWidth(60.0)),
+              SizedBox(height: AppSpacing.space16),
               // 确认按钮
               SizedBox(
                 width: double.infinity,
@@ -229,7 +227,7 @@ class _GoogleAuthSetupPageState extends State<GoogleAuthSetupPage> {
                   ),
                 ),
               ),
-              SizedBox(height: ScreenUtil().setWidth(40.0)),
+              SizedBox(height: AppSpacing.space12),
             ],
           ),
         ),
