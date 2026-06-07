@@ -12,9 +12,7 @@ Widget buttonStyle1(BuildContext context, VoidCallback onTap, String title) {
       ),
       shape: ButtonStyleButton.allOrNull<RoundedRectangleBorder>(
         RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(ScreenUtil().setWidth(16.0)),
-          ),
+          borderRadius: AppRadius.brMd,
           side: BorderSide(
             width: ScreenUtil().setWidth(1.0),
             color: AppColorTokens.of(context).textPrimary,
@@ -51,11 +49,7 @@ Widget buttonStyle2(BuildContext context, VoidCallback? onTap, String title) {
         ),
       ),
       shape: ButtonStyleButton.allOrNull<RoundedRectangleBorder>(
-        RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(ScreenUtil().setWidth(16.0)),
-          ),
-        ),
+        RoundedRectangleBorder(borderRadius: AppRadius.brMd),
       ),
       padding: ButtonStyleButton.allOrNull<EdgeInsets>(EdgeInsets.all(0)),
       alignment: Alignment.center,
@@ -176,9 +170,7 @@ Widget buttonStyle6(
       backgroundColor: ButtonStyleButton.allOrNull<Color>(backgroundColor),
       shape: ButtonStyleButton.allOrNull<RoundedRectangleBorder>(
         RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(ScreenUtil().setWidth(16.0)),
-          ),
+          borderRadius: AppRadius.brMd,
           side: BorderSide(
             width: ScreenUtil().setWidth(1),
             color: borderColor ?? backgroundColor,

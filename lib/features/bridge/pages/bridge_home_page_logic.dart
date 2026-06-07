@@ -259,9 +259,7 @@ mixin BridgeHomeLogicMixin on ConsumerState<BridgeHomePage> {
                       return ListTile(
                         leading: token.logoUri.isNotEmpty
                             ? ClipRRect(
-                                borderRadius: BorderRadius.circular(
-                                  ScreenUtil().setWidth(20),
-                                ),
+                                borderRadius: AppRadius.brMd,
                                 child: Image.network(
                                   token.logoUri,
                                   width: ScreenUtil().setWidth(48),

@@ -107,9 +107,7 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
             ),
             margin: EdgeInsets.only(top: ScreenUtil().setWidth(20.0)),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(
-                Radius.circular(ScreenUtil().setWidth(8.0)),
-              ),
+              borderRadius: AppRadius.brSm,
               color: itemBg,
             ),
             height: ScreenUtil().setWidth(88.0),
@@ -209,9 +207,7 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
             ),
             margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0)),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(
-                Radius.circular(ScreenUtil().setWidth(8.0)),
-              ),
+              borderRadius: AppRadius.brSm,
               color: itemBg,
             ),
             child: Column(

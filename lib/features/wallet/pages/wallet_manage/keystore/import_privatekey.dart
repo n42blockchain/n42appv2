@@ -209,9 +209,7 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                               color: AppColorTokens.of(context).brand,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(ScreenUtil().setWidth(20.0)),
-                              ),
+                              borderRadius: AppRadius.brMd,
                             ),
                             child: Text(
                               S.of(context).g_key_166,
@@ -329,9 +327,7 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                         margin: EdgeInsets.only(top: ScreenUtil().setWidth(30)),
                         decoration: BoxDecoration(
                           color: AppColorTokens.of(context).dangerBg,
-                          borderRadius: BorderRadius.circular(
-                            ScreenUtil().setWidth(8),
-                          ),
+                          borderRadius: AppRadius.brSm,
                         ),
                         child: Text(
                           errorMessage,

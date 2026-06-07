@@ -181,9 +181,7 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
             padding: EdgeInsets.only(left: ScreenUtil().setWidth(32.0)),
             margin: EdgeInsets.only(top: ScreenUtil().setWidth(20.0)),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(
-                Radius.circular(ScreenUtil().setWidth(20.0)),
-              ),
+              borderRadius: AppRadius.brMd,
               color: AppColorTokens.of(context).bgSurface,
             ),
             child: TextField(

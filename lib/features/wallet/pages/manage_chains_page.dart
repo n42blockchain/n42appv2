@@ -79,12 +79,7 @@ class ManageChainsPage extends ConsumerWidget {
                     ),
                   ),
                 ),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(
-                    ScreenUtil().setWidth(20),
-                  ),
-                  child: image,
-                ),
+                ClipRRect(borderRadius: AppRadius.brMd, child: image),
               ],
             ),
             title: Text(

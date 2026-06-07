@@ -81,9 +81,7 @@ class _GoogleAuthSetupPageState extends State<GoogleAuthSetupPage> {
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(
-                      ScreenUtil().setWidth(12.0),
-                    ),
+                    borderRadius: AppRadius.brMd,
                   ),
                   padding: EdgeInsets.all(ScreenUtil().setWidth(16.0)),
                   child: QrImageView(
@@ -137,9 +135,7 @@ class _GoogleAuthSetupPageState extends State<GoogleAuthSetupPage> {
                     ),
                     decoration: BoxDecoration(
                       color: itemBg,
-                      borderRadius: BorderRadius.circular(
-                        ScreenUtil().setWidth(8.0),
-                      ),
+                      borderRadius: AppRadius.brSm,
                     ),
                     child: Row(
                       children: [
@@ -177,9 +173,7 @@ class _GoogleAuthSetupPageState extends State<GoogleAuthSetupPage> {
               Container(
                 decoration: BoxDecoration(
                   color: itemBg,
-                  borderRadius: BorderRadius.circular(
-                    ScreenUtil().setWidth(8.0),
-                  ),
+                  borderRadius: AppRadius.brSm,
                 ),
                 padding: EdgeInsets.symmetric(
                   horizontal: ScreenUtil().setWidth(24.0),

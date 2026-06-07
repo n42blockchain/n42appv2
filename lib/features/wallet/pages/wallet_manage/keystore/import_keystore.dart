@@ -90,9 +90,7 @@ class _ImportKeystoreState extends ConsumerState<ImportKeystore> {
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                               color: AppColorTokens.of(context).brand,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(ScreenUtil().setWidth(20.0)),
-                              ),
+                              borderRadius: AppRadius.brMd,
                             ),
                             child: Text(
                               S.of(context).g_key_166,

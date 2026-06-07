@@ -294,9 +294,7 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
         maxHeight: ScreenUtil().setWidth(100.0),
       ),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(
-          Radius.circular(ScreenUtil().setWidth(20.0)),
-        ),
+        borderRadius: AppRadius.brMd,
         color: AppColorTokens.of(context).bgSurface,
       ),
       child: Row(

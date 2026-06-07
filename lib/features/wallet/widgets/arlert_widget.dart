@@ -55,9 +55,7 @@ Future<void> alertWidget(BuildContext context) async {
                       context,
                       AppThemeKeys.mainButtonBgColor.name,
                     ),
-                    borderRadius: BorderRadius.circular(
-                      ScreenUtil().setWidth(8),
-                    ),
+                    borderRadius: AppRadius.brSm,
                   ),
                   margin: EdgeInsets.symmetric(
                     horizontal: ScreenUtil().setWidth(30),

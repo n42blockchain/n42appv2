@@ -298,9 +298,7 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
       ),
       width: double.infinity,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(
-          Radius.circular(ScreenUtil().setWidth(16.0)),
-        ),
+        borderRadius: AppRadius.brMd,
         color: AppThemeUtils.getColorByKey(
           context,
           AppThemeKeys.errorBgColor2.name,

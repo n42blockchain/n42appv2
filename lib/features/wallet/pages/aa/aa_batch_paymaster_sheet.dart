@@ -55,9 +55,7 @@ class PaymasterSelectionSheet extends StatelessWidget {
                   margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
                   decoration: isSelected
                       ? BoxDecoration(
-                          borderRadius: BorderRadius.circular(
-                            ScreenUtil().setWidth(12),
-                          ),
+                          borderRadius: AppRadius.brMd,
                           border: Border.all(
                             color: const Color(0xFFFF9800),
                             width: 2,

@@ -97,9 +97,7 @@ extension _WalletCoinAddAllImportUI on _WalletCoinAddAllState {
                       context,
                       AppThemeKeys.errorBgColor2.name,
                     ),
-                    borderRadius: BorderRadius.circular(
-                      ScreenUtil().setWidth(8.0),
-                    ),
+                    borderRadius: AppRadius.brSm,
                   ),
                   child: Text(
                     S.of(context).g_token_m_key_10,

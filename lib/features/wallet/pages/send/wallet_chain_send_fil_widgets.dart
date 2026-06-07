@@ -74,9 +74,7 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
             ),
             margin: EdgeInsets.only(top: ScreenUtil().setWidth(20.0)),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(
-                Radius.circular(ScreenUtil().setWidth(8.0)),
-              ),
+              borderRadius: AppRadius.brSm,
               color: itemBg,
             ),
             height: ScreenUtil().setWidth(88.0),
@@ -176,9 +174,7 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
             ),
             margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0)),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(
-                Radius.circular(ScreenUtil().setWidth(8.0)),
-              ),
+              borderRadius: AppRadius.brSm,
               color: itemBg,
             ),
             child: Column(
@@ -287,9 +283,7 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
       padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
       width: double.infinity,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(
-          Radius.circular(ScreenUtil().setWidth(8.0)),
-        ),
+        borderRadius: AppRadius.brSm,
         color: _tc(AppThemeKeys.errorBgColor2.name),
       ),
       child: Text(

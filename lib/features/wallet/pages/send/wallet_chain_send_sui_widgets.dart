@@ -132,9 +132,7 @@ mixin _SuiSendWidgetsMixin on _SuiSendLogicMixin {
           Container(
             margin: EdgeInsets.only(top: ScreenUtil().setWidth(20.0)),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(
-                Radius.circular(ScreenUtil().setWidth(16.0)),
-              ),
+              borderRadius: AppRadius.brMd,
               color: AppColorTokens.of(context).bgSurface,
               boxShadow: [
                 BoxShadow(

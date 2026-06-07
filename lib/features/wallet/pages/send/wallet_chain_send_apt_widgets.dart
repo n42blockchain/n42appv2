@@ -75,9 +75,7 @@ mixin _AptSendWidgetsMixin on _AptSendLogicMixin {
           Container(
             margin: EdgeInsets.only(top: ScreenUtil().setWidth(20.0)),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(
-                Radius.circular(ScreenUtil().setWidth(16.0)),
-              ),
+              borderRadius: AppRadius.brMd,
               color: AppColorTokens.of(context).bgSurface,
               boxShadow: [
                 BoxShadow(
@@ -256,9 +254,7 @@ mixin _AptSendWidgetsMixin on _AptSendLogicMixin {
       padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
       width: double.infinity,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(
-          Radius.circular(ScreenUtil().setWidth(16.0)),
-        ),
+        borderRadius: AppRadius.brMd,
         color: AppThemeUtils.getColorByKey(
           context,
           AppThemeKeys.errorBgColor2.name,

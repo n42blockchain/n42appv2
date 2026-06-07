@@ -202,9 +202,7 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
                 horizontal: ScreenUtil().setWidth(30.0),
               ),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(ScreenUtil().setWidth(20.0)),
-                ),
+                borderRadius: AppRadius.brMd,
                 color: AppColorTokens.of(context).bgSurface,
               ),
               child: Row(

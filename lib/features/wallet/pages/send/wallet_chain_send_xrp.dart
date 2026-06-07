@@ -84,9 +84,7 @@ class _WalletChainSendXrpState extends ConsumerState<WalletChainSendXrp>
       ),
       width: double.infinity,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(
-          Radius.circular(ScreenUtil().setWidth(20.0)),
-        ),
+        borderRadius: AppRadius.brMd,
         color: AppThemeUtils.getColorByKey(
           context,
           AppThemeKeys.errorBgColor2.name,

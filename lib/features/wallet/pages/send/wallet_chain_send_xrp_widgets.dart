@@ -60,9 +60,7 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
                 vertical: ScreenUtil().setWidth(16.0),
               ),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(
-                  ScreenUtil().setWidth(10.0),
-                ),
+                borderRadius: AppRadius.brSm,
                 borderSide: BorderSide.none,
               ),
             ),
@@ -148,9 +146,7 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
           Container(
             margin: EdgeInsets.only(top: ScreenUtil().setWidth(20.0)),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(
-                Radius.circular(ScreenUtil().setWidth(16.0)),
-              ),
+              borderRadius: AppRadius.brMd,
               color: itemBgColor,
             ),
             child: Column(
@@ -357,9 +353,7 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
       ),
       padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(
-          Radius.circular(ScreenUtil().setWidth(8.0)),
-        ),
+        borderRadius: AppRadius.brSm,
         color: _themeColor(AppThemeKeys.itemBgColor.name),
       ),
       child: Column(

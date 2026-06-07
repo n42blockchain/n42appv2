@@ -82,9 +82,7 @@ class _KeystonePairPageState extends State<KeystonePairPage> {
                         padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
                         decoration: BoxDecoration(
                           color: Colors.red.shade900.withAlpha(220),
-                          borderRadius: BorderRadius.circular(
-                            ScreenUtil().setWidth(12),
-                          ),
+                          borderRadius: AppRadius.brMd,
                         ),
                         child: Text(
                           _error!,

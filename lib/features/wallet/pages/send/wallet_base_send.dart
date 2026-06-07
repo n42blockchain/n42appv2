@@ -270,9 +270,7 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
                             horizontal: ScreenUtil().setWidth(30.0),
                           ),
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(ScreenUtil().setWidth(20.0)),
-                            ),
+                            borderRadius: AppRadius.brMd,
                             color: _themeColor(AppThemeKeys.itemBgColor),
                           ),
                           child: Column(

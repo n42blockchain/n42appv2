@@ -65,9 +65,7 @@ class _ExportKeystoreDescState extends State<ExportKeystoreDesc> {
                       padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
                       decoration: BoxDecoration(
                         color: errorBg,
-                        borderRadius: BorderRadius.circular(
-                          ScreenUtil().setWidth(12),
-                        ),
+                        borderRadius: AppRadius.brMd,
                       ),
                       child: Text(
                         s.g_key_ex_keystore_2,
