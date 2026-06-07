@@ -21,6 +21,8 @@ import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/home/widgets/check_version_alert.dart';
 import 'package:n42_wallet/features/home/setting/setting_home_page.dart';
+import 'package:n42_wallet/features/home/setting/security/gesture_password_page.dart';
+import 'package:n42_wallet/features/home/setting/security/google_auth_setup_page.dart';
 
 const String _fontFamily = 'AppTestFont';
 const String _outDir = 'test/screenshots/out';
@@ -159,6 +161,54 @@ void main() {
       t,
       setting,
       'setting_home_dark',
+      dark: true,
+      surface: const Size(420, 900),
+    ),
+    timeout: to,
+  );
+
+  const gesture = GesturePasswordPage();
+  testWidgets(
+    'gesture light',
+    (t) => _shoot(
+      t,
+      gesture,
+      'gesture_password_light',
+      dark: false,
+      surface: const Size(420, 900),
+    ),
+    timeout: to,
+  );
+  testWidgets(
+    'gesture dark',
+    (t) => _shoot(
+      t,
+      gesture,
+      'gesture_password_dark',
+      dark: true,
+      surface: const Size(420, 900),
+    ),
+    timeout: to,
+  );
+
+  const gauth = GoogleAuthSetupPage();
+  testWidgets(
+    'gauth light',
+    (t) => _shoot(
+      t,
+      gauth,
+      'google_auth_light',
+      dark: false,
+      surface: const Size(420, 900),
+    ),
+    timeout: to,
+  );
+  testWidgets(
+    'gauth dark',
+    (t) => _shoot(
+      t,
+      gauth,
+      'google_auth_dark',
       dark: true,
       surface: const Size(420, 900),
     ),
