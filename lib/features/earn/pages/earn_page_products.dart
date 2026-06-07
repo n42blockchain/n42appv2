@@ -50,7 +50,7 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>, EarnPageLogicMixin {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: su.setSp(32),
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                     color: mainText,
                   ),
                 ),
@@ -189,7 +189,7 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>, EarnPageLogicMixin {
                 protocol.chainSymbol,
                 style: TextStyle(
                   fontSize: su.setSp(20),
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                   color: color,
                 ),
               ),
@@ -300,7 +300,7 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>, EarnPageLogicMixin {
             s.g_key_earn_recommended,
             style: TextStyle(
               fontSize: su.setSp(30),
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w600,
               color: mainText,
             ),
           ),

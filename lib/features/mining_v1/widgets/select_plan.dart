@@ -65,7 +65,7 @@ class SelectPlan extends StatelessWidget {
                           AppThemeKeys.mainWhiteColor.name,
                         ),
                         fontSize: ScreenUtil().setSp(30),
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),

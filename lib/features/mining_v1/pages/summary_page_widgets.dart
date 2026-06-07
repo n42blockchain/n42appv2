@@ -114,7 +114,7 @@ mixin _SummaryPageWidgetsMixin on State<SummaryPage>, _SummaryPageLogicMixin {
           style: TextStyle(
             color: AppColorTokens.of(context).textPrimary,
             fontSize: ScreenUtil().setSp(26),
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
           ),
         ),
       ],
@@ -155,7 +155,7 @@ mixin _SummaryPageWidgetsMixin on State<SummaryPage>, _SummaryPageLogicMixin {
                 style: TextStyle(
                   color: AppColorTokens.of(context).brand,
                   fontSize: ScreenUtil().setSp(22),
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ),
@@ -166,7 +166,7 @@ mixin _SummaryPageWidgetsMixin on State<SummaryPage>, _SummaryPageLogicMixin {
             style: TextStyle(
               color: AppColorTokens.of(context).textPrimary,
               fontSize: ScreenUtil().setSp(26),
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w600,
             ),
           ),
       ],

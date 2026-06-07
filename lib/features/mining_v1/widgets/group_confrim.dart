@@ -95,7 +95,7 @@ class GroupConfirm extends StatelessWidget {
                             S.of(context).g_key_79,
                             style: TextStyle(
                               color: AppColorTokens.of(context).brand,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w600,
                               fontSize: ScreenUtil().setSp(30),
                             ),
                           ),
@@ -120,7 +120,7 @@ class GroupConfirm extends StatelessWidget {
                             S.of(context).g_key_78,
                             style: TextStyle(
                               color: Colors.white,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w600,
                               fontSize: ScreenUtil().setSp(30),
                             ),
                           ),

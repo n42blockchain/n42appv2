@@ -111,7 +111,7 @@ extension _CoinItemWidgets on _WalletSearchCoinState {
                           style: TextStyle(
                             fontSize: sp30,
                             color: mainColor,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w600,
                           ),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,

@@ -204,7 +204,7 @@ class _DAppDirectoryPageState extends State<DAppDirectoryPage>
         letter,
         style: TextStyle(
           fontSize: ScreenUtil().setSp(32),
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w600,
           color: Colors.white,
         ),
       ),

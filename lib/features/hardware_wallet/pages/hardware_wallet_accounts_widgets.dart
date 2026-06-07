@@ -320,7 +320,7 @@ class _HWAccountItem extends StatelessWidget {
                     '${account.index + 1}',
                     style: TextStyle(
                       fontSize: su.setSp(24),
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                       color: blueColor,
                     ),
                   ),

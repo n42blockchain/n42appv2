@@ -41,7 +41,7 @@ class KeyDetailsSheet extends StatelessWidget {
             S.of(context).g_key_aa_session_details,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(32),
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w600,
               color: AppColorTokens.of(context).textPrimary,
             ),
           ),

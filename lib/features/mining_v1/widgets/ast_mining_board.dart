@@ -72,14 +72,14 @@ class ASTMiningBoard extends StatelessWidget {
                         style: TextStyle(
                           color: AppColorTokens.of(context).textPrimary,
                           fontSize: ScreenUtil().setSp(104),
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                       Text(
                         CoinType.N.name,
                         style: TextStyle(
                           color: AppColorTokens.of(context).textPrimary,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                           fontSize: ScreenUtil().setSp(32),
                         ),
                       ),

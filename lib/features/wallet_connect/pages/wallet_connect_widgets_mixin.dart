@@ -502,7 +502,7 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
                 style: TextStyle(
                   color: _themeColor(AppThemeKeys.mainTextColor),
                   fontSize: ScreenUtil().setSp(36),
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -575,7 +575,7 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
         style: TextStyle(
           color: _themeColor(AppThemeKeys.mainTextColor),
           fontSize: ScreenUtil().setSp(36),
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w600,
         ),
       ),
     );

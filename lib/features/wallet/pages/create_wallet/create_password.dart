@@ -144,7 +144,7 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(40.0),
                           color: AppColorTokens.of(context).textPrimary,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),

@@ -122,7 +122,7 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
                 S.of(context).g_key_aa_add_operation,
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(32),
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                   color: AppColorTokens.of(context).textPrimary,
                 ),
               ),

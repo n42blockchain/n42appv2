@@ -24,7 +24,7 @@ extension _ProfileHomePageWidgets on ProfileHomePage {
             title,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(28),
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w600,
               color: AppColorTokens.of(context).textSubtitle,
             ),
           ),
@@ -100,7 +100,7 @@ extension _ProfileHomePageWidgets on ProfileHomePage {
                             'NEW',
                             style: TextStyle(
                               fontSize: ScreenUtil().setSp(18),
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w600,
                               color: Colors.white,
                             ),
                           ),

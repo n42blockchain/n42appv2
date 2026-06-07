@@ -233,7 +233,7 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
               S.of(context).g_key_aa_create_session,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(32),
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
                 color: _themeColor(AppThemeKeys.mainTextColor.name),
               ),
             ),
@@ -252,7 +252,7 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
       title,
       style: TextStyle(
         fontSize: ScreenUtil().setSp(26),
-        fontWeight: FontWeight.w700,
+        fontWeight: FontWeight.w600,
         color: _themeColor(AppThemeKeys.mainTextColor.name),
       ),
     );

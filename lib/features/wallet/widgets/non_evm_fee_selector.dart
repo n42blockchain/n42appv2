@@ -235,7 +235,7 @@ class _NonEvmFeeSelectorState extends State<NonEvmFeeSelector> {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(30),
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                     color: mainText,
                   ),
                 ),
@@ -328,7 +328,7 @@ class _NonEvmFeeSelectorState extends State<NonEvmFeeSelector> {
                 label,
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(24),
-                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
                   color: isSelected ? blueColor : mainText,
                 ),
               ),
@@ -423,7 +423,7 @@ class _NonEvmFeeSelectorState extends State<NonEvmFeeSelector> {
           value,
           style: TextStyle(
             fontSize: ScreenUtil().setSp(26),
-            fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
+            fontWeight: isTotal ? FontWeight.w600 : FontWeight.normal,
             color: mainText,
           ),
         ),

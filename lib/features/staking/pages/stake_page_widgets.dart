@@ -61,7 +61,7 @@ mixin _StakeViewsMixin
                           widget.protocol.name,
                           style: TextStyle(
                             fontSize: ScreenUtil().setSp(32),
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w600,
                             color: Colors.white,
                           ),
                         ),
@@ -114,7 +114,7 @@ mixin _StakeViewsMixin
                     '${provider.currentApy.toStringAsFixed(1)}%',
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(36),
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                       color: Colors.white,
                     ),
                   ),
@@ -147,7 +147,7 @@ mixin _StakeViewsMixin
           widget.protocol.chainSymbol.substring(0, 1),
           style: TextStyle(
             color: Colors.white,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
             fontSize: ScreenUtil().setSp(28),
           ),
         ),

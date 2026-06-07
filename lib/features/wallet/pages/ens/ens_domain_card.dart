@@ -54,7 +54,7 @@ class EnsDomainCard extends StatelessWidget {
             ownedEns.name,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(36),
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w600,
               color: AppColorTokens.of(context).textPrimary,
             ),
           ),
@@ -126,7 +126,7 @@ class _DefaultAvatar extends StatelessWidget {
           ownedEns.name.substring(0, 1).toUpperCase(),
           style: TextStyle(
             fontSize: ScreenUtil().setSp(36),
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
             color: domainChain.color,
           ),
         ),

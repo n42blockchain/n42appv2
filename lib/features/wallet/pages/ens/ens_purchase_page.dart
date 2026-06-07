@@ -281,7 +281,7 @@ class _EnsPurchasePageState extends State<EnsPurchasePage> {
             '${widget.name}.eth',
             style: TextStyle(
               fontSize: su.setSp(40),
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w600,
               color: AppColorTokens.of(context).textPrimary,
             ),
           ),

@@ -180,7 +180,7 @@ class _ExportKeystorePageState extends State<ExportKeystorePage> {
             style: TextStyle(
               color: mainTextColor,
               fontSize: scr.setSp(32),
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w600,
             ),
           ),
           SizedBox(height: scr.setWidth(12)),

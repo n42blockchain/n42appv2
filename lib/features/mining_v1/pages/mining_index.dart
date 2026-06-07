@@ -75,7 +75,7 @@ class _MiningIndexState extends State<MiningIndex>
                             style: TextStyle(
                               color: AppColorTokens.of(context).brand,
                               fontSize: ScreenUtil().setSp(30),
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                           if (!AppConfig.isMainChainMining)
@@ -210,7 +210,7 @@ class _MiningIndexState extends State<MiningIndex>
               style: TextStyle(
                 color: AppColorTokens.of(context).textPrimary,
                 fontSize: ScreenUtil().setSp(36.0),
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),

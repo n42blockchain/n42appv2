@@ -156,7 +156,7 @@ class _BridgeSelectChainPageState extends State<BridgeSelectChainPage> {
           chain.name.substring(0, 1).toUpperCase(),
           style: const TextStyle(
             color: Colors.white,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
           ),
         ),
       ),
@@ -209,7 +209,7 @@ class _BridgeSelectChainPageState extends State<BridgeSelectChainPage> {
                     chain.name,
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(30),
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                       color: AppColorTokens.of(context).textPrimary,
                     ),
                   ),

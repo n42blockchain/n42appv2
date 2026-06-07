@@ -123,7 +123,7 @@ Widget buildCoinPriceSection(
             '\$${fmtPrice(price)}',
             style: TextStyle(
               fontSize: ScreenUtil().setSp(44),
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               color: _tc(context, AppThemeKeys.mainTextColor.name),
             ),
             maxLines: 2,

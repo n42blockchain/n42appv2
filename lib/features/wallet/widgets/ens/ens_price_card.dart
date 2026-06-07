@@ -71,7 +71,7 @@ class EnsPriceCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(28),
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                     color: AppColorTokens.of(context).textPrimary,
                   ),
                 ),
@@ -83,7 +83,7 @@ class EnsPriceCard extends StatelessWidget {
                     price.formattedTotalPrice,
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(30),
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                       color: AppColorTokens.of(context).brand,
                     ),
                   ),

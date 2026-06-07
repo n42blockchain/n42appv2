@@ -181,7 +181,7 @@ class _LendingPageState extends State<LendingPage>
               '${apy.toStringAsFixed(2)}%',
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(28),
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
                 color: apyColor,
               ),
             ),

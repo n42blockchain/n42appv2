@@ -121,7 +121,7 @@ class _DexSwapConfirmState extends State<DexSwapConfirm> {
             style: TextStyle(
               color: valueColor,
               fontSize: ScreenUtil().setSp(28),
-              fontWeight: impact >= 1.0 ? FontWeight.bold : FontWeight.normal,
+              fontWeight: impact >= 1.0 ? FontWeight.w600 : FontWeight.normal,
             ),
           ),
         ],

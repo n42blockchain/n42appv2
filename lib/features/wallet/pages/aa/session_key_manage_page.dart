@@ -215,7 +215,7 @@ class _SessionKeyManagePageState extends State<SessionKeyManagePage>
                       s.g_key_aa_session_keys,
                       style: TextStyle(
                         fontSize: su.setSp(28),
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                         color: mainText,
                       ),
                     ),
@@ -276,7 +276,7 @@ class _SessionKeyManagePageState extends State<SessionKeyManagePage>
               value,
               style: TextStyle(
                 fontSize: su.setSp(32),
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
                 color: color,
               ),
             ),

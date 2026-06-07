@@ -148,7 +148,7 @@ class _KeystoneSignPageState extends State<KeystoneSignPage> {
               : s.g_key_hw_keystone_scan_response_title,
           style: TextStyle(
             fontSize: ScreenUtil().setSp(30),
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
             color: AppColorTokens.of(context).textPrimary,
           ),
         ),

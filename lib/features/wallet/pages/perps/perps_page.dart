@@ -296,7 +296,7 @@ class _PerpsPageState extends State<PerpsPage>
                         '${isProfitable ? '+' : ''}\$${p.unrealizedPnl.toStringAsFixed(2)}',
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(26),
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w600,
                           color: isProfitable
                               ? const Color(0xFF22C55E)
                               : const Color(0xFFEF4444),

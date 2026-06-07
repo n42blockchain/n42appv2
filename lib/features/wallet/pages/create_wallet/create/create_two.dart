@@ -133,7 +133,7 @@ class _CreateTwoState extends State<CreateTwo> with _CreateTwoWidgetsMixin {
         style: TextStyle(
           fontSize: ScreenUtil().setSp(50),
           color: AppColorTokens.of(context).textPrimary,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w600,
         ),
       ),
     );
@@ -147,7 +147,7 @@ class _CreateTwoState extends State<CreateTwo> with _CreateTwoWidgetsMixin {
         style: TextStyle(
           fontSize: ScreenUtil().setSp(28),
           color: AppColorTokens.of(context).textPrimary,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w600,
         ),
       ),
     );
@@ -199,7 +199,7 @@ class _CreateTwoState extends State<CreateTwo> with _CreateTwoWidgetsMixin {
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(28),
                 color: AppColorTokens.of(context).textPrimary,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),

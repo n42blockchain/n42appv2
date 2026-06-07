@@ -309,7 +309,7 @@ class EnsSearchResultView extends StatelessWidget {
                   '$searchQuery.eth',
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(32),
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                     color: _themeColor(
                       context,
                       AppThemeKeys.mainTextColor.name,

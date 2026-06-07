@@ -172,7 +172,7 @@ class _SplashPageState extends State<SplashPage>
                   'N42',
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(60),
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                     color: Colors.white,
                   ),
                 ),
@@ -189,7 +189,7 @@ class _SplashPageState extends State<SplashPage>
       'N42 Wallet',
       style: TextStyle(
         fontSize: ScreenUtil().setSp(48),
-        fontWeight: FontWeight.bold,
+        fontWeight: FontWeight.w600,
         color: Colors.white,
         letterSpacing: 2,
       ),

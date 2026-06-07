@@ -72,7 +72,7 @@ mixin BridgeHomeWidgetsMixin
                         textAlign: TextAlign.right,
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(40),
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                           color: AppColorTokens.of(context).textPrimary,
                         ),
                         decoration: InputDecoration(
@@ -98,7 +98,7 @@ mixin BridgeHomeWidgetsMixin
                         textAlign: TextAlign.right,
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(40),
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                           color: AppColorTokens.of(context).textPrimary,
                         ),
                       ),
@@ -167,7 +167,7 @@ mixin BridgeHomeWidgetsMixin
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(28),
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                   color: AppColorTokens.of(context).textPrimary,
                 ),
               ),
@@ -236,7 +236,7 @@ mixin BridgeHomeWidgetsMixin
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(30),
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                   color: AppColorTokens.of(context).textPrimary,
                 ),
               ),
@@ -331,7 +331,7 @@ mixin BridgeHomeWidgetsMixin
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(26),
                         fontWeight: selected
-                            ? FontWeight.bold
+                            ? FontWeight.w600
                             : FontWeight.normal,
                         color: selected
                             ? AppThemeUtils.getColorByKey(

@@ -63,7 +63,7 @@ extension _AAHomePageWidgets on _AAHomePageState {
                       S.of(context).g_key_aa_smart_accounts,
                       style: TextStyle(
                         fontSize: sp(32),
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                         color: _mainTextColor(),
                       ),
                     ),
@@ -308,7 +308,7 @@ extension _AAHomePageWidgets on _AAHomePageState {
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   fontSize: sp(30),
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                   color: _mainTextColor(),
                 ),
               ),
@@ -406,7 +406,7 @@ extension _AAHomePageWidgets on _AAHomePageState {
                         '${i + 1}',
                         style: TextStyle(
                           fontSize: sp(20),
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                           color: _kAccentColor,
                         ),
                       ),

@@ -147,7 +147,7 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
               'NEW',
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(18),
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
                 color: Colors.white,
               ),
             ),

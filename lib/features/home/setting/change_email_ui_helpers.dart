@@ -32,7 +32,7 @@ Widget changeEmailCodeField({
     ],
     style: TextStyle(
       fontSize: 24.sp,
-      fontWeight: FontWeight.w700,
+      fontWeight: FontWeight.w600,
       color: textColor,
       letterSpacing: 8,
     ),

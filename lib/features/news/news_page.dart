@@ -112,7 +112,7 @@ class _NewsPageState extends State<NewsPage> {
                     style: TextStyle(
                       color: AppColorTokens.of(context).textItem,
                       fontSize: ScreenUtil().setSp(30.0),
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                   SizedBox(height: ScreenUtil().setWidth(12.0)),

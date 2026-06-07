@@ -54,7 +54,7 @@ extension _WalletCoinAddAllNetworkDialog on _WalletCoinAddAllState {
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(30.0),
                 color: AppColorTokens.of(context).textPrimary,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),
@@ -121,7 +121,7 @@ extension _WalletCoinAddAllNetworkDialog on _WalletCoinAddAllState {
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(30.0),
                     color: AppColorTokens.of(context).textPrimary,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
                 Text(

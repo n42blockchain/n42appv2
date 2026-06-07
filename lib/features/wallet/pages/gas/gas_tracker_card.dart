@@ -34,7 +34,7 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
                   S.of(context).g_key_gas_realtime_prices,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(30),
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                     color: AppColorTokens.of(context).textPrimary,
                   ),
                 ),

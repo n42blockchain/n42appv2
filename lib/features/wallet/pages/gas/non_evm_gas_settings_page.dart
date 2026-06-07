@@ -184,7 +184,7 @@ class _NonEvmGasSettingsPageState extends State<NonEvmGasSettingsPage> {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(28),
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                     color: mainText,
                   ),
                 ),

@@ -51,7 +51,7 @@ class _AlertsOverviewSheet extends StatelessWidget {
             S.of(context).g_key_gas_alert,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(32),
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w600,
               color: mainText,
             ),
           ),
@@ -272,7 +272,7 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
             '${widget.network.name} — ${S.of(context).g_key_gas_alert}',
             style: TextStyle(
               fontSize: ScreenUtil().setSp(30),
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w600,
               color: mainText,
             ),
           ),

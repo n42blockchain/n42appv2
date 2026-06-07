@@ -75,7 +75,7 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
           style: TextStyle(
             color: textColor,
             fontSize: 18.sp,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
           ),
         ),
         centerTitle: false,
@@ -237,7 +237,7 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
         title: isTouched ? '${pct.toStringAsFixed(1)}%' : '',
         titleStyle: TextStyle(
           fontSize: 12.sp,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w600,
           color: Colors.white,
           shadows: const [Shadow(blurRadius: 4, color: Colors.black26)],
         ),
@@ -375,7 +375,7 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
             highlighted.symbol.toUpperCase(),
             style: TextStyle(
               fontSize: 13.sp,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w600,
               color: textColor,
             ),
           ),
@@ -397,7 +397,7 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
           fmtUsd(totalValue),
           style: TextStyle(
             fontSize: 13.sp,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
             color: textColor,
           ),
         ),
@@ -425,7 +425,7 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
       title,
       style: TextStyle(
         fontSize: 15.sp,
-        fontWeight: FontWeight.bold,
+        fontWeight: FontWeight.w600,
         color: textColor,
       ),
     );

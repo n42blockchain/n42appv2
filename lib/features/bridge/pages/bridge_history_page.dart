@@ -275,7 +275,7 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
           amountText,
           style: TextStyle(
             fontSize: ScreenUtil().setSp(28),
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
             color: mainColor,
           ),
         ),

@@ -190,7 +190,7 @@ class _EnsCreateSubdomainSheetState extends State<EnsCreateSubdomainSheet> {
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(32),
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ),

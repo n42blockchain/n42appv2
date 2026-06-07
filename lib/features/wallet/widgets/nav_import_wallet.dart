@@ -16,7 +16,7 @@ class NavImportWallet extends StatelessWidget {
           S.of(context).g_key_ex_keystore_16,
           style: TextStyle(
             color: AppColorTokens.of(context).textPrimary,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
             fontSize: ScreenUtil().setSp(36.0),
           ),
         ),

@@ -35,7 +35,7 @@ Future<bool?> tipsDialog4(
                       style: TextStyle(
                         color: AppColorTokens.of(context).textPrimary,
                         fontSize: ScreenUtil().setSp(30),
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),

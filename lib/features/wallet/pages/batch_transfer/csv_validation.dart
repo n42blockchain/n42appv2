@@ -187,7 +187,7 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
                 const SizedBox(height: 12),
                 const Text(
                   'Issues:',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: TextStyle(fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(height: 6),
                 ConstrainedBox(

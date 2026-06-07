@@ -167,7 +167,7 @@ class _PresetCard extends StatelessWidget {
             presetInfo.label,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(26),
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               color: AppColorTokens.of(context).textPrimary,
             ),
           ),

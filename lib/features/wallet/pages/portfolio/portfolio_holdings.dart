@@ -54,7 +54,7 @@ class HoldingRow extends StatelessWidget {
                 '$rank',
                 style: TextStyle(
                   fontSize: 12.sp,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                   color: sliceColor,
                 ),
               ),

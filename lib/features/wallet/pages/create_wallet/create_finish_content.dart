@@ -23,7 +23,7 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
         style: TextStyle(
           fontSize: ScreenUtil().setSp(56.0),
           color: _themeColor(AppThemeKeys.mainTextColor.name),
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w600,
         ),
         textAlign: textAlign,
       ),
@@ -42,7 +42,7 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
         style: TextStyle(
           fontSize: ScreenUtil().setSp(32.0),
           color: _themeColor(colorKey ?? AppThemeKeys.mainTextColor6.name),
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w600,
         ),
         textAlign: textAlign ?? TextAlign.center,
       ),
@@ -166,7 +166,7 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(40.0),
                     color: _themeColor(AppThemeKeys.mainTextColor.name),
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
@@ -306,7 +306,7 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
     final hintStyle = TextStyle(
       fontSize: ScreenUtil().setSp(32.0),
       color: _themeColor(AppThemeKeys.mainTextColor7.name),
-      fontWeight: FontWeight.bold,
+      fontWeight: FontWeight.w600,
     );
     final s = S.of(context);
 

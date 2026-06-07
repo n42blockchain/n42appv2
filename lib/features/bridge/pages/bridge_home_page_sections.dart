@@ -45,7 +45,7 @@ mixin BridgeHomeSectionsMixin
           S.of(context).g_key_bridge_route,
           style: TextStyle(
             fontSize: ScreenUtil().setSp(28),
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
             color: AppColorTokens.of(context).textPrimary,
           ),
         ),
@@ -151,7 +151,7 @@ mixin BridgeHomeSectionsMixin
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(20),
                         color: tagColor,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
@@ -187,7 +187,7 @@ mixin BridgeHomeSectionsMixin
                         '$receiveAmt ${provider.toToken?.symbol ?? ''}',
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(30),
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                           color: AppColorTokens.of(context).textPrimary,
                         ),
                       ),

@@ -44,7 +44,7 @@ class _ImportKeystoreState extends ConsumerState<ImportKeystore> {
 
   TextStyle _sectionLabelStyle() => TextStyle(
     color: AppColorTokens.of(context).textPrimary,
-    fontWeight: FontWeight.bold,
+    fontWeight: FontWeight.w600,
     fontSize: ScreenUtil().setSp(32),
   );
 

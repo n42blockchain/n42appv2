@@ -49,7 +49,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
               S.of(context).g_key_stake_liquid_staking_label,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(32),
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
                 color: AppColorTokens.of(context).textPrimary,
               ),
             ),
@@ -65,7 +65,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
                   TextSpan(
                     text: widget.protocol.liquidTokenSymbol,
                     style: TextStyle(
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                       color: AppColorTokens.of(context).brand,
                     ),
                   ),

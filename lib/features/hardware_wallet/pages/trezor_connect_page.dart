@@ -220,7 +220,7 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
                 number,
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(22),
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                   color: blueColor,
                 ),
               ),

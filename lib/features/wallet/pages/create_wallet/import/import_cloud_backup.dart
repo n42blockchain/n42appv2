@@ -328,7 +328,7 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
     text,
     style: TextStyle(
       color: _color(AppThemeKeys.mainTextColor),
-      fontWeight: FontWeight.bold,
+      fontWeight: FontWeight.w600,
       fontSize: ScreenUtil().setSp(32),
     ),
   );

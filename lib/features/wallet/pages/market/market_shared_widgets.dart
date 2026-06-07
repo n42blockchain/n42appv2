@@ -330,7 +330,7 @@ class _FearGreedBadge extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 18.sp,
                   color: color,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
               SizedBox(width: 4.w),
@@ -345,7 +345,7 @@ class _FearGreedBadge extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 16.sp,
                     color: color,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),

@@ -37,7 +37,7 @@ extension _BrowserPageWidgets on _BrowserPageState {
                 color: _mainTextColor(),
                 fontSize: sw(26.0),
                 fontWeight: bValue.titleFocusNode?.hasFocus ?? false
-                    ? FontWeight.bold
+                    ? FontWeight.w600
                     : FontWeight.normal,
               ),
               leftWidget: _buildSecurityIcon(bValue),

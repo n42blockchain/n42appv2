@@ -68,7 +68,7 @@ mixin _TransactionHistoryWidgetsMixin on _TransactionHistoryLogicMixin {
       children: [
         Text(
           S.of(ctx).g_key_filter,
-          style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600),
         ),
         const Spacer(),
         TextButton(

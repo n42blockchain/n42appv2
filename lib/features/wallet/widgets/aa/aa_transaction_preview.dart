@@ -84,7 +84,7 @@ class AATransactionPreview extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 32.sp,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                     color: _color(context, AppThemeKeys.mainTextColor),
                   ),
                 ),
@@ -151,7 +151,7 @@ class AATransactionPreview extends StatelessWidget {
                 data.amount,
                 style: TextStyle(
                   fontSize: 48.sp,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                   color: _color(context, AppThemeKeys.mainTextColor),
                 ),
               ),
@@ -298,7 +298,7 @@ class AATransactionPreview extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontSize: 26.sp,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                       color: Colors.green,
                     ),
                   ),
@@ -358,7 +358,7 @@ class AATransactionPreview extends StatelessWidget {
                         '${i + 1}',
                         style: TextStyle(
                           fontSize: 18.sp,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                           color: blueColor,
                         ),
                       ),

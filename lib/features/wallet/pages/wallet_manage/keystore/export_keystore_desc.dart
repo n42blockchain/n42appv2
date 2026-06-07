@@ -55,7 +55,7 @@ class _ExportKeystoreDescState extends State<ExportKeystoreDesc> {
                       style: TextStyle(
                         color: mainText,
                         fontSize: ScreenUtil().setSp(36),
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     SizedBox(height: ScreenUtil().setWidth(16)),

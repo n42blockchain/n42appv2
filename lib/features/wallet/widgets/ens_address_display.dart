@@ -416,7 +416,7 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
                             _ensName!,
                             style: TextStyle(
                               fontSize: fontSize,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w600,
                               color: textColor,
                             ),
                             maxLines: 1,
@@ -501,7 +501,7 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
           initial,
           style: TextStyle(
             fontSize: size * 0.5,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
             color: blueColor,
           ),
         ),

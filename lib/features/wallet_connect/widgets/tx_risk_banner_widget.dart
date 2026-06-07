@@ -61,7 +61,7 @@ class TxRiskBannerWidget extends StatelessWidget {
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: ScreenUtil().setSp(20),
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
@@ -202,7 +202,7 @@ class _FieldRow extends StatelessWidget {
                     ? badgeColor
                     : AppColorTokens.of(context).textPrimary,
                 fontWeight: field.isHighlighted
-                    ? FontWeight.bold
+                    ? FontWeight.w600
                     : FontWeight.normal,
               ),
               textAlign: TextAlign.right,

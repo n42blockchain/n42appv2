@@ -304,7 +304,7 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
                   '$rank',
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(22),
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                     color: rank <= 3 ? Colors.white : textColor,
                   ),
                 ),
@@ -413,7 +413,7 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
           validator.name.substring(0, 1).toUpperCase(),
           style: TextStyle(
             color: Colors.white,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
             fontSize: ScreenUtil().setSp(24),
           ),
         ),

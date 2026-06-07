@@ -162,7 +162,7 @@ mixin _AddressBookListItemMixin on State<AddressBookList> {
             style: TextStyle(
               color: Colors.white,
               fontSize: ScreenUtil().setSp(30),
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ),

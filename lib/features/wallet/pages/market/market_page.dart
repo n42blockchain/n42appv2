@@ -516,7 +516,7 @@ class _MarketPageState extends ConsumerState<MarketPage>
                 'Markets',
                 style: TextStyle(
                   fontSize: 32.sp,
-                  //fontWeight: FontWeight.bold,
+                  //fontWeight: FontWeight.w600,
                   color: textColor,
                   letterSpacing: -0.5,
                 ),
@@ -546,7 +546,7 @@ class _MarketPageState extends ConsumerState<MarketPage>
                       'Markets',
                       style: TextStyle(
                         fontSize: 32.sp,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                         color: textColor,
                         letterSpacing: -0.5,
                       ),
@@ -574,7 +574,7 @@ class _MarketPageState extends ConsumerState<MarketPage>
           tabAlignment: TabAlignment.start,
           labelStyle: TextStyle(
             fontSize: 24.sp,
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w600,
             letterSpacing: 0.2,
           ),
           unselectedLabelStyle: TextStyle(

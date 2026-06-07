@@ -65,7 +65,7 @@ class _CreateWalletButtonState extends State<CreateWalletButton> {
             style: TextStyle(
               color: mainText,
               fontSize: ScreenUtil().setSp(36.0),
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ),

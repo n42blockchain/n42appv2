@@ -244,7 +244,7 @@ mixin BridgeHomeLogicMixin on ConsumerState<BridgeHomePage> {
                     S.of(context).g_key_bridge_select_token,
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(32),
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                       color: AppColorTokens.of(context).textPrimary,
                     ),
                   ),

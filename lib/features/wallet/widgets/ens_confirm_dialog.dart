@@ -83,7 +83,7 @@ class EnsConfirmDialog extends StatelessWidget {
               S.of(context).g_key_ens_confirm_title,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(32),
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
                 color: mainTextColor,
               ),
             ),

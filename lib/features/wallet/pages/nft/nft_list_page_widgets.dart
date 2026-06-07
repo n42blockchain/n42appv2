@@ -250,7 +250,7 @@ extension _NftListPageWidgets on _NftListPageState {
                 'BTC',
                 style: TextStyle(
                   fontSize: su.setSp(18),
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                   color: Colors.white,
                 ),
               ),

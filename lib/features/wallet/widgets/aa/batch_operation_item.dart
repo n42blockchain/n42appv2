@@ -146,7 +146,7 @@ class BatchOperationItem extends StatelessWidget {
                 '${index + 1}',
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(20),
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                   color: opColor,
                 ),
               ),

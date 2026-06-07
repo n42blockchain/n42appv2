@@ -87,7 +87,7 @@ class _WalletTitleButton extends StatelessWidget {
               style: TextStyle(
                 color: blueColor,
                 fontSize: su.setSp(30),
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
               ),
             ),
             SizedBox(
@@ -231,7 +231,7 @@ class _WalletConnectButton extends ConsumerWidget {
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: ScreenUtil().setSp(18),
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                     ),
                     textAlign: TextAlign.center,
                   ),

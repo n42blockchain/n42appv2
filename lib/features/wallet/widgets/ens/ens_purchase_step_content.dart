@@ -193,7 +193,7 @@ class EnsPurchaseStepContent extends StatelessWidget {
                     '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}',
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(32),
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                       color: textColor,
                     ),
                   ),
@@ -245,7 +245,7 @@ class EnsPurchaseStepContent extends StatelessWidget {
             S.of(context).g_key_ens_success,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(32),
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w600,
               color: Colors.green,
             ),
           ),
@@ -300,7 +300,7 @@ class EnsPurchaseStepContent extends StatelessWidget {
             S.of(context).g_key_ens_failed,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(28),
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w600,
               color: Colors.red,
             ),
           ),

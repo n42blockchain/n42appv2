@@ -145,7 +145,7 @@ class _CreateMpcWalletState extends ConsumerState<CreateMpcWallet> {
                 'No Seed Phrase Needed',
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(40),
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                   color: textColor,
                 ),
               ),

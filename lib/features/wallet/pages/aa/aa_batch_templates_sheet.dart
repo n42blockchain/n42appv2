@@ -59,7 +59,7 @@ class _BatchTemplatesSheetState extends State<BatchTemplatesSheet> {
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(32),
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                         color: AppColorTokens.of(context).textPrimary,
                       ),
                     ),

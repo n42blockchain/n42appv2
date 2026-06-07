@@ -93,7 +93,7 @@ class ProfileHomePage extends ConsumerWidget {
                   'My Wallet',
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(36),
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                     color: AppColorTokens.of(context).textPrimary,
                   ),
                 ),

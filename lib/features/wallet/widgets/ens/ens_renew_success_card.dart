@@ -79,7 +79,7 @@ class _EnsRenewSuccessCardState extends State<EnsRenewSuccessCard> {
             S.of(context).g_key_ens_renew_success,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(28),
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w600,
               color: Colors.green,
             ),
           ),

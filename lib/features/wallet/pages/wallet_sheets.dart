@@ -61,7 +61,7 @@ class _AddressSheetHeader extends StatelessWidget {
               style: TextStyle(
                 color: AppColorTokens.of(context).textPrimary,
                 fontSize: ScreenUtil().setSp(36.0),
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
               ),
               overflow: TextOverflow.ellipsis,
               maxLines: 1,

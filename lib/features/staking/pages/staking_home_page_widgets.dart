@@ -165,7 +165,7 @@ mixin StakingHomePageWidgetsMixin
           protocol.name,
           style: TextStyle(
             fontSize: ScreenUtil().setSp(32),
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
             color: _themeColor(AppThemeKeys.mainTextColor),
           ),
         ),
@@ -203,7 +203,7 @@ mixin StakingHomePageWidgetsMixin
                 '${(liveApys[protocol.id] ?? protocol.apy).toStringAsFixed(1)}%',
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(32),
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                   color: Colors.green,
                 ),
               ),
@@ -338,7 +338,7 @@ mixin StakingHomePageWidgetsMixin
           position.protocol.name,
           style: TextStyle(
             fontSize: ScreenUtil().setSp(30),
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
             color: _themeColor(AppThemeKeys.mainTextColor),
           ),
         ),

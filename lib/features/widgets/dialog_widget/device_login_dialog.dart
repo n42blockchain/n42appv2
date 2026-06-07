@@ -40,7 +40,7 @@ Future<bool?> deviceLoginDialog(
                     S.of(context).device_login_title,
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(32),
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                       color: AppColorTokens.of(context).textItem,
                     ),
                   ),

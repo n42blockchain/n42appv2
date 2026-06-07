@@ -82,7 +82,7 @@ mixin _SectionsMixin on _WidgetsMixin {
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(30),
                 color: AppColorTokens.of(context).textPrimary,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
               ),
             ),
             SizedBox(height: ScreenUtil().setWidth(40)),

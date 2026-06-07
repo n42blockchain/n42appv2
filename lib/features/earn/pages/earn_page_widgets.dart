@@ -106,7 +106,7 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
                 : '\$${earnState.totalStakedUsd.toStringAsFixed(2)}',
             style: TextStyle(
               fontSize: ScreenUtil().setSp(48),
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w600,
               color: Colors.white,
             ),
           ),
@@ -275,7 +275,7 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
                               badge,
                               style: TextStyle(
                                 fontSize: ScreenUtil().setSp(16),
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w600,
                                 color: Colors.white,
                                 letterSpacing: 0.5,
                               ),
@@ -290,7 +290,7 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
                           title,
                           style: TextStyle(
                             fontSize: ScreenUtil().setSp(28),
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w600,
                             color: Colors.white,
                           ),
                           maxLines: 1,

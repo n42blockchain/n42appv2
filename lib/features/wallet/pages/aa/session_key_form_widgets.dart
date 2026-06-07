@@ -172,7 +172,7 @@ class SessionKeyRiskSummary extends StatelessWidget {
                   S.of(context).g_key_aa_permission,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(24),
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     color: AppColorTokens.of(context).textPrimary,
                   ),
                   overflow: TextOverflow.ellipsis,

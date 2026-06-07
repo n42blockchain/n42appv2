@@ -95,7 +95,7 @@ class _BalanceCard extends StatelessWidget {
               data: (balance) => Text(
                 '\$${balance.toStringAsFixed(2)}',
                 style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
               loading: () => const SizedBox(
@@ -105,7 +105,7 @@ class _BalanceCard extends StatelessWidget {
               error: (_, _) => Text(
                 '\$0.00',
                 style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                   color: Colors.grey,
                 ),
               ),
@@ -188,7 +188,7 @@ class _CoinListItem extends StatelessWidget {
         children: [
           Text(
             '${coin.balance.toStringAsFixed(4)} ${coin.symbol}',
-            style: const TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.w600),
           ),
           Text(
             '\$${coin.balanceUsd.toStringAsFixed(2)}',

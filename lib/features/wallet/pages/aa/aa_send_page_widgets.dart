@@ -86,7 +86,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
                   'AA',
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(20),
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                     color: Colors.green,
                   ),
                 ),
@@ -195,7 +195,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
                 ),
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(32),
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ),

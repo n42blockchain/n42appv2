@@ -329,7 +329,7 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
     text,
     style: TextStyle(
       color: AppColorTokens.of(context).textPrimary,
-      fontWeight: FontWeight.bold,
+      fontWeight: FontWeight.w600,
       fontSize: ScreenUtil().setSp(32),
     ),
   );

@@ -162,7 +162,7 @@ class EnsOwnedListItem extends StatelessWidget {
           ownedEns.name.isNotEmpty ? ownedEns.name[0].toUpperCase() : 'E',
           style: TextStyle(
             fontSize: ScreenUtil().setSp(24),
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
             color: AppColorTokens.of(context).brand,
           ),
         ),

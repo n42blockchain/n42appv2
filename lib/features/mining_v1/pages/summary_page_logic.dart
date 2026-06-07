@@ -108,7 +108,7 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
     final boldStyle = TextStyle(
       fontSize: ScreenUtil().setSp(22),
       color: AppColorTokens.of(context).textPrimary,
-      fontWeight: FontWeight.bold,
+      fontWeight: FontWeight.w600,
     );
     final spacerStyle = TextStyle(
       fontSize: ScreenUtil().setSp(10),

@@ -255,7 +255,7 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
               style: TextStyle(
                 color: _tc(AppThemeKeys.mainTextColor.name),
                 fontSize: ScreenUtil().setSp(32.0),
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
               ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,

@@ -114,7 +114,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
                 chain.symbol.substring(0, 1),
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(16),
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                   color: chain.color,
                 ),
               ),
@@ -170,7 +170,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
                 'ENS',
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(24),
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                   color: blueColor,
                 ),
               ),
@@ -185,7 +185,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
                   S.of(context).g_key_ens_service,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(32),
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                     color: _themeColor(AppThemeKeys.mainTextColor.name),
                   ),
                 ),
@@ -311,7 +311,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(30),
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                   color: _themeColor(AppThemeKeys.mainTextColor.name),
                 ),
               ),

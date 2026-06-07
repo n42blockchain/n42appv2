@@ -40,7 +40,7 @@ mixin EarnPageSectionsMixin
             S.of(context).g_key_earn_more,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(30),
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w600,
               color: AppColorTokens.of(context).textPrimary,
             ),
           ),
@@ -121,7 +121,7 @@ mixin EarnPageSectionsMixin
             s.g_key_earn_quick_tools,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(30),
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w600,
               color: AppColorTokens.of(context).textPrimary,
             ),
           ),

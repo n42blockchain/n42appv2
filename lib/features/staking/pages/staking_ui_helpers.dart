@@ -25,7 +25,7 @@ Widget stakingDefaultLogo(BuildContext context, StakingProtocol protocol) {
         protocol.chainSymbol.substring(0, 1),
         style: TextStyle(
           color: Colors.white,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w600,
           fontSize: ScreenUtil().setSp(28),
         ),
       ),
@@ -107,7 +107,7 @@ Widget _stakingStatItem(String label, String value) {
         value,
         style: TextStyle(
           fontSize: ScreenUtil().setSp(36),
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w600,
           color: Colors.white,
         ),
       ),
@@ -161,7 +161,7 @@ Widget stakingSectionHeader(BuildContext context, String title) {
       title,
       style: TextStyle(
         fontSize: ScreenUtil().setSp(28),
-        fontWeight: FontWeight.bold,
+        fontWeight: FontWeight.w600,
         color: AppColorTokens.of(context).textPrimary,
       ),
     ),

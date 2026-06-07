@@ -119,7 +119,7 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(30),
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                         color: mainText,
                       ),
                     ),
@@ -229,7 +229,7 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
                 label,
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(24),
-                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
                   color: isSelected ? blueColor : mainText,
                 ),
               ),
@@ -333,7 +333,7 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
           value,
           style: TextStyle(
             fontSize: ScreenUtil().setSp(26),
-            fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
+            fontWeight: isTotal ? FontWeight.w600 : FontWeight.normal,
             color: valueColor,
           ),
         ),
@@ -419,7 +419,7 @@ class GasSelectorCompact extends StatelessWidget {
                       _getSpeedLabel(context, gasEstimate.selectedSpeed),
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(28),
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                         color: mainText,
                       ),
                     ),

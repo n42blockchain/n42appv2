@@ -102,7 +102,7 @@ class _HardwareWalletPageState extends State<HardwareWalletPage> {
       title,
       style: TextStyle(
         fontSize: ScreenUtil().setSp(30),
-        fontWeight: FontWeight.bold,
+        fontWeight: FontWeight.w600,
         color: AppColorTokens.of(context).textPrimary,
       ),
     );

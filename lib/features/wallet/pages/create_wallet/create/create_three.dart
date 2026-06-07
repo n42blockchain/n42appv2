@@ -105,7 +105,7 @@ class _CreateThreeState extends State<CreateThree> {
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(40.0),
                           color: mainText,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),

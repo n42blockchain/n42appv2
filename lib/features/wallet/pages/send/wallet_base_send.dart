@@ -260,7 +260,7 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
                             style: TextStyle(
                               fontSize: ScreenUtil().setWidth(28.0),
                               color: _themeColor(AppThemeKeys.mainTextColor),
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),

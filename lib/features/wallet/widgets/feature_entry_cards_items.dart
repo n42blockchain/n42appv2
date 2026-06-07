@@ -176,7 +176,7 @@ class EnsEntryCard extends StatelessWidget {
         'ENS',
         style: TextStyle(
           fontSize: ScreenUtil().setSp(24),
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w600,
           color: Colors.white,
         ),
       ),

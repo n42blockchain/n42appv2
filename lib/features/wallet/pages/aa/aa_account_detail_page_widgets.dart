@@ -49,7 +49,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
                       widget.account.displayName,
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(32),
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                         color: _mainText,
                       ),
                     ),

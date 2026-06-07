@@ -185,7 +185,7 @@ class NftInfoBoard extends StatelessWidget {
           tokenName ?? 'NFT #${tokenId ?? "Unknown"}',
           style: TextStyle(
             fontSize: ScreenUtil().setSp(36),
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
             color: _mainTextColor(context),
           ),
           maxLines: 3,

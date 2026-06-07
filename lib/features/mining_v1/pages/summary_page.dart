@@ -79,7 +79,7 @@ class _SummaryPageState extends State<SummaryPage>
                   style: TextStyle(
                     color: AppColorTokens.of(context).textPrimary,
                     fontSize: ScreenUtil().setSp(30),
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
                 SizedBox(height: ScreenUtil().setWidth(44)),
@@ -92,7 +92,7 @@ class _SummaryPageState extends State<SummaryPage>
                   style: TextStyle(
                     color: AppColorTokens.of(context).textPrimary,
                     fontSize: ScreenUtil().setSp(30),
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
                 SizedBox(height: ScreenUtil().setWidth(44)),
@@ -104,7 +104,7 @@ class _SummaryPageState extends State<SummaryPage>
                   style: TextStyle(
                     color: AppColorTokens.of(context).textPrimary,
                     fontSize: ScreenUtil().setSp(30),
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
                 SizedBox(height: ScreenUtil().setWidth(44)),

@@ -191,7 +191,7 @@ class _TradeEntrySheetState extends State<_TradeEntrySheet> {
                         '${s.g_pnl_add_trade} · ${widget.symbol.toUpperCase()}',
                         style: TextStyle(
                           fontSize: 30.sp,
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w600,
                           color: textColor,
                         ),
                       ),

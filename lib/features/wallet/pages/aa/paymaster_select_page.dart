@@ -247,7 +247,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
             sym,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(18),
-              fontWeight: isCurrent ? FontWeight.w700 : FontWeight.normal,
+              fontWeight: isCurrent ? FontWeight.w600 : FontWeight.normal,
               color: isCurrent
                   ? blueColor
                   : _themeColor(AppThemeKeys.itemSubtitleTextColor),
@@ -438,7 +438,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
         S.of(context).g_key_aa_free,
         style: TextStyle(
           fontSize: ScreenUtil().setSp(20),
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w600,
           color: Colors.green,
         ),
       ),

@@ -145,7 +145,7 @@ class BatchResultSheet extends StatelessWidget {
               S.of(context).g_key_140,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(36),
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
                 color: Colors.green,
               ),
             ),
@@ -274,7 +274,7 @@ class BatchHelpDialog extends StatelessWidget {
             const SizedBox(height: 16),
             Text(
               S.of(context).g_key_batch_csv_format,
-              style: TextStyle(fontWeight: FontWeight.bold, color: textColor),
+              style: TextStyle(fontWeight: FontWeight.w600, color: textColor),
             ),
             const SizedBox(height: 8),
             Container(
@@ -295,7 +295,7 @@ class BatchHelpDialog extends StatelessWidget {
             const SizedBox(height: 16),
             Text(
               'Tips',
-              style: TextStyle(fontWeight: FontWeight.bold, color: textColor),
+              style: TextStyle(fontWeight: FontWeight.w600, color: textColor),
             ),
             const SizedBox(height: 8),
             Text(

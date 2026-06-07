@@ -252,7 +252,7 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
                   status.text,
                   style: TextStyle(
                     fontSize: su.setSp(28),
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                     color: status.color,
                   ),
                 ),
@@ -288,7 +288,7 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(30),
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
                 color: _themeColor(context, AppThemeKeys.mainTextColor),
               ),
             ),
@@ -439,7 +439,7 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
                 '${Decimal.parse(formatted.toString())} ${_gasEstimate.unit}',
                 style: TextStyle(
                   fontSize: su.setSp(32),
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                   color: _themeColor(context, AppThemeKeys.mainBlueColor),
                 ),
               ),

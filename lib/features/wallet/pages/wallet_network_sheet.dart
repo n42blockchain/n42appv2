@@ -60,7 +60,7 @@ class _NetworkSheetHeader extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 fontSize: scr.setSp(32),
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
                 color: AppColorTokens.of(context).textPrimary,
               ),
             ),
@@ -151,7 +151,7 @@ class _NetworkAllItem extends StatelessWidget {
                 style: TextStyle(
                   fontSize: scr.setSp(30.0),
                   color: AppColorTokens.of(context).textPrimary,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ),
@@ -216,7 +216,7 @@ class _NetworkCoinItem extends StatelessWidget {
                     style: TextStyle(
                       fontSize: scr.setSp(30.0),
                       color: AppColorTokens.of(context).textPrimary,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,

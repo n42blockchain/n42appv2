@@ -58,7 +58,7 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
                           : s.g_key_hw_not_connected_label,
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(32),
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                         color: isConnected ? Colors.white : mainTextColor,
                       ),
                     ),

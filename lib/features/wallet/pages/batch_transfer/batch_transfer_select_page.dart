@@ -69,7 +69,7 @@ class BatchTransferSelectPage extends ConsumerWidget {
           S.of(context).g_key_batch_select_token,
           style: TextStyle(
             fontSize: ScreenUtil().setSp(28),
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
             color: AppColorTokens.of(context).textPrimary,
           ),
         ),
@@ -146,7 +146,7 @@ class BatchTransferSelectPage extends ConsumerWidget {
                   S.of(context).g_key_batch_title,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(28),
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                     color: AppColorTokens.of(context).textPrimary,
                   ),
                 ),
@@ -198,7 +198,7 @@ class BatchTransferSelectPage extends ConsumerWidget {
                   chainSymbol.isNotEmpty ? chainSymbol[0] : '?',
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(24),
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                     color: chainColor,
                   ),
                 ),

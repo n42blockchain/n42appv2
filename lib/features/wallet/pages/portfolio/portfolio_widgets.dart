@@ -57,7 +57,7 @@ class SummaryCard extends StatelessWidget {
             value,
             style: TextStyle(
               fontSize: 17.sp,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w600,
               color: valueColor,
             ),
             maxLines: 1,
@@ -112,7 +112,7 @@ class LegendItem extends StatelessWidget {
               symbol,
               style: TextStyle(
                 fontSize: 12.sp,
-                fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+                fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
                 color: isActive ? textColor : textColor.withAlpha(178),
               ),
               overflow: TextOverflow.ellipsis,

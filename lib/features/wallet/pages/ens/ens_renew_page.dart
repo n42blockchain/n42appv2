@@ -206,7 +206,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
             ens.name,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(36),
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w600,
               color: _color(AppThemeKeys.mainTextColor),
             ),
           ),

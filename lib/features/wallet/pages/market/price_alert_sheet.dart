@@ -202,7 +202,7 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
                             .g_alert_title(widget.symbol.toUpperCase()),
                         style: TextStyle(
                           fontSize: 17.sp,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                           color: textColor,
                         ),
                       ),
