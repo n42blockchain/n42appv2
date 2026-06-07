@@ -117,9 +117,8 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   S.of(context).g_lock_key26,
-                  style: TextStyle(
+                  style: AppTypography.body.copyWith(
                     color: AppColorTokens.of(context).textPrimary,
-                    fontSize: ScreenUtil().setSp(30.0),
                   ),
                 ),
               ),
@@ -159,8 +158,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                       ),
                       child: Text(
                         S.of(context).g_lock_key27,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(24.0),
+                        style: AppTypography.caption.copyWith(
                           color: AppColorTokens.of(context).textSubtitle,
                         ),
                       ),
@@ -178,8 +176,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                               flex: 1,
                               child: Text(
                                 S.of(context).g_lock_key7,
-                                style: TextStyle(
-                                  fontSize: ScreenUtil().setSp(28),
+                                style: AppTypography.body.copyWith(
                                   color: AppColorTokens.of(context).danger,
                                 ),
                               ),
@@ -194,8 +191,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                                 S.of(context).g_face_5,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontSize: ScreenUtil().setSp(28),
+                                style: AppTypography.body.copyWith(
                                   color: AppColorTokens.of(context).brand,
                                 ),
                               ),
@@ -241,8 +237,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                       ),
                       child: Text(
                         S.of(context).g_lock_key29,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(24.0),
+                        style: AppTypography.caption.copyWith(
                           color: AppColorTokens.of(context).textSubtitle,
                         ),
                       ),
@@ -278,8 +273,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                                 S.of(context).g_lock_key22,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontSize: ScreenUtil().setSp(28),
+                                style: AppTypography.body.copyWith(
                                   color: AppColorTokens.of(context).brand,
                                 ),
                               ),
@@ -325,8 +319,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                       ),
                       child: Text(
                         S.of(context).g_google_auth_key5,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(24.0),
+                        style: AppTypography.caption.copyWith(
                           color: AppColorTokens.of(context).textSubtitle,
                         ),
                       ),

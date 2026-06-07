@@ -64,9 +64,8 @@ class _PersonalSettingState extends State<PersonalSetting> {
       padding: EdgeInsets.only(top: ScreenUtil().setWidth(40.0)),
       child: Text(
         text,
-        style: TextStyle(
+        style: AppTypography.body.copyWith(
           color: AppColorTokens.of(context).brand,
-          fontSize: ScreenUtil().setSp(30.0),
         ),
       ),
     );

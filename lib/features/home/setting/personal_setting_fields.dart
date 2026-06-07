@@ -7,7 +7,7 @@ extension on _PersonalSettingState {
   Color get _subtitleColor => AppColorTokens.of(context).textSubtitle;
 
   TextStyle get _subtitleStyle =>
-      TextStyle(color: _subtitleColor, fontSize: ScreenUtil().setSp(30.0));
+      AppTypography.body.copyWith(color: _subtitleColor);
 
   // ── Avatar (只读) ──────────────────────────────────────────────────────────
 
@@ -95,9 +95,8 @@ extension on _PersonalSettingState {
             )
           : Text(
               _ensName ?? '—',
-              style: TextStyle(
+              style: AppTypography.body.copyWith(
                 color: _ensName != null ? _blueColor : _subtitleColor,
-                fontSize: ScreenUtil().setSp(30.0),
               ),
             ),
     );

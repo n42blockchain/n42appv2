@@ -70,10 +70,7 @@ class _GoogleAuthSetupPageState extends State<GoogleAuthSetupPage> {
               // 说明文字
               Text(
                 S.of(context).g_google_auth_key2,
-                style: TextStyle(
-                  color: mainText,
-                  fontSize: ScreenUtil().setSp(28.0),
-                ),
+                style: AppTypography.body.copyWith(color: mainText),
               ),
               SizedBox(height: ScreenUtil().setWidth(30.0)),
               // QR 码
@@ -100,10 +97,7 @@ class _GoogleAuthSetupPageState extends State<GoogleAuthSetupPage> {
                   children: [
                     Text(
                       S.of(context).g_google_auth_key3,
-                      style: TextStyle(
-                        color: mainBlue,
-                        fontSize: ScreenUtil().setSp(26.0),
-                      ),
+                      style: AppTypography.bodySm.copyWith(color: mainBlue),
                     ),
                     Icon(
                       _showManualKey
@@ -142,9 +136,8 @@ class _GoogleAuthSetupPageState extends State<GoogleAuthSetupPage> {
                         Expanded(
                           child: Text(
                             _secret,
-                            style: TextStyle(
+                            style: AppTypography.bodySm.copyWith(
                               color: mainText,
-                              fontSize: ScreenUtil().setSp(26.0),
                               letterSpacing: 2,
                               fontFamily: 'monospace',
                             ),
@@ -164,10 +157,7 @@ class _GoogleAuthSetupPageState extends State<GoogleAuthSetupPage> {
               // 验证码输入
               Text(
                 S.of(context).g_google_auth_key4,
-                style: TextStyle(
-                  color: subtitleColor,
-                  fontSize: ScreenUtil().setSp(26.0),
-                ),
+                style: AppTypography.bodySm.copyWith(color: subtitleColor),
               ),
               SizedBox(height: ScreenUtil().setWidth(12.0)),
               Container(
@@ -182,18 +172,18 @@ class _GoogleAuthSetupPageState extends State<GoogleAuthSetupPage> {
                   controller: _codeController,
                   keyboardType: TextInputType.number,
                   maxLength: 6,
-                  style: TextStyle(
+                  style: AppTypography.headline.copyWith(
                     color: mainText,
-                    fontSize: ScreenUtil().setSp(32.0),
+                    fontWeight: FontWeight.w400,
                     letterSpacing: 6,
                   ),
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     counterText: '',
                     hintText: '000000',
-                    hintStyle: TextStyle(
+                    hintStyle: AppTypography.headline.copyWith(
                       color: subtitleColor,
-                      fontSize: ScreenUtil().setSp(32.0),
+                      fontWeight: FontWeight.w400,
                       letterSpacing: 6,
                     ),
                   ),
@@ -210,10 +200,7 @@ class _GoogleAuthSetupPageState extends State<GoogleAuthSetupPage> {
                 SizedBox(height: ScreenUtil().setWidth(8.0)),
                 Text(
                   _errorMessage,
-                  style: TextStyle(
-                    color: errorColor,
-                    fontSize: ScreenUtil().setSp(24.0),
-                  ),
+                  style: AppTypography.caption.copyWith(color: errorColor),
                 ),
               ],
               SizedBox(height: ScreenUtil().setWidth(60.0)),
@@ -233,12 +220,11 @@ class _GoogleAuthSetupPageState extends State<GoogleAuthSetupPage> {
                   ),
                   child: Text(
                     S.of(context).g_key_78,
-                    style: TextStyle(
+                    style: AppTypography.body.copyWith(
                       color: AppThemeUtils.getColorByKey(
                         context,
                         AppThemeKeys.mainButtonTextColor.name,
                       ),
-                      fontSize: ScreenUtil().setSp(30.0),
                     ),
                   ),
                 ),

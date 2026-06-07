@@ -90,10 +90,8 @@ extension on _HomeDrawPageState {
                                   : S.of(context).g_key_login,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
+                              style: AppTypography.headline.copyWith(
                                 color: AppColorTokens.of(context).textPrimary,
-                                fontWeight: FontWeight.w600,
-                                fontSize: ScreenUtil().setSp(32),
                                 letterSpacing: 0.3,
                               ),
                             ),
@@ -109,15 +107,12 @@ extension on _HomeDrawPageState {
                                 color: AppColorTokens.of(
                                   context,
                                 ).brand.withValues(alpha: 0.12),
-                                borderRadius: BorderRadius.circular(
-                                  ScreenUtil().setWidth(999),
-                                ),
+                                borderRadius: AppRadius.brPill,
                               ),
                               child: Text(
                                 S.of(context).g_key_squad,
-                                style: TextStyle(
+                                style: AppTypography.captionSm.copyWith(
                                   color: AppColorTokens.of(context).brand,
-                                  fontSize: ScreenUtil().setSp(18),
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
@@ -131,9 +126,8 @@ extension on _HomeDrawPageState {
                           displayEmail,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
+                          style: AppTypography.caption.copyWith(
                             color: AppColorTokens.of(context).textSubtitle,
-                            fontSize: ScreenUtil().setSp(24),
                           ),
                         ),
                       ],
@@ -167,9 +161,8 @@ extension on _HomeDrawPageState {
                   Flexible(
                     child: Text(
                       S.of(context).g_home_key9,
-                      style: TextStyle(
+                      style: AppTypography.caption.copyWith(
                         color: Colors.white,
-                        fontSize: ScreenUtil().setSp(24),
                         fontWeight: FontWeight.w500,
                       ),
                       overflow: TextOverflow.ellipsis,
@@ -257,12 +250,10 @@ extension on _HomeDrawPageState {
                         : showChatEntry
                         ? S.of(context).g_key_squad
                         : S.of(context).g_key_login,
-                    style: TextStyle(
+                    style: AppTypography.bodyStrong.copyWith(
                       color: showWalletLogout
                           ? AppColorTokens.of(context).danger
                           : AppColorTokens.of(context).brand,
-                      fontSize: ScreenUtil().setSp(28),
-                      fontWeight: FontWeight.w600,
                     ),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,

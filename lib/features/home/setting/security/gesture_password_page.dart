@@ -177,9 +177,8 @@ class _GesturePasswordPageState extends State<GesturePasswordPage> {
                 children: [
                   Text(
                     _title,
-                    style: TextStyle(
+                    style: AppTypography.headline.copyWith(
                       color: mainTextColor,
-                      fontSize: ScreenUtil().setSp(32.0),
                       fontWeight: FontWeight.w500,
                     ),
                     textAlign: TextAlign.center,
@@ -187,9 +186,8 @@ class _GesturePasswordPageState extends State<GesturePasswordPage> {
                   SizedBox(height: ScreenUtil().setWidth(20.0)),
                   Text(
                     _subtitle,
-                    style: TextStyle(
+                    style: AppTypography.body.copyWith(
                       color: _errorCount > 0 ? errorColor : subtitleColor,
-                      fontSize: ScreenUtil().setSp(28.0),
                     ),
                     textAlign: TextAlign.center,
                   ),

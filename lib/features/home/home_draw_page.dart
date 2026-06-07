@@ -254,9 +254,8 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
               Expanded(
                 child: Text(
                   actionName,
-                  style: TextStyle(
+                  style: AppTypography.body.copyWith(
                     color: AppColorTokens.of(context).textPrimary,
-                    fontSize: ScreenUtil().setSp(28),
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -286,9 +285,8 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
       ),
       child: Text(
         title.toUpperCase(),
-        style: TextStyle(
+        style: AppTypography.captionSm.copyWith(
           color: AppColorTokens.of(context).textSubtitle,
-          fontSize: ScreenUtil().setSp(20),
           fontWeight: FontWeight.w600,
           letterSpacing: 1.2,
         ),
