@@ -16,7 +16,9 @@ class _SectionLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle),
+      style: AppTypography.body.copyWith(
+        color: AppColorTokens.of(context).textSubtitle,
+      ),
     );
   }
 }
@@ -33,7 +35,9 @@ class _ErrorMessage extends StatelessWidget {
       alignment: Alignment.centerRight,
       child: Text(
         message,
-        style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).danger),
+        style: AppTypography.bodySm.copyWith(
+          color: AppColorTokens.of(context).danger,
+        ),
         textAlign: TextAlign.end,
       ),
     );
@@ -64,8 +68,7 @@ class _PillButton extends StatelessWidget {
         ),
         child: Text(
           label,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(24.0),
+          style: AppTypography.caption.copyWith(
             color: AppThemeUtils.getColorByKey(
               context,
               AppThemeKeys.mainButtonTextColor.name,
@@ -104,12 +107,11 @@ class _SetupPromptRow extends StatelessWidget {
         Expanded(
           child: Text(
             message,
-            style: TextStyle(
+            style: AppTypography.bodySm.copyWith(
               color: AppThemeUtils.getColorByKey(
                 context,
                 AppThemeKeys.mainButtonBgColor.name,
               ),
-              fontSize: ScreenUtil().setSp(26.0),
             ),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,

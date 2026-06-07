@@ -94,12 +94,11 @@ class _ImportKeystoreState extends ConsumerState<ImportKeystore> {
                             ),
                             child: Text(
                               S.of(context).g_key_166,
-                              style: TextStyle(
+                              style: AppTypography.bodySm.copyWith(
                                 color: AppThemeUtils.getColorByKey(
                                   context,
                                   AppThemeKeys.mainWhiteColor.name,
                                 ),
-                                fontSize: ScreenUtil().setSp(26.0),
                               ),
                             ),
                           ),
@@ -118,12 +117,11 @@ class _ImportKeystoreState extends ConsumerState<ImportKeystore> {
                         hintText: S.of(context).g_key_ex_keystore_17,
                         controller: _keystoreController,
                         maxLines: 30,
-                        style: TextStyle(
+                        style: AppTypography.bodySm.copyWith(
                           color: AppThemeUtils.getColorByKey(
                             context,
                             AppThemeKeys.ff888888.name,
                           ),
-                          fontSize: ScreenUtil().setSp(26),
                         ),
                       ),
                     ),
@@ -145,12 +143,11 @@ class _ImportKeystoreState extends ConsumerState<ImportKeystore> {
                         hintText: S.of(context).g_key_21,
                         controller: _passwordController,
                         maxLines: 1,
-                        style: TextStyle(
+                        style: AppTypography.bodySm.copyWith(
                           color: AppThemeUtils.getColorByKey(
                             context,
                             AppThemeKeys.ff888888.name,
                           ),
-                          fontSize: ScreenUtil().setSp(26),
                         ),
                       ),
                     ),
@@ -187,11 +184,15 @@ class _ImportKeystoreState extends ConsumerState<ImportKeystore> {
               children: [
                 Text(
                   selectChain['baseInfo']['name'],
-                  style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textItem),
+                  style: AppTypography.body.copyWith(
+                    color: AppColorTokens.of(context).textItem,
+                  ),
                 ),
                 Text(
                   selectChain['baseInfo']['miniName'],
-                  style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textItem),
+                  style: AppTypography.body.copyWith(
+                    color: AppColorTokens.of(context).textItem,
+                  ),
                 ),
               ],
             ),

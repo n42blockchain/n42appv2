@@ -18,7 +18,9 @@ Future<void> alertWidget(BuildContext context) async {
             children: [
               Text(
                 S.of(context).g_swap_key_20(CoinType.N.name),
-                style: AppTypography.titleLg.copyWith(color: AppColorTokens.of(context).textPrimary),
+                style: AppTypography.titleLg.copyWith(
+                  color: AppColorTokens.of(context).textPrimary,
+                ),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(
@@ -34,7 +36,9 @@ Future<void> alertWidget(BuildContext context) async {
               ),
               Text(
                 S.of(context).g_swap_key_19,
-                style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textPrimary),
+                style: AppTypography.caption.copyWith(
+                  color: AppColorTokens.of(context).textPrimary,
+                ),
                 maxLines: 2,
                 textAlign: TextAlign.center,
               ),
@@ -60,12 +64,11 @@ Future<void> alertWidget(BuildContext context) async {
                   child: Text(
                     S.of(context).g_swap_key_18,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: AppTypography.body.copyWith(
                       color: AppThemeUtils.getColorByKey(
                         context,
                         AppThemeKeys.mainButtonTextColor.name,
                       ),
-                      fontSize: ScreenUtil().setSp(30),
                     ),
                   ),
                 ),

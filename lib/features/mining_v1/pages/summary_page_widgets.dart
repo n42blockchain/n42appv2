@@ -99,12 +99,11 @@ mixin _SummaryPageWidgetsMixin on State<SummaryPage>, _SummaryPageLogicMixin {
       children: [
         Text(
           label,
-          style: TextStyle(
+          style: AppTypography.bodySm.copyWith(
             color: AppThemeUtils.getColorByKey(
               context,
               AppThemeKeys.ff888888.name,
             ),
-            fontSize: ScreenUtil().setSp(26),
           ),
         ),
         Text(
@@ -126,12 +125,11 @@ mixin _SummaryPageWidgetsMixin on State<SummaryPage>, _SummaryPageLogicMixin {
           child: Text(
             S.current.g_mining_key_7,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
+            style: AppTypography.bodySm.copyWith(
               color: AppThemeUtils.getColorByKey(
                 context,
                 AppThemeKeys.ff888888.name,
               ),
-              fontSize: ScreenUtil().setSp(26),
             ),
           ),
         ),
@@ -220,12 +218,11 @@ mixin _SummaryPageWidgetsMixin on State<SummaryPage>, _SummaryPageLogicMixin {
   }
 
   Widget _buildRewardHistoryHeader(BuildContext context) {
-    final headerStyle = TextStyle(
+    final headerStyle = AppTypography.body.copyWith(
       color: AppThemeUtils.getColorByKey(
         context,
         AppThemeKeys.mainWhiteColor.name,
       ),
-      fontSize: ScreenUtil().setSp(30),
     );
 
     return Container(

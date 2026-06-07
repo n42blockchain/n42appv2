@@ -28,12 +28,11 @@ void aboutShowDialog(BuildContext context, String aboutStr, String title) {
               children: [
                 Text(
                   title,
-                  style: TextStyle(
+                  style: AppTypography.body.copyWith(
                     color: AppThemeUtils.getColorByKey(
                       context,
                       AppThemeKeys.mainButtonBgColor.name,
                     ),
-                    fontSize: ScreenUtil().setSp(30.0),
                   ),
                 ),
                 InkWell(

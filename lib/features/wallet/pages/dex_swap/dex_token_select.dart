@@ -173,12 +173,11 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
               ),
               decoration: InputDecoration(
                 hintText: S.of(context).g_key_dex_search_hint,
-                hintStyle: TextStyle(
+                hintStyle: AppTypography.body.copyWith(
                   color: AppThemeUtils.getColorByKey(
                     context,
                     AppThemeKeys.textFieldHintColor.name,
                   ),
-                  fontSize: ScreenUtil().setSp(28),
                 ),
                 prefixIcon: Icon(
                   Icons.search,

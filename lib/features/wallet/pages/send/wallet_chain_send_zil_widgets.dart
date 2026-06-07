@@ -12,7 +12,9 @@ mixin _ZilSendWidgetsMixin on _ZilSendLogicMixin {
         children: [
           Text(
             S.of(context).g_key_38,
-            style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
+            style: AppTypography.body.copyWith(
+              color: AppColorTokens.of(context).textPrimary,
+            ),
           ),
           SizedBox(height: ScreenUtil().setWidth(20.0)),
           textFieldStyle2(
@@ -55,7 +57,9 @@ mixin _ZilSendWidgetsMixin on _ZilSendLogicMixin {
               Flexible(
                 child: Text(
                   S.of(context).g_key_44,
-                  style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
+                  style: AppTypography.body.copyWith(
+                    color: AppColorTokens.of(context).textPrimary,
+                  ),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -126,8 +130,7 @@ mixin _ZilSendWidgetsMixin on _ZilSendLogicMixin {
                     alignment: Alignment.center,
                     child: Text(
                       S.of(context).g_key_197,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(26.0),
+                      style: AppTypography.bodySm.copyWith(
                         color: AppThemeUtils.getColorByKey(
                           context,
                           AppThemeKeys.mainWhiteColor.name,
@@ -155,7 +158,9 @@ mixin _ZilSendWidgetsMixin on _ZilSendLogicMixin {
     final String unit = widget.coinModel.coin['unit'].toString().toUpperCase();
     return Text(
       '${widget.coinModel.balanceStringAll()} $unit',
-      style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
+      style: AppTypography.body.copyWith(
+        color: AppColorTokens.of(context).textPrimary,
+      ),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
       textAlign: TextAlign.right,
@@ -173,7 +178,9 @@ mixin _ZilSendWidgetsMixin on _ZilSendLogicMixin {
       ),
       child: Text(
         addr,
-        style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle),
+        style: AppTypography.body.copyWith(
+          color: AppColorTokens.of(context).textSubtitle,
+        ),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),
@@ -205,17 +212,18 @@ mixin _ZilSendWidgetsMixin on _ZilSendLogicMixin {
                   child: Text(
                     S.of(context).g_key_29,
                     overflow: TextOverflow.ellipsis,
-                    style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle),
+                    style: AppTypography.body.copyWith(
+                      color: AppColorTokens.of(context).textSubtitle,
+                    ),
                   ),
                 ),
                 Text(
                   '${chainModel?.balanceDoubleAll() ?? 0} ${(chainModel?.coin['unit'] ?? '').toString().toUpperCase()}',
-                  style: TextStyle(
+                  style: AppTypography.body.copyWith(
                     color: AppThemeUtils.getColorByKey(
                       context,
                       AppThemeKeys.mainButtonBgColor.name,
                     ),
-                    fontSize: ScreenUtil().setSp(28.0),
                   ),
                 ),
               ],
@@ -245,7 +253,9 @@ mixin _ZilSendWidgetsMixin on _ZilSendLogicMixin {
       ),
       child: Text(
         errorMessage,
-        style: AppTypography.body.copyWith(color: AppColorTokens.of(context).danger),
+        style: AppTypography.body.copyWith(
+          color: AppColorTokens.of(context).danger,
+        ),
       ),
     );
   }

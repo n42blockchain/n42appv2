@@ -29,12 +29,11 @@ Widget successViewV1(String title) {
         ),
         Text(
           title,
-          style: TextStyle(
+          style: AppTypography.body.copyWith(
             color: AppThemeUtils.getColorByKey(
               AppGlobals.navigatorKey.currentContext,
               AppThemeKeys.mainTextColor5.name,
             ),
-            fontSize: ScreenUtil().setSp(28.0),
           ),
         ),
       ],

@@ -118,7 +118,9 @@ class _EditAddressPageState extends State<EditAddressPage> {
               child: Center(
                 child: Text(
                   editStatus ? S.of(context).g_key_115 : S.of(context).Edit,
-                  style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).textPrimary),
+                  style: AppTypography.headline.copyWith(
+                    color: AppColorTokens.of(context).textPrimary,
+                  ),
                 ),
               ),
             ),
@@ -154,12 +156,11 @@ class _EditAddressPageState extends State<EditAddressPage> {
           SizedBox(height: ScreenUtil().setWidth(36.0)),
           Text(
             S.of(context).address_Information,
-            style: TextStyle(
+            style: AppTypography.body.copyWith(
               color: AppThemeUtils.getColorByKey(
                 context,
                 AppThemeKeys.ff888888.name,
               ),
-              fontSize: ScreenUtil().setSp(28.0),
             ),
           ),
           SizedBox(height: ScreenUtil().setWidth(20.0)),
@@ -218,7 +219,9 @@ class _EditAddressPageState extends State<EditAddressPage> {
             SizedBox(width: ScreenUtil().setWidth(24.0)),
             Text(
               coinName,
-              style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
+              style: AppTypography.body.copyWith(
+                color: AppColorTokens.of(context).textPrimary,
+              ),
             ),
             const Spacer(),
             Icon(
@@ -299,12 +302,11 @@ class _EditAddressPageState extends State<EditAddressPage> {
         ),
         child: Text(
           S.of(context).g_key_166,
-          style: TextStyle(
+          style: AppTypography.bodySm.copyWith(
             color: AppThemeUtils.getColorByKey(
               context,
               AppThemeKeys.mainWhiteColor.name,
             ),
-            fontSize: ScreenUtil().setSp(26.0),
           ),
         ),
       ),
@@ -402,12 +404,11 @@ class _EditAddressPageState extends State<EditAddressPage> {
         ),
         child: Text(
           S.of(context).g_key_113,
-          style: TextStyle(
+          style: AppTypography.headline.copyWith(
             color: AppThemeUtils.getColorByKey(
               context,
               AppThemeKeys.mainWhiteColor.name,
             ),
-            fontSize: ScreenUtil().setSp(32.0),
           ),
         ),
       ),

@@ -116,8 +116,7 @@ class EnsSearchResultView extends StatelessWidget {
       children: [
         Text(
           S.of(context).g_key_ens_suggestions,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(26),
+          style: AppTypography.bodySm.copyWith(
             fontWeight: FontWeight.w600,
             color: _themeColor(context, AppThemeKeys.mainTextColor.name),
           ),
@@ -160,8 +159,7 @@ class EnsSearchResultView extends StatelessWidget {
           SizedBox(height: ScreenUtil().setWidth(24)),
           Text(
             S.of(context).g_key_ens_checking,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(26),
+            style: AppTypography.bodySm.copyWith(
               color: _themeColor(
                 context,
                 AppThemeKeys.itemSubtitleTextColor.name,
@@ -186,8 +184,7 @@ class EnsSearchResultView extends StatelessWidget {
           SizedBox(height: ScreenUtil().setWidth(16)),
           Text(
             availabilityResult!.error!,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(26),
+            style: AppTypography.bodySm.copyWith(
               color: _themeColor(
                 context,
                 AppThemeKeys.itemSubtitleTextColor.name,
@@ -257,8 +254,7 @@ class EnsSearchResultView extends StatelessWidget {
           SizedBox(height: ScreenUtil().setWidth(24)),
           Text(
             S.of(context).g_key_ens_try_another,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(26),
+            style: AppTypography.bodySm.copyWith(
               color: _themeColor(
                 context,
                 AppThemeKeys.itemSubtitleTextColor.name,
@@ -297,8 +293,7 @@ class EnsSearchResultView extends StatelessWidget {
               children: [
                 Text(
                   '$searchQuery.eth',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(32),
+                  style: AppTypography.headline.copyWith(
                     fontWeight: FontWeight.w600,
                     color: _themeColor(
                       context,
@@ -359,8 +354,7 @@ class EnsSearchResultView extends StatelessWidget {
       children: [
         Text(
           label,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(26),
+          style: AppTypography.bodySm.copyWith(
             color: _themeColor(
               context,
               AppThemeKeys.itemSubtitleTextColor.name,
@@ -369,8 +363,7 @@ class EnsSearchResultView extends StatelessWidget {
         ),
         Text(
           value,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(26),
+          style: AppTypography.bodySm.copyWith(
             fontWeight: FontWeight.w500,
             color: _themeColor(context, AppThemeKeys.mainTextColor.name),
           ),

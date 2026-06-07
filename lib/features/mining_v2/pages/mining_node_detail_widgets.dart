@@ -65,12 +65,11 @@ mixin _MiningNodeDetailWidgets on ConsumerState<MiningNodeDetailPage> {
               Expanded(
                 child: Text(
                   label,
-                  style: TextStyle(
+                  style: AppTypography.caption.copyWith(
                     color: _themeColor(
                       context,
                       AppThemeKeys.itemSubtitleTextColor,
                     ),
-                    fontSize: ScreenUtil().setSp(22),
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -174,9 +173,8 @@ mixin _MiningNodeDetailWidgets on ConsumerState<MiningNodeDetailPage> {
           Flexible(
             child: Text(
               label,
-              style: TextStyle(
+              style: AppTypography.caption.copyWith(
                 color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
-                fontSize: ScreenUtil().setSp(24),
               ),
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
@@ -260,8 +258,7 @@ mixin _MiningNodeDetailWidgets on ConsumerState<MiningNodeDetailPage> {
   Widget _hintText(BuildContext context, String text) {
     return Text(
       text,
-      style: TextStyle(
-        fontSize: ScreenUtil().setSp(28),
+      style: AppTypography.body.copyWith(
         color: _themeColor(context, AppThemeKeys.textColorOrange),
       ),
       textAlign: TextAlign.center,

@@ -71,20 +71,21 @@ class _MiningKeyListState extends ConsumerState<MiningKeyList> {
                         children: [
                           Text(
                             miningKeyList[index],
-                            style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).textItem),
+                            style: AppTypography.headline.copyWith(
+                              color: AppColorTokens.of(context).textItem,
+                            ),
                           ),
                           Text(
                             isMining
                                 ? S.of(context).g_key_193
                                 : S.of(context).g_mining_key_102,
-                            style: TextStyle(
+                            style: AppTypography.body.copyWith(
                               color: AppThemeUtils.getColorByKey(
                                 context,
                                 isMining
                                     ? AppThemeKeys.rightTextColor.name
                                     : AppThemeKeys.errorTextColor.name,
                               ),
-                              fontSize: ScreenUtil().setSp(30),
                             ),
                           ),
                         ],
@@ -128,7 +129,9 @@ class _MiningKeyListState extends ConsumerState<MiningKeyList> {
                     Expanded(
                       child: Text(
                         'PublicKey:${keyValue['keypart']['publicKey']}',
-                        style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).textItem),
+                        style: AppTypography.headline.copyWith(
+                          color: AppColorTokens.of(context).textItem,
+                        ),
                       ),
                     ),
                     const SizedBox(width: 10),

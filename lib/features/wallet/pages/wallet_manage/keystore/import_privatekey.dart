@@ -213,12 +213,11 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                             ),
                             child: Text(
                               S.of(context).g_key_166,
-                              style: TextStyle(
+                              style: AppTypography.bodySm.copyWith(
                                 color: AppThemeUtils.getColorByKey(
                                   context,
                                   AppThemeKeys.mainWhiteColor.name,
                                 ),
-                                fontSize: ScreenUtil().setSp(26.0),
                               ),
                             ),
                           ),
@@ -237,12 +236,11 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                         hintText: S.of(context).g_key_209,
                         controller: _keystoreController,
                         maxLines: 30,
-                        style: TextStyle(
+                        style: AppTypography.bodySm.copyWith(
                           color: AppThemeUtils.getColorByKey(
                             context,
                             AppThemeKeys.ff888888.name,
                           ),
-                          fontSize: ScreenUtil().setSp(26),
                         ),
                       ),
                     ),
@@ -278,11 +276,15 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                               children: [
                                 Text(
                                   selectChain['baseInfo']['name'],
-                                  style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textItem),
+                                  style: AppTypography.body.copyWith(
+                                    color: AppColorTokens.of(context).textItem,
+                                  ),
                                 ),
                                 Text(
                                   selectChain['baseInfo']['miniName'],
-                                  style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textItem),
+                                  style: AppTypography.body.copyWith(
+                                    color: AppColorTokens.of(context).textItem,
+                                  ),
                                 ),
                               ],
                             ),
@@ -325,7 +327,9 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                         ),
                         child: Text(
                           errorMessage,
-                          style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).danger),
+                          style: AppTypography.bodySm.copyWith(
+                            color: AppColorTokens.of(context).danger,
+                          ),
                           textAlign: TextAlign.center,
                         ),
                       ),

@@ -12,7 +12,9 @@ mixin _DotSendWidgetsMixin on _DotSendLogicMixin {
         children: [
           Text(
             S.of(context).g_key_38,
-            style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
+            style: AppTypography.body.copyWith(
+              color: AppColorTokens.of(context).textPrimary,
+            ),
           ),
           SizedBox(height: ScreenUtil().setWidth(20.0)),
           textFieldStyle2(
@@ -56,7 +58,9 @@ mixin _DotSendWidgetsMixin on _DotSendLogicMixin {
           children: [
             Text(
               S.of(context).g_key_wallet_k58,
-              style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
+              style: AppTypography.body.copyWith(
+                color: AppColorTokens.of(context).textPrimary,
+              ),
             ),
             SizedBox(height: ScreenUtil().setWidth(20.0)),
             textFieldStyle2(
@@ -67,7 +71,9 @@ mixin _DotSendWidgetsMixin on _DotSendLogicMixin {
               errorMessage: noteErrorMessage,
               suffix: Text(
                 "${noteTextEditingController.text.length}/100",
-                style: AppTypography.captionSm.copyWith(color: AppColorTokens.of(context).textSubtitle),
+                style: AppTypography.captionSm.copyWith(
+                  color: AppColorTokens.of(context).textSubtitle,
+                ),
               ),
               onEditingComplete: () {
                 FocusScope.of(context).requestFocus(toNode);
@@ -210,7 +216,9 @@ mixin _DotSendWidgetsMixin on _DotSendLogicMixin {
     final String unit = widget.coinModel.coin['unit'].toString().toUpperCase();
     return Text(
       '${widget.coinModel.balanceStringAll()} $unit',
-      style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
+      style: AppTypography.body.copyWith(
+        color: AppColorTokens.of(context).textPrimary,
+      ),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
       textAlign: TextAlign.right,
@@ -262,17 +270,18 @@ mixin _DotSendWidgetsMixin on _DotSendLogicMixin {
                   child: Text(
                     S.of(context).g_key_29,
                     overflow: TextOverflow.ellipsis,
-                    style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle),
+                    style: AppTypography.body.copyWith(
+                      color: AppColorTokens.of(context).textSubtitle,
+                    ),
                   ),
                 ),
                 Text(
                   '${chainModel?.balanceDoubleAll() ?? 0} ${(chainModel?.coin['unit'] ?? '').toString().toUpperCase()}',
-                  style: TextStyle(
+                  style: AppTypography.body.copyWith(
                     color: AppThemeUtils.getColorByKey(
                       context,
                       AppThemeKeys.mainButtonBgColor.name,
                     ),
-                    fontSize: ScreenUtil().setSp(28.0),
                   ),
                 ),
               ],

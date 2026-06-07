@@ -66,12 +66,11 @@ class _CommInputState extends State<CommInput> {
             decoration: InputDecoration(
               hintText: widget.hintText ?? '',
               //文本框，提示文本颜色
-              hintStyle: TextStyle(
+              hintStyle: AppTypography.body.copyWith(
                 color: AppThemeUtils.getColorByKey(
                   context,
                   AppThemeKeys.hintTextColor.name,
                 ),
-                fontSize: ScreenUtil().setSp(30),
               ),
               //textField设定高度后,文字无法居中
               isCollapsed: widget.isCollapsed,
@@ -91,7 +90,9 @@ class _CommInputState extends State<CommInput> {
             ),
             style:
                 widget.style ??
-                AppTypography.headline.copyWith(color: AppColorTokens.of(context).textPrimary),
+                AppTypography.headline.copyWith(
+                  color: AppColorTokens.of(context).textPrimary,
+                ),
             controller: widget.controller,
             obscureText: obscure,
             keyboardType:

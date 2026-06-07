@@ -30,12 +30,11 @@ class BoardItem extends StatelessWidget {
           child: Text(
             action,
             maxLines: 1,
-            style: TextStyle(
+            style: AppTypography.body.copyWith(
               color: AppThemeUtils.getColorByKey(
                 context,
                 AppThemeKeys.mainButtonTextColor.name,
               ),
-              fontSize: ScreenUtil().setSp(28),
             ),
           ),
         ),

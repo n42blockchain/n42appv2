@@ -73,12 +73,11 @@ class _BackupThreeState extends ConsumerState<BackupThree> {
         keyboardType: TextInputType.visiblePassword,
         textInputAction: textInputAction,
         errorMessage: errorMessage,
-        hintStyle: TextStyle(
+        hintStyle: AppTypography.body.copyWith(
           color: AppThemeUtils.getColorByKey(
             context,
             AppThemeKeys.hintTextColor.name,
           ),
-          fontSize: ScreenUtil().setSp(30.0),
         ),
         obscure: obscure,
         rightWidget1: Container(

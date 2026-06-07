@@ -19,12 +19,11 @@ class NavShowDataItem extends StatelessWidget {
           Expanded(
             child: Text(
               desc,
-              style: TextStyle(
+              style: AppTypography.body.copyWith(
                 color: AppThemeUtils.getColorByKey(
                   context,
                   AppThemeKeys.ff888888.name,
                 ),
-                fontSize: ScreenUtil().setSp(30),
               ),
             ),
           ),
@@ -35,7 +34,9 @@ class NavShowDataItem extends StatelessWidget {
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.end,
-              style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
+              style: AppTypography.body.copyWith(
+                color: AppColorTokens.of(context).textPrimary,
+              ),
             ),
           ),
         ],

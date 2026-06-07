@@ -46,28 +46,28 @@ class ItemMiningNode extends StatelessWidget {
               children: [
                 Text(
                   countryName,
-                  style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
+                  style: AppTypography.body.copyWith(
+                    color: AppColorTokens.of(context).textPrimary,
+                  ),
                 ),
                 SizedBox(height: ScreenUtil().setWidth(12)),
                 Text(
                   nodeAddress,
-                  style: TextStyle(
+                  style: AppTypography.body.copyWith(
                     color: AppThemeUtils.getColorByKey(
                       context,
                       AppThemeKeys.mainGreyColor.name,
                     ),
-                    fontSize: ScreenUtil().setSp(28),
                   ),
                 ),
                 SizedBox(height: ScreenUtil().setWidth(12)),
                 Text(
                   socketUrl,
-                  style: TextStyle(
+                  style: AppTypography.body.copyWith(
                     color: AppThemeUtils.getColorByKey(
                       context,
                       AppThemeKeys.mainGreyColor.name,
                     ),
-                    fontSize: ScreenUtil().setSp(28),
                   ),
                 ),
               ],

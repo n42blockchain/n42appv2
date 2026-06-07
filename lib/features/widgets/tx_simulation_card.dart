@@ -119,8 +119,7 @@ class _SimulatingCard extends StatelessWidget {
                 Expanded(
                   child: Text(
                     label,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(24),
+                    style: AppTypography.caption.copyWith(
                       color: AppThemeUtils.getColorByKey(
                         context,
                         AppThemeKeys.ff888888.name,

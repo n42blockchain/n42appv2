@@ -286,8 +286,7 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
             child: Text(
               S.of(context).g_key_gas_custom,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(30),
+              style: AppTypography.body.copyWith(
                 fontWeight: FontWeight.w600,
                 color: _themeColor(context, AppThemeKeys.mainTextColor),
               ),

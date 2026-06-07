@@ -68,12 +68,11 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
 
   Widget _stepGap() => SizedBox(width: ScreenUtil().setWidth(20.0));
 
-  TextStyle _hintStyle() => TextStyle(
+  TextStyle _hintStyle() => AppTypography.body.copyWith(
     color: AppThemeUtils.getColorByKey(
       context,
       AppThemeKeys.hintTextColor.name,
     ),
-    fontSize: ScreenUtil().setSp(30.0),
   );
 
   Widget _buildPasswordToggle(bool obscure) {

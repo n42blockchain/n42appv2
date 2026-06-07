@@ -182,8 +182,7 @@ class _FieldRow extends StatelessWidget {
             width: ScreenUtil().setWidth(140),
             child: Text(
               field.label,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
+              style: AppTypography.caption.copyWith(
                 color: AppThemeUtils.getColorByKey(
                   context,
                   AppThemeKeys.ff888888.name,

@@ -66,7 +66,9 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
         children: [
           Text(
             S.of(context).g_key_38,
-            style: AppTypography.body.copyWith(color: _themeColor(AppThemeKeys.mainTextColor.name)),
+            style: AppTypography.body.copyWith(
+              color: _themeColor(AppThemeKeys.mainTextColor.name),
+            ),
           ),
           textFieldStyle2(
             context,
@@ -116,7 +118,9 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
                 Flexible(
                   child: Text(
                     S.of(context).g_key_44,
-                    style: AppTypography.body.copyWith(color: _themeColor(AppThemeKeys.mainTextColor.name)),
+                    style: AppTypography.body.copyWith(
+                      color: _themeColor(AppThemeKeys.mainTextColor.name),
+                    ),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -178,7 +182,9 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
                     alignment: Alignment.center,
                     child: Text(
                       S.of(context).g_key_197,
-                      style: AppTypography.bodySm.copyWith(color: _themeColor(AppThemeKeys.mainWhiteColor.name)),
+                      style: AppTypography.bodySm.copyWith(
+                        color: _themeColor(AppThemeKeys.mainWhiteColor.name),
+                      ),
                     ),
                   ),
                   rightOnTap1: maxTag,
@@ -211,7 +217,9 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
     if (widget.coinModel.coin['blockchainType'] != BlockchainType.Ripple.name) {
       return Text(
         '${widget.coinModel.balanceStringAll()} $unit',
-        style: AppTypography.body.copyWith(color: _themeColor(AppThemeKeys.mainTextColor.name)),
+        style: AppTypography.body.copyWith(
+          color: _themeColor(AppThemeKeys.mainTextColor.name),
+        ),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         textAlign: TextAlign.right,
@@ -254,7 +262,9 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
       ),
       child: Text(
         widget.coinModel.address.toString(),
-        style: AppTypography.body.copyWith(color: _themeColor(AppThemeKeys.itemSubtitleTextColor.name)),
+        style: AppTypography.body.copyWith(
+          color: _themeColor(AppThemeKeys.itemSubtitleTextColor.name),
+        ),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),
@@ -287,17 +297,18 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
                   child: Text(
                     S.of(context).g_key_29,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
+                    style: AppTypography.body.copyWith(
                       color: _themeColor(
                         AppThemeKeys.itemSubtitleTextColor.name,
                       ),
-                      fontSize: ScreenUtil().setSp(28.0),
                     ),
                   ),
                 ),
                 Text(
                   '${chainModel?.balanceDoubleAll() ?? 0} ${(chainModel?.coin['unit'] ?? '').toString().toUpperCase()}',
-                  style: AppTypography.body.copyWith(color: _themeColor(AppThemeKeys.mainButtonBgColor.name)),
+                  style: AppTypography.body.copyWith(
+                    color: _themeColor(AppThemeKeys.mainButtonBgColor.name),
+                  ),
                 ),
               ],
             ),
@@ -361,7 +372,9 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
                         child: Text(
                           S.of(context).g_key_t_47,
                           overflow: TextOverflow.ellipsis,
-                          style: AppTypography.caption.copyWith(color: whiteColor),
+                          style: AppTypography.caption.copyWith(
+                            color: whiteColor,
+                          ),
                         ),
                       ),
                     ],
@@ -372,7 +385,9 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
           ),
           Text(
             S.of(context).g_key_t_46,
-            style: AppTypography.caption.copyWith(color: _themeColor(AppThemeKeys.itemSubtitleTextColor.name)),
+            style: AppTypography.caption.copyWith(
+              color: _themeColor(AppThemeKeys.itemSubtitleTextColor.name),
+            ),
           ),
           Padding(
             padding: EdgeInsets.symmetric(
@@ -385,7 +400,9 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
           ),
           Text(
             accountXrp['error'],
-            style: AppTypography.caption.copyWith(color: _themeColor(AppThemeKeys.errorTextColor.name)),
+            style: AppTypography.caption.copyWith(
+              color: _themeColor(AppThemeKeys.errorTextColor.name),
+            ),
           ),
         ],
       ),

@@ -59,12 +59,11 @@ class PlansWidget extends StatelessWidget {
                     margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(4)),
                     child: Text(
                       title1,
-                      style: TextStyle(
+                      style: AppTypography.body.copyWith(
                         color: AppThemeUtils.getColorByKey(
                           context,
                           AppThemeKeys.mainWhiteColor.name,
                         ),
-                        fontSize: ScreenUtil().setSp(30),
                         fontWeight: FontWeight.w600,
                       ),
                       maxLines: 4,

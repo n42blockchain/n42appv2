@@ -49,23 +49,21 @@ mixin _WalletListActionsMixin on ConsumerState<WalletList> {
       builder: (ctx) => AlertDialog(
         title: Text(
           S.of(ctx).g_face_3,
-          style: TextStyle(
+          style: AppTypography.headline.copyWith(
             color: AppThemeUtils.getColorByKey(
               ctx,
               AppThemeKeys.mainTextColor.name,
             ),
-            fontSize: ScreenUtil().setSp(32),
           ),
         ),
         content: SingleChildScrollView(
           child: Text(
             S.of(ctx).g_key_192,
-            style: TextStyle(
+            style: AppTypography.body.copyWith(
               color: AppThemeUtils.getColorByKey(
                 ctx,
                 AppThemeKeys.mainTextColor.name,
               ),
-              fontSize: ScreenUtil().setSp(28),
             ),
           ),
         ),

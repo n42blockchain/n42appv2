@@ -380,8 +380,7 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
                 alignment: Alignment.center,
                 child: Text(
                   S.of(context).search,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(26.0),
+                  style: AppTypography.bodySm.copyWith(
                     color: AppThemeUtils.getColorByKey(
                       context,
                       AppThemeKeys.mainButtonTextColor.name,

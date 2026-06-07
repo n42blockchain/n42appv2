@@ -45,12 +45,11 @@ Widget coinInfoCard(
 
 Widget coinInfoSectionTitle(BuildContext context, String title) => Text(
   title,
-  style: TextStyle(
+  style: AppTypography.body.copyWith(
     color: AppThemeUtils.getColorByKey(
       context,
       AppThemeKeys.mainButtonBgColor.name,
     ),
-    fontSize: ScreenUtil().setSp(30),
     fontWeight: FontWeight.w600,
   ),
 );
@@ -71,12 +70,11 @@ Widget coinInfoStatRow(BuildContext context, String label, String value) {
             value,
             textAlign: TextAlign.end,
             maxLines: 2,
-            style: TextStyle(
+            style: AppTypography.body.copyWith(
               color: AppThemeUtils.getColorByKey(
                 context,
                 AppThemeKeys.mainButtonBgColor.name,
               ),
-              fontSize: ScreenUtil().setSp(28),
             ),
           ),
         ),

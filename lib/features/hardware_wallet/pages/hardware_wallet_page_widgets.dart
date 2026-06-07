@@ -367,8 +367,7 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
             Expanded(
               child: Text(
                 label,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(28),
+                style: AppTypography.body.copyWith(
                   fontWeight: FontWeight.w500,
                   color: _themeColor(context, AppThemeKeys.mainTextColor),
                 ),

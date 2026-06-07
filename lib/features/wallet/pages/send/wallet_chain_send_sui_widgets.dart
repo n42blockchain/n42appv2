@@ -12,7 +12,9 @@ mixin _SuiSendWidgetsMixin on _SuiSendLogicMixin {
         children: [
           Text(
             S.of(context).g_key_38,
-            style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
+            style: AppTypography.body.copyWith(
+              color: AppColorTokens.of(context).textPrimary,
+            ),
           ),
           SizedBox(height: ScreenUtil().setWidth(20.0)),
           textFieldStyle2(
@@ -56,7 +58,9 @@ mixin _SuiSendWidgetsMixin on _SuiSendLogicMixin {
           children: [
             Text(
               S.of(context).g_key_wallet_k58,
-              style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
+              style: AppTypography.body.copyWith(
+                color: AppColorTokens.of(context).textPrimary,
+              ),
             ),
             SizedBox(height: ScreenUtil().setWidth(20.0)),
             textFieldStyle2(
@@ -67,7 +71,9 @@ mixin _SuiSendWidgetsMixin on _SuiSendLogicMixin {
               errorMessage: noteErrorMessage,
               suffix: Text(
                 "${noteTextEditingController.text.length}/100",
-                style: AppTypography.captionSm.copyWith(color: AppColorTokens.of(context).textSubtitle),
+                style: AppTypography.captionSm.copyWith(
+                  color: AppColorTokens.of(context).textSubtitle,
+                ),
               ),
               onEditingComplete: () {
                 FocusScope.of(context).requestFocus(toNode);
@@ -108,7 +114,9 @@ mixin _SuiSendWidgetsMixin on _SuiSendLogicMixin {
                 Flexible(
                   child: Text(
                     S.of(context).g_key_44,
-                    style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
+                    style: AppTypography.body.copyWith(
+                      color: AppColorTokens.of(context).textPrimary,
+                    ),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -188,8 +196,7 @@ mixin _SuiSendWidgetsMixin on _SuiSendLogicMixin {
                     alignment: Alignment.center,
                     child: Text(
                       S.of(context).g_key_197,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(26.0),
+                      style: AppTypography.bodySm.copyWith(
                         color: AppThemeUtils.getColorByKey(
                           context,
                           AppThemeKeys.mainWhiteColor.name,
@@ -217,7 +224,9 @@ mixin _SuiSendWidgetsMixin on _SuiSendLogicMixin {
     final String unit = widget.coinModel.coin['unit'].toString().toUpperCase();
     return Text(
       '${widget.coinModel.balanceStringAll()} $unit',
-      style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
+      style: AppTypography.body.copyWith(
+        color: AppColorTokens.of(context).textPrimary,
+      ),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
       textAlign: TextAlign.right,
@@ -235,7 +244,9 @@ mixin _SuiSendWidgetsMixin on _SuiSendLogicMixin {
       ),
       child: Text(
         addr,
-        style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle),
+        style: AppTypography.body.copyWith(
+          color: AppColorTokens.of(context).textSubtitle,
+        ),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),
@@ -267,17 +278,18 @@ mixin _SuiSendWidgetsMixin on _SuiSendLogicMixin {
                   child: Text(
                     S.of(context).g_key_29,
                     overflow: TextOverflow.ellipsis,
-                    style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle),
+                    style: AppTypography.body.copyWith(
+                      color: AppColorTokens.of(context).textSubtitle,
+                    ),
                   ),
                 ),
                 Text(
                   '${chainModel?.balanceDoubleAll() ?? 0} ${(chainModel?.coin['unit'] ?? '').toString().toUpperCase()}',
-                  style: TextStyle(
+                  style: AppTypography.body.copyWith(
                     color: AppThemeUtils.getColorByKey(
                       context,
                       AppThemeKeys.mainButtonBgColor.name,
                     ),
-                    fontSize: ScreenUtil().setSp(28.0),
                   ),
                 ),
               ],

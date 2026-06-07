@@ -59,12 +59,11 @@ class SelectPlan extends StatelessWidget {
                       title1,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
-                      style: TextStyle(
+                      style: AppTypography.body.copyWith(
                         color: AppThemeUtils.getColorByKey(
                           context,
                           AppThemeKeys.mainWhiteColor.name,
                         ),
-                        fontSize: ScreenUtil().setSp(30),
                         fontWeight: FontWeight.w600,
                       ),
                     ),

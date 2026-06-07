@@ -134,8 +134,7 @@ class AABatchTransactionBody extends StatelessWidget {
               Flexible(
                 child: Text(
                   S.of(context).g_key_aa_batch_transaction,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(28),
+                  style: AppTypography.body.copyWith(
                     fontWeight: FontWeight.w600,
                     color: _themeColor(context, AppThemeKeys.mainTextColor),
                   ),
@@ -147,8 +146,7 @@ class AABatchTransactionBody extends StatelessWidget {
           SizedBox(height: ScreenUtil().setWidth(12)),
           Text(
             S.of(context).g_key_aa_batch_description,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
+            style: AppTypography.caption.copyWith(
               color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
             ),
           ),
@@ -182,8 +180,7 @@ class AABatchTransactionBody extends StatelessWidget {
           Flexible(
             child: Text(
               text,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
+              style: AppTypography.caption.copyWith(
                 color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
               ),
               overflow: TextOverflow.ellipsis,
@@ -221,8 +218,7 @@ class AABatchTransactionBody extends StatelessWidget {
             SizedBox(height: ScreenUtil().setWidth(12)),
             Text(
               S.of(context).g_key_aa_no_operations,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(26),
+              style: AppTypography.bodySm.copyWith(
                 color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
               ),
             ),
@@ -252,8 +248,7 @@ class AABatchTransactionBody extends StatelessWidget {
               child: Text(
                 '${S.of(context).g_key_aa_operations} (${operations.length})',
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(26),
+                style: AppTypography.bodySm.copyWith(
                   fontWeight: FontWeight.w600,
                   color: _themeColor(context, AppThemeKeys.mainTextColor),
                 ),
@@ -333,8 +328,7 @@ class AABatchTransactionBody extends StatelessWidget {
                 child: Text(
                   S.of(context).g_key_aa_total_gas,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24),
+                  style: AppTypography.caption.copyWith(
                     color: _themeColor(
                       context,
                       AppThemeKeys.itemSubtitleTextColor,
@@ -380,8 +374,7 @@ class AABatchTransactionBody extends StatelessWidget {
     }
     return Text(
       '-',
-      style: TextStyle(
-        fontSize: ScreenUtil().setSp(26),
+      style: AppTypography.bodySm.copyWith(
         color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
       ),
     );

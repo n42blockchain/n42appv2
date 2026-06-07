@@ -12,7 +12,9 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
         children: [
           Text(
             S.of(context).g_key_38,
-            style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
+            style: AppTypography.body.copyWith(
+              color: AppColorTokens.of(context).textPrimary,
+            ),
           ),
           SizedBox(height: ScreenUtil().setWidth(20.0)),
           textFieldStyle2(
@@ -55,7 +57,9 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
               Flexible(
                 child: Text(
                   S.of(context).g_key_44,
-                  style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
+                  style: AppTypography.body.copyWith(
+                    color: AppColorTokens.of(context).textPrimary,
+                  ),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -131,8 +135,7 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
                           alignment: Alignment.center,
                           child: Text(
                             S.of(context).g_key_197,
-                            style: TextStyle(
-                              fontSize: ScreenUtil().setSp(26.0),
+                            style: AppTypography.bodySm.copyWith(
                               color: AppThemeUtils.getColorByKey(
                                 context,
                                 AppThemeKeys.mainWhiteColor.name,
@@ -170,7 +173,9 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
     final String unit = widget.coinModel.coin['unit'];
     return Text(
       '${dec.Decimal.parse(widget.coinModel.balanceDoubleAll().toString())} $unit',
-      style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
+      style: AppTypography.body.copyWith(
+        color: AppColorTokens.of(context).textPrimary,
+      ),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
       textAlign: TextAlign.right,
@@ -188,7 +193,9 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
       ),
       child: Text(
         addr,
-        style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle),
+        style: AppTypography.body.copyWith(
+          color: AppColorTokens.of(context).textSubtitle,
+        ),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),
@@ -246,7 +253,9 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
             child: Text(
               S.of(context).g_key_nft_141,
               overflow: TextOverflow.ellipsis,
-              style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
+              style: AppTypography.body.copyWith(
+                color: AppColorTokens.of(context).textPrimary,
+              ),
             ),
           ),
           const Spacer(),
@@ -288,7 +297,9 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
       ),
       child: Text(
         errorMessage,
-        style: AppTypography.body.copyWith(color: AppColorTokens.of(context).danger),
+        style: AppTypography.body.copyWith(
+          color: AppColorTokens.of(context).danger,
+        ),
       ),
     );
   }

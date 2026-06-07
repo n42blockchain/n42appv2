@@ -80,12 +80,11 @@ class _EditWalletPasswordState extends ConsumerState<EditWalletPassword> {
         hintText: hintText,
         keyboardType: keyboardType,
         textInputAction: TextInputAction.done,
-        hintStyle: TextStyle(
+        hintStyle: AppTypography.body.copyWith(
           color: AppThemeUtils.getColorByKey(
             context,
             AppThemeKeys.hintTextColor.name,
           ),
-          fontSize: ScreenUtil().setSp(30.0),
         ),
         obscure: obscure,
         errorMessage: errorMessage,

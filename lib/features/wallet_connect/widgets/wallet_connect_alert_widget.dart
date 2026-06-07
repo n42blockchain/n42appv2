@@ -361,8 +361,7 @@ class _WalletConnectAlertWidgetState
         children: [
           Text(
             title,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
+            style: AppTypography.body.copyWith(
               color: AppThemeUtils.getColorByKey(
                 context,
                 AppThemeKeys.ff888888.name,

@@ -75,8 +75,7 @@ mixin BridgeHomeWidgetsMixin
                         ),
                         decoration: InputDecoration(
                           hintText: '0.0',
-                          hintStyle: TextStyle(
-                            fontSize: ScreenUtil().setSp(40),
+                          hintStyle: AppTypography.titleLg.copyWith(
                             color: AppThemeUtils.getColorByKey(
                               context,
                               AppThemeKeys.textFieldHintColor.name,

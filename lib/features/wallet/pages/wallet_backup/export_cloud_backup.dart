@@ -314,9 +314,8 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
       hintText: hintText,
       controller: controller,
       maxLines: 1,
-      style: TextStyle(
+      style: AppTypography.bodySm.copyWith(
         color: AppThemeUtils.getColorByKey(context, AppThemeKeys.ff888888.name),
-        fontSize: ScreenUtil().setSp(26),
       ),
     ),
   );

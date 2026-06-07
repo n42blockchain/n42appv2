@@ -156,12 +156,11 @@ class _IapPageState extends State<IapPage> {
               onPressed: _restore,
               child: Text(
                 S.of(context).g_iap_restore,
-                style: TextStyle(
+                style: AppTypography.bodySm.copyWith(
                   color: AppThemeUtils.getColorByKey(
                     context,
                     AppThemeKeys.mainButtonBgColor.name,
                   ),
-                  fontSize: ScreenUtil().setSp(26),
                 ),
               ),
             ),

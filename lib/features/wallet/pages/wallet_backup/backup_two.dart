@@ -185,12 +185,11 @@ class _BackupTwoState extends State<BackupTwo> {
             child: Text(
               item.word,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: AppTypography.body.copyWith(
                 color: AppThemeUtils.getColorByKey(
                   context,
                   AppThemeKeys.mainButtonTextColor.name,
                 ),
-                fontSize: ScreenUtil().setSp(28.0),
               ),
             ),
           ),

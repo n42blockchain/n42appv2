@@ -272,12 +272,11 @@ mixin _WidgetsMixin on _LogicMixin {
                     child: Text(
                       titleText,
                       maxLines: 2,
-                      style: TextStyle(
+                      style: AppTypography.caption.copyWith(
                         color: AppThemeUtils.getColorByKey(
                           context,
                           AppThemeKeys.ff888888.name,
                         ),
-                        fontSize: ScreenUtil().setSp(22),
                       ),
                     ),
                   ),

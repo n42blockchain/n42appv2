@@ -151,12 +151,11 @@ mixin _SectionsMixin on _WidgetsMixin {
                                       child: Center(
                                         child: Text(
                                           "${S.of(context).g_mining_key_49}...",
-                                          style: TextStyle(
+                                          style: AppTypography.body.copyWith(
                                             color: AppThemeUtils.getColorByKey(
                                               context,
                                               AppThemeKeys.mainBlueColor.name,
                                             ),
-                                            fontSize: ScreenUtil().setSp(30),
                                           ),
                                         ),
                                       ),
