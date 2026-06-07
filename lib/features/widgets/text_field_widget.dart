@@ -139,9 +139,7 @@ Widget textFieldStyle2(
             padding ??
             EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
         decoration: BoxDecoration(
-          borderRadius:
-              borderRadius ??
-              BorderRadius.all(Radius.circular(ScreenUtil().setWidth(16.0))),
+          borderRadius: borderRadius ?? AppRadius.brMd,
           color:
               bgColor ??
               AppThemeUtils.getColorByKey(
@@ -265,9 +263,7 @@ Widget textFieldStyle3(
             padding ??
             EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
         decoration: BoxDecoration(
-          borderRadius:
-              borderRadius ??
-              BorderRadius.all(Radius.circular(ScreenUtil().setWidth(16.0))),
+          borderRadius: borderRadius ?? AppRadius.brMd,
           color:
               bgColor ??
               AppThemeUtils.getColorByKey(

@@ -404,7 +404,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: AppColorTokens.of(context).danger,
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16.0)),
+          borderRadius: AppRadius.brMd,
         ),
         child: Text(
           S.of(context).g_key_113,

@@ -17,10 +17,8 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
   Color get _subText => _themeColor(AppThemeKeys.itemSubtitleTextColor.name);
   Color get _itemBg => _themeColor(AppThemeKeys.itemBgColor.name);
 
-  BoxDecoration _sectionDecoration() => BoxDecoration(
-    color: _itemBg,
-    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-  );
+  BoxDecoration _sectionDecoration() =>
+      BoxDecoration(color: _itemBg, borderRadius: AppRadius.brMd);
 
   // ─── Account Card ─────────────────────────────────────────────────────
 
@@ -35,7 +33,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Column(
         children: [
@@ -76,7 +74,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
               color: _themeColor(
                 AppThemeKeys.backGroundColor.name,
               ).withAlpha(100),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+              borderRadius: AppRadius.brMd,
             ),
             child: Row(
               children: [
@@ -127,7 +125,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
       height: ScreenUtil().setWidth(64),
       decoration: BoxDecoration(
         color: typeColor.withAlpha(30),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(18)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Center(
         child: Icon(
@@ -196,7 +194,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
         padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
         decoration: BoxDecoration(
           color: effectiveColor.withAlpha(20),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+          borderRadius: AppRadius.brMd,
           border: Border.all(
             color: effectiveColor.withAlpha(isDisabled ? 30 : 40),
           ),

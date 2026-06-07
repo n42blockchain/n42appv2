@@ -18,7 +18,7 @@ mixin _SectionsMixin on _WidgetsMixin {
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Row(
         children: [
@@ -248,7 +248,7 @@ mixin _SectionsMixin on _WidgetsMixin {
         ),
         decoration: BoxDecoration(
           color: AppColorTokens.of(context).bgSurface,
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(30)),
+          borderRadius: AppRadius.brXl,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -283,7 +283,7 @@ mixin _SectionsMixin on _WidgetsMixin {
       ),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Row(
         children: [

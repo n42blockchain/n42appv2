@@ -136,7 +136,7 @@ class _LendingPageState extends State<LendingPage>
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
       ),
       child: ListTile(
         contentPadding: EdgeInsets.symmetric(

@@ -60,7 +60,7 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
       height: ScreenUtil().setWidth(10.0),
       width: ScreenUtil().setWidth(88.0),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10.0)),
+        borderRadius: AppRadius.brSm,
         color: AppColorTokens.of(context).brand,
       ),
     );

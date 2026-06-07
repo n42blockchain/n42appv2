@@ -132,7 +132,7 @@ class BatchResultSheet extends StatelessWidget {
               margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20)),
               decoration: BoxDecoration(
                 color: subText.withValues(alpha: 0.3),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(3)),
+                borderRadius: AppRadius.brSm,
               ),
             ),
             Icon(
@@ -154,7 +154,7 @@ class BatchResultSheet extends StatelessWidget {
               padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
               decoration: BoxDecoration(
                 color: AppColorTokens.of(context).bgBase,
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+                borderRadius: AppRadius.brMd,
               ),
               child: Column(
                 children: [
@@ -222,11 +222,7 @@ class BatchResultSheet extends StatelessWidget {
                     fontSize: ScreenUtil().setSp(30),
                     fontWeight: FontWeight.w600,
                   ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                      ScreenUtil().setWidth(14),
-                    ),
-                  ),
+                  shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
                 ),
               ),
             ),
@@ -239,11 +235,7 @@ class BatchResultSheet extends StatelessWidget {
                   padding: EdgeInsets.symmetric(
                     vertical: ScreenUtil().setWidth(16),
                   ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                      ScreenUtil().setWidth(14),
-                    ),
-                  ),
+                  shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
                 ),
                 child: Text(S.of(context).g_key_batch_done),
               ),

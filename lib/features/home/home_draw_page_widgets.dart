@@ -37,7 +37,7 @@ extension on _HomeDrawPageState {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+        borderRadius: AppRadius.brMd,
         border: Border.all(
           color: AppColorTokens.of(context).brand.withValues(alpha: 0.1),
           width: 1,
@@ -153,7 +153,7 @@ extension on _HomeDrawPageState {
               ),
               decoration: BoxDecoration(
                 color: AppColorTokens.of(context).brand,
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24)),
+                borderRadius: AppRadius.brLg,
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -221,7 +221,7 @@ extension on _HomeDrawPageState {
               Scaffold.of(context).closeDrawer();
             }
           },
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+          borderRadius: AppRadius.brMd,
           child: Container(
             padding: EdgeInsets.symmetric(
               vertical: ScreenUtil().setWidth(16),
@@ -231,7 +231,7 @@ extension on _HomeDrawPageState {
               color: showWalletLogout
                   ? AppColorTokens.of(context).danger.withValues(alpha: 0.1)
                   : AppColorTokens.of(context).brand.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+              borderRadius: AppRadius.brMd,
               border: Border.all(
                 color: showWalletLogout
                     ? AppColorTokens.of(context).danger.withValues(alpha: 0.3)

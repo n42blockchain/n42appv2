@@ -122,7 +122,7 @@ class _MiningIndexState extends State<MiningIndex>
                 margin: EdgeInsets.only(top: ScreenUtil().setWidth(30)),
                 decoration: BoxDecoration(
                   color: AppColorTokens.of(context).dangerBg,
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                  borderRadius: AppRadius.brSm,
                 ),
                 child: Text(
                   "The test chain is being upgraded and blocks cannot be verified temporarily.",
@@ -164,9 +164,7 @@ class _MiningIndexState extends State<MiningIndex>
                     vertical: ScreenUtil().setWidth(24),
                   ),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(
-                      ScreenUtil().setWidth(30),
-                    ),
+                    borderRadius: AppRadius.brXl,
                     color: isSelected
                         ? AppColorTokens.of(context).brand
                         : AppColorTokens.of(context).bgSurface,

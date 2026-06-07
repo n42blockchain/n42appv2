@@ -249,7 +249,7 @@ class _PerpsPageState extends State<PerpsPage>
           padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
           decoration: BoxDecoration(
             color: AppColorTokens.of(context).bgSurface,
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+            borderRadius: AppRadius.brMd,
           ),
           child: Column(
             children: [

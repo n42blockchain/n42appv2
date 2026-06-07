@@ -32,7 +32,7 @@ class NavImportWallet extends StatelessWidget {
             ),
             margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0)),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20.0)),
+              borderRadius: AppRadius.brMd,
               color: Colors.transparent,
               border: Border.fromBorderSide(
                 BorderSide(
@@ -90,7 +90,7 @@ class NavImportWallet extends StatelessWidget {
             ),
             margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0)),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20.0)),
+              borderRadius: AppRadius.brMd,
               color: Colors.transparent,
               border: Border.fromBorderSide(
                 BorderSide(

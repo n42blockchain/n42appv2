@@ -294,7 +294,7 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
       padding: EdgeInsets.only(left: ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8.0)),
+        borderRadius: AppRadius.brSm,
       ),
       height: ScreenUtil().setWidth(72.0),
       child: Row(
@@ -351,7 +351,7 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
       width: double.infinity,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20.0)),
+        borderRadius: AppRadius.brMd,
         color: AppThemeUtils.getColorByKey(
           context,
           AppThemeKeys.errorBgColor2.name,

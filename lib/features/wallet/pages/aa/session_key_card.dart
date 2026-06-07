@@ -43,7 +43,7 @@ class SessionKeyCard extends StatelessWidget {
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
         border: Border.all(
           color: sessionKeyStatusColor(keyData.status).withAlpha(40),
         ),
@@ -110,11 +110,11 @@ class SessionKeyCard extends StatelessWidget {
       height: ScreenUtil().setWidth(48),
       decoration: BoxDecoration(
         color: permColor.withAlpha(25),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
+        borderRadius: AppRadius.brMd,
       ),
       child: keyData.dappIcon != null
           ? ClipRRect(
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
+              borderRadius: AppRadius.brMd,
               child: Image.network(
                 keyData.dappIcon!,
                 fit: BoxFit.cover,
@@ -142,7 +142,7 @@ class SessionKeyCard extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: color.withAlpha(20),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+        borderRadius: AppRadius.brMd,
         border: Border.all(color: color.withAlpha(50)),
       ),
       child: Text(
@@ -175,7 +175,7 @@ class SessionKeyCard extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           color: AppColorTokens.of(context).bgBase.withAlpha(100),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+          borderRadius: AppRadius.brSm,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -255,7 +255,7 @@ class SessionKeyCard extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: chipColor.withAlpha(15),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+        borderRadius: AppRadius.brSm,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -332,9 +332,7 @@ class SessionKeyCard extends StatelessWidget {
             label: Text(S.of(context).g_key_aa_details),
             style: OutlinedButton.styleFrom(
               foregroundColor: AppColorTokens.of(context).brand,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
-              ),
+              shape: RoundedRectangleBorder(borderRadius: AppRadius.brSm),
             ),
           ),
         ),
@@ -347,9 +345,7 @@ class SessionKeyCard extends StatelessWidget {
             style: OutlinedButton.styleFrom(
               foregroundColor: Colors.red,
               side: const BorderSide(color: Colors.red),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
-              ),
+              shape: RoundedRectangleBorder(borderRadius: AppRadius.brSm),
             ),
           ),
         ),

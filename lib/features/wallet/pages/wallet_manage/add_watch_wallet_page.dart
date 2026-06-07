@@ -90,7 +90,7 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
         Container(
           decoration: BoxDecoration(
             color: bgColor,
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+            borderRadius: AppRadius.brMd,
           ),
           child: TextField(
             controller: controller,
@@ -148,7 +148,7 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
               padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
               decoration: BoxDecoration(
                 color: blueColor.withAlpha(20),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+                borderRadius: AppRadius.brMd,
               ),
               child: Row(
                 children: [
@@ -199,11 +199,7 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
                 onPressed: _loading ? null : _submit,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: blueColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                      ScreenUtil().setWidth(20),
-                    ),
-                  ),
+                  shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
                 ),
                 child: _loading
                     ? SizedBox(

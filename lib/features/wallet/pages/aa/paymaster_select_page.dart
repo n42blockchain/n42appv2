@@ -4,6 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -156,7 +157,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -237,7 +238,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
             color: isCurrent
                 ? blueColor.withAlpha(30)
                 : Colors.grey.withAlpha(20),
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
+            borderRadius: AppRadius.brSm,
             border: isCurrent
                 ? Border.all(color: blueColor.withAlpha(80))
                 : null,
@@ -360,11 +361,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
                   padding: EdgeInsets.symmetric(
                     vertical: ScreenUtil().setWidth(16),
                   ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                      ScreenUtil().setWidth(14),
-                    ),
-                  ),
+                  shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
                 ),
                 child: Text(
                   S.of(context).g_key_78,
@@ -387,7 +384,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
       padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
       decoration: BoxDecoration(
         color: color.withAlpha(15),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
         border: Border.all(color: color.withAlpha(30)),
       ),
       child: Row(
@@ -435,7 +432,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
       ),
       decoration: BoxDecoration(
         color: Colors.green.withAlpha(30),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+        borderRadius: AppRadius.brSm,
       ),
       child: Text(
         S.of(context).g_key_aa_free,

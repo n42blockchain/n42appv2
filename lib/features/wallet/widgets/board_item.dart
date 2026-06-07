@@ -1,5 +1,6 @@
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BoardItem extends StatelessWidget {
@@ -22,7 +23,7 @@ class BoardItem extends StatelessWidget {
             context,
             AppThemeKeys.mainButtonBgColor.name,
           ),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(30)),
+          borderRadius: AppRadius.brXl,
         ),
         child: FittedBox(
           fit: BoxFit.scaleDown,

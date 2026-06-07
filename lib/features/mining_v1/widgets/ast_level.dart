@@ -14,7 +14,7 @@ class AstLevel extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
       ),
       padding: EdgeInsets.symmetric(
         horizontal: ScreenUtil().setWidth(30),
@@ -82,9 +82,7 @@ class AstLevel extends StatelessWidget {
                       Container(
                         decoration: BoxDecoration(
                           color: AppColorTokens.of(context).brand,
-                          borderRadius: BorderRadius.circular(
-                            ScreenUtil().setWidth(8),
-                          ),
+                          borderRadius: AppRadius.brSm,
                         ),
                         padding: const EdgeInsets.all(4),
                         child: Image.asset(
@@ -136,10 +134,7 @@ class AstLevel extends StatelessWidget {
     final textColor = AppColorTokens.of(context).textPrimary;
 
     return Container(
-      decoration: BoxDecoration(
-        color: tagBg,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(30)),
-      ),
+      decoration: BoxDecoration(color: tagBg, borderRadius: AppRadius.brXl),
       padding: EdgeInsets.symmetric(
         horizontal: ScreenUtil().setWidth(12),
         vertical: ScreenUtil().setWidth(6),

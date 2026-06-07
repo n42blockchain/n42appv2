@@ -54,7 +54,7 @@ class ContractSecurityCard extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Row(
         children: [
@@ -115,7 +115,7 @@ class ContractSecurityCard extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: color.withAlpha(20),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
         border: Border.all(color: color.withAlpha(80)),
       ),
       child: Column(
@@ -175,7 +175,7 @@ class ContractSecurityCard extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: color.withAlpha(30),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
+        borderRadius: AppRadius.brSm,
       ),
       child: Text(
         risk.label,

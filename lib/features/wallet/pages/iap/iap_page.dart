@@ -311,7 +311,7 @@ class _IapPageState extends State<IapPage> {
       padding: EdgeInsets.all(ScreenUtil().setWidth(32)),
       decoration: BoxDecoration(
         color: cardBg,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+        borderRadius: AppRadius.brMd,
         border: Border.all(color: borderColor),
         boxShadow: [
           BoxShadow(
@@ -333,7 +333,7 @@ class _IapPageState extends State<IapPage> {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+              borderRadius: AppRadius.brMd,
             ),
             child: Icon(
               Icons.diamond_outlined,
@@ -390,7 +390,7 @@ class _IapPageState extends State<IapPage> {
                         end: Alignment.bottomRight,
                       ),
                 color: isPending ? Colors.grey.withValues(alpha: 0.3) : null,
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
+                borderRadius: AppRadius.brMd,
               ),
               child: isPending
                   ? SizedBox(
@@ -448,7 +448,7 @@ class _RetryButton extends StatelessWidget {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+          borderRadius: AppRadius.brMd,
         ),
         child: Text(
           S.of(context).g_iap_retry,

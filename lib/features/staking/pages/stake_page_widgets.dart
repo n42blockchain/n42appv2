@@ -31,7 +31,7 @@ mixin _StakeViewsMixin
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+            borderRadius: AppRadius.brMd,
           ),
           child: Row(
             children: [
@@ -74,9 +74,7 @@ mixin _StakeViewsMixin
                             ),
                             decoration: BoxDecoration(
                               color: Colors.white24,
-                              borderRadius: BorderRadius.circular(
-                                ScreenUtil().setWidth(6),
-                              ),
+                              borderRadius: AppRadius.brSm,
                             ),
                             child: Text(
                               S.of(context).g_key_stake_liquid_tag,
@@ -164,13 +162,13 @@ mixin _StakeViewsMixin
       margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
       ),
       child: TabBar(
         controller: _tabController,
         indicator: BoxDecoration(
           color: AppColorTokens.of(context).brand,
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+          borderRadius: AppRadius.brMd,
         ),
         labelColor: Colors.white,
         unselectedLabelColor: AppColorTokens.of(context).textSubtitle,
@@ -326,7 +324,7 @@ mixin _StakeViewsMixin
       padding: EdgeInsets.all(ScreenUtil().setWidth(12)),
       decoration: BoxDecoration(
         color: Colors.red.withAlpha(20),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+        borderRadius: AppRadius.brSm,
       ),
       child: Row(
         children: [

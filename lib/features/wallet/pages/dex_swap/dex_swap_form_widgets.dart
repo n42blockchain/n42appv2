@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_swap_constants.dart';
 import 'package:n42_wallet/features/widgets/line_chart.dart';
@@ -97,7 +98,7 @@ class DexSlippageRow extends StatelessWidget {
               ),
               decoration: BoxDecoration(
                 color: selected ? btnBg : itemBg,
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
+                borderRadius: AppRadius.brSm,
                 border: Border.all(color: selected ? btnBg : divider),
               ),
               child: Text(
@@ -160,7 +161,7 @@ class DexErrorBanner extends StatelessWidget {
       padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
       decoration: BoxDecoration(
         color: _dexColor(context, AppThemeKeys.errorBgColor),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+        borderRadius: AppRadius.brSm,
       ),
       child: Text(
         message,
@@ -210,7 +211,7 @@ class DexPriceChart extends StatelessWidget {
       padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
       decoration: BoxDecoration(
         color: _dexColor(context, AppThemeKeys.itemBgColor4),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -271,7 +272,7 @@ class DexPriceChart extends StatelessWidget {
           color: isSelected
               ? blueColor.withValues(alpha: 0.15)
               : Colors.transparent,
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+          borderRadius: AppRadius.brMd,
         ),
         child: Text(
           label,

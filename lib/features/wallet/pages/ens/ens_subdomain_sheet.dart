@@ -4,6 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/features/wallet/pages/ens/ens_chain_config.dart';
@@ -236,9 +237,7 @@ class _EnsCreateSubdomainSheetState extends State<EnsCreateSubdomainSheet> {
         labelText: S.of(context).g_key_ens_subdomain_label,
         hintText: S.of(context).g_key_ens_subdomain_label_hint,
         errorText: _labelError,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-        ),
+        border: OutlineInputBorder(borderRadius: AppRadius.brMd),
         suffixText: '.${widget.parentName}',
         suffixStyle: TextStyle(
           color: widget.domainChain.color,
@@ -257,9 +256,7 @@ class _EnsCreateSubdomainSheetState extends State<EnsCreateSubdomainSheet> {
         labelText: S.of(context).g_key_ens_subdomain_owner,
         hintText: S.of(context).g_key_ens_subdomain_owner_hint,
         errorText: _ownerError,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-        ),
+        border: OutlineInputBorder(borderRadius: AppRadius.brMd),
       ),
       style: TextStyle(fontSize: ScreenUtil().setSp(24)),
     );
@@ -272,9 +269,7 @@ class _EnsCreateSubdomainSheetState extends State<EnsCreateSubdomainSheet> {
         onPressed: _creating ? null : _onCreate,
         style: ElevatedButton.styleFrom(
           backgroundColor: widget.domainChain.color,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
         ),
         child: _creating
             ? const SizedBox(

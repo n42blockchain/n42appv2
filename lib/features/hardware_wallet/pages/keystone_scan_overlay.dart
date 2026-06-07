@@ -113,7 +113,7 @@ class _KeystoneInfoCard extends StatelessWidget {
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Row(
         children: [
@@ -152,7 +152,7 @@ class _KeystoneScanErrorCard extends StatelessWidget {
       padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
       decoration: BoxDecoration(
         color: Colors.red.shade900.withAlpha(230),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -175,7 +175,7 @@ class _KeystoneScanErrorCard extends StatelessWidget {
               ),
               decoration: BoxDecoration(
                 color: Colors.white24,
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                borderRadius: AppRadius.brSm,
               ),
               child: Text(
                 s.g_key_hw_load_more,

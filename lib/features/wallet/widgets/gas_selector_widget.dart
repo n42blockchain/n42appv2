@@ -77,7 +77,7 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
       margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -211,7 +211,7 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
           ),
           decoration: BoxDecoration(
             color: isSelected ? blueColor.withAlpha(25) : Colors.transparent,
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+            borderRadius: AppRadius.brMd,
             border: Border.all(
               color: isSelected ? blueColor : dividerColor,
               width: isSelected ? 2 : 1,
@@ -259,7 +259,7 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgBase,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Column(
         children: [
@@ -399,7 +399,7 @@ class GasSelectorCompact extends StatelessWidget {
         margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
         decoration: BoxDecoration(
           color: AppColorTokens.of(context).bgSurface,
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+          borderRadius: AppRadius.brMd,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

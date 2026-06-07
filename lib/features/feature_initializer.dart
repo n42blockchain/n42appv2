@@ -161,4 +161,3 @@ class FeatureInitializer {
 
 /// Global feature initializer instance
 final featureInitializer = FeatureInitializer();
-

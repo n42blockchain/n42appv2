@@ -24,7 +24,7 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
 
   BoxDecoration get _sectionDecoration => BoxDecoration(
     color: _color(AppThemeKeys.itemBgColor),
-    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16.0)),
+    borderRadius: AppRadius.brMd,
   );
 
   EdgeInsets get _sectionPadding => EdgeInsets.symmetric(

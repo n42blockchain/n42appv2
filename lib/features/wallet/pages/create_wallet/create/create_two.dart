@@ -114,7 +114,7 @@ class _CreateTwoState extends State<CreateTwo> with _CreateTwoWidgetsMixin {
       height: ScreenUtil().setWidth(10.0),
       width: ScreenUtil().setWidth(88.0),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10.0)),
+        borderRadius: AppRadius.brSm,
         color: AppThemeUtils.getColorByKey(
           context,
           active

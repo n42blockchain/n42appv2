@@ -2,6 +2,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
@@ -264,9 +265,7 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
       decoration: InputDecoration(
         hintText: S.of(context).g_key_aa_session_dapp_hint,
         prefixIcon: const Icon(Icons.label_outline),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-        ),
+        border: OutlineInputBorder(borderRadius: AppRadius.brMd),
         contentPadding: EdgeInsets.symmetric(
           horizontal: ScreenUtil().setWidth(16),
           vertical: ScreenUtil().setWidth(14),
@@ -295,7 +294,7 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
               color: isSelected
                   ? blueColor.withAlpha(25)
                   : Colors.grey.withAlpha(15),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+              borderRadius: AppRadius.brMd,
               border: Border.all(
                 color: isSelected ? blueColor : Colors.grey.withAlpha(40),
                 width: isSelected ? 2 : 1,
@@ -333,9 +332,7 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
               padding: EdgeInsets.symmetric(
                 vertical: ScreenUtil().setWidth(16),
               ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
-              ),
+              shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
             ),
             child: _isSaving
                 ? SizedBox(

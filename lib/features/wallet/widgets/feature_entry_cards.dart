@@ -61,9 +61,7 @@ class FeatureEntrySection extends StatelessWidget {
                       end: Alignment.bottomCenter,
                       colors: [Color(0xFF5B8DEF), Color(0xFF8B5CF6)],
                     ),
-                    borderRadius: BorderRadius.circular(
-                      ScreenUtil().setWidth(3),
-                    ),
+                    borderRadius: AppRadius.brSm,
                   ),
                 ),
                 SizedBox(width: ScreenUtil().setWidth(12)),
@@ -199,7 +197,7 @@ class FeatureEntryHorizontal extends StatelessWidget {
                 .map((c) => c.withValues(alpha: 0.12))
                 .toList(),
           ),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+          borderRadius: AppRadius.brMd,
           border: Border.all(
             color: gradientColors[0].withValues(alpha: 0.25),
             width: 1,
@@ -246,9 +244,7 @@ class FeatureEntryHorizontal extends StatelessWidget {
                         height: ScreenUtil().setWidth(20),
                         decoration: BoxDecoration(
                           color: badgeColor,
-                          borderRadius: BorderRadius.circular(
-                            ScreenUtil().setWidth(10),
-                          ),
+                          borderRadius: AppRadius.brSm,
                           border: Border.all(color: Colors.white, width: 2),
                         ),
                       ),

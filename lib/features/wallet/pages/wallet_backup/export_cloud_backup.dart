@@ -187,7 +187,7 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
               padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
               decoration: BoxDecoration(
                 color: AppColorTokens.of(context).dangerBg,
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                borderRadius: AppRadius.brSm,
               ),
               child: Text(
                 _error,
@@ -210,7 +210,7 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
     padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
     decoration: BoxDecoration(
       color: const Color(0xFFFFF3CD),
-      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+      borderRadius: AppRadius.brMd,
       border: Border.all(color: const Color(0xFFFFD700), width: 1),
     ),
     child: Row(

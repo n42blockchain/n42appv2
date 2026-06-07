@@ -89,7 +89,7 @@ class _NewsPageState extends State<NewsPage> {
     GestureTapCallback? onTap,
   }) {
     final gap = ScreenUtil().setWidth(30.0);
-    final radius = BorderRadius.circular(ScreenUtil().setWidth(16.0));
+    final radius = AppRadius.brMd;
 
     return GestureDetector(
       onTap: onTap,

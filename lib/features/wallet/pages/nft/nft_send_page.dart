@@ -168,11 +168,7 @@ class _NftSendPageState extends State<NftSendPage> {
                         }
                       },
                     ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(
-                        ScreenUtil().setWidth(8),
-                      ),
-                    ),
+                    border: OutlineInputBorder(borderRadius: AppRadius.brSm),
                   ),
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(26),
@@ -207,11 +203,7 @@ class _NftSendPageState extends State<NftSendPage> {
                         color: subtitleColor,
                         fontSize: ScreenUtil().setSp(26),
                       ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(
-                          ScreenUtil().setWidth(8),
-                        ),
-                      ),
+                      border: OutlineInputBorder(borderRadius: AppRadius.brSm),
                     ),
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(26),
@@ -237,9 +229,7 @@ class _NftSendPageState extends State<NftSendPage> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: blueColor,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                          ScreenUtil().setWidth(12),
-                        ),
+                        borderRadius: AppRadius.brMd,
                       ),
                     ),
                     child: _sending
@@ -273,13 +263,13 @@ class _NftSendPageState extends State<NftSendPage> {
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
         color: blueColor.withAlpha(15),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Row(
         children: [
           // 缩略图
           ClipRRect(
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+            borderRadius: AppRadius.brSm,
             child: nft.imageUrl != null && nft.imageUrl!.isNotEmpty
                 ? Image.network(
                     nft.imageUrl!,

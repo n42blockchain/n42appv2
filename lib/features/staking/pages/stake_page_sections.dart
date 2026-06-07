@@ -16,7 +16,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Center(
         child: Text(
@@ -99,7 +99,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
       padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
       decoration: BoxDecoration(
         color: Colors.orange.withAlpha(20),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Row(
         children: [
@@ -148,7 +148,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
         padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
         decoration: BoxDecoration(
           color: AppColorTokens.of(context).bgSurface,
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+          borderRadius: AppRadius.brMd,
         ),
         child: Center(
           child: Text(
@@ -188,7 +188,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
             padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
             decoration: BoxDecoration(
               color: AppColorTokens.of(context).bgSurface,
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+              borderRadius: AppRadius.brMd,
               border: isSelected
                   ? Border.all(color: Colors.orange, width: 2)
                   : null,
@@ -239,7 +239,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
       padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Row(
         children: [
@@ -321,7 +321,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
                 margin: EdgeInsets.only(right: ScreenUtil().setWidth(8)),
                 decoration: BoxDecoration(
                   color: AppColorTokens.of(context).bgSurface,
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                  borderRadius: AppRadius.brSm,
                 ),
                 child: Center(
                   child: Text(

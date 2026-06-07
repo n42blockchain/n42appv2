@@ -78,10 +78,7 @@ class _ImportOneState extends ConsumerState<ImportOne>
     return Container(
       height: ScreenUtil().setWidth(10.0),
       width: ScreenUtil().setWidth(144.0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10.0)),
-        color: color,
-      ),
+      decoration: BoxDecoration(borderRadius: AppRadius.brSm, color: color),
     );
   }
 
@@ -190,9 +187,7 @@ class _ImportOneState extends ConsumerState<ImportOne>
                       ),
                       decoration: BoxDecoration(
                         color: AppColorTokens.of(context).bgSurface,
-                        borderRadius: BorderRadius.circular(
-                          ScreenUtil().setWidth(8),
-                        ),
+                        borderRadius: AppRadius.brSm,
                       ),
                       child: TextField(
                         style: TextStyle(
@@ -236,9 +231,7 @@ class _ImportOneState extends ConsumerState<ImportOne>
                         margin: EdgeInsets.only(top: ScreenUtil().setWidth(30)),
                         decoration: BoxDecoration(
                           color: AppColorTokens.of(context).dangerBg,
-                          borderRadius: BorderRadius.circular(
-                            ScreenUtil().setWidth(8),
-                          ),
+                          borderRadius: AppRadius.brSm,
                         ),
                         child: Text(
                           errorMessage,

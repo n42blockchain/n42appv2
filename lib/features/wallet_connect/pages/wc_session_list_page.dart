@@ -204,12 +204,12 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
 
     return InkWell(
       onTap: () => _onSessionTap(session),
-      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+      borderRadius: AppRadius.brMd,
       child: Container(
         padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
         decoration: BoxDecoration(
           color: AppColorTokens.of(context).bgSurface,
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+          borderRadius: AppRadius.brMd,
           border: Border.all(
             color: AppColorTokens.of(context).border,
             width: 0.5,
@@ -224,7 +224,7 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
               height: ScreenUtil().setWidth(72),
               margin: EdgeInsets.only(right: ScreenUtil().setWidth(20)),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+                borderRadius: AppRadius.brMd,
                 child: iconUrl.isNotEmpty
                     ? ImageNetWork(
                         imageUrl: iconUrl,
@@ -277,9 +277,7 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
                             color: AppColorTokens.of(
                               context,
                             ).brand.withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(
-                              ScreenUtil().setWidth(8),
-                            ),
+                            borderRadius: AppRadius.brSm,
                           ),
                           child: Text(
                             chain,

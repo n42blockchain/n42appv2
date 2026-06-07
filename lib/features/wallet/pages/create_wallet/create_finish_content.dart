@@ -137,7 +137,7 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
       height: ScreenUtil().setWidth(10.0),
       width: ScreenUtil().setWidth(width),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10.0)),
+        borderRadius: AppRadius.brSm,
         color: _themeColor(AppThemeKeys.mainBlueColor.name),
       ),
     );
@@ -250,9 +250,7 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
                     width: ScreenUtil().setWidth(48.0),
                     decoration: BoxDecoration(
                       color: _themeColor(AppThemeKeys.backGroundColor.name),
-                      borderRadius: BorderRadius.circular(
-                        ScreenUtil().setWidth(24.0),
-                      ),
+                      borderRadius: AppRadius.brLg,
                     ),
                     alignment: Alignment.center,
                     child: Image.asset(

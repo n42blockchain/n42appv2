@@ -43,7 +43,7 @@ class SmartAccountCard extends StatelessWidget {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+          borderRadius: AppRadius.brMd,
           border: Border.all(color: typeColor.withAlpha(40)),
         ),
         child: Column(
@@ -102,7 +102,7 @@ class SmartAccountCard extends StatelessWidget {
       height: ScreenUtil().setWidth(48),
       decoration: BoxDecoration(
         color: color.withAlpha(30),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Center(
         child: Icon(
@@ -122,7 +122,7 @@ class SmartAccountCard extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgBase.withAlpha(100),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Row(
         children: [
@@ -162,7 +162,7 @@ class SmartAccountCard extends StatelessWidget {
       padding: EdgeInsets.all(ScreenUtil().setWidth(14)),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgBase.withAlpha(80),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Column(
         children: [

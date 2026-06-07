@@ -27,7 +27,7 @@ mixin BridgeHomeSectionsMixin
         padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
         decoration: BoxDecoration(
           color: AppColorTokens.of(context).bgSurface,
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+          borderRadius: AppRadius.brMd,
         ),
         child: Center(
           child: Text(
@@ -97,7 +97,7 @@ mixin BridgeHomeSectionsMixin
         padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
         decoration: BoxDecoration(
           color: AppColorTokens.of(context).bgSurface,
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+          borderRadius: AppRadius.brMd,
           border: Border.all(
             color: isSelected ? selectedColor : Colors.transparent,
             width: 2,
@@ -111,9 +111,7 @@ mixin BridgeHomeSectionsMixin
                 if (route.steps.isNotEmpty &&
                     route.steps.first.toolLogoUri.isNotEmpty)
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(
-                      ScreenUtil().setWidth(10),
-                    ),
+                    borderRadius: AppRadius.brSm,
                     child: Image.network(
                       route.steps.first.toolLogoUri,
                       width: ScreenUtil().setWidth(32),
@@ -145,9 +143,7 @@ mixin BridgeHomeSectionsMixin
                     ),
                     decoration: BoxDecoration(
                       color: tagColor.withAlpha(30),
-                      borderRadius: BorderRadius.circular(
-                        ScreenUtil().setWidth(6),
-                      ),
+                      borderRadius: AppRadius.brSm,
                       border: Border.all(color: tagColor),
                     ),
                     child: Text(
@@ -234,9 +230,7 @@ mixin BridgeHomeSectionsMixin
                     ),
                     decoration: BoxDecoration(
                       color: AppColorTokens.of(context).bgBase,
-                      borderRadius: BorderRadius.circular(
-                        ScreenUtil().setWidth(6),
-                      ),
+                      borderRadius: AppRadius.brSm,
                     ),
                     child: Text(
                       '${step.fromToken.symbol} → ${step.toToken.symbol} via ${step.toolName}',
@@ -287,7 +281,7 @@ mixin BridgeHomeSectionsMixin
           context,
           AppThemeKeys.errorBgColor2.name,
         ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Row(
         children: [

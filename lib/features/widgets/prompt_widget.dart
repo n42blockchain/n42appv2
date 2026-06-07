@@ -1,6 +1,7 @@
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 Widget successViewV1(String title) {
@@ -10,7 +11,7 @@ Widget successViewV1(String title) {
       vertical: ScreenUtil().setWidth(48.0),
     ),
     decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24.0)),
+      borderRadius: AppRadius.brLg,
       // color: Colors.white,
       color: AppThemeUtils.getColorByKey(
         AppGlobals.navigatorKey.currentContext,

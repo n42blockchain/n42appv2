@@ -104,7 +104,7 @@ mixin EarnPageLogicMixin on ConsumerState<EarnPage> {
         height: ScreenUtil().setWidth(48),
         decoration: BoxDecoration(
           color: AppColorTokens.of(context).brand.withAlpha(25),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+          borderRadius: AppRadius.brMd,
         ),
         child: Icon(
           icon,

@@ -162,7 +162,7 @@ class _BackupTwoState extends State<BackupTwo> {
           context,
           AppThemeKeys.itemBgColor8.name,
         ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8.0)),
+        borderRadius: AppRadius.brSm,
       ),
     );
   }
@@ -179,7 +179,7 @@ class _BackupTwoState extends State<BackupTwo> {
               context,
               AppThemeKeys.mainButtonBgColor.name,
             ),
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8.0)),
+            borderRadius: AppRadius.brSm,
           ),
           child: Center(
             child: Text(
@@ -210,9 +210,7 @@ class _BackupTwoState extends State<BackupTwo> {
                   width: ScreenUtil().setWidth(36.0),
                   height: ScreenUtil().setWidth(36.0),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(
-                      ScreenUtil().setWidth(18.0),
-                    ),
+                    borderRadius: AppRadius.brMd,
                     color: Colors.white,
                   ),
                   child: Icon(
@@ -251,7 +249,7 @@ class _BackupTwoState extends State<BackupTwo> {
                       ),
                 width: 1,
               ),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8.0)),
+              borderRadius: AppRadius.brSm,
             ),
             child: Center(
               child: Text(

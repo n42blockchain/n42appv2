@@ -27,7 +27,7 @@ class EnsOwnedListItem extends StatelessWidget {
         padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
         decoration: BoxDecoration(
           color: AppColorTokens.of(context).bgSurface,
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+          borderRadius: AppRadius.brMd,
           border: Border.all(
             color: isExpired
                 ? Colors.red.withAlpha(50)
@@ -66,9 +66,7 @@ class EnsOwnedListItem extends StatelessWidget {
                           ),
                           decoration: BoxDecoration(
                             color: Colors.green.withAlpha(30),
-                            borderRadius: BorderRadius.circular(
-                              ScreenUtil().setWidth(8),
-                            ),
+                            borderRadius: AppRadius.brSm,
                           ),
                           child: Text(
                             S.of(context).g_key_ens_primary,
@@ -138,7 +136,7 @@ class EnsOwnedListItem extends StatelessWidget {
   Widget _buildAvatar(BuildContext context) {
     if (ownedEns.avatar != null) {
       return ClipRRect(
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24)),
+        borderRadius: AppRadius.brLg,
         child: Image.network(
           ownedEns.avatar!,
           width: ScreenUtil().setWidth(48),
@@ -157,7 +155,7 @@ class EnsOwnedListItem extends StatelessWidget {
       height: ScreenUtil().setWidth(48),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).brand.withAlpha(30),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24)),
+        borderRadius: AppRadius.brLg,
       ),
       child: Center(
         child: Text(

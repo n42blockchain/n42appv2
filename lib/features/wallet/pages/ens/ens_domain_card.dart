@@ -44,7 +44,7 @@ class EnsDomainCard extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Column(
         children: [
@@ -163,7 +163,7 @@ class _ChainBadgeRow extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: color.withAlpha(25),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
         border: Border.all(color: color.withAlpha(60)),
       ),
       child: Text(

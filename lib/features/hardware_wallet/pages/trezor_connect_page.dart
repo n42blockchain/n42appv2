@@ -174,10 +174,7 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
 
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
-      decoration: BoxDecoration(
-        color: itemBg,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-      ),
+      decoration: BoxDecoration(color: itemBg, borderRadius: AppRadius.brMd),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -252,7 +249,7 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
       padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
       decoration: BoxDecoration(
         color: color.withAlpha(20),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
+        borderRadius: AppRadius.brSm,
         border: Border.all(color: color.withAlpha(80)),
       ),
       child: Row(
@@ -292,9 +289,7 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
         foregroundColor: Colors.white,
         disabledBackgroundColor: blueColor.withAlpha(100),
         padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
       ),
       child: _isConnecting
           ? Row(

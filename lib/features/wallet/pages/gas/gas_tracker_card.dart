@@ -16,7 +16,7 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Row(
         children: [
@@ -65,7 +65,7 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
         border: Border.all(color: network.color.withAlpha(50), width: 1),
       ),
       child: Column(
@@ -249,7 +249,7 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
             ),
             decoration: BoxDecoration(
               color: color.withAlpha(20),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+              borderRadius: AppRadius.brSm,
             ),
             child: Text(
               value,
@@ -281,7 +281,7 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
       ),
       decoration: BoxDecoration(
         color: statusColor.withAlpha(20),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Text(
         statusText,

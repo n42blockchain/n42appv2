@@ -6,23 +6,20 @@ import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'splash_variants.dart';
 
 /// 启动页面
-/// 
+///
 /// 显示应用 Logo 和加载动画，在后台完成初始化
 class SplashPage extends StatefulWidget {
   final Future<void> Function()? onInit;
   final VoidCallback onComplete;
 
-  const SplashPage({
-    super.key,
-    this.onInit,
-    required this.onComplete,
-  });
+  const SplashPage({super.key, this.onInit, required this.onComplete});
 
   @override
   State<SplashPage> createState() => _SplashPageState();
 }
 
-class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateMixin {
+class _SplashPageState extends State<SplashPage>
+    with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
   late Animation<double> _scaleAnimation;
@@ -35,30 +32,30 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
   @override
   void initState() {
     super.initState();
-    
+
     // 设置动画 - 快速启动
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 800),
     );
-    
+
     _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _animationController,
         curve: const Interval(0.0, 0.5, curve: Curves.easeOut),
       ),
     );
-    
+
     _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
       CurvedAnimation(
         parent: _animationController,
         curve: const Interval(0.0, 0.5, curve: Curves.easeOutBack),
       ),
     );
-    
+
     // 开始动画
     _animationController.forward();
-    
+
     // 执行初始化
     _initialize();
   }
@@ -107,10 +104,7 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFF1A237E),
-              Color(0xFF0D1B2A),
-            ],
+            colors: [Color(0xFF1A237E), Color(0xFF0D1B2A)],
           ),
         ),
         child: SafeArea(

@@ -188,7 +188,7 @@ extension _HardwareWalletPageLogic on _HardwareWalletPageState {
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -270,7 +270,7 @@ extension _HardwareWalletPageLogic on _HardwareWalletPageState {
             ),
             decoration: BoxDecoration(
               color: AppColorTokens.of(context).brand.withAlpha(30),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
+              borderRadius: AppRadius.brSm,
             ),
             child: Text(
               connection,

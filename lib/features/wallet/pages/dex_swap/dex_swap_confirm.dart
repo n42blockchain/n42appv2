@@ -44,7 +44,7 @@ class _DexSwapConfirmState extends State<DexSwapConfirm> {
       padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Column(
         children: [

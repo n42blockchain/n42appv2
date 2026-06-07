@@ -83,7 +83,7 @@ class _SimulatingCard extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
         border: Border.all(color: AppColorTokens.of(context).border, width: 1),
       ),
       child: Column(
@@ -164,7 +164,7 @@ class _StatusCard extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
         border: Border.all(color: color.withAlpha(80), width: 1),
       ),
       child: Padding(

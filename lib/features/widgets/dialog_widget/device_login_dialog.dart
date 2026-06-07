@@ -15,7 +15,7 @@ Future<bool?> deviceLoginDialog(
     context,
     Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
         color: AppColorTokens.of(context).bgSurface,
       ),
       child: Column(

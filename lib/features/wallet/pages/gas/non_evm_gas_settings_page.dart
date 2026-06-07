@@ -166,10 +166,7 @@ class _NonEvmGasSettingsPageState extends State<NonEvmGasSettingsPage> {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
       padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-      decoration: BoxDecoration(
-        color: itemBg,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-      ),
+      decoration: BoxDecoration(color: itemBg, borderRadius: AppRadius.brMd),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -202,7 +199,7 @@ class _NonEvmGasSettingsPageState extends State<NonEvmGasSettingsPage> {
             ),
             decoration: BoxDecoration(
               color: AppColorTokens.of(context).bgBase,
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+              borderRadius: AppRadius.brMd,
               border: Border.all(color: borderColor),
             ),
             child: Row(

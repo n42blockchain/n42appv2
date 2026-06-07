@@ -115,7 +115,7 @@ mixin _WalletListTilesMixin on _WalletListActionsMixin {
           color: isActive
               ? AppColorTokens.of(context).brand.withValues(alpha: 0.08)
               : AppColorTokens.of(context).bgSurface,
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
+          borderRadius: AppRadius.brMd,
           border: isActive
               ? Border.all(color: AppColorTokens.of(context).brand, width: 1.5)
               : Border.all(color: Colors.transparent),

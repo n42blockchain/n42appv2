@@ -64,7 +64,7 @@ class _EnsRenewSuccessCardState extends State<EnsRenewSuccessCard> {
       padding: EdgeInsets.all(ScreenUtil().setWidth(32)),
       decoration: BoxDecoration(
         color: Colors.green.withAlpha(20),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
         border: Border.all(color: Colors.green.withAlpha(50)),
       ),
       child: Column(
@@ -102,7 +102,7 @@ class _EnsRenewSuccessCardState extends State<EnsRenewSuccessCard> {
               ),
               decoration: BoxDecoration(
                 color: Colors.green.withAlpha(20),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                borderRadius: AppRadius.brSm,
               ),
               child: Text(
                 'Tx: ${_shortenHash(widget.renewResult.txHash!)}',

@@ -128,7 +128,7 @@ class BatchOperationItem extends StatelessWidget {
       padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
         border: Border.all(color: opColor.withAlpha(30)),
       ),
       child: Row(
@@ -139,7 +139,7 @@ class BatchOperationItem extends StatelessWidget {
             height: ScreenUtil().setWidth(32),
             decoration: BoxDecoration(
               color: opColor.withAlpha(20),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+              borderRadius: AppRadius.brSm,
             ),
             child: Center(
               child: Text(
@@ -183,9 +183,7 @@ class BatchOperationItem extends StatelessWidget {
                         ),
                         decoration: BoxDecoration(
                           color: opColor.withAlpha(20),
-                          borderRadius: BorderRadius.circular(
-                            ScreenUtil().setWidth(8),
-                          ),
+                          borderRadius: AppRadius.brSm,
                         ),
                         child: Text(
                           '${operation.formattedAmount} ${operation.tokenSymbol}',
@@ -250,7 +248,7 @@ class BatchOperationItem extends StatelessWidget {
       height: ScreenUtil().setWidth(40),
       decoration: BoxDecoration(
         color: opColor.withAlpha(20),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
+        borderRadius: AppRadius.brSm,
       ),
       child: Icon(
         _getOperationIcon(),

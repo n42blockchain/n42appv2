@@ -74,7 +74,7 @@ class NftInfoBoard extends StatelessWidget {
           // NFT 媒体区域（图片或视频播放器）
           if (mediaWidget != null) ...[
             ClipRRect(
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+              borderRadius: AppRadius.brMd,
               child: SizedBox(
                 width: double.infinity,
                 height: ScreenUtil().setWidth(320),
@@ -156,7 +156,7 @@ class NftInfoBoard extends StatelessWidget {
       children: [
         // NFT 图片
         ClipRRect(
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+          borderRadius: AppRadius.brMd,
           child: imageUrl != null && imageUrl!.isNotEmpty
               ? Image.network(
                   imageUrl!,
@@ -225,7 +225,7 @@ class NftInfoBoard extends StatelessWidget {
       height: ScreenUtil().setWidth(120),
       decoration: BoxDecoration(
         color: _blueColor(context).withAlpha(30),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Icon(
         Icons.image,
@@ -284,7 +284,7 @@ class NftInfoBoard extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: blueColor.withAlpha(15),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+        borderRadius: AppRadius.brSm,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -382,7 +382,7 @@ class NftInfoBoard extends StatelessWidget {
   ) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+      borderRadius: AppRadius.brMd,
       child: Container(
         padding: EdgeInsets.symmetric(
           vertical: ScreenUtil().setWidth(16),
@@ -390,7 +390,7 @@ class NftInfoBoard extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           color: color.withAlpha(20),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+          borderRadius: AppRadius.brMd,
         ),
         child: Column(
           children: [
@@ -413,7 +413,7 @@ class NftInfoBoard extends StatelessWidget {
   Widget _buildBurnButton(BuildContext context) {
     return InkWell(
       onTap: burnTap,
-      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+      borderRadius: AppRadius.brMd,
       child: Container(
         padding: EdgeInsets.symmetric(
           vertical: ScreenUtil().setWidth(16),
@@ -421,7 +421,7 @@ class NftInfoBoard extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           color: Colors.red.withAlpha(15),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+          borderRadius: AppRadius.brMd,
           border: Border.all(color: Colors.red.withAlpha(50), width: 1),
         ),
         child: Row(

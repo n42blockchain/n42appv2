@@ -31,7 +31,7 @@ class TxRiskBannerWidget extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: bannerBg,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
         border: Border.all(color: badgeColor.withAlpha(60), width: 1),
       ),
       child: Column(
@@ -54,9 +54,7 @@ class TxRiskBannerWidget extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     color: badgeColor,
-                    borderRadius: BorderRadius.circular(
-                      ScreenUtil().setWidth(6),
-                    ),
+                    borderRadius: AppRadius.brSm,
                   ),
                   child: Text(
                     badgeText,

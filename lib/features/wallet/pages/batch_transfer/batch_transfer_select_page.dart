@@ -128,7 +128,7 @@ class BatchTransferSelectPage extends ConsumerWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Row(
         children: [
@@ -182,7 +182,7 @@ class BatchTransferSelectPage extends ConsumerWidget {
         padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
         decoration: BoxDecoration(
           color: AppColorTokens.of(context).bgSurface,
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+          borderRadius: AppRadius.brMd,
         ),
         child: Row(
           children: [
@@ -191,7 +191,7 @@ class BatchTransferSelectPage extends ConsumerWidget {
               height: ScreenUtil().setWidth(48),
               decoration: BoxDecoration(
                 color: chainColor.withAlpha(30),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24)),
+                borderRadius: AppRadius.brLg,
               ),
               child: Center(
                 child: Text(

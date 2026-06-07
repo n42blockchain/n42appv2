@@ -119,7 +119,7 @@ class _PresetCard extends StatelessWidget {
           color: isSelected
               ? cardColor.withAlpha(18)
               : AppColorTokens.of(context).bgBase,
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+          borderRadius: AppRadius.brMd,
           border: Border.all(
             color: isSelected ? cardColor : Colors.grey.withAlpha(30),
             width: isSelected ? 2 : 1,
@@ -153,7 +153,7 @@ class _PresetCard extends StatelessWidget {
           height: ScreenUtil().setWidth(40),
           decoration: BoxDecoration(
             color: cardColor.withAlpha(25),
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
+            borderRadius: AppRadius.brSm,
           ),
           child: Icon(
             sessionKeyPermissionIcon(preset),
@@ -179,7 +179,7 @@ class _PresetCard extends StatelessWidget {
           ),
           decoration: BoxDecoration(
             color: presetInfo.riskColor.withAlpha(20),
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+            borderRadius: AppRadius.brSm,
           ),
           child: Text(
             riskLabel,
@@ -208,7 +208,7 @@ class _PresetCard extends StatelessWidget {
         padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
         decoration: BoxDecoration(
           color: Colors.red.withAlpha(15),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+          borderRadius: AppRadius.brSm,
         ),
         child: Row(
           children: [

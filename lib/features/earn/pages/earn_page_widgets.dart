@@ -66,9 +66,7 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
                 ),
                 decoration: BoxDecoration(
                   color: Colors.white.withAlpha(30),
-                  borderRadius: BorderRadius.circular(
-                    ScreenUtil().setWidth(20),
-                  ),
+                  borderRadius: AppRadius.brMd,
                 ),
                 child: earnState.apyLoading
                     ? SizedBox(
@@ -201,7 +199,7 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+          borderRadius: AppRadius.brMd,
           boxShadow: [
             BoxShadow(
               color: gradientColors[0].withAlpha(80),
@@ -211,7 +209,7 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
           ],
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+          borderRadius: AppRadius.brMd,
           child: Stack(
             children: [
               // 右上装饰圆
@@ -255,9 +253,7 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
                           height: ScreenUtil().setWidth(48),
                           decoration: BoxDecoration(
                             color: Colors.white.withAlpha(50),
-                            borderRadius: BorderRadius.circular(
-                              ScreenUtil().setWidth(12),
-                            ),
+                            borderRadius: AppRadius.brMd,
                           ),
                           child: Icon(
                             icon,
@@ -273,9 +269,7 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
                             ),
                             decoration: BoxDecoration(
                               color: Colors.white.withAlpha(50),
-                              borderRadius: BorderRadius.circular(
-                                ScreenUtil().setWidth(20),
-                              ),
+                              borderRadius: AppRadius.brMd,
                             ),
                             child: Text(
                               badge,
@@ -346,7 +340,7 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
               height: ScreenUtil().setWidth(72),
               decoration: BoxDecoration(
                 color: color.withAlpha(20),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+                borderRadius: AppRadius.brMd,
                 border: Border.all(color: color.withAlpha(40), width: 1),
               ),
               child: Icon(icon, color: color, size: ScreenUtil().setWidth(34)),

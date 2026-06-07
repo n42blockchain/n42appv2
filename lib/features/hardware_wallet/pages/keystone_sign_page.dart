@@ -192,9 +192,7 @@ class _KeystoneSignPageState extends State<KeystoneSignPage> {
               padding: EdgeInsets.symmetric(
                 vertical: ScreenUtil().setWidth(20),
               ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-              ),
+              shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
             ),
             child: Text(
               s.g_key_hw_keystone_tap_to_scan,
@@ -215,7 +213,7 @@ class _KeystoneSignPageState extends State<KeystoneSignPage> {
       padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withAlpha(30),

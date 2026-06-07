@@ -4,6 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
@@ -139,9 +140,7 @@ class EnsSearchResultView extends StatelessWidget {
                 ),
                 decoration: BoxDecoration(
                   color: _themeColor(context, AppThemeKeys.itemBgColor.name),
-                  borderRadius: BorderRadius.circular(
-                    ScreenUtil().setWidth(20),
-                  ),
+                  borderRadius: AppRadius.brMd,
                   border: Border.all(color: blueColor.withAlpha(30)),
                 ),
                 child: Text(
@@ -239,9 +238,7 @@ class EnsSearchResultView extends StatelessWidget {
               padding: EdgeInsets.symmetric(
                 vertical: ScreenUtil().setWidth(18),
               ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-              ),
+              shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
             ),
             child: Text(
               S.of(context).g_key_ens_register_now,
@@ -293,7 +290,7 @@ class EnsSearchResultView extends StatelessWidget {
       padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
       decoration: BoxDecoration(
         color: statusColor.withAlpha(20),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
         border: Border.all(color: statusColor.withAlpha(50)),
       ),
       child: Row(
@@ -343,7 +340,7 @@ class EnsSearchResultView extends StatelessWidget {
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
         color: _themeColor(context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Column(
         children: [
@@ -450,7 +447,7 @@ class EnsSearchResultView extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(14)),
         decoration: BoxDecoration(
           color: isSelected ? blueColor : itemBgColor,
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+          borderRadius: AppRadius.brMd,
           border: Border.all(
             color: isSelected ? blueColor : subtitleColor.withAlpha(50),
           ),

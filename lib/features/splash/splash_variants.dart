@@ -18,11 +18,7 @@ class SplashVariant {
   /// 主文字后的小标签（如 "Matters"、"Won't Forget"）
   final String? midLabel;
 
-  const SplashVariant({
-    this.topLabel,
-    required this.mainText,
-    this.midLabel,
-  });
+  const SplashVariant({this.topLabel, required this.mainText, this.midLabel});
 }
 
 // ---------------------------------------------------------------------------
@@ -33,7 +29,11 @@ class SplashVariant {
 const List<SplashVariant> _poolCnEn = [
   // ── English ──
   SplashVariant(topLabel: 'Who Creates', mainText: 'OWNS'),
-  SplashVariant(topLabel: 'Private', mainText: 'Sovereignty', midLabel: 'Matters'),
+  SplashVariant(
+    topLabel: 'Private',
+    mainText: 'Sovereignty',
+    midLabel: 'Matters',
+  ),
   SplashVariant(mainText: 'Blockchain', midLabel: "Won't Forget"),
 
   // ── 中文 ──
@@ -60,22 +60,38 @@ const List<SplashVariant> _poolOther = [
 
   // ── Español ─────────────────────────────────────────────────────────────
   SplashVariant(topLabel: 'Quien Crea', mainText: 'Posee'),
-  SplashVariant(topLabel: 'Soberanía', mainText: 'Privada', midLabel: 'Importa'),
+  SplashVariant(
+    topLabel: 'Soberanía',
+    mainText: 'Privada',
+    midLabel: 'Importa',
+  ),
   SplashVariant(mainText: 'Blockchain', midLabel: 'No Olvida'),
 
   // ── Français ────────────────────────────────────────────────────────────
   SplashVariant(topLabel: 'Qui Crée', mainText: 'Possède'),
-  SplashVariant(topLabel: 'La Souveraineté', mainText: 'Privée', midLabel: 'Compte'),
+  SplashVariant(
+    topLabel: 'La Souveraineté',
+    mainText: 'Privée',
+    midLabel: 'Compte',
+  ),
   SplashVariant(topLabel: 'La Blockchain', mainText: "N'oublie Pas"),
 
   // ── Deutsch ─────────────────────────────────────────────────────────────
   SplashVariant(topLabel: 'Wer Erschafft', mainText: 'Besitzt'),
-  SplashVariant(topLabel: 'Private', mainText: 'Souveränität', midLabel: 'Zählt'),
+  SplashVariant(
+    topLabel: 'Private',
+    mainText: 'Souveränität',
+    midLabel: 'Zählt',
+  ),
   SplashVariant(mainText: 'Blockchain', midLabel: 'Vergisst Nicht'),
 
   // ── Português ───────────────────────────────────────────────────────────
   SplashVariant(topLabel: 'Quem Cria', mainText: 'Possui'),
-  SplashVariant(topLabel: 'Soberania', mainText: 'Privada', midLabel: 'Importa'),
+  SplashVariant(
+    topLabel: 'Soberania',
+    mainText: 'Privada',
+    midLabel: 'Importa',
+  ),
   SplashVariant(mainText: 'Blockchain', midLabel: 'Não Esquece'),
 
   // ── Русский ─────────────────────────────────────────────────────────────
@@ -95,12 +111,20 @@ const List<SplashVariant> _poolOther = [
 
   // ── हिंदी ────────────────────────────────────────────────────────────────
   SplashVariant(topLabel: 'जो बनाता है', mainText: 'वो पाता है'),
-  SplashVariant(topLabel: 'निजी', mainText: 'संप्रभुता', midLabel: 'मायने रखती है'),
+  SplashVariant(
+    topLabel: 'निजी',
+    mainText: 'संप्रभुता',
+    midLabel: 'मायने रखती है',
+  ),
   SplashVariant(mainText: 'ब्लॉकचेन', midLabel: 'नहीं भूलेगा'),
 
   // ── Tiếng Việt ──────────────────────────────────────────────────────────
   SplashVariant(topLabel: 'Người Tạo Ra', mainText: 'Sở Hữu'),
-  SplashVariant(topLabel: 'Chủ Quyền', mainText: 'Cá Nhân', midLabel: 'Quan Trọng'),
+  SplashVariant(
+    topLabel: 'Chủ Quyền',
+    mainText: 'Cá Nhân',
+    midLabel: 'Quan Trọng',
+  ),
   SplashVariant(mainText: 'Blockchain', midLabel: 'Không Quên'),
 ];
 
@@ -115,8 +139,8 @@ const List<SplashVariant> _poolOther = [
 SplashVariant pickRandomVariant() {
   const int cnEnWeight = 11;
   const int pool2Weight = 2;
-  const int totalCnEn = 6 * cnEnWeight;          // 66
-  const int totalOther = 33 * pool2Weight;        // 66
+  const int totalCnEn = 6 * cnEnWeight; // 66
+  const int totalOther = 33 * pool2Weight; // 66
   const int totalWeight = totalCnEn + totalOther; // 132
 
   final slot = Random().nextInt(totalWeight);

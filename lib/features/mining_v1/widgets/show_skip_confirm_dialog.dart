@@ -15,12 +15,10 @@ Future<bool?> showSKipConfirmDialog(
       //这是宽度沾满宽度
       insetPadding: EdgeInsets.all(ScreenUtil().setWidth(24)),
       //设置圆角
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24)),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: AppRadius.brLg),
       content: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24)),
+          borderRadius: AppRadius.brLg,
           color: AppColorTokens.of(context).bgBase,
         ),
         child: SkipDialogView(sureCall: sureCall),
@@ -86,9 +84,7 @@ class SkipDialogView extends StatelessWidget {
                       child: Container(
                         decoration: BoxDecoration(
                           color: AppColorTokens.of(context).bgSurface,
-                          borderRadius: BorderRadius.circular(
-                            ScreenUtil().setWidth(8),
-                          ),
+                          borderRadius: AppRadius.brSm,
                         ),
                         child: Center(
                           child: Text(
@@ -113,9 +109,7 @@ class SkipDialogView extends StatelessWidget {
                       child: Container(
                         decoration: BoxDecoration(
                           color: AppColorTokens.of(context).brand,
-                          borderRadius: BorderRadius.circular(
-                            ScreenUtil().setWidth(8),
-                          ),
+                          borderRadius: AppRadius.brSm,
                         ),
                         child: Center(
                           child: Text(

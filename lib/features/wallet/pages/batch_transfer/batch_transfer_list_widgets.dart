@@ -111,7 +111,7 @@ class BatchTransferListItem extends StatelessWidget {
         padding: EdgeInsets.all(ScreenUtil().setWidth(12)),
         decoration: BoxDecoration(
           color: AppColorTokens.of(context).bgSurface,
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
+          borderRadius: AppRadius.brSm,
           border: Border.all(
             color: batchStatusColor(item.status).withAlpha(50),
             width: 1,

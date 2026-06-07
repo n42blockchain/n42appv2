@@ -56,10 +56,7 @@ class _CreateThreeState extends State<CreateThree> {
     return Container(
       height: ScreenUtil().setWidth(10.0),
       width: ScreenUtil().setWidth(88.0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10.0)),
-        color: color,
-      ),
+      decoration: BoxDecoration(borderRadius: AppRadius.brSm, color: color),
     );
   }
 
@@ -174,7 +171,7 @@ class _CreateThreeState extends State<CreateThree> {
   }
 
   Widget _buildUserHandList() {
-    final borderRadius = BorderRadius.circular(ScreenUtil().setWidth(8.0));
+    final borderRadius = AppRadius.brSm;
 
     return GridView.builder(
       itemCount: messMnemonicWordsList.length,
@@ -238,9 +235,7 @@ class _CreateThreeState extends State<CreateThree> {
                       width: ScreenUtil().setWidth(36.0),
                       height: ScreenUtil().setWidth(36.0),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                          ScreenUtil().setWidth(18.0),
-                        ),
+                        borderRadius: AppRadius.brMd,
                         color: Colors.white,
                       ),
                       child: Icon(
@@ -293,7 +288,7 @@ class _CreateThreeState extends State<CreateThree> {
           child: Container(
             decoration: BoxDecoration(
               border: Border.all(color: borderColor, width: 1),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8.0)),
+              borderRadius: AppRadius.brSm,
             ),
             child: Center(
               child: Text(

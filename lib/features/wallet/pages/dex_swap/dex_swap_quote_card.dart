@@ -56,7 +56,7 @@ class DexQuoteCard extends StatelessWidget {
       padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Column(
         children: [
@@ -113,7 +113,7 @@ class DexQuoteCard extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: _colorRed.withAlpha(20),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+        borderRadius: AppRadius.brSm,
       ),
       child: Row(
         children: [
@@ -145,7 +145,7 @@ class DexQuoteCard extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: _colorOrange.withAlpha(20),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+        borderRadius: AppRadius.brSm,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -224,7 +224,7 @@ class DexQuoteCard extends StatelessWidget {
             color: selected ? _colorOrange : mainText.withValues(alpha: 0.25),
             width: 1.0,
           ),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+          borderRadius: AppRadius.brMd,
         ),
         child: Text(
           label,

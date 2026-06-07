@@ -21,7 +21,7 @@ mixin _WidgetsMixin on _LogicMixin {
               ),
               decoration: BoxDecoration(
                 color: AppColorTokens.of(context).bgSurface,
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+                borderRadius: AppRadius.brMd,
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -49,9 +49,7 @@ mixin _WidgetsMixin on _LogicMixin {
                           color: isActive
                               ? const Color.fromRGBO(50, 215, 75, 0.2)
                               : const Color.fromRGBO(235, 88, 81, 0.2),
-                          borderRadius: BorderRadius.circular(
-                            ScreenUtil().setWidth(16),
-                          ),
+                          borderRadius: AppRadius.brMd,
                         ),
                         child: Container(
                           height: ScreenUtil().setWidth(16),
@@ -60,9 +58,7 @@ mixin _WidgetsMixin on _LogicMixin {
                             color: isActive
                                 ? const Color(0xff32D74B)
                                 : const Color(0xffEB5851),
-                            borderRadius: BorderRadius.circular(
-                              ScreenUtil().setWidth(16),
-                            ),
+                            borderRadius: AppRadius.brMd,
                           ),
                         ),
                       ),
@@ -137,7 +133,7 @@ mixin _WidgetsMixin on _LogicMixin {
               ),
               decoration: BoxDecoration(
                 color: AppColorTokens.of(context).bgSurface,
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+                borderRadius: AppRadius.brMd,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -177,7 +173,7 @@ mixin _WidgetsMixin on _LogicMixin {
       ),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Row(
         children: [
@@ -264,7 +260,7 @@ mixin _WidgetsMixin on _LogicMixin {
       child: Container(
         decoration: BoxDecoration(
           color: AppColorTokens.of(context).bgSurface,
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+          borderRadius: AppRadius.brMd,
         ),
         padding: EdgeInsets.fromLTRB(
           ScreenUtil().setWidth(30),

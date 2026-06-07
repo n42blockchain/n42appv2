@@ -63,7 +63,7 @@ class EnsPurchaseStepContent extends StatelessWidget {
     Color? borderColor,
   }) => BoxDecoration(
     color: color ?? AppColorTokens.of(context).bgSurface,
-    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+    borderRadius: AppRadius.brMd,
     border: borderColor != null ? Border.all(color: borderColor) : null,
   );
 
@@ -266,7 +266,7 @@ class EnsPurchaseStepContent extends StatelessWidget {
               ),
               decoration: BoxDecoration(
                 color: Colors.green.withAlpha(20),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                borderRadius: AppRadius.brSm,
               ),
               child: Text(
                 'Tx: ${_shortenHash(registerResult!.txHash!)}',
@@ -393,9 +393,7 @@ class EnsPurchaseActionButton extends StatelessWidget {
         backgroundColor: color,
         foregroundColor: Colors.white,
         padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(18)),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
       ),
       child: Text(
         label,

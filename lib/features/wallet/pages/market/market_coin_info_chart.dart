@@ -24,10 +24,10 @@ Widget buildChartSection(
       height: chartH,
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
         child: _resolveChartChild(
           context,
           chartLoading: chartLoading,

@@ -4,6 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/features/wallet/aa/models/smart_account.dart';
@@ -28,7 +29,7 @@ class DeploymentStatusIndicator extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: _getStatusColor().withAlpha(20),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+        borderRadius: AppRadius.brMd,
         border: Border.all(color: _getStatusColor().withAlpha(40)),
       ),
       child: Row(

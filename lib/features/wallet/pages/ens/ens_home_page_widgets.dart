@@ -16,7 +16,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
       ),
       decoration: BoxDecoration(
         color: _themeColor(AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
         border: Border.all(color: selectedChain.color.withAlpha(40)),
       ),
       child: Column(
@@ -48,7 +48,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
                 ),
                 decoration: BoxDecoration(
                   color: selectedChain.color.withAlpha(20),
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                  borderRadius: AppRadius.brSm,
                 ),
                 child: Text(
                   selectedChain.suffix,
@@ -93,7 +93,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
       ),
       decoration: BoxDecoration(
         color: isSelected ? chain.color.withAlpha(25) : Colors.transparent,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
+        borderRadius: AppRadius.brSm,
         border: Border.all(
           color: isSelected ? chain.color : subtitleColor.withAlpha(40),
           width: isSelected ? 1.5 : 1,
@@ -107,7 +107,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
             height: ScreenUtil().setWidth(24),
             decoration: BoxDecoration(
               color: chain.color.withAlpha(30),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+              borderRadius: AppRadius.brMd,
             ),
             child: Center(
               child: Text(
@@ -154,7 +154,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Row(
         children: [
@@ -163,7 +163,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
             height: ScreenUtil().setWidth(56),
             decoration: BoxDecoration(
               color: blueColor.withAlpha(30),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+              borderRadius: AppRadius.brMd,
             ),
             child: Center(
               child: Text(
@@ -258,7 +258,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
         padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
         decoration: BoxDecoration(
           color: _themeColor(AppThemeKeys.itemBgColor.name),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+          borderRadius: AppRadius.brMd,
           border: Border.all(color: color.withAlpha(40), width: 1),
         ),
         child: Column(
@@ -269,7 +269,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
               height: ScreenUtil().setWidth(44),
               decoration: BoxDecoration(
                 color: color.withAlpha(25),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+                borderRadius: AppRadius.brMd,
               ),
               child: Icon(icon, size: ScreenUtil().setWidth(24), color: color),
             ),
@@ -352,7 +352,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
       padding: EdgeInsets.all(ScreenUtil().setWidth(32)),
       decoration: BoxDecoration(
         color: _themeColor(AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Column(
         children: [
@@ -388,7 +388,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
       padding: EdgeInsets.all(ScreenUtil().setWidth(32)),
       decoration: BoxDecoration(
         color: _themeColor(AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
         border: Border.all(color: blueColor.withAlpha(30), width: 1),
       ),
       child: Column(
@@ -430,9 +430,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
                 horizontal: ScreenUtil().setWidth(24),
                 vertical: ScreenUtil().setWidth(12),
               ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-              ),
+              shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
             ),
           ),
         ],

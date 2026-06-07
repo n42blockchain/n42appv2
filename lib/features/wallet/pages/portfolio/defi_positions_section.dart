@@ -187,7 +187,7 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
             ),
             decoration: BoxDecoration(
               color: c.color.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+              borderRadius: AppRadius.brSm,
             ),
             child: Text(
               '${c.label}: ${fmtUsd(c.value)}',
@@ -212,7 +212,7 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -222,7 +222,7 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
             children: [
               if (protocol.logoUrl != null)
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                  borderRadius: AppRadius.brSm,
                   child: Image.network(
                     protocol.logoUrl!,
                     width: ScreenUtil().setWidth(36),

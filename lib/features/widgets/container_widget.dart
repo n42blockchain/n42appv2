@@ -24,7 +24,7 @@ Widget containerStyle1(
       alignment: alignment,
       decoration: BoxDecoration(
         color: bgColor ?? AppColorTokens.of(context).bgSurface,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16.0)),
+        borderRadius: AppRadius.brMd,
         boxShadow: [
           BoxShadow(
             color: Color(0xff101828).withAlpha((0.05 * 255).round()), //底色,阴影颜色

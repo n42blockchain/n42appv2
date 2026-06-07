@@ -66,7 +66,7 @@ class EnsSearchBar extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgBase,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
         border: Border.all(
           color: focusNode.hasFocus
               ? AppColorTokens.of(context).brand
@@ -113,7 +113,7 @@ class EnsSearchBar extends StatelessWidget {
             ),
             decoration: BoxDecoration(
               color: AppColorTokens.of(context).brand.withAlpha(20),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+              borderRadius: AppRadius.brSm,
             ),
             child: Text(
               '.eth',

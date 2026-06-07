@@ -339,7 +339,7 @@ class BackupReminderBanner extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16.0)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

@@ -83,7 +83,7 @@ class _BridgeSelectChainPageState extends State<BridgeSelectChainPage> {
               ),
               decoration: BoxDecoration(
                 color: AppColorTokens.of(context).bgSurface,
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+                borderRadius: AppRadius.brMd,
               ),
               child: TextField(
                 controller: _searchController,
@@ -181,13 +181,13 @@ class _BridgeSelectChainPageState extends State<BridgeSelectChainPage> {
           color: isSelected
               ? blueColor.withAlpha(30)
               : AppColorTokens.of(context).bgSurface,
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+          borderRadius: AppRadius.brMd,
           border: isSelected ? Border.all(color: blueColor, width: 2) : null,
         ),
         child: Row(
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24)),
+              borderRadius: AppRadius.brLg,
               child: chain.logoUri.isNotEmpty
                   ? Image.network(
                       chain.logoUri,

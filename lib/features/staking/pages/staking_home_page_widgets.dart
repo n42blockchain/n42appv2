@@ -4,6 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/staking/models/staking_models.dart';
 import 'package:n42_wallet/features/staking/pages/staking_home_page.dart';
@@ -33,13 +34,13 @@ mixin StakingHomePageWidgetsMixin
       ),
       decoration: BoxDecoration(
         color: _themeColor(AppThemeKeys.itemBgColor),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
       ),
       child: TabBar(
         controller: tabController,
         indicator: BoxDecoration(
           color: _themeColor(AppThemeKeys.mainBlueColor),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+          borderRadius: AppRadius.brMd,
         ),
         labelColor: Colors.white,
         unselectedLabelColor: _themeColor(AppThemeKeys.itemSubtitleTextColor),
@@ -103,13 +104,13 @@ mixin StakingHomePageWidgetsMixin
         padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
         decoration: BoxDecoration(
           color: _themeColor(AppThemeKeys.itemBgColor),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+          borderRadius: AppRadius.brMd,
         ),
         child: Row(
           children: [
             // 协议 Logo
             ClipRRect(
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24)),
+              borderRadius: AppRadius.brLg,
               child: protocol.logoUri.isNotEmpty
                   ? Image.network(
                       protocol.logoUri,
@@ -296,7 +297,7 @@ mixin StakingHomePageWidgetsMixin
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
         color: _themeColor(AppThemeKeys.itemBgColor),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
         border: isUnbonding
             ? Border.all(color: Colors.orange.withAlpha(100), width: 1)
             : null,
@@ -427,7 +428,7 @@ mixin StakingHomePageWidgetsMixin
       ),
       decoration: BoxDecoration(
         color: Colors.orange.withAlpha(20),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+        borderRadius: AppRadius.brSm,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

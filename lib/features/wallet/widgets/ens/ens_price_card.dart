@@ -21,7 +21,7 @@ class EnsPriceCard extends StatelessWidget {
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
         border: Border.all(
           color: AppColorTokens.of(context).brand.withAlpha(30),
         ),
@@ -107,7 +107,7 @@ class EnsPriceCard extends StatelessWidget {
               padding: EdgeInsets.all(ScreenUtil().setWidth(12)),
               decoration: BoxDecoration(
                 color: Colors.orange.withAlpha(20),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                borderRadius: AppRadius.brSm,
               ),
               child: Row(
                 children: [

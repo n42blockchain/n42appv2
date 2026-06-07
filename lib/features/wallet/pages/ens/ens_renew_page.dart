@@ -4,6 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
@@ -197,7 +198,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Column(
         children: [
@@ -270,9 +271,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
                           ? AppThemeKeys.mainBlueColor
                           : AppThemeKeys.itemBgColor,
                     ),
-                    borderRadius: BorderRadius.circular(
-                      ScreenUtil().setWidth(12),
-                    ),
+                    borderRadius: AppRadius.brMd,
                     border: Border.all(
                       color: isSelected
                           ? _color(AppThemeKeys.mainBlueColor)
@@ -309,7 +308,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
         color: Colors.green.withAlpha(20),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
         border: Border.all(color: Colors.green.withAlpha(40)),
       ),
       child: Column(
@@ -381,9 +380,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
           backgroundColor: Colors.green,
           foregroundColor: Colors.white,
           padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(18)),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
         ),
         child: Text(
           S.of(context).g_swap_key_18,
@@ -401,9 +398,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
         backgroundColor: _color(AppThemeKeys.mainBlueColor),
         foregroundColor: Colors.white,
         padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(18)),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
         disabledBackgroundColor: Colors.grey,
       ),
       child: _isRenewing

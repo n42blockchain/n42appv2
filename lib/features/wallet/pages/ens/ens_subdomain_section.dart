@@ -144,9 +144,7 @@ class EnsSubdomainSection extends StatelessWidget {
       ),
       style: OutlinedButton.styleFrom(
         side: BorderSide(color: domainChain.color.withAlpha(80)),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
         minimumSize: Size(double.infinity, ScreenUtil().setWidth(80)),
       ),
     );
@@ -242,7 +240,7 @@ class _SectionCard extends StatelessWidget {
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
       ),
       child: child,
     );

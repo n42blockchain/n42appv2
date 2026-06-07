@@ -66,9 +66,7 @@ class _PillButton extends StatelessWidget {
             context,
             AppThemeKeys.mainButtonBgColor.name,
           ),
-          borderRadius: BorderRadius.all(
-            Radius.circular(ScreenUtil().setWidth(30.0)),
-          ),
+          borderRadius: AppRadius.brXl,
         ),
         child: Text(
           label,
@@ -88,7 +86,7 @@ class _PillButton extends StatelessWidget {
 /// 统一输入框背景装饰
 BoxDecoration _inputBoxDecoration(BuildContext context) {
   return BoxDecoration(
-    borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(8.0))),
+    borderRadius: AppRadius.brSm,
     color: AppColorTokens.of(context).bgSurface,
   );
 }

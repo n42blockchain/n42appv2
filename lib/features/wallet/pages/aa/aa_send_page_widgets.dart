@@ -25,10 +25,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
   Widget buildFromSection() {
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
-      decoration: BoxDecoration(
-        color: _itemBg,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-      ),
+      decoration: BoxDecoration(color: _itemBg, borderRadius: AppRadius.brMd),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -44,9 +41,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
                 height: ScreenUtil().setWidth(44),
                 decoration: BoxDecoration(
                   color: const Color(0xFF5E97F6).withAlpha(25),
-                  borderRadius: BorderRadius.circular(
-                    ScreenUtil().setWidth(12),
-                  ),
+                  borderRadius: AppRadius.brMd,
                 ),
                 child: Icon(
                   Icons.account_balance_wallet,
@@ -85,7 +80,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
                 ),
                 decoration: BoxDecoration(
                   color: Colors.green.withAlpha(20),
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                  borderRadius: AppRadius.brSm,
                 ),
                 child: Text(
                   'AA',
@@ -135,9 +130,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
                 ),
               ],
             ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-            ),
+            border: OutlineInputBorder(borderRadius: AppRadius.brMd),
           ),
         ),
       ],
@@ -198,11 +191,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
                 onChanged: (_) => estimateGas(),
                 decoration: InputDecoration(
                   hintText: '0.0',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(
-                      ScreenUtil().setWidth(12),
-                    ),
-                  ),
+                  border: OutlineInputBorder(borderRadius: AppRadius.brMd),
                 ),
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(32),
@@ -218,7 +207,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
               ),
               decoration: BoxDecoration(
                 color: _itemBg,
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+                borderRadius: AppRadius.brMd,
                 border: Border.all(color: _subText.withAlpha(30)),
               ),
               child: Row(
@@ -284,7 +273,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
       padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
       decoration: BoxDecoration(
         color: isSponsored ? Colors.green.withAlpha(15) : _itemBg,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
         border: isSponsored
             ? Border.all(color: Colors.green.withAlpha(30))
             : null,
@@ -371,9 +360,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
         backgroundColor: _themeColor(AppThemeKeys.mainBlueColor.name),
         foregroundColor: Colors.white,
         padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(18)),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
         disabledBackgroundColor: Colors.grey,
       ),
       child: Text(

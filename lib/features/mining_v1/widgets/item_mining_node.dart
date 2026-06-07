@@ -31,7 +31,7 @@ class ItemMiningNode extends StatelessWidget {
         ),
         margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(12)),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+          borderRadius: AppRadius.brMd,
           color: Colors.transparent,
           border: Border.fromBorderSide(
             BorderSide(color: AppColorTokens.of(context).border, width: 1),

@@ -42,11 +42,7 @@ class SessionKeyAmountLimit extends StatelessWidget {
                 ),
                 decoration: InputDecoration(
                   hintText: S.of(context).g_key_aa_session_amount_hint,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(
-                      ScreenUtil().setWidth(12),
-                    ),
-                  ),
+                  border: OutlineInputBorder(borderRadius: AppRadius.brMd),
                   contentPadding: EdgeInsets.symmetric(
                     horizontal: ScreenUtil().setWidth(16),
                     vertical: ScreenUtil().setWidth(14),
@@ -103,7 +99,7 @@ class _TokenChips extends StatelessWidget {
               color: isSelected
                   ? const Color(0xFF8B5CF6).withAlpha(25)
                   : Colors.grey.withAlpha(15),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
+              borderRadius: AppRadius.brSm,
               border: Border.all(
                 color: isSelected
                     ? const Color(0xFF8B5CF6)
@@ -157,7 +153,7 @@ class SessionKeyRiskSummary extends StatelessWidget {
       padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
       decoration: BoxDecoration(
         color: riskColor.withAlpha(10),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
+        borderRadius: AppRadius.brMd,
         border: Border.all(color: riskColor.withAlpha(30)),
       ),
       child: Column(

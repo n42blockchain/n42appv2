@@ -28,10 +28,7 @@ class _CreateOneState extends ConsumerState<CreateOne> {
     return Container(
       height: ScreenUtil().setWidth(10.0),
       width: ScreenUtil().setWidth(88.0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10.0)),
-        color: color,
-      ),
+      decoration: BoxDecoration(borderRadius: AppRadius.brSm, color: color),
     );
   }
 

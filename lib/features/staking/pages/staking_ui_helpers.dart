@@ -45,7 +45,7 @@ Widget stakingTag({
     ),
     decoration: BoxDecoration(
       color: color.withAlpha(30),
-      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
+      borderRadius: AppRadius.brSm,
     ),
     child: Text(
       label,
@@ -68,7 +68,7 @@ Widget stakingStatsCard(BuildContext context, StakingProvider provider) {
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
       ),
-      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+      borderRadius: AppRadius.brMd,
     ),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,

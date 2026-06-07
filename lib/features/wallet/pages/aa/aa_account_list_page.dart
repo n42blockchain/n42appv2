@@ -222,7 +222,7 @@ class _AAAccountListPageState extends State<AAAccountListPage> {
         ),
         decoration: BoxDecoration(
           color: isSelected ? selectedBgColor : Colors.transparent,
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+          borderRadius: AppRadius.brMd,
           border: Border.all(
             color: isSelected ? activeColor : subtitleColor.withAlpha(50),
           ),

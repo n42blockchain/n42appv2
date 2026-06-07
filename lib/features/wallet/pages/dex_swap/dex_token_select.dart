@@ -200,7 +200,7 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
                 filled: true,
                 fillColor: AppColorTokens.of(context).bgSurface,
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                  borderRadius: AppRadius.brSm,
                   borderSide: BorderSide.none,
                 ),
                 contentPadding: EdgeInsets.symmetric(

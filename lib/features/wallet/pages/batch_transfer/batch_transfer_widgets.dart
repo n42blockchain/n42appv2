@@ -30,7 +30,7 @@ class BatchInfoCard extends StatelessWidget {
       padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Row(
         children: [
@@ -65,7 +65,7 @@ class BatchInfoCard extends StatelessWidget {
               ),
               decoration: BoxDecoration(
                 color: Colors.green.withAlpha(30),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                borderRadius: AppRadius.brSm,
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -121,7 +121,7 @@ class BatchAddItemForm extends StatelessWidget {
       padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

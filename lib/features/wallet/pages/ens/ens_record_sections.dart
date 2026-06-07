@@ -40,9 +40,7 @@ class EnsAddressSection extends StatelessWidget {
                 Icons.account_balance_wallet_outlined,
                 size: 20,
               ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-              ),
+              border: OutlineInputBorder(borderRadius: AppRadius.brMd),
               contentPadding: EdgeInsets.symmetric(
                 horizontal: ScreenUtil().setWidth(16),
                 vertical: ScreenUtil().setWidth(14),
@@ -118,9 +116,7 @@ class _RecordField extends StatelessWidget {
         decoration: InputDecoration(
           labelText: _labelFor(recordKey),
           prefixIcon: Icon(_iconFor(recordKey), size: 20),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-          ),
+          border: OutlineInputBorder(borderRadius: AppRadius.brMd),
           contentPadding: EdgeInsets.symmetric(
             horizontal: ScreenUtil().setWidth(16),
             vertical: ScreenUtil().setWidth(14),
@@ -165,7 +161,7 @@ class _SectionCard extends StatelessWidget {
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
       ),
       child: child,
     );

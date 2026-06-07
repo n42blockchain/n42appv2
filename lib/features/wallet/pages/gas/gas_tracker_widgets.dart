@@ -292,10 +292,7 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
         horizontal: ScreenUtil().setWidth(20),
         vertical: ScreenUtil().setWidth(12),
       ),
-      decoration: BoxDecoration(
-        color: itemBg,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
-      ),
+      decoration: BoxDecoration(color: itemBg, borderRadius: AppRadius.brMd),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -328,10 +325,7 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
   ) {
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
-      decoration: BoxDecoration(
-        color: itemBg,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
-      ),
+      decoration: BoxDecoration(color: itemBg, borderRadius: AppRadius.brMd),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -406,7 +400,7 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
       ),
       decoration: BoxDecoration(
         color: bgColor,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
+        borderRadius: AppRadius.brSm,
         border: Border.all(color: borderColor),
       ),
       child: Row(
@@ -459,9 +453,7 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
         style: ElevatedButton.styleFrom(
           backgroundColor: blueColor,
           foregroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
           disabledBackgroundColor: blueColor.withAlpha(120),
         ),
         child: _saving
@@ -492,9 +484,7 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
         onPressed: _saving ? null : _remove,
         style: TextButton.styleFrom(
           foregroundColor: Colors.red,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
         ),
         child: Text(
           S.of(context).g_key_113, // "Delete"
@@ -536,7 +526,7 @@ class _DirectionButton extends StatelessWidget {
             color: selected ? color : AppColorTokens.of(context).border,
             width: selected ? 1.5 : 1,
           ),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
+          borderRadius: AppRadius.brSm,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -580,7 +570,7 @@ class _SheetDragHandle extends StatelessWidget {
         height: ScreenUtil().setWidth(6),
         decoration: BoxDecoration(
           color: subtitleText.withAlpha(60),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(3)),
+          borderRadius: AppRadius.brSm,
         ),
       ),
     );

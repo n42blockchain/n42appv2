@@ -219,7 +219,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
         child: Container(
           margin: EdgeInsets.symmetric(
             horizontal: ScreenUtil().setWidth(16),
@@ -229,9 +229,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
             horizontal: ScreenUtil().setWidth(16),
             vertical: ScreenUtil().setWidth(16),
           ),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-          ),
+          decoration: BoxDecoration(borderRadius: AppRadius.brMd),
           child: Row(
             children: [
               Container(
@@ -241,9 +239,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
                   color: AppColorTokens.of(
                     context,
                   ).brand.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(
-                    ScreenUtil().setWidth(12),
-                  ),
+                  borderRadius: AppRadius.brMd,
                 ),
                 alignment: Alignment.center,
                 child: Image.asset(

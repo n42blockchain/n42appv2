@@ -14,7 +14,7 @@ class ASTMiningBoard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
       ),
       padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
       child: Column(
@@ -91,9 +91,7 @@ class ASTMiningBoard extends StatelessWidget {
                       Container(
                         decoration: BoxDecoration(
                           color: AppColorTokens.of(context).brand,
-                          borderRadius: BorderRadius.circular(
-                            ScreenUtil().setWidth(8),
-                          ),
+                          borderRadius: AppRadius.brSm,
                         ),
                         padding: EdgeInsets.all(ScreenUtil().setWidth(8)),
                         child: Image.asset(
@@ -216,7 +214,7 @@ class ASTMiningBoard extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               color: AppColorTokens.of(context).brand,
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
+              borderRadius: AppRadius.brSm,
             ),
             width: ScreenUtil().setWidth(44),
             height: ScreenUtil().setWidth(44),
@@ -247,7 +245,7 @@ class ASTMiningBoard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: isDark ? const Color(0xff373739) : const Color(0xffEDEFF2),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(30)),
+        borderRadius: AppRadius.brXl,
       ),
       padding: EdgeInsets.symmetric(
         horizontal: ScreenUtil().setWidth(12),

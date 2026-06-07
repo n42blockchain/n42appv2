@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/utils/regular.dart';
 import 'package:n42_wallet/features/wallet/models/portfolio_trade.dart';
@@ -136,7 +137,7 @@ Widget buildCoinPriceSection(
           ),
           decoration: BoxDecoration(
             color: pctColor.withValues(alpha: 0.12),
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+            borderRadius: AppRadius.brSm,
           ),
           child: Text(
             '${isUp ? '+' : ''}${regular.formartNum(priceChange24h, 2, isCrop: true)}%',
@@ -180,10 +181,7 @@ Widget buildPnlCard(
     ),
     child: Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
-      decoration: BoxDecoration(
-        color: cardBg,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-      ),
+      decoration: BoxDecoration(color: cardBg, borderRadius: AppRadius.brMd),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -272,7 +270,7 @@ Widget buildPeriodSelector(
                       ? AppThemeKeys.mainButtonBgColor.name
                       : AppThemeKeys.itemBgColor.name,
                 ),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                borderRadius: AppRadius.brSm,
               ),
               child: Text(
                 periodLabels[i],

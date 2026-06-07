@@ -114,7 +114,7 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -189,7 +189,7 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
               alignment: Alignment.centerRight,
               child: InkWell(
                 onTap: () => widget.provider.checkTransactionStatus(tx),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                borderRadius: AppRadius.brSm,
                 child: Container(
                   padding: EdgeInsets.symmetric(
                     horizontal: ScreenUtil().setWidth(16),
@@ -197,9 +197,7 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
                   ),
                   decoration: BoxDecoration(
                     color: blueColor,
-                    borderRadius: BorderRadius.circular(
-                      ScreenUtil().setWidth(8),
-                    ),
+                    borderRadius: AppRadius.brSm,
                   ),
                   child: Text(
                     S.of(context).g_key_bridge_refresh,

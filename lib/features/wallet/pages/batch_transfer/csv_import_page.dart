@@ -91,7 +91,7 @@ class _CsvImportPageState extends State<CsvImportPage>
       margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(16)),
       decoration: BoxDecoration(
         color: itemBg,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
         border: Border.all(color: subText.withValues(alpha: 0.2)),
       ),
       child: TextField(

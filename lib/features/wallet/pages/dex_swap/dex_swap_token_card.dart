@@ -40,7 +40,7 @@ class DexTokenCard extends StatelessWidget {
           context,
           AppThemeKeys.itemBgColor4.name,
         ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -107,7 +107,7 @@ class DexTokenCard extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           color: AppColorTokens.of(context).bgSurface,
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+          borderRadius: AppRadius.brSm,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,

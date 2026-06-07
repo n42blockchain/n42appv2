@@ -298,7 +298,7 @@ class _MiningSettingsState extends State<MiningSettings> {
         width: double.infinity,
         padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+          borderRadius: AppRadius.brMd,
           border: Border.all(
             color: AppThemeUtils.getColorByKey(
               context,
@@ -415,7 +415,7 @@ class _MiningSettingsState extends State<MiningSettings> {
       ),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
       ),
       child: child,
     );

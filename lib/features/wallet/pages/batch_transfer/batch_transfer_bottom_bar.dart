@@ -76,7 +76,7 @@ class BatchBottomBar extends StatelessWidget {
                 padding: EdgeInsets.all(ScreenUtil().setWidth(12)),
                 decoration: BoxDecoration(
                   color: Colors.red.withAlpha(20),
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                  borderRadius: AppRadius.brSm,
                 ),
                 child: Text(
                   provider.errorMessage!,

@@ -51,7 +51,7 @@ extension _BrowserPageTabs on _BrowserPageState {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24.0)),
+            borderRadius: AppRadius.brLg,
             border: Border.all(
               width: isActive
                   ? ScreenUtil().setWidth(3.0)
@@ -104,7 +104,7 @@ extension _BrowserPageTabs on _BrowserPageState {
           Container(
             height: ScreenUtil().setWidth(90),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+              borderRadius: AppRadius.brMd,
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -182,7 +182,7 @@ extension _BrowserPageTabs on _BrowserPageState {
                 color: isActive
                     ? AppColorTokens.of(context).brand
                     : AppColorTokens.of(context).textSubtitle,
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                borderRadius: AppRadius.brSm,
               ),
               alignment: Alignment.center,
               child: Text(

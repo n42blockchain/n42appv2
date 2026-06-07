@@ -146,7 +146,7 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
       padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
         color: _itemBgColor(),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
       ),
       child: TextField(
         controller: _searchController,
@@ -226,7 +226,7 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
         ),
         decoration: BoxDecoration(
           color: isSelected ? _blueColor() : _itemBgColor(),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+          borderRadius: AppRadius.brMd,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -286,7 +286,7 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
         padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
         decoration: BoxDecoration(
           color: _itemBgColor(),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+          borderRadius: AppRadius.brMd,
           border: isSelected ? Border.all(color: blue, width: 2) : null,
         ),
         child: Row(
@@ -315,7 +315,7 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
 
             // 验证者 Logo
             ClipRRect(
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24)),
+              borderRadius: AppRadius.brLg,
               child: validator.logoUri.isNotEmpty
                   ? Image.network(
                       validator.logoUri,
@@ -435,7 +435,7 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
       ),
       decoration: BoxDecoration(
         color: color.withAlpha(20),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
+        borderRadius: AppRadius.brSm,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

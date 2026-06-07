@@ -62,16 +62,14 @@ class EnsConfirmDialog extends StatelessWidget {
 
     return AlertDialog(
       backgroundColor: bgColor,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
       title: Row(
         children: [
           Container(
             padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
             decoration: BoxDecoration(
               color: blueColor.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+              borderRadius: AppRadius.brMd,
             ),
             child: Icon(
               Icons.verified_user_rounded,
@@ -102,7 +100,7 @@ class EnsConfirmDialog extends StatelessWidget {
               padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
               decoration: BoxDecoration(
                 color: successGreen.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+                borderRadius: AppRadius.brMd,
                 border: Border.all(color: successGreen.withValues(alpha: 0.3)),
               ),
               child: Row(
@@ -175,7 +173,7 @@ class EnsConfirmDialog extends StatelessWidget {
               padding: EdgeInsets.all(ScreenUtil().setWidth(14)),
               decoration: BoxDecoration(
                 color: Colors.orange.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+                borderRadius: AppRadius.brMd,
                 border: Border.all(color: Colors.orange.withValues(alpha: 0.3)),
               ),
               child: Row(
@@ -233,9 +231,7 @@ class EnsConfirmDialog extends StatelessWidget {
               horizontal: ScreenUtil().setWidth(24),
               vertical: ScreenUtil().setWidth(12),
             ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-            ),
+            shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
           ),
           child: Text(
             S.of(context).g_key_ens_confirm_send,
@@ -266,7 +262,7 @@ class EnsConfirmDialog extends StatelessWidget {
       padding: EdgeInsets.all(ScreenUtil().setWidth(14)),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgBase.withValues(alpha: 0.5),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
         border: Border.all(color: subtitleColor.withValues(alpha: 0.2)),
       ),
       child: Column(
@@ -362,9 +358,7 @@ class EnsResolvingDialog extends StatelessWidget {
 
     return AlertDialog(
       backgroundColor: bgColor,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
       content: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),

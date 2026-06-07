@@ -35,7 +35,7 @@ mixin _CreateTwoWidgetsMixin on State<CreateTwo> {
         return Container(
           decoration: BoxDecoration(
             color: _itemBgColor(),
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8.0)),
+            borderRadius: AppRadius.brSm,
           ),
           child: Center(
             child: Text(
@@ -65,7 +65,7 @@ mixin _CreateTwoWidgetsMixin on State<CreateTwo> {
         padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
         decoration: BoxDecoration(
           color: _itemBgColor(),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16.0)),
+          borderRadius: AppRadius.brMd,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -97,7 +97,7 @@ mixin _CreateTwoWidgetsMixin on State<CreateTwo> {
         padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
         decoration: BoxDecoration(
           color: _itemBgColor(),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16.0)),
+          borderRadius: AppRadius.brMd,
         ),
         constraints: BoxConstraints(
           minHeight: ScreenUtil().setWidth(472.0),

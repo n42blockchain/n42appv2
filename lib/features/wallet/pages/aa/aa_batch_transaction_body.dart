@@ -4,6 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
@@ -117,7 +118,7 @@ class AABatchTransactionBody extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -199,7 +200,7 @@ class AABatchTransactionBody extends StatelessWidget {
         padding: EdgeInsets.all(ScreenUtil().setWidth(32)),
         decoration: BoxDecoration(
           color: _themeColor(context, AppThemeKeys.itemBgColor),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+          borderRadius: AppRadius.brMd,
           border: Border.all(
             color: _themeColor(
               context,
@@ -285,9 +286,7 @@ class AABatchTransactionBody extends StatelessWidget {
       label: Text(S.of(context).g_key_aa_add_operation),
       style: OutlinedButton.styleFrom(
         padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
       ),
     );
   }
@@ -320,7 +319,7 @@ class AABatchTransactionBody extends StatelessWidget {
         color: isSponsored
             ? Colors.green.withAlpha(15)
             : _themeColor(context, AppThemeKeys.itemBgColor),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
         border: isSponsored
             ? Border.all(color: Colors.green.withAlpha(30))
             : null,
@@ -430,9 +429,7 @@ class AABatchTransactionBody extends StatelessWidget {
             backgroundColor: const Color(0xFFFF9800),
             foregroundColor: Colors.white,
             padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(18)),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-            ),
+            shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
             disabledBackgroundColor: Colors.grey,
           ),
           child: isSending

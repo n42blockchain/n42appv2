@@ -258,7 +258,7 @@ class _SortButton extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+        borderRadius: AppRadius.brSm,
         child: Padding(
           padding: EdgeInsets.symmetric(
             horizontal: ScreenUtil().setWidth(8),
@@ -325,7 +325,7 @@ class _ThresholdButton extends StatelessWidget {
           color: active
               ? blueColor.withValues(alpha: 0.12)
               : Colors.transparent,
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+          borderRadius: AppRadius.brMd,
           border: active
               ? Border.all(color: blueColor.withValues(alpha: 0.25), width: 1)
               : null,

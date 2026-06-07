@@ -133,7 +133,7 @@ mixin EarnPageSectionsMixin
             ),
             decoration: BoxDecoration(
               color: AppColorTokens.of(context).bgSurface,
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24)),
+              borderRadius: AppRadius.brLg,
               border: Border.all(
                 color: AppColorTokens.of(context).border.withAlpha(60),
                 width: 1,

@@ -35,7 +35,7 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,11 +85,7 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
                       horizontal: ScreenUtil().setWidth(20),
                       vertical: ScreenUtil().setWidth(12),
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                        ScreenUtil().setWidth(8),
-                      ),
-                    ),
+                    shape: RoundedRectangleBorder(borderRadius: AppRadius.brSm),
                   ),
                   child: Text(s.g_key_hw_disconnect),
                 ),
@@ -151,7 +147,7 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
         ),
         decoration: BoxDecoration(
           color: Colors.white24,
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+          borderRadius: AppRadius.brSm,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -197,7 +193,7 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
         color: _themeColor(context, AppThemeKeys.itemBgColor),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
         border: isConnected ? Border.all(color: Colors.green, width: 2) : null,
       ),
       child: Row(
@@ -208,7 +204,7 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
             height: ScreenUtil().setWidth(56),
             decoration: BoxDecoration(
               color: blueColor.withAlpha(30),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+              borderRadius: AppRadius.brMd,
             ),
             child: Center(
               child: Icon(
@@ -246,9 +242,7 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
                         ),
                         decoration: BoxDecoration(
                           color: Colors.green.withAlpha(30),
-                          borderRadius: BorderRadius.circular(
-                            ScreenUtil().setWidth(6),
-                          ),
+                          borderRadius: AppRadius.brSm,
                         ),
                         child: Text(
                           s.g_key_hw_connected,
@@ -376,7 +370,7 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
         padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
         decoration: BoxDecoration(
           color: _themeColor(context, AppThemeKeys.itemBgColor),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+          borderRadius: AppRadius.brMd,
           border: Border.all(color: blueColor.withAlpha(80)),
         ),
         child: Row(

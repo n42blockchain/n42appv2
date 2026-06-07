@@ -146,7 +146,7 @@ class _TemplateItem extends StatelessWidget {
           context,
           AppThemeKeys.itemBgColor2.name,
         ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Row(
         children: [

@@ -101,7 +101,7 @@ class _WalletChainSendAlgoState extends ConsumerState<WalletChainSendAlgo>
       padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
       width: double.infinity,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8.0)),
+        borderRadius: AppRadius.brSm,
         color: AppThemeUtils.getColorByKey(
           context,
           AppThemeKeys.errorBgColor2.name,

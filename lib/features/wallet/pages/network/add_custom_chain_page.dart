@@ -164,9 +164,7 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColorTokens.of(context).brand,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                            ScreenUtil().setWidth(12),
-                          ),
+                          borderRadius: AppRadius.brMd,
                         ),
                       ),
                       child: _lookingUp
@@ -229,9 +227,7 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
                             ? Colors.red
                             : AppColorTokens.of(context).bgSurface,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                            ScreenUtil().setWidth(12),
-                          ),
+                          borderRadius: AppRadius.brMd,
                         ),
                       ),
                       child: Icon(
@@ -276,9 +272,7 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
                   padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
                   decoration: BoxDecoration(
                     color: Colors.red.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(
-                      ScreenUtil().setWidth(8),
-                    ),
+                    borderRadius: AppRadius.brSm,
                   ),
                   child: Text(
                     _error!,
@@ -299,11 +293,7 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
                   onPressed: _loading ? null : _submit,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColorTokens.of(context).brand,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                        ScreenUtil().setWidth(16),
-                      ),
-                    ),
+                    shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
                   ),
                   child: _loading
                       ? const CircularProgressIndicator(color: Colors.white)
@@ -358,7 +348,7 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
         filled: true,
         fillColor: AppColorTokens.of(context).bgSurface,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+          borderRadius: AppRadius.brMd,
           borderSide: BorderSide(
             color: AppThemeUtils.getColorByKey(
               context,
@@ -367,7 +357,7 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
           ),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+          borderRadius: AppRadius.brMd,
           borderSide: BorderSide(
             color: AppThemeUtils.getColorByKey(
               context,

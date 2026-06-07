@@ -63,17 +63,14 @@ class NonEvmFeeCompact extends StatelessWidget {
 
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+      borderRadius: AppRadius.brMd,
       child: Container(
         padding: EdgeInsets.symmetric(
           horizontal: ScreenUtil().setWidth(30),
           vertical: ScreenUtil().setWidth(20),
         ),
         margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
-        decoration: BoxDecoration(
-          color: itemBg,
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-        ),
+        decoration: BoxDecoration(color: itemBg, borderRadius: AppRadius.brMd),
         child: Row(
           children: [
             // 图标
@@ -191,7 +188,7 @@ class _NonEvmFeeSelectorState extends State<NonEvmFeeSelector> {
       margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -313,7 +310,7 @@ class _NonEvmFeeSelectorState extends State<NonEvmFeeSelector> {
             color: isSelected
                 ? blueColor.withValues(alpha: 0.1)
                 : Colors.transparent,
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+            borderRadius: AppRadius.brMd,
             border: Border.all(
               color: isSelected ? blueColor : dividerColor,
               width: isSelected ? 2 : 1,
@@ -375,10 +372,7 @@ class _NonEvmFeeSelectorState extends State<NonEvmFeeSelector> {
     return Container(
       margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-      ),
+      decoration: BoxDecoration(color: bgColor, borderRadius: AppRadius.brMd),
       child: Column(
         children: [
           // 费率（仅 BTC 类）

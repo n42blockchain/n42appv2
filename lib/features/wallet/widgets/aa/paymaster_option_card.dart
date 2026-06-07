@@ -74,7 +74,7 @@ class PaymasterOptionCard extends StatelessWidget {
           color: isSelected
               ? _getOptionColor().withAlpha(20)
               : AppColorTokens.of(context).bgSurface,
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+          borderRadius: AppRadius.brMd,
           border: Border.all(
             color: isSelected
                 ? _getOptionColor()
@@ -118,9 +118,7 @@ class PaymasterOptionCard extends StatelessWidget {
                             ),
                             decoration: BoxDecoration(
                               color: Colors.green.withAlpha(30),
-                              borderRadius: BorderRadius.circular(
-                                ScreenUtil().setWidth(8),
-                              ),
+                              borderRadius: AppRadius.brSm,
                             ),
                             child: Text(
                               S.of(context).g_key_aa_free,
@@ -188,7 +186,7 @@ class PaymasterOptionCard extends StatelessWidget {
       height: ScreenUtil().setWidth(48),
       decoration: BoxDecoration(
         color: color.withAlpha(20),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Icon(icon, size: ScreenUtil().setWidth(28), color: color),
     );

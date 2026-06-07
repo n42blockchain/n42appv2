@@ -74,7 +74,7 @@ class ProfileHomePage extends ConsumerWidget {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+              borderRadius: AppRadius.brMd,
             ),
             child: Icon(
               Icons.person,

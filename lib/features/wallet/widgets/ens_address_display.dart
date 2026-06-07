@@ -389,7 +389,7 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
         padding: EdgeInsets.all(ScreenUtil().setWidth(12)),
         decoration: BoxDecoration(
           color: AppColorTokens.of(context).bgSurface.withValues(alpha: 0.5),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+          borderRadius: AppRadius.brMd,
           border: Border.all(color: subtitleColor.withValues(alpha: 0.2)),
         ),
         child: Row(

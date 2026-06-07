@@ -197,7 +197,7 @@ class _DAppDirectoryPageState extends State<DAppDirectoryPage>
       height: ScreenUtil().setWidth(80),
       decoration: BoxDecoration(
         color: _colorForLetter(letter),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
       ),
       alignment: Alignment.center,
       child: Text(

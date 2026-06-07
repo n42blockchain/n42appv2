@@ -93,7 +93,7 @@ extension _NftListPageWidgets on _NftListPageState {
               ),
               decoration: BoxDecoration(
                 color: selected ? accentColor : accentColor.withAlpha(20),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+                borderRadius: AppRadius.brMd,
               ),
               child: Text(
                 label,

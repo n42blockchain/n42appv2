@@ -184,7 +184,7 @@ class _DiscoveryBanner extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           color: blueColor.withValues(alpha: 0.10),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+          borderRadius: AppRadius.brMd,
           border: Border.all(color: blueColor.withValues(alpha: 0.30)),
         ),
         child: Row(

@@ -16,7 +16,7 @@ Future<bool?> tipsDialog4(
     context,
     Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
         color: AppColorTokens.of(context).bgSurface,
       ),
       child: Column(
@@ -44,9 +44,7 @@ Future<bool?> tipsDialog4(
                     height: ScreenUtil().setWidth(120),
                     decoration: BoxDecoration(
                       color: AppColorTokens.of(context).bgSurface,
-                      borderRadius: BorderRadius.circular(
-                        ScreenUtil().setWidth(16),
-                      ),
+                      borderRadius: AppRadius.brMd,
                     ),
                     padding: EdgeInsets.symmetric(
                       horizontal: ScreenUtil().setWidth(20),

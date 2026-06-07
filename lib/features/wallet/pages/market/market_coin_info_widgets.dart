@@ -23,7 +23,7 @@ Widget coinInfoCard(
     ),
     decoration: BoxDecoration(
       color: AppColorTokens.of(context).bgSurface,
-      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+      borderRadius: AppRadius.brMd,
     ),
     child: title != null
         ? Column(

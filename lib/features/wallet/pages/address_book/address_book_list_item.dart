@@ -60,10 +60,7 @@ mixin _AddressBookListItemMixin on State<AddressBookList> {
         horizontal: ScreenUtil().setWidth(30),
         vertical: ScreenUtil().setWidth(20),
       ),
-      decoration: BoxDecoration(
-        color: itemBg,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-      ),
+      decoration: BoxDecoration(color: itemBg, borderRadius: AppRadius.brMd),
       child: Row(
         children: [
           _buildAvatar(info),
@@ -95,9 +92,7 @@ mixin _AddressBookListItemMixin on State<AddressBookList> {
                       ),
                       decoration: BoxDecoration(
                         color: subtitleText.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(
-                          ScreenUtil().setWidth(20),
-                        ),
+                        borderRadius: AppRadius.brMd,
                       ),
                       child: Text(
                         info.coinName ?? '',

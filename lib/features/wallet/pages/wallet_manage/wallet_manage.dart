@@ -293,7 +293,7 @@ class _WalletManageState extends ConsumerState<WalletManage> {
 
   BoxDecoration get _tileDecoration => BoxDecoration(
     color: AppColorTokens.of(context).bgSurface,
-    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8.0)),
+    borderRadius: AppRadius.brSm,
   );
 
   EdgeInsets get _tileMargin => EdgeInsets.symmetric(

@@ -347,7 +347,7 @@ extension on _HomePageState {
                 color: isSelected
                     ? selectedColor.withAlpha(22)
                     : Colors.transparent,
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+                borderRadius: AppRadius.brMd,
               ),
               child: Image.asset(
                 imagePath,

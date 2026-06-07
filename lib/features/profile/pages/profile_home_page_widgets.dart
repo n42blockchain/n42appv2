@@ -32,7 +32,7 @@ extension _ProfileHomePageWidgets on ProfileHomePage {
           Container(
             decoration: BoxDecoration(
               color: AppColorTokens.of(context).bgSurface,
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+              borderRadius: AppRadius.brMd,
             ),
             child: Column(children: children),
           ),
@@ -53,7 +53,7 @@ extension _ProfileHomePageWidgets on ProfileHomePage {
   }) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+      borderRadius: AppRadius.brMd,
       child: Padding(
         padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
         child: Row(
@@ -64,7 +64,7 @@ extension _ProfileHomePageWidgets on ProfileHomePage {
               height: ScreenUtil().setWidth(48),
               decoration: BoxDecoration(
                 color: color.withAlpha(30),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+                borderRadius: AppRadius.brMd,
               ),
               child: Icon(icon, color: color, size: ScreenUtil().setWidth(28)),
             ),
@@ -94,9 +94,7 @@ extension _ProfileHomePageWidgets on ProfileHomePage {
                           ),
                           decoration: BoxDecoration(
                             color: Colors.green,
-                            borderRadius: BorderRadius.circular(
-                              ScreenUtil().setWidth(6),
-                            ),
+                            borderRadius: AppRadius.brSm,
                           ),
                           child: Text(
                             'NEW',

@@ -32,7 +32,7 @@ mixin BridgeHomeWidgetsMixin
       padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,7 +117,7 @@ mixin BridgeHomeWidgetsMixin
     bool isFrom,
   ) {
     return InkWell(
-      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+      borderRadius: AppRadius.brMd,
       onTap: () async {
         final selected = await Navigator.push<BridgeChain>(
           context,
@@ -144,14 +144,14 @@ mixin BridgeHomeWidgetsMixin
         ),
         decoration: BoxDecoration(
           color: AppColorTokens.of(context).bgBase,
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+          borderRadius: AppRadius.brMd,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             if (chain?.logoUri.isNotEmpty == true)
               ClipRRect(
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+                borderRadius: AppRadius.brMd,
                 child: Image.network(
                   chain!.logoUri,
                   width: ScreenUtil().setWidth(32),
@@ -192,7 +192,7 @@ mixin BridgeHomeWidgetsMixin
     bool isFrom,
   ) {
     return InkWell(
-      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+      borderRadius: AppRadius.brMd,
       onTap: () async {
         if (chain == null) return;
         final tokens = provider.getTokensForChain(chain.chainId);
@@ -213,14 +213,14 @@ mixin BridgeHomeWidgetsMixin
         ),
         decoration: BoxDecoration(
           color: AppColorTokens.of(context).bgBase,
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+          borderRadius: AppRadius.brMd,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             if (token?.logoUri.isNotEmpty == true)
               ClipRRect(
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+                borderRadius: AppRadius.brMd,
                 child: Image.network(
                   token!.logoUri,
                   width: ScreenUtil().setWidth(40),
@@ -315,9 +315,7 @@ mixin BridgeHomeWidgetsMixin
                               AppThemeKeys.mainButtonBgColor.name,
                             )
                           : AppColorTokens.of(context).bgSurface,
-                      borderRadius: BorderRadius.circular(
-                        ScreenUtil().setWidth(8),
-                      ),
+                      borderRadius: AppRadius.brSm,
                       border: Border.all(
                         color: selected
                             ? AppThemeUtils.getColorByKey(
