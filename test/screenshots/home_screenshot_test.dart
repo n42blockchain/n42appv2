@@ -14,6 +14,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -24,6 +25,8 @@ import 'package:n42_wallet/features/home/widgets/check_version_alert.dart';
 import 'package:n42_wallet/features/home/setting/setting_home_page.dart';
 import 'package:n42_wallet/features/home/setting/security/gesture_password_page.dart';
 import 'package:n42_wallet/features/home/setting/security/google_auth_setup_page.dart';
+import 'package:n42_wallet/features/browser/pages/dapp_directory_page.dart';
+import 'package:n42_wallet/features/bridge/pages/bridge_home_page.dart';
 
 const String _fontFamily = 'AppTestFont';
 const String _outDir = 'test/screenshots/out';
@@ -53,6 +56,7 @@ Future<void> _shoot(
   String name, {
   required bool dark,
   Size surface = const Size(420, 760),
+  List<Override> overrides = const [],
 }) async {
   tester.view.devicePixelRatio = 2.0;
   tester.view.physicalSize = Size(surface.width * 2, surface.height * 2);
@@ -68,6 +72,7 @@ Future<void> _shoot(
 
   await tester.pumpWidget(
     ProviderScope(
+      overrides: overrides,
       child: ScreenUtilInit(
         designSize: const Size(750, 1334),
         minTextAdapt: true,
@@ -360,6 +365,54 @@ void main() {
       t,
       gauth,
       'google_auth_dark',
+      dark: true,
+      surface: const Size(420, 900),
+    ),
+    timeout: to,
+  );
+
+  const dapp = DAppDirectoryPage();
+  testWidgets(
+    'dapp light',
+    (t) => _shoot(
+      t,
+      dapp,
+      'dapp_directory_light',
+      dark: false,
+      surface: const Size(420, 1000),
+    ),
+    timeout: to,
+  );
+  testWidgets(
+    'dapp dark',
+    (t) => _shoot(
+      t,
+      dapp,
+      'dapp_directory_dark',
+      dark: true,
+      surface: const Size(420, 1000),
+    ),
+    timeout: to,
+  );
+
+  const bridge = BridgeHomePage();
+  testWidgets(
+    'bridge light',
+    (t) => _shoot(
+      t,
+      bridge,
+      'bridge_home_light',
+      dark: false,
+      surface: const Size(420, 900),
+    ),
+    timeout: to,
+  );
+  testWidgets(
+    'bridge dark',
+    (t) => _shoot(
+      t,
+      bridge,
+      'bridge_home_dark',
       dark: true,
       surface: const Size(420, 900),
     ),
