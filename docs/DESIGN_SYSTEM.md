@@ -4,7 +4,7 @@
 > 适用范围：主程序 `n42appv2`、聊天插件 `n42_chat`（独立 repo）、直播模块 `features/live`。
 > 配套工具：`/ui-review` skill（`.claude/skills/ui-review/`）按本规范审查任意页面并产出整改补丁。
 
-版本：v1.0（2026-06-01）· 维护：UI/UE 小组
+版本：v1.1（2026-06-07，克制现代/AI 风细调：深冷中性 + 提亮语义 + 标题负字距，令牌实现已对齐本规范）· 维护：UI/UE 小组
 
 ---
 
@@ -60,6 +60,7 @@
 ### 1.3 字阶（Typography）
 
 字体族：跟随系统（iOS SF / Android Roboto），不内嵌字体。字重仅用 `w400 / w500 / w600`。
+**大标题紧排**：`displayLg/titleLg/title/headline` 带轻微负字距（-0.5 ~ -0.2），现代/AI 产品的紧致标题质感；正文及以下不加字距。
 
 | Token | size (.sp / dp) | weight | 行高 | 用途 |
 |---|---|---|---|---|
