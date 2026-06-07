@@ -11,24 +11,28 @@ abstract final class AppTypography {
     fontSize: 48.sp, // ≈24dp 资产总额、开屏大数字
     fontWeight: FontWeight.w600,
     height: 1.2,
+    letterSpacing: -0.5, // 大标题/数字紧排，现代质感
   );
 
   static TextStyle get titleLg => TextStyle(
     fontSize: 40.sp, // ≈20dp 页面大标题
     fontWeight: FontWeight.w600,
     height: 1.25,
+    letterSpacing: -0.4,
   );
 
   static TextStyle get title => TextStyle(
     fontSize: 36.sp, // ≈18dp 卡片标题、AppBar
     fontWeight: FontWeight.w600,
     height: 1.3,
+    letterSpacing: -0.3,
   );
 
   static TextStyle get headline => TextStyle(
     fontSize: 32.sp, // ≈16dp 小节标题、重要项
     fontWeight: FontWeight.w600,
     height: 1.3,
+    letterSpacing: -0.2,
   );
 
   static TextStyle get body => TextStyle(
