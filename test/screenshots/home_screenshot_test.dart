@@ -58,12 +58,14 @@ Future<void> _shoot(
   Size surface = const Size(420, 760),
   List<Override> overrides = const [],
   bool tolerant = false, // 容忍 provider 异常 + 结束前 dispose（数据/计时器重的页）
+  Color? accent, // 品牌主色覆盖（用于品牌色对比，默认 #1976F9）
 }) async {
   tester.view.devicePixelRatio = 2.0;
   tester.view.physicalSize = Size(surface.width * 2, surface.height * 2);
   addTearDown(tester.view.reset);
 
-  final base = dark ? ThemeAdapter.themeDataDark : ThemeAdapter.themeDataLight;
+  final a = accent ?? ThemeAdapter.defaultAccent;
+  final base = dark ? ThemeAdapter.buildDark(a) : ThemeAdapter.buildLight(a);
   final theme = base.copyWith(
     textTheme: base.textTheme.apply(fontFamily: _fontFamily),
     primaryTextTheme: base.primaryTextTheme.apply(fontFamily: _fontFamily),
@@ -455,6 +457,33 @@ void main() {
       'gallery_dark',
       dark: true,
       surface: const Size(420, 1000),
+    ),
+    timeout: to,
+  );
+
+  // 品牌色对比：靛蓝 indigo #5B6CFF（对照现有品牌蓝 gallery_dark）
+  const indigo = Color(0xFF5B6CFF);
+  testWidgets(
+    'gallery indigo dark',
+    (t) => _shoot(
+      t,
+      gallery,
+      'gallery_indigo_dark',
+      dark: true,
+      surface: const Size(420, 1000),
+      accent: indigo,
+    ),
+    timeout: to,
+  );
+  testWidgets(
+    'gallery indigo light',
+    (t) => _shoot(
+      t,
+      gallery,
+      'gallery_indigo_light',
+      dark: false,
+      surface: const Size(420, 1000),
+      accent: indigo,
     ),
     timeout: to,
   );
