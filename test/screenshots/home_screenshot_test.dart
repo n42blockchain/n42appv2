@@ -461,29 +461,17 @@ void main() {
     timeout: to,
   );
 
-  // 品牌色对比：靛蓝 indigo #5B6CFF（对照现有品牌蓝 gallery_dark）
-  const indigo = Color(0xFF5B6CFF);
+  // 品牌色参照：旧蓝 #1976F9（切换前对照；现默认 gallery_* 已是靛蓝 #5B6CFF）
+  const legacyBlue = Color(0xFF1976F9);
   testWidgets(
-    'gallery indigo dark',
+    'gallery legacyblue dark',
     (t) => _shoot(
       t,
       gallery,
-      'gallery_indigo_dark',
+      'gallery_legacyblue_dark',
       dark: true,
       surface: const Size(420, 1000),
-      accent: indigo,
-    ),
-    timeout: to,
-  );
-  testWidgets(
-    'gallery indigo light',
-    (t) => _shoot(
-      t,
-      gallery,
-      'gallery_indigo_light',
-      dark: false,
-      surface: const Size(420, 1000),
-      accent: indigo,
+      accent: legacyBlue,
     ),
     timeout: to,
   );
