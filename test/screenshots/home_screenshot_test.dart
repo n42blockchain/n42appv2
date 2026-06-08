@@ -57,6 +57,7 @@ Future<void> _shoot(
   required bool dark,
   Size surface = const Size(420, 760),
   List<Override> overrides = const [],
+  bool tolerant = false, // 容忍 provider 异常 + 结束前 dispose（数据/计时器重的页）
 }) async {
   tester.view.devicePixelRatio = 2.0;
   tester.view.physicalSize = Size(surface.width * 2, surface.height * 2);
@@ -107,6 +108,10 @@ Future<void> _shoot(
     ),
   );
   await tester.pump(const Duration(milliseconds: 300));
+  if (tolerant) {
+    // 排空 provider/网络缺数据时抛出的异常（页面仍渲染出布局），使截图可用。
+    while (tester.takeException() != null) {}
+  }
 
   final boundary =
       repaintKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
@@ -119,6 +124,13 @@ Future<void> _shoot(
   });
   Directory(_outDir).createSync(recursive: true);
   File('$_outDir/$name.png').writeAsBytesSync(png);
+
+  if (tolerant) {
+    // 卸载页面以触发 dispose（取消 periodic Timer），避免 teardown 报 pending timer。
+    await tester.pumpWidget(const SizedBox());
+    await tester.pump();
+    while (tester.takeException() != null) {}
+  }
 }
 
 /// 设计系统总览画廊：字阶（含负字距）+ 按钮变体 + 徽章色调 + 卡片 + 语义色，
@@ -418,6 +430,10 @@ void main() {
     ),
     timeout: to,
   );
+
+  // 注：钱包首页 / swap / 发送等页深度依赖 Riverpod + 钱包态 + 网络数据，
+  // 测试中无 mock provider 图时只渲染错误占位（红/黄）。已保留 _shoot 的
+  // `overrides` / `tolerant` 入口，后续如需可注入 mock provider 单独补这些页。
 
   const gallery = _Gallery();
   testWidgets(
