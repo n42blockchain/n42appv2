@@ -39,7 +39,7 @@ class AppColorTokens {
   // mainBlueColor 经 colorScheme.primary 解析，自动反映用户自定义 accent。
   Color get brand => _key(AppThemeKeys.mainBlueColor);
   Color get brandSubtle =>
-      _tone(const Color(0xFFE8F1FE), const Color(0xFF16365E));
+      _tone(const Color(0xFFECEDFF), const Color(0xFF232A52));
 
   // ── 语义（复用现有表，缺失者补常量）──
   Color get success => _key(AppThemeKeys.rightTextColor); // #44A677
@@ -92,7 +92,7 @@ class AppColorTokens {
   static const Color onOverlayBorder = Color(0x1FFFFFFF);
 
   // 叠层语境下的语义色（取规范 dark 列定值，保证深背景上对比足够）。
-  static const Color brandOnOverlay = Color(0xFF3B8CFF);
+  static const Color brandOnOverlay = Color(0xFF7E8CFF);
   static const Color successOnOverlay = Color(0xFF2ED391);
   static const Color dangerOnOverlay = Color(0xFFFF5C6C);
   static const Color warningOnOverlay = Color(0xFFFFA53D);

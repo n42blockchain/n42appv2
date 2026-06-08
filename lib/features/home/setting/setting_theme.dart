@@ -52,7 +52,7 @@ final _themeOptions = [
 // ── Preset accent colors ──────────────────────────────────────────────────
 
 const _presetAccents = [
-  Color(0xFF1976F9), // default blue
+  Color(0xFF5B6CFF), // default indigo
   Color(0xFF009688), // teal
   Color(0xFF7B1FA2), // purple
   Color(0xFFF57C00), // orange

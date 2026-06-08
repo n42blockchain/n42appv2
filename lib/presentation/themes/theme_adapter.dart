@@ -14,7 +14,7 @@ class ThemeAdapter {
   ThemeAdapter._();
 
   /// Default accent color (N42 brand blue)
-  static const Color defaultAccent = Color(0xFF1976F9);
+  static const Color defaultAccent = Color(0xFF5B6CFF);
 
   /// Build light ThemeData with the given [accent] color.
   static ThemeData buildLight(Color accent) => ThemeData.light().copyWith(
@@ -188,7 +188,7 @@ class AppThemeUtils {
     AppThemeKeys.backGroundColor3.name: const Color(0xffFFFFFF),
     AppThemeKeys.linearGradient1.name: const Color(0xFFFFFFFF),
     AppThemeKeys.linearGradient2.name: Colors.white54,
-    AppThemeKeys.mainBlueColor.name: const Color(0xFF1976F9),
+    AppThemeKeys.mainBlueColor.name: const Color(0xFF5B6CFF),
     AppThemeKeys.mainTextColor.name: const Color(0xFF1A1C22),
     AppThemeKeys.mainTextColor3.name: const Color(0xFFbebebe),
     AppThemeKeys.mainTextColor4.name: const Color(0xFF9AA0AC),
@@ -199,7 +199,7 @@ class AppThemeUtils {
     AppThemeKeys.mainTextColor10.name: const Color(0xFF8E8E93),
     AppThemeKeys.mainWhiteColor.name: Colors.white,
     AppThemeKeys.mainBlockColor.name: Colors.black,
-    AppThemeKeys.refreshBGColor.name: const Color(0xFF1976F9),
+    AppThemeKeys.refreshBGColor.name: const Color(0xFF5B6CFF),
     AppThemeKeys.refreshValueColor.name: const Color(0xFFFFFFFF),
     AppThemeKeys.ff888888.name: const Color(0xFF888888),
     AppThemeKeys.itemBgColor.name: const Color(0xffffffff),
@@ -218,10 +218,10 @@ class AppThemeUtils {
     AppThemeKeys.rightTextColor.name: const Color(0xff1FB67A),
     AppThemeKeys.textColorOrange.name: const Color(0xFFFF8A1F),
     AppThemeKeys.dividerColor.name: const Color(0xffE6E8EC),
-    AppThemeKeys.mainButtonBgColor.name: const Color(0xFF1976F9),
+    AppThemeKeys.mainButtonBgColor.name: const Color(0xFF5B6CFF),
     AppThemeKeys.mainButtonBgColor3.name: const Color(0xFFD1E4FE),
     AppThemeKeys.mainButtonTextColor.name: const Color(0xFFFFFFFF),
-    AppThemeKeys.mainButtonTextColor3.name: const Color(0xFF1976F9),
+    AppThemeKeys.mainButtonTextColor3.name: const Color(0xFF5B6CFF),
     AppThemeKeys.transparentBgColor.name: const Color.fromRGBO(0, 0, 0, 0.2),
     AppThemeKeys.alertBgColor.name: const Color(0xFF000000).withAlpha(204),
     AppThemeKeys.textColorGrey.name: const Color(0xFFCDCBCB),
@@ -240,7 +240,7 @@ class AppThemeUtils {
     AppThemeKeys.backGroundColor3.name: const Color(0xff000000),
     AppThemeKeys.linearGradient1.name: const Color(0xff232323),
     AppThemeKeys.linearGradient2.name: const Color(0x80000000),
-    AppThemeKeys.mainBlueColor.name: const Color(0xFF1976F9),
+    AppThemeKeys.mainBlueColor.name: const Color(0xFF5B6CFF),
     AppThemeKeys.mainTextColor.name: const Color(0xFFFFFFFF),
     AppThemeKeys.mainTextColor3.name: const Color(0xFFbebebe),
     AppThemeKeys.mainTextColor4.name: const Color(0xFF6B7180),
@@ -251,7 +251,7 @@ class AppThemeUtils {
     AppThemeKeys.mainTextColor10.name: const Color(0xFFD9D9D9),
     AppThemeKeys.mainWhiteColor.name: Colors.white,
     AppThemeKeys.mainBlockColor.name: Colors.black,
-    AppThemeKeys.refreshBGColor.name: const Color(0xFF1976F9),
+    AppThemeKeys.refreshBGColor.name: const Color(0xFF5B6CFF),
     AppThemeKeys.refreshValueColor.name: const Color(0xFFFFFFFF),
     AppThemeKeys.ff888888.name: Colors.white38,
     AppThemeKeys.itemBgColor.name: const Color(0xFF16181F),
@@ -270,10 +270,10 @@ class AppThemeUtils {
     AppThemeKeys.rightTextColor.name: const Color(0xff2ED391),
     AppThemeKeys.textColorOrange.name: const Color(0xFFFFA53D),
     AppThemeKeys.dividerColor.name: const Color(0xff2A2D38),
-    AppThemeKeys.mainButtonBgColor.name: const Color(0xFF1976F9),
+    AppThemeKeys.mainButtonBgColor.name: const Color(0xFF5B6CFF),
     AppThemeKeys.mainButtonBgColor3.name: const Color(0xFF2A3D5C),
     AppThemeKeys.mainButtonTextColor.name: const Color(0xFFFFFFFF),
-    AppThemeKeys.mainButtonTextColor3.name: const Color(0xFF6B9ADB),
+    AppThemeKeys.mainButtonTextColor3.name: const Color(0xFF8B95FF),
     AppThemeKeys.transparentBgColor.name: const Color.fromRGBO(0, 0, 0, 0.2),
     AppThemeKeys.alertBgColor.name: const Color(0xFFffffff),
     AppThemeKeys.textColorGrey.name: const Color(0xFFCDCBCB),
