@@ -164,8 +164,8 @@ class FeatureEntryHorizontal extends StatelessWidget {
             enabled: smartAccountEnabled,
             showBadge: hasSmartAccount,
             badgeColor: isSmartAccountDeployed
-                ? const Color(0xFF4CAF50)
-                : const Color(0xFFFF9800),
+                ? AppColorTokens.of(context).success
+                : AppColorTokens.of(context).warning,
           ),
         ],
       ),

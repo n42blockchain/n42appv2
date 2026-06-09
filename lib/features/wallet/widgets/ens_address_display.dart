@@ -408,7 +408,7 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
                         Icon(
                           Icons.verified,
                           size: fontSize,
-                          color: const Color(0xFF4CAF50),
+                          color: AppColorTokens.of(context).success,
                         ),
                         SizedBox(width: AppSpacing.space2),
                         Expanded(

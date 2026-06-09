@@ -220,14 +220,14 @@ mixin _MiningFullNodeV2WidgetsMixin
                           Icon(
                             Icons.warning_amber_rounded,
                             size: ScreenUtil().setWidth(20),
-                            color: const Color(0xFFEB5851),
+                            color: AppColorTokens.of(context).danger,
                           ),
                           SizedBox(width: AppSpacing.space2),
                           Flexible(
                             child: Text(
                               errTips ?? '',
                               style: AppTypography.caption.copyWith(
-                                color: const Color(0xFFEB5851),
+                                color: AppColorTokens.of(context).danger,
                               ),
                             ),
                           ),

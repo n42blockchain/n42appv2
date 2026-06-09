@@ -305,7 +305,7 @@ class _TradeEntrySheetState extends State<_TradeEntrySheet> {
                         trailing: IconButton(
                           icon: Icon(
                             Icons.delete_outline,
-                            color: const Color(0xFFEF4444),
+                            color: AppColorTokens.of(context).danger,
                             size: 24.sp,
                           ),
                           onPressed: () => _deleteTrade(t),

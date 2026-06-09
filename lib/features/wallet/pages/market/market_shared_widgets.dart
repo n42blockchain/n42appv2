@@ -86,8 +86,8 @@ class _CoinTile extends StatelessWidget {
     final dividerColor = AppColorTokens.of(context).border;
     final isPositive = _pct24h >= 0;
     final pctColor = isPositive
-        ? const Color(0xFF22C55E)
-        : const Color(0xFFEF4444);
+        ? AppColorTokens.of(context).success
+        : AppColorTokens.of(context).danger;
     final showPrice = source != _CoinSource.search;
 
     return InkWell(

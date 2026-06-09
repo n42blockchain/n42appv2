@@ -97,7 +97,7 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
   static const _debounceDelay = Duration(milliseconds: 500);
 
   /// ENS 解析成功颜色
-  static const _successColor = Color(0xFF4CAF50);
+  Color get _successColor => AppColorTokens.of(context).success;
 
   @override
   void initState() {

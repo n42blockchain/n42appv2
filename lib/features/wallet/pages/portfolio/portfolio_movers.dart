@@ -5,6 +5,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/pages/portfolio/portfolio_models.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart'
     show ImageNetWork;
@@ -31,8 +32,8 @@ class MoverRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final isGainer = records.isNotEmpty && records.first.percentage >= 0;
     final labelColor = isGainer
-        ? const Color(0xFF22C55E)
-        : const Color(0xFFEF4444);
+        ? AppColorTokens.of(context).success
+        : AppColorTokens.of(context).danger;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

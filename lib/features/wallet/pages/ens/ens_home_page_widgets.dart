@@ -215,7 +215,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
             icon: Icons.autorenew_rounded,
             title: S.of(context).g_key_ens_renew,
             subtitle: S.of(context).g_key_ens_renew_desc,
-            color: const Color(0xFF66BB6A),
+            color: AppColorTokens.of(context).success,
             onTap: () {
               if (!canManageEns) {
                 _showUnsupportedSnack();

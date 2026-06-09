@@ -207,8 +207,8 @@ class SmartAccountEntryCard extends StatelessWidget {
     const cardRed = Color(0xFFFF6B6B);
     const cardYellow = Color(0xFFFFE66D);
     final statusColor = isDeployed
-        ? const Color(0xFF4CAF50)
-        : const Color(0xFFFF9800);
+        ? AppColorTokens.of(context).success
+        : AppColorTokens.of(context).warning;
     final su = ScreenUtil();
     final mainText = AppColorTokens.of(context).textPrimary;
     final subtitleColor = AppColorTokens.of(context).textSubtitle;

@@ -179,8 +179,8 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
             value: fmtPnl(pnl24h),
             subValue: '${pnlPct >= 0 ? '+' : ''}${pnlPct.toStringAsFixed(2)}%',
             valueColor: pnl24h >= 0
-                ? const Color(0xFF22C55E)
-                : const Color(0xFFEF4444),
+                ? AppColorTokens.of(context).success
+                : AppColorTokens.of(context).danger,
             itemBg: itemBg,
             textColor: textColor,
             icon: pnl24h >= 0

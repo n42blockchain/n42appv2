@@ -27,7 +27,7 @@ class TxSimulationCard extends StatelessWidget {
       TxSimStatus.simulating => _SimulatingCard(label: s.g_key_sim_simulating),
       TxSimStatus.success => _StatusCard(
         icon: Icons.check_circle_outline,
-        color: const Color(0xFF4CAF50),
+        color: AppColorTokens.of(context).success,
         label: s.g_key_sim_success,
         // Show gas estimate when available — helps users judge tx complexity
         detail: result.gasEstimate != null
@@ -37,7 +37,7 @@ class TxSimulationCard extends StatelessWidget {
       ),
       TxSimStatus.reverted => _StatusCard(
         icon: Icons.cancel_outlined,
-        color: const Color(0xFFF44336),
+        color: AppColorTokens.of(context).danger,
         label: s.g_key_sim_reverted,
         // Full revert reason — no truncation; selectable so users can copy
         detail: result.revertReason != null
@@ -47,7 +47,7 @@ class TxSimulationCard extends StatelessWidget {
       ),
       TxSimStatus.unavailable => _StatusCard(
         icon: Icons.info_outline,
-        color: const Color(0xFFFF9800),
+        color: AppColorTokens.of(context).warning,
         label: s.g_key_sim_unavailable,
       ),
     };

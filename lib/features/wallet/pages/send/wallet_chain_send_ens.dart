@@ -216,7 +216,7 @@ class _ResolvedBanner extends StatelessWidget {
       prefixLength: 6,
       suffixLength: 4,
     );
-    const successColor = Color(0xFF4CAF50);
+    final successColor = AppColorTokens.of(context).success;
 
     return GestureDetector(
       onTap: () {

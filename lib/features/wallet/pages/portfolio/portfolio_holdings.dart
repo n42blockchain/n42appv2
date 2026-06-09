@@ -5,6 +5,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/pages/portfolio/portfolio_models.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart'
     show ImageNetWork;
@@ -36,7 +37,9 @@ class HoldingRow extends StatelessWidget {
     final pct = totalValue > 0 ? record.value / totalValue * 100 : 0.0;
     final pnl = pnlFn(record.value, record.percentage);
     final isUp = record.percentage >= 0;
-    final pctColor = isUp ? const Color(0xFF22C55E) : const Color(0xFFEF4444);
+    final pctColor = isUp
+        ? AppColorTokens.of(context).success
+        : AppColorTokens.of(context).danger;
 
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 10.h),

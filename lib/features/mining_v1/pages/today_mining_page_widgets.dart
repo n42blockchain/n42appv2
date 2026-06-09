@@ -46,8 +46,12 @@ mixin _WidgetsMixin on _LogicMixin {
                         padding: EdgeInsets.all(AppSpacing.space2),
                         decoration: BoxDecoration(
                           color: isActive
-                              ? const Color.fromRGBO(50, 215, 75, 0.2)
-                              : const Color.fromRGBO(235, 88, 81, 0.2),
+                              ? AppColorTokens.of(
+                                  context,
+                                ).success.withValues(alpha: 0.2)
+                              : AppColorTokens.of(
+                                  context,
+                                ).danger.withValues(alpha: 0.2),
                           borderRadius: AppRadius.brMd,
                         ),
                         child: Container(
@@ -55,8 +59,8 @@ mixin _WidgetsMixin on _LogicMixin {
                           width: ScreenUtil().setWidth(16),
                           decoration: BoxDecoration(
                             color: isActive
-                                ? const Color(0xff32D74B)
-                                : const Color(0xffEB5851),
+                                ? AppColorTokens.of(context).success
+                                : AppColorTokens.of(context).danger,
                             borderRadius: AppRadius.brMd,
                           ),
                         ),

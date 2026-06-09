@@ -105,9 +105,9 @@ class _DexLimitOrderFormState extends State<DexLimitOrderForm> {
     _priceCtrl.clear();
 
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Limit order created'),
-        backgroundColor: Color(0xFF4CAF50),
+      SnackBar(
+        content: const Text('Limit order created'),
+        backgroundColor: AppColorTokens.of(context).success,
       ),
     );
   }

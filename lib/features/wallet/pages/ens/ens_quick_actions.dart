@@ -29,14 +29,15 @@ class EnsQuickActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final blueColor = AppColorTokens.of(context).brand;
+    final tokens = AppColorTokens.of(context);
+    final blueColor = tokens.brand;
     return Row(
       children: [
         Expanded(
           child: _ActionButton(
             icon: Icons.autorenew,
             label: S.of(context).g_key_ens_renew,
-            color: const Color(0xFF66BB6A),
+            color: tokens.success,
             onTap: onRenew,
           ),
         ),
@@ -45,7 +46,7 @@ class EnsQuickActions extends StatelessWidget {
           child: _ActionButton(
             icon: Icons.star,
             label: S.of(context).g_key_ens_set_primary,
-            color: const Color(0xFFFFA726),
+            color: tokens.warning,
             onTap: onSetPrimary,
           ),
         ),

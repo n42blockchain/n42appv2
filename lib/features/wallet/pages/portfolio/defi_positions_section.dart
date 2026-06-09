@@ -298,7 +298,7 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
             '$prefix ${token.amount.toStringAsFixed(4)} ${token.symbol}',
             style: AppTypography.caption.copyWith(
               color: prefix == '-'
-                  ? const Color(0xFFEF4444)
+                  ? AppColorTokens.of(context).danger
                   : AppColorTokens.of(context).textSubtitle,
             ),
           ),

@@ -132,8 +132,8 @@ class _LendingPageState extends State<LendingPage>
   Widget _buildReserveCard(AaveReserve reserve, {required bool isSupply}) {
     final apy = isSupply ? reserve.supplyApy : reserve.borrowApy;
     final apyColor = isSupply
-        ? const Color(0xFF22C55E) // green for supply
-        : const Color(0xFFF97316); // orange for borrow
+        ? AppColorTokens.of(context).success // green for supply
+        : AppColorTokens.of(context).warning; // orange for borrow
 
     return Container(
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),

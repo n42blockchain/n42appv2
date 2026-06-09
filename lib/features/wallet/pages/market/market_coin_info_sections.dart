@@ -168,7 +168,9 @@ Widget buildPnlCard(
   final pnlUsd = summary.pnlUsd(currentPrice);
   final pnlPct = summary.pnlPct(currentPrice);
   final isProfit = pnlUsd >= 0;
-  final pnlColor = isProfit ? const Color(0xFF22C55E) : const Color(0xFFEF4444);
+  final pnlColor = isProfit
+      ? AppColorTokens.of(context).success
+      : AppColorTokens.of(context).danger;
 
   return Padding(
     padding: EdgeInsets.symmetric(

@@ -213,7 +213,7 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
                           child: Text(
                             S.of(context).g_alert_remove,
                             style: TextStyle(
-                              color: const Color(0xFFEF4444),
+                              color: AppColorTokens.of(context).danger,
                               fontSize: 13.sp,
                             ),
                           ),

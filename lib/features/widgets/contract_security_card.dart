@@ -91,12 +91,12 @@ class ContractSecurityCard extends StatelessWidget {
 
     switch (level) {
       case GoplusRiskLevel.safe:
-        color = const Color(0xFF4CAF50);
+        color = AppColorTokens.of(context).success;
         icon = Icons.verified_outlined;
         title = S.of(context).g_key_security_goplus_safe;
         break;
       case GoplusRiskLevel.caution:
-        color = const Color(0xFFFFA726);
+        color = AppColorTokens.of(context).warning;
         icon = Icons.warning_amber_outlined;
         title = S.of(context).g_key_security_goplus_caution;
         break;

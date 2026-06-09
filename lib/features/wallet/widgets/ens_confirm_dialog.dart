@@ -58,7 +58,7 @@ class EnsConfirmDialog extends StatelessWidget {
     final bgColor = AppColorTokens.of(context).bgSurface;
     final blueColor = AppColorTokens.of(context).brand;
     final warningColor = AppColorTokens.of(context).warning;
-    const successGreen = Color(0xFF4CAF50);
+    final successGreen = AppColorTokens.of(context).success;
 
     return AlertDialog(
       backgroundColor: bgColor,

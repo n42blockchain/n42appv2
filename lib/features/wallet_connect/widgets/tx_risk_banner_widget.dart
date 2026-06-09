@@ -140,19 +140,19 @@ class TxRiskBannerWidget extends StatelessWidget {
     switch (analysis.level) {
       case TxRiskLevel.safe:
         return (
-          const Color(0xFF4CAF50), // green
+          AppColorTokens.of(context).success,
           s.g_tx_risk_safe,
           AppColorTokens.of(context).bgSurface,
         );
       case TxRiskLevel.caution:
         return (
-          const Color(0xFFFF9800), // orange
+          AppColorTokens.of(context).warning,
           s.g_tx_risk_caution,
           AppColorTokens.of(context).bgSurface,
         );
       case TxRiskLevel.danger:
         return (
-          const Color(0xFFF44336), // red
+          AppColorTokens.of(context).danger,
           s.g_tx_risk_danger,
           AppColorTokens.of(context).dangerBg,
         );

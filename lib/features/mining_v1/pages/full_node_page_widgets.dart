@@ -94,7 +94,9 @@ mixin _FullNodePageWidgets on State<FullNodePage> {
                   if (!isEnough)
                     Text(
                       errTips ?? '',
-                      style: AppTypography.captionSm.copyWith(color: const Color(0xffEB5851)),
+                      style: AppTypography.captionSm.copyWith(
+                        color: AppColorTokens.of(context).danger,
+                      ),
                     ),
                 ],
               ),
