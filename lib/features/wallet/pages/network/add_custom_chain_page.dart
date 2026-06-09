@@ -221,9 +221,9 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
                       onPressed: _validateRpc,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: _rpcStatus == 'valid'
-                            ? Colors.green
+                            ? AppColorTokens.of(context).success
                             : _rpcStatus == 'invalid'
-                            ? Colors.red
+                            ? AppColorTokens.of(context).danger
                             : AppColorTokens.of(context).bgSurface,
                         shape: RoundedRectangleBorder(
                           borderRadius: AppRadius.brMd,
@@ -270,12 +270,16 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
                   width: double.infinity,
                   padding: EdgeInsets.all(AppSpacing.space4),
                   decoration: BoxDecoration(
-                    color: Colors.red.withValues(alpha: 0.1),
+                    color: AppColorTokens.of(context).danger.withValues(
+                      alpha: 0.1,
+                    ),
                     borderRadius: AppRadius.brSm,
                   ),
                   child: Text(
                     _error!,
-                    style: AppTypography.caption.copyWith(color: Colors.red),
+                    style: AppTypography.caption.copyWith(
+                      color: AppColorTokens.of(context).danger,
+                    ),
                   ),
                 ),
 

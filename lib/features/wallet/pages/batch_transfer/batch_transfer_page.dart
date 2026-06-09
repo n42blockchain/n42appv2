@@ -164,7 +164,7 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
     if (widget.batchTransferProvider.totalAmount + amount > widget.balance) {
       return _showSnackBar(
         S.of(context).g_key_batch_insufficient_balance(widget.tokenSymbol),
-        bg: Colors.orange,
+        bg: AppColorTokens.of(context).warning,
       );
     }
 
@@ -295,7 +295,7 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
         messenger.showSnackBar(
           SnackBar(
             content: Text(l10n.g_key_140),
-            backgroundColor: Colors.green,
+            backgroundColor: AppColorTokens.of(context).success,
             behavior: SnackBarBehavior.floating,
           ),
         );
@@ -354,7 +354,7 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Export failed: $e'),
-          backgroundColor: Colors.red,
+          backgroundColor: AppColorTokens.of(context).danger,
           behavior: SnackBarBehavior.floating,
         ),
       );

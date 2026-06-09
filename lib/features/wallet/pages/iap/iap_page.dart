@@ -297,7 +297,7 @@ class _IapPageState extends State<IapPage> {
     final cardBg = isDark ? const Color(0xFF1A2236) : Colors.white;
     final borderColor = isDark
         ? Colors.white.withValues(alpha: 0.08)
-        : Colors.grey.withValues(alpha: 0.15);
+        : AppColorTokens.of(context).border.withValues(alpha: 0.15);
 
     return Container(
       padding: EdgeInsets.all(AppSpacing.space8),
@@ -377,7 +377,11 @@ class _IapPageState extends State<IapPage> {
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
-                color: isPending ? Colors.grey.withValues(alpha: 0.3) : null,
+                color: isPending
+                    ? AppColorTokens.of(context).textTertiary.withValues(
+                        alpha: 0.3,
+                      )
+                    : null,
                 borderRadius: AppRadius.brMd,
               ),
               child: isPending

@@ -38,7 +38,7 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
     if (rows.length > 200) {
       _showSnack(
         S.of(context).g_key_batch_max_recipients(200),
-        color: Colors.orange,
+        color: AppColorTokens.of(context).warning,
       );
       return;
     }
@@ -155,7 +155,10 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
       }
     } catch (e) {
       if (!mounted) return;
-      _showSnack('Failed to read file: $e', color: Colors.red);
+      _showSnack(
+        'Failed to read file: $e',
+        color: AppColorTokens.of(context).danger,
+      );
     }
   }
 
@@ -164,16 +167,17 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
     List<String> errors,
     String rawContent,
   ) {
-    final blue = AppColorTokens.of(context).brand;
+    final c = AppColorTokens.of(context);
+    final blue = c.brand;
 
     showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Row(
+        title: Row(
           children: [
-            Icon(Icons.warning_amber, color: Colors.orange),
-            SizedBox(width: 8),
-            Text('Validation Issues'),
+            Icon(Icons.warning_amber, color: c.warning),
+            const SizedBox(width: 8),
+            const Text('Validation Issues'),
           ],
         ),
         content: SizedBox(
@@ -199,7 +203,7 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
                       padding: const EdgeInsets.only(bottom: 4),
                       child: Text(
                         errors[index],
-                        style: const TextStyle(fontSize: 12, color: Colors.red),
+                        style: TextStyle(fontSize: 12, color: c.danger),
                       ),
                     ),
                   ),
@@ -207,7 +211,7 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
                 if (errors.length > 5)
                   Text(
                     '… and ${errors.length - 5} more issues',
-                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                    style: TextStyle(fontSize: 12, color: c.textTertiary),
                   ),
               ],
             ),

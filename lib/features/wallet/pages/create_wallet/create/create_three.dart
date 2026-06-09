@@ -236,7 +236,7 @@ class _CreateThreeState extends State<CreateThree> {
                       child: Icon(
                         Icons.cancel,
                         size: ScreenUtil().setWidth(36.0),
-                        color: Colors.red,
+                        color: AppColorTokens.of(context).danger,
                       ),
                     ),
                   ),
@@ -263,10 +263,10 @@ class _CreateThreeState extends State<CreateThree> {
       itemBuilder: (context, index) {
         final item = messMnemonicWordsList[index];
         final borderColor = item.isSelected
-            ? Colors.blueAccent
+            ? AppColorTokens.of(context).brand
             : _tc(AppThemeKeys.mainGreyColor.name);
         final textColor = item.isSelected
-            ? Colors.blueAccent
+            ? AppColorTokens.of(context).brand
             : _tc(AppThemeKeys.ff444444.name);
 
         return GestureDetector(

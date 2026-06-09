@@ -6,6 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/widgets/aa/gas_sponsorship_badge.dart';
 
@@ -243,6 +244,7 @@ class AATransactionPreview extends StatelessWidget {
   Widget _buildGasSection(BuildContext context) {
     final sponsored = data.isGasSponsored;
     final subtitleColor = _color(context, AppThemeKeys.itemSubtitleTextColor);
+    final success = AppColorTokens.of(context).success;
     final bgFallback = _color(
       context,
       AppThemeKeys.backGroundColor,
@@ -251,11 +253,9 @@ class AATransactionPreview extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
-        color: sponsored ? Colors.green.withAlpha(20) : bgFallback,
+        color: sponsored ? success.withAlpha(20) : bgFallback,
         borderRadius: BorderRadius.circular(12.w),
-        border: sponsored
-            ? Border.all(color: Colors.green.withAlpha(40))
-            : null,
+        border: sponsored ? Border.all(color: success.withAlpha(40)) : null,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -265,7 +265,7 @@ class AATransactionPreview extends StatelessWidget {
               Icon(
                 Icons.local_gas_station,
                 size: 22.w,
-                color: sponsored ? Colors.green : subtitleColor,
+                color: sponsored ? success : subtitleColor,
               ),
               SizedBox(width: 8.w),
               Flexible(
@@ -299,7 +299,7 @@ class AATransactionPreview extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 26.sp,
                       fontWeight: FontWeight.w600,
-                      color: Colors.green,
+                      color: success,
                     ),
                   ),
                 ),

@@ -100,7 +100,11 @@ class _LendingPageState extends State<LendingPage>
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.info_outline, size: 48, color: Colors.grey),
+            Icon(
+              Icons.info_outline,
+              size: 48,
+              color: AppColorTokens.of(context).textTertiary,
+            ),
             SizedBox(height: AppSpacing.space4),
             Text(
               AaveService.isAvailable(widget.chainId)

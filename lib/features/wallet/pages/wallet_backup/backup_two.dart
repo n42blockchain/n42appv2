@@ -215,7 +215,7 @@ class _BackupTwoState extends State<BackupTwo> {
                   child: Icon(
                     Icons.cancel,
                     size: ScreenUtil().setWidth(36.0),
-                    color: Colors.red,
+                    color: AppColorTokens.of(context).danger,
                   ),
                 ),
               ),
@@ -241,7 +241,7 @@ class _BackupTwoState extends State<BackupTwo> {
             decoration: BoxDecoration(
               border: Border.all(
                 color: item.isSelected
-                    ? Colors.blueAccent
+                    ? AppColorTokens.of(context).brand
                     : AppThemeUtils.getColorByKey(
                         context,
                         AppThemeKeys.mainGreyColor.name,
@@ -256,7 +256,7 @@ class _BackupTwoState extends State<BackupTwo> {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: item.isSelected
-                      ? Colors.blueAccent
+                      ? AppColorTokens.of(context).brand
                       : AppThemeUtils.getColorByKey(
                           context,
                           AppThemeKeys.ff444444.name,

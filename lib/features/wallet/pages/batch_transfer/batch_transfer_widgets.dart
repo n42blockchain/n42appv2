@@ -25,6 +25,7 @@ class BatchInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final success = AppColorTokens.of(context).success;
     return Container(
       margin: EdgeInsets.all(AppSpacing.space4),
       padding: EdgeInsets.all(AppSpacing.space4),
@@ -62,7 +63,7 @@ class BatchInfoCard extends StatelessWidget {
                 vertical: AppSpacing.space2,
               ),
               decoration: BoxDecoration(
-                color: Colors.green.withAlpha(30),
+                color: success.withAlpha(30),
                 borderRadius: AppRadius.brSm,
               ),
               child: Row(
@@ -70,14 +71,14 @@ class BatchInfoCard extends StatelessWidget {
                 children: [
                   Icon(
                     Icons.flash_on,
-                    color: Colors.green,
+                    color: success,
                     size: ScreenUtil().setWidth(20),
                   ),
                   SizedBox(width: AppSpacing.space2),
                   Text(
                     'Multicall',
                     style: AppTypography.captionSm.copyWith(
-                      color: Colors.green,
+                      color: success,
                       fontWeight: FontWeight.w600,
                     ),
                   ),

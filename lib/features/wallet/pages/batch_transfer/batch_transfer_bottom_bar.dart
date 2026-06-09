@@ -75,12 +75,14 @@ class BatchBottomBar extends StatelessWidget {
                 width: double.infinity,
                 padding: EdgeInsets.all(AppSpacing.space4),
                 decoration: BoxDecoration(
-                  color: Colors.red.withAlpha(20),
+                  color: AppColorTokens.of(context).danger.withAlpha(20),
                   borderRadius: AppRadius.brSm,
                 ),
                 child: Text(
                   provider.errorMessage!,
-                  style: AppTypography.caption.copyWith(color: Colors.red),
+                  style: AppTypography.caption.copyWith(
+                    color: AppColorTokens.of(context).danger,
+                  ),
                 ),
               ),
               SizedBox(height: AppSpacing.space4),

@@ -101,7 +101,7 @@ class BatchTransferListItem extends StatelessWidget {
       background: Container(
         alignment: Alignment.centerRight,
         padding: EdgeInsets.only(right: ScreenUtil().setWidth(20)),
-        color: Colors.red,
+        color: AppColorTokens.of(context).danger,
         child: const Icon(Icons.delete, color: Colors.white),
       ),
       onDismissed: (_) => onDismiss(),
@@ -112,7 +112,7 @@ class BatchTransferListItem extends StatelessWidget {
           color: AppColorTokens.of(context).bgSurface,
           borderRadius: AppRadius.brSm,
           border: Border.all(
-            color: batchStatusColor(item.status).withAlpha(50),
+            color: batchStatusColor(context, item.status).withAlpha(50),
             width: 1,
           ),
         ),
@@ -216,12 +216,15 @@ String shortenAddress(String address) {
   return '${address.substring(0, 8)}...${address.substring(address.length - 6)}';
 }
 
-Color batchStatusColor(BatchTransferStatus status) => switch (status) {
-  BatchTransferStatus.pending => Colors.grey,
-  BatchTransferStatus.processing => Colors.blue,
-  BatchTransferStatus.success => Colors.green,
-  BatchTransferStatus.failed => Colors.red,
-};
+Color batchStatusColor(BuildContext context, BatchTransferStatus status) {
+  final c = AppColorTokens.of(context);
+  return switch (status) {
+    BatchTransferStatus.pending => c.textTertiary,
+    BatchTransferStatus.processing => c.brand,
+    BatchTransferStatus.success => c.success,
+    BatchTransferStatus.failed => c.danger,
+  };
+}
 
 String batchStatusText(BuildContext context, BatchTransferStatus status) =>
     switch (status) {

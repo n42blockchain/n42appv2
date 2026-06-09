@@ -58,12 +58,15 @@ class BatchConfirmDialog extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Colors.orange.withAlpha(20),
+                color: AppColorTokens.of(context).warning.withAlpha(20),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.warning_amber, color: Colors.orange),
+                  Icon(
+                    Icons.warning_amber,
+                    color: AppColorTokens.of(context).warning,
+                  ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
@@ -118,6 +121,7 @@ class BatchResultSheet extends StatelessWidget {
     final mainText = AppColorTokens.of(context).textPrimary;
     final subText = AppColorTokens.of(context).textSubtitle;
     final blue = AppColorTokens.of(context).brand;
+    final success = AppColorTokens.of(context).success;
     final txHash = provider.txHash ?? '';
 
     return SafeArea(
@@ -137,7 +141,7 @@ class BatchResultSheet extends StatelessWidget {
             ),
             Icon(
               Icons.check_circle_rounded,
-              color: Colors.green,
+              color: success,
               size: ScreenUtil().setWidth(72),
             ),
             SizedBox(height: AppSpacing.space4),
@@ -145,7 +149,7 @@ class BatchResultSheet extends StatelessWidget {
               S.of(context).g_key_140,
               style: AppTypography.title.copyWith(
                 fontWeight: FontWeight.w600,
-                color: Colors.green,
+                color: success,
               ),
             ),
             SizedBox(height: AppSpacing.space6),
@@ -278,7 +282,8 @@ class BatchHelpDialog extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: (isDark ? Colors.white : Colors.grey).withAlpha(30),
+                color: (isDark ? Colors.white : AppColorTokens.of(context).textTertiary)
+                    .withAlpha(30),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(

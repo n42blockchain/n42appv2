@@ -120,7 +120,7 @@ class BatchOperationItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final opColor = _getOperationColor();
+    final opColor = _getOperationColor(context);
     final subtitleColor = AppColorTokens.of(context).textSubtitle;
 
     return Container(
@@ -230,7 +230,7 @@ class BatchOperationItem extends StatelessWidget {
               _buildActionButton(
                 onPressed: onRemove!,
                 icon: Icons.delete_outline,
-                color: Colors.red,
+                color: AppColorTokens.of(context).danger,
               ),
           ],
         ],
@@ -277,12 +277,15 @@ class BatchOperationItem extends StatelessWidget {
     BatchOperationType.custom => Icons.code,
   };
 
-  Color _getOperationColor() => switch (operation.type) {
-    BatchOperationType.transfer => const Color(0xFF5E97F6),
-    BatchOperationType.approve => const Color(0xFF66BB6A),
-    BatchOperationType.swap => const Color(0xFFFF9800),
-    BatchOperationType.custom => const Color(0xFF9C27B0),
-  };
+  Color _getOperationColor(BuildContext context) {
+    final c = AppColorTokens.of(context);
+    return switch (operation.type) {
+      BatchOperationType.transfer => c.brand,
+      BatchOperationType.approve => c.success,
+      BatchOperationType.swap => c.warning,
+      BatchOperationType.custom => const Color(0xFF9C27B0),
+    };
+  }
 
   String _getOperationTitle(BuildContext context) => switch (operation.type) {
     BatchOperationType.transfer => S.of(context).g_key_37,

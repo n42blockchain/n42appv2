@@ -67,7 +67,11 @@ class _CsvImportPageState extends State<CsvImportPage>
             onPressed: _hasContent ? _importData : null,
             child: Text(
               S.of(context).g_key_batch_done,
-              style: TextStyle(color: _hasContent ? blue : Colors.grey),
+              style: TextStyle(
+                color: _hasContent
+                    ? blue
+                    : AppColorTokens.of(context).textTertiary,
+              ),
             ),
           ),
         ],

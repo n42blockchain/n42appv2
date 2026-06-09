@@ -27,6 +27,7 @@ class GasSponsorshipBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     if (!isSponsored) return const SizedBox.shrink();
 
+    final success = AppColorTokens.of(context).success;
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: AppSpacing.space4,
@@ -34,12 +35,12 @@ class GasSponsorshipBadge extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [Colors.green.withAlpha(30), Colors.green.withAlpha(10)],
+          colors: [success.withAlpha(30), success.withAlpha(10)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: AppRadius.brMd,
-        border: Border.all(color: Colors.green.withAlpha(40)),
+        border: Border.all(color: success.withAlpha(40)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -47,7 +48,7 @@ class GasSponsorshipBadge extends StatelessWidget {
           Icon(
             Icons.card_giftcard,
             size: ScreenUtil().setWidth(22),
-            color: Colors.green,
+            color: success,
           ),
           SizedBox(width: AppSpacing.space2),
           Column(
@@ -58,7 +59,7 @@ class GasSponsorshipBadge extends StatelessWidget {
                 S.of(context).g_key_aa_gas_sponsored,
                 style: AppTypography.caption.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: Colors.green,
+                  color: success,
                 ),
               ),
               if (sponsorName != null || savedAmount != null)
@@ -67,7 +68,7 @@ class GasSponsorshipBadge extends StatelessWidget {
                       ? '${S.of(context).g_key_aa_by} $sponsorName'
                       : '${S.of(context).g_key_aa_saved} $savedAmount',
                   style: AppTypography.captionSm.copyWith(
-                    color: Colors.green.withAlpha(180),
+                    color: success.withAlpha(180),
                   ),
                 ),
             ],
@@ -93,16 +94,17 @@ class GasSponsoredIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     if (!isSponsored) return const SizedBox.shrink();
 
+    final success = AppColorTokens.of(context).success;
     return Container(
       padding: EdgeInsets.all(AppSpacing.space2),
       decoration: BoxDecoration(
-        color: Colors.green.withAlpha(30),
+        color: success.withAlpha(30),
         shape: BoxShape.circle,
       ),
       child: Icon(
         Icons.card_giftcard,
         size: ScreenUtil().setWidth(size),
-        color: Colors.green,
+        color: success,
       ),
     );
   }

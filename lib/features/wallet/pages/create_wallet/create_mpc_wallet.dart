@@ -180,12 +180,16 @@ class _CreateMpcWalletState extends ConsumerState<CreateMpcWallet> {
                 Container(
                   padding: EdgeInsets.all(AppSpacing.space4),
                   decoration: BoxDecoration(
-                    color: Colors.red.withValues(alpha: 0.1),
+                    color: AppColorTokens.of(context).danger.withValues(
+                      alpha: 0.1,
+                    ),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
                     _errorMsg,
-                    style: AppTypography.caption.copyWith(color: Colors.red),
+                    style: AppTypography.caption.copyWith(
+                      color: AppColorTokens.of(context).danger,
+                    ),
                   ),
                 ),
               ],
@@ -249,13 +253,15 @@ class _CreateMpcWalletState extends ConsumerState<CreateMpcWallet> {
           label,
           style: AppTypography.body.copyWith(
             fontWeight: FontWeight.w600,
-            color: isDisabled ? Colors.grey : textColor,
+            color: isDisabled
+                ? AppColorTokens.of(context).textTertiary
+                : textColor,
           ),
         ),
         style: OutlinedButton.styleFrom(
           side: BorderSide(
             color: isDisabled
-                ? Colors.grey.shade300
+                ? AppColorTokens.of(context).border
                 : color.withValues(alpha: 0.4),
           ),
           shape: RoundedRectangleBorder(

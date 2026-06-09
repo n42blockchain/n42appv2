@@ -202,12 +202,19 @@ extension _WalletCoinAddAllImportFormUI on _WalletCoinAddAllState {
       ),
       'found' => Row(
         children: [
-          Icon(Icons.check_circle_outline, color: Colors.green, size: iconSize),
+          Icon(
+            Icons.check_circle_outline,
+            color: AppColorTokens.of(context).success,
+            size: iconSize,
+          ),
           SizedBox(width: gap),
           Expanded(
             child: Text(
               'Token found: $_contractHint',
-              style: TextStyle(fontSize: fontSize, color: Colors.green),
+              style: TextStyle(
+                fontSize: fontSize,
+                color: AppColorTokens.of(context).success,
+              ),
             ),
           ),
         ],
