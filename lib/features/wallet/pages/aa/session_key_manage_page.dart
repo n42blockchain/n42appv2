@@ -216,16 +216,14 @@ class _SessionKeyManagePageState extends State<SessionKeyManagePage>
                   children: [
                     Text(
                       s.g_key_aa_session_keys,
-                      style: TextStyle(
-                        fontSize: su.setSp(28),
+                      style: AppTypography.bodyStrong.copyWith(
                         fontWeight: FontWeight.w600,
                         color: mainText,
                       ),
                     ),
                     Text(
                       s.g_key_aa_session_keys_desc,
-                      style: TextStyle(
-                        fontSize: su.setSp(22),
+                      style: AppTypography.caption.copyWith(
                         color: subtitleText,
                       ),
                     ),
@@ -277,16 +275,14 @@ class _SessionKeyManagePageState extends State<SessionKeyManagePage>
           children: [
             Text(
               value,
-              style: TextStyle(
-                fontSize: su.setSp(32),
+              style: AppTypography.headline.copyWith(
                 fontWeight: FontWeight.w600,
                 color: color,
               ),
             ),
             Text(
               label,
-              style: TextStyle(
-                fontSize: su.setSp(20),
+              style: AppTypography.captionSm.copyWith(
                 color: color.withAlpha(180),
               ),
             ),
@@ -320,8 +316,7 @@ class _SessionKeyManagePageState extends State<SessionKeyManagePage>
         indicatorSize: TabBarIndicatorSize.tab,
         labelColor: Colors.white,
         unselectedLabelColor: _themeColor(AppThemeKeys.itemSubtitleTextColor),
-        labelStyle: TextStyle(
-          fontSize: su.setSp(24),
+        labelStyle: AppTypography.caption.copyWith(
           fontWeight: FontWeight.w600,
         ),
         dividerColor: Colors.transparent,
@@ -377,7 +372,7 @@ class _SessionKeyManagePageState extends State<SessionKeyManagePage>
           SizedBox(height: su.setWidth(16)),
           Text(
             S.of(context).g_key_aa_no_session_keys,
-            style: TextStyle(fontSize: su.setSp(28), color: subtitleColor),
+            style: AppTypography.body.copyWith(color: subtitleColor),
           ),
         ],
       ),

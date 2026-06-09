@@ -149,7 +149,7 @@ class _ResolvingBanner extends StatelessWidget {
           Flexible(
             child: Text(
               S.of(context).g_key_ens_resolving,
-              style: TextStyle(fontSize: su.setSp(22), color: subtitleColor),
+              style: AppTypography.caption.copyWith(color: subtitleColor),
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
             ),
@@ -184,7 +184,7 @@ class _FailedBanner extends StatelessWidget {
           Expanded(
             child: Text(
               message,
-              style: TextStyle(fontSize: su.setSp(22), color: warningColor),
+              style: AppTypography.caption.copyWith(color: warningColor),
             ),
           ),
         ],
@@ -255,15 +255,13 @@ class _ResolvedBanner extends StatelessWidget {
                 children: [
                   Text(
                     S.of(context).g_key_ens_resolved_address,
-                    style: TextStyle(
-                      fontSize: su.setSp(20),
+                    style: AppTypography.captionSm.copyWith(
                       color: subtitleColor,
                     ),
                   ),
                   Text(
                     shortAddr,
-                    style: TextStyle(
-                      fontSize: su.setSp(24),
+                    style: AppTypography.caption.copyWith(
                       fontWeight: FontWeight.w600,
                       color: mainTextColor,
                       fontFamily: 'monospace',
@@ -284,8 +282,7 @@ class _ResolvedBanner extends StatelessWidget {
                 ),
                 child: Text(
                   result.sourceChain!,
-                  style: TextStyle(
-                    fontSize: su.setSp(18),
+                  style: AppTypography.captionSm.copyWith(
                     fontWeight: FontWeight.w600,
                     color: blueColor,
                   ),

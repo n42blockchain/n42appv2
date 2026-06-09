@@ -137,8 +137,7 @@ class EnsEntryCard extends StatelessWidget {
                 children: [
                   Text(
                     hasEns ? ensName! : S.of(context).g_key_ens_get_your_name,
-                    style: TextStyle(
-                      fontSize: su.setSp(28),
+                    style: AppTypography.bodyStrong.copyWith(
                       fontWeight: FontWeight.w600,
                       color: mainText,
                     ),
@@ -148,8 +147,7 @@ class EnsEntryCard extends StatelessWidget {
                     hasEns
                         ? S.of(context).g_key_ens_manage_your_identity
                         : S.of(context).g_key_ens_register_description,
-                    style: TextStyle(
-                      fontSize: su.setSp(22),
+                    style: AppTypography.caption.copyWith(
                       color: subtitleColor,
                     ),
                     maxLines: 2,
@@ -273,8 +271,7 @@ class SmartAccountEntryCard extends StatelessWidget {
                           hasSmartAccount
                               ? S.of(context).g_key_aa_title
                               : S.of(context).g_key_aa_create_account,
-                          style: TextStyle(
-                            fontSize: su.setSp(28),
+                          style: AppTypography.bodyStrong.copyWith(
                             fontWeight: FontWeight.w600,
                             color: mainText,
                           ),
@@ -297,8 +294,7 @@ class SmartAccountEntryCard extends StatelessWidget {
                             isDeployed
                                 ? S.of(context).g_key_aa_deployed
                                 : S.of(context).g_key_aa_not_deployed,
-                            style: TextStyle(
-                              fontSize: su.setSp(16),
+                            style: AppTypography.captionSm.copyWith(
                               color: statusColor,
                               fontWeight: FontWeight.w500,
                             ),
@@ -312,8 +308,7 @@ class SmartAccountEntryCard extends StatelessWidget {
                     hasSmartAccount
                         ? _formatAddress(accountAddress ?? '')
                         : S.of(context).g_key_aa_gasless_transactions,
-                    style: TextStyle(
-                      fontSize: su.setSp(22),
+                    style: AppTypography.caption.copyWith(
                       color: subtitleColor,
                     ),
                     maxLines: 2,

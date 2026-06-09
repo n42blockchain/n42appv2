@@ -222,9 +222,8 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
                   ),
                   child: Text(
                     _dateLabel(item),
-                    style: TextStyle(
+                    style: AppTypography.bodyStrong.copyWith(
                       color: mainText,
-                      fontSize: su.setSp(28.0),
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -261,9 +260,8 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
                                 (item.title?.isNotEmpty ?? false)
                                     ? item.title!
                                     : (item.url ?? ''),
-                                style: TextStyle(
+                                style: AppTypography.body.copyWith(
                                   color: mainText,
-                                  fontSize: su.setSp(28.0),
                                 ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
@@ -271,9 +269,8 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
                               SizedBox(height: su.setWidth(6.0)),
                               Text(
                                 item.url ?? '',
-                                style: TextStyle(
+                                style: AppTypography.caption.copyWith(
                                   color: subtitleColor,
-                                  fontSize: su.setSp(24.0),
                                 ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
@@ -284,9 +281,8 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
                         SizedBox(width: su.setWidth(10.0)),
                         Text(
                           _timeLabel(item),
-                          style: TextStyle(
+                          style: AppTypography.caption.copyWith(
                             color: subtitleColor,
-                            fontSize: su.setSp(24.0),
                           ),
                         ),
                       ],
@@ -306,7 +302,7 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
     if (lastPage) {
       child = Text(
         s.g_key_105,
-        style: TextStyle(color: subtitleColor, fontSize: su.setSp(26.0)),
+        style: AppTypography.bodySm.copyWith(color: subtitleColor),
       );
     } else {
       final isLoadingMore = loading == Load.loading && historyList.isNotEmpty;
@@ -322,7 +318,7 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
             ),
           Text(
             s.g_key_106,
-            style: TextStyle(color: subtitleColor, fontSize: su.setSp(26.0)),
+            style: AppTypography.bodySm.copyWith(color: subtitleColor),
           ),
         ],
       );

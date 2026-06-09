@@ -117,9 +117,8 @@ mixin _DotSendWidgetsMixin on _DotSendLogicMixin {
                 Flexible(
                   child: Text(
                     S.of(context).g_key_44,
-                    style: TextStyle(
+                    style: AppTypography.body.copyWith(
                       color: AppColorTokens.of(context).textPrimary,
-                      fontSize: su.setSp(28.0),
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -145,8 +144,7 @@ mixin _DotSendWidgetsMixin on _DotSendLogicMixin {
                   controller: valueTextEditingController,
                   focusNode: valueNode,
                   hintText: S.of(context).g_key_44,
-                  hintStyle: TextStyle(
-                    fontSize: su.setSp(54.0),
+                  hintStyle: AppTypography.displayLg.copyWith(
                     color: AppThemeUtils.getColorByKey(
                       context,
                       AppThemeKeys.textFieldHintColor.name,
@@ -187,8 +185,7 @@ mixin _DotSendWidgetsMixin on _DotSendLogicMixin {
                     alignment: Alignment.center,
                     child: Text(
                       S.of(context).g_key_197,
-                      style: TextStyle(
-                        fontSize: su.setSp(26.0),
+                      style: AppTypography.bodySm.copyWith(
                         color: AppThemeUtils.getColorByKey(
                           context,
                           AppThemeKeys.mainWhiteColor.name,
@@ -235,9 +232,8 @@ mixin _DotSendWidgetsMixin on _DotSendLogicMixin {
       ),
       child: Text(
         addr,
-        style: TextStyle(
+        style: AppTypography.headline.copyWith(
           color: AppColorTokens.of(context).textSubtitle,
-          fontSize: su.setSp(30.0),
         ),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,

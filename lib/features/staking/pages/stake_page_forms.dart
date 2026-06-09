@@ -39,17 +39,14 @@ mixin _StakeFormsMixin on _StakeLogicMixin {
                   children: [
                     Text(
                       provider.selectedValidator!.name,
-                      style: TextStyle(
-                        fontSize: su.setSp(28),
-                        fontWeight: FontWeight.w600,
+                      style: AppTypography.bodyStrong.copyWith(
                         color: mainText,
                       ),
                     ),
                     SizedBox(height: su.setWidth(4)),
                     Text(
                       '${S.of(context).g_key_stake_commission}: ${provider.selectedValidator!.commission.toStringAsFixed(1)}% | ${S.of(context).g_key_stake_apy}: ${provider.selectedValidator!.apy.toStringAsFixed(1)}%',
-                      style: TextStyle(
-                        fontSize: su.setSp(24),
+                      style: AppTypography.caption.copyWith(
                         color: subtitleColor,
                       ),
                     ),
@@ -66,10 +63,7 @@ mixin _StakeFormsMixin on _StakeLogicMixin {
               Expanded(
                 child: Text(
                   S.of(context).g_key_stake_select_a_validator,
-                  style: TextStyle(
-                    fontSize: su.setSp(28),
-                    color: subtitleColor,
-                  ),
+                  style: AppTypography.body.copyWith(color: subtitleColor),
                 ),
               ),
             ],
@@ -103,11 +97,7 @@ mixin _StakeFormsMixin on _StakeLogicMixin {
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
               ],
-              style: TextStyle(
-                fontSize: su.setSp(32),
-                fontWeight: FontWeight.w600,
-                color: mainText,
-              ),
+              style: AppTypography.headline.copyWith(color: mainText),
               decoration: InputDecoration(
                 hintText: '0.0',
                 hintStyle: TextStyle(
@@ -124,11 +114,7 @@ mixin _StakeFormsMixin on _StakeLogicMixin {
           ),
           Text(
             widget.protocol.chainSymbol,
-            style: TextStyle(
-              fontSize: su.setSp(28),
-              fontWeight: FontWeight.w600,
-              color: mainText,
-            ),
+            style: AppTypography.bodyStrong.copyWith(color: mainText),
           ),
         ],
       ),
@@ -169,8 +155,7 @@ mixin _StakeFormsMixin on _StakeLogicMixin {
           child: Center(
             child: Text(
               label,
-              style: TextStyle(
-                fontSize: su.setSp(24),
+              style: AppTypography.caption.copyWith(
                 fontWeight: FontWeight.w600,
                 color: AppColorTokens.of(context).brand,
               ),
@@ -247,21 +232,18 @@ mixin _StakeFormsMixin on _StakeLogicMixin {
     required String value,
     Color? valueColor,
   }) {
-    final su = ScreenUtil();
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           label,
-          style: TextStyle(
-            fontSize: su.setSp(26),
+          style: AppTypography.bodySm.copyWith(
             color: AppColorTokens.of(context).textSubtitle,
           ),
         ),
         Text(
           value,
-          style: TextStyle(
-            fontSize: su.setSp(26),
+          style: AppTypography.bodySm.copyWith(
             fontWeight: FontWeight.w600,
             color: valueColor ?? AppColorTokens.of(context).success,
           ),

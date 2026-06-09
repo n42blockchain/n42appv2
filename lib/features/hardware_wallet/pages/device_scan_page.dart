@@ -168,11 +168,7 @@ class _DeviceScanPageState extends State<DeviceScanPage>
 
           Text(
             isScanning ? 'Searching for devices...' : 'Search complete',
-            style: TextStyle(
-              fontSize: su.setSp(30),
-              fontWeight: FontWeight.w600,
-              color: _textColor(context),
-            ),
+            style: AppTypography.headline.copyWith(color: _textColor(context)),
           ),
 
           SizedBox(height: su.setWidth(8)),
@@ -181,8 +177,7 @@ class _DeviceScanPageState extends State<DeviceScanPage>
             isScanning
                 ? 'Make sure your Ledger is unlocked and Bluetooth is enabled'
                 : '${provider.discoveredDevices.length} device(s) found',
-            style: TextStyle(
-              fontSize: su.setSp(24),
+            style: AppTypography.caption.copyWith(
               color: _subtitleColor(context),
             ),
             textAlign: TextAlign.center,
@@ -217,7 +212,7 @@ class _DeviceScanPageState extends State<DeviceScanPage>
               provider.isScanning
                   ? 'Looking for devices...'
                   : 'No devices found',
-              style: TextStyle(fontSize: su.setSp(28), color: subtitle),
+              style: AppTypography.body.copyWith(color: subtitle),
             ),
           ],
         ),
@@ -275,9 +270,7 @@ class _DeviceScanPageState extends State<DeviceScanPage>
                 children: [
                   Text(
                     device.name,
-                    style: TextStyle(
-                      fontSize: su.setSp(28),
-                      fontWeight: FontWeight.w600,
+                    style: AppTypography.bodyStrong.copyWith(
                       color: _textColor(context),
                     ),
                   ),
@@ -303,8 +296,7 @@ class _DeviceScanPageState extends State<DeviceScanPage>
                       SizedBox(width: su.setWidth(8)),
                       Text(
                         device.isLedger ? 'Ledger Device' : 'Unknown',
-                        style: TextStyle(
-                          fontSize: su.setSp(24),
+                        style: AppTypography.caption.copyWith(
                           color: _subtitleColor(context),
                         ),
                       ),
@@ -351,11 +343,7 @@ class _DeviceScanPageState extends State<DeviceScanPage>
           ),
           child: Text(
             provider.isScanning ? 'Stop Scanning' : 'Scan Again',
-            style: TextStyle(
-              fontSize: su.setSp(30),
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
-            ),
+            style: AppTypography.headline.copyWith(color: Colors.white),
           ),
         ),
       ),

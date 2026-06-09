@@ -257,10 +257,8 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
                           ),
                           child: Text(
                             S.of(context).g_key_202,
-                            style: TextStyle(
-                              fontSize: ScreenUtil().setWidth(28.0),
+                            style: AppTypography.bodyStrong.copyWith(
                               color: _themeColor(AppThemeKeys.mainTextColor),
-                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
@@ -363,9 +361,8 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
         children: [
           Text(
             title,
-            style: TextStyle(
+            style: AppTypography.body.copyWith(
               color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
-              fontSize: su.setSp(28.0),
             ),
           ),
           SizedBox(height: su.setWidth(10.0)),
@@ -391,9 +388,8 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
         children: [
           Text(
             title,
-            style: TextStyle(
+            style: AppTypography.body.copyWith(
               color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
-              fontSize: su.setSp(28.0),
             ),
           ),
           SizedBox(height: su.setWidth(10.0)),
@@ -402,9 +398,8 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
               Expanded(
                 child: Text(
                   value,
-                  style: TextStyle(
+                  style: AppTypography.headline.copyWith(
                     color: _themeColor(AppThemeKeys.mainTextColor),
-                    fontSize: su.setSp(30.0),
                   ),
                 ),
               ),

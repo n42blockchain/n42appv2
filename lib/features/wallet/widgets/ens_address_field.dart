@@ -270,13 +270,12 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
           child: TextField(
             controller: widget.controller,
             focusNode: widget.focusNode,
-            style: TextStyle(fontSize: su.setSp(28), color: mainTextColor),
+            style: AppTypography.body.copyWith(color: mainTextColor),
             decoration: InputDecoration(
               labelText: widget.labelText,
               hintText: widget.hintText ?? 'Address or ENS name',
-              hintStyle: TextStyle(
+              hintStyle: AppTypography.bodySm.copyWith(
                 color: subtitleColor,
-                fontSize: su.setSp(26),
               ),
               contentPadding: EdgeInsets.symmetric(
                 horizontal: su.setWidth(16),
@@ -331,7 +330,7 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
       padding: EdgeInsets.only(top: su.setWidth(8), left: su.setWidth(4)),
       child: Text(
         text,
-        style: TextStyle(fontSize: su.setSp(22), color: color),
+        style: AppTypography.caption.copyWith(color: color),
       ),
     );
   }
@@ -411,16 +410,14 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
                 children: [
                   Text(
                     S.of(context).g_key_ens_resolved_address,
-                    style: TextStyle(
-                      fontSize: su.setSp(20),
+                    style: AppTypography.captionSm.copyWith(
                       color: subtitleColor,
                     ),
                   ),
                   SizedBox(height: su.setWidth(2)),
                   Text(
                     shortAddr,
-                    style: TextStyle(
-                      fontSize: su.setSp(26),
+                    style: AppTypography.bodySm.copyWith(
                       fontWeight: FontWeight.w600,
                       color: mainTextColor,
                       fontFamily: 'monospace',
@@ -444,8 +441,7 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
                 ),
                 child: Text(
                   _resolveResult!.sourceChain!,
-                  style: TextStyle(
-                    fontSize: su.setSp(18),
+                  style: AppTypography.captionSm.copyWith(
                     fontWeight: FontWeight.w600,
                     color: blueColor,
                   ),

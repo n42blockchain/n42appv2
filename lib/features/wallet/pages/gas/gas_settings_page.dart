@@ -251,17 +251,14 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
               children: [
                 Text(
                   status.text,
-                  style: TextStyle(
-                    fontSize: su.setSp(28),
-                    fontWeight: FontWeight.w600,
+                  style: AppTypography.bodyStrong.copyWith(
                     color: status.color,
                   ),
                 ),
                 if (baseFee != null)
                   Text(
                     'Base Fee: ${_formatGwei(baseFee)} Gwei',
-                    style: TextStyle(
-                      fontSize: su.setSp(24),
+                    style: AppTypography.caption.copyWith(
                       color: _themeColor(
                         context,
                         AppThemeKeys.itemSubtitleTextColor,
@@ -368,7 +365,7 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
       children: [
         Text(
           label,
-          style: TextStyle(fontSize: su.setSp(26), color: subtitleColor),
+          style: AppTypography.bodySm.copyWith(color: subtitleColor),
         ),
         SizedBox(height: su.setWidth(8)),
         TextField(
@@ -387,13 +384,11 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
               borderSide: BorderSide.none,
             ),
             suffixText: suffix,
-            suffixStyle: TextStyle(
-              fontSize: su.setSp(26),
+            suffixStyle: AppTypography.bodySm.copyWith(
               color: subtitleColor,
             ),
           ),
-          style: TextStyle(
-            fontSize: su.setSp(28),
+          style: AppTypography.body.copyWith(
             color: _themeColor(context, AppThemeKeys.mainTextColor),
           ),
           onChanged: (_) => setState(() {}),
@@ -426,8 +421,7 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
                 child: Text(
                   S.of(context).g_key_t_16,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: su.setSp(28),
+                  style: AppTypography.body.copyWith(
                     color: _themeColor(
                       context,
                       AppThemeKeys.itemSubtitleTextColor,
@@ -437,9 +431,7 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
               ),
               Text(
                 '${Decimal.parse(formatted.toString())} ${_gasEstimate.unit}',
-                style: TextStyle(
-                  fontSize: su.setSp(32),
-                  fontWeight: FontWeight.w600,
+                style: AppTypography.headline.copyWith(
                   color: _themeColor(context, AppThemeKeys.mainBlueColor),
                 ),
               ),

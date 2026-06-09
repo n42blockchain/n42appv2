@@ -15,7 +15,6 @@ extension _CoinItemWidgets on _WalletSearchCoinState {
     final balanceStr = balance >= 1000000000
         ? _regular.getMoneyAbbreviation(balance)
         : _oCcy.format(balance);
-    final sp30 = su.setSp(30.0);
     final coinSymbol =
         (coinInfo.coin['miniName'] ?? coinInfo.coin['coinType'] ?? '')
             .toString()
@@ -108,8 +107,7 @@ extension _CoinItemWidgets on _WalletSearchCoinState {
                       Expanded(
                         child: Text(
                           coinSymbol.isEmpty ? '--' : coinSymbol,
-                          style: TextStyle(
-                            fontSize: sp30,
+                          style: AppTypography.headline.copyWith(
                             color: mainColor,
                             fontWeight: FontWeight.w600,
                           ),
@@ -119,7 +117,10 @@ extension _CoinItemWidgets on _WalletSearchCoinState {
                       ),
                       Text(
                         '\$$balanceStr',
-                        style: TextStyle(fontSize: sp30, color: mainColor),
+                        style: AppTypography.headline.copyWith(
+                          fontWeight: FontWeight.w400,
+                          color: mainColor,
+                        ),
                       ),
                     ],
                   ),
@@ -128,7 +129,10 @@ extension _CoinItemWidgets on _WalletSearchCoinState {
                     children: [
                       Text(
                         _formatAddress(coinInfo.address),
-                        style: TextStyle(fontSize: sp30, color: subColor),
+                        style: AppTypography.headline.copyWith(
+                          fontWeight: FontWeight.w400,
+                          color: subColor,
+                        ),
                       ),
                       const Spacer(),
                       _percentageWidget(coinInfo.percentage),
@@ -163,8 +167,7 @@ extension _CoinItemWidgets on _WalletSearchCoinState {
                 child: Text(
                   S.of(context).g_key_coin_search_recent,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: su.setSp(24.0),
+                  style: AppTypography.caption.copyWith(
                     color: subColor,
                     fontWeight: FontWeight.w600,
                   ),
@@ -182,7 +185,7 @@ extension _CoinItemWidgets on _WalletSearchCoinState {
                 ),
                 child: Text(
                   S.of(context).g_key_batch_clear_all,
-                  style: TextStyle(fontSize: su.setSp(22.0), color: subColor),
+                  style: AppTypography.caption.copyWith(color: subColor),
                 ),
               ),
             ],
@@ -223,7 +226,7 @@ extension _CoinItemWidgets on _WalletSearchCoinState {
           children: [
             Text(
               keyword,
-              style: TextStyle(fontSize: su.setSp(24.0), color: mainColor),
+              style: AppTypography.caption.copyWith(color: mainColor),
             ),
             SizedBox(width: su.setWidth(8.0)),
             // 单独点击 X 只删除这条历史，不影响其他 chip

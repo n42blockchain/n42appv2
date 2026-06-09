@@ -150,8 +150,7 @@ class _TokenDiscoveryPageState extends ConsumerState<TokenDiscoveryPage> {
           ),
           child: Text(
             chainType,
-            style: TextStyle(
-              fontSize: su.setSp(24),
+            style: AppTypography.caption.copyWith(
               fontWeight: FontWeight.w600,
               color: _color(AppThemeKeys.itemSubtitleTextColor),
               letterSpacing: 1.0,
@@ -211,8 +210,7 @@ class _TokenDiscoveryPageState extends ConsumerState<TokenDiscoveryPage> {
               children: [
                 Text(
                   token.displaySymbol,
-                  style: TextStyle(
-                    fontSize: su.setSp(30),
+                  style: AppTypography.headline.copyWith(
                     fontWeight: FontWeight.w600,
                     color: _color(AppThemeKeys.mainTextColor),
                   ),
@@ -220,8 +218,7 @@ class _TokenDiscoveryPageState extends ConsumerState<TokenDiscoveryPage> {
                 SizedBox(height: su.setWidth(4)),
                 Text(
                   token.displayName,
-                  style: TextStyle(
-                    fontSize: su.setSp(24),
+                  style: AppTypography.caption.copyWith(
                     color: _color(AppThemeKeys.itemSubtitleTextColor),
                   ),
                   maxLines: 1,
@@ -235,8 +232,7 @@ class _TokenDiscoveryPageState extends ConsumerState<TokenDiscoveryPage> {
             children: [
               Text(
                 token.humanBalance,
-                style: TextStyle(
-                  fontSize: su.setSp(28),
+                style: AppTypography.body.copyWith(
                   fontWeight: FontWeight.w500,
                   color: _color(AppThemeKeys.mainTextColor),
                 ),
@@ -249,8 +245,7 @@ class _TokenDiscoveryPageState extends ConsumerState<TokenDiscoveryPage> {
                     onTap: () => _ignoreToken(token),
                     child: Text(
                       s.g_key_token_discovery_ignore,
-                      style: TextStyle(
-                        fontSize: su.setSp(22),
+                      style: AppTypography.caption.copyWith(
                         color: _color(AppThemeKeys.itemSubtitleTextColor),
                         decoration: TextDecoration.underline,
                       ),
@@ -270,8 +265,7 @@ class _TokenDiscoveryPageState extends ConsumerState<TokenDiscoveryPage> {
                       ),
                       child: Text(
                         s.g_key_token_discovery_add,
-                        style: TextStyle(
-                          fontSize: su.setSp(22),
+                        style: AppTypography.caption.copyWith(
                           color: Colors.white,
                           fontWeight: FontWeight.w500,
                         ),
@@ -322,8 +316,7 @@ class _TokenDiscoveryPageState extends ConsumerState<TokenDiscoveryPage> {
               allSelected
                   ? s.g_key_token_discovery_deselect_all
                   : s.g_key_token_discovery_select_all,
-              style: TextStyle(
-                fontSize: su.setSp(26),
+              style: AppTypography.bodySm.copyWith(
                 color: _color(AppThemeKeys.mainBlueColor),
               ),
             ),

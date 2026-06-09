@@ -427,16 +427,14 @@ class _WalletConnectAlertWidgetState
                   children: [
                     Text(
                       _toAddressLabel!.name,
-                      style: TextStyle(
-                        fontSize: su.setSp(24),
+                      style: AppTypography.caption.copyWith(
                         fontWeight: FontWeight.w600,
                         color: tagColor,
                       ),
                     ),
                     Text(
                       _toAddressLabel!.category.toUpperCase(),
-                      style: TextStyle(
-                        fontSize: su.setSp(20),
+                      style: AppTypography.captionSm.copyWith(
                         color: tagColor.withAlpha(180),
                       ),
                     ),
@@ -484,8 +482,7 @@ class _WalletConnectAlertWidgetState
                   SizedBox(width: su.setWidth(8)),
                   Text(
                     'Contract Info',
-                    style: TextStyle(
-                      fontSize: su.setSp(24),
+                    style: AppTypography.caption.copyWith(
                       fontWeight: FontWeight.w600,
                       color: AppColorTokens.of(context).textPrimary,
                     ),
@@ -496,8 +493,7 @@ class _WalletConnectAlertWidgetState
               if (creatorAddr.isNotEmpty)
                 Text(
                   'Creator: ${creatorAddr.length > 16 ? '${creatorAddr.substring(0, 8)}...${creatorAddr.substring(creatorAddr.length - 8)}' : creatorAddr}',
-                  style: TextStyle(
-                    fontSize: su.setSp(22),
+                  style: AppTypography.caption.copyWith(
                     color: AppColorTokens.of(context).textSubtitle,
                   ),
                 ),
@@ -508,8 +504,7 @@ class _WalletConnectAlertWidgetState
                       : ageDays >= 30
                       ? '${(ageDays / 30).toStringAsFixed(0)} months'
                       : '$ageDays days'}',
-                  style: TextStyle(
-                    fontSize: su.setSp(22),
+                  style: AppTypography.caption.copyWith(
                     color: AppColorTokens.of(context).textSubtitle,
                   ),
                 ),
@@ -518,8 +513,7 @@ class _WalletConnectAlertWidgetState
                   padding: EdgeInsets.only(top: su.setWidth(6)),
                   child: Text(
                     '⚠ New contract (< 7 days), proceed with caution',
-                    style: TextStyle(
-                      fontSize: su.setSp(22),
+                    style: AppTypography.caption.copyWith(
                       fontWeight: FontWeight.w600,
                       color: AppColorTokens.of(context).warning,
                     ),

@@ -222,9 +222,8 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
         children: [
           Text(
             'Restore your wallets from an encrypted backup stored on iCloud Drive or Google Drive.',
-            style: TextStyle(
+            style: AppTypography.body.copyWith(
               color: _color(AppThemeKeys.itemSubtitleTextColor),
-              fontSize: su.setSp(28),
             ),
           ),
           SizedBox(height: su.setWidth(40)),
@@ -243,13 +242,12 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
                 Expanded(
                   child: Text(
                     _selectedFileName ?? 'No file selected',
-                    style: TextStyle(
+                    style: AppTypography.body.copyWith(
                       color: _color(
                         _selectedFileName != null
                             ? AppThemeKeys.mainTextColor
                             : AppThemeKeys.itemSubtitleTextColor,
                       ),
-                      fontSize: su.setSp(28),
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -272,9 +270,8 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
               hintText: 'Enter the password used when creating the backup',
               controller: _passwordController,
               maxLines: 1,
-              style: TextStyle(
+              style: AppTypography.bodySm.copyWith(
                 color: _color(AppThemeKeys.ff888888),
-                fontSize: su.setSp(26),
               ),
             ),
           ),
@@ -288,9 +285,8 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
               ),
               child: Text(
                 _error,
-                style: TextStyle(
+                style: AppTypography.bodySm.copyWith(
                   color: _color(AppThemeKeys.errorTextColor),
-                  fontSize: su.setSp(26),
                 ),
               ),
             ),
@@ -309,9 +305,8 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
               Expanded(
                 child: Text(
                   'Your backup is encrypted with AES-256 + PBKDF2. Only the correct password can restore it.',
-                  style: TextStyle(
+                  style: AppTypography.caption.copyWith(
                     color: _color(AppThemeKeys.itemSubtitleTextColor),
-                    fontSize: su.setSp(24),
                   ),
                 ),
               ),
@@ -326,10 +321,9 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
 
   Widget _label(String text) => Text(
     text,
-    style: TextStyle(
+    style: AppTypography.headline.copyWith(
       color: _color(AppThemeKeys.mainTextColor),
       fontWeight: FontWeight.w600,
-      fontSize: ScreenUtil().setSp(32),
     ),
   );
 
@@ -348,7 +342,7 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
         ),
         child: Text(
           text,
-          style: TextStyle(color: Colors.white, fontSize: su.setSp(26)),
+          style: AppTypography.bodySm.copyWith(color: Colors.white),
         ),
       ),
     );

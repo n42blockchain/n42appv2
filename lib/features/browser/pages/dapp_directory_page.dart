@@ -63,7 +63,6 @@ class _DAppDirectoryPageState extends State<DAppDirectoryPage>
 
   Widget _buildTabBar() {
     final blueColor = AppColorTokens.of(context).brand;
-    final tabFontSize = ScreenUtil().setSp(28);
 
     return Container(
       decoration: BoxDecoration(
@@ -80,12 +79,10 @@ class _DAppDirectoryPageState extends State<DAppDirectoryPage>
         tabAlignment: TabAlignment.start,
         labelColor: blueColor,
         unselectedLabelColor: AppColorTokens.of(context).textSubtitle,
-        labelStyle: TextStyle(
-          fontSize: tabFontSize,
+        labelStyle: AppTypography.bodyStrong.copyWith(
           fontWeight: FontWeight.w600,
         ),
-        unselectedLabelStyle: TextStyle(
-          fontSize: tabFontSize,
+        unselectedLabelStyle: AppTypography.body.copyWith(
           fontWeight: FontWeight.normal,
         ),
         indicatorColor: blueColor,
@@ -158,23 +155,26 @@ class _DAppDirectoryPageState extends State<DAppDirectoryPage>
                 children: [
                   _singleLineText(
                     dapp.name,
-                    fontSize: ScreenUtil().setSp(30),
-                    fontWeight: FontWeight.w600,
-                    color: AppColorTokens.of(context).textPrimary,
+                    style: AppTypography.headline.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: AppColorTokens.of(context).textPrimary,
+                    ),
                   ),
                   SizedBox(height: AppSpacing.space2),
                   _singleLineText(
                     dapp.description,
-                    fontSize: ScreenUtil().setSp(24),
-                    color: subtitleColor,
+                    style: AppTypography.caption.copyWith(
+                      color: subtitleColor,
+                    ),
                   ),
                   SizedBox(height: AppSpacing.space2),
                   _singleLineText(
                     host,
-                    fontSize: ScreenUtil().setSp(22),
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.ff888888.name,
+                    style: AppTypography.caption.copyWith(
+                      color: AppThemeUtils.getColorByKey(
+                        context,
+                        AppThemeKeys.ff888888.name,
+                      ),
                     ),
                   ),
                 ],
@@ -212,17 +212,11 @@ class _DAppDirectoryPageState extends State<DAppDirectoryPage>
 
   Widget _singleLineText(
     String text, {
-    required double fontSize,
-    required Color color,
-    FontWeight? fontWeight,
+    required TextStyle style,
   }) {
     return Text(
       text,
-      style: TextStyle(
-        fontSize: fontSize,
-        fontWeight: fontWeight,
-        color: color,
-      ),
+      style: style,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
     );

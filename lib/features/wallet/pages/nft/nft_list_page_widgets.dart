@@ -20,7 +20,7 @@ extension _NftListPageWidgets on _NftListPageState {
         controller: _searchController,
         decoration: InputDecoration(
           hintText: S.of(context).g_key_nft_search_hint,
-          hintStyle: TextStyle(fontSize: su.setSp(26), color: subtitleColor),
+          hintStyle: AppTypography.bodySm.copyWith(color: subtitleColor),
           prefixIcon: Icon(
             Icons.search,
             size: su.setWidth(28),
@@ -51,7 +51,7 @@ extension _NftListPageWidgets on _NftListPageState {
           filled: true,
           fillColor: AppColorTokens.of(context).bgBase,
         ),
-        style: TextStyle(fontSize: su.setSp(26)),
+        style: AppTypography.bodySm,
       ),
     );
   }
@@ -130,7 +130,7 @@ extension _NftListPageWidgets on _NftListPageState {
               _loadErrorMessage?.isNotEmpty == true
                   ? _loadErrorMessage!
                   : S.of(context).g_key_nft_error_retry,
-              style: TextStyle(fontSize: su.setSp(28), color: subtitleColor),
+              style: AppTypography.body.copyWith(color: subtitleColor),
               textAlign: TextAlign.center,
             ),
           ],
@@ -154,7 +154,10 @@ extension _NftListPageWidgets on _NftListPageState {
           SizedBox(height: su.setWidth(20)),
           Text(
             S.of(context).g_key_nft_no_items,
-            style: TextStyle(fontSize: su.setSp(30), color: subtitleColor),
+            style: AppTypography.headline.copyWith(
+              fontWeight: FontWeight.w400,
+              color: subtitleColor,
+            ),
           ),
         ],
       ),
@@ -247,8 +250,7 @@ extension _NftListPageWidgets on _NftListPageState {
               ),
               child: Text(
                 'BTC',
-                style: TextStyle(
-                  fontSize: su.setSp(18),
+                style: AppTypography.captionSm.copyWith(
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
                 ),
@@ -271,8 +273,7 @@ extension _NftListPageWidgets on _NftListPageState {
         children: [
           Text(
             nft.name,
-            style: TextStyle(
-              fontSize: su.setSp(24),
+            style: AppTypography.caption.copyWith(
               fontWeight: FontWeight.w600,
               color: AppColorTokens.of(context).textPrimary,
             ),
@@ -287,8 +288,8 @@ extension _NftListPageWidgets on _NftListPageState {
                   flex: 0,
                   child: Text(
                     '${S.of(context).g_key_nft_floor_price}: ',
-                    style: TextStyle(
-                      fontSize: su.setSp(20),
+                    style: AppTypography.captionSm.copyWith(
+                      fontWeight: FontWeight.w400,
                       color: AppColorTokens.of(context).textSubtitle,
                     ),
                     overflow: TextOverflow.ellipsis,
@@ -298,8 +299,7 @@ extension _NftListPageWidgets on _NftListPageState {
                 Expanded(
                   child: Text(
                     nft.floorPriceDisplay!,
-                    style: TextStyle(
-                      fontSize: su.setSp(20),
+                    style: AppTypography.captionSm.copyWith(
                       fontWeight: FontWeight.w500,
                       color: AppColorTokens.of(context).brand,
                     ),

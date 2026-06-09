@@ -122,7 +122,7 @@ class _WalletCoinMarketPreviewState extends State<WalletCoinMarketPreview> {
               alignment: Alignment.centerRight,
               child: Text(
                 'View Market Data \u2192',
-                style: TextStyle(fontSize: su.setSp(22), color: blueColor),
+                style: AppTypography.caption.copyWith(color: blueColor),
               ),
             ),
           ],
@@ -182,8 +182,7 @@ class _WalletCoinMarketPreviewState extends State<WalletCoinMarketPreview> {
       ),
       child: Text(
         '$sign${widget.priceChange24h.toStringAsFixed(2)}%',
-        style: TextStyle(
-          fontSize: su.setSp(24),
+        style: AppTypography.caption.copyWith(
           fontWeight: FontWeight.w600,
           color: trendColor,
         ),
@@ -231,12 +230,14 @@ class _WalletCoinMarketPreviewState extends State<WalletCoinMarketPreview> {
       children: [
         Text(
           label,
-          style: TextStyle(fontSize: su.setSp(20), color: labelColor),
+          style: AppTypography.captionSm.copyWith(
+            fontWeight: FontWeight.w400,
+            color: labelColor,
+          ),
         ),
         Text(
           value,
-          style: TextStyle(
-            fontSize: su.setSp(22),
+          style: AppTypography.caption.copyWith(
             fontWeight: FontWeight.w500,
             color: valueColor,
           ),

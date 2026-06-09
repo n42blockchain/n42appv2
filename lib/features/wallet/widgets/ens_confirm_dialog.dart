@@ -186,8 +186,7 @@ class EnsConfirmDialog extends StatelessWidget {
                   Expanded(
                     child: Text(
                       S.of(context).g_key_ens_warning,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(22),
+                      style: AppTypography.caption.copyWith(
                         color: warningColor,
                         height: 1.4,
                       ),
@@ -280,8 +279,7 @@ class EnsConfirmDialog extends StatelessWidget {
           SizedBox(height: AppSpacing.space2),
           SelectableText(
             displayValue ?? value,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(26),
+            style: AppTypography.bodySm.copyWith(
               fontWeight: FontWeight.w600,
               color: textColor,
               fontFamily: 'monospace',
@@ -291,8 +289,7 @@ class EnsConfirmDialog extends StatelessWidget {
             SizedBox(height: AppSpacing.space2),
             Text(
               value,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(18),
+              style: AppTypography.captionSm.copyWith(
                 color: subtitleColor,
                 fontFamily: 'monospace',
               ),
@@ -371,8 +368,7 @@ class EnsResolvingDialog extends StatelessWidget {
               SizedBox(height: AppSpacing.space2),
               Text(
                 ensName,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
+                style: AppTypography.caption.copyWith(
                   color: blueColor,
                   fontFamily: 'monospace',
                 ),

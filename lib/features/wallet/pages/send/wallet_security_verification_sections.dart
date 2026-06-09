@@ -155,9 +155,9 @@ class _FaceSection extends StatelessWidget {
           Expanded(
             child: Text(
               statusText,
-              style: _inputTextStyle(
-                context,
-              ).copyWith(fontSize: ScreenUtil().setSp(24.0)),
+              style: AppTypography.caption.copyWith(
+                color: AppColorTokens.of(context).textPrimary,
+              ),
             ),
           ),
           _PillButton(label: S.of(context).Verification, onTap: onVerify),
@@ -244,9 +244,9 @@ class _GoogleAuthSectionState extends State<_GoogleAuthSection> {
                       SizedBox(width: AppSpacing.space2),
                       Text(
                         S.of(context).g_lock_key5,
-                        style: _inputTextStyle(
-                          context,
-                        ).copyWith(fontSize: ScreenUtil().setSp(26.0)),
+                        style: AppTypography.bodySm.copyWith(
+                          color: AppColorTokens.of(context).textPrimary,
+                        ),
                       ),
                     ],
                   )
@@ -254,9 +254,8 @@ class _GoogleAuthSectionState extends State<_GoogleAuthSection> {
                     controller: _ctrl,
                     keyboardType: TextInputType.number,
                     maxLength: 6,
-                    style: TextStyle(
+                    style: AppTypography.body.copyWith(
                       color: mainText,
-                      fontSize: ScreenUtil().setSp(28.0),
                       letterSpacing: 4,
                     ),
                     decoration: InputDecoration(
@@ -358,9 +357,9 @@ class _GestureSection extends StatelessWidget {
                   SizedBox(width: AppSpacing.space2),
                   Text(
                     S.of(context).g_lock_key5,
-                    style: _inputTextStyle(
-                      context,
-                    ).copyWith(fontSize: ScreenUtil().setSp(26.0)),
+                    style: AppTypography.bodySm.copyWith(
+                      color: AppColorTokens.of(context).textPrimary,
+                    ),
                   ),
                 ],
               ),

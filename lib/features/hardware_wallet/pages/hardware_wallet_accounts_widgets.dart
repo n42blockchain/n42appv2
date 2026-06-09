@@ -37,7 +37,10 @@ class _HWNotConnectedView extends StatelessWidget {
           SizedBox(height: su.setWidth(20)),
           Text(
             s.g_key_hw_not_connected,
-            style: TextStyle(fontSize: su.setSp(30), color: subtitle),
+            style: AppTypography.headline.copyWith(
+              fontWeight: FontWeight.w400,
+              color: subtitle,
+            ),
           ),
           SizedBox(height: su.setWidth(20)),
           ElevatedButton(onPressed: onGoBack, child: Text(s.g_key_hw_go_back)),
@@ -85,16 +88,13 @@ class _HWDeviceInfoCard extends StatelessWidget {
               children: [
                 Text(
                   device.name,
-                  style: TextStyle(
-                    fontSize: su.setSp(28),
-                    fontWeight: FontWeight.w600,
+                  style: AppTypography.bodyStrong.copyWith(
                     color: _hwTextColor(context),
                   ),
                 ),
                 Text(
                   S.of(context).g_key_hw_connected,
-                  style: TextStyle(
-                    fontSize: su.setSp(24),
+                  style: AppTypography.caption.copyWith(
                     color: AppColorTokens.of(context).success,
                   ),
                 ),
@@ -155,8 +155,7 @@ class _HWCoinSelector extends StatelessWidget {
                 children: [
                   Text(
                     coin['symbol']!,
-                    style: TextStyle(
-                      fontSize: su.setSp(26),
+                    style: AppTypography.bodySm.copyWith(
                       fontWeight: FontWeight.w600,
                       color: isSelected ? Colors.white : textColor,
                     ),
@@ -164,8 +163,7 @@ class _HWCoinSelector extends StatelessWidget {
                   SizedBox(width: su.setWidth(8)),
                   Text(
                     coin['name']!,
-                    style: TextStyle(
-                      fontSize: su.setSp(22),
+                    style: AppTypography.caption.copyWith(
                       color: isSelected ? Colors.white70 : subtitle,
                     ),
                   ),
@@ -197,13 +195,13 @@ class _HWLoadingView extends StatelessWidget {
           Text(
             s.g_key_hw_loading_accounts,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: su.setSp(26), color: subtitle),
+            style: AppTypography.bodySm.copyWith(color: subtitle),
           ),
           SizedBox(height: su.setWidth(8)),
           Text(
             s.g_key_hw_loading_hint,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: su.setSp(22), color: subtitle),
+            style: AppTypography.caption.copyWith(color: subtitle),
           ),
         ],
       ),
@@ -234,13 +232,13 @@ class _HWEmptyAccountsView extends StatelessWidget {
           SizedBox(height: su.setWidth(16)),
           Text(
             S.of(context).g_key_hw_no_accounts_found,
-            style: TextStyle(fontSize: su.setSp(28), color: subtitle),
+            style: AppTypography.body.copyWith(color: subtitle),
           ),
           SizedBox(height: su.setWidth(8)),
           Text(
             S.of(context).g_key_hw_open_ledger_app_hint(appName),
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: su.setSp(24), color: subtitle),
+            style: AppTypography.caption.copyWith(color: subtitle),
           ),
           SizedBox(height: su.setWidth(20)),
           ElevatedButton(
@@ -271,8 +269,7 @@ class _HWLoadMoreButton extends StatelessWidget {
               onPressed: onLoadMore,
               child: Text(
                 S.of(context).g_key_hw_load_more,
-                style: TextStyle(
-                  fontSize: su.setSp(26),
+                style: AppTypography.bodySm.copyWith(
                   color: _hwBlueColor(context),
                 ),
               ),
@@ -321,8 +318,7 @@ class _HWAccountItem extends StatelessWidget {
                 child: Center(
                   child: Text(
                     '${account.index + 1}',
-                    style: TextStyle(
-                      fontSize: su.setSp(24),
+                    style: AppTypography.caption.copyWith(
                       fontWeight: FontWeight.w600,
                       color: blueColor,
                     ),
@@ -336,17 +332,14 @@ class _HWAccountItem extends StatelessWidget {
                   children: [
                     Text(
                       account.displayName,
-                      style: TextStyle(
-                        fontSize: su.setSp(28),
-                        fontWeight: FontWeight.w600,
+                      style: AppTypography.bodyStrong.copyWith(
                         color: textColor,
                       ),
                     ),
                     SizedBox(height: su.setWidth(4)),
                     Text(
                       account.derivationPath,
-                      style: TextStyle(
-                        fontSize: su.setSp(22),
+                      style: AppTypography.caption.copyWith(
                         color: _hwSubtitleColor(context),
                       ),
                     ),
@@ -377,8 +370,7 @@ class _HWAccountItem extends StatelessWidget {
             ),
             child: Text(
               account.address,
-              style: TextStyle(
-                fontSize: su.setSp(22),
+              style: AppTypography.caption.copyWith(
                 fontFamily: 'monospace',
                 color: textColor,
               ),

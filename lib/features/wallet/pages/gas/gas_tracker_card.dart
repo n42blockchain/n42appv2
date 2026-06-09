@@ -311,9 +311,7 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
               SizedBox(width: su.setWidth(8)),
               Text(
                 'Next Block Gas Prediction',
-                style: TextStyle(
-                  fontSize: su.setSp(28),
-                  fontWeight: FontWeight.w600,
+                style: AppTypography.bodyStrong.copyWith(
                   color: textColor,
                 ),
               ),
@@ -329,8 +327,7 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
                 children: [
                   Text(
                     symbol,
-                    style: TextStyle(
-                      fontSize: su.setSp(24),
+                    style: AppTypography.caption.copyWith(
                       fontWeight: FontWeight.w600,
                       color: textColor,
                     ),
@@ -365,8 +362,7 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
       ),
       child: Text(
         '$label: ${value.toStringAsFixed(1)}',
-        style: TextStyle(
-          fontSize: su.setSp(20),
+        style: AppTypography.captionSm.copyWith(
           fontWeight: FontWeight.w600,
           color: color,
         ),
@@ -395,14 +391,13 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
           SizedBox(width: su.setWidth(6)),
           Text(
             'Mempool',
-            style: TextStyle(fontSize: su.setSp(22), color: subtitleColor),
+            style: AppTypography.caption.copyWith(color: subtitleColor),
           ),
           SizedBox(width: su.setWidth(8)),
           if (data.pendingCount != null)
             Text(
               '${_formatCount(data.pendingCount!)} pending',
-              style: TextStyle(
-                fontSize: su.setSp(22),
+              style: AppTypography.caption.copyWith(
                 color: data.congestionColor,
               ),
             ),

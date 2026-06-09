@@ -48,18 +48,14 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>, EarnPageLogicMixin {
                 child: Text(
                   S.of(context).g_key_earn_active_products,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: su.setSp(32),
-                    fontWeight: FontWeight.w600,
-                    color: mainText,
-                  ),
+                  style: AppTypography.headline.copyWith(color: mainText),
                 ),
               ),
               TextButton(
                 onPressed: () => _pushStaking(context),
                 child: Text(
                   S.of(context).g_key_earn_view_all,
-                  style: TextStyle(fontSize: su.setSp(26), color: blue),
+                  style: AppTypography.bodySm.copyWith(color: blue),
                 ),
               ),
             ],
@@ -77,8 +73,7 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>, EarnPageLogicMixin {
               SizedBox(height: su.setWidth(8)),
               Text(
                 S.of(context).g_key_stake_unstake,
-                style: TextStyle(
-                  fontSize: su.setSp(26),
+                style: AppTypography.bodySm.copyWith(
                   fontWeight: FontWeight.w600,
                   color: subtitle,
                 ),
@@ -126,14 +121,14 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>, EarnPageLogicMixin {
           SizedBox(height: su.setWidth(12)),
           Text(
             S.of(context).g_key_earn_no_positions,
-            style: TextStyle(fontSize: su.setSp(26), color: subtitle),
+            style: AppTypography.bodySm.copyWith(color: subtitle),
           ),
           SizedBox(height: su.setWidth(12)),
           TextButton(
             onPressed: () => _pushStaking(context),
             child: Text(
               S.of(context).g_key_earn_go_staking,
-              style: TextStyle(fontSize: su.setSp(26), color: blue),
+              style: AppTypography.bodySm.copyWith(color: blue),
             ),
           ),
         ],
@@ -187,8 +182,7 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>, EarnPageLogicMixin {
             child: Center(
               child: Text(
                 protocol.chainSymbol,
-                style: TextStyle(
-                  fontSize: su.setSp(20),
+                style: AppTypography.captionSm.copyWith(
                   fontWeight: FontWeight.w600,
                   color: color,
                 ),
@@ -205,9 +199,7 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>, EarnPageLogicMixin {
                     Flexible(
                       child: Text(
                         protocol.name,
-                        style: TextStyle(
-                          fontSize: su.setSp(28),
-                          fontWeight: FontWeight.w600,
+                        style: AppTypography.bodyStrong.copyWith(
                           color: mainText,
                         ),
                         maxLines: 1,
@@ -227,8 +219,7 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>, EarnPageLogicMixin {
                         ),
                         child: Text(
                           'Unbonding',
-                          style: TextStyle(
-                            fontSize: su.setSp(18),
+                          style: AppTypography.captionSm.copyWith(
                             color: AppColorTokens.of(context).warning,
                           ),
                         ),
@@ -238,13 +229,13 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>, EarnPageLogicMixin {
                 ),
                 Text(
                   protocol.chainSymbol,
-                  style: TextStyle(fontSize: su.setSp(22), color: subtitle),
+                  style: AppTypography.caption.copyWith(color: subtitle),
                 ),
                 if (hasPendingRewards)
                   Text(
                     '+${formatBigIntForChain(position.pendingRewards, protocol.chainType, protocol.chainSymbol)}',
-                    style: TextStyle(
-                      fontSize: su.setSp(20),
+                    style: AppTypography.captionSm.copyWith(
+                      fontWeight: FontWeight.w400,
                       color: AppColorTokens.of(context).success,
                     ),
                   ),
@@ -260,16 +251,14 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>, EarnPageLogicMixin {
                   protocol.chainType,
                   protocol.chainSymbol,
                 ),
-                style: TextStyle(
-                  fontSize: su.setSp(28),
-                  fontWeight: FontWeight.w600,
-                  color: mainText,
-                ),
+                style: AppTypography.bodyStrong.copyWith(color: mainText),
               ),
               if (!isUnbonding)
                 Text(
                   apyStr,
-                  style: TextStyle(fontSize: su.setSp(22), color: AppColorTokens.of(context).success),
+                  style: AppTypography.caption.copyWith(
+                    color: AppColorTokens.of(context).success,
+                  ),
                 ),
             ],
           ),
@@ -298,11 +287,7 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>, EarnPageLogicMixin {
         children: [
           Text(
             s.g_key_earn_recommended,
-            style: TextStyle(
-              fontSize: su.setSp(30),
-              fontWeight: FontWeight.w600,
-              color: mainText,
-            ),
+            style: AppTypography.headline.copyWith(color: mainText),
           ),
           SizedBox(height: su.setWidth(16)),
           _buildRecommendedItem(
@@ -370,17 +355,13 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>, EarnPageLogicMixin {
                 children: [
                   Text(
                     name,
-                    style: TextStyle(
-                      fontSize: su.setSp(28),
-                      fontWeight: FontWeight.w600,
-                      color: mainText,
-                    ),
+                    style: AppTypography.bodyStrong.copyWith(color: mainText),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
                     description,
-                    style: TextStyle(fontSize: su.setSp(22), color: subtitle),
+                    style: AppTypography.caption.copyWith(color: subtitle),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -398,8 +379,7 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>, EarnPageLogicMixin {
               ),
               child: Text(
                 apy,
-                style: TextStyle(
-                  fontSize: su.setSp(24),
+                style: AppTypography.caption.copyWith(
                   fontWeight: FontWeight.w600,
                   color: AppColorTokens.of(context).success,
                 ),

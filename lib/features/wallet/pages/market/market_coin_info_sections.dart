@@ -266,8 +266,7 @@ Widget buildPeriodSelector(
               child: Text(
                 periodLabels[i],
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
+                style: AppTypography.caption.copyWith(
                   fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
                   color: selected
                       ? Colors.white
@@ -437,8 +436,7 @@ Widget buildAboutSection(
             children: [
               Text(
                 desc,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(26),
+                style: AppTypography.bodySm.copyWith(
                   color: _tc(context, AppThemeKeys.itemSubtitleTextColor.name),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -456,12 +454,11 @@ Widget buildAboutSection(
                     margin: EdgeInsets.symmetric(vertical: AppSpacing.space2),
                     child: Text(
                       s.g_key_m_7,
-                      style: TextStyle(
+                      style: AppTypography.body.copyWith(
                         color: _tc(
                           context,
                           AppThemeKeys.mainButtonBgColor.name,
                         ),
-                        fontSize: ScreenUtil().setSp(28),
                       ),
                     ),
                   ),

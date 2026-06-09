@@ -78,7 +78,7 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
               Flexible(
                 child: Text(
                   S.of(context).g_key_44,
-                  style: TextStyle(color: mainText, fontSize: su.setSp(28.0)),
+                  style: AppTypography.body.copyWith(color: mainText),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -86,7 +86,7 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
               Expanded(
                 child: Text(
                   balance,
-                  style: TextStyle(color: mainText, fontSize: su.setSp(28.0)),
+                  style: AppTypography.body.copyWith(color: mainText),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.right,
@@ -117,8 +117,7 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
                   controller: valueCtrl,
                   focusNode: valueNode,
                   hintText: S.of(context).g_key_44,
-                  hintStyle: TextStyle(
-                    fontSize: su.setSp(54.0),
+                  hintStyle: AppTypography.displayLg.copyWith(
                     color: AppThemeUtils.getColorByKey(
                       context,
                       AppThemeKeys.textFieldHintColor.name,
@@ -159,8 +158,7 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
                     alignment: Alignment.center,
                     child: Text(
                       S.of(context).g_key_197,
-                      style: TextStyle(
-                        fontSize: su.setSp(26.0),
+                      style: AppTypography.bodySm.copyWith(
                         color: AppThemeUtils.getColorByKey(
                           context,
                           AppThemeKeys.mainWhiteColor.name,
@@ -199,9 +197,8 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
       ),
       child: Text(
         addr,
-        style: TextStyle(
+        style: AppTypography.headline.copyWith(
           color: AppColorTokens.of(context).textSubtitle,
-          fontSize: su.setSp(30.0),
         ),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,

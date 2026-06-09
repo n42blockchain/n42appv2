@@ -60,8 +60,8 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
                     Expanded(
                       child: Text(
                         cm.coin['name'],
-                        style: TextStyle(
-                          fontSize: su.setSp(30),
+                        style: AppTypography.headline.copyWith(
+                          fontWeight: FontWeight.w400,
                           color: mainText,
                         ),
                         textAlign: TextAlign.end,
@@ -276,9 +276,8 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
           ),
           child: Text(
             connectV2.errorMessage,
-            style: TextStyle(
+            style: AppTypography.bodySm.copyWith(
               color: _themeColor(AppThemeKeys.errorTextColor),
-              fontSize: su.setSp(26),
             ),
             textAlign: TextAlign.center,
           ),
@@ -369,8 +368,8 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
         ),
         child: Text(
           title,
-          style: TextStyle(
-            fontSize: su.setSp(30.0),
+          style: AppTypography.headline.copyWith(
+            fontWeight: FontWeight.w400,
             color: _themeColor(AppThemeKeys.mainButtonTextColor),
           ),
         ),
@@ -387,13 +386,13 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
         children: [
           Text(
             title,
-            style: TextStyle(fontSize: su.setSp(28), color: textColor),
+            style: AppTypography.body.copyWith(color: textColor),
           ),
           SizedBox(width: su.setWidth(20)),
           Expanded(
             child: Text(
               value,
-              style: TextStyle(fontSize: su.setSp(28), color: textColor),
+              style: AppTypography.body.copyWith(color: textColor),
               maxLines: 5,
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.right,
@@ -534,9 +533,8 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
                 width: double.infinity,
                 child: Text(
                   dAppWebUrl,
-                  style: TextStyle(
+                  style: AppTypography.bodySm.copyWith(
                     color: _themeColor(AppThemeKeys.mainBlueColor),
-                    fontSize: ScreenUtil().setSp(26),
                     decoration: TextDecoration.underline,
                   ),
                   maxLines: 1,
