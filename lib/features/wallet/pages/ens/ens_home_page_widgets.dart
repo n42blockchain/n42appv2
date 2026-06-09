@@ -346,7 +346,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
           Icon(
             Icons.error_outline,
             size: ScreenUtil().setWidth(48),
-            color: Colors.red,
+            color: AppColorTokens.of(context).danger,
           ),
           SizedBox(height: AppSpacing.space4),
           Text(

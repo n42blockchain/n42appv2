@@ -51,7 +51,9 @@ class EnsSearchBar extends StatelessWidget {
               padding: EdgeInsets.only(top: ScreenUtil().setWidth(8)),
               child: Text(
                 S.of(context).g_key_ens_invalid_name,
-                style: AppTypography.caption.copyWith(color: Colors.red),
+                style: AppTypography.caption.copyWith(
+                  color: AppColorTokens.of(context).danger,
+                ),
               ),
             ),
         ],

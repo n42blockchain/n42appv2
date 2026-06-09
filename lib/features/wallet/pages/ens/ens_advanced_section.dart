@@ -34,7 +34,10 @@ class EnsAdvancedSection extends StatelessWidget {
           SizedBox(height: AppSpacing.space4),
           ListTile(
             contentPadding: EdgeInsets.zero,
-            leading: const Icon(Icons.swap_horiz, color: Colors.red),
+            leading: Icon(
+              Icons.swap_horiz,
+              color: AppColorTokens.of(context).danger,
+            ),
             title: Text(S.of(context).g_key_ens_transfer),
             subtitle: Text(S.of(context).g_key_ens_transfer_desc),
             trailing: const Icon(Icons.chevron_right),

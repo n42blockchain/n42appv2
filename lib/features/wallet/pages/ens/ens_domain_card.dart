@@ -29,9 +29,9 @@ class EnsDomainCard extends StatelessWidget {
 
     final Color gradientBase;
     if (isExpired) {
-      gradientBase = Colors.red;
+      gradientBase = AppColorTokens.of(context).danger;
     } else if (isExpiringSoon) {
-      gradientBase = Colors.orange;
+      gradientBase = AppColorTokens.of(context).warning;
     } else {
       gradientBase = themeBlue;
     }
@@ -146,7 +146,10 @@ class _ChainBadgeRow extends StatelessWidget {
         _badge(label: domainChain.name, color: domainChain.color),
         if (ownedEns.isPrimary) ...[
           SizedBox(width: AppSpacing.space2),
-          _badge(label: S.of(context).g_key_ens_primary, color: Colors.green),
+          _badge(
+            label: S.of(context).g_key_ens_primary,
+            color: AppColorTokens.of(context).success,
+          ),
         ],
       ],
     );
@@ -195,11 +198,11 @@ class _ExpiryRow extends StatelessWidget {
 
     if (isExpired) {
       icon = Icons.error;
-      color = Colors.red;
+      color = AppColorTokens.of(context).danger;
       label = S.of(context).g_key_ens_expired;
     } else if (isExpiringSoon) {
       icon = Icons.warning;
-      color = Colors.orange;
+      color = AppColorTokens.of(context).warning;
       label =
           '${S.of(context).g_key_ens_expires}: ${ownedEns.formattedExpiresAt}';
     } else {

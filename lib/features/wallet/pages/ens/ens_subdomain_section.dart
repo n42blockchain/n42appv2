@@ -220,7 +220,7 @@ class _SubdomainItem extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.delete_outline, size: 18),
             onPressed: () => onDelete(sub),
-            color: Colors.red.withAlpha(180),
+            color: AppColorTokens.of(context).danger.withAlpha(180),
           ),
         ],
       ),

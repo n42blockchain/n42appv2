@@ -102,7 +102,7 @@ class EnsPriceCard extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(AppSpacing.space4),
               decoration: BoxDecoration(
-                color: Colors.orange.withAlpha(20),
+                color: AppColorTokens.of(context).warning.withAlpha(20),
                 borderRadius: AppRadius.brSm,
               ),
               child: Row(
@@ -110,7 +110,7 @@ class EnsPriceCard extends StatelessWidget {
                   Icon(
                     Icons.info_outline,
                     size: ScreenUtil().setWidth(20),
-                    color: Colors.orange,
+                    color: AppColorTokens.of(context).warning,
                   ),
                   SizedBox(width: AppSpacing.space2),
                   Expanded(
@@ -119,7 +119,7 @@ class EnsPriceCard extends StatelessWidget {
                           ? S.of(context).g_key_ens_premium_name
                           : S.of(context).g_key_ens_standard_name,
                       style: AppTypography.caption.copyWith(
-                        color: Colors.orange,
+                        color: AppColorTokens.of(context).warning,
                       ),
                     ),
                   ),

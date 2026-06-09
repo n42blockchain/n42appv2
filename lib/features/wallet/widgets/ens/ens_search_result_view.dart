@@ -179,7 +179,7 @@ class EnsSearchResultView extends StatelessWidget {
           Icon(
             Icons.error_outline,
             size: ScreenUtil().setWidth(64),
-            color: Colors.red,
+            color: AppColorTokens.of(context).danger,
           ),
           SizedBox(height: AppSpacing.space4),
           Text(
@@ -271,7 +271,8 @@ class EnsSearchResultView extends StatelessWidget {
     BuildContext context, {
     required bool isAvailable,
   }) {
-    final statusColor = isAvailable ? Colors.green : Colors.red;
+    final c = AppColorTokens.of(context);
+    final statusColor = isAvailable ? c.success : c.danger;
     return Container(
       padding: EdgeInsets.all(AppSpacing.space6),
       decoration: BoxDecoration(

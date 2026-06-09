@@ -73,7 +73,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Load ENS price failed: $e'),
-            backgroundColor: Colors.red,
+            backgroundColor: AppColorTokens.of(context).danger,
           ),
         );
       }
@@ -107,7 +107,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(data?.error ?? S.of(context).g_key_error_3),
-            backgroundColor: Colors.red,
+            backgroundColor: AppColorTokens.of(context).danger,
           ),
         );
       } else if (data.newExpiresAt != null) {
@@ -122,7 +122,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('ENS renew failed: $e'),
-          backgroundColor: Colors.red,
+          backgroundColor: AppColorTokens.of(context).danger,
         ),
       );
     }
@@ -177,12 +177,13 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
 
   Widget _buildDomainCard() {
     final ens = widget.ownedEns;
+    final c = AppColorTokens.of(context);
     final (statusColor, statusIcon, baseColor) = switch ((
       ens.isExpired,
       ens.isExpiringSoon,
     )) {
-      (true, _) => (Colors.red, Icons.error, Colors.red),
-      (_, true) => (Colors.orange, Icons.warning, Colors.orange),
+      (true, _) => (c.danger, Icons.error, c.danger),
+      (_, true) => (c.warning, Icons.warning, c.warning),
       _ => (
         _color(AppThemeKeys.itemSubtitleTextColor),
         Icons.access_time,
@@ -301,9 +302,11 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
     return Container(
       padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
-        color: Colors.green.withAlpha(20),
+        color: AppColorTokens.of(context).success.withAlpha(20),
         borderRadius: AppRadius.brMd,
-        border: Border.all(color: Colors.green.withAlpha(40)),
+        border: Border.all(
+          color: AppColorTokens.of(context).success.withAlpha(40),
+        ),
       ),
       child: Column(
         children: [
@@ -332,7 +335,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
             child: Icon(
               Icons.arrow_downward,
               size: ScreenUtil().setWidth(24),
-              color: Colors.green,
+              color: AppColorTokens.of(context).success,
             ),
           ),
           Row(
@@ -344,7 +347,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
                   overflow: TextOverflow.ellipsis,
                   style: AppTypography.caption.copyWith(
                     fontWeight: FontWeight.w600,
-                    color: Colors.green,
+                    color: AppColorTokens.of(context).success,
                   ),
                 ),
               ),
@@ -352,7 +355,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
                 _formatDate(newExpiry),
                 style: AppTypography.bodySm.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: Colors.green,
+                  color: AppColorTokens.of(context).success,
                 ),
               ),
             ],
@@ -367,7 +370,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
       return ElevatedButton(
         onPressed: () => Navigator.pop(context, true),
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.green,
+          backgroundColor: AppColorTokens.of(context).success,
           foregroundColor: Colors.white,
           padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
           shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
@@ -386,7 +389,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
         foregroundColor: Colors.white,
         padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
         shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
-        disabledBackgroundColor: Colors.grey,
+        disabledBackgroundColor: AppColorTokens.of(context).textTertiary,
       ),
       child: _isRenewing
           ? SizedBox(

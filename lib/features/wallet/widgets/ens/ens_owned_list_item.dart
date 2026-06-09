@@ -30,9 +30,9 @@ class EnsOwnedListItem extends StatelessWidget {
           borderRadius: AppRadius.brMd,
           border: Border.all(
             color: isExpired
-                ? Colors.red.withAlpha(50)
+                ? AppColorTokens.of(context).danger.withAlpha(50)
                 : isExpiringSoon
-                ? Colors.orange.withAlpha(50)
+                ? AppColorTokens.of(context).warning.withAlpha(50)
                 : AppColorTokens.of(context).brand.withAlpha(30),
           ),
         ),
@@ -64,13 +64,15 @@ class EnsOwnedListItem extends StatelessWidget {
                             vertical: AppSpacing.space2,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.green.withAlpha(30),
+                            color: AppColorTokens.of(context).success.withAlpha(
+                              30,
+                            ),
                             borderRadius: AppRadius.brSm,
                           ),
                           child: Text(
                             S.of(context).g_key_ens_primary,
                             style: AppTypography.captionSm.copyWith(
-                              color: Colors.green,
+                              color: AppColorTokens.of(context).success,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -89,9 +91,9 @@ class EnsOwnedListItem extends StatelessWidget {
                             : Icons.access_time,
                         size: ScreenUtil().setWidth(16),
                         color: isExpired
-                            ? Colors.red
+                            ? AppColorTokens.of(context).danger
                             : isExpiringSoon
-                            ? Colors.orange
+                            ? AppColorTokens.of(context).warning
                             : AppColorTokens.of(context).textSubtitle,
                       ),
                       SizedBox(width: AppSpacing.space2),
@@ -105,9 +107,9 @@ class EnsOwnedListItem extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           style: AppTypography.caption.copyWith(
                             color: isExpired
-                                ? Colors.red
+                                ? AppColorTokens.of(context).danger
                                 : isExpiringSoon
-                                ? Colors.orange
+                                ? AppColorTokens.of(context).warning
                                 : AppColorTokens.of(context).textSubtitle,
                           ),
                         ),

@@ -97,11 +97,11 @@ class EnsRegistrationSteps extends StatelessWidget {
     IconData? icon;
 
     if (isFailed && step == _getFailedStep()) {
-      bgColor = Colors.red;
+      bgColor = AppColorTokens.of(context).danger;
       fgColor = Colors.white;
       icon = Icons.close;
     } else if (isCompleted) {
-      bgColor = Colors.green;
+      bgColor = AppColorTokens.of(context).success;
       fgColor = Colors.white;
       icon = Icons.check;
     } else if (isActive) {
@@ -153,7 +153,7 @@ class EnsRegistrationSteps extends StatelessWidget {
         margin: EdgeInsets.symmetric(horizontal: AppSpacing.space2),
         decoration: BoxDecoration(
           color: isActive
-              ? Colors.green
+              ? AppColorTokens.of(context).success
               : AppColorTokens.of(context).textSubtitle.withAlpha(30),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(2)),
         ),
@@ -197,13 +197,13 @@ class EnsRegistrationSteps extends StatelessWidget {
 
   Color _getStepColor(BuildContext context, int step) {
     if (_isStepCompleted(step)) {
-      return Colors.green;
+      return AppColorTokens.of(context).success;
     }
     if (_isStepActive(step)) {
       return AppColorTokens.of(context).brand;
     }
     if (currentStep == -1 && step == _getFailedStep()) {
-      return Colors.red;
+      return AppColorTokens.of(context).danger;
     }
     return AppColorTokens.of(context).textSubtitle;
   }

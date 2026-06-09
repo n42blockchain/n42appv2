@@ -124,19 +124,19 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
       if (mounted) {
         setState(() => _isLoading = false);
         if (!result.error) {
-          _showSnack(successMessage, bg: Colors.green);
+          _showSnack(successMessage, bg: AppColorTokens.of(context).success);
           onSuccess?.call();
         } else {
           _showSnack(
             result.data?.toString() ?? S.of(context).g_key_error_3,
-            bg: Colors.red,
+            bg: AppColorTokens.of(context).danger,
           );
         }
       }
     } catch (e) {
       if (mounted) {
         setState(() => _isLoading = false);
-        _showSnack(e.toString(), bg: Colors.red);
+        _showSnack(e.toString(), bg: AppColorTokens.of(context).danger);
       }
     }
   }
@@ -156,7 +156,10 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
   Future<void> _saveResolvedAddress() async {
     final addr = _resolvedAddressController.text.trim();
     if (addr.isNotEmpty && !_isValidAddress(addr)) {
-      _showSnack(S.of(context).g_key_ens_invalid_address, bg: Colors.red);
+      _showSnack(
+        S.of(context).g_key_ens_invalid_address,
+        bg: AppColorTokens.of(context).danger,
+      );
       return;
     }
     await _runWithLoading(
@@ -204,7 +207,7 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
     } catch (e) {
       if (mounted) {
         setState(() => _subdomainsLoading = false);
-        _showSnack(e.toString(), bg: Colors.red);
+        _showSnack(e.toString(), bg: AppColorTokens.of(context).danger);
       }
     }
   }
@@ -236,7 +239,9 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(ctx, true),
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColorTokens.of(ctx).danger,
+            ),
             child: Text(
               S.of(ctx).g_key_ens_subdomain_delete,
               style: const TextStyle(color: Colors.white),
@@ -271,7 +276,9 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
                 children: [
                   Text(
                     S.of(ctx).g_key_ens_transfer_warning,
-                    style: AppTypography.caption.copyWith(color: Colors.orange),
+                    style: AppTypography.caption.copyWith(
+                      color: AppColorTokens.of(ctx).warning,
+                    ),
                   ),
                   SizedBox(height: AppSpacing.space4),
                   TextField(
@@ -305,7 +312,9 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
                   }
                   Navigator.pop(ctx, true);
                 },
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColorTokens.of(ctx).danger,
+                ),
                 child: Text(
                   S.of(ctx).g_key_ens_transfer,
                   style: const TextStyle(color: Colors.white),

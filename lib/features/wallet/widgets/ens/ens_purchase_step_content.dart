@@ -217,22 +217,22 @@ class EnsPurchaseStepContent extends StatelessWidget {
       padding: EdgeInsets.all(AppSpacing.space8),
       decoration: _stepDecoration(
         context,
-        color: Colors.green.withAlpha(20),
-        borderColor: Colors.green.withAlpha(50),
+        color: AppColorTokens.of(context).success.withAlpha(20),
+        borderColor: AppColorTokens.of(context).success.withAlpha(50),
       ),
       child: Column(
         children: [
           Icon(
             Icons.check_circle,
             size: ScreenUtil().setWidth(80),
-            color: Colors.green,
+            color: AppColorTokens.of(context).success,
           ),
           SizedBox(height: AppSpacing.space4),
           Text(
             S.of(context).g_key_ens_success,
             style: AppTypography.headline.copyWith(
               fontWeight: FontWeight.w600,
-              color: Colors.green,
+              color: AppColorTokens.of(context).success,
             ),
           ),
           SizedBox(height: AppSpacing.space2),
@@ -248,7 +248,7 @@ class EnsPurchaseStepContent extends StatelessWidget {
                 vertical: AppSpacing.space2,
               ),
               decoration: BoxDecoration(
-                color: Colors.green.withAlpha(20),
+                color: AppColorTokens.of(context).success.withAlpha(20),
                 borderRadius: AppRadius.brSm,
               ),
               child: Text(
@@ -272,18 +272,22 @@ class EnsPurchaseStepContent extends StatelessWidget {
       padding: EdgeInsets.all(AppSpacing.space8),
       decoration: _stepDecoration(
         context,
-        color: Colors.red.withAlpha(20),
-        borderColor: Colors.red.withAlpha(50),
+        color: AppColorTokens.of(context).danger.withAlpha(20),
+        borderColor: AppColorTokens.of(context).danger.withAlpha(50),
       ),
       child: Column(
         children: [
-          Icon(Icons.error, size: ScreenUtil().setWidth(64), color: Colors.red),
+          Icon(
+            Icons.error,
+            size: ScreenUtil().setWidth(64),
+            color: AppColorTokens.of(context).danger,
+          ),
           SizedBox(height: AppSpacing.space4),
           Text(
             S.of(context).g_key_ens_failed,
             style: AppTypography.body.copyWith(
               fontWeight: FontWeight.w600,
-              color: Colors.red,
+              color: AppColorTokens.of(context).danger,
             ),
           ),
           SizedBox(height: AppSpacing.space2),
@@ -336,7 +340,7 @@ class EnsPurchaseActionButton extends StatelessWidget {
           context,
           label: S.of(context).g_key_ens_processing,
           onPressed: null,
-          color: Colors.grey,
+          color: AppColorTokens.of(context).textTertiary,
         );
 
       case 4:
@@ -344,7 +348,7 @@ class EnsPurchaseActionButton extends StatelessWidget {
           context,
           label: S.of(context).g_swap_key_18,
           onPressed: onDone,
-          color: Colors.green,
+          color: AppColorTokens.of(context).success,
         );
 
       case -1:

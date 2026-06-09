@@ -79,15 +79,16 @@ class _ActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDisabled = onTap == null;
+    final c = AppColorTokens.of(context);
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
         decoration: BoxDecoration(
-          color: isDisabled ? Colors.grey.withAlpha(20) : color.withAlpha(20),
+          color: isDisabled ? c.textTertiary.withAlpha(20) : color.withAlpha(20),
           borderRadius: AppRadius.brMd,
           border: Border.all(
-            color: isDisabled ? Colors.grey.withAlpha(30) : color.withAlpha(40),
+            color: isDisabled ? c.border : color.withAlpha(40),
           ),
         ),
         child: Column(
@@ -95,16 +96,14 @@ class _ActionButton extends StatelessWidget {
             Icon(
               icon,
               size: ScreenUtil().setWidth(28),
-              color: isDisabled ? Colors.grey : color,
+              color: isDisabled ? c.textTertiary : color,
             ),
             SizedBox(height: AppSpacing.space2),
             Text(
               label,
               style: AppTypography.caption.copyWith(
                 fontWeight: FontWeight.w500,
-                color: isDisabled
-                    ? Colors.grey
-                    : AppColorTokens.of(context).textPrimary,
+                color: isDisabled ? c.textTertiary : c.textPrimary,
               ),
             ),
           ],

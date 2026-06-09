@@ -130,13 +130,16 @@ class _EnsCreateSubdomainSheetState extends State<EnsCreateSubdomainSheet> {
         messenger.showSnackBar(
           SnackBar(
             content: Text(result.data?.toString() ?? errorFallback),
-            backgroundColor: Colors.red,
+            backgroundColor: AppColorTokens.of(context).danger,
           ),
         );
       } else {
         nav.pop();
         messenger.showSnackBar(
-          SnackBar(content: Text(successMsg), backgroundColor: Colors.green),
+          SnackBar(
+            content: Text(successMsg),
+            backgroundColor: AppColorTokens.of(context).success,
+          ),
         );
         widget.onCreated();
       }
@@ -144,7 +147,10 @@ class _EnsCreateSubdomainSheetState extends State<EnsCreateSubdomainSheet> {
       if (!mounted) return;
       setState(() => _creating = false);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString()), backgroundColor: Colors.red),
+        SnackBar(
+          content: Text(e.toString()),
+          backgroundColor: AppColorTokens.of(context).danger,
+        ),
       );
     }
   }
