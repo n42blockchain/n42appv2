@@ -106,8 +106,7 @@ class _EnsRenewSuccessCardState extends State<EnsRenewSuccessCard> {
               ),
               child: Text(
                 'Tx: ${_shortenHash(widget.renewResult.txHash!)}',
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(22),
+                style: AppTypography.caption.copyWith(
                   fontFamily: 'monospace',
                   color: AppColorTokens.of(context).textSubtitle,
                 ),

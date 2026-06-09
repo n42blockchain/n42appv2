@@ -21,9 +21,9 @@ class _ExportKeystoreDescState extends State<ExportKeystoreDesc> {
 
   Widget _descItem(String text, Color color) => Text(
     text,
-    style: TextStyle(
+    style: AppTypography.headline.copyWith(
       color: color,
-      fontSize: ScreenUtil().setSp(30),
+      fontWeight: FontWeight.w400,
       height: 1.5,
     ),
   );
@@ -68,9 +68,8 @@ class _ExportKeystoreDescState extends State<ExportKeystoreDesc> {
                       ),
                       child: Text(
                         s.g_key_ex_keystore_2,
-                        style: TextStyle(
+                        style: AppTypography.body.copyWith(
                           color: errorText,
-                          fontSize: ScreenUtil().setSp(28),
                           height: 1.5,
                         ),
                       ),
@@ -173,9 +172,8 @@ class _RiskCheckbox extends StatelessWidget {
               padding: EdgeInsets.only(top: ScreenUtil().setWidth(4)),
               child: Text(
                 label,
-                style: TextStyle(
+                style: AppTypography.body.copyWith(
                   color: AppColorTokens.of(context).textPrimary,
-                  fontSize: ScreenUtil().setSp(28),
                   height: 1.5,
                 ),
               ),

@@ -93,9 +93,8 @@ extension _TransactionDetailEthSections on _TransactionDetailEthState {
         children: [
           Expanded(
             child: TextField(
-              style: TextStyle(
+              style: AppTypography.bodySm.copyWith(
                 color: _color(AppThemeKeys.mainTextColor),
-                fontSize: su.setSp(26.0),
               ),
               controller: searchEditingController,
               textInputAction: TextInputAction.search,
@@ -150,8 +149,7 @@ extension _TransactionDetailEthSections on _TransactionDetailEthState {
       ),
       child: Text(
         errorMessage,
-        style: TextStyle(
-          fontSize: su.setSp(28.0),
+        style: AppTypography.body.copyWith(
           color: _color(AppThemeKeys.errorTextColor),
         ),
         textAlign: TextAlign.center,
@@ -171,7 +169,7 @@ extension _TransactionDetailEthSections on _TransactionDetailEthState {
           Expanded(
             child: Text(
               value,
-              style: TextStyle(color: accent, fontSize: su.setSp(28)),
+              style: AppTypography.body.copyWith(color: accent),
             ),
           ),
           if (copy)
@@ -227,9 +225,8 @@ extension _TransactionDetailEthSections on _TransactionDetailEthState {
         children: [
           Text(
             title,
-            style: TextStyle(
+            style: AppTypography.body.copyWith(
               color: _color(AppThemeKeys.mainTextColor),
-              fontSize: su.setSp(28),
             ),
           ),
           SizedBox(height: su.setWidth(20)),

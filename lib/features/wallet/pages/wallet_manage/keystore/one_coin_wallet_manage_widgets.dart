@@ -216,9 +216,8 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
           Expanded(
             child: Text(
               path,
-              style: TextStyle(
+              style: AppTypography.body.copyWith(
                 color: _color(AppThemeKeys.itemSubtitleTextColor),
-                fontSize: su.setSp(28.0),
               ),
             ),
           ),
@@ -391,9 +390,9 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
             width: double.infinity,
             child: Text(
               S.of(context).g_key_21,
-              style: TextStyle(
+              style: AppTypography.headline.copyWith(
                 color: _color(AppThemeKeys.mainTextColor),
-                fontSize: su.setSp(30.0),
+                fontWeight: FontWeight.w400,
               ),
               textAlign: TextAlign.center,
             ),
@@ -461,7 +460,10 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
           alignment: Alignment.center,
           child: Text(
             text,
-            style: TextStyle(color: color, fontSize: ScreenUtil().setSp(30)),
+            style: AppTypography.headline.copyWith(
+              color: color,
+              fontWeight: FontWeight.w400,
+            ),
           ),
         ),
       ),

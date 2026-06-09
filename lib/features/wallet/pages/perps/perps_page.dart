@@ -72,8 +72,7 @@ class _PerpsPageState extends State<PerpsPage>
       appBar: AppBar(
         title: Text(
           'Perpetuals',
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(34),
+          style: AppTypography.title.copyWith(
             fontWeight: FontWeight.w600,
             color: AppColorTokens.of(context).textPrimary,
           ),

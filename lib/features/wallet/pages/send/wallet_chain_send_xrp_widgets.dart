@@ -143,8 +143,7 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
                   controller: valueTextEditingController,
                   focusNode: valueNode,
                   hintText: S.of(context).g_key_44,
-                  hintStyle: TextStyle(
-                    fontSize: ScreenUtil().setSp(54.0),
+                  hintStyle: AppTypography.displayLg.copyWith(
                     color: _themeColor(AppThemeKeys.textFieldHintColor.name),
                   ),
                   keyboardType: TextInputType.numberWithOptions(decimal: true),

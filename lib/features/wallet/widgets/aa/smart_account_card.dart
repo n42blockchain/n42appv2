@@ -127,8 +127,7 @@ class SmartAccountCard extends StatelessWidget {
           Expanded(
             child: Text(
               account.shortAddress,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(26),
+              style: AppTypography.bodySm.copyWith(
                 fontFamily: 'monospace',
                 color: AppColorTokens.of(context).textPrimary,
               ),

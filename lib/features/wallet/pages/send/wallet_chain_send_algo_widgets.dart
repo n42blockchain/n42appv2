@@ -256,7 +256,7 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
   Widget _balanceText(String text, Color color) {
     return Text(
       text,
-      style: TextStyle(color: color, fontSize: ScreenUtil().setSp(28.0)),
+      style: AppTypography.body.copyWith(color: color),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
       textAlign: TextAlign.right,

@@ -266,7 +266,7 @@ class _RecentAddressBarState extends State<RecentAddressBar> {
               child: ActionChip(
                 label: Text(
                   label,
-                  style: TextStyle(fontSize: ScreenUtil().setSp(24)),
+                  style: AppTypography.caption,
                 ),
                 onPressed: () => widget.onSelected(entry.address),
               ),

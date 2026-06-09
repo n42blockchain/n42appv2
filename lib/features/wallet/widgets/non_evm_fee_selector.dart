@@ -97,8 +97,7 @@ class NonEvmFeeCompact extends StatelessWidget {
                   if (estimatedTime != null || rateText != null)
                     Text(
                       [estimatedTime, rateText].whereType<String>().join('  '),
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(23),
+                      style: AppTypography.caption.copyWith(
                         color: subtitleText,
                       ),
                     ),

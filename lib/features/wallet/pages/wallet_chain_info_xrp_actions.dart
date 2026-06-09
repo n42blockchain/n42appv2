@@ -115,7 +115,10 @@ mixin WalletChainInfoXrpActionsMixin<T extends ConsumerStatefulWidget>
                 SizedBox(width: su.setWidth(20.0)),
                 Text(
                   label,
-                  style: TextStyle(color: color, fontSize: su.setSp(30.0)),
+                  style: AppTypography.headline.copyWith(
+                    color: color,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
               ],
             ),

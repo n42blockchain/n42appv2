@@ -140,8 +140,7 @@ mixin _TonSendWidgetsMixin on _TonSendLogicMixin {
                   controller: valueTextEditingController,
                   focusNode: valueNode,
                   hintText: S.of(context).g_key_44,
-                  hintStyle: TextStyle(
-                    fontSize: ScreenUtil().setSp(54.0),
+                  hintStyle: AppTypography.displayLg.copyWith(
                     color: AppThemeUtils.getColorByKey(
                       context,
                       AppThemeKeys.textFieldHintColor.name,
@@ -315,8 +314,7 @@ mixin _TonSendWidgetsMixin on _TonSendLogicMixin {
       ),
       child: Text(
         errorMessage,
-        style: TextStyle(
-          fontSize: su.setSp(28.0),
+        style: AppTypography.body.copyWith(
           color: AppColorTokens.of(context).danger,
         ),
       ),

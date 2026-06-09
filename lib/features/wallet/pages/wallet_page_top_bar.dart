@@ -84,9 +84,8 @@ class _WalletTitleButton extends StatelessWidget {
               ),
             Text(
               walletName,
-              style: TextStyle(
+              style: AppTypography.headline.copyWith(
                 color: blueColor,
-                fontSize: su.setSp(30),
                 fontWeight: FontWeight.w600,
               ),
             ),

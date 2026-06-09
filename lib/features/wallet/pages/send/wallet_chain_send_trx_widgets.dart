@@ -7,8 +7,6 @@ mixin _TrxSendWidgetsMixin on _TrxSendLogicMixin {
   Color _themeColor(AppThemeKeys key) =>
       AppThemeUtils.getColorByKey(context, key.name);
 
-  double get _sp28 => ScreenUtil().setSp(28.0);
-
   Widget toWidget() {
     final sw = ScreenUtil().setWidth;
     return Container(
@@ -18,9 +16,8 @@ mixin _TrxSendWidgetsMixin on _TrxSendLogicMixin {
         children: [
           Text(
             S.of(context).g_key_38,
-            style: TextStyle(
+            style: AppTypography.body.copyWith(
               color: _themeColor(AppThemeKeys.mainTextColor),
-              fontSize: _sp28,
             ),
           ),
           SizedBox(height: sw(20.0)),
@@ -69,9 +66,8 @@ mixin _TrxSendWidgetsMixin on _TrxSendLogicMixin {
         children: [
           Text(
             S.of(context).g_key_wallet_k58,
-            style: TextStyle(
+            style: AppTypography.body.copyWith(
               color: _themeColor(AppThemeKeys.mainTextColor),
-              fontSize: _sp28,
             ),
           ),
           SizedBox(height: sw(20.0)),
@@ -115,9 +111,8 @@ mixin _TrxSendWidgetsMixin on _TrxSendLogicMixin {
               Flexible(
                 child: Text(
                   S.of(context).g_key_44,
-                  style: TextStyle(
+                  style: AppTypography.body.copyWith(
                     color: _themeColor(AppThemeKeys.mainTextColor),
-                    fontSize: _sp28,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -147,8 +142,7 @@ mixin _TrxSendWidgetsMixin on _TrxSendLogicMixin {
                   controller: valueTextEditingController,
                   focusNode: valueNode,
                   hintText: S.of(context).g_key_44,
-                  hintStyle: TextStyle(
-                    fontSize: ScreenUtil().setSp(54.0),
+                  hintStyle: AppTypography.displayLg.copyWith(
                     color: _themeColor(AppThemeKeys.textFieldHintColor),
                   ),
                   keyboardType: const TextInputType.numberWithOptions(
@@ -199,9 +193,8 @@ mixin _TrxSendWidgetsMixin on _TrxSendLogicMixin {
     final unit = widget.coinModel.coin['unit'].toString().toUpperCase();
     return Text(
       '${widget.coinModel.balanceStringAll()} $unit',
-      style: TextStyle(
+      style: AppTypography.body.copyWith(
         color: _themeColor(AppThemeKeys.mainTextColor),
-        fontSize: _sp28,
       ),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
@@ -248,17 +241,15 @@ mixin _TrxSendWidgetsMixin on _TrxSendLogicMixin {
                   child: Text(
                     S.of(context).g_key_29,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
+                    style: AppTypography.body.copyWith(
                       color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
-                      fontSize: _sp28,
                     ),
                   ),
                 ),
                 Text(
                   '${chainModel?.balanceDoubleAll() ?? 0} ${(chainModel?.coin['unit'] ?? '').toString().toUpperCase()}',
-                  style: TextStyle(
+                  style: AppTypography.body.copyWith(
                     color: _themeColor(AppThemeKeys.mainButtonBgColor),
-                    fontSize: _sp28,
                   ),
                 ),
               ],

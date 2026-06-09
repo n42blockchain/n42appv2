@@ -123,8 +123,7 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
       appBar: AppBar(
         title: Text(
           'Add Custom Network',
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(34),
+          style: AppTypography.title.copyWith(
             fontWeight: FontWeight.w600,
             color: AppColorTokens.of(context).textPrimary,
           ),

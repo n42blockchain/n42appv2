@@ -98,10 +98,10 @@ Future<bool?> tipsDialog4(
                       child: Center(
                         child: Text(
                           S.of(context).g_key_78,
-                          style: TextStyle(
+                          style: AppTypography.headline.copyWith(
                             // color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor),
                             color: AppColorTokens.of(context).brand,
-                            fontSize: ScreenUtil().setSp(30),
+                            fontWeight: FontWeight.w400,
                           ),
                         ),
                       ),

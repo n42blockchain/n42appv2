@@ -101,9 +101,9 @@ class _BackupTwoState extends State<BackupTwo> {
                       ),
                       child: Text(
                         S.of(context).g_key_wallet_c12,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(50.0),
+                        style: AppTypography.displayLg.copyWith(
                           color: AppColorTokens.of(context).textPrimary,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
                     ),
@@ -254,14 +254,13 @@ class _BackupTwoState extends State<BackupTwo> {
               child: Text(
                 item.word,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: AppTypography.body.copyWith(
                   color: item.isSelected
                       ? AppColorTokens.of(context).brand
                       : AppThemeUtils.getColorByKey(
                           context,
                           AppThemeKeys.ff444444.name,
                         ),
-                  fontSize: ScreenUtil().setSp(28.0),
                 ),
               ),
             ),

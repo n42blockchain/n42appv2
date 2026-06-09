@@ -42,10 +42,9 @@ class _ImportKeystoreState extends ConsumerState<ImportKeystore> {
     super.dispose();
   }
 
-  TextStyle _sectionLabelStyle() => TextStyle(
+  TextStyle _sectionLabelStyle() => AppTypography.headline.copyWith(
     color: AppColorTokens.of(context).textPrimary,
     fontWeight: FontWeight.w600,
-    fontSize: ScreenUtil().setSp(32),
   );
 
   Future<void> _pasteFromClipboard() async {

@@ -58,8 +58,7 @@ class _NetworkSheetHeader extends StatelessWidget {
             child: Text(
               S.of(context).g_token_m_key_4,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: scr.setSp(32),
+              style: AppTypography.headline.copyWith(
                 fontWeight: FontWeight.w600,
                 color: AppColorTokens.of(context).textPrimary,
               ),
@@ -148,8 +147,7 @@ class _NetworkAllItem extends StatelessWidget {
               child: Text(
                 S.of(context).g_token_m_key_4,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: scr.setSp(30.0),
+                style: AppTypography.headline.copyWith(
                   color: AppColorTokens.of(context).textPrimary,
                   fontWeight: FontWeight.w600,
                 ),
@@ -213,8 +211,7 @@ class _NetworkCoinItem extends StatelessWidget {
                 children: [
                   Text(
                     coinSymbol.isEmpty ? '--' : coinSymbol,
-                    style: TextStyle(
-                      fontSize: scr.setSp(30.0),
+                    style: AppTypography.headline.copyWith(
                       color: AppColorTokens.of(context).textPrimary,
                       fontWeight: FontWeight.w600,
                     ),
@@ -223,9 +220,9 @@ class _NetworkCoinItem extends StatelessWidget {
                   ),
                   Text(
                     coinName,
-                    style: TextStyle(
-                      fontSize: scr.setSp(30.0),
+                    style: AppTypography.headline.copyWith(
                       color: AppColorTokens.of(context).textSubtitle,
+                      fontWeight: FontWeight.w400,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,

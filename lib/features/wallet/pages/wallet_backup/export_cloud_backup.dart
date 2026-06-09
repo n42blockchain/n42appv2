@@ -322,10 +322,9 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
 
   Widget _label(String text) => Text(
     text,
-    style: TextStyle(
+    style: AppTypography.headline.copyWith(
       color: AppColorTokens.of(context).textPrimary,
       fontWeight: FontWeight.w600,
-      fontSize: ScreenUtil().setSp(32),
     ),
   );
 

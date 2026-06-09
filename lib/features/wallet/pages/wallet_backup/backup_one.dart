@@ -46,8 +46,7 @@ class _BackupOneState extends State<BackupOne> {
                       ),
                       child: Text(
                         S.of(context).g_key_wallet_c39,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(50),
+                        style: AppTypography.displayLg.copyWith(
                           color: AppColorTokens.of(context).textPrimary,
                           fontWeight: FontWeight.w600,
                         ),

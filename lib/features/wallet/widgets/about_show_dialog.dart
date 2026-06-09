@@ -56,9 +56,8 @@ void aboutShowDialog(BuildContext context, String aboutStr, String title) {
                   text: HTML.toTextSpan(
                     context,
                     aboutStr,
-                    defaultTextStyle: TextStyle(
+                    defaultTextStyle: AppTypography.bodySm.copyWith(
                       color: AppColorTokens.of(context).textPrimary,
-                      fontSize: ScreenUtil().setSp(26.0),
                       // etc etc
                     ),
                   ),

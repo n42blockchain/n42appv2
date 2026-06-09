@@ -47,9 +47,8 @@ mixin _WalletListTilesMixin on _WalletListActionsMixin {
     ),
     child: Text(
       label,
-      style: TextStyle(
+      style: AppTypography.caption.copyWith(
         color: AppColorTokens.of(context).textSubtitle,
-        fontSize: ScreenUtil().setSp(24),
         letterSpacing: 0.4,
       ),
     ),

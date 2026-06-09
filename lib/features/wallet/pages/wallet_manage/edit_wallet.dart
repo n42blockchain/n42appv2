@@ -149,7 +149,7 @@ class _EditWalletState extends ConsumerState<EditWallet> {
                     (tag) => Chip(
                       label: Text(
                         tag,
-                        style: TextStyle(fontSize: ScreenUtil().setSp(24)),
+                        style: AppTypography.caption,
                       ),
                       deleteIcon: Icon(Icons.close, size: 16, color: subColor),
                       onDeleted: () => _removeTag(tag),
@@ -196,7 +196,7 @@ class _EditWalletState extends ConsumerState<EditWallet> {
                     height: 36,
                     child: TextField(
                       controller: _tagController,
-                      style: TextStyle(fontSize: ScreenUtil().setSp(24)),
+                      style: AppTypography.caption,
                       decoration: InputDecoration(
                         hintText: 'Custom tag...',
                         hintStyle: AppTypography.caption.copyWith(

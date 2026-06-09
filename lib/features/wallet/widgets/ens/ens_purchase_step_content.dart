@@ -253,8 +253,7 @@ class EnsPurchaseStepContent extends StatelessWidget {
               ),
               child: Text(
                 'Tx: ${_shortenHash(registerResult!.txHash!)}',
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(22),
+                style: AppTypography.caption.copyWith(
                   fontFamily: 'monospace',
                   color: _subtitle(context),
                 ),

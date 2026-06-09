@@ -93,9 +93,8 @@ Widget coinInfoStatRowColored(BuildContext context, String label, double pct) {
         Text(label, style: _labelStyle(context)),
         Text(
           fmtPct(pct),
-          style: TextStyle(
+          style: AppTypography.body.copyWith(
             color: pctColor(pct, context),
-            fontSize: ScreenUtil().setSp(28),
             fontWeight: FontWeight.w500,
           ),
         ),

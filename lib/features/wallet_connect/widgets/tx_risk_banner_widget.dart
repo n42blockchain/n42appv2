@@ -107,8 +107,7 @@ class TxRiskBannerWidget extends StatelessWidget {
                     Expanded(
                       child: Text(
                         warn,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(22),
+                        style: AppTypography.caption.copyWith(
                           color: badgeColor,
                           height: 1.4,
                         ),

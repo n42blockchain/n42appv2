@@ -105,8 +105,7 @@ class _TopRow extends StatelessWidget {
           child: Text(
             S.of(context).g_token_m_key_11,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: su.setSp(32),
+            style: AppTypography.headline.copyWith(
               fontWeight: FontWeight.w600,
               color: AppColorTokens.of(context).textPrimary,
             ),
@@ -175,8 +174,7 @@ class _TopRow extends StatelessWidget {
                 children: [
                   Text(
                     networkLabel,
-                    style: TextStyle(
-                      fontSize: su.setSp(24),
+                    style: AppTypography.caption.copyWith(
                       fontWeight: FontWeight.w500,
                       color: blueColor,
                     ),

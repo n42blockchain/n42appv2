@@ -197,8 +197,7 @@ class BatchOperationItem extends StatelessWidget {
                 SizedBox(height: AppSpacing.space2),
                 Text(
                   _shortenAddress(operation.targetAddress),
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(22),
+                  style: AppTypography.caption.copyWith(
                     fontFamily: 'monospace',
                     color: subtitleColor,
                   ),

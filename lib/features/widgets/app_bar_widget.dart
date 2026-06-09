@@ -1,7 +1,7 @@
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 class AppBarWidget extends AppBar {
   /// 带有标题的构造函数
@@ -21,9 +21,8 @@ class AppBarWidget extends AppBar {
                text ?? '',
                style:
                    style ??
-                   TextStyle(
+                   AppTypography.headline.copyWith(
                      fontWeight: FontWeight.normal,
-                     fontSize: ScreenUtil().setSp(32.0),
                      color: AppThemeUtils.getColorByKey(
                        AppGlobals.navigatorKey.currentContext,
                        AppThemeKeys.mainTextColor.name,

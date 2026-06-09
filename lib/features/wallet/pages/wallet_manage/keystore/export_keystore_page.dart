@@ -158,9 +158,8 @@ class _ExportKeystorePageState extends State<ExportKeystorePage> {
       margin: EdgeInsets.symmetric(vertical: scr.setWidth(24)),
       child: Text(
         widget.keystoreJson,
-        style: TextStyle(
+        style: AppTypography.body.copyWith(
           color: AppColorTokens.of(context).textItem,
-          fontSize: scr.setSp(28),
         ),
       ),
     );
@@ -177,16 +176,15 @@ class _ExportKeystorePageState extends State<ExportKeystorePage> {
         children: [
           Text(
             title,
-            style: TextStyle(
+            style: AppTypography.headline.copyWith(
               color: mainTextColor,
-              fontSize: scr.setSp(32),
               fontWeight: FontWeight.w600,
             ),
           ),
           SizedBox(height: scr.setWidth(12)),
           Text(
             action,
-            style: TextStyle(color: mainTextColor, fontSize: scr.setSp(28)),
+            style: AppTypography.body.copyWith(color: mainTextColor),
           ),
         ],
       ),
@@ -216,7 +214,7 @@ class _ClipboardCountdownHint extends StatelessWidget {
         SizedBox(width: AppSpacing.space2),
         Text(
           'Clipboard auto-clears in ${seconds}s',
-          style: TextStyle(color: textColor, fontSize: ScreenUtil().setSp(24)),
+          style: AppTypography.caption.copyWith(color: textColor),
         ),
       ],
     );

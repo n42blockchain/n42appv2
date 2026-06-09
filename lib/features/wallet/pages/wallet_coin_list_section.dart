@@ -138,8 +138,7 @@ class _LoadingBanner extends StatelessWidget {
       ),
       child: Text(
         S.of(context).g_key_208,
-        style: TextStyle(
-          fontSize: su.setSp(24),
+        style: AppTypography.caption.copyWith(
           color: AppThemeUtils.getColorByKey(
             context,
             AppThemeKeys.mainWhiteColor.name,

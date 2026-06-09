@@ -88,8 +88,7 @@ mixin _ZilSendWidgetsMixin on _ZilSendLogicMixin {
                   controller: valueTextEditingController,
                   focusNode: valueNode,
                   hintText: S.of(context).g_key_44,
-                  hintStyle: TextStyle(
-                    fontSize: ScreenUtil().setSp(54.0),
+                  hintStyle: AppTypography.displayLg.copyWith(
                     color: AppThemeUtils.getColorByKey(
                       context,
                       AppThemeKeys.textFieldHintColor.name,

@@ -201,16 +201,14 @@ class _StatusCard extends StatelessWidget {
                     // SelectableText lets users long-press and copy the reason
                     ? SelectableText(
                         detail!,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(22),
+                        style: AppTypography.caption.copyWith(
                           color: color,
                           height: 1.45,
                         ),
                       )
                     : Text(
                         detail!,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(22),
+                        style: AppTypography.caption.copyWith(
                           color: AppThemeUtils.getColorByKey(
                             context,
                             AppThemeKeys.ff888888.name,

@@ -320,8 +320,7 @@ class NftInfoBoard extends StatelessWidget {
         SizedBox(height: AppSpacing.space2),
         Text(
           description!,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(24),
+          style: AppTypography.caption.copyWith(
             color: _subtitleColor(context),
             height: 1.5,
           ),

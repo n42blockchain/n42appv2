@@ -144,7 +144,7 @@ Widget buttonStyle5(
       padding: EdgeInsets.symmetric(horizontal: AppSpacing.space2),
       child: Text(
         title,
-        style: TextStyle(fontSize: ScreenUtil().setSp(28.0), color: textColor),
+        style: AppTypography.body.copyWith(color: textColor),
         textAlign: TextAlign.center,
         maxLines: 2,
         overflow: TextOverflow.ellipsis,

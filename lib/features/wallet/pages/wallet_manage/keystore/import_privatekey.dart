@@ -183,10 +183,9 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                         Expanded(
                           child: Text(
                             S.of(context).g_key_209,
-                            style: TextStyle(
+                            style: AppTypography.headline.copyWith(
                               color: AppColorTokens.of(context).textPrimary,
                               fontWeight: FontWeight.w600,
-                              fontSize: ScreenUtil().setSp(32),
                             ),
                           ),
                         ),
@@ -246,10 +245,9 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                     ),
                     Text(
                       S.of(context).g_key_17,
-                      style: TextStyle(
+                      style: AppTypography.headline.copyWith(
                         color: AppColorTokens.of(context).textPrimary,
                         fontWeight: FontWeight.w600,
-                        fontSize: ScreenUtil().setSp(32),
                       ),
                     ),
                     containerStyle1(

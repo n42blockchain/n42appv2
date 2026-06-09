@@ -78,7 +78,7 @@ class _WalletListState extends ConsumerState<WalletList>
               child: ChoiceChip(
                 label: Text(
                   'All',
-                  style: TextStyle(fontSize: ScreenUtil().setSp(24)),
+                  style: AppTypography.caption,
                 ),
                 selected: _selectedTag == null,
                 onSelected: (_) => setState(() => _selectedTag = null),
@@ -95,7 +95,7 @@ class _WalletListState extends ConsumerState<WalletList>
                 child: ChoiceChip(
                   label: Text(
                     tag,
-                    style: TextStyle(fontSize: ScreenUtil().setSp(24)),
+                    style: AppTypography.caption,
                   ),
                   selected: _selectedTag == tag,
                   onSelected: (_) => setState(() => _selectedTag = tag),

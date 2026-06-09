@@ -368,8 +368,8 @@ class BackupReminderBanner extends StatelessWidget {
               ),
               child: Text(
                 S.of(context).g_key_wallet_c36,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(30),
+                style: AppTypography.headline.copyWith(
+                  fontWeight: FontWeight.w400,
                   color: AppColorTokens.of(context).brand,
                   decoration: TextDecoration.underline,
                   decorationColor: AppColorTokens.of(context).brand,

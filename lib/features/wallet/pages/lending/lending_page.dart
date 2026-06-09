@@ -62,8 +62,7 @@ class _LendingPageState extends State<LendingPage>
       appBar: AppBar(
         title: Text(
           'Aave V3 Lending',
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(34),
+          style: AppTypography.title.copyWith(
             fontWeight: FontWeight.w600,
             color: AppColorTokens.of(context).textPrimary,
           ),
